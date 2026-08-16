@@ -71,7 +71,7 @@
     {
       "id": "clear-the-diagonal",
       "label": "Clear the g7-a1 diagonal",
-      "description": "The library's diagonal plan, and the one this pack's objective copies verbatim. Its signature is two tests joined: a black bishop standing on g7, and zero occupied squares between g7 and a1. Measured on the seven positions this pack authors, the blocker count is 1 at the start and after 11...Bg4, and 2 from 12.e5 onward; the signature itself is satisfied at none of the seven. The entry's own note records the same thing measured over 694 authored spine positions across the whole corpus: g7-d4 clear fired 0 times.",
+      "description": "The library's diagonal plan, and the one this pack's objective copies verbatim. Its signature is two tests joined: a black bishop standing on g7, and zero occupied squares between g7 and a1. RE-MEASURED 2026-08-16 by content wave F; the earlier sentence here said 'the seven positions this pack authors' and cited the entry's note for 'g7-d4 clear fired 0 times over 694 authored spine positions', and both numbers are superseded. This pack authors 8 spine positions. Over those 8 the g7-a1 blocker count is 1 on 2 of them (the start and after 11...Bg4) and 2 on the other 6 from 12.e5 onward, and the signature itself is satisfied at none of the 8 — the pattern the earlier note described, at the corrected count. Corpus-wide over 827 positions across 56 packs, g7-d4 clear now fires 5 times, not 0, and 2 of those 5 are this pack's own first two positions; the blocking square is d4 itself, which here holds the white d-pawn.",
       "shapePlan": { "shape": "fianchetto-g7", "plan": "black-long-diagonal-pressure" }
     },
     {

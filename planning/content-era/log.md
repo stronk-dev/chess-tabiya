@@ -3478,3 +3478,169 @@ Compare wave F 7.7%, middlegame ~14%, explorer ~27%, citation pass ~30%.
   orchestration test. The pack still validates; no chess claim or authored move changed.
 - Deliberately did not generalise this into a blanket spine-depth rule: trajectory roots carry
   leg boundaries and are the known counterexample to that inference.
+
+## 2026-08-16 — content wave F, second pass: the cluster had already run, and its measurements had gone stale
+
+**What this pass was asked to do, and what it found instead.** `planning/work-register.md`
+§2 lists cluster F (D75, D76, D43, D44, D55, D63) as *"queued since 2026-08-15 and never
+launched"*. It was launched. Commit `41afe00` — *"content: fix wave F — trigger tightening,
+witnesses, orphan disposition"*, 2026-08-15 22:32 — is an ancestor of HEAD and shipped the
+work. What never happened is the flow-back: the `design/BACKLOG.md` rows still read
+`💡 open, found 2026-08-15`, and the register still says the cluster is unlaunched. **This is
+the failure the RFC completion protocol was written to catch, arriving through the one door
+that protocol does not cover — a content wave is not an RFC, so nothing required it to flip
+its own rows.** The ledger rows are outside this pass's boundary and are not touched here;
+they are named at the end so the next writer with authority can flip them.
+
+**So the real defect this pass found is a different one, and it is the more interesting one:
+the corpus grew from 43 packs / 694 spine positions to 56 packs / 827, and nine shape entries
+plus two packs carry measured claims pinned to the old denominator. Four of those claims are
+now materially false, not merely stale.** Corpus growth silently refuted content that was
+correct when written. That is failure mode 4 from the wave brief — refuted authored claims —
+reaching the repo by aging rather than by error.
+
+### Verdict per item, verified before touching anything
+
+| Item | Reproduces? | Evidence |
+|---|---|---|
+| **D75** — `rook-4v3-same-side` trigger loose | **MOOT.** Fixed in `41afe00` and the fix holds at the larger corpus | Trigger fires **24 of 827**, every firing in `rook-4v3-same-side-hold`. Neither Philidor pack appears — `philidor-third-rank-hold` and `philidor-passive-rook-convert` are absent from the trigger's pack list, which is exactly what the two added clauses (Black holds ≥1 pawn; White's pawn count exceeds Black's by ≥1) were for. 13 new packs entered the corpus and none entered this shape |
+| **D76** — `fianchetto-g7` arm from the wrong side | **MOOT as a defect, and now positively refuted.** `41afe00` refuted the premise (the entry's own trigger is `any[g6/g7, mirrored(files, g6/g7)]`, so the mirror is correct and the *name* was the defect) and corrected the name. This pass adds the confirmation the earlier one could not have: **the mirrored arm now fires 10 times on authored content** | Trigger 95 of 827: arm 0 (g6/g7) **85**, arm 1 (file mirror, b6/b7) **10**, in `london-wedge-black-counterplay` (2) and `nimzo-doubled-c-pawns` (8). The 2026-08-15 zero was recorded as a coverage fact rather than a defect; the corpus has since supplied the coverage. Separately machine-checked: `mirrorFeature` in `packages/runtime/src/structure.ts` **does** flip `bishop_on_shade` under the files axis, so plans/2's authored claim that the mirrored arm covers a light-squared queenside bishop is true, not assumed |
+| **D43** — signature fires on zero of its own shape's positions | **Reproduces, and it is a COVERAGE FACT, not a bug.** The row's own rule decides it: *"fires nowhere" is a coverage fact and "cannot fire" is a bug* | Ran `all[trigger, plans/1 signature]` as a bare expression through the census. **No R1–R8 rule refutes it**, and a played witness exhibits it **true**: `4k3/8/5n2/1p6/P7/8/8/3BK3 w - - 0 1` then `a5` — White bishop, Black knight, and a white a-pawn that passes the moment the black b-pawn stops being ahead of it. Reference witness `Kf2` from the same position is false. So trigger and signature are **jointly satisfiable** and nothing is changed. Two witnesses committed for the trigger itself, which moved it `unknown` → `satisfiable` |
+| **D44** — nine of twenty-five shape entries orphaned | **Reproduces, but the count is stale: it is 4 of 25, not 9 of 25** | Structured walk over every `shape` / `shapes` reference field in all 56 packs. Orphans: `hanging-pawns`, `knight-vs-bishop`, `up-an-exchange`, `vancura`. This confirms `D297`'s fact refresh (21 of 25 attested) and extends it from 47 packs to 56 |
+| **D55** — census convention (fixture packs) | **The residual is discharged by the shipped instrument, and the pattern reproduces exactly** | The census report **states its own convention**: `corpus.roots`, `corpus.fixturePacks` (the six `.browser` packs, by name) and `corpus.packsWithoutSpine`, with per-pack counts on every subject — so **both denominators are derivable from one report**, which is stronger than picking one. Measured: 827 positions total, **23 fixture / 804 non-fixture**. D43's fan reproduces the row's exact numerator exception at the new size: **9 of 827** under the census convention, **4 of 804** once fixtures are excluded, because 5 of its 9 hits are in `immediate-guard-browser` and `stated-reasoning-browser` |
+| **D63** — eight-way compare overflow | Already closed 2026-08-16, outside this pass | — |
+
+### Every claim the machine refuted in shipped content
+
+Measured with `make expression-census` over 827 authored spine positions / 56 packs. All were
+true when written.
+
+| File | Shipped claim | Measured 2026-08-16 |
+|---|---|---|
+| `content/shapes/doubled-c-pawns.json` | orphan; trigger fires 0 of 694 | **referenced** by `nimzo-doubled-c-pawns`; fires **8 of 827** |
+| `content/shapes/iqp-black.json` | orphan; 0 of 694; *"the killing conjunct is the isolated black d-pawn at 1 of 694"* | **referenced** by `iqp-black-tarrasch-defence`; fires **7 of 827**. The conjunct decomposition explained a zero that no longer exists |
+| `content/shapes/maroczy-bind.json` | orphan; 0 of 694; *"a white pawn on c4 never co-occurs with either half-open file"* | **referenced** by `maroczy-bind-white-squeeze`; fires **10 of 827** — all 10 are exactly that co-occurrence |
+| `content/shapes/open-centre.json` | *"corpus firings 1 of 694 (the single trajectory-qgd-exchange-minority spine position)"* | **16 of 827** across four packs |
+| `content/shapes/fianchetto-g7.json` | *"the trigger fires 44 times, all 44 through the unmirrored arm and 0 through the mirror … g7-d4 clear fires 0 … the blocker is d4"* | trigger **95**, mirror **10**; **g7–d4 clear fires 5**, not 0. Segment walk over the 86 Bg7 positions: f6 **86**, e5 **23**, d4 **5**, c3/b2/a1 **0** |
+| `content/drafts/grunfeld-exchange-fianchetto.json` | *"the seven positions this pack authors"*; cites *"g7-d4 clear fired 0 times"* | the pack authors **8**; g7–d4 clear fires **5** corpus-wide, **2 of them this pack's own first two positions** |
+| `content/drafts/nimzo-doubled-c-pawns.json` | *"that line … is now out of date; this pack does not edit it"* | true, and now closed — the line is corrected |
+| three `SUPERSEDED 2026-08-15` notes | denominator **791** | **827**; every numerator in all three unchanged |
+| `content/shapes/pawn-opposition-key-squares.json` | 33 of 694 (9 + 24) | **33 of 827**, same split — substance intact, denominator only |
+| `iqp-black` + `maroczy-bind` sibling reading | *"carlsbad fires 41 and iqp-white 4"* | carlsbad **still 41**; iqp-white **12** across three packs |
+
+**A limit found while re-measuring, recorded rather than papered over.** Of the 5 positions
+that now reach `g7–d4 clear`, **2 have a white pawn on d4** (`grunfeld`) and **3 have a white
+knight** (`maroczy-bind-white-squeeze`); none has it empty. So `black-long-diagonal-pressure`'s
+prose — *"trade or lever away the central pawns in the bishop's path"* — **does not describe
+the obstruction in 3 of the 5 closest positions in the corpus**. Stated in the entry. No
+replacement claim was invented and no signature was changed to make the number move.
+
+### Changed
+
+- `content/witnesses/expression-witnesses.json` — four witnesses across two new keys
+  (`knight-vs-bishop.json#/trigger`, `#/plans/1/success/signature`). Both lines were **played**
+  through the harness, not assembled; none was refused.
+- Ten shape entries, prose and version only: `knight-vs-bishop` 0.1.2→0.1.3, `fianchetto-g7`
+  0.2.1→0.2.2, `doubled-c-pawns`/`iqp-black`/`maroczy-bind`/`open-centre`/`up-an-exchange`/
+  `vancura` 0.1.2→0.1.3, `hanging-pawns` 0.1.1→0.1.2, `pawn-opposition-key-squares`
+  0.2.2→0.2.3.
+- Two pack `sources` notes: `nimzo-doubled-c-pawns`, `grunfeld-exchange-fianchetto`.
+- **No trigger, no plan signature, no objective, no spine move and no deviation class was
+  edited anywhere.** Every change is a measured claim corrected to what the instrument says.
+
+### Before / after census
+
+`make expression-census` run before and after, same corpus both times (56 packs / 827
+positions, unchanged during the pass).
+
+| Total | Before | After |
+|---|---|---|
+| `subjects` | 192 | 192 |
+| `unsatisfiable` | **0** | **0** |
+| `satisfiabilityUnknown` | 23 | **22** |
+| `neverFiresInCorpus` | 30 | 30 |
+| `firesOnlyOutsideShape` | 39 | 39 |
+| `inShapeDenominatorEmpty` | 19 | 19 |
+
+Subject-level diff: **exactly one subject changed** — `knight-vs-bishop.json#/trigger`,
+`unknown` → `satisfiable`, on a witness basis, coverage unchanged at 0. Nothing else moved,
+which is the intended result for a pass that corrected prose and added witnesses.
+
+Regression: `make shape-check` green on **25 of 25** shapes with
+`CORPUS=content/drafts,content/packs`; `make pack-check` green on **56 of 56** packs.
+
+### Cost — six categories, `agent-*` clock
+
+```
+## 2026-08-16 — content wave F second pass, session 1
+research 35 · encoding 30 · engine-validation 40 · review 0 · revision 15 · tooling-friction 25
+```
+
+Total ~145 min. `engine-validation` here is corpus validation, not engine: the baseline census,
+**18 bare-expression census runs** for the arm and segment decompositions, the witness
+verification runs, and the 25-shape / 56-pack regression sweep. No Stockfish, Syzygy or Maia
+call was made and none is claimed. `tooling-friction` **25 of 145 = 17%**, below the ~25%
+tooling verdict line — compare wave F 7.7%, middlegame ~14%, explorer ~27%, citation pass ~30%.
+`revision` is 15 because two decisions were reworked after measurement, both recorded below.
+
+### Frictions, with time cost
+
+1. **Nothing answers "which shape entries are orphans"** (~8 min). D44 is a standing ledger
+   row and every wave that touches it hand-rolls the reference walker. The census enumerates
+   shape *subjects* but never the pack→shape reference edge, so a `shapes` / `shape` field walk
+   had to be written again. This is the eighth-walker problem the brief warns about, one level
+   over from the expression walker the census did fix.
+2. **No target decomposes an expression into its arms** (~7 min). Answering D76 meant hand-
+   writing 18 sub-expression files and invoking `EXPR=` 18 times. `make expression-census`
+   already walks the corpus; a `--decompose` that reports per-conjunct and per-arm coverage for
+   one subject would have replaced all of it, and both the 2026-08-15 wave and this one built
+   the same thing by hand.
+3. **A witness under a corpus-basis subject is silently never exercised** (~5 min, and it cost
+   a revision). The two witnesses added under `knight-vs-bishop#/plans/1` are **not evaluated**
+   by the default run, because the fan fires 9 times outside the shape and the corpus basis
+   wins — so `satisfiability.witnesses` is absent and an illegal line there would go undetected.
+   They were verified only because the conjunction was run explicitly. The entry now says so in
+   writing. **This is the shape of D105 applied to witnesses: something committed that nothing
+   can see.**
+4. **`make expression-census` still prints its whole report to stdout** (~3 min). `OUT=` is
+   the workaround and was used throughout, as the previous wave also recorded.
+5. **The staleness itself had no detector** (~2 min to conclude, and it is the finding).
+   Nine entries stated *"0 of the 694 authored spine positions"* with no corpus size, no pack
+   count and nothing that could notice the corpus had moved. See the contract gap below.
+
+### Contract gaps
+
+- **A measured claim in content has no machine-readable denominator.** Every one of the ten
+  refuted claims above was prose of the form *"N of 694"*. Nothing links the number to the
+  corpus it was measured against, so nothing can flag it when the corpus grows — the entire
+  finding of this pass would have been a lint rule if measured claims carried
+  `{ measuredAt, packs, positions }`. **This is the same subject as D103** (a shape entry has
+  nowhere to record why its trigger says what it says) and argues that D103's `triggerNote`
+  should be a *measurement* record rather than a free-text note. Both are blocked on the same
+  `additionalProperties: false` in the shape-entry schema, which is outside a content wave.
+- **`FIRES_ONLY_OUTSIDE_SHAPE` is the comparative form that carries a defect** (the ledger's
+  own words) and there are **39** of them, unchanged by this pass. None was triaged here.
+
+### Not done, deliberately
+
+- **No signature, trigger, objective, spine move or deviation class edited.** D43 and D44 both
+  resolved to coverage facts; under the standing rule neither justifies a change, and none was
+  made to improve a number.
+- **No deviation class reclassified.** They are objective-relative
+  (`rfc/archive/content-sourcing-foundation.md`) and no evaluation separates them.
+- **No orphan given an invented `prospective` reference** to look owned — the same restraint
+  `41afe00` recorded.
+- **No `design/`, `rfc/`, `docs/`, `apps/`, `packages/` or `archive/` file touched**, and
+  nothing committed.
+
+### Blocked, and it needs someone with ledger authority
+
+The whole cluster's flow-back is missing and this pass cannot write it. **`design/BACKLOG.md`
+D75, D76, D43, D44 and D55 should flip**, with the dispositions measured above: D75 and D76
+fixed by `41afe00` and re-verified at 56 packs; D43 and D44 resolved as coverage facts, with
+D44's headline corrected from **9 of 25 to 4 of 25**; D55's convention residual discharged by
+the shipped census, which reports both denominators. `planning/work-register.md` §2 should stop
+describing cluster F as never launched. **And the generalisable finding is the one worth
+routing:** a content wave has no completion protocol, which is exactly why this cluster shipped
+its fixes and lost its rows — the RFC protocol's ledger-and-log clause has no content-tier
+counterpart.
