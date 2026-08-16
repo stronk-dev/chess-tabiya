@@ -75,6 +75,9 @@ centipawn, mate, or tablebase-category cost only from the current engine or tabl
 an unbacked or contradicted declaration is refused rather than trusted. Immediate guards gain a
 closed `conditions` list for engine evaluation/mate and tablebase category/DTZ regressions. The
 legacy scalar guard fields desugar to the same list, so existing packs keep their behavior.
+That desugaring is shared by runtime and validation. Explicit scalar shorthands remain active
+beside `conditions[]`, and per-anchor scalar overrides replace matching arms in place without
+reordering unrelated authored conditions.
 Tablebase conditions are learner-relative, require both probes at seven pieces or fewer, and cite
 the exact `tablebase:` record that fired them.
 

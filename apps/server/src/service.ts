@@ -1771,7 +1771,7 @@ export class RunService {
     if (this.#tablebase !== undefined && countFenPieces(node.fen) <= 7 &&
       !queue.outstanding(run.id).some((job) => job.nodeId === node.id && job.kind === "tablebase") &&
       !run.events.some((event) => event.type === "evidence.attached" && event.data.nodeId === node.id && event.data.payload.kind === "tablebase")) {
-      queue.enqueue({ runId: run.id, nodeId: node.id, fen: node.fen, kind: "tablebase" });
+      queue.enqueueProducer({ runId: run.id, nodeId: node.id, fen: node.fen, kind: "tablebase" });
     }
     queue.enqueue({
       runId: run.id,

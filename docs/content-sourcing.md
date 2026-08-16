@@ -104,6 +104,8 @@ after-move record. Engine runs stamp learner-relative cp/mate cost; tablebase ru
 learner-relative category cost. Only records produced by that invocation are eligible:
 preserved sidecar rows cannot acquire a new cost by implication. Existing machine costs must
 match the measured value within the format tolerance or verification refuses before writing.
+Mate and category costs are compared by their typed fields rather than JSON key order, and
+contradictions use a deviation-specific refusal.
 
 The above-range authoring instrument uses Stockfish at depth 22, Threads 1, Hash
 16 MB, and MultiPV 1 in a fresh authoring context, with a 120-second timeout. It clears

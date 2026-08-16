@@ -60,6 +60,7 @@ export interface EvidenceJobFailure {
 interface QueuedEvidence {
   readonly job: EvidenceJob;
   readonly controller: AbortController;
+  readonly recordFailure: boolean;
   cancelled: boolean;
 }
 
@@ -94,6 +95,7 @@ export class EvidenceJobQueue implements JobObserver {
   readonly #nextSeq = new Map<string, number>();
   readonly #idleWaiters = new Set<() => void>();
   readonly #failures: EvidenceJobFailure[] = [];
+  readonly #producerAttempts = new Set<string>();
   #activeCount = 0;
   #jobCounter = 0;
 
@@ -113,6 +115,23 @@ export class EvidenceJobQueue implements JobObserver {
   }
 
   enqueue(input: EvidenceJobInput): EvidenceJob {
+    return this.#enqueue(input, true);
+  }
+
+  /** Attempt non-interactive evidence once, only while the queue is idle. */
+  enqueueProducer(input: EvidenceJobInput): EvidenceJob | undefined {
+    const key = `${input.runId}\0${input.nodeId}\0${input.kind}`;
+    if (this.#producerAttempts.has(key)) return undefined;
+    this.#producerAttempts.add(key);
+    if (!this.isIdle()) return undefined;
+    return this.#enqueue(input, false);
+  }
+
+  isIdle(): boolean {
+    return this.#activeCount === 0 && this.#pending.length === 0;
+  }
+
+  #enqueue(input: EvidenceJobInput, recordFailure: boolean): EvidenceJob {
     if (input.kind !== "tablebase" && (input.depth === undefined) === (input.movetime === undefined)) {
       throw new TypeError("Evidence job requires exactly one of depth or movetime");
     }
@@ -128,7 +147,7 @@ export class EvidenceJobQueue implements JobObserver {
       ...input,
       id: `evidence-job-${++this.#jobCounter}`,
     });
-    this.#pending.push({ job, controller: new AbortController(), cancelled: false });
+    this.#pending.push({ job, controller: new AbortController(), recordFailure, cancelled: false });
     this.#pump();
     return job;
   }
@@ -267,7 +286,7 @@ export class EvidenceJobQueue implements JobObserver {
       const staged = this.#staged.get(queued.job.runId) ?? [];
       this.#staged.set(queued.job.runId, [...staged, result]);
     } catch (error) {
-      if (!queued.cancelled && !queued.controller.signal.aborted) {
+      if (queued.recordFailure && !queued.cancelled && !queued.controller.signal.aborted) {
         this.#failures.push(
           Object.freeze({
             jobId: queued.job.id,

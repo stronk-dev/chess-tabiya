@@ -127,7 +127,14 @@ export function deriveDeviationCost(
 function comparable(left: DeviationCost, right: DeviationCost): boolean {
   if (left.kind !== right.kind) return false;
   if (left.kind === "cp" && right.kind === "cp") return left.basis === right.basis && Math.round(left.loss / 10) === Math.round(right.loss / 10);
-  return JSON.stringify(left) === JSON.stringify(right);
+  if (left.kind === "mate" && right.kind === "mate") {
+    return left.against === right.against && left.basis === right.basis;
+  }
+  if (left.kind === "category" && right.kind === "category") {
+    return left.from === right.from && left.to === right.to && left.basis === right.basis;
+  }
+  return left.kind === "unmeasurable" && right.kind === "unmeasurable" &&
+    left.reason === right.reason;
 }
 
 export function stampDeviationCosts(
@@ -145,7 +152,7 @@ export function stampDeviationCosts(
     const derived = deriveDeviationCost(pack, produced, index, basis);
     if (derived === undefined) continue;
     if (deviation.cost !== undefined && (deviation.cost.kind === "cp" || deviation.cost.kind === "mate" || deviation.cost.kind === "category") && !comparable(deviation.cost, derived)) {
-      throw new SourcingError("VERIFY_ASSESSMENT_CONTRADICTED", `/deviations/${index}/cost contradicts the measured ${JSON.stringify(derived)}`);
+      throw new SourcingError("VERIFY_DEVIATION_COST_CONTRADICTED", `/deviations/${index}/cost contradicts the measured ${JSON.stringify(derived)}`);
     }
     (deviation as { cost?: DeviationCost }).cost = derived;
     stamped += 1;

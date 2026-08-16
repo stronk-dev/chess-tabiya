@@ -6,8 +6,8 @@ import { makeFen, parseFen } from "chessops/fen";
 import { parseUci } from "chessops/util";
 import { describe, expect, it } from "vitest";
 
-import { deviationCostEvidenceIssues } from "./check.js";
-import { deriveDeviationCost, stampDeviationCosts } from "./deviation-cost.js";
+import { deviationCostEvidenceIssues, evidenceSupports } from "./check.js";
+import { deviationCostMatches, deriveDeviationCost, stampDeviationCosts } from "./deviation-cost.js";
 import type { EvidenceRecord, SourcingIssue } from "./types.js";
 
 async function fixture(): Promise<DrillPackDefinition> {
@@ -59,12 +59,38 @@ function pair(pack: DrillPackDefinition, afterCp: number): readonly EvidenceReco
 }
 
 describe("machine-derived deviation costs", () => {
+  it("compares structured costs independently of author JSON key order", () => {
+    expect(deviationCostMatches(
+      { basis: "engine", kind: "mate", against: "learner" },
+      { kind: "mate", against: "learner", basis: "engine" },
+    )).toBe(true);
+    expect(deviationCostMatches(
+      { basis: "tablebase", to: "draw", kind: "category", from: "win" },
+      { kind: "category", from: "win", to: "draw", basis: "tablebase" },
+    )).toBe(true);
+  });
   it("reports an authored machine cost with no matching evidence pair", async () => {
     const issues: SourcingIssue[] = [];
     deviationCostEvidenceIssues(await fixture(), [], issues);
     expect(issues).toContainEqual(
       expect.objectContaining({ code: "DEVIATION_COST_UNBACKED", path: "/deviations/0/cost" }),
     );
+  });
+
+  it("does not let preserved ledger rows back a current verification invocation", async () => {
+    const pack = await fixture();
+    const records = pair(pack, 55);
+    const issues: SourcingIssue[] = [];
+    evidenceSupports(pack, {
+      schema: "tabiya.sourcing.evidence.v1",
+      sourcedAt: "2026-08-16T00:00:00.000Z",
+      records,
+      abstentions: [],
+    }, undefined, issues, []);
+    expect(issues).toContainEqual(expect.objectContaining({
+      code: "DEVIATION_COST_UNBACKED",
+      path: "/deviations/0/cost",
+    }));
   });
 
   it("reports an authored cost that contradicts the measured pair", async () => {
@@ -148,6 +174,9 @@ describe("machine-derived deviation costs", () => {
     const pack = structuredClone(await fixture()) as DrillPackDefinition;
     (pack.deviations![0] as { cost?: unknown }).cost = { kind: "cp", loss: 22, basis: "engine" };
     expect(() => stampDeviationCosts(pack, pair(pack, 40), "engine"))
-      .toThrow(/contradicts the measured/);
+      .toThrow(expect.objectContaining({
+        code: "VERIFY_DEVIATION_COST_CONTRADICTED",
+        message: expect.stringContaining("contradicts the measured"),
+      }));
   });
 });

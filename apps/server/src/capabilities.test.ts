@@ -18,6 +18,9 @@ function ready(identity: EngineIdentity): EngineHealth {
     status: "ready",
     restartCount: 0,
     identity,
+    options: identity.name.toLowerCase().startsWith("maia")
+      ? [{ name: "Elo", type: "spin", default: "1500", min: 0, max: 5000 }]
+      : [{ name: "Threads", type: "spin", default: "1", min: 1, max: 1024 }],
   };
 }
 
@@ -103,7 +106,10 @@ describe("engine capabilities", () => {
         tempoDefaults: { outpaced: "failed" },
         guardBasis: ["rules", "engine"],
         costBasis: ["material", "engine", "tablebase"],
-        capabilityDispositions: expect.any(Array),
+        capabilityDispositions: expect.arrayContaining([
+          expect.objectContaining({ instrument: "Stockfish", capability: "score cp / mate" }),
+          expect.objectContaining({ instrument: "Maia", capability: "policy mass" }),
+        ]),
         assessmentCategories: ["win", "loss", "draw", "cursed-win", "blessed-loss"],
         objectiveAssessmentSets: { win: ["win"], hold: ["draw", "cursed-win", "blessed-loss"], save: ["loss", "blessed-loss"], resist: ["loss", "blessed-loss"] },
         runSchemaVersion: runtimeBuildInfo.runSchemaVersion,
@@ -300,8 +306,13 @@ describe("engine capabilities", () => {
     expect(() => assertAdvertisedCapabilityDispositions([covered])).not.toThrow();
     expect(() => assertAdvertisedCapabilityDispositions([{ ...stockfish, options: [{ name: "Mystery", type: "check" }] }]))
       .toThrow(/Mystery/);
-    expect(() => assertAdvertisedCapabilityDispositions([stockfish]))
+    const { options: _options, ...withoutOptions } = stockfish;
+    expect(() => assertAdvertisedCapabilityDispositions([withoutOptions]))
       .toThrow(/stockfish-analysis published no option table/);
+    expect(() => assertAdvertisedCapabilityDispositions([{ ...stockfish, options: [] }]))
+      .toThrow(/stockfish-analysis published no option table/);
+    expect(() => assertAdvertisedCapabilityDispositions([{ ...stockfish, options: [{ name: "Elo", type: "spin" }] }]))
+      .toThrow(/Elo/);
   });
 
   it("is a strict superset of policyConfig.locus engine identity fields", async () => {

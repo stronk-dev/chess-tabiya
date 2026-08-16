@@ -9,6 +9,7 @@ import { makeUci, parseUci } from "chessops/util";
 import type { EvidencePayload } from "@chess-tabiya/runtime";
 
 import {
+  assertAdvertisedCapabilityDispositions,
   EngineCapabilities,
 } from "./capabilities.js";
 import {
@@ -307,6 +308,11 @@ export async function createApplication(
       analysisSpec,
     ]);
     await supervisor.startAll();
+    assertAdvertisedCapabilityDispositions([
+      supervisor.health("stockfish-play"),
+      supervisor.health("stockfish-analysis"),
+      supervisor.health("maia-5m"),
+    ]);
     selector = new OpponentSelector(supervisor, tablebaseSource === undefined ? {} : { tablebaseSource });
     capabilities = new EngineCapabilities(supervisor, [
       "stockfish-analysis",

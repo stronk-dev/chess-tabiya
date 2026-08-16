@@ -190,7 +190,7 @@ test("runtime corpus counts stay silent until reveal and render population facts
   const corpus = page.getByRole("region", { name: "Corpus evidence" });
   await expect(corpus).toContainText("Lichess explorer — rating buckets 1000,1200,1400,1600,1800,2000,2200,2500");
   await expect(corpus).toContainText("These counts say what this population played, not what is good.");
-  await expect(corpus).toContainText("e4 — 60 of 120 games (50.0%); White wins 50.0%, draw 16.7%, Black wins 33.3%.");
+  await expect(corpus).toContainText("e4 — 60 of 120 games (50.0%). Outcome split withheld below the 100-game per-move floor.");
   await expect(corpus).toContainText("Last recorded game in this population: 2019-04.");
 });
 

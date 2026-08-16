@@ -8,6 +8,12 @@
       "boundary": "FLOAT32_POLICY_MASS_TOLERANCE",
       "validSide": "captured",
       "refusalSide": "minimal-clone-mutation"
+    },
+    {
+      "function": "strongEngine",
+      "fixture": "../../../../apps/server/src/fixtures/strong-engine-51.json",
+      "proof": "real-engine-repeat",
+      "command": "go nodes 50000"
     }
   ]
 }

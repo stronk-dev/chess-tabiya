@@ -27,6 +27,11 @@ per engine. For each child it:
 - accepts an abort signal for searches, sends UCI `stop`, and leaves the child
   available for the next queued request when the engine responds normally.
 
+Real-engine application startup also checks every ready engine's retained UCI
+option table against the published capability-disposition register. Coverage is
+per instrument: a Stockfish row cannot satisfy a Maia option, and an absent or
+empty option table is a startup error rather than vacuous coverage.
+
 The default transcript holds 256 lines. Restart delay starts at 250 ms, doubles
 to a five-second ceiling, and stops after five attempts; an `EngineSpec` can
 override these values.
@@ -106,6 +111,11 @@ own depth or movetime asynchronously. Every persisted Stockfish evidence payload
 records `engineId` and exactly one of `requestedDepth` or
 `requestedMovetimeMs`, in addition to the returned score/WDL/line and achieved
 depth. The effective judgment budget therefore survives in run provenance.
+
+Automatic tablebase evidence is a best-effort producer: it attempts a node once
+and only while the evidence queue is idle. A busy queue or failed producer probe
+is dropped without becoming an opponent-mode failure; explicit interactive
+tablebase requests retain their normal refusals.
 
 ## Maia-3 sidecar
 

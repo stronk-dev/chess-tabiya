@@ -561,6 +561,7 @@ export class OpponentSelector {
     );
   }
 
+  /** @instrument-fed Stockfish 51-position reproducibility corpus */
   async #strongEngine(request: SelectMoveRequest): Promise<OpponentSelection> {
     const searchBound = this.#strongEngineNodes === null
       ? Object.freeze({ kind: "movetime" as const, value: this.#strongEngineMovetimeMs })

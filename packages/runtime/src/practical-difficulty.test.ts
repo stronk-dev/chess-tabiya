@@ -12,13 +12,22 @@ interface MaiaPolicyFixture {
   readonly candidates: readonly { readonly moveUci: string; readonly mass: number }[];
 }
 
-interface InstrumentFedEntry {
+interface BoundaryInstrumentFedEntry {
   readonly function: string;
   readonly fixture: string;
   readonly boundary: string;
   readonly validSide: "captured";
   readonly refusalSide: "minimal-clone-mutation";
 }
+
+interface RepeatedInstrumentFedEntry {
+  readonly function: string;
+  readonly fixture: string;
+  readonly proof: "real-engine-repeat";
+  readonly command: string;
+}
+
+type InstrumentFedEntry = BoundaryInstrumentFedEntry | RepeatedInstrumentFedEntry;
 
 function unresolvedInstrumentFixtures(entries: readonly InstrumentFedEntry[]): readonly string[] {
   return entries
@@ -98,25 +107,40 @@ describe("humanConcessionMass", () => {
     expect(declarations).toHaveLength(1);
   });
 
-  it("registers every instrument-fed function with a captured boundary fixture", () => {
+  it("registers every instrument-fed function with its real captured fixture", () => {
     const register = JSON.parse(readFileSync(
       new URL("./fixtures/instrument-fed.fixture-register.json", import.meta.url),
       "utf8",
     )) as { readonly entries: readonly InstrumentFedEntry[] };
-    expect(register.entries).toEqual([{
-      function: "humanConcessionMass",
-      fixture: "maia-policy-mass-near-boundary.fixture.json",
-      boundary: "FLOAT32_POLICY_MASS_TOLERANCE",
-      validSide: "captured",
-      refusalSide: "minimal-clone-mutation",
-    }]);
-    const production = readFileSync(
-      new URL("./practical-difficulty.ts", import.meta.url),
-      "utf8",
-    );
-    const declared = [...production.matchAll(
-      /\/\*\*\s*@instrument-fed\b[^*]*\*\/\s*export function\s+(\w+)/gu,
-    )].map((match) => match[1]).sort();
+    expect(register.entries).toEqual([
+      {
+        function: "humanConcessionMass",
+        fixture: "maia-policy-mass-near-boundary.fixture.json",
+        boundary: "FLOAT32_POLICY_MASS_TOLERANCE",
+        validSide: "captured",
+        refusalSide: "minimal-clone-mutation",
+      },
+      {
+        function: "strongEngine",
+        fixture: "../../../../apps/server/src/fixtures/strong-engine-51.json",
+        proof: "real-engine-repeat",
+        command: "go nodes 50000",
+      },
+    ]);
+    const roots = [
+      new URL("./", import.meta.url),
+      new URL("../../../apps/server/src/", import.meta.url),
+    ];
+    const declared = roots.flatMap((root) =>
+      readdirSync(root, { recursive: true, withFileTypes: true })
+        .filter((entry) => entry.isFile() && entry.name.endsWith(".ts") && !entry.name.includes(".test.") && !entry.name.includes(".integration."))
+        .flatMap((entry) => {
+          const source = readFileSync(new URL(entry.name, new URL(`${entry.parentPath}/`, "file:")), "utf8");
+          return [...source.matchAll(
+            /\/\*\*\s*@instrument-fed\b[^*]*\*\/\s*(?:export function\s+|async\s+#)(\w+)/gu,
+          )].map((match) => match[1]!);
+        }),
+    ).sort();
     expect(register.entries.map((entry) => entry.function).sort()).toEqual(declared);
     expect(unresolvedInstrumentFixtures(register.entries)).toEqual([]);
     expect(unresolvedInstrumentFixtures([

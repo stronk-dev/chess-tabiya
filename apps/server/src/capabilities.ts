@@ -96,10 +96,14 @@ export const CAPABILITY_DISPOSITIONS: readonly CapabilityDisposition[] = Object.
   { instrument: "Stockfish", capability: "bestmove / MultiPV rank / bestline", disposition: "refused", reason: "Move verdicts are not condition measurements" },
   { instrument: "Stockfish", capability: "MultiPV > 1 outside enumerate", disposition: "refused", reason: "No attested authoring need outside the comparison enumerator", advertisedOptions: ["MultiPV"] },
   { instrument: "Stockfish", capability: "searchmoves", disposition: "unmeasured", reason: "No attested authoring consumer", experiment: "D87 concession-set validator experiment" },
-  { instrument: "Stockfish", capability: "SyzygyPath / SyzygyProbeLimit", disposition: "refused", reason: "Hosted tablebase is the shipped path", advertisedOptions: ["SyzygyPath", "SyzygyProbeLimit"] },
+  { instrument: "Stockfish", capability: "SyzygyPath / SyzygyProbeLimit / SyzygyProbeDepth / Syzygy50MoveRule", disposition: "refused", reason: "Hosted tablebase is the shipped path", advertisedOptions: ["SyzygyPath", "SyzygyProbeLimit", "SyzygyProbeDepth", "Syzygy50MoveRule"] },
   { instrument: "Stockfish", capability: "UCI_LimitStrength / UCI_Elo / Skill Level", disposition: "refused", reason: "Weakened Stockfish is rejected doctrine", advertisedOptions: ["UCI_LimitStrength", "UCI_Elo", "Skill Level"] },
   { instrument: "Stockfish", capability: "nodestime / Ponder / go mate", disposition: "refused", reason: "No product question asks for these controls", advertisedOptions: ["nodestime", "Ponder"] },
   { instrument: "Stockfish", capability: "Threads / Hash / Clear Hash", disposition: "reached", reason: "Request-scoped deterministic engine profile and reset", surface: "engine worker", advertisedOptions: ["Threads", "Hash", "Clear Hash"] },
+  { instrument: "Stockfish", capability: "Debug Log File / NumaPolicy", disposition: "refused", reason: "Deployment diagnostics and topology are not product measurements", advertisedOptions: ["Debug Log File", "NumaPolicy"] },
+  { instrument: "Stockfish", capability: "Move Overhead", disposition: "refused", reason: "Selections use explicit search bounds rather than an engine clock", advertisedOptions: ["Move Overhead"] },
+  { instrument: "Stockfish", capability: "UCI_Chess960", disposition: "refused", reason: "The shipped drill format is standard chess only", advertisedOptions: ["UCI_Chess960"] },
+  { instrument: "Stockfish", capability: "EvalFile / EvalFileSmall", disposition: "refused", reason: "Custom evaluation networks have no authorized product surface", advertisedOptions: ["EvalFile", "EvalFileSmall"] },
   { instrument: "Maia", capability: "policy mass", disposition: "reached", reason: "Recorded on opponent selections", surface: "human split" },
   { instrument: "Maia", capability: "per-move wdl", disposition: "unmeasured", reason: "Recorded but not calibrated for grading", surface: "human split", experiment: "D87 compare Maia WDL with R9 ground truth" },
   { instrument: "Maia", capability: "per-move score cp", disposition: "reached", reason: "Recorded without grading", surface: "human split" },
@@ -128,12 +132,13 @@ export function assertAdvertisedCapabilityDispositions(
   healthRows: readonly EngineHealth[],
   dispositions: readonly CapabilityDisposition[] = CAPABILITY_DISPOSITIONS,
 ): void {
-  const covered = new Set(dispositions.flatMap((row) => row.advertisedOptions ?? []));
   for (const health of healthRows) {
     if (health.status !== "ready" || health.identity === undefined) continue;
-    if (health.options === undefined) {
+    if (health.options === undefined || health.options.length === 0) {
       throw new TypeError(`Engine ${health.id} published no option table for capability disposition coverage`);
     }
+    const instrument = health.identity.name.toLowerCase().startsWith("maia") ? "Maia" : health.identity.name;
+    const covered = new Set(dispositions.filter((row) => row.instrument === instrument).flatMap((row) => row.advertisedOptions ?? []));
     const missing = health.options.map((option) => option.name).filter((name) => !covered.has(name));
     if (missing.length > 0) {
       throw new TypeError(`Engine ${health.id} advertises capabilities with no disposition: ${missing.join(", ")}`);

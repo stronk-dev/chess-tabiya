@@ -239,6 +239,40 @@ describe("evidence job queue", () => {
     }
   });
 
+  it("attempts producer evidence once, only while idle, and drops its failures", async () => {
+    const gate = deferred<EvidencePayload>();
+    const queue = new EvidenceJobQueue({ execute: () => gate.promise }, {
+      maxConcurrency: 1,
+      tablebaseSource: {
+        kind: "mock",
+        async probe() { throw new Error("producer unavailable"); },
+      },
+    });
+    queue.enqueue(job("producer-budget", "interactive"));
+    expect(queue.enqueueProducer({
+      runId: "producer-budget",
+      nodeId: "busy-node",
+      fen: "4k3/8/8/8/8/8/7P/4K3 w - - 0 1",
+      kind: "tablebase",
+    })).toBeUndefined();
+    gate.resolve(payload("eval"));
+    await queue.whenIdle();
+    expect(queue.enqueueProducer({
+      runId: "producer-budget",
+      nodeId: "busy-node",
+      fen: "4k3/8/8/8/8/8/7P/4K3 w - - 0 1",
+      kind: "tablebase",
+    })).toBeUndefined();
+    expect(queue.enqueueProducer({
+      runId: "producer-budget",
+      nodeId: "fresh-node",
+      fen: "4k3/8/8/8/8/8/7P/4K3 w - - 0 1",
+      kind: "tablebase",
+    })).toBeDefined();
+    await queue.whenIdle();
+    expect(queue.failures("producer-budget")).toEqual([]);
+  });
+
   it("starts jobs FIFO while respecting bounded concurrency", async () => {
     const gates = [deferred<EvidencePayload>(), deferred<EvidencePayload>(), deferred<EvidencePayload>()];
     const starts: string[] = [];

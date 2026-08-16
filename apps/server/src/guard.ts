@@ -18,6 +18,16 @@ import type { EngineCondition } from "@chess-tabiya/schema/drill-pack";
 import { Chess } from "chessops/chess";
 import { parseFen } from "chessops/fen";
 
+import {
+  baseGuardConditionSettings,
+  overrideGuardConditionSettings,
+} from "./guard-conditions.js";
+import {
+  CATEGORY_RANK,
+  learnerCategory,
+} from "./sourcing/tablebase-category.js";
+import type { TablebaseCategory } from "./tablebase.js";
+
 function position(fen: string): Chess {
   return Chess.fromSetup(parseFen(fen).unwrap()).unwrap();
 }
@@ -82,38 +92,8 @@ function alreadyGenerated(run: DrillRun, nodeId: string): boolean {
 }
 
 interface GuardSettings {
-  readonly evalSwingCp: number | null;
-  readonly fireOnMate: boolean;
   readonly rulesTier: boolean;
   readonly conditions: readonly EngineCondition[];
-}
-
-function baseConditions(pack: DrillPackDefinition): readonly EngineCondition[] {
-  if (pack.guard?.conditions !== undefined) return pack.guard.conditions;
-  const evalSwingCp = pack.guard?.evalSwingCp === undefined ? 200 : pack.guard.evalSwingCp;
-  const fireOnMate = pack.guard?.fireOnMate ?? true;
-  return Object.freeze([
-    ...(evalSwingCp === null ? [] : [{ kind: "engine_eval_swing" as const, cp: evalSwingCp }]),
-    ...(fireOnMate ? [{ kind: "engine_mate_appears" as const }] : []),
-  ]);
-}
-
-function overrideConditions(
-  conditions: readonly EngineCondition[],
-  override: { readonly evalSwingCp?: number | null; readonly fireOnMate?: boolean } | undefined,
-): readonly EngineCondition[] {
-  if (override === undefined) return conditions;
-  const retained = conditions.filter((condition) =>
-    condition.kind !== "engine_eval_swing" && condition.kind !== "engine_mate_appears");
-  const existingEval = conditions.find((condition): condition is Extract<EngineCondition, { kind: "engine_eval_swing" }> => condition.kind === "engine_eval_swing");
-  const existingMate = conditions.some((condition) => condition.kind === "engine_mate_appears");
-  const cp = override.evalSwingCp === undefined ? existingEval?.cp : override.evalSwingCp;
-  const mate = override.fireOnMate ?? existingMate;
-  return Object.freeze([
-    ...retained,
-    ...(cp === undefined || cp === null ? [] : [{ kind: "engine_eval_swing" as const, cp }]),
-    ...(mate ? [{ kind: "engine_mate_appears" as const }] : []),
-  ]);
 }
 
 function guardSettings(
@@ -122,12 +102,7 @@ function guardSettings(
   previous: Node,
   learnerMoveUci: string,
 ): GuardSettings {
-  const base = {
-    evalSwingCp: pack.guard?.evalSwingCp === undefined ? 200 : pack.guard.evalSwingCp,
-    fireOnMate: pack.guard?.fireOnMate ?? true,
-    rulesTier: pack.guard?.rulesTier ?? true,
-    conditions: baseConditions(pack),
-  };
+  const base = baseGuardConditionSettings(pack.guard);
   if ((pack.guard?.overrides?.length ?? 0) === 0) return base;
   const path = historyFrom(run, previous.id);
   const spineKeys = deviationAnchors(pack);
@@ -152,13 +127,7 @@ function guardSettings(
     ) continue;
     selected = { depth, moveScoped, index, value: override };
   }
-  const conditions = overrideConditions(base.conditions, selected?.value);
-  return {
-    evalSwingCp: selected?.value.evalSwingCp === undefined ? base.evalSwingCp : selected.value.evalSwingCp,
-    fireOnMate: selected?.value.fireOnMate ?? base.fireOnMate,
-    rulesTier: base.rulesTier,
-    conditions,
-  };
+  return overrideGuardConditionSettings(base, selected?.value);
 }
 
 function insideGuardWindow(pack: DrillPackDefinition, consequence: Node): boolean {
@@ -218,19 +187,17 @@ function tablebaseAt(run: DrillRun, nodeId: string): EvidenceAttachedEvent | und
   );
 }
 
-const CATEGORY_RANK: Readonly<Record<string, number>> = Object.freeze({
-  loss: 0, "blessed-loss": 1, draw: 2, "cursed-win": 3, win: 4,
-});
+const CONDITION_CATEGORIES = new Set<TablebaseCategory>([
+  "loss", "blessed-loss", "draw", "cursed-win", "win",
+]);
 
-function learnerTablebaseCategory(event: EvidenceAttachedEvent, learner: Color): string | undefined {
+function learnerTablebaseCategory(event: EvidenceAttachedEvent, learner: Color): TablebaseCategory | undefined {
   const values = event.data.payload.values;
   if (!Number.isSafeInteger(values.pieceCount) || Number(values.pieceCount) > 7) return undefined;
-  if (typeof values.category !== "string" || !(values.category in CATEGORY_RANK)) return undefined;
+  if (typeof values.category !== "string" || !CONDITION_CATEGORIES.has(values.category as TablebaseCategory)) return undefined;
   const turn = typeof values.fen === "string" ? values.fen.split(/\s+/)[1] : undefined;
   if (turn !== "w" && turn !== "b") return undefined;
-  const side = turn === "w" ? "white" : "black";
-  if (side === learner) return values.category;
-  return ({ win: "loss", loss: "win", draw: "draw", "cursed-win": "blessed-loss", "blessed-loss": "cursed-win" } as const)[values.category as "win" | "loss" | "draw" | "cursed-win" | "blessed-loss"];
+  return learnerCategory(turn === "w" ? "white" : "black", values.category as TablebaseCategory, learner);
 }
 
 function tablebaseCondition(
@@ -243,7 +210,7 @@ function tablebaseCondition(
   const afterCategory = learnerTablebaseCategory(consequence, learner);
   if (beforeCategory === undefined || afterCategory === undefined) return false;
   if (condition.kind === "tablebase_category_regression") {
-    return CATEGORY_RANK[afterCategory]! < CATEGORY_RANK[beforeCategory]!;
+    return CATEGORY_RANK[afterCategory as keyof typeof CATEGORY_RANK] < CATEGORY_RANK[beforeCategory as keyof typeof CATEGORY_RANK];
   }
   if (beforeCategory !== afterCategory) return false;
   const before = previous.data.payload.values.preciseDtz ?? previous.data.payload.values.dtz;

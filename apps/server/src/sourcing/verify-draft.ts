@@ -127,13 +127,19 @@ async function createOfflineQuery(retrievedAt: string): Promise<TablebaseQuery> 
   };
 }
 
-function assertArtifacts(pack: DrillPackDefinition, ledger: EvidenceLedger, manifest: SourceManifest, requireGrounding: boolean): void {
+function assertArtifacts(
+  pack: DrillPackDefinition,
+  ledger: EvidenceLedger,
+  manifest: SourceManifest,
+  requireGrounding: boolean,
+  costRecords: readonly EvidenceRecord[] = ledger.records,
+): void {
   const issues: SourcingIssue[] = [];
   validateLedger(ledger, issues);
   validateManifest(manifest, issues);
   linkage(manifest, ledger, issues);
   evidenceSemantics(ledger, issues, manifest, pack);
-  evidenceSupports(pack, ledger, manifest, issues);
+  evidenceSupports(pack, ledger, manifest, issues, costRecords);
   if (issues.some((issue) => issue.severity === "error")) throw new SourcingError("DRAFT_PACK_INVALID", issues.map((issue) => `${issue.path} ${issue.code}: ${issue.message}`).join("; "));
   if (requireGrounding && assessmentGrounding({ document: pack, ledger, manifest }) !== "ledger_verified") throw new SourcingError("DRAFT_PACK_INVALID", "emitted sidecars did not earn ledger_verified admission");
 }
@@ -197,7 +203,7 @@ async function verifySyzygyDraft(file: string, options: VerifyDraftOptions = {})
   const manifest: SourceManifest = { schema: "tabiya.sourcing.manifest.v1", entries: Object.freeze([...entries.values()]) };
   const sourcedAt = manifest.entries.map((entry) => entry.retrievedAt).sort().at(-1)!;
   const ledger: EvidenceLedger = { schema: "tabiya.sourcing.evidence.v1", packId: pack.id, packVersion: pack.version, packDigest: digest, sourcedAt, records: Object.freeze(records), abstentions: Object.freeze(abstentions) };
-  assertArtifacts(pack, ledger, manifest, options.offline !== true);
+  assertArtifacts(pack, ledger, manifest, options.offline !== true, records);
 
   const paths = sidecars(absolute);
   const args = { file: absolute.replace(`${resolve(".")}/`, ""), offline: options.offline === true };
@@ -305,7 +311,7 @@ async function verifyEngineDraft(file: string, options: VerifyDraftOptions): Pro
   const manifest: SourceManifest = { schema: "tabiya.sourcing.manifest.v1", entries: Object.freeze([...entries.values()]) };
   const sourcedAt = manifest.entries.map((entry) => entry.retrievedAt).sort().at(-1)!;
   const ledger: EvidenceLedger = { schema: "tabiya.sourcing.evidence.v1", packId: pack.id, packVersion: pack.version, packDigest: digest, sourcedAt, records: Object.freeze(records), abstentions: Object.freeze((existing.ledger?.abstentions ?? []).filter((value) => value.kind !== "engine_eval")) };
-  assertArtifacts(pack, ledger, manifest, true);
+  assertArtifacts(pack, ledger, manifest, true, produced);
   const args = { file: absolute.replace(`${resolve(".")}/`, ""), offline: options.offline === true };
   await writeFile(absolute, `${JSON.stringify(pack, null, 2)}\n`, "utf8");
   await writeCanonicalJson(paths.ledger, ledger);

@@ -176,7 +176,13 @@ function engineTemplate(record: EvidenceRecord, pack: unknown, recordIndex: numb
   return true;
 }
 
-export function evidenceSupports(pack: unknown, ledger: EvidenceLedger, manifest: SourceManifest | undefined, issues: SourcingIssue[]): void {
+export function evidenceSupports(
+  pack: unknown,
+  ledger: EvidenceLedger,
+  manifest: SourceManifest | undefined,
+  issues: SourcingIssue[],
+  costRecords: readonly EvidenceRecord[] = ledger.records,
+): void {
   const templatedPointers = new Map<string, number>();
   ledger.records.forEach((record: EvidenceRecord, recordIndex) => {
     const isExplorerTemplate = explorerTemplate(record, pack, manifest, recordIndex, issues);
@@ -213,7 +219,7 @@ export function evidenceSupports(pack: unknown, ledger: EvidenceLedger, manifest
       }
     });
   }
-  deviationCostEvidenceIssues(pack, ledger.records, issues);
+  deviationCostEvidenceIssues(pack, costRecords, issues);
 }
 
 export function deviationCostEvidenceIssues(

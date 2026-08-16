@@ -3,6 +3,7 @@ import { existsSync, readFileSync } from "node:fs";
 import { afterEach, describe, expect, it } from "vitest";
 
 import { EngineSupervisor, parseEngineOptions } from "./engine-supervisor.js";
+import { assertAdvertisedCapabilityDispositions } from "./capabilities.js";
 import { OpponentSelector } from "./opponent-selector.js";
 import {
   engineUnavailable,
@@ -159,6 +160,9 @@ describe("UCI engine supervisor", () => {
       expect.objectContaining({ name: "Clear Hash", type: "button" }),
       expect.objectContaining({ name: "MultiPV", type: "spin", min: 1 }),
     ]));
+    expect(() => assertAdvertisedCapabilityDispositions([
+      supervisor.health("stockfish-analysis"),
+    ])).not.toThrow();
 
     const response = await supervisor.execute("stockfish-analysis", {
       commands: ["position startpos", "go depth 2"],
