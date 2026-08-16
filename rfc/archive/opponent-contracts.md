@@ -1,6 +1,6 @@
 # RFC: Opponent contracts — what a mode executes, what it may claim, and what it must refuse
 
-- **Status:** **implementing 2026-08-16** — accepted after adversarial cross-review (pack lane released, see Changelog), with owner question 2 ruled in the body below. Implementation is underway; archival is deliberately deferred until both gates and independent review.
+- **Status:** **implemented 2026-08-16** — accepted after adversarial cross-review, implemented at `6ba0736`, and independently approved after the A10 body correction and D452–D458 follow-up pass. D457 deliberately remains open pending a newly retained precise-DTZ corpus; archival does not claim that measurement.
   **0.28** claim is **RELEASED** by the cross-review (§5, open question 1); the run-schema
   0.17 claim, the migration position, the `/capabilities` change, and both substantive
   findings survive. Six line references were corrected against the tree, one precedent

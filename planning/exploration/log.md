@@ -3040,3 +3040,18 @@ needs a position verdict law 8 forbids. So a boss runs to a real terminal result
 and rates like any other game. **Consequence to design rather than discover:** a
 boss becomes a different object from every other encounter, and the first
 campaign element required to produce a rules-terminal outcome.
+
+## 2026-08-16 — opponent contracts archived after independent review
+
+`rfc/opponent-contracts.md` completed its lifecycle and moved with its planning record to
+the archives. The landed contract publishes measured Maia resistance at mode scope, makes
+opponent-mode dispositions total, records `orderingBasis` for new perfect-tablebase
+selections, and replaces residual lexical tablebase ties with a position-pure neutral digest
+order. Canonical behavior remains documented in `docs/engine-workers.md`,
+`docs/tablebase-grounding.md`, and `docs/branch-runtime.md`.
+
+The independent pass found and closed D452–D456 and D458, including the fullmove-counter
+instability introduced by the first neutral key and the REST reconstruction gaps. **D457
+remains open:** the historical census used rounded `dtz` while runtime uses `preciseDtz`;
+the instrument now matches runtime, but no newly retained corpus has validated the old tie
+counts. Archival records the shipped contract and does not promote that measurement.
