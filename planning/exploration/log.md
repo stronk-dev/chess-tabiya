@@ -2307,3 +2307,88 @@ browser gate passed 24 with the optional Maia measurement skipped. The browser g
 stale `position` selector after the profile label became `Just Play`; it was corrected rather
 than retried. D81, D82, and D83 are closed. Canonical behavior is in `docs/live-sessions.md`
 and `docs/adaptive-guidance.md`.
+
+## 2026-08-16 — R11 answered: the conjunction hypothesis is refuted, and the premise failed first
+
+**Verdict: a conjunction of two census primitives does not beat either alone on R3's T/C/D
+gate — it is worse on all three axes.** `design/research/conjunction-hypothesis.md`,
+`tools/r11-conjunction-harness/`. Measured over **721 spine transitions from 47 packs** and
+**19,099 legal alternatives** enumerated from the same parents, on the R3 harness's
+`leaves.ts` **unmodified**, so every single-primitive number is R3's re-measured rather than
+re-implemented.
+
+Best single leaf:direction: **69.4%** precision, **12.64×** axis-D lift. Best of the 55
+conjunctions: **35.7%**, **2.73×**. Only **7 of 55** pairs produce enough co-signalling
+witnesses to measure discrimination at all; their **median lift is 0.66×** — worse than a
+random quiet move — with 5 of 7 below 1.0×. **Zero conjunctions beat the best single key on
+both axes, and zero of the seven beat even their own two components.**
+
+**The finding is the arithmetic, not the ranking.** §4 of `campaign-effect-vocabulary.md`
+assumed the conjunction multiplies rarity while informativeness is preserved. Given both
+leaves fired, the two *signals* are near-independent (observed precision a median **1.18×**
+the independence prediction), so **the false positives multiply at exactly the rate the
+specificity does**. Firing is not independent either — median lift **1.136**, 20 of 55
+coupled at ≥1.2×, max **5.26×** — because six leaves computed off one attack map are six
+views of one object. Triples run the mechanism to its end: **38** ever co-signal anywhere,
+the most frequent **6 times in 721**, and **none reaches 10**. A build of three or more
+transition primitives is arithmetically empty, not underpowered.
+
+**The `DESIGN-GAP:` is analytic and reaches furthest. A lens read BEFORE the move is
+discrimination-inert by construction** — it takes the same value for the played move and for
+every alternative from that position, so it can only choose *where the surface speaks*, never
+*which move it distinguishes*. All three of §4's worked triples are pre-move conjunctions; so
+are the shape library's 96 signed signatures and the boss-by-census mechanism. They are
+**selectors**, which is useful and is not synergy. Across 161 such combinations precision
+moves a median **+0.1 pp**, and the big gains (`slider_lines_changed:closed ∧ phase:endgame`,
++42.3 pp) are population effects with the within-position also-signalling share **unchanged**.
+
+**The one positive arm was not part of the hypothesis and is about *when* the lens is read.**
+Post-move lenses reach **8.77×** max, 25 of 72 beating their own leaf, and turn
+`escape_squares_changed:gained` from 0.60× into **6.54×** when the child position has a
+passed pawn. Median is still 0.79× and the counts are 12–30, so it is worth an instrument,
+not a shipping decision.
+
+**R3's headline holds. 88.7%** observation-level false positives (6.43 observations per ply,
+0.73 clearing T∧C) against R3's 89.0%, with ρ(firing rate, FP rate) identical at **−0.143**,
+across a corpus 25% larger and with a very different phase mix. **R3's limit 3 is
+discharged**: the middlegame is now **105 transitions from 11 packs**, not 18 plies, and it is
+the corpus's *least* false-positive phase (86.0%) — the census layer is at its best exactly
+where R4 and R9 jointly proved no oracle exists, and still at 86%.
+
+**Population, stated, per the standing attestation that the population decides the answer
+before the instrument does.** The primary population is the 721 authored spine transitions —
+curated good moves, and therefore the *generous* population for this hypothesis. It still
+lost, and swapping to the 17,906 quiet legal alternatives removes its single precision winner
+(1 of 51 → 0 of 55). A Maia-policy-weighted alternative population — R3's own limit 4, still
+unbuilt — would **shrink** every lift in the dossier rather than grow it, because our
+population weights every legal blunder equally and thereby deflates the alternative rate.
+
+**What it changes.** `campaign-effect-vocabulary.md` §4's synergy claim moves from `[M]` to
+`[V]`-refuted for the *emergent* half; authored synergy was never the claim under test and is
+untouched. `roguelike-run-design.md` §3 rank 6 pre-named the consequence and it now applies:
+**loadouts are additive, not synergistic** — do not ship synergy discovery, combination-payoff
+unlocks, or any deck framing promising the value is in the intersection. The slot budget keeps
+optimising for the smallest sufficient set (Into the Breach's shape), and it can only be
+denominated in position lenses, never in transition primitives.
+
+**Gate touched, not called.** `gates.md` K6 carries a second partial-evidence note: the route
+out of generic explanation is not composition. The criterion is **not** fired — this is
+evidence against one proposed remedy, and the authored deviation notes still discriminate by
+construction.
+
+**Ledger, D277–D286, all ten used** — the refutation, the pre-move-inertness rule, the
+post-move arm, `last_of_role` at 12.64× as the sharpest primitive in the family, the empty
+triple space, the discharged middlegame limit, per-move Maia policy mass as the successor
+question, a second-direction confirmation of D257 (three harnesses re-derive "the corpus"
+with three different regexes), the reusable method trap, and R11's own missing registration.
+
+**Two process notes.** First, **R11 had no ledger row and no queue row** — the only question in
+the campaign series with neither. It was born inside a dossier, and dossiers are not
+registers; its statement had to be reconstructed from two sources that ask subtly different
+questions, and §2b of the new dossier records the drift and names which reading was tested.
+Now registered in `planning/campaign-research-queue.md`. Second, and worth more: **the first
+run of the harness reported seven conjunctions with *infinite* discrimination**, caused by
+keying pairs alphabetically on one population and by leaf order on the other. That is precisely
+the shape of result R11 was hoping for. It is fixed, and the guard is now a rule — canonicalise
+combination keys through one function, and never render an infinite ratio; substitute the
+rule-of-three bound so a zero denominator prints as a bound and stays visibly suspicious.
