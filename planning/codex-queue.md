@@ -1,93 +1,82 @@
-# Codex queue — refreshed 2026-08-16 (after codex's fifth catch)
+# Codex queue — refreshed 2026-08-16 (engine-leverage landed)
 
-**Right again, both blockers real, and the first is my recorded error for the fifth time.**
+**`engine-leverage` is in independent review** (`18d2832`, `a1b0332`) — pack 0.23, run 0.16,
+migration 21, 637 tests, 51/51 reproducible Stockfish. Not yours again; an independent
+reviewer has it. **Do not archive it** until that comes back.
 
-- **Q3 and Q7 were resolved in the status line only.** Their bodies still asked the
-  questions. That is *"a resolution outside the body is not a resolution"* verbatim — the
-  thing this file warns you about, committed by me in the same commit that claimed to close
-  them. **Both are now closed in their own question bodies** (`engine-leverage.md`, Q3 and
-  Q7), each stating its reasoning and marking the correction. Q3 **defers `condition.abstained`
-  to `rfc/evidence-at-runtime.md`** — which is drafting now and owns "what does an absent
-  record mean at a node" anyway, so it costs that RFC nothing and saves this one a run-schema
-  lane. Q7 files `stockfish-play`'s identity **`refused` with its reason in the register row**,
-  because publishing it makes the opponent engine's identity client-visible and nothing in
-  `design/03` or `design/05` asks for that.
+**Correction to this file: the Elo batch was already done.** D58, D60, D73 and D74 are all
+closed (`4ce13c2` and the contract work) and this queue still listed them. My staleness, not
+yours — I re-derived the open set from the ledger this time instead of trusting the file.
 
-- **Migration 22 was unlandable and you were right to stop rather than invent a lane.**
-  `STORAGE_VERSION` is **20**; 21 was held by `teacher-surface`, which is **owner-blocked**
-  until `live-marker-quality` is `implemented`. **Resolved by the register's own standing
-  rule — the draft that cannot land is the one that renegotiates.** `engine-leverage` now
-  takes **migration 21 (`STORAGE_VERSION` 20→21)** and `teacher-surface` moves to **22**.
-  That reassignment costs `teacher-surface` nothing but text: it is backfill-free and
-  unimplemented. Register rows for 21 and 22 now exist — they did not before, which is why
-  neither of us caught the conflict earlier.
+**Three batches below, none needing an RFC.** They are defect fixes inside shipped
+mechanisms, which is the line the last several waves have used: a bug in a shipped mechanism
+is yours; a change to the *format* needs a lane and a draft. Where a fix looked schema-shaped
+I pulled it out and listed it in §3 instead.
 
-**Fifth catch.** The four before: `deviation-classes`, `fixture-realism` +
-`live-marker-quality`, `engine-leverage`'s D64 paragraph, `vocabulary-wiring`'s blockers.
-**Three of the five are the same failure**, so treat any resolution I report as unverified
-until you have seen it in the body it governs.
+## 0. Take this first — a live disclosure gap
 
-## 0. Take these now
+**D140.** Four `/runs/:id/*` routes build an `evidencePacket`; **three call
+`requireGuidanceDisclosure` and `/reasoning-review` does not.** Verified at HEAD: the
+packet is built right after `service.reasoningReviewAccess`, gated only on a role-blind
+checkpoint predicate. That packet carries **rung-3 content** — `human_divergence` markers
+built from recorded Maia policy masses — so it is a rung-3 egress skipping the gate its
+three siblings enforce. **This is D68's shape at a fourth site**, after D68 was closed.
+Small fix, real exposure, take it ahead of everything else.
 
-| # | RFC | Claims | Notes |
-|---|---|---|---|
-| 1 | `rfc/engine-leverage.md` | **pack 0.23**, **run 0.16**, **migration 21** | **Both of your blockers are fixed; this is your next item.** Migration is now **21**, not 22 (`STORAGE_VERSION` 20→21). All four open questions are closed **in the question bodies** — verify that yourself before starting, since I have got this wrong three times: Q1 owner-ruled (design home is **both** `design/05`'s four-clause rung rule and `design/03`'s map row, mirrored into `gates.md` so the gate surface stays single); Q9 owner-ruled (`tablebase_dtz_regression` at `byAtLeast` **3**, disposition **`unmeasured`**, §6.3 experiment binding — 3 is *derived* as the first value off the tablebase's optimality boundary, not chosen); Q3 defers `condition.abstained` to `rfc/evidence-at-runtime.md`, so **no run-schema lane is needed for it**; Q7 files `stockfish-play`'s identity **`refused` with its reason in the register row**, which §6.2's enumeration gate still counts, so the register test passes honestly rather than by exemption. **Criterion 4 stays scoped to the engine path** — widening it to tablebase now that D64 is closed is a separate decision nobody has made |
+## 1. The authoring-instrument batch — this is what unblocks content
 
-**Pack lane:** `DRILL_PACK_SCHEMA_VERSION` reads **0.22**, so `engine-leverage` is a clean
-`0.22 → 0.23`. `claim-backing` released 0.26, so nothing is squeezed behind you.
+Every row here cost a content agent real time this week, measured. The owner's priority is
+content velocity, and these are the friction.
 
-## 1. Small and unowned — take whenever a wave has room
+- **D121** — `make shape-check PROBE=<fen>` **computes the probe and prints nothing**
+  (`shape-check.ts` passes `probeFen` in and drops `probeMatches`). **Three separate agents
+  each rebuilt the same disposable evaluator** because of one missing print, ~30 agent-minutes
+  for a one-line fix. Highest ratio in the ledger.
+- **D149** — `explorerUrl` **hard-codes `moves=12`**, so an authored deviation outside the
+  twelve most-played can be *bounded* but never *counted*. At `moves=40` two packs' deviations
+  measured exactly **0**, which is a materially different sentence from "fewer than N".
+- **D152** — `make expression-census` is **blind to corpus grounding**: identical in all nine
+  fields before and after eleven packs gained 16 `corpus_observed` claims. The repo's only
+  corpus-wide content instrument cannot see rung-4 evidence, so a grounding wave looks
+  exactly like a wave that did nothing.
 
-- **D140 — a LIVE disclosure gap, verified by claude, and the highest-priority item in this
-  section.** Four `/runs/:id/*` routes build an `evidencePacket`; **three call
-  `requireGuidanceDisclosure` and `/reasoning-review` does not** (`rest.ts` — the packet is
-  built right after `service.reasoningReviewAccess`, with no disclosure call, gating instead
-  on a role-blind checkpoint predicate). The packet carries **rung-3 content** —
-  `human_divergence` markers built from recorded Maia policy masses — so this is a rung-3
-  egress that skips the gate its three siblings enforce. **This is D68's shape exactly**
-  (`/voice` and `/speech` served `packet.sentences` after only a read check while sibling
-  routes refused with `ASSISTANCE_WITHHELD`), re-found at a fourth site. Small fix, real
-  exposure; take it ahead of the Elo batch.
+## 2. The selection-integrity batch — one file family, found together
 
-- **D60 — OWNER RULED: apply `[1000, 2400]` and close it.** Configuration inside the
-  *already-archived* `engine-request-contract` §9 mechanism, so no new RFC. Dossier:
-  `design/research/maia-band-calibrated-range.md`.
-- **D102 — the expression census reads its witnesses from a server test fixture by
-  default.** Default is `apps/server/src/fixtures/expression-witnesses.json`; the 26 real
-  witnesses live at `content/witnesses/expression-witnesses.json` and must be passed with
-  `WITNESSES=`. The instrument's default answer and the corpus's real answer are two
-  different numbers. One-line repoint plus deleting the fixture.
-- **D73 / D74 / D58** — out-of-range `Elo` saturates silently (9000 *is* 5000,
-  byte-identical on 51/51, no error field); nine of twelve malformed `Elo` forms leave the
-  previous band in force; an Elo-less request inherits the previous request's band. **Same
-  file, same shape — route all three into one change** or the next sweep re-finds them.
-- **D122 — a unit test pinned two content facts and the middlegame wave turned `make verify` red. Already fixed by claude** (`aee7c64`): `expression-census.test.ts` now selects subjects **by observation**, never by name, with each population asserted non-empty so an empty corpus cannot vacuously pass. Listed so you do not re-find it. It is **D47's class one instrument over**, which is worth knowing before you write the next content-adjacent assertion.
-- **D126 is OWNER-RULED and it unblocks content, not code:** explorer **W/D/B result splits are admissible as `corpus_observed`**. The split may be stated; it may **never** be converted into a move verdict or a quality claim. `claim-backing` owns the `explorer_position_census` record kind. Relevant to you only if a validator rule needs to enforce that boundary.
-- **D104 (yours)** — the nondeterministic browser miss on Active line 4 plies. You logged
-  it and added no retries, which is the right call. It stays open as a measurement to
-  reproduce, not a test to stabilise; if it recurs, capture the run rather than quieting it.
+All four came out of `format-surface`'s cross-review while verifying the same code path, and
+routing them into one change is the point.
 
-## 2. Gated — do not start
+- **D107** — `selectorMode` **rewrites an authored mode by name, in the browser, with no
+  record**, and `compatibleAppliedMode` has an arm for `theory_strict` and none for
+  `strong_engine`.
+- **D108** — `sameEngine` **omits `eloApplied`**, so selection reuse can straddle an Elo
+  change. Sibling of the already-closed D95.
+- **D109** — the two `SelectMoveRequest` builders **disagree about `policyConfigDigest`** for
+  the same run.
+- **D117** — `/capabilities` **advertises three opponent modes without checking any engine
+  exists**: it gates `perfect_tablebase` and `practical_resistance` on provider availability
+  and publishes `human_common`, `strong_engine` and `theory_strict` unconditionally. The
+  declared-vs-executable law on the capabilities payload itself. *(Note: the owner ruled
+  `formatDispositions` off `/capabilities` partly on the strength of this row, so the two are
+  related but separate — this one is the false advertisement, not the siting.)*
 
-- `rfc/vocabulary-wiring.md` — **blocked, you were right.** Q1 (*is `plan_signature` the
-  right factoring, or should `plan_consequence` simply be removed?* — it decides whether the
-  schema bump is needed at all) and Q8 (*is a fourth **attest** obligation wanted, and
-  whose?*) both say **resolve before `accepted`**, and Q4/Q6 are explicitly owner-facing.
-  **Q9 is half-answered by me and the answer is in its body:** per-leg
-  `shapes`/`opponentPolicy` is **D96** and `rfc/format-surface.md` — drafted *after* that
-  question was written — owns and implements it at pack 0.25, so that half is destinated and
-  the ledger row is flipped. **`deviation.planClassId` is not covered and stays
-  undestinated**, so Q9 still blocks on its second half. Q1/Q8 go to the owner next.
-- `rfc/format-surface.md` — **accepted, conditional on two owner rulings it names** (Open
-  questions 2 and 7 — both law-5 calls the draft correctly refuses to make). Claims pack
-  **0.25**. Round 2 declined the cross-review's §4.3 narrowing while accepting every one of
-  its measurements, and inverted criterion 2's fixture pair so the decline is testable.
-- `rfc/teacher-surface.md` — **owner-blocked** until `live-marker-quality` is `implemented`. **Its migration moved 21 → 22** so accepted `engine-leverage` could land; backfill-free, so the cost was text only.
-- `rfc/claim-backing.md` — drafted, **awaiting cross-review**. The owner-ruled remedy for
-  D97. **Released pack 0.26** — validator-and-ledger only, all 68 committed ledgers valid
-  unchanged.
-- `rfc/feedback-delivery.md` — lands **behind** `claim-backing`, which dissolves its C6 fork
-  rather than answering it.
+## 3. Gathered for an RFC — do NOT take these
+
+Schema-shaped, so they need a lane and a draft. Listed so you can see why they are not in §1
+despite being the same kind of friction: **D123/D153** (the 400-char `timingWindows[].note`
+cap, which now blocks the D126 ruling's own sentence — the four shipped notes measure
+337/394/372/359 and a population needs ~120), **D124** (no pack states its explorer band in
+a machine-readable field), **D112** (`$defs/feedbackClaim` is `additionalProperties: true`),
+**D106** (`targetElo` accepted beside `strong_engine` and dropped — `format-surface` scoped
+it out explicitly), **D148/D150** (no record kind can carry a result split; `claim-backing`
+round 2 owns it).
+
+## 4. In flight elsewhere — for your awareness only
+
+`claim-backing` round 2 (claim routing to rung 5 + a principle registry), `pack-graduation`
+(D162 — **production serves one pack, and it is the schema example**), `board-annotation`
+(the owner's arrows ruling, legs a and b). `format-surface` is accepted pending a body edit
+I owe it from the arrows ruling. `vocabulary-wiring` needs one destination recorded before it
+is yours.
 
 ## Protocol reminders
 
