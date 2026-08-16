@@ -1,7 +1,13 @@
 # RFC: Teacher surface — the roster is not a grant
 
-- **Status:** **draft — the owner ruling of 2026-08-16 is discharged in the body; no owner
-  question is open.** The block recorded in `rfc/README.md` was Open question 1: *does the
+- **Status:** **draft — the owner ruling of 2026-08-16 is discharged in the body. One
+  small owner confirmation is now open, raised by the adversarial cross-review of
+  2026-08-16 and stated at Open question 1:** §5.2 narrows the recorded terms of
+  `live-marker-quality`'s 2026-08-15 ruling from *"the marker leaves participants and
+  spectators entirely, on every run, permanently"* to *non-reviewing* spectators. That
+  follows from the later ruling and is not a fork; it is surfaced because the author round
+  simultaneously crossed that ruling in §5.2e and cited it as untouchable in §5.3.
+  The block recorded in `rfc/README.md` was Open question 1: *does the
   review surface work without Maia and the corpus?* **The owner refused the fork and ruled
   that teacher mode ships complete** — *"why do you not give option: add them and ship no
   deferral… literally covered all options except 'implement properly'"*. The question is
@@ -63,7 +69,13 @@
     D68 fix — and the words *teacher*, *reviewer*, *observer* and *coach* appear **nowhere**
     in its 1056 lines. The review case is therefore not something it decided and left for
     this RFC to respect; it is something it never contemplated. §5.2c shows the widening
-    leaves its criterion 6 green **by construction**, without a fixture edit.
+    leaves its criterion 6's **fixtures** green, and states plainly that this holds by
+    fixture convention rather than by construction. **The *"by construction"* claim of the
+    author round is withdrawn by cross-review 2026-08-16:** criterion 6's first half is a
+    `liveMarkers` unit test over `AssistanceContext` literals, in which no live session
+    exists at any layer, so the third conjunct is not what saves it — the first is. Two of
+    criterion 6's sentences and one sentence of its §6.2 owner ruling become false as
+    universally quantified claims, and all three edits are owed at landing (§5.2c, §10).
   - `rfc/archive/live-surface-honesty.md` (*implemented 2026-08-15*) — **added by
     cross-review 2026-08-16.** It closed **D81 and D82**, which this draft was written
     the same day believing open: `session.kind` now selects an assistance *preference
@@ -739,14 +751,25 @@ student boards on one page"*. It is also the one site where the run-level chokep
 not save an implementer who forgets: `runRole` is not on this path at all.
 
 **The enumeration is of *readers*; the *writers* of `expires_at` must be decided too**, and
-**six** of them exist — five plus a family of run-creation inserts the first draft of this
-table omitted (cross-review 2026-08-16; the RFC's own rule is that *every* insert or
-upsert states what it does with the column, and four inserts were relying on an unstated
-default). The default — leaving it alone — is wrong in at least two of them.
+**seven table rows covering twelve statements** exist. The count has been wrong twice and
+the corrections are recorded because the rule is what matters, not the integer: the first
+draft listed **five**; the 2026-08-16 cross-review added a sixth (the family of
+run-creation inserts, relying on an unstated default); the author round of 2026-08-16
+carried six; and the second cross-review of 2026-08-16 found a **seventh** row — the two
+promotion sites each contain a fresh-grant `INSERT` as well as the `UPDATE` the table
+described — plus one misnamed symbol inside the sixth. The default — leaving it alone — is
+wrong in at least two of them, right in the rest, and **must be written down either way**.
 
-**The table now carries a second column, `granted_via` (§5.2), at the same six sites**,
+**One further writer exists and is deliberately outside the table:** the legacy backfill
+`INSERT INTO run_grants (run_id, learner_id, role, granted_at) SELECT id, ?, 'host', ? FROM
+drill_runs` inside `#addLearnerTables`. It runs only in the migration that *creates*
+`run_grants`, strictly before either column exists, so it can neither set nor mis-default
+them. It is named so that criterion 7's enumerating test does not fail on it and does not
+silently skip it.
+
+**The table now carries a second column, `granted_via` (§5.2), at the same seven rows**,
 because §5.2 would otherwise reintroduce exactly the defect this table was built to
-prevent: a nullable column added to `run_grants` whose behaviour at four of six writers is
+prevent: a nullable column added to `run_grants` whose behaviour at most of its writers is
 an unstated default. The two columns are **not** governed by the same rule, and the
 difference is the row that matters:
 
@@ -756,7 +779,8 @@ difference is the row that matters:
 | Write site | `expires_at` | `granted_via` |
 |---|---|---|
 | the submission mint (§3.4) | sets it from `expiresInDays` | **writes `'submission'`** — this is the only writer of a non-NULL value anywhere in the product |
-| **the four run-creation host inserts** — `RunStorage.create`, `createDerivedRun`, the live-run create path, and `createRepertoireGapRun`, each `INSERT INTO run_grants (…) VALUES (…,'host',…)` | **writes NULL, and the column is deliberately left unnamed in the statement so SQLite's NULL default supplies it.** A run's own host never expires. Listed rather than assumed, because "the default is already right" is exactly the reasoning that made two of the rows below wrong | **writes NULL, same mechanism.** A host does not need a review capability: they already satisfy the `role === "host"` arm |
+| **the four run-creation host inserts** — `RunStorage.create`, **`createImportedRun`**, `createDerivedRun` and `createRepertoireGapRun`, each `INSERT INTO run_grants (…) VALUES (…,'host',…)`. **Corrected by cross-review 2026-08-16: the author round's fourth entry was *"the live-run create path"*, which does not exist — `createLiveSession` inserts `'participant'`, never `'host'`. The real fourth is `createImportedRun`, whose host insert sits beside the `imported_games` insert in the same transaction** | **writes NULL, and the column is deliberately left unnamed in the statement so SQLite's NULL default supplies it.** A run's own host never expires. Listed rather than assumed, because "the default is already right" is exactly the reasoning that made two of the rows below wrong | **writes NULL, same mechanism.** A host does not need a review capability: they already satisfy the `role === "host"` arm |
+| **the two fresh-grant INSERT arms inside the promotion sites** — `redeemSessionJoinToken`'s `INSERT INTO run_grants(…) VALUES (?,?,?,?)` when `#roleInTransaction` returns `undefined`, and `createLiveSession`'s match-player `INSERT … 'participant'` on the same condition. **Added by cross-review 2026-08-16: each promotion site is *two* statements, an INSERT and an UPDATE, and the author round's table specified only the UPDATE** | **writes NULL** — a grant minted by redeeming a link or taking a match seat carries no classroom expiry, because no submission produced it | **writes NULL.** Same reasoning. Named rather than defaulted, under this table's own rule — an unstated default at two of eight writers is exactly the defect the table exists to prevent, and it is the defect that made two of the author round's five original rows wrong |
 | `#mutateGrant`'s upsert (`ON CONFLICT … DO UPDATE SET role, granted_at`) | **must also clear `expires_at`**. A host re-granting a teacher by hand is an unbounded act; inheriting a stale classroom expiry would silently expire a grant the learner deliberately made | **must also clear `granted_via`**. Same act, same reasoning run the other way: a hand-made grant is not a submission, and letting a re-grant inherit `'submission'` would hand a review rail to a learner who used the ordinary share control and never submitted anything |
 | `redeemSessionJoinToken`'s `spectator` → `participant` promotion | **must preserve `expires_at`**, never clear it. Clearing it would convert an expiring classroom grant into a permanent participant grant through a path the learner did not intend — the leak this section exists to prevent, arriving through the promotion rather than the mint | **must clear `granted_via`.** The opposite disposition from `expires_at`, and deliberately so — the promotion is a *different act by a different party* than the submission, and carrying the review capability through it would let a teacher redeem a session-join link and keep a rail the learner granted them for reading a finished attempt. Belt and braces: §5.2's `reviewing` predicate independently requires that no live session is open on the run, and a redemption implies one is |
 | `createLiveSession`'s match-player upgrade | same rule as the promotion above | same rule as the promotion above |
@@ -803,17 +827,34 @@ shown because the direction argument below is about this change in isolation:
 //  mayRequestSplit = (role === "solo" || role === "host") && deliveryOpen && !seatedInContest
 ```
 
-`seatedInContest` is true iff the run has a `match_states` row and the principal is its
-`whiteLearnerId` or `blackLearnerId`. It is **not** conditioned on pause state: a seat is
+`seatedInContest` is true iff the run's live session is **open** (`live_sessions.closed_at
+IS NULL`) and that session has a `match_states` row whose `whiteLearnerId` or
+`blackLearnerId` is the principal. It is **not** conditioned on pause state: a seat is
 a seat for the duration of the contest, and making the permission flicker at every pause
 would be a worse contract than either extreme.
+
+**The `closed_at IS NULL` clause was added by cross-review 2026-08-16 and it is not a
+detail — without it §5.2's central equality claim is false on every match run.** The first
+spelling of this predicate was *"the run has a `match_states` row and the principal is its
+white or black learner"*, with no time bound at all. `match_states` is keyed
+`session_id TEXT PRIMARY KEY REFERENCES live_sessions(id) ON DELETE CASCADE` and a session
+is **closed, never deleted** (`UPDATE live_sessions SET closed_at=? WHERE id=? AND closed_at
+IS NULL`), so the row survives the contest **permanently**. Under the unbounded spelling a
+learner who once played a native match on a run is `seatedInContest` on that run forever —
+locked out of Maia, corpus, narration and evidence lighting **on their own finished game,
+for the rest of the run's life**, which is a far wider narrowing than D80 asked for and one
+§5.1's own prose (*"for the duration of the contest"*) did not intend. Worse, it puts a
+submission-granted reviewer — who is not seated — **strictly above the run's own host** on
+all seven surfaces, which is precisely the asymmetry §5.2 exists to abolish, arriving
+through §5.1's door. Bounding the seat to the open session is what the prose already said;
+the predicate merely failed to say it. §9's criterion 10g pins both halves.
 
 **The field is required, not optional-with-a-default**, so the compiler enumerates every
 consumer rather than letting a missed site inherit a silent `false`. The consumers are:
 
 | Consumer | Resolves `seatedInContest` from |
 |---|---|
-| `GET …/human-split` (`rest.ts`) | the run's `match_states` row versus `principal.learnerId` |
+| `GET …/human-split` (`rest.ts`) | the run's **open** live session's `match_states` row versus `principal.learnerId` (`liveSessionByRun` does **not** filter `closed_at`; the resolver must) |
 | `GET …/corpus` (`rest.ts`) | same |
 | **`requireGuidanceDisclosure` (`rest.ts`), which gates `POST …/voice` (both the `compare` and the node arms), `POST …/speech` **and `POST …/reasoning-review`** | same. **Added by cross-review 2026-08-15; the route list corrected upward by cross-review 2026-08-16 — it is called from four places, not three, and `/reasoning-review` is the one nobody had counted.** This is the site `live-marker-quality` landed as the D68 fix (`design/BACKLOG.md` D68, closed 2026-08-15), so it did not exist when the source dossier was written and it is exactly the site this RFC claims to land behind. It must resolve the real seating, not a hardcoded `false`: a `false` here would leave `/voice` and `/speech` narrating the human-split content that `/human-split` refuses on the same run — reinstating D68 for the seated host. **Because the seating check lives inside `requireGuidanceDisclosure` rather than at each call site, `/reasoning-review` is covered for free** — but it is named so the implementer knows a fourth route's behaviour changes, and so a future refactor that inlines the check cannot drop it silently |
 | the machine-seeded group path (`RunService`, the `permittedAssistance` call guarding `GROUP_SEEDS`) | same |
@@ -827,6 +868,21 @@ second reason for the landing order below.
 **The same seven consumers resolve `reviewing` (§5.2), and for the same reason — the field
 is required, so the compiler enumerates them.** The five server-side consumers resolve it
 with `reviewingGrant` (§5.2d) from the run they already hold plus two storage lookups;
+
+**Two mechanical consequences at `requireGuidanceDisclosure`, added by cross-review
+2026-08-16 because both are invisible from the table above.** (i) Its shipped signature is
+`requireGuidanceDisclosure(access: GuidanceAccess)`, and `GuidanceAccess` is
+`{ run, node, role, pack?, historyUci, branchSeed }` — it carries **no principal and no
+storage handle**, so neither new field can be resolved inside it as written. All **four**
+call sites must pass the resolved fields (or the principal plus the service) explicitly;
+the function is not a place a resolver can hide. (ii) `apps/server/src/guidance.test.ts`
+carries a shipped source guard — *"pins every evidence-packet construction site behind
+disclosure"* — which locates the **four** `evidencePacket(` occurrences in `rest.ts` and
+asserts each is preceded, **within 800 characters of source**, by the literal token
+`requireGuidanceDisclosure(`. Widening the call must keep that literal spelling and must
+not push any site past the 800-character window, or a shipped guard turns red for a reason
+that is not a defect. Named so the implementer does not discover it as a mystery failure.
+
 `DrillScreen.svelte` reads it from the `reviewing` prop the run-detail projection carries
 and **never derives it**; the two test files state it explicitly, both as `false`, which is
 what keeps their existing assertions byte-identical. The consumer list is one list, walked
@@ -887,6 +943,24 @@ outside for the one admissible reason.
 > submission-minted grant gets the run host's own assistance table — the same one, not a
 > reviewer's variant of it.**
 
+**"Terminal" in that sentence is a summary, not the predicate, and cross-review 2026-08-16
+requires the difference to be printed rather than glossed.** What conjunct two tests is
+`run.events.some((event) => event.type === "outcome.reached")` — **monotone and sticky**.
+A run is not frozen by reaching an outcome: the learner may rewind, branch and commit
+further moves, and the flag never comes back off. Under `attempt_end` that is harmless,
+because `feedbackDeliveryOpen` re-closes on the next `move.committed` and the first
+conjunct shuts the rail with it. Under `delayed_checkpoint`, `segment_end` and
+`immediate_guard`, `feedbackDeliveryOpen` **is** `feedbackDisclosed`, which is monotone
+too — so on those policies a teacher keeps the full rail while the learner plays new
+branches on a submitted run. **That is not a disclosure breach and must not be described as
+one:** the learner is disclosed at the same instant on the same run, so the teacher never
+passes the run's line, and §5.2b property 1 holds unchanged. But it does mean the rail is
+scoped to *"a run that has finished at least once"*, not to *"a finished attempt"*, and the
+sentences in §5.3 and §Motivation that lean on the second reading are leaning on something
+the code does not say. Tightening it — for instance to *no `move.committed` after the last
+`outcome.reached`* — is a coherent alternative and is **Open question 10**, not a silent
+default.
+
 Everything below is that sentence made executable. The design commitment worth naming
 first is the one it *refuses*: there is no reviewer tier, no third permission value, and
 no cell whose value depends on being a teacher. The permission function gains a boolean
@@ -925,14 +999,27 @@ export interface AssistanceContext {
    what it says: it admits a reader to the arm the run's host is already on, subject to
    the run's own barrier unchanged. **A reviewing teacher on a run whose delivery is shut
    is refused, exactly as the learner is.**
-2. **`seatedInContest` dominates.** A reviewer who is also a seated contestant is refused.
-   The two fixes compose in the safe order without a special case.
+2. **`seatedInContest` dominates, and it dominates *symmetrically* — which is a claim about
+   §5.1's predicate, not about this one.** A reviewer who is also a seated contestant is
+   refused; the two fixes compose in the safe order without a special case. But the
+   composition is only safe because §5.1's seat is now bounded to an **open** session.
+   **Cross-review 2026-08-16 found the unbounded spelling and it broke this section's
+   central claim outright:** with a permanent seat, the run's own host on a finished native
+   match is `mayRequestSplit === false` forever while a submission-granted reviewer is
+   `true`, so the reviewer sits **strictly above the host** on all seven surfaces. The
+   equality this section is built on — and criterion 10c's deep-equal assertion — is false
+   on every such run, and 10a's solo-pack fixture cannot see it. The fix is in §5.1, the
+   pin is criterion 10g, and the lesson is recorded here because §5.2's whole safety
+   argument is *"the reviewer is put on an arm the host is already on"*: any input that can
+   knock the **host** off that arm while leaving the reviewer on it falsifies it, and
+   `seatedInContest` is currently the only such input. A third field with that property
+   would have to be checked the same way.
 3. **When both new fields are `false` the function is byte-identical to the shipped one.**
    `deliveryOpen && true && (solo || host)` is the shipped `(solo || host) && deliveryOpen`.
    Criterion 10d pins this, so the migration of every existing call site is provably a
    no-op before either new behaviour is switched on.
 
-#### 5.2c Why this does not break `live-marker-quality`, by construction
+#### 5.2c What this does to `live-marker-quality` — its fixtures survive, one of its sentences does not, and the difference matters
 
 `reviewing` is **true** for a principal on a run iff **all three** hold:
 
@@ -940,23 +1027,81 @@ export interface AssistanceContext {
 |---|---|---|
 | the principal's `run_grants` row on this run has `granted_via = 'submission'` | `RunStorage.grantMintedBySubmission` (§4.3 read site 10) | the learner's own act is the only source of the capability, which is §2.2's whole design applied one level down. A hand-minted spectator grant does **not** confer it — see the disposition question below |
 | the run has an `outcome.reached` event | `run.events` — already in memory at every consumer | `design/05` §3a-i: *"`outcome.reached` discloses under every policy (a finished run has nothing left to contaminate)"*. This is the design tier's own sentence, and it is the reason the review rail is admissible at all |
-| no live session is open on the run | one lookup on `live_sessions` by `run_id` — **`UNIQUE` in the shipped DDL**, so at most one row exists per run — with `closed_at IS NULL` | a submitted run can later carry a live session; without this the teacher would hold a rung-3 rail over a game somebody is playing, which is precisely what `live-marker-quality` refuses |
+| no live session is open on the run | one lookup on `live_sessions` by `run_id` — **`NOT NULL UNIQUE` in the shipped DDL at both sites, verified** — with `closed_at IS NULL`. The shipped `liveSessionByRun` does **not** apply that filter and must not be reused unmodified | a submitted run can later carry a live session; without this the teacher would hold a rung-3 rail over a game somebody is playing, which is precisely what `live-marker-quality` refuses |
 
-`live-marker-quality`'s acceptance criterion 6 asserts `ASSISTANCE_WITHHELD` on `/voice`
-and `/speech` *"for participant, spectator, and pre-disclosure solo contexts"*. **Every
-context that criterion constructs is a live-session context, and the third conjunct makes
-`reviewing` false in all of them.** Its fixtures stay green with no edit — the compiler
-will require the two new fields be spelled out, and both are `false` there. That is a
-stronger guarantee than §5.1 could offer for the same criterion's *other* half, where the
-draft could only ask the implementer to check that a host fixture is unseated.
+**On the race, since a permission surface has to answer it** (cross-review 2026-08-16).
+`reviewingGrant`'s three inputs are resolved by three reads that are not in one
+transaction, so a session opened between the lookup and the response yields **one** stale
+answer. That is acceptable and is not a new property: `deliveryOpen` has had exactly the
+same shape since it shipped, `permittedAssistance` is evaluated per request, and the next
+request refuses. **What would not be acceptable is a cached or sticky `reviewing`**, and
+§5.2e's first bullet already forbids it — the flag is recomputed per request on the server
+and arrives at the client as a projection field it *never derives* (§5.2d). The one
+implementation note: the client's copy is as old as its last `GET /runs/:id/graph`, so the
+client may render a rail the server will refuse. That is the ordinary refusal path
+(`ASSISTANCE_WITHHELD`), and §7.2 already requires the rail to state a closure rather than
+render a dead control — but the client must treat a refusal on a rail it believed open as
+a **re-fetch**, not as an error toast.
 
-**What is honestly given up, said plainly:** read as a universally quantified claim over
-all spectator contexts rather than as a claim about its fixtures, criterion 6's sentence
-becomes false — a spectator context with `reviewing: true` is permitted. That is the
-ruling, not an oversight. The remedy is **one clause added to criterion 6 at this RFC's
-landing** (*"…for participant, non-reviewing spectator, and pre-disclosure solo
-contexts"*), proposed in §10's cross-draft row and **not made here**, because this RFC
-lands behind `live-marker-quality` and a draft does not edit an implementing sibling.
+**The author round claimed this compatibility *"by construction, not by fixture edit"*, on
+the ground that *"every context criterion 6 constructs is a live-session context, so the
+third conjunct makes `reviewing` false in all of them."* **Cross-review 2026-08-16 read
+criterion 6 and that ground is false in both of its halves.** The conclusion survives; the
+argument does not, and the argument was what Open question 1's closure rested on, so it is
+replaced rather than patched.
+
+Criterion 6's verbatim text is two claims on two layers:
+
+> *"A test asserts a `human_divergence` marker is present in `pivotalMarkers` and **absent
+> from `liveMarkers` for a participant, for a spectator**, and for a solo viewer with
+> `feedbackDeliveryOpen === false`; and present for solo/host with delivery open. […]
+> Server tests assert `/voice` and `/speech` return `ASSISTANCE_WITHHELD` for participant,
+> spectator, and pre-disclosure solo contexts, then open for solo/host after disclosure."*
+
+- **Its first half is a runtime unit test.** `liveMarkers(run, branchId, context)` takes an
+  `AssistanceContext` **object literal**. There is no live session anywhere in it — no
+  `live_sessions` row, no storage, no run id to look one up by. "Every context is a
+  live-session context" is not merely unproven there; the layer has no sessions in it.
+- **Its second half does not need a live session either.** A `spectator` row in
+  `run_grants` is mintable by the shipped `POST /runs/:id/grants` on a run that has never
+  had a session, and `POST …/voice` reaches `requireGuidanceDisclosure` through
+  `guidanceAccess` → `requireRead`, which consults `runRole` and nothing else. A server
+  test can construct that spectator with no session at all.
+
+**Why the fixtures nevertheless stay green, stated as the real reason.** Not conjunct
+three. It is conjunct **one**: `reviewing` is `false` unless the grant carries
+`granted_via = 'submission'`, and criterion 6 mints no submission — the word *submission*
+does not occur in `live-marker-quality`. At the runtime layer the field is a literal the
+compiler forces the fixture to spell, and it will be spelled `false`. **So this RFC's
+compatibility with criterion 6 is exactly as strong as §5.1's was, and no stronger: it
+holds by fixture convention, checked by criterion 11's third test, not by a structural
+impossibility.** The author round's claim of a stronger guarantee is withdrawn. The
+practical difference is that a *future* edit to `live-marker-quality`'s fixtures could
+break it silently, which is why criterion 11 asserts the property over that RFC's contexts
+rather than trusting the reading.
+
+**Two of its sentences become false as universally quantified claims, not one.** This is
+the honest cost and the author round undercounted it:
+
+1. **The `/voice` + `/speech` sentence** — *"for participant, spectator, and pre-disclosure
+   solo contexts"* — needs *"non-reviewing spectator"*.
+2. **The `liveMarkers` sentence** — *"absent from `liveMarkers` for a participant, for a
+   spectator"* — needs the same qualification, because §5.2e's seventh row and criterion
+   10a **do place the `human_divergence` marker for a reviewing spectator**. `liveAdmitted`'s
+   `human_divergence` arm is `return permission.humanSplit === "free"` (verified at the
+   symbol), so opening the table opens the marker; that is the mechanism §5.2e credits, and
+   it is the same mechanism that falsifies this sentence.
+3. **And `live-marker-quality` §6.2's body** carries the owner ruling's cost in a stronger
+   form still — *"the marker **leaves participants and spectators entirely, on every run,
+   permanently**"*. That sentence is a recorded owner ruling, not a test, and §5.2 crosses
+   it. **§5.3 is rewritten against this finding**, because the first draft of §5.3 cited
+   the same ruling as the reason this RFC may not touch the live case while §5.2 was
+   already crossing it in the review case.
+
+None of the three edits is made here — this RFC lands behind `live-marker-quality` and a
+draft does not edit an implementing sibling — and all three are carried in §10's cross-draft
+row, which the author round left claiming *"the only edit §5.2 requires anywhere outside
+this document"* in the singular.
 
 Two further compatibility facts, both verified at the symbol rather than assumed:
 
@@ -1048,7 +1193,7 @@ complete set §2.3.4 named as refused:
 | `POST …/speech` | `ASSISTANCE_WITHHELD` | the same, synthesised |
 | `POST …/reasoning-review` | `ASSISTANCE_WITHHELD` | quotation proposals over the learner's own recorded transcript |
 | `permittedAssistance().boardLighting` / `.arrows` | `"sight"` | `"evidence"` |
-| `liveAdmitted` on `human_divergence` | not placed | placed — via L4(b), no code change (§5.2c) |
+| `liveAdmitted` on `human_divergence` | not placed | placed — via L4(b), **with no change to `liveAdmitted` or `pivotalMarkers`**. Not *"no code change"*: `liveMarkers`' only caller is `DrillScreen.svelte`, which must forward the `reviewing` prop (§5.2d), and the dot renders only if the *viewer's own* `assistance.markers` is `"live"` — `SILENT_ASSISTANCE.markers` is `"off"` and `loadAssistance` returns it for every unset profile. Criterion 10a states both (corrected by cross-review 2026-08-16) |
 | `GET …/evidence` (`RunService.evidence`) | **already open** — no role check | unchanged; it is now *coherent* with the rest rather than an exception |
 
 **Law 8 holds unchanged at every one of them, and none of it is new machinery.** These are
@@ -1061,9 +1206,17 @@ a learner's move that the learner is not shown, because nothing is graded for an
 
 **The two consequences a reader should not have to discover:**
 
-- **The rail closes if the learner reopens the run live.** Conjunct three is not sticky. A
-  teacher mid-review whose student opens a live session on the submitted run loses Maia,
-  corpus and narration until it closes; read access is untouched. That is `design/05:41`'s
+- **The rail closes if the learner opens the run live — *once*, and never again.** Conjunct
+  three is not sticky. A teacher mid-review whose student opens a live session on the
+  submitted run loses Maia, corpus and narration until it closes; read access is untouched.
+  **The word is "opens", not "reopens"** (cross-review 2026-08-16): `live_sessions.run_id`
+  is `NOT NULL UNIQUE` and a session is closed by `UPDATE … SET closed_at`, never deleted,
+  so a run carries **at most one live session in its entire life**. The transition this
+  bullet describes can happen exactly once per run and is irreversible in the other
+  direction. The implementer's corollary is that `liveSessionByRun` — which selects the row
+  by `run_id` with **no `closed_at` filter** — cannot be reused for conjunct three as it
+  stands; the resolver needs its own `closed_at IS NULL` predicate, or every run that ever
+  hosted a session loses the rail forever. That is `design/05:41`'s
   *absence is stated, never simulated* applied here: the classroom view and the run rail
   must say the rungs are closed and why, never render dead controls. It is also the
   inverse of §4.1's divergence rule and gets the same treatment.
@@ -1088,18 +1241,44 @@ human-model split and the corpus rungs into the teacher surface"*). §5.2 builds
 The live case was never inside that question; it is a different surface with a different
 answer already given.
 
-**And that answer is an owner ruling of its own, one day older.**
-`rfc/live-marker-quality.md` carries an owner ruling of 2026-08-15 whose recorded terms
-are that *"the marker leaves participants and spectators entirely, and leaves solo play
-until delivery opens"*, accepted *"with open eyes"* as a stated cost. Opening rung 3 to a
-live spectator is not a cost this RFC may pay on the owner's behalf; it would reverse a
-ruling made a day earlier, on a surface another RFC is mid-implementation on, and an
-author does not reverse an owner ruling by specification. **That is the whole and only
-reason, stated as required rather than left as a cost comparison:** it is not expensive,
-it is not risky, and it is not out of scope — it is occupied. If the owner wants it, the
-ruling to revisit is `live-marker-quality`'s, and the revisit is cheap: that RFC records
-its own ruling as *"cheap to reverse… worth revisiting after the surface is actually
-used"*, and under §5.2's shape the reversal is one conjunct, not a design.
+**The author round justified this by citing an owner ruling of 2026-08-15 in
+`rfc/live-marker-quality.md`, and cross-review 2026-08-16 went and read that ruling.
+It does not say what the citation claimed, and the direction of the error is the
+dangerous one: the ruling is *wider* than the use made of it, so §5.2 crosses it while
+§5.3 was arguing the RFC may not.** The banner form quoted by the author round is
+*"the marker leaves participants and spectators entirely, and leaves solo play until
+delivery opens"*, accepted *"with open eyes"*. But §6.2's body — which that ruling
+directs into the specification — records the accepted cost as:
+
+> *"the marker **leaves participants and spectators entirely, on every run, permanently**"*
+
+**On every run, permanently.** A reviewing teacher is a `spectator`, and §5.2e's seventh
+row plus criterion 10a place the `human_divergence` marker for them. So §5.2 already
+narrows that ruling's scope from *all spectators* to *non-reviewing spectators*, on the
+authority of the owner's **later** ruling of 2026-08-16 that teacher mode ships complete.
+That is a defensible reading — a later ruling on the review surface is entitled to move an
+earlier ruling's boundary where the two touch — but **it has to be stated as what it is,
+not concealed behind a citation of the ruling being narrowed.** Citing a ruling for a
+proposition it does not support is the failure `feedback-delivery`'s closure shipped on
+2026-08-16 and it is not repeated here.
+
+**So the reason the live case stays outside is restated, smaller and true.** It is not
+that the 2026-08-15 ruling is untouchable — §5.2 touches it. It is that the 2026-08-16
+ruling **is about the review surface and says nothing about the live one**: the row it is
+recorded in is *"Teacher mode ships COMPLETE — build the missing rungs"*, its named subject
+is Open question 1, and Open question 1's subject was a submitted, finished attempt. The
+review boundary of the earlier ruling is moved by an owner ruling; the **live** boundary
+has no such ruling behind it, and an author may not move it by specification. That is a
+narrower claim than *"it is occupied"*, it is the true one, and it survives the reader who
+notices §5.2 in the other direction.
+
+If the owner wants the live case too, the ruling to revisit is `live-marker-quality`'s and
+the revisit is cheap: that RFC records its own ruling as *"cheap to reverse… worth
+revisiting after the surface is actually used"*, and under §5.2's shape the reversal is one
+conjunct, not a design. **This is therefore an owner question this RFC does not open and
+does not need answered to land** — §5.2 is complete without it — but it is named as one
+rather than as a closed matter, because the previous draft closed it with a citation that
+did not hold.
 
 **The other half of §2.3.4's incoherence is also left, and it is left to its owner.**
 `RunService.evidence` serves staged Stockfish to **any** granted reader on **any**
@@ -1307,11 +1486,28 @@ Otherwise: none.
    sites — `GET /sessions` and `RunStorage.grantMintedBySubmission` explicitly among them,
    so an expired grant mints no review permission either — and the test enumerates them by
    symbol and fails if an **eleventh** reader of `run_grants` is introduced without a case.
-   A second test pins the **six** §4.3 write sites **for both columns**: a host's manual
+   A second test pins the **seven** §4.3 write rows **for both columns**: a host's manual
    re-grant clears `expires_at` *and* `granted_via`; a session-join promotion of an
    expiring, submission-minted spectator grant **preserves `expires_at` and clears
    `granted_via`** — the one row where the two columns are required to diverge, and
-   therefore the row a single-column test would pass while measuring nothing.
+   therefore the row a single-column test would pass while measuring nothing. **The
+   divergence row's reachability is asserted, not assumed** (cross-review 2026-08-16): the
+   state it needs is a learner who submits a finished run and *then* opens an academy
+   session on that same run and invites the teacher as a `participant`, which
+   `redeemSessionJoinToken` reaches only while `closed_at IS NULL`. A criterion whose
+   fixture cannot be built is a criterion that cannot be satisfied, so the path is written
+   out here.
+7a. **The write enumeration is a source guard, not a behaviour test, and it must count
+    statements rather than sites.** A test greps `storage.ts` for every `INSERT INTO
+    run_grants`, `INSERT OR IGNORE INTO run_grants`, `INSERT … ON CONFLICT(run_id,
+    learner_id)` and `UPDATE run_grants SET role` occurrence, asserts the count matches
+    §4.3's table plus the named migration backfill, and fails when an unlisted one appears.
+    **This exists because the site count has been wrong in every revision of §4.3** — five,
+    then six, then seven — and each error had the same shape: a *function* was listed while
+    one of its two statements was not. Counting functions is what let
+    `redeemSessionJoinToken`'s fresh-grant `INSERT` and `createLiveSession`'s match-player
+    `INSERT` sit unspecified through three drafts of a table whose stated purpose is that no
+    writer defaults silently.
 8. An expired host grant does not leave a run hostless through `deleteLearner`, and does
    not keep a run in `host_directed` board control.
 9. Learner-side direct revoke (`POST /runs/:id/grants {op:"revoke"}`) removes access
@@ -1343,10 +1539,27 @@ Otherwise: none.
      `ASSISTANCE_WITHHELD`; `POST …/voice` (both arms), `POST …/speech` and
      `POST …/reasoning-review` return content; `permittedAssistance` returns
      `boardLighting: "evidence"` and `arrows: "evidence"`; and `liveMarkers` places the
-     `human_divergence` marker. The last one is asserted **because no code change produces
-     it** — it arrives through `live-marker-quality`'s L4(b) reading the table, and an
-     untested behaviour that appears without a diff is the one most likely to be removed
-     by accident later.
+     `human_divergence` marker. The last one is asserted **because no change to
+     `liveAdmitted` produces it** — it arrives through `live-marker-quality`'s L4(b) reading
+     the table, and an untested behaviour that appears without a diff is the one most likely
+     to be removed by accident later.
+
+     **Two fixture requirements the criterion is unsatisfiable without, added by
+     cross-review 2026-08-16.** (i) `pivotalMarkers` only emits a `human_divergence` marker
+     from an `opponent.move_selected` event whose `selection.policyModeApplied` is
+     `"human_common"` and whose on-window candidates carry masses with `max ≤ 0.50` and at
+     least three at `≥ 0.15` (`packages/runtime/src/pivotal.ts`, the `divergence` helper) —
+     verified at the symbol. A 10a fixture without such an event asserts the presence of a
+     marker that never existed for anybody, which is the criterion-that-cannot-be-satisfied
+     class. (ii) The marker reaches a **screen** only through `DrillScreen.svelte`'s single
+     `liveMarkers` call, which is itself gated on the *viewer's own client-local*
+     `assistance.markers === "live"` preference — and `loadAssistance` returns
+     `SILENT_ASSISTANCE`, whose `markers` is `"off"`, for every unset profile. So §5.2e's
+     *"no code change"* is true of `liveAdmitted` and **false of the delivery path**:
+     `DrillScreen` must receive and forward the `reviewing` prop (§5.2d) before the teacher
+     can see anything, and the teacher must have turned their own markers on. The criterion
+     therefore asserts `liveMarkers`' return value, which is the permission fact, and states
+     the preference gate rather than implying the dot appears unbidden.
 10b. **Each of the three `reviewing` conjuncts is load-bearing, tested one at a time.**
      From the passing state of 10a, flipping exactly one input closes the rail and leaves
      read access intact: (i) the grant is hand-minted through `POST /runs/:id/grants`
@@ -1356,28 +1569,67 @@ Otherwise: none.
      while `GET /runs/:id` still succeeds. **A conjunct that cannot be shown to refuse
      anything is a conjunct that is not doing work**, and this criterion is what stops the
      predicate degenerating into `granted_via = 'submission'` under a later refactor.
-10c. **The reviewing teacher's table equals the run host's, field by field.** On the 10a
-     run, `permittedAssistance` is called once with the teacher's resolved context and once
-     with the host's, and the two frozen records are asserted **deep-equal** — not merely
-     that `humanSplit` is `"free"`. This is §Motivation's *"no viewer-specific surface at
-     all"* claim made falsifiable; if any future cell diverges by viewer, this fails.
+10c. **The reviewing teacher's table equals the run host's, field by field — on two runs,
+     not one.** `permittedAssistance` is called once with the teacher's resolved context and
+     once with the host's, and the two frozen records are asserted **deep-equal** — not
+     merely that `humanSplit` is `"free"`. This is §Motivation's *"no viewer-specific
+     surface at all"* claim made falsifiable; if any future cell diverges by viewer, this
+     fails. **The second run is required and is the whole point** (cross-review 2026-08-16):
+     the first is 10a's solo pack run, on which the equality is trivial and would hold under
+     the defective predicate too; the second is a **finished native match** — a run whose
+     closed live session still carries a `match_states` row naming the host as White,
+     submitted after the contest ended. Under §5.1's original unbounded `seatedInContest`
+     the host reads `"locked_off"` while the teacher reads `"free"`, so this assertion is
+     what catches it. A deep-equality test whose only fixture is the case where every
+     candidate implementation agrees is the [[D444]] class — it passes while measuring
+     nothing — and 10a's run is exactly that case.
 10d. **The migration of the call sites is provably a no-op.** A test asserts that for the
      full cross-product of `sessionKind × deliveryOpen × role` with `seatedInContest:
      false, reviewing: false`, the new `permittedAssistance` returns records deep-equal to
      the shipped function's output, captured as literals before the change. Both new
      behaviours are therefore switched on by the resolvers, never by the edit.
-10e. **`client-surface-floor`'s pointwise guard still covers the input space.** Its
-     *"every non-host assistance permission pointwise at or below the host ceiling"* loop
-     is extended over `seatedInContest` and `reviewing` as well as `deliveryOpen`, and
-     still passes — at equality where `reviewing` is true on both sides. A guard whose loop
-     stops enumerating the inputs it guards is the *passes-while-measuring-nothing* class,
-     so extending it is required rather than optional.
+10e. **Both of `client-surface-floor`'s shipped permission tests, and the extended loop must
+     be able to fail.** `apps/web/src/lib/client-surface-floor.test.ts` carries **two**, and
+     the author round named only one:
+     - *"keeps every non-host assistance permission pointwise at or below the host
+       ceiling"* — its loop is extended over `seatedInContest` and `reviewing` as well as
+       `deliveryOpen`, and still passes, at equality where `reviewing` is true on both
+       sides.
+     - *"keeps participant and spectator evidence permissions role-scoped"* — which asserts
+       `humanSplit`/`corpus` are `"locked_off"` and `boardLighting`/`arrows` are `"sight"`
+       for spectator **unconditionally**. This is the shipped embodiment of the invariant
+       §5.2 narrows; it stays green only because the compiler forces its literal to spell
+       `reviewing: false`. Named here because an unnamed green test is not evidence.
+
+     **And the extended loop must cross the two sides, not hold them equal.** The shipped
+     guard builds host and candidate *with the other inputs held fixed*, so extending it
+     over the new fields pairs host(seated, reviewing) with candidate(seated, reviewing) and
+     can never construct the pairing that actually occurs in production: a host whose
+     `reviewing` is always `false` (host grants write `granted_via` NULL, §4.3) against a
+     spectator whose `reviewing` may be `true`. The loop must therefore range over the two
+     sides **independently**, and it must be shown to **fail** against §5.1's original
+     unbounded `seatedInContest` — a guard extended in a way that cannot generate the
+     asymmetry it guards against is the *passes-while-measuring-nothing* class wearing a
+     larger loop.
 10f. **Law 8 and the byte-identity of the review projection.** On the 10a run, the teacher
      and the learner receive byte-identical responses from `GET …/human-split`,
      `GET …/corpus`, `GET …/evidence` and `GET …/events`. A source guard asserts this RFC
      adds no call to a voice or model provider and composes no sentence: the only providers
      reached are the shipped ones, through the shipped `renderVoice` / `evidencePacket`
      path, with `BANNED_JUDGEMENTS` unchanged.
+10g. **The seat ends when the contest ends, and the run's own player is never below their
+     reviewer.** Added by cross-review 2026-08-16 as §5.1's missing pin. One learner hosts a
+     native match on a pack run, plays it to `outcome.reached`, and the session is closed.
+     Three assertions on that run afterwards: (i) `seatedInContest` resolves **false** for
+     both former players, because the session's `closed_at` is set; (ii) the host-player's
+     `permittedAssistance` returns `humanSplit: "free"` and `boardLighting: "evidence"` —
+     they are not locked out of their own finished game; (iii) after the learner submits it,
+     the teacher's table and the host's are deep-equal (10c's second fixture). A fourth
+     assertion runs the *same* three during an **open** match at a mutually-accepted pause
+     and gets the opposite of (i) and (ii), so D80's narrowing is shown still to bite. **The
+     criterion exists because the unbounded predicate satisfied every other criterion in
+     this section**: `match_states` survives session close, so nothing in 10a–10f, in
+     criterion 10, or in either `client-surface-floor` guard as extended would have gone red.
 
 **Both directions at once:**
 
@@ -1386,9 +1638,15 @@ Otherwise: none.
     `rfc/live-marker-quality.md`'s refusal assertions are untouched, and the reason
     criterion 10b's case (i) exists. Separately, a test asserts `live-marker-quality`'s
     *"then open for solo/host after disclosure"* fixture uses a **non-seated** host, so the
-    two RFCs' criteria are compatible by construction rather than by luck (§5.1), and a
-    third asserts that **every context that RFC constructs has `reviewing === false`** —
-    the §5.2c claim, made falsifiable rather than argued.
+    two RFCs' criteria stay compatible (§5.1), and a third asserts that **every context that
+    RFC constructs has `reviewing === false`** — the §5.2c claim, made falsifiable rather
+    than argued. **Both of those tests are fixture-convention guards and are labelled as
+    such** (cross-review 2026-08-16): §5.2c's *"by construction"* argument is withdrawn, so
+    criterion 11 is not a restatement of a structural fact but the *only* thing standing
+    between this RFC and a silent break the next time `live-marker-quality`'s fixtures are
+    edited. It is therefore acceptance-blocking rather than confirmatory, and it must name
+    the file and test titles it ranges over so a renamed fixture fails loudly instead of
+    matching nothing — the census-join-key failure, one tier over.
 
 **Migration:**
 
@@ -1432,10 +1690,12 @@ a route that contradicts the table.
 | **Token surface** | **none.** `public_tokens` keeps its two shipped scopes; enrolment is handle-bound, per the `adoption-wave-1` ownership pin |
 | **Refusal codes** | **none** — added by cross-review 2026-08-15, because the first draft made no claim here and §7.1 named a *"uniform not-found"* with no code behind it. There is no `NOT_FOUND` member of `ServerErrorCode` (`errors.ts`); the literal in `rest.ts` is the unrouted-path response, and `RUN_NOT_FOUND` is run-specific. **Ruling: every classroom and assignment non-disclosure refuses `INVALID_REQUEST`**, identical in body for "does not exist", "you are not a member" and "you have left". Reusing `RUN_NOT_FOUND` for a classroom would lie about the subject; minting `CLASSROOM_NOT_FOUND` would both add a versioned member and *be* the disclosure it is meant to prevent, since only a member could ever see it |
 | **Refusal codes, second pass** | **still none**, re-swept 2026-08-16 across `apps/`, `packages/`, `schemas/` and the other nine active RFCs. The four codes this RFC emits — `INVALID_REQUEST`, `RUN_NOT_FOUND`, `FORBIDDEN`, `ASSISTANCE_WITHHELD` — are all shipped members of `ServerErrorCode`. No other active draft mints a classroom-, assignment-, enrolment- or grant-shaped code (`claim-backing`'s `CLAIM_*`, `pack-graduation`'s `GRADUATION_*`, `vocabulary-wiring`'s `PLAN_SIGNATURE_*`, `format-surface`'s `LEG_*` and `engine-leverage`'s `DEVIATION_COST_*` families are disjoint from this surface), so the sweep is clean in both directions |
-| **Cross-draft ownership — and one clause owed to `live-marker-quality`** | That RFC's enforcement sites are `/human-split`, `/corpus`, and (as of the D68 fix) `requireGuidanceDisclosure`, which gates `/voice`, `/speech` **and `/reasoning-review`**: **five routes across three sites.** Correction, author round 2026-08-16, from reading the whole document rather than the summary this draft had been repeating: **`live-marker-quality` does not claim ownership of the `permittedAssistance` table.** Its §7 reads *"Nothing versioned. No register is claimed"*, and what it owns is the D68 fix plus a consumer-side gate in `liveAdmitted`. It treats the table as an **invariant** (L4(b)) rather than as property. This RFC therefore does not need its permission to change the table; it needs to land **behind** it and to leave its criterion 6 green, which §5.2c establishes by construction. **What is owed at landing:** criterion 6's phrase *"for participant, spectator, and pre-disclosure solo contexts"* gains one word — *"for participant, **non-reviewing** spectator, and pre-disclosure solo contexts"*. That is the only edit §5.2 requires anywhere outside this document, it is not made here, and `rfc/README.md`'s ownership pin should record the table as **shared, with this RFC's two fields named**, rather than assigning it to either document |
-| **Ledger rows this RFC ships** (owner tier; reported, not edited) | **D80** — closed by §5.1; its row already reads *"owned by `rfc/teacher-surface.md`"*, so no title changes. **D92** (*"A ninth reader of `run_grants`, and it is disclosure-facing rather than structural"*) and **D93** (*"Account deletion would strand grants permanently"*) — both already carry *"🔨 owned by `rfc/teacher-surface.md`"* in their disposition column, both ship here (§4.3 site 9, §4.1a), and **neither was named in this row before the author round of 2026-08-16.** An RFC that ships a row assigned to it and does not claim it is how a wave completes invisibly, which is the failure the closeout protocol exists to prevent. **Teacher mode ships COMPLETE — build the missing rungs (owner ruling 2026-08-16)** (row title verbatim) — discharged by §5.2; the row is ✅ RULED and becomes ✅ shipped. **Events layer: pack nights, cohorts, team relays** (row title verbatim) — its cohort and pack-night halves ship here; the row should be **split, not closed**, so team relays and native matchmaking survive with their own row, and [[D412]] asks for the same disambiguation. **Named and explicitly not claimed:** **D307** (§6, §8.3), **D419** — this row's own hazard, since D92 and D93 both read `🔨` in a column that is not a status. **Closed by others and no longer claimed here:** D81, D82 (`live-surface-honesty`), D62 (`client-surface-floor`), D94 (the permission-and-correctness batch) |
-| **New ledger rows this RFC's author round produced** (reported for claude to land, ids from **D448**; not written here) | **D448** — `RunService.evidence` serves rung-3 Stockfish to any granted reader on any disclosed run with no role check, so a *live* spectator gets engine numbers that `/human-split` refuses them on the same run. By `live-marker-quality`'s own L4(b) this is a defect in the route, in the narrowing direction, on the surface that RFC owns; §5.2 makes the review case coherent and deliberately does not touch it (§5.3). **D449** — the assistance permission function now takes two viewer-side inputs that are neither `role` nor persisted in the run, and there is no register for *inputs to `permittedAssistance`*; a third would collide the way migration numbers did before 2026-08-12. **D450** — `docs/live-sessions.md` §Accepted limitation asserts a permission rule in prose (*"role may cap it lower… never raise it"*) that no test reads; the same defect class as [[D257]]'s producerless corpus figure, one tier over |
-| **`rfc/README.md`** | **not edited by this draft**, per the drafting instruction. Its Active table row exists and is stale in four ways, all for the accepting commit to fix: (1) the row's headline is **`OWNER-BLOCKED` on the review-surface question — that block is discharged** by the 2026-08-16 ruling and §5.2, and the row should read as an ordinary draft awaiting acceptance review; (2) it says this RFC *"holds the next free migration position after `opponent-contracts`' implementing 23"* — `opponent-contracts` **implemented** 23 at `6ba0736`, and under the *assigned at landing* rule the row records a **position**, never a successor integer; (3) *"no run- or pack-schema change"* is right and any constants quoted beside it are not — they read `0.17` and `0.27` at HEAD, and **`0.28` is claimed and kept by `graduation-clearance`**, so the register's own *"0.28 is the next free pack lane"* line is stale beneath its own table; (4) the summary should now name **four tables, `run_grants.expires_at`, `run_grants.granted_via`, `live_sessions.classroom_id`** and the review rail. Two additions still owed: the migration-register row in position **ahead of `learner-rating`**, and a **cross-draft note** on `permittedAssistance` naming both of this RFC's fields rather than a single-owner pin |
+| **Cross-draft ownership — and one clause owed to `live-marker-quality`** | That RFC's enforcement sites are `/human-split`, `/corpus`, and (as of the D68 fix) `requireGuidanceDisclosure`, which gates `/voice`, `/speech` **and `/reasoning-review`**: **five routes across three sites.** Correction, author round 2026-08-16, from reading the whole document rather than the summary this draft had been repeating: **`live-marker-quality` does not claim ownership of the `permittedAssistance` table.** Its §7 reads *"Nothing versioned. No register is claimed"*, and what it owns is the D68 fix plus a consumer-side gate in `liveAdmitted`. It treats the table as an **invariant** (L4(b)) rather than as property. This RFC therefore does not need its permission to change the table; it needs to land **behind** it and to leave its criterion 6's fixtures green, which §5.2c establishes — **by fixture convention, not by construction; that claim is withdrawn and criterion 11 is what carries it instead.** **What is owed at landing — three edits, not one. Corrected by cross-review 2026-08-16, which read criterion 6 and §6.2 rather than the author round's summary of them:** (1) criterion 6's server sentence *"for participant, spectator, and pre-disclosure solo contexts"* gains one word — *"for participant, **non-reviewing** spectator, …"*; (2) **criterion 6's *first* sentence** — *"absent from `liveMarkers` for a participant, for a **spectator**"* — needs the identical qualification, because §5.2e's seventh row and criterion 10a place the `human_divergence` marker for a reviewing spectator and `liveAdmitted`'s arm for that kind is literally `permission.humanSplit === "free"`; (3) **§6.2's body sentence recording the owner's accepted cost** — *"the marker leaves participants and spectators **entirely, on every run, permanently**"* — is narrowed by this RFC to non-reviewing spectators, which is a **change to the recorded terms of an owner ruling** and is therefore the owner's to confirm at acceptance, not the implementer's to edit. None of the three is made here. **`rfc/README.md` carries no ownership pin on `permittedAssistance` at all** — verified, the Cross-draft ownership pins section holds exactly two pins, on the position player and on `public_tokens` — so the pin this row asks for is a **new** entry recording the table as shared with this RFC's two fields named, not an amendment of an existing one. (`learner-rating` §11.1's phrase *"its ownership pin on `permittedAssistance`"* refers to a pin that does not exist; that correction belongs to that document.) |
+| **Cross-draft — `learner-rating`, and one collision neither document names** | The author round checked §2.1's normative rule against `learner-rating` §10a.2 and found it **strengthened, which is verified**: §10a.2's transposed sentence is *"No code path may derive a `standing_members` row from a `classroom_members` row alone"*, §10a.2 states *"What this RFC does not touch: `run_grants`, `assignments`, `assignment_submissions`, `permittedAssistance`, and the grant-expiry rule of `teacher-surface` §4.3"*, and §5.2d reads **no classroom table on the assistance path at all**. Two things it did **not** check, both found by cross-review 2026-08-16 and both consequences of `learner-rating` landing *behind* this RFC: (a) its §5.2 asserts `AssistanceContext` *"carries three fields (`sessionKind`, `deliveryOpen`, `role`)"* and its **AC-5** asserts `permittedAssistance`'s output is *"byte-identical to today's for the same inputs"* — written against a shape that will have five fields by the time it lands. AC-5 stays **satisfiable** (criterion 10d gives byte-identity when both new fields are `false`) but must be re-expressed, and nothing in either document says so; (b) its §5.2 also refuses *"every server-routed assistance route for [a rated run's] whole lifetime"* with no role exception, which voids §5.2's review rail on any rated run a learner submits — Open question 11. Both are `learner-rating`'s to resolve as the document landing second; **reported, not fixed, and named here so the ladder is not mistaken for coordination** |
+| **Ledger rows this RFC ships** (owner tier; reported, not edited) | **D80** — closed by §5.1. **Correction, cross-review 2026-08-16:** the author round said *"its row already reads 'owned by `rfc/teacher-surface.md`', so no title changes"*. The phrase is there, but it is in **column 2**, and D80's title has **already been rewritten** — the row now opens *"owned by `rfc/teacher-surface.md`, fixed as a pure NARROWING"* and preserves the original title only after an *"`*Original:*`"* marker. Its column 1 reads `🔨` while its column-3 disposition still reads *"💡 open, found 2026-08-15"*, which is [[D419]] firing on this RFC's own row. **What the closing commit flips is column 1 (`🔨` → `✅`), and it must not read column 3 to decide.** Note also that §5.1's fix changed under this cross-review: what closes D80 is the seat bounded to an **open** session, not the unbounded seat the row's rewritten title describes, so the row's summary needs the qualifier or it records a rule the code does not have. **D92** (*"A ninth reader of `run_grants`, and it is disclosure-facing rather than structural"*) and **D93** (*"Account deletion would strand grants permanently"*) — both already carry *"🔨 owned by `rfc/teacher-surface.md`"* in their disposition column, both ship here (§4.3 site 9, §4.1a), and **neither was named in this row before the author round of 2026-08-16.** An RFC that ships a row assigned to it and does not claim it is how a wave completes invisibly, which is the failure the closeout protocol exists to prevent. **Teacher mode ships COMPLETE — build the missing rungs (owner ruling 2026-08-16)** (row title verbatim) — discharged by §5.2. **Locate it before editing it (cross-review 2026-08-16): it is *not* in the defect table.** It lives in the *"Strategic reading and pivotal detection"* `| Idea | Take | Home |` table, so its `✅ **RULED**` sits in column 2 (the *Take*) and column 3 holds a *Home* (`` `teacher-surface`, `05` §3 ``), not a disposition. [[D419]]'s "column 3 is not a status" hazard does not apply to this row — a different one does: an editor who applies the defect-table convention here will write a status into a Home column. **Events layer: pack nights, cohorts, team relays** (row title verbatim) — its cohort and pack-night halves ship here; the row should be **split, not closed**, so team relays and native matchmaking survive with their own row, and [[D412]] asks for the same disambiguation. **Named and explicitly not claimed:** **D307** (§6, §8.3), **D419** — this row's own hazard, since D92 and D93 both read `🔨` in a column that is not a status. **Closed by others and no longer claimed here:** D81, D82 (`live-surface-honesty`), D62 (`client-surface-floor`), D94 (the permission-and-correctness batch) |
+| **Ledger rows this RFC's author round produced — ALREADY LANDED, do not re-land** | **Corrected by cross-review 2026-08-16: D448, D449 and D450 are present in `design/BACKLOG.md` at HEAD, each reading `💡 open, found 2026-08-16`.** The row below was written as *"reported for claude to land… not written here"*, and a reader acting on it would mint duplicates — the wave-completes-invisibly failure running in reverse. The three rows, as landed: **D448** — `RunService.evidence` serves rung-3 Stockfish to any granted reader on any disclosed run with no role check, so a *live* spectator gets engine numbers that `/human-split` refuses them on the same run. By `live-marker-quality`'s own L4(b) this is a defect in the route, in the narrowing direction, on the surface that RFC owns; §5.2 makes the review case coherent and deliberately does not touch it (§5.3). **D449** — the assistance permission function now takes two viewer-side inputs that are neither `role` nor persisted in the run, and there is no register for *inputs to `permittedAssistance`*; a third would collide the way migration numbers did before 2026-08-12. **D450** — `docs/live-sessions.md` §Accepted limitation asserts a permission rule in prose (*"role may cap it lower… never raise it"*) that no test reads; the same defect class as [[D257]]'s producerless corpus figure, one tier over |
+| **New ledger rows this cross-review produced** (reported for claude to land, ids from **D451** — **D448–D450 are taken**; not written here) | **D451** — `design/BACKLOG.md`'s defect table prints its own header as `\| Block \| Issued to \| Status \|` while its rows are `\| <id> <status> \| <description> \| <disposition note> \|`. The header therefore labels **column 3 "Status"** — the exact misread [[D419]] exists to prevent, printed at the top of the table D419 describes, and a second header disagreement (rows are defects, not blocks) beside it. D419 asks for the column to update on flip or carry a historical marker; **it should also ask for the header to stop naming it.** A guard that is contradicted by its own table header is not a guard. **D452** — `permittedAssistance`'s two new inputs are each a *predicate over storage that the function cannot see*, and both were mis-specified on their first writing in the same way: `seatedInContest` omitted the session's `closed_at` and `reviewing` had to be told that `liveSessionByRun` does not filter it either. The shared root is that `assistance.ts` takes booleans and every caller resolves them independently — five server sites, one client site, two test files. **Either the resolvers live beside the table (as `reviewingGrant` does and `seatedInContest` does not), or the next input repeats the defect.** This is the mechanism half of [[D449]], which records only that there is no register. **D453** — `rfc/README.md`'s pack-lane table asserts, in two consecutive rows, that `0.28` is *"claimed 2026-08-16 and kept"* by `graduation-clearance` **and** that *"0.28 is the next free pack lane"*; two Active rows (`opponent-contracts`, `measurement-records`) repeat the stale half as *"0.28 stays free"*. The next genuinely free lane is **0.29** and the register says so nowhere. Three documents now reason from a line that is false beneath its own table |
+| **`rfc/README.md`** | **not edited by this draft**, per the drafting instruction — **but it has been edited by someone, and three of the four staleness claims below were true when the author round wrote them and are false at HEAD.** Corrected by cross-review 2026-08-16, which read the row: (1) *"the headline is `OWNER-BLOCKED`"* — **no longer true**; it reads *"draft — OWNER BLOCK DISCHARGED 2026-08-16; the new §5.2 awaits cross-review before acceptance"*; (2) *"it says this RFC holds the next free migration position after `opponent-contracts`' implementing 23"* — **no longer true**; it reads *"claims one migration position (`STORAGE_VERSION + 1`; head is **23** at `6ba0736`)"*, which is the *assigned at landing* form this row asks for; (3) **still true and the only surviving claim**: the pack-lane constants are stale in the register, `0.28` is claimed and kept by `graduation-clearance`, and the register's *"0.28 is the next free pack lane"* line contradicts the row two lines above it ([[D453]], above); (4) *"the summary should name four tables, `run_grants.expires_at`, `run_grants.granted_via`, `live_sessions.classroom_id`"* — **half true**: the row now names the review rail and the `granted_via` `ALTER`, but its table enumeration is still *"Four tables, `run_grants.expires_at`, `live_sessions.classroom_id`"* with `granted_via` missing from the list. **The lesson, which is why this is rewritten rather than deleted:** a register row a draft describes as stale is itself a fact with a timestamp, and this one moved under the description. Still owed at landing: the migration-register row in position **ahead of `learner-rating`** (the register has no `teacher-surface` row and its integer-only shape cannot express the ladder — [[D423]], [[D449]]), the **new** cross-draft pin on `permittedAssistance` naming both fields, and — new — the row's own claim that the seventh surface arrives *"with **no code change**"*, which §5.2e and criterion 10a now qualify: no change to `liveAdmitted`, a required change to `DrillScreen` |
 
 ## Open questions
 
@@ -1450,20 +1710,40 @@ a route that contradicts the table.
    **§5.2 is the specification.** The `reviewing` input exists, it is required rather than
    optional, and it puts the reviewing teacher on the run host's own arm of the permission
    rule rather than creating a reviewer tier. The three conjuncts, the schema column, the
-   resolver, the seam to the client and the six acceptance criteria are all there.
+   resolver, the seam to the client and the **seven** acceptance criteria (10a–10g, the
+   last added by cross-review 2026-08-16) are all there.
 
-   **The 2026-08-15 objection was real and is answered rather than overridden.** That
+   **The 2026-08-15 objection was real. It is *partly* answered, and cross-review
+   2026-08-16 downgrades the author round's claim to have answered it whole.** That
    objection was that a `reviewing` disjunct *"raises exactly the falses that
    [`live-marker-quality`] asserts"* and would make the two documents assert opposite
-   things about the same test. The answer is §5.2c's third conjunct: `reviewing` requires
-   that **no live session is open on the run**, and every context criterion 6 constructs is
-   a live-session context, so the falses it asserts stay false by construction rather than
-   by fixture convention. What remains is one word owed to that criterion's *sentence*,
-   proposed in §10 and not taken here. **The objection was to a version of the widening
-   with two conjuncts; the version with three does not have the property it objected to.**
+   things about the same test. The author round answered it with the third conjunct —
+   *"every context criterion 6 constructs is a live-session context"* — and **that premise
+   is false**: criterion 6's first half is a `liveMarkers` unit test over `AssistanceContext`
+   object literals with no session at any layer, and its second half reaches a spectator
+   through `run_grants` alone. What actually keeps the fixtures green is the **first**
+   conjunct (`granted_via = 'submission'`, a value criterion 6 never mints), which is a
+   fixture-convention guarantee of exactly the strength §5.1 already had. **The two
+   documents therefore do assert opposite things about the same *sentence*, and the count is
+   three, not one:** criterion 6's server clause, criterion 6's `liveMarkers` clause, and
+   §6.2's recorded owner-ruling cost *"entirely, on every run, permanently"*. All three are
+   proposed in §10 and not taken here; the third is the owner's, because narrowing the
+   recorded terms of a ruling is not an author's edit. **The objection was to a version of
+   the widening
+   with two conjuncts; the version with three has the property in a narrower form — over
+   *sentences* rather than over *tests* — which is why the remedy is three textual edits
+   and not a redesign.**
 
-   **Nothing about this RFC is now waiting on an owner.** Open question 9 is new and is an
-   author call with a stated default, not a block; questions 2–7 were never blocks.
+   **One thing is now waiting on an owner, and it is small.** Not the review rail — §5.2 is
+   complete and no fork is left inside it — but **edit (3) above**: narrowing
+   `live-marker-quality` §6.2's recorded ruling from *"participants and spectators
+   entirely, on every run, permanently"* to *non-reviewing* spectators. The 2026-08-16
+   ruling plainly authorises the review surface and this is a consequence of it, so the
+   expected answer is *yes, that follows*; it is surfaced rather than assumed because the
+   author round both crossed that ruling (§5.2e) and cited it as untouchable (§5.3) in the
+   same pass, and a document may not do both. Open questions 9, 10 and 11 are author calls
+   with stated defaults, not blocks (11 is `learner-rating`'s to resolve); questions 2–7
+   were never blocks.
 2. **Teacher-initiated observation requests.** This RFC ships only learner-initiated
    sharing, because a request from a teacher is a pressure surface: a student who can
    technically decline may not feel able to. Should a request primitive exist at all, and
@@ -1510,6 +1790,35 @@ a route that contradicts the table.
    stated default, not an owner block**, and it is cheap to reverse in exactly one place:
    the first conjunct of §5.2c. Named so that a later widening is a decision rather than a
    discovery.
+10. **Should conjunct two mean "has finished at least once" or "is finished now"?** Opened
+    by cross-review 2026-08-16. As specified it is `events.some(outcome.reached)`, which is
+    monotone: a learner who submits a finished run and then rewinds and plays new branches
+    keeps the teacher's rail open throughout, on every feedback policy except `attempt_end`
+    (§5.2a). **Author's position and the shipped default:** leave it monotone. The learner
+    is disclosed on the identical run at the identical instant, so nothing is shown to the
+    teacher that is withheld from the player, and the alternative — *no `move.committed`
+    after the last `outcome.reached`* — makes the rail flicker branch by branch, which is
+    the contract §5.1 rejected for `seatedInContest` and for the same reason. **The cost is
+    honest and is the reason this is a question rather than a footnote:** §Motivation's case
+    for the private attempt is that *"the rehearsal loop only works if being wrong is
+    cheap, and it stops being cheap the moment someone is always watching"*, and a monotone
+    conjunct means that after one submission the teacher's rail is open over every later
+    branch of that run. The learner can revoke, and the classroom card names who holds
+    access (§2.4), so the surface is visible rather than silent — but this is the one place
+    in §5.2 where the rule and the motivation are not the same shape.
+11. **What happens to the review rail on a *rated* run?** Opened by cross-review
+    2026-08-16 and it is a cross-draft question, not an author call. `rfc/learner-rating.md`
+    §5.2 specifies that *"a rated run refuses every server-routed assistance route for its
+    whole lifetime"*, keyed on its `rated_games` row, with **no role exception** — and that
+    RFC lands **behind** this one by its own §11.1. A learner who plays a rated game and
+    then submits it to an assignment therefore gets a teacher whose review rail is silently
+    void. **This is currently consistent rather than broken** — the host is refused too, so
+    §5.2's *"the teacher's table equals the host's"* still holds, at zero — and neither
+    document mentions the other's mechanism: the string `rated` does not occur in this RFC
+    and `review` does not occur in `learner-rating`'s assistance sections. Consistency by
+    coincidence between two documents on one ladder is the D4/D8 class §2.2 cites, so the
+    resolution belongs in whichever lands second, which is `learner-rating`. Reported in
+    §10's cross-draft row.
 
 ## Changelog
 
@@ -1685,3 +1994,87 @@ a route that contradicts the table.
   the two `public_tokens` scopes; `live_sessions.run_id` being `UNIQUE`, which is what makes
   §5.2c's third conjunct a single-row lookup; and the refusal-code register — the widening
   emits no new code, because the routes it opens already return content.
+- 2026-08-16: **third adversarial cross-review, by an agent that wrote neither the draft nor
+  the two prior reviews, targeted at §5.2 and everything it touches** — the ~230 lines and
+  six criteria the second cross-review never saw. **The consent model survives a third
+  attack unchanged**, and §5.2's central design — put the reviewer on the host's arm rather
+  than build a reviewer tier — survives as the right shape. Three defects were load-bearing:
+
+  1. **A reviewer could see strictly more than the run's own host, and the equality
+     criterion could not see it.** §5.1's `seatedInContest` had no time bound —
+     *"the run has a `match_states` row and the principal is white or black"*. `match_states`
+     is `PRIMARY KEY REFERENCES live_sessions(id) ON DELETE CASCADE` and a session is
+     **closed, never deleted**, so the seat was permanent: on a finished native match the
+     host-player was locked out of Maia, corpus, narration and evidence lighting **on their
+     own game forever**, while a submission-granted teacher reading it was not. §Motivation's
+     *"no viewer-specific surface at all"* and criterion 10c's deep-equality were both false
+     on that run, and 10c's solo-pack fixture is exactly the case where every candidate
+     implementation agrees. **Fixed in §5.1** by bounding the seat to `closed_at IS NULL`,
+     which is what §5.1's own prose (*"for the duration of the contest"*) already said;
+     criterion **10g** is new and pins both directions; 10c gains a second fixture; 10e's
+     extended loop is required to range over the two sides independently and to be shown
+     failing against the old predicate, because held equal it can never construct the
+     pairing that occurs in production.
+  2. **§5.2c's *"by construction, not by fixture edit"* is false and is withdrawn.** Its
+     premise — *"every context `live-marker-quality`'s criterion 6 constructs is a
+     live-session context"* — does not survive reading criterion 6: its first half is a
+     `liveMarkers` unit test over `AssistanceContext` **object literals**, a layer with no
+     sessions in it, and its second half reaches a spectator through a hand-minted
+     `run_grants` row on a run that need never have had a session. The fixtures do stay
+     green, by the **first** conjunct (`granted_via = 'submission'`, which that RFC never
+     mints) — a fixture-convention guarantee of exactly the strength §5.1 already had.
+     Criterion 11 is promoted from confirmatory to acceptance-blocking accordingly.
+  3. **§5.3 cited an owner ruling that says the opposite of what it claimed — the
+     `feedback-delivery` failure, repeated.** `live-marker-quality` §6.2's body records the
+     2026-08-15 accepted cost as *"the marker leaves participants and spectators **entirely,
+     on every run, permanently**"*. §5.2e's seventh row and criterion 10a **place that marker
+     for a reviewing spectator**, so §5.2 was already crossing the ruling while §5.3 argued
+     the RFC may not. §5.3 is rewritten: the review boundary moves on the authority of the
+     *later* 2026-08-16 ruling; the **live** boundary has no ruling behind it and an author
+     may not move it — a narrower claim and a true one. The edits owed to
+     `live-marker-quality` go from **one word to three sentences**, the third being the
+     ruling's own terms and therefore the owner's to confirm (Open question 1, Status).
+
+  **Also landed:** §4.3's write table was wrong in two ways — its fourth run-creation insert
+  was *"the live-run create path"*, which does not exist (`createLiveSession` inserts
+  `'participant'`; the real fourth is **`createImportedRun`**), and **both promotion sites
+  contain a fresh-grant `INSERT` as well as the `UPDATE` the table described**, leaving two
+  writers on an unstated default inside the table built to prevent exactly that. Seven rows,
+  twelve statements, plus the migration backfill named as outside; criterion **7a** counts
+  *statements* rather than sites, because every miscount in three revisions had the same
+  shape. `requireGuidanceDisclosure`'s shipped signature carries neither principal nor
+  storage, so all four call sites change — and `guidance.test.ts`'s shipped source guard
+  requires the literal `requireGuidanceDisclosure(` within 800 source characters of each of
+  the four `evidencePacket(` sites. `client-surface-floor.test.ts` has **two** permission
+  tests and §5.2c named one. Criterion 10a is unsatisfiable without a fixture carrying a
+  qualifying `opponent.move_selected` event, and *"no code change"* is corrected to *"no
+  change to `liveAdmitted`"* — `DrillScreen` must forward the prop and the viewer's own
+  `markers` preference must be `"live"`. §5.2a states that conjunct two is **monotone**, so
+  the rail is scoped to *"a run that has finished at least once"* rather than to a finished
+  attempt (**Open question 10**). §5.2e's *"reopens"* becomes *"opens"*: `live_sessions.run_id`
+  is `NOT NULL UNIQUE` and closed rows persist, so a run carries at most one session ever,
+  and `liveSessionByRun` does not filter `closed_at`. §10's three stale rows are corrected —
+  **D448–D450 are already landed** and the row instructing claude to land them would have
+  minted duplicates; `rfc/README.md`'s row has been edited and three of the four staleness
+  claims against it are themselves stale; **no `permittedAssistance` ownership pin exists**
+  in that register, so the pin owed is a new entry. **One unnamed cross-draft collision:**
+  `learner-rating` §5.2 refuses *"every server-routed assistance route for [a rated run's]
+  whole lifetime"* with no role exception, voiding this rail on any rated submitted run, and
+  its AC-5 pins byte-identity of a three-field `AssistanceContext` that will have five by the
+  time it lands — **Open question 11**, that document's to resolve. Three ledger rows are
+  reported for claude to land from **D451**.
+
+  **Verified sound at the symbol in this round and unchanged:** `live_sessions.run_id` is
+  `NOT NULL UNIQUE` at both DDL sites; `liveAdmitted`'s `human_divergence` arm is
+  `permission.humanSplit === "free"`, so L4(b) really does deliver the seventh surface with
+  no edit to `pivotal.ts`; `requireGuidanceDisclosure` really gates on
+  `permission.humanSplit === "locked_off"` and really has four callers; the three conjuncts
+  are each independently reachable, so criterion 10b can refuse on each; §4.3's divergence
+  row is reachable and does measure something; `STORAGE_VERSION` is **23**,
+  `DRILL_RUN_SCHEMA_VERSION` **0.17**, `DRILL_PACK_SCHEMA_VERSION` **0.27** with 0.28 taken
+  and kept by `graduation-clearance`; `run_grants` is PK `(run_id, learner_id)`;
+  both `design/05` quotations are verbatim at `:133` and `:137`; §2.1's normative rule and
+  its transposition in `learner-rating` §10a.2 are intact and **strengthened** by §5.2d,
+  which reads no classroom table on the assistance path at all; and §5.2b property 1 holds —
+  the reviewer reaches the run's disclosure line and never passes it, because `deliveryOpen`
+  remains a conjunct in every arm.
