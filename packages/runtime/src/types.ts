@@ -34,6 +34,9 @@ export interface PolicyConfig {
 }
 
 export type RunSessionKind = "pack" | "position" | "imported";
+
+export const LIVE_SESSION_KINDS = Object.freeze(["stream", "academy", "match"] as const);
+export type LiveSessionKind = (typeof LIVE_SESSION_KINDS)[number];
 export type RunFeedbackPolicy = "delayed_checkpoint" | "segment_end" | "attempt_end" | "immediate_guard";
 export const RUN_OPPONENT_MODES = Object.freeze([
   "human_common",

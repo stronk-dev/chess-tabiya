@@ -1,7 +1,9 @@
+import { LIVE_SESSION_KINDS, type LiveSessionKind } from "@chess-tabiya/runtime";
+
 import type { LeaseIdentity, RunRole } from "./storage.js";
 
-export const SESSION_KINDS = Object.freeze(["stream", "academy", "match"] as const);
-export type SessionKind = (typeof SESSION_KINDS)[number];
+export const SESSION_KINDS = LIVE_SESSION_KINDS;
+export type SessionKind = LiveSessionKind;
 
 export const BOARD_CONTROLS = Object.freeze(["free_claim", "host_directed", "rotation", "match"] as const);
 export type BoardControl = (typeof BOARD_CONTROLS)[number];

@@ -10,6 +10,7 @@ import type {
   DrillRunEvent,
   EvidenceKind,
   EvidencePayload,
+  LiveSessionKind,
   MutationResult,
   Node,
   ObjectiveEvidenceProposal,
@@ -231,7 +232,7 @@ export type SurfaceAvailability = "available" | "unavailable-here";
 export const PLANNED_SURFACES: readonly SurfaceId[] = Object.freeze([
 ]);
 
-export type SessionKind = "stream" | "academy" | "match";
+export type SessionKind = LiveSessionKind;
 export type BoardControl = "free_claim" | "host_directed" | "rotation" | "match";
 export interface LiveSession {
   readonly id: string; readonly runId: string; readonly kind: SessionKind;

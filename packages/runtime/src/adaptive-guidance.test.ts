@@ -2,6 +2,7 @@ import { readFileSync } from "node:fs";
 import { describe, expect, it } from "vitest";
 
 import {
+  LIVE_SESSION_KINDS,
   BANNED_JUDGEMENTS,
   SILENT_ASSISTANCE,
   classifyPhase,
@@ -39,6 +40,10 @@ function run(fens: readonly string[], events: DrillRun["events"] = []): DrillRun
 }
 
 describe("adaptive guidance runtime", () => {
+  it("publishes one shared live-session vocabulary for server and client", () => {
+    expect(LIVE_SESSION_KINDS).toEqual(["stream", "academy", "match"]);
+  });
+
   it("pins phase bands, abstention, and the two declared counter-intuitive fixtures", () => {
     expect(classifyPhase(start).phase).toBe("opening");
     expect(classifyPhase(developed).phase).toBe("middlegame");
