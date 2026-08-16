@@ -55,6 +55,16 @@
   `EVIDENCE_KINDS`, `EvidenceRecord`, `EvidenceLedger`, `ENGINE_MOVE_LOSS_TEMPLATE_ID`,
   `ASSESSMENT_CATEGORIES`, `countFenPieces`, `CORPUS_GUARD`,
   `DECLARED_UNIMPLEMENTED_POLICY_MODES` and `EngineCapabilities.get` by name, not by number.*
+  **[cross-review] Re-derived at `a7e700d` (HEAD, 2026-08-16).** The content census is
+  unchanged — 32 ledgers, 764 records, 391 `engine_eval` / 341 `tablebase_result` /
+  32 `position_legality`, 0 templated, `grounds: "machine_validation"` on all 764 — and every
+  symbol in the locate list resolves. Six classes of figure did **not** survive re-derivation
+  and are corrected in place below, each marked `[cross-review]` with the command's number:
+  the staleness argument (§2.1, **blocking**), the packet-site count and D140's status (§4.2,
+  **already landed at `a452abb`**), the position count (§8.1, 731 not 732), the clock rule's
+  cost (§2.2, 43 not 0), the engine/tablebase pack split (§8.1, 20/12 not 17/15) and the
+  draft-pack count (§8.4, 53 documents not 47). One specification defect — `RecordedReading`
+  cannot be typed as §3.4 spells it — is fixed in §3.4.*
 - **Exploration gate:** owner question 2026-08-15 — *"doesn't it have access to ALL the
   info?"* — transformed rather than answered, as `design/BACKLOG.md` row *Widen the evidence
   PACKET, not the LLM's licence* (**D116**), then **measured** as *The evidence ledger and
@@ -66,7 +76,8 @@
   **D116 does not fully close**: rung 4 stays absent and §8 says why, with a number.
 - **Ledger rows this RFC opens** (law 4; **id block D138–D147, issued to this draft; no
   other id is used**): D138, D139, D140, D141, D142, D143, D144, D145, D146, D147 — each
-  stated in §9 with its measurement.
+  stated in §9 with its measurement. **The adversarial cross-review opens ten more under its
+  own block, D223–D232, stated in §9a.**
 - **Depends on:** nothing unlanded. `rfc/archive/content-sourcing-foundation.md` ships the
   evidence ledger, `validateLedger` and `assessmentGrounding`;
   `rfc/archive/opening-evidence-path.md` and `rfc/archive/fixture-realism.md` (D64's closure,
@@ -76,7 +87,8 @@
 - **Parent / amends:** amends `PackRecord` and `PackRegistry.fromDocuments`
   (`apps/server/src/pack-registry.ts`); amends `EvidencePacket`
   (`packages/runtime/src/voice.ts`) and `evidencePacket` (`apps/server/src/guidance.ts`);
-  amends the five packet construction sites in `apps/server/src/rest.ts`; amends
+  amends the **four** packet construction sites in `apps/server/src/rest.ts`
+  (**[cross-review]**: four, not five — §4.2); amends
   `Capabilities` (`apps/server/src/capabilities.ts`). **Amends no schema file, no pack
   document, no ledger, and no persisted row.**
 - **Supersedes / superseded by:** —
@@ -132,8 +144,9 @@ because `voiceCheck` makes packet membership a speaking licence), and **presenta
 this surface show it — `AssistanceConfig`, which may withhold and may never add).
 
 **Measured `[V]`.** Of the 764 committed records, **732 are admitted** — 391 `engine_eval`
-and 341 `tablebase_result` — across **32 packs and 732 positions**, which is **100.0% of the
-authored tree, 732 of 732 authored position pointers, with zero gaps and zero duplicates**.
+and 341 `tablebase_result` — across **32 packs and 731 distinct positions**, which is
+**100.0% of the authored tree, 732 of 732 authored position pointers, with zero gaps and
+exactly one duplicate key** (**[cross-review]**: 731, not 732 — §8.1).
 32 `position_legality` records are **refused** as rung-0-recomputable.
 
 **And the honest number, which is the one that decides whether this is worth doing `[V]`.**
@@ -157,7 +170,7 @@ D118 states the disconnection. Re-derived here rather than quoted `[V]`:
 | records in them | **764** — 391 `engine_eval`, 341 `tablebase_result`, 32 `position_legality` |
 | records with `grounds: "machine_validation"` | **764 of 764** |
 | abstentions | **0** |
-| authored packs in `content/drafts/` | **47** — 32 with a ledger, **15 without** (D141) |
+| pack documents in `content/drafts/`, all loaded in development | **53** — 32 with a ledger, **21 without**, of which **6 are browser fixtures** (D141, D227) `[cross-review]` |
 | pack documents in `content/packs/` | **0** — the directory holds `.gitkeep` (D138) |
 | ledgers read by `PackRegistry.loadDefault` | **all of them** (D142) |
 | ledger fields retained on `PackRecord` | **none** |
@@ -264,14 +277,25 @@ Four consequences are enforced structurally rather than by convention:
    (`apps/web/src/lib/corpus-sentences.ts` — *"These counts say what this population played,
    not what is good."*) is the model, and §6.3 extends the pattern rather than inventing a
    second guard.
-4. **Absence is unspeakable, not spoken.** §6.1. There is no "no reading was recorded"
-   template, because absence at a position is a fact about the author's query budget, not
-   about the position.
+4. **Absence is unspeakable on every path this RFC controls.** §6.1. There is no "no reading
+   was recorded" template, because absence at a position is a fact about the author's query
+   budget, not about the position. **[cross-review]:** originally stated as unqualified and
+   attributed to `voiceCheck`; measured false for the provider path — `voiceCheck` passes
+   *"No reading was recorded at this position."* against a packet that contains no such
+   sentence `[V]`. The refusal is real for the deterministic path (no arm exists to render)
+   and is carried on the provider path by the persona prompt (criterion 16a), not by the
+   check. §6.1 has the execution.
 
 **The residual, named rather than denied (D146).** `voiceCheck` is a **token-membership**
 check, not a proposition check: it verifies that every square, move, chess noun, judgement
 word and prescriptive verb in the output already appears in `packet.sentences`. It cannot
-stop the renderer from *joining* two admitted facts into a claim neither record makes. That
+stop the renderer from *joining* two admitted facts into a claim neither record makes.
+**[cross-review] The residual is wider than "joining", and it was measured rather than
+reasoned about:** any sentence containing none of those four token classes passes against any
+packet, including a wholly invented recorded-reading sentence and any sentence *about absence*
+`[V]`. §6.1 carries the four executed counter-examples; D226 carries the row. This does not
+change what this RFC ships — it changes which claims this RFC is allowed to make about why it
+is safe, and §4.1 and §6.1 are rewritten accordingly. That
 residual is pre-existing, but this RFC raises its cost, because a centipawn number is exactly
 the kind of token that invites a causal join. Two mitigations, neither of which is a fix:
 the frozen sentence carries *"when this pack was authored"*, so any join inherits the past
@@ -300,10 +324,13 @@ gets wrong is named.
 `ReadonlyMap<string, readonly RecordedReading[]>` keyed by `transposeKey(record.anchor.fen)`
 and store it on the record. `evidencePacket` receives it and looks up `node.transposeKey`.
 *Cost:* zero added I/O — the read, the parse and the linkage check **already happen** (D142).
-One `Map` of at most 53 entries per pack, built once per process, alongside the
+One `Map` of at most 52 entries per pack (**[cross-review]**: 52, not 53 — the largest ledger
+holds 53 records at 52 distinct keys, §8.1), built once per process, alongside the
 `digestDrillPack` the registry already computes. *Cache:* the `PackRegistry`'s own
 `#records` / `#digests` maps, held for process lifetime, which is where every other derived
-pack fact already lives. *Staleness:* structurally impossible, see §2.1.
+pack fact already lives. *Staleness:* **refused at load by a digest equality this RFC adds**,
+see §2.1 (**[cross-review]**: originally *"structurally impossible"*, which was measured false
+— 5 of 32 committed ledgers are digest-stale at HEAD and all 32 read `ledger_verified`).
 
 **(B) Per-node on-demand resolution.** Open the ledger when a node needs it.
 *Gets wrong:* it puts file I/O on the packet path, which is the one path
@@ -337,23 +364,60 @@ derived-not-persisted values, cited in `rfc/format-surface.md` §4.4, says do no
 you can recompute. It would also fork the ledger's single source of truth, which is the
 defect `claim-backing` §3.1 avoids for the same reason. **Rejected.**
 
-### 2.1 Staleness, and why it cannot arise
+### 2.1 Staleness — the argument this section made was false, and the gate is now two predicates
 
-The pack's ledger declares `packDigest`; `linkage` and `assessmentGrounding` already compare
-it to `digestDrillPack(document)` and return `"ledger_verified" | "unverified"`. `[V]`
+> **[cross-review] This section originally claimed that "`linkage` and `assessmentGrounding`
+> already compare `ledger.packDigest` to `digestDrillPack(document)`", and concluded that
+> staleness was *structurally impossible*. Measured at `a7e700d`: they do not, and it is not.**
+> `assessmentGrounding` reads `objective.grading.assessedBy`, validates the ledger and
+> manifest, calls `linkage(manifest, ledger, issues)` — which joins each record to a
+> **manifest entry** by `sourceId` and `retrievedAt`, and never touches the pack document —
+> and then requires **exactly one** record matching `/start/fen` and the `assessedBy` scalars.
+> **`ledger.packDigest` is never read on the runtime path.** `[V]` The repository's only
+> digest-staleness check is `EVIDENCE_DIGEST_STALE` in `sourcing/check.ts`, it is severity
+> **`warning`**, and it lives in the authoring CLI. `[V]`
+>
+> The consequence is measured, not hypothetical. Evaluating `assessmentGrounding` over all 32
+> committed ledgers at `a7e700d`: **32 of 32 return `ledger_verified`** — including the
+> **5 whose `packDigest` no longer matches their pack**: `mate-bishop-knight`,
+> `mate-k-q-technique`, `mate-k-r-technique`, `philidor-passive-rook-convert`,
+> `trajectory-mate-bishop-knight` (the same five `rfc/pack-graduation.md` §4.5 found at
+> `1b89123`; still five at HEAD). Those five carry **186 records, 181 of them admitted**.
+> Under the rule as originally written this RFC would index and speak 181 readings taken
+> against a document that has since moved. **`byDigest(run.packDigest)` does not save it**:
+> it pins **run → document**, and the drift that matters here is **ledger → document**, which
+> nothing on the load path compares.
 
-> **Normative.** The projection is built **only** when `assessmentGrounding === "ledger_verified"`.
-> Otherwise the index is **empty** — not partial, not best-effort. One predicate, two
-> consumers, and they can never disagree because they are computed from the same in-memory
-> object in the same call.
+The pack's ledger declares `packDigest`; `PackRegistry.fromDocuments` computes
+`digestDrillPack(document)` on the line **above** `assessmentGrounding` and stores it as
+`PackRecord.digest`. `[V]` So the missing comparison is free — both operands are already in
+scope in the same call.
 
-And a run cannot drift away from the pack whose ledger was verified:
-`RunService.#registeredPack` resolves a run's pack through
-`this.#packRegistry?.byDigest(run.packDigest)` `[V]`, so a run is already pinned to the exact
-document version the linkage check passed. **A live run and a static ledger cannot desynchronise
-because the run is keyed by the digest the ledger names.** That is the honest answer to
-"static artifact, live run", and it required no new mechanism — only noticing that the
-existing one already covers it.
+> **Normative, amended `[cross-review]`.** The projection is built **only** when **both** hold:
+> 1. `assessmentGrounding({document, ledger, manifest}) === "ledger_verified"`, and
+> 2. `ledger.packDigest === digest`, where `digest` is the `digestDrillPack(document)` the
+>    registry has already computed for this record.
+>
+> Otherwise the index is **empty** — not partial, not best-effort. Clause 2 is this RFC's
+> own addition, not a restatement of shipped behaviour, and it converts
+> `sourcing-check`'s authoring-time **warning** into a load-time **refusal** for the one
+> consumer that speaks records to a learner. It does not change `assessmentGrounding`, does
+> not change what `sourcing-check` reports, and does not change `GET /packs/:id`'s
+> `grounding` field, all of which stay exactly as shipped.
+
+**Measured cost of clause 2 at `a7e700d`: 5 packs, 181 readings, all endgame.** `[V]` That is
+the honest price of the fence and it is temporary: `rfc/pack-graduation.md` §7 re-stamps
+**32 of 32** ledgers, which clears all five. Until it lands, five packs go silent rather than
+speaking a number about a position their pack no longer contains — which is the direction the
+error must fall.
+
+What *is* structurally sound is the **other** half of the original argument, and it is worth
+keeping separately because it answers a different question. A run cannot drift away from the
+**document**: `RunService.#registeredPack` resolves a run's pack through
+`this.#packRegistry?.byDigest(run.packDigest)` `[V]`, so a run is pinned to the exact document
+version that was loaded. Combined with clause 2, the chain is
+**run → document → ledger**, and each link is a digest equality rather than an assumption.
+Neither link existed for the ledger before this section was corrected.
 
 ### 2.2 The key, and the one place it is not enough
 
@@ -368,18 +432,43 @@ Dropping the fullmove number is correct: no instrument's answer depends on it. D
 - **`engine_eval` — admitted on `transposeKey` alone.** The reading is attributed to
   `reading.fen`, the FEN the engine was actually given, and §3.6's sentence names the
   retrieval date rather than asserting the clocks agree. Measured context: all 391
-  `engine_eval` records live in the 17 opening packs `[V]`, where a clock difference at the
-  same position is not a difference the search is about.
+  `engine_eval` records live in the **20** opening packs `[V]` (**[cross-review]**: 20, not
+  17 — re-derived at `a7e700d` and identical at `bc3cdc1`; see §8.1), where a clock difference
+  at the same position is not a difference the search is about. Corroborating: the recorded
+  halfmove clocks on those 391 anchors run **0–8** (175 at 0, 82 at 1, 64 at 2, tailing to one
+  at 8) `[V]` — nowhere near the fifty-move horizon at which the clock changes what a search
+  returns.
 - **`tablebase_result` — admitted only when the halfmove clock matches exactly.** DTZ is
   defined relative to the fifty-move counter — it is precisely why the source distinguishes
   `dtz` from `precise_dtz` — so a DTZ read at a different clock is a different fact.
   Normative: `node.fen`'s fifth field must equal `reading.fen`'s fifth field, or the reading
   is not admitted at that node.
 
-The strict rule is expected to cost nothing on the authored tree, because records are
-produced by `enumerate` replaying the same move sequence the run replays; **the
-implementation must measure that rather than assume it** (Open question 2, acceptance
-criterion 11).
+> **[cross-review] The strict rule does not cost nothing, and the original "expected zero"
+> was measuring the wrong set.** It is true on the authored tree itself — records are produced
+> by `enumerate` replaying the same move sequence — but the authored tree is not what a
+> `transposeKey` index is *for*. Enumerating every legal successor of all 497 spine-line
+> positions at `a7e700d`: **372 of them land on a `transposeKey` that carries a
+> `tablebase_result`, and 43 of those 372 (11.6%) arrive with a halfmove clock no record at
+> that key holds** `[V]`. Every one is a transposition — the same position reached by a
+> different move order — and the gaps are large (`lucena-bridge-convert` node clock 9 against
+> a recorded 13; `mate-bishop-knight` node clock 7 against a recorded 3, 13 against 9, 15
+> against 11, 19 against 15). These are genuinely different fifty-move states, so **the rule
+> stays exactly as specified and is not relaxed.** What changes is the claim: the rule is a
+> deliberate **11.6% refusal of tablebase lookups the index could otherwise answer**, taken
+> because DTZ at the wrong clock is a wrong number, and Open question 2 / criterion 11 are
+> rewritten to report that figure rather than to expect zero.
+>
+> The sharpest single case is inside one pack. `lucena-bridge-convert` records
+> `8/1P2k3/2K5/8/3R4/8/8/1r6 b - -` **twice** — at halfmove clock **9** (supporting a spine
+> pointer) and clock **13** (supporting `/deviations/7/moveUci`) — with **byte-identical
+> values** (`category: "loss"`, `dtz: -8`, `precise_dtz: -8`, `dtm: -28`) `[V]`. So the corpus
+> already contains a position whose reading provably does not depend on the clock, and the
+> strict rule refuses it at any third clock anyway. That is the correct trade — the rule
+> cannot know which positions are clock-insensitive without probing, and probing is an
+> instrument call §7 forbids — but it is a trade, not a free lunch. It is also why
+> `PositionEvidenceIndex`'s value type **must** stay `readonly RecordedReading[]` rather than
+> collapsing to a single reading: that key holds two.
 
 ---
 
@@ -423,8 +512,12 @@ A record becomes a `RecordedReading` when **all five** hold. A record failing an
 dropped silently at load; it is not an error, because a ledger may legitimately carry records
 this projection has no use for.
 
-1. **Linkage.** `assessmentGrounding === "ledger_verified"` (§2.1). Applies to the whole
-   ledger, not per record.
+1. **Linkage and digest.** `assessmentGrounding === "ledger_verified"` **and**
+   `ledger.packDigest === record.digest` (§2.1). Applies to the whole ledger, not per record.
+   **[cross-review]** The second conjunct is new: `assessmentGrounding` attests **one**
+   record — the `/start/fen` one that matches `assessedBy` — and never compares the ledger to
+   the document, so without it a digest-stale ledger is `ledger_verified` and its records are
+   served. 5 of 32 ledgers are digest-stale at `a7e700d` and all 5 read `ledger_verified` `[V]`.
 2. **Kind.** `record.kind ∈ {"engine_eval", "tablebase_result"}`. The admission registry is
    §5.1's; every other member of `EVIDENCE_KINDS` gets a published refusal row with a reason.
 3. **Grounds.** `record.grounds === "machine_validation"`. A `citable_source` record is a
@@ -464,10 +557,13 @@ export interface EngineReadingValues {
 }
 
 export interface TablebaseReadingValues {
-  readonly category: (typeof ASSESSMENT_CATEGORIES)[number];   // the five determinate values
-  //          ^ there is no `AssessmentCategory` type in the repo; `ASSESSMENT_CATEGORIES`
-  //            (`apps/server/src/tablebase.ts`) is a frozen tuple over `TablebaseCategory`.
-  //            Spelled as an indexed access so no new type name is invented.
+  readonly category: AssessmentCategory;   // packages/runtime/src/branch-scale.ts
+  //          ^ [cross-review] the original spelling was `(typeof ASSESSMENT_CATEGORIES)[number]`
+  //            with the note "there is no `AssessmentCategory` type in the repo". Both halves
+  //            are wrong at a7e700d. `packages/runtime/src/branch-scale.ts` exports
+  //            `AssessmentCategory = "win" | "loss" | "draw" | "cursed-win" | "blessed-loss"`
+  //            — exactly the five determinate values — and `packages/runtime/src/index.ts`
+  //            re-exports it. [V]
   readonly dtz: number | null;
   readonly preciseDtz: number | null;
   readonly dtm: number | null;
@@ -487,6 +583,26 @@ Two narrowing refusals are normative and both follow shipped precedent:
   refuses what the checker already refuses. *(Noted because `engine-leverage`'s cross-review
   found an earlier draft attributing this to a helper named `whitePerspectiveScore` that does
   not exist — there is no normalising function, only a stamped literal and a refusal.)*
+> **[cross-review] Where these types live, because as originally written they could not
+> compile.** §3.5 puts `readings: readonly RecordedReading[]` on `EvidencePacket`
+> (`packages/runtime/src/voice.ts`) and §3.6 puts `renderRecordedReading` in
+> `packages/runtime/`, while §3.4 typed `category` off `ASSESSMENT_CATEGORIES` in
+> `apps/server/src/tablebase.ts`. **`packages/runtime` depends on `@chess-tabiya/schema` and
+> `chessops` and nothing else** `[V]` — it cannot import from `apps/server`, and the
+> dependency may not be inverted.
+>
+> **Normative.** `RecordedReading`, `EngineReadingValues`, `TablebaseReadingValues`,
+> `PositionEvidenceIndex` and `renderRecordedReading` all live in **`packages/runtime`**, and
+> `category` is typed as the runtime's own `AssessmentCategory`. `PackRecord`
+> (`apps/server/src/pack-registry.ts`) imports the type from `@chess-tabiya/runtime`, which is
+> the direction that already exists — `apps/server/src/tablebase.ts` imports `transposeKey`
+> from `@chess-tabiya/runtime` on its first line `[V]`. `ASSESSMENT_CATEGORIES` stays exactly
+> where it is and stays the server's value-level tuple; nothing is moved, deprecated or
+> duplicated. **The admission check in §3.4 is a membership test against
+> `ASSESSMENT_CATEGORIES` performed in `apps/server` at projection-build time**, so the
+> five-value narrowing still happens on the server side where the tuple lives, and only the
+> already-narrowed type crosses the package boundary.
+
 - **`tablebase_result` is refused unless `category ∈ ASSESSMENT_CATEGORIES`** — the five
   determinate values `apps/server/src/tablebase.ts` declares. The indeterminate values
   `verifySyzygyDraft` already refuses (`syzygy-win`, `maybe-win`, `maybe-loss`, `syzygy-loss`,
@@ -545,22 +661,29 @@ readings = packEvidence?.get(node.transposeKey) ?? []
 shipped pattern for machine prose over record values — *"frozen strings over record values,
 which is the one form of machine prose ADR-0005 permits"* (`claim-backing` §3.6).
 
+**[cross-review]** The arms below are rewritten against the values the corpus actually
+stamps at `a7e700d`, because the originals invented an engine version. All 391 `engine_eval`
+records carry `engineName: "Stockfish"`, `engineVersion: "18"`, `depth: 22`, `multiPv: 1`,
+`perspective: "white"` — one identity tuple, 391 times `[V]` — so the first arm's "17.1" named
+a version that appears nowhere in `content/`. The tablebase arm is shown against a real
+record (`lucena-bridge-convert`, 5 pieces, `category: "loss"`, `dtz: -8`, `dtm: -28`).
+
 ```
 engine, score:
-  "Recorded reading at this position: Stockfish 17.1 at depth 22, single line, scored
-   +0.54 from White's side when this pack was authored on 2026-08-14."
+  "Recorded reading at this position: Stockfish 18 at depth 22, single line, scored
+   +0.63 from White's side when this pack was authored on 2026-08-15."
 
 engine, mate:
-  "Recorded reading at this position: Stockfish 17.1 at depth 22, single line, reported
-   mate in 6 from White's side when this pack was authored on 2026-08-14."
+  "Recorded reading at this position: Stockfish 18 at depth 22, single line, reported
+   mate in 6 from White's side when this pack was authored on 2026-08-15."
 
 tablebase:
-  "Recorded reading at this position: Syzygy, 5 pieces — win from White's side, DTZ 14,
-   DTM 39 — queried when this pack was authored on 2026-08-14."
+  "Recorded reading at this position: Syzygy, 5 pieces — loss from White's side, DTZ 8,
+   DTM 28 — queried when this pack was authored on 2026-08-15."
 
 tablebase, no DTM published:
-  "Recorded reading at this position: Syzygy, 5 pieces — draw from White's side, DTZ 0 —
-   queried when this pack was authored on 2026-08-14."
+  "Recorded reading at this position: Syzygy, 6 pieces — draw from White's side, DTZ 0 —
+   queried when this pack was authored on 2026-08-15."
 ```
 
 Every token comes from the record. Six properties are normative:
@@ -613,12 +736,28 @@ statement made operational.
 
 ### 4.1 Gate 2 is the strict one, and it sits at packet construction rather than at render
 
-The instinct is to put the reading in the packet and gate the display. **That is wrong here,
-and the reason is `voiceCheck`.** The check validates renderer output against
-`packet.sentences`; a sentence in the packet is therefore a sentence the renderer *may say*,
-and the packet leaves the server to an external provider. **Packet membership is a speaking
-licence.** So the gate is at construction: a reading that may not be spoken now is not in the
-packet now.
+The instinct is to put the reading in the packet and gate the display. **That is wrong here.**
+The packet leaves the server to an external provider, and `renderVoice`'s fallback returns
+`packet.sentences.join("\n")` verbatim to the learner when the provider fails or fails the
+check `[V]`, so a sentence in the packet is a sentence that can reach a learner **without any
+model in the loop at all**. The gate therefore belongs at construction: a reading that may not
+be spoken now is not in the packet now.
+
+> **[cross-review] The original justification was stronger than the code.** It read: *"The
+> check validates renderer output against `packet.sentences`; a sentence in the packet is
+> therefore a sentence the renderer may say … packet membership is a speaking licence."* The
+> first clause is right and the last is a **one-way** implication that §6.1 measures. Executed:
+> `voiceCheck` passes an entirely invented recorded-reading sentence against a packet that
+> does not contain it, because that sentence carries no square, no move, no `CHESS_LEXICON`
+> noun, no `BANNED_JUDGEMENTS` word and no `PRESCRIPTIVE_VERB` `[V]`. **So packet membership
+> licences chess tokens; withholding a sentence does not prohibit the proposition.**
+>
+> **This strengthens the placement rather than weakening it, and that is why it is corrected
+> here rather than argued away.** If `voiceCheck` were the tight binder the draft assumed, a
+> render-time gate would be nearly as safe. Because it is not, **construction-time is the only
+> place a gate is load-bearing at all**: the deterministic fallback path has no check in front
+> of it, and the provider path has a check that a fluent absence-or-invention sentence walks
+> straight through. Two independent reasons, neither of which is the one originally given.
 
 The gate itself is shipped and unchanged: `requireGuidanceDisclosure(access)`, which computes
 `permittedAssistance({sessionKind, deliveryOpen: feedbackDeliveryOpen(run), role})` and
@@ -634,30 +773,88 @@ that **rung 2 reveals the answer, so showing it is contamination**. This RFC the
 **no new permission, no new config key and no new default**, and it does not reopen the part
 of that question which is still open (availability of rung 0 on request).
 
-### 4.2 The fifth construction site does not apply the gate — D140
+### 4.2 The construction sites — D140 was real and **has already landed**
 
-There are **five** places a packet is constructed, all in `rest.ts` `[V]`:
+> **[cross-review] This section is rewritten twice over.** It said there were **five**
+> construction sites and its own table listed four; there are **four** `[V]`. And its
+> normative blocking fix **shipped before this cross-review ran**: commit `a452abb`
+> (*"fix: gate reasoning review evidence"*) inserted
+> `requireGuidanceDisclosure(service.guidanceAccess(route.runId, principal, access.node.id))`
+> immediately above `/reasoning-review`'s `evidencePacket(...)` call `[V]`. D140 is therefore
+> **closed by another lane**, not owed by this one, and criterion 4's *"must fail before the
+> fix and pass after, and it is written first"* is unexecutable as written — it is rewritten
+> to a **regression** criterion instead.
+
+There are **four** places a packet is constructed, all in `rest.ts`, and at `a7e700d` **all
+four apply the gate** `[V]`:
 
 | site | scope | applies `requireGuidanceDisclosure`? |
 |---|---|---|
 | `/voice`, compare branch | `compare` | **yes** |
 | `/voice`, non-compare branch | `marker` / `reading` / `steering` / `story` | **yes** |
 | `/speech` | `marker` / `reading` / `steering` / `story` | **yes** |
-| `/reasoning-review` | `reasoning` | **NO** |
+| `/reasoning-review` | `reasoning` | **yes, since `a452abb`** |
 
-`/reasoning-review` gates through `reasoningReviewAccess`, which checks read authorization,
-that a `reasoning.recorded` event exists, and `reasoningDeliveryOpen(run, checkpointEventSeq)`
-— a **narrower, checkpoint-scoped** predicate that **does not check role**. `[V]` So today a
-participant or spectator with read access can cause a packet carrying rung-3
-`human_divergence` sentences — built from the *unfiltered* `pivotalMarkers`, not the
-role-aware `liveAdmitted` — to be transmitted to an external provider under a role
-`requireGuidanceDisclosure` exists to refuse. The response is separately filtered by
-`reasoningMatchCheck`, so this is an egress gap rather than a learner-visible leak, and it is
-narrow. It is also live, and this RFC would widen it from rung 3 to rung 2.
+The defect this section found is worth keeping on the record because it explains *why* the
+fix is the shape it is. `/reasoning-review`'s own guard is `reasoningReviewAccess`, which
+checks read authorization, that a `reasoning.recorded` event exists, and
+`reasoningDeliveryOpen(run, checkpointEventSeq)` — a **narrower, checkpoint-scoped** predicate
+that **does not check role** `[V]`. So before `a452abb`, a participant or spectator with read
+access could cause a packet carrying rung-3 `human_divergence` sentences — built from the
+*unfiltered* `pivotalMarkers`, not the role-aware `liveAdmitted` — to be transmitted to an
+external provider under a role `requireGuidanceDisclosure` exists to refuse. `a452abb` did not
+widen `reasoningReviewAccess`; it added a **second, independent** call to
+`service.guidanceAccess` and gated on that, which is why the fix composes with this RFC rather
+than colliding with it.
 
-> **Normative and blocking: `/reasoning-review` applies `requireGuidanceDisclosure(access)`
-> before constructing its packet, and this lands whether or not the rest of this RFC does.**
-> Ledgered as **D140** so it is fixable independently.
+> **Normative, restated `[cross-review]`: all four packet construction sites apply
+> `requireGuidanceDisclosure`, and a test pins that a fifth cannot be added without one.**
+> The pin is the part this RFC still owes — `a452abb` shipped the call, not a guard against
+> the next site forgetting it. Criterion 4.
+
+### 4.2a Can this gate fail the way `engine-leverage`'s did? — the D194 shape, answered
+
+**[cross-review] Added because the brief asks it directly and the RFC never answered it.**
+D194 returned a sibling RFC for exactly this: `SelectionCandidate` gained `scoreCp`,
+`opponent.move_selected` carried it into the run log, and `GET /runs/:id/events` served it
+during committed play because `publicEvents`' barrier — `engineFeedbackEvent` — matches only
+`evidence.attached` and machine-ref `objective.state_changed` `[V]`. **The failure was
+structural, not careless: the barrier is keyed on the event *type*, while the egress is a
+*passthrough* of whatever payload that type carries.** A new field on an unlisted type walks
+through by construction, and no reviewer of the field is looking at the barrier.
+
+This RFC's readings cannot take that door, and the reason is a property of the code rather
+than a promise:
+
+| | `engine-leverage` / D194 | this RFC |
+|---|---|---|
+| where the number lives | a **run event payload** (`opponent.move_selected.selection.candidates[]`) | a **`PackRecord` field** (`positionEvidence`), never an event |
+| how it egresses | `publicEvents` → `GET /runs/:id/events`, a **passthrough** that forwards the whole event object | `projectPackDocument` → `GET /packs/:id`, an **enumeration** that constructs its output field by field |
+| what a new field does by default | **ships**, unless a type-keyed barrier happens to list its event | **nothing**, unless someone writes the field into the projection |
+| the gate's key | the event **type** | the **route**, via `requireGuidanceDisclosure` at packet construction |
+
+Three route audits, run at `a7e700d`, close the remaining doors `[V]`:
+
+1. **`GET /packs/:id`** calls `projectPackDocument(pack.document, pack.assessmentGrounding,
+   pack.channel, pack.publisherHandle)` — four scalars and the document, no `PackRecord`
+   spread. A new record field is invisible to it. Criterion 3.
+2. **`GET /packs`** returns `service.packs()` → `PackRegistry.list()` → `PackSummary`, a
+   closed ten-field interface built by explicit assignment. Also invisible. **Criterion 3 is
+   extended to cover it**, because the original criterion named only `projectPackDocument`.
+3. **`GET /packs/:id/export`** routes to Pack Studio's draft store, not the registry, and
+   `distillRun(run, source: PackRecord | undefined, …)` reads only `source.document.mode` and
+   `source.document` — no spread of the record `[V]`. **Criterion 3 is extended to pin that
+   too.**
+
+And the packet itself never egresses as an object: `ExternalHttpVoiceProvider.render` posts
+`{personaPrompt, sentences, scope}` `[V]`, `renderVoice`'s fallback returns
+`packet.sentences.join("\n")`, `/speech` returns audio bytes, and `/reasoning-review` returns
+`reasoningMatchCheck`-filtered quotations. **The only field of `EvidencePacket` that leaves
+the process is `sentences`** — which is D145 read as a safety property rather than a
+limitation, and it is why §4.1 places the disclosure gate at construction.
+
+> **Normative `[cross-review]`.** `PackRecord.positionEvidence` is **never** included in any
+> wire projection, and no route may serialize a `PackRecord`. Criterion 3.
 
 ### 4.3 Gate 3 — the surface may withhold and may never add
 
@@ -690,15 +887,64 @@ a preference**:
 | `engine_eval` | **391** | **admitted** — rung 2 |
 | `tablebase_result` | **341** | **admitted** — rung 1 |
 | `position_legality` | 32 | **refused** — rung 0 recomputes `pieceCount` exactly and locally through `countFenPieces`; a projection adds nothing and costs a learner-facing surface |
-| `explorer_frequency` | **0** | **refused by clause 1.** Not deferred by preference: no producer has ever written one. `rfc/claim-backing.md` §3.7 specifies `explorer_position_census` as the record kind that closes this; when records exist, this projection gains **one registry row** and nothing else changes. §11.2 |
+| `explorer_frequency` | **0** | **refused by clause 1** — 0 records in `content/drafts/`, 0 in `content/candidates/`, 0 anywhere `[V]`. **[cross-review]: the refusal stands, its stated ground does not.** See §5.1a |
 | `opening_identity` | 0 in loadable packs (52 in `content/candidates/`) | **refused** — anchors by `{spineNodeId}` and `/title`, not by position; rung 5 identity, not a measurement |
 | `puzzle_provenance` | 0 in loadable packs (26 in `content/candidates/`) | **refused** — a citation, `grounds: "citable_source"` |
 | *templated `engine_eval`* (`engine-move-loss/v1`) | **0** | **refused as a verdict** — `bestSan` plus a ranked `candidates[]` is the instrument's choice among moves (§1 consequence 2) |
+
+### 5.1a Is rung 4 still a refusal, or a deferral wearing a refusal's label? — **[cross-review]**
+
+The count is unchanged and I re-derived it: **zero `explorer_frequency` records exist
+anywhere in the repository** at `a7e700d` — 0 across the 32 draft ledgers, 0 across the 36
+candidate ledgers (whose 129 records are 52 `opening_identity`, 27 `position_legality`, 26
+`puzzle_provenance` and 24 `engine_eval`) `[V]`. Clause 1 is a **producer** test, and there is
+no producer. **So the refusal is honest, and it is kept.**
+
+**But the sentence justifying it — *"no producer has ever written one"* — is now the least
+interesting true thing about rung 4, and leaving it as the whole reason would make this a
+deferral wearing a refusal's label.** Three things moved after this RFC was drafted:
+
+1. **The owner ruled.** D126, 2026-08-15: explorer W/D/B result splits are **admissible** as
+   `corpus_observed`, rung 4, with the boundary *"the split may be stated; it may never be
+   converted into a move verdict or a quality claim."* The question is no longer whether the
+   product wants rung 4.
+2. **The content exists — as prose.** `da77c56` authored **16 `corpus_observed` claims across
+   eleven middlegame packs**, described in its own message as *"the first position-level
+   rung-4 evidence in the repo"*.
+3. **And it is unbound.** **D150** measures why: `EVIDENCE_KINDS` has no census kind;
+   `explorer_frequency`'s values are validated key-exact against eight move-share fields, so
+   `white`/`draws`/`black` fail `EVIDENCE_VALUES_INVALID`; and `check.ts` maps `corpus_observed`
+   to `explorer_frequency` alone. **Those eleven packs pass only because they have no
+   `.evidence.json` at all** — they are eleven of the ledger-less packs §8.4 counts.
+
+So the honest statement is the third one, and it is written here rather than left implied:
+**rung 4 is refused because the record kind that could carry the owner's ruling does not
+exist yet, not because nobody wants the number.** That is still clause 1 — a record kind with
+no producer is exactly what clause 1 refuses — but it is a refusal with a **named, specified,
+in-review unblocker** (`rfc/claim-backing.md` §3.7's `explorer_position_census`) rather than
+an absence of demand. When records of that kind exist in a loadable pack, this projection
+gains **one registry row** and nothing else changes; §8.3 and §11.2 hold unaltered. **The
+distinction that keeps this a refusal rather than a deferral is that this RFC ships no
+placeholder, no disabled branch and no reserved field for it** — criterion 12 fails an
+advertised kind with no registry row, in both directions.
 
 Published as `Capabilities.recordedReadingKinds`, computed from the registry exactly as
 `EngineCapabilities.get` computes `guardBasis`, in the
 `DECLARED_UNIMPLEMENTED_POLICY_MODES` style the audit called *"the pattern the rest of the
 layer should copy"*. Criterion 12 fails when an advertised kind has no registry row.
+
+> **[cross-review] Reuse the disposition register that landed while this was drafting.**
+> `a7e700d` added `CAPABILITY_DISPOSITIONS` and `assertAdvertisedCapabilityDispositions` to
+> `apps/server/src/capabilities.ts`, with a four-valued
+> `CapabilityDispositionKind = "reached" | "refused" | "unmeasured" | "impossible"`, a
+> `reason` on every row, and a coverage assertion that throws when an advertised engine option
+> has no disposition `[V]`. That is the same register discipline §5.3 adopts, already shipped,
+> already published on `Capabilities`. **`recordedReadingKinds` should be computed from
+> §5.1's registry and cross-checked against `CAPABILITY_DISPOSITIONS` rather than standing
+> beside it** — note that register already carries `Explorer / position white / draws / black
+> → reached (corpus panel)`, which is precisely the surface/packet split D147 names. Two
+> registers that can disagree about the same instrument is the drift criterion 12 exists to
+> prevent, so criterion 12 is extended to cover the cross-check.
 
 **And clause 1 is why a ledger reading may never become a condition — candidate (D) of §2,
 refused on three grounds:**
@@ -741,7 +987,9 @@ Two halves, both load-bearing here:
   during committed play is silence"*) is not reopened.
 - **Failing demotes; lacking does not.** §6, in full, and it is applied rather than restated:
   the mechanism that makes it true here is that absence produces **no sentence**, not a
-  sentence about absence.
+  sentence about absence. **[cross-review]:** true of the packet and of every code path this
+  RFC ships; **not** true of an external renderer, which `voiceCheck` does not stop (§6.1,
+  executed). Criterion 16a is the lever that remains.
 
 ---
 
@@ -749,16 +997,66 @@ Two halves, both load-bearing here:
 
 Most positions a run visits are off the authored tree and will have no reading (§8.2). A
 packet that carries a reading at some nodes and not others must not let the silence read as a
-verdict. Four rules, of which the first needs no new machinery at all.
+verdict. Four rules. **[cross-review]:** the first was described as needing *"no new machinery
+at all"*, on the belief that `voiceCheck` already enforced it. It does not (§6.1, executed), so
+rule 1 costs one persona-prompt constraint and rule 3 costs one grep test — criterion 16.
 
-### 6.1 Absence is unspeakable, not spoken — and that is structural
+### 6.1 Absence is unspeakable on the deterministic path, and unprompted on the provider path
+
+> **[cross-review] This section's central claim was tested against the shipped `voiceCheck`
+> and it is FALSE. Absence is speakable, and nothing stops the renderer speaking it.**
+> `voiceCheck` refuses exactly four things: `SQUARE`/`UCI`/`SAN` tokens, the 18-word
+> `CHESS_LEXICON`, the 19-word `BANNED_JUDGEMENTS` and the 25-word `PRESCRIPTIVE_VERBS`, each
+> admitted when it already appears in `packet.sentences` `[V]`. **An absence sentence contains
+> none of them.** Executed against a packet whose only sentence is
+> `"This pack declares: opening."`, all four of these return `valid: true` `[V]`:
+>
+> - *"No reading was recorded at this position."*
+> - *"The engine is silent here."*
+> - *"Nothing was recorded for this spot when the pack was authored."*
+> - *"No measurement exists here; elsewhere on this line there was one."*
+>
+> The last one is the dangerous one, and it is precisely the sentence §6 exists to prevent.
+>
+> **The same run establishes the more general fact, which §4.1 leans on harder than it can
+> bear.** A sentence the packet does **not** contain — *"Recorded reading at this position:
+> Stockfish 18 at depth 22, single line, scored +0.63 from White's side when this pack was
+> authored on 2026-08-15."* — also passes `voiceCheck` against that same packet `[V]`, because
+> it too contains no square, no move, no chess noun, no judgement and no prescriptive verb.
+> **So packet membership is a speaking licence only for chess *tokens*. Non-membership is not
+> a speaking prohibition for anything else.** That is D146 stated at full strength rather than
+> as a residual, and it is a property of the shipped check, not of this RFC.
 
 `voiceCheck` validates renderer output against `packet.sentences`. At a node with no reading,
-the packet contains **no recorded-reading sentence**, so the renderer has nothing to word and
-cannot say *"the engine is silent here"* or *"no reading was recorded"* — those sentences are
-not in the packet, and the chess tokens they would need are not either. **Absence therefore
-produces no output, rather than output about absence.** This is `design/05`'s clause 4
-enforced by the mechanism that already exists.
+the packet contains **no recorded-reading sentence**, so the *deterministic* path produces no
+output about the position: `renderRecordedReading` contributes nothing, and `renderVoice`'s
+fallback is `packet.sentences.join("\n")` `[V]`, which cannot contain a sentence that was
+never built. **On the deterministic path absence produces no output, rather than output about
+absence, and that half is genuinely structural.** On the *provider* path it is not enforced at
+all, and this RFC does not pretend otherwise.
+
+> **Normative, amended `[cross-review]`.** Absence is unspeakable **by construction on the
+> deterministic path** and **unenforced on the provider path**. The three mechanisms this RFC
+> actually has, in decreasing strength:
+> 1. **No absence arm exists to render**, so the fallback and the sentence set are clean
+>    (criterion 7, unchanged and still meaningful).
+> 2. **The persona prompt must never mention recorded readings, their absence, or coverage.**
+>    `personaPrompt` is one of the three things `ExternalHttpVoiceProvider.render` transmits
+>    `[V]`; a renderer that is never told the concept exists has no reason to word it. This is
+>    a real lever and it was not previously stated. **New criterion 16.**
+> 3. **§6.3's population line is a surface line, not a packet sentence**, so it is never in
+>    the provider's input at all.
+>
+> **What this RFC may not claim is that `voiceCheck` prevents absence prose. It does not.**
+> The honest scope is: the packet never asserts absence, no shipped code path renders absence,
+> and an external model that invents absence prose is caught by neither this RFC nor the
+> shipped check — the same ceiling `claim-backing` §2 names, now with an executed
+> counter-example instead of an argument. Ledgered as **D226**, together with the substring
+> finding that is the same defect read from the other side: `voiceCheck` is a token filter,
+> and every RFC that has treated it as a proposition binder has over-claimed it.
+
+This is `design/05`'s clause 4 enforced by the mechanisms that exist, named individually
+rather than attributed wholesale to a check that does not do it.
 
 > **Normative: `renderRecordedReading` has no absence arm, and none may be added.**
 > Contrast `renderEndgameReading`, which *does* say *"Technique entries: none in Tabiya's
@@ -788,6 +1086,18 @@ renderer into a fact about a position, and it is stated once per surface rather 
 node — which is what stops it from becoming a per-move signal that something is missing here
 in particular. It is the same shape as `design/05` §4's *"the assistance rail says honestly
 that nothing was written about this position"*, moved one rung up.
+
+> **[cross-review] "Once per surface" was prose with nothing behind it, and it is the rule
+> most likely to erode.** No acceptance criterion covered §6.3 at all, so nothing would have
+> failed if an implementer rendered the guard beside each reading — which is the natural thing
+> to do, and which converts it into exactly the per-node absence signal §6.1 refuses. Two
+> mechanical properties make it checkable and both are now criteria (**16**):
+> **(a)** the string is a module-level frozen constant rendered by the surface container, not
+> by the per-node component — the shipped `CORPUS_GUARD` in `apps/web/src/lib/corpus-sentences.ts`
+> is the exact precedent and has exactly two references in the tree `[V]`; and
+> **(b)** a grep test asserts the constant is referenced **once** outside its own module, and
+> that no per-node renderer imports it. That is not a proof, but it is the difference between
+> a rule and a sentence.
 
 ### 6.4 A reading is about a position, never about the move that reached it
 
@@ -844,19 +1154,35 @@ implementation time (criterion 1).
 | committed records in `content/drafts/*.evidence.json` | **764** |
 | **admitted** as recorded readings | **732** (391 `engine_eval` + 341 `tablebase_result`) |
 | refused (`position_legality`, rung-0-recomputable) | 32 |
-| positions covered | **732** |
+| positions covered (**distinct `transposeKey`s**) | **731** `[cross-review]` |
 | packs covered | **32** |
 | authored position pointers in those packs (`authoredPositionPointers`: `/start/fen` + recursive spine `moveUci` + top-level deviation `moveUci`) | **732** |
-| **authored-tree coverage** | **732 / 732 = 100.0%**, in **32 of 32** packs, zero gaps, zero duplicates |
+| **authored-tree coverage** | **732 / 732 pointers = 100.0%**, in **32 of 32** packs, zero gaps, **one duplicate** `[cross-review]` |
 | distinct anchor FENs corpus-wide | 569 — 281 with an `engine_eval`, 288 with a `tablebase_result` |
+
+> **[cross-review] 731, not 732, and the missing one is a finding rather than an off-by-one.**
+> Building the index exactly as §3.3 specifies over all 32 ledgers at `a7e700d` yields **731
+> distinct keys from 732 admitted records** `[V]`. The collision is inside
+> `lucena-bridge-convert`: two `tablebase_result` records share the `transposeKey`
+> `8/1P2k3/2K5/8/3R4/8/8/1r6 b - -` at halfmove clocks **9** and **13**, one supporting a
+> spine pointer and one supporting `/deviations/7/moveUci`. It is the only such collision in
+> the corpus, and there are **zero** among the 391 `engine_eval` records `[V]`.
+> Three consequences: **pointer coverage is still 732/732 and still 100%** (the two records
+> back two different pointers); **"zero duplicates" is wrong** and is corrected above; and
+> the index's value type must stay an **array** (§2.2). Criterion 1 is corrected to 731.
 
 Two structural findings fall out and are ledgered rather than buried:
 
 - **No position in the corpus carries both an engine reading and a tablebase reading**
-  (281 + 288 = 569 exactly). The two instruments **partition the corpus by pack**: 17 packs
-  are 100% Stockfish (openings), 15 are 100% Syzygy (endgames), and no pack mixes. So a packet
+  (281 + 288 = 569 exactly). The two instruments **partition the corpus by pack**: **20** packs
+  carry only Stockfish records and are all `phase: "opening"`, **12** carry only Syzygy records
+  and are all `phase: "endgame"`, and no pack mixes. So a packet
   can never corroborate one instrument against the other, and any future design that assumes
   it can is assuming a corpus that does not exist. **D143.**
+  **[cross-review]:** the split is **20 / 12**, not the 17 / 15 originally stated — re-derived
+  at `a7e700d` and **identical at `bc3cdc1`**, so this was a drafting error rather than tree
+  movement `[V]`. The partition finding itself — no pack mixes, 20 + 12 = 32 — survives intact,
+  and it is the load-bearing half.
 - **158 FENs are recorded in more than one pack's ledger** (opening transpositions). This RFC
   refuses cross-ledger resolution — `claim-backing` §3.3's rule, *"a binding that reaches
   outside its own digest is unverifiable"* — so those records help only the pack that owns
@@ -871,11 +1197,35 @@ position `[V]`:
 | | |
 |---|---:|
 | spine-line positions (including start) | **497** |
-| distinct legal successors of those positions | **11,559** |
-| successors that are authored (465 spine continuations + 235 deviation stubs) | **700 — 6.06%** |
-| **successors with no record** | **11,094 — 93.94%** |
+| **legal moves** at those positions (promotions counted once) | **11,559** `[cross-review]` |
+| — the same frontier as **distinct** successor positions, by `transposeKey` | **11,464** `[cross-review]` |
+| authored successor **pointers** (465 spine continuations + 235 deviations) | **700 — 6.06% of 11,559** |
+| — the same frontier as **distinct** authored successor positions | **699 — 6.10% of 11,464** `[cross-review]` |
+| **successors with no record** | **11,094 of 11,559 — 93.94%** (equivalently 10,765 of 11,464 — 93.90%) |
 | mean legal moves per position | 23.26 (openings ~34, endgames ~11) |
 | positions with a record more than one ply off the authored tree | **0, by construction** |
+
+> **[cross-review] The cliff is confirmed; two labels on it were wrong, and neither changes
+> the conclusion.** Re-derived at `a7e700d` by replaying all 32 packs from `start.fen` `[V]`:
+> **11,559 is the count of legal moves** at the 497 spine-line positions, not of *distinct*
+> successors — distinct successor positions are **11,464** by `transposeKey` (11,562 by full
+> FEN, i.e. with the three promotion choices expanded). And **700 is the authored *pointer*
+> count**; **699 positions** are distinct, because one deviation transposes back onto its own
+> spine. 465 spine continuations `[V]` and 235 deviations `[V]` both reproduce exactly, and
+> 234 of the 235 deviations land off-spine `[V]`.
+>
+> Both framings are internally consistent (pointers ÷ moves = 6.06%; positions ÷ positions =
+> 6.10%) and the difference is a rounding artefact against a 94% gap. **The finding is
+> unchanged and is the one that matters: coverage is total on a line and empty one ply
+> beside it.** The rows above now state both denominators so criterion 13's re-derivation has
+> something unambiguous to match.
+>
+> One thing the original understated, in the honest direction: because lookup is by
+> `transposeKey`, an *unauthored* move order that **transposes back** into an authored
+> position does get a reading. Measured: **743 of the 11,562 promotion-expanded successors
+> hit an authored key** (372 tablebase, 371 engine) against 699 distinct authored positions
+> `[V]` — so transposition buys roughly 6% more arrivals than move-order-faithful coverage
+> would. It does not soften the cliff; it is noise against 94%.
 
 That last row is the finding. `authoredPositionPointers` enumerates `/start/fen`, spine
 `moveUci` and **top-level** deviation `moveUci` — nothing else — and `verify-draft`'s
@@ -921,7 +1271,8 @@ registry rather than as two hardcoded branches.
 
 ### 8.4 The contingency, stated rather than assumed — D138
 
-**`content/packs/` contains only `.gitkeep`.** `[V]` All 47 authored packs and all 32 ledgers
+**`content/packs/` contains only `.gitkeep`.** `[V]` All 47 authored packs (53 pack documents
+including six browser fixtures — **[cross-review]**, below) and all 32 ledgers
 live in `content/drafts/`, which `PackRegistry.loadDefault` includes **only when
 `development === true`**; a `draftFile` outside development is a `TypeError`. `[V]`
 
@@ -936,6 +1287,18 @@ content promotion this RFC does not perform and does not block on.** Ledgered as
 carried into Open question 4 as an owner call, because "the corpus is dev-only" is a fact the
 whole in-flight wave inherits and none of the sibling RFCs states.
 
+> **[cross-review] This is a stated dependency, and it now has an owner — say so.** D138 was
+> opened by this RFC on 2026-08-16; the same fact was re-found the same day, at larger scope,
+> as **D162** (*"a production deployment serves ONE pack — the schema example"*, owner-gated),
+> and D162 records that **0 of 47 packs has an empty `provenance.graduationBlockers`**, so
+> nothing can graduate today either. **`rfc/pack-graduation.md` owns the promotion.** The
+> dependency is therefore not "a content wave with no owner" but a **named sibling RFC**, and
+> this RFC's position is unchanged and correct: not a blocker, because the mechanism is
+> empty-corpus-safe, but a **declared dependency of the 732** rather than a footnote. Open
+> question 4 is amended accordingly. Two figures in this RFC turn out to depend on
+> `pack-graduation` landing — the 732 (via D138/D162) and the 181 readings §2.1's digest
+> clause refuses (via its 32-of-32 re-stamp) — and both move in this RFC's favour when it does.
+
 **And a second contingency: 15 of 47 authored draft packs have no ledger at all** `[V]` —
 `berlin-queenless-press`, `carlsbad-minority-attack`, `conversion-up-a-piece`,
 `dragon-yugoslav-race`, `french-advance-chain-white`, `grunfeld-exchange-fianchetto`,
@@ -945,6 +1308,22 @@ whole in-flight wave inherits and none of the sibling RFCs states.
 `trajectory-qgd-exchange-minority`. Every one is a 2026-08-15 middlegame-wave pack. So the
 corpus is **two-tier**, coverage is 68% of authored packs, and the only thing published about
 the tier is the binary `assessmentGrounding`. **D141.**
+
+> **[cross-review] The denominator is 53, not 47, and the difference is what the registry
+> actually loads.** `content/drafts/` holds **53 pack documents** — files that are not one of
+> the four `SIDECAR_BASENAMES` suffixes, each with `id`, `start` and `objective` — at both
+> `a7e700d` and `bc3cdc1` `[V]`. `PackRegistry.loadDefault` walks the directory with
+> `jsonFiles`, which excludes sidecars by `isSidecarName` and **nothing else**, so in
+> development the registry indexes **all 53**. **21** have no ledger, of which **6 are browser
+> test fixtures** (`immediate-guard.browser`, `line-boundary.browser`, `outcome-hold.browser`,
+> `outcome-resist.browser`, `stated-reasoning.browser`, `trajectory-legs.browser`) `[V]`.
+> So "15 of 47" is the count **after** excluding those six, which is the right editorial
+> number and which the RFC never said it was doing.
+>
+> Restated normatively: **the projection is built over the 53 packs the registry loads; 32 get
+> a non-empty index, 21 get an empty one, and 6 of those 21 are fixtures that should never
+> have one.** This matters for criterion 1 — a test asserting "32 packs indexed" must assert
+> it against a registry holding **53**, or it is asserting a number nobody computed.
 
 ---
 
@@ -957,14 +1336,29 @@ the tier is the binary `assessmentGrounding`. **D141.**
 |---|---|
 | **D138** 🐞 | **`content/packs/` is empty — the entire authored corpus is dev-only.** 47 authored packs and 32 ledgers live in `content/drafts/`, which `PackRegistry.loadDefault` includes only when `development === true`. Every pack-attached capability in flight therefore delivers zero in a production deployment, and no RFC states it |
 | **D139** 🐞 | **The packet's "rung 1" never touches a tablebase.** `endgameReading` is a material census with `provenanceNote = "Tabiya's material-census convention"` — five type labels and up to three technique names, no `category`, `dtz`, `dtm` or abstention contract. Its honest rung is 0. Corrects D116/D119; escalated as a row rather than written into `design/05`, per law 5 |
-| **D140** 🐞 | **`/reasoning-review` builds an evidence packet without the packet's disclosure gate.** Four of five packet construction sites call `requireGuidanceDisclosure`; `/reasoning-review` gates on `reasoningDeliveryOpen`, which is checkpoint-scoped and **role-blind**, so a participant or spectator can cause a packet carrying unfiltered rung-3 `human_divergence` sentences to be transmitted to an external provider. Egress gap, not a learner-visible leak (`reasoningMatchCheck` filters the response) |
-| **D141** 🐞 | **15 of 47 authored draft packs have no evidence ledger**, all from the 2026-08-15 middlegame wave. The corpus is two-tier at 68% and the only published signal is the binary `assessmentGrounding` |
+| **D140** 🐞→🔨 | **`/reasoning-review` builds an evidence packet without the packet's disclosure gate.** Three of **four** packet construction sites called `requireGuidanceDisclosure`; `/reasoning-review` gated on `reasoningDeliveryOpen`, which is checkpoint-scoped and **role-blind**, so a participant or spectator could cause a packet carrying unfiltered rung-3 `human_divergence` sentences to be transmitted to an external provider. Egress gap, not a learner-visible leak (`reasoningMatchCheck` filters the response). **`[cross-review]` FIXED at `a452abb` before this row was reviewed** — the fix adds a second, independent `service.guidanceAccess` call rather than widening `reasoningReviewAccess`. The residual this RFC still owes is the **structural pin** (criterion 4), not the call. Original text said "four of five"; there are four sites |
+| **D141** 🐞 | **15 of 47 authored draft packs have no evidence ledger**, all from the 2026-08-15 middlegame wave. The corpus is two-tier at 68% and the only published signal is the binary `assessmentGrounding`. **`[cross-review]`: the registry loads **53** documents from `content/drafts/`, so 21 of 53 carry no ledger; the six-document difference is browser test fixtures and is D227** |
 | **D142** 💡 | **`PackRegistry.loadDefault` already reads every pack's ledger and discards it.** `sidecarPaths` → `optionalJson` → `assessmentGrounding`, which keeps one bit of 764 records; `PackRecord` has seven fields and none is the ledger. D118's cost is a discarded object, not a missing contract |
-| **D143** 🐞 | **No position in the corpus carries both an engine reading and a tablebase reading.** 281 + 288 = 569 distinct FENs exactly. The instruments partition by pack — 17 packs 100% Stockfish, 15 packs 100% Syzygy, none mixed — so nothing can corroborate one against the other |
+| **D143** 🐞 | **No position in the corpus carries both an engine reading and a tablebase reading.** 281 + 288 = 569 distinct FENs exactly. The instruments partition by pack — **20** packs 100% Stockfish (all `phase: "opening"`), **12** packs 100% Syzygy (all `phase: "endgame"`), none mixed — so nothing can corroborate one against the other. **`[cross-review]` the split is 20/12; the row originally said 17/15, which was wrong at `bc3cdc1` as well as at HEAD** |
 | **D144** 💡 | **158 FENs are recorded in more than one pack's ledger.** Single-ledger resolution (the `claim-backing` rule) refuses them by construction; it is the cheapest available coverage widening and it changes what "this pack's evidence" means, so it is an owner call |
 | **D145** 🐞 | **`voiceCheck` validates only `packet.sentences`**, and `ExternalHttpVoiceProvider.render` transmits only `{personaPrompt, sentences, scope}`. A structured packet field that produces no sentence is invisible to the renderer *and* to the check. "Widen the packet" means "widen the sentences", and any future packet field that forgets this is decoration |
 | **D146** 🐞 | **`voiceCheck` is token-membership, not proposition-checking.** It cannot stop the renderer joining two admitted facts into a claim neither record makes. Pre-existing, but the cost rises with rung 2, because a centipawn number invites a causal join. The ceiling of any token check over free prose — the same ceiling `claim-backing` §2 names for its span binding |
 | **D147** 💡 | **Rung 4 reaches a live surface but never the packet.** `GET /runs/:id/corpus` is a shipped, disclosure-gated, LLM-free explorer panel; the packet has no rung-4 field. So the corpus can be shown and can never be worded, and the two rung-4 paths are unjoined |
+
+### 9a. Rows opened by the cross-review — **id block D223–D232, no other id used**
+
+| id | row |
+|---|---|
+| **D223** 🐞 | **`assessmentGrounding` does not compare the ledger to the pack, so `ledger_verified` does not mean "this ledger describes this document".** It validates ledger and manifest, runs `linkage` (record → **manifest entry**, by `sourceId`/`retrievedAt`), and then requires **exactly one** record matching `/start/fen` and `objective.grading.assessedBy`. **`ledger.packDigest` is never read on the runtime path**; the only digest check is `EVIDENCE_DIGEST_STALE` in `sourcing/check.ts`, severity **warning**, in the authoring CLI. Measured at `a7e700d`: **32 of 32 ledgers return `ledger_verified`, including all 5 whose `packDigest` is stale** (`mate-bishop-knight`, `mate-k-q-technique`, `mate-k-r-technique`, `philidor-passive-rook-convert`, `trajectory-mate-bishop-knight` — 186 records, 181 admitted). So the one bit the runtime keeps out of 764 records attests **one** record, not the ledger. `evidence-at-runtime` §2.1 adds a digest clause for its own consumer; **the general defect — that a two-valued grounding signal reads as a whole-ledger attestation and is published on `GET /packs/:id`** — is not fixed by that and is this row |
+| **D224** 🐞 | **`transposeKey` collides inside a single pack's ledger, so "one position, one record" is false.** `lucena-bridge-convert` records `8/1P2k3/2K5/8/3R4/8/8/1r6 b - -` twice, at halfmove clocks **9** and **13**, with byte-identical values (`loss`, `dtz -8`, `dtm -28`). 732 admitted records occupy **731** distinct keys. Any position-keyed index over a ledger must therefore be multi-valued; a scalar `Map` silently drops one record and which one depends on iteration order |
+| **D225** 🐞 | **The strict halfmove-clock rule costs 11.6% of tablebase lookups, and the number was invisible because the wrong set was measured.** Over every legal successor of the 497 spine-line positions, **372 land on a key carrying a `tablebase_result` and 43 arrive with a clock no record at that key holds** — all transpositions, differing by 4–6 halfmoves. On the authored tree the cost is 0, which is what makes "expected zero" look true and is why any coverage claim about a transposition index must be measured on the **frontier**, not on the tree |
+| **D226** 🐞 | **`voiceCheck` is a token filter, and every RFC that treats it as a proposition binder over-claims it — demonstrated twice, by execution.** (1) **Absence is speakable.** Executed against a packet whose only sentence is `"This pack declares: opening."`, `voiceCheck` returns `valid: true` for *"No reading was recorded at this position."*, *"The engine is silent here."*, *"Nothing was recorded for this spot when the pack was authored."* and *"No measurement exists here; elsewhere on this line there was one."* — none contains a square, a move, a `CHESS_LEXICON` noun, a `BANNED_JUDGEMENTS` word or a `PRESCRIPTIVE_VERB`, which is everything the check inspects. A whole invented recorded-reading sentence passes the same packet for the same reason. So *"packet membership is a speaking licence"* is true only for chess **tokens**, and its converse — non-membership as prohibition — is false for all other prose. (2) **The token admission is `String.includes`, not a word-boundary match:** a sentence containing `sf-a1x` licenses the square `a1`, while a `\b`-anchored regex over that sentence finds nothing to object to, so every criterion that tests *"the sentence does not **match** `SQUARE`/`UCI`/`SAN`"* tests the wrong direction. Both are pre-existing and orthogonal to any one packet field; both become load-bearing the moment a frozen sentence carries a machine-stamped identity string or a design leans on `voiceCheck` to make absence unspeakable |
+| **D227** 🐞 | **`content/drafts/` holds 53 pack documents and `PackRegistry.loadDefault` loads all 53 in development, six of which are browser test fixtures.** `*.browser.json` is not a `SIDECAR_BASENAMES` suffix, so `jsonFiles` walks it in like any pack. Every corpus figure quoted as "of 47 authored packs" is quietly excluding those six, and no code performs that exclusion. Either the fixtures move out of `content/drafts/`, or "47" stops being used as a denominator |
+| **D228** 💡 | **Two capability registers now describe the same instruments and nothing makes them agree.** `CAPABILITY_DISPOSITIONS` landed at `a7e700d` with `reached`/`refused`/`unmeasured`/`impossible`, a `reason` per row and `assertAdvertisedCapabilityDispositions` as its coverage gate; `evidence-at-runtime` §5.1 proposes a second registry for admitted record kinds, published as `recordedReadingKinds`. They already overlap on Stockfish, Syzygy and Explorer — and disagree in emphasis: the shipped register says `Explorer / position white / draws / black → reached (corpus panel)` while the RFC refuses rung 4 |
+| **D229** 🐞 | **`packages/runtime` cannot see `apps/server`, so any packet field typed off a server constant is unbuildable.** The runtime's dependencies are `@chess-tabiya/schema` and `chessops`. `EvidencePacket` and every `render*Reading` live there; `ASSESSMENT_CATEGORIES`, `TABLEBASE_CATEGORIES` and `EVIDENCE_KINDS` live in `apps/server`. The runtime already exports `AssessmentCategory` (`branch-scale.ts`) with exactly the five determinate values, and `apps/server/src/tablebase.ts` already imports from the runtime — so the fix is always "type in the runtime, narrow in the server", and it should be said once rather than rediscovered per RFC |
+| **D230** 💡 | **The `engine-leverage`/D194 failure has a general shape and no general guard: a type-keyed barrier in front of a payload passthrough.** `publicEvents` allowlists event **types** (`engineFeedbackEvent`), while `GET /runs/:id/events` forwards whole event objects — so any new **field** on an unlisted type egresses by default and no reviewer of the field looks at the barrier. Pack egress does not have the defect, because `projectPackDocument` and `PackSummary` are built by enumeration. The general fix is that anything reaching a passthrough must be projected by enumeration too, or the barrier must key on payload shape |
+| **D231** 🐞 | **Rung 4's refusal is now a refusal of a *specified* record kind, not of an unwanted one, and nothing in the ledger says so in one place.** D126 ruled explorer W/D/B splits admissible as `corpus_observed`; `da77c56` authored 16 such claims across eleven packs; D150 measures that all 16 are unbound prose and pass only because those eleven packs have no ledger; `claim-backing` §3.7 specifies `explorer_position_census`. Zero `explorer_frequency` records still exist (0 in drafts, 0 in candidates), so every clause-1 refusal remains correct — but a reader of any one of those four rows cannot tell that the refusal is now a **sequencing** state with an owner |
+| **D232** 💡 | **Nothing pins that a new evidence-packet construction site arrives with its disclosure gate.** `a452abb` fixed the one site that lacked `requireGuidanceDisclosure`, by adding the call — not by adding a guard. The gate is four hand-written call sites in `rest.ts` beside four hand-written `evidencePacket(` calls, and the failure mode is a fifth site. A structural test (or a constructor that takes the access object) costs one test and removes the whole class |
 
 ---
 
@@ -1050,28 +1444,53 @@ semantics. If `claim-backing`'s §3.2(5) lands first, this RFC is unaffected: it
 ## Acceptance criteria
 
 1. **The projection is built, and the measured figures are reproduced by the shipped code
-   rather than by this document.** Over the committed tree: **32** packs indexed, **732**
-   readings admitted (391 engine + 341 tablebase), **32** `position_legality` records refused,
-   **732 of 732** authored position pointers covered. Recomputed in
+   rather than by this document.** Over the committed tree, with the registry loaded in
+   development mode holding **53** pack documents `[cross-review]`: **32** packs indexed,
+   **732** readings admitted (391 engine + 341 tablebase) at **731 distinct `transposeKey`s**
+   `[cross-review]`, **32** `position_legality` records refused, **21** packs with an empty
+   index, **732 of 732** authored position pointers covered. Recomputed in
    `planning/evidence-at-runtime/`. **If the shipped figure disagrees with §8, §8 is wrong and
    is corrected there rather than the code being bent to it.**
-2. **Linkage is fail-closed and total.** A pack whose ledger fails `assessmentGrounding`
-   yields an **empty** index — asserted for a hand-mutated pack document (digest drift) and
-   for a hand-mutated `packDigest`. A partial index is a test failure.
-3. **`GET /packs/:id` is byte-identical before and after.** A test asserts
-   `projectPackDocument` gains no parameter, that no recorded reading appears in its output for
-   any of the 32 indexed packs, and that the anti-contamination boundary in
-   `docs/explanation-grounds.md` is unchanged.
-4. **All five packet construction sites apply the packet disclosure gate**, `/reasoning-review`
-   included (D140). Tested per site: a spectator, a participant, and a solo learner with the
-   delivery window closed each receive `ASSISTANCE_WITHHELD`; a solo learner with the window
-   open receives readings. **The `/reasoning-review` test must fail before the fix and pass
-   after**, and it is written first.
+2. **Linkage is fail-closed and total, and the digest clause is tested separately from the
+   grounding clause `[cross-review]`.** A pack whose ledger fails `assessmentGrounding` yields
+   an **empty** index. A pack whose ledger passes `assessmentGrounding` but whose
+   `ledger.packDigest` differs from the registry's `digestDrillPack(document)` **also** yields
+   an empty index — and this arm must be tested against a **real** case, not only a synthetic
+   one, because **five exist at HEAD**: `mate-bishop-knight`, `mate-k-q-technique`,
+   `mate-k-r-technique`, `philidor-passive-rook-convert`, `trajectory-mate-bishop-knight`, all
+   of which return `ledger_verified` today `[V]`. **A test asserting that a digest-stale
+   ledger yields an empty index must fail if clause 2 of §2.1 is removed**; if it still
+   passes, the clause is not wired. A partial index is a test failure.
+3. **No `PackRecord` field reaches the wire `[cross-review]`.** Four assertions, not one:
+   `projectPackDocument` gains no parameter and `GET /packs/:id` is byte-identical for all 32
+   indexed packs; `GET /packs` (`PackSummary`) is byte-identical; `GET /packs/:id/export` and
+   `distillRun` are byte-identical; and a grep test asserts that no module spreads or
+   `JSON.stringify`s a `PackRecord`. The anti-contamination boundary in
+   `docs/explanation-grounds.md` is unchanged. **This is the criterion that closes the D194
+   shape (§4.2a) and it must not be narrowed back to `projectPackDocument` alone.**
+4. **All four packet construction sites apply the packet disclosure gate `[cross-review]`.**
+   Tested per site: a spectator, a participant, and a solo learner with the delivery window
+   closed each receive `ASSISTANCE_WITHHELD`; a solo learner with the window open receives
+   readings. `/reasoning-review`'s gate **already shipped at `a452abb`**, so its test is a
+   **regression** test rather than the fail-then-fix test the draft specified. Additionally a
+   **structural** test asserts that every `evidencePacket(` call site in `rest.ts` is preceded
+   by a `requireGuidanceDisclosure` in the same block — the pin `a452abb` did not ship, and
+   the guard against a fifth site arriving without one.
 5. **No move token enters the packet — the law-8 criterion.** Over all 732 admitted readings,
-   every sentence `renderRecordedReading` produces is asserted to match none of `voiceCheck`'s
-   `SQUARE`, `UCI` or `SAN` patterns. A future sentence arm that names a move fails this test.
-   **This is the mechanical form of "widen the packet, never the licence" and it must not be
-   softened.**
+   every sentence `renderRecordedReading` produces is asserted to contain **no substring**
+   matching `voiceCheck`'s `SQUARE`, `UCI` or `SAN` patterns. **`[cross-review]` The test is a
+   substring test, not a regex match, and the distinction is load-bearing:** `voiceCheck`
+   admits an output token when
+   `packet.sentences.join("\n").toLowerCase().includes(token)` `[V]` — a raw `String.includes`,
+   with no word boundary. So a sentence containing `…a1x…` would license the renderer to emit
+   the square `a1`, while a `\b`-anchored regex test over that sentence finds nothing. Asserting
+   "the sentence does not *match* the pattern" tests the wrong direction; assert that the
+   sentence does not *contain* any `[a-h][1-8]` pair, anywhere, at any boundary. The corpus's
+   own stamped values pass — `engineName: "Stockfish"`, `engineVersion: "18"`,
+   `sourceId: "stockfish-authoring" | "syzygy"` `[V]` — but they pass by luck of spelling, and
+   a future engine identity like `sf-a1x` would not. A future sentence arm that names a move
+   fails this test. **This is the mechanical form of "widen the packet, never the licence" and
+   it must not be softened.**
 6. **Zero instrument calls, on both axes.** A grep test asserts the projection module imports
    no engine client, no `LichessTablebaseSource`, no `ExplorerClient` and no fetch; a
    behavioural test asserts that a run with the network unavailable produces byte-identical
@@ -1091,27 +1510,57 @@ semantics. If `claim-backing`'s §3.2(5) lands first, this RFC is unaffected: it
     `templateId: "engine-move-loss/v1"` with `bestSan` and `candidates[]` is not admitted, and
     neither `bestSan` nor any candidate SAN appears in any packet. 0 such records exist today;
     this criterion is the fence, not a regression test.
-11. **The clock rule holds and its cost is measured.** A `tablebase_result` whose recorded
-    halfmove clock differs from the node's is not admitted. The implementation **reports the
-    measured on-tree cost of the strict rule** (expected 0 positions); a non-zero result is
-    carried to Open question 2 rather than silently relaxed.
+11. **The clock rule holds and its cost is measured — and the expected cost is 43, not 0
+    `[cross-review]`.** A `tablebase_result` whose recorded halfmove clock differs from the
+    node's is not admitted. The implementation reports the measured cost over the **one-ply
+    frontier** (every legal successor of the 497 spine-line positions), which is the set the
+    index is for; the on-authored-tree cost is 0 by construction and measuring only that set
+    is what made the draft's "expected zero" look true. Expected at `a7e700d`: **372 frontier
+    positions land on a key carrying a tablebase record, and 43 (11.6%) are refused on clock**
+    `[V]`. A **materially lower** figure means the rule is not wired; a materially higher one
+    is carried to Open question 2 rather than silently relaxed. The test also pins that
+    `lucena-bridge-convert`'s duplicated key returns **both** readings from the index and then
+    **at most one** after the clock filter.
 12. **`/capabilities` publishes the registry, and the register cannot drift.**
     `recordedReadingKinds` is computed from §5.1's registry; a test fails when an advertised
     kind has no registry row, and when a registry row marked admitted has no admission path.
+    **`[cross-review]` Extended:** a test also fails when §5.1's registry and the shipped
+    `CAPABILITY_DISPOSITIONS` (`apps/server/src/capabilities.ts`, landed at `a7e700d`)
+    disagree about the same instrument — two registers that can drift about Stockfish, Syzygy
+    and Explorer is the failure this criterion exists to prevent (§5.1a).
 13. **The coverage gap is published, not just measured.** §8.2's figures — 497 spine-line
-    positions, 11,559 successors, 700 authored (6.06%), 11,094 uncovered — are recomputed from
-    the shipped code in `planning/evidence-at-runtime/`. **A run that reports substantially
-    higher off-tree coverage fails this criterion**, because it would mean the index is
-    matching positions it should not.
+    positions, **11,559 legal moves / 11,464 distinct successor positions**, **700 authored
+    pointers (6.06%) / 699 distinct authored positions (6.10%)**, 11,094 uncovered — are
+    recomputed from the shipped code in `planning/evidence-at-runtime/`. **`[cross-review]`
+    Both denominators are named because the draft published one number under the other's
+    label; a re-derivation that produces 11,464 or 699 is correct, not a failure.** **A run
+    that reports substantially higher off-tree coverage fails this criterion**, because it
+    would mean the index is matching positions it should not — with the one legitimate
+    exception §8.2 now measures: transposition back into an authored key, which accounts for
+    743 promotion-expanded arrivals against 699 distinct authored positions `[V]`.
 14. **All 32 committed ledgers still validate unchanged.** `sourcing-check` over `content/`
     produces the same issue set, code for code. No pack byte changes; no content digest moves.
 15. **The ledger and the log are updated in the archiving commit.** **D118** flips to ✅ with
     **both** numbers named — 732 readings admitted **and** 11,094 of 11,559 one-ply successors
     uncovered. **D116** flips to ✅ with the mechanical half stated and rung 4 named as still
     absent. **D119** and **D120** are annotated with what shipped. **D138–D147** are opened by
-    the drafting commit with their measurements. A dated entry lands in
-    `planning/exploration/log.md`. `rfc/README.md`'s Active row is the reviewer's to add —
+    the drafting commit with their measurements, and **D223–D232** by the cross-review
+    `[cross-review]`; **D140 flips to 🔨 naming `a452abb`, not this RFC**. A dated entry lands
+    in `planning/exploration/log.md`. `rfc/README.md`'s Active row is the reviewer's to add —
     single-writer, not edited here.
+16. **The two rules that were prose are mechanical `[cross-review]`.** Both come from §6, and
+    neither had a criterion.
+    **(a) Absence stays out of the persona prompt.** A test asserts `voicePersona` — the
+    `personaPrompt` string `ExternalHttpVoiceProvider.render` transmits — contains none of
+    `reading`, `recorded`, `coverage`, `queried`, `silent`, `absent`, in any case. A renderer
+    that is never told the concept exists has no reason to word it, and this is the only
+    lever this RFC has on the provider path, because **`voiceCheck` demonstrably does not
+    refuse absence prose** (§6.1, executed `[V]`).
+    **(b) §6.3's population line is rendered once per surface.** It is a module-level frozen
+    constant on the `CORPUS_GUARD` pattern; a grep test asserts exactly one reference outside
+    its defining module and none from a per-node component. Rendering it beside each reading
+    is the failure this criterion exists to catch, because it recreates the per-node absence
+    signal §6.1 refuses.
 
 ---
 
@@ -1123,12 +1572,20 @@ semantics. If `claim-backing`'s §3.2(5) lands first, this RFC is unaffected: it
    admitting it changes what "this pack's evidence" means and would make a pack's honesty
    depend on which other packs happen to be loaded — but it is the cheapest coverage widening
    available and it is an owner call, not a tooling one.
-2. **Does the strict halfmove-clock rule for tablebase readings cost coverage?** Expected zero
-   on the authored tree, because records are produced by replaying the same moves. Criterion 11
-   measures it. If non-zero, the honest options are keeping the strict rule (losing those
-   positions) or admitting with the clock difference stated in the sentence — and the second
-   is a sentence-content change, so it returns here rather than being taken at implementation
-   time.
+2. **Does the strict halfmove-clock rule for tablebase readings cost coverage? — ANSWERED
+   `[cross-review]`: yes, 43 of 372 (11.6%), and the rule is kept anyway.** Measured at
+   `a7e700d` `[V]`; §2.2 carries the derivation and the examples. Zero on the authored tree,
+   as the draft expected, but the authored tree is not the set a `transposeKey` index serves.
+   Of the two honest options the draft named, **keep the strict rule** is taken here: the
+   refused arrivals differ from their records by 4–6 halfmoves, which is a genuinely different
+   fifty-move state, and stating the clock difference in the sentence would put an authoring
+   artefact into a learner-facing sentence — the same thing §6.1 refuses for absence. **What
+   remains open is narrower and is a real owner call:** `lucena-bridge-convert` records one
+   position at two clocks with byte-identical values, so the corpus proves some positions are
+   clock-insensitive. Admitting a reading when **every** record at that key agrees on
+   `category` and `dtz` would recover most of the 43 without stating anything false. It is not
+   taken here because it is a new admission rule rather than a measurement, and because 43
+   readings is a smaller cost than a second admission concept.
 3. **Should recorded readings reach the `compare` scope?** Out of scope here because that
    packet replaces `sentences` wholesale and because compare is the one place several nodes are
    in view, i.e. where §3.5's refusal is load-bearing rather than theoretical. This touches
@@ -1137,11 +1594,25 @@ semantics. If `claim-backing`'s §3.2(5) lands first, this RFC is unaffected: it
    the mechanism is empty-corpus-safe and the contingency is stated rather than hidden — but
    the whole in-flight wave inherits the same contingency and none of the sibling RFCs names
    it. Whether that becomes a content wave with an owner is a scheduling call.
+   **`[cross-review]` It already has an owner: `rfc/pack-graduation.md`, via D162.** So the
+   question narrows to sequencing, and this RFC now has **two** figures riding on it — the 732
+   (§8.4) and the 181 readings §2.1's digest clause refuses until the 32-of-32 re-stamp lands.
+   The recommendation is unchanged (**not a blocker**), but the dependency is now declared in
+   §8.4 rather than left as a footnote, and a reviewer should read the two RFCs' landing order
+   as a scheduling question with a known answer rather than an open one.
 5. **Should `position_legality` be admitted after all?** Refused here as rung-0-recomputable
    (`countFenPieces` is local and exact). The one argument for it is that `pieceCount` is what
    gates rung 1's abstention contract, and a *recorded* piece count carries a retrieval date a
    computed one does not. **Recommendation: keep it refused** — a date on an arithmetic fact is
    provenance theatre — recorded so the refusal is a decision.
+
+6. **`[cross-review]` Should the digest clause of §2.1 be a refusal or a demotion?** It is
+   specified as a refusal (empty index) because a reading about a document that has moved is
+   the one thing this RFC cannot let a renderer say. The alternative — admit, and add
+   *"recorded against an earlier version of this pack"* to the frozen sentence — is rejected
+   for the same reason Open question 2 rejects stating a clock difference: it converts an
+   authoring artefact into a learner-facing sentence. Recorded so the refusal is a decision,
+   and because it costs a measured 181 readings today.
 
 ---
 
@@ -1156,9 +1627,35 @@ semantics. If `claim-backing`'s §3.2(5) lands first, this RFC is unaffected: it
   speaking licence. Cross-node arithmetic refused normatively, which is the boundary against
   `engine-leverage`. Rung 4 refused under the rung rule's clause 1 on a measured zero, with
   `claim-backing`'s `explorer_position_census` named as the unblocker. **Claims nothing
-  versioned**; 0.26 stays free. Measured: **732 of 764 records admitted at 732 positions across
+  versioned**; 0.26 stays free. Measured: **732 of 764 records admitted at 731 positions across
   32 packs, 100.0% of the authored tree** — and **11,094 of 11,559 one-ply-off positions
   uncovered, with nothing at all beyond that ply**. Ten rows opened from measurements taken
   during drafting (D138–D147), including that the packet's "rung 1" never touches a tablebase
-  (D139), that one of five packet construction sites omits the disclosure gate (D140), and that
+  (D139), that one of four packet construction sites omitted the disclosure gate (D140), and that
   `content/packs/` is empty so the whole corpus is dev-only (D138).
+- 2026-08-16: **adversarial cross-review at `a7e700d`**, by an agent that did not write the
+  draft. Content census unchanged (32 / 764 / 391 / 341 / 32 / 0 templated) and every symbol
+  in the locate list resolves, so the *mechanism* survives intact. Six classes of figure did
+  not, and are corrected in the body rather than in a banner: **§2.1's staleness argument was
+  false** and is replaced by a two-predicate gate — `assessmentGrounding` never reads
+  `ledger.packDigest`, and **5 of 32 ledgers are digest-stale at HEAD while all 32 read
+  `ledger_verified`**, so the draft would have served 181 stale readings; **D140's fix already
+  landed at `a452abb`** and there are **four** packet construction sites, not five;
+  **731 distinct positions, not 732** (`lucena-bridge-convert` records one position at two
+  halfmove clocks); **the strict clock rule costs 43 of 372 frontier lookups, not 0**; the
+  engine/tablebase pack split is **20/12, not 17/15**; and `content/drafts/` holds **53 pack
+  documents**, all loaded in development, six of them browser fixtures. One specification
+  defect fixed: `RecordedReading` could not be typed as §3.4 spelled it, because
+  `packages/runtime` cannot import `apps/server` — and the runtime already exports
+  `AssessmentCategory`, which the draft said did not exist. §4.2a added to answer the D194
+  question directly: **the gate cannot fail that way**, because pack egress is projection by
+  enumeration rather than payload passthrough, and criterion 3 is widened to pin all three
+  pack routes. **§6.1's absence guarantee was executed and failed**: `voiceCheck` passes
+  *"No reading was recorded at this position."*, *"The engine is silent here."* and an
+  entirely invented recorded-reading sentence against a packet containing none of them, so
+  absence is unspeakable on the deterministic path and merely unprompted on the provider path
+  — §4.1, §6.1 and law-8 consequence 4 are rewritten to claim only what the code delivers, and
+  criterion 16 makes the persona prompt and the once-per-surface population line mechanical
+  instead of prose. Rung 4's refusal **kept and re-grounded** (§5.1a): still zero
+  `explorer_frequency` records anywhere, but the reason is now a specified-and-unlanded record
+  kind rather than absent demand. Ten rows opened, **D223–D232**.
