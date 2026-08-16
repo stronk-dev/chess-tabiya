@@ -36,11 +36,11 @@ literal classifier assigns to `shape_firing` have no shape reference, while `sub
 and the writer requires a named shape. `graduation-clearance` is returned on buildability again;
 do not implement it or patch D467 outside it until the body supplies an honest subject/predicate.
 
-The learner-facing half of A1 landed on 2026-08-17: D468, D481, D493, D495, D496 and D502 are
-closed and the packaged stack was exercised against its persisted volume. **D469 remains** as
-the independent release-workflow residue; graduation-clearance remains returned on D503.
+The implementation half of A1 landed on 2026-08-17: D468, D469, D481, D493, D495, D496 and
+D502 are closed and the packaged stack was exercised against its persisted volume.
+Graduation-clearance remains returned on D503.
 
-Then: **A1** (D469 plus the returned RFC) → **A2** (6 —
+Then: **A1** (returned RFC only) → **A2** (6 —
 opponent selection serves the wrong move) → **A3** (5 — disclosure holes on live surfaces) →
 **B1** (7 — claim binding and the evidence maps, one file, one live in the corpus) → **B3**
 (4 — corpus denominators and fixture contamination; widest downstream effect for the least
@@ -103,7 +103,7 @@ turns out to fix *both* `Run is terminal at node: run-<uuid>:node:4` **and** the
 
 Full lane: `planning/ux-work-lane.md`. Entry point for everything: `planning/WORK.md`.
 
-## 0. [[D468]] — CLOSED 2026-08-17; [[D469]] remains takeable
+## 0. [[D468]] and [[D469]] — CLOSED 2026-08-17
 
 **Not hypothetical and not scheduled work.** `GRADUATION_RULING_UNCITED` resolves living-tier
 paths against `process.cwd()` (`pack-validation.ts:848-851`). All **43** acceptances cite
@@ -122,9 +122,8 @@ weaker check in production — it is a different check under an identical code n
 budget, and an authoring *admission* rule that may read `.git`. **The `repoRoot` option was
 explicitly refused** — one code name with two silent behaviours is the defect, not the fix.
 
-Take **[[D469]]** with it: `release.yml` runs **nothing** between checkout (`:17`) and
-build/push (`:24-33`), which is why this could reach production undetected. [[D208]]'s shape,
-one workflow over.
+**[[D469]] closed alongside it:** both image jobs now depend on an engine-required `make verify`
+release job, so no image is built or pushed from a corpus that fails the repository gate.
 
 ## 0b. `rfc/graduation-clearance.md` — RETURNED ON [[D503]]
 

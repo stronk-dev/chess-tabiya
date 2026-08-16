@@ -3118,3 +3118,11 @@ not reproducible in the source-tree gates; the packaged-stack check was the evid
 The same admission census contains three permanent-property references to
 `docs/tablebase-grounding.md`; that exact source is packaged and pinned too. Both citation classes
 therefore run the same check in the source tree and the production image.
+
+## 2026-08-17 — release publication now waits for the repository gate
+
+D469 closed after the packaged-stack failure demonstrated the cost of treating the push workflow
+as independent from verification. The server and Maia build/push jobs now both depend on a
+dedicated release job that installs Stockfish and runs `ENGINES_REQUIRED=1 make verify`. The
+packaging verifier pins the dependency, so a later workflow edit cannot silently restore the
+race between validation and publication.

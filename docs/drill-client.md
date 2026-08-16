@@ -375,7 +375,9 @@ engine-backed server.
 The development Compose file builds local images. Tagged releases build the
 server and Maia images for amd64 and arm64, publish version- and commit-SHA
 tags to GHCR, and attach a generated Compose file whose two images are pinned
-to the exact build digests. The devcontainer reuses the Compose toolchain and
+to the exact build digests. Both image jobs wait for an engine-required
+`make verify` release job, so a failing content or packaging gate cannot race a
+push. The devcontainer reuses the Compose toolchain and
 includes Node, pnpm, and Stockfish. The server image carries the exact
 append-only owner-ruling register and permanent-property source used by pack
 admission, so accepted graduation citations resolve identically in the source

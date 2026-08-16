@@ -56,6 +56,10 @@ required(
 
 const release = readFileSync(".github/workflows/release.yml", "utf8");
 for (const expected of [
+  "verify:",
+  "ENGINES_REQUIRED: \"1\"",
+  "- run: make verify",
+  "needs: verify",
   "linux/amd64,linux/arm64",
   "chess-tabiya-server:${{ github.ref_name }}",
   "chess-tabiya-server:${{ github.sha }}",
