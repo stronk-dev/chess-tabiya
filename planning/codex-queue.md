@@ -1,28 +1,11 @@
 # Codex queue — refreshed 2026-08-16 (late)
 
-## 0. TAKE FIRST — a contradiction inside work you just landed
+## 0. Completed items removed from the live queue
 
-**`plan_signature` is refused, demanded and faulted by three different instruments.** It is
-the construct `vocabulary-wiring` shipped at pack **0.24**, and a content wave hit the
-contradiction while trying to use it:
-
-- the **linter DEMANDS** it — `PLAN_SIGNATURE_INLINED` fires on a shape signature written
-  inline;
-- **`pack-check` REFUSES** it inside any `fenPredicate`, via `START_POSITION_UNRUNNABLE`;
-- the **census FAULTS** on it at **all 827 positions**.
-
-So the only legal way to satisfy the linter is a form another instrument rejects, and the
-wave shipped its three packs with the inline copies *because the successor is unusable there*
-— `PLAN_SIGNATURE_INLINED` now fires on expressions that cannot legally be written any other
-way. **Confirmed independently by claude**: census `satisfiabilityUnknown` rose **23 → 26**
-and the three new unknowns are exactly that wave's `plan_signature` objectives.
-
-Context that makes this worth taking first rather than filing: the corpus was **4 packs on
-the deprecated `plan_consequence` and 0 on the successor**, so the merge landed with no
-customer to exercise it, and **neither `PLAN_SIGNATURE_INLINED` nor `START_POSITION_UNRUNNABLE`
-appears in the ledger or the log**. This is the first real use, and it failed.
-
-Rows: D347 (the three-way disagreement), D353 (the census delta going the wrong way).
+The `plan_signature` contradiction was already closed by `e9695cf`: every server-side
+expression boundary resolves the registry leaf, and the census returned from 26 unknowns to
+23. D347 and D353 were green before this queue refresh. D346, D94, D95, D101, D100, D63,
+D184, D185 and D235 are likewise already closed in the ledger and are not work items.
 
 ## 0a. Accepted RFC batch — complete
 
@@ -39,62 +22,34 @@ The four RFCs previously mis-flagged "do not start" are implemented and archived
 with `board-annotation`; `teacher-surface` holds the next migration position**, still a
 draft awaiting cross-review.
 
-## 1. Then — a broken exemplar and a closed vocabulary
+## 1. Content-vocabulary follow-ons — not codex-ready
 
-- **D346** — `carlsbad-minority-attack`, the pack `design/04` §8 names as the middlegame
-  exemplar, declares `plyHorizon: 8` with its deepest authored spine node at **ply 11**. Its
-  last three nodes are in neither `spineNodeIds` nor under the cap, **and its objective
-  materialises exactly there.** Nothing warns. `plyHorizon` equals the deepest spine ply in
-  19/20 opening and 10/11 middlegame packs, so this is the one place the invariant everyone
-  assumes is actually violated.
-- **D348** — **21 of 25 shape entries cannot be named in any expression**: `named_structure`'s
-  vocabulary is closed at four structures, so every structure-keyed predicate in the corpus is
-  a hand copy of the library rather than a reference to it.
-- **D351** — no `make` target computes an attack count. A pack claim was wrong **in both
-  directions** until an evaluator was hand-built for it (d4 asserted 3-attacked/2-defended;
-  actually 2 against 3, because a queen was blocked by its own pawn). That is a diagram anyone
-  would misread, and nothing in the repo would have caught it.
+D346 is already closed. D348 requires a new versioned `shape_trigger` expression leaf and has
+no accepted RFC/lane. D351 proposes a new authoring instrument and likewise has no accepted
+RFC. They remain visible in the ledger but are not implementation authorization.
 
 The earlier vocabulary/format/claim/graduation lane is complete through pack schema 0.27.
 Its historical ordering remains in the RFC register, not in the live work queue.
 
-## 1. Permission and correctness — smallest, sharpest, take first
+## 1. Permission and correctness — complete
 
-- **D94** — `RunService.flip` is `requireRead`-only. A mutating operation behind a read gate.
-- **D95** — `selectionCacheKey` omits `targetElo`, so two bands can share a cache entry.
-  Sibling of the already-closed D108; same family, same file, route them together.
-- **D101** — `SILENT_ASSISTANCE.boardLighting` is `"legal"`, not `"off"`, so the silent floor
-  is the floor in **eight of nine fields**. Bounded to rung 0 by `live-surface-honesty` with a
-  test; closing it properly is still open.
+D94, D95 and D101 landed in `f304384` and are closed with direct regressions.
 
-## 2. Client surface — and one of these blocks an RFC
+## 2. Client surface — complete
 
-- **D100** — the vote form hardcodes three inputs against a server accepting **2–8** options
-  and **15–600** seconds, and sets `label = moveUci` while `rest.ts` requires `label` — so
-  `design/03`'s *"chat votes on plans or moves"* is blocked purely client-side.
-- **D63** — eight-way compare overflows the **desktop** projection, not just phones.
+D100 and D63 are closed in the ledger with browser and geometry regressions.
 
-## 3. Contract residuals — read D72 before touching D67
+## 3. Contract residuals — complete
 
-- **D66** — an aborted MultiPV job leaves the engine at that width.
-- **D67** — `sameEngine` is indifferent to the band. **D72 is the trap**: the obvious fix
-  would silently convert fixed resistance into fresh selections, i.e. cause the desync it
-  exists to prevent. Fix D67 *with* D72 in hand or not at all.
-- **D70** — the advertised Elo range is a UCI formality and would bless the ledger's own
-  counterexample.
+D66 closed when engine state became request-scoped and production stopped using
+`afterCommands`; D67/D72 closed together in `fc99ba1`; D70 closed when the measured
+`[1000,2400]` band reached the request path. Their ledger statuses were stale and are now
+corrected.
 
 ## 4. Structural tidying
 
-- **D185** — `SessionKind` is hand-duplicated across the package boundary with nothing
-  keeping the two in step.
-- **D184** — `deriveMoveAuthorship` is specified, implemented, exported, tested, and reaches
-  **no viewer**. Either wire it or record why it exists.
-- **D235** — your D194 fix strips by **spread-minus-two**, so it enumerates what to remove
-  rather than what to keep; a third field on `SelectionCandidate` would ship public by
-  default. `projectPackDocument` and `PackSummary` build public objects field by field — copy
-  that. Take it on your next touch of `feedback-policy.ts`.
-- **D104 (yours)** — the nondeterministic browser walkthrough. Still a measurement to
-  reproduce, not a test to stabilise.
+D184, D185 and D235 are closed. D104 remains a measurement to reproduce: it passed 20/20
+isolated zero-retry repetitions plus a full suite, so no patch is authorized from absence.
 
 ## 5. Do NOT take — schema-shaped without a lane
 
