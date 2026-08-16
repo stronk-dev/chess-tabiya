@@ -2608,3 +2608,73 @@ middlegame, so the `04` §2d gap is untouched.
 in the run screen, a per-profile default table, and a `tablebase:` branch in
 `evidence-sentences.ts` — which is the *actual* residual behind B4's Syzygy row, since the other
 Syzygy path already ships and is pressable.
+
+## 2026-08-16 — Time as a difficulty lever: the clock clears doctrine and fails measurement
+
+**Landed.** `design/research/time-as-a-difficulty-lever.md` (D330/D331, block **D355–D364**, all ten
+used) and the disposable `tools/d355-reading-cost-harness/`. The owner asked *"what if we want to
+simulate the time pressure of a GREAT move during 10+0 chess and then give actual time?"*, and D331
+was the reason it mattered: time would be the first lever that constrains **the learner** rather
+than the product, and it was hypothesised to interlock with the coaching/cheating criterion —
+*a hint you do not have time to read is not a hint*, so time pressure would degrade assistance
+preferentially near the answer without withholding anything.
+
+**The doctrinal obstacle clears, and the discriminator is mechanical.** `06` §5 refuses *"a pursuit
+clock is a retry price by another name"*. Tested against §2c's own criterion — only *how often* you
+retry conflicts with `00` §76 — a **run-pooled** clock is exactly the refused object (a rewind budget
+with a real-valued counter), and an **attempt-scoped** clock that resets at the fork is not. The
+shipped placeholder already picked the safe altitude: `clockState` is declared on **`Node`**
+(`types.ts:111`; schema `:265`) and written only from `CommitMoveOptions` (`runtime.ts:57,341`), so a
+clock built on the reserved field rewinds with the board automatically and **the refused version
+needs a new run-level field**. The ruling is checkable in a diff rather than in prose.
+
+**The hypothesis is refuted, and not narrowly.** Over **43,272 rendered items** from the shipped
+renderers (47 packs / 721 transitions / 609 positions, 25 shape entries, 43 real cached explorer
+responses, 105 recorded Maia candidate counts): variance in log(words) explained by **distance class**
+is **η² = 0.201** over four classes and **0.038** over the three the product may ship, against
+**η² = 0.984** for *which renderer printed it*; ρ(distance rank, words) = **−0.046** over all items
+and **+0.125** excluding `move`. Reading cost is renderer verbosity, not distance from the answer —
+`kind` spans 6 words (phase reading) to 298 (shape panel), `ranking` spans 12 to 230. **And the
+ordering inverts where it matters: `move` is the cheapest class the product could ever print**
+(median 1 word / 0.3 s against `ranking`'s 63 / 15.9 s), so a clock is a gradient *toward* the
+answer. That interlocks with the still-open D317–D326 owner question: under its option (c), where
+`move` becomes purchasable pre-commit, a clock is a cheating amplifier.
+
+**The arithmetic delivered the one durable thing.** 600 s over a 40-move reference game — Lichess's
+own `initial + 40 × increment` convention, so the denominator is the platform's — is **15.0 s per
+learner move**, or **60 words at 238 wpm** (Brysbaert 2019). The all-on rung-0 reading at **one** node
+is a median **978 words / 247 s: 16.4× the whole budget**, and reading it at two of a median
+encounter's five nodes costs **82% of the entire 600-second game**. What fits is **≈6.6 `fact` items
+or 0.94 `ranking` items** — the slot number D78 licensed and never supplied, reached independently of
+D78 and **without any clock existing**. The campaign's chosen five-slot loadout costs 45 words / 11.3 s.
+
+**Changed.** Ten ledger rows (D355–D364); the id-block registry line; one coverage-matrix row. The
+owner's sentence turns out to read most naturally as a **depicted** clock (*"and then give actual
+time"*), which touches no invariant and is one retained field away: `parsePgnMainline` keeps headers
+whole (`pgn-import.ts:63`) but drops the per-move `[%clk]` comments at `:54`.
+
+**Blocked / owed to the owner tier — one `DESIGN-GAP:`, not acted on here per law 5.** `06` §5 needs
+two amendments: the refused list is one word too broad (the run-pooled clock is the refused object,
+not every clock), and *"what escalates is LEGIBILITY, not power"* has no slot for a third kind of
+escalation that shrinks the **learner's** capacity while changing neither what the opponent can do
+nor what the product will say. The owner question is D364: is time **nothing** (close the cluster,
+delete the reserved field, bank the ≈6-item loadout), **a decoration** (the depicted clock —
+recommended, cheapest), or **a rule** (the enforced attempt-scoped clock — admissible, but a
+run-pooled budget must be refused *in the same ruling*, because the difference is one field's
+altitude and nothing today would catch it).
+
+**Three bugs found on the way, all cheap.** `clock_zeroed` ships a renderer sentence
+(`transition-sentences.ts:9`) that `irreversibility()` can never produce — **0 firings in 721
+transitions** — so the only clock-named renderable string in the product is dead code (D360).
+`clockState` has six non-test references, all passthrough, no client sender, no reader, and
+`additionalProperties: true`, so the run log will today accept and persist an arbitrary object per
+node inside *"the sole source of chess truth"* (D361). And **D78's headline moved**: the all-on state
+is a median **78** observations per position on the 47-pack corpus against Q8's 58, while the mean
+moved only 57.90 → 62.46 — a bimodal-by-phase distribution whose median sits in the gap (endgame 256
+words / 65 s, middlegame 1,199 / 302 s), so the per-phase figures should replace the single median
+wherever it is cited (D359).
+
+**Next.** D364 is an owner ruling and it should not be taken before the D317–D326 hint-ladder ruling,
+because option (c) there flips the sign of the clock's effect. If (b) is chosen, the work is one
+retained field in `pgn-import.ts` plus a renderer and an abstention path (F6). If (a), the deletion
+of `clockState` and the two `06` §5 amendments land together.
