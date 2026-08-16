@@ -290,7 +290,7 @@ Loosening `voiceCheck` remains the named anti-pattern, and this RFC does not tou
 
 - **Any condition, threshold, trigger or grade.** A recorded reading is stated, never
   compared against a trigger point. The engine-condition surface is
-  `rfc/engine-leverage.md`'s (accepted, pack 0.23 / run 0.16 / migration 22) and §11 states
+  `rfc/engine-leverage.md`'s (accepted, pack 0.23 / run 0.16 / migration 21) and §11 states
   the boundary in one sentence.
 - **Any cross-node arithmetic** — swings, losses, deltas, ranks, "this move cost X". §3.5
   makes this a normative refusal rather than an omission, and §11 explains why the same
@@ -1809,7 +1809,7 @@ Otherwise: none.
 
 ## 11. Boundaries against the two adjacent RFCs
 
-### 11.1 `rfc/engine-leverage.md` — accepted and **mid-implementation** at `bc3cdc1`, pack 0.23 / run 0.16 / migration 22
+### 11.1 `rfc/engine-leverage.md` — accepted and **mid-implementation** at `bc3cdc1`, pack 0.23 / run 0.16 / migration 21
 
 > **`engine-leverage` differences measurements the run took. `evidence-at-runtime` states
 > readings the corpus recorded, and may never difference them.**
@@ -1821,7 +1821,7 @@ Otherwise: none.
 | arithmetic | differences across a decision triple (`centipawnSwing`, DTZ regression, category regression) | **none** — §3.5 |
 | thresholds | `evalSwingCp`, `byAtLeast` ≥ 3 | **none** — §5.2 |
 | authoring side | binds `deviation.cost` to the ledger at `verify-draft` time; `go nodes 50000` | nothing |
-| register | pack 0.23, run 0.16, migration 22 | **nothing versioned** |
+| register | pack 0.23, run 0.16, migration 21 | **nothing versioned** |
 | files | `guard.ts`, `pack-validation.ts`, `feedback-policy.ts`, `opponent-selector.ts`, `strong-engine.ts`, `sourcing/verify-draft.ts`, `sourcing/check.ts`, both schemas | `pack-registry.ts`, `guidance.ts`, `voice.ts`, `rest.ts`, `capabilities.ts` |
 
 **No file is shared and no resource is contested.** This RFC adds no condition arm, writes no

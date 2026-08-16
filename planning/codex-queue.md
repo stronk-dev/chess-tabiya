@@ -24,6 +24,25 @@ appears in the ledger or the log**. This is the first real use, and it failed.
 
 Rows: D347 (the three-way disagreement), D353 (the census delta going the wrong way).
 
+## 0a. Accepted RFCs — five of them, take in lane order
+
+**These were mis-flagged "do not start" until 2026-08-16 (late). They are accepted and
+implementable now.** Lane order matters only where a pack-schema number does; the two
+that claim nothing versioned can be taken at any point.
+
+| # | RFC | Claims | Note |
+|---|---|---|---|
+| 1 | `rfc/format-surface.md` | pack **0.25** | Accepted; both owner rulings applied throughout the body. `arrows` is `unmeasured`, **not** retired, and the `<select>` STAYS. `formatDispositions` does **not** go on `/capabilities` |
+| 2 | `rfc/claim-backing.md` | pack **0.26** | Round 2 complete, ready to accept; two owner-gated questions that do **not** block. Re-claimed 0.26, reversing its own earlier release |
+| 3 | `rfc/pack-graduation.md` | pack **0.27** | Accepted. Graduation is a **move**, not a copy; `graduationBlockers` entries become `blocking`/`resolved`/`accepted` objects |
+| 4 | `rfc/evidence-at-runtime.md` | **nothing versioned** | Accepted, one owner call open (the voice seam) — does not block. Closes D118 by deleting a discard: `loadDefault` already reads every ledger and drops 764 records |
+| 5 | `rfc/board-annotation.md` | see its header | Accepted, returned once, all four breaks ratified. **D187 is its hard prerequisite** — `Chessboard.svelte` is destroyed and recreated on every node change, so no board-local state survives a move. Take D187 first or the RFC cannot work |
+
+**Register drift corrected in the same pass:** `engine-leverage` holds **migration 21**
+(landed — `STORAGE_VERSION` is 21 at HEAD), not 22. Its own text said 22 in two places and
+`evidence-at-runtime` had inherited that citation; both are fixed. **Migration 22 is
+`teacher-surface`'s**, still a draft awaiting cross-review.
+
 ## 1. Then — a broken exemplar and a closed vocabulary
 
 - **D346** — `carlsbad-minority-attack`, the pack `design/04` §8 names as the middlegame
@@ -91,13 +110,16 @@ Rows: D347 (the three-way disagreement), D353 (the census delta going the wrong 
 - **D104 (yours)** — the nondeterministic browser walkthrough. Still a measurement to
   reproduce, not a test to stabilise.
 
-## 5. Do NOT take — schema-shaped or owned by an RFC in flight
+## 5. Do NOT take — schema-shaped without a lane
 
 **D103, D112, D123/D153, D124, D106** are schema changes and need a lane.
-**D110, D111, D128, D131, D135, D148, D150, D167, D168, D171** belong to `claim-backing`.
-**D138, D141, D162** belong to `pack-graduation`. **D118, D139, D143, D145, D146, D234**
-belong to `evidence-at-runtime`. **D183 belongs to `board-annotation`.** All three of those
-RFCs were **returned by cross-review** and are in author rounds — do not start them.
+
+**CORRECTED 2026-08-16 (late).** This section previously said `claim-backing`,
+`pack-graduation`, `evidence-at-runtime` and `board-annotation` were *"returned by
+cross-review, in author rounds — do not start them"*. **All four have since been
+accepted, and the sentence was blocking four RFCs' worth of implementation.** They are
+now in §0a above. The queue derives its *defect* rows from `design/BACKLOG.md`; it was
+still deriving its *RFC states* from memory. Fixed by reading `rfc/README.md`.
 
 ## 6. Register rules that changed under you tonight
 

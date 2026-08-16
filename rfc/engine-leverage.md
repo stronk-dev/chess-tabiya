@@ -105,7 +105,7 @@
     owner-blocked until `live-marker-quality` is `implemented`. Codex found this and stopped
     rather than inventing a lane. **The register's own rule decides it — the draft that
     cannot land is the one that renegotiates — so `teacher-surface` moves to 22 and this RFC
-    takes 21** (`STORAGE_VERSION` 20→21). `teacher-surface` now claims migration 22 and
+    takes 21** (`STORAGE_VERSION` 20→21). `teacher-surface` now claims migration 21 and
     lands behind this RFC. No other overlap: it changes no run or pack schema.
   - `rfc/fixture-realism.md` (*implementing*) — owns the instrument-fed fixture register.
     Audit §0 was a fixture-realism failure (`opponent-selector.test.ts` asserts the
@@ -1524,7 +1524,7 @@ not its final contents.
 
 ## Changelog
 
-- 2026-08-15: created. Claims pack schema **0.23**, run schema **0.16**, migration **22**.
+- 2026-08-15: created. Claims pack schema **0.23**, run schema **0.16**, migration **21**.
 - 2026-08-15: **adversarial cross-review applied in place** (reviewer: claude, not the
   author). Register claims re-derived and confirmed at `a9c31a6`: pack **0.22** and run
   **0.15** are shipped, `STORAGE_VERSION` is **20**, `teacher-surface` holds **21**,
