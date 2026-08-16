@@ -124,6 +124,8 @@ class FakeApi implements DrillClientApi {
   activeWriterId = "writer-a";
   authoredFeedbackCalls = 0;
   groupReplyCalls = 0;
+  capabilitiesValue: Capabilities = capabilities;
+  runSessionDigest = digest;
 
   constructor(
     readonly document: DrillPackDefinition = pack,
@@ -132,7 +134,7 @@ class FakeApi implements DrillClientApi {
   ) {}
 
   async capabilities(): Promise<Capabilities> {
-    return capabilities;
+    return this.capabilitiesValue;
   }
 
   async packs(): Promise<readonly PackSummary[]> {
@@ -184,7 +186,7 @@ class FakeApi implements DrillClientApi {
         feedbackPolicy: (this.document.feedbackPolicy ?? "delayed_checkpoint") as "delayed_checkpoint" | "segment_end",
         opponentPolicy: { mode: "human_common" },
       } : input.session,
-      sessionDigest: digest,
+      sessionDigest: this.runSessionDigest,
       policyConfig: input.policyConfig,
       seed: input.seed,
       createdAt: at,
@@ -484,6 +486,17 @@ describe("DrillSessionController", () => {
     });
   });
 
+  it("refuses an unavailable authored opponent mode without substituting another mode", async () => {
+    const api = new FakeApi(blackToMovePack, "c8f5", false);
+    api.capabilitiesValue = { ...capabilities, policyModes: ["human_common"] };
+    const environment = controller(api);
+
+    await environment.controller.startPack(blackToMovePack.id);
+
+    expect(environment.controller.state.error).toBe("theory_strict is unavailable");
+    expect(api.selected).toBeUndefined();
+  });
+
   it("pauses at checkpoints, then selects and writer-appends the opponent ply", async () => {
     const environment = controller();
     await environment.controller.startPack(pack.id);
@@ -511,6 +524,18 @@ describe("DrillSessionController", () => {
       environment.controller.state.runState?.run.events.map((event) => event.type),
     ).toContain("opponent.move_selected");
     expect(new Set(environment.api.writerIds).size).toBe(1);
+  });
+
+  it("uses the run session digest rather than the pack digest for opponent selection", async () => {
+    const api = new FakeApi();
+    const sessionDigest = `sha256:${"9".repeat(64)}`;
+    api.runSessionDigest = sessionDigest;
+    const environment = controller(api);
+    await environment.controller.startPack(pack.id);
+    await environment.controller.move("c1e3");
+    await environment.controller.continueCheckpoint();
+    expect(api.selected?.policy.policyConfigDigest).toBe(sessionDigest);
+    expect(api.selected?.policy.policyConfigDigest).not.toBe(digest);
   });
 
   it("forks, compares, rewinds, exports, and returns to the library", async () => {

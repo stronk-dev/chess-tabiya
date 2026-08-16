@@ -149,12 +149,7 @@ function selectorMode(
   ) {
     return requested;
   }
-  if (capabilities.policyModes.includes("human_common")) return "human_common";
-  const fallback = capabilities.policyModes[0];
-  if (fallback === undefined) {
-    throw new ApiError(503, "POLICY_MODE_UNSUPPORTED", "No opponent mode available");
-  }
-  return fallback;
+  throw new ApiError(422, "POLICY_MODE_UNSUPPORTED", `${String(requested)} is unavailable`);
 }
 
 export class DrillSessionController {
@@ -522,7 +517,7 @@ export class DrillSessionController {
       ),
       policy: {
         mode: pack === undefined ? (run.opponentPolicy.mode as "human_common" | "strong_engine") : selectorMode(pack, capabilities),
-        policyConfigDigest: this.#state.packDigest ?? run.sessionDigest,
+        policyConfigDigest: run.sessionDigest,
         ...(typeof authored.targetElo === "number"
           ? { targetElo: authored.targetElo }
           : {}),

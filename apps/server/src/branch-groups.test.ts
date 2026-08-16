@@ -14,7 +14,7 @@ import { EvidenceJobQueue, type EvidenceExecutor, type EvidenceJob } from "./evi
 import { OpponentSelector, type SelectMoveRequest, type SelectorEngineClient } from "./opponent-selector.js";
 import { PackRegistry } from "./pack-registry.js";
 import { createRestHandler } from "./rest.js";
-import { RunService } from "./service.js";
+import { RunService, sameEngine } from "./service.js";
 import { SQLiteRunStorage } from "./storage.js";
 
 const INITIAL_FEN = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
@@ -35,7 +35,7 @@ class ScriptedEngines implements SelectorEngineClient {
   readonly calls: { readonly engineId: string; readonly request: EngineRequest }[] = [];
   readonly #maiaMoves: string[];
 
-  constructor(maiaMoves: readonly string[] = ["g8f6", "e7e5", "g8f6"]) {
+  constructor(maiaMoves: readonly string[] = ["g8f6", "e7e5", "g8f6"], private readonly unavailable: readonly string[] = []) {
     this.#maiaMoves = [...maiaMoves];
   }
 
@@ -59,6 +59,7 @@ class ScriptedEngines implements SelectorEngineClient {
   }
 
   health(engineId: string): EngineHealth {
+    if (this.unavailable.includes(engineId)) return { id: engineId, status: "unavailable", restartCount: 0 };
     const identity = engineId === "stockfish-play" ? stockfish : maia;
     return { id: engineId, status: "ready", restartCount: 0, identity };
   }
@@ -103,9 +104,9 @@ async function request(handler: ReturnType<typeof createRestHandler>, method: st
   }));
 }
 
-async function setup(pack?: DrillPackDefinition, maiaMoves?: readonly string[]) {
+async function setup(pack?: DrillPackDefinition, maiaMoves?: readonly string[], unavailable?: readonly string[]) {
   const storage = new SQLiteRunStorage();
-  const engines = new ScriptedEngines(maiaMoves);
+  const engines = new ScriptedEngines(maiaMoves, unavailable);
   const selector = new RecordingSelector(engines);
   const evidence = new RecordingEvidence();
   const queue = new EvidenceJobQueue(evidence, { maxConcurrency: 1 });
@@ -121,6 +122,24 @@ async function runFrom(response: Response): Promise<DrillRun> {
 describe("branch-group service and REST contract", () => {
   const stores: SQLiteRunStorage[] = [];
   afterEach(() => { for (const storage of stores.splice(0)) storage.close(); });
+
+  it("does not treat selections from different applied Elo bands as the same engine", () => {
+    const base = { id: "maia-5m", name: "Maia3", version: "test", modelId: "maia3-test", seedHonored: false, eloHonored: true } as const;
+    expect(sameEngine({ ...base, eloApplied: 1600 }, { ...base, eloApplied: 1600 })).toBe(true);
+    expect(sameEngine({ ...base, eloApplied: 1600 }, { ...base, eloApplied: 1900 })).toBe(false);
+  });
+
+  it("refuses an unavailable group resistance instead of substituting another policy", async () => {
+    const environment = await setup(undefined, undefined, ["stockfish-play"]); stores.push(environment.storage);
+    const input = body("group-policy-refusal");
+    await request(environment.handler, "POST", "/runs", { ...input, session: { ...input.session, opponentPolicy: { mode: "strong_engine" } } });
+    const created = await request(environment.handler, "POST", "/runs/group-policy-refusal/group", { source: "hand_picked", candidates: ["e2e4", "d2d4"], at });
+    const group = groupsFromEvents(((await created.json()) as { readonly run: DrillRun }).run)[0]!;
+    const reply = await request(environment.handler, "POST", "/runs/group-policy-refusal/group-reply", { groupId: group.groupId });
+    expect(reply.status).toBe(422);
+    expect(await reply.json()).toMatchObject({ error: { code: "POLICY_MODE_UNSUPPORTED" } });
+    expect(environment.engines.calls).toHaveLength(0);
+  });
 
   it("creates and adopts hand-picked members atomically without duplicate evidence", async () => {
     const environment = await setup(); stores.push(environment.storage);
@@ -202,6 +221,7 @@ describe("branch-group service and REST contract", () => {
     const first = await created.json() as { readonly run: DrillRun; readonly group: { readonly groupId: string; readonly members: readonly { readonly branchId: string }[] } };
     const [memberA, memberB] = first.group.members;
     const firstReply = await request(environment.handler, "POST", "/runs/group-journal/group-reply", { groupId: first.group.groupId });
+    expect(environment.selector.requests[0]?.policy.policyConfigDigest).toBe(environment.storage.read("group-journal")!.run.sessionDigest);
     const firstSelection = (await firstReply.json()) as { readonly selection: OpponentSelection };
     expect((await request(environment.handler, "POST", "/runs/group-journal/moves", { selection: firstSelection.selection, at })).status).toBe(200);
     expect((await request(environment.handler, "POST", "/runs/group-journal/moves", { uci: "b1c3", at })).status).toBe(200);

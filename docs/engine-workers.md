@@ -173,6 +173,8 @@ uses `human_common`; `authoredBoundary` affects later feedback voice, not
 selection.
 
 Selections are cached by `(policyConfigDigest, packId, branchSeed, historyHash)`.
+Every request builder supplies the run's `sessionDigest` as `policyConfigDigest`; pack bytes are
+an input to pack-session identity, not a second policy identity.
 `historyHash` covers the start FEN and every UCI move. Identical drill retries
 therefore reuse the same promise/result, while different branch seeds or histories
 miss. Failed requests are evicted.
@@ -237,7 +239,10 @@ proves late results are discarded; a real Stockfish test proves `stop` is sent.
 
 ## Capabilities
 
-`GET /capabilities` warms the configured engines and returns:
+`GET /capabilities` warms the configured engines and returns only modes whose required provider
+is currently executable: Maia for `human_common`/`theory_strict`, the judge for
+`strong_engine`, tablebase for `perfect_tablebase`, and both Maia and tablebase for
+`practical_resistance`. It has the following shape when every provider is ready:
 
 ```text
 {

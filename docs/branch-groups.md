@@ -71,9 +71,11 @@ state.
 existing event log. When two member paths reach the same transpose key, a
 compatible recorded opponent selection is returned byte-for-byte instead of
 calling the selector again. Reuse also requires a compatible applied mode and
-the same currently available engine identity. A theory-strict request may
+the same currently available engine identity, including the recorded applied Elo. A
+theory-strict request may
 reuse its recorded human-common off-spine fallback only for that same Maia
-identity. If deployment capabilities changed, the journal entry is skipped and
+identity. An unavailable requested mode is refused rather than replaced with another policy.
+If deployment capabilities or the applied band changed, the journal entry is skipped and
 a fresh honest selection is made.
 
 This journal is necessary because the Maia sidecar reports `seedHonored:

@@ -228,7 +228,18 @@ describe("engine capabilities", () => {
     });
     expect(descriptor.surfaces.play).toBe("unavailable-here");
     expect(descriptor.surfaces.justPlay).toBe("unavailable-here");
-    expect(descriptor.policyModes).not.toContain("practical_resistance");
+    expect(descriptor.policyModes).toEqual([]);
+  });
+
+  it("advertises opponent modes only when their providers are executable", async () => {
+    const judge: EngineIdentity = { id: "stockfish-analysis", kind: "judge", name: "Stockfish", version: "18", seedHonored: false };
+    const opponent: EngineIdentity = { id: "maia-5m", kind: "opponent", name: "Maia", version: "3", seedHonored: false, eloHonored: true };
+    const judgeOnly = await new EngineCapabilities(healthClient({ [judge.id]: ready(judge) }), [judge.id], { engineMode: "maia" }).get();
+    expect(judgeOnly.policyModes).toEqual(["strong_engine"]);
+    const opponentOnly = await new EngineCapabilities(healthClient({ [opponent.id]: ready(opponent) }), [opponent.id], { engineMode: "maia" }).get();
+    expect(opponentOnly.policyModes).toEqual(["human_common", "theory_strict"]);
+    const opponentWithTablebase = await new EngineCapabilities(healthClient({ [opponent.id]: ready(opponent) }), [opponent.id], { engineMode: "maia", tablebase: "lichess" }).get();
+    expect(opponentWithTablebase.policyModes).toEqual(["human_common", "theory_strict", "perfect_tablebase", "practical_resistance"]);
   });
 
   it("rejects planned or unknown values at the server response boundary", () => {

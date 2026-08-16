@@ -230,13 +230,13 @@ function seedMoveSan(fen: string, uci: string): string {
   return makeSan(position, move);
 }
 
-function sameEngine(
+export function sameEngine(
   left: OpponentSelection["engine"],
   right: OpponentSelection["engine"],
 ): boolean {
   return left.id === right.id && left.name === right.name && left.version === right.version &&
     left.modelId === right.modelId && left.containerDigest === right.containerDigest &&
-    left.seedHonored === right.seedHonored;
+    left.seedHonored === right.seedHonored && left.eloApplied === right.eloApplied;
 }
 
 function compatibleAppliedMode(
@@ -930,15 +930,9 @@ export class RunService {
     const selector = this.#requiredOpponentSelector();
     const available = selector.availableModes();
     const requested = stored.run.opponentPolicy.mode;
-    const mode = available.includes(requested)
-      ? requested
-      : available.includes("human_common")
-        ? "human_common"
-        : available[0];
-    if (mode === undefined) {
-      throw new ServerError("ENGINE_UNAVAILABLE", "Opponent selector has no healthy engine", { details: { engineId: "opponent-selector", retryAfterMs: 0 } });
-    }
-    const identity = selector.identityFor(mode);
+    if (!available.includes(requested)) throw new ServerError("POLICY_MODE_UNSUPPORTED", `Policy mode is unavailable: ${requested}`, { details: { policyMode: requested } });
+    const mode = requested;
+    const identity = selector.identityFor(mode, stored.run.opponentPolicy.targetElo);
     if (group.resistance === "fixed") {
       const memberIds = new Set(group.members.map((member) => member.branchId));
       const sourcePly = stored.run.nodes.find((candidate) => candidate.id === group.sourceNodeId)!.ply;

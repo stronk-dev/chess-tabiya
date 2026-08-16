@@ -441,12 +441,12 @@ export class OpponentSelector {
     ]);
   }
 
-  identityFor(mode: RunOpponentMode): SelectionEngineIdentity {
+  identityFor(mode: RunOpponentMode, targetElo?: number): SelectionEngineIdentity {
     if (mode === "perfect_tablebase") return Object.freeze({id:"lichess-tablebase",name:"Syzygy (tablebase.lichess.org/standard)",version:"7man",seedHonored:true,eloHonored:false});
-    return selectionIdentity(engineIdentity(
-      this.#client,
-      mode === "strong_engine" ? this.#strongEngineId : this.#maiaEngineId,
-    ));
+    const engineId = mode === "strong_engine" ? this.#strongEngineId : this.#maiaEngineId;
+    const identity = engineIdentity(this.#client, engineId);
+    const eloApplied = mode === "strong_engine" ? undefined : appliedTargetElo(this.#client.health(engineId), targetElo);
+    return selectionIdentity(identity, eloApplied);
   }
 
   async enumerate(request: SelectMoveRequest, count: number): Promise<OpponentSelection> {

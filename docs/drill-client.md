@@ -50,6 +50,9 @@ configured engine mode and live supervisor health. Mock is a first-class
 provider for both opponent and judge when mock evidence is wired. Deployment
 surfaces emit only `available` or `unavailable-here`; `planned` is roadmap
 information and exists only as a client constant.
+Opponent modes are likewise provider-derived. The client refuses a pack whose authored mode is
+not in that list; it never substitutes another mode locally. The only selection-level degradation
+is the recorded `theory_strict` off-spine transition to `human_common`.
 Capabilities also publish the executable pack feedback policies and the guard basis: rules on
 every deployment, plus recorded engine evaluations when a mock or Stockfish judge is live.
 

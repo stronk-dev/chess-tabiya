@@ -277,7 +277,11 @@ export class EngineCapabilities implements CapabilitiesProvider {
     return Object.freeze({
       engines,
       policyModes: Object.freeze(SUPPORTED_POLICY_MODES.filter((mode) =>
-        mode === "perfect_tablebase"
+        mode === "human_common" || mode === "theory_strict"
+          ? providerState.opponent !== "none"
+          : mode === "strong_engine"
+            ? providerState.judge !== "none"
+        : mode === "perfect_tablebase"
           ? providerState.tablebase !== "none"
           : mode === "practical_resistance"
             ? providerState.tablebase !== "none" && providerState.opponent !== "none"
