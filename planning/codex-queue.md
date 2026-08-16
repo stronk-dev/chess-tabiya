@@ -1,85 +1,59 @@
-# Codex queue — refreshed 2026-08-16 (engine-leverage RETURNED)
+# Codex queue — refreshed 2026-08-16 (engine-leverage defects fixed)
 
-**STOP the batches below. `engine-leverage` is returned with a list, and one item is the
-doctrine.** Independent review re-ran both gates itself (`make verify` and
-`ENGINES_REQUIRED=1 make verify` both pass at 637/101, cold-engine reproducibility 10/10 in
-fresh processes) — your reported numbers all hold. The defects are elsewhere.
+**D194 verified fixed by claude, and your remedy was the better one.** Barriering
+`opponent.move_selected` outright — which is what I would have specified — would have stopped
+the opponent-s move reaching the client and broken play. Projecting the payload instead is
+right. **One follow-up, small, take it on your next touch of that file: D235.**
+`publicSelectionEvent` strips by **spread-minus-two**
+(`const { scoreCp: _scoreCp, wdl: _wdl, ...publicCandidate }`), so it enumerates what to
+*remove*, not what to *keep* — and a third measurement on `SelectionCandidate` would be public
+the moment it exists, with no test failing. That is D194-s failure mode one layer in.
+`projectPackDocument` and `PackSummary` already build public objects field by field; copy that.
+While you are there, note the strip leaves `mass` — the Maia policy mass — in the public
+event, while `pivotal.ts` gates the same quantity behind `humanSplit` when it renders it.
 
-**All four rulings verified HONOURED**, criterion 4 stayed scoped (140 costs: 137 `cp/engine`,
-3 `mate/engine`, 4 `unmeasurable`, **zero tablebase-basis**), and migration 21 froze its
-literals correctly. That part is clean work.
+**D236 recorded from your Maia run**: candidate WDL sums to exactly **1000**, so the encoding
+is per-mille. Criterion 21a existed to report that rather than assume it, and it worked. It is
+now a citable constant instead of a number in a test log.
 
-## 0. D194 — an engine evaluation reaches the learner ungated, during committed play
+**D233 — you are right that it needs an RFC.** Direct selection-response leakage is an API
+contract question, not a defect fix, and it is registered as such.
 
-**Verified independently by claude.** `§5.1`'s `candidateLines` change parses `score cp` for
-every caller including `#strongEngine`; `SelectionCandidate` now carries `scoreCp` and `wdl`;
-`opponent.move_selected` carries `selection: OpponentSelection`, which carries those
-candidates; and `engineFeedbackEvent` — the barrier in `publicEvents` — matches only
-`evidence.attached` and machine-ref `objective.state_changed`. **`opponent.move_selected` is
-not barriered.** So `GET /runs/:id/events` serves Stockfish's centipawn score for positions
-during committed play, before disclosure, behind no assistance gate.
+## 0. Take these now — two accepted RFCs
 
-**This is the named anti-pattern.** `AGENTS.md` §Rejected: *"an engine review screen with a
-rewind button — the failure shape the whole product dies in"*, and ADR-0005's dashboard.
-`design/02` §157-158's anti-contamination default says hide the eval bar until segment end or
-explicit request. **The RFC's own §7 deviation 3 states the opposite of what shipped**, so
-this is not a scope call anyone made — it is a defect.
+| # | RFC | Claims | Notes |
+|---|---|---|---|
+| 1 | `rfc/vocabulary-wiring.md` | **pack 0.24** | **Accepted 2026-08-16.** Q1 and Q8 owner-ruled, Q9 closed against `planning/work-register.md` §4a. **Read the open questions rather than grepping them** — superseded *"resolve before `accepted`"* strings inside preserved original text are struck through and labelled, because that search gave you a false clear on this RFC once. Merges `plan_consequence` into a `plan_signature` expression leaf and publishes the selection rule D89 says is missing |
+| 2 | `rfc/format-surface.md` | **pack 0.25** | **Accepted 2026-08-16.** Two owner rulings are applied **throughout the body**, not just in the questions — I had left four sites saying the opposite and fixed them. **`arrows` is `unmeasured`, NOT retired, and the `<select>` STAYS**: `design/05` promises arrows-for-sight, and legs (a) learner-drawn and (b) host-relayed belong to `board-annotation`. **`formatDispositions` does NOT go on `/capabilities`** — it ships with the schema, because a pack format is a property of the schema version, not the deployment |
 
-**Fix the barrier, not the parse.** The scores are wanted; reaching an undisclosed learner is
-not. And note D195 while you are there: **24 of 51 recorded `scoreCp` values are
-aspiration-window bounds** (`upperbound`/`lowerbound` on the final `multipv 1` line), and 2
-carry `score mate` with no `scoreCp` at all — so two of criterion 17's "score agreements" are
-`undefined === undefined`. The numbers are both ungated and, as evaluations, unsound.
+**Pack lane order is 0.24 then 0.25.** `DRILL_PACK_SCHEMA_VERSION` reads 0.23 at HEAD.
 
-## 1. D196 — a failed tablebase probe deletes a different instrument's evidence
+## 1. The authoring-instrument batch — still yours, still the content unblocker
 
-`#ensureStoryEvidence` builds `failed` from `queue.failures(run.id)` keyed by **nodeId, not
-kind**, while the next line filters `outstanding` by `job.kind === "eval"`. One
-`TABLEBASE_UNAVAILABLE` therefore permanently blocks the **Stockfish** eval for that node and
-marks the path ready. Two instruments, one failure key.
+- **D121** — `make shape-check PROBE=<fen>` computes the probe and prints nothing. Three
+  agents each rebuilt the same evaluator over one missing print; highest ratio in the ledger.
+- **D149** — `explorerUrl` hard-codes `moves=12`, so a deviation outside the twelve
+  most-played can be bounded but never counted. At `moves=40` two packs measured exactly **0**,
+  a materially different sentence from "fewer than N".
+- **D152** — `make expression-census` is blind to corpus grounding: identical in all nine
+  fields before and after eleven packs gained 16 `corpus_observed` claims.
 
-## 2. D193 — the register is a table nothing checks, and it is already short
+## 2. Migration numbering — a register rule changed under you
 
-`assertAdvertisedCapabilityDispositions` has **one call site in the whole tree**:
-`capabilities.test.ts`, handed a hand-authored six-name list built to match the register. It
-is wired to no handshake and to no real engine. Diffed against the Stockfish 18 the repo's own
-tests use, **eight advertised options have no disposition row** — `Debug Log File`,
-`NumaPolicy`, `Move Overhead`, `UCI_Chess960`, `SyzygyProbeDepth`, `Syzygy50MoveRule`,
-`EvalFile`, `EvalFileSmall`. Wired to a real engine it throws. Criterion 26 has no test at all
-(`expect.any(Array)` passes on an empty register).
+**Migration numbers are now assigned at LANDING, not at claim** (`rfc/README.md`). `storage.ts`
+skips with `if (migration.version <= version) continue`, so a database that reaches N skips
+every lower migration landing afterwards, silently and permanently. I created exactly that
+hazard by telling `board-annotation` to claim 23 while 22 was unlanded. **A draft now claims a
+position in the landing order; the number is `STORAGE_VERSION + 1` at the moment it lands.**
 
-**This is the third register in a row to pass vacuously** — `format-surface`'s gate rejected
-its own seed rows and an empty register passed every clause. Treat "the register is checked"
-as a claim needing a real call site, every time.
+## 3. Ledger ids — the block convention was amended
 
-## 3. Normative clauses that did not land
+Blocks are now **registered in `design/BACKLOG.md` when issued**, with a table in the file.
+Previously they lived only in agent briefs, which is why you took D203 — correctly following
+*"next free above the highest issued block"* for a block you could not see. Renumbered to
+D233. **The hole was the convention-s, not yours.**
 
-- **D197** — §3.6's producer budget: no queue-emptiness check, no yield to the interactive
-  path, no drop-on-full. Rejected probes land in `#failures`.
-- **D198** — the desugaring shipped as **two independent copies**, which is the one thing
-  §3.1 made normative against (*"one shared helper, used by all three sites"*), plus a
-  duplicated `CATEGORY_RANK` in `guard.ts` instead of reusing `sourcing/tablebase-category.ts`.
-- **D199** — `guard.overrides` silently reorders authored `conditions`, breaking §3.4's
-  declared-order firing rule.
-- **D200** — declaring `conditions` silently kills an authored `evalSwingCp`/`fireOnMate`,
-  with no lint and no refusal.
-- **D201** — the cost checker cannot see the provenance rule it enforces, and `comparable`
-  compares mate/category costs by `JSON.stringify`, which is key-order sensitive over
-  author-written JSON.
-- **D202** — the per-move explorer split renders to 0.1% with **no per-move sample floor**;
-  the 100-game abstention is position-level only.
-
-**Two criteria were never executed by either gate:** 21a and 22 live in
-`maia.maia.integration.ts`, which `vitest.config.ts` excludes — they run only under
-`pnpm test:maia`. Criterion 21a's whole purpose was to *report* observed `wdl` sums so a later
-RFC can pin the encoding, and no sums are reported anywhere. Criterion 16's fixture-realism
-registration is also unmet: `instrument-fed.fixture-register.json` holds one entry and its gate
-scans only `practical-difficulty.ts`.
-
-**Do not archive `engine-leverage`.** Fix D194 and D196 first — those two are shipping
-defects, not polish.
-
-## 4. Then: a live disclosure gap
+## 4. Closed — D140 landed in `a452abb`
 
 **D140.** Four `/runs/:id/*` routes build an `evidencePacket`; **three call
 `requireGuidanceDisclosure` and `/reasoning-review` does not.** Verified at HEAD: the
