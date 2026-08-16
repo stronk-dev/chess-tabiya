@@ -1133,6 +1133,7 @@ export function createRestHandler(
         if (voiceProvider === undefined) throw new ServerError("VOICE_UNAVAILABLE", "No external voice provider is configured");
         const body = closedRecord(value, "/", ["checkpointEventSeq"]);
         const access = service.reasoningReviewAccess(route.runId, principal, requiredSafeInteger(body.checkpointEventSeq, "checkpointEventSeq"));
+        requireGuidanceDisclosure(service.guidanceAccess(route.runId, principal, access.node.id));
         const packet = evidencePacket({ run: access.run, node: access.node, pack: access.pack.document, authored: service.authoredFeedback(route.runId, principal), ...(shapes === undefined ? {} : { shapes }) });
         const prompt = JSON.stringify({ task: "Quote only contiguous learner text that may express each not-detected authored point.", transcript: access.event.data.transcript, keyPoints: access.keyPoints.map((point) => ({ id: point.id, label: point.label, phrases: point.phrases })), detections: access.event.data.detections });
         for (let attempt = 0; attempt < 2; attempt += 1) {

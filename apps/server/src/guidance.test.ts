@@ -1,4 +1,7 @@
+import { readFileSync } from "node:fs";
+
 import type { EvidencePacket } from "@chess-tabiya/runtime";
+import type { DrillPackDefinition } from "@chess-tabiya/schema/drill-pack";
 import { afterEach, describe, expect, it } from "vitest";
 
 import type { CapabilitiesProvider } from "./capabilities.js";
@@ -13,9 +16,11 @@ import { FixtureCorpusSource } from "./corpus.js";
 import { ExternalHttpVoiceProvider } from "./external-voice.js";
 import { ExternalHttpTtsProvider, type TtsProvider } from "./external-tts.js";
 import { IdentityService } from "./identity.js";
+import { PackRegistry } from "./pack-registry.js";
 
 const FEN = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
 const at = "2026-08-14T00:00:00.000Z";
+const reasoningDocument = JSON.parse(readFileSync(new URL("../../../content/drafts/stated-reasoning.browser.json", import.meta.url), "utf8")) as DrillPackDefinition;
 const executor: EvidenceExecutor = { async execute() { return { kind: "eval", source: "engine_validated", values: { centipawns: 0 } }; } };
 class MaiaClient implements SelectorEngineClient {
   readonly calls: EngineRequest[] = [];
@@ -134,6 +139,34 @@ describe("adaptive guidance server seams", () => {
     }
     expect((await handler(request("/runs/role-guide/voice", "POST", { nodeId: run.activeCursor.nodeId, scope: "reading" }, host.cookie))).status).toBe(200);
     expect((await handler(request("/runs/role-guide/speech", "POST", { nodeId: run.activeCursor.nodeId, scope: "reading" }, host.cookie))).status).toBe(200);
+  });
+
+  it("withholds reasoning-review evidence packets from participants and spectators", async () => {
+    const storage = new SQLiteRunStorage(":memory:", { onMigration: () => {} }); stores.push(storage);
+    const identity = new IdentityService(storage, { cookieSecure: false, derive: async (password, salt) => Buffer.alloc(32, password.length + salt.length) });
+    const host = await identity.register({ handle: "reason-host", password: "correct horse battery staple" });
+    const participant = await identity.register({ handle: "reason-participant", password: "correct horse battery staple" });
+    const spectator = await identity.register({ handle: "reason-spectator", password: "correct horse battery staple" });
+    const registry = await PackRegistry.fromDocuments([{ source: "reasoning-disclosure", value: reasoningDocument }]);
+    const service = new RunService(storage, { packRegistry: registry, evidenceQueue: new EvidenceJobQueue(executor) });
+    const hostPrincipal = { learnerId: host.learner.id, handle: host.learner.handle };
+    await service.create({ id: "reasoning-disclosure", session: { kind: "pack", packId: reasoningDocument.id }, policyConfig: { seedMode: "fixed", locus: { executedAt: "server", engineIds: [], modelIds: [] } }, seed: 1, createdAt: at }, { writerId: "host-writer", learnerId: host.learner.id });
+    const moved = service.move("reasoning-disclosure", hostPrincipal, "host-writer", "h2h3", { at });
+    const checkpoint = moved.run.events.find((event) => event.type === "checkpoint.reached")!;
+    service.recordReasoning("reasoning-disclosure", hostPrincipal, "host-writer", { nodeId: moved.run.activeCursor.nodeId, checkpointEventSeq: checkpoint.seq, transcript: { candidates: ["Keep the queen"], plan: "protect the queen", fears: "rook on the d-file" }, at });
+    service.updateGrant("reasoning-disclosure", hostPrincipal, "host-writer", { op: "grant", handle: participant.learner.handle, role: "participant" }, at);
+    service.updateGrant("reasoning-disclosure", hostPrincipal, "host-writer", { op: "grant", handle: spectator.learner.handle, role: "spectator" }, at);
+    let providerCalls = 0;
+    const provider: VoiceProvider = { async render() { providerCalls += 1; return "[]"; } };
+    const handler = createRestHandler(service, undefined, undefined, identity, undefined, undefined, undefined, undefined, provider);
+    for (const session of [participant, spectator]) {
+      const response = await handler(request("/runs/reasoning-disclosure/reasoning-review", "POST", { checkpointEventSeq: checkpoint.seq }, session.cookie));
+      expect(response.status).toBe(409);
+      expect(await response.json()).toMatchObject({ error: { code: "ASSISTANCE_WITHHELD" } });
+    }
+    expect(providerCalls).toBe(0);
+    expect((await handler(request("/runs/reasoning-disclosure/reasoning-review", "POST", { checkpointEventSeq: checkpoint.seq }, host.cookie))).status).toBe(200);
+    expect(providerCalls).toBe(1);
   });
 
   it("posts only text bytes to the external TTS provider", async () => {
