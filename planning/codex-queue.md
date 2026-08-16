@@ -16,7 +16,13 @@ check runs. The production image has no `.git`. It is back with the author with 
 and D454; fully closes D382"* in its body, so the closeout is findable with `git log --grep`.
 That is the whole ask.
 
-## 0. `rfc/teacher-surface.md` — ACCEPTED 2026-08-16, take it
+## 0. `rfc/teacher-surface.md` — BLOCKED: governing body still says draft
+
+**Do not implement from this queue entry.** The register and the earlier text below say
+accepted, but the RFC's own Status says **"draft … ready to be marked `accepted`"** and Open
+question 1 still says **"One thing is now waiting on an owner."** This is the standing
+queue-vs-body failure again. The body must be reconciled first; law 1 makes a queue banner
+insufficient authorization.
 
 Both owner questions are discharged. Claims **one migration position** (`STORAGE_VERSION + 1`;
 head is **23**) — `ALTER TABLE run_grants ADD COLUMN granted_via TEXT`, nullable, **no backfill,
@@ -58,7 +64,11 @@ permission stays refused. **Criterion 6 there changes in two clauses** (*"non-re
 spectator"*) at this RFC's landing, and §6.2's recorded ruling terms carry the amendment beside
 the original — the 2026-08-15 record is not overwritten.
 
-## 0b. `rfc/opponent-contracts.md` — CLEAR TO ARCHIVE
+## 0b. `rfc/archive/opponent-contracts.md` — DISCHARGED at `3276a37`
+
+Archived with its planning directory and append-only exploration entry after both gates passed.
+The migration and archive registers now point at the archived RFC. D457 remains open exactly as
+required; the closeout did not promote the unvalidated historical tie counts.
 
 The independent review's blocking follow-up [[D452]] is closed at `d77a9f1`. The conditional body
 correction — **A10 fired and was scored a pass** — landed at `e0ae0b2`. Archive it: move to
