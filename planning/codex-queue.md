@@ -28,8 +28,10 @@ D210 were fully shipped; D400 was answered/superseded. D204's four emitters are 
 remaining legacy schema arm is a different residue — while D240 genuinely lacks the shared
 template registry its own remedy requires. Four process rows also closed in the same pass:
 D418, D419, D459 and the already-shipped D474. The table header now calls column 3
-**Disposition / history (not status)**. **Next is the accepted `graduation-clearance` lifecycle,**
-which owns the non-standalone parts of A1; do not patch D467 outside it.
+**Disposition / history (not status)**. **A1 is blocked on status reconciliation:**
+`rfc/README.md` calls `graduation-clearance` accepted, while the RFC's governing Status line says
+**draft** and explicitly says the second author round *"does not re-declare"* acceptance. Do not
+implement it or patch D467 outside it until the body itself is accepted.
 
 Then: **A1** (4 rows — item 0 below, the boot failure and the ungated release) → **A2** (6 —
 opponent selection serves the wrong move) → **A3** (5 — disclosure holes on live surfaces) →
