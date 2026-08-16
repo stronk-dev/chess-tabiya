@@ -80,8 +80,7 @@ runtime uses `preciseDtz`, so the *delta* stands and the *tie counts* are unvali
 
 ## 1. Not takeable yet
 
-`feedback-delivery` (final author pass
-running), `learner-rating` (open questions 11 and 12), `measurement-records` (returned to author).
+`learner-rating` (open questions 11 and 12), `measurement-records` (returned to author).
 `engine-leverage`, `vocabulary-wiring` and `live-marker-quality` are **implementing** — do not
 re-enter them.
 
