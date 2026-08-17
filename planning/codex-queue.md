@@ -95,6 +95,41 @@ must be authored, the row was split and the sentence sent to the authored side. 
 which no row records — and it must **not** be bulk-fixed, because the `blocking → resolved`
 writer does not exist yet.
 
+## 0-KILL2. [[D537]] — the board still cannot be played, and two packs play the WRONG move
+
+**Your [[D507]] fix is complete and it is the right shape** — 0 of 64 squares occluded at all
+five viewports on all six packs, overflow 64–164 px → **0 px**, and **no length ceiling verified
+to 4,000 characters** ([[D540]]), because `max-height: clamp(5.5rem,16dvh,10rem)` + `overflow:auto`
+sends growth into the block's own scroll. That is length-**independent**, not length-tolerant.
+
+**A different, pre-existing bug still stops the drill.** Selecting a piece renders `overlayCaption`
+(`DrillScreen.svelte:899`) below the board; `.position-column` re-centres and the board rises by
+**exactly half the caption height plus margin** — `(caption + 5.6) / 2` reproduces every observed
+shift to the pixel, 17–89 px — **and chessground's bounds cache is never invalidated.**
+
+**Proved by controlled flip**: click where e5 is *drawn* → **0 plies**; dispatch a `window resize`
+first, **same coordinates** → **2 plies**.
+
+Aiming where squares are drawn, authored first move delivered: **1 of 6** at 1440×1000, **0 of 6**
+at 1366×768 and 1280×720. **And two packs deliver a different legal move than the square clicked**
+— `mate-k-r-technique` gives `Rh7+`/`Rh8` for `Rh6`; `queen-vs-pawn` gives `Qc6+` for `Qc4+`.
+**A wrong move silently played is worse than a click that does nothing**, and this is on the
+community drafts [[D502]] now serves.
+
+**Independent of D507** — the schema-example pack shows the same −60 px shift at `4a6ad91`.
+
+**Take [[D538]] in the same pass, and note a fixture list will not fix it.** `442b8a3` genuinely
+closed the fixture gap — all six packs at five projections, passing. But re-evaluated **one click
+later**, all **eight** `assertRunViewport` clauses pass in **all eighteen** cells, in a state where
+up to 32/64 squares are un-hit-testable. **The invariant asserts a resting geometry and the defect
+exists only after a gesture.** It needs a post-selection assertion, not more fixtures.
+
+**And read [[D539]] before trusting any playability number, including mine.** Session 1's
+*"1 of 6 playable"* was its probe computing coordinates before the gesture — **probe and bug
+cancelled**. That is the **second instrument in two days** to return a clean reading by sharing
+the defect's own assumption, after the CR1 harness ([[D526]]). Related: [[D541]] —
+`philidor-third-rank-hold` is **Black to move** and coordinate probes assumed White at bottom.
+
 ## 0-CONTENT. Job A — the only genuinely mechanical content job. ~21 edits.
 
 Full order: `planning/content-wave-work-order.md`. **Read [[D518]] first**: claude reported this
