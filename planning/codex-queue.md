@@ -95,6 +95,43 @@ must be authored, the row was split and the sentence sent to the authored side. 
 which no row records — and it must **not** be bulk-fixed, because the `blocking → resolved`
 writer does not exist yet.
 
+## 0-UNBLOCK. `feedback-delivery` Stage 1 — CR1 is fine, the harness is not
+
+**You were right to stop, and criterion 16 was right to be able to fail. The reading was of the
+instrument.** Diagnosis at `planning/feedback-delivery/cr1-diagnosis.md`.
+
+**CR1 works.** `common` is never empty — over **44** real spine fork sets its median size is **72**
+(min 23, max 94), **0 of 44 empty**; CR1 removes **592 of 5,000** candidate entries corpus-wide and
+fires in **41 of 44** fork sets. Positive controls behave: a transposition filters **62/64**,
+identical branches **48/48** (CR3's named case). The fork exclusion is implemented exactly as
+§4.1 specifies (`node.ply > fork.ply`, `node.id !== fork.id` with `previous` seeded from the fork)
+— **not the cause**, and the choice is live: a fork-inclusive reading disagrees on 20/44 sets.
+
+**The defect is `comparisonMeasurement`** (`tools/feedback-delivery-harness/feedback-delivery.test.ts:105-127`):
+it gives every column **exactly one ply past the fork**. At one ply the candidate set is
+`obs(fork+1) \ obs(fork)` while `common` is dominated by what did **not** change — **the two are
+disjoint by construction**, so admission is 100% at every N whatever the filter does. Decomposed:
+`|common|` = 70/61/53 at N=2/4/8 with **0 filtered each**.
+
+**Fix the instrument, then re-run criteria 5 and 16.** Re-shaped with multi-ply columns the same
+harness gives **N=8 admission 29.4% (depth 8), 27.6% (depth 12)** — criterion 16 does not fire and
+Stage 1 is unblocked. ([[D526]].)
+
+Two things to take in the same pass, both measured:
+
+- **[[D528]] — add the empty-column case to CR3.** A column with **zero** plies past the fork makes
+  `common = ∅` and silently disables CR1 for the whole comparison. CR3 enumerates degenerate cases
+  *"named, not discovered"* and misses this one, and **19 of 44** fork sets have a 1-ply column.
+- **[[D527]] — `compare-strips` re-declares its own `observationKey`** instead of reusing
+  `structure.ts`'s `observationIdentity`. Reusing the shared one deletes **971 of 5,000** strip
+  entries (**−19.4%**) **independent of CR1**, because the local key makes `pawn_safe_square`
+  **25.4%** of all candidates. Sibling of [[D430]].
+
+**Context worth carrying: [[D529]] — no authored fork in this corpus is wider than 3 columns**
+(38 binary, 6 ternary, **0 at N ≥ 4**) against `MAX_COMPARISON_BRANCHES = 8`, and the median fork's
+shortest column runs **2 plies**. So every N ≥ 4 number here is synthetic, **including criterion
+16's own threshold** — do not read a re-run at N=8 as a corpus fact.
+
 ## 0-KILL. [[D507]] — COMPLETED 2026-08-17
 
 **Measured hands-on 2026-08-16** (`design/research/endgame-latency-versus-cet.md`): at 1440×1000,
