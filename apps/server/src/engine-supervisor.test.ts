@@ -151,11 +151,11 @@ describe("UCI engine supervisor", () => {
       id: "stockfish-analysis",
       kind: "judge",
       name: "Stockfish",
+      version: "18",
       modelId: "test-nnue-identity",
       containerDigest: `sha256:${"0".repeat(64)}`,
       seedHonored: false,
     });
-    expect(identity.version).not.toBe("unknown");
     expect(supervisor.health("stockfish-analysis").options).toEqual(expect.arrayContaining([
       expect.objectContaining({ name: "Clear Hash", type: "button" }),
       expect.objectContaining({ name: "MultiPV", type: "spin", min: 1 }),

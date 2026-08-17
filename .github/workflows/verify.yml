@@ -9,7 +9,7 @@ permissions:
 
 jobs:
   verify:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     env:
       ENGINES_REQUIRED: "1"
     steps:
@@ -21,9 +21,9 @@ jobs:
         with:
           node-version: 24
           cache: pnpm
-      - name: Install Stockfish
+      - name: Install checksum-pinned Stockfish 18
         run: |
-          sudo apt-get update
-          sudo apt-get install -y stockfish
+          tools/install-stockfish-linux.sh "$RUNNER_TEMP/stockfish"
+          echo "SF_CMD=$RUNNER_TEMP/stockfish/bin/stockfish" >> "$GITHUB_ENV"
       - run: pnpm install --frozen-lockfile
       - run: make verify

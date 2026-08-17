@@ -167,14 +167,15 @@ describe("expression census", () => {
       'export type IrreversibilityDetail =',
       'export type IrreversibilityDetail =\n  | { readonly subkind: "fixture" }',
     );
-    const cases = [
-      ["schema", { "schemas/drill_pack.schema.json": JSON.stringify(schema) }],
-      ["error", { "apps/server/src/errors.ts": errors }],
-      ["assistance", { "packages/runtime/src/assistance.ts": assistance }],
-      ["runtime", { "packages/runtime/src/transition.ts": transition }],
-    ] as const;
-    for (const [namespace, sourceOverrides] of cases) {
-      const mutated = runDeclarationCensus({ sourceOverrides });
+    const mutated = runDeclarationCensus({
+      sourceOverrides: {
+        "schemas/drill_pack.schema.json": JSON.stringify(schema),
+        "apps/server/src/errors.ts": errors,
+        "packages/runtime/src/assistance.ts": assistance,
+        "packages/runtime/src/transition.ts": transition,
+      },
+    });
+    for (const namespace of ["schema", "error", "assistance", "runtime"] as const) {
       expect(mutated.totals[namespace].subjects).toBe(baseline.totals[namespace].subjects + 1);
     }
   }, 20_000);

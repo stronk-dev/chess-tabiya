@@ -55,6 +55,8 @@ required(
 );
 
 const release = readFileSync(".github/workflows/release.yml", "utf8");
+const verifyWorkflow = readFileSync(".github/workflows/verify.yml", "utf8");
+const browserWorkflow = readFileSync(".github/workflows/browser.yml", "utf8");
 for (const expected of [
   "verify:",
   "ENGINES_REQUIRED: \"1\"",
@@ -70,6 +72,13 @@ for (const expected of [
 ]) {
   required(release.includes(expected), `Release workflow is missing ${expected}`);
 }
+for (const [name, workflow] of [["verify", verifyWorkflow], ["release", release]]) {
+  required(workflow.includes("ubuntu-24.04"), `${name} workflow must pin the GA Ubuntu runner`);
+  required(workflow.includes('tools/install-stockfish-linux.sh "$RUNNER_TEMP/stockfish"'), `${name} workflow must install the shared Stockfish pin`);
+  required(workflow.includes('SF_CMD=$RUNNER_TEMP/stockfish/bin/stockfish'), `${name} workflow must test the pinned Stockfish binary`);
+  required(!workflow.includes("apt-get install -y stockfish"), `${name} workflow must not install an unpinned distro Stockfish`);
+}
+required(browserWorkflow.includes("ubuntu-24.04"), "Browser workflow must pin the GA Ubuntu runner");
 
 const devcontainer = JSON.parse(
   readFileSync(".devcontainer/devcontainer.json", "utf8"),
@@ -77,8 +86,8 @@ const devcontainer = JSON.parse(
 required(devcontainer.dockerComposeFile === "../compose.yaml", "Devcontainer must use Compose");
 required(devcontainer.service === "dev", "Devcontainer must target the dev service");
 required(
-  readFileSync(".devcontainer/Dockerfile", "utf8").includes("stockfish"),
-  "Devcontainer must include Stockfish",
+  readFileSync(".devcontainer/Dockerfile", "utf8").includes("install-stockfish-linux /opt/stockfish"),
+  "Devcontainer must install the shared Stockfish pin",
 );
 
 required(
@@ -97,5 +106,18 @@ required(
   ),
   "Production image must include the permanent-property source used by pack admission",
 );
+required(
+  readFileSync("apps/server/Dockerfile", "utf8").includes("install-stockfish-linux /opt/stockfish"),
+  "Production image must install the shared Stockfish pin",
+);
+const stockfishInstaller = readFileSync("tools/install-stockfish-linux.sh", "utf8");
+for (const expected of [
+  'STOCKFISH_VERSION="18"',
+  'STOCKFISH_COMMIT="cb3d4ee9b47d0c5aae855b12379378ea1439675c"',
+  'X86_SHA256="5c6f38b02a4da5f3ffe763f27da6c3e743eebefd92b50cb3661623b96696adff"',
+  'SOURCE_SHA256="b5d3b85e08cdf9189a4753142eb21a4333983d97501531b19e1cd1ac9fc43f35"',
+]) {
+  required(stockfishInstaller.includes(expected), `Stockfish installer is missing ${expected}`);
+}
 
 console.log("packaging verification: OK");

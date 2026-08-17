@@ -47,8 +47,11 @@ converted into a different engine or policy.
 Real Stockfish tests cover handshake, option application, search, health,
 restart, transcript bounds, abort/preemption, identity, and shutdown. A local
 machine without Stockfish prints a prominent warning and skips those cases; CI
-sets `ENGINES_REQUIRED=1`, so absence fails verification. `SF_CMD` plus the JSON
-array `SF_ARGS` can name a non-standard executable.
+sets `ENGINES_REQUIRED=1`, so absence fails verification. Stockfish 18 is the
+supported contract and the handshake test rejects any other version. CI, the
+devcontainer, and the multi-architecture server image use the same official
+commit through a checksum-pinned installer; host development can point at a
+native Stockfish 18 with `SF_CMD` plus the JSON array `SF_ARGS`.
 
 ### Engine request contract
 

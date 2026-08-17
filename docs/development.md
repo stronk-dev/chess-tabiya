@@ -9,6 +9,9 @@
 - Go is reserved for self-contained data-format workers; Python is confined to
   the Dockerized Maia sidecar.
 - Docker Compose is required for the packaged engine-backed experience.
+- Stockfish 18 is the supported judge version. Host development may use a native Stockfish 18;
+  CI, the devcontainer, and production install the same official release through the shared,
+  checksum-pinned `tools/install-stockfish-linux.sh` path.
 
 The project is licensed under GNU AGPL-3.0. JavaScript dependencies are installed into a
 pnpm workspace; pnpm's store/cache/state remain under the ignored repository `.cache/`
@@ -59,6 +62,12 @@ fast-check runtime invariants), and schema/scaffold plus deployment-manifest
 verification. `make build` separately proves the Svelte production bundle.
 `make test-browser` builds and starts the default mock-backed application and
 runs the full Playwright episode in a separate browser CI job.
+
+GitHub Actions pins the GA `ubuntu-24.04` runner instead of following `ubuntu-latest`, but it does
+not use Ubuntu's Stockfish package: that package is version 16, Ubuntu 26.04's preview runner offers
+version 17, and the production Bookworm package is version 15.1. Pinning the engine artifact rather
+than the operating system keeps the UCI contract and chess output aligned with local Stockfish 18.
+The real-engine test refuses every other reported Stockfish version.
 
 Tests use committed artifacts when the production path consumes an artifact. When
 an external instrument cannot run in the unit gate, its captured fixture carries

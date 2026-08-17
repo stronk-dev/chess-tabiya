@@ -1,3 +1,13 @@
+FROM node:24.10.0-bookworm-slim AS stockfish
+
+ARG TARGETARCH
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends ca-certificates curl \
+    && if [ "$TARGETARCH" = "arm64" ]; then apt-get install -y --no-install-recommends g++ make; fi \
+    && rm -rf /var/lib/apt/lists/*
+COPY tools/install-stockfish-linux.sh /usr/local/bin/install-stockfish-linux
+RUN install-stockfish-linux /opt/stockfish
+
 FROM node:24.10.0-bookworm-slim AS build
 
 ENV PNPM_HOME=/pnpm
@@ -21,8 +31,11 @@ RUN pnpm build
 FROM node:24.10.0-bookworm-slim
 
 RUN apt-get update \
-    && apt-get install -y --no-install-recommends netcat-openbsd stockfish \
+    && apt-get install -y --no-install-recommends netcat-openbsd \
     && rm -rf /var/lib/apt/lists/*
+
+COPY --from=stockfish /opt/stockfish/bin/stockfish /usr/games/stockfish
+COPY --from=stockfish /opt/stockfish/source /usr/share/doc/stockfish/source
 
 WORKDIR /app
 COPY --from=build /app/apps/server/dist apps/server/dist

@@ -3214,3 +3214,21 @@ measured checkmate FENs now return typed `INVALID_REQUEST` / HTTP 400 under `hum
 instead of letting the mock's bare `TypeError` become `INTERNAL_ERROR`. Focused coverage pins the
 empty-versus-populated fixture distinction, capability publication, no-partial-run client path,
 and the HTTP refusal grammar.
+
+## 2026-08-17 — CI, development and production converged on one Stockfish contract
+
+Actions run 32010019586 exposed that local verification and CI were exercising different UCI
+option surfaces: the host ran Stockfish 18, Ubuntu 24.04 supplied 16, and the Bookworm-based
+development and production images supplied 15.1. Moving to Ubuntu 26.04 would not align them; its
+runner is preview-only and its package is Stockfish 17. CI now uses the explicit GA Ubuntu 24.04
+label while a shared installer pins the official Stockfish 18 commit and checksums independently
+of the distro. The devcontainer and both production architectures use that same installer, and
+the real-engine handshake test requires version 18. Linux amd64 and arm64 stages were both built
+and identified as Stockfish 18.
+
+The same failed run exposed multiplicative work in the declaration-census regression. Four
+namespace-disjoint mutations each reran the complete repository census, for five scans including
+the baseline. One combined mutation preserves all four namespace assertions with two scans. The
+affected test fell from 24.0 s on CI to about 5.5 s locally while retaining its 20 s timeout.
+`ENGINES_REQUIRED=1 make verify` passed 754 tests across 116 files, and the zero-retry browser
+gate passed 25 tests with one optional Maia test skipped.
