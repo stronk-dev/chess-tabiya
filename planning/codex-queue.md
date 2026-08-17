@@ -95,6 +95,43 @@ must be authored, the row was split and the sentence sent to the authored side. 
 which no row records — and it must **not** be bulk-fixed, because the `blocking → resolved`
 writer does not exist yet.
 
+## 0-CONTENT. Job A — the only genuinely mechanical content job. ~21 edits.
+
+Full order: `planning/content-wave-work-order.md`. **Read [[D518]] first**: claude reported this
+lane as *"27 mechanical rows, five jobs, three of them a shipped `make` target"* and **withdrew
+that framing** — the explorer wave is **0 of 60** mechanical, not 22 of 60, because
+`attachExplorerEvidence` needs an `EXPLORER_RATIONALE` entry in `provenance.sources` and **0 of 50
+packs carry one**. Jobs B and E are blocked on authored judgement. **This is what survives.**
+
+**Job A — provenance-promise repair ([[D470]]).** 20 packs' `provenance.sources` strings promise
+data in `provenance.engineValidation`, which `PROVENANCE_EVIDENCE_INLINE` (`pack-validation.ts:867-868`,
+severity **error**) forbids the pack from carrying. Plus the `bxc5-recoup` citation in
+`anti-caro-advance-early-c5.json` — **present twice**, naming an id that exists nowhere, deleted
+2026-08-15. **21 edits, all mechanical, 0 human.**
+
+Sequence: hand-edit → `make pack-check` → `make verify-draft` (**performs the mandatory digest
+re-stamp** — `digestDrillPack` canonicalizes the whole document and `EVIDENCE_DIGEST_STALE` is
+only a warning, so skipping it drifts silently) → `make sourcing-check`.
+
+**Fold job C in on the same `verify-draft` run**: the engine pass is **7 claims across 2 packs**,
+not 8 across 3 — `maroczy-bind-white-squeeze` has no ledger and no `assessedBy`.
+
+**This is a content wave**, so it carries `CLAUDE.md`'s content closeout: ledger rows flipped
+**and** an entry appended to `planning/content-era/log.md` **in the shipping commit**.
+
+**Say in the commit message what it does not do: it will not move `backedClaims` off 1.** No
+mechanical job in this lane does.
+
+**Also job D — denominator convergence** (code only, not a content wave): [[D519]] measured
+`make expression-census` printing **`corpus.packs: 56` alongside `totals.packs: 50` in the same
+report**, and `make graduation-report` still reporting **56** via its own inline filter at
+`graduation-report.ts:8`. The fixtures were **excluded from discovery, never relocated**.
+
+**And [[D521]] while you are there**: `make graduation-report` **writes `content/accepted-conditions.md`**,
+so the headline graduation instrument cannot be run by a reviewer without dirtying the corpus it
+measures — exactly [[D446]]'s defect, which you fixed for the Q8 harness at `5c66680`, surviving
+in the more load-bearing tool.
+
 ## 0-UNBLOCK. `feedback-delivery` Stage 1 — CR1 is fine, the harness is not
 
 **You were right to stop, and criterion 16 was right to be able to fail. The reading was of the
