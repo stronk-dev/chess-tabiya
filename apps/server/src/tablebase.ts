@@ -30,4 +30,31 @@ export class LichessTablebaseSource implements TablebaseSource{
   async #fetch(key:string,fen:string):Promise<TablebasePosition>{const controller=new AbortController(),timer=setTimeout(()=>controller.abort(),this.options.timeoutMs??4_000);try{const response=await(this.options.fetcher??fetch)(`https://tablebase.lichess.org/standard?fen=${encodeURIComponent(fen)}`,{signal:controller.signal,headers:{"user-agent":"chess-tabiya/0.0.0 (+https://github.com/stronk-dev/chess-tabiya; repository-owner)"}});if(!response.ok)throw new ServerError("TABLEBASE_UNAVAILABLE",`Tablebase HTTP ${response.status}`,{details:{retryAfterMs:response.status===429||response.status>=500?60_000:0}});const value=parseTablebasePosition(await response.json());this.#cache.set(key,{value,expiresAt:Number.POSITIVE_INFINITY});while(this.#cache.size>512)this.#cache.delete(this.#cache.keys().next().value!);return value;}catch(error){const typed=error instanceof ServerError?error:new ServerError("TABLEBASE_UNAVAILABLE",error instanceof DOMException&&error.name==="AbortError"?"Tablebase request timed out":"Tablebase request failed",{details:{retryAfterMs:60_000}});this.#cache.set(key,{error:typed,expiresAt:(this.options.now?.()??Date.now())+60_000});throw typed;}finally{clearTimeout(timer);}}
 }
 
-export class FixtureTablebaseSource implements TablebaseSource{readonly kind="mock" as const;constructor(private readonly positions:Readonly<Record<string,TablebasePosition>>={}){}async probe(fen:string):Promise<TablebasePosition>{if(countFenPieces(fen)>7)throw new ServerError("TABLEBASE_OUT_OF_RANGE","Syzygy covers at most seven pieces");const found=this.positions[transposeKey(fen)]??this.positions[fen];if(found===undefined)throw new ServerError("TABLEBASE_UNAVAILABLE","No fixture tablebase position",{details:{retryAfterMs:0}});return found;}}
+export class FixtureTablebaseSource implements TablebaseSource {
+  readonly kind = "mock" as const;
+  readonly configured: boolean;
+
+  constructor(
+    private readonly positions: Readonly<Record<string, TablebasePosition>> = {},
+  ) {
+    this.configured = Object.keys(positions).length > 0;
+  }
+
+  async probe(fen: string): Promise<TablebasePosition> {
+    if (countFenPieces(fen) > 7) {
+      throw new ServerError(
+        "TABLEBASE_OUT_OF_RANGE",
+        "Syzygy covers at most seven pieces",
+      );
+    }
+    const found = this.positions[transposeKey(fen)] ?? this.positions[fen];
+    if (found === undefined) {
+      throw new ServerError(
+        "TABLEBASE_UNAVAILABLE",
+        "No fixture tablebase position",
+        { details: { retryAfterMs: 0 } },
+      );
+    }
+    return found;
+  }
+}

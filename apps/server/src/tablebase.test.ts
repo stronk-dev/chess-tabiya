@@ -1,11 +1,16 @@
 import { describe, expect, it, vi } from "vitest";
 
-import { LichessTablebaseSource } from "./tablebase.js";
+import { FixtureTablebaseSource, LichessTablebaseSource } from "./tablebase.js";
 
 const fen = "4k3/6KP/8/8/8/8/8/8 w - - 0 1";
 const payload = { category: "win", dtz: 1, moves: [{ uci: "h7h8q", san: "h8=Q+", category: "loss", dtz: -1, precise_dtz: -1 }] };
 
 describe("interactive tablebase source", () => {
+  it("distinguishes an empty mock from an executable fixture provider", () => {
+    expect(new FixtureTablebaseSource().configured).toBe(false);
+    expect(new FixtureTablebaseSource({ [fen]: { category: "win", dtz: 1, preciseDtz: 1, moves: [] } }).configured).toBe(true);
+  });
+
   it("percent-encodes FENs, coalesces identical requests, and retains immutable positives", async () => {
     let release!: () => void;
     const blocked = new Promise<void>((resolve) => { release = resolve; });

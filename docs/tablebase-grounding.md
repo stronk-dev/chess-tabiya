@@ -38,7 +38,7 @@ reach halfmove 100.
 
 ## Perfect tablebase resistance
 
-`perfect_tablebase` is an executable pack-run opponent mode. It is published only when a tablebase provider is configured and is recorded on every selection as `policyModeApplied: "perfect_tablebase"` with the synthetic identity `lichess-tablebase` / `Syzygy (tablebase.lichess.org/standard)` / `7man`.
+`perfect_tablebase` is an executable pack-run opponent mode. It is published only when a tablebase provider is configured and is recorded on every selection as `policyModeApplied: "perfect_tablebase"` with the synthetic identity `lichess-tablebase` / `Syzygy (tablebase.lichess.org/standard)` / `7man`. An empty mock fixture is provider absence, not a configured provider: the default mock stack therefore omits both `perfect_tablebase` and `practical_resistance` instead of advertising modes whose every probe would refuse.
 
 The interactive provider uses `tablebase.lichess.org/standard` with percent-encoded FENs, one request at a time, identical-request coalescing, a bounded queue, a 512-entry positive LRU, and a 60-second negative cache after upstream failures. Positive facts have no TTL because tablebase results are immutable.
 

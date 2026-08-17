@@ -418,6 +418,9 @@ export class OpponentSelector {
 
   select(request: SelectMoveRequest): Promise<OpponentSelection> {
     this.validatePolicy(request.policy);
+    if (currentPosition(request).isEnd()) {
+      throw invalid("Opponent selection requires a non-terminal position");
+    }
     const key = selectionCacheKey(request);
     const cached = this.#cache.get(key);
     if (cached !== undefined) return cached;

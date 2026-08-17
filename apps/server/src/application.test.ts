@@ -85,6 +85,24 @@ describe("development application mock opponent", () => {
     expect(projected).not.toHaveProperty("successConditions");
   });
 
+  it("does not advertise tablebase modes for the empty mock provider", async () => {
+    application = await createApplication({ engineMode: "mock", cookieSecure: false });
+    await new Promise<void>((resolve, reject) => {
+      application!.server.once("error", reject);
+      application!.server.listen(0, "127.0.0.1", resolve);
+    });
+    const address = application.server.address() as AddressInfo;
+    const response = await fetch(`http://127.0.0.1:${address.port}/capabilities`);
+    expect(response.status).toBe(200);
+    const descriptor = await response.json() as {
+      providers: { tablebase: string };
+      policyModes: string[];
+    };
+    expect(descriptor.providers.tablebase).toBe("none");
+    expect(descriptor.policyModes).not.toContain("perfect_tablebase");
+    expect(descriptor.policyModes).not.toContain("practical_resistance");
+  });
+
   it("imports a private repertoire, scans ranked gaps, and enters one atomically",async()=>{
     application=await createApplication({development:true,engineMode:"mock",cookieSecure:false});await new Promise<void>((resolve,reject)=>{application!.server.once("error",reject);application!.server.listen(0,"127.0.0.1",resolve);});const address=application.server.address() as AddressInfo,origin=`http://127.0.0.1:${address.port}`;
     const registered=await fetch(`${origin}/auth/register`,{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify({handle:"repertoire_owner",password:"repertoire-owner-password"})}),cookie=registered.headers.get("set-cookie")!.split(";",1)[0]!;

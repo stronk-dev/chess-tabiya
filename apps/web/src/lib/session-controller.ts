@@ -243,6 +243,7 @@ export class DrillSessionController {
         this.#api.pack(packId),
         this.#api.capabilities(),
       ]);
+      selectorMode(document, capabilities);
       const runId = this.#runId();
       const seed = this.#seed();
       const session = WriterSession.claimFor(runId, this.#storage);

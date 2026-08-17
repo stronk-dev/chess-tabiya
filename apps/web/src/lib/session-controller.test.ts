@@ -534,6 +534,7 @@ describe("DrillSessionController", () => {
     await environment.controller.startPack(blackToMovePack.id);
 
     expect(environment.controller.state.error).toBe("theory_strict is unavailable");
+    expect(api.created).toBeUndefined();
     expect(api.selected).toBeUndefined();
   });
 

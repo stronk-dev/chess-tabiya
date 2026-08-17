@@ -302,9 +302,13 @@ export async function createApplication(
   let capabilities: EngineCapabilities;
   let evidenceExecutor: EvidenceExecutor;
   const corpusSource = options.corpusSource ?? (engineMode === "mock" ? new FixtureCorpusSource() : options.corpusToken === undefined ? undefined : new LichessCorpusSource({ token: options.corpusToken }));
-  const tablebaseSource = options.tablebaseSource === null
+  const candidateTablebaseSource = options.tablebaseSource === null
     ? undefined
     : options.tablebaseSource ?? (engineMode === "mock" ? new FixtureTablebaseSource() : new LichessTablebaseSource());
+  const tablebaseSource = candidateTablebaseSource instanceof FixtureTablebaseSource
+    && !candidateTablebaseSource.configured
+    ? undefined
+    : candidateTablebaseSource;
 
   if (engineMode === "maia") {
     const stockfish = options.stockfishCommand ?? "stockfish";

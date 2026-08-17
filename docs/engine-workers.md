@@ -262,7 +262,8 @@ proves late results are discarded; a real Stockfish test proves `stop` is sent.
 `GET /capabilities` warms the configured engines and returns only modes whose required provider
 is currently executable: Maia for `human_common`/`theory_strict`, the judge for
 `strong_engine`, tablebase for `perfect_tablebase`, and both Maia and tablebase for
-`practical_resistance`. It has the following shape when every provider is ready:
+`practical_resistance`. An empty `FixtureTablebaseSource` is treated as provider
+absence rather than as an executable mock. It has the following shape when every provider is ready:
 
 ```text
 {

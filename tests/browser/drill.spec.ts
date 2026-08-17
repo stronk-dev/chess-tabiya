@@ -949,6 +949,24 @@ test("every shell route owns the viewport at supported desktop and tablet projec
 test("served endgame packs keep the board above the timeline at supported desktop projections", async ({
   page,
 }) => {
+  // This is a layout corpus, not a provider test. The packaged mock correctly
+  // withholds an empty tablebase capability; admit the perfect-play pack here
+  // without ever requesting an opponent move so all six authored layouts run.
+  await page.route(/\/capabilities$/u, async (route) => {
+    const response = await route.fetch();
+    const descriptor = await response.json() as {
+      policyModes: string[];
+      providers: Record<string, string>;
+    };
+    await route.fulfill({
+      response,
+      json: {
+        ...descriptor,
+        policyModes: [...descriptor.policyModes, "perfect_tablebase"],
+        providers: { ...descriptor.providers, tablebase: "mock" },
+      },
+    });
+  });
   const projections = [
     { width: 1280, height: 720 },
     { width: 1366, height: 768 },

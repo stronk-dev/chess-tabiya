@@ -116,14 +116,14 @@ Same shape as [[D482]].
 container-query sizing **already present in the same file's mobile branch**
 (`DrillScreen.svelte:1479-1480`) — ~2 lines, and the board roughly doubles ([[D496]]).
 
-**Take [[D509]] with it before the draft shelf lands:** `/capabilities` advertises
-`perfect_tablebase` and `practical_resistance` and both return **HTTP 503 for every position**
-under `ENGINE_MODE=mock` (empty `FixtureTablebaseSource`). **Two corpus packs declare
-`perfect_tablebase`**, so [[D502]]'s shelf puts them in front of a learner and onto a 503.
+**[[D509]] COMPLETED 2026-08-17:** `/capabilities` advertised `perfect_tablebase` and
+`practical_resistance` even though both returned **HTTP 503 for every position** under
+`ENGINE_MODE=mock`. An empty fixture is now provider absence, and pack start checks the authored
+mode before creating a run.
 
-**And [[D510]]**: `/select-move` returns an **untyped HTTP 500** on a checkmate position under
-`human_common` where `perfect_tablebase` returns a typed 503 — and `human_common` is the mode
-every default and rated run uses. [[D56]]'s family.
+**[[D510]] COMPLETED 2026-08-17:** `/select-move` returned an **untyped HTTP 500** on a
+checkmate position under `human_common`. Selector preflight now returns typed `INVALID_REQUEST`
+/ HTTP 400 before any policy branch runs. [[D56]]'s family.
 
 **Do not take [[D508]]** — it is a finding, not a defect: CET's endpoint measures **30.8 ms**
 against our **30.1 ms** on the same FENs, so there is no speed gap to win and nothing to fix.

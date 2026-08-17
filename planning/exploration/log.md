@@ -3200,3 +3200,17 @@ six served endgame packs at 1280×720, 1366×768, 1440×900, 1440×1000, and 768
 zero-retry regression passes across all thirty pack/viewport combinations. D508 remains a finding,
 not work: the measured tablebase call is at latency parity with CET, so no speed advantage is
 claimed or patched.
+
+## 2026-08-17 — mock capabilities stopped promising unavailable opponents
+
+D509 and D510 close the two opponent-entry failures found by the K9 endgame pass. An empty
+`FixtureTablebaseSource` no longer counts as an executable provider, so the packaged mock stack
+omits `perfect_tablebase` and `practical_resistance` from `/capabilities`. Pack start now checks
+the authored mode before creating a run, preventing an unavailable draft from preserving a
+learner move and only then failing.
+
+Opponent selection also validates the fully replayed position before policy dispatch. The two
+measured checkmate FENs now return typed `INVALID_REQUEST` / HTTP 400 under `human_common`
+instead of letting the mock's bare `TypeError` become `INTERNAL_ERROR`. Focused coverage pins the
+empty-versus-populated fixture distinction, capability publication, no-partial-run client path,
+and the HTTP refusal grammar.

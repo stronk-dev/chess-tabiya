@@ -237,8 +237,10 @@ checkpoint, the controller pauses before selecting an opponent reply. Continue
 calls the pure `/select-move` endpoint and then writer-appends the selection and
 move as one opponent ply. Fork, rewind, switch, compare, PGN export, and stop
 remain thin calls to the existing client/store contracts. The pack registry
-refuses opponent modes that the selector cannot execute; the living fixture
-uses `human_common`, so every served pack is runnable by construction.
+refuses structurally unsupported opponent modes. Before it creates a run, the
+client also checks the authored mode against the deployment's current
+capabilities; an unavailable provider therefore produces no partial run and no
+committed learner move under a mode the server cannot execute.
 
 ## Screens and episode flow
 

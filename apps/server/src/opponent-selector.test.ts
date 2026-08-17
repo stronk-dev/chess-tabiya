@@ -906,6 +906,24 @@ describe("selector/writer REST seam", () => {
       "",
     );
     expect(rejectedSpine.status).toBe(400);
+    const terminal = await httpRequest(
+      handler,
+      "POST",
+      "/select-move",
+      {
+        ...request("human_common"),
+        startFen: "7k/8/5BKN/8/8/8/8/8 b - - 39 20",
+        historyUci: [],
+      },
+      "",
+    );
+    expect(terminal.status).toBe(400);
+    expect(await terminal.json()).toMatchObject({
+      error: {
+        code: "INVALID_REQUEST",
+        message: "Opponent selection requires a non-terminal position",
+      },
+    });
     const selected = await httpRequest(
       handler,
       "POST",
