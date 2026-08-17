@@ -1,18 +1,33 @@
 # Endgame latency and usability versus Chess Endgame Training (K9's missing arm)
 
 - **Feeds:** Q-04 (`planning/research-queue.md` §1, §8) → **K9** · **C7** · [[D488]]
-- **Session:** 2026-08-16, macOS 15 / Apple silicon, Chromium via Playwright, against commit
+- **Session 1 — 2026-08-16**, macOS 15 / Apple silicon, Chromium via Playwright, against commit
   `4a6ad91` extracted to a clean tree outside the repo. Instrument:
   `tools/k9-endgame-latency-harness/` (disposable, labelled, README states why the shipped
-  harness could not be used).
-- **Provenance:** `[V]` unless marked. Every number below was produced in this pass and the
-  command that produced it is in the harness README. CET's numbers are `[P]` — inherited from
-  `design/research/teardown-cet.md` (2026-08-11) — except the one CET figure this pass
-  re-measured itself, which is `[V]`.
+  harness could not be used). **§§0–9 below are that session and are not edited.**
+- **Session 2 — 2026-08-17 (the re-run)**, same machine, against commit **`451bb44`**, after the
+  D507 layout fix (`442b8a3`, 2026-08-17). **§10 is the re-run and supersedes §0.3, §6 and §8's
+  K9 verdict where they disagree.** §§1–5, §7 and §9 stand as written. Read §10 before quoting
+  any occlusion or playability number from §6.
+- **Provenance:** `[V]` unless marked. Every number in §§0–9 was produced in session 1 and every
+  number in §10 was produced in session 2; the commands are in the harness README. CET's numbers
+  are `[P]` — inherited from `design/research/teardown-cet.md` (2026-08-11) — except the one CET
+  figure session 1 re-measured itself, which is `[V]`.
+- **Why session 2 exists:** `planning/exploration/gates.md` was escalated to
+  `📊 EVIDENCE TOWARD FIRING` on session 1's usability numbers, and the defect those numbers
+  named was then repaired. Escalated kill-criterion evidence whose cause has been fixed and
+  which nobody has re-derived is the [[D368]] family on the most consequential surface in the
+  repo; law 6 cuts both ways, so the favourable direction is re-run as carefully as the
+  unfavourable one.
 
 ---
 
 ## 0. The finding that outranks the stopwatch
+
+> **2026-08-17 re-run notice.** Point 3 below is **repaired at HEAD** and point 4 is **obsolete**.
+> The board is now 0/64 occluded at rest on all six packs at all five viewports, and production
+> now serves all six. **The criterion still does not clear**, for a different and pre-existing
+> cause. Points 1 and 2 are re-confirmed. §10.
 
 **K9 fires — on its usability clause, not its speed clause, and the two answers point in
 opposite directions.** Stated plainly, because law 6 says evidence against the thesis is the job
@@ -238,6 +253,12 @@ like.
 
 ## 6. The measurement that stopped being about milliseconds
 
+> **2026-08-17 re-run notice — this whole section is a 2026-08-16 measurement of `4a6ad91` and
+> every number in it is superseded by §10.** The resting-state occlusion it reports is gone; the
+> `assertRunViewport` fixture gap it reports is closed; and one of its own readings — the single
+> "playable" pack — turns out to have been an artefact of the probe aiming where the defect
+> decoded. Kept unedited as the before-half of the comparison.
+
 Before latency on the endgame surface could be sampled, the instrument had to make a move. It
 could not. `occlusion-probe.mjs` hit-tests all 64 square centres per pack per viewport and
 reports which are covered and by what; `playability-probe.mjs` then attempts the pack's own
@@ -348,6 +369,10 @@ Stated explicitly, because the brief and `design/02` both demand it.
 
 ### K9 — *"Endgame mode is not materially faster or more usable than Chess Endgame Training"*
 
+> **2026-08-17: the recommended status is unchanged and the reason is not.** See §10.8 for the
+> replacement wording. The layout defect named below is fixed; the criterion still does not
+> clear.
+
 **Fires, on the usability clause. Does not fire on the speed clause.** Recommended gate status:
 **📊 evidence toward firing**, not `fired`, for one reason that the owner should weigh rather
 than this dossier: the usability failure is a **layout defect of known shape at a known place**,
@@ -442,3 +467,446 @@ named residuals, in order: fix the layout, then run one owner session.
 - **D509 💡** — *Tablebase results are cached forever* (`expiresAt: POSITIVE_INFINITY`), so the
   33 ms first-probe cost is once per position per server lifetime. Worth stating wherever the
   <500 ms uncached budget is quoted, because it makes the budget a first-visit budget.
+
+---
+
+# 10. THE RE-RUN — 2026-08-17, commit `451bb44`
+
+Everything from here down is session 2. Session 1's numbers are above and are not edited.
+
+- **Commit under measurement:** `451bb44` (*"queue: job A — the content work that survived the
+  D518 correction"*). The D507 fix is `442b8a3` (*"fix(web): keep endgame boards playable"*,
+  2026-08-17), three commits earlier `[V]`.
+- **How it was isolated.** The tree was busy again — an implementer held uncommitted
+  `feedback-delivery` work across `apps/web/src/lib/`, `apps/server/src/` and
+  `packages/runtime/src/` `[V]`. Session 1's `make-headtree.sh` extracts HEAD with `git archive`
+  but then **copies the repo's `apps/web/dist`**, which is whatever the working tree last built —
+  and the D507 fix lives in `apps/web/src/lib/DrillScreen.svelte`, so reusing that bundle would
+  have measured the implementer's uncommitted CSS. `rerun-2026-08-17.sh` is session 1's script
+  with that one correction: it runs `vite build` **inside the extracted tree** and asserts the
+  D507 clamp is present in the built CSS before the server starts `[V]`. Nothing was staged; the
+  repo was read, never written except this dossier and the harness directory.
+- **Configuration.** Identical to §2b: the six endgame drafts served from the extracted tree,
+  `NODE_ENV=development ENGINE_MODE=mock K9_REAL_TABLEBASE=1`, mock opponent, real Syzygy. §10.7
+  additionally measures the **shipped production default**, which has changed since session 1.
+- **What was re-run and what was carried forward.** Re-run: the whole usability arm (§10.1–§10.5)
+  and the **browser** latency arm (§10.6), because the layout changed under it. Carried forward
+  unchanged: the API arm (§3) and the CET endpoint comparison (§5) — neither touches the client
+  layout, and §5's controlled result is the finding that settles the speed clause either way.
+
+---
+
+## 10.1 Playability at the three viewports, against the originals
+
+`occlusion-probe.mjs`, unmodified from session 1, same method: hit-test all 64 square centres per
+pack per viewport, count those whose topmost element is not the board. `[V]`
+
+| Viewport | 2026-08-16 · `4a6ad91` — six endgame packs | **2026-08-17 · `451bb44`** |
+|---|---|---|
+| 1920×1080 | **16–48 / 64** occluded, every pack | **0 / 64**, every pack |
+| **1440×1000** | **32–64 / 64** | **0 / 64** |
+| 1440×900 | **32 / 64** on one, **64 / 64** on five | **0 / 64** |
+| **1366×768** | **64 / 64** on all six; board overflows the fold by 30–149 px | **0 / 64**; board bottom sits **162 px above** the fold |
+| **1280×720** | **64 / 64** on all six; overflow up to 197 px | **0 / 64**; board bottom **162 px above** the fold |
+
+Per-pack, at HEAD, every one of the eighteen pack×viewport cells at the three named viewports
+reads **0 occluded squares, no blockers, and 0 px of `.position-column` overflow** — against
+**64–164 px** of overflow on all six in session 1 `[V]`. Board sizes: 326 px at 1440×1000,
+241 px at 1366×768, **193 px** at 1280×720.
+
+**Both control columns from §6a are gone and one of them was wrong.** The schema-example pack is
+no longer served at all (owner ruling [[D502]] removed it from the library), so the "Najdorf
+0/64" column cannot be reproduced; §10.2 replaces it with a synthetic 68-character pack. And the
+control was misleading anyway — §10.4 shows the schema-example pack was **not** playable at
+`4a6ad91` either, under the aiming model a learner actually uses.
+
+### Can the authored first move be made?
+
+`playability-probe-2.mjs` — session 1's probe with two corrections it needed (each gesture gets
+its own fresh run, and board **orientation** is honoured; `philidor-third-rank-hold` starts with
+Black to move and renders flipped, so session 1's probe aimed its drag at the mirrored square and
+nobody could see it because everything failed for layout reasons). Aiming as session 1 did, with
+coordinates taken **before** the gesture: `[V]`
+
+| Viewport | 2026-08-16: authored first move made | **2026-08-17** |
+|---|---|---|
+| 1440×1000 | **1 of 6** (`queen-vs-pawn-seventh-convert` only) | **6 of 6** by drag, 5 of 6 by click |
+| 1366×768 | 0 of 6 (all 64 squares unhittable) | **6 of 6** by drag, 5 of 6 by click |
+| 1280×720 | 0 of 6 (all 64 squares unhittable) | **6 of 6** by drag, 4 of 6 by click |
+
+**Read that row with §10.4 or it will mislead you.** Those coordinates are where the squares
+*were*, and §10.4 shows that is exactly where the remaining defect decodes them. The number a
+learner gets is in §10.4 and it is much worse.
+
+---
+
+## 10.2 Does the fix generalise, or is it pinned to today's corpus?
+
+**It generalises. No ceiling was found, and the fix is length-independent rather than
+length-tolerant.** `[V]`
+
+The session-1 trigger was authored objective length — 68 characters in the schema example against
+**277, 322, 326, 329, 382 and 444** in the corpus (re-confirmed at HEAD, `objective.summary`)
+`[V]`. `length-sweep.mjs` writes clones of `mate-k-r-technique` differing **only** in
+`objective.summary` length, at 68 / 150 / 300 / 444 / 600 / 900 / 1400 / 2200 / 4000 characters
+of real prose, and re-runs the occlusion probe on each. `[V]`
+
+| `objective.summary` chars | 68 | 150 | 300 | 444 | 600 | 900 | 1400 | 2200 | 4000 |
+|---|---|---|---|---|---|---|---|---|---|
+| 1440×1000 occluded / board y / size | 0 / 417 / 421 | 0 / 513 / 326 | 0 / 513 / 326 | 0 / 513 / 326 | 0 / 513 / 326 | 0 / 513 / 326 | 0 / 513 / 326 | 0 / 513 / 326 | **0 / 513 / 326** |
+| 1366×768 occluded | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | **0** |
+| 1280×720 occluded | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | **0** |
+
+The board geometry is **byte-identical from 150 characters to 4,000** — 9× the current corpus
+maximum. The mechanism is why: `442b8a3` gives `.objective-copy h1` a
+`max-height: clamp(5.5rem, 16dvh, 10rem)` with `overflow: auto`, plus a
+`min-width:720px and max-height:800px` rule capping it at `3rem`
+(`apps/web/src/lib/DrillScreen.svelte`) `[V]`. Past the point where the prose fills the clamp — a
+little under 150 characters at these viewports — additional characters go into the block's own
+scroll, not into the column's height. **A bounded box has no ceiling to find**, which is a
+stronger property than surviving 600 characters, and it is the right shape given that
+`objective.summary` is `nonEmptyString` in `schemas/drill_pack.schema.json:223` with **no
+`maxLength`** `[V]` — nothing stops the corpus growing.
+
+**The residual is the floor, not the ceiling.** At 1280×720 the board renders **193 px** against
+the fix's own `expect(board.width).toBeGreaterThanOrEqual(192)` — **1 px of headroom**, and
+24-pixel squares. That is a pass by the thinnest possible margin, and the next region to gain a
+row at that viewport spends it. Proposed as D535.
+
+---
+
+## 10.3 `assertRunViewport` — the fixtures were fixed too, and the invariant is still blind
+
+**Fixed, not CSS-only.** `442b8a3` added `tests/browser/drill.spec.ts:949`, *"served endgame packs
+keep the board above the timeline at supported desktop projections"*, which opens **all six**
+served endgame packs by title at **five** projections — 1280×720, 1366×768, 1440×900, 1440×1000,
+768×1024 — and runs `assertRunViewport` on each `[V]`. The assertion itself gained two clauses: a
+192 px minimum board width and a `.timeline-row` containment check `[V]`. Session 1's finding —
+*"its desktop projections run on the schema-example pack and its compact ones on a Just Play run
+with no pack at all"* — is closed. Verified by execution, not by reading: the shipped test was run
+against this session's harness server and **passes** (`1 passed`, 3.9 s) `[V]`.
+
+**And it would still not catch what is now wrong, because it measures the board at rest.**
+`invariant-after-select-probe.mjs` transcribes all eight of the shipped assertion's clauses and
+evaluates them twice — once at rest, once after clicking the pack's own authored origin square.
+Over all six packs at 1440×1000, 1366×768 and 1280×720, **eighteen cells, all eight clauses pass
+in both states** `[V]` — while in the second state **0–32 of 64 squares** are un-hit-testable
+(0 or 8–16 at 1440×1000, 8–24 at 1366×768, 8–32 at 1280×720, blocked by `div.reading-controls`,
+`section.outcome-context`, `p.grade` and the reading buttons, all of them siblings *inside*
+`.position-column`), and five of six packs at 1440×1000 — six of six at the smaller two — deliver
+no move or the wrong one (§10.4).
+
+This is not the same failure as session 1's and no fixture list fixes it. The assertion checks
+*containment* of a *static* board: inside the viewport, inside `.position-column`, above the
+timeline, at least 192 px wide, region not scrolling. Every one of those survives a board that
+**moves 17–89 px the moment a learner touches a piece** and whose squares then decode to the wrong
+coordinates — because the board is still inside its column, and its siblings are drawn over it
+from inside that same column. **Session 1's guard was blind to the corpus; this one is blind to
+the interaction state**, and the honest statement is that the next content wave does *not* reopen
+it — the current content already does, and the guard is green. Proposed as D531.
+
+---
+
+## 10.4 The defect that replaces it: the board jumps when you touch a piece
+
+**This is the finding of the re-run.** It is not a regression from `442b8a3`, it is not caused by
+authored length, and it is not visible to any resting-state measurement — which is why session 1
+missed it and why session 1's one "playable" reading was an artefact.
+
+### 10.4a Mechanism, measured
+
+1. `overlayCaption` (`apps/web/src/lib/DrillScreen.svelte:899`, derived at `:345-347` from
+   `selectedSquare`) renders one `<p>` per structural observation touching the selected square,
+   inside `div.overlay-caption` **below the board**, with no assistance gate `[V]`.
+2. `.position-column` centres its content, so the board rises by **exactly half** the caption's
+   height plus its `0.35rem` margin. Measured at 1440×1000, one row per pack `[V]`:
+
+   | Pack | caption | sentences | board shift |
+   |---|---|---|---|
+   | `pawn-opposition-convert` | 29 px | 1 | **−17 px** |
+   | `mate-k-r-technique` | 73 px | 4 | **−39 px** |
+   | `lucena-bridge-convert` | 87 px | 5 | **−46 px** |
+   | `philidor-third-rank-hold` | 87 px | 5 | **−46 px** |
+   | `mate-bishop-knight` | 130 px | 7 | **−68 px** |
+   | `queen-vs-pawn-seventh-convert` | 173 px | 10 | **−89 px** |
+
+   `(caption + 5.6 px margin) / 2` reproduces every shift to the pixel. The shift is therefore
+   **position-dependent authored/derived content**, not a constant that could be designed around.
+3. **Chessground's cached board bounds are not invalidated by the shift.** Proof by controlled
+   flip, `mate-bishop-knight` at 1440×1000, identical coordinates in both runs: select c3, then
+   click the point where e5 is **drawn** → **0 plies**. Same again but dispatching a
+   `window resize` (which invalidates the bounds memo) before the second click → **2 plies** `[V]`.
+   The DOM agrees the destination is there — `elementFromPoint` at that point returns
+   `square.move-dest` — and chessground still decodes it as a different square `[V]`.
+
+### 10.4b What a learner gets
+
+`human-aim-probe.mjs` aims every pointer event at where the square is **drawn at that instant**
+(re-measuring the grid between the two clicks, and mid-drag), and records the **SAN actually
+delivered** against the pack's authored first move. Session 1's probes only asked whether *any*
+move happened; after the fix that is the wrong question, because a mis-aimed click on a rook's
+file still produces a legal move. `[V]`
+
+| Viewport | authored move delivered | **wrong move delivered** | nothing happens |
+|---|---|---|---|
+| **1440×1000** | **1 / 6** (`pawn-opposition-convert`) | **2 / 6** | 3 / 6 |
+| **1366×768** | **0 / 6** | 1 / 6 | 5 / 6 |
+| **1280×720** | **0 / 6** | 1 / 6 | 5 / 6 |
+
+Identical for drag and for click, at every viewport `[V]`. The wrong moves are specific:
+`mate-k-r-technique` delivers **Rh7+** (1440×1000, 1366×768) or **Rh8** (1280×720) where the pack
+authored **Rh6**; `queen-vs-pawn-seventh-convert` delivers **Qc6+** where the pack authored
+**Qc4+** `[V]`. `pawn-opposition-convert` succeeds at 1440×1000 only because its caption is a
+single sentence and the 17 px shift is under half a square.
+
+**A drill that silently records a move the learner did not choose is worse than one that ignores
+the click** — the run is preserved, the branch is real, and the comparison the product exists to
+give is now about a move nobody made.
+
+### 10.4c It pre-dates the fix, and it was never about length
+
+Two controls `[V]`:
+
+- **At `4a6ad91`**, the pre-fix commit, the **schema-example pack** — 68 characters, **0/64
+  occluded at rest**, the exact pack `assertRunViewport` ran on, the pack session 1 used as its
+  clean control — shifts **−60 px** on selection and delivers **no move** under human aim at
+  1440×1000 or 1280×720, by drag or by click.
+- **At HEAD**, the synthetic 68-character pack from §10.2 shifts **−39 px** at 1440×1000 and
+  **−40 px** at 1280×720 — the same as the 4,000-character clone.
+
+So the shift is independent of the D507 trigger and of the D507 fix. It was in front of the
+shipped browser suite the whole time.
+
+### 10.4d This corrects session 1
+
+§6b reports that `queen-vs-pawn-seventh-convert`'s authored first move *"went through and drew the
+opponent's reply (0 plies → 2 plies)"* at 1440×1000, and every interactive number in §4 was taken
+on that pack for that reason. **That reading was the probe agreeing with the defect.** Session 1
+computed its coordinates from the resting board and then clicked — which is precisely the mapping
+chessground's stale bounds apply, so the probe and the bug cancelled. The same cancellation is why
+§10.1's drag column reads 6/6 and §10.4b's reads 0/6 at the same viewport, in the same session,
+against the same build. Session 1's §4 latency numbers survive (they measure the same operations
+regardless of which square was aimed at), but *"this pack is playable"* does not.
+
+Same family as [[D526]] — a criterion that fired on its own instrument — and it is the reason
+§10.4b was measured at all. Proposed as D532.
+
+---
+
+## 10.5 What is left of the K9 usability floor
+
+Stated as plainly as session 1 stated the reverse:
+
+1. **The layout defect [[D507]] named is fixed, completely, and the fix generalises.** 0/64
+   occluded at rest on all six packs at all five viewports, 0 px of column overflow, no length
+   ceiling to 4,000 characters, and the shipped invariant now runs on the real corpus. Session 1's
+   §6a and §6c are closed on measurement, not on assertion.
+2. **The criterion still does not clear on usability**, because the floor session 1 defined —
+   *"can a move be made at all"* — is still not met once the question is asked the way a learner
+   asks it: **1 of 6 packs at 1440×1000, 0 of 6 at 1366×768 and 1280×720**.
+3. **The cause is different, older, and cheaper to fix**: one stale bounds cache and one caption
+   that resizes the column under the pointer. It is not a property of the product idea, exactly
+   as session 1 said of the previous cause — and that is now the second time the same sentence has
+   been written about this surface, which is itself worth the owner's attention.
+
+---
+
+## 10.6 The latency arm — re-run, because the layout moved under it
+
+The browser arm was re-run unchanged (`browser-arm.spec.ts`, Chromium 1440×1000, mock opponent).
+The API arm (§3) and the CET endpoint comparison (§5) were **not** re-run: neither is downstream of
+a client layout change, and §5's back-to-back control is the arm that decides the speed clause.
+`[V]`
+
+| Operation | 2026-08-16 median / p95 | **2026-08-17 median / p95** | Budget |
+|---|---|---|---|
+| Cold: fresh context → library (n=1) | 218 | **277** | — |
+| Restart: library click → board + timeline (n=20) | 37.9 / 54.5 | **39.9 / 51.5** | board ready <250 warm ✅ |
+| Reload of a run URL (n=10) | 55 / 57 | **56 / 66** | — |
+| Your move → opponent's reply (n=10) | 128.0 / 133.7 | **130.0 / 147.0** | — |
+| Rewind, preview + confirm (n=10) | 11.9 / 46.2 | **14.6 / 41.8** | rewind <100 ✅ |
+
+**Nothing moved.** Every difference is inside the spread of the samples that produced it, and every
+budget is still met with the same margin. The D507 fix cost no measurable latency, and §8's budget
+table stands unchanged. The one long tail behaves as before: a single 876 ms first sample on
+restart, every subsequent sample 33–52 ms.
+
+**Carried forward, not re-measured**, and flagged so nobody quotes them as fresh: §3's per-call
+distributions, §5's 30.8 vs 30.1 ms CET comparison, and §7's list of what a stopwatch cannot
+answer. One item in §3 is known to have changed by other means and is **not** re-measured here —
+the untyped HTTP 500 on a terminal position under `human_common` is recorded closed by [[D510]]
+(`design/BACKLOG.md`, *"closed 2026-08-17 by terminal selector preflight"*) `[P]`.
+
+---
+
+## 10.7 What production serves now — §2a is obsolete
+
+Measured at HEAD with the harness booted **without** `NODE_ENV=development` and **without** an
+injected tablebase, i.e. the shipped default: `[V]`
+
+| Probe | 2026-08-16 · `4a6ad91` | **2026-08-17 · `451bb44`** |
+|---|---|---|
+| `GET /packs` | 1 pack, the schema-example fixture, `cross_phase` | **6 packs, all `endgame`, all `channel: community`**, badged *unreviewed draft* |
+| Endgame packs served | **0** | **6** |
+| `policyModes` | `human_common, strong_engine, theory_strict, perfect_tablebase, practical_resistance` | **`human_common, strong_engine, theory_strict`** |
+| `perfect_tablebase` selection | HTTP 503 for every position | **not advertised**; `providers.tablebase: none` |
+
+[[D502]]/[[D524]] and [[D509]] both shipped. One consequence is measured and worth recording:
+`mate-bishop-knight` declares `perfect_tablebase` as its opponent, so in the shipped default it
+**cannot be started** — its *Open position* button is enabled, the click does not open a board,
+and the library states *"perfect_tablebase is unavailable"* `[V]`. That is disclosed rather than
+silent, which is the posture [[D509]] promised; the residual is only that the affordance is
+offered before the refusal.
+
+**The consequence for K9 is the opposite of comforting.** On 2026-08-16 the endgame surface was
+unplayable *and* unreachable, so no learner met it. At HEAD five of six endgame packs are
+reachable by any visitor, and §10.4 is what they meet.
+
+---
+
+## 10.8 The K9 gate row — proposed text and state
+
+**Proposed state: `📊 EVIDENCE TOWARD FIRING` — unchanged. The reason is entirely replaced and
+must not be left as it reads.**
+
+Why not `open`: the criterion's usability floor is still unmet on measurement, at the same three
+viewports, on the same six packs — **1 of 6 authored first moves delivered at 1440×1000, 0 of 6 at
+1366×768 and 1280×720** — and the speed clause is settled in the direction that removes the other
+route to clearing it (§5: 30.8 vs 30.1 ms, no gap to win). Moving to `open` would say the
+measurement no longer supports escalation, and it does.
+
+Why not `fired`: unchanged from session 1, and for the same reason. The cause is a defect of known
+shape at a named place — a caption that resizes the column and a bounds cache that is not
+invalidated — not a property of the product idea. Calling the criterion remains the owner's.
+
+Why the row cannot stay as written: **every specific number in it is now false.** It says 5 of 6
+packs cannot receive their first move at 1440×1000 (repaired), that all 64 squares are unhittable
+at 1280×720 and 1366×768 (repaired), that the board overflows `.position-column` by 64–164 px
+(0 px), and that the trigger is authored objective length (it is not, and the fix is
+length-independent to 4,000 characters). A row that is right about its verdict and wrong about
+every fact supporting it is [[D368]]'s failure with the conclusion accidentally intact.
+
+Proposed replacement for the K9 row's evidence cell — **not written by this pass**:
+
+> `design/research/endgame-latency-versus-cet.md` `[V]`, measured 2026-08-16 at `4a6ad91` and
+> **re-measured 2026-08-17 at `451bb44`**. **Speed: settled, and K9 cannot be CLEARED on it** —
+> every budget met (restart 39.9 ms median perceived, rewind 14.6 ms, opponent reply 130.0 ms,
+> first Syzygy probe 33.0 ms), and CET's endpoint and ours are the same speed back-to-back on one
+> machine (30.8 vs 30.1 ms, n=40 each), so the 80–224 ms in `teardown-cet.md` was that network,
+> not that architecture. **Usability: the first cause is FIXED and the floor is still unmet.**
+> [[D507]]'s resting-state defect is closed and the fix generalises — 0/64 squares occluded on all
+> six endgame packs at all five viewports, 0 px of `.position-column` overflow, and **no length
+> ceiling out to 4,000 characters** against a corpus maximum of 444 and a schema with no
+> `maxLength`. `assertRunViewport` now runs on all six packs at five projections and passes.
+> **What still fires:** selecting a piece renders `overlayCaption` below the board, `.position-column`
+> re-centres, and the board rises by exactly half the caption's height — **17–89 px, content-dependent** —
+> while chessground's cached bounds are not invalidated. Aiming where the square is drawn, **1 of 6
+> packs delivers its authored first move at 1440×1000 and 0 of 6 at 1366×768 and 1280×720**, and two
+> packs deliver a **different legal move** than the one aimed at (Rh7+/Rh8 for Rh6, Qc6+ for Qc4+).
+> **Pre-existing, not a regression:** the same −60 px shift and the same failure are measurable at
+> `4a6ad91` on the schema-example pack the suite tested. The shipped invariant passes all eight of
+> its clauses in that state, so it is now blind to the interaction rather than to the corpus.
+> **And it is now reachable**: production serves all six as unreviewed community drafts ([[D502]]),
+> where on 2026-08-16 it served none. Recorded as evidence toward firing rather than `fired`: the
+> cause is again a defect at a named place, and calling the criterion is the owner's. The half a
+> stopwatch cannot answer is untouched — whether it *feels* immediate, and *"more usable"* in the
+> comparative sense.
+
+### C7 — *"Endgame restart and response latency feel effectively instant"*
+
+**Stays `unmet`, and its blocker is unchanged in shape.** The numbers are still inside every budget
+(§10.6). It remains unmet because the verb is *feel*, no person has felt it, and on five of six
+packs there is still nothing to feel. §8's two named residuals stand in the same order: fix the
+interaction, then run one owner session.
+
+---
+
+## 10.9 Method notes and limitations for the re-run
+
+- **The tree was busy and the isolation is stated.** Uncommitted `feedback-delivery` work was
+  present throughout (`apps/server/src/authored-feedback.ts`, `apps/web/src/lib/CompareView.svelte`,
+  `packages/runtime/src/compare-strips.ts` and others) `[V]`. Every number above was taken against
+  `git archive 451bb44` extracted outside the repo, with `@chess-tabiya/*` re-pointed into that
+  extraction and **the web client rebuilt from that extraction** — the last of which session 1 did
+  not do and which matters more for a layout re-run than for a latency one. Nothing was staged and
+  nothing was committed.
+- **What is new instrumentation and why.** Session 1's probes were reused where they answered the
+  question (`occlusion-probe.mjs` unmodified; `browser-arm.spec.ts` unmodified;
+  `make-headtree.sh`'s logic, with the client-build correction). Four probes were added because
+  the question moved once the board became reachable: `playability-probe-2.mjs` (fresh run per
+  gesture, orientation-aware), `selection-shift-probe.mjs` (rest vs selected geometry),
+  `human-aim-probe.mjs` (aim at the drawn square, record delivered SAN),
+  `invariant-after-select-probe.mjs` (the shipped assertion's eight clauses, re-evaluated one click
+  later), plus `length-sweep.mjs`. All disposable, all labelled, all under
+  `tools/k9-endgame-latency-harness/`.
+- **Two session-1 probe errors found and corrected here**, both invisible while everything failed:
+  board orientation was ignored (`philidor-third-rank-hold` is Black to move), and the wrapper
+  element's border made square centres ~3 px low at 1440×1000 — enough to land in a 13 px caption
+  line. §10's probes use the inner `cg-board` rect.
+- **`n` is small on the same four rows as session 1** (n=10 for reload, reply, rewind; n=1 for cold
+  load), and the usability arm is a **census, not a sample**: every pack × viewport × gesture cell
+  was measured once, deterministically, and re-measured across two independent probes that agree.
+- **Desktop Chromium only**, as session 1. The selection shift is a fraction of the board at
+  1440×1000 and a larger fraction at 1280×720; the compact tier is unmeasured here and §7.4's
+  inference still applies `[M]`.
+- **Nothing here grades a chess move** (law 8). The only chess judgements are the packs' own
+  authored first moves and the SAN the application itself rendered.
+
+---
+
+## 10.10 Proposed ledger rows — **not written** (ids from D530; D529 is in use)
+
+- **D530 🐞** — *Touching a piece moves the board out from under the pointer, and chessground is
+  never told.* `overlayCaption` (`DrillScreen.svelte:899`, derived `:345-347`) renders one sentence
+  per structural observation below the board when a square is selected; `.position-column` centres
+  its content, so the board rises by exactly half the caption's height plus margin —
+  **17–89 px measured, one row per pack, `(caption+5.6)/2` reproducing every shift to the pixel**.
+  Chessground's bounds memo is not invalidated, so every subsequent pointer event decodes against
+  the pre-shift grid. Measured consequence at HEAD, aiming where the square is drawn: **1 of 6
+  endgame packs delivers its authored first move at 1440×1000, 0 of 6 at 1366×768 and 1280×720**,
+  identical for drag and click — and two packs deliver a **different legal move** than the one
+  aimed at (**Rh7+/Rh8** for Rh6, **Qc6+** for Qc4+). *A drill that records a move the learner did
+  not choose is worse than one that ignores the click.* **Pre-existing:** the same shift (−60 px)
+  and the same total failure are measurable at `4a6ad91` on the **schema-example pack**, and the
+  synthetic 68-character pack at HEAD shifts the same as the 4,000-character one — so this is
+  independent of [[D507]]'s trigger and of [[D507]]'s fix. Reachable in production since [[D502]].
+  `design/research/endgame-latency-versus-cet.md` §10.4 `[V]`.
+- **D531 🐞** — *`assertRunViewport`'s fixtures were fixed and the invariant is still blind — it
+  measures the board at rest.* `442b8a3` closed [[D507]]'s fixture gap properly: all six endgame
+  packs at five projections, verified passing at HEAD. But all **eight** of its clauses were
+  re-evaluated one click later, over six packs × three viewports, and **all eight pass in every
+  cell** while up to **32/64** squares are un-hit-testable and five of six packs at 1440×1000 —
+  six of six at 1366×768 and 1280×720 — cannot deliver their authored move.
+  The assertion checks *containment of a static board*; the defect is *displacement of a live one*,
+  and the siblings that overlap the board do so from inside the container it is asserted to be
+  inside. **The next content wave does not reopen this — the current content already does, and the
+  guard is green.** Remedy is a clause that asserts a click on a square produces that square's
+  move, not another fixture. Same family as [[D481]] and session 1's own finding, one level up.
+- **D532 🐞** — *A probe that computes its coordinates before the gesture agrees with the bug, and
+  that is why [[D507]]'s dossier reported one pack playable.* Session 1 aimed at the resting grid —
+  exactly the mapping the stale bounds apply — so its drag succeeded on
+  `queen-vs-pawn-seventh-convert` and every interactive latency number was taken there on the
+  strength of it. Re-aimed at the drawn square, that pack fails. The same cancellation makes the
+  re-run's own naive column read **6/6** where the human-aimed column reads **0/6**, in one session
+  against one build. Sibling of [[D526]] (a criterion firing on its own harness) and [[D420]]: **an
+  instrument that shares the defect's assumption cannot see the defect.** Cheap guard: any
+  coordinate-based board probe or test must re-measure the grid between the events it synthesises.
+- **D533 📊** — *The [[D507]] fix has no length ceiling, which is a stronger property than
+  surviving the corpus.* Measured across clones differing only in `objective.summary` length —
+  68/150/300/444/600/900/1400/2200/**4000** characters — the board geometry is identical from 150
+  up and **0/64 occluded at every length at 1440×1000, 1366×768 and 1280×720**. The mechanism is a
+  bounded box (`max-height: clamp(5.5rem,16dvh,10rem)` + `overflow:auto`), so growth goes into the
+  block's own scroll rather than the column's height. Recorded because `objective.summary` is
+  `nonEmptyString` with **no `maxLength`** (`schemas/drill_pack.schema.json:223`) — nothing stops
+  the corpus growing, and now nothing needs to.
+- **D534 🐞** — *One of the six served endgame packs starts with Black to move and every
+  coordinate-based instrument in this repo assumed White at the bottom.* `philidor-third-rank-hold`
+  renders `orientation-black`; session 1's playability probe aimed its drag at the mirrored square
+  and the error was undetectable because the board was unreachable anyway. Small on its own; filed
+  because it is the second measurement error in the same arm that only surfaced once a different
+  bug stopped masking it.
+- **D535 📊** — *The board is 193 px at 1280×720 against a 192 px floor: one pixel of headroom.*
+  `442b8a3`'s own assertion is `expect(board.width).toBeGreaterThanOrEqual(192)` and the measured
+  width at the smallest supported desktop projection is **193**, with 24-pixel squares. The
+  invariant passes by the thinnest possible margin, so the next region to gain a row at that
+  viewport spends the entire budget. Record-only; not a defect today.
