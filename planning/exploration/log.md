@@ -3232,3 +3232,29 @@ the baseline. One combined mutation preserves all four namespace assertions with
 affected test fell from 24.0 s on CI to about 5.5 s locally while retaining its 20 s timeout.
 `ENGINES_REQUIRED=1 make verify` passed 754 tests across 116 files, and the zero-retry browser
 gate passed 25 tests with one optional Maia test skipped.
+
+## 2026-08-20 — Integrated-platform alignment audit and content-stability warning
+
+The owner widened the evidence-rework question: preserve each competitor's appreciated capability
+inside one FOSS/self-hostable platform; settle whether theory hints need retrieval; audit semantic
+detectors, human-like bot policy, player classification, post-game review/share, and stop content
+growth from outrunning the primitives it depends on.
+
+`design/research/integrated-platform-alignment.md` landed with D555-D562 and a seven-product matrix
+extension (63 products total). The code audit found the external LLM receives only deterministic
+sentences; there is no retrieval/index layer. The recommended research direction is curated,
+licensed, offline ingestion with exact chess-key retrieval first and optional embedding reranking,
+while the LLM remains a renderer. The current 18 structural + six transition kinds are a geometric
+census without the semantic/multi-ply tactical family the desired UX assumes. Maia opposition has
+sampling/mode controls but no separate repertoire/style/error/time personality policy, and player
+style has no metric/archetype contract. The current story is too evaluation-led to be the desired
+grounded, replayable Review Map.
+
+The audit also measured a stability warning: 42 commits have touched schema/pack code and 61 have
+touched content since 2026-08-11; pack schema 0.27 already has two later active claims and all 50
+product packs remain drafts. The owner's “foundation is ROCK SOLID before content expands” is
+recorded as D560's active content hold; Gate F is the proposed clearance proof. The owner's
+one-integrated-FOSS-platform ambition is recorded as D555. The resumable dependency program is
+`planning/platform-alignment/plan.md`. Q4c, Q8, K6, E1 and the research coverage matrix now point to
+the new evidence. Next work is active-RFC reconciliation and research, not feature implementation
+or a broad content wave.

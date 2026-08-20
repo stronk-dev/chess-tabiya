@@ -1,11 +1,12 @@
 # The evidence rework — resume brief and wide-alignment prompt
 
 **Written 2026-08-20 after seven agents died on the weekly usage limit (resets 2026-08-21
-09:00 Europe/Amsterdam).** Nothing they produced landed; this file is the resume point so the
-work restarts from intent rather than memory. Owner ideas from the same session are ledgered as
-**D549–D554** — read them first.
+09:00 Europe/Amsterdam).** Nothing they produced landed. **Superseded as the top-level resume
+point on 2026-08-20 by `design/research/integrated-platform-alignment.md` and
+`planning/platform-alignment/plan.md`; this brief remains the detailed prompt for the evidence
+substream.** Owner ideas and audit findings are ledgered as **D549–D562** — read them first.
 
-## The four pieces, in dependency order
+## The evidence substream, in dependency order
 
 1. **`design/research/detection-landscape.md`** — the survey. Every detector family ranked by
    what GROUNDS it (arithmetic / engine read / corpus / tablebase), the real Lichess & chess.com
@@ -17,13 +18,21 @@ work restarts from intent rather than memory. Owner ideas from the same session 
    never been done. First run vs the silence invariant; presets over 54 switches; ranked
    abstaining evidence; the copy ruleset. Alarm-fatigue literature is the frame for 8.83
    entries/ply.
-3. **`rfc/evidence-producers.md`** — the registry as a real binding: symbol, grounding, rung,
+3. **`design/research/theory-retrieval.md`** — exact chess-key retrieval versus hybrid embedding
+   reranking; source allow-list, licence, digest/version, citation propagation and false-match
+   abstention. Compare `~/frameworks/monorepo/api_consultant` for crawler hygiene, not as the chess
+   truth model (D557).
+4. **`design/research/bot-policy.md` + `design/research/player-style-metrics.md`** — keep strength,
+   repertoire, style, errors, timing and voice separate on the opponent side; keep descriptive
+   style, rating and advice separate on the learner side (D551-D553, D561-D562).
+5. **`rfc/evidence-producers.md`** — only after the research gate: the registry as a real binding: symbol, grounding, rung,
    measured abstention, measured lift, typed consumers; what it REFUSES; when producers run
    (free arithmetic vs budgeted calls); selection-not-census honouring R3/R11 and the no-ranking
    doctrine; the per-move verdict line under law 8. Now also owes: the registry serves **bot
    decision-making** too (D551) and the **skills/progression stream** (D549).
-4. **Competitor re-sweep** (D554) — Beacon, Quackmate, ChessLabHQ, Chessiverse, QChess, RookHub
-   plus the forum threads; update the matrix as a mining list.
+6. **Competitor capability watch** (D554-D556) — hands-on Beacon, Quackmate, ChessLabHQ,
+   Chessiverse, QChess, RookHub and Sensei plus the forum threads; update the matrix as evidence,
+   but route the roadmap by novel/loved capability rather than app name.
 
 Measured basis, all landed: **D542** (90.2% of the reading non-discriminating), **D543**
 (ranking buys 294× with no new detector), **D544** (the real gap is tactics; three detectors
@@ -33,10 +42,13 @@ detectors).
 
 ## The wide-alignment prompt (for codex or any reviewer — owner asked for this)
 
-> Review the evidence-rework corpus in this repo for ALIGNMENT, not for correctness of any one
-> document. Read, in order: `design/research/classifier-coverage-and-noise.md`,
+> Review the evidence/platform-alignment corpus in this repo for ALIGNMENT, not for correctness of
+> any one document. Read, in order: `design/research/integrated-platform-alignment.md`,
+> `planning/platform-alignment/plan.md`, `design/research/classifier-coverage-and-noise.md`,
 > `design/research/detection-landscape.md` (when landed), `design/research/evidence-presentation.md`
-> (when landed), `rfc/evidence-producers.md` (when landed), ledger rows D542–D554,
+> (when landed), `design/research/theory-retrieval.md`, `design/research/bot-policy.md`,
+> `design/research/player-style-metrics.md` (each when landed), `rfc/evidence-producers.md` (when
+> landed), ledger rows D542–D562,
 > `design/05-in-run-experience.md` §3, and `design/02-product-shape.md` §Adoption.
 >
 > Answer these, each with file+line evidence:
@@ -50,11 +62,20 @@ detectors).
 > 4. **Is the anti-pattern distinction stated and does it hold** — what keeps this from being
 >    "an engine review screen with a rewind button"? If any document weakens the rehearsal-loop
 >    framing, flag it.
-> 5. **Do the owner ideas D549–D554 each have a home** — a document that owns it, or a named
+> 5. **Do the owner ideas/findings D549–D562 each have a home** — a document that owns it, or a named
 >    reason it waits? An idea with no home is a process bug (law 4).
 > 6. **Does the bot lane and the guidance lane share the registry** rather than fork it?
 >    Chessiverse's lesson (D551) is that opponent steering and support both consume the same
 >    grounded facts.
+> 7. **Does the knowledge plane fail closed?** No live arbitrary scrape in a hint request; every
+>    passage has source/licence/digest/version; deterministic chess keys precede embeddings; a
+>    semantic match never becomes chess truth merely because it is similar.
+> 8. **Does post-game review route back into commitment?** Every actionable Review Map moment needs
+>    retry/re-enter/branch/compare/drill. Flag any screen whose endpoint is an engine label or LLM
+>    explanation, and any social recap that selects its own facts in the language model.
+> 9. **Would this work pass Gate F without re-authoring the corpus?** Name schema churn, undeclared
+>    deprecations, bespoke pack fields, producer-less modules and migrations without a whole-corpus
+>    dry run. The D560 content hold is active even while its exact clearance proof is amendable.
 > Report contradictions ranked by cost, not a summary of each document.
 
 ## Standing constraints for whoever resumes
@@ -62,5 +83,5 @@ detectors).
 Law 8 (grounded evidence only; LLM renders, never grades). Law 3 (label everything V/P/M).
 Law 5 (design/00–06: name, never write). The buildability acceptance test (D473). Non-vacuity +
 negative fixture for every predicate (D444/D451/D522/D526). Instruments must not share the
-defect's assumption (D526/D539). Column 1 is the status (D419/D459). Ids through **D554** are
-in use.
+defect's assumption (D526/D539). Column 1 is the status (D419/D459). Ids through **D562** are in
+use.

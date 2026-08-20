@@ -1,0 +1,228 @@
+# Platform alignment program
+
+**Opened:** 2026-08-20
+
+**Status:** research and reconciliation; this file is a routing plan, not implementation authority.
+
+**Research basis:** `design/research/integrated-platform-alignment.md`
+
+**Earlier brief:** `planning/evidence-rework-brief.md`
+
+## Objective
+
+Turn the implemented foundation into one coherent, self-hostable chess rehearsal platform whose
+evidence can safely power guided play, post-game review, theory links, human-like opponents,
+player profiles, concept progression and later social modes — without manufacturing chess truth,
+dumping engine data on learners, or repeatedly re-authoring packs as primitives change.
+
+## Program rules
+
+1. Research and owner rulings precede RFCs; accepted RFCs precede implementation.
+2. The product mines capabilities, not competitor parity. Every adoption names the thesis-preserving
+   transformation and the thing explicitly not copied.
+3. The evidence plane is shared; guidance, review, bots and profiles are separate consumers with
+   separate confidence, latency and disclosure contracts.
+4. The LLM renders selected, cited evidence. It does not grade moves, select facts, choose an
+   assistance rung, or create strategy.
+5. Until Gate F below passes, authored work is limited to disposable/sacrificial pilot packs and
+   already-authorised mechanical repairs. Do not launch a scale content wave.
+6. A green mechanical suite is necessary and not evidence of intuitive UX. Every interaction
+   module needs real content, gesture-state and non-technical-user checks.
+
+## The foundation gate (Gate F)
+
+Large content expansion is admitted only when all are true:
+
+- [ ] no active RFC holds a drill-pack schema lane;
+- [ ] shared-resource/register state agrees with the tree;
+- [ ] a versioned producer→evidence→consumer manifest has no unexplained orphan;
+- [ ] detector semantics v1 declares sign, grounding, confidence/abstention and validation;
+- [ ] pack capabilities and deprecations have a compatibility policy;
+- [ ] automatic migration/dry-run passes over every pack and sidecar;
+- [ ] non-mechanical re-authoring cost is measured and within an owner-set budget;
+- [ ] a small official-pilot set exercises every required primitive and guidance module;
+- [ ] pilot packs pass viewport, gesture, assistance, review/re-entry and abstention checks;
+- [ ] the owner accepts the resulting primitive set for the first scale wave.
+
+The D560 **content hold is active by owner ruling**. This checklist is the proposed proof for
+lifting it; the owner may amend the proof without weakening the hold by accident.
+
+## Workstreams and dependency order
+
+### 0. Reconcile what is already claimed
+
+**Purpose:** prevent the new program from building on stale RFC/register state.
+
+- derive the actual completion state of every active RFC from code, criteria, ledger and log;
+- finish or explicitly return the accepted `feedback-delivery`, `teacher-surface` and
+  `graduation-clearance` work;
+- settle and implement the shared-resource register/lifecycle mechanism;
+- re-run the interaction-state board checks behind D537-D539;
+- produce one “shipped / accepted-not-built / draft / research-only” capability inventory.
+
+**Exit:** no functionally-complete RFC is advertising an active lane; no accepted RFC is described
+as shipped without its criteria, ledger and log closeout.
+
+### 1. Complete the missing research spine
+
+These are independent dossiers but feed one contract:
+
+| Deliverable | Questions it must answer | Ledger |
+|---|---|---|
+| `design/research/detection-landscape.md` | What can rules, engine search, human corpus, theory catalogues and authored facts each detect? Precision, abstention, sign and validation set? | D544, D545, D558 |
+| `design/research/evidence-presentation.md` | Which modules help without alarm fatigue or direct move leakage? How do touch, hover, keyboard and mobile differ? | D542, D543, D546 |
+| `design/research/theory-retrieval.md` | Exact chess-key retrieval vs hybrid embeddings; licensing, citation, invalidation and false-match abstention? | D557 |
+| `design/research/bot-policy.md` | How are strength, repertoire, style, plausible errors, timing and memory independently composed and measured? | D551, D561 |
+| `design/research/player-style-metrics.md` | Which descriptive metrics are stable, fun and non-deceptive? Minimum samples and confidence? | D552, D553, D562 |
+| hands-on competitor resweep | Same-position/session teardown of Guided Play, Game Review, Beacon, Quackmate, Sensei, ChessLab and Qchess; one loved and hated thing each | D554-D556 |
+
+**Exit:** each dossier has external or hands-on evidence, negative cases and an explicit refusal;
+coverage matrix and exploration gates reflect the results.
+
+### 2. Rule the product and evidence boundaries
+
+Owner decisions required after workstream 1:
+
+- integrated breadth: apply D555's ruled adopt/transform/defer discipline to each capability family;
+- content gate: accept or amend the exact Gate-F clearance proof (the D560 hold already applies);
+- assistance ceilings per session kind and the default preset for each workflow;
+- knowledge plane: curated cited retrieval, authored-only theory, or another bounded source model;
+- player style: descriptive fun layer, coaching input, both with separation, or defer;
+- human play/social/federation: prerequisite, later layer, or external-adapter-first.
+
+**Exit:** every decision is in an intent document or owner-ruling ledger row; no implementer has to
+infer product scope from this planning file.
+
+### 3. Evidence compiler and stable pack primitives
+
+RFC candidates only after workstreams 1-2 clear the exploration gate:
+
+1. **Evidence producer/module contract**
+   - versioned producers and evidence kinds;
+   - sign, subject/object/squares, confidence/exactness, provenance and abstention;
+   - counterfactual query contract;
+   - declared consumers and latency/disclosure constraints;
+   - completeness and non-vacuity checks.
+2. **Semantic detector v1**
+   - exact tactical/event families selected from detection research;
+   - significance/ranking and negative (“avoided”) readings;
+   - fixtures plus independent validation corpus.
+3. **Knowledge-source contract**
+   - allow-list/licence/digest/version;
+   - deterministic chess keys and optional embedding rerank;
+   - citation propagation into evidence packets;
+   - fail-closed invalidation and abstention.
+4. **Pack capability and migration contract**
+   - additive primitive references, capability negotiation and deprecation;
+   - migration dry-run/re-authoring report;
+   - pilot-corpus acceptance instrument.
+
+**Exit:** Gate F's architecture clauses pass and the manifest can answer both “what powers this
+module?” and “where can this evidence appear?” mechanically.
+
+### 4. Guidance UX as modules and presets
+
+Build from the compiler, not directly from engines/classifiers:
+
+- **legal affordance:** touch/hover destinations and accessibility equivalent;
+- **keep me safe:** bounded blunder-prevention warning before commit, without naming the move;
+- **threat radar:** opponent threats, loose pieces and tactical consequences with sign;
+- **structure nudge:** one selected structural change or plan-relevant tension;
+- **theory breadcrumb:** opening/structure/principle source with a progressive hint ladder;
+- **compare coach:** grounded difference between committed branches;
+- **full analysis:** explicit opt-in evidence inspector, not the default learning surface.
+
+Compose them into named intent presets. A learner chooses a workflow, not Stockfish/Maia/classifier
+switches. Advanced controls remain secondary. Each preset is capped by session kind and the reveal
+window; no preset silently raises assistance.
+
+**Exit:** non-technical usability sessions can start Just Play, Guided Rehearsal, Review/Re-entry
+and Coach/Study without configuring evidence sources; each module has an honest abstention state.
+
+### 5. Grounded Review Map and share story
+
+- opening/theory breadcrumb and phase arc;
+- small signed set of pivotal moments, human context and semantic facts;
+- retry/re-enter/branch/compare/drill action per actionable moment;
+- one grounded training focus with confidence;
+- compact and expanded social recap templates;
+- LLM wording tested against source packet, with deterministic fallback.
+
+**Exit:** review ends in a committed replay path; share output remains true when the external LLM is
+disabled; neither view defaults to raw evaluation/move ratings.
+
+### 6. Human-like bots and fun player identity
+
+Bot policy:
+
+- compose base human model, calibrated strength, repertoire, style, error character, timing and
+  repeat memory;
+- validate output distributions and human-likeness separately from win rate;
+- run blind same-position/session comparisons against raw Maia and representative competitors;
+- keep voice/chat separate from move policy.
+
+Player identity:
+
+- publish a versioned metric registry and eligibility denominators;
+- show sample size, uncertainty, contributing games/attempts and profile-version changes;
+- keep descriptive style, strength/rating and coaching suggestions separate;
+- allow a playful archetype/legend match only as a transparent view over the metrics.
+
+**Exit:** a personality has measurable board behaviour; a player type is reproducible from visible
+facts; neither is merely prose.
+
+### 7. Pilot theory and drill packs, then content scale
+
+Before Gate F: create only the minimum sacrificial packs required to exercise detectors, knowledge
+retrieval and modules. After Gate F:
+
+- reground the 13 principle entries in cited chess tradition where possible;
+- bind existing claims under the feedback-delivery contract;
+- graduate a deliberately varied official pilot (opening, middlegame structure, tactics,
+  technical endgame, practical defence);
+- measure re-authoring cost and amend the primitive contract once, if necessary;
+- launch authored waves only after the pilot remains stable.
+
+**Exit:** official content uses the primitives without bespoke client logic, and adding a new
+detector does not require editing unrelated packs.
+
+### 8. Breadth after the core is coherent
+
+Sequence only after the individual loop and official pilot work:
+
+- campaign/concept progression using grounded concept credits;
+- async coach/classroom roster, assignments and progress;
+- streamer/broadcast layouts as composed views, not separate evidence systems;
+- optional game-history selectors and cross-site adapters;
+- human play, bot tournaments and social events;
+- federation/discovery only after trust, identity, moderation and protocol research.
+
+This is a roadmap lane, not a promise that all social infrastructure belongs in the first product.
+
+## Actual RFC state checkpoint
+
+The starting audit found 59 lifecycle-complete archived RFCs. The active set is not all complete:
+
+- accepted but incomplete: `teacher-surface`, `graduation-clearance`, `feedback-delivery`;
+- implementation/closeout needing reconciliation: `live-marker-quality`, `dead-vocabulary`,
+  `engine-leverage`, `vocabulary-wiring`;
+- returned/draft research or process work includes `measurement-records`, `learner-rating`,
+  `assistance-controls`, lifecycle completion, pack provenance and shared registers.
+
+Re-derive this checkpoint before execution; it is intentionally not a replacement for
+`rfc/README.md`.
+
+## First executable queue
+
+The next safe queue is research and reconciliation, not feature implementation:
+
+1. active-RFC completion audit and register repair;
+2. detection-landscape dossier;
+3. evidence-presentation dossier and disposable module prototype;
+4. theory-retrieval comparison instrument;
+5. bot-policy and player-style research;
+6. hands-on competitor teardowns and capability-watch format;
+7. owner rulings, then RFC drafting in dependency order.
+
+Campaign, broad content production, federation and new all-in-one navigation stay off the executable
+queue until their dependencies above are resolved.
