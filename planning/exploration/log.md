@@ -3585,3 +3585,15 @@ not enter `EvidencePacket`; generic observations and matched plans enter typed f
 normative LLM sentence source. D634 closes as research, while F1 remains the required compiled
 projection/consumer contract. B4 and Gate F remain unmet; no product code, schema, content or
 protected design intent changed.
+
+## 2026-08-20 — assistance defaults were traced by learner workflow rather than run kind
+
+`design/research/workflow-default-conformance.md` and the disposable D635 harness prove the six
+persisted profiles are technical addresses, not the six intended workflows. They expose 54 raw
+Settings controls but one byte-identical unnamed default; only Just Play and generic pack play bind
+directly, while Learn is mixed, Review/Analyze inherit the source and Campaign is absent. The
+session-kind ceiling remains invariant. Academy has no profile, and Story narration ignores the
+imported voice preference (D636). The pass also retracts D311's stale 36-control/three-overlap
+claim while retaining its four live residues. F5 now explicitly owns separate workflow/preset
+state and mask composition. Participant defaults, campaign and coach/stream choices remain open;
+no product implementation, schema, content or protected design intent changed.

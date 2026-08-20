@@ -462,3 +462,20 @@ Append-only. Record research, rulings, RFC transitions, implementation closeout 
   and D630 transition operand loss. D634 closes only the missing topology audit.
 - Updated O1, F1, B4, Gate F and the 1.0 map with the negative baseline. No product code, schema,
   protected design intent or authored chess content changed; D560 remains active.
+
+## 2026-08-20 — A5 separated technical assistance profiles from learner workflows
+
+- Added an executable mapping from six intended learner workflows to the six shipped technical
+  profiles and all nine assistance axes. All unset profiles are byte-identical Quiet mechanics;
+  Settings exposes 54 raw controls and the in-run panel six.
+- Only Just Play and generic pack play bind directly to one profile. Learn can be pack or position;
+  Review and Analyze inherit the source run; Campaign is absent. Production persists no workflow or
+  preset identity, so different defaults cannot attach without cross-workflow contamination.
+- Re-ran every role/disclosure cell: pack, position and imported permissions remain byte-identical,
+  so the ruled real session-kind ceiling has not shipped.
+- Found D636: Academy has no profile and falls through to the source run; the primary imported Story
+  offers external narration without consulting the imported voice preference.
+- Corrected D311 rather than repeating it: Settings now covers all nine axes/54 controls. Arrows,
+  Ambient, remount-only loading and indistinguishable sight/evidence overlays remain open.
+- Updated O4/O11, F5/F11, B5/B10 and the capability map. R3 participant comprehension and R15 coach
+  workflow remain external; no product code, schema, protected design intent or content changed.

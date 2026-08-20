@@ -18,6 +18,7 @@ dependency edge, they may not.
 | 0.4 | Close or explicitly return already-implemented RFCs | **PARTIAL:** four stale implementations closed | `live-marker-quality`, `dead-vocabulary`, `engine-leverage`, `vocabulary-wiring` archived; no other active RFC was misclassified complete |
 | 0.5 | Implement accepted incomplete RFC work | BLOCKED by 0.1 and worktree coordination | Existing accepted criteria only; any design mismatch returns to decision queue |
 | 0.6 | A3/A4 detector semantics and evidence-topology baselines | **DONE 2026-08-20** | 18+6 detector-family conformance and 14-producer topology are executable; current production admits no universal learner family and has no compiled module/workflow join |
+| 0.7 | A5 workflow/default conformance | **DONE 2026-08-20** | Six technical profiles/54 raw controls collapse to one unnamed default; only 2/6 intended workflows bind directly and the session-kind ceiling is still invariant |
 
 **Phase exit:** registers reflect code; no stale “shipped” claim; every active RFC has a legal next
 action; measurement instruments do not share the tested defect's assumption.
@@ -40,7 +41,7 @@ action; measurement instruments do not share the tested defect's assumption.
 |---|---|---|---|
 | 2.1 | R1 detection landscape and validation corpus | **DONE 2026-08-20** | Six evidence planes; cheap semantic labels refused |
 | 2.2 | R2 sign/relevance/selection measurement | **DONE 2026-08-20** | Local selector clears volume/specificity; rarity refused as significance; semantic eligibility remains separate |
-| 2.3 | R3 evidence presentation prototypes/tests | **MECHANICAL/DESK/RESPONSIVE PROTOTYPE DONE; PARTICIPANT PROTOCOL READY 2026-08-20; EXTERNAL to complete** | Nine-module/five-preset/six-workflow boundary, current-surface census, responsive artifact and preregistered 12-learner protocol landed; recruited participant comprehension remains external |
+| 2.3 | R3 evidence presentation prototypes/tests | **MECHANICAL/DESK/RESPONSIVE PROTOTYPE + A5 PRODUCTION BASELINE DONE; PARTICIPANT PROTOCOL READY; EXTERNAL to complete** | Nine-module/five-preset/six-workflow boundary and A5 alias/bypass audit landed; recruited participant comprehension remains external |
 | 2.4 | R5 renderer evaluation | **DONE 2026-08-20** | Deterministic fallback passed; hosted free prose is provider-dependent, typed schema/IDs did not preserve citations, and the 360M local arm failed the safety contract |
 | 2.5 | R6 pack stability/migration/re-author audit | **DONE 2026-08-20 — Gate F FAIL** | 92-document compatibility and history census landed; F3 model narrowed, but capability negotiation, migrations, owner budget and pilot coverage are absent |
 
