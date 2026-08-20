@@ -1,0 +1,212 @@
+[
+  {
+    "blindId": "BD755FF32F",
+    "objective": "Black broke at your chain's base immediately, bishop still on c8. Take the pawn — the one answer that asks Black to prove the idea — and then make the real decision: hold the extra pawn with c3/b4, or hand it back at the moment that buys you the better game.",
+    "pgn": "pgn/BD755FF32F.pgn"
+  },
+  {
+    "blindId": "BDC61D19EC",
+    "objective": "You chose the Najdorf. When White answers with the English Attack setup, play your side of the tabiya in the right order — ...e5 and ...Be6 before the wing decisions — and choose your race plan with your eyes open.",
+    "pgn": "pgn/BDC61D19EC.pgn"
+  },
+  {
+    "blindId": "BC39D68088",
+    "objective": "A pawn down in the most common ending in chess: rook and three against rook and four, everything on one wing. It is held with accurate defence and lost constantly in practice. Your job is the result, not the moves — reach the end of the drill still holding.",
+    "pgn": "pgn/BC39D68088.pgn"
+  },
+  {
+    "blindId": "BD0A51A724",
+    "objective": "You have the White side of the Carlsbad: pawns a2/b2 against a7/b7/c6, d4 against d5, no c-pawn on either wing of the file. Execute the minority attack until Black has a backward c-pawn on White's half-open c-file.",
+    "pgn": "pgn/BD0A51A724.pgn"
+  },
+  {
+    "blindId": "B9461F7F9B",
+    "objective": "A pawn down in the most common ending in chess: rook and three against rook and four, everything on one wing. It is held with accurate defence and lost constantly in practice. Your job is the result, not the moves — reach the end of the drill still holding.",
+    "pgn": "pgn/B9461F7F9B.pgn"
+  },
+  {
+    "blindId": "B23455FE94",
+    "objective": "A pawn down in the most common ending in chess: rook and three against rook and four, everything on one wing. It is held with accurate defence and lost constantly in practice. Your job is the result, not the moves — reach the end of the drill still holding.",
+    "pgn": "pgn/B23455FE94.pgn"
+  },
+  {
+    "blindId": "B6113DDF81",
+    "objective": "You chose the Najdorf. When White answers with the English Attack setup, play your side of the tabiya in the right order — ...e5 and ...Be6 before the wing decisions — and choose your race plan with your eyes open.",
+    "pgn": "pgn/B6113DDF81.pgn"
+  },
+  {
+    "blindId": "B8C1A9C0E0",
+    "objective": "A pawn down in the most common ending in chess: rook and three against rook and four, everything on one wing. It is held with accurate defence and lost constantly in practice. Your job is the result, not the moves — reach the end of the drill still holding.",
+    "pgn": "pgn/B8C1A9C0E0.pgn"
+  },
+  {
+    "blindId": "B26DFC2C05",
+    "objective": "Three pawns abreast against two, kings far from the queening square. The win is a forced sale: two pawns are given away so the outside pawn runs through unopposed. Order is everything — the wrong first pawn seals the front and the tablebase calls it a draw. Break through, promote, win.",
+    "pgn": "pgn/B26DFC2C05.pgn"
+  },
+  {
+    "blindId": "BA658CA049",
+    "objective": "Black broke at your chain's base immediately, bishop still on c8. Take the pawn — the one answer that asks Black to prove the idea — and then make the real decision: hold the extra pawn with c3/b4, or hand it back at the moment that buys you the better game.",
+    "pgn": "pgn/BA658CA049.pgn"
+  },
+  {
+    "blindId": "B1426B08CC",
+    "objective": "A pawn down in the most common ending in chess: rook and three against rook and four, everything on one wing. It is held with accurate defence and lost constantly in practice. Your job is the result, not the moves — reach the end of the drill still holding.",
+    "pgn": "pgn/B1426B08CC.pgn"
+  },
+  {
+    "blindId": "BD2623F4D4",
+    "objective": "You have the Black side, and Black is the side to move in this position — that is why this pack seats you here rather than opposite. The kings stand on opposite wings: White's on c1, yours on g8, which is exactly the pair of conditions the shape library's opposite-castling-race trigger tests. Complete this pack's authored queenside arrangement — rook to c8, knight to e5, rook to c5 — before White's h-pawn reaches h5, and without spending more than one move outside that arrangement. Everything the window records is arithmetic about your move order; none of it is a claim that the arrangement is correct.",
+    "pgn": "pgn/BD2623F4D4.pgn"
+  },
+  {
+    "blindId": "B1AB657F4A",
+    "objective": "You chose the Najdorf. When White answers with the English Attack setup, play your side of the tabiya in the right order — ...e5 and ...Be6 before the wing decisions — and choose your race plan with your eyes open.",
+    "pgn": "pgn/B1AB657F4A.pgn"
+  },
+  {
+    "blindId": "BFC31E4BF1",
+    "objective": "You have the White side of the Carlsbad: pawns a2/b2 against a7/b7/c6, d4 against d5, no c-pawn on either wing of the file. Execute the minority attack until Black has a backward c-pawn on White's half-open c-file.",
+    "pgn": "pgn/BFC31E4BF1.pgn"
+  },
+  {
+    "blindId": "BD7B995B6D",
+    "objective": "Three pawns abreast against two, kings far from the queening square. The win is a forced sale: two pawns are given away so the outside pawn runs through unopposed. Order is everything — the wrong first pawn seals the front and the tablebase calls it a draw. Break through, promote, win.",
+    "pgn": "pgn/BD7B995B6D.pgn"
+  },
+  {
+    "blindId": "BF9979BD79",
+    "objective": "You chose the Najdorf. When White answers with the English Attack setup, play your side of the tabiya in the right order — ...e5 and ...Be6 before the wing decisions — and choose your race plan with your eyes open.",
+    "pgn": "pgn/BF9979BD79.pgn"
+  },
+  {
+    "blindId": "BD8F2B0A91",
+    "objective": "Three pawns abreast against two, kings far from the queening square. The win is a forced sale: two pawns are given away so the outside pawn runs through unopposed. Order is everything — the wrong first pawn seals the front and the tablebase calls it a draw. Break through, promote, win.",
+    "pgn": "pgn/BD8F2B0A91.pgn"
+  },
+  {
+    "blindId": "B1E863EDF6",
+    "objective": "You chose the Najdorf. When White answers with the English Attack setup, play your side of the tabiya in the right order — ...e5 and ...Be6 before the wing decisions — and choose your race plan with your eyes open.",
+    "pgn": "pgn/B1E863EDF6.pgn"
+  },
+  {
+    "blindId": "BEDC8A6E9A",
+    "objective": "You have the White side of the Carlsbad: pawns a2/b2 against a7/b7/c6, d4 against d5, no c-pawn on either wing of the file. Execute the minority attack until Black has a backward c-pawn on White's half-open c-file.",
+    "pgn": "pgn/BEDC8A6E9A.pgn"
+  },
+  {
+    "blindId": "B6C8066DAF",
+    "objective": "Black broke at your chain's base immediately, bishop still on c8. Take the pawn — the one answer that asks Black to prove the idea — and then make the real decision: hold the extra pawn with c3/b4, or hand it back at the moment that buys you the better game.",
+    "pgn": "pgn/B6C8066DAF.pgn"
+  },
+  {
+    "blindId": "B2288CE35C",
+    "objective": "You have the Black side, and Black is the side to move in this position — that is why this pack seats you here rather than opposite. The kings stand on opposite wings: White's on c1, yours on g8, which is exactly the pair of conditions the shape library's opposite-castling-race trigger tests. Complete this pack's authored queenside arrangement — rook to c8, knight to e5, rook to c5 — before White's h-pawn reaches h5, and without spending more than one move outside that arrangement. Everything the window records is arithmetic about your move order; none of it is a claim that the arrangement is correct.",
+    "pgn": "pgn/B2288CE35C.pgn"
+  },
+  {
+    "blindId": "B95B6BD3BE",
+    "objective": "Three pawns abreast against two, kings far from the queening square. The win is a forced sale: two pawns are given away so the outside pawn runs through unopposed. Order is everything — the wrong first pawn seals the front and the tablebase calls it a draw. Break through, promote, win.",
+    "pgn": "pgn/B95B6BD3BE.pgn"
+  },
+  {
+    "blindId": "B482856445",
+    "objective": "You have the White side of the Carlsbad: pawns a2/b2 against a7/b7/c6, d4 against d5, no c-pawn on either wing of the file. Execute the minority attack until Black has a backward c-pawn on White's half-open c-file.",
+    "pgn": "pgn/B482856445.pgn"
+  },
+  {
+    "blindId": "BC68428AF9",
+    "objective": "You have the Black side, and Black is the side to move in this position — that is why this pack seats you here rather than opposite. The kings stand on opposite wings: White's on c1, yours on g8, which is exactly the pair of conditions the shape library's opposite-castling-race trigger tests. Complete this pack's authored queenside arrangement — rook to c8, knight to e5, rook to c5 — before White's h-pawn reaches h5, and without spending more than one move outside that arrangement. Everything the window records is arithmetic about your move order; none of it is a claim that the arrangement is correct.",
+    "pgn": "pgn/BC68428AF9.pgn"
+  },
+  {
+    "blindId": "BFF8CAB53A",
+    "objective": "You have the Black side, and Black is the side to move in this position — that is why this pack seats you here rather than opposite. The kings stand on opposite wings: White's on c1, yours on g8, which is exactly the pair of conditions the shape library's opposite-castling-race trigger tests. Complete this pack's authored queenside arrangement — rook to c8, knight to e5, rook to c5 — before White's h-pawn reaches h5, and without spending more than one move outside that arrangement. Everything the window records is arithmetic about your move order; none of it is a claim that the arrangement is correct.",
+    "pgn": "pgn/BFF8CAB53A.pgn"
+  },
+  {
+    "blindId": "B7E638D8E5",
+    "objective": "Three pawns abreast against two, kings far from the queening square. The win is a forced sale: two pawns are given away so the outside pawn runs through unopposed. Order is everything — the wrong first pawn seals the front and the tablebase calls it a draw. Break through, promote, win.",
+    "pgn": "pgn/B7E638D8E5.pgn"
+  },
+  {
+    "blindId": "BA1DB43018",
+    "objective": "You have the Black side, and Black is the side to move in this position — that is why this pack seats you here rather than opposite. The kings stand on opposite wings: White's on c1, yours on g8, which is exactly the pair of conditions the shape library's opposite-castling-race trigger tests. Complete this pack's authored queenside arrangement — rook to c8, knight to e5, rook to c5 — before White's h-pawn reaches h5, and without spending more than one move outside that arrangement. Everything the window records is arithmetic about your move order; none of it is a claim that the arrangement is correct.",
+    "pgn": "pgn/BA1DB43018.pgn"
+  },
+  {
+    "blindId": "B58657F921",
+    "objective": "Black broke at your chain's base immediately, bishop still on c8. Take the pawn — the one answer that asks Black to prove the idea — and then make the real decision: hold the extra pawn with c3/b4, or hand it back at the moment that buys you the better game.",
+    "pgn": "pgn/B58657F921.pgn"
+  },
+  {
+    "blindId": "B3B25A3811",
+    "objective": "A pawn down in the most common ending in chess: rook and three against rook and four, everything on one wing. It is held with accurate defence and lost constantly in practice. Your job is the result, not the moves — reach the end of the drill still holding.",
+    "pgn": "pgn/B3B25A3811.pgn"
+  },
+  {
+    "blindId": "B2EF43AA35",
+    "objective": "You have the White side of the Carlsbad: pawns a2/b2 against a7/b7/c6, d4 against d5, no c-pawn on either wing of the file. Execute the minority attack until Black has a backward c-pawn on White's half-open c-file.",
+    "pgn": "pgn/B2EF43AA35.pgn"
+  },
+  {
+    "blindId": "B955E9A428",
+    "objective": "You have the Black side, and Black is the side to move in this position — that is why this pack seats you here rather than opposite. The kings stand on opposite wings: White's on c1, yours on g8, which is exactly the pair of conditions the shape library's opposite-castling-race trigger tests. Complete this pack's authored queenside arrangement — rook to c8, knight to e5, rook to c5 — before White's h-pawn reaches h5, and without spending more than one move outside that arrangement. Everything the window records is arithmetic about your move order; none of it is a claim that the arrangement is correct.",
+    "pgn": "pgn/B955E9A428.pgn"
+  },
+  {
+    "blindId": "BDCCD95F72",
+    "objective": "You chose the Najdorf. When White answers with the English Attack setup, play your side of the tabiya in the right order — ...e5 and ...Be6 before the wing decisions — and choose your race plan with your eyes open.",
+    "pgn": "pgn/BDCCD95F72.pgn"
+  },
+  {
+    "blindId": "BD65473C14",
+    "objective": "You chose the Najdorf. When White answers with the English Attack setup, play your side of the tabiya in the right order — ...e5 and ...Be6 before the wing decisions — and choose your race plan with your eyes open.",
+    "pgn": "pgn/BD65473C14.pgn"
+  },
+  {
+    "blindId": "B4A41C3DA6",
+    "objective": "You have the Black side, and Black is the side to move in this position — that is why this pack seats you here rather than opposite. The kings stand on opposite wings: White's on c1, yours on g8, which is exactly the pair of conditions the shape library's opposite-castling-race trigger tests. Complete this pack's authored queenside arrangement — rook to c8, knight to e5, rook to c5 — before White's h-pawn reaches h5, and without spending more than one move outside that arrangement. Everything the window records is arithmetic about your move order; none of it is a claim that the arrangement is correct.",
+    "pgn": "pgn/B4A41C3DA6.pgn"
+  },
+  {
+    "blindId": "B0EA9FBABC",
+    "objective": "A pawn down in the most common ending in chess: rook and three against rook and four, everything on one wing. It is held with accurate defence and lost constantly in practice. Your job is the result, not the moves — reach the end of the drill still holding.",
+    "pgn": "pgn/B0EA9FBABC.pgn"
+  },
+  {
+    "blindId": "B5C7E31D37",
+    "objective": "Three pawns abreast against two, kings far from the queening square. The win is a forced sale: two pawns are given away so the outside pawn runs through unopposed. Order is everything — the wrong first pawn seals the front and the tablebase calls it a draw. Break through, promote, win.",
+    "pgn": "pgn/B5C7E31D37.pgn"
+  },
+  {
+    "blindId": "B17D0257E9",
+    "objective": "You have the White side of the Carlsbad: pawns a2/b2 against a7/b7/c6, d4 against d5, no c-pawn on either wing of the file. Execute the minority attack until Black has a backward c-pawn on White's half-open c-file.",
+    "pgn": "pgn/B17D0257E9.pgn"
+  },
+  {
+    "blindId": "BB40212358",
+    "objective": "You have the White side of the Carlsbad: pawns a2/b2 against a7/b7/c6, d4 against d5, no c-pawn on either wing of the file. Execute the minority attack until Black has a backward c-pawn on White's half-open c-file.",
+    "pgn": "pgn/BB40212358.pgn"
+  },
+  {
+    "blindId": "B668F0BA48",
+    "objective": "Black broke at your chain's base immediately, bishop still on c8. Take the pawn — the one answer that asks Black to prove the idea — and then make the real decision: hold the extra pawn with c3/b4, or hand it back at the moment that buys you the better game.",
+    "pgn": "pgn/B668F0BA48.pgn"
+  },
+  {
+    "blindId": "B72EFEBB75",
+    "objective": "Black broke at your chain's base immediately, bishop still on c8. Take the pawn — the one answer that asks Black to prove the idea — and then make the real decision: hold the extra pawn with c3/b4, or hand it back at the moment that buys you the better game.",
+    "pgn": "pgn/B72EFEBB75.pgn"
+  },
+  {
+    "blindId": "B97F57575C",
+    "objective": "Black broke at your chain's base immediately, bishop still on c8. Take the pawn — the one answer that asks Black to prove the idea — and then make the real decision: hold the extra pawn with c3/b4, or hand it back at the moment that buys you the better game.",
+    "pgn": "pgn/B97F57575C.pgn"
+  },
+  {
+    "blindId": "B757CF30DE",
+    "objective": "Three pawns abreast against two, kings far from the queening square. The win is a forced sale: two pawns are given away so the outside pawn runs through unopposed. Order is everything — the wrong first pawn seals the front and the tablebase calls it a draw. Break through, promote, win.",
+    "pgn": "pgn/B757CF30DE.pgn"
+  }
+]

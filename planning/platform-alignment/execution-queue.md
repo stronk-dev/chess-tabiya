@@ -26,7 +26,7 @@ action; measurement instruments do not share the tested defect's assumption.
 | Order | Job | State | Deliverable / closeout |
 |---|---|---|---|
 | 1.1 | R4 knowledge retrieval experiment | **DONE 2026-08-20** | 17 registered sources, 55 passages, 144 queries, six arms and lifecycle controls landed; semantic extraction refused for 1.0 |
-| 1.2 | R11 bot-policy research | **MECHANICAL DONE; EXTERNAL arm remains** | `design/research/bot-policy.md`, harness/results and H5/C5 update landed; generate matched blind 10–20-ply continuations, then recruit reviewers |
+| 1.2 | R11 bot-policy research | **BLIND PACKET READY 2026-08-20; EXTERNAL review remains** | 42 validated blind branches, separate key and scorecard landed; recruit ≥5 reviewers and obtain ≥3 independent scores/branch |
 | 1.3 | R18 self-host/privacy/accessibility/rights audit | **MECHANICAL/CODE/DESK DONE 2026-08-20; participant proof external** | Negative 1.0 result, O13 choice set, D605-D615 and F12 acceptance inputs landed |
 | 1.4 | Competitor capability-watch instrument | **DONE 2026-08-20** | 63-row source snapshot → 21 canonical representatives, 18 capabilities, 25 checked evidence/routing rows; D554 targeted research remains |
 | 1.5 | R9 learner/coach protocol | READY to design; **EXTERNAL to complete** | Preregistered script/tasks/sample; participant work only with owner authority |
@@ -148,8 +148,8 @@ R14/R15/R16/R17/R18 → O10–O13 → optional F10/F11 + required F12
 all included nodes → integrated default journeys → 1.0 proof
 ```
 
-The immediate queue is therefore R11/R3's external-arm preparation and D554's targeted hands-on
-gaps. O1/O3 are ruled; O2's semantic boundary and O4's workflow/pre-commit boundary are ruled while
+The immediate queue is therefore R11/R3's external participant work, D554's targeted hands-on
+gaps, and disposable R3 interaction-prototype preparation. O1/O3 are ruled; O2's semantic boundary and O4's workflow/pre-commit boundary are ruled while
 their exact detector-family/default-preset residues remain with R3/R7. O13 is ruled as the stronger
 Choice-C appliance floor. All five rulings still need protected living-intent amendments before
 their RFC nodes open. R13 is research-ready only after its exact R7 dependency is resolved. There is

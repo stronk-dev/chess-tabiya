@@ -1,0 +1,66 @@
+{
+  "branches": 54,
+  "pgnDigest": "sha256:b2ef4207bbc6e038b6814cfb214cc75d86381d8086b16f0eeca102c7beb04cd8",
+  "packetDigest": "sha256:014ae5368b4bebd4205552210c3400aa8b95d9617a5f25bb17a05af41805f72b",
+  "keyDigest": "sha256:d66ac0644e25815904006dfc81ce3a4668fbd224dc5c98fd5f37a12a0de60596",
+  "localBookDigest": "sha256:03b53f31cc1a39abcb8eb3eff56b45aa845702f1d3480a5fcb9f893a65802364",
+  "arms": {
+    "production_maia": 6,
+    "guard_250": 12,
+    "pawn_x4_guarded": 12,
+    "statistical_book_guarded": 12,
+    "weakened_stockfish_control": 12
+  },
+  "strata": {
+    "opening": 18,
+    "middlegame": 18,
+    "reduced_material": 18
+  },
+  "armExercise": {
+    "production_maia": {
+      "controlledPlies": 72,
+      "fallbackPlies": 0,
+      "fallbackRate": 0,
+      "meanLossCp": 38,
+      "severe250Rate": 0.041666666666666664,
+      "reviewEligible": true
+    },
+    "guard_250": {
+      "controlledPlies": 72,
+      "fallbackPlies": 0,
+      "fallbackRate": 0,
+      "meanLossCp": 40.125,
+      "severe250Rate": 0.027777777777777776,
+      "reviewEligible": true
+    },
+    "pawn_x4_guarded": {
+      "controlledPlies": 72,
+      "fallbackPlies": 0,
+      "fallbackRate": 0,
+      "meanLossCp": 33.80555555555556,
+      "severe250Rate": 0.027777777777777776,
+      "reviewEligible": true
+    },
+    "statistical_book_guarded": {
+      "controlledPlies": 72,
+      "fallbackPlies": 57,
+      "fallbackRate": 0.7916666666666666,
+      "meanLossCp": 33.84722222222222,
+      "severe250Rate": 0.027777777777777776,
+      "reviewEligible": false
+    },
+    "weakened_stockfish_control": {
+      "controlledPlies": 72,
+      "fallbackPlies": 0,
+      "fallbackRate": 0,
+      "meanLossCp": 54.52777777777778,
+      "severe250Rate": 0.041666666666666664,
+      "reviewEligible": false
+    }
+  },
+  "reviewPacketBranches": 42,
+  "refusedBeforeReview": [
+    "authored_repertoire_guarded",
+    "statistical_book_guarded"
+  ]
+}

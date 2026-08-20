@@ -1,0 +1,11 @@
+[Event "R11 blind branch"]
+[Site "Tabiya disposable research"]
+[Date "2026.08.20"]
+[Round "B7AFA19E0A"]
+[White "Bot A"]
+[Black "Bot B"]
+[Result "*"]
+[SetUp "1"]
+[FEN "rnbqkbnr/pp2pppp/8/2ppP3/3P4/8/PPP2PPP/RNBQKBNR w KQkq - 0 4"]
+
+4. Nf3 Qb6 5. c3 Bg4 6. Be2 Nc6 7. O-O e6 8. dxc5 Bxc5 9. b4 Bf8 *

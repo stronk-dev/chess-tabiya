@@ -1,0 +1,26 @@
+{
+  "schema": "tabiya.r11.local-statistical-book.v1",
+  "source": {
+    "name": "r12-style-prefix-2g.pgn",
+    "upstream": "https://database.lichess.org/standard/lichess_db_standard_rated_2026-07.pgn.zst",
+    "sha256": "sha256:c247f9177ff1784e47e168309ceeee3c57b8f91e53649cd804fc5a349da91c8c"
+  },
+  "population": {
+    "event": "Rated Blitz game",
+    "movingRating": [
+      1800,
+      2199
+    ],
+    "maxPly": 24
+  },
+  "roots": {
+    "rnbqkbnr/pp2pppp/8/2ppP3/3P4/8/PPP2PPP/RNBQKBNR w KQkq -": "anti-caro-advance-early-c5",
+    "rnbqkb1r/pp2pppp/3p1n2/8/3NP3/2N5/PPP2PPP/R1BQKB1R b KQkq -": "najdorf-english-attack-black"
+  },
+  "summary": {
+    "eligibleGames": 2761829,
+    "parsedGames": 2519503,
+    "gamesReachingRoot": 19214,
+    "positions": 58147
+  }
+}

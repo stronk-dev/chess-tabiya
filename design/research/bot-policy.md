@@ -216,7 +216,31 @@ R11 completes only after a blinded 10–20-ply arm. The smallest adequate next i
 This protocol should produce reviewable PGNs and a blind key before recruiting reviewers. The
 owner can be a pilot reviewer, but a single owner session cannot establish a population claim.
 
-## 8. Consequences for the 1.0 architecture
+## 8. Blind-set preparation result
+
+The preregistered generator produced 54 legal 12-ply branches over six fixed roots and three
+strata. An offline validator replayed every UCI move, reproduced every SAN/PGN, checked all IDs and
+digests, required Maia identity wherever its packet was used, and re-derived fallback and
+Stockfish-loss aggregates. The final reviewer packet contains 42 branches: raw production Maia,
+`guard_250`, `pawn_x4_guarded`, and the weakened-Stockfish negative control. No reviewer result
+exists yet, so H5/C5 remain unmet. `[V]`
+
+Two planned arms refused themselves before review. The authored-repertoire arm fell off the pack
+spine on 57/72 controlled plies (79.2%). The statistical-book arm first exposed an instrument bug:
+the live explorer returned HTTP 401 and its status was collapsed into an empty response. After
+replacing that call with a frozen local book, the full pass parsed 2,519,503 eligible Lichess blitz
+games, found 19,214 reaching a fixed root, and retained 58,147 rooted positions. Yet the arm still
+fell back on 57/72 controlled plies. Both exceed the preregistered 25% exercise ceiling and are
+excluded before a human can reward their labels. `[V]`
+
+This narrows the architecture. A drill spine is authored consequence content, not an opponent
+repertoire. A root-conditioned book through ply 24 is an opening layer with explicit fallthrough,
+not a general continuation policy. Increasing the input from an 86 MB check to the 14 GB frozen
+prefix did not change that conclusion. The artifacts, source digest, thresholds and correction are
+in `planning/platform-alignment/bot-policy/blind-review-plan.md` and `blind-review/manifest.json`;
+the disposable generator and validator live under `tools/r11-bot-policy-harness/`. `[V]`
+
+## 9. Consequences for the 1.0 architecture
 
 The bot lane and evidence lane should share **facts**, not ownership. A tactical event such as a
 validated fork or discovered attack may support both a learner hint and an error-shape guard; the
@@ -228,7 +252,7 @@ measured move traits, memory and presentation. Each component remains inspectabl
 only the final presentation layer may use an LLM, and R5 requires deterministic fallback plus
 conformance gating. The model or policy must earn the chess behavior before the avatar names it.
 
-## 9. Limits
+## 10. Limits
 
 1. The 279 starts come from the current pack/R9 corpus and stop at ply 20; they do not represent
    full games, deep middlegames or all openings.
@@ -239,10 +263,12 @@ conformance gating. The model or policy must earn the chess behavior before the 
    population, but external generalization is unmeasured.
 6. The complete Maia vector is not exposed past MultiPV 20; §4 bounds rather than removes that
    reconstruction error.
-7. Otter's results are paper-reported and unreproduced here. It is a future adapter candidate, not
+7. The blind packet is prepared but has zero human judgements. It cannot establish coherence,
+   usefulness or human plausibility until the preregistered reviewer population completes it.
+8. Otter's results are paper-reported and unreproduced here. It is a future adapter candidate, not
    a selected dependency.
 
-## 10. Reproduction
+## 11. Reproduction
 
 The plan is `planning/platform-alignment/bot-policy/plan.md`. Run the disposable harness with:
 
@@ -255,3 +281,12 @@ TABIYA_R11_INPUT_DIR=/private/tmp/r12 TABIYA_R11_WRITE=1 \
 
 The raw directory is regenerable through `tools/maia-wdl-agreement-harness/README.md`; only input
 digests and aggregates are committed.
+
+The multi-ply artifact is generated and validated separately:
+
+```sh
+TABIYA_R11_BOOK_PGN=/private/tmp/r12-style-prefix-2g.pgn \
+  node tools/r11-bot-policy-harness/build-local-book.mts
+node tools/r11-bot-policy-harness/generate-blind-set.mts
+node tools/r11-bot-policy-harness/validate-blind-set.mts
+```

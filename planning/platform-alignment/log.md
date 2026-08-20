@@ -355,3 +355,21 @@ Append-only. Record research, rulings, RFC transitions, implementation closeout 
   now an owner-ruled research candidate rather than an open boundary. Product defaults, names and
   composition remain unproven until the external runs occur. No product code, schema, protected
   intent or authored content changed; D560 remains active.
+
+## 2026-08-20 — R11 produced the blind packet and refused two false repertoire arms
+
+- Generated 54 legal 12-ply branches over six fixed roots and three strata through the shipped
+  Maia path plus independent Stockfish accounting. The randomized reviewer packet contains 42:
+  raw Maia, guard 250, pawn ×4 and the weakened-Stockfish negative control.
+- The authored-spine arm fell back on 57/72 controlled plies. A frozen book built from 2,519,503
+  eligible Lichess blitz games, including 19,214 games reaching a fixed root and 58,147 rooted
+  positions, also fell back on 57/72. Both breach the preregistered 25% ceiling and are refused
+  before review; recorded D620-D621.
+- Preserved and repaired an instrument failure: the first live-explorer call returned HTTP 401 and
+  the pilot collapsed it into empty data. The replacement builder aborts on source failure, every
+  fallback is explicit, and the offline validator replays all branches and re-derives digests,
+  packet eligibility and aggregates. Reconciliation also caught that the first packet digest bound
+  filenames but not PGN bytes; the corrected digest binds both. Recorded D622.
+- R11 remains external-to-complete: no branch has a human judgement, H5/C5 stay unmet, and no arm
+  earns a human-like/coherent/personality label. No product code, schema, protected design intent
+  or authored chess content changed; D560 remains active.
