@@ -136,3 +136,22 @@ Append-only. Record research, rulings, RFC transitions, implementation closeout 
   ruling, and updated Q4c/B4/K6 and the capability/queue surfaces. R3 presentation and
   reader/per-consumer validation remain open. No product RFC, product code, schema or content
   changed; D560's hold remains active.
+
+## 2026-08-20 — A2 repaired the interaction instrument and confirmed two product failures
+
+- Landed `design/research/interaction-state-correctness.md` and the disposable
+  `tools/a2-interaction-state-harness/`, measured against clean commit `68b9a98` with all six
+  served endgames, five viewports and stale/live click, drag, emulated touch, resize and hover.
+- The harness independently validates FEN/UCI legality, reads live orientation and board bounds,
+  hit-tests the source/destination and captures the exact request `uci`. Across 90 live gesture
+  cells, 4 delivered the authored move, 15 delivered a different legal move and 71 sent nothing.
+- The controls isolate D537: stale pre-selection coordinates succeed in 19/30 cells while live
+  click succeeds in 1/30; resize recovers all 24/24 desktop/tablet cells. D539's probe-cancellation
+  hazard and D541's White-orientation assumption are closed in the new instrument.
+- Recorded D573 separately: at 390×844 five of six authored source squares are covered by timeline
+  or control regions before selection; the sixth selects, shifts 96 px and still fails. Click,
+  drag and touch each deliver 0/6 exact moves, and resize recovers only that sixth pack.
+- Updated K9 without changing its state: speed cannot clear it and the repaired usability arm
+  remains evidence toward firing, but the causes are named product defects and the owner retains
+  the call. A2 is done; R3 is ready for disposable prototype/mechanical work and external for its
+  participant exit. No product code, schema, content or design intent changed; D560 remains active.

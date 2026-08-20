@@ -229,7 +229,9 @@ the native match already passes pause→branch→resume browser proof. Conversel
 producer registry's eight free-text surface labels intersect none of the seven canonical client
 surface IDs, so the central producer→consumer join remains unimplemented rather than merely
 undocumented. R1 and R2 have since landed: six evidence planes, followed by the measured split
-between semantic eligibility and local selection/budget. A2 still gates interaction UX research.
+between semantic eligibility and local selection/budget. A2 has also landed: the exact-UCI
+instrument confirms the shipped interaction floor fails and unblocks only R3's disposable
+prototype/mechanical arms; participant completion remains external.
 
 `active-rfc-audit.md` records the code/tests/closeout evidence and legal next action. This remains
 a dated checkpoint, not a replacement for `rfc/README.md`.
@@ -239,7 +241,7 @@ a dated checkpoint, not a replacement for `rfc/README.md`.
 The next safe queue is research and reconciliation, not feature implementation. Detailed job
 cards and dependencies are in `execution-queue.md`; the current frontier is:
 
-1. A2 interaction-state/K9 measurement repair;
+1. R3 evidence-presentation prototype/mechanical arms (participant exit external);
 2. R4 knowledge-retrieval experiment;
 3. R5 renderer evaluation;
 4. R6 pack stability/migration audit;

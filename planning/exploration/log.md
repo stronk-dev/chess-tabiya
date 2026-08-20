@@ -3376,3 +3376,19 @@ require semantic eligibility before local selection and prohibit the LLM from se
 or inferring valence. Q4c remains partial until R3 presentation and reader validation. R2 is done;
 R12 research is unblocked; D560's content hold is unchanged. No product implementation or content
 changed.
+
+## 2026-08-20 — A2 exact-UCI interaction census landed
+
+`design/research/interaction-state-correctness.md` rechecked K9 and D537-D541 against clean commit
+`68b9a98`. The disposable census covers all six served endgame packs at 1440×1000, 1366×768,
+1280×720, 768×1024 and 390×844 using stale/live click, drag, emulated touch, resize and hover. It
+validates every authored move from the FEN, handles Black orientation, remeasures live board bounds
+and compares the exact outgoing `uci` rather than treating any ply as success.
+
+Only 4/90 live gesture cells delivered the authored UCI; 15 delivered another legal UCI and 71
+delivered nothing. Stale coordinates succeeded 19/30 while live click succeeded 1/30, reproducing
+the probe/bug cancellation, and resize restored 24/24 desktop/tablet cells. At 390×844 five source
+squares are covered before selection and every click/drag/touch arm is 0/6; this is new D573 rather
+than an extension of stale bounds. K9 remains evidence toward firing, C7 remains unmet, Q3's phone
+run-loop floor is now measured unmet, and R3 prototype work is unblocked while its participant exit
+remains external. No product implementation or content changed.

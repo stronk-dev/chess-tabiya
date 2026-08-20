@@ -910,3 +910,22 @@ interaction, then run one owner session.
   width at the smallest supported desktop projection is **193**, with 24-pixel squares. The
   invariant passes by the thinnest possible margin, so the next region to gain a row at that
   viewport spends the entire budget. Record-only; not a defect today.
+
+---
+
+## 11. 2026-08-20 A2 recheck — current interaction evidence
+
+`design/research/interaction-state-correctness.md` is the current A2 interaction dossier. It
+reproduces §10's desktop result at clean commit `68b9a98`, extends the population to 768×1024 and
+390×844, adds emulated touch, independently verifies every authored UCI and captures the exact
+request UCI. `[V]`
+
+The result remains evidence toward firing K9: 4/90 live click/drag/touch cells deliver the authored
+move, 15 submit a different legal move and 71 submit nothing. At 390×844 every gesture is 0/6;
+five source squares are covered before selection, a separate compact-layout defect (D573). The
+stale-coordinate arm is now explicitly a negative control (19/30 exact versus 1/30 live click),
+closing D539's instrument error rather than cancelling the product defect. `[V]`
+
+This section supersedes only §10's statement that compact viewports were unmeasured and its
+instrument status. The historical measurements, D507 closure, latency results and causal account
+remain as recorded. `[V]`

@@ -1,0 +1,6501 @@
+{
+  "measuredAt": "2026-08-20T11:34:11.959Z",
+  "commit": "68b9a98",
+  "base": "http://127.0.0.1:4182",
+  "packIds": [
+    "lucena-bridge-convert",
+    "mate-bishop-knight",
+    "mate-k-r-technique",
+    "pawn-opposition-convert",
+    "philidor-third-rank-hold",
+    "queen-vs-pawn-seventh-convert"
+  ],
+  "viewports": [
+    "1440x1000",
+    "1366x768",
+    "1280x720",
+    "768x1024",
+    "390x844"
+  ],
+  "summary": {
+    "1440x1000/stale_click": {
+      "total": 6,
+      "matched": 5,
+      "wrong": 0,
+      "none": 1
+    },
+    "1440x1000/live_click": {
+      "total": 6,
+      "matched": 1,
+      "wrong": 2,
+      "none": 3
+    },
+    "1440x1000/live_drag": {
+      "total": 6,
+      "matched": 1,
+      "wrong": 2,
+      "none": 3
+    },
+    "1440x1000/touch_live": {
+      "total": 6,
+      "matched": 1,
+      "wrong": 2,
+      "none": 3
+    },
+    "1440x1000/resize_recovery": {
+      "total": 6,
+      "matched": 6,
+      "wrong": 0,
+      "none": 0
+    },
+    "1440x1000/hover": {
+      "total": 6,
+      "matched": 6,
+      "wrong": 0,
+      "none": 0
+    },
+    "1366x768/stale_click": {
+      "total": 6,
+      "matched": 5,
+      "wrong": 0,
+      "none": 1
+    },
+    "1366x768/live_click": {
+      "total": 6,
+      "matched": 0,
+      "wrong": 1,
+      "none": 5
+    },
+    "1366x768/live_drag": {
+      "total": 6,
+      "matched": 0,
+      "wrong": 1,
+      "none": 5
+    },
+    "1366x768/touch_live": {
+      "total": 6,
+      "matched": 0,
+      "wrong": 1,
+      "none": 5
+    },
+    "1366x768/resize_recovery": {
+      "total": 6,
+      "matched": 6,
+      "wrong": 0,
+      "none": 0
+    },
+    "1366x768/hover": {
+      "total": 6,
+      "matched": 6,
+      "wrong": 0,
+      "none": 0
+    },
+    "1280x720/stale_click": {
+      "total": 6,
+      "matched": 4,
+      "wrong": 0,
+      "none": 2
+    },
+    "1280x720/live_click": {
+      "total": 6,
+      "matched": 0,
+      "wrong": 1,
+      "none": 5
+    },
+    "1280x720/live_drag": {
+      "total": 6,
+      "matched": 0,
+      "wrong": 1,
+      "none": 5
+    },
+    "1280x720/touch_live": {
+      "total": 6,
+      "matched": 0,
+      "wrong": 1,
+      "none": 5
+    },
+    "1280x720/resize_recovery": {
+      "total": 6,
+      "matched": 6,
+      "wrong": 0,
+      "none": 0
+    },
+    "1280x720/hover": {
+      "total": 6,
+      "matched": 6,
+      "wrong": 0,
+      "none": 0
+    },
+    "768x1024/stale_click": {
+      "total": 6,
+      "matched": 5,
+      "wrong": 0,
+      "none": 1
+    },
+    "768x1024/live_click": {
+      "total": 6,
+      "matched": 0,
+      "wrong": 1,
+      "none": 5
+    },
+    "768x1024/live_drag": {
+      "total": 6,
+      "matched": 0,
+      "wrong": 1,
+      "none": 5
+    },
+    "768x1024/touch_live": {
+      "total": 6,
+      "matched": 1,
+      "wrong": 1,
+      "none": 4
+    },
+    "768x1024/resize_recovery": {
+      "total": 6,
+      "matched": 6,
+      "wrong": 0,
+      "none": 0
+    },
+    "768x1024/hover": {
+      "total": 6,
+      "matched": 6,
+      "wrong": 0,
+      "none": 0
+    },
+    "390x844/stale_click": {
+      "total": 6,
+      "matched": 0,
+      "wrong": 0,
+      "none": 6
+    },
+    "390x844/live_click": {
+      "total": 6,
+      "matched": 0,
+      "wrong": 0,
+      "none": 6
+    },
+    "390x844/live_drag": {
+      "total": 6,
+      "matched": 0,
+      "wrong": 0,
+      "none": 6
+    },
+    "390x844/touch_live": {
+      "total": 6,
+      "matched": 0,
+      "wrong": 0,
+      "none": 6
+    },
+    "390x844/resize_recovery": {
+      "total": 6,
+      "matched": 1,
+      "wrong": 0,
+      "none": 5
+    },
+    "390x844/hover": {
+      "total": 6,
+      "matched": 6,
+      "wrong": 0,
+      "none": 0
+    }
+  },
+  "rows": [
+    {
+      "viewport": "1440x1000",
+      "pack": "lucena-bridge-convert",
+      "gesture": "stale_click",
+      "intendedUci": "c1d1",
+      "intendedLegal": true,
+      "submittedUci": null,
+      "matches": false,
+      "extraPlayerRequests": 0,
+      "responseStatuses": [],
+      "rest": {
+        "y": 513,
+        "size": 320
+      },
+      "source": {
+        "x": 462,
+        "y": 813,
+        "insideBoard": true,
+        "topElement": "cg-board"
+      },
+      "selected": {
+        "y": 466,
+        "size": 320,
+        "shiftPx": -46,
+        "selectedMarkers": 1,
+        "captionHeight": 87
+      },
+      "target": {
+        "x": 502,
+        "y": 813,
+        "insideBoard": false,
+        "topElement": "p.svelte-196rcao"
+      }
+    },
+    {
+      "viewport": "1440x1000",
+      "pack": "lucena-bridge-convert",
+      "gesture": "live_click",
+      "intendedUci": "c1d1",
+      "intendedLegal": true,
+      "submittedUci": null,
+      "matches": false,
+      "extraPlayerRequests": 0,
+      "responseStatuses": [],
+      "rest": {
+        "y": 513,
+        "size": 320
+      },
+      "source": {
+        "x": 462,
+        "y": 813,
+        "insideBoard": true,
+        "topElement": "cg-board"
+      },
+      "selected": {
+        "y": 466,
+        "size": 320,
+        "shiftPx": -46,
+        "selectedMarkers": 1,
+        "captionHeight": 87
+      },
+      "target": {
+        "x": 502,
+        "y": 766,
+        "insideBoard": true,
+        "topElement": "cg-board"
+      }
+    },
+    {
+      "viewport": "1440x1000",
+      "pack": "lucena-bridge-convert",
+      "gesture": "live_drag",
+      "intendedUci": "c1d1",
+      "intendedLegal": true,
+      "submittedUci": null,
+      "matches": false,
+      "extraPlayerRequests": 0,
+      "responseStatuses": [],
+      "rest": {
+        "y": 513,
+        "size": 320
+      },
+      "source": {
+        "x": 462,
+        "y": 813,
+        "insideBoard": true,
+        "topElement": "cg-board"
+      },
+      "selected": {
+        "y": 466,
+        "size": 320,
+        "shiftPx": -46,
+        "selectedMarkers": 1,
+        "captionHeight": 87
+      },
+      "target": {
+        "x": 502,
+        "y": 766,
+        "insideBoard": true,
+        "topElement": "square.move-dest"
+      }
+    },
+    {
+      "viewport": "1440x1000",
+      "pack": "lucena-bridge-convert",
+      "gesture": "touch_live",
+      "intendedUci": "c1d1",
+      "intendedLegal": true,
+      "submittedUci": null,
+      "matches": false,
+      "extraPlayerRequests": 0,
+      "responseStatuses": [],
+      "rest": {
+        "y": 513,
+        "size": 320
+      },
+      "source": {
+        "x": 462,
+        "y": 813,
+        "insideBoard": true,
+        "topElement": "cg-board"
+      },
+      "selected": {
+        "y": 466,
+        "size": 320,
+        "shiftPx": -46,
+        "selectedMarkers": 1,
+        "captionHeight": 87
+      },
+      "target": {
+        "x": 502,
+        "y": 766,
+        "insideBoard": true,
+        "topElement": "square.move-dest"
+      }
+    },
+    {
+      "viewport": "1440x1000",
+      "pack": "lucena-bridge-convert",
+      "gesture": "resize_recovery",
+      "intendedUci": "c1d1",
+      "intendedLegal": true,
+      "submittedUci": "c1d1",
+      "matches": true,
+      "extraPlayerRequests": 0,
+      "responseStatuses": [
+        200,
+        200
+      ],
+      "rest": {
+        "y": 513,
+        "size": 320
+      },
+      "source": {
+        "x": 462,
+        "y": 813,
+        "insideBoard": true,
+        "topElement": "cg-board"
+      },
+      "selected": {
+        "y": 466,
+        "size": 320,
+        "shiftPx": -46,
+        "selectedMarkers": 1,
+        "captionHeight": 87
+      },
+      "target": {
+        "x": 502,
+        "y": 766,
+        "insideBoard": true,
+        "topElement": "cg-board"
+      }
+    },
+    {
+      "viewport": "1440x1000",
+      "pack": "lucena-bridge-convert",
+      "gesture": "hover",
+      "intendedUci": "c1d1",
+      "intendedLegal": true,
+      "submittedUci": null,
+      "matches": true,
+      "extraPlayerRequests": 0,
+      "responseStatuses": [],
+      "rest": {
+        "y": 513,
+        "size": 320
+      },
+      "source": {
+        "x": 462,
+        "y": 813,
+        "insideBoard": true,
+        "topElement": "cg-board"
+      },
+      "selected": {
+        "y": 513,
+        "size": 320,
+        "shiftPx": 0,
+        "selectedMarkers": 0,
+        "captionHeight": 0
+      },
+      "target": {
+        "x": 502,
+        "y": 813,
+        "insideBoard": true,
+        "topElement": "cg-board"
+      }
+    },
+    {
+      "viewport": "1440x1000",
+      "pack": "mate-bishop-knight",
+      "gesture": "stale_click",
+      "intendedUci": "c3e5",
+      "intendedLegal": true,
+      "submittedUci": "c3e5",
+      "matches": true,
+      "extraPlayerRequests": 0,
+      "responseStatuses": [
+        200,
+        200
+      ],
+      "rest": {
+        "y": 513,
+        "size": 320
+      },
+      "source": {
+        "x": 462,
+        "y": 733,
+        "insideBoard": true,
+        "topElement": "cg-board"
+      },
+      "selected": {
+        "y": 445,
+        "size": 320,
+        "shiftPx": -68,
+        "selectedMarkers": 1,
+        "captionHeight": 130
+      },
+      "target": {
+        "x": 542,
+        "y": 653,
+        "insideBoard": true,
+        "topElement": "cg-board"
+      }
+    },
+    {
+      "viewport": "1440x1000",
+      "pack": "mate-bishop-knight",
+      "gesture": "live_click",
+      "intendedUci": "c3e5",
+      "intendedLegal": true,
+      "submittedUci": null,
+      "matches": false,
+      "extraPlayerRequests": 0,
+      "responseStatuses": [],
+      "rest": {
+        "y": 513,
+        "size": 320
+      },
+      "source": {
+        "x": 462,
+        "y": 733,
+        "insideBoard": true,
+        "topElement": "cg-board"
+      },
+      "selected": {
+        "y": 445,
+        "size": 320,
+        "shiftPx": -68,
+        "selectedMarkers": 1,
+        "captionHeight": 130
+      },
+      "target": {
+        "x": 542,
+        "y": 585,
+        "insideBoard": true,
+        "topElement": "cg-board"
+      }
+    },
+    {
+      "viewport": "1440x1000",
+      "pack": "mate-bishop-knight",
+      "gesture": "live_drag",
+      "intendedUci": "c3e5",
+      "intendedLegal": true,
+      "submittedUci": null,
+      "matches": false,
+      "extraPlayerRequests": 0,
+      "responseStatuses": [],
+      "rest": {
+        "y": 513,
+        "size": 320
+      },
+      "source": {
+        "x": 462,
+        "y": 733,
+        "insideBoard": true,
+        "topElement": "cg-board"
+      },
+      "selected": {
+        "y": 445,
+        "size": 320,
+        "shiftPx": -68,
+        "selectedMarkers": 1,
+        "captionHeight": 130
+      },
+      "target": {
+        "x": 542,
+        "y": 585,
+        "insideBoard": true,
+        "topElement": "square.move-dest"
+      }
+    },
+    {
+      "viewport": "1440x1000",
+      "pack": "mate-bishop-knight",
+      "gesture": "touch_live",
+      "intendedUci": "c3e5",
+      "intendedLegal": true,
+      "submittedUci": null,
+      "matches": false,
+      "extraPlayerRequests": 0,
+      "responseStatuses": [],
+      "rest": {
+        "y": 513,
+        "size": 320
+      },
+      "source": {
+        "x": 462,
+        "y": 733,
+        "insideBoard": true,
+        "topElement": "cg-board"
+      },
+      "selected": {
+        "y": 445,
+        "size": 320,
+        "shiftPx": -68,
+        "selectedMarkers": 1,
+        "captionHeight": 130
+      },
+      "target": {
+        "x": 542,
+        "y": 585,
+        "insideBoard": true,
+        "topElement": "square.move-dest"
+      }
+    },
+    {
+      "viewport": "1440x1000",
+      "pack": "mate-bishop-knight",
+      "gesture": "resize_recovery",
+      "intendedUci": "c3e5",
+      "intendedLegal": true,
+      "submittedUci": "c3e5",
+      "matches": true,
+      "extraPlayerRequests": 0,
+      "responseStatuses": [
+        200,
+        200
+      ],
+      "rest": {
+        "y": 513,
+        "size": 320
+      },
+      "source": {
+        "x": 462,
+        "y": 733,
+        "insideBoard": true,
+        "topElement": "cg-board"
+      },
+      "selected": {
+        "y": 445,
+        "size": 320,
+        "shiftPx": -68,
+        "selectedMarkers": 1,
+        "captionHeight": 130
+      },
+      "target": {
+        "x": 542,
+        "y": 585,
+        "insideBoard": true,
+        "topElement": "cg-board"
+      }
+    },
+    {
+      "viewport": "1440x1000",
+      "pack": "mate-bishop-knight",
+      "gesture": "hover",
+      "intendedUci": "c3e5",
+      "intendedLegal": true,
+      "submittedUci": null,
+      "matches": true,
+      "extraPlayerRequests": 0,
+      "responseStatuses": [],
+      "rest": {
+        "y": 513,
+        "size": 320
+      },
+      "source": {
+        "x": 462,
+        "y": 733,
+        "insideBoard": true,
+        "topElement": "cg-board"
+      },
+      "selected": {
+        "y": 513,
+        "size": 320,
+        "shiftPx": 0,
+        "selectedMarkers": 0,
+        "captionHeight": 0
+      },
+      "target": {
+        "x": 542,
+        "y": 653,
+        "insideBoard": true,
+        "topElement": "cg-board"
+      }
+    },
+    {
+      "viewport": "1440x1000",
+      "pack": "mate-k-r-technique",
+      "gesture": "stale_click",
+      "intendedUci": "h2h6",
+      "intendedLegal": true,
+      "submittedUci": "h2h6",
+      "matches": true,
+      "extraPlayerRequests": 0,
+      "responseStatuses": [
+        200,
+        200
+      ],
+      "rest": {
+        "y": 513,
+        "size": 320
+      },
+      "source": {
+        "x": 662,
+        "y": 773,
+        "insideBoard": true,
+        "topElement": "cg-board"
+      },
+      "selected": {
+        "y": 473,
+        "size": 320,
+        "shiftPx": -39,
+        "selectedMarkers": 1,
+        "captionHeight": 73
+      },
+      "target": {
+        "x": 662,
+        "y": 613,
+        "insideBoard": true,
+        "topElement": "cg-board"
+      }
+    },
+    {
+      "viewport": "1440x1000",
+      "pack": "mate-k-r-technique",
+      "gesture": "live_click",
+      "intendedUci": "h2h6",
+      "intendedLegal": true,
+      "submittedUci": "h2h7",
+      "matches": false,
+      "extraPlayerRequests": 0,
+      "responseStatuses": [
+        200,
+        200
+      ],
+      "rest": {
+        "y": 513,
+        "size": 320
+      },
+      "source": {
+        "x": 662,
+        "y": 773,
+        "insideBoard": true,
+        "topElement": "cg-board"
+      },
+      "selected": {
+        "y": 473,
+        "size": 320,
+        "shiftPx": -39,
+        "selectedMarkers": 1,
+        "captionHeight": 73
+      },
+      "target": {
+        "x": 662,
+        "y": 573,
+        "insideBoard": true,
+        "topElement": "cg-board"
+      }
+    },
+    {
+      "viewport": "1440x1000",
+      "pack": "mate-k-r-technique",
+      "gesture": "live_drag",
+      "intendedUci": "h2h6",
+      "intendedLegal": true,
+      "submittedUci": "h2h7",
+      "matches": false,
+      "extraPlayerRequests": 0,
+      "responseStatuses": [
+        200,
+        200
+      ],
+      "rest": {
+        "y": 513,
+        "size": 320
+      },
+      "source": {
+        "x": 662,
+        "y": 773,
+        "insideBoard": true,
+        "topElement": "cg-board"
+      },
+      "selected": {
+        "y": 473,
+        "size": 320,
+        "shiftPx": -39,
+        "selectedMarkers": 1,
+        "captionHeight": 73
+      },
+      "target": {
+        "x": 662,
+        "y": 573,
+        "insideBoard": true,
+        "topElement": "square.move-dest"
+      }
+    },
+    {
+      "viewport": "1440x1000",
+      "pack": "mate-k-r-technique",
+      "gesture": "touch_live",
+      "intendedUci": "h2h6",
+      "intendedLegal": true,
+      "submittedUci": "h2h7",
+      "matches": false,
+      "extraPlayerRequests": 0,
+      "responseStatuses": [
+        200,
+        200
+      ],
+      "rest": {
+        "y": 513,
+        "size": 320
+      },
+      "source": {
+        "x": 662,
+        "y": 773,
+        "insideBoard": true,
+        "topElement": "cg-board"
+      },
+      "selected": {
+        "y": 473,
+        "size": 320,
+        "shiftPx": -39,
+        "selectedMarkers": 1,
+        "captionHeight": 73
+      },
+      "target": {
+        "x": 662,
+        "y": 573,
+        "insideBoard": true,
+        "topElement": "cg-board"
+      }
+    },
+    {
+      "viewport": "1440x1000",
+      "pack": "mate-k-r-technique",
+      "gesture": "resize_recovery",
+      "intendedUci": "h2h6",
+      "intendedLegal": true,
+      "submittedUci": "h2h6",
+      "matches": true,
+      "extraPlayerRequests": 0,
+      "responseStatuses": [
+        200,
+        200
+      ],
+      "rest": {
+        "y": 513,
+        "size": 320
+      },
+      "source": {
+        "x": 662,
+        "y": 773,
+        "insideBoard": true,
+        "topElement": "cg-board"
+      },
+      "selected": {
+        "y": 473,
+        "size": 320,
+        "shiftPx": -39,
+        "selectedMarkers": 1,
+        "captionHeight": 73
+      },
+      "target": {
+        "x": 662,
+        "y": 573,
+        "insideBoard": true,
+        "topElement": "cg-board"
+      }
+    },
+    {
+      "viewport": "1440x1000",
+      "pack": "mate-k-r-technique",
+      "gesture": "hover",
+      "intendedUci": "h2h6",
+      "intendedLegal": true,
+      "submittedUci": null,
+      "matches": true,
+      "extraPlayerRequests": 0,
+      "responseStatuses": [],
+      "rest": {
+        "y": 513,
+        "size": 320
+      },
+      "source": {
+        "x": 662,
+        "y": 773,
+        "insideBoard": true,
+        "topElement": "cg-board"
+      },
+      "selected": {
+        "y": 513,
+        "size": 320,
+        "shiftPx": 0,
+        "selectedMarkers": 0,
+        "captionHeight": 0
+      },
+      "target": {
+        "x": 662,
+        "y": 613,
+        "insideBoard": true,
+        "topElement": "cg-board"
+      }
+    },
+    {
+      "viewport": "1440x1000",
+      "pack": "pawn-opposition-convert",
+      "gesture": "stale_click",
+      "intendedUci": "e2e3",
+      "intendedLegal": true,
+      "submittedUci": "e2e3",
+      "matches": true,
+      "extraPlayerRequests": 0,
+      "responseStatuses": [
+        200
+      ],
+      "rest": {
+        "y": 513,
+        "size": 320
+      },
+      "source": {
+        "x": 542,
+        "y": 773,
+        "insideBoard": true,
+        "topElement": "cg-board"
+      },
+      "selected": {
+        "y": 495,
+        "size": 320,
+        "shiftPx": -17,
+        "selectedMarkers": 1,
+        "captionHeight": 29
+      },
+      "target": {
+        "x": 542,
+        "y": 733,
+        "insideBoard": true,
+        "topElement": "cg-board"
+      }
+    },
+    {
+      "viewport": "1440x1000",
+      "pack": "pawn-opposition-convert",
+      "gesture": "live_click",
+      "intendedUci": "e2e3",
+      "intendedLegal": true,
+      "submittedUci": "e2e3",
+      "matches": true,
+      "extraPlayerRequests": 0,
+      "responseStatuses": [
+        200
+      ],
+      "rest": {
+        "y": 513,
+        "size": 320
+      },
+      "source": {
+        "x": 542,
+        "y": 773,
+        "insideBoard": true,
+        "topElement": "cg-board"
+      },
+      "selected": {
+        "y": 495,
+        "size": 320,
+        "shiftPx": -17,
+        "selectedMarkers": 1,
+        "captionHeight": 29
+      },
+      "target": {
+        "x": 542,
+        "y": 715,
+        "insideBoard": true,
+        "topElement": "cg-board"
+      }
+    },
+    {
+      "viewport": "1440x1000",
+      "pack": "pawn-opposition-convert",
+      "gesture": "live_drag",
+      "intendedUci": "e2e3",
+      "intendedLegal": true,
+      "submittedUci": "e2e3",
+      "matches": true,
+      "extraPlayerRequests": 0,
+      "responseStatuses": [
+        200
+      ],
+      "rest": {
+        "y": 513,
+        "size": 320
+      },
+      "source": {
+        "x": 542,
+        "y": 773,
+        "insideBoard": true,
+        "topElement": "cg-board"
+      },
+      "selected": {
+        "y": 495,
+        "size": 320,
+        "shiftPx": -17,
+        "selectedMarkers": 1,
+        "captionHeight": 29
+      },
+      "target": {
+        "x": 542,
+        "y": 715,
+        "insideBoard": true,
+        "topElement": "square.move-dest"
+      }
+    },
+    {
+      "viewport": "1440x1000",
+      "pack": "pawn-opposition-convert",
+      "gesture": "touch_live",
+      "intendedUci": "e2e3",
+      "intendedLegal": true,
+      "submittedUci": "e2e3",
+      "matches": true,
+      "extraPlayerRequests": 0,
+      "responseStatuses": [
+        200
+      ],
+      "rest": {
+        "y": 513,
+        "size": 320
+      },
+      "source": {
+        "x": 542,
+        "y": 773,
+        "insideBoard": true,
+        "topElement": "cg-board"
+      },
+      "selected": {
+        "y": 495,
+        "size": 320,
+        "shiftPx": -17,
+        "selectedMarkers": 1,
+        "captionHeight": 29
+      },
+      "target": {
+        "x": 542,
+        "y": 715,
+        "insideBoard": true,
+        "topElement": "cg-board"
+      }
+    },
+    {
+      "viewport": "1440x1000",
+      "pack": "pawn-opposition-convert",
+      "gesture": "resize_recovery",
+      "intendedUci": "e2e3",
+      "intendedLegal": true,
+      "submittedUci": "e2e3",
+      "matches": true,
+      "extraPlayerRequests": 0,
+      "responseStatuses": [
+        200
+      ],
+      "rest": {
+        "y": 513,
+        "size": 320
+      },
+      "source": {
+        "x": 542,
+        "y": 773,
+        "insideBoard": true,
+        "topElement": "cg-board"
+      },
+      "selected": {
+        "y": 495,
+        "size": 320,
+        "shiftPx": -17,
+        "selectedMarkers": 1,
+        "captionHeight": 29
+      },
+      "target": {
+        "x": 542,
+        "y": 715,
+        "insideBoard": true,
+        "topElement": "cg-board"
+      }
+    },
+    {
+      "viewport": "1440x1000",
+      "pack": "pawn-opposition-convert",
+      "gesture": "hover",
+      "intendedUci": "e2e3",
+      "intendedLegal": true,
+      "submittedUci": null,
+      "matches": true,
+      "extraPlayerRequests": 0,
+      "responseStatuses": [],
+      "rest": {
+        "y": 513,
+        "size": 320
+      },
+      "source": {
+        "x": 542,
+        "y": 773,
+        "insideBoard": true,
+        "topElement": "cg-board"
+      },
+      "selected": {
+        "y": 513,
+        "size": 320,
+        "shiftPx": 0,
+        "selectedMarkers": 0,
+        "captionHeight": 0
+      },
+      "target": {
+        "x": 542,
+        "y": 733,
+        "insideBoard": true,
+        "topElement": "cg-board"
+      }
+    },
+    {
+      "viewport": "1440x1000",
+      "pack": "philidor-third-rank-hold",
+      "gesture": "stale_click",
+      "intendedUci": "h6b6",
+      "intendedLegal": true,
+      "submittedUci": "h6b6",
+      "matches": true,
+      "extraPlayerRequests": 0,
+      "responseStatuses": [
+        200,
+        200
+      ],
+      "rest": {
+        "y": 513,
+        "size": 320
+      },
+      "source": {
+        "x": 382,
+        "y": 733,
+        "insideBoard": true,
+        "topElement": "cg-board"
+      },
+      "selected": {
+        "y": 466,
+        "size": 320,
+        "shiftPx": -46,
+        "selectedMarkers": 1,
+        "captionHeight": 87
+      },
+      "target": {
+        "x": 622,
+        "y": 733,
+        "insideBoard": true,
+        "topElement": "cg-board"
+      }
+    },
+    {
+      "viewport": "1440x1000",
+      "pack": "philidor-third-rank-hold",
+      "gesture": "live_click",
+      "intendedUci": "h6b6",
+      "intendedLegal": true,
+      "submittedUci": null,
+      "matches": false,
+      "extraPlayerRequests": 0,
+      "responseStatuses": [],
+      "rest": {
+        "y": 513,
+        "size": 320
+      },
+      "source": {
+        "x": 382,
+        "y": 733,
+        "insideBoard": true,
+        "topElement": "cg-board"
+      },
+      "selected": {
+        "y": 466,
+        "size": 320,
+        "shiftPx": -46,
+        "selectedMarkers": 1,
+        "captionHeight": 87
+      },
+      "target": {
+        "x": 622,
+        "y": 686,
+        "insideBoard": true,
+        "topElement": "cg-board"
+      }
+    },
+    {
+      "viewport": "1440x1000",
+      "pack": "philidor-third-rank-hold",
+      "gesture": "live_drag",
+      "intendedUci": "h6b6",
+      "intendedLegal": true,
+      "submittedUci": null,
+      "matches": false,
+      "extraPlayerRequests": 0,
+      "responseStatuses": [],
+      "rest": {
+        "y": 513,
+        "size": 320
+      },
+      "source": {
+        "x": 382,
+        "y": 733,
+        "insideBoard": true,
+        "topElement": "cg-board"
+      },
+      "selected": {
+        "y": 466,
+        "size": 320,
+        "shiftPx": -46,
+        "selectedMarkers": 1,
+        "captionHeight": 87
+      },
+      "target": {
+        "x": 622,
+        "y": 686,
+        "insideBoard": true,
+        "topElement": "square.move-dest"
+      }
+    },
+    {
+      "viewport": "1440x1000",
+      "pack": "philidor-third-rank-hold",
+      "gesture": "touch_live",
+      "intendedUci": "h6b6",
+      "intendedLegal": true,
+      "submittedUci": null,
+      "matches": false,
+      "extraPlayerRequests": 0,
+      "responseStatuses": [],
+      "rest": {
+        "y": 513,
+        "size": 320
+      },
+      "source": {
+        "x": 382,
+        "y": 733,
+        "insideBoard": true,
+        "topElement": "cg-board"
+      },
+      "selected": {
+        "y": 466,
+        "size": 320,
+        "shiftPx": -46,
+        "selectedMarkers": 1,
+        "captionHeight": 87
+      },
+      "target": {
+        "x": 622,
+        "y": 686,
+        "insideBoard": true,
+        "topElement": "square.move-dest"
+      }
+    },
+    {
+      "viewport": "1440x1000",
+      "pack": "philidor-third-rank-hold",
+      "gesture": "resize_recovery",
+      "intendedUci": "h6b6",
+      "intendedLegal": true,
+      "submittedUci": "h6b6",
+      "matches": true,
+      "extraPlayerRequests": 0,
+      "responseStatuses": [
+        200,
+        200
+      ],
+      "rest": {
+        "y": 513,
+        "size": 320
+      },
+      "source": {
+        "x": 382,
+        "y": 733,
+        "insideBoard": true,
+        "topElement": "cg-board"
+      },
+      "selected": {
+        "y": 466,
+        "size": 320,
+        "shiftPx": -46,
+        "selectedMarkers": 1,
+        "captionHeight": 87
+      },
+      "target": {
+        "x": 622,
+        "y": 686,
+        "insideBoard": true,
+        "topElement": "cg-board"
+      }
+    },
+    {
+      "viewport": "1440x1000",
+      "pack": "philidor-third-rank-hold",
+      "gesture": "hover",
+      "intendedUci": "h6b6",
+      "intendedLegal": true,
+      "submittedUci": null,
+      "matches": true,
+      "extraPlayerRequests": 0,
+      "responseStatuses": [],
+      "rest": {
+        "y": 513,
+        "size": 320
+      },
+      "source": {
+        "x": 382,
+        "y": 733,
+        "insideBoard": true,
+        "topElement": "cg-board"
+      },
+      "selected": {
+        "y": 513,
+        "size": 320,
+        "shiftPx": 0,
+        "selectedMarkers": 0,
+        "captionHeight": 0
+      },
+      "target": {
+        "x": 622,
+        "y": 733,
+        "insideBoard": true,
+        "topElement": "cg-board"
+      }
+    },
+    {
+      "viewport": "1440x1000",
+      "pack": "queen-vs-pawn-seventh-convert",
+      "gesture": "stale_click",
+      "intendedUci": "e4c4",
+      "intendedLegal": true,
+      "submittedUci": "e4c4",
+      "matches": true,
+      "extraPlayerRequests": 0,
+      "responseStatuses": [
+        200,
+        200
+      ],
+      "rest": {
+        "y": 513,
+        "size": 320
+      },
+      "source": {
+        "x": 542,
+        "y": 693,
+        "insideBoard": true,
+        "topElement": "cg-board"
+      },
+      "selected": {
+        "y": 423,
+        "size": 320,
+        "shiftPx": -89,
+        "selectedMarkers": 1,
+        "captionHeight": 173
+      },
+      "target": {
+        "x": 462,
+        "y": 693,
+        "insideBoard": true,
+        "topElement": "cg-board"
+      }
+    },
+    {
+      "viewport": "1440x1000",
+      "pack": "queen-vs-pawn-seventh-convert",
+      "gesture": "live_click",
+      "intendedUci": "e4c4",
+      "intendedLegal": true,
+      "submittedUci": "e4c6",
+      "matches": false,
+      "extraPlayerRequests": 0,
+      "responseStatuses": [
+        200,
+        200
+      ],
+      "rest": {
+        "y": 513,
+        "size": 320
+      },
+      "source": {
+        "x": 542,
+        "y": 693,
+        "insideBoard": true,
+        "topElement": "cg-board"
+      },
+      "selected": {
+        "y": 423,
+        "size": 320,
+        "shiftPx": -89,
+        "selectedMarkers": 1,
+        "captionHeight": 173
+      },
+      "target": {
+        "x": 462,
+        "y": 603,
+        "insideBoard": true,
+        "topElement": "cg-board"
+      }
+    },
+    {
+      "viewport": "1440x1000",
+      "pack": "queen-vs-pawn-seventh-convert",
+      "gesture": "live_drag",
+      "intendedUci": "e4c4",
+      "intendedLegal": true,
+      "submittedUci": "e4c6",
+      "matches": false,
+      "extraPlayerRequests": 0,
+      "responseStatuses": [
+        200,
+        200
+      ],
+      "rest": {
+        "y": 513,
+        "size": 320
+      },
+      "source": {
+        "x": 542,
+        "y": 693,
+        "insideBoard": true,
+        "topElement": "cg-board"
+      },
+      "selected": {
+        "y": 423,
+        "size": 320,
+        "shiftPx": -89,
+        "selectedMarkers": 1,
+        "captionHeight": 173
+      },
+      "target": {
+        "x": 462,
+        "y": 603,
+        "insideBoard": true,
+        "topElement": "square.move-dest"
+      }
+    },
+    {
+      "viewport": "1440x1000",
+      "pack": "queen-vs-pawn-seventh-convert",
+      "gesture": "touch_live",
+      "intendedUci": "e4c4",
+      "intendedLegal": true,
+      "submittedUci": "e4c6",
+      "matches": false,
+      "extraPlayerRequests": 0,
+      "responseStatuses": [
+        200,
+        200
+      ],
+      "rest": {
+        "y": 513,
+        "size": 320
+      },
+      "source": {
+        "x": 542,
+        "y": 693,
+        "insideBoard": true,
+        "topElement": "cg-board"
+      },
+      "selected": {
+        "y": 423,
+        "size": 320,
+        "shiftPx": -89,
+        "selectedMarkers": 1,
+        "captionHeight": 173
+      },
+      "target": {
+        "x": 462,
+        "y": 603,
+        "insideBoard": true,
+        "topElement": "cg-board"
+      }
+    },
+    {
+      "viewport": "1440x1000",
+      "pack": "queen-vs-pawn-seventh-convert",
+      "gesture": "resize_recovery",
+      "intendedUci": "e4c4",
+      "intendedLegal": true,
+      "submittedUci": "e4c4",
+      "matches": true,
+      "extraPlayerRequests": 0,
+      "responseStatuses": [
+        200,
+        200
+      ],
+      "rest": {
+        "y": 513,
+        "size": 320
+      },
+      "source": {
+        "x": 542,
+        "y": 693,
+        "insideBoard": true,
+        "topElement": "cg-board"
+      },
+      "selected": {
+        "y": 423,
+        "size": 320,
+        "shiftPx": -89,
+        "selectedMarkers": 1,
+        "captionHeight": 173
+      },
+      "target": {
+        "x": 462,
+        "y": 603,
+        "insideBoard": true,
+        "topElement": "cg-board"
+      }
+    },
+    {
+      "viewport": "1440x1000",
+      "pack": "queen-vs-pawn-seventh-convert",
+      "gesture": "hover",
+      "intendedUci": "e4c4",
+      "intendedLegal": true,
+      "submittedUci": null,
+      "matches": true,
+      "extraPlayerRequests": 0,
+      "responseStatuses": [],
+      "rest": {
+        "y": 513,
+        "size": 320
+      },
+      "source": {
+        "x": 542,
+        "y": 693,
+        "insideBoard": true,
+        "topElement": "cg-board"
+      },
+      "selected": {
+        "y": 513,
+        "size": 320,
+        "shiftPx": 0,
+        "selectedMarkers": 0,
+        "captionHeight": 0
+      },
+      "target": {
+        "x": 462,
+        "y": 693,
+        "insideBoard": true,
+        "topElement": "cg-board"
+      }
+    },
+    {
+      "viewport": "1366x768",
+      "pack": "lucena-bridge-convert",
+      "gesture": "stale_click",
+      "intendedUci": "c1d1",
+      "intendedLegal": true,
+      "submittedUci": null,
+      "matches": false,
+      "extraPlayerRequests": 0,
+      "responseStatuses": [],
+      "rest": {
+        "y": 365,
+        "size": 240
+      },
+      "source": {
+        "x": 448,
+        "y": 590,
+        "insideBoard": true,
+        "topElement": "cg-board"
+      },
+      "selected": {
+        "y": 319,
+        "size": 240,
+        "shiftPx": -46,
+        "selectedMarkers": 1,
+        "captionHeight": 87
+      },
+      "target": {
+        "x": 478,
+        "y": 590,
+        "insideBoard": false,
+        "topElement": "p.svelte-196rcao"
+      }
+    },
+    {
+      "viewport": "1366x768",
+      "pack": "lucena-bridge-convert",
+      "gesture": "live_click",
+      "intendedUci": "c1d1",
+      "intendedLegal": true,
+      "submittedUci": null,
+      "matches": false,
+      "extraPlayerRequests": 0,
+      "responseStatuses": [],
+      "rest": {
+        "y": 365,
+        "size": 240
+      },
+      "source": {
+        "x": 448,
+        "y": 590,
+        "insideBoard": true,
+        "topElement": "cg-board"
+      },
+      "selected": {
+        "y": 319,
+        "size": 240,
+        "shiftPx": -46,
+        "selectedMarkers": 1,
+        "captionHeight": 87
+      },
+      "target": {
+        "x": 478,
+        "y": 544,
+        "insideBoard": true,
+        "topElement": "cg-board"
+      }
+    },
+    {
+      "viewport": "1366x768",
+      "pack": "lucena-bridge-convert",
+      "gesture": "live_drag",
+      "intendedUci": "c1d1",
+      "intendedLegal": true,
+      "submittedUci": null,
+      "matches": false,
+      "extraPlayerRequests": 0,
+      "responseStatuses": [],
+      "rest": {
+        "y": 365,
+        "size": 240
+      },
+      "source": {
+        "x": 448,
+        "y": 590,
+        "insideBoard": true,
+        "topElement": "cg-board"
+      },
+      "selected": {
+        "y": 319,
+        "size": 240,
+        "shiftPx": -46,
+        "selectedMarkers": 1,
+        "captionHeight": 87
+      },
+      "target": {
+        "x": 478,
+        "y": 544,
+        "insideBoard": true,
+        "topElement": "square.move-dest"
+      }
+    },
+    {
+      "viewport": "1366x768",
+      "pack": "lucena-bridge-convert",
+      "gesture": "touch_live",
+      "intendedUci": "c1d1",
+      "intendedLegal": true,
+      "submittedUci": null,
+      "matches": false,
+      "extraPlayerRequests": 0,
+      "responseStatuses": [],
+      "rest": {
+        "y": 365,
+        "size": 240
+      },
+      "source": {
+        "x": 448,
+        "y": 590,
+        "insideBoard": true,
+        "topElement": "cg-board"
+      },
+      "selected": {
+        "y": 319,
+        "size": 240,
+        "shiftPx": -46,
+        "selectedMarkers": 1,
+        "captionHeight": 87
+      },
+      "target": {
+        "x": 478,
+        "y": 544,
+        "insideBoard": true,
+        "topElement": "square.move-dest"
+      }
+    },
+    {
+      "viewport": "1366x768",
+      "pack": "lucena-bridge-convert",
+      "gesture": "resize_recovery",
+      "intendedUci": "c1d1",
+      "intendedLegal": true,
+      "submittedUci": "c1d1",
+      "matches": true,
+      "extraPlayerRequests": 0,
+      "responseStatuses": [
+        200,
+        200
+      ],
+      "rest": {
+        "y": 365,
+        "size": 240
+      },
+      "source": {
+        "x": 448,
+        "y": 590,
+        "insideBoard": true,
+        "topElement": "cg-board"
+      },
+      "selected": {
+        "y": 319,
+        "size": 240,
+        "shiftPx": -46,
+        "selectedMarkers": 1,
+        "captionHeight": 87
+      },
+      "target": {
+        "x": 478,
+        "y": 544,
+        "insideBoard": true,
+        "topElement": "cg-board"
+      }
+    },
+    {
+      "viewport": "1366x768",
+      "pack": "lucena-bridge-convert",
+      "gesture": "hover",
+      "intendedUci": "c1d1",
+      "intendedLegal": true,
+      "submittedUci": null,
+      "matches": true,
+      "extraPlayerRequests": 0,
+      "responseStatuses": [],
+      "rest": {
+        "y": 365,
+        "size": 240
+      },
+      "source": {
+        "x": 448,
+        "y": 590,
+        "insideBoard": true,
+        "topElement": "cg-board"
+      },
+      "selected": {
+        "y": 365,
+        "size": 240,
+        "shiftPx": 0,
+        "selectedMarkers": 0,
+        "captionHeight": 0
+      },
+      "target": {
+        "x": 478,
+        "y": 590,
+        "insideBoard": true,
+        "topElement": "cg-board"
+      }
+    },
+    {
+      "viewport": "1366x768",
+      "pack": "mate-bishop-knight",
+      "gesture": "stale_click",
+      "intendedUci": "c3e5",
+      "intendedLegal": true,
+      "submittedUci": "c3e5",
+      "matches": true,
+      "extraPlayerRequests": 0,
+      "responseStatuses": [
+        200,
+        200
+      ],
+      "rest": {
+        "y": 365,
+        "size": 240
+      },
+      "source": {
+        "x": 448,
+        "y": 530,
+        "insideBoard": true,
+        "topElement": "cg-board"
+      },
+      "selected": {
+        "y": 298,
+        "size": 240,
+        "shiftPx": -68,
+        "selectedMarkers": 1,
+        "captionHeight": 130
+      },
+      "target": {
+        "x": 508,
+        "y": 470,
+        "insideBoard": true,
+        "topElement": "cg-board"
+      }
+    },
+    {
+      "viewport": "1366x768",
+      "pack": "mate-bishop-knight",
+      "gesture": "live_click",
+      "intendedUci": "c3e5",
+      "intendedLegal": true,
+      "submittedUci": null,
+      "matches": false,
+      "extraPlayerRequests": 0,
+      "responseStatuses": [],
+      "rest": {
+        "y": 365,
+        "size": 240
+      },
+      "source": {
+        "x": 448,
+        "y": 530,
+        "insideBoard": true,
+        "topElement": "cg-board"
+      },
+      "selected": {
+        "y": 298,
+        "size": 240,
+        "shiftPx": -68,
+        "selectedMarkers": 1,
+        "captionHeight": 130
+      },
+      "target": {
+        "x": 508,
+        "y": 403,
+        "insideBoard": true,
+        "topElement": "cg-board"
+      }
+    },
+    {
+      "viewport": "1366x768",
+      "pack": "mate-bishop-knight",
+      "gesture": "live_drag",
+      "intendedUci": "c3e5",
+      "intendedLegal": true,
+      "submittedUci": null,
+      "matches": false,
+      "extraPlayerRequests": 0,
+      "responseStatuses": [],
+      "rest": {
+        "y": 365,
+        "size": 240
+      },
+      "source": {
+        "x": 448,
+        "y": 530,
+        "insideBoard": true,
+        "topElement": "cg-board"
+      },
+      "selected": {
+        "y": 298,
+        "size": 240,
+        "shiftPx": -68,
+        "selectedMarkers": 1,
+        "captionHeight": 130
+      },
+      "target": {
+        "x": 508,
+        "y": 403,
+        "insideBoard": true,
+        "topElement": "square.move-dest"
+      }
+    },
+    {
+      "viewport": "1366x768",
+      "pack": "mate-bishop-knight",
+      "gesture": "touch_live",
+      "intendedUci": "c3e5",
+      "intendedLegal": true,
+      "submittedUci": null,
+      "matches": false,
+      "extraPlayerRequests": 0,
+      "responseStatuses": [],
+      "rest": {
+        "y": 365,
+        "size": 240
+      },
+      "source": {
+        "x": 448,
+        "y": 530,
+        "insideBoard": true,
+        "topElement": "cg-board"
+      },
+      "selected": {
+        "y": 298,
+        "size": 240,
+        "shiftPx": -68,
+        "selectedMarkers": 1,
+        "captionHeight": 130
+      },
+      "target": {
+        "x": 508,
+        "y": 403,
+        "insideBoard": true,
+        "topElement": "square.move-dest"
+      }
+    },
+    {
+      "viewport": "1366x768",
+      "pack": "mate-bishop-knight",
+      "gesture": "resize_recovery",
+      "intendedUci": "c3e5",
+      "intendedLegal": true,
+      "submittedUci": "c3e5",
+      "matches": true,
+      "extraPlayerRequests": 0,
+      "responseStatuses": [
+        200,
+        200
+      ],
+      "rest": {
+        "y": 365,
+        "size": 240
+      },
+      "source": {
+        "x": 448,
+        "y": 530,
+        "insideBoard": true,
+        "topElement": "cg-board"
+      },
+      "selected": {
+        "y": 298,
+        "size": 240,
+        "shiftPx": -68,
+        "selectedMarkers": 1,
+        "captionHeight": 130
+      },
+      "target": {
+        "x": 508,
+        "y": 403,
+        "insideBoard": true,
+        "topElement": "cg-board"
+      }
+    },
+    {
+      "viewport": "1366x768",
+      "pack": "mate-bishop-knight",
+      "gesture": "hover",
+      "intendedUci": "c3e5",
+      "intendedLegal": true,
+      "submittedUci": null,
+      "matches": true,
+      "extraPlayerRequests": 0,
+      "responseStatuses": [],
+      "rest": {
+        "y": 365,
+        "size": 240
+      },
+      "source": {
+        "x": 448,
+        "y": 530,
+        "insideBoard": true,
+        "topElement": "cg-board"
+      },
+      "selected": {
+        "y": 365,
+        "size": 240,
+        "shiftPx": 0,
+        "selectedMarkers": 0,
+        "captionHeight": 0
+      },
+      "target": {
+        "x": 508,
+        "y": 470,
+        "insideBoard": true,
+        "topElement": "cg-board"
+      }
+    },
+    {
+      "viewport": "1366x768",
+      "pack": "mate-k-r-technique",
+      "gesture": "stale_click",
+      "intendedUci": "h2h6",
+      "intendedLegal": true,
+      "submittedUci": "h2h6",
+      "matches": true,
+      "extraPlayerRequests": 0,
+      "responseStatuses": [
+        200,
+        200
+      ],
+      "rest": {
+        "y": 365,
+        "size": 240
+      },
+      "source": {
+        "x": 598,
+        "y": 560,
+        "insideBoard": true,
+        "topElement": "cg-board"
+      },
+      "selected": {
+        "y": 326,
+        "size": 240,
+        "shiftPx": -39,
+        "selectedMarkers": 1,
+        "captionHeight": 73
+      },
+      "target": {
+        "x": 598,
+        "y": 440,
+        "insideBoard": true,
+        "topElement": "cg-board"
+      }
+    },
+    {
+      "viewport": "1366x768",
+      "pack": "mate-k-r-technique",
+      "gesture": "live_click",
+      "intendedUci": "h2h6",
+      "intendedLegal": true,
+      "submittedUci": "h2h7",
+      "matches": false,
+      "extraPlayerRequests": 0,
+      "responseStatuses": [
+        200,
+        200
+      ],
+      "rest": {
+        "y": 365,
+        "size": 240
+      },
+      "source": {
+        "x": 598,
+        "y": 560,
+        "insideBoard": true,
+        "topElement": "cg-board"
+      },
+      "selected": {
+        "y": 326,
+        "size": 240,
+        "shiftPx": -39,
+        "selectedMarkers": 1,
+        "captionHeight": 73
+      },
+      "target": {
+        "x": 598,
+        "y": 401,
+        "insideBoard": true,
+        "topElement": "cg-board"
+      }
+    },
+    {
+      "viewport": "1366x768",
+      "pack": "mate-k-r-technique",
+      "gesture": "live_drag",
+      "intendedUci": "h2h6",
+      "intendedLegal": true,
+      "submittedUci": "h2h7",
+      "matches": false,
+      "extraPlayerRequests": 0,
+      "responseStatuses": [
+        200,
+        200
+      ],
+      "rest": {
+        "y": 365,
+        "size": 240
+      },
+      "source": {
+        "x": 598,
+        "y": 560,
+        "insideBoard": true,
+        "topElement": "cg-board"
+      },
+      "selected": {
+        "y": 326,
+        "size": 240,
+        "shiftPx": -39,
+        "selectedMarkers": 1,
+        "captionHeight": 73
+      },
+      "target": {
+        "x": 598,
+        "y": 401,
+        "insideBoard": true,
+        "topElement": "square.move-dest"
+      }
+    },
+    {
+      "viewport": "1366x768",
+      "pack": "mate-k-r-technique",
+      "gesture": "touch_live",
+      "intendedUci": "h2h6",
+      "intendedLegal": true,
+      "submittedUci": "h2h7",
+      "matches": false,
+      "extraPlayerRequests": 0,
+      "responseStatuses": [
+        200,
+        200
+      ],
+      "rest": {
+        "y": 365,
+        "size": 240
+      },
+      "source": {
+        "x": 598,
+        "y": 560,
+        "insideBoard": true,
+        "topElement": "cg-board"
+      },
+      "selected": {
+        "y": 326,
+        "size": 240,
+        "shiftPx": -39,
+        "selectedMarkers": 1,
+        "captionHeight": 73
+      },
+      "target": {
+        "x": 598,
+        "y": 401,
+        "insideBoard": true,
+        "topElement": "cg-board"
+      }
+    },
+    {
+      "viewport": "1366x768",
+      "pack": "mate-k-r-technique",
+      "gesture": "resize_recovery",
+      "intendedUci": "h2h6",
+      "intendedLegal": true,
+      "submittedUci": "h2h6",
+      "matches": true,
+      "extraPlayerRequests": 0,
+      "responseStatuses": [
+        200,
+        200
+      ],
+      "rest": {
+        "y": 365,
+        "size": 240
+      },
+      "source": {
+        "x": 598,
+        "y": 560,
+        "insideBoard": true,
+        "topElement": "cg-board"
+      },
+      "selected": {
+        "y": 326,
+        "size": 240,
+        "shiftPx": -39,
+        "selectedMarkers": 1,
+        "captionHeight": 73
+      },
+      "target": {
+        "x": 598,
+        "y": 401,
+        "insideBoard": true,
+        "topElement": "cg-board"
+      }
+    },
+    {
+      "viewport": "1366x768",
+      "pack": "mate-k-r-technique",
+      "gesture": "hover",
+      "intendedUci": "h2h6",
+      "intendedLegal": true,
+      "submittedUci": null,
+      "matches": true,
+      "extraPlayerRequests": 0,
+      "responseStatuses": [],
+      "rest": {
+        "y": 365,
+        "size": 240
+      },
+      "source": {
+        "x": 598,
+        "y": 560,
+        "insideBoard": true,
+        "topElement": "cg-board"
+      },
+      "selected": {
+        "y": 365,
+        "size": 240,
+        "shiftPx": 0,
+        "selectedMarkers": 0,
+        "captionHeight": 0
+      },
+      "target": {
+        "x": 598,
+        "y": 440,
+        "insideBoard": true,
+        "topElement": "cg-board"
+      }
+    },
+    {
+      "viewport": "1366x768",
+      "pack": "pawn-opposition-convert",
+      "gesture": "stale_click",
+      "intendedUci": "e2e3",
+      "intendedLegal": true,
+      "submittedUci": "e2e3",
+      "matches": true,
+      "extraPlayerRequests": 0,
+      "responseStatuses": [
+        200
+      ],
+      "rest": {
+        "y": 365,
+        "size": 240
+      },
+      "source": {
+        "x": 508,
+        "y": 560,
+        "insideBoard": true,
+        "topElement": "cg-board"
+      },
+      "selected": {
+        "y": 348,
+        "size": 240,
+        "shiftPx": -17,
+        "selectedMarkers": 1,
+        "captionHeight": 29
+      },
+      "target": {
+        "x": 508,
+        "y": 530,
+        "insideBoard": true,
+        "topElement": "cg-board"
+      }
+    },
+    {
+      "viewport": "1366x768",
+      "pack": "pawn-opposition-convert",
+      "gesture": "live_click",
+      "intendedUci": "e2e3",
+      "intendedLegal": true,
+      "submittedUci": null,
+      "matches": false,
+      "extraPlayerRequests": 0,
+      "responseStatuses": [],
+      "rest": {
+        "y": 365,
+        "size": 240
+      },
+      "source": {
+        "x": 508,
+        "y": 560,
+        "insideBoard": true,
+        "topElement": "cg-board"
+      },
+      "selected": {
+        "y": 348,
+        "size": 240,
+        "shiftPx": -17,
+        "selectedMarkers": 1,
+        "captionHeight": 29
+      },
+      "target": {
+        "x": 508,
+        "y": 513,
+        "insideBoard": true,
+        "topElement": "square.move-dest"
+      }
+    },
+    {
+      "viewport": "1366x768",
+      "pack": "pawn-opposition-convert",
+      "gesture": "live_drag",
+      "intendedUci": "e2e3",
+      "intendedLegal": true,
+      "submittedUci": null,
+      "matches": false,
+      "extraPlayerRequests": 0,
+      "responseStatuses": [],
+      "rest": {
+        "y": 365,
+        "size": 240
+      },
+      "source": {
+        "x": 508,
+        "y": 560,
+        "insideBoard": true,
+        "topElement": "cg-board"
+      },
+      "selected": {
+        "y": 348,
+        "size": 240,
+        "shiftPx": -17,
+        "selectedMarkers": 1,
+        "captionHeight": 29
+      },
+      "target": {
+        "x": 508,
+        "y": 513,
+        "insideBoard": true,
+        "topElement": "square.move-dest"
+      }
+    },
+    {
+      "viewport": "1366x768",
+      "pack": "pawn-opposition-convert",
+      "gesture": "touch_live",
+      "intendedUci": "e2e3",
+      "intendedLegal": true,
+      "submittedUci": null,
+      "matches": false,
+      "extraPlayerRequests": 0,
+      "responseStatuses": [],
+      "rest": {
+        "y": 365,
+        "size": 240
+      },
+      "source": {
+        "x": 508,
+        "y": 560,
+        "insideBoard": true,
+        "topElement": "cg-board"
+      },
+      "selected": {
+        "y": 348,
+        "size": 240,
+        "shiftPx": -17,
+        "selectedMarkers": 1,
+        "captionHeight": 29
+      },
+      "target": {
+        "x": 508,
+        "y": 513,
+        "insideBoard": true,
+        "topElement": "square.move-dest"
+      }
+    },
+    {
+      "viewport": "1366x768",
+      "pack": "pawn-opposition-convert",
+      "gesture": "resize_recovery",
+      "intendedUci": "e2e3",
+      "intendedLegal": true,
+      "submittedUci": "e2e3",
+      "matches": true,
+      "extraPlayerRequests": 0,
+      "responseStatuses": [
+        200
+      ],
+      "rest": {
+        "y": 365,
+        "size": 240
+      },
+      "source": {
+        "x": 508,
+        "y": 560,
+        "insideBoard": true,
+        "topElement": "cg-board"
+      },
+      "selected": {
+        "y": 348,
+        "size": 240,
+        "shiftPx": -17,
+        "selectedMarkers": 1,
+        "captionHeight": 29
+      },
+      "target": {
+        "x": 508,
+        "y": 513,
+        "insideBoard": true,
+        "topElement": "cg-board"
+      }
+    },
+    {
+      "viewport": "1366x768",
+      "pack": "pawn-opposition-convert",
+      "gesture": "hover",
+      "intendedUci": "e2e3",
+      "intendedLegal": true,
+      "submittedUci": null,
+      "matches": true,
+      "extraPlayerRequests": 0,
+      "responseStatuses": [],
+      "rest": {
+        "y": 365,
+        "size": 240
+      },
+      "source": {
+        "x": 508,
+        "y": 560,
+        "insideBoard": true,
+        "topElement": "cg-board"
+      },
+      "selected": {
+        "y": 365,
+        "size": 240,
+        "shiftPx": 0,
+        "selectedMarkers": 0,
+        "captionHeight": 0
+      },
+      "target": {
+        "x": 508,
+        "y": 530,
+        "insideBoard": true,
+        "topElement": "cg-board"
+      }
+    },
+    {
+      "viewport": "1366x768",
+      "pack": "philidor-third-rank-hold",
+      "gesture": "stale_click",
+      "intendedUci": "h6b6",
+      "intendedLegal": true,
+      "submittedUci": "h6b6",
+      "matches": true,
+      "extraPlayerRequests": 0,
+      "responseStatuses": [
+        200,
+        200
+      ],
+      "rest": {
+        "y": 365,
+        "size": 240
+      },
+      "source": {
+        "x": 388,
+        "y": 530,
+        "insideBoard": true,
+        "topElement": "cg-board"
+      },
+      "selected": {
+        "y": 319,
+        "size": 240,
+        "shiftPx": -46,
+        "selectedMarkers": 1,
+        "captionHeight": 87
+      },
+      "target": {
+        "x": 568,
+        "y": 530,
+        "insideBoard": true,
+        "topElement": "cg-board"
+      }
+    },
+    {
+      "viewport": "1366x768",
+      "pack": "philidor-third-rank-hold",
+      "gesture": "live_click",
+      "intendedUci": "h6b6",
+      "intendedLegal": true,
+      "submittedUci": null,
+      "matches": false,
+      "extraPlayerRequests": 0,
+      "responseStatuses": [],
+      "rest": {
+        "y": 365,
+        "size": 240
+      },
+      "source": {
+        "x": 388,
+        "y": 530,
+        "insideBoard": true,
+        "topElement": "cg-board"
+      },
+      "selected": {
+        "y": 319,
+        "size": 240,
+        "shiftPx": -46,
+        "selectedMarkers": 1,
+        "captionHeight": 87
+      },
+      "target": {
+        "x": 568,
+        "y": 484,
+        "insideBoard": true,
+        "topElement": "cg-board"
+      }
+    },
+    {
+      "viewport": "1366x768",
+      "pack": "philidor-third-rank-hold",
+      "gesture": "live_drag",
+      "intendedUci": "h6b6",
+      "intendedLegal": true,
+      "submittedUci": null,
+      "matches": false,
+      "extraPlayerRequests": 0,
+      "responseStatuses": [],
+      "rest": {
+        "y": 365,
+        "size": 240
+      },
+      "source": {
+        "x": 388,
+        "y": 530,
+        "insideBoard": true,
+        "topElement": "cg-board"
+      },
+      "selected": {
+        "y": 319,
+        "size": 240,
+        "shiftPx": -46,
+        "selectedMarkers": 1,
+        "captionHeight": 87
+      },
+      "target": {
+        "x": 568,
+        "y": 484,
+        "insideBoard": true,
+        "topElement": "square.move-dest"
+      }
+    },
+    {
+      "viewport": "1366x768",
+      "pack": "philidor-third-rank-hold",
+      "gesture": "touch_live",
+      "intendedUci": "h6b6",
+      "intendedLegal": true,
+      "submittedUci": null,
+      "matches": false,
+      "extraPlayerRequests": 0,
+      "responseStatuses": [],
+      "rest": {
+        "y": 365,
+        "size": 240
+      },
+      "source": {
+        "x": 388,
+        "y": 530,
+        "insideBoard": true,
+        "topElement": "cg-board"
+      },
+      "selected": {
+        "y": 319,
+        "size": 240,
+        "shiftPx": -46,
+        "selectedMarkers": 1,
+        "captionHeight": 87
+      },
+      "target": {
+        "x": 568,
+        "y": 484,
+        "insideBoard": true,
+        "topElement": "square.move-dest"
+      }
+    },
+    {
+      "viewport": "1366x768",
+      "pack": "philidor-third-rank-hold",
+      "gesture": "resize_recovery",
+      "intendedUci": "h6b6",
+      "intendedLegal": true,
+      "submittedUci": "h6b6",
+      "matches": true,
+      "extraPlayerRequests": 0,
+      "responseStatuses": [
+        200,
+        200
+      ],
+      "rest": {
+        "y": 365,
+        "size": 240
+      },
+      "source": {
+        "x": 388,
+        "y": 530,
+        "insideBoard": true,
+        "topElement": "cg-board"
+      },
+      "selected": {
+        "y": 319,
+        "size": 240,
+        "shiftPx": -46,
+        "selectedMarkers": 1,
+        "captionHeight": 87
+      },
+      "target": {
+        "x": 568,
+        "y": 484,
+        "insideBoard": true,
+        "topElement": "cg-board"
+      }
+    },
+    {
+      "viewport": "1366x768",
+      "pack": "philidor-third-rank-hold",
+      "gesture": "hover",
+      "intendedUci": "h6b6",
+      "intendedLegal": true,
+      "submittedUci": null,
+      "matches": true,
+      "extraPlayerRequests": 0,
+      "responseStatuses": [],
+      "rest": {
+        "y": 365,
+        "size": 240
+      },
+      "source": {
+        "x": 388,
+        "y": 530,
+        "insideBoard": true,
+        "topElement": "cg-board"
+      },
+      "selected": {
+        "y": 365,
+        "size": 240,
+        "shiftPx": 0,
+        "selectedMarkers": 0,
+        "captionHeight": 0
+      },
+      "target": {
+        "x": 568,
+        "y": 530,
+        "insideBoard": true,
+        "topElement": "cg-board"
+      }
+    },
+    {
+      "viewport": "1366x768",
+      "pack": "queen-vs-pawn-seventh-convert",
+      "gesture": "stale_click",
+      "intendedUci": "e4c4",
+      "intendedLegal": true,
+      "submittedUci": "e4c4",
+      "matches": true,
+      "extraPlayerRequests": 0,
+      "responseStatuses": [
+        200,
+        200
+      ],
+      "rest": {
+        "y": 365,
+        "size": 240
+      },
+      "source": {
+        "x": 508,
+        "y": 500,
+        "insideBoard": true,
+        "topElement": "cg-board"
+      },
+      "selected": {
+        "y": 276,
+        "size": 240,
+        "shiftPx": -89,
+        "selectedMarkers": 1,
+        "captionHeight": 173
+      },
+      "target": {
+        "x": 448,
+        "y": 500,
+        "insideBoard": true,
+        "topElement": "cg-board"
+      }
+    },
+    {
+      "viewport": "1366x768",
+      "pack": "queen-vs-pawn-seventh-convert",
+      "gesture": "live_click",
+      "intendedUci": "e4c4",
+      "intendedLegal": true,
+      "submittedUci": null,
+      "matches": false,
+      "extraPlayerRequests": 0,
+      "responseStatuses": [],
+      "rest": {
+        "y": 365,
+        "size": 240
+      },
+      "source": {
+        "x": 508,
+        "y": 500,
+        "insideBoard": true,
+        "topElement": "cg-board"
+      },
+      "selected": {
+        "y": 276,
+        "size": 240,
+        "shiftPx": -89,
+        "selectedMarkers": 1,
+        "captionHeight": 173
+      },
+      "target": {
+        "x": 448,
+        "y": 411,
+        "insideBoard": true,
+        "topElement": "cg-board"
+      }
+    },
+    {
+      "viewport": "1366x768",
+      "pack": "queen-vs-pawn-seventh-convert",
+      "gesture": "live_drag",
+      "intendedUci": "e4c4",
+      "intendedLegal": true,
+      "submittedUci": null,
+      "matches": false,
+      "extraPlayerRequests": 0,
+      "responseStatuses": [],
+      "rest": {
+        "y": 365,
+        "size": 240
+      },
+      "source": {
+        "x": 508,
+        "y": 500,
+        "insideBoard": true,
+        "topElement": "cg-board"
+      },
+      "selected": {
+        "y": 276,
+        "size": 240,
+        "shiftPx": -89,
+        "selectedMarkers": 1,
+        "captionHeight": 173
+      },
+      "target": {
+        "x": 448,
+        "y": 411,
+        "insideBoard": true,
+        "topElement": "square.move-dest"
+      }
+    },
+    {
+      "viewport": "1366x768",
+      "pack": "queen-vs-pawn-seventh-convert",
+      "gesture": "touch_live",
+      "intendedUci": "e4c4",
+      "intendedLegal": true,
+      "submittedUci": null,
+      "matches": false,
+      "extraPlayerRequests": 0,
+      "responseStatuses": [],
+      "rest": {
+        "y": 365,
+        "size": 240
+      },
+      "source": {
+        "x": 508,
+        "y": 500,
+        "insideBoard": true,
+        "topElement": "cg-board"
+      },
+      "selected": {
+        "y": 276,
+        "size": 240,
+        "shiftPx": -89,
+        "selectedMarkers": 1,
+        "captionHeight": 173
+      },
+      "target": {
+        "x": 448,
+        "y": 411,
+        "insideBoard": true,
+        "topElement": "square.move-dest"
+      }
+    },
+    {
+      "viewport": "1366x768",
+      "pack": "queen-vs-pawn-seventh-convert",
+      "gesture": "resize_recovery",
+      "intendedUci": "e4c4",
+      "intendedLegal": true,
+      "submittedUci": "e4c4",
+      "matches": true,
+      "extraPlayerRequests": 0,
+      "responseStatuses": [
+        200,
+        200
+      ],
+      "rest": {
+        "y": 365,
+        "size": 240
+      },
+      "source": {
+        "x": 508,
+        "y": 500,
+        "insideBoard": true,
+        "topElement": "cg-board"
+      },
+      "selected": {
+        "y": 276,
+        "size": 240,
+        "shiftPx": -89,
+        "selectedMarkers": 1,
+        "captionHeight": 173
+      },
+      "target": {
+        "x": 448,
+        "y": 411,
+        "insideBoard": true,
+        "topElement": "cg-board"
+      }
+    },
+    {
+      "viewport": "1366x768",
+      "pack": "queen-vs-pawn-seventh-convert",
+      "gesture": "hover",
+      "intendedUci": "e4c4",
+      "intendedLegal": true,
+      "submittedUci": null,
+      "matches": true,
+      "extraPlayerRequests": 0,
+      "responseStatuses": [],
+      "rest": {
+        "y": 365,
+        "size": 240
+      },
+      "source": {
+        "x": 508,
+        "y": 500,
+        "insideBoard": true,
+        "topElement": "cg-board"
+      },
+      "selected": {
+        "y": 365,
+        "size": 240,
+        "shiftPx": 0,
+        "selectedMarkers": 0,
+        "captionHeight": 0
+      },
+      "target": {
+        "x": 448,
+        "y": 500,
+        "insideBoard": true,
+        "topElement": "cg-board"
+      }
+    },
+    {
+      "viewport": "1280x720",
+      "pack": "lucena-bridge-convert",
+      "gesture": "stale_click",
+      "intendedUci": "c1d1",
+      "intendedLegal": true,
+      "submittedUci": null,
+      "matches": false,
+      "extraPlayerRequests": 0,
+      "responseStatuses": [],
+      "rest": {
+        "y": 365,
+        "size": 192
+      },
+      "source": {
+        "x": 426,
+        "y": 545,
+        "insideBoard": true,
+        "topElement": "cg-board"
+      },
+      "selected": {
+        "y": 319,
+        "size": 192,
+        "shiftPx": -46,
+        "selectedMarkers": 1,
+        "captionHeight": 87
+      },
+      "target": {
+        "x": 450,
+        "y": 545,
+        "insideBoard": false,
+        "topElement": "p.svelte-196rcao"
+      }
+    },
+    {
+      "viewport": "1280x720",
+      "pack": "lucena-bridge-convert",
+      "gesture": "live_click",
+      "intendedUci": "c1d1",
+      "intendedLegal": true,
+      "submittedUci": null,
+      "matches": false,
+      "extraPlayerRequests": 0,
+      "responseStatuses": [],
+      "rest": {
+        "y": 365,
+        "size": 192
+      },
+      "source": {
+        "x": 426,
+        "y": 545,
+        "insideBoard": true,
+        "topElement": "cg-board"
+      },
+      "selected": {
+        "y": 319,
+        "size": 192,
+        "shiftPx": -46,
+        "selectedMarkers": 1,
+        "captionHeight": 87
+      },
+      "target": {
+        "x": 450,
+        "y": 499,
+        "insideBoard": true,
+        "topElement": "cg-board"
+      }
+    },
+    {
+      "viewport": "1280x720",
+      "pack": "lucena-bridge-convert",
+      "gesture": "live_drag",
+      "intendedUci": "c1d1",
+      "intendedLegal": true,
+      "submittedUci": null,
+      "matches": false,
+      "extraPlayerRequests": 0,
+      "responseStatuses": [],
+      "rest": {
+        "y": 365,
+        "size": 192
+      },
+      "source": {
+        "x": 426,
+        "y": 545,
+        "insideBoard": true,
+        "topElement": "cg-board"
+      },
+      "selected": {
+        "y": 319,
+        "size": 192,
+        "shiftPx": -46,
+        "selectedMarkers": 1,
+        "captionHeight": 87
+      },
+      "target": {
+        "x": 450,
+        "y": 499,
+        "insideBoard": true,
+        "topElement": "square.move-dest"
+      }
+    },
+    {
+      "viewport": "1280x720",
+      "pack": "lucena-bridge-convert",
+      "gesture": "touch_live",
+      "intendedUci": "c1d1",
+      "intendedLegal": true,
+      "submittedUci": null,
+      "matches": false,
+      "extraPlayerRequests": 0,
+      "responseStatuses": [],
+      "rest": {
+        "y": 365,
+        "size": 192
+      },
+      "source": {
+        "x": 426,
+        "y": 545,
+        "insideBoard": true,
+        "topElement": "cg-board"
+      },
+      "selected": {
+        "y": 319,
+        "size": 192,
+        "shiftPx": -46,
+        "selectedMarkers": 1,
+        "captionHeight": 87
+      },
+      "target": {
+        "x": 450,
+        "y": 499,
+        "insideBoard": true,
+        "topElement": "square.move-dest"
+      }
+    },
+    {
+      "viewport": "1280x720",
+      "pack": "lucena-bridge-convert",
+      "gesture": "resize_recovery",
+      "intendedUci": "c1d1",
+      "intendedLegal": true,
+      "submittedUci": "c1d1",
+      "matches": true,
+      "extraPlayerRequests": 0,
+      "responseStatuses": [
+        200,
+        200
+      ],
+      "rest": {
+        "y": 365,
+        "size": 192
+      },
+      "source": {
+        "x": 426,
+        "y": 545,
+        "insideBoard": true,
+        "topElement": "cg-board"
+      },
+      "selected": {
+        "y": 319,
+        "size": 192,
+        "shiftPx": -46,
+        "selectedMarkers": 1,
+        "captionHeight": 87
+      },
+      "target": {
+        "x": 450,
+        "y": 499,
+        "insideBoard": true,
+        "topElement": "cg-board"
+      }
+    },
+    {
+      "viewport": "1280x720",
+      "pack": "lucena-bridge-convert",
+      "gesture": "hover",
+      "intendedUci": "c1d1",
+      "intendedLegal": true,
+      "submittedUci": null,
+      "matches": true,
+      "extraPlayerRequests": 0,
+      "responseStatuses": [],
+      "rest": {
+        "y": 365,
+        "size": 192
+      },
+      "source": {
+        "x": 426,
+        "y": 545,
+        "insideBoard": true,
+        "topElement": "cg-board"
+      },
+      "selected": {
+        "y": 365,
+        "size": 192,
+        "shiftPx": 0,
+        "selectedMarkers": 0,
+        "captionHeight": 0
+      },
+      "target": {
+        "x": 450,
+        "y": 545,
+        "insideBoard": true,
+        "topElement": "cg-board"
+      }
+    },
+    {
+      "viewport": "1280x720",
+      "pack": "mate-bishop-knight",
+      "gesture": "stale_click",
+      "intendedUci": "c3e5",
+      "intendedLegal": true,
+      "submittedUci": "c3e5",
+      "matches": true,
+      "extraPlayerRequests": 0,
+      "responseStatuses": [
+        200,
+        200
+      ],
+      "rest": {
+        "y": 365,
+        "size": 192
+      },
+      "source": {
+        "x": 426,
+        "y": 497,
+        "insideBoard": true,
+        "topElement": "cg-board"
+      },
+      "selected": {
+        "y": 298,
+        "size": 192,
+        "shiftPx": -68,
+        "selectedMarkers": 1,
+        "captionHeight": 130
+      },
+      "target": {
+        "x": 474,
+        "y": 449,
+        "insideBoard": true,
+        "topElement": "cg-board"
+      }
+    },
+    {
+      "viewport": "1280x720",
+      "pack": "mate-bishop-knight",
+      "gesture": "live_click",
+      "intendedUci": "c3e5",
+      "intendedLegal": true,
+      "submittedUci": null,
+      "matches": false,
+      "extraPlayerRequests": 0,
+      "responseStatuses": [],
+      "rest": {
+        "y": 365,
+        "size": 192
+      },
+      "source": {
+        "x": 426,
+        "y": 497,
+        "insideBoard": true,
+        "topElement": "cg-board"
+      },
+      "selected": {
+        "y": 298,
+        "size": 192,
+        "shiftPx": -68,
+        "selectedMarkers": 1,
+        "captionHeight": 130
+      },
+      "target": {
+        "x": 474,
+        "y": 382,
+        "insideBoard": true,
+        "topElement": "cg-board"
+      }
+    },
+    {
+      "viewport": "1280x720",
+      "pack": "mate-bishop-knight",
+      "gesture": "live_drag",
+      "intendedUci": "c3e5",
+      "intendedLegal": true,
+      "submittedUci": null,
+      "matches": false,
+      "extraPlayerRequests": 0,
+      "responseStatuses": [],
+      "rest": {
+        "y": 365,
+        "size": 192
+      },
+      "source": {
+        "x": 426,
+        "y": 497,
+        "insideBoard": true,
+        "topElement": "cg-board"
+      },
+      "selected": {
+        "y": 298,
+        "size": 192,
+        "shiftPx": -68,
+        "selectedMarkers": 1,
+        "captionHeight": 130
+      },
+      "target": {
+        "x": 474,
+        "y": 382,
+        "insideBoard": true,
+        "topElement": "square.move-dest"
+      }
+    },
+    {
+      "viewport": "1280x720",
+      "pack": "mate-bishop-knight",
+      "gesture": "touch_live",
+      "intendedUci": "c3e5",
+      "intendedLegal": true,
+      "submittedUci": null,
+      "matches": false,
+      "extraPlayerRequests": 0,
+      "responseStatuses": [],
+      "rest": {
+        "y": 365,
+        "size": 192
+      },
+      "source": {
+        "x": 426,
+        "y": 497,
+        "insideBoard": true,
+        "topElement": "cg-board"
+      },
+      "selected": {
+        "y": 298,
+        "size": 192,
+        "shiftPx": -68,
+        "selectedMarkers": 1,
+        "captionHeight": 130
+      },
+      "target": {
+        "x": 474,
+        "y": 382,
+        "insideBoard": true,
+        "topElement": "square.move-dest"
+      }
+    },
+    {
+      "viewport": "1280x720",
+      "pack": "mate-bishop-knight",
+      "gesture": "resize_recovery",
+      "intendedUci": "c3e5",
+      "intendedLegal": true,
+      "submittedUci": "c3e5",
+      "matches": true,
+      "extraPlayerRequests": 0,
+      "responseStatuses": [
+        200,
+        200
+      ],
+      "rest": {
+        "y": 365,
+        "size": 192
+      },
+      "source": {
+        "x": 426,
+        "y": 497,
+        "insideBoard": true,
+        "topElement": "cg-board"
+      },
+      "selected": {
+        "y": 298,
+        "size": 192,
+        "shiftPx": -68,
+        "selectedMarkers": 1,
+        "captionHeight": 130
+      },
+      "target": {
+        "x": 474,
+        "y": 382,
+        "insideBoard": true,
+        "topElement": "cg-board"
+      }
+    },
+    {
+      "viewport": "1280x720",
+      "pack": "mate-bishop-knight",
+      "gesture": "hover",
+      "intendedUci": "c3e5",
+      "intendedLegal": true,
+      "submittedUci": null,
+      "matches": true,
+      "extraPlayerRequests": 0,
+      "responseStatuses": [],
+      "rest": {
+        "y": 365,
+        "size": 192
+      },
+      "source": {
+        "x": 426,
+        "y": 497,
+        "insideBoard": true,
+        "topElement": "cg-board"
+      },
+      "selected": {
+        "y": 365,
+        "size": 192,
+        "shiftPx": 0,
+        "selectedMarkers": 0,
+        "captionHeight": 0
+      },
+      "target": {
+        "x": 474,
+        "y": 449,
+        "insideBoard": true,
+        "topElement": "cg-board"
+      }
+    },
+    {
+      "viewport": "1280x720",
+      "pack": "mate-k-r-technique",
+      "gesture": "stale_click",
+      "intendedUci": "h2h6",
+      "intendedLegal": true,
+      "submittedUci": "h2h6",
+      "matches": true,
+      "extraPlayerRequests": 0,
+      "responseStatuses": [
+        200,
+        200
+      ],
+      "rest": {
+        "y": 365,
+        "size": 192
+      },
+      "source": {
+        "x": 546,
+        "y": 521,
+        "insideBoard": true,
+        "topElement": "cg-board"
+      },
+      "selected": {
+        "y": 326,
+        "size": 192,
+        "shiftPx": -39,
+        "selectedMarkers": 1,
+        "captionHeight": 73
+      },
+      "target": {
+        "x": 546,
+        "y": 425,
+        "insideBoard": true,
+        "topElement": "cg-board"
+      }
+    },
+    {
+      "viewport": "1280x720",
+      "pack": "mate-k-r-technique",
+      "gesture": "live_click",
+      "intendedUci": "h2h6",
+      "intendedLegal": true,
+      "submittedUci": "h2h8",
+      "matches": false,
+      "extraPlayerRequests": 0,
+      "responseStatuses": [
+        200,
+        200
+      ],
+      "rest": {
+        "y": 365,
+        "size": 192
+      },
+      "source": {
+        "x": 546,
+        "y": 521,
+        "insideBoard": true,
+        "topElement": "cg-board"
+      },
+      "selected": {
+        "y": 326,
+        "size": 192,
+        "shiftPx": -39,
+        "selectedMarkers": 1,
+        "captionHeight": 73
+      },
+      "target": {
+        "x": 546,
+        "y": 386,
+        "insideBoard": true,
+        "topElement": "cg-board"
+      }
+    },
+    {
+      "viewport": "1280x720",
+      "pack": "mate-k-r-technique",
+      "gesture": "live_drag",
+      "intendedUci": "h2h6",
+      "intendedLegal": true,
+      "submittedUci": "h2h8",
+      "matches": false,
+      "extraPlayerRequests": 0,
+      "responseStatuses": [
+        200,
+        200
+      ],
+      "rest": {
+        "y": 365,
+        "size": 192
+      },
+      "source": {
+        "x": 546,
+        "y": 521,
+        "insideBoard": true,
+        "topElement": "cg-board"
+      },
+      "selected": {
+        "y": 326,
+        "size": 192,
+        "shiftPx": -39,
+        "selectedMarkers": 1,
+        "captionHeight": 73
+      },
+      "target": {
+        "x": 546,
+        "y": 386,
+        "insideBoard": true,
+        "topElement": "square.move-dest"
+      }
+    },
+    {
+      "viewport": "1280x720",
+      "pack": "mate-k-r-technique",
+      "gesture": "touch_live",
+      "intendedUci": "h2h6",
+      "intendedLegal": true,
+      "submittedUci": "h2h8",
+      "matches": false,
+      "extraPlayerRequests": 0,
+      "responseStatuses": [
+        200,
+        200
+      ],
+      "rest": {
+        "y": 365,
+        "size": 192
+      },
+      "source": {
+        "x": 546,
+        "y": 521,
+        "insideBoard": true,
+        "topElement": "cg-board"
+      },
+      "selected": {
+        "y": 326,
+        "size": 192,
+        "shiftPx": -39,
+        "selectedMarkers": 1,
+        "captionHeight": 73
+      },
+      "target": {
+        "x": 546,
+        "y": 386,
+        "insideBoard": true,
+        "topElement": "cg-board"
+      }
+    },
+    {
+      "viewport": "1280x720",
+      "pack": "mate-k-r-technique",
+      "gesture": "resize_recovery",
+      "intendedUci": "h2h6",
+      "intendedLegal": true,
+      "submittedUci": "h2h6",
+      "matches": true,
+      "extraPlayerRequests": 0,
+      "responseStatuses": [
+        200,
+        200
+      ],
+      "rest": {
+        "y": 365,
+        "size": 192
+      },
+      "source": {
+        "x": 546,
+        "y": 521,
+        "insideBoard": true,
+        "topElement": "cg-board"
+      },
+      "selected": {
+        "y": 326,
+        "size": 192,
+        "shiftPx": -39,
+        "selectedMarkers": 1,
+        "captionHeight": 73
+      },
+      "target": {
+        "x": 546,
+        "y": 386,
+        "insideBoard": true,
+        "topElement": "cg-board"
+      }
+    },
+    {
+      "viewport": "1280x720",
+      "pack": "mate-k-r-technique",
+      "gesture": "hover",
+      "intendedUci": "h2h6",
+      "intendedLegal": true,
+      "submittedUci": null,
+      "matches": true,
+      "extraPlayerRequests": 0,
+      "responseStatuses": [],
+      "rest": {
+        "y": 365,
+        "size": 192
+      },
+      "source": {
+        "x": 546,
+        "y": 521,
+        "insideBoard": true,
+        "topElement": "cg-board"
+      },
+      "selected": {
+        "y": 365,
+        "size": 192,
+        "shiftPx": 0,
+        "selectedMarkers": 0,
+        "captionHeight": 0
+      },
+      "target": {
+        "x": 546,
+        "y": 425,
+        "insideBoard": true,
+        "topElement": "cg-board"
+      }
+    },
+    {
+      "viewport": "1280x720",
+      "pack": "pawn-opposition-convert",
+      "gesture": "stale_click",
+      "intendedUci": "e2e3",
+      "intendedLegal": true,
+      "submittedUci": "e2e3",
+      "matches": true,
+      "extraPlayerRequests": 0,
+      "responseStatuses": [
+        200
+      ],
+      "rest": {
+        "y": 365,
+        "size": 192
+      },
+      "source": {
+        "x": 474,
+        "y": 521,
+        "insideBoard": true,
+        "topElement": "cg-board"
+      },
+      "selected": {
+        "y": 348,
+        "size": 192,
+        "shiftPx": -17,
+        "selectedMarkers": 1,
+        "captionHeight": 29
+      },
+      "target": {
+        "x": 474,
+        "y": 497,
+        "insideBoard": true,
+        "topElement": "cg-board"
+      }
+    },
+    {
+      "viewport": "1280x720",
+      "pack": "pawn-opposition-convert",
+      "gesture": "live_click",
+      "intendedUci": "e2e3",
+      "intendedLegal": true,
+      "submittedUci": null,
+      "matches": false,
+      "extraPlayerRequests": 0,
+      "responseStatuses": [],
+      "rest": {
+        "y": 365,
+        "size": 192
+      },
+      "source": {
+        "x": 474,
+        "y": 521,
+        "insideBoard": true,
+        "topElement": "cg-board"
+      },
+      "selected": {
+        "y": 348,
+        "size": 192,
+        "shiftPx": -17,
+        "selectedMarkers": 1,
+        "captionHeight": 29
+      },
+      "target": {
+        "x": 474,
+        "y": 480,
+        "insideBoard": true,
+        "topElement": "square.move-dest"
+      }
+    },
+    {
+      "viewport": "1280x720",
+      "pack": "pawn-opposition-convert",
+      "gesture": "live_drag",
+      "intendedUci": "e2e3",
+      "intendedLegal": true,
+      "submittedUci": null,
+      "matches": false,
+      "extraPlayerRequests": 0,
+      "responseStatuses": [],
+      "rest": {
+        "y": 365,
+        "size": 192
+      },
+      "source": {
+        "x": 474,
+        "y": 521,
+        "insideBoard": true,
+        "topElement": "cg-board"
+      },
+      "selected": {
+        "y": 348,
+        "size": 192,
+        "shiftPx": -17,
+        "selectedMarkers": 1,
+        "captionHeight": 29
+      },
+      "target": {
+        "x": 474,
+        "y": 480,
+        "insideBoard": true,
+        "topElement": "square.move-dest"
+      }
+    },
+    {
+      "viewport": "1280x720",
+      "pack": "pawn-opposition-convert",
+      "gesture": "touch_live",
+      "intendedUci": "e2e3",
+      "intendedLegal": true,
+      "submittedUci": null,
+      "matches": false,
+      "extraPlayerRequests": 0,
+      "responseStatuses": [],
+      "rest": {
+        "y": 365,
+        "size": 192
+      },
+      "source": {
+        "x": 474,
+        "y": 521,
+        "insideBoard": true,
+        "topElement": "cg-board"
+      },
+      "selected": {
+        "y": 348,
+        "size": 192,
+        "shiftPx": -17,
+        "selectedMarkers": 1,
+        "captionHeight": 29
+      },
+      "target": {
+        "x": 474,
+        "y": 480,
+        "insideBoard": true,
+        "topElement": "square.move-dest"
+      }
+    },
+    {
+      "viewport": "1280x720",
+      "pack": "pawn-opposition-convert",
+      "gesture": "resize_recovery",
+      "intendedUci": "e2e3",
+      "intendedLegal": true,
+      "submittedUci": "e2e3",
+      "matches": true,
+      "extraPlayerRequests": 0,
+      "responseStatuses": [
+        200
+      ],
+      "rest": {
+        "y": 365,
+        "size": 192
+      },
+      "source": {
+        "x": 474,
+        "y": 521,
+        "insideBoard": true,
+        "topElement": "cg-board"
+      },
+      "selected": {
+        "y": 348,
+        "size": 192,
+        "shiftPx": -17,
+        "selectedMarkers": 1,
+        "captionHeight": 29
+      },
+      "target": {
+        "x": 474,
+        "y": 480,
+        "insideBoard": true,
+        "topElement": "cg-board"
+      }
+    },
+    {
+      "viewport": "1280x720",
+      "pack": "pawn-opposition-convert",
+      "gesture": "hover",
+      "intendedUci": "e2e3",
+      "intendedLegal": true,
+      "submittedUci": null,
+      "matches": true,
+      "extraPlayerRequests": 0,
+      "responseStatuses": [],
+      "rest": {
+        "y": 365,
+        "size": 192
+      },
+      "source": {
+        "x": 474,
+        "y": 521,
+        "insideBoard": true,
+        "topElement": "cg-board"
+      },
+      "selected": {
+        "y": 365,
+        "size": 192,
+        "shiftPx": 0,
+        "selectedMarkers": 0,
+        "captionHeight": 0
+      },
+      "target": {
+        "x": 474,
+        "y": 497,
+        "insideBoard": true,
+        "topElement": "cg-board"
+      }
+    },
+    {
+      "viewport": "1280x720",
+      "pack": "philidor-third-rank-hold",
+      "gesture": "stale_click",
+      "intendedUci": "h6b6",
+      "intendedLegal": true,
+      "submittedUci": "h6b6",
+      "matches": true,
+      "extraPlayerRequests": 0,
+      "responseStatuses": [
+        200,
+        200
+      ],
+      "rest": {
+        "y": 365,
+        "size": 192
+      },
+      "source": {
+        "x": 378,
+        "y": 497,
+        "insideBoard": true,
+        "topElement": "cg-board"
+      },
+      "selected": {
+        "y": 319,
+        "size": 192,
+        "shiftPx": -46,
+        "selectedMarkers": 1,
+        "captionHeight": 87
+      },
+      "target": {
+        "x": 522,
+        "y": 497,
+        "insideBoard": true,
+        "topElement": "cg-board"
+      }
+    },
+    {
+      "viewport": "1280x720",
+      "pack": "philidor-third-rank-hold",
+      "gesture": "live_click",
+      "intendedUci": "h6b6",
+      "intendedLegal": true,
+      "submittedUci": null,
+      "matches": false,
+      "extraPlayerRequests": 0,
+      "responseStatuses": [],
+      "rest": {
+        "y": 365,
+        "size": 192
+      },
+      "source": {
+        "x": 378,
+        "y": 497,
+        "insideBoard": true,
+        "topElement": "cg-board"
+      },
+      "selected": {
+        "y": 319,
+        "size": 192,
+        "shiftPx": -46,
+        "selectedMarkers": 1,
+        "captionHeight": 87
+      },
+      "target": {
+        "x": 522,
+        "y": 451,
+        "insideBoard": true,
+        "topElement": "cg-board"
+      }
+    },
+    {
+      "viewport": "1280x720",
+      "pack": "philidor-third-rank-hold",
+      "gesture": "live_drag",
+      "intendedUci": "h6b6",
+      "intendedLegal": true,
+      "submittedUci": null,
+      "matches": false,
+      "extraPlayerRequests": 0,
+      "responseStatuses": [],
+      "rest": {
+        "y": 365,
+        "size": 192
+      },
+      "source": {
+        "x": 378,
+        "y": 497,
+        "insideBoard": true,
+        "topElement": "cg-board"
+      },
+      "selected": {
+        "y": 319,
+        "size": 192,
+        "shiftPx": -46,
+        "selectedMarkers": 1,
+        "captionHeight": 87
+      },
+      "target": {
+        "x": 522,
+        "y": 451,
+        "insideBoard": true,
+        "topElement": "square.move-dest"
+      }
+    },
+    {
+      "viewport": "1280x720",
+      "pack": "philidor-third-rank-hold",
+      "gesture": "touch_live",
+      "intendedUci": "h6b6",
+      "intendedLegal": true,
+      "submittedUci": null,
+      "matches": false,
+      "extraPlayerRequests": 0,
+      "responseStatuses": [],
+      "rest": {
+        "y": 365,
+        "size": 192
+      },
+      "source": {
+        "x": 378,
+        "y": 497,
+        "insideBoard": true,
+        "topElement": "cg-board"
+      },
+      "selected": {
+        "y": 319,
+        "size": 192,
+        "shiftPx": -46,
+        "selectedMarkers": 1,
+        "captionHeight": 87
+      },
+      "target": {
+        "x": 522,
+        "y": 451,
+        "insideBoard": true,
+        "topElement": "square.move-dest"
+      }
+    },
+    {
+      "viewport": "1280x720",
+      "pack": "philidor-third-rank-hold",
+      "gesture": "resize_recovery",
+      "intendedUci": "h6b6",
+      "intendedLegal": true,
+      "submittedUci": "h6b6",
+      "matches": true,
+      "extraPlayerRequests": 0,
+      "responseStatuses": [
+        200,
+        200
+      ],
+      "rest": {
+        "y": 365,
+        "size": 192
+      },
+      "source": {
+        "x": 378,
+        "y": 497,
+        "insideBoard": true,
+        "topElement": "cg-board"
+      },
+      "selected": {
+        "y": 319,
+        "size": 192,
+        "shiftPx": -46,
+        "selectedMarkers": 1,
+        "captionHeight": 87
+      },
+      "target": {
+        "x": 522,
+        "y": 451,
+        "insideBoard": true,
+        "topElement": "cg-board"
+      }
+    },
+    {
+      "viewport": "1280x720",
+      "pack": "philidor-third-rank-hold",
+      "gesture": "hover",
+      "intendedUci": "h6b6",
+      "intendedLegal": true,
+      "submittedUci": null,
+      "matches": true,
+      "extraPlayerRequests": 0,
+      "responseStatuses": [],
+      "rest": {
+        "y": 365,
+        "size": 192
+      },
+      "source": {
+        "x": 378,
+        "y": 497,
+        "insideBoard": true,
+        "topElement": "cg-board"
+      },
+      "selected": {
+        "y": 365,
+        "size": 192,
+        "shiftPx": 0,
+        "selectedMarkers": 0,
+        "captionHeight": 0
+      },
+      "target": {
+        "x": 522,
+        "y": 497,
+        "insideBoard": true,
+        "topElement": "cg-board"
+      }
+    },
+    {
+      "viewport": "1280x720",
+      "pack": "queen-vs-pawn-seventh-convert",
+      "gesture": "stale_click",
+      "intendedUci": "e4c4",
+      "intendedLegal": true,
+      "submittedUci": null,
+      "matches": false,
+      "extraPlayerRequests": 0,
+      "responseStatuses": [],
+      "rest": {
+        "y": 365,
+        "size": 192
+      },
+      "source": {
+        "x": 474,
+        "y": 473,
+        "insideBoard": true,
+        "topElement": "cg-board"
+      },
+      "selected": {
+        "y": 276,
+        "size": 192,
+        "shiftPx": -89,
+        "selectedMarkers": 1,
+        "captionHeight": 173
+      },
+      "target": {
+        "x": 426,
+        "y": 473,
+        "insideBoard": false,
+        "topElement": "p.svelte-196rcao"
+      }
+    },
+    {
+      "viewport": "1280x720",
+      "pack": "queen-vs-pawn-seventh-convert",
+      "gesture": "live_click",
+      "intendedUci": "e4c4",
+      "intendedLegal": true,
+      "submittedUci": null,
+      "matches": false,
+      "extraPlayerRequests": 0,
+      "responseStatuses": [],
+      "rest": {
+        "y": 365,
+        "size": 192
+      },
+      "source": {
+        "x": 474,
+        "y": 473,
+        "insideBoard": true,
+        "topElement": "cg-board"
+      },
+      "selected": {
+        "y": 276,
+        "size": 192,
+        "shiftPx": -89,
+        "selectedMarkers": 1,
+        "captionHeight": 173
+      },
+      "target": {
+        "x": 426,
+        "y": 384,
+        "insideBoard": true,
+        "topElement": "cg-board"
+      }
+    },
+    {
+      "viewport": "1280x720",
+      "pack": "queen-vs-pawn-seventh-convert",
+      "gesture": "live_drag",
+      "intendedUci": "e4c4",
+      "intendedLegal": true,
+      "submittedUci": null,
+      "matches": false,
+      "extraPlayerRequests": 0,
+      "responseStatuses": [],
+      "rest": {
+        "y": 365,
+        "size": 192
+      },
+      "source": {
+        "x": 474,
+        "y": 473,
+        "insideBoard": true,
+        "topElement": "cg-board"
+      },
+      "selected": {
+        "y": 276,
+        "size": 192,
+        "shiftPx": -89,
+        "selectedMarkers": 1,
+        "captionHeight": 173
+      },
+      "target": {
+        "x": 426,
+        "y": 384,
+        "insideBoard": true,
+        "topElement": "square.move-dest"
+      }
+    },
+    {
+      "viewport": "1280x720",
+      "pack": "queen-vs-pawn-seventh-convert",
+      "gesture": "touch_live",
+      "intendedUci": "e4c4",
+      "intendedLegal": true,
+      "submittedUci": null,
+      "matches": false,
+      "extraPlayerRequests": 0,
+      "responseStatuses": [],
+      "rest": {
+        "y": 365,
+        "size": 192
+      },
+      "source": {
+        "x": 474,
+        "y": 473,
+        "insideBoard": true,
+        "topElement": "cg-board"
+      },
+      "selected": {
+        "y": 276,
+        "size": 192,
+        "shiftPx": -89,
+        "selectedMarkers": 1,
+        "captionHeight": 173
+      },
+      "target": {
+        "x": 426,
+        "y": 384,
+        "insideBoard": true,
+        "topElement": "square.move-dest"
+      }
+    },
+    {
+      "viewport": "1280x720",
+      "pack": "queen-vs-pawn-seventh-convert",
+      "gesture": "resize_recovery",
+      "intendedUci": "e4c4",
+      "intendedLegal": true,
+      "submittedUci": "e4c4",
+      "matches": true,
+      "extraPlayerRequests": 0,
+      "responseStatuses": [
+        200,
+        200
+      ],
+      "rest": {
+        "y": 365,
+        "size": 192
+      },
+      "source": {
+        "x": 474,
+        "y": 473,
+        "insideBoard": true,
+        "topElement": "cg-board"
+      },
+      "selected": {
+        "y": 276,
+        "size": 192,
+        "shiftPx": -89,
+        "selectedMarkers": 1,
+        "captionHeight": 173
+      },
+      "target": {
+        "x": 426,
+        "y": 384,
+        "insideBoard": true,
+        "topElement": "cg-board"
+      }
+    },
+    {
+      "viewport": "1280x720",
+      "pack": "queen-vs-pawn-seventh-convert",
+      "gesture": "hover",
+      "intendedUci": "e4c4",
+      "intendedLegal": true,
+      "submittedUci": null,
+      "matches": true,
+      "extraPlayerRequests": 0,
+      "responseStatuses": [],
+      "rest": {
+        "y": 365,
+        "size": 192
+      },
+      "source": {
+        "x": 474,
+        "y": 473,
+        "insideBoard": true,
+        "topElement": "cg-board"
+      },
+      "selected": {
+        "y": 365,
+        "size": 192,
+        "shiftPx": 0,
+        "selectedMarkers": 0,
+        "captionHeight": 0
+      },
+      "target": {
+        "x": 426,
+        "y": 473,
+        "insideBoard": true,
+        "topElement": "cg-board"
+      }
+    },
+    {
+      "viewport": "768x1024",
+      "pack": "lucena-bridge-convert",
+      "gesture": "stale_click",
+      "intendedUci": "c1d1",
+      "intendedLegal": true,
+      "submittedUci": null,
+      "matches": false,
+      "extraPlayerRequests": 0,
+      "responseStatuses": [],
+      "rest": {
+        "y": 580,
+        "size": 280
+      },
+      "source": {
+        "x": 202,
+        "y": 843,
+        "insideBoard": true,
+        "topElement": "cg-board"
+      },
+      "selected": {
+        "y": 521,
+        "size": 280,
+        "shiftPx": -59,
+        "selectedMarkers": 1,
+        "captionHeight": 113
+      },
+      "target": {
+        "x": 237,
+        "y": 843,
+        "insideBoard": false,
+        "topElement": "p.svelte-196rcao"
+      }
+    },
+    {
+      "viewport": "768x1024",
+      "pack": "lucena-bridge-convert",
+      "gesture": "live_click",
+      "intendedUci": "c1d1",
+      "intendedLegal": true,
+      "submittedUci": null,
+      "matches": false,
+      "extraPlayerRequests": 0,
+      "responseStatuses": [],
+      "rest": {
+        "y": 580,
+        "size": 280
+      },
+      "source": {
+        "x": 202,
+        "y": 843,
+        "insideBoard": true,
+        "topElement": "cg-board"
+      },
+      "selected": {
+        "y": 521,
+        "size": 280,
+        "shiftPx": -59,
+        "selectedMarkers": 1,
+        "captionHeight": 113
+      },
+      "target": {
+        "x": 237,
+        "y": 783,
+        "insideBoard": true,
+        "topElement": "cg-board"
+      }
+    },
+    {
+      "viewport": "768x1024",
+      "pack": "lucena-bridge-convert",
+      "gesture": "live_drag",
+      "intendedUci": "c1d1",
+      "intendedLegal": true,
+      "submittedUci": null,
+      "matches": false,
+      "extraPlayerRequests": 0,
+      "responseStatuses": [],
+      "rest": {
+        "y": 580,
+        "size": 280
+      },
+      "source": {
+        "x": 202,
+        "y": 843,
+        "insideBoard": true,
+        "topElement": "cg-board"
+      },
+      "selected": {
+        "y": 521,
+        "size": 280,
+        "shiftPx": -59,
+        "selectedMarkers": 1,
+        "captionHeight": 113
+      },
+      "target": {
+        "x": 237,
+        "y": 783,
+        "insideBoard": true,
+        "topElement": "square.move-dest"
+      }
+    },
+    {
+      "viewport": "768x1024",
+      "pack": "lucena-bridge-convert",
+      "gesture": "touch_live",
+      "intendedUci": "c1d1",
+      "intendedLegal": true,
+      "submittedUci": null,
+      "matches": false,
+      "extraPlayerRequests": 0,
+      "responseStatuses": [],
+      "rest": {
+        "y": 580,
+        "size": 280
+      },
+      "source": {
+        "x": 202,
+        "y": 843,
+        "insideBoard": true,
+        "topElement": "cg-board"
+      },
+      "selected": {
+        "y": 521,
+        "size": 280,
+        "shiftPx": -59,
+        "selectedMarkers": 1,
+        "captionHeight": 113
+      },
+      "target": {
+        "x": 237,
+        "y": 783,
+        "insideBoard": true,
+        "topElement": "square.move-dest"
+      }
+    },
+    {
+      "viewport": "768x1024",
+      "pack": "lucena-bridge-convert",
+      "gesture": "resize_recovery",
+      "intendedUci": "c1d1",
+      "intendedLegal": true,
+      "submittedUci": "c1d1",
+      "matches": true,
+      "extraPlayerRequests": 0,
+      "responseStatuses": [
+        200,
+        200
+      ],
+      "rest": {
+        "y": 580,
+        "size": 280
+      },
+      "source": {
+        "x": 202,
+        "y": 843,
+        "insideBoard": true,
+        "topElement": "cg-board"
+      },
+      "selected": {
+        "y": 521,
+        "size": 280,
+        "shiftPx": -59,
+        "selectedMarkers": 1,
+        "captionHeight": 113
+      },
+      "target": {
+        "x": 237,
+        "y": 783,
+        "insideBoard": true,
+        "topElement": "cg-board"
+      }
+    },
+    {
+      "viewport": "768x1024",
+      "pack": "lucena-bridge-convert",
+      "gesture": "hover",
+      "intendedUci": "c1d1",
+      "intendedLegal": true,
+      "submittedUci": null,
+      "matches": true,
+      "extraPlayerRequests": 0,
+      "responseStatuses": [],
+      "rest": {
+        "y": 580,
+        "size": 280
+      },
+      "source": {
+        "x": 202,
+        "y": 843,
+        "insideBoard": true,
+        "topElement": "cg-board"
+      },
+      "selected": {
+        "y": 580,
+        "size": 280,
+        "shiftPx": 0,
+        "selectedMarkers": 0,
+        "captionHeight": 0
+      },
+      "target": {
+        "x": 237,
+        "y": 843,
+        "insideBoard": true,
+        "topElement": "cg-board"
+      }
+    },
+    {
+      "viewport": "768x1024",
+      "pack": "mate-bishop-knight",
+      "gesture": "stale_click",
+      "intendedUci": "c3e5",
+      "intendedLegal": true,
+      "submittedUci": "c3e5",
+      "matches": true,
+      "extraPlayerRequests": 0,
+      "responseStatuses": [
+        200,
+        200
+      ],
+      "rest": {
+        "y": 565,
+        "size": 296
+      },
+      "source": {
+        "x": 200,
+        "y": 769,
+        "insideBoard": true,
+        "topElement": "cg-board"
+      },
+      "selected": {
+        "y": 491,
+        "size": 296,
+        "shiftPx": -74,
+        "selectedMarkers": 1,
+        "captionHeight": 143
+      },
+      "target": {
+        "x": 274,
+        "y": 695,
+        "insideBoard": true,
+        "topElement": "cg-board"
+      }
+    },
+    {
+      "viewport": "768x1024",
+      "pack": "mate-bishop-knight",
+      "gesture": "live_click",
+      "intendedUci": "c3e5",
+      "intendedLegal": true,
+      "submittedUci": null,
+      "matches": false,
+      "extraPlayerRequests": 0,
+      "responseStatuses": [],
+      "rest": {
+        "y": 565,
+        "size": 296
+      },
+      "source": {
+        "x": 200,
+        "y": 769,
+        "insideBoard": true,
+        "topElement": "cg-board"
+      },
+      "selected": {
+        "y": 491,
+        "size": 296,
+        "shiftPx": -74,
+        "selectedMarkers": 1,
+        "captionHeight": 143
+      },
+      "target": {
+        "x": 274,
+        "y": 621,
+        "insideBoard": true,
+        "topElement": "cg-board"
+      }
+    },
+    {
+      "viewport": "768x1024",
+      "pack": "mate-bishop-knight",
+      "gesture": "live_drag",
+      "intendedUci": "c3e5",
+      "intendedLegal": true,
+      "submittedUci": null,
+      "matches": false,
+      "extraPlayerRequests": 0,
+      "responseStatuses": [],
+      "rest": {
+        "y": 565,
+        "size": 296
+      },
+      "source": {
+        "x": 200,
+        "y": 769,
+        "insideBoard": true,
+        "topElement": "cg-board"
+      },
+      "selected": {
+        "y": 491,
+        "size": 296,
+        "shiftPx": -74,
+        "selectedMarkers": 1,
+        "captionHeight": 143
+      },
+      "target": {
+        "x": 274,
+        "y": 621,
+        "insideBoard": true,
+        "topElement": "square.move-dest"
+      }
+    },
+    {
+      "viewport": "768x1024",
+      "pack": "mate-bishop-knight",
+      "gesture": "touch_live",
+      "intendedUci": "c3e5",
+      "intendedLegal": true,
+      "submittedUci": null,
+      "matches": false,
+      "extraPlayerRequests": 0,
+      "responseStatuses": [],
+      "rest": {
+        "y": 565,
+        "size": 296
+      },
+      "source": {
+        "x": 200,
+        "y": 769,
+        "insideBoard": true,
+        "topElement": "cg-board"
+      },
+      "selected": {
+        "y": 491,
+        "size": 296,
+        "shiftPx": -74,
+        "selectedMarkers": 1,
+        "captionHeight": 143
+      },
+      "target": {
+        "x": 274,
+        "y": 621,
+        "insideBoard": true,
+        "topElement": "square.move-dest"
+      }
+    },
+    {
+      "viewport": "768x1024",
+      "pack": "mate-bishop-knight",
+      "gesture": "resize_recovery",
+      "intendedUci": "c3e5",
+      "intendedLegal": true,
+      "submittedUci": "c3e5",
+      "matches": true,
+      "extraPlayerRequests": 0,
+      "responseStatuses": [
+        200,
+        200
+      ],
+      "rest": {
+        "y": 565,
+        "size": 296
+      },
+      "source": {
+        "x": 200,
+        "y": 769,
+        "insideBoard": true,
+        "topElement": "cg-board"
+      },
+      "selected": {
+        "y": 491,
+        "size": 296,
+        "shiftPx": -74,
+        "selectedMarkers": 1,
+        "captionHeight": 143
+      },
+      "target": {
+        "x": 274,
+        "y": 621,
+        "insideBoard": true,
+        "topElement": "cg-board"
+      }
+    },
+    {
+      "viewport": "768x1024",
+      "pack": "mate-bishop-knight",
+      "gesture": "hover",
+      "intendedUci": "c3e5",
+      "intendedLegal": true,
+      "submittedUci": null,
+      "matches": true,
+      "extraPlayerRequests": 0,
+      "responseStatuses": [],
+      "rest": {
+        "y": 565,
+        "size": 296
+      },
+      "source": {
+        "x": 200,
+        "y": 769,
+        "insideBoard": true,
+        "topElement": "cg-board"
+      },
+      "selected": {
+        "y": 565,
+        "size": 296,
+        "shiftPx": 0,
+        "selectedMarkers": 0,
+        "captionHeight": 0
+      },
+      "target": {
+        "x": 274,
+        "y": 695,
+        "insideBoard": true,
+        "topElement": "cg-board"
+      }
+    },
+    {
+      "viewport": "768x1024",
+      "pack": "mate-k-r-technique",
+      "gesture": "stale_click",
+      "intendedUci": "h2h6",
+      "intendedLegal": true,
+      "submittedUci": "h2h6",
+      "matches": true,
+      "extraPlayerRequests": 0,
+      "responseStatuses": [
+        200,
+        200
+      ],
+      "rest": {
+        "y": 580,
+        "size": 280
+      },
+      "source": {
+        "x": 377,
+        "y": 808,
+        "insideBoard": true,
+        "topElement": "cg-board"
+      },
+      "selected": {
+        "y": 528,
+        "size": 280,
+        "shiftPx": -52,
+        "selectedMarkers": 1,
+        "captionHeight": 99
+      },
+      "target": {
+        "x": 377,
+        "y": 668,
+        "insideBoard": true,
+        "topElement": "cg-board"
+      }
+    },
+    {
+      "viewport": "768x1024",
+      "pack": "mate-k-r-technique",
+      "gesture": "live_click",
+      "intendedUci": "h2h6",
+      "intendedLegal": true,
+      "submittedUci": "h2h8",
+      "matches": false,
+      "extraPlayerRequests": 0,
+      "responseStatuses": [
+        200,
+        200
+      ],
+      "rest": {
+        "y": 580,
+        "size": 280
+      },
+      "source": {
+        "x": 377,
+        "y": 808,
+        "insideBoard": true,
+        "topElement": "cg-board"
+      },
+      "selected": {
+        "y": 528,
+        "size": 280,
+        "shiftPx": -52,
+        "selectedMarkers": 1,
+        "captionHeight": 99
+      },
+      "target": {
+        "x": 377,
+        "y": 616,
+        "insideBoard": true,
+        "topElement": "cg-board"
+      }
+    },
+    {
+      "viewport": "768x1024",
+      "pack": "mate-k-r-technique",
+      "gesture": "live_drag",
+      "intendedUci": "h2h6",
+      "intendedLegal": true,
+      "submittedUci": "h2h8",
+      "matches": false,
+      "extraPlayerRequests": 0,
+      "responseStatuses": [
+        200,
+        200
+      ],
+      "rest": {
+        "y": 580,
+        "size": 280
+      },
+      "source": {
+        "x": 377,
+        "y": 808,
+        "insideBoard": true,
+        "topElement": "cg-board"
+      },
+      "selected": {
+        "y": 528,
+        "size": 280,
+        "shiftPx": -52,
+        "selectedMarkers": 1,
+        "captionHeight": 99
+      },
+      "target": {
+        "x": 377,
+        "y": 616,
+        "insideBoard": true,
+        "topElement": "square.move-dest"
+      }
+    },
+    {
+      "viewport": "768x1024",
+      "pack": "mate-k-r-technique",
+      "gesture": "touch_live",
+      "intendedUci": "h2h6",
+      "intendedLegal": true,
+      "submittedUci": "h2h7",
+      "matches": false,
+      "extraPlayerRequests": 0,
+      "responseStatuses": [
+        200,
+        200
+      ],
+      "rest": {
+        "y": 580,
+        "size": 280
+      },
+      "source": {
+        "x": 377,
+        "y": 808,
+        "insideBoard": true,
+        "topElement": "cg-board"
+      },
+      "selected": {
+        "y": 528,
+        "size": 280,
+        "shiftPx": -52,
+        "selectedMarkers": 1,
+        "captionHeight": 99
+      },
+      "target": {
+        "x": 377,
+        "y": 616,
+        "insideBoard": true,
+        "topElement": "cg-board"
+      }
+    },
+    {
+      "viewport": "768x1024",
+      "pack": "mate-k-r-technique",
+      "gesture": "resize_recovery",
+      "intendedUci": "h2h6",
+      "intendedLegal": true,
+      "submittedUci": "h2h6",
+      "matches": true,
+      "extraPlayerRequests": 0,
+      "responseStatuses": [
+        200,
+        200
+      ],
+      "rest": {
+        "y": 580,
+        "size": 280
+      },
+      "source": {
+        "x": 377,
+        "y": 808,
+        "insideBoard": true,
+        "topElement": "cg-board"
+      },
+      "selected": {
+        "y": 528,
+        "size": 280,
+        "shiftPx": -52,
+        "selectedMarkers": 1,
+        "captionHeight": 99
+      },
+      "target": {
+        "x": 377,
+        "y": 616,
+        "insideBoard": true,
+        "topElement": "cg-board"
+      }
+    },
+    {
+      "viewport": "768x1024",
+      "pack": "mate-k-r-technique",
+      "gesture": "hover",
+      "intendedUci": "h2h6",
+      "intendedLegal": true,
+      "submittedUci": null,
+      "matches": true,
+      "extraPlayerRequests": 0,
+      "responseStatuses": [],
+      "rest": {
+        "y": 580,
+        "size": 280
+      },
+      "source": {
+        "x": 377,
+        "y": 808,
+        "insideBoard": true,
+        "topElement": "cg-board"
+      },
+      "selected": {
+        "y": 580,
+        "size": 280,
+        "shiftPx": 0,
+        "selectedMarkers": 0,
+        "captionHeight": 0
+      },
+      "target": {
+        "x": 377,
+        "y": 668,
+        "insideBoard": true,
+        "topElement": "cg-board"
+      }
+    },
+    {
+      "viewport": "768x1024",
+      "pack": "pawn-opposition-convert",
+      "gesture": "stale_click",
+      "intendedUci": "e2e3",
+      "intendedLegal": true,
+      "submittedUci": "e2e3",
+      "matches": true,
+      "extraPlayerRequests": 0,
+      "responseStatuses": [
+        200
+      ],
+      "rest": {
+        "y": 580,
+        "size": 280
+      },
+      "source": {
+        "x": 272,
+        "y": 808,
+        "insideBoard": true,
+        "topElement": "cg-board"
+      },
+      "selected": {
+        "y": 563,
+        "size": 280,
+        "shiftPx": -17,
+        "selectedMarkers": 1,
+        "captionHeight": 29
+      },
+      "target": {
+        "x": 272,
+        "y": 773,
+        "insideBoard": true,
+        "topElement": "cg-board"
+      }
+    },
+    {
+      "viewport": "768x1024",
+      "pack": "pawn-opposition-convert",
+      "gesture": "live_click",
+      "intendedUci": "e2e3",
+      "intendedLegal": true,
+      "submittedUci": null,
+      "matches": false,
+      "extraPlayerRequests": 0,
+      "responseStatuses": [],
+      "rest": {
+        "y": 580,
+        "size": 280
+      },
+      "source": {
+        "x": 272,
+        "y": 808,
+        "insideBoard": true,
+        "topElement": "cg-board"
+      },
+      "selected": {
+        "y": 563,
+        "size": 280,
+        "shiftPx": -17,
+        "selectedMarkers": 1,
+        "captionHeight": 29
+      },
+      "target": {
+        "x": 272,
+        "y": 756,
+        "insideBoard": true,
+        "topElement": "square.move-dest"
+      }
+    },
+    {
+      "viewport": "768x1024",
+      "pack": "pawn-opposition-convert",
+      "gesture": "live_drag",
+      "intendedUci": "e2e3",
+      "intendedLegal": true,
+      "submittedUci": null,
+      "matches": false,
+      "extraPlayerRequests": 0,
+      "responseStatuses": [],
+      "rest": {
+        "y": 580,
+        "size": 280
+      },
+      "source": {
+        "x": 272,
+        "y": 808,
+        "insideBoard": true,
+        "topElement": "cg-board"
+      },
+      "selected": {
+        "y": 563,
+        "size": 280,
+        "shiftPx": -17,
+        "selectedMarkers": 1,
+        "captionHeight": 29
+      },
+      "target": {
+        "x": 272,
+        "y": 756,
+        "insideBoard": true,
+        "topElement": "square.move-dest"
+      }
+    },
+    {
+      "viewport": "768x1024",
+      "pack": "pawn-opposition-convert",
+      "gesture": "touch_live",
+      "intendedUci": "e2e3",
+      "intendedLegal": true,
+      "submittedUci": "e2e3",
+      "matches": true,
+      "extraPlayerRequests": 0,
+      "responseStatuses": [
+        200
+      ],
+      "rest": {
+        "y": 580,
+        "size": 280
+      },
+      "source": {
+        "x": 272,
+        "y": 808,
+        "insideBoard": true,
+        "topElement": "cg-board"
+      },
+      "selected": {
+        "y": 563,
+        "size": 280,
+        "shiftPx": -17,
+        "selectedMarkers": 1,
+        "captionHeight": 29
+      },
+      "target": {
+        "x": 272,
+        "y": 756,
+        "insideBoard": true,
+        "topElement": "cg-board"
+      }
+    },
+    {
+      "viewport": "768x1024",
+      "pack": "pawn-opposition-convert",
+      "gesture": "resize_recovery",
+      "intendedUci": "e2e3",
+      "intendedLegal": true,
+      "submittedUci": "e2e3",
+      "matches": true,
+      "extraPlayerRequests": 0,
+      "responseStatuses": [
+        200
+      ],
+      "rest": {
+        "y": 580,
+        "size": 280
+      },
+      "source": {
+        "x": 272,
+        "y": 808,
+        "insideBoard": true,
+        "topElement": "cg-board"
+      },
+      "selected": {
+        "y": 563,
+        "size": 280,
+        "shiftPx": -17,
+        "selectedMarkers": 1,
+        "captionHeight": 29
+      },
+      "target": {
+        "x": 272,
+        "y": 756,
+        "insideBoard": true,
+        "topElement": "cg-board"
+      }
+    },
+    {
+      "viewport": "768x1024",
+      "pack": "pawn-opposition-convert",
+      "gesture": "hover",
+      "intendedUci": "e2e3",
+      "intendedLegal": true,
+      "submittedUci": null,
+      "matches": true,
+      "extraPlayerRequests": 0,
+      "responseStatuses": [],
+      "rest": {
+        "y": 580,
+        "size": 280
+      },
+      "source": {
+        "x": 272,
+        "y": 808,
+        "insideBoard": true,
+        "topElement": "cg-board"
+      },
+      "selected": {
+        "y": 580,
+        "size": 280,
+        "shiftPx": 0,
+        "selectedMarkers": 0,
+        "captionHeight": 0
+      },
+      "target": {
+        "x": 272,
+        "y": 773,
+        "insideBoard": true,
+        "topElement": "cg-board"
+      }
+    },
+    {
+      "viewport": "768x1024",
+      "pack": "philidor-third-rank-hold",
+      "gesture": "stale_click",
+      "intendedUci": "h6b6",
+      "intendedLegal": true,
+      "submittedUci": "h6b6",
+      "matches": true,
+      "extraPlayerRequests": 0,
+      "responseStatuses": [
+        200,
+        200
+      ],
+      "rest": {
+        "y": 580,
+        "size": 280
+      },
+      "source": {
+        "x": 132,
+        "y": 773,
+        "insideBoard": true,
+        "topElement": "cg-board"
+      },
+      "selected": {
+        "y": 521,
+        "size": 280,
+        "shiftPx": -59,
+        "selectedMarkers": 1,
+        "captionHeight": 113
+      },
+      "target": {
+        "x": 342,
+        "y": 773,
+        "insideBoard": true,
+        "topElement": "cg-board"
+      }
+    },
+    {
+      "viewport": "768x1024",
+      "pack": "philidor-third-rank-hold",
+      "gesture": "live_click",
+      "intendedUci": "h6b6",
+      "intendedLegal": true,
+      "submittedUci": null,
+      "matches": false,
+      "extraPlayerRequests": 0,
+      "responseStatuses": [],
+      "rest": {
+        "y": 580,
+        "size": 280
+      },
+      "source": {
+        "x": 132,
+        "y": 773,
+        "insideBoard": true,
+        "topElement": "cg-board"
+      },
+      "selected": {
+        "y": 521,
+        "size": 280,
+        "shiftPx": -59,
+        "selectedMarkers": 1,
+        "captionHeight": 113
+      },
+      "target": {
+        "x": 342,
+        "y": 713,
+        "insideBoard": true,
+        "topElement": "cg-board"
+      }
+    },
+    {
+      "viewport": "768x1024",
+      "pack": "philidor-third-rank-hold",
+      "gesture": "live_drag",
+      "intendedUci": "h6b6",
+      "intendedLegal": true,
+      "submittedUci": null,
+      "matches": false,
+      "extraPlayerRequests": 0,
+      "responseStatuses": [],
+      "rest": {
+        "y": 580,
+        "size": 280
+      },
+      "source": {
+        "x": 132,
+        "y": 773,
+        "insideBoard": true,
+        "topElement": "cg-board"
+      },
+      "selected": {
+        "y": 521,
+        "size": 280,
+        "shiftPx": -59,
+        "selectedMarkers": 1,
+        "captionHeight": 113
+      },
+      "target": {
+        "x": 342,
+        "y": 713,
+        "insideBoard": true,
+        "topElement": "square.move-dest"
+      }
+    },
+    {
+      "viewport": "768x1024",
+      "pack": "philidor-third-rank-hold",
+      "gesture": "touch_live",
+      "intendedUci": "h6b6",
+      "intendedLegal": true,
+      "submittedUci": null,
+      "matches": false,
+      "extraPlayerRequests": 0,
+      "responseStatuses": [],
+      "rest": {
+        "y": 580,
+        "size": 280
+      },
+      "source": {
+        "x": 132,
+        "y": 773,
+        "insideBoard": true,
+        "topElement": "cg-board"
+      },
+      "selected": {
+        "y": 521,
+        "size": 280,
+        "shiftPx": -59,
+        "selectedMarkers": 1,
+        "captionHeight": 113
+      },
+      "target": {
+        "x": 342,
+        "y": 713,
+        "insideBoard": true,
+        "topElement": "square.move-dest"
+      }
+    },
+    {
+      "viewport": "768x1024",
+      "pack": "philidor-third-rank-hold",
+      "gesture": "resize_recovery",
+      "intendedUci": "h6b6",
+      "intendedLegal": true,
+      "submittedUci": "h6b6",
+      "matches": true,
+      "extraPlayerRequests": 0,
+      "responseStatuses": [
+        200,
+        200
+      ],
+      "rest": {
+        "y": 580,
+        "size": 280
+      },
+      "source": {
+        "x": 132,
+        "y": 773,
+        "insideBoard": true,
+        "topElement": "cg-board"
+      },
+      "selected": {
+        "y": 521,
+        "size": 280,
+        "shiftPx": -59,
+        "selectedMarkers": 1,
+        "captionHeight": 113
+      },
+      "target": {
+        "x": 342,
+        "y": 713,
+        "insideBoard": true,
+        "topElement": "cg-board"
+      }
+    },
+    {
+      "viewport": "768x1024",
+      "pack": "philidor-third-rank-hold",
+      "gesture": "hover",
+      "intendedUci": "h6b6",
+      "intendedLegal": true,
+      "submittedUci": null,
+      "matches": true,
+      "extraPlayerRequests": 0,
+      "responseStatuses": [],
+      "rest": {
+        "y": 580,
+        "size": 280
+      },
+      "source": {
+        "x": 132,
+        "y": 773,
+        "insideBoard": true,
+        "topElement": "cg-board"
+      },
+      "selected": {
+        "y": 580,
+        "size": 280,
+        "shiftPx": 0,
+        "selectedMarkers": 0,
+        "captionHeight": 0
+      },
+      "target": {
+        "x": 342,
+        "y": 773,
+        "insideBoard": true,
+        "topElement": "cg-board"
+      }
+    },
+    {
+      "viewport": "768x1024",
+      "pack": "queen-vs-pawn-seventh-convert",
+      "gesture": "stale_click",
+      "intendedUci": "e4c4",
+      "intendedLegal": true,
+      "submittedUci": "e4c4",
+      "matches": true,
+      "extraPlayerRequests": 0,
+      "responseStatuses": [
+        200,
+        200
+      ],
+      "rest": {
+        "y": 580,
+        "size": 280
+      },
+      "source": {
+        "x": 272,
+        "y": 738,
+        "insideBoard": true,
+        "topElement": "cg-board"
+      },
+      "selected": {
+        "y": 484,
+        "size": 280,
+        "shiftPx": -96,
+        "selectedMarkers": 1,
+        "captionHeight": 186
+      },
+      "target": {
+        "x": 202,
+        "y": 738,
+        "insideBoard": true,
+        "topElement": "cg-board"
+      }
+    },
+    {
+      "viewport": "768x1024",
+      "pack": "queen-vs-pawn-seventh-convert",
+      "gesture": "live_click",
+      "intendedUci": "e4c4",
+      "intendedLegal": true,
+      "submittedUci": null,
+      "matches": false,
+      "extraPlayerRequests": 0,
+      "responseStatuses": [],
+      "rest": {
+        "y": 580,
+        "size": 280
+      },
+      "source": {
+        "x": 272,
+        "y": 738,
+        "insideBoard": true,
+        "topElement": "cg-board"
+      },
+      "selected": {
+        "y": 484,
+        "size": 280,
+        "shiftPx": -96,
+        "selectedMarkers": 1,
+        "captionHeight": 186
+      },
+      "target": {
+        "x": 202,
+        "y": 642,
+        "insideBoard": true,
+        "topElement": "cg-board"
+      }
+    },
+    {
+      "viewport": "768x1024",
+      "pack": "queen-vs-pawn-seventh-convert",
+      "gesture": "live_drag",
+      "intendedUci": "e4c4",
+      "intendedLegal": true,
+      "submittedUci": null,
+      "matches": false,
+      "extraPlayerRequests": 0,
+      "responseStatuses": [],
+      "rest": {
+        "y": 580,
+        "size": 280
+      },
+      "source": {
+        "x": 272,
+        "y": 738,
+        "insideBoard": true,
+        "topElement": "cg-board"
+      },
+      "selected": {
+        "y": 484,
+        "size": 280,
+        "shiftPx": -96,
+        "selectedMarkers": 1,
+        "captionHeight": 186
+      },
+      "target": {
+        "x": 202,
+        "y": 642,
+        "insideBoard": true,
+        "topElement": "square.move-dest"
+      }
+    },
+    {
+      "viewport": "768x1024",
+      "pack": "queen-vs-pawn-seventh-convert",
+      "gesture": "touch_live",
+      "intendedUci": "e4c4",
+      "intendedLegal": true,
+      "submittedUci": null,
+      "matches": false,
+      "extraPlayerRequests": 0,
+      "responseStatuses": [],
+      "rest": {
+        "y": 580,
+        "size": 280
+      },
+      "source": {
+        "x": 272,
+        "y": 738,
+        "insideBoard": true,
+        "topElement": "cg-board"
+      },
+      "selected": {
+        "y": 484,
+        "size": 280,
+        "shiftPx": -96,
+        "selectedMarkers": 1,
+        "captionHeight": 186
+      },
+      "target": {
+        "x": 202,
+        "y": 642,
+        "insideBoard": true,
+        "topElement": "square.move-dest"
+      }
+    },
+    {
+      "viewport": "768x1024",
+      "pack": "queen-vs-pawn-seventh-convert",
+      "gesture": "resize_recovery",
+      "intendedUci": "e4c4",
+      "intendedLegal": true,
+      "submittedUci": "e4c4",
+      "matches": true,
+      "extraPlayerRequests": 0,
+      "responseStatuses": [
+        200,
+        200
+      ],
+      "rest": {
+        "y": 580,
+        "size": 280
+      },
+      "source": {
+        "x": 272,
+        "y": 738,
+        "insideBoard": true,
+        "topElement": "cg-board"
+      },
+      "selected": {
+        "y": 484,
+        "size": 280,
+        "shiftPx": -96,
+        "selectedMarkers": 1,
+        "captionHeight": 186
+      },
+      "target": {
+        "x": 202,
+        "y": 642,
+        "insideBoard": true,
+        "topElement": "cg-board"
+      }
+    },
+    {
+      "viewport": "768x1024",
+      "pack": "queen-vs-pawn-seventh-convert",
+      "gesture": "hover",
+      "intendedUci": "e4c4",
+      "intendedLegal": true,
+      "submittedUci": null,
+      "matches": true,
+      "extraPlayerRequests": 0,
+      "responseStatuses": [],
+      "rest": {
+        "y": 580,
+        "size": 280
+      },
+      "source": {
+        "x": 272,
+        "y": 738,
+        "insideBoard": true,
+        "topElement": "cg-board"
+      },
+      "selected": {
+        "y": 580,
+        "size": 280,
+        "shiftPx": 0,
+        "selectedMarkers": 0,
+        "captionHeight": 0
+      },
+      "target": {
+        "x": 202,
+        "y": 738,
+        "insideBoard": true,
+        "topElement": "cg-board"
+      }
+    },
+    {
+      "viewport": "390x844",
+      "pack": "lucena-bridge-convert",
+      "gesture": "stale_click",
+      "intendedUci": "c1d1",
+      "intendedLegal": true,
+      "submittedUci": null,
+      "matches": false,
+      "extraPlayerRequests": 0,
+      "responseStatuses": [],
+      "rest": {
+        "y": 590,
+        "size": 192
+      },
+      "source": {
+        "x": 159,
+        "y": 770,
+        "insideBoard": false,
+        "topElement": "button.svelte-196rcao"
+      },
+      "selected": {
+        "y": 590,
+        "size": 192,
+        "shiftPx": 0,
+        "selectedMarkers": 0,
+        "captionHeight": 0
+      },
+      "target": {
+        "x": 183,
+        "y": 770,
+        "insideBoard": false,
+        "topElement": "div.modal-backdrop"
+      }
+    },
+    {
+      "viewport": "390x844",
+      "pack": "lucena-bridge-convert",
+      "gesture": "live_click",
+      "intendedUci": "c1d1",
+      "intendedLegal": true,
+      "submittedUci": null,
+      "matches": false,
+      "extraPlayerRequests": 0,
+      "responseStatuses": [],
+      "rest": {
+        "y": 590,
+        "size": 192
+      },
+      "source": {
+        "x": 159,
+        "y": 770,
+        "insideBoard": false,
+        "topElement": "button.svelte-196rcao"
+      },
+      "selected": {
+        "y": 590,
+        "size": 192,
+        "shiftPx": 0,
+        "selectedMarkers": 0,
+        "captionHeight": 0
+      },
+      "target": {
+        "x": 183,
+        "y": 770,
+        "insideBoard": false,
+        "topElement": "div.modal-backdrop"
+      }
+    },
+    {
+      "viewport": "390x844",
+      "pack": "lucena-bridge-convert",
+      "gesture": "live_drag",
+      "intendedUci": "c1d1",
+      "intendedLegal": true,
+      "submittedUci": null,
+      "matches": false,
+      "extraPlayerRequests": 0,
+      "responseStatuses": [],
+      "rest": {
+        "y": 590,
+        "size": 192
+      },
+      "source": {
+        "x": 159,
+        "y": 770,
+        "insideBoard": false,
+        "topElement": "button.svelte-196rcao"
+      },
+      "selected": {
+        "y": 590,
+        "size": 192,
+        "shiftPx": 0,
+        "selectedMarkers": 0,
+        "captionHeight": 0
+      },
+      "target": {
+        "x": 183,
+        "y": 770,
+        "insideBoard": false,
+        "topElement": "div.modal-backdrop"
+      }
+    },
+    {
+      "viewport": "390x844",
+      "pack": "lucena-bridge-convert",
+      "gesture": "touch_live",
+      "intendedUci": "c1d1",
+      "intendedLegal": true,
+      "submittedUci": null,
+      "matches": false,
+      "extraPlayerRequests": 0,
+      "responseStatuses": [],
+      "rest": {
+        "y": 590,
+        "size": 192
+      },
+      "source": {
+        "x": 159,
+        "y": 770,
+        "insideBoard": false,
+        "topElement": "button.svelte-196rcao"
+      },
+      "selected": {
+        "y": 590,
+        "size": 192,
+        "shiftPx": 0,
+        "selectedMarkers": 0,
+        "captionHeight": 0
+      },
+      "target": {
+        "x": 183,
+        "y": 770,
+        "insideBoard": false,
+        "topElement": "div.modal-backdrop"
+      }
+    },
+    {
+      "viewport": "390x844",
+      "pack": "lucena-bridge-convert",
+      "gesture": "resize_recovery",
+      "intendedUci": "c1d1",
+      "intendedLegal": true,
+      "submittedUci": null,
+      "matches": false,
+      "extraPlayerRequests": 0,
+      "responseStatuses": [],
+      "rest": {
+        "y": 590,
+        "size": 192
+      },
+      "source": {
+        "x": 159,
+        "y": 770,
+        "insideBoard": false,
+        "topElement": "button.svelte-196rcao"
+      },
+      "selected": {
+        "y": 590,
+        "size": 192,
+        "shiftPx": 0,
+        "selectedMarkers": 0,
+        "captionHeight": 0
+      },
+      "target": {
+        "x": 183,
+        "y": 770,
+        "insideBoard": false,
+        "topElement": "div.modal-backdrop"
+      }
+    },
+    {
+      "viewport": "390x844",
+      "pack": "lucena-bridge-convert",
+      "gesture": "hover",
+      "intendedUci": "c1d1",
+      "intendedLegal": true,
+      "submittedUci": null,
+      "matches": true,
+      "extraPlayerRequests": 0,
+      "responseStatuses": [],
+      "rest": {
+        "y": 590,
+        "size": 192
+      },
+      "source": {
+        "x": 159,
+        "y": 770,
+        "insideBoard": false,
+        "topElement": "button.svelte-196rcao"
+      },
+      "selected": {
+        "y": 590,
+        "size": 192,
+        "shiftPx": 0,
+        "selectedMarkers": 0,
+        "captionHeight": 0
+      },
+      "target": {
+        "x": 183,
+        "y": 770,
+        "insideBoard": false,
+        "topElement": "button.svelte-196rcao"
+      }
+    },
+    {
+      "viewport": "390x844",
+      "pack": "mate-bishop-knight",
+      "gesture": "stale_click",
+      "intendedUci": "c3e5",
+      "intendedLegal": true,
+      "submittedUci": null,
+      "matches": false,
+      "extraPlayerRequests": 0,
+      "responseStatuses": [],
+      "rest": {
+        "y": 590,
+        "size": 192
+      },
+      "source": {
+        "x": 159,
+        "y": 722,
+        "insideBoard": false,
+        "topElement": "section.timeline"
+      },
+      "selected": {
+        "y": 590,
+        "size": 192,
+        "shiftPx": 0,
+        "selectedMarkers": 0,
+        "captionHeight": 0
+      },
+      "target": {
+        "x": 207,
+        "y": 674,
+        "insideBoard": true,
+        "topElement": "cg-board"
+      }
+    },
+    {
+      "viewport": "390x844",
+      "pack": "mate-bishop-knight",
+      "gesture": "live_click",
+      "intendedUci": "c3e5",
+      "intendedLegal": true,
+      "submittedUci": null,
+      "matches": false,
+      "extraPlayerRequests": 0,
+      "responseStatuses": [],
+      "rest": {
+        "y": 590,
+        "size": 192
+      },
+      "source": {
+        "x": 159,
+        "y": 722,
+        "insideBoard": false,
+        "topElement": "section.timeline"
+      },
+      "selected": {
+        "y": 590,
+        "size": 192,
+        "shiftPx": 0,
+        "selectedMarkers": 0,
+        "captionHeight": 0
+      },
+      "target": {
+        "x": 207,
+        "y": 674,
+        "insideBoard": true,
+        "topElement": "cg-board"
+      }
+    },
+    {
+      "viewport": "390x844",
+      "pack": "mate-bishop-knight",
+      "gesture": "live_drag",
+      "intendedUci": "c3e5",
+      "intendedLegal": true,
+      "submittedUci": null,
+      "matches": false,
+      "extraPlayerRequests": 0,
+      "responseStatuses": [],
+      "rest": {
+        "y": 590,
+        "size": 192
+      },
+      "source": {
+        "x": 159,
+        "y": 722,
+        "insideBoard": false,
+        "topElement": "section.timeline"
+      },
+      "selected": {
+        "y": 590,
+        "size": 192,
+        "shiftPx": 0,
+        "selectedMarkers": 0,
+        "captionHeight": 0
+      },
+      "target": {
+        "x": 207,
+        "y": 674,
+        "insideBoard": true,
+        "topElement": "cg-board"
+      }
+    },
+    {
+      "viewport": "390x844",
+      "pack": "mate-bishop-knight",
+      "gesture": "touch_live",
+      "intendedUci": "c3e5",
+      "intendedLegal": true,
+      "submittedUci": null,
+      "matches": false,
+      "extraPlayerRequests": 0,
+      "responseStatuses": [],
+      "rest": {
+        "y": 590,
+        "size": 192
+      },
+      "source": {
+        "x": 159,
+        "y": 722,
+        "insideBoard": false,
+        "topElement": "section.timeline"
+      },
+      "selected": {
+        "y": 590,
+        "size": 192,
+        "shiftPx": 0,
+        "selectedMarkers": 0,
+        "captionHeight": 0
+      },
+      "target": {
+        "x": 207,
+        "y": 674,
+        "insideBoard": true,
+        "topElement": "cg-board"
+      }
+    },
+    {
+      "viewport": "390x844",
+      "pack": "mate-bishop-knight",
+      "gesture": "resize_recovery",
+      "intendedUci": "c3e5",
+      "intendedLegal": true,
+      "submittedUci": null,
+      "matches": false,
+      "extraPlayerRequests": 0,
+      "responseStatuses": [],
+      "rest": {
+        "y": 590,
+        "size": 192
+      },
+      "source": {
+        "x": 159,
+        "y": 722,
+        "insideBoard": false,
+        "topElement": "section.timeline"
+      },
+      "selected": {
+        "y": 590,
+        "size": 192,
+        "shiftPx": 0,
+        "selectedMarkers": 0,
+        "captionHeight": 0
+      },
+      "target": {
+        "x": 207,
+        "y": 674,
+        "insideBoard": true,
+        "topElement": "cg-board"
+      }
+    },
+    {
+      "viewport": "390x844",
+      "pack": "mate-bishop-knight",
+      "gesture": "hover",
+      "intendedUci": "c3e5",
+      "intendedLegal": true,
+      "submittedUci": null,
+      "matches": true,
+      "extraPlayerRequests": 0,
+      "responseStatuses": [],
+      "rest": {
+        "y": 590,
+        "size": 192
+      },
+      "source": {
+        "x": 159,
+        "y": 722,
+        "insideBoard": false,
+        "topElement": "section.timeline"
+      },
+      "selected": {
+        "y": 590,
+        "size": 192,
+        "shiftPx": 0,
+        "selectedMarkers": 0,
+        "captionHeight": 0
+      },
+      "target": {
+        "x": 207,
+        "y": 674,
+        "insideBoard": true,
+        "topElement": "cg-board"
+      }
+    },
+    {
+      "viewport": "390x844",
+      "pack": "mate-k-r-technique",
+      "gesture": "stale_click",
+      "intendedUci": "h2h6",
+      "intendedLegal": true,
+      "submittedUci": null,
+      "matches": false,
+      "extraPlayerRequests": 0,
+      "responseStatuses": [],
+      "rest": {
+        "y": 590,
+        "size": 192
+      },
+      "source": {
+        "x": 279,
+        "y": 746,
+        "insideBoard": false,
+        "topElement": "div.timeline-row"
+      },
+      "selected": {
+        "y": 590,
+        "size": 192,
+        "shiftPx": 0,
+        "selectedMarkers": 0,
+        "captionHeight": 0
+      },
+      "target": {
+        "x": 279,
+        "y": 650,
+        "insideBoard": true,
+        "topElement": "cg-board"
+      }
+    },
+    {
+      "viewport": "390x844",
+      "pack": "mate-k-r-technique",
+      "gesture": "live_click",
+      "intendedUci": "h2h6",
+      "intendedLegal": true,
+      "submittedUci": null,
+      "matches": false,
+      "extraPlayerRequests": 0,
+      "responseStatuses": [],
+      "rest": {
+        "y": 590,
+        "size": 192
+      },
+      "source": {
+        "x": 279,
+        "y": 746,
+        "insideBoard": false,
+        "topElement": "div.timeline-row"
+      },
+      "selected": {
+        "y": 590,
+        "size": 192,
+        "shiftPx": 0,
+        "selectedMarkers": 0,
+        "captionHeight": 0
+      },
+      "target": {
+        "x": 279,
+        "y": 650,
+        "insideBoard": true,
+        "topElement": "cg-board"
+      }
+    },
+    {
+      "viewport": "390x844",
+      "pack": "mate-k-r-technique",
+      "gesture": "live_drag",
+      "intendedUci": "h2h6",
+      "intendedLegal": true,
+      "submittedUci": null,
+      "matches": false,
+      "extraPlayerRequests": 0,
+      "responseStatuses": [],
+      "rest": {
+        "y": 590,
+        "size": 192
+      },
+      "source": {
+        "x": 279,
+        "y": 746,
+        "insideBoard": false,
+        "topElement": "div.timeline-row"
+      },
+      "selected": {
+        "y": 590,
+        "size": 192,
+        "shiftPx": 0,
+        "selectedMarkers": 0,
+        "captionHeight": 0
+      },
+      "target": {
+        "x": 279,
+        "y": 650,
+        "insideBoard": true,
+        "topElement": "cg-board"
+      }
+    },
+    {
+      "viewport": "390x844",
+      "pack": "mate-k-r-technique",
+      "gesture": "touch_live",
+      "intendedUci": "h2h6",
+      "intendedLegal": true,
+      "submittedUci": null,
+      "matches": false,
+      "extraPlayerRequests": 0,
+      "responseStatuses": [],
+      "rest": {
+        "y": 590,
+        "size": 192
+      },
+      "source": {
+        "x": 279,
+        "y": 746,
+        "insideBoard": false,
+        "topElement": "div.timeline-row"
+      },
+      "selected": {
+        "y": 590,
+        "size": 192,
+        "shiftPx": 0,
+        "selectedMarkers": 0,
+        "captionHeight": 0
+      },
+      "target": {
+        "x": 279,
+        "y": 650,
+        "insideBoard": true,
+        "topElement": "cg-board"
+      }
+    },
+    {
+      "viewport": "390x844",
+      "pack": "mate-k-r-technique",
+      "gesture": "resize_recovery",
+      "intendedUci": "h2h6",
+      "intendedLegal": true,
+      "submittedUci": null,
+      "matches": false,
+      "extraPlayerRequests": 0,
+      "responseStatuses": [],
+      "rest": {
+        "y": 590,
+        "size": 192
+      },
+      "source": {
+        "x": 279,
+        "y": 746,
+        "insideBoard": false,
+        "topElement": "div.timeline-row"
+      },
+      "selected": {
+        "y": 590,
+        "size": 192,
+        "shiftPx": 0,
+        "selectedMarkers": 0,
+        "captionHeight": 0
+      },
+      "target": {
+        "x": 279,
+        "y": 650,
+        "insideBoard": true,
+        "topElement": "cg-board"
+      }
+    },
+    {
+      "viewport": "390x844",
+      "pack": "mate-k-r-technique",
+      "gesture": "hover",
+      "intendedUci": "h2h6",
+      "intendedLegal": true,
+      "submittedUci": null,
+      "matches": true,
+      "extraPlayerRequests": 0,
+      "responseStatuses": [],
+      "rest": {
+        "y": 590,
+        "size": 192
+      },
+      "source": {
+        "x": 279,
+        "y": 746,
+        "insideBoard": false,
+        "topElement": "div.timeline-row"
+      },
+      "selected": {
+        "y": 590,
+        "size": 192,
+        "shiftPx": 0,
+        "selectedMarkers": 0,
+        "captionHeight": 0
+      },
+      "target": {
+        "x": 279,
+        "y": 650,
+        "insideBoard": true,
+        "topElement": "cg-board"
+      }
+    },
+    {
+      "viewport": "390x844",
+      "pack": "pawn-opposition-convert",
+      "gesture": "stale_click",
+      "intendedUci": "e2e3",
+      "intendedLegal": true,
+      "submittedUci": null,
+      "matches": false,
+      "extraPlayerRequests": 0,
+      "responseStatuses": [],
+      "rest": {
+        "y": 590,
+        "size": 192
+      },
+      "source": {
+        "x": 207,
+        "y": 746,
+        "insideBoard": false,
+        "topElement": "div.timeline-row"
+      },
+      "selected": {
+        "y": 590,
+        "size": 192,
+        "shiftPx": 0,
+        "selectedMarkers": 0,
+        "captionHeight": 0
+      },
+      "target": {
+        "x": 207,
+        "y": 722,
+        "insideBoard": false,
+        "topElement": "section.timeline"
+      }
+    },
+    {
+      "viewport": "390x844",
+      "pack": "pawn-opposition-convert",
+      "gesture": "live_click",
+      "intendedUci": "e2e3",
+      "intendedLegal": true,
+      "submittedUci": null,
+      "matches": false,
+      "extraPlayerRequests": 0,
+      "responseStatuses": [],
+      "rest": {
+        "y": 590,
+        "size": 192
+      },
+      "source": {
+        "x": 207,
+        "y": 746,
+        "insideBoard": false,
+        "topElement": "div.timeline-row"
+      },
+      "selected": {
+        "y": 590,
+        "size": 192,
+        "shiftPx": 0,
+        "selectedMarkers": 0,
+        "captionHeight": 0
+      },
+      "target": {
+        "x": 207,
+        "y": 722,
+        "insideBoard": false,
+        "topElement": "section.timeline"
+      }
+    },
+    {
+      "viewport": "390x844",
+      "pack": "pawn-opposition-convert",
+      "gesture": "live_drag",
+      "intendedUci": "e2e3",
+      "intendedLegal": true,
+      "submittedUci": null,
+      "matches": false,
+      "extraPlayerRequests": 0,
+      "responseStatuses": [],
+      "rest": {
+        "y": 590,
+        "size": 192
+      },
+      "source": {
+        "x": 207,
+        "y": 746,
+        "insideBoard": false,
+        "topElement": "div.timeline-row"
+      },
+      "selected": {
+        "y": 590,
+        "size": 192,
+        "shiftPx": 0,
+        "selectedMarkers": 0,
+        "captionHeight": 0
+      },
+      "target": {
+        "x": 207,
+        "y": 722,
+        "insideBoard": false,
+        "topElement": "section.timeline"
+      }
+    },
+    {
+      "viewport": "390x844",
+      "pack": "pawn-opposition-convert",
+      "gesture": "touch_live",
+      "intendedUci": "e2e3",
+      "intendedLegal": true,
+      "submittedUci": null,
+      "matches": false,
+      "extraPlayerRequests": 0,
+      "responseStatuses": [],
+      "rest": {
+        "y": 590,
+        "size": 192
+      },
+      "source": {
+        "x": 207,
+        "y": 746,
+        "insideBoard": false,
+        "topElement": "div.timeline-row"
+      },
+      "selected": {
+        "y": 590,
+        "size": 192,
+        "shiftPx": 0,
+        "selectedMarkers": 0,
+        "captionHeight": 0
+      },
+      "target": {
+        "x": 207,
+        "y": 722,
+        "insideBoard": false,
+        "topElement": "section.timeline"
+      }
+    },
+    {
+      "viewport": "390x844",
+      "pack": "pawn-opposition-convert",
+      "gesture": "resize_recovery",
+      "intendedUci": "e2e3",
+      "intendedLegal": true,
+      "submittedUci": null,
+      "matches": false,
+      "extraPlayerRequests": 0,
+      "responseStatuses": [],
+      "rest": {
+        "y": 590,
+        "size": 192
+      },
+      "source": {
+        "x": 207,
+        "y": 746,
+        "insideBoard": false,
+        "topElement": "div.timeline-row"
+      },
+      "selected": {
+        "y": 590,
+        "size": 192,
+        "shiftPx": 0,
+        "selectedMarkers": 0,
+        "captionHeight": 0
+      },
+      "target": {
+        "x": 207,
+        "y": 722,
+        "insideBoard": false,
+        "topElement": "section.timeline"
+      }
+    },
+    {
+      "viewport": "390x844",
+      "pack": "pawn-opposition-convert",
+      "gesture": "hover",
+      "intendedUci": "e2e3",
+      "intendedLegal": true,
+      "submittedUci": null,
+      "matches": true,
+      "extraPlayerRequests": 0,
+      "responseStatuses": [],
+      "rest": {
+        "y": 590,
+        "size": 192
+      },
+      "source": {
+        "x": 207,
+        "y": 746,
+        "insideBoard": false,
+        "topElement": "div.timeline-row"
+      },
+      "selected": {
+        "y": 590,
+        "size": 192,
+        "shiftPx": 0,
+        "selectedMarkers": 0,
+        "captionHeight": 0
+      },
+      "target": {
+        "x": 207,
+        "y": 722,
+        "insideBoard": false,
+        "topElement": "section.timeline"
+      }
+    },
+    {
+      "viewport": "390x844",
+      "pack": "philidor-third-rank-hold",
+      "gesture": "stale_click",
+      "intendedUci": "h6b6",
+      "intendedLegal": true,
+      "submittedUci": null,
+      "matches": false,
+      "extraPlayerRequests": 0,
+      "responseStatuses": [],
+      "rest": {
+        "y": 590,
+        "size": 192
+      },
+      "source": {
+        "x": 111,
+        "y": 722,
+        "insideBoard": false,
+        "topElement": "section.timeline"
+      },
+      "selected": {
+        "y": 590,
+        "size": 192,
+        "shiftPx": 0,
+        "selectedMarkers": 0,
+        "captionHeight": 0
+      },
+      "target": {
+        "x": 255,
+        "y": 722,
+        "insideBoard": false,
+        "topElement": "section.timeline"
+      }
+    },
+    {
+      "viewport": "390x844",
+      "pack": "philidor-third-rank-hold",
+      "gesture": "live_click",
+      "intendedUci": "h6b6",
+      "intendedLegal": true,
+      "submittedUci": null,
+      "matches": false,
+      "extraPlayerRequests": 0,
+      "responseStatuses": [],
+      "rest": {
+        "y": 590,
+        "size": 192
+      },
+      "source": {
+        "x": 111,
+        "y": 722,
+        "insideBoard": false,
+        "topElement": "section.timeline"
+      },
+      "selected": {
+        "y": 590,
+        "size": 192,
+        "shiftPx": 0,
+        "selectedMarkers": 0,
+        "captionHeight": 0
+      },
+      "target": {
+        "x": 255,
+        "y": 722,
+        "insideBoard": false,
+        "topElement": "section.timeline"
+      }
+    },
+    {
+      "viewport": "390x844",
+      "pack": "philidor-third-rank-hold",
+      "gesture": "live_drag",
+      "intendedUci": "h6b6",
+      "intendedLegal": true,
+      "submittedUci": null,
+      "matches": false,
+      "extraPlayerRequests": 0,
+      "responseStatuses": [],
+      "rest": {
+        "y": 590,
+        "size": 192
+      },
+      "source": {
+        "x": 111,
+        "y": 722,
+        "insideBoard": false,
+        "topElement": "section.timeline"
+      },
+      "selected": {
+        "y": 590,
+        "size": 192,
+        "shiftPx": 0,
+        "selectedMarkers": 0,
+        "captionHeight": 0
+      },
+      "target": {
+        "x": 255,
+        "y": 722,
+        "insideBoard": false,
+        "topElement": "section.timeline"
+      }
+    },
+    {
+      "viewport": "390x844",
+      "pack": "philidor-third-rank-hold",
+      "gesture": "touch_live",
+      "intendedUci": "h6b6",
+      "intendedLegal": true,
+      "submittedUci": null,
+      "matches": false,
+      "extraPlayerRequests": 0,
+      "responseStatuses": [],
+      "rest": {
+        "y": 590,
+        "size": 192
+      },
+      "source": {
+        "x": 111,
+        "y": 722,
+        "insideBoard": false,
+        "topElement": "section.timeline"
+      },
+      "selected": {
+        "y": 590,
+        "size": 192,
+        "shiftPx": 0,
+        "selectedMarkers": 0,
+        "captionHeight": 0
+      },
+      "target": {
+        "x": 255,
+        "y": 722,
+        "insideBoard": false,
+        "topElement": "section.timeline"
+      }
+    },
+    {
+      "viewport": "390x844",
+      "pack": "philidor-third-rank-hold",
+      "gesture": "resize_recovery",
+      "intendedUci": "h6b6",
+      "intendedLegal": true,
+      "submittedUci": null,
+      "matches": false,
+      "extraPlayerRequests": 0,
+      "responseStatuses": [],
+      "rest": {
+        "y": 590,
+        "size": 192
+      },
+      "source": {
+        "x": 111,
+        "y": 722,
+        "insideBoard": false,
+        "topElement": "section.timeline"
+      },
+      "selected": {
+        "y": 590,
+        "size": 192,
+        "shiftPx": 0,
+        "selectedMarkers": 0,
+        "captionHeight": 0
+      },
+      "target": {
+        "x": 255,
+        "y": 722,
+        "insideBoard": false,
+        "topElement": "section.timeline"
+      }
+    },
+    {
+      "viewport": "390x844",
+      "pack": "philidor-third-rank-hold",
+      "gesture": "hover",
+      "intendedUci": "h6b6",
+      "intendedLegal": true,
+      "submittedUci": null,
+      "matches": true,
+      "extraPlayerRequests": 0,
+      "responseStatuses": [],
+      "rest": {
+        "y": 590,
+        "size": 192
+      },
+      "source": {
+        "x": 111,
+        "y": 722,
+        "insideBoard": false,
+        "topElement": "section.timeline"
+      },
+      "selected": {
+        "y": 590,
+        "size": 192,
+        "shiftPx": 0,
+        "selectedMarkers": 0,
+        "captionHeight": 0
+      },
+      "target": {
+        "x": 255,
+        "y": 722,
+        "insideBoard": false,
+        "topElement": "section.timeline"
+      }
+    },
+    {
+      "viewport": "390x844",
+      "pack": "queen-vs-pawn-seventh-convert",
+      "gesture": "stale_click",
+      "intendedUci": "e4c4",
+      "intendedLegal": true,
+      "submittedUci": null,
+      "matches": false,
+      "extraPlayerRequests": 0,
+      "responseStatuses": [],
+      "rest": {
+        "y": 590,
+        "size": 192
+      },
+      "source": {
+        "x": 207,
+        "y": 698,
+        "insideBoard": true,
+        "topElement": "cg-board"
+      },
+      "selected": {
+        "y": 494,
+        "size": 192,
+        "shiftPx": -96,
+        "selectedMarkers": 1,
+        "captionHeight": 186
+      },
+      "target": {
+        "x": 159,
+        "y": 698,
+        "insideBoard": false,
+        "topElement": "p.svelte-196rcao"
+      }
+    },
+    {
+      "viewport": "390x844",
+      "pack": "queen-vs-pawn-seventh-convert",
+      "gesture": "live_click",
+      "intendedUci": "e4c4",
+      "intendedLegal": true,
+      "submittedUci": null,
+      "matches": false,
+      "extraPlayerRequests": 0,
+      "responseStatuses": [],
+      "rest": {
+        "y": 590,
+        "size": 192
+      },
+      "source": {
+        "x": 207,
+        "y": 698,
+        "insideBoard": true,
+        "topElement": "cg-board"
+      },
+      "selected": {
+        "y": 494,
+        "size": 192,
+        "shiftPx": -96,
+        "selectedMarkers": 1,
+        "captionHeight": 186
+      },
+      "target": {
+        "x": 159,
+        "y": 602,
+        "insideBoard": true,
+        "topElement": "square.move-dest"
+      }
+    },
+    {
+      "viewport": "390x844",
+      "pack": "queen-vs-pawn-seventh-convert",
+      "gesture": "live_drag",
+      "intendedUci": "e4c4",
+      "intendedLegal": true,
+      "submittedUci": null,
+      "matches": false,
+      "extraPlayerRequests": 0,
+      "responseStatuses": [],
+      "rest": {
+        "y": 590,
+        "size": 192
+      },
+      "source": {
+        "x": 207,
+        "y": 698,
+        "insideBoard": true,
+        "topElement": "cg-board"
+      },
+      "selected": {
+        "y": 494,
+        "size": 192,
+        "shiftPx": -96,
+        "selectedMarkers": 1,
+        "captionHeight": 186
+      },
+      "target": {
+        "x": 159,
+        "y": 602,
+        "insideBoard": true,
+        "topElement": "square.move-dest"
+      }
+    },
+    {
+      "viewport": "390x844",
+      "pack": "queen-vs-pawn-seventh-convert",
+      "gesture": "touch_live",
+      "intendedUci": "e4c4",
+      "intendedLegal": true,
+      "submittedUci": null,
+      "matches": false,
+      "extraPlayerRequests": 0,
+      "responseStatuses": [],
+      "rest": {
+        "y": 590,
+        "size": 192
+      },
+      "source": {
+        "x": 207,
+        "y": 698,
+        "insideBoard": true,
+        "topElement": "cg-board"
+      },
+      "selected": {
+        "y": 494,
+        "size": 192,
+        "shiftPx": -96,
+        "selectedMarkers": 1,
+        "captionHeight": 186
+      },
+      "target": {
+        "x": 159,
+        "y": 602,
+        "insideBoard": true,
+        "topElement": "square.move-dest"
+      }
+    },
+    {
+      "viewport": "390x844",
+      "pack": "queen-vs-pawn-seventh-convert",
+      "gesture": "resize_recovery",
+      "intendedUci": "e4c4",
+      "intendedLegal": true,
+      "submittedUci": "e4c4",
+      "matches": true,
+      "extraPlayerRequests": 0,
+      "responseStatuses": [
+        200,
+        200
+      ],
+      "rest": {
+        "y": 590,
+        "size": 192
+      },
+      "source": {
+        "x": 207,
+        "y": 698,
+        "insideBoard": true,
+        "topElement": "cg-board"
+      },
+      "selected": {
+        "y": 494,
+        "size": 192,
+        "shiftPx": -96,
+        "selectedMarkers": 1,
+        "captionHeight": 186
+      },
+      "target": {
+        "x": 159,
+        "y": 602,
+        "insideBoard": true,
+        "topElement": "cg-board"
+      }
+    },
+    {
+      "viewport": "390x844",
+      "pack": "queen-vs-pawn-seventh-convert",
+      "gesture": "hover",
+      "intendedUci": "e4c4",
+      "intendedLegal": true,
+      "submittedUci": null,
+      "matches": true,
+      "extraPlayerRequests": 0,
+      "responseStatuses": [],
+      "rest": {
+        "y": 590,
+        "size": 192
+      },
+      "source": {
+        "x": 207,
+        "y": 698,
+        "insideBoard": true,
+        "topElement": "cg-board"
+      },
+      "selected": {
+        "y": 590,
+        "size": 192,
+        "shiftPx": 0,
+        "selectedMarkers": 0,
+        "captionHeight": 0
+      },
+      "target": {
+        "x": 159,
+        "y": 698,
+        "insideBoard": true,
+        "topElement": "cg-board"
+      }
+    }
+  ]
+}
