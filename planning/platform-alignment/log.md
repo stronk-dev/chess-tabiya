@@ -155,3 +155,22 @@ Append-only. Record research, rulings, RFC transitions, implementation closeout 
   remains evidence toward firing, but the causes are named product defects and the owner retains
   the call. A2 is done; R3 is ready for disposable prototype/mechanical work and external for its
   participant exit. No product code, schema, content or design intent changed; D560 remains active.
+
+## 2026-08-20 — R6 answered with a negative Gate-F result
+
+- Landed `design/research/pack-primitive-stability.md` and the disposable
+  `tools/r6-pack-stability-harness/`. The bidirectional census covers 27 schema mutations and all
+  92 current pack documents without checking out or rewriting historical trees.
+- Current syntax is green (92/92 at 0.27), but no document declares a schema/capability requirement.
+  All 92 also validate under 0.24 despite 82 later principle references and 436 typed graduation
+  entries, proving that schema validity can silently overstate older-runtime compatibility.
+- Recorded D574-D578. Schema 0.13 named an invalid artifact and its repaired successor; HEAD's ID
+  says 0.27 while its description says 0.25; no reusable pack migration ladder exists.
+- Separated migration classes. Evidence relocation and engine-cost stamping are reproducible
+  mechanical/instrument work; principle assignment and graduation splitting contain explicit human
+  judgments and may not be inferred by a migrator under law 8.
+- Four declared families have zero pack witnesses (`engineCondition`, per-leg shapes, per-leg
+  opponent policy and prediction), so the corpus is not a primitive-complete pilot.
+- R6 narrows O6/F3 to immutable resource artifacts, versioned capability negotiation, pure plan +
+  separate apply, semantic-residue refusal and a sacrificial varied pilot. It does not unlock an RFC,
+  lift D560 or launch content. Gate F remains failed.

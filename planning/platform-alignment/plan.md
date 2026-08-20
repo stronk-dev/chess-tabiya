@@ -231,7 +231,9 @@ surface IDs, so the central producer→consumer join remains unimplemented rathe
 undocumented. R1 and R2 have since landed: six evidence planes, followed by the measured split
 between semantic eligibility and local selection/budget. A2 has also landed: the exact-UCI
 instrument confirms the shipped interaction floor fails and unblocks only R3's disposable
-prototype/mechanical arms; participant completion remains external.
+prototype/mechanical arms; participant completion remains external. R6 has now landed as a
+negative Gate-F result: syntax admission is broad, but capability negotiation, reusable migrations,
+owner re-authoring budget and primitive-complete pilot coverage do not exist.
 
 `active-rfc-audit.md` records the code/tests/closeout evidence and legal next action. This remains
 a dated checkpoint, not a replacement for `rfc/README.md`.
@@ -244,11 +246,10 @@ cards and dependencies are in `execution-queue.md`; the current frontier is:
 1. R3 evidence-presentation prototype/mechanical arms (participant exit external);
 2. R4 knowledge-retrieval experiment;
 3. R5 renderer evaluation;
-4. R6 pack stability/migration audit;
-5. R11 bot-policy research;
-6. R12 player-style metrics research;
-7. R18 self-host/privacy/accessibility/rights audit;
-8. the capability-watch instrument.
+4. R11 bot-policy research;
+5. R12 player-style metrics research;
+6. R18 self-host/privacy/accessibility/rights audit;
+7. the capability-watch instrument.
 
 Presentation, Review Map, campaign and professional/social research are all on the queue, but
 behind named predecessors. Owner rulings and RFC drafting begin only after

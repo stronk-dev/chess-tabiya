@@ -3392,3 +3392,18 @@ squares are covered before selection and every click/drag/touch arm is 0/6; this
 than an extension of stale bounds. K9 remains evidence toward firing, C7 remains unmet, Q3's phone
 run-loop floor is now measured unmet, and R3 prototype work is unblocked while its participant exit
 remains external. No product implementation or content changed.
+
+## 2026-08-20 — Pack stability re-derived; Gate F remains closed
+
+Platform-alignment R6 landed as `design/research/pack-primitive-stability.md` with a disposable
+Git-history/compatibility harness. All 92 current pack documents validate at 0.27, but none identifies
+its schema or required capabilities; all 92 also validate under 0.24 despite later principle and
+graduation semantics. Syntax admission is therefore not a runtime capability handshake.
+
+The 27-mutation history contains one invalid released schema artifact repaired under the same 0.13
+ID, one breaking 20-pack evidence relocation, later 35-pack/13-principle and whole-92-document
+rewrite waves, and no reusable migration ladder. Four declared primitive families have zero current
+pack witnesses. Mechanical migrations can be planned and replayed; semantic assignments must be
+reported as human residue, not inferred. D574-D578 record the defects and architecture obligations.
+R6 is answered, but its result is negative: O6 remains blocked by R8/R10, F3 is not yet draftable,
+D560 stays active and Gate F remains failed. No product code, schema or content changed.
