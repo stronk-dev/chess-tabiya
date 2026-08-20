@@ -88,8 +88,9 @@ watch owns discovery and routing, not conclusions.
 
 ## What is executable now
 
-The safe research frontier is now the capability watch and preparation of R11's blind
-review set. R3's mechanical/desk arm is done but its interaction/participant exit remains external;
+The capability-watch instrument is complete; D554's 18 missing love/hate rows now define its
+targeted external/forum follow-up. The safe research frontier is preparation of R11's blind review
+set. R3's mechanical/desk arm is done but its interaction/participant exit remains external;
 R4 and R5 are done; R11 is mechanical-done/external; R8 waits on R3's remaining exit.
 R3 and R9 need owner-authorised participants to satisfy their final exits. Scale content, product
 RFC drafting and feature implementation remain outside this queue.

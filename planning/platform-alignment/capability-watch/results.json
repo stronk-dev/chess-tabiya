@@ -1,0 +1,93 @@
+{
+  "schema": "tabiya.capability-watch-summary.v1",
+  "asOf": "2026-08-20",
+  "sourceMatrixRows": 63,
+  "canonicalProducts": 21,
+  "representedProducts": 21,
+  "capabilities": 18,
+  "evidenceRows": 25,
+  "coveredMapFamilies": [
+    "Bot tournaments/social events",
+    "Campaign and fun progression",
+    "Coach/teacher",
+    "Drill/rehearsal modes",
+    "Full analysis inspector",
+    "Guided play and blunder prevention",
+    "Human-like bots",
+    "Human-v-human play",
+    "Import/export and integrations",
+    "Library, opening workflow and content",
+    "Player profile and skills",
+    "Responsive/accessibility/PWA",
+    "Return and longitudinal coaching",
+    "Review Map",
+    "Self-hosted/open distribution",
+    "Streamer/broadcast",
+    "Theory and knowledge"
+  ],
+  "uncoveredMapFamilies": [
+    "Capability watch",
+    "Evidence foundation",
+    "Federation/discovery",
+    "Semantic move understanding"
+  ],
+  "postureCounts": {
+    "transform": 18,
+    "defer": 2,
+    "research": 3,
+    "adopt": 2
+  },
+  "tabiyaStatusCounts": {
+    "mechanical": 12,
+    "absent": 4,
+    "claimed": 7,
+    "proven": 2
+  },
+  "missingSignals": {
+    "loveNotChecked": 18,
+    "loveNotFound": 0,
+    "hateNotChecked": 18,
+    "hateNotFound": 0
+  },
+  "routeCounts": {
+    "C7": 1,
+    "F10": 1,
+    "F11": 5,
+    "F12": 3,
+    "F3": 1,
+    "F4": 3,
+    "F5": 4,
+    "F6": 4,
+    "F7": 4,
+    "F8": 1,
+    "F9": 4,
+    "K9": 1,
+    "O10": 1,
+    "O11": 2,
+    "O12": 3,
+    "O13": 3,
+    "O3": 1,
+    "O4": 4,
+    "O5": 3,
+    "O6": 3,
+    "O7": 4,
+    "O8": 3,
+    "O9": 6,
+    "R11": 4,
+    "R12": 6,
+    "R13": 3,
+    "R14": 1,
+    "R15": 1,
+    "R16": 1,
+    "R17": 3,
+    "R3": 3,
+    "R4": 1,
+    "R5": 2,
+    "R7": 4,
+    "R8": 3
+  },
+  "controls": {
+    "duplicateAliasDoesNotChangeCoverage": true,
+    "newCapabilityChangesCoverage": true
+  }
+}

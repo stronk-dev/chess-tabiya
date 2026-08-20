@@ -28,7 +28,7 @@ action; measurement instruments do not share the tested defect's assumption.
 | 1.1 | R4 knowledge retrieval experiment | **DONE 2026-08-20** | 17 registered sources, 55 passages, 144 queries, six arms and lifecycle controls landed; semantic extraction refused for 1.0 |
 | 1.2 | R11 bot-policy research | **MECHANICAL DONE; EXTERNAL arm remains** | `design/research/bot-policy.md`, harness/results and H5/C5 update landed; generate matched blind 10–20-ply continuations, then recruit reviewers |
 | 1.3 | R18 self-host/privacy/accessibility/rights audit | **MECHANICAL/CODE/DESK DONE 2026-08-20; participant proof external** | Negative 1.0 result, O13 choice set, D605-D615 and F12 acceptance inputs landed |
-| 1.4 | Competitor capability-watch instrument | **READY NOW** | Dated capability-first register with canonical identities and routing; no clone-count objective |
+| 1.4 | Competitor capability-watch instrument | **DONE 2026-08-20** | 63-row source snapshot → 21 canonical representatives, 18 capabilities, 25 checked evidence/routing rows; D554 targeted research remains |
 | 1.5 | R9 learner/coach protocol | READY to design; **EXTERNAL to complete** | Preregistered script/tasks/sample; participant work only with owner authority |
 
 **Phase exit:** each completed row satisfies `research-queue.md`; failed hypotheses remain findings.
@@ -148,7 +148,7 @@ R14/R15/R16/R17/R18 → O10–O13 → optional F10/F11 + required F12
 all included nodes → integrated default journeys → 1.0 proof
 ```
 
-The immediate queue is therefore the capability-watch instrument and R11/R3's external-arm
-preparation; O13 is now ready for owner ruling, while R13 is research-ready only after its exact R7 dependency is resolved. There is
+The immediate queue is therefore R11/R3's external-arm preparation and D554's targeted hands-on
+gaps; O13 is now ready for owner ruling, while R13 is research-ready only after its exact R7 dependency is resolved. There is
 no legal feature-build queue yet; creating one before these results would
 violate the sequencing the owner explicitly requested.

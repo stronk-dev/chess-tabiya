@@ -1,0 +1,344 @@
+{
+  "schema": "tabiya.capability-watch.v1",
+  "asOf": "2026-08-20",
+  "sourcePopulation": {
+    "matrix": "design/research/competitor-matrix.csv",
+    "matrixRows": 63,
+    "synthesis": "design/research/integrated-platform-alignment.md"
+  },
+  "products": [
+    { "id": "beacon", "name": "Beacon Chess", "url": "https://beaconchess.com/", "aliases": [] },
+    { "id": "chess-com", "name": "Chess.com", "url": "https://www.chess.com/", "aliases": ["Chess.com Game Review", "Chess.com Play Coach"] },
+    { "id": "chess-endgame-training", "name": "Chess Endgame Training", "url": "https://chess-endgame-trainer.web.app/", "aliases": ["CET"] },
+    { "id": "chess-vs-chat", "name": "Chess vs Chat", "url": "https://store.steampowered.com/app/1888920/Chess_vs_Chat/", "aliases": [] },
+    { "id": "chess-yourself", "name": "Chess Yourself", "url": "https://www.chessyourself.com/", "aliases": [] },
+    { "id": "chessable", "name": "Chessable", "url": "https://www.chessable.com/", "aliases": [] },
+    { "id": "chessido", "name": "Chessido", "url": "https://www.chessido.com/", "aliases": [] },
+    { "id": "chessigma", "name": "Chessigma", "url": "https://www.chessigma.com/", "aliases": [] },
+    { "id": "chesslab-try", "name": "ChessLab", "url": "https://trychesslab.com/", "aliases": ["ChessLab mobile"] },
+    { "id": "chessly", "name": "Chessly", "url": "https://chessly.com/", "aliases": [] },
+    { "id": "chessmonitor", "name": "ChessMonitor", "url": "https://www.chessmonitor.com/", "aliases": [] },
+    { "id": "chessiverse", "name": "Chessiverse", "url": "https://chessiverse.com/", "aliases": [] },
+    { "id": "chessvision", "name": "chessvision.ai", "url": "https://chessvision.ai/", "aliases": [] },
+    { "id": "dr-wolf", "name": "Dr. Wolf", "url": "https://apps.apple.com/us/app/learn-chess-with-dr-wolf/id1353041020", "aliases": [] },
+    { "id": "en-croissant", "name": "En Croissant", "url": "https://encroissant.org/", "aliases": [] },
+    { "id": "lichess", "name": "Lichess", "url": "https://lichess.org/", "aliases": [] },
+    { "id": "qchess-net", "name": "Qchess.net", "url": "https://www.reddit.com/r/chess/comments/1klwe28", "aliases": ["Qchess"] },
+    { "id": "quackmate", "name": "Quackmate", "url": "https://apps.apple.com/us/app/quackmate/id6789064676", "aliases": [] },
+    { "id": "repcheck-rookhub", "name": "RepCheck / RookHub", "url": "https://chromewebstore.google.com/detail/repcheck-%E2%80%94-opening-repert/mhddbldcaancdahlochjanpkkboaccpn", "aliases": ["RookHub", "RepCheck"] },
+    { "id": "sensei-chess", "name": "Sensei Chess", "url": "https://www.senseichess.com/features", "aliases": [] },
+    { "id": "take-take-take", "name": "Take Take Take", "url": "https://taketaketake.com/", "aliases": [] }
+  ],
+  "capabilities": [
+    {
+      "id": "human_opponent_policy",
+      "learnerValue": "Opponents make plausible, coherent and characterful human decisions rather than merely weakened engine moves.",
+      "mapFamilies": ["Human-like bots"],
+      "evidence": [
+        {
+          "productId": "chessiverse", "checkedOn": "2026-08-20", "label": "V", "source": "https://chessiverse.com/articles/how-chessiverse-bots-are-created", "handsOn": "owner_partial",
+          "love": { "state": "observed", "source": "design/BACKLOG.md#D551", "summary": "Owner found its opponents noticeably more human than Chess.com bots." },
+          "hate": { "state": "observed", "source": "design/BACKLOG.md#D551", "summary": "Owner still found the play recognizably off; vendor also reports implausible single-move drops." },
+          "doesWell": "Separates neural candidates, stronger-engine filtering, opening repertoire and measured output traits.",
+          "limitation": "Most personality labels are measured after play rather than controlled; human-likeness is not independently validated.",
+          "posture": "transform", "transformation": "Compose base human model, strength, repertoire, error guard, time and memory as separately measured layers.",
+          "doNotCopy": "Do not turn a character label or chat persona into evidence of board-behavior control.",
+          "producers": ["maia_policy", "human_explorer", "engine_guard", "opening_identity", "clock_history"], "consumer": "bot_policy", "tabiyaStatus": "mechanical", "route": ["R11", "O8", "F8"]
+        },
+        {
+          "productId": "chess-yourself", "checkedOn": "2026-08-20", "label": "V", "source": "https://www.chessyourself.com/", "handsOn": "none",
+          "love": { "state": "not_checked", "source": null, "summary": null }, "hate": { "state": "not_checked", "source": null, "summary": null },
+          "doesWell": "Turns a learner's own public games into a mirror-match novelty.", "limitation": "Vendor mechanism and sample/calibration contract are undisclosed.",
+          "posture": "defer", "transformation": "Consider an opt-in personal-policy adapter only after transparent habit metrics and privacy controls exist.", "doNotCopy": "Do not make personal-history ingestion mandatory or call similarity coaching truth.",
+          "producers": ["personal_game_corpus", "human_policy"], "consumer": "bot_policy", "tabiyaStatus": "absent", "route": ["R11", "R12", "O8", "O9"]
+        }
+      ]
+    },
+    {
+      "id": "bot_tournaments_social_events",
+      "learnerValue": "Bot/player events create fun repeatable sessions whose games still feed review, profile and rehearsal.",
+      "mapFamilies": ["Bot tournaments/social events"],
+      "evidence": [
+        {
+          "productId": "chessiverse", "checkedOn": "2026-08-20", "label": "V", "source": "https://chessiverse.com/", "handsOn": "owner_partial",
+          "love": { "state": "not_checked", "source": null, "summary": null }, "hate": { "state": "not_checked", "source": null, "summary": null },
+          "doesWell": "Presents bot tournaments and a large character roster as recurring entertainment around the opponent system.", "limitation": "No independent evidence yet connects tournament outcomes to learning, preserved review or stable personality behavior.",
+          "posture": "research", "transformation": "Treat an event as a persisted envelope whose games enter the same Review Map, habit and rehearsal paths.", "doNotCopy": "Do not ship a disconnected bot menu/leaderboard or sell progression advantages.",
+          "producers": ["bot_identity", "event_schedule", "match_events", "review_moments"], "consumer": "social_event_to_review", "tabiyaStatus": "absent", "route": ["R11", "R17", "O12", "F11"]
+        }
+      ]
+    },
+    {
+      "id": "guided_play_modules",
+      "learnerValue": "A learner can ask for a bounded nudge, threat view or board affordance without configuring evidence sources.",
+      "mapFamilies": ["Guided play and blunder prevention"],
+      "evidence": [
+        {
+          "productId": "chessiverse", "checkedOn": "2026-08-20", "label": "V", "source": "https://chessiverse.com/guided-play", "handsOn": "owner_partial",
+          "love": { "state": "observed", "source": "design/BACKLOG.md#D551", "summary": "Board-square lighting and graduated support make help feel like an integrated mode." },
+          "hate": { "state": "not_checked", "source": null, "summary": null },
+          "doesWell": "Packages assistance into Full Help, Peek and Blunder Guard intents rather than engine settings.", "limitation": "Its strongest modes grade or warn before commitment and can reveal move quality.",
+          "posture": "transform", "transformation": "Use named quiet modules and presets with deterministic eligibility, budgets and disclosure ceilings.", "doNotCopy": "Do not import pre-commit grading, best-move leakage or raw evidence dumps.",
+          "producers": ["rules", "semantic_detector", "engine_measurement", "human_policy", "theory_index"], "consumer": "guidance_modules", "tabiyaStatus": "mechanical", "route": ["R3", "O3", "O4", "F5"]
+        },
+        {
+          "productId": "chess-com", "checkedOn": "2026-08-20", "label": "V", "source": "https://www.chess.com/play/coach", "handsOn": "none",
+          "love": { "state": "not_checked", "source": null, "summary": null }, "hate": { "state": "not_checked", "source": null, "summary": null },
+          "doesWell": "Makes guided play a discoverable mainstream workflow with visible praise, warning and hint steps.", "limitation": "Recommends moves during committed play and does not preserve attempts as branches.",
+          "posture": "transform", "transformation": "Adopt workflow clarity and progressive intent; retain commit-first evidence and preserved attempts.", "doNotCopy": "Do not become an engine coach that prevents consequences.",
+          "producers": ["semantic_detector", "engine_measurement"], "consumer": "guidance_modules", "tabiyaStatus": "mechanical", "route": ["R3", "O4", "F5"]
+        },
+        {
+          "productId": "dr-wolf", "checkedOn": "2026-08-20", "label": "V", "source": "design/research/teardown-drwolf-desk.md", "handsOn": "none",
+          "love": { "state": "reported", "source": "https://apps.apple.com/us/app/learn-chess-with-dr-wolf/id1353041020", "summary": "Large review volume and high rating support demand for conversational help during play." },
+          "hate": { "state": "reported", "source": "design/research/teardown-drwolf-desk.md", "summary": "Accuracy complaints and a low skill ceiling recur in the reviewed evidence." },
+          "doesWell": "Combines per-move comments, voice personas, hints and retry in one approachable coach.", "limitation": "Blocking pre-consequence warnings and erase-on-undo invert Tabiya's learning loop.",
+          "posture": "transform", "transformation": "Use optional voice and progressive wording over already-admitted modules after commitment.", "doNotCopy": "Do not let the voice model select chess facts or erase failed attempts.",
+          "producers": ["selected_evidence_packet"], "consumer": "optional_voice_renderer", "tabiyaStatus": "mechanical", "route": ["R3", "R5", "O4", "F5"]
+        }
+      ]
+    },
+    {
+      "id": "review_reentry",
+      "learnerValue": "Post-game review identifies a bounded moment and immediately returns the learner to consequence play.",
+      "mapFamilies": ["Review Map"],
+      "evidence": [
+        {
+          "productId": "beacon", "checkedOn": "2026-08-20", "label": "V", "source": "https://beaconchess.com/", "handsOn": "none",
+          "love": { "state": "not_checked", "source": null, "summary": null }, "hate": { "state": "not_checked", "source": null, "summary": null },
+          "doesWell": "Finds key positions, explains candidates and offers Maia play from the reviewed position.", "limitation": "No evidence yet that the first attempt survives or that branches can be compared.",
+          "posture": "transform", "transformation": "Auto-offer a grounded rewind/branch at a selected moment and preserve both attempts.", "doNotCopy": "Do not auto-play a correction or reduce review to engine labels.",
+          "producers": ["moment_selector", "signed_evidence", "theory_index"], "consumer": "review_map", "tabiyaStatus": "claimed", "route": ["R7", "O7", "F6"]
+        },
+        {
+          "productId": "chessigma", "checkedOn": "2026-08-20", "label": "V", "source": "https://www.chessigma.com/", "handsOn": "none",
+          "love": { "state": "not_checked", "source": null, "summary": null }, "hate": { "state": "not_checked", "source": null, "summary": null },
+          "doesWell": "Re-enters the exact move from a real game with the same clock and a level-matched bot.", "limitation": "The restart does not preserve/compare the original attempt and paid LLM causal claims are opaque.",
+          "posture": "transform", "transformation": "Retain exact-position/same-clock re-entry while preserving the original as a branch.", "doNotCopy": "Do not grade the retry by centipawn loss or accept opaque LLM causality.",
+          "producers": ["imported_game", "moment_selector", "clock_history", "human_policy"], "consumer": "review_map", "tabiyaStatus": "mechanical", "route": ["R7", "O7", "F6"]
+        }
+      ]
+    },
+    {
+      "id": "social_recap",
+      "learnerValue": "A compact, fun account of a game remains grounded and links back to something playable.",
+      "mapFamilies": ["Review Map"],
+      "evidence": [
+        {
+          "productId": "quackmate", "checkedOn": "2026-08-20", "label": "V", "source": "https://apps.apple.com/us/app/quackmate/id6789064676", "handsOn": "none",
+          "love": { "state": "not_checked", "source": null, "summary": null }, "hate": { "state": "not_checked", "source": null, "summary": null },
+          "doesWell": "Packages turning points, weekly reports, player identity and share cards into a playful return loop.", "limitation": "Vendor/mobile claims do not establish grounding, preserved attempts or consequence play.",
+          "posture": "transform", "transformation": "Render a selected signed moment set into deterministic and optional styled recap forms with replay doors.", "doNotCopy": "Do not manufacture a type, takeaway or causal chess story.",
+          "producers": ["review_moments", "habit_metrics", "opening_identity"], "consumer": "social_recap", "tabiyaStatus": "mechanical", "route": ["R7", "R12", "O7", "O9", "F6", "F9"]
+        },
+        {
+          "productId": "take-take-take", "checkedOn": "2026-08-20", "label": "V", "source": "design/research/teardown-taketaketake-desk.md", "handsOn": "none",
+          "love": { "state": "not_checked", "source": null, "summary": null }, "hate": { "state": "reported", "source": "design/research/teardown-taketaketake-desk.md", "summary": "Launch-day examples documented wrong LLM narration." },
+          "doesWell": "Makes one key moment, title and takeaway feel social and lightweight.", "limitation": "The story is read-only and its LLM explanation can be wrong.",
+          "posture": "transform", "transformation": "Adopt the compact story form over a deterministic cited packet and attach re-entry.", "doNotCopy": "Do not use free-form LLM analysis as chess truth.",
+          "producers": ["review_moments", "signed_evidence"], "consumer": "social_recap", "tabiyaStatus": "mechanical", "route": ["R5", "R7", "O7", "F6"]
+        }
+      ]
+    },
+    {
+      "id": "theory_analysis_workbench",
+      "learnerValue": "A learner can move between opening/theory context, analysis and rehearsal without losing the position or provenance.",
+      "mapFamilies": ["Theory and knowledge", "Full analysis inspector", "Self-hosted/open distribution"],
+      "evidence": [
+        {
+          "productId": "lichess", "checkedOn": "2026-08-20", "label": "V", "source": "https://lichess.org/analysis", "handsOn": "inherited",
+          "love": { "state": "reported", "source": "design/research/coverage-sweep-2-notability.md", "summary": "Open analysis, studies and explorer are a community reference workflow." },
+          "hate": { "state": "reported", "source": "design/research/coverage-sweep-2-notability.md", "summary": "Mobile omits study/learn-from-mistakes depth and users complain about the split." },
+          "doesWell": "Integrates analysis board, studies, explorer, opening identity and public data in an open platform.", "limitation": "Analysis/study does not preserve Tabiya-style played branches and rehearsal consequences.",
+          "posture": "transform", "transformation": "Use a cited local theory bundle and explicit inspector linked bidirectionally to rehearsal branches.", "doNotCopy": "Do not default to an engine analysis screen with rewind.",
+          "producers": ["opening_identity", "theory_index", "human_explorer", "engine_measurement"], "consumer": "theory_breadcrumb_and_inspector", "tabiyaStatus": "mechanical", "route": ["R4", "R8", "O5", "F4", "F7"]
+        },
+        {
+          "productId": "en-croissant", "checkedOn": "2026-08-20", "label": "V", "source": "design/research/quickpass-wintrChess-encroissant-chessmonitor.md", "handsOn": "none",
+          "love": { "state": "reported", "source": "design/research/quickpass-wintrChess-encroissant-chessmonitor.md", "summary": "Active open-source community values the modern local workbench and engine/database integration." },
+          "hate": { "state": "reported", "source": "design/research/quickpass-wintrChess-encroissant-chessmonitor.md", "summary": "Repertoire/SRS remains immature and the user must assemble workflows." },
+          "doesWell": "Demonstrates a credible open local database/engine desktop workbench.", "limitation": "Workbench tools are adjacent rather than joined into a learning loop; no mobile path.",
+          "posture": "adopt", "transformation": "Reuse the open/local expectation and adapter posture while preserving a guided workflow default.", "doNotCopy": "Do not expose a toolbox as the primary learner journey.",
+          "producers": ["local_engine", "local_database", "import_export"], "consumer": "analysis_inspector", "tabiyaStatus": "mechanical", "route": ["O5", "O13", "F4", "F12"]
+        }
+      ]
+    },
+    {
+      "id": "course_position_play",
+      "learnerValue": "Authored theory can launch consequence play from the exact strategic position and return to the lesson.",
+      "mapFamilies": ["Theory and knowledge", "Library, opening workflow and content"],
+      "evidence": [
+        {
+          "productId": "chessable", "checkedOn": "2026-08-20", "label": "V", "source": "design/research/teardown-chessable-desk.md", "handsOn": "none",
+          "love": { "state": "not_checked", "source": null, "summary": null }, "hate": { "state": "not_checked", "source": null, "summary": null },
+          "doesWell": "Lets some course positions hand off into bot play from the authored board state.", "limitation": "The handoff is one-way and the played consequence does not flow back into the course explanation.",
+          "posture": "transform", "transformation": "Bind cited theory spans to pack checkpoints and return branch outcomes to the theory view.", "doNotCopy": "Do not turn the product into generic course cards or mandatory spaced repetition.",
+          "producers": ["authored_theory", "theory_applicability"], "consumer": "theory_to_rehearsal", "tabiyaStatus": "claimed", "route": ["R8", "O5", "O6", "F4", "F7"]
+        }
+      ]
+    },
+    {
+      "id": "player_habit_profile",
+      "learnerValue": "A learner gets fun, inspectable longitudinal tendencies with sample/confidence and drill-down evidence.",
+      "mapFamilies": ["Player profile and skills"],
+      "evidence": [
+        {
+          "productId": "chessiverse", "checkedOn": "2026-08-20", "label": "V", "source": "https://chessiverse.com/chess-personality", "handsOn": "none",
+          "love": { "state": "not_checked", "source": null, "summary": null }, "hate": { "state": "not_checked", "source": null, "summary": null },
+          "doesWell": "Makes style playful through metrics, axes, archetypes and famous-player comparison.", "limitation": "The page contradicts itself about quiz versus game inputs and publishes no stability curve.",
+          "posture": "transform", "transformation": "Ship continuous literal habit cards with per-metric sample floors, uncertainty and contributing games.", "doNotCopy": "Do not manufacture natural archetypes or GM twins when clustering fails.",
+          "producers": ["habit_metric_registry", "personal_game_history"], "consumer": "player_profile", "tabiyaStatus": "claimed", "route": ["R12", "R13", "O9", "F9"]
+        },
+        {
+          "productId": "chessmonitor", "checkedOn": "2026-08-20", "label": "V", "source": "design/research/quickpass-wintrChess-encroissant-chessmonitor.md", "handsOn": "none",
+          "love": { "state": "reported", "source": "design/research/quickpass-wintrChess-encroissant-chessmonitor.md", "summary": "Cross-platform aggregation and opponent scouting are repeatedly appreciated." },
+          "hate": { "state": "reported", "source": "design/research/quickpass-wintrChess-encroissant-chessmonitor.md", "summary": "Its marquee estimated-Elo number is a manufactured relative metric and it never returns the learner to play." },
+          "doesWell": "Treats progress/return analytics as a coherent product instead of a buried report.", "limitation": "Watches games but provides no re-entry or rehearsal action.",
+          "posture": "transform", "transformation": "Attach every admitted habit/aggregate to source games and an optional rehearsal selector.", "doNotCopy": "Do not turn opaque summary scores into coaching advice.",
+          "producers": ["habit_metric_registry", "personal_game_history"], "consumer": "player_profile_and_pack_selector", "tabiyaStatus": "claimed", "route": ["R12", "R13", "O9", "F9"]
+        }
+      ]
+    },
+    {
+      "id": "longitudinal_coaching_ritual",
+      "learnerValue": "Several games become a recurring, inspectable review ritual and a grounded next rehearsal rather than a one-off dashboard.",
+      "mapFamilies": ["Return and longitudinal coaching"],
+      "evidence": [
+        {
+          "productId": "sensei-chess", "checkedOn": "2026-08-20", "label": "V", "source": "https://www.senseichess.com/features", "handsOn": "none",
+          "love": { "state": "not_checked", "source": null, "summary": null }, "hate": { "state": "not_checked", "source": null, "summary": null },
+          "doesWell": "Turns blocks of a learner's games into a recurring weekly report/audio ritual across openings, phases and activity.", "limitation": "Diagnoses and grounding are vendor-defined; no preserved branch runtime or self-host path is shown.",
+          "posture": "transform", "transformation": "Aggregate only validated event/metric rows, expose denominators and link each suggestion to a replay or pack.", "doNotCopy": "Do not let an LLM or opaque score invent a weakness or training prescription.",
+          "producers": ["review_moments", "habit_metric_registry", "attempt_history"], "consumer": "grounded_coaching_aggregate", "tabiyaStatus": "absent", "route": ["R12", "R13", "O9", "F9"]
+        }
+      ]
+    },
+    {
+      "id": "opening_live_bridge",
+      "learnerValue": "A live-site opening deviation can return to a maintained repertoire and later rehearsal without making integration mandatory.",
+      "mapFamilies": ["Import/export and integrations", "Library, opening workflow and content"],
+      "evidence": [
+        {
+          "productId": "repcheck-rookhub", "checkedOn": "2026-08-20", "label": "V", "source": "https://chromewebstore.google.com/detail/repcheck-%E2%80%94-opening-repert/mhddbldcaancdahlochjanpkkboaccpn", "handsOn": "none",
+          "love": { "state": "not_checked", "source": null, "summary": null }, "hate": { "state": "not_checked", "source": null, "summary": null },
+          "doesWell": "Highlights off-repertoire moves directly on Chess.com/Lichess against a RookHub/PGN source.", "limitation": "Opening-only third-party adapter with no consequence play or explanation.",
+          "posture": "transform", "transformation": "Offer an optional adapter that records a provenance-preserving re-entry target into the local repertoire/drill loop.", "doNotCopy": "Do not require third-party accounts or inject live assistance into rated games.",
+          "producers": ["repertoire", "opening_identity", "external_adapter_event"], "consumer": "repertoire_gap_to_rehearsal", "tabiyaStatus": "mechanical", "route": ["R8", "R17", "O6", "O12", "F7", "F11"]
+        }
+      ]
+    },
+    {
+      "id": "broad_mobile_workbench",
+      "learnerValue": "Openings, play, analysis and endgames feel like one approachable portable product rather than unrelated modes.",
+      "mapFamilies": ["Responsive/accessibility/PWA"],
+      "evidence": [
+        {
+          "productId": "chesslab-try", "checkedOn": "2026-08-20", "label": "V", "source": "https://trychesslab.com/", "handsOn": "none",
+          "love": { "state": "not_checked", "source": null, "summary": null }, "hate": { "state": "not_checked", "source": null, "summary": null },
+          "doesWell": "Presents openings, puzzles, games, engine analysis and endgames in one approachable mobile/offline shell.", "limitation": "The modes appear adjacent rather than joined by shared attempts/evidence; name is ambiguous across unrelated ChessLab products.",
+          "posture": "transform", "transformation": "Mine navigation, defaults and continuity while keeping one run/evidence protocol.", "doNotCopy": "Do not reproduce Lucas-Chess-style independent mode sprawl.",
+          "producers": ["shared_run", "capability_manifest"], "consumer": "application_shell", "tabiyaStatus": "mechanical", "route": ["O4", "O13", "F5", "F12"]
+        }
+      ]
+    },
+    {
+      "id": "time_management_feedback",
+      "learnerValue": "Clock behavior is explained as an inspectable habit and can affect opponent/session realism without becoming move grading.",
+      "mapFamilies": ["Player profile and skills", "Human-like bots"],
+      "evidence": [
+        {
+          "productId": "qchess-net", "checkedOn": "2026-08-20", "label": "P", "source": "https://www.reddit.com/r/chess/comments/1klwe28", "handsOn": "none",
+          "love": { "state": "not_checked", "source": null, "summary": null }, "hate": { "state": "not_checked", "source": null, "summary": null },
+          "doesWell": "Founder describes time-management feedback alongside human-ish AI, repertoire trees and guess-the-move.", "limitation": "Founder launch claims only; canonical product access and independent teardown remain missing.",
+          "posture": "research", "transformation": "Test literal phase clock-spend metrics and a separate bot think-time model.", "doNotCopy": "Do not infer chess quality or psychology from clock use.",
+          "producers": ["clock_history", "phase_classifier"], "consumer": "player_profile_and_bot_time", "tabiyaStatus": "claimed", "route": ["R11", "R12", "O8", "O9"]
+        }
+      ]
+    },
+    {
+      "id": "endgame_outcome_loop",
+      "learnerValue": "A learner repeatedly converts, holds or saves an exact endgame and restarts instantly.",
+      "mapFamilies": ["Drill/rehearsal modes"],
+      "evidence": [
+        {
+          "productId": "chess-endgame-training", "checkedOn": "2026-08-20", "label": "V", "source": "design/research/endgame-latency-versus-cet.md", "handsOn": "research_hands_on",
+          "love": { "state": "observed", "source": "design/research/teardown-cet.md", "summary": "The focused conversion loop and immediate restart make the task obvious." },
+          "hate": { "state": "observed", "source": "design/research/teardown-cet.md", "summary": "Hints/records/mobile detail remain thin and the public tablebase call offers no speed advantage." },
+          "doesWell": "Provides a focused exact-result play-out loop with almost no setup.", "limitation": "No preserved alternatives, comparison or broader phase/theory context.",
+          "posture": "adopt", "transformation": "Keep instant focused outcome starts and add preserved branch comparison/replay under varied resistance.", "doNotCopy": "Do not treat tablebase best play as a strategic lesson.",
+          "producers": ["tablebase", "objective_state"], "consumer": "outcome_drill", "tabiyaStatus": "proven", "route": ["C7", "K9", "F7"]
+        }
+      ]
+    },
+    {
+      "id": "human_play_platform",
+      "learnerValue": "Human games preserve identity/history and can enter review and rehearsal without losing context.",
+      "mapFamilies": ["Human-v-human play"],
+      "evidence": [
+        {
+          "productId": "chess-com", "checkedOn": "2026-08-20", "label": "V", "source": "design/research/integrated-platform-alignment.md", "handsOn": "inherited",
+          "love": { "state": "not_checked", "source": null, "summary": null }, "hate": { "state": "not_checked", "source": null, "summary": null },
+          "doesWell": "Combines a large human pool, courses, bots and polished review inside one account/history surface.", "limitation": "Closed/paid surfaces and engine-review defaults do not preserve branch rehearsal or self-hostability.",
+          "posture": "research", "transformation": "Cost native play versus an adapter/handoff while retaining a local learning-context envelope.", "doNotCopy": "Do not make network play or proprietary identity mandatory for the rehearsal core.",
+          "producers": ["match_events", "identity", "fair_play_boundary"], "consumer": "human_play_to_review", "tabiyaStatus": "proven", "route": ["R17", "O12", "F11"]
+        }
+      ]
+    },
+    {
+      "id": "stream_audience_play",
+      "learnerValue": "A streamer can compose board, votes and safe evidence for an audience without forking chess truth.",
+      "mapFamilies": ["Streamer/broadcast"],
+      "evidence": [
+        {
+          "productId": "chess-vs-chat", "checkedOn": "2026-08-20", "label": "V", "source": "https://store.steampowered.com/app/1888920/Chess_vs_Chat/", "handsOn": "none",
+          "love": { "state": "not_checked", "source": null, "summary": null }, "hate": { "state": "not_checked", "source": null, "summary": null },
+          "doesWell": "Provides a turnkey Twitch chat-vote game with points/leaderboard and moderation-oriented flow.", "limitation": "Entertainment-only: no learning, rewind, branch or disclosure semantics.",
+          "posture": "transform", "transformation": "Compose audience voting/overlay over the existing run with delayed evidence and adapter attribution.", "doNotCopy": "Do not create a separate audience truth path or imply verified chat identity.",
+          "producers": ["run_projection", "vote_adapter", "disclosure_policy"], "consumer": "stream_overlay", "tabiyaStatus": "mechanical", "route": ["R16", "O11", "F11"]
+        }
+      ]
+    },
+    {
+      "id": "coach_classroom_ops",
+      "learnerValue": "A coach can assign, observe, annotate and return work while permissions and student privacy remain explicit.",
+      "mapFamilies": ["Coach/teacher"],
+      "evidence": [
+        {
+          "productId": "chessido", "checkedOn": "2026-08-20", "label": "V", "source": "https://www.chessido.com/", "handsOn": "none",
+          "love": { "state": "not_checked", "source": null, "summary": null }, "hate": { "state": "not_checked", "source": null, "summary": null },
+          "doesWell": "Treats synchronized class boards, homework and academy operations as a coherent workflow.", "limitation": "Puzzles/ops dominate; no branch rehearsal runtime or evidence contract.",
+          "posture": "transform", "transformation": "Use roster/assignment/return operations around shared run grants and grounded modules.", "doNotCopy": "Do not let roster membership silently grant run or progress access.",
+          "producers": ["assignment", "run_grant", "progress_projection"], "consumer": "coach_workspace", "tabiyaStatus": "claimed", "route": ["R15", "O11", "F11"]
+        }
+      ]
+    },
+    {
+      "id": "campaign_fun_progression",
+      "learnerValue": "A playful wrapper creates return, variety and experimentation without selling or conditioning access on chess success.",
+      "mapFamilies": ["Campaign and fun progression"],
+      "evidence": [
+        {
+          "productId": "chessly", "checkedOn": "2026-08-20", "label": "V", "source": "https://chessly.com/", "handsOn": "none",
+          "love": { "state": "not_checked", "source": null, "summary": null }, "hate": { "state": "not_checked", "source": null, "summary": null },
+          "doesWell": "Combines creator-authored courses, practice, bot testing and visible XP/achievement progression at large claimed scale.", "limitation": "Course cards and proprietary bot practice do not preserve consequence branches or prove the progression improves learning.",
+          "posture": "transform", "transformation": "Use cadence, learner-owned solution histories and setup variety around the unchanged rehearsal loop.", "doNotCopy": "Do not sell progression, require wins for unlocks or turn retries into a scarce resource.",
+          "producers": ["attempt_history", "concept_credit", "encounter_setup"], "consumer": "campaign_wrapper", "tabiyaStatus": "claimed", "route": ["R14", "O10", "F10"]
+        }
+      ]
+    },
+    {
+      "id": "capture_any_position",
+      "learnerValue": "A position from a book, video or site can enter the local analysis/rehearsal loop with honest provenance.",
+      "mapFamilies": ["Import/export and integrations"],
+      "evidence": [
+        {
+          "productId": "chessvision", "checkedOn": "2026-08-20", "label": "V", "source": "https://chessvision.ai/", "handsOn": "none",
+          "love": { "state": "not_checked", "source": null, "summary": null }, "hate": { "state": "not_checked", "source": null, "summary": null },
+          "doesWell": "Turns scanned boards from books/sites/videos into analysis and matched explanations across extensions/mobile/bots.", "limitation": "Import utility only; source rights, OCR confidence and learning flow are separate problems.",
+          "posture": "defer", "transformation": "Admit a provenance/confidence-bearing position adapter after the import and rights contracts are stable.", "doNotCopy": "Do not treat OCR geometry as licensed theory or a graded lesson.",
+          "producers": ["position_ocr", "source_provenance"], "consumer": "position_import", "tabiyaStatus": "absent", "route": ["O6", "O13", "F3", "F12"]
+        }
+      ]
+    }
+  ]
+}

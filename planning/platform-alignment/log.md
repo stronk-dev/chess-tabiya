@@ -292,3 +292,18 @@ Append-only. Record research, rulings, RFC transitions, implementation closeout 
   F12 remains required and participant screen-reader/physical-device proof remains external. O5
   and O12 shed only their R18 dependency. No product code, schema, design intent or authored chess
   content changed; D560 stays active.
+
+## 2026-08-20 — the capability watch replaced clone counting with routed evidence
+
+- Landed a checked capability-first register and deterministic summary over the frozen 63-product
+  matrix: 21 canonical representatives, 18 capabilities and 25 product-capability evidence rows.
+- Every owner-named product is canonicalized. Duplicate Chessiverse matrix rows collapse to one
+  product; ChessLab/Qchess identities stay explicit; RepCheck/RookHub is an evidenced alias.
+- Eighteen rows are transformations, two direct adopts, two deferrals and three research postures.
+  Tabiya is only proven for two rows; 12 are mechanical, seven claimed and four absent. The watch
+  routes integration work into existing O/F nodes instead of creating a parallel feature backlog.
+- The main result is a refusal of false completeness: 18/25 rows have neither checked love nor
+  checked hate evidence. D556 closes because the instrument now exposes that missingness; D554's
+  hands-on/forum sweep remains open and targeted to those rows.
+- Capability and reality maps, research/execution queues and the coverage matrix are reconciled.
+  No product code, design intent, schema or authored content changed; D560 remains active.

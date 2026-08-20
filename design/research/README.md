@@ -78,6 +78,7 @@ claim as `[P]` unless a new dossier upgrades it. The package's own caveats:
 | Area | Feeds | Status | Report |
 |---|---|---|---|
 | Competitor landscape (63 products, feature matrix) | Q1a, `design/02` | covered `[P]` — desk-first snapshot; seven 2026-08-20 additions are vendor/community evidence and need hands-on teardown | `competitor-matrix.csv`, `arch/02` |
+| Capability-first competitor watch | D554-D556, integrated 1.0 map | instrument covered `[V]`; market love/hate remains partial — 21 canonical representatives, 18 capabilities and 25 evidence/routing rows cover 17/21 map families; alias and novel-capability controls pass. **18/25 rows have neither love nor hate checked**, defining the targeted hands-on/forum queue without pretending vendor pages are user evidence | `capability-watch.md`, `capability-watch.json`, `planning/platform-alignment/capability-watch/results.json`, `tools/capability-watch-harness/` |
 | ChessMotive (owner-flagged near-competitor) | Q1a, E1, Q8 | covered `[V]` desk — E1 **intact**; narrows our compare claim | `teardown-chessmotive-desk.md` |
 | Competitor value props: adopt / conflict / not-relevant vs our thesis and posture | Q1a, Q2, Q8, `design/02` | covered `[P]`, 3 claims `[V]` (WhyThisMove, Noctie, Chess Endgame Training) | `competitor-value-props.md` |
 | Chess Endgame Training hands-on (latency, branching; owner's "slow/poor UX" report) | Q1a, K9 | covered `[V]` first pass (desktop; mobile/records/hint pending) | `teardown-cet.md` |

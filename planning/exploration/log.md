@@ -3502,3 +3502,15 @@ CUDA/NVIDIA packages, 15 proprietary/licence-ref, accompany measured CPU use. D6
 findings; R18 makes O13 ready but does not clear F12 or B8's release qualification. Participant
 screen-reader/physical-device evidence remains external. No product code, schema, design intent or
 authored chess content changed; D560 remains active.
+
+## 2026-08-20 — capability-first competitor watch landed
+
+The 63-product static matrix now feeds `design/research/capability-watch.json`: 21 canonical
+representatives, 18 capabilities and 25 evidence rows with separate love/hate missingness,
+thesis-compatible transformation, non-copy boundary, producer/consumer status and exact route.
+The validator proves aliases do not increase coverage and novel capabilities do.
+
+Eighteen of 25 rows are transformations and only two are direct adopts. More importantly, 18/25
+have neither love nor hate checked; vendor feature evidence was not relabelled as user preference.
+D556 closes on the instrument. D554 remains the targeted hands-on/forum queue. No product code,
+schema, design intent or authored chess content changed; D560 remains active.
