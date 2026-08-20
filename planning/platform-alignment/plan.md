@@ -71,7 +71,7 @@ These are independent dossiers but feed one contract:
 |---|---|---|
 | `design/research/detection-landscape.md` | What can rules, engine search, human corpus, theory catalogues and authored facts each detect? Precision, abstention, sign and validation set? | D544, D545, D558 |
 | `design/research/evidence-presentation.md` | Which modules help without alarm fatigue or direct move leakage? How do touch, hover, keyboard and mobile differ? | D542, D543, D546 |
-| `design/research/theory-retrieval.md` | Exact chess-key retrieval vs hybrid embeddings; licensing, citation, invalidation and false-match abstention? | D557 |
+| `design/research/theory-knowledge-pipeline.md` | Can Skipper's separate knowledge subsystem be reused for chess; does semantic retrieval beat exact keys + FTS; licensing, citation, invalidation and false-match abstention? Six-arm experiment queued. | D557, D564 |
 | `design/research/bot-policy.md` | How are strength, repertoire, style, plausible errors, timing and memory independently composed and measured? | D551, D561 |
 | `design/research/player-style-metrics.md` | Which descriptive metrics are stable, fun and non-deceptive? Minimum samples and confidence? | D552, D553, D562 |
 | hands-on competitor resweep | Same-position/session teardown of Guided Play, Game Review, Beacon, Quackmate, Sensei, ChessLab and Qchess; one loved and hated thing each | D554-D556 |
@@ -219,7 +219,7 @@ The next safe queue is research and reconciliation, not feature implementation:
 1. active-RFC completion audit and register repair;
 2. detection-landscape dossier;
 3. evidence-presentation dossier and disposable module prototype;
-4. theory-retrieval comparison instrument;
+4. Skipper-backed knowledge-retrieval comparison instrument;
 5. bot-policy and player-style research;
 6. hands-on competitor teardowns and capability-watch format;
 7. owner rulings, then RFC drafting in dependency order.

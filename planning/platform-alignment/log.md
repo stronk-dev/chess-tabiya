@@ -19,3 +19,16 @@ Append-only. Record research, rulings, RFC transitions, implementation closeout 
   scale content. Gate F is the proposed clearance proof; its exact clauses remain amendable.
 - Next: reconcile active RFC truth; complete the five missing research dossiers and hands-on
   competitor teardowns; obtain owner rulings; draft RFCs only after the exploration gate.
+
+## 2026-08-20 — Skipper reuse question corrected and routed
+
+- Owner clarified that the proposed scraper is a separate knowledge-building subsystem like the
+  existing Frameworks Skipper, not a live scrape inside hint requests.
+- Audited Skipper's full executable and knowledge core. Whole-service reuse is refused for the 1.0
+  core because it imports Frameworks identity/platform/diagnostic concerns and a generic agent
+  policy. Conditional extraction of its crawler/cache/extractor/embedder/store/reranker seam is the
+  recommended path.
+- `design/research/theory-knowledge-pipeline.md` records the required chess provenance,
+  enrichment, validation, bundle and confidence changes.
+- Opened a six-arm disposable experiment under `knowledge-retrieval/`; product extraction happens
+  only if it beats exact chess keys + FTS on predeclared recall, false-match and abstention gates.

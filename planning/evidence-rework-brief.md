@@ -18,10 +18,10 @@ substream.** Owner ideas and audit findings are ledgered as **D549–D562** — 
    never been done. First run vs the silence invariant; presets over 54 switches; ranked
    abstaining evidence; the copy ruleset. Alarm-fatigue literature is the frame for 8.83
    entries/ply.
-3. **`design/research/theory-retrieval.md`** — exact chess-key retrieval versus hybrid embedding
-   reranking; source allow-list, licence, digest/version, citation propagation and false-match
-   abstention. Compare `~/frameworks/monorepo/api_consultant` for crawler hygiene, not as the chess
-   truth model (D557).
+3. **`design/research/theory-knowledge-pipeline.md`** — the Skipper reuse audit and six-arm
+   experiment: source allow-list, licence, digest/version, chess-key enrichment, semantic retrieval,
+   citation propagation and false-match abstention. It evaluates the entire separate knowledge
+   subsystem the owner named, not request-time scraping (D557/D564).
 4. **`design/research/bot-policy.md` + `design/research/player-style-metrics.md`** — keep strength,
    repertoire, style, errors, timing and voice separate on the opponent side; keep descriptive
    style, rating and advice separate on the learner side (D551-D553, D561-D562).
@@ -46,7 +46,7 @@ detectors).
 > any one document. Read, in order: `design/research/integrated-platform-alignment.md`,
 > `planning/platform-alignment/plan.md`, `design/research/classifier-coverage-and-noise.md`,
 > `design/research/detection-landscape.md` (when landed), `design/research/evidence-presentation.md`
-> (when landed), `design/research/theory-retrieval.md`, `design/research/bot-policy.md`,
+> (when landed), `design/research/theory-knowledge-pipeline.md`, `design/research/bot-policy.md`,
 > `design/research/player-style-metrics.md` (each when landed), `rfc/evidence-producers.md` (when
 > landed), ledger rows D542–D562,
 > `design/05-in-run-experience.md` §3, and `design/02-product-shape.md` §Adoption.

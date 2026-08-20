@@ -3258,3 +3258,26 @@ one-integrated-FOSS-platform ambition is recorded as D555. The resumable depende
 `planning/platform-alignment/plan.md`. Q4c, Q8, K6, E1 and the research coverage matrix now point to
 the new evidence. Next work is active-RFC reconciliation and research, not feature implementation
 or a broad content wave.
+
+## 2026-08-20 — Skipper reuse corrected: research the builder, not the whole agent
+
+The owner corrected the previous audit's framing: the question was whether Tabiya could reuse the
+separate Skipper knowledge-builder pattern from `~/frameworks/monorepo/api_consultant`, not whether
+a hint request should scrape the web. D557 now states that question accurately; D563 records the
+bottom-up research→design→RFC→implementation sequencing ruling; D564 records the code-audit
+verdict.
+
+The whole Skipper executable is not a drop-in dependency: it requires Frameworks identity/auth,
+PostgreSQL schema and shared platform packages, and wires video diagnostics, tier/metering,
+platform clients, Gateway/MCP, heartbeat and notifications. Its `internal/knowledge` seam is much
+cleaner and worth testing: crawler/cache/extraction, scheduler, chunker/embedder, store, hybrid
+retrieval and reranker. The generic confidence mapper calls any knowledge-base result `verified`,
+which retrieval does not establish and law 8 cannot accept.
+
+`design/research/theory-knowledge-pipeline.md` therefore recommends using current Skipper unchanged
+as a disposable research instrument, then extracting a standalone builder/search service only if a
+six-arm experiment beats exact chess keys plus full-text search while meeting false-match,
+abstention, citation and rebuild gates. A product release would consume an immutable knowledge
+bundle; ordinary self-hosters would not inherit Postgres, crawling, embeddings or an agent loop.
+The experiment is queued at `planning/platform-alignment/knowledge-retrieval/plan.md`. No product
+code, schema, content or deployment changed.
