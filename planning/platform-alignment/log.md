@@ -271,3 +271,24 @@ Append-only. Record research, rulings, RFC transitions, implementation closeout 
 - R12 permits continuous habit cards to enter O9, not named types, GM twins or advice. R13 remains
   blocked by R7; the behavioral-identifier result now feeds R18. No product code, schema, content
   or design intent changed; D560 remains active.
+
+## 2026-08-20 — R18 proved the provider-off core and failed the present 1.0 platform floor
+
+- Landed `design/research/release-platform-audit.md`, exact deployment/data/rights results and a
+  disposable Chromium DOM/AX/keyboard harness against clean commit `24430fe`.
+- A fresh default Compose deployment served 50 packs, completed a rehearsal without any cloud
+  credential and recovered the run after restart. The optional engine profile selected a Maia move
+  in 0.257 s. This establishes a real provider-off core, not release readiness.
+- Stopping Maia left capabilities green; a cached request passed while an uncached request hung
+  beyond 10 s. Account deletion removed progress but retained a solo run under `__legacy`; no
+  account export, run delete, supported backup/restore or rollback contract exists.
+- The accessibility tree exposes one generic non-focusable board with no square semantics or move
+  entry. Unmodified Tab is captured for Compare and trapped at the Assistance summary. A2's exact-
+  UCI gesture failure therefore remains the stronger input evidence.
+- The main image lacks project/source/notices/SBOM surfaces and copies the authoring corpus. The
+  5.11 GB Maia image contains 18 CUDA/NVIDIA packages, 15 proprietary/licence-ref, despite the
+  measured CPU use. Recorded D605-D615.
+- R18 is mechanical/code/desk done negatively. O13 is READY with a minimum coherent 1.0 choice;
+  F12 remains required and participant screen-reader/physical-device proof remains external. O5
+  and O12 shed only their R18 dependency. No product code, schema, design intent or authored chess
+  content changed; D560 stays active.

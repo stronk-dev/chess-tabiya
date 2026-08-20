@@ -27,7 +27,7 @@ action; measurement instruments do not share the tested defect's assumption.
 |---|---|---|---|
 | 1.1 | R4 knowledge retrieval experiment | **DONE 2026-08-20** | 17 registered sources, 55 passages, 144 queries, six arms and lifecycle controls landed; semantic extraction refused for 1.0 |
 | 1.2 | R11 bot-policy research | **MECHANICAL DONE; EXTERNAL arm remains** | `design/research/bot-policy.md`, harness/results and H5/C5 update landed; generate matched blind 10–20-ply continuations, then recruit reviewers |
-| 1.3 | R18 self-host/privacy/accessibility/rights audit | **READY NOW** | Dossier, platform acceptance floors and Q2/Q3 updates |
+| 1.3 | R18 self-host/privacy/accessibility/rights audit | **MECHANICAL/CODE/DESK DONE 2026-08-20; participant proof external** | Negative 1.0 result, O13 choice set, D605-D615 and F12 acceptance inputs landed |
 | 1.4 | Competitor capability-watch instrument | **READY NOW** | Dated capability-first register with canonical identities and routing; no clone-count objective |
 | 1.5 | R9 learner/coach protocol | READY to design; **EXTERNAL to complete** | Preregistered script/tasks/sample; participant work only with owner authority |
 
@@ -65,7 +65,7 @@ schema evolution.
 |---|---|---|---|
 | 4.1 | R15 coach workflow | WAIT/EXTERNAL | R3/R7 and participant authority |
 | 4.2 | R16 streamer/broadcast workflow | WAIT | R3/R7 |
-| 4.3 | R17 human play/tournaments/social trust | WAIT | R11/R15/R18 |
+| 4.3 | R17 human play/tournaments/social trust | WAIT | R11/R15; R18 platform edge done |
 | 4.4 | R19 federation | POST-1.0 WAIT | R17 plus owner promotion |
 
 **Phase exit:** O11–O13 ruled; every “one platform” claim has an included, adapter or deferred
@@ -148,7 +148,7 @@ R14/R15/R16/R17/R18 → O10–O13 → optional F10/F11 + required F12
 all included nodes → integrated default journeys → 1.0 proof
 ```
 
-The immediate queue is therefore R18, the capability-watch instrument and R11/R3's external-arm
-preparation; R13 is now research-ready only after its exact R7 dependency is resolved. There is
+The immediate queue is therefore the capability-watch instrument and R11/R3's external-arm
+preparation; O13 is now ready for owner ruling, while R13 is research-ready only after its exact R7 dependency is resolved. There is
 no legal feature-build queue yet; creating one before these results would
 violate the sequencing the owner explicitly requested.

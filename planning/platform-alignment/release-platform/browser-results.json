@@ -1,0 +1,690 @@
+{
+  "schema": "tabiya.r18.browser-probe.v1",
+  "measuredAt": "2026-08-20T17:39:36.390Z",
+  "origin": "http://127.0.0.1:43180",
+  "browserVersion": "151.0.7922.34",
+  "auth": {
+    "label": "auth",
+    "title": "Tabiya",
+    "url": "http://127.0.0.1:43180/",
+    "focusable": [
+      {
+        "tag": "input",
+        "text": "",
+        "ariaLabel": null,
+        "role": null,
+        "tabIndex": 0,
+        "disabled": false,
+        "describedBy": null
+      },
+      {
+        "tag": "input",
+        "text": "",
+        "ariaLabel": null,
+        "role": null,
+        "tabIndex": 0,
+        "disabled": false,
+        "describedBy": null
+      },
+      {
+        "tag": "button",
+        "text": "Sign in",
+        "ariaLabel": null,
+        "role": null,
+        "tabIndex": 0,
+        "disabled": false,
+        "describedBy": null
+      },
+      {
+        "tag": "button",
+        "text": "Create an account",
+        "ariaLabel": null,
+        "role": null,
+        "tabIndex": 0,
+        "disabled": false,
+        "describedBy": null
+      }
+    ],
+    "axBoard": null
+  },
+  "drill": {
+    "label": "drill",
+    "title": "Tabiya",
+    "url": "http://127.0.0.1:43180/play/run/run-b0570fe0-aba5-4b38-9ce5-3264469ff077",
+    "focusable": [
+      {
+        "tag": "a",
+        "text": "Skip to primary navigation",
+        "ariaLabel": null,
+        "role": null,
+        "tabIndex": 0,
+        "disabled": false,
+        "describedBy": null
+      },
+      {
+        "tag": "a",
+        "text": "Tabiya",
+        "ariaLabel": null,
+        "role": null,
+        "tabIndex": 0,
+        "disabled": false,
+        "describedBy": null
+      },
+      {
+        "tag": "a",
+        "text": "Home",
+        "ariaLabel": null,
+        "role": null,
+        "tabIndex": 0,
+        "disabled": false,
+        "describedBy": null
+      },
+      {
+        "tag": "a",
+        "text": "Play",
+        "ariaLabel": null,
+        "role": null,
+        "tabIndex": 0,
+        "disabled": false,
+        "describedBy": null
+      },
+      {
+        "tag": "a",
+        "text": "Learn",
+        "ariaLabel": null,
+        "role": null,
+        "tabIndex": 0,
+        "disabled": false,
+        "describedBy": null
+      },
+      {
+        "tag": "a",
+        "text": "Review",
+        "ariaLabel": null,
+        "role": null,
+        "tabIndex": 0,
+        "disabled": false,
+        "describedBy": null
+      },
+      {
+        "tag": "a",
+        "text": "Live",
+        "ariaLabel": null,
+        "role": null,
+        "tabIndex": 0,
+        "disabled": false,
+        "describedBy": null
+      },
+      {
+        "tag": "a",
+        "text": "Create",
+        "ariaLabel": null,
+        "role": null,
+        "tabIndex": 0,
+        "disabled": false,
+        "describedBy": null
+      },
+      {
+        "tag": "a",
+        "text": "Library",
+        "ariaLabel": null,
+        "role": null,
+        "tabIndex": 0,
+        "disabled": false,
+        "describedBy": null
+      },
+      {
+        "tag": "a",
+        "text": "Settings",
+        "ariaLabel": null,
+        "role": null,
+        "tabIndex": 0,
+        "disabled": false,
+        "describedBy": null
+      },
+      {
+        "tag": "button",
+        "text": "Sign out",
+        "ariaLabel": null,
+        "role": null,
+        "tabIndex": 0,
+        "disabled": false,
+        "describedBy": null
+      },
+      {
+        "tag": "main",
+        "text": "Tabiya Your move Authored commentary withheld until checkpoints 1 evidence waiting Assistance Passiv",
+        "ariaLabel": null,
+        "role": null,
+        "tabIndex": -1,
+        "disabled": false,
+        "describedBy": null
+      },
+      {
+        "tag": "button",
+        "text": "Tabiya",
+        "ariaLabel": null,
+        "role": null,
+        "tabIndex": 0,
+        "disabled": false,
+        "describedBy": null
+      },
+      {
+        "tag": "summary",
+        "text": "Assistance",
+        "ariaLabel": null,
+        "role": null,
+        "tabIndex": 0,
+        "disabled": false,
+        "describedBy": null
+      },
+      {
+        "tag": "input",
+        "text": "",
+        "ariaLabel": null,
+        "role": null,
+        "tabIndex": 0,
+        "disabled": false,
+        "describedBy": null
+      },
+      {
+        "tag": "input",
+        "text": "",
+        "ariaLabel": null,
+        "role": null,
+        "tabIndex": 0,
+        "disabled": false,
+        "describedBy": null
+      },
+      {
+        "tag": "input",
+        "text": "",
+        "ariaLabel": null,
+        "role": null,
+        "tabIndex": 0,
+        "disabled": true,
+        "describedBy": "human-split-locked"
+      },
+      {
+        "tag": "input",
+        "text": "",
+        "ariaLabel": null,
+        "role": null,
+        "tabIndex": 0,
+        "disabled": true,
+        "describedBy": "corpus-locked"
+      },
+      {
+        "tag": "button",
+        "text": "?",
+        "ariaLabel": "Keyboard shortcuts",
+        "role": null,
+        "tabIndex": 0,
+        "disabled": false,
+        "describedBy": null
+      },
+      {
+        "tag": "button",
+        "text": "Structural reading",
+        "ariaLabel": null,
+        "role": null,
+        "tabIndex": 0,
+        "disabled": false,
+        "describedBy": null
+      },
+      {
+        "tag": "button",
+        "text": "What changed on this move?",
+        "ariaLabel": null,
+        "role": null,
+        "tabIndex": 0,
+        "disabled": false,
+        "describedBy": null
+      },
+      {
+        "tag": "select",
+        "text": "this positionthis line",
+        "ariaLabel": null,
+        "role": null,
+        "tabIndex": 0,
+        "disabled": false,
+        "describedBy": null
+      },
+      {
+        "tag": "button",
+        "text": "Move these marks to the other scope",
+        "ariaLabel": null,
+        "role": null,
+        "tabIndex": 0,
+        "disabled": true,
+        "describedBy": "rescope-marks-disabled"
+      },
+      {
+        "tag": "button",
+        "text": "1 main Bf5 active",
+        "ariaLabel": "Switch to branch 1: main",
+        "role": null,
+        "tabIndex": 0,
+        "disabled": false,
+        "describedBy": null
+      },
+      {
+        "tag": "input",
+        "text": "",
+        "ariaLabel": null,
+        "role": null,
+        "tabIndex": 0,
+        "disabled": false,
+        "describedBy": null
+      },
+      {
+        "tag": "button",
+        "text": "Hide",
+        "ariaLabel": null,
+        "role": null,
+        "tabIndex": 0,
+        "disabled": false,
+        "describedBy": null
+      },
+      {
+        "tag": "button",
+        "text": "Compare all forked here",
+        "ariaLabel": null,
+        "role": null,
+        "tabIndex": 0,
+        "disabled": false,
+        "describedBy": null
+      },
+      {
+        "tag": "button",
+        "text": "Classify remaining",
+        "ariaLabel": null,
+        "role": null,
+        "tabIndex": 0,
+        "disabled": false,
+        "describedBy": null
+      },
+      {
+        "tag": "button",
+        "text": "1 Bf5",
+        "ariaLabel": "Ply 1: Bf5",
+        "role": null,
+        "tabIndex": 0,
+        "disabled": false,
+        "describedBy": null
+      },
+      {
+        "tag": "button",
+        "text": "Fork B",
+        "ariaLabel": null,
+        "role": null,
+        "tabIndex": 0,
+        "disabled": false,
+        "describedBy": null
+      },
+      {
+        "tag": "button",
+        "text": "Branch group",
+        "ariaLabel": null,
+        "role": null,
+        "tabIndex": 0,
+        "disabled": false,
+        "describedBy": null
+      },
+      {
+        "tag": "button",
+        "text": "Compare Tab",
+        "ariaLabel": null,
+        "role": null,
+        "tabIndex": 0,
+        "disabled": true,
+        "describedBy": "drill-compare-unavailable"
+      },
+      {
+        "tag": "button",
+        "text": "Replay Space",
+        "ariaLabel": null,
+        "role": null,
+        "tabIndex": 0,
+        "disabled": false,
+        "describedBy": null
+      },
+      {
+        "tag": "button",
+        "text": "Export E",
+        "ariaLabel": null,
+        "role": null,
+        "tabIndex": 0,
+        "disabled": false,
+        "describedBy": null
+      }
+    ],
+    "axBoard": {
+      "role": "generic",
+      "name": "Chessboard",
+      "ignored": false,
+      "childCount": 1,
+      "properties": {}
+    }
+  },
+  "boardDom": {
+    "tag": "div",
+    "role": null,
+    "tabIndexAttribute": null,
+    "tabIndexProperty": -1,
+    "rect": {
+      "x": 382.59375,
+      "y": 554.109375,
+      "width": 284.296875,
+      "height": 284.296875
+    },
+    "descendantTags": {
+      "cg-container": 1,
+      "cg-board": 1,
+      "square": 2,
+      "piece": 33,
+      "svg": 4,
+      "defs": 2,
+      "filter": 2,
+      "fegaussianblur": 2,
+      "g": 4,
+      "cg-auto-pieces": 1,
+      "coords": 2,
+      "coord": 16
+    },
+    "focusableDescendants": 0,
+    "namedDescendants": 0
+  },
+  "tabSequence": [
+    {
+      "tag": "a",
+      "text": "Tabiya",
+      "ariaLabel": null,
+      "className": "wordmark svelte-dpqmj0"
+    },
+    {
+      "tag": "a",
+      "text": "Home",
+      "ariaLabel": null,
+      "className": "svelte-dpqmj0"
+    },
+    {
+      "tag": "a",
+      "text": "Play",
+      "ariaLabel": null,
+      "className": "svelte-dpqmj0"
+    },
+    {
+      "tag": "a",
+      "text": "Learn",
+      "ariaLabel": null,
+      "className": "svelte-dpqmj0"
+    },
+    {
+      "tag": "a",
+      "text": "Review",
+      "ariaLabel": null,
+      "className": "svelte-dpqmj0"
+    },
+    {
+      "tag": "a",
+      "text": "Live",
+      "ariaLabel": null,
+      "className": "svelte-dpqmj0"
+    },
+    {
+      "tag": "a",
+      "text": "Create",
+      "ariaLabel": null,
+      "className": "svelte-dpqmj0"
+    },
+    {
+      "tag": "a",
+      "text": "Library",
+      "ariaLabel": null,
+      "className": "svelte-dpqmj0"
+    },
+    {
+      "tag": "a",
+      "text": "Settings",
+      "ariaLabel": null,
+      "className": "svelte-dpqmj0"
+    },
+    {
+      "tag": "button",
+      "text": "Sign out",
+      "ariaLabel": null,
+      "className": "svelte-dpqmj0"
+    },
+    {
+      "tag": "button",
+      "text": "Tabiya",
+      "ariaLabel": null,
+      "className": "wordmark svelte-196rcao"
+    },
+    {
+      "tag": "summary",
+      "text": "Assistance",
+      "ariaLabel": null,
+      "className": "svelte-196rcao"
+    },
+    {
+      "tag": "summary",
+      "text": "Assistance",
+      "ariaLabel": null,
+      "className": "svelte-196rcao"
+    },
+    {
+      "tag": "summary",
+      "text": "Assistance",
+      "ariaLabel": null,
+      "className": "svelte-196rcao"
+    },
+    {
+      "tag": "summary",
+      "text": "Assistance",
+      "ariaLabel": null,
+      "className": "svelte-196rcao"
+    },
+    {
+      "tag": "summary",
+      "text": "Assistance",
+      "ariaLabel": null,
+      "className": "svelte-196rcao"
+    },
+    {
+      "tag": "summary",
+      "text": "Assistance",
+      "ariaLabel": null,
+      "className": "svelte-196rcao"
+    },
+    {
+      "tag": "summary",
+      "text": "Assistance",
+      "ariaLabel": null,
+      "className": "svelte-196rcao"
+    },
+    {
+      "tag": "summary",
+      "text": "Assistance",
+      "ariaLabel": null,
+      "className": "svelte-196rcao"
+    },
+    {
+      "tag": "summary",
+      "text": "Assistance",
+      "ariaLabel": null,
+      "className": "svelte-196rcao"
+    },
+    {
+      "tag": "summary",
+      "text": "Assistance",
+      "ariaLabel": null,
+      "className": "svelte-196rcao"
+    },
+    {
+      "tag": "summary",
+      "text": "Assistance",
+      "ariaLabel": null,
+      "className": "svelte-196rcao"
+    },
+    {
+      "tag": "summary",
+      "text": "Assistance",
+      "ariaLabel": null,
+      "className": "svelte-196rcao"
+    },
+    {
+      "tag": "summary",
+      "text": "Assistance",
+      "ariaLabel": null,
+      "className": "svelte-196rcao"
+    },
+    {
+      "tag": "summary",
+      "text": "Assistance",
+      "ariaLabel": null,
+      "className": "svelte-196rcao"
+    },
+    {
+      "tag": "summary",
+      "text": "Assistance",
+      "ariaLabel": null,
+      "className": "svelte-196rcao"
+    },
+    {
+      "tag": "summary",
+      "text": "Assistance",
+      "ariaLabel": null,
+      "className": "svelte-196rcao"
+    },
+    {
+      "tag": "summary",
+      "text": "Assistance",
+      "ariaLabel": null,
+      "className": "svelte-196rcao"
+    },
+    {
+      "tag": "summary",
+      "text": "Assistance",
+      "ariaLabel": null,
+      "className": "svelte-196rcao"
+    },
+    {
+      "tag": "summary",
+      "text": "Assistance",
+      "ariaLabel": null,
+      "className": "svelte-196rcao"
+    },
+    {
+      "tag": "summary",
+      "text": "Assistance",
+      "ariaLabel": null,
+      "className": "svelte-196rcao"
+    },
+    {
+      "tag": "summary",
+      "text": "Assistance",
+      "ariaLabel": null,
+      "className": "svelte-196rcao"
+    },
+    {
+      "tag": "summary",
+      "text": "Assistance",
+      "ariaLabel": null,
+      "className": "svelte-196rcao"
+    },
+    {
+      "tag": "summary",
+      "text": "Assistance",
+      "ariaLabel": null,
+      "className": "svelte-196rcao"
+    },
+    {
+      "tag": "summary",
+      "text": "Assistance",
+      "ariaLabel": null,
+      "className": "svelte-196rcao"
+    },
+    {
+      "tag": "summary",
+      "text": "Assistance",
+      "ariaLabel": null,
+      "className": "svelte-196rcao"
+    },
+    {
+      "tag": "summary",
+      "text": "Assistance",
+      "ariaLabel": null,
+      "className": "svelte-196rcao"
+    },
+    {
+      "tag": "summary",
+      "text": "Assistance",
+      "ariaLabel": null,
+      "className": "svelte-196rcao"
+    },
+    {
+      "tag": "summary",
+      "text": "Assistance",
+      "ariaLabel": null,
+      "className": "svelte-196rcao"
+    },
+    {
+      "tag": "summary",
+      "text": "Assistance",
+      "ariaLabel": null,
+      "className": "svelte-196rcao"
+    }
+  ],
+  "disabledReasonFailures": [],
+  "viewports": [
+    {
+      "width": 390,
+      "height": 844,
+      "refusal": null,
+      "board": {
+        "x": 99,
+        "y": 688.515625,
+        "width": 192,
+        "height": 192,
+        "bottom": 880.515625
+      },
+      "documentOverflow": 0
+    },
+    {
+      "width": 768,
+      "height": 1024,
+      "refusal": null,
+      "board": {
+        "x": 133.828125,
+        "y": 618.078125,
+        "width": 244.328125,
+        "height": 244.328125,
+        "bottom": 862.40625
+      },
+      "documentOverflow": 0
+    },
+    {
+      "width": 1440,
+      "height": 1000,
+      "refusal": null,
+      "board": {
+        "x": 382.59375,
+        "y": 554.109375,
+        "width": 284.296875,
+        "height": 284.296875,
+        "bottom": 838.40625
+      },
+      "documentOverflow": 0
+    }
+  ],
+  "pwa": {
+    "manifestLink": "/manifest.webmanifest",
+    "serviceWorkerApi": true,
+    "serviceWorkerRegistrations": 0,
+    "prefersReducedMotion": true,
+    "activeAnimations": 0
+  },
+  "limitation": "Mechanical browser/AX-tree evidence only; no screen-reader user participated."
+}

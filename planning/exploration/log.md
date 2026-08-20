@@ -3487,3 +3487,18 @@ unblock run was discarded after its 586/586 result exposed an event-conditioned 
 corrected incidence is 586/4,473. R12's short-session arm is answered, longitudinal transfer remains
 external, R13 still waits on R7, and the identifying-vector result feeds R18. No product code,
 schema, content or design intent changed; D560 remains active.
+
+## 2026-08-20 — platform R18 release audit completed mechanically
+
+`design/research/release-platform-audit.md` measures the clean provider-off and engine-on Compose
+profiles, live Maia failure, user-data deletion/export, built-image rights/content and a served
+Chromium accessibility tree. The provider-off core is real: it needs no cloud secret and a run
+survives restart. The present release platform is not 1.0-ready.
+
+The independent failures are portable data exit/deletion, backup/update recovery, safe HTTP/TLS
+entry points, provider-health honesty, keyboard/assistive move entry, standard Tab traversal and
+distributed notices/SBOM. The optional 5.11 GB Maia image adds a new FOSS/resource blocker: 18
+CUDA/NVIDIA packages, 15 proprietary/licence-ref, accompany measured CPU use. D605-D615 record the
+findings; R18 makes O13 ready but does not clear F12 or B8's release qualification. Participant
+screen-reader/physical-device evidence remains external. No product code, schema, design intent or
+authored chess content changed; D560 remains active.
