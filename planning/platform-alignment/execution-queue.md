@@ -13,7 +13,7 @@ dependency edge, they may not.
 | Order | Job | State | Deliverable / closeout |
 |---|---|---|---|
 | 0.1 | A0 active-RFC truth audit | **DONE 2026-08-20** | `active-rfc-audit.md`; four completed implementations archived; active/accepted/draft truth and next actions reconciled |
-| 0.2 | A1 capability reality audit | **READY NOW** | Evidence-backed current-state column in the capability map or linked audit; producer/client/content/hands-on proof |
+| 0.2 | A1 capability reality audit | **DONE 2026-08-20** | `capability-reality-audit.md`; all 21 rows traced and map truth reconciled |
 | 0.3 | A2 interaction-state/K9 instrument | **READY NOW** | Disposable harness correction, research dossier/gate/log updates; no CSS/product fix unless already authorised by an accepted RFC |
 | 0.4 | Close or explicitly return already-implemented RFCs | **PARTIAL:** four stale implementations closed | `live-marker-quality`, `dead-vocabulary`, `engine-leverage`, `vocabulary-wiring` archived; no other active RFC was misclassified complete |
 | 0.5 | Implement accepted incomplete RFC work | BLOCKED by 0.1 and worktree coordination | Existing accepted criteria only; any design mismatch returns to decision queue |
@@ -37,11 +37,11 @@ action; measurement instruments do not share the tested defect's assumption.
 
 | Order | Job | State | Dependency |
 |---|---|---|---|
-| 2.1 | R1 detection landscape and validation corpus | WAIT | A1 |
-| 2.2 | R2 sign/relevance/selection measurement | WAIT | A1 |
+| 2.1 | R1 detection landscape and validation corpus | **READY NOW** | A1 complete |
+| 2.2 | R2 sign/relevance/selection measurement | **READY NOW** | A1 complete |
 | 2.3 | R3 evidence presentation prototypes/tests | WAIT | A2, R1/R2 fixture contract for final arm |
-| 2.4 | R5 renderer evaluation | WAIT | A1 and fixed packet/rung samples |
-| 2.5 | R6 pack stability/migration/re-author audit | WAIT | A0/A1 |
+| 2.4 | R5 renderer evaluation | **READY NOW** | A1 complete; use fixed packet/rung samples from audited seams |
+| 2.5 | R6 pack stability/migration/re-author audit | **READY NOW** | A0/A1 complete |
 
 **Phase exit:** O1–O6 can be ruled without an implementer inventing chess semantics, UX defaults or
 schema evolution.
@@ -148,5 +148,6 @@ R14/R15/R16/R17/R18 → O10–O13 → optional F10/F11 + required F12
 all included nodes → integrated default journeys → 1.0 proof
 ```
 
-The immediate queue is therefore 0.2–0.3 and 1.1–1.4. There is no legal feature-build queue yet;
-creating one before these results would violate the sequencing the owner explicitly requested.
+The immediate queue is therefore 0.3, 1.1–1.4 and the newly unblocked research jobs 2.1, 2.2,
+2.4 and 2.5. There is no legal feature-build queue yet; creating one before these results would
+violate the sequencing the owner explicitly requested.

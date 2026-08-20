@@ -3312,3 +3312,27 @@ The pass also reconciled `graduation-clearance`'s body status to the register's 
 closed stale D503. It remains unbuilt, as does `teacher-surface`; feedback delivery remains an
 accepted two-stage RFC whose current Stage 1 is uncommitted and was not absorbed. Six documents
 remain draft/returned. No product code, schema or content changed in this closeout.
+
+## 2026-08-20 — Capability reality audit separated mechanics from integrated proof
+
+A1 traced every row in `planning/platform-alignment/1.0-capability-map.md` through a production
+backend/producer, client consumer, real content/workflow instance and current hands-on proof. The
+result is `planning/platform-alignment/capability-reality-audit.md`: two proven integrations,
+fourteen mechanically present families, four claimed-only families and one absent family. The
+classification deliberately does not promote mechanics to learning efficacy, owner-ratified 1.0
+scope or official-content readiness.
+
+The strongest correction is favourable but scope-neutral: native two-player match play already
+ships and passes the current three-browser pause→branch→resume/authorship/friend-link episode, so
+the previous “native play not established” reality was false. R17 still owns whether and how that
+capability belongs in 1.0. The strongest architecture gap is the opposite: eight free-text
+`CAPABILITY_DISPOSITIONS.surface` values intersect none of the seven canonical `SURFACE_IDS`, and
+no client reads the producer field. The promised evidence producer→feature relationship therefore
+does not yet exist as a contract.
+
+The audit also re-derived the content floor: zero official packs, 50 served non-browser community
+drafts and 25 shape entries. Real drafts legitimately prove runtime/client wiring but cannot clear
+Gate F or D560's content hold. R1 detection, R2 selection/significance, R5 renderer evaluation and
+R6 pack-stability research are now unblocked by the exact symbol/content inventory. A2 remains the
+predecessor for interaction-state guidance research. No product code, schema, content or design
+intent changed.

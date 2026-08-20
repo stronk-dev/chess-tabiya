@@ -15,6 +15,7 @@
 - `rfc-graph.md` — existing-document reconciliation and candidate dependency graph;
 - `execution-queue.md` — the only current executable frontier and the route to release;
 - `1.0-capability-map.md` — every requested capability, current reality, route and proposed scope.
+- `capability-reality-audit.md` — A1 four-link proof for every map row.
 
 This file remains the concise program charter. If a thematic workstream below appears to permit
 work that its authoritative queue blocks, the queue wins.
@@ -218,6 +219,15 @@ The A0 audit closed four stale implementations, taking the lifecycle-complete ar
 - accepted but incomplete: `teacher-surface`, `graduation-clearance`, `feedback-delivery`;
 - returned/draft research or process work includes `measurement-records`, `learner-rating`,
   `assistance-controls`, lifecycle completion, pack provenance and shared registers.
+
+The A1 audit then traced all 21 capability families through production backend, client, real
+content/workflow and hands-on proof. Two are proven integrations (the drill loop and native
+human-v-human match), fourteen are mechanically present but incomplete as named outcomes, four are
+claimed-only and bot tournaments/social events are absent. The prior human-play reality was stale;
+the native match already passes pause→branch→resume browser proof. Conversely, the evidence
+producer registry's eight free-text surface labels intersect none of the seven canonical client
+surface IDs, so the central producer→consumer join remains unimplemented rather than merely
+undocumented. R1, R2, R5 and R6 are now unblocked; A2 still gates interaction UX research.
 
 `active-rfc-audit.md` records the code/tests/closeout evidence and legal next action. This remains
 a dated checkpoint, not a replacement for `rfc/README.md`.

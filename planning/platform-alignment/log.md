@@ -72,3 +72,25 @@ Append-only. Record research, rulings, RFC transitions, implementation closeout 
   accepted and in-flight only in the excluded dirty worktree.
 - Six documents remain draft/returned. No process instrument (`register-check`, `status-parity`,
   `work-index`) exists yet, so A0 remains a dated manual audit and those process RFCs still matter.
+
+## 2026-08-20 — A1 traced capability reality end to end
+
+- Audited all 21 integrated-1.0 capability families across four independent links: production
+  backend/producer, client consumer, real content or workflow instance, and current hands-on proof.
+  Uncommitted feedback-delivery work received no capability credit.
+- Classified two families as proven integrations, fourteen as mechanically present, four as
+  claimed-only and one as absent. “Proven” is integration reality, not learning efficacy, user
+  demand, official-content graduation or a 1.0 scope ruling.
+- Corrected the largest stale understatement: native human-v-human play already ships and passes a
+  three-context browser episode covering alternating moves, out-of-turn/reveal refusal,
+  pause→branch→resume, authorship and single-use friend joining. R17 still owns clocks,
+  matchmaking, fair play, moderation, operating cost and whether it belongs in 1.0.
+- Confirmed the central overstatement: the evidence registry is not a producer→consumer contract.
+  Its eight free-text `surface` values have an empty intersection with the seven canonical client
+  surface IDs and the field has no client reader.
+- Counted the actual content floor: zero official pack JSON files, 50 served non-browser community
+  drafts (all `reviewStatus: draft`) and 25 shape entries. Drafts prove wiring, not Gate F or release
+  readiness; D560's content hold remains active.
+- Updated the capability map with explicit state tokens and linked
+  `capability-reality-audit.md`. R1, R2, R5 and R6 are now unblocked. A2 still gates interaction UX
+  evidence because current resting-layout checks do not prove post-gesture board correctness.
