@@ -31,7 +31,7 @@ process truth (A0)
   ├── shared-resource/lifecycle closeout
   └── active RFC closeout
 
-evidence truth (A1, R1, R2; O1–O3)
+evidence truth (A1–A4, R1, R2; O1–O3)
   └── F1 evidence registry + producer/consumer manifest
         ├── F2 semantic evidence + selector contract
         │     ├── F5 assistance modules + presets
@@ -55,7 +55,7 @@ The diagram shows architectural ancestry, not permission to draft nodes early.
 
 | Node | Contract | Opens after | Must prove before acceptance | Likely existing document relationship |
 |---|---|---|---|---|
-| F1 | **Evidence registry and producer→consumer manifest** | A0–A3, O1 | One declaration source; separate predicate/reading/event projections; derived landed state; versioning; bidirectional completeness; declared operands, latency/disclosure/grounding; no free-text join or generic-reader bypass | Extend `shared-resource-registers` or a narrowly separated evidence RFC after its process mechanism settles |
+| F1 | **Evidence registry and producer→consumer manifest** | A0–A4, O1 | One declaration source; separate predicate/reading/event projections; derived landed state; versioning; bidirectional completeness; declared operands, latency/disclosure/grounding; consumer/timing/role/session/form/answer-distance disposition; adapters for all 14 A4 producer paths; no free-text join, global verdict or generic-reader bypass | Extend `shared-resource-registers` or a narrowly separated evidence RFC after its process mechanism settles |
 | F2 | **Semantic evidence and selector** | R1–R2/A3, O2–O3, F1 accepted | Typed sign/event/operands/squares; exactness/confidence/abstention; counterfactual population; subkind-level admission; critical override/top-k budgets; external validation and non-vacuity fixtures | Reconcile `measurement-records`, `live-marker-quality`, `dead-vocabulary`, `engine-leverage`, `vocabulary-wiring`; repair D630-D633 |
 | F3 | **Pack capabilities, compatibility and migration** | R6/A3, O6, F1 accepted | Capability negotiation; additive extension rule; deprecation; dependency-aware automatic migrations; read-only full-corpus dry-run; mechanical/chess-judgment report; re-author budget | Reconcile `graduation-clearance`, `pack-population-provenance`, active schema claims; include indirect D566→outpost users |
 | F4 | **Knowledge sources, builder output and runtime bundle** | R4/R8/R18, O5, F1/F3 accepted | Allow-list/licence/digest/span/version; chess keys; retrieval/abstention; injection boundary; immutable export; runtime without crawler/Postgres/Frameworks identity | Amend/split `pack-population-provenance`; no whole-Skipper agent dependency |

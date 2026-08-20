@@ -147,6 +147,8 @@ parallel implementation of each primitive.
 4. Treat teacher as unbuilt even though Live is real; treat streamer as mechanical even though the
    overlay is real. Neither may borrow the native-match browser proof for its own workflow.
 5. F1 must replace the empty-intersection surface labels with a typed bidirectional manifest before
-   evidence, bot, profile and review consumers expand.
+   evidence, bot, profile and review consumers expand. A4 has now traced the adapters it must own:
+   14 producer paths end in five delivery states, only four are renderer-visible, and no production
+   module/workflow IDs join the otherwise-valid R3 research contract.
 6. Do not release the content hold. The audit found real breadth but still zero official packs and
    no proof that new evidence primitives avoid widespread re-authoring.

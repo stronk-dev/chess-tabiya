@@ -445,3 +445,20 @@ Append-only. Record research, rulings, RFC transitions, implementation closeout 
   literal-token migration census would miss every affected document.
 - Updated O2/F1-F3 routes, Gate-F inputs and the 1.0 capability map. No product code, schema,
   protected design intent or authored chess content changed; D560 remains active.
+
+## 2026-08-20 — A4 proved the shared evidence pool does not yet ship
+
+- Added an executable topology register over fourteen production producer paths. It pins runtime
+  events, sourcing records, rules refs, packet fields/sentences, capability dispositions,
+  standalone Maia/Explorer routes, client capability types and the R3 module/workflow vocabulary.
+- The namespaces are not projections under one declared contract: 0/4 runtime event names match
+  the seven sourcing kinds, only 2/7 sourcing kinds become recorded readings, and eight free-text
+  capability surfaces match 0/7 canonical surface IDs.
+- Only four producer paths are renderer-visible. Four more are typed but outside the LLM sentence
+  source, three are runtime side channels, two are standalone raw panels and opening identity is
+  sourcing-only. Production contains 0/9 R3 module IDs and 0/6 workflow IDs.
+- Re-verified the existing defect family rather than duplicating it: D145 owns the sentence
+  boundary, D147 corpus absence, D318 the global bestline refusal, D546 the missing producer binding
+  and D630 transition operand loss. D634 closes only the missing topology audit.
+- Updated O1, F1, B4, Gate F and the 1.0 map with the negative baseline. No product code, schema,
+  protected design intent or authored chess content changed; D560 remains active.

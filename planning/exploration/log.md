@@ -3572,3 +3572,16 @@ square although upstream helpers compute some of those identities. Five generic 
 readings without family admission. D629 closes as a research instrument; D630-D633 record the live
 operand-erasure, projection, indirect-migration and priority-classifier defects. Gate F remains
 closed and no content, schema, product implementation or protected design intent changed.
+
+## 2026-08-20 — the evidence-pool claim received an executable topology audit
+
+`design/research/evidence-contract-topology.md` and the disposable D634 harness trace fourteen
+producer paths from computation/source through runtime events, sidecars, refs, packet fields,
+sentence admission, standalone routes and client contracts. They terminate in five incompatible
+delivery states; only four are renderer-visible. Runtime and sourcing vocabularies have no name
+join, eight capability surface labels join none of seven canonical IDs, and production contains
+none of the nine R3 module or six workflow IDs. Transition, Maia, Explorer and opening identity do
+not enter `EvidencePacket`; generic observations and matched plans enter typed fields but not its
+normative LLM sentence source. D634 closes as research, while F1 remains the required compiled
+projection/consumer contract. B4 and Gate F remain unmet; no product code, schema, content or
+protected design intent changed.

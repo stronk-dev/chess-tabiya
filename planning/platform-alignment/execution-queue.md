@@ -17,6 +17,7 @@ dependency edge, they may not.
 | 0.3 | A2 interaction-state/K9 instrument | **DONE 2026-08-20** | `interaction-state-correctness.md` and disposable exact-UCI harness; K9/gates/ledger/log reconciled; no product code changed |
 | 0.4 | Close or explicitly return already-implemented RFCs | **PARTIAL:** four stale implementations closed | `live-marker-quality`, `dead-vocabulary`, `engine-leverage`, `vocabulary-wiring` archived; no other active RFC was misclassified complete |
 | 0.5 | Implement accepted incomplete RFC work | BLOCKED by 0.1 and worktree coordination | Existing accepted criteria only; any design mismatch returns to decision queue |
+| 0.6 | A3/A4 detector semantics and evidence-topology baselines | **DONE 2026-08-20** | 18+6 detector-family conformance and 14-producer topology are executable; current production admits no universal learner family and has no compiled module/workflow join |
 
 **Phase exit:** registers reflect code; no stale “shipped” claim; every active RFC has a legal next
 action; measurement instruments do not share the tested defect's assumption.
