@@ -30,7 +30,7 @@ product claims are `[V]`; vendor/forum descriptions remain `[P]`.
 
 | ID | Status | Question / method | Exit criterion | Unlocks |
 |---|---|---|---|---|
-| A0 | READY | **Active-RFC truth audit.** Re-run each active RFC's criteria against code, tests, ledger, log and claimed shared-resource lane. Classify it as shipped-and-closed, implementing, accepted-not-built, returned, or draft. Include the unrelated dirty feedback-delivery work without absorbing it. | One row per active RFC; every discrepancy has an owner and next legal transition; register state agrees with the tree. | Accurate RFC graph; Gate F clauses 1–2. |
+| A0 | **DONE 2026-08-20** | **Active-RFC truth audit.** Re-ran each active RFC's criteria against code, tests, ledger, log and claimed shared-resource lane. The unrelated dirty feedback-delivery work was excluded through a clean committed-tree extraction. | `active-rfc-audit.md`; four verified implementations archived, three accepted documents remain unbuilt/in-flight, six remain draft/returned, and each has one legal next action. | Accurate RFC graph; Gate F clauses 1–2. |
 | A1 | READY | **Capability reality audit.** For every 1.0 capability in `1.0-capability-map.md`, identify the backend primitive, client consumer, real content fixture and last hands-on proof. “Breadth gate green” is not proof of usable integration. | Every capability is `proven`, `mechanically present`, `absent`, or `claimed-only`, with a source. No free-text producer/surface join remains hidden. | All later research; prevents duplicate RFCs. |
 | A2 | READY | **Interaction-state defect recheck.** Reproduce D537–D540 after select/touch/hover/resize, not only at rest; repair the measurement instrument only, not product code. | The harness independently verifies the intended square and legal move after every gesture; K9 evidence updated without probe/bug cancellation. | Honest guided-board and mobile studies. |
 
@@ -88,6 +88,6 @@ watch owns discovery and routing, not conclusions.
 
 ## What is executable now
 
-The safe parallel frontier is A0, A1, A2, R4, R11 and R18. R9 can prepare its protocol but needs
+The safe parallel frontier is A1, A2, R4, R11 and R18. R9 can prepare its protocol but needs
 owner-authorised participants. Every other row is blocked by a named predecessor above. Scale
 content, product RFC drafting and feature implementation remain outside this queue.

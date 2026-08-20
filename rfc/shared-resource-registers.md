@@ -114,7 +114,7 @@ at `schemas/drill_pack.schema.json:1001` with `properties.guard.conditions[]` re
 `searchBound` in `drill_run.schema.json`; and migration **21** landed as
 `{version: 21, name: "engine leverage run schema"}` at `apps/server/src/storage.ts:2335`.
 
-The row understates it. `rfc/engine-leverage.md:1289-1291` is an **acceptance criterion**:
+The row understates it. `rfc/archive/engine-leverage.md:1289-1291` is an **acceptance criterion**:
 
 > `DRILL_PACK_SCHEMA_VERSION` is `"0.23"`, `DRILL_RUN_SCHEMA_VERSION` is `"0.16"`, the two
 > `$id`s match, and `STORAGE_VERSION` is 21 …
@@ -391,7 +391,7 @@ worth more than a reporting target nobody reads.
 
 **Explicitly not corrected here:** whether those two RFCs move to `implemented` and archive.
 That is a lifecycle act, it belongs to RFC-2 or to the owner, and this RFC records the tree's
-facts without deciding anyone's status. `rfc/engine-leverage.md:1289`'s unsatisfiable acceptance
+facts without deciding anyone's status. `rfc/archive/engine-leverage.md:1289`'s unsatisfiable acceptance
 criterion is **named, not edited**, for the same reason — it is proposed as a ledger row in
 §Open questions.
 
@@ -555,7 +555,7 @@ use):
   resources this RFC registers.
 
 - **D504** — *`engine-leverage` carries an acceptance criterion that cannot be satisfied.*
-  `rfc/engine-leverage.md:1289-1291` requires `DRILL_PACK_SCHEMA_VERSION` to be `"0.23"`,
+  `rfc/archive/engine-leverage.md:1289-1291` requires `DRILL_PACK_SCHEMA_VERSION` to be `"0.23"`,
   `DRILL_RUN_SCHEMA_VERSION` `"0.16"` and `STORAGE_VERSION` 21; at HEAD they are `"0.27"`,
   `"0.17"` and 23, and its content has already shipped. `:148` additionally instructs parallel
   drafters not to claim three lanes that are all long gone. This is [[D497]]'s register defect

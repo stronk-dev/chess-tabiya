@@ -212,29 +212,27 @@ This is a roadmap lane, not a promise that all social infrastructure belongs in 
 
 ## Actual RFC state checkpoint
 
-The starting audit found 59 lifecycle-complete archived RFCs. The active set is not all complete:
+The A0 audit closed four stale implementations, taking the lifecycle-complete archive from 59 to
+63. The remaining active set is not complete:
 
 - accepted but incomplete: `teacher-surface`, `graduation-clearance`, `feedback-delivery`;
-- implementation/closeout needing reconciliation: `live-marker-quality`, `dead-vocabulary`,
-  `engine-leverage`, `vocabulary-wiring`;
 - returned/draft research or process work includes `measurement-records`, `learner-rating`,
   `assistance-controls`, lifecycle completion, pack provenance and shared registers.
 
-Re-derive this checkpoint before execution; it is intentionally not a replacement for
-`rfc/README.md`.
+`active-rfc-audit.md` records the code/tests/closeout evidence and legal next action. This remains
+a dated checkpoint, not a replacement for `rfc/README.md`.
 
 ## First executable queue
 
 The next safe queue is research and reconciliation, not feature implementation. Detailed job
 cards and dependencies are in `execution-queue.md`; the current frontier is:
 
-1. A0 active-RFC truth audit;
-2. A1 capability reality audit;
-3. A2 interaction-state/K9 measurement repair;
-4. R4 knowledge-retrieval experiment;
-5. R11 bot-policy research;
-6. R18 self-host/privacy/accessibility/rights audit;
-7. the capability-watch instrument.
+1. A1 capability reality audit;
+2. A2 interaction-state/K9 measurement repair;
+3. R4 knowledge-retrieval experiment;
+4. R11 bot-policy research;
+5. R18 self-host/privacy/accessibility/rights audit;
+6. the capability-watch instrument.
 
 Detection, presentation, player-style, Review Map, campaign and professional/social research are
 all on the queue, but behind named predecessors. Owner rulings and RFC drafting begin only after

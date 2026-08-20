@@ -3294,3 +3294,21 @@ The current legal frontier is audit and research: active-RFC truth, capability r
 interaction-state measurement, the already-queued theory retrieval comparison, bot-policy
 research, release-platform/rights research and capability-watch instrumentation. Product feature
 RFCs and scale content remain blocked. No design intent, product code, schema or content changed.
+
+## 2026-08-20 — Active-RFC truth audit and four lifecycle closeouts
+
+A0 audited every active product RFC independently of the dirty feedback-delivery implementation.
+On a clean extraction of committed `e5a3f3f`, 179 focused tests and 53 Stockfish-required tests
+passed; schema/runtime/server typechecks passed; Svelte reported 0 errors/0 warnings; scaffold and
+packaging passed.
+
+`live-marker-quality`, `dead-vocabulary`, `engine-leverage` and `vocabulary-wiring` were complete
+in code and criteria but had remained `implementing` since 2026-08-15/16 solely for independent
+review. They are now archived with their historical register lanes released. D497 and D505 close.
+The archive grows from 59 to 63 lifecycle-complete RFCs. This number does not measure integrated
+product quality; `planning/platform-alignment/1.0-capability-map.md` owns that proof.
+
+The pass also reconciled `graduation-clearance`'s body status to the register's accepted state and
+closed stale D503. It remains unbuilt, as does `teacher-surface`; feedback delivery remains an
+accepted two-stage RFC whose current Stage 1 is uncommitted and was not absorbed. Six documents
+remain draft/returned. No product code, schema or content changed in this closeout.

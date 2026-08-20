@@ -66,7 +66,7 @@
     scope and creates no second token surface**; enrolment is handle-bound (§3.2).
   - `rfc/archive/return-and-progression.md` — owns `attempts`, `schedules` and `/learn`.
     This RFC writes a card into `/learn` and **does not touch the scheduler**.
-  - `rfc/live-marker-quality.md` (*implementing*) — treats the `permittedAssistance` table
+  - `rfc/archive/live-marker-quality.md` (*implemented*) — treats the `permittedAssistance` table
     as the **ceiling for the live surface** (its L4(b): *"The ceiling is
     `permittedAssistance`'s table, not what the endpoints happen to serve… The permission
     table is the invariant; a route that disagrees with it is a defect in the route"*), and
@@ -510,7 +510,7 @@ CREATE INDEX assignments_classroom ON assignments(classroom_id, created_at);
   2. **The note never renders inside a run.** It lives in the `/learn` assignment card
      and the classroom view, outside the board experience. It is therefore not live
      assistance, does not occupy a rung, and adds **no kind to the live surface** — so
-     `rfc/live-marker-quality.md`'s L5 burden (*a new live kind arrives with a dossier*)
+     `rfc/archive/live-marker-quality.md`'s L5 burden (*a new live kind arrives with a dossier*)
      is not engaged by this RFC at all, and L1–L4 have nothing here to bind.
   3. **The note is pre-commitment, and that is deliberate rather than overlooked.** A
      learner reads it before starting the pack, which is the one timing §3a
@@ -873,7 +873,7 @@ consumer rather than letting a missed site inherit a silent `false`. The consume
 | `liveMarkers` (`packages/runtime/src/pivotal.ts`, which calls `permittedAssistance` itself) | passed through its context |
 | `packages/runtime/src/adaptive-guidance.test.ts` and `apps/web/src/lib/client-surface-floor.test.ts` | explicit in each case |
 
-`pivotal.ts` is also the file `rfc/live-marker-quality.md` is rewriting, which is the
+`pivotal.ts` is also the file `rfc/archive/live-marker-quality.md` is rewriting, which is the
 second reason for the landing order below.
 
 **The same seven consumers resolve `reviewing` (§5.2), and for the same reason — the field
@@ -905,7 +905,7 @@ five — the failure mode a second optional-with-a-default field would have made
 can return `free` afterwards. Participant and spectator contexts had `mayRequestSplit ===
 false` already, and a conjunction cannot raise a false. `markers` is unconditionally
 `"free"` in the shipped table and this change does not touch it. So
-`rfc/live-marker-quality.md`'s **refusal** assertions — markers absent and
+`rfc/archive/live-marker-quality.md`'s **refusal** assertions — markers absent and
 `ASSISTANCE_WITHHELD` returned for participant and spectator contexts on `/human-split`,
 `/corpus`, `/voice` and `/speech` — continue to hold unchanged, and its standing rule that
 *the ceiling is `permittedAssistance`'s table* survives with the table merely lowered in
@@ -1253,7 +1253,7 @@ The live case was never inside that question; it is a different surface with a d
 answer already given.
 
 **The author round justified this by citing an owner ruling of 2026-08-15 in
-`rfc/live-marker-quality.md`, and cross-review 2026-08-16 went and read that ruling.
+`rfc/archive/live-marker-quality.md`, and cross-review 2026-08-16 went and read that ruling.
 It does not say what the citation claimed, and the direction of the error is the
 dangerous one: the ruling is *wider* than the use made of it, so §5.2 crosses it while
 §5.3 was arguing the RFC may not.** The banner form quoted by the author round is
@@ -1475,7 +1475,7 @@ Otherwise: none.
     rendered only with its author's handle. A source guard asserts no code path composes
     a note from an evidence value, engine reading, corpus figure or provider output. A
     second guard asserts this RFC introduces no `PivotalKind` member and no live-surface
-    firing, so `rfc/live-marker-quality.md`'s L5 admission burden is untouched.
+    firing, so `rfc/archive/live-marker-quality.md`'s L5 admission burden is untouched.
 
 **Submission and review:**
 
@@ -1646,7 +1646,7 @@ Otherwise: none.
 
 11. `permittedAssistance` returns identical tables for **non-reviewing** participant and
     spectator contexts before and after this change — the regression guard that
-    `rfc/live-marker-quality.md`'s refusal assertions are untouched, and the reason
+    `rfc/archive/live-marker-quality.md`'s refusal assertions are untouched, and the reason
     criterion 10b's case (i) exists. Separately, a test asserts `live-marker-quality`'s
     *"then open for solo/host after disclosure"* fixture uses a **non-seated** host, so the
     two RFCs' criteria stay compatible (§5.1), and a third asserts that **every context that

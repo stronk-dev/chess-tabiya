@@ -138,7 +138,7 @@ the per-profile default table; the honesty of `AssistanceContext`'s declared sha
 
 | Not in scope | Owned by |
 |---|---|
-| `assistance.markers`, `pivotalMarkers`, `liveMarkers`, `liveAdmitted`, `renderPivotalMarker`, the live-marker admission rule L1–L6 | `rfc/live-marker-quality.md` (*implementing*) |
+| `assistance.markers`, `pivotalMarkers`, `liveMarkers`, `liveAdmitted`, `renderPivotalMarker`, the live-marker admission rule L1–L6 | `rfc/archive/live-marker-quality.md` (*implemented*) |
 | The body of `permittedAssistance` and the `mayRequestSplit` conjunction; `seatedInContest`; `reviewing` | `rfc/teacher-surface.md` (*accepted*) |
 | `SILENT_ASSISTANCE.boardLighting`'s `"legal"` → `"off"` regression | **D493**. **It landed in the working tree while this RFC was being drafted** — `boardLighting` is `"legal"` again and `adaptive-guidance.test.ts`'s *"implements the assistance table with silence as the universal default"* is updated with it. This RFC touches no value of `SILENT_ASSISTANCE`, and §4.2's default table is spelled as a spread of it precisely so a change of this kind flows through in either landing order — which it now has |
 | Stating the silence to a first-run learner | **D494**, already queued |
@@ -360,7 +360,7 @@ true, listed so the RFC's claim is checkable rather than atmospheric:
 5. `liveAdmitted`'s `human_divergence` arm — `permission.humanSplit === "free"` — becomes
    satisfiable, so a learner who has *also* chosen `markers: "live"` may see that dot.
    This RFC does not change that arm; it changes whether its precondition is ever reachable
-   in Just Play, which `rfc/live-marker-quality.md` §6.2's accepted cost describes as
+   in Just Play, which `rfc/archive/live-marker-quality.md` §6.2's accepted cost describes as
    *"until delivery opens — which under `attempt_end` re-closes on the next committed move"*.
    That sentence, too, presupposes a reveal.
 
@@ -371,7 +371,7 @@ says rungs *"3, 4 and 6"* become reachable. Rungs 3 and 4 do, exactly as above. 
 does not, and it is not disclosure that blocks it:** the only in-run call site of
 `requestVoice` is the *Revoice this packet* button inside the **pivotal-marker dialog**, so
 it is gated on `assistance.markers === "live"` and on an admitted marker existing — a
-surface `rfc/live-marker-quality.md` owns and this RFC does not touch. The reveal makes
+surface `rfc/archive/live-marker-quality.md` owns and this RFC does not touch. The reveal makes
 rung 6 reachable *in principle*, by putting an admitted `human_divergence` marker within
 reach; it does not put a rung-6 control in front of a learner who has left markers off.
 Recorded here rather than quietly implemented.
@@ -449,7 +449,7 @@ placeholder rating.
 
 #### 3.5 The relationship to `live-marker-quality`'s standing rule, stated because it must be
 
-`rfc/live-marker-quality.md` §3 governs *"any future kind, sub-kind, board overlay, arrow,
+`rfc/archive/live-marker-quality.md` §3 governs *"any future kind, sub-kind, board overlay, arrow,
 halo, ambient cue or spoken line that fires **without the learner asking for it in that
 moment**"*, and its **L6** says: *"Failing a measurement removes a firing from the live
 surface… **Lacking a measurement does not.**"*
@@ -561,7 +561,7 @@ guard's cartesian product is the 32-case one; if this RFC lands first, its comme
 are `false` the function is byte-identical to the shipped one"* — is unaffected, because
 this RFC leaves the shipped one alone.
 
-**`rfc/live-marker-quality.md` (implementing).** It owns the pivotal-marker surface end to
+**`rfc/archive/live-marker-quality.md` (implemented).** It owns the pivotal-marker surface end to
 end. This RFC removes **one block from inside the pivotal dialog** — the block whose guard
 expression is `assistance.guided === "live"` — and touches nothing else there:
 `renderPivotalMarker`, `liveMarkers`, `liveAdmitted`, `openPivotal`, `pivotalRows`, the
@@ -729,7 +729,7 @@ Each criterion names how it fails, because a criterion that cannot fail is not a
    |---|---|---|---|
    | **A — pin and keep** *(recommended, and what §4.3 specifies)* | `sessionKind` stays declared and unread; the invariant is documented and guarded | one comment, one test, no behaviour | Keeps the seam for a future ruling and kills the false affordance. **Risk:** a guard that cannot fail today is one line from being cited as evidence that the question was settled. Criterion 11 states that it is not |
    | **B — remove the constraint by removing the field** | Delete `sessionKind` from `AssistanceContext`; update six non-test call sites | ~10 lines across `packages/runtime`, `apps/server` (×2 files), `apps/web` | Maximally honest: the signature stops promising a lever. **Cost:** it collides with `rfc/teacher-surface.md` §5.2b, whose normative interface block includes `sessionKind`; it can only be done as a follow-up after that RFC lands, so it is not available today |
-   | **C — implement properly: rule a real difference now** | The owner rules a per-kind ceiling, e.g. a pack's pre-disclosure `boardLighting`/`arrows` drop to the rules floor while `position`/`imported` keep structural sight — *"a curated drill withholds by design"* taken literally | one expression in `permittedAssistance` + tests + a design amendment | Gives the field a real job and makes §4's first clause visible rather than implied. **Cost, and it is the honest one:** this is a **narrowing of a shipped surface with no measurement behind it**, which `rfc/live-marker-quality.md` L6 refuses when done by argument. It would have to be ruled as design intent, not justified as evidence. It also re-opens §6 Q1, which design has marked open |
+   | **C — implement properly: rule a real difference now** | The owner rules a per-kind ceiling, e.g. a pack's pre-disclosure `boardLighting`/`arrows` drop to the rules floor while `position`/`imported` keep structural sight — *"a curated drill withholds by design"* taken literally | one expression in `permittedAssistance` + tests + a design amendment | Gives the field a real job and makes §4's first clause visible rather than implied. **Cost, and it is the honest one:** this is a **narrowing of a shipped surface with no measurement behind it**, which `rfc/archive/live-marker-quality.md` L6 refuses when done by argument. It would have to be ruled as design intent, not justified as evidence. It also re-opens §6 Q1, which design has marked open |
 
    **Recommendation: A now, B as a follow-up if the owner rules that no kind-keyed
    difference will ever exist, C only as an explicit design amendment.** Option C is listed

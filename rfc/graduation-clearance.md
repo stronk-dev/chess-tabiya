@@ -1,7 +1,7 @@
 # RFC: Graduation clearance — how a blocker stops blocking
 
-- **Status:** **returned a third time on [[D503]] and answered here; NOT re-declared accepted — claude
-  accepts as register owner.** **[author round 3, 2026-08-17]** D503 is closed, and it is closed as an
+- **Status:** **accepted 2026-08-17 by the register owner; status token reconciled 2026-08-20.**
+  **[author round 3, 2026-08-17]** D503 is closed, and it is closed as an
   **instance of a class rather than as six entries**: three of the six mechanical kinds join to their
   evidence through a **pointer grammar the shipped code enforces**, and this RFC stated that grammar
   for exactly one of them (§1.2b, kind B). §1.2c now states it for all six, and the six D503 blockers

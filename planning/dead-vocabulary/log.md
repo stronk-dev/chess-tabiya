@@ -16,3 +16,10 @@
 - Final implementation gates passed on the same tree: `ENGINES_REQUIRED=1 make verify`
   (733 tests / 114 files, schema and packaging clean) and `make test-browser` at zero retries
   (24 passed, one optional Maia test skipped).
+
+## 2026-08-20 — independent closeout
+
+- A0 re-ran the focused declaration/vocabulary contracts against a clean committed-tree
+  extraction alongside current type, scaffold and packaging checks; no blocker surfaced.
+- RFC moved to the archive. Residual authoring-code vocabulary work remains D428 and was not
+  falsely closed by this lifecycle.

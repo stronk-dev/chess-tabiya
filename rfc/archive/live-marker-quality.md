@@ -1,6 +1,8 @@
 # RFC: Live marker quality — the admission rule for anything that speaks unasked
 
-- **Status:** implementing — **cross-reviewed 2026-08-15; owner rulings applied; D68 absorbed by the implementation**
+- **Status:** **implemented 2026-08-20.** Implementation landed at `7bcf164`; the independent
+  closeout at `planning/platform-alignment/active-rfc-audit.md` passed current clean focused,
+  type, scaffold and packaging checks and verified the amended owner ruling.
 - **Author:** claude (agent), for Marco
 - **Created:** 2026-08-15
 - **Design refs:** `design/05-in-run-experience.md` §3 (the assistance ladder and its 2026-08-14

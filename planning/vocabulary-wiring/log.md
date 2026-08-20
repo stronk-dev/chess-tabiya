@@ -38,3 +38,10 @@
   are satisfiable with zero evaluation faults. `ENGINES_REQUIRED=1 make verify` passed 672 tests
   across 104 files with Svelte 0/0, and the zero-retry browser gate passed 24 with the optional
   Maia latency test skipped.
+
+## 2026-08-20 — independent closeout
+
+- A0 re-derived the historical pack-0.24 landing at `caa8afa` and ran current clean vocabulary,
+  schema, authoring and presentation contracts plus type, scaffold and packaging checks.
+- No blocker surfaced. RFC moved to the archive; D348 remains an explicitly separate shape-trigger
+  gap rather than being hidden by this closeout.

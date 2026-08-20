@@ -31,3 +31,10 @@ packaging clean. `make test-browser` passed 24 tests at zero retries; the option
 Maia browser measurement was skipped. Canonical behaviour is updated in
 `docs/adaptive-guidance.md`. The lifecycle remains implementing for independent
 review and owner-tier ledger disposition.
+
+## 2026-08-20 — independent closeout
+
+- A0 re-ran current clean live-marker, guidance, runtime and screen contracts plus type,
+  scaffold and packaging checks; no blocker surfaced.
+- D48/D50/D51/D68 remain closed; D52/D53 correctly remain open measurement obligations. RFC
+  moved to the archive without claiming those residuals were discharged.

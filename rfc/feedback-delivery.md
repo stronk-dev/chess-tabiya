@@ -61,7 +61,7 @@
 - **Related, NOT absorbed:** **D88** (*The engine has already answered, at the exact pointer of the
   field that would consume it* — 235 machine-validated records anchored to `/deviations/{i}/moveUci`
   against 0 of 275 deviations declaring a `cost`, `design/BACKLOG.md:124`) is owned by the parallel
-  draft **`rfc/engine-leverage.md`**. This RFC reads the same ledger and must not be read as
+  implemented **`rfc/archive/engine-leverage.md`**. This RFC reads the same ledger and must not be read as
   claiming that row. See §5.3.
 - **Parent / amends:** amends `rfc/archive/authored-feedback-delivery.md` (the three delivered
   authored shapes become four) and `rfc/archive/n-way-comparison.md` (the comparison structure
@@ -254,7 +254,7 @@ better `[V]` `[2026-08-16]`: the comparison structure strip fires on **99.9%** o
 transitions at **8.83 entries per ply**, and **99.4%** of **18,470** quiet alternatives fire too,
 **92.0%** of them with the *same kind* — a lift of **1.004×**, down from the draft's 1.005×, and far
 below the **1.05×** that got `slider_lines_changed` refused by R3 and by
-`rfc/live-marker-quality.md` §3 L2. Volume grew (5,266 entries → **6,659**) and discrimination did
+`rfc/archive/live-marker-quality.md` §3 L2. Volume grew (5,266 entries → **6,659**) and discrimination did
 not. **D78 has not decayed; it has been re-confirmed on 19% more transitions.**
 
 This RFC does two jobs, and they are different jobs with different rules.
@@ -377,7 +377,7 @@ the absence rather than legislating an anchor nobody authored.
   UNBACKED per the 2026-08-15 coordinator ruling. Not re-specified, not re-litigated.
 - **`opening-evidence-path`'s engine records** (pack 0.20) — landed. This RFC *reads* the ledger
   those records live in; it changes nothing about how they are produced or validated.
-- **D88** — owned by `rfc/engine-leverage.md`, drafting in parallel. §5.3 states the interface.
+- **D88** — owned by the implemented `rfc/archive/engine-leverage.md`. §5.3 states the interface.
 - **The rung-0 structural reading itself.** R3 exempts learner-initiated surfaces
   (*"a true answer to a question the learner asked is not noise; the learner chose the cost"*), and
   `CompareView.svelte:118-120` keeps the full per-column reading behind a closed `<details>` as the
@@ -386,7 +386,7 @@ the absence rather than legislating an anchor nobody authored.
 - **New authored content.** Not one word is authored here. Every number in §2 is delivery of prose
   that already exists in `content/drafts/`.
 - **The pivotal-marker half of the timing strip** (`compare-strips.ts:38`) — pinned as an
-  *unmodified* site by `rfc/live-marker-quality.md` §4.2 criterion 3. See §5.2.
+  *unmodified* site by `rfc/archive/live-marker-quality.md` §4.2 criterion 3. See §5.2.
 
 ## Specification
 
@@ -596,7 +596,7 @@ claims**. It is unbackable by construction (D87: no Maia evidence kind exists in
 and moot in practice. `hypothesis` and `derived_feature` are self-declared by design.
 
 > **A second, independent instrument now reproduces this table, and it shipped after the
-> cross-review** `[V]` `[2026-08-16]`. `rfc/dead-vocabulary.md`'s declaration census
+> cross-review** `[V]` `[2026-08-16]`. `rfc/archive/dead-vocabulary.md`'s declaration census
 > (`apps/server/src/declaration-census.ts`, reached by `make expression-census DECLARATIONS=1`,
 > landed `329c62b`) derives the pack schema's declared vocabulary and counts each subject's corpus
 > firings, producers and consumers. Run at HEAD it emits, without being asked about this RFC:
@@ -674,7 +674,7 @@ Four properties, all verified, all load-bearing:
    `CompareView.svelte:135` (re-verified at HEAD; it was `:91` when the draft was written) renders
    the strip inside a closed `<details><summary>Structure and
    timing</summary>`, and the compare view itself is opened by the learner. So
-   `rfc/live-marker-quality.md`'s L1–L6 — the standing admission rule for anything that speaks
+   `rfc/archive/live-marker-quality.md`'s L1–L6 — the standing admission rule for anything that speaks
    **unasked** — **does not bind this surface**, and this RFC does not pretend it does. What binds
    it is narrower and harder to argue with: *the disclosure promises a comparison and returns a
    census*, and R3's D condition supplies the mechanical test for that.
@@ -1721,11 +1721,11 @@ runs D against them. An observation true on every column's path is, by D, not ab
 obvious alternatives, and this RFC obeys both rather than routing around them:
 
 - **Selectivity is not quality.** Spearman **ρ = −0.143** between firing rate and false-positive
-  rate (R3 §6; restated as normative in `rfc/live-marker-quality.md` §3 L2). So "keep the rare
+  rate (R3 §6; restated as normative in `rfc/archive/live-marker-quality.md` §3 L2). So "keep the rare
   observations" is refused — it is the reasoning R3 invalidated, and `live-marker-quality` already
   wrote the standing prohibition. CR2 exists to make the refusal explicit.
 - **A structurally-zero denominator makes lift undefined, not infinite.**
-  `rfc/live-marker-quality.md` §3 L2(i) is the general clause and it binds here: any "the filtered
+  `rfc/archive/live-marker-quality.md` §3 L2(i) is the general clause and it binds here: any "the filtered
   strip achieves ∞× lift because nothing else fires" argument is inadmissible. CR1 makes no lift
   claim at all; it makes an identity claim (§6 criterion 5).
 
@@ -1790,7 +1790,7 @@ special case was written for it.
 > when absent. **The edit is confined to the *first* `{#each}` block on that line — the
 > one over `strips[…].structure`.** That line holds **two** `{#each}` blocks inside one
 > `<details>`; the second iterates `strips[…].timing`, whose pivotal-marker entries
-> `rfc/live-marker-quality.md` criterion 3 protects, and it is not touched. (The per-column rung-0
+> `rfc/archive/live-marker-quality.md` criterion 3 protects, and it is not touched. (The per-column rung-0
 > reading has likewise moved, from `:118-120` to `:157-159`, and stays untouched.)
 > **The runtime's `sentence` field is unchanged**, so `comparisonNarrative` (`:56`),
 > the evidence packet and `/voice` are byte-identical for the entries that survive CR1.
@@ -1812,7 +1812,7 @@ narrative, packet and voice paths as well — is **Open question 2**, not decide
 > written against have **landed and moved to `rfc/archive/`**: `client-surface-floor`,
 > `live-surface-honesty` and — the one that matters — **`claim-backing`**, which did not exist when
 > those sections were written and now supplies this RFC's dependency (§5.8).
-> `rfc/live-marker-quality.md`, `rfc/engine-leverage.md` and `rfc/vocabulary-wiring.md` are all
+> `rfc/archive/live-marker-quality.md`, `rfc/archive/engine-leverage.md` and `rfc/archive/vocabulary-wiring.md` are all
 > **implementing**; `rfc/teacher-surface.md` is still **draft and owner-blocked**. The findings in
 > §§5.2–5.7 were re-checked and **none of them inverted**; what changed is line numbers and one
 > resolved open question, both recorded in place.
@@ -1898,7 +1898,7 @@ class of drift this morning.)*
 written and the numbers are already recorded; a delivery RFC that needed a schema version would be
 evidence that the diagnosis was wrong.
 
-#### 5.2 `rfc/live-marker-quality.md` — one shared file, zero overlap
+#### 5.2 `rfc/archive/live-marker-quality.md` — one shared file, zero overlap
 
 `live-marker-quality` §4.2 pins `compare-strips.ts:38` as one of exactly three `pivotalMarkers`
 call sites that it **does not modify**, and its criterion 3 tests that `castled` and `pawn_break`
@@ -1930,7 +1930,7 @@ zero-denominator) as prohibitions, and does **not** claim that L1–L6 govern th
 scope, and `live-marker-quality`'s own §3 scopes L1–L6 to firings that occur *"without the learner
 asking for it in that moment"*, which agrees.
 
-#### 5.3 `rfc/engine-leverage.md` — the ledger is shared, the row is not
+#### 5.3 `rfc/archive/engine-leverage.md` — the ledger is shared, the row is not
 
 D88 observes 235 machine-validated records anchored to `/deviations/{i}/moveUci` against 0 of 275
 deviations declaring a `cost`. This RFC's §1.2 recomputed that same ledger population from the other
@@ -1991,7 +1991,7 @@ Criterion 10 pins it.
   and an unchanged `<style>` block. That is a real, if small, cost to another RFC's stated plan and
   it is recorded here rather than left for D63's owner to discover.
 
-#### 5.5 `rfc/vocabulary-wiring.md` — no code overlap, one shared ledger row, one shared corpus
+#### 5.5 `rfc/archive/vocabulary-wiring.md` — no code overlap, one shared ledger row, one shared corpus
 
 The draft did not mention this sibling. It claims **pack schema 0.24 and nothing else** (no
 migration, run schema stays 0.15) and it clears this RFC from its side. Symbol-by-symbol it is
@@ -2115,7 +2115,7 @@ this RFC names, which is exactly why a symbol sweep missed it.
    neither RFC blocks the other.
 
 *(Also swept and clear, **re-checked at HEAD `6722130` because three of the four moved**
-`[V]` `[2026-08-16]`: `rfc/dead-vocabulary.md` — **now `implementing`, not `accepted`**: its
+`[V]` `[2026-08-16]`: `rfc/archive/dead-vocabulary.md` — **implemented 2026-08-20**: its
 declaration census landed at `329c62b` as `apps/server/src/declaration-census.ts` behind
 `DECLARATIONS=1`, and it still **claims nothing versioned**. Symbol overlap with this RFC's surface
 is **still zero** — `authored-feedback`, `AuthoredFeedbackItem`, `feedbackClaims`, `compare-strips`,

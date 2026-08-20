@@ -1,6 +1,9 @@
 # RFC: Vocabulary wiring — what a construct must earn before the format admits it
 
-- **Status:** **implementing 2026-08-16.** All acceptance-blocking open questions are closed **in
+- **Status:** **implemented 2026-08-20.** Implementation landed at `caa8afa` plus `e9695cf`;
+  the independent closeout at `planning/platform-alignment/active-rfc-audit.md` re-derived the
+  historical pack-0.24 landing state and passed current clean focused, type, scaffold and
+  packaging checks. All acceptance-blocking open questions are closed **in
   their own bodies**: Q1 and Q8 owner-ruled, Q9 closed by the coordinator against a named
   work-register cluster. Q2/Q3/Q4/Q5/Q6/Q7 were never acceptance-blocking. Superseded
   "resolve before accepted" strings inside preserved original text are struck through and
@@ -47,7 +50,7 @@
 >
 > **0.23 was contested, this draft yielded it, and the yield is recorded on both sides.**
 > *Cite these by anchor text, not line number — all three sibling drafts moved during this draft's
-> own cross-review.* `rfc/engine-leverage.md` claims **0.23** in its register table row
+> own cross-review.* `rfc/archive/engine-leverage.md` claims **0.23** in its register table row
 > *"**Pack schema** | **0.23**"* (`properties.guard.conditions[]`, a new `$defs/engineCondition`, a
 > fourth `deviationCost` arm) and states, under *"If you are drafting in parallel"*: *"do not claim
 > pack 0.23, run 0.16, or migration 22."* `engine-leverage` is a **wave-1** draft and this is
@@ -78,7 +81,7 @@ say so and show the arithmetic.*
 
 *Adversarial cross-review re-ran every one of those counts at **`a9c31a6`** and they are unchanged;
 the code line numbers were re-pinned at the same commit. **The sibling drafts moved again during
-that review** — `rfc/engine-leverage.md` and `rfc/feedback-delivery.md` were both edited by parallel
+that review** — `rfc/archive/engine-leverage.md` and `rfc/feedback-delivery.md` were both edited by parallel
 sessions while it was in progress — so all cross-RFC citations in the register block above are now
 by **anchor text rather than line number**, and reviewers should extend that habit to any citation
 they add.*
@@ -146,7 +149,7 @@ one thing** — and in every case a validator that checks each construct on its 
 
 - **`/deviations/{i}/cost` is not re-specified here.** It ships author-declared and **unbacked**
   per the 2026-08-15 coordinator ruling (ledger row *Bind `/deviations/{i}/cost` to engine
-  evidence*), and `rfc/engine-leverage.md` — a **parallel wave-1 draft** — owns binding it to
+  evidence*), and `rfc/archive/engine-leverage.md` — a **parallel wave-1 draft** — owns binding it to
   evidence. This RFC does not touch `cost`, does not render it, and does not describe how it
   should be grounded. **Named as a dependency and left alone.**
 - **The claim-delivery cluster is not touched.** `rfc/feedback-delivery.md` (parallel wave-1

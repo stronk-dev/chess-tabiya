@@ -330,7 +330,7 @@ population it creates:
 | `feedback-delivery` | `D1` | the binding wave: 98 withheld claims — 63 mandatory pack edits (`author_principle` + a `principles` entry, else `CLAIM_AUTHOR_LABEL_REQUIRED` refuses), an explorer position-census pass over 60 `corpus_observed` claims in 31 packs, a tablebase legal-successor pass over 36 `tablebase_exact` claims in 12 | **`OWNER`** — §6 | `planning/content-era/log.md` + the ledger flips of criterion 11, in the shipping commit (content-wave closeout) |
 | `dead-vocabulary` | `D1` | independent review of the shipped declaration census before archival | **`OWNER`** — nobody is named today, and naming one is the act | `planning/dead-vocabulary/log.md` |
 | `learner-rating` | `D1` | six changes owed to `design/06-campaign.md`, enumerated in its §5.3a; law 5 makes them owner-tier | **`OWNER`** | `design/06-campaign.md` + `planning/exploration/log.md` |
-| `teacher-surface` | `D1` | three edits owed to `rfc/live-marker-quality.md` at landing (criterion 6's two sentences, §6.2's recorded owner cost) | **`teacher-surface`** (self, at landing) | the landing commit |
+| `teacher-surface` | `D1` | three edits owed to `rfc/archive/live-marker-quality.md` at landing (criterion 6's two sentences, §6.2's recorded owner cost) | **`teacher-surface`** (self, at landing) | the landing commit |
 
 Note what the table does that five paragraphs of prose did not: **it makes `OWNER` appear three
 times in one grep.** For the first time the repo can answer *"what is waiting on me?"*

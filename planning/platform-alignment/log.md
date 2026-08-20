@@ -52,3 +52,23 @@ Append-only. Record research, rulings, RFC transitions, implementation closeout 
   scale content remains downstream of stable evidence and pack contracts plus owner acceptance.
 - Corrected the old evidence resume prompt through D564 and removed the implication that the owner
   proposed request-time scraping; it now audits a separate builder and immutable runtime bundle.
+
+## 2026-08-20 — A0 closed four invisible-complete RFCs
+
+- Audited all thirteen active product RFCs on four axes: document status, code presence,
+  acceptance verification and lifecycle closeout. The audit is
+  `planning/platform-alignment/active-rfc-audit.md`.
+- Used a clean extraction of committed `e5a3f3f`, excluding the shared dirty feedback Stage 1
+  work. Current verification passed 179 focused tests, 53 Stockfish-required engine/opponent
+  tests, schema/runtime/server TypeScript, Svelte at 0/0, scaffold and packaging.
+- Independently cleared and archived `live-marker-quality`, `dead-vocabulary`, `engine-leverage`
+  and `vocabulary-wiring`. The archive count is now 63; this is lifecycle completion, not a claim
+  that their capability families meet the integrated 1.0 UX.
+- Re-derived historical landing versions rather than treating old acceptance literals as current
+  version requirements: engine leverage landed 0.23/0.16/storage 21; vocabulary wiring landed
+  0.24. Closed D497/D505 and released the stale register claims.
+- Reconciled `graduation-clearance`'s body to the register's accepted state and closed stale D503.
+  It remains unbuilt. `teacher-surface` also remains accepted/unbuilt; feedback delivery remains
+  accepted and in-flight only in the excluded dirty worktree.
+- Six documents remain draft/returned. No process instrument (`register-check`, `status-parity`,
+  `work-index`) exists yet, so A0 remains a dated manual audit and those process RFCs still matter.

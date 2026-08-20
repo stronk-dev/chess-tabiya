@@ -16,3 +16,10 @@
 - The first browser run caught the expected corpus-sentence contract change: per-move result splits now follow the count/share sentence. The assertion was widened to pin the complete attributed split.
 - Final gates: `ENGINES_REQUIRED=1 make verify` passed with 637 tests across 101 files and Svelte 0 errors/0 warnings; `make test-browser` passed 24 tests at zero retries with the optional Maia latency test skipped.
 - Canonical docs now describe the 50,000-node strong-engine bound, recorded search bounds and candidate measurements, exact tablebase evidence/disclosure, bound deviation costs, guard conditions, capability dispositions, and per-move explorer result splits.
+
+## 2026-08-20 — independent closeout
+
+- A0 re-derived the historical pack 0.23/run 0.16/storage-21 landing state at `18d2832`, rather
+  than incorrectly comparing the landing invariant to HEAD's later 0.27/0.17/23.
+- Current clean focused tests and the Stockfish-required engine suite passed; type, scaffold and
+  packaging checks passed. RFC moved to the archive and historical lanes were released.

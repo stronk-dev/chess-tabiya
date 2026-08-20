@@ -1,6 +1,9 @@
 # RFC: Engine leverage — the instrument has already answered
 
-- **Status:** **implementing 2026-08-16.** Open questions **1 and 9 are owner-ruled**, and
+- **Status:** **implemented 2026-08-20.** Implementation landed at `18d2832` plus `b65bd4e`;
+  the independent closeout at `planning/platform-alignment/active-rfc-audit.md` re-derived the
+  historical 0.23/0.16/storage-21 landing state and passed current clean focused, Stockfish,
+  type, scaffold and packaging checks. Open questions **1 and 9 are owner-ruled**, and
   **3 and 7 are coordinator-closed — all four in the question bodies below**, corrected
   2026-08-16 after codex found 3 and 7 resolved in this line only. Questions 3 and 7 are
   closed on their own stated fallbacks, which is within the standing ruling *"just
@@ -158,7 +161,7 @@ landing with this RFC, and §8 splits the two claims into separate criteria rath
 asserting an impossible "no digest moves" over both.
 
 **0.23 is contested, and the contest is already resolved.** `planning/work-register.md` §2
-puts this RFC in **wave 1** with `rfc/feedback-delivery.md`, and `rfc/vocabulary-wiring.md`
+puts this RFC in **wave 1** with `rfc/feedback-delivery.md`, and `rfc/archive/vocabulary-wiring.md`
 in **wave 2**. `feedback-delivery` states it *"leaves 0.23 free"* and claims no schema
 version. `vocabulary-wiring` claims 0.23 for its `plan_signature` leaf but pre-commits, in
 its own register block, to renegotiating to **0.24** if a wave-1 draft claims it — which

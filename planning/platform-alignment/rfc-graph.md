@@ -13,9 +13,9 @@ same contract. The names F1–F12 below are capability nodes, not reserved filen
 |---|---|---|
 | `shared-resource-registers` | draft | Resolve first if A0 confirms the stale-register class; F1 should reuse its derivation machinery rather than duplicate it. |
 | `rfc-lifecycle-completion` | draft | Resolve process truth before the alignment wave creates more active obligations. |
-| `live-marker-quality` | implementing | Verify/close or return. Its admission rules become an input to O3/O4, not a parallel selector. |
-| `dead-vocabulary` | implementing | Verify/close or return. Its declaration census feeds R6/F3. |
-| `engine-leverage`, `vocabulary-wiring` | implementing | Verify shipped symbols, criteria, claimed lanes, ledger and log. Unfinished work must be reconciled before semantic v1 claims a vocabulary lane. |
+| `archive/live-marker-quality` | implemented; A0-verified 2026-08-20 | Closed. Its admission rules are an input to O3/O4, not a parallel selector. |
+| `archive/dead-vocabulary` | implemented; A0-verified 2026-08-20 | Closed. Its declaration census feeds R6/F3; residual D428 remains separate. |
+| `archive/engine-leverage`, `archive/vocabulary-wiring` | implemented; A0-verified 2026-08-20 | Closed and historical pack lanes released. Their contracts are inputs to semantic v1; no new RFC may duplicate them. |
 | `teacher-surface` | accepted-not-proven | Do not blindly implement as “coach mode.” R15/O11 decide whether it implements unchanged or is amended first. |
 | `graduation-clearance` | accepted | Implement/close if its predicates and lane remain valid after A0; its clearance is an input to Gate F, not Gate F itself. |
 | `feedback-delivery` | accepted, Stage 1 dirty/in progress | Finish authorised Stage 1 without absorbing unrelated work; Stage 2 remains subject to its ownership/content obligations and the D560 hold. |

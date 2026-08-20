@@ -12,10 +12,10 @@ dependency edge, they may not.
 
 | Order | Job | State | Deliverable / closeout |
 |---|---|---|---|
-| 0.1 | A0 active-RFC truth audit | **READY NOW** | Reconciled `rfc/README.md`, ledgers/registers and log; no product edits |
+| 0.1 | A0 active-RFC truth audit | **DONE 2026-08-20** | `active-rfc-audit.md`; four completed implementations archived; active/accepted/draft truth and next actions reconciled |
 | 0.2 | A1 capability reality audit | **READY NOW** | Evidence-backed current-state column in the capability map or linked audit; producer/client/content/hands-on proof |
 | 0.3 | A2 interaction-state/K9 instrument | **READY NOW** | Disposable harness correction, research dossier/gate/log updates; no CSS/product fix unless already authorised by an accepted RFC |
-| 0.4 | Close or explicitly return already-implemented RFCs | BLOCKED by 0.1 | Criteria run, ledger/log closeout, narrow commits that do not absorb the dirty feedback-delivery tree |
+| 0.4 | Close or explicitly return already-implemented RFCs | **PARTIAL:** four stale implementations closed | `live-marker-quality`, `dead-vocabulary`, `engine-leverage`, `vocabulary-wiring` archived; no other active RFC was misclassified complete |
 | 0.5 | Implement accepted incomplete RFC work | BLOCKED by 0.1 and worktree coordination | Existing accepted criteria only; any design mismatch returns to decision queue |
 
 **Phase exit:** registers reflect code; no stale “shipped” claim; every active RFC has a legal next
@@ -148,5 +148,5 @@ R14/R15/R16/R17/R18 → O10–O13 → optional F10/F11 + required F12
 all included nodes → integrated default journeys → 1.0 proof
 ```
 
-The immediate queue is therefore 0.1–0.3 and 1.1–1.4. There is no legal feature-build queue yet;
+The immediate queue is therefore 0.2–0.3 and 1.1–1.4. There is no legal feature-build queue yet;
 creating one before these results would violate the sequencing the owner explicitly requested.

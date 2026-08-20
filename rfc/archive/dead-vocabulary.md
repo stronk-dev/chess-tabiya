@@ -1,7 +1,8 @@
 # RFC: Dead vocabulary — the wave's rows are owned; its instrument is not
 
-- **Status:** **implementing 2026-08-16**, after acceptance and cross-review; implementation
-  is complete pending full gates and independent review.
+- **Status:** **implemented 2026-08-20.** Implementation landed at `329c62b`; the independent
+  closeout at `planning/platform-alignment/active-rfc-audit.md` passed current clean focused,
+  type, scaffold and packaging checks.
   All three Open questions are explicitly non-blocking by their own text — 1 is *not claimed*
   and routed to whichever RFC next edits `dispositions.ts`, 2 is *deferred to first use* on
   [[D53]]'s free-parameter grounds, 3 is *routed* to whichever RFC next owns
@@ -344,7 +345,7 @@ damage.
 
 ### 1. What this RFC cedes, and to whom
 
-Normative, so that no later reader re-derives it: **`rfc/dead-vocabulary.md` claims no
+Normative, so that no later reader re-derives it: **`rfc/archive/dead-vocabulary.md` claims no
 disposition over D84, D85, D86 or D57.** Their owner is `rfc/archive/format-surface.md`, and
 **all four dispositions are shipped and verified in the tree** (Motivation §1's table). The
 cession therefore transfers nothing that has not already been discharged; there is no
@@ -374,7 +375,7 @@ Three consequences that an implementer must not read past:
 
 Three items sit inside cluster E's subject and outside that RFC's dispositions. Each already
 has a destination; this section writes the destination down so the wave can close without
-any of them becoming "a later wave", which `rfc/vocabulary-wiring.md`'s Open question 9
+any of them becoming "a later wave", which `rfc/archive/vocabulary-wiring.md`'s Open question 9
 correctly names as a non-destination — *"'a later wave' is not a destination. **Needs either a
 work-register cluster or an owner-gated row**"* — enforcing there the warning its own §5c makes
 about items lost between waves.
@@ -624,7 +625,7 @@ The measurement is §4b. The dispositions that follow:
 - **The true residual, stated so it is not lost.** `irreversibility()` cannot return
   `clock_zeroed`, so the subkind can never become a **live pivotal marker**, only a
   transition observation. That asymmetry is real and is **not a defect**:
-  `rfc/live-marker-quality.md` is narrowing live `irreversibility` to `last_of_role`, which
+  `rfc/archive/live-marker-quality.md` is narrowing live `irreversibility` to `last_of_role`, which
   removes `pawn_break` and `castled` from the live surface too. A subkind absent from a
   surface that is being narrowed to one member is not dead vocabulary. **No row, no
   disposition, no work** — recorded here because "we checked and there is nothing" is a
@@ -719,13 +720,13 @@ all moved, and not one of them changed anything this RFC specifies.
   and is not a live description of the tree. **Re-routed:** the corrected figure belongs in
   `design/BACKLOG.md` ([[D105]], *"A `retryVariants` note names a pack that does not exist, and
   nothing can see it"*, already carries the 11-entry measurement and is the natural
-  host) and in `rfc/vocabulary-wiring.md` §7, which owns `variantOf`'s adoption and is still
+  host) and in `rfc/archive/vocabulary-wiring.md` §7, which owns `variantOf`'s adoption and is still
   implementing. Reported for claude to land; not made here.
-- **`rfc/live-marker-quality.md` (implementing)** — §4's residual sits in its territory and
+- **`rfc/archive/live-marker-quality.md` (implementing)** — §4's residual sits in its territory and
   proposes nothing. Its narrowing of live `irreversibility` to `last_of_role` is what makes
   `clock_zeroed`'s absence from the live surface a non-issue; that is a citation, not a
   dependency.
-- **`rfc/vocabulary-wiring.md` (implementing)** — its §7 owns `variantOf`'s adoption. §2 hands
+- **`rfc/archive/vocabulary-wiring.md` (implementing)** — its §7 owns `variantOf`'s adoption. §2 hands
   it the two new adopters as evidence, plus the correction above, and claims nothing.
 - **`rfc/graduation-clearance.md` (cross-reviewed, keeps pack 0.28)** — checked after it took
   the lane §6 recorded as free. **No overlap**: it claims a pack schema version and five
@@ -735,7 +736,7 @@ all moved, and not one of them changed anything this RFC specifies.
   entry condition requires (§2). §4a's entry condition, verified: *"it must arrive with a
   measured count of authored uses per member … **Measure before drafting**."* The register
   edit is the implementer's, in the landing commit.
-- **`rfc/engine-leverage.md`, `rfc/teacher-surface.md`, `rfc/feedback-delivery.md`,
+- **`rfc/archive/engine-leverage.md`, `rfc/teacher-surface.md`, `rfc/feedback-delivery.md`,
   `rfc/measurement-records.md`, `rfc/learner-rating.md`, `rfc/opponent-contracts.md`** — no
   shared resource, no shared file, no shared version lane. Checked, not assumed.
   `claim-backing`, `pack-graduation` and `evidence-at-runtime` were listed here as active
