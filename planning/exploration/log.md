@@ -3336,3 +3336,22 @@ Gate F or D560's content hold. R1 detection, R2 selection/significance, R5 rende
 R6 pack-stability research are now unblocked by the exact symbol/content inventory. A2 remains the
 predecessor for interaction-state guidance research. No product code, schema, content or design
 intent changed.
+
+## 2026-08-20 — Detection landscape measured; Q4c producer boundary answered
+
+R1 landed as `design/research/detection-landscape.md` with a disposable external-theme harness.
+The current “classifier” is now split into six evidence planes and exact board atoms are separated
+from semantic tactic/plan events. The candidate tables name sign, operands, grounding,
+exactness/confidence, abstention, cost and allowed consumer/refusal, including the owner's
+multi-ply threat and fianchetto/discovered-line examples.
+
+The empirical check replayed 50,000 Lichess puzzle records plus legal counterfactuals. Broad cheap
+geometry agreed poorly with semantic tags despite high recall: fork 32.3% precision, pin 39.0%,
+discovered attack 19.7%, hanging piece 7.9%. File-mirror invariance passed on 250 records. Lichess's
+own source adds consequence/value conditions and leaves overload unimplemented; its automatically
+generated, vote-refined tags are therefore an external disagreement set rather than ground truth.
+
+Q4c remains partial and K6 gains evidence toward firing for geometry-only generated explanations.
+R1 is done; R2 selection/significance and R3 presentation are still required before any semantic
+detector or guidance RFC. D560's content hold remains unchanged. No product implementation or
+content changed.

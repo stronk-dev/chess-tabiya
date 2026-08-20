@@ -108,6 +108,15 @@ evidence toward firing for the **generated/default delivery path**. K6 is still 
 selected, sign-aware detector layer plus cited authored/theory evidence has not yet been built or
 tested, so the criterion's “despite curated packs” clause remains unmeasured.
 
+**K6 fourth partial evidence, 2026-08-20.** R1
+(`design/research/detection-landscape.md`) tested the tempting “add the missing tactic detectors”
+remedy against 50,000 Lichess puzzle records. Cheap fork geometry was 32.3% precise against the
+external tag, discovered attack 19.7%, and hanging piece 7.9%; discovered-attack geometry also
+fired on 20.48% of legal alternatives to tagged solution moves. The external tags are automatic
+and incomplete, so this is not a grader. It is evidence that geometry-only names would preserve
+genericness. K6 remains open because composite consequence rules plus R2 selection have not been
+tested on the learner surface.
+
 ## Exploration-to-slice gate
 
 The first experimental vertical-slice RFC may open when all of the following have reached
@@ -160,7 +169,7 @@ live.
 | B1 | Shell and entry: stable Play/Learn/Review/Live/Create/Library/Settings routes; resume works | shipped — shell, routes, resume; `phase` projected (D6 closed by `defect-sweep`). Residual: `/settings` remains display-only |
 | B2 | Solo modes: Just Play + Line/Plan/Outcome/Trajectory each complete one fixture run | **shipped in full 2026-08-14** — all four drill modes plus the Just Play position player (`shape-library`); the justPlay/fromPosition capability rows are live |
 | B3 | Review: manual multi-branch selection, pair/multi compare, replay, deep mode, share/export, **plus branch groups — N candidates forked and played in parallel with resistance held constant** | shipped in full — N-way compare, simulate, prediction rendering, deep analysis, export, **and branch groups (2026-08-14)**. Residual: narrative mode + difference strips (forward-trace orphan, ledgered) |
-| B4 | Evidence: authored, Stockfish, Maia, corpus, Syzygy, features, LLM-rendered layers with timing controls | authored ✓, Stockfish ✓, Maia ✓, **corpus/recency ✓ (`runtime-corpus-evidence`)**, structural ✓ (B9), voice seam ✓. True residual: Syzygy runtime rendering + full evidence-bound LLM rendering |
+| B4 | Evidence: authored, Stockfish, Maia, corpus, Syzygy, features, LLM-rendered layers with timing controls | authored ✓, Stockfish ✓, Maia ✓, **corpus/recency ✓ (`runtime-corpus-evidence`)**, structural mechanics ✓ (B9), voice seam ✓. **R1 qualification:** the mechanics are not a semantic guidance layer — cheap fork/discovered/hanging geometry reached only 32.3/19.7/7.9% precision against external Lichess themes, and selection/presentation remain R2/R3. Residual: Syzygy runtime rendering + selected semantic evidence + full evidence-bound LLM rendering |
 | B5 | Live: Twitch host/chat/overlay, academy roles, external Arena handoff | shipped 2026-08-13 (`live-session-platform`) — roles, board control, spectate, chat voting, academy, Arena two-leg handoff. Native matchmaking stays outside minimal-real scope by design |
 | B6 | Create: pack studio/import/review/session-distill produces a validated fixture; corpus mining emits one candidate | shipped — mining (`candidate-emit`) plus studio write path, imports and publication channels. **Correction 2026-08-14 (forward trace): session distillation was claimed here and does NOT exist** — `session_distilled` is a reserved enum with zero producers; re-ledgered (`pack-studio`) |
 | B7 | Return: history/resume, progress, concept scheduling, related retry, recommendations | shipped 2026-08-13 (`return-and-progression`) — attempt scheduling, progress, `/learn`, duplicate, related retry. **Correction 2026-08-14 (forward trace): the opt-in recommender was claimed here and does NOT exist** — no route, disclaimed in the canonical doc; re-ledgered as an orphan. Cross-pack concept identity deliberately absent (a studio/B11 contract) |

@@ -94,3 +94,24 @@ Append-only. Record research, rulings, RFC transitions, implementation closeout 
 - Updated the capability map with explicit state tokens and linked
   `capability-reality-audit.md`. R1, R2, R5 and R6 are now unblocked. A2 still gates interaction UX
   evidence because current resting-layout checks do not prove post-gesture board correctness.
+
+## 2026-08-20 — R1 separated atomic facts from semantic chess events
+
+- Landed `design/research/detection-landscape.md` and the disposable
+  `tools/detection-landscape-harness/`. The dossier replaces the monolithic-classifier framing
+  with six evidence planes: rules/board, transition/bounded consequence, search/engine/tablebase,
+  human corpus/model, theory catalogue and authored truth.
+- Replayed 50,000 complete records from a digested bounded prefix of the official Lichess CC0
+  puzzle export, including the whole solution line, legal alternatives at the first solution move,
+  hard-negative IDs and 250 file mirrors. Cheap fork geometry reached 100.0% recall but 32.3%
+  precision against the tag; discovered attack 19.7%, hanging piece 7.9% and absolute pin 39.0%.
+- Read the official AGPL tagger rather than treating its output as truth. Its semantic rules add
+  material, moved-piece safety and functional consequence; `overloading()` is unimplemented and
+  the export is automatically tagged then vote-refined. Lichess is now explicitly a disagreement
+  corpus, not Tabiya's ontology.
+- Recorded D565-D568. The sharp code defect is D566: `pawn_safe_square.safe` ignores its own
+  `captureAttackers` collection and legal/path occupancy, so the learner-visible name overclaims
+  the computed projection.
+- Updated Q4c and B4 without declaring them complete. R1 settles the producer/grounding boundary;
+  R2 still owns relevance, sign and admission, R3 presentation, and reader validation remains
+  external. No product RFC, product code, schema or content changed.
