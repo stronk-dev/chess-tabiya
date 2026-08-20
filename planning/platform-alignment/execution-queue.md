@@ -39,7 +39,7 @@ action; measurement instruments do not share the tested defect's assumption.
 |---|---|---|---|
 | 2.1 | R1 detection landscape and validation corpus | **DONE 2026-08-20** | Six evidence planes; cheap semantic labels refused |
 | 2.2 | R2 sign/relevance/selection measurement | **DONE 2026-08-20** | Local selector clears volume/specificity; rarity refused as significance; semantic eligibility remains separate |
-| 2.3 | R3 evidence presentation prototypes/tests | **MECHANICAL/DESK DONE; PARTICIPANT PROTOCOL READY 2026-08-20; EXTERNAL to complete** | Eight-module boundary, current-surface census and preregistered 12-learner workflow protocol landed; valid interaction runs and recruited participants remain external |
+| 2.3 | R3 evidence presentation prototypes/tests | **MECHANICAL/DESK/RESPONSIVE PROTOTYPE DONE; PARTICIPANT PROTOCOL READY 2026-08-20; EXTERNAL to complete** | Nine-module/five-preset/six-workflow boundary, current-surface census, responsive artifact and preregistered 12-learner protocol landed; recruited participant comprehension remains external |
 | 2.4 | R5 renderer evaluation | **DONE 2026-08-20** | Deterministic fallback passed; hosted free prose is provider-dependent, typed schema/IDs did not preserve citations, and the 360M local arm failed the safety contract |
 | 2.5 | R6 pack stability/migration/re-author audit | **DONE 2026-08-20 — Gate F FAIL** | 92-document compatibility and history census landed; F3 model narrowed, but capability negotiation, migrations, owner budget and pilot coverage are absent |
 

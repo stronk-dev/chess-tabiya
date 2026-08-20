@@ -1,6 +1,6 @@
 # R3 evidence-presentation participant plan
 
-**Status:** preregistered protocol; external recruitment and runs not started
+**Status:** preregistered protocol and responsive disposable prototype ready; external recruitment and runs not started
 
 **Authority:** platform-alignment R3; owner rulings D617–D619
 
@@ -36,6 +36,11 @@ no-relevant-evidence state and an unavailable-provider state.
 Every registered primitive shown by the prototype must resolve to exactly one location: normal
 module composition, learner-safe Customize, full inspector, or author/operator-only disposition.
 The participant is never asked to understand those implementation categories.
+
+The executable artifact is `tools/r3-presentation-harness/prototype.html`. It uses synthetic
+fixture text only and implements the five preset candidates, six workflow ceilings and three
+required evidence states. Its unit tests and desktop/phone visual QA establish buildability only;
+facilitators must not treat the prototype copy as validated UX.
 
 ## Participants and devices
 

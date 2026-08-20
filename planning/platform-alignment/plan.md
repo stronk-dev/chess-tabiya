@@ -230,8 +230,8 @@ producer registry's eight free-text surface labels intersect none of the seven c
 surface IDs, so the central producer→consumer join remains unimplemented rather than merely
 undocumented. R1 and R2 have since landed: six evidence planes, followed by the measured split
 between semantic eligibility and local selection/budget. A2 has also landed: the exact-UCI
-instrument confirms the shipped interaction floor fails and unblocks only R3's disposable
-prototype/mechanical arms; participant completion remains external. R6 has now landed as a
+instrument confirms the shipped interaction floor fails; R3's disposable prototype/mechanical
+arms are now complete and participant comprehension remains external. R6 has now landed as a
 negative Gate-F result: syntax admission is broad, but capability negotiation, reusable migrations,
 owner re-authoring budget and primitive-complete pilot coverage do not exist.
 
@@ -248,7 +248,7 @@ cards and dependencies are in `execution-queue.md`; the current frontier is:
 3. R3 interaction/participant exit when the board and participant authority are available;
 4. R13 grounded coaching aggregation once R7's exact predecessor clears.
 
-R3's mechanical/desk arm, R4, R5, R18's mechanical/code/desk arm, the capability-watch instrument/forum sweep and R12's short-session arm are complete. R18 proves the provider-off core but fails the present 1.0 platform floor and makes O13 ready; participant accessibility remains external. The watch closes D556 and D554's targeted desk/forum arm while leaving comparable hands-on inside its consumer studies. R12 supports continuous
+R3's mechanical/desk/responsive-prototype arm, R4, R5, R18's mechanical/code/desk arm, the capability-watch instrument/forum sweep and R12's short-session arm are complete. R18 proves the provider-off core but fails the present 1.0 platform floor and makes O13 ready; participant accessibility remains external. The watch closes D556 and D554's targeted desk/forum arm while leaving comparable hands-on inside its consumer studies. R12 supports continuous
 literal habit cards but refuses natural archetypes; its longitudinal transfer remains external.
 R11's mechanical arm is also complete and
 supports a layered bot-policy candidate, but its human-likeness/coherence claim remains external.

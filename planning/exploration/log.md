@@ -3530,3 +3530,19 @@ claim is grounded cross-workflow integration plus preserved N-way consequence co
 hands-on R3/R7/R8/R11 work. Its intent presets and evidence-shaped theory hints support D619; its
 pre-commit move grading remains refused outside explicit Support. No product code, schema, protected
 design intent or authored chess content changed; D560 remains active.
+
+## 2026-08-20 — R3's participant workflow artifact became executable
+
+The disposable R3 harness now contains nine evidence modules, five assistance presets and six
+workflow ceilings plus a responsive participant artifact. Seventeen synthetic tests prove the
+Support-only warning boundary, Theory-only isolation, consumer/timing/budget admission, honest
+empty versus unavailable states, suppressive ceilings and a configuration disposition for every
+module. D628 closes in the instrument after the prior eight-module contract was found unable to
+represent the owner's ruled blunder-prevention boundary.
+
+Headless visual QA exercised Just Play Support at 1440×1000 and post-commit Guided Rehearsal at
+390×844. The expected warning/nudge rendered and the phone document stayed at 390 px; one hidden
+result container that still painted an empty bar was caught and fixed. This proves buildability,
+not comprehension. R3 remains external until 12 nontechnical participants meet the preregistered
+workflow/disclosure thresholds. No product code, schema, protected design intent or authored chess
+content changed; D560 remains active.

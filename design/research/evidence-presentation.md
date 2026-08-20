@@ -57,8 +57,8 @@ The pass used four evidence sources:
    occupied-square selections**. This exactly reproduces the shipped square filter and mark
    expansion; it does not claim that every square is equally likely to be selected.
 3. `[V]` Synthetic, explicitly non-chess fixtures exercising zero/one/many facts, abstention,
-   consumer mismatch, disclosure order and move/PV leakage against eight module contracts. Five
-   tests pass. No fixture asserts chess truth.
+   consumer mismatch, disclosure order and move/PV leakage against nine module contracts plus five
+   preset compositions and six workflow ceilings. Seventeen tests pass. No fixture asserts chess truth.
 4. `[V]` Current official descriptions of Chess.com Game Review and Chessiverse Guided Play,
    W3C interaction requirements, plus `[P]` transfer evidence from tutoring and alert research.
    Vendor descriptions establish what a competitor says it offers, not effectiveness.
@@ -183,7 +183,7 @@ links poor response to repeated, low-information alerts.
 11-caption/19-mark tail and R2's measured low-information families, it makes **volume and repetition
 explicit test variables**. It does not justify a clinical safety claim about chess software.
 
-## 6. Disposable module contracts
+## 6. Disposable module and workflow contracts
 
 The harness makes the missing layer concrete:
 
@@ -191,6 +191,7 @@ The harness makes the missing layer concrete:
 |---|---|---|---|---:|---|
 | Rules floor | Make legal interaction visible | pre-commit | automatic | 0 evidence facts | refused |
 | Sight on request | Answer one concrete board-sight question | pre-commit | request | 1 | refused; **owner-approved research candidate** |
+| Blunder prevention | Warn on a validated staged-move risk only inside Support | pre-commit | explicit preset | 1 | refused |
 | Post-commit nudge | Name consequences of the played move | post-commit | automatic | 2 | refused |
 | Guided hint | Reveal progressively after consent | disclosed | request | 2/stage | final stage only |
 | Compare coach | Name the smallest grounded branch difference | disclosed | request | 2 | refused |
@@ -214,6 +215,20 @@ Every module declares:
 - provenance and LLM-off renderer;
 - touch, pointer and keyboard paths.
 
+`[V]` The executable workflow compiler now supplies five assistance presets—Quiet, Guide me,
+Theory only, Support and Analyze—inside six workflow contracts. A session ceiling is a set
+intersection and therefore can only remove a module. Support is legal only in Just Play; Guided
+Rehearsal and Campaign reject it rather than hiding an active warning. Theory only compiles to the
+rules floor plus cited theory and contains no warning, evaluation, candidate or inspector consumer.
+(`tools/r3-presentation-harness/workflow-contract.ts`; 17 passing tests)
+
+`[V]` A disposable responsive participant artifact now exercises those states at
+`tools/r3-presentation-harness/prototype.html`. It includes eligible, honest-empty and
+optional-provider-unavailable scenarios, an advanced module disposition view and keyboard-addressable
+square controls. Headless visual QA at 1440×1000 and 390×844 confirmed the Support warning and
+post-commit Guided nudge paths; the mobile document width was exactly 390 px. This is instrument
+buildability evidence, not participant comprehension.
+
 `[V]` W3C requires hover/focus content to be dismissible, hoverable and persistent, and recommends
 that hover-triggered content also be available on keyboard focus.
 ([WCAG 2.2 hover/focus guidance](https://www.w3.org/WAI/WCAG22/Understanding/content-on-hover-or-focus.html))
@@ -226,7 +241,8 @@ hover-to-light may be a convenience, never the sole discovery or activation path
 
 ## 7. Workflow-preset candidates for the participant arm
 
-These are task labels to test, not settings to ship:
+These are task labels to test, not settings to ship. The prototype presents assistance presets
+inside them; a workflow is not itself another assistance level:
 
 | Candidate preset | Default modules | Advanced escape hatch |
 |---|---|---|
@@ -261,7 +277,7 @@ The evidence permits these narrow decisions:
 5. `[M]` Carry the six workflow candidates into R3/R9 participant work; do not rule defaults from
    competitor pages or this source audit.
 
-The pass does **not** permit an assistance RFC, preset implementation, pre-commit blunder guard,
+The pass does **not** permit an assistance RFC, product preset implementation, pre-commit blunder guard,
 semantic detector, content wave or claim that the UX is understood by nontechnical chess players.
 
 ## 9. Residual work and exact exit

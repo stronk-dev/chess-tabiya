@@ -9,6 +9,7 @@ import { structuralReading } from "@chess-tabiya/runtime";
 
 import { transitions } from "../r1r2-primitives-harness/corpus.js";
 import { MODULES, compileModulePacket, type EvidenceFact } from "./module-contract.js";
+import { PRESETS, WORKFLOWS, compileWorkflow, moduleDisposition } from "./workflow-contract.js";
 
 const ROOT = new URL("../../", import.meta.url);
 const OUTPUT = new URL("./output.md", import.meta.url).pathname;
@@ -134,5 +135,45 @@ describe("R3 disposable module compiler", () => {
     expect(compileModulePacket(module("postcommit_nudge"), [fixture({ recommendedMoveUci: "e2e4" })]).abstained).toBe(true);
     expect(compileModulePacket(module("compare_coach"), [fixture({ availableAt: "disclosed", principalVariation: ["e2e4", "e7e5"] })]).abstained).toBe(true);
     expect(compileModulePacket(module("guided_hint"), [fixture({ availableAt: "disclosed", recommendedMoveUci: "e2e4" })]).facts).toHaveLength(1);
+  });
+
+  it("admits a warning only to explicit Support and never carries an alternative", () => {
+    const warning = fixture({
+      id: "risk-1",
+      allowedConsumers: ["blunder_prevention"],
+      availableAt: "precommit",
+      sign: "state",
+    });
+    expect(compileModulePacket(module("blunder_prevention"), [warning]).facts).toHaveLength(1);
+    expect(compileModulePacket(module("blunder_prevention"), [warning, { ...warning, id: "risk-2", recommendedMoveUci: "e2e4" }]).facts).toHaveLength(1);
+  });
+});
+
+describe("R3 disposable workflow compiler", () => {
+  const preset = (id: string) => PRESETS.find((candidate) => candidate.id === id)!;
+  const workflow = (id: string) => WORKFLOWS.find((candidate) => candidate.id === id)!;
+
+  it("keeps Quiet and Theory only free of evaluation, candidate and warning consumers", () => {
+    expect(compileWorkflow(workflow("just_play"), preset("quiet")).modules).toEqual(["rules_floor"]);
+    expect(compileWorkflow(workflow("learn_position"), preset("theory_only")).modules).toEqual(["rules_floor", "theory_breadcrumb"]);
+  });
+
+  it("makes proactive warning an explicit Just Play Support capability", () => {
+    expect(compileWorkflow(workflow("just_play"), preset("support")).modules).toContain("blunder_prevention");
+    expect(workflow("guided_rehearsal").allowedPresets).not.toContain("support");
+    expect(workflow("campaign").allowedPresets).not.toContain("support");
+  });
+
+  it("allows a session ceiling only to remove modules", () => {
+    const campaign = workflow("campaign");
+    const compiled = compileWorkflow(campaign, preset("guided"));
+    expect(compiled.modules.every((id) => campaign.ceiling.includes(id))).toBe(true);
+    expect(() => compileWorkflow(campaign, preset("support"))).toThrow(/not allowed/);
+  });
+
+  it("gives every registered module exactly one configuration disposition", () => {
+    const dispositions = MODULES.map((item) => moduleDisposition(item.id));
+    expect(dispositions).toHaveLength(MODULES.length);
+    expect(dispositions.every((value) => ["normal", "advanced", "inspector", "operator"].includes(value))).toBe(true);
   });
 });

@@ -21,6 +21,7 @@ Disposable research output; not a product specification.
 |---|---|---|---|---:|---|---|
 | rules_floor | Show legal interaction affordances, not advice. | precommit | automatic | 0 | refused | existing_policy |
 | sight_on_request | Answer one concrete board-sight question without ranking moves. | precommit | on_request | 1 | refused | owner_ruled_candidate |
+| blunder_prevention | Warn about a validated staged-move risk only inside explicit Support, without naming an alternative. | precommit | explicit_preset | 1 | refused | owner_ruled_candidate |
 | postcommit_nudge | Name at most two consequences of the move just played. | postcommit | automatic | 2 | refused | research_candidate |
 | guided_hint | Reveal a progressive hint only after an explicit request and disclosure. | disclosed | on_request | 2 | allowed only at this boundary | research_candidate |
 | compare_coach | Name the smallest grounded difference between preserved attempts. | disclosed | on_request | 2 | refused | research_candidate |

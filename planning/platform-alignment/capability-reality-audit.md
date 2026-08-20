@@ -139,9 +139,9 @@ parallel implementation of each primitive.
 ## Queue consequences
 
 1. Unblock R1, R2, R5 and R6 with this exact symbol/content inventory.
-2. Start R3's disposable prototype/mechanical arms with A2's exact-UCI interaction contract; keep
-   its participant/default-preset exit external and do not use the shipped defective board as a
-   working baseline.
+2. R3's disposable prototype/mechanical arms are complete against A2's exact-UCI interaction
+   contract. Its participant/default-preset exit remains external; do not use the shipped defective
+   board as a working baseline.
 3. Amend the capability map's human-play reality immediately; research still owns the 1.0 scope,
    but it must compare native/adaptor/defer against code that already exists.
 4. Treat teacher as unbuilt even though Live is real; treat streamer as mechanical even though the

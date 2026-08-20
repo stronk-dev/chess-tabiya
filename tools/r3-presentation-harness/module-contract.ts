@@ -3,6 +3,7 @@
 export type GuidanceModuleId =
   | "rules_floor"
   | "sight_on_request"
+  | "blunder_prevention"
   | "postcommit_nudge"
   | "guided_hint"
   | "compare_coach"
@@ -33,7 +34,7 @@ export interface GuidanceModuleContract {
   readonly id: GuidanceModuleId;
   readonly intent: string;
   readonly timing: Timing;
-  readonly activation: "automatic" | "on_request" | "explicit_mode";
+  readonly activation: "automatic" | "on_request" | "explicit_preset" | "explicit_mode";
   readonly maxFacts: number;
   readonly forms: readonly GuidanceForm[];
   readonly allowsRecommendedMove: boolean;
@@ -57,6 +58,7 @@ const TIMING_ORDER: Record<Timing, number> = {
 export const MODULES: readonly GuidanceModuleContract[] = Object.freeze([
   { id: "rules_floor", intent: "Show legal interaction affordances, not advice.", timing: "precommit", activation: "automatic", maxFacts: 0, forms: ["square"], allowsRecommendedMove: false, status: "existing_policy" },
   { id: "sight_on_request", intent: "Answer one concrete board-sight question without ranking moves.", timing: "precommit", activation: "on_request", maxFacts: 1, forms: ["sentence", "square", "arrow"], allowsRecommendedMove: false, status: "owner_ruled_candidate" },
+  { id: "blunder_prevention", intent: "Warn about a validated staged-move risk only inside explicit Support, without naming an alternative.", timing: "precommit", activation: "explicit_preset", maxFacts: 1, forms: ["sentence", "square"], allowsRecommendedMove: false, status: "owner_ruled_candidate" },
   { id: "postcommit_nudge", intent: "Name at most two consequences of the move just played.", timing: "postcommit", activation: "automatic", maxFacts: 2, forms: ["sentence", "square", "arrow"], allowsRecommendedMove: false, status: "research_candidate" },
   { id: "guided_hint", intent: "Reveal a progressive hint only after an explicit request and disclosure.", timing: "disclosed", activation: "on_request", maxFacts: 2, forms: ["sentence", "square", "arrow", "audio"], allowsRecommendedMove: true, status: "research_candidate" },
   { id: "compare_coach", intent: "Name the smallest grounded difference between preserved attempts.", timing: "disclosed", activation: "on_request", maxFacts: 2, forms: ["sentence", "square", "panel"], allowsRecommendedMove: false, status: "research_candidate" },

@@ -392,3 +392,22 @@ Append-only. Record research, rulings, RFC transitions, implementation closeout 
   This feeds the D619/R3 workflow prototype rather than authorizing product implementation.
 - Comparable hands-on remains in R3/R7/R8/R11/R15-R17. No product code, schema, protected design
   intent or authored chess content changed; D560 remains active.
+
+## 2026-08-20 — R3 gained an executable workflow/preset/ceiling prototype
+
+- Found D628 before participant use: the eight-module contract described explicit Support but had
+  no blunder-prevention consumer or executable session ceiling. Added a ninth synthetic warning
+  module that rejects alternative moves/PVs and may appear only in Just Play Support.
+- Added five preset compositions (Quiet, Guide me, Theory only, Support, Analyze) inside six
+  workflow contracts. A ceiling is a set intersection and only removes capability; Guided
+  Rehearsal/Campaign reject Support and Theory only contains only legal interaction plus cited
+  theory.
+- Added a responsive static participant artifact with eligible, honest-empty and unavailable-source
+  states, advanced module dispositions and keyboard-addressable squares. All chess-like copy is
+  labelled synthetic fixture text.
+- Seventeen tests pass. Headless visual QA at 1440×1000 and 390×844 exercised Support and
+  post-commit Guided paths; expected modules rendered and the phone width stayed exact. One hidden
+  result bar was fixed from the rendered screenshot.
+- R3 remains external-to-complete: buildability is not nontechnical-player comprehension and no
+  preset/default is validated for production. No product code, schema, protected design intent or
+  authored chess content changed; D560 remains active.
