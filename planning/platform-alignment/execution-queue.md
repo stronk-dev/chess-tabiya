@@ -19,6 +19,7 @@ dependency edge, they may not.
 | 0.5 | Implement accepted incomplete RFC work | **BLOCKED by worktree coordination and named alignment gates** | Feedback Stage 1 first reconciles its CR1 records; graduation may implement after overlap clears; teacher waits on R15/O11 or amendment |
 | 0.6 | A3/A4 detector semantics and evidence-topology baselines | **DONE 2026-08-20** | 18+6 detector-family conformance and 14-producer topology are executable; current production admits no universal learner family and has no compiled module/workflow join |
 | 0.7 | A5 workflow/default conformance | **DONE 2026-08-20** | Six technical profiles/54 raw controls collapse to one unnamed default; only 2/6 intended workflows bind directly and the session-kind ceiling is still invariant |
+| 0.8 | A6 research sufficiency join | **DONE 2026-08-20** | `research-sufficiency.md`; only F1/F12 are architecture-research-ready, both blocked by protected intent/process; every F2-F11 empirical predecessor named |
 
 **Phase exit:** registers reflect code; no stale “shipped” claim; every active RFC has a legal next
 action; measurement instruments do not share the tested defect's assumption.

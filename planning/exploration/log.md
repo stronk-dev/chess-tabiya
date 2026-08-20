@@ -3612,3 +3612,16 @@ and two A1-proven integration journeys. No active product RFC is complete: two a
 feedback delivery is accepted with inconsistent dirty Stage-1 records, and six are draft/returned.
 The correction changes queue truth but authorises no feature implementation, content wave or
 protected design edit. D560 and Gate F remain active.
+
+## 2026-08-20 — research sufficiency was joined to the RFC graph
+
+The D639 harness covers all 19 research, 15 decision and 12 candidate-RFC nodes. It classifies five
+research nodes complete, four partial/external, one external-ready and nine blocked. The result
+rejects the blanket statement that the whole program still needs more research: F1 evidence
+architecture and F12 Choice-C release architecture have enough evidence, but their protected
+intent/process gates remain open. F2-F11 each retain a named empirical predecessor.
+
+`planning/platform-alignment/research-sufficiency.md` records which remaining claims require real
+learners, coaches, blind bot reviewers, the owner campaign pilot or social operating evidence.
+Another repository census cannot substitute for those observations. No RFC was drafted and no
+product code, schema, protected design intent or content changed; D560 remains active.

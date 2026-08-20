@@ -247,13 +247,18 @@ a dated checkpoint, not a replacement for `rfc/README.md`.
 
 ## First executable queue
 
-The next safe queue is research and reconciliation, not feature implementation. Detailed job
+The next safe queue is authority reconciliation plus the named external studies, not broad feature
+implementation or more undirected desk research. Detailed job
 cards and dependencies are in `execution-queue.md`; the current frontier is:
 
 1. prepare R11's matched blind multi-ply review set, then run it with external reviewers;
 2. run D554's comparable hands-on work within R3/R7/R8/R11/R15-R17; the targeted forum arm has zero unchecked signals;
 3. R3 interaction/participant exit when the board and participant authority are available;
 4. R13 grounded coaching aggregation once R7's exact predecessor clears.
+
+A6 now proves F1 and F12 have sufficient architecture research. They remain blocked by protected
+intent/process: O1/O13 must be mirrored into living design and the shared-register/lifecycle drafts
+must settle before F1. F2-F11 remain research-blocked by their named learner/workflow evidence.
 
 R3's mechanical/desk/responsive-prototype arm, R4, R5, R18's mechanical/code/desk arm, the capability-watch instrument/forum sweep and R12's short-session arm are complete. R18 proves the provider-off core but fails the present 1.0 platform floor and makes O13 ready; participant accessibility remains external. The watch closes D556 and D554's targeted desk/forum arm while leaving comparable hands-on inside its consumer studies. R12 supports continuous
 literal habit cards but refuses natural archetypes; its longitudinal transfer remains external.

@@ -499,3 +499,17 @@ Append-only. Record research, rulings, RFC transitions, implementation closeout 
   measurement/log preserves the invalid one-ply 100% result while the later diagnostic measures
   properly-shaped N=8 continuations at 27.6-35.7%. Stage 1 must append/reconcile before landing;
   Stage 2 remains separate and D560's content hold remains active.
+
+## 2026-08-20 — A6 separated missing research from missing authority
+
+- Audited all R1-R19 against O1-O14 and F1-F12 with an executable completeness register.
+- Five research nodes are internally complete, four are partial/external, one has an external-ready
+  protocol only, and nine are blocked behind named predecessors.
+- F1 and F12 are the only architecture-research-ready candidate RFC nodes. F1 waits on protected
+  O1 intent plus the shared-register/lifecycle process; F12 waits on the protected O13 Choice-C
+  design amendment. Neither needs another broad desk taxonomy before that work.
+- F2-F11 remain research-blocked. Their residues are human/workflow claims: detector admission,
+  exact guidance defaults, Review Map action, theory transfer, blind bot human-likeness,
+  longitudinal coaching, campaign experience, coach/streamer jobs and social trust.
+- Closed D639. No product code, schema, protected design intent or authored content changed; D560
+  and Gate F remain active.
