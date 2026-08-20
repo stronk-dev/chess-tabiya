@@ -54,7 +54,7 @@ schema evolution.
 | 3.2 | R8 theory↔drill workflow | WAIT | R3 only; R1/R2/R4 complete |
 | 3.3 | R12 player metrics | **SHORT-SESSION ARM DONE 2026-08-20; longitudinal transfer external** | 12/16 literal metrics retained with 25–200-game floors; individual vector passes, archetypes fail; production admission remains O2/O9 and R13 |
 | 3.4 | R13 grounded coaching aggregates | WAIT | R7/R12 |
-| 3.5 | R14 campaign experiential closure | WAIT | playable interaction-correct pilot |
+| 3.5 | R14 campaign experiential closure | **PROTOCOL READY; WAIT on D537/D573 + admitted real R3 packet** | three-phase owner pilot preregistered; no campaign UI or participant result manufactured |
 | 3.6 | R10 learning-effect experiments | WAIT/EXTERNAL | representative pilot and participants |
 
 **Phase exit:** O7–O10 ruled; individual 1.0 core scope frozen in living design.

@@ -411,3 +411,19 @@ Append-only. Record research, rulings, RFC transitions, implementation closeout 
 - R3 remains external-to-complete: buildability is not nontechnical-player comprehension and no
   preset/default is validated for production. No product code, schema, protected design intent or
   authored chess content changed; D560 remains active.
+
+## 2026-08-20 — R14 campaign closure gained an honest, narrowed owner protocol
+
+- Corrected the authoritative campaign queue's stale “nobody played since 2026-08-12” statement:
+  the 2026-08-16 app audit completed/forked/compared a four-ply fixture. The missing evidence is the
+  owner playing real content for attention/value, not runtime execution.
+- Narrowed R6 to its only open part—a count budget on retries—and R7 to the felt effect of an
+  explicitly suppressed module. Existing rewind location/play-out rules and D619 preset/ceiling
+  architecture are not reopened.
+- Preregistered a three-phase owner pilot with separate R8/R6/R7 probes and refusal criteria. The
+  current mechanical filter selects horizons 14/18/40 with 5/7/12 authored deviations; file digests
+  are recorded and must be re-derived at session HEAD.
+- The protocol remains blocked by D537/D573 and a real admitted R3 packet. It does not use broken
+  board interaction or synthetic facts as campaign preference evidence, and it does not authorize
+  F10. No product code, schema, protected design intent or authored content changed; D560 remains
+  active.

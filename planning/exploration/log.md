@@ -3546,3 +3546,18 @@ result container that still painted an empty bar was caught and fixed. This prov
 not comprehension. R3 remains external until 12 nontechnical participants meet the preregistered
 workflow/disclosure thresholds. No product code, schema, protected design intent or authored chess
 content changed; D560 remains active.
+
+## 2026-08-20 — campaign R6–R8 were reconciled to their real experiential residue
+
+Corrected `planning/campaign-research-queue.md`: the 2026-08-16 fixture run did terminate, fork and
+compare, so “nobody has played” was false; what remains is the owner on real content. R6 now tests
+only a retry-count denial because rewind location and consequence-before-rewind are settled. R7 now
+tests whether a D619-style suppressive module ceiling feels legible/useful, not whether presets,
+Theory only or honesty/configuration separation exist. D489 closes in the authoritative queue.
+
+Preregistered the R14 owner pilot over a mechanically selected opening/middlegame/endgame trio and
+recorded the current pack digests. It preserves separate R8, R6 and R7 exits and cannot average a
+failed loop into a positive campaign verdict. The run remains blocked by D537/D573 exact interaction
+and a real compiler-admitted R3 packet; synthetic fixture copy is explicitly insufficient. No
+Campaign RFC or product implementation is authorised. No product code, schema, protected design
+intent or authored chess content changed; D560 remains active.

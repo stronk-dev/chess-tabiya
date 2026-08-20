@@ -1,6 +1,8 @@
 # Campaign & primitives — the research owed before design
 
-**Status: research tier. Nothing here may become an RFC yet.**
+**Status: research tier reconciled 2026-08-20.** The session-independent evidence already earned
+`design/06-campaign.md`; that document is intent, not implementation authority. No campaign RFC may
+be drafted until the narrowed R6–R8 experiential closure feeds platform R14/O10.
 
 On 2026-08-15 the owner generated a large, coherent cluster of product ideas —
 move primitives, "build your coach", campaign constraints, time controls, the
@@ -16,9 +18,11 @@ holds only *what must be learned first*.
 
 ## Ordering principle
 
-The standing sequencing ruling governs: **the campaign wraps the core loop**, so
-questions whose answers change with the owner's first play session are ordered
-*after* it. Questions independent of the session can run now.
+The standing sequencing ruling governs: **the campaign wraps the core loop**, so the three
+remaining experiential residues wait on an interaction-correct owner session with real content.
+The 2026-08-16 app audit did play, terminate, fork and compare a four-ply schema fixture; that proves
+the mechanic can execute, not that a real loop holds attention. Questions independent of the
+session are already answered below.
 
 ## Now — session-independent
 
@@ -36,13 +40,13 @@ questions whose answers change with the owner's first play session are ordered
 **All six session-independent questions are answered.** Four of the six refuted or
 inverted the assumption they were testing. What remains is the post-session set below.
 
-## After the session — the loop must be felt first
+## Experiential closure — the loop must be felt on real content
 
 | # | Question | Why it waits |
 |---|---|---|
-| R6 | Does a rewind budget preserve or destroy punishment-free experimentation? | It touches a thesis-level property and an in-run invariant (`05` §1). The invariant review attached to the first session is the instrument that answers it; guessing beforehand risks designing against a feeling nobody has had yet |
-| R7 | What does assistance-as-inventory feel like when you *lack* a rung you need? | The whole synergy claim ("a noob beats an IM boss with the right coach") depends on scarcity being interesting rather than frustrating. Unknowable from a document |
-| R8 | Is the drill loop itself worth wrapping? | Bluntly: if the core loop does not hold attention for one session, the campaign is scaffolding around a void. **Nobody has played a run since 2026-08-12** |
+| R6 | **NARROWED:** does a *count* budget on retries preserve or destroy punishment-free experimentation? Rewind location and “play the consequence before rewind” are already resolved; the latter is the core rule. | It touches a thesis-level property and an in-run invariant (`05` §1). The session must test only the remaining count/scarcity question rather than reopening the settled location/play-out rules. |
+| R7 | **NARROWED:** when the preset/session ceiling withholds a module the learner wants, is the absence legible and interesting or merely frustrating? | D619/R3 now settle the architecture: presets cannot raise a ceiling, Theory only/empty are first-class, rarity cannot price value. The session tests scarcity tuning and payoff, not whether the primitive/configuration split exists. |
+| R8 | Is the drill loop itself worth wrapping? | A fixture run executed on 2026-08-16 (`planning/research-queue.md` Q-01; `app-reality-check.md` §6), correcting the stale “nobody played” claim. What remains is the owner playing real content to termination, with a real engine and invariant review, after D537/D573 restore exact interaction. If that loop does not hold attention, the campaign is scaffolding around a void. |
 
 ## Explicitly not research — already decided
 
@@ -56,7 +60,7 @@ inverted the assumption they were testing. What remains is the post-session set 
 
 ## What the answers feed
 
-When R1–R5 land, the cluster earns **one design doc** — not six ledger rows
-reassembled from memory — covering: the map, encounters, inventory, constraints,
-resources, and bosses as a single architecture. R6–R8 then either confirm it or
-rewrite it, which is exactly why they come after the session and not before.
+R1–R5/R9/R11 earned **one design doc** — `design/06-campaign.md` — rather than six ledger
+rows reassembled from memory. R6–R8 now feed platform R14/O10: they either support shipping that
+wrapper in 1.0, narrow it, or defer it. Only an O10 “ship” ruling may open F10; the old thematic
+queue is not RFC authority.
