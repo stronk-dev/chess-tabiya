@@ -26,7 +26,7 @@ action; measurement instruments do not share the tested defect's assumption.
 | Order | Job | State | Deliverable / closeout |
 |---|---|---|---|
 | 1.1 | R4 knowledge retrieval experiment | **DONE 2026-08-20** | 17 registered sources, 55 passages, 144 queries, six arms and lifecycle controls landed; semantic extraction refused for 1.0 |
-| 1.2 | R11 bot-policy research | **READY NOW** | `design/research/bot-policy.md`, harness/results, H5/C5 updates |
+| 1.2 | R11 bot-policy research | **MECHANICAL DONE; EXTERNAL arm remains** | `design/research/bot-policy.md`, harness/results and H5/C5 update landed; generate matched blind 10–20-ply continuations, then recruit reviewers |
 | 1.3 | R18 self-host/privacy/accessibility/rights audit | **READY NOW** | Dossier, platform acceptance floors and Q2/Q3 updates |
 | 1.4 | Competitor capability-watch instrument | **READY NOW** | Dated capability-first register with canonical identities and routing; no clone-count objective |
 | 1.5 | R9 learner/coach protocol | READY to design; **EXTERNAL to complete** | Preregistered script/tasks/sample; participant work only with owner authority |

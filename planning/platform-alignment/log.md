@@ -232,3 +232,24 @@ Append-only. Record research, rulings, RFC transitions, implementation closeout 
   with any LLM optional, post-selection and conformance-gated; provenance, disclosure, numbers and
   visual bindings remain deterministic. R5 is done; O4 now waits on R3 only. No product code,
   schema, content or design intent changed; D560 remains active.
+
+## 2026-08-20 — R11 separated played policy from raw Maia mass
+
+- Landed `design/research/bot-policy.md` and the disposable
+  `tools/r11-bot-policy-harness/` over the fixed R9/R12 population: 279 positions × bands
+  1400/1600/1800, joined to Lichess explorer and every-legal-move Stockfish depth-12 values.
+- Discarded the first run after inspecting the pinned engine: emitted `policy` is raw softmax,
+  while production `bestmove` applies temperature 0.8 and top-p 0.92. The repaired reconstruction
+  predicts 19.84 cp loss / 0.39% severe mass, matching the captured sample at 19.57 / 0.36%; raw
+  policy's 59.13 cp was not the bot's played distribution.
+- The 250 cp guard passed its mechanical gate with 1.27 cp strengthening and complete removal of
+  measured severe mass. Pawn ×4 passed its declared-trait gate at +11.97 pp; forcing/quiet ×3
+  failed at +3.02/+2.24 pp. None earns a human-like/coherent/style label.
+- Corrected D590: Tabiya's pinned Maia already conditions on history and prior R9 evidence had
+  measured the effect. Otter motivates a capability adapter and exposes the remaining clock/time
+  gap; it does not diagnose current Maia as position-only. Recorded D593-D596.
+- Chessiverse's first-party account separates candidate curation, opening repertoire, measured
+  output traits and presentation persona. Its repeat-loss adaptation is roadmap, not shipped fact.
+- R11 is mechanical-done and external-to-complete. H5's main claim and C5 remain unmet pending the
+  predeclared blinded 10–20-ply branch review. No product code, schema, content or design intent
+  changed; D560's content hold remains active.

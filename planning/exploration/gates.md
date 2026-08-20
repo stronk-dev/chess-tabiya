@@ -80,6 +80,14 @@ rewind adds value**.
   untouched** — no Stockfish was run and no branch was graded — and so is **K5**, which is
   about plan coherence over a horizon and is not inspected by an outcome count.
   Consequence for the 1000→2000 curve is escalated as D337.
+- **Mechanical precondition measured 2026-08-20**
+  (`design/research/bot-policy.md`, `tools/r11-bot-policy-harness/`). The production sampler had
+  **19.84 cp** expected depth-12 loss and **0.39%** mass at ≥250 cp over 837 fixed cells, matching
+  the captured production sample at 19.57 cp / 0.36%. A 250 cp guard removed the measured severe
+  tail with only 1.27 cp strengthening; pawn ×4 changed its declared move-rate trait +11.97 pp
+  without breaching strength or explorer-retention budgets. This establishes mechanically
+  separable candidate layers, **not** believable/useful branches. No weakened-Stockfish control or
+  blinded 10–20-ply judgement ran, so H5's main statement and verdict remain untouched.
 
 ## Kill criteria
 
@@ -174,7 +182,7 @@ Continue from vertical slice to product build when all of:
 | C2 | Users complete and compare branches in a majority of Plan Drill sessions | unmet | — |
 | C3 | Second-attempt objective performance improves meaningfully | unmet | — |
 | C4 | Delayed related-position performance beats the baseline format | unmet | — |
-| C5 | Opponent coherence judged acceptable for ≥80% of branches | unmet | — |
+| C5 | Opponent coherence judged acceptable for ≥80% of branches | unmet | `design/research/bot-policy.md` `[V]` completes the mechanical screen and specifies the blind 10–20-ply protocol; no branch has yet been judged, so the denominator remains zero. |
 | C6 | Pack authors can create a ~~reviewed~~ pack with a documented, repeatable workflow | 📊 evidence, qualified | nine waves ran the same documented loop with a falling first-run validator error rate (`design/research/pack-authoring-cost.md`). **"reviewed" is struck**: C1's reviewer pass was withdrawn 2026-08-13, so the word describes a stage that no longer exists |
 | C7 | Endgame restart and response latency feel effectively instant | unmet | `design/research/endgame-latency-versus-cet.md` + `interaction-state-correctness.md` `[V]`: measured restart/rewind/reply budgets pass, but “feel” remains untested with a person and the interaction floor fails (4/90 exact live gestures; 15 wrong legal moves). Fix D537/D573, then run the owner session; stopwatch success cannot clear a surface that records the wrong move. |
 
