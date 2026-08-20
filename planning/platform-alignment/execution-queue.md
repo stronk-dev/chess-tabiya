@@ -78,6 +78,9 @@ disposition rather than an implicit omission.
 
 Only the owner or claude-on-owner-ruling edits living intent. Apply O1–O13 in dependency order:
 
+- **READY FOR OWNER/CLAUDE:** `intent-amendment-handoff.md` covers already-ruled O1-O4/O13 and the
+  five process-RFC questions without resolving R3/R7/R8/R15 residues by implication.
+
 1. evidence truth and selection;
 2. assistance/default workflows, theory and stable content primitives;
 3. review, bots, profile/progression;

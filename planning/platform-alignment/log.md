@@ -513,3 +513,15 @@ Append-only. Record research, rulings, RFC transitions, implementation closeout 
   longitudinal coaching, campaign experience, coach/streamer jobs and social trust.
 - Closed D639. No product code, schema, protected design intent or authored content changed; D560
   and Gate F remain active.
+
+## 2026-08-20 — the protected-intent delta became a surgical handoff
+
+- Executably pinned five contradictions between ruled O1-O4/O13 planning and protected
+  `design/02`-`05`: hosted-only/PWA-open posture, raw selectable evidence, B4/B8/B10 shipped claims,
+  rung-0 infallibility, implicit any-form permission and raw per-context default composition.
+- Added `intent-amendment-handoff.md` with edits by section, the exact boundaries that must remain
+  open, closeout requirements and a copy/paste Claude prompt. Codex did not edit protected intent.
+- Priced the five remaining process-RFC owner questions and recommended each draft's minimum
+  choice, widening lifecycle parity to the D638 Active/root and Archive/filesystem failure.
+- D640 remains open until the owner/Claude amendment lands. F1/F12 remain legally blocked despite
+  sufficient architecture research; no RFC or product code was created.

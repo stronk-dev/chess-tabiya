@@ -3625,3 +3625,13 @@ intent/process gates remain open. F2-F11 each retain a named empirical predecess
 learners, coaches, blind bot reviewers, the owner campaign pilot or social operating evidence.
 Another repository census cannot substitute for those observations. No RFC was drafted and no
 product code, schema, protected design intent or content changed; D560 remains active.
+
+## 2026-08-20 — O1-O4/O13 intent debt was prepared for its authorised writer
+
+The D640 parity harness proves planning and protected intent currently disagree at five boundaries.
+`planning/platform-alignment/intent-amendment-handoff.md` gives the owner/Claude exact amendments
+for `design/02`-`05`, names what must remain open, and includes the closeout/check protocol. It also
+reduces the two process drafts to five owner questions with recommended minimum rulings.
+
+No protected design was edited and D640 stays open. This prepares authority; it does not substitute
+for it, accept F1/F12, or loosen the content hold.

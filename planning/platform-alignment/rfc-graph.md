@@ -7,6 +7,10 @@
 Before creating a new file, A0 must prove that an active/returned RFC cannot be amended to own the
 same contract. The names F1–F12 below are capability nodes, not reserved filenames or schema lanes.
 
+The architecture research for F1/F12 is sufficient, but `intent-amendment-handoff.md` records the
+protected O1-O4/O13 intent debt that still makes drafting illegal. Research-ready is not
+authority-ready.
+
 ## Existing-document reconciliation
 
 | Existing RFC | Current register state | Alignment action before new drafting |
