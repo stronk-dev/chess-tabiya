@@ -188,3 +188,27 @@ Append-only. Record research, rulings, RFC transitions, implementation closeout 
   pgvector, contextualization or a chess chat agent.
 - R8 is now blocked only by R3; O5 remains blocked by R8/R18. No product implementation or content
   changed.
+
+## 2026-08-20 — R3 mechanical/desk presentation arm separated modules from forms
+
+- Landed `design/research/evidence-presentation.md` and the disposable
+  `tools/r3-presentation-harness/`. The corpus arm reproduces shipped board lighting over 611
+  unique authored-spine positions and 12,236 occupied-square queries.
+- Settings expose nine mechanism/source axes for six contexts: 54 primary controls. In-run human
+  evidence is raw UCI/mass; system arrows have no renderer; the ambient assistance button has no
+  action. Recorded D582-D585 without changing product code.
+- Board lighting bypasses R2: a selected occupied square renders median 2 captions, p95 9 and max
+  11, with up to 19 drawn marks. The worst query is dominated by eight `line_blockers` plus the
+  ineligible `pawn_safe_square` and generic count/reach facts.
+- `evidencePacket()` independently bypasses R2 by sending the complete structural list, matching
+  plans and authored text to the provider without module identity, eligibility reason or budget.
+- An eight-module disposable boundary passes five zero/one/many, abstention, disclosure, consumer
+  and move/PV-leakage tests. It separates producer → compiler → module → form → optional
+  renderer and keeps pre-commit sight marked as an owner boundary.
+- Chessiverse contributes progressive intent and theory↔play linkage but its Full/Peek/Blunder
+  Guard defaults conflict with the current commit-first rule. Chess.com contributes guided key
+  moments, Retry-before-Show-Moves and visuals bound to explanation text rather than an independent
+  evidence query.
+- R3 is mechanical/desk done and still external to complete: D537/D573 invalidate the shipped
+  gesture baseline, the in-app browser was unavailable, and no nontechnical participants were in
+  scope. R7/R8/O4 remain blocked; R5 is the next evidence-core research job. D560 stays active.

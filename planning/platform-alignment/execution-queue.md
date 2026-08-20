@@ -39,7 +39,7 @@ action; measurement instruments do not share the tested defect's assumption.
 |---|---|---|---|
 | 2.1 | R1 detection landscape and validation corpus | **DONE 2026-08-20** | Six evidence planes; cheap semantic labels refused |
 | 2.2 | R2 sign/relevance/selection measurement | **DONE 2026-08-20** | Local selector clears volume/specificity; rarity refused as significance; semantic eligibility remains separate |
-| 2.3 | R3 evidence presentation prototypes/tests | **READY NOW for mechanical/prototype arms; EXTERNAL to complete** | A2 and R1/R2 complete; participant comprehension/default-preset exit still needs owner-authorised users |
+| 2.3 | R3 evidence presentation prototypes/tests | **MECHANICAL/DESK DONE 2026-08-20; EXTERNAL to complete** | Eight-module boundary and current-surface census landed; valid board interactions plus participant comprehension/default-preset exit still need owner-authorised users |
 | 2.4 | R5 renderer evaluation | **READY NOW** | A1 complete; use fixed packet/rung samples from audited seams |
 | 2.5 | R6 pack stability/migration/re-author audit | **DONE 2026-08-20 — Gate F FAIL** | 92-document compatibility and history census landed; F3 model narrowed, but capability negotiation, migrations, owner budget and pilot coverage are absent |
 
@@ -148,6 +148,6 @@ R14/R15/R16/R17/R18 → O10–O13 → optional F10/F11 + required F12
 all included nodes → integrated default journeys → 1.0 proof
 ```
 
-The immediate queue is therefore 1.1–1.4, 2.3 prototype/instrument work, 2.4 and 3.3. There is
+The immediate queue is therefore 1.2–1.4, 2.4 and 3.3, while R3's external exit is prepared. There is
 no legal feature-build queue yet; creating one before these results would
 violate the sequencing the owner explicitly requested.

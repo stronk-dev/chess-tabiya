@@ -3427,3 +3427,26 @@ applicability predicates and narrow the 1.0 theory candidate to a separate prove
 immutable exact/SQLite-FTS bundle. D564 closes negatively; D557 remains the bounded builder need.
 R8 now waits only on R3 and O5 still waits on R8/R18. No product code, schema, deployment or authored
 chess content changed; D560's hold remains active.
+
+## 2026-08-20 — R3 mechanical presentation research landed; reader exit remains external
+
+`design/research/evidence-presentation.md` audits the shipped assistance paths and lands a
+disposable module boundary. Settings expose 54 source/mechanism controls. Over 611 unique
+authored-spine positions and 12,236 occupied-square queries, current board lighting reaches a tail
+of 11 captions and 19 marks from one selected square because it filters the raw structural census
+by square and bypasses R2. `evidencePacket()` independently sends the full structural list,
+matching plans and authored text to the LLM provider without a consumer identity or budget.
+
+The synthetic module compiler passes zero/one/many fact, abstention, disclosure, consumer mismatch
+and move/PV-leakage tests across rules floor, sight-on-request, post-commit nudge, progressive hint,
+compare, theory breadcrumb, Review Map and explicit inspector contracts. These are research
+candidates, not product defaults; pre-commit rung-0 sight remains an owner boundary.
+
+Competitor evidence supports progressive intent, guided key moments, Retry before move reveal,
+theory↔play links and visual forms bound to an admitted explanation. It does not authorize
+Chessiverse's pre-commit grading/guard or Chess.com's engine-review posture. D582-D585 record the
+concrete defects; K6 gains a sixth partial finding and B4/Q4c are narrowed.
+
+R3 is mechanical/desk done but not complete. The board remains interaction-invalid under D537/D573,
+the in-app browser was unavailable, and no nontechnical participants were in scope. R7, R8 and O4
+remain blocked. No product code, schema or content changed; D560 remains active.

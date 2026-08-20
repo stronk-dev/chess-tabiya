@@ -243,13 +243,15 @@ a dated checkpoint, not a replacement for `rfc/README.md`.
 The next safe queue is research and reconciliation, not feature implementation. Detailed job
 cards and dependencies are in `execution-queue.md`; the current frontier is:
 
-1. R3 evidence-presentation prototype/mechanical arms (participant exit external);
-2. R4 knowledge-retrieval experiment;
-3. R5 renderer evaluation;
-4. R11 bot-policy research;
-5. R12 player-style metrics research;
-6. R18 self-host/privacy/accessibility/rights audit;
-7. the capability-watch instrument.
+1. R5 renderer evaluation;
+2. R11 bot-policy research;
+3. R12 player-style metrics research;
+4. R18 self-host/privacy/accessibility/rights audit;
+5. the capability-watch instrument;
+6. R3 interaction/participant exit when the board and participant authority are available.
+
+R3's mechanical/desk arm and R4 are complete. R3 remains external for real interaction and
+nontechnical-player comprehension, so it does not yet unlock defaults, R7 or R8.
 
 Presentation, Review Map, campaign and professional/social research are all on the queue, but
 behind named predecessors. Owner rulings and RFC drafting begin only after

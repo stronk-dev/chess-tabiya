@@ -127,6 +127,16 @@ or trivial output. K6 remains open because semantic eligibility plus the actual 
 have not been reader-tested; R2 explicitly refuses rarity and relation sign as significance or
 valence.
 
+**K6 sixth partial evidence, 2026-08-20.** R3's mechanical/desk arm
+(`design/research/evidence-presentation.md`) finds the selection bypass in both generated delivery
+paths. A selected occupied square reaches a median 2 captions but a tail of **11 captions / 19
+marks**, driven in the worst case by eight `line_blockers` plus ineligible/generic count facts.
+`evidencePacket()` likewise sends the complete structural list, matching plans and authored text to
+the provider with no consumer identity or budget. This is further evidence toward firing for the
+current default/generated path and evidence that presentation form alone cannot repair it. K6 stays
+open: the disposable module boundary passes mechanical leakage/abstention tests, but eligible
+semantic facts and reader comprehension are not yet measured together.
+
 ## Exploration-to-slice gate
 
 The first experimental vertical-slice RFC may open when all of the following have reached
@@ -179,7 +189,7 @@ live.
 | B1 | Shell and entry: stable Play/Learn/Review/Live/Create/Library/Settings routes; resume works | shipped — shell, routes, resume; `phase` projected (D6 closed by `defect-sweep`). Residual: `/settings` remains display-only |
 | B2 | Solo modes: Just Play + Line/Plan/Outcome/Trajectory each complete one fixture run | **shipped in full 2026-08-14** — all four drill modes plus the Just Play position player (`shape-library`); the justPlay/fromPosition capability rows are live |
 | B3 | Review: manual multi-branch selection, pair/multi compare, replay, deep mode, share/export, **plus branch groups — N candidates forked and played in parallel with resistance held constant** | shipped in full — N-way compare, simulate, prediction rendering, deep analysis, export, **and branch groups (2026-08-14)**. Residual: narrative mode + difference strips (forward-trace orphan, ledgered) |
-| B4 | Evidence: authored, Stockfish, Maia, corpus, Syzygy, features, LLM-rendered layers with timing controls | authored ✓, Stockfish ✓, Maia ✓, **corpus/recency ✓ (`runtime-corpus-evidence`)**, structural mechanics ✓ (B9), voice seam ✓. **R1/R2 qualification:** mechanics are not semantic guidance; cheap semantic labels fail external disagreement and local selection cuts noise but promotes trivial literals unless semantic eligibility runs first. Presentation remains R3. Residual: Syzygy runtime rendering + eligible/selected semantic evidence + full evidence-bound LLM rendering |
+| B4 | Evidence: authored, Stockfish, Maia, corpus, Syzygy, features, LLM-rendered layers with timing controls | authored ✓, Stockfish ✓, Maia ✓, **corpus/recency ✓ (`runtime-corpus-evidence`)**, structural mechanics ✓ (B9), voice seam ✓. **R1–R3 qualification:** mechanics are not semantic guidance; cheap semantic labels fail external disagreement, local selection promotes trivial literals without prior eligibility, and both board/LLM surfaces currently bypass selection. R3's module boundary is mechanically viable but reader validation remains external. Residual: Syzygy runtime rendering + eligible/selected semantic evidence + module-bound rendering |
 | B5 | Live: Twitch host/chat/overlay, academy roles, external Arena handoff | shipped 2026-08-13 (`live-session-platform`) — roles, board control, spectate, chat voting, academy, Arena two-leg handoff. Native matchmaking stays outside minimal-real scope by design |
 | B6 | Create: pack studio/import/review/session-distill produces a validated fixture; corpus mining emits one candidate | shipped — mining (`candidate-emit`) plus studio write path, imports and publication channels. **Correction 2026-08-14 (forward trace): session distillation was claimed here and does NOT exist** — `session_distilled` is a reserved enum with zero producers; re-ledgered (`pack-studio`) |
 | B7 | Return: history/resume, progress, concept scheduling, related retry, recommendations | shipped 2026-08-13 (`return-and-progression`) — attempt scheduling, progress, `/learn`, duplicate, related retry. **Correction 2026-08-14 (forward trace): the opt-in recommender was claimed here and does NOT exist** — no route, disclaimed in the canonical doc; re-ledgered as an orphan. Cross-pack concept identity deliberately absent (a studio/B11 contract) |
@@ -210,7 +220,7 @@ ranked in the dossier; **no gate definition is changed by this note.**
 
 **Two gate-row corrections owed to `design/03` (owner tier — escalated, not edited here,
 and deliberately not applied to this mirror so the surface stays single):** B1/B8's residual
-*"`/settings` remains display-only"* is **stale** — it renders 36 live assistance controls
+*"`/settings` remains display-only"* is **stale** — it renders 54 live assistance controls
 across six contexts, measured hands-on; and B4's *"Syzygy runtime rendering"* residual is
 **over-broad** — the `branch-decidedness` → `BranchRail.svelte:75` path ships and is
 pressable, and the true residual is a single missing `tablebase:` branch in
