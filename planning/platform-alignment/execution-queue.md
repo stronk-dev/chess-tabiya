@@ -140,7 +140,7 @@ own research/decision/RFC node.
 ## Current critical path
 
 ```text
-A0/A1 → R1/R2/R6 → O1/O2/O3/O6 → F1 → F2/F3
+A0/A1/A3 → R1/R2/R6 → O1/O2/O3/O6 → F1 → F2/F3
 F2 → R3/R7/R12 → O4/O7/O9 → F5/F6/F9
 R4/R8 → O5 → F4 → F7 → Gate F → official pilot/content
 R11 → O8 → F8

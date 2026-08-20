@@ -427,3 +427,21 @@ Append-only. Record research, rulings, RFC transitions, implementation closeout 
   board interaction or synthetic facts as campaign preference evidence, and it does not authorize
   F10. No product code, schema, protected design intent or authored content changed; D560 remains
   active.
+
+## 2026-08-20 — A3 closed the current detector-family conformance register
+
+- Added a disposable register covering all 18 structural and six transition families, with literal
+  code semantics, matcher/reader fidelity, safe disposition and blocker. All 18 structural matchers
+  now have an executable positive and hard-negative fixture; all 14 transition leaves have current
+  corpus witnesses and exact-count controls.
+- Replayed 754 committed transitions from 50 packs / 643 positions. Only 11/18 structural families
+  round-trip; three are reader subsets, three lossy and `pawn_count` matcher-only. Every transition
+  family is lossy and 0/3,371 observations retain affected squares.
+- Verified five generic production sinks consume whole readings rather than a declared family
+  version. This closes D629's missing research instrument but admits zero whole families as
+  universally learner-facing; inspector and authored-condition uses remain distinct legal homes.
+- Recorded D630-D633. The migration-critical result is indirect: `pawn_safe_square` has zero literal
+  authored users, yet `outpost` calls it and occurs 23 times across three content documents. A
+  literal-token migration census would miss every affected document.
+- Updated O2/F1-F3 routes, Gate-F inputs and the 1.0 capability map. No product code, schema,
+  protected design intent or authored chess content changed; D560 remains active.

@@ -3561,3 +3561,14 @@ failed loop into a positive campaign verdict. The run remains blocked by D537/D5
 and a real compiler-admitted R3 packet; synthetic fixture copy is explicitly insufficient. No
 Campaign RFC or product implementation is authorised. No product code, schema, protected design
 intent or authored chess content changed; D560 remains active.
+
+## 2026-08-20 — shipped detector kinds received an executable semantic conformance audit
+
+`design/research/detector-semantic-conformance.md` and the disposable D629 harness close a register
+over all 18 structural and six transition families at HEAD. The 50-pack / 754-transition run finds
+11/18 structural families round-trip between matcher and reader, seven subset/lossy/matcher-only,
+and all six transition families lossy. None of 3,371 transition observations retains an affected
+square although upstream helpers compute some of those identities. Five generic sinks accept whole
+readings without family admission. D629 closes as a research instrument; D630-D633 record the live
+operand-erasure, projection, indirect-migration and priority-classifier defects. Gate F remains
+closed and no content, schema, product implementation or protected design intent changed.

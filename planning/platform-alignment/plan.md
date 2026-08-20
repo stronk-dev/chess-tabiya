@@ -82,6 +82,7 @@ These are independent dossiers but feed one contract:
 | Deliverable | Questions it must answer | Ledger |
 |---|---|---|
 | `design/research/detection-landscape.md` | What can rules, engine search, human corpus, theory catalogues and authored facts each detect? Precision, abstention, sign and validation set? | D544, D545, D558 |
+| `design/research/detector-semantic-conformance.md` | **Answered for current 18+6 families:** which matcher/reader projections round-trip, where operands disappear, which content depends indirectly on unstable semantics, and what remains inspector/author-only? | D629-D633 |
 | `design/research/selection-sign-and-significance.md` | Which locally measured facts survive a bounded packet; how do gained/lost/preserved/avoided differ; where does distinctiveness stop short of significance or valence? | D542-D545, D569-D572 |
 | `design/research/evidence-presentation.md` | Which modules help without alarm fatigue or direct move leakage? How do touch, hover, keyboard and mobile differ? | D542, D543, D546 |
 | `design/research/theory-knowledge-pipeline.md` | **Answered:** separate builder need survives; Skipper/semantic extraction fails the six-arm gate. Exact+FTS beats semantic recall@5; applicability, abstention, model identity and provenance controls fail. 1.0 candidate is a typed deterministic provenance compiler plus immutable local index. | D557, D564, D579-D581 |
