@@ -63,7 +63,6 @@ landing order, not lost data.
 | 0.14 | `archive/onramp-guard.md` | implemented — additive: `feedbackPolicy` enum gains `immediate_guard`; optional top-level `guard` tuning block |
 | 0.15 | `archive/open-answer-grading.md` | implemented — additive: checkpoint `interaction` union gains `stated_reasoning` with grounded key points (closed four-kind union); reconciled behind 0.14 |
 | 0.16 | `archive/authoring-frictions.md` | implemented — additive/widening only: `deviationLocation` gains `{atStart}`, `simpleTrigger` gains `atStart`, new `variantOf` (three directional relations), `branchLengthTarget` max 20→40, guard gains `fireOnMate`/`rulesTier`/`window`/`overrides`, `rules_fact` enum gains `draw`, tablebase category enum widens to five determinate values. All committed content remains valid; no content digest moved |
-| `archive/expression-census.md` | implemented | `docs/development.md` (the `make expression-census` target) — restored 2026-08-15 by the reconciliation gate, which found `4a893dc` removed its Active row and added no Archive row, so the RFC existed in neither table |
 | 0.17 | `archive/tempo-vocabulary.md` | implemented — a timing window is a branch-local ledger: commitment opening, ordered closes, move-set readiness/tolerance, luxury spend, seven verdicts, authored `outpaced` control, and `tempo:` applied evidence. Additive plus removal of the unused checkpoint-local point-pair form; no committed content digest moved |
 | 0.18 | `archive/predicate-wave-3.md` | implemented — additive: `plan_consequence` success-condition kind, `king_zone`, `piece_distance`, `piece_count`, `pack.shapes` relation `present`/`prospective`. Ships `pawn_count` and `piece_reach_count scope:"every"` as deprecation WARNINGS (schema removal deferred to wave 4 because `registered_shapes` rows are immutable) |
 | 0.20 | `archive/opening-evidence-path.md` | implemented — additive: `$defs/objectiveGrading.assessedBy` gains a third `oneOf` member `kind: "engine"`. Retires `VERIFY_ASSESSMENT_NOT_SYZYGY`; narrows `OBJECTIVE_GRADING_UNSUPPORTED` to legs |
@@ -263,6 +262,11 @@ before re-attempting this territory.
 | `archive/dead-vocabulary.md` | implemented | `docs/expression-census.md` |
 | `archive/engine-leverage.md` | implemented | `docs/engine-workers.md`, `docs/content-sourcing.md`, `docs/drill-pack-format.md`, `docs/explanation-grounds.md` |
 | `archive/vocabulary-wiring.md` | implemented | `docs/drill-pack-format.md`, `docs/structural-reading.md` |
+| `archive/structural-reading.md` | implemented | `docs/structural-reading.md`, `docs/drill-pack-format.md`, `docs/explanation-grounds.md` |
+| `archive/transition-primitives.md` | implemented | `docs/transition-primitives.md`, `docs/structural-reading.md`, `docs/drill-pack-format.md` |
+| `archive/expression-census.md` | implemented | `docs/expression-census.md`, `docs/development.md` |
+| `archive/format-surface.md` | implemented | `docs/drill-pack-format.md`, `docs/trajectory-drill.md`, `docs/shape-library.md` |
+| `archive/claim-backing.md` | implemented | `docs/claim-backing.md`, `docs/drill-pack-format.md`, `docs/content-sourcing.md` |
 
 ## The archive sketches are quarry, not RFCs
 

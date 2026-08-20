@@ -11,18 +11,18 @@ same contract. The names F1–F12 below are capability nodes, not reserved filen
 
 | Existing RFC | Current register state | Alignment action before new drafting |
 |---|---|---|
-| `shared-resource-registers` | draft | Resolve first if A0 confirms the stale-register class; F1 should reuse its derivation machinery rather than duplicate it. |
-| `rfc-lifecycle-completion` | draft | Resolve process truth before the alignment wave creates more active obligations. |
+| `shared-resource-registers` | draft; A0/D638 confirms the stale-register class | Resolve Q1/Q2 and refresh its observations first; F1 should reuse its derivation machinery rather than duplicate it. |
+| `rfc-lifecycle-completion` | draft; D638 adds a concrete Archive set-equality failure | Resolve Q1-Q3 and absorb D638 before the alignment wave creates more active obligations. |
 | `archive/live-marker-quality` | implemented; A0-verified 2026-08-20 | Closed. Its admission rules are an input to O3/O4, not a parallel selector. |
 | `archive/dead-vocabulary` | implemented; A0-verified 2026-08-20 | Closed. Its declaration census feeds R6/F3; residual D428 remains separate. |
 | `archive/engine-leverage`, `archive/vocabulary-wiring` | implemented; A0-verified 2026-08-20 | Closed and historical pack lanes released. Their contracts are inputs to semantic v1; no new RFC may duplicate them. |
-| `teacher-surface` | accepted-not-proven | Do not blindly implement as “coach mode.” R15/O11 decide whether it implements unchanged or is amended first. |
-| `graduation-clearance` | accepted | Implement/close if its predicates and lane remain valid after A0; its clearance is an input to Gate F, not Gate F itself. |
-| `feedback-delivery` | accepted, Stage 1 dirty/in progress | Finish authorised Stage 1 without absorbing unrelated work; Stage 2 remains subject to its ownership/content obligations and the D560 hold. |
+| `teacher-surface` | accepted, unbuilt | Do not blindly implement as “coach mode.” R15/O11 decide whether it implements unchanged or is amended first. |
+| `graduation-clearance` | accepted, unbuilt; 0.28 held | Implement after worktree coordination; its clearance is an input to Gate F, not Gate F itself. |
+| `feedback-delivery` | accepted, Stage 1 dirty/in progress; measurement records disagree | Reconcile the corrected CR1 instrument, then finish authorised Stage 1 without absorbing unrelated work; Stage 2 remains subject to its ownership/content obligations and the D560 hold. |
 | `assistance-controls` | draft | Amend or supersede only after R3/O4; preserve the ruled real per-kind ceiling and already-identified wiring defects. |
 | `pack-population-provenance` | draft | Feed R4/R6/O5/O6. Do not consume its proposed schema lane until the knowledge and pack contracts settle. |
 | `learner-rating` | draft | Keep strength separate from F9 style/profile. Reconcile its storage/lifecycle claims before either lands. |
-| `measurement-records` | returned | Its measurement/provenance primitives may support F2/F3; resolve its open questions rather than copying the schema. |
+| `measurement-records` | returned; uncommitted authoring revision, no implementation | Its measurement/provenance primitives may support F2/F3; resolve its open questions rather than copying the schema. |
 
 ## Candidate graph
 

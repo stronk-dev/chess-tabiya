@@ -1,5 +1,11 @@
 # Active RFC truth audit
 
+> **Post-audit correction, 2026-08-20:** this run counted 63 files under `rfc/archive/`, but the
+> actual Archive table had only 58 rows. D638 repaired the five-row mismatch and
+> `rfc-completion-refresh.md` now distinguishes lifecycle-closeout, current per-RFC re-verification
+> and 1.0 outcome completion. The row-by-row A0 result remains the source for the four clean-tree
+> implementation reviews.
+
 **Run:** 2026-08-20
 
 **Program job:** A0

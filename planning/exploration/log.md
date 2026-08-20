@@ -3597,3 +3597,18 @@ imported voice preference (D636). The pass also retracts D311's stale 36-control
 claim while retaining its four live residues. F5 now explicitly owns separate workflow/preset
 state and mask composition. Participant defaults, campaign and coach/stream choices remain open;
 no product implementation, schema, content or protected design intent changed.
+
+## 2026-08-20 — RFC completion truth was re-derived after A0
+
+The disposable D637/D638 harness found that the 63-file archive and its register were not
+set-equal: the Archive table held 58 rows, four implemented RFCs appeared only in pack-schema
+history and one archive-shaped row was embedded in that history. The register is repaired and the
+harness now asserts both Active/root and Archive/filesystem equality, implemented body status,
+acceptance-criteria presence, canonical-doc resolution and a planning record.
+
+`planning/platform-alignment/rfc-completion-refresh.md` separates three claims that had been
+collapsed: 63 lifecycle-closed records, four current independently reverified RFC implementations,
+and two A1-proven integration journeys. No active product RFC is complete: two are accepted/unbuilt,
+feedback delivery is accepted with inconsistent dirty Stage-1 records, and six are draft/returned.
+The correction changes queue truth but authorises no feature implementation, content wave or
+protected design edit. D560 and Gate F remain active.

@@ -217,8 +217,12 @@ This is a roadmap lane, not a promise that all social infrastructure belongs in 
 
 ## Actual RFC state checkpoint
 
-The A0 audit closed four stale implementations, taking the lifecycle-complete archive from 59 to
-63. The remaining active set is not complete:
+The A0 audit closed four stale implementations, taking the archive filesystem from 59 to 63. The
+D637/D638 refresh then found the actual Archive table still had only 58 rows; five misplaced or
+missing rows are now repaired and an executable set-equality guard records the result. Therefore
+**63 is now a lifecycle-register count**, while only the four A0 closures have a named current
+per-RFC clean-tree re-verification. Neither count is a 1.0 capability claim. The remaining active
+set is not complete:
 
 - accepted but incomplete: `teacher-surface`, `graduation-clearance`, `feedback-delivery`;
 - returned/draft research or process work includes `measurement-records`, `learner-rating`,

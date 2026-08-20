@@ -12,11 +12,11 @@ dependency edge, they may not.
 
 | Order | Job | State | Deliverable / closeout |
 |---|---|---|---|
-| 0.1 | A0 active-RFC truth audit | **DONE 2026-08-20** | `active-rfc-audit.md`; four completed implementations archived; active/accepted/draft truth and next actions reconciled |
+| 0.1 | A0 active-RFC truth audit and completion refresh | **DONE 2026-08-20** | `active-rfc-audit.md` + `rfc-completion-refresh.md`; four current-reverified archives; all 63 lifecycle records now registered; active/accepted/draft truth and next actions reconciled |
 | 0.2 | A1 capability reality audit | **DONE 2026-08-20** | `capability-reality-audit.md`; all 21 rows traced and map truth reconciled |
 | 0.3 | A2 interaction-state/K9 instrument | **DONE 2026-08-20** | `interaction-state-correctness.md` and disposable exact-UCI harness; K9/gates/ledger/log reconciled; no product code changed |
 | 0.4 | Close or explicitly return already-implemented RFCs | **PARTIAL:** four stale implementations closed | `live-marker-quality`, `dead-vocabulary`, `engine-leverage`, `vocabulary-wiring` archived; no other active RFC was misclassified complete |
-| 0.5 | Implement accepted incomplete RFC work | BLOCKED by 0.1 and worktree coordination | Existing accepted criteria only; any design mismatch returns to decision queue |
+| 0.5 | Implement accepted incomplete RFC work | **BLOCKED by worktree coordination and named alignment gates** | Feedback Stage 1 first reconciles its CR1 records; graduation may implement after overlap clears; teacher waits on R15/O11 or amendment |
 | 0.6 | A3/A4 detector semantics and evidence-topology baselines | **DONE 2026-08-20** | 18+6 detector-family conformance and 14-producer topology are executable; current production admits no universal learner family and has no compiled module/workflow join |
 | 0.7 | A5 workflow/default conformance | **DONE 2026-08-20** | Six technical profiles/54 raw controls collapse to one unnamed default; only 2/6 intended workflows bind directly and the session-kind ceiling is still invariant |
 

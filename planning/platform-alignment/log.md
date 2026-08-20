@@ -479,3 +479,23 @@ Append-only. Record research, rulings, RFC transitions, implementation closeout 
   Ambient, remount-only loading and indistinguishable sight/evidence overlays remain open.
 - Updated O4/O11, F5/F11, B5/B10 and the capability map. R3 participant comprehension and R15 coach
   workflow remain external; no product code, schema, protected design intent or content changed.
+
+## 2026-08-20 — RFC completion was split into lifecycle, current verification and product outcome
+
+- Added the D637/D638 completion harness and `rfc-completion-refresh.md`. All ten root RFC files
+  now join the Active table and all 63 archive files join the actual Archive table.
+- Repaired a five-row Archive mismatch: four implemented RFCs were visible only in pack-schema
+  history, while `expression-census` had an archive-shaped row embedded in that table. The Archive
+  table had 58 rows before the repair, not 63.
+- Verified every archived body labels itself implemented, contains acceptance criteria, links only
+  to existing canonical docs, and has a planning record. This establishes lifecycle closeout; it
+  does not retrospectively re-run 63 implementation specifications.
+- Preserved the stronger distinction: four archives have a named current per-RFC A0 re-verification,
+  while A1 proves only two integrated capability journeys and A3-A5 reject the current evidence and
+  workflow core as 1.0-complete.
+- Classified the nine active product RFCs: two accepted/unbuilt, one accepted with dirty Stage-1
+  work, and six draft/returned. No active product RFC is complete.
+- Recorded that feedback-delivery's dirty records still disagree about CR1: the starting
+  measurement/log preserves the invalid one-ply 100% result while the later diagnostic measures
+  properly-shaped N=8 continuations at 27.6-35.7%. Stage 1 must append/reconcile before landing;
+  Stage 2 remains separate and D560's content hold remains active.
