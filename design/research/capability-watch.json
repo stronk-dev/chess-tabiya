@@ -16,6 +16,7 @@
     { "id": "chessido", "name": "Chessido", "url": "https://www.chessido.com/", "aliases": [] },
     { "id": "chessigma", "name": "Chessigma", "url": "https://www.chessigma.com/", "aliases": [] },
     { "id": "chesslab-try", "name": "ChessLab", "url": "https://trychesslab.com/", "aliases": ["ChessLab mobile"] },
+    { "id": "chesslabhq", "name": "ChessLabHQ", "url": "https://chesslabhq.com/app", "aliases": ["ChessLab HQ"] },
     { "id": "chessly", "name": "Chessly", "url": "https://chessly.com/", "aliases": [] },
     { "id": "chessmonitor", "name": "ChessMonitor", "url": "https://www.chessmonitor.com/", "aliases": [] },
     { "id": "chessiverse", "name": "Chessiverse", "url": "https://chessiverse.com/", "aliases": [] },
@@ -47,7 +48,7 @@
         },
         {
           "productId": "chess-yourself", "checkedOn": "2026-08-20", "label": "V", "source": "https://www.chessyourself.com/", "handsOn": "none",
-          "love": { "state": "not_checked", "source": null, "summary": null }, "hate": { "state": "not_checked", "source": null, "summary": null },
+          "love": { "state": "not_found", "source": null, "summary": null }, "hate": { "state": "not_found", "source": null, "summary": null },
           "doesWell": "Turns a learner's own public games into a mirror-match novelty.", "limitation": "Vendor mechanism and sample/calibration contract are undisclosed.",
           "posture": "defer", "transformation": "Consider an opt-in personal-policy adapter only after transparent habit metrics and privacy controls exist.", "doNotCopy": "Do not make personal-history ingestion mandatory or call similarity coaching truth.",
           "producers": ["personal_game_corpus", "human_policy"], "consumer": "bot_policy", "tabiyaStatus": "absent", "route": ["R11", "R12", "O8", "O9"]
@@ -61,7 +62,7 @@
       "evidence": [
         {
           "productId": "chessiverse", "checkedOn": "2026-08-20", "label": "V", "source": "https://chessiverse.com/", "handsOn": "owner_partial",
-          "love": { "state": "not_checked", "source": null, "summary": null }, "hate": { "state": "not_checked", "source": null, "summary": null },
+          "love": { "state": "reported", "source": "https://www.reddit.com/r/chess/comments/190zavk/i_made_a_website_for_playing_and_training_with/", "summary": "Users asked for tournaments and valued the large, varied personality roster as a repeat-play attraction." }, "hate": { "state": "not_found", "source": null, "summary": null },
           "doesWell": "Presents bot tournaments and a large character roster as recurring entertainment around the opponent system.", "limitation": "No independent evidence yet connects tournament outcomes to learning, preserved review or stable personality behavior.",
           "posture": "research", "transformation": "Treat an event as a persisted envelope whose games enter the same Review Map, habit and rehearsal paths.", "doNotCopy": "Do not ship a disconnected bot menu/leaderboard or sell progression advantages.",
           "producers": ["bot_identity", "event_schedule", "match_events", "review_moments"], "consumer": "social_event_to_review", "tabiyaStatus": "absent", "route": ["R11", "R17", "O12", "F11"]
@@ -76,14 +77,14 @@
         {
           "productId": "chessiverse", "checkedOn": "2026-08-20", "label": "V", "source": "https://chessiverse.com/guided-play", "handsOn": "owner_partial",
           "love": { "state": "observed", "source": "design/BACKLOG.md#D551", "summary": "Board-square lighting and graduated support make help feel like an integrated mode." },
-          "hate": { "state": "not_checked", "source": null, "summary": null },
-          "doesWell": "Packages assistance into Full Help, Peek and Blunder Guard intents rather than engine settings.", "limitation": "Its strongest modes grade or warn before commitment and can reveal move quality.",
+          "hate": { "state": "not_found", "source": null, "summary": null },
+          "doesWell": "Packages assistance into Full Help, Peek and Hint Only; its four-step ladder changes from threat/direction/piece/move to theory facts while an opening guide applies.", "limitation": "Its strongest modes grade or warn before commitment and can reveal move quality; no independent Guided Play review was found in the targeted search.",
           "posture": "transform", "transformation": "Use named quiet modules and presets with deterministic eligibility, budgets and disclosure ceilings.", "doNotCopy": "Do not import pre-commit grading, best-move leakage or raw evidence dumps.",
           "producers": ["rules", "semantic_detector", "engine_measurement", "human_policy", "theory_index"], "consumer": "guidance_modules", "tabiyaStatus": "mechanical", "route": ["R3", "O3", "O4", "F5"]
         },
         {
           "productId": "chess-com", "checkedOn": "2026-08-20", "label": "V", "source": "https://www.chess.com/play/coach", "handsOn": "none",
-          "love": { "state": "not_checked", "source": null, "summary": null }, "hate": { "state": "not_checked", "source": null, "summary": null },
+          "love": { "state": "reported", "source": "https://www.reddit.com/r/chess/comments/1h50dpd/chesscom_game_review_and_coach_explanations/", "summary": "A beginner valued plain-language explanations that make engine moves easier to understand." }, "hate": { "state": "reported", "source": "https://www.reddit.com/r/Chesscom/comments/1t05533/understanding_the_bot_coaches/", "summary": "Users report generic repeated phrases, weak explanations and little evidence that the coach understands the position." },
           "doesWell": "Makes guided play a discoverable mainstream workflow with visible praise, warning and hint steps.", "limitation": "Recommends moves during committed play and does not preserve attempts as branches.",
           "posture": "transform", "transformation": "Adopt workflow clarity and progressive intent; retain commit-first evidence and preserved attempts.", "doNotCopy": "Do not become an engine coach that prevents consequences.",
           "producers": ["semantic_detector", "engine_measurement"], "consumer": "guidance_modules", "tabiyaStatus": "mechanical", "route": ["R3", "O4", "F5"]
@@ -105,17 +106,24 @@
       "evidence": [
         {
           "productId": "beacon", "checkedOn": "2026-08-20", "label": "V", "source": "https://beaconchess.com/", "handsOn": "none",
-          "love": { "state": "not_checked", "source": null, "summary": null }, "hate": { "state": "not_checked", "source": null, "summary": null },
+          "love": { "state": "not_found", "source": null, "summary": null }, "hate": { "state": "not_found", "source": null, "summary": null },
           "doesWell": "Finds key positions, explains candidates and offers Maia play from the reviewed position.", "limitation": "No evidence yet that the first attempt survives or that branches can be compared.",
           "posture": "transform", "transformation": "Auto-offer a grounded rewind/branch at a selected moment and preserve both attempts.", "doNotCopy": "Do not auto-play a correction or reduce review to engine labels.",
           "producers": ["moment_selector", "signed_evidence", "theory_index"], "consumer": "review_map", "tabiyaStatus": "claimed", "route": ["R7", "O7", "F6"]
         },
         {
           "productId": "chessigma", "checkedOn": "2026-08-20", "label": "V", "source": "https://www.chessigma.com/", "handsOn": "none",
-          "love": { "state": "not_checked", "source": null, "summary": null }, "hate": { "state": "not_checked", "source": null, "summary": null },
+          "love": { "state": "not_found", "source": null, "summary": null }, "hate": { "state": "reported", "source": "https://www.trustpilot.com/review/chessigma.com", "summary": "A current user review complains about intrusive advertising and forced ad viewing during game review." },
           "doesWell": "Re-enters the exact move from a real game with the same clock and a level-matched bot.", "limitation": "The restart does not preserve/compare the original attempt and paid LLM causal claims are opaque.",
           "posture": "transform", "transformation": "Retain exact-position/same-clock re-entry while preserving the original as a branch.", "doNotCopy": "Do not grade the retry by centipawn loss or accept opaque LLM causality.",
           "producers": ["imported_game", "moment_selector", "clock_history", "human_policy"], "consumer": "review_map", "tabiyaStatus": "mechanical", "route": ["R7", "O7", "F6"]
+        },
+        {
+          "productId": "chessiverse", "checkedOn": "2026-08-20", "label": "V", "source": "https://chessiverse.com/guided-play", "handsOn": "owner_partial",
+          "love": { "state": "observed", "source": "design/BACKLOG.md#D623", "summary": "Owner values the integrated takeback, resampled reply and theory-guided support direction." }, "hate": { "state": "not_found", "source": null, "summary": null },
+          "doesWell": "Separates learner and bot takeback, accepts a replacement or resampled reply, retains abandoned continuations as branches and exports the main line plus variations.", "limitation": "The workflow still evaluates legal moves before commitment in stronger support modes, and no independent review of the new branch behavior was found.",
+          "posture": "transform", "transformation": "Retain explicit attempt semantics, N-way consequence comparison and grounded re-entry while adopting the low-friction branch controls and theory handoff.", "doNotCopy": "Do not claim branch preservation itself as unique or let a retained branch become an engine-review timeline.",
+          "producers": ["run_graph", "opening_identity", "theory_index", "bot_policy", "signed_evidence"], "consumer": "review_map", "tabiyaStatus": "mechanical", "route": ["R3", "R7", "R8", "O7", "F6", "F7"]
         }
       ]
     },
@@ -126,14 +134,14 @@
       "evidence": [
         {
           "productId": "quackmate", "checkedOn": "2026-08-20", "label": "V", "source": "https://apps.apple.com/us/app/quackmate/id6789064676", "handsOn": "none",
-          "love": { "state": "not_checked", "source": null, "summary": null }, "hate": { "state": "not_checked", "source": null, "summary": null },
+          "love": { "state": "not_found", "source": null, "summary": null }, "hate": { "state": "reported", "source": "https://www.reddit.com/r/Satranc/comments/1uqutdk/neden_kaybetti%C4%9Fimi_bir_t%C3%BCrl%C3%BC_%C3%A7%C3%B6zemiyordum_kendime/", "summary": "A mobile-browser trial produced a blank share card, exposing a failure in the advertised recap workflow." },
           "doesWell": "Packages turning points, weekly reports, player identity and share cards into a playful return loop.", "limitation": "Vendor/mobile claims do not establish grounding, preserved attempts or consequence play.",
           "posture": "transform", "transformation": "Render a selected signed moment set into deterministic and optional styled recap forms with replay doors.", "doNotCopy": "Do not manufacture a type, takeaway or causal chess story.",
           "producers": ["review_moments", "habit_metrics", "opening_identity"], "consumer": "social_recap", "tabiyaStatus": "mechanical", "route": ["R7", "R12", "O7", "O9", "F6", "F9"]
         },
         {
           "productId": "take-take-take", "checkedOn": "2026-08-20", "label": "V", "source": "design/research/teardown-taketaketake-desk.md", "handsOn": "none",
-          "love": { "state": "not_checked", "source": null, "summary": null }, "hate": { "state": "reported", "source": "design/research/teardown-taketaketake-desk.md", "summary": "Launch-day examples documented wrong LLM narration." },
+          "love": { "state": "reported", "source": "https://www.reddit.com/r/chessbeginners/comments/1tjue7e/take_take_take_game_review_is_really_helpful/", "summary": "A beginner preferred its connected plain-language review to terse best-move statements." }, "hate": { "state": "reported", "source": "https://www.reddit.com/r/chess/comments/1secnbs/taketaketake_game_review_is_a_slop_machine/", "summary": "A detailed launch review found confidently wrong or irrelevant LLM explanations that could mislead beginners." },
           "doesWell": "Makes one key moment, title and takeaway feel social and lightweight.", "limitation": "The story is read-only and its LLM explanation can be wrong.",
           "posture": "transform", "transformation": "Adopt the compact story form over a deterministic cited packet and attach re-entry.", "doNotCopy": "Do not use free-form LLM analysis as chess truth.",
           "producers": ["review_moments", "signed_evidence"], "consumer": "social_recap", "tabiyaStatus": "mechanical", "route": ["R5", "R7", "O7", "F6"]
@@ -160,6 +168,13 @@
           "doesWell": "Demonstrates a credible open local database/engine desktop workbench.", "limitation": "Workbench tools are adjacent rather than joined into a learning loop; no mobile path.",
           "posture": "adopt", "transformation": "Reuse the open/local expectation and adapter posture while preserving a guided workflow default.", "doNotCopy": "Do not expose a toolbox as the primary learner journey.",
           "producers": ["local_engine", "local_database", "import_export"], "consumer": "analysis_inspector", "tabiyaStatus": "mechanical", "route": ["O5", "O13", "F4", "F12"]
+        },
+        {
+          "productId": "chesslabhq", "checkedOn": "2026-08-20", "label": "V", "source": "https://chesslabhq.com/app", "handsOn": "none",
+          "love": { "state": "reported", "source": "https://www.reddit.com/r/chess/comments/1uhmc2a/best_chess_training_app_or_website/", "summary": "A learner recommends ChessLabHQ specifically for repertoire databases and finding leaks after games." }, "hate": { "state": "not_found", "source": null, "summary": null },
+          "doesWell": "Joins a game database, transposition-aware opening tree, opponent preparation, repertoire drilling and a nine-factor Leak Finder with peer baselines.", "limitation": "The product is new, the evidence is thin, and its leak factors do not disclose a validation or causal-training contract.",
+          "posture": "transform", "transformation": "Join exact opening identity, repertoire transpositions and literal habit metrics to cited source games and immediate consequence rehearsal.", "doNotCopy": "Do not turn a relative peer baseline into a diagnosis, prescribe training from it or merge this product's evidence with TryChessLab.",
+          "producers": ["opening_identity", "repertoire_graph", "personal_game_history", "habit_metric_registry"], "consumer": "theory_breadcrumb_and_inspector", "tabiyaStatus": "claimed", "route": ["R8", "R12", "R13", "O5", "O9", "F4", "F9"]
         }
       ]
     },
@@ -170,7 +185,7 @@
       "evidence": [
         {
           "productId": "chessable", "checkedOn": "2026-08-20", "label": "V", "source": "design/research/teardown-chessable-desk.md", "handsOn": "none",
-          "love": { "state": "not_checked", "source": null, "summary": null }, "hate": { "state": "not_checked", "source": null, "summary": null },
+          "love": { "state": "reported", "source": "https://www.reddit.com/r/chess/comments/1d1nktl/reviewing_on_chessable_is_terrible/", "summary": "Even a critical thread values the course content and randomized recall that keep a repertoire in memory." }, "hate": { "state": "reported", "source": "https://www.reddit.com/r/chess/comments/1d1nktl/reviewing_on_chessable_is_terrible/", "summary": "Users report poor navigation, context-free review order, early line stopping and weak mobile/video ergonomics." },
           "doesWell": "Lets some course positions hand off into bot play from the authored board state.", "limitation": "The handoff is one-way and the played consequence does not flow back into the course explanation.",
           "posture": "transform", "transformation": "Bind cited theory spans to pack checkpoints and return branch outcomes to the theory view.", "doNotCopy": "Do not turn the product into generic course cards or mandatory spaced repetition.",
           "producers": ["authored_theory", "theory_applicability"], "consumer": "theory_to_rehearsal", "tabiyaStatus": "claimed", "route": ["R8", "O5", "O6", "F4", "F7"]
@@ -184,7 +199,7 @@
       "evidence": [
         {
           "productId": "chessiverse", "checkedOn": "2026-08-20", "label": "V", "source": "https://chessiverse.com/chess-personality", "handsOn": "none",
-          "love": { "state": "not_checked", "source": null, "summary": null }, "hate": { "state": "not_checked", "source": null, "summary": null },
+          "love": { "state": "reported", "source": "https://www.reddit.com/r/chess/comments/1pd8gd8/i_built_yet_another_chess_personality_analyzer/", "summary": "Users describe the result as fun and readily discuss the style card and famous-player match." }, "hate": { "state": "reported", "source": "https://www.reddit.com/r/chess/comments/1pd8gd8/i_built_yet_another_chess_personality_analyzer/", "summary": "Users question the sample and matching when frequent blunders still produce a Carlsen comparison or several people receive the same type." },
           "doesWell": "Makes style playful through metrics, axes, archetypes and famous-player comparison.", "limitation": "The page contradicts itself about quiz versus game inputs and publishes no stability curve.",
           "posture": "transform", "transformation": "Ship continuous literal habit cards with per-metric sample floors, uncertainty and contributing games.", "doNotCopy": "Do not manufacture natural archetypes or GM twins when clustering fails.",
           "producers": ["habit_metric_registry", "personal_game_history"], "consumer": "player_profile", "tabiyaStatus": "claimed", "route": ["R12", "R13", "O9", "F9"]
@@ -196,6 +211,13 @@
           "doesWell": "Treats progress/return analytics as a coherent product instead of a buried report.", "limitation": "Watches games but provides no re-entry or rehearsal action.",
           "posture": "transform", "transformation": "Attach every admitted habit/aggregate to source games and an optional rehearsal selector.", "doNotCopy": "Do not turn opaque summary scores into coaching advice.",
           "producers": ["habit_metric_registry", "personal_game_history"], "consumer": "player_profile_and_pack_selector", "tabiyaStatus": "claimed", "route": ["R12", "R13", "O9", "F9"]
+        },
+        {
+          "productId": "chesslabhq", "checkedOn": "2026-08-20", "label": "V", "source": "https://chesslabhq.com/app", "handsOn": "none",
+          "love": { "state": "reported", "source": "https://www.reddit.com/r/chess/comments/1uhmc2a/best_chess_training_app_or_website/", "summary": "A learner values the combination of repertoire storage and leak finding rather than another standalone statistics page." }, "hate": { "state": "not_found", "source": null, "summary": null },
+          "doesWell": "Surfaces nine named opening, phase, time and tactical factors and compares them with peer baselines.", "limitation": "Neither the factor stability nor the meaning of the peer comparison is independently established.",
+          "posture": "transform", "transformation": "Expose continuous literal metrics with denominators, confidence, source games and replay/drill doors.", "doNotCopy": "Do not call a correlated factor a leak, weakness or training prescription without validation.",
+          "producers": ["habit_metric_registry", "personal_game_history", "opening_identity", "clock_history"], "consumer": "player_profile_and_pack_selector", "tabiyaStatus": "claimed", "route": ["R12", "R13", "O9", "F9"]
         }
       ]
     },
@@ -206,7 +228,7 @@
       "evidence": [
         {
           "productId": "sensei-chess", "checkedOn": "2026-08-20", "label": "V", "source": "https://www.senseichess.com/features", "handsOn": "none",
-          "love": { "state": "not_checked", "source": null, "summary": null }, "hate": { "state": "not_checked", "source": null, "summary": null },
+          "love": { "state": "not_found", "source": null, "summary": null }, "hate": { "state": "not_found", "source": null, "summary": null },
           "doesWell": "Turns blocks of a learner's games into a recurring weekly report/audio ritual across openings, phases and activity.", "limitation": "Diagnoses and grounding are vendor-defined; no preserved branch runtime or self-host path is shown.",
           "posture": "transform", "transformation": "Aggregate only validated event/metric rows, expose denominators and link each suggestion to a replay or pack.", "doNotCopy": "Do not let an LLM or opaque score invent a weakness or training prescription.",
           "producers": ["review_moments", "habit_metric_registry", "attempt_history"], "consumer": "grounded_coaching_aggregate", "tabiyaStatus": "absent", "route": ["R12", "R13", "O9", "F9"]
@@ -220,7 +242,7 @@
       "evidence": [
         {
           "productId": "repcheck-rookhub", "checkedOn": "2026-08-20", "label": "V", "source": "https://chromewebstore.google.com/detail/repcheck-%E2%80%94-opening-repert/mhddbldcaancdahlochjanpkkboaccpn", "handsOn": "none",
-          "love": { "state": "not_checked", "source": null, "summary": null }, "hate": { "state": "not_checked", "source": null, "summary": null },
+          "love": { "state": "reported", "source": "https://www.reddit.com/r/chess/comments/1uhmc2a/best_chess_training_app_or_website/", "summary": "A learner reports using RookHub with RepCheck after games as a quick repertoire-gap check." }, "hate": { "state": "not_found", "source": null, "summary": null },
           "doesWell": "Highlights off-repertoire moves directly on Chess.com/Lichess against a RookHub/PGN source.", "limitation": "Opening-only third-party adapter with no consequence play or explanation.",
           "posture": "transform", "transformation": "Offer an optional adapter that records a provenance-preserving re-entry target into the local repertoire/drill loop.", "doNotCopy": "Do not require third-party accounts or inject live assistance into rated games.",
           "producers": ["repertoire", "opening_identity", "external_adapter_event"], "consumer": "repertoire_gap_to_rehearsal", "tabiyaStatus": "mechanical", "route": ["R8", "R17", "O6", "O12", "F7", "F11"]
@@ -234,7 +256,7 @@
       "evidence": [
         {
           "productId": "chesslab-try", "checkedOn": "2026-08-20", "label": "V", "source": "https://trychesslab.com/", "handsOn": "none",
-          "love": { "state": "not_checked", "source": null, "summary": null }, "hate": { "state": "not_checked", "source": null, "summary": null },
+          "love": { "state": "not_found", "source": null, "summary": null }, "hate": { "state": "not_found", "source": null, "summary": null },
           "doesWell": "Presents openings, puzzles, games, engine analysis and endgames in one approachable mobile/offline shell.", "limitation": "The modes appear adjacent rather than joined by shared attempts/evidence; name is ambiguous across unrelated ChessLab products.",
           "posture": "transform", "transformation": "Mine navigation, defaults and continuity while keeping one run/evidence protocol.", "doNotCopy": "Do not reproduce Lucas-Chess-style independent mode sprawl.",
           "producers": ["shared_run", "capability_manifest"], "consumer": "application_shell", "tabiyaStatus": "mechanical", "route": ["O4", "O13", "F5", "F12"]
@@ -248,10 +270,24 @@
       "evidence": [
         {
           "productId": "qchess-net", "checkedOn": "2026-08-20", "label": "P", "source": "https://www.reddit.com/r/chess/comments/1klwe28", "handsOn": "none",
-          "love": { "state": "not_checked", "source": null, "summary": null }, "hate": { "state": "not_checked", "source": null, "summary": null },
+          "love": { "state": "reported", "source": "https://www.reddit.com/r/chess/comments/1klwe28/qchessnet_free_training_tools_for_openings_time/", "summary": "Launch users praised the integrated free training tools and specifically highlighted the thinking-process workflow." }, "hate": { "state": "reported", "source": "https://www.reddit.com/r/chess/comments/1klwe28/qchessnet_free_training_tools_for_openings_time/", "summary": "The same thread reports drag-cancel and same-square input bugs, while the creator warns that mobile is weak." },
           "doesWell": "Founder describes time-management feedback alongside human-ish AI, repertoire trees and guess-the-move.", "limitation": "Founder launch claims only; canonical product access and independent teardown remain missing.",
           "posture": "research", "transformation": "Test literal phase clock-spend metrics and a separate bot think-time model.", "doNotCopy": "Do not infer chess quality or psychology from clock use.",
           "producers": ["clock_history", "phase_classifier"], "consumer": "player_profile_and_bot_time", "tabiyaStatus": "claimed", "route": ["R11", "R12", "O8", "O9"]
+        }
+      ]
+    },
+    {
+      "id": "structured_thinking_drill",
+      "learnerValue": "Before committing, a learner can rehearse a repeatable scan for threats, forcing moves and candidates without being told which move is best.",
+      "mapFamilies": ["Drill/rehearsal modes", "Review Map"],
+      "evidence": [
+        {
+          "productId": "qchess-net", "checkedOn": "2026-08-20", "label": "P", "source": "https://www.reddit.com/r/chess/comments/1klwe28/qchessnet_free_training_tools_for_openings_time/", "handsOn": "none",
+          "love": { "state": "reported", "source": "https://www.reddit.com/r/chess/comments/1klwe28/qchessnet_free_training_tools_for_openings_time/", "summary": "Users singled out the Thinking Process Drill, including prophylaxis, forcing moves and candidate generation, as the standout tool." }, "hate": { "state": "reported", "source": "https://www.reddit.com/r/chess/comments/1klwe28/qchessnet_free_training_tools_for_openings_time/", "summary": "Input-state bugs and weak mobile presentation interfere with the same deliberate workflow." },
+          "doesWell": "Turns an expert thinking checklist into a guided sequence instead of presenting another analysis dashboard.", "limitation": "Founder-led launch evidence does not establish transfer, and an unchecked checklist can become ritualized noise.",
+          "posture": "transform", "transformation": "Offer an optional pre-commit scan scaffold, then compare the learner's declared scan with admitted signed evidence after commitment.", "doNotCopy": "Do not grade the learner's thought process from engine agreement or reveal candidate moves before commitment.",
+          "producers": ["reasoning_prompt_registry", "semantic_detector", "signed_evidence"], "consumer": "thinking_process_scaffold", "tabiyaStatus": "claimed", "route": ["R3", "R7", "O4", "O7", "F5", "F6"]
         }
       ]
     },
@@ -277,7 +313,7 @@
       "evidence": [
         {
           "productId": "chess-com", "checkedOn": "2026-08-20", "label": "V", "source": "design/research/integrated-platform-alignment.md", "handsOn": "inherited",
-          "love": { "state": "not_checked", "source": null, "summary": null }, "hate": { "state": "not_checked", "source": null, "summary": null },
+          "love": { "state": "reported", "source": "https://www.reddit.com/r/chess/comments/16uhywc/why_do_so_many_people_play_on_chesscom_when/", "summary": "Users value the social graph, friend play, fast matchmaking, mobile app and approachable integrated review/lesson workflow." }, "hate": { "state": "reported", "source": "https://www.reddit.com/r/chess/comments/1cea2r6/why_is_chesscom_so_much_more_popular_than_lichess/", "summary": "Users also criticize clutter, paywalls and the closed platform tradeoff." },
           "doesWell": "Combines a large human pool, courses, bots and polished review inside one account/history surface.", "limitation": "Closed/paid surfaces and engine-review defaults do not preserve branch rehearsal or self-hostability.",
           "posture": "research", "transformation": "Cost native play versus an adapter/handoff while retaining a local learning-context envelope.", "doNotCopy": "Do not make network play or proprietary identity mandatory for the rehearsal core.",
           "producers": ["match_events", "identity", "fair_play_boundary"], "consumer": "human_play_to_review", "tabiyaStatus": "proven", "route": ["R17", "O12", "F11"]
@@ -291,7 +327,7 @@
       "evidence": [
         {
           "productId": "chess-vs-chat", "checkedOn": "2026-08-20", "label": "V", "source": "https://store.steampowered.com/app/1888920/Chess_vs_Chat/", "handsOn": "none",
-          "love": { "state": "not_checked", "source": null, "summary": null }, "hate": { "state": "not_checked", "source": null, "summary": null },
+          "love": { "state": "not_found", "source": null, "summary": null }, "hate": { "state": "not_found", "source": null, "summary": null },
           "doesWell": "Provides a turnkey Twitch chat-vote game with points/leaderboard and moderation-oriented flow.", "limitation": "Entertainment-only: no learning, rewind, branch or disclosure semantics.",
           "posture": "transform", "transformation": "Compose audience voting/overlay over the existing run with delayed evidence and adapter attribution.", "doNotCopy": "Do not create a separate audience truth path or imply verified chat identity.",
           "producers": ["run_projection", "vote_adapter", "disclosure_policy"], "consumer": "stream_overlay", "tabiyaStatus": "mechanical", "route": ["R16", "O11", "F11"]
@@ -305,7 +341,7 @@
       "evidence": [
         {
           "productId": "chessido", "checkedOn": "2026-08-20", "label": "V", "source": "https://www.chessido.com/", "handsOn": "none",
-          "love": { "state": "not_checked", "source": null, "summary": null }, "hate": { "state": "not_checked", "source": null, "summary": null },
+          "love": { "state": "not_found", "source": null, "summary": null }, "hate": { "state": "not_found", "source": null, "summary": null },
           "doesWell": "Treats synchronized class boards, homework and academy operations as a coherent workflow.", "limitation": "Puzzles/ops dominate; no branch rehearsal runtime or evidence contract.",
           "posture": "transform", "transformation": "Use roster/assignment/return operations around shared run grants and grounded modules.", "doNotCopy": "Do not let roster membership silently grant run or progress access.",
           "producers": ["assignment", "run_grant", "progress_projection"], "consumer": "coach_workspace", "tabiyaStatus": "claimed", "route": ["R15", "O11", "F11"]
@@ -319,7 +355,7 @@
       "evidence": [
         {
           "productId": "chessly", "checkedOn": "2026-08-20", "label": "V", "source": "https://chessly.com/", "handsOn": "none",
-          "love": { "state": "not_checked", "source": null, "summary": null }, "hate": { "state": "not_checked", "source": null, "summary": null },
+          "love": { "state": "reported", "source": "https://www.reddit.com/r/chess/comments/1jb3ayd/a_kibitzers_review_of_chessly_20/", "summary": "Reviewers praise the polished interface, concise lessons, drills and motivating progression." }, "hate": { "state": "reported", "source": "https://www.reddit.com/r/chess/comments/1oeblub/chessly_20_is_it_worth_it_now/", "summary": "Users criticize thin course depth, locked navigation, subscription cost and the lack of a native app." },
           "doesWell": "Combines creator-authored courses, practice, bot testing and visible XP/achievement progression at large claimed scale.", "limitation": "Course cards and proprietary bot practice do not preserve consequence branches or prove the progression improves learning.",
           "posture": "transform", "transformation": "Use cadence, learner-owned solution histories and setup variety around the unchanged rehearsal loop.", "doNotCopy": "Do not sell progression, require wins for unlocks or turn retries into a scarce resource.",
           "producers": ["attempt_history", "concept_credit", "encounter_setup"], "consumer": "campaign_wrapper", "tabiyaStatus": "claimed", "route": ["R14", "O10", "F10"]
@@ -333,7 +369,7 @@
       "evidence": [
         {
           "productId": "chessvision", "checkedOn": "2026-08-20", "label": "V", "source": "https://chessvision.ai/", "handsOn": "none",
-          "love": { "state": "not_checked", "source": null, "summary": null }, "hate": { "state": "not_checked", "source": null, "summary": null },
+          "love": { "state": "reported", "source": "https://play.google.com/store/apps/details?hl=en-US&id=ai.chessvision.scanner", "summary": "A large review population values fast, accurate capture from books and sites into analysis." }, "hate": { "state": "reported", "source": "https://apps.apple.com/in/app/chessvision-ai-chess-scanner/id1574933453?platform=ipad&see-all=reviews", "summary": "Users report orientation errors in sparse endgames plus subvariation and stability limitations." },
           "doesWell": "Turns scanned boards from books/sites/videos into analysis and matched explanations across extensions/mobile/bots.", "limitation": "Import utility only; source rights, OCR confidence and learning flow are separate problems.",
           "posture": "defer", "transformation": "Admit a provenance/confidence-bearing position adapter after the import and rights contracts are stable.", "doNotCopy": "Do not treat OCR geometry as licensed theory or a graded lesson.",
           "producers": ["position_ocr", "source_provenance"], "consumer": "position_import", "tabiyaStatus": "absent", "route": ["O6", "O13", "F3", "F12"]

@@ -88,9 +88,10 @@ watch owns discovery and routing, not conclusions.
 
 ## What is executable now
 
-The capability-watch instrument is complete; D554's 18 missing love/hate rows now define its
-targeted external/forum follow-up. R11's blind review set is prepared and validated; only external
+The capability-watch instrument and D554's targeted desk/forum follow-up are complete: zero signals
+remain unchecked, while 20 explicit targeted-search misses preserve absence-of-evidence. R11's blind review set is prepared and validated; only external
 review remains. R3's mechanical/desk arm is done but its interaction/participant exit remains external;
-R4 and R5 are done; R11 is mechanical-done/external; R8 waits on R3's remaining exit.
+R4 and R5 are done; R11 is mechanical-done/external; R8 waits on R3's remaining exit. Comparable
+competitor hands-on stays inside R3/R7/R8/R11/R15-R17 rather than reopening the whole matrix.
 R3 and R9 need owner-authorised participants to satisfy their final exits. Scale content, product
 RFC drafting and feature implementation remain outside this queue.

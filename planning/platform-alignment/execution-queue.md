@@ -28,7 +28,7 @@ action; measurement instruments do not share the tested defect's assumption.
 | 1.1 | R4 knowledge retrieval experiment | **DONE 2026-08-20** | 17 registered sources, 55 passages, 144 queries, six arms and lifecycle controls landed; semantic extraction refused for 1.0 |
 | 1.2 | R11 bot-policy research | **BLIND PACKET READY 2026-08-20; EXTERNAL review remains** | 42 validated blind branches, separate key and scorecard landed; recruit ≥5 reviewers and obtain ≥3 independent scores/branch |
 | 1.3 | R18 self-host/privacy/accessibility/rights audit | **MECHANICAL/CODE/DESK DONE 2026-08-20; participant proof external** | Negative 1.0 result, O13 choice set, D605-D615 and F12 acceptance inputs landed |
-| 1.4 | Competitor capability-watch instrument | **DONE 2026-08-20** | 63-row source snapshot → 21 canonical representatives, 18 capabilities, 25 checked evidence/routing rows; D554 targeted research remains |
+| 1.4 | Competitor capability-watch instrument + targeted forum sweep | **DONE 2026-08-20; hands-on distributed downstream** | 63-row source snapshot → 22 canonical representatives, 19 capabilities, 29 checked evidence/routing rows; 38/58 love/hate cells evidenced, 20 explicit targeted-search misses, zero unchecked; R3/R7/R8/R11/R15-R17 own comparable hands-on |
 | 1.5 | R9 learner/coach protocol | READY to design; **EXTERNAL to complete** | Preregistered script/tasks/sample; participant work only with owner authority |
 
 **Phase exit:** each completed row satisfies `research-queue.md`; failed hypotheses remain findings.

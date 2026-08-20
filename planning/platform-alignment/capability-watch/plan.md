@@ -4,7 +4,7 @@
 
 **Authority:** D554–D556 and platform-alignment execution job 1.4
 
-**Status:** answered 2026-08-20; targeted love/hate and hands-on research remains D554
+**Status:** instrument and targeted desk/forum arm answered 2026-08-20; comparable hands-on remains in R3/R7/R8/R11/R15-R17
 
 ## Question
 
@@ -68,6 +68,9 @@ the deeper R3/R7/R8/R11/R15–R17 teardowns.
 ## Result
 
 `design/research/capability-watch.json` and `tools/capability-watch-harness/check.mjs` pass the
-contract and controls. The first summary covers 18 capabilities through 21 canonical products and
-25 evidence rows. Eighteen rows have neither love nor hate checked, so the instrument closes D556
-while turning D554 into a targeted evidence queue rather than claiming the market sweep complete.
+contract and controls. The current summary covers 19 capabilities through 22 canonical products and
+29 evidence rows. The targeted follow-up searched every previously unchecked love/hate cell: 38 of
+58 cells now carry reported/observed evidence and 20 are explicit `not_found` (8 love, 12 hate),
+with zero `not_checked`. The instrument closes D556 and the targeted desk/forum arm closes; D554's
+hands-on comparisons remain consumer-specific work in R3/R7/R8/R11/R15-R17 rather than a claim that
+every product has been used.

@@ -373,3 +373,22 @@ Append-only. Record research, rulings, RFC transitions, implementation closeout 
 - R11 remains external-to-complete: no branch has a human judgement, H5/C5 stay unmet, and no arm
   earns a human-like/coherent/personality label. No product code, schema, protected design intent
   or authored chess content changed; D560 remains active.
+
+## 2026-08-20 — D554's targeted forum sweep replaced every unchecked signal
+
+- Searched all 19 formerly unchecked capability rows and reconciled the register to 22 canonical
+  products, 19 capabilities and 29 evidence rows. Of 58 love/hate cells, 38 now carry
+  reported/observed evidence and 20 are explicit `not_found` results (8 love, 12 hate); zero remain
+  `not_checked`. The misses remain absence-of-evidence, not approval.
+- Corrected two routing defects: TryChessLab and ChessLabHQ are unrelated products and now have
+  distinct identities; Qchess's praised structured-thinking drill is represented separately from
+  time management. D626-D627 close.
+- Chessiverse's current Guided Play narrows the competitive claim: it now retains branches, permits
+  bot-reply replacement/resampling and joins opening guides to play. The surviving distinction is
+  grounded, preserved N-way consequence comparison across shared workflows—not the feature names.
+- User evidence supports understandable presets, connected explanation, theory/repertoire
+  continuity, fun presentation and low-friction transitions; it rejects premature best-move
+  leakage, generic/inaccurate coaching, context-free repetition, unstable types and brittle input.
+  This feeds the D619/R3 workflow prototype rather than authorizing product implementation.
+- Comparable hands-on remains in R3/R7/R8/R11/R15-R17. No product code, schema, protected design
+  intent or authored chess content changed; D560 remains active.

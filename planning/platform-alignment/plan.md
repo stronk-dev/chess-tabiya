@@ -244,11 +244,11 @@ The next safe queue is research and reconciliation, not feature implementation. 
 cards and dependencies are in `execution-queue.md`; the current frontier is:
 
 1. prepare R11's matched blind multi-ply review set, then run it with external reviewers;
-2. target D554's hands-on/forum work at the capability watch's 18 missing love/hate rows;
+2. run D554's comparable hands-on work within R3/R7/R8/R11/R15-R17; the targeted forum arm has zero unchecked signals;
 3. R3 interaction/participant exit when the board and participant authority are available;
 4. R13 grounded coaching aggregation once R7's exact predecessor clears.
 
-R3's mechanical/desk arm, R4, R5, R18's mechanical/code/desk arm, the capability-watch instrument and R12's short-session arm are complete. R18 proves the provider-off core but fails the present 1.0 platform floor and makes O13 ready; participant accessibility remains external. The watch closes D556 while exposing D554's user-evidence deficit. R12 supports continuous
+R3's mechanical/desk arm, R4, R5, R18's mechanical/code/desk arm, the capability-watch instrument/forum sweep and R12's short-session arm are complete. R18 proves the provider-off core but fails the present 1.0 platform floor and makes O13 ready; participant accessibility remains external. The watch closes D556 and D554's targeted desk/forum arm while leaving comparable hands-on inside its consumer studies. R12 supports continuous
 literal habit cards but refuses natural archetypes; its longitudinal transfer remains external.
 R11's mechanical arm is also complete and
 supports a layered bot-policy candidate, but its human-likeness/coherence claim remains external.

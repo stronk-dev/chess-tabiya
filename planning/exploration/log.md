@@ -3514,3 +3514,19 @@ Eighteen of 25 rows are transformations and only two are direct adopts. More imp
 have neither love nor hate checked; vendor feature evidence was not relabelled as user preference.
 D556 closes on the instrument. D554 remains the targeted hands-on/forum queue. No product code,
 schema, design intent or authored chess content changed; D560 remains active.
+
+## 2026-08-20 — targeted competitor feedback narrowed E1 and completed D554's forum arm
+
+`design/research/competitor-love-hate-sweep.md` searched every previously unchecked product/workflow
+signal and reconciled the checked register. It now contains 22 canonical products, 19 capabilities
+and 29 evidence rows: 38 of 58 love/hate cells are reported/observed, 20 are explicit targeted-search
+misses and none remain unchecked. ChessLabHQ and TryChessLab are now separate identities; Qchess's
+structured-thinking workflow is a first-class capability. D626-D627 close.
+
+E1 remains met but narrows materially. Chessiverse Guided Play now claims retained abandoned
+continuations, bot-reply replacement/resampling, PGN variations and opening-guide handoff, so rewind,
+branches and theory linkage are no longer whitespace individually. The remaining uncontradicted
+claim is grounded cross-workflow integration plus preserved N-way consequence comparison, pending
+hands-on R3/R7/R8/R11 work. Its intent presets and evidence-shaped theory hints support D619; its
+pre-commit move grading remains refused outside explicit Support. No product code, schema, protected
+design intent or authored chess content changed; D560 remains active.
