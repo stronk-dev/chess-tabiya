@@ -3467,3 +3467,23 @@ already-selected module packet after passing a versioned conformance gate, with 
 form as provider-off fallback. D586-D589 record the residual defects and promotion work. R5 is
 done, B4/K6 are qualified, O4 now waits on R3, and D560's content hold remains active. No product
 implementation or authored chess content changed.
+
+## 2026-08-20 — R12 found individual habits but refused natural player types
+
+`design/research/player-style-metrics.md` measures 16 literal player metrics over 36 non-bot
+accounts × 200 blitz games, selected from a fixed 2 GiB prefix of the official July Lichess
+database. The cohort contains 261,892 traced learner decisions and uses 2,573,111 legally parsed
+same-band games as its opening reference. Raw identities and per-decision traces remain outside the
+repository.
+
+Twelve metrics have persistent short-session floors from 25–200 games. Fianchetto-unblock,
+forcing-choice, non-pawn-capture and reply-breadth fail. The retained vector re-identifies 35/36
+accounts across disjoint halves and passes shuffled-identity/rating controls, but no k=4–12
+clustering reaches the ARI 0.70 archetype gate; the best is 0.417. Continuous inspectable habits may
+enter O9. Natural types, GM twins and advice are refused.
+
+D597-D604 record source contradictions, denominators, sample persistence and privacy. The first
+unblock run was discarded after its 586/586 result exposed an event-conditioned denominator;
+corrected incidence is 586/4,473. R12's short-session arm is answered, longitudinal transfer remains
+external, R13 still waits on R7, and the identifying-vector result feeds R18. No product code,
+schema, content or design intent changed; D560 remains active.

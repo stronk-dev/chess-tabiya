@@ -253,3 +253,21 @@ Append-only. Record research, rulings, RFC transitions, implementation closeout 
 - R11 is mechanical-done and external-to-complete. H5's main claim and C5 remain unmet pending the
   predeclared blinded 10–20-ply branch review. No product code, schema, content or design intent
   changed; D560's content hold remains active.
+
+## 2026-08-20 — R12 found individual habits but refused natural player types
+
+- Froze a 2 GiB compressed prefix of the official July Lichess rated database: 6,599,736 complete
+  games over 59 hours, 2,660,480 eligible blitz games and 190 accounts with at least 200 games.
+- Measured 36 non-bot accounts × 200 games across three rating bands, with 261,892 exact learner
+  decisions and a 2,573,111-game same-band opening reference. Raw identities/traces remain in
+  `/private/tmp`.
+- Twelve of sixteen literal metrics have persistent short-session floors from 25–200 games.
+  Fianchetto-unblock, forcing-choice, non-pawn-capture and reply-breadth refuse.
+- The retained vector re-identifies 35/36 accounts across disjoint halves, passes the shuffled and
+  rating controls, but every k=4–12 archetype clustering fails (best median ARI 0.417 vs 0.70).
+- Recorded D597-D604. Two instrument defects were preserved and repaired: an isolated first pass
+  is not a sample floor, and the first fianchetto denominator included its own event (586/586;
+  corrected 586/4,473).
+- R12 permits continuous habit cards to enter O9, not named types, GM twins or advice. R13 remains
+  blocked by R7; the behavioral-identifier result now feeds R18. No product code, schema, content
+  or design intent changed; D560 remains active.

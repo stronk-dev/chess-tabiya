@@ -52,7 +52,7 @@ schema evolution.
 |---|---|---|---|
 | 3.1 | R7 Review Map/re-entry/share study | WAIT | R1–R3 |
 | 3.2 | R8 theory↔drill workflow | WAIT | R3 only; R1/R2/R4 complete |
-| 3.3 | R12 player metrics | **READY NOW for research** | R1–R2 complete; production admission remains O2/O9 |
+| 3.3 | R12 player metrics | **SHORT-SESSION ARM DONE 2026-08-20; longitudinal transfer external** | 12/16 literal metrics retained with 25–200-game floors; individual vector passes, archetypes fail; production admission remains O2/O9 and R13 |
 | 3.4 | R13 grounded coaching aggregates | WAIT | R7/R12 |
 | 3.5 | R14 campaign experiential closure | WAIT | playable interaction-correct pilot |
 | 3.6 | R10 learning-effect experiments | WAIT/EXTERNAL | representative pilot and participants |
@@ -148,6 +148,7 @@ R14/R15/R16/R17/R18 → O10–O13 → optional F10/F11 + required F12
 all included nodes → integrated default journeys → 1.0 proof
 ```
 
-The immediate queue is therefore 1.2–1.4, 2.4 and 3.3, while R3's external exit is prepared. There is
+The immediate queue is therefore R18, the capability-watch instrument and R11/R3's external-arm
+preparation; R13 is now research-ready only after its exact R7 dependency is resolved. There is
 no legal feature-build queue yet; creating one before these results would
 violate the sequencing the owner explicitly requested.

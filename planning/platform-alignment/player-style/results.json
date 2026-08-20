@@ -1,0 +1,91 @@
+{
+  "measuredAt": "2026-08-20",
+  "scope": "short-session rated standard blitz; not longitudinal",
+  "source": {
+    "url": "https://database.lichess.org/standard/lichess_db_standard_rated_2026-07.pgn.zst",
+    "compressedPrefixBytes": 2147483648,
+    "compressedSha256": "8502a22a2ed1e000e0d4399785a3dccd1d59caf694fd0aa8ebb3dc59696e3e59",
+    "windowUtc": ["2026-07-01T00:00:32", "2026-07-03T11:19:31"],
+    "completeGames": 6599736,
+    "eligibleBlitzGames": 2660480,
+    "legalOpeningReferenceGames": 2573111
+  },
+  "population": {
+    "accountsAtLeast200": 190,
+    "observedBotsAtLeast200": 7,
+    "selectedAccounts": 36,
+    "gamesPerAccount": 200,
+    "bands": {"1000-1399": 12, "1400-1799": 12, "1800-2199": 12},
+    "candidateGamesParsed": 18430,
+    "invalidCandidateGames": 0,
+    "tracedLearnerDecisions": 261892,
+    "openingPositionsWanted": 6012,
+    "openingPositionsCovered": 6008,
+    "openingDecisionsWithNAtLeast50": 25391
+  },
+  "persistentFloors": {
+    "opening_surprisal": 25,
+    "opening_family_entropy": 100,
+    "fianchetto_setup_rate": 25,
+    "fianchetto_knight_screen_rate": 200,
+    "fianchetto_unblock_rate": null,
+    "castle_kingside_rate": 50,
+    "castle_queenside_rate": 50,
+    "clock_spend_share:opening": 100,
+    "clock_spend_share:middlegame": 50,
+    "clock_spend_share:endgame": 25,
+    "pawn_choice_residual": 100,
+    "forcing_choice_residual": null,
+    "center_pawn_choice_residual": 200,
+    "early_queen_choice_residual": 100,
+    "nonpawn_capture_residual": null,
+    "opponent_reply_breadth_residual": null
+  },
+  "corrections": {
+    "predeclaredFirstPass": {"castle_queenside_rate": 12, "forcing_choice_residual": 50},
+    "persistentPass": {"castle_queenside_rate": 50, "forcing_choice_residual": null},
+    "discardedFianchettoUnblock": {"wrong": "586/586", "corrected": "586/4473"}
+  },
+  "at200": {
+    "opening_surprisal": {"rho": 0.9740, "mad": 0.0644, "sameSide": 0.9167},
+    "opening_family_entropy": {"rho": 0.9354, "mad": 0.1511, "sameSide": 0.9167},
+    "fianchetto_setup_rate": {"rho": 0.8648, "mad": 0.0267, "sameSide": 0.8333},
+    "fianchetto_knight_screen_rate": {"rho": 0.7574, "mad": 0.0193, "sameSide": 0.8056},
+    "fianchetto_unblock_rate": {"rho": 0.1879, "mad": 0.0328, "sameSide": 0.5000},
+    "castle_kingside_rate": {"rho": 0.8960, "mad": 0.0484, "sameSide": 0.8611},
+    "castle_queenside_rate": {"rho": 0.9065, "mad": 0.0294, "sameSide": 0.8611},
+    "clock_spend_share:opening": {"rho": 0.9495, "mad": 0.0006, "sameSide": 0.8611},
+    "clock_spend_share:middlegame": {"rho": 0.9714, "mad": 0.0017, "sameSide": 0.9722},
+    "clock_spend_share:endgame": {"rho": 0.9323, "mad": 0.0068, "sameSide": 0.8333},
+    "pawn_choice_residual": {"rho": 0.9323, "mad": 0.0103, "sameSide": 0.8333},
+    "forcing_choice_residual": {"rho": 0.9040, "mad": 0.0063, "sameSide": 0.6944},
+    "center_pawn_choice_residual": {"rho": 0.8713, "mad": 0.0035, "sameSide": 0.8056},
+    "early_queen_choice_residual": {"rho": 0.9305, "mad": 0.0080, "sameSide": 0.8611},
+    "nonpawn_capture_residual": {"rho": 0.8806, "mad": 0.0049, "sameSide": 0.7222},
+    "opponent_reply_breadth_residual": {"rho": 0.8551, "mad": 0.0323, "sameSide": 0.6944}
+  },
+  "bootstrap95Width": {
+    "opening_surprisal": {"median": 0.1926, "p90": 0.2429},
+    "opening_family_entropy": {"median": 0.4236, "p90": 0.4888},
+    "fianchetto_setup_rate": {"median": 0.0638, "p90": 0.1004},
+    "fianchetto_knight_screen_rate": {"median": 0.0351, "p90": 0.1039},
+    "castle_kingside_rate": {"median": 0.1172, "p90": 0.1342},
+    "castle_queenside_rate": {"median": 0.0839, "p90": 0.1293},
+    "clock_spend_share:opening": {"median": 0.0017, "p90": 0.0028},
+    "clock_spend_share:middlegame": {"median": 0.0073, "p90": 0.0119},
+    "clock_spend_share:endgame": {"median": 0.0188, "p90": 0.0338},
+    "pawn_choice_residual": {"median": 0.0218, "p90": 0.0252},
+    "center_pawn_choice_residual": {"median": 0.0124, "p90": 0.0141},
+    "early_queen_choice_residual": {"median": 0.0210, "p90": 0.0258}
+  },
+  "vector": {
+    "dimensions": 12,
+    "eligibleAccounts": 36,
+    "selfReidentification": 0.9722,
+    "shuffledIdentityControl": 0.0,
+    "ratingLeakageCrossValidatedR2": -0.2956,
+    "ratingPositiveControlR2": 1.0,
+    "archetypePass": false,
+    "clusterMedianAri": {"4": 0.2514, "5": 0.2520, "6": 0.2806, "7": 0.3247, "8": 0.3369, "9": 0.3488, "10": 0.3472, "11": 0.4171, "12": 0.2880}
+  }
+}

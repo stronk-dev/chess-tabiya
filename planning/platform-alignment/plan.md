@@ -243,13 +243,16 @@ a dated checkpoint, not a replacement for `rfc/README.md`.
 The next safe queue is research and reconciliation, not feature implementation. Detailed job
 cards and dependencies are in `execution-queue.md`; the current frontier is:
 
-1. R12 player-style metrics research;
-2. R18 self-host/privacy/accessibility/rights audit;
-3. the capability-watch instrument;
-4. prepare R11's matched blind multi-ply review set, then run it with external reviewers;
-5. R3 interaction/participant exit when the board and participant authority are available.
+1. R18 self-host/privacy/accessibility/rights audit (now also owns R12's behavioral-identifier
+   finding);
+2. the capability-watch instrument;
+3. prepare R11's matched blind multi-ply review set, then run it with external reviewers;
+4. R3 interaction/participant exit when the board and participant authority are available;
+5. R13 grounded coaching aggregation once R7's exact predecessor clears.
 
-R3's mechanical/desk arm, R4 and R5 are complete. R11's mechanical arm is also complete and
+R3's mechanical/desk arm, R4, R5 and R12's short-session arm are complete. R12 supports continuous
+literal habit cards but refuses natural archetypes; its longitudinal transfer remains external.
+R11's mechanical arm is also complete and
 supports a layered bot-policy candidate, but its human-likeness/coherence claim remains external.
 R3 remains external for real interaction and
 nontechnical-player comprehension, so it does not yet unlock defaults, R7 or R8.
