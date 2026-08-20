@@ -8,6 +8,17 @@
 
 **Earlier brief:** `planning/evidence-rework-brief.md`
 
+**Authoritative bottom-up program files:**
+
+- `research-queue.md` — question, method, population, exit criterion and dependency;
+- `decision-queue.md` — owner/design choices that evidence cannot make;
+- `rfc-graph.md` — existing-document reconciliation and candidate dependency graph;
+- `execution-queue.md` — the only current executable frontier and the route to release;
+- `1.0-capability-map.md` — every requested capability, current reality, route and proposed scope.
+
+This file remains the concise program charter. If a thematic workstream below appears to permit
+work that its authoritative queue blocks, the queue wins.
+
 ## Objective
 
 Turn the implemented foundation into one coherent, self-hostable chess rehearsal platform whose
@@ -214,15 +225,20 @@ Re-derive this checkpoint before execution; it is intentionally not a replacemen
 
 ## First executable queue
 
-The next safe queue is research and reconciliation, not feature implementation:
+The next safe queue is research and reconciliation, not feature implementation. Detailed job
+cards and dependencies are in `execution-queue.md`; the current frontier is:
 
-1. active-RFC completion audit and register repair;
-2. detection-landscape dossier;
-3. evidence-presentation dossier and disposable module prototype;
-4. Skipper-backed knowledge-retrieval comparison instrument;
-5. bot-policy and player-style research;
-6. hands-on competitor teardowns and capability-watch format;
-7. owner rulings, then RFC drafting in dependency order.
+1. A0 active-RFC truth audit;
+2. A1 capability reality audit;
+3. A2 interaction-state/K9 measurement repair;
+4. R4 knowledge-retrieval experiment;
+5. R11 bot-policy research;
+6. R18 self-host/privacy/accessibility/rights audit;
+7. the capability-watch instrument.
+
+Detection, presentation, player-style, Review Map, campaign and professional/social research are
+all on the queue, but behind named predecessors. Owner rulings and RFC drafting begin only after
+their corresponding research exit criteria pass.
 
 Campaign, broad content production, federation and new all-in-one navigation stay off the executable
 queue until their dependencies above are resolved.

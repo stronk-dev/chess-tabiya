@@ -32,3 +32,23 @@ Append-only. Record research, rulings, RFC transitions, implementation closeout 
   enrichment, validation, bundle and confidence changes.
 - Opened a six-arm disposable experiment under `knowledge-retrieval/`; product extraction happens
   only if it beats exact chess keys + FTS on predeclared recall, false-match and abstention gates.
+
+## 2026-08-20 — Bottom-up route to integrated 1.0 made executable
+
+- Expanded D563 from a sequencing statement into five linked program artifacts: an authoritative
+  research queue, owner/design decision queue, existing-aware RFC dependency graph, executable
+  phase queue and full capability map.
+- Separated audit truth (A0–A2), evidence research (R1–R6), learner/review research (R7–R10),
+  bots/progression (R11–R14), and professional/social/platform breadth (R15–R19). Every row now
+  names a method, exit criterion, blocker and downstream decision rather than only a topic.
+- Routed every requested family — evidence, semantic detectors, assistance presets, full analysis,
+  theory, drills, Review Map/share, bots, profiles, campaign, coach, streamer, human play,
+  tournaments, self-hosting, accessibility, integrations and later federation — through research,
+  owner ruling and an RFC node. No capability is silently lost; not all are pre-decided as 1.0.
+- Made the immediate frontier explicit: active-RFC truth, capability reality, interaction-state
+  measurement, knowledge retrieval, bot policy, release-platform audit and the capability-watch
+  instrument. Detector/presentation/profile feature work is correctly blocked behind its inputs.
+- Preserved D560's content hold: only disposable/sacrificial pilot work is legal before Gate F;
+  scale content remains downstream of stable evidence and pack contracts plus owner acceptance.
+- Corrected the old evidence resume prompt through D564 and removed the implication that the owner
+  proposed request-time scraping; it now audits a separate builder and immutable runtime bundle.

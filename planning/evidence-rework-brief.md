@@ -4,7 +4,8 @@
 09:00 Europe/Amsterdam).** Nothing they produced landed. **Superseded as the top-level resume
 point on 2026-08-20 by `design/research/integrated-platform-alignment.md` and
 `planning/platform-alignment/plan.md`; this brief remains the detailed prompt for the evidence
-substream.** Owner ideas and audit findings are ledgered as **D549–D562** — read them first.
+substream.** Owner ideas, rulings and audit findings are ledgered as **D549–D564** — read them
+first. The authoritative bottom-up route now lives under `planning/platform-alignment/`.
 
 ## The evidence substream, in dependency order
 
@@ -48,7 +49,7 @@ detectors).
 > `design/research/detection-landscape.md` (when landed), `design/research/evidence-presentation.md`
 > (when landed), `design/research/theory-knowledge-pipeline.md`, `design/research/bot-policy.md`,
 > `design/research/player-style-metrics.md` (each when landed), `rfc/evidence-producers.md` (when
-> landed), ledger rows D542–D562,
+> landed), ledger rows D542–D564,
 > `design/05-in-run-experience.md` §3, and `design/02-product-shape.md` §Adoption.
 >
 > Answer these, each with file+line evidence:
@@ -62,14 +63,16 @@ detectors).
 > 4. **Is the anti-pattern distinction stated and does it hold** — what keeps this from being
 >    "an engine review screen with a rewind button"? If any document weakens the rehearsal-loop
 >    framing, flag it.
-> 5. **Do the owner ideas/findings D549–D562 each have a home** — a document that owns it, or a named
+> 5. **Do the owner ideas/findings D549–D564 each have a home** — a document that owns it, or a named
 >    reason it waits? An idea with no home is a process bug (law 4).
 > 6. **Does the bot lane and the guidance lane share the registry** rather than fork it?
 >    Chessiverse's lesson (D551) is that opponent steering and support both consume the same
 >    grounded facts.
-> 7. **Does the knowledge plane fail closed?** No live arbitrary scrape in a hint request; every
->    passage has source/licence/digest/version; deterministic chess keys precede embeddings; a
->    semantic match never becomes chess truth merely because it is similar.
+> 7. **Does the separate knowledge-builder fail closed?** Treat Frameworks Skipper as prior art
+>    for an independently operated crawler/index/bundle pipeline, not as a request-time scraper
+>    proposal. Every passage has source/licence/digest/span; deterministic chess keys lead;
+>    semantic retrieval is admitted only if it beats the simpler baseline; runtime can consume an
+>    immutable bundle without the builder; and an LLM cannot select or manufacture the claim.
 > 8. **Does post-game review route back into commitment?** Every actionable Review Map moment needs
 >    retry/re-enter/branch/compare/drill. Flag any screen whose endpoint is an engine label or LLM
 >    explanation, and any social recap that selects its own facts in the language model.
@@ -83,5 +86,5 @@ detectors).
 Law 8 (grounded evidence only; LLM renders, never grades). Law 3 (label everything V/P/M).
 Law 5 (design/00–06: name, never write). The buildability acceptance test (D473). Non-vacuity +
 negative fixture for every predicate (D444/D451/D522/D526). Instruments must not share the
-defect's assumption (D526/D539). Column 1 is the status (D419/D459). Ids through **D562** are in
+defect's assumption (D526/D539). Column 1 is the status (D419/D459). Ids through **D564** are in
 use.

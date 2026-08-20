@@ -15,7 +15,7 @@ created on the project's two highest-output days ([[D487]]).
 
 ---
 
-## The five lanes
+## The six lanes
 
 | Lane | Document | What it holds |
 |---|---|---|
@@ -24,6 +24,7 @@ created on the project's two highest-output days ([[D487]]).
 | **RFCs to draft** | `planning/rfc-drafting-queue.md` | **40 unowned rows → 7 documents (4:1).** Write `shared-resource-registers` first — not the most valuable, but the only one currently *producing wrong work*: three of four registers are wrong at HEAD and five of the seven documents must claim a lane |
 | **Research** | `planning/research-queue.md` | Hypotheses, kill criteria and measurement questions, ranked |
 | **UX** | `planning/ux-work-lane.md` | What to fix so a person can use the thing |
+| **Integrated 1.0 alignment** | `planning/platform-alignment/plan.md` | D555/D563's bottom-up capability program: research queue → owner/design decisions → RFC graph → implementation/content/release proof. Its `execution-queue.md` is authoritative for that program |
 
 Reality check on what a user actually sees: `planning/app-reality-check.md`.
 

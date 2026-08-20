@@ -3281,3 +3281,16 @@ abstention, citation and rebuild gates. A product release would consume an immut
 bundle; ordinary self-hosters would not inherit Postgres, crawling, embeddings or an agent loop.
 The experiment is queued at `planning/platform-alignment/knowledge-retrieval/plan.md`. No product
 code, schema, content or deployment changed.
+
+## 2026-08-20 — The integrated 1.0 program now has a bottom-up dependency queue
+
+D563 is now executable as planning rather than only a ruling. `planning/platform-alignment/`
+contains a research queue with methods and exit criteria, a decision queue for owner/design
+synthesis, an RFC graph that reconciles active documents before creating new ones, an execution
+queue from current research through Gate F and release proof, and a capability map covering the
+individual loop plus campaign, coach, streamer, human play, tournaments and platform breadth.
+
+The current legal frontier is audit and research: active-RFC truth, capability reality,
+interaction-state measurement, the already-queued theory retrieval comparison, bot-policy
+research, release-platform/rights research and capability-watch instrumentation. Product feature
+RFCs and scale content remain blocked. No design intent, product code, schema or content changed.
