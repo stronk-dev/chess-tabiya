@@ -212,3 +212,23 @@ Append-only. Record research, rulings, RFC transitions, implementation closeout 
 - R3 is mechanical/desk done and still external to complete: D537/D573 invalidate the shipped
   gesture baseline, the in-app browser was unavailable, and no nontechnical participants were in
   scope. R7/R8/O4 remain blocked; R5 is the next evidence-core research job. D560 stays active.
+
+## 2026-08-20 — R5 separated optional wording from evidence authority
+
+- Landed `design/research/llm-renderer-contract.md` and the disposable
+  `tools/r5-renderer-harness/`. Sixteen synthetic cases compared deterministic rendering, the
+  current sentence seam and a typed module seam across `gpt-4o-mini`,
+  `claude-sonnet-4-5-20250929` and local `SmolLM2-360M-Instruct`.
+- Deterministic rendering retained all 18 proposition groups and passed every gate. The Claude
+  sentence arm also passed this one pinned run; the GPT sentence arm falsely asserted no evidence
+  in a non-empty case, and shipped `voiceCheck` accepted it.
+- Both hosted typed arms parsed and returned admitted fact IDs in 16/16 cases but dropped required
+  theory citations; the Claude typed arm also removed a disclosure qualifier. JSON shape and IDs
+  therefore do not bind the prose proposition.
+- The 360M local typed arm passed parse/ID checks in 1/16 cases and had 15 hard failures; sentence
+  mode had three. `voiceCheck` accepted 17/18 local hard failures. Offline operation cannot depend
+  on a local generator.
+- Recorded D586-D589. The 1.0 boundary is deterministic rendering as normative/self-host fallback,
+  with any LLM optional, post-selection and conformance-gated; provenance, disclosure, numbers and
+  visual bindings remain deterministic. R5 is done; O4 now waits on R3 only. No product code,
+  schema, content or design intent changed; D560 remains active.

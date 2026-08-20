@@ -137,6 +137,16 @@ current default/generated path and evidence that presentation form alone cannot 
 open: the disposable module boundary passes mechanical leakage/abstention tests, but eligible
 semantic facts and reader comprehension are not yet measured together.
 
+**K6 seventh partial evidence, 2026-08-20.** R5
+(`design/research/llm-renderer-contract.md`) rules out another proposed repair: changing the prose
+model or adding JSON/fact IDs does not make unselected/generic evidence specific. Both hosted typed
+arms returned valid schemas and admitted IDs in 16/16 cases but dropped required citations; one
+also dropped a disclosure qualifier. The current sentence seam was provider-dependent: one hosted
+snapshot passed 16 fixed cases, while the other asserted false absence and `voiceCheck` accepted
+it. A 360M local model failed 15/16 typed cases. This strengthens evidence that the generated path
+needs semantic eligibility, bounded modules and deterministic fact-linked forms before prose. K6
+remains open because that full path has not been reader-tested against curated packs.
+
 ## Exploration-to-slice gate
 
 The first experimental vertical-slice RFC may open when all of the following have reached
@@ -189,7 +199,7 @@ live.
 | B1 | Shell and entry: stable Play/Learn/Review/Live/Create/Library/Settings routes; resume works | shipped — shell, routes, resume; `phase` projected (D6 closed by `defect-sweep`). Residual: `/settings` remains display-only |
 | B2 | Solo modes: Just Play + Line/Plan/Outcome/Trajectory each complete one fixture run | **shipped in full 2026-08-14** — all four drill modes plus the Just Play position player (`shape-library`); the justPlay/fromPosition capability rows are live |
 | B3 | Review: manual multi-branch selection, pair/multi compare, replay, deep mode, share/export, **plus branch groups — N candidates forked and played in parallel with resistance held constant** | shipped in full — N-way compare, simulate, prediction rendering, deep analysis, export, **and branch groups (2026-08-14)**. Residual: narrative mode + difference strips (forward-trace orphan, ledgered) |
-| B4 | Evidence: authored, Stockfish, Maia, corpus, Syzygy, features, LLM-rendered layers with timing controls | authored ✓, Stockfish ✓, Maia ✓, **corpus/recency ✓ (`runtime-corpus-evidence`)**, structural mechanics ✓ (B9), voice seam ✓. **R1–R3 qualification:** mechanics are not semantic guidance; cheap semantic labels fail external disagreement, local selection promotes trivial literals without prior eligibility, and both board/LLM surfaces currently bypass selection. R3's module boundary is mechanically viable but reader validation remains external. Residual: Syzygy runtime rendering + eligible/selected semantic evidence + module-bound rendering |
+| B4 | Evidence: authored, Stockfish, Maia, corpus, Syzygy, features, LLM-rendered layers with timing controls | authored ✓, Stockfish ✓, Maia ✓, **corpus/recency ✓ (`runtime-corpus-evidence`)**, structural mechanics ✓ (B9), voice seam ✓. **R1–R5 qualification:** mechanics are not semantic guidance; cheap semantic labels fail external disagreement, local selection promotes trivial literals without prior eligibility, and current board/LLM surfaces bypass selection. R3's module boundary is mechanically viable but reader validation remains external. R5 establishes deterministic rendering as the normative fallback and permits only a conformance-gated optional LLM after selection; schema/IDs alone do not preserve citations/disclosure. Residual: Syzygy runtime rendering + eligible/selected semantic evidence + module-bound reader validation |
 | B5 | Live: Twitch host/chat/overlay, academy roles, external Arena handoff | shipped 2026-08-13 (`live-session-platform`) — roles, board control, spectate, chat voting, academy, Arena two-leg handoff. Native matchmaking stays outside minimal-real scope by design |
 | B6 | Create: pack studio/import/review/session-distill produces a validated fixture; corpus mining emits one candidate | shipped — mining (`candidate-emit`) plus studio write path, imports and publication channels. **Correction 2026-08-14 (forward trace): session distillation was claimed here and does NOT exist** — `session_distilled` is a reserved enum with zero producers; re-ledgered (`pack-studio`) |
 | B7 | Return: history/resume, progress, concept scheduling, related retry, recommendations | shipped 2026-08-13 (`return-and-progression`) — attempt scheduling, progress, `/learn`, duplicate, related retry. **Correction 2026-08-14 (forward trace): the opt-in recommender was claimed here and does NOT exist** — no route, disclaimed in the canonical doc; re-ledgered as an orphan. Cross-pack concept identity deliberately absent (a studio/B11 contract) |

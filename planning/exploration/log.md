@@ -3450,3 +3450,20 @@ concrete defects; K6 gains a sixth partial finding and B4/Q4c are narrowed.
 R3 is mechanical/desk done but not complete. The board remains interaction-invalid under D537/D573,
 the in-app browser was unavailable, and no nontechnical participants were in scope. R7, R8 and O4
 remain blocked. No product code, schema or content changed; D560 remains active.
+
+## 2026-08-20 — platform R5 renderer evaluation completed
+
+`design/research/llm-renderer-contract.md` measures deterministic, current sentence and typed
+module rendering over sixteen fixed synthetic cases and three model snapshots. Deterministic
+rendering passed every gate. One hosted sentence snapshot passed the pinned run; another returned a
+false absence that `voiceCheck` accepted. Both hosted typed arms returned schema-valid output and
+admitted fact IDs in every case while dropping required citations, so structured output binds the
+envelope rather than the prose proposition. The 360M local typed arm failed 15/16 cases and the
+guard accepted 14 of those failures.
+
+The resulting boundary is narrower than “LLM guidance”: evidence selection, abstention,
+permissions, citations, exact values and board forms are deterministic; an LLM may only style an
+already-selected module packet after passing a versioned conformance gate, with the deterministic
+form as provider-off fallback. D586-D589 record the residual defects and promotion work. R5 is
+done, B4/K6 are qualified, O4 now waits on R3, and D560's content hold remains active. No product
+implementation or authored chess content changed.

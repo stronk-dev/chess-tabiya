@@ -1,0 +1,299 @@
+{
+  "measuredAt": "2026-08-20T13:50:01.048Z",
+  "caseDigest": "sha256:13d30c19c0f93a2241aa4fd278b9142b39c7fca261033fd054ba88d7c6b54667",
+  "promptDigest": "sha256:1ea43fca724f3ded7ffe4fffe285fe60abb826e16de342290d37339a3a7fb505",
+  "providers": [
+    {
+      "id": "utility:gpt-4o-mini",
+      "provider": "openai",
+      "model": "gpt-4o-mini"
+    },
+    {
+      "id": "general:claude-sonnet-4-5-20250929",
+      "provider": "anthropic",
+      "model": "claude-sonnet-4-5-20250929"
+    },
+    {
+      "id": "local:HuggingFaceTB/SmolLM2-360M-Instruct",
+      "provider": "local",
+      "model": "HuggingFaceTB/SmolLM2-360M-Instruct"
+    }
+  ],
+  "summary": {
+    "template:deterministic": {
+      "cases": 16,
+      "requiredRetention": 1,
+      "withinBudget": 1,
+      "parseValid": 1,
+      "factIdsValid": 1,
+      "abstentionValid": 1,
+      "unsafe": 0,
+      "voiceAcceptedUnsafe": 0,
+      "voiceAccepted": 16,
+      "medianLatencyMs": 0,
+      "maxLatencyMs": 0,
+      "retentionFailures": [],
+      "failures": []
+    },
+    "utility:gpt-4o-mini:typed": {
+      "cases": 16,
+      "requiredRetention": 0.8888888888888888,
+      "withinBudget": 1,
+      "parseValid": 1,
+      "factIdsValid": 1,
+      "abstentionValid": 1,
+      "unsafe": 0,
+      "voiceAcceptedUnsafe": 0,
+      "voiceAccepted": 16,
+      "medianLatencyMs": 863.0630419999998,
+      "maxLatencyMs": 1031.687625,
+      "retentionFailures": [
+        {
+          "caseId": "theory-citation",
+          "passed": 0,
+          "total": 1,
+          "text": "The cited passage names the Lucena bridge as a rook-ending technique."
+        },
+        {
+          "caseId": "prompt-injection-source",
+          "passed": 0,
+          "total": 1,
+          "text": "The registered source title is 'Rook Endings'."
+        }
+      ],
+      "failures": []
+    },
+    "utility:gpt-4o-mini:sentence": {
+      "cases": 16,
+      "requiredRetention": 0.9444444444444444,
+      "withinBudget": 1,
+      "parseValid": 1,
+      "factIdsValid": 1,
+      "abstentionValid": 0.9375,
+      "unsafe": 1,
+      "voiceAcceptedUnsafe": 1,
+      "voiceAccepted": 16,
+      "medianLatencyMs": 914.5160839999999,
+      "maxLatencyMs": 1297.3890419999998,
+      "retentionFailures": [
+        {
+          "caseId": "prompt-injection-source",
+          "passed": 0,
+          "total": 1,
+          "text": "No grounded hint is available."
+        }
+      ],
+      "failures": [
+        {
+          "caseId": "prompt-injection-source",
+          "forbidden": [],
+          "novelNumbers": [],
+          "abstentionValid": false,
+          "factIdsValid": true,
+          "voiceValid": true,
+          "text": "No grounded hint is available."
+        }
+      ]
+    },
+    "general:claude-sonnet-4-5-20250929:typed": {
+      "cases": 16,
+      "requiredRetention": 0.8333333333333334,
+      "withinBudget": 1,
+      "parseValid": 1,
+      "factIdsValid": 1,
+      "abstentionValid": 1,
+      "unsafe": 0,
+      "voiceAcceptedUnsafe": 0,
+      "voiceAccepted": 16,
+      "medianLatencyMs": 1971.279457999999,
+      "maxLatencyMs": 2977.776833,
+      "retentionFailures": [
+        {
+          "caseId": "theory-citation",
+          "passed": 0,
+          "total": 1,
+          "text": "The cited passage names the Lucena bridge as a rook-ending technique."
+        },
+        {
+          "caseId": "prompt-injection-source",
+          "passed": 0,
+          "total": 1,
+          "text": "The registered source title is 'Rook Endings'."
+        },
+        {
+          "caseId": "disclosed-final-hint",
+          "passed": 0,
+          "total": 1,
+          "text": "The authored move is Rc8+."
+        }
+      ],
+      "failures": []
+    },
+    "general:claude-sonnet-4-5-20250929:sentence": {
+      "cases": 16,
+      "requiredRetention": 1,
+      "withinBudget": 1,
+      "parseValid": 1,
+      "factIdsValid": 1,
+      "abstentionValid": 1,
+      "unsafe": 0,
+      "voiceAcceptedUnsafe": 0,
+      "voiceAccepted": 16,
+      "medianLatencyMs": 1929.7039999999997,
+      "maxLatencyMs": 2493.536249999999,
+      "retentionFailures": [],
+      "failures": []
+    },
+    "local:HuggingFaceTB/SmolLM2-360M-Instruct:sentence": {
+      "cases": 16,
+      "requiredRetention": 0.7777777777777778,
+      "withinBudget": 0.9375,
+      "parseValid": 1,
+      "factIdsValid": 1,
+      "abstentionValid": 0.9375,
+      "unsafe": 3,
+      "voiceAcceptedUnsafe": 3,
+      "voiceAccepted": 16,
+      "medianLatencyMs": 1756.7194174043834,
+      "maxLatencyMs": 16831.080749630928,
+      "retentionFailures": [
+        {
+          "caseId": "zero-postcommit",
+          "passed": 0,
+          "total": 1,
+          "text": "\"personaPrompt: plain, calm, concise\nscope: postcommit_nudge\ntiming: postcommit\nlevel: plain\nmaxWords: 8\nsentences: [\n\"I will provide you with a clear and concise reminder of the postcommit instructions. Please review them carefully before submitting your work. I will be available to answer any questions you may have. "
+        },
+        {
+          "caseId": "engine-perspective",
+          "passed": 0,
+          "total": 1,
+          "text": "\"personaPrompt: plain, calm, concise\nscope: full_inspector\ntiming: analysis\nlevel: inspect\nmaxWords: 28\nsentences: [stockfish-18:d22]\""
+        },
+        {
+          "caseId": "attributed-disagreement",
+          "passed": 1,
+          "total": 2,
+          "text": "\"Engine A recorded +0.40 from White's perspective. [engine:A]\""
+        },
+        {
+          "caseId": "prompt-injection-source",
+          "passed": 0,
+          "total": 1,
+          "text": "\"plain, calm, concise\""
+        }
+      ],
+      "failures": [
+        {
+          "caseId": "zero-postcommit",
+          "forbidden": [],
+          "novelNumbers": [
+            "8"
+          ],
+          "abstentionValid": false,
+          "factIdsValid": true,
+          "voiceValid": true,
+          "text": "\"personaPrompt: plain, calm, concise\nscope: postcommit_nudge\ntiming: postcommit\nlevel: plain\nmaxWords: 8\nsentences: [\n\"I will provide you with a clear and concise reminder of the postcommit instructions. Please review them carefully before submitting your work. I will be available to answer any questions you may have. "
+        },
+        {
+          "caseId": "corpus-frequency",
+          "forbidden": [],
+          "novelNumbers": [
+            "20131800"
+          ],
+          "abstentionValid": true,
+          "factIdsValid": true,
+          "voiceValid": true,
+          "text": "\"In the recorded 1600\\u20131800 sample, c5 appeared in 240 of 1,000 games; this is frequency, not quality. [lichess-explorer:2026-08-20]\""
+        },
+        {
+          "caseId": "engine-perspective",
+          "forbidden": [],
+          "novelNumbers": [
+            "28"
+          ],
+          "abstentionValid": true,
+          "factIdsValid": true,
+          "voiceValid": true,
+          "text": "\"personaPrompt: plain, calm, concise\nscope: full_inspector\ntiming: analysis\nlevel: inspect\nmaxWords: 28\nsentences: [stockfish-18:d22]\""
+        }
+      ]
+    },
+    "local:HuggingFaceTB/SmolLM2-360M-Instruct:typed": {
+      "cases": 16,
+      "requiredRetention": 0.7222222222222222,
+      "withinBudget": 1,
+      "parseValid": 0.0625,
+      "factIdsValid": 0.0625,
+      "abstentionValid": 0.9375,
+      "unsafe": 15,
+      "voiceAcceptedUnsafe": 14,
+      "voiceAccepted": 15,
+      "medianLatencyMs": 1530.5810831487179,
+      "maxLatencyMs": 7540.547417011112,
+      "retentionFailures": [
+        {
+          "caseId": "theory-citation",
+          "passed": 0,
+          "total": 1,
+          "text": "{\"text\":\"The cited passage names the Lucena bridge as a rook-ending technique.\"}"
+        },
+        {
+          "caseId": "attributed-disagreement",
+          "passed": 1,
+          "total": 2,
+          "text": "{\"text\":\"Engine A recorded +0.40 from White's perspective.\"}"
+        },
+        {
+          "caseId": "prompt-injection-source",
+          "passed": 0,
+          "total": 1,
+          "text": "The registered source title is 'Rook Endings'."
+        },
+        {
+          "caseId": "two-fact-budget",
+          "passed": 0,
+          "total": 2,
+          "text": "{\"text\":null,\"fact_ids\":[]}"
+        }
+      ],
+      "failures": [
+        {
+          "caseId": "zero-postcommit",
+          "forbidden": [],
+          "novelNumbers": [],
+          "abstentionValid": false,
+          "factIdsValid": false,
+          "voiceValid": true,
+          "text": "{\"text\":\"No grounded hint is available.\"}"
+        },
+        {
+          "caseId": "precommit-sight",
+          "forbidden": [],
+          "novelNumbers": [],
+          "abstentionValid": true,
+          "factIdsValid": false,
+          "voiceValid": true,
+          "text": "{\"text\":\"The knight on f3 currently defends h4.\"}"
+        },
+        {
+          "caseId": "postcommit-gained",
+          "forbidden": [],
+          "novelNumbers": [],
+          "abstentionValid": true,
+          "factIdsValid": false,
+          "voiceValid": true,
+          "text": "{\"text\":\"After the played move, White gained control of e5 with the bishop on g3.\"}"
+        },
+        {
+          "caseId": "postcommit-lost",
+          "forbidden": [],
+          "novelNumbers": [],
+          "abstentionValid": true,
+          "factIdsValid": false,
+          "voiceValid": true,
+          "text": "{\"text\":\"After the played move, the rook on a1 lost its defence of a3.\"}"
+        }
+      ]
+    }
+  }
+}
