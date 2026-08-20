@@ -149,6 +149,7 @@ all included nodes → integrated default journeys → 1.0 proof
 ```
 
 The immediate queue is therefore R11/R3's external-arm preparation and D554's targeted hands-on
-gaps; O13 is now ready for owner ruling, while R13 is research-ready only after its exact R7 dependency is resolved. There is
+gaps; O13 is ruled as the stronger Choice-C appliance floor, while its living-intent amendment and
+F12 proof remain open. R13 is research-ready only after its exact R7 dependency is resolved. There is
 no legal feature-build queue yet; creating one before these results would
 violate the sequencing the owner explicitly requested.

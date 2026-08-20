@@ -307,3 +307,15 @@ Append-only. Record research, rulings, RFC transitions, implementation closeout 
   hands-on/forum sweep remains open and targeted to those rows.
 - Capability and reality maps, research/execution queues and the coverage matrix are reconciled.
   No product code, design intent, schema or authored content changed; D560 remains active.
+
+## 2026-08-20 — O13 selected the stronger appliance floor for 1.0
+
+- The owner selected R18 Choice C: the 1.0 release contract includes all Choice-A provider-off,
+  degradation, data-lifecycle, operations, rights and accessibility requirements plus offline
+  tablebase/knowledge support, service-worker update semantics, signed/attested images,
+  multi-architecture resource tiers and a complete reverse-proxy deployment.
+- Recorded D616 and reconciled O13, the research/execution queues and the 1.0 capability map.
+- This is a scope ruling, not release clearance. D605–D615 remain open, F12 must prove the complete
+  appliance contract, and `design/02`/`design/03` still require an owner/Claude-on-ruling intent
+  amendment under law 5. No product code, schema, authored content or protected design intent
+  changed.
