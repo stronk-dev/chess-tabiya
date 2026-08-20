@@ -11,8 +11,9 @@ caption/mark volume.
 The module contract is a boundary prototype, not UI copy. It makes intent, timing, activation,
 consumer eligibility, fact budget and recommendation permission explicit. Synthetic fixtures test
 zero/one/many facts, abstention, later-rung leakage, consumer mismatch and move/PV leakage without
-manufacturing chess claims. `sight_on_request` remains an owner boundary because
-`design/05-in-run-experience.md` leaves pre-commit rung-0 availability open.
+manufacturing chess claims. Owner ruling D619 now permits `sight_on_request` before commitment
+without ranking a move. It remains a research candidate until R3 validates the workflow; the ruling
+does not convert this disposable harness into product authority.
 
 This harness cannot answer whether nontechnical chess players understand the candidate modules or
 defaults, nor can it validate touch/hover/keyboard behaviour while the in-app browser is unavailable
@@ -23,4 +24,3 @@ Run:
 ```sh
 pnpm exec vitest run --config tools/r3-presentation-harness/vitest.config.ts
 ```
-

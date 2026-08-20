@@ -104,7 +104,7 @@ describe("R3 shipped-surface census", () => {
       "|---|---|---|---|---:|---|---|",
       ...MODULES.map((item) => `| ${item.id} | ${item.intent} | ${item.timing} | ${item.activation} | ${item.maxFacts} | ${item.allowsRecommendedMove ? "allowed only at this boundary" : "refused"} | ${item.status} |`),
       "",
-      "`sight_on_request` is deliberately marked `owner_boundary`: the existing design leaves the rung-0 pre-commit line open. The harness does not convert that candidate into product authority.",
+      "`sight_on_request` is marked `owner_ruled_candidate`: D619 permits requested exact sight before commitment without ranking a move. R3 must still validate the workflow, and this harness is not product authority.",
       "",
     ];
     writeFileSync(OUTPUT, `${rows.join("\n")}\n`);
@@ -136,4 +136,3 @@ describe("R3 disposable module compiler", () => {
     expect(compileModulePacket(module("guided_hint"), [fixture({ availableAt: "disclosed", recommendedMoveUci: "e2e4" })]).facts).toHaveLength(1);
   });
 });
-

@@ -37,7 +37,7 @@ export interface GuidanceModuleContract {
   readonly maxFacts: number;
   readonly forms: readonly GuidanceForm[];
   readonly allowsRecommendedMove: boolean;
-  readonly status: "existing_policy" | "research_candidate" | "owner_boundary";
+  readonly status: "existing_policy" | "research_candidate" | "owner_ruled_candidate";
 }
 
 export interface ModulePacket {
@@ -56,7 +56,7 @@ const TIMING_ORDER: Record<Timing, number> = {
 
 export const MODULES: readonly GuidanceModuleContract[] = Object.freeze([
   { id: "rules_floor", intent: "Show legal interaction affordances, not advice.", timing: "precommit", activation: "automatic", maxFacts: 0, forms: ["square"], allowsRecommendedMove: false, status: "existing_policy" },
-  { id: "sight_on_request", intent: "Answer one concrete board-sight question without ranking moves.", timing: "precommit", activation: "on_request", maxFacts: 1, forms: ["sentence", "square", "arrow"], allowsRecommendedMove: false, status: "owner_boundary" },
+  { id: "sight_on_request", intent: "Answer one concrete board-sight question without ranking moves.", timing: "precommit", activation: "on_request", maxFacts: 1, forms: ["sentence", "square", "arrow"], allowsRecommendedMove: false, status: "owner_ruled_candidate" },
   { id: "postcommit_nudge", intent: "Name at most two consequences of the move just played.", timing: "postcommit", activation: "automatic", maxFacts: 2, forms: ["sentence", "square", "arrow"], allowsRecommendedMove: false, status: "research_candidate" },
   { id: "guided_hint", intent: "Reveal a progressive hint only after an explicit request and disclosure.", timing: "disclosed", activation: "on_request", maxFacts: 2, forms: ["sentence", "square", "arrow", "audio"], allowsRecommendedMove: true, status: "research_candidate" },
   { id: "compare_coach", intent: "Name the smallest grounded difference between preserved attempts.", timing: "disclosed", activation: "on_request", maxFacts: 2, forms: ["sentence", "square", "panel"], allowsRecommendedMove: false, status: "research_candidate" },
@@ -80,4 +80,3 @@ export function compileModulePacket(
   }
   return Object.freeze({ moduleId: contract.id, facts: Object.freeze(admitted), abstained: false });
 }
-

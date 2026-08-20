@@ -36,6 +36,14 @@ browser was unavailable for this pass, and no nontechnical learners were recruit
 module and preset names below are research candidates, not a default ruling or RFC input ready for
 implementation.
 
+**Owner ruling after this pass (2026-08-20):** D617–D619 adopt the compiled manifest,
+eligibility-before-selection, configurable-primitive/module/preset split and the pre-commit
+boundary. Requested exact sight is permitted before commitment; proactive blunder prevention is
+permitted only in an explicitly chosen Support preset and is not the rehearsal default. This
+settles the owner boundary but does not validate names, composition, budgets or comprehension. The
+remaining participant arm is preregistered at
+`planning/platform-alignment/evidence-presentation/participant-plan.md`. `[M]`
+
 ## Method and population
 
 The pass used four evidence sources:
@@ -182,7 +190,7 @@ The harness makes the missing layer concrete:
 | Candidate module | Learner intent | Timing | Activation | Fact cap | Move/PV |
 |---|---|---|---|---:|---|
 | Rules floor | Make legal interaction visible | pre-commit | automatic | 0 evidence facts | refused |
-| Sight on request | Answer one concrete board-sight question | pre-commit | request | 1 | refused; **owner boundary** |
+| Sight on request | Answer one concrete board-sight question | pre-commit | request | 1 | refused; **owner-approved research candidate** |
 | Post-commit nudge | Name consequences of the played move | post-commit | automatic | 2 | refused |
 | Guided hint | Reveal progressively after consent | disclosed | request | 2/stage | final stage only |
 | Compare coach | Name the smallest grounded branch difference | disclosed | request | 2 | refused |
@@ -267,8 +275,7 @@ R3 completes only when:
 - zero/one/two/noisy and unavailable-provider cases are shown honestly;
 - nontechnical learners start Just Play, Guided Rehearsal, Review & Retry and Analyze Freely without
   source settings, and comprehension/noise failures select or refuse defaults;
-- the owner rules the pre-commit rung-0 boundary and per-session ceilings;
+- the owner rules the pre-commit rung-0 boundary and per-session ceilings — **met by D619**;
 - R5 proves or refuses the optional renderer over these bounded packets.
 
 Until then, R3 is **MECHANICAL/DESK DONE; EXTERNAL to complete**.
-

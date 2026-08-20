@@ -20,7 +20,7 @@ Disposable research output; not a product specification.
 | Module | Intent | Timing | Activation | Fact cap | Move recommendation | Status |
 |---|---|---|---|---:|---|---|
 | rules_floor | Show legal interaction affordances, not advice. | precommit | automatic | 0 | refused | existing_policy |
-| sight_on_request | Answer one concrete board-sight question without ranking moves. | precommit | on_request | 1 | refused | owner_boundary |
+| sight_on_request | Answer one concrete board-sight question without ranking moves. | precommit | on_request | 1 | refused | owner_ruled_candidate |
 | postcommit_nudge | Name at most two consequences of the move just played. | postcommit | automatic | 2 | refused | research_candidate |
 | guided_hint | Reveal a progressive hint only after an explicit request and disclosure. | disclosed | on_request | 2 | allowed only at this boundary | research_candidate |
 | compare_coach | Name the smallest grounded difference between preserved attempts. | disclosed | on_request | 2 | refused | research_candidate |
@@ -28,5 +28,5 @@ Disposable research output; not a product specification.
 | review_map | Select grounded moments that open a retry, branch, drill, or theory action. | analysis | automatic | 3 | allowed only at this boundary | research_candidate |
 | full_inspector | Expose attributed evidence and engine lines for deliberate analysis. | analysis | explicit_mode | 20 | allowed only at this boundary | research_candidate |
 
-`sight_on_request` is deliberately marked `owner_boundary`: the existing design leaves the rung-0 pre-commit line open. The harness does not convert that candidate into product authority.
+`sight_on_request` is marked `owner_ruled_candidate`: D619 permits requested exact sight before commitment without ranking a move. R3 must still validate the workflow, and this harness is not product authority.
 

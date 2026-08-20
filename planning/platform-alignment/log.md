@@ -339,3 +339,19 @@ Append-only. Record research, rulings, RFC transitions, implementation closeout 
 - Reconciled the decision/execution queues and 1.0 capability map. Protected living intent still
   requires an owner/Claude-on-ruling amendment; no RFC or implementation is authorised by this
   planning closeout. No product code, schema or authored content changed; D560 remains active.
+
+## 2026-08-20 — R3 participant arm became executable without flattening rich configuration
+
+- Preregistered a 12-learner, device-stratified protocol covering quiet Just Play, requested
+  pre-commit sight, explicit Support/blunder prevention, post-commit drill nudges, theory-only and
+  empty states, Review & Retry, the raw inspector, advanced configuration and a suppressive campaign
+  ceiling placeholder.
+- Success is task behavior rather than stated preference: workflows must start without source
+  settings; participants must distinguish sight/theory/evaluation/recommendation; empty and
+  unavailable states must be understood; input forms must return identical fact IDs; any move/PV
+  leakage or ceiling escalation fails automatically. One-vs-two-fact variants have a predeclared
+  retention rule.
+- Reconciled the R3 dossier and disposable harness with D619: requested exact pre-commit sight is
+  now an owner-ruled research candidate rather than an open boundary. Product defaults, names and
+  composition remain unproven until the external runs occur. No product code, schema, protected
+  intent or authored content changed; D560 remains active.
