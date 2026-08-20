@@ -149,7 +149,9 @@ all included nodes → integrated default journeys → 1.0 proof
 ```
 
 The immediate queue is therefore R11/R3's external-arm preparation and D554's targeted hands-on
-gaps; O13 is ruled as the stronger Choice-C appliance floor, while its living-intent amendment and
-F12 proof remain open. R13 is research-ready only after its exact R7 dependency is resolved. There is
+gaps. O1/O3 are ruled; O2's semantic boundary and O4's workflow/pre-commit boundary are ruled while
+their exact detector-family/default-preset residues remain with R3/R7. O13 is ruled as the stronger
+Choice-C appliance floor. All five rulings still need protected living-intent amendments before
+their RFC nodes open. R13 is research-ready only after its exact R7 dependency is resolved. There is
 no legal feature-build queue yet; creating one before these results would
 violate the sequencing the owner explicitly requested.

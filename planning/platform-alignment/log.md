@@ -319,3 +319,23 @@ Append-only. Record research, rulings, RFC transitions, implementation closeout 
   appliance contract, and `design/02`/`design/03` still require an owner/Claude-on-ruling intent
   amendment under law 5. No product code, schema, authored content or protected design intent
   changed.
+
+## 2026-08-20 — O1–O4 separated configurable evidence primitives from opinionated workflows
+
+- The owner approved a compiled, versioned producer→evidence→consumer manifest. Producer/module
+  declarations are primary; joins and shipped state are derived; unexplained orphans fail unless
+  explicitly inspector-only, experimental or retired. Recorded D617 and ruled O1.
+- The owner approved semantic eligibility before deterministic local selection: learner-facing
+  events require typed operands/squares, sign, grounding, exactness/confidence, abstention and
+  positive/hard-negative validation. Raw atoms remain available to the inspector; sign supplies no
+  valence or grade. Recorded D618. O2 remains partial only for exact family admission.
+- The owner clarified that every admitted primitive must remain configurable somewhere, while the
+  ordinary product exposes intent modules and opinionated per-workflow presets instead of source
+  switches. Theory-only and empty nudges are first-class. Requested exact sight may run pre-commit;
+  proactive blunder prevention requires explicit Support and is not the rehearsal default. Session
+  ceilings only remove capability and input forms must be equivalent. Recorded D619; O3 is ruled
+  and O4 remains partial only for R3-tested names/composition/defaults and later campaign/professional
+  scope.
+- Reconciled the decision/execution queues and 1.0 capability map. Protected living intent still
+  requires an owner/Claude-on-ruling amendment; no RFC or implementation is authorised by this
+  planning closeout. No product code, schema or authored content changed; D560 remains active.
