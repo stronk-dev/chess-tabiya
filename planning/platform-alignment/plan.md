@@ -84,7 +84,7 @@ These are independent dossiers but feed one contract:
 | `design/research/detection-landscape.md` | What can rules, engine search, human corpus, theory catalogues and authored facts each detect? Precision, abstention, sign and validation set? | D544, D545, D558 |
 | `design/research/selection-sign-and-significance.md` | Which locally measured facts survive a bounded packet; how do gained/lost/preserved/avoided differ; where does distinctiveness stop short of significance or valence? | D542-D545, D569-D572 |
 | `design/research/evidence-presentation.md` | Which modules help without alarm fatigue or direct move leakage? How do touch, hover, keyboard and mobile differ? | D542, D543, D546 |
-| `design/research/theory-knowledge-pipeline.md` | Can Skipper's separate knowledge subsystem be reused for chess; does semantic retrieval beat exact keys + FTS; licensing, citation, invalidation and false-match abstention? Six-arm experiment queued. | D557, D564 |
+| `design/research/theory-knowledge-pipeline.md` | **Answered:** separate builder need survives; Skipper/semantic extraction fails the six-arm gate. Exact+FTS beats semantic recall@5; applicability, abstention, model identity and provenance controls fail. 1.0 candidate is a typed deterministic provenance compiler plus immutable local index. | D557, D564, D579-D581 |
 | `design/research/bot-policy.md` | How are strength, repertoire, style, plausible errors, timing and memory independently composed and measured? | D551, D561 |
 | `design/research/player-style-metrics.md` | Which descriptive metrics are stable, fun and non-deceptive? Minimum samples and confidence? | D552, D553, D562 |
 | hands-on competitor resweep | Same-position/session teardown of Guided Play, Game Review, Beacon, Quackmate, Sensei, ChessLab and Qchess; one loved and hated thing each | D554-D556 |
@@ -122,7 +122,7 @@ RFC candidates only after workstreams 1-2 clear the exploration gate:
    - fixtures plus independent validation corpus.
 3. **Knowledge-source contract**
    - allow-list/licence/digest/version;
-   - deterministic chess keys and optional embedding rerank;
+   - typed deterministic applicability keys and local exact/SQLite-FTS retrieval;
    - citation propagation into evidence packets;
    - fail-closed invalidation and abstention.
 4. **Pack capability and migration contract**

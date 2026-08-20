@@ -1,0 +1,1130 @@
+[
+  {
+    "id": "opening-a00-anderssen-s-opening-moves",
+    "stratum": "opening",
+    "query": "What opening is ECO A00 after 1. a3?",
+    "eligible": [
+      "opening-a00-anderssen-s-opening"
+    ]
+  },
+  {
+    "id": "opening-a00-anderssen-s-opening-name",
+    "stratum": "opening",
+    "query": "Which move sequence defines Anderssen's Opening?",
+    "eligible": [
+      "opening-a00-anderssen-s-opening"
+    ]
+  },
+  {
+    "id": "opening-a00-anderssen-s-opening-eco",
+    "stratum": "opening",
+    "query": "Find the Anderssen's Opening entry and its ECO code.",
+    "eligible": [
+      "opening-a00-anderssen-s-opening"
+    ]
+  },
+  {
+    "id": "opening-a40-queen-s-pawn-game-moves",
+    "stratum": "opening",
+    "query": "What opening is ECO A40 after 1. d4?",
+    "eligible": [
+      "opening-a40-queen-s-pawn-game"
+    ]
+  },
+  {
+    "id": "opening-a40-queen-s-pawn-game-name",
+    "stratum": "opening",
+    "query": "Which move sequence defines Queen's Pawn Game?",
+    "eligible": [
+      "opening-a40-queen-s-pawn-game"
+    ]
+  },
+  {
+    "id": "opening-a40-queen-s-pawn-game-eco",
+    "stratum": "opening",
+    "query": "Find the Queen's Pawn Game entry and its ECO code.",
+    "eligible": [
+      "opening-a40-queen-s-pawn-game"
+    ]
+  },
+  {
+    "id": "opening-a45-indian-defense-moves",
+    "stratum": "opening",
+    "query": "What opening is ECO A45 after 1. d4 Nf6?",
+    "eligible": [
+      "opening-a45-indian-defense"
+    ]
+  },
+  {
+    "id": "opening-a45-indian-defense-name",
+    "stratum": "opening",
+    "query": "Which move sequence defines Indian Defense?",
+    "eligible": [
+      "opening-a45-indian-defense"
+    ]
+  },
+  {
+    "id": "opening-a45-indian-defense-eco",
+    "stratum": "opening",
+    "query": "Find the Indian Defense entry and its ECO code.",
+    "eligible": [
+      "opening-a45-indian-defense"
+    ]
+  },
+  {
+    "id": "opening-b01-scandinavian-defense-moves",
+    "stratum": "opening",
+    "query": "What opening is ECO B01 after 1. e4 d5?",
+    "eligible": [
+      "opening-b01-scandinavian-defense"
+    ]
+  },
+  {
+    "id": "opening-b01-scandinavian-defense-name",
+    "stratum": "opening",
+    "query": "Which move sequence defines Scandinavian Defense?",
+    "eligible": [
+      "opening-b01-scandinavian-defense"
+    ]
+  },
+  {
+    "id": "opening-b01-scandinavian-defense-eco",
+    "stratum": "opening",
+    "query": "Find the Scandinavian Defense entry and its ECO code.",
+    "eligible": [
+      "opening-b01-scandinavian-defense"
+    ]
+  },
+  {
+    "id": "opening-b06-modern-defense-moves",
+    "stratum": "opening",
+    "query": "What opening is ECO B06 after 1. e4 g6?",
+    "eligible": [
+      "opening-b06-modern-defense"
+    ]
+  },
+  {
+    "id": "opening-b06-modern-defense-name",
+    "stratum": "opening",
+    "query": "Which move sequence defines Modern Defense?",
+    "eligible": [
+      "opening-b06-modern-defense"
+    ]
+  },
+  {
+    "id": "opening-b06-modern-defense-eco",
+    "stratum": "opening",
+    "query": "Find the Modern Defense entry and its ECO code.",
+    "eligible": [
+      "opening-b06-modern-defense"
+    ]
+  },
+  {
+    "id": "opening-b10-caro-kann-defense-moves",
+    "stratum": "opening",
+    "query": "What opening is ECO B10 after 1. e4 c6?",
+    "eligible": [
+      "opening-b10-caro-kann-defense"
+    ]
+  },
+  {
+    "id": "opening-b10-caro-kann-defense-name",
+    "stratum": "opening",
+    "query": "Which move sequence defines Caro-Kann Defense?",
+    "eligible": [
+      "opening-b10-caro-kann-defense"
+    ]
+  },
+  {
+    "id": "opening-b10-caro-kann-defense-eco",
+    "stratum": "opening",
+    "query": "Find the Caro-Kann Defense entry and its ECO code.",
+    "eligible": [
+      "opening-b10-caro-kann-defense"
+    ]
+  },
+  {
+    "id": "opening-b12-caro-kann-defense-moves",
+    "stratum": "opening",
+    "query": "What opening is ECO B12 after 1. e4 c6 2. d4?",
+    "eligible": [
+      "opening-b12-caro-kann-defense"
+    ]
+  },
+  {
+    "id": "opening-b12-caro-kann-defense-name",
+    "stratum": "opening",
+    "query": "Which move sequence defines Caro-Kann Defense?",
+    "eligible": [
+      "opening-b12-caro-kann-defense"
+    ]
+  },
+  {
+    "id": "opening-b12-caro-kann-defense-eco",
+    "stratum": "opening",
+    "query": "Find the Caro-Kann Defense entry and its ECO code.",
+    "eligible": [
+      "opening-b12-caro-kann-defense"
+    ]
+  },
+  {
+    "id": "opening-b20-sicilian-defense-moves",
+    "stratum": "opening",
+    "query": "What opening is ECO B20 after 1. e4 c5?",
+    "eligible": [
+      "opening-b20-sicilian-defense"
+    ]
+  },
+  {
+    "id": "opening-b20-sicilian-defense-name",
+    "stratum": "opening",
+    "query": "Which move sequence defines Sicilian Defense?",
+    "eligible": [
+      "opening-b20-sicilian-defense"
+    ]
+  },
+  {
+    "id": "opening-b20-sicilian-defense-eco",
+    "stratum": "opening",
+    "query": "Find the Sicilian Defense entry and its ECO code.",
+    "eligible": [
+      "opening-b20-sicilian-defense"
+    ]
+  },
+  {
+    "id": "opening-b30-sicilian-defense-old-sicilian-moves",
+    "stratum": "opening",
+    "query": "What opening is ECO B30 after 1. e4 c5 2. Nf3 Nc6?",
+    "eligible": [
+      "opening-b30-sicilian-defense-old-sicilian"
+    ]
+  },
+  {
+    "id": "opening-b30-sicilian-defense-old-sicilian-name",
+    "stratum": "opening",
+    "query": "Which move sequence defines Sicilian Defense: Old Sicilian?",
+    "eligible": [
+      "opening-b30-sicilian-defense-old-sicilian"
+    ]
+  },
+  {
+    "id": "opening-b30-sicilian-defense-old-sicilian-eco",
+    "stratum": "opening",
+    "query": "Find the Sicilian Defense: Old Sicilian entry and its ECO code.",
+    "eligible": [
+      "opening-b30-sicilian-defense-old-sicilian"
+    ]
+  },
+  {
+    "id": "opening-b90-sicilian-defense-najdorf-variation-moves",
+    "stratum": "opening",
+    "query": "What opening is ECO B90 after 1. e4 c5 2. Nf3 d6 3. d4 cxd4 4. Nxd4 Nf6 5. Nc3 a6?",
+    "eligible": [
+      "opening-b90-sicilian-defense-najdorf-variation"
+    ]
+  },
+  {
+    "id": "opening-b90-sicilian-defense-najdorf-variation-name",
+    "stratum": "opening",
+    "query": "Which move sequence defines Sicilian Defense: Najdorf Variation?",
+    "eligible": [
+      "opening-b90-sicilian-defense-najdorf-variation"
+    ]
+  },
+  {
+    "id": "opening-b90-sicilian-defense-najdorf-variation-eco",
+    "stratum": "opening",
+    "query": "Find the Sicilian Defense: Najdorf Variation entry and its ECO code.",
+    "eligible": [
+      "opening-b90-sicilian-defense-najdorf-variation"
+    ]
+  },
+  {
+    "id": "opening-c00-french-defense-moves",
+    "stratum": "opening",
+    "query": "What opening is ECO C00 after 1. e4 e6?",
+    "eligible": [
+      "opening-c00-french-defense"
+    ]
+  },
+  {
+    "id": "opening-c00-french-defense-name",
+    "stratum": "opening",
+    "query": "Which move sequence defines French Defense?",
+    "eligible": [
+      "opening-c00-french-defense"
+    ]
+  },
+  {
+    "id": "opening-c00-french-defense-eco",
+    "stratum": "opening",
+    "query": "Find the French Defense entry and its ECO code.",
+    "eligible": [
+      "opening-c00-french-defense"
+    ]
+  },
+  {
+    "id": "opening-c10-french-defense-paulsen-variation-moves",
+    "stratum": "opening",
+    "query": "What opening is ECO C10 after 1. e4 e6 2. d4 d5 3. Nc3?",
+    "eligible": [
+      "opening-c10-french-defense-paulsen-variation"
+    ]
+  },
+  {
+    "id": "opening-c10-french-defense-paulsen-variation-name",
+    "stratum": "opening",
+    "query": "Which move sequence defines French Defense: Paulsen Variation?",
+    "eligible": [
+      "opening-c10-french-defense-paulsen-variation"
+    ]
+  },
+  {
+    "id": "opening-c10-french-defense-paulsen-variation-eco",
+    "stratum": "opening",
+    "query": "Find the French Defense: Paulsen Variation entry and its ECO code.",
+    "eligible": [
+      "opening-c10-french-defense-paulsen-variation"
+    ]
+  },
+  {
+    "id": "opening-c20-king-s-pawn-game-moves",
+    "stratum": "opening",
+    "query": "What opening is ECO C20 after 1. e4 e5?",
+    "eligible": [
+      "opening-c20-king-s-pawn-game"
+    ]
+  },
+  {
+    "id": "opening-c20-king-s-pawn-game-name",
+    "stratum": "opening",
+    "query": "Which move sequence defines King's Pawn Game?",
+    "eligible": [
+      "opening-c20-king-s-pawn-game"
+    ]
+  },
+  {
+    "id": "opening-c20-king-s-pawn-game-eco",
+    "stratum": "opening",
+    "query": "Find the King's Pawn Game entry and its ECO code.",
+    "eligible": [
+      "opening-c20-king-s-pawn-game"
+    ]
+  },
+  {
+    "id": "opening-c42-petrov-s-defense-moves",
+    "stratum": "opening",
+    "query": "What opening is ECO C42 after 1. e4 e5 2. Nf3 Nf6?",
+    "eligible": [
+      "opening-c42-petrov-s-defense"
+    ]
+  },
+  {
+    "id": "opening-c42-petrov-s-defense-name",
+    "stratum": "opening",
+    "query": "Which move sequence defines Petrov's Defense?",
+    "eligible": [
+      "opening-c42-petrov-s-defense"
+    ]
+  },
+  {
+    "id": "opening-c42-petrov-s-defense-eco",
+    "stratum": "opening",
+    "query": "Find the Petrov's Defense entry and its ECO code.",
+    "eligible": [
+      "opening-c42-petrov-s-defense"
+    ]
+  },
+  {
+    "id": "opening-c50-italian-game-moves",
+    "stratum": "opening",
+    "query": "What opening is ECO C50 after 1. e4 e5 2. Nf3 Nc6 3. Bc4?",
+    "eligible": [
+      "opening-c50-italian-game"
+    ]
+  },
+  {
+    "id": "opening-c50-italian-game-name",
+    "stratum": "opening",
+    "query": "Which move sequence defines Italian Game?",
+    "eligible": [
+      "opening-c50-italian-game"
+    ]
+  },
+  {
+    "id": "opening-c50-italian-game-eco",
+    "stratum": "opening",
+    "query": "Find the Italian Game entry and its ECO code.",
+    "eligible": [
+      "opening-c50-italian-game"
+    ]
+  },
+  {
+    "id": "opening-c60-ruy-lopez-moves",
+    "stratum": "opening",
+    "query": "What opening is ECO C60 after 1. e4 e5 2. Nf3 Nc6 3. Bb5?",
+    "eligible": [
+      "opening-c60-ruy-lopez"
+    ]
+  },
+  {
+    "id": "opening-c60-ruy-lopez-name",
+    "stratum": "opening",
+    "query": "Which move sequence defines Ruy Lopez?",
+    "eligible": [
+      "opening-c60-ruy-lopez"
+    ]
+  },
+  {
+    "id": "opening-c60-ruy-lopez-eco",
+    "stratum": "opening",
+    "query": "Find the Ruy Lopez entry and its ECO code.",
+    "eligible": [
+      "opening-c60-ruy-lopez"
+    ]
+  },
+  {
+    "id": "opening-c65-ruy-lopez-berlin-defense-moves",
+    "stratum": "opening",
+    "query": "What opening is ECO C65 after 1. e4 e5 2. Nf3 Nc6 3. Bb5 Nf6?",
+    "eligible": [
+      "opening-c65-ruy-lopez-berlin-defense"
+    ]
+  },
+  {
+    "id": "opening-c65-ruy-lopez-berlin-defense-name",
+    "stratum": "opening",
+    "query": "Which move sequence defines Ruy Lopez: Berlin Defense?",
+    "eligible": [
+      "opening-c65-ruy-lopez-berlin-defense"
+    ]
+  },
+  {
+    "id": "opening-c65-ruy-lopez-berlin-defense-eco",
+    "stratum": "opening",
+    "query": "Find the Ruy Lopez: Berlin Defense entry and its ECO code.",
+    "eligible": [
+      "opening-c65-ruy-lopez-berlin-defense"
+    ]
+  },
+  {
+    "id": "opening-d00-queen-s-pawn-game-moves",
+    "stratum": "opening",
+    "query": "What opening is ECO D00 after 1. d4 d5?",
+    "eligible": [
+      "opening-d00-queen-s-pawn-game"
+    ]
+  },
+  {
+    "id": "opening-d00-queen-s-pawn-game-name",
+    "stratum": "opening",
+    "query": "Which move sequence defines Queen's Pawn Game?",
+    "eligible": [
+      "opening-d00-queen-s-pawn-game"
+    ]
+  },
+  {
+    "id": "opening-d00-queen-s-pawn-game-eco",
+    "stratum": "opening",
+    "query": "Find the Queen's Pawn Game entry and its ECO code.",
+    "eligible": [
+      "opening-d00-queen-s-pawn-game"
+    ]
+  },
+  {
+    "id": "opening-d02-queen-s-pawn-game-zukertort-variation-moves",
+    "stratum": "opening",
+    "query": "What opening is ECO D02 after 1. d4 d5 2. Nf3?",
+    "eligible": [
+      "opening-d02-queen-s-pawn-game-zukertort-variation"
+    ]
+  },
+  {
+    "id": "opening-d02-queen-s-pawn-game-zukertort-variation-name",
+    "stratum": "opening",
+    "query": "Which move sequence defines Queen's Pawn Game: Zukertort Variation?",
+    "eligible": [
+      "opening-d02-queen-s-pawn-game-zukertort-variation"
+    ]
+  },
+  {
+    "id": "opening-d02-queen-s-pawn-game-zukertort-variation-eco",
+    "stratum": "opening",
+    "query": "Find the Queen's Pawn Game: Zukertort Variation entry and its ECO code.",
+    "eligible": [
+      "opening-d02-queen-s-pawn-game-zukertort-variation"
+    ]
+  },
+  {
+    "id": "opening-d10-slav-defense-moves",
+    "stratum": "opening",
+    "query": "What opening is ECO D10 after 1. d4 d5 2. c4 c6?",
+    "eligible": [
+      "opening-d10-slav-defense"
+    ]
+  },
+  {
+    "id": "opening-d10-slav-defense-name",
+    "stratum": "opening",
+    "query": "Which move sequence defines Slav Defense?",
+    "eligible": [
+      "opening-d10-slav-defense"
+    ]
+  },
+  {
+    "id": "opening-d10-slav-defense-eco",
+    "stratum": "opening",
+    "query": "Find the Slav Defense entry and its ECO code.",
+    "eligible": [
+      "opening-d10-slav-defense"
+    ]
+  },
+  {
+    "id": "opening-d30-queen-s-gambit-declined-moves",
+    "stratum": "opening",
+    "query": "What opening is ECO D30 after 1. d4 d5 2. c4 e6?",
+    "eligible": [
+      "opening-d30-queen-s-gambit-declined"
+    ]
+  },
+  {
+    "id": "opening-d30-queen-s-gambit-declined-name",
+    "stratum": "opening",
+    "query": "Which move sequence defines Queen's Gambit Declined?",
+    "eligible": [
+      "opening-d30-queen-s-gambit-declined"
+    ]
+  },
+  {
+    "id": "opening-d30-queen-s-gambit-declined-eco",
+    "stratum": "opening",
+    "query": "Find the Queen's Gambit Declined entry and its ECO code.",
+    "eligible": [
+      "opening-d30-queen-s-gambit-declined"
+    ]
+  },
+  {
+    "id": "opening-d35-queen-s-gambit-declined-normal-defense-moves",
+    "stratum": "opening",
+    "query": "What opening is ECO D35 after 1. d4 d5 2. c4 e6 3. Nc3 Nf6?",
+    "eligible": [
+      "opening-d35-queen-s-gambit-declined-normal-defense"
+    ]
+  },
+  {
+    "id": "opening-d35-queen-s-gambit-declined-normal-defense-name",
+    "stratum": "opening",
+    "query": "Which move sequence defines Queen's Gambit Declined: Normal Defense?",
+    "eligible": [
+      "opening-d35-queen-s-gambit-declined-normal-defense"
+    ]
+  },
+  {
+    "id": "opening-d35-queen-s-gambit-declined-normal-defense-eco",
+    "stratum": "opening",
+    "query": "Find the Queen's Gambit Declined: Normal Defense entry and its ECO code.",
+    "eligible": [
+      "opening-d35-queen-s-gambit-declined-normal-defense"
+    ]
+  },
+  {
+    "id": "opening-e00-catalan-opening-moves",
+    "stratum": "opening",
+    "query": "What opening is ECO E00 after 1. d4 Nf6 2. c4 e6 3. g3?",
+    "eligible": [
+      "opening-e00-catalan-opening"
+    ]
+  },
+  {
+    "id": "opening-e00-catalan-opening-name",
+    "stratum": "opening",
+    "query": "Which move sequence defines Catalan Opening?",
+    "eligible": [
+      "opening-e00-catalan-opening"
+    ]
+  },
+  {
+    "id": "opening-e00-catalan-opening-eco",
+    "stratum": "opening",
+    "query": "Find the Catalan Opening entry and its ECO code.",
+    "eligible": [
+      "opening-e00-catalan-opening"
+    ]
+  },
+  {
+    "id": "opening-e20-nimzo-indian-defense-moves",
+    "stratum": "opening",
+    "query": "What opening is ECO E20 after 1. d4 Nf6 2. c4 e6 3. Nc3 Bb4?",
+    "eligible": [
+      "opening-e20-nimzo-indian-defense"
+    ]
+  },
+  {
+    "id": "opening-e20-nimzo-indian-defense-name",
+    "stratum": "opening",
+    "query": "Which move sequence defines Nimzo-Indian Defense?",
+    "eligible": [
+      "opening-e20-nimzo-indian-defense"
+    ]
+  },
+  {
+    "id": "opening-e20-nimzo-indian-defense-eco",
+    "stratum": "opening",
+    "query": "Find the Nimzo-Indian Defense entry and its ECO code.",
+    "eligible": [
+      "opening-e20-nimzo-indian-defense"
+    ]
+  },
+  {
+    "id": "wikibooks-sicilian-1",
+    "stratum": "plan",
+    "query": "Why does the Sicilian use a flank pawn to contest d4?",
+    "eligible": [
+      "wikibooks-sicilian"
+    ]
+  },
+  {
+    "id": "wikibooks-sicilian-2",
+    "stratum": "plan",
+    "query": "What development drawback does Black accept after 1 e4 c5?",
+    "eligible": [
+      "wikibooks-sicilian"
+    ]
+  },
+  {
+    "id": "wikibooks-sicilian-3",
+    "stratum": "plan",
+    "query": "How does the Open Sicilian create a centralised knight and open lines?",
+    "eligible": [
+      "wikibooks-sicilian"
+    ]
+  },
+  {
+    "id": "wikibooks-sicilian-4",
+    "stratum": "plan",
+    "query": "Which closed Sicilian setup uses a kingside fianchetto and a slow attack?",
+    "eligible": [
+      "wikibooks-sicilian"
+    ]
+  },
+  {
+    "id": "wikibooks-caro-1",
+    "stratum": "plan",
+    "query": "Why does the Caro-Kann prepare d5 with c6?",
+    "eligible": [
+      "wikibooks-caro"
+    ]
+  },
+  {
+    "id": "wikibooks-caro-2",
+    "stratum": "plan",
+    "query": "How does the Caro-Kann differ from the French bishop problem?",
+    "eligible": [
+      "wikibooks-caro"
+    ]
+  },
+  {
+    "id": "wikibooks-caro-3",
+    "stratum": "plan",
+    "query": "What structure can the Accelerated Panov leave White with?",
+    "eligible": [
+      "wikibooks-caro"
+    ]
+  },
+  {
+    "id": "wikibooks-caro-4",
+    "stratum": "plan",
+    "query": "What is Black's basic response after White builds e4 and d4 against c6?",
+    "eligible": [
+      "wikibooks-caro"
+    ]
+  },
+  {
+    "id": "wikibooks-qg-1",
+    "stratum": "plan",
+    "query": "What central compensation does White seek in the Queen's Gambit?",
+    "eligible": [
+      "wikibooks-qg"
+    ]
+  },
+  {
+    "id": "wikibooks-qg-2",
+    "stratum": "plan",
+    "query": "Why is holding the extra c4 pawn often impractical?",
+    "eligible": [
+      "wikibooks-qg"
+    ]
+  },
+  {
+    "id": "wikibooks-qg-3",
+    "stratum": "plan",
+    "query": "Why do e6 and c6 make natural ways to decline the Queen's Gambit?",
+    "eligible": [
+      "wikibooks-qg"
+    ]
+  },
+  {
+    "id": "wikibooks-qg-4",
+    "stratum": "plan",
+    "query": "What goes wrong with an early knight recapture on d5 in the Marshall defence?",
+    "eligible": [
+      "wikibooks-qg"
+    ]
+  },
+  {
+    "id": "wikibooks-kid-1",
+    "stratum": "plan",
+    "query": "Why is the dark squared bishop important after a King's Indian fianchetto?",
+    "eligible": [
+      "wikibooks-kid"
+    ]
+  },
+  {
+    "id": "wikibooks-kid-2",
+    "stratum": "plan",
+    "query": "Which pawn breaks does Black commonly seek in the King's Indian?",
+    "eligible": [
+      "wikibooks-kid"
+    ]
+  },
+  {
+    "id": "wikibooks-kid-3",
+    "stratum": "plan",
+    "query": "How do the usual wing attacks differ in the King's Indian?",
+    "eligible": [
+      "wikibooks-kid"
+    ]
+  },
+  {
+    "id": "wikibooks-kid-4",
+    "stratum": "plan",
+    "query": "What is the hypermodern idea behind controlling the centre from g7?",
+    "eligible": [
+      "wikibooks-kid"
+    ]
+  },
+  {
+    "id": "wikibooks-pawn-1",
+    "stratum": "endgame",
+    "query": "How does the rule of the square tell whether a king catches a passed pawn?",
+    "eligible": [
+      "wikibooks-pawn"
+    ]
+  },
+  {
+    "id": "wikibooks-pawn-2",
+    "stratum": "endgame",
+    "query": "Which side has the opposition when two kings face each other with one square between?",
+    "eligible": [
+      "wikibooks-pawn"
+    ]
+  },
+  {
+    "id": "wikibooks-pawn-3",
+    "stratum": "endgame",
+    "query": "Why can a blocking pawn invalidate the rule of the square?",
+    "eligible": [
+      "wikibooks-pawn"
+    ]
+  },
+  {
+    "id": "wikibooks-pawn-4",
+    "stratum": "endgame",
+    "query": "What distinguishes a protected passed pawn from an outside passed pawn?",
+    "eligible": [
+      "wikibooks-pawn"
+    ]
+  },
+  {
+    "id": "wikibooks-rookpawn-1",
+    "stratum": "endgame",
+    "query": "Why are connected pawns easier to advance in rook endings?",
+    "eligible": [
+      "wikibooks-rookpawn"
+    ]
+  },
+  {
+    "id": "wikibooks-rookpawn-2",
+    "stratum": "endgame",
+    "query": "Which factors decide a rook ending with a single extra pawn?",
+    "eligible": [
+      "wikibooks-rookpawn"
+    ]
+  },
+  {
+    "id": "wikibooks-rookpawn-3",
+    "stratum": "endgame",
+    "query": "How can an attacking rook cut the defending king off from a passed pawn?",
+    "eligible": [
+      "wikibooks-rookpawn"
+    ]
+  },
+  {
+    "id": "wikibooks-rookpawn-4",
+    "stratum": "endgame",
+    "query": "Why can widely separated pawns be harder for the stronger side to defend?",
+    "eligible": [
+      "wikibooks-rookpawn"
+    ]
+  },
+  {
+    "id": "wikibooks-kqk-1",
+    "stratum": "endgame",
+    "query": "How should a beginner drive a lone king to the edge with a queen?",
+    "eligible": [
+      "wikibooks-kqk"
+    ]
+  },
+  {
+    "id": "wikibooks-kqk-2",
+    "stratum": "endgame",
+    "query": "Why can unnecessary queen checks slow down king and queen mate?",
+    "eligible": [
+      "wikibooks-kqk"
+    ]
+  },
+  {
+    "id": "wikibooks-kqk-3",
+    "stratum": "endgame",
+    "query": "What stalemate trap must be avoided after confining the king?",
+    "eligible": [
+      "wikibooks-kqk"
+    ]
+  },
+  {
+    "id": "wikibooks-kqk-4",
+    "stratum": "endgame",
+    "query": "When should the attacking king approach in queen versus lone king?",
+    "eligible": [
+      "wikibooks-kqk"
+    ]
+  },
+  {
+    "id": "wikibooks-minor-1",
+    "stratum": "endgame",
+    "query": "Why can two bishops force mate while one bishop cannot?",
+    "eligible": [
+      "wikibooks-minor"
+    ]
+  },
+  {
+    "id": "wikibooks-minor-2",
+    "stratum": "endgame",
+    "query": "Which corner is required for bishop and knight mate?",
+    "eligible": [
+      "wikibooks-minor"
+    ]
+  },
+  {
+    "id": "wikibooks-minor-3",
+    "stratum": "endgame",
+    "query": "Why can two knights not normally force mate against a bare king?",
+    "eligible": [
+      "wikibooks-minor"
+    ]
+  },
+  {
+    "id": "wikibooks-minor-4",
+    "stratum": "endgame",
+    "query": "How do two bishops coordinate to restrict the opposing king?",
+    "eligible": [
+      "wikibooks-minor"
+    ]
+  },
+  {
+    "id": "puzzle-hangingpiece-00008-query",
+    "stratum": "tactical-record",
+    "query": "Find the Lichess hangingpiece record 00008 with starting FEN r6k/pp2r2p/4rp1q/3p4/8/1n1p2r1/pqp2bpp/7k b - - 0 24.",
+    "eligible": [
+      "puzzle-hangingpiece-00008"
+    ]
+  },
+  {
+    "id": "puzzle-fork-000Pw-query",
+    "stratum": "tactical-record",
+    "query": "Find the Lichess fork record 000Pw with starting FEN 6k1/5p1p/4p3/4q3/3nn3/2q3p1/pp3p1p/6k1 w - - 2 37.",
+    "eligible": [
+      "puzzle-fork-000Pw"
+    ]
+  },
+  {
+    "id": "puzzle-hangingpiece-000lC-query",
+    "stratum": "tactical-record",
+    "query": "Find the Lichess hangingpiece record 000lC with starting FEN 3r3r/pqnk1ppp/1qnb1n2/1b6/8/8/ppp3pp/3r1r1k w - - 5 19.",
+    "eligible": [
+      "puzzle-hangingpiece-000lC"
+    ]
+  },
+  {
+    "id": "puzzle-fork-000rO-query",
+    "stratum": "tactical-record",
+    "query": "Find the Lichess fork record 000rO with starting FEN 3r4/8/k7/pb2b3/1p6/1p2k3/3p4/8 w - - 4 58.",
+    "eligible": [
+      "puzzle-fork-000rO"
+    ]
+  },
+  {
+    "id": "puzzle-fork-0017R-query",
+    "stratum": "tactical-record",
+    "query": "Find the Lichess fork record 0017R with starting FEN r2qk2r/pp2ppbp/1n1p2p1/3pn3/2p5/2nbbp1p/pp3p2/r2qk2r b kqkq - 0 12.",
+    "eligible": [
+      "puzzle-fork-0017R"
+    ]
+  },
+  {
+    "id": "puzzle-pin-0018S-query",
+    "stratum": "tactical-record",
+    "query": "Find the Lichess pin record 0018S with starting FEN 2kr3r/pp3p2/4p2p/1n1p2p1/3q4/1p1p4/2q2ppp/5rk1 b - - 1 20.",
+    "eligible": [
+      "puzzle-pin-0018S"
+    ]
+  },
+  {
+    "id": "puzzle-pin-001Hi-query",
+    "stratum": "tactical-record",
+    "query": "Find the Lichess pin record 001Hi with starting FEN 6k1/pp1r1pp1/1qp1p2p/4p2p/5q2/1p4r1/p1pr1pp1/r5k1 b - - 4 23.",
+    "eligible": [
+      "puzzle-pin-001Hi"
+    ]
+  },
+  {
+    "id": "puzzle-discoveredattack-001XA-query",
+    "stratum": "tactical-record",
+    "query": "Find the Lichess discoveredattack record 001XA with starting FEN 1qr2rk1/pb2bppp/8/8/2p1n3/p1bn2p1/2q2pbp/1r3rk1 b - - 3 23.",
+    "eligible": [
+      "puzzle-discoveredattack-001XA"
+    ]
+  },
+  {
+    "id": "puzzle-hangingpiece-001aK-query",
+    "stratum": "tactical-record",
+    "query": "Find the Lichess hangingpiece record 001aK with starting FEN 6k1/5p2/4p3/p1b5/2p4p/4pnp1/rb1rn3/5k2 b - - 1 33.",
+    "eligible": [
+      "puzzle-hangingpiece-001aK"
+    ]
+  },
+  {
+    "id": "puzzle-hangingpiece-001gi-query",
+    "stratum": "tactical-record",
+    "query": "Find the Lichess hangingpiece record 001gi with starting FEN r6r/1pnk1ppp/2np4/b3p3/4p1b1/n1q5/p4ppp/r3kb1r w kq - 3 18.",
+    "eligible": [
+      "puzzle-hangingpiece-001gi"
+    ]
+  },
+  {
+    "id": "puzzle-pin-001kG-query",
+    "stratum": "tactical-record",
+    "query": "Find the Lichess pin record 001kG with starting FEN rnbq3r/1p2bkpp/p4n2/8/2pnp3/2n5/ppp3pp/r1bq1rk1 b - - 1 11.",
+    "eligible": [
+      "puzzle-pin-001kG"
+    ]
+  },
+  {
+    "id": "puzzle-hangingpiece-001u3-query",
+    "stratum": "tactical-record",
+    "query": "Find the Lichess hangingpiece record 001u3 with starting FEN 2r3k1/p1q2pp1/q3p2p/b1np4/2np1p2/4p1p1/5k1p/2b1n3 b - - 3 33.",
+    "eligible": [
+      "puzzle-hangingpiece-001u3"
+    ]
+  },
+  {
+    "id": "puzzle-fork-001wr-query",
+    "stratum": "tactical-record",
+    "query": "Find the Lichess fork record 001wr with starting FEN r4rk1/p3ppbp/pp1q1np1/3ppbb1/2b5/2n5/1ppq1ppp/3rr1k1 w - - 4 18.",
+    "eligible": [
+      "puzzle-fork-001wr"
+    ]
+  },
+  {
+    "id": "puzzle-fork-002GQ-query",
+    "stratum": "tactical-record",
+    "query": "Find the Lichess fork record 002GQ with starting FEN 5rk1/5ppp/4p3/4n3/8/1pn5/5ppp/5rk1 w - - 0 28.",
+    "eligible": [
+      "puzzle-fork-002GQ"
+    ]
+  },
+  {
+    "id": "puzzle-discoveredattack-002KJ-query",
+    "stratum": "tactical-record",
+    "query": "Find the Lichess discoveredattack record 002KJ with starting FEN r3kb1r/ppq2ppp/4pn2/2ppn3/1p4bp/2p2n2/p3bpp1/rnbq1rk1 b kq - 2 10.",
+    "eligible": [
+      "puzzle-discoveredattack-002KJ"
+    ]
+  },
+  {
+    "id": "puzzle-pin-002e8-query",
+    "stratum": "tactical-record",
+    "query": "Find the Lichess pin record 002e8 with starting FEN r3nrk1/1b3pp1/4pb2/p3q3/1p1n4/3b2r1/pppqn2p/1k4r1 b - - 1 23.",
+    "eligible": [
+      "puzzle-pin-002e8"
+    ]
+  },
+  {
+    "id": "puzzle-pin-002rd-query",
+    "stratum": "tactical-record",
+    "query": "Find the Lichess pin record 002rd with starting FEN r6k/q1pb1p1p/1b3pr1/p1ppp2q/3p2p1/4b3/pp2nrpp/3r2k1 b - - 1 25.",
+    "eligible": [
+      "puzzle-pin-002rd"
+    ]
+  },
+  {
+    "id": "puzzle-discoveredattack-003cs-query",
+    "stratum": "tactical-record",
+    "query": "Find the Lichess discoveredattack record 003cs with starting FEN 2r1kbnr/pp4pp/4p3/3pp1n1/3q4/1p2b3/p3q1pp/nn3rk1 b k - 1 16.",
+    "eligible": [
+      "puzzle-discoveredattack-003cs"
+    ]
+  },
+  {
+    "id": "puzzle-discoveredattack-003wQ-query",
+    "stratum": "tactical-record",
+    "query": "Find the Lichess discoveredattack record 003wQ with starting FEN 2r2rk1/6pp/3q1q2/8/3n1b2/6p1/pp1k3p/r4b2 w - - 0 24.",
+    "eligible": [
+      "puzzle-discoveredattack-003wQ"
+    ]
+  },
+  {
+    "id": "puzzle-discoveredattack-004RF-query",
+    "stratum": "tactical-record",
+    "query": "Find the Lichess discoveredattack record 004RF with starting FEN 5rk1/5ppp/1p6/1qp2p1q/3p3p/6r1/6pk/8 b - - 0 30.",
+    "eligible": [
+      "puzzle-discoveredattack-004RF"
+    ]
+  },
+  {
+    "id": "contrast-sicilian-open",
+    "stratum": "opposite-advice",
+    "query": "I want to open the Sicilian position quickly with Nf3 and d4; which source explains that choice?",
+    "eligible": [
+      "wikibooks-sicilian"
+    ]
+  },
+  {
+    "id": "contrast-sicilian-closed",
+    "stratum": "opposite-advice",
+    "query": "I want to keep the Sicilian closed, fianchetto, and build a slower kingside attack; which source covers that setup?",
+    "eligible": [
+      "wikibooks-sicilian"
+    ]
+  },
+  {
+    "id": "contrast-kid-white",
+    "stratum": "opposite-advice",
+    "query": "In the usual King's Indian, which wing does White attack?",
+    "eligible": [
+      "wikibooks-kid"
+    ]
+  },
+  {
+    "id": "contrast-kid-black",
+    "stratum": "opposite-advice",
+    "query": "In the usual King's Indian, which wing does Black attack?",
+    "eligible": [
+      "wikibooks-kid"
+    ]
+  },
+  {
+    "id": "ambiguous-square",
+    "stratum": "ambiguous",
+    "query": "Can the king catch this pawn without calculating every move?",
+    "eligible": [
+      "wikibooks-pawn"
+    ]
+  },
+  {
+    "id": "ambiguous-queen",
+    "stratum": "ambiguous",
+    "query": "I trapped the king with my queen; what should I do next without stalemating?",
+    "eligible": [
+      "wikibooks-kqk"
+    ]
+  },
+  {
+    "id": "ambiguous-bishop",
+    "stratum": "ambiguous",
+    "query": "Why does this fianchettoed bishop matter even when it looks passive?",
+    "eligible": [
+      "wikibooks-kid"
+    ]
+  },
+  {
+    "id": "ambiguous-rook",
+    "stratum": "ambiguous",
+    "query": "My rook and extra pawn should be winning, but what positional details decide it?",
+    "eligible": [
+      "wikibooks-rookpawn"
+    ]
+  },
+  {
+    "id": "hard-negative-1",
+    "stratum": "hard-negative",
+    "query": "How do I configure an RTMP ingest server?",
+    "eligible": []
+  },
+  {
+    "id": "hard-negative-2",
+    "stratum": "hard-negative",
+    "query": "What bitrate should I use for a 4K livestream?",
+    "eligible": []
+  },
+  {
+    "id": "hard-negative-3",
+    "stratum": "hard-negative",
+    "query": "Explain the offside rule in association football.",
+    "eligible": []
+  },
+  {
+    "id": "hard-negative-4",
+    "stratum": "hard-negative",
+    "query": "How do I repair a bicycle disc brake?",
+    "eligible": []
+  },
+  {
+    "id": "hard-negative-5",
+    "stratum": "hard-negative",
+    "query": "Which fertilizer is best for indoor tomatoes?",
+    "eligible": []
+  },
+  {
+    "id": "hard-negative-6",
+    "stratum": "hard-negative",
+    "query": "What is the tax rate for a Dutch sole proprietorship?",
+    "eligible": []
+  },
+  {
+    "id": "hard-negative-7",
+    "stratum": "hard-negative",
+    "query": "Diagnose this Kubernetes CrashLoopBackOff.",
+    "eligible": []
+  },
+  {
+    "id": "hard-negative-8",
+    "stratum": "hard-negative",
+    "query": "How does a saxophone overblow into the altissimo register?",
+    "eligible": []
+  },
+  {
+    "id": "hard-negative-9",
+    "stratum": "hard-negative",
+    "query": "Give me a sourdough hydration schedule.",
+    "eligible": []
+  },
+  {
+    "id": "hard-negative-10",
+    "stratum": "hard-negative",
+    "query": "What is the fastest route from Amsterdam to Ljubljana?",
+    "eligible": []
+  },
+  {
+    "id": "hard-negative-11",
+    "stratum": "hard-negative",
+    "query": "How should I normalize a PostgreSQL customer table?",
+    "eligible": []
+  },
+  {
+    "id": "hard-negative-12",
+    "stratum": "hard-negative",
+    "query": "Which camera lens should I buy for bird photography?",
+    "eligible": []
+  }
+]

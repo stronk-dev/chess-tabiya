@@ -174,3 +174,17 @@ Append-only. Record research, rulings, RFC transitions, implementation closeout 
 - R6 narrows O6/F3 to immutable resource artifacts, versioned capability negotiation, pure plan +
   separate apply, semantic-residue refusal and a sacrificial varied pilot. It does not unlock an RFC,
   lift D560 or launch content. Gate F remains failed.
+
+## 2026-08-20 — R4 knowledge retrieval completed negatively
+
+- Ran the predeclared six-arm experiment over 55 licensed/local passages, 106 Skipper chunks and
+  144 fixed queries. Exact+FTS beat the strongest semantic arm at recall@5, 97.7% to 94.7%.
+- The strongest semantic arm missed both safety exits: 8.3% ineligible top-1 and 66.7% hard-negative
+  abstention. Contextualization did not change recall@5 relative to ordinary reranking.
+- Source replacement and exact-vector controls passed; source/span/digest reproduction and
+  same-dimension embedding-model invalidation failed.
+- Closed D564's extraction branch and recorded D579-D581. The separate-builder need remains, but
+  its 1.0 shape is typed provenance compilation plus a local exact/FTS artifact, not Skipper,
+  pgvector, contextualization or a chess chat agent.
+- R8 is now blocked only by R3; O5 remains blocked by R8/R18. No product implementation or content
+  changed.

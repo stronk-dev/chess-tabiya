@@ -25,7 +25,7 @@ action; measurement instruments do not share the tested defect's assumption.
 
 | Order | Job | State | Deliverable / closeout |
 |---|---|---|---|
-| 1.1 | R4 knowledge retrieval experiment | **READY NOW** | Complete source register/gold set, run six arms, land result in existing theory dossier, coverage/gates/log |
+| 1.1 | R4 knowledge retrieval experiment | **DONE 2026-08-20** | 17 registered sources, 55 passages, 144 queries, six arms and lifecycle controls landed; semantic extraction refused for 1.0 |
 | 1.2 | R11 bot-policy research | **READY NOW** | `design/research/bot-policy.md`, harness/results, H5/C5 updates |
 | 1.3 | R18 self-host/privacy/accessibility/rights audit | **READY NOW** | Dossier, platform acceptance floors and Q2/Q3 updates |
 | 1.4 | Competitor capability-watch instrument | **READY NOW** | Dated capability-first register with canonical identities and routing; no clone-count objective |
@@ -51,7 +51,7 @@ schema evolution.
 | Order | Job | State | Dependency |
 |---|---|---|---|
 | 3.1 | R7 Review Map/re-entry/share study | WAIT | R1–R3 |
-| 3.2 | R8 theory↔drill workflow | WAIT | R1–R4 |
+| 3.2 | R8 theory↔drill workflow | WAIT | R3 only; R1/R2/R4 complete |
 | 3.3 | R12 player metrics | **READY NOW for research** | R1–R2 complete; production admission remains O2/O9 |
 | 3.4 | R13 grounded coaching aggregates | WAIT | R7/R12 |
 | 3.5 | R14 campaign experiential closure | WAIT | playable interaction-correct pilot |

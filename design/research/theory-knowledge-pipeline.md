@@ -12,8 +12,10 @@ research, not implementation authority.
 
 ## Verdict
 
-**Do not make the whole Skipper agent a Tabiya dependency. Reuse and enhance its knowledge
-subsystem, conditionally, after a chess retrieval experiment.**
+**Do not make the whole Skipper agent a Tabiya dependency, and do not extract its semantic
+retrieval stack for 1.0. The chess retrieval experiment failed the predeclared gate. Reuse the
+source-ingestion and invalidation patterns in a smaller provenance compiler with typed keys and a
+local FTS bundle.**
 
 There are really three objects called “Skipper” in the code:
 
@@ -26,20 +28,43 @@ more permissive than law 8 allows and solves a different problem: autonomously a
 question. Tabiya needs a builder that returns traceable candidate knowledge to deterministic
 evidence and guidance policies.
 
-The economical route is two-stage:
+The six-arm experiment is complete. Over 144 fixed queries, exact+FTS reached 97.7% recall@5 while
+the strongest semantic arm reached 94.7%; the semantic arm returned an ineligible top result on
+8.3% of answerable queries and abstained on only 66.7% of hard negatives. Skipper also failed the
+model-identity and source/span/digest artifact controls. `[V]` The full method and result are in
+`planning/platform-alignment/knowledge-retrieval/results.md`.
 
-- **Now, research:** run the existing Skipper knowledge stack as a disposable instrument against a
-  small allow-listed chess corpus. This requires no product dependency and tests whether semantic
-  retrieval adds anything over exact chess keys and text search.
-- **Only if it clears:** extract the knowledge core into a standalone builder/retrieval service,
-  add chess provenance and enrichment, and export an immutable knowledge bundle. Ordinary Tabiya
-  deployments consume that bundle; they do not need to operate a crawler, PostgreSQL/pgvector,
-  headless Chrome, an embedding provider, or an LLM.
+The economical route is now one bounded implementation candidate after the remaining research and
+owner ruling: a separate deterministic builder fetches allow-listed sources, records provenance and
+rights, attaches typed chess applicability keys, and publishes an immutable exact-key/SQLite-FTS
+bundle. Ordinary Tabiya deployments need no crawler, PostgreSQL/pgvector, headless Chrome, embedding
+provider, reranker or contextualizing LLM.
 
-This is worth investigating. It could ground theory breadcrumbs, source-backed hints, post-game
+The separate builder remains worth designing. It could ground theory breadcrumbs, source-backed hints, post-game
 explanations, authoring citation search and principle regrounding. It does **not** replace board
 arithmetic, tactical detectors, Stockfish, Maia, explorer statistics, tablebases, or authored
 judgment.
+
+## Experiment outcome — 2026-08-20
+
+The conditional branch was exercised rather than promoted by recommendation. The corpus contained
+55 licensed/local passages and produced 106 Skipper chunks. The gold set had 132 answerable queries
+and 12 hard negatives. `[V]`
+
+- Exact+FTS: 81.8% recall@1, 97.7% recall@5.
+- Contextual hybrid+reranker: 91.7% recall@1, 94.7% recall@5, 8.3% ineligible top-1 and 66.7%
+  hard-negative abstention.
+- Source replacement worked atomically; same-dimension embedding-model invalidation and required
+  licence/revision/span/digest reproduction are unrepresentable in the current store.
+- Exact local vector results matched pgvector's indexed top five in 12/12 controls, so approximate
+  search did not explain the retrieval failures.
+
+The semantic path improves ordering at rank one, but loses candidate recall and cannot enforce
+applicability or refusal. Four rook-ending questions were routed to generic pawn endings, and four
+unrelated hard negatives received chess results. The experiment also exposed a defect in the
+proposed “chess keys” abstraction: the free-text key `pawn` itself over-filtered the correct
+rook-ending source. The replacement is not better embedding. It is typed applicability predicates
+before any ranking. `[V]`
 
 ## What was actually inspected
 

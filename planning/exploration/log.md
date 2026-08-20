@@ -3407,3 +3407,23 @@ pack witnesses. Mechanical migrations can be planned and replayed; semantic assi
 reported as human residue, not inferred. D574-D578 record the defects and architecture obligations.
 R6 is answered, but its result is negative: O6 remains blocked by R8/R10, F3 is not yet draftable,
 D560 stays active and Gate F remains failed. No product code, schema or content changed.
+
+## 2026-08-20 — R4 tested Skipper and refused semantic extraction for 1.0
+
+The separate-builder question was exercised with a licensed source register, a fixed 144-query gold
+set and the actual Frameworks Skipper knowledge path. The corpus contained 55 logical passages and
+produced 106 contextual chunks. Exact+FTS reached 97.7% recall@5; contextual hybrid+reranking reached
+94.7%, returned an ineligible first result on 8.3% of answerable queries and abstained on 66.7% of
+hard negatives. The predeclared semantic gate therefore fails on value and both safety axes.
+
+Atomic source replacement and 12/12 exact-vs-indexed vector controls passed. Skipper chunks do not
+carry required licence/revision/span/digests or embedding model identity, so reproducible provenance
+and same-dimension model invalidation failed. Running the whole service also required unrelated
+Frameworks services, confirming the deployment coupling in execution.
+
+The experiment found a defect in the supposedly deterministic layer too: the free-text key `pawn`
+filtered rook-ending questions to the generic pawn-ending source. D579-D581 require typed
+applicability predicates and narrow the 1.0 theory candidate to a separate provenance compiler plus
+immutable exact/SQLite-FTS bundle. D564 closes negatively; D557 remains the bounded builder need.
+R8 now waits only on R3 and O5 still waits on R8/R18. No product code, schema, deployment or authored
+chess content changed; D560's hold remains active.

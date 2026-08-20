@@ -6,7 +6,7 @@
 
 **Ledger:** D557, D564
 
-**Status:** queued research instrument; no product implementation authority.
+**Status:** complete 2026-08-20; semantic extraction gate failed; no product implementation authority.
 
 ## Decision
 
@@ -57,6 +57,11 @@ The extraction path clears only if the best semantic arm:
 - demonstrates correct invalidation after a source or embedding-model change.
 
 These are predeclared research thresholds, not product acceptance criteria.
+
+**Result:** failed. The strongest safe semantic arm reached 94.7% recall@5 against 97.7% for
+exact+FTS, 8.3% ineligible top-1 against the 2% ceiling and 66.7% hard-negative abstention against
+the 90% floor. Source replacement passed; embedding-model identity and required
+licence/revision/span/digest reproduction failed. See `results.md`.
 
 ## Outputs
 
