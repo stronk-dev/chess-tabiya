@@ -260,6 +260,11 @@ A6 now proves F1 and F12 have sufficient architecture research. They remain bloc
 intent/process: O1/O13 must be mirrored into living design and the shared-register/lifecycle drafts
 must settle before F1. F2-F11 remain research-blocked by their named learner/workflow evidence.
 
+D641 also closes the minimum routing omission: 74 genuinely open rows that appeared nowhere in
+living planning/active RFCs now have one primary destination, and stale D99 is closed. D487 remains
+open because a mention is not proof of one live owner; `make work-register` must derive and enforce
+the stronger join.
+
 R3's mechanical/desk/responsive-prototype arm, R4, R5, R18's mechanical/code/desk arm, the capability-watch instrument/forum sweep and R12's short-session arm are complete. R18 proves the provider-off core but fails the present 1.0 platform floor and makes O13 ready; participant accessibility remains external. The watch closes D556 and D554's targeted desk/forum arm while leaving comparable hands-on inside its consumer studies. R12 supports continuous
 literal habit cards but refuses natural archetypes; its longitudinal transfer remains external.
 R11's mechanical arm is also complete and

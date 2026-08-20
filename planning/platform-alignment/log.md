@@ -525,3 +525,18 @@ Append-only. Record research, rulings, RFC transitions, implementation closeout 
   choice, widening lifecycle parity to the D638 Active/root and Archive/filesystem failure.
 - D640 remains open until the owner/Claude amendment lands. F1/F12 remain legally blocked despite
   sufficient architecture research; no RFC or product code was created.
+
+## 2026-08-20 — D641 routed every definitely omitted open row
+
+- Parsed 589 pre-intervention unique ledger ids: 234 closed/rejected and 355 open. The old work
+  register still stops at D365-era truth.
+- Found 75 open ids with no mention in any living non-log planning document or active product RFC.
+  Closed D99 as a stale prevented hazard and assigned the other 74 exactly one primary destination
+  in `unrouted-defect-refresh.md`.
+- The largest restored groups are F12 appliance (12), R11/F8 bots (9), R12/F9 profile (9), campaign
+  (8), F3 migration (7), and R3/F5 assistance (7). This confirms the new research generated real
+  work faster than the old global index could absorb it.
+- Kept D487 open: 280 other open rows have at least one mention, but no machine proves it is one
+  live, non-stale owner. The disposable D641 registry is not allowed to become another global
+  hand-written index.
+- No product code, protected design, schema or content changed; D560 remains active.

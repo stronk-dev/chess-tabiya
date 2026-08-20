@@ -13,6 +13,12 @@ created on the project's two highest-output days ([[D487]]).
 
 **Snapshot date: 2026-08-16.** Ledger at **D487**, 289 open rows at the time of the routing pass.
 
+**Post-snapshot audit 2026-08-20:** D641 measured 589 pre-intervention ids / 355 open and found 75
+open ids absent from every living non-log planning document and active RFC. D99 was stale-closed;
+the remaining 74 are routed in `planning/platform-alignment/unrouted-defect-refresh.md`. The ledger
+now has 590 ids / 354 open. This removes known zero-mention omissions; it does **not** make this
+hand-written file current or prove unique ownership. D487 and `make work-register` remain open.
+
 ---
 
 ## The six lanes

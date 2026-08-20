@@ -3635,3 +3635,14 @@ reduces the two process drafts to five owner questions with recommended minimum 
 
 No protected design was edited and D640 stays open. This prepares authority; it does not substitute
 for it, accept F1/F12, or loosen the content hold.
+
+## 2026-08-20 — the zero-mention defect residue was routed
+
+The D641 audit joined the current ledger to living non-log planning and active RFCs. Before the
+repair, 75 of 355 open ids appeared nowhere on that routing surface. D99 was a stale historical
+hazard and is closed; 74 genuine residues now have one primary destination in
+`planning/platform-alignment/unrouted-defect-refresh.md`.
+
+This closes omission only. D487 remains open because the other 280 mentions have not been proven
+unique, live or non-stale owners, and the future derived `make work-register` must make that state a
+verification failure. No feature implementation or content work was authorised.
