@@ -3355,3 +3355,24 @@ Q4c remains partial and K6 gains evidence toward firing for geometry-only genera
 R1 is done; R2 selection/significance and R3 presentation are still required before any semantic
 detector or guidance RFC. D560's content hold remains unchanged. No product implementation or
 content changed.
+
+## 2026-08-20 — R2 measured selection/sign and refused rarity as meaning
+
+`design/research/selection-sign-and-significance.md` answers platform-alignment R2 with two
+populations and a predeclared disposable instrument. It compares every legal alternative for 754
+authored decisions and 579 fixed-ply decisions from 108 rated Lichess games stratified by
+Bullet/Blitz/Rapid and three Elo bands.
+
+Local counterfactual admission plus a two-card budget solves the raw-volume problem mechanically:
+8.70→0.79 entries/decision authored and 11.42→1.03 imported, with mean specificity rising from
+about 18% to above 93%. All 108 checkmate/promotion/castling/last-of-role events survived. The
+result transfers; the authored/imported per-kind lift ranking does not transfer unchanged
+(Spearman ρ 0.667).
+
+The finding is deliberately split. The selected families are still led by literal material-count,
+bishop-shade and generic changed-count facts, so rarity does not establish teaching significance.
+And 1,554 alternative-only `avoided` relations establish no good/bad valence. D569-D572 therefore
+require semantic eligibility before local selection and prohibit the LLM from selecting, grading
+or inferring valence. Q4c remains partial until R3 presentation and reader validation. R2 is done;
+R12 research is unblocked; D560's content hold is unchanged. No product implementation or content
+changed.

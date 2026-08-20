@@ -82,6 +82,7 @@ These are independent dossiers but feed one contract:
 | Deliverable | Questions it must answer | Ledger |
 |---|---|---|
 | `design/research/detection-landscape.md` | What can rules, engine search, human corpus, theory catalogues and authored facts each detect? Precision, abstention, sign and validation set? | D544, D545, D558 |
+| `design/research/selection-sign-and-significance.md` | Which locally measured facts survive a bounded packet; how do gained/lost/preserved/avoided differ; where does distinctiveness stop short of significance or valence? | D542-D545, D569-D572 |
 | `design/research/evidence-presentation.md` | Which modules help without alarm fatigue or direct move leakage? How do touch, hover, keyboard and mobile differ? | D542, D543, D546 |
 | `design/research/theory-knowledge-pipeline.md` | Can Skipper's separate knowledge subsystem be reused for chess; does semantic retrieval beat exact keys + FTS; licensing, citation, invalidation and false-match abstention? Six-arm experiment queued. | D557, D564 |
 | `design/research/bot-policy.md` | How are strength, repertoire, style, plausible errors, timing and memory independently composed and measured? | D551, D561 |
@@ -227,7 +228,8 @@ claimed-only and bot tournaments/social events are absent. The prior human-play 
 the native match already passes pause→branch→resume browser proof. Conversely, the evidence
 producer registry's eight free-text surface labels intersect none of the seven canonical client
 surface IDs, so the central producer→consumer join remains unimplemented rather than merely
-undocumented. R1, R2, R5 and R6 are now unblocked; A2 still gates interaction UX research.
+undocumented. R1 and R2 have since landed: six evidence planes, followed by the measured split
+between semantic eligibility and local selection/budget. A2 still gates interaction UX research.
 
 `active-rfc-audit.md` records the code/tests/closeout evidence and legal next action. This remains
 a dated checkpoint, not a replacement for `rfc/README.md`.
@@ -237,15 +239,17 @@ a dated checkpoint, not a replacement for `rfc/README.md`.
 The next safe queue is research and reconciliation, not feature implementation. Detailed job
 cards and dependencies are in `execution-queue.md`; the current frontier is:
 
-1. A1 capability reality audit;
-2. A2 interaction-state/K9 measurement repair;
-3. R4 knowledge-retrieval experiment;
-4. R11 bot-policy research;
-5. R18 self-host/privacy/accessibility/rights audit;
-6. the capability-watch instrument.
+1. A2 interaction-state/K9 measurement repair;
+2. R4 knowledge-retrieval experiment;
+3. R5 renderer evaluation;
+4. R6 pack stability/migration audit;
+5. R11 bot-policy research;
+6. R12 player-style metrics research;
+7. R18 self-host/privacy/accessibility/rights audit;
+8. the capability-watch instrument.
 
-Detection, presentation, player-style, Review Map, campaign and professional/social research are
-all on the queue, but behind named predecessors. Owner rulings and RFC drafting begin only after
+Presentation, Review Map, campaign and professional/social research are all on the queue, but
+behind named predecessors. Owner rulings and RFC drafting begin only after
 their corresponding research exit criteria pass.
 
 Campaign, broad content production, federation and new all-in-one navigation stay off the executable

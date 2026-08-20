@@ -115,3 +115,24 @@ Append-only. Record research, rulings, RFC transitions, implementation closeout 
 - Updated Q4c and B4 without declaring them complete. R1 settles the producer/grounding boundary;
   R2 still owns relevance, sign and admission, R3 presentation, and reader validation remains
   external. No product RFC, product code, schema or content changed.
+
+## 2026-08-20 — R2 separated local distinctiveness from semantic significance
+
+- Landed `design/research/selection-sign-and-significance.md` and the disposable
+  `tools/r2-selection-harness/`. The external arm samples 108 rated Lichess games across three
+  time controls and three Elo bands at fixed plies; the authored arm covers all 754 current spine
+  transitions. Every legal alternative is enumerated, including all four promotion roles.
+- The predeclared ≤20%-same-family, cap-two rule cut raw volume from 8.70 to 0.79 entries/decision
+  authored and 11.42 to 1.03 imported, raising local specificity from about 18% to above 93% on
+  both populations. It retained all 108 predeclared rare rules events.
+- The survivor audit refused the shortcut the aggregate invited: `piece_count`,
+  `bishop_on_shade` and generic changed counts dominate the selected set. Distinctive does not mean
+  significant. The evidence compiler therefore needs semantic eligibility before local
+  selection/budget.
+- Relation sign is now explicitly separate from valence. The 1,032 authored and 522 imported
+  alternative-only relations cannot become “you avoided a mistake” without authored/theory,
+  disclosed engine/tablebase or validated semantic-event backing. This corrects D545.
+- Recorded D569-D572, completed R2, unblocked R12 research, made O3 ready for a narrow owner
+  ruling, and updated Q4c/B4/K6 and the capability/queue surfaces. R3 presentation and
+  reader/per-consumer validation remain open. No product RFC, product code, schema or content
+  changed; D560's hold remains active.

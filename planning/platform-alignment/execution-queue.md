@@ -37,8 +37,8 @@ action; measurement instruments do not share the tested defect's assumption.
 
 | Order | Job | State | Dependency |
 |---|---|---|---|
-| 2.1 | R1 detection landscape and validation corpus | **READY NOW** | A1 complete |
-| 2.2 | R2 sign/relevance/selection measurement | **READY NOW** | A1 complete |
+| 2.1 | R1 detection landscape and validation corpus | **DONE 2026-08-20** | Six evidence planes; cheap semantic labels refused |
+| 2.2 | R2 sign/relevance/selection measurement | **DONE 2026-08-20** | Local selector clears volume/specificity; rarity refused as significance; semantic eligibility remains separate |
 | 2.3 | R3 evidence presentation prototypes/tests | WAIT | A2, R1/R2 fixture contract for final arm |
 | 2.4 | R5 renderer evaluation | **READY NOW** | A1 complete; use fixed packet/rung samples from audited seams |
 | 2.5 | R6 pack stability/migration/re-author audit | **READY NOW** | A0/A1 complete |
@@ -52,7 +52,7 @@ schema evolution.
 |---|---|---|---|
 | 3.1 | R7 Review Map/re-entry/share study | WAIT | R1–R3 |
 | 3.2 | R8 theory↔drill workflow | WAIT | R1–R4 |
-| 3.3 | R12 player metrics | WAIT | R1–R2 |
+| 3.3 | R12 player metrics | **READY NOW for research** | R1–R2 complete; production admission remains O2/O9 |
 | 3.4 | R13 grounded coaching aggregates | WAIT | R7/R12 |
 | 3.5 | R14 campaign experiential closure | WAIT | playable interaction-correct pilot |
 | 3.6 | R10 learning-effect experiments | WAIT/EXTERNAL | representative pilot and participants |
@@ -148,6 +148,6 @@ R14/R15/R16/R17/R18 → O10–O13 → optional F10/F11 + required F12
 all included nodes → integrated default journeys → 1.0 proof
 ```
 
-The immediate queue is therefore 0.3, 1.1–1.4 and the newly unblocked research jobs 2.1, 2.2,
-2.4 and 2.5. There is no legal feature-build queue yet; creating one before these results would
+The immediate queue is therefore 0.3, 1.1–1.4, 2.4–2.5 and newly unblocked 3.3. There is no legal
+feature-build queue yet; creating one before these results would
 violate the sequencing the owner explicitly requested.
