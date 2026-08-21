@@ -34,6 +34,12 @@ export function consumeComparisonEngineTrajectory(view: ConsumerEvidenceView<Com
   return Object.freeze(view.items.map((item) => item.payload));
 }
 
+export function consumeComparisonStripEvidence(view: ConsumerEvidenceView<unknown>): readonly DeclaredEvidence<unknown>[] {
+  assertConsumerEvidenceView(view);
+  if (view.consumer.id !== "compare.structure_strip" || view.consumer.version !== 1) throw new TypeError("Expected compare.structure_strip@1 consumer view");
+  return view.items;
+}
+
 export function comparisonEngineTrajectory(comparison: BranchComparison, branchId: string): readonly ComparisonEvidenceEntry[] {
   const declared = (comparison.evidence[branchId] ?? []).map((entry) => declareEvidence(
     ref("derived.compare_narrative"), ref("derived.compare.engine_trajectory"), entry,
@@ -81,10 +87,17 @@ export function comparisonStrips(run: DrillRun, comparison: BranchComparison): R
       const existing = [...routeMap].find(([, squares]) => squares.at(-1) === from);
       if (existing === undefined) routeMap.set(from, [from, to]); else existing[1].push(to);
     }
+    const routeEvidence = [...routeMap].map(([pieceId, squares]) => declareEvidence(
+      ref("derived.compare_narrative"), ref("derived.compare.piece_route"), Object.freeze({ pieceId, squares: Object.freeze(squares) }),
+    ));
+    const declared = [...structure.flatMap((entry) => entry.evidence === undefined ? [] : [entry.evidence]), ...timing.flatMap((entry) => entry.evidence === undefined ? [] : [entry.evidence]), ...routeEvidence];
+    const admitted = consumeComparisonStripEvidence(evidenceForConsumer(PRIMARY_EVIDENCE_MANIFEST, ref("compare.structure_strip"), declared));
+    const admittedSet = new Set(admitted);
     const value: BranchStrips = Object.freeze({
-      evalTrail: Object.freeze([...(comparison.evidence[column.branchId] ?? [])].sort((a, b) => a.plyOffset - b.plyOffset).map((entry) => ({ plyOffset: entry.plyOffset, nodeId: entry.nodeId, score: entry.score }))),
-      structure: Object.freeze(structure), timing: Object.freeze(timing),
-      routes: Object.freeze([...routeMap].map(([pieceId, squares]) => Object.freeze({ pieceId, squares: Object.freeze(squares) }))),
+      evalTrail: Object.freeze([...comparisonEngineTrajectory(comparison, column.branchId)].sort((a, b) => a.plyOffset - b.plyOffset).map((entry) => ({ plyOffset: entry.plyOffset, nodeId: entry.nodeId, score: entry.score }))),
+      structure: Object.freeze(structure.filter((entry) => entry.evidence !== undefined && admittedSet.has(entry.evidence))),
+      timing: Object.freeze(timing.filter((entry) => entry.evidence !== undefined && admittedSet.has(entry.evidence))),
+      routes: Object.freeze(admitted.filter((entry) => entry.projection.id === "derived.compare.piece_route").map((entry) => entry.payload as PieceRoute)),
     });
     return [column.branchId, value];
   })));

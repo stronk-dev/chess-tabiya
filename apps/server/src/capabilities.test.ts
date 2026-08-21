@@ -182,7 +182,7 @@ describe("engine capabilities", () => {
           ]),
           bindings: expect.arrayContaining([
             expect.objectContaining({ consumerId: "guidance.voice", projectionId: "pack.authored.claim" }),
-            expect.objectContaining({ consumerId: "analysis.engine", projectionId: "live.stockfish.pv" }),
+            expect.objectContaining({ consumerId: "runtime.evidence_ref", projectionId: "live.stockfish.pv" }),
           ]),
         },
       });

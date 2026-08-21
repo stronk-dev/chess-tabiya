@@ -118,7 +118,7 @@ export interface CapabilityDisposition {
 }
 
 export const CAPABILITY_DISPOSITIONS: readonly CapabilityDisposition[] = Object.freeze([
-  { instrument: "Stockfish", capability: "score cp / mate", disposition: "reached", reason: "Engine evidence, guard conditions, and deviation cost binding", surface: "analysis and feedback", evidence: { producerId: "live.stockfish", consumerIds: ["runtime.guard_condition", "compare.engine_trajectory", "analysis.engine", "review.story"] } },
+  { instrument: "Stockfish", capability: "score cp / mate", disposition: "reached", reason: "Engine evidence, guard conditions, and deviation cost binding", surface: "analysis and feedback", evidence: { producerId: "live.stockfish", consumerIds: ["runtime.guard_condition", "runtime.objective_condition", "runtime.evidence_ref", "compare.engine_trajectory"] } },
   { instrument: "Stockfish", capability: "UCI_ShowWDL", disposition: "reached", reason: "Recorded WDL evidence", surface: "analysis", advertisedOptions: ["UCI_ShowWDL"] },
   { instrument: "Stockfish", capability: "go nodes", disposition: "reached", reason: "Reproducible strong-engine search bound", surface: "opponent selection" },
   { instrument: "Stockfish", capability: "bestmove / MultiPV rank / bestline", disposition: "refused", reason: "Move verdicts are not condition measurements" },
@@ -143,7 +143,7 @@ export const CAPABILITY_DISPOSITIONS: readonly CapabilityDisposition[] = Object.
   { instrument: "Maia", capability: "resistance above seven pieces", disposition: "unmeasured", reason: "No exact DTZ ground truth exists outside the Syzygy range; conversion-up-a-piece (17 pieces) and rook-4v3-same-side-hold (11) are outside it at every authored position", experiment: "D370-b realized-ply-count-to-conversion against a fixed converting opponent on the two out-of-range packs" },
   { instrument: "Maia", capability: "Temperature 0", disposition: "refused", reason: "A modal opponent is a different product", advertisedOptions: ["Temperature"] },
   { instrument: "Maia", capability: "asymmetric SelfElo / OppoElo", disposition: "unmeasured", reason: "Advertised but unmeasured", experiment: "RFC ledger row 5 asymmetric Elo experiment", advertisedOptions: ["SelfElo", "OppoElo"] },
-  { instrument: "Syzygy", capability: "category", disposition: "reached", reason: "Opponent modes and category guard", surface: "feedback", evidence: { producerId: "live.syzygy", consumerIds: ["runtime.guard_condition", "opponent.selection", "analysis.engine"] } },
+  { instrument: "Syzygy", capability: "category", disposition: "reached", reason: "Opponent modes and category guard", surface: "feedback", evidence: { producerId: "live.syzygy", consumerIds: ["runtime.guard_condition", "runtime.objective_condition", "runtime.evidence_ref", "opponent.selection"] } },
   { instrument: "Syzygy", capability: "dtz / precise_dtz as a recorded measurement", disposition: "reached", reason: "Exact evidence payload and tablebase cost binding", surface: "feedback" },
   { instrument: "Syzygy", capability: "dtz as a condition threshold", disposition: "unmeasured", reason: "The first non-optimality threshold ships at three but its learning significance is unmeasured", experiment: "D87 category-preserving DTZ-delta distribution" },
   { instrument: "Syzygy", capability: "dtm", disposition: "refused", reason: "Not published for every position; category is total where DTM is not" },

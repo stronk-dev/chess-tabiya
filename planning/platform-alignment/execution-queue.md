@@ -107,9 +107,9 @@ Only the owner or claude-on-owner-ruling edits living intent. Apply O1–O13 in 
 Every RFC needs buildability review, negative fixtures, non-vacuity checks, explicit version/resource
 claims, a planning directory, and accepted status before implementation.
 
-**Wave 6A update, 2026-08-21:** both process/register predecessors are implemented and archived.
-`rfc/evidence-contract-manifest.md` is the F1 draft; it now waits on its exact-symbol/buildability
-author review and acceptance. No F1 product code is authorised yet.
+**Wave 6A update, 2026-08-21:** complete. The process/register predecessors and F1 are implemented
+and archived. F1 closes with 19 producers, 93 projections, 23 sealed consumer operations and 142
+exact bindings; Wave 6B (F2/F3) is now the product-architecture front.
 
 **F12 update, 2026-08-21:** R18/O13 are split into bounded child contracts in
 `release-platform/f12-work-order.md`. `rfc/accessible-board-input.md` is the first independent

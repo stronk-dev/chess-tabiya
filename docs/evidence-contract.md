@@ -46,7 +46,10 @@ transition counts, engine principal variations, and recorded engine/tablebase pr
 merely because the catalogue knows they exist.
 
 Compare and Story use declared `run.record` facts and deterministic `derived.*` projections rather
-than replacing a prose array. Derived projections enumerate non-empty exact-version inputs and may
+than trusting parallel prose arrays. Comparison trajectories, structure/timing strips, and recorded
+piece routes pass their distinct admitted consumers. Story moments, prominence rank, title, public
+share, and card prose are rendered from one admitted `review.story` view; raw Stockfish events are
+derivation inputs, not story-delivery evidence. Derived projections enumerate non-empty exact-version inputs and may
 not widen their inputs' grounding, exactness, answer content, or abstention. Reasoning review is a
 separate non-chess provider request over the learner transcript, key points, and detections; it is
 not a voice scope and receives no chess-evidence items.
@@ -79,12 +82,12 @@ before traffic is served.
 6. If no honest consumer exists, record one explicit disposition. Do not add a wildcard, legacy
    bypass, generic packet renderer, or user-facing primitive switch.
 
-The F1 bind-stage implementation is currently returned on two boundary definitions recorded in
-`planning/evidence-contract-manifest/second-author-return.md`: the operation census must stop
-treating the packet constructor and the pre-evidence analysis request as evidence consumers, and
-the recursive authored structural-expression AST needs a truthful identity distinct from its leaf
-predicate families. The sealed voice/derivation contract above is implemented and retained; the
-remaining operation conversion waits on that amendment.
+F1's bind stage covers twenty-three production operations. Producer computation and provider
+acquisition are deliberately outside that consumer census; authored structural AST inputs and
+computed results, evidence-reference resolution, normalized versus delivery claims, Explorer page
+versus frontier results, recorded comparison points, sourcing-ledger records, and raw opponent
+provider results all retain distinct payload identities. Every registered operation is anchored at
+an exported sealed-view consumer rather than at copy or a DOM attribute.
 
 F1 answers eligibility and traceability only. Relevance/lift selection, semantic event valence,
 presets, workflows, theory retrieval, and content migration belong to their later RFCs.

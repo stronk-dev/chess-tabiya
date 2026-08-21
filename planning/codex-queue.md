@@ -124,24 +124,15 @@ typechecked — [[D662]] one level up. Read the amended §6.1 before resuming:
   Black in imported games (`story.ts:37`). Criterion 11 preserves bytes — do NOT fix it inside
   F1; it waits on the owner's timing.
 
-**Returned again at the bind stage on [[D669]]/[[D670]].** The sentence seal, reasoning split,
-phase correction and derived compiler are implemented and green, but do not continue the remaining
-operation conversions until the author re-identifies the consumer boundaries: `guidance.packet`
-is explicitly not a consumer, `/analysis` has no evidence at its request entrypoint, and the 18
-leaf predicate ids cannot exactly carry a recursive multi-family structural-expression AST. Full
-handoff: `planning/evidence-contract-manifest/second-author-return.md`.
+**F1 implemented and archived 2026-08-21.** The returns on [[D669]]/[[D670]] ultimately exposed
+ten payload/authority collisions through [[D679]]. All twenty-three operations now consume sealed
+views; `guidance.packet` and `/analysis` remain correctly classified as producer/acquisition. The
+next evidence work is F2/F3, including [[D668]] and [[D660]], not more F1 conversion.
 
-## 0-ACCEPTED-2026-08-21. F1 and accessible-board-input — both accepted, implement in this order
+## 0-COMPLETED-2026-08-21. F1 implemented; accessible-board-input awaits owner use
 
-1. **F1 (`rfc/evidence-contract-manifest.md`)** — the producer→projection→consumer spine. Read the
-   cross-review changelog first: the consumer census is **twenty-three** operations (five were
-   missing, including the **public shared-story route**), `ConsumerDeclaration` gained
-   `disposition` (fixture: `assistance.arrows` as `experimental`), and **emission status is pinned
-   to the executable census** — a declarations-only closure test is the shared-assumption failure.
-   **Owner nod recorded 2026-08-21: the §10.1 "Evidence inspector" relabel IS approved at landing.**
-   Seams: your `assistance-controls` D308 reveal wiring adds a consumer call site that must take a
-   literal consumer ID; `feedback-delivery`'s landing order affects row 19's anchors;
-   `pack-population-provenance` inherits the `citable_text` manifest declaration at its landing.
+1. **F1 (`rfc/archive/evidence-contract-manifest.md`) — implemented.** The compiled spine and
+   inspector relabel ship; future consumers must extend the 23-operation census explicitly.
 2. **accessible-board-input** — independent, parallel-safe. The corrected matrix is **150 = 6
    packs × 5 A2 viewports × 5 modes** with the 18 click cells the never-deleted floor; the state
    machine now has `awaiting_promotion`; semantic enumeration **follows `showDests`** ([[D659]] —

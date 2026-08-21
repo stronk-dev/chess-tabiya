@@ -3885,3 +3885,19 @@ byte-checks its derived contract report, writes nothing, and now runs inside `ma
 - Mechanical discharges D1/D2 are complete. `accessible-board-input` is `awaiting D3` on the
   owner's normal device/browser/assistive-technology validation-by-use session; no code work or
   recruited participant study remains.
+
+## 2026-08-21 — evidence-contract-manifest implemented
+
+- F1 compiled one static evidence contract over 19 producers, 93 exact projections, 23 production
+  consumer operations and the explicitly experimental `assistance.arrows` orphan. The runtime
+  digest is exposed through capabilities and the same compiler runs at startup and in verification.
+- Every registered operation now crosses an exported sealed consumer boundary. The bind stage
+  found and corrected ten payload/authority collisions ([[D670]]–[[D679]]) rather than hiding them
+  behind casts or source/DOM anchors; provider acquisition and evidence production remain
+  deliberately outside the consumer census.
+- Deterministic voice, Compare and Story now derive prose from declared items rather than parallel
+  sentence arrays. Opponent selection admits raw Maia/Stockfish/Syzygy results before they can
+  influence a move. F1 does not select relevance, add presets, activate arrows, or migrate content;
+  those remain owned by F2/F3 and [[D668]].
+- Verification at closeout: `make verify` green (125 files / 806 tests), manifest check green
+  (19 / 93 / 23 / 142 bindings), browser green (28 passed, one optional Maia latency test skipped).

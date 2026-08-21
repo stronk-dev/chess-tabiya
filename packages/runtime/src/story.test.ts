@@ -1,6 +1,11 @@
 import { describe, expect, it } from "vitest";
 
-import { attachEvidence, commitMove, createRun, storyDeclaredEvidence, storyMoments, suggestTitle } from "./index.js";
+import { attachEvidence, commitMove, createRun, renderReviewStoryEvidence, storyDeclaredEvidence, storyMoments, suggestTitle } from "./index.js";
+
+if (false) {
+  // @ts-expect-error review story rendering consumes only a compiled evidence view.
+  renderReviewStoryEvidence([]);
+}
 
 const at = "2026-08-14T14:00:00.000Z";
 const digest = `sha256:${"d".repeat(64)}`;

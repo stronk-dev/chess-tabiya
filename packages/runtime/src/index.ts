@@ -26,7 +26,7 @@ export {
   type ObjectiveTimelineEntry,
 } from "./compare.js";
 export { BRANCH_COLLAPSE_FLOOR, branchDecidedness, collapsedBranchIds, renderCollapseExplanation, type AssessmentCategory, type AssessmentObjective, type CollapseExplanation, type Decidedness, type DecidednessGround, type TablebaseCategory as BranchTablebaseCategory } from "./branch-scale.js";
-export { comparisonEngineTrajectory, comparisonNarrative, comparisonStrips, consumeComparisonEngineTrajectory, type BranchStrips, type ComparisonNarrative, type NarrativeGroup, type PieceRoute, type StripEntry } from "./compare-strips.js";
+export { comparisonEngineTrajectory, comparisonNarrative, comparisonStrips, consumeComparisonEngineTrajectory, consumeComparisonStripEvidence, type BranchStrips, type ComparisonNarrative, type NarrativeGroup, type PieceRoute, type StripEntry } from "./compare-strips.js";
 export {
   RuntimeError,
   assertActiveWriter,
@@ -52,7 +52,7 @@ export {
 } from "./transition.js";
 export { endgameReading, renderEndgameReading, type EndgameTypeId, type EndgameReading, type TechniqueRef } from "./endgame.js";
 export { retrospectivePivot } from "./adaptive.js";
-export { STORY_MATE_CP, STORY_PIVOT_CP, storyDeclaredEvidence, storyMoments, suggestTitle, type StoryEvaluation, type StoryMoment, type StoryMomentKind, type StoryProjection, type StoryTitleInput } from "./story.js";
+export { STORY_MATE_CP, STORY_PIVOT_CP, renderReviewStoryEvidence, reviewStoryTitle, storyDeclaredEvidence, storyMoments, suggestTitle, type StoryEvaluation, type StoryMoment, type StoryMomentKind, type StoryProjection, type StoryTitleInput } from "./story.js";
 export {
   voiceCheck,
   renderRecordedReading,

@@ -12,6 +12,7 @@ import {
   comparisonNarrative,
   comparisonStrips,
   consumeComparisonEngineTrajectory,
+  consumeComparisonStripEvidence,
   createRun,
   fork,
   reachCheckpoint,
@@ -27,6 +28,8 @@ import {
 if (false) {
   // @ts-expect-error comparison trajectory consumes only a compiled evidence view.
   consumeComparisonEngineTrajectory([]);
+  // @ts-expect-error comparison strips consume only a compiled evidence view.
+  consumeComparisonStripEvidence([]);
 }
 
 const at = "2026-08-12T12:00:00.000Z";

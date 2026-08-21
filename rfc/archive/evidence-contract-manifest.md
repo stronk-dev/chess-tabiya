@@ -1,7 +1,7 @@
 # RFC: Evidence contract manifest — every producer has a declared consumer or an honest home
 
-- **Status:** implementing — 2026-08-21 second author-return amendment resolves the consumer-boundary
-  and structural-expression failures ([[D669]]/[[D670]]); implementation resumes at stage 2
+- **Status:** implemented — 2026-08-21; nineteen producers, ninety-three exact projections and
+  twenty-three production consumer operations compile as one sealed manifest
 - **Author:** codex (agent), for Marco
 - **Created:** 2026-08-21
 - **Design refs:** `design/03-product-breadth.md` §Intelligence and explanation and gate B4;
@@ -627,6 +627,17 @@ semantics.
     and every root/child tablebase probe passes `consumeOpponentSelectionEvidence` before parsing,
     ordering, sampling or concession-mass computation. This does not bless the selection policy;
     it makes its actual evidence frontier explicit.
+14. **A comparison strip is admitted evidence, not a DOM assertion** ([[D678]], 2026-08-21).
+    `derived.compare.piece_route@1` composes one route from recorded moves and explicitly refuses
+    plan/threat semantics. `consumeComparisonStripEvidence` admits structure deltas, timing facts,
+    pivotal markers and routes; the sparkline obtains its points through the separate trajectory
+    consumer. The verifier anchors the exported consumer, not `data-evidence-consumer` copy.
+15. **Deterministic Review stories use the same sentence authority as voice** ([[D679]],
+    2026-08-21). `renderReviewStoryEvidence` is the registered renderer over an admitted
+    `review.story` view. `storyMoments` no longer accumulates a parallel sentence array: moment
+    prose, rank and title are re-exposed only from admitted/rendered items, including the public
+    share and card paths. Raw Stockfish eval remains a derivation input and is not accepted by the
+    story delivery consumer.
 
 The `outpost` reading/predicate declaration names its dependency on the current
 `pawn_safe_square` predicate projection. A dependency census walks transitive edges, then content
@@ -1086,23 +1097,25 @@ Each criterion names the failure it is intended to catch.
 
 | id | the obligation | owner | recorded when discharged | discharged |
 |---|---|---|---|---|
-| D1 | [[D546]] producer→feature binding and orphan producers/consumers | `evidence-contract-manifest` | implementation commit | |
-| D2 | [[D568]] six-plane consumer join, manifest half only; semantic record remains F2 | `evidence-contract-manifest` | implementation commit | |
-| D3 | [[D572]] compiled eligibility before selection, manifest half only; selector remains F2 | `evidence-contract-manifest` | implementation commit | |
-| D4 | [[D631]] distinct predicate/reading projection identities; semantic learner events remain F2 | `evidence-contract-manifest` | implementation commit | |
-| D5 | [[D632]] transitive semantic dependency discovery; corpus migration remains F3 | `evidence-contract-manifest` | implementation commit | |
-| D6 | [[D662]] one sentence authority: §6.1 rendered items, the branded view, `packet.sentences` deleted, sentinel fixture (criteria 21–22) | `evidence-contract-manifest` | implementation commit | |
-| D7 | [[D663]] reasoning-review typed non-evidence contract; `"reasoning"` removed from `VoiceScope` (§12.1, criterion 23) | `evidence-contract-manifest` | implementation commit | |
-| D8 | [[D665]] phase wrapper carries `PhaseReading`; `pack.authored.phase@1` declared (§9 clause 6, criterion 24) | `evidence-contract-manifest` | implementation commit | |
-| D9 | [[D666]] closure proves consumption, not anchors: branded `ConsumerEvidenceView` at all twenty-three delivery entrypoints plus the `@ts-expect-error` type fixtures (criteria 7, 26) | `evidence-contract-manifest` | implementation commit | |
-| D10 | [[D669]] producer/acquisition anchors separated from the twenty-three real consumer boundaries (§4.1.1; criteria 7, 26) | `evidence-contract-manifest` | implementation commit | |
-| D11 | [[D670]]/[[D671]] source-identified authored structural AST, direct feature results and consumed total predicate result have truthful distinct projections (§9 clause 7; criteria 2–3) | `evidence-contract-manifest` | implementation commit | |
-| D12 | [[D672]] family-only/checkpoint/provider reference tokens use a recorded resolution projection plus optional exact source event, never a fabricated predicate/claim payload (§9 clause 8; criteria 6–7) | `evidence-contract-manifest` | implementation commit | |
-| D13 | [[D673]] normalized authored guidance claim and full delivery-sheet claim item have distinct payload projections and consumers (§9 clause 9; criteria 6–7) | `evidence-contract-manifest` | implementation commit | |
-| D14 | [[D674]] Explorer inspector page and per-position repertoire frontier result have distinct payload projections; every scan result is admitted before use (§9 clause 10; criteria 6–7) | `evidence-contract-manifest` | implementation commit | |
-| D15 | [[D675]] normalized comparison trajectory points are distinct from live Stockfish events and are admitted before rendering (§9 clause 11; criteria 6–7) | `evidence-contract-manifest` | implementation commit | |
-| D16 | [[D676]] claim validation admits exact offline sourcing records, not runtime/API lookalikes (§9 clause 12; criteria 6–7) | `evidence-contract-manifest` | implementation commit | |
-| D17 | [[D677]] opponent selection admits exact raw Maia, Stockfish and Syzygy provider results before they influence a move (§9 clause 13; criteria 6–7) | `evidence-contract-manifest` | implementation commit | |
+| D1 | [[D546]] producer→feature binding and orphan producers/consumers | `evidence-contract-manifest` | implementation commit | ✅ 2026-08-21 |
+| D2 | [[D568]] six-plane consumer join, manifest half only; semantic record remains F2 | `evidence-contract-manifest` | implementation commit | ✅ 2026-08-21 |
+| D3 | [[D572]] compiled eligibility before selection, manifest half only; selector remains F2 | `evidence-contract-manifest` | implementation commit | ✅ 2026-08-21 |
+| D4 | [[D631]] distinct predicate/reading projection identities; semantic learner events remain F2 | `evidence-contract-manifest` | implementation commit | ✅ 2026-08-21 |
+| D5 | [[D632]] transitive semantic dependency discovery; corpus migration remains F3 | `evidence-contract-manifest` | implementation commit | ✅ 2026-08-21 |
+| D6 | [[D662]] one sentence authority: §6.1 rendered items, the branded view, `packet.sentences` deleted, sentinel fixture (criteria 21–22) | `evidence-contract-manifest` | implementation commit | ✅ 2026-08-21 |
+| D7 | [[D663]] reasoning-review typed non-evidence contract; `"reasoning"` removed from `VoiceScope` (§12.1, criterion 23) | `evidence-contract-manifest` | implementation commit | ✅ 2026-08-21 |
+| D8 | [[D665]] phase wrapper carries `PhaseReading`; `pack.authored.phase@1` declared (§9 clause 6, criterion 24) | `evidence-contract-manifest` | implementation commit | ✅ 2026-08-21 |
+| D9 | [[D666]] closure proves consumption, not anchors: branded `ConsumerEvidenceView` at all twenty-three delivery entrypoints plus the `@ts-expect-error` type fixtures (criteria 7, 26) | `evidence-contract-manifest` | implementation commit | ✅ 2026-08-21 |
+| D10 | [[D669]] producer/acquisition anchors separated from the twenty-three real consumer boundaries (§4.1.1; criteria 7, 26) | `evidence-contract-manifest` | implementation commit | ✅ 2026-08-21 |
+| D11 | [[D670]]/[[D671]] source-identified authored structural AST, direct feature results and consumed total predicate result have truthful distinct projections (§9 clause 7; criteria 2–3) | `evidence-contract-manifest` | implementation commit | ✅ 2026-08-21 |
+| D12 | [[D672]] family-only/checkpoint/provider reference tokens use a recorded resolution projection plus optional exact source event, never a fabricated predicate/claim payload (§9 clause 8; criteria 6–7) | `evidence-contract-manifest` | implementation commit | ✅ 2026-08-21 |
+| D13 | [[D673]] normalized authored guidance claim and full delivery-sheet claim item have distinct payload projections and consumers (§9 clause 9; criteria 6–7) | `evidence-contract-manifest` | implementation commit | ✅ 2026-08-21 |
+| D14 | [[D674]] Explorer inspector page and per-position repertoire frontier result have distinct payload projections; every scan result is admitted before use (§9 clause 10; criteria 6–7) | `evidence-contract-manifest` | implementation commit | ✅ 2026-08-21 |
+| D15 | [[D675]] normalized comparison trajectory points are distinct from live Stockfish events and are admitted before rendering (§9 clause 11; criteria 6–7) | `evidence-contract-manifest` | implementation commit | ✅ 2026-08-21 |
+| D16 | [[D676]] claim validation admits exact offline sourcing records, not runtime/API lookalikes (§9 clause 12; criteria 6–7) | `evidence-contract-manifest` | implementation commit | ✅ 2026-08-21 |
+| D17 | [[D677]] opponent selection admits exact raw Maia, Stockfish and Syzygy provider results before they influence a move (§9 clause 13; criteria 6–7) | `evidence-contract-manifest` | implementation commit | ✅ 2026-08-21 |
+| D18 | [[D678]] comparison routes have a derived recorded identity and the strip is built through a real admitted consumer (§9 clause 14; criteria 6–7) | `evidence-contract-manifest` | implementation commit | ✅ 2026-08-21 |
+| D19 | [[D679]] Review story sentences, rank and title derive from one admitted/rendered authority (§9 clause 15; criteria 7, 11, 22) | `evidence-contract-manifest` | implementation commit | ✅ 2026-08-21 |
 
 ## Open questions
 
@@ -1203,3 +1216,8 @@ lands with implementation; no item awaits an owner.
   record projections; and raw Maia UCI, Stockfish UCI and Syzygy probe projections. Their exported
   consumers now reject bare payloads at typecheck and assert the runtime seal. These changes name
   existing bytes and do not alter scoring, selection policy or learner-visible prose.
+- 2026-08-21: final consumer-closure audit ([[D678]]/[[D679]]). Replaced the comparison strip's
+  DOM-only anchor with a sealed consumer, registered recorded piece routes, and routed its
+  sparkline through the trajectory consumer. Rebuilt deterministic story prose/rank/title from
+  the admitted rendered view and deleted the parallel sentence accumulator. Raw eval remains an
+  upstream derivation input, not story-delivery evidence.

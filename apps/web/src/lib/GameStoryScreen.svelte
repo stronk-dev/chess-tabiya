@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { suggestTitle } from "@chess-tabiya/runtime";
+  import { reviewStoryTitle } from "@chess-tabiya/runtime";
   import type { GameStory } from "./api.js";
   import Chessboard from "./Chessboard.svelte";
 
@@ -17,7 +17,7 @@
   let shareUrl = $state<string | undefined>();
   const selected = $derived(ranked.find((moment) => moment.nodeId === selectedId) ?? ranked[0]);
   const imported = $derived(story.source.kind === "native" ? undefined : story.source);
-  const title = $derived(suggestTitle(story));
+  const title = $derived(reviewStoryTitle(story));
 
   function xml(value: string): string { return value.replaceAll("&", "&amp;").replaceAll("<", "&lt;").replaceAll(">", "&gt;"); }
   async function downloadCard(): Promise<void> {

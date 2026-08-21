@@ -112,3 +112,12 @@ Append-only.
 - [[D677]] records that opponent selection consumed raw provider results behind inspector/event
   projection names. Maia and Stockfish line arrays and every Syzygy root/child probe now pass
   `consumeOpponentSelectionEvidence` before parsing or selection. No selection semantics changed.
+
+## 2026-08-21 — final comparison and story consumer closure
+
+- [[D678]] replaced the comparison strip's DOM badge as the verifier anchor. Recorded piece routes
+  now have a derived projection, all strip items pass `consumeComparisonStripEvidence`, and engine
+  dots come from the separate trajectory consumer.
+- [[D679]] deleted Story's parallel sentence accumulator. Moment prose, rank and title now emerge
+  from `renderReviewStoryEvidence`, so the main story, public share and downloadable card all use
+  the same declared renderer authority. Learner-visible bytes remain unchanged.
