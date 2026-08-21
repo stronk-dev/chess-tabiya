@@ -1,10 +1,16 @@
 # RFC: Tactical collectors
 
-- **Status:** draft
+- **Status:** draft — amended 2026-08-22 after the D730 legal-exchange falsification pass;
+  ready for independent buildability review, not accepted
 - **Author:** claude (drafted on the D717 program routing, `planning/evidence-foundation-ux/plan.md` phases 2c/3)
 - **Created:** 2026-08-22
 - **Design refs:** `design/05-in-run-experience.md` §5 (*"detection is cheap, significance is not"* — every collector here ships detection with the significance judgement structurally refused), §3b (guided mode names patterns from a validated library, never recommends); `design/03-product-breadth.md` §Structural reading (the rung-0 layer this extends) and §Intelligence and explanation
-- **Exploration gate:** opened by the owner ruling of 2026-08-12 (gate transition, `planning/exploration/log.md`); commissioned specifically by the D717 program (`planning/evidence-foundation-ux/plan.md`, phase 2c) with all four collector-audit owner questions ruled 2026-08-22 ([[D718]]): *"Phase 3's RFC is now unblocked on every input."* Specification basis: `planning/evidence-foundation-ux/phase2-collector-audit.md` (HEAD `ccb378d`), quoted throughout, not re-derived.
+- **Exploration gate:** opened by the owner ruling of 2026-08-12 (gate transition,
+  `planning/exploration/log.md`); commissioned by the D717 program phase 2c with all four
+  collector-audit questions ruled 2026-08-22 ([[D745]]). Specification basis:
+  `planning/evidence-foundation-ux/phase2-collector-audit.md` (`7eb9210`), the D723 breadth
+  result (`5a20b42`), and the predeclared D730 legal-exchange instrument
+  (`tools/d730-see-harness/`).
 - **Depends on:** nothing unlanded. Builds on the implemented `archive/evidence-contract-manifest.md` (F1) and `archive/semantic-evidence-selection.md` (F2). No file collision with any active draft (verified: `assistance-control-wiring` touches `packages/runtime/src/assistance.ts` and the run controller; `measurement-records` touches the shape-entry schema; neither touches the files named in §3).
 - **Parent / amends:** additively extends the compiled evidence catalogue shipped by `archive/evidence-contract-manifest.md` and the semantic-event layer shipped by `archive/semantic-evidence-selection.md`. Redefines no shipped identity (§2.4).
 - **Supersedes / superseded by:** —
@@ -775,9 +781,9 @@ fallback; every other contrary measurement is escalated per law 6, not shipped a
 
 | id | the obligation | owner | recorded when discharged | discharged |
 |---|---|---|---|---|
-| D1 | Production-module eligibility for every §3 collector — this RFC lands research/inspector-only by design; without promotion these projections join the class-9 wall the gap matrix measured | Phase-3 module-contract RFC (`planning/evidence-foundation-ux/plan.md` phase 3) | that RFC's landing commit | |
-| D2 | Opening-identity Review-surface admission (§3.15) — the collector is specified here; the surface decision and go signal belong to the R8/F7 lane (D694/D743). If the lane has not opened when every other criterion is green, this RFC moves to `awaiting D2` | R8/F7 lane owner | lane-opening commit or D743's flip | |
-| D3 | Learner-facing wiring of the D718 negative reading — ruled admissible post-commit/review; the *wiring* into modules is Phase-3 work over these producers | Phase-3 module-contract RFC | that RFC's landing commit | |
+| D1 | Production-module eligibility for every §3 collector — this RFC lands research/inspector-only by design; without promotion these projections join the class-9 wall the gap matrix measured | `planning/evidence-foundation-ux/plan.md` | the Phase-3 RFC's landing commit | |
+| D2 | Opening-identity Review-surface admission (§3.15) — the collector is specified here; the surface decision and go signal belong to the R8/F7 lane (D694/D743). If the lane has not opened when every other criterion is green, this RFC moves to `awaiting D2` | `claude` | lane-opening commit or D743's flip | |
+| D3 | Learner-facing wiring of the D718 negative reading — ruled admissible post-commit/review; the *wiring* into modules is Phase-3 work over these producers | `planning/evidence-foundation-ux/plan.md` | the Phase-3 RFC's landing commit | |
 
 The prose rationale for each row lives in §9; the table is the machine-read record per the
 lifecycle contract's grammar.
