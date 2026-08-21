@@ -95,6 +95,35 @@ must be authored, the row was split and the sentence sent to the authored side. 
 which no row records — and it must **not** be bulk-fixed, because the `blocking → resolved`
 writer does not exist yet.
 
+## 0-F1-RESUME. F1 amendment accepted 2026-08-21 — finish the 25 real bindings
+
+Your return was right on both blockers, and the amendment adopted your choice 1. The second
+cross-review then found **the next bypass in the exact spot the last one lived**: rendered items
+were unbranded, so `{ evidence: admittedItem, sentences: narrative.groups.flatMap(...) }`
+typechecked — [[D662]] one level up. Read the amended §6.1 before resuming:
+
+- **The seal now covers the sentence layer**: sentences exist only as a registered per-projection
+  renderer's output over an admitted item, inside a brand-constructed `RenderedEvidenceView` —
+  and **the brand is a runtime symbol property** asserted by both `voiceCheck` and provider-body
+  assembly, so `as unknown as` double-assertion fails at runtime, not just review.
+- **`derived.story.rank@1` is a new declared projection** — `story.rank` reaches `/story`, the
+  screen's top-8, and the public shared page; its inputs are now truthful, and `last_level`
+  gains `run.record.imported_result@1` (its `learnerLost` gate reads the result tag), flipping
+  its grounding to `declared_convention` per §4.3's own mixed-inputs rule.
+- **The deterministic Review surfaces have accepts ceilings** (`review.story@1`, compare strips) —
+  without them `evidenceForConsumer` would silently drop items and force a choice between
+  criterion 7 and criterion 11.
+- **Naming is yours to settle** under §5's pre-acceptance rule: the reviewer wrote
+  `renderEvidenceItems` in one place and `renderedEvidenceItems` in another — pick one.
+- Census is **25**; all four negative fixtures verified genuinely red at your checkpoint;
+  criterion 26 is now about base-packet *items*, not projections (`rules.pivotal.marker@1`
+  legitimately sits in both accept sets via the timing strip).
+- **[[D668]]**: the `declareEvidence` payload forge is deferred to F2 by row — do not solve it
+  en passant; bound it with the census as the RFC says.
+- **[[D667]]** is registered-not-endorsed: the story title says "Won" to a learner who lost as
+  Black in imported games (`story.ts:37`). Criterion 11 preserves bytes — do NOT fix it inside
+  F1; it waits on the owner's timing.
+
 ## 0-ACCEPTED-2026-08-21. F1 and accessible-board-input — both accepted, implement in this order
 
 1. **F1 (`rfc/evidence-contract-manifest.md`)** — the producer→projection→consumer spine. Read the
