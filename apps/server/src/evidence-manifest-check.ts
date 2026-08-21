@@ -11,8 +11,8 @@ const CONSUMER_ANCHORS = Object.freeze([
   ["runtime.objective_condition", "packages/runtime/src/objective.ts", "export function evaluateObjectivePredicate"],
   ["runtime.guard_condition", "apps/server/src/guard.ts", "export function applyRecordedEngineGuard"],
   ["guidance.packet", "apps/server/src/guidance.ts", "export function evidencePacket"],
-  ["guidance.deterministic", "apps/server/src/guidance.ts", "const sentences ="],
-  ["guidance.voice", "apps/server/src/guidance.ts", "voiceEvidenceView(packet)"],
+  ["guidance.deterministic", "apps/server/src/guidance.ts", "export function renderedEvidenceItems"],
+  ["guidance.voice", "apps/server/src/guidance.ts", "export function voiceEvidenceView"],
   ["guidance.recorded_reading", "apps/server/src/guidance.ts", "export function appendRecordedReadings"],
   ["runtime.evidence_ref", "apps/web/src/lib/evidence-sentences.ts", "export function renderEvidenceRef"],
   ["inspector.position_structure", "apps/web/src/lib/DrillScreen.svelte", "data-evidence-consumer=\"inspector.position_structure\""],
@@ -30,6 +30,8 @@ const CONSUMER_ANCHORS = Object.freeze([
   ["review.story", "packages/runtime/src/story.ts", "export function storyMoments"],
   ["runtime.repertoire_scan", "apps/server/src/repertoire.ts", "export async function scanRepertoire"],
   ["authoring.claim_binding", "apps/server/src/sourcing/claim-binding.ts", "export function validateClaimBindings"],
+  ["guidance.voice_compare", "apps/server/src/rest.ts", "narrative.evidence, false"],
+  ["guidance.voice_story", "apps/server/src/rest.ts", "storyDeclaredEvidence"],
 ] as const);
 
 function source(path: string): string {
@@ -39,20 +41,20 @@ function source(path: string): string {
 assertEvidenceManifest();
 const declaredConsumers = EVIDENCE_MANIFEST.consumers.map((consumer) => consumer.id);
 const operationIds = CONSUMER_ANCHORS.map(([id]) => id);
-if (new Set(operationIds).size !== CONSUMER_ANCHORS.length || operationIds.join("|") !== CURRENT_CONSUMER_OPERATION_IDS.join("|")) throw new TypeError("The 23-operation consumer anchor census is not set/order-equal to the primary catalogue");
+if (new Set(operationIds).size !== CONSUMER_ANCHORS.length || operationIds.join("|") !== CURRENT_CONSUMER_OPERATION_IDS.join("|")) throw new TypeError("The 25-operation consumer anchor census is not set/order-equal to the primary catalogue");
 for (const [id, path, needle] of CONSUMER_ANCHORS) {
   if (!declaredConsumers.includes(id)) throw new TypeError(`Consumer anchor ${id} has no declaration`);
   if (!source(path).includes(needle)) throw new TypeError(`Consumer anchor drift: ${id} expected ${needle} in ${path}`);
 }
 
-if (EVIDENCE_MANIFEST.producers.map((producer) => producer.id).sort().join("|") !== [...EVIDENCE_PRODUCER_IDS].sort().join("|")) throw new TypeError("The 14 producer paths are not set-equal to the primary catalogue");
+if (EVIDENCE_MANIFEST.producers.map((producer) => producer.id).sort().join("|") !== [...EVIDENCE_PRODUCER_IDS].sort().join("|")) throw new TypeError("The 17 producer paths are not set-equal to the primary catalogue");
 for (const producer of EVIDENCE_MANIFEST.producers) {
-  for (const path of producer.implementation.split(";").map((item) => item.trim()).filter((item) => item.includes("/"))) source(path);
+  for (const path of producer.implementation.split(";").map((item) => item.trim().replace(/(\.ts):.*$/u, "$1")).filter((item) => item.includes("/"))) source(path);
 }
 
 const guidance = source("apps/server/src/guidance.ts");
 const externalVoice = source("apps/server/src/external-voice.ts");
-if (!guidance.includes("render(view: VoiceEvidenceView") || !externalVoice.includes("evidence: view.evidence")) throw new TypeError("EVIDENCE_GENERIC_BYPASS: external voice is not bound to VoiceEvidenceView");
+if (!guidance.includes("render(view: VoiceEvidenceView") || !externalVoice.includes("view.rendered.items")) throw new TypeError("EVIDENCE_GENERIC_BYPASS: external voice is not bound to the rendered VoiceEvidenceView");
 
 const arrows = EVIDENCE_MANIFEST.consumers.find((consumer) => consumer.id === "assistance.arrows");
 if (arrows?.disposition?.kind !== "experimental" || arrows.accepts.length !== 0) throw new TypeError("assistance.arrows lost its explicit producerless experimental disposition");

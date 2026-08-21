@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import { attachEvidence, commitMove, createRun, storyMoments, suggestTitle } from "./index.js";
+import { attachEvidence, commitMove, createRun, storyDeclaredEvidence, storyMoments, suggestTitle } from "./index.js";
 
 const at = "2026-08-14T14:00:00.000Z";
 const digest = `sha256:${"d".repeat(64)}`;
@@ -36,5 +36,6 @@ describe("grounded game story", () => {
     const input = { outcome: { kind: "board_terminal" as const, result: "win" as const }, ...projection };
     expect(suggestTitle(input)).toBe(suggestTitle(structuredClone(input)));
     expect(suggestTitle(input)).toMatch(/Won/);
+    expect(storyDeclaredEvidence(input)[0]!.projection.id).toBe("derived.story.title");
   });
 });

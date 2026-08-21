@@ -5,7 +5,7 @@ import type { EndgameReading } from "./endgame.js";
 import type { DetectedPhase } from "./phase.js";
 import type { PivotalMarker } from "./pivotal.js";
 import type { StructuralObservation, StructureMatch } from "./structure.js";
-import type { DeclaredEvidence } from "./evidence-contract.js";
+import { assertRenderedEvidenceView, type DeclaredEvidence, type RenderedEvidenceView } from "./evidence-contract.js";
 
 export interface ShapeEntryRef { readonly id: string; readonly name: string; readonly attribution: string; }
 
@@ -59,8 +59,7 @@ export interface EvidencePacket {
   readonly plans: readonly ShapeEntryRef[];
   readonly authored: readonly { readonly id: string; readonly text: string; readonly attribution: string }[];
   readonly readings: readonly RecordedReading[];
-  readonly sentences: readonly string[];
-  readonly declared?: readonly DeclaredEvidence<unknown>[];
+  readonly declared: readonly DeclaredEvidence<unknown>[];
 }
 
 function recordedDate(retrievedAt: string): string {
@@ -108,8 +107,9 @@ function tokens(pattern: RegExp, text: string): readonly string[] { return [...t
 function absentWords(words: readonly string[], packet: string, output: string): readonly string[] { const allowed = packet.toLowerCase(); return words.filter((word) => new RegExp(`\\b${word}\\b`, "i").test(output) && !new RegExp(`\\b${word}\\b`, "i").test(allowed)); }
 
 export interface VoiceCheckResult { readonly valid: boolean; readonly violations: readonly string[]; }
-export function voiceCheck(packet: EvidencePacket, output: string): VoiceCheckResult {
-  const source = packet.sentences.join("\n");
+export function voiceCheck(view: RenderedEvidenceView, output: string): VoiceCheckResult {
+  assertRenderedEvidenceView(view);
+  const source = view.items.flatMap((item) => item.sentences).join("\n");
   const violations: string[] = [];
   for (const [label, pattern] of [["square", SQUARE], ["move", UCI], ["move", SAN]] as const) for (const token of tokens(pattern, output)) if (!source.toLowerCase().includes(token)) violations.push(`${label}:${token}`);
   for (const word of absentWords(CHESS_LEXICON, source, output)) violations.push(`noun:${word}`);

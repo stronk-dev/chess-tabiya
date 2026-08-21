@@ -79,7 +79,7 @@ describe("recorded evidence at runtime", () => {
     expect(recordedReadingsAt(record.positionEvidence, node, run)).toHaveLength(1);
     const packet = evidencePacket({ run, node, pack: record.document, packEvidence: record.positionEvidence, authored: { items: [], hasWithheldAuthoredContent: false } });
     expect(packet.readings).toHaveLength(1);
-    expect(packet.sentences.join("\n")).not.toContain("Recorded reading");
+    expect(packet.declared.some((item) => item.projection.id.startsWith("recorded."))).toBe(true);
     const mismatched = { ...node, fen: reading.fen.replace(/ (\d+) (\d+)$/u, (_all, halfmove, fullmove) => ` ${Number(halfmove) + 2} ${fullmove}`) };
     expect(recordedReadingsAt(record.positionEvidence, mismatched, run)).toHaveLength(0);
 

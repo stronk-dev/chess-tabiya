@@ -8,9 +8,13 @@ import {
   BANNED_JUDGEMENTS,
   SILENT_ASSISTANCE,
   classifyPhase,
+  compileEvidenceManifest,
   commitMove,
   createRun,
+  declareEvidence,
   endgameReading,
+  evidenceForConsumer,
+  EVIDENCE_CONTRACT_DECLARATIONS,
   liveAdmitted,
   liveMarkers,
   permittedAssistance,
@@ -18,11 +22,11 @@ import {
   renderEndgameReading,
   renderPhaseReading,
   renderPivotalMarker,
+  renderEvidenceItems,
   retrospectivePivot,
   voiceCheck,
   type BranchComparison,
   type DrillRun,
-  type EvidencePacket,
   type Node,
   type PivotalMarker,
 } from "./index.js";
@@ -178,12 +182,15 @@ describe("adaptive guidance runtime", () => {
   });
 
   it("checks voice introductions while pinning the known plain-English leak", () => {
-    const packet: EvidencePacket = { fen: start, phase: { source: "detector", value: "opening" }, structures: [], observations: [], markers: [], endgame: null, plans: [], authored: [], readings: [], sentences: ["A backward pawn is recorded."] };
-    expect(voiceCheck(packet, "A weak pawn is recorded.").violations).toContain("judgement:weak");
-    expect(voiceCheck(packet, "A brilliant practical choice.").violations).toContain("judgement:brilliant");
-    expect(voiceCheck(packet, "Push the tall one two squares.").violations).toContain("prescription:push");
-    expect(voiceCheck(packet, "The c4 square matters.").valid).toBe(false);
-    expect(voiceCheck(packet, "The tall one wants a friend beside it.").valid).toBe(true);
+    const manifest = compileEvidenceManifest(EVIDENCE_CONTRACT_DECLARATIONS);
+    const evidence = declareEvidence({ id: "pack.authored", version: 1 }, { id: "pack.authored.claim", version: 1 }, { text: "A backward pawn is recorded." });
+    const admitted = evidenceForConsumer(manifest, { id: "guidance.voice", version: 1 }, [evidence]);
+    const view = renderEvidenceItems(admitted, { "pack.authored.claim@1": () => ["A backward pawn is recorded."] });
+    expect(voiceCheck(view, "A weak pawn is recorded.").violations).toContain("judgement:weak");
+    expect(voiceCheck(view, "A brilliant practical choice.").violations).toContain("judgement:brilliant");
+    expect(voiceCheck(view, "Push the tall one two squares.").violations).toContain("prescription:push");
+    expect(voiceCheck(view, "The c4 square matters.").valid).toBe(false);
+    expect(voiceCheck(view, "The tall one wants a friend beside it.").valid).toBe(true);
     expect(BANNED_JUDGEMENTS).toContain("blunder");
   });
 

@@ -18,7 +18,7 @@ import {
 import { compileEvidenceManifest } from "./evidence-contract.js";
 
 const ROOT = new URL("../../../", import.meta.url);
-const EXPECTED_PRODUCERS = Object.freeze(["rules.structural", "rules.transition", "rules.phase", "rules.pivotal", "rules.endgame", "theory.shapes", "pack.authored", "recorded.engine", "recorded.tablebase", "live.stockfish", "live.syzygy", "human.maia", "human.explorer", "theory.opening_identity"]);
+const EXPECTED_PRODUCERS = Object.freeze(["rules.structural", "rules.transition", "rules.phase", "rules.pivotal", "rules.endgame", "theory.shapes", "pack.authored", "recorded.engine", "recorded.tablebase", "live.stockfish", "live.syzygy", "human.maia", "human.explorer", "theory.opening_identity", "run.record", "derived.compare_narrative", "derived.story"]);
 
 function jsonFiles(url: URL): readonly URL[] {
   return readdirSync(url, { withFileTypes: true }).flatMap((entry) => {
@@ -39,7 +39,7 @@ describe("primary evidence catalogue", () => {
     const manifest = compileEvidenceManifest(EVIDENCE_CONTRACT_DECLARATIONS);
     expect(EVIDENCE_PRODUCER_IDS).toEqual(EXPECTED_PRODUCERS);
     expect(EVIDENCE_PRODUCERS.map((item) => item.id)).toEqual(EXPECTED_PRODUCERS);
-    expect(CURRENT_CONSUMER_OPERATION_IDS).toHaveLength(23);
+    expect(CURRENT_CONSUMER_OPERATION_IDS).toHaveLength(25);
     expect(EVIDENCE_CONSUMER_IDS).toEqual([...CURRENT_CONSUMER_OPERATION_IDS, "assistance.arrows"]);
     expect(manifest.consumers.find((item) => item.id === "assistance.arrows")?.disposition).toEqual(expect.objectContaining({ kind: "experimental" }));
     expect(manifest.digest).toBe(createHash("sha256").update(canonical({ producers: manifest.producers, projections: manifest.projections, consumers: manifest.consumers, bindings: manifest.bindings })).digest("hex"));

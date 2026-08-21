@@ -6,6 +6,7 @@ import {
   compileEvidenceManifest,
   declareEvidence,
   evidenceForConsumer,
+  renderEvidenceItems,
   type AdapterDeclaration,
   type ConsumerDeclaration,
   type EvidenceContractDeclarations,
@@ -17,7 +18,8 @@ const ERROR_TABLE = Object.freeze([
   "EVIDENCE_PRODUCER_DUPLICATE", "EVIDENCE_PROJECTION_DUPLICATE", "EVIDENCE_PROJECTION_ORPHANED",
   "EVIDENCE_CONSUMER_ORPHANED", "EVIDENCE_BINDING_UNDECLARED", "EVIDENCE_BINDING_WILDCARD",
   "EVIDENCE_BINDING_WIDENS", "EVIDENCE_PROJECTION_INCOMPLETE", "EVIDENCE_DEPENDENCY_MISSING",
-  "EVIDENCE_DEPENDENCY_CYCLE", "EVIDENCE_GENERIC_BYPASS", "EVIDENCE_PROVIDER_FALLBACK_MISSING",
+  "EVIDENCE_DEPENDENCY_CYCLE", "EVIDENCE_DERIVATION_WIDENS", "EVIDENCE_GENERIC_BYPASS",
+  "EVIDENCE_PROVIDER_FALLBACK_MISSING",
 ] as const);
 
 function projection(id = "p.output", producerId = "p"): ProjectionDeclaration {
@@ -50,7 +52,7 @@ describe("evidence manifest compiler", () => {
     expect(EVIDENCE_MANIFEST_ERROR_CODES).toEqual(ERROR_TABLE);
   });
 
-  it("raises each of the twelve stable error families from an isolated negative", () => {
+  it("raises each of the thirteen stable error families from an isolated negative", () => {
     const qProjection = projection("p.output", "q");
     const disposedProjection = { ...projection(), disposition: { kind: "retired" as const, reason: "fixture" } };
     const missingConsumer = consumer([{ id: "missing.output", version: 1 }]);
@@ -67,6 +69,7 @@ describe("evidence manifest compiler", () => {
       EVIDENCE_DEPENDENCY_CYCLE: { producers: [producer({ ...projection(), dependsOn: [{ id: "q.output", version: 1 }] }), producer({ ...projection("q.output", "q"), dependsOn: [{ id: "p.output", version: 1 }] }, "q")], consumers: [{ ...consumer(), accepts: [{ id: "p.output", version: 1 }, { id: "q.output", version: 1 }] }], adapters: [adapter()] },
       EVIDENCE_GENERIC_BYPASS: { ...base(), genericBypasses: [{ consumer: { id: "c", version: 1 }, implementation: "fixture/raw-reader.ts" }] },
       EVIDENCE_PROVIDER_FALLBACK_MISSING: { ...base(), producers: [producer(projection(), "p", "provider")] },
+      EVIDENCE_DERIVATION_WIDENS: { ...base(), producers: [producer(), producer({ ...projection("q.output", "q"), plane: "derived", grounding: "declared_convention", derivation: { inputs: [{ id: "p.output", version: 1 }] }, disposition: { kind: "operator_only", reason: "fixture" } }, "q")] },
     };
     for (const expected of ERROR_TABLE) expect(code(cases[expected]), expected).toBe(expected);
   });
@@ -87,9 +90,34 @@ describe("evidence manifest compiler", () => {
     const manifest = compileEvidenceManifest({ ...base(), producers: [...base().producers, producer(disposed, "q")] });
     const allowed = declareEvidence({ id: "p", version: 1 }, { id: "p.output", version: 1 }, { value: 1 });
     const other = declareEvidence({ id: "q", version: 1 }, { id: "q.output", version: 1 }, { value: 2 });
-    expect(evidenceForConsumer(manifest, { id: "c", version: 1 }, [allowed, other])).toEqual([allowed]);
+    expect(evidenceForConsumer(manifest, { id: "c", version: 1 }, [allowed, other]).items).toEqual([allowed]);
     expect(() => evidenceForConsumer(manifest, { id: "missing", version: 1 }, [allowed])).toThrowError(expect.objectContaining({ code: "EVIDENCE_BINDING_UNDECLARED" }));
     const forged = declareEvidence({ id: "q", version: 1 }, { id: "p.output", version: 1 }, { value: 3 });
     expect(() => evidenceForConsumer(manifest, { id: "c", version: 1 }, [forged])).toThrowError(expect.objectContaining({ code: "EVIDENCE_BINDING_UNDECLARED" }));
+  });
+
+  it("seals admitted and rendered views at runtime", () => {
+    const manifest = compileEvidenceManifest(base());
+    const evidence = declareEvidence({ id: "p", version: 1 }, { id: "p.output", version: 1 }, { value: 1 });
+    const admitted = evidenceForConsumer(manifest, { id: "c", version: 1 }, [evidence]);
+    const rendered = renderEvidenceItems(admitted, { "p.output@1": () => ["one"] });
+    expect(rendered.items[0]?.sentences).toEqual(["one"]);
+    expect(() => renderEvidenceItems({ consumer: { id: "c", version: 1 }, items: [evidence] } as never, { "p.output@1": () => ["forged"] })).toThrowError(expect.objectContaining({ code: "EVIDENCE_GENERIC_BYPASS" }));
+  });
+
+  it("refuses every derived-evidence widening and incomplete ancestry shape", () => {
+    const declarations = (input: ProjectionDeclaration, derived: Partial<ProjectionDeclaration>): EvidenceContractDeclarations => {
+      const output = { ...projection("q.output", "q"), plane: "derived" as const, grounding: input.grounding, exactness: input.exactness, answerContent: input.answerContent, abstention: input.abstention, derivation: { inputs: [{ id: "p.output", version: 1 }] }, disposition: { kind: "operator_only" as const, reason: "derived fixture" }, ...derived };
+      return { producers: [producer(input), producer(output, "q")], consumers: [consumer()], adapters: [adapter()] };
+    };
+    const measured = { ...projection(), exactness: "measured" as const };
+    expect(code(declarations(measured, { exactness: "exact" }))).toBe("EVIDENCE_DERIVATION_WIDENS");
+    expect(code(declarations(projection(), { answerContent: ["move"] }))).toBe("EVIDENCE_DERIVATION_WIDENS");
+    const abstaining = { ...projection(), abstention: { possible: true, reasons: ["provider_unavailable"] } };
+    expect(code(declarations(abstaining, { abstention: { possible: false, reasons: [] } }))).toBe("EVIDENCE_DERIVATION_WIDENS");
+    expect(code(declarations(projection(), { derivation: { inputs: [{ id: "missing.output", version: 1 }] } }))).toBe("EVIDENCE_DEPENDENCY_MISSING");
+    expect(code(declarations(projection(), { derivation: { inputs: [] } }))).toBe("EVIDENCE_PROJECTION_INCOMPLETE");
+    const cyclic = declarations({ ...projection(), dependsOn: [{ id: "q.output", version: 1 }] }, {});
+    expect(code(cyclic)).toBe("EVIDENCE_DEPENDENCY_CYCLE");
   });
 });

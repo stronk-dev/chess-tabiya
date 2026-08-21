@@ -54,7 +54,7 @@ export const RECORDED_READING_PROJECTION_MAP = Object.freeze({
 } as const);
 
 export const PACKET_FIELD_PROJECTION_MAP = Object.freeze({
-  phase: "rules.phase.reading",
+  phase: "rules.phase.reading|pack.authored.phase",
   structures: "rules.structural.reading.named_structure",
   observations: "rules.structural.reading.piece_count",
   markers: "rules.pivotal.marker",
@@ -62,7 +62,6 @@ export const PACKET_FIELD_PROJECTION_MAP = Object.freeze({
   plans: "theory.shapes.firing",
   authored: "pack.authored.claim",
   readings: "recorded.engine.eval|recorded.tablebase.result",
-  sentences: "derived consumer view; never a producer projection",
 } as const);
 
 // Compiled once at module load. Application startup calls assertEvidenceManifest explicitly, while

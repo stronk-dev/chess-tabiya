@@ -38,11 +38,18 @@ Registering evidence does not make it learner-visible and does not create anothe
 ## LLM boundary
 
 The external voice renderer is a consumer, never a chess authority. Server guidance first wraps
-source-specific values as `DeclaredEvidence`, then derives the exact `guidance.voice@1` view from
-the compiled bindings. The provider receives that view and already-grounded deterministic
-sentences. Maia candidates, Explorer rows, transition counts, shape plans, engine principal
-variations, and recorded engine/tablebase prose do not enter merely because the catalogue knows
-they exist.
+source-specific values as `DeclaredEvidence`, admits the exact scope-specific consumer view, then
+runs registered per-projection renderers. Both admitted and rendered views carry a private runtime
+seal. The provider and `voiceCheck` read the same sealed `{ evidence, sentences }` items; there is
+no parallel packet sentence array that either side can widen. Maia candidates, Explorer rows,
+transition counts, engine principal variations, and recorded engine/tablebase prose do not enter
+merely because the catalogue knows they exist.
+
+Compare and Story use declared `run.record` facts and deterministic `derived.*` projections rather
+than replacing a prose array. Derived projections enumerate non-empty exact-version inputs and may
+not widen their inputs' grounding, exactness, answer content, or abstention. Reasoning review is a
+separate non-chess provider request over the learner transcript, key points, and detections; it is
+not a voice scope and receives no chess-evidence items.
 
 Provider output still passes the deterministic noun, square, move, judgement, and prescription
 checks. Recorded engine/tablebase sentences are appended afterward from frozen renderers. If the
@@ -67,10 +74,17 @@ before traffic is served.
    exactness, abstention, answer content, forms, dependencies, and limitations.
 3. Add an exact consumer acceptance and adapter whose constraints only narrow both endpoints.
 4. Add a producer-off test when any endpoint depends on a provider.
-5. Add the production symbol to the 23-operation closure (or deliberately extend that census) and
+5. Add the production symbol to the operation closure (or deliberately extend that census) and
    run `make evidence-manifest-check` plus `make verify`.
 6. If no honest consumer exists, record one explicit disposition. Do not add a wildcard, legacy
    bypass, generic packet renderer, or user-facing primitive switch.
+
+The F1 bind-stage implementation is currently returned on two boundary definitions recorded in
+`planning/evidence-contract-manifest/second-author-return.md`: the operation census must stop
+treating the packet constructor and the pre-evidence analysis request as evidence consumers, and
+the recursive authored structural-expression AST needs a truthful identity distinct from its leaf
+predicate families. The sealed voice/derivation contract above is implemented and retained; the
+remaining operation conversion waits on that amendment.
 
 F1 answers eligibility and traceability only. Relevance/lift selection, semantic event valence,
 presets, workflows, theory retrieval, and content migration belong to their later RFCs.

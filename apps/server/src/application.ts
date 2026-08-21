@@ -43,6 +43,7 @@ import { ShapeRegistry } from "./shape-registry.js";
 import { PrincipleRegistry } from "./principle-registry.js";
 import { ShapeStudio } from "./shape-studio.js";
 import type { VoiceProvider } from "./guidance.js";
+import type { ReasoningReviewProvider } from "./external-voice.js";
 import { FixtureCorpusSource, LichessCorpusSource, type CorpusSource } from "./corpus.js";
 import { RepertoireService } from "./repertoire.js";
 import type { TtsProvider } from "./external-tts.js";
@@ -62,6 +63,7 @@ export interface ApplicationOptions {
   readonly stockfishCommand?: string;
   readonly cookieSecure?: boolean;
   readonly voiceProvider?: VoiceProvider;
+  readonly reasoningReviewProvider?: ReasoningReviewProvider;
   readonly voicePersona?: string;
   readonly corpusToken?: string;
   readonly corpusSource?: CorpusSource;
@@ -366,7 +368,7 @@ export async function createApplication(
   });
   const live = new LiveSessionService(storage, { runService: service });
   const repertoires = new RepertoireService(storage, service, corpusSource);
-  const api = createRestHandler(service, selector, capabilities, identity, studio, live, shapes, shapeStudio, options.voiceProvider, options.voicePersona, corpusSource, repertoires, options.ttsProvider);
+  const api = createRestHandler(service, selector, capabilities, identity, studio, live, shapes, shapeStudio, options.voiceProvider, options.voicePersona, corpusSource, repertoires, options.ttsProvider, options.reasoningReviewProvider);
   const staticDirectory =
     options.staticDirectory ?? join(process.cwd(), "apps", "web", "dist");
   const handler: RestHandler = async (request) => {

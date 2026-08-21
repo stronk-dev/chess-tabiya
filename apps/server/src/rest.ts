@@ -14,6 +14,7 @@ import {
   comparisonNarrative,
   comparisonStrips,
   suggestTitle,
+  storyDeclaredEvidence,
   trajectoryPolicyAt,
   RUN_OPPONENT_MODES,
   type OpponentSelection,
@@ -47,7 +48,9 @@ import type { LiveSessionService } from "./live-session.js";
 import { projectShapeEntry, type ShapeRegistry } from "./shape-registry.js";
 import type { ShapeStudio } from "./shape-studio.js";
 import type { BoardControl, SessionKind, VoteOption } from "./live-types.js";
-import { appendRecordedReadings, evidencePacket, renderVoice, voiceEvidenceView, type VoiceProvider, type VoiceScope } from "./guidance.js";
+import { appendRecordedReadings, evidencePacket, renderedEvidenceItems, renderVoice, type VoiceProvider, type VoiceScope } from "./guidance.js";
+import type { ReasoningReviewProvider } from "./external-voice.js";
+import { EVIDENCE_MANIFEST } from "./evidence-manifest.js";
 import { corpusPopulation, type CorpusSource } from "./corpus.js";
 import type { RepertoireService } from "./repertoire.js";
 import { publicMutationPayload } from "./feedback-policy.js";
@@ -740,6 +743,7 @@ export function createRestHandler(
   corpusSource?: CorpusSource,
   repertoires?: RepertoireService,
   ttsProvider?: TtsProvider,
+  reasoningReviewProvider?: ReasoningReviewProvider,
 ): RestHandler {
   return async (request) => {
     try {
@@ -1211,15 +1215,14 @@ export function createRestHandler(
       }
       if (route.action === "reasoning-review") {
         requireJson(request);
-        if (voiceProvider === undefined) throw new ServerError("VOICE_UNAVAILABLE", "No external voice provider is configured");
+        if (reasoningReviewProvider === undefined) throw new ServerError("VOICE_UNAVAILABLE", "No external reasoning review provider is configured");
         const body = closedRecord(value, "/", ["checkpointEventSeq"]);
         const access = service.reasoningReviewAccess(route.runId, principal, requiredSafeInteger(body.checkpointEventSeq, "checkpointEventSeq"));
         requireGuidanceDisclosure(service.guidanceAccess(route.runId, principal, access.node.id));
-        const packet = evidencePacket({ run: access.run, node: access.node, pack: access.pack.document, packEvidence: access.pack.positionEvidence, authored: service.authoredFeedback(route.runId, principal), ...(shapes === undefined ? {} : { shapes }) });
-        const prompt = JSON.stringify({ task: "Quote only contiguous learner text that may express each not-detected authored point.", transcript: access.event.data.transcript, keyPoints: access.keyPoints.map((point) => ({ id: point.id, label: point.label, phrases: point.phrases })), detections: access.event.data.detections });
+        const reviewRequest = Object.freeze({ task: "Quote only contiguous learner text that may express each not-detected authored point.", transcript: access.event.data.transcript, keyPoints: access.keyPoints.map((point) => ({ id: point.id, label: point.label, phrases: point.phrases })), detections: access.event.data.detections });
         for (let attempt = 0; attempt < 2; attempt += 1) {
           try {
-            const raw = await voiceProvider.render(voiceEvidenceView(packet), voicePersona, prompt, "reasoning");
+            const raw = await reasoningReviewProvider.review(reviewRequest);
             const parsed = JSON.parse(raw) as unknown;
             if (!Array.isArray(parsed)) continue;
             const proposals = parsed.map((item) => {
@@ -1247,17 +1250,14 @@ export function createRestHandler(
           requireGuidanceDisclosure(access);
           const narrative = comparisonNarrative(access.run, comparison, comparisonStrips(access.run, comparison));
           const base = evidencePacket({ run: access.run, node: access.node, ...(access.pack === undefined ? {} : { pack: access.pack.document }), authored: service.authoredFeedback(route.runId, principal), ...(shapes === undefined ? {} : { shapes }) });
-          const packet = Object.freeze({ ...base, authored: Object.freeze([]), sentences: Object.freeze(narrative.groups.flatMap((group) => group.sentences)) });
-          return json(200, { ...(await renderVoice(voiceProvider, packet, voicePersona, "compare")), scope });
+          return json(200, { ...(await renderVoice(voiceProvider, base, voicePersona, "compare", narrative.evidence, false)), scope });
         }
         const access = service.guidanceAccess(route.runId, principal, requiredString(body.nodeId, "nodeId"));
         requireGuidanceDisclosure(access);
         const basePacket = evidencePacket({ run: access.run, node: access.node, ...(access.pack === undefined ? {} : { pack: access.pack.document, packEvidence: access.pack.positionEvidence }), authored: service.authoredFeedback(route.runId, principal), ...(shapes === undefined ? {} : { shapes }) });
         const story = scope === "story" ? service.story(route.runId, principal) : undefined;
-        const packet = story === undefined
-          ? basePacket
-          : Object.freeze({ ...basePacket, sentences: Object.freeze([...basePacket.sentences, suggestTitle(story), ...(story.moments.find((moment) => moment.nodeId === access.node.id)?.sentences ?? [])]) });
-        return json(200, { ...(await renderVoice(voiceProvider, packet, voicePersona, scope as VoiceScope)), scope });
+        const extra = story === undefined ? [] : storyDeclaredEvidence({ ...story, evidence: story.moments.find((moment) => moment.nodeId === access.node.id)?.evidence ?? [] });
+        return json(200, { ...(await renderVoice(voiceProvider, basePacket, voicePersona, scope as VoiceScope, extra)), scope });
       }
       if (route.action === "speech") {
         requireJson(request);
@@ -1269,8 +1269,10 @@ export function createRestHandler(
         requireGuidanceDisclosure(access);
         const basePacket = evidencePacket({ run: access.run, node: access.node, ...(access.pack === undefined ? {} : { pack: access.pack.document, packEvidence: access.pack.positionEvidence }), authored: service.authoredFeedback(route.runId, principal), ...(shapes === undefined ? {} : { shapes }) });
         const story = scope === "story" ? service.story(route.runId, principal) : undefined;
-        const packet = story === undefined ? basePacket : Object.freeze({ ...basePacket, sentences: Object.freeze([...basePacket.sentences, suggestTitle(story), ...(story.moments.find((moment) => moment.nodeId === access.node.id)?.sentences ?? [])]) });
-        const checkedText = voiceProvider === undefined ? appendRecordedReadings(packet.sentences.join("\n"), packet) : (await renderVoice(voiceProvider, packet, voicePersona, scope as VoiceScope)).text;
+        const extra = story === undefined ? [] : storyDeclaredEvidence({ ...story, evidence: story.moments.find((moment) => moment.nodeId === access.node.id)?.evidence ?? [] });
+        const rendered = renderedEvidenceItems(EVIDENCE_MANIFEST, scope === "story" ? "guidance.voice_story" : "guidance.voice", [...basePacket.declared, ...extra]);
+        const deterministic = rendered.items.flatMap((item) => item.sentences).join("\n");
+        const checkedText = voiceProvider === undefined ? appendRecordedReadings(deterministic, basePacket) : (await renderVoice(voiceProvider, basePacket, voicePersona, scope as VoiceScope, extra)).text;
         const audio = await ttsProvider.synthesize(checkedText);
         return new Response(Uint8Array.from(audio.bytes).buffer, { status: 200, headers: { "content-type": audio.contentType, "cache-control": "no-store" } });
       }

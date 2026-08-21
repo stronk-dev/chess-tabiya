@@ -52,7 +52,7 @@ export {
 } from "./transition.js";
 export { endgameReading, renderEndgameReading, type EndgameTypeId, type EndgameReading, type TechniqueRef } from "./endgame.js";
 export { retrospectivePivot } from "./adaptive.js";
-export { STORY_MATE_CP, STORY_PIVOT_CP, storyMoments, suggestTitle, type StoryEvaluation, type StoryMoment, type StoryMomentKind, type StoryProjection, type StoryTitleInput } from "./story.js";
+export { STORY_MATE_CP, STORY_PIVOT_CP, storyDeclaredEvidence, storyMoments, suggestTitle, type StoryEvaluation, type StoryMoment, type StoryMomentKind, type StoryProjection, type StoryTitleInput } from "./story.js";
 export {
   voiceCheck,
   renderRecordedReading,
@@ -152,10 +152,14 @@ export {
   compileEvidenceManifest,
   declareEvidence,
   evidenceForConsumer,
+  assertConsumerEvidenceView,
+  assertRenderedEvidenceView,
+  renderEvidenceItems,
   type AdapterDeclaration,
   type AnswerDistance,
   type CompiledEvidenceManifest,
   type ConsumerDeclaration,
+  type ConsumerEvidenceView,
   type DeclaredEvidence,
   type EvidenceBinding,
   type EvidenceContractDeclarations,
@@ -163,12 +167,16 @@ export {
   type EvidenceForm,
   type EvidenceGrounding,
   type EvidenceManifestErrorCode,
+  type EvidenceRenderer,
+  type EvidenceRendererRegistry,
   type EvidencePlane,
   type EvidenceRole,
   type EvidenceTiming,
   type ProducerDeclaration,
   type ProjectionDeclaration,
   type ProviderOffBehavior,
+  type RenderedEvidenceItem,
+  type RenderedEvidenceView,
   type VersionedEvidenceId,
 } from "./evidence-contract.js";
 export {

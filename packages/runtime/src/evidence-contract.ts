@@ -1,6 +1,6 @@
-export type EvidencePlane = "rules" | "transition" | "search" | "human" | "theory" | "authored";
+export type EvidencePlane = "rules" | "transition" | "search" | "human" | "theory" | "authored" | "record" | "derived";
 export type ProjectionRole = "predicate" | "reading" | "event" | "source_record";
-export type EvidenceGrounding = "position_rules" | "declared_convention" | "bounded_search" | "tablebase_exact" | "human_model" | "human_corpus" | "cited_theory" | "authored_claim";
+export type EvidenceGrounding = "position_rules" | "declared_convention" | "bounded_search" | "tablebase_exact" | "human_model" | "human_corpus" | "cited_theory" | "authored_claim" | "recorded_run";
 export type EvidenceDisposition = "inspector_only" | "author_only" | "operator_only" | "experimental" | "retired";
 export type EvidenceTiming = "precommit" | "postcommit" | "checkpoint" | "attempt_end" | "terminal" | "review" | "analysis";
 export type EvidenceForm = "sentence" | "list" | "timeline_marker" | "lit_squares" | "arrows" | "piece_halo" | "panel" | "audio" | "machine_condition";
@@ -32,6 +32,7 @@ export interface ProjectionDeclaration {
   readonly answerContent: readonly AnswerDistance[];
   readonly forms: readonly EvidenceForm[];
   readonly dependsOn: readonly VersionedEvidenceId[];
+  readonly derivation?: { readonly inputs: readonly VersionedEvidenceId[] };
   readonly limitations: readonly string[];
   readonly disposition?: EvidenceDispositionDeclaration;
 }
@@ -114,6 +115,28 @@ export interface DeclaredEvidence<T> {
   readonly payload: T;
 }
 
+const ADMITTED = Symbol("tabiya.evidence.admitted");
+
+export interface ConsumerEvidenceView<T = unknown> {
+  readonly [ADMITTED]: true;
+  readonly consumer: VersionedEvidenceId;
+  readonly items: readonly DeclaredEvidence<T>[];
+}
+
+export interface RenderedEvidenceItem<T = unknown> {
+  readonly evidence: DeclaredEvidence<T>;
+  readonly sentences: readonly string[];
+}
+
+export interface RenderedEvidenceView<T = unknown> {
+  readonly [ADMITTED]: true;
+  readonly consumer: VersionedEvidenceId;
+  readonly items: readonly RenderedEvidenceItem<T>[];
+}
+
+export type EvidenceRenderer<T = unknown> = (evidence: DeclaredEvidence<T>) => readonly string[];
+export type EvidenceRendererRegistry<T = unknown> = Readonly<Record<string, EvidenceRenderer<T>>>;
+
 export const EVIDENCE_MANIFEST_ERROR_CODES = Object.freeze([
   "EVIDENCE_PRODUCER_DUPLICATE",
   "EVIDENCE_PROJECTION_DUPLICATE",
@@ -125,6 +148,7 @@ export const EVIDENCE_MANIFEST_ERROR_CODES = Object.freeze([
   "EVIDENCE_PROJECTION_INCOMPLETE",
   "EVIDENCE_DEPENDENCY_MISSING",
   "EVIDENCE_DEPENDENCY_CYCLE",
+  "EVIDENCE_DERIVATION_WIDENS",
   "EVIDENCE_GENERIC_BYPASS",
   "EVIDENCE_PROVIDER_FALLBACK_MISSING",
 ] as const);
@@ -240,7 +264,7 @@ export function declareEvidence<T>(producer: VersionedEvidenceId, projection: Ve
   return immutable({ producer: { ...producer }, projection: { ...projection }, payload });
 }
 
-export function evidenceForConsumer<T>(manifest: CompiledEvidenceManifest, consumer: VersionedEvidenceId, values: readonly DeclaredEvidence<T>[]): readonly DeclaredEvidence<T>[] {
+export function evidenceForConsumer<T>(manifest: CompiledEvidenceManifest, consumer: VersionedEvidenceId, values: readonly DeclaredEvidence<T>[]): ConsumerEvidenceView<T> {
   assertLiteral(consumer, "consumer view");
   const consumerKey = refKey(consumer);
   if (!manifest.consumers.some((candidate) => refKey(candidate) === consumerKey)) {
@@ -260,7 +284,31 @@ export function evidenceForConsumer<T>(manifest: CompiledEvidenceManifest, consu
     }
     if (permitted.has(`${refKey(value.producer)}:${refKey(value.projection)}`)) admitted.push(value);
   }
-  return Object.freeze(admitted);
+  return immutable({ [ADMITTED]: true as const, consumer: { ...consumer }, items: admitted });
+}
+
+export function assertConsumerEvidenceView(value: unknown): asserts value is ConsumerEvidenceView {
+  if (typeof value !== "object" || value === null || (value as { readonly [ADMITTED]?: unknown })[ADMITTED] !== true || !Array.isArray((value as { readonly items?: unknown }).items)) {
+    fail("EVIDENCE_GENERIC_BYPASS", "consumer evidence view was not constructed by evidenceForConsumer", ["consumer-view:unsealed"]);
+  }
+}
+
+export function assertRenderedEvidenceView(value: unknown): asserts value is RenderedEvidenceView {
+  if (typeof value !== "object" || value === null || (value as { readonly [ADMITTED]?: unknown })[ADMITTED] !== true || !Array.isArray((value as { readonly items?: unknown }).items)) {
+    fail("EVIDENCE_GENERIC_BYPASS", "rendered evidence view was not constructed by renderEvidenceItems", ["rendered-view:unsealed"]);
+  }
+}
+
+export function renderEvidenceItems<T>(view: ConsumerEvidenceView<T>, renderers: EvidenceRendererRegistry<T>): RenderedEvidenceView<T> {
+  assertConsumerEvidenceView(view);
+  const items = view.items.map((evidence) => {
+    const renderer = renderers[refKey(evidence.projection)];
+    if (renderer === undefined) {
+      fail("EVIDENCE_BINDING_UNDECLARED", "admitted projection has no registered renderer", [site("consumer", view.consumer), site("projection", evidence.projection)]);
+    }
+    return immutable({ evidence, sentences: Object.freeze([...renderer(evidence)]) });
+  });
+  return immutable({ [ADMITTED]: true as const, consumer: { ...view.consumer }, items });
 }
 
 export function compileEvidenceManifest(declarations: EvidenceContractDeclarations): CompiledEvidenceManifest {
@@ -297,7 +345,7 @@ export function compileEvidenceManifest(declarations: EvidenceContractDeclaratio
     consumerMap.set(refKey(consumer), consumer);
   }
 
-  for (const projection of projectionMap.values()) for (const dependency of projection.dependsOn) {
+  for (const projection of projectionMap.values()) for (const dependency of [...projection.dependsOn, ...(projection.derivation?.inputs ?? [])]) {
     assertLiteral(dependency, site("dependency", projection));
     if (!projectionMap.has(refKey(dependency))) fail("EVIDENCE_DEPENDENCY_MISSING", "projection dependency is absent", [site("projection", projection), site("dependency", dependency)]);
   }
@@ -307,11 +355,32 @@ export function compileEvidenceManifest(declarations: EvidenceContractDeclaratio
     if (visiting.has(key)) fail("EVIDENCE_DEPENDENCY_CYCLE", "projection dependency cycle", [...path, key]);
     if (visited.has(key)) return;
     visiting.add(key);
-    for (const dependency of projectionMap.get(key)!.dependsOn) walk(refKey(dependency), [...path, key]);
+    const projection = projectionMap.get(key)!;
+    for (const dependency of [...projection.dependsOn, ...(projection.derivation?.inputs ?? [])]) walk(refKey(dependency), [...path, key]);
     visiting.delete(key);
     visited.add(key);
   };
   for (const key of projectionMap.keys()) walk(key, []);
+
+  for (const projection of projectionMap.values()) {
+    if (projection.plane !== "derived" && projection.derivation === undefined) continue;
+    const inputs = projection.derivation?.inputs ?? [];
+    if (projection.plane !== "derived" || inputs.length === 0) {
+      fail("EVIDENCE_PROJECTION_INCOMPLETE", "derived projection needs a non-empty literal derivation input list", [site("projection", projection)]);
+    }
+    const inputProjections = inputs.map((input) => projectionMap.get(refKey(input))!);
+    const inputAnswers = new Set(inputProjections.flatMap((input) => [...input.answerContent]));
+    const inputGroundings = new Set(inputProjections.map((input) => input.grounding));
+    const exactnessWidens = projection.exactness === "exact" && inputProjections.some((input) => input.exactness !== "exact");
+    const groundingWidens = inputGroundings.size === 1
+      ? projection.grounding !== inputProjections[0]!.grounding
+      : projection.grounding !== "declared_convention";
+    const answersWiden = projection.answerContent.some((answer) => !inputAnswers.has(answer));
+    const abstentionWidens = inputProjections.some((input) => input.abstention.possible) && (!projection.abstention.possible || !projection.abstention.reasons.includes("input_abstained"));
+    if (exactnessWidens || groundingWidens || answersWiden || abstentionWidens) {
+      fail("EVIDENCE_DERIVATION_WIDENS", "derived projection exceeds the exactness, grounding, answer content, or abstention of its inputs", [site("projection", projection), ...inputs.map((input) => site("derivation-input", input))]);
+    }
+  }
 
   const bindings: EvidenceBinding[] = [];
   for (const adapter of adapters) {

@@ -1,19 +1,19 @@
 import { readFileSync } from "node:fs";
 
-import { voiceCheck, type EvidencePacket } from "@chess-tabiya/runtime";
+import { classifyPhase, declareEvidence, voiceCheck, type EvidencePacket, type RenderedEvidenceView } from "@chess-tabiya/runtime";
 import type { DrillPackDefinition } from "@chess-tabiya/schema/drill-pack";
 import { afterEach, describe, expect, it } from "vitest";
 
 import { HUMAN_COMMON_RESISTANCE_PROFILE, type CapabilitiesProvider } from "./capabilities.js";
 import { EvidenceJobQueue, type EvidenceExecutor } from "./evidence-queue.js";
 import type { EngineHealth, EngineRequest } from "./engine-supervisor.js";
-import { evidencePacket, renderVoice, type VoiceEvidenceView, type VoiceProvider } from "./guidance.js";
+import { evidencePacket, renderVoice, voiceEvidenceView, type VoiceEvidenceView, type VoiceProvider } from "./guidance.js";
 import { OpponentSelector, type SelectorEngineClient } from "./opponent-selector.js";
 import { createRestHandler } from "./rest.js";
 import { RunService } from "./service.js";
 import { SQLiteRunStorage } from "./storage.js";
 import { FixtureCorpusSource } from "./corpus.js";
-import { ExternalHttpVoiceProvider } from "./external-voice.js";
+import { ExternalHttpVoiceProvider, type ReasoningReviewProvider } from "./external-voice.js";
 import { ExternalHttpTtsProvider, type TtsProvider } from "./external-tts.js";
 import { IdentityService } from "./identity.js";
 import { PackRegistry } from "./pack-registry.js";
@@ -41,6 +41,10 @@ const capabilities: CapabilitiesProvider = {
   },
 };
 function request(path: string, method = "GET", body?: unknown, cookie?: string): Request { return new Request(`http://tabiya.test${path}`, { method, headers: { ...(body === undefined ? {} : { "content-type": "application/json" }), ...(cookie === undefined ? {} : { cookie }) }, ...(body === undefined ? {} : { body: JSON.stringify(body) }) }); }
+function fixturePacket(): EvidencePacket {
+  const detected = classifyPhase(FEN);
+  return Object.freeze({ fen: FEN, phase: { source: "detector" as const, value: detected.phase }, structures: [], observations: [], markers: [], endgame: null, plans: [], authored: [], readings: [], declared: [declareEvidence({ id: "rules.phase", version: 1 }, { id: "rules.phase.reading", version: 1 }, detected)] });
+}
 
 describe("adaptive guidance server seams", () => {
   const stores: SQLiteRunStorage[] = [];
@@ -76,8 +80,8 @@ describe("adaptive guidance server seams", () => {
     expect(await response.json()).toMatchObject({ error: { code: "VOICE_UNAVAILABLE" } });
     let calls = 0;
     const provider: VoiceProvider = { async render() { calls += 1; return "Play e2e4 because it is best."; } };
-    const packet = { fen: FEN, phase: { source: "detector", value: "opening" }, structures: [], observations: [], markers: [], endgame: null, plans: [], authored: [], readings: [], sentences: ["Detected by Tabiya's phase bands: opening."] } satisfies EvidencePacket;
-    expect(await renderVoice(provider, packet, "plain")).toEqual({ text: packet.sentences[0], source: "deterministic" });
+    const packet = fixturePacket();
+    expect(await renderVoice(provider, packet, "plain")).toEqual({ text: "Detected by Tabiya's phase bands: opening.", source: "deterministic" });
     expect(calls).toBe(2);
   });
 
@@ -104,7 +108,7 @@ describe("adaptive guidance server seams", () => {
     );
     const body = { nodeId: run.activeCursor.nodeId, scope: "reading" };
     expect((await handler(request("/runs/guide/voice", "POST", body))).status).toBe(200);
-    const source = packets[0]!.sentences.join("\n").toLowerCase();
+    const source = packets[0]!.rendered.items.flatMap((item) => item.sentences).join("\n").toLowerCase();
     const markedSquare = Array.from({ length: 64 }, (_, index) =>
       `${String.fromCharCode(97 + (index % 8))}${Math.floor(index / 8) + 1}`,
     ).find((square) => !source.includes(square))!;
@@ -117,15 +121,13 @@ describe("adaptive guidance server seams", () => {
     }));
     expect(write.status).toBe(200);
     expect((await handler(request("/runs/guide/voice", "POST", body))).status).toBe(200);
-    expect(packets[1]!.sentences).toEqual(packets[0]!.sentences);
-    const checkPacket = { fen: FEN, phase: { source: "detector" as const, value: "opening" as const }, structures: [], observations: [], markers: [], endgame: null, plans: [], authored: [], readings: [], sentences: packets[1]!.sentences } satisfies EvidencePacket;
-    expect(voiceCheck(checkPacket, markedSquare).violations).toContain(`square:${markedSquare}`);
-    expect(voiceCheck({ ...checkPacket, sentences: [...checkPacket.sentences, markedSquare] }, markedSquare).violations).not.toContain(`square:${markedSquare}`);
+    expect(packets[1]!.rendered.items).toEqual(packets[0]!.rendered.items);
+    expect(voiceCheck(packets[1]!.rendered, markedSquare).violations).toContain(`square:${markedSquare}`);
+    expect(() => voiceCheck({ consumer: packets[1]!.rendered.consumer, items: [{ evidence: packets[1]!.rendered.items[0]!.evidence, sentences: [markedSquare] }] } as unknown as RenderedEvidenceView, markedSquare)).toThrowError(expect.objectContaining({ code: "EVIDENCE_GENERIC_BYPASS" }));
 
     const restSource = readFileSync(new URL("./rest.ts", import.meta.url), "utf8");
-    expect(restSource.match(/\bsentences\s*:/gu)).toHaveLength(3);
-    expect(restSource.match(/suggestTitle\(story\)/gu)).toHaveLength(2);
-    expect(restSource.match(/narrative\.groups\.flatMap/gu)).toHaveLength(1);
+    expect(restSource).not.toContain("basePacket.sentences");
+    expect(restSource).not.toContain("narrative.groups.flatMap");
   });
 
   it("keeps delivered claim prose outside evidence packets and the voice allowlist", async () => {
@@ -153,7 +155,7 @@ describe("adaptive guidance server seams", () => {
       authored,
     });
     expect(packet.authored).toEqual([]);
-    expect(packet.sentences.join("\n")).not.toContain(text);
+    expect(voiceEvidenceView(packet).rendered.items.flatMap((item) => item.sentences).join("\n")).not.toContain(text);
     expect(packet).toEqual(evidencePacket({ run, node, authored: { items: [], hasWithheldAuthoredContent: false } }));
   });
 
@@ -271,8 +273,8 @@ describe("adaptive guidance server seams", () => {
     service.updateGrant("reasoning-disclosure", hostPrincipal, "host-writer", { op: "grant", handle: participant.learner.handle, role: "participant" }, at);
     service.updateGrant("reasoning-disclosure", hostPrincipal, "host-writer", { op: "grant", handle: spectator.learner.handle, role: "spectator" }, at);
     let providerCalls = 0;
-    const provider: VoiceProvider = { async render() { providerCalls += 1; return "[]"; } };
-    const handler = createRestHandler(service, undefined, undefined, identity, undefined, undefined, undefined, undefined, provider);
+    const provider: ReasoningReviewProvider = { async review() { providerCalls += 1; return "[]"; } };
+    const handler = createRestHandler(service, undefined, undefined, identity, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, provider);
     for (const session of [participant, spectator]) {
       const response = await handler(request("/runs/reasoning-disclosure/reasoning-review", "POST", { checkpointEventSeq: checkpoint.seq }, session.cookie));
       expect(response.status).toBe(409);
@@ -294,19 +296,20 @@ describe("adaptive guidance server seams", () => {
   });
 
   it("sends only the pinned external voice packet and falls back after transport failures", async () => {
-    const packet = { fen: FEN, phase: { source: "detector", value: "opening" }, structures: [], observations: [], markers: [], endgame: null, plans: [], authored: [], readings: [], sentences: ["Detected by Tabiya's phase bands: opening."] } satisfies EvidencePacket;
+    const packet = fixturePacket();
+    const deterministic = "Detected by Tabiya's phase bands: opening.";
     const bodies: unknown[] = [];
     const provider = new ExternalHttpVoiceProvider({ url: "https://voice.test/render", key: "SENTINEL_SECRET", fetch: async (_input, init) => {
       bodies.push(JSON.parse(String(init?.body)) as unknown);
       expect(new Headers(init?.headers).get("authorization")).toBe("Bearer SENTINEL_SECRET");
-      return Response.json({ text: packet.sentences[0] });
+      return Response.json({ text: deterministic });
     } });
-    expect(await renderVoice(provider, packet, "plain", "marker")).toEqual({ text: packet.sentences[0], source: "provider" });
-    expect(bodies).toEqual([{ personaPrompt: "plain", sentences: packet.sentences, evidence: [expect.objectContaining({ producer: { id: "rules.phase", version: 1 }, projection: { id: "rules.phase.reading", version: 1 } })], scope: "marker" }]);
+    expect(await renderVoice(provider, packet, "plain", "marker")).toEqual({ text: deterministic, source: "provider" });
+    expect(bodies).toEqual([{ personaPrompt: "plain", scope: "marker", items: [{ evidence: expect.objectContaining({ producer: { id: "rules.phase", version: 1 }, projection: { id: "rules.phase.reading", version: 1 } }), sentences: [deterministic] }] }]);
 
     let failures = 0;
     const failing = new ExternalHttpVoiceProvider({ url: "https://voice.test/render", fetch: async () => { failures += 1; return new Response("no", { status: 503 }); } });
-    expect(await renderVoice(failing, packet, "plain", "story")).toEqual({ text: packet.sentences[0], source: "deterministic" });
+    expect(await renderVoice(failing, packet, "plain", "story")).toEqual({ text: deterministic, source: "deterministic" });
     expect(failures).toBe(2);
 
     let timeouts = 0;
@@ -314,8 +317,32 @@ describe("adaptive guidance server seams", () => {
       timeouts += 1;
       return await new Promise<Response>((_resolve, reject) => init?.signal?.addEventListener("abort", () => reject(new DOMException("aborted", "AbortError")), { once: true }));
     } });
-    expect(await renderVoice(timeoutProvider, packet, "plain", "reading")).toEqual({ text: packet.sentences[0], source: "deterministic" });
+    expect(await renderVoice(timeoutProvider, packet, "plain", "reading")).toEqual({ text: deterministic, source: "deterministic" });
     expect(timeouts).toBe(2);
+  });
+
+  it("sends reasoning review as its own non-evidence request", async () => {
+    const bodies: unknown[] = [];
+    const provider = new ExternalHttpVoiceProvider({ url: "https://voice.test/reasoning", fetch: async (_input, init) => {
+      bodies.push(JSON.parse(String(init?.body)) as unknown);
+      return Response.json({ text: "[]" });
+    } });
+    const requestBody = { task: "Quote contiguous learner text.", transcript: { plan: "protect the queen" }, keyPoints: [{ id: "k1", label: "Safety", phrases: ["protect"] }], detections: [] };
+    expect(await provider.review(requestBody)).toBe("[]");
+    expect(bodies).toEqual([{ personaPrompt: "Quote only contiguous learner text; do not add chess claims.", ...requestBody }]);
+    expect(JSON.stringify(bodies)).not.toMatch(/evidence|sentences|phase|Stockfish/);
+  });
+
+  it("declares detector phase bytes separately from an authored pack phase", async () => {
+    const registry = await PackRegistry.fromDocuments([{ source: "reasoning-disclosure", value: reasoningDocument }]);
+    const storage = new SQLiteRunStorage(":memory:", { onMigration: () => {} }); stores.push(storage);
+    const service = new RunService(storage, { packRegistry: registry, evidenceQueue: new EvidenceJobQueue(executor) });
+    const run = await service.create({ id: "phase-packet", session: { kind: "pack", packId: reasoningDocument.id }, policyConfig: { seedMode: "fixed", locus: { executedAt: "server", engineIds: [], modelIds: [] } }, seed: 1, createdAt: at }, "writer");
+    const packet = evidencePacket({ run, node: run.nodes[0]!, pack: reasoningDocument, authored: { items: [], hasWithheldAuthoredContent: false } });
+    const detector = packet.declared.find((item) => item.projection.id === "rules.phase.reading")!;
+    const authored = packet.declared.find((item) => item.projection.id === "pack.authored.phase")!;
+    expect(detector.payload).toEqual(classifyPhase(run.nodes[0]!.fen));
+    expect(authored.payload).toBe(reasoningDocument.phase);
   });
 
   it("keeps recorded readings out of provider input and appends their frozen prose for the learner", async () => {
@@ -350,7 +377,7 @@ describe("adaptive guidance server seams", () => {
   it("pins every evidence-packet construction site behind disclosure", () => {
     const source = readFileSync(new URL("./rest.ts", import.meta.url), "utf8");
     const sites = [...source.matchAll(/\bevidencePacket\(/gu)].map((match) => match.index!);
-    expect(sites).toHaveLength(4);
+    expect(sites).toHaveLength(3);
     for (const index of sites) expect(source.slice(Math.max(0, index - 800), index)).toContain("requireGuidanceDisclosure(");
     expect("Clear, concise Tabiya voice. Do not add chess claims.").not.toMatch(/reading|recorded|coverage|queried|silent|absent/i);
   });

@@ -41,3 +41,18 @@ Append-only.
 - [[D666]] records that the 23-operation checker is currently an anchor census, not the accepted
   bare-payload bypass proof. The handoff preserves it for what it does prove and specifies the
   missing negative type fixture.
+
+## 2026-08-21 — amended bind stage returned on consumer-boundary identity
+
+- The amended sentence path is executable: raw packet prose is gone; admitted and rendered views
+  are runtime-sealed; provider input and `voiceCheck` share one item list; compare/story now emit
+  declared record/derived items; reasoning review has a separate non-evidence request; detector and
+  authored phase payloads are distinct. Focused typechecks and 61 tests are green.
+- Applying criterion 7 beyond voice found [[D669]]: `guidance.packet` is a producer explicitly
+  forbidden from being a consumer by §10.2, while `/analysis` is a command issued before the
+  evidence it allegedly consumes exists. An empty branded wrapper would repeat [[D666]].
+- [[D670]] records the second buildability failure: 18 leaf predicate ids cannot exactly identify
+  a recursive multi-family `StructuralExpression` AST. Wrapping the AST under one leaf would repeat
+  [[D665]] at a new payload.
+- `second-author-return.md` prices the author action and preserves the independently valid amended
+  implementation. No schema, storage, content, D667 or D668 work was absorbed.

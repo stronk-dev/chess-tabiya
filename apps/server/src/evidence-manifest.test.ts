@@ -22,7 +22,7 @@ describe("server evidence manifest aggregate", () => {
     expect(Object.keys(RUNTIME_EVENT_PROJECTION_MAP).sort()).toEqual(["bestline", "eval", "tablebase", "wdl"]);
     expect(Object.keys(SOURCING_PROJECTION_MAP).sort()).toEqual([...EVIDENCE_KINDS].sort());
     expect(Object.keys(RECORDED_READING_PROJECTION_MAP).sort()).toEqual(RECORDED_READING_DISPOSITIONS.filter((row) => row.disposition === "admitted").map((row) => row.kind).sort());
-    expect(Object.keys(PACKET_FIELD_PROJECTION_MAP).sort()).toEqual(["authored", "endgame", "markers", "observations", "phase", "plans", "readings", "sentences", "structures"]);
+    expect(Object.keys(PACKET_FIELD_PROJECTION_MAP).sort()).toEqual(["authored", "endgame", "markers", "observations", "phase", "plans", "readings", "structures"]);
   });
 
   it("reports provider-off state independently for Stockfish, Syzygy, Maia and Explorer", () => {

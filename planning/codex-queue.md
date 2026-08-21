@@ -124,6 +124,13 @@ typechecked — [[D662]] one level up. Read the amended §6.1 before resuming:
   Black in imported games (`story.ts:37`). Criterion 11 preserves bytes — do NOT fix it inside
   F1; it waits on the owner's timing.
 
+**Returned again at the bind stage on [[D669]]/[[D670]].** The sentence seal, reasoning split,
+phase correction and derived compiler are implemented and green, but do not continue the remaining
+operation conversions until the author re-identifies the consumer boundaries: `guidance.packet`
+is explicitly not a consumer, `/analysis` has no evidence at its request entrypoint, and the 18
+leaf predicate ids cannot exactly carry a recursive multi-family structural-expression AST. Full
+handoff: `planning/evidence-contract-manifest/second-author-return.md`.
+
 ## 0-ACCEPTED-2026-08-21. F1 and accessible-board-input — both accepted, implement in this order
 
 1. **F1 (`rfc/evidence-contract-manifest.md`)** — the producer→projection→consumer spine. Read the

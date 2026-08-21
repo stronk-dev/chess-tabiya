@@ -41,6 +41,11 @@ if ((process.env.DRAFT_PACK_FILE !== undefined || process.env.DRAFT_PACK_FILES !
   throw new TypeError("Explicit draft pack files require NODE_ENV=development");
 }
 const draftPackFiles = process.env.DRAFT_PACK_FILES?.split(",").map((path) => path.trim()).filter((path) => path.length > 0);
+const externalVoice = voiceMode !== "external_http" ? undefined : new ExternalHttpVoiceProvider({
+  url: process.env.TABIYA_VOICE_PROVIDER_URL!,
+  ...(process.env.TABIYA_VOICE_PROVIDER_KEY === undefined ? {} : { key: process.env.TABIYA_VOICE_PROVIDER_KEY }),
+  timeoutMs: voiceTimeout,
+});
 const application = await createApplication({
   development,
   engineMode,
@@ -61,13 +66,7 @@ const application = await createApplication({
     ? {}
     : { stockfishCommand: process.env.STOCKFISH_PATH }),
   ...(process.env.LICHESS_TOKEN === undefined ? {} : { corpusToken: process.env.LICHESS_TOKEN }),
-  ...(voiceMode !== "external_http" ? {} : {
-    voiceProvider: new ExternalHttpVoiceProvider({
-      url: process.env.TABIYA_VOICE_PROVIDER_URL!,
-      ...(process.env.TABIYA_VOICE_PROVIDER_KEY === undefined ? {} : { key: process.env.TABIYA_VOICE_PROVIDER_KEY }),
-      timeoutMs: voiceTimeout,
-    }),
-  }),
+  ...(externalVoice === undefined ? {} : { voiceProvider: externalVoice, reasoningReviewProvider: externalVoice }),
   ...(ttsMode !== "external_http" ? {} : {
     ttsProvider: new ExternalHttpTtsProvider({
       url: process.env.TABIYA_TTS_PROVIDER_URL!,
