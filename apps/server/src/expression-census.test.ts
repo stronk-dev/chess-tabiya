@@ -196,7 +196,7 @@ describe("expression census", () => {
     );
     const fixture = runDeclarationCensus({ sourceOverrides: { "apps/server/src/errors.ts": errors } });
     expect(fixture.declarations.find((row) => row.namespace === "error" && row.subject === "FIXTURE_PRODUCERLESS")?.producers).toEqual([]);
-  });
+  }, 20_000);
 
   it("reproduces the clock-zeroed refutation on the shared transition denominator", () => {
     const rows = fullDeclarationReport.declarations.filter((row: any) => row.namespace === "runtime");

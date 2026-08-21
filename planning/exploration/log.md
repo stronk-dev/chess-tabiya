@@ -3901,3 +3901,45 @@ byte-checks its derived contract report, writes nothing, and now runs inside `ma
   those remain owned by F2/F3 and [[D668]].
 - Verification at closeout: `make verify` green (125 files / 806 tests), manifest check green
   (19 / 93 / 23 / 142 bindings), browser green (28 passed, one optional Maia latency test skipped).
+
+## 2026-08-21 — F2 readiness re-derived and semantic-evidence-selection drafted
+
+The post-F1 gate was read from its predicates rather than the old paired Wave-6B label. F2 is open
+after R1/R2/A3, O2/O3 and implemented F1; F3 remains closed on O6 and Gate F. D680 records the
+stale readiness join. D660 was corrected against the later R2 transfer result: global lift remains
+diagnostic and cannot select learner evidence; the deterministic local legal-alternative
+denominator is the admitted mechanism after semantic eligibility.
+
+`rfc/semantic-evidence-selection.md` is now draft. It specifies literal operand-preserving events,
+consumer-specific eligibility, independent rules events, a parameterised local selector, honest
+empty output and the D668 payload seal. It changes no product code, content, schema, migration,
+protected design intent or assistance default. Buildability/cross-review precede acceptance.
+
+## 2026-08-21 — CI failure was a missing census-test budget
+
+GitHub verify run 32515030312 failed one assertion-free way: the producerless-error declaration
+census took 5.282 s on Node 24 against Vitest's inherited 5 s timeout. Its neighboring whole-tree
+tests already declare 20–30 s and the preceding run completed the same 17-test file. D682 records
+the CI defect; the test now carries an explicit 20 s budget. No product behavior changed.
+
+Local verification after the repair is complete: the focused census is 17/17 and full
+`make verify` is green at 125 files / 806 tests plus all repository parity/manifest/planner checks.
+The next pushed commit supplies the Node-24 GitHub confirmation; this pass did not push.
+
+F2's first buildability read then corrected four specification shortcuts before acceptance:
+direct events no longer invent derivation sources; the denominator is the complete legal-
+alternative population; critical events cannot widen finite budgets; and the old R2 surface
+baseline is not attributed to the new event set. The payload-seal migration is re-derived as 38
+direct call lines in fourteen production files.
+
+## 2026-08-21 — D682 runtime-family check and D683 F2 correction
+
+- The failed GitHub expression-census case passes under Node 24/Linux: 17/17 for the file and
+  4.244 s for the formerly 5 s-limited whole-tree test. Full local `make verify` remains green at
+  125 files / 806 tests. Hosted confirmation waits for a pushed commit.
+- F2's second buildability read refused a false direct `avoided` event and then refused an
+  unregistered multi-source selector object. Avoidance now uses eleven exact
+  `derived.semantic_avoidance.*@1` projections over a complete alternative population, retaining
+  the signed base family, supporting events and denominator without valence. The initial boundary
+  is pinned to 22 direct plus eleven derived projections. D683 is closed in the draft;
+  implementation is still unauthorized.

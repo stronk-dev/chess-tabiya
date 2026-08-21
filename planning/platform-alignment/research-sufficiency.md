@@ -1,6 +1,6 @@
 # Research sufficiency audit
 
-**Run:** 2026-08-20
+**Run:** 2026-08-20; readiness delta re-derived 2026-08-21 after F1
 
 **Ledger:** D639
 
@@ -17,7 +17,7 @@ accurate description of the whole queue.
 - **One has an executable external protocol but no participants:** R9.
 - **Nine are blocked behind named predecessors:** R7, R8, R10, R13-R17 and R19.
 
-Only two candidate RFC nodes have sufficient architecture research today:
+At the original run, only two candidate RFC nodes had sufficient architecture research:
 
 - **F1, evidence registry/producer-consumer manifest.** A0-A4 and O1 are complete. It is blocked by
   protected intent amendments and the two process RFCs, not by more evidence taxonomy.
@@ -25,9 +25,20 @@ Only two candidate RFC nodes have sufficient architecture research today:
   blocked by its protected design amendment; physical-device and screen-reader proof remains an
   acceptance requirement, not a reason to leave the architecture unspecified.
 
-F2-F11 remain research-blocked. Drafting them now would force an author to invent at least one
-detector admission rule, UX default, theory workflow, human-likeness claim, longitudinal coaching
-claim, campaign verdict, professional workflow or social/trust boundary.
+**2026-08-21 delta:** F1 and the protected O1–O4 intent amendments have landed, so the blanket
+F2–F11 sentence above has expired. The graph now resolves as follows:
+
+- **F2 is open for drafting.** R1/R2/A3, O2/O3 and F1 are complete. The RFC can specify typed
+  instance events and a parameterised local selector without choosing F5's workflow defaults or
+  pretending that detector rarity supplies semantic eligibility.
+- **F3 is not open.** R6/A3/F1 are complete, but O6 remains explicitly blocked by R8/R10 and the
+  owner's Gate-F primitive/re-authoring budget. F3 may not choose a stable primitive set, pilot or
+  budget by implication.
+- F4–F11 retain their named research/decision predecessors.
+
+This correction is D680. It also corrects D660: the later R2 experiment supersedes the older
+corpus-global 294× lift proposal as product selection policy. Lift remains diagnostic; O3's local
+legal-alternative rule is the selector input after semantic eligibility.
 
 ## What is sufficient now
 
@@ -59,8 +70,8 @@ The productive non-participant work is therefore narrow and concrete:
 
 1. land the protected O1/O2/O3/O4/O13 intent amendments through owner/Claude authority;
 2. resolve `shared-resource-registers` Q1/Q2 and `rfc-lifecycle-completion` Q1-Q3;
-3. draft/accept F1, then let F2/F3 consume one compiled evidence truth rather than inventing local
-   joins;
+3. F1 is implemented; draft/accept F2 against that compiled truth, while keeping F3 closed until
+   O6 is ruled rather than treating Wave 6B as an inseparable pair;
 4. draft F12 after its Choice-C intent amendment, while preserving participant accessibility as a
    release acceptance gate;
 5. prepare/recruit the R3 and R11 external sessions, since they unlock the widest downstream cuts;
@@ -70,4 +81,3 @@ The productive non-participant work is therefore narrow and concrete:
 This is the bottom-up line: current architecture research is enough to stop studying F1/F12 and
 start reconciling authority, while the learner-facing defaults and breadth modes remain honestly
 empirical.
-

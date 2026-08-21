@@ -735,3 +735,68 @@ Append-only. Record research, rulings, RFC transitions, implementation closeout 
   recruited-participant arm.
 - `make intent-parity` is read-only, byte-checks its report, runs under the built-in Node test
   runner and is now a required `make verify` dependency. D651 is closed.
+
+## 2026-08-21 — Wave 6B split on its real gates; F2 drafted
+
+- Re-derived F2/F3 authority after F1 instead of inheriting the paired queue row. F2 is open:
+  R1/R2/A3, O2/O3 and F1 are complete. F3 is still closed because its declared gate includes O6,
+  which remains blocked by R8/R10 and the owner's Gate-F primitive/re-authoring budget. Recorded
+  D680 and corrected the sufficiency memo, execution queue and RFC graph.
+- Corrected D660 before it could become product policy. D542/D543's 294× top-two lift remains a
+  population-specific diagnostic; the later R2 transfer experiment refused global lift as
+  eligibility or ordering authority and established the local legal-alternative denominator as
+  the transferable selector. D681 makes the negative guard explicit.
+- Drafted `rfc/semantic-evidence-selection.md`: identity-preserving literal events, exact
+  event→consumer eligibility, independent irreversibility properties, a parameterised deterministic
+  local selector, honest empty output and removal of the exported generic payload constructor.
+- The draft makes no learner-visible routing/default choice, schema or migration claim, content
+  edit or Gate-F claim. F5 owns production module policies; F3 remains behind O6.
+- Next: exact-symbol/buildability review. Implementation remains unauthorized until correction,
+  acceptance and an implementing planning directory.
+
+## 2026-08-21 — GitHub verify timeout reproduced and repaired
+
+- Read failed GitHub run 32515030312 rather than inferring from its passing tail. The sole failure
+  was `expression-census.test.ts:183`: a second full declaration census took 5.282 s under Node 24
+  and hit Vitest's 5 s default; its assertions did not fail.
+- Added the same explicit 20 s per-test budget already used by the adjacent whole-tree mutation
+  census. This changes no product timeout or census semantics. Recorded D682.
+- Local baseline before the repair was green: 125 files / 806 tests; the full `make verify` path
+  also passed typecheck, tests and all register/status/intent/manifest/graduation checks.
+- Next: run the focused test repeatedly and the complete verify path after the timeout repair.
+
+## 2026-08-21 — D682 local verification complete
+
+- Focused `expression-census.test.ts`: 17/17 green in 36.87 s.
+- Full `make verify`: typecheck green; 125 files / 806 tests green; scaffold/packaging, shared
+  register, lifecycle status, protected-intent parity, evidence-manifest and graduation-plan checks
+  green. GitHub confirmation necessarily waits for a pushed commit; no push was performed.
+
+## 2026-08-21 — F2 first buildability review corrected four false shortcuts
+
+- Direct rules events are now exact declared evidence; only genuinely composed events carry
+  derivation inputs. The first draft's universal source-projection field would have forced a
+  self-dependency or an invented source.
+- The selector denominator is all legal alternatives other than the committed move, including
+  alternatives emitting no event. It refuses an incomplete counterfactual population instead of
+  treating unavailable provider output as “did not signal.”
+- Critical IDs bypass only the minimum/share gate and remain inside finite consumer budgets;
+  concurrent overflow is explicit, deterministic rejection rather than hidden budget widening.
+- Legacy R2 output and new F2-event output now have separate baselines. The new event set cannot
+  claim R2's old 0.79/1.03 volume numbers by inheritance.
+- Re-derived the D668 migration at HEAD: 38 direct production call lines across fourteen files
+  (six runtime, five server, three web), all owned by the exact-adapter closure.
+
+## 2026-08-21 — CI runtime matched and F2 counterfactual identity corrected
+
+- Re-ran the previously failing expression census inside Node 24 on Linux. All 17 tests passed;
+  the exact producerless-error test completed in 4.244 s under the new 20 s whole-tree budget.
+  Together with the green 806-test `make verify`, this closes the local/runtime-family evidence for
+  D682; an actual hosted check still requires a pushed commit.
+- A second F2 buildability read found that `avoided` cannot be a direct committed-edge sign. It is
+  defined by absence on the played move plus prevalence over a complete legal-alternative
+  population. Recorded D683 and changed the RFC to eleven exact registered derived projections,
+  each retaining the signed base family, all supporting alternative events and denominator. This
+  preserves F1's renderer/voice authority instead of making a parallel multi-source object.
+- Made the initial semantic event boundary exhaustive: 22 direct plus eleven derived version-1
+  projection IDs. This prevents an implementer from silently filling the tactic/plan gap inside F2.
