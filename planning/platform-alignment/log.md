@@ -687,3 +687,27 @@ Append-only. Record research, rulings, RFC transitions, implementation closeout 
   labelled/licensed optional GPU `accelerated`.
 - No core learner journey may depend on the accelerated image; external providers remain optional.
 - The deletion-retention choice remains open pending clarification of its user-visible effects.
+
+## 2026-08-21 — Dependency-aware deletion retention ruled
+
+- Owner adopted F12-B's recommended boundary after its effects were stated: private/solo history and
+  learner-only state hard-delete; only authenticated shared dependencies and explicitly published
+  artifacts survive as immutable identity-tombstoned records.
+- Anonymous share links are revoked and do not retain an otherwise-private run. Retained shared
+  runs lose all real writers; private marks and import metadata are removed while the shared move/
+  event history remains readable to the other learner.
+- The same classifier governs per-run deletion. Both F12 owner choices are now settled and F12-B is
+  open for RFC drafting; product behavior is unchanged until an RFC is accepted and implemented.
+
+## 2026-08-21 — F12-B drafted; teacher-surface deletion collision found
+
+- Drafted `rfc/portable-account-data.md`: exhaustive table-to-policy inventory, deterministic
+  account bundle, stale-safe previews, private-run erasure, shared/published tombstones and per-run
+  deletion. Register/status checks are green after using the implemented discharge grammar.
+- Author review found accepted `teacher-surface` §4.1a/criterion 9a pre-revokes a submitted learner's
+  teacher grant and expects no grant to survive. That is the opposite of D656, where the current
+  authenticated grant is what retains the run for the collaborator. Recorded D657 rather than
+  letting two accepted contracts race.
+- Landing order is now explicit: `teacher-surface` first for its migration, then F12-B atomically
+  inventories its tables and supersedes only its account-deletion outcome. Explicit withdrawal,
+  leave, removal, expiry, archive and classroom-delete revocation remain unchanged.

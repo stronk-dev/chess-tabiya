@@ -57,7 +57,7 @@ roadmap capability; it is not a filename or a single merge.
 
 ```text
 F12-A safe deployment ─┐
-F12-B data lifecycle ──┼─┐
+teacher-surface → F12-B data lifecycle ─┼─┐
 F12-C operations ──────┤ │
 F1 → F12-D health ─────┤ ├→ F12-H integrated appliance proof
 F3/F4 → F12-E bundle ──┤ │
@@ -88,7 +88,7 @@ Required contract:
 
 Non-goals: federation, Kubernetes, public SaaS billing, an operator account.
 
-### F12-B — portable data and deletion lifecycle — NEEDS OWNER RETENTION RULING
+### F12-B — portable data and deletion lifecycle — DRAFTED; LANDS AFTER TEACHER-SURFACE
 
 Owns D605/D606 and the future private-by-default behavioral profile data.
 
@@ -103,12 +103,23 @@ Required contract:
 - style/profile metrics private by default, exported and deleted with the learner unless separately
   published by an explicit later contract.
 
-One owner choice is still material: what survives deletion when another person or a public artifact
-depends on it. Recommendation:
+**OWNER RULED 2026-08-21:** adopt the recommended dependency-aware retention boundary:
 
 > hard-delete private/solo runs and learner-only state; retain genuinely shared or published
 > artifacts only as immutable tombstoned records after an explicit preview; delete the learner's
 > grants, private marks, profile and credentials; never reassign a private run to `__legacy`.
+
+For this ruling, an anonymous share link alone is not a durable dependency: deletion revokes the
+link and hard-deletes an otherwise-private run. A run is genuinely shared only when another
+authenticated learner has a durable grant or owns a derived artifact that names it. Retained runs
+lose all real writers and become read-only; registered pack/shape bytes remain immutable while
+account-identifying publisher metadata becomes a tombstone. The preview must disclose that authored
+bytes already embedded in an immutable shared/published artifact survive with that artifact.
+
+Author review found one landing dependency not visible in R18: accepted `teacher-surface.md`
+creates classroom/submission tables and specifies the pre-D656 opposite deletion outcome. It lands
+first for its already-claimed migration; `portable-account-data.md` then inventories those tables and
+supersedes only its account-deletion clause. D657 records the collision.
 
 Account-bundle **import** is not implied by O13's export/delete ruling. Server backup/restore belongs
 to F12-C. A future user-level cross-instance import needs its own collision/identity contract.
@@ -237,10 +248,10 @@ accepted as “1.0 with known issues.”
 
 ## 4. Owner decisions now
 
-Two rulings unblock the largest independent children without waiting on F1/F4:
+Two rulings unblock their child specifications without waiting on F1/F4:
 
-1. **Deletion retention:** adopt or amend F12-B's recommended private-hard-delete / shared-public-
-   tombstone rule.
+1. **Deletion retention — RULED 2026-08-21:** adopted F12-B's private-hard-delete / authenticated-
+   shared-or-published-tombstone rule; anonymous links are revoked rather than treated as retention.
 2. **Resource tiers — RULED 2026-08-21:** adopted F12-E's `core` / FOSS `cpu` / optional separately
    disclosed `accelerated` matrix as proposed.
 
@@ -250,10 +261,11 @@ drafting F12-A/C/F; their eventual implementations still need the named destruct
 
 ## 5. Immediate queue
 
-1. Claude/owner rules the remaining deletion-retention choice; resource tiers are settled.
+1. Both owner choices are settled.
 2. Draft F12-F first: it closes a core-action exclusion and has no F1/F3/F4 dependency.
 3. Draft F12-C and F12-A in either order; they touch disjoint systems.
-4. Draft F12-B after the retention ruling.
+4. **Done:** F12-B drafted from the ruled retention boundary; buildability/cross-review remains, and
+   implementation lands after `teacher-surface`.
 5. Draft F12-D after F1 acceptance.
 6. Draft F12-E independent half after resource tiers; reconcile its runtime bundle after F3/F4.
 7. Draft F12-G after F4.
