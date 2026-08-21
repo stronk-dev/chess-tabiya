@@ -14,6 +14,7 @@ import { describe, expect, it } from "vitest";
 import {
   evidencePayloadTable,
   evidenceSentenceTable,
+  renderDeclaredEvidenceRef,
   renderEvidenceRef,
 } from "./evidence-sentences.js";
 
@@ -25,6 +26,12 @@ const pack = JSON.parse(
 ) as DrillPackDefinition;
 
 describe("evidence sentence contract", () => {
+  it("refuses the pre-F1 bare reference at the consumer entrypoint", () => {
+    if (false) {
+      // @ts-expect-error runtime.evidence_ref consumes only a sealed admitted view.
+      renderDeclaredEvidenceRef("rules:structure-outpost");
+    }
+  });
   it("enumerates a sentence for every rules and pack ref v1 can emit", () => {
     const expected = [
       ...RULES_EVIDENCE_FACTS.map(rulesEvidenceRef),

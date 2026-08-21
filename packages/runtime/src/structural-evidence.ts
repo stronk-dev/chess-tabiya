@@ -1,9 +1,11 @@
 import {
   assertConsumerEvidenceView,
   declareEvidence,
+  evidenceForConsumer,
   type ConsumerEvidenceView,
   type DeclaredEvidence,
 } from "./evidence-contract.js";
+import { PRIMARY_EVIDENCE_MANIFEST } from "./evidence-catalog.js";
 import {
   matchesStructuralExpression,
   mirrorExpression,
@@ -12,8 +14,8 @@ import {
 } from "./structure.js";
 
 const RULES_PRODUCER = Object.freeze({ id: "rules.structural", version: 1 });
-const AUTHORED_PRODUCER = Object.freeze({ id: "pack.authored", version: 1 });
-const CONDITION_PROJECTION = Object.freeze({ id: "pack.authored.structural_condition", version: 1 });
+const AUTHORED_PRODUCER = Object.freeze({ id: "authored.structural_condition", version: 1 });
+const CONDITION_PROJECTION = Object.freeze({ id: "authored.structural_condition.input", version: 1 });
 const RESULT_PROJECTION = Object.freeze({ id: "rules.structural.predicate.result", version: 1 });
 
 export interface StructuralPredicateTraceNode {
@@ -29,6 +31,13 @@ export interface StructuralPredicateResult {
   readonly trace: readonly StructuralPredicateTraceNode[];
 }
 
+export interface AuthoredStructuralCondition {
+  readonly source: "pack" | "shape";
+  readonly documentId: string;
+  readonly pointer: string;
+  readonly expression: StructuralExpression;
+}
+
 export interface StructuralFeaturePredicateResult {
   readonly fen: string;
   readonly feature: StructuralFeature;
@@ -36,12 +45,12 @@ export interface StructuralFeaturePredicateResult {
 }
 
 export type StructuralPredicateEvidencePayload =
-  | StructuralExpression
+  | AuthoredStructuralCondition
   | StructuralPredicateResult
   | StructuralFeaturePredicateResult;
 
 export interface DeclaredStructuralPredicateEvidence {
-  readonly condition: DeclaredEvidence<StructuralExpression>;
+  readonly condition: DeclaredEvidence<AuthoredStructuralCondition>;
   readonly result: DeclaredEvidence<StructuralPredicateResult>;
   readonly featureResults: readonly DeclaredEvidence<StructuralFeaturePredicateResult>[];
 }
@@ -98,6 +107,7 @@ export function evaluateStructuralPredicate(
 export function declareStructuralPredicateEvidence(
   fen: string,
   condition: StructuralExpression,
+  origin: Omit<AuthoredStructuralCondition, "expression">,
 ): DeclaredStructuralPredicateEvidence {
   const result = evaluateStructuralPredicate(fen, condition);
   const featureResults = result.trace.flatMap((node) => node.expression.kind === "feature"
@@ -108,7 +118,7 @@ export function declareStructuralPredicateEvidence(
     )]
     : []);
   return Object.freeze({
-    condition: declareEvidence(AUTHORED_PRODUCER, CONDITION_PROJECTION, condition),
+    condition: declareEvidence(AUTHORED_PRODUCER, CONDITION_PROJECTION, Object.freeze({ ...origin, expression: condition })),
     result: declareEvidence(RULES_PRODUCER, RESULT_PROJECTION, result),
     featureResults: Object.freeze(featureResults),
   });
@@ -133,4 +143,31 @@ export function structuralEvidenceForAuthoring(
     throw new TypeError("Authoring structural evidence requires both the authored condition and computed result");
   }
   return view.items;
+}
+
+export function structuralEvidenceForObjective(
+  view: ConsumerEvidenceView<StructuralPredicateResult>,
+): boolean {
+  assertConsumerEvidenceView(view);
+  if (view.consumer.id !== "runtime.objective_condition" || view.consumer.version !== 1) {
+    throw new TypeError("Expected runtime.objective_condition@1 consumer view");
+  }
+  const result = view.items.find((item) => item.projection.id === RESULT_PROJECTION.id);
+  if (result === undefined) throw new TypeError("Objective structural evidence requires a computed result");
+  return matchesDeclaredStructuralPredicate(result);
+}
+
+export function evaluateAuthoredStructuralPredicate(
+  fen: string,
+  condition: StructuralExpression,
+  origin: Omit<AuthoredStructuralCondition, "expression">,
+): boolean {
+  const evidence = declareStructuralPredicateEvidence(fen, condition, origin);
+  const view = evidenceForConsumer<StructuralPredicateEvidencePayload>(
+    PRIMARY_EVIDENCE_MANIFEST,
+    { id: "authoring.predicate", version: 1 },
+    [evidence.condition, evidence.result, ...evidence.featureResults],
+  );
+  structuralEvidenceForAuthoring(view);
+  return evidence.result.payload.matched;
 }

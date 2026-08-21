@@ -5,6 +5,7 @@ import { compileEvidenceManifest, evidenceForConsumer } from "./evidence-contrac
 import {
   declareStructuralPredicateEvidence,
   structuralEvidenceForAuthoring,
+  structuralEvidenceForObjective,
   type StructuralPredicateEvidencePayload,
 } from "./structural-evidence.js";
 import type { StructuralExpression } from "./structure.js";
@@ -23,8 +24,9 @@ const condition: StructuralExpression = {
 
 describe("declared structural predicate evidence", () => {
   it("keeps a composite authored AST distinct from its total and direct feature results", () => {
-    const evidence = declareStructuralPredicateEvidence(fen, condition);
-    expect(evidence.condition.projection.id).toBe("pack.authored.structural_condition");
+    const evidence = declareStructuralPredicateEvidence(fen, condition, { source: "shape", documentId: "shape-a", pointer: "/trigger" });
+    expect(evidence.condition.projection.id).toBe("authored.structural_condition.input");
+    expect(evidence.condition.payload).toMatchObject({ source: "shape", documentId: "shape-a", pointer: "/trigger", expression: condition });
     expect(evidence.result.projection.id).toBe("rules.structural.predicate.result");
     expect(evidence.result.payload).toMatchObject({ fen, condition, matched: true });
     expect(evidence.featureResults.map((item) => item.projection.id)).toEqual([
@@ -43,7 +45,7 @@ describe("declared structural predicate evidence", () => {
   });
 
   it("delivers the authored condition and computed result through the authoring consumer", () => {
-    const evidence = declareStructuralPredicateEvidence(fen, condition);
+    const evidence = declareStructuralPredicateEvidence(fen, condition, { source: "pack", documentId: "pack-a", pointer: "/objective" });
     const manifest = compileEvidenceManifest(EVIDENCE_CONTRACT_DECLARATIONS);
     const view = evidenceForConsumer<StructuralPredicateEvidencePayload>(manifest, { id: "authoring.predicate", version: 1 }, [
       evidence.condition,
@@ -58,6 +60,17 @@ describe("declared structural predicate evidence", () => {
   });
 
   it("retains the existing refusal to evaluate an unexpanded plan signature", () => {
-    expect(() => declareStructuralPredicateEvidence(fen, { kind: "plan_signature", planClassId: "minority-attack" })).toThrow("must be expanded");
+    expect(() => declareStructuralPredicateEvidence(fen, { kind: "plan_signature", planClassId: "minority-attack" }, { source: "pack", documentId: "pack-a", pointer: "/objective" })).toThrow("must be expanded");
+  });
+
+  it("requires an admitted computed result at the runtime objective boundary", () => {
+    const evidence = declareStructuralPredicateEvidence(fen, condition, { source: "pack", documentId: "pack-a", pointer: "/objective" });
+    const manifest = compileEvidenceManifest(EVIDENCE_CONTRACT_DECLARATIONS);
+    const view = evidenceForConsumer(manifest, { id: "runtime.objective_condition", version: 1 }, [evidence.result]);
+    expect(structuralEvidenceForObjective(view)).toBe(true);
+    if (false) {
+      // @ts-expect-error Runtime objective consumption refuses a bare computed payload.
+      structuralEvidenceForObjective(evidence.result.payload);
+    }
   });
 });

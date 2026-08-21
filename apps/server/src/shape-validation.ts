@@ -3,7 +3,7 @@ import { fileURLToPath } from "node:url";
 
 import type { ShapeEntryDefinition } from "@chess-tabiya/schema/shape-entry";
 import type { StructuralExpression } from "@chess-tabiya/schema/drill-pack";
-import { matchesStructuralExpression } from "@chess-tabiya/runtime";
+import { evaluateAuthoredStructuralPredicate } from "@chess-tabiya/runtime";
 import { INITIAL_FEN } from "chessops/fen";
 import Ajv2020, { type ErrorObject, type ValidateFunction } from "ajv/dist/2020.js";
 import addFormats from "ajv-formats";
@@ -65,7 +65,7 @@ export function validateShapeEntry(value: unknown, options: { readonly probeFen?
     }
   }
   const expressionValid = !issues.some((candidate) => candidate.severity === "error");
-  if (expressionValid && matchesStructuralExpression(INITIAL_FEN, document.trigger)) {
+  if (expressionValid && evaluateAuthoredStructuralPredicate(INITIAL_FEN, document.trigger, { source: "shape", documentId: document.id, pointer: "/trigger" })) {
     issues.push(issue("SHAPE_TRIGGER_TRUE_AT_INITIAL", "/trigger", "shape trigger must not match the standard initial position"));
   }
   const triggerRefutation = containsPlanSignature(document.trigger) ? undefined : refuteStructuralExpression(document.trigger);
@@ -96,6 +96,6 @@ export function validateShapeEntry(value: unknown, options: { readonly probeFen?
     valid: !issues.some((candidate) => candidate.severity === "error"),
     issues: Object.freeze(issues),
     document,
-    ...(options.probeFen === undefined || !expressionValid ? {} : { probeMatches: matchesStructuralExpression(options.probeFen, document.trigger) }),
+    ...(options.probeFen === undefined || !expressionValid ? {} : { probeMatches: evaluateAuthoredStructuralPredicate(options.probeFen, document.trigger, { source: "shape", documentId: document.id, pointer: "/trigger" }) }),
   });
 }

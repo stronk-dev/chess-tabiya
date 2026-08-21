@@ -18,7 +18,7 @@ import {
 import { compileEvidenceManifest } from "./evidence-contract.js";
 
 const ROOT = new URL("../../../", import.meta.url);
-const EXPECTED_PRODUCERS = Object.freeze(["rules.structural", "rules.transition", "rules.phase", "rules.pivotal", "rules.endgame", "theory.shapes", "pack.authored", "recorded.engine", "recorded.tablebase", "live.stockfish", "live.syzygy", "human.maia", "human.explorer", "theory.opening_identity", "run.record", "derived.compare_narrative", "derived.story"]);
+const EXPECTED_PRODUCERS = Object.freeze(["rules.structural", "rules.transition", "rules.phase", "rules.pivotal", "rules.endgame", "theory.shapes", "authored.structural_condition", "pack.authored", "recorded.engine", "recorded.tablebase", "live.stockfish", "live.syzygy", "human.maia", "human.explorer", "theory.opening_identity", "run.record", "derived.compare_narrative", "derived.story"]);
 
 function jsonFiles(url: URL): readonly URL[] {
   return readdirSync(url, { withFileTypes: true }).flatMap((entry) => {
@@ -52,8 +52,8 @@ describe("primary evidence catalogue", () => {
     expect(outputs.find((item) => item.id === "rules.structural.reading.pawn_count")?.disposition).toEqual(expect.objectContaining({ kind: "retired" }));
     expect(outputs.find((item) => item.id === "rules.structural.predicate.outpost")?.dependsOn).toEqual([{ id: "rules.structural.predicate.pawn_safe_square", version: 1 }]);
     expect(outputs.find((item) => item.id === "rules.structural.predicate.outpost")?.payloadType).toBe("StructuralFeaturePredicateResult");
-    expect(outputs.find((item) => item.id === "rules.structural.predicate.result")?.dependsOn).toEqual([{ id: "pack.authored.structural_condition", version: 1 }]);
-    expect(EVIDENCE_PRODUCERS.find((item) => item.id === "pack.authored")?.outputs.some((item) => item.id === "pack.authored.structural_condition")).toBe(true);
+    expect(outputs.find((item) => item.id === "rules.structural.predicate.result")?.dependsOn).toEqual([{ id: "authored.structural_condition.input", version: 1 }]);
+    expect(EVIDENCE_PRODUCERS.find((item) => item.id === "authored.structural_condition")?.outputs.some((item) => item.id === "authored.structural_condition.input")).toBe(true);
   });
 
   it("covers every transition family with the fourteen independently witnessed lossy leaves", () => {

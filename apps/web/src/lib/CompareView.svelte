@@ -1,6 +1,6 @@
 <script lang="ts">
   import type { DrillPackDefinition } from "@chess-tabiya/schema/drill-pack";
-  import { comparisonNarrative, comparisonStrips, structuralReading, type BranchComparison, type ComparisonEvidenceEntry, type DrillRun, type ObjectiveTimelineEntry } from "@chess-tabiya/runtime";
+  import { comparisonNarrative, comparisonStrips, positionStructureEvidence, structuralReading, type BranchComparison, type ComparisonEvidenceEntry, type DrillRun, type ObjectiveTimelineEntry } from "@chess-tabiya/runtime";
   import { onMount } from "svelte";
   import Chessboard from "./Chessboard.svelte";
   import HonestControl from "./HonestControl.svelte";
@@ -155,7 +155,7 @@
         </div>
         {#if consequence}
           <details data-evidence-consumer="inspector.position_structure"><summary>Evidence inspector: position structure</summary>
-            {#each structuralReading(run.nodes.find((node) => node.id === column.leafNodeId)?.fen ?? run.nodes[0]!.fen).features as observation}<p>{renderStructuralObservation(observation)}</p>{/each}
+            {#each positionStructureEvidence(structuralReading(run.nodes.find((node) => node.id === column.leafNodeId)?.fen ?? run.nodes[0]!.fen)) as observation}<p>{renderStructuralObservation(observation)}</p>{/each}
           </details>
         {/if}
       </article>

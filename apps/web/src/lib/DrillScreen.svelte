@@ -1,7 +1,7 @@
 <script lang="ts">
   import type { DrillPackDefinition } from "@chess-tabiya/schema/drill-pack";
   import type { Capabilities, CorpusPage, HumanSplitPage, ReasoningPage, RunRole, SessionKind, ShapeEntryView, VoicePage } from "./api.js";
-  import { BRANCH_COLLAPSE_FLOOR, MARK_BRUSHES, MAX_COMPARISON_BRANCHES, SILENT_ASSISTANCE, branchPath, classifyPhase, collapsedBranchIds, endgameReading, feedbackDeliveryOpen, groupsFromEvents, historyFrom, liveMarkers, permittedAssistance, renderEndgameReading, renderPhaseReading, renderPivotalMarker, shapeFirings, structuralReading, transitionReading, trajectoryVerdict, type AssistanceConfig, type BranchComparison, type BranchGroup, type Decidedness, type RunMark } from "@chess-tabiya/runtime";
+  import { BRANCH_COLLAPSE_FLOOR, MARK_BRUSHES, MAX_COMPARISON_BRANCHES, SILENT_ASSISTANCE, branchPath, classifyPhase, collapsedBranchIds, endgameReading, feedbackDeliveryOpen, groupsFromEvents, historyFrom, liveMarkers, moveTransitionEvidence, permittedAssistance, pivotalMarkerEvidence, positionStructureEvidence, renderEndgameReading, renderPhaseReading, renderPivotalMarker, selectedSquareSightEvidence, shapeFiringEvidence, shapeFirings, structuralReading, transitionReading, trajectoryVerdict, type AssistanceConfig, type BranchComparison, type BranchGroup, type Decidedness, type RunMark } from "@chess-tabiya/runtime";
   import type { DrawShape } from "@lichess-org/chessground/draw";
   import { onDestroy, onMount, tick } from "svelte";
 
@@ -21,6 +21,7 @@
   import { renderStructuralObservation } from "./structural-sentences.js";
   import { renderTransitionObservation } from "./transition-sentences.js";
   import { renderCorpusPage } from "./corpus-sentences.js";
+  import { corpusEvidence, humanSplitEvidence } from "./inspector-evidence.js";
   import { RECORDED_READING_GUARD } from "./recorded-reading-sentences.js";
   import type { CheckpointNotice } from "./screen-model.js";
   import {
@@ -255,7 +256,7 @@
   );
   let entries = $derived(timelineEntries(run, pack));
   let path = $derived(historyFrom(run, run.activeCursor.nodeId));
-  let firings = $derived(shapeFirings(shapes, path));
+  let firings = $derived(shapeFiringEvidence(shapeFirings(shapes, path)));
   let shapeMarkers = $derived(firings.map((firing) => {
     const entry = shapes.find((candidate) => candidate.id === firing.entryId)!;
     return { nodeId: firing.firstNodeId, entryId: entry.id, label: entry.name, channel: entry.channel };
@@ -339,21 +340,25 @@
   );
   let displayedMarkKey = $derived(markScope === "position" ? displayedNode.transposeKey : `${run.activeCursor.branchId}:${displayedNode.id}`);
   let displayedMarks = $derived(ownMarks.filter((mark) => mark.scope === markScope && mark.scopeKey === displayedMarkKey).map((mark) => ({ orig:mark.orig as import("@lichess-org/chessground/types").Key,...(mark.dest===undefined?{}:{dest:mark.dest as import("@lichess-org/chessground/types").Key}),brush:mark.brush })));
-  let structure = $derived(structuralReading(displayedNode.fen));
+  let rawStructure = $derived(structuralReading(displayedNode.fen));
+  let structure = $derived({ ...rawStructure, features: positionStructureEvidence(rawStructure) });
+  let sightFeatures = $derived(selectedSquareSightEvidence(rawStructure));
   let transition = $derived.by(() => {
     if (displayedNode.parentId === null || displayedNode.moveUci === null) return null;
     const parent = run.nodes.find((node) => node.id === displayedNode.parentId);
-    return parent === undefined ? null : transitionReading(parent.fen, displayedNode.moveUci, displayedNode.fen);
+    if (parent === undefined) return null;
+    const reading = transitionReading(parent.fen, displayedNode.moveUci, displayedNode.fen);
+    return reading === null ? null : { ...reading, observations: moveTransitionEvidence(reading) };
   });
   let detectedPhase = $derived(classifyPhase(displayedNode.fen));
   let endgame = $derived(endgameReading(displayedNode.fen));
   let assistanceContext = $derived({ sessionKind: run.sessionKind, deliveryOpen: feedbackDeliveryOpen(run), role: viewerRole });
   let assistancePermission = $derived(permittedAssistance(assistanceContext));
   let effectiveLighting = $derived(assistance.boardLighting === "evidence" && assistancePermission.boardLighting !== "evidence" ? "sight" : assistance.boardLighting);
-  let selectedObservations = $derived(selectedSquare === undefined ? [] : structure.features.filter((item) => item.squares.some((square) => square === selectedSquare)));
+  let selectedObservations = $derived(selectedSquare === undefined ? [] : sightFeatures.filter((item) => item.squares.some((square) => square === selectedSquare)));
   let boardOverlays = $derived((effectiveLighting === "sight" || effectiveLighting === "evidence") ? selectedObservations.flatMap((item) => item.squares.map((square) => ({ orig: square, brush: "blue" }))) : []);
   let overlayCaption = $derived(selectedObservations.map(renderStructuralObservation));
-  let projectedPivotal = $derived(assistance.markers === "live" ? liveMarkers(run, run.activeCursor.branchId, assistanceContext) : []);
+  let projectedPivotal = $derived(assistance.markers === "live" ? pivotalMarkerEvidence(liveMarkers(run, run.activeCursor.branchId, assistanceContext)) : []);
   let pivotalRows = $derived(projectedPivotal.map((marker) => ({ nodeId: marker.nodeId, label: marker.kind.replaceAll("_", " ") })));
   let openPivotal = $derived(openPivotalNodeId === undefined ? [] : projectedPivotal.filter((marker) => marker.nodeId === openPivotalNodeId));
   let guidedShapes = $derived.by(() => {
@@ -375,14 +380,14 @@
   }
 
   async function requestHumanSplit(): Promise<void> {
-    if (onHumanSplit !== undefined) humanSplit = await onHumanSplit(displayedNode.id);
+    if (onHumanSplit !== undefined) humanSplit = humanSplitEvidence(await onHumanSplit(displayedNode.id));
   }
 
   async function requestCorpus(): Promise<void> {
     if (onCorpus === undefined) return;
     const decision = displayedNode.actor === "user" ? displayedNode : [...path].reverse().find((node) => node.actor === "user");
     const queryNode = decision?.parentId ?? displayedNode.id;
-    corpusPage = await onCorpus(queryNode);
+    corpusPage = corpusEvidence(await onCorpus(queryNode));
   }
 
   async function requestVoice(scope: VoicePage["scope"]): Promise<void> {

@@ -69,3 +69,27 @@ Append-only.
 - Buildability checks are green: runtime typecheck, 8 focused tests and
   `make evidence-manifest-check` (17 producers / 80 projections / 23 operations / 197 bindings).
   F1 remains implementing while the real delivery bindings and criterion-7 type fixtures land.
+
+## 2026-08-21 — resumed bind found authored-condition source collision
+
+- [[D671]] records that the first D670 amendment called shape-entry triggers
+  `pack.authored.structural_condition`, even though shape entries are an independent authority.
+- The author contract now uses `authored.structural_condition.input@1` with literal source,
+  document id and pointer. This adds one truthful normalized producer (18 total) without changing
+  schemas, content or any learner-facing behavior.
+
+## 2026-08-21 — resumed bind found reference/payload identity collision
+
+- [[D672]] records that a family-only `rules:` token was bound as a full computed predicate, while
+  checkpoint refs were bound as authored claims and pending provider refs had no payload at all.
+- F1 now declares a recorded reference resolution separately from optional exact Stockfish, Maia
+  or Syzygy event items. `renderDeclaredEvidenceRef` consumes the sealed joined view; the existing
+  `renderEvidenceRef` signature remains a producer/adapter facade so callers retain their bytes.
+
+## 2026-08-21 — resumed bind split normalized and delivery authored claims
+
+- [[D673]] records that `pack.authored.claim@1` promised a full `AuthoredFeedbackItem` while the
+  guidance adapter actually emitted `{id,text,attribution}`.
+- F1 now gives normalized guidance prose and full Checkpoint/Terminal claim items separate exact
+  projections. `claimProvenanceDeclared` consumes the admitted full item; the visible prose remains
+  unchanged.

@@ -1,4 +1,5 @@
 import type { AuthoredFeedbackItem } from "./api.js";
+import { PRIMARY_EVIDENCE_MANIFEST, assertConsumerEvidenceView, declareEvidence, evidenceForConsumer, type ConsumerEvidenceView } from "@chess-tabiya/runtime";
 
 type ClaimItem = Extract<AuthoredFeedbackItem, { readonly kind: "claim" }>;
 
@@ -8,7 +9,12 @@ function principleText(item: ClaimItem): string {
   ).join(" ");
 }
 
-export function claimProvenance(item: ClaimItem): string {
+export function claimProvenanceDeclared(view: ConsumerEvidenceView<ClaimItem>): string {
+  assertConsumerEvidenceView(view);
+  if (view.consumer.id !== "guidance.authored_claim" || view.consumer.version !== 1 || view.items.length !== 1) {
+    throw new TypeError("Expected one guidance.authored_claim@1 evidence item");
+  }
+  const item = view.items[0]!.payload;
   const earned = item.earnedEvidenceTypes.join(", ");
   const unearned = item.evidenceTypes.filter((label) => !item.earnedEvidenceTypes.includes(label));
   if (item.binding === "ledger_bound") {
@@ -20,4 +26,13 @@ export function claimProvenance(item: ClaimItem): string {
   }
   const principle = principleText(item);
   return `Author's claim, author-declared: ${item.evidenceTypes.join(", ")}. No machine record is attached.${principle === "" ? "" : ` ${principle}`}`;
+}
+
+export function claimProvenance(item: ClaimItem): string {
+  const declared = declareEvidence({ id: "pack.authored", version: 1 }, { id: "pack.authored.claim_delivery", version: 1 }, item);
+  return claimProvenanceDeclared(evidenceForConsumer(
+    PRIMARY_EVIDENCE_MANIFEST,
+    { id: "guidance.authored_claim", version: 1 },
+    [declared],
+  ));
 }

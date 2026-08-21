@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 
 import type { AuthoredFeedbackItem } from "./api.js";
-import { claimProvenance } from "./claim-presentation.js";
+import { claimProvenance, claimProvenanceDeclared } from "./claim-presentation.js";
 
 function claim(overrides: Partial<Extract<AuthoredFeedbackItem, { kind: "claim" }>> = {}): Extract<AuthoredFeedbackItem, { kind: "claim" }> {
   return {
@@ -20,6 +20,12 @@ function claim(overrides: Partial<Extract<AuthoredFeedbackItem, { kind: "claim" 
 }
 
 describe("claim provenance", () => {
+  it("rejects a bare claim at the delivery-sheet consumer boundary", () => {
+    if (false) {
+      // @ts-expect-error Delivery sheets consume an admitted full claim item.
+      claimProvenanceDeclared(claim());
+    }
+  });
   it("names only earned machine labels as recorded evidence", () => {
     const text = claimProvenance(claim());
     expect(text).toContain("Evidence recorded for: tablebase_exact.");

@@ -570,21 +570,38 @@ semantics.
    F2 selection. `guidance.deterministic@1` and `guidance.voice@1` accepts gain
    `pack.authored.phase@1`.
 7. **Authored structural conditions and computed predicate results are different projections**
-   ([[D670]], 2026-08-21). `pack.authored.structural_condition@1` carries the complete recursive
-   `StructuralExpression` AST exactly as authored, including `all`, `any`, `not`, `feature`,
-   `pieceOnSquare`, `mirrored`, both quantified forms and `plan_signature`; it is never attributed
-   to one leaf detector. `rules.structural.predicate.<kind>@1` carries a computed result for a
+   ([[D670]]/[[D671]], 2026-08-21). `authored.structural_condition.input@1` carries the complete
+   recursive `StructuralExpression` AST exactly as authored, including `all`, `any`, `not`,
+   `feature`, `pieceOnSquare`, `mirrored`, both quantified forms and `plan_signature`. Its payload
+   also carries the literal source (`pack` or `shape`), document id and JSON pointer, so a shape
+   trigger is never misattributed to `pack.authored`; it is never attributed to one leaf detector.
+   `rules.structural.predicate.<kind>@1` carries a computed result for a
    DIRECT `feature` leaf of that exact family, not the input AST.
    `rules.structural.predicate.result@1` carries the total boolean result plus a typed evaluation
    trace preserving the path, exact expression node and boolean at every visited AST node; this
    covers non-feature leaves (`pieceOnSquare`, `plan_signature`, quantified `piece`) as well as all
-   eighteen feature families. It depends on `pack.authored.structural_condition@1`; the trace,
+   eighteen feature families. It depends on `authored.structural_condition.input@1`; the trace,
    rather than an incomplete static list of feature projection ids, proves which literal nodes
    contributed. A producer adapter accepts the raw AST and emits the authored-condition and total
    result declarations (and may additionally emit direct feature-leaf declarations). Runtime and
    authoring operations consume the declared total result; no arbitrary leaf id may wrap a
    composite expression. Negation and composition change the total result, never the meaning of a
    direct feature projection.
+8. **Persisted evidence references are not source payloads** ([[D672]], 2026-08-21).
+   `run.record.evidence_ref_resolution@1` carries the exact recorded token and its current fixed
+   text/source-label resolution. A family-only rules ref retains no FEN, operands or authored
+   expression and therefore cannot be wrapped as `rules.structural.predicate.*`; a checkpoint ref
+   is not `pack.authored.claim`. When an engine, Maia or tablebase payload is attached it travels
+   beside the resolution as its own exact declared event (`live.stockfish.*`,
+   `human.maia.event@1`, `live.syzygy.result@1`). Pending refs carry only the resolution. The
+   `runtime.evidence_ref` consumer joins admitted items for presentation; it never upgrades the
+   token into a semantic predicate.
+9. **Normalized authored prose and full claim delivery items are distinct projections** ([[D673]],
+   2026-08-21). `pack.authored.claim@1` carries `{ id, text, attribution }`, the exact normalized
+   payload rendered into deterministic/voice guidance. `pack.authored.claim_delivery@1` carries the
+   full claim item including binding, declared/earned evidence kinds, spans and principle records;
+   Checkpoint/Terminal claim provenance consumes this projection. Neither projection may accept
+   the other's payload by cast.
 
 The `outpost` reading/predicate declaration names its dependency on the current
 `pawn_safe_square` predicate projection. A dependency census walks transitive edges, then content
@@ -645,7 +662,7 @@ authored-claim sheets, repertoire gap scanning, and claim-binding validation.
 | 4 | `guidance.deterministic` | `guidance.ts` sentence assembly and fallback | bound sentence consumer |
 | 5 | `guidance.voice` | `renderVoice`; `voiceCheck`; `external-voice.ts` | optional renderer over admitted rendered items (§6.1); marker/reading/steering scopes only after the §10.2 split |
 | 6 | `guidance.recorded_reading` | `appendRecordedReadings`; `renderRecordedReading` | deterministic post-provider sentence |
-| 7 | `runtime.evidence_ref` | `renderEvidenceRef`; attached analysis/guard/objective/compare grounds | exact ref projection by prefix/fact; the delivery boundary for completed Analyze results |
+| 7 | `runtime.evidence_ref` | `renderDeclaredEvidenceRef`; attached analysis/guard/objective/compare grounds | recorded ref-resolution plus optional exact source event; the delivery boundary for completed Analyze results |
 | 8 | `inspector.position_structure` | `DrillScreen.svelte` structural reading section | contextual inspector |
 | 9 | `inspector.move_transition` | `DrillScreen.svelte` “What changed” section | contextual inspector |
 | 10 | `board.selected_square_sight` | `DrillScreen.svelte` admitted overlay/caption delivery; `Chessboard.svelte` | bound square-bearing sight only |
@@ -864,8 +881,9 @@ This RFC is one code landing but has three implementation checkpoints:
 
 1. **Declare:** add types/compiler, literal declarations, closure tests and a read-only report while
    preserving current behavior.
-2. **Bind:** wrap all seventeen producer paths (the fourteen A4 paths plus `run.record` and the
-   two derived producers of §10.2) and require the branded `ConsumerEvidenceView`, the branded
+2. **Bind:** wrap all eighteen producer paths (the fourteen A4 paths plus
+   `authored.structural_condition`, `run.record` and the two derived producers of §10.2) and require
+   the branded `ConsumerEvidenceView`, the branded
    `RenderedEvidenceView` or `DeclaredEvidence<T>` at every registered operation entrypoint — a literal consumer ID string
    next to a bare payload is an anchor, not consumption ([[D666]]). Remove generic bypasses,
    including the `packet.sentences` side channel ([[D662]]) and the reasoning-review smuggling
@@ -917,15 +935,17 @@ Each criterion names the failure it is intended to catch.
    raise the named code.** Fails if a prose invariant has no executable reader or if a fixture
    passes for a different reason.
 2. **All fourteen A4 producer paths resolve to declarations and remain asserted as a subset, and
-   the full producer set is asserted set-equal to the seventeen ids** (the fourteen plus
-   `run.record`, `derived.compare_narrative`, `derived.story` — 2026-08-21 amendment). Fails if
+   the full producer set is asserted set-equal to the eighteen ids** (the fourteen plus
+   `authored.structural_condition`, `run.record`, `derived.compare_narrative`, `derived.story` —
+   2026-08-21 amendments). Fails if
    the implementer registers only the four paths already visible to voice/rendering, or if an
-   eighteenth producer appears without an amendment.
+   nineteenth producer appears without an amendment.
 3. **Authored structural conditions, computed total predicate results, leaf predicate results and
    readings are separately versioned, with leaf closure against all eighteen
    `STRUCTURAL_FEATURE_KINDS`.** A fixture evaluates a composite containing at least two different
    leaf families and negation, asserts that the authored AST is declared only as
-   `pack.authored.structural_condition@1`, and asserts that the consumed total result names the
+   `authored.structural_condition.input@1` with its exact source/document/pointer, and asserts that
+   the consumed total result names the
    exact node/path evaluation trace, including `pieceOnSquare`, `plan_signature`, quantified
    `piece` and two distinct feature families. Fails if a composite AST is wrapped under an arbitrary
    leaf id, if `outpost` predicate and reading share one identity or if `pawn_count` is advertised
@@ -1051,7 +1071,9 @@ Each criterion names the failure it is intended to catch.
 | D8 | [[D665]] phase wrapper carries `PhaseReading`; `pack.authored.phase@1` declared (§9 clause 6, criterion 24) | `evidence-contract-manifest` | implementation commit | |
 | D9 | [[D666]] closure proves consumption, not anchors: branded `ConsumerEvidenceView` at all twenty-three delivery entrypoints plus the `@ts-expect-error` type fixtures (criteria 7, 26) | `evidence-contract-manifest` | implementation commit | |
 | D10 | [[D669]] producer/acquisition anchors separated from the twenty-three real consumer boundaries (§4.1.1; criteria 7, 26) | `evidence-contract-manifest` | implementation commit | |
-| D11 | [[D670]] authored structural AST, leaf results and consumed total predicate result have truthful distinct projections (§9 clause 7; criterion 3) | `evidence-contract-manifest` | implementation commit | |
+| D11 | [[D670]]/[[D671]] source-identified authored structural AST, direct feature results and consumed total predicate result have truthful distinct projections (§9 clause 7; criteria 2–3) | `evidence-contract-manifest` | implementation commit | |
+| D12 | [[D672]] family-only/checkpoint/provider reference tokens use a recorded resolution projection plus optional exact source event, never a fabricated predicate/claim payload (§9 clause 8; criteria 6–7) | `evidence-contract-manifest` | implementation commit | |
+| D13 | [[D673]] normalized authored guidance claim and full delivery-sheet claim item have distinct payload projections and consumers (§9 clause 9; criteria 6–7) | `evidence-contract-manifest` | implementation commit | |
 
 ## Open questions
 
@@ -1130,3 +1152,17 @@ lands with implementation; no item awaits an owner.
   eighteen computed leaf results and the consumed total predicate result into truthful projection
   identities. Criteria 3, 7 and 26 and discharges D9–D11 now test those directions rather than
   rewarding empty admitted-view wrappers. No owner/product ruling was introduced.
+- 2026-08-21: resumed-bind source audit ([[D671]]). The first D670 amendment incorrectly placed
+  both pack conditions and shape-entry triggers under `pack.authored`. Replaced that projection
+  with source-discriminated producer `authored.structural_condition@1` and projection
+  `authored.structural_condition.input@1`; the producer census becomes eighteen. This is a
+  provenance correction, not a product choice.
+- 2026-08-21: resumed-bind reference audit ([[D672]]). Replaced the false mapping from family-only
+  rules refs/checkpoint refs to full predicate/authored-claim payloads with
+  `run.record.evidence_ref_resolution@1`; attached Stockfish, Maia and Syzygy bytes remain separate
+  exact source events admitted beside the resolution. The operation now consumes a sealed view at
+  `renderDeclaredEvidenceRef`; the public `renderEvidenceRef` facade is the producer/adapter.
+- 2026-08-21: resumed-bind authored-claim audit ([[D673]]). Split normalized
+  `pack.authored.claim@1` from full `pack.authored.claim_delivery@1`; deterministic/voice guidance
+  consumes the former and Checkpoint/Terminal provenance consumes the latter. This removes a live
+  payload cast without changing rendered bytes.

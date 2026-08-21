@@ -23,7 +23,8 @@ parsers or computations.
 
 The amended boundary represents all of the shipped grammar:
 
-- `pack.authored.structural_condition@1` carries the complete authored AST;
+- `authored.structural_condition.input@1` carries the complete authored AST plus its literal
+  pack/shape source, document id and pointer;
 - eighteen `rules.structural.predicate.<kind>@1` identities carry only direct feature-leaf results;
 - `rules.structural.predicate.result@1` carries the total boolean and exact path/node/result trace.
 
@@ -36,7 +37,8 @@ one leaf family.
 
 - runtime TypeScript check: green;
 - focused catalogue/structural-evidence tests: 8/8 green;
-- `make evidence-manifest-check`: green — 17 producers, 80 projections, 23 operations plus the
+- `make evidence-manifest-check`: green at the reviewed checkpoint; the resumed-bind D671
+  provenance correction intentionally re-runs it with 18 producers, 80 projections, 23 operations plus the
   explicit producerless arrows disposition, 197 bindings.
 
 The review does not declare F1 implemented. Criterion 7 still requires the remaining delivery

@@ -6,6 +6,8 @@ import { positionFromFen } from "./chess.js";
 import { classifyPhase, type DetectedPhase } from "./phase.js";
 import type { DrillRun, Node, OpponentSelection } from "./types.js";
 import { irreversibility, type IrreversibilityDetail } from "./transition.js";
+import { PRIMARY_EVIDENCE_MANIFEST } from "./evidence-catalog.js";
+import { assertConsumerEvidenceView, declareEvidence, evidenceForConsumer, type ConsumerEvidenceView } from "./evidence-contract.js";
 
 export type PivotalKind = "irreversibility" | "phase_change" | "human_divergence" | "option_collapse";
 export type { IrreversibilityDetail } from "./transition.js";
@@ -94,6 +96,29 @@ export function liveMarkers(
 ): readonly PivotalMarker[] {
   const permission = permittedAssistance(context);
   return Object.freeze(pivotalMarkers(run, branchId).filter((marker) => liveAdmitted(marker, permission)));
+}
+
+export function consumePivotalMarkers(
+  view: ConsumerEvidenceView<PivotalMarker>,
+): readonly PivotalMarker[] {
+  assertConsumerEvidenceView(view);
+  if (view.consumer.id !== "board.pivotal_marker" || view.consumer.version !== 1) {
+    throw new TypeError("Expected board.pivotal_marker@1 consumer view");
+  }
+  return Object.freeze(view.items.map((item) => item.payload));
+}
+
+export function pivotalMarkerEvidence(markers: readonly PivotalMarker[]): readonly PivotalMarker[] {
+  const declared = markers.map((marker) => declareEvidence(
+    { id: "rules.pivotal", version: 1 },
+    { id: "rules.pivotal.marker", version: 1 },
+    marker,
+  ));
+  return consumePivotalMarkers(evidenceForConsumer(
+    PRIMARY_EVIDENCE_MANIFEST,
+    { id: "board.pivotal_marker", version: 1 },
+    declared,
+  ));
 }
 
 export function renderPivotalMarker(marker: PivotalMarker): readonly string[] {

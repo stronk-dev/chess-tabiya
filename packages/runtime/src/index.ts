@@ -35,10 +35,10 @@ export {
 } from "./errors.js";
 export { appendEvents, deriveSegments, eventsSince, groupsFromEvents, projectRun } from "./events.js";
 export { feedbackDeliveryOpen, feedbackDisclosed } from "./feedback.js";
-export { shapeFirings, type ShapeFiring, type ShapeTriggerSource } from "./shape-firing.js";
+export { consumeShapeFiring, declareShapeFiringEvidence, shapeFiringEvidence, shapeFirings, type ShapeFiring, type ShapeTriggerSource } from "./shape-firing.js";
 export { classifyPhase, renderPhaseReading, ENDGAME_MATERIAL_MAX, DEVELOPED_MATERIAL_MIN, OPENING_UNDEVELOPED_MIN, MIDDLEGAME_UNDEVELOPED_MAX, PHASE_PROVENANCE, type DetectedPhase, type PhaseReading } from "./phase.js";
 export { SILENT_ASSISTANCE, permittedAssistance, type AssistanceConfig, type AssistanceContext, type AssistancePermission } from "./assistance.js";
-export { liveAdmitted, liveMarkers, pivotalMarkers, renderPivotalMarker, type PivotalKind, type PivotalMarker, type IrreversibilityDetail, type PhaseChangeDetail, type DivergenceDetail, type CollapseDetail } from "./pivotal.js";
+export { consumePivotalMarkers, liveAdmitted, liveMarkers, pivotalMarkerEvidence, pivotalMarkers, renderPivotalMarker, type PivotalKind, type PivotalMarker, type IrreversibilityDetail, type PhaseChangeDetail, type DivergenceDetail, type CollapseDetail } from "./pivotal.js";
 export {
   TRANSITION_FEATURE_KINDS,
   capturedRole,
@@ -127,9 +127,12 @@ export {
 } from "./structure.js";
 export {
   declareStructuralPredicateEvidence,
+  evaluateAuthoredStructuralPredicate,
   evaluateStructuralPredicate,
   matchesDeclaredStructuralPredicate,
   structuralEvidenceForAuthoring,
+  structuralEvidenceForObjective,
+  type AuthoredStructuralCondition,
   type DeclaredStructuralPredicateEvidence,
   type StructuralFeaturePredicateResult,
   type StructuralPredicateEvidencePayload,
@@ -198,6 +201,7 @@ export {
   EVIDENCE_CONTRACT_DECLARATIONS,
   EVIDENCE_PRODUCER_IDS,
   EVIDENCE_PRODUCERS,
+  PRIMARY_EVIDENCE_MANIFEST,
   STRUCTURAL_PREDICATE_PROJECTION_IDS,
   STRUCTURAL_READING_PROJECTION_IDS,
   TRANSITION_READING_PROJECTION_IDS,
@@ -223,6 +227,16 @@ export {
   type TheoryEvidenceRef,
   type TempoEvidenceRef,
 } from "./evidence-ref.js";
+export {
+  consumeMoveTransition,
+  consumePositionStructure,
+  consumeSelectedSquareSight,
+  declareStructuralReadingEvidence,
+  declareTransitionReadingEvidence,
+  moveTransitionEvidence,
+  positionStructureEvidence,
+  selectedSquareSightEvidence,
+} from "./reading-evidence.js";
 export {
   MATERIAL_VALUES,
   applyObjectiveEvidenceProposal,

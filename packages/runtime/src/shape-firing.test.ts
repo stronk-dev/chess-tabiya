@@ -2,7 +2,9 @@ import { resolvePackPath } from "@chess-tabiya/schema/pack-path";
 
 import { readFileSync } from "node:fs";
 import { describe, expect, it } from "vitest";
-import { shapeFirings, type ShapeTriggerSource } from "./shape-firing.js";
+import { consumeShapeFiring, declareShapeFiringEvidence, shapeFiringEvidence, shapeFirings, type ShapeTriggerSource } from "./shape-firing.js";
+import { evidenceForConsumer } from "./evidence-contract.js";
+import { PRIMARY_EVIDENCE_MANIFEST } from "./evidence-catalog.js";
 import { commitMove, createRun } from "./runtime.js";
 
 const openA: ShapeTriggerSource = { id: "a", trigger: { kind: "feature", feature: { kind: "open_file", file: "a" } } };
@@ -27,6 +29,17 @@ describe("shapeFirings", () => {
 
   it("contains no ranking or valence fields", () => {
     expect(JSON.stringify(shapeFirings([openA], [{ id: "n", fen: aOpen }]))).not.toMatch(/score|rank|severity|favours/);
+  });
+
+  it("admits detected spans at the theory consumer boundary", () => {
+    const firings = shapeFirings([openA], [{ id: "n", fen: aOpen }]);
+    const view = evidenceForConsumer(PRIMARY_EVIDENCE_MANIFEST, { id: "theory.shape_firing", version: 1 }, declareShapeFiringEvidence(firings));
+    expect(consumeShapeFiring(view)).toEqual(firings);
+    expect(shapeFiringEvidence(firings)).toEqual(firings);
+    if (false) {
+      // @ts-expect-error Shape delivery refuses a bare firing list.
+      consumeShapeFiring(firings);
+    }
   });
 
   it("records the four-entry firing envelope over every Pack B spine node without gating it", () => {
