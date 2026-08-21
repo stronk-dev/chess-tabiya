@@ -12,10 +12,10 @@ Research is **not sufficient for the full 1.0 vision**, but “do more research�
 accurate description of the whole queue.
 
 - **Five of 19 research nodes are internally complete:** R1, R2, R4, R5 and R6.
-- **Four have useful mechanical evidence but still need external judgement:** R3, R11, R12 and
-  R18.
-- **One has an executable external protocol but no participants:** R9.
-- **Nine are blocked behind named predecessors:** R7, R8, R10, R13-R17 and R19.
+- **Six have useful mechanical evidence but still need owner/external judgement:** R3, R7, R8,
+  R11, R12 and R18.
+- **R9's recruited-participant protocol is out of scope by D649**, not pending.
+- **Seven are blocked behind named predecessors:** R10, R13-R17 and R19.
 
 At the original run, only two candidate RFC nodes had sufficient architecture research:
 
@@ -31,9 +31,11 @@ F2–F11 sentence above has expired. The graph now resolves as follows:
 - **F2 implemented on 2026-08-21 (`7944ecb`).** It ships typed instance events, research-only
   eligibility and a parameterised complete local selector without choosing F5's workflow defaults
   or pretending that detector rarity supplies semantic eligibility.
-- **F3 is not open.** R6/A3/F1 are complete, but O6 remains explicitly blocked by R8/R10 and the
-  owner's Gate-F primitive/re-authoring budget. F3 may not choose a stable primitive set, pilot or
-  budget by implication.
+- **F3 is not open, but its empirical architecture gate is complete.** R6/A3/F1/R8 now specify the
+  capability/migration model and D697 separates it from final pilot learning evidence. O6's owner
+  ruling and rewrite budget remain; F3 may not choose either by implication.
+- **F4's empirical gate is complete.** R4/R8/R18 support the offline provenance compiler and local
+  exact/FTS bundle; O5 is ready for owner ruling.
 - F4–F11 retain their named research/decision predecessors.
 
 This correction is D680. It also corrects D660: the later R2 experiment supersedes the older
@@ -46,7 +48,7 @@ legal-alternative rule is the selector input after semantic eligibility.
 |---|---|---|
 | R1 + A3 | Separate board predicates, readings and learner events; require operands, grounding, abstention and validation | Which exact current families deserve default learner presentation |
 | R2 | Deterministic legal-alternative selection, local budgets and honest empty results | That rarity or sign means importance, goodness or causality |
-| R4 | Build theory knowledge separately as a deterministic provenance compiler and immutable exact/FTS bundle | The winning learner theory→drill journey |
+| R4 + R8 | Build theory separately as a deterministic provenance compiler and immutable exact/FTS bundle; use typed applicability sets and preserve exact launch/back identity | Final owner acceptance of the learner workflow |
 | R5 | Keep the deterministic renderer normative; make the LLM optional wording only | That any current model improves comprehension |
 | R6 | Require capability negotiation, dependency-aware migration and a primitive-complete pilot | That the current pack foundation is stable enough for content scale |
 | R18 | Specify the owner-ruled Choice-C appliance architecture | Final accessibility acceptance on real assistive/physical devices |
@@ -57,7 +59,7 @@ legal-alternative rule is the selector input after semantic eligibility.
 |---|---|---|
 | R3 | Nontechnical learners choose workflows/presets and understand nudges on desktop, phone and keyboard | Buildability and source correctness do not establish comprehension or acceptable noise |
 | R7 | Learners use a bounded Review Map to choose a useful replay/re-entry action | Moment value and action clarity are human outcomes |
-| R8 | Cited theory→rehearsal and review→rehearsal outperform passive/engine-PV handoff | The join can be implemented correctly and still be a poor learning workflow |
+| R8 | Owner finds the exact theory→rehearsal and review→rehearsal handoff useful | The mechanical join passes, but usefulness remains experiential |
 | R9/R15 | Learners and coaches complete real assign/observe/respond jobs | “Teacher surface” is currently a permission specification, not a validated coach workflow |
 | R11 | Blind reviewers distinguish layered bot arms on human-likeness and coherence | Move legality/distribution cannot establish felt personality |
 | R12/R13 | Short-session metrics remain stable longitudinally and support grounded action | A descriptive correlation is not yet a durable coaching claim |
@@ -70,8 +72,8 @@ The productive non-participant work is therefore narrow and concrete:
 
 1. land the protected O1/O2/O3/O4/O13 intent amendments through owner/Claude authority;
 2. resolve `shared-resource-registers` Q1/Q2 and `rfc-lifecycle-completion` Q1-Q3;
-3. F1 and F2 are implemented; keep F3 closed until O6 is ruled rather than treating Wave 6B as an
-   inseparable pair, and re-evaluate F5/F6/F8/F9 only against their remaining named predecessors;
+3. F1 and F2 are implemented; present the ready O5/O6 architecture/budget choices, then draft F3/F4
+   only after the owner rulings; final Gate-F pilot membership still waits on F5/F7 and use;
 4. draft F12 after its Choice-C intent amendment, while preserving participant accessibility as a
    release acceptance gate;
 5. prepare/recruit the R3 and R11 external sessions, since they unlock the widest downstream cuts;

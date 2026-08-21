@@ -4039,3 +4039,40 @@ mainline coverage has the same split. D691 records that an engine pivot cannot b
 prerequisite at HEAD. R7's mechanical and desk arms are complete. O7 still owns the admitted
 families, whole-game bound, engine role and shared action/provenance contract; owner use remains the
 experiential exit.
+
+## 2026-08-21 — R8 current theory↔drill join audit
+
+The disposable R8 harness pinned the current identity graph over 50 authored draft packs and 25
+official shapes. The substrate is substantial: 38 packs carry 44 shape references across 21 shapes,
+and 82 claim references name 12 principles. The server already reverse-resolves an encountered
+shape to matching pack IDs. The learner workflow fails at the final edges: Learn discards the pack
+ID and opens generic `/play`; the reverse query includes three `prospective` references; ShapePanel
+has no drill door; Library has no theory catalogue and its pack rows are inert; Review declares no
+theory/drill link form. D692, D693 and D695 record those failures.
+
+Opening identity is a different reach gap. The emitter produced 52 cited identity records across
+nine unpublished candidates, while the 50 authored draft packs carry zero and the F1 projection is
+correctly authoring-only. D694 records the boundary rather than treating the candidate shelf as
+runtime evidence. The current-product R8 arm is complete; desk comparison and a disposable
+fixed-position applicability prototype are next. Gate F and the content scale hold remain intact.
+
+## 2026-08-21 — R8 competitor transfer and exact applicability prototype
+
+The targeted desk arm separated four useful workflow shapes from their grading assumptions:
+Chess.com's adjacent Learn/Practice/Retry doors, ChessTempo's repertoire-branch continuity,
+Listudy's in-context comments/hints/reset/analyze controls, and Lichess's open study/practice
+substrate. None supplies a law-8-safe middlegame applicability authority; the common transferable
+unit is a stable variation/position identity, not “related content.” Sources and refusals are in
+`theory-drill-current-joins.md`.
+
+The fixed-position prototype passes 5/5. It resolves `carlsbad` to a versioned theory entry plus two
+present pack targets; retains `hanging-pawns` as theory with no relevant pack; excludes prospective
+shape refs; permits principle lookup only from an exact anchored claim; and keeps candidate opening
+records non-launchable. Every result preserves the source run/node. The opening index adds D696:
+52 records map to 49 transposition keys, with three French Advance positions carrying both parent
+and Main Line identities. Applicability is a set; display specificity needs a declared rule.
+
+R8's mechanical/desk arms are complete. `theory-drill/o5-o6-handoff.md` makes O5 ready and splits
+O6's compatibility/budget decision from final pilot membership. D697 records the former graph cycle:
+F3 waited on all of O6 while F7/Gate F/R10 waited downstream on F3. Gate F remains failed and the
+content scale hold remains active.

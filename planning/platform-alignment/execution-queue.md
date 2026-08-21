@@ -55,7 +55,7 @@ schema evolution.
 | Order | Job | State | Dependency |
 |---|---|---|---|
 | 3.1 | R7 Review Map/re-entry/share study | **MECHANICAL/DESK ARMS DONE; O7 + owner use remain** | Same-mainline three-policy instrument establishes local→whole-game selection and opening-only recorded-eval reach; owner use remains shared exit |
-| 3.2 | R8 theory↔drill workflow | WAIT | R3 only; R1/R2/R4 complete |
+| 3.2 | R8 theory↔drill workflow | **MECHANICAL/DESK ARMS DONE; O5/O6 handoff next** | Exact-join prototype passes with source preservation, transposition sets and honest empty; D692-D696 pinned; owner use remains exit |
 | 3.3 | R12 player metrics | **SHORT-SESSION ARM DONE 2026-08-20; longitudinal transfer external** | 12/16 literal metrics retained with 25–200-game floors; individual vector passes, archetypes fail; production admission remains O2/O9 and R13 |
 | 3.4 | R13 grounded coaching aggregates | WAIT | R7/R12 |
 | 3.5 | R14 campaign experiential closure | **PROTOCOL READY; board and real-R3-packet blockers cleared; WAIT on owner session** | three-phase owner pilot preregistered; no campaign UI or result manufactured |

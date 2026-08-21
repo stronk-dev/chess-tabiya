@@ -842,3 +842,16 @@ thresholds, presets and defaults.
 Created `planning/semantic-evidence-selection/` and moved the accepted RFC to implementing. Landing
 order is compiled contract → literal producers → selector/avoidance → D668 seal → integration.
 Product modules/defaults, schemas and content remain explicitly out of scope.
+
+## 2026-08-21 — R8 exact theory↔drill architecture complete
+
+- Current join audit: 50 draft packs, 25 shapes, 44 pack→shape refs and 82 pack→principle refs;
+  the learner path still drops exact pack identity, includes prospective refs, and offers no
+  ShapePanel/Library/Review handoff. D692-D695 record the edges.
+- Targeted first-party comparison isolates adjacent Learn/Practice/Retry, exact repertoire-branch
+  continuity, in-context hint controls and an open study substrate without importing engine grades.
+- The five-check exact prototype preserves source run/node, excludes prospective refs, treats
+  no-pack and candidate-only as honest empty, and finds 52 opening records map to 49 position keys
+  with three multi-record parent/descendant identities (D696).
+- O5 is ready. D697 splits O6's ready capability/migration/budget decision from final pilot
+  membership, removing the F3→F7→Gate-F→R10 planning cycle without lifting Gate F or D560.
