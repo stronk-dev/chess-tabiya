@@ -9,7 +9,7 @@
   `rfc/README.md`. Citing a `design/` section here would be a fabricated citation — the
   cheapest form of the standing hazard *a closure citing a ruling that says the opposite*.
 - **Exploration gate:** opened by the owner ruling of 2026-08-12, logged in
-  `planning/exploration/log.md` and recorded at `rfc/README.md:98-100`: E1 met, E2 advisory,
+  `planning/exploration/log.md` and recorded at `rfc/README.md:95-97`: E1 met, E2 advisory,
   E3/E4/E5 accepted as in-flight risk. This RFC claims nothing versioned and specifies no
   product behaviour; every row it discharges is a ledgered defect with a named artefact, not
   an open question, so law 1's *"no RFC from a GAP row"* does not bind it.
@@ -25,11 +25,17 @@
 
 **Shared-resource claims: none.** No pack lane, no run lane, no shape-entry lane, no
 principle-entry lane, no migration position, no vocabulary member. Verified at HEAD `68098e5`
-by opening the symbols: `DRILL_PACK_SCHEMA_VERSION` **0.27**, `DRILL_RUN_SCHEMA_VERSION`
-**0.17**, `SHAPE_ENTRY_SCHEMA_VERSION` **0.3**, `PRINCIPLE_ENTRY_SCHEMA_VERSION` **0.1**,
+and re-verified unchanged at `29498ba` (2026-08-21) by opening the symbols:
+`DRILL_PACK_SCHEMA_VERSION` **0.27**, `DRILL_RUN_SCHEMA_VERSION` **0.17**,
+`SHAPE_ENTRY_SCHEMA_VERSION` **0.3**, `PRINCIPLE_ENTRY_SCHEMA_VERSION` **0.1**,
 `STORAGE_VERSION` **23** (`apps/server/src/storage.ts:407`), `EVIDENCE_KINDS` seven members.
-This RFC moves none of them. Once RFC-1 lands, this document carries a `tabiya-claims` block
-reading `none`.
+This RFC moves none of them. The block below is carried now, in RFC-1's ruled position
+(immediately before `## Summary`, per the owner answer to its Q2 — [[D648]]), inert until that
+RFC's checker lands:
+
+```tabiya-claims
+none
+```
 
 ---
 
@@ -128,34 +134,47 @@ statements, zero owners.** Prose is where this repo puts a fact it cannot act on
 ### F3 — completing in halves, and it is not one document's special case
 
 [[D475]] is filed as `feedback-delivery`'s shape. I read all twelve §Active rows and their
-bodies at HEAD; **four of the twelve carry an obligation that is outside the RFC's own code,
-recorded only in prose, and unreadable by any instrument** `[V]`:
+bodies at drafting HEAD `68098e5`; **four of the twelve carried an obligation that is outside
+the RFC's own code, recorded only in prose, and unreadable by any instrument** `[V]`.
+Re-read at `29498ba` (ten rows), **three remain**:
 
 | RFC | The outstanding obligation | Where it is recorded today | Owner today |
 |---|---|---|---|
-| `feedback-delivery` | the binding wave — 98 claims, 63 mandatory pack edits, two instrument runs | §0.2, an Open question, three planning files | **none** (archived) |
-| `dead-vocabulary` | *"archival waits for independent review"* | its `**Status:**` line and its register cell | **unnamed** |
-| `learner-rating` | six changes owed to `design/06-campaign.md`, law 5 | §5.3a and its register cell | **OWNER**, unaddressed |
+| `feedback-delivery` | the binding wave — 98 claims, 63 mandatory pack edits, two instrument runs; **stage 1 landed at `a64e6c5` (2026-08-21), so this is now the only thing between the RFC and `implemented`** | §0.2, an Open question, three planning files | **none** (archived) |
+| `learner-rating` | six changes owed to `design/06-campaign.md`, law 5 (`design/06` was untouched by the `30d1d53` intent amendment, which stopped at `02`–`05`) | §5.3a and its register cell | **OWNER**, unaddressed |
 | `teacher-surface` | three edits owed to `live-marker-quality` at landing, one of them a change to the recorded terms of an owner ruling | one cell of a table in §11 | self, at landing |
 
-A shape that occurs in **one third of the active table** is a lifecycle gap, not a document's
-improvisation. It is also **not specific to content waves**: an independent review, a design-tier
-edit under law 5, and a cross-document correction are the same structure — *the specified
-surface is done and something the RFC does not execute must happen before it can complete.*
+The fourth, `dead-vocabulary` (*"archival waits for independent review"* — owner unnamed),
+**resolved between the two measurements, and how it resolved is evidence on both sides**: the
+independent review ran and it archived 2026-08-20 (`329c62b`) — the obligation was discharged,
+not dropped — but the only record of the discharge is a clause in its now-frozen `**Status:**`
+line, findable by a reader who already knows to look. That is precisely the record §3 gives a
+table and a sha. And the population did not merely shrink: `pack-population-provenance`, drafted
+2026-08-17, **already carries a `## Discharges` section citing this RFC's §3.1** with two owned
+rows — the mechanism has an adopter before it has landed.
+
+A shape that occurred in one third of the drafted table and holds **three of ten** at the
+refresh is a lifecycle gap, not a document's improvisation. It is also **not specific to content
+waves**: a design-tier edit under law 5 and a cross-document correction are the same structure —
+*the specified surface is done and something the RFC does not execute must happen before it can
+complete.*
 
 ### F4 — the state vocabulary, measured by hand
 
-I ran the parity check by hand over all **12** §Active rows at HEAD `68098e5`, comparing each
-register cell to its body's `**Status:**` line `[V]`:
+I ran the parity check by hand over all **12** §Active rows at drafting HEAD `68098e5`, and
+again over the **10** rows at refresh HEAD `29498ba`, comparing each register cell to its
+body's `**Status:**` line `[V]`:
 
-- **11 of 12 differ byte-for-byte.** Only `0000-rfc-process.md` matches, because its cell is the
-  bare word `accepted`. Every other cell and most bodies carry a dated headline and a paragraph
-  of review history.
-- **11 of 12 agree on their leading token** after stripping `**`. The single disagreement is
-  `measurement-records.md`: body `draft`, cell `returned to author 2026-08-16` — and *returned
-  to author* is not one of the six states RFC-0000 defines. That is [[D500]], and it is stable:
-  `planning/rfc-drafting-queue.md` found it at 8 of 9, RFC-1 found it at 9 of 10, I find it at
-  11 of 12 as two rows were added.
+- **11 of 12 differed byte-for-byte at drafting; 9 of 10 differ at the refresh.** Only
+  `0000-rfc-process.md` matches, both times, because its cell is the bare word `accepted`. Every
+  other cell and most bodies carry a dated headline and a paragraph of review history.
+- **11 of 12 agreed on their leading token at drafting; 9 of 10 agree at the refresh** after
+  stripping `**`. The single disagreement is the same row both times:
+  `measurement-records.md` — body `draft`, cell `returned to author 2026-08-16` — and *returned
+  to author* is not one of the six states RFC-0000 defines. That is [[D500]], and it is stable
+  across four measurements: `planning/rfc-drafting-queue.md` found it at 8 of 9, RFC-1 at 9 of
+  10, this RFC at 11 of 12, the refresh at 9 of 10 — one identical row every time, with the
+  counts moving only as table membership moves.
 
 **Those two numbers are the whole reason `make status-parity` cannot be written yet, and the
 row understates it.** [[D477]] prices the instrument at *"one grep"*. A grep comparing the two
@@ -174,7 +193,7 @@ one commit's discipline against one duplicated wave. Priced honestly:
 |---|---|---|---|
 | the seventh state | 3 lines in `rfc/0000-rfc-process.md` | — | — |
 | the cell grammar | 1 cell edit + 2 lines of header note in `rfc/README.md` | — | — |
-| `## Discharges` | 12 sections: **8 read `none`**, 4 carry **5 rows total** | **1 line** (`none`) | 1 row per obligation |
+| `## Discharges` | 10 sections at `29498ba`: **5 read `none`**, 5 carry **6 rows total** — and 3 sections already exist (`pack-population-provenance`'s two rows, RFC-1's `none`, this RFC's own), so the landing writes **7** | **1 line** (`none`) | 1 row per obligation |
 | the archiving clause | 4 lines in §Planning docs | — | one `git grep` at archive time |
 | P1–P6 | ~40 lines **added to** `tools/status-parity.mjs` | — | — |
 
@@ -212,7 +231,7 @@ than asserted. Four candidates were considered; **two are admitted and two are r
 | **`awaiting`** — the specified surface has landed; a named obligation the RFC does not execute remains | **Three readers act differently.** The archiver must *not* move the file; the ledger-flipper must *not* flip its rows; an implementer reading `implementing` today is told there is code work and there is none | **admitted** (§1) |
 | **`returned to author`** | The only reader is an implementer asking *"may I build this?"*, and the answer is identical to `draft`. `draft` is defined as *"under discussion; anything may change"* — which is exactly a returned document | **refused** — it is a **disposition**, not a state (§2) |
 | **`blocked` / `owner-blocked`** | An implementer acts the same as on `draft` or `accepted`-with-an-obligation. What a reader actually needs is *who* is blocking and *on what* — a name, not a token | **refused**; absorbed by a `## Discharges` row with owner `OWNER` (§3.4) |
-| **a state for an RFC whose acceptance criteria cannot pass** (`engine-leverage`, [[D505]]) | No reader is served by a new token: RFC-0000 rule 3 already permits amending a not-yet-implemented RFC in place with a changelog line | **refused** (§8) |
+| **a state for an RFC whose acceptance criteria cannot pass** (`engine-leverage`, [[D505]] — a premise later corrected: the criterion *was* satisfied at its landing commit, see §8) | No reader is served by a new token: RFC-0000 rule 3 already permits amending a not-yet-implemented RFC in place with a changelog line | **refused** (§8), and events confirmed it — closed 2026-08-20 with zero new machinery |
 
 **The corollary matters as much as the rule: a rule goes where it is read at the moment it
 binds.** The archiving clause therefore amends the *"On completion:"* paragraph of §Planning
@@ -243,8 +262,12 @@ with one added bullet and one amended bullet:
 *at landing* — `teacher-surface`'s three edits to `live-marker-quality`, for instance — goes
 `implementing → implemented` as today, because the landing commit discharges them. `awaiting`
 exists for the case where the obligation is a separate act by a separate party over a separate
-period. At HEAD that is **two** documents: `feedback-delivery` (a content wave) and
-`dead-vocabulary` (an independent review).
+period. At drafting that was **two** documents; at `29498ba` it is **one, and it is now in the
+state's exact shape**: `feedback-delivery` shipped its stage 1 at `a64e6c5` (2026-08-21), has no
+outstanding code work, and waits only on the binding wave — while its body and cell keep reading
+`accepted`/`implementing`, telling an implementer there is code to write. (`dead-vocabulary`,
+the second case at drafting, discharged its independent review and archived 2026-08-20 —
+see F3.)
 
 **Why not reuse `implementing`, which is what `feedback-delivery` does today.** Because the one
 reader who acts on `implementing` is the implementer, and the signal it sends them is *there is
@@ -282,7 +305,8 @@ constrains **the first word**, and nothing else. That is the entire remedy for [
 
 **Why the grammar and not merely the vocabulary.** Adding `returned to author` as an eighth
 state would satisfy the vocabulary complaint and leave the checker still unwritable, because
-**11 of 12 cells would still differ from their bodies byte-for-byte** (F4). The vocabulary was
+**9 of 10 cells would still differ from their bodies byte-for-byte** (F4, at the refresh count).
+The vocabulary was
 never the blocker. Conversely the grammar alone, without §1's `awaiting`, would force
 `feedback-delivery` to keep lying in its leading token. Both are needed and neither is
 sufficient — which is the answer to *"states, obligations, or both?"*: **both, and each is
@@ -298,6 +322,14 @@ and before `## Open questions`. It contains either the single word `none` or a t
 | id | the obligation | owner | recorded when discharged | discharged |
 |---|---|---|---|---|
 | `D1` | what must happen, in one sentence, naming a symbol, command, corpus population or document | see §3.4 | the file or commit convention that will hold the record | commit sha, or empty |
+
+**A discharged row is kept — with its discharge sha — when the RFC archives; archival never
+deletes it.** This is **ruled** (owner, D648, 2026-08-21, resolving Q2 below as proposed:
+*"Keep, with discharge SHA — preserves history without looking live"*). A row whose `discharged`
+cell carries a sha cannot be mistaken for a live claim, and deleting it would destroy the only
+record that the obligation existed — which is exactly what happened to `claim-backing`'s OQ5
+(F2). The frozen `## Discharges` table of an archived RFC is history; P5 and P6 read only rows
+with an **empty** `discharged` cell.
 
 **`none` is written, never inferred.** An absent section is a defect, not a claim of nothing
 outstanding. This mirrors RFC-1 §3's `tabiya-claims` `none` and rests on the same evidence
@@ -320,22 +352,29 @@ The contrast with the two neighbouring sections is the point:
   is something the implementer can run. A discharge is something the implementer cannot run,
   because it is not their work.
 
-#### §3.3 What an obligation is, by example — the four at HEAD
+#### §3.3 What an obligation is, by example — the three at HEAD
 
-These are written into the four bodies by this RFC's landing commit, and they are the whole
-population it creates:
+These are written into the three bodies by this RFC's landing commit, and — together with the
+rows `pack-population-provenance` has already written for itself — they are the whole population
+at `29498ba`:
 
 | RFC | id | obligation | owner | recorded when discharged |
 |---|---|---|---|---|
 | `feedback-delivery` | `D1` | the binding wave: 98 withheld claims — 63 mandatory pack edits (`author_principle` + a `principles` entry, else `CLAIM_AUTHOR_LABEL_REQUIRED` refuses), an explorer position-census pass over 60 `corpus_observed` claims in 31 packs, a tablebase legal-successor pass over 36 `tablebase_exact` claims in 12 | **`OWNER`** — §6 | `planning/content-era/log.md` + the ledger flips of criterion 11, in the shipping commit (content-wave closeout) |
-| `dead-vocabulary` | `D1` | independent review of the shipped declaration census before archival | **`OWNER`** — nobody is named today, and naming one is the act | `planning/dead-vocabulary/log.md` |
 | `learner-rating` | `D1` | six changes owed to `design/06-campaign.md`, enumerated in its §5.3a; law 5 makes them owner-tier | **`OWNER`** | `design/06-campaign.md` + `planning/exploration/log.md` |
 | `teacher-surface` | `D1` | three edits owed to `rfc/archive/live-marker-quality.md` at landing (criterion 6's two sentences, §6.2's recorded owner cost) | **`teacher-surface`** (self, at landing) | the landing commit |
 
-Note what the table does that five paragraphs of prose did not: **it makes `OWNER` appear three
-times in one grep.** For the first time the repo can answer *"what is waiting on me?"*
-mechanically — one `git grep -n OWNER rfc/*.md` over a column whose vocabulary is closed — which
-is a benefit the owner receives rather than a tax the owner pays.
+*(The drafted version had a fourth row — `dead-vocabulary`, owner `OWNER`, the independent
+review. The review ran and the RFC archived 2026-08-20 at `329c62b` before this landed; the
+discharge is real and its only record is a clause in a frozen status line, which is the argument
+for the sha column. Its row is not written retroactively — criterion 3 forbids editing archived
+RFCs.)*
+
+Note what the table does that five paragraphs of prose did not: **it makes `OWNER` appear twice
+in one grep** (plus `pack-population-provenance`'s own `OWNER` row makes three at HEAD). For the
+first time the repo can answer *"what is waiting on me?"* mechanically — one
+`git grep -n OWNER rfc/*.md` over a column whose vocabulary is closed — which is a benefit the
+owner receives rather than a tax the owner pays.
 
 #### §3.4 The owner cell has a closed vocabulary, and it may not be empty
 
@@ -392,18 +431,29 @@ input file.
 
 | | Check | Fails when | Red at HEAD? |
 |---|---|---|---|
-| **P1** | Every §Active row's status cell and every RFC body's `**Status:**` line begins with one of the seven tokens (§2's stripping rule). | A cell leads with a disposition. **`measurement-records`, today.** | **yes — 1 of 12** |
-| **P2** | For each §Active row, the cell's leading token equals the body's leading token. | The five-instance defect of [[D477]]: a resolution in a register that is not a resolution in the body. | **yes — 1 of 12**, the same row |
-| **P3** | A file under `rfc/archive/` reads `implemented`, `superseded` or `withdrawn`; a file in `rfc/` that is not `template.md` or `README.md` appears in §Active. | An archived RFC still reads `implementing`; an RFC exists in neither table (which happened to `expression-census` at `4a893dc`, per `rfc/README.md:68`). | no |
+| **P1** | Every §Active row's status cell and every RFC body's `**Status:**` line begins with one of the seven tokens (§2's stripping rule). | A cell leads with a disposition. **`measurement-records`, today.** | **yes — 1 of 10** |
+| **P2** | For each §Active row, the cell's leading token equals the body's leading token. | The defect of [[D477]] (five ledgered instances; `planning/WORK.md` §0 counts six): a resolution in a register that is not a resolution in the body. | **yes — 1 of 10**, the same row |
+| **P3** | **Two set equalities, plus the archive status rule** — **widened by the owner ruling (D648, Q3)**: (a) the set of `*.md` files in `rfc/` minus `README.md` and `template.md` **equals** the set of §Active rows; (b) the set of files under `rfc/archive/` **equals** the set of `## Archive` rows; (c) every file under `rfc/archive/` reads `implemented`, `superseded` or `withdrawn`. (`rfc/withdrawn/` is a subdirectory, outside both sets; its `## Withdrawn` table is not in the ruled scope.) | A file exists in neither register or a row names no file — **[[D638]] is the concrete failure**: at 2026-08-20 there were 63 files under `rfc/archive/` against 58 `## Archive` rows, with five RFCs findable only through pack-register history and one malformed row, so *a file can disappear from both registers*; or an archived RFC still reads `implementing`; or an RFC vanishes from §Active without an Archive row (`expression-census` at `4a893dc`). | no — 10 = 10 and 64 = 64 at `29498ba`, repaired by the D638 fix |
 | **P4** | Every RFC in §Active has exactly one `## Discharges` section; it reads `none` or parses as §3.1's table; if either status side reads `awaiting`, the table has ≥1 row with an empty `discharged` cell, and the status line names one. | A section is dropped in a rewrite; `awaiting` is written with nothing holding it open — a state that passes while measuring nothing ([[D444]]). | n/a until landing |
 | **P5** | No RFC with an undischarged row reads `implemented`, and no such RFC sits under `rfc/archive/`. | An RFC archives over an open obligation — **[[D476]] and [[D475]] in one assertion**. | n/a until landing |
 | **P6** | Every owner cell is one of §3.4's four forms, and any RFC slug it names is in §Active. | An owner is archived, blank, `TBD`, or a sentence. **This is the check `5b65048` would have failed.** | n/a until landing |
 
+**P3's widening has a prior instrument, and the seam is stated rather than duplicated.** The
+D638 repair shipped `tools/rfc-completion-harness/audit.test.ts`, which already asserts both set
+equalities (`activeRows` = root files, `archiveRows` = archive files) — and its first line
+labels it *"DISPOSABLE research harness"*: it proved the checks; it is not the durable reader.
+P3 makes the rule normative and `tools/status-parity.mjs` becomes its `make verify` reader, per
+RFC-1's *share the reader, not the rule* — the harness's set logic is the reference
+implementation, and once P3 runs in `verify` the harness can retire with its question. Neither
+equality is vacuous at `29498ba`: the sets hold **10** and **64** members ([[D444]]'s non-empty
+join requirement, satisfied by construction).
+
 **Negative fixtures are required, and two of these can pass vacuously.** P4's `awaiting` clause
 and P5 are both **implications with an empty antecedent** while no RFC is `awaiting` — they hold
 trivially and measure nothing, which is [[D444]]/[[D451]]'s exact shape. Acceptance criterion 7
-therefore requires a fixture in which each is violated, and a fixture for P6 containing **at
-least two** owner cells, since a check over a singleton proves nothing.
+therefore requires a fixture in which each is violated, a fixture for P6 containing **at
+least two** owner cells, since a check over a singleton proves nothing, and a fixture for P3 in
+which a file exists in neither register — the [[D638]] shape.
 
 **Landing order, and this RFC is its own first case.** `status-parity` cannot implement P1–P6
 before they exist, and this RFC's obligations have no reader until it does. That is exactly the
@@ -504,17 +554,20 @@ not* — and the revision that counted statements got it right at seven rows / t
 
 ### §8 — What this RFC declines to decide
 
-**`engine-leverage` and `vocabulary-wiring` ([[D497]], [[D505]]).** RFC-1 §6 routes *"whether
-those two RFCs move to `implemented` and archive"* to this document or the owner. **I decline to
-add machinery for it, because RFC-0000 already has the remedy and adding a state would be the
-ceremony this document refuses.** `engine-leverage` is not implemented, so **rule 3 applies
-verbatim**: *"small clarifications to a not-yet-implemented RFC are edited in place with a
-changelog line."* Its unsatisfiable criterion (`:1289-1291`, requiring pack `"0.23"`, run
-`"0.16"`, `STORAGE_VERSION` 21 against HEAD's **0.27 / 0.17 / 23** `[V]`) is amended in place by
-its implementer, its `:148` instruction to parallel drafters is deleted, and it then archives
-through the ordinary path. **The lifecycle is not missing a state for it; the document is missing
-an edit**, and [[D505]] is that edit's row. Under §1 it does not even reach `awaiting`: the
-obligation is its own implementer's, at landing.
+**`engine-leverage` and `vocabulary-wiring` ([[D497]], [[D505]]) — declined at drafting, and
+events resolved it exactly as the decline predicted.** RFC-1 §6 routed *"whether those two RFCs
+move to `implemented` and archive"* to this document or the owner. This RFC declined to add
+machinery, on the ground that RFC-0000 rule 3 already had the remedy and a new state would be
+the ceremony this document refuses. **Between drafting and refresh, the A0 active-RFC truth
+audit (2026-08-20) closed both rows with zero new lifecycle machinery**: both RFCs passed an
+independent clean-tree closeout and archived through the ordinary path ([[D497]] ✅), and the
+audit re-derived that the criterion this section — following RFC-1 — had called unsatisfiable
+was in fact **satisfied at its own landing commit `18d2832`**; a landing invariant does not fail
+retroactively ([[D505]] ✅ *"closed by verified archival"*). The decline stands vindicated, with
+one correction to its own premise absorbed: the document was never missing an edit either — the
+register was missing the truth, which is RFC-1's subject, not this one's. The residue [[D505]]'s
+closure names — *"the future register checker must distinguish landed history from live
+claims"* — is RFC-1 §2's landed/claimed split, already specified there.
 
 **Anything about a specific RFC's current status.** P1–P6 are checks; this RFC asserts no
 document's state except the four `## Discharges` rows of §3.3 and its own.
@@ -540,8 +593,9 @@ than restating it.
 
 **`make work-index` ([[D487]]).** No overlap. Different input (`design/BACKLOG.md` **column 1** —
 and per [[D419]]/[[D459]] **column 3 is not a status**, which this RFC reads nowhere), different
-join, different failure, different landing shape (staged, because it is red on 213 of 248 rows).
-This RFC's checks are red on **one** row at HEAD and it lands green.
+join, different failure, different landing shape (staged, because its territory spans **355 open
+ledger rows** per [[D487]]'s 2026-08-20 refresh, which no landing commit can fix). This RFC's
+checks are red on **one** row at HEAD and it lands green.
 
 #### §9.2 Every clause amended, named
 
@@ -555,8 +609,8 @@ This RFC's checks are red on **one** row at HEAD and it lands green.
 | `rfc/template.md` | §Specification guidance | one line, *count statements, not sites* (§7.2) |
 | `rfc/README.md` | §Active, header note | two lines stating §2's grammar |
 | `rfc/README.md` | §Active, one cell | `measurement-records`: `returned to author 2026-08-16` → `draft — returned to author 2026-08-16` |
-| four RFC bodies | new `## Discharges` | `feedback-delivery`, `dead-vocabulary`, `learner-rating`, `teacher-surface` (§3.3) |
-| eight RFC bodies | new `## Discharges` | `none` |
+| three RFC bodies | new `## Discharges` | `feedback-delivery`, `learner-rating`, `teacher-surface` (§3.3; `dead-vocabulary` archived 2026-08-20 with its obligation discharged — see F3) |
+| four RFC bodies | new `## Discharges` | `none` — `0000-rfc-process`, `graduation-clearance`, `measurement-records`, `assistance-controls` (`shared-resource-registers` and `pack-population-provenance` already carry theirs; re-census at landing) |
 
 **Not touched:** `design/` (law 5), `archive/` (law 2), any schema, any migration, any code
 outside the one queued instrument.
@@ -583,8 +637,10 @@ criterion that measures nothing ([[D444]], [[D451]]).
    *Fails if:* `awaiting` is added to the bullet list but not to the arrow — the transition is
    then undefined and an implementer cannot tell whether it precedes or replaces `implementing`,
    which is the ambiguity `feedback-delivery` already resolved by hand and should not have to.
-   *Also fails if:* an eighth state is added for `returned to author`, which §0's admission rule
-   refuses and which would leave 11 of 12 cells still unparseable.
+   *Also fails if:* an `accepted → awaiting` edge is added — the owner ruled it out (Q1,
+   [[D648]]: *"accepted means code has not started"*); or an eighth state is added for
+   `returned to author`, which §0's admission rule refuses and which would leave the cells still
+   unparseable (9 of 10 differ byte-for-byte at `29498ba`).
 
 2. **The grammar of §2 is stated in `rfc/0000-rfc-process.md` §RFC lifecycle and mirrored as a
    two-line note above `rfc/README.md` §Active, and `measurement-records`' cell is the only
@@ -594,15 +650,15 @@ criterion that measures nothing ([[D444]], [[D451]]).
    a cleanup pass here would destroy records no other document holds.
 
 3. **Every RFC named in `rfc/README.md` §Active carries exactly one `## Discharges` section, and
-   the eight with nothing outstanding carry `none` rather than omitting it.**
-   Count against the §Active row count (**12** at HEAD `68098e5`), not `ls rfc/*.md`, which picks
-   up `README.md` and `template.md`.
+   those with nothing outstanding carry `none` rather than omitting it.**
+   Count against the §Active row count (**10** at refresh HEAD `29498ba`; 12 at drafting —
+   re-census at landing), not `ls rfc/*.md`, which picks up `README.md` and `template.md`.
    *Fails if:* an omitted section is treated as equivalent to `none` — the exact ambiguity §3.1
    exists to remove. *Also fails if:* RFCs already under `rfc/archive/` are edited to add the
    section. Those documents are frozen (RFC-0000 rule 3), so **P4 applies to §Active only**, and
    an RFC archived after this lands carries the section it already had.
 
-4. **The four obligations of §3.3 are written as rows with a non-empty owner cell drawn from
+4. **The three obligations of §3.3 are written as rows with a non-empty owner cell drawn from
    §3.4's closed vocabulary, and `feedback-delivery`'s reads `OWNER`.**
    *Fails if:* only `feedback-delivery`'s row is written — the RFC would then have specified a
    general mechanism and shipped a one-off, which is [[D475]]'s complaint restated one tier up.
@@ -627,7 +683,9 @@ criterion that measures nothing ([[D444]], [[D451]]).
    implications with an empty antecedent at landing** — they hold trivially and prove nothing
    until an `awaiting` fixture exists. **P6's negative fixture must contain at least two owner
    cells**, one valid and one archived, because a check over a singleton is satisfied by
-   accident.
+   accident. **P3's negative fixture is a file present in neither register** — the [[D638]]
+   shape — and its passing fixture must show both sets non-empty, since a set equality over two
+   empty sets is [[D444]]'s vacuous join.
 
 8. **This RFC is `awaiting` between its documentary landing and criterion 6, and its own
    `## Discharges` row names `tools/status-parity.mjs` with owner `codex`.**
@@ -646,7 +704,7 @@ criterion that measures nothing ([[D444]], [[D451]]).
     `DRILL_PACK_SCHEMA_VERSION` (**0.27**), `DRILL_RUN_SCHEMA_VERSION` (**0.17**),
     `SHAPE_ENTRY_SCHEMA_VERSION` (**0.3**), `PRINCIPLE_ENTRY_SCHEMA_VERSION` (**0.1**),
     `STORAGE_VERSION` (**23**), `EVIDENCE_KINDS` (7 members) and all four `schemas/*.json` `$id`s
-    are byte-identical before and after.
+    are byte-identical before and after (all six re-verified unchanged at `29498ba`).
     *Fails if:* the four `## Discharges` rows of §3.3 are read as a licence to act on the
     obligations they record. Writing the row is this RFC's work; discharging it is not.
 
@@ -665,35 +723,46 @@ criterion that measures nothing ([[D444]], [[D451]]).
 
 | id | the obligation | owner | recorded when discharged | discharged |
 |---|---|---|---|---|
-| `D1` | P1–P6 implemented in `tools/status-parity.mjs` and wired into `make verify` (acceptance criteria 6 and 7) | `codex`, via `planning/codex-queue.md` | the implementing commit's sha | |
+| `D1` | P1–P6 — P3 as widened by the D648 Q3 ruling — implemented in `tools/status-parity.mjs` and wired into `make verify` (acceptance criteria 6 and 7) | `codex`, via `planning/codex-queue.md` | the implementing commit's sha | |
 
 ---
 
 ## Open questions
 
-**Q1 — Should `awaiting` be reachable from `accepted`, or only from `implementing`?**
-§1's arrow places it after `implementing`, which fits both live cases (`feedback-delivery` and
-`dead-vocabulary` have shipped code and outstanding non-code work). A hypothetical RFC whose
-*entire* specified work is a corpus pass would want `accepted → awaiting` directly. **Proposed
-resolution: only from `implementing`.** No such RFC exists, the extra edge doubles P5's
-transition surface, and §0's rule refuses a transition no reader needs today. *Resolve before
-`accepted`.*
+**Q1 — Should `awaiting` be reachable from `accepted`, or only from `implementing`?
+✅ ANSWERED — only from `implementing` (owner ruling 2026-08-21, [[D648]]).** The ruling, as
+recorded in `planning/platform-alignment/intent-amendment-handoff.md` §Process-RFC owner
+rulings: *"**APPROVED — No; only `implementing → awaiting`.** No current reader needs the extra
+edge; accepted means code has not started."* §1's arrow already places it there; the arrow is
+now closed rather than provisional, and criterion 1 enforces it. The refused alternative is kept
+for the record: a hypothetical RFC whose *entire* specified work is a corpus pass would want
+`accepted → awaiting` directly — no such RFC exists (still true at `29498ba`), and the extra
+edge doubles P5's transition surface.
 
 **Q2 — Does a `## Discharges` row belong in an archived RFC at all, or should archival delete
-it?** §3 keeps discharged rows with their shas, as history. The alternative — delete on archival
-— makes the archived document smaller and destroys the only record that the obligation existed.
-**Proposed: keep, with the sha.** `claim-backing`'s archived OQ5 is the argument in both
-directions: keeping a stale ownership sentence is what made [[D476]] unfixable, but a *discharged*
-row carries a sha and cannot be mistaken for a live claim. *Resolve before `accepted`.*
+it? ✅ ANSWERED — keep, with the discharge sha (owner ruling 2026-08-21, [[D648]]).** The
+ruling: *"**APPROVED — Yes, with discharge SHA.** Preserves history without looking live."*
+§3.1 now states it normatively. `claim-backing`'s archived OQ5 was the argument in both
+directions: keeping a stale ownership *sentence* is what made [[D476]] unfixable, but a
+*discharged* row carries a sha and cannot be mistaken for a live claim — and `dead-vocabulary`'s
+archival between drafting and refresh (F3) supplied a live demonstration of the cost of the
+alternative: a real discharge whose only record is a clause in a frozen status line.
 
-**Q3 — Should P3's "a file in `rfc/` appears in §Active" clause ship in this RFC or with the
-instrument?** It closes the `expression-census` failure (`rfc/README.md:68` — a commit removed its
-Active row and added no Archive row, so the RFC existed in neither table), which is this
-document's family but no ledger row I could find. **Proposed: ship it, and file the row.**
-*Resolve before `accepted`.*
+**Q3 — Should P3's filesystem-parity clause ship in this RFC or with the instrument?
+✅ ANSWERED — ship it, WIDENED (owner ruling 2026-08-21, [[D648]]).** The ruling:
+*"**APPROVED — Yes, widened to Active/root and Archive/filesystem set equality.** D638 is the
+concrete failure; a file can otherwise disappear from both registers."* The drafted clause
+covered only *a root file appears in §Active*; between drafting and the ruling, [[D638]] proved
+the wider failure — 63 archive files against 58 `## Archive` rows, five RFCs findable only
+through pack-register history — and was repaired 2026-08-20 with a **disposable** harness
+asserting exactly the ruled equalities. §5's P3 now specifies both set equalities; the row this
+question proposed to file exists (it is D638, ✅); the durable reader is criterion 6's
+instrument.
 
-**Proposed new ledger rows — described here, deliberately not written** (ids through **D513** are
-in use; these are proposed from **D514**):
+**Proposed new ledger rows — described here, deliberately not written** (ids through **D513**
+were in use at drafting; **all four landed 2026-08-17 under their proposed ids** — verified at
+`29498ba`: [[D514]] 🐞, [[D515]] 🐞, [[D516]] 🐞, [[D517]] 📊, each with the text below. Ids
+through **D651** are now in use; this refresh proposes no further rows):
 
 - **D514** — *The only extant statement of who owns the binding wave is inside a frozen file, and
   it names itself.* `rfc/archive/claim-backing.md:1725` reads *"**answered.** This RFC owns it"*
@@ -741,3 +810,22 @@ in use; these are proposed from **D514**):
   timeline is **3 h 06 m, not a day**, with the archiving commit having already edited both the
   register and the dependent's body — which moves the remedy from *notify the dependent* to *one
   clause in the paragraph the archiver reads*.
+- 2026-08-21: **owner answers recorded and full refresh at HEAD `29498ba`** (author pass per
+  [[D648]]; the `30d1d53` intent amendment, the D649 external-participant descope and Feedback
+  Stage 1 `a64e6c5` all landed since drafting — this RFC references no participant work, checked
+  against D649). **Q1 answered — only `implementing → awaiting`** (§1 closed, criterion 1
+  enforces); **Q2 answered — discharged rows are kept with their sha** (§3.1 now normative);
+  **Q3 answered — P3 ships WIDENED** to Active↔root and Archive↔filesystem set equality (§5),
+  with [[D638]] as the concrete failure and the disposable `tools/rfc-completion-harness/` as
+  the reference implementation the durable instrument replaces. Population refreshed:
+  `dead-vocabulary` discharged its independent review and archived 2026-08-20 (`329c62b`), so
+  §3.3 writes **three** rows, not four, and `awaiting`'s live case narrows to one —
+  `feedback-delivery`, now concretely between its landed stage 1 and the wave;
+  `pack-population-provenance` adopted §3.1 before this RFC landed (two rows, one `OWNER`). §8's
+  declined machinery was vindicated by events — [[D497]]/[[D505]] closed 2026-08-20 with zero
+  new lifecycle states, and the "unsatisfiable criterion" premise is corrected: satisfied at its
+  own landing commit `18d2832`. Parity re-run at `29498ba`: **9 of 10** byte-differ, **9 of 10**
+  token-agree, same single `measurement-records` row (fourth consecutive measurement of [[D516]]'s
+  shape). Proposed rows reconciled: D514–D517 landed 2026-08-17 as proposed; ids run through
+  D651. The metadata paragraph now carries the literal `tabiya-claims` block in RFC-1's ruled
+  position, and this RFC's own `## Discharges` row absorbs the widened P3.
