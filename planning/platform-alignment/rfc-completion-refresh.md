@@ -1,5 +1,13 @@
 # RFC completion truth — post-A0 refresh
 
+> **Update 2026-08-21:** Feedback Stage 1 has landed (`a64e6c5`, recorded `0cf0b3e`): the
+> criterion-20 author correction was applied, the Stage-1 matrix closed, and criteria 1-20a
+> verified green. The "Stage 1 dirty" row and the dirty-worktree section below describe the
+> 2026-08-20 snapshot. "After Feedback Stage 1" sequencing in the queue consequences is now
+> unblocked; the RFC stays accepted/implementing until Stage 2 closes under D560. D648
+> (2026-08-21) also discharged the five process-RFC owner questions; Claude's HEAD refresh and
+> cross-review of the two process drafts remain.
+
 **Run:** 2026-08-20
 
 **Ledger:** D637/D638

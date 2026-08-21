@@ -76,6 +76,34 @@ how loudly each is presented.
 | 5 | **Authored claims** | An author's judgement. Can simply be wrong, and with no review workflow (owner ruling 2026-08-13) provenance is the only safeguard | human hours |
 | 6 | **LLM rendering** | May only word rungs 0–5. Given latitude it fabricates fluently, which is why ADR-0005 exists | provider |
 
+**Amendment — the ladder describes source risk, not wiring and not significance
+(O1/O2/O3 RULED 2026-08-20, owner; written here 2026-08-21 by claude on those
+rulings).** Four clauses now bind alongside the table:
+
+1. **Rung-0 arithmetic may be exact within its declared scope, but a detector
+   name, a projection or a learner-facing interpretation is not automatically
+   exact.** A3 (`design/research/detector-semantic-conformance.md`, 2026-08-20)
+   measured the gap: only 11/18 structural families round-trip, seven are
+   subset/lossy/matcher-only, and 0/3,371 transition observations retain
+   squares. Operand loss and projection mismatch are why **semantic eligibility
+   is a separate gate from the source's rung**.
+2. **Eligibility precedes selection** (O2). A learner-facing event requires
+   typed subject/object/squares, sign, grounding, exactness/confidence,
+   abstention, and positive/hard-negative validation. Raw atoms remain
+   inspector-eligible.
+3. **Local distinctiveness/rarity may select among already-eligible events but
+   cannot establish valence, causality, importance or a move grade** (O2/O3;
+   R2's measurement explicitly refused rarity and relation sign as
+   significance).
+4. **Selection is deterministic** (O3): local legal-alternative comparison,
+   deterministic ties, explicit critical overrides, per-module budgets and
+   honest empty output. The measured 20%/two-fact values are candidates, not
+   frozen constants — exact defaults remain R3's.
+
+The ladder ranks what a **source** can get wrong. Which producer serves which
+consumer, in which form, at which time is O1's manifest question, not a rung
+property.
+
 Two consequences follow, and they are the useful part of the ladder:
 
 **The engine-condition rule — when a rung-2 fact may FIRE, not just be shown**
@@ -149,6 +177,13 @@ matrix honest:
 > to neither — any rung may render in any form, and changing the form never
 > changes what may be said or when.**
 
+**Amended 2026-08-20 (O1/O4; written 2026-08-21 by claude on those rulings):**
+form remains orthogonal to source *honesty*, but "any rung may render in any
+form" is **not implicit permission** — a producer may use only the forms the
+compiled manifest declares for it, under its consumer/timing/disposition
+constraints. The sentence-test below still governs what may be said; the
+manifest governs which producer/form pairs exist at all.
+
 A best-move arrow is not dangerous because it is an arrow; it is dangerous
 because it is a rung-2 verdict delivered pre-commit. The same arrow drawn during
 review is fine. Conversely, a rung-0 sight fact is honest in every form —
@@ -182,6 +217,32 @@ own defaults; the learner adjusts within what disclosure permits. **No form may
 smuggle a source past its rung's rules** — the acceptance test for every new
 form is: render the same content as a sentence; if the sentence would be
 refused, so is the overlay.
+
+**Amended 2026-08-20 (O4; written 2026-08-21 by claude on that ruling).** The
+configuration model is layered, not one raw matrix:
+
+- **Workflow identity and the requested preset are stored separately from
+  technical source preferences.** Ordinary views expose **modules and
+  presets**; raw source/form switches live in Advanced/Custom surfaces or the
+  inspector — and every registered primitive still has an explicit disposition
+  somewhere (advanced/custom composition, inspector, or author/operator
+  surfaces).
+- **Effective assistance is `requested preset ∩ workflow/session ceiling ∩
+  honesty/access ∩ source availability` — every term only narrows.** A
+  workflow or session ceiling can only remove assistance, never add it.
+- **Requested exact sight is legal pre-commit; proactive blunder prevention
+  belongs only to an explicit Support preset and is not the rehearsal
+  default.**
+- **Theory-only, honest-empty and source-unavailable are first-class states**,
+  rendered as themselves rather than as failures.
+- **Input semantics must be equivalent for touch, hover/pointer and
+  keyboard/assistive use.**
+
+A5 (`design/research/workflow-default-conformance.md`, 2026-08-20) is the
+measured negative baseline this amends away from: 54 raw controls, one unnamed
+default, 2/6 direct workflow bindings, byte-identical session-kind permissions.
+Exact preset names, budgets, defaults and Review Map moments are deliberately
+not chosen here — they remain with R3/R7.
 
 ## 3a. The default is silence, and recovery is the skill
 
@@ -252,6 +313,14 @@ live** (`04-content-architecture.md` §0), which is what B9 + B10 + B11 produce
 when assistance is turned up. §3a sets the *default*; this is a mode a learner
 chooses.
 
+**Amended 2026-08-20 (O1/O2; written 2026-08-21 by claude on those rulings):
+guided mode is a module composition, not "the shape library rendered live."**
+Shape entries may ground a structure/theory nudge *module*; threat radar,
+safe-move warning, legal affordance and compare/review modules consume
+different eligible producers, each under the manifest's declarations. **No
+module may dump the raw evidence pool.** The one-line rule below is unchanged —
+it governs what any module may say.
+
 **There is one line, and it is the whole design:**
 
 | Permitted — naming a pattern | Forbidden — evaluating this position |
@@ -313,6 +382,22 @@ The rendering contract, which is checkable rather than aspirational:
    work — so this section states the intended contract, and the packet grammar
    and machine-check rule are B10-RFC detail, not shipped behaviour
    (corrected 2026-08-14; the earlier text overclaimed).
+
+**R5's measured boundary (2026-08-20,
+`design/research/llm-renderer-contract.md`; written here 2026-08-21 by claude
+on the O1 ruling) sharpens the contract:**
+
+- **Deterministic rendering is normative** and the provider-off fallback; the
+  authored/deterministic sentence is what ships by default.
+- The LLM receives **only selected evidence** — post-eligibility,
+  post-selection — and may vary tone, order and brevity **after** deterministic
+  provenance/citations are fixed outside its output.
+- It **never selects evidence, grades moves, adds theory, chooses a rung or
+  preset, or raises assistance.**
+- **A schema-valid model response is not proof of citation preservation** —
+  R5's typed hosted arms returned valid schemas and admitted IDs in 16/16 cases
+  and still dropped required citations. Each provider/model version must pass a
+  conformance set or fall back to deterministic rendering.
 
 **"Beautifully annoying" is a real design property, not a joke.** A voice with
 personality is memorable, and memorable is the difference between a concept the
@@ -501,6 +586,10 @@ Genuine forks, not gaps to be filled by whoever writes the next RFC:
    "theatre", which contradicted §3a; rung
    2 reveals the answer, so showing it is contamination. Somewhere in between —
    probably at rung 1 or 3 — the line sits, and it may move by mode.
+   **Partially ruled 2026-08-20 (O4): requested exact sight may be available
+   pre-commit; proactive prevention requires an explicit Support preset and is
+   not the rehearsal default.** What remains open is R3's question — the exact
+   default composition and budgets per workflow.
 2. **How deep discovered consequence goes — RESOLVED for v1** by the guard and
    lighting specs: one consequence hop, scope sentences carried; deeper is a
    form question behind the invariant review. *(2026-08-14)*
@@ -516,6 +605,11 @@ Genuine forks, not gaps to be filled by whoever writes the next RFC:
 4. **Whether Just Play's defaults are the learner's or the product's —
    RESOLVED**: silence is the product's opinion (§3a ruling); everything else is
    the learner's per-context `AssistanceConfig`. *(2026-08-14)*
+   **Updated 2026-08-20 (O4): raw per-context configuration is no longer the
+   ordinary default model.** Workflows carry product opinions — presets and
+   modules — and advanced controls remain configurable underneath (§the config
+   owns the matrix, as amended). Silence remains the product's opinion for
+   rehearsal (§3a).
    *(original)* **Whether Just Play's assistance defaults are the learner's choice or the
    product's opinion.** A product with a view is more useful and more
    presumptuous; both are defensible.

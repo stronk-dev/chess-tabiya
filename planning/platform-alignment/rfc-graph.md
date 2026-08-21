@@ -11,6 +11,12 @@ The architecture research for F1/F12 is sufficient, but `intent-amendment-handof
 protected O1-O4/O13 intent debt that still makes drafting illegal. Research-ready is not
 authority-ready.
 
+> **Update 2026-08-21:** the O1-O4/O13 intent amendments have landed in `design/02`-`05` (claude
+> on the owner's rulings), removing that intent debt; F1/F12 now wait only on their named process
+> predecessors. Feedback Stage 1 has also landed (`a64e6c5`, recorded `0cf0b3e`), so
+> "after Feedback Stage 1" rows below are unblocked; its RFC remains accepted/implementing until
+> the Stage-2 binding wave closes under D560.
+
 ## Existing-document reconciliation
 
 | Existing RFC | Current register state | Alignment action before new drafting |

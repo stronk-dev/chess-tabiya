@@ -3756,3 +3756,30 @@ principle-entry schema now; place `tabiya-claims` immediately before `## Summary
 their SHA; and enforce both Active/root and Archive/filesystem set equality. D648 records the
 ruling. Neither process RFC is accepted by the ruling alone—Claude's HEAD refresh, criterion
 reconciliation and cross-review remain the next author action.
+
+## 2026-08-21 — protected intent now mirrors the O1-O4/O13 rulings; four breadth gates re-stated
+
+The law-5 amendment pass (claude on the owner's rulings, per
+`planning/platform-alignment/intent-amendment-handoff.md`, D640) landed in `design/02`-`05`.
+`design/02` records O13 Choice C as the 1.0 deployment floor (appliance clauses named, hosted
+retained without core-journey secrets, source model/monetization still open) and the web-first
+responsive PWA target. `design/03` reframes the raw evidence list as the advanced inspector
+inventory under O1's compiled producer→evidence→consumer manifest. `design/04` adds the Gate-F
+primitive definition and D531 principle-classification ownership. `design/05` adds the
+eligibility/selection amendment, manifest-declared forms, the layered O4 configuration model,
+guided-mode-as-modules and R5's measured LLM boundary; open questions 1 and 4 are updated as
+partially ruled.
+
+Gate mirror changes here: B9 gains its A3 qualification (11/18 structural families round-trip;
+zero complete families unconditionally learner-admissible), and the 2026-08-14 "B1-B11 all green"
+headline carries a dated correction — B4 (A4), B8 (R18/O13), B9 (A3) and B10 (A5) are negative or
+qualified as current integration truth while their historical landings stand. Canonical wording
+lives in `design/03` as amended; evidence: `design/research/evidence-contract-topology.md`,
+`release-platform-audit.md`, `detector-semantic-conformance.md`,
+`workflow-default-conformance.md`.
+
+D649 (owner, 2026-08-21) is folded through: external participant studies are descoped; the
+mechanical/desk halves of R3/R9/R11/R15 stand and the owner's own play sessions remain the
+validation instrument. R3/R7/R8/R15 product decisions stay open — nothing in this pass answers
+them. The D640 BACKLOG row update, the intent-parity-harness rework and `make verify` were outside
+this pass's file authority and remain with the closeout owner.

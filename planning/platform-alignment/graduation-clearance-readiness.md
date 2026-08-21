@@ -1,5 +1,10 @@
 # Graduation-clearance readiness after the foundation hold
 
+> **Update 2026-08-21:** Feedback Stage 1 has landed (`a64e6c5`, recorded `0cf0b3e`), so step 1 of
+> the legal landing sequence below is complete and the "uncommitted" precondition is satisfied.
+> Steps 2-5 (criterion-13 correction, mechanism/read-only plan, D560 budget decision) remain as
+> written.
+
 **Run:** 2026-08-20
 
 **Ledger:** D642

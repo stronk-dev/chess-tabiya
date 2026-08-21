@@ -577,3 +577,46 @@ Append-only. Record research, rulings, RFC transitions, implementation closeout 
 - Execution truth was refreshed: Feedback Stage 1 is landed; graduation's corrected mechanism and
   read-only planner are next after its author correction, while D560 continues to block corpus
   application and Feedback Stage 2.
+
+## 2026-08-21 — the O1-O4/O13 intent amendments landed (claude on the owner's rulings)
+
+- Executed `intent-amendment-handoff.md` as the law-5 claude-on-an-owner-ruling pass. Mirrored,
+  did not manufacture: every R3/R7/R8/R15 boundary the packet marks open is preserved as open.
+- `design/02-product-shape.md`: O13 Choice C recorded as the 1.0 deployment floor with all nine
+  appliance clauses named; the self-hostable appliance is a core supported topology; hosted
+  multi-user is retained but no core learner journey may depend on a hosted secret/provider;
+  source model and monetization preserved open. Platform is partially ruled: web-first responsive
+  PWA is the 1.0 target, native apps outside 1.0; per D649 the screen-reader/physical-device
+  release gate is proven by the owner's own devices and use, not recruited participants.
+- `design/03-product-breadth.md`: the raw producer list is now the advanced analysis inspector
+  inventory; ordinary workflows consume named modules/presets under O1's compiled
+  producer→evidence→consumer manifest; LLM wording never selects or grades evidence. Gate rows
+  corrected with dated evidence and history retained: B4 negative on A4
+  (`design/research/evidence-contract-topology.md`), B8 negative against the Choice-C floor on
+  R18 (`design/research/release-platform-audit.md`), B9 qualified on A3
+  (`design/research/detector-semantic-conformance.md`), B10 qualified on A5
+  (`design/research/workflow-default-conformance.md`). Drill loop and native match untouched;
+  Campaign/Coach/Streamer not promoted.
+- `design/04-content-architecture.md`: the O1/Gate-F primitive definition (producer, typed
+  projections, operands, grounding/exactness/abstention, consumers, compatibility; distinct
+  projection identities per A3; machine-readable capability/semantic dependencies;
+  `outpost`→`pawn_safe_square` migration case; D560 hold until Gate F + dependency-aware dry-run
+  + primitive-complete sacrificial pilot). D531 principle-classification ownership recorded in
+  the production model. O5/O6 theory-source and stable-primitive choices left open.
+- `design/05-in-run-experience.md`: ladder amendment (source risk, not wiring/significance;
+  eligibility precedes selection with the O2 learner-event bar; rarity cannot supply valence;
+  O3 deterministic selection), manifest-declared forms replace implicit any-rung-any-form,
+  layered configuration (workflow identity/preset separate from source prefs; narrowing
+  intersection; Support preset for proactive prevention; first-class empty states; input
+  equivalence), guided mode restated as a module composition, R5's measured LLM boundary, and
+  open questions 1/4 updated as partially ruled.
+- Mirrors reconciled: decision-queue O1-O4/O13 rows now name the amended sections and carry the
+  D649 posture; `planning/exploration/gates.md` gained the B9 A3 qualification and a dated
+  correction to the stale "B1-B11 all green" headline.
+- Stale Feedback Stage 1 planning corrected: dated landed-at-`a64e6c5` notes added to
+  `active-rfc-audit.md`, `graduation-clearance-readiness.md`, `rfc-completion-refresh.md` and
+  `rfc-graph.md`; `execution-queue.md` was already current.
+- NOT done, out of this pass's authority: the D640 ledger-row update in `design/BACKLOG.md`, the
+  intent-parity-harness rework, `make verify`, and the five process-RFC recordings (D648's
+  cross-review is a separate author action). "Codex runs mechanical instruments" could not be
+  traced to D531's text and was left out of `design/04`. Proposed ledger rows start at D650.

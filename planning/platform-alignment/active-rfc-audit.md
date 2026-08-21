@@ -6,6 +6,12 @@
 > and 1.0 outcome completion. The row-by-row A0 result remains the source for the four clean-tree
 > implementation reviews.
 
+> **Post-audit correction, 2026-08-21:** Feedback Stage 1 has since **landed** — implementation at
+> `a64e6c5`, recorded at `0cf0b3e`, criteria 1-20a closed with `make verify` and the browser gate
+> green. The "dirty worktree / uncommitted" statements below describe the 2026-08-20 snapshot at
+> `e5a3f3f` and are no longer current; the RFC remains accepted/implementing pending its
+> separately governed Stage-2 binding wave under D560.
+
 **Run:** 2026-08-20
 
 **Program job:** A0

@@ -52,6 +52,33 @@ Supersedes the self-hosted working default on this axis only. **Still open:
 source model and monetization**, which remain OSS-compatible build-for-self with
 no assumed revenue model until ruled.
 
+**Deployment axis, amended — O13 RULED 2026-08-20 (owner: Choice C; written here
+2026-08-21 by claude on that ruling).** The 1.0 release target is R18's stronger
+**appliance floor**. This amends the 2026-08-12 ruling rather than replacing it:
+two topologies are supported, and neither is informal.
+
+- **A reproducible self-hostable appliance is a core supported topology**, not a
+  build-for-self possibility left to whoever can read the Makefile.
+- **Hosted multi-user remains a supported topology** (the 2026-08-12 ruling
+  stands), but **no core learner journey may depend on a hosted secret or
+  provider** — the rehearsal loop must complete on the appliance alone.
+
+The appliance clauses O13 names, all owned by F12 as the 1.0 release floor:
+offline knowledge/tablebase support; explicit service-worker update semantics;
+signed/attested images; multi-architecture resource tiers; a complete
+reverse-proxy deployment; account export/delete; backup/restore/upgrade; a
+rights/SBOM inventory; and accessible input/responsive floors. R18's audit
+(`design/research/release-platform-audit.md`, 2026-08-20) measured the current
+build **below this floor** — no portable export/backup contract, deletion
+retains solo runs, capabilities stay green on Maia loss, pointer-only board
+entry, Tab traps, missing distributed notices/SBOM — and the O13 ruling is
+explicit that the build **may not be called 1.0-with-known-issues** while below
+it.
+
+**Deliberately preserved as open by O13: source model and monetization.** The
+ruling fixes the deployment floor only; those two axes remain exactly as stated
+above until separately ruled.
+
 What follows mechanically, and is scheduled rather than open:
 
 - **Identity is a real boundary.** Accounts, authentication, and per-viewer
@@ -78,12 +105,22 @@ What follows mechanically, and is scheduled rather than open:
   a modular monolith remains a defensible architecture for a hosted deployment.
   It needs an explicit re-decision that adds the auth boundary, not a rewrite.
 
-## Platform — OPEN (exploration Q3)
+## Platform — partially RULED by O13 (2026-08-20); remainder open (exploration Q3)
 
 Working default: web-first (TypeScript/**Svelte 5** + chessground — ruled 2026-08-12; the archive sketch said React),
 responsive. Mobile-native excluded from v0 (three times over, in the brief's scope
 docs). The unexamined question: whether the rehearsal loop — short, repeatable,
 tactile — is actually a strong mobile-web/PWA fit. Revisit after Q1a/Q1b show evidence.
+
+**O13 resolves this only to the extent it ruled (written 2026-08-21 by claude on
+that ruling): web-first responsive PWA is the 1.0 target; native apps remain
+outside 1.0.** The PWA half is currently manifest-only (R18: zero service-worker
+registrations), which is why explicit service-worker update semantics is an
+appliance clause above rather than a nicety. Real screen-reader and
+physical-device proof remains a release gate under F12; per D649 (owner,
+2026-08-21 — *"it's a personal project; I will share it once it's perfect"*) that
+proof is established by the owner's own devices and use, not by recruited
+participant studies.
 
 ## Adoption posture (owner ruling, 2026-08-14)
 

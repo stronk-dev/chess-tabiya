@@ -51,6 +51,34 @@ the human move distribution at a level (Maia); exact truth below eight pieces
 What is **not** primitive, and is the only thing a human must supply: **which of
 those facts matters here, and what it is called.** Salience and naming.
 
+**Amendment — what "primitive" must mean under O1 and Gate F (O1 RULED
+2026-08-20, owner; written here 2026-08-21 by claude on that ruling).** A
+reusable primitive is **not merely a schema enum or a shape trigger**. To be
+registered in O1's compiled producer→evidence→consumer manifest it declares:
+
+- its **producer**;
+- its **typed projection(s)**;
+- its **operands**;
+- its **grounding, exactness and abstention** contract;
+- its **consumers**; and
+- its **compatibility** (version and deprecation posture).
+
+Predicates, inspector readings and learner events may project the same
+underlying fact differently and therefore need **distinct semantic identities
+and versions**. A3 (`design/research/detector-semantic-conformance.md`,
+2026-08-20) measured why this cannot be one identity: seven of eighteen
+structural families are subset/lossy/matcher-only and 0/3,371 transition
+observations retain squares. Pack capability requirements and semantic
+dependencies are **machine-readable**, so a migration finds indirect users —
+the `outpost`→`pawn_safe_square` case is the named example. Adding a producer
+does **not** require rewriting unrelated packs; a pack changes only when it
+claims that capability or depends on changed semantics.
+
+**The D560 scale-content hold remains active** until Gate F, a dependency-aware
+migration dry-run, and a primitive-complete sacrificial official pilot pass.
+**Deliberately not chosen here:** the 1.0 theory source and the stable primitive
+set — O5/O6 remain blocked by R8/R10.
+
 ### The conflation this exposes
 
 The shipped pack format bundles two different kinds of authored content:
@@ -330,3 +358,15 @@ via study-import and session-distillation tooling rather than hand authoring.
 K10 is firing and the answer is better tooling (importers, corpus mining,
 authoring assist), not more hours. That measurement is the first pack's real
 deliverable.
+
+**Principle ownership (D531, owner ruling 2026-08-17; recorded here 2026-08-21
+by claude on that ruling).** The principle registry **grows where a real gap
+shows** — a new principle is authored when several claims cluster on a rule the
+existing set does not express, and each carries its `counterCase`.
+**Classification of claim↔principle pairings is claude's, against cited
+principles, reviewed by the owner** — on the owner's reasoning that
+cross-referencing established theory is not manufacturing it (D530). The
+ruling's own precondition stands: principles must first be regrounded to cited
+chess tradition (`standsOn: "chess_tradition"` with real citations) before
+pairings against them mean anything. All of this is content work and stays
+behind the D560 hold and Gate F.

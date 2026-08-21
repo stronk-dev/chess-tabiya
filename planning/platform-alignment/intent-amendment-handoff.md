@@ -8,6 +8,13 @@
 contradictions but may not edit them. The owner has already ruled O1-O4 and O13; this pass should
 mirror those rulings without manufacturing the remaining R3/R7/R8/R15 decisions.
 
+**Executed 2026-08-21 (claude on the O1-O4/O13 rulings).** The surgical edits below landed in
+`design/02`-`05`; the decision queue, gates mirror and both logs record the result. **D649
+(owner, 2026-08-21) landed after this packet was prepared:** external participant studies are
+descoped — where this packet preserves "participant accessibility success" or other
+recruited-participant work as pending obligations, the mechanical/desk halves stand and the
+recruited arm is out of scope, while the owner's own play sessions are not descoped.
+
 ## Required result
 
 After this author pass, a future RFC author must read one coherent intent:
