@@ -660,3 +660,22 @@ Append-only. Record research, rulings, RFC transitions, implementation closeout 
   criterion 13 names withdrawn `GRADUATION_CLEARANCE_SUBJECT_UNSUPPORTABLE`; the normative table and
   criterion 17 require `GRADUATION_CLEARANCE_SUBJECT_UNGRAMMATICAL`. D560 still gates corpus apply.
 - Next: exact-symbol/buildability and cross-review of F1; only an accepted RFC authorises code.
+
+## 2026-08-21 — F12 split and accessible-board-input drafted
+
+- Refreshed R18 before copying it into an RFC: D614's README defect is closed and D537/D538/D573
+  moved the exact live pointer matrix from 4/90 to 90/90. D605-D613 and D615 remain real; keyboard
+  move entry and normal Tab traversal are still absent.
+- Split Choice C into seven bounded child mechanisms plus one integrated release proof in
+  `release-platform/f12-work-order.md`. Independent deployment/data/operations/input work is
+  separated from provider health (behind F1), runtime distribution (partly behind F3/F4), and
+  offline knowledge/PWA (behind F4).
+- Surfaced two owner decisions rather than hiding them in implementation: private-vs-shared
+  deletion retention, and the `core` / FOSS `cpu` / optional separately disclosed `accelerated`
+  image/resource matrix.
+- Drafted `rfc/accessible-board-input.md` as F12-F. One controller owns legal move submission for
+  click/drag/touch, keyboard navigation, an assistive semantic grid and SAN/UCI text entry; the
+  permanent browser matrix expands from 90 to 150 exact cells. Unmodified Tab returns to focus
+  traversal; no evidence or assistance is added.
+- No product code, schema, storage, content or protected intent changed. Both drafts require
+  buildability/cross-review and acceptance before implementation.

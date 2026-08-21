@@ -78,6 +78,11 @@ The diagram shows architectural ancestry, not permission to draft nodes early.
 | F11 | **Professional/social composition** | R15–R18, O11/O12, relevant F5/F6/F8/F9 accepted | Explicit coach/streamer/player journeys; roles/consent/delay/fair-play/moderation; shared evidence modules; retained review/re-entry context | Amend `teacher-surface` and live-session lineage; split human play if admitted and independently deployable |
 | F12 | **Release platform contract** | R18, O13; all mandatory 1.0 nodes accepted | Reproducible self-host profile; provider-off degradation; rights inventory; export/delete; accessibility/input/mobile floors; observability/update/backup | Amend deployment/PWA/settings lineage; no federation by implication |
 
+**F12 split, 2026-08-21:** `release-platform/f12-work-order.md` decomposes the Choice-C contract
+into deployment, data lifecycle, operations, provider health, distribution, accessible input,
+offline/PWA and integrated-release proof. `rfc/accessible-board-input.md` is the first draft;
+the integrator remains behind every mandatory 1.0 node.
+
 ## Schema and migration discipline
 
 No candidate may reserve a lane while still blocked by research or owner decision. When a node is

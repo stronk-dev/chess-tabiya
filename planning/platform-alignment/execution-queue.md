@@ -111,6 +111,12 @@ claims, a planning directory, and accepted status before implementation.
 `rfc/evidence-contract-manifest.md` is the F1 draft; it now waits on its exact-symbol/buildability
 author review and acceptance. No F1 product code is authorised yet.
 
+**F12 update, 2026-08-21:** R18/O13 are split into bounded child contracts in
+`release-platform/f12-work-order.md`. `rfc/accessible-board-input.md` is the first independent
+draft (F12-F); deployment and operations may draft independently, provider health waits on F1,
+and runtime bundle/offline PWA work waits on F3/F4. Two owner choices remain: deletion retention
+and the core/CPU/accelerated resource-tier matrix.
+
 ## Phase 7 — implementation and integration
 
 Implementation follows accepted RFC order. Completion is not a set of isolated green unit tests:
