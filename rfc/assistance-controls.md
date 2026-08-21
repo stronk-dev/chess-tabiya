@@ -30,6 +30,10 @@ concurrent session landed D493's `SILENT_ASSISTANCE.boardLighting` restoration a
 `sessionErrorMessage` to `session-controller.ts`. Both are absorbed below rather than
 described away; neither changes a disposition.*
 
+```tabiya-claims
+none
+```
+
 ## Summary
 
 Three ledger rows — D307, D308, D309 — describe one object: **the controls by which a

@@ -46,6 +46,7 @@ are documented in `docs/branch-runtime.md`. The normative run shape remains
 ```sh
 pnpm install
 make verify
+make register-check
 make build
 make test-browser
 make pack-check FILE=content/drafts/my-pack.json
@@ -59,7 +60,10 @@ make down
 
 `make verify` is the required local/CI gate and runs strict type checking, Vitest (including
 fast-check runtime invariants), and schema/scaffold plus deployment-manifest
-verification. `make build` separately proves the Svelte production bundle.
+verification. It also runs `make register-check`, which joins every active RFC's
+`tabiya-claims` declaration to the six shared-resource registers, derives their landed heads
+from the tree, refuses collisions, and prints the current next lanes. `make build` separately
+proves the Svelte production bundle.
 `make test-browser` builds and starts the default mock-backed application and
 runs the full Playwright episode in a separate browser CI job.
 

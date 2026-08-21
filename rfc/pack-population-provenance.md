@@ -9,13 +9,18 @@
 - **Exploration gate:** RFC drafting opened by owner override, `planning/exploration/log.md`
   2026-08-12 (*"owner chose immediate RFCs"*). Routed here as **RFC-5** by
   `planning/rfc-drafting-queue.md` §2.5, which records the gate as PASSES with one carve-out (Open questions, Q1).
-- **Depends on:** `rfc/shared-resource-registers.md` (draft — the `evidence-kinds` register this
-  RFC claims a member in does not exist yet); `rfc/graduation-clearance.md` (accepted — holds pack
+- **Depends on:** `rfc/archive/shared-resource-registers.md` (implemented — the `evidence-kinds`
+  register and this RFC's live member claim now exist); `rfc/graduation-clearance.md` (accepted — holds pack
   lane 0.28)
 - **Parent / amends:** — (extends `rfc/archive/pack-graduation.md`'s `$defs/provenance` and
   `rfc/archive/claim-backing.md`'s evidence-ledger vocabulary)
 - **Supersedes / superseded by:** —
 - **Planning:** `planning/pack-population-provenance/` (once implementing)
+
+```tabiya-claims
+pack-schema | lane 0.29 | $defs/provenance.corpusEvidence (new, closed union on state); $defs/timingWindow.properties.note maxLength 400 -> 2000; $defs/feedbackClaim.evidenceTypes (+ provenance_note)
+evidence-kinds | members citable_text | EVIDENCE_KINDS (apps/server/src/sourcing/types.ts)
+```
 
 ---
 
@@ -149,7 +154,7 @@ The sidecar's location is **derived, not declared**: `checkSourcingFile`
 (`apps/server/src/sourcing/check.ts`) reads `${stem}.evidence.json` and `${stem}.sources.json`
 beside the pack file; `checkSourcingDirectory` reads `evidence.json` and `sources.json` in the
 candidate directory. A pack-side path field would restate a derivable fact, and
-`rfc/shared-resource-registers.md` §4 states the doctrine that settles it: **a fact you never write
+`rfc/archive/shared-resource-registers.md` §4 states the doctrine that settles it: **a fact you never write
 cannot go stale.** A declared path can disagree with the loader; a derived one cannot.
 
 What a pack **cannot** say, and must be able to, is not *where* the evidence is but **whether its
@@ -217,7 +222,7 @@ file over: `explorer_position_census.values` carries exact keys `fen`, `total`, 
 `total >= 100`, with each `topMoves[].sharePct` re-derived from its own `playedCount`, and with
 band, window and FEN **compared to the manifest entry's HTTP request URL**. A pack-side copy would
 be validated against nothing. Copying a single-writer resource into a second hand-written home is
-the defect `rfc/shared-resource-registers.md` exists to prevent; this RFC declines to create a
+the defect `rfc/archive/shared-resource-registers.md` exists to prevent; this RFC declines to create a
 seventh instance of it. [[D124]] is discharged by making the recorded population **declarable and
 checkable** (§1.1, P3), not by re-typing it into the pack.
 
@@ -536,10 +541,10 @@ is 0.17), no shape-entry lane (`shape_entry.schema.json` is 0.3), no principle-e
 (`principle_entry.schema.json` is 0.1), and **no migration position** — `STORAGE_VERSION` is 23
 (`apps/server/src/storage.ts`) and nothing here touches stored runs.
 
-**`tabiya-claims`: carried at landing, not now — the same ruling `graduation-clearance` made, on
-the same grounds.** `rfc/shared-resource-registers.md` §3 proposes that every RFC body carry exactly
-one such block; that RFC is a draft, law 1 forbids building on an unlanded grammar, and the grammar
-may still move. The content is fixed here so it is not re-derived under time pressure:
+**`tabiya-claims`: carried now by RFC-1's landing.**
+`rfc/archive/shared-resource-registers.md` §3 requires every active RFC body to carry exactly one
+such block. The declaration at the top of this document is authoritative; the nested copy below
+remains an example and the fence-aware parser deliberately ignores it:
 
 ````
 ```tabiya-claims
@@ -554,9 +559,8 @@ the seven kinds and adds no member, while this one adds `citable_text`. Under RF
 *different* members are not a collision, so this claim does not contest anything.
 
 **Landing order.** Behind `graduation-clearance` (holds 0.28). Behind
-`rfc/shared-resource-registers.md`, which must create the `evidence-kinds` register before this
-document can claim a member in it — that resource is [[D499]]'s fifth unregistered shared resource
-and has no register at all today.
+`rfc/archive/shared-resource-registers.md`, which has created the `evidence-kinds` register and
+records this document's member claim — closing [[D499]] without adding a numeric vocabulary version.
 
 ---
 
@@ -622,7 +626,7 @@ name that was not in the tree, so each criterion below names what fails and how.
    [[D499]] — `EVIDENCE_KINDS` is a shared resource with no version and no register, so a
    hand-written second copy has nothing to drift against. **This RFC creates one such copy on
    purpose** (§5.6), and the test is the only thing holding it in step until
-   `rfc/shared-resource-registers.md` lands.*
+   `rfc/archive/shared-resource-registers.md` is implemented.*
 
 7. **`MACHINE_LABEL_EVIDENCE_KINDS` gains exactly one entry, `provenance_note: ["citable_text"]`,
    and a test asserts `citable_text` appears under no other label.** — *Failure mode: law 8 — a
@@ -652,10 +656,9 @@ name that was not in the tree, so each criterion below names what fails and how.
 12. **`$defs/deviationCost` is byte-identical before and after.** — *Failure mode: §7's refusal
     drifting into a change and breaching ruling [[D126]] in the document that cites it.*
 
-13. **The `tabiya-claims` block of §8 is written into the body at landing if and only if
-    `rfc/shared-resource-registers.md` has landed**; otherwise this RFC lands without it and its
-    `rfc/README.md` claim row is hand-written. — *Failure mode: law 1 — building on an unlanded
-    grammar. This mirrors `graduation-clearance`'s ruling verbatim.*
+13. **The `tabiya-claims` block of §8 is present in the ruled metadata position, written by
+    `shared-resource-registers`' landing**, and its two lines join exactly to the pack and
+    evidence-kinds live-claim rows. — *Failure mode: a declaration or register row moving alone.*
 
 ---
 
@@ -785,10 +788,8 @@ RFC-6 claims a pack lane **behind** this one plus shape-entry 0.5
 (`planning/rfc-drafting-queue.md` §2.6). What travels:
 
 1. **The lane arithmetic.** Pack **0.30** is RFC-6's next free lane once 0.29 lands. Under
-   `rfc/shared-resource-registers.md` §4 the next-free value is computed and printed by
-   `make register-check`, never stored, so nothing needs hand-editing — but until that RFC lands,
-   RFC-6 must read `rfc/README.md`'s hand-written row, which is exactly the failure mode §4 of that
-   document describes.
+   `rfc/archive/shared-resource-registers.md` §4 the next-free value is computed and printed by
+   `make register-check`, never stored, so nothing needs hand-editing.
 2. **[[D103]]'s remedy shape, already decided here.** *A shape entry has nowhere to record why its
    trigger says what it says* is [[D123]]/[[D153]] one schema over. The drafting queue kept them
    apart because they claim different lanes — correctly — but the **rule** travels: §6 settles that

@@ -55,6 +55,11 @@
 - **Supersedes / superseded by:** —
 - **Planning:** `planning/learner-rating/` (once implementing)
 
+```tabiya-claims
+migration | position behind teacher-surface | learner_ratings; rated_games; rating_periods
+migration | position next | cohort_standings; standing_members; learner_marks
+```
+
 ## Summary
 
 This specifies **a Glicko-2 rating for the learner, computed only from whole games played to a

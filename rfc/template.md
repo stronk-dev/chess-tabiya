@@ -10,6 +10,10 @@
 - **Supersedes / superseded by:** —
 - **Planning:** `planning/<rfc-slug>/` (once implementing)
 
+```tabiya-claims
+none
+```
+
 ## Summary
 
 One paragraph: what this specifies and why now.

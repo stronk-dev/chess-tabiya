@@ -236,6 +236,10 @@ moved by fifty or more (`CompareView.svelte`'s strip block was `:91` and is `:13
 > `CLAIM_CENSUS_INCOMPLETE` for the tablebase census claims, and a 15-pack population with **no
 > evidence sidecar at all** to bind into.
 
+```tabiya-claims
+none
+```
+
 ## Summary
 
 Q8 measured the product's feedback surface against the named anti-pattern and returned a split

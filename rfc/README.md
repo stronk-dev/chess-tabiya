@@ -14,8 +14,11 @@ Process: `rfc/0000-rfc-process.md`. Template: `rfc/template.md`.
 | `assistance-controls.md` | **draft 2026-08-16 — and TWO OF THE THREE ROWS WERE NOT OWNER QUESTIONS AT ALL.** D307/D308/D309 were bucketed NEEDS-OWNER on their `DESIGN-GAP:` markers; read against `design/05`, two are **defects against a ruling that already shipped**. **D308**: §3a-i says `attempt_end` *"re-closes on the next committed move — the rule that stops a Just Play reveal becoming a live engine feed"*, and **a rule whose job is to bound a reveal presupposes the reveal is reachable**. Four layers implement it — runtime, `RunService.reveal`, the route, `RunApi.reveal` — and **the fifth never wired the switch**: `api.reveal` has exactly two client call sites, both in `App.svelte`, and `RunStateStore` has no `reveal` at all. **D309**: §3b says guided mode *is* the shape library rendered live and `SILENT_ASSISTANCE` sets `guided: "off"` — **the constant and the behaviour disagree**, because the live path reads no `assistance` value anywhere while the gated path is a strict subset. **D307 is split and its row is half wrong**: the defaults claim is a mis-diagnosis — §5 Q4 is marked **RESOLVED** (*"silence is the product's opinion"*), so six identically silent profiles **is** the ruling; only its permission half is genuinely owner-tier, which the row and `teacher-surface` both already say. **One genuine owner question remains and does not block**: does permission vary by session kind at all — priced three ways including *implement it properly*, because a fork offering only "keep the dead field or delete it" omits that option. **⚠ Coordinate: the implementer has `packages/runtime/src/assistance.ts` open** | — | **claims nothing versioned** — verified at HEAD: no lane, no migration position, no route, no error code, `AssistanceConfig.version` stays **4**. No collision with `teacher-surface` (adds two fields to `AssistanceContext`, touches neither existing fields nor the body — landing order free) or `live-marker-quality` (removes one block identified by its own guard expression; the 2026-08-16 *"for the duration of live play"* amendment read and honoured). **Criterion 5 fails at HEAD — that failure IS D309's fix**; criterion 11 is labelled a regression guard **that cannot fail today**, stated plainly so it is never scored as evidence ([[D444]], [[D451]]) |
 | `rfc-lifecycle-completion.md` | **accepted 2026-08-21 by claude as register owner, on the buildability test ([[D473]]), same joint cross-review.** Corrections applied in place: **P3's clause (c) exceeded the Q3 ruling** — the owner ruled two set equalities and the archive-status rule is not in the ruling's text; it is now attributed to the D638 harness's own assertion and **marked severable** (register-owner disposition: retained, green at 64/64, one owner sentence may strike it); §2's grammar could not parse the pointer its own P4 requires (one machine-read exception added); criteria 6 and 8 contradicted each other on which commit carries the cell edit (resolved to the documentary commit); and dead-vocabulary's archival was **miscited to its implementation commit** in two sites — the archival is `b8e3649`, which is [[D654]]'s whole point. The five answers split cleanly: Q1/Q2 here as `implementing → awaiting` only and discharge-SHA retention | — | **claims nothing versioned.** Amends RFC-0000 (rule seam 7/8 stated both orders); one instrument, six checks, importing the shared parser — **first lander hosts**; `awaiting` has exactly **one live case** at acceptance: `feedback-delivery`, between landed stage 1 and the unrun wave |
 | `pack-population-provenance.md` | **draft 2026-08-17 — RFC-5, the largest of the seven, and its new evidence kind is the mechanism the owner's grounding ruling needs.** Through-line: *a pack may state a fact; the format has nowhere to put where the evidence for that fact lives, and nothing refuses a statement whose evidence cannot exist.* Measured over committed `content/`: **92 packs, all `draft`, 0 published; 68 ledgers, 893 records — and ZERO of either explorer kind** against **31 packs labelling 60 claims `corpus_observed`**. **Spot-check 8 of 8 at the symbol, and 3 of 8 rows carried a materially stale claim** — including [[D157]], whose own update is **false at HEAD** (it says a pack *"now carries the position census"*; the pack carries it as a **prose string** and has no `.evidence.json` at all). It also caught itself citing the **retracted** [[D506]] and rewrote both passages before shipping. **Two refusals it makes and argues**: a pack-side population field (the population already lives in the census record, validated against the manifest request URL — a copy would be validated against nothing), and a corpus basis for `deviationCost`. **A prose-scanning population check is refused too**, because *Classical* is a speed in 14 packs and an **opening name** in ≥6, so the false-positive rate is unboundable. **Found: `refusal-coverage.test.ts` has a `has()` helper and no negative counterpart**, so the suite structurally cannot express a negative fixture — criterion 3 adds `lacks()` | — | claims **pack schema 0.29** plus the **`citable_text` member of `EVIDENCE_KINDS`** — which is exactly what [[D530]]/[[D531]] need to reground the 13 principles from `authors_practice` to `chess_tradition`. No run lane, no shape-entry lane, no principle-entry lane, no migration; all five re-verified at the symbol. `tabiya-claims` carried **at landing, not now**, on law-1 grounds, matching `graduation-clearance`. Two `## Discharges` rows. **RFC-6 inherits pack 0.30** and the don't-copy refusal, which bites harder there because `$defs/structuralExpression` is duplicated across both schemas |
-| `shared-resource-registers.md` | **accepted 2026-08-21 by claude as register owner, on the buildability test ([[D473]]), after a joint cross-review of both process RFCs as ONE contract.** Corrections applied in place: **C1 was fence-blind and failed on its own document** (three example blocks would count as claims; nested-fence rule + mandatory negative fixture added); version comparison unspecified — the live trap is shape-entry `0.3` float-parsing above pack `0.27` (component-wise integers pinned); the migration grammar **could not express the very two-line example §5.1 uses**; §6's landing list was C4(a)-incomplete so **`register-check` would have been red at its own landing commit**; and the refresh commit had written D652–D654 while the body still called them unwritten. **All five owner answers verified verbatim against their ruling text; none exceeds its ruling.** Seam made symmetric: **one parser, first lander hosts** | — | **claims nothing versioned.** Landed half derives from `schemaBuildInfo`; claims declared once in a `tabiya-claims` block immediately before `## Summary` (owner Q2); principle-entry registered at landing (owner Q1); §4 head lines are **checked copies** held to the tree — only the derived next-free is never written |
 | `feedback-delivery.md` | **accepted 2026-08-16 — lands in TWO STAGES, and does not archive on stage 1.** The owner ruling ([[D462]]) is *ship the surface, then run the binding wave before anyone plays*, and its three obligations were **mentioned in an open question and specified nowhere** until this pass. New §0 fixes that: **stage 1** ships the delivery surface, **stage 2** runs the wave, the RFC stays `implementing` between them, and **criterion 11's ledger flips move to stage 2's commit** so no row closes on a day-zero share. **Criterion 21 deliberately demands no percentage** — §3.2 establishes a permanent residue, so a share target would be unsatisfiable by construction; it demands a **named reason for every still-withheld claim**, in two forms, because `validateClaimBindings` **raises nothing for a claim with no binding** and an issue-code-only test would have been unsatisfiable for exactly the 98 claims the wave has not reached. The wave is priced as **three** kinds of work with the pack-edit population (**63 floor / 83 ceiling**) first-class, and because it changes pack bytes it is a **content wave** carrying that closeout. **One thing is left open and named: the binding wave has no owner** ([[D476]]) — `claim-backing` was named for it and then archived. That blocks **stage 2**, not acceptance. Criteria audited at HEAD: **2a passes vacuously** and is now recorded as `vacuous` rather than as a pass; **criterion 6's kill-gate instrument does not exist**; criterion 5's N=4/N=8 columns have no corpus source | — | **claims nothing versioned**, and takes **no migration position** — deliberately, so it does not join [[D423]]'s contest, now two-way after `opponent-contracts` landed. C7 turned out to have **already shipped** (`PackRecord.boundClaimIds` + `claimBackings`), so it adds no field to `PackRecord` at all |
+
+**Claim-cell correction, 2026-08-21:** `pack-population-provenance`'s legacy cell phrase
+*"`tabiya-claims` carried at landing, not now"* is superseded by RFC-1's landing. Its two-line
+declaration is present now and is the authority joined to the pack/evidence live-claim rows.
 
 **Three-draft wave, 2026-08-14** — claim order: `repertoire-gap-finding` first, then
 `onramp-guard`, then `open-answer-grading`. Shared-resource claims (migrations, pack
@@ -37,6 +40,8 @@ documents and planning logs rather than duplicated in this index.
 
 ## Pack-schema-version register
 
+<!-- register: pack-schema head=0.27 -->
+
 Instituted 2026-08-13 after `pack-studio.md` (then named `pack-studio-and-review.md`) and
 `return-and-progression.md` were
 both drafted claiming pack schema **0.6**. `DRILL_PACK_SCHEMA_VERSION`
@@ -47,7 +52,9 @@ digests are content digests and are unaffected by the `$id`
 (`packages/schema/src/drill-pack/digest.ts:58-66`) — so the cost of a collision is a stalled
 landing order, not lost data.
 
-| Pack schema | Owner RFC | Status |
+### Landed
+
+| version | owner RFC | what it changed |
 |---|---|---|
 | 0.3 | `archive/outcome-drill-grading.md` | implemented — `objective.grading`, closed `successConditions` union, closed `objective` |
 | 0.4 | `archive/line-drill-theory-grading.md` | implemented — `follow_theory`, the `atAuthoredBoundary` trigger |
@@ -72,12 +79,85 @@ landing order, not lost data.
 | 0.24 | `archive/vocabulary-wiring.md` | implemented 2026-08-20 closeout — `plan_signature` leaf on `$defs/structuralExpression`, deprecating `plan_consequence`; landed at `caa8afa` plus `e9695cf` |
 | 0.25 | `archive/format-surface.md` | implemented 2026-08-16 — per-leg `opponentPolicy` and `shapes` on `$defs/trajectoryLeg` (D96); `$defs/legOpponentPolicy`; `$defs/shapeReference` extracted; `retryVariants` warning and schema-owned dispositions. No run-schema change, no migration |
 | 0.26 | `archive/claim-backing.md` | implemented 2026-08-16 — optional ledger-side `claimBindings` key prose by claim id plus text digest, direct prose support is refused, explorer attachment preserves pack bytes, and `feedbackClaim.principles` resolves against the official principle-entry 0.1 registry. `$defs/feedbackClaim` is closed. The content migration linked 82 author-principle claims to 12 used entries and refreshed affected ledger digests; one real Philidor claim is now tablebase-bound without changing its prose |
-| 0.27 | `archive/pack-graduation.md` | implemented 2026-08-16 — `provenance.graduationBlockers` entries become objects with `blocking`/`resolved`/`accepted` state, and `provenance` closes `additionalProperties` on its five attested keys. The graduation report, two-root corpus gates, and move-not-copy resolution are executable; the landing corpus honestly has no graduable pack |
-| 0.28 | `graduation-clearance.md` | **claimed and held; the RFC is ACCEPTED 2026-08-17** (third author round; D464–D467 and [[D503]] all resolved at named symbols). *Corrected 2026-08-17 — this cell still read "a draft returned to author" while the Active row read `accepted`, which is [[D477]]'s class live inside the register, found by the RFC-5 draft.* No migration, run-schema, or shape-entry claim |
-| — | **0.29 is the next free pack lane** | recorded 2026-08-15 after a cross-review found three drafts holding lanes with no register rows — the exact collision class this register exists to prevent  **Corrected 2026-08-16 ([[D461]]): this row still read `0.28` four lines below the row claiming and keeping it, and two Active rows repeated the stale half — the register contradicting itself inside four lines, which is the collision class it exists to prevent.** |
+| 0.27 | `archive/pack-graduation.md` | `provenance.graduationBlockers` states and closed `provenance` |
+
+### Live claims
+
+| claim | claimant RFC | changes | declared at |
+|---|---|---|---|
+| lane 0.28 | `graduation-clearance.md` | $defs/graduationEntry.clearance (new, closed object); .resolved.clearance (new, required); .accepted.unreachableBecause (new, required); clearedBy (withdrawn, with its oneOf arm) | `tabiya-claims` |
+| lane 0.29 | `pack-population-provenance.md` | $defs/provenance.corpusEvidence (new, closed union on state); $defs/timingWindow.properties.note maxLength 400 -> 2000; $defs/feedbackClaim.evidenceTypes (+ provenance_note) | `tabiya-claims` |
 
 Landing order follows the numbers. A draft that cannot land behind its
 predecessor renegotiates here rather than renumbering unilaterally.
+
+## Run-schema-version register
+
+<!-- register: run-schema head=0.17 -->
+
+### Landed
+
+| version | owner RFC | what it changed | landed at |
+|---|---|---|---|
+| 0.17 | `archive/opponent-contracts.md` | optional `OpponentSelection.orderingBasis` | `6ba0736` |
+
+### Live claims
+
+| claim | claimant RFC | changes | declared at |
+|---|---|---|---|
+
+## Shape-entry-schema-version register
+
+<!-- register: shape-entry-schema head=0.3 -->
+
+### Landed
+
+| version | owner RFC | what it changed | landed at |
+|---|---|---|---|
+| 0.3 | `archive/vocabulary-wiring.md` | `plan_signature` structural-expression leaf | `caa8afa` |
+
+### Live claims
+
+| claim | claimant RFC | changes | declared at |
+|---|---|---|---|
+| lane 0.4 | `measurement-records.md` | measurements property; $defs/measurementRecord; $defs/measurementSpan; $defs/measurementDisposition | `tabiya-claims` |
+
+## Principle-entry-schema-version register
+
+<!-- register: principle-entry-schema head=0.1 -->
+
+### Landed
+
+| version | owner RFC | what it changed | landed at |
+|---|---|---|---|
+| 0.1 | `archive/claim-backing.md` | official principle-entry registry contract | `5a63225` |
+
+### Live claims
+
+| claim | claimant RFC | changes | declared at |
+|---|---|---|---|
+
+## Evidence-kinds register
+
+<!-- register: evidence-kinds members=7 -->
+
+### Landed
+
+| member | added by | added at |
+|---|---|---|
+| opening_identity | `archive/content-sourcing-foundation.md` | `a30b36c` |
+| position_legality | `archive/content-sourcing-foundation.md` | `a30b36c` |
+| explorer_frequency | `archive/content-sourcing-foundation.md` | `a30b36c` |
+| explorer_position_census | `archive/claim-backing.md` | `5a63225` |
+| tablebase_result | `archive/content-sourcing-foundation.md` | `a30b36c` |
+| engine_eval | `archive/content-sourcing-foundation.md` | `a30b36c` |
+| puzzle_provenance | `archive/content-sourcing-foundation.md` | `a30b36c` |
+
+### Live claims
+
+| claim | claimant RFC | changes | declared at |
+|---|---|---|---|
+| members citable_text | `pack-population-provenance.md` | EVIDENCE_KINDS (apps/server/src/sourcing/types.ts) | `tabiya-claims` |
 
 **Content-sourcing split, 2026-08-12.** An adversarial review rejected the single
 `content-sourcing-pipelines.md` draft and recommended a four-way split; the draft
@@ -110,12 +190,16 @@ name the B-gates they complete before code begins.
 
 ## Migration register
 
+<!-- register: migration head=23 -->
+
 Instituted 2026-08-12 after two RFCs drafted in parallel both claimed database
 migration 2 and `STORAGE_VERSION` 1→2, so neither could land independently. A
 migration number is a **shared, single-writer resource**; claim it here before
 writing it into a draft.
 
-| Migration | `STORAGE_VERSION` | Owner RFC | Status |
+### Landed
+
+| migration | `STORAGE_VERSION` | owner RFC | what it changed |
 |---|---|---|---|
 | 1 | 0→1 | shipped | implemented; **body** rewritten by `archive/pack-optional-runs.md` §8 to stop replaying through `projectRun` (no version change, no new number) |
 | 2 | 1→2 | `archive/learner-identity-and-authorization.md` | implemented |
@@ -155,6 +239,14 @@ was sound for the same reason — the draft that could not land is the one that 
 | 21 | 20→21 | `archive/engine-leverage.md` | **implemented 2026-08-20 closeout** — landed at `18d2832`; stamp-only run schema 0.15→**0.16**. **Reassigned from 22.** Migration body uses frozen literals, never the moving schema constant |
 | 22 | 21→22 | `archive/board-annotation.md` | **implemented 2026-08-16** — creates `run_marks` plus two indexes; create-table/index only, no snapshot rewrite and no run-schema change. `teacher-surface` remains unlanded and therefore takes the next contiguous number at its turn |
 | 23 | 22→23 | `archive/opponent-contracts.md` | **implemented 2026-08-16** at `6ba0736`, independently approved and archived after the A10 correction plus D452–D458 follow-ups. Stamp-only run schema 0.16→**0.17**; optional `OpponentSelection.orderingBasis`, historical selections remain absent and are never inferred. Body uses frozen literals. **D457 remains open** pending a newly retained precise-DTZ corpus |
+
+### Live claims
+
+| claim | claimant RFC | changes | declared at |
+|---|---|---|---|
+| position next | `teacher-surface.md` | classrooms; classroom_members; assignments; assignment_submissions; run_grants.expires_at; run_grants.granted_via; live_sessions.classroom_id | `tabiya-claims` |
+| position behind teacher-surface | `learner-rating.md` | learner_ratings; rated_games; rating_periods | `tabiya-claims` |
+| position next | `learner-rating.md` | cohort_standings; standing_members; learner_marks | `tabiya-claims` |
 
 A migration's *number* is the shared resource, but its *body* is shared too: an
 already-applied migration still runs on databases that never reached it, so a
@@ -204,6 +296,7 @@ before re-attempting this territory.
 
 | RFC | Status | Canonical docs link |
 |---|---|---|
+| `archive/shared-resource-registers.md` | implemented 2026-08-21 — six derived landed/live registers, active-RFC declarations, C1–C6 and `make verify` integration | `docs/development.md`, `rfc/0000-rfc-process.md` |
 | `archive/authored-consequence-lifecycle.md` | implemented 2026-08-21 — D645/D646 closed; lifecycle replay 8→0 packs and Feedback C1 42/50→50/50 | `docs/branch-runtime.md`, `docs/outcome-drill-grading.md` |
 | `archive/branch-runtime.md` | implemented | `docs/branch-runtime.md` |
 | `archive/drill-pack-format.md` | implemented | `docs/drill-pack-format.md` |

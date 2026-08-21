@@ -182,6 +182,10 @@ the pointer the function joins on.**
    different guarantees. The section also reports that **this defect is already shipped one code
    earlier**, which is why "move the check" would not have been a complete answer.
 
+```tabiya-claims
+pack-schema | lane 0.28 | $defs/graduationEntry.clearance (new, closed object); .resolved.clearance (new, required); .accepted.unreachableBecause (new, required); clearedBy (withdrawn, with its oneOf arm)
+```
+
 ## Summary
 
 `make graduation-report` reads **documents 56, blocking 220, resolved 30, accepted 43** over
@@ -2564,7 +2568,7 @@ run the predicate over the corpus before claiming the kind is decidable.**
   `additionalProperties: false` `[V]` — **the lane claim is unchanged, unopposed and still earned.**
 
   **The lane's landing declaration, written out so the implementer does not have to derive it.**
-  `rfc/shared-resource-registers.md` (draft) proposes that every RFC body carry **exactly one**
+  `rfc/archive/shared-resource-registers.md` (implemented) requires every RFC body to carry **exactly one**
   `tabiya-claims` fenced block — one claim per line, three `|`-separated fields, `<resource>` one of
   six canonical names including `pack-schema`, `<changes>` **mandatory and non-empty**, and an explicit
   `none` where nothing is claimed (its §3) `[V]`. It names `graduation-clearance` (pack 0.28) as one of

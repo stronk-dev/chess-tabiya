@@ -107,6 +107,10 @@
 - **Supersedes / superseded by:** —
 - **Planning:** `planning/teacher-surface/` (once implementing)
 
+```tabiya-claims
+migration | position next | classrooms; classroom_members; assignments; assignment_submissions; run_grants.expires_at; run_grants.granted_via; live_sessions.classroom_id
+```
+
 ## Summary
 
 A teacher can already watch a student play, hand them the board, reveal to a class, walk

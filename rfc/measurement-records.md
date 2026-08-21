@@ -62,6 +62,10 @@ in `coverage.corpus.packs` rather than a value the report returns. Both are repr
 made visible**, and §3a-note plus §Open questions 2 now carry it: the `census.*` family cannot
 express a reading about part of an expression.
 
+```tabiya-claims
+shape-entry-schema | lane 0.4 | measurements property; $defs/measurementRecord; $defs/measurementSpan; $defs/measurementDisposition
+```
+
 ---
 
 ## Summary

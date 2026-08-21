@@ -3811,3 +3811,17 @@ type, scaffold and packaging checks. The first full browser run deliberately exp
 workflow helpers aiming with pre-selection coordinates; after they were changed to remeasure after
 selection/pointer-down, `make test-browser` passed **26 tests**, one optional Maia latency test
 skipped, with zero retries.
+
+## 2026-08-21 — Shared-resource declarations and derived registers implemented
+
+Accepted RFC-1 now gives all six shared versioned resources landed/live registers and gives every
+active non-process RFC one machine-readable `tabiya-claims` declaration. `make register-check`
+derives four schema heads and `$id`s, the migration head, and the evidence vocabulary from the
+tree; joins all declarations to register rows; refuses stale, duplicate, missing and integer
+migration claims; and computes next lanes without storing them in the index.
+
+The live hand derivation is pack 0.30, run 0.18, shape-entry 0.5, principle-entry 0.2, migration
+`teacher-surface` then the two ordered `learner-rating` claims, and evidence member `citable_text`
+held with no numeric lane. D376, D385, D423, D447, D461, D498, D499 and D653 close. D384's
+register half and D504's register half close; their explicitly excluded collision/history and
+missing-schema-test halves remain open.

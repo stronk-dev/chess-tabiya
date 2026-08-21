@@ -13,8 +13,8 @@
   E3/E4/E5 accepted as in-flight risk. This RFC claims nothing versioned and specifies no
   product behaviour; every row it discharges is a ledgered defect with a named artefact, not
   an open question, so law 1's *"no RFC from a GAP row"* does not bind it.
-- **Depends on:** nothing unlanded. **Coordinates with `rfc/shared-resource-registers.md`
-  (RFC-1, draft)**, which amends `rfc/0000-rfc-process.md` §Rules and explicitly defers the
+- **Depends on:** nothing unlanded. **Coordinates with `rfc/archive/shared-resource-registers.md`
+  (RFC-1, implemented)**, which amends `rfc/0000-rfc-process.md` §Rules and explicitly defers the
   lifecycle vocabulary here (its §7 and Q3). Two documents editing one file in two sections
   is a merge, not a collision; §9 states the seam from this side.
 - **Parent / amends:** amends `rfc/0000-rfc-process.md` **§RFC lifecycle**, **§Rules** and
@@ -598,7 +598,7 @@ document's state except the three `## Discharges` rows of §3.3 and its own.
 
 #### §9.1 The three neighbours
 
-**`rfc/shared-resource-registers.md` (RFC-1).** It amends §Rules (rule 7, shared versioned
+**`rfc/archive/shared-resource-registers.md` (RFC-1).** It amends §Rules (rule 7, shared versioned
 resources) and the register sections of `rfc/README.md`; this RFC amends §RFC lifecycle,
 §Planning docs, and adds a §Rules rule of its own. **The §Rules numbering is the only collision
 and it is resolved by landing order**: RFC-1 takes **7**, this RFC's *scripted edits assert*
@@ -834,7 +834,7 @@ through **D651** are now in use; this refresh proposes no further rows):
 
 - 2026-08-17: created. Drafted against HEAD `68098e5`; every register fact re-derived at the named
   symbol at that commit rather than inherited from `planning/rfc-drafting-queue.md` (written
-  against `2160d2c`) or `rfc/shared-resource-registers.md` (written against `4a6ad91`). **Three
+  against `2160d2c`) or `rfc/archive/shared-resource-registers.md` (written against `4a6ad91`). **Three
   findings differ from both.** The pack lane is **0.27** at HEAD and **0.28 has never been
   committed** — `git log -S` over `packages/schema/src/index.ts` returns nothing for it `[V]` — so
   RFC-1's note that the bump was uncommitted in the working tree is superseded: 0.28 remains

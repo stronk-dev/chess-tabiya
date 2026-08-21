@@ -76,6 +76,13 @@ not building. Therefore:
    don't improvise.
 6. **The index** (`rfc/README.md`) lists active work and the archive; keep it updated in
    the same commit as any status or location change.
+7. **Shared versioned resources are registered.** A *shared versioned resource* is anything
+   satisfying all three of: (a) it carries a version identifier or is a closed vocabulary;
+   (b) two documents drafted in parallel can move it independently and then cannot both land;
+   (c) it is exported across a package boundary or embedded in a `schemas/*.json` document.
+   Every such resource has a register section in `rfc/README.md`. A draft declares its claims
+   on them in one machine-readable block (`rfc/archive/shared-resource-registers.md` §3) before writing
+   a version into its body.
 
 ## Planning docs & the job log
 

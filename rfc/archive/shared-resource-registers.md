@@ -1,6 +1,6 @@
 # RFC: Shared-resource registers
 
-- **Status:** draft
+- **Status:** implemented 2026-08-21
 - **Author:** claude
 - **Created:** 2026-08-16
 - **Design refs:** **None, and the absence is deliberate.** This RFC specifies repo process,
@@ -25,7 +25,7 @@
   added by cross-review — RFC-2 amends other sections of the same template, a stated merge). **It does not touch §RFC lifecycle** — that section is
   `rfc-lifecycle-completion`'s (RFC-2 in the drafting queue) and the boundary is stated in §7.
 - **Supersedes / superseded by:** —
-- **Planning:** `planning/shared-resource-registers/` (once implementing)
+- **Planning:** `planning/archive/shared-resource-registers/`
 
 ```tabiya-claims
 none
@@ -774,3 +774,7 @@ rows this section proposed at drafting landed under shifted ids, and two have si
   :14–:18/:38/:62/:76/:77/:111/:176/:280, all six constants and four `$id`s, criterion 13's
   verbatim quote, `claim-backing.md:1725`, and both D648 ruling quotes against
   `planning/platform-alignment/intent-amendment-handoff.md:156-157`.
+- 2026-08-21: implemented. Six tree-bound registers, nine active declarations and seven live
+  claims joined by C1–C6; `make verify` passed 767 Vitest tests plus the twelve checker fixtures,
+  schema/scaffold and packaging verification. D376/D385/D423/D447/D461/D498/D499/D653 closed;
+  only the explicitly excluded halves of D384 and D504 remain.
