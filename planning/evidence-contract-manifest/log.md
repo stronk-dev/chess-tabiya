@@ -31,3 +31,13 @@ Append-only.
   must choose and specify the truthful derived-evidence boundary for compare/story revoice (for
   example, declared scope-specific projections or removal from this consumer). No content/schema
   migration or F2 selector work was started.
+
+## 2026-08-21 — author return made buildable
+
+- `author-return.md` traces every voice/speech/reasoning scope and prices three remedies. The
+  recommended shape is one typed rendered item whose sentence and source evidence cannot diverge;
+  a generic derived-sentence projection is explicitly refused.
+- [[D665]] records the false phase payload/provenance declaration.
+- [[D666]] records that the 23-operation checker is currently an anchor census, not the accepted
+  bare-payload bypass proof. The handoff preserves it for what it does prove and specifies the
+  missing negative type fixture.
