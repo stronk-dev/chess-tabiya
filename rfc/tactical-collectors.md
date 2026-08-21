@@ -46,12 +46,15 @@ This RFC specifies the **collector family**: the producers for the tactical and 
 primitives the Phase-2 audit found absent, lossy, or discarded at HEAD — the audit's
 governing finding being that *"F1/F2 registered the authority mechanics over the
 primitives that existed; they did not add the primitives"* (audit §2). It pins six
-declared conventions (`see-convention@1`, `space@1`, `trapped@1`,
-`back_rank_susceptible@1`, `threat@1`, `development@1`), specifies sixteen build items in
-the audit's ranked order — SEE first, as *"the prerequisite of everything tactical and the
-bot blunder gate"* — and registers every collector through the existing F1 contract:
+declared conventions (`legal-exchange@1`, `space@1`, `trapped@1`,
+`back_rank_susceptible@1`, `threat@1`, `development@1`), specifies fifteen build items in
+the audit's ranked order — legal local exchange first because it is the prerequisite for
+tactical semantics and the bot blunder gate — and registers every collector through the existing F1 contract:
 producer + typed projection + operands + grounding + abstention + fixtures, with
-**research/inspector-only dispositions at landing**. It deliberately ships **no
+**research/inspector-only dispositions at landing**. The exchange predicate is the measured
+legal-recapture convention rather than the audit's cheaper pseudo-attacker swap; this removes
+pinned recapturers from downstream claims at about 0.04 ms per evaluated edge in the disposable
+instrument. It deliberately ships **no
 consumer**: production module eligibility arrives with the Phase-3 module RFC, which keeps
 this RFC honest about not inventing consumers before the module contracts exist. Each
 collector's acceptance includes the lift measurement over the corpus with the sign
@@ -115,7 +118,7 @@ this checklist plus the per-collector spec has found a spec bug, not a licence t
    `packages/runtime/src/evidence-catalog.ts` through the existing `producer()` /
    `projection()` helpers, at the implementation homes named in §3. New producer ids in
    this RFC: `rules.exchange`, `rules.tactic`, `rules.castling`, `derived.exchange`,
-   `derived.tactic`, `theory.opening_identity_runtime`; plus additive projections on the
+   `derived.tactic`; plus additive projections on the
    existing `rules.structural`, `rules.transition`, `rules.phase`, `human.maia`, and
    `derived.semantic_avoidance` producers. All projections are `@1` identities; the
    complete id enumeration is Appendix A.
@@ -128,7 +131,7 @@ this checklist plus the per-collector spec has found a spec bug, not a licence t
    `declared_convention`/`convention`. The manifest's derivation-widening check
    (`evidence-contract.ts:464-472`) is load-bearing here: a derived projection over mixed
    groundings **must** declare `declared_convention`, and one with any non-exact input
-   must not declare `exact` — every SEE-conditioned derived projection in §3 therefore
+   must not declare `exact` — every legal-exchange-conditioned derived projection in §3 therefore
    declares `declared_convention`/`convention`.
 4. **Abstention** is declared where the producer can abstain (`abstention: { possible:
    true, reasons: [...] }`); collectors that are total on their domain declare
@@ -136,7 +139,8 @@ this checklist plus the per-collector spec has found a spec bug, not a licence t
 5. **Dispositions at landing.** Event and avoidance projections follow F2's pattern:
    eligible **only** for `research.semantic_selection@1` (the existing
    `EVIDENCE_ELIGIBILITY_DECLARATIONS` generator extends to them unchanged). State
-   readings declare `disposition: "inspector_only"`. Predicate-role projections (SEE) are
+   readings declare `disposition: "inspector_only"`. Predicate-role projections (legal
+   exchange) are
    machine-consumed only. **No production consumer, module id, workflow id, or preset is
    added by this RFC** — criterion A13 verifies the grep stays at zero.
 6. **Fixtures** follow the four-part demand the audit states as this repo's D444/D451/D522
@@ -160,11 +164,37 @@ this checklist plus the per-collector spec has found a spec bug, not a licence t
    explicitly in §3 with a predeclared direction, and the measured answer is recorded even
    when it contradicts the prediction (law 6). Instrument: a disposable harness
    `tools/tactical-collector-measurement-harness/` following the d542 pattern, labeled
-   research tooling, tied to rows D730–D744, logged per RFC-0000's exploration-tooling
-   rule.
+   research tooling, tied to rows D730–D744 plus D749, logged per RFC-0000's exploration-tooling
+   rule. Confidence is a deterministic paired bootstrap over source positions: each resample
+   keeps a played result with that position's complete alternative population. Two thousand
+   resamples report the 2.5th and 97.5th percentiles; `tools/d730-see-harness/` fixes this
+   method before implementation.
 9. **Cost classes** as the audit defines them: *free* = arithmetic over primitives already
    imported (`attacks`, `between`, `pawnAttacks`, FEN fields); *cheap* = free + one-ply
    enumeration or a small table; nothing in this RFC is engine- or corpus-priced.
+
+#### §1.1 Normative production-code sites
+
+This table is the closed production-code census for the implementation. Tests, docs and the
+disposable measurement harness are additional; a production edit outside this table is a spec
+change and must be explained in the RFC changelog before it lands.
+
+| Site | Normative responsibility |
+|---|---|
+| `packages/runtime/src/exchange.ts` (new) | `legal-exchange@1`; capture-class derivation |
+| `packages/runtime/src/tactics.ts` (new) | loose-piece, ray, threat, fork, rook-seventh, discovered, trapped, back-rank and mate-one collectors |
+| `packages/runtime/src/castling.ts` (new) | castling rights, rights-loss cause and current-legality readings |
+| `packages/runtime/src/structure.ts` | pawn connectivity, space and the existing vacation-ray source reused by discovered latency |
+| `packages/runtime/src/phase.ts` | square-retaining development state |
+| `packages/runtime/src/transition.ts` | capture/development events and the two-UCI-form castling repair |
+| `packages/runtime/src/semantic-evidence.ts` | identity-preserving joins and declared tactical avoidance-family generalization |
+| `packages/runtime/src/evidence-catalog.ts` | all producer/projection/event/eligibility declarations in Appendix A |
+| `packages/runtime/src/evidence-source-adapters.ts` | brand-sealed adapters, including Maia candidate WDL |
+| `packages/runtime/src/index.ts` | public runtime exports only |
+
+The already-correct Maia parsing and HTTP transport in `apps/server/src/opponent-selector.ts`
+and `apps/server/src/rest.ts` are fixture inputs, not edit sites. Runtime opening identity is
+explicitly outside this RFC (§3.15).
 
 ### §2 — Structural decisions that bind every item
 
@@ -215,7 +245,7 @@ way (criterion A12).
 
 #### §2.4 No redefinition of any shipped identity
 
-Per audit §6: *"if a later pass redefines one (e.g. SEE-conditioning an existing
+Per audit §6: *"if a later pass redefines one (e.g. exchange-conditioning an existing
 detector), that is a `@2` identity, not an edit."* Every shipped projection keeps its
 declaration byte-for-byte except where a spec below names an exact repair
 (`irreversibility`'s `=== 2`, which is a **defect fix in a producer body**, not a
@@ -225,7 +255,7 @@ projection**, not an operand added to the shipped `human.maia.policy@1` (§3.16)
 
 #### §2.5 `chess_tradition` is a citation basis, not a grounding value
 
-[[D718]] rules the space convention *"declared in the RFC and cited as
+[[D745]] rules the space convention *"declared in the RFC and cited as
 `chess_tradition`"*. `EvidenceGrounding` is a closed nine-value union that does not
 contain `chess_tradition`, and this RFC does not widen it. Reconciliation: the projection
 grounding is `declared_convention`; the convention **text** (§2.6) carries the
@@ -237,11 +267,11 @@ refuses.
 
 | Convention | Exact pinned content |
 |---|---|
-| `see-convention@1` | Piece values in convention units: **P=1, N=3, B=3, R=5, Q=9**. The king is **non-exchangeable**: it never carries a value, may appear only as the final capturer in a swap sequence, and only when the target square has no remaining defenders. Swap algorithm: attackers and defenders alternate captures on the target square in ascending convention-value order; **X-ray reveals through the capture line** (a slider standing behind a same-ray attacker/defender joins the ordered list at its reveal). Result is stated in convention units, **never called centipawns**. Declared limitation, carried on every SEE-grounded projection: *pinned attackers and defenders are not excluded* — SEE is local; the §3.5 absolute-pin state exists so a later `@2` may condition on it. |
-| `space@1` | **As ruled ([[D718]]): classic zones + pawn control, cited as chess tradition.** Zones by file: queenside **a–c**, central **d–e**, kingside **f–h**. Control test: a square counts for a color iff it lies in the **enemy half** (ranks 5–8 for White, ranks 1–4 for Black) and is attacked by at least one of that color's **pawns**. Emitted per zone per color as a count, plus the per-zone differential. |
-| `trapped@1` | A non-pawn, non-king piece is *trapped* iff **both** hold: it is attacked with SEE > 0 for the cheapest capturer on its current square, **and** it has no geometric destination with SEE ≥ 0. Mobility-zero alone is not trapped (the undeveloped a1-rook fixture). Deliberately weaker than "is lost" — that is a search consequence, refused at this tier. |
+| `legal-exchange@1` | A specified **legal capture** begins a recapture-only minimax on its landing square. Each side may stop or make any legal recapture there and chooses the branch maximizing its own material balance under **P=1, N=3, B=3, R=5, Q=9**; promotion adds promoted-piece minus pawn value. Legal enumeration excludes pinned recapturers and illegal king captures; X-rays enter when the front piece leaves. Result is in convention units, **never centipawns**. It is local: zwischenzugs, replies elsewhere, position value and compensation are outside scope. |
+| `space@1` | **As ruled ([[D745]]): classic zones + pawn control, cited as chess tradition.** Zones by file: queenside **a–c**, central **d–e**, kingside **f–h**. Control test: a square counts for a color iff it lies in the **enemy half** (ranks 5–8 for White, ranks 1–4 for Black) and is attacked by at least one of that color's **pawns**. Emitted per zone per color as a count, plus the per-zone differential. |
+| `trapped@1` | A non-pawn, non-king piece is *locally trapped* iff **both** hold: the side to move has a positive `legal-exchange@1` capture of it on its current square, and every legal destination of that piece allows the opponent a positive `legal-exchange@1` capture on the destination. A destination with no such capture is an escape. Mobility-zero alone is not trapped. This is weaker than “the piece is lost,” which needs search. |
 | `back_rank_susceptible@1` | King on its back rank; **every** non-back-rank escape square is blocked by an own piece or attacked; **at least one** enemy heavy piece (rook or queen) has an open or half-open path to that back rank. A **defended** entry square still counts — susceptibility is escape geometry; the defended-entry distinction belongs to the separate mate-in-1 projection (§3.7). |
-| `threat@1` | Null-move convention, declared in provenance: *if the side to move passed, the opponent has a move that (a) wins material by SEE > 0 under `see-convention@1`, or (b) delivers mate in 1 (exact rules fact).* One-ply enumeration + SEE; nothing deeper. |
+| `threat@1` | Declared pass convention: when the side to move is **not in check**, clone the position, give the move to the opponent, clear en-passant availability, and enumerate moves that (a) begin a positive `legal-exchange@1` capture or (b) deliver mate in one. If the side to move is in check, abstain `pass_while_in_check`; a pass is not a legal chess move and the output says so. Nothing deeper is claimed. |
 | `development@1` | Basis: **minor pieces + castling only**, matching the shipped phase classifier's basis (`phase.ts` `HOME` squares b1/g1/c1/f1 and mirrors). *Developed* = the moved minor stood on its home square before this move and leaves it; *development lost* = a minor returns to its home square; a minor **captured** on its home square is neither. Rook connection, queen sorties etc. are deferred. |
 
 Each convention's text ships verbatim in the catalog declaration's `semantics`/
@@ -253,29 +283,30 @@ The order below **is** the audit's §5 ranked build order (*"unblocks-most × ch
 and is normative for implementation sequencing. Per-item, "sign question" states the
 predeclared D545 answer the measurement must confirm or refute.
 
-#### 3.1 SEE — the prerequisite (audit §3.0; row D730)
+#### 3.1 Legal local exchange — the prerequisite (audit §3.0; row D730)
 
 - **Home:** `packages/runtime/src/exchange.ts` (new). Producer `rules.exchange`,
   availability `local`.
-- **Projection:** `rules.exchange.predicate.see@1`, role `predicate`, grounding
-  `declared_convention`, exactness `convention`. *Not itself a learner fact* — a
-  predicate-role eligibility input for §§3.4, 3.5 (relative kinds), 3.6, 3.9, 3.12, and
-  the future bot blunder gate; **never rendered as a sentence on its own** (declared
-  limitation).
-- **Operands (retained):** target square; occupant `{color, role}`; ordered attacker and
-  defender lists (square + role each, including X-ray members and their reveal order);
-  convention id; resulting value in convention units.
-- **Abstention:** none — total on occupied squares (`possible: false`).
-- **Fixtures:** positives — simple winning capture of an undefended piece;
-  attacker-ordering case (pawn captures first). Hard negatives — pawn-defended target
-  attacked by a rook; X-ray-backed defense where the naive attacker/defender count gets
-  the sign wrong. **Non-vacuity core: the fixture set MUST contain at least one position
-  where geometric attack-count and SEE disagree in sign** — *"that disagreement is the
-  entire reason SEE exists (the 0.72× fork population)"* (audit §3.0).
-- **Measurement:** not a firing detector; measured through its downstream gates — the fork
-  and hanging lifts re-run with the SEE gate on, direction predeclared (both move up),
-  interval must exclude 1.0, and the criterion must be able to fail (D451).
-- **Sign question:** n/a (predicate).
+- **Projection:** `rules.exchange.predicate.legal_exchange@1`, role `predicate`, grounding
+  `declared_convention`, exactness `convention`. It evaluates one specified legal capture
+  under `legal-exchange@1`; it is not a free-standing reading and has no sentence form.
+- **Operands (retained):** before FEN; capture UCI; landing square; capturer and captured
+  identities; every visited legal recapture branch as ordered `{mover, captured, from, to,
+  promotion?, delta}` steps; chosen minimax line; stop decisions; convention id; result in
+  convention units. A consumer can therefore inspect why a pinned recapturer was absent and
+  which X-ray appeared instead of trusting one number.
+- **Abstention/domain:** the predicate is total on **legal captures**, not occupied squares.
+  A non-capture or illegal move is outside-domain and no declared evidence is constructed.
+- **Fixtures:** free piece (+3); poisoned pawn (-4); X-ray sequence (+1); pinned geometric
+  recapturer excluded (+1); promotion-capture; illegal king recapture hard negative. The
+  geometry/exchange disagreement fixture remains mandatory.
+- **Measured result before RFC acceptance:** `tools/d730-see-harness/` evaluates 39,038 legal
+  played/alternative edges at 0.038–0.041 ms per edge in the disposable TypeScript
+  implementation. `moved_piece_en_prise` is negative-primary at 0.36× (95% 0.28–0.45)
+  authored and 0.57× (0.47–0.69) imported. Exchange-filtered fork rises above the geometry
+  control: 1.72× (0.72–2.94) authored and 1.96× (1.32–2.71) imported. The authored interval
+  crosses 1.0, so no universal positive-prior claim is permitted.
+- **Sign question:** n/a for the predicate; downstream events carry their measured signs.
 
 #### 3.2 Castling family + reading-plane repair (audit §3.7, §5 item 2; rows D731, retiring D547's residue / D719)
 
@@ -294,7 +325,7 @@ predeclared D545 answer the measurement must confirm or refute.
     illegal, with the specific disqualifying squares retained (transit/landing attacked,
     blocked, in check). Disposition `inspector_only`.
   - **"Prevented" is served by rights-lost (permanent) and legality (transient) and by
-    nothing else** — as ruled ([[D718]] (3)): the intent reading stays refused under
+    nothing else** — as ruled ([[D745]] (3)): the intent reading stays refused under
     law 8. No projection in this RFC may use the word "prevented" of an opponent's
     purpose.
 - **The D547 reading-plane repair:** `irreversibility()` (`transition.ts:351`) adopts the
@@ -324,14 +355,15 @@ predeclared D545 answer the measurement must confirm or refute.
   (`transition.ts:326-337`); today it is kept only when the capture is `last_of_role`
   (`transition.ts:312`) and reduced to `capture: boolean` otherwise (`:311`). Grounding
   `position_rules`, exactness `exact`.
-- **(b) SEE classification of the capture:** `derived.exchange.capture_class@1` (producer
+- **(b) Local-exchange classification of the capture:** `derived.exchange.capture_class@1` (producer
   `derived.exchange`, home `exchange.ts`), `derivation.inputs` = the capture event + the
-  SEE predicate; classes `winning | losing | balanced` in convention units — *"never the
-  words good/bad"*. Grounding `declared_convention`, exactness `convention` (§1.3 forces
-  this).
+  exact `rules.exchange.predicate.legal_exchange@1` result for that capture; classes
+  `positive | negative | equal` in convention units. These are arithmetic signs, not
+  move grades. Grounding `declared_convention`, exactness `convention` (§1.3 forces this).
 - **(c) Trade-completed:** `derived.exchange.trade_completed@1` — capture followed by
-  recapture on the same square within the recorded continuation; a join over
-  `run.record.move` with `derivation.inputs` declared. *"An adapter over existing
+  recapture on the same square within the recorded continuation; `derivation.inputs`
+  names both capture event(s) and `run.record.move`, retaining the two piece identities
+  and landing square. *"An adapter over existing
   records, not a new detector"* (audit §3.9). `queensOff` stays where it lives
   (`transition.ts:354`).
 - **Fixtures:** en-passant identity positive (**starts red at HEAD** — the ep branch of
@@ -348,31 +380,37 @@ predeclared D545 answer the measurement must confirm or refute.
   availability `local`. (Internal file split under the same producer is free;
   the producer home names both `tactics.ts` and any split module.)
 - **State projection** `rules.tactic.reading.loose_piece@1` (disposition
-  `inspector_only`), per occupied square: attacker list, defender list, SEE-if-captured
-  for the cheapest capturer, side to move. Three exact predicates over it, each an operand
-  flag, none a separate projection: **en prise** (cheapest capture has SEE > 0 for the
-  capturer); **loose/LPDO** (no defenders at all); **under-defended** (attacked, and
-  SEE > 0 — subsumes count-vs-value ordering). Grounding `declared_convention`
-  (SEE-conditioned), exactness `convention`.
+  `inspector_only`), per occupied square belonging to the non-moving side: legal capturer
+  list, defender list, `legal-exchange@1` result per capture, side to move. Three predicates
+  over it, each an operand flag, none a separate projection: **en prise** (at least one
+  legal capture has a positive result for the capturer); **loose/LPDO** (no defenders at
+  all); **under-defended** (has at least one defender, yet at least one legal capture has
+  a positive local-exchange result — the defended subset of en prise, subsuming naive
+  count-vs-value ordering). Grounding `declared_convention` (exchange-conditioned),
+  exactness `convention`.
 - **Event family** `loose_piece` joined on the occupant identity, signs
   `gained/lost/preserved` (*"the played move left/exposed/resolved a loose piece"*), plus
   the avoidance form via §2.1's generalized derivation with complete denominators
   (`legalAlternatives`, `alternativesWithFamily`) exactly as
   `CounterfactualAbsenceOperands` already carries.
 - **Ceiling sentence** (declared limitation, law 8): *"White's knight on e5 can be
-  captured winning material under see-convention@1"* is the maximum statement; no valence.
+  captured by a legal move whose `legal-exchange@1` result is +3 convention units"* is
+  the maximum statement; no move grade, recommendation or whole-position claim.
 - **Fixtures:** classic loose piece; attacked-twice-defended-once with value ordering
-  making recapture losing. Hard negative: attacked piece defended by a pawn. **Declared
+  making the local exchange negative for the capturer. Hard negative: attacked piece
+  defended by a pawn with no positive legal capture. **Declared
   limitation, not fixed by search:** a "hanging" piece whose capture loses to a
-  zwischenzug is out of scope (SEE is local). Non-vacuity: static prevalence measured
+  zwischenzug is out of scope (legal exchange is local). Non-vacuity: static prevalence measured
   4.20% *(d542)* — corpus census strictly interior.
-- **Measurement + sign — the D718 headline case.** Pre-SEE probe: **0.26× played / 15.7%
-  of alternatives** — **the negative reading is primary and is declared at registration**
+- **Measurement + sign — the D745 headline case.** The D730 legal-exchange probe measures
+  `moved_piece_en_prise` at **0.36× (95% 0.28–0.45) authored** and **0.57×
+  (0.47–0.69) imported** — robustly negative-primary in both populations. The earlier
+  geometry-only probe was **0.26× played / 15.7% of alternatives**; the legal filter
+  narrows but does not reverse it. **The negative reading is primary and is declared at registration**
   (audit: *"the primary learner-facing form is the avoidance event ('15.7% of your legal
-  moves would have left a piece loose; yours did not')"*), which [[D718]] (2) now admits
+  moves would have left a piece loose; yours did not')"*), which [[D745]] (2) now admits
   to learners post-commit/review with the denominator shown (wiring is Phase 3's; this RFC
-  lands the producer and the declaration). Post-SEE, both signs re-measured; predeclared
-  direction: the en-prise rate on played moves drops further below alternatives.
+  lands the producer and the declaration).
 
 #### 3.5 Ray family: pins, skewers, X-rays (audit §3.3; row D734) — state only at landing
 
@@ -382,8 +420,9 @@ predeclared D545 answer the measurement must confirm or refute.
   `inspector_only`) over slider rays with exactly one blocker, kinds: **absolute pin**
   (target = own king; pure geometry + rules — chessops legality already enforces the
   movement restriction; grounding `position_rules`, exactness `exact`); **relative pin**
-  (target more valuable than blocker under `see-convention@1`); **skewer** (front piece
-  more valuable than back); **X-ray attack/defense** (attack through one intervening
+  (target's declared P/N/B/R/Q value is strictly greater than the blocker's); **skewer**
+  (front piece's declared value is strictly greater than the back piece's); **X-ray
+  attack/defense** (attack through one intervening
   piece, either color). Value-conditioned kinds ground `declared_convention`. Since one
   projection carries both exact and convention kinds, the projection declares
   `declared_convention`/`convention` overall with the absolute-pin exactness noted in
@@ -394,12 +433,13 @@ predeclared D545 answer the measurement must confirm or refute.
   measured by the harness as a probe. Read as **state, not event**: the measured lesson
   *(d542 §7d)* is 5.60% static prevalence vs 1.28× as a delta.
 - **Operands:** slider (square, role, color); blocker (square, occupant); target (square,
-  occupant); full ray squares; classification kind; SEE values where value-conditioned.
+  occupant); full ray squares; classification kind; exact compared roles and convention
+  values where value-conditioned.
 - **Fixtures:** absolute pin positive; skewer with the value order reversed relative to
   the pin fixture (*"same geometry, different classification — this pair is the
   non-vacuity core"*). Hard negatives: two blockers on the ray (X-ray at most, not pin);
-  "pin" against an equal-value defended piece (relative pin must not fire without the SEE
-  condition). **Regression fixture:** the d542 probe's own recorded bug — lifting the
+  "pin" against an equal-valued back piece (relative pin must not fire). **Regression
+  fixture:** the d542 probe's own recorded bug — lifting the
   slider instead of the blocker → 0.00% everywhere — becomes a permanent fixture.
 - **Measurement + sign:** static prevalence per kind; lift reported both as state-presence
   and created-delta; predeclared: state dominates.
@@ -408,26 +448,28 @@ predeclared D545 answer the measurement must confirm or refute.
 
 - **Home:** `tactics.ts`. **Consequence** projection
   `rules.tactic.consequence.threat@1` under `threat@1` (§2.6): grounding
-  `declared_convention`, exactness `convention`; cost cheap (one-ply + SEE); abstention
-  `possible: false` (the enumeration is total; "no threat" is an empty result, not an
-  abstention).
+  `declared_convention`, exactness `convention`; cost cheap (one-ply + legal exchange);
+  abstention `possible: true`, reasons `["pass_while_in_check"]`. Outside that case the
+  enumeration is total and "no threat" is an empty result, not an abstention.
 - **The salience join**, in the same projection's operands (the bot literature's demand,
   D670): `createdByLastMove: boolean` (was this threat absent before the opponent's last
   move) and `attackerJustMoved: boolean` — a join of the threat stream against
   `run.record.move`, pure arithmetic, *"the operand that makes the explainable-miss
   differentiator possible"*. Law 8 per the audit: *"naming a threat that exists is
   arithmetic; it grades nobody."*
-- **Operands:** threatening piece; target; SEE gain or mate flag; the threatened move
-  itself; `createdByLastMove`; `attackerJustMoved`.
+- **Operands:** threatening piece; target; local-exchange result or mate flag; the
+  threatened move itself; `createdByLastMove`; `attackerJustMoved`; pass convention id.
 - **Why it exists:** the R3 module table (`tools/r3-presentation-harness/output.md:24`)
   carries `blunder_prevention` as an owner-ruled candidate with **no producer to consume**
   (audit §2 row 13). This projection is that producer; the module itself remains Phase 3's.
 - **Fixtures:** mate-threat positive; material-threat positive. Hard negative: a "threat"
-  whose execution loses by SEE (must not fire). **Salience fixture:** a pre-existing
+  whose local exchange is negative (must not fire). Abstention: side to move is in check
+  yields `pass_while_in_check`; en-passant is cleared before the hypothetical opponent
+  move. **Salience fixture:** a pre-existing
   threat after an unrelated move — `createdByLastMove` must be `false`. Non-vacuity.
 - **Measurement + sign:** new probe; threat-presence lift reported both signs, direction
   predeclared as negative-primary on the avoidance analogy (a played move rarely leaves a
-  new SEE-winning threat against oneself); the D674 salience-hierarchy experiment is the
+  new positive local-exchange threat against oneself); the D674 salience-hierarchy experiment is the
   designated downstream instrument, not this RFC's gate.
 
 #### 3.7 Fork (audit §3.2; build-order item 7 — **the one collector the audit's D730–D744 set reserves no row for**; see §Ledger rows)
@@ -435,24 +477,32 @@ predeclared D545 answer the measurement must confirm or refute.
 - **Home:** `tactics.ts`. **Two projections, never conflated** (hard rule from D545:
   *"never emit 'fork' on geometry alone"*):
   - `rules.tactic.event.double_attack@1` — *transition event*, mover-anchored: after the
-    move, the moved piece attacks ≥ 2 enemy targets, each either (a) SEE-positive to
-    capture or (b) the king (check). Grounding `declared_convention`, exactness
+    move, the moved piece attacks ≥ 2 enemy targets, each either (a) has a positive
+    `legal-exchange@1` capture by the mover or (b) is the king (check). Grounding
+    `declared_convention`, exactness
     `convention`.
-  - `rules.tactic.consequence.fork_wins_material@1` — the stronger claim: over all legal
-    replies, no single reply makes every target SEE-non-positive or parries the check;
+  - `rules.tactic.consequence.fork_survives_reply@1` — the stronger but still local claim:
+    over all legal replies, no single reply makes every target locally exchange-non-positive
+    or parries the check;
     one-ply enumeration over the existing `legalAlternativeEdges` enumerator
     (`semantic-evidence.ts:257`). `derivation.inputs` names the state event. **Retains
     the refuting move when one exists** — *"retention of the defusing move is what makes
     the negative fixture checkable."* Abstains (`refutation_exists`) rather than firing
     when a defense holds.
 - **Operands:** mover (square before/after, role); target list (square, occupant,
-  per-target SEE); consequence adds the refutation move or its declared absence.
-- **The pre-authorized fallback, as ruled ([[D718]] (4), quoted):** *"if post-SEE lift
+  per-target legal capture + exchange result); consequence adds the refutation move or
+  its declared absence.
+- **Measured sign and the pre-authorized fallback, as ruled ([[D745]] (4)):** D730's
+  exact `double_attack` probe measures **1.72× (95% 0.72–2.94) authored** and **1.96×
+  (1.32–2.71) imported**, versus geometry-only **0.72×/1.00×**. The ruled fallback says
+  *"if post-SEE lift
   still reads below 1.0, the shipped form becomes opponent-relative
   `fork_allowed`/`fork_avoided` — the measurement decides the direction, no second
-  round-trip."* This RFC's criterion states **both branches** (A9): the post-SEE lift
-  measurement is the acceptance gate with predeclared expectation above 1.0; if it stays
-  below, the registered primary reading flips to the opponent-relative family
+  round-trip."* The measured point estimates are not below 1.0, so the fallback does not
+  trigger; the authored interval still crosses 1.0, so no universal positive-primary
+  disposition is permitted. The exact event registers research/inspector-only. If the
+  permanent implementation changes either population's point estimate below 1.0, the
+  registered primary reading flips to the opponent-relative family
   (`fork_allowed` event + avoidance form) **and that outcome is recorded, not
   rationalized** (law 6).
 - **Fixtures:** knight fork of king+rook positive. **Hard negative: geometric "fork" of
@@ -530,7 +580,7 @@ predeclared D545 answer the measurement must confirm or refute.
   convention text (§2.5).
 - **Fixtures:** positive per zone (three); **the honesty fixture, as ruled:** a pawn
   *advance* that **loses** space under the declared test (advances can concede control
-  squares — [[D718]] (1) names this fixture explicitly); mirror fixtures extending the
+  squares — [[D745]] (1) names this fixture explicitly); mirror fixtures extending the
   `structure.ts` mirror machinery to the new kind.
 - **Measurement + sign:** level-reading prevalence and delta lift both reported; the delta
   is predeclared weak (≈1.0) and the criterion scores the *level* reading's census, so the
@@ -540,11 +590,12 @@ predeclared D545 answer the measurement must confirm or refute.
 
 - **Home:** `structure.ts`/`tactics.ts` — this is **`vacationReading` resurrected plus a
   filter, not new detection**: `vacationReading` (`structure.ts:517`; exported, dead —
-  only export site `index.ts:106`) filtered to enemy-occupied gains with an SEE/king
+  only export site `index.ts:106`) filtered to enemy-occupied gains with a positive
+  legal-exchange/king
   condition. **State** `rules.tactic.reading.discovered_latency@1`, disposition
   `inspector_only`: own piece P screens a friendly slider S from an enemy target T on a
   one-blocker ray, so moving P creates a discovered attack (discovered check when
-  T = king). Grounding `declared_convention` (SEE-conditioned; discovered-check arm is
+  T = king). Grounding `declared_convention` (exchange-conditioned; discovered-check arm is
   exact and noted in semantics), exactness `convention`.
 - **The executed case is an adapter, not a collector** (no-duplicate-collector rule):
   derivable today over registered `rules.transition.event.slider_ray:gained` where the
@@ -553,7 +604,7 @@ predeclared D545 answer the measurement must confirm or refute.
   joined by eligibility to this latency state) is **F5's eligibility work, not a third
   producer** — named out of scope.
 - **Operands:** screen piece; slider; target; ray squares; discovered-check flag;
-  per-target SEE.
+  per-target legal capture and exchange result.
 - **Fixtures:** fianchetto battery with screening knight and an enemy piece on the long
   diagonal; discovered-check positive. Hard negatives: two blockers; **blocker is an
   enemy piece** (that is *their* discovered attack — the sign/ownership fixture).
@@ -566,9 +617,10 @@ predeclared D545 answer the measurement must confirm or refute.
 
 - **Home:** `tactics.ts`. Two states under §2.6's conventions:
   - `rules.tactic.reading.trapped_piece@1` (`trapped@1`): operands — piece; square;
-    attacker set; the (empty or SEE-negative) destination census **with per-destination
-    SEE**. The geometric half exists today as `safeDestinations` (`transition.ts:191`,
-    internal, geometric-only) and is upgraded by the SEE filter. Grounding
+    legal attackers on the current square; every legal destination; and, per destination,
+    every opponent legal capture of the moved piece with its `legal-exchange@1` result.
+    The geometric half exists today as `safeDestinations` (`transition.ts:191`,
+    internal, geometric-only) and is upgraded by the legal-exchange filter. Grounding
     `declared_convention`, exactness `convention`.
   - `rules.tactic.reading.back_rank@1` (`back_rank_susceptible@1`): operands — king
     square; blocked/attacked escape squares (which and why); accessing enemy heavy pieces
@@ -577,7 +629,7 @@ predeclared D545 answer the measurement must confirm or refute.
     (one-ply, free, grounding `position_rules`, exactness `exact`) — emitted distinctly so
     the convention state never borrows the exact claim's authority.
 - **Fixtures:** bishop trapped on a7 by b6 positive; hard negatives — zero-mobility piece
-  that is not attacked; attacked piece with one SEE-neutral escape. Back-rank: classic
+  that is not attacked; attacked piece with one exchange-neutral escape. Back-rank: classic
   no-luft open-file rook positive; hard negatives — luft exists; no heavy pieces; and the
   defended-entry case fires *susceptibility* but not *mate_in_one* (the pair fixture that
   keeps the two projections honest). Non-vacuity: corpus prevalence strictly interior for
@@ -607,33 +659,15 @@ predeclared D545 answer the measurement must confirm or refute.
 - **Measurement + sign:** census over endgame-phase positions, not lift (it is a join
   over existing exact projections); non-vacuity strict-interior.
 
-#### 3.15 Opening identity at runtime (audit §3.11; row D743 — sequenced last-but-one, gated on the R8/F7 lane)
+#### 3.15 Opening identity at runtime — deferred to D743/R8/F7, not scoped here
 
-- **Home:** `apps/server/src/opening-identity.ts` (new). Producer
-  `theory.opening_identity_runtime`, projection
-  `theory.opening_identity_runtime.reading@1`, availability `local`, grounding `cited_theory`,
-  exactness `measured`, abstention `{ possible: true, reasons: ["no_catalogue_match"] }` —
-  mirroring the sourcing projection's declared abstention.
-- **Semantics:** position-keyed lookup (EPD via the existing `transposeKey`,
-  `packages/runtime/src/chess.ts:16`, already imported at
-  `apps/server/src/position-evidence.ts:2`) against the already-fetched
-  `lichess-org/chess-openings` table (`apps/server/src/sourcing/openings.ts`,
-  CC0-1.0); deepest match wins; **honest absence** — out-of-book abstains, never falls
-  back to the last match. **This is a new runtime producer, not an admission of the
-  refused record kind**: the `RECORDED_READING_DISPOSITIONS` refusal
-  (`position-evidence.ts:25`, *"Opening identity is position naming, not a recorded
-  measurement"*) stays exactly as is (criterion A11).
-- **Operands:** ECO; name; matched depth/ply; match basis (`transposition` vs
-  `move-order`); table version/source id.
-- **Fixtures:** transposition positive (same position via two move orders names the same
-  opening); **out-of-book abstention — the non-vacuity core** (must abstain);
-  deepest-match precedence.
-- **Measurement:** coverage rate over the imported-game population (share of games with an
-  identity at ply N), not lift — a lookup, not a detector.
-- **Sequencing:** the audit places it at build item 15 — *"cheap but a separate lane
-  (R8/F7 owns the Review surface decision); build when that lane opens, not before."*
-  Normative here: implementation of 3.15 may not begin before the R8/F7 lane opens, and
-  its absence does not block this RFC's other criteria.
+The audit correctly identified this missing producer, but also bound it to an exploration
+lane that has not opened. It is therefore **not** an implementation item, projection, acceptance
+criterion or discharge in this RFC. D743 retains the intended shape—position-keyed lookup over
+the existing CC0 table, deepest-match precedence, transposition identity and honest out-of-book
+abstention—and the later R8/F7 RFC must re-verify those requirements when its gate opens. This
+split prevents a collector RFC from being called accepted while one of its normative items is
+explicitly forbidden to start.
 
 #### 3.16 Maia per-candidate WDL repair (audit §3.15; row D744)
 
@@ -649,7 +683,7 @@ predeclared D545 answer the measurement must confirm or refute.
   red at HEAD**); a line without it yields declared absence.
 - **Sequencing:** *"small, rides any catalog-touching commit"* (audit §5 item 16).
 
-### §4 — The rulings this RFC carries (D718, quoted)
+### §4 — The rulings this RFC carries (D745, quoted)
 
 All four rulings are encoded above; quoted here so the encoding is checkable against the
 ruling:
@@ -701,8 +735,10 @@ Per the audit's §6, consolidated; this RFC performs none of it:
    The audit's fixture demand transfers to runtime fixtures; the witness demand transfers
    to the follow-up.
 2. **`chess_tradition` as citation basis, not grounding member** (§2.5) — a reconciliation
-   of [[D718]]'s wording with the shipped closed union, in the non-widening direction.
-3. Otherwise **none**: `design/05` §5's detection/significance split and §3b's
+   of [[D745]]'s wording with the shipped closed union, in the non-widening direction.
+3. **Opening identity split out** (§3.15) — the audit correctly gated it on R8/F7, so it
+   cannot also be a required item in an otherwise implementable collector RFC.
+4. Otherwise **none**: `design/05` §5's detection/significance split and §3b's
    never-recommend rule are load-bearing constraints this RFC implements rather than
    deviates from.
 
@@ -715,15 +751,16 @@ instrumentation** while the named fallback branch executes (only A9 has a pre-au
 fallback; every other contrary measurement is escalated per law 6, not shipped around).
 
 1. **A1 — Registration completeness.** Every projection id in Appendix A (unit:
-   projection id; total: **29**, stated in that table's caption) exists in the compiled
+   projection id; total: **28**, stated in that table's caption) exists in the compiled
    catalogue; `make evidence-manifest-check semantic-evidence-check` passes; the docs
    tuple in `docs/semantic-evidence.md` and `docs/evidence-contract.md` is updated in the
    same change. A1 counts the same unit as the Appendix A table.
 2. **A2 — Operand fidelity.** For each projection, the declared `operands` match §3's
    list verbatim; event families enforce them through `requiredOperands`.
 3. **A3 — Convention pinning.** The six §2.6 conventions appear verbatim (values and
-   text) in the catalog declarations; the SEE pinned-attacker limitation and the space
-   chess-tradition citation are present as declared limitations/semantics.
+   text) in the catalog declarations; legal-capture enumeration excludes pinned
+   recapturers and illegal king captures, retains X-ray branches, and the space
+   chess-tradition citation is present as declared semantics.
 4. **A4 — Dispositions.** Every new state reading carries `inspector_only`; every new
    event/avoidance projection is eligible only for `research.semantic_selection@1`; grep
    over `apps/ packages/` (tests/tools excluded) for the nine R3 module ids and six
@@ -734,23 +771,28 @@ fallback; every other contrary measurement is escalated per law 6, not shipped a
 6. **A6 — Fixtures that start red.** The following are committed before their fixes and
    verified failing at pre-implementation HEAD, then green at landing: the D547
    `e1h1`-form reading-plane pair (§3.2); the en-passant capture-identity fixture (§3.3);
-   the Maia WDL round-trip (§3.16); the SEE sign-disagreement fixture (§3.1, red because
+   the Maia WDL round-trip (§3.16); the legal-exchange sign-disagreement fixture (§3.1, red because
    no producer exists); the fork geometric hard-negative (§3.7). The d542 pin-probe
    slider/blocker bug fixture is committed as a regression guard **and is labeled a guard
    that cannot fail at landing** if implementation is correct first-try — stated plainly
    so it is never scored as evidence (the D444/D451 lesson).
-7. **A7 — SEE downstream gate.** The hanging and fork lifts are re-measured with the SEE
-   gate on; predeclared directions: hanging en-prise-left-behind stays below 1.0
-   (negative-primary confirmed), fork moves above 1.0; each interval excludes 1.0 or the
-   criterion fails into its named branch (A9 for fork; escalation for hanging).
-8. **A8 — Per-collector measurement.** Every §3 item's measurement (lift with sign, or
+7. **A7 — Legal-exchange downstream reproduction.** The permanent collector reproduces
+   D730's directional result without changing either population's eligible-row or
+   alternative count by more than 10% unless the landing report identifies a deliberate
+   domain correction: `moved_piece_en_prise` remains below 1.0 with both bootstrap upper
+   bounds below 1.0; `double_attack` remains above 1.0 by point estimate in both
+   populations, with the imported interval excluding 1.0 and the authored interval
+   recorded as uncertain rather than promoted to a universal prior.
+8. **A8 — Per-collector measurement.** Every scoped §3 build item's measurement (lift with sign, or
    census/coverage where the spec says lift is not the instrument) is run on both the
    authored spine and `r2-imported-sample@a10a233e…` and recorded in the harness output;
    the capture event carries **no** lift claim (A8 fails if one is scored).
-9. **A9 — Fork branch, both ways (pre-authorized).** If post-SEE fork lift > 1.0 with the
-   interval excluding 1.0: `double_attack` ships as specified. If not: the registered
-   primary reading flips to opponent-relative (`fork_allowed` + avoidance), the flip is
-   recorded in the landing log entry, and no third option exists.
+9. **A9 — Fork branch, both ways (pre-authorized).** D730 does not trigger the fallback:
+   `double_attack` ships as exact research/inspector evidence with **no global
+   positive-primary disposition**, because only the imported interval excludes 1.0. If
+   the permanent implementation moves either population's point estimate below 1.0, the
+   registered primary reading flips to opponent-relative (`fork_allowed` + avoidance),
+   the flip is recorded in the landing log entry, and no third option exists.
 10. **A10 — Reading-plane repair.** `irreversibility()` fires `castled` on both UCI
     forms; an imported PGN game containing castling shows the reading and pivotal marker
     (the D547/D719 residue retires).
@@ -772,24 +814,27 @@ fallback; every other contrary measurement is escalated per law 6, not shipped a
     and the declared family list exactly replaces the `rules.structural.event.` prefix
     filter (a fixture proves a structural family still produces avoidance identically —
     the no-regression half).
-16. **A16 — Closeout protocol.** The landing commit writes ledger rows D730–D744, flips
-    the rows this RFC ships per the completion protocol, and appends the
+16. **A16 — Closeout protocol.** The landing commit flips the already-recorded rows this
+    RFC ships (D730–D742, D744 and D749) per the completion protocol, leaves deferred
+    D743 open, and appends the
     `planning/exploration/log.md` entry — in the same commit (the CLAUDE.md
     ledger-and-log clause).
+17. **A17 — Production-site closure.** The implementation diff's production files are a
+    subset of §1.1's ten sites. Any additional production site returns the RFC for an
+    amendment naming its responsibility and collision impact before that edit lands.
 
 ## Discharges
 
 | id | the obligation | owner | recorded when discharged | discharged |
 |---|---|---|---|---|
 | D1 | Production-module eligibility for every §3 collector — this RFC lands research/inspector-only by design; without promotion these projections join the class-9 wall the gap matrix measured | `planning/evidence-foundation-ux/plan.md` | the Phase-3 RFC's landing commit | |
-| D2 | Opening-identity Review-surface admission (§3.15) — the collector is specified here; the surface decision and go signal belong to the R8/F7 lane (D694/D743). If the lane has not opened when every other criterion is green, this RFC moves to `awaiting D2` | `claude` | lane-opening commit or D743's flip | |
-| D3 | Learner-facing wiring of the D718 negative reading — ruled admissible post-commit/review; the *wiring* into modules is Phase-3 work over these producers | `planning/evidence-foundation-ux/plan.md` | the Phase-3 RFC's landing commit | |
+| D2 | Learner-facing wiring of the D745 negative reading — ruled admissible post-commit/review; the *wiring* into modules is Phase-3 work over these producers | `planning/evidence-foundation-ux/plan.md` | the Phase-3 RFC's landing commit | |
 
-The prose rationale for each row lives in §9; the table is the machine-read record per the
-lifecycle contract's grammar.
+The prose rationale for each row lives in the owning §3 section and §Open questions; the table is
+the machine-read record per the lifecycle contract's grammar.
 ## Open questions
 
-1. **None blocking acceptance from the D718 set** — all four collector-audit questions
+1. **None blocking acceptance from the D745 set** — all four collector-audit questions
    are ruled and encoded (§4). Question 5 of the audit (principle citations, D530/D531)
    is a standing dependency of a *different* row (§2 #19 of the audit) and no collector
    here can close it.
@@ -797,45 +842,46 @@ lifecycle contract's grammar.
    kinds in pack conditions, a follow-up RFC claims the pack lane, extends
    `STRUCTURAL_FEATURE_KINDS` + the schema arms + witnesses, and inherits the audit §6
    impact analysis. Deferred, named, not silently chosen.
-3. **Wave B breadth** (D723–D729: square denial/restriction, pawn dynamics beyond
+3. **Wave B breadth** (D723–D729 and D746–D748: square denial/restriction, pawn dynamics beyond
    connectivity, activity/coordination, king/imbalance composites, multi-edge
    persistence): out of this RFC by the audit's own boundary — *"a prioritized
-   foundation, not a complete middlegame ontology"* (D723). The 2b probes inform a Wave-B
-   RFC; they do not gate this family set. Whether acceptance of this RFC waits on any 2b
-   probe is the owner's sequencing call recorded in `plan.md` phase 2c.
+   foundation, not a complete middlegame ontology"* (D723). The first eleven one-edge
+   probes and the first consecutive-edge census have now landed (`5a20b42`): pawn
+   harassment, locked pairs and defence-edge loss are promising; generic pawn contact and
+   slider alignment are not learner semantics; the preserved-pressure sequence is exact
+   but rare. Exchange/search-dependent Wave-B semantics remain research, not hidden scope here.
 4. **Also deliberately out** (audit §5): the per-candidate application adapter (phase 6,
    D669 lane); time-usage modelling (*"expensive, deferred per `human-like-opponents.md`
    §6d"*); plan labels (D530 citation grounding — an owner ruling, not a collector).
 
-## Ledger rows (written by this RFC's landing pass, per the completion protocol)
+## Ledger rows (already recorded; flipped by the implementation landing pass)
 
-The audit reserved **D730–D744** and proposed the rows; the landing commit writes them to
-`design/BACKLOG.md` verbatim from audit §9 (summarized): **D730** SEE
-(`see-convention@1`, §3.1) · **D731** castling family + reading-plane unification (§3.2)
-· **D732** capture identity + SEE-classified captures + trade join (§3.3) · **D733**
+The audit reserved **D730–D744** and the ruling commit recorded them in
+`design/BACKLOG.md` from audit §9 (summarized): **D730** legal local exchange
+(`legal-exchange@1`, §3.1, amended by D730 measurement) · **D731** castling family + reading-plane unification (§3.2)
+· **D732** capture identity + exchange-classified captures + trade join (§3.3) · **D733**
 hanging/loose with the avoidance form as primary reading (§3.4) · **D734** ray
 classification family (§3.5) · **D735** pawn connectivity (§3.8) · **D736** rook-on-7th
 with meaningfulness operands (§3.10) · **D737** development (§3.9) · **D738** space under
 `space@1` (§3.11) · **D739** trapped + back-rank (§3.13) · **D740** discovered latency +
 executed-discovered adapter (§3.12) · **D741** threats under `threat@1`,
 `blunder_prevention`'s producer (§3.6) · **D742** promotion pressure (§3.14) · **D743**
-runtime opening identity (§3.15) · **D744** Maia WDL repair (§3.16).
+runtime opening identity (deferred §3.15) · **D744** Maia WDL repair (§3.16).
 
-**Fork has no reserved row** — the audit's §9 set skips its own §3.2, an omission this
-RFC surfaces rather than papers over. Fork's standing ledger presence is [[D545]] (the
-geometry-alone caution and the sign question), which §3.7's measurement discharges either
-way; the landing pass writes fork's dedicated row as **D745** (the first free id), and
-anything else new discovered mid-implementation continues from **D746**, each getting its
-row the moment it is uttered (law 4).
+**Fork had no reserved row** — the audit's §9 set skipped its own §3.2. D749 now records
+the dedicated exact-event work and D730's measured sign. D750–D753 record the four spec
+defects found by the prerequisite pass: pseudo-SEE legality, pass-state abstention,
+undefined trapped-destination semantics, and the gated opening item mixed into an
+implementable RFC.
 
 ## Appendix A — projection id enumeration
 
-Unit: **projection id**; total: **29**. This is the closed list A1 counts; adding or
+Unit: **projection id**; total: **28**. This is the closed list A1 counts; adding or
 dropping an id is a spec change with a changelog line, never a silent drift.
 
 | # | projection id | §3 item | role |
 |---:|---|---|---|
-| 1 | `rules.exchange.predicate.see@1` | 3.1 | predicate |
+| 1 | `rules.exchange.predicate.legal_exchange@1` | 3.1 | predicate |
 | 2 | `rules.castling.reading.rights@1` | 3.2 | state reading |
 | 3 | `rules.castling.event.rights_lost@1` | 3.2 | transition event |
 | 4 | `rules.castling.reading.legality@1` | 3.2 | state reading |
@@ -848,7 +894,7 @@ dropping an id is a spec change with a changelog line, never a silent drift.
 | 11 | `rules.tactic.reading.ray_classification@1` | 3.5 | state reading |
 | 12 | `rules.tactic.consequence.threat@1` | 3.6 | consequence |
 | 13 | `rules.tactic.event.double_attack@1` | 3.7 | transition event |
-| 14 | `rules.tactic.consequence.fork_wins_material@1` | 3.7 | consequence |
+| 14 | `rules.tactic.consequence.fork_survives_reply@1` | 3.7 | consequence |
 | 15 | `rules.structural.reading.pawn_connectivity@1` | 3.8 | state reading |
 | 16 | `rules.structural.event.pawn_islands@1` | 3.8 | structural event |
 | 17 | `derived.semantic_avoidance.pawn_islands@1` | 3.8 | avoidance event |
@@ -862,15 +908,19 @@ dropping an id is a spec change with a changelog line, never a silent drift.
 | 25 | `rules.tactic.reading.back_rank@1` | 3.13 | state reading |
 | 26 | `rules.tactic.consequence.mate_in_one@1` | 3.13 | consequence (exact) |
 | 27 | `derived.tactic.promotion_pressure@1` | 3.14 | derived join |
-| 28 | `theory.opening_identity_runtime.reading@1` | 3.15 | lookup state |
-| 29 | `human.maia.candidate_wdl@1` | 3.16 | source projection |
+| 28 | `human.maia.candidate_wdl@1` | 3.16 | source projection |
 
 If the A9 fallback branch executes, ids 13–14 are replaced by
 `rules.tactic.event.fork_allowed@1` + `derived.semantic_avoidance.fork_allowed@1` — the
-total stays 29 and the swap is recorded in the changelog and the landing log entry.
+total stays 28 and the swap is recorded in the changelog and the landing log entry.
 
 ## Changelog
 
 - 2026-08-22: created from `planning/evidence-foundation-ux/phase2-collector-audit.md`
-  (HEAD `ccb378d`) with all symbols re-verified at drafting HEAD `6526ccf`; D718 rulings
+  (HEAD `7eb9210`) with all symbols re-verified at drafting HEAD `6526ccf`; D745 rulings
   encoded; no register claims.
+- 2026-08-22: amended after the predeclared D730 legal-exchange instrument. Replaced the
+  pseudo-attacker swap with legal recapture-only minimax; recorded paired-bootstrap
+  results and uncertainty; fixed pass-in-check abstention and trapped-destination
+  semantics; added the production-site census; split gated opening identity back to
+  D743/R8/F7; corrected the closed projection count from 29 to 28.

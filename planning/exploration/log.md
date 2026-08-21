@@ -4222,3 +4222,24 @@ D746-D748 record the selection, sequence and defender-identity consequences. The
 pins positive/hard-negative fixtures for locking, alignment, shelter and defence edges as well as
 the original line relation. Phase 2b remains open only for semantics requiring SEE/search or a
 stronger declared convention; no production code or content changed.
+
+## 2026-08-22 — legal local exchange falsifies the pseudo-SEE prerequisite
+
+The predeclared D730 disposable instrument evaluated 39,038 played/legal-alternative edges across
+717 authored decisions and 577 decisions from the sealed imported CC0 sample. Legal
+recapture-only minimax runs at 0.038–0.041 ms per edge, excludes a pinned recapturer in the named
+fixture, preserves an X-ray recapture and finds geometry/exchange disagreements in both
+populations. `moved_piece_en_prise` is robustly negative-primary at 0.36× (95% 0.28–0.45)
+authored and 0.57× (0.47–0.69) imported. Exchange-filtered double attack rises from geometry's
+0.72×/1.00× to 1.72×/1.96×; only the imported interval excludes 1, so the exact event receives no
+universal positive-primary disposition.
+
+The result returned the tactical-collectors draft rather than merely changing its implementation.
+The audit's pseudo swap admitted pinned recapturers; threat incorrectly declared a pass state total;
+trapped-destination exchange was undefined; local fork consequence overclaimed “wins material”;
+and gated runtime opening identity made the RFC impossible to complete as one accepted unit. The
+amended draft uses `legal-exchange@1`, records exact abstentions and operands, renames the local
+fork consequence, splits opening identity back to D743/R8/F7, adds a closed ten-site production
+census and corrects Appendix A to 28 projections. D730 is updated and D749–D753 record the fork
+and review defects. The RFC remains draft pending independent buildability review; no production
+or content code changed, and Phase 2b breadth remains open beyond this prerequisite.

@@ -1,5 +1,11 @@
 # Phase 2 — required-collector audit (D717 program)
 
+> **2026-08-22 prerequisite correction:** this audit's pseudo-SEE proposal is superseded by
+> `design/research/legal-exchange-prerequisite.md`. The measured production contract is legal
+> recapture-only minimax (`legal-exchange@1`), not the pinned-attacker-inclusive swap described
+> below. `rfc/tactical-collectors.md` carries the amended normative form. Historical audit text is
+> retained so the falsified assumption remains visible.
+
 **Commissioned by the D717 program routing** (`planning/evidence-foundation-ux/plan.md`, phase 2).
 Re-derived at HEAD `ccb378d`, 2026-08-22. Method: every state claim below was verified **at the
 symbol at HEAD**, never trusted from a ledger row or dossier — the measured stale rate of this
