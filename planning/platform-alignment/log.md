@@ -878,3 +878,15 @@ Product modules/defaults, schemas and content remain explicitly out of scope.
 - `grounded-coaching/o9-handoff.md` makes O9 ready on a conservative contract: continuous literal
   habits, a personal-observation ledger, three learner modules, deterministic-first presentation,
   optional sealed LLM wording, privacy lifecycle and no archetypes/diagnosis/priority ranking.
+
+## 2026-08-21 — R15/R16 coach and streamer handoff ready
+
+- Re-derived all 24 live-kind/role/disclosure permission cells and the current overlay, vote,
+  adapter, delay and accepted-RFC ownership edges.
+- Confirmed shared-truth overlay non-leakage and the completed attribution/2–8-option repairs;
+  separated absent provider bridges and editorial delay from the run disclosure contract.
+- Confirmed Academy alone still inherits Position preferences and reproduced D80's match-seat
+  asymmetry, already owned by accepted `teacher-surface`.
+- Reconciled D649 and the accepted RFC: external recruitment no longer blocks implementation;
+  O11 owns a scoped composition amendment, not a redesign or revocation.
+- `professional-workflows/o11-handoff.md` makes O11 ready; R17 is the next research node.

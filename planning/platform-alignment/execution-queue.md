@@ -16,7 +16,7 @@ dependency edge, they may not.
 | 0.2 | A1 capability reality audit | **DONE 2026-08-20** | `capability-reality-audit.md`; all 21 rows traced and map truth reconciled |
 | 0.3 | A2 interaction-state/K9 instrument | **DONE 2026-08-20** | `interaction-state-correctness.md` and disposable exact-UCI harness; K9/gates/ledger/log reconciled; no product code changed |
 | 0.4 | Close or explicitly return already-implemented RFCs | **PARTIAL:** four stale implementations closed | `live-marker-quality`, `dead-vocabulary`, `engine-leverage`, `vocabulary-wiring` archived; no other active RFC was misclassified complete |
-| 0.5 | Implement accepted incomplete RFC work | **PARTIAL — Feedback Stage 1 and graduation's read-only planner LANDED 2026-08-21** | Feedback Stage 1 landed at `a64e6c5`; graduation criterion 13 was corrected at `bafe62e`, and `make graduation-plan` now re-derives the 92-document population with explicit judgment debt. D560/Gate F still gate schema 0.28, product clearance mutation, the corpus apply and archive. Feedback Stage 2 remains behind D560. Teacher waits on R15/O11 or amendment |
+| 0.5 | Implement accepted incomplete RFC work | **PARTIAL — Feedback Stage 1 and graduation's read-only planner LANDED 2026-08-21** | Feedback Stage 1 landed at `a64e6c5`; graduation criterion 13 was corrected at `bafe62e`, and `make graduation-plan` now re-derives the 92-document population with explicit judgment debt. D560/Gate F still gate schema 0.28, product clearance mutation, the corpus apply and archive. Feedback Stage 2 remains behind D560. Teacher is accepted/executable; reconcile its active deletion/migration wording and O11 composition amendment without revoking its owner ruling |
 | 0.6 | A3/A4 detector semantics and evidence-topology baselines | **DONE 2026-08-20** | 18+6 detector-family conformance and 14-producer topology are executable; current production admits no universal learner family and has no compiled module/workflow join |
 | 0.7 | A5 workflow/default conformance | **DONE 2026-08-20** | Six technical profiles/54 raw controls collapse to one unnamed default; only 2/6 intended workflows bind directly and the session-kind ceiling is still invariant |
 | 0.8 | A6 research sufficiency join | **DONE 2026-08-20** | `research-sufficiency.md`; only F1/F12 are architecture-research-ready, both blocked by protected intent/process; every F2-F11 empirical predecessor named |
@@ -67,9 +67,9 @@ schema evolution.
 
 | Order | Job | State | Dependency |
 |---|---|---|---|
-| 4.1 | R15 coach workflow | WAIT/EXTERNAL | R3/R7 and participant authority |
-| 4.2 | R16 streamer/broadcast workflow | WAIT | R3/R7 |
-| 4.3 | R17 human play/tournaments/social trust | WAIT | R11/R15; R18 platform edge done |
+| 4.1 | R15 coach workflow | **MECHANICAL/CODE/DESK DONE 2026-08-21; O11 READY** | Current synchronous jobs + accepted async contract reconciled; owner use remains |
+| 4.2 | R16 streamer/broadcast workflow | **MECHANICAL/CODE/DESK DONE 2026-08-21; O11 READY** | Overlay/role/vote/adapter/delay matrix complete; owner use remains |
+| 4.3 | R17 human play/tournaments/social trust | **READY NOW** | R11/R15 mechanical predecessors and R18 platform edge done |
 | 4.4 | R19 federation | POST-1.0 WAIT | R17 plus owner promotion |
 
 **Phase exit:** O11–O13 ruled; every “one platform” claim has an included, adapter or deferred

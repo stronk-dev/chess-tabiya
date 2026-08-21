@@ -51,6 +51,7 @@ legal-alternative rule is the selector input after semantic eligibility.
 | R4 + R8 | Build theory separately as a deterministic provenance compiler and immutable exact/FTS bundle; use typed applicability sets and preserve exact launch/back identity | Final owner acceptance of the learner workflow |
 | R5 | Keep the deterministic renderer normative; make the LLM optional wording only | That any current model improves comprehension |
 | R6 | Require capability negotiation, dependency-aware migration and a primitive-complete pilot | That the current pack foundation is stable enough for content scale |
+| R15 + R16 | Compose Coach and Streamer from shared run/evidence modules; keep the accepted Teacher consent model; add an explicit Academy profile; keep provider chat bridges outside the truth path | Exact default density/names and whether owner use finds the workflows legible |
 | R18 | Specify the owner-ruled Choice-C appliance architecture | Final accessibility acceptance on real assistive/physical devices |
 
 ## What still requires people rather than another code census
@@ -60,11 +61,11 @@ legal-alternative rule is the selector input after semantic eligibility.
 | R3 | Nontechnical learners choose workflows/presets and understand nudges on desktop, phone and keyboard | Buildability and source correctness do not establish comprehension or acceptable noise |
 | R7 | Learners use a bounded Review Map to choose a useful replay/re-entry action | Moment value and action clarity are human outcomes |
 | R8 | Owner finds the exact theory→rehearsal and review→rehearsal handoff useful | The mechanical join passes, but usefulness remains experiential |
-| R9/R15 | Learners and coaches complete real assign/observe/respond jobs | “Teacher surface” is currently a permission specification, not a validated coach workflow |
-| R11 | Blind reviewers distinguish layered bot arms on human-likeness and coherence | Move legality/distribution cannot establish felt personality |
+| R9/R15 | Owner uses the accepted assign/observe/respond workflow after implementation | D649 descopes recruited participants; use may reject UX but no longer blocks the consent architecture |
+| R11 | Owner compares the prepared blind bot branches | D649 descopes recruited reviewers; owner use may reject a profile but cannot create a population human-likeness claim |
 | R12/R13 | Short-session metrics remain stable longitudinally and support grounded action | A descriptive correlation is not yet a durable coaching claim |
 | R14 | Owner experiences the campaign wrapper over real admitted evidence | The unresolved questions concern felt scarcity, retry pressure and loop pull |
-| R16/R17 | Audience/player workflows expose useful delay, moderation, clock and fair-play boundaries | These are social operating properties, not only UI mechanics |
+| R16/R17 | Owner uses the composed Stream view; R17 still studies competitive player/event boundaries | Stream's shared-truth mechanics are established; clocks, fair play and public-event moderation remain separate social properties |
 
 ## Dependency effect
 

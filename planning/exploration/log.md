@@ -4108,3 +4108,21 @@ R13's mechanical/code arm is complete and O9 is ready. The handoff recommends a 
 observation ledger feeding separate Observed habit, Recurring situation and Rehearsal result
 modules; deterministic rendering is authoritative and optional LLM prose may only paraphrase the
 sealed card. Owner use remains the quality check, not a pretext for inventing a weakness ranking.
+
+## 2026-08-21 — R15/R16 professional workflow conformance complete
+
+The 24-cell live-kind × role × disclosure matrix and current-surface audit pass. Stream and Match
+have explicit preference profiles; Academy still maps to Position. Permission ignores live kind:
+after disclosure solo/host reach human/corpus evidence while participant/spectator remain locked
+and sight-capped. D80's host-seat match asymmetry is reproduced and remains owned by the accepted
+Teacher RFC.
+
+The Stream overlay is a shared-state projection with withholding and adapter attribution, 2–8 vote
+options and no evidence/provider call. No Twitch/YouTube bridge or editorial delay ships; polling
+is transport only. The accepted async Teacher consent contract remains authoritative, while the
+queue had incorrectly blocked it behind R15/O11 after D649 descoped recruitment. D703-D705 record
+the ownership and scope corrections.
+
+R15/R16's mechanical/code/desk arms are complete and O11 is ready. The handoff recommends explicit
+Academy and Stream compositions, the generic bounded adapter boundary, no 1.0 editorial Stream
+delay, no per-viewer truth and no class-wide progress/weakness dashboard. R17 is now executable.

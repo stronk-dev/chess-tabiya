@@ -73,9 +73,9 @@ These can run in parallel after A1 identifies the exact symbols and fixtures.
 
 | ID | Status | Research deliverable | Method and population | Exit criterion | Unlocks |
 |---|---|---|---|---|---|
-| R15 | BLOCKED by R3/R7; participant arm EXTERNAL | **Teacher/coach workflow** | Audit accepted `teacher-surface` against actual coach jobs: assign, observe, annotate, reveal, compare, return and privacy. Test async and live workflows; distinguish teacher authority from engine assistance. | A minimum coherent coach workflow, permission model and default view are demonstrated; otherwise accepted RFC is amended rather than mechanically shipped. | Teacher implementation/amendment. |
-| R16 | BLOCKED by R3/R7 | **Streamer/broadcast mode** | Teardown live chess teaching/broadcast tools and test composed views for host, participant and spectator. Measure disclosure delay, chat/vote usefulness, moderation and accidental assistance leakage. | Named audience views can be composed from shared run/evidence modules with no separate truth path; underspecified features are refused or scoped. | Streamer/live RFC amendment. |
-| R17 | BLOCKED by R11/R15; external service tests may be needed | **Human play, bot tournaments and social trust** | Compare native play, Lichess/Arena handoff and adapters on identity, clocks, fair-play boundaries, rematch/tournament flow, moderation, persistence and self-host cost. | Owner receives a costed native/adaptor/defer choice; no “one-stop platform” claim rests on a link that drops the learning context. | Human-play/tournament scope decision. |
+| R15 | **MECHANICAL/CODE/DESK COMPLETE 2026-08-21; owner use remains** | **Teacher/coach workflow** — `design/research/professional-workflow-conformance.md` | Reconciled synchronous Live jobs and accepted async Teacher contract against current role/default/evidence paths. D649 descopes recruited participants. | Shared-truth Teach Live and Review Submission compositions are specified; Academy profile gap and accepted-RFC ownership are explicit. | O11 ready; Teacher implementation/amendment. |
+| R16 | **MECHANICAL/CODE/DESK COMPLETE 2026-08-21; owner use remains** | **Streamer/broadcast mode** — `design/research/professional-workflow-conformance.md` | Current 24-cell ceiling matrix and overlay/vote/adapter/delay conformance. Overlay has no provider path; provider bridge/editorial delay are separate absences. | Named Stream view composes from shared truth with withholding/attribution; no accidental evidence fork. | O11 ready; Streamer composition amendment. |
+| R17 | **READY NOW — R11/R15 predecessors mechanically complete** | **Human play, bot tournaments and social trust** | Compare native play, Lichess/Arena handoff and adapters on identity, clocks, fair-play boundaries, rematch/tournament flow, moderation, persistence and self-host cost. | Owner receives a costed native/adaptor/defer choice; no “one-stop platform” claim rests on a link that drops the learning context. | Human-play/tournament scope decision. |
 | R18 | **MECHANICAL/CODE/DESK DONE 2026-08-20; participant accessibility external** | **Self-host, privacy, accessibility and rights inventory** — `design/research/release-platform-audit.md` | Clean provider-off and engine-on deployments, live Maia-loss injection, data deletion/export probes, built-image package/content census and Chromium AX/keyboard/responsive probes. Core rehearsal needs no cloud secret, but 1.0 fails on portable export/deletion, backup/update recovery, provider-health honesty, keyboard/assistive move entry, Tab traversal and distributed rights. | Internal exit met negatively; physical-device and screen-reader participant claims remain external and rerun against F12. | O13 ruled Choice C; F12 is not cleared. |
 | R19 | BLOCKED by R17 | **Federation/discovery protocol** | Research only if native multi-user play/community survives R17. Compare existing open protocols and moderation/identity costs before designing a new one. | Adopt an existing bounded protocol, define a justified minimal extension, or defer. | Post-1.0 unless owner explicitly promotes it. |
 
@@ -92,10 +92,9 @@ watch owns discovery and routing, not conclusions.
 
 ## What is executable now
 
-The capability-watch instrument and D554's targeted desk/forum follow-up are complete: zero signals
-remain unchecked, while 20 explicit targeted-search misses preserve absence-of-evidence. R11's blind review set is prepared and validated; only external
-review remains. R3's mechanical/desk arm is done but its interaction/participant exit remains external;
-R4 and R5 are done; R11 is mechanical-done/external; R8 waits on R3's remaining exit. Comparable
-competitor hands-on stays inside R3/R7/R8/R11/R15-R17 rather than reopening the whole matrix.
-R3 and R9 need owner-authorised participants to satisfy their final exits. Scale content, product
-RFC drafting and feature implementation remain outside this queue.
+The capability-watch and targeted desk/forum follow-up are complete: zero signals remain unchecked
+and 20 explicit targeted-search misses preserve absence-of-evidence. R3, R7, R8, R11, R13, R15 and
+R16 have completed their mechanical/code/desk arms; D649 retains owner use and removes recruited
+participants as an implementation blocker without manufacturing population claims. O5–O9 and O11
+now have owner handoffs. R17 is the next executable research node; R14 remains an owner session;
+R10 remains downstream of the representative pilot. Scale content stays held by D560/Gate F.
