@@ -679,3 +679,11 @@ Append-only. Record research, rulings, RFC transitions, implementation closeout 
   traversal; no evidence or assistance is added.
 - No product code, schema, storage, content or protected intent changed. Both drafts require
   buildability/cross-review and acceptance before implementation.
+
+## 2026-08-21 — Choice-C resource tiers ruled
+
+- Owner adopted F12-E's three-tier appliance matrix as proposed: deterministic no-model `core`,
+  FOSS Stockfish plus CPU Maia `cpu` as the default full local-opponent appliance, and separately
+  labelled/licensed optional GPU `accelerated`.
+- No core learner journey may depend on the accelerated image; external providers remain optional.
+- The deletion-retention choice remains open pending clarification of its user-visible effects.

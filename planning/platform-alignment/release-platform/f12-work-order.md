@@ -169,7 +169,7 @@ Blocked portion:
   candidates, jobs, local paths and authoring-only sidecars, and carry only rights-cleared runtime
   artifacts.
 
-Recommended resource tiers:
+**OWNER RULED 2026-08-21:** adopt these resource tiers as proposed:
 
 1. `core`: deterministic rehearsal, no model, lowest supported memory;
 2. `cpu`: FOSS Stockfish + CPU Maia, the default full local-opponent appliance;
@@ -241,8 +241,8 @@ Two rulings unblock the largest independent children without waiting on F1/F4:
 
 1. **Deletion retention:** adopt or amend F12-B's recommended private-hard-delete / shared-public-
    tombstone rule.
-2. **Resource tiers:** adopt or amend F12-E's `core` / FOSS `cpu` / optional separately disclosed
-   `accelerated` matrix.
+2. **Resource tiers — RULED 2026-08-21:** adopted F12-E's `core` / FOSS `cpu` / optional separately
+   disclosed `accelerated` matrix as proposed.
 
 Everything else above is either already ruled by O13, a technical implementation decision for its
 child RFC, or honestly blocked on F1/F3/F4. No further broad platform research is required before
@@ -250,7 +250,7 @@ drafting F12-A/C/F; their eventual implementations still need the named destruct
 
 ## 5. Immediate queue
 
-1. Claude/owner rules the two choices above.
+1. Claude/owner rules the remaining deletion-retention choice; resource tiers are settled.
 2. Draft F12-F first: it closes a core-action exclusion and has no F1/F3/F4 dependency.
 3. Draft F12-C and F12-A in either order; they touch disjoint systems.
 4. Draft F12-B after the retention ruling.
