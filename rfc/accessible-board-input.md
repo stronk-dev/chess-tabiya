@@ -1,6 +1,6 @@
 # RFC: Accessible board input — one move state machine, four input projections
 
-- **Status:** implementing
+- **Status:** awaiting D3
 - **Author:** codex (agent), for Marco
 - **Created:** 2026-08-21
 - **Design refs:** `design/02-product-shape.md` Choice-C appliance and web/PWA floor;
@@ -359,8 +359,8 @@ assistance content.
 
 | id | the obligation | owner | recorded when discharged | discharged |
 |---|---|---|---|---|
-| D1 | [[D612]] keyboard and assistive board move entry | `accessible-board-input` | implementation commit | |
-| D2 | [[D613]] normal Tab traversal and focus-trap removal | `accessible-board-input` | implementation commit | |
+| D1 | [[D612]] keyboard and assistive board move entry | `accessible-board-input` | implementation commit | `2b68103` |
+| D2 | [[D613]] normal Tab traversal and focus-trap removal | `accessible-board-input` | implementation commit | `2b68103` |
 | D3 | §11 owner validation run on the owner's devices, logged with device/browser/AT and failures (D649 posture) | `accessible-board-input` | `planning/platform-alignment/log.md` entry | |
 
 ## Open questions
@@ -380,3 +380,5 @@ keyboard/assistive board entry, and the text form is the independent fallback.
   Alt+C matched on `event.code` for macOS; Escape target, probe home and AC14 doc homes named;
   post-gesture tree assertions added per [[D538]]; AC16 reconciled with the `awaiting` lifecycle
   via Discharges row D3; coordination seams stated.
+- 2026-08-21: implementation landed at `2b68103`; mechanical D1/D2 discharged. Status moved to
+  `awaiting D3` for the owner validation-by-use session required before archival.

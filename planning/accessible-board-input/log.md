@@ -29,3 +29,9 @@ Append-only.
   suite passed: 28 scenarios green, one optional live-Maia latency probe skipped, zero retries.
 - Web typecheck reports zero errors and zero warnings. The earlier 27-pass figure above is retained
   as the pre-traversal reading rather than rewritten.
+
+## 2026-08-21 — code landed; owner-use discharge remains
+
+- Implementation commit: `2b68103`.
+- RFC D1/D2 are discharged. The RFC moved to `awaiting D3`; per RFC-0000 it stays active and its
+  BACKLOG rows remain open until the owner-use session is logged and the RFC can archive.

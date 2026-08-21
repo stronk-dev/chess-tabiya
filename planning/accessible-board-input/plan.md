@@ -1,6 +1,6 @@
 # Accessible board input — implementation plan
 
-Status: implementing
+Status: awaiting D3
 RFC: `rfc/accessible-board-input.md`
 Started: 2026-08-21
 

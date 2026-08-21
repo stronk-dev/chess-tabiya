@@ -3872,3 +3872,16 @@ question: it appears in neither the approved amendment handoff nor living intent
 the recruited-participant arm. The product boundary remains strict provider conformance with a
 deterministic fallback. `make intent-parity` uses Node's built-in runner, reads protected intent,
 byte-checks its derived contract report, writes nothing, and now runs inside `make verify`.
+## 2026-08-21 — accessible board input landed and awaits owner use
+
+- `2b68103` landed one validated move controller projected through click, drag, touch, keyboard and
+  SAN/UCI text entry, a semantic eight-by-eight grid, native Tab/Shift+Tab traversal and physical
+  `Alt+C` comparison.
+- The permanent interaction floor is now 150 exact cells (six packs × five viewports × five input
+  modes), plus a post-gesture semantic-grid assertion and bidirectional whole-drill focus traversal.
+- Two implementation regressions were caught before landing: the collapsed text control first
+  intercepted board squares, then its non-overlapping repair reduced short-desktop boards below the
+  192px floor. The final adjacent sidecar layout clears both instruments.
+- Mechanical discharges D1/D2 are complete. `accessible-board-input` is `awaiting D3` on the
+  owner's normal device/browser/assistive-technology validation-by-use session; no code work or
+  recruited participant study remains.
