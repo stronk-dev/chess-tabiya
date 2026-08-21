@@ -1,6 +1,6 @@
 # RFC: RFC lifecycle completion — the transitions between documents
 
-- **Status:** awaiting — D1 (`tools/status-parity.mjs`)
+- **Status:** implemented 2026-08-21
 - **Author:** claude
 - **Created:** 2026-08-17
 - **Design refs:** **None, and the absence is deliberate.** This RFC specifies repo process,
@@ -21,7 +21,7 @@
   **§Planning docs & the job log**; amends `rfc/template.md`; specifies one cell edit and one
   header note in `rfc/README.md` §Active. The full list is §9.2.
 - **Supersedes / superseded by:** —
-- **Planning:** `planning/rfc-lifecycle-completion/` (once implementing)
+- **Planning:** `planning/archive/rfc-lifecycle-completion/`
 
 **Shared-resource claims: none.** No pack lane, no run lane, no shape-entry lane, no
 principle-entry lane, no migration position, no vocabulary member. Verified at HEAD `68098e5`
@@ -753,7 +753,7 @@ criterion that measures nothing ([[D444]], [[D451]]).
 
 | id | the obligation | owner | recorded when discharged | discharged |
 |---|---|---|---|---|
-| `D1` | P1–P6 — P3 as widened by the D648 Q3 ruling — implemented in `tools/status-parity.mjs` and wired into `make verify` (acceptance criteria 6 and 7) | `codex`, via `planning/codex-queue.md` | the implementing commit's sha | |
+| `D1` | P1–P6 — P3 as widened by the D648 Q3 ruling — implemented in `tools/status-parity.mjs` and wired into `make verify` (acceptance criteria 6 and 7) | `codex`, via `planning/codex-queue.md` | the implementing commit's sha | `7bdbafa` |
 
 ---
 
@@ -831,6 +831,10 @@ through **D651** are now in use; this refresh proposes no further rows):
 ---
 
 ## Changelog
+
+- 2026-08-21: implemented and discharged. Documentary transition `3aef8df`; P1–P6 reader
+  `7bdbafa`; final gate 767 Vitest tests plus 12 register and 11 lifecycle fixtures, with
+  9 Active / 65 Archive / 6 honest open obligations at the pre-archive reading.
 
 - 2026-08-17: created. Drafted against HEAD `68098e5`; every register fact re-derived at the named
   symbol at that commit rather than inherited from `planning/rfc-drafting-queue.md` (written

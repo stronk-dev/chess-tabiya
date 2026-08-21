@@ -3837,3 +3837,11 @@ while making its leading token comparable. The process RFC itself is the bootstr
 D433, D475, D478 and D460 close on the documentary mechanism. D476 stays open because the binding
 wave is now visibly owned by `OWNER` but has not yet been commissioned; naming a missing act is not
 performing it.
+
+## 2026-08-21 — Lifecycle parity implemented and RFC discharged
+
+`tools/status-parity.mjs` landed at `7bdbafa`, reusing the Active parser from RFC-1. P1–P6 bind
+status tokens, body/cell parity, both filesystem/register set equalities, terminal archive state,
+the Discharges grammar, awaiting pointers, archival clearance and the four owner forms. The
+pre-archive live run read 9 Active, 65 archived and 6 open obligations, all honest, with P1–P6
+green. The lifecycle RFC's D1 records that SHA and the document now archives without an open row.

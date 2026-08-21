@@ -30,3 +30,11 @@ Append-only.
 - `make verify` passed 767 Vitest tests, twelve register fixtures, eleven lifecycle fixtures,
   typecheck, scaffold, schema and packaging checks. The live reading is 9 Active, 65 archived,
   6 open discharge rows, P1–P6 green.
+
+## 2026-08-21 — D1 discharged and RFC complete
+
+- Instrument commit: `7bdbafa`.
+- D1 now carries that SHA; the RFC can transition from awaiting to implemented without erasing
+  the obligation history.
+- D476 remains open and visible as feedback-delivery D1 owned by `OWNER`; this closeout does not
+  pretend the binding wave was commissioned.

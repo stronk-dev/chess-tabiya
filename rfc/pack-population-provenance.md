@@ -669,11 +669,10 @@ name that was not in the tree, so each criterion below names what fails and how.
 | `D1` | Populate `provenance.corpusEvidence` across all 92 packs — deciding per pack whether its state is `ledger`, `abstained` (with which `ABSTENTION_REASONS` member and detail) or `unsourced`. This is authored judgement about each pack's evidence situation, not a mechanical edit, and it is what turns P1's 92 warnings into zero. | **`OWNER`** — commissioning a content wave is an owner act | `planning/content-era/log.md` + the ledger flips, in the shipping commit (`CLAUDE.md` content-wave closeout) | |
 | `D2` | Job A — the 21 `provenance.sources` string repairs that turn P4 from 20 firings to 0. Already specified and queued; this RFC neither re-specifies nor performs it. | **`planning/codex-queue.md`** §0-CONTENT | the job A shipping commit | |
 
-Section format per `rfc/rfc-lifecycle-completion.md` §3.1 (draft). If that RFC does not land, these
-two rows remain as prose obligations and the register row states them; the obligations are real
-either way. **Neither row blocks `accepted`; both block `implemented`** — which is the distinction
-that section exists to express, and the reason `feedback-delivery`'s equivalent obligation went
-ownerless when it was filed as an open question instead ([[D476]]).
+Section format per `rfc/archive/rfc-lifecycle-completion.md` §3.1 (implemented). **Neither row
+blocks `accepted`; both block `implemented`** — which is the distinction that section exists to
+express, and the reason `feedback-delivery`'s equivalent obligation went ownerless when it was
+filed as an open question instead ([[D476]]).
 
 **Not carried as a discharge, deliberately:** the explorer census pass over the 60 `corpus_observed`
 claims in 31 packs. That obligation already exists as `feedback-delivery`'s own `D1` and duplicating
