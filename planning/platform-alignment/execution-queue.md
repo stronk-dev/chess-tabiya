@@ -54,7 +54,7 @@ schema evolution.
 
 | Order | Job | State | Dependency |
 |---|---|---|---|
-| 3.1 | R7 Review Map/re-entry/share study | WAIT | R1–R3 |
+| 3.1 | R7 Review Map/re-entry/share study | **CURRENT/COMPETITOR AUDIT DONE; candidate instrument implementing** | R1/R2/F2 + real R3 packets available; owner use remains shared exit |
 | 3.2 | R8 theory↔drill workflow | WAIT | R3 only; R1/R2/R4 complete |
 | 3.3 | R12 player metrics | **SHORT-SESSION ARM DONE 2026-08-20; longitudinal transfer external** | 12/16 literal metrics retained with 25–200-game floors; individual vector passes, archetypes fail; production admission remains O2/O9 and R13 |
 | 3.4 | R13 grounded coaching aggregates | WAIT | R7/R12 |

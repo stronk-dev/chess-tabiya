@@ -4006,3 +4006,19 @@ module-specific eligibility/refusal set before selection and allow empty budget 
 from the research pool. R3's mechanical/real-packet arms are complete; D649 leaves owner use as the
 exit. A requested browser visual recheck was unrun because no browser surface was connected; 19/19
 executable harness checks pass, and no visual-pass claim was manufactured.
+
+## 2026-08-21 — R7 current Review Map and competitor audit
+
+The first R7 arm is executable at `tools/r7-review-map-harness/` (4/4). Tabiya's strongest fact is
+preserved re-entry: Story rewinds and forks inside the same run, so the source continuation and new
+attempt both survive. The current surface is not yet the requested Review Map: `review.story` admits
+nine projections and zero F2 semantic/avoidance events; ranking is fixed kind priority plus absolute
+recorded-eval delta; each moment has one learning action.
+
+Three defects are ledgered. D687: the PNG stamps every source as recorded engine evidence and keeps
+only the first sentence. D688: private Story selects ranked top eight while public Story selects the
+chronological first eight. D689: F2 events never enter Story, so its landing did not silently create
+attack/defence/structure moments. Current sources isolate the transferable pieces: Chess.com's
+guided ritual, Lichess's verdict-hidden retry, Beacon's candidate/reply continuity and Quackmate's
+one-moment/share ritual. Engine grades, best-move defaults and ungrounded causal prose remain
+refused. The next R7 unit is the same-game three-policy instrument; no F6 RFC is authorized.
