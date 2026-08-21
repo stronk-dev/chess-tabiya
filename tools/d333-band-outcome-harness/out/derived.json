@@ -1,0 +1,282 @@
+{
+ "ladderSpan": {
+  "bandFrom": 1000,
+  "bandTo": 2200,
+  "bandPoints": 1200,
+  "eloGain": 346.8,
+  "eloGainCi95": [
+   315.2,
+   378.3
+  ],
+  "eloPer100Band": 28.9,
+  "eloPer100BandCi95": [
+   26.27,
+   31.53
+  ],
+  "transferRatio": 0.289,
+  "transferRatioCi95": [
+   0.2627,
+   0.3153
+  ]
+ },
+ "thresholds": {
+  "coverage": {
+   "needed": 0.7143,
+   "note": "D332's 1000->2000 journey (1000 Elo) over R10's usable band range (1400 band points)",
+   "observedFullRangeElo": 289.6,
+   "observedFullRangeCi95": [
+    254.5,
+    324.7
+   ],
+   "observedRatio": 0.2068,
+   "met": false,
+   "journeyFractionCovered": 0.2896
+  },
+  "rung": {
+   "neededEloPer100Band": 60.0,
+   "note": "SE of a learner's own Elo over a 30-game session ~= 0.47/sqrt(30) in score ~= 60 Elo",
+   "observed": {
+    "step100-1500-1600": {
+     "gap": 100,
+     "elo": 22.1,
+     "ci95": [
+      12.4,
+      31.8
+     ],
+     "eloPer100Band": 22.1,
+     "ci95UpperBelow60": true
+    },
+    "step100-1900-2000": {
+     "gap": 100,
+     "elo": 26.9,
+     "ci95": [
+      17.0,
+      36.7
+     ],
+     "eloPer100Band": 26.9,
+     "ci95UpperBelow60": true
+    },
+    "step300-1500-1800": {
+     "gap": 300,
+     "elo": 69.8,
+     "ci95": [
+      55.4,
+      84.2
+     ],
+     "eloPer100Band": 23.3,
+     "ci95UpperBelow60": true
+    }
+   },
+   "met": false,
+   "resolvableBandStepPoints": 208,
+   "resolvableRungsInUsableRange": 4.83
+  }
+ },
+ "betweenRungResolution": {
+  "targetPoints": 5.0,
+  "gamesPerRung": 1020,
+  "preRegisteredGamesNeededUnpaired": 1192,
+  "steps": [
+   {
+    "from": "ladder-1000-v-1400",
+    "to": "ladder-1400-v-1400",
+    "deltaScorePoints": 19.22,
+    "seDiff": 0.01768,
+    "mdePoints80": 4.95,
+    "deltaOverMde": 3.88,
+    "ciDisjointClustered": true
+   },
+   {
+    "from": "ladder-1400-v-1400",
+    "to": "ladder-1800-v-1400",
+    "deltaScorePoints": 13.14,
+    "seDiff": 0.01768,
+    "mdePoints80": 4.95,
+    "deltaOverMde": 2.65,
+    "ciDisjointClustered": true
+   },
+   {
+    "from": "ladder-1800-v-1400",
+    "to": "ladder-2200-v-1400",
+    "deltaScorePoints": 13.48,
+    "seDiff": 0.01788,
+    "mdePoints80": 5.01,
+    "deltaOverMde": 2.69,
+    "ciDisjointClustered": true
+   }
+  ],
+  "worstMdePoints": 5.01,
+  "targetMet": false,
+  "allCiDisjointClustered": true
+ },
+ "byPhaseAndMaterial": {
+  "ladder-2200-v-1400": {
+   "cross_phase": {
+    "games": 36,
+    "score": 0.9167,
+    "elo": 416.6
+   },
+   "endgame": {
+    "games": 306,
+    "score": 0.5833,
+    "elo": 58.5
+   },
+   "middlegame": {
+    "games": 264,
+    "score": 0.8314,
+    "elo": 277.2
+   },
+   "opening": {
+    "games": 414,
+    "score": 0.8442,
+    "elo": 293.6
+   },
+   "pieces<=10": {
+    "games": 258,
+    "score": 0.5756,
+    "elo": 52.9
+   },
+   "pieces11-20": {
+    "games": 48,
+    "score": 0.625,
+    "elo": 88.7
+   },
+   "pieces>=21": {
+    "games": 714,
+    "score": 0.8431,
+    "elo": 292.2
+   }
+  },
+  "wide-1000-2400": {
+   "cross_phase": {
+    "games": 36,
+    "score": 0.0,
+    "elo": null
+   },
+   "endgame": {
+    "games": 306,
+    "score": 0.3824,
+    "elo": -83.3
+   },
+   "middlegame": {
+    "games": 264,
+    "score": 0.0663,
+    "elo": -459.5
+   },
+   "opening": {
+    "games": 414,
+    "score": 0.0664,
+    "elo": -459.1
+   },
+   "pieces<=10": {
+    "games": 258,
+    "score": 0.3973,
+    "elo": -72.4
+   },
+   "pieces11-20": {
+    "games": 48,
+    "score": 0.3021,
+    "elo": -145.5
+   },
+   "pieces>=21": {
+    "games": 714,
+    "score": 0.063,
+    "elo": -468.9
+   }
+  },
+  "step300-1500-1800": {
+   "cross_phase": {
+    "games": 60,
+    "score": 0.2333,
+    "elo": -206.7
+   },
+   "endgame": {
+    "games": 510,
+    "score": 0.4657,
+    "elo": -23.9
+   },
+   "middlegame": {
+    "games": 440,
+    "score": 0.3773,
+    "elo": -87.1
+   },
+   "opening": {
+    "games": 690,
+    "score": 0.3826,
+    "elo": -83.1
+   },
+   "pieces<=10": {
+    "games": 430,
+    "score": 0.4663,
+    "elo": -23.5
+   },
+   "pieces11-20": {
+    "games": 80,
+    "score": 0.4625,
+    "elo": -26.1
+   },
+   "pieces>=21": {
+    "games": 1190,
+    "score": 0.3731,
+    "elo": -90.1
+   }
+  }
+ },
+ "fullMaterialLadder": {
+  "filter": "pieceCount >= 21",
+  "rungs": {
+   "ladder-1000-v-1400": {
+    "games": 714,
+    "score": 0.2535,
+    "ci95": [
+     0.2263,
+     0.2807
+    ],
+    "elo": -187.6,
+    "eloSe": 12.7
+   },
+   "ladder-1400-v-1400": {
+    "games": 714,
+    "score": 0.4951,
+    "ci95": [
+     0.4604,
+     0.5298
+    ],
+    "elo": -3.4,
+    "eloSe": 12.3
+   },
+   "ladder-1800-v-1400": {
+    "games": 714,
+    "score": 0.6695,
+    "ci95": [
+     0.6398,
+     0.6991
+    ],
+    "elo": 122.6,
+    "eloSe": 11.9
+   },
+   "ladder-2200-v-1400": {
+    "games": 714,
+    "score": 0.8431,
+    "ci95": [
+     0.8199,
+     0.8664
+    ],
+    "elo": 292.2,
+    "eloSe": 15.6
+   }
+  },
+  "monotone": true,
+  "allCiDisjoint": true,
+  "spanElo": 479.8,
+  "spanEloHalfWidth95": 39.4,
+  "eloPer100Band": 39.98,
+  "transferRatio": 0.3998,
+  "transferRatioCi95": [
+   0.367,
+   0.4327
+  ],
+  "coverageThreshold": 0.7143,
+  "fractionOfCoverageThreshold": 0.5598
+ }
+}

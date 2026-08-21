@@ -1,0 +1,100 @@
+{
+ "bandApplicationAudit": [
+  {
+   "arm": "null-1500-1500",
+   "booksTested": 130,
+   "pooledChi2": 332.3,
+   "permutationP": 0.6486756621689156,
+   "meanTVD": 0.4135,
+   "maxTVD": 1.0
+  },
+  {
+   "arm": "ctl-temp-1500",
+   "booksTested": 168,
+   "pooledChi2": 582.0,
+   "permutationP": 0.0004997501249375312,
+   "meanTVD": 0.8869,
+   "maxTVD": 1.0
+  },
+  {
+   "arm": "wide-1000-2400",
+   "booksTested": 143,
+   "pooledChi2": 494.6,
+   "permutationP": 0.0004997501249375312,
+   "meanTVD": 0.6527,
+   "maxTVD": 1.0
+  },
+  {
+   "arm": "camp-1000-2000",
+   "booksTested": 145,
+   "pooledChi2": 427.67,
+   "permutationP": 0.0004997501249375312,
+   "meanTVD": 0.577,
+   "maxTVD": 1.0
+  },
+  {
+   "arm": "step300-1500-1800",
+   "booksTested": 137,
+   "pooledChi2": 413.21,
+   "permutationP": 0.0004997501249375312,
+   "meanTVD": 0.4088,
+   "maxTVD": 1.0
+  },
+  {
+   "arm": "step100-1500-1600",
+   "booksTested": 141,
+   "pooledChi2": 469.6,
+   "permutationP": 0.07446276861569215,
+   "meanTVD": 0.283,
+   "maxTVD": 0.7
+  },
+  {
+   "arm": "step100-1900-2000",
+   "booksTested": 131,
+   "pooledChi2": 348.31,
+   "permutationP": 0.21339330334832585,
+   "meanTVD": 0.2777,
+   "maxTVD": 0.875
+  },
+  {
+   "arm": "asym-1000-2400",
+   "booksTested": 142,
+   "pooledChi2": 377.33,
+   "permutationP": 0.0004997501249375312,
+   "meanTVD": 0.7148,
+   "maxTVD": 1.0
+  },
+  {
+   "arm": "ladder-1000-v-1400",
+   "booksTested": 141,
+   "pooledChi2": 373.6,
+   "permutationP": 0.022988505747126436,
+   "meanTVD": 0.5225,
+   "maxTVD": 1.0
+  },
+  {
+   "arm": "ladder-1400-v-1400",
+   "booksTested": 128,
+   "pooledChi2": 289.67,
+   "permutationP": 0.8480759620189905,
+   "meanTVD": 0.4635,
+   "maxTVD": 1.0
+  },
+  {
+   "arm": "ladder-1800-v-1400",
+   "booksTested": 135,
+   "pooledChi2": 354.0,
+   "permutationP": 0.0004997501249375312,
+   "meanTVD": 0.5284,
+   "maxTVD": 1.0
+  },
+  {
+   "arm": "ladder-2200-v-1400",
+   "booksTested": 136,
+   "pooledChi2": 395.93,
+   "permutationP": 0.0004997501249375312,
+   "meanTVD": 0.5735,
+   "maxTVD": 1.0
+  }
+ ]
+}

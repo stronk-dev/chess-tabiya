@@ -1,0 +1,1249 @@
+{
+ "d324PreRegistered": {
+  "criterion": "monotone score across all four arms with non-overlapping 95% CIs",
+  "source": "design/BACKLOG.md D324 (mirrored in planning/exploration/gates.md H5)",
+  "rungs": [
+   {
+    "arm": "ladder-1000-v-1400",
+    "score": 0.30686,
+    "ci95": [
+     0.28297,
+     0.33076
+    ],
+    "elo": "-141.6",
+    "n": 1020
+   },
+   {
+    "arm": "ladder-1400-v-1400",
+    "score": 0.49902,
+    "ci95": [
+     0.47393,
+     0.52411
+    ],
+    "elo": "-0.7",
+    "n": 1020
+   },
+   {
+    "arm": "ladder-1800-v-1400",
+    "score": 0.63039,
+    "ci95": [
+     0.60648,
+     0.6543
+    ],
+    "elo": "92.7",
+    "n": 1020
+   },
+   {
+    "arm": "ladder-2200-v-1400",
+    "score": 0.7652,
+    "ci95": [
+     0.73957,
+     0.79082
+    ],
+    "elo": "205.2",
+    "n": 1020
+   }
+  ],
+  "steps": [
+   {
+    "from": "ladder-1000-v-1400",
+    "to": "ladder-1400-v-1400",
+    "increasing": true,
+    "ciDisjoint": true,
+    "deltaScore": 0.19216
+   },
+   {
+    "from": "ladder-1400-v-1400",
+    "to": "ladder-1800-v-1400",
+    "increasing": true,
+    "ciDisjoint": true,
+    "deltaScore": 0.13137
+   },
+   {
+    "from": "ladder-1800-v-1400",
+    "to": "ladder-2200-v-1400",
+    "increasing": true,
+    "ciDisjoint": true,
+    "deltaScore": 0.13481
+   }
+  ],
+  "monotone": true,
+  "allCiDisjoint": true,
+  "verdict": "PASS"
+ },
+ "derivedThresholds": {
+  "coverageRatio": 0.7143,
+  "rungElo": 60.0,
+  "rungRatioOn100BandStep": 0.6,
+  "note": "coverage = D332 journey / R10 usable band range; rung = SE of a 30-game learner Elo estimate"
+ },
+ "arms": [
+  {
+   "arm": "null-1500-1500",
+   "A": "1500",
+   "B": "1500",
+   "nominalBandGap": 0,
+   "games": 1360,
+   "voids": 0,
+   "voidUpperBound95": 0.0022058823529411764,
+   "pairsComplete": 680,
+   "pairsIncomplete": 0,
+   "distinctMovelists": 1297,
+   "duplicateGameRate": 0.04632,
+   "mirroredPairsIdentical": 25,
+   "mirroredPairs": 680,
+   "winsA": 510,
+   "draws": 328,
+   "lossesA": 522,
+   "drawRate": 0.24118,
+   "whiteScoreOverall": 0.58897,
+   "scoreA_perGame": 0.49559,
+   "se_perGame": 0.01181,
+   "scoreA_paired": 0.49559,
+   "se_paired": 0.01074,
+   "se_paired_naive": 0.01065,
+   "se_paired_clusteredByOpening": 0.01074,
+   "clusters": 170,
+   "ci95_paired": [
+    0.47453,
+    0.51665
+   ],
+   "z": -0.411,
+   "p_two_sided": 0.6813740221357357,
+   "eloA": "-3.1",
+   "eloCi95": [
+    -17.7,
+    11.6
+   ],
+   "mde_score_80pct": 0.0301,
+   "mde_elo_80pct": 20.9,
+   "transferRatio": null,
+   "transferRatioCi95": null,
+   "terminations": {
+    "checkmate": 1032,
+    "stalemate": 144,
+    "threefold": 141,
+    "insufficient-material": 28,
+    "fifty-move": 15
+   },
+   "plies": {
+    "mean": 65.7,
+    "max": 224
+   },
+   "byPhase": {
+    "cross_phase": {
+     "games": 48,
+     "pairs": 24,
+     "scoreA": 0.40625,
+     "ci95": [
+      0.2717,
+      0.5408
+     ],
+     "eloA": "-65.9"
+    },
+    "endgame": {
+     "games": 408,
+     "pairs": 204,
+     "scoreA": 0.51348,
+     "ci95": [
+      0.49508,
+      0.53188
+     ],
+     "eloA": "9.4"
+    },
+    "middlegame": {
+     "games": 352,
+     "pairs": 176,
+     "scoreA": 0.48438,
+     "ci95": [
+      0.43864,
+      0.53011
+     ],
+     "eloA": "-10.9"
+    },
+    "opening": {
+     "games": 552,
+     "pairs": 276,
+     "scoreA": 0.49728,
+     "ci95": [
+      0.45893,
+      0.53563
+     ],
+     "eloA": "-1.9"
+    }
+   }
+  },
+  {
+   "arm": "ctl-temp-1500",
+   "A": "1500",
+   "B": "1500:5.0:1.0",
+   "nominalBandGap": 0,
+   "games": 680,
+   "voids": 0,
+   "voidUpperBound95": 0.004411764705882353,
+   "pairsComplete": 340,
+   "pairsIncomplete": 0,
+   "distinctMovelists": 679,
+   "duplicateGameRate": 0.00147,
+   "mirroredPairsIdentical": 0,
+   "mirroredPairs": 340,
+   "winsA": 594,
+   "draws": 86,
+   "lossesA": 0,
+   "drawRate": 0.12647,
+   "whiteScoreOverall": 0.53235,
+   "scoreA_perGame": 0.93676,
+   "se_perGame": 0.00638,
+   "scoreA_paired": 0.93676,
+   "se_paired": 0.00996,
+   "se_paired_naive": 0.0073,
+   "se_paired_clusteredByOpening": 0.00996,
+   "clusters": 170,
+   "ci95_paired": [
+    0.91724,
+    0.95629
+   ],
+   "z": 43.841,
+   "p_two_sided": 0.0,
+   "eloA": "468.3",
+   "eloCi95": [
+    417.9,
+    536.0
+   ],
+   "mde_score_80pct": 0.02791,
+   "mde_elo_80pct": 19.4,
+   "transferRatio": null,
+   "transferRatioCi95": null,
+   "terminations": {
+    "checkmate": 594,
+    "insufficient-material": 51,
+    "stalemate": 25,
+    "threefold": 6,
+    "fifty-move": 4
+   },
+   "plies": {
+    "mean": 32.9,
+    "max": 101
+   },
+   "byPhase": {
+    "cross_phase": {
+     "games": 24,
+     "pairs": 12,
+     "scoreA": 1.0,
+     "ci95": [
+      1.0,
+      1.0
+     ],
+     "eloA": "unbounded"
+    },
+    "endgame": {
+     "games": 204,
+     "pairs": 102,
+     "scoreA": 0.80392,
+     "ci95": [
+      0.76936,
+      0.83848
+     ],
+     "eloA": "245.1"
+    },
+    "middlegame": {
+     "games": 176,
+     "pairs": 88,
+     "scoreA": 0.99148,
+     "ci95": [
+      0.98194,
+      1.00101
+     ],
+     "eloA": "826.3"
+    },
+    "opening": {
+     "games": 276,
+     "pairs": 138,
+     "scoreA": 0.99457,
+     "ci95": [
+      0.98846,
+      1.00067
+     ],
+     "eloA": "905.0"
+    }
+   }
+  },
+  {
+   "arm": "wide-1000-2400",
+   "A": "1000",
+   "B": "2400",
+   "nominalBandGap": -1400,
+   "games": 1020,
+   "voids": 0,
+   "voidUpperBound95": 0.0029411764705882353,
+   "pairsComplete": 510,
+   "pairsIncomplete": 0,
+   "distinctMovelists": 1001,
+   "duplicateGameRate": 0.01863,
+   "mirroredPairsIdentical": 0,
+   "mirroredPairs": 510,
+   "winsA": 72,
+   "draws": 180,
+   "lossesA": 768,
+   "drawRate": 0.17647,
+   "whiteScoreOverall": 0.57451,
+   "scoreA_perGame": 0.15882,
+   "se_perGame": 0.00937,
+   "scoreA_paired": 0.15882,
+   "se_paired": 0.01377,
+   "se_paired_naive": 0.00952,
+   "se_paired_clusteredByOpening": 0.01377,
+   "clusters": 170,
+   "ci95_paired": [
+    0.13183,
+    0.18581
+   ],
+   "z": -24.776,
+   "p_two_sided": 1.6219788650321064e-135,
+   "eloA": "-289.6",
+   "eloCi95": [
+    -327.4,
+    -256.7
+   ],
+   "mde_score_80pct": 0.03858,
+   "mde_elo_80pct": 26.8,
+   "transferRatio": 0.2068,
+   "transferRatioCi95": [
+    0.2339,
+    0.1833
+   ],
+   "terminations": {
+    "checkmate": 840,
+    "stalemate": 100,
+    "threefold": 58,
+    "insufficient-material": 13,
+    "fifty-move": 9
+   },
+   "plies": {
+    "mean": 53.4,
+    "max": 173
+   },
+   "byPhase": {
+    "cross_phase": {
+     "games": 36,
+     "pairs": 18,
+     "scoreA": 0.0,
+     "ci95": [
+      0.0,
+      0.0
+     ],
+     "eloA": "unbounded"
+    },
+    "endgame": {
+     "games": 306,
+     "pairs": 153,
+     "scoreA": 0.38235,
+     "ci95": [
+      0.35744,
+      0.40727
+     ],
+     "eloA": "-83.3"
+    },
+    "middlegame": {
+     "games": 264,
+     "pairs": 132,
+     "scoreA": 0.06629,
+     "ci95": [
+      0.03949,
+      0.09309
+     ],
+     "eloA": "-459.5"
+    },
+    "opening": {
+     "games": 414,
+     "pairs": 207,
+     "scoreA": 0.06643,
+     "ci95": [
+      0.04412,
+      0.08873
+     ],
+     "eloA": "-459.1"
+    }
+   }
+  },
+  {
+   "arm": "camp-1000-2000",
+   "A": "1000",
+   "B": "2000",
+   "nominalBandGap": -1000,
+   "games": 1020,
+   "voids": 0,
+   "voidUpperBound95": 0.0029411764705882353,
+   "pairsComplete": 510,
+   "pairsIncomplete": 0,
+   "distinctMovelists": 996,
+   "duplicateGameRate": 0.02353,
+   "mirroredPairsIdentical": 0,
+   "mirroredPairs": 510,
+   "winsA": 89,
+   "draws": 194,
+   "lossesA": 737,
+   "drawRate": 0.1902,
+   "whiteScoreOverall": 0.57255,
+   "scoreA_perGame": 0.18235,
+   "se_perGame": 0.00998,
+   "scoreA_paired": 0.18235,
+   "se_paired": 0.01257,
+   "se_paired_naive": 0.00975,
+   "se_paired_clusteredByOpening": 0.01257,
+   "clusters": 170,
+   "ci95_paired": [
+    0.15771,
+    0.207
+   ],
+   "z": -25.265,
+   "p_two_sided": 7.82350760296039e-141,
+   "eloA": "-260.7",
+   "eloCi95": [
+    -291.0,
+    -233.3
+   ],
+   "mde_score_80pct": 0.03522,
+   "mde_elo_80pct": 24.5,
+   "transferRatio": 0.2607,
+   "transferRatioCi95": [
+    0.291,
+    0.2333
+   ],
+   "terminations": {
+    "checkmate": 826,
+    "stalemate": 105,
+    "threefold": 63,
+    "insufficient-material": 19,
+    "fifty-move": 7
+   },
+   "plies": {
+    "mean": 57.3,
+    "max": 175
+   },
+   "byPhase": {
+    "cross_phase": {
+     "games": 36,
+     "pairs": 18,
+     "scoreA": 0.125,
+     "ci95": [
+      0.03423,
+      0.21577
+     ],
+     "eloA": "-338.0"
+    },
+    "endgame": {
+     "games": 306,
+     "pairs": 153,
+     "scoreA": 0.36601,
+     "ci95": [
+      0.34283,
+      0.38919
+     ],
+     "eloA": "-95.4"
+    },
+    "middlegame": {
+     "games": 264,
+     "pairs": 132,
+     "scoreA": 0.10985,
+     "ci95": [
+      0.07559,
+      0.1441
+     ],
+     "eloA": "-363.5"
+    },
+    "opening": {
+     "games": 414,
+     "pairs": 207,
+     "scoreA": 0.09783,
+     "ci95": [
+      0.07084,
+      0.12481
+     ],
+     "eloA": "-385.9"
+    }
+   }
+  },
+  {
+   "arm": "step300-1500-1800",
+   "A": "1500",
+   "B": "1800",
+   "nominalBandGap": -300,
+   "games": 1700,
+   "voids": 0,
+   "voidUpperBound95": 0.0017647058823529412,
+   "pairsComplete": 850,
+   "pairsIncomplete": 0,
+   "distinctMovelists": 1610,
+   "duplicateGameRate": 0.05294,
+   "mirroredPairsIdentical": 13,
+   "mirroredPairs": 850,
+   "winsA": 502,
+   "draws": 359,
+   "lossesA": 839,
+   "drawRate": 0.21118,
+   "whiteScoreOverall": 0.60147,
+   "scoreA_perGame": 0.40088,
+   "se_perGame": 0.0105,
+   "scoreA_paired": 0.40088,
+   "se_paired": 0.01018,
+   "se_paired_naive": 0.00987,
+   "se_paired_clusteredByOpening": 0.01018,
+   "clusters": 170,
+   "ci95_paired": [
+    0.38093,
+    0.42083
+   ],
+   "z": -9.736,
+   "p_two_sided": 2.1070017713192148e-22,
+   "eloA": "-69.8",
+   "eloCi95": [
+    -84.4,
+    -55.5
+   ],
+   "mde_score_80pct": 0.02852,
+   "mde_elo_80pct": 19.8,
+   "transferRatio": 0.2327,
+   "transferRatioCi95": [
+    0.2812,
+    0.1849
+   ],
+   "terminations": {
+    "checkmate": 1341,
+    "stalemate": 157,
+    "threefold": 143,
+    "insufficient-material": 40,
+    "fifty-move": 19
+   },
+   "plies": {
+    "mean": 67.7,
+    "max": 212
+   },
+   "byPhase": {
+    "cross_phase": {
+     "games": 60,
+     "pairs": 30,
+     "scoreA": 0.23333,
+     "ci95": [
+      0.15218,
+      0.31449
+     ],
+     "eloA": "-206.7"
+    },
+    "endgame": {
+     "games": 510,
+     "pairs": 255,
+     "scoreA": 0.46569,
+     "ci95": [
+      0.44956,
+      0.48182
+     ],
+     "eloA": "-23.9"
+    },
+    "middlegame": {
+     "games": 440,
+     "pairs": 220,
+     "scoreA": 0.37727,
+     "ci95": [
+      0.33533,
+      0.41921
+     ],
+     "eloA": "-87.1"
+    },
+    "opening": {
+     "games": 690,
+     "pairs": 345,
+     "scoreA": 0.38261,
+     "ci95": [
+      0.34652,
+      0.4187
+     ],
+     "eloA": "-83.1"
+    }
+   }
+  },
+  {
+   "arm": "step100-1500-1600",
+   "A": "1500",
+   "B": "1600",
+   "nominalBandGap": -100,
+   "games": 3400,
+   "voids": 0,
+   "voidUpperBound95": 0.0008823529411764706,
+   "pairsComplete": 1700,
+   "pairsIncomplete": 0,
+   "distinctMovelists": 3202,
+   "duplicateGameRate": 0.05824,
+   "mirroredPairsIdentical": 39,
+   "mirroredPairs": 1700,
+   "winsA": 1191,
+   "draws": 802,
+   "lossesA": 1407,
+   "drawRate": 0.23588,
+   "whiteScoreOverall": 0.59676,
+   "scoreA_perGame": 0.46824,
+   "se_perGame": 0.00748,
+   "scoreA_paired": 0.46824,
+   "se_paired": 0.0071,
+   "se_paired_naive": 0.00683,
+   "se_paired_clusteredByOpening": 0.0071,
+   "clusters": 170,
+   "ci95_paired": [
+    0.45432,
+    0.48215
+   ],
+   "z": -4.474,
+   "p_two_sided": 7.691111175193124e-06,
+   "eloA": "-22.1",
+   "eloCi95": [
+    -31.8,
+    -12.4
+   ],
+   "mde_score_80pct": 0.01989,
+   "mde_elo_80pct": 13.8,
+   "transferRatio": 0.221,
+   "transferRatioCi95": [
+    0.3183,
+    0.1241
+   ],
+   "terminations": {
+    "checkmate": 2598,
+    "stalemate": 359,
+    "threefold": 326,
+    "insufficient-material": 79,
+    "fifty-move": 38
+   },
+   "plies": {
+    "mean": 65.7,
+    "max": 201
+   },
+   "byPhase": {
+    "cross_phase": {
+     "games": 120,
+     "pairs": 60,
+     "scoreA": 0.45417,
+     "ci95": [
+      0.38381,
+      0.52452
+     ],
+     "eloA": "-31.9"
+    },
+    "endgame": {
+     "games": 1020,
+     "pairs": 510,
+     "scoreA": 0.4902,
+     "ci95": [
+      0.47814,
+      0.50225
+     ],
+     "eloA": "-6.8"
+    },
+    "middlegame": {
+     "games": 880,
+     "pairs": 440,
+     "scoreA": 0.47898,
+     "ci95": [
+      0.44957,
+      0.50839
+     ],
+     "eloA": "-14.6"
+    },
+    "opening": {
+     "games": 1380,
+     "pairs": 690,
+     "scoreA": 0.44638,
+     "ci95": [
+      0.42155,
+      0.4712
+     ],
+     "eloA": "-37.4"
+    }
+   }
+  },
+  {
+   "arm": "step100-1900-2000",
+   "A": "1900",
+   "B": "2000",
+   "nominalBandGap": -100,
+   "games": 2720,
+   "voids": 0,
+   "voidUpperBound95": 0.0011029411764705882,
+   "pairsComplete": 1360,
+   "pairsIncomplete": 0,
+   "distinctMovelists": 2586,
+   "duplicateGameRate": 0.04926,
+   "mirroredPairsIdentical": 25,
+   "mirroredPairs": 1360,
+   "winsA": 954,
+   "draws": 602,
+   "lossesA": 1164,
+   "drawRate": 0.22132,
+   "whiteScoreOverall": 0.61507,
+   "scoreA_perGame": 0.4614,
+   "se_perGame": 0.00843,
+   "scoreA_paired": 0.4614,
+   "se_paired": 0.00763,
+   "se_paired_naive": 0.00763,
+   "se_paired_clusteredByOpening": 0.00719,
+   "clusters": 170,
+   "ci95_paired": [
+    0.44645,
+    0.47634
+   ],
+   "z": -5.062,
+   "p_two_sided": 4.141952120207628e-07,
+   "eloA": "-26.9",
+   "eloCi95": [
+    -37.4,
+    -16.5
+   ],
+   "mde_score_80pct": 0.02136,
+   "mde_elo_80pct": 14.9,
+   "transferRatio": 0.2688,
+   "transferRatioCi95": [
+    0.3735,
+    0.1645
+   ],
+   "terminations": {
+    "checkmate": 2118,
+    "threefold": 260,
+    "stalemate": 251,
+    "insufficient-material": 56,
+    "fifty-move": 35
+   },
+   "plies": {
+    "mean": 71.9,
+    "max": 282
+   },
+   "byPhase": {
+    "cross_phase": {
+     "games": 96,
+     "pairs": 48,
+     "scoreA": 0.44792,
+     "ci95": [
+      0.35922,
+      0.53661
+     ],
+     "eloA": "-36.3"
+    },
+    "endgame": {
+     "games": 816,
+     "pairs": 408,
+     "scoreA": 0.49571,
+     "ci95": [
+      0.48282,
+      0.5086
+     ],
+     "eloA": "-3.0"
+    },
+    "middlegame": {
+     "games": 704,
+     "pairs": 352,
+     "scoreA": 0.44531,
+     "ci95": [
+      0.41285,
+      0.47777
+     ],
+     "eloA": "-38.2"
+    },
+    "opening": {
+     "games": 1104,
+     "pairs": 552,
+     "scoreA": 0.44746,
+     "ci95": [
+      0.41968,
+      0.47524
+     ],
+     "eloA": "-36.6"
+    }
+   }
+  },
+  {
+   "arm": "asym-1000-2400",
+   "A": "1000",
+   "B": "2400",
+   "nominalBandGap": -1400,
+   "games": 680,
+   "voids": 0,
+   "voidUpperBound95": 0.004411764705882353,
+   "pairsComplete": 340,
+   "pairsIncomplete": 0,
+   "distinctMovelists": 678,
+   "duplicateGameRate": 0.00294,
+   "mirroredPairsIdentical": 0,
+   "mirroredPairs": 340,
+   "winsA": 57,
+   "draws": 147,
+   "lossesA": 476,
+   "drawRate": 0.21618,
+   "whiteScoreOverall": 0.56985,
+   "scoreA_perGame": 0.19191,
+   "se_perGame": 0.0122,
+   "scoreA_paired": 0.19191,
+   "se_paired": 0.01434,
+   "se_paired_naive": 0.01238,
+   "se_paired_clusteredByOpening": 0.01434,
+   "clusters": 170,
+   "ci95_paired": [
+    0.1638,
+    0.22002
+   ],
+   "z": -21.479,
+   "p_two_sided": 2.4278748342292575e-102,
+   "eloA": "-249.7",
+   "eloCi95": [
+    -283.2,
+    -219.8
+   ],
+   "mde_score_80pct": 0.04018,
+   "mde_elo_80pct": 27.9,
+   "transferRatio": 0.1784,
+   "transferRatioCi95": [
+    0.2023,
+    0.157
+   ],
+   "terminations": {
+    "checkmate": 533,
+    "threefold": 74,
+    "stalemate": 62,
+    "insufficient-material": 10,
+    "fifty-move": 1
+   },
+   "plies": {
+    "mean": 54.1,
+    "max": 176
+   },
+   "byPhase": {
+    "cross_phase": {
+     "games": 24,
+     "pairs": 12,
+     "scoreA": 0.02083,
+     "ci95": [
+      -0.02,
+      0.06167
+     ],
+     "eloA": "-668.8"
+    },
+    "endgame": {
+     "games": 204,
+     "pairs": 102,
+     "scoreA": 0.40686,
+     "ci95": [
+      0.37564,
+      0.43809
+     ],
+     "eloA": "-65.5"
+    },
+    "middlegame": {
+     "games": 176,
+     "pairs": 88,
+     "scoreA": 0.15625,
+     "ci95": [
+      0.10659,
+      0.20591
+     ],
+     "eloA": "-293.0"
+    },
+    "opening": {
+     "games": 276,
+     "pairs": 138,
+     "scoreA": 0.07065,
+     "ci95": [
+      0.04649,
+      0.09482
+     ],
+     "eloA": "-447.6"
+    }
+   }
+  },
+  {
+   "arm": "ladder-1000-v-1400",
+   "A": "1000",
+   "B": "1400",
+   "nominalBandGap": -400,
+   "games": 1020,
+   "voids": 0,
+   "voidUpperBound95": 0.0029411764705882353,
+   "pairsComplete": 510,
+   "pairsIncomplete": 0,
+   "distinctMovelists": 1006,
+   "duplicateGameRate": 0.01373,
+   "mirroredPairsIdentical": 5,
+   "mirroredPairs": 510,
+   "winsA": 193,
+   "draws": 240,
+   "lossesA": 587,
+   "drawRate": 0.23529,
+   "whiteScoreOverall": 0.56667,
+   "scoreA_perGame": 0.30686,
+   "se_perGame": 0.01229,
+   "scoreA_paired": 0.30686,
+   "se_paired": 0.01219,
+   "se_paired_naive": 0.01092,
+   "se_paired_clusteredByOpening": 0.01219,
+   "clusters": 170,
+   "ci95_paired": [
+    0.28297,
+    0.33076
+   ],
+   "z": -15.843,
+   "p_two_sided": 1.5767658912782532e-56,
+   "eloA": "-141.6",
+   "eloCi95": [
+    -161.5,
+    -122.4
+   ],
+   "mde_score_80pct": 0.03415,
+   "mde_elo_80pct": 23.8,
+   "transferRatio": 0.3539,
+   "transferRatioCi95": [
+    0.4038,
+    0.3061
+   ],
+   "terminations": {
+    "checkmate": 780,
+    "stalemate": 110,
+    "threefold": 93,
+    "insufficient-material": 31,
+    "fifty-move": 6
+   },
+   "plies": {
+    "mean": 59.8,
+    "max": 183
+   },
+   "byPhase": {
+    "cross_phase": {
+     "games": 36,
+     "pairs": 18,
+     "scoreA": 0.26389,
+     "ci95": [
+      0.1357,
+      0.39208
+     ],
+     "eloA": "-178.2"
+    },
+    "endgame": {
+     "games": 306,
+     "pairs": 153,
+     "scoreA": 0.43137,
+     "ci95": [
+      0.40723,
+      0.45552
+     ],
+     "eloA": "-48.0"
+    },
+    "middlegame": {
+     "games": 264,
+     "pairs": 132,
+     "scoreA": 0.24432,
+     "ci95": [
+      0.20267,
+      0.28597
+     ],
+     "eloA": "-196.2"
+    },
+    "opening": {
+     "games": 414,
+     "pairs": 207,
+     "scoreA": 0.25845,
+     "ci95": [
+      0.22179,
+      0.29512
+     ],
+     "eloA": "-183.1"
+    }
+   }
+  },
+  {
+   "arm": "ladder-1400-v-1400",
+   "A": "1400",
+   "B": "1400",
+   "nominalBandGap": 0,
+   "games": 1020,
+   "voids": 0,
+   "voidUpperBound95": 0.0029411764705882353,
+   "pairsComplete": 510,
+   "pairsIncomplete": 0,
+   "distinctMovelists": 975,
+   "duplicateGameRate": 0.04412,
+   "mirroredPairsIdentical": 16,
+   "mirroredPairs": 510,
+   "winsA": 383,
+   "draws": 252,
+   "lossesA": 385,
+   "drawRate": 0.24706,
+   "whiteScoreOverall": 0.60294,
+   "scoreA_perGame": 0.49902,
+   "se_perGame": 0.01359,
+   "scoreA_paired": 0.49902,
+   "se_paired": 0.0128,
+   "se_paired_naive": 0.0128,
+   "se_paired_clusteredByOpening": 0.0128,
+   "clusters": 170,
+   "ci95_paired": [
+    0.47393,
+    0.52411
+   ],
+   "z": -0.077,
+   "p_two_sided": 0.9389539924313677,
+   "eloA": "-0.7",
+   "eloCi95": [
+    -18.1,
+    16.8
+   ],
+   "mde_score_80pct": 0.03586,
+   "mde_elo_80pct": 24.9,
+   "transferRatio": null,
+   "transferRatioCi95": null,
+   "terminations": {
+    "checkmate": 768,
+    "stalemate": 110,
+    "threefold": 100,
+    "insufficient-material": 34,
+    "fifty-move": 8
+   },
+   "plies": {
+    "mean": 61.8,
+    "max": 208
+   },
+   "byPhase": {
+    "cross_phase": {
+     "games": 36,
+     "pairs": 18,
+     "scoreA": 0.54167,
+     "ci95": [
+      0.35481,
+      0.72852
+     ],
+     "eloA": "29.0"
+    },
+    "endgame": {
+     "games": 306,
+     "pairs": 153,
+     "scoreA": 0.50817,
+     "ci95": [
+      0.48572,
+      0.53062
+     ],
+     "eloA": "5.7"
+    },
+    "middlegame": {
+     "games": 264,
+     "pairs": 132,
+     "scoreA": 0.49053,
+     "ci95": [
+      0.43441,
+      0.54665
+     ],
+     "eloA": "-6.6"
+    },
+    "opening": {
+     "games": 414,
+     "pairs": 207,
+     "scoreA": 0.49396,
+     "ci95": [
+      0.44901,
+      0.53891
+     ],
+     "eloA": "-4.2"
+    }
+   }
+  },
+  {
+   "arm": "ladder-1800-v-1400",
+   "A": "1800",
+   "B": "1400",
+   "nominalBandGap": 400,
+   "games": 1020,
+   "voids": 0,
+   "voidUpperBound95": 0.0029411764705882353,
+   "pairsComplete": 510,
+   "pairsIncomplete": 0,
+   "distinctMovelists": 985,
+   "duplicateGameRate": 0.03431,
+   "mirroredPairsIdentical": 8,
+   "mirroredPairs": 510,
+   "winsA": 535,
+   "draws": 216,
+   "lossesA": 269,
+   "drawRate": 0.21176,
+   "whiteScoreOverall": 0.60588,
+   "scoreA_perGame": 0.63039,
+   "se_perGame": 0.01329,
+   "scoreA_paired": 0.63039,
+   "se_paired": 0.0122,
+   "se_paired_naive": 0.01189,
+   "se_paired_clusteredByOpening": 0.0122,
+   "clusters": 170,
+   "ci95_paired": [
+    0.60648,
+    0.6543
+   ],
+   "z": 10.688,
+   "p_two_sided": 1.1619938707040255e-26,
+   "eloA": "92.7",
+   "eloCi95": [
+    75.1,
+    110.8
+   ],
+   "mde_score_80pct": 0.03418,
+   "mde_elo_80pct": 23.8,
+   "transferRatio": 0.2319,
+   "transferRatioCi95": [
+    0.1879,
+    0.2771
+   ],
+   "terminations": {
+    "checkmate": 804,
+    "stalemate": 89,
+    "threefold": 87,
+    "insufficient-material": 23,
+    "fifty-move": 17
+   },
+   "plies": {
+    "mean": 65.1,
+    "max": 216
+   },
+   "byPhase": {
+    "cross_phase": {
+     "games": 36,
+     "pairs": 18,
+     "scoreA": 0.70833,
+     "ci95": [
+      0.6093,
+      0.80737
+     ],
+     "eloA": "154.1"
+    },
+    "endgame": {
+     "games": 306,
+     "pairs": 153,
+     "scoreA": 0.53922,
+     "ci95": [
+      0.51833,
+      0.5601
+     ],
+     "eloA": "27.3"
+    },
+    "middlegame": {
+     "games": 264,
+     "pairs": 132,
+     "scoreA": 0.64205,
+     "ci95": [
+      0.59172,
+      0.69237
+     ],
+     "eloA": "101.5"
+    },
+    "opening": {
+     "games": 414,
+     "pairs": 207,
+     "scoreA": 0.68357,
+     "ci95": [
+      0.64124,
+      0.72591
+     ],
+     "eloA": "133.8"
+    }
+   }
+  },
+  {
+   "arm": "ladder-2200-v-1400",
+   "A": "2200",
+   "B": "1400",
+   "nominalBandGap": 800,
+   "games": 1020,
+   "voids": 0,
+   "voidUpperBound95": 0.0029411764705882353,
+   "pairsComplete": 510,
+   "pairsIncomplete": 0,
+   "distinctMovelists": 998,
+   "duplicateGameRate": 0.02157,
+   "mirroredPairsIdentical": 2,
+   "mirroredPairs": 510,
+   "winsA": 684,
+   "draws": 193,
+   "lossesA": 143,
+   "drawRate": 0.18922,
+   "whiteScoreOverall": 0.58088,
+   "scoreA_perGame": 0.7652,
+   "se_perGame": 0.0114,
+   "scoreA_paired": 0.7652,
+   "se_paired": 0.01308,
+   "se_paired_naive": 0.01065,
+   "se_paired_clusteredByOpening": 0.01308,
+   "clusters": 170,
+   "ci95_paired": [
+    0.73957,
+    0.79082
+   ],
+   "z": 20.281,
+   "p_two_sided": 1.8736470894468323e-91,
+   "eloA": "205.2",
+   "eloCi95": [
+    181.3,
+    231.0
+   ],
+   "mde_score_80pct": 0.03663,
+   "mde_elo_80pct": 25.5,
+   "transferRatio": 0.2565,
+   "transferRatioCi95": [
+    0.2266,
+    0.2888
+   ],
+   "terminations": {
+    "checkmate": 827,
+    "stalemate": 88,
+    "threefold": 78,
+    "insufficient-material": 16,
+    "fifty-move": 11
+   },
+   "plies": {
+    "mean": 61.9,
+    "max": 185
+   },
+   "byPhase": {
+    "cross_phase": {
+     "games": 36,
+     "pairs": 18,
+     "scoreA": 0.91667,
+     "ci95": [
+      0.84805,
+      0.98528
+     ],
+     "eloA": "416.6"
+    },
+    "endgame": {
+     "games": 306,
+     "pairs": 153,
+     "scoreA": 0.58333,
+     "ci95": [
+      0.56016,
+      0.6065
+     ],
+     "eloA": "58.5"
+    },
+    "middlegame": {
+     "games": 264,
+     "pairs": 132,
+     "scoreA": 0.83144,
+     "ci95": [
+      0.79183,
+      0.87105
+     ],
+     "eloA": "277.2"
+    },
+    "opening": {
+     "games": 414,
+     "pairs": 207,
+     "scoreA": 0.8442,
+     "ci95": [
+      0.81214,
+      0.87627
+     ],
+     "eloA": "293.6"
+    }
+   }
+  }
+ ]
+}
