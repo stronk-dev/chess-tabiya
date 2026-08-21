@@ -56,3 +56,16 @@ Append-only.
   [[D665]] at a new payload.
 - `second-author-return.md` prices the author action and preserves the independently valid amended
   implementation. No schema, storage, content, D667 or D668 work was absorbed.
+
+## 2026-08-21 — second author amendment accepted; bind stage resumed
+
+- [[D669]] is resolved in the contract by distinguishing producer/computation, acquisition and
+  consumer/delivery directions. `guidance.packet` and `analysis.engine` leave the consumer census;
+  their producer/request symbols remain separately checked. The census re-derives to 23.
+- [[D670]] is resolved in the contract by separating the complete authored AST, direct
+  feature-leaf results and a total computed result carrying an exact path/node/result trace. The
+  review caught and included non-feature grammar nodes rather than pretending the 18 feature kinds
+  cover `pieceOnSquare`, quantified `piece` or `plan_signature`.
+- Buildability checks are green: runtime typecheck, 8 focused tests and
+  `make evidence-manifest-check` (17 producers / 80 projections / 23 operations / 197 bindings).
+  F1 remains implementing while the real delivery bindings and criterion-7 type fixtures land.

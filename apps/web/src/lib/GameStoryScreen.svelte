@@ -34,7 +34,7 @@
   }
 </script>
 
-<main class="story" aria-labelledby="story-title">
+<main class="story" aria-labelledby="story-title" data-evidence-consumer="review.story">
   <header>
     <div><p class="eyebrow">{imported ? "Imported game" : "Played run"} / grounded story</p><h1 id="story-title">{imported ? `${imported.headers.White ?? "White"} – ${imported.headers.Black ?? "Black"}` : "Story of this run"}</h1><p>{imported?.result ?? story.outcome.result ?? "finished"} · {story.outcome.kind.replaceAll("_", " ")}</p></div>
     <div class="actions"><button type="button" onclick={() => onExport()}>Export game + branches</button>{#if onShare}<button type="button" onclick={async () => { shareUrl = await onShare!(); await navigator.clipboard?.writeText(new URL(shareUrl, location.href).href); }}>Share story</button>{/if}<a href="/review">Back to review</a></div>

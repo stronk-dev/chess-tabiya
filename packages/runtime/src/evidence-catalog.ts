@@ -75,11 +75,11 @@ export const EVIDENCE_PRODUCER_IDS = Object.freeze([
 ] as const);
 
 export const CURRENT_CONSUMER_OPERATION_IDS = Object.freeze([
-  "authoring.predicate", "runtime.objective_condition", "runtime.guard_condition", "guidance.packet",
+  "authoring.predicate", "runtime.objective_condition", "runtime.guard_condition",
   "guidance.deterministic", "guidance.voice", "guidance.recorded_reading", "runtime.evidence_ref",
   "inspector.position_structure", "inspector.move_transition", "board.selected_square_sight",
   "theory.shape_firing", "compare.structure_strip", "compare.engine_trajectory", "inspector.human_split",
-  "inspector.corpus", "analysis.engine", "opponent.selection", "guidance.authored_claim",
+  "inspector.corpus", "opponent.selection", "guidance.authored_claim",
   "board.pivotal_marker", "review.story", "runtime.repertoire_scan", "authoring.claim_binding",
   "guidance.voice_compare", "guidance.voice_story",
 ] as const);
@@ -104,13 +104,22 @@ export const TRANSITION_READING_PROJECTION_IDS = Object.freeze(TRANSITION_READIN
 const structuralOutputs = [
   ...STRUCTURAL_FEATURE_KINDS.map((kind) => projection("rules.structural", `rules.structural.predicate.${kind}`, "rules", {
     role: "predicate",
-    payloadType: "StructuralExpression",
-    semantics: `Boolean authored-condition predicate for structural family ${kind}.`,
-    operands: ["fen", "expression"],
+    payloadType: "StructuralFeaturePredicateResult",
+    semantics: `Computed boolean result for one direct structural feature leaf of family ${kind}.`,
+    operands: ["fen", "feature", "matched"],
     forms: ["machine_condition"],
     dependsOn: kind === "outpost" ? [ref("rules.structural.predicate.pawn_safe_square")] : [],
     limitations: kind === "pawn_safe_square" ? ["Enemy-pawn projection is a Tabiya convention, not legal-move safety."] : [],
   })),
+  projection("rules.structural", "rules.structural.predicate.result", "rules", {
+    role: "predicate",
+    payloadType: "StructuralPredicateResult",
+    semantics: "Total computed result for one authored StructuralExpression, retaining an exact path/node/result evaluation trace.",
+    operands: ["fen", "condition", "matched", "trace"],
+    forms: ["machine_condition"],
+    dependsOn: [ref("pack.authored.structural_condition")],
+    limitations: ["plan_signature must be expanded before runtime evaluation, matching the structural evaluator contract."],
+  }),
   ...STRUCTURAL_FEATURE_KINDS.map((kind) => projection("rules.structural", `rules.structural.reading.${kind}`, "rules", {
     payloadType: "StructuralObservation",
     semantics: `Position reading emitted by structuralReading for family ${kind}.`,
@@ -140,6 +149,7 @@ export const EVIDENCE_PRODUCERS: readonly ProducerDeclaration[] = Object.freeze(
   producer("pack.authored", "authored", "apps/server/src/authored-feedback.ts", "recorded", [
     projection("pack.authored", "pack.authored.claim", "authored", { payloadType: "AuthoredFeedbackItem", grounding: "authored_claim", exactness: "authored", answerContent: ["fact", "pattern", "theory", "principle", "plan"], forms: ["sentence", "panel"] }),
     projection("pack.authored", "pack.authored.phase", "authored", { payloadType: "PackPhase", grounding: "authored_claim", exactness: "authored", answerContent: ["fact"], forms: ["sentence", "panel"], limitations: ["The authored phase label is a pack declaration, not the rules detector output."] }),
+    projection("pack.authored", "pack.authored.structural_condition", "authored", { role: "predicate", payloadType: "StructuralExpression", grounding: "authored_claim", exactness: "authored", operands: ["expression"], answerContent: ["fact"], forms: ["machine_condition"], limitations: ["Authored condition input only; it is not a computed truth value or learner guidance."] }),
   ]),
   producer("recorded.engine", "search", "apps/server/src/position-evidence.ts", "recorded", [projection("recorded.engine", "recorded.engine.eval", "search", { role: "source_record", payloadType: "EngineReadingValues", grounding: "bounded_search", exactness: "measured", confidence: "reported", answerContent: ["evaluation"], forms: ["sentence", "panel"], limitations: ["Single-line recorded score only; best move and principal variation are absent."] })]),
   producer("recorded.tablebase", "search", "apps/server/src/position-evidence.ts", "recorded", [projection("recorded.tablebase", "recorded.tablebase.result", "search", { role: "source_record", payloadType: "TablebaseReadingValues", grounding: "tablebase_exact", answerContent: ["fact", "evaluation"], forms: ["sentence", "panel"], abstention: { possible: true, reasons: ["outside_tablebase_domain"] } })]),
@@ -199,17 +209,18 @@ const DEFAULT_LATENCY: ConsumerDeclaration["latency"] = Object.freeze({ mode: "i
 const DEFAULT_BUDGET: ConsumerDeclaration["budget"] = Object.freeze({ maxFacts: 64, maxForms: 4 });
 
 const allPredicateIds = STRUCTURAL_PREDICATE_PROJECTION_IDS;
+const structuralPredicateResultId = "rules.structural.predicate.result";
+const authoredStructuralConditionId = "pack.authored.structural_condition";
 const allStructuralReadingIds = STRUCTURAL_READING_PROJECTION_IDS.filter((id) => !id.endsWith(".pawn_count"));
 const allTransitionReadingIds = TRANSITION_READING_PROJECTION_IDS;
 const CONSUMER_SPECS: readonly ConsumerSpec[] = [
-  { id: "authoring.predicate", implementation: "matchesStructuralExpression; validators; expression census", projections: allPredicateIds, timing: ["analysis"], roles: ["author"], forms: ["machine_condition"], answerContent: ["fact"] },
-  { id: "runtime.objective_condition", implementation: "packages/runtime/src/objective.ts; apps/server/src/pack-orchestrator.ts", projections: [...allPredicateIds, "live.stockfish.eval", "live.syzygy.category"], forms: ["machine_condition"], answerContent: ["fact", "evaluation"] },
+  { id: "authoring.predicate", implementation: "declared structural-condition/result validation adapters; validators; expression census", projections: [authoredStructuralConditionId, structuralPredicateResultId, ...allPredicateIds], timing: ["analysis"], roles: ["author"], forms: ["machine_condition"], answerContent: ["fact"] },
+  { id: "runtime.objective_condition", implementation: "packages/runtime/src/objective.ts; apps/server/src/pack-orchestrator.ts", projections: [structuralPredicateResultId, "live.stockfish.eval", "live.syzygy.category"], forms: ["machine_condition"], answerContent: ["fact", "evaluation"] },
   { id: "runtime.guard_condition", implementation: "packages/runtime/src/guard.ts", projections: ["live.stockfish.eval", "live.syzygy.category", "live.syzygy.distance"], forms: ["machine_condition"], answerContent: ["fact", "evaluation"] },
-  { id: "guidance.packet", implementation: "apps/server/src/guidance.ts:evidencePacket", disposition: { kind: "operator_only", reason: "Internal typed transport aggregate; it is never passed wholesale to a renderer." } },
   { id: "guidance.deterministic", implementation: "apps/server/src/guidance.ts sentence assembly", projections: ["rules.phase.reading", "pack.authored.phase", "rules.structural.reading.named_structure", "rules.pivotal.marker", "rules.endgame.reading", "pack.authored.claim"], forms: ["sentence"], answerContent: ["fact", "pattern", "theory", "principle", "plan"] },
   { id: "guidance.voice", implementation: "renderVoice; voiceCheck; external-voice.ts", projections: ["rules.phase.reading", "pack.authored.phase", "rules.structural.reading.named_structure", "rules.pivotal.marker", "rules.endgame.reading", "pack.authored.claim"], forms: ["sentence", "audio"], answerContent: ["fact", "pattern", "theory", "principle", "plan"], providerOff: "available" },
   { id: "guidance.recorded_reading", implementation: "appendRecordedReadings; renderRecordedReading", projections: ["recorded.engine.eval", "recorded.tablebase.result"], timing: ["postcommit", "checkpoint", "attempt_end", "terminal", "review"], forms: ["sentence"], answerContent: ["fact", "evaluation"] },
-  { id: "runtime.evidence_ref", implementation: "packages/runtime/src/evidence-ref.ts; apps/web/src/lib/evidence-sentences.ts", projections: [...allPredicateIds, ...TRANSITION_READING_PROJECTION_IDS, "live.stockfish.eval", "live.syzygy.category", "pack.authored.claim"], forms: ["sentence", "machine_condition"], answerContent: ["fact", "evaluation"] },
+  { id: "runtime.evidence_ref", implementation: "packages/runtime/src/evidence-ref.ts; apps/web/src/lib/evidence-sentences.ts", projections: [...allPredicateIds, ...TRANSITION_READING_PROJECTION_IDS, "live.stockfish.eval", "live.stockfish.wdl", "live.stockfish.pv", "live.syzygy.category", "live.syzygy.distance", "pack.authored.claim"], forms: ["sentence", "list", "panel", "machine_condition"], answerContent: ["fact", "evaluation", "move", "principal_variation"] },
   { id: "inspector.position_structure", implementation: "apps/web/src/lib/DrillScreen.svelte structural section", projections: allStructuralReadingIds },
   { id: "inspector.move_transition", implementation: "apps/web/src/lib/DrillScreen.svelte What changed section", projections: allTransitionReadingIds },
   { id: "board.selected_square_sight", implementation: "DrillScreen.svelte:selectedObservations; boardOverlays", projections: allStructuralReadingIds, timing: ["precommit", "postcommit"], forms: ["lit_squares", "piece_halo"], answerContent: ["fact"], budget: { maxFacts: 16, maxForms: 2 } },
@@ -218,7 +229,6 @@ const CONSUMER_SPECS: readonly ConsumerSpec[] = [
   { id: "compare.engine_trajectory", implementation: "CompareView.svelte trajectory evidence", projections: ["live.stockfish.eval", "live.stockfish.wdl"], timing: ["review"], forms: ["list", "panel"], answerContent: ["evaluation"] },
   { id: "inspector.human_split", implementation: "rest.ts human-split; DrillScreen.svelte", projections: ["human.maia.policy"], timing: ["postcommit", "review", "analysis"], forms: ["list", "panel"], answerContent: ["candidate_moves"], providerOff: "unavailable" },
   { id: "inspector.corpus", implementation: "rest.ts corpus; renderCorpusPage; DrillScreen.svelte", projections: ["human.explorer.population"], timing: ["postcommit", "review", "analysis"], forms: ["list", "panel"], answerContent: ["fact", "candidate_moves"], providerOff: "honest_empty" },
-  { id: "analysis.engine", implementation: "rest.ts /analysis; service.analysis; evidence jobs", projections: ["live.stockfish.eval", "live.stockfish.wdl", "live.stockfish.pv", "live.syzygy.category", "live.syzygy.distance"], timing: ["analysis"], forms: ["list", "panel"], answerContent: ["fact", "evaluation", "move", "principal_variation"], budget: { maxFacts: null, maxForms: null }, providerOff: "unavailable" },
   { id: "opponent.selection", implementation: "selectMove; opponent-selector", projections: ["human.maia.policy", "live.stockfish.pv", "live.syzygy.category", "live.syzygy.distance"], timing: ["analysis"], roles: ["operator"], forms: ["list", "panel"], answerContent: ["fact", "evaluation", "candidate_moves", "move", "principal_variation"], budget: { maxFacts: null, maxForms: null }, providerOff: "unavailable" },
   { id: "guidance.authored_claim", implementation: "claim-presentation.ts; CheckpointSheet.svelte; TerminalSheet.svelte", projections: ["pack.authored.claim"], forms: ["sentence", "panel"], answerContent: ["fact", "pattern", "theory", "principle", "plan"] },
   { id: "board.pivotal_marker", implementation: "DrillScreen.svelte; renderPivotalMarker", projections: ["rules.pivotal.marker"], forms: ["timeline_marker", "sentence", "panel"], answerContent: ["fact"] },

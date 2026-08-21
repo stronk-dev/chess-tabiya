@@ -28,7 +28,7 @@ presets remain out of scope.
 ## Landing sequence
 
 1. Declare: contract/compiler/catalogue plus exact closure and dependency tests.
-2. Bind: typed wrappers and literal consumer bindings at all twenty-three operations.
+2. Bind: typed wrappers and literal consumer bindings at all twenty-three delivery operations.
 3. Expose: live availability, capabilities, startup check, inspector labels and docs.
 4. Verify: `make evidence-manifest-check`, A3/A4/A5 harnesses, `make verify`, browser suite.
 
@@ -37,8 +37,9 @@ exact declaration. It does not introduce wildcard, legacy or temporary bindings.
 
 ## Current return
 
-Checkpoint 2 is incomplete at [[D662]]. The compiled evidence list and the provider sentence list
-have separate authorities in `VoiceEvidenceView`; compare/story mutate the latter without declared
-source records. Resume only after the RFC author specifies one typed boundary for those derived
-sentences. Checkpoints 1 and 3 remain useful implementation work but do not constitute a landable
-F1 contract by themselves.
+Resolved 2026-08-21. The first return ([[D662]]/[[D663]]/[[D665]]/[[D666]]) produced one sealed
+rendered authority. The second return ([[D669]]/[[D670]]) removed two false-direction consumer
+rows and supplied a truthful structural-condition/result boundary. Buildability review:
+`planning/evidence-contract-manifest/second-amendment-review.md`. Checkpoint 2 resumes over the
+twenty-three delivery operations; F1 is not complete until criterion 7's real bindings and
+negative type fixtures land.

@@ -5,7 +5,8 @@ import { positionFromFen } from "./chess.js";
 import { RuntimeError, unknownNode } from "./errors.js";
 import { appendEvents } from "./events.js";
 import { assertObjectiveTransition } from "./objective-state.js";
-import { matchesStructuralExpression, type StructuralExpression } from "./structure.js";
+import type { StructuralExpression } from "./structure.js";
+import { declareStructuralPredicateEvidence, matchesDeclaredStructuralPredicate } from "./structural-evidence.js";
 import { matchesTransitionExpression } from "./transition.js";
 import type { TransitionExpression } from "@chess-tabiya/schema/drill-pack";
 import {
@@ -186,7 +187,9 @@ function matchesFenPredicate(node: Node, predicate: FenPredicate): boolean {
       );
       return squareSetMatches(pawns("white"), predicate.white, predicate.mode) && squareSetMatches(pawns("black"), predicate.black, predicate.mode);
     }
-    case "structuralFeature": return matchesStructuralExpression(node.fen, predicate.feature);
+    case "structuralFeature": return matchesDeclaredStructuralPredicate(
+      declareStructuralPredicateEvidence(node.fen, predicate.feature).result,
+    );
     default: {
       const exhaustive: never = predicate;
       throw new TypeError(`Unhandled fen predicate: ${JSON.stringify(exhaustive)}`);

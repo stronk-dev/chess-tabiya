@@ -126,6 +126,17 @@ export {
   type VacationReading,
 } from "./structure.js";
 export {
+  declareStructuralPredicateEvidence,
+  evaluateStructuralPredicate,
+  matchesDeclaredStructuralPredicate,
+  structuralEvidenceForAuthoring,
+  type DeclaredStructuralPredicateEvidence,
+  type StructuralFeaturePredicateResult,
+  type StructuralPredicateEvidencePayload,
+  type StructuralPredicateResult,
+  type StructuralPredicateTraceNode,
+} from "./structural-evidence.js";
+export {
   legIndexAt,
   trajectoryPolicyAt,
   trajectoryLegSpans,

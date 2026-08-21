@@ -814,11 +814,11 @@
             {#if assistancePermission.humanSplit === "locked_off"}<span id="human-split-locked" class="honest">Available only after this run opens feedback, and never to participants or spectators.</span>{/if}
             {#if assistance.humanSplit === "on_request" && assistancePermission.humanSplit === "free" && onHumanSplit !== undefined}<button type="button" onclick={() => void requestHumanSplit()}>Open human-model evidence inspector</button>{/if}
             {#if assistance.humanSplit === "on_request" && assistancePermission.humanSplit === "free" && onHumanSplit === undefined}<span class="honest">Recorded human-model splits are unavailable from this deployment.</span>{/if}
-            {#if humanSplit}<section aria-label="Human-model evidence"><p class="guidance-sentence">{humanSplit.engine.name}, rating target {humanSplit.targetElo ?? "unrated"}: {humanSplit.candidates.filter((candidate) => candidate.offWindow !== true).map((candidate) => `${candidate.moveUci} ${candidate.mass === undefined ? "mass unavailable" : `${Math.round(candidate.mass * 100)}%`}`).join(" · ")}</p></section>{/if}
+            {#if humanSplit}<section aria-label="Human-model evidence" data-evidence-consumer="inspector.human_split"><p class="guidance-sentence">{humanSplit.engine.name}, rating target {humanSplit.targetElo ?? "unrated"}: {humanSplit.candidates.filter((candidate) => candidate.offWindow !== true).map((candidate) => `${candidate.moveUci} ${candidate.mass === undefined ? "mass unavailable" : `${Math.round(candidate.mass * 100)}%`}`).join(" · ")}</p></section>{/if}
             {#if capabilities?.providers.corpus !== "none"}<label><input type="checkbox" checked={assistance.corpus === "on_request"} disabled={assistancePermission.corpus === "locked_off"} aria-describedby={assistancePermission.corpus === "locked_off" ? "corpus-locked" : undefined} onchange={(event) => setAssistance("corpus", event.currentTarget.checked ? "on_request" : "off")} /> Evidence inspector: corpus counts</label>{/if}
             {#if capabilities?.providers.corpus !== "none" && assistancePermission.corpus === "locked_off"}<span id="corpus-locked" class="honest">Available only after this run opens feedback, and never to participants or spectators.</span>{/if}
             {#if assistance.corpus === "on_request" && assistancePermission.corpus === "free" && capabilities?.providers.corpus !== "none" && onCorpus !== undefined}<button type="button" onclick={() => void requestCorpus()}>Open corpus evidence inspector</button>{/if}
-            {#if corpusPage}<section aria-label="Corpus evidence">{#each renderCorpusPage(corpusPage) as sentence}<p class="guidance-sentence">{sentence}</p>{/each}</section>{/if}
+            {#if corpusPage}<section aria-label="Corpus evidence" data-evidence-consumer="inspector.corpus">{#each renderCorpusPage(corpusPage) as sentence}<p class="guidance-sentence">{sentence}</p>{/each}</section>{/if}
             {#if capabilities?.providers.llm === "external"}<label><input type="checkbox" checked={assistance.voice === "persona"} onchange={(event) => setAssistance("voice", event.currentTarget.checked ? "persona" : "authored")} /> External voice</label>{/if}
             {#if speechAvailable}<label><input type="checkbox" checked={assistance.spoken === "browser"} onchange={(event) => setAssistance("spoken", event.currentTarget.checked ? "browser" : "off")} /> Speak opened guidance</label>{/if}
             {#if capabilities?.providers.tts === "external"}<label><input type="checkbox" checked={assistance.spoken === "provider"} onchange={(event) => setAssistance("spoken", event.currentTarget.checked ? "provider" : "off")} /> Use configured speech provider</label>{/if}
@@ -947,7 +947,7 @@
               {#if displayedMarks.length===0||onRescopeMarks===undefined}<span id="rescope-marks-disabled">Draw a mark before moving this position's marks to another scope.</span>{/if}
             </div>
           </div>
-          {#if overlayCaption.length > 0}<div class="overlay-caption" aria-live="polite">{#each overlayCaption as sentence}<p>{sentence}</p>{/each}</div>{/if}
+          {#if overlayCaption.length > 0}<div class="overlay-caption" aria-live="polite" data-evidence-consumer="board.selected_square_sight">{#each overlayCaption as sentence}<p>{sentence}</p>{/each}</div>{/if}
           {#if assistance.boardLighting === "evidence" && !feedbackDeliveryOpen(run)}<p class="overlay-caption honest">No disclosed evidence exists here; structural sight remains available.</p>{/if}
         </div>
       </section>
@@ -1132,7 +1132,7 @@
 {#if viewportSupport.supported && openShape}<ShapePanel entry={openShape} onClose={() => (openShapeId = undefined)} />{/if}
 {#if viewportSupport.supported && openPivotalNodeId !== undefined}
   <div class="modal-backdrop">
-    <div class="modal guidance-panel" role="dialog" aria-modal="true" aria-labelledby="pivotal-title">
+    <div class="modal guidance-panel" role="dialog" aria-modal="true" aria-labelledby="pivotal-title" data-evidence-consumer="board.pivotal_marker">
       <p>Pivotal marker</p><h2 id="pivotal-title">Recorded change</h2>
       {#each openPivotal as marker}{#each renderPivotalMarker(marker) as sentence}<p class="guidance-sentence">{sentence}</p>{/each}{/each}
       {#each renderEndgameReading(endgame) as sentence}<p class="guidance-sentence">{sentence}</p>{/each}

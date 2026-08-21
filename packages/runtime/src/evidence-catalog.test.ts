@@ -39,7 +39,7 @@ describe("primary evidence catalogue", () => {
     const manifest = compileEvidenceManifest(EVIDENCE_CONTRACT_DECLARATIONS);
     expect(EVIDENCE_PRODUCER_IDS).toEqual(EXPECTED_PRODUCERS);
     expect(EVIDENCE_PRODUCERS.map((item) => item.id)).toEqual(EXPECTED_PRODUCERS);
-    expect(CURRENT_CONSUMER_OPERATION_IDS).toHaveLength(25);
+    expect(CURRENT_CONSUMER_OPERATION_IDS).toHaveLength(23);
     expect(EVIDENCE_CONSUMER_IDS).toEqual([...CURRENT_CONSUMER_OPERATION_IDS, "assistance.arrows"]);
     expect(manifest.consumers.find((item) => item.id === "assistance.arrows")?.disposition).toEqual(expect.objectContaining({ kind: "experimental" }));
     expect(manifest.digest).toBe(createHash("sha256").update(canonical({ producers: manifest.producers, projections: manifest.projections, consumers: manifest.consumers, bindings: manifest.bindings })).digest("hex"));
@@ -51,6 +51,9 @@ describe("primary evidence catalogue", () => {
     const outputs = EVIDENCE_PRODUCERS.find((item) => item.id === "rules.structural")!.outputs;
     expect(outputs.find((item) => item.id === "rules.structural.reading.pawn_count")?.disposition).toEqual(expect.objectContaining({ kind: "retired" }));
     expect(outputs.find((item) => item.id === "rules.structural.predicate.outpost")?.dependsOn).toEqual([{ id: "rules.structural.predicate.pawn_safe_square", version: 1 }]);
+    expect(outputs.find((item) => item.id === "rules.structural.predicate.outpost")?.payloadType).toBe("StructuralFeaturePredicateResult");
+    expect(outputs.find((item) => item.id === "rules.structural.predicate.result")?.dependsOn).toEqual([{ id: "pack.authored.structural_condition", version: 1 }]);
+    expect(EVIDENCE_PRODUCERS.find((item) => item.id === "pack.authored")?.outputs.some((item) => item.id === "pack.authored.structural_condition")).toBe(true);
   });
 
   it("covers every transition family with the fourteen independently witnessed lossy leaves", () => {

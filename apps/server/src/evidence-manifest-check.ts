@@ -7,27 +7,25 @@ import { EVIDENCE_MANIFEST, assertEvidenceManifest } from "./evidence-manifest.j
 
 const ROOT = process.cwd();
 const CONSUMER_ANCHORS = Object.freeze([
-  ["authoring.predicate", "packages/runtime/src/structure.ts", "export function matchesStructuralExpression"],
+  ["authoring.predicate", "packages/runtime/src/structural-evidence.ts", "export function structuralEvidenceForAuthoring"],
   ["runtime.objective_condition", "packages/runtime/src/objective.ts", "export function evaluateObjectivePredicate"],
   ["runtime.guard_condition", "apps/server/src/guard.ts", "export function applyRecordedEngineGuard"],
-  ["guidance.packet", "apps/server/src/guidance.ts", "export function evidencePacket"],
   ["guidance.deterministic", "apps/server/src/guidance.ts", "export function renderedEvidenceItems"],
   ["guidance.voice", "apps/server/src/guidance.ts", "export function voiceEvidenceView"],
   ["guidance.recorded_reading", "apps/server/src/guidance.ts", "export function appendRecordedReadings"],
   ["runtime.evidence_ref", "apps/web/src/lib/evidence-sentences.ts", "export function renderEvidenceRef"],
   ["inspector.position_structure", "apps/web/src/lib/DrillScreen.svelte", "data-evidence-consumer=\"inspector.position_structure\""],
   ["inspector.move_transition", "apps/web/src/lib/DrillScreen.svelte", "data-evidence-consumer=\"inspector.move_transition\""],
-  ["board.selected_square_sight", "apps/web/src/lib/DrillScreen.svelte", "let selectedObservations ="],
-  ["theory.shape_firing", "packages/runtime/src/shape-firing.ts", "export function shapeFirings"],
+  ["board.selected_square_sight", "apps/web/src/lib/DrillScreen.svelte", "data-evidence-consumer=\"board.selected_square_sight\""],
+  ["theory.shape_firing", "apps/web/src/lib/ShapePanel.svelte", "data-evidence-consumer=\"theory.shape_firing\""],
   ["compare.structure_strip", "apps/web/src/lib/CompareView.svelte", "data-evidence-consumer=\"compare.structure_strip\""],
-  ["compare.engine_trajectory", "apps/web/src/lib/CompareView.svelte", "recorded engine evaluations"],
-  ["inspector.human_split", "apps/server/src/rest.ts", "route.action === \"human-split\""],
-  ["inspector.corpus", "apps/server/src/rest.ts", "route.action === \"corpus\""],
-  ["analysis.engine", "apps/server/src/rest.ts", "route.action === \"analysis\""],
-  ["opponent.selection", "apps/server/src/opponent-selector.ts", "export function parseSelectMoveRequest"],
+  ["compare.engine_trajectory", "apps/web/src/lib/CompareView.svelte", "data-evidence-consumer=\"compare.engine_trajectory\""],
+  ["inspector.human_split", "apps/web/src/lib/DrillScreen.svelte", "data-evidence-consumer=\"inspector.human_split\""],
+  ["inspector.corpus", "apps/web/src/lib/DrillScreen.svelte", "data-evidence-consumer=\"inspector.corpus\""],
+  ["opponent.selection", "apps/server/src/opponent-selector.ts", "select(request: SelectMoveRequest)"],
   ["guidance.authored_claim", "apps/web/src/lib/claim-presentation.ts", "export function claimProvenance"],
-  ["board.pivotal_marker", "apps/web/src/lib/DrillScreen.svelte", "let pivotalRows ="],
-  ["review.story", "packages/runtime/src/story.ts", "export function storyMoments"],
+  ["board.pivotal_marker", "apps/web/src/lib/DrillScreen.svelte", "data-evidence-consumer=\"board.pivotal_marker\""],
+  ["review.story", "apps/web/src/lib/GameStoryScreen.svelte", "data-evidence-consumer=\"review.story\""],
   ["runtime.repertoire_scan", "apps/server/src/repertoire.ts", "export async function scanRepertoire"],
   ["authoring.claim_binding", "apps/server/src/sourcing/claim-binding.ts", "export function validateClaimBindings"],
   ["guidance.voice_compare", "apps/server/src/rest.ts", "narrative.evidence, false"],
@@ -41,10 +39,19 @@ function source(path: string): string {
 assertEvidenceManifest();
 const declaredConsumers = EVIDENCE_MANIFEST.consumers.map((consumer) => consumer.id);
 const operationIds = CONSUMER_ANCHORS.map(([id]) => id);
-if (new Set(operationIds).size !== CONSUMER_ANCHORS.length || operationIds.join("|") !== CURRENT_CONSUMER_OPERATION_IDS.join("|")) throw new TypeError("The 25-operation consumer anchor census is not set/order-equal to the primary catalogue");
+if (new Set(operationIds).size !== CONSUMER_ANCHORS.length || operationIds.join("|") !== CURRENT_CONSUMER_OPERATION_IDS.join("|")) throw new TypeError("The 23-operation consumer anchor census is not set/order-equal to the primary catalogue");
 for (const [id, path, needle] of CONSUMER_ANCHORS) {
   if (!declaredConsumers.includes(id)) throw new TypeError(`Consumer anchor ${id} has no declaration`);
   if (!source(path).includes(needle)) throw new TypeError(`Consumer anchor drift: ${id} expected ${needle} in ${path}`);
+}
+
+const NON_CONSUMER_ANCHORS = Object.freeze([
+  ["producer", "apps/server/src/guidance.ts", "export function evidencePacket"],
+  ["acquisition", "apps/server/src/rest.ts", "route.action === \"analysis\""],
+] as const);
+for (const [direction, path, needle] of NON_CONSUMER_ANCHORS) {
+  if (!source(path).includes(needle)) throw new TypeError(`Evidence ${direction} anchor drift: expected ${needle} in ${path}`);
+  if (declaredConsumers.includes(direction === "producer" ? "guidance.packet" : "analysis.engine")) throw new TypeError(`Evidence ${direction} anchor was incorrectly reintroduced as a consumer`);
 }
 
 if (EVIDENCE_MANIFEST.producers.map((producer) => producer.id).sort().join("|") !== [...EVIDENCE_PRODUCER_IDS].sort().join("|")) throw new TypeError("The 17 producer paths are not set-equal to the primary catalogue");

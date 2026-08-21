@@ -1,8 +1,7 @@
 # RFC: Evidence contract manifest — every producer has a declared consumer or an honest home
 
-- **Status:** implementing — 2026-08-21 author-return amendment landed (return choice 1, typed
-  rendered items; [[D662]]/[[D663]]/[[D665]]/[[D666]]); the implementation branch resumes at
-  stage 2
+- **Status:** implementing — 2026-08-21 second author-return amendment resolves the consumer-boundary
+  and structural-expression failures ([[D669]]/[[D670]]); implementation resumes at stage 2
 - **Author:** codex (agent), for Marco
 - **Created:** 2026-08-21
 - **Design refs:** `design/03-product-breadth.md` §Intelligence and explanation and gate B4;
@@ -131,6 +130,29 @@ consumer classes; the implementation census fixes the complete initial set.
 A **binding** is an explicit edge from one exact producer/projection version to one consumer. It
 states what the consumer may receive and under which constraints. There is no wildcard binding and
 no “all structural readings” binding.
+
+#### 4.1.1 Production, acquisition and consumption are different boundaries
+
+The manifest distinguishes three directions which the original census incorrectly collapsed:
+
+- a **producer/computation entrypoint** accepts source operands and emits declared evidence;
+- an **acquisition entrypoint** requests future provider work but has no evidence payload yet; and
+- a **consumer/delivery entrypoint** receives declared evidence and takes a product or authoring
+  action from it.
+
+Only the third is a `ConsumerDeclaration` and is subject to criterion 7's admitted-view rule.
+Producer and acquisition entrypoints remain enumerable implementation anchors, but making them
+accept an empty admitted view would prove only that a wrapper exists while reversing their data
+flow. In particular, `guidance.ts:evidencePacket` is a producer/aggregate constructor and POST
+`/analysis` is an acquisition command. Neither is a consumer. Completed analysis results are
+consumed only when their attached evidence references are delivered through
+`runtime.evidence_ref`; provider request authorization remains governed by the engine-request
+contract and route policy, not by a fictitious evidence binding at request time.
+
+The same direction rule applies to structural conditions. `matchesStructuralExpression` computes
+over authored input; it is not itself an authoring consumer merely because validators call it.
+The consumer boundary is the validator or runtime operation receiving the declared computed
+result.
 
 #### 4.2 Version identities
 
@@ -547,6 +569,22 @@ semantics.
    detector item renders `renderPhaseReading`. That registers current shipped behavior; it is not
    F2 selection. `guidance.deterministic@1` and `guidance.voice@1` accepts gain
    `pack.authored.phase@1`.
+7. **Authored structural conditions and computed predicate results are different projections**
+   ([[D670]], 2026-08-21). `pack.authored.structural_condition@1` carries the complete recursive
+   `StructuralExpression` AST exactly as authored, including `all`, `any`, `not`, `feature`,
+   `pieceOnSquare`, `mirrored`, both quantified forms and `plan_signature`; it is never attributed
+   to one leaf detector. `rules.structural.predicate.<kind>@1` carries a computed result for a
+   DIRECT `feature` leaf of that exact family, not the input AST.
+   `rules.structural.predicate.result@1` carries the total boolean result plus a typed evaluation
+   trace preserving the path, exact expression node and boolean at every visited AST node; this
+   covers non-feature leaves (`pieceOnSquare`, `plan_signature`, quantified `piece`) as well as all
+   eighteen feature families. It depends on `pack.authored.structural_condition@1`; the trace,
+   rather than an incomplete static list of feature projection ids, proves which literal nodes
+   contributed. A producer adapter accepts the raw AST and emits the authored-condition and total
+   result declarations (and may additionally emit direct feature-leaf declarations). Runtime and
+   authoring operations consume the declared total result; no arbitrary leaf id may wrap a
+   composite expression. Negation and composition change the total result, never the meaning of a
+   direct feature projection.
 
 The `outpost` reading/predicate declaration names its dependency on the current
 `pawn_safe_square` predicate projection. A dependency census walks transitive edges, then content
@@ -556,12 +594,12 @@ F3 consumes this graph for migration planning.
 
 ### 10. Current consumer closure
 
-The implementation first derives the full current consumer census from production call sites and
-checks it in as literal declarations. At minimum it covers the five generic sinks pinned by A3 and
-the other A4 paths: server guidance packet assembly, deterministic voice, external voice,
+The implementation first derives the full current consumer census from evidence-delivery call sites
+and checks it in as literal declarations. At minimum it covers the five generic sinks pinned by A3
+and the other A4 paths: deterministic guidance, external voice,
 authored-claim delivery sheets, evidence-reference rendering, in-run structural/transition rows,
 selected-square lighting, comparison rows/strips, marker/story output, engine/tablebase
-conditions, explicit analysis, human-split/corpus panels, repertoire gap scanning, opponent
+conditions, completed analysis-result delivery, human-split/corpus panels, repertoire gap scanning, opponent
 selection and sourcing/claim-binding validation.
 
 Raw structural/transition tables, Maia splits, Explorer rows, engine lines and tablebase detail are
@@ -587,9 +625,10 @@ control would be a behavior change this RFC does not scope.
 
 #### 10.1 Initial consumer-symbol census
 
-The initial closure is **twenty-five consumer operations**: the twenty-three below plus rows
-24–25, added in §10.2 by the 2026-08-21 author return when the bind stage measured that compare
-and story revoice carry permission contracts the base voice operation does not. A row is one
+The initial closure is **twenty-three consumer operations**: the original twenty-three, less the
+two false-direction rows (`guidance.packet`, `analysis.engine`), plus rows 22–23 added in §10.2
+by the 2026-08-21 author return when the bind stage measured that compare and story revoice carry
+permission contracts the base voice operation does not. A row is one
 operation with a distinct permission or output consequence, not one call site; multiple call
 sites using the same renderer stay one row. The implementation plan must refresh the anchors and split a row if one operation
 actually carries two permission contracts. It may not silently drop a row to make closure green.
@@ -600,29 +639,33 @@ authored-claim sheets, repertoire gap scanning, and claim-binding validation.
 
 | # | consumer id | current implementation anchors | initial home |
 |---:|---|---|---|
-| 1 | `authoring.predicate` | `matchesStructuralExpression`; objective/pack/shape validators and expression census | `author_only` |
+| 1 | `authoring.predicate` | declared structural-condition/result validation adapter; objective/pack/shape validators and expression census | `author_only` |
 | 2 | `runtime.objective_condition` | `objective.ts`; `pack-orchestrator.ts` evidence refs | `machine_condition` |
 | 3 | `runtime.guard_condition` | `guard.ts`; queued engine/tablebase condition evidence | `machine_condition` |
-| 4 | `guidance.packet` | `guidance.ts:evidencePacket` | internal aggregate, no direct learner form |
-| 5 | `guidance.deterministic` | `guidance.ts` sentence assembly and fallback | bound sentence consumer |
-| 6 | `guidance.voice` | `renderVoice`; `voiceCheck`; `external-voice.ts` | optional renderer over admitted rendered items (§6.1); marker/reading/steering scopes only after the §10.2 split |
-| 7 | `guidance.recorded_reading` | `appendRecordedReadings`; `renderRecordedReading` | deterministic post-provider sentence |
-| 8 | `runtime.evidence_ref` | `renderEvidenceRef`; guard/objective/compare grounds | exact ref projection by prefix/fact |
-| 9 | `inspector.position_structure` | `DrillScreen.svelte` structural reading section | contextual inspector |
-| 10 | `inspector.move_transition` | `DrillScreen.svelte` “What changed” section | contextual inspector |
-| 11 | `board.selected_square_sight` | `selectedObservations`; `boardOverlays`; overlay caption | bound square-bearing sight only |
-| 12 | `theory.shape_firing` | `shapeFirings`; Story/guided shape paths; `ShapePanel.svelte` | author/theory identity; no inferred advice |
-| 13 | `compare.structure_strip` | `compare-strips.ts`; `CompareView.svelte` leaf and strip details | Review inspector |
-| 14 | `compare.engine_trajectory` | comparison evidence trail, sparkline and deepest score | Review inspector |
-| 15 | `inspector.human_split` | `/human-split`; `DrillScreen.svelte` on-request panel | post-disclosure contextual inspector |
-| 16 | `inspector.corpus` | `/corpus`; `renderCorpusPage`; on-request panel | post-disclosure contextual inspector |
-| 17 | `analysis.engine` | `/analysis`; `service.analysis`; evidence jobs | explicit Analyze consumer; moves/PVs legal only here |
-| 18 | `opponent.selection` | `selectMove`; `opponent-selector`; live Syzygy/Maia inputs | machine consumer, never learner advice |
-| 19 | `guidance.authored_claim` | `claim-presentation.ts:claimProvenance`; `CheckpointSheet.svelte`; `TerminalSheet.svelte` | bound authored-claim text with binding/earned-evidence disclosure |
-| 20 | `board.pivotal_marker` | `DrillScreen.svelte` pivotal rows; `renderPivotalMarker` | timeline marker plus opened marker sentences |
-| 21 | `review.story` | `storyMoments`; `service.story`; `/story` and `/api/shared/…/story` routes; `GameStoryScreen.svelte` | Review consumer over recorded eval events, pivotal kinds, shape spans; spectator-reachable via share token |
-| 22 | `runtime.repertoire_scan` | `repertoire.ts:scanRepertoire`; `corpusPopulation`; `REPERTOIRE_CORPUS_GUARD` | machine consumer of the Explorer population; guard/abstention learner-visible |
-| 23 | `authoring.claim_binding` | `claim-binding.ts:validateClaimBindings`; `MACHINE_LABEL_EVIDENCE_KINDS` | `author_only` validation of claims against source records |
+| 4 | `guidance.deterministic` | `guidance.ts` sentence assembly and fallback | bound sentence consumer |
+| 5 | `guidance.voice` | `renderVoice`; `voiceCheck`; `external-voice.ts` | optional renderer over admitted rendered items (§6.1); marker/reading/steering scopes only after the §10.2 split |
+| 6 | `guidance.recorded_reading` | `appendRecordedReadings`; `renderRecordedReading` | deterministic post-provider sentence |
+| 7 | `runtime.evidence_ref` | `renderEvidenceRef`; attached analysis/guard/objective/compare grounds | exact ref projection by prefix/fact; the delivery boundary for completed Analyze results |
+| 8 | `inspector.position_structure` | `DrillScreen.svelte` structural reading section | contextual inspector |
+| 9 | `inspector.move_transition` | `DrillScreen.svelte` “What changed” section | contextual inspector |
+| 10 | `board.selected_square_sight` | `DrillScreen.svelte` admitted overlay/caption delivery; `Chessboard.svelte` | bound square-bearing sight only |
+| 11 | `theory.shape_firing` | `ShapePanel.svelte` and the guided shape panel; `shapeFirings` is its upstream producer, not the consumer entrypoint | author/theory identity; no inferred advice |
+| 12 | `compare.structure_strip` | `compare-strips.ts`; `CompareView.svelte` leaf and strip details | Review inspector |
+| 13 | `compare.engine_trajectory` | comparison evidence trail, sparkline and deepest score | Review inspector |
+| 14 | `inspector.human_split` | `DrillScreen.svelte` on-request panel; `/human-split` is its upstream acquisition/production path | post-disclosure contextual inspector |
+| 15 | `inspector.corpus` | `DrillScreen.svelte` on-request panel and `renderCorpusPage`; `/corpus` is upstream acquisition | post-disclosure contextual inspector |
+| 16 | `opponent.selection` | `selectMove`; `opponent-selector`; live Syzygy/Maia inputs | machine consumer, never learner advice |
+| 17 | `guidance.authored_claim` | `claim-presentation.ts:claimProvenance`; `CheckpointSheet.svelte`; `TerminalSheet.svelte` | bound authored-claim text with binding/earned-evidence disclosure |
+| 18 | `board.pivotal_marker` | `DrillScreen.svelte` timeline/modal delivery; `renderPivotalMarker` | timeline marker plus opened marker sentences |
+| 19 | `review.story` | `/story` and `/api/shared/…/story` delivery; `GameStoryScreen.svelte`; `storyMoments` is its upstream derived producer | Review consumer over recorded eval events, pivotal kinds, shape spans; spectator-reachable via share token |
+| 20 | `runtime.repertoire_scan` | `repertoire.ts:scanRepertoire`; `corpusPopulation`; `REPERTOIRE_CORPUS_GUARD` | machine consumer of the Explorer population; guard/abstention learner-visible |
+| 21 | `authoring.claim_binding` | `claim-binding.ts:validateClaimBindings`; `MACHINE_LABEL_EVIDENCE_KINDS` | `author_only` validation of claims against source records |
+
+The two non-consumer anchors remain explicit: `guidance.ts:evidencePacket` is the aggregate
+producer and POST `/analysis`/`service.analysis` is the provider acquisition command. The former
+must emit only `DeclaredEvidence`; the latter must remain separately authorized and must not
+receive an admitted view. Their output reaches actual consumers through the declared delivery
+boundaries above. The anchor checker asserts their direction separately from consumer closure.
 
 The two on-request panels and the manually opened structural/transition/compare detail sections are
 the current **contextual analysis inspector**, even though they live inside the run layout. Their
@@ -681,11 +724,11 @@ rule they become their own operations:
 
 | # | consumer id | current implementation anchors | accepts ceiling and constraints |
 |---:|---|---|---|
-| 24 | `guidance.voice_compare@1` | `rest.ts` `scope === "compare"` branch; `comparisonNarrative` | `run.record.fork@1`, `run.record.move@1`, `run.record.checkpoint_hit@1`, `run.record.objective_transition@1`, `run.record.consequence@1`, `rules.pivotal.marker@1`, `derived.compare.structure_delta@1`, `derived.compare.eval_delta@1`; `timing: ["review"]`, `forms: ["sentence"]`, `answerContent: ["fact", "evaluation", "move"]`, `providerOff: "available"` |
-| 25 | `guidance.voice_story@1` | `rest.ts` story arm of the `voice`/`speech` actions; `storyMoments`; `suggestTitle` | the five base `guidance.voice` projections plus `pack.authored.phase@1`, `theory.shapes.firing@1`, `run.record.consequence@1`, `run.record.imported_result@1`, `derived.story.eval_shift@1`, `derived.story.last_level@1`, `derived.story.title@1`; `timing: ["review"]`, `forms: ["sentence", "audio"]`, `providerOff: "available"` |
+| 22 | `guidance.voice_compare@1` | `rest.ts` `scope === "compare"` branch; `comparisonNarrative` | `run.record.fork@1`, `run.record.move@1`, `run.record.checkpoint_hit@1`, `run.record.objective_transition@1`, `run.record.consequence@1`, `rules.pivotal.marker@1`, `derived.compare.structure_delta@1`, `derived.compare.eval_delta@1`; `timing: ["review"]`, `forms: ["sentence"]`, `answerContent: ["fact", "evaluation", "move"]`, `providerOff: "available"` |
+| 23 | `guidance.voice_story@1` | `rest.ts` story arm of the `voice`/`speech` actions; `storyMoments`; `suggestTitle` | the five base `guidance.voice` projections plus `pack.authored.phase@1`, `theory.shapes.firing@1`, `run.record.consequence@1`, `run.record.imported_result@1`, `derived.story.eval_shift@1`, `derived.story.last_level@1`, `derived.story.title@1`; `timing: ["review"]`, `forms: ["sentence", "audio"]`, `providerOff: "available"` |
 
-The census is therefore **twenty-five operations**; `CURRENT_CONSUMER_OPERATION_IDS`, the anchor
-census in `evidence-manifest-check.ts` and the declared consumers move to twenty-five together.
+The census is therefore **twenty-three operations**; `CURRENT_CONSUMER_OPERATION_IDS`, the anchor
+census in `evidence-manifest-check.ts` and the declared consumers move to twenty-three together.
 The accepts lists above are ceilings: implementation may narrow them, never widen. The compare
 view carries ONLY items produced by the comparison assembly — `run.record`, `derived.compare`
 and the compared branches' pivotal markers from the timing strip; no item of the base packet
@@ -707,13 +750,13 @@ and pivotal entries. At stage 2, `review.story@1`'s accepts therefore gain
 minimum; the stage-2 census splits a row if the timing strip carries a distinct permission
 contract, per §10.1's rule) gain `run.record.fork@1`, `run.record.move@1`,
 `run.record.checkpoint_hit@1`, `run.record.objective_transition@1`, `run.record.consequence@1`
-and `rules.pivotal.marker@1` — as ceilings, like rows 24–25. Leaving these accepts un-amended
+and `rules.pivotal.marker@1` — as ceilings, like rows 22–23. Leaving these accepts un-amended
 while criterion 7 forces admission through `evidenceForConsumer` would silently drop
 learner-visible story/compare content and break criterion 11's byte-identity; this paragraph
 exists so that failure is a spec breach, not a discovered surprise.
 
-`guidance.packet` is permitted as an internal aggregate only when its fields are
-`DeclaredEvidence`; it is not itself a consumer binding and cannot be passed wholesale to a
+The guidance packet is permitted as an internal aggregate only when its fields are
+`DeclaredEvidence`; it is not a consumer binding and cannot be passed wholesale to a
 renderer. The external voice receives the exact compiled `guidance.voice` view rather than the
 aggregate; compare and story revoice receive their own §10.2 views under their own consumer
 contracts.
@@ -878,10 +921,16 @@ Each criterion names the failure it is intended to catch.
    `run.record`, `derived.compare_narrative`, `derived.story` — 2026-08-21 amendment). Fails if
    the implementer registers only the four paths already visible to voice/rendering, or if an
    eighteenth producer appears without an amendment.
-3. **Structural predicates and readings are separately versioned, with closure against all eighteen
-   `STRUCTURAL_FEATURE_KINDS`.** Fails if `outpost` predicate and reading share one identity or if
-   `pawn_count` is advertised as an emitted reading. The emitted/declared distinction is read from
-   the executable emission census of §9, not from the declarations under test.
+3. **Authored structural conditions, computed total predicate results, leaf predicate results and
+   readings are separately versioned, with leaf closure against all eighteen
+   `STRUCTURAL_FEATURE_KINDS`.** A fixture evaluates a composite containing at least two different
+   leaf families and negation, asserts that the authored AST is declared only as
+   `pack.authored.structural_condition@1`, and asserts that the consumed total result names the
+   exact node/path evaluation trace, including `pieceOnSquare`, `plan_signature`, quantified
+   `piece` and two distinct feature families. Fails if a composite AST is wrapped under an arbitrary
+   leaf id, if `outpost` predicate and reading share one identity or if `pawn_count` is advertised
+   as an emitted reading. The emitted/declared distinction is read from the executable emission
+   census of §9, not from the declarations under test.
 4. **Every transition family/leaf has a reading declaration whose initial version records the
    missing operands and is not learner-event eligible.** Fails if count-only output gains a square
    form or semantic-event binding without retaining squares.
@@ -891,7 +940,7 @@ Each criterion names the failure it is intended to catch.
 6. **Runtime event kinds, sourcing evidence kinds, evidence refs, recorded-reading dispositions and
    packet fields each have an explicit set-equality or projection-map assertion.** Fails if a new
    member silently becomes unmanifested; namespace equality is not asserted.
-7. **Every registered consumer operation's entrypoint accepts only the branded
+7. **Every registered consumer/delivery operation's entrypoint accepts only the branded
    `ConsumerEvidenceView`, the branded `RenderedEvidenceView` or `DeclaredEvidence<T>`, and a
    per-package type fixture passes each
    operation its pre-F1 bare payload under `@ts-expect-error`.** The build fails when a directive
@@ -899,6 +948,10 @@ Each criterion names the failure it is intended to catch.
    red at checkpoint `2b68103`…`aaea3e4` and green only when consumption is real. Fails the way
    the checkpoint failed ([[D666]]): a source file retains the named function, its raw input
    bypasses every compiled binding, and a needle census stays green.
+   Producer/computation and acquisition entrypoints are excluded by §4.1.1 and checked separately
+   for direction: `evidencePacket` emits declarations and POST `/analysis` requests work. Fails if
+   either is reintroduced as an empty-view consumer or if completed analysis payloads bypass the
+   real `runtime.evidence_ref` delivery boundary.
 8. **Every projection has at least one binding or exactly one allowed disposition with a non-empty
    reason.** Fails on both an orphan and two conflicting dispositions.
 9. **Every consumer has a non-empty exact accepted-projection set or exactly one explicit
@@ -974,9 +1027,9 @@ Each criterion names the failure it is intended to catch.
     `EVIDENCE_DEPENDENCY_CYCLE`; and a derived projection with empty `derivation.inputs` — the
     refused generic `derived.sentence` escape hatch — raises `EVIDENCE_PROJECTION_INCOMPLETE`.
     Fails if free prose can become a projection.
-26. **The consumer census is twenty-five and the voice split is real.**
+26. **The consumer census is twenty-three and the voice split is real.**
     `CURRENT_CONSUMER_OPERATION_IDS`, the anchor census and the declared consumers are
-    set/order-equal at twenty-five; `guidance.voice_compare@1` and `guidance.voice_story@1` have
+    set/order-equal at twenty-three; `guidance.voice_compare@1` and `guidance.voice_story@1` have
     non-identical accepts sets; and the compare view admits no item of the base packet
     aggregate — for a fixed run whose base packet carries phase, named-structure and authored
     items, none of those items appears in the compare view, while `rules.pivotal.marker` items
@@ -996,17 +1049,20 @@ Each criterion names the failure it is intended to catch.
 | D6 | [[D662]] one sentence authority: §6.1 rendered items, the branded view, `packet.sentences` deleted, sentinel fixture (criteria 21–22) | `evidence-contract-manifest` | implementation commit | |
 | D7 | [[D663]] reasoning-review typed non-evidence contract; `"reasoning"` removed from `VoiceScope` (§12.1, criterion 23) | `evidence-contract-manifest` | implementation commit | |
 | D8 | [[D665]] phase wrapper carries `PhaseReading`; `pack.authored.phase@1` declared (§9 clause 6, criterion 24) | `evidence-contract-manifest` | implementation commit | |
-| D9 | [[D666]] closure proves consumption, not anchors: branded `ConsumerEvidenceView` at all twenty-five entrypoints plus the `@ts-expect-error` type fixtures (criteria 7, 26) | `evidence-contract-manifest` | implementation commit | |
+| D9 | [[D666]] closure proves consumption, not anchors: branded `ConsumerEvidenceView` at all twenty-three delivery entrypoints plus the `@ts-expect-error` type fixtures (criteria 7, 26) | `evidence-contract-manifest` | implementation commit | |
+| D10 | [[D669]] producer/acquisition anchors separated from the twenty-three real consumer boundaries (§4.1.1; criteria 7, 26) | `evidence-contract-manifest` | implementation commit | |
+| D11 | [[D670]] authored structural AST, leaf results and consumed total predicate result have truthful distinct projections (§9 clause 7; criterion 3) | `evidence-contract-manifest` | implementation commit | |
 
 ## Open questions
 
 No owner/product question remains: O1–O4 already rule the authority, semantic boundary and UX
 layering. The drafting census resolves the four initial implementation questions in §§7, 10.1 and
-14: shared static catalogue in runtime plus server availability aggregate; twenty-five current
+14: shared static catalogue in runtime plus server availability aggregate; twenty-three current
 consumer operations (the author census said eighteen; the 2026-08-21 cross-review re-derivation
 refuted that count at the symbol and added rows 19–23; the 2026-08-21 author return split
-compare/story revoice into rows 24–25 when the bind stage measured their distinct permission
-contracts, §10.2); one set-equal transition release for
+compare/story revoice when the bind stage measured their distinct permission contracts, §10.2;
+the second author return then removed the packet constructor and analysis request after proving
+they point opposite to consumption); one set-equal transition release for
 `RECORDED_READING_DISPOSITIONS`; and current manually opened raw panels classified as the
 contextual inspector, never as learner guidance. Cross-review must re-derive those answers and
 return the RFC if the dependency graph or symbol census refutes them; it may not substitute a
@@ -1042,7 +1098,7 @@ lands with implementation; no item awaits an owner.
   grounding `recorded_run`; §6.1 rendered items, the branded `ConsumerEvidenceView`,
   `renderedEvidenceItems`, deletion of `EvidencePacket.sentences`, and the red-first sentinel
   fixture ([[D662]]/[[D666]]); §9 clause 6 and `pack.authored.phase@1` ([[D665]]); §10.2
-  `run.record` plus derived compare/story declarations and the twenty-five-operation census
+  `run.record` plus derived compare/story declarations and the then-twenty-five-operation census
   (`guidance.voice_compare@1`, `guidance.voice_story@1`); §12.1 reasoning-review typed
   non-evidence contract ([[D663]]); implementation areas 15–16; criteria 1, 2, 7 and 11 amended
   and 21–26 added; discharges D6–D9. Contract types amended in place under RFC-0000 rule 3 (the
@@ -1066,3 +1122,11 @@ lands with implementation; no item awaits an owner.
   rule; criterion 26's "no base-packet projection" corrected to "no base-packet item"
   (`rules.pivotal.marker` legitimately sits in both accept sets); criterion 7/§15 admit the
   sealed rendered view at entrypoints; Open-questions garbled residue repaired.
+- 2026-08-21: second bind-stage author return (`planning/evidence-contract-manifest/second-author-return.md`).
+  [[D669]] separated producer/computation, provider acquisition and consumer/delivery boundaries;
+  removed `guidance.packet` and `analysis.engine` from consumer declarations; named
+  `runtime.evidence_ref` as the completed-analysis delivery boundary; and re-derived the census as
+  twenty-three real operations. [[D670]] split the complete authored `StructuralExpression`, the
+  eighteen computed leaf results and the consumed total predicate result into truthful projection
+  identities. Criteria 3, 7 and 26 and discharges D9–D11 now test those directions rather than
+  rewarding empty admitted-view wrappers. No owner/product ruling was introduced.

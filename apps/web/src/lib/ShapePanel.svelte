@@ -10,7 +10,7 @@
   let { entry, onClose }: Props = $props();
 </script>
 
-<aside class="shape-panel" aria-labelledby="shape-panel-title">
+<aside class="shape-panel" aria-labelledby="shape-panel-title" data-evidence-consumer="theory.shape_firing">
   <header>
     <div>
       <p class="eyebrow">Detected structure · {entry.channel}{entry.publisherHandle ? ` · ${entry.publisherHandle}` : ""}</p>

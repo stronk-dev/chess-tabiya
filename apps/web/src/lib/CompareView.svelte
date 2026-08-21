@@ -150,7 +150,7 @@
         {#each entries as entry}
           <div><strong>{entry.from} → {entry.to}</strong>{#each entry.grounds as ground}<p>{ground.sourceLabel}: {ground.text}</p>{/each}</div>
         {/each}
-        <div class="scores" aria-label={`${column.label} recorded engine evaluations`}>
+        <div class="scores" aria-label={`${column.label} recorded engine evaluations`} data-evidence-consumer="compare.engine_trajectory">
           {#each comparison.evidence[column.branchId] ?? [] as entry}<span data-ply-offset={entry.plyOffset}>+{entry.plyOffset}: {score(entry)}</span>{/each}
         </div>
         {#if consequence}
