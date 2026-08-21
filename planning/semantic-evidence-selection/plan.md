@@ -1,7 +1,7 @@
 # Semantic evidence selection — implementation plan
 
 **RFC:** `rfc/semantic-evidence-selection.md`  
-**Status:** implementing  
+**Status:** implemented by `7944ecb`  
 **Started:** 2026-08-21
 
 ## Boundary
@@ -13,19 +13,19 @@ content changes.
 
 ## Landing units
 
-1. **Compiled contract.** Extend the F1 declarations/compiler/digest with 33 semantic events, 33
+1. **Completed — compiled contract.** Extend the F1 declarations/compiler/digest with 33 semantic events, 33
    eligibility rows, 15 reasons and one research policy. Add the fifteen exact error codes,
    declaration validation, runtime event/selected-view seals, negative fixtures and count closure.
-2. **Literal event producers.** Preserve identities for the eleven round-trip structural families,
+2. **Completed — literal event producers.** Preserve identities for the eleven round-trip structural families,
    five transition-geometry families and six independent rules events without changing old count
    readings. Canonicalize castling and retain complete operands.
-3. **Selector and avoidance derivation.** Enumerate every chessops legal alternative, require a
+3. **Completed — selector and avoidance derivation.** Enumerate every chessops legal alternative, require a
    complete population, apply the versioned policy deterministically, construct eleven registered
    avoidance projections and reproduce the R2 authored/imported baselines.
-4. **D668 seal.** Replace all 38 generic construction calls in the fourteen-file closure with exact
+4. **Completed — D668 seal.** Replace all 38 generic construction calls in the fourteen-file closure with exact
    source adapters; remove `declareEvidence` from the runtime package export; reject a fifteenth
    call site and runtime forgeries.
-5. **Integration and closeout.** Add `make semantic-evidence-check` to `make verify`, capability
+5. **Completed — integration and closeout.** Add `make semantic-evidence-check` to `make verify`, capability
    counts, `docs/semantic-evidence.md`, full unit/browser verification, ledger discharges and
    append-only logs. Archive only after every RFC discharge is closed.
 

@@ -98,7 +98,7 @@ Only the owner or claude-on-owner-ruling edits living intent. Apply O1–O13 in 
 | Wave | Nodes | Parallelism rule |
 |---|---|---|
 | 6A | Process/register closeout, then F1 | Serial; shared truth first |
-| 6B | F2, then F3 when O6 opens it | **F2 READY TO DRAFT 2026-08-21** after F1/O2/O3; **F3 WAIT on O6**. Coordinate resource claims; do not let the old paired wording invent the stable primitive set (D680) |
+| 6B | F2, then F3 when O6 opens it | **F2 IMPLEMENTED 2026-08-21 by `7944ecb`; F3 WAIT on O6.** The semantic selector does not choose F5 defaults or lift the Gate-F content hold |
 | 6C | F4 | After F1/F3 and knowledge ruling |
 | 6D | F5, F6, F8, F9 | May draft in parallel after F2, but share the manifest and do not duplicate selectors |
 | 6E | F7 | After F3/F4/F5; owns Gate-F pilot/content lifecycle |
@@ -109,8 +109,9 @@ claims, a planning directory, and accepted status before implementation.
 
 **Wave 6A update, 2026-08-21:** complete. The process/register predecessors and F1 are implemented
 and archived. F1 closes with 19 producers, 93 projections, 23 sealed consumer operations and 142
-exact bindings. Re-derived after landing: F2 is now the product-architecture front; F3 remains
-behind O6 rather than inheriting authority merely because it shared the old Wave-6B row (D680).
+exact bindings. F2 subsequently implemented 33 events, research-only eligibility and complete
+local selection in `7944ecb`; F3 remains behind O6 rather than inheriting authority merely because
+it shared the old Wave-6B row (D680).
 
 **F12 update, 2026-08-21:** R18/O13 are split into bounded child contracts in
 `release-platform/f12-work-order.md`. `rfc/accessible-board-input.md` is the first independent
@@ -168,8 +169,8 @@ R14/R15/R16/R17/R18 → O10–O13 → optional F10/F11 + required F12
 all included nodes → integrated default journeys → 1.0 proof
 ```
 
-The immediate architecture queue is F2 drafting against the implemented manifest. F3 stays behind
-O6; R7/R8 and owner-use of real admitted R3 packets remain the widest downstream unlocks. O1–O4
-and O13 are ruled and their protected living-intent amendments have landed. There is still no
-authority to implement F2 before acceptance, to choose F5's exact workflow defaults inside F2, or
-to launch content while D560/Gate F remains active.
+F2 is implemented. F5/F6/F8/F9 now satisfy their F2 dependency but retain their other named
+research/ruling gates; F3 stays behind O6. R7/R8 and owner-use of real admitted R3 packets remain
+the widest downstream unlocks. O1–O4 and O13 are ruled and their protected living-intent
+amendments have landed. There is still no authority to choose F5's exact workflow defaults by
+implication or to launch content while D560/Gate F remains active.

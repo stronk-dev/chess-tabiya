@@ -41,3 +41,17 @@ The adapter pass also exposed D685: several F1 projection operand descriptions d
 payload bytes current producers pass. Source-specific shape checks have started closing the
 generic arbitrary-object hole, but F2 is not complete until those payloads are normalized or the
 manifest is corrected truthfully and registered renderers remain the sole prose authority.
+
+## 2026-08-21 — implemented and closed
+
+Implementation `7944ecb` closes all eight RFC discharges. D685 was repaired rather than waived:
+manifest operands now describe current bytes, exact object adapters enforce set-equality with
+those operands, shape firings use one payload, and Compare/Story registered renderers derive prose
+from structured values rather than accepting caller sentences.
+
+Verification after the repair: 127 unit files / 827 tests passed; the sandbox-blocked three server
+files passed separately with localhost access (11/11); browser coverage is 28 passed with the one
+optional Maia latency case skipped (26 unaffected cases in the full run plus both repaired
+regressions replayed successfully); the legacy R2 output remained byte-clean at 1,032 authored and
+522 imported alternative-only candidates; type/schema/register/status/intent/manifest/semantic
+and graduation checks pass. No schema, content, persistence or learner-facing default changed.

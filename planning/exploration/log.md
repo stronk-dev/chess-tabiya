@@ -3977,3 +3977,17 @@ does not choose production assistance modules, thresholds, presets or defaults; 
 
 `semantic-evidence-selection` is implementing with a five-unit plan. The first unit is the compiled
 manifest extension and negative fixtures; no learner-visible behavior changes in that unit.
+
+## 2026-08-21 — F2 semantic evidence selection implemented
+
+`7944ecb` implements and closes `semantic-evidence-selection`: 22 direct operand-preserving events,
+eleven registered denominator-bearing avoidance events, 33 research-only eligibility rows, a
+complete deterministic legal-alternative selector, exact source adapters and one compiled manifest
+of 20/126/25/175 + 33/33/15/1. The retained baseline covers all 754 authored transitions and 579
+CC0 decisions without borrowing the legacy R2 volume claims.
+
+The adapter migration exposed and repaired D685 before closeout. Compare/Story prose is again only
+registered renderer output over structured admitted evidence; projection operand names match the
+runtime payloads and malformed adapters fail. D572, D630, D631's semantic half, D633, D668, D681
+and D685 are closed; D632's dependency report ships while its F3/Gate-F content migration remains
+open. F5 is now unblocked on F2 but still owns every learner-visible module, preset and default.

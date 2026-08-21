@@ -1,6 +1,6 @@
 # RFC: Semantic evidence and local selection — preserve the fact before deciding to speak
 
-- **Status:** implementing
+- **Status:** implemented
 - **Author:** codex (agent), for Marco
 - **Created:** 2026-08-21
 - **Design refs:** `design/03-product-breadth.md` §§Intelligence and explanation, B3, B4 and B9;
@@ -662,14 +662,14 @@ not paired with this draft because O6 remains unresolved (D680).
 
 | id | the obligation | owner | recorded when discharged | discharged |
 |---|---|---|---|---|
-| D1 | [[D572]] eligibility and local-selection half | `semantic-evidence-selection` | implementation commit | — |
-| D2 | [[D630]] transition operand preservation | `semantic-evidence-selection` | implementation commit | — |
-| D3 | [[D631]] semantic-event half; content migration remains F3 | `semantic-evidence-selection` | implementation commit | — |
-| D4 | [[D633]] independent irreversibility events | `semantic-evidence-selection` | implementation commit | — |
-| D5 | [[D660]] correction enforced: lift diagnostic, never selector authority | `semantic-evidence-selection` | implementation commit | — |
-| D6 | [[D668]] generic payload constructor removed from package consumers | `semantic-evidence-selection` | implementation commit | — |
-| D7 | [[D681]] no-global-lift negative fixture | `semantic-evidence-selection` | implementation commit | — |
-| D8 | [[D685]] exact-adapter payload/manifest reconciliation | `semantic-evidence-selection` | implementation commit | — |
+| D1 | [[D572]] eligibility and local-selection half | `semantic-evidence-selection` | implementation commit | `7944ecb` |
+| D2 | [[D630]] transition operand preservation | `semantic-evidence-selection` | implementation commit | `7944ecb` |
+| D3 | [[D631]] semantic-event half; content migration remains F3 | `semantic-evidence-selection` | implementation commit | `7944ecb` |
+| D4 | [[D633]] independent irreversibility events | `semantic-evidence-selection` | implementation commit | `7944ecb` |
+| D5 | [[D660]] correction enforced: lift diagnostic, never selector authority | `semantic-evidence-selection` | implementation commit | `7944ecb` |
+| D6 | [[D668]] generic payload constructor removed from package consumers | `semantic-evidence-selection` | implementation commit | `7944ecb` |
+| D7 | [[D681]] no-global-lift negative fixture | `semantic-evidence-selection` | implementation commit | `7944ecb` |
+| D8 | [[D685]] exact-adapter payload/manifest reconciliation | `semantic-evidence-selection` | implementation commit | `7944ecb` |
 
 ## Open questions
 
@@ -701,3 +701,8 @@ claim, it returns this RFC instead of filling the gap.
   prose instead of the structured operands their registered renderer should translate. Criterion
   8 and the discharge table now require that class to close before F2 can complete; this adds no
   product policy or owner question.
+- 2026-08-21: implemented by `7944ecb`. The compiled closure is 20/126/25/175 plus
+  33/33/15/1; the separate F2 baseline covers 754 authored transitions and 579 retained CC0
+  decisions with complete legal-alternative populations. D685 was repaired before closeout, all
+  eight discharges name the implementation SHA, and F5 remains the sole owner of learner-visible
+  policies, modules, presets and defaults.

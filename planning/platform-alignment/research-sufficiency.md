@@ -28,9 +28,9 @@ At the original run, only two candidate RFC nodes had sufficient architecture re
 **2026-08-21 delta:** F1 and the protected O1–O4 intent amendments have landed, so the blanket
 F2–F11 sentence above has expired. The graph now resolves as follows:
 
-- **F2 is open for drafting.** R1/R2/A3, O2/O3 and F1 are complete. The RFC can specify typed
-  instance events and a parameterised local selector without choosing F5's workflow defaults or
-  pretending that detector rarity supplies semantic eligibility.
+- **F2 implemented on 2026-08-21 (`7944ecb`).** It ships typed instance events, research-only
+  eligibility and a parameterised complete local selector without choosing F5's workflow defaults
+  or pretending that detector rarity supplies semantic eligibility.
 - **F3 is not open.** R6/A3/F1 are complete, but O6 remains explicitly blocked by R8/R10 and the
   owner's Gate-F primitive/re-authoring budget. F3 may not choose a stable primitive set, pilot or
   budget by implication.
@@ -70,8 +70,8 @@ The productive non-participant work is therefore narrow and concrete:
 
 1. land the protected O1/O2/O3/O4/O13 intent amendments through owner/Claude authority;
 2. resolve `shared-resource-registers` Q1/Q2 and `rfc-lifecycle-completion` Q1-Q3;
-3. F1 is implemented; draft/accept F2 against that compiled truth, while keeping F3 closed until
-   O6 is ruled rather than treating Wave 6B as an inseparable pair;
+3. F1 and F2 are implemented; keep F3 closed until O6 is ruled rather than treating Wave 6B as an
+   inseparable pair, and re-evaluate F5/F6/F8/F9 only against their remaining named predecessors;
 4. draft F12 after its Choice-C intent amendment, while preserving participant accessibility as a
    release acceptance gate;
 5. prepare/recruit the R3 and R11 external sessions, since they unlock the widest downstream cuts;
