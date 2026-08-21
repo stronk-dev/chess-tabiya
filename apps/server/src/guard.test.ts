@@ -9,7 +9,7 @@ import {
 } from "@chess-tabiya/runtime";
 import type { DrillPackDefinition } from "@chess-tabiya/schema/drill-pack";
 
-import { applyRecordedEngineGuard, applyRulesGuard } from "./guard.js";
+import { applyRecordedEngineGuard, applyRulesGuard, consumeGuardCondition } from "./guard.js";
 
 const at = "2026-08-14T12:00:00.000Z";
 const selection = (moveUci: string): OpponentSelection => ({
@@ -49,6 +49,12 @@ const tunedPack = (fen: string, guard: NonNullable<DrillPackDefinition["guard"]>
 } as unknown as DrillPackDefinition);
 
 describe("post-commit guard", () => {
+  it("rejects bare provider payloads at the guard consumer boundary", () => {
+    if (false) {
+      // @ts-expect-error Guard conditions consume an admitted provider-evidence view.
+      consumeGuardCondition([]);
+    }
+  });
   it("records a material loss only after the opponent starts the consequence", () => {
     let played = commitMove(run("3rk3/8/8/8/8/8/7P/3Q2K1 w - - 0 1"), "h2h3", { at }).run;
     expect(played.events.some((event) => event.type === "feedback.generated")).toBe(false);

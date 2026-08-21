@@ -4,12 +4,18 @@ import { opposite } from "chessops/util";
 
 import {
   MATERIAL_VALUES,
+  assertConsumerEvidenceView,
   appendEvents,
+  declareEvidence,
   deviationAnchors,
+  evidenceForConsumer,
   historyFrom,
   transposeKey,
   type DrillRun,
   type EvidenceAttachedEvent,
+  type EvidencePayload,
+  type ConsumerEvidenceView,
+  type DeclaredEvidence,
   type MutationResult,
   type Node,
 } from "@chess-tabiya/runtime";
@@ -27,6 +33,7 @@ import {
   learnerCategory,
 } from "./sourcing/tablebase-category.js";
 import type { TablebaseCategory } from "./tablebase.js";
+import { EVIDENCE_MANIFEST } from "./evidence-manifest.js";
 
 function position(fen: string): Chess {
   return Chess.fromSetup(parseFen(fen).unwrap()).unwrap();
@@ -191,8 +198,7 @@ const CONDITION_CATEGORIES = new Set<TablebaseCategory>([
   "loss", "blessed-loss", "draw", "cursed-win", "win",
 ]);
 
-function learnerTablebaseCategory(event: EvidenceAttachedEvent, learner: Color): TablebaseCategory | undefined {
-  const values = event.data.payload.values;
+function learnerTablebaseCategory(values: Readonly<Record<string, unknown>>, learner: Color): TablebaseCategory | undefined {
   if (!Number.isSafeInteger(values.pieceCount) || Number(values.pieceCount) > 7) return undefined;
   if (typeof values.category !== "string" || !CONDITION_CATEGORIES.has(values.category as TablebaseCategory)) return undefined;
   const turn = typeof values.fen === "string" ? values.fen.split(/\s+/)[1] : undefined;
@@ -202,8 +208,8 @@ function learnerTablebaseCategory(event: EvidenceAttachedEvent, learner: Color):
 
 function tablebaseCondition(
   condition: Extract<EngineCondition, { kind: "tablebase_category_regression" | "tablebase_dtz_regression" }>,
-  previous: EvidenceAttachedEvent,
-  consequence: EvidenceAttachedEvent,
+  previous: Readonly<Record<string, unknown>>,
+  consequence: Readonly<Record<string, unknown>>,
   learner: Color,
 ): boolean {
   const beforeCategory = learnerTablebaseCategory(previous, learner);
@@ -213,8 +219,8 @@ function tablebaseCondition(
     return CATEGORY_RANK[afterCategory as keyof typeof CATEGORY_RANK] < CATEGORY_RANK[beforeCategory as keyof typeof CATEGORY_RANK];
   }
   if (beforeCategory !== afterCategory) return false;
-  const before = previous.data.payload.values.preciseDtz ?? previous.data.payload.values.dtz;
-  const after = consequence.data.payload.values.preciseDtz ?? consequence.data.payload.values.dtz;
+  const before = previous.preciseDtz ?? previous.dtz;
+  const after = consequence.preciseDtz ?? consequence.dtz;
   return typeof before === "number" && typeof after === "number" &&
     Math.abs(after) - Math.abs(before) >= condition.byAtLeast;
 }
@@ -226,16 +232,53 @@ function mateAgainstLearner(values: Readonly<Record<string, unknown>>, learner: 
 }
 
 function centipawnSwing(
-  previous: EvidenceAttachedEvent,
-  consequence: EvidenceAttachedEvent,
+  previous: EvidencePayload,
+  consequence: EvidencePayload,
   learner: Color,
   threshold: number,
 ): boolean {
-  const before = previous.data.payload.values;
-  const after = consequence.data.payload.values;
+  const before = previous.values;
+  const after = consequence.values;
   if (!Number.isSafeInteger(before.centipawns) || !Number.isSafeInteger(after.centipawns)) return false;
   const delta = (after.centipawns as number) - (before.centipawns as number);
   return learner === "white" ? delta <= -threshold : delta >= threshold;
+}
+
+type GuardEvidencePayload = EvidencePayload | Readonly<Record<string, unknown>>;
+
+export function consumeGuardCondition(
+  view: ConsumerEvidenceView<GuardEvidencePayload>,
+): readonly DeclaredEvidence<GuardEvidencePayload>[] {
+  assertConsumerEvidenceView(view);
+  if (view.consumer.id !== "runtime.guard_condition" || view.consumer.version !== 1) {
+    throw new TypeError("Expected runtime.guard_condition@1 consumer view");
+  }
+  return view.items;
+}
+
+function guardEvidence(
+  condition: EngineCondition,
+  previousEval: EvidenceAttachedEvent | undefined,
+  consequenceEval: EvidenceAttachedEvent | undefined,
+  previousTablebase: EvidenceAttachedEvent | undefined,
+  consequenceTablebase: EvidenceAttachedEvent | undefined,
+): readonly DeclaredEvidence<GuardEvidencePayload>[] {
+  const declared: DeclaredEvidence<GuardEvidencePayload>[] = [];
+  if (condition.kind === "engine_eval_swing" || condition.kind === "engine_mate_appears") {
+    for (const event of [previousEval, consequenceEval]) if (event !== undefined) declared.push(declareEvidence(
+      { id: "live.stockfish", version: 1 }, { id: "live.stockfish.eval", version: 1 }, event.data.payload,
+    ));
+  } else {
+    const projection = condition.kind === "tablebase_category_regression" ? "live.syzygy.category" : "live.syzygy.distance";
+    for (const event of [previousTablebase, consequenceTablebase]) if (event !== undefined) declared.push(declareEvidence(
+      { id: "live.syzygy", version: 1 }, { id: projection, version: 1 }, event.data.payload.values,
+    ));
+  }
+  return consumeGuardCondition(evidenceForConsumer(
+    EVIDENCE_MANIFEST,
+    { id: "runtime.guard_condition", version: 1 },
+    declared,
+  ));
 }
 
 export function applyRecordedEngineGuard(
@@ -259,17 +302,19 @@ export function applyRecordedEngineGuard(
     const settings = guardSettings(pack, run, triple.previous, triple.learnerMove.moveUci!);
     const previousTablebase = tablebaseAt(run, triple.previous.id);
     const consequenceTablebase = tablebaseAt(run, consequence.id);
-    const before = previousEval?.data.payload.values;
-    const after = consequenceEval?.data.payload.values;
-    const mate = before !== undefined && after !== undefined &&
-      mateAgainstLearner(after, run.start.side) && !mateAgainstLearner(before, run.start.side);
     for (const condition of settings.conditions) {
-      const engineMatched = previousEval !== undefined && consequenceEval !== undefined &&
+      const admitted = guardEvidence(condition, previousEval, consequenceEval, previousTablebase, consequenceTablebase);
+      const enginePayloads = admitted.filter((item) => item.projection.id === "live.stockfish.eval").map((item) => item.payload as EvidencePayload);
+      const tablebasePayloads = admitted.filter((item) => item.projection.id.startsWith("live.syzygy.")).map((item) => item.payload as Readonly<Record<string, unknown>>);
+      const before = enginePayloads[0]?.values;
+      const after = enginePayloads[1]?.values;
+      const mate = before !== undefined && after !== undefined && mateAgainstLearner(after, run.start.side) && !mateAgainstLearner(before, run.start.side);
+      const engineMatched = enginePayloads.length === 2 &&
         ((condition.kind === "engine_mate_appears" && mate) ||
-          (condition.kind === "engine_eval_swing" && centipawnSwing(previousEval, consequenceEval, run.start.side, condition.cp)));
-      const tablebaseMatched = previousTablebase !== undefined && consequenceTablebase !== undefined &&
+          (condition.kind === "engine_eval_swing" && centipawnSwing(enginePayloads[0]!, enginePayloads[1]!, run.start.side, condition.cp)));
+      const tablebaseMatched = tablebasePayloads.length === 2 &&
         (condition.kind === "tablebase_category_regression" || condition.kind === "tablebase_dtz_regression") &&
-        tablebaseCondition(condition, previousTablebase, consequenceTablebase, run.start.side);
+        tablebaseCondition(condition, tablebasePayloads[0]!, tablebasePayloads[1]!, run.start.side);
       const namespace = engineMatched ? "engine:" : tablebaseMatched ? "tablebase:" : undefined;
       if (namespace !== undefined) {
         const reference = appliedEvidenceRefs.find((candidate) => candidate.startsWith(namespace));

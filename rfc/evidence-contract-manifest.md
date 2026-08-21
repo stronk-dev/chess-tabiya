@@ -602,6 +602,12 @@ semantics.
    full claim item including binding, declared/earned evidence kinds, spans and principle records;
    Checkpoint/Terminal claim provenance consumes this projection. Neither projection may accept
    the other's payload by cast.
+10. **Explorer inspector pages and repertoire frontier results are distinct projections**
+    ([[D674]], 2026-08-21). `human.explorer.population@1` carries the on-request `CorpusPage`;
+    `human.explorer.position_stats@1` carries one `CorpusSource.stats` `CorpusResult`. The latter is
+    admitted at `consumeRepertoireCorpus` before its counts or abstention change the frontier.
+    Both retain the same human-corpus/no-quality limitation, but their payload, latency and budget
+    contracts are not interchangeable.
 
 The `outpost` reading/predicate declaration names its dependency on the current
 `pawn_safe_square` predicate projection. A dependency census walks transitive edges, then content
@@ -1074,6 +1080,7 @@ Each criterion names the failure it is intended to catch.
 | D11 | [[D670]]/[[D671]] source-identified authored structural AST, direct feature results and consumed total predicate result have truthful distinct projections (§9 clause 7; criteria 2–3) | `evidence-contract-manifest` | implementation commit | |
 | D12 | [[D672]] family-only/checkpoint/provider reference tokens use a recorded resolution projection plus optional exact source event, never a fabricated predicate/claim payload (§9 clause 8; criteria 6–7) | `evidence-contract-manifest` | implementation commit | |
 | D13 | [[D673]] normalized authored guidance claim and full delivery-sheet claim item have distinct payload projections and consumers (§9 clause 9; criteria 6–7) | `evidence-contract-manifest` | implementation commit | |
+| D14 | [[D674]] Explorer inspector page and per-position repertoire frontier result have distinct payload projections; every scan result is admitted before use (§9 clause 10; criteria 6–7) | `evidence-contract-manifest` | implementation commit | |
 
 ## Open questions
 
@@ -1166,3 +1173,6 @@ lands with implementation; no item awaits an owner.
   `pack.authored.claim@1` from full `pack.authored.claim_delivery@1`; deterministic/voice guidance
   consumes the former and Checkpoint/Terminal provenance consumes the latter. This removes a live
   payload cast without changing rendered bytes.
+- 2026-08-21: resumed-bind Explorer audit ([[D674]]). Split the on-request `CorpusPage` from
+  per-position `CorpusResult`; repertoire scanning now admits every provider result before it
+  changes gaps or abstention state. No ranking or quality semantics were added.

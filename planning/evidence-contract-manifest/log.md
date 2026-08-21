@@ -93,3 +93,10 @@ Append-only.
 - F1 now gives normalized guidance prose and full Checkpoint/Terminal claim items separate exact
   projections. `claimProvenanceDeclared` consumes the admitted full item; the visible prose remains
   unchanged.
+
+## 2026-08-21 — resumed bind split Explorer page and frontier result
+
+- [[D674]] records that repertoire scan consumed `CorpusResult`, not the `CorpusPage` its binding
+  promised.
+- `human.explorer.position_stats@1` now names the exact frontier payload, and every provider result
+  passes `consumeRepertoireCorpus` before it changes scan state. Inspector behavior is unchanged.

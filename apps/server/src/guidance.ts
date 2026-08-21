@@ -1,5 +1,6 @@
 import {
   classifyPhase,
+  assertConsumerEvidenceView,
   declareEvidence,
   endgameReading,
   evidenceForConsumer,
@@ -19,6 +20,7 @@ import {
   type Node,
   type PositionEvidenceIndex,
   type RenderedEvidenceView,
+  type ConsumerEvidenceView,
 } from "@chess-tabiya/runtime";
 import type { DrillPackDefinition, PackPhase } from "@chess-tabiya/schema/drill-pack";
 
@@ -110,8 +112,17 @@ export function evidencePacket(input: { readonly run: DrillRun; readonly node: N
   return Object.freeze({ fen: input.node.fen, phase: Object.freeze(phase), structures: reading.structures, observations: reading.features, markers: Object.freeze(markers), endgame, plans: Object.freeze(plans), authored: Object.freeze(authored), readings, declared });
 }
 
+export function renderRecordedReadingEvidence(view: ConsumerEvidenceView<unknown>): readonly string[] {
+  assertConsumerEvidenceView(view);
+  if (view.consumer.id !== "guidance.recorded_reading" || view.consumer.version !== 1) {
+    throw new TypeError("Expected guidance.recorded_reading@1 consumer view");
+  }
+  return Object.freeze(view.items.flatMap((item) => renderRecordedReading(item.payload as Parameters<typeof renderRecordedReading>[0])));
+}
+
 export function appendRecordedReadings(text: string, packet: EvidencePacket): string {
-  const rendered = packet.readings.flatMap(renderRecordedReading).join("\n");
+  const view = evidenceForConsumer(EVIDENCE_MANIFEST, { id: "guidance.recorded_reading", version: 1 }, packet.declared);
+  const rendered = renderRecordedReadingEvidence(view).join("\n");
   if (rendered === "") return text;
   return text === "" ? rendered : `${text}\n${rendered}`;
 }

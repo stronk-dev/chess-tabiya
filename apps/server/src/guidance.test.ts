@@ -7,7 +7,7 @@ import { afterEach, describe, expect, it } from "vitest";
 import { HUMAN_COMMON_RESISTANCE_PROFILE, type CapabilitiesProvider } from "./capabilities.js";
 import { EvidenceJobQueue, type EvidenceExecutor } from "./evidence-queue.js";
 import type { EngineHealth, EngineRequest } from "./engine-supervisor.js";
-import { evidencePacket, renderVoice, voiceEvidenceView, type VoiceEvidenceView, type VoiceProvider } from "./guidance.js";
+import { evidencePacket, renderRecordedReadingEvidence, renderVoice, voiceEvidenceView, type VoiceEvidenceView, type VoiceProvider } from "./guidance.js";
 import { OpponentSelector, type SelectorEngineClient } from "./opponent-selector.js";
 import { createRestHandler } from "./rest.js";
 import { RunService } from "./service.js";
@@ -47,6 +47,12 @@ function fixturePacket(): EvidencePacket {
 }
 
 describe("adaptive guidance server seams", () => {
+  it("rejects bare recorded readings at the deterministic consumer boundary", () => {
+    if (false) {
+      // @ts-expect-error Recorded-reading delivery consumes an admitted view.
+      renderRecordedReadingEvidence([]);
+    }
+  });
   const stores: SQLiteRunStorage[] = [];
   afterEach(() => { for (const storage of stores.splice(0)) storage.close(); });
 

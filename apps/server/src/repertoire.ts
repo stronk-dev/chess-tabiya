@@ -6,9 +6,10 @@ import { makeSan } from "chessops/san";
 import { parseUci } from "chessops/util";
 
 import { canonicalizeJson } from "@chess-tabiya/schema/drill-pack";
-import { canonicalFen, transposeKey } from "@chess-tabiya/runtime";
+import { assertConsumerEvidenceView, canonicalFen, declareEvidence, evidenceForConsumer, transposeKey, type ConsumerEvidenceView } from "@chess-tabiya/runtime";
 
-import { corpusPopulation, type CorpusPopulation, type CorpusSource } from "./corpus.js";
+import { corpusPopulation, type CorpusPopulation, type CorpusResult, type CorpusSource } from "./corpus.js";
+import { EVIDENCE_MANIFEST } from "./evidence-manifest.js";
 import { ServerError } from "./errors.js";
 import { resolveStudySource } from "./import-source.js";
 import { parseRepertoirePgn, RepertoirePgnError } from "./repertoire-pgn.js";
@@ -37,6 +38,17 @@ export interface UnknownGapRow {readonly key:string;readonly representativeFen:s
 
 interface Frontier {readonly fen:string;readonly key:string;readonly mass:number;readonly line:readonly string[];readonly ply:number;readonly alternate:boolean}
 
+export function consumeRepertoireCorpus(view: ConsumerEvidenceView<CorpusResult>): CorpusResult {
+  assertConsumerEvidenceView(view);
+  if (view.consumer.id !== "runtime.repertoire_scan" || view.consumer.version !== 1 || view.items.length !== 1) throw new TypeError("Expected one runtime.repertoire_scan@1 evidence item");
+  return view.items[0]!.payload;
+}
+
+function repertoireCorpusEvidence(result: CorpusResult): CorpusResult {
+  const declared = declareEvidence({ id: "human.explorer", version: 1 }, { id: "human.explorer.position_stats", version: 1 }, result);
+  return consumeRepertoireCorpus(evidenceForConsumer(EVIDENCE_MANIFEST, { id: "runtime.repertoire_scan", version: 1 }, [declared]));
+}
+
 function position(fen:string):Chess{return Chess.fromSetup(parseFen(fen).unwrap()).unwrap();}
 function seedFen(chess:Chess):string{return `${transposeKey(canonicalFen(chess))} 0 1`;}
 function play(fen:string,uci:string):{fen:string;san:string}{const chess=position(fen),move=parseUci(uci);if(move===undefined||!chess.isLegal(move))throw new ServerError("INVALID_REQUEST",`Illegal repertoire move ${uci}`);const san=makeSan(chess,move);chess.play(move);return {fen:seedFen(chess),san};}
@@ -52,7 +64,7 @@ export async function scanRepertoire(record:RepertoireRecord,moves:readonly Repe
   while(frontier.length>0){const nextByKey=new Map<string,Frontier>();for(const item of frontier){reached.add(item.key);if(item.ply>=60){truncated=true;unqueried++;continue;}if(expanded.has(`${item.alternate?"a":"m"}:${item.key}`))continue;const chess=position(item.fen);
       if(chess.isEnd())continue;
       if(chess.turn===record.side){const choices=answers.get(item.key)??[];for(const answer of choices){const child=play(item.fen,answer.moveUci),alternate=item.alternate||answer.rank!==0;mergeFrontier(nextByKey,{fen:child.fen,key:transposeKey(child.fen),mass:item.mass,line:Object.freeze([...item.line,answer.moveSan]),ply:item.ply+1,alternate});}continue;}
-      if(queries>=300){truncated=true;unqueried++;continue;}queries++;const stats=await source.stats({...population,fen:item.fen});if(stats.kind==="abstention"){if(stats.reason==="source_unavailable")sourceFailures++;unknown.push(Object.freeze({key:item.key,representativeFen:item.fen,line:item.line,reason:stats.reason,detail:stats.detail,pathMass:item.mass,gamesUntilPosition:Math.max(1,Math.round(1/item.mass))}));continue;}
+      if(queries>=300){truncated=true;unqueried++;continue;}queries++;const stats=repertoireCorpusEvidence(await source.stats({...population,fen:item.fen}));if(stats.kind==="abstention"){if(stats.reason==="source_unavailable")sourceFailures++;unknown.push(Object.freeze({key:item.key,representativeFen:item.fen,line:item.line,reason:stats.reason,detail:stats.detail,pathMass:item.mass,gamesUntilPosition:Math.max(1,Math.round(1/item.mass))}));continue;}
       for(const reply of stats.moves){const mass=item.mass*(reply.playedCount/stats.total);if(mass<bound)continue;let child;try{child=play(item.fen,reply.uci);}catch{continue;}const key=transposeKey(child.fen),line=Object.freeze([...item.line,reply.san]),covered=answers.has(key);if(!covered){if(item.alternate){alternateGaps.set(key,Object.freeze({key,representativeFen:child.fen,replySan:reply.san,replyUci:reply.uci,line,behindAlternate:true}));}else{const prior=gaps.get(key),combined=(prior?.mass??0)+mass;gaps.set(key,Object.freeze({key,representativeFen:child.fen,replySan:reply.san,replyUci:reply.uci,line:prior!==undefined&&prior.line.length<=line.length?prior.line:line,mass:combined,gamesUntilSeen:Math.max(1,Math.round(1/combined))}));}continue;}mergeFrontier(nextByKey,{fen:child.fen,key,mass,line,ply:item.ply+1,alternate:item.alternate});}
       expanded.add(`${item.alternate?"a":"m"}:${item.key}`);
     }frontier=[...nextByKey.values()];}

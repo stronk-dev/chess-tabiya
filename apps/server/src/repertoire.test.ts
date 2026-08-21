@@ -2,7 +2,7 @@ import { describe, expect, it } from "vitest";
 
 import { corpusPopulation, type CorpusSource } from "./corpus.js";
 import { parseRepertoirePgn } from "./repertoire-pgn.js";
-import { repertoireDigest, scanRepertoire } from "./repertoire.js";
+import { consumeRepertoireCorpus, repertoireDigest, scanRepertoire } from "./repertoire.js";
 import type { RepertoireMoveRecord, RepertoireRecord } from "./storage.js";
 
 const START="rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
@@ -11,6 +11,12 @@ const AT="2026-08-14T12:00:00.000Z";
 function record(moves:readonly RepertoireMoveRecord[]):RepertoireRecord{return {id:"rep",ownerLearnerId:"learner",name:"Black choices",side:"black",rootFen:START,targetElo:1600,coverageDenominator:10,sourceKind:"pgn_paste",sourceUrl:null,originalPgn:"",licenceNote:"test",digest:repertoireDigest("black",START,moves),createdAt:AT,updatedAt:AT};}
 
 describe("repertoire import and gap scan",()=>{
+  it("rejects a bare Explorer result at the scan consumer boundary",()=>{
+    if(false){
+      // @ts-expect-error Repertoire scanning consumes an admitted Explorer result.
+      consumeRepertoireCorpus({kind:"abstention",reason:"no_data_at_band",detail:"none",population:corpusPopulation(1600,new Date(AT))});
+    }
+  });
   it("walks every variation and chapter while recording learner-side answers by position",()=>{
     const parsed=parseRepertoirePgn(`[Event "One"]\n\n1. d4 d5 (1... Nf6) 2. c4 *\n\n[Event "Two"]\n\n1. e4 c5 *`,`black`);
     expect(parsed.games).toBe(2);
