@@ -117,7 +117,7 @@ and the `onramp` profile defaults to silent like the rest.
 **D307, permission half — real, owner-tier, and correctly self-described.** The row's own
 strongest sentence is *"there is no lever to make Just Play more permissive than a drill
 **even if the owner rules that it should be**"* — i.e. it states that no ruling exists.
-`rfc/teacher-surface.md` (accepted) reaches the same conclusion and hands it on in its own
+`rfc/archive/teacher-surface.md` (implemented) reaches the same conclusion and hands it on in its own
 words: *"The live row in this territory is now D307, and this RFC does not touch it… it
 belongs to whoever next owns that surface. Naming it without claiming it is the point."*
 This RFC owns that surface. §4.3 pins the invariant and §Open questions 1 prices the fork,
@@ -143,7 +143,7 @@ the per-profile default table; the honesty of `AssistanceContext`'s declared sha
 | Not in scope | Owned by |
 |---|---|
 | `assistance.markers`, `pivotalMarkers`, `liveMarkers`, `liveAdmitted`, `renderPivotalMarker`, the live-marker admission rule L1–L6 | `rfc/archive/live-marker-quality.md` (*implemented*) |
-| The body of `permittedAssistance` and the `mayRequestSplit` conjunction; `seatedInContest`; `reviewing` | `rfc/teacher-surface.md` (*accepted*) |
+| The body of `permittedAssistance` and the `mayRequestSplit` conjunction; `seatedInContest`; `reviewing` | `rfc/archive/teacher-surface.md` (*implemented*) |
 | `SILENT_ASSISTANCE.boardLighting`'s `"legal"` → `"off"` regression | **D493**. **It landed in the working tree while this RFC was being drafted** — `boardLighting` is `"legal"` again and `adaptive-guidance.test.ts`'s *"implements the assistance table with silence as the universal default"* is updated with it. This RFC touches no value of `SILENT_ASSISTANCE`, and §4.2's default table is spelled as a spread of it precisely so a change of this kind flows through in either landing order — which it now has |
 | Stating the silence to a first-run learner | **D494**, already queued |
 | Which shape entries a pack loads versus the full catalogue | §Open questions 2 |
@@ -556,7 +556,7 @@ the on-ramp default applies **only** where nothing is stored.
 
 ### 6. Composition with the two in-flight RFCs
 
-**`rfc/teacher-surface.md` (accepted).** Its §5.2b adds `seatedInContest` and `reviewing`
+**`rfc/archive/teacher-surface.md` (implemented).** Its §5.2b adds `seatedInContest` and `reviewing`
 to `AssistanceContext` and re-associates `mayRequestSplit`. This RFC changes neither the
 interface's existing fields nor the function body. Landing order is free: if
 `teacher-surface` lands first, §4.3's doc comment is written above its final form and the

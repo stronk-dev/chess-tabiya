@@ -42,9 +42,9 @@
   win/loss/draw store), `rfc/archive/engine-request-contract.md` and
   `rfc/archive/resistance-spectrum.md` (`eloHonored`/`eloApplied` per-move record),
   `rfc/archive/learner-identity-and-authorization.md` (`learners`, the learner id).
-  **`teacher-surface.md` is now a hard dependency, not only a migration-order neighbour** —
+  **`archive/teacher-surface.md` is now a hard dependency, not only a migration-order neighbour** —
   §10a's standing is scoped to its `classrooms` / `classroom_members` and adds no second
-  grouping object and no second consent model (§10a.2). **Lands behind `teacher-surface.md` and
+  grouping object and no second consent model (§10a.2). It lands after `teacher-surface` and
   `opponent-contracts.md`** in the migration order (see §9.1); the ladder now carries a **fourth
   claim** ([[D423]], §9.1)
 - **Parent / amends:** **nothing.** The draft claimed it amended `docs/return-and-progression.md`;
@@ -1106,21 +1106,14 @@ above needed no edit, only the prose around it did. Per D392, no integer appears
 acceptance criterion here. **Re-derive `STORAGE_VERSION` at landing; do not trust this
 paragraph.**
 
-**Re-verified late, this round, against the tree rather than against the draft:**
-`STORAGE_VERSION` reads **23** (`apps/server/src/storage.ts`, `export const STORAGE_VERSION = 23`)
-`[V]` — unmoved since cross-review, which is the first time a figure in this document has survived
-a round.
-
-**Three active documents hold `STORAGE_VERSION + 1` ([[D423]]) and this round makes this RFC's
-share of that contention larger, so it is stated as a fourth claim rather than hidden inside the
-third.** The holders are `teacher-surface` (draft), `opponent-contracts` (**implementing**, its
-own header marks the position **CONTESTED**), and this RFC — which now carries **two independent
-table sets**, the rating's three (§10.1) and the standing's three (§10a.7). Counted by document
-the ladder has three claimants; **counted by claim it has four, and this is the fourth.** They
-land in one migration body because they land in one commit; if the owner ever splits the standing
-into its own RFC, that RFC is a fourth *document* and D423's count moves again. Also verified this
-round: `feedback-delivery` **declines** to become a silent fourth holder and says so in its own
-register section `[V]`; `graduation-clearance` claims **no** migration position `[V]`.
+**Re-verified 2026-08-22 against the tree rather than against this draft:**
+`STORAGE_VERSION` is **24** (`apps/server/src/storage.ts`), landed by
+`archive/teacher-surface.md`. This RFC is now the only active migration claimant and holds the
+next position. It carries **two independent table sets**: the rating's three (§10.1) and the
+standing's three (§10a.7). They land in one migration body because they land in one commit; if
+the owner later splits the standing into its own RFC, the register must split the claims before
+either implementation begins. `feedback-delivery` and `graduation-clearance` claim no migration
+position.
 
 Body: **create-table/index only. No backfill, no snapshot rewrite, no stamp.** Nothing historical
 is rated — every historical run was played under an unknown assistance state against an
@@ -1556,7 +1549,7 @@ machine-readable, which is the third of §8a's mechanisms.
 
 | RFC | Overlap | Resolution |
 |---|---|---|
-| `teacher-surface.md` (**draft**) | **Now a hard dependency, not only a migration neighbour.** §10a's standing is scoped to its `classrooms` / `classroom_members` and transposes its §2.1/§2.2 consent model rather than inventing one. Still: migration ladder, `/learn`, and its ownership pin on `permittedAssistance` | This RFC lands **behind** it and takes the next position at its turn — which is now a **correctness** requirement, not a courtesy: §10a.7's tables carry a foreign key into `classrooms`. `permittedAssistance` is untouched (§5.2), so the pin is not contested. The `/learn` collision is **not** doctrinal — §11.2 |
+| `archive/teacher-surface.md` (**implemented**) | **A hard dependency, not only a migration neighbour.** §10a's standing is scoped to its `classrooms` / `classroom_members` and transposes its §2.1/§2.2 consent model rather than inventing one. Still: migration ladder, `/learn`, and its ownership pin on `permittedAssistance` | This RFC takes the next migration position after it — a **correctness** requirement, not a courtesy: §10a.7's tables carry a foreign key into `classrooms`. `permittedAssistance` is untouched (§5.2), so the pin is not contested. The `/learn` collision is **not** doctrinal — §11.2 |
 | `pack-graduation.md` (**implemented 2026-08-16, `rfc/archive/`**) | **None.** All its state is pack-scoped; pack 0.27 has landed | Nothing to negotiate |
 | `opponent-contracts.md` (**implementing 2026-08-16** — the cross-review said "accepted"; it moved again) | **Migration ladder.** Its run 0.17 has **landed**; its pack 0.28 claim was **released** by its own cross-review (D385); its header marks its migration position **CONTESTED** | This RFC claims no pack and no run lane, so it contests neither. On the migration it lands **behind** this one too (§9.1) |
 | `graduation-clearance.md` (**draft, author round complete 2026-08-16**) | **Pack lane 0.28** — which the cross-review recorded as unclaimed. It is claimed: that RFC's §7 verdict is *"keep 0.28"* for `$defs/graduationEntry` `[V]` | **No collision.** This RFC claims no pack lane (§9.2). It claims no migration position either, so it is not on the ladder |

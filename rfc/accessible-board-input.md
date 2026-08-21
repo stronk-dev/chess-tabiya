@@ -305,7 +305,7 @@ external panel is required; a failed owner run blocks release and returns to thi
   in `App.svelte`/`RunStateStore`; this RFC touches none of those symbols. Both edit
   `DrillScreen.svelte` (this one only its `keyboard()` handler and `interactiveTarget()`), so the
   seam is a file-level rebase, not a semantic conflict; landing order is free.
-- `teacher-surface.md` (accepted) owns `run_grants`; §7 here only reads the existing run access
+- `archive/teacher-surface.md` (implemented) owns `run_grants`; §7 here only reads the existing run access
   check and changes no grant, lease or migration — no seam.
 - This RFC claims nothing versioned; `make register-check` is green at HEAD with its `none` block.
 

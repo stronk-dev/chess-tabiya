@@ -8,7 +8,7 @@
   `planning/platform-alignment/release-platform/f12-work-order.md` F12-B; D605, D606, D656
 - **Exploration gate:** O13/D616 chose the Choice-C appliance floor; D656 rules the remaining
   private-delete versus shared/public-retain boundary
-- **Depends on:** `teacher-surface.md` lands first so its classroom/submission tables enter the
+- **Depends on:** `archive/teacher-surface.md` landed first so its classroom/submission tables enter the
   exhaustive inventory and its pre-D656 deletion clause can be superseded atomically; F12-C supplies
   only the final configured backup-retention sentence
 - **Parent / amends:** `archive/learner-identity-and-authorization.md`,
@@ -97,7 +97,7 @@ The inventory is the guard against “new table, old privacy policy.” Schema m
 `make verify` read it. An implementation may split one class into several entries; it may not merge
 away a table or silently use `not_applicable`.
 
-`teacher-surface.md` is accepted and claims the next migration. It adds classrooms, members,
+`archive/teacher-surface.md` is implemented at migration 24. It adds classrooms, members,
 assignments, submissions and two permission columns while specifying account deletion under the old
 blanket-reassignment policy. It therefore lands before this RFC. F12-B inventories every table it
 adds and supersedes its §4.1a/criterion 9a deletion outcome in the same commit; there is no interval
@@ -232,7 +232,7 @@ For a run owned by the departing learner, `externalDependency` is true iff eithe
 2. `run_derivations` names the run as a source and the derived run is currently owned by a different
    authenticated learner.
 
-The accepted `teacher-surface` migration's submission grants enter through rule 1; no special
+The implemented `teacher-surface` migration's submission grants enter through rule 1; no special
 classroom exception is needed. A `story_read` or `session_join` token, a live session with no other
 current grantee, a previously revoked grant, or an unredeemed invitation is **not** an external
 dependency. An anonymous link is revocable access, not co-ownership.
@@ -311,7 +311,7 @@ private run.
 
 #### 4.6 Classroom and submission integration
 
-This subsection applies once the accepted `teacher-surface.md` migration has landed.
+This subsection applies after the implemented `archive/teacher-surface.md` migration.
 
 Its §4.1a currently revokes submission-minted grants before deleting either party because every run
 was assumed to survive under `__legacy`. That order would erase the very authenticated dependency
@@ -411,7 +411,7 @@ described the old implementation and now conflicts with the later D656 owner rul
 narrows reassignment to genuinely shared tombstones and hard-deletes private runs. The protected
 design sentence requires an owner/Claude-on-ruling correction; this RFC does not edit it.
 
-The accepted `teacher-surface.md` §4.1a and criterion 9a revoke every submission grant before
+The implemented `archive/teacher-surface.md` §4.1a and criterion 9a revoke every submission grant before
 deleting a learner and expect no teacher grant on the legacy run. D656 reverses that result for a
 current authenticated dependency. `teacher-surface` lands first; this RFC then supersedes only its
 account-deletion outcome while preserving explicit withdrawal, leave, removal, archive, classroom
