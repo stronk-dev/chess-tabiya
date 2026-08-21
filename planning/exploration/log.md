@@ -3991,3 +3991,18 @@ registered renderer output over structured admitted evidence; projection operand
 runtime payloads and malformed adapters fail. D572, D630, D631's semantic half, D633, D668, D681
 and D685 are closed; D632's dependency report ships while its F3/Gate-F content migration remains
 open. F5 is now unblocked on F2 but still owns every learner-visible module, preset and default.
+
+## 2026-08-21 — R3 real-packet handoff after F2
+
+The disposable R3 prototype now consumes three runtime-sealed F2 selections rather than pretending
+synthetic F-02 prose is compiler evidence. Castling, promotion and checkmate evaluate all **55/55**
+legal alternatives and carry five exact facts, IDs, signs, squares and denominators through a typed
+adapter; a forged selection object fails. The adapter adds no grade, valence, best move or PV.
+
+The first contact is also a negative finding, D686: after the critical castling and promotion facts,
+the research-wide policy fills its second slot with `occupied_defence` and
+`direct_attack_count`. Exact plus distinctive is still not learner-significant. F5 must compile a
+module-specific eligibility/refusal set before selection and allow empty budget rather than filling
+from the research pool. R3's mechanical/real-packet arms are complete; D649 leaves owner use as the
+exit. A requested browser visual recheck was unrun because no browser surface was connected; 19/19
+executable harness checks pass, and no visual-pass claim was manufactured.

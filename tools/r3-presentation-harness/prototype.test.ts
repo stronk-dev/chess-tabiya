@@ -50,5 +50,7 @@ describe("R3 participant workflow prototype", () => {
     expect(css).toMatch(/@media \(max-width: 850px\)/);
     expect(js).toContain('aria-label="Research chessboard fixture"');
     expect(js).toContain('aria-pressed=');
+    expect(js).toContain('fetch("./real-packets.json")');
+    expect(js).toContain("F2-selected exact events");
   });
 });

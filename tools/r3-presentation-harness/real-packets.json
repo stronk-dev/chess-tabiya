@@ -1,0 +1,145 @@
+[
+  {
+    "id": "e1g1",
+    "label": "Castle kingside",
+    "beforeFen": "r3k2r/8/8/8/8/8/8/R3K2R w KQkq - 0 1",
+    "moveUci": "e1g1",
+    "afterFen": "r3k2r/8/8/8/8/8/8/R4RK1 b kq - 1 1",
+    "population": {
+      "legalAlternatives": 25,
+      "evaluatedAlternatives": 25
+    },
+    "facts": [
+      {
+        "id": "f6540ccc70090341fdc884cab12aee26866e1b696d91195fa00a58e11d6264eb",
+        "kind": "rules.transition.event.castled@1",
+        "eligible": true,
+        "allowedConsumers": [
+          "postcommit_nudge",
+          "guided_hint",
+          "compare_coach",
+          "review_map",
+          "full_inspector"
+        ],
+        "availableAt": "postcommit",
+        "sourceRung": 0,
+        "exactness": "exact",
+        "sign": "state",
+        "squares": [
+          "e1",
+          "g1"
+        ],
+        "text": "This move produced castling."
+      },
+      {
+        "id": "be3110de7ecd6a9a1ad3cd36e32997ddcd8c44db56a98fd73de4e9fbb2425834",
+        "kind": "rules.transition.event.occupied_defence@1",
+        "eligible": true,
+        "allowedConsumers": [
+          "postcommit_nudge",
+          "guided_hint",
+          "compare_coach",
+          "review_map",
+          "full_inspector"
+        ],
+        "availableAt": "postcommit",
+        "sourceRung": 0,
+        "exactness": "exact",
+        "sign": "gained",
+        "squares": [
+          "a1",
+          "f1"
+        ],
+        "text": "This move created a defence of an occupied square. 4 of 25 other legal moves produced the same event family."
+      }
+    ]
+  },
+  {
+    "id": "a7a8q",
+    "label": "Promote on a8",
+    "beforeFen": "4k3/P7/8/8/8/8/8/4K3 w - - 0 1",
+    "moveUci": "a7a8q",
+    "afterFen": "Q3k3/8/8/8/8/8/8/4K3 b - - 0 1",
+    "population": {
+      "legalAlternatives": 8,
+      "evaluatedAlternatives": 8
+    },
+    "facts": [
+      {
+        "id": "bab5d100da9c75ab58796e93a0bb1b6a387e0ca0549613d4509438a9f067fad2",
+        "kind": "rules.transition.event.promotion@1",
+        "eligible": true,
+        "allowedConsumers": [
+          "postcommit_nudge",
+          "guided_hint",
+          "compare_coach",
+          "review_map",
+          "full_inspector"
+        ],
+        "availableAt": "postcommit",
+        "sourceRung": 0,
+        "exactness": "exact",
+        "sign": "state",
+        "squares": [
+          "a7",
+          "a8"
+        ],
+        "text": "This move produced promotion."
+      },
+      {
+        "id": "0f9d80be8563d70aafa394fa831246028d2458f31c9e9de5141f46678211d23e",
+        "kind": "rules.structural.event.direct_attack_count@1",
+        "eligible": true,
+        "allowedConsumers": [
+          "postcommit_nudge",
+          "guided_hint",
+          "compare_coach",
+          "review_map",
+          "full_inspector"
+        ],
+        "availableAt": "postcommit",
+        "sourceRung": 0,
+        "exactness": "exact",
+        "sign": "gained",
+        "squares": [
+          "e8"
+        ],
+        "text": "This move created the number of direct attacks. 1 of 8 other legal moves produced the same event family."
+      }
+    ]
+  },
+  {
+    "id": "g6g7",
+    "label": "Deliver checkmate",
+    "beforeFen": "7k/8/5KQ1/8/8/8/8/8 w - - 0 1",
+    "moveUci": "g6g7",
+    "afterFen": "7k/6Q1/5K2/8/8/8/8/8 b - - 1 1",
+    "population": {
+      "legalAlternatives": 22,
+      "evaluatedAlternatives": 22
+    },
+    "facts": [
+      {
+        "id": "6985b9c250ddf8d35fd3b851b3c817167857b2956a58c0114ba1b71f0295fc6d",
+        "kind": "rules.transition.event.checkmate@1",
+        "eligible": true,
+        "allowedConsumers": [
+          "postcommit_nudge",
+          "guided_hint",
+          "compare_coach",
+          "review_map",
+          "full_inspector"
+        ],
+        "availableAt": "postcommit",
+        "sourceRung": 0,
+        "exactness": "exact",
+        "sign": "state",
+        "squares": [
+          "g6",
+          "g7"
+        ],
+        "text": "This move produced checkmate."
+      }
+    ]
+  }
+]

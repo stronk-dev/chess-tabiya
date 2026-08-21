@@ -52,7 +52,8 @@ describe("R3 shipped-surface census", () => {
     expect(axesPerProfile).toBe(9);
     expect(settings).toContain("Human move split on request");
     expect(drill).toContain("`${candidate.moveUci} ");
-    expect(drill).toContain("structure.features.filter");
+    expect(drill).toContain("selectedSquareSightEvidence(rawStructure)");
+    expect(drill).toContain("sightFeatures.filter");
     expect(drill).not.toContain("assistance.arrows ===");
     const ambientTag = drill.match(/<button class="ambient"[^>]*>/)?.[0] ?? "";
     expect(ambientTag).not.toContain("onclick");

@@ -26,6 +26,8 @@ select { background: var(--panel2); color: var(--ink); border: 1px solid var(--l
 .square[aria-pressed="true"] { box-shadow: inset 0 0 0 5px var(--gold); }
 .square:focus-visible { z-index: 2; outline: 4px solid var(--blue); outline-offset: -4px; }
 .board-actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 14px; }
+.fixture-caption { display: flex; justify-content: space-between; gap: 12px; margin-top: 10px; color: var(--muted); }
+.fixture-caption strong { color: var(--text); }
 .inline-result, .quiet, .ceiling { display: grid; gap: 4px; margin-top: 12px; padding: 14px; border: 1px solid var(--line); border-radius: 12px; background: var(--panel); }
 aside { display: grid; gap: 14px; }
 .preset-panel, .module { border: 1px solid var(--line); border-radius: 16px; background: var(--panel); padding: 18px; }
@@ -39,6 +41,8 @@ aside { display: grid; gap: 14px; }
 .module__meta { color: var(--muted); font-size: .72rem; text-transform: uppercase; letter-spacing: .08em; }
 .module h3 { font-size: 1rem; margin: 8px 0 6px; }
 .module p { color: #c4ccd8; margin: 0; }
+.module li { margin: 8px 0; color: #c4ccd8; }
+.module li span { display: block; margin-top: 3px; color: var(--muted); font-size: .72rem; }
 .module a { display: inline-block; margin-top: 10px; color: #bcd5ff; }
 .ceiling { border-color: #6e5d31; background: #211c12; }
 .customize { width: min(780px, calc(100vw - 32px)); max-height: calc(100vh - 40px); color: var(--ink); background: #121924; border: 1px solid var(--line); border-radius: 18px; padding: 22px; box-shadow: 0 30px 100px #000c; }

@@ -1,6 +1,6 @@
 # R3 evidence-presentation participant plan
 
-**Status:** preregistered protocol and responsive disposable prototype ready; external recruitment and runs not started
+**Status:** amended 2026-08-21 for D649; real F2 packet prototype ready; owner-use run remains
 
 **Authority:** platform-alignment R3; owner rulings D617–D619
 
@@ -37,10 +37,21 @@ Every registered primitive shown by the prototype must resolve to exactly one lo
 module composition, learner-safe Customize, full inspector, or author/operator-only disposition.
 The participant is never asked to understand those implementation categories.
 
-The executable artifact is `tools/r3-presentation-harness/prototype.html`. It uses synthetic
-fixture text only and implements the five preset candidates, six workflow ceilings and three
-required evidence states. Its unit tests and desktop/phone visual QA establish buildability only;
-facilitators must not treat the prototype copy as validated UX.
+The executable artifact is `tools/r3-presentation-harness/prototype.html`. Its post-commit nudge
+uses sealed F2-selected castling, promotion and checkmate packets; theory, warning and progressive
+hint copy remain synthetic fixtures. It implements the five preset candidates, six workflow ceilings
+and three required evidence states. Its tests establish buildability only; the owner must not treat
+prototype copy as validated UX before using it.
+
+## D649 amendment — validation by owner use
+
+D649 descoped recruited panels without descoping the owner's real use. The twelve-person protocol
+below remains the reusable public-study design, but it is no longer a 1.0 gate. The current exit is
+one owner session over Tasks 1–9 on the owner's available desktop and phone/input paths. Every
+misunderstood preset, unwanted source-setting detour, noisy packet or leaked recommendation is
+recorded as a defect; there is no aggregate threshold that can average it away. The owner then
+accepts, renames, narrows or refuses each candidate default. This amendment changes the executor and
+decision rule, not the tasks or automatic leakage/ceiling failures.
 
 ## Participants and devices
 

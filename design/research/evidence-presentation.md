@@ -2,8 +2,8 @@
 
 **Platform-alignment question:** R3  
 **Date:** 2026-08-20  
-**Status:** mechanical and desk-research arms answered; interaction and participant exit remain
-external  
+**Status:** mechanical, desk, responsive-prototype and real-F2-packet arms answered; owner-use exit
+remains
 **Instrument:** `tools/r3-presentation-harness/`
 
 ## Verdict
@@ -31,10 +31,11 @@ A **session-kind ceiling** limits what a preset may offer; it does not choose th
 **full inspector** is a deliberate analysis mode, not the fallback when selection fails. These
 distinctions preserve `design/05`'s source/timing/form rules while supplying the missing UX object.
 
-This does not clear R3. `[V]` The shipped board fails A2's exact-interaction floor, the in-app
-browser was unavailable for this pass, and no nontechnical learners were recruited. Therefore the
-module and preset names below are research candidates, not a default ruling or RFC input ready for
-implementation.
+This does not clear R3. `[V]` D537/D573 and accessible-board-input repaired the earlier board
+interaction floor, and F2 now supplies real compiler-admitted packets. The remaining exit is the
+owner's use of those packets through the candidate workflows under D649's validation-by-use ruling.
+Therefore the module and preset names below remain research candidates, not silently chosen product
+defaults.
 
 **Owner ruling after this pass (2026-08-20):** D617–D619 adopt the compiled manifest,
 eligibility-before-selection, configurable-primitive/module/preset split and the pre-commit
@@ -59,7 +60,10 @@ The pass used four evidence sources:
 3. `[V]` Synthetic, explicitly non-chess fixtures exercising zero/one/many facts, abstention,
    consumer mismatch, disclosure order and move/PV leakage against nine module contracts plus five
    preset compositions and six workflow ceilings. Seventeen tests pass. No fixture asserts chess truth.
-4. `[V]` Current official descriptions of Chess.com Game Review and Chessiverse Guided Play,
+4. `[V]` Three sealed F2 selections over castling, promotion and checkmate, including every legal
+   alternative (**55/55 evaluated**) and five selected facts. The adapter rejects a structurally
+   similar forged result and preserves event IDs, operands, signs, squares and denominators.
+5. `[V]` Current official descriptions of Chess.com Game Review and Chessiverse Guided Play,
    W3C interaction requirements, plus `[P]` transfer evidence from tutoring and alert research.
    Vendor descriptions establish what a competitor says it offers, not effectiveness.
 
@@ -229,6 +233,31 @@ square controls. Headless visual QA at 1440×1000 and 390×844 confirmed the Sup
 post-commit Guided nudge paths; the mobile document width was exactly 390 px. This is instrument
 buildability evidence, not participant comprehension.
 
+### 6.1 First contact with real F2 packets
+
+`[V]` F2 changes the prototype's most important premise: post-commit facts no longer need to be
+synthetic. `real-packet.ts` accepts only a runtime-sealed `EvidenceSelectionResult`; maps its exact
+IDs, source grounding, sign, squares and complete alternative denominator; and emits neutral prose
+with no recommendation, PV, valence or grade. The three committed cases evaluated **25 + 8 + 22 =
+55** legal alternatives and selected **2 + 2 + 1 = 5** facts. A forged plain object fails with
+`EVIDENCE_GENERIC_BYPASS`. (`tools/r3-presentation-harness/real-packet.test.ts`)
+
+`[V]` The result is deliberately not all positive. Castling, promotion and checkmate are retained
+as critical exact events. But the remaining cap is filled by `occupied_defence` after castling and
+`direct_attack_count` after promotion. Those facts are exact and locally distinctive; neither fact
+has thereby become useful learner guidance. This independently re-demonstrates R2's
+distinctiveness-versus-significance split at the actual F2→module seam. F2 correctly declares its
+current policy research-only. F5 must compile a module-specific semantic eligibility/refusal set
+*before* selection and leave unused budget empty; it must not promote the research consumer's wide
+eligibility into a product default. `[M]`
+
+The prototype now loads those exact packets, renders the position before/after the committed move,
+and exposes event identity plus square operands under the nudge. Theory, staged warning and deeper
+hint copy remain labelled research fixtures because F2 does not manufacture those meanings. The
+2026-08-21 browser recheck is explicitly **unrun** because no browser surface was connected in the
+session; the executable/static tests pass, but this paragraph does not upgrade that to visual
+evidence. `[V]`
+
 `[V]` W3C requires hover/focus content to be dismissible, hoverable and persistent, and recommends
 that hover-triggered content also be available on keyboard focus.
 ([WCAG 2.2 hover/focus guidance](https://www.w3.org/WAI/WCAG22/Understanding/content-on-hover-or-focus.html))
@@ -284,14 +313,12 @@ semantic detector, content wave or claim that the UX is understood by nontechnic
 
 R3 completes only when:
 
-- D537/D573 no longer invalidate the board interaction baseline;
-- the eight modules are exercised on desktop, tablet and phone through tap/click, drag, hover,
-  keyboard and screen-reader-accessible controls;
+- the nine modules are exercised by the owner on the supported desktop/phone and input paths;
 - visual output is proven to be the same admitted fact as its sentence, not an independent query;
 - zero/one/two/noisy and unavailable-provider cases are shown honestly;
-- nontechnical learners start Just Play, Guided Rehearsal, Review & Retry and Analyze Freely without
-  source settings, and comprehension/noise failures select or refuse defaults;
+- the owner starts Just Play, Guided Rehearsal, Review & Retry and Analyze Freely without source
+  settings, and any comprehension/noise failure selects or refuses a candidate default;
 - the owner rules the pre-commit rung-0 boundary and per-session ceilings — **met by D619**;
 - R5 proves or refuses the optional renderer over these bounded packets.
 
-Until then, R3 is **MECHANICAL/DESK DONE; EXTERNAL to complete**.
+Until then, R3 is **MECHANICAL/DESK/REAL-PACKET DONE; OWNER USE to complete**.

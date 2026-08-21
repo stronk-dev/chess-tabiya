@@ -43,7 +43,7 @@ action; measurement instruments do not share the tested defect's assumption.
 |---|---|---|---|
 | 2.1 | R1 detection landscape and validation corpus | **DONE 2026-08-20** | Six evidence planes; cheap semantic labels refused |
 | 2.2 | R2 sign/relevance/selection measurement | **DONE 2026-08-20** | Local selector clears volume/specificity; rarity refused as significance; semantic eligibility remains separate |
-| 2.3 | R3 evidence presentation prototypes/tests | **MECHANICAL/DESK/RESPONSIVE PROTOTYPE + A5 PRODUCTION BASELINE DONE; external arm DESCOPED by D649; owner use remains** | Nine-module/five-preset/six-workflow boundary landed; repaired board is 90/90 exact; real compiler-admitted packets still precede owner validation |
+| 2.3 | R3 evidence presentation prototypes/tests | **MECHANICAL/DESK/RESPONSIVE/REAL-F2-PACKET + A5 PRODUCTION BASELINE DONE; owner use remains** | Nine-module/five-preset/six-workflow boundary landed; three sealed F2 cases evaluate 55/55 alternatives and expose D686's significance gap; the owner-use protocol is executable |
 | 2.4 | R5 renderer evaluation | **DONE 2026-08-20** | Deterministic fallback passed; hosted free prose is provider-dependent, typed schema/IDs did not preserve citations, and the 360M local arm failed the safety contract |
 | 2.5 | R6 pack stability/migration/re-author audit | **DONE 2026-08-20 — Gate F FAIL** | 92-document compatibility and history census landed; F3 model narrowed, but capability negotiation, migrations, owner budget and pilot coverage are absent |
 
@@ -58,7 +58,7 @@ schema evolution.
 | 3.2 | R8 theory↔drill workflow | WAIT | R3 only; R1/R2/R4 complete |
 | 3.3 | R12 player metrics | **SHORT-SESSION ARM DONE 2026-08-20; longitudinal transfer external** | 12/16 literal metrics retained with 25–200-game floors; individual vector passes, archetypes fail; production admission remains O2/O9 and R13 |
 | 3.4 | R13 grounded coaching aggregates | WAIT | R7/R12 |
-| 3.5 | R14 campaign experiential closure | **PROTOCOL READY; board blocker cleared; WAIT on admitted real R3 packet + owner session** | three-phase owner pilot preregistered; no campaign UI or result manufactured |
+| 3.5 | R14 campaign experiential closure | **PROTOCOL READY; board and real-R3-packet blockers cleared; WAIT on owner session** | three-phase owner pilot preregistered; no campaign UI or result manufactured |
 | 3.6 | R10 learning-effect experiments | WAIT/EXTERNAL | representative pilot and participants |
 
 **Phase exit:** O7–O10 ruled; individual 1.0 core scope frozen in living design.

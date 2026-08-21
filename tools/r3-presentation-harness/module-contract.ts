@@ -21,7 +21,7 @@ export interface EvidenceFact {
   readonly allowedConsumers: readonly GuidanceModuleId[];
   readonly availableAt: Timing;
   readonly sourceRung: 0 | 1 | 2 | 3 | 4 | 5;
-  readonly exactness: "exact" | "model" | "corpus" | "authored";
+  readonly exactness: "exact" | "convention" | "measured" | "authored";
   readonly sign: "gained" | "lost" | "preserved" | "avoided" | "state";
   readonly squares: readonly string[];
   readonly text: string;
