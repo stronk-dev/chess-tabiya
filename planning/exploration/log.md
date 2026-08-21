@@ -4163,3 +4163,14 @@ thirteen current grant-writing statements (plus the legacy migration distinction
 fixtures cover owner/learner account deletion, expiry, promotion divergence, route-level consent
 and post-close seat resolution. Canonical behaviour is in `docs/classrooms.md`; the later
 portable-account-data RFC still owns D657's explicitly recorded deletion-policy supersession.
+
+## 2026-08-22 — owner-use rejection of the play experience; the evidence-foundation + UX program opens
+
+The owner used the app and rejected the incumbent play experience in six named defects
+(stacked-above-board evidence, board shrinkage, clipped overflow, raw classifier/UCI/percentage
+leakage, plumbing-as-assistance, 192 px board as "proof"). Recorded as D717 with the standing
+instruction that a UX pass means a dependency audit, not a reskin. Governing distinction:
+F1/F2 established authority and mechanics, not completeness or a learner experience. The
+bottom-up program (collectors → typed evidence → module bindings → layout/presets) is briefed
+at planning/evidence-foundation-ux/plan.md; Phase 1 (HEAD-derived gap matrix) and Phase 2
+(collector re-verification) audits commissioned this session. No corpus expansion until Gate F.
