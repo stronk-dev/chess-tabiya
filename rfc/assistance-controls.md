@@ -22,7 +22,9 @@
 - **Parent / amends:** amends the shipped assistance surface established by
   `rfc/archive/adaptive-guidance.md` (the `AssistanceConfig` axes and the six profiles) at
   the **controls**, not at the detectors, the permission table or the marker admission rule.
-- **Supersedes / superseded by:** —
+- **Supersedes / superseded by:** §§2, 3, 4.1–4.2 and their acceptance criteria are
+  superseded by `assistance-control-wiring.md`; this document retains only D307's F5-coordinated
+  permission-ceiling question and its historical audit.
 - **Planning:** `planning/assistance-controls/` (once implementing)
 
 *Every code site below was read in full at HEAD on 2026-08-16, not grepped. **Locate by
