@@ -773,20 +773,14 @@ fallback; every other contrary measurement is escalated per law 6, not shipped a
 
 ## Discharges
 
-- **Production-module eligibility for every collector in §3** — this RFC lands
-  research/inspector-only by design; without the Phase-3 module RFC promoting eligibility,
-  these projections would join the class-9 wall the gap matrix measured. Owner of the
-  discharge: the Phase-3 module-contract RFC (`planning/evidence-foundation-ux/plan.md`
-  phase 3). This RFC is not `implemented`-complete in spirit until that RFC exists to
-  consume it, but the lifecycle hold is the ledger rows', not a code obligation here.
-- **Opening-identity Review-surface admission (§3.15)** — the collector is specified here;
-  the surface decision and the go signal belong to the R8/F7 lane (D694/D743). If the lane
-  has not opened by the time every other criterion is green, this RFC moves to `awaiting
-  D743` rather than blocking on it.
-- **Learner-facing wiring of the D718 negative reading** — ruled admissible
-  (post-commit/review, denominator shown); the wiring is Phase 3/5 work and is named
-  there, not held here.
+| id | the obligation | owner | recorded when discharged | discharged |
+|---|---|---|---|---|
+| D1 | Production-module eligibility for every §3 collector — this RFC lands research/inspector-only by design; without promotion these projections join the class-9 wall the gap matrix measured | Phase-3 module-contract RFC (`planning/evidence-foundation-ux/plan.md` phase 3) | that RFC's landing commit | |
+| D2 | Opening-identity Review-surface admission (§3.15) — the collector is specified here; the surface decision and go signal belong to the R8/F7 lane (D694/D743). If the lane has not opened when every other criterion is green, this RFC moves to `awaiting D2` | R8/F7 lane owner | lane-opening commit or D743's flip | |
+| D3 | Learner-facing wiring of the D718 negative reading — ruled admissible post-commit/review; the *wiring* into modules is Phase-3 work over these producers | Phase-3 module-contract RFC | that RFC's landing commit | |
 
+The prose rationale for each row lives in §9; the table is the machine-read record per the
+lifecycle contract's grammar.
 ## Open questions
 
 1. **None blocking acceptance from the D718 set** — all four collector-audit questions
