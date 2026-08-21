@@ -1,7 +1,7 @@
 # R14 campaign experiential closure — preregistered owner pilot
 
-**Status:** protocol ready; blocked by D537/D573 exact interaction and an admitted real-packet R3
-instrument. No session has started.
+**Status:** protocol ready; D537/D573 interaction blocker cleared 2026-08-21; waiting on an admitted
+real-packet R3 instrument and the owner session. No session has started.
 
 **Authority:** campaign R6–R8, platform R14 and O10
 
@@ -24,8 +24,9 @@ establish population learning or preference.
 
 The run must not start until all are true:
 
-- D537 and D573 are closed by a regression that hit-tests the authored source square and asserts the
-  exact submitted UCI after selection/gesture at the tested viewport.
+- D537 and D573 are closed: the permanent regression hit-tests every authored source and asserts the
+  exact submitted UCI after selection at desktop/tablet/phone, while A2 is 90/90 exact across
+  click/drag/touch. This prerequisite is met.
 - `make up-engines` serves disclosed non-fixture content; engine and optional-provider health are
   visible before the run.
 - The selected packs pass the normal pack/source checks and remain labelled by their actual

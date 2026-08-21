@@ -60,6 +60,15 @@ const ENDGAME_VIEWPORT_PACKS = [
   "Queen against a knight pawn on the seventh: the zigzag",
 ] as const;
 
+const ENDGAME_INTERACTION_PACKS = [
+  { title: ENDGAME_VIEWPORT_PACKS[0], uci: "c1d1", orientation: "white" },
+  { title: ENDGAME_VIEWPORT_PACKS[1], uci: "h6b6", orientation: "black" },
+  { title: ENDGAME_VIEWPORT_PACKS[2], uci: "c3e5", orientation: "white" },
+  { title: ENDGAME_VIEWPORT_PACKS[3], uci: "h2h6", orientation: "white" },
+  { title: ENDGAME_VIEWPORT_PACKS[4], uci: "e2e3", orientation: "white" },
+  { title: ENDGAME_VIEWPORT_PACKS[5], uci: "e4c4", orientation: "white" },
+] as const;
+
 test.beforeEach(async ({ page }) => register(page));
 
 test("imports one game, opens a grounded story, re-enters play, and exports original plus branch", async ({ page }) => {
@@ -509,9 +518,17 @@ async function move(page: Page, from: string, to: string, orientation: "white" |
   const box = await board.boundingBox();
   if (box === null) throw new Error("Chessground board has no bounding box");
   const origin = squarePoint(box, from, orientation);
-  const destination = squarePoint(box, to, orientation);
   await page.mouse.move(origin.x, origin.y);
   await page.mouse.down();
+  await board.evaluate(
+    (element) =>
+      new Promise<void>((resolve) =>
+        requestAnimationFrame(() => requestAnimationFrame(() => resolve())),
+      ),
+  );
+  const selectedBox = await board.boundingBox();
+  if (selectedBox === null) throw new Error("Chessground board has no selected bounding box");
+  const destination = squarePoint(selectedBox, to, orientation);
   await page.mouse.move(destination.x, destination.y, { steps: 8 });
   await page.mouse.up();
 }
@@ -528,9 +545,52 @@ async function clickMove(page: Page, from: string, to: string): Promise<void> {
   const box = await board.boundingBox();
   if (box === null) throw new Error("Chessground board has no bounding box");
   const origin = squarePoint(box, from);
-  const destination = squarePoint(box, to);
   await page.mouse.click(origin.x, origin.y);
+  await board.evaluate(
+    (element) =>
+      new Promise<void>((resolve) =>
+        requestAnimationFrame(() => requestAnimationFrame(() => resolve())),
+      ),
+  );
+  const selectedBox = await board.boundingBox();
+  if (selectedBox === null) throw new Error("Chessground board has no selected bounding box");
+  const destination = squarePoint(selectedBox, to);
   await page.mouse.click(destination.x, destination.y);
+}
+
+async function liveClickMove(
+  page: Page,
+  uci: string,
+  orientation: "white" | "black",
+): Promise<void> {
+  const board = page.getByLabel("Chessboard");
+  await expect(board).toBeVisible();
+  const restingBox = await board.boundingBox();
+  if (restingBox === null) throw new Error("Chessground board has no resting bounding box");
+  const origin = squarePoint(restingBox, uci.slice(0, 2), orientation);
+  const sourceHitsBoard = await board.evaluate(
+    (element, point) => element.contains(document.elementFromPoint(point.x, point.y)),
+    origin,
+  );
+  expect(sourceHitsBoard, `${uci} source must be hit-testable`).toBe(true);
+  const submitted = page.waitForRequest(
+    (request) =>
+      request.method() === "POST" && /\/runs\/[^/]+\/moves$/u.test(new URL(request.url()).pathname),
+  );
+
+  await page.mouse.click(origin.x, origin.y);
+  await board.evaluate(
+    (element) =>
+      new Promise<void>((resolve) =>
+        requestAnimationFrame(() => requestAnimationFrame(() => resolve())),
+      ),
+  );
+  const selectedBox = await board.boundingBox();
+  if (selectedBox === null) throw new Error("Chessground board has no selected bounding box");
+  const destination = squarePoint(selectedBox, uci.slice(2, 4), orientation);
+  await page.mouse.click(destination.x, destination.y);
+
+  expect((await submitted).postDataJSON()).toMatchObject({ uci });
 }
 
 test("served Najdorf pack plays, rewinds, branches, compares, and exports", async ({
@@ -984,6 +1044,44 @@ test("served endgame packs keep the board above the timeline at supported deskto
       await card.getByRole("button", { name: /Open position/ }).click();
       await expect(page.getByLabel("Chessboard")).toBeVisible();
       await assertRunViewport(page, viewport);
+    }
+  }
+});
+
+test("served endgame packs submit the exact drawn move after selection at desktop, tablet, and phone sizes", async ({
+  page,
+}) => {
+  await page.route(/\/capabilities$/u, async (route) => {
+    const response = await route.fetch();
+    const descriptor = await response.json() as {
+      policyModes: string[];
+      providers: Record<string, string>;
+    };
+    await route.fulfill({
+      response,
+      json: {
+        ...descriptor,
+        policyModes: [...descriptor.policyModes, "perfect_tablebase"],
+        providers: { ...descriptor.providers, tablebase: "mock" },
+      },
+    });
+  });
+  const projections = [
+    { width: 1440, height: 1000 },
+    { width: 768, height: 1024 },
+    { width: 390, height: 844 },
+  ] as const;
+
+  for (const viewport of projections) {
+    await page.setViewportSize(viewport);
+    for (const pack of ENDGAME_INTERACTION_PACKS) {
+      await page.goto("/play");
+      await page
+        .getByRole("article")
+        .filter({ hasText: pack.title })
+        .getByRole("button", { name: /Open position/ })
+        .click();
+      await liveClickMove(page, pack.uci, pack.orientation);
     }
   }
 });

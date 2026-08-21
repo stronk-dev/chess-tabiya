@@ -8,6 +8,7 @@ import { afterEach, describe, expect, it, vi } from "vitest";
 const chessground = vi.hoisted(() => ({
   configs: [] as Config[],
   set: vi.fn<(config: Config) => void>(),
+  redrawAll: vi.fn<() => void>(),
   destroy: vi.fn<() => void>(),
 }));
 
@@ -16,6 +17,7 @@ vi.mock("@lichess-org/chessground", () => ({
     chessground.configs.push(config);
     return {
       set: chessground.set,
+      redrawAll: chessground.redrawAll,
       destroy: chessground.destroy,
     } as unknown as Api;
   },
@@ -27,7 +29,9 @@ afterEach(() => {
   document.body.replaceChildren();
   chessground.configs.length = 0;
   chessground.set.mockClear();
+  chessground.redrawAll.mockClear();
   chessground.destroy.mockClear();
+  vi.unstubAllGlobals();
 });
 
 describe("Chessboard", () => {
@@ -96,6 +100,33 @@ describe("Chessboard", () => {
     const component = mount(Chessboard,{target,props:{fen:"8/8/8/8/8/8/8/K6k w - - 0 1",startSide:"white",onMove:vi.fn(),drawingEnabled:true,marks:[{orig:"a1",dest:"h8",brush:"red"}],overlays:[{orig:"b2",brush:"blue"}],onMarksChange}});
     await tick();
     expect(chessground.configs[0]!.drawable).toMatchObject({enabled:true,defaultSnapToValidMove:false,eraseOnMovablePieceClick:false,shapes:[{orig:"a1",dest:"h8",brush:"red"}],autoShapes:[{orig:"b2",brush:"blue"}],onChange:onMarksChange});
+    await unmount(component);
+  });
+
+  it("refreshes cached board bounds after selection-driven parent layout", async () => {
+    vi.stubGlobal("requestAnimationFrame", (callback: FrameRequestCallback) => {
+      callback(0);
+      return 1;
+    });
+    const onSelect = vi.fn();
+    const target = document.createElement("div");
+    document.body.append(target);
+    const component = mount(Chessboard, {
+      target,
+      props: {
+        fen: "8/8/8/8/8/8/4P3/4K2k w - - 0 1",
+        startSide: "white",
+        onSelect,
+        onMove: vi.fn(),
+      },
+    });
+    await tick();
+    const redrawsBeforeSelection = chessground.redrawAll.mock.calls.length;
+
+    chessground.configs[0]!.events!.select!("e2");
+
+    expect(onSelect).toHaveBeenCalledWith("e2");
+    expect(chessground.redrawAll.mock.calls.length).toBeGreaterThan(redrawsBeforeSelection);
     await unmount(component);
   });
 });

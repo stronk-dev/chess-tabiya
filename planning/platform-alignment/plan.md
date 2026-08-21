@@ -72,7 +72,8 @@ lifting it; the owner may amend the proof without weakening the hold by accident
   build the mechanism/read-only plan after Feedback Stage 1, and require the D560 budget decision
   before the 92-document corpus apply/archive;
 - settle and implement the shared-resource register/lifecycle mechanism;
-- re-run the interaction-state board checks behind D537-D539;
+- ~~re-run the interaction-state board checks behind D537-D539~~ — passed 2026-08-21 at 90/90
+  exact live click/drag/touch cells, with a permanent source→request browser regression;
 - produce one “shipped / accepted-not-built / draft / research-only” capability inventory.
 
 **Exit:** no functionally-complete RFC is advertising an active lane; no accepted RFC is described
@@ -239,9 +240,10 @@ the native match already passes pause→branch→resume browser proof. Conversel
 producer registry's eight free-text surface labels intersect none of the seven canonical client
 surface IDs, so the central producer→consumer join remains unimplemented rather than merely
 undocumented. R1 and R2 have since landed: six evidence planes, followed by the measured split
-between semantic eligibility and local selection/budget. A2 has also landed: the exact-UCI
-instrument confirms the shipped interaction floor fails; R3's disposable prototype/mechanical
-arms are now complete and participant comprehension remains external. R6 has now landed as a
+between semantic eligibility and local selection/budget. A2 has also landed and its 2026-08-21
+product recheck is 90/90 exact across live click/drag/touch; the shipped pointer/touch interaction
+floor now passes. R3's disposable prototype/mechanical arms are complete, its recruited-participant
+arm is descoped by D649, and owner-use validation remains. R6 has now landed as a
 negative Gate-F result: syntax admission is broad, but capability negotiation, reusable migrations,
 owner re-authoring budget and primitive-complete pilot coverage do not exist.
 

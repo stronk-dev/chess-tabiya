@@ -26,6 +26,12 @@ project; I will share it once it's perfect."* Every node marked *EXTERNAL to com
 recruited-participant arm; mechanical/desk halves stand; the owner's own play sessions are not
 descoped. Rows below that name participant work now read under that posture.
 
+**Unruled protected-intent residual (D650):** the amendment pass deliberately left three measured
+stale claims in `design/03` unchanged: B1/B8 still describe Settings as display-only, B4 overstates
+the remaining Syzygy gap, and B3 understates the shipped narrative/difference strip. One owner nod
+may authorize Claude to correct all three from the recorded measurements; until then they remain
+open rather than being smuggled into the amendment.
+
 | ID | State | Decision | Evidence required | Intent home | What the ruling must say |
 |---|---|---|---|---|---|
 | O0 | RULED | Build bottom-up; hold scale content | D560/D563 | `design/00`, `design/04` if owner wants the ruling mirrored | Research→design→RFC→implementation; Gate F hold remains active |

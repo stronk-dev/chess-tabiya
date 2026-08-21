@@ -136,6 +136,31 @@ and prevents the A2 result being mis-described as generic pointer instability. `
 - beginning participant comparison on a board that can record a move the participant did not make;
 - changing product CSS/chessground code under this research task without RFC authority.
 
+## 2026-08-21 product repair recheck
+
+D537, D538 and D573 are closed. The selection callback now invalidates Chessground's cached bounds
+on the first rendered frame and again after layout settles; compact objective prose is bounded so
+the 192 px board stays inside the position region rather than underneath Timeline. `[V]`
+(`apps/web/src/lib/Chessboard.svelte`, `apps/web/src/lib/DrillScreen.svelte`)
+
+The same predeclared A2 population and gesture matrix now delivers the authored UCI in **90/90**
+live click, drag and emulated-touch cells: six packs × five viewports × three input paths, with zero
+different legal moves and zero missing requests. At 390×844 all six authored sources are topmost
+board targets and click/drag/touch are each 6/6 exact. `[V]` (final-source recheck output SHA-256
+`0aa7b90c2830b4d2caf678054cb91201436ebebbae6a79e6cfb97a46387be084`)
+
+The permanent browser regression independently exercises all six packs at 1440×1000, 768×1024
+and 390×844. It hit-tests the source, remeasures after selection and asserts the request UCI. Its
+first run exposed a remaining two-frame race by receiving `e4c6` for authored `e4c4`; moving the
+first invalidation to the next rendered frame made that same test pass. This demonstrated-failing
+step is why resting geometry and the slower research harness are not the sole product guard. `[V]`
+(`tests/browser/drill.spec.ts`, `apps/web/src/lib/Chessboard.test.ts`)
+
+The historical baseline above remains evidence about the failure and the instrument controls. It
+no longer describes current product behavior. K9 returns to an open comparative-usability question:
+speed still does not differentiate the products, while whether the repaired rehearsal loop is more
+usable requires the owner's real-content session. `[M]`
+
 ## Limits and next evidence
 
 This is deterministic Chromium measurement, not a physical-device or assistive-technology study.

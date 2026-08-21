@@ -3783,3 +3783,31 @@ mechanical/desk halves of R3/R9/R11/R15 stand and the owner's own play sessions 
 validation instrument. R3/R7/R8/R15 product decisions stay open — nothing in this pass answers
 them. The D640 BACKLOG row update, the intent-parity-harness rework and `make verify` were outside
 this pass's file authority and remain with the closeout owner.
+
+## 2026-08-21 — Exact board interaction repaired; K9 returns to owner-use evidence
+
+D537, D538 and D573 closed in one implementation pass. `Chessboard.svelte` now refreshes
+Chessground's cached bounds on the first rendered frame after selection and once after layout
+settles. The compact drill layout bounds long objective prose to keep the 192 px board wholly
+inside the position region instead of underneath Timeline. A unit test binds selection to redraw;
+the permanent browser gate hit-tests the authored source, remeasures after selection and asserts
+the exact outgoing UCI for all six served endgames at 1440×1000, 768×1024 and 390×844.
+
+The gate demonstrated a remaining race before passing: a two-frame-only refresh still submitted
+`e4c6` for authored `e4c4`; moving the first invalidation to the next rendered frame closed it.
+The final-source A2 rerun is **90/90 exact** across six packs × five viewports × live click, drag
+and emulated touch, with zero wrong and zero missing requests (SHA-256
+`0aa7b90c2830b4d2caf678054cb91201436ebebbae6a79e6cfb97a46387be084`). The 2026-08-20 4/90
+baseline remains in the dossier as historical failure evidence.
+
+Consequences: Q3's pointer/touch run-loop floor now passes; C7 is mechanically met but still needs
+the owner's feel judgment; K9 returns from defect-caused evidence toward firing to an open
+comparative-usability question. R14 no longer waits on board correctness and now waits only on a
+real compiler-admitted R3 packet plus the owner's preregistered run. Keyboard/assistive input and
+the 720–992 px full-surface gap remain separate F12/R18 work; no accessibility claim was promoted.
+
+Verification after the final helper correction: `make verify` passed **767 tests / 117 files** plus
+type, scaffold and packaging checks. The first full browser run deliberately exposed seven older
+workflow helpers aiming with pre-selection coordinates; after they were changed to remeasure after
+selection/pointer-down, `make test-browser` passed **26 tests**, one optional Maia latency test
+skipped, with zero retries.

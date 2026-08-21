@@ -71,7 +71,7 @@
         eraseOnMovablePieceClick: false,
         ...(onMarksChange === undefined ? {} : { onChange: onMarksChange }),
       },
-      ...(onSelect === undefined ? {} : { events: { select: onSelect } }),
+      ...(onSelect === undefined ? {} : { events: { select: selected } }),
       movable: {
         free: false,
         color: canMove ? startSide : "both",
@@ -90,6 +90,28 @@
       return;
     }
     void onMove(`${from}${to}`);
+  }
+
+  function redrawAfterLayout(): void {
+    requestAnimationFrame(() =>
+      requestAnimationFrame(() => {
+        if (typeof board?.redrawAll === "function") board.redrawAll();
+      }),
+    );
+  }
+
+  function selected(square: Key): void {
+    onSelect?.(square);
+    // A selection can reveal structural captions in the parent drill screen.
+    // That changes the board's position without changing any Chessground prop,
+    // so refresh cached pointer bounds on the next rendered frame. Repeat once
+    // to cover a second layout pass without leaving the first safe click stale.
+    requestAnimationFrame(() => {
+      if (typeof board?.redrawAll === "function") board.redrawAll();
+      requestAnimationFrame(() => {
+        if (typeof board?.redrawAll === "function") board.redrawAll();
+      });
+    });
   }
 
   function promote(role: PromotionRole): void {
@@ -125,11 +147,7 @@
     // Objective/checkpoint banners can move the board without resizing it.
     // Chessground caches DOM bounds, so redraw after layout settles or the
     // next pointer move is interpreted against the board's former position.
-    requestAnimationFrame(() =>
-      requestAnimationFrame(() => {
-        if (typeof board?.redrawAll === "function") board.redrawAll();
-      }),
-    );
+    redrawAfterLayout();
   });
 </script>
 

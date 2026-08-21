@@ -620,3 +620,24 @@ Append-only. Record research, rulings, RFC transitions, implementation closeout 
   intent-parity-harness rework, `make verify`, and the five process-RFC recordings (D648's
   cross-review is a separate author action). "Codex runs mechanical instruments" could not be
   traced to D531's text and was left out of `design/04`. Proposed ledger rows start at D650.
+
+## 2026-08-21 — D537/D538/D573 implementation and downstream unblock
+
+- Reproduced current HEAD before editing: A2 remained 4/90 exact live gestures, 15 wrong and 71
+  missing; `h2h7` for authored `h2h6` reproduced, and resize remained the positive cache control.
+- Added selection-bound Chessground invalidation and a compact objective bound that preserves the
+  192 px board inside `.position-column`. The final A2 matrix is 90/90 exact over six packs × five
+  viewports × click/drag/touch, including 18/18 at 390×844; zero wrong/missing.
+- Added the missing product invariant: every served endgame at desktop/tablet/phone must have a
+  hit-testable authored source and send the exact UCI after live remeasurement. Its first run failed
+  on `e4c6`, forcing the first redraw one frame earlier before the gate passed.
+- Closed D537/D538/D573 and refreshed the capability map, reality audit, A2/R3/R14 queues and
+  campaign prerequisite. The board no longer blocks R3 owner-use or R14; a real admitted evidence
+  packet and the owner's session still do. Accessibility/F12 remains negative and separate.
+- Full closeout is green: `make verify` passed 767 tests / 117 files plus type/scaffold/packaging;
+  `make test-browser` passed 26 with one optional Maia test skipped. The first full browser run
+  failed seven old workflows because their shared helpers encoded the stale-coordinate assumption;
+  remeasuring after selection/pointer-down repaired the tests and made D538 a suite-wide invariant.
+- The standalone work-routing audit initially failed on freshly landed D650: the amendment recorded
+  the protected-intent residual but routed it nowhere. `decision-queue.md` now names the required
+  owner nod without making it, and the four-test routing audit is green again.

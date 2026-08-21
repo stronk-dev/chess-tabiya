@@ -125,7 +125,13 @@ Both claim **nothing versioned**. The ledger flips ride in your implementing com
 their rows ([[D416]]). After these two: the graduation-clearance mechanism + read-only
 migration report, then **F1**, per `planning/platform-alignment/execution-queue.md`.
 
-## 0-KILL2. [[D537]] — the board still cannot be played, and two packs play the WRONG move
+## 0-KILL2. ✅ CLOSED 2026-08-21 — [[D537]]/[[D538]]/[[D573]] exact board interaction
+
+Selection-bound cache invalidation plus compact board-first sizing moved the identical A2 matrix
+from 4/90 to **90/90 exact** live click/drag/touch cells. The permanent browser gate hit-tests the
+source, remeasures after selection and asserts the exact outgoing UCI for all six served endgames
+at desktop/tablet/phone. The failure record below is retained as the queue item's measured premise,
+not as current product status.
 
 **Your [[D507]] fix is complete and it is the right shape** — 0 of 64 squares occluded at all
 five viewports on all six packs, overflow 64–164 px → **0 px**, and **no length ceiling verified

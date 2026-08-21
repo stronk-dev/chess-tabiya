@@ -368,7 +368,17 @@ the drill board remains wholly within the viewport and above the timeline. A
 corpus projection additionally exercises all six served endgame packs across
 the measured failing desktop sizes and requires a board of at least 192px;
 long objective prose scrolls inside its own bounded region instead of consuming
-the board's interaction area.
+the board's interaction area. Compact runs bound that prose more tightly so the
+same 192px board floor remains inside the position region rather than underneath
+Timeline.
+
+Selection can reveal a structural caption and move the rendered board without
+resizing it. The Chessground wrapper therefore refreshes its cached bounds on
+the next rendered frame and once again after layout settles. The browser gate
+hit-tests the authored source, remeasures after selection and asserts the exact
+outgoing UCI for every served endgame at desktop, tablet and phone projections;
+resting containment or merely observing some legal move is not accepted as
+interaction correctness.
 
 ## Packaged operation
 

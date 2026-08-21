@@ -1480,6 +1480,10 @@
       gap: .25rem;
       overflow: hidden;
     }
+    .objective-copy h1 {
+      max-height: 3.25rem;
+      font-size: 1.1rem;
+    }
     .board-slot {
       grid-row: -2 / -1;
       container-type: size;
