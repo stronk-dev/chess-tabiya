@@ -27,7 +27,7 @@ pack-check:
 
 shape-check:
 	@test -n "$(FILE)" || (echo "Usage: make shape-check FILE=<path-to-shape.json>" >&2; exit 2)
-	pnpm --filter @chess-tabiya/server exec esbuild src/shape-check.ts --bundle --platform=node --format=esm --outfile=dist/shape-check.js
+	pnpm --filter @chess-tabiya/server exec esbuild src/shape-check.ts --bundle --platform=node --format=esm --external:typescript --outfile=dist/shape-check.js
 	node apps/server/dist/shape-check.js "$(FILE)" "$(PROBE)" "$(CORPUS)"
 
 expression-census:

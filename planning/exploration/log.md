@@ -3734,3 +3734,16 @@ and browser gates therefore agree; no aggregate-green shortcut remains in this S
 Feedback Stage 1 landed at `a64e6c5`. D526 and D527 close with the implementation; D78 remains open
 because the correct filter still emits 7.32 entries/ply at only 1.017x lift on real authored forks.
 The RFC stays accepted/implementing until the separately governed Stage-2 binding wave closes.
+
+## 2026-08-21 — root README replaced and its commands exercised
+
+D614 closed: the obsolete “zero open defects” release summary and hand-copied test/content counts
+were removed. The root entry point now follows a conventional open-source structure, states the
+pre-1.0 status honestly, gives a Docker quick start and real authoring examples, and routes changing
+status to the checked gates, ledger, RFC register and implementation docs. All 15 relative links
+resolve.
+
+Exercising the examples found D647: `make shape-check` bundled TypeScript into ESM and crashed on a
+dynamic `fs` require before reading the shape. Its Makefile target now shares the external-TypeScript
+boundary already used by `expression-census`; the Carlsbad pack and shape examples both pass their
+respective checks (with the corpus's existing warnings preserved).
