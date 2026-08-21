@@ -19,3 +19,14 @@ Append-only.
   learner rating and teacher surface.
 - Closed D433, D475, D478 and D460. D476 deliberately remains open: recording `OWNER` makes the
   missing commission visible but does not perform it.
+
+## 2026-08-21 — D1 reader implemented
+
+- `tools/status-parity.mjs` reuses RFC-1's Active parser and implements P1–P6: token validity,
+  body/cell parity, non-empty Active/root and Archive/filesystem equality, terminal archive
+  status, discharge grammar/awaiting pointers, no archival over open work, and closed owner forms.
+- Eleven focused fixtures cover both directions of P1–P6, including an awaiting implication,
+  an orphan file, and a two-owner P6 case with one archived slug.
+- `make verify` passed 767 Vitest tests, twelve register fixtures, eleven lifecycle fixtures,
+  typecheck, scaffold, schema and packaging checks. The live reading is 9 Active, 65 archived,
+  6 open discharge rows, P1–P6 green.

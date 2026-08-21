@@ -47,6 +47,7 @@ are documented in `docs/branch-runtime.md`. The normative run shape remains
 pnpm install
 make verify
 make register-check
+make status-parity
 make build
 make test-browser
 make pack-check FILE=content/drafts/my-pack.json
@@ -63,7 +64,8 @@ fast-check runtime invariants), and schema/scaffold plus deployment-manifest
 verification. It also runs `make register-check`, which joins every active RFC's
 `tabiya-claims` declaration to the six shared-resource registers, derives their landed heads
 from the tree, refuses collisions, and prints the current next lanes. `make build` separately
-proves the Svelte production bundle.
+proves the Svelte production bundle. `make status-parity` binds the Active and Archive tables to
+their files, compares lifecycle tokens, and refuses malformed or ownerless surviving obligations.
 `make test-browser` builds and starts the default mock-backed application and
 runs the full Playwright episode in a separate browser CI job.
 
