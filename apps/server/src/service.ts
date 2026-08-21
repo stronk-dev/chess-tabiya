@@ -25,6 +25,7 @@ import {
   matchKeyPoints,
   opponentMovesFromEvents,
   permittedAssistance,
+  reviewingGrant,
   revealFeedback,
   isMachineEvidenceRef,
   rewind,
@@ -122,6 +123,8 @@ export interface RunViewer {
   readonly mayWrite: boolean;
   readonly holdsLease: boolean;
   readonly leaseHeldBy: { readonly learnerId: string; readonly handle: string };
+  readonly seatedInContest: boolean;
+  readonly reviewing: boolean;
 }
 
 export interface RunGraph {
@@ -145,6 +148,8 @@ export interface GuidanceAccess {
   readonly pack?: PackRecord;
   readonly historyUci: readonly string[];
   readonly branchSeed: number;
+  readonly seatedInContest: boolean;
+  readonly reviewing: boolean;
 }
 
 export interface DistillationAccess {
@@ -763,6 +768,7 @@ export class RunService {
     if (holder === undefined) {
       throw new ServerError("STORAGE_FAILURE", "Run lease holder is missing");
     }
+    const assistance = this.#assistanceContext(runId, principal, run, role);
     return Object.freeze({
       id: run.id,
       viewer: Object.freeze({
@@ -773,6 +779,8 @@ export class RunService {
           stored.activeWriterId === writerId &&
           stored.activeWriterLearnerId === principal.learnerId,
         leaseHeldBy: Object.freeze({ learnerId: holder.id, handle: holder.handle }),
+        seatedInContest: assistance.seatedInContest,
+        reviewing: assistance.reviewing,
       }),
       nodes: publicNodes(run),
       branches: run.branches,
@@ -788,6 +796,7 @@ export class RunService {
     const branch = run.branches.find((candidate) => candidate.id === node.branchId);
     if (branch === undefined) throw new ServerError("STORAGE_FAILURE", `Node ${nodeId} has no branch`);
     const pack = this.#requiredRegisteredPack(run);
+    const assistance = this.#assistanceContext(runId, principal, run, role);
     return Object.freeze({
       run,
       node,
@@ -795,6 +804,8 @@ export class RunService {
       ...(pack === undefined ? {} : { pack }),
       historyUci: Object.freeze(historyFrom(run, nodeId).flatMap((item) => item.moveUci === null ? [] : [item.moveUci])),
       branchSeed: branch.seed,
+      seatedInContest: assistance.seatedInContest,
+      reviewing: assistance.reviewing,
     });
   }
 
@@ -878,6 +889,7 @@ export class RunService {
         sessionKind: stored.run.sessionKind,
         deliveryOpen: feedbackDeliveryOpen(stored.run),
         role,
+        ...this.#assistanceContext(runId, principal, stored.run, role),
       });
       if (permission.humanSplit === "locked_off") {
         throw new ServerError("ASSISTANCE_WITHHELD", "Machine-seeded groups are withheld in this context");
@@ -1719,6 +1731,22 @@ export class RunService {
     const state=this.#storage.matchState?.(session.id);
     if(state===undefined)throw new ServerError("STORAGE_FAILURE","Native match state is missing");
     return Object.freeze({session,state});
+  }
+
+  #assistanceContext(runId: string, principal: Principal, run: DrillRun, _role: RunRole) {
+    const session = this.#storage.liveSessionByRun?.(runId);
+    const liveSessionOpen = session !== undefined && session.closedAt === undefined;
+    const match = session === undefined ? undefined : this.#storage.matchState?.(session.id);
+    const seatedInContest = liveSessionOpen && match !== undefined &&
+      (match.whiteLearnerId === principal.learnerId || match.blackLearnerId === principal.learnerId);
+    return Object.freeze({
+      seatedInContest,
+      reviewing: reviewingGrant({
+        run,
+        grantMintedBySubmission: this.#storage.grantMintedBySubmission(runId, principal.learnerId),
+        liveSessionOpen,
+      }),
+    });
   }
 
   #refuseWhileMatchLive(runId:string,run:DrillRun):void{

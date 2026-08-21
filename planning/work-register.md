@@ -104,7 +104,7 @@ requires the log entry in the archiving commit.
 |---|---|
 | The breadth doc's stale residuals and counts (B4, B8, shape count, "Twitch", the events row) | reconciliation gate list; `design/03` is owner tier |
 | Whether the campaign deck becomes a **per-lens loadout with a slot budget** (turns 1 build into 278,256 at zero authoring cost) | `design/06` §1, corrected 2026-08-15 |
-| Teacher mode: defer with the stated trigger, or scope it | `broadcast-and-teacher-surfaces.md` |
+| Teacher mode | ✅ shipped 2026-08-22 by `rfc/archive/teacher-surface.md`; classroom rosters, assignments, explicit submission consent and bounded review access |
 
 ## 4. Content scale — the sequencing the owner set
 

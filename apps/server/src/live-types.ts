@@ -32,6 +32,7 @@ export interface LiveSession {
   readonly createdBy: string;
   readonly createdAt: string;
   readonly closedAt?: string;
+  readonly classroomId?: string;
 }
 
 export interface SessionJournalEntry {

@@ -20,8 +20,8 @@ an explicit not-found view rather than crashing the application.
 | `/play` | Just Play position entry and registered pack list |
 | `/play/run/:runId` | Live drill, branch, compare, and export context |
 | `/review` | Stored run history; opening a row returns to its live run context |
-| `/learn` | Honest empty state for the phase-based learning program |
-| `/live` | Live-session index, native-match simul wall, and creation from hosted runs |
+| `/learn` | Assigned classroom packs above the return queue and phase-based catalogue |
+| `/live` | Classroom roster/assignment management, scheduled pack nights, live-session index, native-match simul wall, and creation from hosted runs |
 | `/live/session/:sessionId` | Members, match pause state, friend links, board control, proposals, votes, invitations, Arena legs, and journal |
 | `/live/overlay/:runId` | Chrome-free spectator/stream projection of a live run |
 | `/create` | Honest empty state for the authoring program |
@@ -226,8 +226,9 @@ candidate.
 
 Current intentional boundaries:
 
-- Learn, Live, and Create reserve information architecture but do not claim
-  their future behavior exists.
+- Create still reserves information architecture without claiming its future
+  program exists. Learn and Live now carry classroom assignments and scheduled
+  sessions in addition to their earlier catalogue and live-run surfaces.
 - comparison remains run-scoped rather than a standalone Review route;
 - lease transfer is absent; and
 - read-only offline shell caching and native mobile packaging remain deferred;

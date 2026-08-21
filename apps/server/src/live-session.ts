@@ -8,11 +8,11 @@ import { canonicalRunStart, commitMove, fork, type DrillRun } from "@chess-tabiy
 import { mayControlSession, mayPropose, mayVote, requireRead, requireWrite, type Principal } from "./authorization.js";
 import { ServerError } from "./errors.js";
 import type { ArenaLeg, BoardControl, LiveSession, LiveSessionDetail, LiveSessionSummary, MatchState, SessionKind, SessionProposal, VoteOption, VoteTally } from "./live-types.js";
-import type { LeaseHolder, LiveSessionStorage, PublicTokenRecord, RunRole, RunStorage } from "./storage.js";
+import type { ClassroomStorage, LeaseHolder, LiveSessionStorage, PublicTokenRecord, RunRole, RunStorage } from "./storage.js";
 import type { RunService } from "./service.js";
 import { parsePgnMainline, PgnImportError } from "./pgn-import.js";
 
-type Storage = RunStorage & LiveSessionStorage;
+type Storage = RunStorage & LiveSessionStorage & ClassroomStorage;
 
 export interface MoveAuthorship { readonly eventSeq:number;readonly nodeId:string;readonly learnerId:string|null }
 export function deriveMoveAuthorship(run:DrillRun,journal:readonly import("./live-types.js").SessionJournalEntry[],ownerLearnerId:string):readonly MoveAuthorship[]{
@@ -54,9 +54,17 @@ export class LiveSessionService {
     readonly boardControl?: BoardControl; readonly scheduledFor?: string;
     readonly voteAdapterHandle?: string; readonly rotationHandles?: readonly string[];
     readonly matchPlayers?: { readonly white?: string; readonly black?: string };
+    readonly classroomId?: string;
   }): LiveSession {
     const { role } = requireRead(this.#storage,input.runId,principal);
     if (!mayControlSession(role)) throw new ServerError("FORBIDDEN","Only a host may create a live session");
+    if (input.classroomId !== undefined) {
+      const member = this.#storage.classroomMember(input.classroomId, principal.learnerId);
+      const classroom = this.#storage.classroom(input.classroomId);
+      if (classroom === undefined || classroom.archivedAt !== null || member?.state !== "active" || member.memberRole !== "teacher") {
+        throw new ServerError("INVALID_REQUEST", "Classroom is unavailable");
+      }
+    }
     const adapter = input.voteAdapterHandle === undefined ? undefined : this.#storage.learnerByHandle(input.voteAdapterHandle.toLowerCase());
     if (input.voteAdapterHandle !== undefined && adapter === undefined) throw new ServerError("INVALID_REQUEST","Unknown vote adapter handle");
     if (adapter !== undefined && this.#storage.runRole(input.runId,adapter.id) === undefined) throw new ServerError("INVALID_REQUEST","Vote adapter needs a run grant");
@@ -81,7 +89,8 @@ export class LiveSessionService {
     }else if(input.matchPlayers!==undefined)throw new ServerError("INVALID_REQUEST","matchPlayers requires match board control");
     return this.#storage.createLiveSession({id:randomUUID(),runId:input.runId,kind:input.kind,title:input.title,boardControl,
       ...(input.scheduledFor===undefined?{}:{scheduledFor:input.scheduledFor}),...(adapter===undefined?{}:{voteAdapterLearnerId:adapter.id}),
-      ...(rotation===undefined?{}:{rotation:Object.freeze(rotation)}),...(matchPlayers===undefined?{}:{matchPlayers}),createdBy:principal.learnerId,at:this.#now()});
+      ...(rotation===undefined?{}:{rotation:Object.freeze(rotation)}),...(matchPlayers===undefined?{}:{matchPlayers}),
+      ...(input.classroomId===undefined?{}:{classroomId:input.classroomId}),createdBy:principal.learnerId,at:this.#now()});
   }
 
   list(principal: Principal): readonly LiveSessionSummary[] { return Object.freeze(this.#storage.listLiveSessions(principal.learnerId).map((session)=>{

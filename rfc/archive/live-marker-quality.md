@@ -946,11 +946,11 @@ owner's ruling and this RFC's §3 becomes its mirror.
    member fails to compile rather than rendering the pawn-contact sentence.
 6. **The divergence gate holds on every delivery path.** A test
    asserts a `human_divergence` marker is present in `pivotalMarkers` and absent from
-   `liveMarkers` for a participant, for a spectator, and for a solo viewer with
+   `liveMarkers` for a participant, for a non-reviewing spectator, and for a solo viewer with
    `feedbackDeliveryOpen === false`; and present for solo/host with delivery open. A second test
    asserts `DrillScreen` renders no divergence sentence in the modal in the locked cases. **This
    criterion closes the client leg of D51.** Server tests assert `/voice` and `/speech` return
-   `ASSISTANCE_WITHHELD` for participant, spectator, and pre-disclosure solo contexts, then open
+   `ASSISTANCE_WITHHELD` for participant, non-reviewing spectator, and pre-disclosure solo contexts, then open
    for solo/host after disclosure. `evidencePacket` remains a viewer-independent projection; the
    permission is enforced before either route serves or synthesises its sentences.
 7. **Law 8 at the surface.** A test asserts no string returned by `renderPivotalMarker` for any

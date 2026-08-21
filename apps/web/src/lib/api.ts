@@ -71,6 +71,8 @@ export interface RunGraph {
     readonly mayWrite: boolean;
     readonly holdsLease: boolean;
     readonly leaseHeldBy: LeaseIdentity;
+    readonly seatedInContest: boolean;
+    readonly reviewing: boolean;
   };
   readonly nodes: readonly Node[];
   readonly branches: DrillRun["branches"];
@@ -261,6 +263,7 @@ export interface LiveSession {
   readonly voteAdapterLearnerId?: string; readonly rotation?: readonly string[];
   readonly handoffLearnerId?: string; readonly rotationCursor: number;
   readonly createdBy: string; readonly createdAt: string; readonly closedAt?: string;
+  readonly classroomId?: string;
 }
 export interface MatchState { readonly sessionId:string;readonly whiteLearnerId:string|null;readonly blackLearnerId:string|null;readonly pausedAt:string|null;readonly pauseProposedBy:string|null }
 export interface LiveSessionSummary extends LiveSession { readonly board:{readonly activeFen:string;readonly sideToMove:"white"|"black";readonly plyCount:number;readonly pausedAt:string|null;readonly leaseHeldBy:LeaseIdentity;readonly lastMoveAt:string|null;readonly players?:{readonly white:LeaseIdentity|null;readonly black:LeaseIdentity|null}};readonly match?:MatchState }
@@ -274,6 +277,13 @@ export interface ArenaLeg { readonly sessionId:string;readonly leg:1|2;readonly 
 export interface RelayedMark { readonly scope:"position"|"branch";readonly brush:import("@chess-tabiya/runtime").MarkBrush;readonly orig:string;readonly dest?:string;readonly drawnBy?:LeaseIdentity;readonly at:string }
 export interface LiveSessionDetail { readonly session:LiveSession;readonly role:RunRole;readonly activeNodeId:string;readonly leaseHeldBy:LeaseIdentity;readonly voteAdapter?:LeaseIdentity;readonly grants:readonly RunGrant[];readonly moveAuthorship:readonly MoveAuthorship[];readonly proposals:readonly SessionProposal[];readonly vote?:VoteTally;readonly invitations:readonly SessionInvitation[];readonly legs:readonly ArenaLeg[];readonly match?:MatchState;readonly marks:readonly RelayedMark[];readonly marksTruncated?:true }
 export interface SessionJoinLink {readonly id:string;readonly scope:"session_join";readonly sessionId:string;readonly matchSlot:"white"|"black"|null;readonly invitedRole:"participant"|"spectator";readonly invitedHandle:string|null;readonly expiresAt:string;readonly usesRemaining:number;readonly createdAt:string;readonly revokedAt:string|null}
+
+export interface ClassroomSummary { readonly id:string;readonly ownerLearnerId:string;readonly name:string;readonly createdAt:string;readonly archivedAt:string|null;readonly memberRole:"teacher"|"learner";readonly memberState:"invited"|"active"|"left" }
+export interface ClassroomMember { readonly classroomId:string;readonly learnerId:string;readonly handle:string;readonly memberRole:"teacher"|"learner";readonly state:"invited"|"active"|"left";readonly invitedBy:string|null;readonly invitedAt:string;readonly joinedAt:string|null;readonly leftAt:string|null }
+export interface ClassroomAssignment { readonly id:string;readonly classroomId:string;readonly packId:string;readonly assignedBy:string;readonly note:string|null;readonly dueAt:string|null;readonly createdAt:string;readonly withdrawnAt:string|null }
+export interface AssignmentSubmission { readonly assignmentId:string;readonly learnerId:string;readonly runId:string;readonly grantedLearnerIds:readonly string[];readonly submittedAt:string;readonly accessExpiresAt:string;readonly withdrawnAt:string|null;readonly access?:"available"|"revoked_or_expired" }
+export interface ClassroomDetail { readonly classroom:Omit<ClassroomSummary,"memberRole"|"memberState">;readonly membership:ClassroomMember;readonly members:readonly ClassroomMember[];readonly assignments:readonly ClassroomAssignment[];readonly submissions:readonly AssignmentSubmission[];readonly upcomingSessions:readonly LiveSession[] }
+export interface AssignedPack extends ClassroomAssignment { readonly classroomName:string;readonly assignedByHandle:string;readonly submissions:readonly AssignmentSubmission[] }
 
 export interface Capabilities {
   readonly engines: readonly EngineCapability[];
@@ -678,7 +688,17 @@ export interface DrillClientApi extends RunApi {
   registerShapeDraft?(draftId: string): Promise<ShapeSummary>;
   liveSessions?(): Promise<readonly LiveSessionSummary[]>;
   liveSession?(sessionId:string):Promise<LiveSessionDetail>;
-  createLiveSession?(input:{readonly runId:string;readonly kind:SessionKind;readonly title:string;readonly boardControl?:BoardControl;readonly matchPlayers?:{readonly white?:string;readonly black?:string}}):Promise<LiveSession>;
+  createLiveSession?(input:{readonly runId:string;readonly kind:SessionKind;readonly title:string;readonly boardControl?:BoardControl;readonly matchPlayers?:{readonly white?:string;readonly black?:string};readonly classroomId?:string;readonly scheduledFor?:string}):Promise<LiveSession>;
+  classrooms?():Promise<readonly ClassroomSummary[]>;
+  classroom?(id:string):Promise<ClassroomDetail>;
+  createClassroom?(name:string):Promise<ClassroomSummary>;
+  inviteClassroomMember?(id:string,handle:string,role:"teacher"|"learner"):Promise<ClassroomMember>;
+  respondClassroomInvite?(id:string,op:"accept"|"decline"|"leave"):Promise<void>;
+  removeClassroomMember?(id:string,handle:string):Promise<void>;
+  createAssignment?(classroomId:string,input:{readonly packId:string;readonly note?:string;readonly dueAt?:string}):Promise<ClassroomAssignment>;
+  assignments?():Promise<readonly AssignedPack[]>;
+  submitAssignment?(id:string,runId:string,expiresInDays?:number):Promise<AssignmentSubmission>;
+  withdrawSubmission?(id:string,runId:string):Promise<void>;
   sessionJournal?(sessionId:string,sinceSeq?:number):Promise<{readonly entries:readonly SessionJournalEntry[];readonly nextSeq:number}>;
   sessionProposals?(sessionId:string):Promise<readonly SessionProposal[]>;
   proposeMove?(sessionId:string,nodeId:string,moveUci:string):Promise<SessionProposal>;
@@ -923,7 +943,17 @@ export class DrillApi implements DrillClientApi {
 
   async liveSessions():Promise<readonly LiveSessionSummary[]>{const body=await this.#json<{sessions:readonly LiveSessionSummary[]}>("/sessions");return body.sessions;}
   liveSession(sessionId:string):Promise<LiveSessionDetail>{return this.#json(`/sessions/${encoded(sessionId)}`);}
-  async createLiveSession(input:{readonly runId:string;readonly kind:SessionKind;readonly title:string;readonly boardControl?:BoardControl;readonly matchPlayers?:{readonly white?:string;readonly black?:string}}):Promise<LiveSession>{const body=await this.#json<{session:LiveSession}>("/sessions",{method:"POST",body:input});return body.session;}
+  async createLiveSession(input:{readonly runId:string;readonly kind:SessionKind;readonly title:string;readonly boardControl?:BoardControl;readonly matchPlayers?:{readonly white?:string;readonly black?:string};readonly classroomId?:string;readonly scheduledFor?:string}):Promise<LiveSession>{const body=await this.#json<{session:LiveSession}>("/sessions",{method:"POST",body:input});return body.session;}
+  async classrooms():Promise<readonly ClassroomSummary[]>{const body=await this.#json<{classrooms:readonly ClassroomSummary[]}>("/classrooms");return body.classrooms;}
+  classroom(id:string):Promise<ClassroomDetail>{return this.#json(`/classrooms/${encoded(id)}`);}
+  async createClassroom(name:string):Promise<ClassroomSummary>{const body=await this.#json<{classroom:ClassroomSummary}>("/classrooms",{method:"POST",body:{name}});return body.classroom;}
+  async inviteClassroomMember(id:string,handle:string,role:"teacher"|"learner"):Promise<ClassroomMember>{const body=await this.#json<{member:ClassroomMember}>(`/classrooms/${encoded(id)}/members`,{method:"POST",body:{op:"invite",handle,role}});return body.member;}
+  async respondClassroomInvite(id:string,op:"accept"|"decline"|"leave"):Promise<void>{await this.#json(`/classrooms/${encoded(id)}/members`,{method:"POST",body:{op}});}
+  async removeClassroomMember(id:string,handle:string):Promise<void>{await this.#json(`/classrooms/${encoded(id)}/members`,{method:"POST",body:{op:"remove",handle}});}
+  async createAssignment(classroomId:string,input:{readonly packId:string;readonly note?:string;readonly dueAt?:string}):Promise<ClassroomAssignment>{const body=await this.#json<{assignment:ClassroomAssignment}>(`/classrooms/${encoded(classroomId)}/assignments`,{method:"POST",body:input});return body.assignment;}
+  async assignments():Promise<readonly AssignedPack[]>{const body=await this.#json<{assignments:readonly AssignedPack[]}>("/assignments");return body.assignments;}
+  async submitAssignment(id:string,runId:string,expiresInDays?:number):Promise<AssignmentSubmission>{const body=await this.#json<{submission:AssignmentSubmission}>(`/assignments/${encoded(id)}/submissions`,{method:"POST",body:{runId,...(expiresInDays===undefined?{}:{expiresInDays})}});return body.submission;}
+  async withdrawSubmission(id:string,runId:string):Promise<void>{await this.#json(`/assignments/${encoded(id)}/submissions`,{method:"POST",body:{op:"withdraw",runId}});}
   sessionJournal(sessionId:string,sinceSeq=0):Promise<{readonly entries:readonly SessionJournalEntry[];readonly nextSeq:number}>{return this.#json(`/sessions/${encoded(sessionId)}/journal?sinceSeq=${sinceSeq}`);}
   async sessionProposals(sessionId:string):Promise<readonly SessionProposal[]>{const body=await this.#json<{proposals:readonly SessionProposal[]}>(`/sessions/${encoded(sessionId)}/proposals`);return body.proposals;}
   async proposeMove(sessionId:string,nodeId:string,moveUci:string):Promise<SessionProposal>{const body=await this.#json<{proposal:SessionProposal}>(`/sessions/${encoded(sessionId)}/proposals`,{method:"POST",body:{nodeId,moveUci}});return body.proposal;}

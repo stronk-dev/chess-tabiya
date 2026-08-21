@@ -4149,3 +4149,17 @@ retain private native casual matches; implement an optional Lichess-first typed 
 manual provider-off fallback; admit a bounded local bot event only after O8/F8; and keep native
 public pools, human tournaments, anti-cheat and federation outside 1.0. D708-D710 carry the event,
 scope and provider findings. R19 is no longer generic debt; it waits on explicit post-1.0 promotion.
+
+## 2026-08-22 — teacher surface implemented
+
+`teacher-surface` landed at storage migration 24 and moved to the RFC archive. Classrooms now
+provide reusable rosters, registered-pack assignments, explicit learner submission consent,
+bounded teacher grants, visible revoke/expiry state and scheduled academy sessions. Enrolment
+alone remains powerless. The review rail derives from submission provenance + terminal outcome +
+no open live session, while an open native-match seat independently caps both players.
+
+The landing also closed D80, D92, D93, D463 and D703. Source guards pin ten grant readers and
+thirteen current grant-writing statements (plus the legacy migration distinction), and focused
+fixtures cover owner/learner account deletion, expiry, promotion divergence, route-level consent
+and post-close seat resolution. Canonical behaviour is in `docs/classrooms.md`; the later
+portable-account-data RFC still owns D657's explicitly recorded deletion-policy supersession.

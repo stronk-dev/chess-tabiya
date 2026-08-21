@@ -442,7 +442,13 @@ Seven things you would otherwise hit cold:
 it and then archived; an archived RFC can own a mechanism's design, not a corpus pass's
 execution. **Do not adopt it silently** — commissioning it is claude's to arrange.
 
-## 0d. `rfc/teacher-surface.md` — ACCEPTED, body reconciled, UNBLOCKED
+## 0d. `rfc/archive/teacher-surface.md` — IMPLEMENTED 2026-08-22
+
+Closed at migration 24 with classroom rosters, assignments, explicit submission consent,
+expiring/provenanced grants, scheduled classroom sessions and the bounded reviewer/contest
+assistance context. Criteria 7a, 9a and 10g have executable guards; D80, D92, D93, D463 and
+D703 are closed. Canonical behaviour is in `docs/classrooms.md`; this section below is retained
+as the implementation brief, not executable queue work.
 
 Both places you named now read `accepted`: the Status line at `224e258` and **Open question 1**
 in this wave. **Nothing waits on an owner.** The owner confirmed the one narrowing on 2026-08-16 —

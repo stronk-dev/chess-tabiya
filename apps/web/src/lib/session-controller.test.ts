@@ -338,6 +338,8 @@ class FakeApi implements DrillClientApi {
         mayWrite: true,
         holdsLease: writerId === this.activeWriterId,
         leaseHeldBy: { learnerId: "learner-a", handle: "alice" },
+        seatedInContest: false,
+        reviewing: false,
       },
       nodes: run.nodes,
       branches: run.branches,

@@ -55,6 +55,52 @@ export interface RunGrant {
   readonly handle: string;
   readonly role: RunRole;
   readonly grantedAt: string;
+  readonly expiresAt?: string;
+  readonly grantedVia?: string;
+}
+
+export type ClassroomMemberRole = "teacher" | "learner";
+export type ClassroomMemberState = "invited" | "active" | "left";
+
+export interface ClassroomRecord {
+  readonly id: string;
+  readonly ownerLearnerId: string;
+  readonly name: string;
+  readonly createdAt: string;
+  readonly archivedAt: string | null;
+}
+
+export interface ClassroomMemberRecord {
+  readonly classroomId: string;
+  readonly learnerId: string;
+  readonly handle: string;
+  readonly memberRole: ClassroomMemberRole;
+  readonly state: ClassroomMemberState;
+  readonly invitedBy: string | null;
+  readonly invitedAt: string;
+  readonly joinedAt: string | null;
+  readonly leftAt: string | null;
+}
+
+export interface AssignmentRecord {
+  readonly id: string;
+  readonly classroomId: string;
+  readonly packId: string;
+  readonly assignedBy: string;
+  readonly note: string | null;
+  readonly dueAt: string | null;
+  readonly createdAt: string;
+  readonly withdrawnAt: string | null;
+}
+
+export interface AssignmentSubmissionRecord {
+  readonly assignmentId: string;
+  readonly learnerId: string;
+  readonly runId: string;
+  readonly grantedLearnerIds: readonly string[];
+  readonly submittedAt: string;
+  readonly accessExpiresAt: string;
+  readonly withdrawnAt: string | null;
 }
 
 export interface LeaseHolder {
@@ -216,6 +262,7 @@ export interface RunStorage {
   }): readonly StoredRunMark[];
   rescopeRunMarks(input: { readonly runId:string;readonly learnerId:string;readonly fromScope:RunMark["scope"];readonly fromKey:string;readonly toScope:RunMark["scope"];readonly toKey:string }): readonly StoredRunMark[];
   ownerLearnerId?(runId: string): string | undefined;
+  grantMintedBySubmission(runId: string, learnerId: string): boolean;
   grantRole(
     runId: string,
     learnerId: string,
@@ -234,6 +281,7 @@ export interface LiveSessionStorage {
     readonly title: string; readonly boardControl: BoardControl;
     readonly scheduledFor?: string; readonly voteAdapterLearnerId?: string;
     readonly rotation?: readonly string[]; readonly createdBy: string; readonly at: string;
+    readonly classroomId?: string;
     readonly matchPlayers?: { readonly whiteLearnerId: string | null; readonly blackLearnerId: string | null };
   }): LiveSession;
   liveSession(sessionId: string): LiveSession | undefined;
@@ -268,6 +316,27 @@ export interface LiveSessionStorage {
   sessionJoinTokens(sessionId: string, creatorId: string): readonly Extract<PublicTokenRecord, { scope: "session_join" }>[];
   redeemSessionJoinToken(tokenHash: string, learnerId: string, handle: string, at: string): { readonly token: Extract<PublicTokenRecord, { scope: "session_join" }>; readonly session: LiveSession } | undefined;
   revokeSessionJoinToken(sessionId: string, tokenId: string, creatorId: string, at: string): void;
+}
+
+export interface ClassroomStorage {
+  createClassroom(record: ClassroomRecord): void;
+  classroomsFor(learnerId: string): readonly ClassroomRecord[];
+  classroom(id: string): ClassroomRecord | undefined;
+  classroomMembers(classroomId: string): readonly ClassroomMemberRecord[];
+  classroomMember(classroomId: string, learnerId: string): ClassroomMemberRecord | undefined;
+  inviteClassroomMember(input: Omit<ClassroomMemberRecord, "handle" | "joinedAt" | "leftAt">): void;
+  setClassroomMemberState(classroomId: string, learnerId: string, state: ClassroomMemberState, at: string): void;
+  archiveClassroom(classroomId: string, at: string): void;
+  createAssignment(record: AssignmentRecord): void;
+  assignment(id: string): AssignmentRecord | undefined;
+  assignmentsForLearner(learnerId: string): readonly AssignmentRecord[];
+  assignmentsForClassroom(classroomId: string): readonly AssignmentRecord[];
+  withdrawAssignment(id: string, at: string): void;
+  assignmentSubmissions(assignmentId: string): readonly AssignmentSubmissionRecord[];
+  assignmentSubmissionsForLearner(learnerId: string): readonly AssignmentSubmissionRecord[];
+  classroomLiveSessions(classroomId: string): readonly LiveSession[];
+  submitAssignment(record: AssignmentSubmissionRecord, teacherLearnerIds: readonly string[]): AssignmentSubmissionRecord;
+  withdrawAssignmentSubmission(assignmentId: string, learnerId: string, runId: string, at: string): void;
 }
 
 export interface StoredAttempt extends AttemptRow {
@@ -404,7 +473,7 @@ export interface SQLiteRunStorageOptions {
   readonly onMigration?: (entry: StorageMigrationLog) => void;
 }
 
-export const STORAGE_VERSION = 23;
+export const STORAGE_VERSION = 24;
 const LEGACY_ID = "__legacy";
 const LEGACY_HASH = "!";
 
@@ -451,6 +520,59 @@ function storedRunMark(row: Readonly<Record<string, unknown>>): StoredRunMark {
     ...(row.dest === null ? {} : { dest: row.dest }),
     relayed: row.relayed === 1,
     at: row.created_at,
+  });
+}
+
+function classroomRecord(row: Readonly<Record<string, unknown>>): ClassroomRecord {
+  return Object.freeze({
+    id: String(row.id),
+    ownerLearnerId: String(row.owner_learner_id),
+    name: String(row.name),
+    createdAt: String(row.created_at),
+    archivedAt: row.archived_at === null ? null : String(row.archived_at),
+  });
+}
+
+function classroomMemberRecord(row: Readonly<Record<string, unknown>>): ClassroomMemberRecord {
+  return Object.freeze({
+    classroomId: String(row.classroom_id),
+    learnerId: String(row.learner_id),
+    handle: String(row.handle),
+    memberRole: String(row.member_role) as ClassroomMemberRole,
+    state: String(row.state) as ClassroomMemberState,
+    invitedBy: row.invited_by === null ? null : String(row.invited_by),
+    invitedAt: String(row.invited_at),
+    joinedAt: row.joined_at === null ? null : String(row.joined_at),
+    leftAt: row.left_at === null ? null : String(row.left_at),
+  });
+}
+
+function assignmentRecord(row: Readonly<Record<string, unknown>>): AssignmentRecord {
+  return Object.freeze({
+    id: String(row.id),
+    classroomId: String(row.classroom_id),
+    packId: String(row.pack_id),
+    assignedBy: String(row.assigned_by),
+    note: row.note === null ? null : String(row.note),
+    dueAt: row.due_at === null ? null : String(row.due_at),
+    createdAt: String(row.created_at),
+    withdrawnAt: row.withdrawn_at === null ? null : String(row.withdrawn_at),
+  });
+}
+
+function assignmentSubmissionRecord(row: Readonly<Record<string, unknown>>): AssignmentSubmissionRecord {
+  const granted = JSON.parse(String(row.granted_learner_ids)) as unknown;
+  if (!Array.isArray(granted) || granted.some((value) => typeof value !== "string")) {
+    throw new TypeError("Stored assignment submission grant list is invalid");
+  }
+  return Object.freeze({
+    assignmentId: String(row.assignment_id),
+    learnerId: String(row.learner_id),
+    runId: String(row.run_id),
+    grantedLearnerIds: Object.freeze(granted),
+    submittedAt: String(row.submitted_at),
+    accessExpiresAt: String(row.access_expires_at),
+    withdrawnAt: row.withdrawn_at === null ? null : String(row.withdrawn_at),
   });
 }
 
@@ -596,7 +718,7 @@ function storageFailure(message: string, cause: unknown): ServerError {
   return new ServerError("STORAGE_FAILURE", message, { cause });
 }
 
-export class SQLiteRunStorage implements RunStorage, ProgressStorage, LiveSessionStorage {
+export class SQLiteRunStorage implements RunStorage, ProgressStorage, LiveSessionStorage, ClassroomStorage {
   readonly #database: DatabaseSync;
   readonly #snapshots = new Map<string, StoredRun>();
   readonly #now: () => string;
@@ -650,8 +772,8 @@ export class SQLiteRunStorage implements RunStorage, ProgressStorage, LiveSessio
         );
       this.#database
         .prepare(
-          `INSERT INTO run_grants (run_id, learner_id, role, granted_at)
-           VALUES (?, ?, 'host', ?)`,
+          `INSERT INTO run_grants (run_id, learner_id, role, granted_at, expires_at, granted_via)
+           VALUES (?, ?, 'host', ?, NULL, NULL)`,
         )
         .run(run.id, lease.learnerId, updatedAt);
       this.#database.exec("COMMIT");
@@ -722,8 +844,8 @@ export class SQLiteRunStorage implements RunStorage, ProgressStorage, LiveSessio
           JSON.stringify(summaryFields(run, title, updatedAt)), lease.learnerId,
           lease.learnerId, run.schemaVersion,
         );
-      this.#database.prepare(`INSERT INTO run_grants (run_id,learner_id,role,granted_at)
-        VALUES (?,?,'host',?)`).run(run.id, lease.learnerId, updatedAt);
+      this.#database.prepare(`INSERT INTO run_grants (run_id,learner_id,role,granted_at,expires_at,granted_via)
+        VALUES (?,?,'host',?,NULL,NULL)`).run(run.id, lease.learnerId, updatedAt);
       this.#database.prepare(`INSERT INTO imported_games
         (run_id,source_kind,source_url,movetext_digest,headers_json,result,pgn,licence_note,imported_at)
         VALUES (?,?,?,?,?,?,?,?,?)`).run(
@@ -784,12 +906,13 @@ export class SQLiteRunStorage implements RunStorage, ProgressStorage, LiveSessio
                   holder.id AS lease_learner_id, holder.handle AS lease_handle
            FROM drill_runs r
            JOIN run_grants g ON g.run_id = r.id AND g.learner_id = ?
+             AND (g.expires_at IS NULL OR g.expires_at > ?)
            JOIN learners holder ON holder.id = r.active_writer_learner_id
            WHERE r.schema_version = ?
            ORDER BY r.updated_at DESC, r.id ASC
            LIMIT ? OFFSET ?`,
         )
-        .all(learnerId, DRILL_RUN_SCHEMA_VERSION, limit, offset);
+        .all(learnerId, this.#now(), DRILL_RUN_SCHEMA_VERSION, limit, offset);
     } catch (error) {
       throw storageFailure("Could not list runs", error);
     }
@@ -914,7 +1037,7 @@ export class SQLiteRunStorage implements RunStorage, ProgressStorage, LiveSessio
     try{
       this.#database.exec("BEGIN IMMEDIATE");
       this.#database.prepare(`INSERT INTO drill_runs (id,snapshot_json,active_writer_id,updated_at,summary_json,owner_learner_id,active_writer_learner_id,schema_version) VALUES (?,?,?,?,?,?,?,?)`).run(run.id,JSON.stringify(run),lease.writerId,updatedAt,JSON.stringify(summaryFields(run,title,updatedAt)),lease.learnerId,lease.learnerId,run.schemaVersion);
-      this.#database.prepare("INSERT INTO run_grants (run_id,learner_id,role,granted_at) VALUES (?,?,'host',?)").run(run.id,lease.learnerId,updatedAt);
+      this.#database.prepare("INSERT INTO run_grants (run_id,learner_id,role,granted_at,expires_at,granted_via) VALUES (?,?,'host',?,NULL,NULL)").run(run.id,lease.learnerId,updatedAt);
       this.#database.prepare("INSERT INTO run_derivations (derived_run_id,source_run_id,source_branch_id,source_node_id,kind,created_at) VALUES (?,?,?,?,?,?)").run(derivation.derivedRunId,derivation.sourceRunId,derivation.sourceBranchId,derivation.sourceNodeId,derivation.kind,derivation.createdAt);
       this.#database.exec("COMMIT"); this.#snapshots.set(run.id,Object.freeze({run,activeWriterId:lease.writerId,activeWriterLearnerId:lease.learnerId}));
     }catch(error){this.#rollback();throw storageFailure("Could not create derived run",error);}
@@ -940,7 +1063,7 @@ export class SQLiteRunStorage implements RunStorage, ProgressStorage, LiveSessio
   repertoireScan(id:string):RepertoireScanRecord|undefined{const row=this.#database.prepare("SELECT * FROM repertoire_scans WHERE repertoire_id=?").get(id) as Record<string,unknown>|undefined;if(row===undefined)return undefined;return Object.freeze({repertoireId:String(row.repertoire_id),scannedAt:String(row.scanned_at),repertoireDigest:String(row.repertoire_digest),population:JSON.parse(String(row.population_json)),gaps:JSON.parse(String(row.gaps_json)),alternateGaps:JSON.parse(String(row.alternate_gaps_json)),unknown:JSON.parse(String(row.unknown_json)),uncoveredMass:Number(row.uncovered_mass),truncated:Number(row.truncated)===1,sourceFailures:Number(row.source_failures),queriesUsed:Number(row.queries_used),unreachedKeys:Number(row.unreached_keys)});}
   addRepertoireAnswer(record:RepertoireMoveRecord,expectedDigest:string,nextDigest:string,updatedAt:string):void{try{this.#database.exec("BEGIN IMMEDIATE");const row=this.#database.prepare("SELECT digest FROM repertoires WHERE id=?").get(record.repertoireId) as {digest?:unknown}|undefined;if(row===undefined)throw new ServerError("RUN_NOT_FOUND","Repertoire not found");if(row.digest!==expectedDigest)throw new ServerError("REPERTOIRE_STALE","Repertoire changed while it was being edited",{details:{digest:String(row.digest)}});this.#database.prepare("UPDATE repertoire_moves SET rank=rank+1 WHERE repertoire_id=? AND position_key=?").run(record.repertoireId,record.positionKey);this.#database.prepare("INSERT INTO repertoire_moves (repertoire_id,position_key,move_uci,move_san,representative_fen,rank,origin,created_at) VALUES (?,?,?,?,?,0,'chosen_from_attempt',?) ON CONFLICT(repertoire_id,position_key,move_uci) DO UPDATE SET rank=0,origin='chosen_from_attempt'").run(record.repertoireId,record.positionKey,record.moveUci,record.moveSan,record.representativeFen,record.createdAt);this.#database.prepare("UPDATE repertoires SET digest=?,updated_at=? WHERE id=?").run(nextDigest,updatedAt,record.repertoireId);this.#database.exec("COMMIT");}catch(error){this.#rollback();if(error instanceof ServerError)throw error;throw storageFailure("Could not add repertoire answer",error);}}
   deleteRepertoire(id:string,ownerLearnerId:string):void{try{this.#database.exec("BEGIN IMMEDIATE");const found=this.#database.prepare("SELECT 1 AS found FROM repertoires WHERE id=? AND owner_learner_id=?").get(id,ownerLearnerId);if(found===undefined)throw new ServerError("RUN_NOT_FOUND","Repertoire not found");this.#deleteRepertoireRows(id);this.#database.exec("COMMIT");}catch(error){this.#rollback();if(error instanceof ServerError)throw error;throw storageFailure("Could not delete repertoire",error);}}
-  createRepertoireGapRun(run:DrillRun,lease:LeaseHolder,title:string,link:RepertoireGapRunRecord):void{const updatedAt=this.#now();try{this.#database.exec("BEGIN IMMEDIATE");this.#database.prepare("INSERT INTO drill_runs (id,snapshot_json,active_writer_id,updated_at,summary_json,owner_learner_id,active_writer_learner_id,schema_version) VALUES (?,?,?,?,?,?,?,?)").run(run.id,JSON.stringify(run),lease.writerId,updatedAt,JSON.stringify(summaryFields(run,title,updatedAt)),lease.learnerId,lease.learnerId,run.schemaVersion);this.#database.prepare("INSERT INTO run_grants (run_id,learner_id,role,granted_at) VALUES (?,?,'host',?)").run(run.id,lease.learnerId,updatedAt);this.#database.prepare("INSERT INTO repertoire_gap_runs (run_id,repertoire_id,gap_key,created_at) VALUES (?,?,?,?)").run(link.runId,link.repertoireId,link.gapKey,link.createdAt);this.#database.exec("COMMIT");this.#snapshots.set(run.id,Object.freeze({run,activeWriterId:lease.writerId,activeWriterLearnerId:lease.learnerId}));}catch(error){this.#rollback();throw storageFailure("Could not create repertoire gap run",error);}}
+  createRepertoireGapRun(run:DrillRun,lease:LeaseHolder,title:string,link:RepertoireGapRunRecord):void{const updatedAt=this.#now();try{this.#database.exec("BEGIN IMMEDIATE");this.#database.prepare("INSERT INTO drill_runs (id,snapshot_json,active_writer_id,updated_at,summary_json,owner_learner_id,active_writer_learner_id,schema_version) VALUES (?,?,?,?,?,?,?,?)").run(run.id,JSON.stringify(run),lease.writerId,updatedAt,JSON.stringify(summaryFields(run,title,updatedAt)),lease.learnerId,lease.learnerId,run.schemaVersion);this.#database.prepare("INSERT INTO run_grants (run_id,learner_id,role,granted_at,expires_at,granted_via) VALUES (?,?,'host',?,NULL,NULL)").run(run.id,lease.learnerId,updatedAt);this.#database.prepare("INSERT INTO repertoire_gap_runs (run_id,repertoire_id,gap_key,created_at) VALUES (?,?,?,?)").run(link.runId,link.repertoireId,link.gapKey,link.createdAt);this.#database.exec("COMMIT");this.#snapshots.set(run.id,Object.freeze({run,activeWriterId:lease.writerId,activeWriterLearnerId:lease.learnerId}));}catch(error){this.#rollback();throw storageFailure("Could not create repertoire gap run",error);}}
   repertoireGapRun(repertoireId:string,gapKey:string):RepertoireGapRunRecord|undefined{const row=this.#database.prepare("SELECT * FROM repertoire_gap_runs WHERE repertoire_id=? AND gap_key=? ORDER BY created_at LIMIT 1").get(repertoireId,gapKey) as Record<string,unknown>|undefined;return row===undefined?undefined:Object.freeze({runId:String(row.run_id),repertoireId:String(row.repertoire_id),gapKey:String(row.gap_key),createdAt:String(row.created_at)});}
   repertoireGapAttemptCount(runId:string):number{const row=this.#database.prepare("SELECT count(*) AS total FROM attempts WHERE run_id=? AND countable=1").get(runId) as {total?:unknown};return Number(row.total??0);}
   repertoireGapFirstMoves(runId:string):readonly {readonly moveUci:string;readonly moveSan:string}[]{const stored=this.read(runId);if(stored===undefined)return Object.freeze([]);const root=stored.run.nodes[0];if(root===undefined)return Object.freeze([]);const rows=stored.run.nodes.filter((node)=>node.parentId===root.id&&node.actor==="user").map((node)=>({moveUci:node.moveUci!,moveSan:node.moveSan!}));return Object.freeze([...new Map(rows.map((row)=>[row.moveUci,row])).values()]);}
@@ -1058,10 +1181,12 @@ export class SQLiteRunStorage implements RunStorage, ProgressStorage, LiveSessio
           `SELECT mine.run_id
            FROM run_grants mine
            WHERE mine.learner_id = ? AND mine.role = 'host'
+             AND (mine.expires_at IS NULL OR mine.expires_at > ?)
              AND 1 = (SELECT count(*) FROM run_grants hosts
-                      WHERE hosts.run_id = mine.run_id AND hosts.role = 'host')`,
+                      WHERE hosts.run_id = mine.run_id AND hosts.role = 'host'
+                        AND (hosts.expires_at IS NULL OR hosts.expires_at > ?))`,
         )
-        .all(learnerId) as unknown as readonly { readonly run_id: string }[];
+        .all(learnerId, at, at) as unknown as readonly { readonly run_id: string }[];
       const activeRuns = this.#database
         .prepare("SELECT id FROM drill_runs WHERE active_writer_learner_id = ?")
         .all(learnerId) as unknown as readonly { readonly id: string }[];
@@ -1095,12 +1220,21 @@ export class SQLiteRunStorage implements RunStorage, ProgressStorage, LiveSessio
       ).run(LEGACY_ID, learnerId);
       const repertoireRows=this.#database.prepare("SELECT id FROM repertoires WHERE owner_learner_id=?").all(learnerId) as unknown as readonly {id:string}[];
       for(const row of repertoireRows)this.#deleteRepertoireRows(row.id);
+      const classroomRows=this.#database.prepare("SELECT id FROM classrooms WHERE owner_learner_id=?").all(learnerId) as unknown as readonly {id:string}[];
+      for(const row of classroomRows){
+        this.#database.prepare("UPDATE classrooms SET archived_at=COALESCE(archived_at,?) WHERE id=?").run(at,row.id);
+        this.#revokeClassroomSubmissionGrants(row.id);
+      }
+      const memberships=this.#database.prepare("SELECT classroom_id FROM classroom_members WHERE learner_id=? AND state<>'left'").all(learnerId) as unknown as readonly {classroom_id:string}[];
+      for(const row of memberships)this.#revokeClassroomSubmissionGrants(row.classroom_id,learnerId);
+      this.#database.prepare("DELETE FROM assignment_submissions WHERE learner_id=?").run(learnerId);
+      this.#database.prepare("DELETE FROM classroom_members WHERE learner_id=?").run(learnerId);
       this.#database.prepare("UPDATE live_sessions SET created_by = ? WHERE created_by = ?").run(LEGACY_ID,learnerId);
       this.#database.prepare("DELETE FROM run_marks WHERE author_learner_id = ?").run(learnerId);
       this.#database.prepare("DELETE FROM learners WHERE id = ?").run(learnerId);
       const restore = this.#database.prepare(
-        `INSERT OR IGNORE INTO run_grants (run_id, learner_id, role, granted_at)
-         VALUES (?, ?, 'host', ?)`,
+        `INSERT OR IGNORE INTO run_grants (run_id, learner_id, role, granted_at, expires_at, granted_via)
+         VALUES (?, ?, 'host', ?, NULL, NULL)`,
       );
       for (const row of onlyHostRuns) restore.run(row.run_id, LEGACY_ID, at);
       this.#database.exec("COMMIT");
@@ -1163,11 +1297,12 @@ export class SQLiteRunStorage implements RunStorage, ProgressStorage, LiveSessio
     try {
       const rows = this.#database
         .prepare(
-          `SELECT g.learner_id, l.handle, g.role, g.granted_at
+          `SELECT g.learner_id, l.handle, g.role, g.granted_at, g.expires_at, g.granted_via
            FROM run_grants g JOIN learners l ON l.id = g.learner_id
-           WHERE g.run_id = ? ORDER BY l.handle ASC`,
+           WHERE g.run_id = ? AND (g.expires_at IS NULL OR g.expires_at > ?)
+           ORDER BY l.handle ASC`,
         )
-        .all(runId) as readonly Record<string, unknown>[];
+        .all(runId, this.#now()) as readonly Record<string, unknown>[];
       return Object.freeze(
         rows.map((row) => {
           if (
@@ -1183,6 +1318,8 @@ export class SQLiteRunStorage implements RunStorage, ProgressStorage, LiveSessio
             handle: row.handle,
             role: row.role,
             grantedAt: row.granted_at,
+            ...(row.expires_at === null ? {} : { expiresAt: String(row.expires_at) }),
+            ...(row.granted_via === null ? {} : { grantedVia: String(row.granted_via) }),
           });
         }),
       );
@@ -1194,8 +1331,9 @@ export class SQLiteRunStorage implements RunStorage, ProgressStorage, LiveSessio
   runRole(runId: string, learnerId: string): RunRole | undefined {
     try {
       const value = this.#database
-        .prepare("SELECT role FROM run_grants WHERE run_id = ? AND learner_id = ?")
-        .get(runId, learnerId) as { readonly role?: unknown } | undefined;
+        .prepare(`SELECT role FROM run_grants WHERE run_id = ? AND learner_id = ?
+          AND (expires_at IS NULL OR expires_at > ?)`)
+        .get(runId, learnerId, this.#now()) as { readonly role?: unknown } | undefined;
       if (value === undefined) return undefined;
       if (!isRunRole(value.role)) throw new TypeError("Stored run role is invalid");
       return value.role;
@@ -1332,7 +1470,9 @@ export class SQLiteRunStorage implements RunStorage, ProgressStorage, LiveSessio
       const sessionRow = this.#database.prepare("SELECT * FROM live_sessions WHERE run_id=?").get(runId) as Record<string,unknown>|undefined;
       let boardControl: BoardControl;
       if (sessionRow === undefined) {
-        const count = this.#database.prepare("SELECT count(*) AS count FROM run_grants WHERE run_id=? AND role IN ('host','participant')").get(runId) as {count:number};
+        const count = this.#database.prepare(`SELECT count(*) AS count FROM run_grants
+          WHERE run_id=? AND role IN ('host','participant')
+            AND (expires_at IS NULL OR expires_at>?)`).get(runId,this.#now()) as {count:number};
         boardControl = count.count <= 1 ? "free_claim" : "host_directed";
       } else boardControl = String(sessionRow.board_control) as BoardControl;
       if (boardControl === "host_directed" && role !== "host" && sessionRow?.handoff_learner_id !== lease.learnerId) {
@@ -1771,6 +1911,7 @@ export class SQLiteRunStorage implements RunStorage, ProgressStorage, LiveSessio
     readonly title: string; readonly boardControl: BoardControl;
     readonly scheduledFor?: string; readonly voteAdapterLearnerId?: string;
     readonly rotation?: readonly string[]; readonly createdBy: string; readonly at: string;
+    readonly classroomId?: string;
     readonly matchPlayers?: { readonly whiteLearnerId: string | null; readonly blackLearnerId: string | null };
   }): LiveSession {
     try {
@@ -1785,11 +1926,12 @@ export class SQLiteRunStorage implements RunStorage, ProgressStorage, LiveSessio
         throw new ServerError("RUN_NOT_FOUND", `Unknown run: ${input.runId}`);
       }
       this.#database.prepare(`INSERT INTO live_sessions
-        (id,run_id,kind,title,board_control,scheduled_for,vote_adapter_learner_id,rotation_json,created_by,created_at)
-        VALUES (?,?,?,?,?,?,?,?,?,?)`).run(
+        (id,run_id,kind,title,board_control,scheduled_for,vote_adapter_learner_id,rotation_json,created_by,created_at,classroom_id)
+        VALUES (?,?,?,?,?,?,?,?,?,?,?)`).run(
           input.id, input.runId, input.kind, input.title, input.boardControl,
           input.scheduledFor ?? null, input.voteAdapterLearnerId ?? null,
           input.rotation === undefined ? null : JSON.stringify(input.rotation), input.createdBy, input.at,
+          input.classroomId ?? null,
         );
       const runSeq = this.#snapshotSeq(run.snapshot_json);
       this.#appendSessionJournal(input.id, "session.opened", input.createdBy, runSeq, {}, input.at);
@@ -1805,8 +1947,11 @@ export class SQLiteRunStorage implements RunStorage, ProgressStorage, LiveSessio
         for(const learnerId of [players.whiteLearnerId,players.blackLearnerId]){
           if(learnerId===null)continue;
           const existing=this.#roleInTransaction(input.runId,learnerId);
-          if(existing===undefined)this.#database.prepare("INSERT INTO run_grants(run_id,learner_id,role,granted_at) VALUES (?,?,'participant',?)").run(input.runId,learnerId,input.at);
-          else if(existing==="spectator")this.#database.prepare("UPDATE run_grants SET role='participant',granted_at=? WHERE run_id=? AND learner_id=?").run(input.at,input.runId,learnerId);
+          if(existing===undefined)this.#database.prepare(`INSERT INTO run_grants(run_id,learner_id,role,granted_at,expires_at,granted_via)
+            VALUES (?,?,'participant',?,NULL,NULL) ON CONFLICT(run_id,learner_id) DO UPDATE SET
+            role='participant',granted_at=excluded.granted_at,expires_at=NULL,granted_via=NULL`).run(input.runId,learnerId,input.at);
+          else if(existing==="spectator")this.#database.prepare(`UPDATE run_grants SET
+            role='participant',granted_at=?,granted_via=NULL WHERE run_id=? AND learner_id=?`).run(input.at,input.runId,learnerId);
         }
         this.#database.prepare("INSERT INTO match_states(session_id,white_learner_id,black_learner_id) VALUES (?,?,?)").run(input.id,players.whiteLearnerId,players.blackLearnerId);
       }
@@ -1839,7 +1984,8 @@ export class SQLiteRunStorage implements RunStorage, ProgressStorage, LiveSessio
   listLiveSessions(learnerId: string): readonly LiveSession[] {
     const rows = this.#database.prepare(`SELECT s.* FROM live_sessions s
       JOIN run_grants g ON g.run_id=s.run_id AND g.learner_id=?
-      ORDER BY COALESCE(s.scheduled_for,s.created_at),s.id`).all(learnerId) as readonly Record<string, unknown>[];
+        AND (g.expires_at IS NULL OR g.expires_at>?)
+      ORDER BY COALESCE(s.scheduled_for,s.created_at),s.id`).all(learnerId,this.#now()) as readonly Record<string, unknown>[];
     return Object.freeze(rows.map((row) => this.#liveSessionRow(row)));
   }
 
@@ -1924,8 +2070,11 @@ export class SQLiteRunStorage implements RunStorage, ProgressStorage, LiveSessio
       if(session.closed_at!==null){this.#database.exec("ROLLBACK");return undefined;}
       const role=String(row.invited_role) as RunRole;
       const existing=this.#roleInTransaction(String(session.run_id),learnerId);
-      if(existing===undefined)this.#database.prepare("INSERT INTO run_grants(run_id,learner_id,role,granted_at) VALUES (?,?,?,?)").run(String(session.run_id),learnerId,role,at);
-      else if(existing==="spectator"&&role==="participant")this.#database.prepare("UPDATE run_grants SET role='participant',granted_at=? WHERE run_id=? AND learner_id=?").run(at,String(session.run_id),learnerId);
+      if(existing===undefined)this.#database.prepare(`INSERT INTO run_grants(run_id,learner_id,role,granted_at,expires_at,granted_via)
+        VALUES (?,?,?,?,NULL,NULL) ON CONFLICT(run_id,learner_id) DO UPDATE SET
+        role=excluded.role,granted_at=excluded.granted_at,expires_at=NULL,granted_via=NULL`).run(String(session.run_id),learnerId,role,at);
+      else if(existing==="spectator"&&role==="participant")this.#database.prepare(`UPDATE run_grants SET
+        role='participant',granted_at=?,granted_via=NULL WHERE run_id=? AND learner_id=?`).run(at,String(session.run_id),learnerId);
       if(row.match_slot!==null){
         const column=row.match_slot==="white"?"white_learner_id":"black_learner_id";
         const changed=this.#database.prepare(`UPDATE match_states SET ${column}=? WHERE session_id=? AND ${column} IS NULL`).run(learnerId,String(row.session_id));
@@ -2090,7 +2239,7 @@ export class SQLiteRunStorage implements RunStorage, ProgressStorage, LiveSessio
     return Object.freeze({id:String(row.id),runId:String(row.run_id),kind:String(row.kind) as SessionKind,title:String(row.title),boardControl:String(row.board_control) as BoardControl,
       ...(row.scheduled_for===null?{}:{scheduledFor:String(row.scheduled_for)}),...(row.vote_adapter_learner_id===null?{}:{voteAdapterLearnerId:String(row.vote_adapter_learner_id)}),
       ...(rotation===undefined?{}:{rotation:Object.freeze(rotation)}),...(row.handoff_learner_id===null?{}:{handoffLearnerId:String(row.handoff_learner_id)}),
-      rotationCursor:Number(row.rotation_cursor),createdBy:String(row.created_by),createdAt:String(row.created_at),...(row.closed_at===null?{}:{closedAt:String(row.closed_at)})});
+      rotationCursor:Number(row.rotation_cursor),createdBy:String(row.created_by),createdAt:String(row.created_at),...(row.closed_at===null?{}:{closedAt:String(row.closed_at)}),...(row.classroom_id===null||row.classroom_id===undefined?{}:{classroomId:String(row.classroom_id)})});
   }
   #matchStateRow(row:Record<string,unknown>):MatchState{return Object.freeze({sessionId:String(row.session_id),whiteLearnerId:row.white_learner_id===null?null:String(row.white_learner_id),blackLearnerId:row.black_learner_id===null?null:String(row.black_learner_id),pausedAt:row.paused_at===null?null:String(row.paused_at),pauseProposedBy:row.pause_proposed_by===null?null:String(row.pause_proposed_by)});}
   #requiredLiveSessionRow(id:string):Record<string,unknown>{const row=this.#database.prepare("SELECT * FROM live_sessions WHERE id=?").get(id) as Record<string,unknown>|undefined;if(row===undefined)throw new ServerError("RUN_NOT_FOUND",`Unknown session: ${id}`);return row;}
@@ -2103,6 +2252,237 @@ export class SQLiteRunStorage implements RunStorage, ProgressStorage, LiveSessio
   #appendSessionJournal(sessionId:string,kind:SessionJournalEntry["kind"],actorLearnerId:string|null,runSeq:number|null,payload:Readonly<Record<string,unknown>>,at:string):void {
     const row=this.#database.prepare("SELECT COALESCE(max(seq),0)+1 AS seq FROM session_journal WHERE session_id=?").get(sessionId) as {seq:number};
     this.#database.prepare("INSERT INTO session_journal(session_id,seq,at,kind,actor_learner_id,run_seq,payload_json) VALUES(?,?,?,?,?,?,?)").run(sessionId,row.seq,at,kind,actorLearnerId,runSeq,JSON.stringify(payload));
+  }
+
+  createClassroom(record: ClassroomRecord): void {
+    try {
+      this.#database.exec("BEGIN IMMEDIATE");
+      this.#database.prepare(
+        "INSERT INTO classrooms(id,owner_learner_id,name,created_at,archived_at) VALUES(?,?,?,?,NULL)",
+      ).run(record.id, record.ownerLearnerId, record.name, record.createdAt);
+      this.#database.prepare(`INSERT INTO classroom_members
+        (classroom_id,learner_id,member_role,state,invited_by,invited_at,joined_at,left_at)
+        VALUES (?,?,'teacher','active',NULL,?,?,NULL)`).run(
+        record.id, record.ownerLearnerId, record.createdAt, record.createdAt,
+      );
+      this.#database.exec("COMMIT");
+    } catch (error) {
+      this.#rollback();
+      throw storageFailure("Could not create classroom", error);
+    }
+  }
+
+  classroomsFor(learnerId: string): readonly ClassroomRecord[] {
+    const rows = this.#database.prepare(`SELECT c.* FROM classrooms c
+      JOIN classroom_members m ON m.classroom_id=c.id
+      WHERE m.learner_id=? AND m.state IN ('invited','active')
+      ORDER BY c.created_at,c.id`).all(learnerId) as readonly Record<string, unknown>[];
+    return Object.freeze(rows.map(classroomRecord));
+  }
+
+  classroom(id: string): ClassroomRecord | undefined {
+    const row = this.#database.prepare("SELECT * FROM classrooms WHERE id=?").get(id) as Record<string, unknown> | undefined;
+    return row === undefined ? undefined : classroomRecord(row);
+  }
+
+  classroomMembers(classroomId: string): readonly ClassroomMemberRecord[] {
+    const rows = this.#database.prepare(`SELECT m.*,COALESCE(l.handle,'deleted') AS handle
+      FROM classroom_members m LEFT JOIN learners l ON l.id=m.learner_id
+      WHERE m.classroom_id=? ORDER BY m.member_role DESC,handle,m.learner_id`).all(classroomId) as readonly Record<string, unknown>[];
+    return Object.freeze(rows.map(classroomMemberRecord));
+  }
+
+  classroomMember(classroomId: string, learnerId: string): ClassroomMemberRecord | undefined {
+    const row = this.#database.prepare(`SELECT m.*,COALESCE(l.handle,'deleted') AS handle
+      FROM classroom_members m LEFT JOIN learners l ON l.id=m.learner_id
+      WHERE m.classroom_id=? AND m.learner_id=?`).get(classroomId, learnerId) as Record<string, unknown> | undefined;
+    return row === undefined ? undefined : classroomMemberRecord(row);
+  }
+
+  inviteClassroomMember(input: Omit<ClassroomMemberRecord, "handle" | "joinedAt" | "leftAt">): void {
+    this.#database.prepare(`INSERT INTO classroom_members
+      (classroom_id,learner_id,member_role,state,invited_by,invited_at,joined_at,left_at)
+      VALUES (?,?,?,?,?,?,NULL,NULL)
+      ON CONFLICT(classroom_id,learner_id) DO UPDATE SET
+        member_role=excluded.member_role,state='invited',invited_by=excluded.invited_by,
+        invited_at=excluded.invited_at,joined_at=NULL,left_at=NULL`).run(
+      input.classroomId, input.learnerId, input.memberRole, input.state,
+      input.invitedBy, input.invitedAt,
+    );
+  }
+
+  setClassroomMemberState(classroomId: string, learnerId: string, state: ClassroomMemberState, at: string): void {
+    try {
+      this.#database.exec("BEGIN IMMEDIATE");
+      const changed = this.#database.prepare(`UPDATE classroom_members SET state=?,
+        joined_at=CASE WHEN ?='active' THEN ? ELSE joined_at END,
+        left_at=CASE WHEN ?='left' THEN ? ELSE NULL END
+        WHERE classroom_id=? AND learner_id=?`).run(state, state, at, state, at, classroomId, learnerId);
+      if (changed.changes !== 1) throw new ServerError("INVALID_REQUEST", "Classroom membership is unavailable");
+      if (state === "left") this.#revokeClassroomSubmissionGrants(classroomId, learnerId);
+      this.#database.exec("COMMIT");
+    } catch (error) {
+      this.#rollback();
+      if (error instanceof ServerError) throw error;
+      throw storageFailure("Could not update classroom membership", error);
+    }
+  }
+
+  archiveClassroom(classroomId: string, at: string): void {
+    try {
+      this.#database.exec("BEGIN IMMEDIATE");
+      this.#database.prepare("UPDATE classrooms SET archived_at=? WHERE id=? AND archived_at IS NULL").run(at, classroomId);
+      this.#revokeClassroomSubmissionGrants(classroomId);
+      this.#database.exec("COMMIT");
+    } catch (error) {
+      this.#rollback();
+      throw storageFailure("Could not archive classroom", error);
+    }
+  }
+
+  createAssignment(record: AssignmentRecord): void {
+    this.#database.prepare(`INSERT INTO assignments
+      (id,classroom_id,pack_id,assigned_by,note,due_at,created_at,withdrawn_at)
+      VALUES (?,?,?,?,?,?,?,NULL)`).run(record.id, record.classroomId, record.packId,
+      record.assignedBy, record.note, record.dueAt, record.createdAt);
+  }
+
+  assignment(id: string): AssignmentRecord | undefined {
+    const row = this.#database.prepare("SELECT * FROM assignments WHERE id=?").get(id) as Record<string, unknown> | undefined;
+    return row === undefined ? undefined : assignmentRecord(row);
+  }
+
+  assignmentsForLearner(learnerId: string): readonly AssignmentRecord[] {
+    const rows = this.#database.prepare(`SELECT a.* FROM assignments a
+      JOIN classroom_members m ON m.classroom_id=a.classroom_id
+      WHERE m.learner_id=? AND m.state='active' AND a.withdrawn_at IS NULL
+      ORDER BY COALESCE(a.due_at,a.created_at),a.id`).all(learnerId) as readonly Record<string, unknown>[];
+    return Object.freeze(rows.map(assignmentRecord));
+  }
+
+  assignmentsForClassroom(classroomId: string): readonly AssignmentRecord[] {
+    const rows = this.#database.prepare("SELECT * FROM assignments WHERE classroom_id=? ORDER BY created_at,id")
+      .all(classroomId) as readonly Record<string, unknown>[];
+    return Object.freeze(rows.map(assignmentRecord));
+  }
+
+  withdrawAssignment(id: string, at: string): void {
+    try {
+      this.#database.exec("BEGIN IMMEDIATE");
+      this.#database.prepare("UPDATE assignments SET withdrawn_at=? WHERE id=? AND withdrawn_at IS NULL").run(at, id);
+      this.#database.exec("COMMIT");
+    } catch (error) {
+      this.#rollback();
+      throw storageFailure("Could not withdraw assignment", error);
+    }
+  }
+
+  assignmentSubmissions(assignmentId: string): readonly AssignmentSubmissionRecord[] {
+    const rows = this.#database.prepare("SELECT * FROM assignment_submissions WHERE assignment_id=? ORDER BY submitted_at,run_id")
+      .all(assignmentId) as readonly Record<string, unknown>[];
+    return Object.freeze(rows.map(assignmentSubmissionRecord));
+  }
+
+  assignmentSubmissionsForLearner(learnerId: string): readonly AssignmentSubmissionRecord[] {
+    const rows = this.#database.prepare("SELECT * FROM assignment_submissions WHERE learner_id=? ORDER BY submitted_at,run_id")
+      .all(learnerId) as readonly Record<string, unknown>[];
+    return Object.freeze(rows.map(assignmentSubmissionRecord));
+  }
+
+  classroomLiveSessions(classroomId: string): readonly LiveSession[] {
+    const rows = this.#database.prepare(`SELECT * FROM live_sessions
+      WHERE classroom_id=? AND closed_at IS NULL AND scheduled_for IS NOT NULL
+      ORDER BY scheduled_for,id`).all(classroomId) as readonly Record<string, unknown>[];
+    return Object.freeze(rows.map((row) => this.#liveSessionRow(row)));
+  }
+
+  submitAssignment(record: AssignmentSubmissionRecord, teacherLearnerIds: readonly string[]): AssignmentSubmissionRecord {
+    const prior = this.#database.prepare(`SELECT * FROM assignment_submissions
+      WHERE assignment_id=? AND learner_id=? AND run_id=?`).get(
+      record.assignmentId, record.learnerId, record.runId,
+    ) as Record<string, unknown> | undefined;
+    if (prior !== undefined && prior.withdrawn_at === null) return assignmentSubmissionRecord(prior);
+    try {
+      this.#database.exec("BEGIN IMMEDIATE");
+      const granted: string[] = [];
+      for (const learnerId of teacherLearnerIds) {
+        const inserted = this.#database.prepare(`INSERT OR IGNORE INTO run_grants
+          (run_id,learner_id,role,granted_at,expires_at,granted_via)
+          VALUES (?,?,'spectator',?,?,'submission')`).run(
+          record.runId, learnerId, record.submittedAt, record.accessExpiresAt,
+        );
+        const refreshed = inserted.changes === 1 ? inserted : this.#database.prepare(`UPDATE run_grants SET
+          role='spectator',granted_at=?,expires_at=?,granted_via='submission'
+          WHERE run_id=? AND learner_id=?
+            AND (granted_via='submission' OR (expires_at IS NOT NULL AND expires_at<=?))`).run(
+          record.submittedAt, record.accessExpiresAt, record.runId, learnerId, record.submittedAt,
+        );
+        if (refreshed.changes === 1) {
+          granted.push(learnerId);
+        }
+      }
+      this.#database.prepare(`INSERT INTO assignment_submissions
+        (assignment_id,learner_id,run_id,granted_learner_ids,submitted_at,access_expires_at,withdrawn_at)
+        VALUES (?,?,?,?,?,?,NULL)
+        ON CONFLICT(assignment_id,learner_id,run_id) DO UPDATE SET
+          granted_learner_ids=excluded.granted_learner_ids,submitted_at=excluded.submitted_at,
+          access_expires_at=excluded.access_expires_at,withdrawn_at=NULL`).run(
+        record.assignmentId, record.learnerId, record.runId, JSON.stringify(granted),
+        record.submittedAt, record.accessExpiresAt,
+      );
+      this.#database.exec("COMMIT");
+      return Object.freeze({ ...record, grantedLearnerIds: Object.freeze(granted), withdrawnAt: null });
+    } catch (error) {
+      this.#rollback();
+      throw storageFailure("Could not submit assignment", error);
+    }
+  }
+
+  withdrawAssignmentSubmission(assignmentId: string, learnerId: string, runId: string, at: string): void {
+    try {
+      this.#database.exec("BEGIN IMMEDIATE");
+      const row = this.#database.prepare(`SELECT * FROM assignment_submissions
+        WHERE assignment_id=? AND learner_id=? AND run_id=? AND withdrawn_at IS NULL`).get(
+        assignmentId, learnerId, runId,
+      ) as Record<string, unknown> | undefined;
+      if (row === undefined) throw new ServerError("INVALID_REQUEST", "Assignment submission is unavailable");
+      this.#revokeSubmissionGrantList(assignmentSubmissionRecord(row));
+      this.#database.prepare(`UPDATE assignment_submissions SET withdrawn_at=?
+        WHERE assignment_id=? AND learner_id=? AND run_id=?`).run(at, assignmentId, learnerId, runId);
+      this.#database.exec("COMMIT");
+    } catch (error) {
+      this.#rollback();
+      if (error instanceof ServerError) throw error;
+      throw storageFailure("Could not withdraw assignment submission", error);
+    }
+  }
+
+  grantMintedBySubmission(runId: string, learnerId: string): boolean {
+    return this.#database.prepare(`SELECT 1 FROM run_grants
+      WHERE run_id=? AND learner_id=? AND granted_via='submission'
+        AND (expires_at IS NULL OR expires_at>?)`).get(runId, learnerId, this.#now()) !== undefined;
+  }
+
+  #revokeSubmissionGrantList(record: AssignmentSubmissionRecord): void {
+    for (const learnerId of record.grantedLearnerIds) {
+      this.#database.prepare(`DELETE FROM run_grants
+        WHERE run_id=? AND learner_id=? AND granted_via='submission'`).run(record.runId, learnerId);
+    }
+  }
+
+  #revokeClassroomSubmissionGrants(classroomId: string, leavingLearnerId?: string): void {
+    const rows = this.#database.prepare(`SELECT s.* FROM assignment_submissions s
+      JOIN assignments a ON a.id=s.assignment_id
+      WHERE a.classroom_id=? AND s.withdrawn_at IS NULL`).all(classroomId) as readonly Record<string, unknown>[];
+    for (const row of rows) {
+      const record = assignmentSubmissionRecord(row);
+      if (leavingLearnerId === undefined || record.learnerId === leavingLearnerId) {
+        this.#revokeSubmissionGrantList(record);
+      } else if (record.grantedLearnerIds.includes(leavingLearnerId)) {
+        this.#database.prepare(`DELETE FROM run_grants
+          WHERE run_id=? AND learner_id=? AND granted_via='submission'`).run(record.runId, leavingLearnerId);
+      }
+    }
   }
 
   /** Evicts only memoized projections; useful for cold-load diagnostics. */
@@ -2145,8 +2525,9 @@ export class SQLiteRunStorage implements RunStorage, ProgressStorage, LiveSessio
       const removingHost = targetRole === "host" && role !== "host";
       if (removingHost) {
         const count = this.#database
-          .prepare("SELECT count(*) AS count FROM run_grants WHERE run_id = ? AND role = 'host'")
-          .get(runId) as { readonly count: number };
+          .prepare(`SELECT count(*) AS count FROM run_grants WHERE run_id = ? AND role = 'host'
+            AND (expires_at IS NULL OR expires_at > ?)`)
+          .get(runId, this.#now()) as { readonly count: number };
         if (count.count <= 1) {
           throw new ServerError("INVALID_REQUEST", "A run must retain at least one host");
         }
@@ -2170,10 +2551,11 @@ export class SQLiteRunStorage implements RunStorage, ProgressStorage, LiveSessio
       } else {
         this.#database
           .prepare(
-            `INSERT INTO run_grants (run_id, learner_id, role, granted_at)
-             VALUES (?, ?, ?, ?)
+            `INSERT INTO run_grants (run_id, learner_id, role, granted_at, expires_at, granted_via)
+             VALUES (?, ?, ?, ?, NULL, NULL)
              ON CONFLICT(run_id, learner_id)
-             DO UPDATE SET role = excluded.role, granted_at = excluded.granted_at`,
+             DO UPDATE SET role = excluded.role, granted_at = excluded.granted_at,
+               expires_at = NULL, granted_via = NULL`,
           )
           .run(runId, targetLearnerId, role, at);
       }
@@ -2203,8 +2585,9 @@ export class SQLiteRunStorage implements RunStorage, ProgressStorage, LiveSessio
 
   #roleInTransaction(runId: string, learnerId: string): RunRole | undefined {
     const value = this.#database
-      .prepare("SELECT role FROM run_grants WHERE run_id = ? AND learner_id = ?")
-      .get(runId, learnerId) as { readonly role?: unknown } | undefined;
+      .prepare(`SELECT role FROM run_grants WHERE run_id = ? AND learner_id = ?
+        AND (expires_at IS NULL OR expires_at > ?)`)
+      .get(runId, learnerId, this.#now()) as { readonly role?: unknown } | undefined;
     if (value === undefined) return undefined;
     if (!isRunRole(value.role)) throw new TypeError("Stored run role is invalid");
     return value.role;
@@ -2360,6 +2743,11 @@ export class SQLiteRunStorage implements RunStorage, ProgressStorage, LiveSessio
         version: 23,
         name: "opponent ordering basis run schema",
         apply: () => this.#upgradeV016Runs(),
+      },
+      {
+        version: 24,
+        name: "classrooms, assignments, submissions, and expiring run grants",
+        apply: () => this.#addClassroomTables(),
       },
     ] as const;
     assertContiguousMigrationVersions(migrations.map((migration) => migration.version));
@@ -3063,6 +3451,66 @@ export class SQLiteRunStorage implements RunStorage, ProgressStorage, LiveSessio
          SELECT id, ?, 'host', ? FROM drill_runs`,
       )
       .run(LEGACY_ID, at);
+  }
+
+  #addClassroomTables(): void {
+    this.#database.exec(`
+      CREATE TABLE IF NOT EXISTS classrooms (
+        id TEXT PRIMARY KEY,
+        owner_learner_id TEXT NOT NULL,
+        name TEXT NOT NULL,
+        created_at TEXT NOT NULL,
+        archived_at TEXT
+      ) STRICT;
+      CREATE INDEX IF NOT EXISTS classrooms_owner ON classrooms(owner_learner_id);
+      CREATE TABLE IF NOT EXISTS classroom_members (
+        classroom_id TEXT NOT NULL REFERENCES classrooms(id) ON DELETE CASCADE,
+        learner_id TEXT NOT NULL,
+        member_role TEXT NOT NULL CHECK (member_role IN ('teacher','learner')),
+        state TEXT NOT NULL CHECK (state IN ('invited','active','left')),
+        invited_by TEXT,
+        invited_at TEXT NOT NULL,
+        joined_at TEXT,
+        left_at TEXT,
+        PRIMARY KEY (classroom_id, learner_id)
+      ) STRICT;
+      CREATE INDEX IF NOT EXISTS classroom_members_learner
+        ON classroom_members(learner_id, state);
+      CREATE TABLE IF NOT EXISTS assignments (
+        id TEXT PRIMARY KEY,
+        classroom_id TEXT NOT NULL REFERENCES classrooms(id) ON DELETE CASCADE,
+        pack_id TEXT NOT NULL,
+        assigned_by TEXT NOT NULL,
+        note TEXT,
+        due_at TEXT,
+        created_at TEXT NOT NULL,
+        withdrawn_at TEXT
+      ) STRICT;
+      CREATE INDEX IF NOT EXISTS assignments_classroom
+        ON assignments(classroom_id, created_at);
+      CREATE TABLE IF NOT EXISTS assignment_submissions (
+        assignment_id TEXT NOT NULL REFERENCES assignments(id) ON DELETE CASCADE,
+        learner_id TEXT NOT NULL,
+        run_id TEXT NOT NULL REFERENCES drill_runs(id) ON DELETE CASCADE,
+        granted_learner_ids TEXT NOT NULL,
+        submitted_at TEXT NOT NULL,
+        access_expires_at TEXT NOT NULL,
+        withdrawn_at TEXT,
+        PRIMARY KEY (assignment_id, learner_id, run_id)
+      ) STRICT;
+      CREATE INDEX IF NOT EXISTS assignment_submissions_run ON assignment_submissions(run_id);
+    `);
+    const columns = (table: string): ReadonlySet<string> => new Set(
+      (this.#database.prepare(`PRAGMA table_info(${table})`).all() as unknown as readonly { name: string }[])
+        .map((row) => row.name),
+    );
+    const grantColumns = columns("run_grants");
+    if (!grantColumns.has("expires_at")) this.#database.exec("ALTER TABLE run_grants ADD COLUMN expires_at TEXT");
+    if (!grantColumns.has("granted_via")) this.#database.exec("ALTER TABLE run_grants ADD COLUMN granted_via TEXT");
+    if (!columns("live_sessions").has("classroom_id")) {
+      this.#database.exec(`ALTER TABLE live_sessions ADD COLUMN classroom_id TEXT
+        REFERENCES classrooms(id) ON DELETE SET NULL`);
+    }
   }
 
   #insertLegacy(at: string): void {

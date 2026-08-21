@@ -33,6 +33,9 @@
     type RepertoireSummary,
     type RepertoireGapPage,
     type ProgressRecommendation,
+    type ClassroomSummary,
+    type ClassroomDetail,
+    type AssignedPack,
     ApiError,
   } from "./lib/api.js";
   import { HistoryRouter, routePath, type AppRoute } from "./lib/router.js";
@@ -88,11 +91,22 @@
   let shapeProbeFen = $state("");
   let shapeProbeResult: boolean | undefined = $state();
   let liveSessions: readonly LiveSessionSummary[] = $state([]);
+  let classrooms: readonly ClassroomSummary[] = $state([]);
+  let classroomDetail: ClassroomDetail | undefined = $state();
+  let assignedPacks: readonly AssignedPack[] = $state([]);
+  let classroomName = $state("");
+  let classroomInviteHandle = $state("");
+  let classroomInviteRole: "teacher" | "learner" = $state("learner");
+  let assignmentPackId = $state("");
+  let assignmentNote = $state("");
+  let assignmentDueAt = $state("");
   let liveDetail: LiveSessionDetail | undefined = $state();
   let activeLiveDetail: LiveSessionDetail | undefined = $state();
   let liveJournal: readonly SessionJournalEntry[] = $state([]);
   let liveKind: SessionKind = $state("academy");
   let liveBoardControl: BoardControl = $state("host_directed");
+  let liveClassroomId = $state("");
+  let liveScheduledFor = $state("");
   let liveProposalMove = $state("");
   let liveOfferHandle = $state("");
   let liveVotePrompt = $state("Which continuation?");
@@ -222,18 +236,20 @@
       } else if (next.name === "settings") {
         capabilities = await api.capabilities();
       } else if (next.name === "learn") {
-        [attempts, dueSchedules, milestones, repertoires, recommendations] = await Promise.all([
+        [attempts, dueSchedules, milestones, repertoires, recommendations, assignedPacks, runs] = await Promise.all([
           api.progress?.() ?? Promise.resolve([]),
           api.dueProgress?.() ?? Promise.resolve([]),
           api.milestones?.() ?? Promise.resolve([]),
           api.repertoires?.() ?? Promise.resolve([]),
           api.recommendations?.() ?? Promise.resolve([]),
+          api.assignments?.() ?? Promise.resolve([]),
+          api.runs(50, 0),
         ]);
         const pages=await Promise.all(repertoires.map(async(item)=>[item.id,await api.repertoireGaps?.(item.id)] as const));repertoirePages=Object.fromEntries(pages.filter((entry)=>entry[1]!==undefined)) as Record<string,RepertoireGapPage>;
       } else if (next.name === "create") {
         [drafts, shapeDrafts] = await Promise.all([api.packDrafts?.() ?? Promise.resolve([]), api.shapeDrafts?.() ?? Promise.resolve([])]);
       } else if (next.name === "live") {
-        [liveSessions,runs]=await Promise.all([api.liveSessions?.()??Promise.resolve([]),api.runs(50,0)]);
+        [liveSessions,runs,classrooms,packs]=await Promise.all([api.liveSessions?.()??Promise.resolve([]),api.runs(50,0),api.classrooms?.()??Promise.resolve([]),api.packs()]);
       } else if (next.name === "live-session") {
         [liveDetail,liveJournal]=await Promise.all([api.liveSession?.(next.sessionId),api.sessionJournal?.(next.sessionId).then((page)=>page.entries)??Promise.resolve([])]);
       } else if (next.name === "live-overlay" && session.runState?.run.id !== next.runId) {
@@ -449,7 +465,14 @@
     shapeDrafts = await (api.shapeDrafts?.() ?? Promise.resolve([]));
   }
 
-  async function createLive(runId:string):Promise<void>{const created=await api.createLiveSession?.({runId,kind:liveKind,title:`${liveKind} session`,boardControl:liveBoardControl,...(liveBoardControl==="match"?{matchPlayers:{...(liveMatchWhite?{white:liveMatchWhite}:{}),...(liveMatchBlack?{black:liveMatchBlack}:{})}}:{})});if(created){navigate(routePath({name:"live-session",sessionId:created.id}));}}
+  async function createLive(runId:string):Promise<void>{const created=await api.createLiveSession?.({runId,kind:liveKind,title:`${liveKind} session`,boardControl:liveBoardControl,...(liveClassroomId?{classroomId:liveClassroomId}:{}),...(liveScheduledFor?{scheduledFor:new Date(liveScheduledFor).toISOString()}:{}),...(liveBoardControl==="match"?{matchPlayers:{...(liveMatchWhite?{white:liveMatchWhite}:{}),...(liveMatchBlack?{black:liveMatchBlack}:{})}}:{})});if(created){navigate(routePath({name:"live-session",sessionId:created.id}));}}
+  async function createClassroom():Promise<void>{if(!classroomName.trim()||api.createClassroom===undefined)return;await api.createClassroom(classroomName.trim());classroomName="";classrooms=await (api.classrooms?.()??Promise.resolve([]));}
+  async function openClassroom(id:string):Promise<void>{classroomDetail=await api.classroom?.(id);}
+  async function respondClassroom(id:string,op:"accept"|"decline"|"leave"):Promise<void>{await api.respondClassroomInvite?.(id,op);classrooms=await (api.classrooms?.()??Promise.resolve([]));classroomDetail=undefined;}
+  async function inviteClassroom():Promise<void>{if(!classroomDetail||!classroomInviteHandle.trim())return;await api.inviteClassroomMember?.(classroomDetail.classroom.id,classroomInviteHandle.trim(),classroomInviteRole);classroomInviteHandle="";await openClassroom(classroomDetail.classroom.id);}
+  async function assignClassroomPack():Promise<void>{if(!classroomDetail||!assignmentPackId)return;await api.createAssignment?.(classroomDetail.classroom.id,{packId:assignmentPackId,...(assignmentNote.trim()?{note:assignmentNote}:{}),...(assignmentDueAt?{dueAt:new Date(assignmentDueAt).toISOString()}: {})});assignmentNote="";assignmentDueAt="";await openClassroom(classroomDetail.classroom.id);}
+  async function submitAssignedRun(assignmentId:string,runId:string):Promise<void>{await api.submitAssignment?.(assignmentId,runId);assignedPacks=await (api.assignments?.()??Promise.resolve([]));}
+  async function withdrawAssignedRun(assignmentId:string,runId:string):Promise<void>{await api.withdrawSubmission?.(assignmentId,runId);assignedPacks=await (api.assignments?.()??Promise.resolve([]));}
   function liveWriterId(runId:string):string|undefined{return WriterSession.peek(runId,storage)?.writerId;}
   async function submitLiveProposal():Promise<void>{if(!liveDetail||!liveProposalMove)return;await api.proposeMove?.(liveDetail.session.id,liveDetail.activeNodeId,liveProposalMove);liveDetail=await api.liveSession?.(liveDetail.session.id);liveProposalMove="";}
   async function offerLiveBoard():Promise<void>{if(!liveDetail||!liveOfferHandle)return;const writer=liveWriterId(liveDetail.session.runId);if(!writer)return;await api.boardControl?.(liveDetail.session.id,writer,"offer",liveOfferHandle);liveDetail=await api.liveSession?.(liveDetail.session.id);}
@@ -593,6 +616,8 @@
         boardSide={activeLiveDetail?.match===undefined||learner===undefined?undefined:activeLiveDetail.match.whiteLearnerId===learner.id?"white":activeLiveDetail.match.blackLearnerId===learner.id?"black":undefined}
         assistanceStorage={storage}
         liveSessionKind={activeLiveDetail?.session.kind}
+        seatedInContest={session.viewer?.seatedInContest}
+        reviewing={session.viewer?.reviewing}
         onMove={(uci) => controller.move(uci)}
         onRewind={(target) => controller.rewind(target)}
         onFork={(label, intent) => controller.fork(label, intent)}
@@ -671,6 +696,27 @@
     <main class="shell-view" aria-labelledby="learn-title">
       <p class="eyebrow">Learn / return loop</p>
       <h1 id="learn-title">Return to the positions that need another attempt.</h1>
+      <section aria-labelledby="assigned-title">
+        <h2 id="assigned-title">Assigned</h2>
+        <div class="item-list">
+          {#each assignedPacks as assignment}
+            <article>
+              <div>
+                <h3>{assignment.packId}</h3>
+                <p>{assignment.classroomName} · assigned by @{assignment.assignedByHandle}{assignment.dueAt ? ` · due ${readableDate(assignment.dueAt)}` : ""}</p>
+                {#if assignment.note}<blockquote><p>{assignment.note}</p><footer>— @{assignment.assignedByHandle}, your teacher</footer></blockquote>{/if}
+                {#each assignment.submissions as submission}<p>{submission.withdrawnAt ? "Submission withdrawn" : `Submitted ${readableDate(submission.submittedAt)} · access until ${readableDate(submission.accessExpiresAt)}`} {#if !submission.withdrawnAt}<button type="button" onclick={()=>void withdrawAssignedRun(assignment.id,submission.runId)}>Revoke teacher access</button>{/if}</p>{/each}
+              </div>
+              <div class="row-actions">
+                <button type="button" onclick={()=>void controller.startPack(assignment.packId)}>Start pack</button>
+                {#each runs.filter((run)=>run.packId===assignment.packId&&run.viewerRole==="host") as run}
+                  <button type="button" onclick={()=>void submitAssignedRun(assignment.id,run.id)}>Submit {run.title}</button>
+                {/each}
+              </div>
+            </article>
+          {:else}<p>No open assignments.</p>{/each}
+        </div>
+      </section>
       {#if recommendations.length>0}
         <section aria-labelledby="recommended-title"><h2 id="recommended-title">Recommended next</h2><div class="item-list">
           {#each recommendations as item}<article><p>{item.sentence}</p>{#if item.kind==="repertoire_gap"}<button type="button" onclick={()=>void enterRepertoireGap(item.repertoireId,item.gapKey)}>Enter gap</button>{:else if item.packIds[0]}<button type="button" onclick={()=>navigate("/play")}>Find {item.packIds[0]}</button>{/if}</article>{/each}
@@ -803,7 +849,31 @@
   {:else if route.name === "live"}
     <main class="shell-view" aria-labelledby="live-title">
       <p class="eyebrow">Live / shared rehearsal</p><h1 id="live-title">Rehearse with other people.</h1>
-      <div class="row-actions"><label>Kind <select bind:value={liveKind}><option value="stream">Stream</option><option value="academy">Academy</option><option value="match">Match / Arena</option></select></label><label>Board <select bind:value={liveBoardControl}><option value="host_directed">Host directed</option><option value="free_claim">Free claim</option><option value="rotation">Rotation</option><option value="match">Native two-player match</option></select></label>{#if liveBoardControl==="match"}<label>White handle<input bind:value={liveMatchWhite} placeholder="student-white"/></label><label>Black handle<input bind:value={liveMatchBlack} placeholder="or leave one seat open"/></label>{/if}</div>
+      <section aria-labelledby="classrooms-title">
+        <h2 id="classrooms-title">Classrooms</h2>
+        <form class="row-actions" onsubmit={(event)=>{event.preventDefault();void createClassroom();}}><label>New classroom <input required bind:value={classroomName} /></label><button type="submit">Create</button></form>
+        <div class="item-list">
+          {#each classrooms as classroom}
+            <article><div><h3>{classroom.name}</h3><p>{classroom.memberRole} · {classroom.memberState}</p></div>
+              {#if classroom.memberState==="invited"}<div class="row-actions"><button type="button" onclick={()=>void respondClassroom(classroom.id,"accept")}>Accept</button><button type="button" onclick={()=>void respondClassroom(classroom.id,"decline")}>Decline</button></div>{:else}<button type="button" onclick={()=>void openClassroom(classroom.id)}>Open</button>{/if}
+            </article>
+          {:else}<p>No classrooms yet.</p>{/each}
+        </div>
+        {#if classroomDetail}
+          <article class="classroom-detail">
+            <div class="row-actions"><h3>{classroomDetail.classroom.name}</h3><button type="button" onclick={()=>void respondClassroom(classroomDetail!.classroom.id,"leave")}>Leave</button></div>
+            <h4>Members</h4><ul>{#each classroomDetail.members as member}<li>@{member.handle} — {member.memberRole}, {member.state}</li>{/each}</ul>
+            {#if classroomDetail.membership.memberRole==="teacher"}
+              <form class="row-actions" onsubmit={(event)=>{event.preventDefault();void inviteClassroom();}}><label>Invite handle <input required bind:value={classroomInviteHandle}/></label><label>Role <select bind:value={classroomInviteRole}><option value="learner">Learner</option><option value="teacher">Teacher</option></select></label><button type="submit">Invite</button></form>
+              <form class="row-actions" onsubmit={(event)=>{event.preventDefault();void assignClassroomPack();}}><label>Pack <select required bind:value={assignmentPackId}><option value="">Choose a pack</option>{#each packs as pack}<option value={pack.id}>{pack.title}</option>{/each}</select></label><label>Teacher note <input bind:value={assignmentNote}/></label><label>Due <input type="datetime-local" bind:value={assignmentDueAt}/></label><button type="submit">Assign</button></form>
+            {/if}
+            <h4>Assignments</h4><ul>{#each classroomDetail.assignments as assignment}<li>{assignment.packId}{assignment.dueAt?` · ${readableDate(assignment.dueAt)}`:""}{assignment.withdrawnAt?" · withdrawn":""}</li>{:else}<li>No assignments.</li>{/each}</ul>
+            {#if classroomDetail.membership.memberRole==="teacher"}<h4>Submitted runs</h4><ul>{#each classroomDetail.submissions as submission}<li>{readableDate(submission.submittedAt)} · {submission.access==="available"?"access available":"access revoked or expired"} {#if submission.access==="available"}<button type="button" onclick={()=>navigate(routePath({name:"run",runId:submission.runId}))}>Review run</button>{/if}</li>{:else}<li>No submitted runs.</li>{/each}</ul>{/if}
+            <h4>Upcoming sessions</h4><ul>{#each classroomDetail.upcomingSessions as item}<li>{item.title} · {item.scheduledFor?readableDate(item.scheduledFor):"unscheduled"}</li>{:else}<li>No scheduled sessions.</li>{/each}</ul>
+          </article>
+        {/if}
+      </section>
+      <div class="row-actions"><label>Kind <select bind:value={liveKind}><option value="stream">Stream</option><option value="academy">Academy</option><option value="match">Match / Arena</option></select></label><label>Board <select bind:value={liveBoardControl}><option value="host_directed">Host directed</option><option value="free_claim">Free claim</option><option value="rotation">Rotation</option><option value="match">Native two-player match</option></select></label><label>Classroom (optional) <select bind:value={liveClassroomId}><option value="">None</option>{#each classrooms.filter((item)=>item.memberRole==="teacher"&&item.memberState==="active") as classroom}<option value={classroom.id}>{classroom.name}</option>{/each}</select></label><label>Schedule (optional) <input type="datetime-local" bind:value={liveScheduledFor}/></label>{#if liveBoardControl==="match"}<label>White handle<input bind:value={liveMatchWhite} placeholder="student-white"/></label><label>Black handle<input bind:value={liveMatchBlack} placeholder="or leave one seat open"/></label>{/if}</div>
       <section><h2>Your sessions</h2><div class="item-list live-wall">{#each liveSessions as item}<article><div class="mini-board"><Chessboard fen={item.board.activeFen} startSide="white" disabled={true} onMove={()=>{}}/></div><div><h3>{item.title}</h3><p>{item.kind} · {item.boardControl} · {item.board.sideToMove} to move{item.board.pausedAt ? " · paused" : ""}</p>{#if item.board.players}<p>{item.board.players.white?`@${item.board.players.white.handle}`:"open"} vs {item.board.players.black?`@${item.board.players.black.handle}`:"open"}</p>{/if}<p>@{item.board.leaseHeldBy.handle} holds the board · {item.board.plyCount} plies</p></div><button type="button" onclick={()=>navigate(routePath({name:"live-session",sessionId:item.id}))}>Open</button></article>{:else}<p>No live sessions yet.</p>{/each}</div></section>
       <section><h2>Start from a run</h2><div class="item-list">{#each runs as item}<article><div><h3>{item.title}</h3><p>{item.viewerRole === "host" ? "Ready to host" : "Only a host can create a session"}</p></div><button type="button" disabled={item.viewerRole!=="host"} aria-describedby={item.viewerRole!=="host"?`live-disabled-${item.id}`:undefined} onclick={()=>void createLive(item.id)}>Create {liveKind}</button>{#if item.viewerRole!=="host"}<span id={`live-disabled-${item.id}`} class="honest">Host role required.</span>{/if}</article>{/each}</div></section>
       <p class="honest">Vote tallies are advisory. Chat identity is only as trustworthy as the configured adapter.</p>

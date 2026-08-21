@@ -37,7 +37,7 @@ export { appendEvents, deriveSegments, eventsSince, groupsFromEvents, projectRun
 export { feedbackDeliveryOpen, feedbackDisclosed } from "./feedback.js";
 export { consumeShapeFiring, declareShapeFiringEvidence, shapeFiringEvidence, shapeFirings, type ShapeFiring, type ShapeTriggerSource } from "./shape-firing.js";
 export { classifyPhase, renderPhaseReading, ENDGAME_MATERIAL_MAX, DEVELOPED_MATERIAL_MIN, OPENING_UNDEVELOPED_MIN, MIDDLEGAME_UNDEVELOPED_MAX, PHASE_PROVENANCE, type DetectedPhase, type PhaseReading } from "./phase.js";
-export { SILENT_ASSISTANCE, permittedAssistance, type AssistanceConfig, type AssistanceContext, type AssistancePermission } from "./assistance.js";
+export { SILENT_ASSISTANCE, permittedAssistance, reviewingGrant, type AssistanceConfig, type AssistanceContext, type AssistancePermission } from "./assistance.js";
 export { consumePivotalMarkers, liveAdmitted, liveMarkers, pivotalMarkerEvidence, pivotalMarkers, renderPivotalMarker, type PivotalKind, type PivotalMarker, type IrreversibilityDetail, type PhaseChangeDetail, type DivergenceDetail, type CollapseDetail } from "./pivotal.js";
 export {
   TRANSITION_FEATURE_KINDS,

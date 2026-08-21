@@ -34,6 +34,12 @@ does not deliver deviations, feedback claims, checkpoint triggers, plan
 classes, concepts, or spine annotations. The stored document—not this
 projection—remains authoritative for orchestration, PGN export, and digesting.
 
+Classroom assignments reuse this pack projection rather than defining a second
+content format. Learn renders assigned packs before the ordinary catalogue; starting one
+creates the same hosted run as any other pack start. Submission is a separate explicit
+action after play and grants bounded review access. Teacher notes remain attributed UI
+text and never enter the run, evidence packet, or provider input.
+
 ## Run index and deployment capabilities
 
 SQLite opens through an ordered, idempotent `PRAGMA user_version` migration

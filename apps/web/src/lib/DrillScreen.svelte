@@ -65,6 +65,8 @@
     boardSide?: "white" | "black" | undefined;
     assistanceStorage?: PreferenceStorage | undefined;
     liveSessionKind?: SessionKind | undefined;
+    seatedInContest?: boolean | undefined;
+    reviewing?: boolean | undefined;
     onMove: (uci: string) => void | Promise<void>;
     onRewind: (target: RewindTarget) => void | Promise<void>;
     onFork: (label?: string, intent?: string) => void | Promise<void>;
@@ -109,6 +111,8 @@
     boardSide,
     assistanceStorage,
     liveSessionKind,
+    seatedInContest = false,
+    reviewing = false,
     onMove,
     onRewind,
     onFork,
@@ -352,7 +356,7 @@
   });
   let detectedPhase = $derived(classifyPhase(displayedNode.fen));
   let endgame = $derived(endgameReading(displayedNode.fen));
-  let assistanceContext = $derived({ sessionKind: run.sessionKind, deliveryOpen: feedbackDeliveryOpen(run), role: viewerRole });
+  let assistanceContext = $derived({ sessionKind: run.sessionKind, deliveryOpen: feedbackDeliveryOpen(run), role: viewerRole, seatedInContest, reviewing });
   let assistancePermission = $derived(permittedAssistance(assistanceContext));
   let effectiveLighting = $derived(assistance.boardLighting === "evidence" && assistancePermission.boardLighting !== "evidence" ? "sight" : assistance.boardLighting);
   let selectedObservations = $derived(selectedSquare === undefined ? [] : sightFeatures.filter((item) => item.squares.some((square) => square === selectedSquare)));

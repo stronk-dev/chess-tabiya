@@ -105,6 +105,7 @@ describe("SQLite run-storage migrations and summaries", () => {
       { version: 21, name: "engine leverage run schema" },
       { version: 22, name: "learner board annotations" },
       { version: 23, name: "opponent ordering basis run schema" },
+      { version: 24, name: "classrooms, assignments, submissions, and expiring run grants" },
     ]);
     expect(upgraded.list(10, 0)).toEqual([]);
     expect(upgraded.read("legacy-run")).toBeUndefined();
@@ -122,7 +123,7 @@ describe("SQLite run-storage migrations and summaries", () => {
     expect(
       (inspection.prepare("PRAGMA user_version").get() as { user_version: number })
         .user_version,
-    ).toBe(23);
+    ).toBe(24);
     inspection.close();
   });
 
@@ -144,11 +145,14 @@ describe("SQLite run-storage migrations and summaries", () => {
       INSERT INTO session_journal SELECT * FROM session_journal_v14; DROP TABLE session_journal_v14;
       ALTER TABLE live_sessions RENAME TO live_sessions_v14;
       CREATE TABLE live_sessions (id TEXT PRIMARY KEY,run_id TEXT NOT NULL UNIQUE REFERENCES drill_runs(id) ON DELETE CASCADE,kind TEXT NOT NULL CHECK(kind IN ('stream','academy','match')),title TEXT NOT NULL,board_control TEXT NOT NULL CHECK(board_control IN ('free_claim','host_directed','rotation')),scheduled_for TEXT,vote_adapter_learner_id TEXT REFERENCES learners(id) ON DELETE SET NULL,rotation_json TEXT,handoff_learner_id TEXT REFERENCES learners(id) ON DELETE SET NULL,rotation_cursor INTEGER NOT NULL DEFAULT 0,created_by TEXT NOT NULL REFERENCES learners(id),created_at TEXT NOT NULL,closed_at TEXT) STRICT;
-      INSERT INTO live_sessions SELECT * FROM live_sessions_v14; DROP TABLE live_sessions_v14;
+      INSERT INTO live_sessions
+        SELECT id,run_id,kind,title,board_control,scheduled_for,vote_adapter_learner_id,
+          rotation_json,handoff_learner_id,rotation_cursor,created_by,created_at,closed_at
+        FROM live_sessions_v14; DROP TABLE live_sessions_v14;
       PRAGMA user_version=13;
     `);fixture.close();
 
-    const log:StorageMigrationLog[]=[];const upgraded=new SQLiteRunStorage(filename,{onMigration:(entry)=>log.push(entry)});expect(log).toEqual([{version:14,name:"native matches and session join tokens"},{version:15,name:"learner repertoires, scans, and gap-run links"},{version:16,name:"immediate guard run schema"},{version:17,name:"stated reasoning run schema"},{version:18,name:"perfect tablebase run schema"},{version:19,name:"practical resistance run schema"},{version:20,name:"engine request record run schema"},{version:21,name:"engine leverage run schema"},{version:22,name:"learner board annotations"},{version:23,name:"opponent ordering basis run schema"}]);
+    const log:StorageMigrationLog[]=[];const upgraded=new SQLiteRunStorage(filename,{onMigration:(entry)=>log.push(entry)});expect(log).toEqual([{version:14,name:"native matches and session join tokens"},{version:15,name:"learner repertoires, scans, and gap-run links"},{version:16,name:"immediate guard run schema"},{version:17,name:"stated reasoning run schema"},{version:18,name:"perfect tablebase run schema"},{version:19,name:"practical resistance run schema"},{version:20,name:"engine request record run schema"},{version:21,name:"engine leverage run schema"},{version:22,name:"learner board annotations"},{version:23,name:"opponent ordering basis run schema"},{version:24,name:"classrooms, assignments, submissions, and expiring run grants"}]);
     expect(upgraded.liveSession(session.id)?.title).toBe("Old class");expect(upgraded.publicTokenByHash("hash-old")).toMatchObject({scope:"story_read",runId:value.id});upgraded.close();
     const inspection=new DatabaseSync(filename);expect((inspection.prepare("PRAGMA foreign_key_check").all())).toEqual([]);for(const table of ["session_proposals","session_vote_windows","session_invitations","arena_legs"]){const targets=(inspection.prepare(`PRAGMA foreign_key_list(${table})`).all() as readonly Record<string,unknown>[]).map((row)=>row.table);expect(targets).toContain("live_sessions");expect(targets).not.toContain("live_sessions_v14");}expect(String((inspection.prepare("SELECT sql FROM sqlite_master WHERE type='table' AND name='live_sessions'").get() as {sql:string}).sql)).toContain("'match'");inspection.close();
     const freshFile=join(directory,"fresh.sqlite"),freshStorage=new SQLiteRunStorage(freshFile,{onMigration:()=>{}});freshStorage.close();const upgradedSchema=new DatabaseSync(filename),freshSchema=new DatabaseSync(freshFile);
@@ -216,6 +220,7 @@ describe("SQLite run-storage migrations and summaries", () => {
       { version: 21, name: "engine leverage run schema" },
       { version: 22, name: "learner board annotations" },
       { version: 23, name: "opponent ordering basis run schema" },
+      { version: 24, name: "classrooms, assignments, submissions, and expiring run grants" },
     ]);
     expect(upgraded.read(ordinary.id)?.run.schemaVersion).toBe("0.17");
     expect(upgraded.list(10, 0).map((entry) => entry.id)).toEqual([ordinary.id]);
@@ -310,6 +315,7 @@ describe("SQLite run-storage migrations and summaries", () => {
       { version: 21, name: "engine leverage run schema" },
       { version: 22, name: "learner board annotations" },
       { version: 23, name: "opponent ordering basis run schema" },
+      { version: 24, name: "classrooms, assignments, submissions, and expiring run grants" },
     ]);
     expect(upgraded.read(ordinary.id)?.run.schemaVersion).toBe("0.17");
     expect(upgraded.read(quarantined.id)).toBeUndefined();
@@ -379,7 +385,7 @@ describe("SQLite run-storage migrations and summaries", () => {
 
     const log: StorageMigrationLog[] = [];
     const upgraded = new SQLiteRunStorage(filename, { onMigration: (entry) => log.push(entry) });
-    expect(log).toEqual([{ version: 16, name: "immediate guard run schema" }, { version: 17, name: "stated reasoning run schema" }, { version: 18, name: "perfect tablebase run schema" }, { version: 19, name: "practical resistance run schema" }, { version: 20, name: "engine request record run schema" }, { version: 21, name: "engine leverage run schema" }, { version: 22, name: "learner board annotations" }, { version: 23, name: "opponent ordering basis run schema" }]);
+    expect(log).toEqual([{ version: 16, name: "immediate guard run schema" }, { version: 17, name: "stated reasoning run schema" }, { version: 18, name: "perfect tablebase run schema" }, { version: 19, name: "practical resistance run schema" }, { version: 20, name: "engine request record run schema" }, { version: 21, name: "engine leverage run schema" }, { version: 22, name: "learner board annotations" }, { version: 23, name: "opponent ordering basis run schema" }, { version: 24, name: "classrooms, assignments, submissions, and expiring run grants" }]);
     expect(upgraded.read("guard-migration")?.run.schemaVersion).toBe("0.17");
     upgraded.close();
 
@@ -421,7 +427,7 @@ describe("SQLite run-storage migrations and summaries", () => {
 
     const log: StorageMigrationLog[] = [];
     const upgraded = new SQLiteRunStorage(filename, { onMigration: (entry) => log.push(entry) });
-    expect(log).toEqual([{ version: 19, name: "practical resistance run schema" }, { version: 20, name: "engine request record run schema" }, { version: 21, name: "engine leverage run schema" }, { version: 22, name: "learner board annotations" }, { version: 23, name: "opponent ordering basis run schema" }]);
+    expect(log).toEqual([{ version: 19, name: "practical resistance run schema" }, { version: 20, name: "engine request record run schema" }, { version: 21, name: "engine leverage run schema" }, { version: 22, name: "learner board annotations" }, { version: 23, name: "opponent ordering basis run schema" }, { version: 24, name: "classrooms, assignments, submissions, and expiring run grants" }]);
     const after = upgraded.read(selected.id)!.run;
     expect(after.schemaVersion).toBe("0.17");
     expect(after.events).toEqual(selected.events);
@@ -452,7 +458,7 @@ describe("SQLite run-storage migrations and summaries", () => {
 
     const log: StorageMigrationLog[] = [];
     const upgraded = new SQLiteRunStorage(filename, { onMigration: (entry) => log.push(entry) });
-    expect(log).toEqual([{ version: 20, name: "engine request record run schema" }, { version: 21, name: "engine leverage run schema" }, { version: 22, name: "learner board annotations" }, { version: 23, name: "opponent ordering basis run schema" }]);
+    expect(log).toEqual([{ version: 20, name: "engine request record run schema" }, { version: 21, name: "engine leverage run schema" }, { version: 22, name: "learner board annotations" }, { version: 23, name: "opponent ordering basis run schema" }, { version: 24, name: "classrooms, assignments, submissions, and expiring run grants" }]);
     const after = upgraded.read(selected.id)!.run;
     expect(after.schemaVersion).toBe("0.17");
     expect(after.events).toEqual(selected.events);
@@ -484,7 +490,7 @@ describe("SQLite run-storage migrations and summaries", () => {
 
     const log: StorageMigrationLog[] = [];
     const upgraded = new SQLiteRunStorage(filename, { onMigration: (entry) => log.push(entry) });
-    expect(log).toEqual([{ version: 21, name: "engine leverage run schema" }, { version: 22, name: "learner board annotations" }, { version: 23, name: "opponent ordering basis run schema" }]);
+    expect(log).toEqual([{ version: 21, name: "engine leverage run schema" }, { version: 22, name: "learner board annotations" }, { version: 23, name: "opponent ordering basis run schema" }, { version: 24, name: "classrooms, assignments, submissions, and expiring run grants" }]);
     const after = upgraded.read(selected.id)!.run;
     expect(after.schemaVersion).toBe("0.17");
     expect(after.events).toEqual(selected.events);
@@ -517,7 +523,7 @@ describe("SQLite run-storage migrations and summaries", () => {
 
     const log: StorageMigrationLog[] = [];
     const upgraded = new SQLiteRunStorage(filename, { onMigration: (entry) => log.push(entry) });
-    expect(log).toEqual([{ version: 23, name: "opponent ordering basis run schema" }]);
+    expect(log).toEqual([{ version: 23, name: "opponent ordering basis run schema" }, { version: 24, name: "classrooms, assignments, submissions, and expiring run grants" }]);
     const after = upgraded.read(selected.id)!.run;
     expect(after.schemaVersion).toBe("0.17");
     expect(after.events).toEqual(selected.events);

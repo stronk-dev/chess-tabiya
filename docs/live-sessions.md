@@ -132,10 +132,12 @@ revoked, and wrong-handle tokens all return the same not-found response.
 
 A streamer cannot be forced to play blind while their audience sees more evidence: the
 streamer can grant and use a second spectator account. Tabiya therefore gives player and
-spectator the same viewer-blind run projection. Assistance is a separate rail: role may cap it
-lower for a participant or spectator, never raise it, and never exceed what the run itself has
-disclosed. It protects every reader from premature evidence; it does not pretend to prevent a
-host from cheating on themselves.
+spectator the same viewer-blind run projection. Assistance is a separate rail: it caps a
+seated participant or non-reviewing spectator during live play, never raises the run's
+disclosure ceiling, and never exceeds what the run itself has disclosed. A
+submission-granted teacher may receive the host ceiling only after an outcome and after
+the live session closes. It protects every reader from premature evidence; it does not
+pretend to prevent a host from cheating on themselves.
 
 The live platform uses authenticated polling rather than WebSockets or SSE. External
 challenge URLs remain opaque HTTPS links supplied by the host; native clocks,
@@ -144,4 +146,5 @@ matchmaking, and provider-specific challenge APIs do not ship.
 SQLite migration 9 adds the original live-session tables. Migration 14 rebuilds the
 closed session/journal/token vocabularies and adds `match_states`; it disables foreign
 keys before its transaction and verifies `foreign_key_check` before commit. The run
-schema remains v0.10 and pack schema remains v0.13.
+schema remains v0.17 and pack schema remains v0.27. Migration 24 adds the nullable
+`classroom_id` association used by scheduled classroom sessions; see `docs/classrooms.md`.

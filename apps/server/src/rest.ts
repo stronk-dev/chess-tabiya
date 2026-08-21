@@ -56,6 +56,7 @@ import type { RepertoireService } from "./repertoire.js";
 import { publicMutationPayload } from "./feedback-policy.js";
 import { reasoningMatchCheck, type ReasoningProposal } from "./reasoning.js";
 import { distillRun } from "./distill.js";
+import type { ClassroomService } from "./classroom.js";
 
 export type RestHandler = (request: Request) => Promise<Response>;
 
@@ -98,6 +99,8 @@ function requireGuidanceDisclosure(access: GuidanceAccess): void {
     sessionKind: access.run.sessionKind,
     deliveryOpen: feedbackDeliveryOpen(access.run),
     role: access.role,
+    seatedInContest: access.seatedInContest,
+    reviewing: access.reviewing,
   });
   if (permission.humanSplit === "locked_off") {
     throw new ServerError("ASSISTANCE_WITHHELD", "Guidance containing human-model distribution is withheld in this context");
@@ -744,6 +747,7 @@ export function createRestHandler(
   repertoires?: RepertoireService,
   ttsProvider?: TtsProvider,
   reasoningReviewProvider?: ReasoningReviewProvider,
+  classrooms?: ClassroomService,
 ): RestHandler {
   return async (request) => {
     try {
@@ -797,6 +801,87 @@ export function createRestHandler(
           return jsonWithCookie(200, {}, cookie);
         }
         return json(404, { error: { code: "NOT_FOUND", message: "Route not found" } });
+      }
+      if (url.pathname === "/classrooms") {
+        if (classrooms === undefined) throw new ServerError("STORAGE_FAILURE", "Classroom service is not configured");
+        const principal = authenticate();
+        if (request.method === "GET") return json(200, { classrooms: classrooms.list(principal) });
+        if (request.method === "POST") {
+          requireJson(request);
+          const body = closedRecord(await parseBody(request), "/", ["name"]);
+          return json(201, { classroom: classrooms.create(principal, requiredString(body.name, "name")) });
+        }
+        return json(405, { error: { code: "METHOD_NOT_ALLOWED", message: "Method not allowed" } });
+      }
+      const classroomRoute = /^\/classrooms\/([^/]+)(?:\/(members|assignments))?$/.exec(url.pathname);
+      if (classroomRoute !== null) {
+        if (classrooms === undefined) throw new ServerError("STORAGE_FAILURE", "Classroom service is not configured");
+        const principal = authenticate();
+        const id = decodeURIComponent(classroomRoute[1]!);
+        const resource = classroomRoute[2];
+        if (request.method === "GET" && resource === undefined) return json(200, classrooms.detail(id, principal));
+        if (request.method !== "POST") return json(405, { error: { code: "METHOD_NOT_ALLOWED", message: "Method not allowed" } });
+        requireJson(request);
+        if (resource === undefined) {
+          const body = closedRecord(await parseBody(request), "/", ["op"]);
+          if (requiredString(body.op, "op") !== "archive") throw invalid("op must be archive");
+          classrooms.archive(id, principal);
+          return json(200, { archived: true });
+        }
+        if (resource === "members") {
+          const body = closedRecord(await parseBody(request), "/", ["op", "handle", "role"]);
+          const op = requiredString(body.op, "op");
+          if (op === "invite") {
+            const role = requiredString(body.role, "role");
+            if (role !== "teacher" && role !== "learner") throw invalid("role must be teacher or learner");
+            return json(201, { member: classrooms.invite(id, principal, requiredString(body.handle, "handle"), role) });
+          }
+          if (op === "remove") {
+            classrooms.remove(id, principal, requiredString(body.handle, "handle"));
+            return json(200, { removed: true });
+          }
+          if (op === "accept" || op === "decline" || op === "leave") {
+            classrooms.respond(id, principal, op);
+            return json(200, { state: op === "accept" ? "active" : "left" });
+          }
+          throw invalid("Unknown member operation");
+        }
+        const body = closedRecord(await parseBody(request), "/", ["packId", "note", "dueAt"]);
+        return json(201, { assignment: classrooms.assign(id, principal, {
+          packId: requiredString(body.packId, "packId"),
+          ...(body.note === undefined ? {} : { note: requiredString(body.note, "note") }),
+          ...(body.dueAt === undefined ? {} : { dueAt: requiredString(body.dueAt, "dueAt") }),
+        }) });
+      }
+      if (url.pathname === "/assignments") {
+        if (classrooms === undefined) throw new ServerError("STORAGE_FAILURE", "Classroom service is not configured");
+        if (request.method !== "GET") return json(405, { error: { code: "METHOD_NOT_ALLOWED", message: "Method not allowed" } });
+        return json(200, { assignments: classrooms.assignments(authenticate()) });
+      }
+      const assignmentRoute = /^\/assignments\/([^/]+)(?:\/(submissions))?$/.exec(url.pathname);
+      if (assignmentRoute !== null) {
+        if (classrooms === undefined) throw new ServerError("STORAGE_FAILURE", "Classroom service is not configured");
+        if (request.method !== "POST") return json(405, { error: { code: "METHOD_NOT_ALLOWED", message: "Method not allowed" } });
+        requireJson(request);
+        const principal = authenticate();
+        const id = decodeURIComponent(assignmentRoute[1]!);
+        if (assignmentRoute[2] === undefined) {
+          const body = closedRecord(await parseBody(request), "/", ["op"]);
+          if (requiredString(body.op, "op") !== "withdraw") throw invalid("op must be withdraw");
+          classrooms.withdrawAssignment(id, principal);
+          return json(200, { withdrawn: true });
+        }
+        const body = closedRecord(await parseBody(request), "/", ["op", "runId", "expiresInDays"]);
+        const runId = requiredString(body.runId, "runId");
+        if (body.op === undefined) {
+          const expiresInDays = body.expiresInDays === undefined
+            ? undefined
+            : requiredPositiveSafeInteger(body.expiresInDays, "expiresInDays");
+          return json(201, { submission: classrooms.submit(id, principal, runId, expiresInDays) });
+        }
+        if (requiredString(body.op, "op") !== "withdraw") throw invalid("op must be withdraw");
+        classrooms.withdrawSubmission(id, principal, runId);
+        return json(200, { withdrawn: true });
       }
       if (request.method === "GET" && url.pathname === "/capabilities") {
         if (capabilities === undefined) {
@@ -1037,12 +1122,12 @@ export function createRestHandler(
         if (sessionRoute.sessionId === undefined) {
           if (request.method === "GET") return json(200, { sessions: live.list(principal) });
           if (request.method === "POST") {
-            requireJson(request); const body=closedRecord(await parseBody(request),"/",["runId","kind","title","boardControl","scheduledFor","voteAdapterHandle","rotationHandles","matchPlayers"]);
+            requireJson(request); const body=closedRecord(await parseBody(request),"/",["runId","kind","title","boardControl","scheduledFor","voteAdapterHandle","rotationHandles","matchPlayers","classroomId"]);
             const kind=requiredString(body.kind,"kind"); if(!["stream","academy","match"].includes(kind))throw invalid("kind must be stream, academy, or match");
             const control=body.boardControl===undefined?undefined:requiredString(body.boardControl,"boardControl");if(control!==undefined&&!["free_claim","host_directed","rotation","match"].includes(control))throw invalid("boardControl is invalid");
             const handles=body.rotationHandles===undefined?undefined:Array.isArray(body.rotationHandles)&&body.rotationHandles.every((item)=>typeof item==="string")?body.rotationHandles as string[]:(()=>{throw invalid("rotationHandles must be an array of strings");})();
             const players=body.matchPlayers===undefined?undefined:closedRecord(body.matchPlayers,"/matchPlayers",["white","black"]);
-            return json(201,{session:live.create(principal,{runId:requiredString(body.runId,"runId"),kind:kind as SessionKind,title:requiredString(body.title,"title"),...(control===undefined?{}:{boardControl:control as BoardControl}),...(body.scheduledFor===undefined?{}:{scheduledFor:requiredString(body.scheduledFor,"scheduledFor")}),...(body.voteAdapterHandle===undefined?{}:{voteAdapterHandle:requiredString(body.voteAdapterHandle,"voteAdapterHandle")}),...(handles===undefined?{}:{rotationHandles:handles}),...(players===undefined?{}:{matchPlayers:{...(players.white===undefined?{}:{white:requiredString(players.white,"matchPlayers.white")}),...(players.black===undefined?{}:{black:requiredString(players.black,"matchPlayers.black")})}})})});
+            return json(201,{session:live.create(principal,{runId:requiredString(body.runId,"runId"),kind:kind as SessionKind,title:requiredString(body.title,"title"),...(control===undefined?{}:{boardControl:control as BoardControl}),...(body.scheduledFor===undefined?{}:{scheduledFor:requiredString(body.scheduledFor,"scheduledFor")}),...(body.voteAdapterHandle===undefined?{}:{voteAdapterHandle:requiredString(body.voteAdapterHandle,"voteAdapterHandle")}),...(body.classroomId===undefined?{}:{classroomId:requiredString(body.classroomId,"classroomId")}),...(handles===undefined?{}:{rotationHandles:handles}),...(players===undefined?{}:{matchPlayers:{...(players.white===undefined?{}:{white:requiredString(players.white,"matchPlayers.white")}),...(players.black===undefined?{}:{black:requiredString(players.black,"matchPlayers.black")})}})})});
           }
           return json(405,{error:{code:"METHOD_NOT_ALLOWED",message:"Method not allowed"}});
         }
@@ -1146,7 +1231,7 @@ export function createRestHandler(
           throw new ServerError("ENGINE_UNAVAILABLE", "Human-model distribution is unavailable", { details: { engineId: "opponent-selector", retryAfterMs: 0 } });
         }
         const access = service.guidanceAccess(route.runId, principal, requiredString(url.searchParams.get("nodeId"), "nodeId"));
-        const permission = permittedAssistance({ sessionKind: access.run.sessionKind, deliveryOpen: feedbackDeliveryOpen(access.run), role: access.role });
+        const permission = permittedAssistance({ sessionKind: access.run.sessionKind, deliveryOpen: feedbackDeliveryOpen(access.run), role: access.role, seatedInContest: access.seatedInContest, reviewing: access.reviewing });
         if (permission.humanSplit === "locked_off") throw new ServerError("ASSISTANCE_WITHHELD", "Human-model distribution is withheld in this context");
         const available = await capabilities.get();
         if (available.providers.opponent === "none") throw new ServerError("ENGINE_UNAVAILABLE", "Human-model distribution is unavailable", { details: { engineId: "opponent-selector", retryAfterMs: 0 } });
@@ -1165,7 +1250,7 @@ export function createRestHandler(
       if (request.method === "GET" && route.action === "corpus") {
         if (corpusSource === undefined) throw new ServerError("CORPUS_UNAVAILABLE", "Corpus evidence is unavailable");
         const access = service.guidanceAccess(route.runId, principal, requiredString(url.searchParams.get("nodeId"), "nodeId"));
-        const permission = permittedAssistance({ sessionKind: access.run.sessionKind, deliveryOpen: feedbackDeliveryOpen(access.run), role: access.role });
+        const permission = permittedAssistance({ sessionKind: access.run.sessionKind, deliveryOpen: feedbackDeliveryOpen(access.run), role: access.role, seatedInContest: access.seatedInContest, reviewing: access.reviewing });
         if (permission.corpus === "locked_off") throw new ServerError("ASSISTANCE_WITHHELD", "Corpus evidence is withheld in this context");
         const authored = access.pack === undefined
           ? access.run.opponentPolicy

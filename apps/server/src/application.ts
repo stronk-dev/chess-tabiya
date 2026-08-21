@@ -46,6 +46,7 @@ import type { VoiceProvider } from "./guidance.js";
 import type { ReasoningReviewProvider } from "./external-voice.js";
 import { FixtureCorpusSource, LichessCorpusSource, type CorpusSource } from "./corpus.js";
 import { RepertoireService } from "./repertoire.js";
+import { ClassroomService } from "./classroom.js";
 import type { TtsProvider } from "./external-tts.js";
 import { FixtureTablebaseSource, LichessTablebaseSource, type TablebaseSource } from "./tablebase.js";
 
@@ -227,6 +228,10 @@ function isApiPath(pathname: string): boolean {
     pathname.startsWith("/progress/") ||
     pathname === "/repertoires" ||
     pathname.startsWith("/repertoires/") ||
+    pathname === "/classrooms" ||
+    pathname.startsWith("/classrooms/") ||
+    pathname === "/assignments" ||
+    pathname.startsWith("/assignments/") ||
     pathname.startsWith("/api/shared/") ||
     pathname.startsWith("/shared/") ||
     pathname === "/select-move"
@@ -368,7 +373,8 @@ export async function createApplication(
   });
   const live = new LiveSessionService(storage, { runService: service });
   const repertoires = new RepertoireService(storage, service, corpusSource);
-  const api = createRestHandler(service, selector, capabilities, identity, studio, live, shapes, shapeStudio, options.voiceProvider, options.voicePersona, corpusSource, repertoires, options.ttsProvider, options.reasoningReviewProvider);
+  const classrooms = new ClassroomService(storage, registry);
+  const api = createRestHandler(service, selector, capabilities, identity, studio, live, shapes, shapeStudio, options.voiceProvider, options.voicePersona, corpusSource, repertoires, options.ttsProvider, options.reasoningReviewProvider, classrooms);
   const staticDirectory =
     options.staticDirectory ?? join(process.cwd(), "apps", "web", "dist");
   const handler: RestHandler = async (request) => {

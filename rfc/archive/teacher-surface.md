@@ -1,6 +1,6 @@
 # RFC: Teacher surface — the roster is not a grant
 
-- **Status:** **accepted 2026-08-16.** Both owner questions are discharged and the cross-review
+- **Status:** **implemented 2026-08-22.** Both owner questions are discharged and the cross-review
   corrections are landed. **No item awaits an owner.** (Corrected 2026-08-16: this block read
   *"draft … ready to be marked accepted"* while the register read `accepted`, and the
   implementer correctly refused to build against the contradiction. That is claude's standing
@@ -1716,7 +1716,7 @@ a route that contradicts the table.
 
 | id | the obligation | owner | recorded when discharged | discharged |
 |---|---|---|---|---|
-| `D1` | Three edits owed to `rfc/archive/live-marker-quality.md` at landing: criterion 6's two sentences and §6.2's recorded owner cost | `teacher-surface`, self at landing | the landing commit | |
+| `D1` | Three edits owed to `rfc/archive/live-marker-quality.md` at landing: criterion 6's two sentences and §6.2's recorded owner cost | `teacher-surface`, self at landing | the landing commit | ✅ 2026-08-22 |
 
 ## Open questions
 
