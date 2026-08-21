@@ -1,6 +1,6 @@
 # RFC: Semantic evidence and local selection — preserve the fact before deciding to speak
 
-- **Status:** draft
+- **Status:** accepted
 - **Author:** codex (agent), for Marco
 - **Created:** 2026-08-21
 - **Design refs:** `design/03-product-breadth.md` §§Intelligence and explanation, B3, B4 and B9;
@@ -622,7 +622,10 @@ not paired with this draft because O6 remains unresolved (D680).
 10. The unchanged legacy R2 harness still reproduces its frozen authored/imported counts and
     108/108 rare-event retention. A separate F2 report runs the new eligible event set over those
     inputs and establishes its own named baseline; it may not claim the old 0.79/1.03 volumes as
-    new-event output. Any legacy or F2 baseline change is explicit and population-digested.
+    new-event output. The retained CC0 imported fixture has digest
+    `a10a233e8e51f6a0877f65cee417339080d2fd32cd22886f755f576c84fa58ec`, fills all nine 12-game
+    strata and yields 579 decisions; origin/range/digest metadata is executable. Any legacy or F2
+    baseline change is explicit and population-digested.
 11. Type/AST fixtures prove global lift, population rank and learned scores cannot enter the policy
     or comparator. Diagnostics require population ID, digest and date.
 12. Permuting candidates and alternatives yields byte-identical selected IDs/reasons. Ties follow
@@ -684,3 +687,6 @@ claim, it returns this RFC instead of filling the gap.
   moved `avoided` out of direct event signs into eleven denominator-bearing derived projections.
   This preserves F1's one-rendered-item/declared-evidence authority instead of inventing a parallel
   multi-source rendering object.
+- 2026-08-21: accepted on the owner's direction to continue after the second review and D684's
+  bounded external-fixture repair. No open product question remains inside F2; F5 still owns
+  production thresholds, modules, presets and defaults.

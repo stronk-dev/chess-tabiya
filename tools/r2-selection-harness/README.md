@@ -8,7 +8,8 @@ evidence compiler or presentation change. It answers platform-alignment R2 and D
 Two populations are evaluated:
 
 1. every authored spine transition returned by `tools/r1r2-primitives-harness/corpus.ts`; and
-2. a deterministic sample of rated standard Lichess games from the July 2026 public PGN prefix.
+2. the retained deterministic 108-game sample of rated standard Lichess games from the July 2026
+   public PGN prefix (`imported-sample.pgn`, provenance in `fixture.json`).
    The sample takes the first 12 complete legal games in each Bullet/Blitz/Rapid x
    1000-1399/1400-1799/1800-2199 cell, then plies 8, 16, 24, 32, 40 and 48 when present. A game
    contributes at most six decisions, so long games cannot dominate. This is a chronological
@@ -41,10 +42,12 @@ already found that no measurable pair beat its components.
 ## Run
 
 ```sh
-TABIYA_LICHESS_GAMES=/tmp/tabiya-games-head.pgn \
-  pnpm exec vitest run --config tools/r2-selection-harness/vitest.config.ts
+pnpm exec vitest run --config tools/r2-selection-harness/vitest.config.ts
 ```
 
-The external input is not committed. The output records its SHA-256 digest and selection counts.
-Without the environment variable, the external measurement test skips; the instrument's local
-unit tests still run under ordinary repository verification.
+The bounded CC0 input is committed because the original `/tmp` prefix vanished after the first
+measurement. `extract-fixture.ts` replays the predeclared first-12-per-cell selection over a source
+prefix. A 16 MiB compressed HTTP range from the official archive reproduced the same 108 games,
+579 decisions and every report line after the input digest; `fixture.json` records both prefix and
+fixture digests. `TABIYA_LICHESS_GAMES` may override the fixture for an explicit transfer run and
+`TABIYA_R2_OUTPUT` may redirect output so a comparison does not dirty the recorded baseline.

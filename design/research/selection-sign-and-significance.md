@@ -83,6 +83,13 @@ Bullet/Blitz/Rapid crossed with average player Elo 1000–1399/1400–1799/1800�
 8, 16, 24, 32, 40 and 48 when the game reaches them. That yields **108 games and 579 decisions**;
 each game contributes at most six, so long games cannot dominate. `[V]`
 
+**Reproducibility repair, 2026-08-21.** The original input prefix was temporary. A fresh bounded
+extraction from the official archive's first 16 MiB compressed range selected the same 108 games
+and reproduced every report line after the input digest byte-for-byte. The 243 KiB CC0 fixture,
+source/range/digest manifest and extraction helper are retained in
+`tools/r2-selection-harness/`; its fixture digest is
+`a10a233e8e51f6a0877f65cee417339080d2fd32cd22886f755f576c84fa58ec`. `[V]`
+
 This is a chronological prefix, not a random sample. It deliberately tests transfer across common
 ratings and time controls; it does not estimate the whole Lichess population or teaching value.
 

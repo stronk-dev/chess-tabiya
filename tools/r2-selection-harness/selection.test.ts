@@ -19,8 +19,10 @@ import {
 
 import { transitions } from "../r1r2-primitives-harness/corpus.js";
 
-const OUTPUT = new URL("./output.md", import.meta.url).pathname;
-const SOURCE = process.env.TABIYA_LICHESS_GAMES;
+const OUTPUT = process.env.TABIYA_R2_OUTPUT ?? new URL("./output.md", import.meta.url).pathname;
+const FIXTURE = new URL("./imported-sample.pgn", import.meta.url).pathname;
+const FIXTURE_META = new URL("./fixture.json", import.meta.url).pathname;
+const SOURCE = process.env.TABIYA_LICHESS_GAMES ?? FIXTURE;
 const TARGET_PLIES = new Set([8, 16, 24, 32, 40, 48]);
 const TOP_EIGHT = new Set([
   "named_structure",
@@ -427,6 +429,21 @@ function renderKinds(result: PopulationResult): readonly string[] {
 }
 
 describe("R2 selection, sign, and significance", () => {
+  it("pins the retained imported fixture to its CC0 origin and digest", () => {
+    const metadata = JSON.parse(readFileSync(FIXTURE_META, "utf8")) as {
+      readonly source: { readonly url: string; readonly licence: string };
+      readonly fixture: { readonly bytes: number; readonly sha256: string; readonly games: number; readonly decisions: number };
+    };
+    const fixture = readFileSync(FIXTURE);
+    expect(metadata.source).toMatchObject({
+      url: "https://database.lichess.org/standard/lichess_db_standard_rated_2026-07.pgn.zst",
+      licence: "CC0-1.0",
+    });
+    expect(fixture.byteLength).toBe(metadata.fixture.bytes);
+    expect(createHash("sha256").update(fixture).digest("hex")).toBe(metadata.fixture.sha256);
+    expect(metadata.fixture).toMatchObject({ games: 108, decisions: 579 });
+  });
+
   it("enumerates all four legal promotion outcomes", () => {
     const outcomes = legalOutcomes("8/P7/8/8/8/8/7k/4K3 w - - 0 1").map((item) => item.uci);
     expect(outcomes.filter((uci) => uci.startsWith("a7a8"))).toEqual(["a7a8q", "a7a8r", "a7a8b", "a7a8n"]);

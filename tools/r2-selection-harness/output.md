@@ -1,6 +1,6 @@
 # R2 selection harness output
 
-External PGN SHA-256: `5fb40add89903d24cfcf1d5dabc94074e6cfcefa867fdda432cb1049d25e1400`.
+External PGN SHA-256: `a10a233e8e51f6a0877f65cee417339080d2fd32cd22886f755f576c84fa58ec`.
 Imported selection: blitz/1000-1399=12, blitz/1400-1799=12, blitz/1800-2199=12, bullet/1000-1399=12, bullet/1400-1799=12, bullet/1800-2199=12, rapid/1000-1399=12, rapid/1400-1799=12, rapid/1800-2199=12; 579 fixed-ply decisions.
 Authored selection: 754 transitions from 50 current draft packs.
 

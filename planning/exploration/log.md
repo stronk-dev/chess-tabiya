@@ -3951,3 +3951,24 @@ The emulated amd64 workflow path passed typecheck and 803/806 tests; the repaire
 GitHub run passed all three (`pack-authoring`, `application`, `feedback-delivery`) and failed only
 the repaired census, so their budgets were not changed on non-representative timing evidence. A
 push-triggered hosted run remains the final D682 confirmation; this pass did not push.
+
+## 2026-08-21 — D682 hosted closeout and D684 F2 reproducibility finding
+
+The owner reported CI green; hosted verify run 32518662865 passed on `fb7a147`, closing D682.
+The F2 acceptance read then found its R2 imported input existed only as a deleted `/tmp` file. The
+digest and report survive, but the 108-game population cannot be rerun from repository bytes. D684
+holds F2 acceptance until a bounded CC0 fixture with origin/digest is retained; saved output alone
+is not external validation.
+
+## 2026-08-21 — D684 closed; R2 external arm is reproducible
+
+The official archive's first 16 MiB compressed range reproduced the same 108 selected games, nine
+12-game strata, 579 decisions and every original report line after the input digest. The 243 KiB
+CC0 fixture, extraction helper and exact origin/range/digest manifest are now retained with the R2
+harness. Its 3/3 tests pass without external input. F2's external-validation criterion is buildable.
+
+## 2026-08-21 — F2 accepted
+
+On the owner's direction to continue, `semantic-evidence-selection` is accepted after two
+buildability reviews and the D684 fixture repair. Implementation may now be planned. Acceptance
+does not choose production assistance modules, thresholds, presets or defaults; those remain F5.

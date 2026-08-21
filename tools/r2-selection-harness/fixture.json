@@ -1,0 +1,32 @@
+{
+  "schema": "tabiya.research.r2-fixture.v1",
+  "source": {
+    "url": "https://database.lichess.org/standard/lichess_db_standard_rated_2026-07.pgn.zst",
+    "licence": "CC0-1.0",
+    "compressedRange": "bytes=0-16777215",
+    "compressedBytes": 16777216,
+    "compressedRangeSha256": "ee4fff08e9e88cbcc0e650487310d1e70910c103d26b9cfa572bb1a41a50300f",
+    "decompressedPrefixBytes": 120061952,
+    "decompressedPrefixSha256": "6446d0ba6d613f4723875c8695078d4c67ea4ba39e709449da34617859831004",
+    "originalMeasurementInputSha256": "5fb40add89903d24cfcf1d5dabc94074e6cfcefa867fdda432cb1049d25e1400"
+  },
+  "fixture": {
+    "path": "imported-sample.pgn",
+    "bytes": 248593,
+    "sha256": "a10a233e8e51f6a0877f65cee417339080d2fd32cd22886f755f576c84fa58ec",
+    "games": 108,
+    "decisions": 579,
+    "strata": {
+      "blitz/1000-1399": 12,
+      "blitz/1400-1799": 12,
+      "blitz/1800-2199": 12,
+      "bullet/1000-1399": 12,
+      "bullet/1400-1799": 12,
+      "bullet/1800-2199": 12,
+      "rapid/1000-1399": 12,
+      "rapid/1400-1799": 12,
+      "rapid/1800-2199": 12
+    }
+  },
+  "equivalence": "Every generated report line after the input digest matches the original R2 output byte for byte."
+}

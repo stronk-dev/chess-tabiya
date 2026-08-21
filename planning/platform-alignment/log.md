@@ -810,3 +810,29 @@ Append-only. Record research, rulings, RFC transitions, implementation closeout 
   `application.test.ts` and `feedback-delivery.test.ts` all passed there; the run's sole failure was
   the now-repaired expression census. They are not widened on emulator-only evidence.
 - The remaining proof is the real push-triggered GitHub run. No push was performed.
+
+## 2026-08-21 — Hosted CI confirmed; F2 fixture residue found
+
+- Owner reported the pushed workflow green; verify run 32518662865 passed on `fb7a147`. D682 is
+  closed with hosted evidence.
+- Final F2 buildability review found D684: the R2 imported result retained its digest and output but
+  not `/tmp/tabiya-games-head.pgn`. Criterion 10 cannot require a rerun over vanished bytes. Repair
+  the bounded CC0 fixture/origin before acceptance; do not weaken “external validation” to a saved
+  Markdown number.
+
+## 2026-08-21 — D684 closed with a bounded CC0 fixture
+
+- Downloaded only bytes 0–16,777,215 of the official July 2026 archive and extracted the
+  predeclared first twelve legal games in every speed/rating cell.
+- The retained 248,593-byte fixture contains 108 games, fills all nine cells, yields 579 decisions,
+  and reproduces every original R2 report line after the input digest byte-for-byte.
+- Added the extraction helper, source/range/digest manifest and a fixture-integrity test. R2 now
+  runs without an environment variable; 3/3 harness tests pass. D684 is closed.
+
+## 2026-08-21 — F2 accepted after buildability and reproducibility repair
+
+The owner directed work to continue after hosted CI passed. With two buildability reviews complete
+and D684 closed, `semantic-evidence-selection` is accepted. Its implementation boundary is 22
+direct plus eleven derived semantic projections, research-only eligibility/policy, a complete local
+alternative selector and D668's source-adapter seal. F5—not F2—still owns learner-visible modules,
+thresholds, presets and defaults.
