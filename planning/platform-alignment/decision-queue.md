@@ -11,6 +11,11 @@ owner (or by claude on that ruling). Planning prose is not an intent substitute.
 `intent-amendment-handoff.md` is the surgical O1-O4/O13 author packet. It names the exact stale
 intent, required amendment and boundary that must remain open; it does not itself satisfy law 5.
 
+**Process predecessor ruled 2026-08-21 (D648):** the owner approved all five recommended answers
+for `shared-resource-registers` Q1/Q2 and `rfc-lifecycle-completion` Q1-Q3. Owner decision is no
+longer a blocker; Claude's HEAD refresh, criterion reconciliation, cross-review and acceptance of
+the two drafts remain required before implementation.
+
 | ID | State | Decision | Evidence required | Intent home | What the ruling must say |
 |---|---|---|---|---|---|
 | O0 | RULED | Build bottom-up; hold scale content | D560/D563 | `design/00`, `design/04` if owner wants the ruling mirrored | Research→design→RFC→implementation; Gate F hold remains active |

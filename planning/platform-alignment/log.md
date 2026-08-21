@@ -565,3 +565,15 @@ Append-only. Record research, rulings, RFC transitions, implementation closeout 
 - Reproduced D644: criterion 20 fails on 46/67 projected backing rows because it forbids words in
   authored principle fields C8 requires rendered verbatim. Prepared a narrow author correction;
   no authored content, schema or protected design changed. Stage 2 and D560 remain untouched.
+
+## 2026-08-21 — owner approved the five process-RFC recommendations
+
+- D648 records approval of `shared-resource-registers` Q1/Q2 and
+  `rfc-lifecycle-completion` Q1–Q3 exactly as recommended.
+- Owner decision is no longer a blocker. Claude must still refresh both drafts against HEAD,
+  reconcile their criteria, cross-review them and accept them before implementation begins.
+- The same handoff retains the protected O1–O4/O13 intent amendments and explicitly preserves the
+  unresolved R3/R7/R8/R15 product questions.
+- Execution truth was refreshed: Feedback Stage 1 is landed; graduation's corrected mechanism and
+  read-only planner are next after its author correction, while D560 continues to block corpus
+  application and Feedback Stage 2.

@@ -49,7 +49,7 @@ describe("D641 minimum work-routing audit", () => {
       .filter((row) => !texts.some((text) => new RegExp(`\\b${row.id}\\b`, "u").test(text)))
       .map((row) => row.id)
       .sort();
-    expect(ROUTED_IDS).toHaveLength(74);
+    expect(ROUTED_IDS).toHaveLength(73);
     expect(unmentioned).toEqual(ROUTED_IDS);
   });
 
@@ -67,6 +67,7 @@ describe("D641 minimum work-routing audit", () => {
       "",
       "Pre-refresh ledger: 589 ids, 355 open. Seventy-five open ids had no living non-log planning or active-RFC mention.",
       "Intervention: D99 closed as a stale historical hazard; the other 74 receive exactly one primary destination below. Current ledger: 590 ids, 354 open after D641 closeout.",
+      "Current routed-open population: 73 after D614 closed in the root README repair.",
       "This proves no zero-mention residue remains after the refresh. It does not prove the other 280 open rows have one live, unique, non-stale owner; D487 and the future derived work register retain that stronger job.",
       "",
       "| destination | ids | action |",

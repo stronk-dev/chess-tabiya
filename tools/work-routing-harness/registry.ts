@@ -14,7 +14,7 @@ export const ROUTE_GROUPS = Object.freeze([
   { destination: "R3/F5 assistance modules", ids: ["D583", "D585", "D586", "D587", "D589", "D624", "D261"], action: "bounded module packets, deterministic absence/provenance and validated presets" },
   { destination: "R11/F8 bot policy", ids: ["D590", "D591", "D592", "D593", "D594", "D595", "D596", "D620", "D621"], action: "separate model/sampler/repertoire/style layers and finish blind review" },
   { destination: "R12/R13/F9 player metrics", ids: ["D597", "D598", "D599", "D600", "D601", "D602", "D603", "D625", "D441"], action: "literal metrics, persistent floors, import/privacy and longitudinal coaching" },
-  { destination: "R18/F12 release appliance", ids: ["D588", "D604", "D606", "D607", "D608", "D609", "D610", "D611", "D612", "D613", "D614", "D512"], action: "deterministic provider-off release, data/ops/rights/accessibility and live health" },
+  { destination: "R18/F12 release appliance", ids: ["D588", "D604", "D606", "D607", "D608", "D609", "D610", "D611", "D612", "D613", "D512"], action: "deterministic provider-off release, data/ops/rights/accessibility and live health" },
   { destination: "R14/O10/F10 campaign", ids: ["D356", "D297", "D298", "D299", "D301", "D302", "D303", "D304"], action: "owner pilot and campaign ruling; no implementation before closure" },
   { destination: "R3/R7/R8 capability watch", ids: ["D559", "D623"], action: "Review Map and theory/guidance hands-on studies; uniqueness claims corrected" },
   { destination: "feedback-delivery Stage 2 / F3", ids: ["D520", "D131"], action: "repair unsatisfiable tablebase census and preserve inference ceiling during binding wave" },

@@ -3747,3 +3747,12 @@ Exercising the examples found D647: `make shape-check` bundled TypeScript into E
 dynamic `fs` require before reading the shape. Its Makefile target now shares the external-TypeScript
 boundary already used by `expression-census`; the Carlsbad pack and shape examples both pass their
 respective checks (with the corpus's existing warnings preserved).
+
+## 2026-08-21 — process predecessor owner questions discharged
+
+The owner approved all five recommendations in the platform-alignment handoff: register the
+principle-entry schema now; place `tabiya-claims` immediately before `## Summary`; allow
+`implementing → awaiting` but not `accepted → awaiting`; retain discharged rows in archives with
+their SHA; and enforce both Active/root and Archive/filesystem set equality. D648 records the
+ruling. Neither process RFC is accepted by the ruling alone—Claude's HEAD refresh, criterion
+reconciliation and cross-review remain the next author action.

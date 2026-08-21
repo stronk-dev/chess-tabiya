@@ -16,7 +16,7 @@ dependency edge, they may not.
 | 0.2 | A1 capability reality audit | **DONE 2026-08-20** | `capability-reality-audit.md`; all 21 rows traced and map truth reconciled |
 | 0.3 | A2 interaction-state/K9 instrument | **DONE 2026-08-20** | `interaction-state-correctness.md` and disposable exact-UCI harness; K9/gates/ledger/log reconciled; no product code changed |
 | 0.4 | Close or explicitly return already-implemented RFCs | **PARTIAL:** four stale implementations closed | `live-marker-quality`, `dead-vocabulary`, `engine-leverage`, `vocabulary-wiring` archived; no other active RFC was misclassified complete |
-| 0.5 | Implement accepted incomplete RFC work | **BLOCKED by author/worktree coordination and named alignment gates** | Feedback Stage 1 needs D644's narrow criterion-20 author correction plus D643 matrix closeout. D642 then permits graduation's corrected mechanism/read-only planner, while D560 gates its 92-document apply/archive. Teacher waits on R15/O11 or amendment |
+| 0.5 | Implement accepted incomplete RFC work | **PARTIAL — Feedback Stage 1 LANDED 2026-08-21; next author/mechanism work named** | Feedback Stage 1 landed at `a64e6c5` with D643–D646 closed. D642 now permits graduation's corrected mechanism/read-only planner after its stale criterion is amended, while D560 still gates the 92-document apply/archive. Feedback Stage 2 remains behind D560. Teacher waits on R15/O11 or amendment |
 | 0.6 | A3/A4 detector semantics and evidence-topology baselines | **DONE 2026-08-20** | 18+6 detector-family conformance and 14-producer topology are executable; current production admits no universal learner family and has no compiled module/workflow join |
 | 0.7 | A5 workflow/default conformance | **DONE 2026-08-20** | Six technical profiles/54 raw controls collapse to one unnamed default; only 2/6 intended workflows bind directly and the session-kind ceiling is still invariant |
 | 0.8 | A6 research sufficiency join | **DONE 2026-08-20** | `research-sufficiency.md`; only F1/F12 are architecture-research-ready, both blocked by protected intent/process; every F2-F11 empirical predecessor named |
@@ -80,7 +80,9 @@ disposition rather than an implicit omission.
 Only the owner or claude-on-owner-ruling edits living intent. Apply O1–O13 in dependency order:
 
 - **READY FOR OWNER/CLAUDE:** `intent-amendment-handoff.md` covers already-ruled O1-O4/O13 and the
-  five process-RFC questions without resolving R3/R7/R8/R15 residues by implication.
+  five process-RFC questions without resolving R3/R7/R8/R15 residues by implication. **D648 now
+  records owner approval of all five process answers; Claude's author refresh/cross-review and the
+  protected O1-O4/O13 intent amendments are the remaining authority work.**
 
 1. evidence truth and selection;
 2. assistance/default workflows, theory and stable content primitives;

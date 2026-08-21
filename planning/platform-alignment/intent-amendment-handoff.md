@@ -136,20 +136,25 @@ default model; workflows have product opinions/presets and advanced controls rem
 
 ## Process-RFC owner rulings ready to record
 
+**OWNER APPROVED 2026-08-21 — all five recommendations below, without amendment (D648).** The
+questions are discharged. Claude may now record the answers in both RFCs, refresh every stale
+count/observation against HEAD, cross-review their criteria and accept them only if that review
+passes. This approval does not itself accept either draft and does not authorize implementation.
+
 These five questions are independent of the unresolved learner research. The recommendations are
 the drafts' own smallest choices, now strengthened by D638:
 
 | RFC | Question | Recommended ruling | Reason |
 |---|---|---|---|
-| `shared-resource-registers` Q1 | Register principle-entry schema now? | **Yes** | It is the only versioned schema whose constant is not test-bound to `$id`; four lines buy coverage before a claimant appears |
-| `shared-resource-registers` Q2 | Where does `tabiya-claims` live? | **Fixed metadata block immediately before `## Summary`** | One unambiguous parser/reader location |
-| `rfc-lifecycle-completion` Q1 | May `accepted` transition directly to `awaiting`? | **No; only `implementing → awaiting`** | No current reader needs the extra edge; accepted means code has not started |
-| `rfc-lifecycle-completion` Q2 | Keep discharged rows in archives? | **Yes, with discharge SHA** | Preserves history without looking live |
-| `rfc-lifecycle-completion` Q3 | Ship Active/filesystem parity in this RFC? | **Yes, widened to Active/root and Archive/filesystem set equality** | D638 is the concrete failure; a file can otherwise disappear from both registers |
+| `shared-resource-registers` Q1 | Register principle-entry schema now? | **APPROVED — Yes** | It is the only versioned schema whose constant is not test-bound to `$id`; four lines buy coverage before a claimant appears |
+| `shared-resource-registers` Q2 | Where does `tabiya-claims` live? | **APPROVED — Fixed metadata block immediately before `## Summary`** | One unambiguous parser/reader location |
+| `rfc-lifecycle-completion` Q1 | May `accepted` transition directly to `awaiting`? | **APPROVED — No; only `implementing → awaiting`** | No current reader needs the extra edge; accepted means code has not started |
+| `rfc-lifecycle-completion` Q2 | Keep discharged rows in archives? | **APPROVED — Yes, with discharge SHA** | Preserves history without looking live |
+| `rfc-lifecycle-completion` Q3 | Ship Active/filesystem parity in this RFC? | **APPROVED — Yes, widened to Active/root and Archive/filesystem set equality** | D638 is the concrete failure; a file can otherwise disappear from both registers |
 
-If the owner approves these five recommendations, Claude can mark the questions answered, refresh
-stale counts/observations, cross-review both RFCs, and accept only after their criteria match HEAD.
-Approval does not accept F1 or F12; it only clears the process predecessor.
+Claude can now mark the questions answered, refresh stale counts/observations, cross-review both
+RFCs, and accept only after their criteria match HEAD. Approval does not accept F1 or F12; it only
+clears the process predecessor.
 
 ## Required closeout for the author pass
 
@@ -172,4 +177,3 @@ Approval does not accept F1 or F12; it only clears the process predecessor.
 > in the same commit. Do not draft F1/F12 or implement product code. Separately record the five
 > process-RFC recommendations only if Marco explicitly approves them. Report any old intent that
 > cannot be reconciled without a new owner choice instead of silently choosing.
-
