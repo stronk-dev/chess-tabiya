@@ -1,6 +1,6 @@
 # RFC: Portable account data and dependency-aware deletion
 
-- **Status:** draft
+- **Status:** draft — buildability review 2026-08-22 corrected D711–D714; ready for independent review
 - **Author:** Codex on the owner's 2026-08-21 retention ruling
 - **Created:** 2026-08-21
 - **Design refs:** `design/02-product-shape.md` deployment axis and appliance clauses;
@@ -65,9 +65,13 @@ Out of scope:
 ### 1. One exhaustive durable-data inventory
 
 `apps/server/src/account-data.ts` owns `ACCOUNT_DATA_INVENTORY`. Each entry names the storage table
-or non-table durable store, ownership/join rule, export projection and deletion disposition. A test
+or non-table durable store, ownership/join rule, export projection and deletion disposition. For
+every identity-bearing table it also names each learner/account column and one exact transform:
+`delete_row`, `set_null`, `legacy_identity`, or `deletion_scoped_key`. A test
 reads `sqlite_schema`, excluding only `sqlite_*`, and fails when any application table has no entry or
-one table has two entries. Future browser persistence holding learner history must add a named
+one table has two entries. A second set-equality test reads table metadata and the known JSON identity
+field registry and fails when an identity-bearing column or payload field has no transform, or when
+the declared transform contradicts its foreign-key action. Future browser persistence holding learner history must add a named
 non-table entry in the same inventory.
 
 The initial inventory has these semantic classes. This is a classification of all current durable
@@ -153,7 +157,10 @@ format becomes a shared versioned resource and must earn a register before it ch
 
 - Every run owned by the learner is exported from its stored snapshot, including its complete event
   log. A quarantined or older-schema snapshot is exported losslessly with `replayable: false` and an
-  error code; export never drops it merely because the current runtime cannot project it.
+  error code; export never drops it merely because the current runtime cannot project it. The
+  snapshot field is a closed union: `{kind:"parsed", value: StoredRunDocument}` for valid JSON or
+  `{kind:"raw", utf8:string, diagnostic: StoredRunDiagnostic}` for invalid/unprojectable stored
+  text. The raw arm preserves the exact stored UTF-8 string; it is never parsed by the browser.
 - Imported source is embedded beside its owned run. The same bytes do not appear in a second section.
 - For a run owned by somebody else, `sharedAccess` includes only the relationship and the learner's
   own contributions. It does not clone the other account's snapshot into this bundle.
@@ -226,9 +233,9 @@ method reimplements its predicates.
 
 #### 4.1 Private versus genuinely shared runs
 
-For a run owned by the departing learner, `externalDependency` is true iff either:
+For a run owned by the departing learner, `externalDependency` is true at the plan timestamp iff either:
 
-1. a current `run_grants` row names a different authenticated learner; or
+1. a non-expired `run_grants` row names a different authenticated learner other than `__legacy`; or
 2. `run_derivations` names the run as a source and the derived run is currently owned by a different
    authenticated learner.
 
@@ -274,9 +281,12 @@ Inside the same transaction:
    source bytes/headers and private repertoire links are deleted;
 6. summary/title metadata that identifies the account becomes a neutral “Shared run from deleted
    account” projection; the event log and moves remain unchanged;
-7. typed live/social identity fields are scrubbed: learner-id foreign keys follow their explicit
-   null/cascade rule, handle arrays/invitations remove the departing handle, and known identity fields
-   in journal payloads become the tombstone marker. Blind string replacement is forbidden.
+7. typed live/social identity fields are scrubbed through the inventory's declared transform:
+   nullable learner foreign keys become null, cascade-owned contributions delete, required retained
+   foreign keys use `__legacy`, and non-FK retained classroom identities use the deletion-scoped key;
+   handle arrays/invitations remove the departing handle, and every registered identity field in
+   journal payloads becomes the tombstone marker. Blind string replacement is forbidden, and an
+   unregistered identity-bearing column or payload key fails before mutation.
 
 Because no real host or writer remains, a surviving reader can read/export the tombstone but cannot
 commit, transfer the lease, mint links, reopen the session or change grants. Tests exercise each verb;
@@ -342,6 +352,13 @@ under existing uniqueness constraints. It is generated only while applying the t
 not part of the deterministic preview. The preview names each retained classroom and submission
 count.
 
+The read-only promise is an application change, not a storage assumption: classroom detail/list
+projectors admit an archived classroom only to a surviving active member and label it archived;
+every member, assignment, submission and scheduling mutation refuses it. The Live classroom surface
+renders the retained roster/assignment/submission history without actionable controls. The current
+`ClassroomService.#memberRecord` blanket archived-room refusal must therefore be split into explicit
+read and mutation guards.
+
 ### 5. Account and run UX
 
 The Account region becomes a guided lifecycle panel, not another settings matrix:
@@ -384,7 +401,7 @@ without requiring a reload. Failures retain the preview and explain whether it b
 
 ### 7. Implementation surface
 
-The table's unit is one module or route/UI family with a distinct responsibility; total **12**.
+The table's unit is one module or route/UI family with a distinct responsibility; total **14**.
 
 | # | Surface | Required change |
 |---:|---|---|
@@ -398,8 +415,10 @@ The table's unit is one module or route/UI family with a distinct responsibility
 | 8 | `apps/web/src/lib/api.ts` | opaque export download and typed preview/delete calls |
 | 9 | `apps/web/src/lib/AssistanceSettings.svelte` or extracted Account panel | guided export/preview/confirm UX and corrected disclosure |
 | 10 | run-list/run-action client surface | per-run preview/delete entry and list/cache update |
-| 11 | server/component/browser tests plus R18 harness | inventory, classifier, rollback, deterministic export and user-visible flows |
-| 12 | `docs/identity-and-authorization.md` plus data-lifecycle documentation | canonical shipped behavior, bundle format, backup caveat and operator-facing semantics |
+| 11 | classroom service/routes and Live classroom surface | surviving-member read-only archived projection; every archived mutation refused; deleted identities rendered without exposing keys |
+| 12 | Pack Studio and Shape Studio registration confirmations | before publication, warn that immutable authored bytes and attribution survive later account deletion |
+| 13 | server/component/browser tests plus R18 harness | inventory, classifier, rollback, deterministic export and user-visible flows |
+| 14 | `docs/identity-and-authorization.md` plus data-lifecycle documentation | canonical shipped behavior, bundle format, backup caveat and operator-facing semantics |
 
 The account panel may be extracted from `AssistanceSettings.svelte`; this RFC does not require
 account lifecycle to remain inside an assistance component.
@@ -442,8 +461,10 @@ No other deviation.
    and export it but every write, grant, link and reopen verb is refused. No real host/writer remains.
 9. **Derived dependency:** a foreign-owned derived run causes its source to tombstone; a wholly
    private derivation chain hard-deletes as a closure.
-10. **Shared scrub:** departing marks/import metadata/progress disappear, typed live identity fields
-    are scrubbed, event/move bytes remain unchanged and foreign-key check is green.
+10. **Shared scrub:** departing marks/import metadata/progress disappear, every identity-bearing
+    database column and registered journal payload field matches its declared transform, event/move
+    bytes remain unchanged and foreign-key check is green. Adding an unregistered identity field
+    makes the inventory guard fail.
 11. **Published artifact:** registered pack and shape bytes/digests remain exact, publisher account
     metadata is tombstoned, ids remain unclaimable, and unregistered drafts/playtests are absent.
 12. **Per-run deletion:** a private run hard-deletes; a shared run tombstones; unrelated runs and
@@ -451,7 +472,9 @@ No other deviation.
 13. **Classroom integration:** deleting a submitting learner preserves the current teacher's read
     grant on a run tombstone and scrubs the submission identity; deleting a teacher removes only that
     teacher's grant; shared classrooms archive read-only, private classrooms hard-delete, and
-    explicit classroom deletion still executes the original revocation contract.
+    explicit classroom deletion still executes the original revocation contract. A surviving member
+    can list/read the archived classroom, while every archived-room mutation is refused and no
+    deletion-scoped key appears in the response.
 14. **Stale preview:** adding a grant, publishing a draft, or changing a run after preview causes
     `DELETION_PREVIEW_STALE` and zero mutation.
 15. **Rollback:** injected failure after each deletion effect group leaves the pre-operation database
@@ -459,7 +482,8 @@ No other deviation.
 16. **Browser:** export downloads without body parsing; account and run previews render every nonempty
     category; password and digest are required; success signs out or updates the list; failure is
     recoverable. Keyboard and assistive navigation cover the full flow.
-17. **Disclosure:** UI and docs distinguish live deletion from backup expiry and warn that immutable
+17. **Disclosure:** UI and docs distinguish live deletion from backup expiry and both Pack Studio
+    and Shape Studio warn before registration that immutable
     shared/published authored bytes survive. They distinguish server account data from device-local
     preferences, clear the confirming browser, and never claim remote-browser or blanket erasure.
 18. **No import:** there is no account-import route or control, and object-level import behavior is
@@ -484,3 +508,6 @@ streaming or a bounded temporary file are implementation decisions constrained b
 - 2026-08-21: drafted from R18, the F12 split and owner ruling D656; specifies deterministic export,
   exhaustive inventory, stale-safe previews, per-run deletion and the private/shared/published
   retention classifier.
+- 2026-08-22: buildability review corrected D711–D714: identity transforms are exhaustive, invalid
+  stored run JSON has a closed raw representation, archived classroom history gains a real read-only
+  consumer, and both publication surfaces own the required retention warning.
