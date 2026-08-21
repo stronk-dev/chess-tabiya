@@ -95,6 +95,36 @@ must be authored, the row was split and the sentence sent to the authored side. 
 which no row records — and it must **not** be bulk-fixed, because the `blocking → resolved`
 writer does not exist yet.
 
+## 0-PROCESS. Both register RFCs ACCEPTED 2026-08-21 — implement them, RFC-1 first
+
+`rfc/shared-resource-registers.md` and `rfc/rfc-lifecycle-completion.md`, accepted on the
+buildability test after a **joint** cross-review (they are one contract). The owner's five
+process answers are recorded in their open-question sections with the rulings quoted.
+
+**The seam rule, which the review had to add because neither document stated it: ONE parser,
+FIRST LANDER HOSTS.** `status-parity` imports the §Active parser; if you land RFC-2's
+instrument before RFC-1's, the parser lives in `status-parity.mjs` and `register-check`
+imports it later — never two copies. This is why RFC-1 first is the recommendation, not a
+hard order.
+
+- **RFC-1** (`make register-check`): landed half derived from `schemaBuildInfo`, claimed half
+  from `tabiya-claims` blocks parsed **with the nested-fence rule** — the review found the
+  spec counted RFC-1's own example blocks as claims. Component-wise integer version compare
+  (shape-entry `0.3` vs pack `0.27` is the live trap). §6's landing list now includes the
+  run-schema row and the seven `EVIDENCE_KINDS` member rows — without them the check is red
+  at its own landing. **Discharges [[D653]]** (four live claims currently have no register
+  row anywhere) and closes [[D461]]/[[D497]]'s class.
+- **RFC-2** (`tools/status-parity.mjs`, six checks P1–P6): the state vocabulary is seven
+  tokens with the leading-token grammar (D516: byte-equality would false-positive 9 of 10);
+  **P4 reads exactly one thing after the separator** — the `awaiting` pointer; P3 is the two
+  owner-ruled set equalities plus a **severable** archive-status clause (retained for now).
+  `awaiting` has exactly one live case to fixture against: `feedback-delivery`. Discharge
+  rows keep their SHA on archival ([[D654]] is the motivating case).
+
+Both claim **nothing versioned**. The ledger flips ride in your implementing commits and name
+their rows ([[D416]]). After these two: the graduation-clearance mechanism + read-only
+migration report, then **F1**, per `planning/platform-alignment/execution-queue.md`.
+
 ## 0-KILL2. [[D537]] — the board still cannot be played, and two packs play the WRONG move
 
 **Your [[D507]] fix is complete and it is the right shape** — 0 of 64 squares occluded at all
