@@ -94,6 +94,10 @@ rewind adds value**.
   pawn ×4, weakened-Stockfish negative control). Authored-spine and statistical-book arms both
   refuse before review at 57/72 fallback plies. Zero human judgements exist, so status/verdict stay
   untested; this removes an instrument-preparation blocker, not the human gate.
+- **External arm descoped by owner 2026-08-21 (D649).** The 42-branch packet remains available for
+  owner use, which may reject an incoherent 1.0 profile but cannot establish the population claim
+  in H5/C5. R11's narrower policy-architecture question is mechanically and desk-complete; H5's
+  main statement remains untested rather than silently treated as passed.
 
 ## Kill criteria
 
@@ -198,7 +202,7 @@ Continue from vertical slice to product build when all of:
 | C2 | Users complete and compare branches in a majority of Plan Drill sessions | unmet | — |
 | C3 | Second-attempt objective performance improves meaningfully | unmet | — |
 | C4 | Delayed related-position performance beats the baseline format | unmet | — |
-| C5 | Opponent coherence judged acceptable for ≥80% of branches | unmet | `design/research/bot-policy.md` `[V]` completes the mechanical screen; the integrity-checked 42-branch blind packet/key/scorecard are ready, but no branch has yet been judged, so the denominator remains zero. |
+| C5 | Opponent coherence judged acceptable for ≥80% of branches | unmet; external arm out of 1.0 scope | `design/research/bot-policy.md` `[V]` completes the mechanical screen; the integrity-checked 42-branch blind packet/key/scorecard remain for owner use. D649 descopes recruited review, so the population denominator remains zero and no “human-like” clearance may be claimed. |
 | C6 | Pack authors can create a ~~reviewed~~ pack with a documented, repeatable workflow | 📊 evidence, qualified | nine waves ran the same documented loop with a falling first-run validator error rate (`design/research/pack-authoring-cost.md`). **"reviewed" is struck**: C1's reviewer pass was withdrawn 2026-08-13, so the word describes a stage that no longer exists |
 | C7 | Endgame restart and response latency feel effectively instant | mechanically met; owner feel untested | `design/research/endgame-latency-versus-cet.md` + `interaction-state-correctness.md` `[V]`: restart/rewind/reply budgets pass and the repaired exact-UCI floor is 90/90 live gestures with zero wrong/missing. “Feels effectively instant” still requires the owner's real-content session; automation clears the broken-surface blocker, not the experiential clause. |
 

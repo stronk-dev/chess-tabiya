@@ -855,3 +855,13 @@ Product modules/defaults, schemas and content remain explicitly out of scope.
   with three multi-record parent/descendant identities (D696).
 - O5 is ready. D697 splits O6's ready capability/migration/budget decision from final pilot
   membership, removing the F3→F7→Gate-F→R10 planning cycle without lifting Gate F or D560.
+
+## 2026-08-21 — O8 bot-policy handoff ready
+
+- Reconciled R11 with D649: mechanical/desk research is complete, recruited review is out of scope,
+  and the 42-branch blind packet remains an owner-use instrument rather than an external blocker.
+- Preserved H5/C5 as unmet population claims; neither owner use nor mechanical proxies silently
+  clear them.
+- Prepared `bot-policy/o8-handoff.md`: one versioned policy stack; human baseline, disclosed 250 cp
+  guard and measured pawn-heavy profile; controlled/observed/presentation separation; no invented
+  repertoire, memory or personality labels. O8 is ready and R13 is the next executable research job.

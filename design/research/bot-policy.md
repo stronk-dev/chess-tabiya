@@ -3,7 +3,8 @@
 **Question:** platform-alignment R11 — which bot-policy layers can change a declared behavior
 without destroying the human-policy signal or silently moving strength?
 
-**Status:** mechanical arm answered `[V]`; human-likeness and multi-ply coherence remain external.
+**Status:** mechanical and desk arms answered `[V]`; owner blind use remains under D649. Recruited
+participant review is out of scope, so no population-level human-likeness claim is made.
 
 ## Verdict
 
@@ -36,7 +37,8 @@ their predeclared mechanical gates. Capture/check ×3 and quiet-move ×3 change 
 only **+3.02 pp** and **+2.24 pp**, so both fail. `[V]`
 
 These are distribution facts, not findings that a guarded or pawn-biased bot feels human, plans
-coherently or is fun. H5 and C5 therefore remain unmet.
+coherently or is fun. H5 and C5 therefore remain unmet as population claims; their former external
+review arm is not a blocker to the narrower policy-architecture decision.
 
 ## 1. What competitors actually document
 
@@ -186,7 +188,8 @@ It also supports an explicit distinction between `observedTraits` computed from 
 `controlledTraits` promised by a policy. Chessiverse's Guardian→Savage measurement belongs to the
 first; this pass's pawn transform is evidence for the second, but only at one-move resolution.
 
-The following remain refused from an RFC until the residual experiment runs:
+The following remain refused from an RFC unless later owner use or a separately authorised
+experiment supplies the missing evidence:
 
 - “human-like,” “coherent,” “aggressive,” “solid,” “tricky” or similar product claims from these
   numbers alone;
@@ -196,9 +199,10 @@ The following remain refused from an RFC until the residual experiment runs:
 - clock-pressure behavior without a model/data source that accepts clock state;
 - a cross-game memory feature evaluated as same-position repeat arithmetic.
 
-## 7. Residual experiment for H5/C5
+## 7. Retained owner-use instrument for H5/C5
 
-R11 completes only after a blinded 10–20-ply arm. The smallest adequate next instrument is:
+D649 descopes recruited reviewers and keeps validation-by-owner-use. The prepared blinded
+10–20-ply arm is therefore retained as an owner-use instrument, not an R11 completion blocker:
 
 1. generate matched continuations from the same stratified starts under raw production Maia,
    guarded Maia, one mechanically retained trait arm, authored repertoire+guard, listed statistical
@@ -210,11 +214,11 @@ R11 completes only after a blinded 10–20-ply arm. The smallest adequate next i
    separately; collect the exact ply that breaks coherence;
 5. report strength/outcome, latency, failure and trait expression from instruments, never reviewer
    intuition;
-6. require ≥80% acceptable branches to clear C5, as already declared in
-   `planning/exploration/gates.md`.
+6. keep the declared ≥80% threshold as the boundary for any future population-level C5 claim;
+   owner use may reject a profile but cannot clear that population claim.
 
-This protocol should produce reviewable PGNs and a blind key before recruiting reviewers. The
-owner can be a pilot reviewer, but a single owner session cannot establish a population claim.
+The protocol already produced reviewable PGNs and a blind key. A single owner session can validate
+or reject the proposed 1.0 roster by use, but cannot establish a population claim.
 
 ## 8. Blind-set preparation result
 
@@ -223,7 +227,8 @@ strata. An offline validator replayed every UCI move, reproduced every SAN/PGN, 
 digests, required Maia identity wherever its packet was used, and re-derived fallback and
 Stockfish-loss aggregates. The final reviewer packet contains 42 branches: raw production Maia,
 `guard_250`, `pawn_x4_guarded`, and the weakened-Stockfish negative control. No reviewer result
-exists yet, so H5/C5 remain unmet. `[V]`
+exists yet, so H5/C5 remain unmet as population claims. That is an explicit limitation, not a
+remaining external dependency after D649. `[V]`
 
 Two planned arms refused themselves before review. The authored-repertoire arm fell off the pack
 spine on 57/72 controlled plies (79.2%). The statistical-book arm first exposed an instrument bug:

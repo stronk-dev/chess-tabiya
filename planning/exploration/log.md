@@ -4076,3 +4076,17 @@ R8's mechanical/desk arms are complete. `theory-drill/o5-o6-handoff.md` makes O5
 O6's compatibility/budget decision from final pilot membership. D697 records the former graph cycle:
 F3 waited on all of O6 while F7/Gate F/R10 waited downstream on F3. Gate F remains failed and the
 content scale hold remains active.
+
+## 2026-08-21 — R11 completion reconciled with the participant descope
+
+R11's mechanical and desk arms are complete: the production sampler reconstruction, five policy
+transforms, two refused book arms and the integrity-checked 42-branch packet all stand. D649 had
+already moved recruited blind review out of scope while retaining owner use, but the research and
+execution queues still treated recruitment as a blocker. D698 records and closes that planning
+contradiction.
+
+The population claims remain deliberately unmet: owner use may reject an incoherent profile but
+cannot establish H5/C5. O8 is now ready on the narrower evidence the product actually has. Its
+handoff recommends one composable policy stack, an honest baseline/guarded/pawn-heavy 1.0 roster,
+separate controlled/observed/presentation traits, explicit band calibration and no repertoire,
+memory or named style claim until its own evidence exists.

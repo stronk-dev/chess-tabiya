@@ -30,7 +30,7 @@ action; measurement instruments do not share the tested defect's assumption.
 | Order | Job | State | Deliverable / closeout |
 |---|---|---|---|
 | 1.1 | R4 knowledge retrieval experiment | **DONE 2026-08-20** | 17 registered sources, 55 passages, 144 queries, six arms and lifecycle controls landed; semantic extraction refused for 1.0 |
-| 1.2 | R11 bot-policy research | **BLIND PACKET READY 2026-08-20; EXTERNAL review remains** | 42 validated blind branches, separate key and scorecard landed; recruit ≥5 reviewers and obtain ≥3 independent scores/branch |
+| 1.2 | R11 bot-policy research | **MECHANICAL/DESK DONE 2026-08-20; O8 READY; owner use remains** | 42 validated blind branches, separate key and scorecard landed; D649 descopes recruited review, so the packet remains for owner use and no population human-likeness claim is made |
 | 1.3 | R18 self-host/privacy/accessibility/rights audit | **MECHANICAL/CODE/DESK DONE 2026-08-20; participant proof external** | Negative 1.0 result, O13 choice set, D605-D615 and F12 acceptance inputs landed |
 | 1.4 | Competitor capability-watch instrument + targeted forum sweep | **DONE 2026-08-20; hands-on distributed downstream** | 63-row source snapshot → 22 canonical representatives, 19 capabilities, 29 checked evidence/routing rows; 38/58 love/hate cells evidenced, 20 explicit targeted-search misses, zero unchecked; R3/R7/R8/R11/R15-R17 own comparable hands-on |
 | 1.5 | R9 learner/coach protocol | READY to design; **EXTERNAL to complete** | Preregistered script/tasks/sample; participant work only with owner authority |
@@ -57,7 +57,7 @@ schema evolution.
 | 3.1 | R7 Review Map/re-entry/share study | **MECHANICAL/DESK ARMS DONE; O7 + owner use remain** | Same-mainline three-policy instrument establishes local→whole-game selection and opening-only recorded-eval reach; owner use remains shared exit |
 | 3.2 | R8 theory↔drill workflow | **MECHANICAL/DESK ARMS DONE; O5/O6 handoff next** | Exact-join prototype passes with source preservation, transposition sets and honest empty; D692-D696 pinned; owner use remains exit |
 | 3.3 | R12 player metrics | **SHORT-SESSION ARM DONE 2026-08-20; longitudinal transfer external** | 12/16 literal metrics retained with 25–200-game floors; individual vector passes, archetypes fail; production admission remains O2/O9 and R13 |
-| 3.4 | R13 grounded coaching aggregates | WAIT | R7/R12 |
+| 3.4 | R13 grounded coaching aggregates | **READY NOW** | R7 mechanical/desk and R12 short-session arms complete; test cited recurring-pattern summaries and actions without diagnosis |
 | 3.5 | R14 campaign experiential closure | **PROTOCOL READY; board and real-R3-packet blockers cleared; WAIT on owner session** | three-phase owner pilot preregistered; no campaign UI or result manufactured |
 | 3.6 | R10 learning-effect experiments | WAIT/EXTERNAL | representative pilot and participants |
 
