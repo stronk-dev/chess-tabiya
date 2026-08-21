@@ -95,6 +95,27 @@ must be authored, the row was split and the sentence sent to the authored side. 
 which no row records — and it must **not** be bulk-fixed, because the `blocking → resolved`
 writer does not exist yet.
 
+## 0-ACCEPTED-2026-08-21. F1 and accessible-board-input — both accepted, implement in this order
+
+1. **F1 (`rfc/evidence-contract-manifest.md`)** — the producer→projection→consumer spine. Read the
+   cross-review changelog first: the consumer census is **twenty-three** operations (five were
+   missing, including the **public shared-story route**), `ConsumerDeclaration` gained
+   `disposition` (fixture: `assistance.arrows` as `experimental`), and **emission status is pinned
+   to the executable census** — a declarations-only closure test is the shared-assumption failure.
+   **Owner nod recorded 2026-08-21: the §10.1 "Evidence inspector" relabel IS approved at landing.**
+   Seams: your `assistance-controls` D308 reveal wiring adds a consumer call site that must take a
+   literal consumer ID; `feedback-delivery`'s landing order affects row 19's anchors;
+   `pack-population-provenance` inherits the `citable_text` manifest declaration at its landing.
+2. **accessible-board-input** — independent, parallel-safe. The corrected matrix is **150 = 6
+   packs × 5 A2 viewports × 5 modes** with the 18 click cells the never-deleted floor; the state
+   machine now has `awaiting_promotion`; semantic enumeration **follows `showDests`** ([[D659]] —
+   never widen the ceiling from a projection); Alt+C matches on `event.code`. Holds in `awaiting`
+   on the owner-run discharge — that does not block implementation, only archival.
+
+**D650 is closed** — the three stale intent residuals are corrected and `make intent-parity`
+guards them. **[[D660]]**: when F2 is drafted it must ingest D542/D543 measured lift; the row owns
+that seam until then — do not absorb selection into F1.
+
 ## 0-PROCESS. Both register RFCs ACCEPTED 2026-08-21 — implement them, RFC-1 first
 
 `rfc/shared-resource-registers.md` and `rfc/rfc-lifecycle-completion.md`, accepted on the
