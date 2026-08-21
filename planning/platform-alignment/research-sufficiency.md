@@ -1,6 +1,6 @@
 # Research sufficiency audit
 
-**Run:** 2026-08-20; readiness delta re-derived 2026-08-21 after F1
+**Run:** 2026-08-20; readiness deltas re-derived 2026-08-21 after F1 and R17
 
 **Ledger:** D639
 
@@ -12,10 +12,10 @@ Research is **not sufficient for the full 1.0 vision**, but “do more research�
 accurate description of the whole queue.
 
 - **Five of 19 research nodes are internally complete:** R1, R2, R4, R5 and R6.
-- **Six have useful mechanical evidence but still need owner/external judgement:** R3, R7, R8,
-  R11, R12 and R18.
+- **Eleven have completed useful mechanical/code/desk work and retain owner use or a ruling:** R3,
+  R7, R8 and R11–R18.
 - **R9's recruited-participant protocol is out of scope by D649**, not pending.
-- **Seven are blocked behind named predecessors:** R10, R13-R17 and R19.
+- **R10 waits on the representative pilot; R19 is deferred pending explicit post-1.0 promotion.**
 
 At the original run, only two candidate RFC nodes had sufficient architecture research:
 
@@ -36,7 +36,13 @@ F2–F11 sentence above has expired. The graph now resolves as follows:
   ruling and rewrite budget remain; F3 may not choose either by implication.
 - **F4's empirical gate is complete.** R4/R8/R18 support the offline provenance compiler and local
   exact/FTS bundle; O5 is ready for owner ruling.
-- F4–F11 retain their named research/decision predecessors.
+- F4–F11 retain their named owner-ruling, owner-use and composition predecessors; R13/R15–R17 no
+  longer need another repository census.
+
+**Later 2026-08-21 delta:** R13 and R15–R17 have completed their mechanical/code/desk arms.
+O9/O11/O12 now have bounded handoffs; recruited participants remain out of scope under D649 and
+owner use remains the UX/quality exit. R17 recommends no native public pool in 1.0, so R19 is
+deferred pending an explicit post-1.0 promotion rather than described as research debt.
 
 This correction is D680. It also corrects D660: the later R2 experiment supersedes the older
 corpus-global 294× lift proposal as product selection policy. Lift remains diagnostic; O3's local
@@ -52,6 +58,7 @@ legal-alternative rule is the selector input after semantic eligibility.
 | R5 | Keep the deterministic renderer normative; make the LLM optional wording only | That any current model improves comprehension |
 | R6 | Require capability negotiation, dependency-aware migration and a primitive-complete pilot | That the current pack foundation is stable enough for content scale |
 | R15 + R16 | Compose Coach and Streamer from shared run/evidence modules; keep the accepted Teacher consent model; add an explicit Academy profile; keep provider chat bridges outside the truth path | Exact default density/names and whether owner use finds the workflows legible |
+| R17 | Preserve native casual learning matches; use a typed optional provider round trip for clocked/rated/public play; make local bot events versioned collections of ordinary reviewable runs | O12's scope approval, live provider reliability and owner-use journey quality |
 | R18 | Specify the owner-ruled Choice-C appliance architecture | Final accessibility acceptance on real assistive/physical devices |
 
 ## What still requires people rather than another code census
@@ -65,7 +72,7 @@ legal-alternative rule is the selector input after semantic eligibility.
 | R11 | Owner compares the prepared blind bot branches | D649 descopes recruited reviewers; owner use may reject a profile but cannot create a population human-likeness claim |
 | R12/R13 | Short-session metrics remain stable longitudinally and support grounded action | A descriptive correlation is not yet a durable coaching claim |
 | R14 | Owner experiences the campaign wrapper over real admitted evidence | The unresolved questions concern felt scarcity, retry pressure and loop pull |
-| R16/R17 | Owner uses the composed Stream view; R17 still studies competitive player/event boundaries | Stream's shared-truth mechanics are established; clocks, fair play and public-event moderation remain separate social properties |
+| R16/R17 | Owner uses the composed Stream and provider-return journeys | Stream mechanics and the social trust boundary are established; account-connection/recovery language and felt integration remain experiential |
 
 ## Dependency effect
 
@@ -77,7 +84,8 @@ The productive non-participant work is therefore narrow and concrete:
    only after the owner rulings; final Gate-F pilot membership still waits on F5/F7 and use;
 4. draft F12 after its Choice-C intent amendment, while preserving participant accessibility as a
    release acceptance gate;
-5. prepare/recruit the R3 and R11 external sessions, since they unlock the widest downstream cuts;
+5. run the retained owner-use R3/R11/R17 protocols when their product surfaces exist; recruited
+   sessions are out of scope under D649;
 6. do not spend time on another broad competitor list or detector census unless a new product adds
    a genuinely new capability to the existing watch.
 

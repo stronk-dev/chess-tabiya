@@ -4126,3 +4126,26 @@ the ownership and scope corrections.
 R15/R16's mechanical/code/desk arms are complete and O11 is ready. The handoff recommends explicit
 Academy and Stream compositions, the generic bounded adapter boundary, no 1.0 editorial Stream
 delay, no per-viewer truth and no class-wide progress/weakness dashboard. R17 is now executable.
+
+## 2026-08-21 — R17 social-play boundary and O12 handoff complete
+
+The current product has two unequal social paths. Native friend play is a complete casual learning
+primitive: side-to-move possession, authorship, one-use joining and consensual
+pause→rehearse→compare all remain in one run. It has no clocks, ratings, public matchmaking,
+resignation/draw verbs, moderation or fair-play enforcement and must not imply them. Position Arena
+preserves imported branches but its external half is only an opaque HTTPS string plus manually
+pasted PGN; no provider, challenge/game identity or automatic result return exists. D706-D707 own
+those boundaries.
+
+Official Lichess OpenAPI 2.0.165 already exposes the expensive competitive substrate: challenge
+terms, clocks, FEN input, public seeks, event/game streams, export and bulk pairing, with OAuth and
+rate/stream constraints. The disposable R17 harness proves two minimum contracts: a complete
+source→provider→returned-run identity, and a local bot event whose entrants carry exact policy
+versions and whose games are ordinary Review runs. URL-only and unversioned controls refuse. The
+first instrument run found and repaired two checker defects before the result was accepted.
+
+R17's mechanical/code/desk arms are complete. O12 is ready on the costed hybrid recommendation:
+retain private native casual matches; implement an optional Lichess-first typed round trip with
+manual provider-off fallback; admit a bounded local bot event only after O8/F8; and keep native
+public pools, human tournaments, anti-cheat and federation outside 1.0. D708-D710 carry the event,
+scope and provider findings. R19 is no longer generic debt; it waits on explicit post-1.0 promotion.

@@ -890,3 +890,19 @@ Product modules/defaults, schemas and content remain explicitly out of scope.
 - Reconciled D649 and the accepted RFC: external recruitment no longer blocks implementation;
   O11 owns a scoped composition amendment, not a redesign or revocation.
 - `professional-workflows/o11-handoff.md` makes O11 ready; R17 is the next research node.
+
+## 2026-08-21 — R17 human play and social-event boundary complete
+
+- Reproduced the native/private and external/Arena paths without upgrading a URL or PGN to
+  provider identity. Native friend matches retain one run, authorship and pause→rehearse→compare;
+  they explicitly have no clock, rating, public pool, resignation/draw event or fair-play claim.
+- Verified official Lichess OpenAPI 2.0.165 capabilities for challenge, clock/FEN terms, public
+  seeks, event/game streams, export and bulk pairing. Public competitive infrastructure can remain
+  provider-owned while Tabiya owns the learning round trip.
+- The focused two-test instrument initially caught two errors in itself—line-wrapped docs were
+  misread and empty bot-policy versions were admitted—then passed after both controls were fixed.
+- D706-D710 record the missing provider/game identity, native casual label, versioned bot-event
+  envelope, hybrid recommendation and existing provider substrate.
+- `social-play/o12-handoff.md` makes O12 ready: private native casual play + optional Lichess-first
+  typed round trip + local versioned bot events after O8/F8; no native public pool, human
+  tournament, anti-cheat or federation in 1.0. R19 now waits on explicit post-1.0 promotion.

@@ -69,8 +69,8 @@ schema evolution.
 |---|---|---|---|
 | 4.1 | R15 coach workflow | **MECHANICAL/CODE/DESK DONE 2026-08-21; O11 READY** | Current synchronous jobs + accepted async contract reconciled; owner use remains |
 | 4.2 | R16 streamer/broadcast workflow | **MECHANICAL/CODE/DESK DONE 2026-08-21; O11 READY** | Overlay/role/vote/adapter/delay matrix complete; owner use remains |
-| 4.3 | R17 human play/tournaments/social trust | **READY NOW** | R11/R15 mechanical predecessors and R18 platform edge done |
-| 4.4 | R19 federation | POST-1.0 WAIT | R17 plus owner promotion |
+| 4.3 | R17 human play/tournaments/social trust | **MECHANICAL/CODE/DESK DONE 2026-08-21; O12 READY** | Native/Arena matrix, official Lichess substrate and exact external-game/local-bot-event envelopes landed; owner use remains |
+| 4.4 | R19 federation | POST-1.0 WAIT | R17 recommends no 1.0 native public pool; run only after explicit O12/post-1.0 promotion |
 
 **Phase exit:** O11–O13 ruled; every “one platform” claim has an included, adapter or deferred
 disposition rather than an implicit omission.

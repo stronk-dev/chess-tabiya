@@ -75,9 +75,9 @@ These can run in parallel after A1 identifies the exact symbols and fixtures.
 |---|---|---|---|---|---|
 | R15 | **MECHANICAL/CODE/DESK COMPLETE 2026-08-21; owner use remains** | **Teacher/coach workflow** — `design/research/professional-workflow-conformance.md` | Reconciled synchronous Live jobs and accepted async Teacher contract against current role/default/evidence paths. D649 descopes recruited participants. | Shared-truth Teach Live and Review Submission compositions are specified; Academy profile gap and accepted-RFC ownership are explicit. | O11 ready; Teacher implementation/amendment. |
 | R16 | **MECHANICAL/CODE/DESK COMPLETE 2026-08-21; owner use remains** | **Streamer/broadcast mode** — `design/research/professional-workflow-conformance.md` | Current 24-cell ceiling matrix and overlay/vote/adapter/delay conformance. Overlay has no provider path; provider bridge/editorial delay are separate absences. | Named Stream view composes from shared truth with withholding/attribution; no accidental evidence fork. | O11 ready; Streamer composition amendment. |
-| R17 | **READY NOW — R11/R15 predecessors mechanically complete** | **Human play, bot tournaments and social trust** | Compare native play, Lichess/Arena handoff and adapters on identity, clocks, fair-play boundaries, rematch/tournament flow, moderation, persistence and self-host cost. | Owner receives a costed native/adaptor/defer choice; no “one-stop platform” claim rests on a link that drops the learning context. | Human-play/tournament scope decision. |
+| R17 | **MECHANICAL/CODE/DESK COMPLETE 2026-08-21; owner-use integration remains** | **Human play, bot tournaments and social trust** — `design/research/social-play-and-event-boundary.md` | Current native/Arena census, official Lichess OpenAPI comparison and positive/negative external-game + bot-event identity prototypes. Native casual learning play is complete; URL/PGN handoff lacks provider identity/automatic return; public competitive infrastructure is expensive and available through an adapter. | Costed hybrid/native/handoff choice delivered; exact round-trip and local bot-event contracts pass; fair-play/federation boundaries explicit. | O12 ready; F11 after ruling. |
 | R18 | **MECHANICAL/CODE/DESK DONE 2026-08-20; participant accessibility external** | **Self-host, privacy, accessibility and rights inventory** — `design/research/release-platform-audit.md` | Clean provider-off and engine-on deployments, live Maia-loss injection, data deletion/export probes, built-image package/content census and Chromium AX/keyboard/responsive probes. Core rehearsal needs no cloud secret, but 1.0 fails on portable export/deletion, backup/update recovery, provider-health honesty, keyboard/assistive move entry, Tab traversal and distributed rights. | Internal exit met negatively; physical-device and screen-reader participant claims remain external and rerun against F12. | O13 ruled Choice C; F12 is not cleared. |
-| R19 | BLOCKED by R17 | **Federation/discovery protocol** | Research only if native multi-user play/community survives R17. Compare existing open protocols and moderation/identity costs before designing a new one. | Adopt an existing bounded protocol, define a justified minimal extension, or defer. | Post-1.0 unless owner explicitly promotes it. |
+| R19 | **DEFERRED pending O12 promotion** | **Federation/discovery protocol** | R17 recommends optional provider integration and no native public pool for 1.0. Research only if O12 promotes cross-instance discovery/community. | Adopt an existing bounded protocol, define a justified minimal extension, or defer. | Post-1.0 unless owner explicitly promotes it. |
 
 ## Cross-cutting capability watch
 
@@ -93,8 +93,8 @@ watch owns discovery and routing, not conclusions.
 ## What is executable now
 
 The capability-watch and targeted desk/forum follow-up are complete: zero signals remain unchecked
-and 20 explicit targeted-search misses preserve absence-of-evidence. R3, R7, R8, R11, R13, R15 and
-R16 have completed their mechanical/code/desk arms; D649 retains owner use and removes recruited
-participants as an implementation blocker without manufacturing population claims. O5–O9 and O11
-now have owner handoffs. R17 is the next executable research node; R14 remains an owner session;
+and 20 explicit targeted-search misses preserve absence-of-evidence. R3, R7, R8, R11, R13 and
+R15–R17 have completed their mechanical/code/desk arms; D649 retains owner use and removes
+recruited participants as an implementation blocker without manufacturing population claims.
+O5–O9 and O11–O12 now have owner handoffs. R14 remains an owner session;
 R10 remains downstream of the representative pilot. Scale content stays held by D560/Gate F.

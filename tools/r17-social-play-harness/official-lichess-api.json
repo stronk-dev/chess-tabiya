@@ -1,0 +1,41 @@
+{
+  "source": "https://lichess.org/api/openapi.yaml",
+  "retrievedAt": "2026-08-21",
+  "version": "2.0.165",
+  "operations": {
+    "challengeCreate": {
+      "path": "/api/challenge/{username}",
+      "capabilities": ["rated", "clock", "correspondence", "color", "variant", "fen", "challenge_identity", "rematch_rule"]
+    },
+    "challengeOpen": {
+      "path": "/api/challenge/open",
+      "capabilities": ["rated", "clock", "correspondence", "variant", "fen", "named_players", "challenge_identity", "rematch_rule"]
+    },
+    "apiBoardSeek": {
+      "path": "/api/board/seek",
+      "capabilities": ["public_opponent_discovery", "rated", "clock", "correspondence", "variant"]
+    },
+    "apiStreamEvent": {
+      "path": "/api/stream/event",
+      "capabilities": ["challenge_identity", "game_identity", "game_start", "game_finish"]
+    },
+    "boardGameStream": {
+      "path": "/api/board/game/stream/{gameId}",
+      "capabilities": ["game_identity", "live_moves", "clock", "result", "draw", "opponent_presence"]
+    },
+    "gamePgn": {
+      "path": "/game/export/{gameId}",
+      "capabilities": ["game_identity", "pgn", "clock", "opening", "provider_evaluation", "provider_accuracy"]
+    },
+    "bulkPairingCreate": {
+      "path": "/api/bulk-pairing",
+      "capabilities": ["event_identity", "game_identity", "clock", "rated", "fen", "pairings"]
+    }
+  },
+  "limits": [
+    "OAuth scopes are required for Board play, challenge writes, and bulk pairing.",
+    "Only one global event stream may be active per token.",
+    "Ongoing game exports are delayed by three moves to reduce cheat-bot use.",
+    "Bulk pairing requires OAuth tokens for every paired player."
+  ]
+}
