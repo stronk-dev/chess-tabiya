@@ -262,6 +262,7 @@ interface ConsumerDeclaration {
   readonly latency: { readonly mode: "sync" | "interactive" | "background" | "offline"; readonly maxMs: number | null };
   readonly budget: { readonly maxFacts: number | null; readonly maxForms: number | null };
   readonly providerOff: "available" | "honest_empty" | "unavailable";
+  readonly disposition?: { readonly kind: EvidenceDisposition; readonly reason: string };
 }
 
 interface EvidenceBinding {
@@ -356,7 +357,7 @@ The compiler raises one stable code per invariant and prints both declaration si
 | `EVIDENCE_PRODUCER_DUPLICATE` | `(producer id, version)` is unique | duplicate one producer |
 | `EVIDENCE_PROJECTION_DUPLICATE` | `(projection id, version)` is unique | two producers claim one projection version |
 | `EVIDENCE_PROJECTION_ORPHANED` | every projection has a binding or one explicit disposition with a reason | remove the final binding/disposition |
-| `EVIDENCE_CONSUMER_ORPHANED` | every consumer accepts at least one existing projection | name only a missing projection |
+| `EVIDENCE_CONSUMER_ORPHANED` | every consumer accepts at least one existing projection or carries one explicit disposition with a reason | name only a missing projection; give one consumer two dispositions |
 | `EVIDENCE_BINDING_UNDECLARED` | adapter, producer, projection and consumer all exist at exact versions | change one version by one |
 | `EVIDENCE_BINDING_WILDCARD` | IDs and versions are literal; no prefix, range or “latest” | use `rules.*` or omit a version |
 | `EVIDENCE_BINDING_WIDENS` | binding timing/role/session/form/answer sets, latency and budgets only narrow both endpoints | add `principal_variation` to a fact-only consumer or raise its fact budget |
@@ -377,6 +378,11 @@ semantics.
 1. `STRUCTURAL_FEATURE_KINDS` is set-equal to structural **predicate** declarations.
 2. Every actually emitted structural reading kind has a separate **reading** declaration. The seven
    matcher/reader mismatches are explicit dependencies or limitations, not one shared version.
+   **"Actually emitted" is established by an executable emission census over the committed fixture
+   corpus** (the D548 measurement style, `tools/d542-classifier-audit-harness/`), never by the
+   declaration under test — a closure test that reads only the declarations would share the
+   defect's assumption. A declared kind with zero census emissions (`pawn_count` at HEAD, 0
+   observations over 643 positions) compiles only with an explicit disposition naming that state.
 3. `TRANSITION_FEATURE_KINDS` and every emitted subkind/direction leaf are covered by reading
    declarations. The initial versions state that affected squares/subjects are absent; none is
    admitted as an operand-preserving learner event.
@@ -397,9 +403,10 @@ F3 consumes this graph for migration planning.
 The implementation first derives the full current consumer census from production call sites and
 checks it in as literal declarations. At minimum it covers the five generic sinks pinned by A3 and
 the other A4 paths: server guidance packet assembly, deterministic voice, external voice,
-evidence-reference rendering, in-run structural/transition rows, selected-square lighting,
-comparison rows/strips, marker/story output, engine/tablebase conditions, explicit analysis,
-human-split/corpus panels, opponent selection and sourcing validation.
+authored-claim delivery sheets, evidence-reference rendering, in-run structural/transition rows,
+selected-square lighting, comparison rows/strips, marker/story output, engine/tablebase
+conditions, explicit analysis, human-split/corpus panels, repertoire gap scanning, opponent
+selection and sourcing/claim-binding validation.
 
 Raw structural/transition tables, Maia splits, Explorer rows, engine lines and tablebase detail are
 bound to `analysis.inspector` (or author/operator consumers) rather than to a generic learner
@@ -413,12 +420,25 @@ consumer ID/version. A rendered surface with no producer is therefore visible as
 consumer, and a producer with no surface is visible as a disposition—not hidden by separate
 tables.
 
+A producerless surface is registered, never deleted and never left out. The known instance is
+[[D546]]'s `assistance.arrows`: `AssistanceConfig.arrows` (`assistance-preference.ts`) has four
+version migrations, values `sight`/`evidence`, and at HEAD no producer and no renderer — the
+token appears only in `AssistanceSettings.svelte` and the preference migration. It is declared as
+a consumer with an explicit `experimental` disposition whose reason names D546; whether it later
+gains a producer or is retired is F5's/the owner's decision, recorded then. Leaving it
+unregistered would re-create the register-that-cannot-see-its-own-state failure; deleting the
+control would be a behavior change this RFC does not scope.
+
 #### 10.1 Initial consumer-symbol census
 
-The initial closure is **eighteen consumer operations**. A row is one operation with a distinct
+The initial closure is **twenty-three consumer operations**. A row is one operation with a distinct
 permission or output consequence, not one call site; multiple call sites using the same renderer
 stay one row. The implementation plan must refresh the anchors and split a row if one operation
 actually carries two permission contracts. It may not silently drop a row to make closure green.
+Rows 19–23 were added by the 2026-08-21 cross-review: the author census of eighteen omitted five
+operations its own §10 enumeration partly names — the marker UI (producer path 4 promises "both
+consumers" and the census carried only voice), story output, the feedback-delivery stage-1
+authored-claim sheets, repertoire gap scanning, and claim-binding validation.
 
 | # | consumer id | current implementation anchors | initial home |
 |---:|---|---|---|
@@ -440,6 +460,11 @@ actually carries two permission contracts. It may not silently drop a row to mak
 | 16 | `inspector.corpus` | `/corpus`; `renderCorpusPage`; on-request panel | post-disclosure contextual inspector |
 | 17 | `analysis.engine` | `/analysis`; `service.analysis`; evidence jobs | explicit Analyze consumer; moves/PVs legal only here |
 | 18 | `opponent.selection` | `selectMove`; `opponent-selector`; live Syzygy/Maia inputs | machine consumer, never learner advice |
+| 19 | `guidance.authored_claim` | `claim-presentation.ts:claimProvenance`; `CheckpointSheet.svelte`; `TerminalSheet.svelte` | bound authored-claim text with binding/earned-evidence disclosure |
+| 20 | `board.pivotal_marker` | `DrillScreen.svelte` pivotal rows; `renderPivotalMarker` | timeline marker plus opened marker sentences |
+| 21 | `review.story` | `storyMoments`; `service.story`; `/story` and `/api/shared/…/story` routes; `GameStoryScreen.svelte` | Review consumer over recorded eval events, pivotal kinds, shape spans; spectator-reachable via share token |
+| 22 | `runtime.repertoire_scan` | `repertoire.ts:scanRepertoire`; `corpusPopulation`; `REPERTOIRE_CORPUS_GUARD` | machine consumer of the Explorer population; guard/abstention learner-visible |
+| 23 | `authoring.claim_binding` | `claim-binding.ts:validateClaimBindings`; `MACHINE_LABEL_EVIDENCE_KINDS` | `author_only` validation of claims against source records |
 
 The two on-request panels and the manually opened structural/transition/compare detail sections are
 the current **contextual analysis inspector**, even though they live inside the run layout. Their
@@ -505,7 +530,12 @@ separate binding.
 - `CAPABILITY_DISPOSITIONS` remains an engine/provider option audit. Evidence-relevant rows gain
   references to manifest producer/consumer IDs; its free-text `surface` field is not an authority.
 - `EVIDENCE_KINDS` remains the sourcing-ledger record vocabulary. Each admitted record kind has an
-  explicit adapter/projection; the manifest does not copy or rename the enum.
+  explicit adapter/projection; the manifest does not copy or rename the enum. **Named seam:** the
+  evidence-kinds register carries a live `citable_text` claim by `pack-population-provenance.md`.
+  F1's set-equality test is over the seven landed members; when that claim lands, the landing
+  commit must add the new member's projection or disposition declaration or the compile fails —
+  that failure is this design working, and RFC-5's implementer inherits the obligation from this
+  sentence rather than discovering it as a red build.
 - runtime `EvidenceKind` remains the event transport vocabulary until a later schema RFC changes
   it. Its four members map explicitly to projections.
 - `RULES_EVIDENCE_FACTS` remains the persisted/ref grammar. A ref is not a semantic event; its
@@ -573,7 +603,8 @@ Each criterion names the failure it is intended to catch.
    voice/rendering.
 3. **Structural predicates and readings are separately versioned, with closure against all eighteen
    `STRUCTURAL_FEATURE_KINDS`.** Fails if `outpost` predicate and reading share one identity or if
-   `pawn_count` is advertised as an emitted reading.
+   `pawn_count` is advertised as an emitted reading. The emitted/declared distinction is read from
+   the executable emission census of §9, not from the declarations under test.
 4. **Every transition family/leaf has a reading declaration whose initial version records the
    missing operands and is not learner-event eligible.** Fails if count-only output gains a square
    form or semantic-event binding without retaining squares.
@@ -588,8 +619,11 @@ Each criterion names the failure it is intended to catch.
    bare whole reading/packet field.
 8. **Every projection has at least one binding or exactly one allowed disposition with a non-empty
    reason.** Fails on both an orphan and two conflicting dispositions.
-9. **Every consumer has a non-empty exact accepted-projection set.** Fails if a checkbox, renderer or
-   route has no producer, or accepts `rules.*`/latest.
+9. **Every consumer has a non-empty exact accepted-projection set or exactly one explicit
+   disposition with a non-empty reason.** Fails if a checkbox, renderer or route has no producer
+   and no disposition, or accepts `rules.*`/latest. The required positive fixture is
+   `assistance.arrows` compiling under its `experimental` disposition; the negative fixture strips
+   that disposition and must raise `EVIDENCE_CONSUMER_ORPHANED`.
 10. **A binding cannot widen timing, roles, sessions, forms, answer content, latency or fact/form
     budgets.** The required
     negative fixture attempts to pass `bestMoveUci` from an eval payload to a fact-only precommit
@@ -636,11 +670,13 @@ Each criterion names the failure it is intended to catch.
 
 No owner/product question remains: O1–O4 already rule the authority, semantic boundary and UX
 layering. The drafting census resolves the four initial implementation questions in §§7, 10.1 and
-14: shared static catalogue in runtime plus server availability aggregate; eighteen current
-consumer operations; one set-equal transition release for `RECORDED_READING_DISPOSITIONS`; and
-current manually opened raw panels classified as the contextual inspector, never as learner
-guidance. Cross-review must re-derive those answers and return the RFC if the dependency graph or
-symbol census refutes them; it may not substitute a wildcard or legacy bypass.
+14: shared static catalogue in runtime plus server availability aggregate; twenty-three current
+consumer operations (the author census said eighteen; the 2026-08-21 cross-review re-derivation
+refuted that count at the symbol and added rows 19–23); one set-equal transition release for
+`RECORDED_READING_DISPOSITIONS`; and current manually opened raw panels classified as the
+contextual inspector, never as learner guidance. Cross-review must re-derive those answers and
+return the RFC if the dependency graph or symbol census refutes them; it may not substitute a
+wildcard or legacy bypass.
 
 ## Changelog
 
@@ -650,3 +686,10 @@ symbol census refutes them; it may not substitute a wildcard or legacy bypass.
 - 2026-08-21: author buildability pass resolved the package home and published an eighteen-operation
   current-consumer census. Raw manually opened in-run/compare panels are the contextual inspector;
   server/provider availability joins the shared runtime catalogue without redeclaring semantics.
+- 2026-08-21: adversarial cross-review. The consumer census was refuted at the symbol and corrected
+  to twenty-three operations (added: authored-claim delivery sheets, pivotal marker UI, story,
+  repertoire gap scanning, claim-binding validation). Consumer declarations gained the disposition
+  arm O1's orphan rule requires, with `assistance.arrows` as the named producerless fixture;
+  `EVIDENCE_CONSUMER_ORPHANED` and criterion 9 updated to match. §9's "actually emitted" is now
+  pinned to the executable emission census rather than the declarations under test (criterion 3
+  updated). §14 names the live `citable_text` claim seam with `pack-population-provenance`.
