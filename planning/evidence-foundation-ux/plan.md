@@ -26,4 +26,10 @@ before touching content; no corpus expansion until Gate F.
 | 7 | Interaction-state acceptance across 7 viewports × 14 states; screenshots; CI path | rides 4 | criteria in the Phase-4 RFC |
 
 **Deliverable 7 (owner questions) accumulates here** — nothing is silently chosen:
-- (none yet; the audits will populate)
+1. **Space convention** — which zone boundaries and control test become `space@1` (owner vocabulary; precedent permits a claude-declared convention but this one is his).
+2. **Negative-reading admission** — may *"what you avoided; N% of alternatives would not have"* face learners, and in which modules (the d542/D571 sign-rule ruling).
+3. **"Castling prevented"** — confirm rights-lost-with-cause + legality-state discharge the brief's word, with the intent reading refused.
+4. **Fork failure branch** — if post-SEE fork lift still reads below 1.0, the shipped form becomes opponent-relative (`fork_allowed`/avoidance): pre-authorize or re-rule then.
+5. **Principle citations** — §2 #19 stays *registered with residue* until the D530/D531 regrounding work lands; no collector can close it. *(Already ruled; a dependency, not a fresh question.)*
+
+Phase 1 landed `990f3d9`; Phase 2 landed with this commit. Both audits' proposed rows (D718–D722, D730–D744) are written by the landing passes of the RFCs that own them, not in bulk.
