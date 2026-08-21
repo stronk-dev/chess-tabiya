@@ -711,3 +711,15 @@ Append-only. Record research, rulings, RFC transitions, implementation closeout 
 - Landing order is now explicit: `teacher-surface` first for its migration, then F12-B atomically
   inventories its tables and supersedes only its account-deletion outcome. Explicit withdrawal,
   leave, removal, expiry, archive and classroom-delete revocation remain unchanged.
+
+## 2026-08-21 — Graduation-clearance read-only plan landed
+
+- `make graduation-plan` now executes the accepted seven-rule classifier and 17-row hand table over
+  all 56 drafts, inventories all 36 candidate documents against the nine emitter templates, and
+  prints the mechanical-versus-judgment boundary without writing any artifact.
+- The verify guard pins 203 rule suggestions, 17 hand assignments, 141 recognized candidate
+  entries, two named non-template exceptions and zero unclassified draft blockers.
+- D658 closed after the first run showed six published hand-table labels are file stems rather than
+  internal pack ids. Both identities remain visible; the lookup follows the RFC's file-stem key.
+- D560 remains active: pack schema stays 0.27 and product clearance code, 92-document mutation,
+  sidecar restamping, lane release and RFC archival remain behind Gate F and the owner budget call.

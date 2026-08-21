@@ -48,6 +48,7 @@ pnpm install
 make verify
 make register-check
 make status-parity
+make graduation-plan
 make build
 make test-browser
 make pack-check FILE=content/drafts/my-pack.json
@@ -99,6 +100,11 @@ without moving files into `content/packs/`.
 `make tablebase-walk` is the read-only Syzygy authoring instrument. It accepts one pack or
 a newline-delimited FEN file, can enumerate learner decisions, and writes only its report
 when `OUT` is supplied. It never promotes or rewrites content.
+
+`make graduation-plan` is the read-only D560 migration instrument. It re-derives the accepted
+graduation classifier over drafts, inventories candidate emitter templates, and reports the
+judgment-bearing residue. It does not activate pack schema 0.28 or write packs, sidecars, or
+clearance transitions; `make verify` runs its population and no-silent-default guard.
 
 `make expression-census` is the offline, report-only structural-expression instrument. It
 separates corpus coverage from three-valued satisfiability and never treats a zero firing count

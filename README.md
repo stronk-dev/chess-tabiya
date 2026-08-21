@@ -100,6 +100,7 @@ make pack-check FILE=content/drafts/carlsbad-minority-attack.json
 make pack-preview FILE=content/drafts/carlsbad-minority-attack.json
 make shape-check FILE=content/shapes/carlsbad.json
 make graduation-report
+make graduation-plan
 ```
 
 See [docs/development.md](docs/development.md) for the complete toolchain,

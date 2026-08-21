@@ -3845,3 +3845,16 @@ status tokens, body/cell parity, both filesystem/register set equalities, termin
 the Discharges grammar, awaiting pointers, archival clearance and the four owner forms. The
 pre-archive live run read 9 Active, 65 archived and 6 open obligations, all honest, with P1–P6
 green. The lifecycle RFC's D1 records that SHA and the document now archives without an open row.
+
+## 2026-08-21 — graduation clearance gained an executable read-only plan
+
+The D560/D642 legal slice now runs as `make graduation-plan`. It re-derives all 220 draft blocking
+entries as 203 ordered-rule suggestions plus the RFC's 17 published hand assignments, inventories
+141 of 143 candidate blockers against the nine emitter templates, and names the two non-template
+entries rather than defaulting them. The report also exposes the 30 resolved, 43 accepted, one
+removed-referent and five fixture-transition obligations as judgment-bearing apply work.
+
+The first run found D658: six hand-table rows use source file stems that differ from their internal
+pack ids. The classifier now binds the table to file stem and tests the divergent rook case. The
+guard is part of `make verify`. Pack schema remains 0.27 and no pack, sidecar or clearance state was
+mutated; schema 0.28, the product writer and the 92-document apply/archive remain held by Gate F.

@@ -58,13 +58,14 @@ should assert `..._SUBJECT_UNGRAMMATICAL` and keep its positive `claim_bound` co
 
 1. Recover, verify and land Feedback Stage 1 without claiming its authored Stage 2.
 2. Apply the criterion-13 author correction and append the RFC change record.
-3. Implement the 0.28 schema, types, document-only lints, checkout sweep, report verification,
-   emitter template registry, classifier and `graduation-clear --check` as a read-only plan.
-4. Run that plan over all drafts, candidate packs and sidecars. It must print separate mechanical,
+3. Implement and verify the standalone classifier and read-only migration plan without activating
+   schema 0.28 or mutating product/content.
+4. Run that plan over all drafts and candidate packs. It must print separate mechanical,
    already-enumerated judgement and unsupported residue, with no default-to-`unreachable` path.
 5. Ask the owner to accept or reject the measured apply/re-authoring budget under D560.
-6. Only after acceptance, apply the corpus rewrite, run all 19 corrected criteria, update docs,
-   release pack lane 0.28, flip shipped ledger rows and append the lifecycle log in the same commit.
+6. Only after acceptance, implement the 0.28 schema, types, lints, checkout sweep, report verification,
+   emitter registry and writer; apply the corpus rewrite; run all 19 corrected criteria; update docs;
+   release pack lane 0.28; flip shipped ledger rows and append the lifecycle log in the same commit.
 
 This split does not weaken the accepted mechanism or lift Gate F. It makes the later content
 decision observable and prevents an accepted pre-hold RFC from bypassing a newer owner ruling.
