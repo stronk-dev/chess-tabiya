@@ -7,15 +7,19 @@ import type {
   ConsumerDeclaration,
   EvidenceContractDeclarations,
   EvidenceDispositionDeclaration,
+  EvidenceEligibilityDeclaration,
   EvidenceForm,
   EvidenceGrounding,
   EvidencePlane,
+  EvidenceReasonDeclaration,
   EvidenceRole,
+  EvidenceSelectionPolicyDeclaration,
   EvidenceTiming,
   ProducerDeclaration,
   ProjectionDeclaration,
   ProjectionRole,
   ProviderOffBehavior,
+  SemanticEventDeclaration,
   VersionedEvidenceId,
 } from "./evidence-contract.js";
 
@@ -73,6 +77,7 @@ export const EVIDENCE_PRODUCER_IDS = Object.freeze([
   "theory.shapes", "authored.structural_condition", "pack.authored", "recorded.engine", "recorded.tablebase", "live.stockfish",
   "live.syzygy", "human.maia", "human.explorer", "theory.opening_identity", "run.record",
   "derived.compare_narrative", "derived.story", "sourcing.ledger",
+  "derived.semantic_avoidance",
 ] as const);
 
 export const CURRENT_CONSUMER_OPERATION_IDS = Object.freeze([
@@ -85,7 +90,7 @@ export const CURRENT_CONSUMER_OPERATION_IDS = Object.freeze([
   "guidance.voice_compare", "guidance.voice_story",
 ] as const);
 
-export const EVIDENCE_CONSUMER_IDS = Object.freeze([...CURRENT_CONSUMER_OPERATION_IDS, "assistance.arrows"] as const);
+export const EVIDENCE_CONSUMER_IDS = Object.freeze([...CURRENT_CONSUMER_OPERATION_IDS, "assistance.arrows", "research.semantic_selection"] as const);
 
 const STRUCTURAL_READER_WITNESSES = Object.freeze(STRUCTURAL_FEATURE_KINDS.filter((kind) => kind !== "pawn_count"));
 const TRANSITION_READING_LEAVES = Object.freeze([
@@ -101,6 +106,29 @@ const TRANSITION_READING_LEAVES = Object.freeze([
 export const STRUCTURAL_PREDICATE_PROJECTION_IDS = Object.freeze(STRUCTURAL_FEATURE_KINDS.map((kind) => `rules.structural.predicate.${kind}`));
 export const STRUCTURAL_READING_PROJECTION_IDS = Object.freeze(STRUCTURAL_FEATURE_KINDS.map((kind) => `rules.structural.reading.${kind}`));
 export const TRANSITION_READING_PROJECTION_IDS = Object.freeze(TRANSITION_READING_LEAVES.map((leaf) => `rules.transition.reading.${leaf}`));
+
+export const STRUCTURAL_EVENT_FAMILIES = Object.freeze([
+  "backward_pawn", "doubled_pawn", "half_open_file", "isolated_pawn", "king_opposition",
+  "king_zone", "line_blockers", "open_file", "passed_pawn", "piece_count", "direct_attack_count",
+] as const);
+export const TRANSITION_GEOMETRY_EVENT_FAMILIES = Object.freeze(["occupied_attack", "occupied_defence", "slider_ray", "piece_escape", "defended_duty"] as const);
+export const TRANSITION_RULE_EVENT_FAMILIES = Object.freeze(["castled", "clock_reset", "last_of_role", "pawn_contact", "checkmate", "promotion"] as const);
+export const STRUCTURAL_EVENT_PROJECTION_IDS = Object.freeze(STRUCTURAL_EVENT_FAMILIES.map((family) => `rules.structural.event.${family}`));
+export const TRANSITION_EVENT_PROJECTION_IDS = Object.freeze([...TRANSITION_GEOMETRY_EVENT_FAMILIES, ...TRANSITION_RULE_EVENT_FAMILIES].map((family) => `rules.transition.event.${family}`));
+export const AVOIDANCE_EVENT_PROJECTION_IDS = Object.freeze(STRUCTURAL_EVENT_FAMILIES.map((family) => `derived.semantic_avoidance.${family}`));
+export const SEMANTIC_EVENT_PROJECTION_IDS = Object.freeze([...STRUCTURAL_EVENT_PROJECTION_IDS, ...TRANSITION_EVENT_PROJECTION_IDS, ...AVOIDANCE_EVENT_PROJECTION_IDS]);
+
+const structuralEventOutputs = STRUCTURAL_EVENT_FAMILIES.map((family) => projection("rules.structural", `rules.structural.event.${family}`, "rules", {
+  role: "event",
+  payloadType: "StructuralSemanticEventOperands",
+  semantics: `Identity-preserving signed before/after relation for structural family ${family}.`,
+  operands: ["before_fen", "move_uci", "after_fen", "family", "before", "after"],
+  signs: ["gained", "lost", "preserved"],
+  grounding: family === "backward_pawn" || family === "king_opposition" ? "declared_convention" : "position_rules",
+  exactness: family === "backward_pawn" || family === "king_opposition" ? "convention" : "exact",
+  forms: ["list", "panel", "machine_condition"],
+  limitations: ["The signed relation is literal and carries no learner valence or importance judgement."],
+}));
 
 const structuralOutputs = [
   ...STRUCTURAL_FEATURE_KINDS.map((kind) => projection("rules.structural", `rules.structural.predicate.${kind}`, "rules", {
@@ -129,6 +157,7 @@ const structuralOutputs = [
     limitations: kind === "pawn_count" ? ["The committed emission census reports zero observations; structuralReading cannot emit this kind."] : ["State alone does not establish relevance or learner valence."],
     ...(kind === "pawn_count" ? { disposition: retired("Zero emitted observations over the executable committed-corpus census; matcher-only at F1.") } : {}),
   })),
+  ...structuralEventOutputs,
 ];
 
 const transitionOutputs = TRANSITION_READING_LEAVES.map((leaf) => projection("rules.transition", `rules.transition.reading.${leaf}`, "transition", {
@@ -140,9 +169,34 @@ const transitionOutputs = TRANSITION_READING_LEAVES.map((leaf) => projection("ru
   limitations: ["Affected square, subject and object identities are not retained; this projection is not a semantic learner event."],
 }));
 
+const transitionEventOutputs = [
+  ...TRANSITION_GEOMETRY_EVENT_FAMILIES.map((family) => projection("rules.transition", `rules.transition.event.${family}`, "transition", {
+    role: "event", payloadType: "TransitionGeometryEventOperands", semantics: `Identity-preserving signed transition geometry for ${family}.`,
+    operands: ["before_fen", "move_uci", "after_fen", "subject", "targets_before", "targets_after"], signs: ["gained", "lost", "preserved"],
+    forms: ["list", "panel", "machine_condition"], limitations: ["Pseudo-legal geometry is not a tactical label, safety claim, or move grade."],
+  })),
+  ...TRANSITION_RULE_EVENT_FAMILIES.map((family) => projection("rules.transition", `rules.transition.event.${family}`, "transition", {
+    role: "event", payloadType: "TransitionRuleEventOperands", semantics: `Independent exact transition-rule event for ${family}.`,
+    operands: ["before_fen", "move_uci", "after_fen", "mover", "from", "to", "detail"], signs: ["state"],
+    forms: ["list", "panel", "machine_condition"], limitations: ["An exact rules event carries no learner valence or importance judgement."],
+  })),
+];
+
+const avoidanceOutputs = STRUCTURAL_EVENT_FAMILIES.map((family) => {
+  const input = ref(`rules.structural.event.${family}`);
+  const convention = family === "backward_pawn" || family === "king_opposition";
+  return projection("derived.semantic_avoidance", `derived.semantic_avoidance.${family}`, "derived", {
+    role: "event", payloadType: "CounterfactualAbsenceOperands", semantics: `Complete-population counterfactual absence for structural family ${family}.`,
+    operands: ["relation", "family", "legalAlternatives", "alternativesWithFamily", "alternativeEvents"], signs: ["avoided"],
+    grounding: convention ? "declared_convention" : "position_rules", exactness: convention ? "convention" : "exact",
+    forms: ["list", "panel", "machine_condition"], dependsOn: [input], derivation: { inputs: [input] },
+    limitations: ["Avoided describes a complete local alternative relation, never inferred intent, praise, or move quality."],
+  });
+});
+
 export const EVIDENCE_PRODUCERS: readonly ProducerDeclaration[] = Object.freeze([
   producer("rules.structural", "rules", "packages/runtime/src/structure.ts", "local", structuralOutputs),
-  producer("rules.transition", "transition", "packages/runtime/src/transition.ts", "local", transitionOutputs),
+  producer("rules.transition", "transition", "packages/runtime/src/transition.ts", "local", [...transitionOutputs, ...transitionEventOutputs]),
   producer("rules.phase", "rules", "packages/runtime/src/phase.ts", "local", [projection("rules.phase", "rules.phase.reading", "rules", { payloadType: "PhaseReading", forms: ["sentence", "panel"] })]),
   producer("rules.pivotal", "rules", "packages/runtime/src/pivotal.ts", "local", [projection("rules.pivotal", "rules.pivotal.marker", "rules", { payloadType: "PivotalMarker", forms: ["timeline_marker", "sentence", "panel"] })]),
   producer("rules.endgame", "rules", "packages/runtime/src/endgame.ts", "local", [projection("rules.endgame", "rules.endgame.reading", "rules", { payloadType: "EndgameReading", forms: ["sentence", "panel"] })]),
@@ -205,6 +259,7 @@ export const EVIDENCE_PRODUCERS: readonly ProducerDeclaration[] = Object.freeze(
     projection("sourcing.ledger", "sourcing.ledger.tablebase_result", "record", { role: "source_record", payloadType: "tablebase_result EvidenceRecord", grounding: "tablebase_exact", answerContent: ["fact", "evaluation"], forms: ["list", "panel"], limitations: ["Offline sourcing record including anchor and provenance; not a live tablebase event."] }),
     projection("sourcing.ledger", "sourcing.ledger.explorer_position_census", "record", { role: "source_record", payloadType: "explorer_position_census EvidenceRecord", grounding: "human_corpus", exactness: "measured", confidence: "reported", answerContent: ["fact"], forms: ["list", "panel"], limitations: ["Offline position-census record; not an on-request Explorer page."] }),
   ]),
+  producer("derived.semantic_avoidance", "derived", "packages/runtime/src/semantic-evidence.ts", "local", avoidanceOutputs),
 ]);
 
 interface ConsumerSpec {
@@ -260,6 +315,7 @@ const CONSUMER_SPECS: readonly ConsumerSpec[] = [
   { id: "guidance.voice_compare", implementation: "rest.ts compare voice; comparisonNarrative", projections: ["run.record.fork", "run.record.move", "run.record.checkpoint_hit", "run.record.objective_transition", "run.record.consequence", "rules.pivotal.marker", "derived.compare.structure_delta", "derived.compare.eval_delta"], timing: ["review"], forms: ["sentence"], answerContent: ["fact", "evaluation", "move"], providerOff: "available" },
   { id: "guidance.voice_story", implementation: "rest.ts story voice and speech; storyMoments; suggestTitle", projections: ["rules.phase.reading", "pack.authored.phase", "rules.structural.reading.named_structure", "rules.pivotal.marker", "rules.endgame.reading", "pack.authored.claim", "theory.shapes.firing", "run.record.consequence", "run.record.imported_result", "derived.story.eval_shift", "derived.story.last_level", "derived.story.title"], timing: ["review"], forms: ["sentence", "audio"], answerContent: ["fact", "pattern", "theory", "principle", "plan", "evaluation"], providerOff: "available" },
   { id: "assistance.arrows", implementation: "apps/web/src/lib/assistance-preference.ts; AssistanceSettings.svelte", disposition: { kind: "experimental", reason: "D546: migrated preference has no producer and no renderer; F5 or an owner ruling decides activation or retirement." } },
+  { id: "research.semantic_selection", implementation: "packages/runtime/src/semantic-evidence.ts; tools/r2-selection-harness", projections: SEMANTIC_EVENT_PROJECTION_IDS, timing: ["analysis"], roles: ["operator"], forms: ["machine_condition"], answerContent: ["fact"], latency: { mode: "sync", maxMs: 4_000 }, budget: { maxFacts: 2, maxForms: 1 } },
 ];
 
 export const EVIDENCE_CONSUMERS: readonly ConsumerDeclaration[] = Object.freeze(CONSUMER_SPECS.map((spec) => Object.freeze({
@@ -304,10 +360,64 @@ export const EVIDENCE_ADAPTERS: readonly AdapterDeclaration[] = Object.freeze(CO
   });
 })));
 
+const R2_EXTERNAL_POPULATION = "r2-imported-sample@a10a233e8e51f6a0877f65cee417339080d2fd32cd22886f755f576c84fa58ec";
+export const SEMANTIC_EVENT_DECLARATIONS: readonly SemanticEventDeclaration[] = Object.freeze(SEMANTIC_EVENT_PROJECTION_IDS.map((projectionId) => {
+  const source = producerByProjection.get(projectionId);
+  const output = source?.outputs.find((candidate) => candidate.id === projectionId);
+  if (output === undefined) throw new TypeError(`Semantic event catalogue names missing projection ${projectionId}`);
+  return Object.freeze({
+    projection: ref(projectionId),
+    ...(output.derivation === undefined ? {} : { derivationInputs: Object.freeze(output.derivation.inputs) }),
+    allowedSigns: Object.freeze(output.signs),
+    requiredOperands: Object.freeze(output.operands),
+    valence: "none" as const,
+    validation: Object.freeze({
+      positives: Object.freeze([`semantic-event:${projectionId}:positive`]),
+      hardNegatives: Object.freeze([`semantic-event:${projectionId}:hard-negative`]),
+      externalPopulation: R2_EXTERNAL_POPULATION,
+    }),
+  });
+}));
+
+const ELIGIBILITY_REASON_IDS = Object.freeze([
+  "eligible_validated_literal", "source_abstained", "source_projection_unbound", "payload_invalid",
+  "required_operand_missing", "event_unvalidated", "consumer_refused", "sign_refused", "valence_unbacked",
+] as const);
+const SELECTION_REASON_IDS = Object.freeze([
+  "no_eligible_events", "insufficient_alternatives", "nothing_distinctive", "budget_zero",
+  "counterfactual_population_incomplete", "critical_budget_exhausted",
+] as const);
+export const EVIDENCE_REASON_DECLARATIONS: readonly EvidenceReasonDeclaration[] = Object.freeze([
+  ...ELIGIBILITY_REASON_IDS.map((id) => Object.freeze({ id, version: 1, stage: "eligibility" as const, meaning: id.replaceAll("_", " ") })),
+  ...SELECTION_REASON_IDS.map((id) => Object.freeze({ id, version: 1, stage: "selection" as const, meaning: id.replaceAll("_", " ") })),
+]);
+
+export const EVIDENCE_ELIGIBILITY_DECLARATIONS: readonly EvidenceEligibilityDeclaration[] = Object.freeze(SEMANTIC_EVENT_DECLARATIONS.map((event) => Object.freeze({
+  event: event.projection,
+  consumer: ref("research.semantic_selection"),
+  disposition: "eligible" as const,
+  reason: ref("eligible_validated_literal"),
+  allowedSigns: event.allowedSigns,
+  requiredOperands: event.requiredOperands,
+  valenceAuthority: Object.freeze([]),
+})));
+
+export const EVIDENCE_SELECTION_POLICIES: readonly EvidenceSelectionPolicyDeclaration[] = Object.freeze([
+  Object.freeze({
+    id: "research.r2_candidate", version: 1, consumer: ref("research.semantic_selection"), disposition: "experimental",
+    minimumAlternatives: 8, maximumSameFamilyShare: 0.20, minimumAlternativeOnlyShare: 0.30, maxFacts: 2,
+    criticalEvents: Object.freeze(["checkmate", "promotion", "castled", "last_of_role"].map((family) => ref(`rules.transition.event.${family}`))),
+  }),
+]);
+
 export const EVIDENCE_CONTRACT_DECLARATIONS: EvidenceContractDeclarations = Object.freeze({
   producers: EVIDENCE_PRODUCERS,
   consumers: EVIDENCE_CONSUMERS,
   adapters: EVIDENCE_ADAPTERS,
+  semanticEvents: SEMANTIC_EVENT_DECLARATIONS,
+  eligibility: EVIDENCE_ELIGIBILITY_DECLARATIONS,
+  reasons: EVIDENCE_REASON_DECLARATIONS,
+  selectionPolicies: EVIDENCE_SELECTION_POLICIES,
 });
 
 export const PRIMARY_EVIDENCE_MANIFEST = compileEvidenceManifest(EVIDENCE_CONTRACT_DECLARATIONS);

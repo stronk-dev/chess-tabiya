@@ -836,3 +836,9 @@ and D684 closed, `semantic-evidence-selection` is accepted. Its implementation b
 direct plus eleven derived semantic projections, research-only eligibility/policy, a complete local
 alternative selector and D668's source-adapter seal. F5—not F2—still owns learner-visible modules,
 thresholds, presets and defaults.
+
+## 2026-08-21 — F2 implementation opened
+
+Created `planning/semantic-evidence-selection/` and moved the accepted RFC to implementing. Landing
+order is compiled contract → literal producers → selector/avoidance → D668 seal → integration.
+Product modules/defaults, schemas and content remain explicitly out of scope.

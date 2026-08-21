@@ -74,6 +74,23 @@ export interface TransitionReading {
   readonly observations: readonly TransitionObservation[];
 }
 
+export type TransitionSemanticFact =
+  | {
+      readonly family: "occupied_attack" | "occupied_defence" | "slider_ray" | "piece_escape" | "defended_duty";
+      readonly sign: "gained" | "lost" | "preserved";
+      readonly subject: Readonly<Record<string, unknown>>;
+      readonly targets_before: readonly SquareName[];
+      readonly targets_after: readonly SquareName[];
+    }
+  | {
+      readonly family: "castled" | "clock_reset" | "last_of_role" | "pawn_contact" | "checkmate" | "promotion";
+      readonly sign: "state";
+      readonly mover: Readonly<Record<string, unknown>>;
+      readonly from: SquareName;
+      readonly to: SquareName;
+      readonly detail: Readonly<Record<string, unknown>>;
+    };
+
 type Position = ReturnType<typeof positionFromFen>;
 
 interface AttackMap {
@@ -222,6 +239,88 @@ function dutyChanges(before: Position, after: Position, beforeMap: AttackMap, af
     if (previous >= 2 && current < 2) released += 1;
   }
   return { acquired, released };
+}
+
+function actorSquares(position: Position, map: AttackMap, color: Color, target: Square): readonly SquareName[] {
+  return Object.freeze([...position.board[color]].filter((square) => map.bySquare[square]?.has(target)).map(makeSquare).sort());
+}
+
+function rayDetails(position: Position): ReadonlyMap<string, { readonly subject: Readonly<Record<string, unknown>>; readonly blockers: readonly SquareName[] }> {
+  const result = new Map<string, { readonly subject: Readonly<Record<string, unknown>>; readonly blockers: readonly SquareName[] }>();
+  for (const [square, piece] of position.board) {
+    if (!(piece.role in SLIDER_DIRECTIONS)) continue;
+    for (const [df, dr] of SLIDER_DIRECTIONS[piece.role as "bishop" | "rook" | "queen"]) {
+      let file = square % 8, rank = Math.floor(square / 8), endpoint = square;
+      while (file + df >= 0 && file + df < 8 && rank + dr >= 0 && rank + dr < 8) { file += df; rank += dr; endpoint = file + rank * 8; }
+      const blockers = [...between(square, endpoint as Square).intersect(position.board.occupied)].map(makeSquare).sort();
+      const subject = Object.freeze({ slider: makeSquare(square), color: piece.color, role: piece.role, endpoint: makeSquare(endpoint as Square) });
+      result.set(JSON.stringify(subject), { subject, blockers: Object.freeze(blockers) });
+    }
+  }
+  return result;
+}
+
+function dutyTargets(position: Position, map: AttackMap, square: Square): readonly SquareName[] {
+  const piece = position.board.get(square);
+  if (piece === undefined) return [];
+  return Object.freeze([...map.bySquare[square]!.intersect(position.board[piece.color]).intersect(map.attacked[opposite(piece.color)])].map(makeSquare).sort());
+}
+
+export function transitionSemanticFacts(beforeFen: string, moveUci: string, afterFen: string): readonly TransitionSemanticFact[] {
+  if (!isPlayedEdge(beforeFen, moveUci, afterFen)) return [];
+  const before = positionFromFen(beforeFen), after = positionFromFen(afterFen);
+  const beforeMap = attackMap(before), afterMap = attackMap(after);
+  const facts: TransitionSemanticFact[] = [];
+  for (const color of ["white", "black"] as const) for (const relation of ["attack", "defence"] as const) {
+    const targetColor = relation === "attack" ? opposite(color) : color;
+    for (const square of before.board[targetColor].intersect(after.board[targetColor])) {
+      const beforeActors = actorSquares(before, beforeMap, color, square), afterActors = actorSquares(after, afterMap, color, square);
+      if ((beforeActors.length === 0) === (afterActors.length === 0)) continue;
+      const occupant = before.board.get(square)!;
+      facts.push({ family: relation === "attack" ? "occupied_attack" : "occupied_defence", sign: beforeActors.length === 0 ? "gained" : "lost", subject: Object.freeze({ color, target: makeSquare(square), occupant: Object.freeze({ color: occupant.color, role: occupant.role }) }), targets_before: beforeActors, targets_after: afterActors });
+    }
+  }
+  const leftRays = rayDetails(before), rightRays = rayDetails(after);
+  for (const key of new Set([...leftRays.keys(), ...rightRays.keys()])) {
+    const left = leftRays.get(key), right = rightRays.get(key);
+    if (left === undefined || right === undefined || left.blockers.length === right.blockers.length) continue;
+    facts.push({ family: "slider_ray", sign: right.blockers.length < left.blockers.length ? "gained" : "lost", subject: left.subject, targets_before: left.blockers, targets_after: right.blockers });
+  }
+  for (const [square, piece] of before.board) {
+    const afterPiece = after.board.get(square);
+    if (afterPiece?.color !== piece.color || afterPiece.role !== piece.role) continue;
+    const beforeEscapes = [...geometricDestinations(before, beforeMap, square, piece).diff(beforeMap.attacked[opposite(piece.color)])].map(makeSquare).sort();
+    const afterEscapes = [...geometricDestinations(after, afterMap, square, afterPiece).diff(afterMap.attacked[opposite(piece.color)])].map(makeSquare).sort();
+    const gained = afterEscapes.filter((target) => !beforeEscapes.includes(target));
+    const lost = beforeEscapes.filter((target) => !afterEscapes.includes(target));
+    const subject = Object.freeze({ piece: makeSquare(square), color: piece.color, role: piece.role });
+    if (gained.length > 0) facts.push({ family: "piece_escape", sign: "gained", subject, targets_before: Object.freeze(beforeEscapes), targets_after: Object.freeze(afterEscapes) });
+    if (lost.length > 0) facts.push({ family: "piece_escape", sign: "lost", subject, targets_before: Object.freeze(beforeEscapes), targets_after: Object.freeze(afterEscapes) });
+    const beforeDuty = dutyTargets(before, beforeMap, square), afterDuty = dutyTargets(after, afterMap, square);
+    if (beforeDuty.length < 2 && afterDuty.length >= 2) facts.push({ family: "defended_duty", sign: "gained", subject, targets_before: beforeDuty, targets_after: afterDuty });
+    if (beforeDuty.length >= 2 && afterDuty.length < 2) facts.push({ family: "defended_duty", sign: "lost", subject, targets_before: beforeDuty, targets_after: afterDuty });
+  }
+  const parsed = parseUci(moveUci);
+  if (parsed !== undefined && "from" in parsed) {
+    const movingPiece = before.board.get(parsed.from);
+    if (movingPiece !== undefined) {
+      const mover = Object.freeze({ color: movingPiece.color, role: movingPiece.role });
+      const from = makeSquare(parsed.from), to = makeSquare(parsed.to);
+      if (movingPiece.role === "king" && Math.abs((parsed.to % 8) - (parsed.from % 8)) >= 2) facts.push({ family: "castled", sign: "state", mover, from, to, detail: Object.freeze({ resultingKingSquare: Math.floor(parsed.from / 8) * 8 + (parsed.to > parsed.from ? 6 : 2) }) });
+      const captured = capturedRole(before, after, moveUci);
+      if (movingPiece.role === "pawn" || captured !== undefined) facts.push({ family: "clock_reset", sign: "state", mover, from, to, detail: Object.freeze({ pawnMove: movingPiece.role === "pawn", capture: captured !== undefined }) });
+      if (captured !== undefined && after.board.pieces(captured.color, captured.role).isEmpty()) facts.push({ family: "last_of_role", sign: "state", mover, from, to, detail: Object.freeze({ capturedColor: captured.color, capturedRole: captured.role }) });
+      if (movingPiece.role === "pawn") {
+        const enemyPawns = after.board.pieces(opposite(movingPiece.color), "pawn");
+        const beforeContact = pawnAttacks(movingPiece.color, parsed.from).intersects(before.board.pieces(opposite(movingPiece.color), "pawn"));
+        const afterContact = pawnAttacks(movingPiece.color, parsed.to).intersects(enemyPawns);
+        if (!beforeContact && afterContact) facts.push({ family: "pawn_contact", sign: "state", mover, from, to, detail: Object.freeze({ enemyPawnSquares: Object.freeze([...pawnAttacks(movingPiece.color, parsed.to).intersect(enemyPawns)].map(makeSquare).sort()) }) });
+      }
+      if (parsed.promotion !== undefined) facts.push({ family: "promotion", sign: "state", mover, from, to, detail: Object.freeze({ promotionRole: parsed.promotion }) });
+      if (after.isCheckmate()) facts.push({ family: "checkmate", sign: "state", mover, from, to, detail: Object.freeze({ matedSide: after.turn }) });
+    }
+  }
+  return Object.freeze(facts.sort((left, right) => left.family.localeCompare(right.family) || left.sign.localeCompare(right.sign) || JSON.stringify(left).localeCompare(JSON.stringify(right))));
 }
 
 export function capturedRole(before: Position, after: Position, moveUci: string): { readonly color: Color; readonly role: Role } | undefined {

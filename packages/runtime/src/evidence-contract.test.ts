@@ -20,6 +20,11 @@ const ERROR_TABLE = Object.freeze([
   "EVIDENCE_BINDING_WIDENS", "EVIDENCE_PROJECTION_INCOMPLETE", "EVIDENCE_DEPENDENCY_MISSING",
   "EVIDENCE_DEPENDENCY_CYCLE", "EVIDENCE_DERIVATION_WIDENS", "EVIDENCE_GENERIC_BYPASS",
   "EVIDENCE_PROVIDER_FALLBACK_MISSING",
+  "EVIDENCE_EVENT_DUPLICATE", "EVIDENCE_EVENT_PROJECTION_MISSING", "EVIDENCE_EVENT_DERIVATION_MISMATCH",
+  "EVIDENCE_EVENT_SIGN_WIDENS", "EVIDENCE_EVENT_OPERAND_MISSING", "EVIDENCE_EVENT_UNVALIDATED",
+  "EVIDENCE_EVENT_PROJECTION_REFUSED", "EVIDENCE_EVENT_VALENCE_UNBACKED", "EVIDENCE_ELIGIBILITY_DUPLICATE",
+  "EVIDENCE_ELIGIBILITY_ORPHANED", "EVIDENCE_REASON_DUPLICATE", "EVIDENCE_POLICY_DUPLICATE",
+  "EVIDENCE_POLICY_INVALID", "EVIDENCE_POLICY_CONSUMER_MISSING", "EVIDENCE_POLICY_CRITICAL_REFUSED",
 ] as const);
 
 function projection(id = "p.output", producerId = "p"): ProjectionDeclaration {
@@ -56,7 +61,7 @@ describe("evidence manifest compiler", () => {
     const qProjection = projection("p.output", "q");
     const disposedProjection = { ...projection(), disposition: { kind: "retired" as const, reason: "fixture" } };
     const missingConsumer = consumer([{ id: "missing.output", version: 1 }]);
-    const cases: Readonly<Record<(typeof ERROR_TABLE)[number], EvidenceContractDeclarations>> = {
+    const cases: Readonly<Record<string, EvidenceContractDeclarations>> = {
       EVIDENCE_PRODUCER_DUPLICATE: { ...base(), producers: [producer(), producer()] },
       EVIDENCE_PROJECTION_DUPLICATE: { ...base(), producers: [producer(), producer(qProjection, "q")] },
       EVIDENCE_PROJECTION_ORPHANED: { producers: [producer()], consumers: [{ ...consumer(), disposition: { kind: "retired", reason: "fixture" } }], adapters: [] },
@@ -70,8 +75,9 @@ describe("evidence manifest compiler", () => {
       EVIDENCE_GENERIC_BYPASS: { ...base(), genericBypasses: [{ consumer: { id: "c", version: 1 }, implementation: "fixture/raw-reader.ts" }] },
       EVIDENCE_PROVIDER_FALLBACK_MISSING: { ...base(), producers: [producer(projection(), "p", "provider")] },
       EVIDENCE_DERIVATION_WIDENS: { ...base(), producers: [producer(), producer({ ...projection("q.output", "q"), plane: "derived", grounding: "declared_convention", derivation: { inputs: [{ id: "p.output", version: 1 }] }, disposition: { kind: "operator_only", reason: "fixture" } }, "q")] },
+      ...semanticErrorCases(),
     };
-    for (const expected of ERROR_TABLE) expect(code(cases[expected]), expected).toBe(expected);
+    for (const expected of ERROR_TABLE) expect(code(cases[expected]!), expected).toBe(expected);
   });
 
   it("is deterministic across declaration order and changes digest on a semantic version", () => {
@@ -121,3 +127,38 @@ describe("evidence manifest compiler", () => {
     expect(code(cyclic)).toBe("EVIDENCE_DEPENDENCY_CYCLE");
   });
 });
+
+function semanticDeclarations(): EvidenceContractDeclarations {
+  const output = { ...projection(), role: "event" as const };
+  return {
+    producers: [producer(output)], consumers: [consumer()], adapters: [adapter()],
+    semanticEvents: [{ projection: { id: "p.output", version: 1 }, allowedSigns: ["state"], requiredOperands: ["fen"], valence: "none", validation: { positives: ["positive"], hardNegatives: ["negative"] } }],
+    eligibility: [{ event: { id: "p.output", version: 1 }, consumer: { id: "c", version: 1 }, disposition: "eligible", reason: { id: "eligible", version: 1 }, allowedSigns: ["state"], requiredOperands: ["fen"], valenceAuthority: [] }],
+    reasons: [{ id: "eligible", version: 1, stage: "eligibility", meaning: "fixture eligible" }, { id: "empty", version: 1, stage: "selection", meaning: "fixture empty" }],
+    selectionPolicies: [{ id: "policy", version: 1, consumer: { id: "c", version: 1 }, disposition: "experimental", minimumAlternatives: 1, maximumSameFamilyShare: 0.2, minimumAlternativeOnlyShare: 0.3, maxFacts: 1, criticalEvents: [{ id: "p.output", version: 1 }] }],
+  };
+}
+
+function semanticErrorCases(): Record<string, EvidenceContractDeclarations> {
+  const valid = semanticDeclarations();
+  const event = valid.semanticEvents![0]!;
+  const row = valid.eligibility![0]!;
+  const policy = valid.selectionPolicies![0]!;
+  return {
+    EVIDENCE_EVENT_DUPLICATE: { ...valid, semanticEvents: [event, event] },
+    EVIDENCE_EVENT_PROJECTION_MISSING: { ...valid, semanticEvents: [{ ...event, projection: { id: "missing.event", version: 1 } }], eligibility: [], selectionPolicies: [] },
+    EVIDENCE_EVENT_DERIVATION_MISMATCH: { ...valid, semanticEvents: [{ ...event, derivationInputs: [{ id: "p.output", version: 1 }] }] },
+    EVIDENCE_EVENT_SIGN_WIDENS: { ...valid, semanticEvents: [{ ...event, allowedSigns: ["lost"] }] },
+    EVIDENCE_EVENT_OPERAND_MISSING: { ...valid, semanticEvents: [{ ...event, requiredOperands: ["missing"] }] },
+    EVIDENCE_EVENT_UNVALIDATED: { ...valid, semanticEvents: [{ ...event, validation: { positives: [], hardNegatives: ["negative"] } }] },
+    EVIDENCE_EVENT_PROJECTION_REFUSED: { ...valid, producers: [producer()], eligibility: [], selectionPolicies: [] },
+    EVIDENCE_EVENT_VALENCE_UNBACKED: { ...valid, semanticEvents: [{ ...event, valence: "source_required" }] },
+    EVIDENCE_ELIGIBILITY_DUPLICATE: { ...valid, eligibility: [row, row] },
+    EVIDENCE_ELIGIBILITY_ORPHANED: { ...valid, eligibility: [{ ...row, consumer: { id: "missing", version: 1 } }], selectionPolicies: [] },
+    EVIDENCE_REASON_DUPLICATE: { ...valid, reasons: [valid.reasons![0]!, valid.reasons![0]!] },
+    EVIDENCE_POLICY_DUPLICATE: { ...valid, selectionPolicies: [policy, policy] },
+    EVIDENCE_POLICY_INVALID: { ...valid, selectionPolicies: [{ ...policy, maximumSameFamilyShare: Number.NaN }] },
+    EVIDENCE_POLICY_CONSUMER_MISSING: { ...valid, selectionPolicies: [{ ...policy, consumer: { id: "missing", version: 1 } }] },
+    EVIDENCE_POLICY_CRITICAL_REFUSED: { ...valid, selectionPolicies: [{ ...policy, criticalEvents: [{ id: "missing.event", version: 1 }] }] },
+  };
+}

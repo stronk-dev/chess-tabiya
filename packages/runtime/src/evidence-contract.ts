@@ -9,6 +9,7 @@ export type EvidenceRole = "learner" | "host" | "participant" | "spectator" | "a
 export type AvailabilityMode = "local" | "recorded" | "provider" | "build_time";
 export type LatencyMode = "sync" | "interactive" | "background" | "offline";
 export type ProviderOffBehavior = "available" | "honest_empty" | "unavailable";
+export type SemanticEventSign = ProjectionDeclaration["signs"][number];
 
 export interface VersionedEvidenceId { readonly id: string; readonly version: number }
 export interface EvidenceDispositionDeclaration { readonly kind: EvidenceDisposition; readonly reason: string }
@@ -94,11 +95,58 @@ export interface EvidenceBinding {
   readonly budget: EvidenceBudget;
 }
 
+export interface SemanticEventDeclaration {
+  readonly projection: VersionedEvidenceId;
+  readonly derivationInputs?: readonly VersionedEvidenceId[];
+  readonly allowedSigns: readonly SemanticEventSign[];
+  readonly requiredOperands: readonly string[];
+  readonly valence: "none" | "source_required";
+  readonly validation: {
+    readonly positives: readonly string[];
+    readonly hardNegatives: readonly string[];
+    readonly externalPopulation?: string;
+  };
+}
+
+export interface EvidenceEligibilityDeclaration {
+  readonly event: VersionedEvidenceId;
+  readonly consumer: VersionedEvidenceId;
+  readonly disposition: "eligible" | "refused";
+  readonly reason: VersionedEvidenceId;
+  readonly allowedSigns: readonly SemanticEventSign[];
+  readonly requiredOperands: readonly string[];
+  readonly valenceAuthority: readonly VersionedEvidenceId[];
+}
+
+export interface EvidenceReasonDeclaration extends VersionedEvidenceId {
+  readonly stage: "eligibility" | "selection";
+  readonly meaning: string;
+}
+
+export interface EvidenceSelectionPolicy {
+  readonly id: string;
+  readonly version: number;
+  readonly minimumAlternatives: number;
+  readonly maximumSameFamilyShare: number;
+  readonly minimumAlternativeOnlyShare: number | null;
+  readonly maxFacts: number;
+  readonly criticalEvents: readonly VersionedEvidenceId[];
+}
+
+export interface EvidenceSelectionPolicyDeclaration extends EvidenceSelectionPolicy {
+  readonly consumer: VersionedEvidenceId;
+  readonly disposition: "experimental" | "production";
+}
+
 export interface EvidenceContractDeclarations {
   readonly producers: readonly ProducerDeclaration[];
   readonly consumers: readonly ConsumerDeclaration[];
   readonly adapters: readonly AdapterDeclaration[];
   readonly genericBypasses?: readonly { readonly consumer: VersionedEvidenceId; readonly implementation: string }[];
+  readonly semanticEvents?: readonly SemanticEventDeclaration[];
+  readonly eligibility?: readonly EvidenceEligibilityDeclaration[];
+  readonly reasons?: readonly EvidenceReasonDeclaration[];
+  readonly selectionPolicies?: readonly EvidenceSelectionPolicyDeclaration[];
 }
 
 export interface CompiledEvidenceManifest {
@@ -106,15 +154,22 @@ export interface CompiledEvidenceManifest {
   readonly projections: readonly ProjectionDeclaration[];
   readonly consumers: readonly ConsumerDeclaration[];
   readonly bindings: readonly EvidenceBinding[];
+  readonly semanticEvents: readonly SemanticEventDeclaration[];
+  readonly eligibility: readonly EvidenceEligibilityDeclaration[];
+  readonly reasons: readonly EvidenceReasonDeclaration[];
+  readonly selectionPolicies: readonly EvidenceSelectionPolicyDeclaration[];
   readonly digest: string;
 }
 
 export interface DeclaredEvidence<T> {
+  readonly [DECLARED]: true;
   readonly producer: VersionedEvidenceId;
   readonly projection: VersionedEvidenceId;
   readonly payload: T;
 }
 
+const DECLARED: unique symbol = Symbol("tabiya.evidence.declared");
+const DECLARED_VALUES = new WeakSet<object>();
 const ADMITTED = Symbol("tabiya.evidence.admitted");
 
 export interface ConsumerEvidenceView<T = unknown> {
@@ -151,6 +206,21 @@ export const EVIDENCE_MANIFEST_ERROR_CODES = Object.freeze([
   "EVIDENCE_DERIVATION_WIDENS",
   "EVIDENCE_GENERIC_BYPASS",
   "EVIDENCE_PROVIDER_FALLBACK_MISSING",
+  "EVIDENCE_EVENT_DUPLICATE",
+  "EVIDENCE_EVENT_PROJECTION_MISSING",
+  "EVIDENCE_EVENT_DERIVATION_MISMATCH",
+  "EVIDENCE_EVENT_SIGN_WIDENS",
+  "EVIDENCE_EVENT_OPERAND_MISSING",
+  "EVIDENCE_EVENT_UNVALIDATED",
+  "EVIDENCE_EVENT_PROJECTION_REFUSED",
+  "EVIDENCE_EVENT_VALENCE_UNBACKED",
+  "EVIDENCE_ELIGIBILITY_DUPLICATE",
+  "EVIDENCE_ELIGIBILITY_ORPHANED",
+  "EVIDENCE_REASON_DUPLICATE",
+  "EVIDENCE_POLICY_DUPLICATE",
+  "EVIDENCE_POLICY_INVALID",
+  "EVIDENCE_POLICY_CONSUMER_MISSING",
+  "EVIDENCE_POLICY_CRITICAL_REFUSED",
 ] as const);
 export type EvidenceManifestErrorCode = (typeof EVIDENCE_MANIFEST_ERROR_CODES)[number];
 
@@ -185,6 +255,10 @@ function subset<T>(candidate: readonly T[], ceiling: readonly T[]): boolean {
   return candidate.every((value) => ceiling.includes(value));
 }
 
+function setEqual<T>(left: readonly T[], right: readonly T[]): boolean {
+  return left.length === right.length && subset(left, right) && subset(right, left);
+}
+
 function budgetNarrows(candidate: number | null, ceiling: number | null): boolean {
   return ceiling === null || (candidate !== null && candidate >= 0 && candidate <= ceiling);
 }
@@ -199,6 +273,10 @@ function canonical(value: unknown): string {
   if (Array.isArray(value)) return `[${value.map(canonical).join(",")}]`;
   const record = value as Record<string, unknown>;
   return `{${Object.keys(record).sort().map((key) => `${JSON.stringify(key)}:${canonical(record[key])}`).join(",")}}`;
+}
+
+export function evidenceDigest(value: unknown): string {
+  return sha256(canonical(value));
 }
 
 // Small dependency-free SHA-256 so the shared runtime contract remains browser-buildable.
@@ -261,7 +339,15 @@ function immutable<T>(value: T): T {
 export function declareEvidence<T>(producer: VersionedEvidenceId, projection: VersionedEvidenceId, payload: T): DeclaredEvidence<T> {
   assertLiteral(producer, "declared-evidence producer");
   assertLiteral(projection, "declared-evidence projection");
-  return immutable({ producer: { ...producer }, projection: { ...projection }, payload });
+  const value = immutable({ [DECLARED]: true as const, producer: { ...producer }, projection: { ...projection }, payload });
+  DECLARED_VALUES.add(value);
+  return value;
+}
+
+export function assertDeclaredEvidence(value: unknown): asserts value is DeclaredEvidence<unknown> {
+  if (typeof value !== "object" || value === null || (value as { readonly [DECLARED]?: unknown })[DECLARED] !== true || !DECLARED_VALUES.has(value)) {
+    fail("EVIDENCE_GENERIC_BYPASS", "evidence was not constructed by an exact declared-evidence adapter", ["declared-evidence:unsealed"]);
+  }
 }
 
 export function evidenceForConsumer<T>(manifest: CompiledEvidenceManifest, consumer: VersionedEvidenceId, values: readonly DeclaredEvidence<T>[]): ConsumerEvidenceView<T> {
@@ -276,6 +362,7 @@ export function evidenceForConsumer<T>(manifest: CompiledEvidenceManifest, consu
     .map((binding) => `${refKey(binding.producer)}:${refKey(binding.projection)}`));
   const admitted: DeclaredEvidence<T>[] = [];
   for (const value of values) {
+    assertDeclaredEvidence(value);
     assertLiteral(value.producer, "declared-evidence producer");
     assertLiteral(value.projection, "declared-evidence projection");
     const projection = projectionByKey.get(refKey(value.projection));
@@ -319,6 +406,10 @@ export function compileEvidenceManifest(declarations: EvidenceContractDeclaratio
   const projectionMap = new Map<string, ProjectionDeclaration>();
   const consumerMap = new Map<string, ConsumerDeclaration>();
   const adapterMap = new Map<string, AdapterDeclaration>();
+  const semanticEvents = [...(declarations.semanticEvents ?? [])].sort((left, right) => refKey(left.projection).localeCompare(refKey(right.projection)));
+  const eligibility = [...(declarations.eligibility ?? [])].sort((left, right) => `${refKey(left.event)}:${refKey(left.consumer)}`.localeCompare(`${refKey(right.event)}:${refKey(right.consumer)}`));
+  const reasons = [...(declarations.reasons ?? [])].sort((left, right) => refKey(left).localeCompare(refKey(right)));
+  const selectionPolicies = [...(declarations.selectionPolicies ?? [])].sort((left, right) => refKey(left).localeCompare(refKey(right)));
 
   for (const producer of producers) {
     assertLiteral(producer, site("producer", producer, producer.implementation));
@@ -382,7 +473,70 @@ export function compileEvidenceManifest(declarations: EvidenceContractDeclaratio
     }
   }
 
+
   const bindings: EvidenceBinding[] = [];
+  const reasonMap = new Map<string, EvidenceReasonDeclaration>();
+  for (const reason of reasons) {
+    assertLiteral(reason, site("reason", reason));
+    if (reasonMap.has(refKey(reason))) fail("EVIDENCE_REASON_DUPLICATE", "duplicate evidence reason", [site("reason", reason)]);
+    if (reason.meaning.trim() === "") fail("EVIDENCE_ELIGIBILITY_ORPHANED", "evidence reason needs a meaning", [site("reason", reason)]);
+    reasonMap.set(refKey(reason), reason);
+  }
+
+  const eventMap = new Map<string, SemanticEventDeclaration>();
+  for (const event of semanticEvents) {
+    assertLiteral(event.projection, site("semantic-event", event.projection));
+    const key = refKey(event.projection);
+    if (eventMap.has(key)) fail("EVIDENCE_EVENT_DUPLICATE", "duplicate semantic event declaration", [site("semantic-event", event.projection)]);
+    const projection = projectionMap.get(key);
+    if (projection === undefined) fail("EVIDENCE_EVENT_PROJECTION_MISSING", "semantic event projection is absent", [site("semantic-event", event.projection)]);
+    if (projection.role !== "event" || projection.disposition !== undefined) fail("EVIDENCE_EVENT_PROJECTION_REFUSED", "semantic event projection is not an active event projection", [site("semantic-event", event.projection)]);
+    const derivationInputs = event.derivationInputs ?? [];
+    const declaredInputs = projection.derivation?.inputs ?? [];
+    if (!setEqual(derivationInputs.map(refKey), declaredInputs.map(refKey))) fail("EVIDENCE_EVENT_DERIVATION_MISMATCH", "semantic event derivation inputs disagree with its projection", [site("semantic-event", event.projection)]);
+    if (event.allowedSigns.length === 0 || !subset(event.allowedSigns, projection.signs)) fail("EVIDENCE_EVENT_SIGN_WIDENS", "semantic event signs exceed its projection", [site("semantic-event", event.projection)]);
+    if (!subset(event.requiredOperands, projection.operands) || !nonEmptyStrings(event.requiredOperands)) fail("EVIDENCE_EVENT_OPERAND_MISSING", "semantic event requires an operand absent from its projection", [site("semantic-event", event.projection)]);
+    if (event.validation.positives.length === 0 || event.validation.hardNegatives.length === 0 || !nonEmptyStrings(event.validation.positives) || !nonEmptyStrings(event.validation.hardNegatives)) fail("EVIDENCE_EVENT_UNVALIDATED", "semantic event needs executable positive and hard-negative fixtures", [site("semantic-event", event.projection)]);
+    eventMap.set(key, event);
+  }
+
+  const eligibilityMap = new Map<string, EvidenceEligibilityDeclaration>();
+  for (const row of eligibility) {
+    assertLiteral(row.event, site("eligibility-event", row.event));
+    assertLiteral(row.consumer, site("eligibility-consumer", row.consumer));
+    assertLiteral(row.reason, site("eligibility-reason", row.reason));
+    const key = `${refKey(row.event)}:${refKey(row.consumer)}`;
+    if (eligibilityMap.has(key)) fail("EVIDENCE_ELIGIBILITY_DUPLICATE", "duplicate event/consumer eligibility", [key]);
+    const event = eventMap.get(refKey(row.event));
+    const consumer = consumerMap.get(refKey(row.consumer));
+    const reason = reasonMap.get(refKey(row.reason));
+    if (event === undefined || consumer === undefined || reason?.stage !== "eligibility") fail("EVIDENCE_ELIGIBILITY_ORPHANED", "eligibility row names an absent event, consumer, or eligibility reason", [key]);
+    if (!subset(row.allowedSigns, event.allowedSigns)) fail("EVIDENCE_EVENT_SIGN_WIDENS", "eligibility signs exceed the semantic event", [key]);
+    if (!subset(row.requiredOperands, event.requiredOperands)) fail("EVIDENCE_EVENT_OPERAND_MISSING", "eligibility requires an undeclared event operand", [key]);
+    if ((event.valence === "source_required") !== (row.valenceAuthority.length > 0)) fail("EVIDENCE_EVENT_VALENCE_UNBACKED", "event valence lacks exact declared authority or invents authority for a valence-free event", [key]);
+    for (const authority of row.valenceAuthority) {
+      assertLiteral(authority, site("valence-authority", authority));
+      if (!projectionMap.has(refKey(authority))) fail("EVIDENCE_EVENT_VALENCE_UNBACKED", "valence authority is absent", [key, site("valence-authority", authority)]);
+    }
+    eligibilityMap.set(key, row);
+  }
+
+  const policyMap = new Map<string, EvidenceSelectionPolicyDeclaration>();
+  for (const policy of selectionPolicies) {
+    assertLiteral(policy, site("selection-policy", policy));
+    assertLiteral(policy.consumer, site("selection-policy-consumer", policy.consumer));
+    if (policyMap.has(refKey(policy))) fail("EVIDENCE_POLICY_DUPLICATE", "duplicate evidence selection policy", [site("selection-policy", policy)]);
+    if (!consumerMap.has(refKey(policy.consumer))) fail("EVIDENCE_POLICY_CONSUMER_MISSING", "selection policy names an absent consumer", [site("selection-policy", policy), site("consumer", policy.consumer)]);
+    const sharesValid = Number.isFinite(policy.maximumSameFamilyShare) && policy.maximumSameFamilyShare >= 0 && policy.maximumSameFamilyShare <= 1 && (policy.minimumAlternativeOnlyShare === null || (Number.isFinite(policy.minimumAlternativeOnlyShare) && policy.minimumAlternativeOnlyShare >= 0 && policy.minimumAlternativeOnlyShare <= 1));
+    if (!Number.isSafeInteger(policy.minimumAlternatives) || policy.minimumAlternatives < 0 || !Number.isSafeInteger(policy.maxFacts) || policy.maxFacts < 0 || !sharesValid) fail("EVIDENCE_POLICY_INVALID", "selection policy thresholds and budgets must be finite and in range", [site("selection-policy", policy)]);
+    for (const critical of policy.criticalEvents) {
+      assertLiteral(critical, site("critical-event", critical));
+      const row = eligibilityMap.get(`${refKey(critical)}:${refKey(policy.consumer)}`);
+      if (row?.disposition !== "eligible") fail("EVIDENCE_POLICY_CRITICAL_REFUSED", "critical event is not eligible for the policy consumer", [site("selection-policy", policy), site("critical-event", critical)]);
+    }
+    policyMap.set(refKey(policy), policy);
+  }
+
   for (const adapter of adapters) {
     assertLiteral(adapter, site("adapter", adapter, adapter.implementation));
     assertLiteral(adapter.producer, site("adapter-producer", adapter, adapter.implementation));
@@ -401,6 +555,12 @@ export function compileEvidenceManifest(declarations: EvidenceContractDeclaratio
     bindings.push(immutable({ producer: { ...adapter.producer }, projection: { ...adapter.projection }, consumer: { ...adapter.consumer }, adapter: { id: adapter.id, version: adapter.version }, timing: [...adapter.timing].sort(), roles: [...adapter.roles].sort(), sessions: [...adapter.sessions].sort(), forms: [...adapter.forms].sort(), answerContent: [...adapter.answerContent].sort(), latency: { ...adapter.latency }, budget: { ...adapter.budget } }));
   }
 
+  for (const row of eligibility) {
+    const key = `${refKey(row.event)}:${refKey(row.consumer)}`;
+    if (row.disposition === "eligible" && !bindings.some((binding) => refKey(binding.projection) === refKey(row.event) && refKey(binding.consumer) === refKey(row.consumer))) fail("EVIDENCE_ELIGIBILITY_ORPHANED", "eligible event is not bound to its exact consumer", [key]);
+    for (const authority of row.valenceAuthority) if (!bindings.some((binding) => refKey(binding.projection) === refKey(authority) && refKey(binding.consumer) === refKey(row.consumer))) fail("EVIDENCE_EVENT_VALENCE_UNBACKED", "valence authority is unbound for the consumer", [key, site("valence-authority", authority)]);
+  }
+
   for (const projection of projectionMap.values()) {
     const bound = bindings.some((binding) => refKey(binding.projection) === refKey(projection));
     if (bound === (projection.disposition !== undefined)) fail("EVIDENCE_PROJECTION_ORPHANED", bound ? "bound projection also carries a disposition" : "projection has neither binding nor disposition", [site("projection", projection)]);
@@ -416,6 +576,6 @@ export function compileEvidenceManifest(declarations: EvidenceContractDeclaratio
 
   const projections = [...projectionMap.values()].sort((left, right) => refKey(left).localeCompare(refKey(right)));
   bindings.sort((left, right) => `${refKey(left.consumer)}:${refKey(left.projection)}`.localeCompare(`${refKey(right.consumer)}:${refKey(right.projection)}`));
-  const material = { producers, projections, consumers, bindings };
+  const material = { producers, projections, consumers, bindings, semanticEvents, eligibility, reasons, selectionPolicies };
   return immutable({ ...material, digest: sha256(canonical(material)) });
 }

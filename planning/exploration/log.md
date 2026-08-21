@@ -3972,3 +3972,8 @@ harness. Its 3/3 tests pass without external input. F2's external-validation cri
 On the owner's direction to continue, `semantic-evidence-selection` is accepted after two
 buildability reviews and the D684 fixture repair. Implementation may now be planned. Acceptance
 does not choose production assistance modules, thresholds, presets or defaults; those remain F5.
+
+## 2026-08-21 — F2 implementation started
+
+`semantic-evidence-selection` is implementing with a five-unit plan. The first unit is the compiled
+manifest extension and negative fixtures; no learner-visible behavior changes in that unit.

@@ -1,6 +1,6 @@
 # RFC: Semantic evidence and local selection — preserve the fact before deciding to speak
 
-- **Status:** accepted
+- **Status:** implementing
 - **Author:** codex (agent), for Marco
 - **Created:** 2026-08-21
 - **Design refs:** `design/03-product-breadth.md` §§Intelligence and explanation, B3, B4 and B9;
@@ -690,3 +690,5 @@ claim, it returns this RFC instead of filling the gap.
 - 2026-08-21: accepted on the owner's direction to continue after the second review and D684's
   bounded external-fixture repair. No open product question remains inside F2; F5 still owns
   production thresholds, modules, presets and defaults.
+- 2026-08-21: implementation opened with `planning/semantic-evidence-selection/`; compiled contract
+  and negative fixtures are the first landing unit.
