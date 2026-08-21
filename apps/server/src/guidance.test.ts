@@ -7,7 +7,7 @@ import { afterEach, describe, expect, it } from "vitest";
 import { HUMAN_COMMON_RESISTANCE_PROFILE, type CapabilitiesProvider } from "./capabilities.js";
 import { EvidenceJobQueue, type EvidenceExecutor } from "./evidence-queue.js";
 import type { EngineHealth, EngineRequest } from "./engine-supervisor.js";
-import { evidencePacket, renderVoice, type VoiceProvider } from "./guidance.js";
+import { evidencePacket, renderVoice, type VoiceEvidenceView, type VoiceProvider } from "./guidance.js";
 import { OpponentSelector, type SelectorEngineClient } from "./opponent-selector.js";
 import { createRestHandler } from "./rest.js";
 import { RunService } from "./service.js";
@@ -30,7 +30,7 @@ class MaiaClient implements SelectorEngineClient {
 const capabilities: CapabilitiesProvider = {
   async get() {
     return {
-      engines: [], policyModes: ["human_common"], feedbackPolicies: ["delayed_checkpoint", "segment_end", "immediate_guard"], guardBasis: ["rules"], costBasis: ["material"], capabilityDispositions: [], recordedReadingKinds: [], runSchemaVersion: "0.17",
+      engines: [], policyModes: ["human_common"], feedbackPolicies: ["delayed_checkpoint", "segment_end", "immediate_guard"], guardBasis: ["rules"], costBasis: ["material"], capabilityDispositions: [], recordedReadingKinds: [], runSchemaVersion: "0.17", evidenceManifest: { digest: "fixture", availability: [], bindings: [] },
       tempoVerdicts: ["unopened", "open", "in_time", "over_budget", "too_slow", "outpaced", "premature"], tempoGradeable: ["in_time", "over_budget", "too_slow", "premature", "outpaced"], tempoDefaults: { outpaced: "failed" },
       assessmentCategories: ["win", "loss", "draw", "cursed-win", "blessed-loss"],
       objectiveAssessmentSets: { win: ["win"], hold: ["draw", "cursed-win", "blessed-loss"], save: ["loss", "blessed-loss"], resist: ["loss", "blessed-loss"] },
@@ -84,7 +84,7 @@ describe("adaptive guidance server seams", () => {
   it("keeps learner-drawn squares outside the voice allowlist", async () => {
     const { service, run } = await setup();
     service.reveal("guide", "writer", at);
-    const packets: EvidencePacket[] = [];
+    const packets: VoiceEvidenceView[] = [];
     const provider: VoiceProvider = {
       async render(packet, _persona, deterministicText) {
         packets.push(packet);
@@ -118,8 +118,9 @@ describe("adaptive guidance server seams", () => {
     expect(write.status).toBe(200);
     expect((await handler(request("/runs/guide/voice", "POST", body))).status).toBe(200);
     expect(packets[1]!.sentences).toEqual(packets[0]!.sentences);
-    expect(voiceCheck(packets[1]!, markedSquare).violations).toContain(`square:${markedSquare}`);
-    expect(voiceCheck({ ...packets[1]!, sentences: [...packets[1]!.sentences, markedSquare] }, markedSquare).violations).not.toContain(`square:${markedSquare}`);
+    const checkPacket = { fen: FEN, phase: { source: "detector" as const, value: "opening" as const }, structures: [], observations: [], markers: [], endgame: null, plans: [], authored: [], readings: [], sentences: packets[1]!.sentences } satisfies EvidencePacket;
+    expect(voiceCheck(checkPacket, markedSquare).violations).toContain(`square:${markedSquare}`);
+    expect(voiceCheck({ ...checkPacket, sentences: [...checkPacket.sentences, markedSquare] }, markedSquare).violations).not.toContain(`square:${markedSquare}`);
 
     const restSource = readFileSync(new URL("./rest.ts", import.meta.url), "utf8");
     expect(restSource.match(/\bsentences\s*:/gu)).toHaveLength(3);
@@ -301,7 +302,7 @@ describe("adaptive guidance server seams", () => {
       return Response.json({ text: packet.sentences[0] });
     } });
     expect(await renderVoice(provider, packet, "plain", "marker")).toEqual({ text: packet.sentences[0], source: "provider" });
-    expect(bodies).toEqual([{ personaPrompt: "plain", sentences: packet.sentences, scope: "marker" }]);
+    expect(bodies).toEqual([{ personaPrompt: "plain", sentences: packet.sentences, evidence: [expect.objectContaining({ producer: { id: "rules.phase", version: 1 }, projection: { id: "rules.phase.reading", version: 1 } })], scope: "marker" }]);
 
     let failures = 0;
     const failing = new ExternalHttpVoiceProvider({ url: "https://voice.test/render", fetch: async () => { failures += 1; return new Response("no", { status: 503 }); } });

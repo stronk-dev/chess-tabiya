@@ -182,8 +182,8 @@ lets that region claim the event first, then considers global commands.
 | Owner | Keys |
 |---|---|
 | Shell | `g` chords; `?` and Escape when no region claims them |
-| Drill | R, Shift+R, B, 1–9, Tab while focused inside the drill, arrows, Space, E, local `?` and Escape |
-| Browser | Tab outside the drill region, including the top bar |
+| Drill | R, Shift+R, B, 1–9, Alt+C while the drill region is focused, arrows, Space, E, local `?` and Escape |
+| Browser | Tab and Shift+Tab everywhere, including the drill region and top bar |
 
 The shell chord map is `g h` Home, `g p` Play, `g l` Learn, `g r` Review,
 `g v` Live, `g c` Create, `g b` Library, and `g s` Settings. `g m` focuses the
@@ -191,13 +191,14 @@ first primary-navigation link, providing a keyboard-only route from the drill
 body to the top bar. Once `g` starts a chord, its next key is consumed and is
 not delivered to the drill.
 
-Tab preserves the established compare-toggle behavior only while focus is
-inside the drill region. It remains normal browser traversal in navigation and
-other shell controls. Help overlays, dialogs, checkpoint continuation, and
-compare dismissal restore focus to the invoking control or drill region. The
-browser test covers the drill-to-compare contract, normal top-bar Tab, the
-navigation escape chord, and focus restoration; it also caught a lost-focus
-defect after checkpoint continuation.
+Tab and Shift+Tab always preserve browser focus traversal. `Alt+C`, matched by
+physical `event.code === "KeyC"`, toggles comparison only when the drill region
+itself owns focus; it never fires from an input, summary, semantic board grid,
+or contenteditable descendant. Help overlays, dialogs, checkpoint continuation,
+and comparison dismissal restore focus to the invoking control or drill region.
+The browser test covers the drill-to-compare binding, unmodified Tab traversal,
+the navigation escape chord, and focus restoration; it also caught a
+lost-focus defect after checkpoint continuation.
 
 ## Honest disabled controls
 

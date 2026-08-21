@@ -275,7 +275,7 @@ describe("Layer 3 screens", () => {
 
     expect(document.querySelector(".pivotal-marker")).toBeNull();
     const request = [...document.querySelectorAll<HTMLButtonElement>(".assistance-grid button")]
-      .find((button) => button.textContent?.includes("Show recorded human-model split"));
+      .find((button) => button.textContent?.includes("Open human-model evidence inspector"));
     expect(request).toBeDefined();
     request!.click();
     expect(onHumanSplit).toHaveBeenCalledWith(run.activeCursor.nodeId);
@@ -561,7 +561,7 @@ describe("Layer 3 screens", () => {
     expect(document.body.textContent).toContain("active → achieved");
     expect(document.body.textContent).toContain("objective achieved");
     expect(document.body.textContent).toContain("M-2");
-    expect(document.body.textContent).toContain("Recorded branch strips");
+    expect(document.body.textContent).toContain("Evidence inspector: recorded branch strips");
     const compareSections = [...document.querySelectorAll(".compare > section")];
     expect(compareSections.indexOf(document.querySelector(".narrative")!)).toBeLessThan(
       compareSections.indexOf(document.querySelector(".trajectory")!),
@@ -713,11 +713,31 @@ describe("Layer 3 screens", () => {
     main.focus();
     key("1");
     expect(onSwitchBranch).toHaveBeenCalledWith("screen-run:node:3");
-    key("Tab");
+    const compareKey = new KeyboardEvent("keydown", {
+      key: "c", code: "KeyC", altKey: true, bubbles: true, cancelable: true,
+    });
+    Object.defineProperty(compareKey, "target", { value: main });
+    regionKeyboard?.(compareKey);
     expect(onCompare).toHaveBeenCalledWith([
       run.activeCursor.branchId,
       run.branches[0]!.id,
     ]);
+    const compareCalls = onCompare.mock.calls.length;
+    const contenteditable = document.createElement("div");
+    contenteditable.contentEditable = "true";
+    main.append(contenteditable);
+    for (const target of [
+      document.querySelector(".assistance-control summary")!,
+      document.querySelector(".text-move input")!,
+      document.querySelector("[data-board-input-grid]")!,
+      contenteditable,
+    ]) {
+      const blocked = new KeyboardEvent("keydown", { key: "c", code: "KeyC", altKey: true, bubbles: true, cancelable: true });
+      Object.defineProperty(blocked, "target", { value: target });
+      Object.defineProperty(blocked, "composedPath", { value: () => [target, main] });
+      expect(regionKeyboard?.(blocked)).toBe(false);
+    }
+    expect(onCompare).toHaveBeenCalledTimes(compareCalls);
     key("ArrowLeft");
     await tick();
     expect(document.body.textContent).toContain("Preview");
@@ -734,6 +754,16 @@ describe("Layer 3 screens", () => {
     expect(document.querySelector('[aria-labelledby="shortcut-title"]')).not.toBeNull();
     expect(document.activeElement?.id).toBe("shortcut-title");
     expect(document.body.textContent).toContain("Shift + R");
+    key("Escape");
+    await tick();
+    expect(document.activeElement).toBe(main);
+
+    const helpButton = document.querySelector<HTMLButtonElement>('button[aria-label="Keyboard shortcuts"]')!;
+    helpButton.click();
+    await tick();
+    document.querySelector<HTMLButtonElement>('[aria-labelledby="shortcut-title"] button')!.click();
+    await tick();
+    expect(document.activeElement).toBe(helpButton);
     await unmount(component);
   });
 });

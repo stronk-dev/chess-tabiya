@@ -140,6 +140,10 @@
   let compareIds: string[] = $state([]);
   let compareStep = $state(0);
   let helpOpen = $state(false);
+  let helpInvoker: HTMLElement | undefined;
+  let forkInvoker: HTMLElement | undefined;
+  let checkpointPickerInvoker: HTMLElement | undefined;
+  let compareInvoker: HTMLElement | undefined;
   let forkOpen = $state(false);
   let checkpointPickerOpen = $state(false);
   let replaying = $state(false);
@@ -168,6 +172,10 @@
   let speechAvailable = $state(false);
   let dismissedGuardSeq: number | undefined = $state();
   let selectedSquare: string | undefined = $state();
+  let boardActiveSquare: import("./board-input.js").Square | undefined = $state();
+  let boardActiveRunId: string | undefined = $state();
+  let boardMoveAnnouncement: string | undefined = $state();
+  let boardFocusRequested = $state(false);
   let compactTab: "timeline" | "branches" | "evidence" = $state("timeline");
   let decidedness: Readonly<Record<string, Decidedness>> = $state({});
   let foldedBranchIds: string[] = $state([]);
@@ -449,15 +457,17 @@
     if (next !== undefined) await onSwitchBranch(branchPath(run, next.branchId).at(-1)!.id);
   }
   function interactiveTarget(event: KeyboardEvent): boolean {
-    const target =
-      event.target instanceof Node ? event.target : document.activeElement;
-    return (
+    return event.composedPath().some((target) =>
       target instanceof HTMLInputElement ||
       target instanceof HTMLTextAreaElement ||
       target instanceof HTMLSelectElement ||
       target instanceof HTMLButtonElement ||
       target instanceof HTMLAnchorElement ||
-      (target instanceof HTMLElement && target.isContentEditable)
+      (target instanceof HTMLElement && (
+        target.tagName === "SUMMARY" ||
+        target.isContentEditable ||
+        target.dataset.boardInputGrid !== undefined
+      )),
     );
   }
 
@@ -468,6 +478,18 @@
     return other === undefined ? undefined : [active, other];
   }
 
+  function invoker(event: Event): HTMLElement | undefined {
+    return event.currentTarget instanceof HTMLElement ? event.currentTarget : undefined;
+  }
+
+  function keyboardInvoker(event: KeyboardEvent): HTMLElement | undefined {
+    return event.target instanceof HTMLElement ? event.target : mainElement;
+  }
+
+  function restoreFocus(target: HTMLElement | undefined): void {
+    void tick().then(() => (target?.isConnected ? target : mainElement)?.focus());
+  }
+
   function openCompare(): void {
     const ids = selectedCompareIds();
     if (ids !== undefined) void onCompare(ids);
@@ -475,22 +497,22 @@
 
   function closeCompare(): void {
     onCloseCompare();
-    void tick().then(() => mainElement?.focus());
+    restoreFocus(compareInvoker);
   }
 
   function closeHelp(): void {
     helpOpen = false;
-    void tick().then(() => mainElement?.focus());
+    restoreFocus(helpInvoker);
   }
 
   function closeFork(): void {
     forkOpen = false;
-    void tick().then(() => mainElement?.focus());
+    restoreFocus(forkInvoker);
   }
 
   function closeCheckpointPicker(): void {
     checkpointPickerOpen = false;
-    void tick().then(() => mainElement?.focus());
+    restoreFocus(checkpointPickerInvoker);
   }
 
   function toggleCompare(branchId: string): void {
@@ -615,7 +637,10 @@
     if (event.key === "?" || (event.key === "/" && event.shiftKey)) {
       event.preventDefault();
       if (helpOpen) closeHelp();
-      else helpOpen = true;
+      else {
+        helpInvoker = keyboardInvoker(event);
+        helpOpen = true;
+      }
       return true;
     }
     if (event.key === "Escape") {
@@ -640,6 +665,7 @@
       event.preventDefault();
       if (!canWrite) return true;
       if (event.shiftKey) {
+        checkpointPickerInvoker = keyboardInvoker(event);
         checkpointPickerOpen = true;
         void tick().then(() => pickerHeading?.focus());
       }
@@ -651,6 +677,7 @@
     } else if (event.key.toLowerCase() === "b") {
       event.preventDefault();
       if (!canWrite) return true;
+      forkInvoker = keyboardInvoker(event);
       forkOpen = true;
       void tick().then(() => forkInput?.focus());
       return true;
@@ -661,9 +688,16 @@
         void onSwitchBranch(branch.leafNodeId);
         return true;
       }
-    } else if (event.key === "Tab") {
+    } else if (
+      event.altKey &&
+      event.code === "KeyC" &&
+      (event.target === mainElement || event.target === regionElement)
+    ) {
       event.preventDefault();
-      if (comparison === undefined) openCompare();
+      if (comparison === undefined) {
+        compareInvoker = keyboardInvoker(event);
+        openCompare();
+      }
       else closeCompare();
       return true;
     } else if (event.key === "ArrowLeft" || event.key === "ArrowRight") {
@@ -714,6 +748,15 @@
   });
 
   $effect(() => {
+    if (boardActiveRunId !== run.id) {
+      boardActiveRunId = run.id;
+      boardActiveSquare = undefined;
+      boardMoveAnnouncement = undefined;
+      boardFocusRequested = false;
+    }
+  });
+
+  $effect(() => {
     comparison;
     compareStep = 0;
   });
@@ -728,7 +771,7 @@
   });
 </script>
 
-<div class="drill-region" data-keyboard-region="drill" bind:this={regionElement}>
+<div class="drill-region" data-keyboard-region="drill" tabindex="-1" bind:this={regionElement}>
 
 {#if !viewportSupport.supported}
   <section class="viewport-refusal" role="alert" aria-labelledby="viewport-refusal-title">
@@ -767,14 +810,14 @@
           <div class="assistance-grid">
             <label><input type="checkbox" checked={assistance.markers === "live"} onchange={(event) => setAssistance("markers", event.currentTarget.checked ? "live" : "off")} /> Passive pivotal markers</label>
             <label><input type="checkbox" checked={assistance.guided === "live"} onchange={(event) => setAssistance("guided", event.currentTarget.checked ? "live" : "off")} /> Named-pattern guidance</label>
-            <label><input type="checkbox" checked={assistance.humanSplit === "on_request"} disabled={assistancePermission.humanSplit === "locked_off"} aria-describedby={assistancePermission.humanSplit === "locked_off" ? "human-split-locked" : undefined} onchange={(event) => setAssistance("humanSplit", event.currentTarget.checked ? "on_request" : "off")} /> Human move split on request</label>
+            <label><input type="checkbox" checked={assistance.humanSplit === "on_request"} disabled={assistancePermission.humanSplit === "locked_off"} aria-describedby={assistancePermission.humanSplit === "locked_off" ? "human-split-locked" : undefined} onchange={(event) => setAssistance("humanSplit", event.currentTarget.checked ? "on_request" : "off")} /> Evidence inspector: human move split</label>
             {#if assistancePermission.humanSplit === "locked_off"}<span id="human-split-locked" class="honest">Available only after this run opens feedback, and never to participants or spectators.</span>{/if}
-            {#if assistance.humanSplit === "on_request" && assistancePermission.humanSplit === "free" && onHumanSplit !== undefined}<button type="button" onclick={() => void requestHumanSplit()}>Show recorded human-model split</button>{/if}
+            {#if assistance.humanSplit === "on_request" && assistancePermission.humanSplit === "free" && onHumanSplit !== undefined}<button type="button" onclick={() => void requestHumanSplit()}>Open human-model evidence inspector</button>{/if}
             {#if assistance.humanSplit === "on_request" && assistancePermission.humanSplit === "free" && onHumanSplit === undefined}<span class="honest">Recorded human-model splits are unavailable from this deployment.</span>{/if}
             {#if humanSplit}<section aria-label="Human-model evidence"><p class="guidance-sentence">{humanSplit.engine.name}, rating target {humanSplit.targetElo ?? "unrated"}: {humanSplit.candidates.filter((candidate) => candidate.offWindow !== true).map((candidate) => `${candidate.moveUci} ${candidate.mass === undefined ? "mass unavailable" : `${Math.round(candidate.mass * 100)}%`}`).join(" · ")}</p></section>{/if}
-            {#if capabilities?.providers.corpus !== "none"}<label><input type="checkbox" checked={assistance.corpus === "on_request"} disabled={assistancePermission.corpus === "locked_off"} aria-describedby={assistancePermission.corpus === "locked_off" ? "corpus-locked" : undefined} onchange={(event) => setAssistance("corpus", event.currentTarget.checked ? "on_request" : "off")} /> Corpus counts on request</label>{/if}
+            {#if capabilities?.providers.corpus !== "none"}<label><input type="checkbox" checked={assistance.corpus === "on_request"} disabled={assistancePermission.corpus === "locked_off"} aria-describedby={assistancePermission.corpus === "locked_off" ? "corpus-locked" : undefined} onchange={(event) => setAssistance("corpus", event.currentTarget.checked ? "on_request" : "off")} /> Evidence inspector: corpus counts</label>{/if}
             {#if capabilities?.providers.corpus !== "none" && assistancePermission.corpus === "locked_off"}<span id="corpus-locked" class="honest">Available only after this run opens feedback, and never to participants or spectators.</span>{/if}
-            {#if assistance.corpus === "on_request" && assistancePermission.corpus === "free" && capabilities?.providers.corpus !== "none" && onCorpus !== undefined}<button type="button" onclick={() => void requestCorpus()}>Show corpus counts</button>{/if}
+            {#if assistance.corpus === "on_request" && assistancePermission.corpus === "free" && capabilities?.providers.corpus !== "none" && onCorpus !== undefined}<button type="button" onclick={() => void requestCorpus()}>Open corpus evidence inspector</button>{/if}
             {#if corpusPage}<section aria-label="Corpus evidence">{#each renderCorpusPage(corpusPage) as sentence}<p class="guidance-sentence">{sentence}</p>{/each}</section>{/if}
             {#if capabilities?.providers.llm === "external"}<label><input type="checkbox" checked={assistance.voice === "persona"} onchange={(event) => setAssistance("voice", event.currentTarget.checked ? "persona" : "authored")} /> External voice</label>{/if}
             {#if speechAvailable}<label><input type="checkbox" checked={assistance.spoken === "browser"} onchange={(event) => setAssistance("spoken", event.currentTarget.checked ? "browser" : "off")} /> Speak opened guidance</label>{/if}
@@ -782,7 +825,7 @@
             {#if !speechAvailable && capabilities?.providers.tts !== "external"}<span id="spoken-unavailable" class="honest">Speech synthesis is unavailable in this browser.</span>{/if}
           </div>
         </details>
-        <button class="help" type="button" aria-label="Keyboard shortcuts" onclick={() => (helpOpen = true)}>?</button>
+        <button class="help" type="button" aria-label="Keyboard shortcuts" onclick={(event) => { helpInvoker = invoker(event); helpOpen = true; }}>?</button>
       </div>
     </header>
 
@@ -851,8 +894,8 @@
         {/if}
         {#if banner !== undefined}<WhyBanner model={banner} />{/if}
         <div class="reading-controls" class:compact-active={compactTab === "evidence"}>
-          <section class="structural-reading" aria-label="Structural reading">
-            <button type="button" aria-expanded={structuralOpen} onclick={() => (structuralOpen = !structuralOpen)}>Structural reading</button>
+          <section class="structural-reading" aria-label="Evidence inspector: position structure" data-evidence-consumer="inspector.position_structure">
+            <button type="button" aria-expanded={structuralOpen} onclick={() => (structuralOpen = !structuralOpen)}>Evidence inspector: position structure</button>
             {#if structuralOpen}
               <div class="structural-facts">
                 {#if structure.features.length === 0}<p>No rung-0 structural observations in this position.</p>{/if}
@@ -860,8 +903,8 @@
               </div>
             {/if}
           </section>
-          <section class="transition-reading" aria-label="Transition reading">
-            <button type="button" aria-expanded={transitionOpen} onclick={() => (transitionOpen = !transitionOpen)}>What changed on this move?</button>
+          <section class="transition-reading" aria-label="Evidence inspector: move transition" data-evidence-consumer="inspector.move_transition">
+            <button type="button" aria-expanded={transitionOpen} onclick={() => (transitionOpen = !transitionOpen)}>Evidence inspector: what changed on this move?</button>
             {#if transitionOpen}
               <div class="transition-facts">
                 {#if transition === null || transition.observations.length === 0}<p>No rung-0 transition observations at this move.</p>{/if}
@@ -886,6 +929,14 @@
                 drawingEnabled={previewNodeId === undefined}
                 onMarksChange={changedMarks}
                 onSelect={(square) => selectedSquare = square}
+                onExitGrid={() => regionElement?.focus()}
+                activeSquare={boardActiveSquare}
+                onActiveSquareChange={(square) => boardActiveSquare = square}
+                lastMoveAnnouncement={boardMoveAnnouncement}
+                onMoveCommitted={(announcement) => boardMoveAnnouncement = announcement}
+                focusAfterMove={boardFocusRequested}
+                onMoveSettled={() => boardFocusRequested = true}
+                onFocusRestored={() => boardFocusRequested = false}
                 onMove={boardMove}
               />
             {/key}
@@ -951,7 +1002,7 @@
         />
         <div class="quick-actions" aria-label="Run actions">
           <HonestControl disabled={!canWrite} reasonId="drill-fork-readonly" reason="This read-only view cannot create a branch.">
-            {#snippet children(describedBy)}<button type="button" disabled={!canWrite} aria-describedby={describedBy} onclick={() => (forkOpen = true)}>Fork <kbd>B</kbd></button>{/snippet}
+            {#snippet children(describedBy)}<button type="button" disabled={!canWrite} aria-describedby={describedBy} onclick={(event) => { forkInvoker = invoker(event); forkOpen = true; }}>Fork <kbd>B</kbd></button>{/snippet}
           </HonestControl>
           <HonestControl disabled={!canWrite} reasonId="drill-group-readonly" reason="This read-only view cannot create a branch group.">
             {#snippet children(describedBy)}<button type="button" disabled={!canWrite} aria-describedby={describedBy} onclick={() => (groupOpen = !groupOpen)}>Branch group</button>{/snippet}
@@ -966,8 +1017,8 @@
                 type="button"
                 disabled={cards.length < 2}
                 aria-describedby={describedBy}
-                onclick={openCompare}
-              >Compare <kbd>Tab</kbd></button>
+                onclick={(event) => { compareInvoker = invoker(event); openCompare(); }}
+              >Compare <kbd>Alt+C</kbd></button>
             {/snippet}
           </HonestControl>
           <button type="button" aria-pressed={replaying} onclick={toggleReplay}>
@@ -1435,6 +1486,12 @@
     .objective-copy h1 {
       max-height: 3rem;
       font-size: 1.25rem;
+    }
+    .board-frame,
+    .position-column.outcome .board-frame {
+      width: min(100cqw, calc(100cqh + 8.9rem));
+      height: min(100cqh, calc(100cqw - 8.9rem));
+      aspect-ratio: auto;
     }
   }
 

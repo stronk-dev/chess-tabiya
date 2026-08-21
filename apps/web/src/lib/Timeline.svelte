@@ -36,7 +36,8 @@
   let rootPivotal = $derived(pivotalMarkers.some((marker) => marker.nodeId === rootNodeId));
 </script>
 
-<section class="timeline" aria-labelledby="timeline-title">
+<!-- svelte-ignore a11y_no_noninteractive_tabindex (an empty timeline is still a required drill focus region) -->
+<section class="timeline" aria-labelledby="timeline-title" tabindex="0">
   <div class="timeline-heading">
     <h2 id="timeline-title">Active line</h2>
     <span>{entries.length} plies</span>

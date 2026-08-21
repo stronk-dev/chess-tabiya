@@ -209,8 +209,18 @@ tests.
 derives legal destinations from the authoritative FEN. The pack's `start.side`
 sets orientation and restricts input to the learner's turns; the component
 passes the current check and last move into Chessground's normal highlights.
-Pawn moves to the back rank pause at an explicit queen/rook/bishop/knight
-picker before emitting promotion UCI.
+
+One `BoardInputController` receives click, drag, touch, keyboard-grid, and
+SAN/UCI text actions, validates them against that FEN, and is the only source
+of a submitted UCI. The graphical board remains primary; the adjacent semantic
+grid is one Tab stop with visual-direction square navigation, an eight-row by
+eight-cell accessibility tree, and an independent collapsed “Enter a move”
+fallback. Pointer and keyboard promotion both pause at the same explicit
+queen/rook/bishop/knight choice. The semantic grid carries position and
+legality facts only. In particular, it inherits `showDests` from visible board
+lighting: when the graphical board withholds destinations, it withholds their
+semantic enumeration too. Illegal-move refusal remains available in every
+lighting mode.
 
 ## Evidence sentences
 
@@ -330,9 +340,11 @@ active registered region, then to shell commands. The drill region owns `R`
 for the latest checkpoint, `Shift+R` for the checkpoint picker, `B` for a
 labeled/intent branch, `1`–`9` for branch switch, left/right arrows for the
 synchronized timeline, Space for replay, `E` for PGN export, and its local
-keyboard guide. `Tab` toggles compare only while focus is inside the drill
-region; in the top bar it retains native focus traversal, so keyboard users can
-always leave the drill.
+keyboard guide. `Alt+C` toggles comparison only from the focused drill region
+and is matched with physical `event.code`; unmodified Tab and Shift+Tab remain
+native focus traversal everywhere. The semantic board owns its arrows,
+Home/End/Page keys, Enter/Space, and two-step Escape exit sequence without
+leaking those commands to timeline controls.
 
 Shell `g` chords route to Home, Play, Learn, Review, Live, Create, Library, or
 Settings, while `g m` focuses primary navigation. Shell and region `?` guides,

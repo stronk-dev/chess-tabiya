@@ -1,6 +1,6 @@
 # RFC: Accessible board input — one move state machine, four input projections
 
-- **Status:** draft
+- **Status:** implementing
 - **Author:** codex (agent), for Marco
 - **Created:** 2026-08-21
 - **Design refs:** `design/02-product-shape.md` Choice-C appliance and web/PWA floor;

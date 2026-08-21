@@ -11,7 +11,7 @@ export const KEYBOARD_OWNERSHIP = Object.freeze({
     "Shift+R",
     "B",
     "1…9",
-    "Tab inside the drill region",
+    "Alt+C inside the drill region",
     "ArrowLeft",
     "ArrowRight",
     "Space",

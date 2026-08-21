@@ -147,6 +147,43 @@ export {
 } from "./session.js";
 export { attachEvidence } from "./evidence.js";
 export {
+  EVIDENCE_MANIFEST_ERROR_CODES,
+  EvidenceManifestError,
+  compileEvidenceManifest,
+  declareEvidence,
+  evidenceForConsumer,
+  type AdapterDeclaration,
+  type AnswerDistance,
+  type CompiledEvidenceManifest,
+  type ConsumerDeclaration,
+  type DeclaredEvidence,
+  type EvidenceBinding,
+  type EvidenceContractDeclarations,
+  type EvidenceDisposition,
+  type EvidenceForm,
+  type EvidenceGrounding,
+  type EvidenceManifestErrorCode,
+  type EvidencePlane,
+  type EvidenceRole,
+  type EvidenceTiming,
+  type ProducerDeclaration,
+  type ProjectionDeclaration,
+  type ProviderOffBehavior,
+  type VersionedEvidenceId,
+} from "./evidence-contract.js";
+export {
+  CURRENT_CONSUMER_OPERATION_IDS,
+  EVIDENCE_ADAPTERS,
+  EVIDENCE_CONSUMER_IDS,
+  EVIDENCE_CONSUMERS,
+  EVIDENCE_CONTRACT_DECLARATIONS,
+  EVIDENCE_PRODUCER_IDS,
+  EVIDENCE_PRODUCERS,
+  STRUCTURAL_PREDICATE_PROJECTION_IDS,
+  STRUCTURAL_READING_PROJECTION_IDS,
+  TRANSITION_READING_PROJECTION_IDS,
+} from "./evidence-catalog.js";
+export {
   RULES_EVIDENCE_FACTS,
   THEORY_EVIDENCE_FACTS,
   engineEvidenceRef,

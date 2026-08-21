@@ -1,6 +1,4 @@
-import type { EvidencePacket } from "@chess-tabiya/runtime";
-
-import type { VoiceProvider, VoiceScope } from "./guidance.js";
+import type { VoiceEvidenceView, VoiceProvider, VoiceScope } from "./guidance.js";
 
 export interface ExternalHttpVoiceOptions {
   readonly url: string;
@@ -22,7 +20,7 @@ export class ExternalHttpVoiceProvider implements VoiceProvider {
     this.#fetch = options.fetch ?? fetch;
   }
 
-  async render(packet: EvidencePacket, persona: string, _deterministicText: string, scope: VoiceScope): Promise<string> {
+  async render(view: VoiceEvidenceView, persona: string, _deterministicText: string, scope: VoiceScope): Promise<string> {
     const controller = new AbortController();
     const timeout = setTimeout(() => controller.abort(), this.#timeoutMs);
     try {
@@ -32,7 +30,7 @@ export class ExternalHttpVoiceProvider implements VoiceProvider {
           "content-type": "application/json",
           ...(this.#key === undefined ? {} : { authorization: `Bearer ${this.#key}` }),
         },
-        body: JSON.stringify({ personaPrompt: persona, sentences: packet.sentences, scope }),
+        body: JSON.stringify({ personaPrompt: persona, sentences: view.sentences, evidence: view.evidence, scope }),
         signal: controller.signal,
       });
       if (!response.ok) throw new Error(`Voice provider returned ${response.status}`);

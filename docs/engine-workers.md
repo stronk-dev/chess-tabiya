@@ -1,5 +1,9 @@
 # Engine workers and opponent selection
 
+Engine and tablebase outputs are separately projected and bound to consumers; availability does
+not itself authorize display. See [Evidence contract](evidence-contract.md) for the Stockfish,
+Syzygy, Maia and provider-off contract.
+
 The server-side engine layer makes drill runs playable without giving a worker
 permission to mutate a run. It consists of a UCI process supervisor, a packaged
 Maia-3 opponent, a pure opponent selector, an asynchronous Stockfish evidence

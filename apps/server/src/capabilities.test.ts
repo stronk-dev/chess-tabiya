@@ -172,6 +172,19 @@ describe("engine capabilities", () => {
           justPlay: "available",
           fromPosition: "available",
         },
+        evidenceManifest: {
+          digest: expect.stringMatching(/^[a-f0-9]{64}$/),
+          availability: expect.arrayContaining([
+            expect.objectContaining({ producerId: "live.stockfish", state: "available" }),
+            expect.objectContaining({ producerId: "live.syzygy", state: "available" }),
+            expect.objectContaining({ producerId: "human.maia", state: "available" }),
+            expect.objectContaining({ producerId: "human.explorer", state: "honest_empty" }),
+          ]),
+          bindings: expect.arrayContaining([
+            expect.objectContaining({ consumerId: "guidance.voice", projectionId: "pack.authored.claim" }),
+            expect.objectContaining({ consumerId: "analysis.engine", projectionId: "live.stockfish.pv" }),
+          ]),
+        },
       });
       expect(observed).toEqual(["stockfish-analysis", "maia-5m"]);
     } finally {

@@ -65,6 +65,7 @@ const runSummary: RunSummary = {
 };
 
 const capabilities: Capabilities = {
+  evidenceManifest: { digest: "fixture", availability: [], bindings: [] },
   engines: [],
   policyModes: ["human_common"],
   feedbackPolicies: ["delayed_checkpoint", "segment_end", "immediate_guard"],
@@ -258,7 +259,7 @@ describe("application shell", () => {
 
     const main = document.querySelector<HTMLElement>("main.drill")!;
     main.focus();
-    expect(key("Tab").defaultPrevented).toBe(true);
+    expect(key("Tab").defaultPrevented).toBe(false);
 
     const playLink = document.querySelector<HTMLAnchorElement>(
       "#primary-navigation a[href='/play']",

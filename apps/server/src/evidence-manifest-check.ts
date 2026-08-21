@@ -1,0 +1,60 @@
+import { readFileSync } from "node:fs";
+import { resolve } from "node:path";
+
+import { CURRENT_CONSUMER_OPERATION_IDS, EVIDENCE_PRODUCER_IDS } from "@chess-tabiya/runtime";
+
+import { EVIDENCE_MANIFEST, assertEvidenceManifest } from "./evidence-manifest.js";
+
+const ROOT = process.cwd();
+const CONSUMER_ANCHORS = Object.freeze([
+  ["authoring.predicate", "packages/runtime/src/structure.ts", "export function matchesStructuralExpression"],
+  ["runtime.objective_condition", "packages/runtime/src/objective.ts", "export function evaluateObjectivePredicate"],
+  ["runtime.guard_condition", "apps/server/src/guard.ts", "export function applyRecordedEngineGuard"],
+  ["guidance.packet", "apps/server/src/guidance.ts", "export function evidencePacket"],
+  ["guidance.deterministic", "apps/server/src/guidance.ts", "const sentences ="],
+  ["guidance.voice", "apps/server/src/guidance.ts", "voiceEvidenceView(packet)"],
+  ["guidance.recorded_reading", "apps/server/src/guidance.ts", "export function appendRecordedReadings"],
+  ["runtime.evidence_ref", "apps/web/src/lib/evidence-sentences.ts", "export function renderEvidenceRef"],
+  ["inspector.position_structure", "apps/web/src/lib/DrillScreen.svelte", "data-evidence-consumer=\"inspector.position_structure\""],
+  ["inspector.move_transition", "apps/web/src/lib/DrillScreen.svelte", "data-evidence-consumer=\"inspector.move_transition\""],
+  ["board.selected_square_sight", "apps/web/src/lib/DrillScreen.svelte", "let selectedObservations ="],
+  ["theory.shape_firing", "packages/runtime/src/shape-firing.ts", "export function shapeFirings"],
+  ["compare.structure_strip", "apps/web/src/lib/CompareView.svelte", "data-evidence-consumer=\"compare.structure_strip\""],
+  ["compare.engine_trajectory", "apps/web/src/lib/CompareView.svelte", "recorded engine evaluations"],
+  ["inspector.human_split", "apps/server/src/rest.ts", "route.action === \"human-split\""],
+  ["inspector.corpus", "apps/server/src/rest.ts", "route.action === \"corpus\""],
+  ["analysis.engine", "apps/server/src/rest.ts", "route.action === \"analysis\""],
+  ["opponent.selection", "apps/server/src/opponent-selector.ts", "export function parseSelectMoveRequest"],
+  ["guidance.authored_claim", "apps/web/src/lib/claim-presentation.ts", "export function claimProvenance"],
+  ["board.pivotal_marker", "apps/web/src/lib/DrillScreen.svelte", "let pivotalRows ="],
+  ["review.story", "packages/runtime/src/story.ts", "export function storyMoments"],
+  ["runtime.repertoire_scan", "apps/server/src/repertoire.ts", "export async function scanRepertoire"],
+  ["authoring.claim_binding", "apps/server/src/sourcing/claim-binding.ts", "export function validateClaimBindings"],
+] as const);
+
+function source(path: string): string {
+  return readFileSync(resolve(ROOT, path), "utf8");
+}
+
+assertEvidenceManifest();
+const declaredConsumers = EVIDENCE_MANIFEST.consumers.map((consumer) => consumer.id);
+const operationIds = CONSUMER_ANCHORS.map(([id]) => id);
+if (new Set(operationIds).size !== CONSUMER_ANCHORS.length || operationIds.join("|") !== CURRENT_CONSUMER_OPERATION_IDS.join("|")) throw new TypeError("The 23-operation consumer anchor census is not set/order-equal to the primary catalogue");
+for (const [id, path, needle] of CONSUMER_ANCHORS) {
+  if (!declaredConsumers.includes(id)) throw new TypeError(`Consumer anchor ${id} has no declaration`);
+  if (!source(path).includes(needle)) throw new TypeError(`Consumer anchor drift: ${id} expected ${needle} in ${path}`);
+}
+
+if (EVIDENCE_MANIFEST.producers.map((producer) => producer.id).sort().join("|") !== [...EVIDENCE_PRODUCER_IDS].sort().join("|")) throw new TypeError("The 14 producer paths are not set-equal to the primary catalogue");
+for (const producer of EVIDENCE_MANIFEST.producers) {
+  for (const path of producer.implementation.split(";").map((item) => item.trim()).filter((item) => item.includes("/"))) source(path);
+}
+
+const guidance = source("apps/server/src/guidance.ts");
+const externalVoice = source("apps/server/src/external-voice.ts");
+if (!guidance.includes("render(view: VoiceEvidenceView") || !externalVoice.includes("evidence: view.evidence")) throw new TypeError("EVIDENCE_GENERIC_BYPASS: external voice is not bound to VoiceEvidenceView");
+
+const arrows = EVIDENCE_MANIFEST.consumers.find((consumer) => consumer.id === "assistance.arrows");
+if (arrows?.disposition?.kind !== "experimental" || arrows.accepts.length !== 0) throw new TypeError("assistance.arrows lost its explicit producerless experimental disposition");
+
+console.log(`evidence-manifest-check: ${EVIDENCE_MANIFEST.digest} · ${EVIDENCE_MANIFEST.producers.length} producers · ${EVIDENCE_MANIFEST.projections.length} projections · ${CURRENT_CONSUMER_OPERATION_IDS.length} operations + assistance.arrows · ${EVIDENCE_MANIFEST.bindings.length} bindings`);

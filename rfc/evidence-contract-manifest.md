@@ -1,6 +1,6 @@
 # RFC: Evidence contract manifest — every producer has a declared consumer or an honest home
 
-- **Status:** draft
+- **Status:** implementing
 - **Author:** codex (agent), for Marco
 - **Created:** 2026-08-21
 - **Design refs:** `design/03-product-breadth.md` §Intelligence and explanation and gate B4;

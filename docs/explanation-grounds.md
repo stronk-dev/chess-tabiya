@@ -1,5 +1,9 @@
 # Explanation grounds
 
+The producer/projection/consumer authority that limits which grounds may reach each renderer is
+documented in [Evidence contract](evidence-contract.md). This document describes the explanation
+behavior built on top of those bindings.
+
 Tabiya's explanation layer renders only evidence already recorded by the run or
 prose explicitly stored in its registered drill pack. It does not generate
 strategic prose, infer authored theory, or ask an LLM to invent why a move

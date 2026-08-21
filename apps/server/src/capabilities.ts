@@ -21,6 +21,10 @@ import {
   resolveStrongEngineProfile,
   type StrongEngineProfile,
 } from "./strong-engine.js";
+import {
+  evidenceManifestCapabilities,
+  type EvidenceManifestCapabilities,
+} from "./evidence-manifest.js";
 
 export const SUPPORTED_POLICY_MODES: readonly OpponentPolicyMode[] = RUN_OPPONENT_MODES;
 
@@ -95,6 +99,7 @@ export interface Capabilities {
   };
   readonly providers: CapabilityProviders;
   readonly surfaces: SurfaceCapabilities;
+  readonly evidenceManifest: EvidenceManifestCapabilities;
 }
 
 export type CapabilityDispositionKind = "reached" | "refused" | "unmeasured" | "impossible";
@@ -106,10 +111,14 @@ export interface CapabilityDisposition {
   readonly surface?: string;
   readonly experiment?: string;
   readonly advertisedOptions?: readonly string[];
+  readonly evidence?: {
+    readonly producerId: string;
+    readonly consumerIds: readonly string[];
+  };
 }
 
 export const CAPABILITY_DISPOSITIONS: readonly CapabilityDisposition[] = Object.freeze([
-  { instrument: "Stockfish", capability: "score cp / mate", disposition: "reached", reason: "Engine evidence, guard conditions, and deviation cost binding", surface: "analysis and feedback" },
+  { instrument: "Stockfish", capability: "score cp / mate", disposition: "reached", reason: "Engine evidence, guard conditions, and deviation cost binding", surface: "analysis and feedback", evidence: { producerId: "live.stockfish", consumerIds: ["runtime.guard_condition", "compare.engine_trajectory", "analysis.engine", "review.story"] } },
   { instrument: "Stockfish", capability: "UCI_ShowWDL", disposition: "reached", reason: "Recorded WDL evidence", surface: "analysis", advertisedOptions: ["UCI_ShowWDL"] },
   { instrument: "Stockfish", capability: "go nodes", disposition: "reached", reason: "Reproducible strong-engine search bound", surface: "opponent selection" },
   { instrument: "Stockfish", capability: "bestmove / MultiPV rank / bestline", disposition: "refused", reason: "Move verdicts are not condition measurements" },
@@ -123,7 +132,7 @@ export const CAPABILITY_DISPOSITIONS: readonly CapabilityDisposition[] = Object.
   { instrument: "Stockfish", capability: "Move Overhead", disposition: "refused", reason: "Selections use explicit search bounds rather than an engine clock", advertisedOptions: ["Move Overhead"] },
   { instrument: "Stockfish", capability: "UCI_Chess960", disposition: "refused", reason: "The shipped drill format is standard chess only", advertisedOptions: ["UCI_Chess960"] },
   { instrument: "Stockfish", capability: "EvalFile / EvalFileSmall", disposition: "refused", reason: "Custom evaluation networks have no authorized product surface", advertisedOptions: ["EvalFile", "EvalFileSmall"] },
-  { instrument: "Maia", capability: "policy mass", disposition: "reached", reason: "Recorded on opponent selections", surface: "human split" },
+  { instrument: "Maia", capability: "policy mass", disposition: "reached", reason: "Recorded on opponent selections", surface: "human split", evidence: { producerId: "human.maia", consumerIds: ["inspector.human_split", "opponent.selection"] } },
   { instrument: "Maia", capability: "per-move wdl", disposition: "unmeasured", reason: "Recorded but not calibrated for grading", surface: "human split", experiment: "D87 compare Maia WDL with R9 ground truth" },
   { instrument: "Maia", capability: "per-move score cp", disposition: "reached", reason: "Recorded without grading", surface: "human split" },
   { instrument: "Maia", capability: "Elo", disposition: "reached", reason: "Applied band is recorded on every new Maia selection", surface: "opponent selection", advertisedOptions: ["Elo"] },
@@ -134,11 +143,11 @@ export const CAPABILITY_DISPOSITIONS: readonly CapabilityDisposition[] = Object.
   { instrument: "Maia", capability: "resistance above seven pieces", disposition: "unmeasured", reason: "No exact DTZ ground truth exists outside the Syzygy range; conversion-up-a-piece (17 pieces) and rook-4v3-same-side-hold (11) are outside it at every authored position", experiment: "D370-b realized-ply-count-to-conversion against a fixed converting opponent on the two out-of-range packs" },
   { instrument: "Maia", capability: "Temperature 0", disposition: "refused", reason: "A modal opponent is a different product", advertisedOptions: ["Temperature"] },
   { instrument: "Maia", capability: "asymmetric SelfElo / OppoElo", disposition: "unmeasured", reason: "Advertised but unmeasured", experiment: "RFC ledger row 5 asymmetric Elo experiment", advertisedOptions: ["SelfElo", "OppoElo"] },
-  { instrument: "Syzygy", capability: "category", disposition: "reached", reason: "Opponent modes and category guard", surface: "feedback" },
+  { instrument: "Syzygy", capability: "category", disposition: "reached", reason: "Opponent modes and category guard", surface: "feedback", evidence: { producerId: "live.syzygy", consumerIds: ["runtime.guard_condition", "opponent.selection", "analysis.engine"] } },
   { instrument: "Syzygy", capability: "dtz / precise_dtz as a recorded measurement", disposition: "reached", reason: "Exact evidence payload and tablebase cost binding", surface: "feedback" },
   { instrument: "Syzygy", capability: "dtz as a condition threshold", disposition: "unmeasured", reason: "The first non-optimality threshold ships at three but its learning significance is unmeasured", experiment: "D87 category-preserving DTZ-delta distribution" },
   { instrument: "Syzygy", capability: "dtm", disposition: "refused", reason: "Not published for every position; category is total where DTM is not" },
-  { instrument: "Explorer", capability: "position white / draws / black", disposition: "reached", reason: "Population result at the queried position", surface: "corpus panel" },
+  { instrument: "Explorer", capability: "position white / draws / black", disposition: "reached", reason: "Population result at the queried position", surface: "corpus panel", evidence: { producerId: "human.explorer", consumerIds: ["inspector.corpus", "runtime.repertoire_scan", "authoring.claim_binding"] } },
   { instrument: "Explorer", capability: "per-move white / draws / black", disposition: "reached", reason: "Population result attached to each move without grading", surface: "corpus panel" },
   { instrument: "Explorer", capability: "per-move averageRating", disposition: "unmeasured", reason: "No runtime consumer", experiment: "D87 within-band skew experiment" },
   { instrument: "Explorer", capability: "monthly history", disposition: "refused", reason: "Measured drift is below any actionable threshold" },
@@ -356,6 +365,7 @@ export class EngineCapabilities implements CapabilitiesProvider {
       }),
       providers: providerState,
       surfaces: surfaces(providerState),
+      evidenceManifest: evidenceManifestCapabilities(providerState),
     });
   }
 }

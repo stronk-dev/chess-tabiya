@@ -12,6 +12,7 @@ import {
   assertAdvertisedCapabilityDispositions,
   EngineCapabilities,
 } from "./capabilities.js";
+import { assertEvidenceManifest } from "./evidence-manifest.js";
 import {
   EvidenceJobQueue,
   StockfishEvidenceExecutor,
@@ -276,6 +277,7 @@ async function staticResponse(
 export async function createApplication(
   options: ApplicationOptions = {},
 ): Promise<ChessTabiyaApplication> {
+  assertEvidenceManifest();
   const databasePath = options.databasePath ?? ":memory:";
   if (databasePath !== ":memory:") await mkdir(dirname(databasePath), { recursive: true });
   const storage = new SQLiteRunStorage(databasePath);

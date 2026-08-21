@@ -1,7 +1,7 @@
 import { mkdir, writeFile } from "node:fs/promises";
 import { randomUUID } from "node:crypto";
 
-import { expect, test, type Page } from "@playwright/test";
+import { expect, test, type Locator, type Page } from "@playwright/test";
 
 async function register(page: Page): Promise<string> {
   await page.goto("/play");
@@ -15,6 +15,24 @@ async function register(page: Page): Promise<string> {
   }
   await expect(page.getByText("Choose a position worth returning to.")).toBeVisible();
   return handle;
+}
+
+async function enableEndgamePolicies(page: Page): Promise<void> {
+  await page.route(/\/capabilities$/u, async (route) => {
+    const response = await route.fetch();
+    const descriptor = await response.json() as {
+      policyModes: string[];
+      providers: Record<string, string>;
+    };
+    await route.fulfill({
+      response,
+      json: {
+        ...descriptor,
+        policyModes: [...descriptor.policyModes, "perfect_tablebase"],
+        providers: { ...descriptor.providers, tablebase: "mock" },
+      },
+    });
+  });
 }
 
 async function assertRunViewport(
@@ -114,11 +132,11 @@ test("Just Play reaches a Carlsbad and opens a passive shape marker without muta
   await expect(marker).toBeVisible();
   const runId = page.url().split("/").at(-1)!;
   const before = await (await page.request.get(`/runs/${runId}/events?sinceSeq=0`)).json() as { events: unknown[] };
-  const transitionButton = page.getByRole("button", { name: "What changed on this move?" });
+  const transitionButton = page.getByRole("button", { name: "Evidence inspector: what changed on this move?" });
   await expect(transitionButton).toHaveAttribute("aria-expanded", "false");
   await transitionButton.click();
   await expect(transitionButton).toHaveAttribute("aria-expanded", "true");
-  await expect(page.getByRole("region", { name: "Transition reading" })).toContainText(/geometric transition census|halfmove clock|irreversibility convention/);
+  await expect(page.getByRole("region", { name: "Evidence inspector: move transition" })).toContainText(/geometric transition census|halfmove clock|irreversibility convention/);
   await transitionButton.click();
   await expect(transitionButton).toHaveAttribute("aria-expanded", "false");
   await marker.click();
@@ -202,8 +220,8 @@ test("runtime corpus counts stay silent until reveal and render population facts
   expect(reveal.ok()).toBe(true);
   await page.reload();
   await page.getByText("Assistance", { exact: true }).click();
-  await page.getByLabel("Corpus counts on request").check();
-  await page.getByRole("button", { name: "Show corpus counts" }).click();
+  await page.getByLabel("Evidence inspector: corpus counts").check();
+  await page.getByRole("button", { name: "Open corpus evidence inspector" }).click();
   const corpus = page.getByRole("region", { name: "Corpus evidence" });
   await expect(corpus).toContainText("Lichess explorer — rating buckets 1000,1200,1400,1600,1800,2000,2200,2500");
   await expect(corpus).toContainText("These counts say what this population played, not what is good.");
@@ -222,7 +240,7 @@ test("Pack B references the Carlsbad entry while its pack prose stays server-wit
   expect(projected).not.toHaveProperty("successConditions");
 
   await page.getByRole("article").filter({ hasText: pack.title }).getByRole("button", { name: /Open position/ }).click();
-  const structuralReading = page.getByRole("button", { name: "Structural reading" });
+  const structuralReading = page.getByRole("button", { name: "Evidence inspector: position structure" });
   await expect(structuralReading).toHaveAttribute("aria-expanded", "false");
   await expect(page.locator(".structural-facts")).toHaveCount(0);
   await structuralReading.click();
@@ -230,7 +248,7 @@ test("Pack B references the Carlsbad entry while its pack prose stays server-wit
   await expect(page.locator(".structural-facts")).toContainText("Black has 7 pawns.");
   await expect(page.locator(".structural-facts")).toContainText("White's bishop on d3 stands on a light square.");
   await page.reload();
-  await expect(page.getByRole("button", { name: "Structural reading" })).toHaveAttribute("aria-expanded", "false");
+  await expect(page.getByRole("button", { name: "Evidence inspector: position structure" })).toHaveAttribute("aria-expanded", "false");
   await expect(page.locator(".structural-facts")).toHaveCount(0);
   const marker = page.getByRole("button", { name: /Carlsbad structure/ });
   await expect(marker).toBeVisible();
@@ -593,6 +611,87 @@ async function liveClickMove(
   expect((await submitted).postDataJSON()).toMatchObject({ uci });
 }
 
+type BoardInputMode = "click" | "drag" | "touch" | "keyboard" | "text";
+
+function displayedSquarePoint(
+  from: string,
+  to: string,
+  orientation: "white" | "black",
+): { readonly file: number; readonly rank: number } {
+  const file = to.charCodeAt(0) - from.charCodeAt(0);
+  const rank = Number(to[1]) - Number(from[1]);
+  return orientation === "white"
+    ? { file, rank: -rank }
+    : { file: -file, rank };
+}
+
+async function navigateGrid(
+  page: Page,
+  from: string,
+  to: string,
+  orientation: "white" | "black",
+): Promise<void> {
+  const delta = displayedSquarePoint(from, to, orientation);
+  const horizontal = delta.file > 0 ? "ArrowRight" : "ArrowLeft";
+  const vertical = delta.rank > 0 ? "ArrowDown" : "ArrowUp";
+  for (let index = 0; index < Math.abs(delta.file); index += 1) await page.keyboard.press(horizontal);
+  for (let index = 0; index < Math.abs(delta.rank); index += 1) await page.keyboard.press(vertical);
+}
+
+async function liveInputMove(
+  page: Page,
+  uci: string,
+  orientation: "white" | "black",
+  mode: BoardInputMode,
+): Promise<void> {
+  if (mode === "click") return liveClickMove(page, uci, orientation);
+  const submitted = page.waitForRequest(
+    (request) => request.method() === "POST" && /\/runs\/[^/]+\/moves$/u.test(new URL(request.url()).pathname),
+  );
+  if (mode === "text") {
+    await page.getByText("Enter a move", { exact: true }).click();
+    await page.getByLabel("Move in SAN or UCI").fill(uci);
+    await page.getByRole("button", { name: "Submit move" }).click();
+  } else if (mode === "keyboard") {
+    const grid = page.getByRole("grid", { name: /Board input/u });
+    await grid.focus();
+    const active = await grid.getAttribute("aria-activedescendant");
+    if (active === null) throw new Error("Semantic board has no active descendant");
+    const activeSquare = active.replace("board-square-", "");
+    await navigateGrid(page, activeSquare, uci.slice(0, 2), orientation);
+    await page.keyboard.press("Enter");
+    await navigateGrid(page, uci.slice(0, 2), uci.slice(2, 4), orientation);
+    await page.keyboard.press("Enter");
+    await expect(grid).toBeFocused();
+    await expect(grid).toHaveAttribute("aria-activedescendant", `board-square-${uci.slice(2, 4)}`);
+  } else {
+    const board = page.getByLabel("Chessboard");
+    await expect(board).toBeVisible();
+    const resting = await board.boundingBox();
+    if (resting === null) throw new Error("Chessground board has no resting bounding box");
+    const origin = squarePoint(resting, uci.slice(0, 2), orientation);
+    if (mode === "drag") {
+      await page.mouse.move(origin.x, origin.y);
+      await page.mouse.down();
+    } else {
+      await page.touchscreen.tap(origin.x, origin.y);
+    }
+    await board.evaluate(
+      () => new Promise<void>((resolve) => requestAnimationFrame(() => requestAnimationFrame(() => resolve()))),
+    );
+    const selected = await board.boundingBox();
+    if (selected === null) throw new Error("Chessground board has no selected bounding box");
+    const destination = squarePoint(selected, uci.slice(2, 4), orientation);
+    if (mode === "drag") {
+      await page.mouse.move(destination.x, destination.y, { steps: 8 });
+      await page.mouse.up();
+    } else {
+      await page.touchscreen.tap(destination.x, destination.y);
+    }
+  }
+  expect((await submitted).postDataJSON()).toMatchObject({ uci });
+}
+
 test("served Najdorf pack plays, rewinds, branches, compares, and exports", async ({
   page,
 }) => {
@@ -620,7 +719,7 @@ test("served Najdorf pack plays, rewinds, branches, compares, and exports", asyn
     .getByRole("button", { name: /Open position/ })
     .click();
   await expect(page.getByLabel("Chessboard")).toBeVisible();
-  const structuralReading = page.getByRole("button", { name: "Structural reading" });
+  const structuralReading = page.getByRole("button", { name: "Evidence inspector: position structure" });
   await expect(structuralReading).toHaveAttribute("aria-expanded", "false");
   await expect(page.locator(".structural-facts")).toHaveCount(0);
   await structuralReading.click();
@@ -668,7 +767,7 @@ test("served Najdorf pack plays, rewinds, branches, compares, and exports", asyn
   });
 
   await page.locator("main.drill").focus();
-  await page.keyboard.press("Tab");
+  await page.keyboard.press("Alt+C");
   await expect(
     page.getByRole("heading", { name: "Same decision, two consequences." }),
   ).toBeVisible();
@@ -676,7 +775,7 @@ test("served Najdorf pack plays, rewinds, branches, compares, and exports", asyn
     page.getByText("The comparison is already at its first aligned position."),
   ).toBeVisible();
   await expect(page.locator(".boards article")).toHaveCount(2);
-  await expect(page.getByRole("heading", { name: "Recorded branch strips" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Evidence inspector: recorded branch strips" })).toBeVisible();
   await expect(page.locator(".sparkline")).toHaveCount(2);
   await expect.poll(() =>
     page.locator(".sparkline").evaluateAll((sparklines) =>
@@ -713,7 +812,7 @@ test("served Najdorf pack plays, rewinds, branches, compares, and exports", asyn
   expect(pgn).toContain('[Event "Tabiya drill: najdorf-transition-schema-example"]');
   expect(pgn).toMatch(/\([^)]*\)/);
 
-  await page.keyboard.press("Tab");
+  await page.getByRole("button", { name: "Close comparison" }).click();
   await expect(page.locator("main.drill")).toBeFocused();
   const playNavigation = page.locator("#primary-navigation a[href='/play']");
   await playNavigation.focus();
@@ -1012,21 +1111,7 @@ test("served endgame packs keep the board above the timeline at supported deskto
   // This is a layout corpus, not a provider test. The packaged mock correctly
   // withholds an empty tablebase capability; admit the perfect-play pack here
   // without ever requesting an opponent move so all six authored layouts run.
-  await page.route(/\/capabilities$/u, async (route) => {
-    const response = await route.fetch();
-    const descriptor = await response.json() as {
-      policyModes: string[];
-      providers: Record<string, string>;
-    };
-    await route.fulfill({
-      response,
-      json: {
-        ...descriptor,
-        policyModes: [...descriptor.policyModes, "perfect_tablebase"],
-        providers: { ...descriptor.providers, tablebase: "mock" },
-      },
-    });
-  });
+  await enableEndgamePolicies(page);
   const projections = [
     { width: 1280, height: 720 },
     { width: 1366, height: 768 },
@@ -1048,42 +1133,110 @@ test("served endgame packs keep the board above the timeline at supported deskto
   }
 });
 
-test("served endgame packs submit the exact drawn move after selection at desktop, tablet, and phone sizes", async ({
-  page,
+test("served endgame packs submit the exact drawn move through every permanent input projection", async ({
+  page, browser,
 }) => {
-  await page.route(/\/capabilities$/u, async (route) => {
-    const response = await route.fetch();
-    const descriptor = await response.json() as {
-      policyModes: string[];
-      providers: Record<string, string>;
-    };
-    await route.fulfill({
-      response,
-      json: {
-        ...descriptor,
-        policyModes: [...descriptor.policyModes, "perfect_tablebase"],
-        providers: { ...descriptor.providers, tablebase: "mock" },
-      },
-    });
-  });
+  test.setTimeout(180_000);
+  await enableEndgamePolicies(page);
   const projections = [
     { width: 1440, height: 1000 },
+    { width: 1366, height: 768 },
+    { width: 1280, height: 720 },
     { width: 768, height: 1024 },
     { width: 390, height: 844 },
   ] as const;
+  const modes: readonly BoardInputMode[] = ["click", "drag", "touch", "keyboard", "text"];
 
   for (const viewport of projections) {
     await page.setViewportSize(viewport);
+    const touchContext = await browser.newContext({ viewport, hasTouch: true, isMobile: true });
+    const touchPage = await touchContext.newPage();
+    await enableEndgamePolicies(touchPage);
+    await register(touchPage);
     for (const pack of ENDGAME_INTERACTION_PACKS) {
-      await page.goto("/play");
-      await page
-        .getByRole("article")
-        .filter({ hasText: pack.title })
-        .getByRole("button", { name: /Open position/ })
-        .click();
-      await liveClickMove(page, pack.uci, pack.orientation);
+      for (const mode of modes) {
+        const inputPage = mode === "touch" ? touchPage : page;
+        await inputPage.goto("/play");
+        await inputPage
+          .getByRole("article")
+          .filter({ hasText: pack.title })
+          .getByRole("button", { name: /Open position/ })
+          .click();
+        await liveInputMove(inputPage, pack.uci, pack.orientation, mode);
+      }
     }
+    await touchContext.close();
   }
+});
+
+test("the semantic board remains a complete interactive grid after a keyboard move", async ({ page }) => {
+  await page.goto("/play");
+  await page
+    .getByRole("article")
+    .filter({ hasText: "schema example" })
+    .getByRole("button", { name: /Open position/ })
+    .click();
+  const grid = page.getByRole("grid", { name: /Board input/u });
+  await expect(grid).toBeVisible();
+  await expect(grid.getByRole("row")).toHaveCount(8);
+  await expect(grid.getByRole("gridcell")).toHaveCount(64);
+  await expect(grid.locator('[aria-selected="true"]')).toHaveCount(1);
+  await expect(page.getByText("Enter a move", { exact: true })).toBeVisible();
+  await liveInputMove(page, "c1e3", "white", "keyboard");
+  await expect(grid).toBeFocused();
+  await expect(grid).toHaveAttribute("aria-activedescendant", "board-square-e3");
+  await expect(page.locator(".input-status")).toContainText("Move committed:");
+});
+
+test("normal Tab traversal reaches every drill region in both directions and exits", async ({ page }) => {
+  await page.goto("/play");
+  await page
+    .getByRole("article")
+    .filter({ hasText: "schema example" })
+    .getByRole("button", { name: /Open position/ })
+    .click();
+  await page.getByText("Enter a move", { exact: true }).click();
+
+  const marker = () => page.evaluate(() => {
+    const active = document.activeElement;
+    if (!(active instanceof HTMLElement)) return { inside: false, marker: "none" };
+    const inside = active.closest(".drill-region") !== null;
+    const value = active.matches(".wordmark") ? "wordmark"
+      : active.matches(".assistance-control summary") ? "assistance"
+      : active.matches('button[aria-label="Keyboard shortcuts"]') ? "help"
+      : active.matches(".structural-reading button") ? "structure-inspector"
+      : active.matches(".transition-reading button") ? "transition-inspector"
+      : active.matches(".text-move summary") ? "text-summary"
+      : active.matches(".text-move input") ? "text-input"
+      : active.matches(".text-move button") ? "text-submit"
+      : active.matches("[data-board-input-grid]") ? "board-grid"
+      : active.matches(".mark-controls select") ? "board-marks"
+      : active.matches(".rail button, .rail input") ? "branches"
+      : active.matches(".timeline, .timeline button") ? "timeline"
+      : active.matches(".quick-actions button") ? "run-actions"
+      : `${active.tagName.toLowerCase()}:${active.className}`;
+    return { inside, marker: value };
+  });
+
+  async function trace(keys: "Tab" | "Shift+Tab", start: Locator): Promise<Set<string>> {
+    await start.focus();
+    const seen = new Set<string>();
+    let entered = false;
+    for (let index = 0; index < 120; index += 1) {
+      const current = await marker();
+      if (current.inside) entered = true;
+      if (entered && !current.inside) return seen;
+      seen.add(current.marker);
+      await page.keyboard.press(keys);
+    }
+    throw new Error(`${keys} did not leave the drill region`);
+  }
+
+  const expected = ["assistance", "help", "structure-inspector", "transition-inspector", "text-summary", "text-input", "text-submit", "board-grid", "board-marks", "branches", "timeline", "run-actions"];
+  const forward = await trace("Tab", page.locator("main.drill .wordmark"));
+  for (const item of expected) expect(forward.has(item), `forward traversal missed ${item}`).toBe(true);
+  const backward = await trace("Shift+Tab", page.locator(".quick-actions button").last());
+  for (const item of expected) expect(backward.has(item), `reverse traversal missed ${item}`).toBe(true);
 });
 
 test("mobile shell, settings, and install manifest preserve the run regions", async ({ page }) => {

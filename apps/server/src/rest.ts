@@ -47,7 +47,7 @@ import type { LiveSessionService } from "./live-session.js";
 import { projectShapeEntry, type ShapeRegistry } from "./shape-registry.js";
 import type { ShapeStudio } from "./shape-studio.js";
 import type { BoardControl, SessionKind, VoteOption } from "./live-types.js";
-import { appendRecordedReadings, evidencePacket, renderVoice, type VoiceProvider, type VoiceScope } from "./guidance.js";
+import { appendRecordedReadings, evidencePacket, renderVoice, voiceEvidenceView, type VoiceProvider, type VoiceScope } from "./guidance.js";
 import { corpusPopulation, type CorpusSource } from "./corpus.js";
 import type { RepertoireService } from "./repertoire.js";
 import { publicMutationPayload } from "./feedback-policy.js";
@@ -1219,7 +1219,7 @@ export function createRestHandler(
         const prompt = JSON.stringify({ task: "Quote only contiguous learner text that may express each not-detected authored point.", transcript: access.event.data.transcript, keyPoints: access.keyPoints.map((point) => ({ id: point.id, label: point.label, phrases: point.phrases })), detections: access.event.data.detections });
         for (let attempt = 0; attempt < 2; attempt += 1) {
           try {
-            const raw = await voiceProvider.render(packet, voicePersona, prompt, "reasoning");
+            const raw = await voiceProvider.render(voiceEvidenceView(packet), voicePersona, prompt, "reasoning");
             const parsed = JSON.parse(raw) as unknown;
             if (!Array.isArray(parsed)) continue;
             const proposals = parsed.map((item) => {

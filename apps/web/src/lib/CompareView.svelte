@@ -62,7 +62,7 @@
 <section class="compare" aria-labelledby="compare-title">
   <header>
     <div><p>Branch comparison</p><h2 id="compare-title" tabindex="-1" bind:this={heading}>Same decision, {comparison.columns.length === 2 ? "two" : comparison.columns.length} consequences.</h2></div>
-    <button type="button" onclick={onClose}>Close <kbd>Tab</kbd></button>
+    <button type="button" onclick={onClose}>Close comparison</button>
   </header>
 
   <div class="zoom-control" aria-label="Comparison detail">
@@ -127,12 +127,12 @@
     {/each}
   </section>
 
-  <section class="strip-band" aria-label="Per-branch difference strips">
-    <h3>Recorded branch strips</h3>
+  <section class="strip-band" aria-label="Evidence inspector: per-branch difference strips" data-evidence-consumer="compare.structure_strip">
+    <h3>Evidence inspector: recorded branch strips</h3>
     {#each comparison.columns as column}
       <article><strong>{column.label}</strong>
         <div class="sparkline" aria-label={`${column.label} recorded evaluation points`}>{#each strips[column.branchId]?.evalTrail ?? [] as point}<span data-ply-offset={point.plyOffset} title={score({ ...point, evidenceRefs: [], kind: "eval", source: "engine_validated" })}>●</span>{/each}</div>
-        <details><summary>Structure and timing</summary>{#each strips[column.branchId]?.structure ?? [] as entry}<p>+{entry.plyOffset}: {entry.observation ? renderStructuralObservation(entry.observation) : entry.sentence} {entry.attribution}.</p>{/each}{#each strips[column.branchId]?.timing ?? [] as entry}<p>+{entry.plyOffset}: {entry.sentence} {entry.attribution}.</p>{/each}</details>
+        <details><summary>Evidence inspector: structure and timing</summary>{#each strips[column.branchId]?.structure ?? [] as entry}<p>+{entry.plyOffset}: {entry.observation ? renderStructuralObservation(entry.observation) : entry.sentence} {entry.attribution}.</p>{/each}{#each strips[column.branchId]?.timing ?? [] as entry}<p>+{entry.plyOffset}: {entry.sentence} {entry.attribution}.</p>{/each}</details>
         <details><summary>Piece routes</summary>{#each strips[column.branchId]?.routes ?? [] as route}<p>{route.pieceId}: {route.squares.join(" → ")}</p>{:else}<p>No piece route past the fork.</p>{/each}</details>
       </article>
     {/each}
@@ -154,7 +154,7 @@
           {#each comparison.evidence[column.branchId] ?? [] as entry}<span data-ply-offset={entry.plyOffset}>+{entry.plyOffset}: {score(entry)}</span>{/each}
         </div>
         {#if consequence}
-          <details><summary>Structural reading</summary>
+          <details data-evidence-consumer="inspector.position_structure"><summary>Evidence inspector: position structure</summary>
             {#each structuralReading(run.nodes.find((node) => node.id === column.leafNodeId)?.fen ?? run.nodes[0]!.fen).features as observation}<p>{renderStructuralObservation(observation)}</p>{/each}
           </details>
         {/if}

@@ -5,6 +5,7 @@ import type { EndgameReading } from "./endgame.js";
 import type { DetectedPhase } from "./phase.js";
 import type { PivotalMarker } from "./pivotal.js";
 import type { StructuralObservation, StructureMatch } from "./structure.js";
+import type { DeclaredEvidence } from "./evidence-contract.js";
 
 export interface ShapeEntryRef { readonly id: string; readonly name: string; readonly attribution: string; }
 
@@ -59,6 +60,7 @@ export interface EvidencePacket {
   readonly authored: readonly { readonly id: string; readonly text: string; readonly attribution: string }[];
   readonly readings: readonly RecordedReading[];
   readonly sentences: readonly string[];
+  readonly declared?: readonly DeclaredEvidence<unknown>[];
 }
 
 function recordedDate(retrievedAt: string): string {

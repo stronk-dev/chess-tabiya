@@ -101,8 +101,8 @@ if (!license.includes("GNU AFFERO GENERAL PUBLIC LICENSE") || !license.includes(
 }
 
 const makefile = await readText("Makefile");
-if (!/^verify: typecheck test schema-check register-check status-parity intent-parity graduation-plan-check$/m.test(makefile)) {
-  failures.push("Makefile: verify must depend on typecheck, test, schema-check, register-check, status-parity, intent-parity, and graduation-plan-check");
+if (!/^verify: typecheck test schema-check register-check status-parity intent-parity evidence-manifest-check graduation-plan-check$/m.test(makefile)) {
+  failures.push("Makefile: verify must depend on typecheck, test, schema-check, register-check, status-parity, intent-parity, evidence-manifest-check, and graduation-plan-check");
 }
 
 const workflow = await readText(".github/workflows/verify.yml");

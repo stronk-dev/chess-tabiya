@@ -9,6 +9,7 @@ import type {
   DrillRun,
   DrillRunEvent,
   EvidenceKind,
+  EvidenceForm,
   EvidencePayload,
   LiveSessionKind,
   MutationResult,
@@ -17,6 +18,7 @@ import type {
   ObjectiveState,
   OpponentSelection,
   PolicyConfig,
+  ProviderOffBehavior,
   ReasoningDetection,
   ReasoningTranscript,
   RunMark,
@@ -333,6 +335,23 @@ export interface Capabilities {
     readonly tablebase: "lichess" | "mock" | "none";
   };
   readonly surfaces: Readonly<Record<SurfaceId, SurfaceAvailability>>;
+  readonly evidenceManifest: {
+    readonly digest: string;
+    readonly availability: readonly {
+      readonly producerId: string;
+      readonly version: number;
+      readonly state: "available" | "honest_empty" | "unavailable";
+      readonly reason: string;
+    }[];
+    readonly bindings: readonly {
+      readonly consumerId: string;
+      readonly consumerVersion: number;
+      readonly projectionId: string;
+      readonly projectionVersion: number;
+      readonly forms: readonly EvidenceForm[];
+      readonly providerOff: ProviderOffBehavior;
+    }[];
+  };
 }
 
 export interface HumanSplitPage {
