@@ -128,7 +128,7 @@ interface EvidenceEligibilityDeclaration {
   readonly event: VersionedEvidenceId;
   readonly consumer: VersionedEvidenceId;
   readonly disposition: "eligible" | "refused";
-  readonly reason: string;
+  readonly reason: VersionedEvidenceId;
   readonly allowedSigns: readonly SemanticEventSign[];
   readonly requiredOperands: readonly string[];
   readonly valenceAuthority: readonly VersionedEvidenceId[];
@@ -144,6 +144,14 @@ interface EvidenceReasonDeclaration {
 interface EvidenceSelectionPolicyDeclaration extends EvidenceSelectionPolicy {
   readonly consumer: VersionedEvidenceId;
   readonly disposition: "experimental" | "production";
+}
+
+interface EvidenceContractDeclarations {
+  // existing producers, consumers, adapters and genericBypasses stay unchanged
+  readonly semanticEvents: readonly SemanticEventDeclaration[];
+  readonly eligibility: readonly EvidenceEligibilityDeclaration[];
+  readonly reasons: readonly EvidenceReasonDeclaration[];
+  readonly selectionPolicies: readonly EvidenceSelectionPolicyDeclaration[];
 }
 ```
 
@@ -169,12 +177,42 @@ Inspector, authoring, operator and machine-condition consumers may continue to a
 without semantic eligibility. A learner-facing selector accepts only projections with an exact
 `eligible` row for its target consumer. There is no wildcard, role-wide or family-prefix grant.
 
+The initial matrix is exhaustive: all 33 §7 events are eligible only for
+`research.semantic_selection@1`; none of F1's current production operations gains an event binding.
+Every other event/consumer pair is absent and therefore refused. F5 must add literal production
+eligibility rows and adapters rather than promoting the research consumer or inheriting its set.
+
+The implementation adds this exact closed error-code set to F1's existing manifest errors:
+
+```text
+EVIDENCE_EVENT_DUPLICATE
+EVIDENCE_EVENT_PROJECTION_MISSING
+EVIDENCE_EVENT_DERIVATION_MISMATCH
+EVIDENCE_EVENT_SIGN_WIDENS
+EVIDENCE_EVENT_OPERAND_MISSING
+EVIDENCE_EVENT_UNVALIDATED
+EVIDENCE_EVENT_PROJECTION_REFUSED
+EVIDENCE_EVENT_VALENCE_UNBACKED
+EVIDENCE_ELIGIBILITY_DUPLICATE
+EVIDENCE_ELIGIBILITY_ORPHANED
+EVIDENCE_REASON_DUPLICATE
+EVIDENCE_POLICY_DUPLICATE
+EVIDENCE_POLICY_INVALID
+EVIDENCE_POLICY_CONSUMER_MISSING
+EVIDENCE_POLICY_CRITICAL_REFUSED
+```
+
+No implementation-only synonym or generic `EVIDENCE_EVENT_INVALID` may replace these diagnostics.
+
 ### 6. Semantic event instance
 
 The compiler emits an immutable, runtime-sealed value:
 
 ```ts
+const SEMANTIC_EVENT = Symbol("tabiya.evidence.semantic_event");
+
 interface SemanticEvidenceEvent<T = unknown> {
+  readonly [SEMANTIC_EVENT]: true;
   readonly id: string;
   readonly projection: VersionedEvidenceId;
   readonly evidence: DeclaredEvidence<T>;
@@ -211,6 +249,10 @@ ID is the canonical digest of projection, both FENs,
 canonical UCI, sign and operands; it excludes optional run coordinates. Castling UCI is
 canonicalized by resulting king square before hashing, matching the R2 instrument and repairing the
 imported-game mismatch without changing stored moves.
+
+Only the compiler can attach `SEMANTIC_EVENT`; its runtime assertion rechecks the declared
+projection, producer, sign, operands, derivation inputs and canonical ID. A plain object or a valid
+declared-evidence wrapper paired with invented event metadata fails as `EVIDENCE_GENERIC_BYPASS`.
 
 `sign` describes a relation, never a verdict. The initial direct event set uses `state`, `gained`,
 `lost` and `preserved` where their literal contracts apply. It does not
@@ -295,7 +337,7 @@ An event is eligible for one consumer only when all of these hold:
 
 Failure produces a machine-readable abstention, not a downgraded generic sentence:
 
-The initial eligibility reason declarations are `source_abstained`,
+The initial eligibility reason declarations are `eligible_validated_literal`, `source_abstained`,
 `source_projection_unbound`, `payload_invalid`, `required_operand_missing`,
 `event_unvalidated`, `consumer_refused`, `sign_refused` and `valence_unbacked`, each at version 1.
 The result carries an exact `VersionedEvidenceId`; consumers do not switch over an exported closed
@@ -304,11 +346,19 @@ union.
 Raw evidence may still appear in an inspector when F1 permits it. The compiler never changes a
 refusal into an inspector error or an event into a raw fallback.
 
+Every initial event declaration names the frozen R2 authored/imported population digest in
+`validation.externalPopulation`. Zero observed occurrences are reported rather than converted into
+a pass; executable positives establish reachability, hard negatives establish refusal, and the
+external run establishes measured population behavior. Replacing that population requires a new
+versioned validation record, not an in-place count edit.
+
 ### 9. Local legal-alternative selector
 
 Selection is a pure function over already eligible events:
 
 ```ts
+const SELECTED_EVIDENCE = Symbol("tabiya.evidence.selected");
+
 interface EvidenceSelectionPolicy {
   readonly id: string;
   readonly version: number;
@@ -320,7 +370,9 @@ interface EvidenceSelectionPolicy {
 }
 
 interface EvidenceSelectionResult {
+  readonly [SELECTED_EVIDENCE]: true;
   readonly policy: VersionedEvidenceId;
+  readonly consumer: VersionedEvidenceId;
   readonly population: {
     readonly legalAlternatives: number;
     readonly evaluatedAlternatives: number;
@@ -352,6 +404,12 @@ type SelectedEvidenceFact =
       }>;
     };
 ```
+
+Only the selector can construct the frozen `SELECTED_EVIDENCE` brand. Its runtime assertion checks
+the policy/consumer pair against the compiled manifest and checks every selected event's runtime
+seal and exact eligibility. A structural cast or a result assembled from otherwise valid event
+objects is refused. F5 renderers accept this selected view and render each contained declared event
+through F1's registered renderer path; they never accept an unsealed candidate array.
 
 For a committed legal edge, the selector enumerates every legal move from the exact parent FEN
 **except the committed move**, including all promotion roles, obtains eligible events for each
@@ -467,6 +525,14 @@ without claiming JavaScript can prevent a malicious source-tree fork.
 F2 adds compiler and selected-view types but does not silently route current raw surfaces through
 `research.r2_candidate@1`.
 
+Starting from F1's implemented 19 producers / 93 projections / 24 declared consumers (23 current
+operations plus disposed `assistance.arrows`) / 142 bindings, this RFC's exact compiled closure is
+20 / 126 / 25 / 175. The additions are one derived-avoidance producer, 33 event projections, one
+experimental research consumer and 33 exact event→research bindings. The four new declaration
+collections contain 33 semantic events, 33 eligibility rows, 15 reasons and one policy. These
+numbers are derived from the literal sets above and must move together if the RFC returns to author;
+they are not minimums.
+
 - Inspectors continue to render admitted raw readings.
 - Existing deterministic guidance and voice keep F1-proven byte behavior until F5 supplies a named
   module/policy and migrates them together.
@@ -520,7 +586,11 @@ not paired with this draft because O6 remains unresolved (D680).
 ## Acceptance criteria
 
 1. Semantic-event and eligibility declarations compile into the F1 manifest/digest; shuffled
-   declaration order is stable and a separate generated registry is refused.
+   declaration order is stable and a separate generated registry is refused. The new manifest
+   error codes are set-equal to §5's fifteen literals and every code has a failing fixture. The
+   complete manifest/count tuple is exactly 20 producers / 126 projections / 25 consumers / 175
+   bindings, plus 33 events / 33 eligibility rows / 15 reasons / one policy; capabilities and docs
+   report the same tuple.
 2. The §7 set is exactly 33 literal version-1 projection IDs (22 direct plus eleven derived
    avoidance projections) and is set-equal to executable declarations. Every event names and
    passes at least one positive and hard-negative fixture;
@@ -534,7 +604,9 @@ not paired with this draft because O6 remains unresolved (D680).
    together. Castling, promotion and checkmate each have a positive and near-miss negative;
    imported/authored castling encodings yield the same event ID.
 6. The same event can be eligible for one exact test consumer and refused for another; no wildcard
-   compiles. A raw count remains inspector-visible and learner-event refused simultaneously.
+   compiles. The initial matrix contains exactly 33 eligibility rows, all targeting
+   `research.semantic_selection@1`; no current production consumer gains an event binding. A raw
+   count remains inspector-visible and learner-event refused simultaneously.
 7. Gained/lost/preserved direct events and selector-derived `avoided` events carry no valence.
    `avoided` cannot be constructed by a direct producer; its declared derivation inputs are the
    exact numerator events and its operands retain the complete legal-alternative denominator.
@@ -554,7 +626,9 @@ not paired with this draft because O6 remains unresolved (D680).
 11. Type/AST fixtures prove global lift, population rank and learned scores cannot enter the policy
     or comparator. Diagnostics require population ID, digest and date.
 12. Permuting candidates and alternatives yields byte-identical selected IDs/reasons. Ties follow
-    §9, and operand-coordinate changes do not change the family denominator.
+    §9, and operand-coordinate changes do not change the family denominator. A double-cast result
+    literal and a result with a valid event but mismatched consumer both fail the selected-view
+    runtime assertion.
 13. Played-family sensitivity covers 10/20/30%, alternative-only sensitivity covers
     null/20/30/40%, and caps cover 1/2/3. Cap changes volume, not eligibility;
     `maxFacts: 0` yields `budget_zero` with no implicit default. The R2 profile reproduces its

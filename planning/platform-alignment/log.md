@@ -800,3 +800,13 @@ Append-only. Record research, rulings, RFC transitions, implementation closeout 
   preserves F1's renderer/voice authority instead of making a parallel multi-source object.
 - Made the initial semantic event boundary exhaustive: 22 direct plus eleven derived version-1
   projection IDs. This prevents an implementer from silently filling the tactic/plan gap inside F2.
+
+## 2026-08-21 — Full Node-24/Linux CI comparison
+
+- Ran the workflow's full typecheck/test path in the amd64 Node 24 Linux image with pinned
+  Stockfish under Apple-Silicon emulation. Typecheck passed and 803/806 tests passed; the repaired
+  census completed in 4.498 s. Three unrelated 5 s tests crossed their limits only under emulation.
+- Compared those exact files to native GitHub run 32515030312: `pack-authoring.test.ts`,
+  `application.test.ts` and `feedback-delivery.test.ts` all passed there; the run's sole failure was
+  the now-repaired expression census. They are not widened on emulator-only evidence.
+- The remaining proof is the real push-triggered GitHub run. No push was performed.

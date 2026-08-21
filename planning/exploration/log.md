@@ -3943,3 +3943,11 @@ direct call lines in fourteen production files.
   the signed base family, supporting events and denominator without valence. The initial boundary
   is pinned to 22 direct plus eleven derived projections. D683 is closed in the draft;
   implementation is still unauthorized.
+
+## 2026-08-21 — Node-24/Linux full-path comparison
+
+The emulated amd64 workflow path passed typecheck and 803/806 tests; the repaired census passed in
+4.498 s. Three other default-timeout tests exceeded 5 s only under x86 emulation. The actual native
+GitHub run passed all three (`pack-authoring`, `application`, `feedback-delivery`) and failed only
+the repaired census, so their budgets were not changed on non-representative timing evidence. A
+push-triggered hosted run remains the final D682 confirmation; this pass did not push.
