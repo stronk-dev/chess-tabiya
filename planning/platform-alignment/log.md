@@ -906,3 +906,23 @@ Product modules/defaults, schemas and content remain explicitly out of scope.
 - `social-play/o12-handoff.md` makes O12 ready: private native casual play + optional Lichess-first
   typed round trip + local versioned bot events after O8/F8; no native public pool, human
   tournament, anti-cheat or federation in 1.0. R19 now waits on explicit post-1.0 promotion.
+
+## 2026-08-22 — owner rejected the incumbent play composition; collector readiness split
+
+- Extended the owner's D717 validation-by-use result with the symbol-level D718 trace. The ordinary run does not place support
+  beside a stable board: objective/status/banner/inspector blocks precede the board in one
+  constrained column, consume its remaining height, and encounter multiple `overflow:hidden`
+  boundaries. The viewport gate accepts containment and a 192 px board, not composition quality.
+- Updated R3 and the execution queue: this is a negative reading of the incumbent, not validation
+  of the candidate F5 module/preset prototype. F5 owes a board-first rail/drawer/bottom-sheet
+  composition and open-state visual/interaction checks, not a cosmetic rename of the raw dump.
+- Re-derived evidence readiness after F1/F2. The catalogue now has 20 producers, 126 projections,
+  25 consumers, 175 bindings and 33 semantic events, but every semantic eligibility row still
+  terminates at the research consumer. `evidence-collector-readiness.md` separates true collector
+  gaps, computed-but-discarded atoms, research-only events and source-specific raw consumers. It
+  is the collector-readiness input to `planning/evidence-foundation-ux/plan.md`, not a competing
+  program.
+- Routed the next foundation work as an additive atomic-evidence wave with no pack/schema/content
+  claim, followed by bounded semantic consequences and consumer-specific F5/F6/F8 eligibility.
+  Bots can proceed after O8 against the same catalogue. Campaign remains behind the repaired core
+  loop, F5/F7 and the R14 owner session.
