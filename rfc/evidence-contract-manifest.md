@@ -1,6 +1,8 @@
 # RFC: Evidence contract manifest — every producer has a declared consumer or an honest home
 
-- **Status:** implementing
+- **Status:** implementing — 2026-08-21 author-return amendment landed (return choice 1, typed
+  rendered items; [[D662]]/[[D663]]/[[D665]]/[[D666]]); the implementation branch resumes at
+  stage 2
 - **Author:** codex (agent), for Marco
 - **Created:** 2026-08-21
 - **Design refs:** `design/03-product-breadth.md` §Intelligence and explanation and gate B4;
@@ -147,6 +149,57 @@ head or closed vocabulary. Two RFCs adding different IDs can merge. A collision 
 version fails compilation. Therefore this RFC truthfully declares `tabiya-claims: none` while
 remaining consistent with RFC-0000 rule 7.
 
+#### 4.3 Derived producers and projections (2026-08-21 author-return amendment)
+
+The bind-stage return found provider text whose sentences represent compositions of other
+evidence — comparison deltas, story evaluation shifts, a suggested title — with no declared
+identity ([[D662]]). The return's choice 1 (typed rendered items, §6.1) is adopted; this section
+supplies the vocabulary that choice requires, so implementation does not invent its semantics.
+
+**Rendering versus derivation.** Rendering turns ONE declared item's payload into a form
+(sentence, marker, lit squares) and creates no new evidence identity: "Checkpoint c2 was
+reached." over one `run.record.checkpoint_hit` payload is rendering. Derivation computes a NEW
+payload from the payloads of one or more declared projections: an eval delta across two recorded
+evaluations, the changed-observation set between two positions, a title ranked over moments.
+Derived values need their own projection identity before any consumer — the LLM included — may
+receive them.
+
+A **derived producer** is a named deterministic pure function whose evidence inputs are
+exclusively the payloads of other declared projections at exact versions. It declares
+`plane: "derived"` and `availability: "local"`. A **derived projection** is an output of a
+derived producer; it carries `derivation.inputs`, the literal `{ id, version }` list of the
+projections its payload is computed from. Derivation may chain (the story title consumes the
+story eval-shift projection, itself derived); identity and versioning follow §4.2 — re-pinning an
+input to a different projection version is a semantic change and increments the derived
+projection's version.
+
+**Derivation composes evidence; it never composes judgement** (law-8 corollary). A derived
+projection over grounded facts is grounded exactly as far as its inputs are: it may count,
+difference, rank or threshold them deterministically; it cannot add grounding, grade a move, or
+introduce a strategic claim no input carries. A derived projection over two grounded facts is
+grounded; prose ABOUT them is rendering, never a projection of its own.
+
+The compiler enforces:
+
+- `derivation.inputs` is non-empty and every entry names a declared projection at its exact
+  version (`EVIDENCE_DEPENDENCY_MISSING` otherwise); derivation edges join the §8 cycle walk
+  (`EVIDENCE_DEPENDENCY_CYCLE`).
+- A derived projection cannot claim more exactness than its inputs: `exactness: "exact"` is legal
+  only when every input is exact and the composition is total; otherwise it declares `measured`
+  or `convention` (`EVIDENCE_DERIVATION_WIDENS`).
+- Grounding is inherited, never invented: when all inputs share one grounding the derived
+  projection carries it; when inputs mix groundings it carries `declared_convention` and its
+  `semantics` names the composition rule (`EVIDENCE_DERIVATION_WIDENS` otherwise).
+- `answerContent` is a subset of the union of the inputs' `answerContent`
+  (`EVIDENCE_DERIVATION_WIDENS`) — a derived projection over facts cannot disclose a move.
+- If any input can abstain, the derived projection declares `abstention.possible: true` carrying
+  at least the reason `input_abstained` (`EVIDENCE_DERIVATION_WIDENS`).
+
+The generic escape hatch stays refused (the return's choice 3): a `derived.sentence` projection —
+free prose with unenumerated inputs — is unrepresentable, because a derived projection without a
+non-empty literal `derivation.inputs` list does not compile. This is the wildcard refusal of
+`EVIDENCE_BINDING_WILDCARD`, applied to composition.
+
 ### 5. Contract types
 
 `packages/runtime/src/evidence-contract.ts` owns dependency-free types and the pure compiler. The
@@ -159,7 +212,9 @@ type EvidencePlane =
   | "search"
   | "human"
   | "theory"
-  | "authored";
+  | "authored"
+  | "record"   // facts of the persisted run/imported document (2026-08-21, §10.2)
+  | "derived"; // deterministic compositions of other declared projections (§4.3)
 
 type ProjectionRole = "predicate" | "reading" | "event" | "source_record";
 type EvidenceGrounding =
@@ -170,7 +225,8 @@ type EvidenceGrounding =
   | "human_model"
   | "human_corpus"
   | "cited_theory"
-  | "authored_claim";
+  | "authored_claim"
+  | "recorded_run"; // a fact mechanically read from the persisted run/imported document (2026-08-21)
 
 type EvidenceDisposition =
   | "inspector_only"
@@ -235,6 +291,7 @@ interface ProjectionDeclaration {
   readonly answerContent: readonly AnswerDistance[];
   readonly forms: readonly EvidenceForm[];
   readonly dependsOn: readonly { readonly id: string; readonly version: number }[];
+  readonly derivation?: { readonly inputs: readonly { readonly id: string; readonly version: number }[] }; // §4.3; 2026-08-21
   readonly limitations: readonly string[];
   readonly disposition?: { readonly kind: EvidenceDisposition; readonly reason: string };
 }
@@ -317,7 +374,62 @@ limitations and force an inspector/experimental disposition until a later versio
 Every API that hands evidence to a consumer takes `DeclaredEvidence<T>` or a compiled binding view,
 never bare `unknown`, a family-name string or a whole `EvidencePacket` field by convention. The
 existing packet may remain as a transport aggregate during migration, but each item inside it is
-wrapped and voice/deterministic consumers receive only items bound to them.
+wrapped and voice/deterministic consumers receive only items bound to them. The 2026-08-21
+amendment goes further: `EvidencePacket.sentences` is deleted and `EvidencePacket.declared`
+becomes required (§6.1); no consumer reads a parallel sentence array.
+
+#### 6.1 Typed rendered items and the admitted view (2026-08-21 author-return amendment)
+
+The checkpoint's `VoiceEvidenceView` carried a filtered `evidence` list AND a `sentences` array
+copied independently from `EvidencePacket.sentences`, while `voiceCheck` treated that same array
+as its allow-list — one undeclared mutation widened both provider input and the output checker
+([[D662]]). The manifest must not be bypassable by a parallel array, so provider text becomes
+typed rendered items and the parallel array is deleted.
+
+```ts
+interface RenderedEvidenceItem<T = unknown> {
+  readonly evidence: DeclaredEvidence<T>;
+  readonly sentences: readonly string[];
+}
+
+// Constructible only inside packages/runtime/src/evidence-contract.ts: the brand is a
+// non-exported unique symbol, so no call site can forge the view from a bare payload.
+interface ConsumerEvidenceView<T = unknown> {
+  readonly [ADMITTED]: true;
+  readonly consumer: VersionedEvidenceId;
+  readonly items: readonly DeclaredEvidence<T>[];
+}
+```
+
+- `evidenceForConsumer` returns the branded `ConsumerEvidenceView`. This is what upgrades the
+  §10.1 census from anchors to consumption ([[D666]]): every registered operation entrypoint
+  accepts `ConsumerEvidenceView` or `DeclaredEvidence<T>`, and a bare packet/reading/ref no
+  longer typechecks. Each package hosting operations carries a type fixture that passes each
+  operation its pre-F1 bare payload under `@ts-expect-error`; TypeScript fails the build when a
+  directive is unused, so the fixture is red exactly while a bare payload still compiles — it is
+  red at the checkpoint, which is what [[D444]]/[[D451]] demand of an instrument.
+- `apps/server/src/guidance.ts` gains `renderedEvidenceItems(manifest, consumer, declared)`: it
+  admits `declared` through `evidenceForConsumer` FIRST, then maps each admitted item through an
+  exact per-projection renderer (literal projection id → deterministic render function; no
+  catch-all arm). The result is the only sentence authority — deterministic guidance text is the
+  join of item sentences, provider input is the item list, and `voiceCheck`'s allow-list is
+  derived from the same admitted items. One authority, three readers.
+- `VoiceEvidenceView` becomes `{ consumer, scope, items: readonly RenderedEvidenceItem[] }` with
+  no `sentences` field; `voiceCheck(items, output)` replaces `voiceCheck(packet, output)` in
+  `packages/runtime/src/voice.ts`. The external provider body
+  (`apps/server/src/external-voice.ts`) is
+  `{ personaPrompt, scope, items: [{ evidence: { producer, projection, payload }, sentences }] }`.
+- Any surviving sentence list elsewhere (`StoryMoment`, `ComparisonNarrative` groups) is a
+  flatMap over rendered items at the use site, never a second stored array.
+- Byte-compatibility: for a fixed input, the joined item sentences reproduce the checkpoint's
+  deterministic output byte-for-byte in the current assembly order (phase, structures, markers,
+  endgame, authored; compare and story keep their §10.2 orders). Criterion 11 pins this.
+
+The sentinel fixture the return demands: write a unique sentinel into the only place raw prose
+could previously travel (raw `packet.sentences` at the checkpoint); it must neither enter
+provider input nor become allowed output. At the checkpoint it does both, so the fixture starts
+red. After the field is deleted, the fixture keeps its output arm: a provider response containing
+a token absent from the admitted items is refused by `voiceCheck` (criterion 21).
 
 ### 7. Primary declarations and compilation
 
@@ -366,8 +478,10 @@ The compiler raises one stable code per invariant and prints both declaration si
 | `EVIDENCE_DEPENDENCY_CYCLE` | the projection dependency graph is acyclic | make A depend on B and B on A |
 | `EVIDENCE_GENERIC_BYPASS` | registered consumer call sites cannot accept a bare reading/ref/packet field | invoke a guarded renderer with a raw payload |
 | `EVIDENCE_PROVIDER_FALLBACK_MISSING` | every provider-backed consumer declares available, honest-empty or unavailable behavior | omit the Maia-off arm |
+| `EVIDENCE_DERIVATION_WIDENS` | a derived projection inherits grounding, cannot exceed its inputs' exactness or answer content, and preserves input abstention (§4.3) | declare `derived.compare.eval_delta` as `exact`, give it an answer distance no input carries, or drop `input_abstained` |
 
-These are twelve **compiler error families**. Tests assert set equality between the exported error
+These are thirteen **compiler error families** (twelve at acceptance; `EVIDENCE_DERIVATION_WIDENS`
+added by the 2026-08-21 author-return amendment). Tests assert set equality between the exported error
 code list and the negative-fixture table so a new invariant cannot exist only in prose.
 
 ### 9. Initial projection closure
@@ -391,6 +505,18 @@ semantics.
    projection-map tests. Namespace equality is not required; every deliberate narrowing is.
 5. The fourteen A4 producer paths each resolve to at least one producer declaration and at least
    one output projection or explicit retired disposition.
+6. **The phase wrapper carries the payload its projection promises** ([[D665]], 2026-08-21).
+   `rules.phase.reading@1` declares `payloadType: "PhaseReading"`, so `evidencePacket`
+   (`apps/server/src/guidance.ts`) always wraps the actual `classifyPhase(fen)` result — never
+   the `{ source, value }` transport pair — and an authored pack's declared phase is a DIFFERENT
+   projection, `pack.authored.phase@1` (producer `pack.authored`, `payloadType: "PackPhase"`,
+   grounding `authored_claim`, exactness `authored`). Both are declared when a pack is present.
+   Current sentence behavior is preserved as a deterministic rendering rule in
+   `renderedEvidenceItems`: when a `pack.authored.phase` item is admitted it renders
+   "This pack declares: X." and the detector phase item renders no sentence; with no pack the
+   detector item renders `renderPhaseReading`. That registers current shipped behavior; it is not
+   F2 selection. `guidance.deterministic@1` and `guidance.voice@1` accepts gain
+   `pack.authored.phase@1`.
 
 The `outpost` reading/predicate declaration names its dependency on the current
 `pawn_safe_square` predicate projection. A dependency census walks transitive edges, then content
@@ -431,9 +557,11 @@ control would be a behavior change this RFC does not scope.
 
 #### 10.1 Initial consumer-symbol census
 
-The initial closure is **twenty-three consumer operations**. A row is one operation with a distinct
-permission or output consequence, not one call site; multiple call sites using the same renderer
-stay one row. The implementation plan must refresh the anchors and split a row if one operation
+The initial closure is **twenty-five consumer operations**: the twenty-three below plus rows
+24–25, added in §10.2 by the 2026-08-21 author return when the bind stage measured that compare
+and story revoice carry permission contracts the base voice operation does not. A row is one
+operation with a distinct permission or output consequence, not one call site; multiple call
+sites using the same renderer stay one row. The implementation plan must refresh the anchors and split a row if one operation
 actually carries two permission contracts. It may not silently drop a row to make closure green.
 Rows 19–23 were added by the 2026-08-21 cross-review: the author census of eighteen omitted five
 operations its own §10 enumeration partly names — the marker UI (producer path 4 promises "both
@@ -447,7 +575,7 @@ authored-claim sheets, repertoire gap scanning, and claim-binding validation.
 | 3 | `runtime.guard_condition` | `guard.ts`; queued engine/tablebase condition evidence | `machine_condition` |
 | 4 | `guidance.packet` | `guidance.ts:evidencePacket` | internal aggregate, no direct learner form |
 | 5 | `guidance.deterministic` | `guidance.ts` sentence assembly and fallback | bound sentence consumer |
-| 6 | `guidance.voice` | `renderVoice`; `voiceCheck`; `external-voice.ts` | optional renderer over bound sentences |
+| 6 | `guidance.voice` | `renderVoice`; `voiceCheck`; `external-voice.ts` | optional renderer over admitted rendered items (§6.1); marker/reading/steering scopes only after the §10.2 split |
 | 7 | `guidance.recorded_reading` | `appendRecordedReadings`; `renderRecordedReading` | deterministic post-provider sentence |
 | 8 | `runtime.evidence_ref` | `renderEvidenceRef`; guard/objective/compare grounds | exact ref projection by prefix/fact |
 | 9 | `inspector.position_structure` | `DrillScreen.svelte` structural reading section | contextual inspector |
@@ -472,10 +600,74 @@ headings gain “Evidence inspector” semantics/labels at F1 landing so they ca
 guidance modules. This is a classification of already-visible raw evidence under the O1 amendment,
 not an F5 preset/default decision. They remain explicitly opened and keep current disclosure gates.
 
+#### 10.2 Compare and story provider text: declared sources (2026-08-21 author-return amendment)
+
+The bind-stage return (§1 of `planning/evidence-contract-manifest/author-return.md`) enumerated
+what compare and story prose actually represents. None of it is invented here; all of it is
+registered. Facts of the persisted run/imported document gain one producer, and the values that
+are genuinely composed gain derived projections (§4.3).
+
+**`run.record@1`** — plane `record`, grounding `recorded_run`, availability `recorded`;
+implementation `packages/runtime/src/compare-strips.ts; packages/runtime/src/story.ts;
+packages/runtime/src/branch-path.ts`:
+
+| projection | payload | represented prose |
+|---|---|---|
+| `run.record.fork@1` | fork node, shared ply count, per-branch fork offsets | "The recorded branches share N plies through the fork." |
+| `run.record.move@1` | recorded SAN/UCI committed at a node | "Branch at offset k begins with recorded move X." — `answerContent: ["fact", "move"]` with the limitation *recorded already-played move, never a recommendation*; `review` timing only |
+| `run.record.checkpoint_hit@1` | checkpoint id and ply offset | "Checkpoint X was reached." |
+| `run.record.objective_transition@1` | from/to objective state at a node | "The recorded objective changed from A to B." |
+| `run.record.consequence@1` | plies reached, objective state, terminal flag, learner outcome | branch consequence/terminal sentences; the story outcome moment |
+| `run.record.imported_result@1` | the imported PGN result tag | "The PGN records the game result as R…" — limitation: a claim of the imported document, not a rules-derived outcome |
+
+**`derived.compare_narrative@1`** — plane `derived`, implementation
+`packages/runtime/src/compare-strips.ts:comparisonNarrative`:
+
+| projection | derivation.inputs | grounding / exactness |
+|---|---|---|
+| `derived.compare.structure_delta@1` | the seventeen emitted `rules.structural.reading.*@1` | `position_rules` / `exact` (all inputs exact; set difference is total) |
+| `derived.compare.eval_delta@1` | `live.stockfish.eval@1` | `bounded_search` / `measured`; abstains (`input_abstained`, `no_recorded_trail`) |
+
+**`derived.story@1`** — plane `derived`, implementation
+`packages/runtime/src/story.ts:storyMoments; suggestTitle`:
+
+| projection | derivation.inputs | grounding / exactness |
+|---|---|---|
+| `derived.story.eval_shift@1` | `live.stockfish.eval@1` | `bounded_search` / `measured` |
+| `derived.story.last_level@1` | `live.stockfish.eval@1` | `bounded_search` / `convention` — the within-a-pawn threshold is Tabiya's declared recorded-evaluation convention, named in `semantics` |
+| `derived.story.title@1` | `derived.story.eval_shift@1`, `run.record.consequence@1`, `run.record.imported_result@1`, `rules.endgame.reading@1` | mixed input groundings ⇒ `declared_convention` / `convention`; `semantics` names the title composition rule. This is the chained case: it consumes a derived projection |
+
+Everything else in compare/story prose is rendering over an already-declared projection:
+timing-strip pivotal entries over `rules.pivotal.marker@1`, story endgame-entry sentences over
+`rules.endgame.reading@1`, shape spans over `theory.shapes.firing@1`, and outcome sentences over
+the two `run.record` outcome projections. No producer beyond `run.record` and the two derived
+producers is added, and the raw `live.stockfish.eval` payload is NOT admitted to any voice
+consumer — only its derived deltas are. That narrowing is the manifest doing its job.
+
+**Consumer split.** Compare and story revoice admit `run.record` and derived projections the
+base voice must not (compare additionally discloses a recorded `move` token), so per §10.1's own
+rule they become their own operations:
+
+| # | consumer id | current implementation anchors | accepts ceiling and constraints |
+|---:|---|---|---|
+| 24 | `guidance.voice_compare@1` | `rest.ts` `scope === "compare"` branch; `comparisonNarrative` | `run.record.fork@1`, `run.record.move@1`, `run.record.checkpoint_hit@1`, `run.record.objective_transition@1`, `run.record.consequence@1`, `rules.pivotal.marker@1`, `derived.compare.structure_delta@1`, `derived.compare.eval_delta@1`; `timing: ["review"]`, `forms: ["sentence"]`, `answerContent: ["fact", "evaluation", "move"]`, `providerOff: "available"` |
+| 25 | `guidance.voice_story@1` | `rest.ts` story arm of the `voice`/`speech` actions; `storyMoments`; `suggestTitle` | the five base `guidance.voice` projections plus `pack.authored.phase@1`, `theory.shapes.firing@1`, `run.record.consequence@1`, `run.record.imported_result@1`, `derived.story.eval_shift@1`, `derived.story.last_level@1`, `derived.story.title@1`; `timing: ["review"]`, `forms: ["sentence", "audio"]`, `providerOff: "available"` |
+
+The census is therefore **twenty-five operations**; `CURRENT_CONSUMER_OPERATION_IDS`, the anchor
+census in `evidence-manifest-check.ts` and the declared consumers move to twenty-five together.
+The accepts lists above are ceilings: implementation may narrow them, never widen. The compare
+view carries ONLY comparison items — the base packet's items are not admitted, which encodes in
+the manifest what the checkpoint did by ad-hoc packet surgery at `rest.ts` — and the story view
+carries base items plus story items. Registering `theory.shapes.firing` and the story/run-record
+projections for revoice does not broaden learner visibility: those sentences already reach the
+provider today through the undeclared array; this declares them and makes the widening path
+refusable.
+
 `guidance.packet` is permitted as an internal aggregate only when its fields are
 `DeclaredEvidence`; it is not itself a consumer binding and cannot be passed wholesale to a
 renderer. The external voice receives the exact compiled `guidance.voice` view rather than the
-aggregate.
+aggregate; compare and story revoice receive their own §10.2 views under their own consumer
+contracts.
 
 ### 11. Consumer constraints and answer distance
 
@@ -498,10 +690,11 @@ those choices.
 
 ### 12. LLM boundary
 
-The LLM is a consumer/renderer, never a producer of chess truth. `guidance.voice` accepts only
-evidence already bound to the requested scope. Its input is a selected subset when F2 exists; until
-then it remains the current deterministic sentence subset, now declared rather than inferred from
-`packet.sentences`.
+The LLM is a consumer/renderer, never a producer of chess truth. The voice consumers accept only
+evidence already bound to them. Their input is a selected subset when F2 exists; until then it is
+the current deterministic set, carried as §6.1 rendered items — `packet.sentences` no longer
+exists to be inferred from, and `voiceCheck`'s allow-list derives from the same admitted items
+the provider receives.
 
 Recorded engine/tablebase readings may remain deterministically appended outside provider output.
 Maia, Explorer, transitions, plans and opening identity do not enter the LLM merely because the
@@ -511,6 +704,32 @@ selection gates.
 Provider failure preserves the current deterministic fallback. The manifest must report voice as
 available with deterministic rendering when no external provider exists; “LLM unavailable” is not
 “evidence unavailable.”
+
+#### 12.1 Reasoning review is not chess evidence ([[D663]], 2026-08-21 author-return amendment)
+
+The reasoning-review operation (`rest.ts`, `route.action === "reasoning-review"`) asks the
+external provider to quote contiguous learner text: its input is the learner transcript, the
+authored key points and the deterministic detections. At the checkpoint its task travels in the
+legacy `deterministicText` argument that `ExternalHttpVoiceProvider.render` ignores, so a
+configured provider receives chess sentences instead of the task — a live wrong-content leak to
+an external service, and a non-chess operation smuggled through `guidance.voice`.
+
+The fix is a separate typed contract, not a manifest binding:
+
+- `"reasoning"` is removed from `VoiceScope` (`apps/server/src/guidance.ts`).
+- `apps/server/src/external-voice.ts` gains `ReasoningReviewProvider` with
+  `review(request: ReasoningReviewRequest): Promise<string>`, where `ReasoningReviewRequest`
+  carries `{ task, transcript, keyPoints, detections }` — pinned to the exact fields the route
+  already assembles at `rest.ts` (`task`, `access.event.data.transcript`,
+  `access.keyPoints` id/label/phrases, `access.event.data.detections`). The HTTP body is
+  `{ personaPrompt, task, transcript, keyPoints, detections }`: no evidence items, no chess
+  sentences.
+- The route stops building an `EvidencePacket` for this operation entirely.
+  `reasoningMatchCheck` remains the deterministic acceptance gate over the provider's proposals,
+  unchanged, and the learner-facing proposal text is unchanged.
+- The operation is deliberately NOT a manifest consumer: it consumes no chess-evidence
+  projection, and declaring it one would launder learner text through the evidence vocabulary.
+  Its guard is acceptance criterion 23, which starts red at the checkpoint.
 
 ### 13. Availability and abstention
 
@@ -553,8 +772,12 @@ This RFC is one code landing but has three implementation checkpoints:
 
 1. **Declare:** add types/compiler, literal declarations, closure tests and a read-only report while
    preserving current behavior.
-2. **Bind:** wrap all fourteen producer paths and require literal consumer IDs at every registered
-   consumer call site. Remove generic bypasses; do not broaden learner visibility.
+2. **Bind:** wrap all seventeen producer paths (the fourteen A4 paths plus `run.record` and the
+   two derived producers of §10.2) and require the branded `ConsumerEvidenceView` or
+   `DeclaredEvidence<T>` at every registered operation entrypoint — a literal consumer ID string
+   next to a bare payload is an anchor, not consumption ([[D666]]). Remove generic bypasses,
+   including the `packet.sentences` side channel ([[D662]]) and the reasoning-review smuggling
+   (§12.1); do not broaden learner visibility.
 3. **Expose:** add the derived digest/availability/binding summary to server and web capabilities,
    document the contract, and put the compiler in `make verify` and startup.
 
@@ -566,8 +789,9 @@ finds is output for F2/F3 and remains under D560.
 
 ### 16. Implementation surface
 
-The table below enumerates **implementation areas**, total fourteen; it does not claim fourteen
-files. The implementing plan must replace each area with an exact file/symbol list before coding.
+The table below enumerates **implementation areas**, total sixteen (fourteen at acceptance; 15
+and 16 added by the 2026-08-21 author return); it does not claim sixteen files. The implementing
+plan must replace each area with an exact file/symbol list before coding.
 
 | # | area | required change |
 |---:|---|---|
@@ -585,6 +809,8 @@ files. The implementing plan must replace each area with an exact file/symbol li
 | 12 | web API/rendering consumers | typed consumer IDs; inspector/raw paths explicit |
 | 13 | verification tooling | closure, bypass, dependency and provider-off tests |
 | 14 | canonical docs | `docs/evidence-contract.md` and existing evidence docs cross-links |
+| 15 | run-record and derived producers | `run.record`/`derived.*` declarations; `comparisonNarrative` and `storyMoments`/`suggestTitle` refactored to rendered items (§10.2) |
+| 16 | reasoning-review contract | `ReasoningReviewProvider`; `rest.ts` reasoning-review route; `VoiceScope` narrowing (§12.1) |
 
 ## Deviations from design
 
@@ -595,12 +821,14 @@ intent amendments require.
 
 Each criterion names the failure it is intended to catch.
 
-1. **The compiler exposes the twelve error families in §8, and twelve negative fixtures each raise
-   the named code.** Fails if a prose invariant has no executable reader or if a fixture passes for
-   a different reason.
-2. **All fourteen A4 producer paths resolve to declarations, and set equality against the audited
-   ID list is asserted.** Fails if the implementer registers only the four paths already visible to
-   voice/rendering.
+1. **The compiler exposes the thirteen error families in §8, and thirteen negative fixtures each
+   raise the named code.** Fails if a prose invariant has no executable reader or if a fixture
+   passes for a different reason.
+2. **All fourteen A4 producer paths resolve to declarations and remain asserted as a subset, and
+   the full producer set is asserted set-equal to the seventeen ids** (the fourteen plus
+   `run.record`, `derived.compare_narrative`, `derived.story` — 2026-08-21 amendment). Fails if
+   the implementer registers only the four paths already visible to voice/rendering, or if an
+   eighteenth producer appears without an amendment.
 3. **Structural predicates and readings are separately versioned, with closure against all eighteen
    `STRUCTURAL_FEATURE_KINDS`.** Fails if `outpost` predicate and reading share one identity or if
    `pawn_count` is advertised as an emitted reading. The emitted/declared distinction is read from
@@ -614,9 +842,13 @@ Each criterion names the failure it is intended to catch.
 6. **Runtime event kinds, sourcing evidence kinds, evidence refs, recorded-reading dispositions and
    packet fields each have an explicit set-equality or projection-map assertion.** Fails if a new
    member silently becomes unmanifested; namespace equality is not asserted.
-7. **Every current evidence consumer call site names an exact consumer ID/version and accepts only
-   `DeclaredEvidence` or a compiled binding view.** Fails if one generic reader can still accept a
-   bare whole reading/packet field.
+7. **Every registered consumer operation's entrypoint accepts only the branded
+   `ConsumerEvidenceView` or `DeclaredEvidence<T>`, and a per-package type fixture passes each
+   operation its pre-F1 bare payload under `@ts-expect-error`.** The build fails when a directive
+   is unused — i.e. while a bare packet/reading/ref still typechecks anywhere — so the fixture is
+   red at checkpoint `2b68103`…`aaea3e4` and green only when consumption is real. Fails the way
+   the checkpoint failed ([[D666]]): a source file retains the named function, its raw input
+   bypasses every compiled binding, and a needle census stays green.
 8. **Every projection has at least one binding or exactly one allowed disposition with a non-empty
    reason.** Fails on both an orphan and two conflicting dispositions.
 9. **Every consumer has a non-empty exact accepted-projection set or exactly one explicit
@@ -630,7 +862,11 @@ Each criterion names the failure it is intended to catch.
     consumer and to raise its fact budget; both are refused.
 11. **The current deterministic voice output and provider-off fallback remain byte-identical for a
     fixed packet, while adding an unbound Maia/Explorer/transition/plan item changes neither provider
-    input nor output.** Fails if “compiled pool” becomes “everything reaches the LLM.”
+    input nor output.** The same byte-identity holds for the compare and story deterministic
+    fallbacks: the joined admitted-item sentences reproduce the checkpoint's narrative/story
+    output for a fixed run, in the same order. Fails if “compiled pool” becomes “everything
+    reaches the LLM,” or if the items refactor silently reorders or rewrites learner-visible
+    prose.
 12. **Recorded engine/tablebase prose remains deterministic and outside provider-authored text.**
     Fails if provider output can introduce or reorder an engine move/PV or citation.
 13. **Provider-off tests cover Maia, Stockfish, Syzygy, Explorer and external voice separately.**
@@ -655,6 +891,39 @@ Each criterion names the failure it is intended to catch.
 20. **The existing A3/A4/A5 research harnesses still pass or are replaced by stricter equivalent
     assertions with their negative baseline preserved in history.** Fails if implementation merely
     deletes the instrument that demonstrated the gap.
+21. **The sentinel side-channel fixture exists and started red at the checkpoint** ([[D662]]). A
+    unique sentinel written only to the raw packet sentence array must neither enter provider
+    input nor become allowed voice output; at checkpoint `2b68103`…`aaea3e4` it does both. After
+    `EvidencePacket.sentences` is deleted the fixture keeps its output arm: provider output
+    containing a token absent from the admitted items is refused by `voiceCheck`. Fails if one
+    undeclared mutation can ever again widen provider input and the output checker together.
+22. **`voiceCheck` and provider input share one authority.** `voiceCheck` takes the admitted
+    items — its packet parameter is gone — and a test asserts, for every voice scope, that its
+    allow-list equals the flatMap of the exact item list sent to the provider. Fails if the
+    checker and the provider input are computed from different sources.
+23. **The reasoning-review request body carries the task and no chess evidence** ([[D663]]). A
+    fixture captures the external HTTP body for `reasoning-review` and asserts it contains
+    `task`, `transcript`, `keyPoints` and `detections` and contains no evidence items and no
+    chess sentences; `"reasoning"` is absent from `VoiceScope`. This fixture starts red: at the
+    checkpoint the provider receives chess sentences and never sees the task.
+24. **The phase wrapper's bytes match its projection** ([[D665]]). For a detector packet the
+    `rules.phase.reading@1` payload is the `classifyPhase` result; for an authored pack the
+    packet declares BOTH the detector `PhaseReading` under `rules.phase.reading@1` AND the
+    authored phase under `pack.authored.phase@1`, with deterministic output byte-identical to
+    the checkpoint. Fails if a `{ source, value }` transport pair is attributed to the detector
+    producer.
+25. **Derived projections cannot lie about their inputs** (§4.3). Negative fixtures: an `exact`
+    claim over a `measured` input, an answer distance no input carries, and a dropped
+    `input_abstained` reason each raise `EVIDENCE_DERIVATION_WIDENS`; a derivation input absent
+    from the catalogue raises `EVIDENCE_DEPENDENCY_MISSING`; a derivation cycle raises
+    `EVIDENCE_DEPENDENCY_CYCLE`; and a derived projection with empty `derivation.inputs` — the
+    refused generic `derived.sentence` escape hatch — raises `EVIDENCE_PROJECTION_INCOMPLETE`.
+    Fails if free prose can become a projection.
+26. **The consumer census is twenty-five and the voice split is real.**
+    `CURRENT_CONSUMER_OPERATION_IDS`, the anchor census and the declared consumers are
+    set/order-equal at twenty-five; `guidance.voice_compare@1` and `guidance.voice_story@1` have
+    non-identical accepts sets; and the compare view admits no base-packet projection. Fails if
+    compare or story prose reaches the provider under the base `guidance.voice` contract.
 
 ## Discharges
 
@@ -665,18 +934,31 @@ Each criterion names the failure it is intended to catch.
 | D3 | [[D572]] compiled eligibility before selection, manifest half only; selector remains F2 | `evidence-contract-manifest` | implementation commit | |
 | D4 | [[D631]] distinct predicate/reading projection identities; semantic learner events remain F2 | `evidence-contract-manifest` | implementation commit | |
 | D5 | [[D632]] transitive semantic dependency discovery; corpus migration remains F3 | `evidence-contract-manifest` | implementation commit | |
+| D6 | [[D662]] one sentence authority: §6.1 rendered items, the branded view, `packet.sentences` deleted, sentinel fixture (criteria 21–22) | `evidence-contract-manifest` | implementation commit | |
+| D7 | [[D663]] reasoning-review typed non-evidence contract; `"reasoning"` removed from `VoiceScope` (§12.1, criterion 23) | `evidence-contract-manifest` | implementation commit | |
+| D8 | [[D665]] phase wrapper carries `PhaseReading`; `pack.authored.phase@1` declared (§9 clause 6, criterion 24) | `evidence-contract-manifest` | implementation commit | |
+| D9 | [[D666]] closure proves consumption, not anchors: branded `ConsumerEvidenceView` at all twenty-five entrypoints plus the `@ts-expect-error` type fixtures (criteria 7, 26) | `evidence-contract-manifest` | implementation commit | |
 
 ## Open questions
 
 No owner/product question remains: O1–O4 already rule the authority, semantic boundary and UX
 layering. The drafting census resolves the four initial implementation questions in §§7, 10.1 and
-14: shared static catalogue in runtime plus server availability aggregate; twenty-three current
+14: shared static catalogue in runtime plus server availability aggregate; twenty-five current
 consumer operations (the author census said eighteen; the 2026-08-21 cross-review re-derivation
-refuted that count at the symbol and added rows 19–23); one set-equal transition release for
+refuted that count at the symbol and added rows 19–23; the 2026-08-21 author return split
+compare/story revoice into rows 24–25 when the bind stage measured their distinct permission
+contracts, §10.2); one set-equal transition release for
 `RECORDED_READING_DISPOSITIONS`; and current manually opened raw panels classified as the
 contextual inspector, never as learner guidance. Cross-review must re-derive those answers and
 return the RFC if the dependency graph or symbol census refutes them; it may not substitute a
 wildcard or legacy bypass.
+
+The 2026-08-21 author return raised no owner question either: choice 1 preserves shipped
+learner-visible behavior byte-for-byte (criteria 11, 24), the consumer split and the
+`run.record`/derived declarations register current truth rather than deciding new presentation,
+and the refusal of a generic `derived.sentence` re-affirms the return's own choice-3 refusal.
+The §10.1 "Evidence inspector" relabel is **owner-approved (nod recorded 2026-08-21)** — it lands with implementation, no item awaits an owner.1 “Evidence inspector” relabel at
+landing.
 
 ## Changelog
 
@@ -693,3 +975,16 @@ wildcard or legacy bypass.
   `EVIDENCE_CONSUMER_ORPHANED` and criterion 9 updated to match. §9's "actually emitted" is now
   pinned to the executable emission census rather than the declarations under test (criterion 3
   updated). §14 names the live `citable_text` claim seam with `pack-population-provenance`.
+- 2026-08-21: author round on the bind-stage implementation return
+  (`planning/evidence-contract-manifest/author-return.md`). Adopted return choice 1 — typed
+  rendered items — and re-refused choice 3. Added: §4.3 derived producers/projections with
+  `derivation.inputs` and the law-8 corollary (derivation composes evidence, never judgement);
+  the thirteenth error family `EVIDENCE_DERIVATION_WIDENS`; planes `record`/`derived` and
+  grounding `recorded_run`; §6.1 rendered items, the branded `ConsumerEvidenceView`,
+  `renderedEvidenceItems`, deletion of `EvidencePacket.sentences`, and the red-first sentinel
+  fixture ([[D662]]/[[D666]]); §9 clause 6 and `pack.authored.phase@1` ([[D665]]); §10.2
+  `run.record` plus derived compare/story declarations and the twenty-five-operation census
+  (`guidance.voice_compare@1`, `guidance.voice_story@1`); §12.1 reasoning-review typed
+  non-evidence contract ([[D663]]); implementation areas 15–16; criteria 1, 2, 7 and 11 amended
+  and 21–26 added; discharges D6–D9. Contract types amended in place under RFC-0000 rule 3 (the
+  RFC is implementing, not implemented; the checkpoint branch has not merged).
