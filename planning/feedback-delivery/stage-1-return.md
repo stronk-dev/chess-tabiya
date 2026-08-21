@@ -70,5 +70,5 @@ obligation. Two findings remain deliberately outside the narrow criterion-20 cor
   50/50 packs (19/19 single-line, 14/14 learner-branch, 17/17 opponent-branch). No anchor and no
   softer predicate were added.
 
-The RFC remains accepted/implementing until criterion 12 closes in the Stage-1 landing and the
-scoped verification/browser proof is green. Stage 2 remains separate content work under D560.
+Criterion 12 and the scoped verification/browser proof landed at `a64e6c5`. The RFC remains
+accepted/implementing because Stage 2 is separate content work under D560.

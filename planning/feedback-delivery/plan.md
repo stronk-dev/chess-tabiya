@@ -1,6 +1,6 @@
 # Feedback delivery implementation plan
 
-Status: Stage 1 recovery criterion-complete 2026-08-21; scoped verification and landing remain
+Status: Stage 1 landed at `a64e6c5` on 2026-08-21; Stage 2 remains under D560
 
 1. Add admitted authored claims to the run-scoped projection under the full-spine exhaustion and
    quiescence predicate.

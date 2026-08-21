@@ -310,7 +310,7 @@ describe("feedback delivery Stage 1", () => {
     const authoredForks = authoredForkMeasurement();
     const n8Share = comparisons.find(([count]) => count === 8)![1].share;
     const report = `# Feedback delivery — Stage 1 starting measurement\n\n`+
-      `Measured: 2026-08-21 recovery run (deterministic event timestamps remain 2026-08-17). Predicate: recovery-worktree \`admittedFeedbackClaimIds\` and \`projectAuthoredFeedback\`; not shipped until the scoped Stage-1 landing.\n\n`+
+      `Measured: 2026-08-21 recovery run (deterministic event timestamps remain 2026-08-17). Predicate: the \`admittedFeedbackClaimIds\` and \`projectAuthoredFeedback\` implementation landed at \`a64e6c5\`.\n\n`+
       `- Claim-bearing packs: ${packs.length}.\n- Claims: ${admitted}/${claims} admitted; ${admittedCharacters}/${characters} characters admitted.\n`+
       `- Admission-withheld by evidence policy: ${claims - admitted}/${claims} claims; ${characters - admittedCharacters}/${characters} characters.\n`+
       `- Derived-feature-only explicit self-declared population: ${derivedOnly} claims / ${derivedOnlyCharacters} characters.\n`+

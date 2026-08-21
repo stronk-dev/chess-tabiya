@@ -114,3 +114,9 @@
 - `make verify`: 766 tests / 117 files plus typecheck, schema, scaffold and packaging green.
 - `make test-browser`: 25 passed, one optional Maia-latency probe skipped.
 - This closes Stage 1 only. Criteria 21–23, the binding content wave and RFC archival remain Stage 2.
+
+## 2026-08-21 — Stage 1 landed
+
+Commit `a64e6c5` landed the criterion-complete recovery. D526/D527 are closed; D78 remains open on
+the measured learner-value result rather than implementation correctness. The unrelated
+`rfc/measurement-records.md` and D333 harness stayed outside the checkpoint.

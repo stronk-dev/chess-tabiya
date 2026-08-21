@@ -133,7 +133,7 @@ describe("D645 objective lifecycle diagnosis", () => {
       `- Affected authored leaf paths: ${blocks.length}.\n`+
       `- Maximum authored plies hidden behind an absorbing objective transition: ${Math.max(0, ...blocks.map((entry) => entry.remaining))}.\n\n`+
       `| Pack | Objective | blocked leaf paths | max hidden plies | first absorbing site(s) |\n`+
-      `|---|---:|---:|---:|---|\n${rows.join("\n")}\n`;
+      `|---|---:|---:|---:|---|\n${rows.length === 0 ? "" : `${rows.join("\n")}\n`}`;
 
     if (process.env.UPDATE_OBJECTIVE_LIFECYCLE === "1") {
       let current = "";

@@ -3730,3 +3730,7 @@ The criterion-complete tree then passed `make verify` (766 tests / 117 files, ty
 packaging green), the two disposable Feedback acceptance suites (4/4), the RFC lifecycle audit
 (5/5), and `make test-browser` (25 passed / one optional Maia-latency probe skipped). The evidence
 and browser gates therefore agree; no aggregate-green shortcut remains in this Stage-1 closeout.
+
+Feedback Stage 1 landed at `a64e6c5`. D526 and D527 close with the implementation; D78 remains open
+because the correct filter still emits 7.32 entries/ply at only 1.017x lift on real authored forks.
+The RFC stays accepted/implementing until the separately governed Stage-2 binding wave closes.

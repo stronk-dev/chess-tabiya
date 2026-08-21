@@ -36,6 +36,6 @@ assertion cover each accepted obligation?
 
 ## Recovery result
 
-Criteria 1–20a are mapped to executable proof or an explicitly preserved out-of-scope defect.
-Stage 1 may land after the scoped verification/browser rerun. Leave the RFC accepted/implementing
-and its completion rows open for Stage 2.
+Criteria 1–20a are mapped to executable proof or an explicitly preserved out-of-scope defect and
+landed at `a64e6c5` after the scoped verification/browser rerun. The RFC remains accepted/
+implementing and its completion rows remain open for Stage 2.

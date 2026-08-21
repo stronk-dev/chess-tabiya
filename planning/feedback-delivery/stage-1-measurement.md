@@ -1,6 +1,6 @@
 # Feedback delivery — Stage 1 starting measurement
 
-Measured: 2026-08-21 recovery run (deterministic event timestamps remain 2026-08-17). Predicate: recovery-worktree `admittedFeedbackClaimIds` and `projectAuthoredFeedback`; not shipped until the scoped Stage-1 landing.
+Measured: 2026-08-21 recovery run (deterministic event timestamps remain 2026-08-17). Predicate: the `admittedFeedbackClaimIds` and `projectAuthoredFeedback` implementation landed at `a64e6c5`.
 
 - Claim-bearing packs: 50.
 - Claims: 98/196 admitted; 26735/61531 characters admitted.
