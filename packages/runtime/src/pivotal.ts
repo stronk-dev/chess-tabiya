@@ -7,7 +7,8 @@ import { classifyPhase, type DetectedPhase } from "./phase.js";
 import type { DrillRun, Node, OpponentSelection } from "./types.js";
 import { irreversibility, type IrreversibilityDetail } from "./transition.js";
 import { PRIMARY_EVIDENCE_MANIFEST } from "./evidence-catalog.js";
-import { assertConsumerEvidenceView, declareEvidence, evidenceForConsumer, type ConsumerEvidenceView } from "./evidence-contract.js";
+import { assertConsumerEvidenceView, evidenceForConsumer, type ConsumerEvidenceView } from "./evidence-contract.js";
+import { declarePivotalMarkerEvidence } from "./evidence-source-adapters.js";
 
 export type PivotalKind = "irreversibility" | "phase_change" | "human_divergence" | "option_collapse";
 export type { IrreversibilityDetail } from "./transition.js";
@@ -109,11 +110,7 @@ export function consumePivotalMarkers(
 }
 
 export function pivotalMarkerEvidence(markers: readonly PivotalMarker[]): readonly PivotalMarker[] {
-  const declared = markers.map((marker) => declareEvidence(
-    { id: "rules.pivotal", version: 1 },
-    { id: "rules.pivotal.marker", version: 1 },
-    marker,
-  ));
+  const declared = markers.map(declarePivotalMarkerEvidence);
   return consumePivotalMarkers(evidenceForConsumer(
     PRIMARY_EVIDENCE_MANIFEST,
     { id: "board.pivotal_marker", version: 1 },

@@ -4,7 +4,8 @@ import {
   RULES_EVIDENCE_FACTS,
   THEORY_EVIDENCE_FACTS,
   assertConsumerEvidenceView,
-  declareEvidence,
+  declareEvidenceReferenceResolution,
+  declareLivePacketEvidence,
   evidenceForConsumer,
   packEvidenceRef,
   packAbsentEvidenceRef,
@@ -221,14 +222,7 @@ export interface EvidenceReferenceResolution {
 type EvidenceReferencePayload = EvidenceReferenceResolution | EvidencePayload;
 
 function declaredSource(payload: EvidencePayload): DeclaredEvidence<EvidencePayload> {
-  if (payload.source === "tablebase_exact") {
-    return declareEvidence({ id: "live.syzygy", version: 1 }, { id: "live.syzygy.result", version: 1 }, payload);
-  }
-  if (payload.source === "human_model_predicted") {
-    return declareEvidence({ id: "human.maia", version: 1 }, { id: "human.maia.event", version: 1 }, payload);
-  }
-  const projection = payload.kind === "bestline" ? "live.stockfish.pv" : payload.kind === "wdl" ? "live.stockfish.wdl" : "live.stockfish.eval";
-  return declareEvidence({ id: "live.stockfish", version: 1 }, { id: projection, version: 1 }, payload);
+  return declareLivePacketEvidence(payload);
 }
 
 export function renderDeclaredEvidenceRef(
@@ -257,11 +251,7 @@ export function renderEvidenceRef(
   payloads: ReadonlyMap<string, EvidencePayload> = new Map(),
 ): EvidenceSentence {
   const resolved = resolveEvidenceSentence(reference, pack, payloads);
-  const resolution = declareEvidence<EvidenceReferencePayload>(
-    { id: "run.record", version: 1 },
-    { id: "run.record.evidence_ref_resolution", version: 1 },
-    Object.freeze({ reference: resolved.reference, text: resolved.text, sourceLabel: resolved.sourceLabel }),
-  );
+  const resolution = declareEvidenceReferenceResolution<EvidenceReferencePayload>(Object.freeze({ reference: resolved.reference, text: resolved.text, sourceLabel: resolved.sourceLabel }));
   const declared: DeclaredEvidence<EvidenceReferencePayload>[] = [resolution];
   if (resolved.payload !== undefined) declared.push(declaredSource(resolved.payload));
   return renderDeclaredEvidenceRef(evidenceForConsumer(

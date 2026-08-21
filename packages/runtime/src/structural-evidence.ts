@@ -1,10 +1,10 @@
 import {
   assertConsumerEvidenceView,
-  declareEvidence,
   evidenceForConsumer,
   type ConsumerEvidenceView,
   type DeclaredEvidence,
 } from "./evidence-contract.js";
+import { declareAuthoredStructuralConditionEvidence, declareStructuralPredicateFeatureEvidence, declareStructuralPredicateResultEvidence } from "./evidence-source-adapters.js";
 import { PRIMARY_EVIDENCE_MANIFEST } from "./evidence-catalog.js";
 import {
   matchesStructuralExpression,
@@ -111,15 +111,11 @@ export function declareStructuralPredicateEvidence(
 ): DeclaredStructuralPredicateEvidence {
   const result = evaluateStructuralPredicate(fen, condition);
   const featureResults = result.trace.flatMap((node) => node.expression.kind === "feature"
-    ? [declareEvidence(
-      RULES_PRODUCER,
-      { id: `rules.structural.predicate.${node.expression.feature.kind}`, version: 1 },
-      { fen, feature: node.expression.feature, matched: node.matched },
-    )]
+    ? [declareStructuralPredicateFeatureEvidence({ fen, feature: node.expression.feature, matched: node.matched })]
     : []);
   return Object.freeze({
-    condition: declareEvidence(AUTHORED_PRODUCER, CONDITION_PROJECTION, Object.freeze({ ...origin, expression: condition })),
-    result: declareEvidence(RULES_PRODUCER, RESULT_PROJECTION, result),
+    condition: declareAuthoredStructuralConditionEvidence(Object.freeze({ ...origin, expression: condition })),
+    result: declareStructuralPredicateResultEvidence(result),
     featureResults: Object.freeze(featureResults),
   });
 }

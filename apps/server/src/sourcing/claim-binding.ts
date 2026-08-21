@@ -3,7 +3,7 @@ import { Chess } from "chessops/chess";
 import { makeFen, parseFen } from "chessops/fen";
 import { makeSan } from "chessops/san";
 import { makeUci, parseUci } from "chessops/util";
-import { assertConsumerEvidenceView, declareEvidence, evidenceForConsumer, type ConsumerEvidenceView } from "@chess-tabiya/runtime";
+import { assertConsumerEvidenceView, declareSourcingRecordEvidence, evidenceForConsumer, type ConsumerEvidenceView } from "@chess-tabiya/runtime";
 
 import type { TablebaseCategory } from "../tablebase.js";
 import { EVIDENCE_MANIFEST } from "../evidence-manifest.js";
@@ -185,11 +185,8 @@ export function consumeClaimBindingRecords(view: ConsumerEvidenceView<EvidenceRe
 function claimBindingLedger(ledger: EvidenceLedger): EvidenceLedger {
   const declared = ledger.records.flatMap((record) => {
     const projection = CLAIM_RECORD_PROJECTION[record.kind];
-    return projection === undefined ? [] : [declareEvidence(
-      { id: record.kind === "opening_identity" ? "theory.opening_identity" : "sourcing.ledger", version: 1 },
-      { id: projection, version: 1 },
-      record,
-    )];
+    const declared = projection === undefined ? undefined : declareSourcingRecordEvidence(record);
+    return declared === undefined ? [] : [declared];
   });
   const records = consumeClaimBindingRecords(evidenceForConsumer(
     EVIDENCE_MANIFEST,

@@ -1,0 +1,121 @@
+{
+  "schema": "tabiya.research.f2-semantic-baseline.v1",
+  "policy": "research.r2_candidate@1",
+  "manifest": "20/126/25/175/33/33/15/1",
+  "inputs": {
+    "authored": {
+      "digest": "c8c9b965a09547770ddcb486f200bff9a037032092996668acd38c0a52558511",
+      "transitions": 754
+    },
+    "imported": {
+      "digest": "a10a233e8e51f6a0877f65cee417339080d2fd32cd22886f755f576c84fa58ec",
+      "decisions": 579
+    }
+  },
+  "populations": [
+    {
+      "name": "authored",
+      "decisions": 754,
+      "evaluatedAlternatives": 19619,
+      "completePopulations": 754,
+      "decisionsWithSelection": 494,
+      "selected": 837,
+      "avoided": 359,
+      "empty": 260,
+      "emptyReasons": {
+        "insufficient_alternatives": 116,
+        "nothing_distinctive": 144
+      },
+      "projections": {
+        "derived.semantic_avoidance.backward_pawn@1:avoided": 2,
+        "derived.semantic_avoidance.direct_attack_count@1:avoided": 157,
+        "derived.semantic_avoidance.doubled_pawn@1:avoided": 2,
+        "derived.semantic_avoidance.isolated_pawn@1:avoided": 2,
+        "derived.semantic_avoidance.king_zone@1:avoided": 3,
+        "derived.semantic_avoidance.line_blockers@1:avoided": 193,
+        "rules.structural.event.backward_pawn@1:gained": 15,
+        "rules.structural.event.backward_pawn@1:lost": 6,
+        "rules.structural.event.direct_attack_count@1:gained": 1,
+        "rules.structural.event.direct_attack_count@1:preserved": 2,
+        "rules.structural.event.doubled_pawn@1:gained": 21,
+        "rules.structural.event.doubled_pawn@1:lost": 6,
+        "rules.structural.event.half_open_file@1:gained": 24,
+        "rules.structural.event.half_open_file@1:lost": 17,
+        "rules.structural.event.isolated_pawn@1:gained": 2,
+        "rules.structural.event.isolated_pawn@1:lost": 2,
+        "rules.structural.event.king_opposition@1:gained": 25,
+        "rules.structural.event.king_zone@1:lost": 10,
+        "rules.structural.event.line_blockers@1:gained": 3,
+        "rules.structural.event.passed_pawn@1:gained": 9,
+        "rules.structural.event.passed_pawn@1:lost": 8,
+        "rules.structural.event.piece_count@1:lost": 51,
+        "rules.transition.event.castled@1:state": 22,
+        "rules.transition.event.checkmate@1:state": 6,
+        "rules.transition.event.clock_reset@1:state": 3,
+        "rules.transition.event.defended_duty@1:gained": 25,
+        "rules.transition.event.defended_duty@1:lost": 9,
+        "rules.transition.event.last_of_role@1:state": 21,
+        "rules.transition.event.occupied_attack@1:gained": 28,
+        "rules.transition.event.occupied_attack@1:lost": 36,
+        "rules.transition.event.occupied_defence@1:gained": 61,
+        "rules.transition.event.occupied_defence@1:lost": 18,
+        "rules.transition.event.pawn_contact@1:state": 25,
+        "rules.transition.event.piece_escape@1:gained": 1,
+        "rules.transition.event.piece_escape@1:lost": 5,
+        "rules.transition.event.promotion@1:state": 1,
+        "rules.transition.event.slider_ray@1:gained": 5,
+        "rules.transition.event.slider_ray@1:lost": 10
+      }
+    },
+    {
+      "name": "imported",
+      "decisions": 579,
+      "evaluatedAlternatives": 18842,
+      "completePopulations": 579,
+      "decisionsWithSelection": 394,
+      "selected": 688,
+      "avoided": 212,
+      "empty": 185,
+      "emptyReasons": {
+        "insufficient_alternatives": 17,
+        "nothing_distinctive": 168
+      },
+      "projections": {
+        "derived.semantic_avoidance.backward_pawn@1:avoided": 1,
+        "derived.semantic_avoidance.direct_attack_count@1:avoided": 87,
+        "derived.semantic_avoidance.doubled_pawn@1:avoided": 6,
+        "derived.semantic_avoidance.line_blockers@1:avoided": 117,
+        "derived.semantic_avoidance.open_file@1:avoided": 1,
+        "rules.structural.event.backward_pawn@1:gained": 16,
+        "rules.structural.event.backward_pawn@1:lost": 8,
+        "rules.structural.event.direct_attack_count@1:lost": 1,
+        "rules.structural.event.doubled_pawn@1:gained": 25,
+        "rules.structural.event.doubled_pawn@1:lost": 13,
+        "rules.structural.event.half_open_file@1:gained": 29,
+        "rules.structural.event.half_open_file@1:lost": 19,
+        "rules.structural.event.isolated_pawn@1:gained": 10,
+        "rules.structural.event.isolated_pawn@1:lost": 8,
+        "rules.structural.event.king_zone@1:gained": 1,
+        "rules.structural.event.king_zone@1:lost": 2,
+        "rules.structural.event.open_file@1:gained": 9,
+        "rules.structural.event.open_file@1:lost": 2,
+        "rules.structural.event.passed_pawn@1:gained": 5,
+        "rules.structural.event.passed_pawn@1:lost": 2,
+        "rules.structural.event.piece_count@1:lost": 77,
+        "rules.transition.event.castled@1:state": 23,
+        "rules.transition.event.checkmate@1:state": 1,
+        "rules.transition.event.clock_reset@1:state": 7,
+        "rules.transition.event.defended_duty@1:gained": 35,
+        "rules.transition.event.defended_duty@1:lost": 21,
+        "rules.transition.event.last_of_role@1:state": 34,
+        "rules.transition.event.occupied_attack@1:gained": 3,
+        "rules.transition.event.occupied_attack@1:lost": 46,
+        "rules.transition.event.occupied_defence@1:gained": 40,
+        "rules.transition.event.occupied_defence@1:lost": 14,
+        "rules.transition.event.pawn_contact@1:state": 21,
+        "rules.transition.event.slider_ray@1:gained": 3,
+        "rules.transition.event.slider_ray@1:lost": 1
+      }
+    }
+  ]
+}

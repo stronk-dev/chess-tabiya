@@ -17,6 +17,7 @@ import {
   TRANSITION_READING_PROJECTION_IDS,
 } from "./evidence-catalog.js";
 import { compileEvidenceManifest } from "./evidence-contract.js";
+import { EvidenceManifestError } from "./evidence-contract.js";
 
 const ROOT = new URL("../../../", import.meta.url);
 const EXPECTED_PRODUCERS = Object.freeze(["rules.structural", "rules.transition", "rules.phase", "rules.pivotal", "rules.endgame", "theory.shapes", "authored.structural_condition", "pack.authored", "recorded.engine", "recorded.tablebase", "live.stockfish", "live.syzygy", "human.maia", "human.explorer", "theory.opening_identity", "run.record", "derived.compare_narrative", "derived.story", "sourcing.ledger", "derived.semantic_avoidance"]);
@@ -46,6 +47,8 @@ describe("primary evidence catalogue", () => {
     expect([manifest.producers.length, manifest.projections.length, manifest.consumers.length, manifest.bindings.length]).toEqual([20, 126, 25, 175]);
     expect([manifest.semanticEvents.length, manifest.eligibility.length, manifest.reasons.length, manifest.selectionPolicies.length]).toEqual([33, 33, 15, 1]);
     expect(new Set(manifest.semanticEvents.map((item) => item.projection.id))).toEqual(new Set(SEMANTIC_EVENT_PROJECTION_IDS));
+    expect(new Set(manifest.eligibility.map((item) => `${item.consumer.id}@${item.consumer.version}`))).toEqual(new Set(["research.semantic_selection@1"]));
+    expect(manifest.bindings.filter((binding) => SEMANTIC_EVENT_PROJECTION_IDS.includes(binding.projection.id)).every((binding) => binding.consumer.id === "research.semantic_selection")).toBe(true);
     expect(manifest.digest).toBe(createHash("sha256").update(canonical({ producers: manifest.producers, projections: manifest.projections, consumers: manifest.consumers, bindings: manifest.bindings, semanticEvents: manifest.semanticEvents, eligibility: manifest.eligibility, reasons: manifest.reasons, selectionPolicies: manifest.selectionPolicies })).digest("hex"));
   });
 
@@ -80,5 +83,26 @@ describe("primary evidence catalogue", () => {
     const counts = documents.map((text) => [...text.matchAll(/"kind"\s*:\s*"outpost"/gu)].length);
     expect(counts.reduce((sum, count) => sum + count, 0)).toBe(23);
     expect(counts.filter((count) => count > 0)).toHaveLength(3);
+  });
+
+  it("keeps all seven non-round-trip structural readings refused as semantic events", () => {
+    const refused = ["outpost", "bishop_on_shade", "piece_distance", "piece_reach_count", "named_structure", "pawn_safe_square", "pawn_count"];
+    expect(refused.every((family) => !SEMANTIC_EVENT_PROJECTION_IDS.includes(`rules.structural.reading.${family}`))).toBe(true);
+    for (const family of refused) {
+      const projection = EVIDENCE_PRODUCERS.find((item) => item.id === "rules.structural")!.outputs.find((item) => item.id === `rules.structural.reading.${family}`)!;
+      expect(() => compileEvidenceManifest({ ...EVIDENCE_CONTRACT_DECLARATIONS, semanticEvents: [...EVIDENCE_CONTRACT_DECLARATIONS.semanticEvents!, { projection: { id: projection.id, version: 1 }, allowedSigns: projection.signs, requiredOperands: projection.operands, valence: "none", validation: { positives: ["positive"], hardNegatives: ["negative"] } }] })).toThrowError(expect.objectContaining<Partial<EvidenceManifestError>>({ code: "EVIDENCE_EVENT_PROJECTION_REFUSED" }));
+    }
+  });
+
+  it("keeps exact source-adapter operand names aligned with current payload bytes", () => {
+    const projection = (id: string) => EVIDENCE_PRODUCERS.flatMap((item) => item.outputs).find((item) => item.id === id)?.operands;
+    expect(projection("rules.structural.reading.open_file")).toEqual(["kind", "squares"]);
+    expect(projection("rules.transition.reading.slider_lines_changed.opened")).toEqual(["kind", "color", "direction", "count", "provenanceNote"]);
+    expect(projection("authored.structural_condition.input")).toContain("documentId");
+    expect(projection("run.record.evidence_ref_resolution")).toContain("sourceLabel");
+    expect(projection("derived.compare.eval_delta")).toEqual(["delta", "plyOffset"]);
+    expect(projection("derived.story.eval_shift")).toEqual(["before", "after", "delta"]);
+    expect(projection("derived.compare.eval_delta")).not.toContain("sentence");
+    expect(projection("derived.story.eval_shift")).not.toContain("sentence");
   });
 });

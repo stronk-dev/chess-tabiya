@@ -27,6 +27,16 @@ export interface EvidenceConsumerBindingSummary {
 }
 export interface EvidenceManifestCapabilities {
   readonly digest: string;
+  readonly counts: {
+    readonly producers: number;
+    readonly projections: number;
+    readonly consumers: number;
+    readonly bindings: number;
+    readonly semanticEvents: number;
+    readonly eligibility: number;
+    readonly reasons: number;
+    readonly selectionPolicies: number;
+  };
   readonly availability: readonly EvidenceProducerAvailability[];
   readonly bindings: readonly EvidenceConsumerBindingSummary[];
 }
@@ -92,6 +102,7 @@ export function evidenceManifestCapabilities(providers: CapabilityProviders): Ev
   const consumerById = new Map(EVIDENCE_MANIFEST.consumers.map((consumer) => [consumer.id, consumer]));
   return Object.freeze({
     digest: EVIDENCE_MANIFEST.digest,
+    counts: Object.freeze({ producers: EVIDENCE_MANIFEST.producers.length, projections: EVIDENCE_MANIFEST.projections.length, consumers: EVIDENCE_MANIFEST.consumers.length, bindings: EVIDENCE_MANIFEST.bindings.length, semanticEvents: EVIDENCE_MANIFEST.semanticEvents.length, eligibility: EVIDENCE_MANIFEST.eligibility.length, reasons: EVIDENCE_MANIFEST.reasons.length, selectionPolicies: EVIDENCE_MANIFEST.selectionPolicies.length }),
     availability: Object.freeze(EVIDENCE_MANIFEST.producers.map((producer) => providerState(producer.id, providers))),
     bindings: Object.freeze(EVIDENCE_MANIFEST.bindings.map((binding) => Object.freeze({
       consumerId: binding.consumer.id,

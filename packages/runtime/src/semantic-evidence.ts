@@ -8,7 +8,6 @@ import { PRIMARY_EVIDENCE_MANIFEST, STRUCTURAL_EVENT_FAMILIES } from "./evidence
 import {
   EvidenceManifestError,
   assertDeclaredEvidence,
-  declareEvidence,
   evidenceDigest,
   type CompiledEvidenceManifest,
   type DeclaredEvidence,
@@ -18,7 +17,8 @@ import {
   type SemanticEventSign,
   type VersionedEvidenceId,
 } from "./evidence-contract.js";
-import { structuralReading, type StructuralObservation } from "./structure.js";
+import { declareAvoidanceEvidence, declareStructuralSemanticSourceEvidence, declareTransitionSemanticSourceEvidence } from "./evidence-source-adapters.js";
+import { structuralReading, type StructuralObservation, type StructuralReading } from "./structure.js";
 import { transitionSemanticFacts, type TransitionSemanticFact } from "./transition.js";
 
 const SEMANTIC_EVENT: unique symbol = Symbol("tabiya.evidence.semantic_event");
@@ -168,13 +168,20 @@ function structuralMagnitude(value: StructuralObservation): number {
 
 function declareStructuralEventEvidence(family: StructuralSemanticEventOperands["family"], payload: StructuralSemanticEventOperands): DeclaredEvidence<StructuralSemanticEventOperands> {
   if (!STRUCTURAL_EVENT_FAMILIES.includes(family)) throw new TypeError(`Unsupported structural event family ${family}`);
-  return declareEvidence(ref("rules.structural"), ref(`rules.structural.event.${family}`), payload);
+  return declareStructuralSemanticSourceEvidence(family, payload);
 }
 
-export function structuralSemanticEvents(beforeFen: string, moveUci: string, afterFen: string): readonly SemanticEvidenceEvent<StructuralSemanticEventOperands>[] {
+function structuralSemanticEventsCached(beforeFen: string, moveUci: string, afterFen: string, cache?: Map<string, StructuralReading>): readonly SemanticEvidenceEvent<StructuralSemanticEventOperands>[] {
   const anchor = canonicalAnchor({ beforeFen, moveUci, afterFen, side: positionFromFen(beforeFen).turn });
-  const before = structuralReading(anchor.beforeFen).features.filter((item): item is StructuralObservation & { kind: StructuralSemanticEventOperands["family"] } => STRUCTURAL_EVENT_FAMILIES.includes(item.kind as StructuralSemanticEventOperands["family"]));
-  const after = structuralReading(anchor.afterFen).features.filter((item): item is StructuralObservation & { kind: StructuralSemanticEventOperands["family"] } => STRUCTURAL_EVENT_FAMILIES.includes(item.kind as StructuralSemanticEventOperands["family"]));
+  const read = (fen: string): StructuralReading => {
+    const existing = cache?.get(fen);
+    if (existing !== undefined) return existing;
+    const value = structuralReading(fen);
+    cache?.set(fen, value);
+    return value;
+  };
+  const before = read(anchor.beforeFen).features.filter((item): item is StructuralObservation & { kind: StructuralSemanticEventOperands["family"] } => STRUCTURAL_EVENT_FAMILIES.includes(item.kind as StructuralSemanticEventOperands["family"]));
+  const after = read(anchor.afterFen).features.filter((item): item is StructuralObservation & { kind: StructuralSemanticEventOperands["family"] } => STRUCTURAL_EVENT_FAMILIES.includes(item.kind as StructuralSemanticEventOperands["family"]));
   const events: SemanticEvidenceEvent<StructuralSemanticEventOperands>[] = [];
   for (const family of STRUCTURAL_EVENT_FAMILIES) {
     const left = new Map(before.filter((item) => item.kind === family).map((item) => [structuralSubject(item), item]));
@@ -190,8 +197,12 @@ export function structuralSemanticEvents(beforeFen: string, moveUci: string, aft
   return Object.freeze(events.sort((left, right) => refKey(left.projection).localeCompare(refKey(right.projection)) || left.sign.localeCompare(right.sign) || left.id.localeCompare(right.id)));
 }
 
+export function structuralSemanticEvents(beforeFen: string, moveUci: string, afterFen: string): readonly SemanticEvidenceEvent<StructuralSemanticEventOperands>[] {
+  return structuralSemanticEventsCached(beforeFen, moveUci, afterFen);
+}
+
 function declareTransitionEventEvidence(payload: TransitionSemanticEventOperands): DeclaredEvidence<TransitionSemanticEventOperands> {
-  return declareEvidence(ref("rules.transition"), ref(`rules.transition.event.${payload.family}`), payload);
+  return declareTransitionSemanticSourceEvidence(payload.family, payload);
 }
 
 export function transitionSemanticEvents(beforeFen: string, moveUci: string, afterFen: string): readonly SemanticEvidenceEvent<TransitionSemanticEventOperands>[] {
@@ -316,9 +327,8 @@ export function selectSemanticEvidence(manifest: CompiledEvidenceManifest, polic
     const share = events.length / alternatives.length;
     if (share < policy.minimumAlternativeOnlyShare) continue;
     const suffix = projectionKey.slice("rules.structural.event.".length).replace(/@\d+$/u, "");
-    const derivedProjection = ref(`derived.semantic_avoidance.${suffix}`);
     const operands: CounterfactualAbsenceOperands = immutable({ relation: "avoided", family: { projection: events[0]!.projection, sign }, legalAlternatives: alternatives.length, alternativesWithFamily: events.length, alternativeEvents: events });
-    const evidence = declareEvidence(ref("derived.semantic_avoidance"), derivedProjection, operands);
+    const evidence = declareAvoidanceEvidence(suffix, operands);
     const event = compileSemanticEvidenceEvent(manifest, { evidence, derivationInputs: events.map((value) => value.evidence), anchor: { beforeFen: input.beforeFen, moveUci: input.moveUci, afterFen: input.afterFen, side: positionFromFen(input.beforeFen).turn }, sign: "avoided", operands });
     if (eligible(manifest, event, consumer)) candidates.push({ fact: { kind: "counterfactual_absence", event }, support: share, critical: false, operandDigest: evidenceDigest(operands) });
   }
@@ -331,10 +341,12 @@ export function selectSemanticEvidence(manifest: CompiledEvidenceManifest, polic
 }
 
 export function selectLocalSemanticEvidence(policyRef: VersionedEvidenceId, input: Omit<SemanticSelectionInput, "playedEvents" | "evaluateAlternative">): EvidenceSelectionResult {
+  const cache = new Map<string, StructuralReading>();
+  const events = (edge: { readonly beforeFen: string; readonly moveUci: string; readonly afterFen: string }): readonly SemanticEvidenceEvent[] => Object.freeze([...structuralSemanticEventsCached(edge.beforeFen, edge.moveUci, edge.afterFen, cache), ...transitionSemanticEvents(edge.beforeFen, edge.moveUci, edge.afterFen)]);
   return selectSemanticEvidence(PRIMARY_EVIDENCE_MANIFEST, policyRef, {
     ...input,
-    playedEvents: localSemanticEvents(input.beforeFen, input.moveUci, input.afterFen),
-    evaluateAlternative: (edge) => localSemanticEvents(edge.beforeFen, edge.moveUci, edge.afterFen),
+    playedEvents: events(input),
+    evaluateAlternative: events,
   });
 }
 

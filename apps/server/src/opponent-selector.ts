@@ -7,7 +7,7 @@ import { parseUci } from "chessops/util";
 
 import {
   assertConsumerEvidenceView,
-  declareEvidence,
+  declareOpponentProviderEvidence,
   evidenceForConsumer,
   PolicyMassError,
   humanConcessionMass,
@@ -88,11 +88,11 @@ export function consumeOpponentSelectionEvidence(view: ConsumerEvidenceView<Oppo
   return Object.freeze(view.items.map((item) => item.payload));
 }
 
-function opponentProviderEvidence<T extends OpponentProviderPayload>(producerId: "human.maia" | "live.stockfish" | "live.syzygy", projectionId: "human.maia.uci_response" | "live.stockfish.uci_response" | "live.syzygy.probe_result", payload: T): T {
+function opponentProviderEvidence<T extends OpponentProviderPayload>(source: "maia" | "stockfish" | "syzygy", payload: T): T {
   const admitted = consumeOpponentSelectionEvidence(evidenceForConsumer(
     EVIDENCE_MANIFEST,
     { id: "opponent.selection", version: 1 },
-    [declareEvidence({ id: producerId, version: 1 }, { id: projectionId, version: 1 }, payload)],
+    [declareOpponentProviderEvidence(source, payload)],
   ));
   return admitted[0] as T;
 }
@@ -494,7 +494,7 @@ export class OpponentSelector {
     if (!Number.isSafeInteger(count) || count < 2 || count > 8) {
       throw invalid("enumerate count must be an integer from 2 to 8");
     }
-    const lines = opponentProviderEvidence("live.stockfish", "live.stockfish.uci_response", await this.#client.execute(this.#strongEngineId, {
+    const lines = opponentProviderEvidence("stockfish", await this.#client.execute(this.#strongEngineId, {
       commands: [
         `setoption name MultiPV value ${count}`,
         positionCommand(request),
@@ -557,7 +557,7 @@ export class OpponentSelector {
       positionCommand(request),
       "go",
     ];
-    const lines = opponentProviderEvidence("human.maia", "human.maia.uci_response", await this.#client.execute(this.#maiaEngineId, {
+    const lines = opponentProviderEvidence("maia", await this.#client.execute(this.#maiaEngineId, {
       commands,
       until: (line) => line.startsWith("bestmove "),
       timeoutMs: 60_000,
@@ -603,7 +603,7 @@ export class OpponentSelector {
     const searchBound = this.#strongEngineNodes === null
       ? Object.freeze({ kind: "movetime" as const, value: this.#strongEngineMovetimeMs })
       : Object.freeze({ kind: "nodes" as const, value: this.#strongEngineNodes });
-    const lines = opponentProviderEvidence("live.stockfish", "live.stockfish.uci_response", await this.#client.execute(this.#strongEngineId, {
+    const lines = opponentProviderEvidence("stockfish", await this.#client.execute(this.#strongEngineId, {
       commands: [
         `setoption name MultiPV value ${this.#strongEngineMultiPv}`,
         positionCommand(request),
@@ -664,7 +664,7 @@ export class OpponentSelector {
     }
     const board = currentPosition(request);
     const fen = makeFen(board.toSetup());
-    const position = opponentProviderEvidence("live.syzygy", "live.syzygy.probe_result", await this.#tablebase.probe(fen));
+    const position = opponentProviderEvidence("syzygy", await this.#tablebase.probe(fen));
     if (position.category === "unknown") {
       throw new ServerError("TABLEBASE_UNAVAILABLE", "Tablebase category is unknown", { details: { retryAfterMs: 60_000 } });
     }
@@ -703,7 +703,7 @@ export class OpponentSelector {
     }
     const board = currentPosition(request);
     const fen = makeFen(board.toSetup());
-    const root = opponentProviderEvidence("live.syzygy", "live.syzygy.probe_result", await this.#tablebase.probe(fen));
+    const root = opponentProviderEvidence("syzygy", await this.#tablebase.probe(fen));
     if (root.category === "unknown") {
       throw new ServerError("PRACTICAL_RESISTANCE_UNAVAILABLE", "The root outcome class is unknown");
     }
@@ -727,7 +727,7 @@ export class OpponentSelector {
     for (const candidate of preserving) {
       const child = play(board, candidate.uci, `tablebase reply ${candidate.uci}`);
       const childFen = makeFen(child.toSetup());
-      const childTablebase = opponentProviderEvidence("live.syzygy", "live.syzygy.probe_result", await this.#tablebase.probe(childFen));
+      const childTablebase = opponentProviderEvidence("syzygy", await this.#tablebase.probe(childFen));
       if (childTablebase.category === "unknown") {
         throw new ServerError("PRACTICAL_RESISTANCE_UNAVAILABLE", `Outcome class after ${candidate.uci} is unknown`);
       }

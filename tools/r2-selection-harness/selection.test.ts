@@ -13,6 +13,7 @@ import { describe, expect, it } from "vitest";
 import {
   STRUCTURAL_FEATURE_KINDS,
   structuralReading,
+  selectLocalSemanticEvidence,
   transitionReading,
   type StructuralObservation,
 } from "@chess-tabiya/runtime";
@@ -22,6 +23,8 @@ import { transitions } from "../r1r2-primitives-harness/corpus.js";
 const OUTPUT = process.env.TABIYA_R2_OUTPUT ?? new URL("./output.md", import.meta.url).pathname;
 const FIXTURE = new URL("./imported-sample.pgn", import.meta.url).pathname;
 const FIXTURE_META = new URL("./fixture.json", import.meta.url).pathname;
+const F2_OUTPUT = new URL("./f2-output.json", import.meta.url).pathname;
+const F2_BASELINE = new URL("./f2-baseline.json", import.meta.url).pathname;
 const SOURCE = process.env.TABIYA_LICHESS_GAMES ?? FIXTURE;
 const TARGET_PLIES = new Set([8, 16, 24, 32, 40, 48]);
 const TOP_EIGHT = new Set([
@@ -529,5 +532,42 @@ describe("R2 selection, sign, and significance", () => {
     expect(mean(authored.selected.shares)).toBeLessThan(mean(authored.raw.shares));
     expect(mean(ordinary.selected.shares)).toBeLessThan(mean(ordinary.raw.shares));
     expect(authored.criticalRetained + ordinary.criticalRetained).toBe(authored.criticalTotal + ordinary.criticalTotal);
+  });
+
+  it.skipIf(SOURCE === undefined || !existsSync(SOURCE))("establishes the separate F2 semantic-event baseline", () => {
+    const authoredRows: Row[] = transitions().map((row) => ({ id: `${row.pack}/${row.nodeId}`, parentFen: row.parentFen, fen: row.fen, uci: row.uci, stratum: row.phase }));
+    const imported = importedRows(SOURCE!);
+    const summarizeF2 = (name: string, rows: readonly Row[]) => {
+      let evaluated = 0, selected = 0, avoided = 0, empty = 0, complete = 0;
+      const projections = new Map<string, number>();
+      const emptyReasons = new Map<string, number>();
+      for (const row of rows) {
+        const result = selectLocalSemanticEvidence({ id: "research.r2_candidate", version: 1 }, { beforeFen: row.parentFen, moveUci: row.uci, afterFen: row.fen });
+        evaluated += result.population.evaluatedAlternatives;
+        if (result.population.evaluatedAlternatives === result.population.legalAlternatives) complete += 1;
+        selected += result.selected.length;
+        avoided += result.selected.filter((item) => item.kind === "counterfactual_absence").length;
+        if (result.selected.length === 0) empty += 1;
+        if (result.emptyReason !== undefined) emptyReasons.set(result.emptyReason.id, (emptyReasons.get(result.emptyReason.id) ?? 0) + 1);
+        for (const item of result.selected) {
+          const key = `${item.event.projection.id}@${item.event.projection.version}:${item.event.sign}`;
+          projections.set(key, (projections.get(key) ?? 0) + 1);
+        }
+      }
+      return { name, decisions: rows.length, evaluatedAlternatives: evaluated, completePopulations: complete, decisionsWithSelection: rows.length - empty, selected, avoided, empty, emptyReasons: Object.fromEntries([...emptyReasons].sort()), projections: Object.fromEntries([...projections].sort()) };
+    };
+    const result = {
+      schema: "tabiya.research.f2-semantic-baseline.v1",
+      policy: "research.r2_candidate@1",
+      manifest: "20/126/25/175/33/33/15/1",
+      inputs: {
+        authored: { digest: createHash("sha256").update(JSON.stringify(authoredRows)).digest("hex"), transitions: authoredRows.length },
+        imported: { digest: createHash("sha256").update(readFileSync(SOURCE!)).digest("hex"), decisions: imported.rows.length },
+      },
+      populations: [summarizeF2("authored", authoredRows), summarizeF2("imported", imported.rows)],
+    };
+    writeFileSync(F2_OUTPUT, `${JSON.stringify(result, null, 2)}\n`, "utf8");
+    if (!existsSync(F2_BASELINE)) throw new Error(`F2 baseline absent; inspect ${F2_OUTPUT} and retain it explicitly`);
+    expect(result).toEqual(JSON.parse(readFileSync(F2_BASELINE, "utf8")));
   });
 });

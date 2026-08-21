@@ -51,3 +51,9 @@ prefix. A 16 MiB compressed HTTP range from the official archive reproduced the 
 579 decisions and every report line after the input digest; `fixture.json` records both prefix and
 fixture digests. `TABIYA_LICHESS_GAMES` may override the fixture for an explicit transfer run and
 `TABIYA_R2_OUTPUT` may redirect output so a comparison does not dirty the recorded baseline.
+
+`f2-baseline.json` is the separately named semantic-event selector baseline. It covers every one
+of the 754 authored transitions and 579 retained imported decisions with complete legal-move
+enumeration. The F2 test writes `f2-output.json` and requires exact equality with that reviewed
+baseline; changing either population or selector output is therefore an explicit digest change,
+not an incidental snapshot update.

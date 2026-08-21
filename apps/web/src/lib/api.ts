@@ -337,6 +337,7 @@ export interface Capabilities {
   readonly surfaces: Readonly<Record<SurfaceId, SurfaceAvailability>>;
   readonly evidenceManifest: {
     readonly digest: string;
+    readonly counts: { readonly producers: number; readonly projections: number; readonly consumers: number; readonly bindings: number; readonly semanticEvents: number; readonly eligibility: number; readonly reasons: number; readonly selectionPolicies: number };
     readonly availability: readonly {
       readonly producerId: string;
       readonly version: number;

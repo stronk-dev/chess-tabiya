@@ -616,7 +616,10 @@ not paired with this draft because O6 remains unresolved (D680).
    caller IDs fails typecheck, a double-cast literal fails the runtime brand, and the closure census
    re-derives all fourteen current production files and permits generic construction only in the
    contract and named exact-adapter modules. The set is asserted equal, not as a minimum; a
-   fifteenth direct call site fails.
+   fifteenth direct call site fails. Each named adapter rejects a malformed payload for its exact
+   projection. D685's implementation-time payload/manifest mismatches are normalized or corrected
+   truthfully; a pre-rendered sentence may not stand in for the structured operands a projection
+   claims.
 9. On ordinary, castling, en-passant and four-promotion fixtures, selector alternatives are
    set-equal to chessops legal moves and every child FEN replays from its UCI.
 10. The unchanged legacy R2 harness still reproduces its frozen authored/imported counts and
@@ -666,6 +669,7 @@ not paired with this draft because O6 remains unresolved (D680).
 | D5 | [[D660]] correction enforced: lift diagnostic, never selector authority | `semantic-evidence-selection` | implementation commit | — |
 | D6 | [[D668]] generic payload constructor removed from package consumers | `semantic-evidence-selection` | implementation commit | — |
 | D7 | [[D681]] no-global-lift negative fixture | `semantic-evidence-selection` | implementation commit | — |
+| D8 | [[D685]] exact-adapter payload/manifest reconciliation | `semantic-evidence-selection` | implementation commit | — |
 
 ## Open questions
 
@@ -692,3 +696,8 @@ claim, it returns this RFC instead of filling the gap.
   production thresholds, modules, presets and defaults.
 - 2026-08-21: implementation opened with `planning/semantic-evidence-selection/`; compiled contract
   and negative fixtures are the first landing unit.
+- 2026-08-21: implementation discovered D685: several F1 projection operand declarations and
+  production payloads describe different shapes, and some derived adapters carry caller-authored
+  prose instead of the structured operands their registered renderer should translate. Criterion
+  8 and the discharge table now require that class to close before F2 can complete; this adds no
+  product policy or owner question.

@@ -1,6 +1,7 @@
 import { matchesStructuralExpression, type StructuralExpression } from "./structure.js";
 import { PRIMARY_EVIDENCE_MANIFEST } from "./evidence-catalog.js";
-import { assertConsumerEvidenceView, declareEvidence, evidenceForConsumer, type ConsumerEvidenceView, type DeclaredEvidence } from "./evidence-contract.js";
+import { assertConsumerEvidenceView, evidenceForConsumer, type ConsumerEvidenceView, type DeclaredEvidence } from "./evidence-contract.js";
+import { declareShapeFiringSourceEvidence } from "./evidence-source-adapters.js";
 
 export interface ShapeTriggerSource {
   readonly id: string;
@@ -37,11 +38,7 @@ export function shapeFirings(
 export function declareShapeFiringEvidence(
   firings: readonly ShapeFiring[],
 ): readonly DeclaredEvidence<ShapeFiring>[] {
-  return Object.freeze(firings.map((firing) => declareEvidence(
-    { id: "theory.shapes", version: 1 },
-    { id: "theory.shapes.firing", version: 1 },
-    firing,
-  )));
+  return Object.freeze(firings.map(declareShapeFiringSourceEvidence));
 }
 
 export function consumeShapeFiring(

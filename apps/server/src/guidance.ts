@@ -1,7 +1,16 @@
 import {
   classifyPhase,
   assertConsumerEvidenceView,
-  declareEvidence,
+  declareAuthoredClaimEvidence,
+  declareEndgameReadingEvidence,
+  declareNamedStructureEvidence,
+  declarePackPhaseEvidence,
+  declarePhaseReadingEvidence,
+  declarePivotalMarkerEvidence,
+  declareRecordedEngineEvidence,
+  declareRecordedTablebaseEvidence,
+  declareShapeFiringSourceEvidence,
+  declareStructuralReadingSourceEvidence,
   endgameReading,
   evidenceForConsumer,
   matchesStructuralExpression,
@@ -35,11 +44,31 @@ export interface VoiceEvidenceView {
 }
 export interface VoiceProvider { render(view: VoiceEvidenceView, persona: string, deterministicText: string, scope: VoiceScope): Promise<string>; }
 
-const producerRef = (id: string) => ({ id, version: 1 } as const);
-const projectionRef = (id: string) => ({ id, version: 1 } as const);
-
-interface SentencePayload { readonly sentence: string }
-const sentencePayload = (value: unknown): readonly string[] => Object.freeze([(value as SentencePayload).sentence]);
+const one = (sentence: string): readonly string[] => Object.freeze([sentence]);
+function renderRunRecord(evidence: DeclaredEvidence<unknown>): readonly string[] {
+  const payload = evidence.payload as Readonly<Record<string, unknown>>;
+  if (evidence.projection.id === "run.record.fork") return one(`The recorded branches share ${String(payload.sharedPly)} plies through the fork.`);
+  if (evidence.projection.id === "run.record.move") return one(payload.moveSan === null ? `Branch at offset ${String(payload.offset)} has no recorded move past the fork.` : `Branch at offset ${String(payload.offset)} begins with recorded move ${String(payload.moveSan)}.`);
+  if (evidence.projection.id === "run.record.checkpoint_hit") return one(`Checkpoint ${String(payload.checkpointId)} was reached. Source: recorded checkpoint event.`);
+  if (evidence.projection.id === "run.record.objective_transition") return one(`The recorded objective changed from ${String(payload.from)} to ${String(payload.to)}. Source: recorded objective event.`);
+  if (evidence.projection.id === "run.record.imported_result") return one(`The PGN records the game result as ${String(payload.result)}; the board is not terminal here.`);
+  if (payload.context === "story") return one(`Board-terminal result for the learner: ${String(payload.outcome)}.`);
+  return one(payload.terminal === true ? `The recorded branch ends at a board-terminal position with learner result ${String(payload.outcome)}.` : `The recorded branch reaches ${String(payload.plies)} plies with objective state ${String(payload.objectiveState)}.`);
+}
+function renderCompareDerived(evidence: DeclaredEvidence<unknown>): readonly string[] {
+  const payload = evidence.payload as Readonly<Record<string, unknown>>;
+  if (evidence.projection.id === "derived.compare.structure_delta") return one(`A recorded structural observation changed: ${String((payload.observation as { readonly kind?: unknown }).kind)}. Source: Tabiya structural detector.`);
+  const delta = Number(payload.delta);
+  return one(`Recorded engine evidence changed by ${delta >= 0 ? "+" : ""}${delta} cp at offset ${String(payload.plyOffset)}.`);
+}
+function renderStoryDerived(evidence: DeclaredEvidence<unknown>): readonly string[] {
+  const payload = evidence.payload as Readonly<Record<string, unknown>>;
+  if (evidence.projection.id === "derived.story.last_level") return one("The last recorded moment within a pawn of level — Tabiya's recorded-evaluation convention.");
+  if (evidence.projection.id === "derived.story.title") return one(String(payload.title));
+  const after = payload.after as { readonly engineId?: unknown; readonly requestedMovetimeMs?: unknown };
+  const delta = Number(payload.delta);
+  return one(`The recorded evaluation moved ${delta >= 0 ? "+" : ""}${delta} cp across this move (${String(after.engineId)}${after.requestedMovetimeMs === undefined ? "" : `, ${String(after.requestedMovetimeMs)} ms`}).`);
+}
 const RENDERERS = Object.freeze({
   "rules.phase.reading@1": (evidence: DeclaredEvidence<unknown>) => Object.freeze([renderPhaseReading(evidence.payload as ReturnType<typeof classifyPhase>)]),
   "pack.authored.phase@1": (evidence: DeclaredEvidence<unknown>) => Object.freeze([`This pack declares: ${String(evidence.payload)}.`]),
@@ -47,18 +76,18 @@ const RENDERERS = Object.freeze({
   "rules.pivotal.marker@1": (evidence: DeclaredEvidence<unknown>) => renderPivotalMarker(evidence.payload as Parameters<typeof renderPivotalMarker>[0]),
   "rules.endgame.reading@1": (evidence: DeclaredEvidence<unknown>) => renderEndgameReading(evidence.payload as Parameters<typeof renderEndgameReading>[0]),
   "pack.authored.claim@1": (evidence: DeclaredEvidence<unknown>) => { const item = evidence.payload as { readonly text: string; readonly attribution: string }; return Object.freeze([`${item.text} (${item.attribution})`]); },
-  "theory.shapes.firing@1": (evidence: DeclaredEvidence<unknown>) => { const item = evidence.payload as { readonly id: string }; return Object.freeze([`Shape ${item.id} begins here under its recorded catalogue trigger.`]); },
-  "run.record.fork@1": (evidence: DeclaredEvidence<unknown>) => sentencePayload(evidence.payload),
-  "run.record.move@1": (evidence: DeclaredEvidence<unknown>) => sentencePayload(evidence.payload),
-  "run.record.checkpoint_hit@1": (evidence: DeclaredEvidence<unknown>) => sentencePayload(evidence.payload),
-  "run.record.objective_transition@1": (evidence: DeclaredEvidence<unknown>) => sentencePayload(evidence.payload),
-  "run.record.consequence@1": (evidence: DeclaredEvidence<unknown>) => sentencePayload(evidence.payload),
-  "run.record.imported_result@1": (evidence: DeclaredEvidence<unknown>) => sentencePayload(evidence.payload),
-  "derived.compare.structure_delta@1": (evidence: DeclaredEvidence<unknown>) => sentencePayload(evidence.payload),
-  "derived.compare.eval_delta@1": (evidence: DeclaredEvidence<unknown>) => sentencePayload(evidence.payload),
-  "derived.story.eval_shift@1": (evidence: DeclaredEvidence<unknown>) => sentencePayload(evidence.payload),
-  "derived.story.last_level@1": (evidence: DeclaredEvidence<unknown>) => sentencePayload(evidence.payload),
-  "derived.story.title@1": (evidence: DeclaredEvidence<unknown>) => sentencePayload(evidence.payload),
+  "theory.shapes.firing@1": (evidence: DeclaredEvidence<unknown>) => { const item = evidence.payload as { readonly entryId: string }; return Object.freeze([`Shape ${item.entryId} begins here under its recorded catalogue trigger.`]); },
+  "run.record.fork@1": renderRunRecord,
+  "run.record.move@1": renderRunRecord,
+  "run.record.checkpoint_hit@1": renderRunRecord,
+  "run.record.objective_transition@1": renderRunRecord,
+  "run.record.consequence@1": renderRunRecord,
+  "run.record.imported_result@1": renderRunRecord,
+  "derived.compare.structure_delta@1": renderCompareDerived,
+  "derived.compare.eval_delta@1": renderCompareDerived,
+  "derived.story.eval_shift@1": renderStoryDerived,
+  "derived.story.last_level@1": renderStoryDerived,
+  "derived.story.title@1": renderStoryDerived,
 });
 
 export function renderedEvidenceItems(manifest: CompiledEvidenceManifest, consumerId: string, declared: readonly DeclaredEvidence<unknown>[]): RenderedEvidenceView {
@@ -99,15 +128,15 @@ export function evidencePacket(input: { readonly run: DrillRun; readonly node: N
   });
   const readings = recordedReadingsAt(input.packEvidence, input.node, input.run);
   const declared = Object.freeze([
-    declareEvidence(producerRef("rules.phase"), projectionRef("rules.phase.reading"), detected),
-    ...(input.pack === undefined ? [] : [declareEvidence(producerRef("pack.authored"), projectionRef("pack.authored.phase"), input.pack.phase)]),
-    ...reading.structures.map((item) => declareEvidence(producerRef("rules.structural"), projectionRef("rules.structural.reading.named_structure"), item)),
-    ...reading.features.filter((item) => item.kind !== "pawn_count").map((item) => declareEvidence(producerRef("rules.structural"), projectionRef(`rules.structural.reading.${item.kind}`), item)),
-    ...markers.map((item) => declareEvidence(producerRef("rules.pivotal"), projectionRef("rules.pivotal.marker"), item)),
-    ...(endgame === null ? [] : [declareEvidence(producerRef("rules.endgame"), projectionRef("rules.endgame.reading"), endgame)]),
-    ...plans.map((item) => declareEvidence(producerRef("theory.shapes"), projectionRef("theory.shapes.firing"), item)),
-    ...authored.map((item) => declareEvidence(producerRef("pack.authored"), projectionRef("pack.authored.claim"), item)),
-    ...readings.map((item) => declareEvidence(producerRef(item.kind === "engine_eval" ? "recorded.engine" : "recorded.tablebase"), projectionRef(item.kind === "engine_eval" ? "recorded.engine.eval" : "recorded.tablebase.result"), item)),
+    declarePhaseReadingEvidence(detected),
+    ...(input.pack === undefined ? [] : [declarePackPhaseEvidence(input.pack.phase as PackPhase)]),
+    ...reading.structures.map(declareNamedStructureEvidence),
+    ...reading.features.filter((item) => item.kind !== "pawn_count").map(declareStructuralReadingSourceEvidence),
+    ...markers.map(declarePivotalMarkerEvidence),
+    ...(endgame === null ? [] : [declareEndgameReadingEvidence(endgame)]),
+    ...plans.map((plan) => declareShapeFiringSourceEvidence(Object.freeze({ entryId: plan.id, firstNodeId: input.node.id, lastNodeId: input.node.id, openEnded: true }))),
+    ...authored.map(declareAuthoredClaimEvidence),
+    ...readings.map((item) => item.kind === "engine_eval" ? declareRecordedEngineEvidence(item) : declareRecordedTablebaseEvidence(item)),
   ]);
   return Object.freeze({ fen: input.node.fen, phase: Object.freeze(phase), structures: reading.structures, observations: reading.features, markers: Object.freeze(markers), endgame, plans: Object.freeze(plans), authored: Object.freeze(authored), readings, declared });
 }

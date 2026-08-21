@@ -6,7 +6,9 @@ import {
   MATERIAL_VALUES,
   assertConsumerEvidenceView,
   appendEvents,
-  declareEvidence,
+  declareStockfishEvalEvidence,
+  declareSyzygyCategoryEvidence,
+  declareSyzygyDistanceEvidence,
   deviationAnchors,
   evidenceForConsumer,
   historyFrom,
@@ -265,14 +267,9 @@ function guardEvidence(
 ): readonly DeclaredEvidence<GuardEvidencePayload>[] {
   const declared: DeclaredEvidence<GuardEvidencePayload>[] = [];
   if (condition.kind === "engine_eval_swing" || condition.kind === "engine_mate_appears") {
-    for (const event of [previousEval, consequenceEval]) if (event !== undefined) declared.push(declareEvidence(
-      { id: "live.stockfish", version: 1 }, { id: "live.stockfish.eval", version: 1 }, event.data.payload,
-    ));
+    for (const event of [previousEval, consequenceEval]) if (event !== undefined) declared.push(declareStockfishEvalEvidence(event.data.payload));
   } else {
-    const projection = condition.kind === "tablebase_category_regression" ? "live.syzygy.category" : "live.syzygy.distance";
-    for (const event of [previousTablebase, consequenceTablebase]) if (event !== undefined) declared.push(declareEvidence(
-      { id: "live.syzygy", version: 1 }, { id: projection, version: 1 }, event.data.payload.values,
-    ));
+    for (const event of [previousTablebase, consequenceTablebase]) if (event !== undefined) declared.push(condition.kind === "tablebase_category_regression" ? declareSyzygyCategoryEvidence(event.data.payload.values) : declareSyzygyDistanceEvidence(event.data.payload.values));
   }
   return consumeGuardCondition(evidenceForConsumer(
     EVIDENCE_MANIFEST,

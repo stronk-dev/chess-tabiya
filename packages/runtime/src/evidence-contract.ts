@@ -527,8 +527,10 @@ export function compileEvidenceManifest(declarations: EvidenceContractDeclaratio
     assertLiteral(policy.consumer, site("selection-policy-consumer", policy.consumer));
     if (policyMap.has(refKey(policy))) fail("EVIDENCE_POLICY_DUPLICATE", "duplicate evidence selection policy", [site("selection-policy", policy)]);
     if (!consumerMap.has(refKey(policy.consumer))) fail("EVIDENCE_POLICY_CONSUMER_MISSING", "selection policy names an absent consumer", [site("selection-policy", policy), site("consumer", policy.consumer)]);
+    const allowedPolicyKeys = new Set(["id", "version", "consumer", "disposition", "minimumAlternatives", "maximumSameFamilyShare", "minimumAlternativeOnlyShare", "maxFacts", "criticalEvents"]);
+    const unknownKeys = Object.keys(policy).filter((key) => !allowedPolicyKeys.has(key));
     const sharesValid = Number.isFinite(policy.maximumSameFamilyShare) && policy.maximumSameFamilyShare >= 0 && policy.maximumSameFamilyShare <= 1 && (policy.minimumAlternativeOnlyShare === null || (Number.isFinite(policy.minimumAlternativeOnlyShare) && policy.minimumAlternativeOnlyShare >= 0 && policy.minimumAlternativeOnlyShare <= 1));
-    if (!Number.isSafeInteger(policy.minimumAlternatives) || policy.minimumAlternatives < 0 || !Number.isSafeInteger(policy.maxFacts) || policy.maxFacts < 0 || !sharesValid) fail("EVIDENCE_POLICY_INVALID", "selection policy thresholds and budgets must be finite and in range", [site("selection-policy", policy)]);
+    if (unknownKeys.length > 0 || !Number.isSafeInteger(policy.minimumAlternatives) || policy.minimumAlternatives < 0 || !Number.isSafeInteger(policy.maxFacts) || policy.maxFacts < 0 || !sharesValid) fail("EVIDENCE_POLICY_INVALID", `selection policy fields, thresholds and budgets must be exact and in range${unknownKeys.length === 0 ? "" : `; unknown: ${unknownKeys.join(", ")}`}`, [site("selection-policy", policy)]);
     for (const critical of policy.criticalEvents) {
       assertLiteral(critical, site("critical-event", critical));
       const row = eligibilityMap.get(`${refKey(critical)}:${refKey(policy.consumer)}`);

@@ -23,3 +23,21 @@ enumerator replays ordinary, castling, en-passant and all four promotion roles. 
 selector evaluates the complete alternative population, derives registered avoidance events and
 returns a sealed, finite result. Focused compiler/catalog/event/transition tests and runtime
 typecheck pass. D668 adapter migration and the retained-population report remain open.
+
+## 2026-08-21 — exact adapter census and retained-population baseline
+
+The fourteen-file D668 census now has no generic production constructor: generic evidence
+construction remains only in the contract and named adapter module, and the runtime package no
+longer exports it. Declared evidence, semantic events and selected results all use construction
+identity seals in addition to symbols; object-spread and double-cast forgeries fail at runtime.
+
+The separate F2 baseline ran over all 754 authored transitions and all 579 retained CC0 decisions.
+Every decision evaluated its complete legal-alternative population: 19,619 authored and 18,842
+imported alternatives. The selector returned 837 authored facts (359 derived avoidances) and 688
+imported facts (212 avoidances), with honest empty output on 260 and 185 decisions respectively.
+Input digests and the complete machine output are pinned in `f2-baseline.json`.
+
+The adapter pass also exposed D685: several F1 projection operand descriptions do not match the
+payload bytes current producers pass. Source-specific shape checks have started closing the
+generic arbitrary-object hole, but F2 is not complete until those payloads are normalized or the
+manifest is corrected truthfully and registered renderers remain the sole prose authority.

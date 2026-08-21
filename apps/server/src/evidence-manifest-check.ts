@@ -65,5 +65,9 @@ if (!guidance.includes("render(view: VoiceEvidenceView") || !externalVoice.inclu
 
 const arrows = EVIDENCE_MANIFEST.consumers.find((consumer) => consumer.id === "assistance.arrows");
 if (arrows?.disposition?.kind !== "experimental" || arrows.accepts.length !== 0) throw new TypeError("assistance.arrows lost its explicit producerless experimental disposition");
+const semanticResearch = EVIDENCE_MANIFEST.consumers.find((consumer) => consumer.id === "research.semantic_selection");
+if (semanticResearch === undefined || semanticResearch.accepts.length !== 33 || EVIDENCE_MANIFEST.selectionPolicies[0]?.consumer.id !== semanticResearch.id) throw new TypeError("The research semantic-selection consumer is not closed over its 33 exact event bindings");
+const counts = [EVIDENCE_MANIFEST.producers.length, EVIDENCE_MANIFEST.projections.length, EVIDENCE_MANIFEST.consumers.length, EVIDENCE_MANIFEST.bindings.length, EVIDENCE_MANIFEST.semanticEvents.length, EVIDENCE_MANIFEST.eligibility.length, EVIDENCE_MANIFEST.reasons.length, EVIDENCE_MANIFEST.selectionPolicies.length];
+if (counts.join("/") !== "20/126/25/175/33/33/15/1") throw new TypeError(`Semantic evidence closure drift: ${counts.join("/")}`);
 
-console.log(`evidence-manifest-check: ${EVIDENCE_MANIFEST.digest} · ${EVIDENCE_MANIFEST.producers.length} producers · ${EVIDENCE_MANIFEST.projections.length} projections · ${CURRENT_CONSUMER_OPERATION_IDS.length} operations + assistance.arrows · ${EVIDENCE_MANIFEST.bindings.length} bindings`);
+console.log(`evidence-manifest-check: ${EVIDENCE_MANIFEST.digest} · 20/126/25/175 core · 33/33/15/1 semantic`);

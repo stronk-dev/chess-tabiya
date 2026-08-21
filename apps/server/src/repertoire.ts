@@ -6,7 +6,7 @@ import { makeSan } from "chessops/san";
 import { parseUci } from "chessops/util";
 
 import { canonicalizeJson } from "@chess-tabiya/schema/drill-pack";
-import { assertConsumerEvidenceView, canonicalFen, declareEvidence, evidenceForConsumer, transposeKey, type ConsumerEvidenceView } from "@chess-tabiya/runtime";
+import { assertConsumerEvidenceView, canonicalFen, declareExplorerPositionEvidence, evidenceForConsumer, transposeKey, type ConsumerEvidenceView } from "@chess-tabiya/runtime";
 
 import { corpusPopulation, type CorpusPopulation, type CorpusResult, type CorpusSource } from "./corpus.js";
 import { EVIDENCE_MANIFEST } from "./evidence-manifest.js";
@@ -45,7 +45,7 @@ export function consumeRepertoireCorpus(view: ConsumerEvidenceView<CorpusResult>
 }
 
 function repertoireCorpusEvidence(result: CorpusResult): CorpusResult {
-  const declared = declareEvidence({ id: "human.explorer", version: 1 }, { id: "human.explorer.position_stats", version: 1 }, result);
+  const declared = declareExplorerPositionEvidence(result);
   return consumeRepertoireCorpus(evidenceForConsumer(EVIDENCE_MANIFEST, { id: "runtime.repertoire_scan", version: 1 }, [declared]));
 }
 

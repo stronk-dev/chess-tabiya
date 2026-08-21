@@ -11,7 +11,7 @@ import {
   compileEvidenceManifest,
   commitMove,
   createRun,
-  declareEvidence,
+  declareAuthoredClaimEvidence,
   endgameReading,
   evidenceForConsumer,
   EVIDENCE_CONTRACT_DECLARATIONS,
@@ -183,7 +183,7 @@ describe("adaptive guidance runtime", () => {
 
   it("checks voice introductions while pinning the known plain-English leak", () => {
     const manifest = compileEvidenceManifest(EVIDENCE_CONTRACT_DECLARATIONS);
-    const evidence = declareEvidence({ id: "pack.authored", version: 1 }, { id: "pack.authored.claim", version: 1 }, { text: "A backward pawn is recorded." });
+    const evidence = declareAuthoredClaimEvidence({ id: "fixture-claim", text: "A backward pawn is recorded.", attribution: "fixture:authored" });
     const admitted = evidenceForConsumer(manifest, { id: "guidance.voice", version: 1 }, [evidence]);
     const view = renderEvidenceItems(admitted, { "pack.authored.claim@1": () => ["A backward pawn is recorded."] });
     expect(voiceCheck(view, "A weak pawn is recorded.").violations).toContain("judgement:weak");

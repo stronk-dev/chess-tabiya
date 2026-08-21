@@ -109,6 +109,8 @@ describe("evidence manifest compiler", () => {
     const rendered = renderEvidenceItems(admitted, { "p.output@1": () => ["one"] });
     expect(rendered.items[0]?.sentences).toEqual(["one"]);
     expect(() => renderEvidenceItems({ consumer: { id: "c", version: 1 }, items: [evidence] } as never, { "p.output@1": () => ["forged"] })).toThrowError(expect.objectContaining({ code: "EVIDENCE_GENERIC_BYPASS" }));
+    const forgedEvidence = { ...evidence } as never;
+    expect(() => evidenceForConsumer(manifest, { id: "c", version: 1 }, [forgedEvidence])).toThrowError(expect.objectContaining({ code: "EVIDENCE_GENERIC_BYPASS" }));
   });
 
   it("refuses every derived-evidence widening and incomplete ancestry shape", () => {
@@ -125,6 +127,25 @@ describe("evidence manifest compiler", () => {
     expect(code(declarations(projection(), { derivation: { inputs: [] } }))).toBe("EVIDENCE_PROJECTION_INCOMPLETE");
     const cyclic = declarations({ ...projection(), dependsOn: [{ id: "q.output", version: 1 }] }, {});
     expect(code(cyclic)).toBe("EVIDENCE_DEPENDENCY_CYCLE");
+  });
+
+  it("refuses global lift, learned score and population rank as policy inputs", () => {
+    const valid = semanticDeclarations();
+    for (const forbidden of ["globalLift", "learnedScore", "populationRank"] as const) {
+      const contaminated = { ...valid.selectionPolicies![0]!, [forbidden]: 1 } as never;
+      expect(code({ ...valid, selectionPolicies: [contaminated] })).toBe("EVIDENCE_POLICY_INVALID");
+    }
+  });
+
+  it("refuses every invalid policy threshold and budget shape without clamping", () => {
+    const valid = semanticDeclarations();
+    const basePolicy = valid.selectionPolicies![0]!;
+    for (const override of [
+      { minimumAlternatives: -1 }, { minimumAlternatives: 1.5 },
+      { maximumSameFamilyShare: -0.01 }, { maximumSameFamilyShare: 1.01 },
+      { minimumAlternativeOnlyShare: -0.01 }, { minimumAlternativeOnlyShare: 1.01 },
+      { maxFacts: -1 }, { maxFacts: 1.5 },
+    ]) expect(code({ ...valid, selectionPolicies: [{ ...basePolicy, ...override }] })).toBe("EVIDENCE_POLICY_INVALID");
   });
 });
 

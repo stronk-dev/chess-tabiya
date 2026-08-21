@@ -1,7 +1,8 @@
 import {
   PRIMARY_EVIDENCE_MANIFEST,
   assertConsumerEvidenceView,
-  declareEvidence,
+  declareExplorerPopulationEvidence,
+  declareMaiaPolicyEvidence,
   evidenceForConsumer,
   type ConsumerEvidenceView,
 } from "@chess-tabiya/runtime";
@@ -29,7 +30,7 @@ export function consumeCorpus(
 }
 
 export function humanSplitEvidence(page: HumanSplitPage): HumanSplitPage {
-  const declared = declareEvidence({ id: "human.maia", version: 1 }, { id: "human.maia.policy", version: 1 }, page);
+  const declared = declareMaiaPolicyEvidence(page);
   return consumeHumanSplit(evidenceForConsumer(
     PRIMARY_EVIDENCE_MANIFEST,
     { id: "inspector.human_split", version: 1 },
@@ -38,7 +39,7 @@ export function humanSplitEvidence(page: HumanSplitPage): HumanSplitPage {
 }
 
 export function corpusEvidence(page: CorpusPage): CorpusPage {
-  const declared = declareEvidence({ id: "human.explorer", version: 1 }, { id: "human.explorer.population", version: 1 }, page);
+  const declared = declareExplorerPopulationEvidence(page);
   return consumeCorpus(evidenceForConsumer(
     PRIMARY_EVIDENCE_MANIFEST,
     { id: "inspector.corpus", version: 1 },

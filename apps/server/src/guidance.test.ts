@@ -1,6 +1,6 @@
 import { readFileSync } from "node:fs";
 
-import { classifyPhase, declareEvidence, voiceCheck, type EvidencePacket, type RenderedEvidenceView } from "@chess-tabiya/runtime";
+import { classifyPhase, declarePhaseReadingEvidence, voiceCheck, type EvidencePacket, type RenderedEvidenceView } from "@chess-tabiya/runtime";
 import type { DrillPackDefinition } from "@chess-tabiya/schema/drill-pack";
 import { afterEach, describe, expect, it } from "vitest";
 
@@ -30,7 +30,7 @@ class MaiaClient implements SelectorEngineClient {
 const capabilities: CapabilitiesProvider = {
   async get() {
     return {
-      engines: [], policyModes: ["human_common"], feedbackPolicies: ["delayed_checkpoint", "segment_end", "immediate_guard"], guardBasis: ["rules"], costBasis: ["material"], capabilityDispositions: [], recordedReadingKinds: [], runSchemaVersion: "0.17", evidenceManifest: { digest: "fixture", availability: [], bindings: [] },
+      engines: [], policyModes: ["human_common"], feedbackPolicies: ["delayed_checkpoint", "segment_end", "immediate_guard"], guardBasis: ["rules"], costBasis: ["material"], capabilityDispositions: [], recordedReadingKinds: [], runSchemaVersion: "0.17", evidenceManifest: { digest: "fixture", counts: { producers: 20, projections: 126, consumers: 25, bindings: 175, semanticEvents: 33, eligibility: 33, reasons: 15, selectionPolicies: 1 }, availability: [], bindings: [] },
       tempoVerdicts: ["unopened", "open", "in_time", "over_budget", "too_slow", "outpaced", "premature"], tempoGradeable: ["in_time", "over_budget", "too_slow", "premature", "outpaced"], tempoDefaults: { outpaced: "failed" },
       assessmentCategories: ["win", "loss", "draw", "cursed-win", "blessed-loss"],
       objectiveAssessmentSets: { win: ["win"], hold: ["draw", "cursed-win", "blessed-loss"], save: ["loss", "blessed-loss"], resist: ["loss", "blessed-loss"] },
@@ -43,7 +43,7 @@ const capabilities: CapabilitiesProvider = {
 function request(path: string, method = "GET", body?: unknown, cookie?: string): Request { return new Request(`http://tabiya.test${path}`, { method, headers: { ...(body === undefined ? {} : { "content-type": "application/json" }), ...(cookie === undefined ? {} : { cookie }) }, ...(body === undefined ? {} : { body: JSON.stringify(body) }) }); }
 function fixturePacket(): EvidencePacket {
   const detected = classifyPhase(FEN);
-  return Object.freeze({ fen: FEN, phase: { source: "detector" as const, value: detected.phase }, structures: [], observations: [], markers: [], endgame: null, plans: [], authored: [], readings: [], declared: [declareEvidence({ id: "rules.phase", version: 1 }, { id: "rules.phase.reading", version: 1 }, detected)] });
+  return Object.freeze({ fen: FEN, phase: { source: "detector" as const, value: detected.phase }, structures: [], observations: [], markers: [], endgame: null, plans: [], authored: [], readings: [], declared: [declarePhaseReadingEvidence(detected)] });
 }
 
 describe("adaptive guidance server seams", () => {

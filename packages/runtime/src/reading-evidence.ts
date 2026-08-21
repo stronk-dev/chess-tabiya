@@ -1,10 +1,10 @@
 import {
   assertConsumerEvidenceView,
-  declareEvidence,
   evidenceForConsumer,
   type ConsumerEvidenceView,
   type DeclaredEvidence,
 } from "./evidence-contract.js";
+import { declareStructuralReadingSourceEvidence, declareTransitionReadingSourceEvidence } from "./evidence-source-adapters.js";
 import { PRIMARY_EVIDENCE_MANIFEST } from "./evidence-catalog.js";
 import type { StructuralObservation, StructuralReading } from "./structure.js";
 import type { TransitionObservation, TransitionReading } from "./transition.js";
@@ -16,20 +16,13 @@ export function declareStructuralReadingEvidence(
 ): readonly DeclaredEvidence<StructuralObservation>[] {
   return Object.freeze(reading.features
     .filter((item) => item.kind !== "pawn_count")
-    .map((item) => declareEvidence(ref("rules.structural"), ref(`rules.structural.reading.${item.kind}`), item)));
-}
-
-function transitionProjection(observation: TransitionObservation): string {
-  return observation.kind === "move_irreversibility"
-    ? `rules.transition.reading.move_irreversibility.${observation.subkind}`
-    : `rules.transition.reading.${observation.kind}.${observation.direction}`;
+    .map(declareStructuralReadingSourceEvidence));
 }
 
 export function declareTransitionReadingEvidence(
   reading: TransitionReading,
 ): readonly DeclaredEvidence<TransitionObservation>[] {
-  return Object.freeze(reading.observations.map((item) =>
-    declareEvidence(ref("rules.transition"), ref(transitionProjection(item)), item)));
+  return Object.freeze(reading.observations.map(declareTransitionReadingSourceEvidence));
 }
 
 function consume<T>(view: ConsumerEvidenceView<T>, id: string): readonly T[] {
