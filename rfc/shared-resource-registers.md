@@ -20,8 +20,9 @@
   hypothetical: `pack-population-provenance.md` (RFC-5) holds two live claims — pack **0.29** and
   the `citable_text` member of `EVIDENCE_KINDS` — **neither of which has a register row anywhere**,
   while the pack register's hand-written next-free row still names 0.29 as free (see §Motivation).
-- **Parent / amends:** amends `rfc/0000-rfc-process.md` **§Rules** (adds rule 7) and the
-  register sections of `rfc/README.md`. **It does not touch §RFC lifecycle** — that section is
+- **Parent / amends:** amends `rfc/0000-rfc-process.md` **§Rules** (adds rule 7), the
+  register sections of `rfc/README.md`, and one placeholder line in `rfc/template.md` (§3;
+  added by cross-review — RFC-2 amends other sections of the same template, a stated merge). **It does not touch §RFC lifecycle** — that section is
   `rfc-lifecycle-completion`'s (RFC-2 in the drafting queue) and the boundary is stated in §7.
 - **Supersedes / superseded by:** —
 - **Planning:** `planning/shared-resource-registers/` (once implementing)
@@ -214,8 +215,9 @@ why it falls there.
 >    on them in one machine-readable block (§3) before writing a version into its body.
 
 The criterion is what keeps this bounded. `ABSTENTION_REASONS` (`sourcing/types.ts:68`) satisfies
-(a) and (c) and fails (b) — no in-flight draft moves it — so it is **not registered today and
-enters the register the day a draft claims it**, by the same rule. The register grows by claim,
+(a) and (c), and (b) only in potential — any two drafts *could* contest it, but none does — so it
+is **not registered today and enters the register the day a draft claims it**: the criterion
+names what *may* be registered, and a claim is what triggers entry. The register grows by claim,
 not by inventory.
 
 The six resources of §Motivation are the closed set at HEAD. Their canonical names, used verbatim
@@ -297,7 +299,10 @@ Every RFC body carries **exactly one** fenced block with the info string `tabiya
 rule that precedes the summary. This placement is **ruled** (owner, D648, 2026-08-21: *"Fixed
 metadata block immediately before `## Summary` — one unambiguous parser/reader location"*, Q2
 below) and C1's locator accepts no other position. One claim per line; three `|`-separated
-fields; comments begin `#`.
+fields; comments begin `#`. **`rfc/template.md` gains the block in this position in the landing
+commit** — one placeholder line; without it every future draft starts C1-red by omission.
+(RFC-2 §9.2 amends other sections of the same template; two documents editing one file in two
+places is the same merge-not-collision as §7's RFC-0000 seam.)
 
 ````
 ```tabiya-claims
@@ -307,8 +312,17 @@ fields; comments begin `#`.
 
 - **`<resource>`** — one of the six canonical names in §1. Any other value is an error.
 - **`<claim>`** — by resource kind:
-  - schema resources: `lane <version>` (e.g. `lane 0.29`)
+  - schema resources: `lane <version>` (e.g. `lane 0.29`). **A version is a dotted integer
+    tuple and every comparison in this document and its checker is component-wise integer
+    comparison**: shape-entry `0.3` is *below* pack `0.27`'s minor because 3 < 27. This is
+    stated because a float or lexicographic comparison inverts exactly this repo's live pair —
+    a checker that parses `0.3 > 0.27` passes a stale claim and fails a fresh one.
   - `migration`: `position behind <rfc-slug>`, or `position next`. **A bare integer is refused.**
+    A block may carry several `migration` lines; **they are ordered as written, each implicitly
+    behind its predecessor in the same block**, so `learner-rating`'s second table set (§5.1)
+    needs no self-referencing slug. Two *documents* claiming `position behind` the same slug is
+    C3's collision for this resource — the order between them is renegotiated in the register,
+    which is [[D423]]'s three-way contest made visible instead of silent.
   - `evidence-kinds`: `members <name>[, <name>…]`
 - **`<changes>`** — the named symbol(s) this claim will move: a `$defs` path, an enum, a property,
   a table, or a constant. **It is mandatory and must be non-empty.** This is [[D385]]'s doctrine
@@ -321,6 +335,15 @@ fields; comments begin `#`.
 none
 ```
 ````
+
+**A block inside a longer fence is not a block.** Cross-review forced this rule by parsing this
+document by hand: this §3 carries two example blocks wrapped in four-backtick fences, and
+`pack-population-provenance` stages its block the same way in its §8 — a fence-blind regex
+counts all of them and fails C1 **on this very RFC** (three blocks) while crediting a staged
+example as a live declaration. C1's locator therefore scans line-by-line tracking the innermost
+open fence and counts only `tabiya-claims` fences that open at the top level — still §6's
+regex-level bar (a fence tracker is a dozen lines, no Markdown AST), and criterion 6's C1
+fixtures must include a nested-fence example that is **not** counted.
 
 An RFC that claims nothing versioned writes `none`. It does **not** omit the block. This is the
 cheapest guard in the document and it is bought with evidence: `CLAUDE.md` records that
@@ -354,6 +377,14 @@ version:
 Then a table of landed rows — `| version | owner RFC | what it changed |` — and a table of live
 claims — `| version | claimant RFC | changes | declared at |`.
 
+**The head line and the landed rows are written copies, and cross-review forced this sentence
+because §2's boxed rule reads as if they were not.** §2's rule names the *truth source*: the
+landed half's authority is the tree, and C6 (head line) and C4 (landed rows) hold every written
+copy equal to it, so a stale copy becomes a red check instead of a trusted lie — which is the
+whole difference from today's registers, where the copy *is* the record. The only fact never
+written in any form is the derived one, the next-free lane, because a written computation has
+nothing to hold it (F3).
+
 **The `principle-entry-schema` section ships now, with a landed row for 0.1 and an empty claim
 table — ruled** (owner, D648, 2026-08-21, resolving Q1 as proposed: *"it is the only versioned
 schema whose constant is not test-bound to its `$id` [[D504]]; four lines buy coverage before a
@@ -363,7 +394,7 @@ day this lands, instead of from the day someone first wants it.
 
 **No section contains a "next free" row.** The next free lane is `max(head, highest live claim)`
 incremented, it is **computed and printed by `make register-check`**, and it is never written into
-the file. This is F3's lesson generalised: `rfc/README.md:78`'s hand-written *"0.29 is the next
+the file. This is F3's lesson generalised: `rfc/README.md:77`'s hand-written *"0.29 is the next
 free pack lane"* went stale against a row four lines above it. **A fact you never write cannot go
 stale**, and this removes the only remaining hand-written derived fact in the pack register. The
 two existing sections lose their next-free rows on the same rule.
@@ -409,7 +440,9 @@ gives the position a row; §3's `position behind <rfc-slug>` gives it an order.
 ### §6 — `make register-check`
 
 A single Node script, `tools/register-check.mjs`, in the family of `tools/verify-scaffold.mjs`
-(135 lines) and `tools/verify-packaging.mjs` (87 lines). It reads: four `schemas/*.json` `$id`s;
+(135 lines) and `tools/verify-packaging.mjs` (123 lines at `29498ba`; the 87 this RFC previously
+reported was the drafting-HEAD count, caught stale by cross-review — a line count is [[D501]]'s
+class and this one is kept only because the *family* claim is the point). It reads: four `schemas/*.json` `$id`s;
 `packages/schema/src/index.ts`; `apps/server/src/storage.ts` for `STORAGE_VERSION` and the
 `migrations` array head; `apps/server/src/sourcing/types.ts` for `EVIDENCE_KINDS`; the
 `tabiya-claims` block of every RFC named in `rfc/README.md` §Active; and the six register head
@@ -417,6 +450,10 @@ lines. Regex-level parsing throughout — no TypeScript AST, no JSON-schema trav
 
 It prints the derived next-free lane for each of the six resources, then runs six checks. It
 exits non-zero on any failure and names the two disagreeing sites in every message.
+
+**Where it runs:** wherever `make verify` runs — a repo checkout, dev or CI. It reads committed
+files only and needs no git history, so [[D468]]'s production-image constraint (no living-tier
+directories, no `.git`) is never in its path: the image neither runs it nor ships it.
 
 | | Check | Fails when |
 |---|---|---|
@@ -439,7 +476,14 @@ is green the day it lands is worth more than a reporting target nobody reads.
 **What the landing commit must correct to reach green** — re-derived at `29498ba`, and no more:
 
 1. A shape-entry landed row for **0.3**, owner `vocabulary-wiring`, landed at `caa8afa` — it
-   ships inside the new shape-entry section (F2).
+   ships inside the new shape-entry section (F2). **And the other new sections seed their
+   head landed rows too, or C4(a) is red on them in the landing commit itself** — an omission
+   cross-review caught by running the check against this list by hand: run-schema **0.17**,
+   owner `opponent-contracts`, landed at `6ba0736` (today recorded only as prose inside the
+   migration register's row 23); principle-entry **0.1** per §4's ruled section; and the seven
+   `EVIDENCE_KINDS` members as landed member rows, `added by`/`added at` recovered from
+   register history where recoverable and `pre-register` where not — for `evidence-kinds`,
+   C4(a) reads *every member of the constant has a landed row*.
 2. The hand-written next-free row (`rfc/README.md:77`) is deleted with the other next-free rows
    per §4 — it is stale a second time, naming 0.29 while `pack-population-provenance` claims it.
 3. Claim rows for the live claims that have none: pack **0.29** and `citable_text`
@@ -471,11 +515,18 @@ HEAD and, with different membership, **ten rows again at `29498ba`** — and bot
 agree on their leading token** with the same single disagreement: `measurement-records.md`'s
 body reads `- **Status:** draft` while its register cell reads *"returned to author
 2026-08-16"*, and *returned to author* is not one of the six states in `rfc/0000-rfc-process.md`
-§RFC lifecycle. (The drafting queue reports 8 of 9; RFC-2 reports 11 of 12 at its own drafting
-HEAD; every measurement finds the one identical row. The counts differ only in table membership.)
+§RFC lifecycle. (The drafting-queue pass measured 8 of 9 — recorded in [[D500]]'s row, not in
+the queue file itself, which cross-review corrected here; RFC-2 reports 11 of 12 at its own
+drafting HEAD; every measurement finds the one identical row. The counts differ only in table
+membership.)
 From **this** RFC: the reader. C1's block-locator and C3's §Active-table parser are the same
 plumbing `status-parity` needs, and `tools/register-check.mjs` is where it lives. **Share the
 reader, not the rule** — `status-parity` may import from it and must not restate its parsing.
+**And the home is landing-order-symmetric, which neither document stated until cross-review:**
+RFC-2's instrument is a separate codex commit that does not wait on this RFC, so if
+`tools/status-parity.mjs` lands while `tools/register-check.mjs` does not exist, the shared
+§Active parser is born there and *this* RFC's checker imports it. The rule names one parser,
+not a fixed file — first lander hosts.
 
 **`make work-index` ([[D487]]) — does not belong here at all.** Different input
 (`design/BACKLOG.md` column 1, not schemas), different join (rows to destinations), different
@@ -526,8 +577,10 @@ described is a criterion that measures nothing.
    landing** — these counts moved once already (5/4/5 at drafting → 4/5/7 at `29498ba`).
    *Fails if:* the implementer treats an omitted block as equivalent to `none` — the exact
    ambiguity §3 exists to remove; if a block sits anywhere but the ruled position (one in-flight
-   draft, `pack-population-provenance`, stages its block inside a body section §8 and must
-   relocate it when carried at landing); or if the file-glob is used and picks up `README.md` and
+   draft, `pack-population-provenance`, stages its block inside a four-backtick fence in its §8 —
+   §6's landing item 4 carries it into the ruled position **in this RFC's landing commit**,
+   superseding that draft's carry-at-own-landing plan, so its §13 criterion is satisfied early
+   rather than contradicted); or if the file-glob is used and picks up `README.md` and
    `template.md`, giving 12 where §Active gives 10 (both numbers re-verified at `29498ba`).
 
 4. **`make register-check` exists, is listed in `.PHONY`, and is a prerequisite of `verify`.**
@@ -547,7 +600,10 @@ described is a criterion that measures nothing.
    *Fails if:* only the passing direction is tested. Two of these checks are joins, and a join
    whose key matches nothing passes silently — [[D444]]'s census defect. **C3's negative fixture
    must contain at least two live claims**, because an equality over a singleton set holds
-   trivially and would pass while measuring nothing.
+   trivially and would pass while measuring nothing. **C1's fixture set must include a
+   four-backtick-wrapped example block that the locator does not count** — §3's nested-fence
+   rule, whose live case is this RFC's own §3 — and one staged-in-body block that C1 refuses
+   as out-of-position.
 
 7. **The derived next-free lane is printed for all six resources and is correct against a
    hand-derivation recorded in the planning log.** At committed HEAD `29498ba` that is: pack
@@ -583,7 +639,9 @@ described is a criterion that measures nothing.
    `EVIDENCE_KINDS` — §4 refuses that explicitly.
 
 10. **The ledger rows are flipped in the landing commit** ([[D376]], [[D385]], [[D423]],
-    [[D447]], [[D384]] register-half, [[D498]], [[D499]], [[D504]] register-half), and
+    [[D447]], [[D384]] register-half, [[D498]], [[D499]], [[D504]] register-half, and
+    **[[D653]]** — whose own row names this RFC's landing as its discharge; it landed in this
+    document's refresh commit `a4877f4` and cross-review added it here), and
     **[[D461]] is flipped on this RFC's verification with no work attached**.
     *Fails if:* D461 is left open — it is discharged, re-verified at `4a6ad91` and again at
     `29498ba`, and a criterion that tells an implementer to flip a row that is already flipped
@@ -652,12 +710,14 @@ rows this section proposed at drafting landed under shifted ids, and two have si
 - The *two-copies-of-`EVIDENCE_KINDS`* finding landed as **[[D506]]** and was **RETRACTED
   2026-08-17 as a false record** — see the correction in §The measurement. What survives is
   [[D499]] plus the now-declared `citable_text` claim.
-- The *WORK.md-says-six / D477-says-five* counter discrepancy **never landed a row and is still
-  live at `29498ba`**: `planning/WORK.md` §0 reads *"Six instances"* and [[D477]]'s row title
-  reads *"FIVE times"*. Proposed as **D652** (ids through **D651** are in use): two
-  hand-maintained documents, one incrementing counter, written a day apart — the defect class of
-  this RFC appearing in the very file that queues the fix for it. Described here, deliberately
-  not written.
+- The *WORK.md-says-six / D477-says-five* counter discrepancy: `planning/WORK.md` §0 reads
+  *"Six instances"* and [[D477]]'s row title reads *"FIVE times"*. Proposed as **D652** — and
+  **landed as [[D652]] in this document's own refresh commit `a4877f4`**, which also wrote
+  [[D653]] (the four unregistered live claims; in criterion 10's flip list) and [[D654]].
+  Cross-review corrected this passage: it shipped still reading *"described here, deliberately
+  not written"* in the very commit that wrote the row — the observation-of-the-working-tree
+  lesson of §The measurement, third instance, this time about the ledger. **Ids run through
+  D654 at this document's landing commit; propose from D655.**
 
 ---
 
@@ -695,3 +755,22 @@ rows this section proposed at drafting landed under shifted ids, and two have si
   tokens agree, same single `measurement-records` row. A `## Discharges` section (`none`) and
   this document's own `tabiya-claims` block added, each demonstrating the mechanism of the
   companion document.
+- 2026-08-21 (adversarial cross-review, joint with `rfc-lifecycle-completion`): eight
+  corrections, all re-derived at the symbol. **(1)** C1 made fence-aware — a fence-blind regex
+  counts §3's own two four-backtick examples and fails C1 on this document (§3; criterion 6
+  fixture added). **(2)** Version comparison pinned to component-wise integers — a float parse
+  inverts the live `0.3`/`0.27` pair (§3). **(3)** Multi-line `migration` claims given an order
+  (§3): the grammar could not express `learner-rating`'s two-claim case that §5.1 itself uses as
+  the example. **(4)** §6's landing list was C4(a)-incomplete — run-schema 0.17 and the seven
+  `EVIDENCE_KINDS` landed rows added. **(5)** `verify-packaging.mjs` is **123** lines at
+  `29498ba`, not 87; §4's `rfc/README.md:78` → `:77`. **(6)** [[D653]] added to criterion 10 and
+  the D652 passage corrected: both rows landed in this document's own refresh commit `a4877f4`
+  while the text still read *"deliberately not written"* — ids run through **D654**, propose
+  from D655. **(7)** §4 now states head lines and landed rows are *checked copies*; §2's "never
+  written" names the truth source, not the file. **(8)** The shared-parser home made
+  landing-order-symmetric (§7) and the `rfc/template.md` placeholder added (§3, metadata); the
+  8-of-9 count re-attributed to [[D500]]'s row. Everything else re-verified clean at `29498ba`:
+  census 4/5/7 over 10, the criterion-7 next-free list, 9-of-10 parity, README refs
+  :14–:18/:38/:62/:76/:77/:111/:176/:280, all six constants and four `$id`s, criterion 13's
+  verbatim quote, `claim-backing.md:1725`, and both D648 ruling quotes against
+  `planning/platform-alignment/intent-amendment-handoff.md:156-157`.
