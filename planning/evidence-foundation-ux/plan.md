@@ -19,8 +19,8 @@ before touching content; no corpus expansion until Gate F.
 | 0 | Record the rejection (ledger/R3/queue/log) | **done 2026-08-22** (D717, log entry; R3+queue notes ride the audit landing) | `22e8937` |
 | 1 | HEAD-derived producer→…→consumer gap matrix, every primitive, ten-way gap classification | **done 2026-08-22** | `phase1-gap-matrix.md`, `990f3d9` |
 | 2 | Collector re-verification (the ~20 required primitives; D544/D545/D547/D548/D632/D686/D694 re-derived) | **done 2026-08-22** | `phase2-collector-audit.md`, `7eb9210` |
-| 2b | Breadth closure beyond the first collector wave: square denial/restriction, pawn dynamics, activity/coordination, king/imbalance and multi-edge persistence; disposable probes + authored/imported-population measurements | **research landed; probes pending** | `design/research/middlegame-evidence-and-style-taxonomy.md`, D723-D729 |
-| 2c | SEE + exact/identity-retaining collector Wave A: accepted RFC, implementation and external-population measurements | blocked on 2b probes + owner convention/sign rulings | collector RFC + implementation |
+| 2b | Breadth closure beyond the first collector wave: square denial/restriction, pawn dynamics, activity/coordination, king/imbalance and multi-edge persistence; disposable probes + authored/imported-population measurements | **taxonomy + eleven one-edge probes + first sequence census landed; SEE/search-dependent semantics active** | `design/research/middlegame-evidence-and-style-taxonomy.md`, `tools/d723-breadth-harness/`, D723-D729, D746-D748 |
+| 2c | SEE + exact/identity-retaining collector Wave A: accepted RFC, implementation and external-population measurements | blocked on 2b closure; owner convention/sign rulings answered | collector RFC + implementation |
 | 3 | F5 module contracts (11 candidate modules, full declaration schema, sealed LLM packet boundary) | blocked on 2c; modules consume real Wave-A ids and abstain where Wave B is absent | RFC |
 | 4 | Play composition rebuild (board-stage + companion rail/drawer/sheet; nothing above the board) | blocked on 3 | RFC |
 | 5 | Presets over intent (Just Play / Guided / Support / Drill / Review / Analyze / Academy / Stream); effective config = preset ∩ ceiling ∩ role ∩ availability; ceilings only remove | blocked on 3 | RFC (with `assistance-controls` reconciliation) |
@@ -28,7 +28,7 @@ before touching content; no corpus expansion until Gate F.
 | 7 | Interaction-state acceptance across 7 viewports × 14 states; screenshots; CI path | rides 4 | criteria in the Phase-4 RFC |
 
 **Deliverable 7 (owner questions) accumulates here** — nothing is silently chosen.
-**All four open questions RULED 2026-08-22 ([[D718]])**: space = classic zones + pawn control,
+**All four open questions RULED 2026-08-22 ([[D745]])**: space = classic zones + pawn control,
 `chess_tradition`; the negative reading faces learners post-commit/review with the denominator;
 castling-prevented = the two mechanical forms; the fork fallback is pre-authorized. Question 5
 remains a dependency on D530/D531's regrounding. **Phase 3's RFC is now unblocked on every

@@ -4174,3 +4174,51 @@ F1/F2 established authority and mechanics, not completeness or a learner experie
 bottom-up program (collectors → typed evidence → module bindings → layout/presets) is briefed
 at planning/evidence-foundation-ux/plan.md; Phase 1 (HEAD-derived gap matrix) and Phase 2
 (collector re-verification) audits commissioned this session. No corpus expansion until Gate F.
+
+## 2026-08-22 — middlegame breadth and style proof burdens separated
+
+The Phase-2 collector audit remains the correct SEE-first implementation wave, but a cross-source
+research pass found it was not an exhaustive middlegame ontology. D723-D728 now name the missing
+families: square denial/restriction, pawn tension and levers, activity/coordination and file
+control, king pressure and material imbalance, and multi-edge persistence. The owner's
+`...Bg4, h3, ...Bh5` example is recorded as a mandatory sequence fixture: pawn attack and square
+denial occur, the bishop retreats, and the relative queen-line pressure survives; “tempo,”
+“prophylaxis,” “forced” and “best” remain refused without their separate evidence joins.
+
+The same pass split player evidence into per-game observations, opportunity-normalized stable
+habits, and named personalities. Existing R12 data permits continuous habit cards but not natural
+types; D729 requires temporal/time-control transfer, rating separation, intervals and privacy for
+each new axis. Phase 2b is added as a disposable-probe/measurement arm before the later additive
+collector waves. No production code or content changed.
+
+## 2026-08-22 — first Phase-2b middlegame breadth probe
+
+The disposable D723 harness tested seven predeclared exact/convention facts across 754 authored
+spine transitions and 579 decisions from the sealed imported CC0 sample, comparing each played
+move with every distinct legal-result alternative. Pawn harassment is the sharpest candidate in
+both populations (3.63× authored, 3.18× imported). Generic pawn contact is nearly background
+(1.03×/1.19×), and relative line constraints reverse direction (0.74×/1.33×), so neither may be
+treated as universally interesting. The owner fixture `...Bg4 h3 ...Bh5` and broken-ray,
+changed-target, two-blocker, missing-target and capture-screen negatives pass.
+
+The result advances Phase 2b but does not close it: majority/blockade, coordination/battery, king
+shelter, material imbalance, defender manipulation and corpus-scale multi-edge persistence remain.
+No production schema, collector, learner text or content changed. A duplicate ledger identifier
+introduced by the concurrent ruling commit was corrected: the new owner ruling is D745 and the
+earlier layout trace remains D718.
+
+## 2026-08-22 — Phase-2b breadth probe expanded to relationships and sequences
+
+The predeclared instrument expanded from seven to eleven one-edge probes and added a genuine
+consecutive-edge census. Newly locked pawn pairs measure 3.89×/2.08× authored/imported lift and
+opponent defence-edge loss 2.66×/3.36×. Generic same-color slider alignment measures 0.82×/0.99×:
+it is an operand, not a learner-facing “battery” label. The disclosed king-shelter window reverses
+from 1.13× authored to 0.72× imported, another reason selection cannot use one global positive
+rank.
+
+Across 692 authored branch pairs and 6,883 imported pairs, 19/180 attacked minors immediately
+relocated after pawn harassment; only 3/6 retained the same screened valuable-target relation.
+D746-D748 record the selection, sequence and defender-identity consequences. The harness now
+pins positive/hard-negative fixtures for locking, alignment, shelter and defence edges as well as
+the original line relation. Phase 2b remains open only for semantics requiring SEE/search or a
+stronger declared convention; no production code or content changed.
