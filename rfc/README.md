@@ -24,6 +24,13 @@ first `D<n>` token is machine-read as its discharge pointer.
 *"`tabiya-claims` carried at landing, not now"* is superseded by RFC-1's landing. Its two-line
 declaration is present now and is the authority joined to the pack/evidence live-claim rows.
 
+**Assistance-controls status correction, 2026-08-22:** D532 answered the cell's remaining owner
+question with option C, a real per-context ceiling. The RFC is returned on D715 because its §4.3
+and criterion 11 still encoded rejected option A, and because `RunSessionKind` plus the current
+permission vocabulary cannot express all six shipped preference contexts or the rules floor. The
+independent reveal/guided/default subset remains buildable and must be split or coordinated with F5
+before acceptance.
+
 **Three-draft wave, 2026-08-14** — claim order: `repertoire-gap-finding` first, then
 `onramp-guard`, then `open-answer-grading`. Shared-resource claims (migrations, pack
 schema, ownership pins) land in that order; a draft that cannot land behind its

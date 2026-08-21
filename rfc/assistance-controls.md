@@ -1,6 +1,8 @@
 # RFC: Assistance controls — three switches over the ladder, each wired to the wrong thing
 
-- **Status:** draft
+- **Status:** draft — returned to author 2026-08-22 on D715. The owner chose option C in D532,
+  but §4.3 and criterion 11 still specify option A, and the current runtime context cannot express
+  the six shipped preference contexts or the ruling's rules-floor example.
 - **Author:** claude (agent), for Marco
 - **Created:** 2026-08-16
 - **Design refs:** `design/05-in-run-experience.md` §3 (the ladder), §3a-i (the disclosure
@@ -14,8 +16,9 @@
   code census that produced **D307**, **D308** and **D309**; `planning/app-reality-check.md`
   (2026-08-16, hands-on against the running app). No new research is required and none is
   proposed: every claim below is a reading of shipped code or a quotation of a design ruling.
-- **Depends on:** nothing unlanded. Composes with two in-flight RFCs and collides with
-  neither — see §6.
+- **Depends on:** the D308/D309/default-control subset depends on nothing unlanded. The D307
+  permission half must either be split into F5 or adopt F5's compiled workflow/ceiling input; see
+  §4.3. Treating the whole document as dependency-free would implement the rejected choice.
 - **Parent / amends:** amends the shipped assistance surface established by
   `rfc/archive/adaptive-guidance.md` (the `AssistanceConfig` axes and the six profiles) at
   the **controls**, not at the detectors, the permission table or the marker admission rule.
@@ -41,7 +44,8 @@ learner moves on `design/05`'s assistance ladder.** All three were bucketed
 `NEEDS-OWNER` on `DESIGN-GAP:` markers. Read against the design tier, **two of the three
 are defects against rulings that already exist, and the third is two claims of which one
 is a defect and one is a mis-diagnosis.** This RFC specifies the fixes and puts the single
-genuine, and non-blocking, owner question at the end where it belongs.
+genuine owner question at the end. D532 has now answered it with option C; the stale option-A
+specification is returned in §4.3 rather than implemented.
 
 - **D308 — defect.** `design/05` §3a-i ships a disclosure model in which a Just Play learner
   may reveal mid-run and the reveal *"re-closes on the next committed move"*. The server,
@@ -508,35 +512,31 @@ configuration changes meaning and `AssistanceConfig.version` stays `4`.
 The table is spelled as a spread of `SILENT_ASSISTANCE` rather than as nine literals so
 that **D493**'s `boardLighting` restoration flows through it in either landing order.
 
-#### 4.3 `AssistanceContext.sessionKind` — pin the invariant, do not invent a difference
+#### 4.3 `AssistanceContext.sessionKind` — RETURNED: the owner chose a real ceiling
 
-No value in the returned table changes. Two things are added:
+D532 rejects this draft's option A and rules option C: context must remove capabilities. The
+previous section specified byte-equality across `sessionKind` and criterion 11 guarded that no-op;
+implementing it now would contradict the owner.
 
-1. A doc comment above `permittedAssistance` (`packages/runtime/src/assistance.ts`)
-   recording the invariant the function actually holds and why it is the right one:
+The ruling also exposed a shape mismatch that must be resolved before acceptance:
 
-   > Permission is a function of `deliveryOpen` and `role` only. `design/05` §4's two
-   > context clauses are both carried by `deliveryOpen`: *"a curated drill withholds by
-   > design"* is the pack's own `delayed_checkpoint` / `segment_end` policy, and *"Just
-   > Play is the learner's own game and they may want everything"* is the learner-initiated
-   > `attempt_end` reveal. `sessionKind` is declared for the shape of the context and is
-   > deliberately unread; see `rfc/assistance-controls.md` §Open questions 1.
+1. `RunSessionKind` distinguishes only `pack`, `position` and `imported`. The shipped preference
+   contexts are `pack`, `position`, `imported`, `match`, `stream` and `onramp`; `match`/`stream`
+   arrive through `liveKind`, while `onramp` arrives through `feedbackPolicy`. Neither reaches
+   `permittedAssistance`.
+2. The ruling's concrete pack example lowers lighting to the rules floor. `AssistanceConfig` can
+   request `boardLighting: "legal"`, but `AssistancePermission` has no `"legal"` value, and
+   `DrillScreen` only clamps requested `"evidence"` to `"sight"`. The return type cannot state or
+   enforce the example.
+3. O4 now requires `requested preset ∩ workflow/session ceiling ∩ honesty/access ∩ source
+   availability`, pointwise and narrowing-only. A branch over three run kinds is not that contract
+   and would fork ceiling logic before F5 compiles it.
 
-2. A regression guard in **`packages/runtime/src/adaptive-guidance.test.ts`**, extending its
-   existing case *"implements the assistance table with silence as the universal default"* —
-   which already pins `SILENT_ASSISTANCE`'s exact nine-field shape and already calls
-   `permittedAssistance` four times. No new test file is created. The guard asserts that
-   `permittedAssistance` is deep-equal across all three `RunSessionKind` values, over the
-   full cartesian product of the other declared fields as they exist when the test is
-   written (today: 2 `deliveryOpen` × 4 `role` = 8 cases; after `teacher-surface` lands,
-   × 2 `seatedInContest` × 2 `reviewing` = 32). Its client-side sibling
-   `apps/web/src/lib/client-surface-floor.test.ts` already pins the `role` dimension —
-   *"keeps every non-host assistance permission pointwise at or below the host ceiling"* —
-   and is not modified.
-
-**This guard cannot fail today and the RFC says so** (see criterion 11). It is not evidence
-of anything; it is a tripwire that fires the day someone branches on `sessionKind` without
-a design ruling, which is the exact hazard D307 identifies.
+Before independent review the author must either **split** the already-ruled reveal/guided/default
+fixes (D308/D309 and §4.2) into an independently accepted RFC and route D532 wholly to F5, or
+**adopt** F5's compiled workflow-context input plus a pointwise permission clamp here. No default is
+taken. In either shape the final table must name what all six shipped contexts may never show;
+presets may request less and may never raise the table.
 
 ### 5. Register claims — nothing versioned
 
@@ -547,7 +547,7 @@ Verified at HEAD by reading the constants, not the register:
 | `DRILL_PACK_SCHEMA_VERSION` | `0.27` (`packages/schema/src/index.ts`) | none — 0.28 is held by `graduation-clearance`, 0.29 is the next free lane and this RFC does not take it |
 | `DRILL_RUN_SCHEMA_VERSION` | `0.17` | none — no new event type, no new field; `feedback.revealed` already exists |
 | `SHAPE_ENTRY_SCHEMA_VERSION` | `0.3` | none |
-| `STORAGE_VERSION` | `23` (`apps/server/src/storage.ts`) | none — no DDL, no migration position; the ladder `teacher-surface` → `learner-rating` is untouched |
+| `STORAGE_VERSION` | `24` (`apps/server/src/storage.ts`) | none — no DDL and no migration position |
 | `AssistanceConfig.version` | `4` | none — no key added, no key's domain changed, `migrate` untouched |
 | REST surface | — | none — no route, no method, no error code |
 
@@ -692,13 +692,13 @@ Each criterion names how it fails, because a criterion that cannot fail is not a
     which would silently re-enable guidance for a learner who turned it off — the exact
     shape of a control that cannot be turned off, which §3b names as one of Clippy's four
     failures.
-11. **`permittedAssistance` is invariant in `sessionKind`.** Deep-equal across all three
-    `RunSessionKind` values over the full cartesian product of the other declared fields.
-    — **This is a regression guard and it cannot fail today**, stated plainly so it is not
-    scored as evidence of anything. It fires the day a `sessionKind` branch is added
-    without the design ruling §Open questions 1 asks for.
+11. ~~**`permittedAssistance` is invariant in `sessionKind`.**~~ **WITHDRAWN by D532.** The owner
+    ruled a real context ceiling. Its replacement must enumerate every shipped workflow context,
+    prove pointwise narrowing against requested preferences, and include a negative fixture showing
+    that one context cannot request a capability another forbids. Until §4.3's input/permission
+    shape is settled, this criterion stays explicitly missing rather than asserting rejected behavior.
 12. **Nothing versioned.** `DRILL_PACK_SCHEMA_VERSION` `0.27`, `DRILL_RUN_SCHEMA_VERSION`
-    `0.17`, `SHAPE_ENTRY_SCHEMA_VERSION` `0.3`, `STORAGE_VERSION` `23` and
+    `0.17`, `SHAPE_ENTRY_SCHEMA_VERSION` `0.3`, `STORAGE_VERSION` `24` and
     `AssistanceConfig.version` `4` are unchanged by this RFC's diff. — *Fails if* the
     on-ramp default is implemented inside `migrate`, which is the tempting place and would
     change what stored configurations mean, requiring `version: 5` and a migration branch.
@@ -723,8 +723,8 @@ none
 
 ## Open questions
 
-1. **Does assistance *permission* vary by session kind at all? — NON-BLOCKING; this RFC is
-   implementable under any answer, and §4.3 ships under the recommendation.**
+1. ~~**Does assistance permission vary by session kind at all?**~~ **ANSWERED by owner ruling
+   D532: yes, implement a real per-context ceiling (option C).**
 
    `design/05` §4 asks *"What assistance is permitted here?"* and answers *"A curated drill
    withholds by design. Just Play is the learner's own game and they may want everything."*
@@ -739,10 +739,8 @@ none
    | **B — remove the constraint by removing the field** | Delete `sessionKind` from `AssistanceContext`; update six non-test call sites | ~10 lines across `packages/runtime`, `apps/server` (×2 files), `apps/web` | Maximally honest: the signature stops promising a lever. **Cost:** it collides with `rfc/teacher-surface.md` §5.2b, whose normative interface block includes `sessionKind`; it can only be done as a follow-up after that RFC lands, so it is not available today |
    | **C — implement properly: rule a real difference now** | The owner rules a per-kind ceiling, e.g. a pack's pre-disclosure `boardLighting`/`arrows` drop to the rules floor while `position`/`imported` keep structural sight — *"a curated drill withholds by design"* taken literally | one expression in `permittedAssistance` + tests + a design amendment | Gives the field a real job and makes §4's first clause visible rather than implied. **Cost, and it is the honest one:** this is a **narrowing of a shipped surface with no measurement behind it**, which `rfc/archive/live-marker-quality.md` L6 refuses when done by argument. It would have to be ruled as design intent, not justified as evidence. It also re-opens §6 Q1, which design has marked open |
 
-   **Recommendation: A now, B as a follow-up if the owner rules that no kind-keyed
-   difference will ever exist, C only as an explicit design amendment.** Option C is listed
-   because a fork that offers only "keep the dead field or delete it" is a fork that omits
-   *implement it properly*, and that is not a fork this repo accepts.
+   **The owner chose C.** §4.3 records why the original `sessionKind` seam is insufficient and why
+   the author must coordinate with F5 rather than invent a three-row approximation.
 
 2. **Should a pack-loaded run see the whole shape catalogue or only its declared subset?**
    `SessionController.#loadShapes` loads a pack's declared `document.shapes` for pack runs
@@ -774,3 +772,6 @@ none
   written. §Scope, §2.4 and §4.3 are written against the moved tree; §4.2's spread-based
   default table was chosen before the move and survived it unchanged, which is the reason
   it was written that way.
+- 2026-08-22: returned on D715 after folding D532. Option A and its invariant criterion are
+  withdrawn; the current context and permission vocabularies cannot express option C across the six
+  shipped profiles. The independent D308/D309/default subset remains buildable and may be split.
