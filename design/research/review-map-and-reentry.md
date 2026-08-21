@@ -2,8 +2,7 @@
 
 **Platform-alignment question:** R7  
 **Date:** 2026-08-21  
-**Status:** shipped-product and targeted desk arms answered; same-game candidate prototype and owner
-use remain  
+**Status:** mechanical and targeted desk arms answered; owner use and O7 ruling remain
 **Instrument:** `tools/r7-review-map-harness/`
 
 ## Verdict
@@ -23,16 +22,18 @@ objects:
 2. a **grounded explanation packet** that may combine exact facts without changing their source;
 3. an **action door**—retry, branch/compare, cited theory or drill—whose target is the same position.
 
-The current Story has part of 1, a strong foundation for 2, and only one form of 3. F6 cannot be
-drafted yet: R7 still owes the same-game candidate comparison and O7 must decide which semantic
-families may become moments and what role an engine threshold plays.
+The current Story has part of 1, a strong foundation for 2, and only one form of 3. The fixed-game
+comparison now adds two constraints: local semantic selection still overproduces on a long game,
+while retained engine evidence reaches only openings. F6 cannot be drafted until O7 rules the
+whole-game bound, admitted moment families and the engine's optional role.
 
 ## Method
 
 The current-product arm executed one legal castling edge through both sealed F2 selection and
 `storyMoments()`, inspected the compiled consumer and renderer, traced private/public/card/re-entry
-paths, counted action doors, and pinned the result in four executable checks plus a generated
-read-only report. `[V]`
+paths, counted action doors, and pinned the result in five executable checks plus generated
+read-only reports. The candidate arm ran three policies over the same eight stratified mainlines and
+measured recorded-evaluation reach over all 49 eligible authored mainlines. `[V]`
 
 The targeted desk arm used current official/product sources. Vendor pages establish offered behavior,
 not pedagogical effectiveness or explanation correctness. No paid/login-gated hands-on session was
@@ -142,16 +143,31 @@ one bounded moment projection
   abstention: zero useful moments is a valid result
 ```
 
-The same-game experiment must compare at least three policies over fixed recorded games: current
-Story ranking; one-moment engine-pivot baseline; and a mixed exact-event policy with module-specific
-eligibility and at most one optional engine context. Measure moment count, source mix,
-repeated/generic families, recall of the primary fact, chosen action, and whether retry precedes
-analysis reveal. A policy fails automatically if it creates a moment with no action, changes
-private/public IDs, fills spare budget with D686-style generic facts, or uses an LLM to select/grade.
+### 3.1 Same-mainline result
+
+The experiment compared current Story, a one-pivot recorded-engine baseline, and a narrow mixed
+exact-event policy over two opening, two middlegame, two endgame and two cross-phase mainlines. `[V]`
+The mixed arm applies module eligibility before F2 selection, retains at most one exact fact per
+node, assigns every retained item a retry/branch action, and permits zero.
+
+- Short games yielded **0–2** mixed moments, including honest abstention in two cases.
+- The 52- and 60-ply trajectories yielded **13 and 16** moments. This is D690: even disciplined
+  local selection cannot supply the whole-game bound. A second selector must choose among locally
+  eligible moments; its unused budget must remain empty.
+- Current Story reached its fixed eight-card ceiling on both long trajectories, while selecting
+  **0–3** moments on the six shorter games. Its cap bounds volume but does not solve D689's input or
+  action problem.
+- Retained recorded evaluations support consecutive-ply comparison on **20/20 opening** mainlines
+  and **0/29** middlegame/endgame mainlines (also 0/2 cross-phase). This is D691: an engine pivot is
+  optional context at current reach, not a general review prerequisite.
+
+The candidate establishes architecture, not the final policy: **module eligibility → local evidence
+selection → whole-game moment selection → action-bound rendering**. O7 still owns the final
+families, whole-game count/default, engine role and disclosure sequence.
 
 ## Residual and routing
 
-- **R7:** build and run the same-game candidate instrument; owner use replaces recruited panels.
+- **R7:** mechanical and desk arms are complete; owner use replaces recruited panels.
 - **O7:** rule moment families, engine-label role, default bound, theory/human context and share forms.
 - **F6:** one compiled moment projection for private Story, public share and social card; action doors;
   deterministic fallback; D687/D688 repair.
@@ -159,5 +175,5 @@ private/public IDs, fills spare budget with D686-style generic facts, or uses an
 - **F7:** owns theory/drill identity joins; absence must remain honest.
 - **F9:** longitudinal focus is excluded from the per-game selector.
 
-R7 is **not complete**. The current-product and targeted competitor arms are complete; the fixed-game
-candidate comparison and owner-use decision remain.
+R7's **mechanical research is complete**. Owner use and O7's product ruling remain; neither is
+manufactured by the harness.

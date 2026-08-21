@@ -4022,3 +4022,20 @@ attack/defence/structure moments. Current sources isolate the transferable piece
 guided ritual, Lichess's verdict-hidden retry, Beacon's candidate/reply continuity and Quackmate's
 one-moment/share ritual. Engine grades, best-move defaults and ungrounded causal prose remain
 refused. The next R7 unit is the same-game three-policy instrument; no F6 RFC is authorized.
+
+## 2026-08-21 — R7 same-mainline policy comparison
+
+The disposable R7 instrument ran current Story, a one-pivot recorded-engine baseline and a narrow
+mixed-exact policy over the same eight stratified authored mainlines; five focused checks pass. The
+mixed policy applies module eligibility before F2 selection, keeps at most one fact per node and
+gives every retained item a retry/branch action. It honestly produces zero on two short games, but
+still produces **13 and 16** moments on the 52/60-ply trajectories. D690 records the architectural
+result: local evidence selection cannot double as the whole-game Review Map selector. F6 needs a
+second declared stage with a game-level budget and honest unused capacity.
+
+The engine baseline exposed a separate reach constraint. Consecutive retained evaluations cover
+**20/20 opening** mainlines and **0/13 middlegame, 0/14 endgame and 0/2 cross-phase** mainlines; full
+mainline coverage has the same split. D691 records that an engine pivot cannot be a universal Review
+prerequisite at HEAD. R7's mechanical and desk arms are complete. O7 still owns the admitted
+families, whole-game bound, engine role and shared action/provenance contract; owner use remains the
+experiential exit.
