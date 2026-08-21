@@ -1,4 +1,4 @@
-.PHONY: setup typecheck test test-browser schema-check register-check status-parity graduation-plan graduation-plan-check build verify pack-check shape-check expression-census graduation-report pack-preview source-fetch candidate-emit candidate-attach sourcing-check verify-draft tablebase-walk engine-walk up up-engines down
+.PHONY: setup typecheck test test-browser schema-check register-check status-parity intent-parity graduation-plan graduation-plan-check build verify pack-check shape-check expression-census graduation-report pack-preview source-fetch candidate-emit candidate-attach sourcing-check verify-draft tablebase-walk engine-walk up up-engines down
 
 setup:
 	pnpm install --frozen-lockfile
@@ -23,6 +23,9 @@ status-parity:
 	node --test tools/status-parity.test.mjs
 	node tools/status-parity.mjs
 
+intent-parity:
+	node --test tools/intent-parity-harness/audit.test.mjs
+
 graduation-plan:
 	node tools/graduation-clearance-plan.mjs
 
@@ -33,7 +36,7 @@ graduation-plan-check:
 build:
 	pnpm build
 
-verify: typecheck test schema-check register-check status-parity graduation-plan-check
+verify: typecheck test schema-check register-check status-parity intent-parity graduation-plan-check
 
 pack-check:
 	@test -n "$(FILE)" || (echo "Usage: make pack-check FILE=<path-to-pack.json>" >&2; exit 2)

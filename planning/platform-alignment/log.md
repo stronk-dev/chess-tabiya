@@ -723,3 +723,15 @@ Append-only. Record research, rulings, RFC transitions, implementation closeout 
   internal pack ids. Both identities remain visible; the lookup follows the RFC's file-stem key.
 - D560 remains active: pack schema stays 0.27 and product clearance code, 92-document mutation,
   sidecar restamping, lane release and RFC archival remain behind Gate F and the owner budget call.
+
+## 2026-08-21 — D651 protected-intent parity closed
+
+- Replaced D640's stale-text detector with six positive contracts reading the amended `design/02`
+  through `05`, the Gate-F plan and the B4/B8/B9/B10 mirror in exploration gates.
+- The guard checks 30 required amendment anchors, five deliberately preserved open boundaries,
+  three amendment-after-history orderings and four measured cross-document gate pairs.
+- The old registry's unsupported provider-comprehension “open question” was refused rather than
+  carried forward; the approved handoff specifies conformance/fallback, while D649 descopes the
+  recruited-participant arm.
+- `make intent-parity` is read-only, byte-checks its report, runs under the built-in Node test
+  runner and is now a required `make verify` dependency. D651 is closed.

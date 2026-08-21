@@ -3858,3 +3858,17 @@ The first run found D658: six hand-table rows use source file stems that differ 
 pack ids. The classifier now binds the table to file stem and tests the divergent rook case. The
 guard is part of `make verify`. Pack schema remains 0.27 and no pack, sidecar or clearance state was
 mutated; schema 0.28, the product writer and the 92-document apply/archive remain held by Gate F.
+
+## 2026-08-21 — amended living intent gained a parity reader
+
+D651 replaces the disposable D640 stale-text detector with six positive contracts over the
+owner/Claude amendments in `design/02`–`05` and their gate mirror. The guard verifies the Choice-C
+appliance/D649 posture, compiled evidence authority, eligibility-before-selection, workflow/preset
+composition, deterministic renderer/optional LLM boundary, and the D560/Gate-F hold. It also keeps
+the real open questions open and asserts that amendments follow, rather than erase, history.
+
+The first focused run rejected the old harness's invented “provider wording comprehension” open
+question: it appears in neither the approved amendment handoff nor living intent, and D649 descopes
+the recruited-participant arm. The product boundary remains strict provider conformance with a
+deterministic fallback. `make intent-parity` uses Node's built-in runner, reads protected intent,
+byte-checks its derived contract report, writes nothing, and now runs inside `make verify`.

@@ -169,7 +169,7 @@ clears the process predecessor.
 - mirror any changed B/Gate wording into `planning/exploration/gates.md`;
 - update D640 with the exact amendment result;
 - append both platform-alignment and exploration logs;
-- update `tools/intent-parity-harness/` from a stale-text detector into a new-intent parity check;
+- **done 2026-08-21 (D651):** update `tools/intent-parity-harness/` from a stale-text detector into a new-intent parity check;
 - run that harness plus `make verify`;
 - do not edit an active product RFC in the same commit unless its own author round is explicitly in
   scope.

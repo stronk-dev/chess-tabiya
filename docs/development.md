@@ -48,6 +48,7 @@ pnpm install
 make verify
 make register-check
 make status-parity
+make intent-parity
 make graduation-plan
 make build
 make test-browser
@@ -67,6 +68,8 @@ verification. It also runs `make register-check`, which joins every active RFC's
 from the tree, refuses collisions, and prints the current next lanes. `make build` separately
 proves the Svelte production bundle. `make status-parity` binds the Active and Archive tables to
 their files, compares lifecycle tokens, and refuses malformed or ownerless surviving obligations.
+`make intent-parity` binds the owner/Claude amendments in living intent to their mirrored gate
+claims and deliberately preserved open questions; it reads those documents and never rewrites them.
 `make test-browser` builds and starts the default mock-backed application and
 runs the full Playwright episode in a separate browser CI job.
 
