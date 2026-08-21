@@ -21,8 +21,8 @@ authority-ready.
 
 | Existing RFC | Current register state | Alignment action before new drafting |
 |---|---|---|
-| `shared-resource-registers` | draft; A0/D638 confirms the stale-register class | Resolve Q1/Q2 and refresh its observations first; F1 should reuse its derivation machinery rather than duplicate it. |
-| `rfc-lifecycle-completion` | draft; D638 adds a concrete Archive set-equality failure | Resolve Q1-Q3 and absorb D638 before the alignment wave creates more active obligations. |
+| `archive/shared-resource-registers` | implemented 2026-08-21 at `fdece96` | Predecessor complete. F1 reuses its landed-vs-claimed discipline but does not add a parallel hand-written register. |
+| `archive/rfc-lifecycle-completion` | implemented 2026-08-21 at `7bdbafa`, archived at `ab5ae02` | Predecessor complete. F1 carries one Discharges section and the normal draft lifecycle. |
 | `archive/live-marker-quality` | implemented; A0-verified 2026-08-20 | Closed. Its admission rules are an input to O3/O4, not a parallel selector. |
 | `archive/dead-vocabulary` | implemented; A0-verified 2026-08-20 | Closed. Its declaration census feeds R6/F3; residual D428 remains separate. |
 | `archive/engine-leverage`, `archive/vocabulary-wiring` | implemented; A0-verified 2026-08-20 | Closed and historical pack lanes released. Their contracts are inputs to semantic v1; no new RFC may duplicate them. |

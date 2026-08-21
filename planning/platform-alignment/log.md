@@ -641,3 +641,22 @@ Append-only. Record research, rulings, RFC transitions, implementation closeout 
 - The standalone work-routing audit initially failed on freshly landed D650: the amendment recorded
   the protected-intent residual but routed it nowhere. `decision-queue.md` now names the required
   owner nod without making it, and the four-test routing audit is green again.
+
+## 2026-08-21 — F1 evidence-contract manifest drafted after its process predecessors
+
+- Re-derived the F1 gate against the amended intent, A3 detector conformance and A4 evidence
+  topology. The opening conditions are complete: O1-O4 are ruled, `design/03`-`05` mirror them,
+  and both shared-resource/lifecycle predecessors are implemented and archived.
+- Drafted `rfc/evidence-contract-manifest.md`. Its unit is the fourteen audited producer paths;
+  each must expose independently versioned producer/projection declarations and exact consumer
+  bindings or an explicit inspector/author/operator/experimental/retired disposition.
+- Kept the scope below F2/F5: no detector is declared significant or good/bad, no local selector,
+  module, preset, workflow default, theory source or content migration is invented. The LLM remains
+  an optional renderer after eligibility and selection, with deterministic provider-off output.
+- The draft claims no existing shared-resource lane. Its IDs are an extensible set with per-entry
+  versions, and duplicate `(id, version)` declarations fail compilation; no global copied manifest
+  version or generated snapshot is introduced.
+- Graduation clearance remains separately blocked on its recorded one-line author correction:
+  criterion 13 names withdrawn `GRADUATION_CLEARANCE_SUBJECT_UNSUPPORTABLE`; the normative table and
+  criterion 17 require `GRADUATION_CLEARANCE_SUBJECT_UNGRAMMATICAL`. D560 still gates corpus apply.
+- Next: exact-symbol/buildability and cross-review of F1; only an accepted RFC authorises code.
