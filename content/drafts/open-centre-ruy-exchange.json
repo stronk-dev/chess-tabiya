@@ -36,7 +36,7 @@
       {
         "kind": "plan_consequence",
         "planClassId": "neutralize-the-file",
-        "to": "achieved"
+        "to": "preserved"
       },
       {
         "kind": "structural_feature",

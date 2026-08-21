@@ -112,7 +112,7 @@ async function setup(pack?: DrillPackDefinition, maiaMoves?: readonly string[], 
   const queue = new EvidenceJobQueue(evidence, { maxConcurrency: 1 });
   const registry = pack === undefined ? undefined : await PackRegistry.fromDocuments([{ source: "group-pack", value: pack }]);
   const service = new RunService(storage, { evidenceQueue: queue, opponentSelector: selector, ...(registry === undefined ? {} : { packRegistry: registry }) });
-  return { storage, engines, selector, evidence, queue, service, handler: createRestHandler(service, selector) };
+  return { storage, engines, selector, evidence, queue, registry, service, handler: createRestHandler(service, selector) };
 }
 
 async function runFrom(response: Response): Promise<DrillRun> {
@@ -282,6 +282,49 @@ describe("branch-group service and REST contract", () => {
     const grouped = await request(environment.handler, "POST", "/runs/group-authored-run/group", { source: "authored", size: 2, at });
     expect(grouped.status).toBe(200);
     expect(groupsFromEvents(((await grouped.json()) as { readonly run: DrillRun }).run)[0]?.members).toHaveLength(2);
+  });
+
+  it("does not release a pack-wide claim when a group seed mates before an authored sibling is reached", async () => {
+    const document: DrillPackDefinition = {
+      id: "group-terminal-claim",
+      version: "0.1.0",
+      title: "Group terminal claim fixture",
+      mode: "plan",
+      phase: "opening",
+      start: {
+        fen: "rnbqkbnr/pppp1ppp/8/4p3/6P1/5P2/PPPPP2P/RNBQKBNR b KQkq - 0 2",
+        side: "black",
+      },
+      objective: { type: "play_until_checkpoint", summary: "Exercise group-seed feedback withholding." },
+      spine: [
+        { id: "mate", moveUci: "d8h4", moveSan: "Qh4#", children: [] },
+        { id: "knight", moveUci: "g8f6", moveSan: "Nf6", children: [] },
+        { id: "center", moveUci: "d7d5", moveSan: "d5", children: [] },
+      ],
+      checkpoints: [{ id: "start", trigger: { atStart: true } }],
+      feedbackClaims: [{ id: "whole-tree", text: "The authored tree has been rehearsed.", evidenceTypes: ["hypothesis"] }],
+      opponentPolicy: { mode: "human_common", seedMode: "fixed", targetElo: 1600 },
+      feedbackPolicy: "segment_end",
+      provenance: { reviewStatus: "draft", sources: [], reviewers: [] },
+    } as DrillPackDefinition;
+    const environment = await setup(document); stores.push(environment.storage);
+    const created = await request(environment.handler, "POST", "/runs", {
+      id: "group-terminal-claim-run",
+      session: { kind: "pack", packId: document.id },
+      policyConfig: { seedMode: "fixed", locus: { executedAt: "server", engineIds: [], modelIds: [] } },
+      seed: 41,
+      createdAt: at,
+    });
+    expect(created.status).toBe(201);
+    const grouped = await request(environment.handler, "POST", "/runs/group-terminal-claim-run/group", {
+      source: "hand_picked",
+      candidates: ["d8h4", "g8f6"],
+      at,
+    });
+    expect(grouped.status).toBe(200);
+    const result = await grouped.json() as { readonly run: DrillRun };
+    expect(result.run.events.some((event) => event.type === "outcome.reached")).toBe(true);
+    expect(environment.service.authoredFeedback(result.run.id).items.filter((item) => item.kind === "claim")).toEqual([]);
   });
 
   it("records but does not gate the eight-member creation envelope", async () => {

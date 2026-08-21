@@ -41,7 +41,7 @@ describe("principle registry",()=>{
     const registry=await PackRegistry.loadDefault({development:true,principles});
     const pack=registry.required("philidor-third-rank-hold");
     expect(pack.boundClaimIds.has("philidor-is-drawn")).toBe(true);
-    expect(pack.claimBackings.get("philidor-is-drawn")).toMatchObject({binding:"author_attributed",rendered:expect.arrayContaining([expect.stringContaining("Syzygy")]),principles:[expect.objectContaining({id:"authored-teaching-is-declared"})]});
+    expect(pack.claimBackings.get("philidor-is-drawn")).toMatchObject({binding:"author_attributed",instrumentKinds:["tablebase_result","tablebase_result","tablebase_result","tablebase_result"],rendered:expect.arrayContaining([expect.stringContaining("Syzygy")]),principles:[expect.objectContaining({id:"authored-teaching-is-declared"})]});
     expect(pack.document.feedbackClaims?.find((claim)=>claim.id==="philidor-is-drawn")?.text).toContain("This exact position is a tablebase draw");
   });
 });

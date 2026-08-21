@@ -88,6 +88,13 @@ legality. Opponent moves use the selection-aware helper described below.
   emitted order is always `branch.forked` followed by `move.committed`.
 - `fork(nodeId, label?, intent?)` creates an empty explicit branch and moves the
   cursor to it. Its first move does not create another branch.
+
+Objective states `achieved`, `failed`, and `transitioned` remain absorbing and refuse a later move.
+Pack validation therefore replays every top-level authored edge through the same checkpoint and
+objective orchestrator used at runtime. If one of those states is reached at a spine node that still
+has authored children, the pack fails with `OBJECTIVE_ABSORBS_BEFORE_AUTHORED_BOUNDARY`. A terminal
+transition at an authored leaf remains valid. This binds authoring to the core loop: a pack cannot
+validate consequence moves that its own objective makes unplayable.
 - `rewind(nodeId)` changes only the cursor and appends `run.rewound`. Existing
   nodes and branches remain unchanged. Rewind by the latest matching checkpoint is
   also available.

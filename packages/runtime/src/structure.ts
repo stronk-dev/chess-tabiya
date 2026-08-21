@@ -444,7 +444,7 @@ const STRUCTURE_METADATA: Readonly<Record<StructureId, Omit<StructureMatch, "id"
 });
 
 function observationKey(value: StructuralObservation): string { return JSON.stringify(value); }
-function observationIdentity(value: StructuralObservation): string {
+export function observationIdentity(value: StructuralObservation): string {
   if (value.kind === "pawn_safe_square") return JSON.stringify({ kind: value.kind, color: value.color, squares: value.squares });
   return observationKey(value);
 }

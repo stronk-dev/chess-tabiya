@@ -96,6 +96,7 @@ export {
   matchesStructuralExpression,
   matchesStructuralFeature,
   mirrorExpression,
+  observationIdentity,
   pawnSafety,
   structuralDelta,
   structuralFeatureKinds,

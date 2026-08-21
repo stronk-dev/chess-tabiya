@@ -10,6 +10,7 @@
   import Chessboard from "./Chessboard.svelte";
   import type { StartSide } from "./board-model.js";
   import { theoryVerdictSentence, UNKNOWN_THEORY_NOTE } from "./theory-presentation.js";
+  import { claimProvenance } from "./claim-presentation.js";
 
   interface Props {
     checkpoint: CheckpointNotice;
@@ -142,6 +143,8 @@
                 {/if}
                 {#if item.description}<p>{item.description}</p>{/if}
                 {#if item.gradability === "declared_uncheckable"}<p>This plan has no structural signature, so the drill does not check it.</p>{#if item.gradabilityNote}<p>{item.gradabilityNote}</p>{/if}{/if}
+              {:else if item.kind === "claim"}
+                <span class="kind">Author's claim</span><p>{item.text}</p><small>{claimProvenance(item)}</small>
               {:else}
                 <span class="kind">Theory</span><p>{theoryVerdictSentence(item, run)}</p>
               {/if}

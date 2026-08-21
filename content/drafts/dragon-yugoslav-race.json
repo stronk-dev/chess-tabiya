@@ -37,33 +37,7 @@
   },
   "objective": {
     "type": "preserve_plan_window",
-    "summary": "You have the Black side, and Black is the side to move in this position — that is why this pack seats you here rather than opposite. The kings stand on opposite wings: White's on c1, yours on g8, which is exactly the pair of conditions the shape library's opposite-castling-race trigger tests. Complete this pack's authored queenside arrangement — rook to c8, knight to e5, rook to c5 — before White's h-pawn reaches h5, and without spending more than one move outside that arrangement. Everything the window records is arithmetic about your move order; none of it is a claim that the arrangement is correct.",
-    "successConditions": [
-      {
-        "kind": "timing_window",
-        "windowId": "arrange-before-h5",
-        "verdict": "in_time",
-        "to": "achieved"
-      },
-      {
-        "kind": "timing_window",
-        "windowId": "arrange-before-h5",
-        "verdict": "over_budget",
-        "to": "degraded"
-      },
-      {
-        "kind": "timing_window",
-        "windowId": "arrange-before-h5",
-        "verdict": "too_slow",
-        "to": "failed"
-      },
-      {
-        "kind": "timing_window",
-        "windowId": "arrange-before-h5",
-        "verdict": "premature",
-        "to": "failed"
-      }
-    ]
+    "summary": "You have the Black side, and Black is the side to move in this position — that is why this pack seats you here rather than opposite. The kings stand on opposite wings: White's on c1, yours on g8, which is exactly the pair of conditions the shape library's opposite-castling-race trigger tests. Complete this pack's authored queenside arrangement — rook to c8, knight to e5, rook to c5 — before White's h-pawn reaches h5, and without spending more than one move outside that arrangement. Everything the window records is arithmetic about your move order; none of it is a claim that the arrangement is correct."
   },
   "concepts": [
     "opposite-side-castling",

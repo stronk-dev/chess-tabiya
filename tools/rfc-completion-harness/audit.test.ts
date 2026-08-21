@@ -39,7 +39,7 @@ describe("D637/D638 RFC completion truth", () => {
     expect(activeRows).toEqual(rootRfcFiles);
     expect(ACTIVE_TRUTH.map((row) => row.rfc).sort()).toEqual(activeRows);
     expect(archiveRows).toEqual(archiveFiles);
-    expect(new Set(archiveRows).size).toBe(63);
+    expect(new Set(archiveRows).size).toBe(64);
   });
 
   it("proves every archived body calls itself implemented and every canonical docs link resolves", () => {
@@ -95,7 +95,7 @@ describe("D637/D638 RFC completion truth", () => {
       "# D637/D638 RFC completion truth — raw output",
       "",
       `Archive files: ${archiveFiles.length}; Archive-table rows: ${archiveRows.length}; self-declared implemented: ${archiveFiles.length}.`,
-      "Canonical documentation links: all resolve. Planning record: 59 dedicated archived logs + 4 A0 global closeouts.",
+      "Canonical documentation links: all resolve. Planning record: 60 dedicated archived logs + 4 A0 global closeouts.",
       "Independent current per-RFC clean-tree re-verification: 4 (live-marker-quality, dead-vocabulary, engine-leverage, vocabulary-wiring).",
       "Current 1.0 capability proof: not implied by archive state; A1 proves only the drill loop and native human match as integrated journeys.",
       "",
@@ -109,16 +109,15 @@ describe("D637/D638 RFC completion truth", () => {
       "",
       "## Completion levels",
       "",
-      "1. Lifecycle-closed: 63/63 archive files are now registered, label themselves implemented, link to existing canonical docs and carry a planning record.",
+      "1. Lifecycle-closed: 64/64 archive files are now registered, label themselves implemented, link to existing canonical docs and carry a planning record.",
       "2. Independently reverified against current code: four RFCs have a named A0 clean-tree per-RFC trace. Aggregate verification of HEAD is not a substitute for re-deriving all historical criteria.",
       "3. Current 1.0 outcome-complete: archive membership says nothing about this level; capability/workflow audits own it and currently reject the shared evidence pool, guided defaults, Review Map, theory bundle, bot personality, player identity, campaign and release appliance as complete.",
       "",
       "## Dirty feedback-delivery boundary",
       "",
-      "The worktree contains Stage-1 code and two CR1 instruments, while the committed RFC remains accepted and unimplemented. The starting measurement/log still records the invalid one-ply 100% result; the later diagnosis records a properly-shaped N=8 result of 27.6–35.7%. Reconcile those records before landing Stage 1, and do not archive until the separate authored Stage 2 obligation is discharged.",
+      "The worktree contains Stage-1 code and corrected CR1 instruments, while the committed RFC remains accepted and unimplemented. D645's foundation repair moved C1 reach from 42/50 to 50/50; criterion 20's author conflict and the landing-time gate edit remain. Do not archive feedback-delivery until the separate authored Stage 2 obligation is discharged.",
       "",
     ];
     writeFileSync(OUT, lines.join("\n"));
   });
 });
-

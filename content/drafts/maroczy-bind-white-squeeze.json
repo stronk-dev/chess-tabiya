@@ -36,33 +36,7 @@
   },
   "objective": {
     "type": "preserve_plan_window",
-    "summary": "You have the White side of the Maroczy bind: pawns on c4 and e4, the d-file half-open for you, the c-file half-open for Black. Complete the restraining arrangement — a rook on c1 and the pawn on b3 — before Black's ...b5 lever arrives, and without spending more than one move on anything else.",
-    "successConditions": [
-      {
-        "kind": "timing_window",
-        "windowId": "hold-the-b5-lever",
-        "verdict": "in_time",
-        "to": "achieved"
-      },
-      {
-        "kind": "timing_window",
-        "windowId": "hold-the-b5-lever",
-        "verdict": "over_budget",
-        "to": "degraded"
-      },
-      {
-        "kind": "timing_window",
-        "windowId": "hold-the-b5-lever",
-        "verdict": "too_slow",
-        "to": "failed"
-      },
-      {
-        "kind": "timing_window",
-        "windowId": "hold-the-b5-lever",
-        "verdict": "premature",
-        "to": "failed"
-      }
-    ]
+    "summary": "You have the White side of the Maroczy bind: pawns on c4 and e4, the d-file half-open for you, the c-file half-open for Black. Complete the restraining arrangement — a rook on c1 and the pawn on b3 — before Black's ...b5 lever arrives, and without spending more than one move on anything else."
   },
   "concepts": [
     "maroczy-bind",

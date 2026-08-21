@@ -7,6 +7,7 @@
   import OutcomeContext from "./OutcomeContext.svelte";
   import type { DrillRun } from "@chess-tabiya/runtime";
   import { theoryVerdictSentence, UNKNOWN_THEORY_NOTE } from "./theory-presentation.js";
+  import { claimProvenance } from "./claim-presentation.js";
 
   interface Props {
     outcome: RunOutcome;
@@ -49,6 +50,7 @@
               {#if item.kind === "annotation"}{item.text}
               {:else if item.kind === "deviation"}{item.note}
               {:else if item.kind === "plan_class"}<strong>{item.label}</strong>{#if item.shapePlan}{@const plan=shapes.find((entry)=>entry.id===item.shapePlan!.shape)?.plans.find((candidate)=>candidate.id===item.shapePlan!.plan)}{#if plan} — {plan.description}{/if}{/if}{#if item.description} — {item.description}{/if}{#if item.gradability === "declared_uncheckable"}<p>This plan has no structural signature, so the drill does not check it.</p>{#if item.gradabilityNote}<p>{item.gradabilityNote}</p>{/if}{/if}
+              {:else if item.kind === "claim"}<span class="kind">Author's claim</span><p>{item.text}</p><small>{claimProvenance(item)}</small>
               {:else}{theoryVerdictSentence(item, run)}
               {/if}
             </li>

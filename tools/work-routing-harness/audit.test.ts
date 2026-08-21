@@ -27,11 +27,10 @@ function ledgerRows(): readonly LedgerRow[] {
 }
 
 describe("D641 minimum work-routing audit", () => {
-  it("pins the ledger population and unique ids after the refresh", () => {
+  it("pins unique ids and the refresh closeout without freezing later ledger growth", () => {
     const rows = ledgerRows();
-    expect(rows).toHaveLength(590);
+    expect(rows.length).toBeGreaterThanOrEqual(590);
     expect(new Set(rows.map((row) => row.id)).size).toBe(rows.length);
-    expect(rows.filter((row) => !CLOSED.has(row.status))).toHaveLength(354);
     expect(rows.find((row) => row.id === "D99")?.status).toBe("✅");
     expect(rows.find((row) => row.id === "D641")?.status).toBe("✅");
   });
@@ -75,6 +74,7 @@ describe("D641 minimum work-routing audit", () => {
       ...ROUTE_GROUPS.map((group) => `| ${group.destination} | ${group.ids.join(", ")} | ${group.action} |`),
       "",
     ];
-    writeFileSync(OUT, lines.join("\n"));
+    const rendered = lines.join("\n");
+    if (readFileSync(OUT, "utf8") !== rendered) writeFileSync(OUT, rendered);
   });
 });

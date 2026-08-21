@@ -177,6 +177,24 @@ export type AuthoredFeedbackItem =
       readonly spineNodeId?: string;
       readonly deviationClass?: string;
       readonly deviationMistakes?: readonly string[];
+    }
+  | {
+      readonly kind: "claim";
+      readonly id: string;
+      readonly revealedBy: RevealAttribution;
+      readonly anchor: { readonly claimId: string };
+      readonly text: string;
+      readonly evidenceTypes: readonly string[];
+      readonly earnedEvidenceTypes: readonly string[];
+      readonly binding: "ledger_bound" | "author_attributed" | "self_declared";
+      readonly authorSpans: readonly string[];
+      readonly principles: readonly {
+        readonly id: string;
+        readonly name: string;
+        readonly statement: string;
+        readonly standsOn: string;
+        readonly counterCase: string;
+      }[];
     };
 
 export interface AuthoredFeedbackPage {

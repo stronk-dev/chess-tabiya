@@ -438,7 +438,7 @@ describe("server-side feedback withholding", () => {
       objective: {
         type: "play_until_checkpoint",
         summary: "Reach reveal",
-        successConditions: [{ kind: "reach_checkpoint", checkpointId: "reveal" }],
+        successConditions: [{ kind: "reach_checkpoint", checkpointId: "reveal", to: "preserved" }],
       },
     });
     const environment = await setup(delayed);
@@ -651,7 +651,7 @@ describe("server-side feedback withholding", () => {
         type: "play_until_checkpoint",
         summary: "Finish segment",
         successConditions: [
-          { kind: "reach_checkpoint", checkpointId: "segment-finish" },
+          { kind: "reach_checkpoint", checkpointId: "segment-finish", to: "preserved" },
         ],
       },
     });

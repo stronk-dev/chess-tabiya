@@ -41,7 +41,7 @@
       {
         "kind": "plan_consequence",
         "planClassId": "hold-the-base",
-        "to": "achieved"
+        "to": "preserved"
       },
       {
         "kind": "structural_feature",

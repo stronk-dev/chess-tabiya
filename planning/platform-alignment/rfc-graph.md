@@ -21,8 +21,8 @@ authority-ready.
 | `archive/dead-vocabulary` | implemented; A0-verified 2026-08-20 | Closed. Its declaration census feeds R6/F3; residual D428 remains separate. |
 | `archive/engine-leverage`, `archive/vocabulary-wiring` | implemented; A0-verified 2026-08-20 | Closed and historical pack lanes released. Their contracts are inputs to semantic v1; no new RFC may duplicate them. |
 | `teacher-surface` | accepted, unbuilt | Do not blindly implement as “coach mode.” R15/O11 decide whether it implements unchanged or is amended first. |
-| `graduation-clearance` | accepted, unbuilt; 0.28 held | Implement after worktree coordination; its clearance is an input to Gate F, not Gate F itself. |
-| `feedback-delivery` | accepted, Stage 1 dirty/in progress; measurement records disagree | Reconcile the corrected CR1 instrument, then finish authorised Stage 1 without absorbing unrelated work; Stage 2 remains subject to its ownership/content obligations and the D560 hold. |
+| `graduation-clearance` | accepted, unbuilt; 0.28 held; D642 split required | After Feedback Stage 1, correct stale criterion 13 and build the mechanism/read-only planner. D560 gates the 92-document apply/archive; clearance remains an input to Gate F, not Gate F itself. |
+| `feedback-delivery` | accepted, Stage 1 dirty; CR1 repaired; D644 acceptance conflict | Narrowly author-correct criterion 20, close D643's explicit Stage-1 matrix and land without absorbing unrelated work; Stage 2 remains subject to its ownership/content obligations and the D560 hold. |
 | `assistance-controls` | draft | Amend or supersede only after R3/O4; preserve the ruled real per-kind ceiling and already-identified wiring defects. |
 | `pack-population-provenance` | draft | Feed R4/R6/O5/O6. Do not consume its proposed schema lane until the knowledge and pack contracts settle. |
 | `learner-rating` | draft | Keep strength separate from F9 style/profile. Reconcile its storage/lifecycle claims before either lands. |

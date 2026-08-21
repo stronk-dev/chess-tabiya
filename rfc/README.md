@@ -204,6 +204,7 @@ before re-attempting this territory.
 
 | RFC | Status | Canonical docs link |
 |---|---|---|
+| `archive/authored-consequence-lifecycle.md` | implemented 2026-08-21 — D645/D646 closed; lifecycle replay 8→0 packs and Feedback C1 42/50→50/50 | `docs/branch-runtime.md`, `docs/outcome-drill-grading.md` |
 | `archive/branch-runtime.md` | implemented | `docs/branch-runtime.md` |
 | `archive/drill-pack-format.md` | implemented | `docs/drill-pack-format.md` |
 | `archive/engine-workers.md` | implemented | `docs/engine-workers.md` |

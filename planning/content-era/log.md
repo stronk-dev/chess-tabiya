@@ -3835,3 +3835,16 @@ until a second pass measured the pack start positions the sentence actually name
   anchor** for claims that name a position rather than a corpus.
 - **No `design/`, `rfc/`, `docs/`, `apps/`, `packages/` or `archive/` file touched, and nothing
   committed.**
+
+## 2026-08-21 — authored consequence lifecycle repair
+
+- Seven intermediate success conditions changed only their lifecycle target from `achieved` to
+  `preserved`: closed-centre Black, French Advance White, IQP Black, KID White, London Black,
+  French Exchange Black and Ruy Exchange Black.
+- Removed sixteen redundant `timing_window` conditions from Dragon, Panov, KID and Maroczy; the
+  already-shipped `preserve_plan_window` rules remain their sole verdict producer.
+- Narrowed IQP Black's structure-dissolved `transitioned` rule to `from: ["active"]`, so it cannot
+  overwrite preserved success before the authored final move.
+- No move, predicate expression, annotation, evidence label or chess claim was authored or changed.
+  Executable replay moved absorbing non-leaf paths from ten to zero and Feedback C1 from 42/50 to
+  50/50.

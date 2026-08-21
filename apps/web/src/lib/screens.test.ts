@@ -380,6 +380,17 @@ describe("Layer 3 screens", () => {
             revealedBy: { kind: "outcome", eventSeq: outcome.seq },
             anchor: { spineNodeId: "mate" },
             text: "The terminal authored explanation.",
+          }, {
+            kind: "claim",
+            id: "claim#terminal",
+            revealedBy: { kind: "outcome", eventSeq: outcome.seq },
+            anchor: { claimId: "terminal" },
+            text: "The terminal authored claim.",
+            evidenceTypes: ["derived_feature"],
+            earnedEvidenceTypes: [],
+            binding: "self_declared",
+            authorSpans: [],
+            principles: [],
           }],
           hasWithheldAuthoredContent: false,
         },
@@ -399,6 +410,8 @@ describe("Layer 3 screens", () => {
 
     expect(document.querySelector('[role="dialog"]')?.textContent).toContain("You won.");
     expect(document.body.textContent).toContain("The terminal authored explanation.");
+    expect(document.body.textContent).toContain("The terminal authored claim.");
+    expect(document.body.textContent).toContain("No machine record is attached.");
     expect(document.body.textContent).toContain("Engine evidence recorded");
     document.querySelector<HTMLButtonElement>(".sheet .actions button")!.click();
     expect(onRewind).toHaveBeenCalledWith({ nodeId: run.nodes[0]!.id });

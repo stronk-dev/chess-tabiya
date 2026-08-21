@@ -37,33 +37,9 @@
     "summary": "You are White in the King's Indian chain: pawns on c4, d5 and e4 against Black's on d6 and e5. Black's f-pawn is coming. Put the two pieces of the shape library's blunting arrangement that this spine reaches — the knight on d3 and the pawn on f3 — on their squares before a black pawn lands on f4, and spend at most one move on anything else. The window records only whether the arrangement was finished before the arrival; it does not say the arrangement is correct.",
     "successConditions": [
       {
-        "kind": "timing_window",
-        "windowId": "blunt-before-the-lock",
-        "verdict": "in_time",
-        "to": "achieved"
-      },
-      {
-        "kind": "timing_window",
-        "windowId": "blunt-before-the-lock",
-        "verdict": "over_budget",
-        "to": "degraded"
-      },
-      {
-        "kind": "timing_window",
-        "windowId": "blunt-before-the-lock",
-        "verdict": "too_slow",
-        "to": "failed"
-      },
-      {
-        "kind": "timing_window",
-        "windowId": "blunt-before-the-lock",
-        "verdict": "premature",
-        "to": "failed"
-      },
-      {
         "kind": "plan_consequence",
         "planClassId": "strike-the-base",
-        "to": "achieved"
+        "to": "preserved"
       }
     ]
   },

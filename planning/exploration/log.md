@@ -3646,3 +3646,87 @@ hazard and is closed; 74 genuine residues now have one primary destination in
 This closes omission only. D487 remains open because the other 280 mentions have not been proven
 unique, live or non-stale owners, and the future derived `make work-register` must make that state a
 verification failure. No feature implementation or content work was authorised.
+
+## 2026-08-20 — graduation-clearance readiness was reconciled with the later content hold
+
+The D642 audit confirmed the accepted 0.28 mechanism is absent and re-derived its migration
+population as 56 draft documents / 293 entries plus 36 candidate pack documents / 143 entries. It
+also found acceptance criterion 13 names a clearance issue code the RFC's normative table withdrew.
+
+The legal sequence is now explicit: recover Feedback Stage 1, correct that authoring defect, build
+the clearance mechanism and read-only migration plan, then expose mechanical versus enumerated
+judgement residue before asking the owner to approve any corpus apply under D560. No schema,
+product, protected design or authored content changed.
+
+## 2026-08-20 — Feedback Stage 1 was recovered to an honest author return
+
+The interrupted CR1 harness now uses eight-ply deterministic columns and reports N=8 admission at
+70/450 (15.6%), not the invalid one-ply 79/79. The false start remains in the measurement and log.
+`comparisonStrips` now shares the runtime's canonical observation identity.
+
+An explicit criteria audit then found the accepted RFC cannot satisfy criterion 20 as written:
+46 of 67 projected provenance rows contain vocabulary originating in authored principle statements
+or counter-cases that C8 requires rendered verbatim. D644 records the reproduced conflict and a
+narrow author-correction handoff. Stage 1 remains uncommitted; no content, schema or protected
+design changed.
+
+## 2026-08-20 — Feedback Stage 1 reached criterion-complete evidence except for its author conflict
+
+The D643 recovery now maps every Stage-1 acceptance criterion to executable proof or a named
+landing obligation. The full-spine driver measures the three populations separately and reaches
+42/50 packs, well above the 10% kill gate; eight uncredited replay residues remain named. On the
+real 44-fork corpus, CR1 admits 3,463/4,029 candidates (86.0%), still emits on 97.3% of plies and
+has 1.017x lift. That satisfies the accepted no-threshold measurement criterion but is negative
+evidence about the filter's learner value.
+
+Safety coverage now includes all-policy early-terminal refusal, group seeding, quiescence,
+ledger-less fallbacks, expression-census/refusal joins, withheld-flag parity, CR3 degeneracies,
+timing-strip identity, rebound withholding, `/voice` and `/speech` byte identity, and earned-only
+provenance labels. Stage 1 is still uncommitted: D644 requires the RFC author to correct criterion
+20's conflict with verbatim principle provenance, and K6/B4 is updated only in the landing commit.
+
+## 2026-08-20 — feedback reach failures were separated from driver failures
+
+The eight packs not credited by the Stage-1 walkthrough were re-run with the production
+plan-signature resolver. All eight still terminate their objective before full authored-spine
+coverage under every leaf ordering. D645 records that C1 is genuinely unreachable for this class;
+the measured 42/50 reach is the product result, not an incomplete-instrument denominator. The 10%
+kill gate remains clear, but the RFC author must disposition the permanently unreachable claims.
+
+## 2026-08-21 — D645 was promoted from feedback residue to foundation defect
+
+The owner rejected deferring the eight packs behind anchors and directed a proper fix now. A new
+disposable corpus replay located every absorbing transition: 8/50 packs, ten authored leaf paths,
+one to six authored plies hidden, all `achieved`. The result instantiates the already accepted D12b
+law — a state that stops play may only occur where play ended — and the thesis's mandatory
+consequence rule. It does not reopen runtime semantics.
+
+The same pass found D646: all four `preserve_plan_window` packs duplicate their type-owned verdict
+rules, so terminal authored copies can fire only one ply after the actual verdict. The research
+dossier selects a bounded repair: remove those duplicates, mark intermediate plan success as
+`preserved`, and add executable validation against absorbing non-leaf authored nodes.
+
+## 2026-08-21 — authored consequence lifecycle closed
+
+The bounded repair shipped in the worktree with both recurrence guards. A first re-run exposed and
+repaired one masked IQP `transitioned` rule; the second found zero absorbing authored continuations.
+Feedback C1 now reaches 50/50 without an anchor or softer predicate. Full verification is 766 tests
+across 117 files and browser is 25 passed / one optional skipped.
+
+## 2026-08-21 — Feedback Stage 1 closed its criterion audit
+
+D644 was corrected without changing C8: the deterministic template introduces zero prohibited
+chess-judgement tokens across 67 projected rows, while 46 rows retain such vocabulary verbatim
+inside explicitly attributed authored principle fields. The negative fixture proves the boundary
+by injecting `best` into template-owned text and refusing it.
+
+The landing measurement also replaces the obsolete authored-feedback gate baseline. Of 196 claims,
+98 are admitted and 98 are evidence-withheld pending the binding wave. Full authored-spine replay
+reaches 50/50 packs and actually renders 69/98 admitted claims; 29/98 remain timing-withheld because
+no released reveal occurrence remains. B4/K6 now carry all three populations. This closes Stage 1's
+criteria 1–20a, not the RFC: Stage 2 and its content closeout remain under D560.
+
+The criterion-complete tree then passed `make verify` (766 tests / 117 files, type/schema/scaffold/
+packaging green), the two disposable Feedback acceptance suites (4/4), the RFC lifecycle audit
+(5/5), and `make test-browser` (25 passed / one optional Maia-latency probe skipped). The evidence
+and browser gates therefore agree; no aggregate-green shortcut remains in this Stage-1 closeout.

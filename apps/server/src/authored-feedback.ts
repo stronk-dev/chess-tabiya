@@ -16,6 +16,7 @@ import {
 import { reachableAuthoredSpineIds } from "@chess-tabiya/schema/drill-pack";
 
 import type { PackRecord } from "./pack-registry.js";
+import { MACHINE_LABEL_EVIDENCE_KINDS } from "./sourcing/claim-binding.js";
 import {
   expandPackAuthoredBoundary,
   planSignatureResolver,
@@ -69,6 +70,24 @@ export type AuthoredFeedbackItem =
       readonly spineNodeId?: string;
       readonly deviationClass?: string;
       readonly deviationMistakes?: readonly string[];
+    }
+  | {
+      readonly kind: "claim";
+      readonly id: string;
+      readonly revealedBy: RevealAttribution;
+      readonly anchor: { readonly claimId: string };
+      readonly text: string;
+      readonly evidenceTypes: readonly string[];
+      readonly earnedEvidenceTypes: readonly string[];
+      readonly binding: "ledger_bound" | "author_attributed" | "self_declared";
+      readonly authorSpans: readonly string[];
+      readonly principles: readonly {
+        readonly id: string;
+        readonly name: string;
+        readonly statement: string;
+        readonly standsOn: string;
+        readonly counterCase: string;
+      }[];
     };
 
 export interface AuthoredFeedbackPage {
@@ -114,7 +133,7 @@ function revealIsReleased(pack: PackRecord, run: DrillRun, reveal: RevealEvent):
 }
 
 const KIND_ORDER: Readonly<Record<AuthoredFeedbackItem["kind"], number>> =
-  Object.freeze({ annotation: 0, deviation: 1, plan_class: 2, theory_verdict: 3 });
+  Object.freeze({ annotation: 0, deviation: 1, plan_class: 2, theory_verdict: 3, claim: 4 });
 
 function indexSpine(
   nodes: readonly SpineNode[],
@@ -252,6 +271,14 @@ function planClassSourceIds(pack: DrillPackDefinition): ReadonlySet<string> {
   return result;
 }
 
+export function admittedFeedbackClaimIds(pack: PackRecord): ReadonlySet<string> {
+  return new Set((pack.document.feedbackClaims ?? []).flatMap((claim) =>
+    claim.evidenceTypes.every(
+      (label) => MACHINE_LABEL_EVIDENCE_KINDS[label] === undefined || pack.boundClaimIds.has(claim.id),
+    ) ? [claim.id] : [],
+  ));
+}
+
 export function projectAuthoredFeedback(
   pack: PackRecord,
   run: DrillRun,
@@ -275,11 +302,24 @@ export function projectAuthoredFeedback(
     for (const source of sources) deliverable.add(source.id);
   }
   for (const sourceId of planClassSourceIds(pack.document)) deliverable.add(sourceId);
+  const admittedClaimIds = admittedFeedbackClaimIds(pack);
+  const claims = (pack.document.feedbackClaims ?? []).filter((claim) => admittedClaimIds.has(claim.id));
+  for (const claim of claims) deliverable.add(`claim#${claim.id}`);
+
+  const runSpineIds = new Set(
+    run.nodes.flatMap((node) => {
+      const spineNodeId = spineNodeIdFor(positionIndex, node);
+      return spineNodeId === undefined ? [] : [spineNodeId];
+    }),
+  );
+  const authoredExhausted = [...spine.keys()].every((id) => runSpineIds.has(id));
 
   const definitions = planClasses(pack.document);
   const revealed = new Map<string, AuthoredFeedbackItem>();
+  let latestReleasedReveal: RevealEvent | undefined;
   for (const reveal of revealEvents(pack, run)) {
     if (!revealIsReleased(pack, run, reveal)) continue;
+    latestReleasedReveal = reveal;
     const path = historyFrom(run, reveal.nodeId);
     const pathRunNodeIds = new Set(path.map((node) => node.id));
     const pathSpineNodeIds = new Set(
@@ -363,6 +403,34 @@ export function projectAuthoredFeedback(
           ...(entry.deviationMistakes === undefined ? {} : { deviationMistakes: entry.deviationMistakes }),
         }));
       }
+    }
+  }
+
+  const quiescent = latestReleasedReveal !== undefined && !run.events.some(
+    (event) =>
+      event.seq > latestReleasedReveal!.orderSeq &&
+      (event.type === "move.committed" || event.type === "run.rewound"),
+  );
+  if (authoredExhausted && quiescent && latestReleasedReveal !== undefined) {
+    for (const claim of claims) {
+      const sourceId = `claim#${claim.id}`;
+      const backing = pack.claimBackings.get(claim.id);
+      const instrumentKinds = new Set(backing?.instrumentKinds ?? []);
+      const earnedEvidenceTypes = claim.evidenceTypes.filter((label) =>
+        (MACHINE_LABEL_EVIDENCE_KINDS[label] ?? []).some((kind) => instrumentKinds.has(kind)),
+      );
+      revealed.set(sourceId, Object.freeze({
+        kind: "claim",
+        id: sourceId,
+        revealedBy: latestReleasedReveal.attribution,
+        anchor: { claimId: claim.id },
+        text: claim.text,
+        evidenceTypes: Object.freeze([...claim.evidenceTypes]),
+        earnedEvidenceTypes: Object.freeze(earnedEvidenceTypes),
+        binding: backing?.binding ?? "self_declared",
+        authorSpans: backing?.authorSpans ?? Object.freeze([]),
+        principles: backing?.principles ?? Object.freeze([]),
+      }));
     }
   }
 

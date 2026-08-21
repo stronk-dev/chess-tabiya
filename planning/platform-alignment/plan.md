@@ -68,6 +68,9 @@ lifting it; the owner may amend the proof without weakening the hold by accident
 - derive the actual completion state of every active RFC from code, criteria, ledger and log;
 - finish or explicitly return the accepted `feedback-delivery`, `teacher-surface` and
   `graduation-clearance` work;
+- for `graduation-clearance`, apply D642's split: correct the withdrawn-code acceptance criterion,
+  build the mechanism/read-only plan after Feedback Stage 1, and require the D560 budget decision
+  before the 92-document corpus apply/archive;
 - settle and implement the shared-resource register/lifecycle mechanism;
 - re-run the interaction-state board checks behind D537-D539;
 - produce one “shipped / accepted-not-built / draft / research-only” capability inventory.

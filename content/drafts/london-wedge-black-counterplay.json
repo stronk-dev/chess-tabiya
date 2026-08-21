@@ -41,7 +41,7 @@
           "kind": "plan_signature",
           "planClassId": "c-file-trade"
         },
-        "to": "achieved"
+        "to": "preserved"
       }
     ]
   },

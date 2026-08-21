@@ -36,33 +36,7 @@
   },
   "objective": {
     "type": "preserve_plan_window",
-    "summary": "You have the White side of the isolated queen's pawn: pawns on a2, b2, d4, f2, g2, h2, and the d-pawn with no neighbour on the c- or e-file. Black's blockading knight is already on d5 — this pack does not ask you to prevent its arrival, because the corpus line that reaches this position put it there. It asks you to complete the arrangement this spine plays — a rook to e1 and the bishop to e4 — before Black's second defender of d5 arrives, and without spending more than one move on anything else.",
-    "successConditions": [
-      {
-        "kind": "timing_window",
-        "windowId": "arrangement-before-the-second-defender",
-        "verdict": "in_time",
-        "to": "achieved"
-      },
-      {
-        "kind": "timing_window",
-        "windowId": "arrangement-before-the-second-defender",
-        "verdict": "over_budget",
-        "to": "degraded"
-      },
-      {
-        "kind": "timing_window",
-        "windowId": "arrangement-before-the-second-defender",
-        "verdict": "too_slow",
-        "to": "failed"
-      },
-      {
-        "kind": "timing_window",
-        "windowId": "arrangement-before-the-second-defender",
-        "verdict": "premature",
-        "to": "failed"
-      }
-    ]
+    "summary": "You have the White side of the isolated queen's pawn: pawns on a2, b2, d4, f2, g2, h2, and the d-pawn with no neighbour on the c- or e-file. Black's blockading knight is already on d5 — this pack does not ask you to prevent its arrival, because the corpus line that reaches this position put it there. It asks you to complete the arrangement this spine plays — a rook to e1 and the bishop to e4 — before Black's second defender of d5 arrives, and without spending more than one move on anything else."
   },
   "concepts": [
     "isolated-queens-pawn",

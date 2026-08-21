@@ -147,6 +147,12 @@ may additionally opt `outpaced` into degradation. The defaults deliberately use
 `degraded`, never terminal `failed`, because the learner must be able to rewind and
 retry. Every applied transition carries its `tempo:` evidence reference.
 
+A `preserve_plan_window` objective may not repeat those type-owned verdicts as authored
+`timing_window` success conditions. Validation raises `PLAN_WINDOW_CONDITION_REDUNDANT` at the
+condition pointer. The earlier double declaration did not override the built-in rule at the verdict
+node; it fired one ply later from the inherited `preserved` or `degraded` state, which could stop an
+authored consequence after its actual timing result.
+
 ## Current limits
 
 - Authored endgame drafts, including the B+N trajectory root, have ledger-verified

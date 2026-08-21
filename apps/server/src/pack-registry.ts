@@ -55,6 +55,7 @@ export interface PackRecord {
   readonly boundClaimIds: ReadonlySet<string>;
   readonly claimBackings: ReadonlyMap<string, {
     readonly binding: "ledger_bound" | "author_attributed" | "self_declared";
+    readonly instrumentKinds: readonly import("./sourcing/types.js").EvidenceRecord["kind"][];
     readonly rendered: readonly string[];
     readonly authorSpans: readonly string[];
     readonly principles: readonly { readonly id: string; readonly name: string; readonly statement: string; readonly standsOn: string; readonly counterCase: string }[];
@@ -283,8 +284,8 @@ export class PackRegistry {
       }));
       for (const claim of document.feedbackClaims ?? []) {
         const binding = validBindings.find((candidate) => candidate.claimId === claim.id);
-        if (binding !== undefined) claimBackings.set(claim.id, Object.freeze({ binding: binding.disposition, rendered: binding.rendered, authorSpans: binding.authorSpans, principles: principleRows(claim.principles) }));
-        else if (claim.evidenceTypes.includes("author_principle") && !claim.evidenceTypes.some((label) => ["corpus_observed", "engine_validated", "tablebase_exact"].includes(label))) claimBackings.set(claim.id, Object.freeze({ binding: "self_declared", rendered: Object.freeze([]), authorSpans: Object.freeze([claim.text]), principles: principleRows(claim.principles) }));
+        if (binding !== undefined) claimBackings.set(claim.id, Object.freeze({ binding: binding.disposition, instrumentKinds: binding.instrumentKinds, rendered: binding.rendered, authorSpans: binding.authorSpans, principles: principleRows(claim.principles) }));
+        else if (claim.evidenceTypes.includes("author_principle") && !claim.evidenceTypes.some((label) => ["corpus_observed", "engine_validated", "tablebase_exact"].includes(label))) claimBackings.set(claim.id, Object.freeze({ binding: "self_declared", instrumentKinds: Object.freeze([]), rendered: Object.freeze([]), authorSpans: Object.freeze([claim.text]), principles: principleRows(claim.principles) }));
       }
       const summary: PackSummary = freeze({
         id: document.id,

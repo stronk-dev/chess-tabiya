@@ -65,7 +65,7 @@
             }
           ]
         },
-        "to": "achieved"
+        "to": "preserved"
       },
       {
         "kind": "structural_feature",
@@ -79,7 +79,10 @@
             }
           }
         },
-        "to": "transitioned"
+        "to": "transitioned",
+        "from": [
+          "active"
+        ]
       }
     ]
   },

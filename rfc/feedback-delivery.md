@@ -2433,16 +2433,19 @@ used as-is.
     otherwise be read as promising that no unattributed rate reaches a learner, and it does not
     promise that. When D417 is fixed the test flips with it; today it stops the guarantee from being
     silently assumed.
-20. **C8's own sentences are inside the vocabulary floor, and only its own sentences are claimed.**
-    A test asserts that the three rendered provenance lines contain no `BANNED_JUDGEMENTS` and no
-    `PRESCRIPTIVE_VERBS` word for every projected `claimBackings` row in the corpus — including the
-    principle `statement` and `counterCase` fields, which are authored prose interpolated into a
-    frozen template. **The population is 67 rows at day zero** `[V]` `[2026-08-16]` — 1 written by
-    `pack-registry.ts`'s binding arm and 66 by its `author_principle`-without-machine-label arm — so
-    this criterion selects a real set now and not only at wave end; the count is re-derived at
-    implementation. **The author's claim sentence is explicitly out of this criterion's scope**
-    (66 of 196 carry a judgement word), because [[D421]] establishes that authored prose has no gate
-    and this RFC does not build one.
+20. **C8's templates add no chess judgement; authored inputs remain attributable and unchanged.**
+    For every projected `claimBackings` row, a boundary test identifies the byte ranges copied from
+    the selected principle's `name`, `statement` and `counterCase`. Every one of those authored
+    inputs must occur unchanged in the rendered provenance line. Any `BANNED_JUDGEMENTS` or
+    `PRESCRIPTIVE_VERBS` token outside those ranges fails; a token inside them remains visible
+    verbatim under C8's explicit *author's judgement* / *counter-case* attribution. The negative
+    fixture injects a prohibited word into template-owned text and must fail even when the same word
+    also occurs inside an authored input. **The population is 67 rows at implementation: 46 contain
+    authored prohibited vocabulary and zero contain template-owned prohibited vocabulary** `[V]`
+    `[2026-08-21]`. This replaces the former whole-line assertion, which was unsatisfiable because it
+    forbade the authored fields C8 requires verbatim. **The author's claim sentence is explicitly
+    out of this criterion's scope** (66 of 196 carry a judgement word), because [[D421]] establishes
+    that authored prose has no gate and this RFC does not build one.
 20a. **No provenance line asserts a record for a label no instrument earned.** `[cross-review
     2026-08-16]` A test asserts that for every delivered claim, the label set interpolated into an
     *"evidence recorded"* clause is `earnedEvidenceTypes` and never `evidenceTypes` — specifically
@@ -2799,6 +2802,14 @@ used as-is.
    §0.2 carries it into the commissioning brief and criterion 22 requires it there.
 
 ## Changelog
+
+- 2026-08-21: **criterion 20 corrected on D644's executable counterexample.** The former
+  whole-line vocabulary assertion failed on 46 of 67 real rows because C8 requires authored
+  principle statements and counter-cases to be preserved verbatim. The replacement asserts the
+  boundary the deterministic renderer owns: all authored inputs survive byte-for-byte, zero
+  prohibited tokens originate in template text, and an injected template-owned token fails even
+  when the same token is authored elsewhere in the line. C8's forms and the claim sentence are
+  unchanged.
 
 - 2026-08-15: created.
 - 2026-08-15: **adversarial cross-review by an agent that did not write the draft.** Every measured

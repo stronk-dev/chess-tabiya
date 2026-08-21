@@ -74,6 +74,7 @@ describe("Line Drill orchestration", () => {
     expect(page.items.filter((item) => item.kind === "theory_verdict").every((item) => item.revealedBy.kind === "checkpoint")).toBe(true);
     const verdictOnlyDocument = structuredClone(record.document) as DrillPackDefinition & Record<string, unknown>;
     delete (verdictOnlyDocument as unknown as Record<string, unknown>).planClasses;
+    delete (verdictOnlyDocument as unknown as Record<string, unknown>).feedbackClaims;
     for (const checkpoint of verdictOnlyDocument.checkpoints) {
       delete (checkpoint as Record<string, unknown>).interaction;
     }

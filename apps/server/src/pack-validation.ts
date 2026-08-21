@@ -15,10 +15,15 @@ import {
   BANNED_JUDGEMENTS,
   DECLARED_UNGRADEABLE_VERDICTS,
   TEMPO_GRADEABLE_VERDICTS,
+  appendOpponentPly,
+  commitMove,
   createRun,
+  evaluateObjectivePredicate,
   matchesStructuralExpression,
   matchesTransitionExpression,
   transposeKey,
+  type DrillRun,
+  type ObjectiveTransitionRule,
 } from "@chess-tabiya/runtime";
 import { between } from "chessops/attacks";
 import { Chess } from "chessops/chess";
@@ -41,6 +46,8 @@ import {
   expandStructuralExpression,
   expandTransitionExpression,
   objectiveRules,
+  orchestratePackMove,
+  orchestratePackStart,
   PackCompileError,
   planSignatureResolver,
   type PlanSignatureResolver,
@@ -473,6 +480,13 @@ export function objectiveIssues(
         issues.push(runtimeIssue("UNSUPPORTED_OBJECTIVE_CONDITION", conditionPointer, `unknown checkpoint ${condition.checkpointId}`));
       }
       if (condition.kind === "timing_window") {
+        if (objective.type === "preserve_plan_window") {
+          issues.push(runtimeIssue(
+            "PLAN_WINDOW_CONDITION_REDUNDANT",
+            conditionPointer,
+            `preserve_plan_window already grades timing verdict ${condition.verdict} for window ${condition.windowId}`,
+          ));
+        }
         const window = pack.timingWindows?.find((candidate) => candidate.id === condition.windowId);
         if (window === undefined) {
           issues.push(runtimeIssue("TIMING_WINDOW_UNKNOWN", `${conditionPointer}/windowId`, `unknown timing window ${condition.windowId}`));
@@ -543,6 +557,93 @@ export function objectiveIssues(
         issues.push(runtimeIssue("RULE_DRAW_ROOT_NEEDS_SEGMENT_BUDGET", "/difficulty/branchLengthTarget", `rule-drawn root needs at least ${needed} plies to reach halfmove 100`));
       }
     }
+  }
+  return Object.freeze(issues);
+}
+
+const ABSORBING_OBJECTIVE_STATES = new Set(["achieved", "failed", "transitioned"]);
+
+function sameReferences(left: readonly string[], right: readonly string[]): boolean {
+  return left.length === right.length && left.every((reference, index) => reference === right[index]);
+}
+
+function absorbingRulePointer(
+  run: DrillRun,
+  event: Extract<DrillRun["events"][number], { readonly type: "objective.state_changed" }>,
+  rules: readonly ObjectiveTransitionRule[],
+): string {
+  const matched = rules.find((rule) =>
+    rule.from === event.data.from &&
+    rule.to === event.data.to &&
+    sameReferences(rule.evidenceRefs, event.data.evidenceRefs) &&
+    evaluateObjectivePredicate(run, rule.when));
+  const condition = /^pack-success-(\d+)-/u.exec(matched?.id ?? "");
+  return condition === null
+    ? "/objective/successConditions"
+    : `/objective/successConditions/${condition[1]}`;
+}
+
+function absorbingAuthoredContinuationIssues(
+  pack: DrillPackDefinition,
+  resolvePlanSignature: PlanSignatureResolver,
+): readonly PackValidationIssue[] {
+  if (pack.legs !== undefined || (pack.spine?.length ?? 0) === 0) return [];
+  const issues: PackValidationIssue[] = [];
+  const at = "2000-01-01T00:00:00.000Z";
+  try {
+    let root = createRun({
+      id: "pack-validation-authored-lifecycle",
+      session: {
+        kind: "pack",
+        packId: pack.id,
+        packDigest: `sha256:${"0".repeat(64)}`,
+        start: pack.start,
+        feedbackPolicy: "delayed_checkpoint",
+        opponentPolicy: { mode: "human_common" },
+      },
+      sessionDigest: `sha256:${"0".repeat(64)}`,
+      policyConfig: {
+        seedMode: "fixed",
+        locus: { executedAt: "server", engineIds: [], modelIds: [] },
+      },
+      seed: 0,
+      createdAt: at,
+    });
+    root = orchestratePackStart(pack, root, resolvePlanSignature).run;
+    const rules = objectiveRules(pack, pack["objective"], "/objective", resolvePlanSignature);
+    const walk = (run: DrillRun, nodes: readonly import("@chess-tabiya/schema/drill-pack").SpineNode[]): void => {
+      for (const spineNode of nodes) {
+        const cursor = run.nodes.find((node) => node.id === run.activeCursor.nodeId)!;
+        const learnerTurn = (cursor.fen.split(" ")[1] === "w" ? "white" : "black") === pack.start.side;
+        const committed = learnerTurn
+          ? commitMove(run, spineNode.moveUci, { at })
+          : appendOpponentPly(run, {
+              moveUci: spineNode.moveUci,
+              policyModeApplied: "human_common",
+              engine: { id: "pack-validation", name: "Authored path validation", version: "1", seedHonored: true },
+            }, { at });
+        const result = orchestratePackMove(pack, run, committed, resolvePlanSignature);
+        const active = result.run.nodes.find((node) => node.id === result.run.activeCursor.nodeId)!;
+        if (spineNode.children.length > 0 && ABSORBING_OBJECTIVE_STATES.has(active.objectiveState)) {
+          const event = [...result.emitted].reverse().find((candidate) =>
+            candidate.type === "objective.state_changed" && ABSORBING_OBJECTIVE_STATES.has(candidate.data.to));
+          const path = event?.type === "objective.state_changed"
+            ? absorbingRulePointer(result.run, event, rules)
+            : "/objective/successConditions";
+          issues.push(runtimeIssue(
+            "OBJECTIVE_ABSORBS_BEFORE_AUTHORED_BOUNDARY",
+            path,
+            `objective enters ${active.objectiveState} at authored node ${spineNode.id}, which still has ${spineNode.children.length} authored child${spineNode.children.length === 1 ? "" : "ren"}`,
+          ));
+          continue;
+        }
+        walk(result.run, spineNode.children);
+      }
+    };
+    walk(root, pack.spine ?? []);
+  } catch {
+    // Existing schema, lint, legality, checkpoint and objective compilation checks own malformed
+    // paths. This relational guard adds an issue only after a complete authored edge can run.
   }
   return Object.freeze(issues);
 }
@@ -1193,6 +1294,7 @@ function runtimeIssues(
   for (const [index, leg] of (pack.legs ?? []).entries()) {
     issues.push(...objectiveIssues(pack, leg.objective, `/legs/${index}/objective`, checkpoints, compile, resolvePlanSignature, "leg"));
   }
+  issues.push(...absorbingAuthoredContinuationIssues(pack, resolvePlanSignature));
 
   try {
     const side = pack.start.side;

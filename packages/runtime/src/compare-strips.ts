@@ -1,11 +1,11 @@
 import { branchPath } from "./branch-path.js";
 import { pivotalMarkers, renderPivotalMarker } from "./pivotal.js";
-import { structuralReading, type StructuralObservation } from "./structure.js";
+import { observationIdentity, structuralReading, type StructuralObservation } from "./structure.js";
 import { STORY_MATE_CP, STORY_PIVOT_CP } from "./story.js";
 import type { BranchComparison, ComparisonScore } from "./compare.js";
 import type { DrillRun } from "./types.js";
 
-export interface StripEntry { readonly plyOffset: number; readonly nodeId: string; readonly sentence: string; readonly attribution: string }
+export interface StripEntry { readonly plyOffset: number; readonly nodeId: string; readonly sentence: string; readonly attribution: string; readonly observation?: StructuralObservation }
 export interface PieceRoute { readonly pieceId: string; readonly squares: readonly string[] }
 export interface BranchStrips {
   readonly evalTrail: readonly { readonly plyOffset: number; readonly nodeId: string; readonly score: ComparisonScore }[];
@@ -16,20 +16,30 @@ export interface BranchStrips {
 export interface NarrativeGroup { readonly branchId?: string; readonly sentences: readonly string[] }
 export interface ComparisonNarrative { readonly groups: readonly NarrativeGroup[] }
 
-function observationKey(value: StructuralObservation): string { return JSON.stringify(value); }
 function scoreCp(score: ComparisonScore): number { return score.kind === "cp" ? score.value : score.movesTo < 0 ? -STORY_MATE_CP : STORY_MATE_CP; }
 
 export function comparisonStrips(run: DrillRun, comparison: BranchComparison): Readonly<Record<string, BranchStrips>> {
   const fork = run.nodes.find((node) => node.id === comparison.forkNodeId);
   if (fork === undefined) throw new TypeError(`Comparison fork ${comparison.forkNodeId} is missing`);
+  const pathObservationSets = comparison.columns.map((column) => new Set(
+    branchPath(run, column.branchId)
+      .filter((node) => node.ply > fork.ply)
+      .flatMap((node) => structuralReading(node.fen).features.map(observationIdentity)),
+  ));
+  const common = comparison.columns.length < 2
+    ? undefined
+    : new Set([...pathObservationSets[0]!].filter((key) => pathObservationSets.slice(1).every((set) => set.has(key))));
   return Object.freeze(Object.fromEntries(comparison.columns.map((column) => {
     const path = branchPath(run, column.branchId).filter((node) => node.ply >= fork.ply);
     const structure: StripEntry[] = [];
     let previous = new Set<string>();
     for (const node of path) {
       const observations = structuralReading(node.fen).features;
-      const current = new Set(observations.map(observationKey));
-      if (node.id !== fork.id) for (const observation of observations) if (!previous.has(observationKey(observation))) structure.push(Object.freeze({ plyOffset: node.ply - fork.ply, nodeId: node.id, sentence: `A recorded structural observation changed: ${observation.kind}.`, attribution: "Tabiya structural detector" }));
+      const current = new Set(observations.map(observationIdentity));
+      if (node.id !== fork.id) for (const observation of observations) {
+        const key = observationIdentity(observation);
+        if (!previous.has(key) && !common?.has(key)) structure.push(Object.freeze({ plyOffset: node.ply - fork.ply, nodeId: node.id, sentence: `A recorded structural observation changed: ${observation.kind}.`, attribution: "Tabiya structural detector", observation }));
+      }
       previous = current;
     }
     const timing: StripEntry[] = [

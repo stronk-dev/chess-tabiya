@@ -540,3 +540,28 @@ Append-only. Record research, rulings, RFC transitions, implementation closeout 
   live, non-stale owner. The disposable D641 registry is not allowed to become another global
   hand-written index.
 - No product code, protected design, schema or content changed; D560 remains active.
+
+## 2026-08-20 — graduation clearance was split at the content-hold boundary
+
+- Re-derived the accepted RFC's current population: 56 draft documents / 293 entries and 36
+  candidate pack documents / 143 entries. Pack schema remains 0.27 and the 0.28 mechanism is absent.
+- Found one buildability defect in the accepted text: criterion 13 still requires
+  `GRADUATION_CLEARANCE_SUBJECT_UNSUPPORTABLE`, which the normative table withdrew into
+  `GRADUATION_CLEARANCE_SUBJECT_UNGRAMMATICAL`; criterion 17 already uses the surviving code.
+- Separated mechanism from apply. Feedback Stage 1 lands first; then the corrected schema, lints,
+  planner, writer and emitters may implement. The 92-document rewrite/archive waits for a read-only
+  mechanical-versus-judgement report and the owner's D560 budget decision.
+- Closed D642 with a five-test disposable readiness harness. No product code, schema, protected
+  intent or authored content changed; Gate F and D560 remain active.
+
+## 2026-08-20 — Feedback Stage 1 recovered its measurement and hit an acceptance conflict
+
+- Replaced criterion 16's invalid one-ply construction with deterministic eight-ply N=2/4/8
+  continuations. N=8 now admits 70/450 (15.6%), below the 90% reopening threshold; the original
+  100% result remains recorded as instrument failure.
+- Reused the runtime's canonical observation identity, removing the private strip identity D527
+  identified. Focused tests remain green.
+- Mapped criteria 1–20a and found aggregate verification had not encoded all accepted negatives.
+- Reproduced D644: criterion 20 fails on 46/67 projected backing rows because it forbids words in
+  authored principle fields C8 requires rendered verbatim. Prepared a narrow author correction;
+  no authored content, schema or protected design changed. Stage 2 and D560 remain untouched.

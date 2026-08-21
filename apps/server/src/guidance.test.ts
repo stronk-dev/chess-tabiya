@@ -7,7 +7,7 @@ import { afterEach, describe, expect, it } from "vitest";
 import { HUMAN_COMMON_RESISTANCE_PROFILE, type CapabilitiesProvider } from "./capabilities.js";
 import { EvidenceJobQueue, type EvidenceExecutor } from "./evidence-queue.js";
 import type { EngineHealth, EngineRequest } from "./engine-supervisor.js";
-import { renderVoice, type VoiceProvider } from "./guidance.js";
+import { evidencePacket, renderVoice, type VoiceProvider } from "./guidance.js";
 import { OpponentSelector, type SelectorEngineClient } from "./opponent-selector.js";
 import { createRestHandler } from "./rest.js";
 import { RunService } from "./service.js";
@@ -125,6 +125,73 @@ describe("adaptive guidance server seams", () => {
     expect(restSource.match(/\bsentences\s*:/gu)).toHaveLength(3);
     expect(restSource.match(/suggestTitle\(story\)/gu)).toHaveLength(2);
     expect(restSource.match(/narrative\.groups\.flatMap/gu)).toHaveLength(1);
+  });
+
+  it("keeps delivered claim prose outside evidence packets and the voice allowlist", async () => {
+    const { run } = await setup();
+    const node = run.nodes.find((candidate) => candidate.id === run.activeCursor.nodeId)!;
+    const text = "The author's pack-wide claim must stay on the authored sheet.";
+    const authored = {
+      items: [{
+        kind: "claim" as const,
+        id: "claim#packet",
+        revealedBy: { kind: "outcome" as const, eventSeq: 9 },
+        anchor: { claimId: "packet" },
+        text,
+        evidenceTypes: ["hypothesis"],
+        earnedEvidenceTypes: [],
+        binding: "self_declared" as const,
+        authorSpans: [],
+        principles: [],
+      }],
+      hasWithheldAuthoredContent: false,
+    };
+    const packet = evidencePacket({
+      run,
+      node,
+      authored,
+    });
+    expect(packet.authored).toEqual([]);
+    expect(packet.sentences.join("\n")).not.toContain(text);
+    expect(packet).toEqual(evidencePacket({ run, node, authored: { items: [], hasWithheldAuthoredContent: false } }));
+  });
+
+  it("keeps voice and speech byte-identical when the authored page gains a delivered claim", async () => {
+    const { service, run } = await setup();
+    service.reveal("guide", "writer", at);
+    const voiceProvider: VoiceProvider = { async render(_packet, _persona, deterministicText) { return deterministicText; } };
+    const spoken: string[] = [];
+    const tts: TtsProvider = { async synthesize(text) { spoken.push(text); return { bytes: new TextEncoder().encode(text), contentType: "audio/test" }; } };
+    const handler = createRestHandler(service, undefined, undefined, undefined, undefined, undefined, undefined, undefined, voiceProvider, undefined, undefined, undefined, tts);
+    const body = { nodeId: run.activeCursor.nodeId, scope: "reading" };
+    const voiceBefore = await (await handler(request("/runs/guide/voice", "POST", body))).text();
+    const speechBefore = new Uint8Array(await (await handler(request("/runs/guide/speech", "POST", body))).arrayBuffer());
+    const claimText = "A delivered authored claim that must not widen either renderer.";
+    Object.defineProperty(service, "authoredFeedback", { value: () => ({
+      items: [{
+        kind: "claim" as const,
+        id: "claim#route-boundary",
+        revealedBy: { kind: "outcome" as const, eventSeq: 8 },
+        anchor: { claimId: "route-boundary" },
+        text: claimText,
+        evidenceTypes: ["hypothesis"],
+        earnedEvidenceTypes: [],
+        binding: "self_declared" as const,
+        authorSpans: [],
+        principles: [],
+      }],
+      hasWithheldAuthoredContent: false,
+    }) });
+    const voiceAfter = await (await handler(request("/runs/guide/voice", "POST", body))).text();
+    const speechAfter = new Uint8Array(await (await handler(request("/runs/guide/speech", "POST", body))).arrayBuffer());
+    expect(voiceAfter).toBe(voiceBefore);
+    expect(speechAfter).toEqual(speechBefore);
+    expect(spoken[1]).toBe(spoken[0]);
+    expect(voiceAfter).not.toContain(claimText);
+
+    const source = readFileSync(new URL("./guidance.ts", import.meta.url), "utf8");
+    const authoredText = source.slice(source.indexOf("function authoredText"), source.indexOf("export function evidencePacket"));
+    expect(authoredText).not.toMatch(/kind\s*===\s*["']claim["']/u);
   });
 
   it("maps absent TTS to 503 and sends only deterministic checked text", async () => {
