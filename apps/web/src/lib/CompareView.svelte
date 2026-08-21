@@ -1,6 +1,6 @@
 <script lang="ts">
   import type { DrillPackDefinition } from "@chess-tabiya/schema/drill-pack";
-  import { comparisonNarrative, comparisonStrips, positionStructureEvidence, structuralReading, type BranchComparison, type ComparisonEvidenceEntry, type DrillRun, type ObjectiveTimelineEntry } from "@chess-tabiya/runtime";
+  import { comparisonEngineTrajectory, comparisonNarrative, comparisonStrips, positionStructureEvidence, structuralReading, type BranchComparison, type ComparisonEvidenceEntry, type DrillRun, type ObjectiveTimelineEntry } from "@chess-tabiya/runtime";
   import { onMount } from "svelte";
   import Chessboard from "./Chessboard.svelte";
   import HonestControl from "./HonestControl.svelte";
@@ -34,6 +34,7 @@
   let zoom: ComparisonZoomBand = $state(defaultComparisonZoom(comparison.columns.length));
   let strips = $derived(comparisonStrips(run, comparison));
   let narrative = $derived(comparisonNarrative(run, comparison, strips));
+  let trajectories = $derived(Object.fromEntries(comparison.columns.map((column) => [column.branchId, comparisonEngineTrajectory(comparison, column.branchId)])));
   let payloads = $derived(evidencePayloads(run));
 
   function timeline(entries: readonly ObjectiveTimelineEntry[]) {
@@ -119,7 +120,7 @@
       <div class="trajectory-row">
         <strong>{column.label}</strong>
         <div class="evidence-cell" data-ply-offset="0">
-          {#each (comparison.evidence[column.branchId] ?? []).filter((entry) => entry.plyOffset === 0) as entry}
+          {#each (trajectories[column.branchId] ?? []).filter((entry) => entry.plyOffset === 0) as entry}
             <span class="evidence-entry">{score(entry)}</span>
           {/each}
         </div>
@@ -151,7 +152,7 @@
           <div><strong>{entry.from} → {entry.to}</strong>{#each entry.grounds as ground}<p>{ground.sourceLabel}: {ground.text}</p>{/each}</div>
         {/each}
         <div class="scores" aria-label={`${column.label} recorded engine evaluations`} data-evidence-consumer="compare.engine_trajectory">
-          {#each comparison.evidence[column.branchId] ?? [] as entry}<span data-ply-offset={entry.plyOffset}>+{entry.plyOffset}: {score(entry)}</span>{/each}
+          {#each trajectories[column.branchId] ?? [] as entry}<span data-ply-offset={entry.plyOffset}>+{entry.plyOffset}: {score(entry)}</span>{/each}
         </div>
         {#if consequence}
           <details data-evidence-consumer="inspector.position_structure"><summary>Evidence inspector: position structure</summary>

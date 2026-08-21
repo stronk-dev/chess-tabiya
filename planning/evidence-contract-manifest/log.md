@@ -100,3 +100,15 @@ Append-only.
   promised.
 - `human.explorer.position_stats@1` now names the exact frontier payload, and every provider result
   passes `consumeRepertoireCorpus` before it changes scan state. Inspector behavior is unchanged.
+
+## 2026-08-21 — resumed bind split comparison, claim-ledger and opponent provider payloads
+
+- [[D675]] records that comparison rendered normalized run-relative trajectory points while the
+  manifest promised live Stockfish events. `derived.compare.engine_trajectory@1` and
+  `consumeComparisonEngineTrajectory` now own that exact boundary.
+- [[D676]] records that claim validation consumed offline `EvidenceRecord`s behind runtime/API
+  projection names. Three sourcing-ledger projections plus the already-exact opening identity
+  projection now pass `consumeClaimBindingRecords` before assertion evaluation.
+- [[D677]] records that opponent selection consumed raw provider results behind inspector/event
+  projection names. Maia and Stockfish line arrays and every Syzygy root/child probe now pass
+  `consumeOpponentSelectionEvidence` before parsing or selection. No selection semantics changed.

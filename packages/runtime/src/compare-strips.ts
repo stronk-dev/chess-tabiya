@@ -2,9 +2,10 @@ import { branchPath } from "./branch-path.js";
 import { pivotalMarkers, renderPivotalMarker } from "./pivotal.js";
 import { observationIdentity, structuralReading, type StructuralObservation } from "./structure.js";
 import { STORY_MATE_CP, STORY_PIVOT_CP } from "./story.js";
-import type { BranchComparison, ComparisonScore } from "./compare.js";
+import type { BranchComparison, ComparisonEvidenceEntry, ComparisonScore } from "./compare.js";
 import type { DrillRun } from "./types.js";
-import { declareEvidence, type DeclaredEvidence } from "./evidence-contract.js";
+import { assertConsumerEvidenceView, declareEvidence, evidenceForConsumer, type ConsumerEvidenceView, type DeclaredEvidence } from "./evidence-contract.js";
+import { PRIMARY_EVIDENCE_MANIFEST } from "./evidence-catalog.js";
 
 export interface StripEntry { readonly plyOffset: number; readonly nodeId: string; readonly sentence: string; readonly attribution: string; readonly observation?: StructuralObservation; readonly evidence?: DeclaredEvidence<unknown> }
 export interface PieceRoute { readonly pieceId: string; readonly squares: readonly string[] }
@@ -26,6 +27,23 @@ function stripEntry(value: Omit<StripEntry, "evidence">, evidence: DeclaredEvide
 }
 
 function scoreCp(score: ComparisonScore): number { return score.kind === "cp" ? score.value : score.movesTo < 0 ? -STORY_MATE_CP : STORY_MATE_CP; }
+
+export function consumeComparisonEngineTrajectory(view: ConsumerEvidenceView<ComparisonEvidenceEntry>): readonly ComparisonEvidenceEntry[] {
+  assertConsumerEvidenceView(view);
+  if (view.consumer.id !== "compare.engine_trajectory" || view.consumer.version !== 1) throw new TypeError("Expected compare.engine_trajectory@1 consumer view");
+  return Object.freeze(view.items.map((item) => item.payload));
+}
+
+export function comparisonEngineTrajectory(comparison: BranchComparison, branchId: string): readonly ComparisonEvidenceEntry[] {
+  const declared = (comparison.evidence[branchId] ?? []).map((entry) => declareEvidence(
+    ref("derived.compare_narrative"), ref("derived.compare.engine_trajectory"), entry,
+  ));
+  return consumeComparisonEngineTrajectory(evidenceForConsumer(
+    PRIMARY_EVIDENCE_MANIFEST,
+    ref("compare.engine_trajectory"),
+    declared,
+  ));
+}
 
 export function comparisonStrips(run: DrillRun, comparison: BranchComparison): Readonly<Record<string, BranchStrips>> {
   const fork = run.nodes.find((node) => node.id === comparison.forkNodeId);

@@ -2,10 +2,15 @@ import type { DrillPackDefinition } from "@chess-tabiya/schema/drill-pack";
 import { describe, expect, it } from "vitest";
 
 import { sha256 } from "./canonical.js";
-import { validateClaimBindings } from "./claim-binding.js";
+import { consumeClaimBindingRecords, validateClaimBindings } from "./claim-binding.js";
 import type { ClaimBinding, EvidenceLedger, SourcingIssue } from "./types.js";
 
 const START = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
+
+if (false) {
+  // @ts-expect-error claim validation accepts only a compiled consumer view, never a bare ledger record array.
+  consumeClaimBindingRecords([]);
+}
 
 function pack(text = "The move appears in 31.4% of games.", evidenceTypes = ["corpus_observed"]): DrillPackDefinition {
   return { id:"claim-fixture",version:"0.1.0",title:"Claim fixture",mode:"outcome",phase:"opening",start:{fen:START,side:"white"},objective:{type:"win",summary:"Win"},difficulty:{branchLengthTarget:2},feedbackPolicy:"attempt_end",opponentPolicy:{mode:"human_common"},spine:[],checkpoints:[],feedbackClaims:[{id:"claim",text,evidenceTypes}],provenance:{reviewStatus:"draft"} } as unknown as DrillPackDefinition;

@@ -608,6 +608,25 @@ semantics.
     admitted at `consumeRepertoireCorpus` before its counts or abstention change the frontier.
     Both retain the same human-corpus/no-quality limitation, but their payload, latency and budget
     contracts are not interchangeable.
+11. **Recorded comparison trajectories are not live Stockfish events** ([[D675]], 2026-08-21).
+    `derived.compare.engine_trajectory@1` carries the exact normalized `ComparisonEvidenceEntry`:
+    node, fork-relative ply, evidence references and cp/mate score. It is derived from an attached
+    Stockfish eval, but no longer contains the provider event payload. `CompareView` obtains every
+    displayed trajectory point through `consumeComparisonEngineTrajectory`; neither a DOM marker
+    nor the original `comparison.evidence` array counts as consumer closure.
+12. **Offline sourcing records keep their ledger identity** ([[D676]], 2026-08-21).
+    `sourcing.ledger.{engine_eval,tablebase_result,explorer_position_census}@1` carry the exact
+    `EvidenceRecord` envelopes used by claim assertions. Existing
+    `theory.opening_identity.record@1` already carries the fourth exact record. All four pass
+    `consumeClaimBindingRecords` before kind/FEN/anchor/value selection; runtime reading and API
+    page projections may not stand in for them.
+13. **Opponent selection consumes raw provider results, not inspector or attached-event payloads**
+    ([[D677]], 2026-08-21). `human.maia.uci_response@1`,
+    `live.stockfish.uci_response@1`, and `live.syzygy.probe_result@1` name the line arrays and
+    `TablebasePosition` objects that can influence a move choice. Every Maia/Stockfish execution
+    and every root/child tablebase probe passes `consumeOpponentSelectionEvidence` before parsing,
+    ordering, sampling or concession-mass computation. This does not bless the selection policy;
+    it makes its actual evidence frontier explicit.
 
 The `outpost` reading/predicate declaration names its dependency on the current
 `pawn_safe_square` predicate projection. A dependency census walks transitive edges, then content
@@ -1081,6 +1100,9 @@ Each criterion names the failure it is intended to catch.
 | D12 | [[D672]] family-only/checkpoint/provider reference tokens use a recorded resolution projection plus optional exact source event, never a fabricated predicate/claim payload (§9 clause 8; criteria 6–7) | `evidence-contract-manifest` | implementation commit | |
 | D13 | [[D673]] normalized authored guidance claim and full delivery-sheet claim item have distinct payload projections and consumers (§9 clause 9; criteria 6–7) | `evidence-contract-manifest` | implementation commit | |
 | D14 | [[D674]] Explorer inspector page and per-position repertoire frontier result have distinct payload projections; every scan result is admitted before use (§9 clause 10; criteria 6–7) | `evidence-contract-manifest` | implementation commit | |
+| D15 | [[D675]] normalized comparison trajectory points are distinct from live Stockfish events and are admitted before rendering (§9 clause 11; criteria 6–7) | `evidence-contract-manifest` | implementation commit | |
+| D16 | [[D676]] claim validation admits exact offline sourcing records, not runtime/API lookalikes (§9 clause 12; criteria 6–7) | `evidence-contract-manifest` | implementation commit | |
+| D17 | [[D677]] opponent selection admits exact raw Maia, Stockfish and Syzygy provider results before they influence a move (§9 clause 13; criteria 6–7) | `evidence-contract-manifest` | implementation commit | |
 
 ## Open questions
 
@@ -1176,3 +1198,8 @@ lands with implementation; no item awaits an owner.
 - 2026-08-21: resumed-bind Explorer audit ([[D674]]). Split the on-request `CorpusPage` from
   per-position `CorpusResult`; repertoire scanning now admits every provider result before it
   changes gaps or abstention state. No ranking or quality semantics were added.
+- 2026-08-21: resumed-bind comparison, claim-ledger and opponent-frontier audit
+  ([[D675]]–[[D677]]). Added a normalized recorded trajectory projection; exact offline sourcing
+  record projections; and raw Maia UCI, Stockfish UCI and Syzygy probe projections. Their exported
+  consumers now reject bare payloads at typecheck and assert the runtime seal. These changes name
+  existing bytes and do not alter scoring, selection policy or learner-visible prose.

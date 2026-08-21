@@ -8,8 +8,10 @@ import {
   branchPath,
   commitMove,
   compareBranches,
+  comparisonEngineTrajectory,
   comparisonNarrative,
   comparisonStrips,
+  consumeComparisonEngineTrajectory,
   createRun,
   fork,
   reachCheckpoint,
@@ -21,6 +23,11 @@ import {
   type DrillRun,
   type OpponentSelection,
 } from "./index.js";
+
+if (false) {
+  // @ts-expect-error comparison trajectory consumes only a compiled evidence view.
+  consumeComparisonEngineTrajectory([]);
+}
 
 const at = "2026-08-12T12:00:00.000Z";
 const opponent = (moveUci: string): OpponentSelection => ({

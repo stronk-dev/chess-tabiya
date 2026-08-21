@@ -19,15 +19,15 @@ const CONSUMER_ANCHORS = Object.freeze([
   ["board.selected_square_sight", "packages/runtime/src/reading-evidence.ts", "export function consumeSelectedSquareSight"],
   ["theory.shape_firing", "packages/runtime/src/shape-firing.ts", "export function consumeShapeFiring"],
   ["compare.structure_strip", "apps/web/src/lib/CompareView.svelte", "data-evidence-consumer=\"compare.structure_strip\""],
-  ["compare.engine_trajectory", "apps/web/src/lib/CompareView.svelte", "data-evidence-consumer=\"compare.engine_trajectory\""],
+  ["compare.engine_trajectory", "packages/runtime/src/compare-strips.ts", "export function consumeComparisonEngineTrajectory"],
   ["inspector.human_split", "apps/web/src/lib/inspector-evidence.ts", "export function consumeHumanSplit"],
   ["inspector.corpus", "apps/web/src/lib/inspector-evidence.ts", "export function consumeCorpus"],
-  ["opponent.selection", "apps/server/src/opponent-selector.ts", "select(request: SelectMoveRequest)"],
+  ["opponent.selection", "apps/server/src/opponent-selector.ts", "export function consumeOpponentSelectionEvidence"],
   ["guidance.authored_claim", "apps/web/src/lib/claim-presentation.ts", "export function claimProvenanceDeclared"],
   ["board.pivotal_marker", "packages/runtime/src/pivotal.ts", "export function consumePivotalMarkers"],
   ["review.story", "apps/web/src/lib/GameStoryScreen.svelte", "data-evidence-consumer=\"review.story\""],
   ["runtime.repertoire_scan", "apps/server/src/repertoire.ts", "export function consumeRepertoireCorpus"],
-  ["authoring.claim_binding", "apps/server/src/sourcing/claim-binding.ts", "export function validateClaimBindings"],
+  ["authoring.claim_binding", "apps/server/src/sourcing/claim-binding.ts", "export function consumeClaimBindingRecords"],
   ["guidance.voice_compare", "apps/server/src/rest.ts", "narrative.evidence, false"],
   ["guidance.voice_story", "apps/server/src/rest.ts", "storyDeclaredEvidence"],
 ] as const);
@@ -54,7 +54,7 @@ for (const [direction, path, needle] of NON_CONSUMER_ANCHORS) {
   if (declaredConsumers.includes(direction === "producer" ? "guidance.packet" : "analysis.engine")) throw new TypeError(`Evidence ${direction} anchor was incorrectly reintroduced as a consumer`);
 }
 
-if (EVIDENCE_MANIFEST.producers.map((producer) => producer.id).sort().join("|") !== [...EVIDENCE_PRODUCER_IDS].sort().join("|")) throw new TypeError("The 18 producer paths are not set-equal to the primary catalogue");
+if (EVIDENCE_MANIFEST.producers.map((producer) => producer.id).sort().join("|") !== [...EVIDENCE_PRODUCER_IDS].sort().join("|")) throw new TypeError("The producer paths are not set-equal to the primary catalogue");
 for (const producer of EVIDENCE_MANIFEST.producers) {
   for (const path of producer.implementation.split(";").map((item) => item.trim().replace(/(\.ts):.*$/u, "$1")).filter((item) => item.includes("/"))) source(path);
 }

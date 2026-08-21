@@ -26,7 +26,7 @@ export {
   type ObjectiveTimelineEntry,
 } from "./compare.js";
 export { BRANCH_COLLAPSE_FLOOR, branchDecidedness, collapsedBranchIds, renderCollapseExplanation, type AssessmentCategory, type AssessmentObjective, type CollapseExplanation, type Decidedness, type DecidednessGround, type TablebaseCategory as BranchTablebaseCategory } from "./branch-scale.js";
-export { comparisonNarrative, comparisonStrips, type BranchStrips, type ComparisonNarrative, type NarrativeGroup, type PieceRoute, type StripEntry } from "./compare-strips.js";
+export { comparisonEngineTrajectory, comparisonNarrative, comparisonStrips, consumeComparisonEngineTrajectory, type BranchStrips, type ComparisonNarrative, type NarrativeGroup, type PieceRoute, type StripEntry } from "./compare-strips.js";
 export {
   RuntimeError,
   assertActiveWriter,

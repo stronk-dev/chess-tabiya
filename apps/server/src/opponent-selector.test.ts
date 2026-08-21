@@ -14,6 +14,7 @@ import type {
   EngineRequest,
 } from "./engine-supervisor.js";
 import {
+  consumeOpponentSelectionEvidence,
   neutralTiebreakKey,
   OpponentSelector,
   selectionCacheKey,
@@ -21,6 +22,11 @@ import {
   type SelectorEngineClient,
   type SelectorSpineNode,
 } from "./opponent-selector.js";
+
+if (false) {
+  // @ts-expect-error opponent selection accepts only a compiled provider-evidence view.
+  consumeOpponentSelectionEvidence([]);
+}
 import { createRestHandler, errorResponse } from "./rest.js";
 import { RunService } from "./service.js";
 import { EvidenceJobQueue, type EvidenceExecutor } from "./evidence-queue.js";

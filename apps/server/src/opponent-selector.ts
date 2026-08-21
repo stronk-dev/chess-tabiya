@@ -6,6 +6,9 @@ import { isNormal } from "chessops/types";
 import { parseUci } from "chessops/util";
 
 import {
+  assertConsumerEvidenceView,
+  declareEvidence,
+  evidenceForConsumer,
   PolicyMassError,
   humanConcessionMass,
   transposeKey,
@@ -13,6 +16,7 @@ import {
   type RunOpponentMode,
   type SelectionCandidate,
   type SelectionEngineIdentity,
+  type ConsumerEvidenceView,
 } from "@chess-tabiya/runtime";
 
 import type {
@@ -27,11 +31,12 @@ import {
   policyModeUnsupported,
 } from "./errors.js";
 import { appliedTargetElo } from "./engine-band.js";
+import { EVIDENCE_MANIFEST } from "./evidence-manifest.js";
 import {
   resolveStrongEngineProfile,
   type StrongEngineProfile,
 } from "./strong-engine.js";
-import { invertTablebaseCategory, type TablebaseMove, type TablebaseSource } from "./tablebase.js";
+import { invertTablebaseCategory, type TablebaseMove, type TablebasePosition, type TablebaseSource } from "./tablebase.js";
 
 export type OpponentPolicyMode = RunOpponentMode;
 
@@ -74,6 +79,23 @@ export interface OpponentSelectorOptions {
 const DEFAULT_TEMPERATURE = 0.8;
 const DEFAULT_TOP_P = 0.92;
 const DIGEST_PATTERN = /^sha256:[0-9a-f]{64}$/;
+
+type OpponentProviderPayload = readonly string[] | TablebasePosition;
+
+export function consumeOpponentSelectionEvidence(view: ConsumerEvidenceView<OpponentProviderPayload>): readonly OpponentProviderPayload[] {
+  assertConsumerEvidenceView(view);
+  if (view.consumer.id !== "opponent.selection" || view.consumer.version !== 1) throw new TypeError("Expected opponent.selection@1 consumer view");
+  return Object.freeze(view.items.map((item) => item.payload));
+}
+
+function opponentProviderEvidence<T extends OpponentProviderPayload>(producerId: "human.maia" | "live.stockfish" | "live.syzygy", projectionId: "human.maia.uci_response" | "live.stockfish.uci_response" | "live.syzygy.probe_result", payload: T): T {
+  const admitted = consumeOpponentSelectionEvidence(evidenceForConsumer(
+    EVIDENCE_MANIFEST,
+    { id: "opponent.selection", version: 1 },
+    [declareEvidence({ id: producerId, version: 1 }, { id: projectionId, version: 1 }, payload)],
+  ));
+  return admitted[0] as T;
+}
 
 function invalid(message: string, cause?: Error): ServerError {
   return new ServerError("INVALID_REQUEST", message, {
@@ -472,7 +494,7 @@ export class OpponentSelector {
     if (!Number.isSafeInteger(count) || count < 2 || count > 8) {
       throw invalid("enumerate count must be an integer from 2 to 8");
     }
-    const lines = await this.#client.execute(this.#strongEngineId, {
+    const lines = opponentProviderEvidence("live.stockfish", "live.stockfish.uci_response", await this.#client.execute(this.#strongEngineId, {
       commands: [
         `setoption name MultiPV value ${count}`,
         positionCommand(request),
@@ -481,7 +503,7 @@ export class OpponentSelector {
       resetSearchState: true,
       until: (line) => line.startsWith("bestmove "),
       timeoutMs: Math.max(5_000, this.#strongEngineMovetimeMs * 10),
-    });
+    }));
     return makeSelection(
       bestMove(lines),
       candidateLines(lines),
@@ -535,11 +557,11 @@ export class OpponentSelector {
       positionCommand(request),
       "go",
     ];
-    const lines = await this.#client.execute(this.#maiaEngineId, {
+    const lines = opponentProviderEvidence("human.maia", "human.maia.uci_response", await this.#client.execute(this.#maiaEngineId, {
       commands,
       until: (line) => line.startsWith("bestmove "),
       timeoutMs: 60_000,
-    });
+    }));
     return Object.freeze({
       lines,
       identity,
@@ -581,7 +603,7 @@ export class OpponentSelector {
     const searchBound = this.#strongEngineNodes === null
       ? Object.freeze({ kind: "movetime" as const, value: this.#strongEngineMovetimeMs })
       : Object.freeze({ kind: "nodes" as const, value: this.#strongEngineNodes });
-    const lines = await this.#client.execute(this.#strongEngineId, {
+    const lines = opponentProviderEvidence("live.stockfish", "live.stockfish.uci_response", await this.#client.execute(this.#strongEngineId, {
       commands: [
         `setoption name MultiPV value ${this.#strongEngineMultiPv}`,
         positionCommand(request),
@@ -590,7 +612,7 @@ export class OpponentSelector {
       resetSearchState: true,
       until: (line) => line.startsWith("bestmove "),
       timeoutMs: searchBound.kind === "nodes" ? 5_000 : Math.max(5_000, searchBound.value * 10),
-    });
+    }));
     return makeSelection(
       bestMove(lines),
       candidateLines(lines),
@@ -642,7 +664,7 @@ export class OpponentSelector {
     }
     const board = currentPosition(request);
     const fen = makeFen(board.toSetup());
-    const position = await this.#tablebase.probe(fen);
+    const position = opponentProviderEvidence("live.syzygy", "live.syzygy.probe_result", await this.#tablebase.probe(fen));
     if (position.category === "unknown") {
       throw new ServerError("TABLEBASE_UNAVAILABLE", "Tablebase category is unknown", { details: { retryAfterMs: 60_000 } });
     }
@@ -681,7 +703,7 @@ export class OpponentSelector {
     }
     const board = currentPosition(request);
     const fen = makeFen(board.toSetup());
-    const root = await this.#tablebase.probe(fen);
+    const root = opponentProviderEvidence("live.syzygy", "live.syzygy.probe_result", await this.#tablebase.probe(fen));
     if (root.category === "unknown") {
       throw new ServerError("PRACTICAL_RESISTANCE_UNAVAILABLE", "The root outcome class is unknown");
     }
@@ -705,7 +727,7 @@ export class OpponentSelector {
     for (const candidate of preserving) {
       const child = play(board, candidate.uci, `tablebase reply ${candidate.uci}`);
       const childFen = makeFen(child.toSetup());
-      const childTablebase = await this.#tablebase.probe(childFen);
+      const childTablebase = opponentProviderEvidence("live.syzygy", "live.syzygy.probe_result", await this.#tablebase.probe(childFen));
       if (childTablebase.category === "unknown") {
         throw new ServerError("PRACTICAL_RESISTANCE_UNAVAILABLE", `Outcome class after ${candidate.uci} is unknown`);
       }

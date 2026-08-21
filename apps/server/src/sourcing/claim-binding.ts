@@ -3,8 +3,10 @@ import { Chess } from "chessops/chess";
 import { makeFen, parseFen } from "chessops/fen";
 import { makeSan } from "chessops/san";
 import { makeUci, parseUci } from "chessops/util";
+import { assertConsumerEvidenceView, declareEvidence, evidenceForConsumer, type ConsumerEvidenceView } from "@chess-tabiya/runtime";
 
 import type { TablebaseCategory } from "../tablebase.js";
+import { EVIDENCE_MANIFEST } from "../evidence-manifest.js";
 import { learnerCategory } from "./tablebase-category.js";
 import { sha256 } from "./canonical.js";
 import { issue, object } from "./ledger-validation.js";
@@ -167,11 +169,42 @@ const MACHINE_TOKEN = /(?:\b\d+(?:[,.]\d+)*(?:%|st|nd|rd|th)?\b|\b(?:zero|one|tw
 const RATE_TOKEN = /(?:[+-]?\d+\.\d+%?)/;
 export const MACHINE_LABEL_EVIDENCE_KINDS: Readonly<Record<string, readonly EvidenceRecord["kind"][]>> = Object.freeze({ corpus_observed:["explorer_frequency","explorer_position_census"], engine_validated:["engine_eval"], tablebase_exact:["tablebase_result"] });
 
+const CLAIM_RECORD_PROJECTION: Partial<Record<EvidenceRecord["kind"], string>> = Object.freeze({
+  engine_eval: "sourcing.ledger.engine_eval",
+  tablebase_result: "sourcing.ledger.tablebase_result",
+  explorer_position_census: "sourcing.ledger.explorer_position_census",
+  opening_identity: "theory.opening_identity.record",
+});
+
+export function consumeClaimBindingRecords(view: ConsumerEvidenceView<EvidenceRecord>): readonly EvidenceRecord[] {
+  assertConsumerEvidenceView(view);
+  if (view.consumer.id !== "authoring.claim_binding" || view.consumer.version !== 1) throw new TypeError("Expected authoring.claim_binding@1 consumer view");
+  return Object.freeze(view.items.map((item) => item.payload));
+}
+
+function claimBindingLedger(ledger: EvidenceLedger): EvidenceLedger {
+  const declared = ledger.records.flatMap((record) => {
+    const projection = CLAIM_RECORD_PROJECTION[record.kind];
+    return projection === undefined ? [] : [declareEvidence(
+      { id: record.kind === "opening_identity" ? "theory.opening_identity" : "sourcing.ledger", version: 1 },
+      { id: projection, version: 1 },
+      record,
+    )];
+  });
+  const records = consumeClaimBindingRecords(evidenceForConsumer(
+    EVIDENCE_MANIFEST,
+    { id: "authoring.claim_binding", version: 1 },
+    declared,
+  ));
+  return Object.freeze({ ...ledger, records });
+}
+
 function segments(text: string): readonly string[] {
   return text.split(/(?<=[.?!])\s+(?=[A-Z"'“(])|(?<=[;:])\s+|\s+[—–]\s+|\s+-\s+|,?\s+(?=(?:so|therefore|thus|hence|which means|because|since)\b)/i).map((part) => part.trim()).filter(Boolean);
 }
 
 export function validateClaimBindings(pack: DrillPackDefinition, ledger: EvidenceLedger, issues: SourcingIssue[]): readonly ValidatedClaimBinding[] {
+  ledger = claimBindingLedger(ledger);
   const result: ValidatedClaimBinding[] = [], seen = new Set<string>(), positionSets = positions(pack);
   for (const [bindingIndex, binding] of (ledger.claimBindings ?? []).entries()) {
     const base = `/claimBindings/${bindingIndex}`, before = issues.length;
