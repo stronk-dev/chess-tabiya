@@ -4090,3 +4090,21 @@ cannot establish H5/C5. O8 is now ready on the narrower evidence the product act
 handoff recommends one composable policy stack, an honest baseline/guarded/pawn-heavy 1.0 roster,
 separate controlled/observed/presentation traits, explicit band calibration and no repertoire,
 memory or named style claim until its own evidence exists.
+
+## 2026-08-21 — R13 grounded coaching mechanical/code arm complete
+
+The focused two-test instrument establishes the smallest safe longitudinal card: versioned
+identity, occurrence/opportunity, exact source, complete-vs-shown count and exact or honestly empty
+pack/theory applicability. Its deterministic Carlsbad example passes; label-only merge, missing
+denominator, source-less count, ungrounded action and diagnostic/advice vocabulary refuse.
+
+The current production path cannot populate that contract across games. Imported runs never enter
+progress, F2 semantic events do not persist there, existing aggregates drop source rows and
+opportunity denominators, and shape recommendations keep run IDs but not firing nodes. The corpus
+adds a separate identity defect: 199 concept references contain 25 cross-pack reused raw identities,
+while the resolver stores all 199 as pack-scoped keys. D699-D702 own the gaps.
+
+R13's mechanical/code arm is complete and O9 is ready. The handoff recommends a personal-
+observation ledger feeding separate Observed habit, Recurring situation and Rehearsal result
+modules; deterministic rendering is authoritative and optional LLM prose may only paraphrase the
+sealed card. Owner use remains the quality check, not a pretext for inventing a weakness ranking.

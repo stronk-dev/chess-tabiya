@@ -1,0 +1,82 @@
+{
+  "packs": 50,
+  "conceptReferences": 199,
+  "rawConceptIdentities": 168,
+  "rawIdentitiesRepeatedAcrossPacks": 25,
+  "packScopedPersistedIdentities": 199,
+  "mostRepeated": [
+    [
+      "advance-chain-base",
+      [
+        "anti-caro-advance-early-c5",
+        "anti-caro-advance-c5-race",
+        "anti-french-advance-white",
+        "caro-kann-advance-black",
+        "french-advance-black",
+        "trajectory-caro-advance-chain-bishops"
+      ]
+    ],
+    [
+      "arrangement-before-action",
+      [
+        "dragon-yugoslav-race",
+        "kid-mar-del-plata-white",
+        "maroczy-bind-white-squeeze"
+      ]
+    ],
+    [
+      "break-timing",
+      [
+        "anti-caro-advance-c5-race",
+        "caro-kann-advance-black",
+        "najdorf-english-attack-black"
+      ]
+    ],
+    [
+      "backward-pawn-target",
+      [
+        "carlsbad-minority-attack",
+        "trajectory-qgd-exchange-minority"
+      ]
+    ],
+    [
+      "bishop-coloured-corner",
+      [
+        "mate-bishop-knight",
+        "trajectory-mate-bishop-knight"
+      ]
+    ],
+    [
+      "blockade-square",
+      [
+        "iqp-black-tarrasch-defence",
+        "iqp-white-panov-attack"
+      ]
+    ],
+    [
+      "carlsbad-structure",
+      [
+        "carlsbad-minority-attack",
+        "trajectory-qgd-exchange-minority"
+      ]
+    ],
+    [
+      "castle-before-attacking",
+      [
+        "opening-principles-black",
+        "opening-principles-white"
+      ]
+    ]
+  ],
+  "topology": {
+    "importedAttemptsPersisted": false,
+    "conceptIdentityIsCrossPack": false,
+    "attemptsCarrySourceNode": true,
+    "conceptTagsCarrySourceNode": false,
+    "aggregateMetricsCarrySourceRows": false,
+    "aggregateMetricsCarryOpportunityDenominator": false,
+    "shapeRecommendationCarriesRunIds": true,
+    "shapeRecommendationCarriesNodeIds": false,
+    "reviewConsumesSemanticEvents": false
+  }
+}

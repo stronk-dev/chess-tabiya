@@ -865,3 +865,16 @@ Product modules/defaults, schemas and content remain explicitly out of scope.
 - Prepared `bot-policy/o8-handoff.md`: one versioned policy stack; human baseline, disclosed 250 cp
   guard and measured pawn-heavy profile; controlled/observed/presentation separation; no invented
   repertoire, memory or personality labels. O8 is ready and R13 is the next executable research job.
+
+## 2026-08-21 — R13 grounded coaching handoff ready
+
+- Measured the current coaching topology: imported histories, cross-pack concept identity,
+  semantic-event persistence, aggregate source rows/opportunities and exact recommendation nodes
+  are absent or broken at named joins.
+- Counted 199 concept refs / 168 raw identities / 25 cross-pack reuses; current pack-scoped keys
+  fragment all 199 and cannot be repaired by grouping display labels.
+- The focused two-test prototype passes one cited occurrence/opportunity card with exact replay,
+  pack and theory actions, and refuses five laundering shapes.
+- `grounded-coaching/o9-handoff.md` makes O9 ready on a conservative contract: continuous literal
+  habits, a personal-observation ledger, three learner modules, deterministic-first presentation,
+  optional sealed LLM wording, privacy lifecycle and no archetypes/diagnosis/priority ranking.
