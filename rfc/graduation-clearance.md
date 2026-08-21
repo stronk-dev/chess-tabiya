@@ -669,7 +669,9 @@ so this is a refusal and not a note. So:
 
 > **Normative.** A `ledger_record` clearance whose `subject` matches `PROSE_POINTERS` or
 > `HUMAN_ONLY_POINTERS` is **unsatisfiable by construction** and is an error —
-> `GRADUATION_CLEARANCE_SUBJECT_UNSUPPORTABLE`. Such an entry is `claim_bound`, whose predicate
+> `GRADUATION_CLEARANCE_SUBJECT_UNGRAMMATICAL` *(this rule is the B row of §1.2c's table; its
+> original standalone code `…_SUBJECT_UNSUPPORTABLE` was withdrawn into the grammatical code in
+> author round 3, and this box was corrected 2026-08-21 to match)*. Such an entry is `claim_bound`, whose predicate
 > reaches prose through `claimBindings` and no other way.
 
 **This is the B(corpus)/C boundary, decided by a mechanism instead of by a keyword.** §4.2 already
@@ -2133,7 +2135,7 @@ reopening the object that RFC closed. The lane is claimed instead (§7).
 | Stage | Population | Rule |
 |---|---|---|
 | 0 | `content/candidates/` — 143 entries, 36 documents | each emitter blocker template gets one checked-in `clearance`; the emitters write it and Stage 0 backfills the same object. Keyed on the template id, not on the rendered statement `[V]` — **but see the correction below: 3 of the 143 are not emitter output and do need judgement** |
-| A | `content/drafts/` — 220 blocking entries | the **§5.1a ruleset, published as a literal**, assigns a candidate `kind`; **the 17 residue are classified by hand in §5.1b, not defaulted** (open question 4's ruling — the draft defaulted them to `unreachable`, the one kind eligible for `accepted`). Every assignment is written into the commit for review as a diff, and the classifier ships under `tools/` so the diff is re-derivable (criterion 11). **[author round 2] Stage A also writes the `subject`, and for the 46 rule-2 entries the subject *decides the kind*** — a position/move pointer takes `ledger_record` + `recordKind`, a prose pointer takes `claim_bound`, and `GRADUATION_CLEARANCE_SUBJECT_UNSUPPORTABLE` refuses the combination that cannot hold (§1.2b). **The ruleset therefore assigns a candidate kind for six of its seven rules and a candidate *pair* for rule 2**, which is stated here rather than left as a surprise at implementation ([[D464]]) |
+| A | `content/drafts/` — 220 blocking entries | the **§5.1a ruleset, published as a literal**, assigns a candidate `kind`; **the 17 residue are classified by hand in §5.1b, not defaulted** (open question 4's ruling — the draft defaulted them to `unreachable`, the one kind eligible for `accepted`). Every assignment is written into the commit for review as a diff, and the classifier ships under `tools/` so the diff is re-derivable (criterion 11). **[author round 2] Stage A also writes the `subject`, and for the 46 rule-2 entries the subject *decides the kind*** — a position/move pointer takes `ledger_record` + `recordKind`, a prose pointer takes `claim_bound`, and `GRADUATION_CLEARANCE_SUBJECT_UNGRAMMATICAL` refuses the combination that cannot hold (§1.2b/§1.2c; corrected 2026-08-21 from the withdrawn code). **The ruleset therefore assigns a candidate kind for six of its seven rules and a candidate *pair* for rule 2**, which is stated here rather than left as a surprise at implementation ([[D464]]) |
 | B | `content/drafts/` — 30 resolved entries | each gains `resolved.clearance`; the 4 measured stale ones (§4.1) are **not** hand-resolved — **`make graduation-clear` (§6.5) resolves them**, which is the migration's own first test. **[author round 2] The population splits 29 + 1, measured**: 29 take a subject that resolves today (§2.2a's four families), and **1** — `anti-caro-advance-early-c5`'s `refuted-and-deleted-…` — takes `kind: "referent_removed"` with `absentIds: ["bxc5-recoup","bxc5-trade"]`. **Stage B is a mechanical migration over 29 and a one-line hand entry over 1, and the RFC says which is which rather than claiming 30** ([[D465]]) |
 | C | 5 browser fixtures (§0.4) | `blocking` → `accepted`, `kind: "out_of_scope"`, `unreachableBecause` naming the fixture role. First `out_of_scope` instances in the corpus |
 
@@ -2866,7 +2868,10 @@ RFC do is call a convention a mechanism.**
     both sides** `[V]`. Asserting a literal seven-item list on the schema side alone would pass while
     a new evidence kind silently became unexpressible in a clearance, which is the failure this
     criterion exists to catch. A second assertion covers the pointer rule: a `ledger_record` clearance
-    with `subject: "/feedbackClaims/0/text"` raises `GRADUATION_CLEARANCE_SUBJECT_UNSUPPORTABLE`, and
+    with `subject: "/feedbackClaims/0/text"` raises `GRADUATION_CLEARANCE_SUBJECT_UNGRAMMATICAL`
+    *(corrected 2026-08-21 — the criterion still named `…_SUBJECT_UNSUPPORTABLE`, withdrawn into the
+    grammatical code in author round 3; a criterion keying on a withdrawn code is unsatisfiable, the
+    exact [[D444]]/[[D451]] class this round exists to prevent)*, and
     the same entry with `kind: "claim_bound"` does not. **Non-vacuity is established first**: the test
     asserts that `PROSE_POINTERS` (`check.ts:36`) actually contains the `/feedbackClaims/\d+/text`
     pattern before asserting the lint keys on it.
