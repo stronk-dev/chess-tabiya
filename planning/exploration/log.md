@@ -3825,3 +3825,15 @@ The live hand derivation is pack 0.30, run 0.18, shape-entry 0.5, principle-entr
 held with no numeric lane. D376, D385, D423, D447, D461, D498, D499 and D653 close. D384's
 register half and D504's register half close; their explicitly excluded collision/history and
 missing-schema-test halves remain open.
+
+## 2026-08-21 — RFC lifecycle documentary stage landed awaiting its reader
+
+The lifecycle now admits `awaiting` only after `implementing`, gives every Active RFC an explicit
+Discharges section, closes the owner vocabulary, and requires archive commits to clear or re-home
+obligations owned by the departing slug. The status grammar preserves Active-cell review history
+while making its leading token comparable. The process RFC itself is the bootstrap case:
+`awaiting — D1` until P1–P6 exist in the shared parser's companion instrument.
+
+D433, D475, D478 and D460 close on the documentary mechanism. D476 stays open because the binding
+wave is now visibly owned by `OWNER` but has not yet been commissioned; naming a missing act is not
+performing it.

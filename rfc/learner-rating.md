@@ -1959,6 +1959,12 @@ Rows still proposed:
   from the rated-game projector — the R2 half of §5.3a, asserted over the module graph the way
   AC-11 asserts R15.
 
+## Discharges
+
+| id | the obligation | owner | recorded when discharged | discharged |
+|---|---|---|---|---|
+| `D1` | Six changes owed to `design/06-campaign.md`, enumerated in §5.3a | `OWNER` | `design/06-campaign.md` plus `planning/exploration/log.md` | |
+
 ## Open questions
 
 Resolved before `accepted`, or deferred to a named future RFC. **Numbering is preserved across

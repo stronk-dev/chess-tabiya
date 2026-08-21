@@ -717,6 +717,10 @@ Each criterion names how it fails, because a criterion that cannot fail is not a
     defaults, which is the failure `docs/adaptive-guidance.md:61` is currently in for
     D493 and is precisely the pattern not to repeat.
 
+## Discharges
+
+none
+
 ## Open questions
 
 1. **Does assistance *permission* vary by session kind at all? — NON-BLOCKING; this RFC is

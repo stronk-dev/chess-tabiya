@@ -1,6 +1,6 @@
 # RFC: RFC lifecycle completion — the transitions between documents
 
-- **Status:** draft
+- **Status:** awaiting — D1 (`tools/status-parity.mjs`)
 - **Author:** claude
 - **Created:** 2026-08-17
 - **Design refs:** **None, and the absence is deliberate.** This RFC specifies repo process,

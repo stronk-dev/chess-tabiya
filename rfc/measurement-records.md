@@ -1275,6 +1275,10 @@ is untouched: nothing here changes what a learner is shown, and B4 remains unmet
 
 ---
 
+## Discharges
+
+none
+
 ## Open questions
 
 1. **Should packs get the `measurements` surface too, or keep using `claimBindings`?** Two pack

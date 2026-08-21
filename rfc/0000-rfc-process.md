@@ -49,14 +49,23 @@ not building. Therefore:
 
 ## RFC lifecycle
 
-`draft` → `accepted` → `implementing` → `implemented` → (`superseded` | `withdrawn`)
+`draft` → `accepted` → `implementing` → (`awaiting` →) `implemented` → (`superseded` | `withdrawn`)
 
 - **draft**: under discussion; anything may change.
 - **accepted**: scope and approach agreed by Marco; implementation may be planned.
 - **implementing**: at least one planning doc exists and work is underway.
-- **implemented**: shipped; canonical behavior has been distilled into `docs/`, and the
-  frozen RFC has moved to `rfc/archive/`.
+- **awaiting**: the surface has landed, at least one obligation executed outside this RFC's
+  implementation remains undischarged, and no outstanding code work remains. It stays active,
+  does not flip its ledger rows, and names the holding discharge row in both status locations.
+- **implemented**: shipped; canonical behavior has been distilled into `docs/`, every row of
+  its `## Discharges` section is discharged, and the frozen RFC has moved to `rfc/archive/`.
 - **superseded**: a later RFC replaces it (must link both ways). **withdrawn**: abandoned, kept for the record.
+
+The state vocabulary is closed at `draft`, `accepted`, `implementing`, `awaiting`, `implemented`,
+`superseded`, and `withdrawn`. Both the body Status line and the Active-table status cell begin
+with one token after stripping Markdown emphasis and whitespace. Text from the first date, dash,
+colon, comma, semicolon or parenthesis is prose. For `awaiting`, the first `D<n>` token after that
+separator is the required pointer to an undischarged row; no other prose is machine-read.
 
 ## Rules
 
@@ -83,6 +92,10 @@ not building. Therefore:
    Every such resource has a register section in `rfc/README.md`. A draft declares its claims
    on them in one machine-readable block (`rfc/archive/shared-resource-registers.md` §3) before writing
    a version into its body.
+8. **Scripted edits assert.** Any scripted edit to a repo document asserts its anchor before
+   replacing (`assert old in s`), or rewrites the file whole. Anchored patching is not used on a
+   file another agent also edits. Before a commit message describes an edit, verify it with
+   `git diff --stat`.
 
 ## Planning docs & the job log
 
@@ -96,6 +109,10 @@ create `planning/<slug>/`:
 
 On completion: distill outcomes into `docs/`, set the RFC to `implemented`, move the RFC
 to `rfc/archive/` and its planning directory to `planning/archive/`. Never delete either.
+Before archiving, clear the document's name from every other document's obligations: run
+`git grep -ln '<slug>' rfc/ planning/ design/`, then mark each `## Discharges` row whose owner
+names it discharged (with the SHA) or re-home it to an allowed owner. Name both in the archiving
+commit body as `lifts: <path> — <what>` and `rehomes: <what> → <owner>`.
 
 ## Docs conventions
 
@@ -104,6 +121,10 @@ to `rfc/archive/` and its planning directory to `planning/archive/`. Never delet
 - Every implementing change that alters behavior updates the relevant `docs/` page in
   the same change.
 - When docs and code disagree, that is a bug in docs; fix it with the next change.
+
+## Discharges
+
+none
 
 ## Changelog
 

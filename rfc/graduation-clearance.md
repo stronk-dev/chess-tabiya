@@ -2953,6 +2953,10 @@ RFC do is call a convention a mechanism.**
     prose rather than an assertion. **A premise an RFC argues from and no test holds is a premise that
     will be refuted by a commit nobody connected to this document.**
 
+## Discharges
+
+none
+
 ## Open questions
 
 1. **Do the 5 browser fixtures become `accepted`, or do they leave `content/drafts/`?** §6.2 Stage C

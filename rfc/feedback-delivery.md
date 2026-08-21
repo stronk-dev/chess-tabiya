@@ -2528,6 +2528,12 @@ used as-is.
     be: `main.ts` defaults `databasePath` to `":memory:"` and no run store persists, so there is no
     event count to read (§0.3).
 
+## Discharges
+
+| id | the obligation | owner | recorded when discharged | discharged |
+|---|---|---|---|---|
+| `D1` | Binding wave: 63 mandatory pack edits, explorer position-census over 60 `corpus_observed` claims in 31 packs, and tablebase legal-successor pass over 36 `tablebase_exact` claims in 12 packs | `OWNER` | `planning/content-era/log.md` plus criterion-11 ledger flips in the shipping commit | |
+
 ## Open questions
 
 1. **CLOSED BY OWNER RULING 2026-08-16 ([[D462]], `4ca7792`) — and closed on the narrowed question,

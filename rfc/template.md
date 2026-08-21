@@ -1,6 +1,6 @@
 # RFC: Title
 
-- **Status:** draft | accepted | implementing | implemented | superseded | withdrawn
+- **Status:** draft | accepted | implementing | awaiting | implemented | superseded | withdrawn
 - **Author:**
 - **Created:** YYYY-MM-DD
 - **Design refs:** (design doc sections this specifies, e.g. `design/01 §2`)
@@ -27,6 +27,9 @@ What problem/goal, and why this scope boundary (what is explicitly out of scope)
 The normative content. Concrete enough that an agent can implement without inventing
 mechanics: data shapes, formulas, API surfaces, behaviors, edge cases.
 
+A table enumerating code sites states its **unit** and its **total** in the table's caption,
+and the acceptance criterion that verifies it counts the same unit.
+
 ## Deviations from design
 
 Explicit list of anywhere this diverges from `design/` docs, with rationale. "None" if none.
@@ -34,6 +37,10 @@ Explicit list of anywhere this diverges from `design/` docs, with rationale. "No
 ## Acceptance criteria
 
 Testable gates: what must pass for this RFC to move to `implemented`.
+
+## Discharges
+
+none
 
 ## Open questions
 
