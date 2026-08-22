@@ -39,7 +39,9 @@ registry and its eligibility rows are `learner-modules.md`'s to land). `node
 tools/register-check.mjs` passes with this block declaring `none`. `node
 tools/status-parity.mjs` reports exactly one expected P3 error until the index row for this
 file is written — the index edit is withheld from this drafting change by instruction and is
-the register owner's recording act (criterion A15).
+the register owner's recording act (criterion A15). *(The row has since been recorded: at
+cross-review all three instruments run green with this file present — `register-check` 13
+active / C1–C6, `status-parity` 14 active / P1–P6, `make intent-parity` 4/4.)*
 
 ## Summary
 
@@ -48,7 +50,7 @@ geometry is a function of viewport alone**, a **companion region** (desktop rail
 bounded queue / phone bottom sheet) that seats the eleven accepted module contracts through
 their declared seat classes, a **separate opt-in full-inspector surface**, and — riding in this
 RFC per the program routing — the **Phase-7 interaction-state acceptance matrix**: seven
-viewports × fourteen composition states, asserted **post-gesture**, screenshotted, running on
+viewports × sixteen composition states, asserted **post-gesture**, screenshotted, running on
 the existing browser CI path.
 
 The normative core is already ruled and is quoted, not re-decided: the two field invariants
@@ -183,7 +185,7 @@ desktop drawing:
   (`+3`). Selecting a badge **swaps the head's content in place**; the band never adds rows
   and never changes height. Content taller than the head scrolls inside the card.
 - **Phone**: the sheet's **collapsed rim** (constant height `--rim-h`, in layout below the
-  strip) carries the badges. Expanding the sheet is an **overlay**: it paints over the
+  objective/state line per the §2.3 stack) carries the badges. Expanding the sheet is an **overlay**: it paints over the
   board's lower edge with a scrim, contributes no layout, and never moves the board. One
   seat expanded inside the sheet at a time, same swap rule. A visible drag-handle/dismiss
   affordance is mandatory.
@@ -225,6 +227,23 @@ numerals, producer vocabulary, percentages-as-mass and trigger ASTs are legal (�
 field pattern 6 held to its legitimate home (`competitor-play-ux.md` §2.6) and the design-tier
 IA ruling made layout.
 
+The surface's hosted set is slightly broader than the module packet: beside
+`module.full_inspector` and the four subsumed consumers it carries, **as surface chrome**,
+run-machinery diagnostics that are not manifest evidence at all (the raw trajectory-leg
+sentence of L4 — run/pack state, not a projection). **Contract seam, found in cross-review
+and held open rather than papered (the D523 class — a destination is only real if the
+contract can carry it):** four §5.2 rows route evidence families to (i) whose projection ids
+are in **neither** `module.full_inspector`'s accepted 34 `accepts` rows nor any subsumed
+shipped consumer — `rules.phase.reading@1` (L1's producer phrasing),
+`rules.pivotal.marker@1` (L10), the `pack.authored` classifier-verdict token (L12), and
+`derived.compare.{structure_delta, eval_delta, engine_trajectory, piece_route}@1` (L13's
+full grids/strips/routes — CompareView is their only shipped consumer and it is a
+vocabulary-lawful play-adjacent surface under §5.1, so the raw forms have no legal home
+today). Their inspector homes require an Appendix-B amendment to `rfc/learner-modules.md`
+(accepted, not yet implemented — an in-place amendment with a changelog line is legal under
+RFC-0000 rule 3), recorded before or with that RFC's implementation. Discharges **D4** holds
+the obligation, and A4 cannot close on those rows until the amended rows compile.
+
 ### §3 — Board-size stability as a testable invariant
 
 #### 3.1 The geometry function
@@ -247,6 +266,31 @@ remainder (`container-type: size` at `DrillScreen.svelte:1335`, board
 `min(100cqw, 100cqh)` of whatever the stacked content left over — is exactly the defect: it
 makes board size `f(viewport − content)`.
 
+**Satisfiability exhibit (non-normative — an existence proof for A1, not chosen values;
+added in cross-review because the draft fixed no token value anywhere, leaving open whether
+the closed form can solve at all seven viewports).** One conforming assignment, checked
+against the shipped chrome (`DrillScreen.svelte:1190-1194` topbar ≈ 54 px content+padding):
+`topbarH 56`, `stripH 40`, `objectiveH 32`, `bandH 176`, `rimH 48`, `railW 336` (absorbing
+the stage–rail gap), `stagePad 16` desktop/tablet and `8` phone, `gaps 32` (four 8 px stack
+gaps). The closed form yields:
+
+| viewport | class | min() arms | edge | axes check |
+|---|---|---|---:|---|
+| 1440×900 | desktop | min(1104, 804) − 32 | **768** | 56+768+40+32 = 896 ≤ 900; 768+336 ≤ 1440 |
+| 1366×768 | desktop | min(1030, 672) − 32 | **640** | 56+640+40+32 = 768, exact |
+| 1280×720 | desktop | min(944, 624) − 32 | **592** | 56+592+40+32 = 720, exact |
+| 768×1024 | tablet | min(736, 688) | **688** | 56+688+40+32+176+32 = 1024, exact |
+| 430×932 | phone | min(414, 724) | **408** | width-bound; 552 ≤ 932 vertical |
+| 390×844 | phone | min(374, 636) | **368** | width-bound |
+| 360×680 | phone | min(344, 472) | **344** | 56+344+40+32+48+32 = 552 ≤ 680 |
+
+Every edge is 8-divisible, ≥ the retained 192 px sanity floor, and fits both axes with the
+strip, objective line, band/rim and topbar all present — including the degenerate ends:
+360×680 with the sheet rim in layout, and both sides of the 1024 boundary (1024×768 takes
+the rail form at 640; 1023×768 the band form at 432 under these tokens — the class-switch
+discontinuity OQ1 already owns). Implementers may move any token; the exhibit proves a
+legal assignment exists, so A1 is satisfiable rather than aspirational.
+
 The 192 px clause is retired as *proof*: a board that shrinks to fit content proves the
 composition wrong, not the viewport handled ([[D717]] clause 6). A minimum-legibility floor
 may remain as a sanity assert, but no criterion in this RFC is satisfied by "the board fits."
@@ -262,9 +306,28 @@ module packets and cards; captions (the shipped `overlay-caption`,
 `DrillScreen.svelte:959`, is retired from layout); banners (`WhyBanner`); objective, variant,
 phase, trajectory and outcome sections (`DrillScreen.svelte:874-903` — the D718 stack);
 inspector sections (`:906`, `:915`); guard prompts; menus and popovers; the checkpoint sheet;
-mark controls; honest-empty sentences; loading/provider states. Each of these lives in the
+mark controls; honest-empty sentences; loading/provider states; **run-status notices** (the
+error alert and read-only banner, `DrillScreen.svelte:841`/`:843` — at HEAD both are
+conditional layout children of `main.drill` that push the workspace down; they re-home to
+fixed-height shell/topbar status treatment or an overlay toast); and **the branch-group and
+fork creators** (`:1040`, `:1109` — the group creator is a `main`-level layout sibling at
+HEAD whose opening shrinks the workspace; both become region-3 companion seats or overlays —
+L9 moves their chips' vocabulary, this clause moves the surfaces). Each of these lives in the
 companion region, in an overlay layer, or on the board's own paint layer (chessground's
 squares/SVG — zero layout cost, field pattern 3).
+
+**The board component's own layout chain is covered by the same closure** (found in
+cross-review — the one board-resizing insertion the draft's list missed): at HEAD the
+`accessible-board-input` text-move entry (`Chessboard.svelte:292`, the "Enter a move"
+disclosure) is the first grid row of `.board-shell` — opening it grows an `auto` row and
+shrinks `.board-surface`, a content-driven board resize *inside* the stage that no shipped
+gate measures. The rebuilt composition re-homes the text-move affordance outside the board's
+layout ancestors: its collapsed control sits in a fixed-height stage element (the strip row)
+or the companion region, and its open form is an **overlay**. Its input semantics, gates and
+focus order are `accessible-board-input`'s and are untouched (A12); only its seat moves. The
+semantic grid, the input-status live region and the promotion picker are already absolutely
+positioned paint/overlay layers at HEAD (`Chessboard.svelte:371-395`, `:429-438`) and remain
+so — they are the pattern, not the defect.
 
 This kills the [[D537]] class **structurally**: the caption-reflow that moved the board
 17–96 px under selection cannot recur, because in this composition no state change can insert
@@ -276,7 +339,7 @@ removes the class of trigger.
 #### 3.3 The testable statement
 
 At a fixed viewport, `getBoundingClientRect()` of the board element is **identical — x, y,
-width, height, to the CSS pixel — across all fourteen composition states of §6**, including
+width, height, to the CSS pixel — across all sixteen composition states of §6**, including
 every state D717 lists (selection, hint, guard, menu, long objective, evidence-unavailable,
 inspector open/closed, timeline change) and the max-load state. Measured **post-gesture**
 (§6.1). Criterion A2.
@@ -286,12 +349,26 @@ inspector open/closed, timeline change) and the max-load state. Measured **post-
 The shipped screen recreates the board component every move:
 `{#key `${displayedNode.id}:…`}` around `<Chessboard …>` (`DrillScreen.svelte:928`) destroys
 and remounts the component per node change, so chessground's `board.set()` FEN-diff animation
-(`Chessboard.svelte:257`, `redrawAfterLayout` `:173`) never sees a diff — the named
-keyed-re-render hazard. **The rebuilt composition must keep one stable board component
-instance across moves within a run** and update it through `set()`; a keyed re-render on node
-identity is non-conformant (criterion A9, which starts red at HEAD). The animation *pref*
-(None/Fast/Normal per the [[D875]] floor) and the felt-quality verification are the
-[[D840]]/[[D839]] lane's — this RFC only refuses to make that lane impossible.
+(`Chessboard.svelte:274`, instance mount `:257`, `redrawAfterLayout` `:173`) never sees a
+diff — the named keyed-re-render hazard. **The rebuilt composition must keep one stable board
+component instance across moves within a run** and update it through `set()`; a keyed
+re-render on node identity is non-conformant (criterion A9, which starts red at HEAD). The
+animation *pref* (None/Fast/Normal per the [[D875]] floor) and the felt-quality verification
+are the [[D840]]/[[D839]] lane's — this RFC only refuses to make that lane impossible.
+
+**What the key currently does besides defeating animation, and its named replacement — so
+removing it is safe rather than hopeful** (added in cross-review): the key's second term
+(`groupOpen ? groupCandidates.length : -1`) force-remounts the board after each hand-picked
+branch-group candidate is captured, snapping chessground back to `displayedNode.fen` even
+though no prop changed (capture-mode moves mutate chessground's internal state without
+touching the run — `DrillScreen.svelte:1055`'s "The run is not changed until Create group");
+and the node-identity term guarantees no stale interaction state survives a rewind. The
+replacements are explicit: candidate capture re-asserts the position through the same
+`$effect` → `board.set(config())` path (`Chessboard.svelte:261-279`, extended to fire on
+capture), and interaction state already resets through `controller.replacePosition` on every
+position change (`:272`). A9's fixture therefore carries a capture-reset arm: after capturing
+a candidate, the rendered position equals `displayedNode.fen` with **no** remount — a naive
+key deletion that leaves the captured move on the board fails it.
 
 ### §4 — Seat classes bound to `learner-modules.md`
 
@@ -321,7 +398,8 @@ fact; until Phase 5 lands, fixture-driven — the learner-modules D1 honesty not
 through). An occupied seat renders in one of three visual states: **collapsed** (fixed-height
 badged row — the count badge is the module's fact count, which retires the L2 topbar
 counter), **expanded** (the packet's card), or **empty-quiet** (§4.3). `on_request` modules'
-collapsed rows are their request affordance.
+collapsed rows are their request affordance and carry no count before a request — the row is
+the door, never a claim of pending facts.
 
 **The open/close protocol**: at most one seat expanded per companion region at a time;
 expanding one collapses the previously expanded seat to its badged row; every expansion and
@@ -414,18 +492,24 @@ asserts all 15.
 | L14 | `wdl evidence recorded.` family + raw tablebase detail (`evidence-sentences.ts:163,186-195,211`) | (i) with operands and attribution (the class-3 closure `learner-modules.md` 4.11 owns); guard-prompt grounds on play surfaces render registered SAN sentences |
 | L15 | shape trigger-AST prose (`ShapePanel.svelte:25-26`); false Story footer (`GameStoryScreen.svelte:30`); voice cp-delta sentences (`guidance.ts:62,70`) | AST → (i); the footer's false attribution is corrected in place under §5.1's attribution honesty (Story *selection* stays [[D901]]'s lane); cp sentences → (m) `compare_coach`/`review_map` renderers, raw provider strings → (i) |
 
+Rows L1, L10, L12 and L13's (i) destinations depend on the §2.4 contract-seam amendment
+(Discharges D4) — until those `accepts` rows compile, the raw families are *removed* from
+play surfaces under this RFC but not yet *carried* by the inspector's module contract. L4's
+raw sentence renders as inspector surface chrome (run diagnostics, not a packet).
+
 ### §6 — The composition-state vocabulary (Phase 7's axis)
 
-Table caption — unit: **composition state**; total: **14**. This is the closed list the
-acceptance matrix multiplies against the seven viewports; adding or dropping one is a spec
-change with a changelog line. It covers every state D717's rejection names.
+Table caption — unit: **composition state**; total: **16** (drafted as 14; states 15–16
+added in cross-review). This is the closed list the acceptance matrix multiplies against the
+seven viewports; adding or dropping one is a spec change with a changelog line. It covers
+every state D717's rejection names.
 
 | # | state | how the fixture reaches it |
 |---:|---|---|
 | 1 | calm rest | run open, no interaction |
 | 2 | square selected (requested sight) | select an occupied square; `sight_on_request` seat carries content |
 | 3 | move staged, cue present (at-commit) | stage a move under a Support-composable fixture; `blunder_prevention` head slot occupied |
-| 4 | post-commit nudge present | commit a move with eligible events |
+| 4 | post-commit nudge / guard present | commit a move with eligible events; the fixture's guard arm raises the post-commit guard prompt as a companion card (its §3.2 re-homing) |
 | 5 | rail module expanded | expand the wordiest occupied seat |
 | 6 | guided hint at final stage | disclosure-open fixture, request through stage 3 |
 | 7 | menu/popover open | preset pill or seat menu open |
@@ -436,6 +520,17 @@ change with a changelog line. It covers every state D717's rejection names.
 | 12 | compare open | two settled attempts, `compare_coach` seat expanded |
 | 13 | max load | every seat occupied, badges visible, one expanded (§2.2) |
 | 14 | terminal / outcome reached | run reaches `outcome.reached`; verdict card + review handoff |
+| 15 | promotion pending | stage a promotion move to the back rank; the picker overlays the board (paint/overlay layer, no layout) and is hit-testable (A3) |
+| 16 | keyboard/text entry active | focus the semantic grid and arrow to a square; open the text-move entry and submit a SAN move (post-gesture, A12's path) |
+
+States 15–16 are the `accessible-board-input` states, added in cross-review: that RFC is
+shipped and its surfaces must hold the same rects as every other state, or the two accepted
+documents collide silently. State 16 **starts red at HEAD** — opening the shipped text-move
+disclosure shrinks `.board-surface` (§3.2's re-homing is the fix). Considered and excluded,
+with reasons stated so the closure is real: spoken/TTS playback (audio is a form with no
+composition footprint); read-only follower (chrome-only once the `:843` banner re-homes per
+§3.2 — its disabled-control rendering is the shipped access tests' to assert, not this
+matrix's).
 
 #### 6.1 Post-gesture assertion — the D538/D539 lesson, binding
 
@@ -490,7 +585,7 @@ existing `playwright-report` artifact upload carries the screenshots.
    asserts the edge changed) must fail the invariant test.
 2. **A2 — Board byte-stability.** For each of the **7 viewports** (1440×900, 1366×768,
    1280×720, 768×1024, 430×932, 390×844, 360×680 — all already exercised by the shipped
-   suite, `tests/browser/drill.spec.ts:1053,1115,1141,1253,1279`) × the **14 states** (§6),
+   suite, `tests/browser/drill.spec.ts:1053,1115,1141,1253,1279`) × the **16 states** (§6),
    the board's post-gesture `getBoundingClientRect()` equals the calm-state rect exactly.
    Negative: a test-only fixture that inserts a caption into the stage column must fail;
    the shipped composition at HEAD fails this criterion (verified by the D718 trace — it
@@ -525,7 +620,7 @@ existing `playwright-report` artifact upload carries the screenshots.
    every overlay has a visible dismiss affordance; focus returns to the invoking element on
    dismiss. Negative: an overlay implemented as a layout sibling fails A2's rect check and
    this criterion's open-state check.
-8. **A8 — Screenshots and CI.** One screenshot per (viewport × state) — 98 images — is
+8. **A8 — Screenshots and CI.** One screenshot per (viewport × state) — 112 images — is
    written to the Playwright report and uploaded by the existing `browser.yml` artifact
    step; the matrix test is part of `make test-browser` with no skip annotation. Negative:
    the criterion fails if any cell is `test.skip`ped or its screenshot is absent from the
@@ -577,6 +672,7 @@ existing `playwright-report` artifact upload carries the screenshots.
 | D1 | Preset activation of the seated modules — this composition builds real seats whose activation semantics are Phase 5's; until that RFC lands the seats are exercised by fixtures and the explicit surfaces, and the chain's last link stays open | `planning/evidence-foundation-ux/plan.md` | the Phase-5 preset RFC's landing commit | |
 | D2 | The system-arrow vector producer ([[D546]] form (c), routed here by [[D900]]) — seated modules draw arrows only from retained ordered operands; a producer for system-drawn vectors remains unbuilt and is not declared by this RFC | `planning/evidence-foundation-ux/plan.md` | the RFC or defect fix that lands the producer | |
 | D3 | The [[D839]]/[[D840]] lane — dark/board/piece theming over this composition's tokens and the animation pref with a None option; this RFC's A9 removes the animation *defeat* but ships no pref and no theme | `claude` | that lane's landing commit | |
+| D4 | The §2.4 contract seam: `rules.phase.reading@1`, `rules.pivotal.marker@1`, the `pack.authored` classifier token and `derived.compare.*` need `module.full_inspector` `accepts` rows via an Appendix-B amendment to `rfc/learner-modules.md` before their §5.2 (i) destinations are contract-carried; A4 stays open on those rows until then | `planning/evidence-foundation-ux/plan.md` | the learner-modules amendment/implementation commit that compiles the rows | |
 
 Honesty note, stated plainly: like its parent contracts, this composition is
 **preset-inert at landing** — the day it lands, the rebuilt screen carries the shipped
@@ -605,33 +701,70 @@ learner-visible on D1's schedule, held open here and in the parent RFC's D2.
 4. **The inspector's route form** (path segment vs. modal-mode) is the implementer's; §2.4
    fixes only separateness, opt-in entry and the vocabulary boundary.
 
-## Ledger rows (proposed from head+1; NOT written — the ledger head verified **D907** at
-drafting, with a register defect found and reported below)
+## Ledger rows (recorded — re-verified in cross-review at head **D915**)
 
-**Register collision found while verifying the head:** `design/BACKLOG.md` carries **two
-D906 rows and two D907 rows** (the learner-modules owner rulings + semantic reducers at
-lines 269–270, and the bounded-mating-nets + promotion-race results at lines 279–280) — the
-same double-assignment class as the D718/D745 collision that row itself records as
-"corrected before downstream use." Both pairs are already cited downstream (this program's
-documents cite the rulings pair; the Wave-C documents cite the results pair), so the
-register owner should renumber the later-landed pair and annotate, before ambiguity
-propagates. Proposed rows therefore start at D908:
+Drafting verified head D907, reported the D906/D907 double-assignment, and proposed
+D908–D910. The register has since moved, and the section is updated to the recorded truth
+rather than left describing a resolved state: the collision resolved under the
+registered-block protocol (the later-landed Wave-C pair renumbered itself to **D908/D909**
+— the outcome the drafted defect row asked for, recorded inside D910's row text rather than
+as a separate row), this RFC's drafted row recorded as **[[D910]]** and the canvas
+corrections as **[[D911]]**; Wave-C rows D912–D915 followed. The recorded D910 row carries
+the drafted 14-state/98-screenshot counts; the landing flip corrects them to **16/112**
+with this changelog as the citation (the recorded row is the register's to flip, not this
+document's to rewrite). Rows proposed by the cross-review, from head+1, NOT written:
 
-- **D908** — Phase-4 composition RFC drafted: three viewport classes over one queue pattern,
-  the board-geometry closed form with a closed stage-children list (the D537 class killed
-  structurally), the 15-leak destination table (all 15 named), the eleven seats bound
-  through the accepted seat classes with `board_adjacent` read as priority-not-geography,
-  and the Phase-7 matrix (7 viewports × 14 states, post-gesture, screenshots, existing CI
-  path) as this RFC's criteria. (this file)
-- **D909** — Ledger register defect: D906 and D907 are each assigned to two unrelated rows;
-  renumber the later pair and annotate both, per the D718/D745 precedent.
-- **D910** — Canvas corrections owed before implementation cites the artboards: the phone
-  status-chip row above the board moves below the strip (§2.3 makes "nothing above the
-  board" strict), and the tablet objective returns adjacent to the board above the
-  companion band; the max-load [[D876]] fix is already applied in the artboards.
+- **D923** — Phase-4 composition RFC cross-reviewed, blockers fixed in place: the
+  closed-children audit found three HEAD insertions the barred list missed (error/read-only
+  notices at `DrillScreen.svelte:841/:843`, the branch-group creator at `:1040`, and the
+  `accessible-board-input` text-move entry — a board-resizing layout child inside
+  `.board-shell` itself, `Chessboard.svelte:292`); the state matrix extended 14 → 16
+  (promotion pending; keyboard/text entry — state 16 starts red at HEAD) so the shipped
+  `accessible-board-input` surfaces hold the same rects; A9's `{#key}` removal made safe by
+  naming the branch-group capture-reset the key currently performs and its `set()`
+  replacement; a token-assignment satisfiability exhibit added so §3.1/A1 is demonstrably
+  solvable at all seven viewports (edges 768/640/592/688/408/368/344).
+- **D924** — Contract seam between the two Phase RFCs: four §5.2 leak destinations route
+  raw families to the inspector that `module.full_inspector`'s accepted 34 `accepts` rows
+  cannot carry (`rules.phase.reading@1`, `rules.pivotal.marker@1`, the `pack.authored`
+  classifier token, `derived.compare.*`); an Appendix-B amendment to `rfc/learner-modules.md`
+  is required before A4 can close on those rows — held by this RFC's Discharges D4.
 
 ## Changelog
 
+- 2026-08-22: adversarial cross-review (independent), at HEAD `d8dff66` (`register-check`
+  13 active / C1–C6 green, `status-parity` 14 active / P1–P6 green, `make intent-parity`
+  4/4; ledger head verified **D915**, this RFC's rows recorded as D910/D911; every cited
+  symbol re-verified at HEAD, with one citation corrected — `board.set()` lives at
+  `Chessboard.svelte:274`, `:257` is the instance mount). Blocker corrections, each with
+  its evidence: **(1)** the §3.2 closed-children list missed three real HEAD insertions in
+  the board's layout-ancestor chain — the error alert and read-only banner
+  (`DrillScreen.svelte:841/:843`, conditional `main.drill` children), the branch-group
+  creator (`:1040`, a `main`-level sibling whose opening shrinks the workspace), and the
+  `accessible-board-input` text-move entry (`Chessboard.svelte:292` — the "Enter a move"
+  disclosure is the first grid row of `.board-shell`; opening it shrinks `.board-surface`,
+  a board resize inside the stage no shipped gate measures); all three now barred with
+  named homes. **(2)** The state matrix omitted the shipped `accessible-board-input`
+  states — promotion pending and keyboard/text entry added as states 15–16 (16 states,
+  112 screenshots; state 16 starts red at HEAD), the guard prompt folded into state 4's
+  fixture, and TTS/read-only named as considered-and-excluded so the closure is real.
+  **(3)** §3.4 named only the animation half of what the `{#key}` does: its
+  `groupCandidates.length` term is the branch-group capture-reset mechanism — removing the
+  key without the named `set()` re-assert breaks hand-picked group creation; the
+  replacement and A9's capture-reset arm are now specified. **(4)** Four §5.2 (i)
+  destinations route families `module.full_inspector`'s accepted `accepts` cannot carry
+  (the D523 class): `rules.phase.reading@1`, `rules.pivotal.marker@1`, the authored
+  classifier token, `derived.compare.*` — named as a contract seam in §2.4, held by new
+  Discharges D4 (Appendix-B amendment to `rfc/learner-modules.md`), with L4's trajectory
+  prose re-classed as inspector surface chrome (run diagnostics, not a packet). **(5)** No
+  token value existed anywhere, leaving A1's satisfiability unproven — a non-normative
+  worked-token exhibit added deriving all seven edges (768/640/592/688/408/368/344, all
+  8-divisible, both axes closing, degenerate ends and the 1024 boundary checked). Also:
+  the stale ledger section rewritten to the recorded register (head D915; D906/D907
+  collision resolved by renumbering; proposals restart at D916); the claims-block
+  status-parity note updated to the recorded index row; phone rim position corrected to
+  "below the objective/state line"; on-request badge semantics pinned (no count before a
+  request). Verdict: accept-after-corrections — corrections applied in place.
 - 2026-08-22: created. Drafted at HEAD `ddcc977`. Symbols verified live at that HEAD:
   `DrillScreen.svelte:873/:925/:928/:959/:1335/:1340/:1501` and the overflow sites;
   `Chessboard.svelte:173/:257`; `App.svelte:923-930/:994`;
