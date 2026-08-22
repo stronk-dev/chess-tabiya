@@ -76,7 +76,7 @@ export const EVIDENCE_PRODUCER_IDS = Object.freeze([
   "rules.structural", "rules.transition", "rules.castling", "rules.exchange", "rules.tactic", "rules.square", "rules.mobility", "rules.pawn", "rules.king", "rules.phase", "rules.pivotal", "rules.endgame",
   "theory.shapes", "authored.structural_condition", "pack.authored", "recorded.engine", "recorded.tablebase", "live.stockfish",
   "live.syzygy", "human.maia", "human.explorer", "theory.opening_identity", "run.record",
-  "derived.compare_narrative", "derived.story", "derived.exchange", "derived.tactic", "derived.pawn", "derived.material", "derived.king", "derived.activity", "sourcing.ledger",
+  "derived.compare_narrative", "derived.story", "derived.grade", "derived.exchange", "derived.tactic", "derived.pawn", "derived.material", "derived.king", "derived.activity", "sourcing.ledger",
   "derived.semantic_avoidance",
 ] as const);
 
@@ -728,6 +728,19 @@ export const EVIDENCE_PRODUCERS: readonly ProducerDeclaration[] = Object.freeze(
     projection("derived.story", "derived.story.last_level", "derived", { payloadType: "StoryLastLevel", grounding: "declared_convention", exactness: "convention", operands: ["recordedResult", "evaluation"], semantics: "Within-one-pawn threshold gated by whether the imported result says the learner lost.", answerContent: ["fact", "evaluation"], forms: ["sentence", "panel"], abstention: { possible: true, reasons: ["input_abstained"] }, derivation: { inputs: [ref("live.stockfish.eval"), ref("run.record.imported_result")] } }),
     projection("derived.story", "derived.story.rank", "derived", { payloadType: "StoryRank", grounding: "declared_convention", exactness: "convention", operands: ["rank"], semantics: "Fixed kind-priority order with absolute recorded-evaluation delta as a tiebreak; presentation prominence, not chess significance.", answerContent: ["fact", "pattern", "evaluation"], forms: ["list", "panel"], abstention: { possible: true, reasons: ["input_abstained"] }, derivation: { inputs: [ref("derived.story.eval_shift"), ref("derived.story.last_level"), ref("run.record.consequence"), ref("run.record.imported_result"), ref("rules.pivotal.marker"), ref("rules.endgame.reading"), ref("theory.shapes.firing")] } }),
     projection("derived.story", "derived.story.title", "derived", { payloadType: "StoryTitle", grounding: "declared_convention", exactness: "convention", operands: ["title", "rank", "outcome"], semantics: "Fixed title composition over rank, recorded outcome/result, and endgame label; imported result verbs retain the current White-relative convention.", answerContent: ["fact", "pattern", "evaluation"], forms: ["sentence", "panel"], abstention: { possible: true, reasons: ["input_abstained"] }, derivation: { inputs: [ref("derived.story.rank"), ref("run.record.consequence"), ref("run.record.imported_result"), ref("rules.endgame.reading")] } }),
+  ]),
+  producer("derived.grade", "derived", "packages/runtime/src/grade.ts", "local", [
+    projection("derived.grade", "derived.grade.move_quality", "derived", {
+      payloadType: "MoveQualityGrade",
+      semantics: "Learner-POV loss class under grade-convention@1, retaining both typed scores, the unrounded win-percentage drop, threshold, context, lane, engine and search limit; no best move or principal variation.",
+      operands: ["klass", "arm", "before", "after", "dropWinPercent", "thresholdCrossed", "convention", "engineId", "lane", "depthOrMovetime"],
+      grounding: "bounded_search", exactness: "convention", confidence: "reported",
+      abstention: { possible: true, reasons: ["input_abstained", "missing_eval", "unequal_instrument", "mate_score_inconsistent"] },
+      answerContent: ["evaluation"], forms: ["sentence", "panel"],
+      derivation: { inputs: [ref("recorded.engine.eval"), ref("live.stockfish.eval")] },
+      limitations: ["Single-line evals only: the drop compares one engine's paired readings at one search limit.", "Not a lesson: the grade can be right about the position and wrong about the reason."],
+      disposition: { kind: "experimental", reason: "Awaits learner-module consumer compilation for postcommit_nudge and review_map." },
+    }),
   ]),
   producer("derived.exchange", "derived", "packages/runtime/src/exchange.ts", "local", derivedExchangeOutputs),
   producer("derived.tactic", "derived", "packages/runtime/src/tactics.ts; packages/runtime/src/semantic-evidence.ts", "local", derivedTacticOutputs),

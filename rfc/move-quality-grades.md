@@ -1,6 +1,6 @@
 # RFC: Move-quality grades — the grade-family projection and its convention document
 
-- **Status:** accepted — 2026-08-22, by claude as register owner on the buildability test, after a cross-review that recomputed the arithmetic to four decimals and found the report ladder **wrong by exactly a factor of two** (the taxonomy gloss trusted over the source, [[D939]] — every report grade would have been ~one class off) and the mate arm contradicting three pinned source cells, all corrected in place. The one open coordination: the constants changed materially — **report grades will be ~2× more common than the draft implied** — flagged for the owner before any play session judges the drill ladder. *(Prior line for history: draft)*
+- **Status:** implementing — 2026-08-22 projection checkpoint landed: the cited convention, pure grade/mate arithmetic, renderer, and experimental manifest declaration are implemented and verified. D1 remains open until learner-modules compiles the two production consumers; this RFC must not archive before that edge exists. *(Accepted 2026-08-22 by claude after adversarial cross-review; prior line: draft.)*
 - **Author:** claude, on the [[D879]] BUILD-IT verdict and the [[D899]] routing (learner-modules `## Discharges` D3)
 - **Created:** 2026-08-22
 - **Design refs:** `design/05-in-run-experience.md` §3 (grounding ladder, §3-forms honesty split), `design/research/assistance-surface-taxonomy.md` §2b (pinned Lichess constants), §2d-1 (two-ladder precedent), §4a (the explicit verdict); `design/research/classifier-coverage-and-noise.md` §4a layer 2 (as quoted by both)
@@ -626,3 +626,8 @@ to the ledger by this review:**
   All arithmetic recomputed independently to 4 decimals; all symbol cites re-verified
   at review HEAD (`e52bccf`); `register-check`/`status-parity`/`intent-parity` green
   with this draft's README row.
+- 2026-08-22 (implementation checkpoint): `grade-convention@1`, the pure learner-POV
+  grade projection, typed mate arms, deterministic co-renderer, and experimental F1
+  declaration landed. The manifest compiles at 34/184/25/207; 19 focused grade/catalogue
+  fixtures and runtime typecheck pass. D1 remains deliberately blank because no production
+  module declaration consumes the projection yet.

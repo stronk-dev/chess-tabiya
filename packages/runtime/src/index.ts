@@ -200,6 +200,27 @@ export {
 } from "./session.js";
 export { attachEvidence } from "./evidence.js";
 export {
+  GRADE_CONVENTION,
+  assertMoveQualityGradeSentence,
+  moveQualityGrade,
+  renderMoveQualityGrade,
+  renderMoveQualityResult,
+  winPercentFromCp,
+  type AbstainedGradeEvaluation,
+  type CitedGradeConstant,
+  type GradeContext,
+  type GradeEvaluation,
+  type GradeLane,
+  type GradeScore,
+  type GradeSide,
+  type MoveQualityAbstention,
+  type MoveQualityAbstentionReason,
+  type MoveQualityArm,
+  type MoveQualityClass,
+  type MoveQualityGrade,
+  type MoveQualityResult,
+} from "./grade.js";
+export {
   EVIDENCE_MANIFEST_ERROR_CODES,
   EvidenceManifestError,
   compileEvidenceManifest,

@@ -22,9 +22,14 @@ by a SHA-256 digest. `/capabilities` returns that digest, current producer avail
 consumer-safe binding summary. It never returns engine lines, authored prose, provider secrets, or
 corpus rows.
 
-The current compiled closure is 33 producers, 183 projections, 25 consumers and 207 bindings,
+The current compiled closure is 34 producers, 184 projections, 25 consumers and 207 bindings,
 plus 65 semantic-event declarations, 65 eligibility rows, 15 refusal reasons and one selection
 policy. The executable manifest and semantic-evidence checks own this tuple.
+
+The additional inert projection is `derived.grade.move_quality@1`: it thresholds paired,
+same-instrument engine readings under the cited `grade-convention@1`, retains typed mate scores,
+and can carry evaluation only. It remains `experimental` until the post-commit and Review module
+consumers compile; catalogue presence alone does not make it visible.
 
 ## Honest homes and raw evidence
 

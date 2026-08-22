@@ -5203,3 +5203,28 @@ guessed.
 
 **Next:** amend and re-review those literal tables, then implement the complete 5×7 compiler
 fixtures and activate the preset surface.
+
+## 2026-08-22 — move-quality grade projection checkpoint
+
+**What landed:** `grade-convention@1` now carries twelve source-and-date-pinned constants;
+`derived.grade.move_quality@1` computes learner-POV win-percentage drops from paired readings
+of one engine at one search limit. Report and practice ladders are separate. Mate scores retain
+their type and use the cited `mate_lost`/`mate_allowed` table rather than the Story ±1000-cp
+coercion. The deterministic renderer always carries the class, operands, drop, threshold tier,
+and convention version.
+
+**Verification:** 19 focused grade/catalogue fixtures pass, including every ladder boundary,
+the class-changing clamp case, both perspective lanes, all mate tiers, four abstentions,
+word-only-render refusal, move-answer widening refusal, and empty-derivation refusal. Runtime
+typecheck is green. The evidence manifest compiles at 34 producers / 184 projections / 25
+consumers / 207 bindings.
+
+**What changed:** D899, D932 and D933 close at the projection boundary; D879 moves to an
+implementation checkpoint. The grade remains explicitly `experimental` and learner-invisible.
+
+**Blocked:** move-quality-grades D1 remains open until learner-modules compiles
+`module.postcommit_nudge` and `module.review_map`. The RFC stays implementing rather than
+archiving around a producer with no consumer.
+
+**Next:** compile the two module consumers when their policy tables land, then expose the grade
+through post-commit and Review composition under the preset/disclosure ceilings.

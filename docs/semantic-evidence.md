@@ -60,7 +60,7 @@ structured projection. The exact 14-file migration census is executable in
 
 ## Compiled closure and provider behavior
 
-The primary manifest contains 33 producers, 183 projections, 25 consumers and 207 bindings, plus
+The primary manifest contains 34 producers, 184 projections, 25 consumers and 207 bindings, plus
 65 semantic events, 65 eligibility rows, 15 reasons and one selection policy. All collections
 contribute to one canonical digest. `/capabilities` reports this tuple and the same digest used at
 startup and by `make semantic-evidence-check`.

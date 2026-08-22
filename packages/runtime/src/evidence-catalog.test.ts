@@ -24,7 +24,7 @@ import { compileEvidenceManifest } from "./evidence-contract.js";
 import { EvidenceManifestError } from "./evidence-contract.js";
 
 const ROOT = new URL("../../../", import.meta.url);
-const EXPECTED_PRODUCERS = Object.freeze(["rules.structural", "rules.transition", "rules.castling", "rules.exchange", "rules.tactic", "rules.square", "rules.mobility", "rules.pawn", "rules.king", "rules.phase", "rules.pivotal", "rules.endgame", "theory.shapes", "authored.structural_condition", "pack.authored", "recorded.engine", "recorded.tablebase", "live.stockfish", "live.syzygy", "human.maia", "human.explorer", "theory.opening_identity", "run.record", "derived.compare_narrative", "derived.story", "derived.exchange", "derived.tactic", "derived.pawn", "derived.material", "derived.king", "derived.activity", "sourcing.ledger", "derived.semantic_avoidance"]);
+const EXPECTED_PRODUCERS = Object.freeze(["rules.structural", "rules.transition", "rules.castling", "rules.exchange", "rules.tactic", "rules.square", "rules.mobility", "rules.pawn", "rules.king", "rules.phase", "rules.pivotal", "rules.endgame", "theory.shapes", "authored.structural_condition", "pack.authored", "recorded.engine", "recorded.tablebase", "live.stockfish", "live.syzygy", "human.maia", "human.explorer", "theory.opening_identity", "run.record", "derived.compare_narrative", "derived.story", "derived.grade", "derived.exchange", "derived.tactic", "derived.pawn", "derived.material", "derived.king", "derived.activity", "sourcing.ledger", "derived.semantic_avoidance"]);
 
 function jsonFiles(url: URL): readonly URL[] {
   return readdirSync(url, { withFileTypes: true }).flatMap((entry) => {
@@ -48,12 +48,35 @@ describe("primary evidence catalogue", () => {
     expect(CURRENT_CONSUMER_OPERATION_IDS).toHaveLength(23);
     expect(EVIDENCE_CONSUMER_IDS).toEqual([...CURRENT_CONSUMER_OPERATION_IDS, "assistance.arrows", "research.semantic_selection"]);
     expect(manifest.consumers.find((item) => item.id === "assistance.arrows")?.disposition).toEqual(expect.objectContaining({ kind: "experimental" }));
-    expect([manifest.producers.length, manifest.projections.length, manifest.consumers.length, manifest.bindings.length]).toEqual([33, 183, 25, 207]);
+    expect([manifest.producers.length, manifest.projections.length, manifest.consumers.length, manifest.bindings.length]).toEqual([34, 184, 25, 207]);
     expect([manifest.semanticEvents.length, manifest.eligibility.length, manifest.reasons.length, manifest.selectionPolicies.length]).toEqual([65, 65, 15, 1]);
     expect(new Set(manifest.semanticEvents.map((item) => item.projection.id))).toEqual(new Set(SEMANTIC_EVENT_PROJECTION_IDS));
     expect(new Set(manifest.eligibility.map((item) => `${item.consumer.id}@${item.consumer.version}`))).toEqual(new Set(["research.semantic_selection@1"]));
     expect(manifest.bindings.filter((binding) => SEMANTIC_EVENT_PROJECTION_IDS.includes(binding.projection.id)).every((binding) => binding.consumer.id === "research.semantic_selection")).toBe(true);
     expect(manifest.digest).toBe(createHash("sha256").update(canonical({ producers: manifest.producers, projections: manifest.projections, consumers: manifest.consumers, bindings: manifest.bindings, semanticEvents: manifest.semanticEvents, eligibility: manifest.eligibility, reasons: manifest.reasons, selectionPolicies: manifest.selectionPolicies })).digest("hex"));
+  });
+
+  it("registers move quality as an inert, evaluation-only derived projection", () => {
+    const grade = EVIDENCE_PRODUCERS.find((item) => item.id === "derived.grade")?.outputs[0];
+    expect(grade).toMatchObject({
+      id: "derived.grade.move_quality", version: 1, grounding: "bounded_search",
+      exactness: "convention", answerContent: ["evaluation"],
+      disposition: { kind: "experimental" },
+    });
+    expect(grade?.derivation?.inputs).toEqual([{ id: "recorded.engine.eval", version: 1 }, { id: "live.stockfish.eval", version: 1 }]);
+    expect(grade?.answerContent).not.toContain("move");
+  });
+
+  it("refuses a grade that gains move content or loses its declared inputs", () => {
+    const mutateGrade = (change: Record<string, unknown>) => ({
+      ...EVIDENCE_CONTRACT_DECLARATIONS,
+      producers: EVIDENCE_CONTRACT_DECLARATIONS.producers.map((producer) => producer.id !== "derived.grade" ? producer : {
+        ...producer,
+        outputs: producer.outputs.map((output) => output.id !== "derived.grade.move_quality" ? output : { ...output, ...change }),
+      }),
+    });
+    expect(() => compileEvidenceManifest(mutateGrade({ answerContent: ["evaluation", "move"] }))).toThrowError(expect.objectContaining<Partial<EvidenceManifestError>>({ code: "EVIDENCE_DERIVATION_WIDENS" }));
+    expect(() => compileEvidenceManifest(mutateGrade({ derivation: { inputs: [] } }))).toThrowError(expect.objectContaining<Partial<EvidenceManifestError>>({ code: "EVIDENCE_PROJECTION_INCOMPLETE" }));
   });
 
   it("registers only the seven Wave-C events whose accepted derivations are buildable", () => {
