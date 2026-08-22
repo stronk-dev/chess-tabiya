@@ -632,3 +632,24 @@ abstention checks."*
 | Genuinely missing witnesses | **1**, and only conditionally: a `prediction` checkpoint |
 | Cells needing owner **chess authoring** | **0** — consistent with [[D997]] |
 | Cells needing an owner **ruling** | 2 — the retirement verdicts (§2) and the §2.2 widening |
+
+
+---
+
+## CORRECTION 2026-08-23 — owner ruling [[D1006]]: retire nothing
+
+The retirement verdicts above (`legShapes` retire outright; `engineCondition`,
+`legOpponentPolicy`, `prediction` as candidates) are **withdrawn by owner ruling**: *"retire NONE.
+these are still important for bots, ui, etc."*
+
+**The framing error was mine.** This census read O6.3's *"unless a ruled workflow actually adopts
+them"* as **compiled, shipped consumers** — a reading that is far too narrow for a platform whose
+consumers are mostly accepted RFCs awaiting implementation. `bot-policy` (accepted 2026-08-22) is
+the consumer of `legOpponentPolicy`; `campaign-core` (accepted 2026-08-22) of per-leg encounter
+structure; `longitudinal-store` (accepted 2026-08-22) of `prediction`. A ruled workflow is ruled
+whether or not codex has reached it — measuring only shipped code would retire the roadmap.
+
+**What survives unchanged:** the required-cells table and the 8-document covering set, which never
+depended on retirement — only on whether a cell is *required* for clause 8. The conditional
+"1 genuinely missing witness" (a `prediction` checkpoint) is now simply **not needed for
+retirement reasons**; whether the pilot witnesses it is a coverage question, not a retirement one.

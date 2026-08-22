@@ -277,3 +277,35 @@ five-minute question. Recommended framing for the ruling: option (ii) of §2c.1 
 mechanical arm (a) now (records and sidecars are not authored content and no schema lane is
 touched), and decide the 63-edit authored arm (b) against Gate F's re-authoring-budget clause —
 but the choice is the owner's, and this order executes under any of the three.
+
+
+---
+
+## HOLD SPLIT 2026-08-23 — owner ruling [[D1005]]: the binding arm is released
+
+[[D949]]'s whole-wave hold is **amended, not overturned**: the owner ruled the split on measurement
+that did not exist when D949 was made ([[D1001]]).
+
+**RELEASED — execute now (steps 3+, binding arm only):**
+- the **43 pure joins** — machine-label instances whose backing record already sits in the pack's
+  own ledger (14 packs); no new machine run required;
+- the **60 `corpus_observed`** claims behind the single never-executed explorer census
+  (`make candidate-emit PIPELINE=explorer`);
+- the **8 `engine_validated`** prose normalizations against the 391 existing `engine_eval` records;
+- the **`claimBindings` keys**, modelled on `philidor-third-rank-hold`'s working example — the
+  measured payoff is [[D1000]]: `lucena-bridge-convert` goes from 1 of 4 claims (152 chars) to all
+  four (~860 chars), assistance rung 5 → rung 1.
+
+**STILL HELD — do not touch:**
+- any `graduationEntry` edit or `blocking → resolved` transition (lane 0.28 is a breaking change:
+  two new required fields, `clearedBy` withdrawn, 288 entries migrate);
+- the **26 stale candidate ledger digests** — they ride the clearance writer, unchanged from the
+  original order;
+- the 215 blocking conditions and the 63–94 authored decisions (the irreducible human arm).
+
+**The line, stated once:** the binding arm may retire *binding* debt; it may not touch *graduation*
+state. Same instruments, different populations — check which arm a command's population belongs to
+before running it.
+
+**Closeout:** this is content-lane work, so the content-wave protocol applies — ledger rows flipped
+and an entry appended to `planning/content-era/log.md` **in the shipping commit**.

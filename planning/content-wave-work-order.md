@@ -740,3 +740,20 @@ The state-of-the-corpus audit produced three rows; this work order is their dest
 - **[[D1001]]** — the binding/graduation separability measurement. Destination: the owner's
   hold-split ruling; if the binding arm is released, execution is
   `planning/feedback-delivery/stage2-work-order.md` steps 3+ **restricted to the binding arm**.
+
+## Owner rulings 2026-08-23 — the hold split and the retirement refusal
+
+- **[[D1005]] — the binding arm is RELEASED; the graduation arm stays held.** Executable scope
+  lives in `planning/feedback-delivery/stage2-work-order.md`, **steps 3+ restricted to the binding
+  arm**: the 43 pure joins (records already in each pack's own ledger), the 60 `corpus_observed`
+  claims behind the never-run explorer census, the 8 `engine_validated` prose normalizations, and
+  the `claimBindings` keys modelled on `philidor-third-rank-hold`'s working example. **Not** in
+  scope: any `graduationEntry` edit, any `blocking → resolved` transition, any re-stamp of the 26
+  stale candidate ledgers — those ride the graduation arm, still held behind lane 0.28's breaking
+  change. The line from [[D949]] holds in its new form: **the binding arm may retire binding debt;
+  it may not touch graduation state.**
+- **[[D1006]] — retire nothing.** `engineCondition`, `legShapes`, `legOpponentPolicy` and
+  `prediction` all stay. The retirement census misread "ruled workflow" as "shipped consumer";
+  accepted-but-unimplemented RFCs (`bot-policy`, `campaign-core`, `longitudinal-store`) are ruled
+  consumers of exactly these families. Correction applied in `planning/content-era/pilot-matrix.md`;
+  no pilot cell changes.

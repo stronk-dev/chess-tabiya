@@ -64,6 +64,44 @@ with the review's finds carried:
 end of that chain. `semantic-collectors` (Wave-C) is drafting and will slot between the
 collector waves and the module amendment (your order items 2 and 5).
 
+## 0-BINDING-ARM-RELEASED. The owner split the content hold — the binding arm is yours NOW
+
+Owner ruling [[D1005]] (2026-08-23) amends [[D949]]: **the binding arm is released; the graduation
+arm stays held.** Full scope in `planning/feedback-delivery/stage2-work-order.md` §HOLD SPLIT.
+
+**Why it is worth taking first: the corpus already has the evidence and never joined it.** 764
+machine records against **one** claim binding ([[D993]]). Measured on a real pack ([[D1000]]):
+`lucena-bridge-convert` shows a learner **1 of its 4 claims — 152 characters** — because
+`admittedFeedbackClaimIds` (`authored-feedback.ts:274-280`) strips unbound machine-labelled claims
+from the page, while **22 `tablebase_result` records sit unused in that pack's own sidecar**. One
+`claimBindings` key, modelled on `philidor-third-rank-hold`'s working example, surfaces all four
+(~860 chars) and lifts them from assistance rung 5 to rung 1.
+
+**Take it in this order** (41% of the arm is pure script, 0% needs chess judgement):
+1. **The 43 pure joins** — the backing record is already in the pack's own ledger (14 packs).
+   Scriptable end to end.
+2. **The explorer census** — `make candidate-emit PIPELINE=explorer`, the instrument that ships and
+   has **never been run**; it backs the 60 `corpus_observed` claims.
+3. **The 8 `engine_validated`** normalizations against the 391 existing `engine_eval` records.
+4. **The `claimBindings` keys** themselves, then re-measure: `expression-census` should move
+   `backedClaims` off 1 for the first time.
+
+**Do NOT touch** (still held): any `graduationEntry` edit, any `blocking → resolved` transition,
+and the 26 stale candidate ledger digests — all ride the graduation arm behind lane 0.28's breaking
+change. **Same instruments, different populations**; check which arm a command's population belongs
+to before running it.
+
+**Closeout is the content-wave protocol**: flip the rows and append to `planning/content-era/log.md`
+**in the shipping commit** (the clause that exists because a content wave once completed invisibly).
+
+## 0-NO-RETIREMENTS. [[D1006]] — `engineCondition`/`legShapes`/`legOpponentPolicy`/`prediction` all STAY
+
+Owner ruling: *"retire NONE. these are still important for bots, ui, etc."* If you see a retirement
+recommendation in `planning/content-era/pilot-matrix.md`, it is withdrawn — the correction is
+appended at the foot of that file. The census misread "ruled workflow" as "shipped consumer";
+`bot-policy`, `campaign-core` and `longitudinal-store` are all accepted and all consume these
+families. **Do not delete or deprecate any of the four.**
+
 ## 0-THEMING-ACCEPTED. `theming` is accepted — three axes, schemes inherited whole
 
 Accepted 2026-08-22 on the owner's [[D982]] ruling (*"have app theme, board theme, pieces theme.
