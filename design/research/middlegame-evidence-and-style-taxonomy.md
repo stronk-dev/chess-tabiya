@@ -324,6 +324,24 @@ The first two events earn exact foundation identities. The latter three require 
 eligibility. None supplies “dangerous,” “winning,” “good plan” or conversion success without theory,
 search, tablebase or authored consequence.
 
+### 4.6 King state decomposes; the strongest headlines are joins
+
+D778 measures eleven shelter, escape, zone and check transitions over the same populations and full
+imported horizon bands. `[V]` (`decomposed-king-state.md`;
+`tools/d778-king-state-harness/output.md`)
+
+- Broad king-zone defender loss is 6.07×/5.12×/3.94×, but excluding captures reverses it to
+  0.00×/0.07×/0.38×. The useful identity is capture + the captured piece's prior zone-defender role.
+- King relocation to more shelter is chiefly castling: the castling subset is
+  10.08×/8.19×/5.31× while non-castling relocation is 0.32×/0.87×/1.57×. Shelter is an operand of
+  the existing castling event, not a duplicate semantic event.
+- Opponent escape reduction, direct slider check and increased zone attackers are background or
+  uncertain early, then stable in middle/later bands. They require phase-aware eligibility.
+- Shelter loss and mover escape gain are weak/mixed. They remain on-demand state, not default hints.
+
+The failed king-exposure conjunction stays failed. Decomposition identifies useful operands and
+their joins; it does not license “king unsafe,” “attack,” “exposed” or “mating net.”
+
 ---
 
 ## 5. From evidence to player habits—not invented personalities

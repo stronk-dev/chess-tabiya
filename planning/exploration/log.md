@@ -4336,6 +4336,24 @@ overrepresent a phase-specific one, so pack coverage cannot define foundation co
 production or authored content changed. Phase 2b remains open for candidate-passers/lever timing,
 decomposed king state, broader individual mobility and bounded reply/search semantics.
 
+## 2026-08-22 — king state decomposes; two headline signals reduce to existing joins
+
+D778 measured shelter, adjacent legal escapes, distinct zone attackers/defenders and direct slider
+checks separately after the earlier king-exposure conjunction produced zero authored positives. Two
+initially strong readings were not accepted at face value. King-zone defender loss measured
+6.07×/5.12×/3.94× across imported horizon bands, but became 0.00×/0.07×/0.38× when captures were
+excluded: the honest reusable event is capture identity + the captured piece's prior zone-defender
+role. King relocation to more shelter reduced chiefly to castling: 10.08×/8.19×/5.31× for the
+castling subset versus 0.32×/0.87×/1.57× otherwise. Neither earns a duplicate producer.
+
+Opponent legal-escape reduction, direct slider check and increased zone attackers are uncertain or
+background at plies 1–20, then stable at 2.34×/2.19×, 2.67×/2.52× and 1.71×/1.80× in the middle/
+later bands. Shelter loss and mover escape gain remain weak/mixed. The disposition is phase-aware
+operands plus explicit joins, never “king unsafe,” “exposed,” attack quality or mating-net prose.
+D778–D782 record the results. Three focused tests pass over 39 measured one-edge probes in the
+program; no production or authored content changed. Phase 2b remains open for candidate-passer/
+lever timing, broader individual mobility and bounded reply/search semantics.
+
 ## 2026-08-22 — D667 imported story titles become learner-relative
 
 With F1's byte-preservation constraint discharged, the story title now carries the learner side and
