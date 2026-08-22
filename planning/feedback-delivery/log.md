@@ -120,3 +120,18 @@
 Commit `a64e6c5` landed the criterion-complete recovery. D526/D527 are closed; D78 remains open on
 the measured learner-value result rather than implementation correctness. The unrelated
 `rfc/measurement-records.md` and D333 harness stayed outside the checkpoint.
+
+## 2026-08-23 — Stage-2 prerequisite tooling landed
+
+- Added the specified `clearGraduationEntries` writer with check-only mode, cached-census input,
+  all-or-nothing writes, digest re-stamping and a canonical transition document. No corpus entry
+  was migrated or transitioned; the owner-held graduation apply boundary remains intact.
+- Added criterion 21(b)'s per-claim accounting, criterion 23's append-only-log tripwire and the
+  explorer-rationale split probe to the disposable feedback-delivery harness.
+- Re-derived the Stage-1 baseline unchanged at 98/196 admitted and 26,735/61,531 characters. The
+  63 mandatory pack-edit floor also reproduces.
+- Corrected the work-order premise for explorer attachment: 0 of 60 withheld explorer claims are
+  rationale-ready today, across 0 of 31 packs. The earlier 22-directly-attachable split described
+  ledger availability, not satisfaction of the shipped attach path's rationale precondition.
+- Criterion 23 is clean through this commit. A future trip remains an owner escalation, not a code
+  defect to waive.

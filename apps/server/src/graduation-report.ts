@@ -5,7 +5,7 @@ type Entry = string | { readonly id: string; readonly state: "blocking" | "resol
 
 function files(root: string): readonly string[] {
   if (root === "content/candidates") return readdirSync(root, { withFileTypes: true }).filter((entry) => entry.isDirectory()).map((entry) => resolve(root, entry.name, "pack.json")).filter((file) => { try { readFileSync(file); return true; } catch { return false; } }).sort();
-  return readdirSync(root, { withFileTypes: true }).filter((entry) => entry.isFile() && entry.name.endsWith(".json") && !/\.(?:evidence|job|sources)\.json$/u.test(entry.name)).map((entry) => resolve(root, entry.name)).sort();
+  return readdirSync(root, { withFileTypes: true }).filter((entry) => entry.isFile() && entry.name.endsWith(".json") && !/\.(?:evidence|graduation|job|sources)\.json$/u.test(entry.name)).map((entry) => resolve(root, entry.name)).sort();
 }
 
 export interface GraduationReport { readonly text: string; readonly acceptedPage: string; readonly legacy: number; readonly graduable: readonly string[]; }

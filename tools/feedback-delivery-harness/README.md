@@ -12,6 +12,11 @@ The D645 lifecycle arm separately replays every authored leaf and fails if an ab
 transition hides authored descendants. Its generated report is refreshed with
 `UPDATE_OBJECTIVE_LIFECYCLE=1`.
 
+The Stage-2 accounting arm derives criterion 21(b)'s per-claim refusal queue, measures which
+explorer claims have the authored rationale required by the attach path, and implements criterion
+23 as a tripwire over the append-only log suffix since Stage 1. A trip is escalated to the owner;
+the harness must not rewrite or waive it.
+
 Run side-effect-free:
 
 ```sh
