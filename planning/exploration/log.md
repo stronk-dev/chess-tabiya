@@ -4511,3 +4511,15 @@ sequence kinds carry literal two-/three-edge and three/four-node horizons. Press
 copy their harness boundaries, and en-passant square plus mover-relative half-open-file joins are
 explicit. The rows remain open because the same author cannot independently validate its repair;
 Claude review is still required before acceptance and implementation.
+
+## 2026-08-22 — correction: Breadth process row renumbered D860→D869
+
+The titled-player/Chessable research lane committed D860–D868 while the Breadth process correction
+was landing, creating a duplicate D860. The Breadth row is now D869; its substance is unchanged.
+The earlier append-only reference remains as history rather than being rewritten.
+
+## 2026-08-22 — correction: Breadth process row finally assigned D871
+
+The Solitaire Chess ruling landed D869–D870 before the first collision repair committed. The
+Breadth process-only row therefore moves once more, from D869 to D871. Both earlier references
+remain in this append-only log; the living register and planning pointers now use D871.
