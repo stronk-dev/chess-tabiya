@@ -1,0 +1,190 @@
+# Wave C — complete the basic semantic evidence foundation
+
+**Opened:** 2026-08-22  
+**Authority:** D717 and D872  
+**State:** research program; no production implementation or content mutation is authorized  
+**Inputs:** `design/research/detection-landscape.md`,
+`design/research/middlegame-evidence-and-style-taxonomy.md`,
+`design/research/identity-retaining-three-edge-consequences.md`,
+`design/research/bounded-reply-semantics.md`,
+`design/research/review-map-and-reentry.md`,
+`design/research/player-analysis-and-skills.md`, and
+`planning/platform-alignment/evidence-collector-readiness.md`.
+
+## Verdict
+
+Waves A and B are necessary but not the whole 1.0 classifier foundation. They establish reusable
+pieces, squares, rays, duties, exchanges, reply sets, pawn relations, mobility, king operands and
+observed short sequences. A credible chess product still needs the **basic semantic tactics** that
+players expect: overload, defender removal/deflection, interference, clearance, zwischenzug,
+meaningful discovered tactics, mating patterns and promotion threats.
+
+These are basic product capabilities. Some need more rigorous proof than a fork or literal ray,
+because cheap geometry produces false names. The extra proof depth does not make the capability
+optional or post-1.0.
+
+The closure rule is:
+
+> A foundation capability is complete when its versioned producer, exact operands, proof horizon,
+> abstention and consumer eligibility are explicit. The platform may refuse a concept it cannot
+> establish; it may not silently replace it with geometry or LLM prose.
+
+## 1. Layers that must remain separate
+
+| Layer | Authority | Examples | 1.0 role |
+|---|---|---|---|
+| Exact operands | rules and committed transitions | controller, ray, captured piece, duty, legal exchange, reply set | shared substrate; Waves A/B |
+| Semantic tactics | declared bounded consequence over exact operands | overload, deflection, interference, clearance, zwischenzug, mating pattern | **basic Wave C foundation** |
+| Sourced context | versioned model/corpus/theory source | Maia mass, Explorer frequency, opening identity, cited theory, engine/tablebase result | source adapters; never imitated by board geometry |
+| Product interpretation | named consumer policy | Support warning, theory-only nudge, Review moment, bot transform, habit card | F5/F6/F7/F8/F9 |
+
+The LLM is outside these authority layers. It may phrase the already selected packet at a chosen
+answer distance. It may not promote an operand into a tactic, select a Review moment, invent theory,
+grade a move or diagnose a player.
+
+## 2. Foundation inventory
+
+| Capability family | Current evidence | Missing work | Required for |
+|---|---|---|---|
+| Wave-A tactical projections | 20/30 implemented; ten author-spec gaps remain | accepted RFC amendment for trade/loose/pawn/rook/space/discovered/promotion semantics, then implementation | F5/F8 minimum substrate |
+| Wave-B positional/sequence projections | research complete; 18-id draft repaired author-side | independent Claude reproduction/acceptance, then implementation | F5/F8 breadth substrate |
+| Overload and defender manipulation | exact duties plus rare identity-retaining three-edge sequences; causal names refused | complete-reply/bounded-line definitions for overload, defender removal and deflection | full Support, Review, tactics drill grounding |
+| Interference and clearance | exact slider/blocker/ray transitions | target-retaining consequence rules that distinguish a tactic from geometry | full Support, Review, tactics drill grounding |
+| Zwischenzug and quiet threats | exact reply sets, exchanges, check/mate and one-reply consequences | line-order and counterfactual predicate with a declared stopping rule | full Review and advanced Support |
+| Mating patterns and king sequences | exact check/mate-in-one, back-rank, escape and king-zone operands | bounded mating-net/forced-king-walk semantics, with honest refusal outside the horizon | full Review and king-attack drills |
+| Promotion threats/races | passed-pawn, blocker, distance, control and Syzygy inputs | quiet promotion threat/race consequences and exact authority split with tablebase | full endgame Support/Review |
+| Runtime opening identity | CC0 catalogue/transposition key and R8 collision/empty-path evidence | versioned runtime applicability adapter and coverage-by-ply report | F7 theory, Review openings, repertoire-aware bots |
+| Cited theory bundle | R4 exact+FTS result and R8 exact-join prototype | O5/F4 provenance compiler and immutable local bundle | theory-only nudges and drill links |
+| Engine-relative Review operands | Stockfish/Syzygy and some recorded deltas; uneven reach | typed eval/WDL/mate consequence records, coverage/cost/stability research and O7 label ruling | Analyze and optional engine Review |
+| Candidate evidence for bots | shared vocabulary and F8 compiler boundary specified | one adapter applies registered projections to every complete candidate set | explainable bot policy |
+| Player habits and skills | opportunity arithmetic and twelve measured candidates | longitudinal observation store, floors/baselines/privacy | F9; not another classifier wave |
+
+## 3. Wave-C research tracks
+
+### C1 — defender and line tactics
+
+Test the concepts independently; do not create a catch-all `tactic` enum.
+
+- **Defender removal:** a named defender ceases a named duty and the same target becomes legally
+  and locally positively capturable within the declared horizon.
+- **Deflection/attraction:** quantify the complete relevant reply set and retain exact relocation,
+  duty and target identities; observed order alone does not establish the name.
+- **Overload:** one defender has at least two retained duties and the challenging continuation
+  proves that the declared reply population cannot preserve both.
+- **Interference/clearance:** retain the changed ray, blocker, target and bounded consequence;
+  opened geometry without an affected target is only an operand.
+- **Zwischenzug/quiet threat:** retain the expected recapture/reply population, intervening edge
+  and exact consequence without importing “best,” “forced” or intent.
+
+Instrument requirements: canonical positives from cited published lines, constructed hard
+negatives, color/file mirrors, capture/promotion identity checks, complete-reply enumeration and a
+fixed imported population. Lichess themes are a disagreement corpus only; its published tagger has
+no working overload oracle. Report prevalence, abstention and disagreement separately. Zero
+witnesses is a valid result.
+
+**Falsifier:** a label fires from geometry alone, loses a subject identity, calls an observed reply
+forced, or cannot name a consumer that acts differently on it.
+
+### C2 — king and promotion consequences
+
+Research separately:
+
+- mating net versus exact mate-in-one/back-rank operands;
+- forced king walk versus merely reduced escape squares;
+- promotion race and quiet promotion threat versus distance-to-promotion;
+- clearance/interference around the king versus generic king-zone counts;
+- sacrifice versus literal material loss followed by a declared bounded or tablebase consequence.
+
+Every result retains horizon, side to move, complete/refuting branches and its tablebase/search
+authority. Syzygy owns outcome in-domain. Outside it, “winning,” “conversion” and “sacrifice
+worked” require a declared engine/search boundary.
+
+**Falsifier:** an engine scalar threshold sits on the optimality boundary and smuggles `bestmove`,
+or a king-zone/escape delta is renamed “attack” without a consequence.
+
+### C3 — opening and theory applicability
+
+This is mostly closure of completed R4/R8 research, not a new algorithm hunt:
+
+1. audit catalogue ingestion, `transposeKey`, packet omission and every Review/theory consumer;
+2. report coverage by ply/population and preserve multiple identities per transposition key;
+3. fixture two move orders reaching one key, parent+descendant identities, deepest-match ordering
+   and out-of-catalogue abstention;
+4. split the handoff between F4 bundle production and F7 runtime/applicability UX.
+
+**Falsifier:** the adapter carries the last known opening beyond a catalogue match, or LLM/FTS can
+create applicability.
+
+### C4 — engine and human consequence operands for Review
+
+Measure:
+
+1. consecutive eval/WDL/mate availability by phase and run type;
+2. latency/storage cost of a bounded post-game enrichment pass;
+3. moment stability across depth/budget and engine version;
+4. overlap/disagreement among engine swing, human-policy mass, Explorer frequency, exact semantic
+   tactics, opening exit and tablebase state;
+5. how often a useful factual card exists without an engine grade.
+
+The output is typed operands plus a coverage matrix. Whether an explicit engine-review preset may
+say inaccuracy/mistake/blunder, with its convention visible, is an O7/F6 product ruling. Ordinary
+Review must remain useful with zero engine labels and permit zero moments.
+
+**Falsifier:** engine availability is inferred from openings, raw PV/bestmove enters ordinary
+Support, or a model/corpus probability becomes a chess-quality verdict.
+
+### C5 — cross-consumer closure
+
+Every admitted projection must publish:
+
+```text
+projection/version
+  producer + literal operands + abstention
+  eligible consumers: support / review / theory / bot / habit / inspector / authoring
+  timing: pre-commit / post-commit / post-game / offline
+  answer distance: square / relation / concept / candidate / move / line
+  source ceiling and workflow ceiling
+  positive + hard-negative + abstention fixture
+  availability/latency disposition
+```
+
+The same projection may be quiet in Support, visible in Review, weighted by a bot and counted in a
+habit card. That is reuse. Four consumers implementing four near-identical detectors is failure.
+
+## 4. Downstream gates
+
+| Node | Minimum dependency | Wave-C effect |
+|---|---|---|
+| F5 module architecture | landed A/B projections, eligibility and honest absence | may draft after A/B; **full 1.0 Support acceptance waits on admitted C1/C2 semantics** |
+| F6 Review Map | F5 eligibility, whole-game selector and factual events | may build factual shell; **full tactical Review waits on C1/C2 and engine-grade features wait on C4/O7** |
+| F7 theory/drills | F3 capabilities + F4 bundle + C3 runtime applicability | waits on C3 for contextual theory |
+| F8 bots | landed A/B + candidate adapter + compiled decision record | baseline/guarded/pawn-heavy may proceed; richer tactical personas consume C1/C2 later |
+| F9 habits/skills | versioned events + longitudinal store + opportunities | existing validated metrics may proceed; each new semantic metric earns its own stability gate |
+| Campaign | usable F5/F7 core loop and R14 owner use | waits on the credible consumer experience, not on every future chess concept |
+| Content scale-up | Gate F, version negotiation and sacrificial pilot | waits; required pilot capabilities must be stable, optional future projections need no pack edits |
+
+## 5. Content-stability rule
+
+Collectors produce facts; packs declare only capabilities they require. Adding an optional
+projection does not edit a pack. Replacing semantics creates `@2`; `@1` remains supported through
+1.x or the runtime refuses the pack explicitly. A mechanical migration adds a capability stamp
+only after its read-only plan proves there is no chess/provenance judgement.
+
+“Foundation first” therefore means stable extension, versioning and refusal **plus the basic
+semantic set above**. It does not mean freezing an impossible final list of every chess idea.
+
+## 6. Execution order and closeout
+
+1. Finish Wave A's ten author-spec returns; do not improvise them in code.
+2. Obtain independent review/acceptance for Wave B, then implement its 18 projections.
+3. Run C1 and C2 as disposable research instruments; each label may pass, narrow or be refused.
+4. Run C3 symbol/coverage closure and route it to F4/F7.
+5. Run C4 over real imported and pack trajectories; return the engine-label choice to O7.
+6. Compile C5 from the catalogue and research results.
+7. Draft only admitted RFCs. Do not combine source adapters, engine Review and tactical semantics
+   merely because they all produce evidence.
+8. Close each track with a dossier or explicit refusal, a `design/research/README.md` row, affected
+   gate/backlog reconciliation and an append-only exploration-log entry.
+
+No research result itself authorizes product code, content changes, learner wording or an LLM
+prompt.

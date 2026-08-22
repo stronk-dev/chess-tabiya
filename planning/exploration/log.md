@@ -4523,3 +4523,13 @@ The earlier append-only reference remains as history rather than being rewritten
 The Solitaire Chess ruling landed D869–D870 before the first collision repair committed. The
 Breadth process-only row therefore moves once more, from D869 to D871. Both earlier references
 remain in this append-only log; the living register and planning pointers now use D871.
+
+## 2026-08-22 — the basic semantic-tactics foundation is opened as Wave C
+
+D872 corrects the earlier scope boundary: overload, defender removal/deflection, interference,
+clearance, zwischenzug, mating patterns and promotion threats are not optional “deep” enrichment.
+They are basic 1.0 semantic evidence. Waves A/B provide their exact operand substrate; Wave C now
+owns the separately falsified consequence semantics, opening/theory adapters and Review engine
+operands in `planning/evidence-foundation-ux/wave-c-foundation-closure.md`. F5 may draft its module
+architecture after A/B, but full Support/Review acceptance cannot claim semantic breadth while the
+admitted Wave-C set is absent. Content remains held behind Gate F and capability negotiation.
