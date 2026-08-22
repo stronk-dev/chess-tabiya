@@ -2,7 +2,7 @@
 
 **Drafted 2026-08-22 at HEAD `a3b1e01`. Every population below is re-derived from the tree at
 that commit, not inherited from the RFC** (criterion 22 rejects an inherited count;
-`rfc/feedback-delivery.md:2496-2499`). Status: **executable pending one owner ruling (R1, §5)**;
+`rfc/feedback-delivery.md:2496-2499`). Status: **R1 RULED 2026-08-22 ([[D949]]): the whole wave holds until Gate F — both arms. Steps 1–2 (tooling) proceed; steps 3+ wait for Gate F.** R2 ruled too ([[D950]]: registry may grow, claude authors counterCases under owner veto), dormant behind Gate F. Original status line: executable pending one owner ruling (R1, §5);
 steps 1–2 are legal to queue immediately.
 
 This is the commissioning brief criterion 22 requires — the wave `rfc/archive/claim-backing.md`

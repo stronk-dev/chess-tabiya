@@ -5036,3 +5036,28 @@ named-plan block's final home (D309's own wording is historically dated).
 
 **Next:** queue wiring for codex ahead of intent-presets per the landing order; decide the
 parent RFC's disposition (supersede-and-archive) in a follow-up pass.
+
+## 2026-08-22 — three rulings, a refused draft, a live round-trip, and the audit that failed its predecessor
+
+**What landed:** (1) Owner rulings D949/D950: the stage-2 binding wave holds WHOLE until Gate F —
+the owner chose the strict reading with the play-session consequence stated — and the principle
+registry may grow with claude-authored counterCases under owner veto (dormant behind Gate F);
+tooling steps 1–2 stay queued as mechanism. (2) The campaign drafting fork REFUSED its own
+directive — the campaign lane's owner-grounded gate ("no campaign RFC until R6–R8 experiential
+closure") was stated first in the derivation dossier's body and omitted from its summary; the
+draft was commissioned from the summary (D951, near-miss, zero bytes written; feedback memory
+landed). Waive-or-hold is now the owner's question. (3) The D947 live-sources harness ran 20 real
+tournament games through the shipped import path — D414 discharged by execution: broadcast PGN
+parses; multi-game bodies are refused whole (the splitter is the first missing piece); evals and
+third-party verdicts are dropped at parse but stored verbatim at the record, relocating D410's
+trap to `importGame`; the streaming endpoint beats polling decisively (0.24 s TTFB vs 4.6 s).
+Derivation dossier at `planning/live-sources/rfc-derivation.md`; D948's routing discharged.
+(4) The never-started audit (D952): 143 of 543 open rows unrouted at HEAD, and 55 of D641's 74
+"routed" rows were never routed anywhere living — the fourth consecutive audit to re-prove
+`make work-index` (D487) is the only durable fix; now priority-queued for codex.
+
+**Blocked:** the wave and the play session behind Gate F (owner's choice); the campaign RFC
+behind its waive-or-hold question; live-sources Phase A unblocked and drafting.
+
+**Next:** live-sources RFC draft (Phase A cut); the campaign question to the owner; codex takes
+work-index, the writer, and the wiring/presets chain.

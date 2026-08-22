@@ -64,6 +64,16 @@ with the review's finds carried:
 end of that chain. `semantic-collectors` (Wave-C) is drafting and will slot between the
 collector waves and the module amendment (your order items 2 and 5).
 
+## 0-WORK-INDEX. `make work-index` ([[D487]]) is now priority tooling — the fourth audit just re-proved it
+
+[[D952]]: the 2026-08-22 re-run of D641's exact join found **143 of 543 open rows unrouted**, and
+55 of D641's 74 "routed" rows were never routed anywhere living — the audit test itself now fails
+(143 ≠ 73). Every hand audit goes stale at the rate ideas land. Build the instrument as specced in
+`planning/WORK.md` §0: derive the routing from `design/BACKLOG.md` column 1 joined against the RFC
+register and the queues, **fail when any open row has no destination**, wire into `make verify`.
+The current 143-row inventory to test against is `planning/platform-alignment/never-started-lanes.md`
+(hand-made, dated — your instrument replaces it). Take this ahead of any other tooling item.
+
 ## 0-STAGE2-TOOLING. Binding-wave steps 1–2 are queueable NOW — no owner decision required
 
 The stage-2 work order is landed at `planning/feedback-delivery/stage2-work-order.md` (read it
@@ -80,8 +90,11 @@ byte moves:
 - **Step 2 — the criterion-21(b) per-claim reason lister and the criterion-23 log-trip
   assertion** (both specced to buildability in the work order).
 
-Content steps 3+ are held pending owner ruling R1 (D560 content hold × D462 wave-before-play) —
-do not start them regardless of how ready the tooling makes them.
+**R1 RULED 2026-08-22 ([[D949]]): the owner holds the WHOLE wave — both arms — until Gate F.**
+Content steps 3+ do not start before Gate F passes, full stop. Steps 1–2 (the writer + the two
+instruments) remain queued: they are mechanism, not wave, D642 permits them post-Stage-1, and the
+accepted `graduation-clearance` §6.5 requires the writer regardless. R2 is also ruled ([[D950]]:
+registry may grow, claude authors counterCases under owner veto) and is dormant behind Gate F.
 
 ## 0-WIRING-ACCEPTED. `assistance-control-wiring` is accepted — lands FIRST in the assistance pair
 
