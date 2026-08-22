@@ -81,7 +81,7 @@ export const EVIDENCE_PRODUCER_IDS = Object.freeze([
   "rules.structural", "rules.transition", "rules.castling", "rules.exchange", "rules.tactic", "rules.square", "rules.mobility", "rules.pawn", "rules.king", "rules.phase", "rules.pivotal", "rules.endgame",
   "theory.shapes", "authored.structural_condition", "pack.authored", "recorded.engine", "recorded.tablebase", "live.stockfish",
   "live.syzygy", "human.maia", "human.explorer", "theory.opening_identity", "run.record",
-  "derived.compare_narrative", "derived.story", "derived.grade", "derived.exchange", "derived.tactic", "derived.pawn", "derived.material", "derived.king", "derived.activity", "sourcing.ledger",
+  "derived.compare_narrative", "derived.story", "derived.grade", "derived.exchange", "derived.tactic", "derived.pawn", "derived.material", "derived.king", "derived.activity", "derived.opponent", "sourcing.ledger",
   "derived.semantic_avoidance",
 ] as const);
 
@@ -693,6 +693,26 @@ const derivedActivityOutputs = [projection("derived.activity", "derived.activity
   limitations: ["Stationary-piece file-class changes do not fire. Occupancy does not imply activity, control, importance, or improvement."],
 })];
 
+const candidateCollectorInputs = Object.freeze([
+  ...new Set([...TACTICAL_COLLECTOR_PROJECTION_IDS, ...BREADTH_COLLECTOR_PROJECTION_IDS]),
+  // Maia WDL is an alternative provider evaluation, not a local collector result. Stage B's
+  // fixed-bound adapter admits one Stockfish evaluation per candidate and does not relabel it.
+].filter((id) => id !== "human.maia.candidate_wdl"));
+
+const derivedOpponentOutputs = [projection("derived.opponent", "derived.opponent.candidate_feature_vector", "derived", {
+  payloadType: "CandidateFeatureVector",
+  semantics: "A typed record of one fixed-bound engine evaluation and the literal registered tactical/breadth collector results for each legal candidate child position. It adds no detector, grade, trait, or prose.",
+  operands: ["beforeFen", "scoreFrame", "engine", "candidates"],
+  grounding: "declared_convention",
+  exactness: "convention",
+  abstention: { possible: true, reasons: ["input_abstained"] },
+  answerContent: ["evaluation"],
+  forms: ["list", "machine_condition"],
+  dependsOn: [ref("live.stockfish.eval"), ...candidateCollectorInputs.map(ref)],
+  derivation: { anyOf: candidateCollectorInputs.map((id) => [ref("live.stockfish.eval"), ref(id)]) },
+  limitations: ["The vector re-anchors registered results to hypothetical legal moves. Presence is not importance; absence is not safety; engine score and collector payloads do not grade the learner or establish a personality trait."],
+})];
+
 export const EVIDENCE_PRODUCERS: readonly ProducerDeclaration[] = Object.freeze([
   producer("rules.structural", "rules", "packages/runtime/src/structure.ts", "local", structuralOutputs),
   producer("rules.transition", "transition", "packages/runtime/src/transition.ts", "local", [...transitionOutputs, ...transitionEventOutputs]),
@@ -789,6 +809,7 @@ export const EVIDENCE_PRODUCERS: readonly ProducerDeclaration[] = Object.freeze(
   producer("derived.material", "derived", "packages/runtime/src/material-state.ts", "local", derivedMaterialOutputs),
   producer("derived.king", "derived", "packages/runtime/src/semantic-evidence.ts", "local", derivedKingOutputs),
   producer("derived.activity", "derived", "packages/runtime/src/semantic-evidence.ts", "local", derivedActivityOutputs),
+  producer("derived.opponent", "derived", "apps/server/src/candidate-evidence.ts", "local", derivedOpponentOutputs),
   producer("sourcing.ledger", "record", "apps/server/src/sourcing/types.ts; apps/server/src/sourcing/claim-binding.ts", "recorded", [
     projection("sourcing.ledger", "sourcing.ledger.engine_eval", "record", { role: "source_record", payloadType: "engine_eval EvidenceRecord", grounding: "bounded_search", exactness: "measured", confidence: "reported", operands: ["kind", "sourceId", "retrievedAt", "values"], answerContent: ["evaluation"], forms: ["list", "panel"], limitations: ["Offline sourcing record including anchor and provenance; not a runtime engine reading."] }),
     projection("sourcing.ledger", "sourcing.ledger.tablebase_result", "record", { role: "source_record", payloadType: "tablebase_result EvidenceRecord", grounding: "tablebase_exact", operands: ["kind", "sourceId", "retrievedAt", "values"], answerContent: ["fact", "evaluation"], forms: ["list", "panel"], limitations: ["Offline sourcing record including anchor and provenance; not a live tablebase event."] }),
@@ -841,7 +862,7 @@ const CONSUMER_SPECS: readonly ConsumerSpec[] = [
   { id: "compare.engine_trajectory", implementation: "compare-strips.ts:comparisonEngineTrajectory; CompareView.svelte", projections: ["derived.compare.engine_trajectory"], timing: ["review"], forms: ["list", "panel"], answerContent: ["evaluation"] },
   { id: "inspector.human_split", implementation: "rest.ts human-split; DrillScreen.svelte", projections: ["human.maia.policy"], timing: ["postcommit", "review", "analysis"], forms: ["list", "panel"], answerContent: ["candidate_moves"], providerOff: "unavailable" },
   { id: "inspector.corpus", implementation: "rest.ts corpus; renderCorpusPage; DrillScreen.svelte", projections: ["human.explorer.population"], timing: ["postcommit", "review", "analysis"], forms: ["list", "panel"], answerContent: ["fact", "candidate_moves"], providerOff: "honest_empty" },
-  { id: "opponent.selection", implementation: "selectMove; opponent-selector", projections: ["human.maia.uci_response", "live.stockfish.uci_response", "live.syzygy.probe_result"], timing: ["analysis"], roles: ["operator"], forms: ["list", "panel"], answerContent: ["fact", "evaluation", "candidate_moves", "move", "principal_variation"], budget: { maxFacts: null, maxForms: null }, providerOff: "unavailable" },
+  { id: "opponent.selection", implementation: "selectMove; opponent-selector; candidateFeatureVector", projections: ["human.maia.uci_response", "live.stockfish.uci_response", "live.syzygy.probe_result", "derived.opponent.candidate_feature_vector"], timing: ["analysis"], roles: ["operator"], forms: ["list", "panel", "machine_condition"], answerContent: ["fact", "evaluation", "candidate_moves", "move", "principal_variation"], budget: { maxFacts: null, maxForms: null }, providerOff: "unavailable" },
   { id: "guidance.authored_claim", implementation: "claim-presentation.ts; CheckpointSheet.svelte; TerminalSheet.svelte", projections: ["pack.authored.claim_delivery"], forms: ["sentence", "panel"], answerContent: ["fact", "pattern", "theory", "principle", "plan"] },
   { id: "board.pivotal_marker", implementation: "DrillScreen.svelte; renderPivotalMarker", projections: ["rules.pivotal.marker"], forms: ["timeline_marker", "sentence", "panel"], answerContent: ["fact"] },
   { id: "review.story", implementation: "storyMoments; renderReviewStoryEvidence; service.story; GameStoryScreen.svelte", projections: ["rules.pivotal.marker", "theory.shapes.firing", "run.record.consequence", "run.record.imported_result", "rules.endgame.reading", "derived.story.eval_shift", "derived.story.last_level", "derived.story.rank", "derived.story.title"], timing: ["review"], roles: ["learner", "host", "participant", "spectator"], forms: ["sentence", "timeline_marker", "list", "panel"], answerContent: ["fact", "pattern", "evaluation"] },

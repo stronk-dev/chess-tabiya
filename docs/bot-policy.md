@@ -32,3 +32,12 @@ legacy `targetElo`, `temperature`, or `topP` authorities, and must match an exac
 catalog entry. The triple is part of the selection-cache identity. Because the production
 catalog is deliberately empty, every profiled production request currently fails closed;
 the selector never treats an unexecuted profile as ordinary Maia while claiming otherwise.
+
+Stage B's candidate-evidence boundary is also implemented. `candidateFeatureVector` accepts
+legal candidate moves with one finite, fixed-bound Stockfish score in the root mover's frame,
+plays each move on a cloned position, and applies the existing tactical and breadth collectors
+to that child and edge. Every retained result carries its literal registered projection id and
+structured payload. The derived vector is admitted only to `opponent.selection@1`; it does not
+flatten facts into labels or add bot-only detector code. Multi-edge sequence collectors are
+honestly absent from this one-edge adapter. No personality or salience transform is thereby
+registered: those remain separately measured policy layers.

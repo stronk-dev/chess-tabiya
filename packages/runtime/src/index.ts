@@ -412,6 +412,7 @@ export {
   declareCastlingRightsLostEvidence,
   declareCastlingLegalityEvidence,
   declareCandidateMajorityEvidence,
+  declareCandidateFeatureVectorEvidence,
   declareCapturedZoneDefenderEvidence,
   declareDefenderConsequenceEvidence,
   declareDefenderExposureEvidence,

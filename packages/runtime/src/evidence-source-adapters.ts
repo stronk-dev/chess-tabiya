@@ -137,6 +137,7 @@ export const declareSquareClearanceEvidence = <T extends object>(payload: T) => 
 export const declareInterferenceEvidence = <T extends object>(payload: T) => exactObject("derived.tactic", "derived.tactic.interference_observed", payload, ["interposingMove", "slider", "betweenSquare", "target", "brokenDuty", "targetCapture"]);
 export const declareCheckZwischenzugEvidence = <T extends object>(payload: T) => exactObject("derived.tactic", "derived.tactic.check_zwischenzug_observed", payload, ["expectedRecapture", "intermediateCheck", "reply", "retainedRecapture"]);
 export const declareOverloadExploitationEvidence = <T extends object>(payload: T) => exactObject("derived.tactic", "derived.tactic.overload_exploitation_observed", payload, ["firstCapture", "defenderRecapture", "secondTargetCapture", "dutySet"]);
+export const declareCandidateFeatureVectorEvidence = <T extends object>(payload: T) => exactObject("derived.opponent", "derived.opponent.candidate_feature_vector", payload, ["beforeFen", "scoreFrame", "engine", "candidates"]);
 
 export function declareStructuralReadingSourceEvidence<T extends { readonly kind: string }>(payload: T): DeclaredEvidence<T> {
   if (!STRUCTURAL_FEATURE_KINDS.includes(payload.kind as (typeof STRUCTURAL_FEATURE_KINDS)[number]) || payload.kind === "pawn_count") throw new TypeError(`Unsupported structural reading evidence kind ${payload.kind}`);

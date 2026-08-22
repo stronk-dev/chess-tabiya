@@ -5449,3 +5449,26 @@ whose recurring omission class is now guarded by `make work-index`.
 architecture includes downstream selection/module work; D546 remains open because registering the
 producerless arrows surface does not give it a producer. Each flipped row already named its own
 implemented/closed disposition and was checked at the referenced symbol or permanent fixture.
+
+## 2026-08-22 — D813 candidate evidence reuses the shared collector registry
+
+**What landed:** `derived.opponent.candidate_feature_vector@1` is a typed local producer admitted
+only to `opponent.selection@1`. For each legal candidate, `candidateFeatureVector` clones and plays
+the edge, requires one finite root-frame Stockfish score with a positive fixed search bound, and
+records the existing tactical/breadth child readings and one-edge events as literal `{id,version}`
+sources with their structured payloads. Illegal, duplicate, empty, unbounded and unevaluated inputs
+fail closed. D813 moves to implemented.
+
+**What changed:** the evidence manifest is now 35 producers / 188 projections / 25 consumers / 210
+bindings; the candidate vector has exactly one consumer. The adapter adds no detector, feature
+label, learner prose, grade, salience hierarchy, or personality claim. Multi-edge sequence
+collectors do not pretend to fire from a one-edge candidate. This opens registered-id classifiers
+for future bot traits, but each trait still needs the bot-policy RFC's separate measured admission.
+
+**Verification:** 19 focused candidate/catalogue/manifest tests pass, the server TypeScript project
+is clean, and `make evidence-manifest-check` reports the compiled counts above with all producer
+paths and bindings closed.
+
+**Next:** D969/D970 still block the guarded production roster. The remaining bot implementation is
+the persisted run/profile seam, composed policy-decision record and server-side sampler; none is
+silently implied by D813.
