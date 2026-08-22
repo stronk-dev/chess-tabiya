@@ -713,17 +713,27 @@ predeclared D545 answer the measurement must confirm or refute.
   `derived.tactic.promotion_pressure@1`: **a derived producer that computes nothing new,
   it joins** — `derivation.inputs` naming the existing `passed_pawn` predicate,
   `direct_attack_count` (both colors at the queening square), and `line_blockers`
-  (pawn→promotion square), plus the rule-of-the-square exact arithmetic
-  (kings-and-pawns-only, declared scope). Grounding `position_rules` where all inputs are
-  exact; exactness `exact`; **declared limitation: pressure description only — outcome
-  words are deferred to the tablebase projection** (Syzygy owns the exact outcome ≤ 7
-  men).
+  (pawn→promotion square). **AMENDED 2026-08-22 (implementing; the D832 author amendment
+  on Wave-C's measured evidence, `basic-semantic-tactics-stage-0.md` §8 — so the
+  underspecified verdict cannot land): the rule-of-the-square "verdict" is REMOVED.** It
+  exposed an underspecified outcome as if it were exact (its arithmetic holds only in a
+  kings-and-pawns-only scope the operand set cannot itself guarantee at read time). In
+  its place, two **measured exact flags** under the disclosed pass convention:
+  `promotionAvailableNext` (the same pawn may promote on the very next move) and
+  `promotionUnstoppable` (the same-pawn promotion remains legal after **every** legal
+  opponent reply — the all-reply enumeration, measured at 13/754 authored and 1/579
+  imported played edges, so strict-interior non-vacuity is satisfiable). Grounding
+  `position_rules`; exactness `exact` — genuinely, now, because both flags are legality
+  enumerations, not scoped arithmetic; **declared limitation unchanged: pressure
+  description only — outcome words stay with Syzygy** (≤ 7 men).
 - **Operands:** pawn square; distance to promotion; promotion-square control balance;
-  path blockers; rule-of-the-square verdict with its scope flag.
+  path blockers; `promotionAvailableNext`; `promotionUnstoppable` — descriptive operands
+  retained, the verdict field gone.
 - **Fixtures:** Lucena-adjacent positives (the endgame catalogue has the positions);
-  blockaded passer hard negative (operands show the blocker); rule-of-the-square
-  boundary pair — king exactly in / exactly out of the square (the D451 able-to-fail
-  pair).
+  blockaded passer hard negative (operands show the blocker); an
+  `availableNext`-but-not-`unstoppable` pair (one legal reply prevents — the D451
+  able-to-fail pair, replacing the withdrawn rule-of-the-square boundary pair); an
+  in-check pass-clone abstention fixture (the D751/D435-family hazard, declared).
 - **Measurement + sign:** census over endgame-phase positions, not lift (it is a join
   over existing exact projections); non-vacuity strict-interior.
 
