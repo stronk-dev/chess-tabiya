@@ -4243,3 +4243,35 @@ fork consequence, splits opening identity back to D743/R8/F7, adds a closed ten-
 census and corrects Appendix A to 28 projections. D730 is updated and D749–D753 record the fork
 and review defects. The RFC remains draft pending independent buildability review; no production
 or content code changed, and Phase 2b breadth remains open beyond this prerequisite.
+
+## 2026-08-22 — second Wave-B probe separates useful joins from background truth
+
+The D754 disposable instrument added nine predeclared event probes over the same 717/577 eligible
+authored/imported decisions and 19,619/18,842 legal alternatives, with paired-position bootstrap
+intervals. Two candidates survive both populations: defender-edge loss joined to a positive legal
+exchange on the retained target measures 4.50×/6.52× on per-probe eligible denominators, and increased P/N/B/R/Q role asymmetry
+measures 2.47×/4.35×. The broader material-signature event is higher still at 3.84×/5.05× but is
+recorded as a selection warning: captures changing inventory are distinctive without being a
+useful sentence.
+
+Six plausible chess labels did not earn global presentation. A pawn newly contesting an empty
+minor destination is almost exact background (0.96×/0.95×); connected rooks are 0.82×/1.12×;
+majority-wing advances 0.76×/0.69×; direct blockaders reverse 0.62×/1.10×; target-bearing slider
+coordination reverses 2.19×/0.25× on only 2/1 played positives; and the shelter+king-zone
+composite fires on zero authored played edges. They remain exact operands for hover, theory,
+phase-specific modules, bot features or opportunity-normalized habits—not default hints.
+
+The shared research exchange implementation now feeds D730 and D754, and D730's focused suite
+passes four tests including the second buildability review's paired pin and capture-destination
+controls. **Append-only correction to the preceding D730 log entry:** the total is **39,755**
+played-plus-alternative edges (717 + 19,619 + 577 + 18,842), not 39,038; the latter accidentally
+summed neither the two full populations nor only their alternatives. D754 uses per-probe
+denominators: the defender-loss join abstains on 42/717 authored and 32/577 imported played rows,
+plus 463/19,619 and 402/18,842 alternatives, because the disclosed pass state is invalid; none of
+those abstentions are counted as false. A focused D730 rerun also widened the observed timing band
+slightly to 0.038–0.043 ms/edge; this remains feasibility evidence, not a production guarantee.
+Those controls tightened the tactical RFC again: a legal along-ray capture of the pinner
+must be admitted, and `trapped@1` values capture moves by their own exchange result rather than
+post-arrival capturability. D754 and D759–D762 record the outcomes. Phase 2b remains open for
+legal per-piece mobility, lever/passer conversion, decomposed king state, forcing-reply/search
+semantics and identity-preserving three-edge sequences; no production or content code changed.

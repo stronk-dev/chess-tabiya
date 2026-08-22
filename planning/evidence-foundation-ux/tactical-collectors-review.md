@@ -9,10 +9,10 @@
 
 | Finding | Why it blocked | Resolution in amended draft |
 |---|---|---|
-| Pseudo-SEE retained pinned recapturers | Every downstream loose/fork/threat/trapped claim could inherit a geometrically present but illegal defender or attacker | Replaced with `legal-exchange@1`, legal recapture-only minimax; D730 fixtures include pinned and X-ray cases |
+| Pseudo-SEE did not model move legality | Every downstream loose/fork/threat/trapped claim could inherit an illegal pinned recapture—or an exclude-all-pinned repair could wrongly drop a legal along-ray capture of the pinner | Replaced with `legal-exchange@1`, legal recapture-only minimax; D730 fixtures include both pinned directions and X-rays |
 | Fork branch assumed both confidence intervals would exclude 1 | The measured authored point is 1.72× but 95% interval is 0.72–2.94; requiring exclusion would discard an exact event or invite criterion softening | Exact `double_attack` stays research/inspector-only with no universal positive-primary disposition; fallback triggers only if a permanent-code point estimate falls below 1 |
 | Threat declared total under a null/pass convention | Passing while in check is not a valid counterfactual state; stale en-passant rights can manufacture a capture | `pass_while_in_check` abstention is mandatory and EP is cleared |
-| Trapped destination “SEE” had no specified mover/turn/domain | Different implementations could test attack geometry, the wrong side, or the pre-move square and all claim compliance | `trapped@1` now requires current positive capture plus a complete legal-destination census, each tested for a positive opponent capture of the relocated piece |
+| Trapped destination “SEE” had no specified mover/turn/domain | Different implementations could test attack geometry, the wrong side, or the pre-move square and all claim compliance; testing every destination only after arrival also calls a locally profitable `RxQ KxR` escape trapped | `trapped@1` now requires current positive capture plus a complete legal-move census: capture moves use their own exchange result; quiet destinations use post-arrival opponent capture |
 | Capture class used `winning/losing/balanced` | Those names invite whole-move valence although the payload is only a local convention result | Classes are `positive/negative/equal`; derivation binds the exact capture event and exact exchange result |
 | Fork consequence claimed “wins material” after only a one-reply local test | A local convention cannot establish whole-position or game-theoretic winning | Projection renamed `fork_survives_reply@1`; limitation stays local and retains a refuting reply |
 | Runtime opening identity was normative but forbidden to begin before R8/F7 | The RFC could neither meet all acceptance criteria nor honestly be called implementable | Removed from Appendix A and acceptance; D743 remains open for the gated R8/F7 RFC |
@@ -23,7 +23,7 @@
 
 The prerequisite is supported, with bounded claims:
 
-- 39,038 played/alternative edges across independent authored and sealed imported populations;
+- 39,755 played/alternative edges across independent authored and sealed imported populations;
 - deterministic paired source-position bootstrap, 2,000 resamples;
 - legal, X-ray, pinned-recapturer and geometry-disagreement controls;
 - negative-primary en-prise result in both populations with both intervals below 1;

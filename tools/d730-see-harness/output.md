@@ -4,7 +4,7 @@
 
 ## authored pack spines
 
-Rows 717; alternatives 19619; elapsed 769.9 ms (0.0379 ms per evaluated edge).
+Rows 717; alternatives 19619; elapsed 805.9 ms (0.0396 ms per evaluated edge).
 
 | probe | played n/rate | alternatives n/rate | lift (paired position bootstrap 95%) |
 |---|---:|---:|---:|
@@ -16,7 +16,7 @@ First geometry/exchange disagreements: `anti-italian-center-attack-black/p9-d4:d
 
 ## sealed imported CC0 sample
 
-Rows 577; alternatives 18842; elapsed 792.5 ms (0.0408 ms per evaluated edge).
+Rows 577; alternatives 18842; elapsed 833.1 ms (0.0429 ms per evaluated edge).
 
 | probe | played n/rate | alternatives n/rate | lift (paired position bootstrap 95%) |
 |---|---:|---:|---:|

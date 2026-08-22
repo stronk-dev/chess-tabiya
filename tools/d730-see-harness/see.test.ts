@@ -4,20 +4,26 @@ import { readFileSync, writeFileSync } from "node:fs";
 
 import { attacks } from "chessops/attacks";
 import { Chess } from "chessops/chess";
-import { makeFen, parseFen } from "chessops/fen";
+import { makeFen } from "chessops/fen";
 import { parsePgn, startingPosition } from "chessops/pgn";
 import { parseSan } from "chessops/san";
-import type { Color, Move, Piece, Role, Square } from "chessops/types";
+import type { Move, Role } from "chessops/types";
 import { makeUci, opposite, parseUci } from "chessops/util";
 import { describe, expect, it } from "vitest";
 
 import { transitions } from "../r1r2-primitives-harness/corpus.js";
+import {
+  legalCaptureMovesTo,
+  legalExchange,
+  legalExchangeForMove,
+  researchPieceValue,
+  researchPosition,
+} from "../research-chess/legal-exchange.js";
 
 const OUTPUT = new URL("./output.md", import.meta.url).pathname;
 const IMPORTED = new URL("../r2-selection-harness/imported-sample.pgn", import.meta.url).pathname;
 const TARGET_PLIES = new Set([8, 16, 24, 32, 40, 48]);
 const PROMOTIONS: readonly Role[] = ["queen", "rook", "bishop", "knight"];
-const VALUE: Readonly<Record<Role, number>> = { pawn: 1, knight: 3, bishop: 3, rook: 5, queen: 9, king: 100 };
 
 interface Row {
   readonly id: string;
@@ -33,74 +39,7 @@ interface Outcome {
 type Probe = (beforeFen: string, uci: string, afterFen: string) => boolean;
 
 function position(fen: string): Chess {
-  return Chess.fromSetup(parseFen(fen).unwrap()).unwrap();
-}
-
-function captureAt(pos: Chess, move: Move): Piece | undefined {
-  if (!("from" in move)) return undefined;
-  const mover = pos.board.get(move.from);
-  if (mover === undefined) return undefined;
-  const direct = pos.board.get(move.to);
-  if (direct !== undefined && direct.color !== mover.color) return direct;
-  if (mover.role === "pawn" && pos.epSquare === move.to && move.from % 8 !== move.to % 8) {
-    return { color: opposite(mover.color), role: "pawn" };
-  }
-  return undefined;
-}
-
-function captureMovesTo(pos: Chess, target: Square, fromOnly?: Square): readonly Move[] {
-  const result: Move[] = [];
-  for (const [from, dests] of pos.allDests()) {
-    if (fromOnly !== undefined && from !== fromOnly) continue;
-    if (!dests.has(target)) continue;
-    const roles: readonly (Role | undefined)[] = pos.board.getRole(from) === "pawn" && (target < 8 || target >= 56)
-      ? PROMOTIONS
-      : [undefined];
-    for (const promotion of roles) {
-      const move: Move = promotion === undefined ? { from, to: target } : { from, to: target, promotion };
-      if (captureAt(pos, move) !== undefined && pos.isLegal(move)) result.push(move);
-    }
-  }
-  return result;
-}
-
-function promotionGain(pos: Chess, move: Move): number {
-  if (!("from" in move) || move.promotion === undefined || pos.board.getRole(move.from) !== "pawn") return 0;
-  return VALUE[move.promotion] - VALUE.pawn;
-}
-
-function continuation(pos: Chess, target: Square, perspective: Color, memo: Map<string, number>): number {
-  const key = `${makeFen(pos.toSetup())}|${target}|${perspective}`;
-  const cached = memo.get(key);
-  if (cached !== undefined) return cached;
-  const sign = pos.turn === perspective ? 1 : -1;
-  const values = captureMovesTo(pos, target).map((move) => {
-    const captured = captureAt(pos, move)!;
-    const delta = sign * (VALUE[captured.role] + promotionGain(pos, move));
-    const next = pos.clone();
-    next.play(move);
-    return delta + continuation(next, target, perspective, memo);
-  });
-  const value = pos.turn === perspective ? Math.max(0, ...values) : Math.min(0, ...values);
-  memo.set(key, value);
-  return value;
-}
-
-function legalExchangeForMove(pos: Chess, move: Move): number | undefined {
-  if (!("from" in move) || !pos.isLegal(move)) return undefined;
-  const captured = captureAt(pos, move);
-  if (captured === undefined) return undefined;
-  const perspective = pos.turn;
-  const initial = VALUE[captured.role] + promotionGain(pos, move);
-  const next = pos.clone();
-  next.play(move);
-  return initial + continuation(next, move.to, perspective, new Map());
-}
-
-function legalExchange(fen: string, uci: string): number | undefined {
-  const pos = position(fen);
-  const move = parseUci(uci);
-  return move === undefined ? undefined : legalExchangeForMove(pos, move);
+  return researchPosition(fen);
 }
 
 function playedFen(beforeFen: string, uci: string): string {
@@ -144,12 +83,12 @@ function movedPieceTargets(beforeFen: string, uci: string, afterFen: string, exc
       continue;
     }
     if (!exchangeFiltered) {
-      if (VALUE[victim.role] >= 3) count += 1;
+      if (researchPieceValue(victim.role) >= 3) count += 1;
       continue;
     }
     const hypothetical = after.clone();
     hypothetical.turn = moved.color;
-    const capture = captureMovesTo(hypothetical, target, parsed.to)[0];
+    const capture = legalCaptureMovesTo(hypothetical, target, parsed.to)[0];
     if (capture !== undefined && (legalExchangeForMove(hypothetical, capture) ?? 0) > 0) count += 1;
   }
   return count;
@@ -159,7 +98,7 @@ function movedPieceEnPrise(_beforeFen: string, uci: string, afterFen: string): b
   const after = position(afterFen);
   const parsed = parseUci(uci);
   if (parsed === undefined || !("from" in parsed)) return false;
-  return captureMovesTo(after, parsed.to).some((move) => (legalExchangeForMove(after, move) ?? 0) > 0);
+  return legalCaptureMovesTo(after, parsed.to).some((move) => (legalExchangeForMove(after, move) ?? 0) > 0);
 }
 
 const PROBES: Readonly<Record<string, Probe>> = {
@@ -327,6 +266,21 @@ describe("D730 legal exchange", () => {
 
     const pinnedRecapturer = "4k3/4n3/2p5/1B6/8/8/8/4R1K1 w - - 0 1";
     expect(legalExchange(pinnedRecapturer, "b5c6")).toBe(1);
+  });
+
+  it("counts along-ray pinned recaptures and values capture destinations (buildability-review controls)", () => {
+    // The recapturer is textbook-pinned BY the capturing rook standing on e4 (e4-e6-e8), yet
+    // Rxe4 captures the pinner and is legal. A naive "exclude pinned recapturers" filter reads
+    // Rxe4 as impossible and calls the pawn grab +1; legal enumeration returns the true -4.
+    const pinnedByCapturer = "4k3/8/4r3/8/4p3/8/8/4R1K1 w - - 0 1";
+    expect(legalExchange(pinnedByCapturer, "e1e4")).toBe(-4);
+
+    // A cornered rook whose only non-losing destination is RxQ met by Kxb8: the opponent has a
+    // positive capture ON the destination (+5), but the destination move's own exchange value is
+    // +4 — winning, an escape. The trapped@1 destination test must value capture destinations by
+    // their own legal-exchange result, not by "opponent has a positive capture there".
+    const queenCaptureEscape = "Rqk5/8/P7/8/8/8/6K1/8 w - - 0 1";
+    expect(legalExchange(queenCaptureEscape, "a8b8")).toBe(4);
   });
 
   it("filters a defended geometry-only fork", () => {

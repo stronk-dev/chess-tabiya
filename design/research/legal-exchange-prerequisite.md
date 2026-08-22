@@ -4,8 +4,8 @@
 collectors materially less noisy without pretending to be engine evaluation or chess truth?
 
 **Verdict.** **Yes as a prerequisite; no as a universal significance rule.** `[V]` A legal
-recapture-only minimax is fast on both repo populations, excludes pinned recapturers and illegal
-king captures by construction, preserves X-rays, and separates geometrical from materially live
+recapture-only minimax is fast on both repo populations, excludes **illegal** pinned recaptures
+and illegal king captures while admitting along-ray captures of the pinner, preserves X-rays, and separates geometrical from materially live
 double attacks. It makes `moved_piece_en_prise` robustly negative-primary. The imported
 population supports a positive `double_attack` prior, while the authored interval crosses 1.0;
 therefore the collector may emit an exact local event but may not receive a universal
@@ -28,8 +28,9 @@ Legal enumeration is the important part. `[V]` The repo already uses chessops, w
 feature set includes legal move generation and attack/ray operations; the harness calls
 `allDests()` and `isLegal()` for each capture and recapture
 ([chessops project](https://github.com/niklasf/chessops)). Pinned recapturers and king moves into
-check therefore never enter the exchange tree. X-ray recapturers enter after the front piece is
-removed and the legal moves are regenerated.
+check therefore never enter the exchange tree. A piece pinned on a line may still legally capture
+the pinner along that line and is retained; X-ray recapturers enter after the front piece is removed
+and the legal moves are regenerated.
 
 The name deliberately is **not** Stockfish SEE. `[V]` Stockfish's current position source
 separately makes attacker generation depend on occupancy and rejects pinned non-king moves that
@@ -89,7 +90,8 @@ alternatives from one position as independent played decisions.
 - free piece: +3;
 - poisoned pawn: -4;
 - an X-ray recapture sequence: +1;
-- a geometrically present but legally pinned recapturer is excluded: +1;
+- a geometrically present but illegal pinned recapture is excluded: +1;
+- a pinned piece legally capturing its pinner along the king ray is admitted: -4;
 - a defended geometry-only knight fork fires geometrically and is rejected by exchange.
 
 The permanent collector also requires promotion-capture and illegal-king-recapture fixtures; the
@@ -104,8 +106,8 @@ RFC makes those acceptance tests rather than claiming the disposable probe alrea
 | `moved_piece_en_prise` | 0.36× (0.28–0.45) | 0.57× (0.47–0.69) | robust negative/avoidance-primary fact |
 
 `[V]` Full counts, rates and disagreement examples are committed in
-`tools/d730-see-harness/output.md`. The run evaluated 39,038 played/alternative edges in
-1.56 seconds total, about 0.038–0.041 ms per edge on this machine. This is an implementation
+`tools/d730-see-harness/output.md`. The latest run evaluated 39,755 played/alternative edges in
+1.64 seconds total; repeated focused runs observed about 0.038–0.043 ms per edge on this machine. This is an implementation
 feasibility measurement, not a production latency guarantee.
 
 The exchange filter changes the answer in both directions. `[V]` The committed output includes
@@ -126,7 +128,8 @@ value≥3 cutoff. That is why “geometry + one more heuristic” is not an adeq
    eligibility decides when it matters; the authored uncertainty forbids a universal rank boost.
 4. **Threat and trapped semantics need legal state.** A pass-style threat must abstain while the
    side to move is in check and clear en-passant state. A locally trapped piece must be attacked
-   now and have no legal destination escaping a positive opponent exchange.
+   now and have no locally non-losing legal move. Capture destinations are valued by the move's
+   own exchange result; quiet destinations are tested for a positive opponent capture afterward.
 5. **The collector RFC is smaller.** Runtime opening identity remains important but belongs to
    its gated R8/F7 lane; mixing it into this RFC made “accepted and implementable” contradictory.
 

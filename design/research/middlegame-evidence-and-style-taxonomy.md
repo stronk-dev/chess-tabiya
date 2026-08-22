@@ -5,8 +5,9 @@ describe what a move actually did—including square denial, harassment, preserv
 multi-ply tactical/strategic consequences—and can the same primitives support player habits,
 styles, bot personalities, Review and drills?
 
-**Status:** taxonomy, eleven one-edge breadth probes and the first multi-edge census answered
-`[V]`/`[P]`; proposed collectors still require SEE/search-dependent validation and an accepted RFC.
+**Status:** taxonomy, twenty one-edge breadth probes, legal-exchange prerequisite and the first
+multi-edge census answered `[V]`/`[P]`; bounded-search and longer identity-preserving sequences
+remain open, and proposed collectors still require an accepted RFC.
 This report extends, and does not replace,
 `detection-landscape.md`, `player-style-metrics.md` and
 `planning/evidence-foundation-ux/phase2-collector-audit.md`.
@@ -254,6 +255,26 @@ That rarity is not a defect. It means the owner's `...Bg4 h3 ...Bh5` pattern is 
 multi-edge fact suited to a selected Review moment, theory link, habit observation or bot feature.
 It is not a generic hint to emit after every pawn attack. The 174 imported relocations that did
 not preserve the relation are the natural disagreement set for the later sequence collector.
+
+### 4.2 Second Wave-B probe
+
+The D754 follow-up tested nine more events on the same two populations with paired bootstrap
+intervals. `[V]` (`wave-b-breadth-probe.md`; `tools/d754-wave-b-harness/output.md`)
+
+- Defender loss joined to positive legal exchange on the retained target is stable and selective:
+  **4.50× authored / 6.52× imported**, with illegal hypothetical pass states excluded from
+  each probe's denominator rather than counted as negative examples.
+- Increased material-role asymmetry is also stable: **2.47× / 4.35×**. The broader
+  material-signature change is higher but generic, proving high lift alone does not buy a hint.
+- Future-square pawn contest is background (**0.96× / 0.95×**); connected rooks are near 1;
+  majority advances are below 1; blockades and target-bearing slider coordination reverse across
+  populations; the tested king-exposure conjunction has zero authored played positives.
+
+This narrows the remaining frontier. Exact operands for those low/unstable events are still useful
+for hover, theory, bots and opportunity-normalized habits, but the only new globally stable
+Wave-B event candidates from this pass are defender exposure and valence-free material-role
+asymmetry. Legal per-piece mobility, pawn lever/passer conversion, decomposed king state,
+forcing-reply/search semantics and identity-preserving three-edge sequences remain open.
 
 ---
 
