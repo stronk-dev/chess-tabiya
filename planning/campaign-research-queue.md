@@ -4,6 +4,11 @@
 `design/06-campaign.md`; that document is intent, not implementation authority. No campaign RFC may
 be drafted until the narrowed R6–R8 experiential closure feeds platform R14/O10.
 
+> **GATE WAIVED 2026-08-22 by owner ruling [[D953]]** — "draft v1 now." The sentence above is
+> retained as the record of the gate as it stood. R6's design half was ruled the same day
+> ([[D945]] earned rewinds); R7/R8 remain open and experiential, and the v1 RFC's play-derived
+> amendments are their landing site — the presets pattern, chosen with the Gate F tension stated.
+
 On 2026-08-15 the owner generated a large, coherent cluster of product ideas —
 move primitives, "build your coach", campaign constraints, time controls, the
 roguelike frame — and then said the right thing about them: *"we did a lot of
