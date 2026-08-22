@@ -81,7 +81,7 @@ before yours. Read the review-corrected file; what changed materially:
 - **`BANNED_JUDGEMENTS` is asserted by symbol, never by count** (32 at HEAD and moving); R16
   runs the denylist over the rating's frozen authored copy.
 - The five registered opens (3/5/6/8/9) are non-blocking; do not resolve them en passant.
-- Your implementing commit flips the rows §12's lifecycle map names ([[D967]]/[[D968]] and the
+- Your implementing commit flips the rows §12's lifecycle map names ([[D980]]/[[D981]] and the
   addenda rows) and appends the log entry per protocol.
 
 ## 0-CAMPAIGN-ACCEPTED. `campaign-core` v1 is accepted — implement at its migration position (fifth)
@@ -137,15 +137,18 @@ tournament games for import/analysis). Read the review-corrected §3 and §4 bef
   the log entry per protocol. [[D959]] (paste path stores verbatim) is recorded, out of Phase A
   scope — do not fix it en passant.
 
-## 0-WORK-INDEX. `make work-index` ([[D487]]) is now priority tooling — the fourth audit just re-proved it
+## 0-WORK-INDEX — landed; semantic conflict detection is the narrowed residual
 
-[[D952]]: the 2026-08-22 re-run of D641's exact join found **143 of 543 open rows unrouted**, and
-55 of D641's 74 "routed" rows were never routed anywhere living — the audit test itself now fails
-(143 ≠ 73). Every hand audit goes stale at the rate ideas land. Build the instrument as specced in
-`planning/WORK.md` §0: derive the routing from `design/BACKLOG.md` column 1 joined against the RFC
-register and the queues, **fail when any open row has no destination**, wire into `make verify`.
-The current 143-row inventory to test against is `planning/platform-alignment/never-started-lanes.md`
-(hand-made, dated — your instrument replaces it). Take this ahead of any other tooling item.
+`make work-index` now derives open state from `design/BACKLOG.md`, discovers active RFCs and living
+route-shaped planning documents, excludes logs/archives and the stale audit inventories, rejects
+duplicate ledger ids and fails any open row with no destination. Its first live run found **112**
+still-open omissions after the D967/D968 collision repair; `planning/routing-queue.md` assigns all
+of them to lawful lanes. [[D952]] is closed and the command is part of `make verify`.
+
+[[D487]] remains narrowly open for **semantic ownership conflicts**. The JSON output exposes every
+reference, but 119 rows currently have multiple same-priority references and many are legitimate
+dependencies. Do not make a fake guard that rejects all mentions; the residual needs literal
+primary-owner declarations that distinguish ownership from a dependency citation.
 
 ## 0-STAGE2-TOOLING. Binding-wave steps 1–2 are queueable NOW — no owner decision required
 

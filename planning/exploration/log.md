@@ -5124,7 +5124,7 @@ tier is server-refusable), §10a.3's score orientation was inverted (right concl
 premise), and `BANNED_JUDGEMENTS` is now asserted by symbol, never by count. Verified clean: the
 Glicko-2 arithmetic end-to-end to four decimals, the event/branch-keyed void mechanism across
 all four persisted rewind-family paths, and the witnessed-play seam composing over shipped
-`run_grants`. Rows D967/D968 landed; D395 flipped closed with R15/R16 intact (its own flip
+`run_grants`. Rows D980/D981 landed; D395 flipped closed with R15/R16 intact (its own flip
 condition); addenda applied to D388/D389/D423 and the D332 status note.
 
 **What changed:** the register has NO remaining reviewable draft — every active RFC is accepted
@@ -5371,3 +5371,26 @@ inside its classroom rather than becoming a global table.
 
 **Next:** return to the next accepted foundation slice that is not waiting on Claude's
 semantic-tactics review or unresolved RFC tables.
+
+## 2026-08-22 — executable work index and routing recovery
+
+**What landed:** `make work-index` now parses ledger status, discovers active RFCs and living
+route-shaped planning documents, excludes archives/logs and the stale routing inventories, and
+fails on duplicate ids or any open row with no destination. `--json` exposes the full join. Its
+first repository run found 112 still-open rows with no living destination and a second duplicate-id
+incident: learner-module D967/D968 and learner-rating D967/D968. The module blockers retain those
+ids; rating moved atomically to D980/D981. `planning/routing-queue.md` assigns every omission to a
+named next action and gate rather than making audit prose count as ownership.
+
+**Verification:** the focused Node suite is 4/4, `make work-index` reports 916 ledger rows / 512
+open / 512 routed / 0 unrouted, duplicate ids are empty, and `git diff --check` is clean. The target
+is wired into `make verify`; no broad suite was rerun for this planning/tooling checkpoint.
+
+**What changed:** D952 closes, D652's hand-copied incident count is removed, D809's namespace guard
+is executable, and the omission/duplication half of D487 is implemented. D487 remains narrowly
+open: ordinary references do not distinguish ownership from dependency, and 119 rows have multiple
+same-priority references. A future conflict guard needs literal primary-owner declarations; failing
+every multi-reference row would encode a false invariant.
+
+**Next:** keep the accepted collector/runtime queue moving while Claude reviews the Wave-C contract;
+take direct evidence-integrity defects that do not depend on the held promotion-race authorities.

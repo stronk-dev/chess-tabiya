@@ -1,4 +1,4 @@
-.PHONY: setup typecheck test test-browser schema-check register-check status-parity intent-parity evidence-manifest-check semantic-evidence-check graduation-plan graduation-plan-check tactical-collector-measurement breadth-collector-measurement build verify pack-check shape-check expression-census graduation-report pack-preview source-fetch candidate-emit candidate-attach sourcing-check verify-draft tablebase-walk engine-walk up up-engines down
+.PHONY: setup typecheck test test-browser schema-check register-check status-parity work-index intent-parity evidence-manifest-check semantic-evidence-check graduation-plan graduation-plan-check tactical-collector-measurement breadth-collector-measurement build verify pack-check shape-check expression-census graduation-report pack-preview source-fetch candidate-emit candidate-attach sourcing-check verify-draft tablebase-walk engine-walk up up-engines down
 
 setup:
 	pnpm install --frozen-lockfile
@@ -22,6 +22,10 @@ register-check:
 status-parity:
 	node --test tools/status-parity.test.mjs
 	node tools/status-parity.mjs
+
+work-index:
+	node --test tools/work-index.test.mjs
+	node tools/work-index.mjs
 
 intent-parity:
 	node --test tools/intent-parity-harness/audit.test.mjs
@@ -50,7 +54,7 @@ breadth-collector-measurement:
 build:
 	pnpm build
 
-verify: typecheck test schema-check register-check status-parity intent-parity evidence-manifest-check semantic-evidence-check graduation-plan-check
+verify: typecheck test schema-check register-check status-parity work-index intent-parity evidence-manifest-check semantic-evidence-check graduation-plan-check
 
 pack-check:
 	@test -n "$(FILE)" || (echo "Usage: make pack-check FILE=<path-to-pack.json>" >&2; exit 2)

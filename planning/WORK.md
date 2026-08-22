@@ -7,9 +7,10 @@ that it was: `planning/work-register.md` states the right invariant — *"every 
 appears exactly once, with a destination"* — and was **121 rows stale**, missing every row
 created on the project's two highest-output days ([[D487]]).
 
-> **⚠ THIS FILE IS HAND-MADE AND WILL ROT THE SAME WAY.** That is not a caveat, it is the top
-> item in the queue below. Until `make work-index` exists and **fails when any open ledger row
-> has no destination**, treat every count here as a snapshot with a date on it.
+> **Executable index:** `make work-index` now derives open rows from the ledger, discovers living
+> queue documents and active RFCs, and fails on duplicate ids or any open row with no destination.
+> `node tools/work-index.mjs --json` exposes the complete join for review. Counts below are retained
+> as dated history, not current inventory.
 
 **Snapshot date: 2026-08-16.** Ledger at **D487**, 289 open rows at the time of the routing pass.
 
@@ -31,22 +32,25 @@ hand-written file current or prove unique ownership. D487 and `make work-registe
 | **Research** | `planning/research-queue.md` | Hypotheses, kill criteria and measurement questions, ranked |
 | **UX** | `planning/ux-work-lane.md` | What to fix so a person can use the thing |
 | **Integrated 1.0 alignment** | `planning/platform-alignment/plan.md` | D555/D563's bottom-up capability program: research queue → owner/design decisions → RFC graph → implementation/content/release proof. Its `execution-queue.md` is authoritative for that program |
+| **Cross-lane ownership** | `planning/routing-queue.md` | Explicit next lawful lanes for open rows that otherwise exist only in audits or historical prose; checked by `make work-index` |
 
 Reality check on what a user actually sees: `planning/app-reality-check.md`.
 
 ---
 
-## 0. The two instruments that stop this rotting — build these first
+## 0. The two instruments that stop this rotting
 
 Both are `make verify` targets, both are small, and both exist because a **normative rule
 written in prose has no reader**. That is now the dominant defect class in this repo.
 
-- **`make work-index`** ([[D487]]) — derive the routing from column 1 of `design/BACKLOG.md`,
-  joined against the RFC register and the queue. **Fail when any open row has no destination.**
-  That is the invariant `work-register.md` already claims and cannot keep by hand.
-- **`make status-parity`** ([[D477]]) — compare every Active row in `rfc/README.md` to the RFC
-  body's `**Status:**` line. **Six instances** of that contradiction have now blocked an
-  implementer mid-task; each cost a round trip and one cost a wasted acceptance.
+- **`make work-index`** ([[D487]]/[[D952]]) — implemented: derive routing from column 1 of
+  `design/BACKLOG.md`, join active RFCs and living queues, and fail on duplicate ids or zero-route
+  open rows. The JSON report exposes every reference. Semantic conflict detection remains the
+  narrowed residual of D487; repeated references are often dependency citations, so treating every
+  multi-reference row as a conflict would be a false guard.
+- **`make status-parity`** ([[D477]]) — implemented: compare every Active row in
+  `rfc/README.md` to the RFC body's `**Status:**` line. The executable result is authoritative;
+  this file no longer hand-copies an incident count.
 
 Same family: [[D450]] (a permission rule in a doc that no test reads), [[D459]] (the defect
 table's own header mislabels column 3 and produced four misreads).
@@ -129,6 +133,6 @@ waiting on a calendar slot, they are waiting on [[D502]] shipping the draft chan
 ## Maintenance rule
 
 **Every lane document above states its own snapshot date and the commit it was measured at.**
-A lane with no date is not current. When `make work-index` lands, this section is replaced by
-its output and the counts stop being hand-copied — which is the only version of this file that
-survives contact with a working week.
+A lane with no date is not current. Current coverage comes only from `make work-index`; do not
+copy its totals into this file. Human ownership decisions that cannot be derived live in
+`planning/routing-queue.md`, and the checker makes omissions and duplicate identities fail CI.
