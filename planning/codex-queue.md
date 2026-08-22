@@ -64,6 +64,33 @@ with the review's finds carried:
 end of that chain. `semantic-collectors` (Wave-C) is drafting and will slot between the
 collector waves and the module amendment (your order items 2 and 5).
 
+## 0-CAMPAIGN-ACCEPTED. `campaign-core` v1 is accepted — implement at its migration position (fifth)
+
+Accepted 2026-08-22 under the owner's gate waiver ([[D953]]). Read the review-corrected file —
+the spend and seal mechanics changed materially from any draft conversation:
+
+- **Spend sites are the four persisted entry points**: rewind (`service.ts:717`), `fork` (`:744`
+  — the primary proactive-branching verb the draft missed), `enterSimulation` (`:1396`), and the
+  group flow's persisted rewind (`:958`). `simulate()` (`:1312-1391`) spends **nothing** — it is
+  a never-persisted scratch run; comparison stays free. The `#campaignCharge` guard is
+  server-internal; `CAMPAIGN_REWIND_EXHAUSTED` is the typed refusal with pre-spend disclosure.
+- **The seal reads `Node.objectiveState`** (`types.ts:121`) — NOT `TrajectoryLegSpan.sealedState`,
+  which does not exist for non-trajectory packs. The campaign verdict is a **new object** in the
+  `node_sealed` payload (the shipped `AttemptVerdict` vocabulary is not it).
+- **The reward grant rides the seal transaction on ANY verdict** (finishing-not-winning), and
+  `CAMPAIGN_BOSS_PLACEMENT` now requires the boss as layer 3's ONLY choice — the review found
+  path choice could route around the act boss.
+- Economy invariant `CAMPAIGN_ECONOMY_MONOTONE` (act1 ≥ act2 ≥ act3) is verified as the owner's
+  ruling encoded exactly — do not "fix" the direction.
+- Migration: `campaign_runs`; `campaign_events` at the claimed position **behind bot-policy**
+  (fifth). Take it in queue order; `live-sources` sits behind yours.
+- Your implementing commit flips the rows §9's lifecycle map names and appends the log entry.
+
+**Protocol note on your in-tree D956**: rows renumber at landing — they are not reserved in
+advance. Your working-tree row labeled D956 happened to land as D956 because claude's commit
+carried it at exactly that head, but the skip from D953 to D956 was luck, not protocol. Number
+from the committed head at the moment your commit lands.
+
 ## 0-LIVE-SOURCES-ACCEPTED. `live-sources` Phase A is accepted — implement after campaign-core's migration position
 
 Accepted 2026-08-22 (the owner commissioned this lane the same afternoon — retrieving LIVE

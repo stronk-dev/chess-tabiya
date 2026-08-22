@@ -1,6 +1,6 @@
 # RFC: Campaign core — the pure-chess campaign over authored encounters
 
-- **Status:** draft — 2026-08-22
+- **Status:** accepted — 2026-08-22, by claude as register owner on the buildability test, after an independent cross-review that re-derived ~70 claims at source and corrected 15 findings in place — headline three: the §2.2 spend-site pointed at a never-persisted scratch mutation (`simulate()`'s map, not a run) while missing `RunService.fork`, the primary proactive-branching verb; the §4.1 seal read `TrajectoryLegSpan.sealedState`, a record that does not exist for non-trajectory packs (re-pinned to `Node.objectiveState`); and no transaction anywhere granted the node's `reward` (added to the seal transaction, any-verdict per the finishing-not-winning principle). The suspected `CAMPAIGN_ECONOMY_MONOTONE` direction inversion was checked and REFUTED — act1 ≥ act2 ≥ act3 encodes the owner's more-forgiving-lower-acts exactly. Ledger rows landed as D960–D962 (the review's D954–D956 label predated the live-sources landing; head was D959 at this acceptance). *(Prior line for history: draft — 2026-08-22)*
 - **Author:** claude (drafted from `planning/campaign/rfc-derivation.md`, the HEAD derivation of
   every seam this document composes; derivation HEAD `c93ae83`, spot-re-verified at drafting HEAD)
 - **Created:** 2026-08-22
@@ -77,7 +77,7 @@ the module table (`rfc/learner-modules.md:299-311`), `STORAGE_VERSION = 24`
 ### §1. Objects and vocabulary
 
 **Naming collision, pinned first.** `design/06` calls a campaign attempt "the run"; the codebase
-calls a play session a run (`Run`, `RunService`). This RFC keeps both and never abbreviates: the
+calls a play session a run (`DrillRun`, `packages/runtime/src/types.ts:318`; `RunService`). This RFC keeps both and never abbreviates: the
 campaign object is **`CampaignRun`** everywhere in code and schema (`campaign_runs` table), and
 "run" unqualified always means the play run. A campaign run *contains* play runs (one per
 encounter attempt); no symbol named bare `run` is added by this RFC. (Proposed row 1.)
@@ -94,6 +94,7 @@ CampaignDocument {
   version: number;               // authored document version
   acts: [Act, Act, Act];         // exactly three — v1 is fixed-shape
   economy: CampaignEconomy;      // §2
+  startingModules: UnlockableModuleId[];  // §3.2's start grants; may be empty
 }
 Act {
   id: "act1" | "act2" | "act3";
@@ -107,21 +108,24 @@ Node {
   encounter: { kind: "pack"; packId: string };   // shape 1 ONLY in v1 — the closed enum has one member
   suppress?: ModuleId[];         // suppressor mechanism, §3.3; boss nodes use this
   reward?: NodeReward;           // §3.1
-  boss?: true;                   // exactly one node per act, and it must be in layer 3 (lint)
+  boss?: true;                   // exactly one per act; layer 3's only choice (lint)
 }
 ```
 
 The `encounter.kind` union is **closed at one member in v1**; adding `position` (rated boss),
 `prediction` or `survival` is a schema change belonging to the Discharge rows. A validator rule
 `CAMPAIGN_ENCOUNTER_PACK_UNKNOWN` (error) refuses a `packId` absent from the registry, and
-`CAMPAIGN_BOSS_PLACEMENT` (error) enforces one boss per act in the final layer. Path choice is
+`CAMPAIGN_BOSS_PLACEMENT` (error) enforces, per act: exactly one `boss: true` node, in layer 3,
+**and layer 3 carrying that node as its only choice** — a multi-choice final layer would let
+path choice dodge the act boss, which the act ladder does not intend (`06:436-439`'s three-leg
+shape ends every act at its boss). Path choice is
 the StS gesture (D893: *"in Slay the Spire you choose paths"*): the learner picks one node per
 layer; unpicked alternatives stay unvisited for this CampaignRun.
 
 **Map progression** is strictly forward: layer N+1 opens when a node in layer N seals (§4). No
 node re-entry after seal — retrying a node means retrying it before declaring done (§2 prices
 the *navigation*, §4's submitted-branch rule prices the *commitment*; declaring done is what
-counts, `06:413-419`).
+counts, `06:441-444`).
 
 ### §2. The earned economy — D945 made mechanism
 
@@ -141,17 +145,25 @@ CampaignEconomy {
 **2.1 Earn.** One grant of `actGrants[act]` charges is appended (`charge_earned` event, §6) when
 a node seals, whatever its verdict — income prices *finishing*, not winning, so a failed seal
 still funds the next attempt at the next node. Lint `CAMPAIGN_ECONOMY_MONOTONE` (error) refuses
-a document where `actGrants` increases with act index: the ruling's *"lower floors/acts more
-forgiving"* means act1 ≥ act2 ≥ act3, and the constraint is authored-document-checkable.
+a document where `actGrants` increases with act index: the ruling scales counts *"(on lower
+floors/acts/whatever)"* so that — in the design/06 amendment's words — *"lower floors are more
+forgiving"* (`06:219-221`), which means act1 ≥ act2 ≥ act3, and the constraint is
+authored-document-checkable.
 
-**2.2 Spend and enforcement.** One charge is spent by each play-run mutation that abandons a
-line inside an active campaign encounter: the rewind verb (`RunService.rewind`,
-`service.ts:717`) and branch creation from an ancestor node (the `choiceIndex > 0` rewind at
-`service.ts:1357`'s compare path and any equivalent fork-from-earlier flow). Reviewing without
-creating a branch or rewinding spends nothing. Enforcement is **server-internal with no run
+**2.2 Spend and enforcement.** One charge is spent by each **persisted** play-run mutation that
+abandons a line inside an active campaign encounter — one charge per gesture, at the four
+shipped entry points: the rewind verb (`RunService.rewind`, `service.ts:717`, covering its
+`rewindToCheckpoint` dispatch), proactive branching from an ancestor node (`RunService.fork`,
+`service.ts:744`), adopting a simulated line (`enterSimulation`, `service.ts:1396` — it persists
+a fork from the simulation's source node), and branch-group creation (one charge per group
+whatever the member count — the flow's one persisted rewind, `service.ts:958`). The scratch
+mutations inside `simulate` (`service.ts:1312-1391`) are never saved and spend nothing:
+comparison stays free; only *entering* a line it produced is priced. Reviewing without creating
+a branch or rewinding spends nothing. Enforcement is **server-internal with no run
 field**: a new private guard `RunService.#campaignCharge(runId, at)` looks up whether `runId` is
-the active encounter run of a `campaign_runs` row (§6), and if so atomically decrements the
-charge balance and appends `charge_spent` in the same transaction as the rewind — or refuses
+the active encounter run of a `campaign_runs` row (§6), and if so re-derives the balance from
+that row's events and appends `charge_spent` in the same transaction as the mutation (the §4.2
+projection is the balance's only home — no balance column exists to drift) — or refuses
 with the new typed error **`CAMPAIGN_REWIND_EXHAUSTED`** (HTTP 409, typed body like
 `INVALID_REQUEST`'s) when the balance is zero. A non-campaign run passes the guard untouched.
 The lookup is one indexed query; §6 pins the index.
@@ -182,7 +194,9 @@ The pool is **exactly ten**: the closed eleven of `rfc/learner-modules.md:299-31
 assistance"* and appears in no ceiling complement (`rfc/intent-presets.md:172-174`) — an
 earnable rules floor would break the floor-and-ceiling token, so the exclusion is a **type**:
 `UnlockableModuleId = Exclude<ModuleId, "rules_floor">`, with a compile-time test asserting the
-member count is 10. Law 8 shape: an unlock gates an **evidence consumer** — availability, never
+member count is 10. (`ModuleId` is intent-presets' pinned name for the closed eleven —
+`ModuleDeclaration["id"]`, `intent-presets.md:129-134`; like the rest of that machinery it is
+absent from code at HEAD, so criterion 5 compiles at the modules landing, not before.) Law 8 shape: an unlock gates an **evidence consumer** — availability, never
 truth. An unlocked module still says only what its contract admits; nothing about what may
 honestly be shown changes (`06` §3 law 1: honesty outer, inventory inner).
 
@@ -196,15 +210,15 @@ effective = contextCeiling("campaign")      // §5 — fixed, honesty-outer
           ∩ presetRequest                   // the learner's intent-presets request, unchanged
 ```
 
-A CampaignRun starts with `rules_floor` plus whatever the campaign document grants at start
-(v1 seed: `sight_on_request` — a candidate like every seed value). An unlock event whose
+A CampaignRun starts with `rules_floor` plus the document's `startingModules` (§1's schema
+field; v1 seed: `sight_on_request` — a candidate like every seed value). An unlock event whose
 `moduleId` is outside the campaign context ceiling is **refused at append time** with typed
 `CAMPAIGN_UNLOCK_OUTSIDE_CEILING` — inventory may never exceed honesty (criterion 6's negative
 fixture).
 
 **3.3 The suppressor boss.** A node's `suppress: ModuleId[]` subtracts those modules from
 availability for that encounter only — Balatro's boss blind, law-8-legal by construction because
-it *"speaks about the learner's information, never about chess"* (`06:384-389`). Suppression is
+it *"speaks about the learner's information, never about chess"* (`06:412-414`). Suppression is
 narrowing (always legal in the algebra), is **disclosed before the encounter starts** (the node
 card names the suppressed modules — criterion 7), and may not name `rules_floor` (same type as
 §3.1). The v1 act bosses are authored encounters with suppression; their packs are ordinary
@@ -218,7 +232,7 @@ like every other node.
 
 ### §4. Sealing — the submitted branch, node verdicts, and the roll-up
 
-**4.1 Declaring done.** The ruling (`06:413-419`): *"a node remembers the branch you SUBMIT…
+**4.1 Declaring done.** The ruling (`06:441-444`): *"a node remembers the branch you SUBMIT…
 declaring done is what counts."* The verb is the shipped `reveal`
 (`RunService.reveal`, `service.ts:1547`), extended by one new server route:
 
@@ -227,16 +241,24 @@ POST /campaigns/:campaignRunId/nodes/:nodeId/submit   { runId, branchId }
 ```
 
 which (in one transaction) validates the branch belongs to the run and the run to the node's
-active encounter, reads the branch tip's sealed objective state
-(`TrajectoryLegSpan.sealedState`, `packages/runtime/src/trajectory.ts:15`), appends
-`node_sealed { nodeId, runId, branchId, verdict }`, appends the §2.1 `charge_earned` grant, and
+active encounter, reads the submitted branch tip's objective state (`Node.objectiveState`,
+`packages/runtime/src/types.ts:121` — the same source `projectAttempts` reads,
+`apps/server/src/progress.ts:127`; in a trajectory pack the tip carries the final leg's state,
+earlier legs having sealed as `TrajectoryLegSpan.sealedState`, `trajectory.ts:15`), appends
+`node_sealed { nodeId, runId, branchId, verdict }`, appends the §2.1 `charge_earned` grant,
+appends `module_unlocked` for the node's `reward` if it carries one (whatever the verdict — the
+same finishing-not-winning principle as §2.1 and ADR-0007's unlocked-by-playing; refused at
+append if outside the ceiling, §3.2), and
 advances the map cursor. The node verdict vocabulary **is** `ObjectiveState`'s absorbing subset
 plus the non-absorbing fallback: `verdict = "achieved" | "failed" | "transitioned" | "open"`,
 mapped 1:1 from the submitted tip (an `active`/`preserved`/`degraded` tip seals as `"open"` —
 submitting an unfinished line is legal and priced only by its own verdict). No new judgement
-enters: the seal is a copy of the pack's own objective machinery.
+enters: the seal is a copy of the pack's own objective machinery. The verdict is a **new object
+whose only home is the `node_sealed` payload** — it is not the shipped `AttemptVerdict`
+(`"open" | "unstable" | "stable"`, `progress.ts:62`), which stays untouched; the two share the
+`"open"` token but not a type.
 
-**4.2 The run-level roll-up** — `06:424-427`'s *"computed nowhere"*, the smallest new part,
+**4.2 The run-level roll-up** — `06:452-454`'s *"computed nowhere"*, the smallest new part,
 built here as a **projection, not a table** (the `attempts`/rating-as-projection precedent):
 
 ```
@@ -266,8 +288,14 @@ Per `rfc/intent-presets.md` Discharge D3 (quoted whole in derivation §3.1), reg
 1. `"campaign"` joins `WORKFLOW_CONTEXTS` (eighth member) with localStorage preference key
    `tabiya.assistance.v1.campaign` under the shipped `assistanceKey` grammar
    (`apps/web/src/lib/assistance-preference.ts:15`).
-2. A full `ContextContract` row: `defaultPreset: "guided"`, `allowedPresets` and the
-   may-never-show complement seeded as **candidates** (§2.3's device), `configClamp.boardLighting`
+2. A full `ContextContract` row, every value marked `validation: "candidate"` (§2.3's device):
+   `defaultPreset: "guided"`; seed `allowedPresets: quiet, guided, theory_only, analysis` (the
+   Drill row's set, `intent-presets.md:144`); seed may-never-show complement
+   `{ blunder_prevention }` — inherited with the Drill row's R3 rationale (Support's at-commit
+   prevention is not offerable outside Just Play) and non-empty so criterion 6's negative
+   fixture has a real member. With this seed `blunder_prevention` is typed-unlockable (§3.1)
+   but contract-refused until the owner re-tables the candidate — the type stays ten; the
+   contract is the narrower authority, exactly §3.2's algebra. `configClamp.boardLighting` is
    drawn from the registry-invariant token set `"legal" | "sight" | "evidence"` — the campaign
    can never darken the rules floor, by the same compile-time test that guards the other seven.
 3. **The derivation signal — decided here** (derivation gap 10): `deriveWorkflowContext`'s
@@ -289,7 +317,9 @@ Per `rfc/intent-presets.md` Discharge D3 (quoted whole in derivation §3.1), reg
 ### §6. Persistence — two tables, one migration position
 
 Claimed above: `migration | position behind bot-policy | campaign_runs; campaign_events` —
-fourth in the landing order (learner-rating ×2 → longitudinal-store → bot-policy → this), number
+**fifth** in the landing order (learner-rating holds **two** positions → longitudinal-store →
+bot-policy → this; the register row says fifth and the queue at `rfc/README.md` holds five claim
+rows), number
 taken at landing as `STORAGE_VERSION + 1` per the register rule, body uses frozen literals.
 
 ```sql
@@ -299,7 +329,7 @@ CREATE TABLE campaign_runs (
   campaign_id TEXT NOT NULL,          -- CampaignDocument.id
   campaign_version INTEGER NOT NULL,  -- pinned at creation; a CampaignRun never migrates documents
   status TEXT NOT NULL CHECK (status IN ('active','completed','abandoned')),
-  active_encounter_run_id TEXT,       -- NULL between encounters; no FK (runs live in their own store)
+  active_encounter_run_id TEXT,       -- NULL between encounters; no FK by choice (drill_runs is snapshot storage with its own deletion path; the §2.2 guard validates at lookup)
   created_at TEXT NOT NULL
 ) STRICT;
 CREATE INDEX idx_campaign_runs_active_encounter ON campaign_runs(active_encounter_run_id)
@@ -318,7 +348,7 @@ CREATE TABLE campaign_events (
 ```
 
 Discipline inherited by name: `STRICT` + literal CHECK strings (the migration-9 freeze lesson,
-`rfc/README.md:133`), `ON DELETE CASCADE` on `learners(id)`, create-table/index only, **no
+`rfc/README.md:240`), `ON DELETE CASCADE` on `learners(id)`, create-table/index only, **no
 backfill** (nothing historical is a campaign run). One learner may hold at most one `active`
 CampaignRun per `campaign_id` (partial unique index in the migration; a second start refuses
 typed `CAMPAIGN_RUN_ACTIVE_EXISTS`). Earned state is server-held by ruling (`06:237-239`,
@@ -331,7 +361,7 @@ schema coupling either way).
 ### §7. Surfaces — where campaign chrome lives
 
 `rfc/play-composition.md:104-107` excludes campaign surfaces from the closed 16-state
-composition, and `06:280-284` orders composition **last** (D717). So:
+composition, and `06:308-311` orders composition **last** (D717). So:
 
 - **The map screen** (`/campaign` route: act ladder, layer choices, node cards with suppression
   and reward disclosure, charge balance, unlocked shelf) is a **new surface outside the play
@@ -382,7 +412,7 @@ composition, and `06:280-284` orders composition **last** (D717). So:
 
 1. **`06` §5's map is prose, not a schema; this RFC fixes 3 acts × 3 layers × ≤3 choices.** The
    fixed shape is v1 scope control; `06` nowhere requires variability, and the 9-node/3-act
-   frame is its own (`06:310-314`).
+   frame is its own (`06:338-342`).
 2. **The §2a second-axis reading is consumed as-is** — claude-derived, explicitly *"the owner's
    to veto"* (`06:130-133`). Restated once here per the derivation's recommendation (gap 3);
    proceeding on it, veto absorbs without structural change (v1 carries no rated result, so the
@@ -397,8 +427,9 @@ server-held inventory are transcriptions of ruled text.
 
 ## Acceptance criteria
 
-Unit note: criteria 1–3 count over the seed fixture campaign (9 nodes, 3 acts, 2 bosses
-suppressed + 1 boss suppressed — one per act); criterion counts state their own units.
+Unit note: criteria 1–3 count over the seed fixture campaign (9 nodes, 3 acts, 3 suppressed
+bosses — one per act, each layer 3's only choice per §1's lint); criterion counts state their
+own units.
 
 1. **Schema + validator**: the seed `content/campaigns/seed-endgames.json` (9 nodes over
    registered packs) validates; each of `CAMPAIGN_ENCOUNTER_PACK_UNKNOWN`,
@@ -477,16 +508,16 @@ set).
    philosophy: cheap to change, impossible to change silently — the abandonment event exists in
    the log either way via `node_entered` recurrence).
 
-## Ledger rows (proposed — renumber at landing; committed head D953 at drafting. Note: `rfc/live-sources.md` labels its proposed rows D953–D955; both sets renumber from the then-head at their own landings)
+## Ledger rows (proposed — renumber at landing; committed head D953 at drafting. Note: `rfc/live-sources.md`'s cross-review has since relabeled its proposed rows **D954–D956** — the same labels as the three below. Neither set owns the numbers: per the standing protocol each set renumbers from the then-head in the commit that lands it, so whichever lands second takes the next free numbers at its turn)
 
-- **D954 (proposed)** — the campaign/play "run" naming collision is pinned: `CampaignRun` in
+- **D960 (landed)** — the campaign/play "run" naming collision is pinned: `CampaignRun` in
   every symbol and table, bare "run" reserved for play runs; the container D303 wanted arrives
   campaign-shaped (`CampaignDocument`), with the Track generalization left open.
-- **D955 (proposed)** — 🐞-class honesty note: the play-run record does not know it served a
+- **D961 (landed)** — 🐞-class honesty note: the play-run record does not know it served a
   campaign encounter; the linkage lives in `campaign_events`, run-schema lane 0.19 is
   named-and-declined with the §5.3 reopen condition (any non-campaign consumer needing per-run
   campaign identity converts the join into a lane claim at its RFC's turn).
-- **D956 (proposed)** — the persona'd-rated-boss disjointness (derivation gap 11) is recorded
+- **D962 (landed)** — the persona'd-rated-boss disjointness (derivation gap 11) is recorded
   and routed to Discharge D1: `RunOpponentPolicy.profile` forbids `targetElo`; the rated
   predicate requires a rung — a rated persona boss needs a rung-calibrated profile or no
   persona.
@@ -495,3 +526,30 @@ set).
 
 - 2026-08-22: created — drafted from `planning/campaign/rfc-derivation.md` under the [[D953]]
   gate waiver, with [[D945]]'s earned-rewind economy promoted to v1 core.
+- 2026-08-22: **cross-review corrections in place** (independent adversarial re-derivation at
+  source). Migration position corrected fourth → **fifth** (learner-rating holds two queue
+  positions; the RFC's own register row already said fifth). §2.2's spend sites re-pinned to
+  the real persisted entry points — `RunService.fork` (`:744`), `enterSimulation` (`:1396`),
+  the group flow's persisted rewind (`:958`) — the drafted "`service.ts:1357` compare path" is
+  a never-persisted scratch mutation inside `simulate`, and the primary proactive-branching
+  verb was missing entirely; "atomically decrements the balance" reworded to the projection
+  truth (no balance column exists). §4.1's seal now reads the tip's `Node.objectiveState`
+  (`types.ts:121`) rather than `TrajectoryLegSpan.sealedState` (a leg-boundary record that
+  does not exist for non-trajectory packs), names the campaign verdict a new object distinct
+  from the shipped `AttemptVerdict` (`"open" | "unstable" | "stable"`), and appends the node's
+  `module_unlocked` reward inside the seal transaction (the draft granted rewards nowhere).
+  `CAMPAIGN_BOSS_PLACEMENT` closes the boss-dodging path (the act boss is layer 3's only
+  choice). `startingModules` given the schema home §3.2 assumed. §5.2's contract row given
+  named candidate seeds (Drill's `allowedPresets`, complement `{ blunder_prevention }`) so the
+  registration is a full row and criterion 6's negative fixture exists. Five `design/06` line
+  citations re-derived at HEAD — the file grew +36 lines when [[D945]] landed after the
+  dossier's `c93ae83`, and the draft had carried the dossier's pre-D945 numbers.
+  `rfc/README.md:133` → `:240`; `Run` → `DrillRun`; the live-sources row-label note updated
+  (its cross-review relabeled to D954–D956, colliding with this RFC's labels — the renumber
+  rule stated, not resolved); the economy-monotone quote re-attributed to the ruling's actual
+  words. Verified clean at source: the D945 economy direction (act1 ≥ act2 ≥ act3 **is**
+  lower-acts-more-forgiving), the campaign-only scope, the earn-on-seal grammar, charging
+  both rewind and proactive branching (the ruling's own conjunction), the ten-member unlock
+  type over the byte-exact eleven, the eighth-context slot (seven shipped members verified),
+  the intent-presets D3 hand-off wording, the claims-line grammar (byte-equal to the register
+  row), and criterion 11's failable 16-state comparison.

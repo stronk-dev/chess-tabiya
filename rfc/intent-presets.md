@@ -441,7 +441,7 @@ criterion 2 counts them).
 |---|---|---|---|---|
 | D1 | Owner-use validation of every `candidate` entry (names, labels, promises, defaults, allowedPresets, the Support-offering set) — confirmed/renamed/re-tabled by logged rulings after real sessions; until then candidates ship as candidates | OWNER | the log entries recording the rulings; the commit dropping each `candidate` marker cites its ruling | |
 | D2 | Server-side per-learner workflow persistence (the personalization era's store) — deferred; localStorage is v1's honest scope. The future RFC claims its own migration position (behind `bot-policy` at HEAD ordering) | `planning/exploration/plan.md` | that RFC's registration | |
-| D3 | Campaign as an eighth context — `design/06`'s encounter rules compose this contract (a campaign encounter is a `ContextContract` with encounter-authored ceilings); nothing here forecloses it and nothing here builds it | `planning/exploration/plan.md` | the campaign RFC's registration | |
+| D3 | Campaign as an eighth context — `design/06`'s encounter rules compose this contract (a campaign encounter is a `ContextContract` with encounter-authored ceilings); nothing here forecloses it and nothing here builds it | `planning/exploration/plan.md` | the campaign RFC's registration | discharged 2026-08-22 — `rfc/campaign-core.md` registered at `5b52698`, accepted same day; its §5 registers `campaign` per this contract's §3 invariant with the seeded contract row |
 
 **Discharged BY this RFC's landing** (the SHAs are written into the counterparties' tables in
 the landing commit, per their own "recorded when discharged" cells): `learner-modules.md`

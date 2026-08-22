@@ -5084,3 +5084,29 @@ bot-policy → campaign-core → live-sources.
 
 **Next:** campaign-core's cross-review is in flight; codex implements Phase A after
 campaign-core's migration lands (position order).
+
+## 2026-08-22 — campaign-core accepted: the campaign is paper-real, ten RFCs through the cycle today
+
+**What landed:** `rfc/campaign-core.md` accepted after an independent cross-review (~70 claims
+re-derived, 15 findings corrected in place). Three catches carry the day: the §2.2 spend-site
+charged a never-persisted scratch mutation (`simulate()`'s map) while missing `RunService.fork`,
+the primary proactive-branching verb — the earned-rewind economy would have charged nothing real;
+the §4.1 seal read `TrajectoryLegSpan.sealedState`, a record that does not exist for
+non-trajectory packs (re-pinned to `Node.objectiveState`, with the campaign verdict pinned as a
+new object in the `node_sealed` payload); and no transaction anywhere granted a node's `reward` —
+the unlock economy had no income. Also: the boss was dodgeable by path choice (lint tightened to
+layer-3-only), `startingModules` had no schema home, five design/06 citations were stale by the
+D945 amendment's own line-shift. The suspected economy-direction inversion was REFUTED — act1 ≥
+act2 ≥ act3 encodes the owner's more-forgiving-lower-acts exactly. Rows D960–D962 landed;
+intent-presets Discharge D3 recorded discharged at `5b52698`.
+
+**What changed:** the day's tally is ten RFCs through draft → adversarial review → acceptance
+(presets, grades, wiring, portable-account-data, live-sources, campaign-core, plus the four
+accepted earlier in the stretch), the migration queue runs learner-rating ×2 →
+longitudinal-store → bot-policy → campaign-core → live-sources, and the owner's three rulings
+(earned rewinds, witnessed-play seam, gate waiver) are all encoded in accepted paper.
+
+**Blocked:** campaign implementation on its migration position; rated boss on learner-rating.
+
+**Next:** codex's queue in order; learner-rating is the next draft to push through review now
+that D945/D946 resolved its open questions 11/12.
