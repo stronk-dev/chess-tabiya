@@ -488,12 +488,31 @@ tablebase consequence without requiring an engine grade. Analyze may expose a PV
 own ceiling. Support does not inherit a raw best move merely because the eval executor happened to
 return one.
 
-### 12.3 Limits
+### 12.3 Engine version is part of the operand
 
-The stability arm is one host, one Stockfish version and 24 fixed transitions; it does not establish
-cross-version stability or a universal search budget. The exact mate arm covers deterministic
-samples from mate-through-four, not five-plus. Neither arm measures which moments learners find
-useful. Cross-source overlap/disagreement and whole-game selection remain C4/F6 work. `[M]`
+The same 24 transitions were evaluated at 100 ms by the official Stockfish 17.1 and 18 release
+binaries. The 17.1 macOS Apple-Silicon asset was fetched from the official release and retained
+outside the repository; its archive SHA-256 is
+`4e23165eb8f353c221ff7ab6716f0a160c3993dadf90d0c0ad982a7ade4091c9`. `[V]`
+([Stockfish 17.1 release](https://github.com/official-stockfish/Stockfish/releases/tag/sf_17.1);
+`tools/d872-semantic-tactics-harness/review-engine-version-output.md`)
+
+Among 22 transitions that are cp→cp in both releases, delta signs agree **17/22 (77.3%)**;
+absolute delta difference is median/p90 **10/28 cp**, and the top-eight moment Jaccard is **.600**.
+White-normalized WDL deltas agree in sign **20/23 (87.0%)**, differ by median/p90 **0.9/4.1
+percentage points**, and also have top-eight Jaccard **.600**. Cp/mate point type agrees **48/48**;
+three points involve mate. `[V]` (same instrument)
+
+That is sufficient to choose a pinned default engine and insufficient to publish a timeless
+editorial grade. Every stored eval/WDL operand retains engine version and budget; changing either
+may change which moments a whole-game selector admits. `[M]`
+
+### 12.4 Limits
+
+The stability arms use one host, two adjacent Stockfish releases and 24 fixed transitions; they do
+not establish every future upgrade or a universal search budget. The exact mate arm covers
+deterministic samples from mate-through-four, not five-plus. Whole-game source overlap is measured
+in §15, but no arm measures which moments learners find useful. `[M]`
 
 ## 13. Overload: duty set, response conflict and exploitation are different facts
 

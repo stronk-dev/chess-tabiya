@@ -41,6 +41,8 @@ Generated evidence:
 - `review-cross-source-output.md` — whole-game source-local overlap plus the measured effect of
   storing Stockfish WDL without a fixed perspective; cp/mate, WDL, exact opening identity,
   semantic facts and tablebase-domain reach remain separate typed units.
+- `review-engine-version-output.md` — typed eval and perspective-normalized WDL stability across
+  the official Stockfish 17.1 and 18 releases on the same fixed imported transitions.
 - `overload-response-output.md` — rejected broad duty-edge rule versus the exact sole-defender,
   positive-consequence response conflict.
 - `consumer-matrix-output.md` — executable candidate projection→consumer/timing/answer-distance

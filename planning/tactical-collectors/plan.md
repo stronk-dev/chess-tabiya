@@ -28,3 +28,7 @@ preset, workflow or authorable-vocabulary edits.
 - The remaining ten Wave-A projections require the D829–D835 author amendments: space citation;
   pawn connectivity encoding; rook cutoff; rule-of-square arithmetic; discovered-executed inputs;
   trade adjacency/operands; and the side-oriented loose-piece event/avoidance baseline.
+- D922 removed the rule-of-square verdict, but `promotion_pressure@1` remains returned on D931:
+  its accepted RFC, C5 matrix and research helper disagree on whether an invalid turn clone
+  abstains or produces `false`. Geometry may remain total; reply-dependent flags need typed
+  availability before implementation.

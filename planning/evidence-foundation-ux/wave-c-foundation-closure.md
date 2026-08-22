@@ -182,6 +182,12 @@ selector: source-local admission plus declared family quotas/priorities, never o
 cp/mate, WDL, human likelihood, opening identity, semantic relations and DTZ. Engine-version
 stability and learner usefulness remain.
 
+**Engine-version arm answered 2026-08-22:** official Stockfish 17.1 versus 18 at the same 100-ms
+bound over 24 fixed transitions yields cp-delta sign agreement **77.3%**, White-normalized WDL
+delta agreement **87.0%**, and top-eight moment Jaccard **.600** for both families. Cp/mate point
+type agrees 48/48. Version remains a required operand because moment identity still changes;
+learner usefulness is the remaining C4/F6 arm.
+
 ### C5 — cross-consumer closure
 
 Every admitted projection must publish:

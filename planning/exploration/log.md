@@ -4722,3 +4722,27 @@ Review successor a typed source-local selector: each family admits and ranks in 
 declared quotas/priorities compose the final map. Mate is never cp, human likelihood is never chess
 quality and DTZ is never advantage magnitude. C4's cross-source overlap arm is answered;
 cross-version stability and learner usefulness remain.
+
+## 2026-08-22 — promotion-pressure implementation returned on absence semantics
+
+The D922 amendment correctly removed the ungrounded rule-of-the-square verdict, but the next
+implementation read found three incompatible contracts for its replacement flags. The accepted
+tactical RFC requires an in-check pass-clone abstention; the executable C5 matrix calls the same
+per-pawn reading total; and the research helper returns false when the turn clone is invalid.
+Unavailable and refuted would therefore become the same production byte.
+
+D931 returns only this seam. The proposed author repair keeps pawn/path/distance/control geometry
+total while making each reply-dependent flag explicitly available or `invalid_turn_clone`; the
+matrix and research helper must then share that shape. No production code was written from the
+contradiction.
+
+## 2026-08-22 — engine-version stability is measured, not assumed
+
+The C4 harness compared official Stockfish 17.1 and 18 at 100 ms over the same 24 fixed imported
+transitions. Cp-delta signs agree 17/22 (77.3%), White-normalized WDL delta signs agree 20/23
+(87.0%), and both top-eight moment sets have Jaccard .600. Cp/mate point type agrees 48/48.
+
+This closes the adjacent-release arm while preserving its consequence: engine version and budget
+remain stored operands because the identity of a Review moment changes across either. No result is
+a grade threshold, and no mate/WDL/cp units are collapsed. Learner usefulness remains the open
+C4/F6 arm.

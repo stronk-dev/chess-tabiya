@@ -446,7 +446,7 @@ Both rows ride 2d's `derived.pawn` producer at `pawn-dynamics.ts`.
   promotionUnstoppable`; the matrix row's `sideToMove` rides the reading's position
   anchor rather than a named operand — the amended §3.14 list carries no `sideToMove`
   member, verified against the amendment text) is recorded in the declaration's semantics
-  so the matrix row is traceable to its serving id. **Binding hold (D929):** the amended
+  so the matrix row is traceable to its serving id. **Binding hold (D931):** the amended
   projection's absence semantics are contested — the sibling RFC declares an in-check
   pass-clone abstention while the matrix row is total and the research helper returns a
   silent `false` — and this binding waits on that seam amendment; unavailable must never
@@ -667,7 +667,7 @@ Recorded rows this RFC encodes (none flipped by drafting): **D872** (the program
 (typed engine operands — D2's evidence), **D919** (overload three-way), **D920** (the
 matrix), **D921** (module-amendment order — D1), **D922** (the sibling amendment §3.7
 binds to). Open defect rows cited, owned elsewhere: **D917**, **D918** (D2); **D904**,
-**D905** (seams, untouched); **D929** (the §3.7 promotion-pressure absence-semantics seam,
+**D905** (seams, untouched); **D931** (the §3.7 promotion-pressure absence-semantics seam,
 in flight — see the collision note below).
 
 Registered rows — **written by the drafting commit `530bb4a`** (the draft's "head D922"
@@ -685,9 +685,9 @@ row, so `design/BACKLOG.md` at commit `530bb4a` holds two D925 rows (verified co
 head **D926**). The review proposed renumbering the WDL row to **D927** per the D906/D908
 precedent — and found the concurrent C4/Review session's in-flight working tree already
 carries exactly that repair (the WDL row as D927, plus new rows **D928** — the Review
-whole-game selector — and **D929**, below), so the repair needs committing, not
+whole-game selector — and **D931**, below), so the repair needs committing, not
 re-deciding. Every D925 reference in this document means the Wave-C implementation-wave 💡
-row. **D929 🐞 (in flight, `tactical-collectors / semantic-collectors` seam) binds §3.7
+row. **D931 🐞 (in flight, `tactical-collectors / semantic-collectors` seam) binds §3.7
 directly:** `promotion_pressure@1` carries three incompatible absence semantics after D922
 (RFC in-check abstention vs. the matrix's total row vs. the helper's silent `false`) — the
 §3.7 binding cannot be implemented until that amendment pins one shape, and this RFC's
@@ -747,7 +747,7 @@ is a spec change with a changelog line.
   section records reality: rows D925/D926 were written by drafting commit `530bb4a`, which
   also created a **D925 collision** with the WDL-perspective defect row — committed head is
   D926; the concurrent C4 session's in-flight tree already carries the proposed D927
-  renumbering plus rows D928/D929, and D929's promotion-pressure absence-semantics seam is
+  renumbering plus rows D928/D931, and D931's promotion-pressure absence-semantics seam is
   now a named hold on the §3.7 binding; C15 cannot close while the collision stands
   uncommitted. **(7)** two labeled fixtures added to the disposable harness:
   the broad-overload rule firing where the strict predicate refuses

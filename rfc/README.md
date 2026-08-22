@@ -265,6 +265,7 @@ was sound for the same reason — the draft that could not land is the one that 
 |---|---|---|---|
 | position next | `learner-rating.md` | learner_ratings; rated_games; rating_periods | `tabiya-claims` |
 | position next | `learner-rating.md` | cohort_standings; standing_members; learner_marks | `tabiya-claims` |
+| position behind learner-rating | `longitudinal-store.md` | learner_observations; learner_structure_stats | `tabiya-claims` |
 
 A migration's *number* is the shared resource, but its *body* is shared too: an
 already-applied migration still runs on databases that never reached it, so a
