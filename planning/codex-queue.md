@@ -64,6 +64,37 @@ with the review's finds carried:
 end of that chain. `semantic-collectors` (Wave-C) is drafting and will slot between the
 collector waves and the module amendment (your order items 2 and 5).
 
+## 0-THEMING-ACCEPTED. `theming` is accepted — three axes, schemes inherited whole
+
+Accepted 2026-08-22 on the owner's [[D982]] ruling (*"have app theme, board theme, pieces theme.
+done."*) after cross-review + restructure + verification (138 claims, 12 corrected). Going in:
+
+- **Three orthogonal axes**: `appTheme`, `boardTheme`, `pieceSet` — each selectable alone.
+  **Criterion 13 is the guard**: switch one axis and the other two stay byte-identical. Do not
+  reintroduce `--board-light`/`--board-dark` into an app palette; the board axis owns them.
+- **An app theme is a COMPLETE INHERITED SCHEME, applied — not composed.** The 12 contract keys
+  are the owner's own registry vocabulary (verified: all 10 schemes there carry all 12). Inherited
+  palettes are **byte-exact upstream** and criterion 5b asserts it — [[D988]] is why: a reviewer
+  edited `accentTextColor` believing it was ours and broke the verbatim rule while citing it.
+  **Never "fix" an inherited value.** Tabiya-origin palettes are gated on WCAG; inherited ones are
+  measured and published; `MODE_DEFAULT` must resolve to an `origin: "tabiya"` palette (4(e)).
+- **The load-bearing engineering is the skin/paint split**: `chessground.brown.css` fuses square
+  color with CSS-painted evidence paint (last-move, dests, selected, premove, check). Board themes
+  become skin-only over one shared token-driven interaction-paint stylesheet. **Brush colors are
+  NOT in that CSS** — they are chessground's JS `drawable.brushes` defaults
+  (`#15781B`/`#882020`/`#003088`/`#e68f00`), a `config()` seam.
+- **Two traps the verification caught, already fixed — keep them fixed**: `--shadow` maps to
+  `--shadow-color` with geometry derived once (its 7 call sites are `box-shadow:` shorthand
+  consumers; a bare color there is invalid CSS), and `DERIVED_TOKENS`
+  (`shadow`/`scrim`/`scrim-strong`/`display-font`) is in criterion 1's admitted set or the
+  criterion is red forever on 23 `--display-font` uses.
+- **[[D983]] ships in the same pass**: the live light-theme WCAG failures — `--muted` → `#6d6960`
+  (unconditional) and `--warning` → `#8e6116` (owner-visible candidate), eight small-text sites.
+- **Persistence is `tabiya.theme`** — plain validated key, no version machinery ([[D977]]:
+  validation IS the migration strategy). Client-only; **claims nothing versioned**.
+- Criterion 1 is **red at HEAD** on two phantom tokens ([[D986]]) — that is the starting state.
+  Your implementing commit flips D986 and the rows §10's lifecycle map names.
+
 ## 0-RATING-ACCEPTED. `learner-rating` is accepted — it HEADS the migration train
 
 Accepted 2026-08-22 after independent cross-review (~80 claims, 14 corrected). Its two table
