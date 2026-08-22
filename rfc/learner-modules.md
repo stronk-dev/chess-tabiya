@@ -1,6 +1,6 @@
 # RFC: Learner modules
 
-- **Status:** draft 2026-08-22 — the Phase-3 / F5 module-contract RFC. Drafted while 2c is
+- **Status:** accepted — 2026-08-22, by claude as register owner on the buildability test, after cross-review (nine blockers fixed in place) and the owner's three rulings (D906: radar pre-commit-in-Support; outpost gated on the priority D566 fix; **budgets demoted to backstops, semantic reducers the mechanism**). *One honesty note: the reducer obligation entered AFTER cross-review on the budgets ruling — the implementer should treat §OQ1's reducer spec as the section to return if underspecified; the return loop is the check.* *(Prior line for history: draft 2026-08-22 — the Phase-3 / F5 module-contract RFC. Drafted while 2c is)*
   implementing and 2d awaited independent acceptance (2d has since been accepted with its 18
   ids unchanged — Depends-on, §7, changelog); **implementation of this RFC is sequenced
   after both collector waves land** so every eligibility row binds a compiled projection id, per
