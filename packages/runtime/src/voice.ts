@@ -94,7 +94,7 @@ export const BANNED_JUDGEMENTS = Object.freeze([
   "weak", "strong", "good", "bad", "better", "worse", "advantage", "winning", "losing",
   "should", "must", "best", "worst", "mistake", "blunder", "punish", "wins", "loses",
   "brilliant", "excellent", "great", "superb", "perfect", "impressive", "beautiful",
-  "accurate", "precise", "clever", "sharp", "strongest",
+  "accurate", "inaccurate", "inaccuracy", "precise", "clever", "sharp", "strongest",
 ]);
 export const PRESCRIPTIVE_VERBS = Object.freeze(["play", "push", "trade", "take", "capture", "put", "place", "move", "develop", "castle", "promote", "advance", "retreat", "sacrifice", "exchange", "avoid", "prevent", "prepare", "aim", "attack", "defend", "target", "grab", "reroute"]);
 export const CHESS_LEXICON = Object.freeze(["pawn", "knight", "bishop", "rook", "queen", "king", "opening", "middlegame", "endgame", "outpost", "carlsbad", "isolated", "backward", "passed", "file", "lucena", "philidor", "vancura"]);

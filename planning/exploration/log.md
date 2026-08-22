@@ -4915,3 +4915,17 @@ green.
 
 **Next:** continue with compiled module destinations for phase, compare, tablebase and voice; do
 not reintroduce raw values as temporary cards while those modules are absent.
+
+## 2026-08-22 — voice refuses invented inaccuracy grades
+
+**What landed:** closed [[D940]] independently of the grade projection. The shared external-voice
+guard now treats both `inaccuracy` and `inaccurate` as judgements, so either word is refused when
+the admitted rendered evidence contains no matching grade sentence. The focused fixture exercises
+both exact violation tokens over an authored, ungraded evidence view.
+
+**What changed:** a provider may still re-voice a grade that the deterministic registered renderer
+actually admitted, but it can no longer invent the mildest grade merely because the previous ban
+covered `accurate`, `mistake` and `blunder` but missed these two non-substring word-boundary cases.
+
+**Next:** implement `derived.grade.move_quality@1` after its accepted learner-module dependency;
+this guard is already global and does not need to be repeated per consumer.

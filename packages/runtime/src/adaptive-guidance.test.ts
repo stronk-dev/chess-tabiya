@@ -200,10 +200,14 @@ describe("adaptive guidance runtime", () => {
     const view = renderEvidenceItems(admitted, { "pack.authored.claim@1": () => ["A backward pawn is recorded."] });
     expect(voiceCheck(view, "A weak pawn is recorded.").violations).toContain("judgement:weak");
     expect(voiceCheck(view, "A brilliant practical choice.").violations).toContain("judgement:brilliant");
+    expect(voiceCheck(view, "That was an inaccuracy.").violations).toContain("judgement:inaccuracy");
+    expect(voiceCheck(view, "That was inaccurate.").violations).toContain("judgement:inaccurate");
     expect(voiceCheck(view, "Push the tall one two squares.").violations).toContain("prescription:push");
     expect(voiceCheck(view, "The c4 square matters.").valid).toBe(false);
     expect(voiceCheck(view, "The tall one wants a friend beside it.").valid).toBe(true);
     expect(BANNED_JUDGEMENTS).toContain("blunder");
+    expect(BANNED_JUDGEMENTS).toContain("inaccuracy");
+    expect(BANNED_JUDGEMENTS).toContain("inaccurate");
   });
 
   it("records the combined guidance envelope over Pack B and a 60-ply position run without gating it", () => {
