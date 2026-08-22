@@ -1,6 +1,6 @@
 # RFC: Intent presets — the workflow/preset layer over the module foundation
 
-- **Status:** draft — 2026-08-22
+- **Status:** accepted — 2026-08-22, by claude as register owner on the buildability test, after a cross-review that re-derived ~52 claims at source and failed 14 — including this RFC's own acceptance-grid arithmetic (24 admitted / 11 refused, not the drafted 19/16 — which also summed to 35, exactly how a wrong count hides) and a "structurally impossible" claim that was false in five of six contexts (finding 2: the rules floor is now universal via restricted `boardLighting` clamp tokens, not a per-context accident). Corrections in place; changelog entry 2026-08-22. *(Prior line for history: draft — 2026-08-22)*
 - **Author:** claude (drafted from `planning/evidence-foundation-ux/presets-head-derivation.md`, the HEAD derivation of every surface this document composes)
 - **Created:** 2026-08-22
 - **Design refs:** `design/05-in-run-experience.md` §3-forms O4 amendment (the algebra), §3a (silence default), §5 Q4; `design/03-product-breadth.md` §Play, §Review and explore, §Live and community, shell table
@@ -22,13 +22,14 @@ learner is in and the **preset** they request — and specifies the pure compile
 `AssistanceConfig` the shipped screen consumes. It is the activation layer the accepted module
 foundation is waiting for: `learner-modules`' Discharge D1 and `play-composition`'s Discharge D1
 both name this RFC's landing commit as their recording site, and until it lands the eleven
-registered modules are production-registered but preset-inert. It also discharges the
+contracted modules stay preset-inert (their production registration is `learner-modules`'
+own implementation — accepted, in flight at HEAD, zero module ids in production code yet). It also discharges the
 D532/D715 obligation inherited from `assistance-controls`: every shipped context gets an
 enumerated ceiling ("what it may never show"), the permission vocabulary becomes able to express
 the rules floor, and `permittedAssistance` finally receives a context input that can see
 `match`/`stream`/`onramp`. Preset names, defaults and per-context allowances ship as
-**candidates behind an owner-use validation gate** — the D907 shape — because R3's exit is
-owner use, not desk work. Claims nothing versioned.
+**candidates behind an owner-use validation gate** — the [[D906]](3) budgets→backstops shape —
+because R3's exit is owner use, not desk work. Claims nothing versioned.
 
 ## Motivation
 
@@ -38,7 +39,7 @@ Advanced/Custom surfaces or the inspector"* — and ends with *"Exact preset nam
 defaults and Review Map moments are deliberately not chosen here — they remain with R3/R7."*
 This is the document that chooses. At HEAD (`presets-head-derivation.md` §0): a grep for
 `preset|Preset` over `apps/web/src`, `packages/runtime/src`, `apps/server/src` returns **zero
-production hits**. What exists instead is five overlapping vocabularies that no two of which
+production hits**. What exists instead is five overlapping vocabularies, no two of which
 agree — the six `ASSISTANCE_PROFILES`, the seven capability `SURFACE_IDS`, the eight shell
 routes, design/03's surface names, and the disposable R3 harness's six workflows × five
 presets — plus a 54-control raw preference matrix the A5 audit measured as the negative
@@ -70,7 +71,7 @@ eight-name shorthand is retired by proposed row [[D942]].
 | — (imported) | context | `imported` | profile `imported` ("Imported game") |
 | — (match) | context | `match` | profile `match`; `liveKind === "match"`; `seatedInContest` |
 | Stream | context | `stream` | profile `stream`; `liveKind === "stream"`; routes `live`/`live-overlay` |
-| Academy | context | `academy` — **new seventh context** | `LIVE_SESSION_KINDS` member `"academy"` (`packages/runtime/src/types.ts:38`), which today **falls through** to `pack`/`position` (`assistance-preference.ts:7-12`) — the defect proposed as [[D943]] |
+| Academy | context | `academy` — **new seventh context** | `LIVE_SESSION_KINDS` member `"academy"` (`packages/runtime/src/types.ts:38`), which today **falls through** to the run's `sessionKind` profile — `pack`/`position`/`imported` (`assistance-preference.ts:7-12`) — the defect proposed as [[D943]] |
 | — (on-ramp) | context | `onramp` | profile `onramp`; `feedbackPolicy === "immediate_guard"` |
 | Guided | preset | `guided` | R3 `guided`; `AssistanceConfig.guided` |
 | Support | preset | `support` | R3 `support`; design/05 O4's "explicit Support preset" |
@@ -100,7 +101,7 @@ export type PresetId = (typeof PRESET_IDS)[number];
 
 ### §2. The algebra, quoted then typed
 
-`design/05:232-235`, verbatim — the normative sentence (the plan row's
+`design/05:230-232`, verbatim — the normative sentence (the plan row's
 `preset ∩ ceiling ∩ role ∩ availability` is a paraphrase; quote this, not the gloss):
 
 > **Effective assistance is `requested preset ∩ workflow/session ceiling ∩ honesty/access ∩
@@ -130,6 +131,10 @@ export interface ContextContract {
 }
 ```
 
+`ModuleId` is the closed eleven-id union — `ModuleDeclaration["id"]` from the registry
+`learner-modules` lands in `evidence-catalog.ts` — exported **once** beside that registry
+and imported here, never a second literal copy of the list (the [[D523]] class).
+
 **The candidate table** (validation-gated, §7; `moduleCeiling` is stated as the complement —
 what the context **may never show** — because that is the sentence D532 requires):
 
@@ -151,12 +156,22 @@ export type AssistancePermission = "free" | "locked_off" | "legal" | "sight" | "
 ```
 
 `"legal"` means: `boardLighting` may not exceed `"legal"` **and may not fall below it** — the
-rules floor is a floor and a ceiling in one token, which is what makes [[D493]]'s regression
-(a "quiet-looking" constant flipping the board dark) structurally impossible: no compiled
-output can carry `boardLighting: "off"`, because no permission value admits it (acceptance
-criterion 3). The `match` context's clamp is `"legal"` on `boardLighting`, `locked_off` on
-everything optional; `rules_floor` itself is never in any complement — it is not assistance
-(`learner-modules.md:322-329`, `evidence: none`).
+rules floor is a floor and a ceiling in one token. The floor is universal, not match-only
+(corrected in cross-review — the draft stated the floor mechanism only for the `"legal"`
+token, leaving criterion 3 unbacked in every context whose clamp is `"sight"`/`"evidence"`):
+on the `boardLighting` field, the only clamp values any `ContextContract` may carry are
+`"legal" | "sight" | "evidence"`, **each denoting the range `["legal", token]`** — a registry
+invariant (compile-time test, the `learner-modules` §6 pattern) refuses `"free"`/`"locked_off"`
+there. A stored `boardLighting: "off"` — a pre-[[D493]] artifact that `validV4` still admits —
+compiles to `"legal"`; stored-value supremacy (§5 rule 4) does not apply, because the rules
+floor is not an assistance control and turning it off was never a choice the surface honestly
+offered (the [[D493]] ruling: *"legal-move rendering was never on the assistance ladder — it
+is the rules floor, not evidence"*). That is what makes [[D493]]'s regression (a
+"quiet-looking" constant flipping the board dark) structurally impossible: no compiled output
+can carry `boardLighting: "off"` (acceptance criterion 3). The `match` context's clamp is
+`"legal"` on `boardLighting`, `locked_off` on everything optional; `rules_floor` itself is
+never in any complement — it is not assistance (`learner-modules.md:322-329`,
+`evidence: none`).
 
 #### §3.1 One derivation, two callers
 
@@ -189,8 +204,9 @@ membership updated to the accepted 11-id contract. Each entry is
 Deltas from R3, each with its reason: `structure_nudge` joins `guided` (it registered after R3
 ran; same post-commit timing class as `postcommit_nudge`); `threat_radar` joins `support` only
 (its pre-commit arm is ruled *"pre-commit, inside the Support preset only, on-request, never
-proactive"* — [[D906]], `learner-modules.md:906`); `postcommit_nudge` is out of `analysis`
-(the inspector surface subsumes it). The union of all preset module lists must equal the
+proactive"* — [[D906]], `learner-modules.md:906`). `postcommit_nudge` stays out of `analysis`
+exactly as in R3 — not a delta, restated because `guided` gained a post-commit module and
+`analysis` deliberately did not (the inspector surface subsumes it). The union of all preset module lists must equal the
 11 registered ids exactly — every module reachable through some preset or the explicit
 surfaces, none dangling (criterion 6).
 
@@ -218,9 +234,14 @@ export interface SuppressionRecord {
 }
 ```
 
-Rules, in application order (each is an ∩ term — order affects only which `by` a record
-carries, never membership):
+Rules, in application order (rule 0 is an input-integrity refusal; rules 1–4 are each an
+∩ term — among the ∩ terms, order affects only which `by` a record carries, never
+membership):
 
+0. `input.context` must equal `input.access.workflowContext` — the same value arrives twice
+   only because `AssistanceContext` travels to the server whole (§3.1); a mismatch is the
+   same typed refusal as rule 1, never a silent pick of either (added in cross-review: two
+   sources for one value with no equality check is the [[D523]] class in a signature).
 1. `preset.modules ∩ context.moduleCeiling` — a preset not in `allowedPresets` is refused
    before compilation with a typed error; the UI never offers it (criterion 2).
 2. `∩ access` — the existing `permittedAssistance` clamps, now context-aware (§3.1);
@@ -233,7 +254,8 @@ carries, never membership):
 4. `∩ stored` — **stored explicit choices beat preset defaults, in both directions.** The
    compiled `config` starts from the preset's config projection and is overridden per-field by
    the learner's stored v4 values, except where a `configClamp` term narrows below the stored
-   value (a clamp is a ceiling; a stored "off" always survives). Applying a preset **never
+   value (a clamp is a ceiling; a stored "off" always survives — with the single ruled
+   exception of `boardLighting`, which never compiles below `"legal"`, §3). Applying a preset **never
    writes** `tabiya.assistance.v1.*` (§6) — the parent contract's criterion 10 (silently
    re-enabling a turned-off control is *"the exact shape of a control that cannot be turned
    off"*, `assistance-controls.md:692-696`) holds by construction.
@@ -251,7 +273,7 @@ evidence-packet, or eligibility type; its signature is the enforcement (criterio
 
 ### §6. Persistence — where the choice lives
 
-`design/05:226-228`: *"Workflow identity and the requested preset are stored separately from
+`design/05:224-225`: *"Workflow identity and the requested preset are stored separately from
 technical source preferences."* Concretely:
 
 - New key grammar **beside, never inside** the existing one:
@@ -265,8 +287,11 @@ technical source preferences."* Concretely:
   claims its migration position then; nothing here forecloses it.
 - **A mid-run preset change is not a run event, and here is the argument rather than the
   omission** (derivation gap 5): raising a preset changes what may be *offered*; nothing
-  renders to the learner without passing through the disclosure events the run log already
-  carries (the `attempt_end` reveal wiring, module `on_request` grants). The reopen condition
+  renders to the learner without passing through a logged disclosure event — the shipped
+  `feedback.revealed` wiring today, plus the module-delivery logging `learner-modules`'
+  implementation owes (stated as an obligation on that landing, not as an existing fact —
+  corrected in cross-review: no module `on_request` grant event exists at HEAD, because no
+  module does). The reopen condition
   is named and tested: **if any module rendering path delivers content without a logged
   disclosure event, this decision is void** and the successor claims run lane 0.19 with a
   `preset.changed` event (criterion 9 is the guard — changing preset mid-run with no learner
@@ -284,7 +309,7 @@ technical source preferences."* Concretely:
   configuration itself.
 - **Settings** keeps the six-profile grid and gains the seventh context; raw switches remain
   the Advanced surface per design/05 — the pill is the ordinary view.
-- **The validation gate** (the [[D907]] budgets→backstops shape; R3's exit is owner use,
+- **The validation gate** (the [[D906]](3) budgets→backstops shape; R3's exit is owner use,
   `design/research/evidence-presentation.md:5`; [[D649]]: validation is the owner's own use):
   every entry in the preset table and the context table carries `validation: "candidate"`.
   A candidate is confirmed, renamed, or re-tabled by an owner ruling logged in
@@ -332,20 +357,20 @@ is cited, none is re-argued:
 
 | binding | source |
 |---|---|
-| Proactive blunder prevention only inside an explicit Support preset; never the rehearsal default | `design/05:236-238` (O4) |
+| Proactive blunder prevention only inside an explicit Support preset; never the rehearsal default | `design/05:233-235` (O4) |
 | `blunder_prevention` timing `at_commit`, Support only | `learner-modules.md:303` |
 | Threat radar pre-commit: Support only, on-request, never proactive | [[D906]], `learner-modules.md:906` |
-| Avoidance/negative readings face learners post-commit/review only, always with the denominator | [[D745]]/[[D718]] |
+| Avoidance/negative readings face learners post-commit/review only, always with the denominator | [[D745]](2) (cross-review dropped the stray [[D718]] — the ledger's own correction note pins D718 as the earlier layout-trace row; the negative-reading ruling is D745's) |
 | The rules floor is not assistance and appears in every compiled output | [[D493]]; `learner-modules.md:322-329` |
 | A preset filters modules, never eligibility | [[D660]]; `assistance-surface-taxonomy.md:521` |
 | Stored explicit choices beat preset defaults, both directions | `assistance-controls.md:692-696` (criterion 10 lineage) |
-| A ceiling is *"a ceiling on what may be **offered**, never a floor on what is **shown**"* | D532 ruling, `design/BACKLOG.md` |
+| A ceiling is *"a ceiling on what may be *offered*, never a floor on what is *shown*"* | D532 ruling, `design/BACKLOG.md:532` |
 | Match: byte-identical disclosure for both players | `design/03:93-98` |
 | Relayed marks are attribution-governed, not rung-governed | `design/05:199` |
 
 ## Deviations from design
 
-None. The algebra is quoted verbatim from `design/05:232-235`; the plan row's
+None. The algebra is quoted verbatim from `design/05:230-232`; the plan row's
 `preset ∩ ceiling ∩ role ∩ availability` phrasing is treated as the paraphrase it is
 (role ⊂ honesty/access), which is conformance, not deviation. The one vocabulary design does
 not contain — the seventh context `academy` — extends `ASSISTANCE_PROFILES`, which is code,
@@ -354,20 +379,21 @@ not design tier; design/03's Academy surface is its anchor.
 ## Acceptance criteria
 
 Unit note: criteria 1–3 and 6 quantify over the full preset × context cross product —
-**5 × 7 = 35 pairs**, of which the `allowedPresets` tables admit **19** (the other 16 must be
-refused, criterion 2 counts them).
+**5 × 7 = 35 pairs**, of which the `allowedPresets` tables admit **24** (position 5 + pack 4 +
+imported 4 + match 1 + stream 4 + academy 3 + onramp 3; the other 11 must be refused,
+criterion 2 counts them).
 
-1. **Pointwise narrowing, exhaustively.** For all 19 admitted pairs:
+1. **Pointwise narrowing, exhaustively.** For all 24 admitted pairs:
    `compiled.modules ⊆ preset.modules` and `compiled.modules ⊆ context.moduleCeiling`, and
    for every `AssistanceConfig` field the compiled value ≤ the clamp under the permission
    order. Flip-a-constant check: widening any single ceiling entry makes exactly the fixtures
    naming that entry fail.
-2. **Refusal is typed and total.** All 16 disallowed pairs produce the typed refusal, and the
+2. **Refusal is typed and total.** All 11 disallowed pairs produce the typed refusal, and the
    pill menu for each context offers exactly `allowedPresets` — a browser fixture per context
-   asserts the absent options are absent (the negative-fixture-per-context obligation from
-   `assistance-controls.md:697-701`, discharged).
+   asserts the absent options are absent (discharging, strengthened from one fixture to one
+   per context, the negative-fixture obligation from `assistance-controls.md:697-701`).
 3. **The rules floor is unexpressible-off.** Type level: `AssistancePermission` includes
-   `"legal"` and no compiler path emits `boardLighting: "off"`. Test level: all 19 compiled
+   `"legal"` and no compiler path emits `boardLighting: "off"`. Test level: all 24 compiled
    outputs have `boardLighting ∈ {"legal","sight","evidence"}` and `modules ∋ rules_floor`;
    the D493 regression fixture (quiet × each context ⇒ `"legal"` exactly) is permanent.
 4. **Stored-value supremacy, both directions.** Fixture A: stored `guided: "off"`, apply
@@ -394,17 +420,20 @@ refused, criterion 2 counts them).
 8. **Candidate lint.** Every preset/context table entry carries `validation: "candidate"` or
    a ruling citation (log-entry date + anchor); the lint fails a bare non-candidate. Shape
    precedent: grades' `{value, source, pinnedAt}` fields.
-9. **The no-run-event guard.** Mid-run preset raise with no subsequent learner request
-   renders zero new evidence items (fixture over a live run with `guided` → `analysis`);
-   every rendered item in the fixture run traces to a logged disclosure event. This criterion
+9. **The no-run-event guard.** Two arms. (a) Mid-run preset raise with no subsequent learner
+   request renders zero new evidence items (fixture over a live run with `guided` →
+   `analysis`). (b) `quiet` → `guided` followed by one committed move — the proactive path,
+   which arm (a)'s review-timing modules never exercise (strengthened in cross-review): the
+   nudge that renders must trace to its logged disclosure event. In both arms every rendered
+   item in the fixture run traces to a logged disclosure event. This criterion
    is the standing condition of §6's no-lane decision — if it cannot be kept green, the
    decision reopens by its own terms.
 10. **On-ramp default has one owner.** At landing, exactly one source defines the on-ramp
     `guided` default (grep-census over `PROFILE_DEFAULTS`/`ContextContract`), whichever
     landing order §8.2 resolved to.
 11. **Academy stops falling through.** `deriveWorkflowContext({liveKind: "academy", ...})`
-    = `"academy"`, with the pre-fix behavior (`pack`/`position`) as the named regression
-    the fixture kills.
+    = `"academy"`, with the pre-fix behavior (fall-through to the run's `sessionKind`
+    profile) as the named regression the fixture kills.
 
 ## Discharges
 
@@ -430,20 +459,48 @@ use ([[D649]]) and the D941 lesson is that holding paper for ceremony delays the
 that counts. An owner who wants Support offerable in `pack` drills says so after feeling it;
 the table absorbs the ruling without re-opening the RFC.
 
-## Ledger rows (proposed — renumber at landing; head D941 at drafting, registered block D942–D944)
+## Ledger rows (landed as D942–D944 at acceptance, 2026-08-22)
 
-- **D942 (proposed)** — the plan row's eight-intent list conflates two axes (five contexts,
+- **D942 (landed)** — the plan row's eight-intent list conflates two axes (five contexts,
   two presets, one surface state); resolved by §1's mapping table; the shorthand is retired
   from routing use.
-- **D943 (proposed)** — 🐞 an `academy` live session falls through to the `pack`/`position`
-  assistance profile (`assistance-preference.ts:7-12` has no academy branch), so a coached
-  session inherits solo-drill defaults and ceilings; fixed by the seventh context (§3.1,
-  criterion 11).
-- **D944 (proposed)** — three role vocabularies coexist (`RUN_ROLES`,
+- **D943 (landed)** — 🐞 an `academy` live session falls through to its run's
+  `sessionKind` assistance profile — `pack`/`position`/`imported`
+  (`assistance-preference.ts:7-12` has no academy branch) — so a coached session inherits
+  solo defaults and ceilings; fixed by the seventh context (§3.1, criterion 11).
+- **D944 (landed)** — three role vocabularies coexist (`RUN_ROLES`,
   `AssistanceContext.role` + `solo`, `EvidenceRole` + `author`/`operator`); §8.3 pins the
   injection mapping; unification into one vocabulary is real future work nobody owns yet.
 
 ## Changelog
 
+- 2026-08-22 (cross-review, in place): **(1)** the acceptance grid recounted from this RFC's
+  own `allowedPresets` tables — **24 admitted / 11 refused**, not the drafted 19/16
+  (5+4+4+1+4+3+3; criteria 1–3 and the unit note corrected — the register row carries the
+  same wrong count and is the acceptor's to fix). **(2)** The rules floor made universal at
+  the mechanism: the draft's `"legal"`-token floor left criterion 3 unbacked in every
+  context whose `boardLighting` clamp is `"sight"`/`"evidence"`, while §5 rule 4's "a stored
+  'off' always survives" would have compiled a pre-D493 stored `boardLighting: "off"` — the
+  exact regression the section claims is structurally impossible; §3 now floors the field in
+  all contexts with a registry invariant and §5 rule 4 carries the ruled exception.
+  **(3)** Summary corrected: zero module ids exist in production at HEAD (grep, this pass —
+  `learner-modules` is accepted with implementation in flight); "production-registered" was
+  false as a present-tense claim. **(4)** Ledger cites repaired: budgets→backstops is
+  [[D906]](3), not [[D907]] (twice); the §9 negative-reading row cited [[D718]], which the
+  ledger's own correction note pins as the layout-trace row — now [[D745]](2). **(5)** §6's
+  mid-run argument no longer asserts module `on_request` grant events "the run log already
+  carries" (none exist at HEAD); the logging is stated as `learner-modules`' implementation
+  obligation, and criterion 9 gains the proactive arm (`quiet` → `guided` + one commit) the
+  drafted `guided` → `analysis` fixture could never exercise. **(6)** Compiler rule 0 added:
+  `input.context` must equal `access.workflowContext`, typed refusal on mismatch. **(7)**
+  design/05 line cites corrected against the file (algebra `:230-232` not `:232-235`;
+  Support ruling `:233-235` not `:236-238`; storage separation `:224-225` not `:226-228`);
+  academy fall-through stated precisely (`sessionKind` profile incl. `imported`);
+  `postcommit_nudge`-out-of-`analysis` restated as the non-delta it is; `ModuleId` pinned as
+  a single exported union, never a second literal list. Verified clean at source: the §2
+  algebra quote byte-exact; the §1 mapping table's five vocabularies re-derived at HEAD
+  (all cells hold); the R3 promotion deltas and the 11-id union closure; both counterparty
+  Discharge D1 rows (`learner-modules.md:801`, `play-composition.md:672`); D942–D944 free at
+  ledger head D941.
 - 2026-08-22: created, drafted from the Phase-5 HEAD derivation dossier
   (`planning/evidence-foundation-ux/presets-head-derivation.md`).

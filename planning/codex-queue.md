@@ -86,6 +86,39 @@ pins the disagreement as ours-by-choice). Sequencing unchanged: grades compile t
 for `postcommit_nudge`/`review_map` and sit **after `learner-modules`** in your order — nothing
 else moves.
 
+## 0-PRESETS-ACCEPTED. `intent-presets` is accepted — implement after `learner-modules`, alongside/after grades
+
+Accepted 2026-08-22 after cross-review; corrections in place — **trust the RFC file at HEAD, not
+any earlier conversation**. What you need going in:
+
+- **Two new vocabularies to name in code**: seven `WorkflowContextId`s (the six shipped
+  `ASSISTANCE_PROFILES` + `academy` — [[D943]]: academy currently falls through to its run's
+  `sessionKind` profile and inherits solo defaults; your implementation closes that row) and
+  five `PresetId`s promoted from the R3 harness, shipped as `validation: "candidate"` behind
+  the owner-use gate. §1's mapping table is normative — every cell was re-derived at HEAD.
+- **The compiler is pure and narrowing-only** (§5, with rule 0's typed refusal when
+  `input.context` ≠ `input.access.workflowContext`). **The rules floor is universal**:
+  `boardLighting` clamp tokens are restricted to `"legal"|"sight"|"evidence"`, each denoting
+  `["legal", token]` — the registry invariant is what makes [[D493]] unrepeatable; do not
+  reintroduce a per-context `"off"` path. A stored `off` survives ONLY under the ruled §5-rule-4
+  exception.
+- **Preset apply is a fallback/new-profile write, never a merge** over the three localStorage
+  migration branches. Persistence is client-only `tabiya.workflow.v1.*`, version inside the
+  value — **claims nothing versioned**; run lane 0.19 is named-and-declined, and criterion 9
+  (both arms — (b) is the proactive `quiet → guided` arm the review added) is the standing
+  guard whose failure reopens that decision.
+- **`deriveWorkflowContext` is ONE runtime symbol imported by client AND server** — criterion 5
+  fails the landing as vacuous unless `permittedAssistance` returns different permissions than
+  HEAD for match/stream/onramp (sessionKind is declared-and-unread today; that changes here).
+- **Acceptance grid: 5 presets × 7 contexts = 24 admitted pairs, 11 typed refusals** (the
+  draft's 19/16 was a counting error the review caught — both sum to 35).
+- Opponent policy stays **beside** the preset ([[D938]] seam): pre-fill the roster picker,
+  never compose the request. The preset pill slot and disclosure seat are already reserved in
+  play-composition's 16 states (state 7).
+- Your landing commit closes [[D943]] and records the two counterparty Discharge D1 rows
+  (`learner-modules` and `play-composition` both name this RFC's landing as their recording
+  site) — flip rows and append the log entry in that commit per protocol.
+
 ## 0-PRIORITY-D566. The `pawnSafety` repair is owner-promoted — fix it properly
 
 Owner ruling 2026-08-22 ([[D906]](2)): *"just fix the foundation and then keep it in."*

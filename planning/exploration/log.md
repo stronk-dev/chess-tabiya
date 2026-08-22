@@ -4929,3 +4929,31 @@ covered `accurate`, `mistake` and `blunder` but missed these two non-substring w
 
 **Next:** implement `derived.grade.move_quality@1` after its accepted learner-module dependency;
 this guard is already global and does not need to be repeated per consumer.
+
+## 2026-08-22 — intent-presets accepted; the last unwritten Phase-5 document exists
+
+**What landed:** `rfc/intent-presets.md` drafted from a HEAD-derivation dossier
+(`presets-head-derivation.md`), cross-reviewed, corrected in place, and accepted — body,
+register, ledger rows D942–D944 and the plan-row flip in one commit. The owner caught the
+process error that commissioned it (D941): holding the draft "for the eve of the first play
+session" guaranteed the session could not test it; drafting now and letting play rulings
+become the amendment is the coherent form of the freshness instinct.
+
+**What the review caught:** the draft's own acceptance grid summed wrong (24 admitted / 11
+refused, not 19/16 — both sum to 35, which is exactly how a wrong count hides); §3's
+"structurally impossible" D493-regression claim was false in five of six contexts (the rules
+floor is now universal via restricted clamp tokens); a production-registration overclaim;
+run-log events claimed that don't exist; one D444-vacuous fixture arm. ~52 claims re-derived,
+14 failed. The design/05 algebra quote was verified byte-exact — the misquote class did not
+recur.
+
+**What changed:** every document in the D717 program now exists and is accepted. The eight-name
+intent shorthand is retired (D942, two-axis conflation); `academy`'s fall-through to solo
+defaults is a named defect closing at implementation (D943); the three role vocabularies have a
+pinned mapping and an unowned unification row (D944). Storage claims nothing versioned; run
+lane 0.19 named-and-declined with a standing reopen criterion.
+
+**Blocked:** nothing. Implementation follows `learner-modules` in the codex order.
+
+**Next:** codex implements; the owner's first session exercises the five candidate presets and
+rules on names, defaults and per-context Support — the validation gate is their own use (D649).
