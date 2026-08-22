@@ -688,3 +688,18 @@ proves the digest discipline on 20 files before anything larger depends on it.
 mechanical job in this document does. The number moves when a human writes a claim a machine can
 certify — which is exactly the shape law 8 requires, and the reason this wave has a floor under how
 fast it can go.
+
+---
+
+## Training-method content wave (D863) — added 2026-08-22 from the residue reconciliation
+
+> **Training-method content wave (D863):** author (a) stated_reasoning checkpoints across
+> the existing spine — the write-before-checking method whose full machinery ships with one
+> consumer, and (b) additional perfect_tablebase technical-position packs (currently 6 files)
+> re-cut as play-the-consequence, never find-the-tactic. Both are law-8-clean: the machinery
+> already grades nothing. This wave also absorbs SC Discharge D4's authored-witness debt
+> (D926) where positions overlap.
+
+Authoring work, not code; no RFC needed. Sequencing: this is a content wave and sits behind the
+owner's D949 Gate F hold with the rest of the content lane; it carries the standard content-wave
+closeout (ledger flips + `planning/content-era/log.md` entry in the shipping commit).
