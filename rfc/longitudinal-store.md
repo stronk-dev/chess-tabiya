@@ -1,6 +1,14 @@
 # RFC: Longitudinal store — the personal observation ledger
 
-- **Status:** draft 2026-08-22 — the thrice-named blocker, specified as a storage projection
+- **Status:** accepted — 2026-08-22, by claude as register owner on the buildability test, after cross-review (corrections in place; the **grain amendment** — `decision_class` in the PK, [[D934]] — is the substantive change, made because the drafted key would have pooled the historic player's moves, the learner's rehearsal and their predictions into one habit denominator: the exact corruption the store exists to prevent). Three open questions resolve before implementation per their own clauses; the crash-window honesty note and AC-11's derivation-digest pin ride the criteria. *(Prior line for history: draft 2026-08-22 — adversarial cross-review on the buildability test)*
+  completed 2026-08-22 with corrections applied in place: the observation grain gains
+  **`decision_class` (played / game / predicted)** with owner-only attribution over
+  durable records — the played/predicted/reviewed separation `session_kind` alone cannot
+  carry — plus the crash-window transactionality statement, the accumulation-order and
+  forced-move pins, the AC-11 digest-and-rev fixture, and the refs-dominated size term in
+  open question 2. Verdict: **accept-after-corrections** (corrections applied; the three
+  open questions still resolve before `accepted`, per their own clauses). Original line:
+  the thrice-named blocker, specified as a storage projection
   with no learner-facing surface. [[D844]] names the store, not a collector, as the tip
   sentence's blocker; [[D842]] needs opportunity denominators over time; Wave C's consumer
   matrix holds habit classification at **zero rows** until this exists
@@ -28,7 +36,9 @@
   `rfc/archive/learner-identity-and-authorization.md` (`learners`, cascade posture),
   `rfc/archive/game-import-and-story.md` (imported runs — this store's first population)
 - **Coordination:** `learner-rating.md` (migration order — this RFC claims the position
-  behind its two claims; and R15, whose byte-identity rule §5 extends to this store);
+  behind its two claims; and R15 — its §8 refusal and rendering-set, quoted and extended
+  to both directions of this store in §5.2 here, enforced as reachability since a
+  consumer-less store has no rendered bytes for a byte-identity fixture to compare);
   `portable-account-data.md` (the two new durable classes join its export/deletion
   inventory — Discharge D1)
 - **Parent / amends:** —
@@ -42,7 +52,9 @@ migration | position behind learner-rating | learner_observations; learner_struc
 ## Summary
 
 A per-learner, per-game store of **opportunity/outcome pairs over declared evidence**,
-phase-split, keyed by the F1 projection ids that produced them, plus the per-root
+phase-split and **decision-class-split** (played / game / predicted — action, observed
+source-game moves, and guesses never pooled by default), keyed by the F1 projection ids
+that produced them, plus the per-root
 **attempt-structure counts** (rewinds, forks, comparison groups) that every surveyed
 competitor destroys. The store is a **projection of the run event log** — derived at the
 existing attempt-projection seam, idempotent, and re-derivable byte-for-byte by a rebuild
@@ -110,7 +122,22 @@ primitives this RFC persists.
 ### 1. Vocabulary
 
 - **Decision** — a user-actor node in a run: a `Node` with `actor === "user"` and a
-  non-null parent, identified by `(parent.fen, node.moveUci)`.
+  non-null parent, identified by `(parent.fen, node.moveUci)` — **attributed to the run's
+  owner, or booked not at all** (§4.2's attribution rule; a grant holder's or seated
+  opponent's move is another learner's hand and is never the owner's observation).
+- **Decision class** — *how the learner met the decision*, a closed three-value
+  vocabulary added by the 2026-08-22 cross-review because `session_kind` alone cannot
+  carry it (one imported run mixes all three): **`played`** — a decision the owner
+  committed live (all owner-attributed user-actor nodes in `pack`/`position` runs; in
+  imported runs, the owner's rewound/forked/extension play beyond the source mainline);
+  **`game`** — a user-actor node on an imported run's source-game mainline (the historic
+  player's move for the chosen side — the store does **not** assert that player is the
+  learner; import headers are unverified); **`predicted`** — a decision evidenced by a
+  `prediction.recorded` event (`packages/runtime/src/types.ts:227`), whose "played" edge
+  is the predicted edge. Without this column, [[D860]]/[[D869]]'s prediction runs and
+  third-party imports would silently pool observation with action — the exact habit-
+  denominator corruption this store exists to prevent; a consumer that pools classes must
+  do so by explicit filter, never by default.
 - **Habit family** — one versioned F1 projection id from the ingest set (§3), e.g.
   `derived.semantic_avoidance.loose_piece` at version 1. The family **is** the F1 identity;
   this RFC invents no second taxonomy.
@@ -140,17 +167,18 @@ CREATE TABLE learner_observations (
   projection_id TEXT NOT NULL,
   projection_version INTEGER NOT NULL,
   phase TEXT NOT NULL CHECK (phase IN ('opening','middlegame','endgame')),
+  decision_class TEXT NOT NULL CHECK (decision_class IN ('played','game','predicted')),
   session_kind TEXT NOT NULL CHECK (session_kind IN ('pack','position','imported')),
   pack_id TEXT,
-  decisions INTEGER NOT NULL,             -- user decisions in this run+phase (family-independent)
+  decisions INTEGER NOT NULL,             -- owner decisions of this row's class in this run+phase (family-independent)
   opportunities INTEGER NOT NULL,         -- decisions where the family was declinable
-  occurred INTEGER NOT NULL,              -- opportunities where the played edge exhibits it
-  alternative_share_sum REAL NOT NULL,    -- Σ over decisions of (exhibiting alternatives / legal alternatives)
+  occurred INTEGER NOT NULL,              -- opportunities where the class's played/predicted edge exhibits it
+  alternative_share_sum REAL NOT NULL,    -- Σ over decisions of (exhibiting alternatives / legal alternatives); 0 for a forced move (§4.2)
   occurred_refs TEXT NOT NULL,            -- JSON array of node ids (exact drill-down, R13 invariant 2)
   opportunity_refs TEXT NOT NULL,         -- JSON array of node ids
   derived_rev INTEGER NOT NULL,
   derived_at TEXT NOT NULL,
-  PRIMARY KEY (learner_id, run_id, projection_id, projection_version, phase),
+  PRIMARY KEY (learner_id, run_id, projection_id, projection_version, phase, decision_class),
   CHECK (occurred <= opportunities),
   CHECK (opportunities > 0)
 ) STRICT;
@@ -195,13 +223,21 @@ Design notes, each load-bearing:
    alternative_share_sum/decisions` form) and opportunity density are all computable from
    one row without a second query. It is derived data inside a derived table; the equality
    instrument (§4.3) is what keeps it honest.
-4. **`session_kind` includes `'imported'` — the deliberate difference from `attempts`.**
-   The attempts CHECK excludes imported runs because a rehearsal verdict on an unauthored
-   game is meaningless; an *observation* on an imported game is the entire point of a
-   longitudinal profile (D552: "tells you all your openings"). Provenance stays a column so
-   consumers can apply [[D842]] rule 2 — drill outcomes credit *rehearsal result*, never
-   *skill possessed* — by filtering `session_kind`, and pack-selected exposure is visible
-   via `pack_id` rather than laundered into a population claim.
+4. **`session_kind` includes `'imported'` — the deliberate difference from `attempts` —
+   and `decision_class` carries what `session_kind` cannot.** The attempts CHECK excludes
+   imported runs because a rehearsal verdict on an unauthored game is meaningless; an
+   *observation* on an imported game is the entire point of a longitudinal profile (D552:
+   "tells you all your openings"). But `session_kind` is per-run and the mixing is
+   per-decision: a single imported run holds the source game's own moves (`game`), the
+   owner's rewound-and-branched rehearsal inside it (`played`), and — once [[D860]]/
+   [[D869]] lift the pack gate at `service.ts:1204` — the owner's guesses (`predicted`).
+   The class column keys the row, so the three are never summed by accident; a habit
+   denominator over `played` is action, `game` is observation whose subject identity the
+   store never asserts, and `predicted` is its own behavioral channel, landing with no
+   migration on the day solitaire ships. `session_kind`/`pack_id` still carry run
+   provenance so consumers can apply [[D842]] rule 2 — drill outcomes credit *rehearsal
+   result*, never *skill possessed* — and pack-selected exposure stays visible rather than
+   laundered into a population claim.
 5. **Anti-farming is a consumer join, with the key provided.** [[D842]] rule 3 (retries on
    one root contribute one opportunity row per distinct decision context) is enforceable by
    joining `learner_observations.run_id` to `attempts` (`attempt_no`, `origin`,
@@ -237,9 +273,13 @@ ingest population at the next `derived_rev` bump (§4.4) rather than silently or
 
 #### 4.1 The store is a projection, never a second source of truth
 
-Every row is a pure function `f(run bytes, ingest-set catalog, derived_rev)`. The run event
-log is the only authority; the store is a queryable index of it. Three consequences are
-normative:
+Every row is a pure function `f(run bytes, durable attribution records, ingest-set
+catalog, derived_rev)` — where the durable attribution records are the run's session
+journal and match seating (`session_journal`/`match_states`, for owner attribution of
+each commit) and its `imported_games` row (for the source-mainline boundary), every one
+of them a durable single-writer store the rebuild reads exactly as the incremental path
+does. The run event log is the primary authority; the store is a queryable index of it.
+Three consequences are normative:
 
 1. **No API writes rows except the deriver and the rebuild instrument.** There is no
    insert/update surface, no correction endpoint, no manual repair path. A wrong row is
@@ -263,31 +303,64 @@ A new pure function in the `projectAttempts` family:
 // apps/server/src/progress.ts (family home; exact file is the implementer's)
 export function projectObservations(input: {
   readonly run: DrillRun;
-  readonly learnerId: string;
+  readonly ownerLearnerId: string;          // the run's owner — NEVER the acting writer
+  readonly moveAuthorship: readonly MoveAuthorship[]; // deriveMoveAuthorship + match seats
+  readonly importedMainlinePlies: number | null;      // from the imported_games record
 }): {
   readonly observations: readonly ObservationRow[];
   readonly structureStats: readonly StructureStatRow[];
 }
 ```
 
-- **Decisions**: every node with `actor === "user"` and a parent, across all branches.
-  Unlike `projectAttempts`, **imported runs are included** — `sessionKind === "imported"`
-  produces rows, because a longitudinal store of native rehearsals only would repeat the
-  R13 census failure this RFC exists to fix.
+- **Attribution — the owner, or nothing.** Rows are derived for
+  `ownerLearnerId(runId)`, **never** for the acting writer. This is a pin, not a detail:
+  `RunService.#project` today receives `lease.learnerId`, and in a shared run (a live
+  session with a board grant, a match with a seated opponent — `#matchMoveOptions`
+  assigns `actor: "user"` to whoever holds the start side) the writer is not the owner.
+  Wiring the writer in would attribute another learner's moves to whichever hand last
+  persisted, and rebuild — which reads `owner_learner_id` — would silently disagree.
+  Per-commit authorship derives from the durable records the platform already keeps:
+  `deriveMoveAuthorship` (`apps/server/src/live-session.ts:18`) over the session journal,
+  plus `match_states` seating for match runs. A user-actor decision whose commit is
+  attributed to a non-owner produces **no row** — another learner's hand is neither the
+  owner's action nor the owner's opportunity. A run with no session journal attributes
+  every commit to the owner, which is today's single-player truth.
+- **Decisions**: every owner-attributed node with `actor === "user"` and a parent, across
+  all branches. Unlike `projectAttempts`, **imported runs are included** — `sessionKind
+  === "imported"` produces rows, because a longitudinal store of native rehearsals only
+  would repeat the R13 census failure this RFC exists to fix.
+- **Decision class** (§1): in `pack`/`position` runs every decision is `played`. In an
+  imported run, a user-actor node is `game` iff it lies on the primary branch
+  (`run.branches[0]`) at a ply within the source mainline — the boundary is
+  `importedMainlinePlies`, the move count of the immutable `imported_games` record's
+  movetext (never inferred from timestamps), so an owner extension past a resigned
+  game's tip books `played`, not `game`. A `predicted` decision is the **first**
+  `prediction.recorded` event per `(nodeId, checkpointId)` — the untutored guess; later
+  re-predictions at the same checkpoint are event-log history, not additional decisions
+  (the [[D842]]-rule-3 discipline applied to guessing). Its population is
+  `{predicted edge} ∪ legalAlternativeEdges(node.fen, predictedUci)` and its occurrence
+  edge is the predicted edge; phase is `classifyPhase(node.fen)`.
 - **Per decision**: population = played edge plus
   `legalAlternativeEdges(parent.fen, node.moveUci)`
   (`packages/runtime/src/semantic-evidence.ts:304`); events per edge via
   `localSemanticEvents` (`semantic-evidence.ts:263`); phase via `classifyPhase(parent.fen)`.
-  For each ingested family: opportunity if any edge exhibits it; occurrence if the played
-  edge does; `alternative_share_sum` accumulates exhibiting-alternatives ÷
-  legal-alternatives for the decision.
+  For each ingested family: opportunity if any edge exhibits it; occurrence if the
+  class's played/predicted edge does; `alternative_share_sum` accumulates
+  exhibiting-alternatives ÷ legal-alternatives for the decision. **A forced move**
+  (`legalAlternativeEdges` empty) **contributes 0 to the sum** — the only pinnable
+  reading of 0/0 that keeps R12's share-residual form finite — and can still be an
+  opportunity and occurrence through its own edge.
 - **Aggregation**: rows keyed `(learner, run, family, phase)` per §2; structure stats per
   §2's event-to-root attribution — an event belongs to the root of the branch it names
   (`run.rewound.branchId`; `branch.forked`'s new branch; `group.created.sourceNodeId`'s
   node branch; `outcome.reached.nodeId`'s node branch), where a branch's root is its
   `forkNodeId` node, exactly as `projectAttempts` resolves roots.
-- **Determinism**: output ordering is canonical (sorted by primary key); two calls over the
-  same run bytes are byte-identical.
+- **Determinism**: output ordering is canonical (sorted by primary key), and — because
+  `alternative_share_sum` is a REAL whose value depends on float summation order —
+  **accumulation order is pinned too**: decisions accumulate in ascending event `seq`
+  (node commit order). Two calls over the same inputs are byte-identical, and the
+  incremental and rebuild paths share the one function, so equality never depends on two
+  implementations agreeing.
 
 #### 4.3 Writing, and the rebuild instrument
 
@@ -298,16 +371,28 @@ projection. Whole-run replace makes the write **idempotent and order-independent
 final state after any sequence of persists equals a single derivation over the final run
 bytes. The seam fires on every run mutation persist, which subsumes run close
 (`outcome.reached` arrives through the same persist path); no separate close hook exists
-to drift from.
+to drift from. **The transactionality boundary, stated rather than implied:** the replace
+transaction is atomic *within itself* but is a separate transaction from the run persist
+it follows. In-process this window is unreadable — the storage connection is synchronous
+and the seam runs in the same call chain as the persist, so no request observes a run
+whose observations are mid-replace — and concurrent branch closes on one run are
+serialized commits whose later projection covers both. What remains is the crash between
+persist and projection: stale rows for exactly that run, which the default-mode rebuild
+names (AC-5's missing/stale-run fixture) and `--write` repairs, and which no reader can
+be misled by at landing because no consumer exists (AC-9). A future consumer RFC that
+cannot tolerate the crash window moves the replace into the run-persist transaction; the
+contract here is equality-or-detectably-behind, never a second truth.
 
 **The rebuild instrument.** A `make longitudinal-rebuild` target running a server-side
 script (entry `apps/server/src/longitudinal-rebuild.ts`, in the family of the migration-6
 replay body at `storage.ts:3150-3165`, which already demonstrates replaying every stored
 run through a projection):
 
-- default mode: derive `projectObservations` over every run in `drill_runs`, compare the
-  canonical serialization against stored state, **exit non-zero naming every divergent
-  row**;
+- default mode: derive `projectObservations` over every run in `drill_runs` — joined to
+  the same durable attribution records the incremental path reads (§4.1): the run's
+  session journal, match seating, and `imported_games` row — compare the canonical
+  serialization (stored rows read in primary-key order) against stored state, **exit
+  non-zero naming every divergent row**;
 - `--write`: replace stored state with the derived state in one transaction.
 
 **Byte-equality is the contract**: incremental state and rebuilt state must be identical,
@@ -333,8 +418,14 @@ version; this store's ingest set is deliberately not frozen.)
 
 `OBSERVATION_DERIVATION_REV`, an exported integer literal, stamped on every row. Bumping
 it is **required** whenever the derivation function or the ingest set changes meaning, and
-a bump obligates a rebuild (`--write`) before the equality criterion can pass again. Rows
-therefore never mix revisions silently: the instrument fails until the store is coherent.
+a bump obligates a rebuild (`--write`) before the equality criterion can pass again. The
+honest limit of that guarantee: an *unbumped* semantic change passes AC-5 trivially — both
+sides of the equality run the new code — and leaves production rows stale under an
+unchanged rev until an operator happens to rebuild. The rev is therefore held by a fixture
+rather than by discipline alone: **AC-11 commits the pair `(fixture-corpus derivation
+digest, OBSERVATION_DERIVATION_REV)` as one literal**, so any change to derivation output
+fails a test and forces the author to touch the line that names the rev — an unbumped
+change becomes a diff-visible refusal instead of a silent mix.
 Together with the projection version in the key, this is R13 invariant 7 (versioned
 recomputation — classifier improvements do not rewrite old claims invisibly) in storage
 form: a producer's semantic change arrives as `projection_version` N+1 rows under a new
@@ -388,7 +479,8 @@ Extended here to both directions of this store, as the dossier's edge 6 requires
 
 #### 5.3 No LLM output, no prose, no verdict (law 8)
 
-Every column is an id, count, share-sum, ref array, revision or timestamp. **There is no
+Every column is an id, closed-vocabulary token, count, share-sum, ref array, revision or
+timestamp. **There is no
 sentence column, no label column, no verdict column** — the same "no column any renderer
 reads" property `learner-rating` §10.1 establishes for its tables, here with the stronger
 consequence that LLM text has no cell it could occupy. The derivation reads rules-grounded
@@ -412,6 +504,7 @@ No production code reads these tables at landing except the rebuild instrument. 
 observations(learnerId: string, filter?: {
   readonly projectionIds?: readonly string[];   // family ids, versions in-key
   readonly phases?: readonly ("opening" | "middlegame" | "endgame")[];
+  readonly decisionClasses?: readonly ("played" | "game" | "predicted")[];
   readonly sessionKinds?: readonly ("pack" | "position" | "imported")[];
   readonly since?: string;                      // derived_at lower bound
 }): readonly ObservationRow[];
@@ -535,7 +628,17 @@ as absence, never approximated.
 
 ## Deviations from design
 
-None. The store implements the dossier's §6 edge 1 and R13 §2's ledger shape as specified.
+One addition beyond the dossier, from the 2026-08-22 cross-review: the **`decision_class`
+key column** (§1, §2). The dossier's aggregates assume the learner's own play; the shipped
+event stream also carries source-game moves (imported mainlines, `importGame` commits them
+with `actor: "user"` for the chosen side) and predictions ([[D860]]), and a store poured
+without the distinction could never add it to already-derived history without a rev bump
+it had no column for. R13 §3's module split (observed habit / recurring situation /
+rehearsal result) is the same distinction one tier up, so this is the dossier's own
+posture pushed into the key rather than a departure from it.
+
+Otherwise none. The store implements the dossier's §6 edge 1 and R13 §2's ledger shape as
+specified.
 Two boundaries are tighter than the research proposed, not looser: R13 invariant 5's
 applicability join (theory/pack ids on each observation) is left to F7's exact join rather
 than stored here (the refs and `pack_id` carry the join keys), and R13's "measured value +
@@ -553,12 +656,19 @@ negative fixture where it could otherwise pass vacuously.
   number from this document); the literal assertion in `live-session.test.ts` is updated.
   Negative fixture: a migration body that also rewrites a `drill_runs` row fails the diff
   test.
-- **AC-2 (derivation, positive and honest-empty).** A fixture run with hand-computed
-  decisions yields exactly the expected `learner_observations` rows (values and refs); an
-  `imported` fixture run yields rows with `session_kind='imported'`; a fixture where a
-  family has zero opportunities yields **no row** for that family, and the suite asserts
-  the absence (not merely fails to assert presence). Negative fixture: a row with
-  `opportunities = 0` is rejected by the schema CHECK.
+- **AC-2 (derivation, positive and honest-empty, and the class split).** A fixture run
+  with hand-computed decisions yields exactly the expected `learner_observations` rows
+  (values and refs); an `imported` fixture run **containing a learner fork** yields
+  source-mainline rows with `decision_class='game'` and forked-branch rows with
+  `decision_class='played'`, asserted separately with hand-computed counts for each; a
+  fixture with a `prediction.recorded` event yields a `predicted` row whose occurrence
+  edge is the predicted move, and a second prediction at the same `(nodeId,
+  checkpointId)` changes nothing; a live-session fixture in which a **grant holder**
+  commits a user-actor move yields **no row for that decision** (owner attribution,
+  §4.2), and the suite asserts the absence; a fixture where a family has zero
+  opportunities yields **no row** for that family, and the suite asserts the absence (not
+  merely fails to assert presence). Negative fixture: a row with `opportunities = 0` is
+  rejected by the schema CHECK.
 - **AC-3 (structure stats).** A fixture run containing `run.rewound`, `branch.forked`,
   `group.created` and `outcome.reached` events across two roots yields per-root counts
   matching hand attribution per §4.2. Negative fixture: an event attributed to the wrong
@@ -567,13 +677,16 @@ negative fixture where it could otherwise pass vacuously.
   byte-identical store state; persisting a run incrementally (mid-run, then final) equals
   a single derivation over the final bytes. Negative fixture: a writer that appends
   instead of replacing fails the second comparison.
-- **AC-5 (rebuild equality — the instrument can fail).** Over a fixture corpus,
-  incremental state equals `longitudinal-rebuild`'s derived state byte-for-byte; after
-  tampering one stored row, the instrument exits non-zero and names the row; after
-  `--write`, equality holds again. The tamper fixture is mandatory — an equality check
-  that has never failed is [[D444]]'s class.
+- **AC-5 (rebuild equality — the instrument can fail).** Over a fixture corpus that
+  includes an imported run, a shared run written by a non-owner, and a prediction run,
+  incremental state equals `longitudinal-rebuild`'s derived state byte-for-byte. Three
+  mandatory red fixtures, because an equality check that has never failed is [[D444]]'s
+  class: tampering a **count** and tampering a **refs-array element** (data, not just
+  totals) each make the instrument exit non-zero naming the row; deleting one run's rows
+  entirely (the §4.3 crash shape) is likewise named. After `--write`, equality holds
+  again.
 - **AC-6 (reachability, both R15 directions and the R12 pin).** A module-graph test in
-  AC-11's shape asserts: (a) no module in the rendering set (`guard.ts`,
+  the shape of `learner-rating.md`'s AC-11 asserts: (a) no module in the rendering set (`guard.ts`,
   `guard-conditions.ts`, `voice.ts`, `outcome-presentation.ts`, `feedback.ts`,
   `objective.ts`) imports the store/derivation modules; (b) the store/derivation modules
   import no rating module and no provider/LLM module; (c) `classroom.ts` and any
@@ -594,6 +707,13 @@ negative fixture where it could otherwise pass vacuously.
 - **AC-10 (closed column set).** A schema-reflection test asserts both tables' column
   lists equal the §2 lists exactly — the no-prose-column pin (§5.3) as a diff-visible
   gate. Negative fixture: adding a `sentence` column fails it.
+- **AC-11 (rev discipline is a fixture, not a promise — §4.4).** One committed literal
+  pairs the canonical-serialization digest of the derivation over AC-5's fixture corpus
+  with `OBSERVATION_DERIVATION_REV`; a test derives at current code and asserts the pair.
+  Any semantic change to the derivation or the ingest set changes the digest and fails the
+  test, forcing the author to edit the literal that names the rev in the same diff.
+  Negative fixture: recompute the digest with one predicate inverted and assert the pair
+  no longer matches.
 
 ## Discharges
 
@@ -611,25 +731,56 @@ negative fixture where it could otherwise pass vacuously.
    population), yes as the first post-landing rev bump once that definition is written.
    Resolve before `accepted`.
 2. **Bulk-import scale.** A learner importing thousands of games multiplies rows by
-   (families × phases) per game. Rows are small and per-run, and SQLite is ratified for
-   this deployment shape, but no measurement exists. Proposal: accept without a cap;
-   measure on the owner's own import corpus ([[D649]]) and let a future consumer RFC add
-   windowing if reads demand it. Resolve or explicitly defer before `accepted`.
+   (families × phases × classes) per game — the ingest set is **40 families** at HEAD (11
+   structural + 13 transition + 11 avoidance + 3 tactical + 1 castling + 1 exchange), so
+   the per-run ceiling is ~120 family rows per class — and the honest cost term is not
+   the counts but the **refs arrays**: `opportunity_refs` can hold every decision of a
+   long game per firing family, so a dense family costs O(decisions) per row and a bulk
+   import is O(games × families × decisions) bytes in the worst case, not "small rows."
+   SQLite is ratified for this deployment shape, but no measurement exists. Proposal:
+   accept without a cap; measure on the owner's own import corpus ([[D649]]) — refs bytes
+   specifically, not just row counts — and let a future rev move refs to a side table or
+   window them if the measurement demands it (a rev bump and rebuild, not a data loss).
+   Resolve or explicitly defer before `accepted`.
 3. **Who bumps `derived_rev`.** Proposal: any RFC that changes the derivation or the
    ingest set names the bump and the rebuild in its own acceptance criteria (the pattern
    §4.4 assumes); a bump outside an RFC is a defect. Resolve before `accepted`.
 
-## Proposed ledger rows (from the verified head D926; proposed, not written)
+## Ledger rows
 
-- **D929** — `longitudinal-store.md` drafted: the [[D842]]/[[D844]]/Wave-C blocker routed
-  as a storage projection of the run event log — per-run opportunity/outcome pairs keyed
-  by F1 projection ids, phase-split, with a byte-equality rebuild instrument; no
-  learner-facing surface; migration position claimed behind `learner-rating`.
-- **D930** — pin: future longitudinal consumers (F6/F9, [[D882]], [[D893]], [[D865]])
-  read the store only through the typed learner-scoped contract and each registers its own
-  F1 consumer; direct table reads are AC-9's census failure. The R15/R12 privacy pins live
-  at that chokepoint.
+**Written 2026-08-22** as **D929** (drafted: the blocker routed as a projection of the
+event log) and **D930** (pin: consumers read only through the typed learner-scoped
+contract, each registering its own F1 consumer; the R15/R12 pins live at that chokepoint).
+The cross-review found `design/BACKLOG.md` at HEAD carries a **D929 collision** — a
+separate `promotion_pressure` absence-semantics row (tactical/semantic seam) also landed
+as D929 — which the ledger owner resolves by renumbering the later row (proposed: D931),
+exactly as the earlier D925→D927 collision resolved. Proposed by this review, from the
+head after that renumbering and **not yet written**:
+
+- **D932** — `longitudinal-store.md` cross-review correction: the observation grain gains
+  `decision_class ∈ {played, game, predicted}` in the key, with owner-only attribution
+  over the durable session-journal/match-seat records — `session_kind` alone cannot
+  separate the source game's moves, the learner's rehearsal inside an imported run, and
+  [[D860]]/[[D869]] predictions, and pooling them silently is the habit-denominator
+  corruption the store exists to prevent.
 
 ## Changelog
 
 - 2026-08-22: created.
+- 2026-08-22: adversarial cross-review (claude, independent of the author). Blockers
+  fixed in place: (1) `decision_class ∈ {played, game, predicted}` added to the
+  observation key with owner-only attribution derived from the durable session
+  journal/match seating and the `imported_games` mainline boundary — as drafted, imported
+  mainline moves (`actor:"user"` by `importGame`'s side rule), the learner's own forked
+  play in the same run, and future [[D860]]/[[D869]] predictions were indistinguishable,
+  and shared-run writes would have attributed a grant holder's or seated opponent's
+  moves to whichever learner last persisted while the rebuild attributed to the owner —
+  byte-equality was unsatisfiable as specified; (2) §4.3 states the real transactionality
+  boundary (replace is atomic but separate from the run persist; crash window detected by
+  rebuild, unreadable at landing); (3) §4.4's "never mix revisions silently" narrowed to
+  its true scope and held by the new AC-11 digest+rev pair fixture; (4) accumulation
+  order and the forced-move 0/0 case pinned for byte-determinism of the REAL column; (5)
+  AC-2/AC-5 fixtures extended (class split, grant-holder absence, refs-element tamper,
+  crash-shape deletion); (6) open question 2 re-costed — refs arrays, not row counts, are
+  the size term; (7) ledger section reconciled: D929/D930 landed, the HEAD D929 collision
+  named, D932 proposed for the grain amendment.
