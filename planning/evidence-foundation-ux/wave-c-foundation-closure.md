@@ -67,23 +67,26 @@ Test the concepts independently; do not create a catch-all `tactic` enum.
 
 - **Defender removal:** a named defender ceases a named duty and the same target becomes legally
   and locally positively capturable within the declared horizon.
-- **Deflection/attraction:** quantify the complete relevant reply set and retain exact relocation,
-  duty and target identities; observed order alone does not establish the name.
-- **Overload:** one defender has at least two retained duties and the challenging continuation
-  proves that the declared reply population cannot preserve both.
+- **Deflection/attraction:** retain exact relocation, duty and target identities plus the observed
+  consequence. Quantify the complete relevant reply set only when the claim says forced or
+  unavoidable.
+- **Overload:** one defender has at least two retained duties and an exact continuation exploits
+  the duty conflict. A complete-reply variant is a stronger separate claim, not the admission floor
+  for the basic name.
 - **Interference/clearance:** retain the changed ray, blocker, target and bounded consequence;
   opened geometry without an affected target is only an operand.
 - **Zwischenzug/quiet threat:** retain the expected recapture/reply population, intervening edge
   and exact consequence without importing “best,” “forced” or intent.
 
 Instrument requirements: canonical positives from cited published lines, constructed hard
-negatives, color/file mirrors, capture/promotion identity checks, complete-reply enumeration and a
-fixed imported population. Lichess themes are a disagreement corpus only; its published tagger has
+negatives, color/file mirrors, capture/promotion identity checks, complete-reply enumeration for
+the claims that quantify replies, and a fixed imported population. Lichess themes are a disagreement corpus only; its published tagger has
 no working overload oracle. Report prevalence, abstention and disagreement separately. Zero
 witnesses is a valid result.
 
-**Falsifier:** a label fires from geometry alone, loses a subject identity, calls an observed reply
-forced, or cannot name a consumer that acts differently on it.
+**Falsifier:** a label fires from geometry alone without the relation its name asserts, loses a
+subject identity, calls an observed reply forced, or cannot name a consumer that acts differently
+on it. Lack of all-reply survival does not falsify a correctly phrased observed event.
 
 ### C2 — king and promotion consequences
 

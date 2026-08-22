@@ -4544,3 +4544,14 @@ finds, over 6,775 imported triples, 26 defender removals, 13 relocations, 5 over
 23 clearances and 3 interferences; 6,667 quads contain 7 exact check-zwischenzugs. All six families
 have zero authored-path witnesses. These numbers prove computability and fixture debt, not force,
 intent or value. The counterfactual/live-support arm remains next.
+
+## 2026-08-22 — Wave-C Stage 2 refutes all-reply survival as the tactic-name floor
+
+The complete-one-reply arm finds exact initiations at real scale—authored/imported defender removal
+46/87 rows, clearance 24/42 and interference 0/3—but the same retained target survives every legal
+reply in only 1 imported removal and zero other cells. Requiring that proof before naming the basic
+event would suppress the whole semantic layer. The corrected contract separates exact relation
+events from reply-qualified consequences: “removed this defender/cleared this ray/interfered with
+this defence” is grounded by retained operands; “persistent/unavoidable under every reply” requires
+the rare stronger projection. Support may show the first at its allowed answer distance without
+giving a move; the module ceiling governs presentation.

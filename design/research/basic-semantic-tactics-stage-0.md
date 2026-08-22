@@ -4,8 +4,8 @@
 mating patterns and promotion threats optional “deep” analysis, or missing basic classifier
 foundation—and what evidence horizon do they require?
 
-**Status:** partial `[V]`; external population/upstream tagger audited and exact observed-sequence
-prerequisites measured; complete-reply/counterfactual semantics remain Stage 2.  
+**Status:** partial `[V]`; external population/upstream tagger, exact observed sequences and the
+complete-one-reply boundary measured; external agreement plus king/promotion arms remain.
 **Instrument:** `tools/d872-semantic-tactics-harness/`  
 **Authority:** D872 / evidence-foundation Wave C
 
@@ -177,14 +177,51 @@ This arm changes the implementation boundary:
 `[M]` These are foundation primitives because they feed Support, Review, drills and bots. Their
 rarity only prevents default-volume assumptions; it does not demote the capability.
 
-## 7. Next research
+## 7. Stage-2 result: complete-reply survival is a strength modifier, not the tactic floor
+
+The counterfactual arm detects exact defender-removal, clearance and interference **initiations**
+on a played edge, enumerates every legal opponent reply, and asks whether the same retained target
+is still positively capturable after every reply. A positive and a refutable canonical target pass.
+`[V]` (`tools/d872-semantic-tactics-harness/counterfactual.test.ts`)
+
+| population | family | initiating rows / witnesses | all-reply rows / witnesses |
+|---|---|---:|---:|
+| authored played edges | defender removed | 46 / 66 | **0 / 0** |
+| authored played edges | clearance | 24 / 26 | **0 / 0** |
+| authored played edges | interference | 0 / 0 | **0 / 0** |
+| imported played edges | defender removed | 87 / 138 | **1 / 1** |
+| imported played edges | clearance | 42 / 42 | **0 / 0** |
+| imported played edges | interference | 3 / 3 | **0 / 0** |
+
+`[V]` The sole imported all-reply witness is pinned in
+`tools/d872-semantic-tactics-harness/counterfactual-output.md`.
+
+This refutes **all-reply survival as a universal admission requirement for the basic semantic
+name**. It would suppress every authored initiation and virtually the entire imported population.
+That is the same error as requiring `fork_survives_reply@1` before saying an exact meaningful
+double attack occurred. `[M]`
+
+Instead, the semantic contract has two independent levels:
+
+1. **Exact event:** the named relation and identities hold—e.g. this move captured a defender and
+   removed its duty; this move vacated the only blocker on a named slider→target ray; this move
+   entered the between-set and broke the named defence. This can ground factual post-commit and
+   Review language without asserting inevitability.
+2. **Reply-qualified consequence:** the exact target remains available under some/all declared
+   replies. This earns stronger words such as persistent or unavoidable at that horizon and will be
+   rare.
+
+`[M]` Pre-commit Support can evaluate the candidate and display the exact relation at level 1
+without giving a move or promising success. It may add level 2 only when the counterfactual
+predicate holds. The module—not the collector—chooses whether that amount of information is allowed.
+
+## 8. Next research
 
 1. Compare the five externally represented observed families against Lichess as disagreement, reporting
    precision/recall only as agreement metrics.
-2. Build overload's complete-reply form from cited canonical positions and synthetic controls;
-   report it separately from the observed five-case convention.
-3. Implement and price complete-reply/counterfactual variants for live Support.
-4. Add mating-pattern and promotion-consequence arms; do not fold them into defender/line labels.
-5. Admit, narrow or refuse every family independently; then update the Wave-C consumer matrix.
+2. Add a reply-qualified overload form separately from the observed five-case convention; do not
+   make it the basic label's floor.
+3. Add mating-pattern and promotion-consequence arms; do not fold them into defender/line labels.
+4. Admit, narrow or refuse every family independently; then update the Wave-C consumer matrix.
 
 No production detector, learner sentence, content edit or RFC is authorized by this Stage-0 result.
