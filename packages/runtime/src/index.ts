@@ -39,6 +39,33 @@ export { consumeShapeFiring, declareShapeFiringEvidence, shapeFiringEvidence, sh
 export { classifyPhase, developmentReading, isDevelopmentHome, renderPhaseReading, DEVELOPMENT_CONVENTION, DEVELOPMENT_HOMES, ENDGAME_MATERIAL_MAX, DEVELOPED_MATERIAL_MIN, OPENING_UNDEVELOPED_MIN, MIDDLEGAME_UNDEVELOPED_MAX, PHASE_PROVENANCE, type DetectedPhase, type DevelopmentReading, type PhaseReading } from "./phase.js";
 export { backRankReading, defenderDutyReading, defenderDutyRelocatedEvents, defenderRemovedEvents, discoveredExecutedEvents, discoveredLatencyReading, loosePieceEvents, loosePieceReading, mateInOne, overloadedDefenderResponseConflict, promotionPressureReading, rayClassificationReading, rookOnSeventhReading, trappedPieceReading, BACK_RANK_CONVENTION, DEFENCE_DUTY_CONVENTION, TRAPPED_CONVENTION, type BackRankReading, type DefenderDuty, type DefenderDutyReading, type DefenderDutyRelocatedEvent, type DefenderRemovedEvent, type DiscoveredExecutedEvent, type DiscoveredLatencyReading, type GainedSliderRay, type LoosePieceEvent, type LoosePieceEventResult, type LoosePieceReading, type LoosePieceState, type MateInOneReading, type OverloadedDefenderConflict, type OverloadedDefenderConflictResult, type PromotionAvailability, type PromotionPressureReading, type RayClassification, type RayClassificationKind, type RayClassificationReading, type RookOnSeventhReading, type TrappedPieceReading, type TrappedPieceState } from "./tactics.js";
 export { forcedMateAfterMove, MATE_PROOF_CONVENTION, MATE_PROOF_NODE_CAP, type ForcedMateAfterMoveProof, type ForcedMateAfterMoveResult, type MateProofStatus } from "./mate-proof.js";
+export {
+  MODULE_ANSWER_IMAGE,
+  MODULE_CONTRACT_ERROR_CODES,
+  MODULE_FORM_IMAGE,
+  MODULE_IDS,
+  MODULE_TIMING_IMAGE,
+  ModuleContractError,
+  compileModuleRegistry,
+  type CompiledModuleRegistry,
+  type ModuleAcceptanceDeclaration,
+  type ModuleAnswerCeiling,
+  type ModuleAnswerContract,
+  type ModuleBudgets,
+  type ModuleCeilings,
+  type ModuleContractErrorCode,
+  type ModuleDeclaration,
+  type ModuleEmptyBehavior,
+  type ModuleEvidenceClosure,
+  type ModuleEvidenceDeclaration,
+  type ModuleForm,
+  type ModuleId,
+  type ModuleInitiative,
+  type ModuleSeatClass,
+  type ModuleSelectionDeclaration,
+  type ModuleTiming,
+  type ModuleTimingDeclaration,
+} from "./module-contract.js";
 export { SILENT_ASSISTANCE, permittedAssistance, reviewingGrant, type AssistanceConfig, type AssistanceContext, type AssistancePermission } from "./assistance.js";
 export { consumePivotalMarkers, liveAdmitted, liveMarkers, pivotalMarkerEvidence, pivotalMarkers, renderPivotalMarker, type PivotalKind, type PivotalMarker, type IrreversibilityDetail, type PhaseChangeDetail, type DivergenceDetail, type CollapseDetail } from "./pivotal.js";
 export {

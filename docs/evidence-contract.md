@@ -96,6 +96,22 @@ an exported sealed-view consumer rather than at copy or a DOM attribute.
 F1 answers eligibility and traceability only. Relevance/lift selection, semantic event valence,
 presets, workflows, theory retrieval, and content migration belong to their later RFCs.
 
+## Learner-module contract foundation
+
+The runtime exports a closed eleven-id learner-module vocabulary and a compiler for the complete
+thirteen-field contract: intent/action, evidence acceptance, timing/initiative, answer contract,
+disclosure/session/role ceilings, overflow budgets, policy/precedence, honest-empty behavior,
+seat, forms, and deterministic rendering. It also types `at_commit` as distinct from pre- and
+post-commit, pins the module-to-evidence timing/form/answer images, enforces the three progressive
+hint stages, preserves visible-board assistance parity, permits exactly one board-adjacent module,
+and refuses pre-commit avoidance evidence or an avoidance fact without its denominator.
+
+No production module declarations or consumers compile yet. D965–D968 hold four contract holes in
+the accepted RFC: an incomplete Appendix-B enumeration with a nonexistent projection, undefined
+reducer identity/window/scope, absent literal role/session/disclosure ceilings, and an ambiguous
+“maximum” answer-distance image. The compiler can advance independently; filling those policy
+values in code would invent learner-facing access and selection behavior.
+
 ## Breadth collector inventory
 
 The second collector wave adds eight producers and eighteen closed projections without adding a
