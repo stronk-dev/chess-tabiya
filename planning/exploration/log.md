@@ -4802,3 +4802,22 @@ silence and all 18 catalogue ids.
 
 **Next:** after the tactical closeout, execute B1–B5 without another research or authoring round,
 then open the accepted semantic-collector implementation.
+
+## 2026-08-22 — the basic semantic wave has an execution queue
+
+**What landed:** checked semantic-collectors Appendix A against the compiled catalogue; all 14 ids
+remain absent. Added a five-slice implementation plan covering defender duties, observed
+deflection/attraction/clearance/interference/zwischenzug, overload, bounded mate proof, promotion
+races and manifest/measurement closeout.
+
+**What changed:** “basic tactic” and “cheap computation” are no longer conflated. Most of the wave
+is exact state arithmetic or two-to-five-edge recorded joins. Mate is bounded-tree-priced because
+the semantic name requires a proof rather than suggestive king-zone geometry; that cost class does
+not make mating nets an optional advanced feature. The consumer handoff is also explicit: modules
+choose significance/disclosure, while collectors never dump prose or ask an LLM to discover facts.
+
+**Blocked:** production waits on Tactical, Breadth and the D931 independent seam review; there is no
+remaining owner question for the 14 registered ids.
+
+**Next:** execute S1–S5 immediately after the two prerequisite collector closeouts, then bind the
+landed ids into modules, Review, bots and longitudinal analysis through their separate contracts.
