@@ -4783,3 +4783,22 @@ RFC status; this planning pass does not waive it.
 
 **Next:** run that independent review, implement the mapped ten, and immediately open the accepted
 breadth collector wave.
+
+## 2026-08-22 — breadth no longer needs a second planning pause
+
+**What landed:** checked the accepted breadth-collectors Appendix A against the compiled catalogue:
+all 18 ids are absent, so its implementation remains one closed wave. Added the dependency-safe
+five-slice execution plan at
+`planning/evidence-foundation-ux/breadth-collectors-implementation.md`, covering control/mobility,
+pawn state and sequences, defender consequences, material/king/activity operands, and manifest /
+measurement / lifecycle closure.
+
+**What changed:** tactical completion can now flow directly into breadth implementation. The plan
+pins every existing authority that must be consumed instead of recomputed, the typed clone
+abstentions, identity-retaining sequence boundaries, exact production-site census, learner-surface
+silence and all 18 catalogue ids.
+
+**Blocked:** only by the accepted RFC's declared dependency on the complete tactical landing.
+
+**Next:** after the tactical closeout, execute B1–B5 without another research or authoring round,
+then open the accepted semantic-collector implementation.
