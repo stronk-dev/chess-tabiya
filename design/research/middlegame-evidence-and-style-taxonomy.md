@@ -371,6 +371,20 @@ one weakens across horizon and immediate conversion appears in only 0/622 author
 imported three-edge windows. Candidate status can ground structure/theory modules; it cannot supply
 the plan or timing verdict.
 
+### 4.9 One-reply enumeration mostly rejects “forcing”
+
+D794 enumerates the complete legal reply set and tests retained positive-capture and moved-piece
+double-attack consequences over the same two populations. `[V]` (`bounded-reply-semantics.md`;
+`tools/d794-bounded-reply-harness/output.md`)
+
+Reply breadth is exact but corpus-shaped: authored packs average 27.08 replies and imported human
+decisions 34.45; exactly-one-reply occurs 5.16% versus .52%, with the authored non-check cases
+concentrated in mating technique. Generic positive-capture threats occur on 18.67%/38.17% of
+eligible played moves and sit near background (.91×/1.04×), while the same threat survives every
+reply only 1/0 times. Meaningful double attacks occur 10/29 times, but the RFC's all-reply fork
+consequence survives only **0/10 and 2/29**. Exact reply sets/refutations are a reusable primitive;
+“forcing,” unavoidable, best and winning remain unproved.
+
 ---
 
 ## 5. From evidence to player habits—not invented personalities

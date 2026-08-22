@@ -4388,3 +4388,17 @@ candidate→passed on the next own move 0/1. The foundation therefore admits exa
 operands and retained identities, while refusing break timing, favorable liquidation, breakthrough
 and plan prose. Three focused tests pass; no production or authored content changed. Phase 2b now
 has 49 one-edge probes and remains open only for bounded reply/search semantics.
+
+## 2026-08-22 — bounded replies close Phase 2b by making “forcing” narrower
+
+D794 enumerated every legal reply over 717 authored and 577 sealed imported decisions plus 38,461
+alternatives. Reply breadth is exact but population-shaped (played means 27.08/34.45;
+only-reply 5.16%/.52%). Generic positive-capture threats are background (.91×/1.04×) and the same
+threat survives every reply only 1/0 times. Meaningful moved-piece double attacks occur 10/29 times;
+the RFC's all-reply consequence survives 0/2.
+
+The result admits a shared exact reply/refutation object and refuses “forcing,” unavoidable, best,
+winning and deeper inevitability. Four focused tests pass, including positive/refutable fork and
+threat controls. The full research pass costs ~.26/.39 ms per candidate edge in the disposable
+harness. No production or authored content changed. Phase 2b is complete; next work is reconciling
+these residuals into the collector RFC and its executable queue.
