@@ -5417,3 +5417,20 @@ consumer operations enter through compiled evidence views with bare-payload nega
 **What changed:** four false-open rows stop competing with real foundation work. D574's historical
 schema-identity incident remains open because correcting today's description cannot rewrite a past
 artifact; D576/D578 remain contract/RFC work rather than being smuggled into this direct repair.
+
+## 2026-08-22 — bot-policy request seam fails closed before the roster
+
+**What landed:** the selector request grammar now carries an optional exact compiled profile triple,
+valid only on `human_common`, mutually exclusive with all three legacy policy authorities, and
+verified against a supplied compiled catalog. Profile identity joins the selection cache key. The
+production catalog remains empty, so production profile requests are refused rather than silently
+playing ordinary Maia under a profile name.
+
+**Verification:** the opponent-selector suite is 41/41 and the server TypeScript project is clean.
+Fixtures cover exact acceptance, digest mismatch, wrong mode, all three two-authority collisions,
+and cache separation. The RFC/register move to `implementing`; no schema lane or migration is
+claimed at this checkpoint because the persisted run seam has not landed.
+
+**Next:** D969/D970 still require Claude/owner amendment before the guarded roster. Continue the
+unblocked persisted-profile and typed selection-record work only when its claimed migration order
+is free; do not invent the probe, mate score frame, or band list.

@@ -25,3 +25,10 @@ empty `BOT_POLICY_PROFILES`: D970 must pin the concrete band/profile roster, whi
 must pin the Stockfish candidate-pricing and typed mate contract before guarded profiles
 can compile. Until those contracts land, the existing `human_common` behavior is
 unchanged and no UI may advertise the new roster.
+
+The selector request boundary already admits the eventual compiled identity as exactly
+`{id, version, digest}`. It is valid only for `human_common`, cannot be combined with the
+legacy `targetElo`, `temperature`, or `topP` authorities, and must match an exact compiled
+catalog entry. The triple is part of the selection-cache identity. Because the production
+catalog is deliberately empty, every profiled production request currently fails closed;
+the selector never treats an unexecuted profile as ordinary Maia while claiming otherwise.

@@ -17,11 +17,16 @@ import {
   consumeOpponentSelectionEvidence,
   neutralTiebreakKey,
   OpponentSelector,
+  parseSelectMoveRequest,
   selectionCacheKey,
   type SelectMoveRequest,
   type SelectorEngineClient,
   type SelectorSpineNode,
 } from "./opponent-selector.js";
+import {
+  compileBotProfile,
+  type BotProfileDeclaration,
+} from "./bot-policy-catalog.js";
 
 if (false) {
   // @ts-expect-error opponent selection accepts only a compiled provider-evidence view.
@@ -40,6 +45,35 @@ import { DEFAULT_MAIA_IMAGE, MAIA3_MODEL_ID } from "./maia.js";
 
 const at = "2026-08-12T18:00:00.000Z";
 const digest = `sha256:${"4".repeat(64)}`;
+
+const testBotProfile = compileBotProfile({
+  id: "human-baseline-test",
+  version: 1,
+  layers: [
+    {
+      id: "model.maia3-test@1", kind: "human_policy_model", inputs: ["provider.maia.raw_policy"], effect: "base_distribution",
+      parameters: { band: 1500 }, parameterCitation: "fixture", fallback: "unavailable", abstentions: ["provider_unavailable"], changesStrength: true,
+      engineId: "maia-5m", modelId: "maia3-5m", band: 1500, historyCapability: "full_history",
+    },
+    {
+      id: "sampler.maia-test@1", kind: "sampler", inputs: ["provider.maia.raw_policy"], effect: "sample",
+      parameters: { temperature: 0.8, topP: 0.92, completenessThreshold: 0.97 }, parameterCitation: "fixture", fallback: "base_model",
+      abstentions: ["incomplete_vector"], changesStrength: true, requiresCompleteVector: true, degradedPath: "base_model",
+      temperature: 0.8, topP: 0.92, completenessThreshold: 0.97,
+    },
+    {
+      id: "presentation.baseline-test@1", kind: "presentation", inputs: [], effect: "presentation",
+      parameters: {}, parameterCitation: "fixture", fallback: "deterministic_name", abstentions: [], changesStrength: false,
+      name: "Baseline", bio: "Samples one declared model band.",
+    },
+  ],
+} satisfies BotProfileDeclaration);
+
+const testProfileRef = Object.freeze({
+  id: testBotProfile.id,
+  version: testBotProfile.version,
+  digest: testBotProfile.digest,
+});
 
 interface MaiaPolicyFixture {
   readonly provenance: { readonly image: string; readonly modelId: string };
@@ -191,6 +225,46 @@ function practicalTablebase(conceding = true): FixtureTablebaseSource {
 }
 
 describe("pure opponent selector", () => {
+  it("accepts only an exact compiled profile reference on human_common", () => {
+    const parsed = parseSelectMoveRequest({
+      startFen: INITIAL_FEN,
+      historyUci: [],
+      policy: { mode: "human_common", policyConfigDigest: digest, profile: testProfileRef },
+      seed: 7,
+    }, [testBotProfile]);
+    expect(parsed.policy.profile).toEqual(testProfileRef);
+
+    expect(() => parseSelectMoveRequest({
+      ...parsed,
+      policy: { ...parsed.policy, profile: { ...testProfileRef, digest: `sha256:${"9".repeat(64)}` } },
+    }, [testBotProfile])).toThrow(/does not match the compiled bot-policy catalog/u);
+    expect(() => parseSelectMoveRequest({
+      ...parsed,
+      policy: { ...parsed.policy, mode: "strong_engine" },
+    }, [testBotProfile])).toThrow(/valid only with human_common/u);
+  });
+
+  it.each(["targetElo", "temperature", "topP"] as const)(
+    "refuses profile plus the second %s authority",
+    (field) => {
+      expect(() => parseSelectMoveRequest({
+        startFen: INITIAL_FEN,
+        historyUci: [],
+        policy: { mode: "human_common", policyConfigDigest: digest, profile: testProfileRef, [field]: field === "targetElo" ? 1500 : 0.8 },
+        seed: 7,
+      }, [testBotProfile])).toThrow(/cannot be combined/u);
+    },
+  );
+
+  it("keeps profile identity in the selection cache key", () => {
+    const profiled = request("human_common", { policy: { mode: "human_common", policyConfigDigest: digest, profile: testProfileRef } });
+    expect(selectionCacheKey(profiled)).not.toBe(selectionCacheKey(request("human_common")));
+    expect(selectionCacheKey(profiled)).not.toBe(selectionCacheKey({
+      ...profiled,
+      policy: { ...profiled.policy, profile: { ...testProfileRef, digest: `sha256:${"8".repeat(64)}` } },
+    }));
+  });
+
   it("keys cached selections by the requested Elo band", () => {
     const lower = request("human_common", {
       policy: { mode: "human_common", policyConfigDigest: digest, targetElo: 1400 },

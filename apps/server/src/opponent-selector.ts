@@ -33,6 +33,10 @@ import {
 import { appliedTargetElo } from "./engine-band.js";
 import { EVIDENCE_MANIFEST } from "./evidence-manifest.js";
 import {
+  BOT_POLICY_PROFILES,
+  type CompiledBotProfile,
+} from "./bot-policy-catalog.js";
+import {
   resolveStrongEngineProfile,
   type StrongEngineProfile,
 } from "./strong-engine.js";
@@ -52,6 +56,11 @@ export interface SelectorPolicy {
   readonly targetElo?: number;
   readonly temperature?: number;
   readonly topP?: number;
+  readonly profile?: Readonly<{
+    readonly id: string;
+    readonly version: number;
+    readonly digest: string;
+  }>;
   readonly spine?: readonly SelectorSpineNode[];
 }
 
@@ -142,7 +151,27 @@ function parseSpineNode(value: unknown, label: string): SelectorSpineNode {
   });
 }
 
-export function parseSelectMoveRequest(value: unknown): SelectMoveRequest {
+function validateProfilePolicy(
+  policy: Pick<SelectorPolicy, "mode" | "targetElo" | "temperature" | "topP" | "profile">,
+  profiles: readonly CompiledBotProfile[],
+): void {
+  if (policy.profile === undefined) return;
+  if (policy.mode !== "human_common") throw invalid("policy.profile is valid only with human_common");
+  if (policy.targetElo !== undefined || policy.temperature !== undefined || policy.topP !== undefined) {
+    throw invalid("policy.profile cannot be combined with targetElo, temperature, or topP");
+  }
+  const declared = profiles.find((profile) =>
+    profile.id === policy.profile!.id && profile.version === policy.profile!.version
+  );
+  if (declared === undefined || declared.digest !== policy.profile.digest) {
+    throw invalid("policy.profile does not match the compiled bot-policy catalog");
+  }
+}
+
+export function parseSelectMoveRequest(
+  value: unknown,
+  profiles: readonly CompiledBotProfile[] = BOT_POLICY_PROFILES,
+): SelectMoveRequest {
   const body = record(value, "body");
   for (const key of Object.keys(body)) {
     if (!["startFen", "historyUci", "policy", "seed", "packId"].includes(key)) {
@@ -157,7 +186,7 @@ export function parseSelectMoveRequest(value: unknown): SelectMoveRequest {
   }
   const policy = record(body.policy, "policy");
   for (const key of Object.keys(policy)) {
-    if (!["mode", "policyConfigDigest", "targetElo", "temperature", "topP"].includes(key)) {
+    if (!["mode", "policyConfigDigest", "targetElo", "temperature", "topP", "profile"].includes(key)) {
       throw invalid(`policy.${key} is an unknown field`);
     }
   }
@@ -177,18 +206,33 @@ export function parseSelectMoveRequest(value: unknown): SelectMoveRequest {
   if (topP !== undefined && (topP < 0 || topP > 1)) {
     throw invalid("policy.topP must be between 0 and 1");
   }
+  const profile = (() => {
+    if (policy.profile === undefined) return undefined;
+    const value = record(policy.profile, "policy.profile");
+    for (const key of Object.keys(value)) {
+      if (!["id", "version", "digest"].includes(key)) throw invalid(`policy.profile.${key} is an unknown field`);
+    }
+    const version = finiteNumber(value.version, "policy.profile.version");
+    if (!Number.isSafeInteger(version) || version < 1) throw invalid("policy.profile.version must be a positive safe integer");
+    const profileDigest = string(value.digest, "policy.profile.digest");
+    if (!DIGEST_PATTERN.test(profileDigest)) throw invalid("policy.profile.digest must be an RFC-8785 SHA-256 digest");
+    return Object.freeze({ id: string(value.id, "policy.profile.id"), version, digest: profileDigest });
+  })();
+  const parsedPolicy = Object.freeze({
+    mode: string(policy.mode, "policy.mode"),
+    policyConfigDigest: digest,
+    ...(targetElo === undefined ? {} : { targetElo }),
+    ...(temperature === undefined ? {} : { temperature }),
+    ...(topP === undefined ? {} : { topP }),
+    ...(profile === undefined ? {} : { profile }),
+  });
+  validateProfilePolicy(parsedPolicy, profiles);
   return Object.freeze({
     startFen: string(body.startFen, "startFen"),
     historyUci: Object.freeze(
       body.historyUci.map((move, index) => string(move, `historyUci[${index}]`)),
     ),
-    policy: Object.freeze({
-      mode: string(policy.mode, "policy.mode"),
-      policyConfigDigest: digest,
-      ...(targetElo === undefined ? {} : { targetElo }),
-      ...(temperature === undefined ? {} : { temperature }),
-      ...(topP === undefined ? {} : { topP }),
-    }),
+    policy: parsedPolicy,
     seed: body.seed,
     ...(body.packId === undefined ? {} : { packId: string(body.packId, "packId") }),
   });
@@ -217,7 +261,16 @@ function neutralTiebreak(fen: string, leftUci: string, rightUci: string): number
 }
 
 export function selectionCacheKey(request: SelectMoveRequest): string {
-  return [request.policy.policyConfigDigest, request.policy.targetElo ?? "", request.packId ?? "", request.seed, historyHash(request)].join(
+  return [
+    request.policy.policyConfigDigest,
+    request.policy.targetElo ?? "",
+    request.policy.profile?.id ?? "",
+    request.policy.profile?.version ?? "",
+    request.policy.profile?.digest ?? "",
+    request.packId ?? "",
+    request.seed,
+    historyHash(request),
+  ].join(
     "\0",
   );
 }
@@ -458,7 +511,8 @@ export class OpponentSelector {
     return this.#cache.size;
   }
 
-  validatePolicy(policy: Pick<SelectorPolicy, "mode" | "targetElo">): void {
+  validatePolicy(policy: Pick<SelectorPolicy, "mode" | "targetElo" | "temperature" | "topP" | "profile">): void {
+    validateProfilePolicy(policy, BOT_POLICY_PROFILES);
     if (
       policy.mode === "human_common"
       || policy.mode === "theory_strict"
