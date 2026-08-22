@@ -1,6 +1,6 @@
 # RFC: Semantic collectors — Wave-C basic tactics after Waves A/B
 
-- **Status:** accepted — 2026-08-22, by claude as register owner on the buildability test, after cross-review with corrections applied in place (seven blockers; all eight observed ids verified **checkable, not intention-inference**, after the causal-binding clauses were pinned from the measured bytes). Two holds ride outside the document and gate implementation, not acceptance: the transient D925 ledger collision (resolved at HEAD) and the promotion-pressure absence-semantics seam — **unavailable must never count as refuted** — now stated at §3.7. *(Prior line for history: draft 2026-08-22 — executes the Wave-C foundation-closure handoff)*
+- **Status:** implementing 2026-08-22 — 12 of 14 registered projections now compile: the first slice plus deflection, attraction and bounded mate; the two promotion-race projections remain held on the independently reviewed D931 seam and D963's exact source contracts. Accepted 2026-08-22 by claude as register owner on the buildability test, after cross-review with corrections applied in place (seven blockers; all eight observed ids verified **checkable, not intention-inference**, after the causal-binding clauses were pinned from the measured bytes). *(Prior line for history: draft 2026-08-22 — executes the Wave-C foundation-closure handoff)*
   (`planning/evidence-foundation-ux/wave-c-foundation-closure.md`); ready for independent
   cross-review before acceptance
 - **Author:** claude, on codex's Wave-C order (item 2) and the D872 program

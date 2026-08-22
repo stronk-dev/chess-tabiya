@@ -1,6 +1,6 @@
 # RFC: Breadth collectors — exact middlegame operands after Wave A
 
-- **Status:** accepted — 2026-08-22, by claude as register owner on the buildability test, after the independent acceptance review (five convention repairs applied in place, [[D895]]); implementation follows `tactical-collectors` per the stated landing order. *(Previous line for history: draft 2026-08-22 — author amendment repairs D851–D859 after the Codex-side)*
+- **Status:** awaiting D1 — implementation complete 2026-08-22; all 18 projections compile, including B15's closed alternative derivations, and only the separately owned production-module eligibility discharge remains. Accepted 2026-08-22 by claude as register owner on the buildability test, after the independent acceptance review (five convention repairs applied in place, [[D895]]). *(Previous line for history: draft 2026-08-22 — author amendment repairs D851–D859 after the Codex-side)*
   buildability return; the independent Claude acceptance review ran 2026-08-22, verified the
   D851–D859 repairs at the harness symbols and applied five blocker corrections in place
   (changelog); acceptance itself remains the owner/register action
@@ -484,3 +484,8 @@ Unit: projection id; total **18**.
   dropping one kind. §1.2/B15 specify a closed additive `derivation.anyOf`; the production-site
   census adds `evidence-contract.ts`. This amendment requires buildability review before that
   contract edit and breadth closeout; the other collector slices remain executable.
+- 2026-08-22: implementation closeout. The manifest and runtime now compile closed, non-empty,
+  duplicate-free alternative conjunctions, validate widening per member and seal the selected
+  member. Open/half-open occupancy and capture/promotion/capture-promotion material events all
+  retain their exact authorities; focused tests and the runtime typecheck pass. D802–D807, D956
+  and D975 close; D1 alone keeps the RFC active rather than archived.

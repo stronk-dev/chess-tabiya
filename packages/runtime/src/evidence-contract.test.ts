@@ -129,6 +129,58 @@ describe("evidence manifest compiler", () => {
     expect(code(cyclic)).toBe("EVIDENCE_DEPENDENCY_CYCLE");
   });
 
+  it("compiles only closed, non-empty, independently valid disjunctive derivations", () => {
+    const pRef = { id: "p.output", version: 1 } as const;
+    const rRef = { id: "r.output", version: 1 } as const;
+    const p = projection();
+    const r = { ...projection("r.output", "r"), disposition: { kind: "operator_only" as const, reason: "fixture input" } };
+    const derived = (derivation: NonNullable<ProjectionDeclaration["derivation"]>, overrides: Partial<ProjectionDeclaration> = {}): ProjectionDeclaration => ({
+      ...projection("q.output", "q"), plane: "derived", grounding: "position_rules", derivation,
+      disposition: { kind: "operator_only", reason: "fixture" }, ...overrides,
+    });
+    const declarations = (output: ProjectionDeclaration): EvidenceContractDeclarations => ({
+      producers: [producer(p), producer(r, "r"), producer(output, "q")],
+      consumers: [consumer()], adapters: [adapter()],
+    });
+
+    expect(code(declarations(derived({ anyOf: [[pRef], [rRef]] })))).toBeUndefined();
+    expect(code(declarations(derived({ anyOf: [] })))).toBe("EVIDENCE_PROJECTION_INCOMPLETE");
+    expect(code(declarations(derived({ anyOf: [[]] })))).toBe("EVIDENCE_PROJECTION_INCOMPLETE");
+    expect(code(declarations(derived({ anyOf: [[pRef, pRef]] })))).toBe("EVIDENCE_PROJECTION_INCOMPLETE");
+    expect(code(declarations(derived({ anyOf: [[pRef, rRef], [rRef, pRef]] })))).toBe("EVIDENCE_PROJECTION_INCOMPLETE");
+    expect(code(declarations(derived({ anyOf: [[pRef], [rRef]] }, { exactness: "exact" })))).toBeUndefined();
+    const measuredR = { ...r, exactness: "measured" as const };
+    const widened: EvidenceContractDeclarations = {
+      producers: [producer(p), producer(measuredR, "r"), producer(derived({ anyOf: [[pRef], [rRef]] }), "q")],
+      consumers: [consumer()], adapters: [adapter()],
+    };
+    expect(code(widened)).toBe("EVIDENCE_DERIVATION_WIDENS");
+  });
+
+  it("requires semantic-event alternatives to be a set-equal copy of the projection alternatives", () => {
+    const pRef = { id: "p.output", version: 1 } as const;
+    const rRef = { id: "r.output", version: 1 } as const;
+    const output = {
+      ...projection("q.output", "q"), role: "event" as const, plane: "derived" as const,
+      derivation: { anyOf: [[pRef], [rRef]] },
+    };
+    const baseEvent = {
+      projection: { id: "q.output", version: 1 }, derivationAnyOf: [[pRef], [rRef]],
+      allowedSigns: ["state" as const], requiredOperands: ["fen"], valence: "none" as const,
+      validation: { positives: ["positive"], hardNegatives: ["negative"] },
+    };
+    const declarations = (event: typeof baseEvent): EvidenceContractDeclarations => ({
+      producers: [producer(projection()), producer({ ...projection("r.output", "r"), disposition: { kind: "operator_only", reason: "fixture input" } }, "r"), producer(output, "q")],
+      consumers: [consumer([pRef, { id: "q.output", version: 1 }])],
+      adapters: [adapter(), adapter({ id: "aq", producer: { id: "q", version: 1 }, projection: { id: "q.output", version: 1 } })],
+      semanticEvents: [event],
+    });
+    expect(code(declarations(baseEvent))).toBeUndefined();
+    expect(code(declarations({ ...baseEvent, derivationAnyOf: [[pRef], [pRef]] }))).toBe("EVIDENCE_EVENT_DERIVATION_MISMATCH");
+    expect(code(declarations({ ...baseEvent, derivationAnyOf: [[pRef, pRef], [rRef]] }))).toBe("EVIDENCE_EVENT_DERIVATION_MISMATCH");
+    expect(code(declarations({ ...baseEvent, derivationAnyOf: [[pRef]] }))).toBe("EVIDENCE_EVENT_DERIVATION_MISMATCH");
+  });
+
   it("refuses global lift, learned score and population rank as policy inputs", () => {
     const valid = semanticDeclarations();
     for (const forbidden of ["globalLift", "learnedScore", "populationRank"] as const) {

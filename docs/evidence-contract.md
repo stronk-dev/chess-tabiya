@@ -22,8 +22,8 @@ by a SHA-256 digest. `/capabilities` returns that digest, current producer avail
 consumer-safe binding summary. It never returns engine lines, authored prose, provider secrets, or
 corpus rows.
 
-The current compiled closure is 34 producers, 184 projections, 25 consumers and 207 bindings,
-plus 65 semantic-event declarations, 65 eligibility rows, 15 refusal reasons and one selection
+The current compiled closure is 34 producers, 187 projections, 25 consumers and 209 bindings,
+plus 67 semantic-event declarations, 67 eligibility rows, 15 refusal reasons and one selection
 policy. The executable manifest and semantic-evidence checks own this tuple.
 
 The additional inert projection is `derived.grade.move_quality@1`: it thresholds paired,
@@ -58,8 +58,12 @@ Compare and Story use declared `run.record` facts and deterministic `derived.*` 
 than trusting parallel prose arrays. Comparison trajectories, structure/timing strips, and recorded
 piece routes pass their distinct admitted consumers. Story moments, prominence rank, title, public
 share, and card prose are rendered from one admitted `review.story` view; raw Stockfish events are
-derivation inputs, not story-delivery evidence. Derived projections enumerate non-empty exact-version inputs and may
-not widen their inputs' grounding, exactness, answer content, or abstention. Reasoning review is a
+derivation inputs, not story-delivery evidence. Derived projections enumerate either one non-empty
+exact-version conjunction or a closed, non-empty `anyOf` set of alternative conjunctions. Every
+alternative is validated independently; duplicate sources, duplicate members, empty members,
+subsets, supersets and unions of alternatives are rejected, and the runtime event seal records the
+one member actually used. A derived projection may not widen any member's grounding, exactness,
+answer content, or abstention. Reasoning review is a
 separate non-chess provider request over the learner transcript, key points, and detections; it is
 not a voice scope and receives no chess-evidence items.
 

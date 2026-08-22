@@ -48,8 +48,8 @@ describe("primary evidence catalogue", () => {
     expect(CURRENT_CONSUMER_OPERATION_IDS).toHaveLength(23);
     expect(EVIDENCE_CONSUMER_IDS).toEqual([...CURRENT_CONSUMER_OPERATION_IDS, "assistance.arrows", "research.semantic_selection"]);
     expect(manifest.consumers.find((item) => item.id === "assistance.arrows")?.disposition).toEqual(expect.objectContaining({ kind: "experimental" }));
-    expect([manifest.producers.length, manifest.projections.length, manifest.consumers.length, manifest.bindings.length]).toEqual([34, 184, 25, 207]);
-    expect([manifest.semanticEvents.length, manifest.eligibility.length, manifest.reasons.length, manifest.selectionPolicies.length]).toEqual([65, 65, 15, 1]);
+    expect([manifest.producers.length, manifest.projections.length, manifest.consumers.length, manifest.bindings.length]).toEqual([34, 187, 25, 209]);
+    expect([manifest.semanticEvents.length, manifest.eligibility.length, manifest.reasons.length, manifest.selectionPolicies.length]).toEqual([67, 67, 15, 1]);
     expect(new Set(manifest.semanticEvents.map((item) => item.projection.id))).toEqual(new Set(SEMANTIC_EVENT_PROJECTION_IDS));
     expect(new Set(manifest.eligibility.map((item) => `${item.consumer.id}@${item.consumer.version}`))).toEqual(new Set(["research.semantic_selection@1"]));
     expect(manifest.bindings.filter((binding) => SEMANTIC_EVENT_PROJECTION_IDS.includes(binding.projection.id)).every((binding) => binding.consumer.id === "research.semantic_selection")).toBe(true);
@@ -79,15 +79,17 @@ describe("primary evidence catalogue", () => {
     expect(() => compileEvidenceManifest(mutateGrade({ derivation: { inputs: [] } }))).toThrowError(expect.objectContaining<Partial<EvidenceManifestError>>({ code: "EVIDENCE_PROJECTION_INCOMPLETE" }));
   });
 
-  it("registers only the seven Wave-C events whose accepted derivations are buildable", () => {
+  it("registers the nine Wave-C events whose accepted derivations are buildable", () => {
     expect(SEMANTIC_WAVE_EVENT_PROJECTION_IDS).toEqual([
       "rules.tactic.event.defender_removed", "rules.tactic.event.defender_duty_relocated",
+      "derived.tactic.deflection_observed", "derived.tactic.attraction_observed",
       "derived.tactic.line_blocker_clearance_observed", "derived.tactic.square_clearance_observed",
       "derived.tactic.interference_observed", "derived.tactic.check_zwischenzug_observed",
       "derived.tactic.overload_exploitation_observed",
     ]);
     const projections = new Set(EVIDENCE_PRODUCERS.flatMap((producer) => producer.outputs.map((output) => output.id)));
-    expect(["derived.tactic.deflection_observed", "derived.tactic.attraction_observed", "derived.pawn.promotion_race_geometry", "derived.pawn.promotion_race_tablebase", "rules.tactic.consequence.forced_mate_after_move"].every((id) => !projections.has(id))).toBe(true);
+    expect(["derived.pawn.promotion_race_geometry", "derived.pawn.promotion_race_tablebase"].every((id) => !projections.has(id))).toBe(true);
+    expect(projections.has("rules.tactic.consequence.forced_mate_after_move")).toBe(true);
   });
 
   it("separates all structural predicate and reading identities and pins the emission exception", () => {

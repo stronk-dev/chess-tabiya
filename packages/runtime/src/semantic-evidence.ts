@@ -20,7 +20,7 @@ import {
   type SemanticEventSign,
   type VersionedEvidenceId,
 } from "./evidence-contract.js";
-import { declareAvoidanceEvidence, declareCaptureClassEvidence, declareCastlingRightsLostEvidence, declareCheckEventEvidence, declareCheckZwischenzugEvidence, declareDefenderDutyEvidence, declareDefenderDutyRelocatedEvidence, declareDefenderRemovedEvidence, declareDiscoveredExecutedEvidence, declareDiscoveredLatencyEvidence, declareDoubleAttackEvidence, declareInterferenceEvidence, declareLegalExchangeEvidence, declareLineBlockerClearanceEvidence, declareLoosePieceEventEvidence, declareOverloadExploitationEvidence, declarePawnIslandEventEvidence, declareReplyBreadthEvidence, declareSquareClearanceEvidence, declareStructuralSemanticSourceEvidence, declareTradeCompletedEvidence, declareTransitionSemanticSourceEvidence } from "./evidence-source-adapters.js";
+import { declareAttractionObservedEvidence, declareAvoidanceEvidence, declareCaptureClassEvidence, declareCastlingRightsLostEvidence, declareCheckEventEvidence, declareCheckZwischenzugEvidence, declareDefenderDutyEvidence, declareDefenderDutyRelocatedEvidence, declareDefenderRemovedEvidence, declareDeflectionObservedEvidence, declareDiscoveredExecutedEvidence, declareDiscoveredLatencyEvidence, declareDoubleAttackEvidence, declareInterferenceEvidence, declareLegalExchangeEvidence, declareLineBlockerClearanceEvidence, declareLoosePieceEventEvidence, declareOverloadExploitationEvidence, declarePawnIslandEventEvidence, declareReplyBreadthEvidence, declareSquareClearanceEvidence, declareStructuralSemanticSourceEvidence, declareTradeCompletedEvidence, declareTransitionSemanticSourceEvidence } from "./evidence-source-adapters.js";
 import {
   declareCapturedZoneDefenderEvidence,
   declareDefenderConsequenceEvidence,
@@ -808,6 +808,7 @@ export function openFileOccupancyOperands(beforeFen: string, moveUci: string, af
 export function breadthSemanticEvents(beforeFen: string, moveUci: string, afterFen: string): readonly SemanticEvidenceEvent[] {
   const anchor = canonicalAnchor({ beforeFen, moveUci, afterFen, side: positionFromFen(beforeFen).turn });
   const result: SemanticEvidenceEvent[] = [];
+  const transitionEvents = transitionSemanticEvents(anchor.beforeFen, anchor.moveUci, anchor.afterFen);
   const controls = squareControlEvents(anchor.beforeFen, anchor.moveUci, anchor.afterFen).events;
   const controlEvidence = new Map(controls.map((payload) => [payload, declareSquareControlEventEvidence(payload)]));
   for (const payload of controls) result.push(compileSemanticEvidenceEvent(PRIMARY_EVIDENCE_MANIFEST, { evidence: controlEvidence.get(payload)!, anchor, sign: payload.sign, operands: payload }));
@@ -823,15 +824,16 @@ export function breadthSemanticEvents(beforeFen: string, moveUci: string, afterF
   const material = materialRoleAsymmetryEvent(anchor.beforeFen, anchor.moveUci, anchor.afterFen);
   if (material !== undefined) {
     const readings = [declareMaterialRoleReadingEvidence(materialRoleSignatureReading(anchor.beforeFen)), declareMaterialRoleReadingEvidence(materialRoleSignatureReading(anchor.afterFen))];
-    result.push(compileSemanticEvidenceEvent(PRIMARY_EVIDENCE_MANIFEST, { evidence: declareMaterialRoleEventEvidence(material), derivationInputs: readings, anchor, sign: "state", operands: material }));
+    const authorityIds = new Set(material.sourceEvents.map((source) => `rules.transition.event.${source.family}@1`));
+    const authorities = transitionEvents.filter((event) => authorityIds.has(refKey(event.projection))).map((event) => event.evidence);
+    result.push(compileSemanticEvidenceEvent(PRIMARY_EVIDENCE_MANIFEST, { evidence: declareMaterialRoleEventEvidence(material), derivationInputs: [...readings, ...authorities], anchor, sign: "state", operands: material }));
   }
   for (const payload of kingZoneEvents(anchor.beforeFen, anchor.moveUci, anchor.afterFen)) result.push(compileSemanticEvidenceEvent(PRIMARY_EVIDENCE_MANIFEST, { evidence: declareKingZoneEventEvidence(payload), anchor, sign: "state", operands: payload }));
   const kingReadingEvidence = declareKingZoneReadingEvidence(kingZoneReading(anchor.beforeFen));
-  const transitionEvents = transitionSemanticEvents(anchor.beforeFen, anchor.moveUci, anchor.afterFen);
   const capture = transitionEvents.find((event) => event.operands.family === "capture");
   if (capture !== undefined) for (const payload of capturedZoneDefenderOperands(anchor.beforeFen, anchor.moveUci, anchor.afterFen)) result.push(compileSemanticEvidenceEvent(PRIMARY_EVIDENCE_MANIFEST, { evidence: declareCapturedZoneDefenderEvidence(payload), derivationInputs: [capture.evidence, kingReadingEvidence], anchor, sign: "state", operands: payload }));
   const activity = openFileOccupancyOperands(anchor.beforeFen, anchor.moveUci, anchor.afterFen);
-  if (activity !== undefined && activity.fileClass === "open_file") {
+  if (activity !== undefined) {
     const source = declareStructuralReadingSourceEvidence(activity.sourceReading as StructuralObservation & { readonly kind: string });
     result.push(compileSemanticEvidenceEvent(PRIMARY_EVIDENCE_MANIFEST, { evidence: declareOpenFileOccupancyEvidence(activity), derivationInputs: [source], anchor, sign: "gained", operands: activity }));
   }
@@ -868,6 +870,20 @@ function exactSequenceInputs(moveEvidence: readonly DeclaredEvidence<unknown>[],
 export function lineBlockerClearanceSemanticEvent(payload: LineBlockerClearanceObservedOperands, moveEvidence: readonly DeclaredEvidence<unknown>[], exchangeEvidence: DeclaredEvidence<unknown>): SemanticEvidenceEvent<LineBlockerClearanceObservedOperands> {
   const inputs = exactSequenceInputs(moveEvidence, 3, [exchangeEvidence], ["rules.exchange.predicate.legal_exchange"]);
   return compileSemanticEvidenceEvent(PRIMARY_EVIDENCE_MANIFEST, { evidence: declareLineBlockerClearanceEvidence(payload), derivationInputs: inputs, anchor: sequenceAnchor(payload), sign: "state", operands: payload });
+}
+
+export function deflectionObservedSemanticEvent(payload: DeflectionObservedOperands, moveEvidence: readonly DeclaredEvidence<unknown>[], dutyEvidence: DeclaredEvidence<unknown>, captureEvidence: readonly DeclaredEvidence<unknown>[], exchangeEvidence: DeclaredEvidence<unknown>): SemanticEvidenceEvent<DeflectionObservedOperands> {
+  if (captureEvidence.length === 0 || captureEvidence.some((value) => refKey(value.projection) !== "rules.transition.event.capture@1")) throw new TypeError("Observed deflection requires exact capture evidence");
+  const inputs = exactSequenceInputs(moveEvidence, 3, [dutyEvidence, ...captureEvidence, exchangeEvidence], ["rules.tactic.reading.defender_duty_set", "rules.transition.event.capture", "rules.exchange.predicate.legal_exchange"]);
+  return compileSemanticEvidenceEvent(PRIMARY_EVIDENCE_MANIFEST, { evidence: declareDeflectionObservedEvidence(payload), derivationInputs: inputs, anchor: sequenceAnchor(payload), sign: "state", operands: payload });
+}
+
+export function attractionObservedSemanticEvent(payload: AttractionObservedOperands, moveEvidence: readonly DeclaredEvidence<unknown>[], captureEvidence: readonly DeclaredEvidence<unknown>[], checkEvidence?: DeclaredEvidence<unknown>): SemanticEvidenceEvent<AttractionObservedOperands> {
+  if (captureEvidence.length === 0 || captureEvidence.some((value) => refKey(value.projection) !== "rules.transition.event.capture@1")) throw new TypeError("Observed attraction requires exact capture evidence");
+  const isCheck = payload.checkOrCaptureConsequence.kind === "check";
+  if (isCheck !== (checkEvidence !== undefined) || checkEvidence !== undefined && refKey(checkEvidence.projection) !== "rules.tactic.event.check@1") throw new TypeError("Observed attraction check authority disagrees with its consequence kind");
+  const inputs = exactSequenceInputs(moveEvidence, payload.horizon, [...captureEvidence, ...(checkEvidence === undefined ? [] : [checkEvidence])], ["rules.transition.event.capture", ...(isCheck ? ["rules.tactic.event.check"] : [])]);
+  return compileSemanticEvidenceEvent(PRIMARY_EVIDENCE_MANIFEST, { evidence: declareAttractionObservedEvidence(payload), derivationInputs: inputs, anchor: sequenceAnchor(payload), sign: "state", operands: payload });
 }
 
 export function squareClearanceSemanticEvent(payload: SquareClearanceObservedOperands, moveEvidence: readonly DeclaredEvidence<unknown>[]): SemanticEvidenceEvent<SquareClearanceObservedOperands> {
@@ -916,13 +932,22 @@ export function compileSemanticEvidenceEvent<T>(manifest: CompiledEvidenceManife
   if (input.evidence.payload !== input.operands) genericBypass("semantic event operands differ from the sealed evidence payload");
   const derivationInputs = [...(input.derivationInputs ?? [])];
   for (const value of derivationInputs) assertDeclaredEvidence(value);
-  const expectedInputs = new Set((declaration.derivationInputs ?? []).map(refKey));
-  const actualInputs = new Set(derivationInputs.map((value) => refKey(value.projection)));
-  if (expectedInputs.size !== actualInputs.size || [...expectedInputs].some((key) => !actualInputs.has(key)) || (expectedInputs.size > 0 && derivationInputs.length === 0)) throw new EvidenceManifestError("EVIDENCE_EVENT_DERIVATION_MISMATCH", "runtime derivation inputs disagree with the event declaration", [refKey(input.evidence.projection)]);
+  const expectedMembers = declaration.derivationAnyOf ?? (declaration.derivationInputs === undefined ? [Object.freeze([])] : [declaration.derivationInputs]);
+  const actualKeys = [...new Set(derivationInputs.map((value) => refKey(value.projection)))];
+  const matchingMembers = expectedMembers.filter((member) => member.length === actualKeys.length && member.every((value) => actualKeys.includes(refKey(value))) && actualKeys.every((key) => member.some((value) => refKey(value) === key)));
+  if (matchingMembers.length !== 1) throw new EvidenceManifestError("EVIDENCE_EVENT_DERIVATION_MISMATCH", "runtime derivation inputs disagree with the event declaration", [refKey(input.evidence.projection)]);
   const anchor = canonicalAnchor(input.anchor);
   const operandRecord = input.operands as Record<string, unknown>;
   if (("before_fen" in operandRecord && operandRecord.before_fen !== anchor.beforeFen) || ("move_uci" in operandRecord && operandRecord.move_uci !== anchor.moveUci) || ("after_fen" in operandRecord && operandRecord.after_fen !== anchor.afterFen)) throw new EvidenceManifestError("EVIDENCE_EVENT_OPERAND_MISSING", "runtime edge operands are not canonical anchor bytes", [refKey(input.evidence.projection)]);
-  const id = evidenceDigest({ projection: input.evidence.projection, beforeFen: anchor.beforeFen, moveUci: anchor.moveUci, afterFen: anchor.afterFen, sign: input.sign, operands: input.operands });
+  const id = evidenceDigest({
+    projection: input.evidence.projection,
+    beforeFen: anchor.beforeFen,
+    moveUci: anchor.moveUci,
+    afterFen: anchor.afterFen,
+    sign: input.sign,
+    operands: input.operands,
+    ...(declaration.derivationAnyOf === undefined ? {} : { derivationMember: [...actualKeys].sort() }),
+  });
   const value = immutable({
     [SEMANTIC_EVENT]: true as const, id, projection: { ...input.evidence.projection }, evidence: input.evidence,
     derivationInputs, anchor, sign: input.sign, operands: input.operands,

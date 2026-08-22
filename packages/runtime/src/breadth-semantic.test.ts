@@ -3,10 +3,11 @@ import { parseUci } from "chessops/util";
 import { describe, expect, it } from "vitest";
 
 import { canonicalFen, positionFromFen } from "./chess.js";
+import { PRIMARY_EVIDENCE_MANIFEST } from "./evidence-catalog.js";
 import type { RecordedMoveAnchor } from "./pawn-dynamics.js";
 import { pawnContactTimingSequence } from "./pawn-dynamics.js";
-import { declareRunRecordEvidence } from "./evidence-source-adapters.js";
-import { breadthSemanticEvents, capturedZoneDefenderOperands, defenderConsequenceOperands, defenderExposureOperands, openFileOccupancyOperands, pawnContactTimingSemanticEvent } from "./semantic-evidence.js";
+import { declareOpenFileOccupancyEvidence, declareRunRecordEvidence, declareStructuralReadingSourceEvidence } from "./evidence-source-adapters.js";
+import { breadthSemanticEvents, capturedZoneDefenderOperands, compileSemanticEvidenceEvent, defenderConsequenceOperands, defenderExposureOperands, openFileOccupancyOperands, pawnContactTimingSemanticEvent } from "./semantic-evidence.js";
 
 function after(fen: string, uci: string): string {
   const position = positionFromFen(fen);
@@ -94,7 +95,41 @@ describe("breadth semantic joins", () => {
 
     const halfOpen = "4k3/8/3p4/8/8/8/P7/R3K3 w - - 0 1";
     expect(openFileOccupancyOperands(halfOpen, "a1d1", after(halfOpen, "a1d1"))?.fileClass).toBe("half_open_file");
-    expect(breadthSemanticEvents(halfOpen, "a1d1", after(halfOpen, "a1d1")).map((event) => event.projection.id)).not.toContain("derived.activity.event.open_file_occupancy");
+    const halfOpenEvent = breadthSemanticEvents(halfOpen, "a1d1", after(halfOpen, "a1d1")).find((event) => event.projection.id === "derived.activity.event.open_file_occupancy");
+    expect(halfOpenEvent).toMatchObject({ derivationInputs: [{ projection: { id: "rules.structural.reading.half_open_file" } }] });
+  });
+
+  it("seals exactly one declared open-file derivation member at runtime", () => {
+    const halfOpen = "4k3/8/3p4/8/8/8/P7/R3K3 w - - 0 1";
+    const afterFen = after(halfOpen, "a1d1");
+    const payload = openFileOccupancyOperands(halfOpen, "a1d1", afterFen)!;
+    const halfEvidence = declareStructuralReadingSourceEvidence(payload.sourceReading);
+    const open = "4k3/8/8/8/8/8/P7/R3K3 w - - 0 1";
+    const openPayload = openFileOccupancyOperands(open, "a1d1", after(open, "a1d1"))!;
+    const openEvidence = declareStructuralReadingSourceEvidence(openPayload.sourceReading);
+    const input = {
+      evidence: declareOpenFileOccupancyEvidence(payload), anchor: { beforeFen: halfOpen, moveUci: "a1d1", afterFen, side: "white" as const }, sign: "gained" as const, operands: payload,
+    };
+    const admitted = compileSemanticEvidenceEvent(PRIMARY_EVIDENCE_MANIFEST, { ...input, derivationInputs: [halfEvidence] });
+    const otherMember = compileSemanticEvidenceEvent(PRIMARY_EVIDENCE_MANIFEST, { ...input, derivationInputs: [openEvidence] });
+    expect(admitted.id).not.toBe(otherMember.id);
+    expect(() => compileSemanticEvidenceEvent(PRIMARY_EVIDENCE_MANIFEST, { ...input, derivationInputs: [] })).toThrow(/derivation inputs disagree/u);
+    expect(() => compileSemanticEvidenceEvent(PRIMARY_EVIDENCE_MANIFEST, { ...input, derivationInputs: [halfEvidence, openEvidence] })).toThrow(/derivation inputs disagree/u);
+    expect(() => compileSemanticEvidenceEvent(PRIMARY_EVIDENCE_MANIFEST, { ...input, derivationInputs: [declareRunRecordEvidence("move", { context: "wrong authority", offset: 0, moveSan: "Ra1-d1" })] })).toThrow(/derivation inputs disagree/u);
+  });
+
+  it("retains promotion-only and capture-promotion authorities for material-role events", () => {
+    const promotion = "4k3/P7/8/8/8/8/8/4K3 w - - 0 1";
+    const promotionEvent = breadthSemanticEvents(promotion, "a7a8q", after(promotion, "a7a8q")).find((event) => event.projection.id === "derived.material.event.role_asymmetry");
+    expect(promotionEvent?.derivationInputs.map((value) => value.projection.id)).toEqual([
+      "derived.material.reading.role_signature", "derived.material.reading.role_signature", "rules.transition.event.promotion",
+    ]);
+
+    const capturePromotion = "r3k3/1P6/8/8/8/8/8/4K3 w - - 0 1";
+    const capturePromotionEvent = breadthSemanticEvents(capturePromotion, "b7a8q", after(capturePromotion, "b7a8q")).find((event) => event.projection.id === "derived.material.event.role_asymmetry");
+    expect(capturePromotionEvent?.derivationInputs.map((value) => value.projection.id)).toEqual([
+      "derived.material.reading.role_signature", "derived.material.reading.role_signature", "rules.transition.event.capture", "rules.transition.event.promotion",
+    ]);
   });
 
   it("seals a retained contact sequence only with the required recorded-move evidence", () => {

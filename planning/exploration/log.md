@@ -5295,3 +5295,27 @@ through evidence or voice.
 take migration 26 and the accepted longitudinal projection once its stale pre-acceptance question
 wording is reconciled, because that store is the foundation for grounded opening, structure,
 style and habit views.
+
+## 2026-08-22 — breadth closeout and Wave-C 12/14 checkpoint
+
+**What landed:** the evidence contract now represents a derived projection as either one exact
+conjunction or a closed set of alternative conjunctions. The compiler validates every member
+independently; the semantic-event declaration must copy the complete set; and the runtime seal
+accepts exactly one member and includes its identity in the event digest. This closes the last
+implementation return on all 18 breadth projections. It also admits Wave-C deflection, attraction
+and bounded forced-mate authority without manufacturing a common source.
+
+**Verification:** 47 focused runtime fixtures pass across the contract, catalogue, breadth,
+material, semantic-tactic and mate-proof paths; runtime typecheck is green. Negative controls reject
+empty members, duplicate sources, duplicate/set-equal members, missing members, undeclared sources,
+partial members and unions. Positive controls cover open and half-open files plus capture-only,
+promotion-only and capture-promotion material events.
+
+**What changed:** breadth is implementation-complete and awaits only its separately owned D1
+production-module eligibility. Wave-C moves from 9 to 12 of 14 registered projections. D963 is
+narrowed rather than closed: exact promotion-race geometry and live-or-recorded Syzygy authority
+remain held until their independently reviewed source contract is buildable.
+
+**Next:** land the two promotion-race projections after D931/D963 review, then compile literal
+Support/Review eligibility for the completed collector ids. Detection remains silent until those
+module and preset contracts select it.

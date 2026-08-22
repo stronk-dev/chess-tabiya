@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
 
+import { declareForcedMateAfterMoveEvidence } from "./evidence-source-adapters.js";
 import { forcedMateAfterMove } from "./mate-proof.js";
 import { replyBreadth } from "./tactics.js";
 
@@ -18,7 +19,10 @@ describe("bounded mate proof", () => {
         nodes: 1,
       },
     });
-    if (result.kind === "proof") expect(result.proof.proofDigest).toMatch(/^[0-9a-f]{64}$/u);
+    if (result.kind === "proof") {
+      expect(result.proof.proofDigest).toMatch(/^[0-9a-f]{64}$/u);
+      expect(declareForcedMateAfterMoveEvidence(result.proof).projection.id).toBe("rules.tactic.consequence.forced_mate_after_move");
+    }
   });
 
   it("retains a legal escaping root reply when the bounded claim is refuted", () => {

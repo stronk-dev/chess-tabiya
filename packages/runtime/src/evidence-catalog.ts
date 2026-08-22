@@ -15,6 +15,7 @@ import type {
   EvidenceRole,
   EvidenceSelectionPolicyDeclaration,
   EvidenceTiming,
+  EvidenceDerivation,
   ProducerDeclaration,
   ProjectionDeclaration,
   ProjectionRole,
@@ -40,7 +41,7 @@ interface ProjectionOptions {
   readonly answerContent?: readonly AnswerDistance[];
   readonly forms?: readonly EvidenceForm[];
   readonly dependsOn?: readonly VersionedEvidenceId[];
-  readonly derivation?: { readonly inputs: readonly VersionedEvidenceId[] };
+  readonly derivation?: EvidenceDerivation;
   readonly limitations?: readonly string[];
   readonly disposition?: EvidenceDispositionDeclaration;
 }
@@ -66,7 +67,11 @@ function projection(producerId: string, id: string, plane: EvidencePlane, option
     answerContent: Object.freeze(answers),
     forms: Object.freeze(forms),
     dependsOn: Object.freeze(options.dependsOn ?? []),
-    ...(options.derivation === undefined ? {} : { derivation: Object.freeze({ inputs: Object.freeze(options.derivation.inputs) }) }),
+    ...(options.derivation === undefined ? {} : {
+      derivation: options.derivation.inputs !== undefined
+        ? Object.freeze({ inputs: Object.freeze(options.derivation.inputs) })
+        : Object.freeze({ anyOf: Object.freeze(options.derivation.anyOf.map((member) => Object.freeze(member))) }),
+    }),
     limitations: Object.freeze(options.limitations ?? []),
     ...(options.disposition === undefined ? {} : { disposition: options.disposition }),
   });
@@ -136,6 +141,7 @@ export const BREADTH_EVENT_PROJECTION_IDS = Object.freeze([
 ] as const);
 export const SEMANTIC_WAVE_EVENT_PROJECTION_IDS = Object.freeze([
   "rules.tactic.event.defender_removed", "rules.tactic.event.defender_duty_relocated",
+  "derived.tactic.deflection_observed", "derived.tactic.attraction_observed",
   "derived.tactic.line_blocker_clearance_observed", "derived.tactic.square_clearance_observed",
   "derived.tactic.interference_observed", "derived.tactic.check_zwischenzug_observed",
   "derived.tactic.overload_exploitation_observed",
@@ -421,6 +427,15 @@ const tacticalOutputs = [
     dependsOn: [ref("rules.tactic.reading.defender_duty_set")],
     limitations: [SEMANTIC_CONVENTION_TEXT.defenceDuty, "Relocation is never aliased to deflection or attraction without the separately declared observed consequence."],
   }),
+  projection("rules.tactic", "rules.tactic.consequence.forced_mate_after_move", "rules", {
+    role: "predicate", payloadType: "ForcedMateAfterMoveProof", semantics: SEMANTIC_CONVENTION_TEXT.mateProof,
+    operands: ["candidate", "attacker", "maxAttackerMoves", "proofStatus", "proofDigest", "rootReplies", "nodes"], signs: ["state"],
+    answerContent: ["candidate_moves"], forms: ["list", "panel", "machine_condition"],
+    abstention: { possible: true, reasons: ["budget_exhausted", "horizon_above_four"] },
+    dependsOn: [ref("rules.tactic.consequence.reply_breadth")],
+    limitations: ["Exact only through four attacker moves under mate-proof@1. Five-plus, engine mate claims, move quality and king-zone inference are outside this projection."],
+    disposition: { kind: "inspector_only", reason: "Bounded proof predicate lands before Support/Review module eligibility." },
+  }),
 ];
 
 const derivedTacticOutputs = [
@@ -467,6 +482,27 @@ const derivedTacticOutputs = [
     derivation: { inputs: [ref("rules.tactic.reading.defender_duty_set"), ref("rules.transition.event.capture"), ref("rules.exchange.predicate.legal_exchange")] },
     limitations: ["Candidate-time arithmetic only; it does not grade or recommend the candidate."],
     disposition: { kind: "inspector_only", reason: "Machine predicate lands before Support/Review module eligibility." },
+  }),
+  projection("derived.tactic", "derived.tactic.deflection_observed", "derived", {
+    role: "event", payloadType: "DeflectionObservedOperands", semantics: `${SEMANTIC_CONVENTION_TEXT.observedWindow} A defender is displaced by capturing the bait or answering its check, loses a named duty, and the retained target is positively captured on the third edge.`,
+    operands: ["baitMove", "defenderBefore", "defenderAfter", "lostDuty", "targetCapture"], signs: ["state"], grounding: "declared_convention", exactness: "convention",
+    answerContent: ["fact"], forms: ["list", "panel", "lit_squares", "arrows", "machine_condition"],
+    abstention: { possible: true, reasons: ["continuation_too_short", "input_abstained"] },
+    dependsOn: [ref("run.record.move"), ref("rules.tactic.reading.defender_duty_set"), ref("rules.transition.event.capture"), ref("rules.exchange.predicate.legal_exchange")],
+    derivation: { inputs: [ref("run.record.move"), ref("rules.tactic.reading.defender_duty_set"), ref("rules.transition.event.capture"), ref("rules.exchange.predicate.legal_exchange")] },
+    limitations: ["Relocation without the retained positive target capture is a hard negative; recorded order proves neither force, intent nor move quality."],
+  }),
+  projection("derived.tactic", "derived.tactic.attraction_observed", "derived", {
+    role: "event", payloadType: "AttractionObservedOperands", semantics: `${SEMANTIC_CONVENTION_TEXT.observedWindow} A king, queen or rook captures bait onto its destination; the opponent re-attacks that square and the retained heavy piece is checked on edge three or captured there on edge five.`,
+    operands: ["baitMove", "heavyPiece", "arrivalSquare", "checkOrCaptureConsequence"], signs: ["state"], grounding: "declared_convention", exactness: "convention",
+    answerContent: ["fact"], forms: ["list", "panel", "lit_squares", "arrows", "machine_condition"],
+    abstention: { possible: true, reasons: ["continuation_too_short", "input_abstained"] },
+    dependsOn: [ref("run.record.move"), ref("rules.transition.event.capture"), ref("rules.tactic.event.check")],
+    derivation: { anyOf: [
+      [ref("run.record.move"), ref("rules.transition.event.capture"), ref("rules.tactic.event.check")],
+      [ref("run.record.move"), ref("rules.transition.event.capture")],
+    ] },
+    limitations: ["The K/Q/R restriction is load-bearing; minor-piece bait captures are a permanent hard negative and recorded order proves neither force nor intent."],
   }),
   projection("derived.tactic", "derived.tactic.line_blocker_clearance_observed", "derived", {
     role: "event", payloadType: "LineBlockerClearanceObservedOperands", semantics: `${SEMANTIC_CONVENTION_TEXT.observedWindow} A friendly sole blocker vacates the exact slider-target between-set; the unchanged slider later captures the retained non-king target with a positive legal-exchange@1 result.`,
@@ -632,7 +668,12 @@ const derivedMaterialOutputs = [
   projection("derived.material", "derived.material.event.role_asymmetry", "derived", {
     role: "event", payloadType: "MaterialRoleAsymmetryEvent", semantics: "Exact before/after material-role vectors and strictly rising unweighted asymmetry magnitude, retaining applicable capture/promotion facts.",
     operands: ["beforeFen", "moveUci", "afterFen", "conventionId", "before", "after", "changedRoles", "increased", "sourceEvents"], signs: ["state"], grounding: "position_rules", exactness: "exact", forms: breadthForms,
-    dependsOn: [ref("derived.material.reading.role_signature"), ref("rules.structural.event.piece_count"), ref("rules.transition.event.capture"), ref("rules.transition.event.promotion")], derivation: { inputs: [ref("derived.material.reading.role_signature")] },
+    dependsOn: [ref("derived.material.reading.role_signature"), ref("rules.structural.event.piece_count"), ref("rules.transition.event.capture"), ref("rules.transition.event.promotion")],
+    derivation: { anyOf: [
+      [ref("derived.material.reading.role_signature"), ref("rules.transition.event.capture")],
+      [ref("derived.material.reading.role_signature"), ref("rules.transition.event.promotion")],
+      [ref("derived.material.reading.role_signature"), ref("rules.transition.event.capture"), ref("rules.transition.event.promotion")],
+    ] },
     limitations: [BREADTH_CONVENTION_TEXT.materialRole, "Role-count change is not a trade recommendation or position evaluation."],
   }),
 ];
@@ -648,7 +689,7 @@ const derivedKingOutputs = [projection("derived.king", "derived.king.captured_zo
 const derivedActivityOutputs = [projection("derived.activity", "derived.activity.event.open_file_occupancy", "derived", {
   role: "event", payloadType: "OpenFileOccupancyOperands", semantics: "A moved rook/queen newly occupies a file already classified open or half-open for that mover, while its source file had neither class.",
   operands: ["beforeFen", "moveUci", "afterFen", "piece", "fileClass", "sourceReading"], signs: ["gained"], grounding: "position_rules", exactness: "exact", forms: breadthForms,
-  dependsOn: [ref("rules.structural.reading.open_file"), ref("rules.structural.reading.half_open_file")], derivation: { inputs: [ref("rules.structural.reading.open_file")] },
+  dependsOn: [ref("rules.structural.reading.open_file"), ref("rules.structural.reading.half_open_file")], derivation: { anyOf: [[ref("rules.structural.reading.open_file")], [ref("rules.structural.reading.half_open_file")]] },
   limitations: ["Stationary-piece file-class changes do not fire. Occupancy does not imply activity, control, importance, or improvement."],
 })];
 
@@ -861,7 +902,10 @@ export const SEMANTIC_EVENT_DECLARATIONS: readonly SemanticEventDeclaration[] = 
   if (output === undefined) throw new TypeError(`Semantic event catalogue names missing projection ${projectionId}`);
   return Object.freeze({
     projection: ref(projectionId),
-    ...(output.derivation === undefined ? {} : { derivationInputs: Object.freeze(output.derivation.inputs) }),
+    ...(output.derivation === undefined ? {}
+      : output.derivation.inputs !== undefined
+        ? { derivationInputs: Object.freeze(output.derivation.inputs) }
+        : { derivationAnyOf: Object.freeze(output.derivation.anyOf.map((member) => Object.freeze(member))) }),
     allowedSigns: Object.freeze(output.signs),
     requiredOperands: Object.freeze(output.operands),
     valence: "none" as const,

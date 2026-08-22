@@ -16,6 +16,10 @@ export interface EvidenceDispositionDeclaration { readonly kind: EvidenceDisposi
 export interface EvidenceLatency { readonly mode: LatencyMode; readonly maxMs: number | null }
 export interface EvidenceBudget { readonly maxFacts: number | null; readonly maxForms: number | null }
 
+export type EvidenceDerivation =
+  | { readonly inputs: readonly VersionedEvidenceId[]; readonly anyOf?: never }
+  | { readonly inputs?: never; readonly anyOf: readonly (readonly VersionedEvidenceId[])[] };
+
 export interface ProjectionDeclaration {
   readonly id: string;
   readonly version: number;
@@ -33,7 +37,7 @@ export interface ProjectionDeclaration {
   readonly answerContent: readonly AnswerDistance[];
   readonly forms: readonly EvidenceForm[];
   readonly dependsOn: readonly VersionedEvidenceId[];
-  readonly derivation?: { readonly inputs: readonly VersionedEvidenceId[] };
+  readonly derivation?: EvidenceDerivation;
   readonly limitations: readonly string[];
   readonly disposition?: EvidenceDispositionDeclaration;
 }
@@ -98,6 +102,7 @@ export interface EvidenceBinding {
 export interface SemanticEventDeclaration {
   readonly projection: VersionedEvidenceId;
   readonly derivationInputs?: readonly VersionedEvidenceId[];
+  readonly derivationAnyOf?: readonly (readonly VersionedEvidenceId[])[];
   readonly allowedSigns: readonly SemanticEventSign[];
   readonly requiredOperands: readonly string[];
   readonly valence: "none" | "source_required";
@@ -257,6 +262,17 @@ function subset<T>(candidate: readonly T[], ceiling: readonly T[]): boolean {
 
 function setEqual<T>(left: readonly T[], right: readonly T[]): boolean {
   return left.length === right.length && subset(left, right) && subset(right, left);
+}
+
+function derivationMembers(projection: ProjectionDeclaration): readonly (readonly VersionedEvidenceId[])[] {
+  const derivation = projection.derivation;
+  if (derivation === undefined) return Object.freeze([]);
+  if (derivation.inputs !== undefined) return Object.freeze([derivation.inputs]);
+  return derivation.anyOf;
+}
+
+function derivationMemberKey(member: readonly VersionedEvidenceId[]): string {
+  return [...member].map(refKey).sort().join("|");
 }
 
 function budgetNarrows(candidate: number | null, ceiling: number | null): boolean {
@@ -423,7 +439,17 @@ export function compileEvidenceManifest(declarations: EvidenceContractDeclaratio
       if (prior !== undefined) fail("EVIDENCE_PROJECTION_DUPLICATE", "duplicate projection", [site("projection", projection, producer.implementation), site("projection", prior)]);
       const abstentionValid = typeof projection.abstention?.possible === "boolean" && Array.isArray(projection.abstention.reasons) && (!projection.abstention.possible || projection.abstention.reasons.length > 0) && nonEmptyStrings(projection.abstention.reasons);
       const dispositionValid = projection.disposition === undefined || completeDisposition(projection.disposition);
-      if (projection.payloadType.trim() === "" || projection.semantics.trim() === "" || projection.forms.length === 0 || projection.answerContent.length === 0 || !nonEmptyStrings(projection.operands) || !nonEmptyStrings(projection.limitations) || !abstentionValid || !dispositionValid) fail("EVIDENCE_PROJECTION_INCOMPLETE", "projection semantics are incomplete", [site("projection", projection, producer.implementation)]);
+      const members = derivationMembers(projection);
+      const derivation = projection.derivation;
+      const hasInputs = derivation !== undefined && "inputs" in derivation && derivation.inputs !== undefined;
+      const hasAnyOf = derivation !== undefined && "anyOf" in derivation && derivation.anyOf !== undefined;
+      const memberKeys = members.map(derivationMemberKey);
+      const invalidDerivation = derivation !== undefined && (
+        hasInputs === hasAnyOf || members.length === 0 ||
+        members.some((member) => member.length === 0 || new Set(member.map(refKey)).size !== member.length) ||
+        new Set(memberKeys).size !== memberKeys.length
+      );
+      if (projection.payloadType.trim() === "" || projection.semantics.trim() === "" || projection.forms.length === 0 || projection.answerContent.length === 0 || !nonEmptyStrings(projection.operands) || !nonEmptyStrings(projection.limitations) || !abstentionValid || !dispositionValid || invalidDerivation) fail("EVIDENCE_PROJECTION_INCOMPLETE", "projection semantics are incomplete", [site("projection", projection, producer.implementation)]);
       projectionMap.set(refKey(projection), projection);
     }
   }
@@ -436,7 +462,7 @@ export function compileEvidenceManifest(declarations: EvidenceContractDeclaratio
     consumerMap.set(refKey(consumer), consumer);
   }
 
-  for (const projection of projectionMap.values()) for (const dependency of [...projection.dependsOn, ...(projection.derivation?.inputs ?? [])]) {
+  for (const projection of projectionMap.values()) for (const dependency of [...projection.dependsOn, ...derivationMembers(projection).flat()]) {
     assertLiteral(dependency, site("dependency", projection));
     if (!projectionMap.has(refKey(dependency))) fail("EVIDENCE_DEPENDENCY_MISSING", "projection dependency is absent", [site("projection", projection), site("dependency", dependency)]);
   }
@@ -447,7 +473,7 @@ export function compileEvidenceManifest(declarations: EvidenceContractDeclaratio
     if (visited.has(key)) return;
     visiting.add(key);
     const projection = projectionMap.get(key)!;
-    for (const dependency of [...projection.dependsOn, ...(projection.derivation?.inputs ?? [])]) walk(refKey(dependency), [...path, key]);
+    for (const dependency of [...projection.dependsOn, ...derivationMembers(projection).flat()]) walk(refKey(dependency), [...path, key]);
     visiting.delete(key);
     visited.add(key);
   };
@@ -455,21 +481,23 @@ export function compileEvidenceManifest(declarations: EvidenceContractDeclaratio
 
   for (const projection of projectionMap.values()) {
     if (projection.plane !== "derived" && projection.derivation === undefined) continue;
-    const inputs = projection.derivation?.inputs ?? [];
-    if (projection.plane !== "derived" || inputs.length === 0) {
+    const members = derivationMembers(projection);
+    if (projection.plane !== "derived" || members.length === 0) {
       fail("EVIDENCE_PROJECTION_INCOMPLETE", "derived projection needs a non-empty literal derivation input list", [site("projection", projection)]);
     }
-    const inputProjections = inputs.map((input) => projectionMap.get(refKey(input))!);
-    const inputAnswers = new Set(inputProjections.flatMap((input) => [...input.answerContent]));
-    const inputGroundings = new Set(inputProjections.map((input) => input.grounding));
-    const exactnessWidens = projection.exactness === "exact" && inputProjections.some((input) => input.exactness !== "exact");
-    const groundingWidens = inputGroundings.size === 1
-      ? projection.grounding !== inputProjections[0]!.grounding
-      : projection.grounding !== "declared_convention";
-    const answersWiden = projection.answerContent.some((answer) => !inputAnswers.has(answer));
-    const abstentionWidens = inputProjections.some((input) => input.abstention.possible) && (!projection.abstention.possible || !projection.abstention.reasons.includes("input_abstained"));
-    if (exactnessWidens || groundingWidens || answersWiden || abstentionWidens) {
-      fail("EVIDENCE_DERIVATION_WIDENS", "derived projection exceeds the exactness, grounding, answer content, or abstention of its inputs", [site("projection", projection), ...inputs.map((input) => site("derivation-input", input))]);
+    for (const inputs of members) {
+      const inputProjections = inputs.map((input) => projectionMap.get(refKey(input))!);
+      const inputAnswers = new Set(inputProjections.flatMap((input) => [...input.answerContent]));
+      const inputGroundings = new Set(inputProjections.map((input) => input.grounding));
+      const exactnessWidens = projection.exactness === "exact" && inputProjections.some((input) => input.exactness !== "exact");
+      const groundingWidens = inputGroundings.size === 1
+        ? projection.grounding !== inputProjections[0]!.grounding
+        : projection.grounding !== "declared_convention";
+      const answersWiden = projection.answerContent.some((answer) => !inputAnswers.has(answer));
+      const abstentionWidens = inputProjections.some((input) => input.abstention.possible) && (!projection.abstention.possible || !projection.abstention.reasons.includes("input_abstained"));
+      if (exactnessWidens || groundingWidens || answersWiden || abstentionWidens) {
+        fail("EVIDENCE_DERIVATION_WIDENS", "derived projection exceeds the exactness, grounding, answer content, or abstention of its inputs", [site("projection", projection), ...inputs.map((input) => site("derivation-input", input))]);
+      }
     }
   }
 
@@ -491,9 +519,16 @@ export function compileEvidenceManifest(declarations: EvidenceContractDeclaratio
     const projection = projectionMap.get(key);
     if (projection === undefined) fail("EVIDENCE_EVENT_PROJECTION_MISSING", "semantic event projection is absent", [site("semantic-event", event.projection)]);
     if (projection.role !== "event" || projection.disposition !== undefined) fail("EVIDENCE_EVENT_PROJECTION_REFUSED", "semantic event projection is not an active event projection", [site("semantic-event", event.projection)]);
-    const derivationInputs = event.derivationInputs ?? [];
-    const declaredInputs = projection.derivation?.inputs ?? [];
-    if (!setEqual(derivationInputs.map(refKey), declaredInputs.map(refKey))) fail("EVIDENCE_EVENT_DERIVATION_MISMATCH", "semantic event derivation inputs disagree with its projection", [site("semantic-event", event.projection)]);
+    const declaredMembers = derivationMembers(projection);
+    const eventMembers = event.derivationAnyOf ?? (event.derivationInputs === undefined ? [] : [event.derivationInputs]);
+    const declaredMemberKeys = declaredMembers.map(derivationMemberKey);
+    const eventMemberKeys = eventMembers.map(derivationMemberKey);
+    const eventDeclaresBothForms = event.derivationInputs !== undefined && event.derivationAnyOf !== undefined;
+    const invalidEventMembers = eventMembers.some((member) => member.length === 0 || new Set(member.map(refKey)).size !== member.length)
+      || new Set(eventMemberKeys).size !== eventMemberKeys.length;
+    if (eventDeclaresBothForms || invalidEventMembers || !setEqual(eventMemberKeys, declaredMemberKeys)) {
+      fail("EVIDENCE_EVENT_DERIVATION_MISMATCH", "semantic event derivation inputs disagree with its projection", [site("semantic-event", event.projection)]);
+    }
     if (event.allowedSigns.length === 0 || !subset(event.allowedSigns, projection.signs)) fail("EVIDENCE_EVENT_SIGN_WIDENS", "semantic event signs exceed its projection", [site("semantic-event", event.projection)]);
     if (!subset(event.requiredOperands, projection.operands) || !nonEmptyStrings(event.requiredOperands)) fail("EVIDENCE_EVENT_OPERAND_MISSING", "semantic event requires an operand absent from its projection", [site("semantic-event", event.projection)]);
     if (event.validation.positives.length === 0 || event.validation.hardNegatives.length === 0 || !nonEmptyStrings(event.validation.positives) || !nonEmptyStrings(event.validation.hardNegatives)) fail("EVIDENCE_EVENT_UNVALIDATED", "semantic event needs executable positive and hard-negative fixtures", [site("semantic-event", event.projection)]);

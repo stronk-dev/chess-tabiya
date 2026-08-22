@@ -4,9 +4,11 @@ import { describe, expect, it } from "vitest";
 
 import { canonicalFen, positionFromFen } from "./chess.js";
 import {
+  attractionObservedSemanticEvent,
   attractionObservedOperands,
   checkZwischenzugObservedOperands,
   deflectionObservedOperands,
+  deflectionObservedSemanticEvent,
   interferenceObservedOperands,
   interferenceSemanticEvent,
   lineBlockerClearanceObservedOperands,
@@ -16,9 +18,9 @@ import {
   squareClearanceObservedOperands,
   squareClearanceSemanticEvent,
 } from "./semantic-evidence.js";
-import { declareDefenderDutyEvidence, declareLegalExchangeEvidence, declareRunRecordEvidence, declareTransitionSemanticSourceEvidence } from "./evidence-source-adapters.js";
+import { declareCheckEventEvidence, declareDefenderDutyEvidence, declareLegalExchangeEvidence, declareRunRecordEvidence, declareTransitionSemanticSourceEvidence } from "./evidence-source-adapters.js";
 import type { RecordedMoveAnchor } from "./pawn-dynamics.js";
-import { defenderDutyReading } from "./tactics.js";
+import { checkEvent, defenderDutyReading } from "./tactics.js";
 import { transitionSemanticFacts } from "./transition.js";
 
 function anchors(fen: string, moves: readonly string[]): readonly RecordedMoveAnchor[] {
@@ -48,18 +50,23 @@ function captureEvidence(anchor: RecordedMoveAnchor) {
 describe("observed semantic tactic sequences", () => {
   it("requires defender displacement and a later positive target capture", () => {
     const positive = anchors("1B5k/r3q3/2n5/8/8/8/8/4R1K1 w - - 0 1", ["b8a7", "c6a7", "e1e7"]);
-    expect(deflectionObservedOperands(positive)).toContainEqual(expect.objectContaining({
+    const event = deflectionObservedOperands(positive)[0]!;
+    expect(event).toEqual(expect.objectContaining({
       defenderBefore: expect.objectContaining({ square: "c6" }),
       defenderAfter: expect.objectContaining({ square: "a7" }),
       lostDuty: expect.objectContaining({ target: expect.objectContaining({ square: "e7" }) }),
     }));
+    expect(deflectionObservedSemanticEvent(event, moveEvidence(positive), declareDefenderDutyEvidence(defenderDutyReading(positive[0]!.beforeFen)), positive.map(captureEvidence), declareLegalExchangeEvidence(event.targetCapture))).toMatchObject({ projection: { id: "derived.tactic.deflection_observed" }, operands: event });
     const noCapture = anchors("1B5k/r7/2n1q3/8/8/8/8/4R1K1 w - - 0 1", ["b8a7", "c6a7", "e1e6"]);
     expect(deflectionObservedOperands(noCapture)).toEqual([]);
   });
 
   it("restricts attraction to the retained king/queen/rook consequence", () => {
     const king = anchors("4k3/8/4B3/8/8/8/8/R5K1 w - - 0 1", ["e6d7", "e8d7", "a1d1"]);
-    expect(attractionObservedOperands(king)).toContainEqual(expect.objectContaining({ horizon: 3, arrivalSquare: "d7", checkOrCaptureConsequence: expect.objectContaining({ kind: "check" }) }));
+    const event = attractionObservedOperands(king)[0]!;
+    expect(event).toEqual(expect.objectContaining({ horizon: 3, arrivalSquare: "d7", checkOrCaptureConsequence: expect.objectContaining({ kind: "check" }) }));
+    const check = checkEvent(king[2]!.beforeFen, king[2]!.moveUci)!;
+    expect(attractionObservedSemanticEvent(event, moveEvidence(king), [captureEvidence(king[1]!)], declareCheckEventEvidence(check))).toMatchObject({ projection: { id: "derived.tactic.attraction_observed" }, operands: event });
     const minor = anchors("4k3/8/1n6/8/2B5/8/8/R5K1 w - - 0 1", ["c4d5", "b6d5", "a1d1"]);
     expect(attractionObservedOperands(minor)).toEqual([]);
   });
