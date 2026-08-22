@@ -1,6 +1,6 @@
 # RFC: live-sources — Phase A, finished-round broadcast ingestion
 
-- **Status:** draft — 2026-08-22
+- **Status:** accepted — 2026-08-22, by claude as register owner on the buildability test, after a cross-review that re-derived ~49 claims (6 failed, all corrected in place): the record was unwritable at HEAD (`imported_games.source_kind` STRICT CHECK — now a claimed migration behind `campaign-core`, criterion 11), the sanitizer missed 61 out-of-comment SAN verdict glyphs in the fixture itself (strip now structural), the residue vocabulary shown open by two further verdict classes, criterion 6's fixture claim corrected to the synthesized case, and rows renumbered D957–D959 (codex took D956 mid-review). *(Prior line for history: draft — 2026-08-22)*
 - **Author:** claude (coordinator), from `planning/live-sources/rfc-derivation.md`
 - **Created:** 2026-08-22
 - **Design refs:** `design/03-product-breadth.md` Live surfaces (:81-83, :291) and the
@@ -22,7 +22,7 @@
 - **Planning:** `planning/live-sources/`
 
 ```tabiya-claims
-none
+migration | position behind campaign-core | imported_games.source_kind CHECK gains 'lichess_broadcast' (storage.ts:3356; STRICT table — SQLite CHECK edits require a rebuild migration)
 ```
 
 ## Summary
@@ -51,8 +51,8 @@ sourcing, splitting, stripping-with-assertion.
 **Scope boundary.** Phase A = finished-round ingestion only, shippable on today's
 measured behavior alone (derivation §6, recommended cut). Out of scope, each with a
 named home: live-follow (the round follower, the run growth model, the [[D411]]
-assistance lock — proposed row D953), casting (a composition over the existing stream
-session + overlay per [[D705]], gated on the owner's B5 ruling — proposed row D954),
+assistance lock — proposed row D957), casting (a composition over the existing stream
+session + overlay per [[D705]], gated on the owner's B5 ruling — proposed row D958),
 discovery UI beyond URL paste (derivation gap 8: the smallest slice that lets a URL
 paste work ships first).
 
@@ -69,7 +69,9 @@ string `broadcast` appears nowhere in `apps/`, `packages/`, or `workers/` code,
 grep-verified in the derivation):
 
 - `ImportSource` gains `{ kind: "broadcast"; url: string; board?: string }` — a
-  server-code union member, not a versioned register entry (see the claims argument).
+  server-code union member, not a versioned register entry (the union crosses no
+  package boundary and appears in no schema; the one versioned resource this RFC
+  touches is the §4 storage migration, claimed in the tabiya-claims block).
 - `resolveBroadcastSource(url, board, fetchImpl)` in `import-source.ts`, beside
   `resolveImportSource` and `resolveStudySource`, sharing the module-wide serialized
   fetch queue (:21, :68), the 10 s timeout, and the `429/5xx` →
@@ -100,8 +102,11 @@ returning one PGN string per board with headers intact. It performs **no** chess
 validation; `parsePgnMainline` remains the sole legality authority for the selected
 board (one parser, no clone — the [[D523]]/one-authority discipline).
 
-Not-yet-started boards (headers, zero moves — real in live rounds, harness §ongoing)
-stay in the split output and are refused **at import** by the existing
+Not-yet-started boards (headers, zero moves — a real state in live rounds, though
+**no committed fixture game carries it**: the harness demonstrated the refusal on a
+header-only PGN it derived from the ongoing fixture's first game,
+`roundtrip.test.ts:105`) stay in the split output and are refused **at import** by
+the existing
 `requireMoves: true` configuration (*"PGN must contain at least one move"*,
 `pgn-import.ts:38-40`), surfaced as a typed refusal naming the board rather than a
 crash. **Phase A convention: a board becomes importable at its first move.** Following
@@ -115,8 +120,15 @@ round; no cap change.
 
 ### 3. Strip-with-assertion — `sanitizeBroadcastPgn` ([[D410]])
 
-The measured facts (harness, finished round): the input carried **972 `[%eval]`, 902
-`[%clk]`, 59 literate verdicts** (`Blunder./Mistake./Inaccuracy. … was best`); the
+The measured facts (harness, finished round; verdict inventory corrected by
+cross-review 2026-08-22 against the committed fixture): the input carried **972
+`[%eval]`, 902 `[%clk]`, 61 literate verdict comments** — 59
+`Blunder./Mistake./Inaccuracy.` plus one `Checkmate is now unavoidable.` and one
+`Lost forced checkmate sequence.` (the harness's 59 counted only the three named
+classes: **the literate vocabulary is open, not closed**, which is why the
+assertion below is structural rather than an enumeration) — **and 61 third-party
+suffix glyphs on the SAN tokens themselves** (`?` ×9, `?!` ×39, `??` ×13, e.g.
+`33. Kf1??` — outside any comment, in the movetext proper). The
 parse result contains none of them — but `importGame` stores
 **`pgn: source.pgn` verbatim** (`service.ts:555`) and `importRecord()` serves it back.
 Without this section, another product's move verdicts enter our storage as
@@ -130,16 +142,31 @@ in `import-source.ts`:
 
 - removes all `{...}` comments (which is where Lichess keeps evals, clocks, and
   literate verdicts — measured: zero fixture games carried `(...)` variations in
-  movetext, the verdict lines live inside comments) and all NAG glyphs (`$n`);
-- **asserts, then returns**: after stripping, the output must contain zero occurrences
-  of `[%eval`, `[%clk`, and the verdict tokens `Blunder.` / `Mistake.` /
-  `Inaccuracy.` / `was best`. A residue throws the **new typed error**
+  movetext, the verdict sentences live inside comments), all `;` rest-of-line
+  comments (legal PGN, unobserved upstream, stripped so the assertion never meets
+  one), all NAG glyphs (`$n`), **and all move-suffix annotation glyphs** (`!`/`?`
+  sequences trailing a SAN token — the fixture's 61 `?`/`?!`/`??` are the same
+  Lichess analysis pass wearing movetext syntax; a strip that handled only
+  comments would store `33. Kf1??` as authored-looking judgment, which cross-review
+  demonstrated from the committed fixture);
+- **asserts, then returns — structurally, on the movetext (headers excluded)**:
+  after stripping, the movetext must contain **zero occurrences of `{`, `}`, `;`,
+  `[%`, `$`, `!`, and `?`** (none of these characters occurs in legal SAN,
+  move numbers, or the four result tokens), and — belt over braces — zero
+  occurrences of the measured verdict tokens `Blunder.` / `Mistake.` /
+  `Inaccuracy.` / `was best`. Any residue throws the **new typed error**
   `BROADCAST_ANNOTATION_RESIDUE` — the import fails closed rather than storing
-  third-party grades. This is the assertion-not-hope D410 demands, and it runs on
-  every broadcast import, not only in tests.
+  third-party grades. The character-class assertion is what closes the D410 trap
+  over verdict sentences the token list has never seen (the fixture already
+  carries two classes outside `Blunder./Mistake./Inaccuracy.`); the token arm
+  keeps the measured cases readable in the test output. This is the
+  assertion-not-hope D410 demands, and it runs on every broadcast import, not
+  only in tests.
 
 `resolveBroadcastSource` returns the **sanitized** bytes as `source.pgn`, so
-`ImportedGameRecord.pgn` (:555) stores clean text with **no record-shape change**.
+`ImportedGameRecord.pgn` (:555) stores clean text with **no record-shape change**
+(the record's fields are untouched; its `sourceKind` union and the SQLite CHECK
+behind it gain one member — the §4 migration).
 Headers are not comments and survive sanitization untouched — `BroadcastName`,
 `BroadcastURL`, `GameURL`, `WhiteFideId`/`BlackFideId`, hierarchical `Round` all pass
 through into `parsed.headers` and the record (measured: 20-21 headers kept per fixture
@@ -147,13 +174,13 @@ game). Provenance is free; keep it.
 
 The paste path (`kind: "pgn"`) is **unchanged**: a user pasting annotated PGN today
 stores its comments verbatim, and changing that is out of this RFC's scope — but it is
-the same trap through a manual door, recorded as proposed row D955 rather than fixed
+the same trap through a manual door, recorded as proposed row D959 rather than fixed
 silently here.
 
 ### 4. The import hand-off
 
 `resolveBroadcastSource` output matches the existing resolved-source shape
-(`import-source.ts:86-92`): sanitized `pgn`, `sourceKind: "lichess_broadcast" as
+(`import-source.ts:85-90`): sanitized `pgn`, `sourceKind: "lichess_broadcast" as
 const`, `sourceUrl` (the round/game URL as given), and the licence note in the
 existing `no-rights-asserted` form (derivation gap 11), **exact text**:
 
@@ -170,7 +197,19 @@ From there the path is the shipped one, byte-for-byte: `importGame`
 `movetextDigest` → session `{ kind: "imported", feedbackPolicy: "attempt_end" }` →
 `createRun` + replay with `actor: "user"` for the chosen side, `"system"` for the
 other → `ImportedGameRecord` → story evidence pass. **No new session kind, no new
-run field, no schema change.** The accepted `longitudinal-store` grain already
+run field, no run-schema change — but one storage migration.** Cross-review
+2026-08-22 re-derived the write path at source: `imported_games` is a STRICT
+table with `source_kind TEXT NOT NULL CHECK (source_kind IN
+('pgn_paste','lichess_url'))` (`storage.ts:3356`), so this section's INSERT of
+`"lichess_broadcast"` **fails the CHECK on every database at HEAD** — the record
+this RFC specifies was unwritable as drafted. SQLite cannot alter a CHECK in
+place; the implementing commit ships the next-numbered storage migration (claim
+`position behind campaign-core` in the tabiya-claims block — behind the same-day
+campaign draft, which already held `position behind bot-policy`): a standard table
+rebuild of `imported_games` widening the CHECK to admit `'lichess_broadcast'`,
+no data rewrite. `ImportedGameRecord.sourceKind` (`storage.ts:144`) and the
+resolved-source `sourceKind` union widen by the same one member.
+The accepted `longitudinal-store` grain already
 reserves exactly this shape: the broadcast players' moves are `decision_class='game'`,
 the learner's forks `'played'` (its imported-run acceptance case, :662-663) — consumed,
 not amended.
@@ -203,9 +242,9 @@ Unit: deferred obligations; total: 4. Each has a named home — none is dropped.
 
 | deferred | home |
 |---|---|
-| Live-follow: the server-side round follower (one held stream per followed round), the run **growth model** (nothing at HEAD appends to an imported run — re-import-per-update vs append-to-run is Phase B's hardest decision), move-0 follows | proposed row **D953**, the Phase-B RFC |
-| The [[D411]] lock (*"assistance must be lockable on 'the source game is still live'"*): pinned now as the **workflow/session-ceiling term** of `intent-presets` §2's four-term ∩ algebra — a dynamic `AssistanceContext` bit (sibling of `seatedInContest`, `assistance.ts:21-33`), **not** a new `WorkflowContextId` — release/fail-closed semantics specified in Phase B where the follower that knows liveness exists | proposed row **D953**; the ceiling-term pinning is normative now so Phase B composes rather than invents |
-| Casting: host imports a board → hosts it as the existing `stream` session → the existing `/live/overlay/:runId` projects it ([[D705]]: composition, not a new evidence mode; [[D704]]: the overlay issues no evidence/provider query). Blocked on the owner's B5 justification ruling — the lane justifies on **anyone-analyses** unless the owner rules casting leads | proposed row **D954**, Open question 1 |
+| Live-follow: the server-side round follower (one held stream per followed round), the run **growth model** (nothing at HEAD appends to an imported run — re-import-per-update vs append-to-run is Phase B's hardest decision), move-0 follows | proposed row **D957**, the Phase-B RFC |
+| The [[D411]] lock (*"assistance must be lockable on 'the source game is still live'"*): pinned now as the **workflow/session-ceiling term** of `intent-presets` §2's four-term ∩ algebra — a dynamic `AssistanceContext` bit (sibling of `seatedInContest`, `assistance.ts:21-33`), **not** a new `WorkflowContextId` — release/fail-closed semantics specified in Phase B where the follower that knows liveness exists | proposed row **D957**; the ceiling-term pinning is normative now so Phase B composes rather than invents |
+| Casting: host imports a board → hosts it as the existing `stream` session → the existing `/live/overlay/:runId` projects it ([[D705]]: composition, not a new evidence mode; [[D704]]: the overlay issues no evidence/provider query). Blocked on the owner's B5 justification ruling — the lane justifies on **anyone-analyses** unless the owner rules casting leads | proposed row **D958**, Open question 1 |
 | Discovery UI beyond URL paste (`/api/broadcast` index, curation, IA placement) | derivation gap 8; a later slice of this lane |
 
 ## Deviations from design
@@ -219,7 +258,7 @@ as an owner ruling or is severed to its own ruling — Open question 3.
 
 ## Acceptance criteria
 
-Unit: criteria; total: 10. Each is failable — the wrong implementation it catches is
+Unit: criteria; total: 11. Each is failable — the wrong implementation it catches is
 named where non-obvious.
 
 1. `splitBroadcastRound` on the two committed harness fixtures returns **exactly 10
@@ -230,20 +269,27 @@ named where non-obvious.
    mainline ply counts equal the harness record's per-game plies (134, 46, 60, 145,
    211, 88, 65, 80, 75, 68). (Catches silent move loss in split/sanitize.)
 3. **The D410 assertion, positive arm:** a broadcast import of the finished fixture
-   stores an `ImportedGameRecord.pgn` containing zero occurrences of `[%eval`,
-   `[%clk`, `Blunder.`, `Mistake.`, `Inaccuracy.`, `was best` — asserted against the
+   stores an `ImportedGameRecord.pgn` whose movetext contains zero occurrences of
+   `{`, `}`, `;`, `[%`, `$`, `!`, and `?` (§3's character classes — this is what
+   catches the fixture's 61 `?`/`?!`/`??` suffix glyphs, which the earlier
+   six-token form provably stored) and zero occurrences of `[%eval`, `[%clk`,
+   `Blunder.`, `Mistake.`, `Inaccuracy.`, `was best` — asserted against the
    **stored record**, not the parse result (the parse already drops them; the record
    is where D410's trap lives).
-4. **The D410 assertion, negative control:** the same raw fixture pasted through the
-   existing `kind: "pgn"` path retains its annotations in the stored record. (Proves
-   criterion 3 measures the broadcast boundary, not an accidental global behavior
-   change — the [[D444]] vacuity guard.)
+4. **The D410 assertion, negative control:** the same raw fixture **game** (one
+   split unit, not the multi-game round file, which the parser refuses whole)
+   pasted through the existing `kind: "pgn"` path retains its annotations —
+   comments and suffix glyphs — in the stored record. (Proves criterion 3
+   measures the broadcast boundary, not an accidental global behavior change —
+   the [[D444]] vacuity guard.)
 5. `BROADCAST_ANNOTATION_RESIDUE`: feeding `sanitizeBroadcastPgn` a constructed PGN
    whose annotation survives the strip (e.g. a verdict token outside any comment)
    fails closed with the typed error; nothing is stored.
-6. A not-yet-started board (headers, zero moves — fixture from the ongoing round)
-   selected for import yields the typed refusal naming the board; the process does
-   not crash and no record is created.
+6. A not-yet-started board (headers, zero moves — constructed from the ongoing
+   fixture's headers exactly as the harness does at `roundtrip.test.ts:105`; no
+   committed fixture game is itself zero-move) selected for import yields the
+   typed refusal naming the board; the process does not crash and no record is
+   created.
 7. The stored record for a broadcast import carries the broadcast provenance headers
    (`BroadcastName`, `BroadcastURL`, `GameURL` when upstream provides them) and the
    licence note **byte-matching** §4's form.
@@ -257,6 +303,13 @@ named where non-obvious.
     `stream/broadcast/round` appear nowhere in shipped code (grep, mirroring the
     derivation's absence check) — live-follow did not leak in under this RFC's name.
     (Failable by exactly the creep it forbids.)
+11. **The migration writes what HEAD refuses:** on a database at the pre-landing
+    storage version, a broadcast import's `imported_games` INSERT fails the shipped
+    `source_kind` CHECK (`storage.ts:3356`); after the §4 rebuild migration the
+    same INSERT succeeds, existing `pgn_paste`/`lichess_url` rows survive
+    byte-identically, and an unknown `source_kind` is still refused. (Catches
+    both the unwritable-record defect cross-review found and a rebuild that
+    silently drops the CHECK.)
 
 ### 7. Ledger rows this RFC closes
 
@@ -267,16 +320,16 @@ ruling at acceptance, the import half at implementation. [[D413]] — criterion 
 edit, implementation commit. [[D414]] — already ✅, discharged by execution
 2026-08-22 (`tools/d947-broadcast-roundtrip-harness/`); recorded here as the evidence
 base. [[D947]] — **partially**: Phase A of the commission; Phase B and casting remain
-with proposed rows D953/D954.
+with proposed rows D957/D958.
 
 ## Discharges
 
 | id | the obligation | owner | recorded when discharged | discharged |
 |---|---|---|---|---|
-| D1 | Phase B — the round follower (held stream), the imported-run growth model, move-0 follows, and the [[D411]] lock as a dynamic ceiling-term bit with fail-closed release (§6 rows 1–2); proposed row D953 owns the seam until its RFC exists | claude | `planning/live-sources/` | |
-| D2 | Casting composition ([[D705]]) — blocked on the owner's B5 justification ruling (Open question 1); proposed row D954 | OWNER | `planning/live-sources/` | |
+| D1 | Phase B — the round follower (held stream), the imported-run growth model, move-0 follows, and the [[D411]] lock as a dynamic ceiling-term bit with fail-closed release (§6 rows 1–2); proposed row D957 owns the seam until its RFC exists | claude | `planning/live-sources/` | |
+| D2 | Casting composition ([[D705]]) — blocked on the owner's B5 justification ruling (Open question 1); proposed row D958 | OWNER | `planning/live-sources/` | |
 | D3 | The [[D412]] events-row clause in `design/03` — law 5, owner ruling at this RFC's acceptance or severed to its own ruling (Open question 3) | OWNER | `planning/live-sources/` | |
-| D4 | Phase-A implementation: criteria 1–10, the [[D413]] doc edit, and the [[D410]]/[[D412]]-import ledger flips in the implementing commit | codex | `planning/codex-queue.md` | |
+| D4 | Phase-A implementation: criteria 1–11 (including the `imported_games` CHECK rebuild migration), the [[D413]] doc edit, and the [[D410]]/[[D412]]-import ledger flips in the implementing commit | codex | `planning/codex-queue.md` | |
 
 ## Open questions
 
@@ -290,22 +343,29 @@ with proposed rows D953/D954.
    recommendation — it keeps `ASSISTANCE_PROFILES`, the frozen `WorkflowContextId`
    set, and the `decision_class='game'` grain untouched). The open half is Phase B's:
    whether the D411 lock rides a **source facet** on `imported` or a new session
-   kind. Deferred to D953's RFC with the recommendation recorded, not decided.
+   kind. Deferred to D957's RFC with the recommendation recorded, not decided.
 3. **Owner at acceptance — the D412 design clause** (§Deviations): ride this
    acceptance or sever to its own ruling.
 
-## Ledger rows (proposed — renumber at landing; head D952 at drafting)
+## Ledger rows (proposed — renumber at landing)
 
-- **D953 (proposed)** — Phase B of the live-sources lane: the round follower (held
+Head D952 at drafting; the campaign-gate waiver landed as D953 hours later, and a
+breadth-evidence row took D956 during cross-review — the head is **D956 at
+cross-review 2026-08-22**, so the rows below carry **D957–D959**. The ledger
+allocates above the highest registered id, and the landed D953 row records this
+renumbering obligation; **the acceptor re-derives the numbers from the then-head
+at landing** — these are current, not promised.
+
+- **D957 (landed)** — Phase B of the live-sources lane: the round follower (held
   `/api/stream/broadcast/round` connection, measured 0.24 s first-burst), the
   imported-run **growth model** (re-import-per-update vs append-to-run; nothing at
   HEAD appends to an imported run), move-0 follows, and the [[D411]] lock as a
   dynamic ceiling-term bit with fail-closed release semantics. Needs its own RFC;
   this row owns the seam until then.
-- **D954 (proposed)** — casting is a composition ([[D705]]) blocked on the owner's B5
+- **D958 (landed)** — casting is a composition ([[D705]]) blocked on the owner's B5
   justification ruling (Open question 1); binding the existing `stream` session +
   overlay to a followed run requires Phase B's follower and no new evidence mode.
-- **D955 (proposed)** — 🐞 the paste path stores third-party annotations verbatim
+- **D959 (landed)** — 🐞 the paste path stores third-party annotations verbatim
   today: `kind: "pgn"` retains comments (including engine verdicts) in
   `ImportedGameRecord.pgn` — [[D410]]'s trap through the manual door, out of Phase A's
   scope and recorded rather than silently fixed or silently kept.
@@ -314,3 +374,35 @@ with proposed rows D953/D954.
 
 - 2026-08-22: created from `planning/live-sources/rfc-derivation.md` (D947 lane;
   harness-measured evidence base; Phase-A cut per the derivation's recommendation).
+- 2026-08-22 (cross-review, adversarial, re-derived at source): **(1) the record
+  was unwritable as drafted** — `imported_games.source_kind` carries a STRICT-table
+  CHECK closed over `('pgn_paste','lichess_url')` (`storage.ts:3356`), so §4's
+  INSERT fails on every database at HEAD; the RFC now ships a CHECK-rebuild
+  migration, the tabiya-claims block claims `migration | position behind
+  campaign-core` (was `none`; `behind bot-policy` would collide with the same-day
+  campaign draft, C3-verified — **the register row's claims cell and a migration
+  Live-claims row must move with it at acceptance**), and criterion 11 pins both
+  arms. **(2) The sanitizer in §3 had a
+  measured hole**: 61 third-party suffix glyphs (`?`×9, `?!`×39, `??`×13) sit in
+  the finished fixture's movetext outside any comment and survived both the strip
+  and the six-token assertion — `Kf1??` would have been stored as
+  authored-looking judgment; the strip now covers suffix glyphs, `;` comments and
+  NAGs, and the assertion is structural (character classes) with the token arm
+  retained. **(3) Verdict inventory corrected 59→61**: the fixture carries
+  `Checkmate is now unavoidable.` and `Lost forced checkmate sequence.` beyond
+  the three named classes — the literate vocabulary is open, which is the
+  argument for the structural assertion. **(4) No committed fixture game is
+  zero-move**; §2 and criterion 6 now name the harness's header-only derivation
+  (`roundtrip.test.ts:105`) instead of implying a fixture board. **(5) Proposed
+  rows renumbered to D957–D959** — the campaign-gate waiver landed as D953 after
+  drafting and a breadth-evidence row took the next free id during cross-review
+  itself; the acceptor re-derives from the then-head at landing. **(6)**
+  Criterion 4 pins "fixture game", not the
+  refusable round file; resolved-source cite corrected to
+  `import-source.ts:85-90`. Verified clean: 4/4 harness tests re-run green at
+  HEAD; every `service.ts`/`pgn-import.ts`/`import-source.ts`/`assistance.ts`
+  line cite; the ply list, 10+10 splits, 972/902 counts, latency figures, URL
+  grammar against the fixtures' `BroadcastURL`/`GameURL`; the run-schema and
+  longitudinal claims-none halves (no digest or rebuild reads
+  `ImportedGameRecord.pgn`; `movetextDigest` is over parsed moves and unaffected
+  by stripping).

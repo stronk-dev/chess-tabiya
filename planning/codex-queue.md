@@ -64,6 +64,32 @@ with the review's finds carried:
 end of that chain. `semantic-collectors` (Wave-C) is drafting and will slot between the
 collector waves and the module amendment (your order items 2 and 5).
 
+## 0-LIVE-SOURCES-ACCEPTED. `live-sources` Phase A is accepted — implement after campaign-core's migration position
+
+Accepted 2026-08-22 (the owner commissioned this lane the same afternoon — retrieving LIVE
+tournament games for import/analysis). Read the review-corrected §3 and §4 before implementing:
+
+- **The migration is real and ordered**: `imported_games.source_kind`'s STRICT CHECK gains
+  `'lichess_broadcast'` via a table-rebuild migration at the claimed position **behind
+  `campaign-core`** (sixth in the queue). Criterion 11 has both arms: pre-migration INSERT fails,
+  post-migration succeeds, unknown kinds still refused. Do not take this before the positions
+  ahead of it land.
+- **The strip is structural, not token-based**: `sanitizeBroadcastPgn` removes comments, NAGs,
+  `;` comments AND bare SAN suffix glyphs — the fixture carries 61 `??`/`?!`/`?` verdicts OUTSIDE
+  comments — then `BROADCAST_ANNOTATION_RESIDUE` fail-closed asserts stored movetext contains
+  zero of `{ } ; [% $ ! ?`. The six-token vocabulary is evidence the verdict vocabulary is open,
+  not the assertion itself.
+- The splitter (`splitBroadcastRound`) does no chess validation — the shipped parser stays the
+  sole authority; boards import at their first move; the synthesized header-only case is the
+  zero-move fixture (criterion 6 as corrected).
+- `resolveBroadcastSource` lives beside `resolveImportSource` in `import-source.ts`, sharing the
+  module-global serialized fetch queue, 10 s timeout, and the 429/5xx passthrough.
+- Fixtures: `tools/d947-broadcast-roundtrip-harness/` (real tournament PGN, 4/4 green at HEAD) —
+  promote what the criteria need into permanent tests; the harness itself stays disposable.
+- Your implementing commit flips [[D414]]-adjacent residues per §7's lifecycle map and appends
+  the log entry per protocol. [[D959]] (paste path stores verbatim) is recorded, out of Phase A
+  scope — do not fix it en passant.
+
 ## 0-WORK-INDEX. `make work-index` ([[D487]]) is now priority tooling — the fourth audit just re-proved it
 
 [[D952]]: the 2026-08-22 re-run of D641's exact join found **143 of 543 open rows unrouted**, and

@@ -5061,3 +5061,26 @@ behind its waive-or-hold question; live-sources Phase A unblocked and drafting.
 
 **Next:** live-sources RFC draft (Phase A cut); the campaign question to the owner; codex takes
 work-index, the writer, and the wiring/presets chain.
+
+## 2026-08-22 — live-sources Phase A accepted; the review found the record unwritable
+
+**What landed:** `rfc/live-sources.md` accepted after cross-review (~49 claims, 6 failed, all
+corrected). The two catches that justify the whole review pattern: (1) the drafted record was
+**unwritable at HEAD** — `imported_games.source_kind` is a STRICT CHECK closed over
+`('pgn_paste','lichess_url')`, so the claimed "no schema change" was false; the RFC now claims
+one migration position behind `campaign-core` with criterion 11 pinning both arms. (2) The
+sanitizer was beaten by its own fixture: 61 third-party SAN suffix verdicts (`??`/`?!`/`?`) live
+OUTSIDE comments in the real broadcast PGN and the drafted comment-strip missed them all —
+Lichess's blunder verdicts would have entered storage as authored-looking text, exactly D410's
+trap. The strip is now structural (zero `{ } ; [% $ ! ?` in stored movetext). Rows D957–D959
+landed (Phase B seam, casting/B5, the paste-path twin of D410 confirmed live).
+
+**What changed:** the live lane the owner commissioned this afternoon is accepted paper end to
+end for Phase A: URL grammar → split → pick board → strip-with-assertion → existing import.
+Register: 11 live claims, migration order now learner-rating ×2 → longitudinal-store →
+bot-policy → campaign-core → live-sources.
+
+**Blocked:** casting on the owner's B5 ruling; Phase B on its own RFC (D957).
+
+**Next:** campaign-core's cross-review is in flight; codex implements Phase A after
+campaign-core's migration lands (position order).
