@@ -15,6 +15,35 @@ this file as a lesson and nothing reads it.
 
 ---
 
+## 0-PHASE4-ACCEPTED. `play-composition` is accepted — the screen rebuild is implementable
+
+Accepted 2026-08-22 after cross-review; corrections in place. Your implementation order for it,
+with the review's finds carried:
+
+- **The board edge is a closed-form `snap8(min(...))` of viewport + tokens — no
+  content-measured term** — replacing the container-query remainder at
+  `DrillScreen.svelte:1335/1340/1501`. A seven-viewport numeric exhibit is in §3.1; the token
+  assignment there is an existence proof, not a mandate.
+- **The stage column's children are a CLOSED LIST.** The review's audit found three unbarred
+  insertions you must re-home: the error alert and read-only banner (`:841/:843`), the
+  branch-group creator (`:1040`), and — the live one — **the text-move disclosure inside
+  `.board-shell` (`Chessboard.svelte:292`), which shrinks the board when opened. Acceptance
+  state 16 starts red on it.** Re-home semantics untouched (A12).
+- **Do NOT naively remove the `{#key}` at `:928`.** Its second term is the branch-group
+  capture-reset; A9 carries the replacement (capture re-asserts via the existing
+  `$effect`→`set()` path) and a capture-reset arm. Removing the key correctly is also the
+  [[D840]] animation fix — one change, two criteria.
+- **16 composition states × 7 viewports, asserted POST-GESTURE, 112 screenshots** on the
+  existing `browser.yml` → `make test-browser` path. Pre-gesture coordinate caching is the
+  [[D539]] trap; stale-rect probes only as negative controls.
+- The 15-leak destination table is normative (§5.2): each leak's removal must land its
+  destination rendering in the same pass or the criterion holds it open. The six inspector
+  rows the D924 amendment added (inspector 34→40) are part of `learner-modules`' compiled 179.
+
+**Sequencing**: after D566 (still first), 2c, 2d, and `learner-modules` — this is the visible
+end of that chain. `semantic-collectors` (Wave-C) is drafting and will slot between the
+collector waves and the module amendment (your order items 2 and 5).
+
 ## 0-PRIORITY-D566. The `pawnSafety` repair is owner-promoted — fix it properly
 
 Owner ruling 2026-08-22 ([[D906]](2)): *"just fix the foundation and then keep it in."*
