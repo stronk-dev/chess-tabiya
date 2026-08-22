@@ -276,6 +276,22 @@ Wave-B event candidates from this pass are defender exposure and valence-free ma
 asymmetry. Legal per-piece mobility, pawn lever/passer conversion, decomposed king state,
 forcing-reply/search semantics and identity-preserving three-edge sequences remain open.
 
+### 4.3 Legal destination versus locally safe destination
+
+D771 tested the owner's “pawn prevents a bishop or knight from taking the spot” example at a
+stricter level. `[V]` (`legal-square-denial.md`; `tools/d771-legal-denial-harness/output.md`)
+
+A pawn attack does not make a non-king move illegal. The exact tested event retains the named minor
+and destination, requires the move to remain legal before and after, then records that the square
+changes from locally non-losing to a positive `legal-exchange@1` capture specifically by the moved
+pawn. It measures **1.00× authored / 1.02× imported**, with both intervals spanning 1. The safety
+join is sound and useful for touch/hover, theory joins, bot features and opportunity-normalized
+habits; it earns no default hint and cannot be worded as intention, force or prevention.
+
+This also keeps two apparently similar examples separate: attacking a minor already occupying its
+square is selective at 3.63×/3.18×, while changing a future empty destination's local safety is
+background. The next semantic step is multi-edge/counterfactual evidence, not a stronger adjective.
+
 ---
 
 ## 5. From evidence to player habits—not invented personalities

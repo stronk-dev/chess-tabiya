@@ -4275,3 +4275,20 @@ must be admitted, and `trapped@1` values capture moves by their own exchange res
 post-arrival capturability. D754 and D759–D762 record the outcomes. Phase 2b remains open for
 legal per-piece mobility, lever/passer conversion, decomposed king state, forcing-reply/search
 semantics and identity-preserving three-edge sequences; no production or content code changed.
+
+## 2026-08-22 — pawn “prevention” splits into legal reach and local safety
+
+D771 corrected the question before measuring it: a pawn attack does not make a bishop or knight
+move illegal. The disposable probe instead retains a named minor and the same legal quiet
+destination before/after, then asks whether the square changed from locally non-losing to a
+positive `legal-exchange@1` capture by the moved pawn. The fixture pins both facts: `...Ne5–g4`
+remains legal after `h3`, but the h3-pawn now wins the knight locally; a square already unsafe to a
+rook is the hard negative.
+
+Across 717 authored and 577 imported eligible decisions, the stronger safety event measures
+**1.00×** (95% 0.76–1.26) and **1.02×** (0.74–1.34). It reduces the geometry event's rate but does
+not distinguish played moves from legal alternatives. The disposition is therefore on-demand
+square evidence for hover/touch, theory joins, bot features and opportunity-normalized habits—not
+a default hint and never “prevented,” intent, force or move quality. Occupied-minor harassment
+remains the separate 3.63×/3.18× event. D771 is answered; D772 retains the multi-edge consequence
+question. Three focused tests pass; no production or authored content changed.
