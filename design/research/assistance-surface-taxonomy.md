@@ -144,6 +144,17 @@ timing / initiative / subject / form / valence / disclosure cost / grounding.
 - **Judgment thresholds** (`modules/tree/src/main/Advice.scala`): winning-chances **drop ≥
   0.30 → Blunder, ≥ 0.20 → Mistake, ≥ 0.10 → Inaccuracy** (the [−1,+1] scale; 0.1 = 10
   win-percentage points). The historical 300/200/100 cp rule is gone from the code path.
+
+> **ERRATUM 2026-08-22** (found by the `move-quality-grades` cross-review, verified by verbatim
+> source fetch; [[D939]]): the §2b gloss *"0.1 = 10 win-percentage points"* is **wrong for
+> `Advice.scala`** — its thresholds operate on raw `winningChances ∈ [−1,+1]`, so 0.10/0.20/0.30
+> = **5/10/15 Win%-points**. The practice file's `povDiff` divides by 2, so the 2.5/6/14 practice
+> gloss stands. Consequently the "4× stricter practice ladder" below is a **cross-normalization
+> artifact**: the true ratios are **2×/1.67×/1.07×**. The mate thresholds are a complete pinned
+> three-tier table at source (not the three cells this dossier quoted), and Advice feeds the
+> logistic **unclamped**. Rows below are left as written per the append-only spirit; every
+> consumer must read this erratum first — `move-quality-grades` §2 carries the corrected
+> constants.
   Mate cases have their own table (allowed-mate from ≥ −700 pov-cp → Blunder; lost-mate
   while still > +999 → only Inaccuracy; **MateDelayed — a slower mate — is never judged**).
   ([source](https://github.com/lichess-org/lila/blob/master/modules/tree/src/main/Advice.scala))

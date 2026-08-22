@@ -4821,3 +4821,25 @@ remaining owner question for the 14 registered ids.
 
 **Next:** execute S1–S5 immediately after the two prerequisite collector closeouts, then bind the
 landed ids into modules, Review, bots and longitudinal analysis through their separate contracts.
+
+## 2026-08-22 — move-quality-grades accepted after the review that caught a factor of two
+
+**What landed:** `rfc/move-quality-grades.md` accepted (body + register, one commit, parity green).
+The cross-review recomputed every constant against fetched sources and found the report ladder
+wrong by exactly 2×: the taxonomy dossier glossed `Advice.scala`'s 0.10/0.20/0.30 thresholds as
+Win%-points, but they operate on raw winningChances ∈ [−1,+1] — so the ladder is **5/10/15**, not
+10/20/30, and every report or imported grade would have been ~one class lenient. The dossier now
+carries a dated erratum ([[D939]]); the "4×-stricter practice ladder" was a cross-normalization
+artifact (true ratios 2×/1.67×/1.07×). The mate arm's generalizations contradicted three pinned
+source cells and are replaced by the complete fixed-cp three-tier table (countermate = Blunder,
+F-MATE-LOST-M). *"Zero voice changes"* was false by one word: `BANNED_JUDGEMENTS` lacks
+"inaccuracy" ([[D940]], open, one-word fix + fixture arm).
+
+**What changed:** the grades chain (learner-modules → grades → Review) is fully accepted; the only
+unwritten document is Phase-5 presets, held deliberately for the eve of the owner's first play
+session. Rows D939–D940 landed.
+
+**Blocked:** nothing — grades implement after learner-modules per the queue order.
+
+**Next:** owner should know before playing: report grades will be ~2× more common than the draft
+implied; the drill ladder (2.5/6/14) is unchanged and was verified correct.

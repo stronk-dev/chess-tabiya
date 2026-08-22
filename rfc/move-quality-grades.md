@@ -1,6 +1,6 @@
 # RFC: Move-quality grades — the grade-family projection and its convention document
 
-- **Status:** draft
+- **Status:** accepted — 2026-08-22, by claude as register owner on the buildability test, after a cross-review that recomputed the arithmetic to four decimals and found the report ladder **wrong by exactly a factor of two** (the taxonomy gloss trusted over the source, [[D939]] — every report grade would have been ~one class off) and the mate arm contradicting three pinned source cells, all corrected in place. The one open coordination: the constants changed materially — **report grades will be ~2× more common than the draft implied** — flagged for the owner before any play session judges the drill ladder. *(Prior line for history: draft)*
 - **Author:** claude, on the [[D879]] BUILD-IT verdict and the [[D899]] routing (learner-modules `## Discharges` D3)
 - **Created:** 2026-08-22
 - **Design refs:** `design/05-in-run-experience.md` §3 (grounding ladder, §3-forms honesty split), `design/research/assistance-surface-taxonomy.md` §2b (pinned Lichess constants), §2d-1 (two-ladder precedent), §4a (the explicit verdict); `design/research/classifier-coverage-and-noise.md` §4a layer 2 (as quoted by both)
@@ -26,12 +26,14 @@ nothing versioned").*
 One derived projection, **`derived.grade.move_quality@1`**, over the two shipped eval
 projections (`recorded.engine.eval@1`, `live.stockfish.eval@1`), plus one versioned
 convention document, **`grade-convention@1`**, compiled as a literal cited-constant table.
-The delta basis is **win-percentage drop** on Lichess's published logistic (pinned from
-source in the taxonomy), not raw centipawns. Mate scores get a **typed arm**
-(`mate_lost` / `mate_allowed`; `mate_delayed` is never graded) — never the ±1000 cp
+The delta basis is **win-percentage drop** on Lichess's published logistic (re-pinned
+from verbatim source at cross-review — the taxonomy's threshold gloss was off by the
+[−1,+1]-scale factor of two for the report ladder; §1), not raw centipawns. Mate scores
+get a **typed arm** (`mate_lost` / `mate_allowed`; `mate_delayed` is never graded),
+pinned verbatim to Advice.scala's full three-tier mate table — never the ±1000 cp
 coercion `story.ts` ships ([[D917]]). Two ladders serve three contexts (drill gets the
-4×-stricter practice ladder; review and imported analysis share the report ladder), both
-versioned in one document. The word, the numbers, the threshold crossed and the convention
+stricter practice ladder — 2×/1.67×/1.07× of the report rungs; review and imported
+analysis share the report ladder), both versioned in one document. The word, the numbers, the threshold crossed and the convention
 version are **co-rendered, always** — printing only the word launders a convention as a
 fact. Praise classes are refused; rating is not an operand (R15); the projection cannot
 carry a best move because the F1 derivation compiler forbids it (§5.3). Consumed by
@@ -73,19 +75,36 @@ cp clamped to [−1000, +1000] before conversion
 drop = Win%(before) − Win%(after)                — learner POV, unrounded floats
 ```
 
-Lichess's judgment thresholds operate on this drop (Advice.scala's winning-chances
-deltas on the [−1,+1] scale; 0.10 there = 10 win-percentage points here — the taxonomy's
-own gloss, and the practice ladder's 0.025/0.06/0.14 = 2.5/6/14 points under the same
-mapping, which is what makes "4× stricter" arithmetic rather than vibes).
+Lichess's judgment thresholds operate on this drop, **but its two ladders live on two
+different normalizations, and the taxonomy's single gloss ("0.1 = 10 win-percentage
+points") is refuted at the source for the report ladder** (verbatim fetch of both files
+at cross-review, 2026-08-22; erratum proposed as a ledger row below):
+
+- **Report** (`Advice.scala`): `delta = currentWinningChances − prevWinningChances`, a
+  *raw* difference of `WinPercent.winningChances` values on **[−1,+1]**, thresholds
+  0.10/0.20/0.30. Since Win% = 50 + 50·wc, a wc-drop of 0.10 is **5 Win%-points**, not
+  10 — the report ladder is **5/10/15** in this RFC's unit.
+- **Practice** (`practiceCtrl.ts`): `shift = −povDiff(...)`, and `povDiff` **divides the
+  povChances difference by 2** (`ui/lib/src/ceval/winningChances.ts`), thresholds
+  0.025/0.06/0.14. A shift of 0.025 is a wc-drop of 0.05 = **2.5 Win%-points** — the
+  practice ladder is **2.5/6/14** in this RFC's unit, as the taxonomy stated.
+
+The corrected ratios: practice is **2× stricter at inaccuracy, 1.67× at mistake, and
+only 1.07× at blunder** — the taxonomy's "4×" compared threshold literals across the
+two normalizations. The drill-context rationale (§4) survives: practice is stricter at
+every rung; the near-agreement at blunder is Lichess's own shape, adopted as cited.
+Sanity anchor: +1.00 → −1.00 is a wc-drop of 0.364 — a Lichess **Blunder** (≥ 0.30),
+and 18.21 Win%-points ≥ 15 here; under the uncorrected 10/20/30 ladder the same move
+would have graded "inaccuracy," misgrading every grade in the family by about one class.
 
 **Why not raw centipawn deltas — the arithmetic:**
 
-| move | cp before → after | cp lost | Win% before → after | drop | honest reading |
+| move | cp before → after | cp lost | Win% before → after | drop | honest reading (report ladder, §4) |
 |---|---|---|---|---|---|
-| A | +500 → +300 | 200 | 86.31 → 75.11 | **11.20** | still winning; an inaccuracy |
-| B | +100 → −100 | 200 | 59.10 → 40.90 | **18.21** | the game changed hands |
-| C | +800 → +200 | 600 | 95.01 → 67.62 | **27.39** | large, yet still clearly better |
-| D | 0 → −300 | 300 | 50.00 → 24.94 | **25.06** | equal → probably lost |
+| A | +500 → +300 | 200 | 86.31 → 75.11 | **11.19** | still winning; a mistake |
+| B | +100 → −100 | 200 | 59.10 → 40.90 | **18.21** | the game changed hands; a blunder |
+| C | +800 → +200 | 600 | 95.01 → 67.62 | **27.38** | still clearly better, and still a blunder |
+| D | 0 → −300 | 300 | 50.00 → 24.89 | **25.11** | equal → probably lost; a blunder |
 
 A and B lose the identical 200 cp and are not the same mistake; C loses three times A's
 centipawns and is not three times the error. The logistic says what the raw scale cannot:
@@ -103,7 +122,16 @@ normalization lands; it is not available honestly today.
 
 The clamp is part of the tradition and is honest: beyond ±1000 cp the curve reads ≥97.5%,
 and differences of saturated evals are not differences in winning chances. +2500 → +1200
-clamps to +1000 → +1000: drop 0, no grade (fixture F-CLAMP).
+clamps to +1000 → +1000: drop 0, no grade (fixture F-CLAMP). **Clamp-before-conversion is
+a declared cell, not a pinned one, and it can change a grade class** (found at
+cross-review): Lichess's own two paths disagree — `WinPercent.fromCentiPawns` and the ui's
+`cpWinningChances` clamp the *input* to ±1000, while `Advice.scala` feeds *unclamped* cp
+into `winningChances` (the output clamp to [−1,+1] is mathematically inert). At
++3000 → +530 the clamped drop is 9.98 (inaccuracy) and the unclamped drop 12.44
+(mistake). This RFC pins **clamp-the-input**, siding with `fromCentiPawns` and the
+practice path, and fixture F-CLAMP-2 pins the +3000 → +530 case to **inaccuracy** so a
+future "fix" toward unclamped Advice arithmetic is a visible convention change
+(`grade-convention@2`), never a silent one.
 
 ### §2 — Pairing, perspective, and abstention
 
@@ -152,46 +180,54 @@ un-computable is *abstention*. Declared reasons:
 `story.ts:33/:104` maps every `mateIn` to ±`STORY_MATE_CP` (1000) and clips — which
 destroys mate distance, mate appearance, and cp↔mate transitions ([[D917]]). The
 corruption is not cosmetic; run fixture F-MATE-LOST through it: *learner has mate-in-2;
-plays a move; engine now reads +800 cp.* Coerced, that is 97.55% → 95.01%, drop 2.54 —
-**below every review threshold: a missed forced mate grades as nothing.** The coercion
-makes exactly the moves a grade family exists for invisible. Lichess itself does not
-grade mates through its formula either — Advice.scala keeps a separate mate table — so
-a typed arm *is* the tradition, and the ±1000 mapping there serves accuracy%/graphs,
-which are [[D880]]'s problem, not this projection's.
+plays a move; engine now reads +800 cp.* Coerced, that is 97.54% → 95.01%, drop 2.54 —
+**below every report threshold (§4: 5/10/15): a missed forced mate grades as nothing in
+review** (and in drill it grazes the 2.5 practice rung as a borderline "inaccuracy" —
+either way, never the mate-loss verdict). The coercion makes exactly the moves a grade
+family exists for invisible or trivial. Lichess's report path does not grade mates
+through its formula either — Advice.scala keeps a separate mate table — so a typed arm
+*is* the report tradition. (Its *practice* path does coerce, via the mate-distance-aware
+`(21 − min(10, N)) × 100` cp mapping in `winningChances.ts` — softer than `story.ts`'s
+flat ±1000, refused here for the same reason: a mate is a forced outcome, not a scalar.
+The flat ±1000 `WinPercent.fromMate` mapping serves accuracy%/graphs, which are
+[[D880]]'s problem, not this projection's.)
 
-**The arm, typed.** With both scores learner-POV (`mate M > 0` = learner mates in M;
-`M < 0` = learner is mated):
+**The arm, typed — and the whole arm is now `chess_tradition`, pinned verbatim from
+Advice.scala at cross-review (2026-08-22).** The taxonomy had pinned only three cells of
+Lichess's mate table; the source carries the *complete* three-tier table on both sides,
+so the drafted floor/boundary generalizations are withdrawn — they contradicted cells
+that turn out to be pinned (the drafted floor read #N → +800 as Inaccuracy; the source
+says **Mistake**). With both scores learner-POV (`mate M > 0` = learner mates in M;
+`M < 0` = learner is mated); mate-tier comparisons are on learner-POV cp, strict, as in
+source, and clamp-invariant (cp moved by the ±1000 clamp never cross a ±700/±999 tier):
 
-| transition (before → after) | class | severity |
+| transition (before → after) | class | severity (verbatim Advice.scala) |
 |---|---|---|
 | cp → cp | `eval_delta` | the §4 ladder on the Win% drop |
-| mate M>0 → cp | **`mate_lost`** | `max(inaccuracy, ladder(100 − Win%(after)))` — the floor rule, derivation below |
-| cp → mate M<0 | **`mate_allowed`** | **blunder** when Win%(before) ≥ 7.06 (= Win%(−700 cp) — the pinned Lichess constant); else `ladder(Win%(before))` |
-| mate M>0 → mate N>0, N ≥ M | `mate_delayed` | **never graded — no emission** (pinned: Lichess's MateDelayed is never judged) |
-| mate M>0 → mate N>0, N < M | — | no emission (optimal or better) |
-| mate M<0 → mate N<0, any N | — | no emission: every move of a position lost by force loses by force; shortening it has no honest severity without a convention nobody has published |
-| mate M<0 → cp, or cp → mate M>0 improving | — | no emission (grades are loss classes; §7.2) — and `mate M<0 → cp` is additionally impossible under one instrument's coherent readings: abstain `mate_score_inconsistent` (a depth/horizon disagreement, not a learner improvement) |
+| mate M>0 → cp | **`mate_lost`** | after-cp > +999 → **inaccuracy**; > +700 → **mistake**; else → **blunder** (the `MateLost` tiers) |
+| mate M>0 → mate N<0 | **`mate_lost`** | **blunder** — the cell the draft omitted: source matches this transition as `MateLost`, and with no after-cp its `povCpOrZero = 0` falls to the blunder tier |
+| cp → mate M<0 | **`mate_allowed`** | before-cp < −999 → **inaccuracy**; < −700 → **mistake**; else → **blunder** (the `MateCreated` tiers — an allowed mate **always** grades, at least Inaccuracy; the drafted "usually nothing" fallback contradicted source and is withdrawn) |
+| mate M>0 → mate N>0, N ≥ M | `mate_delayed` | **never graded — no emission** (pinned: positive→positive never matches a `MateSequence` in source; `MateDelayed` is never judged) |
+| mate M>0 → mate N>0, N < M | — | no emission (optimal or better; the same unmatched cell in source) |
+| mate M<0 → mate N<0, any N | — | no emission: every move of a position lost by force loses by force (source: unmatched, no advice) |
+| mate M<0 → cp, or cp → mate M>0 improving | — | no emission (grades are loss classes; §7.2) — and `mate M<0 → cp` is additionally impossible under one instrument's coherent readings: abstain `mate_score_inconsistent` where Lichess silently emits nothing (a depth/horizon disagreement, not a learner improvement; same rendered outcome, ours declared) |
 
-**The pinned cells and the declared cells, separated (D879's two options, both used):**
-three cells are `chess_tradition`, cited to the taxonomy's source-pinned Advice.scala
-constants — *allowed-mate from ≥ −700 pov-cp → Blunder*; *lost-mate while still > +999 →
-only Inaccuracy*; *MateDelayed never judged*. Every other cell is **our declaration with
-the derivation shown**: the `mate_lost` floor generalizes the pinned +999 cell downward
-coherently (at the +1000 clamp the drop is 2.45 and the pinned verdict is still
-Inaccuracy, so the floor `max(inaccuracy, ladder(drop))` reproduces the pinned cell
-exactly and degrades continuously — at +800 it stays Inaccuracy by floor, at +200 the
-drop 32.38 makes it a Blunder by ladder); `mate_allowed` below −700 falls back to the
-ladder on Win%(before) < 7.06 — allowing mate in a position already lost by more than
-seven win-points is graded by what was actually still on the table, usually nothing.
+Win% glosses of the tier constants, for renderers: Win%(+999) = 97.54, Win%(±700) =
+92.94 / 7.06, Win%(−999) = 2.46. The tier operands are the cp values themselves; the
+delayed/lost boundary is pinned by the source's sequence matcher — `mate_lost` fires
+exactly when a positive mate becomes cp or a negative mate, `mate_delayed`'s no-emission
+covers positive → positive at any N.
 
 The mate arm is **context-independent** (one table for all three §4 contexts): mate
-classes state forced outcomes, not the loss tolerance a context chooses. Only the
-`eval_delta` ladder varies by context; the `ladder(...)` calls inside the mate rows use
-the context's ladder, so the floor tightens automatically in drill.
+classes state forced outcomes, not the loss tolerance a context chooses; the tiers are
+fixed cp constants with no per-context variant in the report tradition, and
+practice-mode's coerced-mate divergence is refused above. Only the `eval_delta` ladder
+varies by context. (The draft's "the floor tightens automatically in drill" sentence
+contradicted this declaration and is gone with the floor itself.)
 
 Co-rendering for mate classes shows the mate operands, never a coerced scalar:
-*"Inaccuracy — a forced mate (#2) was on the board; after this move the engine reads
-+8.00 (95.0%). Mate-lost floor, grade-convention@1/review."*
+*"Mistake — a forced mate (#2) was on the board; after this move the engine reads
++8.00 (95.0%), inside the +7.00..+9.99 mate-lost tier. grade-convention@1/review."*
 
 ### §4 — `grade-convention@1`: the versioned per-context convention document
 
@@ -206,20 +242,21 @@ nothing is emitted — "good" is the absence of a grade, §7.2):
 
 | ladder | inaccuracy | mistake | blunder | source, pinned 2026-08-22 |
 |---|---|---|---|---|
-| `report` | ≥ 10 | ≥ 20 | ≥ 30 | Lichess `modules/tree/src/main/Advice.scala` (win-chances drop 0.10/0.20/0.30), via `assistance-surface-taxonomy.md` §2b `[V]` |
-| `practice` | ≥ 2.5 | ≥ 6 | ≥ 14 | Lichess `ui/analyse/src/practice/practiceCtrl.ts` (0.025/0.06/0.14), same pin — the 4×-stricter in-drill ladder Lichess itself runs beside its report ladder (taxonomy §2d-1: two declared conventions in one product) |
+| `report` | ≥ 5 | ≥ 10 | ≥ 15 | Lichess `modules/tree/src/main/Advice.scala`: raw winning-chances drops 0.10/0.20/0.30 on the **[−1,+1]** scale, ×50 to Win%-points (§1's normalization correction — the taxonomy's §2b gloss read these as 10/20/30 and is refuted at source; verbatim fetch 2026-08-22) |
+| `practice` | ≥ 2.5 | ≥ 6 | ≥ 14 | Lichess `ui/analyse/src/practice/practiceCtrl.ts`: 0.025/0.06/0.14 over `povDiff`, which **halves** the [−1,+1] difference, so ×100 to Win%-points — the stricter in-drill ladder Lichess itself runs beside its report ladder (taxonomy §2d-1's two-conventions precedent stands; its "4×" was a cross-normalization artifact — true ratios 2×/1.67×/1.07×) |
 
-Plus the two mate constants: `mate_allowed` blunder boundary **−700 cp**
-(Win% 7.06) and the `mate_lost` **floor = inaccuracy** (§3; the +999 pinned cell is its
-anchor). The cp clamp **±1000** and the logistic coefficient **0.00368208** are
-constants of the same table, same citation discipline.
+Plus the four mate-tier constants (§3, verbatim Advice.scala): `mate_lost` after-cp tiers
+**+999 / +700** and `mate_allowed` before-cp tiers **−999 / −700** (Win% glosses 97.54 /
+92.94 / 7.06 / 2.46). The cp clamp **±1000** (a declared cell where Lichess's own two
+paths disagree — §1) and the logistic coefficient **0.00368208** are constants of the
+same table, same citation discipline.
 
 **Three contexts, and which shares what:**
 
 | context | ladder | who consumes | rationale |
 |---|---|---|---|
 | `drill` | `practice` | `postcommit_nudge`, at its timings (post-commit cap-2, `attempt_end`/disclosed — learner-modules §4.5) | a consequence rehearsal is Lichess's practice-mode situation: the learner asked to be held to precision, and the whole product loop is *rewind and try again* — a 3-win-point slip is exactly what a drill exists to surface |
-| `review` | `report` | `review_map` (review timing — learner-modules §4.10) | post-game reading of a finished run is the report situation the 10/20/30 constants were derived for |
+| `review` | `report` | `review_map` (review timing — learner-modules §4.10) | post-game reading of a finished run is the report situation the 0.10/0.20/0.30 constants were derived for |
 | `imported_analysis` | `report` — **shared with `review`**, declared, not duplicated | `review_map` over `sessionKind: "imported"` runs | an imported real game is precisely what Lichess's report ladder reports on; sharing the tradition's constants keeps our verdicts comparable to the Lichess/chess.com reports the owner will hold them against |
 
 The convention is cited as **`chess_tradition` in the convention text, never as a
@@ -272,7 +309,7 @@ interface MoveQualityGrade {
   readonly before: GradeScore;   // { score: {kind:"cp",value}|{kind:"mate",movesTo}, winPercent, learner-POV }
   readonly after: GradeScore;
   readonly dropWinPercent: number;         // unrounded; renderers round to 0.1
-  readonly thresholdCrossed: number | "mate_lost_floor" | "mate_allowed_boundary";
+  readonly thresholdCrossed: number | "mate_lost_tier" | "mate_allowed_tier"; // eval_delta: the ladder value crossed; mate arms: the §3 tier, whose cp bounds sit in before/after
   readonly convention: { readonly id: "grade-convention"; readonly version: 1;
                          readonly context: "drill" | "review" | "imported_analysis" };
   readonly engineId: string;
@@ -298,7 +335,21 @@ the projection*, and the refusal is structural, not editorial: F1 §4.3 requires
 absent"* and `live.stockfish.eval@1`'s adapter *"excludes bestMoveUci from fact-only
 consumers"* — so a grade payload carrying a move raises `EVIDENCE_DERIVATION_WIDENS` at
 compile. A derived projection over facts cannot disclose a move no input carries.
-This is also the right disclosure economics: a grade **narrows** (a word plus numbers), a
+
+One sentence of F1 §4.3 prose must be named rather than stepped around: its law-8
+corollary says derivation "may count, difference, rank or **threshold** [inputs]
+deterministically; it cannot add grounding, **grade a move**, or introduce a strategic
+claim no input carries." A move-quality grade is exactly a deterministic threshold, and
+the clause's target is manufactured judgement, not cited convention — but the words
+collide, and F1 is archived and immutable. The governing interpretation is the *later,
+accepted* `learner-modules` §5 ruling (grades are a derived projection), which this RFC
+implements with the two mechanisms that keep the clause's intent true: `exactness:
+convention` (the class boundary never claims measurement status) and §6's mandatory
+co-render (the word never travels without the numbers and the convention version). The
+compiler-enforced surface of §4.3 — inputs, grounding, exactness, answerContent,
+abstention — is satisfied without exception.
+
+The refusal is also the right disclosure economics: a grade **narrows** (a word plus numbers), a
 best move **reveals** — different rows of the disclosure-cost axis, different budget. The
 field's pairing is served on our side by composition, not by widening: the nudge's
 "Explain" action opens the inspector, where `live.stockfish.pv` already renders under its
@@ -315,7 +366,7 @@ convention id/version/context:
 
 > "Mistake — the recorded evaluation moved +1.00 (59.1%) → −1.00 (40.9%) across this
 > move, a drop of 18.2 win-points against a threshold of 10 (grade-convention@1/review).
-> Wait, that drop grades Inaccuracy — see fixture F-COR-2."
+> Wait, an 18.2-point drop crosses the 15-point blunder rung — see fixture F-COR-2."
 
 *(The example above is itself a negative fixture: a renderer whose word disagrees with
 its own printed threshold arithmetic must be constructible in tests and must fail.)*
@@ -325,13 +376,21 @@ exist only as the registered renderer's output over an admitted item's payload i
 branded `RenderedEvidenceView`; a forged grade sentence fails
 `EVIDENCE_GENERIC_BYPASS`.
 
-**The voice layer needs zero changes, and that is verified mechanics, not hope**:
-`voiceCheck`'s `absentWords` (voice.ts:107-110) bans a `BANNED_JUDGEMENTS` word only when
-it is absent from the admitted packet's sentences. Once the deterministic co-rendered
-sentence is in the packet, the LLM may re-voice "mistake"; it can never introduce a grade
-word for an ungraded move, and it can never escalate — "blunder" over a packet that
-graded "inaccuracy" is a `judgement:` violation and falls back to deterministic
-rendering. The co-rendered sentence *is* the allow-list entry.
+**The voice layer needs one word, not zero — corrected at cross-review against the
+shipped list**: `voiceCheck`'s `absentWords` (voice.ts:107, applied :116) bans a
+`BANNED_JUDGEMENTS` word only when it is absent from the admitted packet's sentences,
+and once the deterministic co-rendered sentence is in the packet the LLM may re-voice
+"mistake" but never escalate — "blunder" over a packet that graded "inaccuracy" is a
+`judgement:` violation and falls back to deterministic rendering. The co-rendered
+sentence *is* the allow-list entry. **But the shipped list (voice.ts:93-97) contains
+"mistake" and "blunder" and not "inaccuracy"** — and `\baccurate\b` does not match
+inside "inaccurate" — so at HEAD the LLM *could* introduce "inaccuracy" over an
+ungraded move with no violation. The implementation adds `"inaccuracy"` and
+`"inaccurate"` to `BANNED_JUDGEMENTS` (one line, closing the gap for every consumer,
+grade or not), and F-COR-2 gains the arm: LLM output saying "inaccuracy" over a packet
+with no grade sentence yields a `judgement:inaccuracy` violation. The draft's
+"zero voice-layer changes" claim was measured against the guard's mechanics and missed
+the vocabulary; proposed ledger row below records the gap.
 
 ### §7 — What this projection refuses, stated
 
@@ -400,10 +459,15 @@ intermediate commit.
 
 ## Deviations from design
 
-None. The load-bearing rulings — grades-are-a-projection (learner-modules §5),
-co-rendering (§4a-layer-2), post-commit/review timing (disclosure model), praise-class
-refusal, R15, law 8 — are implemented, not deviated from. The one place this RFC chooses
-where design is silent is the drill-context ladder values (open question 1).
+None from the intent tier. The load-bearing rulings — grades-are-a-projection
+(learner-modules §5), co-rendering (§4a-layer-2), post-commit/review timing (disclosure
+model), praise-class refusal, R15, law 8 — are implemented, not deviated from. The one
+place this RFC chooses where design is silent is the drill-context ladder values (open
+question 1). **One research dossier is knowingly contradicted:** this RFC's report-ladder
+and mate-table constants diverge from `assistance-surface-taxonomy.md` §2b/§2d-1 because
+the dossier's normalization gloss is refuted at the verbatim source (§1, §3); the erratum
+is proposed as ledger row D939, and the divergence is deliberate, visible, and cited —
+not silent.
 
 ## Acceptance criteria
 
@@ -418,29 +482,40 @@ scored as evidence.
    abstention reasons, disposition. Negative arms: a test variant adding `"move"` to
    `answerContent` raises `EVIDENCE_DERIVATION_WIDENS` (the §5.3 refusal, executable);
    a variant with empty `derivation.inputs` raises `EVIDENCE_PROJECTION_INCOMPLETE`.
-2. **Convention table cited** (unit: constant record; total 9 — 6 ladder thresholds + the
-   −700 boundary + the ±1000 clamp + the logistic coefficient): every record carries
-   non-empty `{ value, source, pinnedAt }`; the lint fails on a record missing either
-   field (negative fixture: one uncited constant).
-3. **Ladder boundary pairs** (unit: fixture; total 12 — 3 classes × 2 sides × 2 ladders),
-   each pinning Win% to two decimals. Report ladder, from cp 0 (50.00%): →−110 = drop
-   9.99, **no emission** / →−111 = 10.08, inaccuracy; →−230 = 19.99, inaccuracy / →−231 =
-   20.07, mistake; →−376 = 29.97, mistake / →−377 = 30.03, blunder. Practice ladder:
-   →−27 = 2.48, nothing / →−28 = 2.58, inaccuracy; →−65 = 5.96, inaccuracy / →−66 = 6.05,
-   mistake; →−156 = 13.98, mistake / →−157 = 14.06, blunder. Failure mode: a wrong
-   coefficient, clamp, or comparison direction flips at least one pair.
+2. **Convention table cited** (unit: constant record; total 12 — 6 ladder thresholds +
+   the 4 mate-tier constants (±700, ±999) + the ±1000 clamp + the logistic coefficient):
+   every record carries all three of `{ value, source, pinnedAt }` non-empty; this check
+   is a **test to be built beside the table** (part of this RFC's implementation, not an
+   existing linter), and it fails on a record missing any field (negative fixture: one
+   uncited constant).
+3. **Ladder boundary pairs** (unit: fixture; total 13 — 3 classes × 2 sides × 2 ladders,
+   plus the clamp-class pair), each pinning Win% to two decimals. Report ladder
+   (5/10/15), from cp 0 (50.00%): →−54 = drop 4.95, **no emission** / →−55 = 5.05,
+   inaccuracy; →−110 = 9.99, inaccuracy / →−111 = 10.08, mistake; →−168 = 14.99,
+   mistake / →−169 = 15.07, blunder. Practice ladder (2.5/6/14): →−27 = 2.48, nothing /
+   →−28 = 2.58, inaccuracy; →−65 = 5.96, inaccuracy / →−66 = 6.05, mistake; →−156 =
+   13.98, mistake / →−157 = 14.06, blunder. F-CLAMP-2 (§1): +3000 → +530 = clamped drop
+   9.98, **inaccuracy** — an unclamped-input implementation reads 12.44 and misgrades it
+   mistake. Failure mode: a wrong coefficient, clamp, normalization (×50 vs ×100 — the
+   exact error this cross-review found in the draft), or comparison direction flips at
+   least one pair.
 4. **Two-conventions fixture** (F-CTX): the identical 0→−28 pair grades **inaccuracy**
    under `drill` and **nothing** under `review`; byte-identical inputs, different
    convention context, different (word vs silence) result — the Lichess two-ladder
    precedent, executable.
-5. **Mate arm** (unit: fixture; total 5): F-MATE-LOST (learner #2 → +800: `mate_lost`,
-   floored **inaccuracy**, sentence carries "#2" and 95.01%); mate-lost by ladder
-   (#3 → +200: drop 32.38 → **blunder**); F-MATE-ALLOWED (0 cp → opponent #3:
-   **blunder**, drop 50.00, boundary cited); F-MATE-DELAYED (#2 → #5: **no emission**);
-   F-MATE-NEG — the permanent hard negative: the grade path imports no `STORY_MATE_CP`
-   and no ±1000 mate coercion (asserted structurally), and the fixture text documents
-   the misgrade coercion would produce (97.55 → 95.01, drop 2.54 — a missed forced mate
-   graded as nothing).
+5. **Mate arm** (unit: fixture; total 9, one per §3 tier plus the negatives):
+   `mate_lost` tiers — #2 → +1100 (clamps to +1000 > +999): **inaccuracy**; F-MATE-LOST
+   (#2 → +800: **mistake**, sentence carries "#2", 95.01% and the +7.00..+9.99 tier);
+   #3 → +200: **blunder**. F-MATE-LOST-M (#2 → opponent #4: **blunder** — the
+   mate-to-countermate cell the draft omitted). `mate_allowed` tiers — F-MATE-ALLOWED
+   (0 cp → opponent #3: **blunder**, before-cp ≥ −700 cited); −800 → opponent #2:
+   **mistake**; −1200 → opponent #2: **inaccuracy** (an allowed mate always grades —
+   the source property the drafted fallback would have violated). F-MATE-DELAYED
+   (#2 → #5: **no emission**). F-MATE-NEG — the permanent hard negative: the grade path
+   imports no `STORY_MATE_CP` and no mate→cp coercion (asserted structurally), and the
+   fixture text documents the misgrade coercion would produce (97.54 → 95.01, drop
+   2.54 — a missed forced mate graded as nothing in review and a borderline
+   "inaccuracy" in drill).
 6. **Abstention renders nothing** (unit: fixture; total 4): missing after-eval;
    recorded-vs-live cross-lane pair; depth 18 vs depth 12; mate-against → cp
    (`mate_score_inconsistent`). Each yields abstention, zero sentences, and no default
@@ -451,14 +526,25 @@ scored as evidence.
    converges to identical learner-POV Win% to two decimals; failure mode: skipping
    either lane's §2 normalization flips the sign.
 8. **R15 byte-identity** (F-R15): identical run bytes under two different learner-rating
-   contexts produce byte-identical `MoveQualityGrade` payloads and sentences. Failure
-   mode: any rating operand reaching the computation.
+   contexts produce byte-identical `MoveQualityGrade` payloads and sentences. **What
+   varies, so the fixture can actually fail:** `moveQualityGrade`'s signature carries no
+   rating, so a fixture calling only the pure function is vacuous by construction; F-R15
+   instead drives the packet path (admission → selection → render) with a learner
+   profile/rating present in scope, where a future "personalize the wording" change
+   *could* reach the grade — that seam exists only once learner-modules' registry lands,
+   so until then F-R15 runs over the pure path plus a structural assertion (no
+   rating-typed import in `grade.ts`) and is recorded as **partially deferred, not
+   passed** (criterion 11's own discipline). Failure mode: any rating operand reaching
+   the computation or the sentence.
 9. **Co-render** (unit: fixture; total 3): the deterministic sentence contains word +
    both numbers (or mate distance) + drop + threshold + `grade-convention@1/<context>`
    (F-COR-0); F-COR-1 — a word-only sentence fails the renderer contract, permanently
-   red-by-design; F-COR-2 — a `voiceCheck` arm: LLM output saying "blunder" over a
-   packet whose sentence graded "inaccuracy" yields a `judgement:blunder` violation,
-   while re-voicing "inaccuracy" passes — proving §6's zero-voice-change claim.
+   red-by-design; F-COR-2 — the `voiceCheck` arms: LLM output saying "blunder" over a
+   packet whose sentence graded "inaccuracy" yields a `judgement:blunder` violation
+   while re-voicing "inaccuracy" passes, and — with §6's one-word `BANNED_JUDGEMENTS`
+   addition in place — "inaccuracy" over a packet with no grade sentence yields
+   `judgement:inaccuracy` (red at HEAD in both directions: the first arm for want of a
+   grade path, the second for want of the vocabulary entry).
 10. **No persistence** — no table, event, or snapshot stores a grade class (grep + test
     over storage writes). **Vacuously green at HEAD; regression guard, not evidence.**
 11. **Registry hygiene at the consumer edge**: the id appears in no pre-commit/at-commit
@@ -488,21 +574,31 @@ scored as evidence.
    `full_inspector` should also list the grade (it accepts all rungs, attributed) is an
    owner call at learner-modules' implementation, not taken silently here.
 
-## Ledger rows (proposed from D932 — head verified **D931** at drafting and moving in
-flight this hour; whoever lands them re-verifies the head first, per the taxonomy's own
-renumbering precedent)
+## Ledger rows
 
-- **D932** — Grade-family projection RFC drafted (this file): win%-drop basis on the
-  pinned Lichess logistic (raw-cp refuted by arithmetic), typed mate arm refusing the
-  ±1000 coercion with the misgrade quantified (a missed mate-in-2 for +8 reads drop 2.54
-  — invisible — under coercion), two ladders × three contexts in cited-constant
-  `grade-convention@1`, best-move refusal compiler-enforced via `answerContent`, grades
-  never persisted, zero voice-layer changes needed (the co-rendered sentence is the
-  allow-list entry).
-- **D933** — Pin: `winPercentFromCp` is one exported symbol; the accuracy/eval-graph
-  family ([[D880]]) and any future win%-based reading must consume it, never re-derive
-  the 0.00368208 constant — the frozen-literal/duplicate-constant hazard, closed at the
-  first symbol.
+**D932 and D933 are landed in `design/BACKLOG.md`** (verified at cross-review,
+2026-08-22; ledger head **D937**). Two of D932's claims are corrected by this
+cross-review and superseded by the rows below: the drafted report ladder ("10/20/30")
+and the "zero voice-layer changes" clause. **Landed as D939/D940 at acceptance — whoever cites them
+re-verifies the head first, per the taxonomy's own renumbering precedent; not written
+to the ledger by this review:**
+
+- **D939 (landed)** — **The taxonomy's §2b threshold gloss ("0.1 = 10
+  win-percentage points") is refuted at source, and §2d-1's "4× stricter" with it.**
+  Verbatim Advice.scala: `delta` is a *raw* difference of `WinPercent.winningChances`
+  values on [−1,+1] (×50 to Win%-points → report = 5/10/15), while practiceCtrl.ts's
+  `povDiff` *halves* the same difference (×100 → practice = 2.5/6/14): the gloss is
+  right for one file and wrong by 2× for the other, so the true strictness ratios are
+  2×/1.67×/1.07×, and Advice.scala's mate table is fully three-tiered on both sides
+  (±700/±999) where the taxonomy pinned three cells. Advice also feeds *unclamped* cp
+  into the logistic where `fromCentiPawns`/`cpWinningChances` clamp input — Lichess's
+  two paths disagree and a convention must choose. `move-quality-grades.md` carries the
+  corrected constants; the dossier needs the erratum (owner/dossier pass — law 5).
+- **D940 (landed)** — **`BANNED_JUDGEMENTS` (voice.ts:93-97) lacks
+  "inaccuracy"/"inaccurate"** — "mistake" and "blunder" are banned but the LLM can
+  introduce "inaccuracy" over any packet with no violation (`\baccurate\b` does not
+  match inside "inaccurate"). One-line vocabulary addition, owned by
+  `move-quality-grades`' implementation (§6), guarding every consumer.
 
 ## Changelog
 
@@ -512,3 +608,21 @@ renumbering precedent)
   `derived.story.eval_shift` ~:402), `story.ts:33/:104/:106-107`,
   `evidence-queue.ts:81`, `voice.ts:12-21/:93-97/:107-110`, `compare.ts:176-177`,
   `evidence-contract.ts:3/:455-472`.
+- 2026-08-22 (adversarial cross-review, buildability): **report ladder corrected
+  10/20/30 → 5/10/15 Win%-points** — the taxonomy's gloss applied one normalization to
+  two differently-normalized Lichess files; verified against verbatim Advice.scala +
+  winningChances.ts fetches (sanity anchor: +1.00 → −1.00 is wc-drop 0.364, a Lichess
+  Blunder, and was an "inaccuracy" under the drafted ladder). **Mate arm replaced by
+  Advice.scala's full three-tier tables** (the drafted floor/boundary generalizations
+  contradicted pinned cells: #N → +800 is Mistake, not floored Inaccuracy; an allowed
+  mate always grades ≥ Inaccuracy, never "usually nothing") **and the omitted
+  mate-to-countermate cell added** (`MateLost` → blunder). Clamp-before-conversion
+  declared as a cell where Lichess's own paths disagree, with the class-changing
+  fixture F-CLAMP-2 (+3000 → +530: 9.98 clamped vs 12.44 unclamped). "Zero voice-layer
+  changes" corrected to the one-word `BANNED_JUDGEMENTS` addition (§6). F1 §4.3's
+  "cannot grade a move" prose named and resolved in §5.3. F-R15's vacuity boundary
+  stated (criterion 8). Motivation-table decimals fixed (11.19/27.38/24.89/25.11;
+  97.54). Ledger section updated: D932/D933 landed, head D937, D938/D939 proposed.
+  All arithmetic recomputed independently to 4 decimals; all symbol cites re-verified
+  at review HEAD (`e52bccf`); `register-check`/`status-parity`/`intent-parity` green
+  with this draft's README row.
