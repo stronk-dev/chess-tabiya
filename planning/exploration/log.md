@@ -4314,3 +4314,24 @@ research population projection now supplies sampled decisions and full paths wit
 independent parser. D772's four focused tests and the refactored D771 three-test suite pass; no
 production or authored content changed. Phase 2b remains open for pawn lever/passer conversion,
 decomposed king state, broader individual mobility and bounded reply/search semantics.
+
+## 2026-08-22 — pawn conversion survives; passer advancement is phase-bound
+
+D774 replaced generic pawn-contact prose with five pinned passed-pawn transitions. The first
+fixed-ply run produced a dangerous disagreement: authored packs called passed-pawn advances
+18.81× while the imported sample had zero played advances. Rather than publish the authored corpus's
+purpose as a universal chess prior, the instrument widened the same sealed games to every mainline
+decision and split them into disclosed ply bands.
+
+The robust foundation events are a moved pawn becoming passed (**12.46× / 13.45× / 7.72×**) and a
+capture creating that moved passer (**21.18× / 14.45× / 11.58×**) over plies
+1–20 / 21–40 / 41+. Passed-pawn advance is 0 played / 1.03× / 3.17×; protected and connected passer
+gains become reliable only late at 2.68×/2.73×. Therefore passage creation earns exact identities,
+while advancement/protection/connection require phase-aware module eligibility. None permits danger,
+winning, quality, intent or plan language.
+
+Three focused fixtures pass, including a blocking adjacent pawn and capture-created connected pair.
+D774–D777 record the result and the wider lesson: current packs omit a strong human event and
+overrepresent a phase-specific one, so pack coverage cannot define foundation completeness. No
+production or authored content changed. Phase 2b remains open for candidate-passers/lever timing,
+decomposed king state, broader individual mobility and bounded reply/search semantics.

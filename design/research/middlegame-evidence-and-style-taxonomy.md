@@ -307,6 +307,23 @@ reply was forced or that the first move was removal, deflection or overload. Tha
 enumeration and distinct counterfactuals. The zero authored count also means permanent work needs
 canonical fixtures before pack authors can safely adopt the vocabulary.
 
+### 4.5 Pawn conversion, separated from generic contact
+
+D774 measures identity-retaining passer transitions and adds full imported paths in three disclosed
+ply bands to prevent the endgame-heavy authored corpus from supplying a global prior. `[V]`
+(`pawn-conversion-events.md`; `tools/d774-pawn-conversion-harness/output.md`)
+
+- A moved pawn becoming passed is robust at **12.46× / 13.45× / 7.72×** over plies
+  1–20 / 21–40 / 41+.
+- A capture creating that moved passer is sharper: **21.18× / 14.45× / 11.58×**.
+- Advancing an existing passer is background in the middle band (**1.03×**) and distinctive only
+  late (**3.17×**). Its **18.81×** authored lift is pack-composition evidence, not a universal rank.
+- Protected and connected passer gains become stable later (~2.7×) but are sparse/uncertain earlier.
+
+The first two events earn exact foundation identities. The latter three require phase-aware module
+eligibility. None supplies “dangerous,” “winning,” “good plan” or conversion success without theory,
+search, tablebase or authored consequence.
+
 ---
 
 ## 5. From evidence to player habits—not invented personalities
