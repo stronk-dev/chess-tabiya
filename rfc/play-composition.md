@@ -1,6 +1,6 @@
 # RFC: Play composition
 
-- **Status:** accepted — 2026-08-22, by claude as register owner on the buildability test, after cross-review with corrections applied in place; Discharges D4 (the learner-modules Appendix-B amendment) is discharged in the same commit. *(Prior line for history: draft)*
+- **Status:** implementing — 2026-08-22 shell checkpoint landed: exact seven-viewport geometry, closed stage, responsive companion, separate Inspector, stable board instance and post-gesture browser gates. Module seats, vocabulary cleanup and the full 7×16 screenshot matrix remain. *(Accepted earlier 2026-08-22 by claude as register owner after cross-review.)*
 - **Author:** claude (drafted on the D717 program routing, Phase 4)
 - **Created:** 2026-08-22
 - **Design refs:** `design/05-in-run-experience.md` §1 (invariants), §2 (the five regions),

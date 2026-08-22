@@ -63,7 +63,7 @@ test("two learners alternate a native match, pause to branch, and return to the 
   const black = await learner(browser, "black");
   try {
     const runId = await startPosition(coach.page);
-    await coach.page.locator("#primary-navigation").getByRole("link", { name: "Live" }).click();
+    await coach.page.goto("/live");
     await coach.page.getByLabel("Kind").selectOption("match");
     await coach.page.getByLabel("Board").selectOption("match");
     await coach.page.getByLabel("White handle").fill(white.handle);
@@ -157,7 +157,7 @@ test("a single-use friend link registers a learner without exposing the board", 
   const coach = await learner(browser, "linkcoach");
   try {
     const runId = await startPosition(coach.page);
-    await coach.page.locator("#primary-navigation").getByRole("link", { name: "Live" }).click();
+    await coach.page.goto("/live");
     await coach.page.getByLabel("Kind").selectOption("match");
     await coach.page.getByLabel("Board").selectOption("match");
     await coach.page.getByLabel("White handle").fill(coach.handle);

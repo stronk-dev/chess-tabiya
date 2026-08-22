@@ -2,6 +2,7 @@ import { mkdir, writeFile } from "node:fs/promises";
 import { randomUUID } from "node:crypto";
 
 import { expect, test, type Locator, type Page } from "@playwright/test";
+import { playBoardEdge } from "../../apps/web/src/lib/play-composition.js";
 
 async function register(page: Page): Promise<string> {
   await page.goto("/play");
@@ -41,6 +42,8 @@ async function assertRunViewport(
 ): Promise<void> {
   const boardElement = page.getByLabel("Chessboard");
   await expect(boardElement).toBeVisible();
+  const expectedEdge = playBoardEdge(viewport.width, viewport.height);
+  await expect.poll(async () => (await boardElement.boundingBox())?.width).toBe(expectedEdge);
   const board = await boardElement.boundingBox();
   expect(board).not.toBeNull();
   expect(board!.x).toBeGreaterThanOrEqual(-1);
@@ -48,6 +51,9 @@ async function assertRunViewport(
   expect(board!.x + board!.width).toBeLessThanOrEqual(viewport.width + 1);
   expect(board!.y + board!.height).toBeLessThanOrEqual(viewport.height + 1);
   expect(board!.width).toBeGreaterThanOrEqual(192);
+  expect(board!.width).toBe(expectedEdge);
+  expect(board!.height).toBe(board!.width);
+  expect(board!.width % 8).toBe(0);
   const regionElement = page.locator(".drill-region");
   const regionBox = await regionElement.boundingBox();
   const positionBox = await page.locator(".position-column").boundingBox();
@@ -63,7 +69,7 @@ async function assertRunViewport(
   }));
   expect(region.scrollHeight).toBeLessThanOrEqual(region.clientHeight + 1);
   if (viewport.width > 719) {
-    const timeline = await page.locator(".timeline-row").boundingBox();
+    const timeline = await page.locator(".timeline-strip").boundingBox();
     expect(timeline).not.toBeNull();
     expect(board!.y + board!.height).toBeLessThanOrEqual(timeline!.y + 1);
   }
@@ -132,13 +138,15 @@ test("Just Play reaches a Carlsbad and opens a passive shape marker without muta
   await expect(marker).toBeVisible();
   const runId = page.url().split("/").at(-1)!;
   const before = await (await page.request.get(`/runs/${runId}/events?sinceSeq=0`)).json() as { events: unknown[] };
-  const transitionButton = page.getByRole("button", { name: "Evidence inspector: what changed on this move?" });
+  await page.getByRole("button", { name: "Inspector" }).click();
+  const transitionButton = page.getByRole("button", { name: "Move transition" });
   await expect(transitionButton).toHaveAttribute("aria-expanded", "false");
   await transitionButton.click();
   await expect(transitionButton).toHaveAttribute("aria-expanded", "true");
   await expect(page.getByRole("region", { name: "Evidence inspector: move transition" })).toContainText(/geometric transition census|halfmove clock|irreversibility convention/);
   await transitionButton.click();
   await expect(transitionButton).toHaveAttribute("aria-expanded", "false");
+  await page.getByRole("button", { name: "Return to play" }).click();
   await marker.click();
   const panel = page.getByRole("complementary", { name: "Carlsbad structure" });
   await expect(panel).toContainText("Named plans for this structure — general to the kind of position, not advice for this one.");
@@ -150,7 +158,7 @@ test("Just Play reaches a Carlsbad and opens a passive shape marker without muta
 });
 
 test("imports a repertoire, enters its biggest corpus gap, and records an addressed attempt",async({page})=>{
-  await page.getByRole("link",{name:"Learn"}).click();
+  await page.goto("/learn");
   await page.getByRole("heading",{name:"Repertoire gaps"}).scrollIntoViewIfNeeded();
   await page.getByLabel("Name").fill("Browser black repertoire");
   await page.getByLabel("Your side").selectOption("black");
@@ -163,7 +171,8 @@ test("imports a repertoire, enters its biggest corpus gap, and records an addres
   await card.getByRole("button",{name:"Go to biggest gap"}).click();
   await expect(page).toHaveURL(/\/play\/run\/gap-/);await expect(page.getByLabel("Chessboard")).toBeVisible();
   await move(page,"c7","c5","black");
-  await page.getByRole("link",{name:"Learn"}).click();
+  await page.getByRole("button", { name: "Tabiya" }).click();
+  await page.getByRole("link", { name: "Learn" }).click();
   const refreshed=page.getByRole("article").filter({hasText:"Browser black repertoire"});
   await expect(refreshed.getByText(/e4 · about 1 in 2 games · addressed/)).toBeVisible({timeout:5_000});
 });
@@ -179,7 +188,8 @@ test("adaptive guidance keeps a queen-exchange phase change passive and removabl
   await page.getByLabel("Optional FEN").fill("3qk2r/5p2/2b2n2/8/8/8/8/3QK3 w - - 0 1");
   await page.getByRole("button", { name: "Start game" }).click();
   await expect(page.getByLabel("Chessboard")).toBeVisible();
-  await expect(page.getByText("Detected by Tabiya's phase bands: middlegame.")).toBeVisible();
+  await expect(page.getByRole("region", { name: "Phase reading" })).toContainText("middlegame");
+  await expect(page.getByText("Detected by Tabiya's phase bands: middlegame.")).toHaveCount(0);
 
   await page.getByText("Assistance", { exact: true }).click();
   await page.getByLabel("Passive pivotal markers").check();
@@ -222,6 +232,7 @@ test("runtime corpus counts stay silent until reveal and render population facts
   await page.getByText("Assistance", { exact: true }).click();
   await page.getByLabel("Evidence inspector: corpus counts").check();
   await page.getByRole("button", { name: "Open corpus evidence inspector" }).click();
+  await page.getByRole("button", { name: "Inspector", exact: true }).click();
   const corpus = page.getByRole("region", { name: "Corpus evidence" });
   await expect(corpus).toContainText("Lichess explorer — rating buckets 1000,1200,1400,1600,1800,2000,2200,2500");
   await expect(corpus).toContainText("These counts say what this population played, not what is good.");
@@ -240,7 +251,8 @@ test("Pack B references the Carlsbad entry while its pack prose stays server-wit
   expect(projected).not.toHaveProperty("successConditions");
 
   await page.getByRole("article").filter({ hasText: pack.title }).getByRole("button", { name: /Open position/ }).click();
-  const structuralReading = page.getByRole("button", { name: "Evidence inspector: position structure" });
+  await page.getByRole("button", { name: "Inspector" }).click();
+  const structuralReading = page.getByRole("button", { name: "Position structure" });
   await expect(structuralReading).toHaveAttribute("aria-expanded", "false");
   await expect(page.locator(".structural-facts")).toHaveCount(0);
   await structuralReading.click();
@@ -248,8 +260,10 @@ test("Pack B references the Carlsbad entry while its pack prose stays server-wit
   await expect(page.locator(".structural-facts")).toContainText("Black has 7 pawns.");
   await expect(page.locator(".structural-facts")).toContainText("White's bishop on d3 stands on a light square.");
   await page.reload();
-  await expect(page.getByRole("button", { name: "Evidence inspector: position structure" })).toHaveAttribute("aria-expanded", "false");
+  await page.getByRole("button", { name: "Inspector" }).click();
+  await expect(page.getByRole("button", { name: "Position structure" })).toHaveAttribute("aria-expanded", "false");
   await expect(page.locator(".structural-facts")).toHaveCount(0);
+  await page.getByRole("button", { name: "Return to play" }).click();
   const marker = page.getByRole("button", { name: /Carlsbad structure/ });
   await expect(marker).toBeVisible();
   await marker.click();
@@ -273,7 +287,7 @@ test("immediate guard waits for the consequence, preserves play-on, and rewinds 
   await expect(prompt).toHaveCount(0);
   await page.reload();
   await expect(prompt).toBeVisible();
-  await prompt.getByRole("button", { name: "Rewind this decision" }).click();
+  await prompt.getByRole("button", { name: "Rewind" }).click();
   await expect(page.getByText("Active line 0 plies")).toBeVisible();
   await move(page, "h2", "h4");
   await expect(page.getByRole("button", { name: /Switch to branch 1:/ })).toBeVisible();
@@ -322,7 +336,7 @@ test("Live turns a run into a session and exposes a chrome-free overlay", async 
   const card = page.getByRole("article").filter({ hasText: "schema example" }).first();
   await card.getByRole("button", { name: /Open position/ }).click();
   await expect(page.getByLabel("Chessboard")).toBeVisible();
-  await page.locator("#primary-navigation").getByRole("link", { name: "Live" }).click();
+  await page.goto("/live");
   await expect(page.getByRole("heading", { name: "Rehearse with other people." })).toBeVisible();
   await page.getByRole("button", { name: "Create academy" }).first().click();
   await expect(page.getByRole("heading", { name: "academy session" })).toBeVisible();
@@ -454,7 +468,7 @@ test("terminal flip preserves the source and milestones link back into played ru
   await expect(page).toHaveURL(/\/play\/run\/flip-/);
   await expect(page.getByText("No pack is loaded. Nothing is claimed about this position.")).toBeVisible();
   await expect(page.getByLabel("Opposite-side replay source")).toContainText(sourceId);
-  await page.getByRole("link", { name: "Learn" }).click();
+  await page.goto("/learn");
   await expect(page.getByRole("heading", { name: "Milestones" })).toBeVisible();
   await expect(page.getByText("First preserved attempt.")).toBeVisible();
 });
@@ -719,13 +733,15 @@ test("served Najdorf pack plays, rewinds, branches, compares, and exports", asyn
     .getByRole("button", { name: /Open position/ })
     .click();
   await expect(page.getByLabel("Chessboard")).toBeVisible();
-  const structuralReading = page.getByRole("button", { name: "Evidence inspector: position structure" });
+  await page.getByRole("button", { name: "Inspector" }).click();
+  const structuralReading = page.getByRole("button", { name: "Position structure" });
   await expect(structuralReading).toHaveAttribute("aria-expanded", "false");
   await expect(page.locator(".structural-facts")).toHaveCount(0);
   await structuralReading.click();
   await expect(page.locator(".structural-facts")).toBeVisible();
   await expect(page.locator(".structural-facts p").first()).toBeVisible();
   await structuralReading.click();
+  await page.getByRole("button", { name: "Return to play" }).click();
   const boardReadyMs =
     (await page.evaluate(() => performance.now())) - boardStart;
 
@@ -814,17 +830,14 @@ test("served Najdorf pack plays, rewinds, branches, compares, and exports", asyn
 
   await page.getByRole("button", { name: "Close comparison" }).click();
   await expect(page.locator("main.drill")).toBeFocused();
-  const playNavigation = page.locator("#primary-navigation a[href='/play']");
-  await playNavigation.focus();
-  await page.keyboard.press("Tab");
-  await expect(page.locator("#primary-navigation a[href='/learn']")).toBeFocused();
+  await expect(page.locator("#primary-navigation")).toHaveCount(0);
   await expect(
     page.getByRole("heading", { name: "Same decision, two consequences." }),
   ).toHaveCount(0);
   await page.locator("main.drill").focus();
   await page.keyboard.press("g");
   await page.keyboard.press("m");
-  await expect(page.locator("#primary-navigation a").first()).toBeFocused();
+  await expect(page.locator("main.drill")).toBeFocused();
 
   const selectorLatency = await page.evaluate(async () => {
     const packResponse = await fetch("/packs");
@@ -1032,7 +1045,7 @@ test("a granted spectator follows a run without receiving a write control", asyn
 
   await spectator.goto(`/play/run/${encodeURIComponent(runId)}`);
   await expect(spectator.getByLabel("Chessboard")).toBeVisible();
-  await expect(spectator.getByText("Read-only", { exact: true })).toBeVisible();
+  await expect(spectator.getByText("Read-only follower", { exact: true })).toBeVisible();
   await expect(spectator.getByRole("button", { name: "Take the board on this device" })).toHaveCount(0);
   await expect(spectator.getByRole("button", { name: /^Fork/ })).toBeDisabled();
   await expect(spectator.getByRole("button", { name: "Branch group" })).toBeDisabled();
@@ -1098,11 +1111,77 @@ test("every shell route owns the viewport at supported desktop and tablet projec
         if (viewport.width === 768) {
           expect((await page.getByLabel("Chessboard").boundingBox())!.width).toBeGreaterThanOrEqual(400);
           await expect(page.locator(".rail-stack")).toBeVisible();
-          await expect(page.locator(".timeline-row")).toBeVisible();
+          await expect(page.locator(".timeline-strip")).toBeVisible();
         }
       }
     }
   }
+});
+
+test("play composition keeps one exact board rectangle through overlays and companion gestures", async ({ page }) => {
+  await page.goto("/play");
+  await page
+    .getByRole("article")
+    .filter({ hasText: "schema example" })
+    .getByRole("button", { name: /Open position/ })
+    .click();
+
+  const projections = [
+    { width: 1440, height: 900 },
+    { width: 1366, height: 768 },
+    { width: 1280, height: 720 },
+    { width: 768, height: 1024 },
+    { width: 430, height: 932 },
+    { width: 390, height: 844 },
+    { width: 360, height: 680 },
+  ] as const;
+
+  for (const viewport of projections) {
+    await page.setViewportSize(viewport);
+    await assertRunViewport(page, viewport);
+    const calm = await page.getByLabel("Chessboard").boundingBox();
+    expect(calm).not.toBeNull();
+
+    await page.getByText("Enter a move", { exact: true }).click();
+    await expect(page.getByLabel("Move in SAN or UCI")).toBeVisible();
+    expect(await page.getByLabel("Chessboard").boundingBox()).toEqual(calm);
+    await page.getByText("Enter a move", { exact: true }).click();
+
+    await page.getByRole("button", { name: "Inspector" }).click();
+    await expect(page.getByRole("dialog", { name: "Evidence inspector" })).toBeVisible();
+    expect(await page.getByLabel("Chessboard").boundingBox()).toEqual(calm);
+    await page.getByRole("button", { name: "Return to play" }).click();
+
+    if (viewport.width <= 1023) {
+      await page.locator(".objective-line").click();
+      await expect(page.getByRole("dialog", { name: /Select a setup/ })).toBeVisible();
+      expect(await page.getByLabel("Chessboard").boundingBox()).toEqual(calm);
+      await page.getByRole("button", { name: "Return to the board" }).click();
+    }
+
+    if (viewport.width <= 719) {
+      await page.getByRole("button", { name: "Branches" }).click();
+      await expect(page.locator(".rail-stack")).toHaveClass(/sheet-open/);
+      expect(await page.getByLabel("Chessboard").boundingBox()).toEqual(calm);
+      await page.getByRole("button", { name: "Collapse companion" }).click();
+    }
+  }
+});
+
+test("a committed move updates the stable board instance instead of remounting it", async ({ page }) => {
+  await page.goto("/play");
+  await page.getByRole("button", { name: "Start game" }).click();
+  const board = page.getByLabel("Chessboard");
+  await expect(board).toBeVisible();
+  await board.evaluate((element) => {
+    (window as unknown as { __tabiyaBoard?: Element }).__tabiyaBoard = element;
+  });
+
+  await move(page, "e2", "e4", "white");
+  await expect(page.locator(".timeline")).toContainText("Active line 2 plies");
+  expect(await board.evaluate((element) =>
+    (window as unknown as { __tabiyaBoard?: Element }).__tabiyaBoard === element,
+  )).toBe(true);
 });
 
 test("served endgame packs keep the board above the timeline at supported desktop projections", async ({
@@ -1203,15 +1282,15 @@ test("normal Tab traversal reaches every drill region in both directions and exi
     const inside = active.closest(".drill-region") !== null;
     const value = active.matches(".wordmark") ? "wordmark"
       : active.matches(".assistance-control summary") ? "assistance"
+      : active.matches(".inspector-entry") ? "inspector"
       : active.matches('button[aria-label="Keyboard shortcuts"]') ? "help"
-      : active.matches(".structural-reading button") ? "structure-inspector"
-      : active.matches(".transition-reading button") ? "transition-inspector"
       : active.matches(".text-move summary") ? "text-summary"
       : active.matches(".text-move input") ? "text-input"
       : active.matches(".text-move button") ? "text-submit"
       : active.matches("[data-board-input-grid]") ? "board-grid"
       : active.matches(".mark-controls select") ? "board-marks"
-      : active.matches(".rail button, .rail input") ? "branches"
+      : active.matches(".compact-tabs button") ? "companion-tabs"
+      : active.matches(".branch-seat button, .branch-seat input") ? "branches"
       : active.matches(".timeline, .timeline button") ? "timeline"
       : active.matches(".quick-actions button") ? "run-actions"
       : `${active.tagName.toLowerCase()}:${active.className}`;
@@ -1232,7 +1311,7 @@ test("normal Tab traversal reaches every drill region in both directions and exi
     throw new Error(`${keys} did not leave the drill region`);
   }
 
-  const expected = ["assistance", "help", "structure-inspector", "transition-inspector", "text-summary", "text-input", "text-submit", "board-grid", "board-marks", "branches", "timeline", "run-actions"];
+  const expected = ["assistance", "inspector", "help", "text-summary", "text-input", "text-submit", "board-grid", "timeline", "companion-tabs", "branches", "board-marks", "run-actions"];
   const forward = await trace("Tab", page.locator("main.drill .wordmark"));
   for (const item of expected) expect(forward.has(item), `forward traversal missed ${item}`).toBe(true);
   const backward = await trace("Shift+Tab", page.locator(".quick-actions button").last());
@@ -1252,20 +1331,23 @@ test("mobile shell, settings, and install manifest preserve the run regions", as
   await expect(page.getByRole("navigation", { name: "Run regions" })).toBeVisible();
   for (const viewport of [{ width: 390, height: 844 }, { width: 360, height: 680 }] as const) {
     await page.setViewportSize(viewport);
-    for (const tab of ["Timeline", "Branches", "Evidence"] as const) {
+    await assertRunViewport(page, viewport);
+    const calmRect = await page.getByLabel("Chessboard").boundingBox();
+    expect(calmRect).not.toBeNull();
+    for (const tab of ["Support", "Branches", "Actions"] as const) {
       await page.getByRole("button", { name: tab }).click();
       await assertRunViewport(page, viewport);
-      if (tab === "Timeline") {
-        await expect(page.locator(".timeline-row")).toBeVisible();
-        await expect(page.locator(".reading-controls")).toBeHidden();
-      } else if (tab === "Branches") {
-        await expect(page.locator(".rail-stack")).toBeVisible();
-      } else {
-        await expect(page.locator(".reading-controls")).toBeVisible();
-        await expect(page.locator(".timeline-row")).toBeHidden();
-        await expect(page.locator(".rail-stack")).toBeHidden();
-      }
+      await expect(page.locator(".rail-stack")).toHaveClass(/sheet-open/);
+      await expect(page.getByRole("region", { name: tab === "Actions" ? "Run actions" : tab })).toBeVisible();
+      await expect(page.locator(".timeline-strip")).toBeVisible();
+      expect(await page.getByLabel("Chessboard").boundingBox()).toEqual(calmRect);
+      await page.getByRole("button", { name: "Collapse companion" }).click();
+      expect(await page.getByLabel("Chessboard").boundingBox()).toEqual(calmRect);
     }
+    await page.locator(".objective-line").click();
+    await expect(page.getByRole("dialog", { name: /No pack is loaded/ })).toBeVisible();
+    expect(await page.getByLabel("Chessboard").boundingBox()).toEqual(calmRect);
+    await page.getByRole("button", { name: "Return to the board" }).click();
   }
   await page.setViewportSize({ width: 430, height: 932 });
   await page.goto("/play");
@@ -1274,9 +1356,11 @@ test("mobile shell, settings, and install manifest preserve the run regions", as
     .filter({ hasText: "Outcome hold browser fixture" })
     .getByRole("button", { name: /Open position/ })
     .click();
+  await page.getByRole("button", { name: "Support" }).click();
   await expect(page.getByText("No opponent move has been played yet.")).toBeVisible();
   await expect(page.getByText("Root assessment (authored, unproved):", { exact: false })).toBeVisible();
   await assertRunViewport(page, { width: 430, height: 932 });
+  await page.getByRole("button", { name: "Collapse companion" }).click();
   expect((await page.locator('[aria-label="Chessboard"]').boundingBox())!.width).toBeGreaterThan(192);
   const dimensions = await page.evaluate(() => ({ scrollHeight: document.scrollingElement!.scrollHeight, clientHeight: document.scrollingElement!.clientHeight }));
   expect(dimensions.scrollHeight).toBeLessThanOrEqual(dimensions.clientHeight + 1);

@@ -557,7 +557,14 @@
     <p class="honest">There is no password recovery yet. Keep your password somewhere safe.</p>
   </main>
 {:else}
-<ShellFrame {route} {runContext} {learner} chrome={route.name !== "live-overlay"} onNavigate={navigate} onSignOut={() => void signOut()}>
+<ShellFrame
+  {route}
+  {runContext}
+  {learner}
+  chrome={route.name !== "live-overlay" && route.name !== "run"}
+  onNavigate={navigate}
+  onSignOut={() => void signOut()}
+>
   {#if routeLoading}
     <main class="shell-view" aria-busy="true"><p>Loading Tabiya…</p></main>
   {:else if routeError}

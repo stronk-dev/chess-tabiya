@@ -177,7 +177,8 @@ describe("Layer 3 screens", () => {
 
     earlier.click();
     await tick();
-    expect(chessground.configs.at(-1)!.drawable!.shapes).toEqual([{ orig: "a1", dest: "h8", brush: "red" }]);
+    expect(chessground.set.mock.calls.at(-1)?.[0].drawable!.shapes).toEqual([{ orig: "a1", dest: "h8", brush: "red" }]);
+    expect(chessground.configs).toHaveLength(1);
     await unmount(component);
     vi.useRealTimers();
   });
@@ -279,6 +280,7 @@ describe("Layer 3 screens", () => {
     expect(request).toBeDefined();
     request!.click();
     expect(onHumanSplit).toHaveBeenCalledWith(run.activeCursor.nodeId);
+    document.querySelector<HTMLButtonElement>(".inspector-entry")!.click();
     await vi.waitFor(() => expect(document.querySelector("[aria-label='Human-model evidence']")?.textContent).toContain("e8e7 40%"));
     await unmount(component);
   });

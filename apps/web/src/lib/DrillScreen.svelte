@@ -44,6 +44,7 @@
   } from "./outcome-presentation.js";
   import { assistanceProfile, loadAssistance, saveAssistance, type PreferenceStorage } from "./assistance-preference.js";
   import { runViewportSupport, type RunViewportSupport } from "./viewport-support.js";
+  import { playBoardEdge } from "./play-composition.js";
 
   type RewindTarget =
     | { readonly nodeId: string }
@@ -154,6 +155,9 @@
   let replaying = $state(false);
   let structuralOpen = $state(false);
   let transitionOpen = $state(false);
+  let inspectorOpen = $state(false);
+  let objectiveOpen = $state(false);
+  let sheetOpen = $state(false);
   let openShapeId: string | undefined = $state();
   let assistance: AssistanceConfig = $state(SILENT_ASSISTANCE);
   let openPivotalNodeId: string | undefined = $state();
@@ -196,6 +200,7 @@
   }
 
   let run = $derived(snapshot.run);
+  let boardEdge = $derived(playBoardEdge(viewportSupport.width, viewportSupport.height));
   let canWrite = $derived(snapshot.access === "writer");
   let currentNode = $derived(activeNode(run));
 
@@ -800,12 +805,13 @@
     onVoice={onCompareVoice === undefined ? undefined : async () => (await onCompareVoice()).text}
   />
 {:else}
-  <main class="drill" tabindex="-1" bind:this={mainElement} aria-labelledby="drill-title">
+  <main class="drill" tabindex="-1" bind:this={mainElement} aria-labelledby="drill-title" style={`--board-edge: ${boardEdge}px`}>
     <header class="topbar">
       <button class="wordmark" type="button" onclick={onStop}>Tabiya</button>
       <div class="status" aria-live="polite">
+        <span class="run-name">{pack?.title ?? "Just Play"}</span>
         <span class:readonly={snapshot.access === "read_only"}>
-          {snapshot.access === "read_only" ? "Read-only follower" : busy ? "Thinking…" : "Your move"}
+          {snapshot.access === "read_only" ? "Read-only follower" : busy ? "Writer · thinking…" : "Writer · your move"}
         </span>
         {#if authoredFeedback?.hasWithheldAuthoredContent}
           <span role="status">Authored commentary withheld until checkpoints</span>
@@ -823,17 +829,16 @@
             {#if assistancePermission.humanSplit === "locked_off"}<span id="human-split-locked" class="honest">Available only after this run opens feedback, and never to participants or spectators.</span>{/if}
             {#if assistance.humanSplit === "on_request" && assistancePermission.humanSplit === "free" && onHumanSplit !== undefined}<button type="button" onclick={() => void requestHumanSplit()}>Open human-model evidence inspector</button>{/if}
             {#if assistance.humanSplit === "on_request" && assistancePermission.humanSplit === "free" && onHumanSplit === undefined}<span class="honest">Recorded human-model splits are unavailable from this deployment.</span>{/if}
-            {#if humanSplit}<section aria-label="Human-model evidence" data-evidence-consumer="inspector.human_split"><p class="guidance-sentence">{humanSplit.engine.name}, rating target {humanSplit.targetElo ?? "unrated"}: {humanSplit.candidates.filter((candidate) => candidate.offWindow !== true).map((candidate) => `${candidate.moveUci} ${candidate.mass === undefined ? "mass unavailable" : `${Math.round(candidate.mass * 100)}%`}`).join(" · ")}</p></section>{/if}
             {#if capabilities?.providers.corpus !== "none"}<label><input type="checkbox" checked={assistance.corpus === "on_request"} disabled={assistancePermission.corpus === "locked_off"} aria-describedby={assistancePermission.corpus === "locked_off" ? "corpus-locked" : undefined} onchange={(event) => setAssistance("corpus", event.currentTarget.checked ? "on_request" : "off")} /> Evidence inspector: corpus counts</label>{/if}
             {#if capabilities?.providers.corpus !== "none" && assistancePermission.corpus === "locked_off"}<span id="corpus-locked" class="honest">Available only after this run opens feedback, and never to participants or spectators.</span>{/if}
             {#if assistance.corpus === "on_request" && assistancePermission.corpus === "free" && capabilities?.providers.corpus !== "none" && onCorpus !== undefined}<button type="button" onclick={() => void requestCorpus()}>Open corpus evidence inspector</button>{/if}
-            {#if corpusPage}<section aria-label="Corpus evidence" data-evidence-consumer="inspector.corpus">{#each renderCorpusPage(corpusPage) as sentence}<p class="guidance-sentence">{sentence}</p>{/each}</section>{/if}
             {#if capabilities?.providers.llm === "external"}<label><input type="checkbox" checked={assistance.voice === "persona"} onchange={(event) => setAssistance("voice", event.currentTarget.checked ? "persona" : "authored")} /> External voice</label>{/if}
             {#if speechAvailable}<label><input type="checkbox" checked={assistance.spoken === "browser"} onchange={(event) => setAssistance("spoken", event.currentTarget.checked ? "browser" : "off")} /> Speak opened guidance</label>{/if}
             {#if capabilities?.providers.tts === "external"}<label><input type="checkbox" checked={assistance.spoken === "provider"} onchange={(event) => setAssistance("spoken", event.currentTarget.checked ? "provider" : "off")} /> Use configured speech provider</label>{/if}
             {#if !speechAvailable && capabilities?.providers.tts !== "external"}<span id="spoken-unavailable" class="honest">Speech synthesis is unavailable in this browser.</span>{/if}
           </div>
         </details>
+        <button class="inspector-entry" type="button" aria-haspopup="dialog" onclick={() => (inspectorOpen = true)}>Inspector</button>
         <button class="help" type="button" aria-label="Keyboard shortcuts" onclick={(event) => { helpInvoker = invoker(event); helpOpen = true; }}>?</button>
       </div>
     </header>
@@ -845,87 +850,11 @@
       </p>
     {/if}
 
-    {#if guardEvent?.type === "feedback.generated"}
-      <section class="guard-prompt" aria-label="Post-commit guard" aria-live="polite">
-        <div>
-          <strong>The consequence exposed something concrete.</strong>
-          {#each guardGrounds as sentence}<p>{sentence.text}</p>{/each}
-          <p>Your played line stays preserved on the branch rail.</p>
-        </div>
-        <div class="guard-actions">
-          <button type="button" onclick={() => (dismissedGuardSeq = guardEvent?.seq)}>Play on</button>
-          <button
-            class="primary"
-            type="button"
-            disabled={snapshot.access === "read_only" || guardRewindNodeId === undefined}
-            onclick={() => guardRewindNodeId === undefined ? undefined : onRewind({ nodeId: guardRewindNodeId })}
-          >Rewind this decision</button>
-        </div>
-      </section>
-    {/if}
-
     <div class="workspace" class:evidence-active={compactTab === "evidence"}>
-      <nav class="compact-tabs" aria-label="Run regions">
-        <button class:active={compactTab === "timeline"} onclick={() => compactTab = "timeline"}>Timeline</button>
-        <button class:active={compactTab === "branches"} onclick={() => compactTab = "branches"}>Branches</button>
-        <button class:active={compactTab === "evidence"} onclick={() => compactTab = "evidence"}>Evidence</button>
-      </nav>
       <section class="position-column" class:outcome={grading !== undefined || pack?.objective.type === "follow_theory"}>
-        <div class="objective-copy">
-          <p>Objective</p>
-          <h1 id="drill-title">{pack === undefined ? "No pack is loaded. Nothing is claimed about this position." : packObjective(pack)}</h1>
-        </div>
-        {#if pack?.variantOf !== undefined}
-          <section class="variant-link" aria-label="Related rehearsal">
-            <span>{pack.variantOf.relation.kind === "root_after_move" ? `After ${pack.variantOf.relation.moveUci}` : pack.variantOf.relation.kind === "same_root_other_side" ? "Same position, other side" : "Same position, other objective"}:</span>
-            <button type="button" disabled={onSelectPack === undefined} onclick={() => onSelectPack?.(pack.variantOf!.packId)}>{pack.variantOf.packId}</button>
-          </section>
-        {/if}
-        <section class="phase-reading" aria-label="Phase reading">
-          {#if pack}<span>This pack declares: {pack.phase}.</span>{/if}
-          <span>{renderPhaseReading(detectedPhase)}</span>
-        </section>
-        {#if trajectory}
-          <section class="trajectory-status" aria-label="Trajectory legs">
-            {#each trajectory.legs as leg}
-              <div class:active-leg={leg.legId === trajectory.activeLegId}>
-                <strong>{leg.legId}</strong>
-                <span>{leg.status === "not_entered" ? "not entered" : leg.state}</span>
-              </div>
-            {/each}
-            {#if trajectory.transitions.length > 0}
-              <p>{trajectory.transitions.at(-1)!.fromLegId} → {trajectory.transitions.at(-1)!.toLegId} at ply {trajectory.transitions.at(-1)!.ply}; {trajectory.transitions.at(-1)!.producedBy.length} moves produced this position.</p>
-            {/if}
-          </section>
-        {/if}
-        {#if pack !== undefined && (assessment !== undefined || resistance.length > 0)}
-          <OutcomeContext {assessment} {resistance} grade={objectiveGradeSentence(pack.objective.type, currentNode.objectiveState)} />
-        {/if}
-        {#if banner !== undefined}<WhyBanner model={banner} />{/if}
-        <div class="reading-controls" class:compact-active={compactTab === "evidence"}>
-          <section class="structural-reading" aria-label="Evidence inspector: position structure" data-evidence-consumer="inspector.position_structure">
-            <button type="button" aria-expanded={structuralOpen} onclick={() => (structuralOpen = !structuralOpen)}>Evidence inspector: position structure</button>
-            {#if structuralOpen}
-              <div class="structural-facts">
-                {#if structure.features.length === 0}<p>No rung-0 structural observations in this position.</p>{/if}
-                {#each structure.features as observation}<p>{renderStructuralObservation(observation)}</p>{/each}
-              </div>
-            {/if}
-          </section>
-          <section class="transition-reading" aria-label="Evidence inspector: move transition" data-evidence-consumer="inspector.move_transition">
-            <button type="button" aria-expanded={transitionOpen} onclick={() => (transitionOpen = !transitionOpen)}>Evidence inspector: what changed on this move?</button>
-            {#if transitionOpen}
-              <div class="transition-facts">
-                {#if transition === null || transition.observations.length === 0}<p>No rung-0 transition observations at this move.</p>{/if}
-                {#each transition?.observations ?? [] as observation}<p>{renderTransitionObservation(observation)}</p>{/each}
-              </div>
-            {/if}
-          </section>
-        </div>
         <div class="board-slot">
           <div class="board-frame" class:previewing={previewNodeId !== undefined}>
             {#if previewNodeId}<span class="preview-label">Preview</span>{/if}
-            {#key `${displayedNode.id}:${groupOpen ? groupCandidates.length : -1}`}
               <Chessboard
                 fen={displayedNode.fen}
                 startSide={boardSide ?? startSide}
@@ -944,24 +873,89 @@
                 lastMoveAnnouncement={boardMoveAnnouncement}
                 onMoveCommitted={(announcement) => boardMoveAnnouncement = announcement}
                 focusAfterMove={boardFocusRequested}
+                resetToken={`${displayedNode.id}:${groupOpen ? groupCandidates.length : -1}`}
                 onMoveSettled={() => boardFocusRequested = true}
                 onFocusRestored={() => boardFocusRequested = false}
                 onMove={boardMove}
               />
-            {/key}
-            <div class="mark-controls" aria-label="Board marks">
-              <label>Marks stay with <select value={markScope} onchange={setMarkScope}><option value="position">this position</option><option value="branch">this line</option></select></label>
-              <span>{displayedMarks.length}/64 marks</span>
-              <button type="button" disabled={displayedMarks.length===0||onRescopeMarks===undefined} aria-describedby={displayedMarks.length===0||onRescopeMarks===undefined?"rescope-marks-disabled":undefined} onclick={rescopeVisibleMarks}>Move these marks to the other scope</button>
-              {#if displayedMarks.length===0||onRescopeMarks===undefined}<span id="rescope-marks-disabled">Draw a mark before moving this position's marks to another scope.</span>{/if}
-            </div>
           </div>
-          {#if overlayCaption.length > 0}<div class="overlay-caption" aria-live="polite" data-evidence-consumer="board.selected_square_sight">{#each overlayCaption as sentence}<p>{sentence}</p>{/each}</div>{/if}
-          {#if assistance.boardLighting === "evidence" && !feedbackDeliveryOpen(run)}<p class="overlay-caption honest">No disclosed evidence exists here; structural sight remains available.</p>{/if}
         </div>
+        <div class="timeline-strip">
+          <Timeline
+            {entries}
+            activeNodeId={run.activeCursor.nodeId}
+            {previewNodeId}
+            onPreview={preview}
+            onConfirm={confirmPreview}
+            canConfirm={canWrite}
+            {authoredSpineNodeIds}
+            rootNodeId={run.nodes[0]?.id}
+            {shapeMarkers}
+            onOpenShape={(entryId) => (openShapeId = entryId)}
+            pivotalMarkers={pivotalRows}
+            onOpenPivotal={openPivotalMarker}
+          />
+        </div>
+        <button class="objective-line" type="button" onclick={() => (objectiveOpen = true)} title={pack === undefined ? "No pack is loaded" : packObjective(pack)}>
+          <span>Objective</span>
+          <strong>{pack === undefined ? "No pack is loaded." : packObjective(pack)}</strong>
+          <small>{detectedPhase.phase}</small>
+        </button>
       </section>
 
-      <div class="rail-stack" class:compact-active={compactTab === "branches"}>
+      <aside class="rail-stack" class:sheet-open={sheetOpen} aria-label="Run companion">
+        <div class="companion-identity">
+          <div class="objective-copy">
+            <p>Objective</p>
+            <h1 id="drill-title">{pack === undefined ? "No pack is loaded. Nothing is claimed about this position." : packObjective(pack)}</h1>
+          </div>
+          {#if pack?.variantOf !== undefined}
+            <section class="variant-link" aria-label="Related rehearsal">
+              <span>{pack.variantOf.relation.kind === "root_after_move" ? `After ${pack.variantOf.relation.moveUci}` : pack.variantOf.relation.kind === "same_root_other_side" ? "Same position, other side" : "Same position, other objective"}:</span>
+              <button type="button" disabled={onSelectPack === undefined} onclick={() => onSelectPack?.(pack.variantOf!.packId)}>{pack.variantOf.packId}</button>
+            </section>
+          {/if}
+          <section class="phase-reading" aria-label="Phase reading">
+            {#if pack}<span>{pack.phase}</span>{/if}
+            <span>{detectedPhase.phase}</span>
+          </section>
+        </div>
+
+        <nav class="compact-tabs" aria-label="Run regions">
+          <span class="sheet-handle" aria-hidden="true"></span>
+          <button class:active={compactTab === "evidence"} onclick={() => { compactTab = "evidence"; sheetOpen = true; }}>Support</button>
+          <button class:active={compactTab === "branches"} onclick={() => { compactTab = "branches"; sheetOpen = true; }}>Branches</button>
+          <button class:active={compactTab === "timeline"} onclick={() => { compactTab = "timeline"; sheetOpen = true; }}>Actions</button>
+          <button class="sheet-close" type="button" aria-label="Collapse companion" onclick={() => (sheetOpen = false)}>Close</button>
+        </nav>
+
+        <div class="companion-scroll">
+          <section class="companion-section evidence-seat" class:compact-active={compactTab === "evidence"} aria-label="Support">
+            {#if guardEvent?.type === "feedback.generated"}
+              <section class="guard-prompt" aria-label="Post-commit guard" aria-live="polite">
+                <div>
+                  <strong>The consequence exposed something concrete.</strong>
+                  {#each guardGrounds as sentence}<p>{sentence.text}</p>{/each}
+                  <p>Your played line stays preserved.</p>
+                </div>
+                <div class="guard-actions">
+                  <button type="button" onclick={() => (dismissedGuardSeq = guardEvent?.seq)}>Play on</button>
+                  <button class="primary" type="button" disabled={snapshot.access === "read_only" || guardRewindNodeId === undefined} onclick={() => guardRewindNodeId === undefined ? undefined : onRewind({ nodeId: guardRewindNodeId })}>Rewind</button>
+                </div>
+              </section>
+            {/if}
+            {#if overlayCaption.length > 0}<div class="overlay-caption" aria-live="polite" data-evidence-consumer="board.selected_square_sight">{#each overlayCaption as sentence}<p>{sentence}</p>{/each}</div>{/if}
+            {#if assistance.boardLighting === "evidence" && !feedbackDeliveryOpen(run)}<p class="overlay-caption honest">No disclosed evidence exists here; structural sight remains available.</p>{/if}
+            {#if trajectory}
+              <section class="trajectory-status" aria-label="Trajectory legs">
+                {#each trajectory.legs as leg}<div class:active-leg={leg.legId === trajectory.activeLegId}><strong>{leg.legId}</strong><span>{leg.status === "not_entered" ? "not entered" : leg.state}</span></div>{/each}
+              </section>
+            {/if}
+            {#if pack !== undefined && (assessment !== undefined || resistance.length > 0)}<OutcomeContext {assessment} {resistance} grade={objectiveGradeSentence(pack.objective.type, currentNode.objectiveState)} />{/if}
+            {#if banner !== undefined}<WhyBanner model={banner} />{/if}
+          </section>
+
+          <section class="companion-section branch-seat" class:compact-active={compactTab === "branches"} aria-label="Branches">
         {#if activeGroup}
           <GroupPanel
             {run}
@@ -992,23 +986,15 @@
           onRestoreAll={() => persistFolded([])}
           onClassify={onClassifyBranches === undefined ? undefined : classifyRemaining}
         />
-      </div>
+          </section>
 
-      <div class="timeline-row" class:compact-active={compactTab === "timeline"}>
-        <Timeline
-          {entries}
-          activeNodeId={run.activeCursor.nodeId}
-          {previewNodeId}
-          onPreview={preview}
-          onConfirm={confirmPreview}
-          canConfirm={canWrite}
-          {authoredSpineNodeIds}
-          rootNodeId={run.nodes[0]?.id}
-          {shapeMarkers}
-          onOpenShape={(entryId) => (openShapeId = entryId)}
-          pivotalMarkers={pivotalRows}
-          onOpenPivotal={openPivotalMarker}
-        />
+          <section class="companion-section action-seat" class:compact-active={compactTab === "timeline"} aria-label="Run actions">
+        <div class="mark-controls" aria-label="Board marks">
+          <label>Marks stay with <select value={markScope} onchange={setMarkScope}><option value="position">this position</option><option value="branch">this line</option></select></label>
+          <span>{displayedMarks.length}/64 marks</span>
+          <button type="button" disabled={displayedMarks.length===0||onRescopeMarks===undefined} aria-describedby={displayedMarks.length===0||onRescopeMarks===undefined?"rescope-marks-disabled":undefined} onclick={rescopeVisibleMarks}>Move marks to the other scope</button>
+          {#if displayedMarks.length===0||onRescopeMarks===undefined}<span id="rescope-marks-disabled">Draw a mark before moving it to another scope.</span>{/if}
+        </div>
         <div class="quick-actions" aria-label="Run actions">
           <HonestControl disabled={!canWrite} reasonId="drill-fork-readonly" reason="This read-only view cannot create a branch.">
             {#snippet children(describedBy)}<button type="button" disabled={!canWrite} aria-describedby={describedBy} onclick={(event) => { forkInvoker = invoker(event); forkOpen = true; }}>Fork <kbd>B</kbd></button>{/snippet}
@@ -1035,7 +1021,9 @@
           </button>
           <button type="button" onclick={() => onExport(compareIds.length > 0 ? compareIds : undefined)}>Export <kbd>E</kbd></button>
         </div>
-      </div>
+          </section>
+        </div>
+      </aside>
     </div>
     {#if groupOpen}
       <section class="group-creator" aria-labelledby="group-create-title">
@@ -1105,6 +1093,44 @@
 {/if}
 
 {#if viewportSupport.supported && helpOpen}<KeyboardHelp onClose={closeHelp} />{/if}
+
+{#if viewportSupport.supported && objectiveOpen}
+  <div class="modal-backdrop">
+    <div class="modal objective-dialog" role="dialog" aria-modal="true" aria-labelledby="objective-dialog-title">
+      <p>Objective</p>
+      <h2 id="objective-dialog-title">{pack === undefined ? "No pack is loaded. Nothing is claimed about this position." : packObjective(pack)}</h2>
+      <button type="button" onclick={() => (objectiveOpen = false)}>Return to the board</button>
+    </div>
+  </div>
+{/if}
+
+{#if viewportSupport.supported && inspectorOpen}
+  <div class="modal-backdrop inspector-backdrop">
+    <div class="inspector-surface" role="dialog" aria-modal="true" aria-labelledby="inspector-title">
+      <header><div><p>Analysis surface</p><h2 id="inspector-title">Evidence inspector</h2></div><button type="button" onclick={() => (inspectorOpen = false)}>Return to play</button></header>
+      <div class="inspector-grid">
+        <section class="structural-reading" aria-label="Evidence inspector: position structure" data-evidence-consumer="inspector.position_structure">
+          <button type="button" aria-expanded={structuralOpen} onclick={() => (structuralOpen = !structuralOpen)}>Position structure</button>
+          {#if structuralOpen}<div class="structural-facts">{#if structure.features.length === 0}<p>No rung-0 structural observations in this position.</p>{/if}{#each structure.features as observation}<p>{renderStructuralObservation(observation)}</p>{/each}</div>{/if}
+        </section>
+        <section class="transition-reading" aria-label="Evidence inspector: move transition" data-evidence-consumer="inspector.move_transition">
+          <button type="button" aria-expanded={transitionOpen} onclick={() => (transitionOpen = !transitionOpen)}>Move transition</button>
+          {#if transitionOpen}<div class="transition-facts">{#if transition === null || transition.observations.length === 0}<p>No rung-0 transition observations at this move.</p>{/if}{#each transition?.observations ?? [] as observation}<p>{renderTransitionObservation(observation)}</p>{/each}</div>{/if}
+        </section>
+        <section aria-label="Human-model evidence" data-evidence-consumer="inspector.human_split">
+          <h3>Human move model</h3>
+          {#if assistancePermission.humanSplit === "free" && onHumanSplit !== undefined}<button type="button" onclick={() => void requestHumanSplit()}>Load model candidates</button>{/if}
+          {#if humanSplit}<p class="guidance-sentence">{humanSplit.engine.name}, rating target {humanSplit.targetElo ?? "unrated"}: {humanSplit.candidates.filter((candidate) => candidate.offWindow !== true).map((candidate) => `${candidate.moveUci} ${candidate.mass === undefined ? "mass unavailable" : `${Math.round(candidate.mass * 100)}%`}`).join(" · ")}</p>{:else}<p class="honest">No human-model page loaded.</p>{/if}
+        </section>
+        <section aria-label="Corpus evidence" data-evidence-consumer="inspector.corpus">
+          <h3>Human corpus</h3>
+          {#if assistancePermission.corpus === "free" && capabilities?.providers.corpus !== "none" && onCorpus !== undefined}<button type="button" onclick={() => void requestCorpus()}>Load corpus counts</button>{/if}
+          {#if corpusPage}{#each renderCorpusPage(corpusPage) as sentence}<p class="guidance-sentence">{sentence}</p>{/each}{:else}<p class="honest">No corpus page loaded.</p>{/if}
+        </section>
+      </div>
+    </div>
+  </div>
+{/if}
 
 {#if viewportSupport.supported && forkOpen}
   <div class="modal-backdrop">
@@ -1177,10 +1203,18 @@
   .viewport-refusal p:last-child { margin: 0; color: var(--muted); line-height: 1.45; }
 
   .drill {
-    width: min(86rem, calc(100% - 2rem));
+    --topbar-h: 56px;
+    --strip-h: 40px;
+    --objective-h: 32px;
+    --band-h: 176px;
+    --rim-h: 48px;
+    --rail-w: 336px;
+    --stage-pad: 16px;
+    position: relative;
+    width: min(90rem, 100%);
     height: 100%;
     margin: 0 auto;
-    padding: 0.6rem 0;
+    padding: 0;
     display: flex;
     flex-direction: column;
     overflow: hidden;
@@ -1188,13 +1222,16 @@
   }
 
   .topbar {
+    flex: 0 0 var(--topbar-h);
+    height: var(--topbar-h);
     display: grid;
     grid-template-columns: 1fr auto 1fr;
     align-items: center;
-    padding: 0.4rem 0 1rem;
+    padding: 0 1rem;
   }
 
   .wordmark,
+  .inspector-entry,
   .help {
     width: fit-content;
     border: 0;
@@ -1214,6 +1251,13 @@
     height: 2rem;
     border: 1px solid var(--line);
     border-radius: 50%;
+  }
+
+  .inspector-entry {
+    padding: .4rem .65rem;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    background: var(--panel);
   }
 
   .status {
@@ -1237,6 +1281,13 @@
 
   .error,
   .readonly-banner {
+    position: absolute;
+    z-index: 12;
+    top: calc(var(--topbar-h) + .35rem);
+    left: 50%;
+    width: min(42rem, calc(100% - 2rem));
+    margin: 0;
+    transform: translateX(-50%);
     padding: 0.7rem 0.9rem;
     border-radius: 0.7rem;
   }
@@ -1254,13 +1305,16 @@
     flex: 1;
     min-height: 0;
     display: grid;
-    grid-template-columns: minmax(0, 1fr) minmax(15rem, 0.38fr);
-    grid-template-rows: minmax(0, 1fr) auto;
-    gap: 1rem;
+    grid-template-columns: minmax(0, 1fr) var(--rail-w);
+    grid-template-rows: minmax(0, 1fr);
+    gap: 0;
     overflow: hidden;
   }
-  .compact-tabs { display: none; }
-  .overlay-caption { max-width: 40rem; margin: 0.35rem auto 0; padding: 0.4rem 0.6rem; border-radius: 0.5rem; background: var(--panel); font-size: 0.72rem; }
+  .compact-tabs { display: flex; flex: none; gap: .25rem; padding: .5rem; border-bottom: 1px solid var(--line); overflow-x: auto; }
+  .compact-tabs button { padding: .4rem .55rem; border: 1px solid var(--line); border-radius: 999px; background: var(--paper); color: inherit; white-space: nowrap; }
+  .compact-tabs button.active { border-color: var(--accent); color: var(--accent); }
+  .sheet-handle, .sheet-close { display: none; }
+  .overlay-caption { margin: 0; padding: 0.65rem; border-radius: 0.65rem; background: var(--paper-soft); font-size: 0.78rem; }
   .overlay-caption p { margin: 0.1rem 0; }
   .ambient { width: 2rem; height: 2rem; border: 1px solid var(--line); border-radius: 999px; background: var(--panel); }
 
@@ -1268,11 +1322,16 @@
     width: 100%;
     min-height: 0;
     justify-self: center;
-    display: flex;
-    flex-direction: column;
-    gap: 0.8rem;
+    display: grid;
+    grid-template-rows: var(--board-edge) var(--strip-h);
+    justify-content: center;
+    align-content: center;
+    gap: 0;
+    padding: var(--stage-pad);
     overflow: hidden;
   }
+
+  .companion-identity { display: grid; gap: .55rem; padding: .75rem; border-bottom: 1px solid var(--line); }
 
   .objective-copy p {
     margin: 0;
@@ -1283,14 +1342,15 @@
   }
 
   .objective-copy h1 {
-    max-width: 30ch;
-    max-height: clamp(5.5rem, 16dvh, 10rem);
+    max-width: 32ch;
+    max-height: 6rem;
     margin: 0.25rem 0 0;
     overflow: auto;
-    font: 500 clamp(1.25rem, min(3vw, 3dvh), 2.4rem) / 1.08 var(--display-font);
+    font: 500 1.15rem/1.2 var(--display-font);
   }
 
-  .reading-controls { display:flex; flex-wrap:wrap; gap:.5rem; align-items:start; }
+  .objective-line { display: none; }
+
   .structural-reading > button,
   .transition-reading > button {
     padding: 0.45rem 0.65rem;
@@ -1302,7 +1362,7 @@
 
   .phase-reading { display:flex; flex-wrap:wrap; gap:.35rem .8rem; color:var(--muted); font-size:.72rem; }
   .assistance-control { position:relative; z-index:6; padding:.35rem .55rem; border:1px solid var(--line); border-radius:.6rem; background:var(--panel); font-size:.75rem; }
-  .guard-prompt { display:flex; align-items:center; justify-content:space-between; gap:1rem; margin:.55rem .8rem 0; padding:.65rem .8rem; border:1px solid var(--accent); border-radius:.7rem; background:color-mix(in srgb,var(--accent) 9%,var(--panel)); }
+  .guard-prompt { display:grid; gap:.65rem; margin:0; padding:.65rem; border:1px solid var(--accent); border-radius:.7rem; background:color-mix(in srgb,var(--accent) 9%,var(--panel)); }
   .guard-prompt p { margin:.2rem 0 0; font-size:.78rem; color:var(--muted); }
   .guard-actions { display:flex; flex:none; gap:.45rem; }
   .assistance-control summary { cursor:pointer; }
@@ -1326,19 +1386,17 @@
   .board-slot {
     min-width: 0;
     min-height: 0;
-    width: 100%;
-    flex: 1 1 0;
-    align-self: stretch;
+    width: var(--board-edge);
+    height: var(--board-edge);
     display: grid;
     place-items: center;
     overflow: hidden;
-    container-type: size;
   }
 
   .board-frame {
     position: relative;
-    width: min(100cqw, 100cqh);
-    height: auto;
+    width: 100%;
+    height: 100%;
     aspect-ratio: 1;
     justify-self: center;
     overflow: hidden;
@@ -1347,8 +1405,8 @@
   }
 
   .position-column.outcome .board-frame {
-    width: min(100cqw, 100cqh);
-    height: auto;
+    width: 100%;
+    height: 100%;
   }
 
   .board-frame.previewing {
@@ -1369,15 +1427,14 @@
     text-transform: uppercase;
   }
 
-  .timeline-row {
-    grid-column: 1 / -1;
-    min-height: 0;
-    max-height: 8.5rem;
-    display: grid;
-    grid-template-columns: minmax(0, 1fr) auto;
-    gap: 0.75rem;
-    overflow: hidden;
-  }
+  .timeline-strip { width: var(--board-edge); height: var(--strip-h); min-width: 0; overflow: hidden; }
+  :global(.timeline-strip .timeline) { height: var(--strip-h); display: grid; grid-template-columns: auto minmax(0,1fr); align-items: center; padding: 0 .3rem; border: 0; border-radius: 0 0 .7rem .7rem; }
+  :global(.timeline-strip .timeline-heading) { display: flex; gap: .25rem; align-items: baseline; padding: 0 .35rem; white-space: nowrap; }
+  :global(.timeline-strip .timeline-heading h2) { font-size: .68rem; }
+  :global(.timeline-strip .timeline-heading span) { font-size: .62rem; }
+  :global(.timeline-strip .timeline ol) { height: 100%; margin: 0; padding: .2rem; align-items: center; }
+  :global(.timeline-strip .timeline li > button) { min-width: 3rem; padding: .28rem .42rem; }
+  :global(.timeline-strip .timeline .confirm) { position: absolute; right: .25rem; bottom: .25rem; margin: 0; padding: .25rem .4rem; }
 
   .quick-actions {
     display: grid;
@@ -1385,7 +1442,13 @@
     gap: 0.45rem;
   }
 
-  .rail-stack{min-width:0;min-height:0;display:grid;grid-template-rows:auto auto minmax(0,1fr);gap:.45rem;overflow:hidden}.next-member{justify-self:start;padding:.4rem .55rem;border:1px solid var(--line);border-radius:.55rem;background:var(--panel);color:inherit}.group-creator{display:flex;align-items:end;gap:.65rem;flex-wrap:wrap;padding:.65rem;border:1px solid var(--accent);border-radius:.75rem;background:var(--panel)}.group-creator p,.group-creator h2{margin:0}.group-creator h2{font:600 1rem var(--display-font)}.group-creator label{display:grid;gap:.2rem;font-size:.7rem;color:var(--muted)}.group-creator select,.group-creator input,.group-creator button{padding:.45rem .55rem;border:1px solid var(--line);border-radius:.55rem;background:var(--paper);color:inherit}.capture-help{flex-basis:100%;color:var(--muted);font-size:.72rem}.candidate-chips{display:flex;gap:.35rem;flex-wrap:wrap}.creator-actions{display:flex;gap:.35rem}.group-creator .honest{flex-basis:100%;color:var(--muted);font-size:.68rem}
+  .rail-stack{min-width:0;min-height:0;display:grid;grid-template-rows:auto auto minmax(0,1fr);overflow:hidden;border-left:1px solid var(--line);background:var(--panel)}
+  .companion-scroll { min-height: 0; display: grid; gap: .65rem; padding: .65rem; overflow-y: auto; overscroll-behavior: contain; }
+  .companion-section { min-width: 0; display: grid; gap: .55rem; }
+  .next-member{justify-self:start;padding:.4rem .55rem;border:1px solid var(--line);border-radius:.55rem;background:var(--panel);color:inherit}.group-creator{position:fixed;z-index:24;left:50%;bottom:1rem;width:min(60rem,calc(100% - 2rem));transform:translateX(-50%);display:flex;align-items:end;gap:.65rem;flex-wrap:wrap;padding:.65rem;border:1px solid var(--accent);border-radius:.75rem;background:var(--panel);box-shadow:var(--shadow)}.group-creator p,.group-creator h2{margin:0}.group-creator h2{font:600 1rem var(--display-font)}.group-creator label{display:grid;gap:.2rem;font-size:.7rem;color:var(--muted)}.group-creator select,.group-creator input,.group-creator button{padding:.45rem .55rem;border:1px solid var(--line);border-radius:.55rem;background:var(--paper);color:inherit}.capture-help{flex-basis:100%;color:var(--muted);font-size:.72rem}.candidate-chips{display:flex;gap:.35rem;flex-wrap:wrap}.creator-actions{display:flex;gap:.35rem}.group-creator .honest{flex-basis:100%;color:var(--muted);font-size:.68rem}
+  .mark-controls { display: grid; gap: .35rem; padding: .55rem; border: 1px solid var(--line); border-radius: .65rem; color: var(--muted); font-size: .72rem; }
+  .mark-controls label { display: flex; align-items: center; justify-content: space-between; gap: .5rem; }
+  .mark-controls button, .mark-controls select { padding: .35rem .45rem; border: 1px solid var(--line); border-radius: .45rem; background: var(--paper); color: inherit; }
 
   .quick-actions button,
   .modal button,
@@ -1488,78 +1551,75 @@
   .trajectory-status div { display: grid; padding: 0.3rem 0.5rem; color: var(--muted); }
   .trajectory-status .active-leg { color: var(--ink); background: var(--paper-soft); }
   .trajectory-status span { font-size: 0.72rem; }
-  .trajectory-status p { flex-basis: 100%; margin: 0.25rem 0 0; font-size: 0.8rem; }
 
-  @media (min-width: 720px) and (max-height: 800px) {
-    .position-column { gap: 0.25rem; }
-    .objective-copy h1 {
-      max-height: 3rem;
-      font-size: 1.25rem;
+  .inspector-backdrop { align-items: stretch; }
+  .inspector-surface { width: min(72rem, 100%); max-height: calc(100dvh - 2rem); margin: auto; display: grid; grid-template-rows: auto minmax(0,1fr); border-radius: 1rem; background: var(--panel); overflow: hidden; }
+  .inspector-surface > header { display: flex; align-items: center; justify-content: space-between; gap: 1rem; padding: 1rem; border-bottom: 1px solid var(--line); }
+  .inspector-surface h2, .inspector-surface p { margin: 0; }
+  .inspector-surface header p { color: var(--accent); font: 700 .65rem ui-monospace, monospace; text-transform: uppercase; }
+  .inspector-surface button { padding: .5rem .65rem; border: 1px solid var(--line); border-radius: .55rem; background: var(--paper); color: inherit; }
+  .inspector-grid { min-height: 0; display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: .75rem; padding: .75rem; overflow-y: auto; }
+  .inspector-grid > section { min-width: 0; padding: .75rem; border: 1px solid var(--line); border-radius: .75rem; background: var(--paper-soft); }
+  .inspector-grid h3 { margin: 0 0 .5rem; }
+
+  @media (min-width: 720px) and (max-width: 1023px) {
+    .drill {
+      --stage-pad: 16px;
     }
-    .board-frame,
-    .position-column.outcome .board-frame {
-      width: min(100cqw, calc(100cqh + 8.9rem));
-      height: min(100cqh, calc(100cqw - 8.9rem));
-      aspect-ratio: auto;
-    }
+    .workspace { grid-template-columns: 1fr; grid-template-rows: minmax(0,1fr) var(--band-h); }
+    .position-column { grid-row: 1; grid-template-rows: var(--board-edge) var(--strip-h) var(--objective-h); padding: 0 var(--stage-pad); }
+    .objective-line { width: var(--board-edge); height: var(--objective-h); display: grid; grid-template-columns: auto minmax(0,1fr) auto; gap: .5rem; align-items: center; padding: 0 .55rem; border: 0; background: var(--panel); color: inherit; text-align: left; }
+    .objective-line span, .objective-line small { color: var(--muted); font: 600 .62rem ui-monospace,monospace; text-transform: uppercase; }
+    .objective-line strong { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .rail-stack { grid-row: 2; grid-template-rows: auto minmax(0,1fr); border-left: 0; border-top: 1px solid var(--line); }
+    .companion-identity { display: none; }
+    .companion-scroll { overflow: hidden; }
+    .companion-section { display: none; height: 100%; overflow-y: auto; }
+    .companion-section.compact-active { display: grid; }
   }
 
   @media (max-width: 719px) {
-    .drill-region { overflow: hidden; }
     .drill {
-      width: min(100% - 1rem, 86rem);
-      height: 100%;
-      padding: .3rem 0;
-      overflow: hidden;
+      --stage-pad: 8px;
+      width: 100%;
     }
 
     .topbar {
-      grid-template-columns: 1fr auto;
-      padding: .2rem 0 .5rem;
+      grid-template-columns: 1fr auto auto;
+      padding: 0 .5rem;
     }
 
     .status {
-      grid-column: 1 / -1;
-      grid-row: 2;
-      margin-top: 0.25rem;
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      overflow: hidden;
+      clip-path: inset(50%);
     }
 
-    .help {
-      grid-column: 2;
-      grid-row: 1;
-    }
     .workspace {
       grid-template-columns: 1fr;
-      grid-template-rows: auto minmax(0, 1fr) clamp(4rem, 18dvh, 8rem);
-      gap: .5rem;
-      overflow: hidden;
+      grid-template-rows: minmax(0, 1fr) var(--rim-h);
     }
-    .workspace.evidence-active { grid-template-rows: auto minmax(0, 1fr) 0; }
-    .compact-tabs { display: flex; grid-column: 1; grid-row: 1; gap: 0.25rem; overflow: auto; }
-    .compact-tabs button { padding: 0.4rem; border: 1px solid var(--line); border-radius: 0.45rem; background: var(--panel); }
-    .compact-tabs button.active { border-color: var(--accent); color: var(--accent); }
     .position-column {
-      display: grid;
-      grid-column: 1;
-      grid-row: 2;
-      grid-template-rows: repeat(8, auto) minmax(0, 1fr);
-      gap: .25rem;
-      overflow: hidden;
+      grid-row: 1;
+      grid-template-rows: var(--board-edge) var(--strip-h) var(--objective-h);
+      padding: 0 var(--stage-pad);
     }
-    .objective-copy h1 {
-      max-height: 3.25rem;
-      font-size: 1.1rem;
-    }
-    .board-slot {
-      grid-row: -2 / -1;
-      container-type: size;
-      min-height: 12rem;
-    }
-    .rail-stack, .timeline-row, .reading-controls { display: none; }
-    .rail-stack, .timeline-row { grid-column: 1; grid-row: 3; min-height: 4rem; overflow: auto; }
-    .rail-stack.compact-active, .timeline-row.compact-active { display: grid; grid-template-columns: 1fr; }
-    .reading-controls.compact-active { display: grid; }
-    .board-frame,
-    .position-column.outcome .board-frame { width: min(100cqw, 100cqh); }
+    .objective-line { width: var(--board-edge); height: var(--objective-h); display: grid; grid-template-columns: auto minmax(0,1fr) auto; gap: .4rem; align-items: center; padding: 0 .45rem; border: 0; background: var(--panel); color: inherit; text-align: left; }
+    .objective-line span, .objective-line small { color: var(--muted); font: 600 .58rem ui-monospace,monospace; text-transform: uppercase; }
+    .objective-line strong { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: .76rem; }
+    .rail-stack { grid-row: 2; grid-template-rows: var(--rim-h) minmax(0,1fr); border: 0; border-top: 1px solid var(--line); }
+    .rail-stack.sheet-open { position: fixed; z-index: 20; right: 0; bottom: 0; left: 0; height: min(68dvh, 38rem); grid-template-rows: var(--rim-h) minmax(0,1fr); border-radius: 1rem 1rem 0 0; box-shadow: var(--shadow); }
+    .companion-identity { display: none; }
+    .compact-tabs { height: var(--rim-h); align-items: center; justify-content: center; padding: .3rem .5rem; border: 0; }
+    .sheet-handle { position: absolute; top: .25rem; left: 50%; width: 2.5rem; height: .2rem; transform: translateX(-50%); border-radius: 999px; background: var(--line); }
+    .sheet-close { display: none; }
+    .sheet-open .sheet-close { display: block; }
+    .rail-stack:not(.sheet-open) .companion-scroll { display: none; }
+    .companion-scroll { overflow: hidden; }
+    .companion-section { display: none; height: 100%; overflow-y: auto; }
+    .companion-section.compact-active { display: grid; }
+    .inspector-grid { grid-template-columns: 1fr; }
   }
 </style>

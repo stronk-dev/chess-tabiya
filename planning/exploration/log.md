@@ -4843,3 +4843,34 @@ session. Rows D939–D940 landed.
 
 **Next:** owner should know before playing: report grades will be ~2× more common than the draft
 implied; the drill ladder (2.5/6/14) is unchanged and was verified correct.
+
+## 2026-08-22 — play composition shell protects the board
+
+**What landed:** began the accepted `play-composition` implementation and replaced the rejected
+content-coupled run layout. `/play/run/:runId` is now a focused full-viewport surface with one run
+topbar rather than duplicate global and run chrome. `playBoardEdge(width, height)` is the single
+runtime/test authority for the RFC's exact seven viewport sizes and 8-pixel snapping. The stage is
+closed over board, fixed timeline strip and compact tablet/phone objective; desktop gets a 336 px
+rail, tablet a 176 px band and phone a 48 px rim with overlay sheet. Structure, transition,
+human-model and corpus diagnostics moved to the separate Evidence Inspector.
+
+**What changed:** the text-move disclosure no longer adds a board row; errors, read-only state and
+branch-group creation are overlays; the keyed Chessground remount is removed in favor of the
+existing `board.set()` path plus an explicit reset token. The browser gate now asserts exact board
+geometry rather than a 192 px containment floor, remeasures after text/Inspector/objective/sheet
+gestures at all seven viewports, and proves one board DOM node survives a committed move. Existing
+evidence, repertoire, live-session, endgame-input and match scenarios were reconciled with the
+focused run and explicit Inspector. Browser result: 30 passed, one optional Maia latency test
+skipped; web typecheck 0 errors/0 warnings; focused unit/component result 30/30.
+
+**Closed:** [[D718]]'s layout/test mechanism and [[D923]]'s internal text-entry/remount/overlay
+defects. [[D717]] remains open deliberately: registered module composition, presets and the
+remaining ordinary-surface vocabulary are not made complete by a stable shell.
+
+**Blocked:** no shell work is blocked. Module seats wait on their collector/learner-module landing
+order; the full 7×16 / 112-screenshot matrix and remaining SAN/producer-vocabulary cleanup are
+still obligations of the implementing RFC.
+
+**Next:** compile the learner-module queue after its dependencies, finish the leak-destination
+cleanup, and execute every remaining acceptance state before archival. The exact remainder is in
+`planning/play-composition/plan.md`.

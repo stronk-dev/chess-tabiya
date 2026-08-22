@@ -39,8 +39,10 @@ phase machine; it owns only an optional active drill session. A deep link to a
 run reconstructs its pack ID from the authoritative `run.started` event, so
 reload does not depend on query-string pack metadata.
 
-The shell top bar keeps the primary routes and current run/access context
-visible. Standalone comparison is not a route: Review opens a run at
+The shell top bar keeps the primary routes and current run/access context visible on ordinary
+application routes. A live `/play/run/:runId` is a focused full-viewport composition and replaces
+that global chrome with its own fixed run topbar; its Tabiya control exits back to Play, where the
+global navigation resumes. Standalone comparison is not a route: Review opens a run at
 `/play/run/:runId`, where the existing controller can project and compare it.
 
 ## Run index and SQLite migration

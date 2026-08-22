@@ -261,26 +261,11 @@ describe("application shell", () => {
     main.focus();
     expect(key("Tab").defaultPrevented).toBe(false);
 
-    const playLink = document.querySelector<HTMLAnchorElement>(
-      "#primary-navigation a[href='/play']",
-    )!;
-    playLink.focus();
-    expect(key("Tab").defaultPrevented).toBe(false);
-
     main.focus();
     expect(key("g").defaultPrevented).toBe(true);
     expect(key("m").defaultPrevented).toBe(true);
-    expect(document.activeElement).toBe(
-      document.querySelector("#primary-navigation a"),
-    );
-
-    playLink.focus();
-    key("?");
-    await vi.waitFor(() =>
-      expect(document.activeElement?.id).toBe("shell-shortcuts-title"),
-    );
-    key("Escape");
-    await vi.waitFor(() => expect(document.activeElement).toBe(playLink));
+    expect(document.querySelector("#primary-navigation")).toBeNull();
+    expect(document.activeElement).toBe(main);
 
     main.focus();
     key("?");

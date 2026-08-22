@@ -44,6 +44,8 @@
     lastMoveAnnouncement?: string | undefined;
     onMoveCommitted?: (announcement: string) => void;
     focusAfterMove?: boolean;
+    /** Re-assert the current position without replacing the board instance. */
+    resetToken?: string | number;
     onMoveSettled?: () => void;
     onFocusRestored?: () => void;
     onMove: (uci: string) => void | Promise<void>;
@@ -67,6 +69,7 @@
     lastMoveAnnouncement,
     onMoveCommitted,
     focusAfterMove = false,
+    resetToken = 0,
     onMoveSettled,
     onFocusRestored,
     onMove,
@@ -268,6 +271,7 @@
     overlays;
     marks;
     drawingEnabled;
+    resetToken;
     onMarksChange;
     inputState = controller.replacePosition(inputPosition);
     escapeArmed = false;
@@ -351,8 +355,6 @@
     position: relative;
     width: 100%;
     aspect-ratio: 1;
-    display: grid;
-    grid-template-rows: auto minmax(0, 1fr);
   }
 
   .board-surface,
@@ -395,10 +397,11 @@
   }
 
   .text-move {
-    position: relative;
-    z-index: 1;
-    width: 100%;
-    max-width: 100%;
+    position: absolute;
+    z-index: 5;
+    top: 0.45rem;
+    right: 0.45rem;
+    width: min(18rem, calc(100% - 0.9rem));
     padding: 0.3rem 0.45rem;
     border: 1px solid var(--line, CanvasText);
     border-radius: 0.4rem;
@@ -411,20 +414,6 @@
   .text-move[open] form { display: grid; }
   .text-move label { display: grid; gap: 0.15rem; }
   .text-move input, .text-move button { min-width: 0; padding: 0.25rem; color: inherit; background: Canvas; border: 1px solid CanvasText; }
-
-  @media (min-width: 720px) and (max-height: 800px) {
-    .board-shell {
-      height: 100%;
-      aspect-ratio: auto;
-      grid-template-columns: minmax(0, 1fr) 8.5rem;
-      grid-template-rows: minmax(0, 1fr);
-      gap: 0.4rem;
-    }
-
-    .board-surface { grid-column: 1; grid-row: 1; }
-    .text-move { grid-column: 2; grid-row: 1; align-self: start; }
-    .text-move form { grid-template-columns: 1fr; }
-  }
 
   .promotion-picker {
     position: absolute;
