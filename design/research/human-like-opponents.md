@@ -1,6 +1,6 @@
 # Human-like opponents — what makes engine play non-human, and what our evidence plane must produce
 
-**Question:** D669 / D670 / D671 (`design/BACKLOG.md`), in the owner's framing:
+**Question:** D810 / D811 / D812 (`design/BACKLOG.md`), in the owner's framing:
 
 > *"What are the points of engines that make it 'non-human' in play? Is it the lack of
 > tactics in midgame? Is it the random blunders (and how does that differ from a human
@@ -10,7 +10,7 @@
 > a proper Elo range of bots that play human-like, with bonus points for personalities.
 > Chessable has nice dimensions but their AI still sucks."*
 
-**Feeds:** D669–D671, D551, D561, D591, H5/C5, the D332 campaign denominator, the D544
+**Feeds:** D810–D812, D551, D561, D591, H5/C5, the D332 campaign denominator, the D544
 tactical family, and the selector RFC this lane will eventually need.
 
 **Relation to `bot-policy.md` (R11).** R11 is the *mechanical* arm: it measured what the
@@ -18,7 +18,7 @@ shipped sampler actually plays and which one-move policy transforms survive pred
 gates. This dossier is the *literature and practitioner* arm: why engine play reads as
 non-human in mechanism, how the field models human error, how anyone has ever calibrated a
 bot to a human Elo, and — against the F1 producer census — exactly what evidence a
-D669-shaped selector needs that nothing produces today. Where R11 measured a thing, this
+D810-shaped selector needs that nothing produces today. Where R11 measured a thing, this
 dossier cites it rather than re-deriving it.
 
 **Method and labels.** Desk research only; nothing was run that writes. Repo claims were
@@ -36,7 +36,7 @@ below. Summarizer-tier numbers are therefore never labelled `[V]` here.
 ## 1. Verdict
 
 1. **What makes engine play non-human is not the error rate — it is where the errors sit.**
-   The strongest result in the literature is exactly our D670 hypothesis: weakened engines
+   The strongest result in the literature is exactly our D811 hypothesis: weakened engines
    misplace their errors. Depth-limited Stockfish matches *stronger* humans better than
    weaker ones no matter how much you weaken it — weakening dilutes optimal play with
    noise instead of moving it toward how a 1200 actually plays. §2.
@@ -55,7 +55,7 @@ below. Summarizer-tier numbers are therefore never labelled `[V]` here.
    infrastructure (sharpness/multipv spread), one is repeat queries of an existing producer
    (multi-band Maia mass), and one needs new corpus work (time usage). §6.
 
-4. **The D669 selector shape is confirmed by every practitioner comparison, and the
+4. **The D810 selector shape is confirmed by every practitioner comparison, and the
    declared-evidence constraint is genuinely unclaimed.** Chessiverse ships the same
    generate→curate→book shape with undeclared filters; Komodo buries persona inside eval;
    Maia-2 buries skill inside the net. No published system anywhere generates post-hoc
@@ -155,11 +155,11 @@ The attention mechanism is real: Bilalić, McLeod & Gobet's Einstellung eye-trac
 (Cognition 108, 2008) showed experts who *reported* searching for a better solution kept
 fixating features of the familiar one — attention bias operating below awareness `[P]`
 ([PubMed 18565505](https://pubmed.ncbi.nlm.nih.gov/18565505/)). **But the specific
-hierarchy D670 asserts — threat-just-created, attacker-just-moved, discovered geometry,
+hierarchy D811 asserts — threat-just-created, attacker-just-moved, discovered geometry,
 backward-move blindness — has no direct empirical paper.** This pass searched for it and
 found coaching folklore plus adjacent evidence only (Krogius's retained-image errors;
 Maia's blunder-prediction CNN at 71.7% `[P]` shows *predictability* without naming
-features). This is a correction to D670's confidence, and an opportunity: nobody has
+features). This is a correction to D811's confidence, and an opportunity: nobody has
 measured the salience hierarchy, and our corpus + explorer population can (§9, experiment 3).
 
 ### 2.4 Rank 4 — phase and material asymmetry, where Maia is inverted
@@ -414,11 +414,11 @@ it is a **candidate-evidence producer class**: the declared vocabulary, applied 
 candidate, with SEE and the salience/recency join added to it. Two of five families are
 free arithmetic, two ride existing producers, one is deferred. This also resolves the
 D544 connection: the tactical family the guidance lane needs and the feature set the bot
-lane needs are the same detectors, which is D669's shared-registry argument made concrete.
+lane needs are the same detectors, which is D810's shared-registry argument made concrete.
 
 ---
 
-## 7. The selector shape (D669)
+## 7. The selector shape (D810)
 
 Confirmed: **candidate generation (Maia policy mass ∪ book/explorer frequency ∪ engine
 multipv) → feature each candidate via declared detectors → persona/skill policy over
@@ -463,7 +463,7 @@ of the bot's own decision, which is the legal side of the ADR-0005 line.
 
 ---
 
-## 8. Personas as priors (D671) — the dimension map
+## 8. Personas as priors (D812) — the dimension map
 
 What the practitioners actually vary, mapped to our declared vocabulary:
 
@@ -480,7 +480,7 @@ What the practitioners actually vary, mapped to our declared vocabulary:
 | Presentation | — | biographies | biographies/chat | avatars/celebrity | separately measured persona (R11: "the model or policy must earn the chess behavior before the avatar names it" `[V]`) |
 
 Three uses of the map. First, **every practitioner dimension lands on a declared feature
-weight or a candidate mask** — D671's "priors over declared feature weights, not new
+weight or a candidate mask** — D812's "priors over declared feature weights, not new
 machinery" is confirmed against the whole field. Second, R11's `observedTraits` vs
 `controlledTraits` distinction (D591) is the honesty line every vendor blurs: Chessiverse
 *measures* Guardian→Savage and controls almost none of it; we must never label a bot with a
@@ -505,7 +505,7 @@ weights candidate selection; it never grades the learner's move.**
 2. **Salience-hierarchy measurement — turn the folklore into a number.** For corpus
    positions with explorer coverage, condition band-level human error mass on the proposed
    salience features (threat-just-created, attacker-just-moved, `slider_lines_changed.opened`).
-   Law-8-clean (population statistics, nobody graded). Outcome either upgrades D670's
+   Law-8-clean (population statistics, nobody graded). Outcome either upgrades D811's
    premise from folklore to measurement — a result with standalone publication value, since
    §2.3 found nobody has measured it — or kills the feature family before it ships.
 
@@ -521,25 +521,25 @@ standing perceptual step for H5/C5 and is not re-proposed here.)
 
 ---
 
-## 10. Proposed ledger rows (from D672; proposals only, not written)
+## 10. Ledger rows (renumbered to D813–D820 after the D809 collision repair)
 
-- **D672** — Candidate-evidence producer class: declared detectors applied per candidate
-  move pre-play; the single structural gap under D669/D670 (§6).
-- **D673** — SEE as a rules producer; prerequisite for honest tactic eligibility (D544/D545)
+- **D813** — Candidate-evidence producer class: declared detectors applied per candidate
+  move pre-play; the single structural gap under D810/D811 (§6).
+- **D814** — SEE as a rules producer; prerequisite for honest tactic eligibility (D544/D545)
   and for blind-spot personas (§6c, §8).
-- **D674** — Salience/recency features as a `derived.*` join of `structuralDelta` against
+- **D815** — Salience/recency features as a `derived.*` join of `structuralDelta` against
   `run.record.move` (threat-just-created, attacker-just-moved); gated on experiment 2 (§9).
-- **D675** — Sharpness/only-move projection (multipv spread) with an
+- **D816** — Sharpness/only-move projection (multipv spread) with an
   `→ opponent.selection`-only binding; the grading refusal at `capabilities.ts:124` stands
   unchanged (§6b).
-- **D676** — Multi-band Maia disagreement as a difficulty/teachability signal; prototype on
+- **D817** — Multi-band Maia disagreement as a difficulty/teachability signal; prototype on
   R11 captures (§6e).
-- **D677** — Explainable-pick record: `opponent.selection` carries the feature vectors of
+- **D818** — Explainable-pick record: `opponent.selection` carries the feature vectors of
   the chosen and top rejected candidates, so a bot's miss is renderable from record — the
-  D669 differentiator as a data contract (§7).
-- **D678** — Human-scale anchor for the bot ladder (Chessiverse-pattern anchor accounts or
+  D810 differentiator as a data contract (§7).
+- **D819** — Human-scale anchor for the bot ladder (Chessiverse-pattern anchor accounts or
   learner-derived Glicko), extending D344's calibrated-value rule to personas (§5).
-- **D679** — Time-usage/move-timing modelling: deferred, new corpus/model work; do not fake
+- **D820** — Time-usage/move-timing modelling: deferred, new corpus/model work; do not fake
   from position-only Maia (§6d).
 
 ---

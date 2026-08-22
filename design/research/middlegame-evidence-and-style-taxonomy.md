@@ -470,7 +470,7 @@ The same versioned primitives can feature every candidate move: SEE risk, loose 
 space, pawn structure, king safety, file control and repertoire identity. A persona is then a
 declared policy over candidate evidence, not a new detector. This makes behavior reviewable:
 Tabiya can state which registered feature caused a candidate to be admitted/downweighted without
-claiming that a bot “understood” a plan. `[M]` (D669–D671; `bot-policy.md`)
+claiming that a bot “understood” a plan. `[M]` (D810–D812; `bot-policy.md`)
 
 Learned style vectors are a later alternative/augmentation. They may generate coherent individual
 behavior, but their latent dimensions and strength can entangle; the interpretable policy stack is

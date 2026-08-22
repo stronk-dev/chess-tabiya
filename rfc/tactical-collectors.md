@@ -464,7 +464,7 @@ predeclared D545 answer the measurement must confirm or refute.
   abstention `possible: true`, reasons `["pass_while_in_check"]`. Outside that case the
   enumeration is total and "no threat" is an empty result, not an abstention.
 - **The salience join**, in the same projection's operands (the bot literature's demand,
-  D670): `createdByLastMove: boolean` (was this threat absent before the opponent's last
+  D811): `createdByLastMove: boolean` (was this threat absent before the opponent's last
   move) and `attackerJustMoved: boolean` — a join of the threat stream against
   `run.record.move`, pure arithmetic, *"the operand that makes the explainable-miss
   differentiator possible"*. Law 8 per the audit: *"naming a threat that exists is
@@ -483,7 +483,7 @@ predeclared D545 answer the measurement must confirm or refute.
   authored / 1.04× imported** on 126/675 and 208/545 eligible played decisions. A retained
   attacker→target positive capture survives every legal reply only **1/675 authored and
   0/545 imported**. Threat presence is therefore inspector/negative/on-demand evidence,
-  not a default positive or blunder label. The D674 salience-hierarchy experiment remains
+  not a default positive or blunder label. The D815 salience-hierarchy experiment remains
   downstream; no missing salience result can widen this disposition.
 - **Shared exact reply projection:** `rules.tactic.consequence.reply_breadth@1` records the
   triggering move, terminal/check status, complete legal reply UCIs and count, and horizon
@@ -663,7 +663,7 @@ predeclared D545 answer the measurement must confirm or refute.
   enemy piece** (that is *their* discovered attack — the sign/ownership fixture).
   Non-vacuity.
 - **Measurement + sign:** new probe; predeclared state-shaped (prevalence, not delta
-  lift). The bot-side salience reading is D670's *measured candidate, not an assumed
+  lift). The bot-side salience reading is D811's *measured candidate, not an assumed
   truth* — downstream, not this gate.
 
 #### 3.13 Trapped piece + back-rank (audit §3.4/§3.5; row D739)
@@ -931,7 +931,7 @@ the machine-read record per the lifecycle contract's grammar.
    the whole middlegame ontology. `reply_breadth@1` is the one exception because this RFC's
    own threat/fork consequence semantics already enumerate and consume it.
 4. **Also deliberately out** (audit §5): the per-candidate application adapter (phase 6,
-   D669 lane); time-usage modelling (*"expensive, deferred per `human-like-opponents.md`
+   D810 lane); time-usage modelling (*"expensive, deferred per `human-like-opponents.md`
    §6d"*); plan labels (D530 citation grounding — an owner ruling, not a collector).
 
 ## Ledger rows (already recorded; flipped by the implementation landing pass)

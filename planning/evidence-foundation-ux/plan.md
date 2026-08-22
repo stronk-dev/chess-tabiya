@@ -25,7 +25,7 @@ before touching content; no corpus expansion until Gate F.
 | 3 | F5 module contracts (11 candidate modules, full declaration schema, sealed LLM packet boundary) | blocked on 2c+2d landing; modules consume real tactical and breadth ids with semantic eligibility before selection | RFC |
 | 4 | Play composition rebuild (board-stage + companion rail/drawer/sheet; nothing above the board) | blocked on 3 | RFC |
 | 5 | Presets over intent (Just Play / Guided / Support / Drill / Review / Analyze / Academy / Stream); effective config = preset ∩ ceiling ∩ role ∩ availability; ceilings only remove | blocked on 3 | RFC (with `assistance-controls` reconciliation) |
-| 6 | F8 bots on the same foundation (D669–D679 lane; policy generation distinct from guidance) | blocked on 2c+2d + O8; policy adapters may draft while implementation dependencies land | RFC |
+| 6 | F8 bots on the same foundation (D810–D823 lane; policy generation distinct from guidance) | dependency map complete; blocked on 2c+2d + O8; D815/D816/D817 experiments may run while collectors land | `planning/platform-alignment/bot-policy/f8-dependency-map.md`; then RFC |
 | 7 | Interaction-state acceptance across 7 viewports × 14 states; screenshots; CI path | rides 4 | criteria in the Phase-4 RFC |
 
 **Deliverable 7 (owner questions) accumulates here** — nothing is silently chosen.

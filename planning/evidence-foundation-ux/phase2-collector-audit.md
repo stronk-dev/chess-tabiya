@@ -16,7 +16,7 @@ arithmetic are unchanged, so the lifts still bound the same definitions.
 
 **Binding rules honored:** no intention inference; no LLM chess truth (law 8); geometry is not a
 tactic without the material/functional test (D545: `fork_created` 0.72× on geometry alone; SEE is
-the prerequisite, D673); no duplicate collector where an adapter is the gap; this document is the
+the prerequisite, D814); no duplicate collector where an adapter is the gap; this document is the
 basis for the Phase-3 RFC, not implementation. Ledger ids proposed here start at **D730**
 (Phase 1 proposes from D718 and has already used D718; nothing here collides). Proposals are
 written here only — the audit's landing commit flips no rows and writes no design docs.
@@ -125,7 +125,7 @@ caveat is bounded; for each collector the *negative reading* question is answere
 - **Measurement.** Not a firing detector; measured through its downstream gates — re-run the
   fork and hanging lifts with the SEE gate on, predeclared direction, interval must exclude 1.0
   and the criterion must be able to fail (D451).
-- **Shared registry:** learner eligibility for every tactical kind AND the D669 selector's
+- **Shared registry:** learner eligibility for every tactical kind AND the D810 selector's
   per-candidate material-safety feature — the strongest single shared-registry item
   (`human-like-opponents.md` §6c).
 
@@ -155,7 +155,7 @@ caveat is bounded; for each collector the *negative reading* question is answere
   moment the structural family exists — **zero new avoidance code**. Post-SEE, both signs re-measured.
 - **Cost:** free (attack maps exist) + SEE. **Consumers:** learner (postcommit_nudge,
   blunder_prevention, review_map) and bot (candidate safety feature; a low-band persona that
-  sometimes fails this test *by declared policy* is D671's honest twist persona).
+  sometimes fails this test *by declared policy* is D812's honest twist persona).
 
 ### 3.2 Fork / double attack, materially meaningful
 
@@ -180,7 +180,7 @@ caveat is bounded; for each collector the *negative reading* question is answere
   avoided-allowing), and that outcome must be recorded, not rationalized (law 6).
 - **Cost:** free + SEE; consequence adds one-ply enumeration (cheap — the
   `legalAlternativeEdges` enumerator already exists, `semantic-evidence.ts:257`). **Consumers:**
-  learner (review_map, guided_hint grounds) and bot ("it missed your fork because…" — the D669
+  learner (review_map, guided_hint grounds) and bot ("it missed your fork because…" — the D810
   explainable-miss differentiator; salience join in §3.13).
 
 ### 3.3 Pins, skewers, X-rays (ray classifications)
@@ -259,7 +259,7 @@ caveat is bounded; for each collector the *negative reading* question is answere
 - **Measurement:** `pawn_island_gained` already measured **2.13×** — positive reading viable as an
   event; ship state + event. **Cost:** free. **Consumers:** learner (the vocabulary the shape
   library "keeps reaching for" — and the orphaned `hanging-pawns` shape entry finally gets its
-  detector) and bot (solidity personas weight structure preservation, D671).
+  detector) and bot (solidity personas weight structure preservation, D812).
 
 ### 3.7 Castling: rights state, rights-lost transition, legality state
 
@@ -367,14 +367,14 @@ caveat is bounded; for each collector the *negative reading* question is answere
   passer hard negative (pressure operands show the blocker); rule-of-the-square boundary fixture
   (king exactly in/out of the square — D451-style able-to-fail pair).
 - **Cost:** free. **Consumers:** learner (endgame modules) and bot (passer-pushing personas;
-  endgame-strength personas per D670's engine-floor note).
+  endgame-strength personas per D811's engine-floor note).
 
 ### 3.13 Threats and bounded tactical consequences
 
 - **Semantics.** *Consequence*, under a **declared null-move convention** (`threat@1`): "if the
   side to move passed, the opponent has a move that (a) wins material by SEE, or (b) mates in 1
   (exact)." One-ply enumeration + SEE; null-move is a convention and says so in the provenance.
-  Additionally the **recency/salience join** the bot literature demands (D670,
+  Additionally the **recency/salience join** the bot literature demands (D811,
   `human-like-opponents.md` §6a): was this threat created by the opponent's last move; did the
   threatening piece itself just move — a join of the threat stream against `run.record.move`,
   pure arithmetic, and **the operand that makes the explainable-miss differentiator possible**.
@@ -384,7 +384,7 @@ caveat is bounded; for each collector the *negative reading* question is answere
 - **Fixtures.** Positive (mate threat; material threat); hard negative: a "threat" whose
   execution loses by SEE (must not fire); a pre-existing threat after an unrelated move
   (`createdByLastMove` must be false — the salience join's own fixture); non-vacuity.
-- **Measurement:** new probe; the D674 salience-hierarchy experiment (folklore → measured) is the
+- **Measurement:** new probe; the D815 salience-hierarchy experiment (folklore → measured) is the
   designated instrument; report threat-presence lift both signs. **Cost:** cheap (one-ply + SEE).
   **Consumers:** learner (`blunder_prevention` — the owner-ruled R3 module that currently has no
   producer; postcommit consequence naming) and bot (the salience feature family — the core of
@@ -407,7 +407,7 @@ caveat is bounded; for each collector the *negative reading* question is answere
   diagonal; discovered-check positive; hard negatives: two blockers; blocker is an enemy piece
   (that is *their* discovered attack, sign/ownership fixture); non-vacuity.
 - **Measurement:** new probe; expect state-shaped; the bot-side reading (candidate moves of P
-  carry the latent consequence) is the salience feature "discovered geometry" — D670 marks the
+  carry the latent consequence) is the salience feature "discovered geometry" — D811 marks the
   specific hierarchy folklore, so it enters as a measured candidate, not an assumed truth.
 - **Cost:** free. **Consumers:** learner (the owner's named case; style/habit indexing D553) and
   bot (candidate featuring; personas that "see" or "miss" discovered geometry by declared policy).
@@ -423,9 +423,9 @@ caveat is bounded; for each collector the *negative reading* question is answere
 
 ---
 
-## 4. The shared-registry test (D551/D669)
+## 4. The shared-registry test (D551/D810)
 
-D669's architectural claim — the bot consumes DECLARED evidence so its miss is explainable — and
+D810's architectural claim — the bot consumes DECLARED evidence so its miss is explainable — and
 `human-like-opponents.md` §6's synthesis (the missing thing is a **candidate-evidence producer
 class**, i.e. the same declared vocabulary applied per candidate move) give the test: *a collector
 passes if the identical projection serves a learner module and the selector's candidate featuring,
@@ -438,7 +438,7 @@ adapter itself is phase-6 work; nothing below needs a second implementation for 
 | Hanging/loose (3.1) | postcommit_nudge, blunder_prevention, review_map, avoidance form | candidate safety feature; twist personas | **YES** |
 | Fork (3.2) | review_map, guided_hint grounds | the explainable-miss case verbatim | **YES** |
 | Pins/skewers/X-ray (3.3) | sight_on_request, theory_breadcrumb | pinned-candidate salience | **YES** |
-| Threats + salience join (3.13) | blunder_prevention (currently producer-less) | the structured-error core (D670) | **YES** |
+| Threats + salience join (3.13) | blunder_prevention (currently producer-less) | the structured-error core (D811) | **YES** |
 | Discovered latency (3.14) | D553 habit indexing, theory join | discovered-geometry salience candidate | **YES** |
 | Castling rights (3.7) | Review facts, imported-game story | king-safety persona feature | **YES** |
 | Islands/chains (3.6) | structure vocabulary, shape join | solidity persona weights | **YES** |
@@ -451,7 +451,7 @@ adapter itself is phase-6 work; nothing below needs a second implementation for 
 | Promotion pressure (3.12) | endgame modules | passer persona | yes |
 | Maia WDL (3.15) | inspector (if admitted) | candidate outcome prior | yes |
 
-Every proposed collector passes; none requires forking the registry — which is the D551/D669
+Every proposed collector passes; none requires forking the registry — which is the D551/D810
 requirement, honored by construction because each is specified as one producer with
 learner-consumer and (future) `opponent.selection`-consumer adapters.
 
@@ -460,7 +460,7 @@ learner-consumer and (future) `opponent.selection`-consumer adapters.
 ## 5. Ranked build order (unblocks-most × cheapest)
 
 1. **SEE** (3.0) — free; hard prerequisite of 3.1, 3.2, relative 3.3, 3.4, 3.9b, 3.13, and the
-   bot blunder gate. Nothing tactical is honest without it (D545/D673). Build first.
+   bot blunder gate. Nothing tactical is honest without it (D545/D814). Build first.
 2. **Castling rights + reading-plane castling unification** (3.7 + the D547 residue: route
    `irreversibility`/`pgn-import` through `canonicalMoveUci` or the `>= 2` test) — trivial,
    exact, repairs a shipped defect and adds the cheapest new exact family in one commit's scope.
@@ -490,7 +490,7 @@ Maia-WDL repair. **Specified with a declared-convention or measurement gate stil
 RFC's own acceptance:** fork (post-SEE lift must be measured, direction predeclared), space
 (zone/test convention — owner-visible), trapped + back-rank (convention text), threats
 (null-move convention text), discovered latency (probe first). **Deliberately out of this RFC:**
-the per-candidate application adapter (phase 6, D669 lane), time-usage modelling (expensive,
+the per-candidate application adapter (phase 6, D810 lane), time-usage modelling (expensive,
 deferred per `human-like-opponents.md` §6d), plan labels (D530 citation grounding — owner ruling,
 not a collector).
 
@@ -552,7 +552,7 @@ not a collector).
 ## 9. Proposed ledger rows (from D730 — proposed here, to be written to `design/BACKLOG.md` by the landing pass, not by this audit)
 
 - **D730** — SEE as a declared-convention predicate producer (`see-convention@1`); the tactical
-  family's prerequisite; spec §3.0. Implements the collector D673 found absent.
+  family's prerequisite; spec §3.0. Implements the collector D814 found absent.
 - **D731** — Castling family: rights state, rights-lost transition with cause, legality state;
   plus reading-plane castling unification retiring D547's residue. Spec §3.7.
 - **D732** — Generic `capture` event retaining captured identity (+ en passant), SEE-classified

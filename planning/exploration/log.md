@@ -4419,3 +4419,19 @@ drafts claim no shared versioned resource and land research/inspector-only. Prod
 blocked on acceptance; breadth implementation follows tactical because it consumes legal exchange
 and reply breadth. The draft also consumes the existing pawn-contact, passed-pawn, piece-count and
 open/half-open-file authorities rather than creating duplicate meanings.
+
+## 2026-08-22 — bot-policy namespace and F8 boundary re-derived
+
+The bot-policy block had reused D669–D679 after F1 already owned those ids. The closed F1 history
+keeps its numbers; the bot lane is renumbered to D810–D820 and living research/planning/RFC
+citations now distinguish the two. D809 remains open for an executable duplicate-id guard rather
+than treating the one-time repair as prevention.
+
+The current first-party Chessiverse mechanism was rechecked and still supports R11's narrower
+reading: generated candidates plus a stronger-engine curator, post-hoc observed styles, per-bot and
+statistical books, and human-scale anchor bots. A HEAD selector audit then found three concrete F8
+seams: the request rejects policy-stack fields (D821), the persisted selection lacks layer/feature/
+contribution/calibration identities (D822), and Maia chooses `bestmove` internally while the branch
+seed is not honored by generation (D823). `f8-dependency-map.md` routes the bot wave behind O8 and
+the two collector landings, while leaving salience/sharpness/multi-band experiments parallel and
+campaign independent.

@@ -5,6 +5,12 @@
 D649, Chessiverse/Otter desk research  
 **Does not claim:** human-likeness from an external panel; owner use remains validation
 
+**2026-08-22 HEAD audit:** `planning/platform-alignment/bot-policy/f8-dependency-map.md` confirms
+the research result but adds three required F8 seams: the current request cannot encode a stack
+(D821), the selection event cannot audit one (D822), and `human_common` accepts a branch seed while
+Maia's internal sample correctly records `seedHonored: false` (D823). These are RFC inputs, not new
+owner questions.
+
 ## What research has settled
 
 1. Tabiya ships a useful base model, not a personality system: history-conditioned Maia-3 with
