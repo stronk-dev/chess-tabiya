@@ -4335,3 +4335,10 @@ D774–D777 record the result and the wider lesson: current packs omit a strong 
 overrepresent a phase-specific one, so pack coverage cannot define foundation completeness. No
 production or authored content changed. Phase 2b remains open for candidate-passers/lever timing,
 decomposed king state, broader individual mobility and bounded reply/search semantics.
+
+## 2026-08-22 — D667 imported story titles become learner-relative
+
+With F1's byte-preservation constraint discharged, the story title now carries the learner side and
+applies the same `learnerLost` rule already used by the neighboring outcome projection. The paired
+regression fixes the trust leak directly: imported `1-0` renders “Won” for a White learner and “The
+turning point” for a Black learner. No evidence semantics or title ranking changed.

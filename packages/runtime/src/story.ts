@@ -29,7 +29,7 @@ export interface StoryMoment {
   readonly endgame?: EndgameReading;
 }
 export interface StoryProjection { readonly moments: readonly StoryMoment[]; readonly rank: readonly string[]; readonly evidence: readonly DeclaredEvidence<unknown>[]; }
-export interface StoryTitleInput { readonly outcome: { readonly kind: "board_terminal" | "recorded_result" | "unfinished"; readonly result?: RunOutcome | "1-0" | "0-1" | "1/2-1/2" | "*" }; readonly moments: readonly StoryMoment[]; readonly rank: readonly string[]; }
+export interface StoryTitleInput { readonly side: "white" | "black"; readonly outcome: { readonly kind: "board_terminal" | "recorded_result" | "unfinished"; readonly result?: RunOutcome | "1-0" | "0-1" | "1/2-1/2" | "*" }; readonly moments: readonly StoryMoment[]; readonly rank: readonly string[]; }
 export const STORY_MATE_CP = 1000;
 export const STORY_PIVOT_CP = 150;
 const ref = (id: string) => ({ id, version: 1 } as const);
@@ -76,7 +76,9 @@ export function suggestTitle(story: StoryTitleInput): string {
   const move = top === undefined ? "the finish" : `move ${Math.max(1, Math.ceil(top.ply / 2))}`;
   const family = top?.endgame?.type?.label;
   const result = story.outcome.result;
-  const verb = result === "draw" || result === "1/2-1/2" ? "Held" : result === "win" || result === "1-0" ? "Won" : result === "loss" || result === "0-1" ? "The turning point" : "A game story";
+  const recordedLoss = result === "1-0" || result === "0-1" ? learnerLost(result, story.side) : false;
+  const recordedWin = (result === "1-0" || result === "0-1") && !recordedLoss;
+  const verb = result === "draw" || result === "1/2-1/2" ? "Held" : result === "win" || recordedWin ? "Won" : result === "loss" || recordedLoss ? "The turning point" : "A game story";
   return family === undefined ? `${verb} at ${move}` : `${verb} from the ${family.toLowerCase()} at ${move}`;
 }
 

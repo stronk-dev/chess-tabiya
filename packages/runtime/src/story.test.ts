@@ -38,9 +38,15 @@ describe("grounded game story", () => {
   it("composes deterministic titles only from story facts", () => {
     const run = commitMove(imported("7k/8/5KQ1/8/8/8/8/8 w - - 0 1"), "g6g7", { actor: "user", at }).run;
     const projection = storyMoments(run, run.activeCursor.branchId, { recordedResult: "1-0" });
-    const input = { outcome: { kind: "board_terminal" as const, result: "win" as const }, ...projection };
+    const input = { side: run.start.side, outcome: { kind: "board_terminal" as const, result: "win" as const }, ...projection };
     expect(suggestTitle(input)).toBe(suggestTitle(structuredClone(input)));
     expect(suggestTitle(input)).toMatch(/Won/);
     expect(storyDeclaredEvidence(input)[0]!.projection.id).toBe("derived.story.title");
+  });
+
+  it("renders imported result tags from the learner's side", () => {
+    const base = { moments: [], rank: [], outcome: { kind: "recorded_result" as const, result: "1-0" as const } };
+    expect(suggestTitle({ ...base, side: "white" })).toBe("Won at the finish");
+    expect(suggestTitle({ ...base, side: "black" })).toBe("The turning point at the finish");
   });
 });
