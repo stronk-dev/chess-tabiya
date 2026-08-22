@@ -29,7 +29,7 @@ function ratedRun(id: string) {
   });
 }
 
-function declaration(runId: string, learnerId: string): OpenRatedGameRecord {
+function declaration(runId: string, learnerId: string, overrides: Partial<OpenRatedGameRecord> = {}): OpenRatedGameRecord {
   return Object.freeze({
     runId,
     learnerId,
@@ -42,6 +42,7 @@ function declaration(runId: string, learnerId: string): OpenRatedGameRecord {
     engineIdentityDigest: "1e13597c42d4858b7cfd7cfdae01e297263364b2",
     state: "open",
     startedAt: AT,
+    ...overrides,
   });
 }
 
@@ -107,6 +108,9 @@ describe("rated-game storage", () => {
     expect(() => storage.sealRatedGame({ ...terminal, result: "loss" })).toThrow(/already sealed or voided/u);
     expect(storage.learnerRating("learner-a")).toMatchObject({ ratedGames: 1, periodNo: 0 });
     expect(storage.ratingPeriods("learner-a")[0]).toMatchObject({ games: 1, closedAt: null });
+    expect(storage.learnerMarks("learner-a")).toEqual([
+      expect.objectContaining({ mark: "bronze", runId: run.id, earnedAt: LATER }),
+    ]);
     storage.close();
   });
 

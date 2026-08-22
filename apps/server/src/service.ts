@@ -56,6 +56,7 @@ import {
   type RunOpponentMode,
   type RunOpponentPolicy,
   type PositionOpponentPolicy,
+  type PublishedBandValue,
   type ReasoningTranscript,
   type RunMark,
   RuntimeError,
@@ -92,6 +93,7 @@ import {
 import type { ImportedGameRecord, PublicTokenRecord, RepertoireGapRunRecord, RunDerivation, RunStorage, RunSummary, StoredRun } from "./storage.js";
 import type { ProgressStorage, ScheduleRow, StoredAttempt } from "./storage.js";
 import type { RatingStorage, RatedGameTerminalReason } from "./storage.js";
+import type { ClassroomStorage } from "./storage.js";
 import {
   projectAttempts,
   rootKey as progressRootKey,
@@ -112,6 +114,12 @@ import {
 import type { LeaseHolder, RunGrant, RunRole } from "./storage.js";
 import { parsePgnMainline, PgnImportError } from "./pgn-import.js";
 import { resolveImportSource, type ImportSource } from "./import-source.js";
+
+function ratingGroup(value: PublishedBandValue): string | number {
+  if (value.kind === "below") return `below-${value.band}`;
+  if (value.kind === "above") return `above-${value.band}`;
+  return 1000 + Math.floor((value.value - 1000) / 150) * 150;
+}
 import type { ShapeRegistry } from "./shape-registry.js";
 import {
   NO_PREVIOUS_REASONING,
@@ -330,6 +338,7 @@ export class RunService {
   readonly #evidenceMovetimeMs: number;
   readonly #progress: ProgressStorage | undefined;
   readonly #rating: RatingStorage | undefined;
+  readonly #classrooms: ClassroomStorage | undefined;
   readonly #opponentSelector: OpponentSelector | undefined;
   readonly #importFetch: typeof fetch;
   readonly #shapes: ShapeRegistry | undefined;
@@ -351,6 +360,7 @@ export class RunService {
       readonly evidenceMovetimeMs?: number;
       readonly progressStorage?: ProgressStorage;
       readonly ratingStorage?: RatingStorage;
+      readonly classroomStorage?: ClassroomStorage;
       readonly opponentSelector?: OpponentSelector;
       readonly importFetch?: typeof fetch;
       readonly shapeRegistry?: ShapeRegistry;
@@ -364,6 +374,11 @@ export class RunService {
     this.#rating = options.ratingStorage ?? (
       "createRatedRun" in storage && "ratedGame" in storage
         ? storage as RunStorage & RatingStorage
+        : undefined
+    );
+    this.#classrooms = options.classroomStorage ?? (
+      "classroomMember" in storage && "classroom" in storage
+        ? storage as RunStorage & ClassroomStorage
         : undefined
     );
     this.#opponentSelector = options.opponentSelector;
@@ -624,6 +639,143 @@ export class RunService {
       periods: storage.ratingPeriods(principal.learnerId),
       games: storage.ratedGames(principal.learnerId).filter((game) => game.state !== "open"),
     });
+  }
+
+  learnerMarks(principal: Principal) {
+    const storage = this.#rating;
+    if (storage === undefined) throw new ServerError("STORAGE_FAILURE", "Rating storage is not configured");
+    return storage.learnerMarks(principal.learnerId);
+  }
+
+  openCohortStanding(principal: Principal, classroomId: string, input: {
+    readonly windowFrom: string;
+    readonly windowTo?: string;
+    readonly at?: string;
+  }) {
+    const { ratings } = this.#standingAccess(classroomId, principal, true);
+    const openedAt = input.at ?? new Date().toISOString();
+    this.#assertStandingWindow(input.windowFrom, input.windowTo);
+    return ratings.createCohortStanding(Object.freeze({
+      classroomId,
+      openedByLearnerId: principal.learnerId,
+      windowFrom: input.windowFrom,
+      windowTo: input.windowTo ?? null,
+      openedAt,
+      closedAt: null,
+    }));
+  }
+
+  configureCohortStanding(principal: Principal, classroomId: string, input:
+    | { readonly op: "close"; readonly at?: string }
+    | { readonly op: "window"; readonly windowFrom: string; readonly windowTo?: string }
+  ) {
+    const { ratings } = this.#standingAccess(classroomId, principal, true);
+    if (input.op === "close") return ratings.closeCohortStanding(classroomId, input.at ?? new Date().toISOString());
+    this.#assertStandingWindow(input.windowFrom, input.windowTo);
+    return ratings.updateCohortStandingWindow(classroomId, input.windowFrom, input.windowTo ?? null);
+  }
+
+  publishCohortStanding(principal: Principal, classroomId: string, at = new Date().toISOString()) {
+    const { ratings } = this.#standingAccess(classroomId, principal);
+    return ratings.publishStandingMember(Object.freeze({
+      classroomId,
+      learnerId: principal.learnerId,
+      showRecord: true,
+      showRating: false,
+      publishedAt: at,
+    }));
+  }
+
+  setCohortStandingVisibility(principal: Principal, classroomId: string, field: "record" | "rating", visible: boolean) {
+    const { ratings } = this.#standingAccess(classroomId, principal);
+    return ratings.setStandingMemberVisibility(classroomId, principal.learnerId, field, visible);
+  }
+
+  withdrawCohortStanding(principal: Principal, classroomId: string): void {
+    const { ratings } = this.#standingAccess(classroomId, principal);
+    ratings.withdrawStandingMember(classroomId, principal.learnerId);
+  }
+
+  cohortStanding(principal: Principal, classroomId: string) {
+    const { ratings, classrooms } = this.#standingAccess(classroomId, principal);
+    const standing = ratings.cohortStanding(classroomId);
+    if (standing === undefined) throw new ServerError("RUN_NOT_FOUND", `Unknown classroom: ${classroomId}`);
+    const insideWindow = (value: string | null) => value !== null && value >= standing.windowFrom && (standing.windowTo === null || value <= standing.windowTo);
+    const entries = ratings.standingMembers(classroomId).flatMap((entry) => {
+      const membership = classrooms.classroomMember(classroomId, entry.learnerId);
+      if (membership?.state !== "active") return [];
+      const games = ratings.ratedGames(entry.learnerId).filter((game) => game.state === "sealed" && insideWindow(game.sealedAt));
+      const wins = games.filter((game) => game.result === "win").length;
+      const draws = games.filter((game) => game.result === "draw").length;
+      const losses = games.filter((game) => game.result === "loss").length;
+      const abandoned = ratings.ratedGames(entry.learnerId).filter((game) => game.voidReason === "abandoned" && insideWindow(game.sealedAt)).length;
+      const byOpponentBand = Object.freeze([...new Set(games.map((game) => game.opponentBand))]
+        .sort((left, right) => left - right)
+        .map((opponentBand) => {
+          const bandGames = games.filter((game) => game.opponentBand === opponentBand);
+          const bandWins = bandGames.filter((game) => game.result === "win").length;
+          const bandDraws = bandGames.filter((game) => game.result === "draw").length;
+          const bandLosses = bandGames.filter((game) => game.result === "loss").length;
+          return Object.freeze({
+            opponentBand,
+            wins: bandWins,
+            draws: bandDraws,
+            losses: bandLosses,
+            games: bandGames.length,
+            points: bandWins + bandDraws / 2,
+          });
+        }));
+      const record = Object.freeze({ wins, draws, losses, games: games.length, points: wins + draws / 2, abandoned, byOpponentBand });
+      const state = ratings.learnerRating(entry.learnerId);
+      const published = state === undefined ? undefined : publishRating(state);
+      const marks = ratings.learnerMarks(entry.learnerId).map((mark) => Object.freeze({
+        mark: mark.mark,
+        band: mark.mark === "bronze" ? 1400 : mark.mark === "silver" ? 1800 : 2200,
+        calibrationId: mark.calibrationId,
+        earnedAt: mark.earnedAt,
+      }));
+      return [Object.freeze({
+        learnerId: entry.learnerId,
+        handle: membership.handle,
+        marks: Object.freeze(marks),
+        ...(entry.showRecord ? { record } : {}),
+        ...(entry.showRating && published?.pointEstimate !== undefined
+          ? { rating: Object.freeze({ ...published, group: ratingGroup(published.pointEstimate) }) }
+          : {}),
+        _order: record,
+      })];
+    }).sort((left, right) =>
+      right._order.points - left._order.points ||
+      right._order.games - left._order.games ||
+      left.handle.localeCompare(right.handle),
+    ).map(({ _order: _ignored, ...entry }) => Object.freeze(entry));
+    return Object.freeze({
+      standing,
+      limitation: "These games were played alone against a bot and nobody witnessed them.",
+      entries: Object.freeze(entries),
+    });
+  }
+
+  #standingAccess(classroomId: string, principal: Principal, teacher = false): {
+    readonly ratings: RatingStorage;
+    readonly classrooms: ClassroomStorage;
+  } {
+    const ratings = this.#rating;
+    const classrooms = this.#classrooms;
+    const classroom = classrooms?.classroom(classroomId);
+    const membership = classrooms?.classroomMember(classroomId, principal.learnerId);
+    if (ratings === undefined || classrooms === undefined || classroom === undefined || classroom.archivedAt !== null || membership?.state !== "active" || (teacher && membership.memberRole !== "teacher")) {
+      throw new ServerError("RUN_NOT_FOUND", `Unknown classroom: ${classroomId}`);
+    }
+    return Object.freeze({ ratings, classrooms });
+  }
+
+  #assertStandingWindow(windowFrom: string, windowTo?: string): void {
+    const from = Date.parse(windowFrom);
+    const to = windowTo === undefined ? undefined : Date.parse(windowTo);
+    if (!Number.isFinite(from) || (to !== undefined && (!Number.isFinite(to) || to < from))) {
+      throw new ServerError("INVALID_REQUEST", "Standing window must be valid and ordered");
+    }
   }
 
   expireRatedGames(at = new Date().toISOString()) {

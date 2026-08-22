@@ -24,6 +24,15 @@ guidance, reveal, and analysis remain withheld while the game is open.
 
 Rating periods close after 12 sealed games or after seven days with at least one. The server
 publishes only the abstention-shaped result through `/rating`, with history at
-`/rating/history`; an unplayed prior produces no displayed rating. There is still no
-learner-facing rating screen or cohort-standing calculation. Ratings remain selection input
-only and must never alter evidence rendering, return recommendations, or milestones.
+`/rating/history`; an unplayed prior produces no displayed rating. `/marks` exposes only the
+caller's permanent event-derived marks.
+
+A teacher can open and configure one standing for an existing classroom. It starts empty:
+every member must publish themselves, can independently hide their record or rating, and can
+withdraw immediately. The server orders entries only by game points, games played, and handle;
+records include W/D/L split by measured opponent band. Ratings are absent unless both the member
+opts in and the publication gate admits a point estimate, and never affect the order. A standing
+returns no run, branch, move, position, or evidence data and permanently states that its games
+were played alone against a bot and were not witnessed. There is still no learner-facing rating
+or standing screen. Ratings remain selection input only and must never alter evidence rendering,
+return recommendations, or milestones.

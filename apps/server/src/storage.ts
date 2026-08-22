@@ -278,12 +278,46 @@ export interface RatingPeriodRecord {
   readonly volatilityAfter: number | null;
 }
 
+export interface LearnerMarkRecord {
+  readonly learnerId: string;
+  readonly mark: "bronze" | "silver" | "gold";
+  readonly calibrationId: string;
+  readonly runId: string;
+  readonly earnedAt: string;
+}
+
+export interface CohortStandingRecord {
+  readonly classroomId: string;
+  readonly openedByLearnerId: string;
+  readonly windowFrom: string;
+  readonly windowTo: string | null;
+  readonly openedAt: string;
+  readonly closedAt: string | null;
+}
+
+export interface StandingMemberRecord {
+  readonly classroomId: string;
+  readonly learnerId: string;
+  readonly showRecord: boolean;
+  readonly showRating: boolean;
+  readonly publishedAt: string;
+}
+
 export interface RatingStorage {
   createRatedRun(run: DrillRun, lease: LeaseHolder, title: string, game: OpenRatedGameRecord): void;
   ratedGame(runId: string): RatedGameRecord | undefined;
   ratedGames(learnerId: string): readonly RatedGameRecord[];
   learnerRating(learnerId: string): LearnerRatingRecord | undefined;
   ratingPeriods(learnerId: string): readonly RatingPeriodRecord[];
+  learnerMarks(learnerId: string): readonly LearnerMarkRecord[];
+  createCohortStanding(record: CohortStandingRecord): CohortStandingRecord;
+  cohortStanding(classroomId: string): CohortStandingRecord | undefined;
+  updateCohortStandingWindow(classroomId: string, windowFrom: string, windowTo: string | null): CohortStandingRecord;
+  closeCohortStanding(classroomId: string, at: string): CohortStandingRecord;
+  publishStandingMember(record: StandingMemberRecord): StandingMemberRecord;
+  standingMembers(classroomId: string): readonly StandingMemberRecord[];
+  setStandingMemberVisibility(classroomId: string, learnerId: string, field: "record" | "rating", visible: boolean): StandingMemberRecord;
+  withdrawStandingMember(classroomId: string, learnerId: string): void;
   sealRatedGame(input: {
     readonly runId: string;
     readonly result: RatedGameResult;
@@ -984,6 +1018,91 @@ export class SQLiteRunStorage implements RunStorage, ProgressStorage, LiveSessio
     })));
   }
 
+  learnerMarks(learnerId: string): readonly LearnerMarkRecord[] {
+    const rows = this.#database.prepare(
+      "SELECT * FROM learner_marks WHERE learner_id = ? ORDER BY CASE mark WHEN 'bronze' THEN 1 WHEN 'silver' THEN 2 ELSE 3 END",
+    ).all(learnerId) as readonly Record<string, unknown>[];
+    return Object.freeze(rows.map((row) => Object.freeze({
+      learnerId: String(row.learner_id), mark: row.mark as LearnerMarkRecord["mark"],
+      calibrationId: String(row.calibration_id), runId: String(row.run_id), earnedAt: String(row.earned_at),
+    })));
+  }
+
+  createCohortStanding(record: CohortStandingRecord): CohortStandingRecord {
+    try {
+      this.#database.prepare(`INSERT INTO cohort_standings
+        (classroom_id,opened_by_learner_id,window_from,window_to,opened_at,closed_at)
+        VALUES (?,?,?,?,?,NULL)`).run(
+          record.classroomId, record.openedByLearnerId, record.windowFrom,
+          record.windowTo, record.openedAt,
+        );
+    } catch (error) {
+      throw storageFailure("Could not create cohort standing", error);
+    }
+    return this.cohortStanding(record.classroomId)!;
+  }
+
+  cohortStanding(classroomId: string): CohortStandingRecord | undefined {
+    const row = this.#database.prepare("SELECT * FROM cohort_standings WHERE classroom_id=?").get(classroomId) as Record<string, unknown> | undefined;
+    return row === undefined ? undefined : Object.freeze({
+      classroomId: String(row.classroom_id), openedByLearnerId: String(row.opened_by_learner_id),
+      windowFrom: String(row.window_from), windowTo: row.window_to === null ? null : String(row.window_to),
+      openedAt: String(row.opened_at), closedAt: row.closed_at === null ? null : String(row.closed_at),
+    });
+  }
+
+  updateCohortStandingWindow(classroomId: string, windowFrom: string, windowTo: string | null): CohortStandingRecord {
+    const result = this.#database.prepare(`UPDATE cohort_standings SET window_from=?,window_to=?
+      WHERE classroom_id=? AND closed_at IS NULL`).run(windowFrom, windowTo, classroomId);
+    if (result.changes !== 1) throw new ServerError("RUN_NOT_FOUND", `Unknown open standing: ${classroomId}`);
+    return this.cohortStanding(classroomId)!;
+  }
+
+  closeCohortStanding(classroomId: string, at: string): CohortStandingRecord {
+    const result = this.#database.prepare(`UPDATE cohort_standings SET closed_at=?
+      WHERE classroom_id=? AND closed_at IS NULL`).run(at, classroomId);
+    if (result.changes !== 1) throw new ServerError("RUN_NOT_FOUND", `Unknown open standing: ${classroomId}`);
+    return this.cohortStanding(classroomId)!;
+  }
+
+  publishStandingMember(record: StandingMemberRecord): StandingMemberRecord {
+    const standing = this.cohortStanding(record.classroomId);
+    if (standing === undefined || standing.closedAt !== null) {
+      throw new ServerError("RUN_NOT_FOUND", `Unknown open standing: ${record.classroomId}`);
+    }
+    this.#database.prepare(`INSERT INTO standing_members
+      (classroom_id,learner_id,show_record,show_rating,published_at)
+      VALUES (?,?,?,?,?)
+      ON CONFLICT(classroom_id,learner_id) DO UPDATE SET
+        show_record=excluded.show_record,show_rating=excluded.show_rating,published_at=excluded.published_at`).run(
+          record.classroomId, record.learnerId, record.showRecord ? 1 : 0,
+          record.showRating ? 1 : 0, record.publishedAt,
+        );
+    return this.standingMembers(record.classroomId).find((member) => member.learnerId === record.learnerId)!;
+  }
+
+  standingMembers(classroomId: string): readonly StandingMemberRecord[] {
+    const rows = this.#database.prepare(`SELECT * FROM standing_members
+      WHERE classroom_id=? ORDER BY learner_id`).all(classroomId) as readonly Record<string, unknown>[];
+    return Object.freeze(rows.map((row) => Object.freeze({
+      classroomId: String(row.classroom_id), learnerId: String(row.learner_id),
+      showRecord: row.show_record === 1, showRating: row.show_rating === 1,
+      publishedAt: String(row.published_at),
+    })));
+  }
+
+  setStandingMemberVisibility(classroomId: string, learnerId: string, field: "record" | "rating", visible: boolean): StandingMemberRecord {
+    const column = field === "record" ? "show_record" : "show_rating";
+    const result = this.#database.prepare(`UPDATE standing_members SET ${column}=?
+      WHERE classroom_id=? AND learner_id=?`).run(visible ? 1 : 0, classroomId, learnerId);
+    if (result.changes !== 1) throw new ServerError("RUN_NOT_FOUND", "Standing entry is not published");
+    return this.standingMembers(classroomId).find((member) => member.learnerId === learnerId)!;
+  }
+
+  withdrawStandingMember(classroomId: string, learnerId: string): void {
+    this.#database.prepare("DELETE FROM standing_members WHERE classroom_id=? AND learner_id=?").run(classroomId, learnerId);
+  }
+
   sealRatedGame(input: {
     readonly runId: string;
     readonly result: RatedGameResult;
@@ -1015,6 +1134,17 @@ export class SQLiteRunStorage implements RunStorage, ProgressStorage, LiveSessio
         WHERE learner_id=? AND period_no=? AND closed_at IS NULL`).run(existing.learnerId, state.periodNo);
       this.#database.prepare(`UPDATE learner_ratings SET rated_games=rated_games+1,updated_at=?
         WHERE learner_id=?`).run(input.sealedAt, existing.learnerId);
+      const mark = input.result !== "win"
+        ? undefined
+        : existing.opponentBand === 1400 ? "bronze"
+          : existing.opponentBand === 1800 ? "silver"
+            : existing.opponentBand === 2200 ? "gold" : undefined;
+      if (mark !== undefined) {
+        this.#database.prepare(`INSERT OR IGNORE INTO learner_marks
+          (learner_id,mark,calibration_id,run_id,earned_at) VALUES (?,?,?,?,?)`).run(
+            existing.learnerId, mark, existing.calibrationId, existing.runId, input.sealedAt,
+          );
+      }
 
       const period = this.#database.prepare(`SELECT * FROM rating_periods
         WHERE learner_id=? AND period_no=?`).get(existing.learnerId, state.periodNo) as Record<string, unknown> | undefined;
@@ -2639,7 +2769,10 @@ export class SQLiteRunStorage implements RunStorage, ProgressStorage, LiveSessio
         left_at=CASE WHEN ?='left' THEN ? ELSE NULL END
         WHERE classroom_id=? AND learner_id=?`).run(state, state, at, state, at, classroomId, learnerId);
       if (changed.changes !== 1) throw new ServerError("INVALID_REQUEST", "Classroom membership is unavailable");
-      if (state === "left") this.#revokeClassroomSubmissionGrants(classroomId, learnerId);
+      if (state === "left") {
+        this.#revokeClassroomSubmissionGrants(classroomId, learnerId);
+        this.#database.prepare("DELETE FROM standing_members WHERE classroom_id=? AND learner_id=?").run(classroomId, learnerId);
+      }
       this.#database.exec("COMMIT");
     } catch (error) {
       this.#rollback();

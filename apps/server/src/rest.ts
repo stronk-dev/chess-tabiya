@@ -1085,6 +1085,41 @@ export function createRestHandler(
       if (request.method === "GET" && url.pathname === "/rating") {
         return json(200, service.rating(authenticate()));
       }
+      if (request.method === "GET" && url.pathname === "/marks") {
+        return json(200, { marks: service.learnerMarks(authenticate()) });
+      }
+      const standingRoute = /^\/cohorts\/([^/]+)\/standing$/.exec(url.pathname);
+      if (standingRoute !== null) {
+        const principal = authenticate();
+        const classroomId = decodeURIComponent(standingRoute[1]!);
+        if (request.method === "GET") return json(200, service.cohortStanding(principal, classroomId));
+        if (request.method !== "POST") return json(405, { error: { code: "METHOD_NOT_ALLOWED", message: "Method not allowed" } });
+        requireJson(request);
+        const body = closedRecord(await parseBody(request), "/", ["op", "windowFrom", "windowTo", "at"]);
+        const op = requiredString(body.op, "op");
+        const at = body.at === undefined ? undefined : requiredString(body.at, "at");
+        if (op === "open") {
+          return json(201, { standing: service.openCohortStanding(principal, classroomId, {
+            windowFrom: requiredString(body.windowFrom, "windowFrom"),
+            ...(body.windowTo === undefined ? {} : { windowTo: requiredString(body.windowTo, "windowTo") }),
+            ...(at === undefined ? {} : { at }),
+          }) });
+        }
+        if (op === "close") return json(200, { standing: service.configureCohortStanding(principal, classroomId, { op, ...(at === undefined ? {} : { at }) }) });
+        if (op === "window") return json(200, { standing: service.configureCohortStanding(principal, classroomId, {
+          op,
+          windowFrom: requiredString(body.windowFrom, "windowFrom"),
+          ...(body.windowTo === undefined ? {} : { windowTo: requiredString(body.windowTo, "windowTo") }),
+        }) });
+        if (op === "publish") return json(201, {
+          member: service.publishCohortStanding(principal, classroomId, at),
+          limitation: "These games were played alone against a bot and nobody witnessed them.",
+        });
+        if (op === "withdraw") { service.withdrawCohortStanding(principal, classroomId); return json(200, { withdrawn: true }); }
+        if (op === "showRating" || op === "hideRating") return json(200, { member: service.setCohortStandingVisibility(principal, classroomId, "rating", op === "showRating") });
+        if (op === "showRecord" || op === "hideRecord") return json(200, { member: service.setCohortStandingVisibility(principal, classroomId, "record", op === "showRecord") });
+        throw invalid("Unknown standing operation");
+      }
       if (request.method === "POST" && url.pathname === "/runs/import") {
         const principal = authenticate();
         return json(201, await service.importGame(

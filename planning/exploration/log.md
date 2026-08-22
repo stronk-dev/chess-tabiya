@@ -5272,3 +5272,26 @@ fixture counts exposed by the focused run.
 still require answers before implementation. Claude/register owner must reconcile that text;
 meanwhile learner-rating can continue through cohort standings, UI composition and remaining
 acceptance criteria.
+
+## 2026-08-22 — learner-rating cohort-standing backend checkpoint
+
+**What landed:** the migration-25 standing and mark tables now have their production writers and
+reads. Sealed wins mint permanent event-derived marks; a teacher can open or configure one
+standing for an existing classroom; and every entry can only be published, hidden or withdrawn
+by its own active member. Leaving the classroom removes the entry in the same transaction.
+
+**Verification:** 11 focused storage and standing fixtures pass and the server typecheck is
+green. The route fixture rejects a teacher-supplied learner handle before dispatch, then admits
+the learner's own publish gesture. Service fixtures cover empty-by-default consent, outsider
+indistinguishability, W/D/L split by opponent band, result-only ordering, provisional-rating
+absence, permanent marks, withdrawal, membership expiry, and the no-run-data response boundary.
+
+**What changed:** cohort computation is no longer a learner-rating residual. The remaining
+product gap is the dedicated classroom standing UI plus the RFC's wider generated acceptance
+graph and owner-use arm; the server contract is usable now and does not route standing copy
+through evidence or voice.
+
+**Next:** finish the learner-facing composition when its UI dependency is clear. In parallel,
+take migration 26 and the accepted longitudinal projection once its stale pre-acceptance question
+wording is reconciled, because that store is the foundation for grounded opening, structure,
+style and habit views.
