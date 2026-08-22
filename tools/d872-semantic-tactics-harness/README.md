@@ -40,5 +40,7 @@ Generated evidence:
   mate-through-four population.
 - `overload-response-output.md` — rejected broad duty-edge rule versus the exact sole-defender,
   positive-consequence response conflict.
+- `consumer-matrix-output.md` — executable candidate projection→consumer/timing/answer-distance
+  handoff for the Wave-C collector and module RFCs.
 
 The source file is not committed.

@@ -168,8 +168,8 @@ is 68.2–81.8% between adjacent tested budgets and top-eight moment Jaccard is 
 `centipawns | mateIn` typed, derive deltas only for cp→cp, and retain engine/version/budget. On 72
 already-proved mate-through-four positions, the 100-ms engine agrees on winner and exact remaining
 distance 72/72; the legal-tree proof and engine reading remain separately cited. Current Story
-instead coerces mate into ±1000 cp (D911), and the post-game pass requests eval without compiling
-the other declared sources (D912). Cross-source overlap, engine-version stability and whole-game
+instead coerces mate into ±1000 cp (D917), and the post-game pass requests eval without compiling
+the other declared sources (D918). Cross-source overlap, engine-version stability and whole-game
 selection remain.
 
 ### C5 — cross-consumer closure
@@ -189,6 +189,14 @@ projection/version
 
 The same projection may be quiet in Support, visible in Review, weighted by a bot and counted in a
 habit card. That is reuse. Four consumers implementing four near-identical detectors is failure.
+
+**Candidate matrix answered 2026-08-22:** 20 research-admitted rows carry every field above in an
+executable handoff. Candidate reach is Support 16, Review 20, bot 13, inspector 20, authoring 17 and
+theory 3. Pre-commit rows are position-rules-grounded and expose no move, line or evaluation answer.
+Habits receive zero rows until an opportunity denominator, sample floor and longitudinal store
+exist; raw counts would measure exposure. The matrix does not authorize production names: the
+Wave-C collector/source RFC owns those, followed by a literal-id amendment to `learner-modules` and
+the Review successor (D921).
 
 ## 4. Downstream gates
 

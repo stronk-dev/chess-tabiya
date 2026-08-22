@@ -461,7 +461,7 @@ producers, but no post-game compiler joins their typed results into one Review p
 Story then violates the type boundary. `story.ts:evaluation` converts any `mateIn` to ±1000 cp,
 clips real centipawns into that same range, reorients the scalar and feeds it to the 150-cp pivot
 rule. Mate distance, mate appearance/disappearance and cp↔mate transitions are lost before the
-renderer sees them. `[V]` (`packages/runtime/src/story.ts:evaluation`; D911)
+renderer sees them. `[V]` (`packages/runtime/src/story.ts:evaluation`; D917)
 
 Recorded offline engine evidence does not repair the runtime gap. The earlier Review census found
 consecutive retained evaluations on 20/20 opening mainlines and 0/29 middlegame/endgame mainlines;
@@ -542,7 +542,44 @@ The versioned foundation therefore keeps three projections:
 authorities. The zero authored result is content/fixture debt, not a reason to weaken the
 classifier or demote a basic tactic.
 
-## 14. Next research
+## 14. C5 compiles the producer-to-consumer handoff
+
+The closure instrument makes every candidate projection state its producer, grounding, literal
+operands, abstention, timing, answer distance, source/workflow ceilings, positive/hard-negative/
+abstention fixtures and availability. It rejects duplicate identities, incomplete rows, any
+pre-commit row not grounded in position rules, and any pre-commit answer containing a move, line or
+evaluation. `[V]` (`tools/d872-semantic-tactics-harness/consumer-matrix.test.ts`)
+
+| candidate consumer | Wave-C rows |
+|---|---:|
+| Support | 16 |
+| Review | 20 |
+| bot candidate policy | 13 |
+| advanced inspector | 20 |
+| authoring/validation | 17 |
+| theory | 3 |
+| player habits | **0** |
+
+`[V]` (`tools/d872-semantic-tactics-harness/consumer-matrix-output.md`)
+
+The zero for habits is a gate, not a forgotten consumer. None of these event rows yet carries the
+opportunity denominator, sample floor, baseline population and longitudinal store that would
+distinguish “this player misses overloads” from “this player encountered more overloads.” F9 may
+derive habit projections later from versioned events; it may not count raw firings. `[M]`
+
+Support's 16 is not an always-visible set. Recorded sequences are post-commit only; the four
+pre-commit-requested families are rules-grounded duty relations, overload response conflict,
+bounded mate proof and promotion geometry/race. Their answer distances stop before move/line/eval,
+and the workflow ceiling can reveal only the relation or concept. Review and the inspector can see
+all 20 because timing changes eligibility, not truth. `[V]` (same executable matrix)
+
+The production order is now explicit. The Wave-C collector/source-adapter RFC accepts or renames
+the 20 candidate identities and lands their literal contracts. Only then may `learner-modules` and
+the Review successor bind them. The currently accepted 175-row module RFC predates every Wave-C id;
+placeholder names would recreate the manifest's old free-text surface defect. `[V]`
+(`rfc/learner-modules.md` Appendix A; D921)
+
+## 15. Next research
 
 1. Carry the separately named attraction/deflection/square-clearance contracts into the Wave-C
    collector RFC alongside, not instead of, retained-duty relocation and line-blocker clearance.
@@ -553,6 +590,6 @@ classifier or demote a basic tactic.
 4. Carry the split promotion geometry/tablebase join into the collector RFC; do not recreate a
    geometric winner field under another name.
 5. Measure cross-source overlap on whole games and compile the C5 consumer matrix before accepting
-   full Support/Review breadth.
+   full Review selection; C5 itself is complete.
 
 No production detector, learner sentence, content edit or RFC is authorized by this Stage-0 result.

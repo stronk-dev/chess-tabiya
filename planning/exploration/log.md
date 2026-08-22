@@ -4668,3 +4668,25 @@ retained target after every legal recapture by that defender. It fires on 0 auth
 imported moves. D913 therefore splits the basic foundation into the ordinary multi-duty operand,
 the exact response conflict and the observed later exploitation. Winning, force against every
 opponent reply and engine judgement remain separate authorities.
+
+## 2026-08-22 — Wave C gets an executable producer-to-consumer handoff
+
+Twenty candidate projection rows now retain the complete C5 contract rather than a free-text
+surface: producer, operands, grounding, abstention, timing, answer distance, source/workflow
+ceilings, three fixture classes and availability. The closure test gives candidate reach of Support
+16, Review 20, bots 13, inspector 20, authoring 17 and theory 3. Every pre-commit-requested row is
+rules-grounded and none can contain a move, line or evaluation answer.
+
+Habits receive zero rows deliberately. Until opportunities, sample floors, baselines and the
+longitudinal store exist, a motif count measures exposure rather than player style. D914 records the
+matrix; D915 records the mandatory landing order. The Wave-C collector/source adapters must create
+literal production identities before the accepted learner-module RFC or the Review successor can
+bind them. Cross-source whole-game selection remains C4/F6 research, not a collector blocker.
+
+## 2026-08-22 — correction: the Wave-C Review/closure block moves to D916–D921
+
+The play-composition draft claimed D910/D911 after the Review engine checkpoint had used the same
+two identities. The entire contiguous Wave-C block moves together so its internal references stay
+coherent: engine operands D916, Story mate-type defect D917, missing post-game join D918, exact
+overload D919, C5 matrix D920 and module-amendment order D921. The earlier D910–D915 log references
+remain append-only history; none of the findings, counts or contracts changes.
