@@ -155,6 +155,16 @@ Review must remain useful with zero engine labels and permit zero moments.
 **Falsifier:** engine availability is inferred from openings, raw PV/bestmove enters ordinary
 Support, or a model/corpus probability becomes a chess-quality verdict.
 
+**Engine operand arm answered 2026-08-22:** the shipped 100-ms executor is affordable as a
+post-game source but not a grade oracle. Across 24 fixed imported transitions, delta-sign agreement
+is 68.2–81.8% between adjacent tested budgets and top-eight moment Jaccard is .455–.778. Keep
+`centipawns | mateIn` typed, derive deltas only for cp→cp, and retain engine/version/budget. On 72
+already-proved mate-through-four positions, the 100-ms engine agrees on winner and exact remaining
+distance 72/72; the legal-tree proof and engine reading remain separately cited. Current Story
+instead coerces mate into ±1000 cp (D911), and the post-game pass requests eval without compiling
+the other declared sources (D912). Cross-source overlap, engine-version stability and whole-game
+selection remain.
+
 ### C5 — cross-consumer closure
 
 Every admitted projection must publish:

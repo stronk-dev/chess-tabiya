@@ -34,5 +34,9 @@ Generated evidence:
   boundary probe.
 - `promotion-race-tablebase-output.md` — exact promotion geometry against the repository's
   recorded Syzygy outcome evidence.
+- `review-engine-operands-output.md` — cost and budget stability of typed consecutive engine
+  readings over fixed imported transitions.
+- `review-engine-mate-output.md` — typed engine-mate agreement against the already-proved exact
+  mate-through-four population.
 
 The source file is not committed.

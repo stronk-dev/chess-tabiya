@@ -4,9 +4,9 @@
 mating patterns and promotion threats optional “deep” analysis, or missing basic classifier
 foundation—and what evidence horizon do they require?
 
-**Status:** partial `[V]`; external population/upstream tagger, exact observed sequences,
-complete-one-reply boundary and exact next-mate/promotion consequences measured; external detector
-agreement and deeper mating/race horizons remain.
+**Status:** partial `[V]`; exact semantic tactics, mate-through-four, promotion/Syzygy authority,
+runtime Review engine operands and engine-mate agreement measured. Cross-source Review selection
+and engine-version stability remain.
 **Instrument:** `tools/d872-semantic-tactics-harness/`  
 **Authority:** D872 / evidence-foundation Wave C
 
@@ -405,16 +405,107 @@ none inherits a whole-position result without the joined authority. This lets Su
 pawns are racing” or reveal distance at the permitted answer level, while Review may add “Syzygy:
 draw” and a bot may weight the exact tablebase moves. `[M]`
 
-## 12. Next research
+## 12. Review engine operands: keep the types; do not manufacture a grade
+
+The C4 instrument drives the shipped `StockfishEvidenceExecutor`, including its reset prologue,
+over 24 fixed imported transitions: four each at plies 8, 16, 24, 32, 40 and 48. Both endpoints
+were evaluated at 50, 100 and 200 ms with Stockfish 18, one thread, 16 MB hash and MultiPV 1. `[V]`
+(`tools/d872-semantic-tactics-harness/review-engine-operands.test.ts`)
+
+| budget | transitions | cp→cp | mate-bearing | pair latency median / p90 | absolute cp swing median / p90 |
+|---:|---:|---:|---:|---:|---:|
+| 50 ms | 24 | 22 | 2 | 111.6 / 113.4 ms | 22 / 61 cp |
+| 100 ms | 24 | 22 | 2 | 211.6 / 212.3 ms | 17 / 69 cp |
+| 200 ms | 24 | 22 | 2 | 411.6 / 412.9 ms | 18 / 71 cp |
+
+The same transition does not yield a budget-invariant editorial verdict. Delta-sign agreement is
+15/22 (68.2%) at 50→100 ms, 18/22 (81.8%) at 100→200 and 14/22 (63.6%) at 50→200. The top-eight
+absolute-swing sets have Jaccard .455, .778 and .600 respectively. Median absolute swing
+difference is 8–14 cp and p90 22–40 cp. `[V]`
+(`tools/d872-semantic-tactics-harness/review-engine-operands-output.md`)
+
+Those figures establish an affordable **measured operand**, not an inaccuracy/mistake/blunder
+taxonomy. The budget and engine identity are part of the fact; a later declared grading convention
+may operate on it only if O7 authorizes that product. Selection cannot pretend the same top moments
+were stable across the tested budgets. `[M]`
+
+The mating arm evaluates 24 deterministic examples at each already-proved exact source horizon
+after the fixed candidate move. At the shipped 100-ms bound, the executor returns a typed mate on
+72/72 rows, agrees with the exact proof's winning side on 72/72 and reports the exact remaining
+distance—1, 2 or 3 moves—on every row. Median/p90 latency is 7.2/7.4 ms, 9.0/12.4 ms and 30.8/43.3
+ms by source horizon. `[V]`
+(`tools/d872-semantic-tactics-harness/review-engine-mate-output.md`)
+
+This is agreement between two authorities, not permission to merge them. The legal-tree event says
+the declared candidate forces mate through the bounded reply tree. The engine reading says this
+engine/version/budget returned a signed mate distance. If the engine returns centipawns at a finite
+budget, that is engine absence, not refutation of the exact proof. `[M]`
+
+### 12.1 Current pipeline audit
+
+The imported-game path already launches a post-game pass. `RunService.#ensureStoryEvidence`
+enqueues one `eval` job for every branch node at the default 100-ms movetime and waits until each is
+durable or failed. The queue defaults to two concurrent jobs. `[V]`
+(`apps/server/src/service.ts:#ensureStoryEvidence`;
+`apps/server/src/evidence-queue.ts:EvidenceJobQueue`;
+`apps/server/src/strong-engine.ts:DEFAULT_STRONG_ENGINE_PROFILE`)
+
+The executor can separately emit centipawn-or-mate eval, WDL and a best line. The eval payload also
+contains `bestMoveUci`. The post-game pass requests **only eval**. Maia policy/WDL, Explorer
+population, Syzygy result, runtime opening identity and Wave-C semantic events are independent
+producers, but no post-game compiler joins their typed results into one Review packet. `[V]`
+(`apps/server/src/evidence-queue.ts:StockfishEvidenceExecutor`;
+`packages/runtime/src/evidence-catalog.ts:EVIDENCE_PRODUCERS`;
+`apps/server/src/service.ts:#ensureStoryEvidence`)
+
+Story then violates the type boundary. `story.ts:evaluation` converts any `mateIn` to ±1000 cp,
+clips real centipawns into that same range, reorients the scalar and feeds it to the 150-cp pivot
+rule. Mate distance, mate appearance/disappearance and cp↔mate transitions are lost before the
+renderer sees them. `[V]` (`packages/runtime/src/story.ts:evaluation`; D911)
+
+Recorded offline engine evidence does not repair the runtime gap. The earlier Review census found
+consecutive retained evaluations on 20/20 opening mainlines and 0/29 middlegame/endgame mainlines;
+the live pass is what gives imported Story broad eval reach. `[V]`
+(`design/research/review-map-and-reentry.md` §3.1)
+
+### 12.2 Contract handed to Review
+
+The minimum source-separated packet is:
+
+- `review.eval_point@1`: `centipawns | mateIn`, never both, with explicit perspective, engine
+  identity/version and search bound;
+- `review.eval_delta@1`: only cp→cp, retaining both points and signed difference;
+- `review.mate_transition@1`: mate appeared/disappeared, side and distance change without a
+  centipawn conversion; may join `forced_mate_after_move@1` when candidate and position identity
+  match;
+- WDL, PV, Maia policy/WDL, Explorer counts, opening identity, semantic events and Syzygy remain
+  separate admitted items with independent absence and provenance;
+- a compiled Review moment packet joins items by run/node/move identity, not prose, then a named
+  module/preset selects what becomes visible.
+
+`[M]` Ordinary Review can therefore explain an exact tactic, human surprise, theory context or
+tablebase consequence without requiring an engine grade. Analyze may expose a PV or move under its
+own ceiling. Support does not inherit a raw best move merely because the eval executor happened to
+return one.
+
+### 12.3 Limits
+
+The stability arm is one host, one Stockfish version and 24 fixed transitions; it does not establish
+cross-version stability or a universal search budget. The exact mate arm covers deterministic
+samples from mate-through-four, not five-plus. Neither arm measures which moments learners find
+useful. Cross-source overlap/disagreement and whole-game selection remain C4/F6 work. `[M]`
+
+## 13. Next research
 
 1. Carry the separately named attraction/deflection/square-clearance contracts into the Wave-C
    collector RFC alongside, not instead of, retained-duty relocation and line-blocker clearance.
 2. Add a reply-qualified overload form separately from the observed five-case convention; do not
    make it the basic label's floor.
-3. Carry exact mate-through-four into the collector RFC and measure typed engine-mate agreement as
-   a separate C4 authority; do not call king-zone deltas a mating net.
+3. Carry exact mate-through-four and the typed engine-mate join into the collector/Review RFCs;
+   never convert mate to centipawns or call king-zone deltas a mating net.
 4. Carry the split promotion geometry/tablebase join into the collector RFC; do not recreate a
    geometric winner field under another name.
-5. Admit, narrow or refuse every family independently; then update the Wave-C consumer matrix.
+5. Measure cross-source overlap on whole games and compile the C5 consumer matrix before accepting
+   full Support/Review breadth.
 
 No production detector, learner sentence, content edit or RFC is authorized by this Stage-0 result.

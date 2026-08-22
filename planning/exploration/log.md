@@ -4633,3 +4633,25 @@ D907 therefore admits exact per-pawn geometry and exact race ordering as descrip
 Syzygy category/DTZ for outcome in range, and abstains on outcome outside it. It does not discard
 the primitives: Support can say both pawns are racing or expose distance without claiming the
 winner, Review can add the tablebase result, and bots can consume the exact joined authority.
+
+## 2026-08-22 — correction: Wave-C result rows move to D908/D909
+
+The learner-modules ruling claimed D906 and its semantic-reducer follow-up claimed D907 after the
+bounded-mate and promotion-race results had already used those identities. The living research rows
+and Wave-C pointers move to D908/D909. The earlier D906/D907 log text remains append-only history;
+the findings and their evidence do not change.
+
+## 2026-08-22 — Review engine operands are typed facts, not grades
+
+The shipped Stockfish executor was measured on 24 fixed imported transitions at 50/100/200 ms.
+Parent+child latency is median 111.6/211.6/411.6 ms, but delta-sign agreement ranges only
+63.6–81.8% across budgets and top-eight moment Jaccard .455–.778. That is sufficient for a
+source-labelled recorded operand and insufficient to infer a stable editorial grade. Mate stays a
+separate type: at 100 ms Stockfish 18 returned mate with the correct winner and exact remaining
+distance on 72/72 rows already proved by the complete mate-through-four tree.
+
+The symbol audit found the production failure the types need to prevent. Story maps every mate to
+±1000 cp and runs the ordinary 150-cp pivot rule over it (D911), while the post-game pass enqueues
+only eval and has no compiled join for the separately declared human, theory, semantic and
+tablebase sources (D912). C4 now hands Review a typed point/delta/mate-transition contract; source
+overlap, engine-version stability and whole-game selection remain research.
