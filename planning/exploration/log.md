@@ -4992,3 +4992,24 @@ Lifecycle-token clarification: P5 requires an active document with a surviving d
 
 Further parser clarification: `awaiting` points to the local discharge table rather than the global
 ledger, so the valid lifecycle token is `awaiting D1`; D921 remains the global owner.
+
+## 2026-08-22 — portable-account-data accepted; deletion and export are contract, not hope
+
+**What landed:** `rfc/portable-account-data.md` accepted after buildability (D711–D714) and an
+independent cross-review (~45 claims re-derived, 5 failed, all corrected in place). The two
+material catches: the browser-clearing promise named one localStorage prefix where the shipped
+grammars are three — a `tabiya:` clear would have missed writer ids, assistance preferences and
+the same-day `tabiya.workflow.v1.*` preset keys, i.e. "clear my data" would have silently kept
+most of it — and the §4.3 tombstone journal record was unwritable under `session_journal.kind`'s
+closed CHECK with no migration claimed (pinned to the existing `session.closed` kind). The
+migration-position queue now names all three pending positions including longitudinal-store's
+Discharge-D1 export hand-off.
+
+**What changed:** account export, deletion previews, and identity tombstones have an accepted
+contract claiming nothing versioned; teacher-surface's account-deletion clause has its named
+successor (F12-B, atomic supersession).
+
+**Blocked:** nothing for acceptance; implementation is queue-ordered work.
+
+**Next:** queue for codex behind the current chain; `assistance-control-wiring`'s review is in
+flight and `learner-rating` is unblocked by today's D945/D946 rulings.

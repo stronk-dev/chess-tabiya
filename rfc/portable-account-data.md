@@ -1,6 +1,6 @@
 # RFC: Portable account data and dependency-aware deletion
 
-- **Status:** draft — buildability review 2026-08-22 corrected D711–D714; ready for independent review
+- **Status:** accepted — 2026-08-22, by claude as register owner on the buildability test, after buildability (D711–D714) and an independent cross-review that re-derived ~45 claims at source and failed 5, all corrected in place: the browser-clearing promise named one localStorage prefix where the shipped grammars are three (`tabiya:` / `tabiya.` / `chess-tabiya:`) plus the same-day `tabiya.workflow.v1.*`; the §4.3 tombstone journal record was impossible under `session_journal.kind`'s closed CHECK with no migration claimed (pinned to `session.closed`); the migration-position queue predated the 2026-08-22 acceptances (all three named, with longitudinal-store's D1 hand-off); the migration-24 column enumeration missed `live_sessions.classroom_id`; `archive/teacher-surface.md` joins Parent/amends. *(Prior line for history: draft — buildability review 2026-08-22 corrected D711–D714; independent cross-review 2026-08-22 corrected five findings; ready for acceptance)*
 - **Author:** Codex on the owner's 2026-08-21 retention ruling
 - **Created:** 2026-08-21
 - **Design refs:** `design/02-product-shape.md` deployment axis and appliance clauses;
@@ -14,7 +14,8 @@
 - **Parent / amends:** `archive/learner-identity-and-authorization.md`,
   `archive/pack-studio.md`, `archive/shape-library.md`, `archive/game-import-and-story.md`,
   `archive/return-and-progression.md`, `archive/live-session-platform.md`,
-  `archive/social-match.md`, `archive/board-annotation.md`
+  `archive/social-match.md`, `archive/board-annotation.md`,
+  `archive/teacher-surface.md` (its §4.1a/criterion 9a account-deletion outcome only — §4.6)
 - **Supersedes / superseded by:** —
 - **Planning:** `planning/portable-account-data/` once implementing
 
@@ -94,7 +95,7 @@ data, not permission to omit a table-level entry.
 | anonymous public tokens | metadata says a link exists; token and token hash are excluded | revoke/delete; never a retention reason |
 | run derivations | learner-owned source/derived references | delete dangling private references; a foreign-owned derived run is a shared dependency |
 | future behavioral/style profiles | full metric values, sample/version/provenance and sharing state | hard-delete unless a later explicit publication contract says otherwise |
-| browser-local writer ids and view/assistance preferences | not account-scoped and therefore named in exclusions; they cannot be recovered from another device | clear every `tabiya:` key on the confirming browser; obsolete keys on another device carry no server data or valid session and are disclosed as device-local |
+| browser-local writer ids and view/assistance preferences | not account-scoped and therefore named in exclusions; they cannot be recovered from another device | clear every key in all three shipped grammars on the confirming browser — `tabiya:*` (mark scope, branch fold, branch group), `tabiya.*` (`tabiya.assistance.v1.*` and `intent-presets`' `tabiya.workflow.v1.*`) and `chess-tabiya:run:*:writer-id`; obsolete keys on another device carry no server data or valid session and are disclosed as device-local |
 | global registries, official content and deployment configuration | excluded and named as installation data | untouched |
 
 The inventory is the guard against “new table, old privacy policy.” Schema migration tests and
@@ -102,11 +103,16 @@ The inventory is the guard against “new table, old privacy policy.” Schema m
 away a table or silently use `not_applicable`.
 
 `archive/teacher-surface.md` is implemented at migration 24. It adds classrooms, members,
-assignments, submissions and two permission columns while specifying account deletion under the old
+assignments, submissions, two grant columns (`run_grants.expires_at`, `run_grants.granted_via`) and
+the `live_sessions.classroom_id` ownership column while specifying account deletion under the old
 blanket-reassignment policy. It therefore lands before this RFC. F12-B inventories every table it
 adds and supersedes its §4.1a/criterion 9a deletion outcome in the same commit; there is no interval
-in which the new classifier sees an unregistered classroom table. Later migrations (including
-`learner-rating`) must add inventory entries as part of their own schema guard.
+in which the new classifier sees an unregistered classroom table. Later migrations must add
+inventory entries as part of their own schema guard; the three queued at HEAD are `learner-rating`
+(rating tables), `longitudinal-store` (`learner_observations` and `learner_structure_stats`, whose
+accepted Discharge D1 routes both classes into this inventory — they export under the
+attempts/concepts/statistics class and hard-delete by their declared learner/run cascades) and
+`bot-policy` (stamp-only, no table).
 
 ### 2. Portable account bundle
 
@@ -275,7 +281,10 @@ Inside the same transaction:
 1. owner and active writer become `__legacy` with a fresh legacy writer id;
 2. every surviving real learner grant becomes `spectator`; the departing grant is deleted and one
    `__legacy` host grant is inserted;
-3. the live session, if any, is closed and a final identity-free tombstone journal record is appended;
+3. the live session, if any, is closed and a final identity-free tombstone journal record is
+   appended using the existing `session.closed` kind with a null actor and a tombstone payload —
+   `session_journal.kind` is a closed CHECK vocabulary at HEAD, and this RFC claims no migration,
+   so a new journal kind is not available to it;
 4. all anonymous tokens for the run are revoked/deleted;
 5. all marks authored by the departing learner, attempts/progress owned by them, imported-game
    source bytes/headers and private repertoire links are deleted;
@@ -376,9 +385,12 @@ shared-run preview says the learner will leave and a read-only tombstone will re
 number of collaborators. No raw `__legacy`, table name or retention classifier vocabulary appears in
 ordinary UI.
 
-On success, account deletion expires the cookie and clears every `tabiya:` localStorage key on the
-confirming browser—writer ids, assistance preferences, mark scopes, branch folds and group modes—
-before returning to the signed-out shell. Server-side sessions on every device are invalidated by
+On success, account deletion expires the cookie and clears every key in the three shipped
+localStorage grammars on the confirming browser—`chess-tabiya:run:*:writer-id` writer ids,
+`tabiya.assistance.v1.*` assistance preferences, `tabiya.workflow.v1.*` workflow presets, and the
+`tabiya:*` mark-scope, branch-fold and group-mode keys—before returning to the signed-out shell. A
+key grammar added later joins this clearing list through the same inventory exclusion entry that
+names it. Server-side sessions on every device are invalidated by
 learner deletion. A browser that is not present during deletion can retain only those device-local
 preferences/obsolete writer ids; the confirmation says so rather than promising remote browser
 erasure. Run deletion clears that run's local writer/view keys and removes it from every local list
@@ -511,3 +523,17 @@ streaming or a bounded temporary file are implementation decisions constrained b
 - 2026-08-22: buildability review corrected D711–D714: identity transforms are exhaustive, invalid
   stored run JSON has a closed raw representation, archived classroom history gains a real read-only
   consumer, and both publication surfaces own the required retention warning.
+- 2026-08-22: independent cross-review corrected five findings against HEAD and the RFCs accepted
+  the same day: (1) the browser-clearing grammar named only `tabiya:` keys while the shipped
+  writer ids are `chess-tabiya:run:*:writer-id` and assistance preferences are
+  `tabiya.assistance.v1.*` — a prefix clear would have missed both, plus `intent-presets`'
+  accepted `tabiya.workflow.v1.*`; §1 and §5 now name all three grammars. (2) The §4.3 tombstone
+  journal record is pinned to the existing `session.closed` kind — `session_journal.kind` is a
+  closed CHECK vocabulary and this RFC claims no migration, so a new kind was impossible as
+  written. (3) §1's later-migration sentence named only `learner-rating`; it now names all three
+  queued positions, including `longitudinal-store`'s two tables whose accepted Discharge D1 routes
+  them into this inventory. (4) The teacher-surface column enumeration omitted
+  `live_sessions.classroom_id`. (5) `archive/teacher-surface.md` joins Parent/amends, since §4.6
+  supersedes its §4.1a/criterion 9a outcome. Everything else re-derived clean: register count
+  (six), migration 24 ownership, deleteLearner/405/disclosure motivation claims, FK-free classroom
+  identity columns under the deletion-scoped key, and the 14-surface/19-criterion/discharge grids.
