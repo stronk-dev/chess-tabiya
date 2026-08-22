@@ -1,9 +1,10 @@
-# Breadth collectors — independent buildability review
+# Breadth collectors — author-side buildability return
 
 **Date:** 2026-08-22  
 **Input:** `rfc/breadth-collectors.md`, current F1/F2/Wave-A runtime declarations, and the
 completed Phase-2b harnesses named by the RFC  
-**Outcome:** **returned for author amendment**; no implementation is authorized
+**Outcome:** **returned for author amendment**; no implementation is authorized, and the required
+independent acceptance review remains outstanding because this RFC and this pass are both Codex work
 
 ## What passed
 
@@ -102,6 +103,6 @@ One amendment can close the return without a product ruling:
 4. add the named hard negatives and extend B2/B3/B4/B8 to cover them;
 5. re-run or explicitly domain-correct any quoted measurement whose predicate changed.
 
-After amendment, the independent reviewer should re-check the exact source bytes, not only the id
-names. Acceptance remains an owner/Claude action under RFC-0000. Wave-A implementation may continue
+After amendment, Claude's independent reviewer should re-check the exact source bytes, not only the
+id names. Acceptance remains an owner/Claude action under RFC-0000. Wave-A implementation may continue
 within its accepted boundary; Wave B stays blocked until this review is discharged.

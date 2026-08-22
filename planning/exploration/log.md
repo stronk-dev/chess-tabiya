@@ -4494,3 +4494,10 @@ implementations: legal control on empty/occupied squares, pressure-line colors a
 identity, pawn relation/rank predicates, en-passant's displaced captured square and half-open-file
 color. D851–D859 route one author amendment; no owner product ruling and no implementation were
 invented.
+
+## 2026-08-22 — correction: the Breadth return was author-side, not independent
+
+The preceding entry's findings stand, but its review label was false: `breadth-collectors.md` is
+Codex-authored and the pass was performed by Codex. The living review/register now call it an
+author-side buildability return. D851–D859 still require amendment; Claude's independent review
+remains required afterward. D860 records the correction rather than rewriting the append-only log.
