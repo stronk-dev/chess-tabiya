@@ -938,3 +938,20 @@ Product modules/defaults, schemas and content remain explicitly out of scope.
   forking detector code.
 - The ruling does not authorize unmeasured personality labels, bot tournaments, repertoire content,
   chat-driven move choice or hidden difficulty adjustment.
+
+## 2026-08-22 — F9 longitudinal-store buildability packet ready
+
+- Re-derived the storage boundary at HEAD: native attempts retain exact roots but not semantic
+  observations; imported games retain complete runs but are explicitly excluded from progress;
+  aggregates drop sources/opportunities; pack concepts remain pack-scoped.
+- Split the missing persistence into atomic versioned observations and reproducible metric
+  snapshots. Cached prose, diagnosis, archetypes, grades and priority ranks are not store fields.
+- Pinned the rebuild boundary: rules facts may be recomputed by an explicit versioned job; external
+  evidence requires an already-recorded response/artifact; labels and prose never backfill identity.
+- Kept exact applicability with F7, Review ranking with F6, composition with F5 and adaptive bot
+  memory with F8. The shared primitive vocabulary does not imply shared authority or retention.
+- Recorded the two landing coordinations: F9 needs a migration position alongside the unaccepted
+  learner-rating claimant, and every new behavioral table must join portable account
+  export/delete/per-run invalidation in the same landing.
+- O9 remains the sole decision gate. Its existing conservative handoff can now open a buildable RFC
+  without another collector or storage-discovery pass.

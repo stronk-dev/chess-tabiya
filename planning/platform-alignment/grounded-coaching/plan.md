@@ -2,7 +2,8 @@
 
 **Opened:** 2026-08-21  
 **Authority:** platform-alignment R13; disposable research only  
-**Status:** mechanical/code arm answered 2026-08-21; owner-use quality remains
+**Status:** mechanical/code arm answered 2026-08-21; HEAD buildability handoff added
+2026-08-22; O9 owner ruling and owner-use quality remain
 
 ## Question
 
@@ -67,3 +68,11 @@ R13's mechanical arm completes when the current topology matrix, corpus identity
 positive/negative prototype are reproducible; every safe card has a replay or honest-empty action
 result; and the dossier states exactly what O9/F9 may specify versus what still needs owner use or
 later evidence.
+
+## F9 buildability follow-through — 2026-08-22
+
+`f9-readiness.md` translates the answered R13 contract into a HEAD-derived pre-RFC handoff. It
+separates atomic observations from metric snapshots, pins the rebuild/no-silent-backfill rule,
+routes exact applicability to F7 and bot memory to F8, and records the learner-rating migration
+and portable-account-data coordination. It adds no implementation authority: O9 remains the one
+decision gate before F9 drafting.

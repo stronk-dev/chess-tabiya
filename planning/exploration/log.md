@@ -4690,3 +4690,20 @@ two identities. The entire contiguous Wave-C block moves together so its interna
 coherent: engine operands D916, Story mate-type defect D917, missing post-game join D918, exact
 overload D919, C5 matrix D920 and module-amendment order D921. The earlier D910–D915 log references
 remain append-only history; none of the findings, counts or contracts changes.
+
+## 2026-08-22 — the longitudinal blocker is specified as storage, not another classifier
+
+The F9 HEAD audit confirms R13 against the post-F1/F2 tree and turns its logical record into a
+buildability handoff. Native attempts preserve exact roots but no semantic observation;
+`projectAttempts` still returns empty for imported games; current metrics omit contributing rows
+and opportunity denominators; and pack concepts remain pack-scoped. The missing plane therefore
+splits into atomic versioned observations and reproducible metric snapshots, never cached prose or
+a weakness score.
+
+The rebuild boundary is explicit before authoring: pure rules facts may be recomputed from
+preserved events by a version-pinned idempotent job, while external evidence requires a recorded
+response/artifact and label/prose joins remain forbidden. Exact theory/drill applicability stays
+F7-owned; whole-game Review selection stays F6-owned; module composition stays F5-owned; adaptive
+bot memory stays F8-owned under O8's deferral. The store must coordinate a landing-position claim
+with `learner-rating` and join portable account export/delete/per-run invalidation in the same
+commit. O9 is still the only gate before F9 RFC drafting.
