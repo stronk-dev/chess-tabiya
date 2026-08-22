@@ -110,3 +110,19 @@ Append-only.
   25 consumers, 182 bindings and 40 semantic events/eligibility rows.
 - Focused verification: 74 affected runtime/server/web tests green; runtime typecheck, manifest
   check, semantic check and diff hygiene green. No repository-wide verification was run.
+
+## 2026-08-22 — remaining Wave-A contract audit
+
+- Re-read every one of the ten unimplemented Appendix-A projections against its available source
+  bytes. All ten are grouped behind seven author corrections, D829–D835; none is blocked by an
+  unknown implementation technique.
+- Newly returned: rule-of-the-square arithmetic omits turn/double-step/boundary semantics (D832);
+  a generic gained slider ray cannot prove the friendly-screen/enemy-target claim in
+  `discovered_executed` (D833); trade completion does not pin immediate adjacency or operands
+  (D834); and the loose-piece event tries to compare state readings that describe opposite owners
+  before and after every move (D835).
+- Previously returned: absent `space@1` tradition citation (D829), undefined pawn mutual-support
+  encoding (D830), and undefined rook cutoff predicate (D831).
+- Implementation pauses at the honest 20/30 boundary until the accepted RFC is amended. The
+  research-complete breadth successor D802 still needs its own independently accepted RFC before
+  Wave B code; UX modules, pack vocabulary and bot candidate adapters remain downstream consumers.

@@ -25,3 +25,6 @@ preset, workflow or authorable-vocabulary edits.
 - D743 runtime opening identity remains open for R8/F7.
 - Learner/module eligibility and the negative-reading UX remain the Phase-3 discharges.
 - Breadth collectors require their separate independent acceptance review.
+- The remaining ten Wave-A projections require the D829–D835 author amendments: space citation;
+  pawn connectivity encoding; rook cutoff; rule-of-square arithmetic; discovered-executed inputs;
+  trade adjacency/operands; and the side-oriented loose-piece event/avoidance baseline.
