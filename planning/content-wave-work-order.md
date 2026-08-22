@@ -703,3 +703,27 @@ fast it can go.
 Authoring work, not code; no RFC needed. Sequencing: this is a content wave and sits behind the
 owner's D949 Gate F hold with the rest of the content lane; it carries the standard content-wave
 closeout (ledger flips + `planning/content-era/log.md` entry in the shipping commit).
+
+---
+
+## Content-state routing 2026-08-23 (from `planning/content-era/state-of-the-corpus.md`)
+
+The state-of-the-corpus audit produced three rows; this work order is their destination.
+
+- **[[D992]] — Gate F clause 2's unrecorded pass.** Ticked in `planning/platform-alignment/plan.md`
+  at the audit's landing commit (`register-check` green; [[D499]] closed 2026-08-21). Residual owned
+  here: **every Gate F clause should name the command that proves it**, so the checklist stops
+  decaying the way routing did ([[D487]]/[[D952]]). One line per clause; no ruling needed.
+- **[[D993]] — the corpus is join-poor, not evidence-poor.** 764 machine records (391 `engine_eval`,
+  341 `tablebase_result`, 32 `position_legality`, 0 explorer) against 196 claims with exactly **one**
+  bound. All 98 withheld claims are **grounded-derivable**: 60 `corpus_observed` via the shipped-but-
+  never-run explorer instrument, 36 `tablebase_exact` via `ENUMERATE=all` censuses over 277 positions,
+  8 `engine_validated` via prose normalization. Execution arm is the binding wave
+  (`planning/feedback-delivery/stage2-work-order.md`), **held whole until Gate F by [[D949]]** — this
+  measurement resizes that wave's mechanical arm; it does not lift the owner's hold.
+- **[[D994]] — no subset of the 152 drafts can satisfy Gate F clause 8.** Four primitive families have
+  zero corpus witnesses (`engineCondition`, `legShapes`, `legOpponentPolicy`, `prediction`) and the
+  Maia assistance rung carries zero claims. The sacrificial pilot is the only route, and its authoring
+  is **licensed now** by `planning/platform-alignment/plan.md:39` (the limiting clause is the licensing
+  clause). Blocked only on the O6.3 membership rule; candidate evidence (lowest-debt drafts, primitive
+  coverage) is in the audit's pilot shortlist — evidence for a ruling, not a decision.

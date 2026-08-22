@@ -527,3 +527,7 @@ zero-witness families and rung 3. The owner rules; this is the arithmetic.
 | Evidence records held | **764** (391 engine, 341 tablebase, 32 legality); **0 explorer** |
 | Candidate ledgers digest-stale | **26 / 42** (all `onramp-*`) |
 | Gate F | **1 pass · 7 fail · 2 unmeasured** — and the one pass is unrecorded |
+
+
+
+*(Routing for the rows this audit produced lives in `planning/content-wave-work-order.md` — this file is a state report, not a route-shaped document; `make work-index` joins on the work order.)*
