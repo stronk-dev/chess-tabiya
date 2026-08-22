@@ -4454,3 +4454,21 @@ experiment already compared band-to-band Maia policy movement with human populat
 queries are removed from F8. D815 remains open behind exact tactical-identity landing; current
 `structuralDelta` cannot establish the threat relation its proposed salience experiment claims to
 measure, so the first F8 stack excludes it rather than shipping an unmeasured folklore weight.
+
+## 2026-08-22 — joint collector-RFC buildability pass returned and repaired three seams
+
+The 30-id tactical and 18-id breadth drafts were reviewed as one dependency graph. Both appendices
+are unique and register-silent, and every Breadth prerequisite resolves to HEAD or Wave A. Three
+cross-contract defects blocked acceptance: “consequence” was not a member of the closed manifest
+role union (D824); recorded-run salience was attributed to a local rules threat projection without
+its input/grounding (D825); and Breadth attempted to add shelter operands to Wave A's closed
+castling event (D826).
+
+The drafts now repair all three. Every tactical id has a literal role; a refutable fork is a false
+predicate retaining the replies rather than an abstention. Threat emits exact identity only and
+D815 remains the later measured recorded-run derivation. Castling shelter is a later join over two
+immutable authorities, and king-state keeps conservative convention grounding. Tactical has now
+received a separate Codex buildability pass and awaits the owner/Claude acceptance action. Breadth
+was originally Codex-authored, so this same-agent pass does not impersonate its required independent
+acceptance review; its five-check handoff is recorded in `collector-rfc-joint-review.md`. No
+implementation was authorized.

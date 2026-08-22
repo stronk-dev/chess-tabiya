@@ -1,7 +1,7 @@
 # RFC: Tactical collectors
 
-- **Status:** draft — amended 2026-08-22 after the D730 legal-exchange and D794 bounded-reply
-  falsification passes; ready for refreshed independent buildability review, not accepted
+- **Status:** draft — amended 2026-08-22 after the D730/D794 falsification passes and the joint
+  collector buildability review; D824/D825 repaired, refreshed acceptance review still required
 - **Author:** claude (drafted on the D717 program routing, `planning/evidence-foundation-ux/plan.md` phases 2c/3)
 - **Created:** 2026-08-22
 - **Design refs:** `design/05-in-run-experience.md` §5 (*"detection is cheap, significance is not"* — every collector here ships detection with the significance judgement structurally refused), §3b (guided mode names patterns from a validated library, never recommends); `design/03-product-breadth.md` §Structural reading (the rung-0 layer this extends) and §Intelligence and explanation
@@ -456,29 +456,28 @@ predeclared D545 answer the measurement must confirm or refute.
 - **Measurement + sign:** static prevalence per kind; lift reported both as state-presence
   and created-delta; predeclared: state dominates.
 
-#### 3.6 Threats + salience (audit §3.13; row D741 — `blunder_prevention`'s producer)
+#### 3.6 Threats (audit §3.13; row D741 — `blunder_prevention`'s producer)
 
-- **Home:** `tactics.ts`. **Consequence** projection
+- **Home:** `tactics.ts`. **Consequence-shaped reading** projection
   `rules.tactic.consequence.threat@1` under `threat@1` (§2.6): grounding
   `declared_convention`, exactness `convention`; cost cheap (one-ply + legal exchange);
+  manifest role `reading`, signs `["threatened"]`, forms `list | panel | machine_condition`,
+  answer ceiling `threat`, disposition `inspector_only`;
   abstention `possible: true`, reasons `["pass_while_in_check"]`. Outside that case the
   enumeration is total and "no threat" is an empty result, not an abstention.
-- **The salience join**, in the same projection's operands (the bot literature's demand,
-  D811): `createdByLastMove: boolean` (was this threat absent before the opponent's last
-  move) and `attackerJustMoved: boolean` — a join of the threat stream against
-  `run.record.move`, pure arithmetic, *"the operand that makes the explainable-miss
-  differentiator possible"*. Law 8 per the audit: *"naming a threat that exists is
-  arithmetic; it grades nobody."*
 - **Operands:** threatening piece; target; local-exchange result or mate flag; the
-  threatened move itself; `createdByLastMove`; `attackerJustMoved`; pass convention id.
+  threatened move itself; pass convention id.
+- **Salience is not smuggled into this rules projection.** `createdByLastMove` and
+  `attackerJustMoved` require `run.record.move`, therefore a separate `derived.*` identity,
+  `recorded_run` grounding and D815's still-unpassed measurement. That later projection is
+  outside Wave A. This repairs D825 and leaves the exact threat identity as D815's future input.
 - **Why it exists:** the R3 module table (`tools/r3-presentation-harness/output.md:24`)
   carries `blunder_prevention` as an owner-ruled candidate with **no producer to consume**
   (audit §2 row 13). This projection is that producer; the module itself remains Phase 3's.
 - **Fixtures:** mate-threat positive; material-threat positive. Hard negative: a "threat"
   whose local exchange is negative (must not fire). Abstention: side to move is in check
   yields `pass_while_in_check`; en-passant is cleared before the hypothetical opponent
-  move. **Salience fixture:** a pre-existing
-  threat after an unrelated move — `createdByLastMove` must be `false`. Non-vacuity.
+  move. Non-vacuity.
 - **Measurement + sign (D794, pre-acceptance):** threat presence measures **0.91×
   authored / 1.04× imported** on 126/675 and 208/545 eligible played decisions. A retained
   attacker→target positive capture survives every legal reply only **1/675 authored and
@@ -523,10 +522,14 @@ predeclared D545 answer the measurement must confirm or refute.
     when every parry still leaves a positive capture of the other target, which the earlier
     "or parries the check" phrasing wrongly made unsatisfiable for every royal fork.
     One-ply enumeration over the existing `legalAlternativeEdges` enumerator
-    (`semantic-evidence.ts:257`). `derivation.inputs` names the state event. **Retains
-    the refuting move when one exists** — *"retention of the defusing move is what makes
-    the negative fixture checkable."* Abstains (`refutation_exists`) rather than firing
-    when a defense holds.
+    (`semantic-evidence.ts:257`). **Retains the refuting moves when they exist** —
+    *"retention of the defusing move is what makes the negative fixture checkable."*
+    Manifest role `predicate`, signs `["state"]`, forms `machine_condition | list | panel`,
+    answer ceiling `threat`; the payload is `{ matched, refutingReplies }` over a
+    `double_attack` input. A refutation is a total negative predicate result, **not an
+    abstention**. `derivation.inputs` names `rules.tactic.event.double_attack@1`,
+    `rules.tactic.consequence.reply_breadth@1` and
+    `rules.exchange.predicate.legal_exchange@1`.
 - **Operands:** mover (square before/after, role); target list (square, occupant,
   per-target legal capture + exchange result); consequence adds the refutation move or
   its declared absence.
@@ -683,7 +686,9 @@ predeclared D545 answer the measurement must confirm or refute.
     square; blocked/attacked escape squares (which and why); accessing enemy heavy pieces
     and their files/paths. Susceptibility, not mate. **Mate-in-1 through the back rank is
     a separate exact rules projection** `rules.tactic.consequence.mate_in_one@1`
-    (one-ply, free, grounding `position_rules`, exactness `exact`) — emitted distinctly so
+    (one-ply, free, grounding `position_rules`, exactness `exact`, manifest role `reading`,
+    signs `["threatened"]`, forms `list | panel | machine_condition`, answer ceiling `threat`,
+    disposition `inspector_only`) — emitted distinctly so
     the convention state never borrows the exact claim's authority.
 - **Fixtures:** bishop trapped on a7 by b6 positive; hard negatives — zero-mobility piece
   that is not attacked; attacked piece with one quiet exchange-neutral escape; the
@@ -824,8 +829,10 @@ fallback; every other contrary measurement is escalated per law 6, not shipped a
    along-ray and non-king-pin recapturers counted — the −4 harness control), retains
    X-ray branches, and the space chess-tradition citation is present as declared
    semantics.
-4. **A4 — Dispositions.** Every new state reading plus the reply-breadth operand carries
-   `inspector_only`; every semantic event/avoidance projection (including check) is eligible only
+4. **A4 — Roles and dispositions.** Every projection uses a literal shipped `ProjectionRole`.
+   Threat and mate-in-one are inspector-only readings; fork-survives-reply is a machine predicate
+   whose false result retains refutations; reply breadth is an inspector-only event. Every semantic
+   event/avoidance projection (including check) is eligible only
    for `research.semantic_selection@1`; grep
    over `apps/ packages/` (tests/tools excluded) for the nine R3 module ids and six
    workflow ids still returns **0 production hits**.
@@ -896,7 +903,7 @@ fallback; every other contrary measurement is escalated per law 6, not shipped a
     `reply_breadth@1.replies` is set-equal to chessops' legal moves after the triggering
     move and `count === replies.length`; zero is terminal rather than only-reply. Threat
     and fork consequence code consumes this compiled object (no second enumerator), and a
-    failed fork retains at least one reply that actually makes its original-target
+    false fork predicate retains at least one reply that actually makes its original-target
     positive capture unavailable. The permanent measurement reproduces D794's eligible
     denominators within 10% or reports a deliberate domain correction.
 
@@ -968,35 +975,35 @@ dropping an id is a spec change with a changelog line, never a silent drift.
 | # | projection id | §3 item | role |
 |---:|---|---|---|
 | 1 | `rules.exchange.predicate.legal_exchange@1` | 3.1 | predicate |
-| 2 | `rules.castling.reading.rights@1` | 3.2 | state reading |
-| 3 | `rules.castling.event.rights_lost@1` | 3.2 | transition event |
-| 4 | `rules.castling.reading.legality@1` | 3.2 | state reading |
-| 5 | `rules.transition.event.capture@1` | 3.3 | transition rule event |
-| 6 | `derived.exchange.capture_class@1` | 3.3 | derived |
-| 7 | `derived.exchange.trade_completed@1` | 3.3 | derived join |
-| 8 | `rules.tactic.reading.loose_piece@1` | 3.4 | state reading |
-| 9 | `rules.tactic.event.loose_piece@1` | 3.4 | structural-style event |
-| 10 | `derived.semantic_avoidance.loose_piece@1` | 3.4 | avoidance event |
-| 11 | `rules.tactic.reading.ray_classification@1` | 3.5 | state reading |
-| 12 | `rules.tactic.consequence.threat@1` | 3.6 | consequence |
-| 13 | `rules.tactic.event.double_attack@1` | 3.7 | transition event |
-| 14 | `rules.tactic.consequence.fork_survives_reply@1` | 3.7 | consequence |
-| 15 | `rules.structural.reading.pawn_connectivity@1` | 3.8 | state reading |
-| 16 | `rules.structural.event.pawn_islands@1` | 3.8 | structural event |
-| 17 | `derived.semantic_avoidance.pawn_islands@1` | 3.8 | avoidance event |
-| 18 | `rules.phase.development@1` | 3.9 | state reading |
-| 19 | `rules.transition.event.developed@1` | 3.9 | transition rule event |
-| 20 | `rules.tactic.reading.rook_on_seventh@1` | 3.10 | state reading |
-| 21 | `rules.structural.reading.space@1` | 3.11 | level reading |
-| 22 | `rules.tactic.reading.discovered_latency@1` | 3.12 | state reading |
-| 23 | `derived.tactic.discovered_executed@1` | 3.12 | derived adapter |
-| 24 | `rules.tactic.reading.trapped_piece@1` | 3.13 | state reading |
-| 25 | `rules.tactic.reading.back_rank@1` | 3.13 | state reading |
-| 26 | `rules.tactic.consequence.mate_in_one@1` | 3.13 | consequence (exact) |
-| 27 | `derived.tactic.promotion_pressure@1` | 3.14 | derived join |
-| 28 | `human.maia.candidate_wdl@1` | 3.16 | source projection |
-| 29 | `rules.tactic.consequence.reply_breadth@1` | 3.6 | event (exact consequence operand) |
-| 30 | `rules.tactic.event.check@1` | 3.6 | exact rules event |
+| 2 | `rules.castling.reading.rights@1` | 3.2 | reading |
+| 3 | `rules.castling.event.rights_lost@1` | 3.2 | event |
+| 4 | `rules.castling.reading.legality@1` | 3.2 | reading |
+| 5 | `rules.transition.event.capture@1` | 3.3 | event |
+| 6 | `derived.exchange.capture_class@1` | 3.3 | event |
+| 7 | `derived.exchange.trade_completed@1` | 3.3 | event |
+| 8 | `rules.tactic.reading.loose_piece@1` | 3.4 | reading |
+| 9 | `rules.tactic.event.loose_piece@1` | 3.4 | event |
+| 10 | `derived.semantic_avoidance.loose_piece@1` | 3.4 | event |
+| 11 | `rules.tactic.reading.ray_classification@1` | 3.5 | reading |
+| 12 | `rules.tactic.consequence.threat@1` | 3.6 | reading |
+| 13 | `rules.tactic.event.double_attack@1` | 3.7 | event |
+| 14 | `rules.tactic.consequence.fork_survives_reply@1` | 3.7 | predicate |
+| 15 | `rules.structural.reading.pawn_connectivity@1` | 3.8 | reading |
+| 16 | `rules.structural.event.pawn_islands@1` | 3.8 | event |
+| 17 | `derived.semantic_avoidance.pawn_islands@1` | 3.8 | event |
+| 18 | `rules.phase.development@1` | 3.9 | reading |
+| 19 | `rules.transition.event.developed@1` | 3.9 | event |
+| 20 | `rules.tactic.reading.rook_on_seventh@1` | 3.10 | reading |
+| 21 | `rules.structural.reading.space@1` | 3.11 | reading |
+| 22 | `rules.tactic.reading.discovered_latency@1` | 3.12 | reading |
+| 23 | `derived.tactic.discovered_executed@1` | 3.12 | event |
+| 24 | `rules.tactic.reading.trapped_piece@1` | 3.13 | reading |
+| 25 | `rules.tactic.reading.back_rank@1` | 3.13 | reading |
+| 26 | `rules.tactic.consequence.mate_in_one@1` | 3.13 | reading |
+| 27 | `derived.tactic.promotion_pressure@1` | 3.14 | reading |
+| 28 | `human.maia.candidate_wdl@1` | 3.16 | source_record |
+| 29 | `rules.tactic.consequence.reply_breadth@1` | 3.6 | event |
+| 30 | `rules.tactic.event.check@1` | 3.6 | event |
 
 If the A9 fallback branch executes, ids 13–14 are replaced by
 `rules.tactic.event.fork_allowed@1` + `derived.semantic_avoidance.fork_allowed@1` — the
@@ -1037,3 +1044,7 @@ total stays 30 and the swap is recorded in the changelog and the landing log ent
   dispositions and population zeroes, repaired A5 so canonical non-vacuity cannot erase
   honest population absence, and routed the remaining breadth families to D802 rather
   than silently expanding this Wave-A RFC.
+- 2026-08-22: joint collector buildability review repaired D824/D825. Every
+  consequence-shaped id now maps to a literal shipped manifest role; a refutable fork is a
+  negative predicate result rather than abstention. Recorded-run salience operands were removed
+  from the local threat projection and remain D815's separately grounded, post-tactical derivation.

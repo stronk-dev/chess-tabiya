@@ -1,7 +1,7 @@
 # RFC: Breadth collectors — exact middlegame operands after Wave A
 
-- **Status:** draft 2026-08-22 — authored from the completed Phase-2b evidence; independent
-  buildability review required before acceptance
+- **Status:** draft 2026-08-22 — amended after the joint collector buildability review repaired
+  D826; an independent acceptance review is still required
 - **Author:** codex, on the owner-opened breadth/evidence-foundation program and D802 routing
 - **Created:** 2026-08-22
 - **Design refs:** `design/03-product-breadth.md` §Intelligence and explanation;
@@ -216,12 +216,16 @@ Each convention text and limitation ships verbatim in the manifest declaration.
   rather than computing a second attack map; the separate legal-controller set remains available
   for square-entry questions. Convention grounding.
 - `rules.king.event.zone_state@1`: typed exact changes—escape set, attacker/defender set, shelter
-  pawn set and king relocation—with before/after identities.
+  pawn set and king relocation—with before/after identities. Because the reading consumes
+  `king-zone@1` and `king-shelter@1`, the event is conservatively
+  `declared_convention`/`convention`; “exact changes” describes set fidelity, not a widened
+  exactness declaration.
 - `derived.king.captured_zone_defender@1`: generic capture identity joined to the captured piece's
   prior zone-defender role. This is the admitted form of the 6.07×/5.12×/3.94× headline; its
   non-capture counterpart is 0/.07×/.38× and no generic “weakened king” event exists.
-- Castling-to-more-shelter is an operand on Wave A's castling event (10.08×/8.19×/5.31×), not a
-  duplicate. Escape reduction and zone-attacker gain are phase-aware inspector operands. Direct
+- Castling-to-more-shelter is a later derived/module join over Wave A's immutable castling event and
+  this RFC's before/after shelter set (measured 10.08×/8.19×/5.31×), not an operand added to the
+  prerequisite projection and not a duplicate producer. Escape reduction and zone-attacker gain are phase-aware inspector operands. Direct
   check uses the existing check event. No unsafe/exposed/attack/mating-net claim.
 
 #### 3.8 Open-file occupancy
@@ -264,7 +268,8 @@ Its split from tactical Wave A is an RFC process decision, not a product-intent 
    boundary fixtures pin orientation, equality and support/blocker cases.
 4. **B4 — No duplicate authorities.** Capture, pawn-contact, passed-pawn, piece-count,
    open/half-open-file, castling, check, occupied-defence and legal-exchange facts are consumed by
-   id, not recomputed under a second meaning.
+   id, not recomputed under a second meaning. Wave A's castling declaration remains byte-identical;
+   this RFC does not attach shelter operands to it.
 5. **B5 — Fixtures/non-vacuity.** Every kind has positive and hard-negative canonical fixtures;
    declared abstentions have fixtures. Canonical sets are strict-interior. Population zeroes remain
    visible, specifically the authored defender sequences.
@@ -332,3 +337,6 @@ Unit: projection id; total **18**.
 
 - 2026-08-22: drafted from completed Phase 2b under D802. Claims no shared lane; production code
   remains blocked on acceptance and on `tactical-collectors` landing first.
+- 2026-08-22: joint collector buildability review repaired D826. Castling-to-more-shelter remains
+  a later derived/module join instead of mutating Wave A's closed castling event; king-state event
+  grounding is explicitly convention-level while its retained set deltas remain exact.
