@@ -89,6 +89,24 @@ oracle of either kind**.
 middlegame), or none. The ramp has a documented hole, and the product says so
 rather than inventing a number across it.
 
+**Amended 2026-08-16 (D439, owner ruling; written 2026-08-22 by claude on that
+ruling): all four labels describe a POSITION; a boss result describes an
+ENCOUNTER, and it lives on a second axis, not a fifth label.**
+Measured-by-outcome, measured-by-tablebase, authored, and none are all answers
+to *"how measurable is this position's difficulty?"*. A rated boss (§2b as
+amended, §5) plays to `terminalOutcome` and produces a **result** — a property
+of the encounter, not of any position inside it — so it does not fit on that
+scale at all. The ruling's encoding (`rfc/learner-rating.md` §5.3a, consequence
+2) already says how it relates: the rated axis *"runs orthogonally to the
+decidability axis rather than alongside it"* — which is a second axis. Every
+node keeps its difficulty-availability label, and independently either carries
+a result (only the Act II rated boss can — see §5's act-ladder amendment) or
+does not. *The ruling named the fork "a fifth label or a second axis" without
+choosing; the second-axis reading here is derived by claude from the ruling's
+own orthogonality sentence and is the owner's to veto — a fifth label would put
+"has a result" on the same scale as "how measurable is difficulty", which that
+sentence refuses.*
+
 ### 2b. There is no IM/GM opponent, and the re-cut is better than the request
 
 Maia's usable band is **`[1000, 2400]`** — measured by R10 and ruled by the owner
@@ -108,6 +126,32 @@ This is stronger than the request. "Beat a GM" is a strength claim; "beat the
 Advance Caro-Kann's actual plan, with the right counter-theory unlocked" is the
 product's own claim. Caveat carried from R5: only three of the **five** shipped opponent modes are
 reproducible at all, and `practical_resistance` is scoped to decided positions.
+
+**Amended 2026-08-16 (D439, owner ruling; written 2026-08-22 by claude on that
+ruling): a campaign boss is a full game, not a pack — and exactly ONE of the
+three bosses can be that game with a rated result: the middlegame boss.** The
+ruling's encoding is `rfc/learner-rating.md` §5.3a: a rated boss is a
+`position` session played to a rules-terminal result against a calibrated rung
+— the object `POST /rated-games` already creates, the same rated-game object
+the cohort-standing rulings (D437/D438) read — with the campaign supplying the
+start FEN, the side and the band. Per boss:
+
+- **Middlegame boss (Act II) — CAN.** `human_common` has the calibrated band R1
+  requires, and the material precondition is measured, not hoped: `plan` mode —
+  the corpus analogue of this boss's *"band plus an authored plan"* shape — is
+  **14 for 14 at ≥21 pieces**, so R5's material floor costs the ruling nothing
+  where it applies. (The prose-to-`plan`-mode mapping is an inference, not a
+  schema fact; the precondition is checked per encounter from the start FEN.)
+- **Opening boss — CANNOT, refused twice.** R1: `theory_strict` has no
+  calibrated band. Structurally: `THEORY_NEEDS_AUTHORED_BOUNDARY` +
+  `BOUNDARY_NEEDS_PLY_HORIZON` (`apps/server/src/pack-validation.ts`) make a
+  `follow_theory` objective **incapable** of running to a rules-terminal result
+  — the validator requires it to declare a finite horizon.
+- **Endgame boss — CANNOT, refused twice.** R1: no calibrated band. R5 on
+  material, and the refusal is exact: `PERFECT_TABLEBASE_OUT_OF_RANGE` requires
+  a root with **at most seven pieces**, against R5's rating floor of 21. It
+  still plays to mate — a result exists on the board — but no rating can
+  receive it. The consequence for the act ladder is owned in §5.
 
 ### 2c. The rewind budget prices the thesis's own selling point
 
@@ -129,6 +173,15 @@ does not, because the cost has **already been measured**: the all-on state is th
 them unconditional, the compare strip at 8.31 entries/ply and 1.01× lift). A slot
 budget is therefore **the product refusing to print noise**, not withholding a
 reward — no invariant is touched and nothing is sold back.
+
+**Amended 2026-08-16 (D439, conditional clause; written 2026-08-22 by claude):
+the rated boss reopens exactly one corner of this — see the OPEN QUESTION at
+the end of §5.** §5's submitted-branch ruling keeps rewind free inside an
+encounter; R11 (`rfc/learner-rating.md`) voids any rated game containing a
+rewind. For the one encounter that is a rated game, both cannot hold. The
+ruling made writing this into the doc conditional on `learner-rating` open
+question 11, which still stands open as of 2026-08-22 — so it lands here as the
+open question it is, not as an answer.
 
 ## 3. Standing laws for the campaign
 
@@ -159,6 +212,37 @@ idea that already exists and a measurement that already landed. Specifically: R6
 gates the retry budget but not rewind-*location* limits or the play-out rule; R7
 gates scarcity tuning and the synergy payoff but not the slot vocabulary or the
 two-gate architecture; R8 gates the whole build.
+
+**Amended 2026-08-22 (D649 owner ruling 2026-08-21; R6/R7 as narrowed in
+`planning/campaign-research-queue.md`; written by claude on those rulings).**
+Three updates to *how* these questions get answered, none to what they are:
+
+- **No participant studies (D649).** External participant studies are descoped
+  as a permanent posture, not a gap — this is a personal project, validated by
+  the owner's own use. Any campaign-validation language in or downstream of
+  this doc means **owner play**, and the instrument already exists: the
+  preregistered owner pilot at
+  `planning/platform-alignment/campaign/participant-plan.md` (campaign R6–R8,
+  platform R14/O10). A single owner run can settle an owner product ruling and
+  expose failure; it cannot establish population learning or preference, and
+  nothing here claims it can.
+- **R6 is NARROWED to the count budget.** Rewind location and *play the
+  consequence before you rewind* are settled (§2c); the residual question is
+  whether a **count** budget on retries preserves or destroys punishment-free
+  experimentation. The pilot tests only that residue.
+- **R7 is NARROWED to preset-withheld modules.** D619/R3 settle the
+  architecture (presets cannot raise a ceiling; Theory-only and empty states
+  are first-class; rarity cannot price value — law 5 of §3). The residual
+  question is experiential: when the encounter ceiling withholds a module the
+  learner wants, is the absence **legible and interesting or merely
+  frustrating**? The pilot tests scarcity tuning and payoff, not whether the
+  split exists.
+
+One ordering constraint this doc inherits from the evidence-foundation program
+(D717, owner ruling 2026-08-22): **campaign composition comes last**, after
+modules, presets and bots — this doc's build order sits behind that program,
+and nothing in this amendment pass promotes campaign scope beyond the posture
+above.
 
 One dependency this doc inherits: `design/research/mobile-scope.md` names the
 campaign as one of the few things that would reopen its own verdict. A phone-first
@@ -194,9 +278,62 @@ parity would overshoot minute parity roughly fourfold.
 DECIDABILITY:** Act I outcome-measured (`theory_strict`), Act II authored
 (`human_common` plus an authored plan), Act III tablebase-measured
 (`perfect_tablebase` — literally unbeatable, already shipped, and a stronger climax
-than anything in the comparison set). Encounters are bounded by the **shipped**
-`plyHorizon`: 36 of 37 packs already declare one, median 12 ply, 17 of them
-voluntarily.
+than anything in the comparison set). Authored encounters are bounded by the
+**shipped** `plyHorizon`: **50 of 56 draft packs declare one, median 11 ply, 30
+of them voluntarily** — where *voluntarily* means no `follow_theory` objective
+compels it via `THEORY_NEEDS_AUTHORED_BOUNDARY` + `BOUNDARY_NEEDS_PLY_HORIZON`
+(20 are so compelled). *(Corrected 2026-08-22 per D439: the original "36 of 37,
+median 12, 17 voluntarily" was already stale at ruling time. Re-derived at HEAD
+`7d15685` over the 56 pack files in `content/drafts/` — sidecar
+`.evidence/.job/.sources` files excluded — landing on the same figures §5.3a
+measured `[V]`. D440 caveat: 26 of the 56 also declare `resolveAt: "terminal"`
+and 25 of those declare a `plyHorizon` too, 20 at 7–13 ply; nothing lints the
+pair, so this corpus's terminality claims are unreliable until D440's lint
+lands — a pack that "resolves at terminal" and stops at ply 11 resolves at
+whatever ply 11 holds.)*
+
+**Amended 2026-08-16 (D439, owner ruling; written 2026-08-22 by claude on that
+ruling): one encounter class is NOT bounded by `plyHorizon`, and the map now
+has TWO verdict producers.** A campaign boss is a full game, not a pack —
+encoded in `rfc/learner-rating.md` §5.3a as a `position` session played to a
+rules-terminal result against a calibrated rung (the object `POST /rated-games`
+creates; the same rated-game object the D437 cohort standing reads), with the
+campaign supplying the start FEN, the side and the band. The encounter
+vocabulary is therefore two rows:
+
+| Encounter class | Object | Bounded by | Sealed by |
+|---|---|---|---|
+| **Authored encounter** (every non-boss node, and the Act I and Act III bosses) | pack | `plyHorizon` | an `ObjectiveState` from `successConditions`, stored as `sealedState` |
+| **Boss game** (the Act II rated boss only) | `position` session | the rules of chess | `terminalOutcome` |
+
+**Which producer seals a node is a property of the node**; the producers are
+not interchangeable and neither is computed from the other — §1 of
+`learner-rating` drawn across the campaign, not only across the rating. A boss
+game may still carry authored copy (a briefing before the first ply), because
+briefing copy reaches no update; it may not carry an authored *verdict*,
+because it has a real one. The reason the boss is a game rather than a
+horizon-free pack is structural, not stylistic: `objective` and `checkpoints`
+are in the pack schema's top-level `required` list, so a pack cannot exist
+without an authored objective — the first row of R2's refused-inputs list —
+and encoding the boss as a game makes the refused input **absent rather than
+ignored**.
+
+**Amended 2026-08-16 (D439, owner ruling; written 2026-08-22 by claude on that
+ruling): the acts no longer differ only in decidability — they differ in
+whether a RATED RESULT exists at all, and the rated boss exists in ACT II
+ONLY.** Act I is refused twice: R1 (`theory_strict` has no calibrated band),
+and structurally — the `THEORY_NEEDS_AUTHORED_BOUNDARY` +
+`BOUNDARY_NEEDS_PLY_HORIZON` lint pair makes a `follow_theory` objective
+incapable of a rules-terminal result. Act III is refused twice: R1, and R5's
+material floor of 21 pieces against `PERFECT_TABLEBASE_OUT_OF_RANGE`'s
+seven-piece ceiling. **So the campaign's climax act is the one act that cannot
+carry a rated result — the climax cannot produce the outcome the campaign
+rates.** This doc owns that tension rather than hiding it: the ladder the acts
+climb is decidability, and the rated axis runs **orthogonally** to it (§2a as
+amended) — Act III's climax is *unbeatable perfection*, a stronger close than
+a result, but it is not a result, and no rating event happens there. Where the
+rated boss does apply, material costs nothing: `plan` mode is 14 for 14 at ≥21
+pieces (§2b as amended).
 
 **The mechanism nobody had proposed, and the best one: a capability-suppressing
 boss** (Balatro's boss blind). It is law-8-legal *by construction* — it speaks about
@@ -242,4 +379,19 @@ thesis working, not a bug, and it is precisely why the *submitted* branch rather
 nowhere**: `attempts` is per *branch*, so a **run-level roll-up** is the precondition for
 everything else here — the smallest new part, and the first one to build. **No budget,
 counter, currency, refusal class or clock is required by any of this.**
+
+**OPEN QUESTION — the rated boss collides with the submitted-branch ruling
+above, and this doc records the collision without resolving it.** *(Added
+2026-08-22 by claude under D439's conditional clause: the ruling ordered this
+written iff `rfc/learner-rating.md` open question 11 resolved toward R11; as of
+2026-08-22 question 11 still stands open, so the tension lands as an open
+question, per the ruling's own iff-clause.)* The ruling above says *rewind
+stays free inside an encounter; declaring done is what counts*. R11 says a
+rated game containing a rewind is void. For the Act II rated boss — the one
+encounter that **is** a rated game — both cannot hold: either the boss is the
+one encounter class where rewind is closed, or a rated boss is unrateable in
+practice, because the first rewind voids it. `learner-rating` §5.3a
+(consequence 4) explicitly does not decide this — `06` is intent tier and the
+ruling is the owner's. Until the owner rules: the submitted-branch text above
+governs **authored encounters**, and is **undefined for the boss-game class**.
 

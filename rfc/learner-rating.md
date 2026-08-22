@@ -602,8 +602,10 @@ affordance and deliberately does not use it.
    unrateable in practice because the first rewind voids it. This RFC does **not** decide it —
    `06` is intent tier (law 5) and the ruling is the owner's. **Open question 11.**
 
-**What `design/06-campaign.md` needs, named and not written** (law 5 — the RFC tier may not edit
-the design tier):
+**What `design/06-campaign.md` needs — WRITTEN 2026-08-22** (claude on the D439 ruling, law 5;
+all six amendments landed, [[D836]], with the rewind/R11 collision recorded there as the open
+question this RFC's question 11 still holds). The list below stands as the record of what was
+named:
 
 - **§5's encounter vocabulary.** *"Encounters are bounded by the **shipped** `plyHorizon`"* is now
   false of one encounter class. The doc needs a boss row that is bounded by the rules instead, and

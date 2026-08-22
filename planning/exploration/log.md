@@ -4472,3 +4472,12 @@ received a separate Codex buildability pass and awaits the owner/Claude acceptan
 was originally Codex-authored, so this same-agent pass does not impersonate its required independent
 acceptance review; its five-check handoff is recorded in `collector-rfc-joint-review.md`. No
 implementation was authorized.
+
+## 2026-08-22 — the D439 campaign amendments land, six days late and honestly
+
+The six changes the boss ruling named on 2026-08-16 are written into design/06-campaign.md
+(claude on the ruling, law 5). The doc now owns its sharpest tension in its own voice: the
+campaign's climax act cannot carry a rated result. One fork the ruling left open is written
+as claude-derived-with-veto-hook (D837), one collision as the open question the ruling's
+iff-clause made it (rewind vs R11). Corpus figures re-derived at HEAD rather than copied.
+learner-rating Discharge D1 flips in the same commit. Rows D836-D838.
