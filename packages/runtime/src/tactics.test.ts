@@ -1,6 +1,8 @@
 import { expect, describe, it } from "vitest";
 
-import { backRankReading, checkEvent, discoveredLatencyReading, doubleAttackEvent, forkSurvivesReply, loosePieceReading, mateInOne, rayClassificationReading, replyBreadth, threats, trappedPieceReading } from "./tactics.js";
+import { backRankReading, checkEvent, discoveredExecutedEvents, discoveredLatencyReading, doubleAttackEvent, forkSurvivesReply, loosePieceEvents, loosePieceReading, mateInOne, promotionPressureReading, rayClassificationReading, replyBreadth, rookOnSeventhReading, threats, trappedPieceReading } from "./tactics.js";
+import { transitionSemanticFacts } from "./transition.js";
+import type { GainedSliderRay } from "./tactics.js";
 
 describe("bounded tactical authorities", () => {
   it("records exact reply breadth and treats zero as terminal", () => {
@@ -51,6 +53,21 @@ describe("bounded tactical authorities", () => {
     expect(defendedBishop?.legalCapturers[0]?.exchange.resultUnits).toBe(0);
   });
 
+  it("compares mover-owned loose-piece state across the played edge", () => {
+    const hung = loosePieceEvents("4r1k1/8/8/8/8/8/3Q4/6K1 w - - 0 1", "d2e2");
+    expect(hung.kind).toBe("available");
+    if (hung.kind === "available") expect(hung.events).toContainEqual(expect.objectContaining({
+      mover: { color: "white", before: { square: "d2", role: "queen" }, after: { square: "e2", role: "queen" } },
+      sign: "gained",
+    }));
+    const rescued = loosePieceEvents("3r2k1/8/8/8/8/8/3Q4/6K1 w - - 0 1", "d2e2");
+    expect(rescued.kind).toBe("available");
+    if (rescued.kind === "available") expect(rescued.events).toContainEqual(expect.objectContaining({
+      mover: { color: "white", before: { square: "d2", role: "queen" }, after: { square: "e2", role: "queen" } },
+      sign: "lost",
+    }));
+  });
+
   it("classifies pins, skewers and X-rays with one precedence rule", () => {
     const kind = (fen: string) => rayClassificationReading(fen).rays.find((ray) => ray.slider.square === "b5" && ray.blocker.square === "c6" && ray.target.square === "d7");
     expect(kind("8/3k4/2n5/1B6/8/8/8/4K3 w - - 0 1")?.kind).toBe("absolute_pin");
@@ -89,6 +106,75 @@ describe("bounded tactical authorities", () => {
 
     const enemyBlocker = discoveredLatencyReading("7k/8/8/8/4r3/5n2/6B1/4K3 w - - 0 1");
     expect(enemyBlocker.screens.some((value) => value.screen.square === "f3" && value.slider.square === "g2")).toBe(false);
+  });
+
+  it("requires the before-state latency identity and the exact gained ray for discovered execution", () => {
+    const before = "7k/8/8/8/4r3/5N2/6B1/7K w - - 0 1";
+    const after = "7k/8/8/8/4r2N/8/6B1/7K b - - 1 1";
+    const rays = transitionSemanticFacts(before, "f3h4", after).filter((fact) => fact.family === "slider_ray" && fact.sign === "gained") as readonly GainedSliderRay[];
+    expect(discoveredExecutedEvents(before, "f3h4", after, rays)).toContainEqual(expect.objectContaining({
+      screen: expect.objectContaining({ square: "f3" }),
+      slider: expect.objectContaining({ square: "g2" }),
+      target: expect.objectContaining({ square: "e4" }),
+      discoveredCheck: false,
+    }));
+    expect(discoveredExecutedEvents(before, "f3h4", after, [])).toEqual([]);
+
+    const enemyBefore = "7k/8/8/8/4r3/5n2/6B1/7K b - - 0 1";
+    const enemyAfter = "7k/8/8/8/4r2n/8/6B1/7K w - - 1 2";
+    const enemyRays = transitionSemanticFacts(enemyBefore, "f3h4", enemyAfter).filter((fact) => fact.family === "slider_ray" && fact.sign === "gained") as readonly GainedSliderRay[];
+    expect(discoveredExecutedEvents(enemyBefore, "f3h4", enemyAfter, enemyRays)).toEqual([]);
+
+    const mirrorBefore = "k7/6b1/5n2/4R3/8/8/8/K7 b - - 0 1";
+    const mirrorAfter = "k7/6b1/8/4R2n/8/8/8/K7 w - - 1 2";
+    const mirrorRays = transitionSemanticFacts(mirrorBefore, "f6h5", mirrorAfter).filter((fact) => fact.family === "slider_ray" && fact.sign === "gained") as readonly GainedSliderRay[];
+    expect(discoveredExecutedEvents(mirrorBefore, "f6h5", mirrorAfter, mirrorRays)).toContainEqual(expect.objectContaining({
+      screen: expect.objectContaining({ square: "f6", piece: expect.objectContaining({ color: "black" }) }),
+      slider: expect.objectContaining({ square: "g7", piece: expect.objectContaining({ color: "black" }) }),
+      target: expect.objectContaining({ square: "e5", occupant: expect.objectContaining({ color: "white" }) }),
+    }));
+  });
+
+  it("retains every seventh-rank rook even when both relevance operands are empty", () => {
+    expect(rookOnSeventhReading("8/3R4/8/4k3/8/8/8/4K3 w - - 0 1").rooks).toEqual([
+      {
+        rook: { square: "d7", piece: { color: "white", role: "rook", promoted: false } },
+        enemyKingOnBackRank: null,
+        enemyPawnsOnSeventh: [],
+      },
+    ]);
+    expect(rookOnSeventhReading("4k3/3R1p2/8/8/8/8/8/4K3 w - - 0 1").rooks[0]).toMatchObject({
+      rook: { square: "d7" },
+      enemyKingOnBackRank: { square: "e8", piece: { color: "black", role: "king" } },
+      enemyPawnsOnSeventh: [{ square: "f7", piece: { color: "black", role: "pawn" } }],
+    });
+    expect(rookOnSeventhReading("4k3/8/8/8/8/8/3r4/4K3 b - - 0 1").rooks[0]).toMatchObject({ rook: { square: "d2", piece: { color: "black", role: "rook" } } });
+  });
+
+  it("retains promotion geometry while keeping pass and all-reply claims typed", () => {
+    const quiet = promotionPressureReading("7k/P7/8/8/8/8/8/7K b - - 0 1").pawns[0]!;
+    expect(quiet).toMatchObject({ pawn: { square: "a7" }, distance: 1, promotionSquare: "a8", path: ["a8"], blockers: [] });
+    expect(quiet.passAvailability).toEqual({ kind: "available", value: true });
+
+    const removable = promotionPressureReading("4k3/P6r/8/8/8/8/8/6K1 b - - 0 1").pawns[0]!;
+    expect(removable.passAvailability).toEqual({ kind: "available", value: true });
+    expect(removable.replyPersistence).toEqual({ kind: "available", value: false });
+
+    const checking = promotionPressureReading("7k/6P1/8/8/8/8/8/7K b - - 0 1").pawns[0]!;
+    expect(checking.passAvailability).toEqual({ kind: "unavailable", reason: "invalid_turn_clone" });
+    expect(checking.path).toEqual(["g8"]);
+
+    const terminal = promotionPressureReading("7k/P4K2/6Q1/8/8/8/8/8 b - - 0 1").pawns[0]!;
+    expect(terminal.passAvailability).toEqual({ kind: "available", value: true });
+    expect(terminal.replyPersistence).toEqual({ kind: "available", value: false });
+
+    const abstained = promotionPressureReading("7k/P7/8/8/8/8/8/7K b - - 0 1", false).pawns[0]!;
+    expect(abstained.passAvailability).toEqual({ kind: "unavailable", reason: "input_abstained" });
+    expect(abstained.replyPersistence).toEqual({ kind: "unavailable", reason: "input_abstained" });
+
+    const mirror = promotionPressureReading("7k/8/8/8/8/8/p7/7K w - - 0 1").pawns[0]!;
+    expect(mirror).toMatchObject({ pawn: { square: "a2", piece: { color: "black" } }, distance: 1, promotionSquare: "a1", path: ["a1"] });
+    expect(mirror.passAvailability).toEqual({ kind: "available", value: true });
   });
 
   it("requires both a positive current capture and no local escape before calling a piece trapped", () => {

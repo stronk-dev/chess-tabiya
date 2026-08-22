@@ -22,6 +22,10 @@ by a SHA-256 digest. `/capabilities` returns that digest, current producer avail
 consumer-safe binding summary. It never returns engine lines, authored prose, provider secrets, or
 corpus rows.
 
+The current compiled closure is 25 producers, 156 projections, 25 consumers and 188 bindings,
+plus 46 semantic-event declarations, 46 eligibility rows, 15 refusal reasons and one selection
+policy. The executable manifest and semantic-evidence checks own this tuple.
+
 ## Honest homes and raw evidence
 
 Every projection is either bound to a consumer or has one explicit disposition:

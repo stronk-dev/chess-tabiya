@@ -1,4 +1,4 @@
-import { normalizeMove } from "chessops/chess";
+import { Chess, normalizeMove } from "chessops/chess";
 import { attacks, between } from "chessops/attacks";
 import { makeFen } from "chessops/fen";
 import type { Color, Move, NormalMove, Piece, Role, Square, SquareName } from "chessops/types";
@@ -6,13 +6,138 @@ import { makeSquare, makeUci, opposite, parseSquare, parseUci } from "chessops/u
 
 import { canonicalFen, positionFromFen } from "./chess.js";
 import { EXCHANGE_PIECE_VALUES, legalCaptureMovesTo, legalExchangeForMove, type LegalExchangeResult } from "./exchange.js";
-import { vacationReading } from "./structure.js";
+import { matchesStructuralFeature, vacationReading } from "./structure.js";
 
 const PROMOTIONS: readonly Role[] = Object.freeze(["queen", "rook", "bishop", "knight"]);
 export const THREAT_CONVENTION = "threat@1" as const;
 export const REPLY_HORIZON = "1 reply" as const;
 export const TRAPPED_CONVENTION = "trapped@1" as const;
 export const BACK_RANK_CONVENTION = "back_rank_susceptible@1" as const;
+
+export interface RookOnSeventhReading {
+  readonly fen: string;
+  readonly rooks: readonly {
+    readonly rook: { readonly square: SquareName; readonly piece: Piece };
+    readonly enemyKingOnBackRank: { readonly square: SquareName; readonly piece: Piece } | null;
+    readonly enemyPawnsOnSeventh: readonly { readonly square: SquareName; readonly piece: Piece }[];
+  }[];
+}
+
+export type PromotionAvailability =
+  | { readonly kind: "available"; readonly value: boolean }
+  | { readonly kind: "unavailable"; readonly reason: "invalid_turn_clone" | "input_abstained" };
+
+export interface PromotionPressureReading {
+  readonly fen: string;
+  readonly pawns: readonly {
+    readonly pawn: { readonly square: SquareName; readonly piece: Piece };
+    readonly distance: number;
+    readonly promotionSquare: SquareName;
+    readonly path: readonly SquareName[];
+    readonly blockers: readonly { readonly square: SquareName; readonly piece: Piece }[];
+    readonly controls: readonly {
+      readonly color: Color;
+      readonly attackers: readonly { readonly square: SquareName; readonly piece: Piece }[];
+      readonly count: number;
+    }[];
+    readonly passAvailability: PromotionAvailability;
+    readonly replyPersistence: PromotionAvailability;
+  }[];
+}
+
+export function rookOnSeventhReading(fen: string): RookOnSeventhReading {
+  const position = positionFromFen(fen);
+  const rooks: RookOnSeventhReading["rooks"][number][] = [];
+  for (const color of ["white", "black"] as const) {
+    const relativeSeventh = color === "white" ? 6 : 1;
+    const enemy = opposite(color);
+    const enemyBackRank = enemy === "white" ? 0 : 7;
+    const enemyKingSquare = position.board.kingOf(enemy);
+    const enemyKing = enemyKingSquare !== undefined && Math.floor(enemyKingSquare / 8) === enemyBackRank
+      ? Object.freeze({ square: makeSquare(enemyKingSquare), piece: position.board.get(enemyKingSquare)! })
+      : null;
+    const enemyPawnsOnSeventh = [...position.board.pieces(enemy, "pawn")]
+      .filter((square) => Math.floor(square / 8) === relativeSeventh)
+      .map((square) => Object.freeze({ square: makeSquare(square), piece: position.board.get(square)! }))
+      .sort((left, right) => left.square.localeCompare(right.square));
+    for (const square of position.board.pieces(color, "rook")) {
+      if (Math.floor(square / 8) !== relativeSeventh) continue;
+      rooks.push(Object.freeze({
+        rook: Object.freeze({ square: makeSquare(square), piece: position.board.get(square)! }),
+        enemyKingOnBackRank: enemyKing,
+        enemyPawnsOnSeventh: Object.freeze(enemyPawnsOnSeventh),
+      }));
+    }
+  }
+  rooks.sort((left, right) => left.rook.square.localeCompare(right.rook.square));
+  return Object.freeze({ fen: canonicalFen(position), rooks: Object.freeze(rooks) });
+}
+
+function promotionLegalFrom(position: ReturnType<typeof positionFromFen>, pawnSquare: Square): boolean {
+  const piece = position.board.get(pawnSquare);
+  if (piece?.role !== "pawn" || piece.color !== position.turn) return false;
+  return legalMoves(position).some((move) => move.from === pawnSquare && (move.to < 8 || move.to >= 56));
+}
+
+/** Exact geometry for passed pawns owned by the player who just moved in this position. */
+export function promotionPressureReading(fen: string, inputsAvailable = true): PromotionPressureReading {
+  const position = positionFromFen(fen);
+  const canonical = canonicalFen(position);
+  const mover = opposite(position.turn);
+  const values: PromotionPressureReading["pawns"][number][] = [];
+  for (const pawnSquare of position.board.pieces(mover, "pawn")) {
+    const pawnName = makeSquare(pawnSquare);
+    if (!matchesStructuralFeature(canonical, { kind: "passed_pawn", color: mover, square: pawnName })) continue;
+    const file = pawnSquare % 8;
+    const rank = Math.floor(pawnSquare / 8);
+    const promotionRank = mover === "white" ? 7 : 0;
+    const step = mover === "white" ? 1 : -1;
+    const pathSquares: Square[] = [];
+    for (let current = rank + step; mover === "white" ? current <= promotionRank : current >= promotionRank; current += step) pathSquares.push((file + current * 8) as Square);
+    const promotionSquare = pathSquares.at(-1)!;
+    const blockers = pathSquares.flatMap((square) => {
+      const piece = position.board.get(square);
+      return piece === undefined ? [] : [{ square: makeSquare(square), piece }];
+    });
+    const controls = (["white", "black"] as const).map((color) => {
+      const attackers = [...position.board[color]].flatMap((square) => {
+        const piece = position.board.get(square)!;
+        return attacks(piece, square, position.board.occupied).has(promotionSquare) ? [{ square: makeSquare(square), piece }] : [];
+      }).sort((left, right) => left.square.localeCompare(right.square));
+      return Object.freeze({ color, attackers: Object.freeze(attackers), count: attackers.length });
+    });
+    let passAvailability: PromotionAvailability;
+    let replyPersistence: PromotionAvailability;
+    if (!inputsAvailable) {
+      passAvailability = Object.freeze({ kind: "unavailable", reason: "input_abstained" });
+      replyPersistence = Object.freeze({ kind: "unavailable", reason: "input_abstained" });
+    } else {
+      const pass = Chess.fromSetup({ ...position.toSetup(), turn: mover, epSquare: undefined });
+      passAvailability = pass.isOk
+        ? Object.freeze({ kind: "available", value: promotionLegalFrom(pass.value, pawnSquare) })
+        : Object.freeze({ kind: "unavailable", reason: "invalid_turn_clone" });
+      const replies = legalMoves(position);
+      if (replies.length === 0) replyPersistence = Object.freeze({ kind: "available", value: false });
+      else replyPersistence = Object.freeze({ kind: "available", value: replies.every((reply) => {
+        const next = position.clone();
+        next.play(reply);
+        return promotionLegalFrom(next, pawnSquare);
+      }) });
+    }
+    values.push(Object.freeze({
+      pawn: Object.freeze({ square: pawnName, piece: position.board.get(pawnSquare)! }),
+      distance: Math.abs(promotionRank - rank),
+      promotionSquare: makeSquare(promotionSquare),
+      path: Object.freeze(pathSquares.map(makeSquare)),
+      blockers: Object.freeze(blockers),
+      controls: Object.freeze(controls),
+      passAvailability,
+      replyPersistence,
+    }));
+  }
+  values.sort((left, right) => left.pawn.square.localeCompare(right.pawn.square));
+  return Object.freeze({ fen: canonical, pawns: Object.freeze(values) });
+}
 
 export interface LoosePieceReading {
   readonly fen: string;
@@ -32,6 +157,30 @@ export interface LoosePieceState {
   readonly enPrise: boolean;
   readonly loose: boolean;
   readonly underDefended: boolean;
+}
+
+export type LoosePieceEventResult =
+  | { readonly kind: "unavailable"; readonly reason: "invalid_turn_clone" }
+  | {
+      readonly kind: "available";
+      readonly beforeFen: string;
+      readonly moveUci: string;
+      readonly afterFen: string;
+      readonly events: readonly LoosePieceEvent[];
+    };
+
+export interface LoosePieceEvent {
+  readonly beforeFen: string;
+  readonly moveUci: string;
+  readonly afterFen: string;
+  readonly mover: {
+    readonly color: Color;
+    readonly before: { readonly square: SquareName; readonly role: Role };
+    readonly after: { readonly square: SquareName; readonly role: Role };
+  };
+  readonly before: LoosePieceState;
+  readonly after: LoosePieceState;
+  readonly sign: "gained" | "lost" | "preserved";
 }
 
 export function loosePieceReading(fen: string): LoosePieceReading {
@@ -73,6 +222,52 @@ export function loosePieceReading(fen: string): LoosePieceReading {
     sideToMove: position.turn,
     pieces: Object.freeze(pieces.sort((a, b) => a.piece.square.localeCompare(b.piece.square))),
   });
+}
+
+function loosePieceReadingForColor(fen: string, color: Color): LoosePieceReading | undefined {
+  const position = positionFromFen(fen);
+  if (opposite(position.turn) === color) return loosePieceReading(fen);
+  const clone = Chess.fromSetup({ ...position.toSetup(), turn: opposite(color), epSquare: undefined });
+  return clone.isOk ? loosePieceReading(makeFen(clone.value.toSetup())) : undefined;
+}
+
+/** Identity-preserving mover-relative loose-piece deltas; clone failure is absence, never false. */
+export function loosePieceEvents(beforeFen: string, moveUci: string): LoosePieceEventResult {
+  const beforePosition = positionFromFen(beforeFen);
+  const move = played(beforePosition, moveUci);
+  const mover = beforePosition.turn;
+  const canonicalBefore = canonicalFen(beforePosition);
+  const canonicalMove = makeUci(move);
+  const baseline = loosePieceReadingForColor(canonicalBefore, mover);
+  beforePosition.play(move);
+  const afterFen = canonicalFen(beforePosition);
+  const outcome = loosePieceReadingForColor(afterFen, mover);
+  if (baseline === undefined || outcome === undefined) return Object.freeze({ kind: "unavailable", reason: "invalid_turn_clone" });
+  const currentBySquare = new Map(outcome.pieces.map((state) => [state.piece.square, state]));
+  const events: LoosePieceEvent[] = [];
+  for (const prior of baseline.pieces) {
+    const beforeSquare = prior.piece.square;
+    const afterSquare = beforeSquare === makeSquare(move.from) ? makeSquare(move.to) : beforeSquare;
+    const current = currentBySquare.get(afterSquare);
+    if (current === undefined || current.piece.occupant.color !== mover) continue;
+    const sign = !prior.enPrise && current.enPrise ? "gained" : prior.enPrise && !current.enPrise ? "lost" : prior.enPrise && current.enPrise ? "preserved" : undefined;
+    if (sign === undefined) continue;
+    events.push(Object.freeze({
+      beforeFen: canonicalBefore,
+      moveUci: canonicalMove,
+      afterFen,
+      mover: Object.freeze({
+        color: mover,
+        before: Object.freeze({ square: beforeSquare, role: prior.piece.occupant.role }),
+        after: Object.freeze({ square: afterSquare, role: current.piece.occupant.role }),
+      }),
+      before: prior,
+      after: current,
+      sign,
+    }));
+  }
+  events.sort((left, right) => left.mover.before.square.localeCompare(right.mover.before.square));
+  return Object.freeze({ kind: "available", beforeFen: canonicalBefore, moveUci: canonicalMove, afterFen, events: Object.freeze(events) });
 }
 
 export type TrappedPieceReading =
@@ -236,6 +431,28 @@ export interface DiscoveredLatencyReading {
   }[];
 }
 
+export interface GainedSliderRay {
+  readonly family: "slider_ray";
+  readonly sign: "gained";
+  readonly subject: Readonly<Record<string, unknown>>;
+  readonly targets_before: readonly SquareName[];
+  readonly targets_after: readonly SquareName[];
+}
+
+export interface DiscoveredExecutedEvent {
+  readonly beforeFen: string;
+  readonly moveUci: string;
+  readonly afterFen: string;
+  readonly screen: DiscoveredLatencyReading["screens"][number]["screen"];
+  readonly slider: DiscoveredLatencyReading["screens"][number]["slider"];
+  readonly target: DiscoveredLatencyReading["screens"][number]["target"];
+  readonly raySquares: readonly SquareName[];
+  readonly discoveredCheck: boolean;
+  readonly captureUci?: string;
+  readonly exchange?: LegalExchangeResult;
+  readonly gainedRay: GainedSliderRay;
+}
+
 export function discoveredLatencyReading(fen: string): DiscoveredLatencyReading {
   const position = positionFromFen(fen);
   const screens: DiscoveredLatencyReading["screens"][number][] = [];
@@ -274,6 +491,45 @@ export function discoveredLatencyReading(fen: string): DiscoveredLatencyReading 
     fen: canonicalFen(position),
     screens: Object.freeze(screens.sort((a, b) => a.screen.square.localeCompare(b.screen.square) || a.slider.square.localeCompare(b.slider.square) || a.target.square.localeCompare(b.target.square))),
   });
+}
+
+/** Joins a before-state latency relation to the exact gained ray produced by the played edge. */
+export function discoveredExecutedEvents(beforeFen: string, moveUci: string, afterFen: string, gainedRays: readonly GainedSliderRay[]): readonly DiscoveredExecutedEvent[] {
+  const before = positionFromFen(beforeFen);
+  const move = played(before, moveUci);
+  const canonicalBefore = canonicalFen(before);
+  before.play(move);
+  const canonicalAfter = canonicalFen(before);
+  if (canonicalFen(positionFromFen(afterFen)) !== canonicalAfter) throw new TypeError(`Discovered-execution after FEN does not match ${makeUci(move)}`);
+  const screenSquare = makeSquare(move.from);
+  const events: DiscoveredExecutedEvent[] = [];
+  for (const relation of discoveredLatencyReading(canonicalBefore).screens) {
+    if (relation.screen.square !== screenSquare) continue;
+    const sliderSquare = parseSquare(relation.slider.square)!;
+    const targetSquare = parseSquare(relation.target.square)!;
+    const slider = before.board.get(sliderSquare);
+    const target = before.board.get(targetSquare);
+    if (slider?.color !== relation.slider.piece.color || slider.role !== relation.slider.piece.role) continue;
+    if (target?.color !== relation.target.occupant.color || target.role !== relation.target.occupant.role) continue;
+    for (const ray of gainedRays) {
+      if (ray.subject.slider !== relation.slider.square || ray.subject.color !== relation.slider.piece.color || ray.subject.role !== relation.slider.piece.role) continue;
+      if (!ray.targets_before.includes(relation.screen.square) || !ray.targets_before.includes(relation.target.square) || !ray.targets_after.includes(relation.target.square) || ray.targets_after.includes(relation.screen.square)) continue;
+      events.push(Object.freeze({
+        beforeFen: canonicalBefore,
+        moveUci: makeUci(move),
+        afterFen: canonicalAfter,
+        screen: relation.screen,
+        slider: relation.slider,
+        target: relation.target,
+        raySquares: relation.raySquares,
+        discoveredCheck: relation.discoveredCheck,
+        ...(relation.captureUci === undefined ? {} : { captureUci: relation.captureUci }),
+        ...(relation.exchange === undefined ? {} : { exchange: relation.exchange }),
+        gainedRay: ray,
+      }));
+    }
+  }
+  return Object.freeze(events.sort((left, right) => left.screen.square.localeCompare(right.screen.square) || left.slider.square.localeCompare(right.slider.square) || left.target.square.localeCompare(right.target.square)));
 }
 
 const SLIDER_DIRECTIONS = Object.freeze({

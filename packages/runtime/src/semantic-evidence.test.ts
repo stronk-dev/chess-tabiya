@@ -6,6 +6,7 @@ import { describe, expect, it } from "vitest";
 import { canonicalFen, positionFromFen } from "./chess.js";
 import { EVIDENCE_CONTRACT_DECLARATIONS, PRIMARY_EVIDENCE_MANIFEST, SEMANTIC_EVENT_DECLARATIONS } from "./evidence-catalog.js";
 import { compileEvidenceManifest, declareEvidence, type EvidenceSelectionPolicyDeclaration } from "./evidence-contract.js";
+import { declareRunRecordEvidence } from "./evidence-source-adapters.js";
 import {
   assertEvidenceSelectionResult,
   assertSemanticEvidenceEvent,
@@ -14,10 +15,12 @@ import {
   compileSemanticEvidenceEvent,
   legalAlternativeEdges,
   localSemanticEvents,
+  pawnIslandSemanticEvents,
   selectSemanticEvidence,
   selectLocalSemanticEvidence,
   structuralSemanticEvents,
   tacticalSemanticEvents,
+  tradeCompletedSemanticEvent,
   transitionSemanticEvents,
   type SemanticEvidenceEvent,
 } from "./semantic-evidence.js";
@@ -37,6 +40,13 @@ function event(fen: string, uci: string, projection = "rules.structural.event.op
   const afterFen = after(fen, uci);
   const payload = Object.freeze({ before_fen: canonicalFen(positionFromFen(fen)), move_uci: canonicalMoveUci(fen, uci), after_fen: afterFen, family: projection.split(".").at(-1), before: [], after: ["fixture"] });
   const declared = declareEvidence(ref("rules.structural"), ref(projection), payload);
+  return compileSemanticEvidenceEvent(PRIMARY_EVIDENCE_MANIFEST, { evidence: declared, anchor: { beforeFen: fen, moveUci: uci, afterFen, side: positionFromFen(fen).turn }, sign, operands: payload });
+}
+
+function looseEvent(fen: string, uci: string, sign: "gained" | "lost" | "preserved" = "gained"): SemanticEvidenceEvent {
+  const afterFen = after(fen, uci);
+  const payload = Object.freeze({ beforeFen: canonicalFen(positionFromFen(fen)), moveUci: canonicalMoveUci(fen, uci), afterFen, mover: Object.freeze({ fixture: true }), before: Object.freeze({ enPrise: sign !== "gained" }), after: Object.freeze({ enPrise: sign !== "lost" }) });
+  const declared = declareEvidence(ref("rules.tactic"), ref("rules.tactic.event.loose_piece"), payload);
   return compileSemanticEvidenceEvent(PRIMARY_EVIDENCE_MANIFEST, { evidence: declared, anchor: { beforeFen: fen, moveUci: uci, afterFen, side: positionFromFen(fen).turn }, sign, operands: payload });
 }
 
@@ -167,6 +177,71 @@ describe("semantic evidence runtime", () => {
     expect(event?.derivationInputs.map((input) => input.projection.id).sort()).toEqual(["rules.exchange.predicate.legal_exchange", "rules.transition.event.capture"]);
   });
 
+  it("emits pawn-island and mover-relative loose-piece events through the compiled path", () => {
+    const pawnFen = "4k3/8/8/8/8/8/PP1P4/4K3 w - - 0 1";
+    const pawnAfter = after(pawnFen, "b2b4");
+    const islandEvents = pawnIslandSemanticEvents(pawnFen, "b2b4", pawnAfter);
+    expect(islandEvents.find((value) => value.operands.color === "white")).toMatchObject({
+      projection: { id: "rules.structural.event.pawn_islands" },
+      operands: { before: 2, after: 2 },
+      sign: "preserved",
+    });
+
+    const looseFen = "4r1k1/8/8/8/8/8/3Q4/6K1 w - - 0 1";
+    const loose = localSemanticEvents(looseFen, "d2e2", after(looseFen, "d2e2")).find((value) => value.projection.id === "rules.tactic.event.loose_piece");
+    expect(loose).toMatchObject({ sign: "gained", operands: { mover: { before: { square: "d2" }, after: { square: "e2" } } } });
+    expect(() => assertSemanticEvidenceEvent(PRIMARY_EVIDENCE_MANIFEST, loose)).not.toThrow();
+  });
+
+  it("seals an immediate capture-recapture trade over both capture and recorded-move anchors", () => {
+    const start = "4k3/8/4p3/3p4/4P3/8/8/4K3 w - - 0 1";
+    const boundary = after(start, "e4d5");
+    const end = after(boundary, "e6d5");
+    const first = transitionSemanticEvents(start, "e4d5", boundary).find((value) => value.operands.family === "capture")!;
+    const second = transitionSemanticEvents(boundary, "e6d5", end).find((value) => value.operands.family === "capture")!;
+    const firstMove = declareRunRecordEvidence("move", { context: { nodeId: "n1" }, offset: 1, moveSan: "exd5" });
+    const secondMove = declareRunRecordEvidence("move", { context: { nodeId: "n2" }, offset: 2, moveSan: "exd5" });
+    const trade = tradeCompletedSemanticEvent(first, second, firstMove, secondMove);
+    expect(trade).toMatchObject({
+      projection: { id: "derived.exchange.trade_completed" },
+      operands: { startFen: first.anchor.beforeFen, boundaryFen: first.anchor.afterFen, endFen: second.anchor.afterFen, landingSquare: "d5" },
+    });
+    expect(trade?.derivationInputs.map((value) => value.projection.id)).toEqual([
+      "rules.transition.event.capture", "rules.transition.event.capture", "run.record.move", "run.record.move",
+    ]);
+
+    const delayOne = after(boundary, "e8f7");
+    const delayTwo = after(delayOne, "e1f2");
+    const lateEnd = after(delayTwo, "e6d5");
+    const lateCapture = transitionSemanticEvents(delayTwo, "e6d5", lateEnd).find((value) => value.operands.family === "capture")!;
+    expect(tradeCompletedSemanticEvent(first, lateCapture, firstMove, secondMove)).toBeUndefined();
+
+    const specialCaptures = [
+      { start: "4k3/2p5/8/3pP3/8/8/8/4K3 w - d6 0 1", first: "e5d6", second: "c7d6", enPassant: true },
+      { start: "6kr/6P1/8/8/8/8/8/K7 w - - 0 1", first: "g7h8n", second: "g8h8", enPassant: false },
+    ] as const;
+    for (const fixture of specialCaptures) {
+      const middle = after(fixture.start, fixture.first);
+      const finish = after(middle, fixture.second);
+      const openingCapture = transitionSemanticEvents(fixture.start, fixture.first, middle).find((value) => value.operands.family === "capture")!;
+      const recapture = transitionSemanticEvents(middle, fixture.second, finish).find((value) => value.operands.family === "capture")!;
+      const specialTrade = tradeCompletedSemanticEvent(openingCapture, recapture, firstMove, secondMove);
+      expect(openingCapture.operands).toMatchObject({ family: "capture", enPassant: fixture.enPassant });
+      expect(specialTrade).toMatchObject({ operands: { landingSquare: fixture.first.slice(2, 4), firstMoveUci: fixture.first, secondMoveUci: fixture.second } });
+    }
+  });
+
+  it("emits discovered execution only when the exact before-state relation and gained ray agree", () => {
+    const before = "7k/8/8/8/4r3/5N2/6B1/7K w - - 0 1";
+    const afterFen = after(before, "f3h4");
+    const values = localSemanticEvents(before, "f3h4", afterFen);
+    const executed = values.find((value) => value.projection.id === "derived.tactic.discovered_executed");
+    expect(executed).toMatchObject({ operands: { screen: { square: "f3" }, slider: { square: "g2" }, target: { square: "e4" } }, sign: "gained" });
+    expect(executed?.derivationInputs.map((value) => value.projection.id)).toEqual([
+      "rules.tactic.reading.discovered_latency", "rules.transition.event.slider_ray",
+    ]);
+  });
+
   it("emits exact reply/check and exchange-filtered double-attack events from their real producers", () => {
     const forkFen = "8/2k5/3r4/8/3N4/8/8/4K3 w - - 0 1";
     const forkAfter = after(forkFen, "d4b5");
@@ -271,6 +346,16 @@ describe("semantic evidence runtime", () => {
     expect(avoided.event.operands.alternativeEvents).toHaveLength(6);
     expect(avoided.event.derivationInputs).toHaveLength(6);
     expect(avoided.event.valence).toBeUndefined();
+  });
+
+  it("constructs loose-piece avoidance through the same complete-population path", () => {
+    const configured = policy();
+    const afterFen = after(INITIAL_FEN, "e2e4");
+    let index = 0;
+    const result = selectSemanticEvidence(configured.manifest, ref(configured.declaration.id), { beforeFen: INITIAL_FEN, moveUci: "e2e4", afterFen, playedEvents: [], evaluateAlternative: (edge) => index++ < 6 ? [looseEvent(edge.beforeFen, edge.moveUci)] : [] });
+    const avoided = result.selected.find((item) => item.kind === "counterfactual_absence" && item.event.projection.id === "derived.semantic_avoidance.loose_piece");
+    expect(avoided?.kind).toBe("counterfactual_absence");
+    if (avoided?.kind === "counterfactual_absence") expect(avoided.event.operands).toMatchObject({ legalAlternatives: 19, alternativesWithFamily: 6, relation: "avoided" });
   });
 
   it("makes every selection reason reachable, including a non-empty critical budget exhaustion", () => {

@@ -10,7 +10,7 @@ import { canonicalFen, selectLocalSemanticEvidence } from "@chess-tabiya/runtime
 import { EVIDENCE_MANIFEST } from "./evidence-manifest.js";
 
 const tuple = [EVIDENCE_MANIFEST.producers.length, EVIDENCE_MANIFEST.projections.length, EVIDENCE_MANIFEST.consumers.length, EVIDENCE_MANIFEST.bindings.length, EVIDENCE_MANIFEST.semanticEvents.length, EVIDENCE_MANIFEST.eligibility.length, EVIDENCE_MANIFEST.reasons.length, EVIDENCE_MANIFEST.selectionPolicies.length];
-if (tuple.join("/") !== "25/146/25/182/40/40/15/1") throw new TypeError(`Semantic evidence closure drift: ${tuple.join("/")}`);
+if (tuple.join("/") !== "25/156/25/188/46/46/15/1") throw new TypeError(`Semantic evidence closure drift: ${tuple.join("/")}`);
 
 const position = Chess.fromSetup(parseFen(INITIAL_FEN).unwrap()).unwrap();
 const move = normalizeMove(position, parseUci("e2e4")!);

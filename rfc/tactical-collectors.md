@@ -1,11 +1,10 @@
 # RFC: Tactical collectors
 
-- **Status:** **implementing 2026-08-22 — owner accepted after the D730/D794 falsification passes,
-  independent Codex buildability review and D824/D825 author repairs.** The owner's instruction to
-  begin the larger foundation wave is the acceptance action; the two downstream discharges remain
-  open and do not block this research/inspector-only collector landing. The remaining ten
-  projections are held on the 2026-08-22 D829–D835/D931 in-place amendment below until an
-  independent buildability review accepts the repaired boundaries; the first twenty remain landed.
+- **Status:** **awaiting D1 — implementation complete 2026-08-22; all 30 projections compile and
+  the permanent authored/imported two-population instrument passes.** Discharge D1 is the downstream
+  collector-to-module admission (globally tracked by D921), so this RFC remains active while both
+  learner-module discharges are open. D743 runtime opening identity remains a separate R8/F7
+  obligation and was not silently absorbed.
 - **Author:** claude (drafted on the D717 program routing, `planning/evidence-foundation-ux/plan.md` phases 2c/3)
 - **Created:** 2026-08-22
 - **Design refs:** `design/05-in-run-experience.md` §5 (*"detection is cheap, significance is not"* — every collector here ships detection with the significance judgement structurally refused), §3b (guided mode names patterns from a validated library, never recommends); `design/03-product-breadth.md` §Structural reading (the rung-0 layer this extends) and §Intelligence and explanation

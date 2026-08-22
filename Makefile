@@ -1,4 +1,4 @@
-.PHONY: setup typecheck test test-browser schema-check register-check status-parity intent-parity evidence-manifest-check semantic-evidence-check graduation-plan graduation-plan-check build verify pack-check shape-check expression-census graduation-report pack-preview source-fetch candidate-emit candidate-attach sourcing-check verify-draft tablebase-walk engine-walk up up-engines down
+.PHONY: setup typecheck test test-browser schema-check register-check status-parity intent-parity evidence-manifest-check semantic-evidence-check graduation-plan graduation-plan-check tactical-collector-measurement build verify pack-check shape-check expression-census graduation-report pack-preview source-fetch candidate-emit candidate-attach sourcing-check verify-draft tablebase-walk engine-walk up up-engines down
 
 setup:
 	pnpm install --frozen-lockfile
@@ -40,6 +40,9 @@ evidence-manifest-check:
 semantic-evidence-check:
 	./node_modules/.bin/esbuild apps/server/src/semantic-evidence-check.ts --bundle --platform=node --format=esm --outfile=apps/server/dist/semantic-evidence-check.js
 	node apps/server/dist/semantic-evidence-check.js
+
+tactical-collector-measurement:
+	./node_modules/.bin/vitest run --config tools/tactical-collector-measurement-harness/vitest.config.ts
 
 build:
 	pnpm build

@@ -126,3 +126,42 @@ Append-only.
 - Implementation pauses at the honest 20/30 boundary until the accepted RFC is amended. The
   research-complete breadth successor D802 still needs its own independently accepted RFC before
   Wave B code; UX modules, pack vocabulary and bot candidate adapters remain downstream consumers.
+
+## 2026-08-22 — final ten landed; Tactical collector RFC complete
+
+- Added the ten missing Appendix-A identities: pawn connectivity, pawn-island event/avoidance,
+  mover-relative loose-piece event/avoidance, rook-on-seventh, `space@1`, immediate trade,
+  discovered execution and typed promotion pressure. The compiled inventory is now 30/30.
+- The returned seams close at their exact boundaries: connected pairs differ from directed support;
+  rook relevance operands never suppress the state; trade requires adjacent captures on one landing
+  square; discovered execution joins the before-state latency identity to the gained ray; invalid
+  turn clones remain typed absence rather than false. En-passant and promotion-capture trades plus
+  color mirrors are permanent fixtures.
+- The permanent two-population instrument evaluates production collectors against complete legal
+  alternatives. `moved_piece_en_prise` remains negative-primary at 0.25× authored (95% 0.18–0.33)
+  and 0.49× imported (0.39–0.59). Exact `double_attack` remains above one at 1.72× authored
+  (0.75–2.96) and 1.96× imported (1.30–2.71); the imported interval excludes one while the authored
+  interval remains uncertain, so the ruled fallback does not trigger and no universal positive
+  prior is claimed.
+- Honest zeros remain visible: trapped-piece state is 0/754 on authored played positions;
+  promotion-unstoppable is 0/579 on imported played positions; all-reply fork is 0/717 authored.
+  Canonical positives/hard negatives prove the predicates can fire. Capture is recorded only as a
+  frequency/class census (101/754 authored, 158/579 imported), never assigned a lift.
+- Compiled closure is 25 producers / 156 projections / 25 consumers / 188 bindings and
+  46 semantic events / 46 eligibility rows / 15 reasons / one selection policy. No content, schema,
+  settings, module, preset, workflow or learner-copy bytes changed. D743 opening identity remains
+  open under R8/F7; learner admission remains the two explicit Phase-3 discharges.
+
+## 2026-08-22 — correction: implementation complete, archival held
+
+- The preceding entry called the RFC archived before running lifecycle P5. P5 correctly refused an
+  archived RFC with two open Phase-3 learner-module discharges. The implementation and all 30
+  projections remain complete; `rfc/tactical-collectors.md` stays active with status `implemented`
+  until those discharges close. No acceptance result or measurement changed.
+
+- Lifecycle-token clarification after running P5: the active document's token is `awaiting D921`,
+  not `implemented`; D921 is the live ledger owner of the collector-to-module amendment. The phrase
+  “implementation complete” remains descriptive, not the lifecycle token.
+
+- Further parser clarification: an `awaiting` token points to the RFC's **local discharge id**, not
+  the global backlog row. The valid token is therefore `awaiting D1`; D921 remains the global owner.

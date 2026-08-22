@@ -19,9 +19,9 @@ import {
   type SemanticEventSign,
   type VersionedEvidenceId,
 } from "./evidence-contract.js";
-import { declareAvoidanceEvidence, declareCaptureClassEvidence, declareCastlingRightsLostEvidence, declareCheckEventEvidence, declareDoubleAttackEvidence, declareLegalExchangeEvidence, declareReplyBreadthEvidence, declareStructuralSemanticSourceEvidence, declareTransitionSemanticSourceEvidence } from "./evidence-source-adapters.js";
-import { structuralReading, type StructuralObservation, type StructuralReading } from "./structure.js";
-import { checkEvent, doubleAttackEvent, replyBreadth, type CheckEvent, type DoubleAttackEvent, type ReplyBreadth } from "./tactics.js";
+import { declareAvoidanceEvidence, declareCaptureClassEvidence, declareCastlingRightsLostEvidence, declareCheckEventEvidence, declareDiscoveredExecutedEvidence, declareDiscoveredLatencyEvidence, declareDoubleAttackEvidence, declareLegalExchangeEvidence, declareLoosePieceEventEvidence, declarePawnIslandEventEvidence, declareReplyBreadthEvidence, declareStructuralSemanticSourceEvidence, declareTradeCompletedEvidence, declareTransitionSemanticSourceEvidence } from "./evidence-source-adapters.js";
+import { pawnConnectivityReading, structuralReading, type StructuralObservation, type StructuralReading } from "./structure.js";
+import { checkEvent, discoveredExecutedEvents, discoveredLatencyReading, doubleAttackEvent, loosePieceEvents, replyBreadth, type CheckEvent, type DiscoveredExecutedEvent, type DoubleAttackEvent, type GainedSliderRay, type LoosePieceEvent, type ReplyBreadth } from "./tactics.js";
 import { transitionSemanticFacts, type TransitionSemanticFact } from "./transition.js";
 
 const SEMANTIC_EVENT: unique symbol = Symbol("tabiya.evidence.semantic_event");
@@ -120,6 +120,28 @@ export type TransitionSemanticEventOperands = TransitionSemanticFact & {
 export type TacticalSemanticEventOperands = DoubleAttackEvent | ReplyBreadth | CheckEvent;
 export type CastlingSemanticEventOperands = CastlingRightLostEvent;
 export type DerivedExchangeSemanticEventOperands = CaptureClassEvent;
+
+export interface PawnIslandEventOperands {
+  readonly before_fen: string;
+  readonly move_uci: string;
+  readonly after_fen: string;
+  readonly family: "pawn_islands";
+  readonly color: Color;
+  readonly before: number;
+  readonly after: number;
+}
+
+export interface TradeCompletedEventOperands {
+  readonly startFen: string;
+  readonly firstMoveUci: string;
+  readonly boundaryFen: string;
+  readonly secondMoveUci: string;
+  readonly endFen: string;
+  readonly landingSquare: string;
+  readonly first: TransitionSemanticEventOperands;
+  readonly second: TransitionSemanticEventOperands;
+  readonly moveAnchors: readonly unknown[];
+}
 
 function immutable<T>(value: T): T {
   if (value !== null && typeof value === "object" && !Object.isFrozen(value)) {
@@ -234,6 +256,44 @@ export function tacticalSemanticEvents(beforeFen: string, moveUci: string, after
   return Object.freeze(events.sort((left, right) => refKey(left.projection).localeCompare(refKey(right.projection))));
 }
 
+export function pawnIslandSemanticEvents(beforeFen: string, moveUci: string, afterFen: string): readonly SemanticEvidenceEvent<PawnIslandEventOperands>[] {
+  const anchor = canonicalAnchor({ beforeFen, moveUci, afterFen, side: positionFromFen(beforeFen).turn });
+  const before = pawnConnectivityReading(anchor.beforeFen);
+  const after = pawnConnectivityReading(anchor.afterFen);
+  return Object.freeze((["white", "black"] as const).map((color) => {
+    const prior = before.colors.find((value) => value.color === color)!.islandCount;
+    const current = after.colors.find((value) => value.color === color)!.islandCount;
+    const sign = current > prior ? "gained" : current < prior ? "lost" : "preserved";
+    const payload = immutable({ before_fen: anchor.beforeFen, move_uci: anchor.moveUci, after_fen: anchor.afterFen, family: "pawn_islands" as const, color, before: prior, after: current });
+    return compileSemanticEvidenceEvent(PRIMARY_EVIDENCE_MANIFEST, { evidence: declarePawnIslandEventEvidence(payload), anchor, sign, operands: payload });
+  }));
+}
+
+export function loosePieceSemanticEvents(beforeFen: string, moveUci: string, afterFen: string): readonly SemanticEvidenceEvent<LoosePieceEvent>[] | undefined {
+  const anchor = canonicalAnchor({ beforeFen, moveUci, afterFen, side: positionFromFen(beforeFen).turn });
+  const result = loosePieceEvents(anchor.beforeFen, anchor.moveUci);
+  if (result.kind === "unavailable") return undefined;
+  if (result.afterFen !== anchor.afterFen) throw new TypeError(`Loose-piece after FEN does not match ${anchor.moveUci}`);
+  return Object.freeze(result.events.map((payload) => compileSemanticEvidenceEvent(PRIMARY_EVIDENCE_MANIFEST, {
+    evidence: declareLoosePieceEventEvidence(payload), anchor, sign: payload.sign, operands: payload,
+  })));
+}
+
+export function discoveredExecutedSemanticEvents(beforeFen: string, moveUci: string, afterFen: string, transitionEvents: readonly SemanticEvidenceEvent<TransitionSemanticEventOperands>[] = transitionSemanticEvents(beforeFen, moveUci, afterFen)): readonly SemanticEvidenceEvent<DiscoveredExecutedEvent>[] {
+  const anchor = canonicalAnchor({ beforeFen, moveUci, afterFen, side: positionFromFen(beforeFen).turn });
+  const gainedRays = transitionEvents.filter((event) => event.operands.family === "slider_ray" && event.sign === "gained");
+  const byPayload = new Map(gainedRays.map((event) => [event.operands, event]));
+  const events = discoveredExecutedEvents(anchor.beforeFen, anchor.moveUci, anchor.afterFen, gainedRays.map((event) => event.operands as GainedSliderRay));
+  const latencyEvidence = declareDiscoveredLatencyEvidence(discoveredLatencyReading(anchor.beforeFen));
+  return Object.freeze(events.map((payload) => {
+    const rayEvent = byPayload.get(payload.gainedRay as TransitionSemanticEventOperands);
+    if (rayEvent === undefined) throw new TypeError("Discovered execution lost its exact gained-ray source");
+    return compileSemanticEvidenceEvent(PRIMARY_EVIDENCE_MANIFEST, {
+      evidence: declareDiscoveredExecutedEvidence(payload), derivationInputs: [latencyEvidence, rayEvent.evidence], anchor, sign: "gained", operands: payload,
+    });
+  }));
+}
+
 export function castlingSemanticEvents(beforeFen: string, moveUci: string, afterFen: string): readonly SemanticEvidenceEvent<CastlingSemanticEventOperands>[] {
   const anchor = canonicalAnchor({ beforeFen, moveUci, afterFen, side: positionFromFen(beforeFen).turn });
   return Object.freeze(castlingRightsLost(anchor.beforeFen, anchor.moveUci, anchor.afterFen).map((payload) => compileSemanticEvidenceEvent(PRIMARY_EVIDENCE_MANIFEST, {
@@ -260,9 +320,38 @@ export function derivedExchangeSemanticEvents(beforeFen: string, moveUci: string
   })]);
 }
 
+export function tradeCompletedSemanticEvent(
+  first: SemanticEvidenceEvent<TransitionSemanticEventOperands>,
+  second: SemanticEvidenceEvent<TransitionSemanticEventOperands>,
+  firstMoveAnchor: DeclaredEvidence<unknown>,
+  secondMoveAnchor: DeclaredEvidence<unknown>,
+): SemanticEvidenceEvent<TradeCompletedEventOperands> | undefined {
+  assertSemanticEvidenceEvent(PRIMARY_EVIDENCE_MANIFEST, first);
+  assertSemanticEvidenceEvent(PRIMARY_EVIDENCE_MANIFEST, second);
+  assertDeclaredEvidence(firstMoveAnchor);
+  assertDeclaredEvidence(secondMoveAnchor);
+  if (first.operands.family !== "capture" || second.operands.family !== "capture") return undefined;
+  if (first.anchor.afterFen !== second.anchor.beforeFen || first.operands.to !== second.operands.to) return undefined;
+  if (refKey(firstMoveAnchor.projection) !== "run.record.move@1" || refKey(secondMoveAnchor.projection) !== "run.record.move@1") throw new TypeError("Trade completion requires two run.record.move anchors");
+  const payload = immutable({
+    startFen: first.anchor.beforeFen,
+    firstMoveUci: first.anchor.moveUci,
+    boundaryFen: first.anchor.afterFen,
+    secondMoveUci: second.anchor.moveUci,
+    endFen: second.anchor.afterFen,
+    landingSquare: first.operands.to,
+    first: first.operands,
+    second: second.operands,
+    moveAnchors: [firstMoveAnchor.payload, secondMoveAnchor.payload],
+  });
+  return compileSemanticEvidenceEvent(PRIMARY_EVIDENCE_MANIFEST, {
+    evidence: declareTradeCompletedEvidence(payload), derivationInputs: [first.evidence, second.evidence, firstMoveAnchor, secondMoveAnchor], anchor: second.anchor, sign: "state", operands: payload,
+  });
+}
+
 export function localSemanticEvents(beforeFen: string, moveUci: string, afterFen: string): readonly SemanticEvidenceEvent[] {
   const transitionEvents = transitionSemanticEvents(beforeFen, moveUci, afterFen);
-  return Object.freeze([...structuralSemanticEvents(beforeFen, moveUci, afterFen), ...transitionEvents, ...tacticalSemanticEvents(beforeFen, moveUci, afterFen), ...castlingSemanticEvents(beforeFen, moveUci, afterFen), ...derivedExchangeSemanticEvents(beforeFen, moveUci, afterFen, transitionEvents)]);
+  return Object.freeze([...structuralSemanticEvents(beforeFen, moveUci, afterFen), ...pawnIslandSemanticEvents(beforeFen, moveUci, afterFen), ...transitionEvents, ...tacticalSemanticEvents(beforeFen, moveUci, afterFen), ...(loosePieceSemanticEvents(beforeFen, moveUci, afterFen) ?? []), ...castlingSemanticEvents(beforeFen, moveUci, afterFen), ...derivedExchangeSemanticEvents(beforeFen, moveUci, afterFen, transitionEvents), ...discoveredExecutedSemanticEvents(beforeFen, moveUci, afterFen, transitionEvents)]);
 }
 
 export function compileSemanticEvidenceEvent<T>(manifest: CompiledEvidenceManifest, input: SemanticEventInput<T>): SemanticEvidenceEvent<T> {
@@ -370,10 +459,12 @@ export function selectSemanticEvidence(manifest: CompiledEvidenceManifest, polic
   if (policy.minimumAlternativeOnlyShare !== null && alternatives.length >= policy.minimumAlternatives) for (const [key, events] of byFamily) {
     if (played.some((event) => familyKey(event) === key)) continue;
     const [projectionKey, sign] = key.split(":") as [string, SemanticEventSign];
-    if (!projectionKey.startsWith("rules.structural.event.")) continue;
+    const suffix = projectionKey.startsWith("rules.structural.event.")
+      ? projectionKey.slice("rules.structural.event.".length).replace(/@\d+$/u, "")
+      : projectionKey === "rules.tactic.event.loose_piece@1" ? "loose_piece" : undefined;
+    if (suffix === undefined) continue;
     const share = events.length / alternatives.length;
     if (share < policy.minimumAlternativeOnlyShare) continue;
-    const suffix = projectionKey.slice("rules.structural.event.".length).replace(/@\d+$/u, "");
     const operands: CounterfactualAbsenceOperands = immutable({ relation: "avoided", family: { projection: events[0]!.projection, sign }, legalAlternatives: alternatives.length, alternativesWithFamily: events.length, alternativeEvents: events });
     const evidence = declareAvoidanceEvidence(suffix, operands);
     const event = compileSemanticEvidenceEvent(manifest, { evidence, derivationInputs: events.map((value) => value.evidence), anchor: { beforeFen: input.beforeFen, moveUci: input.moveUci, afterFen: input.afterFen, side: positionFromFen(input.beforeFen).turn }, sign: "avoided", operands });
@@ -389,14 +480,17 @@ export function selectSemanticEvidence(manifest: CompiledEvidenceManifest, polic
 
 export function selectLocalSemanticEvidence(policyRef: VersionedEvidenceId, input: Omit<SemanticSelectionInput, "playedEvents" | "evaluateAlternative">): EvidenceSelectionResult {
   const cache = new Map<string, StructuralReading>();
-  const events = (edge: { readonly beforeFen: string; readonly moveUci: string; readonly afterFen: string }): readonly SemanticEvidenceEvent[] => {
+  const events = (edge: { readonly beforeFen: string; readonly moveUci: string; readonly afterFen: string }): readonly SemanticEvidenceEvent[] | undefined => {
     const transitions = transitionSemanticEvents(edge.beforeFen, edge.moveUci, edge.afterFen);
-    return Object.freeze([...structuralSemanticEventsCached(edge.beforeFen, edge.moveUci, edge.afterFen, cache), ...transitions, ...tacticalSemanticEvents(edge.beforeFen, edge.moveUci, edge.afterFen), ...castlingSemanticEvents(edge.beforeFen, edge.moveUci, edge.afterFen), ...derivedExchangeSemanticEvents(edge.beforeFen, edge.moveUci, edge.afterFen, transitions)]);
+    const loose = loosePieceSemanticEvents(edge.beforeFen, edge.moveUci, edge.afterFen);
+    if (loose === undefined) return undefined;
+    return Object.freeze([...structuralSemanticEventsCached(edge.beforeFen, edge.moveUci, edge.afterFen, cache), ...pawnIslandSemanticEvents(edge.beforeFen, edge.moveUci, edge.afterFen), ...transitions, ...tacticalSemanticEvents(edge.beforeFen, edge.moveUci, edge.afterFen), ...loose, ...castlingSemanticEvents(edge.beforeFen, edge.moveUci, edge.afterFen), ...derivedExchangeSemanticEvents(edge.beforeFen, edge.moveUci, edge.afterFen, transitions), ...discoveredExecutedSemanticEvents(edge.beforeFen, edge.moveUci, edge.afterFen, transitions)]);
   };
+  const playedEvents = events(input);
   return selectSemanticEvidence(PRIMARY_EVIDENCE_MANIFEST, policyRef, {
     ...input,
-    playedEvents: events(input),
-    evaluateAlternative: events,
+    playedEvents: playedEvents ?? [],
+    evaluateAlternative: playedEvents === undefined ? () => undefined : events,
   });
 }
 

@@ -114,16 +114,39 @@ export const STRUCTURAL_EVENT_FAMILIES = Object.freeze([
 export const TRANSITION_GEOMETRY_EVENT_FAMILIES = Object.freeze(["occupied_attack", "occupied_defence", "slider_ray", "piece_escape", "defended_duty"] as const);
 export const TRANSITION_RULE_EVENT_FAMILIES = Object.freeze(["castled", "clock_reset", "last_of_role", "pawn_contact", "checkmate", "promotion", "capture", "developed"] as const);
 export const STRUCTURAL_EVENT_PROJECTION_IDS = Object.freeze(STRUCTURAL_EVENT_FAMILIES.map((family) => `rules.structural.event.${family}`));
+export const TACTICAL_STRUCTURAL_EVENT_PROJECTION_IDS = Object.freeze(["rules.structural.event.pawn_islands"] as const);
 export const TRANSITION_EVENT_PROJECTION_IDS = Object.freeze([...TRANSITION_GEOMETRY_EVENT_FAMILIES, ...TRANSITION_RULE_EVENT_FAMILIES].map((family) => `rules.transition.event.${family}`));
 export const AVOIDANCE_EVENT_PROJECTION_IDS = Object.freeze(STRUCTURAL_EVENT_FAMILIES.map((family) => `derived.semantic_avoidance.${family}`));
+export const TACTICAL_AVOIDANCE_EVENT_PROJECTION_IDS = Object.freeze(["derived.semantic_avoidance.loose_piece", "derived.semantic_avoidance.pawn_islands"] as const);
 export const TACTICAL_EVENT_PROJECTION_IDS = Object.freeze([
   "rules.tactic.event.double_attack",
   "rules.tactic.consequence.reply_breadth",
   "rules.tactic.event.check",
+  "rules.tactic.event.loose_piece",
 ] as const);
 export const CASTLING_EVENT_PROJECTION_IDS = Object.freeze(["rules.castling.event.rights_lost"] as const);
-export const DERIVED_EXCHANGE_EVENT_PROJECTION_IDS = Object.freeze(["derived.exchange.capture_class"] as const);
-export const SEMANTIC_EVENT_PROJECTION_IDS = Object.freeze([...STRUCTURAL_EVENT_PROJECTION_IDS, ...TRANSITION_EVENT_PROJECTION_IDS, ...AVOIDANCE_EVENT_PROJECTION_IDS, ...TACTICAL_EVENT_PROJECTION_IDS, ...CASTLING_EVENT_PROJECTION_IDS, ...DERIVED_EXCHANGE_EVENT_PROJECTION_IDS]);
+export const DERIVED_EXCHANGE_EVENT_PROJECTION_IDS = Object.freeze(["derived.exchange.capture_class", "derived.exchange.trade_completed"] as const);
+export const DERIVED_TACTIC_EVENT_PROJECTION_IDS = Object.freeze(["derived.tactic.discovered_executed"] as const);
+export const SEMANTIC_EVENT_PROJECTION_IDS = Object.freeze([...STRUCTURAL_EVENT_PROJECTION_IDS, ...TACTICAL_STRUCTURAL_EVENT_PROJECTION_IDS, ...TRANSITION_EVENT_PROJECTION_IDS, ...AVOIDANCE_EVENT_PROJECTION_IDS, ...TACTICAL_AVOIDANCE_EVENT_PROJECTION_IDS, ...TACTICAL_EVENT_PROJECTION_IDS, ...CASTLING_EVENT_PROJECTION_IDS, ...DERIVED_EXCHANGE_EVENT_PROJECTION_IDS, ...DERIVED_TACTIC_EVENT_PROJECTION_IDS]);
+
+/** Closed Appendix-A inventory from tactical-collectors; checked set-equal to the compiled catalogue. */
+export const TACTICAL_COLLECTOR_PROJECTION_IDS = Object.freeze([
+  "rules.exchange.predicate.legal_exchange", "rules.castling.reading.rights",
+  "rules.castling.event.rights_lost", "rules.castling.reading.legality",
+  "rules.transition.event.capture", "derived.exchange.capture_class",
+  "derived.exchange.trade_completed", "rules.tactic.reading.loose_piece",
+  "rules.tactic.event.loose_piece", "derived.semantic_avoidance.loose_piece",
+  "rules.tactic.reading.ray_classification", "rules.tactic.consequence.threat",
+  "rules.tactic.event.double_attack", "derived.tactic.fork_survives_reply",
+  "rules.structural.reading.pawn_connectivity", "rules.structural.event.pawn_islands",
+  "derived.semantic_avoidance.pawn_islands", "rules.phase.development",
+  "rules.transition.event.developed", "rules.tactic.reading.rook_on_seventh",
+  "rules.structural.reading.space", "rules.tactic.reading.discovered_latency",
+  "derived.tactic.discovered_executed", "rules.tactic.reading.trapped_piece",
+  "rules.tactic.reading.back_rank", "rules.tactic.consequence.mate_in_one",
+  "derived.tactic.promotion_pressure", "human.maia.candidate_wdl",
+  "rules.tactic.consequence.reply_breadth", "rules.tactic.event.check",
+] as const);
 
 const structuralEventOutputs = STRUCTURAL_EVENT_FAMILIES.map((family) => projection("rules.structural", `rules.structural.event.${family}`, "rules", {
   role: "event",
@@ -164,6 +187,23 @@ const structuralOutputs = [
     limitations: kind === "pawn_count" ? ["The committed emission census reports zero observations; structuralReading cannot emit this kind."] : ["State alone does not establish relevance or learner valence."],
     ...(kind === "pawn_count" ? { disposition: retired("Zero emitted observations over the executable committed-corpus census; matcher-only at F1.") } : {}),
   })),
+  projection("rules.structural", "rules.structural.reading.pawn_connectivity", "rules", {
+    payloadType: "PawnConnectivityReading", semantics: "Exact per-color pawn islands, adjacent-file connected pairs, directed literal pawn-support edges, and maximal weak support chains with every base retained.",
+    operands: ["fen", "colors"], answerContent: ["fact", "pattern"], forms: ["list", "panel", "lit_squares", "machine_condition"],
+    limitations: ["Connectivity is literal pawn geometry; it is not a statement of strategic quality or a pack-authoring vocabulary member."],
+    disposition: { kind: "inspector_only", reason: "Exact state evidence lands before measured module selection." },
+  }),
+  projection("rules.structural", "rules.structural.reading.space", "rules", {
+    payloadType: "SpaceReading", semantics: "space@1: literal pawn-attacked squares in the enemy half, counted by queenside a-c, central d-e, and kingside f-h zones; differentials are White minus Black under this declared convention.",
+    operands: ["fen", "conventionId", "colors", "differentials"], grounding: "declared_convention", exactness: "convention", answerContent: ["fact", "pattern"], forms: ["list", "panel", "lit_squares", "machine_condition"],
+    limitations: ["Pawn control only; piece control, mobility, territory quality, recommendation, and move grade are outside space@1."],
+    disposition: { kind: "inspector_only", reason: "Level reading only; the measured near-neutral delta is not registered as an event." },
+  }),
+  projection("rules.structural", "rules.structural.event.pawn_islands", "rules", {
+    role: "event", payloadType: "PawnIslandEventOperands", semantics: "Exact per-color before/after occupied-file island count across one legal edge.",
+    operands: ["before_fen", "move_uci", "after_fen", "family", "color", "before", "after"], signs: ["gained", "lost", "preserved"], forms: ["list", "panel", "machine_condition"],
+    limitations: ["The signed count relation carries no learner valence or inferred plan."],
+  }),
   ...structuralEventOutputs,
 ];
 
@@ -190,13 +230,14 @@ const transitionEventOutputs = [
   })),
 ];
 
-const avoidanceOutputs = STRUCTURAL_EVENT_FAMILIES.map((family) => {
-  const input = ref(`rules.structural.event.${family}`);
-  const convention = family === "backward_pawn" || family === "king_opposition";
+const avoidanceOutputs = [...STRUCTURAL_EVENT_FAMILIES, "loose_piece", "pawn_islands"].map((family) => {
+  const input = ref(family === "loose_piece" ? "rules.tactic.event.loose_piece" : `rules.structural.event.${family}`);
+  const convention = family === "backward_pawn" || family === "king_opposition" || family === "loose_piece";
   return projection("derived.semantic_avoidance", `derived.semantic_avoidance.${family}`, "derived", {
     role: "event", payloadType: "CounterfactualAbsenceOperands", semantics: `Complete-population counterfactual absence for structural family ${family}.`,
     operands: ["relation", "family", "legalAlternatives", "alternativesWithFamily", "alternativeEvents"], signs: ["avoided"],
     grounding: convention ? "declared_convention" : "position_rules", exactness: convention ? "convention" : "exact",
+    ...(family === "loose_piece" ? { abstention: { possible: true as const, reasons: ["input_abstained"] } } : {}),
     forms: ["list", "panel", "machine_condition"], dependsOn: [input], derivation: { inputs: [input] },
     limitations: ["Avoided describes a complete local alternative relation, never inferred intent, praise, or move quality."],
   });
@@ -280,6 +321,12 @@ const tacticalOutputs = [
     limitations: ["Susceptibility is not mate, a move grade or inferred intent. Rank/diagonal approaches and whether an entry square is defended are outside this convention; exact mate-in-one is a separate projection."],
     disposition: { kind: "inspector_only", reason: "Convention state lands separately from exact mate and before learner-module selection." },
   }),
+  projection("rules.tactic", "rules.tactic.reading.rook_on_seventh", "rules", {
+    payloadType: "RookOnSeventhReading", semantics: "Exact rooks on the seventh rank relative to their color, retaining the enemy king on its back rank and enemy pawns on that rook rank as literal relevance operands without suppressing the state.",
+    operands: ["fen", "rooks"], answerContent: ["fact", "pattern"], forms: ["list", "panel", "lit_squares", "piece_halo", "machine_condition"],
+    limitations: ["The state does not infer king cutoff, importance, recommendation, or move quality."],
+    disposition: { kind: "inspector_only", reason: "Literal state lands before learner eligibility joins king mobility and control." },
+  }),
   projection("rules.tactic", "rules.tactic.consequence.threat", "rules", {
     role: "reading", payloadType: "ThreatResult", semantics: THREAT_SEMANTICS,
     operands: ["kind", "conventionId", "threats"], signs: ["threatened"], grounding: "declared_convention", exactness: "convention",
@@ -306,6 +353,12 @@ const tacticalOutputs = [
     answerContent: ["fact"], forms: ["list", "panel", "machine_condition"],
     limitations: ["Check is a literal rule event, not a forcing or quality label."],
   }),
+  projection("rules.tactic", "rules.tactic.event.loose_piece", "rules", {
+    role: "event", payloadType: "LoosePieceEvent", semantics: "Identity-preserving mover-owned en-prise change. The before position is evaluated on an opponent-turn clone with en-passant cleared; the after position already gives the opponent the move.",
+    operands: ["beforeFen", "moveUci", "afterFen", "mover", "before", "after"], signs: ["gained", "lost", "preserved"], grounding: "declared_convention", exactness: "convention", answerContent: ["fact", "threat"], forms: ["list", "panel", "machine_condition"], dependsOn: [ref("rules.tactic.reading.loose_piece")],
+    abstention: { possible: true, reasons: ["invalid_turn_clone"] },
+    limitations: ["Local legal-exchange relation only; no whole-position move grade, recommendation, or inferred intent."],
+  }),
 ];
 
 const derivedTacticOutputs = [
@@ -318,6 +371,19 @@ const derivedTacticOutputs = [
     limitations: ["One-reply local survival only; no inevitability, quality or whole-position claim."],
     disposition: { kind: "inspector_only", reason: "Rare bounded consequence retained for inspection and later Review admission; no production module consumes it at landing." },
   }),
+  projection("derived.tactic", "derived.tactic.discovered_executed", "derived", {
+    role: "event", payloadType: "DiscoveredExecutedEvent", semantics: "Joins a before-state friendly screen/slider/enemy-target latency relation to the exact gained slider ray on the played edge, preserving all identities.",
+    operands: ["beforeFen", "moveUci", "afterFen", "screen", "slider", "target", "raySquares", "discoveredCheck", "gainedRay"], signs: ["gained"], grounding: "declared_convention", exactness: "convention", answerContent: ["fact", "pattern", "threat"], forms: ["list", "panel", "lit_squares", "arrows", "machine_condition"],
+    dependsOn: [ref("rules.tactic.reading.discovered_latency"), ref("rules.transition.event.slider_ray")], derivation: { inputs: [ref("rules.tactic.reading.discovered_latency"), ref("rules.transition.event.slider_ray")] },
+    limitations: ["Execution inherits the bounded latency relation; it does not infer importance, intent, or move quality."],
+  }),
+  projection("derived.tactic", "derived.tactic.promotion_pressure", "derived", {
+    role: "reading", payloadType: "PromotionPressureReading", semantics: "Exact passed-pawn promotion geometry with typed pass-clone and all-opponent-reply availability; it carries no outcome verdict.",
+    operands: ["fen", "pawns"], signs: ["state"], answerContent: ["fact"], forms: ["list", "panel", "lit_squares", "machine_condition"],
+    dependsOn: [ref("rules.structural.predicate.passed_pawn"), ref("rules.structural.predicate.direct_attack_count"), ref("rules.structural.predicate.line_blockers")], derivation: { inputs: [ref("rules.structural.predicate.passed_pawn"), ref("rules.structural.predicate.direct_attack_count"), ref("rules.structural.predicate.line_blockers")] },
+    limitations: ["Pressure description only; winner, drawing status and outcome words stay with Syzygy."],
+    disposition: { kind: "inspector_only", reason: "Exact geometry lands before learner and bot eligibility." },
+  }),
 ];
 
 const derivedExchangeOutputs = [
@@ -328,6 +394,12 @@ const derivedExchangeOutputs = [
     dependsOn: [ref("rules.transition.event.capture"), ref("rules.exchange.predicate.legal_exchange")],
     derivation: { inputs: [ref("rules.transition.event.capture"), ref("rules.exchange.predicate.legal_exchange")] },
     limitations: ["Local exchange arithmetic only; compensation, zwischenzugs and whole-position move quality remain outside scope. The landing binding is research selection only; no learner module consumes it."],
+  }),
+  projection("derived.exchange", "derived.exchange.trade_completed", "derived", {
+    role: "event", payloadType: "TradeCompletedEvent", semantics: "Two immediately consecutive legal captures with a byte-identical shared position, the second capturing on the first capture's landing square.",
+    operands: ["startFen", "firstMoveUci", "boundaryFen", "secondMoveUci", "endFen", "landingSquare", "first", "second", "moveAnchors"], signs: ["state"], grounding: "declared_convention", exactness: "exact", answerContent: ["fact"], forms: ["list", "panel", "machine_condition"],
+    dependsOn: [ref("rules.transition.event.capture"), ref("run.record.move")], derivation: { inputs: [ref("rules.transition.event.capture"), ref("run.record.move")] },
+    limitations: ["Immediate capture-recapture only; later return captures and strategic exchange judgements are outside scope."],
   }),
 ];
 

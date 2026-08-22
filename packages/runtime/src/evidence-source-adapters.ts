@@ -96,6 +96,14 @@ export const declareMateInOneEvidence = <T extends object>(payload: T) => exactO
 export const declareDiscoveredLatencyEvidence = <T extends object>(payload: T) => exactObject("rules.tactic", "rules.tactic.reading.discovered_latency", payload, ["fen", "screens"]);
 export const declareTrappedPieceEvidence = <T extends object>(payload: T) => exactObject("rules.tactic", "rules.tactic.reading.trapped_piece", payload, ["kind", "conventionId", "pieces"]);
 export const declareBackRankEvidence = <T extends object>(payload: T) => exactObject("rules.tactic", "rules.tactic.reading.back_rank", payload, ["fen", "conventionId", "susceptible"]);
+export const declareRookOnSeventhEvidence = <T extends object>(payload: T) => exactObject("rules.tactic", "rules.tactic.reading.rook_on_seventh", payload, ["fen", "rooks"]);
+export const declarePawnConnectivityEvidence = <T extends object>(payload: T) => exactObject("rules.structural", "rules.structural.reading.pawn_connectivity", payload, ["fen", "colors"]);
+export const declareSpaceEvidence = <T extends object>(payload: T) => exactObject("rules.structural", "rules.structural.reading.space", payload, ["fen", "conventionId", "colors", "differentials"]);
+export const declareLoosePieceEventEvidence = <T extends object>(payload: T) => exactObject("rules.tactic", "rules.tactic.event.loose_piece", payload, ["beforeFen", "moveUci", "afterFen", "mover", "before", "after"]);
+export const declarePawnIslandEventEvidence = <T extends object>(payload: T) => exactObject("rules.structural", "rules.structural.event.pawn_islands", payload, ["before_fen", "move_uci", "after_fen", "family", "color", "before", "after"]);
+export const declareDiscoveredExecutedEvidence = <T extends object>(payload: T) => exactObject("derived.tactic", "derived.tactic.discovered_executed", payload, ["beforeFen", "moveUci", "afterFen", "screen", "slider", "target", "raySquares", "discoveredCheck", "gainedRay"]);
+export const declarePromotionPressureEvidence = <T extends object>(payload: T) => exactObject("derived.tactic", "derived.tactic.promotion_pressure", payload, ["fen", "pawns"]);
+export const declareTradeCompletedEvidence = <T extends object>(payload: T) => exactObject("derived.exchange", "derived.exchange.trade_completed", payload, ["startFen", "firstMoveUci", "boundaryFen", "secondMoveUci", "endFen", "landingSquare", "first", "second", "moveAnchors"]);
 export const declareCastlingRightsEvidence = <T extends object>(payload: T) => exactObject("rules.castling", "rules.castling.reading.rights", payload, ["fen", "white", "black"]);
 export const declareCastlingRightsLostEvidence = <T extends object>(payload: T) => exactObject("rules.castling", "rules.castling.event.rights_lost", payload, ["beforeFen", "moveUci", "afterFen", "color", "wing", "cause"]);
 export const declareCastlingLegalityEvidence = <T extends object>(payload: T) => exactObject("rules.castling", "rules.castling.reading.legality", payload, ["color", "wing", "kingSquare", "rookSquare", "legalNow", "inCheck", "blockedSquares", "attackedSquares"]);
@@ -186,7 +194,7 @@ export function declareTransitionSemanticSourceEvidence<T extends object>(family
 }
 
 export function declareAvoidanceEvidence<T extends object>(family: string, payload: T): DeclaredEvidence<T> {
-  const allowed = new Set(["backward_pawn", "doubled_pawn", "half_open_file", "isolated_pawn", "king_opposition", "king_zone", "line_blockers", "open_file", "passed_pawn", "piece_count", "direct_attack_count"]);
+  const allowed = new Set(["backward_pawn", "doubled_pawn", "half_open_file", "isolated_pawn", "king_opposition", "king_zone", "line_blockers", "open_file", "passed_pawn", "piece_count", "direct_attack_count", "loose_piece", "pawn_islands"]);
   if (!allowed.has(family)) throw new TypeError(`Unsupported avoidance family ${family}`);
   return exactObject("derived.semantic_avoidance", `derived.semantic_avoidance.${family}`, payload, ["relation", "family", "legalAlternatives", "alternativesWithFamily", "alternativeEvents"]);
 }

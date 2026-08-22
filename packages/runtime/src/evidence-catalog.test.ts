@@ -14,6 +14,7 @@ import {
   SEMANTIC_EVENT_PROJECTION_IDS,
   STRUCTURAL_PREDICATE_PROJECTION_IDS,
   STRUCTURAL_READING_PROJECTION_IDS,
+  TACTICAL_COLLECTOR_PROJECTION_IDS,
   TRANSITION_READING_PROJECTION_IDS,
 } from "./evidence-catalog.js";
 import { compileEvidenceManifest } from "./evidence-contract.js";
@@ -44,8 +45,8 @@ describe("primary evidence catalogue", () => {
     expect(CURRENT_CONSUMER_OPERATION_IDS).toHaveLength(23);
     expect(EVIDENCE_CONSUMER_IDS).toEqual([...CURRENT_CONSUMER_OPERATION_IDS, "assistance.arrows", "research.semantic_selection"]);
     expect(manifest.consumers.find((item) => item.id === "assistance.arrows")?.disposition).toEqual(expect.objectContaining({ kind: "experimental" }));
-    expect([manifest.producers.length, manifest.projections.length, manifest.consumers.length, manifest.bindings.length]).toEqual([25, 146, 25, 182]);
-    expect([manifest.semanticEvents.length, manifest.eligibility.length, manifest.reasons.length, manifest.selectionPolicies.length]).toEqual([40, 40, 15, 1]);
+    expect([manifest.producers.length, manifest.projections.length, manifest.consumers.length, manifest.bindings.length]).toEqual([25, 156, 25, 188]);
+    expect([manifest.semanticEvents.length, manifest.eligibility.length, manifest.reasons.length, manifest.selectionPolicies.length]).toEqual([46, 46, 15, 1]);
     expect(new Set(manifest.semanticEvents.map((item) => item.projection.id))).toEqual(new Set(SEMANTIC_EVENT_PROJECTION_IDS));
     expect(new Set(manifest.eligibility.map((item) => `${item.consumer.id}@${item.consumer.version}`))).toEqual(new Set(["research.semantic_selection@1"]));
     expect(manifest.bindings.filter((binding) => SEMANTIC_EVENT_PROJECTION_IDS.includes(binding.projection.id)).every((binding) => binding.consumer.id === "research.semantic_selection")).toBe(true);
@@ -105,5 +106,16 @@ describe("primary evidence catalogue", () => {
     expect(projection("derived.compare.eval_delta")).not.toContain("sentence");
     expect(projection("derived.story.eval_shift")).not.toContain("sentence");
     expect(projection("human.maia.candidate_wdl")).toEqual(["nodeId", "engine", "targetElo", "candidates"]);
+    expect(projection("rules.structural.reading.pawn_connectivity")).toEqual(["fen", "colors"]);
+    expect(projection("rules.structural.reading.space")).toEqual(["fen", "conventionId", "colors", "differentials"]);
+    expect(projection("rules.tactic.reading.rook_on_seventh")).toEqual(["fen", "rooks"]);
+    expect(projection("derived.tactic.promotion_pressure")).toEqual(["fen", "pawns"]);
+  });
+
+  it("keeps the tactical collector Appendix-A inventory set-equal to thirty compiled projections", () => {
+    expect(TACTICAL_COLLECTOR_PROJECTION_IDS).toHaveLength(30);
+    expect(new Set(TACTICAL_COLLECTOR_PROJECTION_IDS).size).toBe(30);
+    const compiled = new Set(EVIDENCE_PRODUCERS.flatMap((producer) => producer.outputs.map((output) => output.id)));
+    expect(TACTICAL_COLLECTOR_PROJECTION_IDS.every((id) => compiled.has(id))).toBe(true);
   });
 });

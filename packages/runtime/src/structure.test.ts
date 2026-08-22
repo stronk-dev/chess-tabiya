@@ -12,7 +12,9 @@ import {
   matchesStructuralExpression,
   matchesStructuralFeature,
   mirrorExpression,
+  pawnConnectivityReading,
   pawnSafety,
+  spaceReading,
   structuralDelta,
   structuralFeatureKinds,
   structuralReading,
@@ -94,6 +96,60 @@ describe("structural predicates", () => {
     const reading = structuralReading(carlsbad);
     expect(reading.features.some((item) => item.kind === "half_open_file" && item.color === "white" && item.file === "c")).toBe(true);
     expect(JSON.stringify(reading)).not.toMatch(/score|severity|favours|balance/);
+  });
+
+  it("separates connected pawn pairs, directed support, chains, and occupied-file islands", () => {
+    const branched = pawnConnectivityReading("4k3/8/8/8/8/3P4/2P1P3/4K3 w - - 0 1").colors.find((value) => value.color === "white")!;
+    expect(branched.supportEdges).toEqual([
+      { supporter: "c2", supported: "d3" },
+      { supporter: "e2", supported: "d3" },
+    ]);
+    expect(branched.chains).toEqual([{ members: ["c2", "d3", "e2"], bases: ["c2", "e2"] }]);
+
+    const duo = pawnConnectivityReading("4k3/8/8/8/2PP4/8/8/4K3 w - - 0 1").colors.find((value) => value.color === "white")!;
+    expect(duo.connectedPawnPairs).toEqual([["c4", "d4"]]);
+    expect(duo.supportEdges).toEqual([]);
+    expect(duo.chains).toEqual([]);
+
+    const doubled = pawnConnectivityReading("4k3/8/8/8/8/P7/P1P5/4K3 w - - 0 1").colors.find((value) => value.color === "white")!;
+    expect(doubled.islandCount).toBe(2);
+    expect(doubled.islands).toEqual([
+      { files: ["a"], squares: ["a2", "a3"] },
+      { files: ["c"], squares: ["c2"] },
+    ]);
+
+    const blackMirror = pawnConnectivityReading("4k3/2p1p3/3p4/8/8/8/8/4K3 b - - 0 1").colors.find((value) => value.color === "black")!;
+    expect(blackMirror.supportEdges).toEqual([
+      { supporter: "c7", supported: "d6" },
+      { supporter: "e7", supported: "d6" },
+    ]);
+    expect(blackMirror.chains).toEqual([{ members: ["c7", "d6", "e7"], bases: ["c7", "e7"] }]);
+  });
+
+  it("measures space as pawn-controlled enemy-half squares in three fixed zones", () => {
+    const fen = "4k3/8/8/3P3P/5P2/8/8/4K3 w - - 0 1";
+    const before = spaceReading(fen);
+    const white = before.colors.find((value) => value.color === "white")!;
+    expect(white.zones).toEqual([
+      { zone: "queenside", squares: ["c6"], count: 1 },
+      { zone: "central", squares: ["e5", "e6"], count: 2 },
+      { zone: "kingside", squares: ["g5", "g6"], count: 2 },
+    ]);
+    const afterWhite = spaceReading(after(fen, ["f4f5"])).colors.find((value) => value.color === "white")!;
+    expect(afterWhite.zones.find((value) => value.zone === "central")?.count).toBe(1);
+    expect(afterWhite.zones.find((value) => value.zone === "kingside")?.count).toBe(1);
+    expect(before.conventionId).toBe("space@1");
+
+    const mirror = "4K3/8/8/5p2/3p3p/8/8/4k3 b - - 0 1";
+    const black = spaceReading(mirror).colors.find((value) => value.color === "black")!;
+    expect(black.zones).toEqual([
+      { zone: "queenside", squares: ["c3"], count: 1 },
+      { zone: "central", squares: ["e3", "e4"], count: 2 },
+      { zone: "kingside", squares: ["g3", "g4"], count: 2 },
+    ]);
+    const afterBlack = spaceReading(after(mirror, ["f5f4"])).colors.find((value) => value.color === "black")!;
+    expect(afterBlack.zones.find((value) => value.zone === "central")?.count).toBe(1);
+    expect(afterBlack.zones.find((value) => value.zone === "kingside")?.count).toBe(1);
   });
 
   it("records eviction distance changes without inventing permanence", () => {

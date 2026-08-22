@@ -120,6 +120,53 @@ export interface VacationReading {
   readonly unblocks: readonly { readonly slider: SquareName; readonly color: Color; readonly gains: readonly SquareName[] }[];
 }
 
+export const SPACE_CONVENTION = "space@1" as const;
+
+export interface PawnConnectivityReading {
+  readonly fen: string;
+  readonly colors: readonly PawnConnectivityColorReading[];
+}
+
+export interface PawnConnectivityColorReading {
+  readonly color: Color;
+  readonly islandCount: number;
+  readonly islands: readonly {
+    readonly files: readonly FileName[];
+    readonly squares: readonly SquareName[];
+  }[];
+  readonly connectedPawnPairs: readonly (readonly [SquareName, SquareName])[];
+  readonly supportEdges: readonly {
+    readonly supporter: SquareName;
+    readonly supported: SquareName;
+  }[];
+  readonly chains: readonly {
+    readonly members: readonly SquareName[];
+    readonly bases: readonly SquareName[];
+  }[];
+}
+
+export type SpaceZone = "queenside" | "central" | "kingside";
+
+export interface SpaceReading {
+  readonly fen: string;
+  readonly conventionId: typeof SPACE_CONVENTION;
+  readonly colors: readonly {
+    readonly color: Color;
+    readonly zones: readonly {
+      readonly zone: SpaceZone;
+      readonly squares: readonly SquareName[];
+      readonly count: number;
+    }[];
+    readonly total: number;
+  }[];
+  readonly differentials: readonly {
+    readonly zone: SpaceZone;
+    readonly white: number;
+    readonly black: number;
+    readonly difference: number;
+  }[];
+}
+
 const FILES = Object.freeze(["a", "b", "c", "d", "e", "f", "g", "h"] as const);
 const COLORS = Object.freeze(["white", "black"] as const);
 const REACH_ROLES = Object.freeze(["knight", "bishop", "rook", "queen"] as const);
@@ -131,6 +178,96 @@ function shadeOf(square: Square): "light" | "dark" { return ((square % 8) + rank
 function forward(color: Color): 1 | -1 { return color === "white" ? 1 : -1; }
 function compare(actual: number, comparison: FeatureComparison, expected: number): boolean {
   return comparison === "atLeast" ? actual >= expected : comparison === "atMost" ? actual <= expected : actual === expected;
+}
+
+const SPACE_ZONES: Readonly<Record<SpaceZone, readonly number[]>> = Object.freeze({
+  queenside: Object.freeze([0, 1, 2]),
+  central: Object.freeze([3, 4]),
+  kingside: Object.freeze([5, 6, 7]),
+});
+
+/** Exact pawn-file connectivity. It deliberately does not enter the authorable pack vocabulary. */
+export function pawnConnectivityReading(fen: string): PawnConnectivityReading {
+  const position = positionFromFen(fen);
+  const colors = COLORS.map((color): PawnConnectivityColorReading => {
+    const ownPawns = [...position.board.pieces(color, "pawn")].sort((left, right) => left - right);
+    const byFile = new Map<number, Square[]>();
+    for (const square of ownPawns) byFile.set(square % 8, [...(byFile.get(square % 8) ?? []), square]);
+    const occupiedFiles = [...byFile.keys()].sort((left, right) => left - right);
+    const islands: { files: FileName[]; squares: SquareName[] }[] = [];
+    for (const file of occupiedFiles) {
+      const current = islands.at(-1);
+      if (current === undefined || file !== fileIndex(current.files.at(-1)!) + 1) {
+        islands.push({ files: [FILES[file]!], squares: [...byFile.get(file)!].map(makeSquare).sort() });
+      } else {
+        current.files.push(FILES[file]!);
+        current.squares.push(...[...byFile.get(file)!].map(makeSquare));
+        current.squares.sort();
+      }
+    }
+    const connectedPawnPairs: [SquareName, SquareName][] = [];
+    const supportEdges: { supporter: SquareName; supported: SquareName }[] = [];
+    for (let left = 0; left < ownPawns.length; left += 1) for (let right = left + 1; right < ownPawns.length; right += 1) {
+      const a = ownPawns[left]!, b = ownPawns[right]!;
+      if (Math.abs((a % 8) - (b % 8)) === 1) connectedPawnPairs.push([makeSquare(a), makeSquare(b)]);
+      if (pawnAttacks(color, a).has(b)) supportEdges.push({ supporter: makeSquare(a), supported: makeSquare(b) });
+      if (pawnAttacks(color, b).has(a)) supportEdges.push({ supporter: makeSquare(b), supported: makeSquare(a) });
+    }
+    supportEdges.sort((left, right) => left.supporter.localeCompare(right.supporter) || left.supported.localeCompare(right.supported));
+    const graph = new Map<SquareName, Set<SquareName>>();
+    for (const edge of supportEdges) {
+      (graph.get(edge.supporter) ?? graph.set(edge.supporter, new Set()).get(edge.supporter)!).add(edge.supported);
+      (graph.get(edge.supported) ?? graph.set(edge.supported, new Set()).get(edge.supported)!).add(edge.supporter);
+    }
+    const supported = new Set(supportEdges.map((edge) => edge.supported));
+    const visited = new Set<SquareName>();
+    const chains: { members: SquareName[]; bases: SquareName[] }[] = [];
+    for (const start of [...graph.keys()].sort()) {
+      if (visited.has(start)) continue;
+      const pending = [start], members: SquareName[] = [];
+      while (pending.length > 0) {
+        const square = pending.shift()!;
+        if (visited.has(square)) continue;
+        visited.add(square);
+        members.push(square);
+        pending.push(...(graph.get(square) ?? []));
+      }
+      members.sort();
+      chains.push({ members, bases: members.filter((square) => !supported.has(square)) });
+    }
+    return Object.freeze({
+      color,
+      islandCount: islands.length,
+      islands: Object.freeze(islands.map((island) => Object.freeze({ files: Object.freeze(island.files), squares: Object.freeze(island.squares) }))),
+      connectedPawnPairs: Object.freeze(connectedPawnPairs.map((pair) => Object.freeze(pair))),
+      supportEdges: Object.freeze(supportEdges.map((edge) => Object.freeze(edge))),
+      chains: Object.freeze(chains.map((chain) => Object.freeze({ members: Object.freeze(chain.members), bases: Object.freeze(chain.bases) }))),
+    });
+  });
+  return Object.freeze({ fen, colors: Object.freeze(colors) });
+}
+
+/** space@1: literal pawn-controlled squares in the enemy half, split into fixed file zones. */
+export function spaceReading(fen: string): SpaceReading {
+  const position = positionFromFen(fen);
+  const colors = COLORS.map((color) => {
+    const controlled = new Set<Square>();
+    for (const pawn of position.board.pieces(color, "pawn")) for (const square of pawnAttacks(color, pawn)) {
+      const rank = rankOf(square);
+      if (color === "white" ? rank >= 4 : rank <= 3) controlled.add(square);
+    }
+    const zones = (Object.keys(SPACE_ZONES) as SpaceZone[]).map((zone) => {
+      const squares = [...controlled].filter((square) => SPACE_ZONES[zone].includes(square % 8)).map(makeSquare).sort();
+      return Object.freeze({ zone, squares: Object.freeze(squares), count: squares.length });
+    });
+    return Object.freeze({ color, zones: Object.freeze(zones), total: controlled.size });
+  });
+  const differentials = (Object.keys(SPACE_ZONES) as SpaceZone[]).map((zone) => {
+    const white = colors[0]!.zones.find((value) => value.zone === zone)!.count;
+    const black = colors[1]!.zones.find((value) => value.zone === zone)!.count;
+    return Object.freeze({ zone, white, black, difference: white - black });
+  });
+  return Object.freeze({ fen, conventionId: SPACE_CONVENTION, colors: Object.freeze(colors), differentials: Object.freeze(differentials) });
 }
 
 function knightDistance(from: Square, to: Square): number {

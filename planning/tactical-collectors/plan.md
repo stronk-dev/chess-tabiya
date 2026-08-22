@@ -1,7 +1,7 @@
 # Tactical collectors implementation plan
 
 **RFC:** `rfc/tactical-collectors.md`  
-**State:** implementing 2026-08-22  
+**State:** implementation complete; awaiting local discharge D1 / global D921 before archival (2026-08-22)
 **Scope:** the accepted 30-projection research/inspector-only wave; no content, schema, module,
 preset, workflow or authorable-vocabulary edits.
 
@@ -10,28 +10,23 @@ preset, workflow or authorable-vocabulary edits.
 1. **Checkpoint complete:** build and fixture the legal local-exchange authority; exact reply,
    check, capture and fork-survival primitives landed with manifest bindings.
 2. **Checkpoint complete:** castling rights, current legality and permanent rights-loss cause.
-3. **In progress:** Maia candidate WDL, legal-exchange-backed loose-piece state, ordered
-   ray classification, role-matched development state/event, capture classification,
-   exact mate-in-one, latent discovered geometry, locally trapped pieces and back-rank
-   susceptibility are implemented; add the remaining structural and tactical collectors
-   at the ten normative production sites.
-4. Register all 30 projections, typed operands, event families, eligibility and source adapters.
-5. Generalize identity-preserving tactical joins and avoidance without changing R2 selection.
-6. Run the permanent two-population measurement and record every sign/census, including zeros.
-7. Reconcile docs, close shipped ledger rows, append lifecycle logs and archive only after A1–A18.
+3. **Complete:** the final ten add pawn connectivity/space/rook/promotion readings; immediate
+   trade, mover-relative loose-piece, pawn-island and discovered-execution joins; and the two
+   declared avoidance families.
+4. **Complete:** all 30 projections, typed operands, event families, eligibility and source
+   adapters compile set-equal to Appendix A.
+5. **Complete:** identity-preserving tactical joins and avoidance generalize without changing R2
+   selection policy.
+6. **Complete:** the permanent authored/imported measurement records every sign/census, including
+   honest zeros and capture without a lift claim.
+7. **Complete for implementation:** docs, shipped ledger rows and lifecycle logs reconcile. The RFC
+   stays active until its two Phase-3 learner-module discharges close; lifecycle P5 correctly blocks
+   premature archival.
 
 ## Holds
 
 - D743 runtime opening identity remains open for R8/F7.
 - Learner/module eligibility and the negative-reading UX remain the Phase-3 discharges.
 - Breadth collectors require their separate independent acceptance review.
-- The D829–D835/D931 in-place author amendment is drafted and executable in
-  `tools/d829-wave-a-contract-harness/` (7/7): cited space convention; directed pawn-support graph;
-  undefined rook cutoff deleted; D832 closed by the earlier D922 verdict removal; discovered
-  execution bound to latency + gained ray; immediate trade anchors; mover-relative loose-piece
-  state; total promotion geometry with typed field absence. **Independent buildability review is
-  the remaining hold before these ten projections resume.**
-- The post-review implementation is pre-mapped at
-  `planning/tactical-collectors/final-ten-implementation-map.md`: exact ten absent compiled ids,
-  production homes, join keys, permanent fixtures and focused landing gates. This removes
-  rediscovery but does not bypass the independent-review hold.
+- D829–D835/D931 are closed by the implemented contracts and permanent fixtures. The pre-landing
+  implementation map remains as the trace of the exact ten-id boundary.

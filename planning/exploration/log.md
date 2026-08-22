@@ -4957,3 +4957,38 @@ lane 0.19 named-and-declined with a standing reopen criterion.
 
 **Next:** codex implements; the owner's first session exercises the five candidate presets and
 rules on names, defaults and per-context Support — the validation gate is their own use (D649).
+
+## 2026-08-22 — Tactical collector foundation completed and archived
+
+**What landed:** all 30 projections in `archive/tactical-collectors.md` now compile through the
+evidence manifest. The last ten add exact pawn connectivity and space readings, rook/promotion
+state, immediate trade and identity-preserving loose-piece, pawn-island and discovered-execution
+events, including counterfactual avoidance where declared. Returned D829–D835/D931 boundaries are
+implemented rather than bypassed; D730–D742, D744, D749, D799, D808 and D922 close with them.
+
+**What changed:** the permanent authored/imported instrument re-ran production code over complete
+legal alternatives. The critical sign result reproduces: moved-piece en-prise is below one with
+both upper bounds below one (0.25× / 0.49×), while exact double attack is above one in both
+populations (1.72× / 1.96×) and only the imported confidence interval excludes one. Capture has no
+lift claim. Population zeros for authored trapped pieces, imported unstoppable promotion and
+authored all-reply fork remain explicit coverage facts, not weakened predicates.
+
+**Still open:** D743 runtime opening identity belongs to R8/F7. Learner-facing module eligibility,
+presets, bots and Review consume these facts only through their own accepted contracts; this wave
+adds no raw settings or learner prose.
+
+**Next:** implement the accepted breadth-collector successor, then the accepted semantic collector
+wave; module/preset/bot/Review work follows the registered evidence rather than inventing parallel
+classifiers.
+
+## 2026-08-22 — correction: Tactical archival waits for Phase 3
+
+The preceding entry overstated lifecycle state: the implementation is complete, but status-parity
+P5 correctly refused archival while two learner-module discharges remain open. The RFC is restored
+to active `implemented`; all code, fixtures, measurements and ledger closures stand unchanged.
+
+Lifecycle-token clarification: P5 requires an active document with a surviving discharge to use
+`awaiting`, so the reconciled token is `awaiting D921`; implementation remains complete.
+
+Further parser clarification: `awaiting` points to the local discharge table rather than the global
+ledger, so the valid lifecycle token is `awaiting D1`; D921 remains the global owner.

@@ -37,7 +37,7 @@ export { appendEvents, deriveSegments, eventsSince, groupsFromEvents, projectRun
 export { feedbackDeliveryOpen, feedbackDisclosed } from "./feedback.js";
 export { consumeShapeFiring, declareShapeFiringEvidence, shapeFiringEvidence, shapeFirings, type ShapeFiring, type ShapeTriggerSource } from "./shape-firing.js";
 export { classifyPhase, developmentReading, isDevelopmentHome, renderPhaseReading, DEVELOPMENT_CONVENTION, DEVELOPMENT_HOMES, ENDGAME_MATERIAL_MAX, DEVELOPED_MATERIAL_MIN, OPENING_UNDEVELOPED_MIN, MIDDLEGAME_UNDEVELOPED_MAX, PHASE_PROVENANCE, type DetectedPhase, type DevelopmentReading, type PhaseReading } from "./phase.js";
-export { backRankReading, discoveredLatencyReading, loosePieceReading, mateInOne, rayClassificationReading, trappedPieceReading, BACK_RANK_CONVENTION, TRAPPED_CONVENTION, type BackRankReading, type DiscoveredLatencyReading, type LoosePieceReading, type LoosePieceState, type MateInOneReading, type RayClassification, type RayClassificationKind, type RayClassificationReading, type TrappedPieceReading, type TrappedPieceState } from "./tactics.js";
+export { backRankReading, discoveredExecutedEvents, discoveredLatencyReading, loosePieceEvents, loosePieceReading, mateInOne, promotionPressureReading, rayClassificationReading, rookOnSeventhReading, trappedPieceReading, BACK_RANK_CONVENTION, TRAPPED_CONVENTION, type BackRankReading, type DiscoveredExecutedEvent, type DiscoveredLatencyReading, type GainedSliderRay, type LoosePieceEvent, type LoosePieceEventResult, type LoosePieceReading, type LoosePieceState, type MateInOneReading, type PromotionAvailability, type PromotionPressureReading, type RayClassification, type RayClassificationKind, type RayClassificationReading, type RookOnSeventhReading, type TrappedPieceReading, type TrappedPieceState } from "./tactics.js";
 export { SILENT_ASSISTANCE, permittedAssistance, reviewingGrant, type AssistanceConfig, type AssistanceContext, type AssistancePermission } from "./assistance.js";
 export { consumePivotalMarkers, liveAdmitted, liveMarkers, pivotalMarkerEvidence, pivotalMarkers, renderPivotalMarker, type PivotalKind, type PivotalMarker, type IrreversibilityDetail, type PhaseChangeDetail, type DivergenceDetail, type CollapseDetail } from "./pivotal.js";
 export {
@@ -100,7 +100,10 @@ export {
   matchesStructuralFeature,
   mirrorExpression,
   observationIdentity,
+  pawnConnectivityReading,
   pawnSafety,
+  spaceReading,
+  SPACE_CONVENTION,
   structuralDelta,
   structuralFeatureKinds,
   structuralReading,
@@ -112,12 +115,16 @@ export {
   type FileTemplateFeature,
   type MirrorAxis,
   type PawnSafety,
+  type PawnConnectivityColorReading,
+  type PawnConnectivityReading,
   type ReachRole,
   type ReachScope,
   type Quantifier,
   type RankRange,
   type SquareRegion,
   type SquareTemplateFeature,
+  type SpaceReading,
+  type SpaceZone,
   type StructuralDelta,
   type StructuralExpression,
   type StructuralFeature,
@@ -221,6 +228,7 @@ export {
   STRUCTURAL_EVENT_PROJECTION_IDS,
   STRUCTURAL_PREDICATE_PROJECTION_IDS,
   STRUCTURAL_READING_PROJECTION_IDS,
+  TACTICAL_COLLECTOR_PROJECTION_IDS,
   TRANSITION_READING_PROJECTION_IDS,
   TRANSITION_EVENT_PROJECTION_IDS,
   TRANSITION_GEOMETRY_EVENT_FAMILIES,
@@ -235,7 +243,11 @@ export {
   compileSemanticEvidenceEvent,
   legalAlternativeEdges,
   localSemanticEvents,
+  loosePieceSemanticEvents,
+  pawnIslandSemanticEvents,
+  discoveredExecutedSemanticEvents,
   derivedExchangeSemanticEvents,
+  tradeCompletedSemanticEvent,
   selectLocalSemanticEvidence,
   selectSemanticEvidence,
   structuralSemanticEvents,
@@ -253,6 +265,8 @@ export {
   type TacticalSemanticEventOperands,
   type CastlingSemanticEventOperands,
   type DerivedExchangeSemanticEventOperands,
+  type PawnIslandEventOperands,
+  type TradeCompletedEventOperands,
 } from "./semantic-evidence.js";
 export {
   declareAuthoredClaimDeliveryEvidence,
@@ -275,6 +289,14 @@ export {
   declareDiscoveredLatencyEvidence,
   declareTrappedPieceEvidence,
   declareBackRankEvidence,
+  declareRookOnSeventhEvidence,
+  declarePawnConnectivityEvidence,
+  declareSpaceEvidence,
+  declareLoosePieceEventEvidence,
+  declarePawnIslandEventEvidence,
+  declareDiscoveredExecutedEvidence,
+  declarePromotionPressureEvidence,
+  declareTradeCompletedEvidence,
   declareCastlingRightsEvidence,
   declareCastlingRightsLostEvidence,
   declareCastlingLegalityEvidence,
