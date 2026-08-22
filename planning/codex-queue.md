@@ -64,6 +64,28 @@ with the review's finds carried:
 end of that chain. `semantic-collectors` (Wave-C) is drafting and will slot between the
 collector waves and the module amendment (your order items 2 and 5).
 
+## 0-GRADES-ACCEPTED. `move-quality-grades` is accepted — implement after `learner-modules`
+
+Accepted 2026-08-22 after a cross-review that recomputed every constant against fetched sources;
+corrections are in the RFC body. **Read §2's constants tables before implementing — three things
+changed from any prior conversation about this RFC:**
+
+- **The report ladder is 5/10/15 Win%-points, not 10/20/30.** The taxonomy dossier's gloss was
+  wrong by 2× (`Advice.scala` thresholds operate on raw winningChances ∈ [−1,+1]); the dossier
+  carries a dated erratum ([[D939]]). The practice ladder 2.5/6/14 was verified correct. All
+  fixtures re-derived to four decimals — trust the RFC file, not the dossier's §2b table.
+- **The mate arm is the complete fixed-cp three-tier table**, not floor/boundary rules. It
+  includes the countermate row (mate→countermate = Blunder, fixture F-MATE-LOST-M). The tiers
+  are cp constants, so the mate arm is context-independent by construction.
+- **"Zero `voice.ts` changes" is now "one word":** [[D940]] — add `"inaccuracy"` to
+  `BANNED_JUDGEMENTS` (`voice.ts:93-97`; `\baccurate\b` cannot match inside "inaccurate"), with
+  its own fixture arm. **The flip of D940 rides in your grades implementing commit.**
+
+Also declared: grades **clamp the logistic input** where Lichess feeds it unclamped (F-CLAMP-2
+pins the disagreement as ours-by-choice). Sequencing unchanged: grades compile the two ◇ rows
+for `postcommit_nudge`/`review_map` and sit **after `learner-modules`** in your order — nothing
+else moves.
+
 ## 0-PRIORITY-D566. The `pawnSafety` repair is owner-promoted — fix it properly
 
 Owner ruling 2026-08-22 ([[D906]](2)): *"just fix the foundation and then keep it in."*
