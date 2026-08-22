@@ -560,7 +560,8 @@ closed enumeration.
   (`inspector.position_structure`, `inspector.move_transition`, `inspector.human_split`,
   `inspector.corpus`) become this module's sub-surfaces; their bindings stay. New rows cover
   ids with no bound inspector home yet.
-- **Accepts (34 new rows):** the Wave-A inspector readings —
+- **Accepts (34 new rows; +6 by the 2026-08-22 in-place Appendix-B amendment below = 40):**
+  the Wave-A inspector readings —
   `rules.tactic.reading.{loose_piece, ray_classification, rook_on_seventh, trapped_piece,
   back_rank, discovered_latency}@1`, `rules.tactic.consequence.{threat, mate_in_one,
   reply_breadth}@1`, `rules.structural.reading.{space, pawn_connectivity}@1`,
@@ -577,6 +578,15 @@ closed enumeration.
 - The class-3 operand losses close here as renderer work: `wdl`/`pv`/tablebase detail render
   their **values with attribution**, not "wdl evidence recorded." — the operands are already
   in the payloads (gap matrix §6.4).
+- **Appendix-B amendment 2026-08-22 (in place, per RFC-0000 rule 3 — accepted, not
+  implemented; play-composition's Discharges D4 and [[D924]]):** the play-composition
+  cross-review found four leak destinations routing families this contract could not carry.
+  Six rows added: `rules.phase.reading@1` (L1's classifier sentence home),
+  `rules.pivotal.marker@1` (L10), the `pack.authored.classifier@1` token (L12), and
+  `derived.compare.{structure_delta, eval_delta}@1` plus `derived.story.rank@1` (L13/L15's
+  inspector halves — the compare/story derived projections' attributed panels). Counts:
+  inspector 34 → **40**; totals 175/173 → **181/179**. The [[D523]] lesson at the contract
+  seam: a leak's destination must be checked for *permission*, not just existence.
 - Cap 20 facts / 400 words / 20 marks / 8 arrows. Empty: `stated_absence` per family. All
   rungs, everything attributed.
 

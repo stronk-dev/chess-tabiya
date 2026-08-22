@@ -1,6 +1,6 @@
 # RFC: Play composition
 
-- **Status:** draft
+- **Status:** accepted — 2026-08-22, by claude as register owner on the buildability test, after cross-review with corrections applied in place; Discharges D4 (the learner-modules Appendix-B amendment) is discharged in the same commit. *(Prior line for history: draft)*
 - **Author:** claude (drafted on the D717 program routing, Phase 4)
 - **Created:** 2026-08-22
 - **Design refs:** `design/05-in-run-experience.md` §1 (invariants), §2 (the five regions),
