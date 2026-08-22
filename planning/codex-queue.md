@@ -15,6 +15,26 @@ this file as a lesson and nothing reads it.
 
 ---
 
+## 0-HOLD-LIFTED. The Tactical amendment passed independent review — the 42-projection chain is executable
+
+Reviewed 2026-08-22 at both amendment commits and HEAD via a throwaway worktree; all three
+instruments green at both points. **Every row D829–D835 + D931 is repaired-as-specified** —
+nothing fixed, nothing drifted: the amendment diff touches exactly the seven named boundaries,
+and every untouched convention was verified byte-identical. The 14 tests are real contract
+fixtures — **each has a flip-a-constant result naming the pre-amendment defect it catches**
+(the duo-with-no-edges pair kills the adjacency misreading; the delayed-recapture negative
+kills the old window; both checking-move tests kill the clone→false collapse). D931's
+invariant — **unavailable is never refuted** — is enforced at the type and in fixtures across
+all three surfaces. The final-ten map is faithful: ten ids byte-identical to Appendix A, no
+operand dropped, no census downgrade; its one extra fixture is added coverage, not
+re-specification.
+
+**Proceed: Tactical final ten → Breadth 18 → Semantic 14 → modules → bots → Review.** The
+landing conditions are the ones already in the RFC/map, restated: the boundary harness
+graduates to permanent runtime tests (+ the terminal-child and `input_abstained` fixtures),
+A1–A18 with the two-population measurement and honest zeros, and A16's ledger-and-log closeout
+naming the rows in the landing commit.
+
 ## 0-PHASE4-ACCEPTED. `play-composition` is accepted — the screen rebuild is implementable
 
 Accepted 2026-08-22 after cross-review; corrections in place. Your implementation order for it,
