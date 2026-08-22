@@ -336,6 +336,12 @@ closed enumeration.
   learner's explicit selection: 15 structural readings (the 18 `STRUCTURAL_FEATURE_KINDS`
   minus retired `pawn_count`; minus `pawn_safe_square` — R1/D566 made it ineligible for its
   advertised meaning; and minus `outpost`, removed in cross-review because its matcher consumes
+  **RULED 2026-08-22 (owner): *"just fix the foundation and then keep it in"* — `outpost`
+  RETURNS to this table the moment the D566 `pawnSafety` repair lands**, which that ruling
+  simultaneously promotes to a priority defect fix (queued for the implementer). The
+  exclusion is a gate on the fix, not a scope decision — and the fork that offered only
+  keep-out vs ship-broken, omitting *fix the foundation*, is re-ledgered as the
+  every-fork-includes-removing-the-constraint rule firing again (D906).
   the same defective `pawnSafety` result (`structure.ts:352`; the live manifest check names the
   dependency and D632 records the overclaim's reach) — it stays inspector material until that
   repair lands rather than entering requested sight under a broken convention);
@@ -799,9 +805,17 @@ RFCs from ever archiving around it.
 
 ## Open questions
 
-1. **Budget numbers are candidate bounds, not validated defaults** (R2-compatible; R3's
-   participant/owner-use arm is the validation instrument). The owner may adjust any budget
-   before `accepted`; at acceptance they close.
+1. ~~Budget numbers are candidate bounds~~ **RULED 2026-08-22 (owner): *"why this
+   arbitrary? we need better reducers, not arbitrary limits."* Budgets are DEMOTED from
+   mechanism to backstop.** The reduction mechanism is the selection policy itself — typed
+   admission, critical-event ordering, the versioned lift table, and (new obligation, D906)
+   **semantic reducers**: same-fact deduplication across projections, subsumption (a fact
+   entailed by an already-selected fact is dropped), and per-position novelty against the
+   learner's recent packets. The numeric caps stay only as **overflow backstops with an
+   instrument obligation**: a module whose reducer output EXCEEDS its backstop logs a
+   reduction-quality event rather than silently truncating, so cap pressure is measured and
+   the reducers improve where the pressure is — never tuned by feel. Backstop values are
+   claude/implementer-adjustable without ceremony; the *mechanism* question is closed.
 2. **Threat radar's pre-commit arm is the one place this draft exceeds a literal ruling**
    (sharpened in cross-review — the P3(c) pattern, named rather than presupposed): O4
    pre-commit-authorizes exactly two things — requested exact sight and Support-preset
@@ -879,7 +893,7 @@ this document's to rewrite).
   commit/date anchors, changelog-only changes); selection ties totalized for reading-shaped
   candidates (operand-serialization final key); blunder-prevention forced-move and
   branching-factor-two behavior stated; OQ2 sharpened — the pre-commit threat arm exceeds the
-  literal O4 ruling and defaults to post-commit-only if unruled at acceptance; review-map
+  literal O4 ruling and RULED 2026-08-22 (owner): **pre-commit, inside the Support preset only, on-request, never proactive** — the draft's arm as proposed, now carried by an explicit O4 extension recorded at D906 rather than presupposed; review-map
   moment-count scope and PV-ceiling slack named; D900's arrow-consumer count corrected to the
   seven nonzero-`maxArrows` modules; phase-reading "abstention" claim aligned with the shipped
   no-abstention declaration; preset-inert honesty note made concrete (nothing new renders at

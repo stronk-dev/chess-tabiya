@@ -15,6 +15,16 @@ this file as a lesson and nothing reads it.
 
 ---
 
+## 0-PRIORITY-D566. The `pawnSafety` repair is owner-promoted — fix it properly
+
+Owner ruling 2026-08-22 ([[D906]](2)): *"just fix the foundation and then keep it in."*
+[[D566]]'s `pawnSafetyOnPosition` defect now gates a learner-facing sight row — `outpost`
+returns to `sight_on_request`'s table the moment the repair lands, and [[D632]]'s indirect
+reach through authored shapes closes with it. Fix the predicate at the mechanism (the
+pushAttackers/captureAttackers computation), add the counterexample fixtures from D566's own
+row, re-run the lift measurement for `pawn_safe_square` and `outpost` post-fix, and flip
+D566/D632 in the implementing commit naming them.
+
 ## 0-2D-ACCEPTED. `breadth-collectors` is accepted — implement after 2c lands
 
 Accepted 2026-08-22 on the buildability test after the independent review the plan reserved.
