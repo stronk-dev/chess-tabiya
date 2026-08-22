@@ -287,3 +287,13 @@ their corresponding research exit criteria pass.
 
 Campaign, broad content production, federation and new all-in-one navigation stay off the executable
 queue until their dependencies above are resolved.
+
+## F3 derivation routing 2026-08-23 (`planning/platform-alignment/f3-derivation.md`)
+
+- **[[D1002]]** — `PACK_INVALID` returns 500 for a client error (`rest.ts:661`); takeable by codex
+  ahead of the F3 RFC.
+- **[[D1003]]** — Gate F clause 6's population is undefined ("92 documents" is a property filter
+  over 2 of 6 content roots; the non-sidecar corpus is 308). **F3 must define the population**
+  before clause 6 is tickable.
+- **[[D1004]]** — 56 versioned ids in three spellings, none ever bumped; F3's acceptance test is
+  the D566/D632 drift that changed meaning with no version movement at all.
