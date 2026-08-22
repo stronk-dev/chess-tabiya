@@ -43,6 +43,9 @@ Archive homes are cited as `arch/NN §…` = `archive/brief-v2/NN_….md`.
 
 ## Breadth-first product surfaces (owner-ratified 2026-08-11)
 
+| D969 🐞 | **Bot-policy Stage A requires a fixed-bound Stockfish loss for every Maia candidate, but its accepted contract names no authorized probe.** The shipped capability table refuses `MultiPV > 1 outside enumerate` and leaves `searchmoves` unmeasured, while the RFC's guard needs one of those mechanisms (and does not define cp-vs-mate loss normalization). Implementing either silently would contradict the capability contract and can mis-mask forced-mate candidates. Amend F8 with the exact request shape, score-frame/perspective rule, typed mate handling, completeness/budget behavior, and an able-to-fail forced-mate fixture; catalog, sampler, profile seam, and non-guarded profiles may proceed independently. | 🐞 open — blocks `guard.severe_error@1`, Guarded human/Pawn-heavy production registration, and F8 A6/A8; RFC amendment/re-review required |
+| D970 🐞 | **Bot-policy was accepted while its concrete Human-baseline roster is still an open question.** A profile owns its Maia band and is mutually exclusive with `targetElo`, so choosing exposed bands changes the literal profile ids/digests and the learner-visible ladder; §Open question 2 says this was to be settled at acceptance but records only a proposal. Compile the catalog and seam now, but register no production profile until the accepted RFC pins the exact band set (or a measured rule that derives it). | 🐞 open — blocks shipped profile declarations, `/capabilities` roster and valid production-profile A1 fixture; owner/RFC amendment required |
+
 These are one product, not optional bolt-ons behind a one-pack drill screen.
 Each must reach a minimal real end-to-end workflow before content depth and
 branch-scoring polish become the main work. Canonical matrix:

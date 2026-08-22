@@ -1,0 +1,27 @@
+# Bot-policy foundation
+
+Tabiya's bot policy is a compiled, versioned composition over a human-move model. The
+compiler lives in `apps/server/src/bot-policy-catalog.ts`. It keeps move policy separate
+from presentation: a name, avatar, or bio cannot change a move.
+
+The compiler currently enforces these boundaries:
+
+- one human-policy model, sampler, guard, repertoire, memory policy, and presentation
+  authority per profile;
+- no learner history, rating, style, or habit input in opponent policy;
+- no artificial delay, active memory instance, undisclosed engine guard, or unmeasured
+  controlled trait;
+- complete-vector transforms must declare the recorded base-model degraded path;
+- sampler temperature is greater than zero and top-p is in `(0, 1]`;
+- presentation copy cannot assert the v1 vocabulary of unmeasured playing styles.
+
+The shipped arithmetic reconstructs Maia's played distribution from raw legal policy
+mass, applies the measured temperature and top-p rule with a deterministic tie-break,
+supports declared trait multipliers, and draws from the final distribution using a
+caller-supplied deterministic unit value.
+
+No production profile is registered yet. This is intentional and machine-visible as an
+empty `BOT_POLICY_PROFILES`: D970 must pin the concrete band/profile roster, while D969
+must pin the Stockfish candidate-pricing and typed mate contract before guarded profiles
+can compile. Until those contracts land, the existing `human_common` behavior is
+unchanged and no UI may advertise the new roster.

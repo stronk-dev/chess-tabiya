@@ -5136,3 +5136,25 @@ positions. The owner's rulings D945/D946 are absorbed and accepted; the rated bo
 
 **Next:** codex implements in queue order; claude's next work is review-on-demand, the
 assistance-controls parent disposition, and the owner-fork backlog (B5 casting, army-prestige).
+
+## 2026-08-22 — bot-policy compiler and sampler foundation landed without guessing the roster
+
+**What landed:** the F8 catalog compiler and deterministic Maia-distribution primitives. The
+compiler rejects duplicate authorities, incomplete-vector transforms without a recorded degraded
+path, hidden guards, unmeasured traits, fake delays, memory instances, learner-derived inputs and
+unmeasured persona claims. Focused fixtures cover every refusal plus deterministic canonical
+digests, top-p top-1 forcing, equal-mass ordering, trait reweighting and the final draw.
+
+**What changed:** two accepted-RFC gaps were made explicit before production policy was invented.
+D969 records that the severe-error guard has no authorized Stockfish candidate-pricing request or
+typed mate normalization while both plausible shipped mechanisms are currently refused/unmeasured.
+D970 records that the accepted RFC left its concrete Maia band roster open even though band is part
+of profile identity and mutually exclusive with `targetElo`. The production registry therefore
+remains honestly empty; existing `human_common` behavior is byte-untouched.
+
+**Blocked:** guarded/pawn-heavy profiles on D969; every concrete profile and request-seam positive
+fixture on D970; the run-schema migration remains behind learner-rating and longitudinal-store as
+registered.
+
+**Next:** amend/re-review F8 on those exact contracts, then wire the compiled roster through the
+run and selector seams. Independent accepted dependencies continue meanwhile.
