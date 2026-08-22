@@ -4533,3 +4533,14 @@ owns the separately falsified consequence semantics, opening/theory adapters and
 operands in `planning/evidence-foundation-ux/wave-c-foundation-closure.md`. F5 may draft its module
 architecture after A/B, but full Support/Review acceptance cannot claim semantic breadth while the
 admitted Wave-C set is absent. Content remains held behind Gate F and capability negotiation.
+
+## 2026-08-22 — Wave-C Stage 0/1 finds exact basic tactic sequences and no authored witnesses
+
+The external arm measured 250,587 complete Lichess puzzle records plus one rejected truncated tail.
+Defender/line themes have median 3–5-ply and p90 5–7-ply solution horizons; quiet/promotion reach a
+9-ply p90; several families co-tag 24–30%; overload has zero records because the current upstream
+tagger returns false. The exact observed-line arm then passes canonical/hard-negative fixtures and
+finds, over 6,775 imported triples, 26 defender removals, 13 relocations, 5 overload exploitations,
+23 clearances and 3 interferences; 6,667 quads contain 7 exact check-zwischenzugs. All six families
+have zero authored-path witnesses. These numbers prove computability and fixture debt, not force,
+intent or value. The counterfactual/live-support arm remains next.
