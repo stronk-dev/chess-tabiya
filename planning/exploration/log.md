@@ -5394,3 +5394,14 @@ every multi-reference row would encode a false invariant.
 
 **Next:** keep the accepted collector/runtime queue moving while Claude reviews the Wave-C contract;
 take direct evidence-integrity defects that do not depend on the held promotion-race authorities.
+
+## 2026-08-22 — principle-entry schema guard closes D504
+
+**What landed:** the missing principle-entry schema test now independently binds the exported
+`0.1` version to the JSON Schema `$id`, walks the full schema for open object definitions,
+validates every registered principle, and pins the shared canonical digest against key-order and
+version changes. This closes the schema-test half that shared-resource-registers deliberately left
+outside its process scope.
+
+**Next:** continue the accepted bot-policy substrate without registering the D969/D970-blocked
+guarded roster or inventing its engine probe/band set.
