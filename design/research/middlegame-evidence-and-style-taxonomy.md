@@ -292,6 +292,21 @@ This also keeps two apparently similar examples separate: attacking a minor alre
 square is selective at 3.63×/3.18×, while changing a future empty destination's local safety is
 background. The next semantic step is multi-edge/counterfactual evidence, not a stronger adjective.
 
+### 4.4 Three-edge identity retention
+
+D772 follows defender and target identities through a move, reply and next move. `[V]`
+(`identity-retaining-three-edge-consequences.md`; `tools/d772-three-edge-harness/output.md`)
+
+The sealed imported paths contain 29/6,775 windows where a defender edge disappears first and the
+same target is positively captured third; 26 literally capture that defender first. A separate 13
+newly expose the defender to a positive local capture, observe it relocate and lose the edge, then
+capture the retained target. The authored corpus contains 0/622 examples.
+
+These exact sequences are suitable Review/drill/module operands. They do not establish that the
+reply was forced or that the first move was removal, deflection or overload. That requires reply
+enumeration and distinct counterfactuals. The zero authored count also means permanent work needs
+canonical fixtures before pack authors can safely adopt the vocabulary.
+
 ---
 
 ## 5. From evidence to player habits—not invented personalities

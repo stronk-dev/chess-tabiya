@@ -18,7 +18,15 @@ const PROMOTIONS: readonly Role[] = ["queen", "rook", "bishop", "knight"];
 export interface ResearchRow {
   readonly id: string;
   readonly parentFen: string;
+  readonly fen: string;
   readonly uci: string;
+}
+
+export type ResearchTriple = readonly [ResearchRow, ResearchRow, ResearchRow];
+
+export interface ResearchPopulation {
+  readonly sampled: readonly ResearchRow[];
+  readonly paths: readonly (readonly ResearchRow[])[];
 }
 
 export interface ResearchOutcome {
@@ -67,10 +75,11 @@ function band(rating: number): "1000-1399" | "1400-1799" | "1800-2199" | undefin
   return undefined;
 }
 
-export function importedRows(): readonly ResearchRow[] {
+export function importedPopulation(): ResearchPopulation {
   const blocks = readFileSync(IMPORTED, "utf8").split(/\n(?=\[Event )/u);
   const accepted = new Map<string, number>();
   const rows: ResearchRow[] = [];
+  const paths: ResearchRow[][] = [];
   const full = (): boolean => ["bullet", "blitz", "rapid"].every((time) =>
     ["1000-1399", "1400-1799", "1800-2199"].every((elo) => (accepted.get(`${time}/${elo}`) ?? 0) >= 12));
   for (const block of blocks) {
@@ -87,6 +96,7 @@ export function importedRows(): readonly ResearchRow[] {
     if ((accepted.get(cell) ?? 0) >= 12) continue;
     const pos: Chess = startingPosition(game.headers).unwrap();
     const candidates: ResearchRow[] = [];
+    const path: ResearchRow[] = [];
     let ply = 0;
     let legal = true;
     for (const data of game.moves.mainline()) {
@@ -96,16 +106,55 @@ export function importedRows(): readonly ResearchRow[] {
       const parentFen = makeFen(pos.toSetup());
       const uci = makeUci(move);
       pos.play(move);
-      if (TARGET_PLIES.has(ply)) candidates.push({ id: `${game.headers.get("Site") ?? cell}#${ply}`, parentFen, uci });
+      const row = { id: `${game.headers.get("Site") ?? cell}#${ply}`, parentFen, fen: makeFen(pos.toSetup()), uci };
+      path.push(row);
+      if (TARGET_PLIES.has(ply)) candidates.push(row);
     }
     if (!legal || candidates.length === 0) continue;
     accepted.set(cell, (accepted.get(cell) ?? 0) + 1);
     rows.push(...candidates);
+    paths.push(path);
   }
   if (!full()) throw new Error(`imported fixture did not fill every stratum: ${JSON.stringify(Object.fromEntries(accepted))}`);
-  return rows;
+  return { sampled: rows, paths };
+}
+
+export function importedRows(): readonly ResearchRow[] {
+  return importedPopulation().sampled;
 }
 
 export function authoredRows(): readonly ResearchRow[] {
-  return transitions().map((row) => ({ id: `${row.pack}/${row.nodeId}`, parentFen: row.parentFen, uci: row.uci }));
+  return transitions().map((row) => ({ id: `${row.pack}/${row.nodeId}`, parentFen: row.parentFen, fen: row.fen, uci: row.uci }));
+}
+
+export function pathTriples(paths: readonly (readonly ResearchRow[])[]): readonly ResearchTriple[] {
+  const result: ResearchTriple[] = [];
+  for (const path of paths) for (let index = 0; index + 2 < path.length; index += 1) {
+    result.push([path[index]!, path[index + 1]!, path[index + 2]!]);
+  }
+  return result;
+}
+
+export function authoredTriples(): readonly ResearchTriple[] {
+  const source = transitions();
+  const byParent = new Map<string, typeof source>();
+  for (const row of source) {
+    const key = `${row.pack}|${row.ply}|${row.parentFen}`;
+    const found = byParent.get(key) ?? [];
+    found.push(row);
+    byParent.set(key, found);
+  }
+  const result: ResearchTriple[] = [];
+  for (const first of source) {
+    for (const second of byParent.get(`${first.pack}|${first.ply + 1}|${first.fen}`) ?? []) {
+      for (const third of byParent.get(`${first.pack}|${second.ply + 1}|${second.fen}`) ?? []) {
+        result.push([
+          { id: `${first.pack}/${first.nodeId}`, parentFen: first.parentFen, fen: first.fen, uci: first.uci },
+          { id: `${second.pack}/${second.nodeId}`, parentFen: second.parentFen, fen: second.fen, uci: second.uci },
+          { id: `${third.pack}/${third.nodeId}`, parentFen: third.parentFen, fen: third.fen, uci: third.uci },
+        ]);
+      }
+    }
+  }
+  return result;
 }

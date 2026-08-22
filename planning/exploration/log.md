@@ -4292,3 +4292,25 @@ square evidence for hover/touch, theory joins, bot features and opportunity-norm
 a default hint and never “prevented,” intent, force or move quality. Occupied-minor harassment
 remains the separate 3.63×/3.18× event. D771 is answered; D772 retains the multi-edge consequence
 question. Three focused tests pass; no production or authored content changed.
+
+## 2026-08-22 — three-edge identity works; named tactical causality does not come free
+
+D772 followed exact defender and target identities through move, reply and next move. In 6,775
+sealed imported three-ply windows, 29 lose a defender edge first and positively capture the same
+retained target third; 26 of those literally capture the exact defender first. Another 13 newly
+expose the exact defender to a positive local capture, observe it relocate and lose its former edge,
+then positively capture the same target. Four fixtures reject target replacement and locally losing
+final captures as well as pinning both positive forms.
+
+The literal sequence vocabulary is therefore feasible and grounded. “Removal,” “deflection,”
+“overload,” “forced,” intent and whole-position value are not: observed order does not establish
+causality or reply coverage, and local exchange is not evaluation. The intended learner surface is
+one compact three-move Review/drill module over retained operands, never three raw strings and never
+an LLM-supplied adjective.
+
+The authored corpus contains 0/622 examples. D773 records that permanent sequence work needs
+canonical positive/disagreement fixtures before pack adoption; no pack was relabelled. The shared
+research population projection now supplies sampled decisions and full paths without a fourth
+independent parser. D772's four focused tests and the refactored D771 three-test suite pass; no
+production or authored content changed. Phase 2b remains open for pawn lever/passer conversion,
+decomposed king state, broader individual mobility and bounded reply/search semantics.
