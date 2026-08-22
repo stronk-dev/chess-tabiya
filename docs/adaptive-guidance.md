@@ -58,14 +58,20 @@ shape is currently:
 }
 ```
 
-New contexts start from `SILENT_ASSISTANCE`; its rules-tier `boardLighting: "legal"` is the
-single named exception to literal off. Preferences live in `localStorage`; they are not events,
+Five contexts start from `SILENT_ASSISTANCE`; its rules-tier `boardLighting: "legal"` is the
+single named exception to literal off. The `immediate_guard` on-ramp differs only by starting
+named-pattern guidance live. A stored preference remains authoritative as a whole, so an explicit
+on-ramp `guided: "off"` is never overwritten by that fallback. Preferences live in `localStorage`; they are not events,
 run fields, or server-side learner state. A profile selects what the learner asked for, never
 what the viewer may receive. The shared `permittedAssistance` function separately projects that
 permission ceiling and guards the server-owned human-split and corpus seams. A human split is
 unavailable while a run's feedback-delivery window is closed and to live participants or
 spectators. Markers and named-pattern guidance are client projections of data the viewer already
 holds, so pretending to withhold them server-side would be theatre.
+
+`guided` owns the named-shape timeline channel and its attributed `ShapePanel`; `markers` owns the
+separate pivotal-moment channel. The two controls do not depend on each other. When guidance is
+live but no shape matches, the learner-opened structure inspector reports that honest absence.
 
 ## Pivotal markers
 

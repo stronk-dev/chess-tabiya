@@ -1,7 +1,7 @@
 import { readFileSync } from "node:fs";
 import { describe, expect, it } from "vitest";
 import { SILENT_ASSISTANCE } from "@chess-tabiya/runtime";
-import { ASSISTANCE_PROFILES, assistanceKey, assistanceProfile, loadAssistance, saveAssistance } from "./assistance-preference.js";
+import { ASSISTANCE_PROFILES, PROFILE_DEFAULTS, assistanceKey, assistanceProfile, loadAssistance, saveAssistance } from "./assistance-preference.js";
 
 describe("assistance preference", () => {
   it("defaults silently and keeps pack and position surfaces separate", () => {
@@ -55,16 +55,15 @@ describe("assistance preference", () => {
     expect(values.get(assistanceKey("position"))).toBe(JSON.stringify(position));
   });
 
-  it("keeps fresh profiles evidence-silent with legal board mechanics", () => {
+  it("defaults only on-ramp guidance live and preserves an explicit stored off", () => {
     const maximum = { version: 4, markers: "live", guided: "live", humanSplit: "on_request", corpus: "on_request", voice: "persona", spoken: "provider", boardLighting: "evidence", arrows: "evidence", ambient: "on" } as const;
-    for (const profile of ["match", "stream", "onramp"] as const) {
+    for (const profile of ["pack", "position", "imported", "match", "stream"] as const) {
       expect(loadAssistance(profile, { getItem: () => null, setItem() {} })).toEqual(SILENT_ASSISTANCE);
-      const storedOff = { ...maximum, markers: "off" as const, guided: "off" as const, humanSplit: "off" as const, corpus: "off" as const, voice: "authored" as const, spoken: "off" as const, boardLighting: "off" as const, arrows: "off" as const, ambient: "off" as const };
-      const resolved = loadAssistance(profile, { getItem: () => null, setItem() {} });
-      const changed = Object.keys(resolved).filter((key) => resolved[key as keyof typeof resolved] !== storedOff[key as keyof typeof storedOff]);
-      expect(changed).toEqual(["boardLighting"]);
-      expect(resolved.boardLighting).toBe("legal");
     }
+    expect(PROFILE_DEFAULTS.onramp).toEqual({ ...SILENT_ASSISTANCE, guided: "live" });
+    const storedOff = { ...maximum, markers: "off" as const, guided: "off" as const, humanSplit: "off" as const, corpus: "off" as const, voice: "authored" as const, spoken: "off" as const, boardLighting: "legal" as const, arrows: "off" as const, ambient: "off" as const };
+    expect(loadAssistance("onramp", { getItem: () => JSON.stringify(storedOff), setItem() {} })).toEqual(storedOff);
+    expect(loadAssistance("onramp", { getItem: () => "malformed", setItem() {} })).toEqual(PROFILE_DEFAULTS.onramp);
   });
 
   it("renders settings from the same exhaustive profile list", () => {
@@ -78,5 +77,13 @@ describe("assistance preference", () => {
     const source = readFileSync(new URL("./HonestControl.svelte", import.meta.url), "utf8");
     expect(source).toContain("display: block");
     expect(source).not.toContain("clip: rect(0, 0, 0, 0)");
+  });
+
+  it("keeps the named-plan explanation in the shape panel only", () => {
+    const sentence = "Named plans for this structure — general to the kind of position, not advice for this one.";
+    const panel = readFileSync(new URL("./ShapePanel.svelte", import.meta.url), "utf8");
+    const screen = readFileSync(new URL("./DrillScreen.svelte", import.meta.url), "utf8");
+    expect(panel.split(sentence)).toHaveLength(2);
+    expect(screen).not.toContain(sentence);
   });
 });

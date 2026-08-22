@@ -317,6 +317,16 @@ export class DrillSessionController {
     }
   }
 
+  async reveal(): Promise<void> {
+    this.#patch({ busy: true, error: undefined });
+    try {
+      await this.#requiredStore().reveal();
+      this.#patch({ busy: false });
+    } catch (error) {
+      this.#fail(error);
+    }
+  }
+
   async claimLease(): Promise<void> {
     const runId = this.#requiredStore().snapshot.run.id;
     if (this.#api.claimLease === undefined) {

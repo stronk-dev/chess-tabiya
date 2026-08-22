@@ -127,6 +127,12 @@ disclosed. Until disclosure:
 - `/evidence` withholds staged results, while attempts to apply them return the
   typed `FEEDBACK_WITHHELD` error.
 
+The run's Support region exposes **Open evidence for this position** only for a writable
+`attempt_end` run. Opening it records `feedback.revealed`; while open the control states that the
+window closes on the next committed move. Read-only viewers and other feedback policies do not see
+the control. A live-match refusal remains server-authoritative and reaches the existing visible
+alert; the client does not guess whether the match is paused.
+
 `/authored-feedback` returns an honest empty page for position runs. An absent
 or stale registry entry never opens any engine-evidence surface.
 

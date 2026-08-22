@@ -70,6 +70,7 @@
     seatedInContest?: boolean | undefined;
     reviewing?: boolean | undefined;
     onMove: (uci: string) => void | Promise<void>;
+    onReveal?: (() => void | Promise<void>) | undefined;
     onRewind: (target: RewindTarget) => void | Promise<void>;
     onFork: (label?: string, intent?: string) => void | Promise<void>;
     onSwitchBranch: (leafNodeId: string) => void | Promise<void>;
@@ -116,6 +117,7 @@
     seatedInContest = false,
     reviewing = false,
     onMove,
+    onReveal,
     onRewind,
     onFork,
     onSwitchBranch,
@@ -269,7 +271,7 @@
   let entries = $derived(timelineEntries(run, pack));
   let path = $derived(historyFrom(run, run.activeCursor.nodeId));
   let firings = $derived(shapeFiringEvidence(shapeFirings(shapes, path)));
-  let shapeMarkers = $derived(firings.map((firing) => {
+  let shapeMarkers = $derived((assistance.guided === "live" ? firings : []).map((firing) => {
     const entry = shapes.find((candidate) => candidate.id === firing.entryId)!;
     return { nodeId: firing.firstNodeId, entryId: entry.id, label: entry.name, channel: entry.channel };
   }));
@@ -375,12 +377,6 @@
   let pivotalRows = $derived(projectedPivotal.map((marker) => ({ nodeId: marker.nodeId, label: marker.kind.replaceAll("_", " ") })));
   let openPivotal = $derived(openPivotalNodeId === undefined ? [] : projectedPivotal.filter((marker) => marker.nodeId === openPivotalNodeId));
   let openPivotalNode = $derived(openPivotalNodeId === undefined ? undefined : run.nodes.find((node) => node.id === openPivotalNodeId));
-  let guidedShapes = $derived.by(() => {
-    if (openPivotalNodeId === undefined || assistance.guided !== "live") return [];
-    const target = path.findIndex((node) => node.id === openPivotalNodeId);
-    return shapes.filter((entry) => firings.some((firing) => firing.entryId === entry.id && path.findIndex((node) => node.id === firing.firstNodeId) <= target && path.findIndex((node) => node.id === firing.lastNodeId) >= target));
-  });
-
   function preferenceStorage(): PreferenceStorage | undefined {
     if (assistanceStorage !== undefined) return assistanceStorage;
     if (import.meta.env.MODE === "test") return undefined;
@@ -937,6 +933,13 @@
 
         <div class="companion-scroll">
           <section class="companion-section evidence-seat" class:compact-active={compactTab === "evidence"} aria-label="Support">
+            {#if run.feedbackPolicy === "attempt_end" && canWrite && onReveal !== undefined}
+              <section class="evidence-reveal" aria-label="Evidence disclosure">
+                <button type="button" disabled={feedbackDeliveryOpen(run) || busy} onclick={() => void onReveal?.()}>Open evidence for this position</button>
+                {#if feedbackDeliveryOpen(run)}<p>Evidence is open at this position until you commit your next move.</p>{/if}
+                <p>Recorded on the run as a disclosure, and it closes again on your next committed move.</p>
+              </section>
+            {/if}
             {#if guardEvent?.type === "feedback.generated"}
               <section class="guard-prompt" aria-label="Post-commit guard" aria-live="polite">
                 <div>
@@ -1112,7 +1115,7 @@
       <div class="inspector-grid">
         <section class="structural-reading" aria-label="Evidence inspector: position structure" data-evidence-consumer="inspector.position_structure">
           <button type="button" aria-expanded={structuralOpen} onclick={() => (structuralOpen = !structuralOpen)}>Position structure</button>
-          {#if structuralOpen}<div class="structural-facts">{#if structure.features.length === 0}<p>No rung-0 structural observations in this position.</p>{/if}{#each structure.features as observation}<p>{renderStructuralObservation(observation)}</p>{/each}</div>{/if}
+          {#if structuralOpen}<div class="structural-facts">{#if assistance.guided === "live" && firings.length === 0}<p>No named structure entry matches this line.</p>{/if}{#if structure.features.length === 0}<p>No rung-0 structural observations in this position.</p>{/if}{#each structure.features as observation}<p>{renderStructuralObservation(observation)}</p>{/each}</div>{/if}
         </section>
         <section class="transition-reading" aria-label="Evidence inspector: move transition" data-evidence-consumer="inspector.move_transition">
           <button type="button" aria-expanded={transitionOpen} onclick={() => (transitionOpen = !transitionOpen)}>Move transition</button>
@@ -1136,9 +1139,6 @@
             <p class="honest">{openPivotalNode?.moveSan ?? "Start position"} · ply {openPivotalNode?.ply ?? 0}</p>
             {#each openPivotal as marker}{#each renderPivotalMarker(marker) as sentence}<p class="guidance-sentence">{sentence}</p>{/each}{/each}
             {#each renderEndgameReading(endgame) as sentence}<p class="guidance-sentence">{sentence}</p>{/each}
-            {#if assistance.guided === "live"}
-              {#each guidedShapes as shape}<section><h4>{shape.name}</h4><p>Named plans for this structure — general to the kind of position, not advice for this one.</p><ul>{#each shape.plans as plan}<li>{plan.label}</li>{/each}</ul></section>{/each}
-            {/if}
             {#if assistance.voice === "persona" && capabilities?.providers.llm === "external" && onVoice !== undefined}<button type="button" onclick={() => void requestVoice("marker")}>Revoice this evidence</button>{/if}
             {#if voicePage?.text.includes("Recorded reading at this position:")}<p class="guidance-sentence">{RECORDED_READING_GUARD}</p>{/if}
             {#if voicePage}<p class="guidance-sentence">{voicePage.text}</p>{/if}

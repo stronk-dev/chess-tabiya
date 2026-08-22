@@ -1,6 +1,6 @@
 # RFC: Assistance control wiring
 
-- **Status:** accepted — 2026-08-22, by claude as register owner on the buildability test, after an independent cross-review (~40 claims re-derived at source, 2 failed, both corrected in place): §2's deletion target had moved — feedback stage 1 relocated the duplicate named-plan block from the pivotal dialog to the inspector's Recorded-moment section (`data-evidence-consumer="inspector.pivotal_marker"`), so the text as drafted sent the implementer to delete nothing — and the D532/D715 scoping was de-staled against `intent-presets`' same-day acceptance, with the §8.2 landing-order seam mirrored into §3. The reveal chain, criterion-1 policy typing, and all counts verified clean at source. *(Prior line for history: draft — ready for independent review)*
+- **Status:** implemented — 2026-08-22; the learner reveal, guided-channel ownership, duplicate deletion and on-ramp fallback shipped together with focused unit/component and built-browser coverage. *(Prior line for history: accepted — 2026-08-22, by claude as register owner on the buildability test after independent cross-review.)*
 - **Author:** Codex, extracting the dependency-free subset of `assistance-controls`
 - **Created:** 2026-08-22
 - **Design refs:** `design/05-in-run-experience.md` §3a, §3a-i, §3b and §3-forms
@@ -130,8 +130,8 @@ None. D532's later ceiling ruling is preserved by explicitly excluding `permitte
 
 | id | the obligation | owner | recorded when discharged | discharged |
 |---|---|---|---|---|
-| D1 | D308 — reachable learner-initiated reveal | `assistance-control-wiring` | implementation commit | |
-| D2 | D309 — guided preference owns the named-shape live channel | `assistance-control-wiring` | implementation commit | |
+| D1 | D308 — reachable learner-initiated reveal | `assistance-control-wiring` | implementation commit | 2026-08-22 |
+| D2 | D309 — guided preference owns the named-shape live channel | `assistance-control-wiring` | implementation commit | 2026-08-22 |
 
 ## Open questions
 

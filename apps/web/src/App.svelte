@@ -626,6 +626,7 @@
         seatedInContest={session.viewer?.seatedInContest}
         reviewing={session.viewer?.reviewing}
         onMove={(uci) => controller.move(uci)}
+        onReveal={() => controller.reveal()}
         onRewind={(target) => controller.rewind(target)}
         onFork={(label, intent) => controller.fork(label, intent)}
         onSwitchBranch={(nodeId) => controller.switchBranch(nodeId)}

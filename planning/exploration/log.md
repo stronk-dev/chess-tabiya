@@ -5158,3 +5158,28 @@ registered.
 
 **Next:** amend/re-review F8 on those exact contracts, then wire the compiled roster through the
 run and selector seams. Independent accepted dependencies continue meanwhile.
+
+## 2026-08-22 — assistance-control-wiring implemented and archived
+
+**What landed:** the missing learner disclosure now runs through `RunStateStore` and
+`DrillSessionController` to the existing server mutation. Writable `attempt_end` runs expose one
+Support control; the refreshed run opens provider evidence, a second reveal is idempotent, and the
+next committed move closes the window. The server remains authoritative for live-match pause
+state, and its typed refusal reaches the existing visible alert.
+
+Named-shape guidance now has one owner and one renderer: `guided` gates timeline shape markers,
+works with pivotal `markers` off, and opens the attributed `ShapePanel`. The smaller duplicate in
+Recorded-moment evidence is gone. Five profile fallbacks remain silent; on-ramp differs only by
+`guided: "live"`, while any stored v4 preference wins whole.
+
+**Verification:** 54 focused store/controller/preference/screen tests pass; web typecheck reports
+zero errors and zero warnings. Two targeted built-browser journeys pass: a real Carlsbad marker
+under `guided: live, markers: off`, and disclosure → provider-control availability → next-move
+re-lock. The scoped diff covers all nine RFC implementation families and changes no schema,
+route, error code or assistance-config version.
+
+**What changed:** D308, D309 and the split-tracking D716 close; both RFC discharges are dated. The
+RFC is archived and its active-register row moved to the archive table in the same commit.
+
+**Next:** intent presets can now consume the single on-ramp default owner; learner-module and
+play-composition work can bind named modules to this functioning control path.

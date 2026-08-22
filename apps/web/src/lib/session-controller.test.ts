@@ -11,13 +11,14 @@ import {
   createRun,
   fork,
   reachCheckpoint,
+  revealFeedback,
   rewind,
   rewindToCheckpoint,
   type DrillRun,
   type MutationResult,
   type OpponentSelection,
 } from "@chess-tabiya/runtime";
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 
 import type {
   Capabilities,
@@ -210,8 +211,10 @@ class FakeApi implements DrillClientApi {
     return this.run;
   }
 
-  async reveal(): Promise<MutationResult> {
-    throw new Error("position reveal is outside the pack-player fake");
+  async reveal(_runId: string, _writerId: string): Promise<MutationResult> {
+    const result = revealFeedback(this.requiredRun(), at);
+    this.run = result.run;
+    return result;
   }
 
   async selectMove(input: SelectMoveRequest): Promise<OpponentSelection> {
@@ -690,6 +693,28 @@ describe("DrillSessionController", () => {
     expect(api.selected).toMatchObject({ startFen: expect.stringContaining("rnbqkbnr"), historyUci: [], policy: { mode: "human_common", policyConfigDigest: digest } });
     expect(environment.controller.state.pack).toBeUndefined();
     expect(environment.controller.state.runState?.run.nodes.at(-1)).toMatchObject({ moveUci: "e2e4", actor: "opponent" });
+  });
+
+  it("reveals attempt-end evidence through the active store", async () => {
+    const api = new FakeApi(pack, "e2e4", false);
+    const environment = controller(api);
+    await environment.controller.startPosition({ fen: pack.start.fen, side: "white", mode: "human_common" });
+
+    await environment.controller.reveal();
+
+    expect(environment.controller.state.busy).toBe(false);
+    expect(environment.controller.state.runState?.run.events.filter((event) => event.type === "feedback.revealed")).toHaveLength(1);
+  });
+
+  it("shows the existing live-match refusal instead of guessing pause state", async () => {
+    const api = new FakeApi(pack, "e2e4", false);
+    const environment = controller(api);
+    await environment.controller.startPosition({ fen: pack.start.fen, side: "white", mode: "human_common" });
+    vi.spyOn(api, "reveal").mockRejectedValueOnce(new ApiError(409, "MATCH_LIVE", "raw refusal"));
+
+    await environment.controller.reveal();
+
+    expect(environment.controller.state.error).toBe("Pause the live match before rewinding, branching, or revealing feedback.");
   });
 
   it("does not request an initial opponent ply for a read-only follower", async () => {

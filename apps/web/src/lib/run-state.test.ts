@@ -4,6 +4,7 @@ import {
   commitMove,
   createRun,
   reachCheckpoint,
+  revealFeedback,
   rewind,
   type DrillRun,
   type MutationResult,
@@ -184,7 +185,9 @@ class FakeApi implements RunApi {
     _writerId: string,
     _at?: string,
   ): Promise<MutationResult> {
-    throw new Error("not used");
+    const result = revealFeedback(this.serverRun, at);
+    this.serverRun = result.run;
+    return result;
   }
 
   async applyEvidence(
@@ -213,6 +216,26 @@ function session(storage = new MemoryStorage()): WriterSession {
 }
 
 describe("RunStateStore", () => {
+  it("routes learner disclosure through the mutation projection", async () => {
+    const api = new FakeApi();
+    api.serverRun = createRun({
+      id: "run-a",
+      session: { kind: "position", start: { fen: pack.start.fen, side: "white" }, feedbackPolicy: "attempt_end", opponentPolicy: { mode: "human_common" } },
+      sessionDigest: `sha256:${"b".repeat(64)}`,
+      policyConfig: { seedMode: "fixed", locus: { executedAt: "server", engineIds: [], modelIds: [] } },
+      seed: 7,
+      createdAt: at,
+    });
+    const store = new RunStateStore(api, session(), api.serverRun);
+
+    const first = await store.reveal();
+    const second = await store.reveal();
+
+    expect(first.emitted.map((event) => event.type)).toEqual(["feedback.revealed"]);
+    expect(second.emitted).toEqual([]);
+    expect(store.snapshot.run.events.filter((event) => event.type === "feedback.revealed")).toHaveLength(1);
+  });
+
   it("projects mutation-returned events and polls revealed pending evidence at 1s", async () => {
     const api = new FakeApi();
     const scheduler = new FakeScheduler();

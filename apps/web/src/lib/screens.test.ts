@@ -318,7 +318,7 @@ describe("Layer 3 screens", () => {
     await unmount(component);
   });
 
-  it("shows a passive shape marker in pack-free play and opens the attributed plans panel", async () => {
+  it("shows a guided shape marker with markers off and opens the attributed plans panel", async () => {
     const run = createRun({
       id: "just-play-shape",
       session: { kind: "position", start: { fen: "r1bqr1k1/pp1nbppp/2p2n2/3p2B1/3P4/2NBP3/PPQ1NPPP/R4RK1 b - - 7 10", side: "black" }, feedbackPolicy: "attempt_end", opponentPolicy: { mode: "human_common" } },
@@ -327,6 +327,7 @@ describe("Layer 3 screens", () => {
     });
     const component = mount(DrillScreen, { target: target(), props: {
       snapshot: { run, access: "writer", pendingEvidence: 0, withheld: false }, shapes: [carlsbad],
+      assistanceStorage: { getItem: () => JSON.stringify({ version: 4, markers: "off", guided: "live", humanSplit: "off", corpus: "off", voice: "authored", spoken: "off", boardLighting: "legal", arrows: "off", ambient: "off" }), setItem: vi.fn() },
       onMove: vi.fn(), onRewind: vi.fn(), onFork: vi.fn(), onSwitchBranch: vi.fn(), onCompare: vi.fn(), onCloseCompare: vi.fn(), onContinueCheckpoint: vi.fn(), onExport: vi.fn(), onStop: vi.fn(), registerKeyboardRegion,
     } });
     await tick();
@@ -338,6 +339,33 @@ describe("Layer 3 screens", () => {
     expect(document.querySelector(".shape-panel")?.textContent).toContain("Minority attack");
     document.querySelector<HTMLButtonElement>(".shape-panel footer button")!.click(); await tick();
     expect(document.querySelector('[aria-label="Named structure evidence"]')?.textContent).toContain("CC-BY-SA-4.0");
+    await unmount(component);
+  });
+
+  it("exposes reveal only to writable attempt-end runs and reports the open window", async () => {
+    const run = createRun({
+      id: "reveal-screen",
+      session: { kind: "position", start: { fen: pack.start.fen, side: "white" }, feedbackPolicy: "attempt_end", opponentPolicy: { mode: "human_common" } },
+      sessionDigest: `sha256:${"c".repeat(64)}`,
+      policyConfig: { seedMode: "fixed", locus: { executedAt: "server", engineIds: [], modelIds: [] } },
+      seed: 1,
+      createdAt: at,
+    });
+    const onReveal = vi.fn();
+    const shared = { onMove: vi.fn(), onRewind: vi.fn(), onFork: vi.fn(), onSwitchBranch: vi.fn(), onCompare: vi.fn(), onCloseCompare: vi.fn(), onContinueCheckpoint: vi.fn(), onExport: vi.fn(), onStop: vi.fn(), registerKeyboardRegion };
+    let component = mount(DrillScreen, { target: target(), props: { snapshot: { run, access: "writer", pendingEvidence: 0, withheld: false }, onReveal, ...shared } });
+    await tick();
+    const reveal = [...document.querySelectorAll<HTMLButtonElement>("button")].find((button) => button.textContent === "Open evidence for this position")!;
+    expect(reveal.disabled).toBe(false);
+    reveal.click();
+    expect(onReveal).toHaveBeenCalledTimes(1);
+    expect(document.body.textContent).toContain("Recorded on the run as a disclosure");
+    await unmount(component);
+
+    document.body.replaceChildren();
+    component = mount(DrillScreen, { target: target(), props: { snapshot: { run, access: "read_only", pendingEvidence: 0, withheld: false }, onReveal, ...shared } });
+    await tick();
+    expect(document.body.textContent).not.toContain("Open evidence for this position");
     await unmount(component);
   });
 

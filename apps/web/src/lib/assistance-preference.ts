@@ -3,6 +3,14 @@ import type { SessionKind } from "./api.js";
 
 export const ASSISTANCE_PROFILES = Object.freeze(["pack", "position", "imported", "match", "stream", "onramp"] as const);
 export type AssistanceProfile = (typeof ASSISTANCE_PROFILES)[number];
+export const PROFILE_DEFAULTS: Readonly<Record<AssistanceProfile, AssistanceConfig>> = Object.freeze({
+  pack: SILENT_ASSISTANCE,
+  position: SILENT_ASSISTANCE,
+  imported: SILENT_ASSISTANCE,
+  match: SILENT_ASSISTANCE,
+  stream: SILENT_ASSISTANCE,
+  onramp: Object.freeze({ ...SILENT_ASSISTANCE, guided: "live" }),
+});
 
 export function assistanceProfile(input: { readonly sessionKind: RunSessionKind; readonly feedbackPolicy: RunFeedbackPolicy; readonly liveKind?: SessionKind | undefined }): AssistanceProfile {
   if (input.feedbackPolicy === "immediate_guard") return "onramp";
@@ -28,7 +36,8 @@ function migrate(value: unknown): AssistanceConfig | undefined {
   return undefined;
 }
 export function loadAssistance(kind: AssistanceProfile, storage?: PreferenceStorage): AssistanceConfig {
-  if (storage === undefined) return SILENT_ASSISTANCE;
-  try { const raw = storage.getItem(assistanceKey(kind)); if (raw === null) return SILENT_ASSISTANCE; return migrate(JSON.parse(raw)) ?? SILENT_ASSISTANCE; } catch { return SILENT_ASSISTANCE; }
+  const fallback = PROFILE_DEFAULTS[kind];
+  if (storage === undefined) return fallback;
+  try { const raw = storage.getItem(assistanceKey(kind)); if (raw === null) return fallback; return migrate(JSON.parse(raw)) ?? fallback; } catch { return fallback; }
 }
 export function saveAssistance(kind: AssistanceProfile, value: AssistanceConfig, storage?: PreferenceStorage): void { storage?.setItem(assistanceKey(kind), JSON.stringify(value)); }

@@ -187,6 +187,12 @@ export class RunStateStore {
     );
   }
 
+  reveal(): Promise<MutationResult> {
+    return this.#mutate(() =>
+      this.#api.reveal(this.#session.runId, this.#session.writerId),
+    );
+  }
+
   appendOpponentPly(
     selection: OpponentSelection,
     options?: MoveOptions,

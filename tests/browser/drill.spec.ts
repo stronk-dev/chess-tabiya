@@ -125,7 +125,8 @@ test("imports one game, opens a grounded story, re-enters play, and exports orig
   expect(text).toContain("Tabiya branch");
 });
 
-test("Just Play reaches a Carlsbad and opens a passive shape marker without mutating the run", async ({ page }) => {
+test("Just Play reaches a Carlsbad and opens a guided shape marker without mutating the run", async ({ page }) => {
+  await page.evaluate(() => localStorage.setItem("tabiya.assistance.v1.position", JSON.stringify({ version: 4, markers: "off", guided: "live", humanSplit: "off", corpus: "off", voice: "authored", spoken: "off", boardLighting: "legal", arrows: "off", ambient: "off" })));
   await page.getByLabel("Your side").selectOption("black");
   await page.getByLabel("Optional FEN").fill("r1bqr1k1/pppnbppp/5n2/3p2B1/3P4/2NBP3/PPQ1NPPP/R4RK1 b - - 7 10");
   await page.getByRole("button", { name: "Start game" }).click();
@@ -158,6 +159,32 @@ test("Just Play reaches a Carlsbad and opens a passive shape marker without muta
   const after = await (await page.request.get(`/runs/${runId}/events?sinceSeq=0`)).json() as { events: unknown[] };
   expect(after.events).toHaveLength(before.events.length);
   await expect(page.getByText("Authored commentary withheld", { exact: false })).toHaveCount(0);
+});
+
+test("Just Play explicitly reveals evidence and the next move closes the window", async ({ page }) => {
+  await page.getByRole("button", { name: "Start game" }).click();
+  await expect(page.getByLabel("Chessboard")).toBeVisible();
+  const reveal = page.getByRole("button", { name: "Open evidence for this position" });
+  await expect(reveal).toBeEnabled();
+  await page.getByRole("button", { name: "Inspector" }).click();
+  await expect(page.getByRole("button", { name: "Load model candidates" })).toHaveCount(0);
+  await page.getByRole("button", { name: "Return to play" }).click();
+
+  await reveal.click();
+  await expect(reveal).toBeDisabled();
+  await expect(page.getByText("Evidence is open at this position until you commit your next move.")).toBeVisible();
+  await page.getByRole("button", { name: "Inspector" }).click();
+  await expect(page.getByRole("button", { name: "Load model candidates" })).toBeVisible();
+  await page.getByRole("button", { name: "Return to play" }).click();
+  const runId = page.url().split("/").at(-1)!;
+  const opened = await (await page.request.get(`/runs/${runId}/events?sinceSeq=0`)).json() as { events: { type: string }[] };
+  expect(opened.events.filter((event) => event.type === "feedback.revealed")).toHaveLength(1);
+
+  await move(page, "e2", "e4", "white");
+  await expect(reveal).toBeEnabled();
+  await expect(page.getByText("Evidence is open at this position until you commit your next move.")).toHaveCount(0);
+  await page.getByRole("button", { name: "Inspector" }).click();
+  await expect(page.getByRole("button", { name: "Load model candidates" })).toHaveCount(0);
 });
 
 test("imports a repertoire, enters its biggest corpus gap, and records an addressed attempt",async({page})=>{
