@@ -1,6 +1,6 @@
 # RFC: Bot policy
 
-- **Status:** draft
+- **Status:** accepted — 2026-08-22, by claude as register owner on the buildability test, after cross-review (four blockers fixed in place; the structural one — the run seam, [[D938]] — is the request-seam class check: *who builds this request, from what persisted state*). *(Prior line for history: draft)*
 - **Author:** claude (drafted on the D717 program routing, `planning/evidence-foundation-ux/plan.md`
   Phase 6; executes the completed dependency map
   `planning/platform-alignment/bot-policy/f8-dependency-map.md`)
@@ -32,7 +32,11 @@
   controller; `play-composition` touches web layout; `learner-modules`,
   `semantic-collectors`, `longitudinal-store`, `measurement-records`,
   `pack-population-provenance`, `learner-rating`, `graduation-clearance`,
-  `portable-account-data` touch none of §3's files).
+  `portable-account-data` touch none of §3's files). One shared file exists after the
+  cross-review added the §4.1 run seam: `apps/web/src/lib/session-controller.ts` is also
+  touched by `assistance-control-wiring` — in disjoint members (`#selectionRequest` here,
+  the reveal wrapper there), so landing order stays free, but the coordination is named
+  rather than asserted away.
 - **Parent / amends:** extends the shipped opponent selector
   (`apps/server/src/opponent-selector.ts`) and capability contract
   (`apps/server/src/capabilities.ts`); replaces no shipped mode and redefines no shipped
@@ -54,8 +58,19 @@ learner-rating`), evidence-kinds 7 members. This RFC widens the **persisted**
 `opponent.move_selected` event payload (`packages/runtime/src/types.ts:171`) by an optional
 `OpponentSelection.policy` object — the exact shape-class that moved run 0.14→0.15
 (migration 20, `SelectionCandidate.offWindow`) and 0.16→0.17 (migration 23,
-`orderingBasis`), both stamp-only. So: one run-schema lane, one stamp-only migration
-position, frozen literals per the migration-4/9 freeze lesson. **Everything else is
+`orderingBasis`), both stamp-only. The same 0.18 lane also covers §4.1's run seam: the
+persisted `run.started` `opponentPolicy` payload (`RunOpponentPolicy`,
+`packages/runtime/src/types.ts:69`) widens by the same optional `profile` triple — one
+version bump, two payloads; the register row's parenthetical gains that clause in the next
+register-touching commit (acceptance), stated here rather than edited now so the C3
+byte-join between this block and `rfc/README.md` stays intact. So: one run-schema lane,
+one stamp-only migration position, frozen literals per the migration-4/9 freeze lesson.
+The downstream seam of both widenings is verified empty at HEAD: no F1 manifest row
+declares the `opponent.move_selected` event payload shape, and no active draft consumes
+`OpponentSelection` by name — `longitudinal-store` ingests learner-actor evidence families
+only (its own grain rule: the opponent's move is never the owner's observation) and
+`learner-modules` names neither symbol — so the optional fields have no consumer to
+notify beyond the stamp itself. **Everything else is
 deliberately claim-free**: the policy/layer/profile definitions are **catalog-local
 versioned declarations, not a storage table** (§1 argues this — the [[D473]] decision the
 drafting order asked for); the three new evidence projections are additive `@1` identities
@@ -269,7 +284,14 @@ achieved Elo (O8.4, [[D344]]).
 **§2.2 Sampler** — `sampler.maia_reconstruction@1`: reconstruct
 `softmax(logits/T)` from raw mass as `p^(1/T)`, apply the pinned cumulative `≤ topP`
 rule forcing top-1, renormalize. Parameters (T, topP, completeness threshold — default
-0.97, below the measured minimum) are part of the profile, not the request. The §0
+0.97, below the measured minimum) are part of the profile, not the request. Parameter
+domains are compiled, not assumed: **T > 0** (`p^(1/T)` is undefined at zero, and
+Temperature 0 is already refused doctrine — *"a modal opponent is a different product"*,
+`capabilities.ts:144`) and **topP ∈ (0, 1]**; a sampler declaration outside its domain
+fails compilation (an A2 fixture). The truncation ordering is pinned too: candidates sort
+by descending reconstructed mass with **equal-mass ties ordered by `neutralTiebreak`**, so
+membership at the cumulative `≤ topP` boundary can never depend on provider emission
+order — the same rule §4.2 applies to the draw. The §0
 positive control (0.27 cp / 0.03 pp) is this layer's permanent conformance fixture
 (criterion A4). The draw itself is §4's, not the model's.
 
@@ -290,8 +312,14 @@ candidate whose fixed-bound Stockfish loss versus the best candidate in the same
 severe mass, −1.27 cp expected-loss shift, 100.2% explorer-match retention). Declared
 engine identity and search bound ride the record. **The guard is an explicit information
 advantage**: the layer declaration's `disclosure` string states the engine, bound and
-threshold, the profile card renders it, and the compiler (§3) **fails a guard layer with
-an empty disclosure** — a hidden guard is unrepresentable, not merely refused. Abstention:
+threshold, and the profile card renders it. The guarantee is stated at its actual
+strength: engine identity, search bound and threshold are **typed declaration fields**,
+and the compiler (§3) **fails a guard layer whose `disclosure` string does not embed each
+of those declared literals verbatim** — so an absent, empty, or vacuous disclosure
+("plays carefully") cannot carry a guard through compilation. What remains authored is
+only the prose around the literals, and A6's conformance fixture gates that; "a hidden
+guard cannot compile" is the honest form of the claim, and it is a compile error, not a
+review note. Abstention:
 engine unavailable → the guard records `abstained: "provider_unavailable"` and the base
 distribution passes through unmasked — recorded, never silent. If the guard masks the
 entire distribution (all candidates ≥ threshold — possible in lost positions), it
@@ -355,6 +383,12 @@ a `MemoryPolicy` instance (§2.6); **any layer declaring a learner-derived input
 wall — the input vocabulary is closed to provider projections and registered
 position-evidence ids, and learner history, style vectors, ratings, and run records of
 the current learner are not in it, so the wall is a type error, not a review note).
+The vocabulary closes over **provenance, not only names**: every layer *parameter* is a
+literal whose provenance is the cited measurement dossier over the declared population
+corpus (§2.5's gate), so a weight computed from any learner's data outside the compiler
+and passed in as a bare constant is inadmissible the moment its citation is checked — a
+per-learner number has no population dossier to cite. A9's census inspects parameter
+citations, not only input ids.
 A layer may abstain without erasing the base distribution (O8.1); every abstention is
 recorded in §6's record with its reason.
 
@@ -381,6 +415,25 @@ digest must match the catalog's compiled digest for `id@version`
 (mismatch → `INVALID_REQUEST`; this is how a stale client is caught at the boundary).
 `selectionCacheKey` (`:219`) extends with the profile triple.
 
+**The run seam — the production caller, named.** Production selection requests are not
+composed ad hoc: the web client assembles every `SelectMoveRequest` from the run's
+persisted policy (`#selectionRequest`, `apps/web/src/lib/session-controller.ts`, reading
+`run.opponentPolicy`), so a profile that exists only in the selector request grammar is
+unreachable by any shipped caller — and a resumed run would not know which bot it was
+playing. `RunOpponentPolicy` (`packages/runtime/src/types.ts:69`) therefore gains the
+**same optional `profile` triple**, under exactly §4.1's rules (v1 `human_common` only;
+mutually exclusive with `targetElo`/`temperature`/`topP`; digest checked against the
+catalog **at run creation** through the existing `validateOpponentPolicy` path,
+`apps/server/src/service.ts:345` → `OpponentSelector.validatePolicy`, so a stale profile
+is refused before a run starts, not at its first opponent move). The client passes the
+triple through unchanged; the persisted `run.started` `opponentPolicy` payload widens by
+the same optional object under the same 0.18 stamp — absent on every historical run and
+**never inferred**, the same discipline as §6's record. This is §3's identity discipline
+made real rather than asserted: the run carries the session digest *and* the profile
+triple; the selection record carries what was actually applied per move. The roster
+*picker* UI (which surface offers which profile) is Just Play / `play-composition`
+surface work and is not this RFC's; the seam specified here ends at `run.opponentPolicy`.
+
 **§4.2 The seeded draw ([[D823]], mechanism 1).** For a profile request the selector:
 requests the full-width raw vector exactly as `#humanCommon` does today; verifies the
 completeness statistic against the profile threshold; runs §3's compiled pipeline over the
@@ -393,6 +446,14 @@ model's internal sample is discarded. Basis-equal candidates order by the positi
 finding — byte-identical reproducibility is the property the whole instrument chain rests
 on): the same (startFen, historyUci, seed, profile id/version/digest, model identity)
 reproduce the same selection and the same §6 record, byte-identically (criterion A3).
+Scope, stated so A3 cannot be misread: the seeded draw exists **only on the composed
+path**. Profile-less `human_common` keeps playing Maia's internal unseeded sample
+(`seedHonored: false` — R5 measured that `bestmove` repeat-stable on only 34.3% of keys
+while the policy vector is bit-stable 105/105,
+`design/research/maia-policy-scalar-stability.md`), and `practical_resistance` keeps its
+bit-stable scalar basis; both ship unchanged (§8). This RFC **inherits, rather than
+silently fixing,** the unseeded sample everywhere a profile does not own the draw — replay
+and the event log remain the repeatability instrument there, exactly as today.
 
 **§4.3 The degraded path is recorded, never silent.** If the raw vector fails the
 completeness threshold, or the model omits mass, the stack does not apply: the selector
@@ -616,7 +677,7 @@ runtime selector, and does not reopen [[D817]].
 
 ### §10 — Implementation surface
 
-Unit: **production source file**; total: **8** (Stage A; Stage B adds one). Criterion A12
+Unit: **production source file**; total: **11** (Stage A; Stage B adds one). Criterion A12
 counts the same unit.
 
 | # | file | change |
@@ -629,6 +690,9 @@ counts the same unit.
 | 6 | `apps/server/src/storage.ts` | the stamp-only migration at its claimed position (frozen literals; its number is assigned at landing as `STORAGE_VERSION + 1`, never printed in a draft — the register's position rule) |
 | 7 | `packages/runtime/src/evidence-catalog.ts` | the §5 projection ids; `opponent.selection` consumer row gains the new projections |
 | 8 | `apps/server/src/evidence-manifest.ts` | bindings for the new projections |
+| 9 | `apps/server/src/service.ts` | run-creation acceptance and digest validation of `opponentPolicy.profile` (§4.1 run seam; the `validateOpponentPolicy` pass-through) |
+| 10 | `apps/web/src/lib/api.ts` | client `SelectMoveRequest`/run-creation types gain the `profile` triple (§4.1) |
+| 11 | `apps/web/src/lib/session-controller.ts` | `#selectionRequest` passes `run.opponentPolicy.profile` through (§4.1; shared file with `assistance-control-wiring`, disjoint members — coordination named in the header) |
 
 Named validation/docs sites that necessarily move (the [[D828]] lesson — named, not
 implicit, and not extra implementation homes): `apps/server/src/evidence-manifest-check.ts`
@@ -652,8 +716,12 @@ Each criterion names its failure mode; none can pass while measuring nothing ([[
 - **A1 — request seam.** `parseSelectMoveRequest` accepts a valid `profile` triple with
   `human_common` and rejects: unknown fields (existing negative retained), `profile` with
   any other mode, `profile` alongside `targetElo`/`temperature`/`topP`, and a digest that
-  does not match the catalog. *Fails if* the parser merges instead of refusing (two
-  authorities).
+  does not match the catalog. The run seam round-trips: a position-session run created
+  with `opponentPolicy.profile` is refused at creation on a bad digest, persists the
+  triple in `run.started` when valid, and the client's next selection request carries it;
+  historical runs carry none and no code path infers one. *Fails if* the parser merges
+  instead of refusing (two authorities), or if a profile is acceptable in a selector
+  request but unreachable from the run that must send it.
 - **A2 — compiler refusals.** Fixtures for every §3 failure: duplicate authority, complete-
   vector transform without a degraded declaration, undisclosed guard, unmeasured trait,
   delay layer, memory instance, learner-derived input. Each fixture must fail compilation;
@@ -665,7 +733,10 @@ Each criterion names its failure mode; none can pass while measuring nothing ([[
   basis-equal tie is broken by insertion order (the `neutralTiebreak` rule) or if two runs
   diverge.
 - **A4 — sampler positive control.** The reconstruction layer, run over the committed R11
-  aggregates, reproduces expected loss within 0.5 cp and severe mass within 0.1 pp of the
+  aggregates (`planning/platform-alignment/bot-policy/results.json` —
+  `summary.current_sample` is the captured production sample, `summary.production_sampler`
+  the reconstruction; the fixture reads the committed file, never numbers restated in a
+  test), reproduces expected loss within 0.5 cp and severe mass within 0.1 pp of the
   captured production sample (the measured agreement is 0.27 cp / 0.03 pp; the bound
   leaves working room without admitting the raw vector's 39 cp error). The able-to-fail
   arm: perturbing T to 1.0 must break the bound. *Fails if* the control is asserted
@@ -679,8 +750,10 @@ Each criterion names its failure mode; none can pass while measuring nothing ([[
 - **A6 — disclosure is structural.** Every registered profile with a guard renders the
   guard's engine/bound/threshold on its card from the layer's `disclosure` string; the
   card's controlled-trait list is exactly the profile's registered traits. Negative
-  fixture: a card asserting a trait absent from the composition must fail the conformance
-  test. *Fails if* card text is hand-written prose beside the declaration.
+  fixtures: a card asserting a trait absent from the composition must fail the conformance
+  test, and a guard whose `disclosure` omits any of its declared engine/bound/threshold
+  literals must fail compilation (§2.4). *Fails if* card text is hand-written prose beside
+  the declaration, or if the disclosure check accepts any non-empty string.
 - **A7 — trait gate enforcement.** `trait.pawn_preference@1` registers with its cited
   measurements; registration attempts for forcing ×3 and quiet ×3 (the measured failures)
   are refused by the catalog test. *Fails if* the gate checks presence of numbers rather
@@ -704,9 +777,9 @@ Each criterion names its failure mode; none can pass while measuring nothing ([[
   criterion — this criterion gates the **label plumbing** and is satisfiable at landing.
   *Fails if* the criterion is read as requiring the ladder before merge (it must not be:
   that reading makes it unsatisfiable pre-landing, the [[D473]] class).
-- **A12 — surface census.** Exactly the 8 Stage-A production files of §10 change for
+- **A12 — surface census.** Exactly the 11 Stage-A production files of §10 change for
   Stage A (validation/docs sites excluded by name, per §10); the count is asserted in the
-  landing review against `git diff --stat`. *Fails if* a ninth production home appears
+  landing review against `git diff --stat`. *Fails if* a twelfth production home appears
   unnamed.
 - **A13 — docs.** `docs/bot-policy.md` documents the stack, the record, the label rule,
   and the degraded path in the landing commit. *Fails if* deferred.
@@ -748,3 +821,20 @@ as a named future measured layer (Open question 4).
 
 - 2026-08-22: created, executing `planning/platform-alignment/bot-policy/f8-dependency-map.md`
   under the O8 owner ruling of 2026-08-22.
+- 2026-08-22: adversarial cross-review corrections (buildability test). Blockers fixed in
+  place: (1) the §4.1 **run seam** — production callers build every selection request from
+  `run.opponentPolicy` (`#selectionRequest`), so `RunOpponentPolicy` gains the same
+  optional `profile` triple, validated at run creation and persisted in `run.started`
+  under the same 0.18 lane; §10 grows 8→11 files, A1/A12 updated, and the
+  `session-controller.ts` coordination with `assistance-control-wiring` is named.
+  (2) §2.4's "unrepresentable" claim restated at mechanism strength: the compiler
+  verifies the disclosure embeds the guard's declared engine/bound/threshold literals,
+  not merely that a string is non-empty (A6 fixture added). (3) §2.2 pins the sampler
+  parameter domains (T > 0 — Temperature 0 is refused doctrine, `capabilities.ts:144`;
+  topP ∈ (0,1]) and routes top-p cutoff ties through `neutralTiebreak`. (4) §3's wall
+  closes over parameter **provenance**, not only input names. Honesty additions: §4.2
+  states the composed-path-only scope of the seeded draw (profile-less `human_common`
+  and `practical_resistance` inherit their shipped R5-measured behavior unchanged); A4
+  names the committed conformance artifact by path; the claims paragraph states the
+  verified-empty downstream seam of the payload widenings and defers the register-row
+  parenthetical to the next register-touching commit to preserve the C3 byte-join.
