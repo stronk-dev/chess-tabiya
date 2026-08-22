@@ -61,3 +61,32 @@ open rather than being smuggled into the amendment.
 An owner may rule several together, but no ruling may silently answer a missing empirical question.
 If evidence does not discriminate among choices, the ruling should say that it accepts uncertainty
 and name the revisit trigger.
+
+---
+
+## Missing-decision refresh 2026-08-22 — the audit's find, repaired
+
+The never-started-lanes audit ([[D952]]) found four owner-tier rows flagged in the ledger but
+absent from this file — the file that exists to hold them. Added now, with their current state:
+
+- **[[D886]] — verdict shape 4: score-threshold over an UNBOUNDED run** (survival/streak family).
+  UNRULED. Deferred out of `campaign-core` v1 (its Discharge D2: shapes 3–4 each need a seal
+  mechanism absent at HEAD; the prediction-threshold form must reconcile with format v0.9's
+  no-verdict rule). Rule when shapes 3–4 draft — nothing blocks on it today.
+- **[[D887]] — the material/board balance law**: position and material bend freely (grounded
+  chess); board geometry and piece set exit the evidence plane. UNRULED as intent law; the
+  owner's balance instinct is on record (*"we don't need to forget we're learning chess here"*).
+  Rule before any fairy-piece/reduced-army encounter class drafts (campaign-core Discharge D3's
+  army/prestige fork cites it).
+- **[[D304]] — ADR-0007's twin clause: unlocked by playing, never by WINNING.** ⚠ owner-facing.
+  `campaign-core` §4.1 now grants rewards on ANY verdict (finishing-not-winning), which is this
+  clause implemented ahead of its ruling — the owner should confirm the clause so the intent tier
+  carries it, or veto and the RFC amends.
+- **[[D868]] — content strategy: the paying is for the AUTHOR MARKETPLACE, the returning is for
+  the scheduler.** Evidence routed to `design/04`/owner; no ruling recorded. No current work
+  blocks on it; it gates any monetization design.
+- **[[D869]]/[[D870]] — solitaire chess + the variant family: RULED 2026-08-22** (both standalone
+  mode AND campaign encounter class; a family, not one). Representation gap is execution, not
+  decision: the encounter-class arm is `campaign-core` Discharge D2's (shapes 3–4); the
+  **standalone-mode arm has no lane** — routed today to the variant-family research/RFC seam the
+  D870 row owns. No further ruling needed.
