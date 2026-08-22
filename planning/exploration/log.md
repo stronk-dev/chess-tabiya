@@ -4577,3 +4577,29 @@ its last named endpoint, so a sticky live opening label is stale in 108/108 game
 hands an RFC three separate facts: exact current named endpoint, current catalogue membership, and
 retrospective deepest named endpoint reached. Absence of an endpoint is not “out of book,” and
 neither FTS nor an LLM may invent applicability.
+
+## 2026-08-22 — external themes validate one exact tactic and refute three aliases
+
+Every positive row for seven Lichess themes plus a deterministic 1/20 tag-negative control was run
+through the exact observed-event predicates. Defender removal reaches 1,638/1,642
+`capturingDefender` tags (99.8%) with 2.3% control firing. Exact interference is conservative
+(37.2%) but highly selective (.1% control); check-zwischenzug reaches 68.5% of broad `intermezzo`
+with .6% control firing. Three convenient aliases fail: defender relocation reaches only 4.5% of
+`deflection` and .5% of `attraction`, while ray-vacating capture reaches 1.1% of `clearance` and
+fires in 3.9% of its tag-negative controls. The source tagger confirms these are different
+algorithms, not just thresholds. D902 therefore requires distinct exact names/contracts instead of
+loosening a detector to imitate broad generated labels. Upstream still emits zero overload tags,
+so overload keeps fixture/corpus authority rather than a fake external oracle.
+
+## 2026-08-22 — the split tactic contracts recover breadth without recovering noise
+
+Three separately retained event contracts were added to the disposable harness and run over the
+same positives/control. Defender-duty displacement after bait/check reaches 93.0% of `deflection`
+tags with 3.1% control firing; heavy-piece attraction with check/capture follow-through reaches
+99.9% with 6/12,094 controls; square vacated for a later slider reaches 98.3% with 2.7% controls.
+The attraction negative arm caught the important failure: a first draft reached 100% of tags but
+also 19.0% of controls, and only became admissible after restoring the attracted role and actual
+consequence. Wave C therefore carries six distinct facts where a shallow taxonomy would carry
+three words: duty relocation, exact deflection, ray-blocker clearance, square clearance, exact
+attraction and reply-qualified variants. Familiar vocabulary is retained without making one noisy
+classifier responsible for every meaning.

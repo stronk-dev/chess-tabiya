@@ -22,4 +22,13 @@ TABIYA_LICHESS_PUZZLES=/path/to/lichess_db_puzzle.csv \
   pnpm exec vitest run --config tools/d872-semantic-tactics-harness/vitest.config.ts
 ```
 
-`output.md` is generated evidence. The source file is not committed.
+Generated evidence:
+
+- `output.md` — tag population, horizons and co-occurrence;
+- `sequence-output.md` — exact observed-line events;
+- `counterfactual-output.md` — exact event versus all-reply qualification;
+- `king-promotion-output.md` — mate-next and promotion availability/persistence;
+- `agreement-output.md` — exact-event sensitivity against tags plus a deterministic 1/20
+  tag-negative control.
+
+The source file is not committed.

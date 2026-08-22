@@ -23,7 +23,7 @@ import {
 } from "../research-chess/populations.js";
 
 const OUTPUT = new URL("./sequence-output.md", import.meta.url).pathname;
-type ResearchQuad = readonly [ResearchRow, ResearchRow, ResearchRow, ResearchRow];
+export type ResearchQuad = readonly [ResearchRow, ResearchRow, ResearchRow, ResearchRow];
 
 interface Duty {
   readonly defender: Square;
@@ -68,7 +68,7 @@ function positiveExpectedCapture(row: ResearchRow, square: Square, color: Color,
   return captured?.color === color && captured.role === role && (legalExchangeForMove(parsed.pos, parsed.move) ?? 0) > 0;
 }
 
-function defenderRemovedSequence(triple: ResearchTriple): boolean {
+export function defenderRemovedSequence(triple: ResearchTriple): boolean {
   const before = researchPosition(triple[0].parentFen);
   const defendedColor = opposite(before.turn);
   return duties(triple[0].parentFen, defendedColor).some((duty) =>
@@ -76,7 +76,7 @@ function defenderRemovedSequence(triple: ResearchTriple): boolean {
     positiveExpectedCapture(triple[2], duty.target, duty.color, duty.targetRole));
 }
 
-function defenderRelocatedSequence(triple: ResearchTriple): boolean {
+export function defenderRelocatedSequence(triple: ResearchTriple): boolean {
   const before = researchPosition(triple[0].parentFen);
   const defendedColor = opposite(before.turn);
   const first = parsedRow(triple[0]);
@@ -110,7 +110,7 @@ function defenderRelocatedSequence(triple: ResearchTriple): boolean {
   return false;
 }
 
-function overloadExploitationSequence(triple: ResearchTriple): boolean {
+export function overloadExploitationSequence(triple: ResearchTriple): boolean {
   const before = researchPosition(triple[0].parentFen);
   const defendedColor = opposite(before.turn);
   const reply = parsedRow(triple[1]);
@@ -135,7 +135,7 @@ function overloadExploitationSequence(triple: ResearchTriple): boolean {
   return false;
 }
 
-function clearanceSequence(triple: ResearchTriple): boolean {
+export function clearanceSequence(triple: ResearchTriple): boolean {
   const first = parsedRow(triple[0]);
   const third = parsedRow(triple[2]);
   if (first === undefined || third === undefined) return false;
@@ -157,7 +157,7 @@ function clearanceSequence(triple: ResearchTriple): boolean {
   return false;
 }
 
-function interferenceSequence(triple: ResearchTriple): boolean {
+export function interferenceSequence(triple: ResearchTriple): boolean {
   const first = parsedRow(triple[0]);
   if (first === undefined) return false;
   const defendedColor = opposite(first.pos.turn);
@@ -174,7 +174,7 @@ function interferenceSequence(triple: ResearchTriple): boolean {
   return false;
 }
 
-function checkZwischenzugSequence(quad: ResearchQuad): boolean {
+export function checkZwischenzugSequence(quad: ResearchQuad): boolean {
   const initial = parsedRow(quad[0]);
   const betweenMove = parsedRow(quad[1]);
   const finalMove = parsedRow(quad[3]);
@@ -188,7 +188,7 @@ function checkZwischenzugSequence(quad: ResearchQuad): boolean {
     (legalExchangeForMove(finalMove.pos, finalMove.move) ?? 0) > 0;
 }
 
-function rowsFromMoves(fen: string, moves: readonly string[]): readonly ResearchRow[] {
+export function rowsFromMoves(fen: string, moves: readonly string[]): readonly ResearchRow[] {
   const result: ResearchRow[] = [];
   let current = fen;
   for (const [index, uci] of moves.entries()) {

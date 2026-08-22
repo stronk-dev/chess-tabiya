@@ -254,10 +254,77 @@ the exact availability and all-reply flags instead of exposing an underspecified
 `rule-of-the-square verdict` as if it were an outcome. Distance, blockers and control balance remain
 descriptive operands; Syzygy remains the outcome authority.
 
-## 9. Next research
+## 9. External disagreement: one near-identity and three semantic splits
 
-1. Compare the five externally represented observed families against Lichess as disagreement, reporting
-   precision/recall only as agreement metrics.
+Every row carrying one of seven source themes was evaluated, plus a deterministic 1/20 sample of
+rows without each theme. The puzzle solution's side-to-move parity was preserved: defender/line
+events begin on solver moves, while intermezzo begins with the interrupted opponent capture. All
+selected lines parsed legally. `[V]`
+(`tools/d872-semantic-tactics-harness/agreement.test.ts`;
+`tools/d872-semantic-tactics-harness/agreement-output.md`)
+
+| source theme | tagged | exact event also found | tag sensitivity | tag-negative controls | exact event in controls |
+|---|---:|---:|---:|---:|---:|
+| `capturingDefender` | 1,642 | 1,638 | **99.8%** | 12,442 | 283 (2.3%) |
+| `deflection` → defender relocation hypothesis | 10,915 | 494 | **4.5%** | 11,989 | 150 (1.3%) |
+| `attraction` → defender relocation hypothesis | 9,088 | 47 | **0.5%** | 12,094 | 171 (1.4%) |
+| `clearance` → ray-vacating capture hypothesis | 3,352 | 36 | **1.1%** | 12,365 | 478 (3.9%) |
+| `interference` | 928 | 345 | **37.2%** | 12,484 | 8 (0.1%) |
+| `intermezzo` → check-zwischenzug subset | 2,891 | 1,980 | **68.5%** | 12,387 | 70 (0.6%) |
+| `overloading` | 0 | 0 | n/a | 12,530 | 211 (1.7%) |
+
+These are disagreement measures, not precision/recall against chess truth. The Lichess source tags
+are generated heuristics and vote-refined labels; the control is a fixed sample, not a fully
+adjudicated negative set. `[V]`
+([upstream tagger](https://github.com/ornicar/lichess-puzzler/blob/master/tagger/cook.py);
+fetched-file SHA-256 `b21a0d179b710742010dde07e806eda0ecea0514412af9f5a1d04d053bc9859d`;
+`tools/d872-semantic-tactics-harness/README.md`)
+
+Three conclusions are strong enough to constrain the RFC:
+
+1. **Exact defender removal is the ready anchor.** Near-complete tag sensitivity plus a low
+   tag-negative control rate supports the retained-duty definition without making the source an
+   oracle.
+2. **Exact interference and check-zwischenzug are conservative subsets.** Their lower sensitivity
+   is expected: interference retains a specific duty/target and zwischenzug currently requires
+   check, while the source tags broader families. Their .1%/.6% control rates make them useful exact
+   facts rather than reasons to broaden the detector.
+3. **The proposed aliases are refuted.** Defender relocation must not be emitted as generic
+   `deflection` or `attraction`; those need separate exact contracts. The measured ray-vacating
+   capture must not monopolize `clearance`: upstream clearance follows a vacated-square/ray-piece
+   sequence, while this event follows a vacated blocker→opened ray→captured target. Register
+   unambiguous event names (for example `defender_duty_relocated@1` and
+   `line_blocker_vacated_capture@1`) and research any broader tactic separately. `[M]`
+
+Overload retains no external-positive oracle because upstream returns false for every puzzle. Its
+exact two-duty/exploitation fixture and observed corpus witnesses remain the authority until a
+separately cited labelled set exists. `[V]` (same upstream tagger, `overloading()`)
+
+The split contracts were then implemented as research predicates with canonical hard negatives and
+re-run over the identical external population. `[V]`
+(`tools/d872-semantic-tactics-harness/semantic-splits.ts`;
+`tools/d872-semantic-tactics-harness/semantic-splits.test.ts`)
+
+| source family | separately retained exact event | tag sensitivity | tag-negative control firing |
+|---|---|---:|---:|
+| `deflection` | defender had exact duty; bait capture/check displaced it; retained target then captured | **93.0%** | 371/11,989 (3.1%) |
+| `attraction` | king/queen/rook captured bait onto square; king then checked or queen/rook later captured there | **99.9%** | 6/12,094 (0.05%) |
+| `clearance` | exact square vacated; later same-side slider moves to/through it | **98.3%** | 331/12,365 (2.7%) |
+
+The attraction correction demonstrates why the negative arm is mandatory. Its first exact-looking
+form—any piece captures bait and is then attacked—reached 100% of tags but also fired on **19.0%**
+of negative controls. Retaining the source family's heavy-piece role and consequence cut that to
+six controls without sacrificing material sensitivity. A recall-only gate would have admitted the
+noisy form. `[V]` (`tools/d872-semantic-tactics-harness/agreement-output.md`)
+
+These three families now clear the research gate as distinct observed events. Their names do not
+assert best play, intent or force. A later complete-reply projection may add “forced” or
+“unavoidable”; it is not a prerequisite for naming what the committed sequence did. `[M]`
+
+## 10. Next research
+
+1. Carry the separately named attraction/deflection/square-clearance contracts into the Wave-C
+   collector RFC alongside, not instead of, retained-duty relocation and line-blocker clearance.
 2. Add a reply-qualified overload form separately from the observed five-case convention; do not
    make it the basic label's floor.
 3. Extend mate-next into bounded mate-depth/tree records and compare engine mate claims with exact
