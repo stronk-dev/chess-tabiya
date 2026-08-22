@@ -33,6 +33,16 @@ withdraw immediately. The server orders entries only by game points, games playe
 records include W/D/L split by measured opponent band. Ratings are absent unless both the member
 opts in and the publication gate admits a point estimate, and never affect the order. A standing
 returns no run, branch, move, position, or evidence data and permanently states that its games
-were played alone against a bot and were not witnessed. There is still no learner-facing rating
-or standing screen. Ratings remain selection input only and must never alter evidence rendering,
-return recommendations, or milestones.
+were played alone against a bot and were not witnessed.
+
+The authenticated shell exposes the learner's measured record at `/rating`. It renders only the
+server-shaped publication: no point estimate appears when the server abstains, every visible
+estimate carries its interval and disclosures, marks name the recorded win event rather than a
+level, and game history reports outcomes without grading moves. Classroom standings render beside
+their classroom on `/live`. Publication requires a separate confirmation that repeats the
+unwitnessed-games limitation; record and rating visibility are independent, and withdrawal is
+immediate. The client preserves server ordering and derives no rank, percentile or praise copy.
+
+Ratings remain selection input only and must never alter evidence rendering, return
+recommendations, or milestones. Rated campaign entry and the RFC's remaining validation arms are
+not supplied by these reading surfaces.

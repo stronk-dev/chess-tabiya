@@ -5347,3 +5347,27 @@ version of this guarantee that survives next week.
 
 **Next:** codex takes the D585 fold-in with play-composition; the daily-position glyph prototype
 and R20/R21 desk arms are claude-startable.
+
+## 2026-08-22 — learner-rating reading surfaces checkpoint
+
+**What landed:** the authenticated shell now has a dedicated `/rating` measured-record route and
+each classroom composes its own consented standing. The rating view renders only server-shaped
+publication, fixed disclosures, event-named marks and whole-game result history. It preserves
+server abstention: a missing publication creates no point estimate, provisional label or fake
+1500. The classroom module preserves server order, prints no rank, keeps rating visibility off by
+default, and requires a two-step learner publication gesture whose confirmation repeats the
+permanent unwitnessed-games limitation. Record visibility, rating visibility and withdrawal are
+separate learner actions; teachers can configure the result window but cannot publish a member.
+
+**Verification:** focused client fixtures cover the API paths, route parser, published and
+abstaining rating states, event-mark copy, game history, server-order preservation and informed
+standing publication. The web typecheck reports zero errors and zero warnings. No broad suite was
+run at this checkpoint.
+
+**What changed:** the learner-facing reading surface is no longer the learner-rating residual.
+Rated campaign entry, owner-use and the RFC's remaining generated acceptance graph still prevent
+archive; the UI does not pretend otherwise. `/learn` remains rating-free and the standing remains
+inside its classroom rather than becoming a global table.
+
+**Next:** return to the next accepted foundation slice that is not waiting on Claude's
+semantic-tactics review or unresolved RFC tables.

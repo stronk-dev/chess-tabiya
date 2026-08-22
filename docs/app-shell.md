@@ -20,8 +20,9 @@ an explicit not-found view rather than crashing the application.
 | `/play` | Just Play position entry and registered pack list |
 | `/play/run/:runId` | Live drill, branch, compare, and export context |
 | `/review` | Stored run history; opening a row returns to its live run context |
+| `/rating` | Server-shaped band-equivalent publication, permanent rated-win marks, disclosures, and whole-game result history |
 | `/learn` | Assigned classroom packs above the return queue and phase-based catalogue |
-| `/live` | Classroom roster/assignment management, scheduled pack nights, live-session index, native-match simul wall, and creation from hosted runs |
+| `/live` | Classroom roster/assignment management, consented classroom standings, scheduled pack nights, live-session index, native-match simul wall, and creation from hosted runs |
 | `/live/session/:sessionId` | Members, match pause state, friend links, board control, proposals, votes, invitations, Arena legs, and journal |
 | `/live/overlay/:runId` | Chrome-free spectator/stream projection of a live run |
 | `/create` | Honest empty state for the authoring program |
@@ -44,6 +45,14 @@ application routes. A live `/play/run/:runId` is a focused full-viewport composi
 that global chrome with its own fixed run topbar; its Tabiya control exits back to Play, where the
 global navigation resumes. Standalone comparison is not a route: Review opens a run at
 `/play/run/:runId`, where the existing controller can project and compare it.
+
+The measured record is deliberately separate from `/learn`: return scheduling remains an attempt
+history rather than a score. `/rating` renders only the publication already shaped by the server,
+including abstention, intervals, sample counts and fixed disclosures; it never derives a grade or
+reorders history. A classroom standing lives inside that classroom on `/live`. Joining is a
+two-step learner gesture whose confirmation repeats the permanent unwitnessed-games limitation;
+record and rating visibility remain independently revocable. The table preserves the server's
+result order and prints no client-derived rank.
 
 ## Run index and SQLite migration
 

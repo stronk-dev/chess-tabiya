@@ -6,6 +6,8 @@
   import PackList from "./lib/PackList.svelte";
   import JustPlayStarter from "./lib/JustPlayStarter.svelte";
   import GameStoryScreen from "./lib/GameStoryScreen.svelte";
+  import RatingScreen from "./lib/RatingScreen.svelte";
+  import CohortStanding from "./lib/CohortStanding.svelte";
   import ShellFrame from "./lib/ShellFrame.svelte";
   import ShellKeyboardHelp from "./lib/ShellKeyboardHelp.svelte";
   import AssistanceSettings from "./lib/AssistanceSettings.svelte";
@@ -876,6 +878,7 @@
               <form class="row-actions" onsubmit={(event)=>{event.preventDefault();void assignClassroomPack();}}><label>Pack <select required bind:value={assignmentPackId}><option value="">Choose a pack</option>{#each packs as pack}<option value={pack.id}>{pack.title}</option>{/each}</select></label><label>Teacher note <input bind:value={assignmentNote}/></label><label>Due <input type="datetime-local" bind:value={assignmentDueAt}/></label><button type="submit">Assign</button></form>
             {/if}
             <h4>Assignments</h4><ul>{#each classroomDetail.assignments as assignment}<li>{assignment.packId}{assignment.dueAt?` · ${readableDate(assignment.dueAt)}`:""}{assignment.withdrawnAt?" · withdrawn":""}</li>{:else}<li>No assignments.</li>{/each}</ul>
+            {#if learner}<CohortStanding {api} classroomId={classroomDetail.classroom.id} learnerId={learner.id} role={classroomDetail.membership.memberRole} />{/if}
             {#if classroomDetail.membership.memberRole==="teacher"}<h4>Submitted runs</h4><ul>{#each classroomDetail.submissions as submission}<li>{readableDate(submission.submittedAt)} · {submission.access==="available"?"access available":"access revoked or expired"} {#if submission.access==="available"}<button type="button" onclick={()=>navigate(routePath({name:"run",runId:submission.runId}))}>Review run</button>{/if}</li>{:else}<li>No submitted runs.</li>{/each}</ul>{/if}
             <h4>Upcoming sessions</h4><ul>{#each classroomDetail.upcomingSessions as item}<li>{item.title} · {item.scheduledFor?readableDate(item.scheduledFor):"unscheduled"}</li>{:else}<li>No scheduled sessions.</li>{/each}</ul>
           </article>
@@ -900,6 +903,8 @@
     <main class="live-overlay" aria-label="Live session overlay">
       {#if session.runState}{@const node=session.runState.run.nodes.find((candidate)=>candidate.id===session.runState!.run.activeCursor.nodeId)}{#if node}<Chessboard fen={node.fen} startSide={session.runState.run.start.side} overlays={relayedMarkShapes(activeLiveDetail)} disabled={true} onMove={()=>{}}/><aside><p class="eyebrow">Tabiya live</p><h1>{node.objectiveState}</h1><p>{session.runState.run.branches.length} branches</p>{#if activeLiveDetail && markAttribution(activeLiveDetail)}<p>{markAttribution(activeLiveDetail)}</p>{/if}{#if activeLiveDetail?.vote}<p>{activeLiveDetail.vote.window.prompt}</p><ul>{#each activeLiveDetail.vote.tally as item}<li>{item.label}: {item.count}</li>{/each}</ul><p>{voteAttribution(activeLiveDetail)}</p>{/if}{#if session.runState.withheld}<p>Host is ahead; evidence is withheld until this run discloses.</p>{/if}</aside>{/if}{:else}<p role="alert">Overlay run unavailable.</p>{/if}
     </main>
+  {:else if route.name === "rating"}
+    <RatingScreen {api} />
   {:else if route.name === "library"}
     <main class="shell-view" aria-labelledby="library-title">
       <p class="eyebrow">Library</p><h1 id="library-title">Packs and run artifacts</h1>

@@ -22,6 +22,7 @@ import type {
   ReasoningDetection,
   ReasoningTranscript,
   RunMark,
+  RatingPublication,
   StoryMoment,
 } from "@chess-tabiya/runtime";
 
@@ -284,6 +285,97 @@ export interface ClassroomAssignment { readonly id:string;readonly classroomId:s
 export interface AssignmentSubmission { readonly assignmentId:string;readonly learnerId:string;readonly runId:string;readonly grantedLearnerIds:readonly string[];readonly submittedAt:string;readonly accessExpiresAt:string;readonly withdrawnAt:string|null;readonly access?:"available"|"revoked_or_expired" }
 export interface ClassroomDetail { readonly classroom:Omit<ClassroomSummary,"memberRole"|"memberState">;readonly membership:ClassroomMember;readonly members:readonly ClassroomMember[];readonly assignments:readonly ClassroomAssignment[];readonly submissions:readonly AssignmentSubmission[];readonly upcomingSessions:readonly LiveSession[] }
 export interface AssignedPack extends ClassroomAssignment { readonly classroomName:string;readonly assignedByHandle:string;readonly submissions:readonly AssignmentSubmission[] }
+
+export interface RatingView {
+  readonly rating?: RatingPublication | null;
+  readonly disclosures: readonly string[];
+}
+
+export interface RatingPeriod {
+  readonly periodNo: number;
+  readonly calibrationId: string;
+  readonly openedAt: string;
+  readonly closedAt: string | null;
+  readonly games: number;
+  readonly ratingBefore: number;
+  readonly rdBefore: number;
+  readonly volatilityBefore: number;
+  readonly ratingAfter: number | null;
+  readonly rdAfter: number | null;
+  readonly volatilityAfter: number | null;
+}
+
+export interface RatedGameHistoryItem {
+  readonly runId: string;
+  readonly calibrationId: string;
+  readonly opponentBand: number;
+  readonly learnerSide: "white" | "black";
+  readonly state: "sealed" | "voided";
+  readonly voidReason: "rewound" | "forked" | "assistance" | "engine_changed" | "calibration_retired" | "abandoned" | null;
+  readonly result: "win" | "loss" | "draw" | null;
+  readonly terminalReason: "checkmate" | "stalemate" | "insufficient_material" | "fifty_move" | "threefold" | null;
+  readonly plyCount: number | null;
+  readonly periodNo: number | null;
+  readonly startedAt: string;
+  readonly sealedAt: string | null;
+}
+
+export interface RatingHistoryPage {
+  readonly periods: readonly RatingPeriod[];
+  readonly games: readonly RatedGameHistoryItem[];
+}
+
+export interface LearnerMark {
+  readonly mark: "bronze" | "silver" | "gold";
+  readonly calibrationId: string;
+  readonly runId: string;
+  readonly earnedAt: string;
+}
+
+export interface CohortStandingRecord {
+  readonly classroomId: string;
+  readonly openedByLearnerId: string;
+  readonly windowFrom: string;
+  readonly windowTo: string | null;
+  readonly openedAt: string;
+  readonly closedAt: string | null;
+}
+
+export interface StandingRecord {
+  readonly wins: number;
+  readonly draws: number;
+  readonly losses: number;
+  readonly games: number;
+  readonly points: number;
+  readonly abandoned: number;
+  readonly byOpponentBand: readonly {
+    readonly opponentBand: number;
+    readonly wins: number;
+    readonly draws: number;
+    readonly losses: number;
+    readonly games: number;
+    readonly points: number;
+  }[];
+}
+
+export interface CohortStandingEntry {
+  readonly learnerId: string;
+  readonly handle: string;
+  readonly marks: readonly {
+    readonly mark: "bronze" | "silver" | "gold";
+    readonly band: 1400 | 1800 | 2200;
+    readonly calibrationId: string;
+    readonly earnedAt: string;
+  }[];
+  readonly record?: StandingRecord;
+  readonly rating?: RatingPublication & { readonly group: string | number };
+}
+
+export interface CohortStandingView {
+  readonly standing: CohortStandingRecord;
+  readonly limitation: string;
+  readonly entries: readonly CohortStandingEntry[];
+}
 
 export interface Capabilities {
   readonly engines: readonly EngineCapability[];
@@ -699,6 +791,16 @@ export interface DrillClientApi extends RunApi {
   assignments?():Promise<readonly AssignedPack[]>;
   submitAssignment?(id:string,runId:string,expiresInDays?:number):Promise<AssignmentSubmission>;
   withdrawSubmission?(id:string,runId:string):Promise<void>;
+  rating?(): Promise<RatingView>;
+  ratingHistory?(): Promise<RatingHistoryPage>;
+  learnerMarks?(): Promise<readonly LearnerMark[]>;
+  cohortStanding?(classroomId: string): Promise<CohortStandingView>;
+  updateCohortStanding?(classroomId: string, input:
+    | { readonly op: "open"; readonly windowFrom: string; readonly windowTo?: string }
+    | { readonly op: "close" }
+    | { readonly op: "window"; readonly windowFrom: string; readonly windowTo?: string }
+    | { readonly op: "publish" | "withdraw" | "showRating" | "hideRating" | "showRecord" | "hideRecord" }
+  ): Promise<void>;
   sessionJournal?(sessionId:string,sinceSeq?:number):Promise<{readonly entries:readonly SessionJournalEntry[];readonly nextSeq:number}>;
   sessionProposals?(sessionId:string):Promise<readonly SessionProposal[]>;
   proposeMove?(sessionId:string,nodeId:string,moveUci:string):Promise<SessionProposal>;
@@ -954,6 +1056,16 @@ export class DrillApi implements DrillClientApi {
   async assignments():Promise<readonly AssignedPack[]>{const body=await this.#json<{assignments:readonly AssignedPack[]}>("/assignments");return body.assignments;}
   async submitAssignment(id:string,runId:string,expiresInDays?:number):Promise<AssignmentSubmission>{const body=await this.#json<{submission:AssignmentSubmission}>(`/assignments/${encoded(id)}/submissions`,{method:"POST",body:{runId,...(expiresInDays===undefined?{}:{expiresInDays})}});return body.submission;}
   async withdrawSubmission(id:string,runId:string):Promise<void>{await this.#json(`/assignments/${encoded(id)}/submissions`,{method:"POST",body:{op:"withdraw",runId}});}
+  rating():Promise<RatingView>{return this.#json("/rating");}
+  ratingHistory():Promise<RatingHistoryPage>{return this.#json("/rating/history");}
+  async learnerMarks():Promise<readonly LearnerMark[]>{const body=await this.#json<{readonly marks:readonly LearnerMark[]}>("/marks");return body.marks;}
+  cohortStanding(classroomId:string):Promise<CohortStandingView>{return this.#json(`/cohorts/${encoded(classroomId)}/standing`);}
+  async updateCohortStanding(classroomId:string,input:
+    | {readonly op:"open";readonly windowFrom:string;readonly windowTo?:string}
+    | {readonly op:"close"}
+    | {readonly op:"window";readonly windowFrom:string;readonly windowTo?:string}
+    | {readonly op:"publish"|"withdraw"|"showRating"|"hideRating"|"showRecord"|"hideRecord"}
+  ):Promise<void>{await this.#json(`/cohorts/${encoded(classroomId)}/standing`,{method:"POST",body:input});}
   sessionJournal(sessionId:string,sinceSeq=0):Promise<{readonly entries:readonly SessionJournalEntry[];readonly nextSeq:number}>{return this.#json(`/sessions/${encoded(sessionId)}/journal?sinceSeq=${sinceSeq}`);}
   async sessionProposals(sessionId:string):Promise<readonly SessionProposal[]>{const body=await this.#json<{proposals:readonly SessionProposal[]}>(`/sessions/${encoded(sessionId)}/proposals`);return body.proposals;}
   async proposeMove(sessionId:string,nodeId:string,moveUci:string):Promise<SessionProposal>{const body=await this.#json<{proposal:SessionProposal}>(`/sessions/${encoded(sessionId)}/proposals`,{method:"POST",body:{nodeId,moveUci}});return body.proposal;}

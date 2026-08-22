@@ -27,6 +27,7 @@
     ["Play", "/play", "play"],
     ["Learn", "/learn", "learn"],
     ["Review", "/review", "review"],
+    ["Record", "/rating", "rating"],
     ["Live", "/live", "live"],
     ["Create", "/create", "create"],
     ["Library", "/library", "library"],

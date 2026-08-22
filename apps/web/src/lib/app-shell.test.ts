@@ -285,7 +285,7 @@ describe("application shell", () => {
     });
 
     await vi.waitFor(() => expect(document.body.textContent).toContain("Run history"));
-    expect(document.querySelectorAll("nav a")).toHaveLength(8);
+    expect(document.querySelectorAll("nav a")).toHaveLength(9);
     document.querySelector<HTMLButtonElement>(".item-list button")!.click();
 
     await vi.waitFor(() => expect(document.querySelector("main.drill")).not.toBeNull());
@@ -323,6 +323,7 @@ describe("application shell", () => {
     const routes = [
       ["/play", "Choose a position worth returning to."],
       ["/learn", "Return to the positions"],
+      ["/rating", "Your measured record"],
       ["/live", "Rehearse with other people"],
       ["/create", "Author against the real validator"],
       ["/library", "Packs and run artifacts"],

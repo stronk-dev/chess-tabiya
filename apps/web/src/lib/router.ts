@@ -2,6 +2,7 @@ export type StaticRouteName =
   | "home"
   | "play"
   | "review"
+  | "rating"
   | "learn"
   | "live"
   | "create"
@@ -22,6 +23,7 @@ const STATIC_ROUTES: Readonly<Record<string, StaticRouteName>> = Object.freeze({
   "/": "home",
   "/play": "play",
   "/review": "review",
+  "/rating": "rating",
   "/learn": "learn",
   "/live": "live",
   "/create": "create",

@@ -1,0 +1,142 @@
+<script lang="ts">
+  import { onMount } from "svelte";
+
+  import type { PublishedBandValue, RatingPublication } from "@chess-tabiya/runtime";
+  import type {
+    DrillClientApi,
+    LearnerMark,
+    RatedGameHistoryItem,
+    RatingHistoryPage,
+    RatingView,
+  } from "./api.js";
+
+  interface Props { api: DrillClientApi }
+  let { api }: Props = $props();
+
+  let ratingView: RatingView | undefined = $state();
+  let history: RatingHistoryPage | undefined = $state();
+  let marks: readonly LearnerMark[] = $state([]);
+  let loading = $state(true);
+  let error: string | undefined = $state();
+
+  onMount(() => { void load(); });
+
+  async function load(): Promise<void> {
+    loading = true;
+    error = undefined;
+    try {
+      [ratingView, history, marks] = await Promise.all([
+        api.rating?.() ?? Promise.resolve({ disclosures: [] }),
+        api.ratingHistory?.() ?? Promise.resolve({ periods: [], games: [] }),
+        api.learnerMarks?.() ?? Promise.resolve([]),
+      ]);
+    } catch (cause) {
+      error = cause instanceof Error ? cause.message : String(cause);
+    } finally {
+      loading = false;
+    }
+  }
+
+  function band(value: PublishedBandValue): string {
+    if (value.kind === "below") return `below band ${value.band}`;
+    if (value.kind === "above") return `above band ${value.band}`;
+    return `band ${Math.round(value.value)}`;
+  }
+
+  function interval(publication: RatingPublication): string {
+    return `${band(publication.interval[0])} to ${band(publication.interval[1])}`;
+  }
+
+  function gameResult(game: RatedGameHistoryItem): string {
+    if (game.state === "voided") return game.voidReason === null ? "voided" : `voided: ${game.voidReason.replaceAll("_", " ")}`;
+    return game.result ?? "sealed";
+  }
+
+  function readableDate(value: string | null): string {
+    if (value === null) return "open";
+    const parsed = new Date(value);
+    return Number.isNaN(parsed.valueOf()) ? value : parsed.toLocaleDateString();
+  }
+</script>
+
+<main class="rating-view" aria-labelledby="rating-title">
+  <header>
+    <p class="eyebrow">Rated games</p>
+    <h1 id="rating-title">Your measured record</h1>
+    <p>Results against the calibrated human-choice opponent ladder. This record never grades a move or changes what a coach says about it.</p>
+  </header>
+
+  {#if loading}
+    <p role="status">Loading rated games…</p>
+  {:else if error}
+    <div class="error" role="alert"><p>{error}</p><button type="button" onclick={() => void load()}>Try again</button></div>
+  {:else}
+    {#if ratingView?.rating}
+      {@const publication = ratingView.rating}
+      <section class="rating-card" aria-labelledby="current-rating-title">
+        <div>
+          <p class="eyebrow">Current publication</p>
+          <h2 id="current-rating-title">
+            {publication.pointEstimate ? band(publication.pointEstimate) : "Interval only"}
+          </h2>
+          <p class="interval">{interval(publication)}</p>
+        </div>
+        <dl>
+          <div><dt>State</dt><dd>{publication.state}</dd></div>
+          <div><dt>Rated games</dt><dd>{publication.ratedGames}</dd></div>
+          <div><dt>Abandoned</dt><dd>{publication.abandonedGames}</dd></div>
+        </dl>
+      </section>
+      <section aria-labelledby="rating-disclosures-title">
+        <h2 id="rating-disclosures-title">What this number means</h2>
+        <ul class="disclosures">{#each ratingView.disclosures as disclosure}<li>{disclosure}</li>{/each}</ul>
+      </section>
+    {/if}
+
+    {#if marks.length > 0}
+      <section aria-labelledby="marks-title">
+        <h2 id="marks-title">Recorded wins</h2>
+        <ul class="marks">{#each marks as item}<li class={`mark ${item.mark}`}>Beat band {item.mark === "bronze" ? 1400 : item.mark === "silver" ? 1800 : 2200} on {readableDate(item.earnedAt)}</li>{/each}</ul>
+      </section>
+    {/if}
+
+    <section aria-labelledby="rated-history-title">
+      <h2 id="rated-history-title">Game history</h2>
+      {#if history?.games.length}
+        <div class="table-scroll"><table>
+          <thead><tr><th>Date</th><th>Opponent</th><th>Side</th><th>Result</th></tr></thead>
+          <tbody>{#each [...history.games].reverse() as game}<tr><td>{readableDate(game.sealedAt ?? game.startedAt)}</td><td>Band {game.opponentBand}</td><td>{game.learnerSide}</td><td>{gameResult(game)}</td></tr>{/each}</tbody>
+        </table></div>
+      {:else}
+        <p>No rated-game result has been recorded. Rated campaign games will appear here after they reach a chess-rules result.</p>
+      {/if}
+    </section>
+  {/if}
+</main>
+
+<style>
+  .rating-view { height: 100%; overflow: auto; padding: clamp(1rem, 3vw, 2.5rem); max-width: 70rem; margin: 0 auto; }
+  header { max-width: 48rem; }
+  h1, h2, p { margin-top: 0; }
+  section { margin-top: 1.5rem; }
+  .eyebrow { color: var(--muted); font: 700 0.72rem/1.2 ui-monospace, monospace; letter-spacing: .08em; text-transform: uppercase; }
+  .rating-card { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 1.5rem; align-items: end; padding: clamp(1rem, 3vw, 1.75rem); border: 1px solid var(--line); border-radius: 1rem; background: var(--panel); }
+  .rating-card h2 { font-size: clamp(1.8rem, 5vw, 3.2rem); }
+  .interval { color: var(--muted); margin-bottom: 0; }
+  dl { display: flex; gap: 1.5rem; margin: 0; }
+  dl div { display: grid; gap: .2rem; }
+  dt { color: var(--muted); font-size: .72rem; text-transform: uppercase; }
+  dd { margin: 0; font-variant-numeric: tabular-nums; }
+  .disclosures { max-width: 55rem; color: var(--muted); line-height: 1.5; }
+  .marks { display: flex; flex-wrap: wrap; gap: .6rem; padding: 0; list-style: none; }
+  .mark { padding: .55rem .75rem; border: 1px solid var(--line); border-radius: 999px; }
+  .bronze { background: color-mix(in srgb, #a9673f 18%, var(--paper)); }
+  .silver { background: color-mix(in srgb, #9ca3af 20%, var(--paper)); }
+  .gold { background: color-mix(in srgb, #d6a800 18%, var(--paper)); }
+  .table-scroll { overflow-x: auto; }
+  table { width: 100%; border-collapse: collapse; }
+  th, td { padding: .7rem; border-bottom: 1px solid var(--line); text-align: left; }
+  th { color: var(--muted); font-size: .72rem; text-transform: uppercase; }
+  .error { padding: 1rem; border: 1px solid var(--warning); border-radius: .75rem; }
+  @media (max-width: 620px) { .rating-card { grid-template-columns: 1fr; } dl { flex-wrap: wrap; } }
+</style>
