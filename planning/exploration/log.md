@@ -5405,3 +5405,15 @@ outside its process scope.
 
 **Next:** continue the accepted bot-policy substrate without registering the D969/D970-blocked
 guarded roster or inventing its engine probe/band set.
+
+## 2026-08-22 — schema self-description and F1 ledger reconciliation
+
+**What landed:** the drill-pack schema's human description now follows its exported 0.27 version,
+with a derived assertion beside the existing `$id` binding. D663/D665/D666 also move to their true
+terminal state after re-verification at the production symbols: reasoning review has a typed
+non-evidence HTTP request, detector/authored phases carry distinct exact payloads, and all registered
+consumer operations enter through compiled evidence views with bare-payload negative fixtures.
+
+**What changed:** four false-open rows stop competing with real foundation work. D574's historical
+schema-identity incident remains open because correcting today's description cannot rewrite a past
+artifact; D576/D578 remain contract/RFC work rather than being smuggled into this direct repair.

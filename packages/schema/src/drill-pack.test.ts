@@ -62,6 +62,7 @@ describe("drill_pack.schema.json v0.27", () => {
       $id: "urn:chess-tabiya:schema:drill-pack:0.27",
     });
     expect(DRILL_PACK_SCHEMA_VERSION).toBe("0.27");
+    expect(schema.description).toContain(`v${DRILL_PACK_SCHEMA_VERSION}`);
   });
 
   it("binds schema vocabularies to the shared constants", () => {
