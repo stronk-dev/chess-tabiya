@@ -12,6 +12,7 @@ import {
 } from "@chess-tabiya/schema/drill-pack";
 
 import { positionFromFen } from "./chess.js";
+import { DEVELOPMENT_CONVENTION, isDevelopmentHome } from "./phase.js";
 import {
   matchesStructuralExpression,
   structuralFeatureKinds,
@@ -98,6 +99,14 @@ export type TransitionSemanticFact =
       readonly to: SquareName;
       readonly captured: Readonly<{ color: Color; role: Role }>;
       readonly enPassant: boolean;
+    }
+  | {
+      readonly family: "developed";
+      readonly sign: "gained" | "lost";
+      readonly mover: Readonly<{ readonly color: Color; readonly role: "knight" | "bishop" }>;
+      readonly from: SquareName;
+      readonly to: SquareName;
+      readonly detail: Readonly<{ readonly conventionId: typeof DEVELOPMENT_CONVENTION; readonly roleMatchedHome: true }>;
     };
 
 type Position = ReturnType<typeof positionFromFen>;
@@ -315,6 +324,18 @@ export function transitionSemanticFacts(beforeFen: string, moveUci: string, afte
     if (movingPiece !== undefined) {
       const mover = Object.freeze({ color: movingPiece.color, role: movingPiece.role });
       const from = makeSquare(parsed.from), to = makeSquare(parsed.to);
+      if (movingPiece.role === "knight" || movingPiece.role === "bishop") {
+        const leftHome = isDevelopmentHome(movingPiece.color, movingPiece.role, from);
+        const returnedHome = isDevelopmentHome(movingPiece.color, movingPiece.role, to);
+        if (leftHome !== returnedHome) facts.push({
+          family: "developed",
+          sign: leftHome ? "gained" : "lost",
+          mover: Object.freeze({ color: movingPiece.color, role: movingPiece.role }),
+          from,
+          to,
+          detail: Object.freeze({ conventionId: DEVELOPMENT_CONVENTION, roleMatchedHome: true }),
+        });
+      }
       if (movingPiece.role === "king" && Math.abs((parsed.to % 8) - (parsed.from % 8)) >= 2) facts.push({ family: "castled", sign: "state", mover, from, to, detail: Object.freeze({ resultingKingSquare: Math.floor(parsed.from / 8) * 8 + (parsed.to > parsed.from ? 6 : 2) }) });
       const captured = capturedRole(before, after, moveUci);
       if (captured !== undefined) facts.push({ family: "capture", sign: "state", mover, from, to, captured: Object.freeze(captured), enPassant: before.board.get(parsed.to) === undefined && movingPiece.role === "pawn" && parsed.from % 8 !== parsed.to % 8 });

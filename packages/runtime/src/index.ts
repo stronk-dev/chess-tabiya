@@ -36,7 +36,8 @@ export {
 export { appendEvents, deriveSegments, eventsSince, groupsFromEvents, projectRun } from "./events.js";
 export { feedbackDeliveryOpen, feedbackDisclosed } from "./feedback.js";
 export { consumeShapeFiring, declareShapeFiringEvidence, shapeFiringEvidence, shapeFirings, type ShapeFiring, type ShapeTriggerSource } from "./shape-firing.js";
-export { classifyPhase, renderPhaseReading, ENDGAME_MATERIAL_MAX, DEVELOPED_MATERIAL_MIN, OPENING_UNDEVELOPED_MIN, MIDDLEGAME_UNDEVELOPED_MAX, PHASE_PROVENANCE, type DetectedPhase, type PhaseReading } from "./phase.js";
+export { classifyPhase, developmentReading, isDevelopmentHome, renderPhaseReading, DEVELOPMENT_CONVENTION, DEVELOPMENT_HOMES, ENDGAME_MATERIAL_MAX, DEVELOPED_MATERIAL_MIN, OPENING_UNDEVELOPED_MIN, MIDDLEGAME_UNDEVELOPED_MAX, PHASE_PROVENANCE, type DetectedPhase, type DevelopmentReading, type PhaseReading } from "./phase.js";
+export { loosePieceReading, rayClassificationReading, type LoosePieceReading, type LoosePieceState, type RayClassification, type RayClassificationKind, type RayClassificationReading } from "./tactics.js";
 export { SILENT_ASSISTANCE, permittedAssistance, reviewingGrant, type AssistanceConfig, type AssistanceContext, type AssistancePermission } from "./assistance.js";
 export { consumePivotalMarkers, liveAdmitted, liveMarkers, pivotalMarkerEvidence, pivotalMarkers, renderPivotalMarker, type PivotalKind, type PivotalMarker, type IrreversibilityDetail, type PhaseChangeDetail, type DivergenceDetail, type CollapseDetail } from "./pivotal.js";
 export {
@@ -265,6 +266,8 @@ export {
   declareForkSurvivalEvidence,
   declareReplyBreadthEvidence,
   declareCheckEventEvidence,
+  declareLoosePieceEvidence,
+  declareRayClassificationEvidence,
   declareCastlingRightsEvidence,
   declareCastlingRightsLostEvidence,
   declareCastlingLegalityEvidence,
@@ -272,11 +275,13 @@ export {
   declareExplorerPositionEvidence,
   declareLivePacketEvidence,
   declareMaiaEventEvidence,
+  declareMaiaCandidateWdlEvidence,
   declareMaiaPolicyEvidence,
   declareNamedStructureEvidence,
   declareOpponentProviderEvidence,
   declarePackPhaseEvidence,
   declarePhaseReadingEvidence,
+  declareDevelopmentReadingEvidence,
   declarePivotalMarkerEvidence,
   declareRecordedEngineEvidence,
   declareRecordedTablebaseEvidence,
@@ -295,6 +300,7 @@ export {
   declareTransitionReadingSourceEvidence,
   declareTransitionSemanticSourceEvidence,
 } from "./evidence-source-adapters.js";
+export type { MaiaCandidateWdlProjection } from "./evidence-source-adapters.js";
 export {
   RULES_EVIDENCE_FACTS,
   THEORY_EVIDENCE_FACTS,

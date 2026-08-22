@@ -27,6 +27,7 @@ function exactObject<T extends object>(producer: string, projection: string, pay
 }
 
 export const declarePhaseReadingEvidence = <T extends object>(payload: T) => exactObject("rules.phase", "rules.phase.reading", payload, ["fen", "phase", "material", "undevelopedMinors", "provenanceNote"]);
+export const declareDevelopmentReadingEvidence = <T extends object>(payload: T) => exactObject("rules.phase", "rules.phase.development", payload, ["fen", "conventionId", "undeveloped"]);
 export const declarePackPhaseEvidence = <T extends string>(payload: T) => {
   if (!new Set(["opening", "middlegame", "endgame", "cross_phase"]).has(payload)) throw new TypeError("pack.authored.phase evidence payload is not a pack phase");
   return exact("pack.authored", "pack.authored.phase", payload);
@@ -42,6 +43,40 @@ export const declareRecordedTablebaseEvidence = <T extends object>(payload: T) =
 export const declareExplorerPositionEvidence = <T extends object>(payload: T) => exactObject("human.explorer", "human.explorer.position_stats", payload, ["kind", "population"]);
 export const declareExplorerPopulationEvidence = <T extends object>(payload: T) => exactObject("human.explorer", "human.explorer.population", payload, ["nodeId", "result", "committedMoveSan"]);
 export const declareMaiaPolicyEvidence = <T extends object>(payload: T) => exactObject("human.maia", "human.maia.policy", payload, ["nodeId", "engine", "targetElo", "candidates"]);
+export interface MaiaCandidateWdlProjection {
+  readonly nodeId: string;
+  readonly engine: object;
+  readonly targetElo: number | null;
+  readonly candidates: readonly {
+    readonly moveUci: string;
+    readonly rank: number;
+    readonly wdl: Readonly<{ readonly win: number; readonly draw: number; readonly loss: number }>;
+  }[];
+}
+
+export function declareMaiaCandidateWdlEvidence(page: {
+  readonly nodeId: string;
+  readonly engine: object;
+  readonly targetElo: number | null;
+  readonly candidates: readonly {
+    readonly moveUci: string;
+    readonly rank: number;
+    readonly wdl?: Readonly<{ readonly win: number; readonly draw: number; readonly loss: number }>;
+  }[];
+}): DeclaredEvidence<MaiaCandidateWdlProjection> | undefined {
+  const candidates = page.candidates.flatMap((candidate) => candidate.wdl === undefined ? [] : [{
+    moveUci: candidate.moveUci,
+    rank: candidate.rank,
+    wdl: candidate.wdl,
+  }]);
+  if (candidates.length === 0) return undefined;
+  return exactObject("human.maia", "human.maia.candidate_wdl", {
+    nodeId: page.nodeId,
+    engine: page.engine,
+    targetElo: page.targetElo,
+    candidates,
+  }, ["nodeId", "engine", "targetElo", "candidates"]);
+}
 export const declareMaiaEventEvidence = <T extends object>(payload: T) => exactObject("human.maia", "human.maia.event", payload, ["kind", "source", "values"]);
 export const declareSyzygyResultEvidence = <T extends object>(payload: T) => exactObject("live.syzygy", "live.syzygy.result", payload, ["kind", "source", "values"]);
 export const declareStockfishEvalEvidence = <T extends object>(payload: T) => exactObject("live.stockfish", "live.stockfish.eval", payload, ["kind", "source", "values"]);
@@ -54,6 +89,8 @@ export const declareDoubleAttackEvidence = <T extends object>(payload: T) => exa
 export const declareForkSurvivalEvidence = <T extends object>(payload: T) => exactObject("derived.tactic", "derived.tactic.fork_survives_reply", payload, ["matched", "doubleAttack", "replyBreadth", "refutingReplies"]);
 export const declareReplyBreadthEvidence = <T extends object>(payload: T) => exactObject("rules.tactic", "rules.tactic.consequence.reply_breadth", payload, ["triggeringMove", "afterFen", "terminal", "check", "replies", "count", "horizon"]);
 export const declareCheckEventEvidence = <T extends object>(payload: T) => exactObject("rules.tactic", "rules.tactic.event.check", payload, ["triggeringMove", "checkingPieces", "checkedKing", "attackSquares", "rays"]);
+export const declareLoosePieceEvidence = <T extends object>(payload: T) => exactObject("rules.tactic", "rules.tactic.reading.loose_piece", payload, ["fen", "sideToMove", "pieces"]);
+export const declareRayClassificationEvidence = <T extends object>(payload: T) => exactObject("rules.tactic", "rules.tactic.reading.ray_classification", payload, ["fen", "rays"]);
 export const declareCastlingRightsEvidence = <T extends object>(payload: T) => exactObject("rules.castling", "rules.castling.reading.rights", payload, ["fen", "white", "black"]);
 export const declareCastlingRightsLostEvidence = <T extends object>(payload: T) => exactObject("rules.castling", "rules.castling.event.rights_lost", payload, ["beforeFen", "moveUci", "afterFen", "color", "wing", "cause"]);
 export const declareCastlingLegalityEvidence = <T extends object>(payload: T) => exactObject("rules.castling", "rules.castling.reading.legality", payload, ["color", "wing", "kingSquare", "rookSquare", "legalNow", "inCheck", "blockedSquares", "attackedSquares"]);
@@ -134,7 +171,7 @@ export function declareStructuralSemanticSourceEvidence<T extends object>(family
 }
 
 export function declareTransitionSemanticSourceEvidence<T extends object>(family: string, payload: T): DeclaredEvidence<T> {
-  const allowed = new Set(["occupied_attack", "occupied_defence", "slider_ray", "piece_escape", "defended_duty", "castled", "clock_reset", "last_of_role", "pawn_contact", "checkmate", "promotion", "capture"]);
+  const allowed = new Set(["occupied_attack", "occupied_defence", "slider_ray", "piece_escape", "defended_duty", "castled", "clock_reset", "last_of_role", "pawn_contact", "checkmate", "promotion", "capture", "developed"]);
   if (!allowed.has(family)) throw new TypeError(`Unsupported transition semantic family ${family}`);
   const keys = new Set(["occupied_attack", "occupied_defence", "slider_ray", "piece_escape", "defended_duty"]).has(family)
     ? ["before_fen", "move_uci", "after_fen", "subject", "targets_before", "targets_after"]

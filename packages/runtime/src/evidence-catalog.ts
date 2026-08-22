@@ -112,7 +112,7 @@ export const STRUCTURAL_EVENT_FAMILIES = Object.freeze([
   "king_zone", "line_blockers", "open_file", "passed_pawn", "piece_count", "direct_attack_count",
 ] as const);
 export const TRANSITION_GEOMETRY_EVENT_FAMILIES = Object.freeze(["occupied_attack", "occupied_defence", "slider_ray", "piece_escape", "defended_duty"] as const);
-export const TRANSITION_RULE_EVENT_FAMILIES = Object.freeze(["castled", "clock_reset", "last_of_role", "pawn_contact", "checkmate", "promotion", "capture"] as const);
+export const TRANSITION_RULE_EVENT_FAMILIES = Object.freeze(["castled", "clock_reset", "last_of_role", "pawn_contact", "checkmate", "promotion", "capture", "developed"] as const);
 export const STRUCTURAL_EVENT_PROJECTION_IDS = Object.freeze(STRUCTURAL_EVENT_FAMILIES.map((family) => `rules.structural.event.${family}`));
 export const TRANSITION_EVENT_PROJECTION_IDS = Object.freeze([...TRANSITION_GEOMETRY_EVENT_FAMILIES, ...TRANSITION_RULE_EVENT_FAMILIES].map((family) => `rules.transition.event.${family}`));
 export const AVOIDANCE_EVENT_PROJECTION_IDS = Object.freeze(STRUCTURAL_EVENT_FAMILIES.map((family) => `derived.semantic_avoidance.${family}`));
@@ -184,7 +184,8 @@ const transitionEventOutputs = [
   ...TRANSITION_RULE_EVENT_FAMILIES.map((family) => projection("rules.transition", `rules.transition.event.${family}`, "transition", {
     role: "event", payloadType: "TransitionRuleEventOperands", semantics: `Independent exact transition-rule event for ${family}.`,
     operands: family === "capture" ? ["before_fen", "move_uci", "after_fen", "mover", "from", "to", "captured", "enPassant"] : ["before_fen", "move_uci", "after_fen", "mover", "from", "to", "detail"], signs: ["state"],
-    forms: ["list", "panel", "machine_condition"], limitations: ["An exact rules event carries no learner valence or importance judgement."],
+    ...(family === "developed" ? { semantics: "development@1: a role-matched minor leaves its home square (gained) or returns to it (lost). Knights use b/g files and bishops c/f; captures of a minor on its home square, castling, rook connection and queen movement are outside this event.", grounding: "declared_convention" as const, exactness: "convention" as const, signs: ["gained", "lost"] as const } : {}),
+    forms: ["list", "panel", "machine_condition"], limitations: ["The literal development transition carries no learner valence, move grade, or complete-development claim."],
   })),
 ];
 
@@ -238,6 +239,20 @@ const castlingOutputs = [
 ];
 
 const tacticalOutputs = [
+  projection("rules.tactic", "rules.tactic.reading.loose_piece", "rules", {
+    payloadType: "LoosePieceReading", semantics: "For each non-king piece belonging to the non-moving side, retains legal capturers, geometric defenders, legal-exchange@1 results and the en-prise, loose and under-defended convention flags.",
+    operands: ["fen", "sideToMove", "pieces"], grounding: "declared_convention", exactness: "convention",
+    answerContent: ["fact", "threat"], forms: ["list", "panel", "machine_condition"], dependsOn: [ref("rules.exchange.predicate.legal_exchange")],
+    limitations: ["Local exchange only; zwischenzugs, compensation and whole-position move quality are outside scope."],
+    disposition: { kind: "inspector_only", reason: "Collector landing retains exact identities; Phase 3 decides learner-module eligibility." },
+  }),
+  projection("rules.tactic", "rules.tactic.reading.ray_classification", "rules", {
+    payloadType: "RayClassificationReading", semantics: "Classifies one-blocker slider rays with precedence absolute pin, skewer, relative pin, then X-ray; each item retains slider, blocker, target, ray and any declared value comparison. Absolute-pin geometry is exact; the combined projection conservatively declares convention grounding.",
+    operands: ["fen", "rays"], grounding: "declared_convention", exactness: "convention",
+    answerContent: ["fact", "pattern", "threat"], forms: ["list", "panel", "lit_squares", "piece_halo", "machine_condition"],
+    limitations: ["State geometry is not a move grade, tactical inevitability or statement that a ray is important."],
+    disposition: { kind: "inspector_only", reason: "State evidence lands before measured module selection; no ray event family is admitted here." },
+  }),
   projection("rules.tactic", "rules.tactic.consequence.threat", "rules", {
     role: "reading", payloadType: "ThreatResult", semantics: THREAT_SEMANTICS,
     operands: ["kind", "conventionId", "threats"], signs: ["threatened"], grounding: "declared_convention", exactness: "convention",
@@ -284,7 +299,16 @@ export const EVIDENCE_PRODUCERS: readonly ProducerDeclaration[] = Object.freeze(
   producer("rules.castling", "rules", "packages/runtime/src/castling.ts", "local", castlingOutputs),
   producer("rules.exchange", "rules", "packages/runtime/src/exchange.ts", "local", exchangeOutputs),
   producer("rules.tactic", "rules", "packages/runtime/src/tactics.ts", "local", tacticalOutputs),
-  producer("rules.phase", "rules", "packages/runtime/src/phase.ts", "local", [projection("rules.phase", "rules.phase.reading", "rules", { payloadType: "PhaseReading", operands: ["fen", "phase", "material", "undevelopedMinors", "provenanceNote"], forms: ["sentence", "panel"] })]),
+  producer("rules.phase", "rules", "packages/runtime/src/phase.ts", "local", [
+    projection("rules.phase", "rules.phase.reading", "rules", { payloadType: "PhaseReading", operands: ["fen", "phase", "material", "undevelopedMinors", "provenanceNote"], forms: ["sentence", "panel"] }),
+    projection("rules.phase", "rules.phase.development", "rules", {
+      payloadType: "DevelopmentReading", semantics: "development@1 state: role-matched knights on b/g home squares and bishops on c/f home squares are retained per color. This intentionally differs from the role-agnostic count used only by the phase band classifier.",
+      operands: ["fen", "conventionId", "undeveloped"], grounding: "declared_convention", exactness: "convention",
+      answerContent: ["fact", "pattern"], forms: ["list", "panel", "piece_halo"],
+      limitations: ["Minor-piece home-square state only; it is not a complete opening-development score or move grade."],
+      disposition: { kind: "inspector_only", reason: "Exact convention state lands before learner-module and bot-feature selection." },
+    }),
+  ]),
   producer("rules.pivotal", "rules", "packages/runtime/src/pivotal.ts", "local", [projection("rules.pivotal", "rules.pivotal.marker", "rules", { payloadType: "PivotalMarker", operands: ["nodeId", "kind", "detail", "provenanceNote"], forms: ["timeline_marker", "sentence", "panel"] })]),
   producer("rules.endgame", "rules", "packages/runtime/src/endgame.ts", "local", [projection("rules.endgame", "rules.endgame.reading", "rules", { payloadType: "EndgameReading", operands: ["type", "techniques", "provenanceNote"], forms: ["sentence", "panel"] })]),
   producer("theory.shapes", "theory", "packages/runtime/src/shape-firing.ts; apps/server/src/shape-registry.ts", "local", [projection("theory.shapes", "theory.shapes.firing", "theory", { payloadType: "ShapeFiring", grounding: "authored_claim", exactness: "authored", operands: ["entryId", "firstNodeId", "lastNodeId", "openEnded"], answerContent: ["pattern", "theory", "plan"], forms: ["sentence", "panel", "timeline_marker"], limitations: ["A trigger match does not infer an uncited strategic consequence."] })]),
@@ -313,6 +337,7 @@ export const EVIDENCE_PRODUCERS: readonly ProducerDeclaration[] = Object.freeze(
   producer("human.maia", "human", "apps/server/src/opponent-selector.ts; apps/server/src/rest.ts", "provider", [
     projection("human.maia", "human.maia.uci_response", "human", { role: "source_record", payloadType: "readonly UCI line[]", grounding: "human_model", exactness: "measured", confidence: "reported", answerContent: ["candidate_moves", "move"], forms: ["list", "panel"], abstention: { possible: true, reasons: ["provider_unavailable", "model_failure"] }, limitations: ["Raw model response used by opponent selection; policy mass describes model choice, not move quality."] }),
     projection("human.maia", "human.maia.policy", "human", { role: "source_record", payloadType: "HumanSplitPage", grounding: "human_model", exactness: "measured", confidence: "reported", operands: ["nodeId", "engine", "targetElo", "candidates"], answerContent: ["candidate_moves"], forms: ["list", "panel"], abstention: { possible: true, reasons: ["provider_unavailable", "model_failure"] }, limitations: ["Policy mass describes model choice, not move quality."] }),
+    projection("human.maia", "human.maia.candidate_wdl", "human", { role: "source_record", payloadType: "MaiaCandidateWdlProjection", grounding: "human_model", exactness: "measured", confidence: "reported", operands: ["nodeId", "engine", "targetElo", "candidates"], answerContent: ["evaluation"], forms: ["list", "panel"], abstention: { possible: true, reasons: ["provider_unavailable", "model_failure", "empty_population"] }, limitations: ["Per-candidate model WDL is retained exactly for inspection; it is not a move grade, recommendation, or middlegame oracle."], disposition: { kind: "inspector_only", reason: "D744: retain already-transported Maia candidate WDL without admitting it to a learner module." } }),
     projection("human.maia", "human.maia.event", "human", { role: "event", payloadType: "EvidencePayload.human_model_predicted", grounding: "human_model", exactness: "measured", confidence: "reported", operands: ["kind", "source", "values"], answerContent: ["candidate_moves", "move"], forms: ["panel"], abstention: { possible: true, reasons: ["provider_unavailable", "model_failure"] }, limitations: ["Attached model event records a model output, not move quality or advice."] }),
   ]),
   producer("human.explorer", "human", "apps/server/src/corpus.ts; apps/server/src/rest.ts", "provider", [

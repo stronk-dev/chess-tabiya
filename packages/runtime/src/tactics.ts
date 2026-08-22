@@ -1,15 +1,157 @@
 import { normalizeMove } from "chessops/chess";
 import { attacks, between } from "chessops/attacks";
 import { makeFen } from "chessops/fen";
-import type { Move, NormalMove, Piece, Role, Square, SquareName } from "chessops/types";
+import type { Color, Move, NormalMove, Piece, Role, Square, SquareName } from "chessops/types";
 import { makeSquare, makeUci, opposite, parseUci } from "chessops/util";
 
 import { canonicalFen, positionFromFen } from "./chess.js";
-import { legalCaptureMovesTo, legalExchangeForMove, type LegalExchangeResult } from "./exchange.js";
+import { EXCHANGE_PIECE_VALUES, legalCaptureMovesTo, legalExchangeForMove, type LegalExchangeResult } from "./exchange.js";
 
 const PROMOTIONS: readonly Role[] = Object.freeze(["queen", "rook", "bishop", "knight"]);
 export const THREAT_CONVENTION = "threat@1" as const;
 export const REPLY_HORIZON = "1 reply" as const;
+
+export interface LoosePieceReading {
+  readonly fen: string;
+  readonly sideToMove: Color;
+  readonly pieces: readonly LoosePieceState[];
+}
+
+export interface LoosePieceState {
+  readonly piece: { readonly square: SquareName; readonly occupant: Piece };
+  readonly legalCapturers: readonly {
+    readonly square: SquareName;
+    readonly piece: Piece;
+    readonly captureUci: string;
+    readonly exchange: LegalExchangeResult;
+  }[];
+  readonly defenders: readonly { readonly square: SquareName; readonly piece: Piece }[];
+  readonly enPrise: boolean;
+  readonly loose: boolean;
+  readonly underDefended: boolean;
+}
+
+export function loosePieceReading(fen: string): LoosePieceReading {
+  const position = positionFromFen(fen);
+  const victimColor = opposite(position.turn);
+  const pieces: LoosePieceState[] = [];
+  for (const target of position.board[victimColor]) {
+    const occupant = position.board.get(target)!;
+    if (occupant.role === "king") continue;
+    const legalCapturers = legalCaptureMovesTo(position, target).flatMap((move) => {
+      const exchange = legalExchangeForMove(position, move);
+      const piece = position.board.get(move.from);
+      return exchange === undefined || piece === undefined ? [] : [{
+        square: makeSquare(move.from),
+        piece,
+        captureUci: makeUci(move),
+        exchange,
+      }];
+    });
+    const defenders = [...position.board[victimColor]].flatMap((square) => {
+      if (square === target) return [];
+      const piece = position.board.get(square)!;
+      return attacks(piece, square, position.board.occupied).has(target)
+        ? [{ square: makeSquare(square), piece }]
+        : [];
+    });
+    const enPrise = legalCapturers.some((capture) => capture.exchange.resultUnits > 0);
+    pieces.push(Object.freeze({
+      piece: Object.freeze({ square: makeSquare(target), occupant }),
+      legalCapturers: Object.freeze(legalCapturers.sort((a, b) => a.captureUci.localeCompare(b.captureUci))),
+      defenders: Object.freeze(defenders.sort((a, b) => a.square.localeCompare(b.square))),
+      enPrise,
+      loose: defenders.length === 0,
+      underDefended: defenders.length > 0 && enPrise,
+    }));
+  }
+  return Object.freeze({
+    fen: canonicalFen(position),
+    sideToMove: position.turn,
+    pieces: Object.freeze(pieces.sort((a, b) => a.piece.square.localeCompare(b.piece.square))),
+  });
+}
+
+export type RayClassificationKind = "absolute_pin" | "relative_pin" | "skewer" | "xray_attack" | "xray_defense";
+
+export interface RayClassification {
+  readonly slider: { readonly square: SquareName; readonly piece: Piece };
+  readonly blocker: { readonly square: SquareName; readonly occupant: Piece };
+  readonly target: { readonly square: SquareName; readonly occupant: Piece };
+  readonly raySquares: readonly SquareName[];
+  readonly kind: RayClassificationKind;
+  readonly comparison?: {
+    readonly frontRole: Role;
+    readonly backRole: Role;
+    readonly frontValue: number;
+    readonly backValue: number;
+  };
+}
+
+export interface RayClassificationReading {
+  readonly fen: string;
+  readonly rays: readonly RayClassification[];
+}
+
+const SLIDER_DIRECTIONS = Object.freeze({
+  bishop: [[-1, -1], [1, -1], [-1, 1], [1, 1]],
+  rook: [[-1, 0], [1, 0], [0, -1], [0, 1]],
+  queen: [[-1, -1], [1, -1], [-1, 1], [1, 1], [-1, 0], [1, 0], [0, -1], [0, 1]],
+} as const);
+
+function rayKind(slider: Piece, front: Piece, back: Piece): Pick<RayClassification, "kind" | "comparison"> {
+  if (front.color !== slider.color && back.color !== slider.color && back.role === "king") return { kind: "absolute_pin" };
+  if (front.color !== slider.color && back.color !== slider.color && front.role === "king") return { kind: "skewer" };
+  if (front.role !== "king" && back.role !== "king") {
+    const comparison = Object.freeze({
+      frontRole: front.role,
+      backRole: back.role,
+      frontValue: EXCHANGE_PIECE_VALUES[front.role],
+      backValue: EXCHANGE_PIECE_VALUES[back.role],
+    });
+    if (front.color !== slider.color && back.color !== slider.color && comparison.frontValue > comparison.backValue) return { kind: "skewer", comparison };
+    if (front.color !== slider.color && back.color !== slider.color && comparison.backValue > comparison.frontValue) return { kind: "relative_pin", comparison };
+    return { kind: back.color === slider.color ? "xray_defense" : "xray_attack", comparison };
+  }
+  return { kind: back.color === slider.color ? "xray_defense" : "xray_attack" };
+}
+
+export function rayClassificationReading(fen: string): RayClassificationReading {
+  const position = positionFromFen(fen);
+  const rays: RayClassification[] = [];
+  for (const [square, slider] of position.board) {
+    if (!(slider.role in SLIDER_DIRECTIONS)) continue;
+    for (const [df, dr] of SLIDER_DIRECTIONS[slider.role as "bishop" | "rook" | "queen"]) {
+      let file = square % 8;
+      let rank = Math.floor(square / 8);
+      const occupied: Square[] = [];
+      const span: SquareName[] = [];
+      while (file + df >= 0 && file + df < 8 && rank + dr >= 0 && rank + dr < 8) {
+        file += df;
+        rank += dr;
+        const next = (file + rank * 8) as Square;
+        span.push(makeSquare(next));
+        if (position.board.occupied.has(next)) occupied.push(next);
+        if (occupied.length === 2) break;
+      }
+      if (occupied.length !== 2) continue;
+      const [frontSquare, backSquare] = occupied as [Square, Square];
+      const front = position.board.get(frontSquare)!;
+      const back = position.board.get(backSquare)!;
+      rays.push(Object.freeze({
+        slider: Object.freeze({ square: makeSquare(square), piece: slider }),
+        blocker: Object.freeze({ square: makeSquare(frontSquare), occupant: front }),
+        target: Object.freeze({ square: makeSquare(backSquare), occupant: back }),
+        raySquares: Object.freeze(span),
+        ...rayKind(slider, front, back),
+      }));
+    }
+  }
+  return Object.freeze({
+    fen: canonicalFen(position),
+    rays: Object.freeze(rays.sort((a, b) => a.slider.square.localeCompare(b.slider.square) || a.target.square.localeCompare(b.target.square))),
+  });
+}
 
 function legalMoves(position: ReturnType<typeof positionFromFen>): readonly NormalMove[] {
   const result: NormalMove[] = [];

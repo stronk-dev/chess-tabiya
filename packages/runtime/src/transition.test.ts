@@ -77,4 +77,18 @@ describe("transition primitives", () => {
     expect(irreversibility(fen, "e1h1", result)).toEqual({ subkind: "castled", color: "white" });
     expect(irreversibility(fen, "e1g1", result)).toEqual({ subkind: "castled", color: "white" });
   });
+
+  it("emits role-matched minor development and return without treating a redeployed knight as undeveloped", () => {
+    const developedAfter = after(INITIAL_FEN, "g1f3");
+    expect(transitionSemanticFacts(INITIAL_FEN, "g1f3", developedAfter)).toContainEqual(expect.objectContaining({ family: "developed", sign: "gained", mover: { color: "white", role: "knight" }, from: "g1", to: "f3" }));
+
+    const returnFen = developedAfter.replace(" b ", " w ");
+    expect(transitionSemanticFacts(returnFen, "f3g1", after(returnFen, "f3g1"))).toContainEqual(expect.objectContaining({ family: "developed", sign: "lost", from: "f3", to: "g1" }));
+
+    const roleMismatch = "4k3/8/8/8/8/8/8/4KN2 w - - 0 1";
+    expect(transitionSemanticFacts(roleMismatch, "f1g3", after(roleMismatch, "f1g3")).some((fact) => fact.family === "developed")).toBe(false);
+
+    const capturedAtHome = "4k1r1/8/8/8/8/8/8/4K1N1 b - - 0 1";
+    expect(transitionSemanticFacts(capturedAtHome, "g8g1", after(capturedAtHome, "g8g1")).some((fact) => fact.family === "developed")).toBe(false);
+  });
 });

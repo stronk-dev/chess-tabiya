@@ -1,6 +1,6 @@
 import { expect, describe, it } from "vitest";
 
-import { checkEvent, doubleAttackEvent, forkSurvivesReply, replyBreadth, threats } from "./tactics.js";
+import { checkEvent, doubleAttackEvent, forkSurvivesReply, loosePieceReading, rayClassificationReading, replyBreadth, threats } from "./tactics.js";
 
 describe("bounded tactical authorities", () => {
   it("records exact reply breadth and treats zero as terminal", () => {
@@ -38,5 +38,32 @@ describe("bounded tactical authorities", () => {
     const value = threats("4k3/8/8/3pP3/8/8/8/4K3 w - d6 0 1");
     expect(value.kind).toBe("threats");
     if (value.kind === "threats") expect(value.threats.some((threat) => threat.threatenedMove === "e5d6")).toBe(false);
+  });
+
+  it("separates loose, en-prise and under-defended from raw attack geometry", () => {
+    const freeQueen = loosePieceReading("q3k3/8/8/8/8/8/8/R3K3 w - - 0 1").pieces.find((value) => value.piece.square === "a8");
+    expect(freeQueen).toMatchObject({ loose: true, enPrise: true, underDefended: false });
+    expect(freeQueen?.legalCapturers[0]).toMatchObject({ square: "a1", captureUci: "a1a8", exchange: { resultUnits: 9 } });
+
+    const defendedBishop = loosePieceReading("4k3/8/4p3/3b4/8/8/6B1/4K3 w - - 0 1").pieces.find((value) => value.piece.square === "d5");
+    expect(defendedBishop?.defenders.map((value) => value.square)).toContain("e6");
+    expect(defendedBishop).toMatchObject({ loose: false, enPrise: false, underDefended: false });
+    expect(defendedBishop?.legalCapturers[0]?.exchange.resultUnits).toBe(0);
+  });
+
+  it("classifies pins, skewers and X-rays with one precedence rule", () => {
+    const kind = (fen: string) => rayClassificationReading(fen).rays.find((ray) => ray.slider.square === "b5" && ray.blocker.square === "c6" && ray.target.square === "d7");
+    expect(kind("8/3k4/2n5/1B6/8/8/8/4K3 w - - 0 1")?.kind).toBe("absolute_pin");
+    expect(kind("7k/3n4/2r5/1B6/8/8/8/4K3 w - - 0 1")).toMatchObject({ kind: "skewer", comparison: { frontValue: 5, backValue: 3 } });
+    expect(kind("7k/3r4/2n5/1B6/8/8/8/4K3 w - - 0 1")).toMatchObject({ kind: "relative_pin", comparison: { frontValue: 3, backValue: 5 } });
+    expect(kind("7k/3b4/2n5/1B6/8/8/8/4K3 w - - 0 1")?.kind).toBe("xray_attack");
+    expect(kind("7k/3R4/2n5/1B6/8/8/8/4K3 w - - 0 1")?.kind).toBe("xray_defense");
+  });
+
+  it("does not preserve a ray classification after lifting the slider", () => {
+    const before = rayClassificationReading("7k/3r4/2n5/1B6/8/8/8/4K3 w - - 0 1");
+    const after = rayClassificationReading("7k/3r4/2n5/8/B7/8/8/4K3 b - - 1 1");
+    expect(before.rays.some((ray) => ray.slider.square === "b5" && ray.target.square === "d7")).toBe(true);
+    expect(after.rays.some((ray) => ray.slider.square === "b5")).toBe(false);
   });
 });

@@ -38,3 +38,25 @@ Append-only.
   25 consumers, 180 bindings and 38 semantic events/eligibility rows.
 - Focused result after the second checkpoint: 93 tests green, runtime typecheck green, manifest and
   semantic checks green.
+
+## 2026-08-22 — first middlegame breadth checkpoint
+
+- Repaired the lossy Maia boundary with sibling `human.maia.candidate_wdl@1`: reported candidate
+  triples round-trip with move/rank identity, responses without WDL declare absence, and the
+  projection remains inspector-only rather than becoming another learner-facing quality score.
+- Added legal-exchange-backed loose-piece state. Every non-king opponent piece retains its legal
+  capturers, geometric defenders, per-capture exchange tree and separate `enPrise`, `loose` and
+  `underDefended` flags; the ceiling remains a local convention fact, not a move grade.
+- Added ordered ray state for absolute pins, relative pins, skewers and attack/defence X-rays. The
+  slider, blocker, target, complete ray and any exact convention-value comparison survive; the
+  lifting-the-slider regression is a permanent negative fixture and no delta event was invented.
+- Added `development@1` state and transition evidence. The reading retains role-matched home-minor
+  identities; transitions distinguish leaving home (`gained`) from returning (`lost`), while a
+  knight on a bishop home square and capture of a home minor are hard negatives. The existing
+  role-agnostic phase-band count remains unchanged and its divergence is explicit in the manifest.
+- Registered 15 of 30 RFC projections. The compiled manifest is now 24 producers, 141 projections,
+  25 consumers, 181 bindings and 39 semantic events/eligibility rows. WDL, loose-piece and ray
+  readings remain inspector-only; only the literal development transition joins research selection.
+- Focused verification: 40 runtime/semantic tests and 56 affected server/web contract tests green;
+  runtime typecheck, manifest check, semantic check and diff hygiene green. No repository-wide
+  verification was run for this incremental checkpoint.
