@@ -210,6 +210,34 @@ ruling made writing this into the doc conditional on `learner-rating` open
 question 11, which still stands open as of 2026-08-22 — so it lands here as the
 open question it is, not as an answer.
 
+**RULED 2026-08-22 ([[D945]], written by claude on the ruling; the owner's
+verbatim answer to question 11): "you have to earn rewinds or proactive
+branching... not infinite, not forbidden. it's what allows a weaker player to
+actually win a campaign (on lower floors/acts/whatever)."** This is a third
+shape neither document had: **inside campaign encounters, rewind and proactive
+branching are an earned economy** — charges earned through play, spendable in
+any encounter *including the boss*, with counts scaling by floor/act
+difficulty so that lower floors are more forgiving. Three consequences, scoped
+precisely:
+
+- **The economy is campaign-scoped.** Outside the campaign — drill packs, Just
+  Play, Review — rewind stays exactly as free as `00-thesis.md` promises;
+  nothing here amends `05` §1 for non-campaign surfaces. Inside the campaign,
+  the earned economy *is* the "how often" answer §2c above said was the only
+  real conflict, and it answers it by scarcity-with-income rather than a flat
+  budget — which is also §2c's slot-budget logic wearing a different resource.
+- **The boss is no longer the collision it was.** The rated boss admits
+  rewinds — *earned* ones. The default R11 reading (claude's, the owner's to
+  veto, recorded in [[D945]]): spending an earned rewind can still **win** the
+  encounter — that is the ruling's entire point — while the attempt's
+  *ratedness* follows R11 unchanged. Rated when clean; winnable regardless.
+  The two verdict producers §5 already separates make this expressible without
+  a new rule: the encounter verdict reads the earned-economy state, the rating
+  predicate keeps R11.
+- **Earned state is server-held progression state**, like every other campaign
+  holding (§4's "a doc cannot hold something earned") — it is not an
+  assistance preference and never lives in the client-side config.
+
 ## 3. Standing laws for the campaign
 
 1. **Honesty policy and inventory are independent.** Deck-building operates on
@@ -440,4 +468,12 @@ practice, because the first rewind voids it. `learner-rating` §5.3a
 (consequence 4) explicitly does not decide this — `06` is intent tier and the
 ruling is the owner's. Until the owner rules: the submitted-branch text above
 governs **authored encounters**, and is **undefined for the boss-game class**.
+
+**RESOLVED 2026-08-22 ([[D945]]): the owner ruled a third shape — earned
+rewinds.** The full ruling, its scope, and the default R11 reading live in
+§2c's ruled paragraph above; the boss-game class is no longer undefined — it
+admits *earned* rewinds, wins stand, ratedness follows R11 unchanged (rated
+when clean, winnable regardless; the R11 half is claude's default reading and
+the owner's to veto). The paragraph above is retained as the record of the
+collision as it stood before the ruling.
 
