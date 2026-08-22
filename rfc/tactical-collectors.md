@@ -1,7 +1,9 @@
 # RFC: Tactical collectors
 
-- **Status:** draft — amended 2026-08-22 after the D730/D794 falsification passes and the joint
-  collector buildability review; D824/D825 repaired, refreshed acceptance review still required
+- **Status:** **implementing 2026-08-22 — owner accepted after the D730/D794 falsification passes,
+  independent Codex buildability review and D824/D825 author repairs.** The owner's instruction to
+  begin the larger foundation wave is the acceptance action; the two downstream discharges remain
+  open and do not block this research/inspector-only collector landing.
 - **Author:** claude (drafted on the D717 program routing, `planning/evidence-foundation-ux/plan.md` phases 2c/3)
 - **Created:** 2026-08-22
 - **Design refs:** `design/05-in-run-experience.md` §5 (*"detection is cheap, significance is not"* — every collector here ships detection with the significance judgement structurally refused), §3b (guided mode names patterns from a validated library, never recommends); `design/03-product-breadth.md` §Structural reading (the rung-0 layer this extends) and §Intelligence and explanation
@@ -1011,6 +1013,9 @@ total stays 30 and the swap is recorded in the changelog and the landing log ent
 
 ## Changelog
 
+- 2026-08-22: owner accepted the repaired contract and opened implementation. No open product
+  question was inferred: the accepted scope is the closed 30-projection research/inspector wave;
+  module promotion, presets, authored vocabulary and opening identity remain outside it.
 - 2026-08-22: created from `planning/evidence-foundation-ux/phase2-collector-audit.md`
   (HEAD `7eb9210`) with all symbols re-verified at drafting HEAD `6526ccf`; D745 rulings
   encoded; no register claims.
