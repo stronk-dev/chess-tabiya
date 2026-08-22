@@ -52,7 +52,7 @@
     display: grid;
     place-items: center;
     padding: 1rem;
-    background: rgb(20 18 14 / 58%);
+    background: var(--scrim);
     backdrop-filter: blur(6px);
   }
   .dialog { width: min(38rem, 100%); max-height: calc(100dvh - 2rem); overflow: auto; padding: 1.25rem; border-radius: 1.2rem; background: var(--panel); }

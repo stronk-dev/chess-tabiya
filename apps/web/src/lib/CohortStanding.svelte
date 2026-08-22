@@ -142,9 +142,9 @@
   tbody tr.self { background: color-mix(in srgb, var(--accent) 8%, transparent); }
   td small { display: block; margin-top: .2rem; }
   .mark { display: inline-flex; min-width: 2rem; justify-content: center; margin: .1rem; padding: .2rem .35rem; border-radius: 999px; }
-  .bronze { background: #a9673f33; } .silver { background: #9ca3af44; } .gold { background: #d6a80044; }
+  .bronze { background: color-mix(in srgb, var(--danger) 12%, var(--paper)); } .silver { background: color-mix(in srgb, var(--muted) 14%, var(--paper)); } .gold { background: color-mix(in srgb, var(--warning) 16%, var(--paper)); }
   .split { display: block; white-space: nowrap; }
   details { margin-top: 1rem; }
   summary { cursor: pointer; margin-bottom: .75rem; }
-  .error { color: var(--warning); }
+  .error { color: var(--ink); }
 </style>

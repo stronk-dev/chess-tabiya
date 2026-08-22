@@ -166,7 +166,7 @@
   .objective {
     padding: 0.2rem 0.4rem;
     border-radius: 999px;
-    background: var(--paper-soft);
+    background: var(--surface);
     font: 600 0.6rem/1 ui-monospace, monospace;
     text-transform: uppercase;
   }

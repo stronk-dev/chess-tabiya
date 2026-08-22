@@ -145,7 +145,7 @@
     padding: 0.55rem 0.65rem;
     border: 1px solid transparent;
     border-radius: 0.65rem;
-    background: var(--paper-soft);
+    background: var(--surface);
     color: var(--ink);
     cursor: pointer;
   }
@@ -188,7 +188,7 @@
   .guard-marker {
     display: block;
     margin-top: 0.2rem;
-    color: var(--warning);
+    color: var(--ink);
     font: 700 0.55rem/1 ui-monospace, monospace;
   }
 

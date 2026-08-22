@@ -177,7 +177,7 @@
   }
 
   .run-context strong.readonly {
-    color: var(--warning);
+    color: var(--ink);
   }
 
   .identity-control { display: flex; align-items: center; gap: 0.35rem; font-size: 0.72rem; }

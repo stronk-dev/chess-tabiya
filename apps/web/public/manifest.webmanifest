@@ -5,6 +5,7 @@
   "start_url": "/",
   "theme_color": "#eeeade",
   "background_color": "#eeeade",
+  "theme_colors": { "light": "#eeeade", "dark": "#16140f" },
   "icons": [
     { "src": "/tabiya-icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any maskable" }
   ]

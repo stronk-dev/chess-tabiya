@@ -50,7 +50,7 @@
     display: grid;
     place-items: center;
     padding: 1rem;
-    background: rgb(20 18 14 / 58%);
+    background: var(--scrim);
     backdrop-filter: blur(6px);
   }
 

@@ -5530,3 +5530,31 @@ population.
 and queue edits before these implementation files landed. D989 records the shared-worktree staging
 failure; this implementation commit names the split instead of pretending the same-commit closeout
 held.
+
+## 2026-08-23 — Theming foundation implemented; owner-use holds remain
+
+**What landed:** appearance is now three independent live axes: 3 application schemes, 2 board
+skins, and 2 piece sets, plus None/Fast/Normal movement. The global `tabiya.theme` preference is
+unversioned and validates each field independently; device mode is the default, explicit mode wins,
+storage events update other tabs, and reduced-motion forces no animation. Settings owns the full
+picker while the board carries one link into it. `docs/theming.md` records the runtime contract.
+
+**What changed:** board square paint, interaction/evidence paint, and piece artwork are separate
+layers. Switching any axis preserves the Chessground element and position. The layout-bound repair
+that previously called `redrawAll()` immediately after each position update was the animation
+defeat: Chessground interpolates in JavaScript and the redraw erased its tween. Bounds now refresh
+after the configured 120/250 ms movement duration, while selection-triggered layout changes retain
+their immediate refresh. The shipped light-theme warning/muted contrast defect and both phantom
+tokens are closed, and every artwork file has an exhaustive license/source row.
+
+**Verification:** 33 focused component/theme tests pass; Svelte reports 0 errors and 0 warnings;
+the focused browser contract passes 2/2, including stable DOM identity/position across a live
+four-axis switch and more than two observed transforms over at least 60 ms after a committed move.
+Permanent gates also cover token totality, zero stray colors, authored-palette WCAG floors,
+inherited palette byte/measurement pins, CIE76 evidence separation, axis cross-product selection,
+assistance/theme separation, and mode-aware install chrome.
+
+**Closeout:** theming D4 and play-composition D3 are discharged; D839, D983, D986, and the D875
+floor close. The RFC moves to `awaiting D3`: Claude/owner still owes the protected design/03
+Settings-row amendment ([[D987]]). The distinct owner-use felt-quality pass remains D5/[[D840]];
+it does not hold the implementation code or its mechanical criteria.

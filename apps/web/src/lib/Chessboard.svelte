@@ -1,7 +1,10 @@
 <script lang="ts">
   import "@lichess-org/chessground/assets/chessground.base.css";
-  import "@lichess-org/chessground/assets/chessground.brown.css";
   import "@lichess-org/chessground/assets/chessground.cburnett.css";
+  import "./theme/board-skins/brown.css";
+  import "./theme/board-skins/olive.css";
+  import "./theme/interaction-paint.css";
+  import "./theme/piece-skins/mono.css";
 
   import { Chessground } from "@lichess-org/chessground";
   import type { Api } from "@lichess-org/chessground/api";
@@ -25,6 +28,9 @@
     type BoardInputState,
     type Square,
   } from "./board-input.js";
+  import { useTheme } from "./theme/context.js";
+  import { MARK_BRUSHES } from "./theme/catalog.js";
+  import { animationConfig, type ResolvedTheme } from "./theme/controller.js";
 
   interface Props {
     fen: string;
@@ -78,6 +84,9 @@
   let gridElement: HTMLDivElement;
   let promotionPicker = $state<HTMLDivElement>();
   let board: Api | undefined;
+  let redrawTimer: ReturnType<typeof setTimeout> | undefined;
+  const theme = useTheme();
+  let resolvedTheme: ResolvedTheme = $state(theme.current);
   let moveText = $state("");
   let escapeArmed = false;
   function newController(): BoardInputController {
@@ -129,6 +138,7 @@
         shapes: [...marks],
         defaultSnapToValidMove: false,
         eraseOnMovablePieceClick: false,
+        brushes: MARK_BRUSHES,
         ...(onMarksChange === undefined ? {} : { onChange: onMarksChange }),
       },
       ...(onSelect === undefined ? {} : { events: { select: selected } }),
@@ -139,6 +149,7 @@
         showDests,
         events: { after: moved },
       },
+      animation: animationConfig(resolvedTheme.animation),
     };
   }
 
@@ -173,12 +184,15 @@
     dispatch({ type: "pointer_destination", square: controllerSquare(to) });
   }
 
-  function redrawAfterLayout(): void {
-    requestAnimationFrame(() =>
-      requestAnimationFrame(() => {
-        if (typeof board?.redrawAll === "function") board.redrawAll();
-      }),
-    );
+  function redrawAfterLayout(delay = 0): void {
+    if (redrawTimer !== undefined) clearTimeout(redrawTimer);
+    redrawTimer = setTimeout(() => {
+      requestAnimationFrame(() =>
+        requestAnimationFrame(() => {
+          if (typeof board?.redrawAll === "function") board.redrawAll();
+        }),
+      );
+    }, delay);
   }
 
   function selected(square: Key): void {
@@ -257,8 +271,16 @@
   }
 
   onMount(() => {
+    const unsubscribeTheme = theme.subscribe((next) => {
+      resolvedTheme = next;
+      board?.set({ animation: animationConfig(next.animation) });
+    });
     board = Chessground(boardElement, config());
-    return () => board?.destroy();
+    return () => {
+      unsubscribeTheme();
+      if (redrawTimer !== undefined) clearTimeout(redrawTimer);
+      board?.destroy();
+    };
   });
 
   $effect(() => {
@@ -279,7 +301,10 @@
     // Objective/checkpoint banners can move the board without resizing it.
     // Chessground caches DOM bounds, so redraw after layout settles or the
     // next pointer move is interpreted against the board's former position.
-    redrawAfterLayout();
+    // redrawAll resets Chessground's in-flight piece interpolation. Wait for
+    // the selected movement duration before refreshing its cached bounds, so
+    // responsive layout repair and visible movement do not cancel each other.
+    redrawAfterLayout(animationConfig(resolvedTheme.animation).duration);
   });
 
   $effect(() => {
@@ -292,7 +317,8 @@
   });
 </script>
 
-<div class="board-shell">
+<div class="board-shell" data-board-theme={resolvedTheme.preference.boardTheme} data-piece-set={resolvedTheme.preference.pieceSet} data-animation={resolvedTheme.animation}>
+  {#if !disabled}<a class="appearance-link" href="/settings#appearance-settings">Appearance</a>{/if}
   <details class="text-move">
     <summary>Enter a move</summary>
     <form onsubmit={submitText}>
@@ -357,6 +383,20 @@
     aspect-ratio: 1;
   }
 
+  .appearance-link {
+    position: absolute;
+    z-index: 5;
+    top: .45rem;
+    left: .45rem;
+    padding: .25rem .4rem;
+    border: 1px solid var(--line);
+    border-radius: .4rem;
+    background: var(--panel);
+    color: var(--muted);
+    font-size: .65rem;
+    text-decoration: none;
+  }
+
   .board-surface,
   .board {
     position: relative;
@@ -383,7 +423,7 @@
   .semantic-grid:focus-visible { box-shadow: inset 0 0 0 3px CanvasText; }
   .semantic-row { display: grid; grid-template-columns: repeat(8, 1fr); }
   .semantic-cell { min-width: 0; min-height: 0; display: grid; place-items: center; color: transparent; }
-  .semantic-cell.active { color: CanvasText; outline: 3px solid CanvasText; outline-offset: -3px; background: rgb(255 255 255 / 16%); }
+  .semantic-cell.active { color: CanvasText; outline: 3px solid CanvasText; outline-offset: -3px; background: color-mix(in srgb, var(--ink) 16%, transparent); }
   .semantic-cell span { font: 600 0.55rem/1 ui-monospace, monospace; }
 
   .input-status {

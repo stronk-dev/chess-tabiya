@@ -1,0 +1,15 @@
+.board-shell[data-board-theme="olive"] cg-board {
+  background-color: #f0d9a8;
+  background-image: repeating-conic-gradient(#96a25e 0 25%, transparent 0 50%);
+  background-size: 25% 25%;
+}
+
+.board-shell[data-board-theme="olive"] .orientation-white .ranks :nth-child(odd),
+.board-shell[data-board-theme="olive"] .orientation-white .files :nth-child(even),
+.board-shell[data-board-theme="olive"] .orientation-black .ranks :nth-child(even),
+.board-shell[data-board-theme="olive"] .orientation-black .files :nth-child(odd) { color: rgb(55 57 34 / 85%); }
+
+.board-shell[data-board-theme="olive"] .orientation-white .ranks :nth-child(even),
+.board-shell[data-board-theme="olive"] .orientation-white .files :nth-child(odd),
+.board-shell[data-board-theme="olive"] .orientation-black .ranks :nth-child(odd),
+.board-shell[data-board-theme="olive"] .orientation-black .files :nth-child(even) { color: rgb(255 255 240 / 85%); }

@@ -90,7 +90,7 @@
     display: grid;
     place-items: end center;
     padding: 1rem;
-    background: rgb(20 18 14 / 52%);
+    background: var(--scrim);
     backdrop-filter: blur(5px);
   }
   .sheet {
@@ -100,11 +100,11 @@
     padding: 1.4rem;
     border-radius: 1.25rem;
     background: var(--panel);
-    box-shadow: 0 1.2rem 4rem rgb(0 0 0 / 35%);
+    box-shadow: var(--shadow);
   }
   .eyebrow {
     margin: 0;
-    color: var(--warning);
+    color: var(--ink);
     font: 700 0.68rem ui-monospace, monospace;
     letter-spacing: 0.12em;
     text-transform: uppercase;

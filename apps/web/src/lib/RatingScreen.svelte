@@ -130,9 +130,9 @@
   .disclosures { max-width: 55rem; color: var(--muted); line-height: 1.5; }
   .marks { display: flex; flex-wrap: wrap; gap: .6rem; padding: 0; list-style: none; }
   .mark { padding: .55rem .75rem; border: 1px solid var(--line); border-radius: 999px; }
-  .bronze { background: color-mix(in srgb, #a9673f 18%, var(--paper)); }
-  .silver { background: color-mix(in srgb, #9ca3af 20%, var(--paper)); }
-  .gold { background: color-mix(in srgb, #d6a800 18%, var(--paper)); }
+  .bronze { background: color-mix(in srgb, var(--danger) 12%, var(--paper)); }
+  .silver { background: color-mix(in srgb, var(--muted) 14%, var(--paper)); }
+  .gold { background: color-mix(in srgb, var(--warning) 16%, var(--paper)); }
   .table-scroll { overflow-x: auto; }
   table { width: 100%; border-collapse: collapse; }
   th, td { padding: .7rem; border-bottom: 1px solid var(--line); text-align: left; }

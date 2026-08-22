@@ -27,7 +27,7 @@ an explicit not-found view rather than crashing the application.
 | `/live/overlay/:runId` | Chrome-free spectator/stream projection of a live run |
 | `/create` | Honest empty state for the authoring program |
 | `/library` | Read-only pack and run-artifact lists |
-| `/settings` | Provider, deployment-surface, and shortcut information |
+| `/settings` | Appearance, provider, deployment-surface, and shortcut information |
 
 Public `/shared/:token` pages sit outside the authenticated shell. Story tokens render a
 bounded terminal card; session-join tokens render only title, host, and the existing
@@ -167,6 +167,12 @@ catalogue and settings routes.
 popover for pack, position, and imported sessions. It reports deployment
 providers without pretending environment configuration is an account control.
 Account deletion uses in-page password re-entry; shared runs are reassigned.
+
+Appearance is a separate global browser preference, documented in
+`docs/theming.md`. App colors, board colors, piece artwork, mode override, and
+movement speed apply live and independently. They share no assistance fields and
+do not change evidence eligibility. The board offers only a link into this
+Settings section; it does not duplicate the picker controls in play.
 
 The web build is installable through `manifest.webmanifest` with a maskable
 Tabiya icon. No service worker or offline mutation queue ships, so installed

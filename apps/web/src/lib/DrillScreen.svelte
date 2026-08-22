@@ -1229,7 +1229,7 @@
     border-radius: 1rem;
     background: var(--panel);
   }
-  .viewport-refusal p:first-child { color: var(--warning); font: 700 .68rem ui-monospace, monospace; text-transform: uppercase; }
+  .viewport-refusal p:first-child { color: var(--ink); font: 700 .68rem ui-monospace, monospace; text-transform: uppercase; }
   .viewport-refusal h1 { margin: .35rem 0; font: 500 1.6rem/1.1 var(--display-font); }
   .viewport-refusal p:last-child { margin: 0; color: var(--muted); line-height: 1.45; }
 
@@ -1305,7 +1305,7 @@
   }
 
   .status .readonly {
-    color: var(--warning);
+    color: var(--ink);
   }
 
   .topbar-actions { position:relative; justify-self:end; display:flex; align-items:center; gap:.55rem; }
@@ -1325,7 +1325,7 @@
 
   .error {
     background: color-mix(in srgb, var(--danger) 12%, var(--panel));
-    color: var(--danger);
+    color: var(--ink);
   }
 
   .readonly-banner {
@@ -1345,7 +1345,7 @@
   .compact-tabs button { padding: .4rem .55rem; border: 1px solid var(--line); border-radius: 999px; background: var(--paper); color: inherit; white-space: nowrap; }
   .compact-tabs button.active { border-color: var(--accent); color: var(--accent); }
   .sheet-handle, .sheet-close { display: none; }
-  .overlay-caption { margin: 0; padding: 0.65rem; border-radius: 0.65rem; background: var(--paper-soft); font-size: 0.78rem; }
+  .overlay-caption { margin: 0; padding: 0.65rem; border-radius: 0.65rem; background: var(--surface); font-size: 0.78rem; }
   .overlay-caption p { margin: 0.1rem 0; }
   .ambient { width: 2rem; height: 2rem; border: 1px solid var(--line); border-radius: 999px; background: var(--panel); }
 
@@ -1451,8 +1451,8 @@
     left: 0.6rem;
     padding: 0.3rem 0.5rem;
     border-radius: 999px;
-    background: var(--warning);
-    color: #20180d;
+    background: color-mix(in srgb, var(--warning) 25%, var(--panel));
+    color: var(--ink);
     font: 700 0.65rem ui-monospace, monospace;
     text-transform: uppercase;
   }
@@ -1508,7 +1508,7 @@
     display: grid;
     place-items: center;
     padding: 1rem;
-    background: rgb(20 18 14 / 55%);
+    background: var(--scrim);
     backdrop-filter: blur(6px);
   }
 
@@ -1579,7 +1579,7 @@
   }
 
   .trajectory-status div { display: grid; padding: 0.3rem 0.5rem; color: var(--muted); }
-  .trajectory-status .active-leg { color: var(--ink); background: var(--paper-soft); }
+  .trajectory-status .active-leg { color: var(--ink); background: var(--surface); }
   .trajectory-status span { font-size: 0.72rem; }
 
   .inspector-backdrop { align-items: stretch; }
@@ -1589,7 +1589,7 @@
   .inspector-surface header p { color: var(--accent); font: 700 .65rem ui-monospace, monospace; text-transform: uppercase; }
   .inspector-surface button { padding: .5rem .65rem; border: 1px solid var(--line); border-radius: .55rem; background: var(--paper); color: inherit; }
   .inspector-grid { min-height: 0; display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: .75rem; padding: .75rem; overflow-y: auto; }
-  .inspector-grid > section { min-width: 0; padding: .75rem; border: 1px solid var(--line); border-radius: .75rem; background: var(--paper-soft); }
+  .inspector-grid > section { min-width: 0; padding: .75rem; border: 1px solid var(--line); border-radius: .75rem; background: var(--surface); }
   .inspector-grid h3 { margin: 0 0 .5rem; }
 
   @media (min-width: 720px) and (max-width: 1023px) {

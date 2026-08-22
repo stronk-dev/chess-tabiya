@@ -1,4 +1,6 @@
 <script lang="ts">
+  import "./lib/theme/base.css";
+
   import { onDestroy, onMount, tick, untrack } from "svelte";
 
   import DrillScreen from "./lib/DrillScreen.svelte";
@@ -11,6 +13,9 @@
   import ShellFrame from "./lib/ShellFrame.svelte";
   import ShellKeyboardHelp from "./lib/ShellKeyboardHelp.svelte";
   import AssistanceSettings from "./lib/AssistanceSettings.svelte";
+  import AppearanceSettings from "./lib/AppearanceSettings.svelte";
+  import { ThemeController } from "./lib/theme/controller.js";
+  import { provideTheme } from "./lib/theme/context.js";
   import {
     DrillApi,
     PLANNED_SURFACES,
@@ -67,6 +72,7 @@
   );
   const router = untrack(() => routerProp ?? new HistoryRouter());
   const storage = untrack(() => storageProp);
+  const themeController = provideTheme(new ThemeController(storage));
   const MIN_LIVE_VOTE_OPTIONS = 2;
   const MAX_LIVE_VOTE_OPTIONS = 8;
   const MIN_LIVE_VOTE_SECONDS = 15;
@@ -498,6 +504,7 @@
   async function mintJoinLink():Promise<void>{if(!liveDetail)return;const result=await api.mintSessionLink?.(liveDetail.session.id,{matchSlot:liveJoinSlot,invitedRole:"participant",...(liveJoinHandle?{invitedHandle:liveJoinHandle}:{})});if(result)liveJoinUrl=result.url;}
 
   onMount(() => {
+    const stopTheme = themeController.start();
     window.addEventListener("tabiya:unauthenticated", onUnauthenticated);
     unsubscribeController = controller.subscribe((next) => (session = next));
     unsubscribeRouter = router.subscribe((next) => {
@@ -519,6 +526,7 @@
         authLoading = false;
       }
     })();
+    return stopTheme;
   });
 
   $effect(() => {
@@ -528,6 +536,7 @@
   });
 
   onDestroy(() => {
+    themeController.stop();
     window.removeEventListener("tabiya:unauthenticated", onUnauthenticated);
     unsubscribeController?.();
     unsubscribeRouter?.();
@@ -914,6 +923,7 @@
   {:else if route.name === "settings"}
     <main class="shell-view" aria-labelledby="settings-title">
       <p class="eyebrow">Settings</p><h1 id="settings-title">This deployment</h1>
+      <AppearanceSettings />
       <AssistanceSettings {capabilities} {learner} onSignOut={signOut} onDelete={deleteAccountWithPassword} />
       {#if capabilities}<h2>Surface availability</h2><ul>{#each Object.entries(capabilities.surfaces) as [id, availability]}<li>{id}: {PLANNED_SURFACES.includes(id as SurfaceId) ? "planned" : availability}</li>{/each}</ul>{/if}
     </main>
@@ -933,18 +943,6 @@
 <style>
   :global(*) { box-sizing: border-box; }
   :global(:root) {
-    color-scheme: light;
-    --ink: #171713;
-    --paper: #eeeade;
-    --paper-soft: #e5e0d2;
-    --panel: #f8f5ec;
-    --muted: #6f6b61;
-    --line: #cbc4b4;
-    --accent: #3858c8;
-    --warning: #df9d32;
-    --danger: #ad3c32;
-    --display-font: Iowan Old Style, Palatino Linotype, Book Antiqua, Palatino, Georgia, serif;
-    --shadow: 0 0.8rem 2.5rem rgb(40 35 25 / 10%);
     font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
     color: var(--ink);
     background: var(--paper);
@@ -954,7 +952,7 @@
     min-width: 20rem;
     min-height: 100vh;
     margin: 0;
-    background: radial-gradient(circle at 12% 5%, rgb(255 255 255 / 65%), transparent 30rem), linear-gradient(135deg, transparent 0 58%, rgb(56 88 200 / 4%) 58% 100%), var(--paper);
+    background: radial-gradient(circle at 12% 5%, color-mix(in srgb, var(--ink) 5%, transparent), transparent 30rem), linear-gradient(135deg, transparent 0 58%, color-mix(in srgb, var(--accent) 4%, transparent) 58% 100%), var(--paper);
   }
   :global(button), :global(input), :global(textarea) { font: inherit; }
   :global(:focus-visible) { outline: 3px solid color-mix(in srgb, var(--accent) 65%, white); outline-offset: 2px; }
@@ -979,7 +977,7 @@
   .repertoire-card{display:grid;gap:.6rem}.gap-results{grid-column:1/-1;border-top:1px solid var(--line);padding-top:.6rem}.gap-row{display:flex;align-items:center;justify-content:space-between;gap:1rem;padding:.4rem 0}
   .access, .honest { font-size: 0.88rem; }
   button { padding: 0.72rem 0.9rem; border: 1px solid var(--line); border-radius: 0.65rem; background: var(--panel); color: var(--ink); cursor: pointer; }
-  button:hover, button:focus-visible, button.primary { border-color: var(--accent); background: var(--accent); color: white; }
+  button:hover, button:focus-visible, button.primary { border-color: var(--accent); background: var(--accent); color: var(--on-accent); }
   button:disabled { cursor: not-allowed; opacity: 0.55; }
   .item-list { display: grid; gap: 0.7rem; max-height: min(55dvh, 36rem); margin-top: 2rem; overflow: auto; }
   .item-list article { display: flex; align-items: center; justify-content: space-between; gap: 1rem; padding: 1rem; border: 1px solid var(--line); border-radius: 0.8rem; background: var(--panel); }
@@ -993,7 +991,7 @@
   .row-actions label { display: grid; gap: 0.25rem; }
   select { padding: 0.65rem; border: 1px solid var(--line); border-radius: 0.55rem; background: var(--panel); }
   .live-overlay { width: 100%; height: 100%; display: grid; grid-template-columns: minmax(0, min(75vh, 70vw)) minmax(12rem, 1fr); gap: 1.5rem; align-items: center; padding: 1rem; overflow: hidden; background: transparent; }
-  .live-overlay aside { padding: 1rem; border-radius: 0.8rem; background: rgb(23 23 19 / 88%); color: white; }
+  .live-overlay aside { padding: 1rem; border-radius: 0.8rem; background: var(--scrim-strong); color: var(--paper); }
   .studio-grid { display: grid; grid-template-columns: minmax(12rem, 18rem) minmax(0, 1fr); gap: 1rem; }
   .studio-grid aside { display: grid; align-content: start; gap: 0.5rem; overflow: auto; }
   .studio-grid section { display: grid; gap: 0.5rem; min-width: 0; }

@@ -1,0 +1,18 @@
+.board-shell cg-board square.move-dest {
+  background: radial-gradient(rgb(20 85 30 / 50%) 22%, #208530 0, rgb(0 0 0 / 30%) 0, transparent 0);
+}
+.board-shell cg-board square.premove-dest {
+  background: radial-gradient(rgb(20 30 85 / 50%) 22%, #203085 0, rgb(0 0 0 / 30%) 0, transparent 0);
+}
+.board-shell cg-board square.oc.move-dest { background: radial-gradient(transparent 0 80%, rgb(20 85 0 / 30%) 80%); }
+.board-shell cg-board square.oc.premove-dest { background: radial-gradient(transparent 0 80%, rgb(20 30 85 / 20%) 80%); }
+.board-shell cg-board square.move-dest:hover,
+.board-shell cg-board square.move-dest.hover { background: rgb(20 85 30 / 30%); }
+.board-shell cg-board square.premove-dest:hover,
+.board-shell cg-board square.premove-dest.hover { background: rgb(20 30 85 / 20%); }
+.board-shell cg-board square.last-move { background-color: rgb(155 199 0 / 41%); }
+.board-shell cg-board square.selected { background-color: rgb(20 85 30 / 50%); }
+.board-shell cg-board square.check {
+  background: radial-gradient(ellipse at center, rgb(255 0 0) 0%, rgb(231 0 0) 25%, transparent 89%);
+}
+.board-shell cg-board square.current-premove { background-color: rgb(20 30 85 / 50%); }

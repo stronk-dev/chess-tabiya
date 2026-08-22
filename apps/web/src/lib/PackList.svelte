@@ -113,7 +113,7 @@
   }
 
   .review-status {
-    color: var(--warning);
+    color: var(--ink);
   }
 
   h2 {
@@ -147,6 +147,6 @@
   }
 
   .error {
-    color: var(--danger);
+    color: var(--ink);
   }
 </style>
