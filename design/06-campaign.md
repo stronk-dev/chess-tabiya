@@ -89,6 +89,33 @@ oracle of either kind**.
 middlegame), or none. The ramp has a documented hole, and the product says so
 rather than inventing a number across it.
 
+**The run architecture (owner ruling 2026-08-22, D893 — quoted, written by claude).**
+The owner set the frame in his own words: *"in Slay the Spire you choose paths… this can be
+one of the choices… or a variant campaign — we DEF want a pure chess campaign (where
+basically abilities or evidence consumers are unlocked???). And the nodes you visit to unlock
+shit can be puzzles, find best move, find blunder, play out the position and survive for x
+turns, the solitaire — ANYTHING we can find that's fun or teaching something… building an
+army sounds like a dope extension — not only would that unlock more difficult bosses but it
+can be a nice 'prestige' reward. Just like how in Slay the Spire the hero you choose affects
+the ENTIRE run and what you can even collect."* Three structural consequences, recorded as
+intent:
+
+1. **Node variety is the format catalogue.** Any format the variants catalogue grounds may be
+   a node type; a node declares its encounter class from the table below.
+2. **The PURE-CHESS campaign is definite**, and its progression currency is **evidence
+   consumers**: modules/abilities unlock as the run advances — the "build your coach" idea
+   made the campaign's core loop, constrained by [[D297]]'s knowledge-as-key device and
+   `design/05`'s honesty policy (an unlocked ability is a grounded module, never a truth
+   change).
+3. **Army-building is a campaign VARIANT in the character-select sense** — a chosen start
+   that shapes the entire run and its collectible pool (the Slay-the-Spire hero analogy),
+   and additionally a **prestige axis**: completing it unlocks harder bosses. It is an
+   extension beside the pure campaign, not the spine ([[D885]] adjusted accordingly).
+
+Composition stays last per [[D717]]'s program order; R6/R7/R8 still gate the experiential
+choices. This block records the owner's architecture so later RFCs argue from it rather than
+rediscover it.
+
 **Amended 2026-08-16 (D439, owner ruling; written 2026-08-22 by claude on that
 ruling): all four labels describe a POSITION; a boss result describes an
 ENCOUNTER, and it lives on a second axis, not a fifth label.**
@@ -201,6 +228,18 @@ open question it is, not as an answer.
    rule** (`live-marker-quality` L1–L6), including *failing a measurement demotes,
    lacking one does not*.
 
+**The material/board balance law (owner ruling 2026-08-22, D887 — with the owner's
+looser rewards clause).** The campaign may bend **material and position** freely: a
+reduced-material start on the standard board is a legal chess position, every instrument
+works unchanged — the tablebase turns *on* at ≤7 units — and the Steps-Method tradition
+validates the pedagogy. Bending the **board geometry or the piece set** exits the evidence
+plane (no Maia, no explorer, no tablebase, wrong movement model in the collectors), so an
+evidence-dark node is marked **play, never training**, and it may **seal no verdict, credit
+no skill, and gate no content** — but it **may pay out cosmetic rewards** (piece skins,
+board themes): the owner's chosen looser clause, so fun nodes stay worth visiting without
+blurring what counts as learning. The owner's own sentence is the law's spirit: *"we don't
+need to forget we're learning chess here."*
+
 ## 4. What is not decided here
 
 R6, R7 and R8 remain unanswered and are experiential: whether a rewind budget
@@ -305,6 +344,13 @@ vocabulary is therefore two rows:
 |---|---|---|---|
 | **Authored encounter** (every non-boss node, and the Act I and Act III bosses) | pack | `plyHorizon` | an `ObjectiveState` from `successConditions`, stored as `sealedState` |
 | **Boss game** (the Act II rated boss only) | `position` session | the rules of chess | `terminalOutcome` |
+| **Prediction encounter** (solitaire-chess nodes — owner ruling 2026-08-22, D869) | a fixed recorded game | the game's own length | a **prediction-score threshold** over `prediction.recorded` events against the human distribution |
+| **Survival encounter** (the streak family: resistance plies, rush counts, open-ended avoid-the-blunder — owner ruling 2026-08-22, D886) | an unbounded run | nothing but failure | a **score threshold over an unbounded run** (plies survived / correct count / avoidance streak, each with its declared grounded counter) |
+
+*(Amended 2026-08-22 on the owner's D869/D886 rulings, written by claude. The 30-format
+catalogue in `design/research/training-mode-variants.md` seals every surveyed format under
+these four shapes; no format required a fifth, and that closure is the argument the table is
+complete for the formats we know.)*
 
 **Which producer seals a node is a property of the node**; the producers are
 not interchangeable and neither is computed from the other — §1 of
