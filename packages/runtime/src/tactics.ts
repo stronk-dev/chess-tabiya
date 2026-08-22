@@ -211,6 +211,34 @@ export interface CheckEvent {
   readonly rays: readonly { readonly from: SquareName; readonly through: readonly SquareName[]; readonly to: SquareName }[];
 }
 
+export interface MateInOneReading {
+  readonly fen: string;
+  readonly mates: readonly {
+    readonly moveUci: string;
+    readonly mover: { readonly piece: Piece; readonly from: SquareName; readonly to: SquareName };
+    readonly matedKing: { readonly piece: Piece; readonly square: SquareName };
+  }[];
+}
+
+export function mateInOne(fen: string): MateInOneReading {
+  const position = positionFromFen(fen);
+  const mates: MateInOneReading["mates"][number][] = [];
+  for (const move of legalMoves(position)) {
+    const mover = position.board.get(move.from)!;
+    const next = position.clone();
+    next.play(move);
+    if (!next.isCheckmate()) continue;
+    const kingSquare = next.board.kingOf(next.turn);
+    if (kingSquare === undefined) continue;
+    mates.push(Object.freeze({
+      moveUci: makeUci(move),
+      mover: Object.freeze({ piece: mover, from: makeSquare(move.from), to: makeSquare(move.to) }),
+      matedKing: Object.freeze({ piece: next.board.get(kingSquare)!, square: makeSquare(kingSquare) }),
+    }));
+  }
+  return Object.freeze({ fen: canonicalFen(position), mates: Object.freeze(mates.sort((a, b) => a.moveUci.localeCompare(b.moveUci))) });
+}
+
 export function checkEvent(beforeFen: string, triggeringMove: string): CheckEvent | undefined {
   const position = positionFromFen(beforeFen);
   const move = played(position, triggeringMove);

@@ -84,6 +84,7 @@ export const declareSyzygyCategoryEvidence = <T extends object>(payload: T) => e
 export const declareSyzygyDistanceEvidence = <T extends object>(payload: T) => exactObject("live.syzygy", "live.syzygy.distance", payload, ["category"]);
 export const declareEvidenceReferenceResolution = <T extends object>(payload: T) => exactObject("run.record", "run.record.evidence_ref_resolution", payload, ["reference", "text", "sourceLabel"]);
 export const declareLegalExchangeEvidence = <T extends object>(payload: T) => exactObject("rules.exchange", "rules.exchange.predicate.legal_exchange", payload, ["beforeFen", "captureUci", "landingSquare", "capturer", "captured", "branches", "chosenLine", "stopDecisions", "conventionId", "resultUnits"]);
+export const declareCaptureClassEvidence = <T extends object>(payload: T) => exactObject("derived.exchange", "derived.exchange.capture_class", payload, ["before_fen", "move_uci", "after_fen", "capture", "exchange", "class"]);
 export const declareThreatEvidence = <T extends object>(payload: T) => exactObject("rules.tactic", "rules.tactic.consequence.threat", payload, ["kind", "conventionId", "threats"]);
 export const declareDoubleAttackEvidence = <T extends object>(payload: T) => exactObject("rules.tactic", "rules.tactic.event.double_attack", payload, ["beforeFen", "moveUci", "afterFen", "mover", "targets"]);
 export const declareForkSurvivalEvidence = <T extends object>(payload: T) => exactObject("derived.tactic", "derived.tactic.fork_survives_reply", payload, ["matched", "doubleAttack", "replyBreadth", "refutingReplies"]);
@@ -91,6 +92,7 @@ export const declareReplyBreadthEvidence = <T extends object>(payload: T) => exa
 export const declareCheckEventEvidence = <T extends object>(payload: T) => exactObject("rules.tactic", "rules.tactic.event.check", payload, ["triggeringMove", "checkingPieces", "checkedKing", "attackSquares", "rays"]);
 export const declareLoosePieceEvidence = <T extends object>(payload: T) => exactObject("rules.tactic", "rules.tactic.reading.loose_piece", payload, ["fen", "sideToMove", "pieces"]);
 export const declareRayClassificationEvidence = <T extends object>(payload: T) => exactObject("rules.tactic", "rules.tactic.reading.ray_classification", payload, ["fen", "rays"]);
+export const declareMateInOneEvidence = <T extends object>(payload: T) => exactObject("rules.tactic", "rules.tactic.consequence.mate_in_one", payload, ["fen", "mates"]);
 export const declareCastlingRightsEvidence = <T extends object>(payload: T) => exactObject("rules.castling", "rules.castling.reading.rights", payload, ["fen", "white", "black"]);
 export const declareCastlingRightsLostEvidence = <T extends object>(payload: T) => exactObject("rules.castling", "rules.castling.event.rights_lost", payload, ["beforeFen", "moveUci", "afterFen", "color", "wing", "cause"]);
 export const declareCastlingLegalityEvidence = <T extends object>(payload: T) => exactObject("rules.castling", "rules.castling.reading.legality", payload, ["color", "wing", "kingSquare", "rookSquare", "legalNow", "inCheck", "blockedSquares", "attackedSquares"]);

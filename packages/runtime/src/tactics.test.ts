@@ -1,6 +1,6 @@
 import { expect, describe, it } from "vitest";
 
-import { checkEvent, doubleAttackEvent, forkSurvivesReply, loosePieceReading, rayClassificationReading, replyBreadth, threats } from "./tactics.js";
+import { checkEvent, doubleAttackEvent, forkSurvivesReply, loosePieceReading, mateInOne, rayClassificationReading, replyBreadth, threats } from "./tactics.js";
 
 describe("bounded tactical authorities", () => {
   it("records exact reply breadth and treats zero as terminal", () => {
@@ -65,5 +65,12 @@ describe("bounded tactical authorities", () => {
     const after = rayClassificationReading("7k/3r4/2n5/8/B7/8/8/4K3 b - - 1 1");
     expect(before.rays.some((ray) => ray.slider.square === "b5" && ray.target.square === "d7")).toBe(true);
     expect(after.rays.some((ray) => ray.slider.square === "b5")).toBe(false);
+  });
+
+  it("keeps exact mate in one separate from deeper or absent threats", () => {
+    const exact = mateInOne("7k/8/5KQ1/8/8/8/8/8 w - - 0 1");
+    expect(exact.mates.map((value) => value.moveUci)).toContain("g6g7");
+    expect(exact.mates.find((value) => value.moveUci === "g6g7")).toMatchObject({ matedKing: { square: "h8", piece: { color: "black", role: "king" } } });
+    expect(mateInOne("4k3/8/8/8/8/8/4P3/4K3 w - - 0 1").mates).toEqual([]);
   });
 });

@@ -60,3 +60,26 @@ Append-only.
 - Focused verification: 40 runtime/semantic tests and 56 affected server/web contract tests green;
   runtime typecheck, manifest check, semantic check and diff hygiene green. No repository-wide
   verification was run for this incremental checkpoint.
+
+## 2026-08-22 — three authoring seams returned, remaining implementation continues
+
+- D829: `space@1` claims a chess-tradition citation that the accepted RFC does not actually carry.
+- D830: pawn connectivity never defines how “mutual” support differs from literal one-way pawn
+  support, so its pair/chain payload is not implementable without inventing a convention.
+- D831: rook-on-seventh retains a king-cutoff fact but never defines the cutoff predicate.
+- These three projections are held for an author amendment. They do not block capture
+  classification, discovered geometry, trapped/back-rank/mate, promotion pressure or the
+  already-defined loose-piece event work.
+
+## 2026-08-22 — derived capture and exact mate checkpoint
+
+- Added `derived.exchange.capture_class@1` as a sealed two-input derivation: the exact capture
+  event and the exact `legal-exchange@1` tree must both be present. The resulting
+  `positive | equal | negative` value is convention arithmetic, explicitly not a move grade.
+- Added a separate exact `mate_in_one@1` reading that enumerates all legal immediate mates and
+  retains mover and mated-king identities. It is inspector-only and cannot be inferred from, or
+  silently merged into, the later conventional back-rank-susceptibility state.
+- Registered 17 of 30 RFC projections. The compiled manifest is now 25 producers, 143 projections,
+  25 consumers, 182 bindings and 40 semantic events/eligibility rows.
+- Focused verification: 92 affected runtime/server/web tests green; runtime typecheck, manifest
+  check, semantic check and diff hygiene green. No repository-wide verification was run.

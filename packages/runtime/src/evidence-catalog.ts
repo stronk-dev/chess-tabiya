@@ -76,7 +76,7 @@ export const EVIDENCE_PRODUCER_IDS = Object.freeze([
   "rules.structural", "rules.transition", "rules.castling", "rules.exchange", "rules.tactic", "rules.phase", "rules.pivotal", "rules.endgame",
   "theory.shapes", "authored.structural_condition", "pack.authored", "recorded.engine", "recorded.tablebase", "live.stockfish",
   "live.syzygy", "human.maia", "human.explorer", "theory.opening_identity", "run.record",
-  "derived.compare_narrative", "derived.story", "derived.tactic", "sourcing.ledger",
+  "derived.compare_narrative", "derived.story", "derived.exchange", "derived.tactic", "sourcing.ledger",
   "derived.semantic_avoidance",
 ] as const);
 
@@ -122,7 +122,8 @@ export const TACTICAL_EVENT_PROJECTION_IDS = Object.freeze([
   "rules.tactic.event.check",
 ] as const);
 export const CASTLING_EVENT_PROJECTION_IDS = Object.freeze(["rules.castling.event.rights_lost"] as const);
-export const SEMANTIC_EVENT_PROJECTION_IDS = Object.freeze([...STRUCTURAL_EVENT_PROJECTION_IDS, ...TRANSITION_EVENT_PROJECTION_IDS, ...AVOIDANCE_EVENT_PROJECTION_IDS, ...TACTICAL_EVENT_PROJECTION_IDS, ...CASTLING_EVENT_PROJECTION_IDS]);
+export const DERIVED_EXCHANGE_EVENT_PROJECTION_IDS = Object.freeze(["derived.exchange.capture_class"] as const);
+export const SEMANTIC_EVENT_PROJECTION_IDS = Object.freeze([...STRUCTURAL_EVENT_PROJECTION_IDS, ...TRANSITION_EVENT_PROJECTION_IDS, ...AVOIDANCE_EVENT_PROJECTION_IDS, ...TACTICAL_EVENT_PROJECTION_IDS, ...CASTLING_EVENT_PROJECTION_IDS, ...DERIVED_EXCHANGE_EVENT_PROJECTION_IDS]);
 
 const structuralEventOutputs = STRUCTURAL_EVENT_FAMILIES.map((family) => projection("rules.structural", `rules.structural.event.${family}`, "rules", {
   role: "event",
@@ -253,6 +254,12 @@ const tacticalOutputs = [
     limitations: ["State geometry is not a move grade, tactical inevitability or statement that a ray is important."],
     disposition: { kind: "inspector_only", reason: "State evidence lands before measured module selection; no ray event family is admitted here." },
   }),
+  projection("rules.tactic", "rules.tactic.consequence.mate_in_one", "rules", {
+    role: "reading", payloadType: "MateInOneReading", semantics: "Complete exact legal moves from the current position that immediately produce checkmate, retaining mover and mated-king identities.",
+    operands: ["fen", "mates"], signs: ["threatened"], answerContent: ["threat"], forms: ["list", "panel", "machine_condition"],
+    limitations: ["One legal ply only; empty means no mate in one and says nothing about deeper mating nets, move quality or back-rank susceptibility."],
+    disposition: { kind: "inspector_only", reason: "Exact one-ply consequence is retained separately from convention states; Phase 3 decides learner presentation." },
+  }),
   projection("rules.tactic", "rules.tactic.consequence.threat", "rules", {
     role: "reading", payloadType: "ThreatResult", semantics: THREAT_SEMANTICS,
     operands: ["kind", "conventionId", "threats"], signs: ["threatened"], grounding: "declared_convention", exactness: "convention",
@@ -290,6 +297,17 @@ const derivedTacticOutputs = [
     derivation: { inputs: [ref("rules.tactic.event.double_attack"), ref("rules.tactic.consequence.reply_breadth"), ref("rules.exchange.predicate.legal_exchange")] },
     limitations: ["One-reply local survival only; no inevitability, quality or whole-position claim."],
     disposition: { kind: "inspector_only", reason: "Rare bounded consequence retained for inspection and later Review admission; no production module consumes it at landing." },
+  }),
+];
+
+const derivedExchangeOutputs = [
+  projection("derived.exchange", "derived.exchange.capture_class", "derived", {
+    role: "event", payloadType: "CaptureClassEvent", semantics: "Classifies one exact capture as positive, equal or negative solely by its legal-exchange@1 result in declared material units. The arithmetic class is not a move grade.",
+    operands: ["before_fen", "move_uci", "after_fen", "capture", "exchange", "class"], signs: ["state"], grounding: "declared_convention", exactness: "convention",
+    answerContent: ["fact"], forms: ["list", "panel", "machine_condition"],
+    dependsOn: [ref("rules.transition.event.capture"), ref("rules.exchange.predicate.legal_exchange")],
+    derivation: { inputs: [ref("rules.transition.event.capture"), ref("rules.exchange.predicate.legal_exchange")] },
+    limitations: ["Local exchange arithmetic only; compensation, zwischenzugs and whole-position move quality remain outside scope. The landing binding is research selection only; no learner module consumes it."],
   }),
 ];
 
@@ -366,6 +384,7 @@ export const EVIDENCE_PRODUCERS: readonly ProducerDeclaration[] = Object.freeze(
     projection("derived.story", "derived.story.rank", "derived", { payloadType: "StoryRank", grounding: "declared_convention", exactness: "convention", operands: ["rank"], semantics: "Fixed kind-priority order with absolute recorded-evaluation delta as a tiebreak; presentation prominence, not chess significance.", answerContent: ["fact", "pattern", "evaluation"], forms: ["list", "panel"], abstention: { possible: true, reasons: ["input_abstained"] }, derivation: { inputs: [ref("derived.story.eval_shift"), ref("derived.story.last_level"), ref("run.record.consequence"), ref("run.record.imported_result"), ref("rules.pivotal.marker"), ref("rules.endgame.reading"), ref("theory.shapes.firing")] } }),
     projection("derived.story", "derived.story.title", "derived", { payloadType: "StoryTitle", grounding: "declared_convention", exactness: "convention", operands: ["title", "rank", "outcome"], semantics: "Fixed title composition over rank, recorded outcome/result, and endgame label; imported result verbs retain the current White-relative convention.", answerContent: ["fact", "pattern", "evaluation"], forms: ["sentence", "panel"], abstention: { possible: true, reasons: ["input_abstained"] }, derivation: { inputs: [ref("derived.story.rank"), ref("run.record.consequence"), ref("run.record.imported_result"), ref("rules.endgame.reading")] } }),
   ]),
+  producer("derived.exchange", "derived", "packages/runtime/src/exchange.ts", "local", derivedExchangeOutputs),
   producer("derived.tactic", "derived", "packages/runtime/src/tactics.ts", "local", derivedTacticOutputs),
   producer("sourcing.ledger", "record", "apps/server/src/sourcing/types.ts; apps/server/src/sourcing/claim-binding.ts", "recorded", [
     projection("sourcing.ledger", "sourcing.ledger.engine_eval", "record", { role: "source_record", payloadType: "engine_eval EvidenceRecord", grounding: "bounded_search", exactness: "measured", confidence: "reported", operands: ["kind", "sourceId", "retrievedAt", "values"], answerContent: ["evaluation"], forms: ["list", "panel"], limitations: ["Offline sourcing record including anchor and provenance; not a runtime engine reading."] }),

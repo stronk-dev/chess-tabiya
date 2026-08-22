@@ -13,6 +13,7 @@ import {
   castlingSemanticEvents,
   compileSemanticEvidenceEvent,
   legalAlternativeEdges,
+  localSemanticEvents,
   selectSemanticEvidence,
   selectLocalSemanticEvidence,
   structuralSemanticEvents,
@@ -156,6 +157,14 @@ describe("semantic evidence runtime", () => {
     expect(families.has("last_of_role")).toBe(true);
     expect(families.has("pawn_contact")).toBe(true);
     expect(values.every((value) => value.projection.id === `rules.transition.event.${value.operands.family}`)).toBe(true);
+  });
+
+  it("seals capture class as a derivation of the exact capture and exchange evidence", () => {
+    const fen = "r3k3/p7/8/8/8/8/8/R3K3 w - - 0 1";
+    const values = localSemanticEvents(fen, "a1a7", after(fen, "a1a7"));
+    const event = values.find((value) => value.projection.id === "derived.exchange.capture_class");
+    expect(event?.operands).toMatchObject({ class: "negative", exchange: { resultUnits: -4 } });
+    expect(event?.derivationInputs.map((input) => input.projection.id).sort()).toEqual(["rules.exchange.predicate.legal_exchange", "rules.transition.event.capture"]);
   });
 
   it("emits exact reply/check and exchange-filtered double-attack events from their real producers", () => {

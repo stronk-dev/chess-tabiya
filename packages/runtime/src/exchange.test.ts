@@ -1,6 +1,16 @@
 import { describe, expect, it } from "vitest";
 
-import { captureExchangeClass, legalExchange } from "./exchange.js";
+import { captureClassEvent, captureExchangeClass, legalExchange } from "./exchange.js";
+import { transitionSemanticFacts } from "./transition.js";
+import { Chess, normalizeMove } from "chessops/chess";
+import { makeFen, parseFen } from "chessops/fen";
+import { parseUci } from "chessops/util";
+
+function after(fen: string, moveUci: string): string {
+  const position = Chess.fromSetup(parseFen(fen).unwrap()).unwrap();
+  position.play(normalizeMove(position, parseUci(moveUci)!));
+  return makeFen(position.toSetup());
+}
 
 describe("legal-exchange@1", () => {
   it("retains free, poisoned and X-ray recapture trees", () => {
@@ -28,5 +38,14 @@ describe("legal-exchange@1", () => {
   it("accounts for promotion gain and rejects non-captures", () => {
     expect(legalExchange("4k2r/6P1/8/8/8/8/8/4K3 w - - 0 1", "g7h8q")!.resultUnits).toBe(13);
     expect(legalExchange("4k3/8/8/8/8/8/4P3/4K3 w - - 0 1", "e2e4")).toBeUndefined();
+  });
+
+  it("derives an arithmetic capture class from the exact capture identity", () => {
+    const fen = "r3k3/p7/8/8/8/8/8/R3K3 w - - 0 1";
+    const afterFen = after(fen, "a1a7");
+    const capture = transitionSemanticFacts(fen, "a1a7", afterFen).find((fact) => fact.family === "capture");
+    expect(capture?.family).toBe("capture");
+    if (capture?.family !== "capture") throw new TypeError("capture fixture did not emit");
+    expect(captureClassEvent({ before_fen: fen, move_uci: "a1a7", after_fen: afterFen, capture })).toMatchObject({ class: "negative", exchange: { resultUnits: -4 } });
   });
 });

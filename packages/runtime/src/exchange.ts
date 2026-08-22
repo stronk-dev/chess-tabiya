@@ -189,3 +189,32 @@ export type CaptureExchangeClass = "positive" | "negative" | "equal";
 export function captureExchangeClass(result: LegalExchangeResult): CaptureExchangeClass {
   return result.resultUnits > 0 ? "positive" : result.resultUnits < 0 ? "negative" : "equal";
 }
+
+export interface CaptureClassEvent {
+  readonly before_fen: string;
+  readonly move_uci: string;
+  readonly after_fen: string;
+  readonly capture: Readonly<{
+    readonly family: "capture";
+    readonly sign: "state";
+    readonly mover: Readonly<Record<string, unknown>>;
+    readonly from: SquareName;
+    readonly to: SquareName;
+    readonly captured: Readonly<{ readonly color: Color; readonly role: Role }>;
+    readonly enPassant: boolean;
+  }>;
+  readonly exchange: LegalExchangeResult;
+  readonly class: CaptureExchangeClass;
+}
+
+export function captureClassEvent(input: Omit<CaptureClassEvent, "exchange" | "class">): CaptureClassEvent | undefined {
+  const result = legalExchange(input.before_fen, input.move_uci);
+  if (result === undefined) return undefined;
+  const position = positionFromFen(input.before_fen);
+  const move = parseUci(input.move_uci);
+  if (move === undefined || !position.isLegal(move)) return undefined;
+  position.play(move);
+  if (makeFen(position.toSetup()) !== makeFen(positionFromFen(input.after_fen).toSetup())) return undefined;
+  if (result.captured.color !== input.capture.captured.color || result.captured.role !== input.capture.captured.role) throw new TypeError("Capture-class identity differs from the exact capture event");
+  return Object.freeze({ ...input, exchange: result, class: captureExchangeClass(result) });
+}

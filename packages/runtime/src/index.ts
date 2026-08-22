@@ -37,7 +37,7 @@ export { appendEvents, deriveSegments, eventsSince, groupsFromEvents, projectRun
 export { feedbackDeliveryOpen, feedbackDisclosed } from "./feedback.js";
 export { consumeShapeFiring, declareShapeFiringEvidence, shapeFiringEvidence, shapeFirings, type ShapeFiring, type ShapeTriggerSource } from "./shape-firing.js";
 export { classifyPhase, developmentReading, isDevelopmentHome, renderPhaseReading, DEVELOPMENT_CONVENTION, DEVELOPMENT_HOMES, ENDGAME_MATERIAL_MAX, DEVELOPED_MATERIAL_MIN, OPENING_UNDEVELOPED_MIN, MIDDLEGAME_UNDEVELOPED_MAX, PHASE_PROVENANCE, type DetectedPhase, type DevelopmentReading, type PhaseReading } from "./phase.js";
-export { loosePieceReading, rayClassificationReading, type LoosePieceReading, type LoosePieceState, type RayClassification, type RayClassificationKind, type RayClassificationReading } from "./tactics.js";
+export { loosePieceReading, mateInOne, rayClassificationReading, type LoosePieceReading, type LoosePieceState, type MateInOneReading, type RayClassification, type RayClassificationKind, type RayClassificationReading } from "./tactics.js";
 export { SILENT_ASSISTANCE, permittedAssistance, reviewingGrant, type AssistanceConfig, type AssistanceContext, type AssistancePermission } from "./assistance.js";
 export { consumePivotalMarkers, liveAdmitted, liveMarkers, pivotalMarkerEvidence, pivotalMarkers, renderPivotalMarker, type PivotalKind, type PivotalMarker, type IrreversibilityDetail, type PhaseChangeDetail, type DivergenceDetail, type CollapseDetail } from "./pivotal.js";
 export {
@@ -235,6 +235,7 @@ export {
   compileSemanticEvidenceEvent,
   legalAlternativeEdges,
   localSemanticEvents,
+  derivedExchangeSemanticEvents,
   selectLocalSemanticEvidence,
   selectSemanticEvidence,
   structuralSemanticEvents,
@@ -251,6 +252,7 @@ export {
   type TransitionSemanticEventOperands,
   type TacticalSemanticEventOperands,
   type CastlingSemanticEventOperands,
+  type DerivedExchangeSemanticEventOperands,
 } from "./semantic-evidence.js";
 export {
   declareAuthoredClaimDeliveryEvidence,
@@ -261,6 +263,7 @@ export {
   declareEndgameReadingEvidence,
   declareEvidenceReferenceResolution,
   declareLegalExchangeEvidence,
+  declareCaptureClassEvidence,
   declareThreatEvidence,
   declareDoubleAttackEvidence,
   declareForkSurvivalEvidence,
@@ -268,6 +271,7 @@ export {
   declareCheckEventEvidence,
   declareLoosePieceEvidence,
   declareRayClassificationEvidence,
+  declareMateInOneEvidence,
   declareCastlingRightsEvidence,
   declareCastlingRightsLostEvidence,
   declareCastlingLegalityEvidence,
@@ -439,12 +443,14 @@ export { LIVE_SESSION_KINDS, MARK_BRUSHES, RUN_OPPONENT_MODES } from "./types.js
 export {
   EXCHANGE_PIECE_VALUES,
   LEGAL_EXCHANGE_CONVENTION,
+  captureClassEvent,
   captureExchangeClass,
   exchangeCaptureAt,
   legalCaptureMovesTo,
   legalExchange,
   legalExchangeForMove,
   type CaptureExchangeClass,
+  type CaptureClassEvent,
   type ExchangePieceIdentity,
   type LegalExchangeBranch,
   type LegalExchangeResult,
