@@ -30,5 +30,7 @@ Generated evidence:
 - `king-promotion-output.md` — mate-next and promotion availability/persistence;
 - `agreement-output.md` — exact-event sensitivity against tags plus a deterministic 1/20
   tag-negative control.
+- `bounded-mate-output.md` — complete-reply mate-through-four proof plus a capped five-plus
+  boundary probe.
 
 The source file is not committed.

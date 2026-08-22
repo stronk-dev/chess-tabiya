@@ -4603,3 +4603,21 @@ consequence. Wave C therefore carries six distinct facts where a shallow taxonom
 three words: duty relocation, exact deflection, ray-blocker clearance, square clearance, exact
 attraction and reply-qualified variants. Familiar vocabulary is retained without making one noisy
 classifier responsible for every meaning.
+
+## 2026-08-22 — bounded mating nets clear the basic foundation through four
+
+A complete legal-tree instrument fixes the candidate first move, searches future attacker moves,
+and requires mate against every defender reply. Deterministic source samples prove 240/240
+mate-in-2, 240/240 mate-in-3 and 120/120 mate-in-4 rows; all 600 adjacent deeper controls refute at
+the shallower horizon; none hit the 250,000-node cap. Mate-in-4 proof cost is median 635, p90 4,716,
+max 87,255 nodes. The five-depth boundary explains its own anomalies: upstream `mateIn5` means
+five **or more**, not exact five. Testing 24 of that bucket at depth five proves 19, refutes two
+longer lines and abstains three at the cap. D903 admits exact mate-through-four as a basic
+versioned primitive and requires proved/refuted/budget-exhausted with retained proof/refutation.
+“Mating net” may render that fact; king-zone and escape-count deltas cannot manufacture it.
+
+## 2026-08-22 — correction: bounded mating-net row is D906, not D903
+
+The learner-modules cross-review claimed D903–D905 while the bounded mate instrument was running.
+The living mating-net row and Wave-C pointers now use D906. The preceding D903 reference remains as
+append-only collision history; no research result or contract changed.

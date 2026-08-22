@@ -321,14 +321,58 @@ These three families now clear the research gate as distinct observed events. Th
 assert best play, intent or force. A later complete-reply projection may add “forced” or
 “unavoidable”; it is not a prerequisite for naming what the committed sequence did. `[M]`
 
-## 10. Next research
+## 10. Bounded mating nets are exact through four; `mateIn5` is a capped bucket
+
+A legal-tree solver fixes the exported candidate first move, treats later attacker moves as
+existential, enumerates **every** defender reply, and returns proved/refuted/budget-exhausted at a
+250,000-node cap. Adjacent deeper tags are the negative control: a mate-in-3 record must not prove
+within two, and a mate-in-4 must not prove within three. Promotions are fully enumerated. `[V]`
+(`tools/d872-semantic-tactics-harness/bounded-mate.test.ts`)
+
+| arm | proved | refuted | cap abstention | proof nodes median / p90 / max |
+|---|---:|---:|---:|---:|
+| mate-in-2 positives | **240/240** | 0 | 0 | 3 / 8 / 18 |
+| mate-in-3 tested at depth 2 | **0/240** | 240 | 0 | 36 / 46 / 204 |
+| mate-in-3 positives | **240/240** | 0 | 0 | 32 / 118 / 3,032 |
+| mate-in-4 tested at depth 3 | **0/240** | 240 | 0 | 906 / 1,783 / 3,317 |
+| mate-in-4 positives | **120/120** | 0 | 0 | 635 / 4,716 / 87,255 |
+| `mateIn5` tested at depth 4 | **0/120** | 120 | 0 | 15,284 / 39,084 / 88,912 |
+| `mateIn5` tested at depth 5 | 19/24 | 2 | 3 | 19,191 / 178,345 / 250,001 |
+
+`[V]` (`tools/d872-semantic-tactics-harness/bounded-mate-output.md`; deterministic hash samples
+from the bounded official prefix)
+
+The last row is not a detector defect. Upstream computes `moves_to_mate = len(mainline) // 2`,
+emits exact tags for one through four, and returns `mateIn5` for **every remaining depth**. The two
+refuted witnesses are source lines longer than five attacker moves; the three cap witnesses sit at
+the declared computation boundary. `[V]`
+([upstream `mate_in`](https://github.com/ornicar/lichess-puzzler/blob/master/tagger/cook.py);
+fetched-file SHA-256 `b21a0d179b710742010dde07e806eda0ecea0514412af9f5a1d04d053bc9859d`)
+
+The production contract handed to a Wave-C collector RFC is therefore:
+
+- `forced_mate_after_move@1` proves a declared candidate within **1–4 attacker moves** by complete
+  legal-tree enumeration;
+- payload retains candidate, attacker, maximum moves, root check/reply breadth, proof horizon and a
+  proof-tree digest/count; refutation retains at least one legal escaping branch;
+- node/time exhaustion is `budget_exhausted`, never false and never an engine-derived guess;
+- five-plus may use a separately declared offline budget or typed engine mate authority, but the
+  external `mateIn5` string is not exact evidence;
+- “mating net” is presentation vocabulary over a proved bounded tree. King-zone pressure, reduced
+  escapes and a sequence of checks remain useful operands but cannot emit the name.
+
+This is a basic Review/Support primitive with workflow-priced computation, not an optional advanced
+concept. Pre-commit delivery still obeys the module answer-distance ceiling; proving a candidate
+does not authorize showing its move. `[M]`
+
+## 11. Next research
 
 1. Carry the separately named attraction/deflection/square-clearance contracts into the Wave-C
    collector RFC alongside, not instead of, retained-duty relocation and line-blocker clearance.
 2. Add a reply-qualified overload form separately from the observed five-case convention; do not
    make it the basic label's floor.
-3. Extend mate-next into bounded mate-depth/tree records and compare engine mate claims with exact
-   shallow proofs; do not call king-zone deltas a mating net.
+3. Carry exact mate-through-four into the collector RFC and measure typed engine-mate agreement as
+   a separate C4 authority; do not call king-zone deltas a mating net.
 4. Add promotion-race/tablebase joins and keep them separate from the now-measured next-promotion
    forms.
 5. Admit, narrow or refuse every family independently; then update the Wave-C consumer matrix.

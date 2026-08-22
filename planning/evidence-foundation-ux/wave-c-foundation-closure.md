@@ -105,6 +105,12 @@ worked” require a declared engine/search boundary.
 **Falsifier:** an engine scalar threshold sits on the optimality boundary and smuggles `bestmove`,
 or a king-zone/escape delta is renamed “attack” without a consequence.
 
+**Mating-net arm answered 2026-08-22:** exact complete-reply proof clears mate-through-four on
+600/600 sampled positives and rejects 600/600 adjacent-depth controls, with zero 250k-node
+abstentions. The source's `mateIn5` is verified as a five-or-more bucket; exact depth-five reaches
+the computation boundary. The collector contract is proved/refuted/budget-exhausted with retained
+horizon/tree or refuting branch. Promotion-race/tablebase closure remains.
+
 ### C3 — opening and theory applicability
 
 This is mostly closure of completed R4/R8 research, not a new algorithm hunt:
