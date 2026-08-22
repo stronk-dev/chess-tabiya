@@ -4621,3 +4621,15 @@ versioned primitive and requires proved/refuted/budget-exhausted with retained p
 The learner-modules cross-review claimed D903–D905 while the bounded mate instrument was running.
 The living mating-net row and Wave-C pointers now use D906. The preceding D903 reference remains as
 append-only collision history; no research result or contract changed.
+
+## 2026-08-22 — promotion race keeps exact geometry and refuses a geometric winner
+
+The 12 recorded Syzygy sidecars yield 288 unique FENs, 157 pawn-bearing and 49 pure pawn endings.
+The result is the counterexample the vague `ruleOfSquareVerdict` needed: 23 positions with a
+side-to-move seventh-rank pawn split 11 win / 1 draw / 11 loss; three immediate legal-promotion
+positions include a draw; and a baseline that accounts for side to move, clear paths and initial
+double pushes agrees with Syzygy on only 7/10 two-sided races, including two loss→win inversions.
+D907 therefore admits exact per-pawn geometry and exact race ordering as description, joins
+Syzygy category/DTZ for outcome in range, and abstains on outcome outside it. It does not discard
+the primitives: Support can say both pawns are racing or expose distance without claiming the
+winner, Review can add the tablebase result, and bots can consume the exact joined authority.

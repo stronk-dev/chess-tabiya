@@ -109,7 +109,13 @@ or a king-zone/escape delta is renamed “attack” without a consequence.
 600/600 sampled positives and rejects 600/600 adjacent-depth controls, with zero 250k-node
 abstentions. The source's `mateIn5` is verified as a five-or-more bucket; exact depth-five reaches
 the computation boundary. The collector contract is proved/refuted/budget-exhausted with retained
-horizon/tree or refuting branch. Promotion-race/tablebase closure remains.
+horizon/tree or refuting branch.
+
+**Promotion-race arm answered 2026-08-22:** exact geometry is useful and not outcome. Across 288
+unique recorded Syzygy FENs, a side-to-move seventh-rank pawn splits 11 win / 1 draw / 11 loss,
+immediate promotion includes a draw, and unblocked stride/turn ordering agrees only 7/10 with two
+loss→win inversions. The collector splits geometry from a tablebase outcome join and abstains on
+outcome outside the domain; D832's underspecified `ruleOfSquareVerdict` is refused.
 
 ### C3 — opening and theory applicability
 

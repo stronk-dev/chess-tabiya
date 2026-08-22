@@ -32,5 +32,7 @@ Generated evidence:
   tag-negative control.
 - `bounded-mate-output.md` — complete-reply mate-through-four proof plus a capped five-plus
   boundary probe.
+- `promotion-race-tablebase-output.md` — exact promotion geometry against the repository's
+  recorded Syzygy outcome evidence.
 
 The source file is not committed.

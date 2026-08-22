@@ -365,7 +365,47 @@ This is a basic Review/Support primitive with workflow-priced computation, not a
 concept. Pre-commit delivery still obeys the module answer-distance ceiling; proving a candidate
 does not authorize showing its move. `[M]`
 
-## 11. Next research
+## 11. Promotion geometry cannot grade a race; Syzygy joins it
+
+The repository's 12 Syzygy evidence sidecars contain 288 unique FENs after exact de-duplication.
+The research join recomputes current-side pawn identity, seventh-rank state, legal promotion and
+unblocked forward distance from each FEN, then compares the descriptive geometry with the recorded
+tablebase category. `[V]`
+(`tools/d872-semantic-tactics-harness/promotion-race-tablebase.test.ts`;
+`tools/d872-semantic-tactics-harness/promotion-race-tablebase-output.md`)
+
+| population/fact | result |
+|---|---:|
+| pawn-bearing unique tablebase FENs | 157 |
+| kings-and-pawns-only | 49 |
+| side-to-move seventh-rank pawn | 23: **11 win / 1 draw / 11 loss** |
+| immediate legal promotion | 3: **2 win / 1 draw / 0 loss** |
+| two-sided unblocked geometric race | 10 |
+| naive stride/turn ordering agrees with Syzygy | **7/10 (70.0%)** |
+| worst direction error | 2 geometric losses are exact Syzygy wins |
+
+The geometric baseline is deliberately stronger than a raw distance count: it uses exact side to
+move, occupied forward paths and the initial two-square push. It is still not outcome because it
+omits control, captures, checks, king access and what each promotion does. Those omitted relations
+are not edge cases—the baseline gets the outcome backwards on two of ten recorded races. `[V]`
+(same output; first disagreement FENs and evidence files are retained there)
+
+This closes D832's `ruleOfSquareVerdict` question by refusal. The versioned foundation should carry:
+
+- `promotion_geometry@1`: exact named pawn, distance, forward path/blockers, control operands,
+  side to move, pass-convention availability and complete-one-reply persistence;
+- `promotion_race_geometry@1`: two or more named pawns with each exact arrival convention and
+  ordering, explicitly **descriptive** and never `winning`/`losing`;
+- `promotion_race_tablebase@1`: the same named participants joined to Syzygy category and available
+  DTZ/precise-DTZ when the position is in range;
+- `outside_tablebase_domain` / provider failure as outcome abstention while geometry remains.
+
+Immediate promotion, promotion first and promotion with check/mate can be exact additional events;
+none inherits a whole-position result without the joined authority. This lets Support say “both
+pawns are racing” or reveal distance at the permitted answer level, while Review may add “Syzygy:
+draw” and a bot may weight the exact tablebase moves. `[M]`
+
+## 12. Next research
 
 1. Carry the separately named attraction/deflection/square-clearance contracts into the Wave-C
    collector RFC alongside, not instead of, retained-duty relocation and line-blocker clearance.
@@ -373,8 +413,8 @@ does not authorize showing its move. `[M]`
    make it the basic label's floor.
 3. Carry exact mate-through-four into the collector RFC and measure typed engine-mate agreement as
    a separate C4 authority; do not call king-zone deltas a mating net.
-4. Add promotion-race/tablebase joins and keep them separate from the now-measured next-promotion
-   forms.
+4. Carry the split promotion geometry/tablebase join into the collector RFC; do not recreate a
+   geometric winner field under another name.
 5. Admit, narrow or refuse every family independently; then update the Wave-C consumer matrix.
 
 No production detector, learner sentence, content edit or RFC is authorized by this Stage-0 result.
