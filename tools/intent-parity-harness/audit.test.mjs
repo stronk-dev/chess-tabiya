@@ -30,10 +30,11 @@ test("keeps the four amended breadth gates mirrored at the measured boundary", (
   const design = normalized(source("design/03-product-breadth.md"));
   const gates = normalized(source("planning/exploration/gates.md"));
   for (const fact of [
-    { design: "fourteen shipped producer paths end in five incompatible delivery states", gates: "A4 traces 14 producer paths into five incompatible delivery states" },
+    { design: "20 producers / 126 projections / 25 consumers / 175 bindings", gates: "20 producers / 126 projections / 25 consumers / 175 bindings" },
+    { design: "not completeness or a learner experience", gates: "F2 deliberately grants no product-module admission" },
     { design: "only 11/18 structural families round-trip", gates: "only 11/18 structural families round-trip" },
     { design: "only 2/6 direct workflow bindings", gates: "only 2/6 intended workflows bind directly" },
-    { design: "The provider-off Compose core functions", gates: "The 1.0 platform floor is not met" },
+    { design: "The provider-off Compose core functions", gates: "The 1.0 platform floor is still unmet independently" },
   ]) {
     assert.ok(design.includes(fact.design), `design mirror: ${fact.design}`);
     assert.ok(gates.includes(fact.gates), `gate mirror: ${fact.gates}`);

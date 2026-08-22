@@ -8,7 +8,7 @@ export const INTENT_CONTRACTS = Object.freeze([
       { path: "design/02-product-shape.md", text: "no core learner journey may depend on a hosted secret or provider" },
       { path: "design/02-product-shape.md", text: "proof is established by the owner's own devices and use, not by recruited participant studies" },
       { path: "design/03-product-breadth.md", text: "Corrected 2026-08-21 against the O13 Choice-C floor" },
-      { path: "planning/exploration/gates.md", text: "The 1.0 platform floor is not met" },
+      { path: "planning/exploration/gates.md", text: "The 1.0 platform floor is still unmet independently" },
     ],
     preservedOpen: { path: "design/02-product-shape.md", text: "Deliberately preserved as open by O13: source model and monetization" },
   },
