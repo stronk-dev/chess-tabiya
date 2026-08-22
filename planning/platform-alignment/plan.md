@@ -51,7 +51,7 @@ Large content expansion is admitted only when all are true:
 - [ ] detector semantics v1 declares sign, grounding, confidence/abstention and validation;
 - [ ] pack capabilities and deprecations have a compatibility policy;
 - [ ] automatic migration/dry-run passes over every pack and sidecar;
-- [ ] non-mechanical re-authoring cost is measured and within an owner-set budget;
+- [ ] non-mechanical re-authoring cost is **measured and ruled per release** — *amended 2026-08-23 by claude on owner ruling [[D996]] ("decide per release"), owner-vetoable: the original clause required a standing owner-set budget, which the ruling declines to create, so the clause as written could never pass. The measurement obligation is unchanged (`make graduation-plan`); the owner's per-release ruling replaces the standing number, and no breaking change proceeds until its cost is measured and seen*;
 - [ ] a small official-pilot set exercises every required primitive and guidance module;
 - [ ] pilot packs pass viewport, gesture, assistance, review/re-entry and abstention checks;
 - [ ] the owner accepts the resulting primitive set for the first scale wave.

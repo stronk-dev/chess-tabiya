@@ -100,3 +100,20 @@ owner use + Gate F proof → content hold may be reconsidered
 
 Approval does **not** graduate a pack, publish candidate openings, accept generated chess prose, or
 authorize content expansion.
+
+
+---
+
+## Owner rulings landed 2026-08-23
+
+- **O6.1 — APPROVED** ([[D995]]): the six-part capability model as recommended. **F3 may draft**;
+  it is the sole route to Gate F clauses 5 and 6.
+- **O6.2 — RULED AGAINST THE RECOMMENDATION** ([[D996]]): no standing budget, *"decide per
+  release."* Gate F clause 7 amended to **measured and ruled per release** (claude on the ruling,
+  owner-vetoable) because the clause as written required a standing budget that will not exist.
+  The measurement obligation stands.
+- **Pilot sourcing — RULED** ([[D997]]): grounded sources only (tablebase / explorer / engine-
+  validated). The pilot starts now under `plan.md:39`'s standing licence with no owner authoring.
+- **O6.3 applies as written** ([[D998]]): requirements derive from compiled 1.0 workflow consumers,
+  not schema vocabulary; zero-use `engine_condition`, per-leg shape/policy and `prediction` are
+  **retirement candidates**, not authoring jobs. Census first, author only missing witnesses.
