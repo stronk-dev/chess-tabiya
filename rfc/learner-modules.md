@@ -311,7 +311,7 @@ one is a spec change with a changelog line.
 | 11 | `full_inspector` | review (explicit_mode) | explicit_surface | principal_variation | 20 / 400 / 20 / 8 | open a fact's provenance |
 
 Eligibility summary — unit: **eligibility row** (one literal `(projection id, module consumer)`
-pair); total declared: **175**, of which **173 compile at landing** and **2 are
+pair); total declared: **181** (175 at cross-review, +6 by the D924 Appendix-B amendment), of which **179 compile at landing** and **2 are
 declared-awaiting** the grade-family projection (§5). (Drafted as 179/177; four sight rows were
 removed in cross-review — Appendix B and the changelog carry the correction.) Appendix B is the
 closed enumeration.
@@ -635,7 +635,7 @@ availability rule, working.
    (all eleven minus registry-only `rules_floor`), version 1, appended to
    `EVIDENCE_CONSUMER_IDS`. Each consumer declaration mirrors its module's timing, roles,
    forms, answer content and budgets — and per F1's law, its adapters **only narrow**.
-3. **Eligibility**: `PRODUCTION_ELIGIBILITY_DECLARATIONS` — the 173 literal compiled rows of
+3. **Eligibility**: `PRODUCTION_ELIGIBILITY_DECLARATIONS` — the 179 literal compiled rows of
    Appendix B — joined into `EVIDENCE_MANIFEST.eligibility` beside the 40 research rows
    (which are byte-identical after this change). The manifest digest moves; the docs tuple in
    `docs/semantic-evidence.md` and `docs/evidence-contract.md` moves in the same change.
@@ -722,7 +722,7 @@ unit and total and match the tables they verify.
    exist in `MODULE_DECLARATIONS` with all thirteen §1 fields; `make evidence-manifest-check
    semantic-evidence-check` passes; the docs tuple moves in the same change. Negative: a
    twelfth module id, or a module missing `emptyBehavior`, fails compilation.
-2. **A2 — Eligibility rows.** The compiled manifest contains exactly the **173** Appendix-B
+2. **A2 — Eligibility rows.** The compiled manifest contains exactly the **179** Appendix-B
    compiled rows (unit: `(projection, consumer)` pair) — no more, no fewer — and the 40
    research rows byte-identical. The 2 declared-awaiting grade rows are **absent** from the
    compiled manifest and present in the registry's `awaiting` lists; a test asserts both
@@ -917,7 +917,7 @@ this document's to rewrite).
 ## Appendix B — eligibility row enumeration
 
 Unit: **eligibility row** — one literal `(projection id, module consumer id)` pair. Total
-declared: **175**; compiled at landing: **173**; declared-awaiting: **2** (marked ◇). This is
+declared: **181**; compiled at landing: **179**; declared-awaiting: **2** (marked ◇). This is
 the closed list A2 counts; adding or dropping a row is a spec change with a changelog line.
 
 | module consumer | rows | n |
@@ -934,4 +934,4 @@ the closed list A2 counts; adding or dropping a row is a spec change with a chan
 | `module.full_inspector` | `rules.tactic.reading.{loose_piece, ray_classification, rook_on_seventh, trapped_piece, back_rank, discovered_latency}@1`, `rules.tactic.consequence.{threat, mate_in_one, reply_breadth}@1`, `rules.structural.reading.{space, pawn_connectivity}@1`, `rules.phase.development@1`, `rules.castling.reading.{rights, legality}@1`, `derived.tactic.{discovered_executed, promotion_pressure}@1` (16); `rules.square.reading.control@1`, `rules.mobility.reading.piece_destinations@1`, `rules.pawn.reading.{contacts, candidate_majority}@1`, `derived.material.reading.role_signature@1`, `rules.king.reading.zone_state@1` (6); `live.stockfish.{eval, wdl, pv}@1`, `human.maia.{policy, candidate_wdl}@1`, `human.explorer.population@1`, `live.syzygy.{result, category, distance}@1`, `recorded.engine.eval@1`, `recorded.tablebase.result@1`, `theory.shapes.firing@1` (12) | 34 |
 | `rules_floor` | — (registry-only; `evidence: none`) | 0 |
 
-Cross-check: 20+3+7+38+6+4+7+8+48+34 = **175**; minus the two ◇ rows = **173** compiled.
+Cross-check: 20+3+7+38+6+4+7+8+48+40 = **181**; minus the two ◇ rows = **179** compiled (inspector 34→40 per the D924 amendment).
