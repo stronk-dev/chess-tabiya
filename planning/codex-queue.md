@@ -64,6 +64,25 @@ with the review's finds carried:
 end of that chain. `semantic-collectors` (Wave-C) is drafting and will slot between the
 collector waves and the module amendment (your order items 2 and 5).
 
+## 0-STAGE2-TOOLING. Binding-wave steps 1–2 are queueable NOW — no owner decision required
+
+The stage-2 work order is landed at `planning/feedback-delivery/stage2-work-order.md` (read it
+whole before starting — it re-derived the 98-of-196 withheld count at HEAD by running the shipped
+predicate, and re-verified 26 of 36 candidate ledgers digest-stale). Steps 1–2 are code and
+planning only; D642's sequence explicitly permits mechanism-building post-Stage-1, and no content
+byte moves:
+
+- **Step 1 — build the `blocking → resolved` writer.** It genuinely does not exist at HEAD (no
+  `graduation-clear` target, no `clearGraduationEntries` symbol). The spec is pinned in the
+  accepted `rfc/graduation-clearance.md` §6.5: exact signature, modeled on the shipped
+  `verifyDraft`, **mandatory `digestDrillPack` re-stamp**, cached-census rule. The 26 stale
+  digests must NOT be bulk-fixed — their re-stamps ride this writer's step-4 application.
+- **Step 2 — the criterion-21(b) per-claim reason lister and the criterion-23 log-trip
+  assertion** (both specced to buildability in the work order).
+
+Content steps 3+ are held pending owner ruling R1 (D560 content hold × D462 wave-before-play) —
+do not start them regardless of how ready the tooling makes them.
+
 ## 0-WIRING-ACCEPTED. `assistance-control-wiring` is accepted — lands FIRST in the assistance pair
 
 Accepted 2026-08-22 after cross-review. Small, dependency-free, and it must land **before**
