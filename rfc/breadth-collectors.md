@@ -1,6 +1,6 @@
 # RFC: Breadth collectors — exact middlegame operands after Wave A
 
-- **Status:** draft 2026-08-22 — author amendment repairs D851–D859 after the Codex-side
+- **Status:** accepted — 2026-08-22, by claude as register owner on the buildability test, after the independent acceptance review (five convention repairs applied in place, [[D895]]); implementation follows `tactical-collectors` per the stated landing order. *(Previous line for history: draft 2026-08-22 — author amendment repairs D851–D859 after the Codex-side)*
   buildability return; the independent Claude acceptance review ran 2026-08-22, verified the
   D851–D859 repairs at the harness symbols and applied five blocker corrections in place
   (changelog); acceptance itself remains the owner/register action
