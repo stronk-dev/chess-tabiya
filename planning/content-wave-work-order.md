@@ -727,3 +727,16 @@ The state-of-the-corpus audit produced three rows; this work order is their dest
   is **licensed now** by `planning/platform-alignment/plan.md:39` (the limiting clause is the licensing
   clause). Blocked only on the O6.3 membership rule; candidate evidence (lowest-debt drafts, primitive
   coverage) is in the audit's pilot shortlist — evidence for a ruling, not a decision.
+
+## Capability-staleness routing 2026-08-23 (from `planning/content-era/capability-staleness.md`)
+
+- **[[D999]]** — the staleness hypothesis inverts: packs match the HEAD format; the nine new
+  capabilities are not pack-referenceable (disjoint vocabularies). Owned here as the standing
+  answer to "should we re-author against new capabilities" — **no, there is nothing new to say**;
+  the binding gap is the real one.
+- **[[D1000]]** — the one-pack proof: `lucena-bridge-convert` shows 1 of 4 claims because unbound
+  machine-labelled claims are removed from the page, with 22 unused tablebase records in its own
+  sidecar. Closes with the binding arm.
+- **[[D1001]]** — the binding/graduation separability measurement. Destination: the owner's
+  hold-split ruling; if the binding arm is released, execution is
+  `planning/feedback-delivery/stage2-work-order.md` steps 3+ **restricted to the binding arm**.
