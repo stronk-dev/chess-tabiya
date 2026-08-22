@@ -120,6 +120,7 @@ predecessor renegotiates here rather than renumbering unilaterally.
 | version | owner RFC | what it changed | landed at |
 |---|---|---|---|
 | 0.17 | `archive/opponent-contracts.md` | optional `OpponentSelection.orderingBasis` | `6ba0736` |
+| 0.18 | `bot-policy.md` | OpponentSelection.policy (packages/runtime/src/types.ts:102 OpponentSelection gains an optional typed policy-decision record; opponent.move_selected payload widens) | `tabiya-claims` |
 
 ### Live claims
 
