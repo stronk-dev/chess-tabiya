@@ -49,9 +49,9 @@ admission is correct. F8 adds a derived candidate/selection layer after those ad
 | Local exchange/error guard | exact legal recapture convention per candidate | specified/measured in tactical Wave A | tactical landing first (`legal-exchange@1`) |
 | Tactical features | capture/check/loose/ray/threat/fork/development/etc. over each candidate | tactical RFC draft, 30 closed ids | candidate adapter consumes collector ids; no duplicate tactic code |
 | Positional features | control, mobility, pawn, defender, material, king and activity operands | breadth RFC draft, 18 closed ids | candidate adapter consumes breadth ids; low-lift facts remain features, not hint prominence |
-| Salience/recency | whether a threat/geometry was just created and which actor moved | specific hierarchy remains folklore | D815 experiment before production weighting |
-| Sharpness/blunder potential | candidate-loss distribution / bounded MultiPV spread | literature-supported, product projection absent | D816 engine-priced experiment and opponent-only binding; grading refusal remains |
-| Cross-band disagreement | policy change across human bands | captured three-band inputs prove feasibility; signal not yet measured as selector feature | D817 prototype before runtime multi-query cost |
+| Salience/recency | whether an exact threat was just created and which actor moved | hierarchy remains folklore; current `structuralDelta` cannot establish the claimed threat identity | D815 moves behind tactical landing and is excluded from the first stack unless its later experiment passes |
+| Sharpness/blunder potential | candidate-loss distribution / bounded MultiPV spread | D816 measured stable band-level rank signal (ρ .51–.56 for severe-choice breadth), but middlegame/endgame reach is absent | admit typed opponent-only distribution/budget/completeness; never a learner grade or “only move” label |
+| Cross-band disagreement | policy change across human bands | D817 refuted by the existing sealed comparison (Pearson .021–.044; sign 47–52%) | exclude multi-band runtime queries from F8 |
 | Repertoire | transposition-aware immutable book with coverage/fallthrough | drill spine and root book both measured 79.2% fallback and refused as general personas | interface may be specified; no 1.0 repertoire persona without its own corpus wave |
 | Memory/timing | explicit cross-game state and clock-conditioned behavior | unmeasured/absent | keep off; D820 forbids fake random delays |
 | Controlled trait | versioned transform with measured output delta and strength effect | pawn ×4 passed; forcing/quiet transforms failed | O8 decides whether pawn-heavy enters the initial roster |
@@ -104,7 +104,7 @@ degraded path that says the stack did not apply.
 O8 owner ruling
   ├─ tactical-collectors independent review → acceptance → implementation
   ├─ breadth-collectors independent review → acceptance → implementation
-  └─ D815/D816/D817 focused research may run while collectors land
+  └─ D816 settled-go; D817 settled-refuse; D815 is optional post-tactical research
           ↓
 F8 policy-stack RFC (candidate adapter + compiler + seed + selection record)
           ↓

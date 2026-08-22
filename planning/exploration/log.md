@@ -4435,3 +4435,22 @@ contribution/calibration identities (D822), and Maia chooses `bestmove` internal
 seed is not honored by generation (D823). `f8-dependency-map.md` routes the bot wave behind O8 and
 the two collector landings, while leaving salience/sharpness/multi-band experiments parallel and
 campaign independent.
+
+## 2026-08-22 — bot candidate sharpness measured; multi-band Maia feature refused
+
+D816 reused the fixed R9/R11 279-position snapshot, R9's committed explorer counts and R4's
+full-legal-move Stockfish depth-12 probe. All engine cells completed; 633/837 position-band cells
+have nonzero explorer population and the mapped move list covers a median 99.66% of games. Legal
+severe-choice breadth tracks observed severe human mass consistently by band (Spearman
+.524/.514/.556); near-best breadth points the other way (−.486/−.481/−.589). Best/second gap is
+weaker. The projection is admitted only as a typed opponent-selection distribution with engine
+budget and completeness, never as an “only move” label or learner grade. The corpus supports the
+opening/cross-phase result; its 35 middlegame cells are weak and it has no explorer-covered endgame
+cells, so no broader claim was made.
+
+D817 closed as a measured refusal without duplicating engine work. The earlier sealed Maia/WDL
+experiment already compared band-to-band Maia policy movement with human population movement over
+1,171–1,283 shared move rows: Pearson .021–.044 and sign agreement 47–52%. Runtime multi-band
+queries are removed from F8. D815 remains open behind exact tactical-identity landing; current
+`structuralDelta` cannot establish the threat relation its proposed salience experiment claims to
+measure, so the first F8 stack excludes it rather than shipping an unmeasured folklore weight.

@@ -1,0 +1,882 @@
+{
+  "method": {
+    "sourcePositions": 279,
+    "stockfishPositions": 279,
+    "joinedPositions": 279,
+    "cells": 633,
+    "bands": [
+      1400,
+      1600,
+      1800
+    ],
+    "stockfishDepth": 12,
+    "severeThresholdCp": 250,
+    "nearBestThresholdCp": 50,
+    "humanMassNote": "Explorer exposes its listed moves plus a total. Lower-bound mass uses the full total; within-listed metrics condition on mapped listed moves. Unlisted moves are never assigned an engine score."
+  },
+  "checks": {
+    "unresolvedSanRows": 0,
+    "zeroExplorerCells": 204,
+    "stockfishErrorRows": 0,
+    "duplicateStockfishFens": 0,
+    "reachedDepth12": 279,
+    "mappedCoverage": {
+      "min": 0.9129937034917001,
+      "median": 0.9966327971482458,
+      "max": 1
+    }
+  },
+  "positionDistributions": {
+    "bestSecondGapCp": {
+      "min": 0,
+      "q25": 3,
+      "median": 9,
+      "q75": 21.5,
+      "max": 925
+    },
+    "legalSevereFraction250": {
+      "min": 0,
+      "q25": 0.14285714285714285,
+      "median": 0.24,
+      "q75": 0.34292763157894735,
+      "max": 0.9772727272727273
+    },
+    "legalNearBestFraction50": {
+      "min": 0.02127659574468085,
+      "q25": 0.09131944444444445,
+      "median": 0.24324324324324326,
+      "q75": 0.42857142857142855,
+      "max": 1
+    },
+    "medianLegalLossCp": {
+      "min": 0,
+      "q25": 59,
+      "median": 91,
+      "q75": 167,
+      "max": 99944
+    },
+    "p90LegalLossCp": {
+      "min": 0,
+      "q25": 357.19999999999993,
+      "median": 471.8000000000001,
+      "q75": 576.2,
+      "max": 99944
+    }
+  },
+  "pooledCorrelations": {
+    "bestSecondGapCp": {
+      "severeMassLowerBound": {
+        "n": 633,
+        "pearson": 0.13123756780610848,
+        "spearman": 0.3390900776210405
+      },
+      "severeMassWithinListed": {
+        "n": 633,
+        "pearson": 0.13159697098176854,
+        "spearman": 0.3388190294109632
+      },
+      "expectedLossWithinListedCp": {
+        "n": 633,
+        "pearson": -0.0012496240428156806,
+        "spearman": 0.35520737822325416
+      },
+      "engineBestMassLowerBound": {
+        "n": 633,
+        "pearson": 0.38023698724861127,
+        "spearman": 0.26043460362876064
+      }
+    },
+    "legalSevereFraction250": {
+      "severeMassLowerBound": {
+        "n": 633,
+        "pearson": 0.17944892648092964,
+        "spearman": 0.5301060071463062
+      },
+      "severeMassWithinListed": {
+        "n": 633,
+        "pearson": 0.1796283560553598,
+        "spearman": 0.5298455781484647
+      },
+      "expectedLossWithinListedCp": {
+        "n": 633,
+        "pearson": 0.21277451763289085,
+        "spearman": 0.21999490451004844
+      },
+      "engineBestMassLowerBound": {
+        "n": 633,
+        "pearson": 0.33360400326359163,
+        "spearman": 0.15444643590496698
+      }
+    },
+    "legalNearBestFraction50": {
+      "severeMassLowerBound": {
+        "n": 633,
+        "pearson": -0.18465742013398845,
+        "spearman": -0.5151422202651941
+      },
+      "severeMassWithinListed": {
+        "n": 633,
+        "pearson": -0.1847267513879494,
+        "spearman": -0.5147716631680685
+      },
+      "expectedLossWithinListedCp": {
+        "n": 633,
+        "pearson": -0.11224254505995086,
+        "spearman": -0.302344726808364
+      },
+      "engineBestMassLowerBound": {
+        "n": 633,
+        "pearson": -0.30741516911763966,
+        "spearman": -0.34301411504110946
+      }
+    },
+    "medianLegalLossCp": {
+      "severeMassLowerBound": {
+        "n": 633,
+        "pearson": 0.10184825437206034,
+        "spearman": 0.5804623254069028
+      },
+      "severeMassWithinListed": {
+        "n": 633,
+        "pearson": 0.10171940448231188,
+        "spearman": 0.5800638285815798
+      },
+      "expectedLossWithinListedCp": {
+        "n": 633,
+        "pearson": 0.8530023993600147,
+        "spearman": 0.2777691813540227
+      },
+      "engineBestMassLowerBound": {
+        "n": 633,
+        "pearson": 0.09614230831869786,
+        "spearman": 0.32696669756144336
+      }
+    },
+    "p90LegalLossCp": {
+      "severeMassLowerBound": {
+        "n": 633,
+        "pearson": 0.10231774787317963,
+        "spearman": 0.32476429139626206
+      },
+      "severeMassWithinListed": {
+        "n": 633,
+        "pearson": 0.10219288062955323,
+        "spearman": 0.3247187891762069
+      },
+      "expectedLossWithinListedCp": {
+        "n": 633,
+        "pearson": 0.8530750069302762,
+        "spearman": 0.2124945102805637
+      },
+      "engineBestMassLowerBound": {
+        "n": 633,
+        "pearson": 0.09215135573282611,
+        "spearman": 0.04539509276948851
+      }
+    }
+  },
+  "pooledQuartileContrasts": {
+    "legalSevereFraction250_to_severeMassLowerBound": {
+      "nPerQuartile": 158,
+      "lowFeatureMedian": 0.08333333333333333,
+      "highFeatureMedian": 0.4491596638655462,
+      "lowTargetMedian": 0,
+      "highTargetMedian": 0.001953960093657742
+    },
+    "legalNearBestFraction50_to_severeMassLowerBound": {
+      "nPerQuartile": 158,
+      "lowFeatureMedian": 0.06559139784946236,
+      "highFeatureMedian": 0.5135135135135135,
+      "lowTargetMedian": 0.001686609163756356,
+      "highTargetMedian": 0
+    }
+  },
+  "byBand": {
+    "1400": {
+      "bestSecondGapCp": {
+        "severeMassLowerBound": {
+          "n": 206,
+          "pearson": 0.15605401439169628,
+          "spearman": 0.3139813624635493
+        },
+        "severeMassWithinListed": {
+          "n": 206,
+          "pearson": 0.1566291352098856,
+          "spearman": 0.3134410582763271
+        },
+        "expectedLossWithinListedCp": {
+          "n": 206,
+          "pearson": 0.007467477557110225,
+          "spearman": 0.3892978960750064
+        },
+        "engineBestMassLowerBound": {
+          "n": 206,
+          "pearson": 0.3610511218394896,
+          "spearman": 0.24626538046013838
+        }
+      },
+      "legalSevereFraction250": {
+        "severeMassLowerBound": {
+          "n": 206,
+          "pearson": 0.23067574527295667,
+          "spearman": 0.5249636629113931
+        },
+        "severeMassWithinListed": {
+          "n": 206,
+          "pearson": 0.23108914972276337,
+          "spearman": 0.5245206142199429
+        },
+        "expectedLossWithinListedCp": {
+          "n": 206,
+          "pearson": 0.2307071600503379,
+          "spearman": 0.2370141264278887
+        },
+        "engineBestMassLowerBound": {
+          "n": 206,
+          "pearson": 0.3595390862209132,
+          "spearman": 0.16168791556220513
+        }
+      },
+      "legalNearBestFraction50": {
+        "severeMassLowerBound": {
+          "n": 206,
+          "pearson": -0.2206125128036624,
+          "spearman": -0.48632735267985544
+        },
+        "severeMassWithinListed": {
+          "n": 206,
+          "pearson": -0.22051612045028485,
+          "spearman": -0.4856313444638807
+        },
+        "expectedLossWithinListedCp": {
+          "n": 206,
+          "pearson": -0.11807409660796507,
+          "spearman": -0.34833866214838466
+        },
+        "engineBestMassLowerBound": {
+          "n": 206,
+          "pearson": -0.3004773591623209,
+          "spearman": -0.3414094775739577
+        }
+      },
+      "medianLegalLossCp": {
+        "severeMassLowerBound": {
+          "n": 206,
+          "pearson": 0.1248500757095381,
+          "spearman": 0.5627124635818962
+        },
+        "severeMassWithinListed": {
+          "n": 206,
+          "pearson": 0.12449062048949124,
+          "spearman": 0.5620526441001699
+        },
+        "expectedLossWithinListedCp": {
+          "n": 206,
+          "pearson": 0.890721430949383,
+          "spearman": 0.32764710123771534
+        },
+        "engineBestMassLowerBound": {
+          "n": 206,
+          "pearson": 0.11602694298715868,
+          "spearman": 0.32536768807735394
+        }
+      },
+      "p90LegalLossCp": {
+        "severeMassLowerBound": {
+          "n": 206,
+          "pearson": 0.124684421337913,
+          "spearman": 0.3145784646199791
+        },
+        "severeMassWithinListed": {
+          "n": 206,
+          "pearson": 0.12433049399613495,
+          "spearman": 0.3145380337976807
+        },
+        "expectedLossWithinListedCp": {
+          "n": 206,
+          "pearson": 0.8907506411755588,
+          "spearman": 0.2334666271320289
+        },
+        "engineBestMassLowerBound": {
+          "n": 206,
+          "pearson": 0.11215541302424155,
+          "spearman": 0.04751285273754492
+        }
+      }
+    },
+    "1600": {
+      "bestSecondGapCp": {
+        "severeMassLowerBound": {
+          "n": 213,
+          "pearson": 0.09919293329521141,
+          "spearman": 0.3142488305105641
+        },
+        "severeMassWithinListed": {
+          "n": 213,
+          "pearson": 0.09949145266379018,
+          "spearman": 0.3139255097733188
+        },
+        "expectedLossWithinListedCp": {
+          "n": 213,
+          "pearson": -0.0053863075550390485,
+          "spearman": 0.3456533617140077
+        },
+        "engineBestMassLowerBound": {
+          "n": 213,
+          "pearson": 0.3833428781525619,
+          "spearman": 0.25897637413471336
+        }
+      },
+      "legalSevereFraction250": {
+        "severeMassLowerBound": {
+          "n": 213,
+          "pearson": 0.13442378783841474,
+          "spearman": 0.5153973533106629
+        },
+        "severeMassWithinListed": {
+          "n": 213,
+          "pearson": 0.1344484533865469,
+          "spearman": 0.5153178375791225
+        },
+        "expectedLossWithinListedCp": {
+          "n": 213,
+          "pearson": 0.20855189812355293,
+          "spearman": 0.22488681845968972
+        },
+        "engineBestMassLowerBound": {
+          "n": 213,
+          "pearson": 0.3311011580633786,
+          "spearman": 0.14424866365528688
+        }
+      },
+      "legalNearBestFraction50": {
+        "severeMassLowerBound": {
+          "n": 213,
+          "pearson": -0.15323742836938767,
+          "spearman": -0.48044081733443394
+        },
+        "severeMassWithinListed": {
+          "n": 213,
+          "pearson": -0.1533668905491511,
+          "spearman": -0.4800849489527096
+        },
+        "expectedLossWithinListedCp": {
+          "n": 213,
+          "pearson": -0.11158101538613262,
+          "spearman": -0.2953897759744743
+        },
+        "engineBestMassLowerBound": {
+          "n": 213,
+          "pearson": -0.3066104338987925,
+          "spearman": -0.3372260809212433
+        }
+      },
+      "medianLegalLossCp": {
+        "severeMassLowerBound": {
+          "n": 213,
+          "pearson": 0.08570734538188561,
+          "spearman": 0.5389171495795245
+        },
+        "severeMassWithinListed": {
+          "n": 213,
+          "pearson": 0.08563354075877441,
+          "spearman": 0.5384636862550883
+        },
+        "expectedLossWithinListedCp": {
+          "n": 213,
+          "pearson": 0.8524242561610385,
+          "spearman": 0.26333938442185967
+        },
+        "engineBestMassLowerBound": {
+          "n": 213,
+          "pearson": 0.09383483462519124,
+          "spearman": 0.32525241990234527
+        }
+      },
+      "p90LegalLossCp": {
+        "severeMassLowerBound": {
+          "n": 213,
+          "pearson": 0.08719580167162674,
+          "spearman": 0.34277651248958324
+        },
+        "severeMassWithinListed": {
+          "n": 213,
+          "pearson": 0.087128734029322,
+          "spearman": 0.3427654912050607
+        },
+        "expectedLossWithinListedCp": {
+          "n": 213,
+          "pearson": 0.8525549614482385,
+          "spearman": 0.22027666136247895
+        },
+        "engineBestMassLowerBound": {
+          "n": 213,
+          "pearson": 0.08971996900351938,
+          "spearman": 0.03272112903694473
+        }
+      }
+    },
+    "1800": {
+      "bestSecondGapCp": {
+        "severeMassLowerBound": {
+          "n": 214,
+          "pearson": 0.1494036630959931,
+          "spearman": 0.39566825926261934
+        },
+        "severeMassWithinListed": {
+          "n": 214,
+          "pearson": 0.14962170894803414,
+          "spearman": 0.39552068239543603
+        },
+        "expectedLossWithinListedCp": {
+          "n": 214,
+          "pearson": -0.0072361427547386345,
+          "spearman": 0.33905339800501494
+        },
+        "engineBestMassLowerBound": {
+          "n": 214,
+          "pearson": 0.3949588628747176,
+          "spearman": 0.27566944625156564
+        }
+      },
+      "legalSevereFraction250": {
+        "severeMassLowerBound": {
+          "n": 214,
+          "pearson": 0.18618829619724026,
+          "spearman": 0.5579599065536889
+        },
+        "severeMassWithinListed": {
+          "n": 214,
+          "pearson": 0.1862664547074479,
+          "spearman": 0.5578157497991485
+        },
+        "expectedLossWithinListedCp": {
+          "n": 214,
+          "pearson": 0.2033409404454514,
+          "spearman": 0.20074514047301356
+        },
+        "engineBestMassLowerBound": {
+          "n": 214,
+          "pearson": 0.3128906559364985,
+          "spearman": 0.14815955496065036
+        }
+      },
+      "legalNearBestFraction50": {
+        "severeMassLowerBound": {
+          "n": 214,
+          "pearson": -0.18880825061998777,
+          "spearman": -0.5875765700644465
+        },
+        "severeMassWithinListed": {
+          "n": 214,
+          "pearson": -0.18894966630620635,
+          "spearman": -0.5874648810363106
+        },
+        "expectedLossWithinListedCp": {
+          "n": 214,
+          "pearson": -0.10938176887183047,
+          "spearman": -0.27081175782500005
+        },
+        "engineBestMassLowerBound": {
+          "n": 214,
+          "pearson": -0.31587444255312275,
+          "spearman": -0.34749634071668223
+        }
+      },
+      "medianLegalLossCp": {
+        "severeMassLowerBound": {
+          "n": 214,
+          "pearson": 0.09826388199264621,
+          "spearman": 0.6493577979322581
+        },
+        "severeMassWithinListed": {
+          "n": 214,
+          "pearson": 0.09828225383838882,
+          "spearman": 0.6492690883374893
+        },
+        "expectedLossWithinListedCp": {
+          "n": 214,
+          "pearson": 0.8289624715395528,
+          "spearman": 0.24769552789918628
+        },
+        "engineBestMassLowerBound": {
+          "n": 214,
+          "pearson": 0.080430901175695,
+          "spearman": 0.3264424708967769
+        }
+      },
+      "p90LegalLossCp": {
+        "severeMassLowerBound": {
+          "n": 214,
+          "pearson": 0.09816902691565228,
+          "spearman": 0.32032917358488294
+        },
+        "severeMassWithinListed": {
+          "n": 214,
+          "pearson": 0.09818756372906093,
+          "spearman": 0.3201992822040469
+        },
+        "expectedLossWithinListedCp": {
+          "n": 214,
+          "pearson": 0.8290298587434753,
+          "spearman": 0.19380574426120883
+        },
+        "engineBestMassLowerBound": {
+          "n": 214,
+          "pearson": 0.07641919972579345,
+          "spearman": 0.047608741505836195
+        }
+      }
+    }
+  },
+  "byPhase": {
+    "cross_phase": {
+      "positions": 109,
+      "cells": 136,
+      "correlations": {
+        "bestSecondGapCp": {
+          "severeMassLowerBound": {
+            "n": 136,
+            "pearson": 0.05629107467365895,
+            "spearman": 0.3833812536502041
+          },
+          "severeMassWithinListed": {
+            "n": 136,
+            "pearson": 0.05616026066718041,
+            "spearman": 0.3833812536502041
+          },
+          "expectedLossWithinListedCp": {
+            "n": 136,
+            "pearson": -0.06993622856266932,
+            "spearman": -0.0916252833336679
+          },
+          "engineBestMassLowerBound": {
+            "n": 136,
+            "pearson": 0.5193097136267648,
+            "spearman": 0.3509002616888053
+          }
+        },
+        "legalSevereFraction250": {
+          "severeMassLowerBound": {
+            "n": 136,
+            "pearson": 0.10452148307894975,
+            "spearman": 0.5057318257154085
+          },
+          "severeMassWithinListed": {
+            "n": 136,
+            "pearson": 0.10448916533698072,
+            "spearman": 0.5057318257154085
+          },
+          "expectedLossWithinListedCp": {
+            "n": 136,
+            "pearson": 0.023081579599681403,
+            "spearman": -0.009552275096725927
+          },
+          "engineBestMassLowerBound": {
+            "n": 136,
+            "pearson": 0.3935157975940028,
+            "spearman": 0.1300324618666116
+          }
+        },
+        "legalNearBestFraction50": {
+          "severeMassLowerBound": {
+            "n": 136,
+            "pearson": -0.09783190039999619,
+            "spearman": -0.46114005914002365
+          },
+          "severeMassWithinListed": {
+            "n": 136,
+            "pearson": -0.09778236326509707,
+            "spearman": -0.46114005914002365
+          },
+          "expectedLossWithinListedCp": {
+            "n": 136,
+            "pearson": -0.0998292093029015,
+            "spearman": -0.13051266347032348
+          },
+          "engineBestMassLowerBound": {
+            "n": 136,
+            "pearson": -0.5442569288372171,
+            "spearman": -0.5024504190166598
+          }
+        },
+        "medianLegalLossCp": {
+          "severeMassLowerBound": {
+            "n": 136,
+            "pearson": 0.07650118098641011,
+            "spearman": 0.44170196500887937
+          },
+          "severeMassWithinListed": {
+            "n": 136,
+            "pearson": 0.07639913130293098,
+            "spearman": 0.44170196500887937
+          },
+          "expectedLossWithinListedCp": {
+            "n": 136,
+            "pearson": -0.048009301899083416,
+            "spearman": 0.12619449953691025
+          },
+          "engineBestMassLowerBound": {
+            "n": 136,
+            "pearson": 0.5077237960500205,
+            "spearman": 0.4619621204841681
+          }
+        },
+        "p90LegalLossCp": {
+          "severeMassLowerBound": {
+            "n": 136,
+            "pearson": 0.1554734084978423,
+            "spearman": 0.2793977284718399
+          },
+          "severeMassWithinListed": {
+            "n": 136,
+            "pearson": 0.15561018260990533,
+            "spearman": 0.2793977284718399
+          },
+          "expectedLossWithinListedCp": {
+            "n": 136,
+            "pearson": 0.18594024599621511,
+            "spearman": 0.10902106996267692
+          },
+          "engineBestMassLowerBound": {
+            "n": 136,
+            "pearson": 0.1467151920836436,
+            "spearman": 0.09186786702263074
+          }
+        }
+      }
+    },
+    "middlegame": {
+      "positions": 16,
+      "cells": 35,
+      "correlations": {
+        "bestSecondGapCp": {
+          "severeMassLowerBound": {
+            "n": 35,
+            "pearson": 0.20192184357239698,
+            "spearman": 0.3471124351991759
+          },
+          "severeMassWithinListed": {
+            "n": 35,
+            "pearson": 0.20066314729059664,
+            "spearman": 0.3471124351991759
+          },
+          "expectedLossWithinListedCp": {
+            "n": 35,
+            "pearson": -0.1996677662227944,
+            "spearman": 0.18077526741046693
+          },
+          "engineBestMassLowerBound": {
+            "n": 35,
+            "pearson": 0.8410087695328875,
+            "spearman": 0.8217607060358637
+          }
+        },
+        "legalSevereFraction250": {
+          "severeMassLowerBound": {
+            "n": 35,
+            "pearson": 0.3942420253249117,
+            "spearman": 0.1811206593933204
+          },
+          "severeMassWithinListed": {
+            "n": 35,
+            "pearson": 0.38926052394075933,
+            "spearman": 0.1811206593933204
+          },
+          "expectedLossWithinListedCp": {
+            "n": 35,
+            "pearson": -0.24768800075363137,
+            "spearman": -0.21938250932173345
+          },
+          "engineBestMassLowerBound": {
+            "n": 35,
+            "pearson": 0.7749681739959563,
+            "spearman": 0.30030094608323327
+          }
+        },
+        "legalNearBestFraction50": {
+          "severeMassLowerBound": {
+            "n": 35,
+            "pearson": -0.340477609292641,
+            "spearman": -0.31237170386988455
+          },
+          "severeMassWithinListed": {
+            "n": 35,
+            "pearson": -0.3400475379762924,
+            "spearman": -0.31237170386988455
+          },
+          "expectedLossWithinListedCp": {
+            "n": 35,
+            "pearson": -0.2147630377259878,
+            "spearman": -0.17809028285528683
+          },
+          "engineBestMassLowerBound": {
+            "n": 35,
+            "pearson": -0.6222443916306303,
+            "spearman": -0.49022875207859556
+          }
+        },
+        "medianLegalLossCp": {
+          "severeMassLowerBound": {
+            "n": 35,
+            "pearson": 0.3498879713897987,
+            "spearman": 0.2583535129209744
+          },
+          "severeMassWithinListed": {
+            "n": 35,
+            "pearson": 0.3457137708197742,
+            "spearman": 0.2583535129209744
+          },
+          "expectedLossWithinListedCp": {
+            "n": 35,
+            "pearson": -0.2478664606871664,
+            "spearman": 0.16152476574266997
+          },
+          "engineBestMassLowerBound": {
+            "n": 35,
+            "pearson": 0.8197871152149128,
+            "spearman": 0.498148350688905
+          }
+        },
+        "p90LegalLossCp": {
+          "severeMassLowerBound": {
+            "n": 35,
+            "pearson": 0.22092344688359827,
+            "spearman": 0.3337650459211307
+          },
+          "severeMassWithinListed": {
+            "n": 35,
+            "pearson": 0.21953546332072582,
+            "spearman": 0.3337650459211307
+          },
+          "expectedLossWithinListedCp": {
+            "n": 35,
+            "pearson": -0.28257147591706855,
+            "spearman": -0.09775302592056753
+          },
+          "engineBestMassLowerBound": {
+            "n": 35,
+            "pearson": 0.6923624409171012,
+            "spearman": 0.21472592708003982
+          }
+        }
+      }
+    },
+    "opening": {
+      "positions": 154,
+      "cells": 462,
+      "correlations": {
+        "bestSecondGapCp": {
+          "severeMassLowerBound": {
+            "n": 462,
+            "pearson": 0.1310907337145878,
+            "spearman": 0.30990330959848894
+          },
+          "severeMassWithinListed": {
+            "n": 462,
+            "pearson": 0.13147583152059772,
+            "spearman": 0.3094714162061337
+          },
+          "expectedLossWithinListedCp": {
+            "n": 462,
+            "pearson": -0.006727796883600933,
+            "spearman": 0.4386734943901805
+          },
+          "engineBestMassLowerBound": {
+            "n": 462,
+            "pearson": 0.325517044904525,
+            "spearman": 0.1877599615337245
+          }
+        },
+        "legalSevereFraction250": {
+          "severeMassLowerBound": {
+            "n": 462,
+            "pearson": 0.19056859030059103,
+            "spearman": 0.5737941952599652
+          },
+          "severeMassWithinListed": {
+            "n": 462,
+            "pearson": 0.19092153512585072,
+            "spearman": 0.5735448615622502
+          },
+          "expectedLossWithinListedCp": {
+            "n": 462,
+            "pearson": 0.2580763121540749,
+            "spearman": 0.28152464480561035
+          },
+          "engineBestMassLowerBound": {
+            "n": 462,
+            "pearson": 0.28798194091177304,
+            "spearman": 0.13699067163020937
+          }
+        },
+        "legalNearBestFraction50": {
+          "severeMassLowerBound": {
+            "n": 462,
+            "pearson": -0.1873886810677898,
+            "spearman": -0.5134430442835624
+          },
+          "severeMassWithinListed": {
+            "n": 462,
+            "pearson": -0.1873810526651482,
+            "spearman": -0.5130103591819053
+          },
+          "expectedLossWithinListedCp": {
+            "n": 462,
+            "pearson": -0.12087691961663875,
+            "spearman": -0.38829737017038984
+          },
+          "engineBestMassLowerBound": {
+            "n": 462,
+            "pearson": -0.17296893089903867,
+            "spearman": -0.21962700604543425
+          }
+        },
+        "medianLegalLossCp": {
+          "severeMassLowerBound": {
+            "n": 462,
+            "pearson": 0.10215725551861311,
+            "spearman": 0.6159577615466082
+          },
+          "severeMassWithinListed": {
+            "n": 462,
+            "pearson": 0.10200965052059537,
+            "spearman": 0.6154875224973846
+          },
+          "expectedLossWithinListedCp": {
+            "n": 462,
+            "pearson": 0.8527796526251152,
+            "spearman": 0.3798278793640032
+          },
+          "engineBestMassLowerBound": {
+            "n": 462,
+            "pearson": 0.10453135533949334,
+            "spearman": 0.2004640802693554
+          }
+        },
+        "p90LegalLossCp": {
+          "severeMassLowerBound": {
+            "n": 462,
+            "pearson": 0.10271691168546199,
+            "spearman": 0.38963693765482493
+          },
+          "severeMassWithinListed": {
+            "n": 462,
+            "pearson": 0.1025725882210574,
+            "spearman": 0.38954276167728286
+          },
+          "expectedLossWithinListedCp": {
+            "n": 462,
+            "pearson": 0.8528393994960467,
+            "spearman": 0.278911895831933
+          },
+          "engineBestMassLowerBound": {
+            "n": 462,
+            "pearson": 0.10186719630815488,
+            "spearman": 0.03837010228467583
+          }
+        }
+      }
+    }
+  }
+}

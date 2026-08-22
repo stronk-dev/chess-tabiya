@@ -9,7 +9,9 @@ D649, Chessiverse/Otter desk research
 the research result but adds three required F8 seams: the current request cannot encode a stack
 (D821), the selection event cannot audit one (D822), and `human_common` accepts a branch seed while
 Maia's internal sample correctly records `seedHonored: false` (D823). These are RFC inputs, not new
-owner questions.
+owner questions. The subsequent D816/D817 pass admits one opponent-only candidate-loss distribution
+and refuses multi-band Maia queries; D815 salience is excluded from the first stack until exact
+tactical identities land and its own experiment passes (`design/research/bot-candidate-sharpness.md`).
 
 ## What research has settled
 
