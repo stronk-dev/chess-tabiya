@@ -1,7 +1,7 @@
 import { readFileSync } from "node:fs";
 import { resolve } from "node:path";
 
-import { CURRENT_CONSUMER_OPERATION_IDS, EVIDENCE_PRODUCER_IDS } from "@chess-tabiya/runtime";
+import { CURRENT_CONSUMER_OPERATION_IDS, EVIDENCE_ADAPTERS, EVIDENCE_CONSUMERS, EVIDENCE_ELIGIBILITY_DECLARATIONS, EVIDENCE_PRODUCER_IDS, EVIDENCE_PRODUCERS, EVIDENCE_REASON_DECLARATIONS, EVIDENCE_SELECTION_POLICIES, SEMANTIC_EVENT_PROJECTION_IDS } from "@chess-tabiya/runtime";
 
 import { EVIDENCE_MANIFEST, assertEvidenceManifest } from "./evidence-manifest.js";
 
@@ -66,8 +66,11 @@ if (!guidance.includes("render(view: VoiceEvidenceView") || !externalVoice.inclu
 const arrows = EVIDENCE_MANIFEST.consumers.find((consumer) => consumer.id === "assistance.arrows");
 if (arrows?.disposition?.kind !== "experimental" || arrows.accepts.length !== 0) throw new TypeError("assistance.arrows lost its explicit producerless experimental disposition");
 const semanticResearch = EVIDENCE_MANIFEST.consumers.find((consumer) => consumer.id === "research.semantic_selection");
-if (semanticResearch === undefined || semanticResearch.accepts.length !== 58 || EVIDENCE_MANIFEST.selectionPolicies[0]?.consumer.id !== semanticResearch.id) throw new TypeError("The research semantic-selection consumer is not closed over its 58 exact event bindings");
+const semanticIds = semanticResearch?.accepts.map((value) => `${value.id}@${value.version}`).sort() ?? [];
+const declaredSemanticIds = SEMANTIC_EVENT_PROJECTION_IDS.map((id) => `${id}@1`).sort();
+if (semanticResearch === undefined || semanticIds.join("|") !== declaredSemanticIds.join("|") || EVIDENCE_MANIFEST.selectionPolicies[0]?.consumer.id !== semanticResearch.id) throw new TypeError(`The research semantic-selection consumer is not set-equal to its ${declaredSemanticIds.length} declared events`);
 const counts = [EVIDENCE_MANIFEST.producers.length, EVIDENCE_MANIFEST.projections.length, EVIDENCE_MANIFEST.consumers.length, EVIDENCE_MANIFEST.bindings.length, EVIDENCE_MANIFEST.semanticEvents.length, EVIDENCE_MANIFEST.eligibility.length, EVIDENCE_MANIFEST.reasons.length, EVIDENCE_MANIFEST.selectionPolicies.length];
-if (counts.join("/") !== "33/174/25/200/58/58/15/1") throw new TypeError(`Semantic evidence closure drift: ${counts.join("/")}`);
+const declaredCounts = [EVIDENCE_PRODUCERS.length, EVIDENCE_PRODUCERS.flatMap((producer) => producer.outputs).length, EVIDENCE_CONSUMERS.length, EVIDENCE_ADAPTERS.length, SEMANTIC_EVENT_PROJECTION_IDS.length, EVIDENCE_ELIGIBILITY_DECLARATIONS.length, EVIDENCE_REASON_DECLARATIONS.length, EVIDENCE_SELECTION_POLICIES.length];
+if (counts.join("/") !== declaredCounts.join("/")) throw new TypeError(`Semantic evidence compiler dropped a declaration: compiled ${counts.join("/")}, declared ${declaredCounts.join("/")}`);
 
-console.log(`evidence-manifest-check: ${EVIDENCE_MANIFEST.digest} · 33/174/25/200 core · 58/58/15/1 semantic`);
+console.log(`evidence-manifest-check: ${EVIDENCE_MANIFEST.digest} · ${counts.slice(0, 4).join("/")} core · ${counts.slice(4).join("/")} semantic`);

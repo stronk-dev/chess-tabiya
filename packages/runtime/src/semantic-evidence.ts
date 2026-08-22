@@ -1,4 +1,5 @@
 import { Chess, castlingSide, normalizeMove } from "chessops/chess";
+import { attacks, between } from "chessops/attacks";
 import { makeFen } from "chessops/fen";
 import type { Color, Move, Piece, Role, SquareName } from "chessops/types";
 import { makeSquare, makeUci, opposite, parseSquare, parseUci } from "chessops/util";
@@ -19,7 +20,7 @@ import {
   type SemanticEventSign,
   type VersionedEvidenceId,
 } from "./evidence-contract.js";
-import { declareAvoidanceEvidence, declareCaptureClassEvidence, declareCastlingRightsLostEvidence, declareCheckEventEvidence, declareDiscoveredExecutedEvidence, declareDiscoveredLatencyEvidence, declareDoubleAttackEvidence, declareLegalExchangeEvidence, declareLoosePieceEventEvidence, declarePawnIslandEventEvidence, declareReplyBreadthEvidence, declareStructuralSemanticSourceEvidence, declareTradeCompletedEvidence, declareTransitionSemanticSourceEvidence } from "./evidence-source-adapters.js";
+import { declareAvoidanceEvidence, declareCaptureClassEvidence, declareCastlingRightsLostEvidence, declareCheckEventEvidence, declareCheckZwischenzugEvidence, declareDefenderDutyEvidence, declareDefenderDutyRelocatedEvidence, declareDefenderRemovedEvidence, declareDiscoveredExecutedEvidence, declareDiscoveredLatencyEvidence, declareDoubleAttackEvidence, declareInterferenceEvidence, declareLegalExchangeEvidence, declareLineBlockerClearanceEvidence, declareLoosePieceEventEvidence, declareOverloadExploitationEvidence, declarePawnIslandEventEvidence, declareReplyBreadthEvidence, declareSquareClearanceEvidence, declareStructuralSemanticSourceEvidence, declareTradeCompletedEvidence, declareTransitionSemanticSourceEvidence } from "./evidence-source-adapters.js";
 import {
   declareCapturedZoneDefenderEvidence,
   declareDefenderConsequenceEvidence,
@@ -45,7 +46,7 @@ import { pieceDestinationEvents } from "./mobility.js";
 import { pawnContactsReading, pawnDynamicsEvents, pawnTransitionEvents, type HarassmentPressureSequence, type PawnContactTimingSequence, type RecordedMoveAnchor } from "./pawn-dynamics.js";
 import { squareControlEvents, squareControlReading, type SquareControlEvent } from "./square-control.js";
 import { pawnConnectivityReading, structuralReading, type StructuralObservation, type StructuralReading } from "./structure.js";
-import { checkEvent, discoveredExecutedEvents, discoveredLatencyReading, doubleAttackEvent, loosePieceEvents, replyBreadth, type CheckEvent, type DiscoveredExecutedEvent, type DoubleAttackEvent, type GainedSliderRay, type LoosePieceEvent, type ReplyBreadth } from "./tactics.js";
+import { checkEvent, defenderDutyReading, defenderDutyRelocatedEvents, defenderRemovedEvents, discoveredExecutedEvents, discoveredLatencyReading, doubleAttackEvent, loosePieceEvents, replyBreadth, type CheckEvent, type DiscoveredExecutedEvent, type DoubleAttackEvent, type GainedSliderRay, type LoosePieceEvent, type ReplyBreadth } from "./tactics.js";
 import { transitionSemanticFacts, type TransitionSemanticFact } from "./transition.js";
 
 const SEMANTIC_EVENT: unique symbol = Symbol("tabiya.evidence.semantic_event");
@@ -207,6 +208,66 @@ export interface OpenFileOccupancyOperands {
   readonly piece: { readonly before: { readonly square: SquareName; readonly piece: Piece }; readonly after: { readonly square: SquareName; readonly piece: Piece } };
   readonly fileClass: "open_file" | "half_open_file";
   readonly sourceReading: StructuralObservation;
+}
+
+export interface ObservedSequenceBase {
+  readonly anchors: readonly RecordedMoveAnchor[];
+  readonly nodes: readonly { readonly nodeId: string; readonly fen: string }[];
+  readonly conventionId: "observed-window@1";
+}
+
+export interface DeflectionObservedOperands extends ObservedSequenceBase {
+  readonly baitMove: RecordedMoveAnchor;
+  readonly defenderBefore: { readonly square: SquareName; readonly piece: Piece };
+  readonly defenderAfter: { readonly square: SquareName; readonly piece: Piece };
+  readonly lostDuty: { readonly defender: { readonly square: SquareName; readonly piece: Piece }; readonly target: { readonly square: SquareName; readonly piece: Piece } };
+  readonly targetCapture: LegalExchangeResult;
+}
+
+export interface AttractionObservedOperands extends ObservedSequenceBase {
+  readonly horizon: 3 | 5;
+  readonly baitMove: RecordedMoveAnchor;
+  readonly heavyPiece: { readonly before: { readonly square: SquareName; readonly piece: Piece }; readonly arrival: { readonly square: SquareName; readonly piece: Piece } };
+  readonly arrivalSquare: SquareName;
+  readonly checkOrCaptureConsequence: { readonly kind: "check"; readonly move: RecordedMoveAnchor } | { readonly kind: "capture"; readonly move: RecordedMoveAnchor; readonly capture: TransitionSemanticEventOperands };
+}
+
+export interface LineBlockerClearanceObservedOperands extends ObservedSequenceBase {
+  readonly blocker: { readonly square: SquareName; readonly piece: Piece };
+  readonly slider: { readonly square: SquareName; readonly piece: Piece };
+  readonly ray: readonly SquareName[];
+  readonly target: { readonly square: SquareName; readonly piece: Piece };
+  readonly targetCapture: LegalExchangeResult;
+}
+
+export interface SquareClearanceObservedOperands extends ObservedSequenceBase {
+  readonly vacatedSquare: SquareName;
+  readonly vacatingPiece: { readonly square: SquareName; readonly piece: Piece };
+  readonly laterSlider: { readonly square: SquareName; readonly piece: Piece };
+  readonly laterMove: RecordedMoveAnchor;
+}
+
+export interface InterferenceObservedOperands extends ObservedSequenceBase {
+  readonly interposingMove: RecordedMoveAnchor;
+  readonly slider: { readonly square: SquareName; readonly piece: Piece };
+  readonly betweenSquare: SquareName;
+  readonly target: { readonly square: SquareName; readonly piece: Piece };
+  readonly brokenDuty: { readonly defender: { readonly square: SquareName; readonly piece: Piece }; readonly target: { readonly square: SquareName; readonly piece: Piece } };
+  readonly targetCapture: LegalExchangeResult;
+}
+
+export interface CheckZwischenzugObservedOperands extends ObservedSequenceBase {
+  readonly expectedRecapture: readonly string[];
+  readonly intermediateCheck: RecordedMoveAnchor;
+  readonly reply: RecordedMoveAnchor;
+  readonly retainedRecapture: LegalExchangeResult;
+}
+
+export interface OverloadExploitationObservedOperands extends ObservedSequenceBase {
+  readonly firstCapture: TransitionSemanticEventOperands;
+  readonly defenderRecapture: TransitionSemanticEventOperands;
+  readonly secondTargetCapture: LegalExchangeResult;
+  readonly dutySet: readonly { readonly defender: { readonly square: SquareName; readonly piece: Piece }; readonly target: { readonly square: SquareName; readonly piece: Piece } }[];
 }
 
 function immutable<T>(value: T): T {
@@ -537,6 +598,180 @@ export function defenderConsequenceOperands(values: readonly RecordedMoveAnchor[
   return Object.freeze(results);
 }
 
+function anchorMove(anchor: RecordedMoveAnchor) {
+  const position = positionFromFen(anchor.beforeFen);
+  const move = parseUci(anchor.moveUci);
+  if (move === undefined || !("from" in move) || !position.isLegal(move)) throw new TypeError(`Recorded semantic move is illegal: ${anchor.moveUci}`);
+  return { position, move };
+}
+
+function captureFact(anchor: RecordedMoveAnchor): TransitionSemanticEventOperands | undefined {
+  const fact = transitionSemanticFacts(anchor.beforeFen, anchor.moveUci, anchor.afterFen).find((value) => value.family === "capture");
+  return fact?.family === "capture" ? immutable({ ...fact, before_fen: anchor.beforeFen, move_uci: anchor.moveUci, after_fen: anchor.afterFen }) as TransitionSemanticEventOperands : undefined;
+}
+
+function positiveCapture(anchor: RecordedMoveAnchor): LegalExchangeResult | undefined {
+  const { position, move } = anchorMove(anchor);
+  const exchange = legalExchangeForMove(position, move);
+  return exchange !== undefined && exchange.resultUnits > 0 ? exchange : undefined;
+}
+
+function observed<T extends { readonly anchors: readonly RecordedMoveAnchor[] }>(payload: Omit<T, "nodes" | "conventionId">): T {
+  return immutable({ ...payload, nodes: recordNodes(payload.anchors), conventionId: "observed-window@1" as const }) as unknown as T;
+}
+
+/** Exact three-edge defender displacement followed by a positive capture of the retained target. */
+export function deflectionObservedOperands(values: readonly RecordedMoveAnchor[]): readonly DeflectionObservedOperands[] {
+  const anchors = canonicalRecordedPath(values, 3);
+  const first = anchorMove(anchors[0]!);
+  const reply = anchorMove(anchors[1]!);
+  const targetCapture = positiveCapture(anchors[2]!);
+  if (targetCapture === undefined) return Object.freeze([]);
+  const baitCapture = captureFact(anchors[1]!);
+  const inducedByBait = reply.move.to === first.move.to && baitCapture?.family === "capture" && baitCapture.captured.color === first.position.turn;
+  const inducedByCheck = positionFromFen(anchors[0]!.afterFen).isCheck();
+  if (!inducedByBait && !inducedByCheck) return Object.freeze([]);
+  const defendedColor = opposite(first.position.turn);
+  const afterReply = positionFromFen(anchors[1]!.afterFen);
+  const afterReplyEdges = new Set(defenseEdges(anchors[1]!.afterFen, defendedColor).map(defenseKey));
+  const result: DeflectionObservedOperands[] = [];
+  for (const duty of defenseEdges(anchors[0]!.beforeFen, defendedColor)) {
+    if (makeSquare(reply.move.from) !== duty.defender.square || duty.target.square !== targetCapture.captured.square || !sameOccupant(duty.target.piece, targetCapture.captured)) continue;
+    const defenderAfter = exactPiece(afterReply, makeSquare(reply.move.to));
+    if (defenderAfter === undefined || !sameOccupant(duty.defender.piece, defenderAfter.piece)) continue;
+    if (afterReplyEdges.has(defenseKey({ defender: defenderAfter, target: duty.target }))) continue;
+    result.push(observed<DeflectionObservedOperands>({ anchors, baitMove: anchors[0]!, defenderBefore: duty.defender, defenderAfter, lostDuty: duty, targetCapture }));
+  }
+  return Object.freeze(result);
+}
+
+/** Heavy-piece attraction on the measured three-edge king or five-edge queen/rook horizon. */
+export function attractionObservedOperands(values: readonly RecordedMoveAnchor[]): readonly AttractionObservedOperands[] {
+  if (values.length !== 3 && values.length !== 5) throw new TypeError("Attraction requires exactly three or five anchors");
+  const anchors = canonicalRecordedPath(values, values.length);
+  const first = anchorMove(anchors[0]!);
+  const reply = anchorMove(anchors[1]!);
+  if (reply.move.to !== first.move.to) return Object.freeze([]);
+  const baitCapture = captureFact(anchors[1]!);
+  if (baitCapture?.family !== "capture" || baitCapture.captured.color !== first.position.turn) return Object.freeze([]);
+  const heavyBefore = exactPiece(reply.position, makeSquare(reply.move.from));
+  if (heavyBefore === undefined || heavyBefore.piece.color === first.position.turn || !["king", "queen", "rook"].includes(heavyBefore.piece.role)) return Object.freeze([]);
+  const arrival = exactPiece(positionFromFen(anchors[1]!.afterFen), makeSquare(reply.move.to));
+  if (arrival === undefined || !sameOccupant(heavyBefore.piece, arrival.piece)) return Object.freeze([]);
+  const follow = anchorMove(anchors[2]!);
+  const afterFollow = positionFromFen(anchors[2]!.afterFen);
+  const follower = afterFollow.board.get(follow.move.to);
+  if (follower?.color !== first.position.turn || !attacks(follower, follow.move.to, afterFollow.board.occupied).has(reply.move.to)) return Object.freeze([]);
+  if (heavyBefore.piece.role === "king") {
+    if (anchors.length !== 3 || !afterFollow.isCheck()) return Object.freeze([]);
+    return Object.freeze([observed<AttractionObservedOperands>({ anchors, horizon: 3, baitMove: anchors[0]!, heavyPiece: Object.freeze({ before: heavyBefore, arrival }), arrivalSquare: arrival.square, checkOrCaptureConsequence: Object.freeze({ kind: "check", move: anchors[2]! }) })]);
+  }
+  if (anchors.length !== 5) return Object.freeze([]);
+  const finishCapture = captureFact(anchors[4]!);
+  if (finishCapture?.family !== "capture" || finishCapture.to !== arrival.square || finishCapture.captured.color !== arrival.piece.color || finishCapture.captured.role !== arrival.piece.role) return Object.freeze([]);
+  return Object.freeze([observed<AttractionObservedOperands>({ anchors, horizon: 5, baitMove: anchors[0]!, heavyPiece: Object.freeze({ before: heavyBefore, arrival }), arrivalSquare: arrival.square, checkOrCaptureConsequence: Object.freeze({ kind: "capture", move: anchors[4]!, capture: finishCapture }) })]);
+}
+
+/** Friendly blocker vacates a sole ray and the unchanged slider later captures the retained target. */
+export function lineBlockerClearanceObservedOperands(values: readonly RecordedMoveAnchor[]): readonly LineBlockerClearanceObservedOperands[] {
+  const anchors = canonicalRecordedPath(values, 3);
+  const first = anchorMove(anchors[0]!);
+  const third = anchorMove(anchors[2]!);
+  const blocker = exactPiece(first.position, makeSquare(first.move.from));
+  const targetCapture = positiveCapture(anchors[2]!);
+  if (blocker === undefined || targetCapture === undefined) return Object.freeze([]);
+  const afterFirst = positionFromFen(anchors[0]!.afterFen);
+  const result: LineBlockerClearanceObservedOperands[] = [];
+  for (const [sliderSquare, sliderPiece] of first.position.board) {
+    if (sliderPiece.color !== first.position.turn || !["bishop", "rook", "queen"].includes(sliderPiece.role)) continue;
+    for (const [targetSquare, targetPiece] of first.position.board) {
+      if (targetPiece.color === sliderPiece.color || targetPiece.role === "king") continue;
+      const span = between(sliderSquare, targetSquare);
+      const occupied = [...span.intersect(first.position.board.occupied)];
+      if (occupied.length !== 1 || occupied[0] !== first.move.from || blocker.piece.color !== sliderPiece.color) continue;
+      if (!attacks(sliderPiece, sliderSquare, afterFirst.board.occupied).has(targetSquare)) continue;
+      if (third.move.from !== sliderSquare || third.move.to !== targetSquare || targetCapture.captured.square !== makeSquare(targetSquare) || !sameOccupant(targetPiece, targetCapture.captured)) continue;
+      result.push(observed<LineBlockerClearanceObservedOperands>({ anchors, blocker, slider: Object.freeze({ square: makeSquare(sliderSquare), piece: sliderPiece }), ray: Object.freeze([...span].map(makeSquare)), target: Object.freeze({ square: makeSquare(targetSquare), piece: targetPiece }), targetCapture }));
+    }
+  }
+  return Object.freeze(result);
+}
+
+/** Exact square vacation followed by a quiet same-side slider move to or through that square. */
+export function squareClearanceObservedOperands(values: readonly RecordedMoveAnchor[]): readonly SquareClearanceObservedOperands[] {
+  const anchors = canonicalRecordedPath(values, 3);
+  const first = anchorMove(anchors[0]!);
+  const third = anchorMove(anchors[2]!);
+  if (first.move.from === third.move.from || captureFact(anchors[2]!) !== undefined) return Object.freeze([]);
+  const vacatingPiece = exactPiece(first.position, makeSquare(first.move.from));
+  const laterSlider = exactPiece(third.position, makeSquare(third.move.from));
+  if (vacatingPiece === undefined || laterSlider?.piece.color !== first.position.turn || !["bishop", "rook", "queen"].includes(laterSlider.piece.role)) return Object.freeze([]);
+  if (third.move.to !== first.move.from && !between(third.move.from, third.move.to).has(first.move.from)) return Object.freeze([]);
+  return Object.freeze([observed<SquareClearanceObservedOperands>({ anchors, vacatedSquare: vacatingPiece.square, vacatingPiece, laterSlider, laterMove: anchors[2]! })]);
+}
+
+/** Interposition breaks an enemy slider duty and the retained target is positively captured. */
+export function interferenceObservedOperands(values: readonly RecordedMoveAnchor[]): readonly InterferenceObservedOperands[] {
+  const anchors = canonicalRecordedPath(values, 3);
+  const first = anchorMove(anchors[0]!);
+  const targetCapture = positiveCapture(anchors[2]!);
+  if (targetCapture === undefined) return Object.freeze([]);
+  const defendedColor = opposite(first.position.turn);
+  const afterFirstEdges = new Set(defenseEdges(anchors[0]!.afterFen, defendedColor).map(defenseKey));
+  const result: InterferenceObservedOperands[] = [];
+  for (const duty of defenseEdges(anchors[0]!.beforeFen, defendedColor)) {
+    if (!["bishop", "rook", "queen"].includes(duty.defender.piece.role) || !between(parseSquare(duty.defender.square)!, parseSquare(duty.target.square)!).has(first.move.to)) continue;
+    if (afterFirstEdges.has(defenseKey(duty)) || duty.target.square !== targetCapture.captured.square || !sameOccupant(duty.target.piece, targetCapture.captured)) continue;
+    const targetAfterFirst = exactPiece(positionFromFen(anchors[0]!.afterFen), duty.target.square);
+    const targetAfterReply = exactPiece(positionFromFen(anchors[1]!.afterFen), duty.target.square);
+    if (targetAfterFirst === undefined || targetAfterReply === undefined || !sameOccupant(duty.target.piece, targetAfterFirst.piece) || !sameOccupant(duty.target.piece, targetAfterReply.piece)) continue;
+    result.push(observed<InterferenceObservedOperands>({ anchors, interposingMove: anchors[0]!, slider: duty.defender, betweenSquare: makeSquare(first.move.to), target: duty.target, brokenDuty: duty, targetCapture }));
+  }
+  return Object.freeze(result);
+}
+
+/** Exact recapture existed, a check intervened, and that same recapturer later captured positively. */
+export function checkZwischenzugObservedOperands(values: readonly RecordedMoveAnchor[]): readonly CheckZwischenzugObservedOperands[] {
+  const anchors = canonicalRecordedPath(values, 4);
+  const initialCapture = captureFact(anchors[0]!);
+  const betweenMove = anchorMove(anchors[1]!);
+  const finalMove = anchorMove(anchors[3]!);
+  if (initialCapture?.family !== "capture") return Object.freeze([]);
+  const captureSquare = parseSquare(initialCapture.to)!;
+  const recaptures = legalCaptureMovesTo(positionFromFen(anchors[0]!.afterFen), captureSquare).map((move) => makeUci(move)).sort();
+  if (recaptures.length === 0 || betweenMove.move.to === captureSquare || !positionFromFen(anchors[1]!.afterFen).isCheck()) return Object.freeze([]);
+  const retainedRecapture = positiveCapture(anchors[3]!);
+  if (retainedRecapture === undefined || finalMove.move.to !== captureSquare || !recaptures.some((uci) => parseUci(uci) && (parseUci(uci) as Move & { from: number }).from === finalMove.move.from)) return Object.freeze([]);
+  return Object.freeze([observed<CheckZwischenzugObservedOperands>({ anchors, expectedRecapture: Object.freeze(recaptures), intermediateCheck: anchors[1]!, reply: anchors[2]!, retainedRecapture })]);
+}
+
+/** Observed three-edge exploitation of a defender that held at least two duties. */
+export function overloadExploitationObservedOperands(values: readonly RecordedMoveAnchor[]): readonly OverloadExploitationObservedOperands[] {
+  const anchors = canonicalRecordedPath(values, 3);
+  const first = anchorMove(anchors[0]!);
+  const reply = anchorMove(anchors[1]!);
+  const firstCapture = captureFact(anchors[0]!);
+  const defenderRecapture = captureFact(anchors[1]!);
+  const secondTargetCapture = positiveCapture(anchors[2]!);
+  if (firstCapture?.family !== "capture" || defenderRecapture?.family !== "capture" || secondTargetCapture === undefined) return Object.freeze([]);
+  const duties = defenseEdges(anchors[0]!.beforeFen, opposite(first.position.turn));
+  const groups = new Map<string, typeof duties>();
+  for (const duty of duties) {
+    const key = `${duty.defender.square}:${duty.defender.piece.color}:${duty.defender.piece.role}`;
+    groups.set(key, Object.freeze([...(groups.get(key) ?? []), duty]));
+  }
+  const result: OverloadExploitationObservedOperands[] = [];
+  for (const dutySet of groups.values()) {
+    if (dutySet.length < 2) continue;
+    const firstDuty = dutySet.find((duty) => duty.target.square === firstCapture.to && duty.target.piece.color === firstCapture.captured.color && duty.target.piece.role === firstCapture.captured.role);
+    if (firstDuty === undefined || makeSquare(reply.move.from) !== firstDuty.defender.square || makeSquare(reply.move.to) !== firstDuty.target.square || defenderRecapture.captured.color !== first.position.turn) continue;
+    const secondDuty = dutySet.find((duty) => duty.target.square !== firstDuty.target.square && duty.target.square === secondTargetCapture.captured.square && sameOccupant(duty.target.piece, secondTargetCapture.captured));
+    if (secondDuty === undefined) continue;
+    result.push(observed<OverloadExploitationObservedOperands>({ anchors, firstCapture, defenderRecapture, secondTargetCapture, dutySet }));
+  }
+  return Object.freeze(result);
+}
+
 /** Generic capture identity joined to the captured piece's exact prior king-zone defender role. */
 export function capturedZoneDefenderOperands(beforeFen: string, moveUci: string, afterFen: string): readonly CapturedZoneDefenderOperands[] {
   const anchor = canonicalAnchor({ beforeFen, moveUci, afterFen, side: positionFromFen(beforeFen).turn });
@@ -603,7 +838,7 @@ export function breadthSemanticEvents(beforeFen: string, moveUci: string, afterF
   return Object.freeze(result.sort((left, right) => refKey(left.projection).localeCompare(refKey(right.projection)) || left.id.localeCompare(right.id)));
 }
 
-function sequenceAnchor(payload: PawnContactTimingSequence | HarassmentPressureSequence | DefenderConsequenceOperands): SemanticEventAnchor {
+function sequenceAnchor(payload: { readonly anchors: readonly RecordedMoveAnchor[] }): SemanticEventAnchor {
   const edge = payload.anchors.at(-1)!;
   return Object.freeze({ beforeFen: edge.beforeFen, moveUci: edge.moveUci, afterFen: edge.afterFen, side: positionFromFen(edge.beforeFen).turn });
 }
@@ -623,9 +858,51 @@ export function defenderConsequenceSemanticEvent(payload: DefenderConsequenceOpe
   return compileSemanticEvidenceEvent(PRIMARY_EVIDENCE_MANIFEST, { evidence: declareDefenderConsequenceEvidence(payload), derivationInputs: moveEvidence, anchor: sequenceAnchor(payload), sign: "state", operands: payload });
 }
 
+function exactSequenceInputs(moveEvidence: readonly DeclaredEvidence<unknown>[], expectedMoves: number, otherEvidence: readonly DeclaredEvidence<unknown>[], requiredOther: readonly string[]): readonly DeclaredEvidence<unknown>[] {
+  if (moveEvidence.length !== expectedMoves || moveEvidence.some((value) => refKey(value.projection) !== "run.record.move@1")) throw new TypeError(`Observed semantic sequence requires ${expectedMoves} run.record.move evidence items`);
+  const actual = otherEvidence.map((value) => refKey(value.projection));
+  for (const required of requiredOther) if (!actual.includes(`${required}@1`)) throw new TypeError(`Observed semantic sequence is missing ${required}@1 evidence`);
+  return Object.freeze([...moveEvidence, ...otherEvidence]);
+}
+
+export function lineBlockerClearanceSemanticEvent(payload: LineBlockerClearanceObservedOperands, moveEvidence: readonly DeclaredEvidence<unknown>[], exchangeEvidence: DeclaredEvidence<unknown>): SemanticEvidenceEvent<LineBlockerClearanceObservedOperands> {
+  const inputs = exactSequenceInputs(moveEvidence, 3, [exchangeEvidence], ["rules.exchange.predicate.legal_exchange"]);
+  return compileSemanticEvidenceEvent(PRIMARY_EVIDENCE_MANIFEST, { evidence: declareLineBlockerClearanceEvidence(payload), derivationInputs: inputs, anchor: sequenceAnchor(payload), sign: "state", operands: payload });
+}
+
+export function squareClearanceSemanticEvent(payload: SquareClearanceObservedOperands, moveEvidence: readonly DeclaredEvidence<unknown>[]): SemanticEvidenceEvent<SquareClearanceObservedOperands> {
+  const inputs = exactSequenceInputs(moveEvidence, 3, [], []);
+  return compileSemanticEvidenceEvent(PRIMARY_EVIDENCE_MANIFEST, { evidence: declareSquareClearanceEvidence(payload), derivationInputs: inputs, anchor: sequenceAnchor(payload), sign: "state", operands: payload });
+}
+
+export function interferenceSemanticEvent(payload: InterferenceObservedOperands, moveEvidence: readonly DeclaredEvidence<unknown>[], dutyEvidence: DeclaredEvidence<unknown>, exchangeEvidence: DeclaredEvidence<unknown>): SemanticEvidenceEvent<InterferenceObservedOperands> {
+  const inputs = exactSequenceInputs(moveEvidence, 3, [dutyEvidence, exchangeEvidence], ["rules.tactic.reading.defender_duty_set", "rules.exchange.predicate.legal_exchange"]);
+  return compileSemanticEvidenceEvent(PRIMARY_EVIDENCE_MANIFEST, { evidence: declareInterferenceEvidence(payload), derivationInputs: inputs, anchor: sequenceAnchor(payload), sign: "state", operands: payload });
+}
+
+export function checkZwischenzugSemanticEvent(payload: CheckZwischenzugObservedOperands, moveEvidence: readonly DeclaredEvidence<unknown>[], captureEvidence: DeclaredEvidence<unknown>, checkEvidence: DeclaredEvidence<unknown>, exchangeEvidence: DeclaredEvidence<unknown>): SemanticEvidenceEvent<CheckZwischenzugObservedOperands> {
+  const inputs = exactSequenceInputs(moveEvidence, 4, [captureEvidence, checkEvidence, exchangeEvidence], ["rules.transition.event.capture", "rules.tactic.event.check", "rules.exchange.predicate.legal_exchange"]);
+  return compileSemanticEvidenceEvent(PRIMARY_EVIDENCE_MANIFEST, { evidence: declareCheckZwischenzugEvidence(payload), derivationInputs: inputs, anchor: sequenceAnchor(payload), sign: "state", operands: payload });
+}
+
+export function overloadExploitationSemanticEvent(payload: OverloadExploitationObservedOperands, moveEvidence: readonly DeclaredEvidence<unknown>[], dutyEvidence: DeclaredEvidence<unknown>, captureEvidence: readonly DeclaredEvidence<unknown>[], exchangeEvidence: DeclaredEvidence<unknown>): SemanticEvidenceEvent<OverloadExploitationObservedOperands> {
+  if (captureEvidence.length !== 2 || captureEvidence.some((value) => refKey(value.projection) !== "rules.transition.event.capture@1")) throw new TypeError("Observed overload exploitation requires two exact capture evidence items");
+  const inputs = exactSequenceInputs(moveEvidence, 3, [dutyEvidence, ...captureEvidence, exchangeEvidence], ["rules.tactic.reading.defender_duty_set", "rules.transition.event.capture", "rules.exchange.predicate.legal_exchange"]);
+  return compileSemanticEvidenceEvent(PRIMARY_EVIDENCE_MANIFEST, { evidence: declareOverloadExploitationEvidence(payload), derivationInputs: inputs, anchor: sequenceAnchor(payload), sign: "state", operands: payload });
+}
+
+/** Brand-sealed one-edge duty events. They consume the already-compiled capture event. */
+export function semanticDutyEvents(beforeFen: string, moveUci: string, afterFen: string, transitionEvents: readonly SemanticEvidenceEvent<TransitionSemanticEventOperands>[] = transitionSemanticEvents(beforeFen, moveUci, afterFen)): readonly SemanticEvidenceEvent[] {
+  const anchor = canonicalAnchor({ beforeFen, moveUci, afterFen, side: positionFromFen(beforeFen).turn });
+  const capture = transitionEvents.find((event) => event.operands.family === "capture");
+  const removed = defenderRemovedEvents(anchor.beforeFen, anchor.moveUci, anchor.afterFen, capture?.operands as Extract<TransitionSemanticFact, { readonly family: "capture" }> | undefined).map((payload) => compileSemanticEvidenceEvent(PRIMARY_EVIDENCE_MANIFEST, { evidence: declareDefenderRemovedEvidence(payload), anchor, sign: "state", operands: payload }));
+  const relocated = defenderDutyRelocatedEvents(anchor.beforeFen, anchor.moveUci, anchor.afterFen).map((payload) => compileSemanticEvidenceEvent(PRIMARY_EVIDENCE_MANIFEST, { evidence: declareDefenderDutyRelocatedEvidence(payload), anchor, sign: "state", operands: payload }));
+  return Object.freeze([...removed, ...relocated]);
+}
+
 export function localSemanticEvents(beforeFen: string, moveUci: string, afterFen: string): readonly SemanticEvidenceEvent[] {
   const transitionEvents = transitionSemanticEvents(beforeFen, moveUci, afterFen);
-  return Object.freeze([...structuralSemanticEvents(beforeFen, moveUci, afterFen), ...pawnIslandSemanticEvents(beforeFen, moveUci, afterFen), ...transitionEvents, ...tacticalSemanticEvents(beforeFen, moveUci, afterFen), ...(loosePieceSemanticEvents(beforeFen, moveUci, afterFen) ?? []), ...castlingSemanticEvents(beforeFen, moveUci, afterFen), ...derivedExchangeSemanticEvents(beforeFen, moveUci, afterFen, transitionEvents), ...discoveredExecutedSemanticEvents(beforeFen, moveUci, afterFen, transitionEvents), ...breadthSemanticEvents(beforeFen, moveUci, afterFen)]);
+  return Object.freeze([...structuralSemanticEvents(beforeFen, moveUci, afterFen), ...pawnIslandSemanticEvents(beforeFen, moveUci, afterFen), ...transitionEvents, ...tacticalSemanticEvents(beforeFen, moveUci, afterFen), ...(loosePieceSemanticEvents(beforeFen, moveUci, afterFen) ?? []), ...castlingSemanticEvents(beforeFen, moveUci, afterFen), ...derivedExchangeSemanticEvents(beforeFen, moveUci, afterFen, transitionEvents), ...discoveredExecutedSemanticEvents(beforeFen, moveUci, afterFen, transitionEvents), ...breadthSemanticEvents(beforeFen, moveUci, afterFen), ...semanticDutyEvents(beforeFen, moveUci, afterFen, transitionEvents)]);
 }
 
 export function compileSemanticEvidenceEvent<T>(manifest: CompiledEvidenceManifest, input: SemanticEventInput<T>): SemanticEvidenceEvent<T> {

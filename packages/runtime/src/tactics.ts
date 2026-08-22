@@ -7,12 +7,210 @@ import { makeSquare, makeUci, opposite, parseSquare, parseUci } from "chessops/u
 import { canonicalFen, positionFromFen } from "./chess.js";
 import { EXCHANGE_PIECE_VALUES, legalCaptureMovesTo, legalExchangeForMove, type LegalExchangeResult } from "./exchange.js";
 import { matchesStructuralFeature, vacationReading } from "./structure.js";
+import type { TransitionSemanticFact } from "./transition.js";
 
 const PROMOTIONS: readonly Role[] = Object.freeze(["queen", "rook", "bishop", "knight"]);
 export const THREAT_CONVENTION = "threat@1" as const;
 export const REPLY_HORIZON = "1 reply" as const;
 export const TRAPPED_CONVENTION = "trapped@1" as const;
 export const BACK_RANK_CONVENTION = "back_rank_susceptible@1" as const;
+export const DEFENCE_DUTY_CONVENTION = "defence-duty@1" as const;
+
+export interface DefenderDuty {
+  readonly conventionId: typeof DEFENCE_DUTY_CONVENTION;
+  readonly defender: { readonly square: SquareName; readonly piece: Piece };
+  readonly target: { readonly square: SquareName; readonly piece: Piece };
+  readonly coDefenders: readonly { readonly square: SquareName; readonly piece: Piece }[];
+}
+
+export interface DefenderDutyReading {
+  readonly fen: string;
+  readonly duties: readonly DefenderDuty[];
+}
+
+export interface DefenderRemovedEvent {
+  readonly beforeFen: string;
+  readonly moveUci: string;
+  readonly afterFen: string;
+  readonly move: { readonly from: SquareName; readonly to: SquareName };
+  readonly defender: { readonly square: SquareName; readonly piece: Piece };
+  readonly defenderRole: Role;
+  readonly target: { readonly square: SquareName; readonly piece: Piece };
+  readonly targetRole: Role;
+  readonly lostDuty: DefenderDuty;
+}
+
+export interface DefenderDutyRelocatedEvent {
+  readonly beforeFen: string;
+  readonly moveUci: string;
+  readonly afterFen: string;
+  readonly move: { readonly from: SquareName; readonly to: SquareName };
+  readonly defenderBefore: { readonly square: SquareName; readonly piece: Piece };
+  readonly defenderAfter: { readonly square: SquareName; readonly piece: Piece };
+  readonly target: { readonly square: SquareName; readonly piece: Piece };
+  readonly lostDuty: DefenderDuty;
+}
+
+export interface OverloadedDefenderConflict {
+  readonly conventionId: "overload-conflict@1";
+  readonly beforeFen: string;
+  readonly candidate: string;
+  readonly afterFen: string;
+  readonly soleDefender: { readonly square: SquareName; readonly piece: Piece };
+  readonly capturedTarget: { readonly square: SquareName; readonly piece: Piece };
+  readonly retainedTargets: readonly { readonly square: SquareName; readonly piece: Piece }[];
+  readonly legalRecaptures: readonly string[];
+  readonly positiveCaptures: readonly { readonly recapture: string; readonly target: { readonly square: SquareName; readonly piece: Piece }; readonly captures: readonly LegalExchangeResult[] }[];
+}
+
+export type OverloadedDefenderConflictResult =
+  | { readonly kind: "conflicts"; readonly conflicts: readonly OverloadedDefenderConflict[] }
+  | { readonly kind: "clear"; readonly conflicts: readonly [] }
+  | { readonly kind: "unavailable"; readonly reason: "no_legal_recapture"; readonly conflicts: readonly [] };
+
+function samePiece(left: Piece, right: Piece): boolean {
+  return left.color === right.color && left.role === right.role && Boolean(left.promoted) === Boolean(right.promoted);
+}
+
+/** Current-occupancy pseudo defence duties. A state never implies that the duty is legally executable. */
+export function defenderDutyReading(fen: string): DefenderDutyReading {
+  const position = positionFromFen(fen);
+  const raw: Omit<DefenderDuty, "coDefenders">[] = [];
+  for (const [defenderSquare, defenderPiece] of position.board) {
+    for (const targetSquare of attacks(defenderPiece, defenderSquare, position.board.occupied)) {
+      const targetPiece = position.board.get(targetSquare);
+      if (targetPiece?.color !== defenderPiece.color || targetPiece.role === "king") continue;
+      raw.push(Object.freeze({
+        conventionId: DEFENCE_DUTY_CONVENTION,
+        defender: Object.freeze({ square: makeSquare(defenderSquare), piece: defenderPiece }),
+        target: Object.freeze({ square: makeSquare(targetSquare), piece: targetPiece }),
+      }));
+    }
+  }
+  const duties = raw.map((duty): DefenderDuty => Object.freeze({
+    ...duty,
+    coDefenders: Object.freeze(raw
+      .filter((candidate) => candidate.target.square === duty.target.square && candidate.defender.square !== duty.defender.square)
+      .map((candidate) => candidate.defender)
+      .sort((left, right) => left.square.localeCompare(right.square))),
+  })).sort((left, right) => left.defender.square.localeCompare(right.defender.square) || left.target.square.localeCompare(right.target.square));
+  return Object.freeze({ fen: canonicalFen(position), duties: Object.freeze(duties) });
+}
+
+function retainedTarget(after: ReturnType<typeof positionFromFen>, duty: DefenderDuty): boolean {
+  const square = parseSquare(duty.target.square)!;
+  const piece = after.board.get(square);
+  return piece !== undefined && samePiece(piece, duty.target.piece);
+}
+
+function exactEdge(beforeFen: string, moveUci: string, afterFen: string) {
+  const before = positionFromFen(beforeFen);
+  const move = played(before, moveUci);
+  const canonicalBefore = canonicalFen(before);
+  const moving = before.board.get(move.from)!;
+  before.play(move);
+  const canonicalAfter = canonicalFen(before);
+  if (canonicalAfter !== canonicalFen(positionFromFen(afterFen))) throw new TypeError(`After FEN does not match ${moveUci}`);
+  return { beforeFen: canonicalBefore, moveUci: makeUci(move), afterFen: canonicalAfter, move, moving, after: before };
+}
+
+/** Captured defenders joined to the already-produced exact capture identity. */
+export function defenderRemovedEvents(beforeFen: string, moveUci: string, afterFen: string, capture: Extract<TransitionSemanticFact, { readonly family: "capture" }> | undefined): readonly DefenderRemovedEvent[] {
+  if (capture === undefined) return Object.freeze([]);
+  const edge = exactEdge(beforeFen, moveUci, afterFen);
+  if (capture.from !== makeSquare(edge.move.from) || capture.to !== makeSquare(edge.move.to)) throw new TypeError("Defender-removal capture identity differs from the edge");
+  const capturedSquare = capture.enPassant
+    ? ((Math.floor(edge.move.from / 8) * 8 + edge.move.to % 8) as Square)
+    : edge.move.to;
+  const capturedName = makeSquare(capturedSquare);
+  const duties = defenderDutyReading(edge.beforeFen).duties.filter((duty) => duty.defender.square === capturedName && duty.defender.piece.color === capture.captured.color && duty.defender.piece.role === capture.captured.role);
+  return Object.freeze(duties.filter((duty) => retainedTarget(edge.after, duty)).map((lostDuty) => Object.freeze({
+    beforeFen: edge.beforeFen,
+    moveUci: edge.moveUci,
+    afterFen: edge.afterFen,
+    move: Object.freeze({ from: makeSquare(edge.move.from), to: makeSquare(edge.move.to) }),
+    defender: lostDuty.defender,
+    defenderRole: lostDuty.defender.piece.role,
+    target: lostDuty.target,
+    targetRole: lostDuty.target.piece.role,
+    lostDuty,
+  })));
+}
+
+/** Same-piece relocations that lose a named current-occupancy defence duty. */
+export function defenderDutyRelocatedEvents(beforeFen: string, moveUci: string, afterFen: string): readonly DefenderDutyRelocatedEvent[] {
+  const edge = exactEdge(beforeFen, moveUci, afterFen);
+  const from = makeSquare(edge.move.from), to = makeSquare(edge.move.to);
+  const current = edge.after.board.get(edge.move.to);
+  if (current === undefined || !samePiece(edge.moving, current)) return Object.freeze([]);
+  const afterDuties = new Set(defenderDutyReading(edge.afterFen).duties.map((duty) => `${duty.defender.square}:${duty.target.square}:${duty.target.piece.color}:${duty.target.piece.role}`));
+  const beforeDuties = defenderDutyReading(edge.beforeFen).duties.filter((duty) => duty.defender.square === from);
+  return Object.freeze(beforeDuties.filter((duty) => retainedTarget(edge.after, duty) && !afterDuties.has(`${to}:${duty.target.square}:${duty.target.piece.color}:${duty.target.piece.role}`)).map((lostDuty) => Object.freeze({
+    beforeFen: edge.beforeFen,
+    moveUci: edge.moveUci,
+    afterFen: edge.afterFen,
+    move: Object.freeze({ from, to }),
+    defenderBefore: lostDuty.defender,
+    defenderAfter: Object.freeze({ square: to, piece: current }),
+    target: lostDuty.target,
+    lostDuty,
+  })));
+}
+
+/** Candidate-time four-clause overload response conflict. It does not grade the candidate. */
+export function overloadedDefenderResponseConflict(beforeFen: string, moveUci: string, afterFen: string, capture: Extract<TransitionSemanticFact, { readonly family: "capture" }> | undefined): OverloadedDefenderConflictResult {
+  if (capture === undefined) return Object.freeze({ kind: "clear", conflicts: Object.freeze([] as const) });
+  const edge = exactEdge(beforeFen, moveUci, afterFen);
+  if (capture.from !== makeSquare(edge.move.from) || capture.to !== makeSquare(edge.move.to)) throw new TypeError("Overload capture identity differs from the edge");
+  const duties = defenderDutyReading(edge.beforeFen).duties;
+  const targetDuties = duties.filter((duty) => duty.target.square === capture.to && duty.target.piece.color === capture.captured.color && duty.target.piece.role === capture.captured.role && duty.coDefenders.length === 0);
+  let missingRecapture = false;
+  const conflicts: OverloadedDefenderConflict[] = [];
+  for (const capturedDuty of targetDuties) {
+    const retainedTargets = duties.filter((duty) => duty.defender.square === capturedDuty.defender.square && duty.target.square !== capturedDuty.target.square && duty.coDefenders.length === 0 && retainedTarget(edge.after, duty));
+    if (retainedTargets.length === 0) continue;
+    const defenderSquare = parseSquare(capturedDuty.defender.square)!;
+    const destination = parseSquare(capture.to)!;
+    const recaptures = legalCaptureMovesTo(edge.after, destination, defenderSquare).filter((candidate) => {
+      const result = legalExchangeForMove(edge.after, candidate);
+      return result?.captured.color === edge.moving.color;
+    });
+    if (recaptures.length === 0) { missingRecapture = true; continue; }
+    const positiveCaptures: OverloadedDefenderConflict["positiveCaptures"][number][] = [];
+    let preservesEveryDuty = false;
+    let everyRecaptureExposes = true;
+    for (const recapture of recaptures) {
+      const reply = edge.after.clone();
+      const recaptureUci = makeUci(recapture);
+      reply.play(recapture);
+      const replyFen = canonicalFen(reply);
+      const replyDuties = defenderDutyReading(replyFen).duties;
+      if (retainedTargets.every((duty) => replyDuties.some((candidate) => candidate.defender.square === capture.to && candidate.defender.piece.role === capturedDuty.defender.piece.role && candidate.target.square === duty.target.square && samePiece(candidate.target.piece, duty.target.piece)))) preservesEveryDuty = true;
+      let exposed = false;
+      for (const duty of retainedTargets) {
+        const targetSquare = parseSquare(duty.target.square)!;
+        const captures = legalCaptureMovesTo(reply, targetSquare).map((candidate) => legalExchangeForMove(reply, candidate)).filter((value): value is LegalExchangeResult => value !== undefined && value.resultUnits > 0);
+        if (captures.length === 0) continue;
+        exposed = true;
+        positiveCaptures.push(Object.freeze({ recapture: recaptureUci, target: duty.target, captures: Object.freeze(captures) }));
+      }
+      if (!exposed) everyRecaptureExposes = false;
+    }
+    if (!preservesEveryDuty && everyRecaptureExposes) conflicts.push(Object.freeze({
+      conventionId: "overload-conflict@1",
+      beforeFen: edge.beforeFen,
+      candidate: edge.moveUci,
+      afterFen: edge.afterFen,
+      soleDefender: capturedDuty.defender,
+      capturedTarget: capturedDuty.target,
+      retainedTargets: Object.freeze(retainedTargets.map((duty) => duty.target)),
+      legalRecaptures: Object.freeze(recaptures.map(makeUci).sort()),
+      positiveCaptures: Object.freeze(positiveCaptures.sort((left, right) => left.recapture.localeCompare(right.recapture) || left.target.square.localeCompare(right.target.square))),
+    }));
+  }
+  if (conflicts.length > 0) return Object.freeze({ kind: "conflicts", conflicts: Object.freeze(conflicts) });
+  return missingRecapture ? Object.freeze({ kind: "unavailable", reason: "no_legal_recapture", conflicts: Object.freeze([] as const) }) : Object.freeze({ kind: "clear", conflicts: Object.freeze([] as const) });
+}
 
 export interface RookOnSeventhReading {
   readonly fen: string;

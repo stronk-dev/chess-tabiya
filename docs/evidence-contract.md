@@ -22,8 +22,8 @@ by a SHA-256 digest. `/capabilities` returns that digest, current producer avail
 consumer-safe binding summary. It never returns engine lines, authored prose, provider secrets, or
 corpus rows.
 
-The current compiled closure is 33 producers, 174 projections, 25 consumers and 200 bindings,
-plus 58 semantic-event declarations, 58 eligibility rows, 15 refusal reasons and one selection
+The current compiled closure is 33 producers, 183 projections, 25 consumers and 207 bindings,
+plus 65 semantic-event declarations, 65 eligibility rows, 15 refusal reasons and one selection
 policy. The executable manifest and semantic-evidence checks own this tuple.
 
 ## Honest homes and raw evidence
@@ -117,3 +117,10 @@ only a conjunction, while open-file occupancy consumes an `open_file | half_open
 Exact open-file events compile today; half-open payloads remain uncompiled rather than receiving a
 forged source. Breadth closeout waits for the accepted RFC/evidence contract to gain a closed
 disjunctive derivation form.
+
+The same limitation is now exercised by Wave-C (D963): deflection, attraction, and the tablebase
+race each have honest alternative source paths. They remain absent from the compiled catalogue
+until a closed disjunction can validate the exact branch actually supplied. The bounded-mate
+projection is likewise held until its promised re-derivable proof digest has an explicit retained
+certificate contract. Nine independently buildable Wave-C projections are registered meanwhile;
+seven events remain research-only and add no learner surface, preset, renderer, or raw setting.

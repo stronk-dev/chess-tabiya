@@ -134,7 +134,13 @@ export const BREADTH_EVENT_PROJECTION_IDS = Object.freeze([
   "derived.material.event.role_asymmetry", "rules.king.event.zone_state",
   "derived.king.captured_zone_defender", "derived.activity.event.open_file_occupancy",
 ] as const);
-export const SEMANTIC_EVENT_PROJECTION_IDS = Object.freeze([...STRUCTURAL_EVENT_PROJECTION_IDS, ...TACTICAL_STRUCTURAL_EVENT_PROJECTION_IDS, ...TRANSITION_EVENT_PROJECTION_IDS, ...AVOIDANCE_EVENT_PROJECTION_IDS, ...TACTICAL_AVOIDANCE_EVENT_PROJECTION_IDS, ...TACTICAL_EVENT_PROJECTION_IDS, ...CASTLING_EVENT_PROJECTION_IDS, ...DERIVED_EXCHANGE_EVENT_PROJECTION_IDS, ...DERIVED_TACTIC_EVENT_PROJECTION_IDS, ...BREADTH_EVENT_PROJECTION_IDS]);
+export const SEMANTIC_WAVE_EVENT_PROJECTION_IDS = Object.freeze([
+  "rules.tactic.event.defender_removed", "rules.tactic.event.defender_duty_relocated",
+  "derived.tactic.line_blocker_clearance_observed", "derived.tactic.square_clearance_observed",
+  "derived.tactic.interference_observed", "derived.tactic.check_zwischenzug_observed",
+  "derived.tactic.overload_exploitation_observed",
+] as const);
+export const SEMANTIC_EVENT_PROJECTION_IDS = Object.freeze([...STRUCTURAL_EVENT_PROJECTION_IDS, ...TACTICAL_STRUCTURAL_EVENT_PROJECTION_IDS, ...TRANSITION_EVENT_PROJECTION_IDS, ...AVOIDANCE_EVENT_PROJECTION_IDS, ...TACTICAL_AVOIDANCE_EVENT_PROJECTION_IDS, ...TACTICAL_EVENT_PROJECTION_IDS, ...CASTLING_EVENT_PROJECTION_IDS, ...DERIVED_EXCHANGE_EVENT_PROJECTION_IDS, ...DERIVED_TACTIC_EVENT_PROJECTION_IDS, ...BREADTH_EVENT_PROJECTION_IDS, ...SEMANTIC_WAVE_EVENT_PROJECTION_IDS]);
 
 /** Closed Appendix-A inventory from tactical-collectors; checked set-equal to the compiled catalogue. */
 export const TACTICAL_COLLECTOR_PROJECTION_IDS = Object.freeze([
@@ -176,6 +182,14 @@ export const BREADTH_CONVENTION_TEXT = Object.freeze({
   pressureLine: "pressure-line@1: A bishop/rook/queen slider and an enemy rook/queen target are collinear with exactly one occupied square between them, and with that screen removed the target lies in the slider's own chessops attack set from its square. The screen belongs to the target's color, has lower P1/N3/B3/R5/Q9 role value than the target, and is not a king. Retention requires the same slider color/role plus the exact same screen square/color/role and target square/color/role.",
   squareControl: "Square control uses no hypothetical occupant. A pseudo controller is a piece whose chessops attack set contains the target under current occupancy. A legal controller is that same source piece only when the target also appears in its actual allDests() set after a valid clone makes the piece's color the side to move and clears en passant. Opposing-king-square pseudo control makes the checking color's complete legal set abstain invalid_turn_clone.",
   pawnRelations: "An opposing-pawn contact is a directed pawn-attack edge; a direct lock is a White pawn immediately below a Black pawn on the same file; a passed pawn's blockers are opposing pawns strictly ahead on its file or either adjacent file; protection is a same-color pawn attack on the subject; and a connected passed pair is any two passed pawns of one color on adjacent files, with rank distance deliberately unrestricted.",
+});
+
+export const SEMANTIC_CONVENTION_TEXT = Object.freeze({
+  defenceDuty: "defence-duty@1: A duty is a directed pseudo defence edge under current occupancy from any defender onto a same-color non-king target. Sole defender means the named defender holds the only such edge onto that target. Duties are not legality-filtered; multiple duties alone never imply exploitable overload.",
+  overloadConflict: "overload-conflict@1: One named defender is sole defender of the captured target and another retained target; it has a legal recapture; no legal recapture preserves every retained sole duty; and after every recapture at least one retained target has a positive legal-exchange@1 capture. No legal recapture abstains. The broad lost-duty-edge rule is rejected.",
+  mateProof: "mate-proof@1: The declared candidate is attacker move one; later attacker moves are existential and every defender reply is enumerated through one to four attacker moves. One node is counted per visited position before cap/terminal checks; the cap is 250000. Attacker moves sort check-first then canonical UCI, defender moves canonical UCI. Results are proved, refuted with an escaping reply or terminal non-mate, or budget_exhausted. Five-plus is outside the convention.",
+  raceArrival: "race-arrival@1: Two or more opposite-color named pawns with unblocked forward paths; side to move and the initial double push are respected; strict turn alternation models no captures, checks, king or piece activity. Ordering and per-pawn arrival distance are descriptive and contain no outcome verdict.",
+  observedWindow: "observed-window@1: N consecutive move anchors retain N+1 ordered nodes, byte-equal shared FEN/node boundaries, canonical UCI and exact subject identity. Recorded order never establishes intent, force, best play or causality.",
 });
 
 const structuralEventOutputs = STRUCTURAL_EVENT_FAMILIES.map((family) => projection("rules.structural", `rules.structural.event.${family}`, "rules", {
@@ -389,6 +403,24 @@ const tacticalOutputs = [
     abstention: { possible: true, reasons: ["invalid_turn_clone"] },
     limitations: ["Local legal-exchange relation only; no whole-position move grade, recommendation, or inferred intent."],
   }),
+  projection("rules.tactic", "rules.tactic.reading.defender_duty_set", "rules", {
+    payloadType: "DefenderDutyReading", semantics: SEMANTIC_CONVENTION_TEXT.defenceDuty,
+    operands: ["fen", "duties"], forms: ["list", "panel", "lit_squares", "arrows", "machine_condition"],
+    limitations: ["Pseudo duty may be legally unexecutable; co-defenders are retained specifically to prevent multi-duty state from being called overload."],
+    disposition: { kind: "inspector_only", reason: "Exact duty identities land before module and bot eligibility." },
+  }),
+  projection("rules.tactic", "rules.tactic.event.defender_removed", "rules", {
+    role: "event", payloadType: "DefenderRemovedEvent", semantics: "Exact capture identity joined to every retained non-king target duty held by the captured defender.",
+    operands: ["move", "defender", "defenderRole", "target", "targetRole", "lostDuty"], signs: ["state"], forms: ["list", "panel", "lit_squares", "arrows", "machine_condition"],
+    dependsOn: [ref("rules.transition.event.capture"), ref("rules.tactic.reading.defender_duty_set")],
+    limitations: [SEMANTIC_CONVENTION_TEXT.defenceDuty, "Removal is an exact transition fact; it does not establish that the target is exploitable or name a tactic."],
+  }),
+  projection("rules.tactic", "rules.tactic.event.defender_duty_relocated", "rules", {
+    role: "event", payloadType: "DefenderDutyRelocatedEvent", semantics: "The same defender relocates on the played edge, loses one named pseudo duty, and the target survives by exact identity.",
+    operands: ["move", "defenderBefore", "defenderAfter", "target", "lostDuty"], signs: ["state"], forms: ["list", "panel", "lit_squares", "arrows", "machine_condition"],
+    dependsOn: [ref("rules.tactic.reading.defender_duty_set")],
+    limitations: [SEMANTIC_CONVENTION_TEXT.defenceDuty, "Relocation is never aliased to deflection or attraction without the separately declared observed consequence."],
+  }),
 ];
 
 const derivedTacticOutputs = [
@@ -425,6 +457,60 @@ const derivedTacticOutputs = [
     operands: ["kind", "anchors", "nodes", "defender", "target", "firstMoveCapturedDefender", "finalCapture"], signs: ["state"], grounding: "recorded_run", exactness: "convention", answerContent: ["fact"], forms: ["list", "panel", "lit_squares", "arrows", "machine_condition"],
     dependsOn: [ref("rules.square.event.control"), ref("rules.transition.event.capture"), ref("rules.exchange.predicate.legal_exchange"), ref("run.record.move")], derivation: { inputs: [ref("run.record.move")] },
     limitations: ["Observed order does not emit removal, deflection, overload, force, tactic success, quality, intent, or causality."],
+  }),
+  projection("derived.tactic", "derived.tactic.overloaded_defender_response_conflict", "derived", {
+    role: "predicate", payloadType: "OverloadedDefenderConflict", semantics: SEMANTIC_CONVENTION_TEXT.overloadConflict,
+    operands: ["candidate", "soleDefender", "capturedTarget", "retainedTargets", "legalRecaptures", "positiveCaptures"], signs: ["state"], grounding: "declared_convention", exactness: "convention",
+    answerContent: ["fact"], forms: ["list", "panel", "machine_condition"],
+    abstention: { possible: true, reasons: ["no_legal_recapture", "input_abstained"] },
+    dependsOn: [ref("rules.tactic.reading.defender_duty_set"), ref("rules.transition.event.capture"), ref("rules.exchange.predicate.legal_exchange")],
+    derivation: { inputs: [ref("rules.tactic.reading.defender_duty_set"), ref("rules.transition.event.capture"), ref("rules.exchange.predicate.legal_exchange")] },
+    limitations: ["Candidate-time arithmetic only; it does not grade or recommend the candidate."],
+    disposition: { kind: "inspector_only", reason: "Machine predicate lands before Support/Review module eligibility." },
+  }),
+  projection("derived.tactic", "derived.tactic.line_blocker_clearance_observed", "derived", {
+    role: "event", payloadType: "LineBlockerClearanceObservedOperands", semantics: `${SEMANTIC_CONVENTION_TEXT.observedWindow} A friendly sole blocker vacates the exact slider-target between-set; the unchanged slider later captures the retained non-king target with a positive legal-exchange@1 result.`,
+    operands: ["blocker", "slider", "ray", "target", "targetCapture"], signs: ["state"], grounding: "declared_convention", exactness: "convention",
+    answerContent: ["fact"], forms: ["list", "panel", "lit_squares", "arrows", "machine_condition"],
+    abstention: { possible: true, reasons: ["continuation_too_short", "input_abstained"] },
+    dependsOn: [ref("run.record.move"), ref("rules.exchange.predicate.legal_exchange")],
+    derivation: { inputs: [ref("run.record.move"), ref("rules.exchange.predicate.legal_exchange")] },
+    limitations: ["Opened geometry without the retained target consequence is only an operand; recorded order proves neither intent nor move quality."],
+  }),
+  projection("derived.tactic", "derived.tactic.square_clearance_observed", "derived", {
+    role: "event", payloadType: "SquareClearanceObservedOperands", semantics: `${SEMANTIC_CONVENTION_TEXT.observedWindow} An exact square is vacated and a same-side B/R/Q later makes a quiet move to or through it from another source square.`,
+    operands: ["vacatedSquare", "vacatingPiece", "laterSlider", "laterMove"], signs: ["state"], grounding: "recorded_run", exactness: "exact",
+    answerContent: ["fact"], forms: ["list", "panel", "lit_squares", "arrows", "machine_condition"],
+    abstention: { possible: true, reasons: ["continuation_too_short", "input_abstained"] },
+    dependsOn: [ref("run.record.move")], derivation: { inputs: [ref("run.record.move")] },
+    limitations: ["The quiet clause keeps capture-consequence ray clearance in its separate family; recorded order proves neither intent nor move quality."],
+  }),
+  projection("derived.tactic", "derived.tactic.interference_observed", "derived", {
+    role: "event", payloadType: "InterferenceObservedOperands", semantics: `${SEMANTIC_CONVENTION_TEXT.observedWindow} The attacking side interposes on an enemy slider's exact defence-duty between-set; the retained target is later captured with a positive legal-exchange@1 result.`,
+    operands: ["interposingMove", "slider", "betweenSquare", "target", "brokenDuty", "targetCapture"], signs: ["state"], grounding: "declared_convention", exactness: "convention",
+    answerContent: ["fact"], forms: ["list", "panel", "lit_squares", "arrows", "machine_condition"],
+    abstention: { possible: true, reasons: ["continuation_too_short", "input_abstained"] },
+    dependsOn: [ref("run.record.move"), ref("rules.tactic.reading.defender_duty_set"), ref("rules.exchange.predicate.legal_exchange")],
+    derivation: { inputs: [ref("run.record.move"), ref("rules.tactic.reading.defender_duty_set"), ref("rules.exchange.predicate.legal_exchange")] },
+    limitations: ["A blocker on an unrelated ray does not qualify; recorded order proves neither force nor intent."],
+  }),
+  projection("derived.tactic", "derived.tactic.check_zwischenzug_observed", "derived", {
+    role: "event", payloadType: "CheckZwischenzugObservedOperands", semantics: `${SEMANTIC_CONVENTION_TEXT.observedWindow} A legal recapture exists; its mover instead gives check, the opponent answers, and the same recapturer then makes a positive legal-exchange@1 capture on the retained square.`,
+    operands: ["expectedRecapture", "intermediateCheck", "reply", "retainedRecapture"], signs: ["state"], grounding: "declared_convention", exactness: "convention",
+    answerContent: ["fact"], forms: ["list", "panel", "lit_squares", "arrows", "machine_condition"],
+    abstention: { possible: true, reasons: ["continuation_too_short", "input_abstained"] },
+    dependsOn: [ref("run.record.move"), ref("rules.transition.event.capture"), ref("rules.tactic.event.check"), ref("rules.exchange.predicate.legal_exchange")],
+    derivation: { inputs: [ref("run.record.move"), ref("rules.transition.event.capture"), ref("rules.tactic.event.check"), ref("rules.exchange.predicate.legal_exchange")] },
+    limitations: ["Check-intermezzo subset only; expected does not mean best, and quiet zwischenzugs remain outside this version."],
+  }),
+  projection("derived.tactic", "derived.tactic.overload_exploitation_observed", "derived", {
+    role: "event", payloadType: "OverloadExploitationObservedOperands", semantics: `${SEMANTIC_CONVENTION_TEXT.observedWindow} A multi-duty defender's first target is captured, that defender recaptures, and a different retained target is then positively captured.`,
+    operands: ["firstCapture", "defenderRecapture", "secondTargetCapture", "dutySet"], signs: ["state"], grounding: "declared_convention", exactness: "convention",
+    answerContent: ["fact"], forms: ["list", "panel", "lit_squares", "arrows", "machine_condition"],
+    abstention: { possible: true, reasons: ["continuation_too_short", "input_abstained"] },
+    dependsOn: [ref("run.record.move"), ref("rules.tactic.reading.defender_duty_set"), ref("rules.transition.event.capture"), ref("rules.exchange.predicate.legal_exchange")],
+    derivation: { inputs: [ref("run.record.move"), ref("rules.tactic.reading.defender_duty_set"), ref("rules.transition.event.capture"), ref("rules.exchange.predicate.legal_exchange")] },
+    limitations: ["The recapture is observed, not proved forced; one-duty defenders are a permanent hard negative."],
   }),
 ];
 

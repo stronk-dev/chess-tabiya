@@ -5,12 +5,13 @@ import { Chess, normalizeMove } from "chessops/chess";
 import { INITIAL_FEN, parseFen } from "chessops/fen";
 import { parseUci } from "chessops/util";
 
-import { canonicalFen, selectLocalSemanticEvidence } from "@chess-tabiya/runtime";
+import { EVIDENCE_ADAPTERS, EVIDENCE_CONSUMERS, EVIDENCE_ELIGIBILITY_DECLARATIONS, EVIDENCE_PRODUCERS, EVIDENCE_REASON_DECLARATIONS, EVIDENCE_SELECTION_POLICIES, SEMANTIC_EVENT_PROJECTION_IDS, canonicalFen, selectLocalSemanticEvidence } from "@chess-tabiya/runtime";
 
 import { EVIDENCE_MANIFEST } from "./evidence-manifest.js";
 
 const tuple = [EVIDENCE_MANIFEST.producers.length, EVIDENCE_MANIFEST.projections.length, EVIDENCE_MANIFEST.consumers.length, EVIDENCE_MANIFEST.bindings.length, EVIDENCE_MANIFEST.semanticEvents.length, EVIDENCE_MANIFEST.eligibility.length, EVIDENCE_MANIFEST.reasons.length, EVIDENCE_MANIFEST.selectionPolicies.length];
-if (tuple.join("/") !== "33/174/25/200/58/58/15/1") throw new TypeError(`Semantic evidence closure drift: ${tuple.join("/")}`);
+const declaredTuple = [EVIDENCE_PRODUCERS.length, EVIDENCE_PRODUCERS.flatMap((producer) => producer.outputs).length, EVIDENCE_CONSUMERS.length, EVIDENCE_ADAPTERS.length, SEMANTIC_EVENT_PROJECTION_IDS.length, EVIDENCE_ELIGIBILITY_DECLARATIONS.length, EVIDENCE_REASON_DECLARATIONS.length, EVIDENCE_SELECTION_POLICIES.length];
+if (tuple.join("/") !== declaredTuple.join("/")) throw new TypeError(`Semantic evidence compiler dropped a declaration: compiled ${tuple.join("/")}, declared ${declaredTuple.join("/")}`);
 
 const position = Chess.fromSetup(parseFen(INITIAL_FEN).unwrap()).unwrap();
 const move = normalizeMove(position, parseUci("e2e4")!);

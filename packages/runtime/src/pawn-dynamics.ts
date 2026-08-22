@@ -1,6 +1,6 @@
 import { attacks, between, pawnAttacks } from "chessops/attacks";
 import { normalizeMove } from "chessops/chess";
-import type { Color, Piece, Square, SquareName } from "chessops/types";
+import type { Color, Move, Piece, Role, Square, SquareName } from "chessops/types";
 import { makeSquare, makeUci, opposite, parseSquare, parseUci } from "chessops/util";
 
 import { canonicalFen, positionFromFen } from "./chess.js";
@@ -9,6 +9,7 @@ import { matchesStructuralFeature } from "./structure.js";
 import { transitionSemanticFacts } from "./transition.js";
 
 export const CANDIDATE_MAJORITY_CONVENTION = "candidate-majority@1" as const;
+export const RACE_ARRIVAL_CONVENTION = "race-arrival@1" as const;
 const COLORS = Object.freeze(["white", "black"] as const);
 
 export interface BoardPieceIdentity {
@@ -388,4 +389,107 @@ export function harassmentPressureSequence(values: readonly RecordedMoveAnchor[]
     pressure: Object.freeze(retained),
     conventionId: "pressure-line@1",
   });
+}
+
+export interface PromotionRacePawn {
+  readonly pawn: PawnIdentity;
+  readonly path: readonly SquareName[];
+  readonly arrivalMoves: number;
+  readonly arrivalPly: number;
+  readonly initialDoublePushApplied: boolean;
+}
+
+export interface PromotionRaceGeometry {
+  readonly fen: string;
+  readonly pawns: readonly PromotionRacePawn[];
+  readonly arrivalConvention: typeof RACE_ARRIVAL_CONVENTION;
+  readonly ordering: readonly { readonly arrivalPly: number; readonly pawns: readonly PawnIdentity[] }[];
+  readonly sideToMove: Color;
+}
+
+export type PromotionRaceGeometryResult =
+  | { readonly kind: "available"; readonly value: PromotionRaceGeometry }
+  | { readonly kind: "unavailable"; readonly reason: "blocked_or_capturable_path_outside_convention" | "input_abstained" };
+
+export interface PromotionRaceTablebaseInput {
+  readonly category: string;
+  readonly dtz: number | null;
+  readonly preciseDtz: number | null;
+  readonly provider: string;
+  readonly pieceCount: number;
+}
+
+export interface PromotionRaceTablebaseEvent {
+  readonly geometry: PromotionRaceGeometry;
+  readonly category: string;
+  readonly dtz: number | null;
+  readonly preciseDtz: number | null;
+  readonly provider: string;
+  readonly immediatePromotion: readonly string[];
+  readonly promotionFirst: readonly PawnIdentity[];
+  readonly promotionWithCheck: readonly string[];
+}
+
+export type PromotionRaceTablebaseResult =
+  | { readonly kind: "available"; readonly value: PromotionRaceTablebaseEvent }
+  | { readonly kind: "unavailable"; readonly reason: "outside_tablebase_domain" | "provider_unavailable" | "input_abstained" };
+
+function promotionPath(position: ReturnType<typeof positionFromFen>, square: Square, color: Color): { readonly path: readonly SquareName[]; readonly moves: number; readonly double: boolean } | undefined {
+  const step = color === "white" ? 8 : -8;
+  const promotionRank = color === "white" ? 7 : 0;
+  const startRank = color === "white" ? 1 : 6;
+  const path: SquareName[] = [];
+  let cursor = square;
+  while (Math.floor(cursor / 8) !== promotionRank) {
+    cursor = (cursor + step) as Square;
+    if (position.board.get(cursor) !== undefined) return undefined;
+    path.push(makeSquare(cursor));
+  }
+  const double = Math.floor(square / 8) === startRank && path.length >= 2;
+  return Object.freeze({ path: Object.freeze(path), moves: path.length - (double ? 1 : 0), double });
+}
+
+/** Descriptive unopposed-stride ordering. It deliberately contains no outcome vocabulary. */
+export function promotionRaceGeometry(fen: string, inputsAvailable = true): PromotionRaceGeometryResult {
+  if (!inputsAvailable) return Object.freeze({ kind: "unavailable", reason: "input_abstained" });
+  const position = positionFromFen(fen);
+  const pawns: PromotionRacePawn[] = [];
+  for (const color of COLORS) for (const square of position.board.pieces(color, "pawn")) {
+    const path = promotionPath(position, square, color);
+    if (path === undefined) continue;
+    pawns.push(Object.freeze({ pawn: identity(position, square), path: path.path, arrivalMoves: path.moves, arrivalPly: 2 * path.moves - (position.turn === color ? 1 : 0), initialDoublePushApplied: path.double }));
+  }
+  if (!pawns.some((value) => value.pawn.piece.color === "white") || !pawns.some((value) => value.pawn.piece.color === "black")) return Object.freeze({ kind: "unavailable", reason: "blocked_or_capturable_path_outside_convention" });
+  pawns.sort((left, right) => left.arrivalPly - right.arrivalPly || left.pawn.square.localeCompare(right.pawn.square));
+  const byPly = new Map<number, PawnIdentity[]>();
+  for (const value of pawns) byPly.set(value.arrivalPly, [...(byPly.get(value.arrivalPly) ?? []), value.pawn]);
+  const ordering = [...byPly].sort((left, right) => left[0] - right[0]).map(([arrivalPly, values]) => Object.freeze({ arrivalPly, pawns: Object.freeze(values.sort((left, right) => left.square.localeCompare(right.square))) }));
+  return Object.freeze({ kind: "available", value: Object.freeze({ fen: canonicalFen(position), pawns: Object.freeze(pawns), arrivalConvention: RACE_ARRIVAL_CONVENTION, ordering: Object.freeze(ordering), sideToMove: position.turn }) });
+}
+
+function promotionMoves(position: ReturnType<typeof positionFromFen>): readonly Move[] {
+  const roles: readonly Role[] = ["queen", "rook", "bishop", "knight"];
+  const result: Move[] = [];
+  for (const [from, destinations] of position.allDests()) for (const to of destinations) {
+    if (position.board.getRole(from) !== "pawn" || (to >= 8 && to < 56)) continue;
+    for (const promotion of roles) {
+      const move = { from, to, promotion } as const;
+      if (position.isLegal(move)) result.push(move);
+    }
+  }
+  return Object.freeze(result.sort((left, right) => makeUci(left).localeCompare(makeUci(right))));
+}
+
+/** Joins descriptive race participants to an existing tablebase authority; never infers outcome. */
+export function promotionRaceTablebase(geometry: PromotionRaceGeometryResult, source: PromotionRaceTablebaseInput | undefined): PromotionRaceTablebaseResult {
+  if (geometry.kind === "unavailable") return Object.freeze({ kind: "unavailable", reason: "input_abstained" });
+  if (source === undefined || source.provider.trim().length === 0) return Object.freeze({ kind: "unavailable", reason: "provider_unavailable" });
+  const position = positionFromFen(geometry.value.fen);
+  const actualPieces = [...position.board].length;
+  if (actualPieces > 7 || source.pieceCount !== actualPieces) return Object.freeze({ kind: "unavailable", reason: "outside_tablebase_domain" });
+  const immediate = promotionMoves(position);
+  const promotionWithCheck = immediate.filter((move) => { const next = position.clone(); next.play(move); return next.isCheck(); }).map(makeUci);
+  const firstPly = geometry.value.ordering[0]?.arrivalPly;
+  const promotionFirst = firstPly === undefined ? [] : geometry.value.pawns.filter((value) => value.arrivalPly === firstPly).map((value) => value.pawn);
+  return Object.freeze({ kind: "available", value: Object.freeze({ geometry: geometry.value, category: source.category, dtz: source.dtz, preciseDtz: source.preciseDtz, provider: source.provider, immediatePromotion: Object.freeze(immediate.map(makeUci)), promotionFirst: Object.freeze(promotionFirst), promotionWithCheck: Object.freeze(promotionWithCheck) }) });
 }

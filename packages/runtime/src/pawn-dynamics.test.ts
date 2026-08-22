@@ -6,7 +6,7 @@ import { makeUci } from "chessops/util";
 import { describe, expect, it } from "vitest";
 
 import { canonicalFen, positionFromFen } from "./chess.js";
-import { candidateMajorityReading, harassmentPressureSequence, pawnContactTimingSequence, pawnContactsReading, pawnDynamicsEvents, pawnTransitionEvents, type RecordedMoveAnchor } from "./pawn-dynamics.js";
+import { candidateMajorityReading, harassmentPressureSequence, pawnContactTimingSequence, pawnContactsReading, pawnDynamicsEvents, pawnTransitionEvents, promotionRaceGeometry, promotionRaceTablebase, type RecordedMoveAnchor } from "./pawn-dynamics.js";
 
 function after(fen: string, uci: string): string {
   const position = positionFromFen(fen);
@@ -165,5 +165,26 @@ describe("identity-retaining pawn dynamics", () => {
     });
     const broken = sanAnchors(["d4", "d5", "Nf3", "Nf6", "e3", "Bg4", "h3", "Bf5"]);
     expect(harassmentPressureSequence(broken.slice(6, 8))).toBeUndefined();
+  });
+
+  it("orders unblocked promotion arrivals without turning geometry into an outcome", () => {
+    const fen = "4k3/7p/8/8/8/8/P7/4K3 w - - 0 1";
+    const result = promotionRaceGeometry(fen);
+    expect(result).toMatchObject({ kind: "available", value: { arrivalConvention: "race-arrival@1", sideToMove: "white", ordering: [{ arrivalPly: 9, pawns: [expect.objectContaining({ square: "a2" })] }, { arrivalPly: 10, pawns: [expect.objectContaining({ square: "h7" })] }] } });
+    if (result.kind === "available") expect(JSON.stringify(result.value)).not.toMatch(/winning|losing|drawing|win|loss|draw/u);
+
+    expect(promotionRaceGeometry("4k3/7p/8/8/8/p7/P7/4K3 w - - 0 1")).toEqual({ kind: "unavailable", reason: "blocked_or_capturable_path_outside_convention" });
+    expect(promotionRaceGeometry(fen, false)).toEqual({ kind: "unavailable", reason: "input_abstained" });
+  });
+
+  it("keeps Syzygy outcome in a separate exact source join", () => {
+    const fen = "4k3/P7/8/8/8/8/7p/4K3 w - - 0 1";
+    const geometry = promotionRaceGeometry(fen);
+    expect(promotionRaceTablebase(geometry, { category: "win", dtz: 1, preciseDtz: 1, provider: "fixture", pieceCount: 4 })).toMatchObject({
+      kind: "available",
+      value: { category: "win", provider: "fixture", immediatePromotion: expect.arrayContaining(["a7a8q"]), promotionWithCheck: expect.arrayContaining(["a7a8q"]) },
+    });
+    expect(promotionRaceTablebase(geometry, undefined)).toEqual({ kind: "unavailable", reason: "provider_unavailable" });
+    expect(promotionRaceTablebase(geometry, { category: "win", dtz: 1, preciseDtz: 1, provider: "fixture", pieceCount: 5 })).toEqual({ kind: "unavailable", reason: "outside_tablebase_domain" });
   });
 });

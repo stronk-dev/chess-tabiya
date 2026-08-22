@@ -14,6 +14,7 @@ import {
   EVIDENCE_PRODUCER_IDS,
   EVIDENCE_PRODUCERS,
   SEMANTIC_EVENT_PROJECTION_IDS,
+  SEMANTIC_WAVE_EVENT_PROJECTION_IDS,
   STRUCTURAL_PREDICATE_PROJECTION_IDS,
   STRUCTURAL_READING_PROJECTION_IDS,
   TACTICAL_COLLECTOR_PROJECTION_IDS,
@@ -47,12 +48,23 @@ describe("primary evidence catalogue", () => {
     expect(CURRENT_CONSUMER_OPERATION_IDS).toHaveLength(23);
     expect(EVIDENCE_CONSUMER_IDS).toEqual([...CURRENT_CONSUMER_OPERATION_IDS, "assistance.arrows", "research.semantic_selection"]);
     expect(manifest.consumers.find((item) => item.id === "assistance.arrows")?.disposition).toEqual(expect.objectContaining({ kind: "experimental" }));
-    expect([manifest.producers.length, manifest.projections.length, manifest.consumers.length, manifest.bindings.length]).toEqual([33, 174, 25, 200]);
-    expect([manifest.semanticEvents.length, manifest.eligibility.length, manifest.reasons.length, manifest.selectionPolicies.length]).toEqual([58, 58, 15, 1]);
+    expect([manifest.producers.length, manifest.projections.length, manifest.consumers.length, manifest.bindings.length]).toEqual([33, 183, 25, 207]);
+    expect([manifest.semanticEvents.length, manifest.eligibility.length, manifest.reasons.length, manifest.selectionPolicies.length]).toEqual([65, 65, 15, 1]);
     expect(new Set(manifest.semanticEvents.map((item) => item.projection.id))).toEqual(new Set(SEMANTIC_EVENT_PROJECTION_IDS));
     expect(new Set(manifest.eligibility.map((item) => `${item.consumer.id}@${item.consumer.version}`))).toEqual(new Set(["research.semantic_selection@1"]));
     expect(manifest.bindings.filter((binding) => SEMANTIC_EVENT_PROJECTION_IDS.includes(binding.projection.id)).every((binding) => binding.consumer.id === "research.semantic_selection")).toBe(true);
     expect(manifest.digest).toBe(createHash("sha256").update(canonical({ producers: manifest.producers, projections: manifest.projections, consumers: manifest.consumers, bindings: manifest.bindings, semanticEvents: manifest.semanticEvents, eligibility: manifest.eligibility, reasons: manifest.reasons, selectionPolicies: manifest.selectionPolicies })).digest("hex"));
+  });
+
+  it("registers only the seven Wave-C events whose accepted derivations are buildable", () => {
+    expect(SEMANTIC_WAVE_EVENT_PROJECTION_IDS).toEqual([
+      "rules.tactic.event.defender_removed", "rules.tactic.event.defender_duty_relocated",
+      "derived.tactic.line_blocker_clearance_observed", "derived.tactic.square_clearance_observed",
+      "derived.tactic.interference_observed", "derived.tactic.check_zwischenzug_observed",
+      "derived.tactic.overload_exploitation_observed",
+    ]);
+    const projections = new Set(EVIDENCE_PRODUCERS.flatMap((producer) => producer.outputs.map((output) => output.id)));
+    expect(["derived.tactic.deflection_observed", "derived.tactic.attraction_observed", "derived.pawn.promotion_race_geometry", "derived.pawn.promotion_race_tablebase", "rules.tactic.consequence.forced_mate_after_move"].every((id) => !projections.has(id))).toBe(true);
   });
 
   it("separates all structural predicate and reading identities and pins the emission exception", () => {
