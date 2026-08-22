@@ -1,6 +1,6 @@
 # RFC: Theming — three axes, schemes inherited whole
 
-- **Status:** draft — restructured 2026-08-22 on owner ruling [[D982]] (three axes, schemes inherited whole); ready for independent review
+- **Status:** accepted — 2026-08-22, by claude as register owner on the buildability test. Three passes: a first cross-review (~45 claims, 9 failed) that found **both color criteria unsatisfiable as drafted** — one demanded a color distance between the blue brush and a "lighting overlay" that IS the blue brush (`DrillScreen.svelte:374`, distance 0.0 by identity), the other set WCAG floors nobody had ever computed; then a **restructure on owner ruling [[D982]]** (three orthogonal axes — app/board/pieces — with app themes inherited as complete schemes, their own backgrounds included, collapsing the token contract 17 → 12 keys all read off the owner's own registry); then a verification pass (**138 claims, 12 failed**, all corrected). The ruling's own vindication is [[D988]]: the composed contract let a reviewer edit `accentTextColor` believing it was ours, **violating the verbatim rule in the sentence that cited it** — a scheme inherited whole cannot hide whose value you hold. Verified at source: all 12 keys present in the owner's registry (and all 10 schemes carry all 12), all 24 `tokyo-night` values byte-exact upstream with zero drift, every contrast figure reproduced. The prior open question about inherited-palette contrast **dissolved** under inherit-whole and is published, not escalated. *(Prior line for history: draft — restructured 2026-08-22 on owner ruling D982; before that: draft 2026-08-22.)*
 - **Author:** claude (drafted from `planning/theming/rfc-derivation.md`, restructured on [[D982]] after two cross-review passes — see the changelog)
 - **Created:** 2026-08-22
 - **Design refs:** `design/03-product-breadth.md` shell table (Settings row — amendment owed, Deviation 1); `design/05-in-run-experience.md` §3a (assistance silence is untouched by any theme); ledger rows [[D839]] (the commission), [[D840]] (the animation defect), [[D875]] (the measured floor), [[D976]]/[[D977]]/[[D982]] (the three owner rulings this RFC encodes)
@@ -126,7 +126,8 @@ owner's registry (`~/frameworks/mistserver/lsp/modules/core/themes.js`, 10 schem
 2026-08-22) supplies, for each mode: three background levels, two text levels, an accent with
 its own text color and hover fill, a border color, a red, an orange/changed, and a shadow. That
 is the vocabulary. Tabiya's CSS custom-property names are kept (so **330 existing `var()` uses
-migrate by definition, not by edit**) and mapped onto it 1:1:
+migrate by definition, not by edit** — with one re-definition, `--shadow`, called out below) and
+mapped onto it 1:1:
 
 | Tabiya token | scheme key | uses at HEAD |
 |---|---|---|
@@ -141,16 +142,22 @@ migrate by definition, not by edit**) and mapped onto it 1:1:
 | `--accent-soft` | `hover-bg` | 0 *(new)* |
 | `--warning` | `changedColor` | 16 |
 | `--danger` | `red` | 3 |
-| `--shadow` | `shadowColor` | 7 |
+| `--shadow-color` | `shadowColor` | 7 *(via `--shadow`; see the geometry bullet below)* |
 
 ```ts
 // apps/web/src/lib/theme/tokens.ts (new)
 export const THEME_TOKENS = Object.freeze([
   "paper", "panel", "surface", "ink", "muted", "line",
-  "accent", "on-accent", "accent-soft", "warning", "danger", "shadow",
+  "accent", "on-accent", "accent-soft", "warning", "danger", "shadow-color",
 ] as const);
 export type ThemeToken = (typeof THEME_TOKENS)[number];
 export type Palette = Readonly<Record<ThemeToken, string>>;
+
+// Not scheme keys: computed once from the active palette (or app chrome), never authored
+// per theme. Criterion 1 admits these alongside THEME_TOKENS.
+export const DERIVED_TOKENS = Object.freeze([
+  "shadow", "scrim", "scrim-strong", "display-font",
+] as const);
 ```
 
 **Twelve tokens, down from the returned draft's seventeen, and every one is a key a scheme
@@ -167,7 +174,16 @@ the ruling's *"how hard is it to apply a theme??? done."* Three specific retirem
   palette in one place. The rule (from [[D982]]): *a value the app needs that no scheme
   provides is a mapping decision stated once, not a per-theme authoring burden.* Same for
   `--display-font`, which is app chrome and not a color-scheme concern at all — it leaves the
-  theme contract entirely.
+  theme contract entirely. Both live in `DERIVED_TOKENS`, which criterion 1 admits: evicting a
+  token from the *palette* must not evict it from the *sweep*, or the sweep is red forever
+  (23 `var(--display-font)` uses at HEAD — the [[D984]] class, caught in verification).
+- **`--shadow` is one scheme color plus geometry derived once.** All 7 call sites are
+  `box-shadow: var(--shadow)` **shorthand** consumers (`App.svelte:970,974`,
+  `DrillScreen.svelte:1400,1434,1478,1643`, `PackList.svelte:105`) while `shadowColor` is a bare
+  color (`rgba(0,0,0,0.4)`), so a literal 1:1 substitution emits invalid CSS. The scheme key is
+  therefore `--shadow-color`, and `--shadow: 0 0.8rem 2.5rem var(--shadow-color)` is derived once
+  under the `--scrim` rule. The 7 call sites keep their spelling; **this is the one place where
+  the "migrate by definition, not by edit" claim is a re-definition rather than a no-op.**
 
 A palette is **total by type** — `Record<ThemeToken, string>` makes a missing token a compile
 error — and criterion 3 re-asserts totality at runtime over the shipped catalog, because a type
@@ -217,17 +233,19 @@ export interface AppThemeDef {
 
 1. **`paper`** — `origin: "tabiya"`, light. The shipped warm-paper identity, values
    byte-identical to `App.svelte:930-943` (`--ink #171713`, `--paper #eeeade`,
-   `--panel #f8f5ec`, `--line #cbc4b4`, `--accent #3858c8`, `--danger #ad3c32`) **except the two
+   `--panel #f8f5ec`, `--line #cbc4b4`, `--accent #3858c8`, `--danger #ad3c32`; the block is
+   `:930-943` at `fbf3fc8` and `:936-947` at HEAD, all six values re-verified byte-equal at
+   both) **except the two
    tokens [[D983]] requires repairing** (§3.4). It is Tabiya's own work and is therefore gated by
    criterion 5a.
 2. **`tokyo-night`** — `origin: "inherited"`, dark + light. The owner's named favorite,
    **transcribed whole** from the registry above, backgrounds included:
    - dark: `paper #1a1b26`, `panel #1f2335`, `surface #15161e`, `ink #c0caf5`, `muted #a9b1d6`,
      `line #414868`, `accent #7aa2f7`, `on-accent #1a1b26`, `accent-soft #292e42`,
-     `warning #e0af68`, `danger #f7768e`, `shadow rgba(0,0,0,0.4)`.
+     `warning #e0af68`, `danger #f7768e`, `shadow-color rgba(0,0,0,0.4)`.
    - light: `paper #e1e2e7`, `panel #d5d6db`, `surface #c8c9ce`, `ink #3b4261`, `muted #4e5772`,
      `line #b4b5b9`, `accent #2e7de9`, **`on-accent #ffffff`**, `accent-soft #c8c9ce`,
-     `warning #8c6c3e`, `danger #f52a65`, `shadow rgba(0,0,0,0.12)`.
+     `warning #8c6c3e`, `danger #f52a65`, `shadow-color rgba(0,0,0,0.12)`.
 
    **`on-accent #ffffff` is restored to upstream's value.** The previous cross-review changed it
    to `#0d0e14` believing `on-accent` was a Tabiya token; the scheme carries
@@ -269,10 +287,20 @@ in criterion 5; ratios on opaque values):
 
 | palette | origin | worst text pair | worst non-text pair | disposition |
 |---|---|---|---|---|
-| `tokyo-night` dark | inherited | `muted`/`panel` 7.37 | `accent`/`panel` 6.18 | clean anyway |
+| `tokyo-night` dark | inherited | `on-accent`/`accent` 6.79 | `danger`/`panel` 5.88 | clean anyway |
 | `tokyo-night` light | inherited | **`on-accent`/`accent` 4.02** | **`danger`/`panel` 2.68**, `accent`/`panel` 2.77 | **published as upstream's own** (§3.3) |
 | `paper` | tabiya | **`muted`/`paper` 4.42** → repaired | **`warning`/`paper` 1.94** → repaired | gated; §3.4 |
-| `warm-dark` | tabiya | `muted`/`paper` 5.85 | `warning`/`paper` 7.37 | gated; unpinned tokens forced by criterion 3 |
+| `warm-dark` | tabiya | `muted`/`panel` 5.46 | `accent`/`panel` 7.07 | gated; unpinned tokens forced by criterion 3 |
+
+*"Worst" is the minimum over **criterion 5a's enumerated pairs only** — `ink`/`paper`,
+`ink`/`panel`, `muted`/`paper`, `muted`/`panel`, `on-accent`/`accent` for text; `accent`,
+`warning`, `danger` against the worse of `paper`/`panel` for non-text. `surface`-backed pairs and
+`line` are outside that set by construction (§2, criterion 5a), and `warm-dark`'s `on-accent`/
+`danger` are unpinned in §3.2, so its row is the minimum over what exists. The two dark rows were
+**corrected in verification 2026-08-22**: the restructure had recorded `muted`/`panel` 7.37 and
+`accent`/`panel` 6.18 for `tokyo-night` dark, but `on-accent`/`accent` 6.79 and `danger`/`panel`
+5.88 are lower; and `warm-dark`'s cited 7.37 is its `warning`/`panel` (its `warning`/`paper` is
+7.89), while `accent`/`panel` 7.07 is the actual non-text minimum. No disposition changes.*
 
 Note what the ruling bought: `tokyo-night` light's three sub-AA pairs are now *upstream's own
 foreground on upstream's own background*, so they are a property of the scheme the owner asked
@@ -451,7 +479,9 @@ owner's felt pass (D5) and may trail the code landing.
 ## Acceptance criteria
 
 1. **Token totality sweep** — a test enumerates every `var(--x)` under `apps/web/src` and
-   asserts `x ∈ THEME_TOKENS ∪ dimensional-tokens`; **red at HEAD** on `--surface`
+   asserts `x ∈ THEME_TOKENS ∪ DERIVED_TOKENS ∪ dimensional-tokens` (the derived set is §2's
+   four: `shadow`, `scrim`, `scrim-strong`, `display-font` — without it the sweep is red forever
+   on 23 `var(--display-font)` uses, which is the [[D984]] class); **red at HEAD** on `--surface`
    (`CheckpointSheet.svelte:228`) and `--panel-soft` (`CompareView.svelte:168`), and red on
    every surviving `--paper-soft`/`--panel-soft` reference after the §2 retirement. The sweep is
    the criterion; its first green is the fix's evidence.
@@ -465,7 +495,11 @@ owner's felt pass (D5) and may trail the code landing.
    (b) no stored pref + emulated light ⇒ `paper`, **computed styles byte-identical to the
    pre-RFC light baseline except `--muted` and `--warning`**, which the test pins by name with
    their §3.4 values — the exception is enumerated, not open-ended; (c) stored override beats
-   device; (d) OS-change event re-resolves without reload when no override is stored.
+   device; (d) OS-change event re-resolves without reload when no override is stored;
+   **(e) the invariant, not the ids** — for every mode, `catalog[MODE_DEFAULT[mode]].origin ===
+   "tabiya"` and `MODE_DEFAULT[mode]` declares that mode. (a)/(b) pin today's literal ids and so
+   would catch a promoted inherited default only incidentally; (e) is what makes §3.3's
+   *"`MODE_DEFAULT` never resolves to an inherited scheme"* a mechanism rather than prose.
 5. **Contrast.** Formula pinned: **WCAG 2.1 relative luminance** (sRGB linearized `c/12.92`
    below 0.04045 else `((c+0.055)/1.055)^2.4`; `L = 0.2126R + 0.7152G + 0.0722B`; ratio
    `(L₁+0.05)/(L₂+0.05)`), computed on **opaque token values**. Three arms, split by `origin`
@@ -474,14 +508,24 @@ owner's felt pass (D5) and may trail the code landing.
      `muted`/`paper`, `muted`/`panel`, `on-accent`/`accent`) and non-text UI at 3:1 (`accent`,
      `warning`, `danger` against the worse of `paper`/`panel`). A failure blocks the landing.
      `line` is a **decorative separator, deliberately excluded** — WCAG 1.4.11 exempts purely
-     decorative rules, and no shipped palette's `line` reaches 3:1 (paper 1.44, tokyo-night dark
-     1.74, tokyo-night light 1.96, warm-dark 1.34); listing it would make the criterion red
-     forever for no accessibility gain.
+     decorative rules, and no shipped palette's `line` reaches 3:1 (against the worse of
+     `paper`/`panel`: `paper` 1.44, `tokyo-night` dark 1.74, `tokyo-night` light **1.41**;
+     `warm-dark`'s `line` is unpinned in §3.2 and therefore uncomputable here); listing it would
+     make the criterion red forever for no accessibility gain. *(Verification 2026-08-22
+     corrected two of these: `tokyo-night` light was recorded as 1.96 — no background gives that
+     value; its `line` `#b4b5b9` is 1.58 on `paper` and 1.41 on `panel` — and `warm-dark` was
+     recorded as 1.34 for a token this RFC never pins. The conclusion is unchanged: still none
+     reaches 3:1.)*
    - **5b — MEASURED AND PUBLISHED, `origin: "inherited"`.** The same pairs are computed and
      asserted **equal to a committed measurements table**; the test fails if a number changes
-     without the table changing (so a silent edit to an inherited palette is caught — the row-C
-     class), never because upstream's own value is low. The picker renders any sub-AA pair on
-     the entry.
+     without the table changing, never because upstream's own value is low. The picker renders
+     any sub-AA pair on the entry. **Two shapes the table must have, or it does not catch the
+     row-C class it exists for** (tightened in verification 2026-08-22): the committed table
+     enumerates **every** 5a pair for every inherited palette and mode, not the worst-pair
+     summary §3.3 prints for humans; **and** each inherited palette's twelve values are asserted
+     **byte-identical to §3.2's transcription**. Ratios alone under-catch — a silent edit to
+     `ink`, `surface`, `line`, `accent-soft` or `shadow-color` moves no worst-pair number at all,
+     and row C's actual near-miss was an edit to `on-accent`, i.e. a *value*, not a *ratio*.
    - **5c — status tokens are not body-text colors**: a lint forbids `color: var(--warning)` and
      `color: var(--danger)` on text below 18.66px/700; status is carried by border or fill plus
      `--ink`. The eight `color: var(--warning)` sites in §3.4 are the repair list.
@@ -560,7 +604,7 @@ owner's felt pass (D5) and may trail the code landing.
 | D3 | The design/03 Settings-row amendment naming appearance (row B, law 5) | OWNER | the ruling's landing commit (claude may write it on the ruling) | |
 | D4 | Implementation — tokens, three catalogs, the split, the preference, the sweeps; flips [[D839]]/[[D983]]/[[D875]] and records play-composition D3 discharged in the same commit | codex | the implementing commit | |
 | D5 | Felt-quality verification — [[D840]]'s flip rides the owner's own session, plus the inherited play-composition OQ3 echo decision made in that pass | OWNER | the play-session log entry | |
-| D6 | Criterion 10(c) — the assistance compiler does not exist at HEAD ([[D985]]); when it lands under whatever name [[D971]]'s amendment gives it, its input type joins criterion 10(a)'s no-shared-key assertion | `intent-presets` | the commit that builds the compiler | |
+| D6 | Criterion 10(c) — the assistance compiler does not exist at HEAD ([[D985]]); when it lands under whatever name [[D971]]'s amendment gives it, its input type joins criterion 10(a)'s no-shared-key assertion | `intent-presets.md` | the commit that builds the compiler | |
 
 ## Open questions
 
@@ -584,22 +628,24 @@ on?" — is **dissolved by [[D982]]**, not answered: under inherit-whole its red
 background, and the resulting ratios are §3.3's published property of a scheme the owner chose
 by name. No owner ruling is owed.)*
 
-## Ledger rows (proposed — renumber at landing)
+## Ledger rows (landed at acceptance 2026-08-22)
 
-Committed head at drafting is **D985** (`202f7f2`); D978/D979 are gaps left by codex's earlier
-renumbering and are **not** backfilled (`design/BACKLOG.md:124-133`). Rows below are written as
-**D986–D988**; re-derive at landing.
+Committed head at drafting is **D985** (`202f7f2`, re-verified at HEAD `6677dbb` in verification
+2026-08-22 — max committed id is D985 and `design/BACKLOG.md` is clean). D978/D979 exist nowhere
+in the ledger: they are gaps left by the id-block renumbering whose convention
+`design/BACKLOG.md:124-133` records, and are **not** backfilled. Rows below are written as
+**D986–D988**, landed at acceptance 2026-08-22 (head was D985; D978/D979 stay unbackfilled — gaps from codex's renumbering).
 
-- **row A (→ D986)** — 🐞 two phantom tokens at HEAD: `var(--surface)`
+- **D986 (landed 2026-08-22)** — 🐞 two phantom tokens at HEAD: `var(--surface)`
   (`CheckpointSheet.svelte:228`) and `var(--panel-soft)` (`CompareView.svelte:168`) are used but
   defined nowhere and resolve to nothing. Found by the theming derivation, re-verified at HEAD
   twice. §2 defines `--surface` by *mapping it to the scheme's third background level* and
   retires `--panel-soft` entirely; criterion 1's sweep keeps the class dead.
-- **row B (→ D987)** — 💡 `design/03` Settings-row amendment owed: the shell table's Settings
+- **D987 (landed 2026-08-22)** — 💡 `design/03` Settings-row amendment owed: the shell table's Settings
   families (`design/03-product-breadth.md:294`: *"opponent/rating, feedback/evidence,
   engines/models, LLM, data, accessibility"*) do not name appearance/theming; owner-tier per
   law 5, written on the ruling Discharge D3 records.
-- **row C (→ D988, new in this restructure)** — 🐞 **a composed token contract let a reviewer
+- **D988 (landed 2026-08-22, new in this restructure)** — 🐞 **a composed token contract let a reviewer
   edit an inherited value while believing it was ours.** The 2026-08-22 cross-review changed
   `tokyo-night` light's `on-accent` from `#ffffff` to `#0d0e14` to satisfy a contrast criterion,
   reasoning explicitly that *"`on-accent` is Tabiya's own token, so this does not touch D976's
@@ -645,3 +691,33 @@ renumbering and are **not** backfilled (`design/BACKLOG.md:124-133`). Rows below
   criterion 5b's committed measurements table so that class cannot recur silently. [[D983]]'s
   live WCAG defect is now **fixed by this RFC** rather than deferred, because `paper` is
   `origin: "tabiya"` and §3.3 gates it (§3.4).
+- 2026-08-22 — **verification pass 2026-08-22** (independent, restructure-only scope; every
+  number recomputed at source). **Confirmed:** all 12 contract keys exist in
+  `~/frameworks/mistserver/lsp/modules/core/themes.js` spelled exactly as claimed, and **all 10
+  schemes carry all 12** — the contract really is the registry's vocabulary; all **24**
+  `tokyo-night` values in §3.2 byte-exact against upstream in both modes, **zero drift**,
+  including the restored `on-accent #ffffff`; every OQ4-dissolution number exact (ink
+  7.59/6.77/5.94, muted 5.54/4.94, accent 3.11/2.77, red 3.01/2.68, `on-accent`/`accent` 4.02) on
+  backgrounds that are genuinely upstream's; both [[D983]] repairs exact (`#6d6960` 4.55/5.02,
+  ΔE\*ab 0.97; `#8e6116` 4.51/4.98, ΔE\*ab 29.53; alternative `#b57b1c` 3.00, exactly the 3:1
+  floor) with all eight small-text `--warning` call sites present at HEAD and **no ninth**; every
+  criterion 7a/7b/7c ΔE reproduced to ±0.05; all twelve §2 use-counts and the 330-`var()` total
+  exact; `--paper-soft` 7 uses + 1 definition, `--panel-soft` 1 use + **0** definitions (so it is
+  simultaneously a phantom and a retirement — both framings in the RFC are correct); 14 criteria
+  contiguous, 6 five-column discharges, 4 open questions, 3 proposed rows, head **D985** with
+  D978/D979 absent; `node tools/register-check.mjs` green, `claims: none`. **Corrected:** §3.3's
+  two dark worst-pair cells (`tokyo-night` dark → `on-accent`/`accent` 6.79 and `danger`/`panel`
+  5.88; `warm-dark` → `muted`/`panel` 5.46 and `accent`/`panel` 7.07), with the pair set the
+  minimum is taken over now stated; criterion 5a's `line` figures (`tokyo-night` light 1.96 → the
+  measured 1.41, and `warm-dark` 1.34 struck as a number for a token §3.2 never pins) —
+  conclusion unchanged; **`--shadow` split into the scheme's `--shadow-color` plus geometry
+  derived once**, because all 7 call sites are `box-shadow:` shorthand consumers and a bare
+  `shadowColor` would emit invalid CSS; **`DERIVED_TOKENS` added and criterion 1's admitted set
+  widened to it**, because the restructure evicted `--display-font` from the palette without
+  widening the sweep, leaving 23 uses red forever — the [[D984]] class inside the RFC that names
+  it; criterion 4 gains **(e)**, asserting `MODE_DEFAULT`'s members are `origin: "tabiya"` as an
+  invariant rather than leaving §3.3's promise resting on pinned ids; criterion 5b tightened to
+  an all-pairs table **plus byte-identity of each inherited palette against §3.2**, since ratios
+  alone miss a silent edit to `ink`/`surface`/`line`/`accent-soft`/`shadow-color` and row C's
+  actual near-miss was a value edit, not a ratio change. §3.3's gate asymmetry was verified as
+  honestly implemented and is left as [[D982]]'s forced consequence, the owner's to veto.

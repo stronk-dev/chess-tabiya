@@ -253,11 +253,12 @@ any earlier conversation**. What you need going in:
 
 Owner ruling 2026-08-22 ([[D906]](2)): *"just fix the foundation and then keep it in."*
 [[D566]]'s `pawnSafetyOnPosition` defect now gates a learner-facing sight row — `outpost`
-returns to `sight_on_request`'s table the moment the repair lands, and [[D632]]'s indirect
-reach through authored shapes closes with it. Fix the predicate at the mechanism (the
+returns to `sight_on_request`'s table after the repair lands and the accepted module table is
+amended. [[D632]] does **not** close with the code fix: the dependency now reaches 77 authored
+occurrences, so its F3/Gate-F truth-set migration and human re-evaluation remain. Fix the predicate at the mechanism (the
 pushAttackers/captureAttackers computation), add the counterexample fixtures from D566's own
-row, re-run the lift measurement for `pawn_safe_square` and `outpost` post-fix, and flip
-D566/D632 in the implementing commit naming them.
+row, re-run the lift measurement for `pawn_safe_square` and `outpost` post-fix, flip D566, and
+record the measured D632 truth-set change without claiming the content migration.
 
 ## 0-2D-ACCEPTED. `breadth-collectors` is accepted — implement after 2c lands
 

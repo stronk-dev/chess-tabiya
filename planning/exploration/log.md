@@ -5472,3 +5472,33 @@ paths and bindings closed.
 **Next:** D969/D970 still block the guarded production roster. The remaining bot implementation is
 the persisted run/profile seam, composed policy-decision record and server-side sampler; none is
 silently implied by D813.
+
+## 2026-08-22 — theming accepted after a return: the ruling that proved itself
+
+**What landed:** `rfc/theming.md` accepted after three passes — cross-review, an owner-ordered
+RESTRUCTURE, and an independent verification (138 claims, 12 failed). The owner returned the
+first draft in one sentence — *"what 'panel'? how hard is it to apply a theme??? ... Like have
+app theme, board theme, pieces theme. done."* ([[D982]]) — and the restructure proved the ruling
+concretely: the first cross-review had "fixed" a contrast failure by editing `tokyo-night` light's
+`accentTextColor`, reasoning that the token was ours, **violating the verbatim rule in the
+sentence that cited it** ([[D988]]). The registry carries `#ffffff`. A composed contract cannot
+tell you whose value you hold; a scheme inherited whole can. Token surface 17 → 12, every key
+read off the owner's own registry (all 10 schemes there carry all 12).
+
+**What the reviews caught:** both color criteria were unsatisfiable as drafted — one demanded a
+distance between the brushes and a "lighting overlay" that IS the blue brush (0.0 by identity),
+the other imposed WCAG floors nobody had computed (two of four palettes failed). The
+verification then caught a criterion red-forever (`--display-font` evicted with 23 live uses) and
+an invalid-CSS mapping (`--shadow`'s seven call sites are shorthand consumers). And a real live
+defect fell out of the arithmetic: the **shipped** light theme fails WCAG AA today
+([[D983]] — `--warning` 1.94:1, small text in eight files), fixed in this RFC rather than
+deferred.
+
+**What changed:** the owner's most-repeated ask now has accepted paper. Rows D986–D988 landed;
+[[D984]]'s guard generalizes past theming — any numeric criterion ships with the numbers computed
+for every value the same RFC ships.
+
+**Blocked:** nothing. Implementation is queue-ordered.
+
+**Next:** codex implements; the inherited-scheme accessibility asymmetry (§3.3) stands as the
+ruling's forced consequence and remains the owner's to veto.
