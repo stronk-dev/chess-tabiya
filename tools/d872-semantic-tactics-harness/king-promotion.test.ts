@@ -46,17 +46,20 @@ function withTurn(fen: string, turn: Color): Chess | undefined {
   return result.isOk ? result.value : undefined;
 }
 
-function promotionAvailableUnderPass(afterFen: string, pawn: Square, mover: Color): boolean {
+type Availability =
+  | { readonly kind: "available"; readonly value: boolean }
+  | { readonly kind: "unavailable"; readonly reason: "invalid_turn_clone" };
+
+function promotionAvailableUnderPass(afterFen: string, pawn: Square, mover: Color): Availability {
   const pass = withTurn(afterFen, mover);
-  if (pass === undefined || pass.board.getColor(pawn) !== mover || pass.board.getRole(pawn) !== "pawn") return false;
+  if (pass === undefined) return Object.freeze({ kind: "unavailable", reason: "invalid_turn_clone" });
+  if (pass.board.getColor(pawn) !== mover || pass.board.getRole(pawn) !== "pawn") return Object.freeze({ kind: "available", value: false });
   const prefix = squareText(pawn);
   for (const [from, dests] of pass.allDests()) {
     if (from !== pawn) continue;
-    for (const to of dests) {
-      if ((to < 8 || to >= 56) && `${prefix}${squareText(to)}`.length === 4) return true;
-    }
+    for (const to of dests) if ((to < 8 || to >= 56) && `${prefix}${squareText(to)}`.length === 4) return Object.freeze({ kind: "available", value: true });
   }
-  return false;
+  return Object.freeze({ kind: "available", value: false });
 }
 
 function promotionAfterEveryReply(afterFen: string, pawn: Square, mover: Color): boolean {
@@ -99,7 +102,10 @@ function measure(rows: readonly ResearchRow[]) {
     const pawns = advancedPawns(row.fen, before.turn);
     if (pawns.length === 0) continue;
     advancedPawnRows += 1;
-    const pass = pawns.some((pawn) => promotionAvailableUnderPass(row.fen, pawn, before.turn));
+    const pass = pawns.some((pawn) => {
+      const value = promotionAvailableUnderPass(row.fen, pawn, before.turn);
+      return value.kind === "available" && value.value;
+    });
     const every = pawns.some((pawn) => promotionAfterEveryReply(row.fen, pawn, before.turn));
     if (pass) promotionUnderPassRows += 1;
     if (every) {
@@ -125,11 +131,16 @@ describe("D872 exact king/promotion consequence boundary", () => {
 
   it("distinguishes a persistent promotion from a pawn the opponent can remove", () => {
     const stable = row("7k/8/P7/8/8/8/8/7K w - - 0 1", "a6a7");
-    expect(promotionAvailableUnderPass(stable.fen, 48, "white")).toBe(true);
+    expect(promotionAvailableUnderPass(stable.fen, 48, "white")).toEqual({ kind: "available", value: true });
     expect(promotionAfterEveryReply(stable.fen, 48, "white")).toBe(true);
     const removable = row("7k/1r6/P7/8/8/8/8/7K w - - 0 1", "a6a7");
-    expect(promotionAvailableUnderPass(removable.fen, 48, "white")).toBe(true);
+    expect(promotionAvailableUnderPass(removable.fen, 48, "white")).toEqual({ kind: "available", value: true });
     expect(promotionAfterEveryReply(removable.fen, 48, "white")).toBe(false);
+  });
+
+  it("keeps an invalid pass clone unavailable instead of treating it as no promotion", () => {
+    const checking = row("7k/8/6P1/8/8/8/8/7K w - - 0 1", "g6g7");
+    expect(promotionAvailableUnderPass(checking.fen, 54, "white")).toEqual({ kind: "unavailable", reason: "invalid_turn_clone" });
   });
 
   it("measures exact next-own-move consequences on both fixed populations", () => {

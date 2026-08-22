@@ -3,7 +3,9 @@
 - **Status:** **implementing 2026-08-22 — owner accepted after the D730/D794 falsification passes,
   independent Codex buildability review and D824/D825 author repairs.** The owner's instruction to
   begin the larger foundation wave is the acceptance action; the two downstream discharges remain
-  open and do not block this research/inspector-only collector landing.
+  open and do not block this research/inspector-only collector landing. The remaining ten
+  projections are held on the 2026-08-22 D829–D835/D931 in-place amendment below until an
+  independent buildability review accepts the repaired boundaries; the first twenty remain landed.
 - **Author:** claude (drafted on the D717 program routing, `planning/evidence-foundation-ux/plan.md` phases 2c/3)
 - **Created:** 2026-08-22
 - **Design refs:** `design/05-in-run-experience.md` §5 (*"detection is cheap, significance is not"* — every collector here ships detection with the significance judgement structurally refused), §3b (guided mode names patterns from a validated library, never recommends); `design/03-product-breadth.md` §Structural reading (the rung-0 layer this extends) and §Intelligence and explanation
@@ -271,7 +273,7 @@ refuses.
 | Convention | Exact pinned content |
 |---|---|
 | `legal-exchange@1` | A specified **legal capture** begins a recapture-only minimax on its landing square. Each side may stop or make any legal recapture there and chooses the branch maximizing its own material balance under **P=1, N=3, B=3, R=5, Q=9**; promotion adds promoted-piece minus pawn value. Recaptures are enumerated as **legal moves**: a recapture that would leave the recapturing side's king in check — an absolutely pinned piece capturing off its pin line, or a king capturing a defended piece — never enters; a piece whose pin line passes through the exchange square (including one pinned by the very piece it recaptures — `4k3/8/4r3/8/4p3/8/8/4R1K1 w`, `e1e4` = −4, where an exclude-all-pinned filter reads +1 with the wrong sign) or one pinned only to a non-king piece recaptures legally and **is counted**; X-rays enter when the front piece leaves. Result is in convention units, **never centipawns**. It is local: zwischenzugs, replies elsewhere, position value and compensation are outside scope. |
-| `space@1` | **As ruled ([[D745]]): classic zones + pawn control, cited as chess tradition.** Zones by file: queenside **a–c**, central **d–e**, kingside **f–h**. Control test: a square counts for a color iff it lies in the **enemy half** (ranks 5–8 for White, ranks 1–4 for Black) and is attacked by at least one of that color's **pawns**. Emitted per zone per color as a count, plus the per-zone differential. |
+| `space@1` | **As ruled ([[D745]]): classic zones + pawn control, with the tradition boundary cited rather than the exact formula mis-attributed.** Space is a loosely defined feature related to square/centre control, with materially different engine implementations ([Chess Programming Wiki, *Space*](https://www.chessprogramming.org/Space)); FIDE 3.1.3 establishes that an attacked square remains attacked even when moving the attacker would expose its king ([FIDE Laws](https://rcc.fide.com/fide-laws-of-chess_fulltexthtml/)). The exact Tabiya convention is declared, not sourced byte-for-byte: zones by file are queenside **a–c**, central **d–e**, kingside **f–h**. A square counts for a color iff it lies in the **enemy half** (ranks 5–8 for White, ranks 1–4 for Black) and lies in that color's literal pawn-attack set under current occupancy. Emitted per zone per color as a count, plus the per-zone differential. |
 | `trapped@1` | A non-pawn, non-king piece of the **side to move** (the owner asking whether it can be saved) is *locally trapped* iff **both** hold: (1) on the opponent-to-move clone of the position (turn given to the opponent, en passant cleared — the same clone device as `threat@1`), the opponent has a positive `legal-exchange@1` capture of the piece on its current square; and (2) every legal destination of the piece is locally losing — a **capture** destination's own `legal-exchange@1` result is negative for the owner; a **quiet** destination leaves the opponent, in the resulting position, a positive `legal-exchange@1` capture of the piece there. A destination failing its test is an escape: a cornered rook whose only move wins queen for rook (`Rqk5/8/P7/8/8/8/6K1/8 w`, `a8b8` = +4) is **not** trapped, though the opponent has a positive capture on b8 after it arrives — capture destinations are valued by their own exchange result, never by post-arrival capturability alone. If the owner is in check the reading abstains (`trapped_while_in_check`) — the flipped clone would be rule-invalid, the same hazard D751 fixed in `threat@1`. Mobility-zero alone is not trapped. This is weaker than “the piece is lost,” which needs search (defending, blocking and counterattacking replies are outside scope). |
 | `back_rank_susceptible@1` | King on its back rank; **every** non-back-rank escape square is blocked by an own piece or attacked; **at least one** enemy heavy piece (rook or queen) either already stands on that back rank or stands on a file with **no pawn of either color** on the squares strictly between it and that file's back-rank square. Pieces in the path do not block susceptibility — they can move or be exchanged; pawns are the durable blockers this convention respects, so a half-open file whose defending pawn stands in the path does **not** count. Rank and diagonal approaches are outside the convention and named in its limitations. A **defended** entry square still counts — susceptibility is escape geometry; the defended-entry distinction belongs to the separate mate-in-1 projection (§3.13). |
 | `threat@1` | Declared pass convention: when the side to move is **not in check**, clone the position, give the move to the opponent, clear en-passant availability, and enumerate moves that (a) begin a positive `legal-exchange@1` capture or (b) deliver mate in one. If the side to move is in check, abstain `pass_while_in_check`; a pass is not a legal chess move and the output says so. Nothing deeper is claimed — and the same-horizon exclusions are named, not implied: a **quiet promotion**, a mating net deeper than one move, and trapping or forking *threats* do not fire, and the projection's semantics text lists these exclusions (a capture-promotion is covered by (a) through the promotion term of `legal-exchange@1`). |
@@ -364,15 +366,20 @@ predeclared D545 answer the measurement must confirm or refute.
   exact `rules.exchange.predicate.legal_exchange@1` result for that capture; classes
   `positive | negative | equal` in convention units. These are arithmetic signs, not
   move grades. Grounding `declared_convention`, exactness `convention` (§1.3 forces this).
-- **(c) Trade-completed:** `derived.exchange.trade_completed@1` — capture followed by
-  recapture on the same square within the recorded continuation; `derivation.inputs`
-  names both capture event(s) and `run.record.move`, retaining the two piece identities
-  and landing square. *"An adapter over existing
-  records, not a new detector"* (audit §3.9). `queensOff` stays where it lives
-  (`transition.ts:354`).
+- **(c) Trade-completed:** `derived.exchange.trade_completed@1` — **two immediately
+  consecutive legal capture anchors**, the second capturing on the first capture's landing square.
+  This deliberately names the elementary capture→recapture exchange, not every later return
+  capture that prose might call a trade (FIDE's glossary includes capture followed by recapture as
+  one meaning of exchange: [FIDE Laws](https://rcc.fide.com/fide-laws-of-chess_fulltexthtml/)).
+  `derivation.inputs` names both `rules.transition.event.capture@1` events and the two
+  `run.record.move@1` anchors. Operands retain both mover identities, both captured identities,
+  landing square, canonical UCIs, and three ordered FEN/node anchors; the shared boundary must be
+  byte-identical. A non-adjacent recapture does not fire. *"An adapter over existing records, not a
+  new detector"* (audit §3.9). `queensOff` stays where it lives (`transition.ts:354`).
 - **Fixtures:** en-passant identity positive (**starts red at HEAD** — the ep branch of
   `capturedRole` is exercised nowhere learner-visible); promotion-capture; non-capture
-  hard negative; a capture with no recapture (trade must not fire).
+  hard negative; immediate same-square recapture positive; a capture with no recapture and a
+  same-square recapture delayed by two intervening plies (trade must not fire).
 - **Measurement + sign:** capture is near-unconditional on capture moves — **no lift claim
   is made or scored** (a lift criterion here would be unfalsifiable ceremony); the
   informative measurements are (b)'s class distribution and (c)'s corpus rate, both
@@ -392,15 +399,26 @@ predeclared D545 answer the measurement must confirm or refute.
   a positive local-exchange result — the defended subset of en prise, subsuming naive
   count-vs-value ordering). Grounding `declared_convention` (exchange-conditioned),
   exactness `convention`.
-- **Event family** `loose_piece` joined on the occupant identity, signs
-  `gained/lost/preserved` (*"the played move left/exposed/resolved a loose piece"*), plus
-  the avoidance form via §2.1's generalized derivation with complete denominators
-  (`legalAlternatives`, `alternativesWithFamily`) exactly as
+- **Event family** `loose_piece` follows **all retained mover-owned non-king pieces** and compares
+  the `enPrise` flag on the same identity. The before-state baseline is
+  `loose_piece@1` evaluated on a clone with turn given to the opponent and en passant cleared; the
+  normal after position already has the opponent to move, so both readings describe the mover.
+  Clone failure abstains `invalid_turn_clone`. The moved identity maps `from`→`to` (promotion
+  retains the mover edge and records the pawn→promoted-role transition); unchanged identities
+  match exact square/color/role. Signs are `gained/lost/preserved`. This is the literal
+  *"played move left/exposed/resolved a locally en-prise piece"* relation; LPDO and
+  under-defended remain separate flags inside the state, not silent aliases for the event.
+  The avoidance form consumes this exact `gained` event plus F2's implemented
+  `legalAlternativeEdges(...)` enumeration, evaluates the same mover-relative baseline for every
+  legal alternative, and retains
+  `legalAlternatives`, `alternativesWithFamily` and the alternative events exactly as
   `CounterfactualAbsenceOperands` already carries.
 - **Ceiling sentence** (declared limitation, law 8): *"White's knight on e5 can be
   captured by a legal move whose `legal-exchange@1` result is +3 convention units"* is
   the maximum statement; no move grade, recommendation or whole-position claim.
-- **Fixtures:** classic loose piece; attacked-twice-defended-once with value ordering
+- **Fixtures:** classic loose piece; mover hangs the moved piece (`gained`) and moves an en-prise
+  piece to safety (`lost`) under the same-side baseline; opponent-turn clone abstention;
+  attacked-twice-defended-once with value ordering
   making the local exchange negative for the capturer. Hard negative: attacked piece
   defended by a pawn with no positive legal capture. **Declared
   limitation, not fixed by search:** a "hanging" piece whose capture loses to a
@@ -567,16 +585,26 @@ predeclared D545 answer the measurement must confirm or refute.
   `STRUCTURAL_FEATURE_KINDS` member, §2.2).
 - **State projection** `rules.structural.reading.pawn_connectivity@1` (disposition
   `inspector_only`), per color: island count (connected components over files containing
-  own pawns — doubled pawns on one file are one island, a fixture); connected-pawn pairs
-  (adjacent files, support stated as mutual or one-way); chains (maximal diagonal support
-  runs) with the **base** identified (the attackable member). Grounding
+  own pawns — doubled pawns on one file are one island, a fixture); **connected-pawn pairs**
+  as unordered same-color pawn pairs on adjacent files, with rank unrestricted; **directed
+  support edges** `supporter→supported` iff the first pawn's literal pawn-attack set contains
+  the second; and **chains** as maximal weakly connected components of that directed support
+  graph containing at least two pawns. Each chain retains `bases`, the complete set of members
+  with no incoming pawn-support edge. A branched chain may have two bases, so no singular base or
+  impossible `mutualSupport` flag exists. This separates the broad traditional connected-pawn
+  relation from the narrower diagonal chain
+  ([Connected pawns](https://en.wikipedia.org/wiki/Connected_pawns),
+  [Chess.com pawn chain](https://www.chess.com/terms/pawn-chain-chess)). Grounding
   `position_rules`, exactness `exact`.
 - **Event family** `pawn_islands` on the island-count magnitude via §2.1's compare
   (gained/lost/preserved), plus the avoidance form.
-- **Operands:** per-color island count and file-set per island; pair squares; chain
-  squares + base square; before/after counts on the event.
-- **Fixtures:** 3-island positive; chain with base named. Hard negatives: doubled pawns
-  single island; all-pawns-one-wing (one island despite open files elsewhere).
+- **Operands:** per-color island count and file-set/square-set per island; adjacent-file pair
+  squares; directed support edges; chain member squares + base-square set; before/after counts on
+  the event.
+- **Fixtures:** 3-island positive; same-rank adjacent duo (connected pair, no support edge or
+  chain); diagonal chain with one base; branched support graph with two bases. Hard negatives:
+  doubled pawns single island; same-file pawns are not a connected pair; all-pawns-one-wing (one
+  island despite open files elsewhere).
   Non-vacuity: static >2-islands prevalence measured 4.67% *(d542)*.
 - **Measurement + sign:** `pawn_island_gained` already measured **2.13×** — **positive
   reading viable as an event; ship state + event** (the one family in this RFC whose
@@ -609,13 +637,18 @@ predeclared D545 answer the measurement must confirm or refute.
 - **Home:** `tactics.ts` under `rules.tactic` (homed with the attack-map plumbing).
   **State** `rules.tactic.reading.rook_on_seventh@1`, disposition `inspector_only`:
   rook (or doubled rooks — count retained) on the seventh rank relative to its color,
-  with the **meaningfulness operands retained and eligibility deferred**: enemy king on
-  its back rank or cut off (which), enemy pawns on the seventh (squares). Grounding
+  with two **literal relevance operands retained and eligibility deferred**: whether the enemy
+  king is on its back rank (king identity/square), and enemy pawns on the rook's rank (squares).
+  Generic `cutOff` is deleted: the traditional description says a seventh-rank rook may hem the
+  king and attack unadvanced pawns, but supplies no single legal-mobility/file/control predicate
+  ([Rook, Development](https://en.wikipedia.org/wiki/Rook_(chess)#Development)). A later module may
+  join Wave-B king mobility and square-control evidence under an explicit meaning; this collector
+  does not guess one. Grounding
   `position_rules`, exactness `exact` — the operands are facts; *which* of them makes the
   rook meaningful is a Phase-3 eligibility decision, not a detector claim.
 - **Fixtures:** classic seventh-rank rook positive; hard negative: rook on the seventh
-  with no enemy king constraint and no seventh-rank pawns (state fires with empty
-  meaningfulness operands — the fixture verifies the operands, not a suppression);
+  with the enemy king off its back rank and no enemy pawns on the rook's rank (state fires with
+  both relevance operands empty — the fixture verifies the operands, not a suppression);
   mirror fixture.
 - **Measurement + sign:** measured **3.83×, 8.09% static** *(d542)* — positive reading
   predeclared primary.
@@ -655,17 +688,24 @@ predeclared D545 answer the measurement must confirm or refute.
   exact and noted in semantics), exactness `convention`.
 - **The executed case is an adapter, not a collector** (no-duplicate-collector rule):
   registered as `derived.tactic.discovered_executed@1` (Appendix A #23, producer
-  `derived.tactic`, home `tactics.ts`), derivable today over registered
-  `rules.transition.event.slider_ray:gained` where the
-  subject blocker was the mover. The adapter is declared with `derivation.inputs`; no new
-  chess code. The D553 shape join (fianchetto + screening knight as an authored trigger
+  `derived.tactic`, home `tactics.ts`). Its `derivation.inputs` are the **before-position**
+  `rules.tactic.reading.discovered_latency@1` item plus the played edge's exact
+  `rules.transition.event.slider_ray@1` gained event. The mover must be the latency item's named
+  friendly screen; after the move the exact slider square/color/role and enemy target
+  square/color/role must survive, and the gained ray's blocker delta must remove that screen while
+  retaining the target. The positive-exchange/discovered-check fact is inherited from the latency
+  item and is not recomputed. Thus opened-ray geometry without the before-state relation cannot
+  masquerade as discovered execution; the adapter adds no second chess authority. The D553 shape
+  join (fianchetto + screening knight as an authored trigger
   joined by eligibility to this latency state) is **F5's eligibility work, not a third
   producer** — named out of scope.
 - **Operands:** screen piece; slider; target; ray squares; discovered-check flag;
   per-target legal capture and exchange result.
 - **Fixtures:** fianchetto battery with screening knight and an enemy piece on the long
-  diagonal; discovered-check positive. Hard negatives: two blockers; **blocker is an
-  enemy piece** (that is *their* discovered attack — the sign/ownership fixture).
+  diagonal; moving that exact screen opens the retained slider/target relation;
+  discovered-check positive. Hard negatives: a gained ray absent from the before-state latency
+  set; a different mover; target or slider identity changes; two blockers; **blocker is an enemy
+  piece** (that is *their* discovered attack — the sign/ownership fixture).
   Non-vacuity.
 - **Measurement + sign:** new probe; predeclared state-shaped (prevalence, not delta
   lift). The bot-side salience reading is D811's *measured candidate, not an assumed
@@ -722,18 +762,30 @@ predeclared D545 answer the measurement must confirm or refute.
   `promotionAvailableNext` (the same pawn may promote on the very next move) and
   `promotionUnstoppable` (the same-pawn promotion remains legal after **every** legal
   opponent reply — the all-reply enumeration, measured at 13/754 authored and 1/579
-  imported played edges, so strict-interior non-vacuity is satisfiable). Grounding
+  imported played edges, so strict-interior non-vacuity is satisfiable). **D931 absence repair:**
+  the per-pawn geometry item is total, while each reply-dependent flag is a typed availability
+  value: `{ kind: "available", value: boolean }` or
+  `{ kind: "unavailable", reason: "invalid_turn_clone" | "input_abstained" }`.
+  `promotionAvailableNext` uses the mover-turn/en-passant-cleared clone; a checking move can make
+  that clone invalid, in which case the field is unavailable rather than false and the pawn/path/
+  distance/control geometry remains. `promotionUnstoppable` enumerates the real opponent replies;
+  zero replies returns available/false because the game has ended, avoiding vacuous truth.
+  Grounding
   `position_rules`; exactness `exact` — genuinely, now, because both flags are legality
   enumerations, not scoped arithmetic; **declared limitation unchanged: pressure
   description only — outcome words stay with Syzygy** (≤ 7 men).
 - **Operands:** pawn square; distance to promotion; promotion-square control balance;
-  path blockers; `promotionAvailableNext`; `promotionUnstoppable` — descriptive operands
-  retained, the verdict field gone.
+  path blockers; typed `passAvailability` serving `promotionAvailableNext`; typed
+  `replyPersistence` serving `promotionUnstoppable` — descriptive operands retained, the verdict
+  field gone. The Wave-C binding maps these literal fields and declares the same availability
+  union; it does not re-register the geometry.
 - **Fixtures:** Lucena-adjacent positives (the endgame catalogue has the positions);
   blockaded passer hard negative (operands show the blocker); an
   `availableNext`-but-not-`unstoppable` pair (one legal reply prevents — the D451
   able-to-fail pair, replacing the withdrawn rule-of-the-square boundary pair); an
-  in-check pass-clone abstention fixture (the D751/D435-family hazard, declared).
+  checking-move pass-clone fixture where geometry survives and `passAvailability` is
+  `invalid_turn_clone` (the D751/D435-family hazard); terminal child fixture where
+  `replyPersistence` is available/false, not vacuously true.
 - **Measurement + sign:** census over endgame-phase positions, not lift (it is a join
   over existing exact projections); non-vacuity strict-interior.
 
@@ -1070,3 +1122,11 @@ total stays 30 and the swap is recorded in the changelog and the landing log ent
   consequence-shaped id now maps to a literal shipped manifest role; a refutable fork is a
   negative predicate result rather than abstention. Recorded-run salience operands were removed
   from the local threat projection and remain D815's separately grounded, post-tactical derivation.
+- 2026-08-22: D829–D835/D931 author-return amendment drafted from
+  `wave-a-contract-closure.md` and a seven-case executable boundary harness. Space's tradition
+  basis is cited without attributing the exact product formula; pawn connectivity separates
+  adjacent-file pairs, directed support and plural-base chains; generic rook `cutOff` is deleted;
+  trade is an immediate two-ply exchange; loose-piece deltas compare mover-owned identities;
+  discovered execution consumes its before-state latency relation; promotion geometry stays total
+  while reply-dependent fields carry typed unavailability. The ten projections remain held until
+  an independent review accepts these amended bytes.

@@ -4746,3 +4746,19 @@ This closes the adjacent-release arm while preserving its consequence: engine ve
 remain stored operands because the identity of a Review moment changes across either. No result is
 a grade threshold, and no mate/WDL/cp units are collapsed. Learner usefulness remains the open
 C4/F6 arm.
+
+## 2026-08-22 — the last Wave-A meanings are executable, not deep
+
+The ten unimplemented tactical projections were blocked by seven author-contract gaps, not by
+expensive chess search. `wave-a-contract-closure.md` grounds the terminology and a disposable
+seven-test harness makes the repaired boundaries fail-able: adjacent pawn pairs are not support
+chains; branched chains retain two bases; a rook-on-seventh state survives without inventing
+`cutOff`; only an immediate capture/recapture pair is `trade_completed@1`; loose-piece deltas
+compare mover-owned identities on both sides; discovered execution requires its before-state
+latency record; and a checking pawn's invalid pass clone is unavailable rather than false.
+
+The in-place D829–D835/D931 amendment carries those exact repairs into Tactical and the Wave-C
+promotion binding. D832 closes through D922's earlier removal of the rule-of-the-square verdict.
+Focused instruments pass 7/7 in the new boundary harness and 7/7 across the existing promotion and
+consumer-matrix files. Production remains held until an independent buildability review accepts
+the amended bytes; Breadth still follows the complete Tactical landing.

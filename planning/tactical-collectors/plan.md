@@ -25,10 +25,9 @@ preset, workflow or authorable-vocabulary edits.
 - D743 runtime opening identity remains open for R8/F7.
 - Learner/module eligibility and the negative-reading UX remain the Phase-3 discharges.
 - Breadth collectors require their separate independent acceptance review.
-- The remaining ten Wave-A projections require the D829–D835 author amendments: space citation;
-  pawn connectivity encoding; rook cutoff; rule-of-square arithmetic; discovered-executed inputs;
-  trade adjacency/operands; and the side-oriented loose-piece event/avoidance baseline.
-- D922 removed the rule-of-square verdict, but `promotion_pressure@1` remains returned on D931:
-  its accepted RFC, C5 matrix and research helper disagree on whether an invalid turn clone
-  abstains or produces `false`. Geometry may remain total; reply-dependent flags need typed
-  availability before implementation.
+- The D829–D835/D931 in-place author amendment is drafted and executable in
+  `tools/d829-wave-a-contract-harness/` (7/7): cited space convention; directed pawn-support graph;
+  undefined rook cutoff deleted; D832 closed by the earlier D922 verdict removal; discovered
+  execution bound to latency + gained ray; immediate trade anchors; mover-relative loose-piece
+  state; total promotion geometry with typed field absence. **Independent buildability review is
+  the remaining hold before these ten projections resume.**

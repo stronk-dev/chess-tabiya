@@ -438,19 +438,20 @@ Both rows ride 2d's `derived.pawn` producer at `pawn-dynamics.ts`.
   `rules.pawn.reading.promotion_geometry@1` is **bound to the amended sibling id**
   `derived.tactic.promotion_pressure@1` (`tactical-collectors.md` §3.14 as amended
   2026-08-22 under D922): named pawn, distance, forward path/blockers, control balance,
-  and the two exact pass-convention flags `promotionAvailableNext` /
-  `promotionUnstoppable` (13/754 and 1/579 measured), with the in-check pass-clone
-  abstention already declared there. Registering a second per-pawn geometry producer
+  and the two exact typed-availability fields serving `promotionAvailableNext` /
+  `promotionUnstoppable` (13/754 and 1/579 measured). The geometry row remains total; an invalid
+  mover-turn clone makes `passAvailability` unavailable with reason `invalid_turn_clone` rather
+  than false, while `replyPersistence` is computed over the real opponent-reply population.
+  Registering a second per-pawn geometry producer
   would be the duplicate-collector failure; the operand mapping
-  (`passAvailability → promotionAvailableNext`, `replyPersistence →
+  (`passAvailability.value → promotionAvailableNext`, `replyPersistence.value →
   promotionUnstoppable`; the matrix row's `sideToMove` rides the reading's position
   anchor rather than a named operand — the amended §3.14 list carries no `sideToMove`
   member, verified against the amendment text) is recorded in the declaration's semantics
   so the matrix row is traceable to its serving id. **Binding hold (D931):** the amended
-  projection's absence semantics are contested — the sibling RFC declares an in-check
-  pass-clone abstention while the matrix row is total and the research helper returns a
-  silent `false` — and this binding waits on that seam amendment; unavailable must never
-  count as refuted (§Ledger).
+  projection's repaired absence semantics are awaiting independent review: the sibling RFC,
+  matrix and research helper now share the total-row/typed-field shape, and the binding stays held
+  until that review confirms unavailable can never count as refuted (§Ledger).
 - `derived.pawn.promotion_race_geometry@1` — *derived reading* under `race-arrival@1`
   (§2): two-plus named pawns, per-pawn exact arrival convention and ordering. Grounding
   `declared_convention`/`convention` (mixed exact inputs: the passed-pawn/blocker
@@ -668,7 +669,7 @@ Recorded rows this RFC encodes (none flipped by drafting): **D872** (the program
 matrix), **D921** (module-amendment order — D1), **D922** (the sibling amendment §3.7
 binds to). Open defect rows cited, owned elsewhere: **D917**, **D918** (D2); **D904**,
 **D905** (seams, untouched); **D931** (the §3.7 promotion-pressure absence-semantics seam,
-in flight — see the collision note below).
+amended in place and awaiting independent review — see the collision note below).
 
 Registered rows — **written by the drafting commit `530bb4a`** (the draft's "head D922"
 was already stale when it landed: D923/D924 had been taken by the play-composition review
@@ -684,14 +685,14 @@ recorded the independently found Stockfish-WDL-perspective defect as a second **
 row, so `design/BACKLOG.md` at commit `530bb4a` holds two D925 rows (verified committed
 head **D926**). The review proposed renumbering the WDL row to **D927** per the D906/D908
 precedent — and found the concurrent C4/Review session's in-flight working tree already
-carries exactly that repair (the WDL row as D927, plus new rows **D928** — the Review
-whole-game selector — and **D931**, below), so the repair needs committing, not
-re-deciding. Every D925 reference in this document means the Wave-C implementation-wave 💡
-row. **D931 🐞 (in flight, `tactical-collectors / semantic-collectors` seam) binds §3.7
-directly:** `promotion_pressure@1` carries three incompatible absence semantics after D922
-(RFC in-check abstention vs. the matrix's total row vs. the helper's silent `false`) — the
-§3.7 binding cannot be implemented until that amendment pins one shape, and this RFC's
-mapping note inherits whatever `invalid_turn_clone` form it rules.
+carries exactly that repair (the WDL row as D927 plus **D928**, the Review whole-game selector);
+that collision repair landed at `097581e`. **D931**, below, is the later promotion-binding return.
+Every D925 reference in this document means the Wave-C implementation-wave 💡
+row. **D931 🐞 (amended, independent review pending; `tactical-collectors /
+semantic-collectors` seam) binds §3.7 directly:** the sibling RFC, executable matrix and helper
+now share one total geometry row whose reply-dependent fields carry typed availability;
+`invalid_turn_clone` is unavailable, never false. The §3.7 binding cannot be implemented until
+the independent review accepts that repaired shape.
 
 ## Appendix A — registered projection ids
 
@@ -761,3 +762,7 @@ is a spec change with a changelog line.
   `7181834`; the 20 matrix identities adjudicated 14 registered / 1 bound / 5 assigned; the
   `9f7112c` overload separation, D908 mate horizon and D909 outcome refusal pinned; no
   register claims.
+- 2026-08-22: D931 sibling-binding amendment proposed. Promotion geometry remains a total row;
+  `passAvailability`/`replyPersistence` carry typed available/unavailable values, and the research
+  helper's former invalid-clone→false collapse is removed. The binding remains held until an
+  independent review accepts the tactical sibling amendment.
