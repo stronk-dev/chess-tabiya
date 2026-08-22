@@ -4374,3 +4374,17 @@ The collector consequence is exact sets and identities for hover/joins, not coun
 predicates exist. Three focused fixtures/censuses pass; no production or authored content changed.
 Phase 2b now has 45 one-edge probes and remains open only for candidate-passer/lever timing and
 bounded reply/search semantics.
+
+## 2026-08-22 — pawn status, lever action and consequence are separated
+
+D788 grounded a deliberately named `candidate-majority@1` convention in historical Stockfish
+source, disclosed the omitted backward-pawn classifier, and measured four one-edge events plus three
+retained sequences. Executing an existing pawn contact is 9.82× authored / 15.07× imported but is
+still only pawn-capture identity. Creating a contact is background (1.03×/.90×). Candidate gain is
+2.80×/3.30× and strongest early; advancement fades with horizon.
+
+Across 622/6,775 authored/imported triples, create→reply→same-pawn execution appears 1/45 times and
+candidate→passed on the next own move 0/1. The foundation therefore admits exact status/action
+operands and retained identities, while refusing break timing, favorable liquidation, breakthrough
+and plan prose. Three focused tests pass; no production or authored content changed. Phase 2b now
+has 49 one-edge probes and remains open only for bounded reply/search semantics.

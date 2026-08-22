@@ -357,6 +357,20 @@ activity operand. Losing every safe destination is distinctive only in the impor
 (**2.58×** versus an uncertain **1.12×** authored); without attack and bounded-consequence
 predicates it cannot be called trapped, dominated or forced.
 
+### 4.8 Pawn status, action and consequence stay separate
+
+D788 pins a versioned `candidate-majority@1` geometry from historical engine prior art and measures
+it separately from literal pawn-contact creation/execution. `[V]`
+(`pawn-lever-and-candidate-timing.md`; `tools/d788-pawn-timing-harness/output.md`)
+
+Executing an existing pawn contact is highly distinctive (**9.82× authored / 15.07× imported**)
+but remains a pawn-capture join, not proof of favorable liquidation. Creating a lever is background
+(**1.03× / 0.90×**) and becomes negative-primary later; it earns no generic “break” hint.
+Candidate-majority gain is stable (**2.80× / 3.30×**) and strongest early (7.60×), while advancing
+one weakens across horizon and immediate conversion appears in only 0/622 authored and 1/6,775
+imported three-edge windows. Candidate status can ground structure/theory modules; it cannot supply
+the plan or timing verdict.
+
 ---
 
 ## 5. From evidence to player habits—not invented personalities
