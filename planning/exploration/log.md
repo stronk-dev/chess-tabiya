@@ -5110,3 +5110,29 @@ longitudinal-store → bot-policy → campaign-core → live-sources, and the ow
 
 **Next:** codex's queue in order; learner-rating is the next draft to push through review now
 that D945/D946 resolved its open questions 11/12.
+
+## 2026-08-22 — learner-rating accepted; the review caught a live engine assist inside a rated game
+
+**What landed:** `rfc/learner-rating.md` accepted after its first independent cross-review (~80
+claims re-derived, 14 failed, all corrected in place). The center catch: R6's refused-route
+enumeration was incomplete — `service.analysis` enqueues engine bestline/eval/wdl behind
+`#forWrite` alone and `feedbackDeliveryOpen()` opens `/evidence` on `feedback.revealed`, so a
+rated run could read live Stockfish lines mid-game through `/reveal` → `/analysis` →
+`/evidence`, routes the withholding set never named. Fixed at the set, the creation pin, and
+AC-5. Also corrected: the six-of-nine-axes count was stale at HEAD (v4's `spoken: "provider"`
+tier is server-refusable), §10a.3's score orientation was inverted (right conclusion, backwards
+premise), and `BANNED_JUDGEMENTS` is now asserted by symbol, never by count. Verified clean: the
+Glicko-2 arithmetic end-to-end to four decimals, the event/branch-keyed void mechanism across
+all four persisted rewind-family paths, and the witnessed-play seam composing over shipped
+`run_grants`. Rows D967/D968 landed; D395 flipped closed with R15/R16 intact (its own flip
+condition); addenda applied to D388/D389/D423 and the D332 status note.
+
+**What changed:** the register has NO remaining reviewable draft — every active RFC is accepted
+or implementing. The migration train is fully ordered behind learner-rating's two head
+positions. The owner's rulings D945/D946 are absorbed and accepted; the rated boss
+(campaign-core Discharge D1, carrying D962) becomes buildable when this lands.
+
+**Blocked:** nothing at the paper tier. Everything now flows through codex's queue.
+
+**Next:** codex implements in queue order; claude's next work is review-on-demand, the
+assistance-controls parent disposition, and the owner-fork backlog (B5 casting, army-prestige).

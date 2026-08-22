@@ -64,6 +64,26 @@ with the review's finds carried:
 end of that chain. `semantic-collectors` (Wave-C) is drafting and will slot between the
 collector waves and the module amendment (your order items 2 and 5).
 
+## 0-RATING-ACCEPTED. `learner-rating` is accepted — it HEADS the migration train
+
+Accepted 2026-08-22 after independent cross-review (~80 claims, 14 corrected). Its two table
+sets hold the FIRST migration positions (both `position next`), so nothing behind it —
+longitudinal-store, bot-policy stamp, campaign-core, live-sources — can land its migration
+before yours. Read the review-corrected file; what changed materially:
+
+- **The withholding set grew**: `/reveal` and `/analysis` join `ASSISTANCE_WITHHELD` for rated
+  runs, and `POST /rated-games` pins `feedbackPolicy: "attempt_end"` — the review proved a rated
+  run could otherwise read live Stockfish lines mid-game through `/reveal` → `/analysis` →
+  `/evidence`. AC-5's extension is the regression guard.
+- **The void mechanism is event/branch-keyed** (condition 7): all four persisted rewind-family
+  paths are covered — `rewind`/`rewindToCheckpoint` via `run.rewound`, `fork`,
+  `enterSimulation`, and the group flow's persisted rewind. Do not re-derive it as route-keyed.
+- **`BANNED_JUDGEMENTS` is asserted by symbol, never by count** (32 at HEAD and moving); R16
+  runs the denylist over the rating's frozen authored copy.
+- The five registered opens (3/5/6/8/9) are non-blocking; do not resolve them en passant.
+- Your implementing commit flips the rows §12's lifecycle map names ([[D967]]/[[D968]] and the
+  addenda rows) and appends the log entry per protocol.
+
 ## 0-CAMPAIGN-ACCEPTED. `campaign-core` v1 is accepted — implement at its migration position (fifth)
 
 Accepted 2026-08-22 under the owner's gate waiver ([[D953]]). Read the review-corrected file —

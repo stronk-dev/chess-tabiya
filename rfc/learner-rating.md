@@ -1,13 +1,13 @@
 # RFC: Learner rating
 
-- **Status:** **draft — rulings D945/D946 absorbed 2026-08-22; ready for independent review.**
-  The two blocking open questions are ruled: **question 11** by [[D945]] (earned rewinds — a third
+- **Status:** **accepted — 2026-08-22, by claude as register owner on the buildability test, after an independent cross-review that re-derived ~80 claims at source and failed 14, all corrected in place.** The center catch: R6's refused-route enumeration was incomplete — a rated run could read live Stockfish lines mid-game via `/reveal` → `/analysis` → `/evidence`, routes the withholding set never named (now in `ASSISTANCE_WITHHELD`, `POST /rated-games` pins `feedbackPolicy: "attempt_end"`, AC-5 extended). The Glicko-2 arithmetic verified clean end-to-end to four decimals; the void mechanism verified event/branch-keyed across all four persisted rewind-family paths; the five remaining open questions (3/5/6/8/9) are registered opens, judged non-blocking per review. Rows: D967/D968 landed at acceptance; D395 flips closed with R15/R16 intact. Prior line: **draft — independent cross-review complete 2026-08-22 (verdict: accept-after-corrections); awaiting acceptance**; before that: **rulings D945/D946 absorbed 2026-08-22.**
+  The two blocking open questions are ruled: **question 11** by [[D945]] (earned rewinds — a fourth
   shape none of the drafted answers had; R11 stands **unchanged**, the earned economy lives on the
   encounter-verdict side per accepted `rfc/campaign-core.md` §2, so the boss is **rated when
   clean, winnable regardless**) and **question 12** by [[D946]] (the witnessed-play seam is
   **pinned**: a cohort may one day require it; the default stays not-required; nothing is
   implemented until a real cohort exists — §10a.2a). [[D962]]'s persona/`targetElo` disjointness
-  is recorded at the rated predicate without foreclosing either arm (§5.3). Prior line:
+  is recorded at the rated predicate without foreclosing either arm (§3, condition 3). Prior line:
   **draft — author round 2026-08-16, on two owner rulings.** **Ruling 1 reverses
   R10**: leaderboards and cross-learner comparison are now a **designed surface**, specified in
   §10a as the **cohort standing**, with the refusal's one empirical ground — we do not police
@@ -53,8 +53,8 @@
   **`archive/teacher-surface.md` is now a hard dependency, not only a migration-order neighbour** —
   §10a's standing is scoped to its `classrooms` / `classroom_members` and adds no second
   grouping object and no second consent model (§10a.2). It lands after `teacher-surface` and
-  `opponent-contracts.md`** in the migration order (see §9.1); the ladder now carries a **fourth
-  claim** ([[D423]], §9.1)
+  `opponent-contracts.md` in the migration order (both since implemented — see §9.1); the ladder
+  carried a **fourth claim** ([[D423]], since closed by `shared-resource-registers`; §9.1)
 - **Parent / amends:** **nothing.** The draft claimed it amended `docs/return-and-progression.md`;
   **cross-review found no contradiction to amend** — all three of that doc's no-rating
   sentences are scoped to surfaces R14 keeps the rating off, and each survives verbatim.
@@ -182,7 +182,7 @@ nothing else, there is no `learnerElo` / `declaredBand` / `selfRating` anywhere 
 `apps/`, and *"band-tuned flattery is currently unreachable because the conditioning variable
 does not exist"* `[V]`. Its §3 completes the picture: `applyRecordedEngineGuard` and
 `applyRulesGuard` between them expose **six conditions, six regressions, zero positive arms**,
-and the guard's output is `{ nodeId, evidenceRefs }` — **a pointer at recorded evidence, never a
+and the guard's output is `{ nodeId, evidenceRefs }` — **a pointer to recorded evidence, never a
 word**. *"There is no 'brilliant' in this product to be generous with."*
 
 **This RFC is the commit that ends that.** It creates the conditioning variable, per-learner and
@@ -508,15 +508,19 @@ route for its whole lifetime**, keyed on the `rated_games` row.
 
 **What R6 therefore actually enforces, stated because the draft implied more than it can
 deliver.** `AssistanceConfig` has **nine** non-version axes
-(`packages/runtime/src/assistance.ts`). Exactly **three** of them cross the wire and can be
-refused: `humanSplit`, `corpus`, and `voice` (with `/speech` and `/reasoning-review` behind the
-same disclosure gate). The other six — `boardLighting`, `arrows`, `spoken`, `ambient`, `markers`,
-`guided` — are **rendered in the browser from data the client already holds**, and refusing them
-server-side is not possible, not detectable, and not claimed here. Neither is anything outside
-the tab: a second window, an engine on another device, or a person in the room.
+(`packages/runtime/src/assistance.ts`). **Three** of them cross the wire whole and can be
+refused: `humanSplit`, `corpus`, and `voice` (with `/reasoning-review` behind the same disclosure
+gate) — and *(recounted by cross-review 2026-08-22 against the v4 config, which grew under this
+draft)* a **fourth, `spoken`, crosses it in one of its three values**: `spoken: "provider"` is
+server-synthesized TTS via `/speech` (`DrillScreen.svelte` calls it when the provider tier is
+selected), so that tier is refused too. The remainder — `boardLighting`, `arrows`, `ambient`,
+`markers`, `guided`, and `spoken`'s browser tier — are **rendered in the browser from data the
+client already holds**, and refusing them server-side is not possible, not detectable, and not
+claimed here. Neither is anything outside the tab: a second window, an engine on another device,
+or a person in the room.
 
 So R6's honest content is: **a rated game is unassisted to the exact limit of what the server can
-refuse — the three evidence rungs that would otherwise deliver a measurement into the run — and
+refuse — the wire-crossing rungs that would otherwise deliver a measurement into the run — and
 makes no claim beyond that limit.** §7.4's disclosure 5 says so at the point of printing, which is
 the same posture `docs/live-sessions.md` already takes about self-cheating. **A rating that
 claimed "unassisted" without that qualifier would be the manufactured claim this RFC exists to
@@ -525,9 +529,10 @@ how a run was played inherits the same ceiling.
 
 **`permittedAssistance` is not modified.** The honesty gate keeps its inputs exactly as
 `coaching-versus-cheating-and-the-band-curve.md` §2f documents them — *"the honesty **ceiling**:
-which sources may speak, given role and disclosure state"* — noting that the declared
-`AssistanceContext` carries three fields (`sessionKind`, `deliveryOpen`, `role`) of which the
-body turns on one boolean (`assistance.ts:21-28`). The rated refusal is a route-layer ceiling
+which sources may speak, given role and disclosure state"*. *(The dossier's field count is
+historical: at HEAD the declared `AssistanceContext` carries **five** fields — `sessionKind`,
+`deliveryOpen`, `role`, `seatedInContest`, `reviewing` — grown under this draft by
+`teacher-surface`; the rated refusal reads none of them, which is the point.)* The rated refusal is a route-layer ceiling
 *outside* the gate — which also keeps this RFC clear of `teacher-surface`'s requested ownership
 pin on that function (§11.1). `06` §3 law 1 holds: nothing here changes what may honestly be
 shown or when.
@@ -609,7 +614,8 @@ affordance and deliberately does not use it.
    `plan` mode is an inference, not a schema fact; the precondition is checked per encounter from
    the start FEN either way, never assumed from the mode.
 4. **The rated boss and `06` §5's submitted-branch ruling collided — RULED 2026-08-22
-   ([[D945]]), a third shape none of the drafted answers had.** The collision as recorded: `06`
+   ([[D945]]), a fourth shape none of the drafted answers had** (a *third* relative to the
+   two-document binary [[D945]]'s own row records; both counts describe the one ruling). The collision as recorded: `06`
    §5 ruled *"rewind stays free inside an encounter; **declaring done** is what counts"*, and R11
    voids any rated game containing a rewind — for a rated boss these could not both hold. The
    owner's verbatim answer to question 11: *"you have to earn rewinds or proactive branching...
@@ -941,8 +947,9 @@ Every surface that prints the rating prints, in the same view:
 4. wherever a *journey* or *movement* is printed, the transfer ratio beside it: the band ladder
    `[1000, 2200]` is worth **≈480 real Elo at full material** and **≈347 over the corpus as
    authored**, i.e. **a 100-band step is ≈40 real Elo at full material, not 100**;
-5. that "unassisted" means **every assistance the server can refuse**, and that six of the nine
-   assistance axes are browser-rendered and therefore neither refused nor detected (§5.2, D389);
+5. that "unassisted" means **every assistance the server can refuse**, and that five of the nine
+   assistance axes — plus `spoken`'s browser tier — are browser-rendered and therefore neither
+   refused nor detected (§5.2, D389);
 6. **on any surface where a learner can see another learner's rating, record or mark** — i.e.
    every §10a surface — that **these games were played alone against a bot and nobody witnessed
    them**, in that register and not softer. This is obligation 5's ceiling restated for the one
@@ -957,7 +964,8 @@ quantity for the span it is attached to.* 289.6 Elo is the corpus-wide value of 
 `[V]`. A normative disclosure printing a 16% understatement of its own instrument's span is the
 disclosure failing at its one job.
 
-Copy is not specified here beyond these five obligations, which are testable (§AC-6) — **and is
+Copy is not specified here beyond these **six** obligations (*"five" corrected by cross-review:
+ruling 1's obligation 6 made it six*), which are testable — 1–5 in §AC-6, 6 in §AC-16 — **and is
 bounded by R16, which is where the copy itself becomes a law-8 surface.**
 
 ### 8. Refusals
@@ -971,7 +979,7 @@ Each is named, each has a reason that is a measurement or a law, and each is a t
 | **R3** | **Cross-band comparison the transfer ratio does not support** — offering, displaying or distinguishing band steps finer than a measured rung; treating `targetElo` as the opponent's rating anywhere | D336 (the smallest resolvable step is ~150–208 band points) and D344 (*"`targetElo` must never be passed to a rating update directly"*) |
 | **R4** | Any **per-move contribution** — accuracy, per-move rating delta, "performance rating for this move", a move-quality axis of any kind | A move verdict wearing arithmetic. ADR-0005 / law 8, and the named anti-pattern in `AGENTS.md` |
 | **R5** | A rating in **reduced endgames** — <21 pieces at the start position | Transfer ≈0.07 at ≤10 pieces with CIs straddling parity; n = 48 at 11–20; and independently, 43 of 45 endgame positions **tied** between bands 1100 and 1900 (`maia-endgame-fidelity.md`, D381). The opponent's rating there is **unidentified, not merely imprecise** — so the update is *undefined*, which no widening of RD repairs |
-| **R6** | **Pooling server-assisted with server-unassisted play** | Otherwise the rating measures the loadout. Assistance is browser-side (D389), so this is enforced by server refusal of the three wire-crossing rungs (§5.2), never by trusting a declaration — **and it does not reach the six browser-rendered axes or anything outside the tab, which §7.4's fifth disclosure states rather than papers over** |
+| **R6** | **Pooling server-assisted with server-unassisted play** | Otherwise the rating measures the loadout. Assistance is browser-side (D389), so this is enforced by server refusal of the wire-crossing rungs and routes (§5.2, §10.2), never by trusting a declaration — **and it does not reach the browser-rendered remainder (§5.2) or anything outside the tab, which §7.4's fifth disclosure states rather than papers over** |
 | **R7** | Publishing the number as an **external-scale equivalent** (FIDE / Lichess / Chess.com), or converting to one | The anchor is unmeasured; the whole calibration is engine-vs-engine |
 | **R8** | Publishing a **point estimate outside the bracket or at score saturation** | §7.3. Report a bound instead |
 | **R9** | Making the rating **purchasable, sellable, or a gate on content** | ADR-0007. D334's surviving distinction: winning may unlock convenience and variety, **never content** |
@@ -980,8 +988,8 @@ Each is named, each has a reason that is a measurement or a law, and each is a t
 | **R12** | **Any adjudication of an unfinished game — engine evaluation *and* tablebase probe** | Only `terminalOutcome` may seal. **Widened by cross-review:** the draft admitted a tablebase-exact seal; a tablebase result is a fact about the position *under optimal play*, not about the game, so it fails §1's own test, and Maia converts only 88.1–91.9% of won endgames in practice (§5.4). Owner may reopen it as a *disclosed adjudication* — Open question 9 |
 | **R13** | Maia's own **expected score** `0.5 + cp/2000` as a rating input | `maia-wdl-versus-human-outcome.md` §9.5: the value head's band response carries **no information** about the band's outcome shift (Pearson 0.021–0.044, sign agreement 47.2–52.0%). Retained as a diagnostic only (§AC-8) |
 | **R14** | Feeding the rating into **`/progress/recommendations`**, milestones, or scheduling | That would make it a weakness model driving content selection — a different product, and out of scope. Open questions Q5. R14 is also what keeps all three of `docs/return-and-progression.md`'s no-rating sentences true verbatim (§11.2) |
-| **R15** | **The rating as an input to anything the product SAYS about a move, a position, or a run.** Named concretely: `learnerRating` (and every projection of it — `rating`, `rd`, band-equivalent, bracket position, `seed_band`, `period_no`) may not reach `apps/server/src/guard.ts`, `guard-conditions.ts`, `packages/runtime/src/voice.ts`, `outcome-presentation.ts`, `feedback.ts`, `objective.ts`, any `feedbackClaims` assertion argument, any voice/speech/reasoning-review packet, any `evalSwingCp` or guard threshold, any `corpusPopulation()` argument, or any pack-selection predicate that alters *what is said* rather than *what is offered* | **D395 — the blocker this cross-review was opened on.** `band-flattery-and-buried-value.md` §1/§3/§5.5: band-tuned flattery is unreachable today **only** because `learners` has no rating column and the guard has *"six conditions, six regressions, zero positive arms"* emitting *"a pointer at recorded evidence, never a word"*. **This RFC creates the conditioning variable**, so *"it cannot happen because the field does not exist"* stops being an argument on the day it lands. The invariant, in the dossier's own words: ***a rating may select WHAT a learner is shown — which pack, which band, which population — and may never appear as an input to WHAT IS SAID about a move they played. Selection, yes; rendering, never.*** Enforced as a reachability test, not a principle: **AC-11** |
-| **R16** | **Evaluative, congratulatory or praise copy on any rating surface**, and routing any rating surface's text through the voice/LLM layer at all | **D393's fix does not reach here.** `BANNED_JUDGEMENTS` grew 19→30 words at `3e6fe2e` to cover the praise register — but it is enforced by `voiceCheck`'s **containment test over LLM output only**, and `KEY_POINT_JUDGEMENTS` applies only to `ReasoningKeyPoint.phrases` and only when *every* word in a phrase is a listed one. **Authored prose has no vocabulary gate at all** (`band-flattery-and-buried-value.md` §5.2: `feedbackClaims[].text`, `objective.summary`, `PlanClass.description` — none). A rating surface's copy is authored, so it would be **the one new law-8 surface this RFC creates that no shipped guard covers** — the route-around, not the hole. Closed two ways: the rating surface emits only the §7.4 disclosure sentences and the numbers, from a frozen set; and **the denylist is run over that frozen set anyway** even though it is not LLM output. **AC-12** |
+| **R15** | **The rating as an input to anything the product SAYS about a move, a position, or a run.** Named concretely: `learnerRating` (and every projection of it — `rating`, `rd`, band-equivalent, bracket position, `seed_band`, `period_no`) may not reach `apps/server/src/guard.ts`, `guard-conditions.ts`, `packages/runtime/src/voice.ts`, `outcome-presentation.ts`, `feedback.ts`, `objective.ts`, any `feedbackClaims` assertion argument, any voice/speech/reasoning-review packet, any `evalSwingCp` or guard threshold, any `corpusPopulation()` argument, or any pack-selection predicate that alters *what is said* rather than *what is offered* | **D395 — the blocker this cross-review was opened on.** `band-flattery-and-buried-value.md` §1/§3/§5.5: band-tuned flattery is unreachable today **only** because `learners` has no rating column and the guard has *"six conditions, six regressions, zero positive arms"* emitting *"a pointer to recorded evidence, never a word"*. **This RFC creates the conditioning variable**, so *"it cannot happen because the field does not exist"* stops being an argument on the day it lands. The invariant, in the dossier's own words: ***a rating may select WHAT a learner is shown — which pack, which band, which population — and may never appear as an input to WHAT IS SAID about a move they played. Selection, yes; rendering, never.*** Enforced as a reachability test, not a principle: **AC-11** |
+| **R16** | **Evaluative, congratulatory or praise copy on any rating surface**, and routing any rating surface's text through the voice/LLM layer at all | **D393's fix does not reach here.** `BANNED_JUDGEMENTS` grew 19→30 words at `3e6fe2e` to cover the praise register (32 at HEAD) — but it is enforced by `voiceCheck`'s **containment test over LLM output only**, and `KEY_POINT_JUDGEMENTS` applies only to `ReasoningKeyPoint.phrases` and only when *every* word in a phrase is a listed one. **Authored prose has no vocabulary gate at all** (`band-flattery-and-buried-value.md` §5.2: `feedbackClaims[].text`, `objective.summary`, `PlanClass.description` — none). A rating surface's copy is authored, so it would be **the one new law-8 surface this RFC creates that no shipped guard covers** — the route-around, not the hole. Closed two ways: the rating surface emits only the §7.4 disclosure sentences and the numbers, from a frozen set; and **the denylist is run over that frozen set anyway** even though it is not LLM output. **AC-12** |
 
 #### 8a. R15's mechanism, because a refusal without one is a wish
 
@@ -1135,8 +1143,11 @@ paragraph.**
 
 **Re-verified 2026-08-22 against the tree rather than against this draft:**
 `STORAGE_VERSION` is **24** (`apps/server/src/storage.ts`), landed by
-`archive/teacher-surface.md`. This RFC is now the only active migration claimant and holds the
-next position. It carries **two independent table sets**: the rating's three (§10.1) and the
+`archive/teacher-surface.md`. This RFC holds the next position — *no longer as the only active
+claimant* (cross-review 2026-08-22): `rfc/longitudinal-store.md`, accepted 2026-08-22, claims
+the position **behind** this one, and `rfc/portable-account-data.md`, accepted the same day,
+obliges this migration to **add its six tables' deletion-inventory entries as part of its own
+schema guard** (its §1 queues `learner-rating` by name). It carries **two independent table sets**: the rating's three (§10.1) and the
 standing's three (§10a.7). They land in one migration body because they land in one commit; if
 the owner later splits the standing into its own RFC, the register must split the claims before
 either implementation begins. `feedback-delivery` and `graduation-clearance` claim no migration
@@ -1146,8 +1157,8 @@ Body: **create-table/index only. No backfill, no snapshot rewrite, no stamp.** N
 is rated — every historical run was played under an unknown assistance state against an
 unrecorded ceiling, and retro-rating it would manufacture exactly the fiction §1 refuses. Also
 note for the register: `live-session.test.ts:29` asserts `STORAGE_VERSION` literally, so the bump
-edits that test. **That assertion currently reads `toBe(22)` against a constant of 23** — stale
-at HEAD, not this RFC's to fix, but the implementer will meet it.
+edits that test. *(The draft's note that it read `toBe(22)` against 23 is resolved: at HEAD it
+reads `toBe(24)` and matches. The bump will edit it again.)*
 
 #### 9.2 Pack schema — **none.**
 
@@ -1241,12 +1252,18 @@ CREATE TABLE rating_periods (
 
 `ON DELETE CASCADE` on `learners(id)` gives account deletion for free, matching migration 2's
 posture rather than the bare-`TEXT` pattern `teacher-surface` adopted for classroom tables.
+*(Checked against `rfc/portable-account-data.md`, accepted 2026-08-22: hard-delete is that RFC's
+class for records that strand nothing and mint no authorization, which these are — a standing
+entry hard-deleting on account deletion is the same semantics as §10a.7's withdrawal-is-a-DELETE,
+i.e. the ultimate withdrawal, and a mark means nothing without the account. The migration adds
+the deletion-inventory entries §9.1 records as owed.)*
 
 Literal CHECK strings, per the migration-9 freeze lesson recorded in `rfc/README.md:133`.
 
 **`tablebase_exact` is removed from `terminal_reason`** by cross-review (§5.4, R12). The five
 values that remain are exactly the four `terminalOutcome` branches, with `isEnd`-not-checkmate
-split into its three rules causes.
+split into its two rules causes (stalemate and insufficient material — *"three" corrected to
+"two" by cross-review 2026-08-22; 4 branches with one split into 2 is the 5 the CHECK carries*).
 
 **Two schema-level notes on R15**, because storage is where the invariant would first leak:
 `learner_ratings` and `rated_games` carry **no column any renderer reads** — no cached sentence,
@@ -1268,13 +1285,21 @@ All three sit behind `authenticate()` → `Principal`, like every `/progress` ro
 scope, no new `RunRole`.
 
 Every **server-routed** assistance route — `/human-split`, `/corpus`, `/voice`, `/speech`,
-`/reasoning-review` — refuses with the shipped `ASSISTANCE_WITHHELD` when the run has an `open`
-`rated_games` row. The six browser-rendered axes are outside this ceiling by construction (§5.2).
+`/reasoning-review`, **and (added by cross-review 2026-08-22) `/reveal` and `/analysis`** —
+refuses with the shipped `ASSISTANCE_WITHHELD` when the run has an `open` `rated_games` row.
+**The two additions close a route the draft's enumeration missed:** `service.analysis` enqueues
+engine `bestline`/`eval`/`wdl` evidence on any node behind `#forWrite` alone, and
+`feedbackDeliveryOpen()` opens the `/evidence` read on a `feedback.revealed` event — so without
+them a rated run could reveal mid-game and read Stockfish lines through routes R6 never named.
+Belt and braces on the same hole: **`POST /rated-games` pins `feedbackPolicy: "attempt_end"`**,
+under which delivery opens only at `outcome.reached` — after the seal, when the assist can no
+longer precede a rated move. The browser-rendered remainder is outside this ceiling by
+construction (§5.2).
 
 #### 10.3 Voiding
 
-`RunService.#project` already runs on every run mutation (`service.ts:1747-1765`; called from
-ten sites). The rated-game
+`RunService.#project` already runs on every run mutation (`service.ts`, locate by name; called
+from **thirteen** sites at HEAD — "ten" was true when written and moved under the draft). The rated-game
 projector hangs off it: on `run.rewound` or a second branch → `state='voided'`; on
 `outcome.reached` on the single branch → `state='sealed'` with the result and terminal reason; on
 engine identity mismatch in any `opponent.move_selected` → `state='voided'`,
@@ -1421,9 +1446,11 @@ sentence true verbatim after owner ruling 1; merging them is what would break it
 never a level: *"beat band 2200 on 2026-09-01"*, never *"reached 2200"* — the first is a rules
 fact, the second is the band-equivalent wearing a mark's clothes and is refused by R10(b) and R3.
 (b) **A mark is not rare and must never be presented as rarity.** From the calibration's own
-ladder, the band-1400 reference engine scores **0.8431** against band 2200
-(`derived.json` → `fullMaterialLadder`) `[V]`, so a learner at the 1500-BCS origin takes roughly
-**one game in six** off band 2200 and the gold mark is expected within a handful of attempts. It
+ladder, band 2200 scores **0.8431** against the band-1400 reference
+(`derived.json` → `fullMaterialLadder`, key `ladder-2200-v-1400`; orientation corrected by
+cross-review — the draft had the reference scoring 0.8431) `[V]`, so a learner at the 1500-BCS
+origin takes roughly **one game in six** (1 − 0.8431 ≈ 0.157) off band 2200 and the gold mark is
+expected within a handful of attempts. It
 is a participation record, and `06` §3 law 5 — *"Rarity is not value"* — is the standing law that
 says so.
 
@@ -1586,16 +1613,29 @@ machine-readable, which is the third of §8a's mechanisms.
 
 ### 11.1 Sibling RFCs
 
-*Statuses re-derived at cross-review, and again this round; two more had moved.*
+*Statuses re-derived at cross-review, and again this round; two more had moved. Re-derived a
+third time by independent cross-review 2026-08-22: `opponent-contracts` is **implemented and
+archived**; `graduation-clearance` is **accepted 2026-08-17**; and five RFCs accepted 2026-08-22
+now interact and are added below the table.*
 
 | RFC | Overlap | Resolution |
 |---|---|---|
 | `archive/teacher-surface.md` (**implemented**) | **A hard dependency, not only a migration neighbour.** §10a's standing is scoped to its `classrooms` / `classroom_members` and transposes its §2.1/§2.2 consent model rather than inventing one. Still: migration ladder, `/learn`, and its ownership pin on `permittedAssistance` | This RFC takes the next migration position after it — a **correctness** requirement, not a courtesy: §10a.7's tables carry a foreign key into `classrooms`. `permittedAssistance` is untouched (§5.2), so the pin is not contested. The `/learn` collision is **not** doctrinal — §11.2 |
 | `pack-graduation.md` (**implemented 2026-08-16, `rfc/archive/`**) | **None.** All its state is pack-scoped; pack 0.27 has landed | Nothing to negotiate |
-| `opponent-contracts.md` (**implementing 2026-08-16** — the cross-review said "accepted"; it moved again) | **Migration ladder.** Its run 0.17 has **landed**; its pack 0.28 claim was **released** by its own cross-review (D385); its header marks its migration position **CONTESTED** | This RFC claims no pack and no run lane, so it contests neither. On the migration it lands **behind** this one too (§9.1) |
-| `graduation-clearance.md` (**draft, author round complete 2026-08-16**) | **Pack lane 0.28** — which the cross-review recorded as unclaimed. It is claimed: that RFC's §7 verdict is *"keep 0.28"* for `$defs/graduationEntry` `[V]` | **No collision.** This RFC claims no pack lane (§9.2). It claims no migration position either, so it is not on the ladder |
+| `opponent-contracts.md` (**implemented 2026-08-16, `rfc/archive/`** — "implementing" at the author round; it moved a third time) | **Migration ladder.** Its run 0.17 has **landed**; its pack 0.28 claim was **released** by its own cross-review (D385); its header marks its migration position **CONTESTED** | This RFC claims no pack and no run lane, so it contests neither. On the migration it lands **behind** this one too (§9.1) |
+| `graduation-clearance.md` (**accepted 2026-08-17** — "draft" at the author round) | **Pack lane 0.28** — which the cross-review recorded as unclaimed. It is claimed: that RFC's §7 verdict is *"keep 0.28"* for `$defs/graduationEntry` `[V]` | **No collision.** This RFC claims no pack lane (§9.2). It claims no migration position either, so it is not on the ladder |
 | `archive/engine-leverage.md` (implemented) | Its `searchBound` record on `SelectionEngineIdentity` (`packages/runtime/src/types.ts:99`, `{ kind: "nodes" \| "movetime"; value: number }`) is what a future `strong_engine` rung would need (Open questions Q3) | Read-only dependency |
 | `measurement-records.md` (draft) | **None structurally**, but D392's lesson binds here: no acceptance criterion in this RFC pins a version integer | Adopted (§9.1) |
+
+**Added by independent cross-review 2026-08-22 — the five same-day acceptances:**
+
+| RFC | Overlap | Resolution |
+|---|---|---|
+| `campaign-core.md` (**accepted 2026-08-22**) | Its Discharge D1 owns the deferred rated boss and absorbs [[D945]]'s rated-when-clean reading *"once `learner-rating` is accepted"*; its §2 is the earned-rewind mechanism §5.3a consequence 4 cites | Consistent both directions: its §3.4 defers the rated boss to D1; this RFC's condition-3 note routes the persona/`targetElo` disjointness to the same D1. This RFC's acceptance is what unblocks it |
+| `bot-policy.md` (**accepted 2026-08-22**) | `RunOpponentPolicy.profile` **mutually exclusive** with `targetElo` (its §"profile" rules) — the ground of [[D962]] | Recorded at §3 condition 3 without foreclosing either arm; nothing else touched |
+| `longitudinal-store.md` (**accepted 2026-08-22**) | Claims the migration position **behind this RFC** (its register row names the grammar). Its store is decision-grained (`decision_class`); the rating never reads it — the rating's only outcome input is `attempts.result` on runs created by `POST /rated-games`, so `game`/`predicted` decision classes cannot pool into an update | No collision; the ladder order is register-recorded (§9.1) |
+| `portable-account-data.md` (**accepted 2026-08-22**) | Owns deletion/export semantics; queues this RFC's migration **by name** for deletion-inventory entries | Obligation absorbed: §9.1 records the inventory entries as part of this migration's schema guard; §10.1 records why CASCADE hard-delete is that RFC's correct class for these six tables |
+| `intent-presets.md` (**accepted 2026-08-22**) | Compiled assistance contexts and the universal rules floor (`boardLighting` never below `"legal"`) | No interaction needed: the rated refusal is route-layer, outside `permittedAssistance` and outside preset compilation; the rules floor is *mandatory* rendering, which strengthens §5.2's claim that the browser-rendered remainder is not refusable. A rated run needs no context of its own |
 
 ### 11.2 The doctrine collision the draft declared — and did not have
 
@@ -1611,7 +1651,8 @@ sentences, verbatim `[V]`:
   sentences state only those events and corpus population counts; **they** never infer weakness,
   mastery, **rating**, or what other learners struggle with."*
 - the `/learn` copy line *"This is an attempt history and return queue, not a mastery score"*
-  (`App.svelte:746` — the draft cited `:741`, which is the milestone block above it), reasserted
+  (`App.svelte:803` at HEAD — the draft cited `:741`, the cross-review `:746`; locate by the
+  sentence, it keeps moving), reasserted
   by `teacher-surface` §7.2.
 
 **All three are scoped to a named surface by their own grammar** — *"Those"*, *"they"*, *"This"* —
@@ -1708,7 +1749,9 @@ rather than re-proposed:
   §11.3 names the worst-case-bound and lag fixes.
 - *"Assistance state is client-side only, so nothing that conditions on it can be verified"* —
   landed as **D389**. **Addendum owed:** the RFC now states the boundary in the refusal itself —
-  three of nine axes are refusable, six are not — rather than implying a whole-loadout claim.
+  three of nine axes are refusable whole, `spoken`'s provider tier joins them at v4, and the
+  browser-rendered remainder is not (§5.2, recounted 2026-08-22) — rather than implying a
+  whole-loadout claim.
 - *"The campaign has four offerable rungs today, not five to nine"* — landed as **D390**.
 
 **And one row now blocks this RFC rather than being proposed by it:**
@@ -1719,6 +1762,15 @@ rather than re-proposed:
   for the `BANNED_JUDGEMENTS` route-around D393's fix does not reach. The row can flip to closed
   **when the RFC is accepted with R15 and R16 intact** — not before, since the invariant's whole
   point is that it must exist before the conditioning variable does.
+
+**Status reconciliation, cross-review 2026-08-22 — most of the list has landed.** The register
+row's own citations settle it: items **4, 5, 6, 8** landed as **[[D420]]–[[D423]]** (D423 has
+since been **closed** by `shared-resource-registers`, which built the claimant-counting register
+the item asked for) and items **9–15** landed as **[[D437]]–[[D443]]**. Item **3** is
+substantially covered by an existing 2026-08-15 row (*"No run-level verdict exists —
+`attempts` is per branch"*). Still genuinely proposed at HEAD: **items 1, 2 and 7** — plus the
+addenda the preamble above records against D388/D389/D423. The list below is preserved as the
+record of what was proposed:
 
 Rows still proposed:
 
@@ -1797,8 +1849,8 @@ Rows still proposed:
 11. **New 💡 — a campaign boss is a full game, not a pack (owner ruling, 2026-08-16).** Answers
     `learner-rating` open question 1 by changing the boss rather than the rating: a boss runs to a
     rules-terminal result as a `position` session and rates like any other game
-    (`rfc/learner-rating.md` §5.3a). **Consequences owed to `design/06-campaign.md`** (law 5, not
-    acted on): §5's encounter vocabulary gains an encounter not bounded by `plyHorizon`; the rated
+    (`rfc/learner-rating.md` §5.3a). **Consequences owed to `design/06-campaign.md`** (law 5;
+    landed 2026-08-22, [[D836]]): §5's encounter vocabulary gains an encounter not bounded by `plyHorizon`; the rated
     boss is **Act II only** — Act I is refused by `THEORY_NEEDS_AUTHORED_BOUNDARY` /
     `BOUNDARY_NEEDS_PLY_HORIZON` and Act III by R1 and R5, so **the campaign's climax act is the
     one that cannot carry a result**; §2a gains a fourth difficulty-availability class; §2b should
@@ -1851,7 +1903,10 @@ Rows still proposed:
    bounded by the rules, not by `plyHorizon`), a statement that the rated boss lives in Act II
    only, a fourth class on §2a's difficulty-availability axis, a note on §2b's boss table saying
    which of the three bosses can carry a result, and a corpus fix (*"36 of 37 packs, median 12"* is
-   50 of 56, median 11 `[V]`). **Not acted on here — law 5.** The one part §5.3a did not name a
+   50 of 56, median 11 `[V]`). **Not acted on by this RFC (law 5) — and since LANDED: all six
+   amendments were written into `06` on 2026-08-22 by claude on the D439 ruling ([[D836]]),
+   discharging D1** (cross-review 2026-08-22 verified them in `06` and reconciled the discharge
+   table, which still showed the column blank). The one part §5.3a did not name a
    change for was the rewind collision, which was a ruling rather than an edit — **ruled
    2026-08-22 ([[D945]]) and landed in `06` §2c/§5 by claude on the ruling** (§5.3a consequence 4
    carries the resolution).
@@ -1909,10 +1964,12 @@ Rows still proposed:
 - **AC-4 (no historical rating).** After the migration, `learner_ratings` and `rated_games` are
   empty on every existing database, and `GET /rating` publishes nothing.
 - **AC-5 (assistance is refused, not trusted).** An integration test drives a rated run and
-  asserts every **server-routed** assistance route returns `ASSISTANCE_WITHHELD` regardless of any
-  client-supplied preference; and asserts `permittedAssistance`'s output is byte-identical to
-  today's for the same inputs. **It must also assert the negative** — that the six browser-rendered
-  axes are unaffected — so the RFC's claim and its test agree about what R6 reaches.
+  asserts every **server-routed** assistance route — the §10.2 set, `/reveal` and `/analysis`
+  included — returns `ASSISTANCE_WITHHELD` regardless of any client-supplied preference; asserts
+  the created run's `feedbackPolicy` is `"attempt_end"` and that `GET /evidence` returns an empty
+  page before `outcome.reached`; and asserts `permittedAssistance`'s output is byte-identical to
+  today's for the same inputs. **It must also assert the negative** — that the browser-rendered
+  remainder (§5.2) is unaffected — so the RFC's claim and its test agree about what R6 reaches.
 - **AC-6 (the five disclosures ship).** A rendering test asserts scale name, interval, game
   count + abandonment count, the assistance-ceiling qualifier, and — wherever movement is shown —
   the transfer ratio, with the corpus-wide magnitude asserted as **346.8**, not 289.6.
@@ -1955,7 +2012,9 @@ Rows still proposed:
      sentence, the bytes differ.
 - **AC-12 (the rating's own copy is inside the denylist, not around it).** The rating surface
   emits only a frozen sentence set; a test asserts (a) that set is exhaustive of the surface's
-  text, (b) `BANNED_JUDGEMENTS` (all 30 words at `3e6fe2e`) intersects it nowhere, and (c) no
+  text, (b) the **shipped `BANNED_JUDGEMENTS` constant** intersects it nowhere — asserted by
+  symbol, never by a pinned count: the list was 30 words at `3e6fe2e` and is **32 at HEAD**
+  (`inaccurate`, `inaccuracy` added), which is D384's lesson applied to a wordlist — and (c) no
   rating surface reaches `/voice`, `/speech` or `/reasoning-review`. **(b) is deliberately run on
   authored strings, which `voiceCheck` never sees** — that is the point of the criterion.
   **The standing surface is inside the same frozen set**, which is where AC-12 does most of its
@@ -1999,7 +2058,7 @@ Rows still proposed:
 
 | id | the obligation | owner | recorded when discharged | discharged |
 |---|---|---|---|---|
-| `D1` | Six changes owed to `design/06-campaign.md`, enumerated in §5.3a | `OWNER` | `design/06-campaign.md` plus `planning/exploration/log.md` | |
+| `D1` | Six changes owed to `design/06-campaign.md`, enumerated in §5.3a | `OWNER` | `design/06-campaign.md` plus `planning/exploration/log.md` | **2026-08-22 — [[D836]]**: all six amendments written into `design/06-campaign.md` by claude on the D439 ruling; the log entry and this register flip rode that commit (recorded here by cross-review, which found the column still blank against a landed discharge) |
 
 ## Open questions
 
@@ -2151,3 +2210,30 @@ rounds rather than compacted** — answered questions (1 and 10 on 2026-08-16; 1
   `targetElo`, so a rated persona boss needs a rung-calibrated profile or no persona —
   foreclosing neither arm; resolution owned by `campaign-core` Discharge D1. No R-rule, §8-table
   or acceptance-criterion change in this round; open questions 3, 5, 6, 8 and 9 still stand.
+- 2026-08-22: **independent cross-review** (claude, not the author) — every load-bearing claim
+  re-derived at HEAD; the rulings verified verbatim against `design/BACKLOG.md` D945/D946/D962
+  and `design/06-campaign.md` §2c/§5, and the calibration, Glicko-2 update, and §7.3 bracket
+  arithmetic all recompute clean. **Substantive fix — R6's route enumeration was incomplete:**
+  `/reveal` opens `feedbackDeliveryOpen()` and `/analysis` enqueues engine bestline/eval/wdl
+  behind `#forWrite` alone, so a rated run could have read Stockfish lines mid-game through
+  routes the refusal never named; both join the `ASSISTANCE_WITHHELD` set and
+  `POST /rated-games` pins `feedbackPolicy: "attempt_end"` (§10.2, AC-5). **Recounts:** the v4
+  `AssistanceConfig` puts `spoken: "provider"` on the wire via `/speech`, so "six of nine
+  unrefusable" becomes five-plus-a-tier (§5.2, §7.4 ob. 5, R6, D389 addendum); `AssistanceContext`
+  is five fields at HEAD, not three (§5.2); `terminal_reason`'s non-mate `isEnd` split is **two**
+  causes, not three (§10.1); `BANNED_JUDGEMENTS` is 32 at HEAD and AC-12 now asserts the symbol,
+  not a pinned count; `#project` has thirteen call sites; the 0.8431 ladder score's orientation
+  was inverted in §10a.3 (it is band 2200's score, the one-in-six conclusion stands). **Register
+  reconciliation:** `longitudinal-store` (accepted 2026-08-22) claims the position behind this
+  RFC — "only active claimant" corrected; `portable-account-data` (same day) queues this
+  migration by name for deletion-inventory entries — obligation absorbed (§9.1, §10.1); five
+  same-day acceptances added to §11.1; `opponent-contracts` implemented, `graduation-clearance`
+  accepted; `live-session.test.ts` now matches at 24. **Residue of the absorption reconciled:**
+  Discharge D1 was already discharged by [[D836]] (all six `06` amendments landed) — the table,
+  Deviations 2 and §12 item 11 now say so; §12's proposal list marked against the landed rows
+  D420–D423/D437–D443; "third shape"/"fourth shape" aligned; the D962 status-line cite fixed
+  §5.3→§3; §7.4's "five obligations" is six; two "pointer at/to" misquotes fixed. Not fixed,
+  reported to the acceptor: `rfc/README.md`'s register row still says "14 named refusals" and
+  repeats the withdrawn `docs/return-and-progression.md:48-49` amendment claim (do-not-touch
+  file); `void_reason`'s `'assistance'` and `'calibration_retired'` values have no specified
+  writer.
