@@ -473,7 +473,7 @@ export interface SQLiteRunStorageOptions {
   readonly onMigration?: (entry: StorageMigrationLog) => void;
 }
 
-export const STORAGE_VERSION = 24;
+export const STORAGE_VERSION = 25;
 const LEGACY_ID = "__legacy";
 const LEGACY_HASH = "!";
 
@@ -2749,6 +2749,11 @@ export class SQLiteRunStorage implements RunStorage, ProgressStorage, LiveSessio
         name: "classrooms, assignments, submissions, and expiring run grants",
         apply: () => this.#addClassroomTables(),
       },
+      {
+        version: 25,
+        name: "learner ratings, rated games, periods, standings, and marks",
+        apply: () => this.#addLearnerRatingTables(),
+      },
     ] as const;
     assertContiguousMigrationVersions(migrations.map((migration) => migration.version));
     for (const migration of migrations) {
@@ -3511,6 +3516,84 @@ export class SQLiteRunStorage implements RunStorage, ProgressStorage, LiveSessio
       this.#database.exec(`ALTER TABLE live_sessions ADD COLUMN classroom_id TEXT
         REFERENCES classrooms(id) ON DELETE SET NULL`);
     }
+  }
+
+  #addLearnerRatingTables(): void {
+    this.#database.exec(`
+      CREATE TABLE IF NOT EXISTS learner_ratings (
+        learner_id TEXT PRIMARY KEY REFERENCES learners(id) ON DELETE CASCADE,
+        calibration_id TEXT NOT NULL,
+        rating REAL NOT NULL,
+        rd REAL NOT NULL,
+        volatility REAL NOT NULL,
+        seed_band INTEGER,
+        rated_games INTEGER NOT NULL DEFAULT 0,
+        voided_games INTEGER NOT NULL DEFAULT 0,
+        abandoned_games INTEGER NOT NULL DEFAULT 0,
+        period_no INTEGER NOT NULL DEFAULT 0,
+        period_started_at TEXT NOT NULL,
+        updated_at TEXT NOT NULL
+      ) STRICT;
+      CREATE TABLE IF NOT EXISTS rated_games (
+        run_id TEXT PRIMARY KEY REFERENCES drill_runs(id) ON DELETE CASCADE,
+        learner_id TEXT NOT NULL REFERENCES learners(id) ON DELETE CASCADE,
+        calibration_id TEXT NOT NULL,
+        opponent_band INTEGER NOT NULL,
+        opponent_rating REAL NOT NULL,
+        opponent_rd REAL NOT NULL,
+        learner_side TEXT NOT NULL CHECK (learner_side IN ('white','black')),
+        start_piece_count INTEGER NOT NULL,
+        engine_identity_digest TEXT NOT NULL,
+        state TEXT NOT NULL CHECK (state IN ('open','sealed','voided')),
+        void_reason TEXT CHECK (void_reason IN ('rewound','forked','assistance','engine_changed','calibration_retired','abandoned')),
+        result TEXT CHECK (result IN ('win','loss','draw')),
+        terminal_reason TEXT CHECK (terminal_reason IN ('checkmate','stalemate','insufficient_material','fifty_move','threefold')),
+        ply_count INTEGER,
+        period_no INTEGER,
+        started_at TEXT NOT NULL,
+        sealed_at TEXT
+      ) STRICT;
+      CREATE INDEX IF NOT EXISTS rated_games_learner ON rated_games(learner_id, sealed_at);
+      CREATE TABLE IF NOT EXISTS rating_periods (
+        learner_id TEXT NOT NULL REFERENCES learners(id) ON DELETE CASCADE,
+        period_no INTEGER NOT NULL,
+        calibration_id TEXT NOT NULL,
+        opened_at TEXT NOT NULL,
+        closed_at TEXT,
+        games INTEGER NOT NULL DEFAULT 0,
+        rating_before REAL NOT NULL,
+        rd_before REAL NOT NULL,
+        volatility_before REAL NOT NULL,
+        rating_after REAL,
+        rd_after REAL,
+        volatility_after REAL,
+        PRIMARY KEY (learner_id, period_no)
+      ) STRICT;
+      CREATE TABLE IF NOT EXISTS cohort_standings (
+        classroom_id TEXT PRIMARY KEY REFERENCES classrooms(id) ON DELETE CASCADE,
+        opened_by_learner_id TEXT NOT NULL,
+        window_from TEXT NOT NULL,
+        window_to TEXT,
+        opened_at TEXT NOT NULL,
+        closed_at TEXT
+      ) STRICT;
+      CREATE TABLE IF NOT EXISTS standing_members (
+        classroom_id TEXT NOT NULL REFERENCES cohort_standings(classroom_id) ON DELETE CASCADE,
+        learner_id TEXT NOT NULL REFERENCES learners(id) ON DELETE CASCADE,
+        show_record INTEGER NOT NULL DEFAULT 1,
+        show_rating INTEGER NOT NULL DEFAULT 0,
+        published_at TEXT NOT NULL,
+        PRIMARY KEY (classroom_id, learner_id)
+      ) STRICT;
+      CREATE TABLE IF NOT EXISTS learner_marks (
+        learner_id TEXT NOT NULL REFERENCES learners(id) ON DELETE CASCADE,
+        mark TEXT NOT NULL CHECK (mark IN ('bronze','silver','gold')),
+        calibration_id TEXT NOT NULL,
+        run_id TEXT NOT NULL,
+        earned_at TEXT NOT NULL,
+        PRIMARY KEY (learner_id, mark)
+      ) STRICT;
+    `);
   }
 
   #insertLegacy(at: string): void {

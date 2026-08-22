@@ -5228,3 +5228,24 @@ archiving around a producer with no consumer.
 
 **Next:** compile the two module consumers when their policy tables land, then expose the grade
 through post-commit and Review composition under the preset/disclosure ceilings.
+
+## 2026-08-22 — learner-rating core and storage checkpoint
+
+**What landed:** the runtime now owns the four measured full-material Maia opponent rungs, an
+exact Glicko-2 update, uncertainty widening for empty periods, publication abstention,
+abandonment handling and the six disclosures every later rating surface must carry. Migration
+25 creates the six rating/standing tables additively.
+
+**Verification:** the six focused rating fixtures reproduce the published Glicko-2 worked
+example and repository calibration artifact; fourteen storage fixtures cover fresh and
+historical upgrades, including the deliberate no-backfill result; runtime and server typechecks
+are green. The migration register now records 25 as landed rather than leaving a live claim.
+
+**What changed:** the arithmetic and durable schema are real, but the application still creates
+and shows no ratings. The separate rating documentation says so explicitly, while the existing
+return/progression no-rating clauses remain surface-scoped and unchanged.
+
+**Next:** implement rated-game admission and event projection, assistance/rewind voiding, rating
+period closure, service routes, cohort standings and the learner surface. In parallel dependency
+order, migration 26 is now available to the accepted longitudinal store that powers grounded
+opening, structure, style and habit aggregates without feeding the rating.

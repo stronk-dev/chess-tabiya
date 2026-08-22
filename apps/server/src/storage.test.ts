@@ -8,6 +8,7 @@ import { afterEach, describe, expect, it } from "vitest";
 
 import {
   SQLiteRunStorage,
+  STORAGE_VERSION,
   assertContiguousMigrationVersions,
   type StorageMigrationLog,
 } from "./storage.js";
@@ -44,6 +45,35 @@ describe("SQLite run-storage migrations and summaries", () => {
     expect(() => assertContiguousMigrationVersions([1, 3], 3)).toThrow(/exactly 1\.\.3/u);
     expect(() => assertContiguousMigrationVersions([1, 2, 2], 3)).toThrow(/exactly 1\.\.3/u);
     expect(() => assertContiguousMigrationVersions([2, 1, 3], 3)).toThrow(/exactly 1\.\.3/u);
+  });
+
+  it("adds the six rating and cohort tables without rating historical learners or runs", () => {
+    const directory = mkdtempSync(join(tmpdir(), "tabiya-storage-rating-"));
+    directories.push(directory);
+    const filename = join(directory, "rating.sqlite");
+    const initial = new SQLiteRunStorage(filename, { onMigration: () => {} });
+    initial.createLearner({ id: "historical-learner", handle: "historical", passwordHash: "!", createdAt });
+    initial.create(run("historical-run"), { writerId: "writer", learnerId: "historical-learner" }, "Historical run");
+    initial.close();
+
+    const fixture = new DatabaseSync(filename);
+    for (const table of ["learner_marks", "standing_members", "cohort_standings", "rating_periods", "rated_games", "learner_ratings"]) fixture.exec(`DROP TABLE ${table}`);
+    fixture.exec("PRAGMA user_version = 24");
+    fixture.close();
+
+    const log: StorageMigrationLog[] = [];
+    const upgraded = new SQLiteRunStorage(filename, { onMigration: (entry) => log.push(entry) });
+    expect(STORAGE_VERSION).toBe(25);
+    expect(log).toEqual([{ version: 25, name: "learner ratings, rated games, periods, standings, and marks" }]);
+    upgraded.close();
+
+    const inspected = new DatabaseSync(filename);
+    const tables = ["learner_ratings", "rated_games", "rating_periods", "cohort_standings", "standing_members", "learner_marks"];
+    for (const table of tables) expect((inspected.prepare(`SELECT count(*) AS count FROM ${table}`).get() as { count: number }).count).toBe(0);
+    const ratedSql = (inspected.prepare("SELECT sql FROM sqlite_master WHERE type='table' AND name='rated_games'").get() as { sql: string }).sql;
+    expect(ratedSql).not.toContain("tablebase_exact");
+    expect(ratedSql).toContain("'checkmate','stalemate','insufficient_material','fifty_move','threefold'");
+    inspected.close();
   });
 
   it("upgrades and backfills a legacy fixture once, then skips on reopen", () => {
@@ -106,6 +136,7 @@ describe("SQLite run-storage migrations and summaries", () => {
       { version: 22, name: "learner board annotations" },
       { version: 23, name: "opponent ordering basis run schema" },
       { version: 24, name: "classrooms, assignments, submissions, and expiring run grants" },
+      { version: 25, name: "learner ratings, rated games, periods, standings, and marks" },
     ]);
     expect(upgraded.list(10, 0)).toEqual([]);
     expect(upgraded.read("legacy-run")).toBeUndefined();
@@ -123,7 +154,7 @@ describe("SQLite run-storage migrations and summaries", () => {
     expect(
       (inspection.prepare("PRAGMA user_version").get() as { user_version: number })
         .user_version,
-    ).toBe(24);
+    ).toBe(25);
     inspection.close();
   });
 
@@ -152,7 +183,7 @@ describe("SQLite run-storage migrations and summaries", () => {
       PRAGMA user_version=13;
     `);fixture.close();
 
-    const log:StorageMigrationLog[]=[];const upgraded=new SQLiteRunStorage(filename,{onMigration:(entry)=>log.push(entry)});expect(log).toEqual([{version:14,name:"native matches and session join tokens"},{version:15,name:"learner repertoires, scans, and gap-run links"},{version:16,name:"immediate guard run schema"},{version:17,name:"stated reasoning run schema"},{version:18,name:"perfect tablebase run schema"},{version:19,name:"practical resistance run schema"},{version:20,name:"engine request record run schema"},{version:21,name:"engine leverage run schema"},{version:22,name:"learner board annotations"},{version:23,name:"opponent ordering basis run schema"},{version:24,name:"classrooms, assignments, submissions, and expiring run grants"}]);
+    const log:StorageMigrationLog[]=[];const upgraded=new SQLiteRunStorage(filename,{onMigration:(entry)=>log.push(entry)});expect(log).toEqual([{version:14,name:"native matches and session join tokens"},{version:15,name:"learner repertoires, scans, and gap-run links"},{version:16,name:"immediate guard run schema"},{version:17,name:"stated reasoning run schema"},{version:18,name:"perfect tablebase run schema"},{version:19,name:"practical resistance run schema"},{version:20,name:"engine request record run schema"},{version:21,name:"engine leverage run schema"},{version:22,name:"learner board annotations"},{version:23,name:"opponent ordering basis run schema"},{version:24,name:"classrooms, assignments, submissions, and expiring run grants"},{version:25,name:"learner ratings, rated games, periods, standings, and marks"}]);
     expect(upgraded.liveSession(session.id)?.title).toBe("Old class");expect(upgraded.publicTokenByHash("hash-old")).toMatchObject({scope:"story_read",runId:value.id});upgraded.close();
     const inspection=new DatabaseSync(filename);expect((inspection.prepare("PRAGMA foreign_key_check").all())).toEqual([]);for(const table of ["session_proposals","session_vote_windows","session_invitations","arena_legs"]){const targets=(inspection.prepare(`PRAGMA foreign_key_list(${table})`).all() as readonly Record<string,unknown>[]).map((row)=>row.table);expect(targets).toContain("live_sessions");expect(targets).not.toContain("live_sessions_v14");}expect(String((inspection.prepare("SELECT sql FROM sqlite_master WHERE type='table' AND name='live_sessions'").get() as {sql:string}).sql)).toContain("'match'");inspection.close();
     const freshFile=join(directory,"fresh.sqlite"),freshStorage=new SQLiteRunStorage(freshFile,{onMigration:()=>{}});freshStorage.close();const upgradedSchema=new DatabaseSync(filename),freshSchema=new DatabaseSync(freshFile);
@@ -221,6 +252,7 @@ describe("SQLite run-storage migrations and summaries", () => {
       { version: 22, name: "learner board annotations" },
       { version: 23, name: "opponent ordering basis run schema" },
       { version: 24, name: "classrooms, assignments, submissions, and expiring run grants" },
+      { version: 25, name: "learner ratings, rated games, periods, standings, and marks" },
     ]);
     expect(upgraded.read(ordinary.id)?.run.schemaVersion).toBe("0.17");
     expect(upgraded.list(10, 0).map((entry) => entry.id)).toEqual([ordinary.id]);
@@ -316,6 +348,7 @@ describe("SQLite run-storage migrations and summaries", () => {
       { version: 22, name: "learner board annotations" },
       { version: 23, name: "opponent ordering basis run schema" },
       { version: 24, name: "classrooms, assignments, submissions, and expiring run grants" },
+      { version: 25, name: "learner ratings, rated games, periods, standings, and marks" },
     ]);
     expect(upgraded.read(ordinary.id)?.run.schemaVersion).toBe("0.17");
     expect(upgraded.read(quarantined.id)).toBeUndefined();
@@ -385,7 +418,7 @@ describe("SQLite run-storage migrations and summaries", () => {
 
     const log: StorageMigrationLog[] = [];
     const upgraded = new SQLiteRunStorage(filename, { onMigration: (entry) => log.push(entry) });
-    expect(log).toEqual([{ version: 16, name: "immediate guard run schema" }, { version: 17, name: "stated reasoning run schema" }, { version: 18, name: "perfect tablebase run schema" }, { version: 19, name: "practical resistance run schema" }, { version: 20, name: "engine request record run schema" }, { version: 21, name: "engine leverage run schema" }, { version: 22, name: "learner board annotations" }, { version: 23, name: "opponent ordering basis run schema" }, { version: 24, name: "classrooms, assignments, submissions, and expiring run grants" }]);
+    expect(log).toEqual([{ version: 16, name: "immediate guard run schema" }, { version: 17, name: "stated reasoning run schema" }, { version: 18, name: "perfect tablebase run schema" }, { version: 19, name: "practical resistance run schema" }, { version: 20, name: "engine request record run schema" }, { version: 21, name: "engine leverage run schema" }, { version: 22, name: "learner board annotations" }, { version: 23, name: "opponent ordering basis run schema" }, { version: 24, name: "classrooms, assignments, submissions, and expiring run grants" }, { version: 25, name: "learner ratings, rated games, periods, standings, and marks" }]);
     expect(upgraded.read("guard-migration")?.run.schemaVersion).toBe("0.17");
     upgraded.close();
 
@@ -427,7 +460,7 @@ describe("SQLite run-storage migrations and summaries", () => {
 
     const log: StorageMigrationLog[] = [];
     const upgraded = new SQLiteRunStorage(filename, { onMigration: (entry) => log.push(entry) });
-    expect(log).toEqual([{ version: 19, name: "practical resistance run schema" }, { version: 20, name: "engine request record run schema" }, { version: 21, name: "engine leverage run schema" }, { version: 22, name: "learner board annotations" }, { version: 23, name: "opponent ordering basis run schema" }, { version: 24, name: "classrooms, assignments, submissions, and expiring run grants" }]);
+    expect(log).toEqual([{ version: 19, name: "practical resistance run schema" }, { version: 20, name: "engine request record run schema" }, { version: 21, name: "engine leverage run schema" }, { version: 22, name: "learner board annotations" }, { version: 23, name: "opponent ordering basis run schema" }, { version: 24, name: "classrooms, assignments, submissions, and expiring run grants" }, { version: 25, name: "learner ratings, rated games, periods, standings, and marks" }]);
     const after = upgraded.read(selected.id)!.run;
     expect(after.schemaVersion).toBe("0.17");
     expect(after.events).toEqual(selected.events);
@@ -458,7 +491,7 @@ describe("SQLite run-storage migrations and summaries", () => {
 
     const log: StorageMigrationLog[] = [];
     const upgraded = new SQLiteRunStorage(filename, { onMigration: (entry) => log.push(entry) });
-    expect(log).toEqual([{ version: 20, name: "engine request record run schema" }, { version: 21, name: "engine leverage run schema" }, { version: 22, name: "learner board annotations" }, { version: 23, name: "opponent ordering basis run schema" }, { version: 24, name: "classrooms, assignments, submissions, and expiring run grants" }]);
+    expect(log).toEqual([{ version: 20, name: "engine request record run schema" }, { version: 21, name: "engine leverage run schema" }, { version: 22, name: "learner board annotations" }, { version: 23, name: "opponent ordering basis run schema" }, { version: 24, name: "classrooms, assignments, submissions, and expiring run grants" }, { version: 25, name: "learner ratings, rated games, periods, standings, and marks" }]);
     const after = upgraded.read(selected.id)!.run;
     expect(after.schemaVersion).toBe("0.17");
     expect(after.events).toEqual(selected.events);
@@ -490,7 +523,7 @@ describe("SQLite run-storage migrations and summaries", () => {
 
     const log: StorageMigrationLog[] = [];
     const upgraded = new SQLiteRunStorage(filename, { onMigration: (entry) => log.push(entry) });
-    expect(log).toEqual([{ version: 21, name: "engine leverage run schema" }, { version: 22, name: "learner board annotations" }, { version: 23, name: "opponent ordering basis run schema" }, { version: 24, name: "classrooms, assignments, submissions, and expiring run grants" }]);
+    expect(log).toEqual([{ version: 21, name: "engine leverage run schema" }, { version: 22, name: "learner board annotations" }, { version: 23, name: "opponent ordering basis run schema" }, { version: 24, name: "classrooms, assignments, submissions, and expiring run grants" }, { version: 25, name: "learner ratings, rated games, periods, standings, and marks" }]);
     const after = upgraded.read(selected.id)!.run;
     expect(after.schemaVersion).toBe("0.17");
     expect(after.events).toEqual(selected.events);
@@ -523,7 +556,7 @@ describe("SQLite run-storage migrations and summaries", () => {
 
     const log: StorageMigrationLog[] = [];
     const upgraded = new SQLiteRunStorage(filename, { onMigration: (entry) => log.push(entry) });
-    expect(log).toEqual([{ version: 23, name: "opponent ordering basis run schema" }, { version: 24, name: "classrooms, assignments, submissions, and expiring run grants" }]);
+    expect(log).toEqual([{ version: 23, name: "opponent ordering basis run schema" }, { version: 24, name: "classrooms, assignments, submissions, and expiring run grants" }, { version: 25, name: "learner ratings, rated games, periods, standings, and marks" }]);
     const after = upgraded.read(selected.id)!.run;
     expect(after.schemaVersion).toBe("0.17");
     expect(after.events).toEqual(selected.events);

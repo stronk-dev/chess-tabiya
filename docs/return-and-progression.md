@@ -47,6 +47,9 @@ It deliberately presents no mastery percentage: the stored data is an attempt hi
 a return queue, not proof of mastery. It also lists derived event-shaped milestones linking
 to preserved runs. Those record firsts and one explicit attempt-count event; they never add
 a skill percentage, score, streak, rating, ranking, or cross-learner comparison.
+Those limits are scoped to the return and progression surfaces. The separate learner-rating
+system records whole-game results against calibrated opponents and never feeds this scheduler,
+its recommendations, or its milestones.
 
 `GET /progress/recommendations` is a read-only, learner-scoped projection. It
 may name an unaddressed stored repertoire gap or a shape encountered in a

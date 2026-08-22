@@ -1,6 +1,6 @@
 # RFC: Learner rating
 
-- **Status:** **accepted — 2026-08-22, by claude as register owner on the buildability test, after an independent cross-review that re-derived ~80 claims at source and failed 14, all corrected in place.** The center catch: R6's refused-route enumeration was incomplete — a rated run could read live Stockfish lines mid-game via `/reveal` → `/analysis` → `/evidence`, routes the withholding set never named (now in `ASSISTANCE_WITHHELD`, `POST /rated-games` pins `feedbackPolicy: "attempt_end"`, AC-5 extended). The Glicko-2 arithmetic verified clean end-to-end to four decimals; the void mechanism verified event/branch-keyed across all four persisted rewind-family paths; the five remaining open questions (3/5/6/8/9) are registered opens, judged non-blocking per review. Rows: D967/D968 landed at acceptance; D395 flips closed with R15/R16 intact. Prior line: **draft — independent cross-review complete 2026-08-22 (verdict: accept-after-corrections); awaiting acceptance**; before that: **rulings D945/D946 absorbed 2026-08-22.**
+- **Status:** **implementing — 2026-08-22 core/storage checkpoint.** The calibrated Glicko-2 update, publication abstention, four measured opponent rungs, six mandatory disclosures, and migration 25's six empty tables are implemented. No historical game is backfilled. No rating is yet produced, projected, served, or shown: the rated-game writer, event projector, assistance/rewind voiding, cohort standing, routes, client surface, and remaining acceptance criteria still belong to this RFC. **Accepted 2026-08-22, by claude as register owner on the buildability test, after an independent cross-review that re-derived ~80 claims at source and failed 14, all corrected in place.** The center catch: R6's refused-route enumeration was incomplete — a rated run could read live Stockfish lines mid-game via `/reveal` → `/analysis` → `/evidence`, routes the withholding set never named (now in `ASSISTANCE_WITHHELD`, `POST /rated-games` pins `feedbackPolicy: "attempt_end"`, AC-5 extended). The Glicko-2 arithmetic verified clean end-to-end to four decimals; the void mechanism verified event/branch-keyed across all four persisted rewind-family paths; the five remaining open questions (3/5/6/8/9) are registered opens, judged non-blocking per review. Rows: D967/D968 landed at acceptance; D395 flips closed with R15/R16 intact. Prior line: **draft — independent cross-review complete 2026-08-22 (verdict: accept-after-corrections); awaiting acceptance**; before that: **rulings D945/D946 absorbed 2026-08-22.**
   The two blocking open questions are ruled: **question 11** by [[D945]] (earned rewinds — a fourth
   shape none of the drafted answers had; R11 stands **unchanged**, the earned economy lives on the
   encounter-verdict side per accepted `rfc/campaign-core.md` §2, so the boss is **rated when
@@ -64,8 +64,7 @@
 - **Planning:** `planning/learner-rating/` (once implementing)
 
 ```tabiya-claims
-migration | position next | learner_ratings; rated_games; rating_periods
-migration | position next | cohort_standings; standing_members; learner_marks
+none
 ```
 
 ## Summary
@@ -2237,3 +2236,10 @@ rounds rather than compacted** — answered questions (1 and 10 on 2026-08-16; 1
   repeats the withdrawn `docs/return-and-progression.md:48-49` amendment claim (do-not-touch
   file); `void_reason`'s `'assistance'` and `'calibration_retired'` values have no specified
   writer.
+- 2026-08-22: **implementation checkpoint — arithmetic and storage only.** The runtime now
+  carries the four measured full-material opponent rungs, exact Glicko-2 update (including
+  uncertainty widening over empty periods), publication abstention, abandonment handling and
+  six mandatory disclosures. Migration 25 creates the six §10.1/§10a tables without backfill;
+  upgrade fixtures prove historical learner/run rows create no rating, game, period, standing,
+  membership or mark rows. The live migration claim is discharged. The RFC remains implementing:
+  no writer, projector, service route, cohort computation or learner UI has landed.
