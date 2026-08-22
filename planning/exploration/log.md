@@ -4898,3 +4898,20 @@ module/leak work; no schema was invented in this slice.
 
 **Next:** land the module compiler in dependency order, then finish those typed destinations and
 the complete composition-state matrix.
+
+## 2026-08-22 — more plumbing leaves the run surface
+
+**What landed:** removed the aggregate “evidence waiting” topbar counter rather than preserving a
+producer backlog as learner chrome. Raw trajectory leg ids/states moved from Support into a Run
+trajectory Inspector section. Theory verdicts still render the played SAN and authored/unknown
+distinction, but no longer print `concept_violation`, `tactical_error` or mistake enum tokens; a
+classified alternative now says only that the pack has authored commentary about it.
+
+**What changed:** L2 is removed and the dependency-free portions of L4/L12 are routed. Timeline
+marks and the final authored theory module still belong to the module implementation, but ordinary
+play no longer waits for those dependencies to stop exposing their internal vocabulary. Web
+typecheck is 0/0; 26 focused unit/component tests and the affected authored-theory browser path are
+green.
+
+**Next:** continue with compiled module destinations for phase, compare, tablebase and voice; do
+not reintroduce raw values as temporary cards while those modules are absent.

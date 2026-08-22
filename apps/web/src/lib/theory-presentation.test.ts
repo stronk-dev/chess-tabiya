@@ -22,18 +22,17 @@ function item(deviationMistakes?: readonly string[]): Extract<AuthoredFeedbackIt
 }
 
 describe("theory verdict presentation", () => {
-  it("renders every declared mistake in canonical order", () => {
+  it("keeps classifier and mistake tokens out of learner copy", () => {
     expect(theoryVerdictSentence(item(["timing", "plan"]), run)).toBe(
-      "Ply 8, Qd2: the pack classifies this as concept_violation (plan, timing).",
+      "Ply 8, Qd2: the pack has authored commentary about this alternative.",
     );
     const sentence = theoryVerdictSentence(item(["tactical", "plan", "timing"]), run);
-    expect(sentence).toContain("(plan, timing, tactical)");
-    expect(new Set(sentence.match(/plan|timing|tactical/g))).toEqual(new Set(["plan", "timing", "tactical"]));
+    expect(sentence).not.toMatch(/concept_violation|plan|timing|tactical/u);
   });
 
   it("renders absence without a placeholder", () => {
     expect(theoryVerdictSentence(item(), run)).toBe(
-      "Ply 8, Qd2: the pack classifies this as concept_violation.",
+      "Ply 8, Qd2: the pack has authored commentary about this alternative.",
     );
   });
 });

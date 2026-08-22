@@ -823,7 +823,6 @@
         {#if authoredFeedback?.hasWithheldAuthoredContent}
           <span role="status">Authored commentary withheld until checkpoints</span>
         {/if}
-        {#if snapshot.pendingEvidence > 0}<span>{snapshot.pendingEvidence} evidence waiting</span>{/if}
       </div>
       <div class="topbar-actions">
         {#if assistance.ambient === "on"}<button class="ambient" type="button" aria-label="Open assistance" title={busy ? "Thinking…" : snapshot.withheld ? "Waiting for disclosure" : guardEvent ? "A consequence is ready" : "Present"}>♟</button>{/if}
@@ -953,11 +952,6 @@
             {/if}
             {#if overlayCaption.length > 0}<div class="overlay-caption" aria-live="polite" data-evidence-consumer="board.selected_square_sight">{#each overlayCaption as sentence}<p>{sentence}</p>{/each}</div>{/if}
             {#if assistance.boardLighting === "evidence" && !feedbackDeliveryOpen(run)}<p class="overlay-caption honest">No disclosed evidence exists here; structural sight remains available.</p>{/if}
-            {#if trajectory}
-              <section class="trajectory-status" aria-label="Trajectory legs">
-                {#each trajectory.legs as leg}<div class:active-leg={leg.legId === trajectory.activeLegId}><strong>{leg.legId}</strong><span>{leg.status === "not_entered" ? "not entered" : leg.state}</span></div>{/each}
-              </section>
-            {/if}
             {#if pack !== undefined && (assessment !== undefined || resistance.length > 0)}<OutcomeContext {assessment} {resistance} grade={objectiveGradeSentence(pack.objective.type, currentNode.objectiveState)} />{/if}
             {#if banner !== undefined}<WhyBanner model={banner} />{/if}
           </section>
@@ -1162,6 +1156,14 @@
             {#each inspectedShape.provenance.sources as source}<p>{source}</p>{/each}
             {#each inspectedShape.plans.filter((plan) => plan.success.signature !== null) as plan}<p class="guidance-sentence">{plan.label}: {renderStructuralExpressionSpec(plan.success.signature!)}.</p>{/each}
           {/if}
+        </section>
+        <section aria-label="Run trajectory diagnostics">
+          <h3>Run trajectory</h3>
+          {#if trajectory}
+            <div class="trajectory-status">
+              {#each trajectory.legs as leg}<div class:active-leg={leg.legId === trajectory.activeLegId}><strong>{leg.legId}</strong><span>{leg.status === "not_entered" ? "not entered" : leg.state}</span></div>{/each}
+            </div>
+          {:else}<p class="honest">This run has no trajectory legs.</p>{/if}
         </section>
       </div>
     </div>

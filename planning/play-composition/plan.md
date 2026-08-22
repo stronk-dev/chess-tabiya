@@ -27,6 +27,9 @@ remain in their owning RFCs.
    checkpoint alternatives never fall back to raw UCI; pivotal producer prose and shape trigger
    AST/provenance moved behind explicit Inspector doors. Their ordinary cards retain only SAN,
    the recorded-moment affordance and authored named plans.
+9. The aggregate “evidence waiting” plumbing counter is absent from run chrome; raw trajectory-leg
+   state lives in Inspector; theory checkpoints no longer expose deviation-class or mistake enums
+   as learner copy.
 
 ## Remaining before archive
 
@@ -34,8 +37,8 @@ remain in their owning RFCs.
    the one-expanded queue and fact-count badges rather than treating the three structural tabs as
    final module composition.
 2. Remove the remaining ordinary-surface vocabulary leaks named by §5. The related-pack relation
-   currently suppresses its raw UCI until an authoritative SAN projection exists; phase, trajectory,
-   classifier, compare, tablebase and voice families still need their compiled module renderers.
+   currently suppresses its raw UCI until an authoritative SAN projection exists; phase, compare,
+   tablebase and voice families still need their compiled module renderers.
 3. Complete every acceptance state in the 7×16 matrix, including max-load, long objective,
    checkpoint, terminal, promotion and branch-group capture; capture and retain the 112 CI
    screenshots required by A8.

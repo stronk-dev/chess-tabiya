@@ -1003,7 +1003,8 @@ test("Pack A withholds its line, grades the boundary, and renders authored theor
   await move(page, "e1", "g1");
   const boundarySheet = page.getByRole("dialog");
   await expect(boundarySheet.getByRole("heading", { name: "You are past the authored line" })).toBeVisible();
-  await expect(boundarySheet.getByText("concept_violation", { exact: false })).toBeVisible();
+  await expect(boundarySheet.getByText("concept_violation", { exact: false })).toHaveCount(0);
+  await expect(boundarySheet.getByText("the pack has authored commentary about this alternative", { exact: false })).toBeVisible();
   await expect(boundarySheet.getByText("Castling into the break", { exact: false })).toBeVisible();
   await expect(page.getByText("Objective: follow_theory — degraded", { exact: false })).toBeVisible();
   await expect(boundarySheet.getByText("Applied policy: theory_strict", { exact: false })).toBeVisible();
