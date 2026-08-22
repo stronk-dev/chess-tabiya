@@ -38,8 +38,8 @@ absorbing on a promotion-free path because the material count cannot rise.
 
 ## Assistance configuration and enforcement
 
-Six learner-facing contexts have independent, versioned local preferences: curated drills,
-Just Play, imported games, native matches/Arenas, streamed sessions, and the on-ramp. A live
+Seven learner-facing contexts have independent, versioned local preferences: curated drills,
+Just Play, imported games, native matches/Arenas, streamed sessions, Academy, and the on-ramp. A live
 stream or match selects its own profile; `immediate_guard` selects on-ramp first. The stored
 shape is currently:
 
@@ -58,7 +58,7 @@ shape is currently:
 }
 ```
 
-Five contexts start from `SILENT_ASSISTANCE`; its rules-tier `boardLighting: "legal"` is the
+Six contexts start from `SILENT_ASSISTANCE`; its rules-tier `boardLighting: "legal"` is the
 single named exception to literal off. The `immediate_guard` on-ramp differs only by starting
 named-pattern guidance live. A stored preference remains authoritative as a whole, so an explicit
 on-ramp `guided: "off"` is never overwritten by that fallback. Preferences live in `localStorage`; they are not events,
@@ -68,6 +68,21 @@ permission ceiling and guards the server-owned human-split and corpus seams. A h
 unavailable while a run's feedback-delivery window is closed and to live participants or
 spectators. Markers and named-pattern guidance are client projections of data the viewer already
 holds, so pretending to withhold them server-side would be theatre.
+
+### Workflow preset foundation
+
+The preset foundation names seven workflow contexts and five candidate learner intents: Quiet,
+Guide me, Theory only, Support, and Analyze. Their declared module sets close over all eleven
+registered learner modules, while the context matrix admits 24 of the 35 context/preset pairs
+and refuses the remaining 11. `deriveWorkflowContext` is shared by client and server, gives the
+on-ramp precedence, and keeps Academy distinct from an ordinary pack. Preset choices use the
+separate `tabiya.workflow.v1.<context>` local-storage namespace; they do not overwrite the raw
+v4 assistance preference.
+
+This is a foundation checkpoint, not the active preset UI. The accepted RFC does not yet state
+the exact nine-field `AssistanceConfig` projection for each preset or the literal seven-row
+configuration clamp. D971 blocks the final compiler, preset pill, and footer until those tables
+are amended and reviewed; the implementation does not guess them.
 
 `guided` owns the named-shape timeline channel and its attributed `ShapePanel`; `markers` owns the
 separate pivotal-moment channel. The two controls do not depend on each other. When guidance is

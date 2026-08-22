@@ -17,6 +17,7 @@ import {
   historyFrom,
   canonicalRunStart,
   digestSessionSource,
+  deriveWorkflowContext,
   isPackSession,
   lineMembership,
   MARK_BRUSHES,
@@ -150,6 +151,7 @@ export interface GuidanceAccess {
   readonly branchSeed: number;
   readonly seatedInContest: boolean;
   readonly reviewing: boolean;
+  readonly workflowContext: import("@chess-tabiya/runtime").WorkflowContextId;
 }
 
 export interface DistillationAccess {
@@ -806,6 +808,7 @@ export class RunService {
       branchSeed: branch.seed,
       seatedInContest: assistance.seatedInContest,
       reviewing: assistance.reviewing,
+      workflowContext: assistance.workflowContext,
     });
   }
 
@@ -1741,6 +1744,7 @@ export class RunService {
       (match.whiteLearnerId === principal.learnerId || match.blackLearnerId === principal.learnerId);
     return Object.freeze({
       seatedInContest,
+      workflowContext: deriveWorkflowContext({ sessionKind: run.sessionKind, feedbackPolicy: run.feedbackPolicy, ...(session === undefined ? {} : { liveKind: session.kind }) }),
       reviewing: reviewingGrant({
         run,
         grantMintedBySubmission: this.#storage.grantMintedBySubmission(runId, principal.learnerId),

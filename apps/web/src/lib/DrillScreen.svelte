@@ -367,7 +367,7 @@
   });
   let detectedPhase = $derived(classifyPhase(displayedNode.fen));
   let endgame = $derived(endgameReading(displayedNode.fen));
-  let assistanceContext = $derived({ sessionKind: run.sessionKind, deliveryOpen: feedbackDeliveryOpen(run), role: viewerRole, seatedInContest, reviewing });
+  let assistanceContext = $derived({ sessionKind: run.sessionKind, workflowContext: assistanceProfile({ sessionKind: run.sessionKind, feedbackPolicy: run.feedbackPolicy, liveKind: liveSessionKind }), deliveryOpen: feedbackDeliveryOpen(run), role: viewerRole, seatedInContest, reviewing });
   let assistancePermission = $derived(permittedAssistance(assistanceContext));
   let effectiveLighting = $derived(assistance.boardLighting === "evidence" && assistancePermission.boardLighting !== "evidence" ? "sight" : assistance.boardLighting);
   let selectedObservations = $derived(selectedSquare === undefined ? [] : sightFeatures.filter((item) => item.squares.some((square) => square === selectedSquare)));

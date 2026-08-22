@@ -1,26 +1,41 @@
-import { SILENT_ASSISTANCE, type AssistanceConfig, type RunFeedbackPolicy, type RunSessionKind } from "@chess-tabiya/runtime";
-import type { SessionKind } from "./api.js";
+import { PRESET_IDS, SILENT_ASSISTANCE, WORKFLOW_CONTEXTS, deriveWorkflowContext, workflowContextPolicy, type AssistanceConfig, type PresetId, type WorkflowContextId } from "@chess-tabiya/runtime";
 
-export const ASSISTANCE_PROFILES = Object.freeze(["pack", "position", "imported", "match", "stream", "onramp"] as const);
-export type AssistanceProfile = (typeof ASSISTANCE_PROFILES)[number];
+export const ASSISTANCE_PROFILES = WORKFLOW_CONTEXTS;
+export type AssistanceProfile = WorkflowContextId;
+export const assistanceProfile = deriveWorkflowContext;
 export const PROFILE_DEFAULTS: Readonly<Record<AssistanceProfile, AssistanceConfig>> = Object.freeze({
   pack: SILENT_ASSISTANCE,
   position: SILENT_ASSISTANCE,
   imported: SILENT_ASSISTANCE,
   match: SILENT_ASSISTANCE,
   stream: SILENT_ASSISTANCE,
+  academy: SILENT_ASSISTANCE,
   onramp: Object.freeze({ ...SILENT_ASSISTANCE, guided: "live" }),
 });
 
-export function assistanceProfile(input: { readonly sessionKind: RunSessionKind; readonly feedbackPolicy: RunFeedbackPolicy; readonly liveKind?: SessionKind | undefined }): AssistanceProfile {
-  if (input.feedbackPolicy === "immediate_guard") return "onramp";
-  if (input.liveKind === "stream") return "stream";
-  if (input.liveKind === "match") return "match";
-  return input.sessionKind;
-}
-
 export interface PreferenceStorage { getItem(key: string): string | null; setItem(key: string, value: string): void; }
 export function assistanceKey(kind: AssistanceProfile): string { return `tabiya.assistance.v1.${kind}`; }
+export function workflowKey(kind: AssistanceProfile): string { return `tabiya.workflow.v1.${kind}`; }
+export function loadWorkflowPreset(kind: AssistanceProfile, storage?: PreferenceStorage): PresetId {
+  const fallback = workflowContextPolicy(kind).defaultPreset;
+  if (storage === undefined) return fallback;
+  try {
+    const raw = storage.getItem(workflowKey(kind));
+    if (raw === null) return fallback;
+    const value = JSON.parse(raw) as unknown;
+    if (value === null || typeof value !== "object" || Array.isArray(value)) return fallback;
+    const item = value as Record<string, unknown>;
+    return item.version === 1 && PRESET_IDS.includes(item.preset as PresetId) && workflowContextPolicy(kind).allowedPresets.includes(item.preset as PresetId)
+      ? item.preset as PresetId
+      : fallback;
+  } catch {
+    return fallback;
+  }
+}
+export function saveWorkflowPreset(kind: AssistanceProfile, preset: PresetId, storage?: PreferenceStorage): void {
+  if (!workflowContextPolicy(kind).allowedPresets.includes(preset)) throw new TypeError(`Preset ${preset} is unavailable in ${kind}`);
+  storage?.setItem(workflowKey(kind), JSON.stringify({ version: 1, preset }));
+}
 function validV4(value: unknown): value is AssistanceConfig {
   if (value === null || typeof value !== "object" || Array.isArray(value)) return false;
   const item = value as Record<string, unknown>;

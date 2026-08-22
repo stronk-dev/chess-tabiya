@@ -1,6 +1,6 @@
 # RFC: Intent presets — the workflow/preset layer over the module foundation
 
-- **Status:** accepted — 2026-08-22, by claude as register owner on the buildability test, after a cross-review that re-derived ~52 claims at source and failed 14 — including this RFC's own acceptance-grid arithmetic (24 admitted / 11 refused, not the drafted 19/16 — which also summed to 35, exactly how a wrong count hides) and a "structurally impossible" claim that was false in five of six contexts (finding 2: the rules floor is now universal via restricted `boardLighting` clamp tokens, not a per-context accident). Corrections in place; changelog entry 2026-08-22. *(Prior line for history: draft — 2026-08-22)*
+- **Status:** implementing — 2026-08-22 foundation checkpoint landed: the closed vocabularies, module/context tables, context derivation, and separate preference namespace are implemented. D971 blocks the exact config projections and clamps, compiler, preset pill, and footer pending amendment and re-review. *(Accepted 2026-08-22 by claude after cross-review; prior line: draft — 2026-08-22.)*
 - **Author:** claude (drafted from `planning/evidence-foundation-ux/presets-head-derivation.md`, the HEAD derivation of every surface this document composes)
 - **Created:** 2026-08-22
 - **Design refs:** `design/05-in-run-experience.md` §3-forms O4 amendment (the algebra), §3a (silence default), §5 Q4; `design/03-product-breadth.md` §Play, §Review and explore, §Live and community, shell table

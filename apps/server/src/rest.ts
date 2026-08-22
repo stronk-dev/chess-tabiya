@@ -97,6 +97,7 @@ function invalid(message: string): ServerError {
 function requireGuidanceDisclosure(access: GuidanceAccess): void {
   const permission = permittedAssistance({
     sessionKind: access.run.sessionKind,
+    workflowContext: access.workflowContext,
     deliveryOpen: feedbackDeliveryOpen(access.run),
     role: access.role,
     seatedInContest: access.seatedInContest,
@@ -1231,7 +1232,7 @@ export function createRestHandler(
           throw new ServerError("ENGINE_UNAVAILABLE", "Human-model distribution is unavailable", { details: { engineId: "opponent-selector", retryAfterMs: 0 } });
         }
         const access = service.guidanceAccess(route.runId, principal, requiredString(url.searchParams.get("nodeId"), "nodeId"));
-        const permission = permittedAssistance({ sessionKind: access.run.sessionKind, deliveryOpen: feedbackDeliveryOpen(access.run), role: access.role, seatedInContest: access.seatedInContest, reviewing: access.reviewing });
+        const permission = permittedAssistance({ sessionKind: access.run.sessionKind, workflowContext: access.workflowContext, deliveryOpen: feedbackDeliveryOpen(access.run), role: access.role, seatedInContest: access.seatedInContest, reviewing: access.reviewing });
         if (permission.humanSplit === "locked_off") throw new ServerError("ASSISTANCE_WITHHELD", "Human-model distribution is withheld in this context");
         const available = await capabilities.get();
         if (available.providers.opponent === "none") throw new ServerError("ENGINE_UNAVAILABLE", "Human-model distribution is unavailable", { details: { engineId: "opponent-selector", retryAfterMs: 0 } });
@@ -1250,7 +1251,7 @@ export function createRestHandler(
       if (request.method === "GET" && route.action === "corpus") {
         if (corpusSource === undefined) throw new ServerError("CORPUS_UNAVAILABLE", "Corpus evidence is unavailable");
         const access = service.guidanceAccess(route.runId, principal, requiredString(url.searchParams.get("nodeId"), "nodeId"));
-        const permission = permittedAssistance({ sessionKind: access.run.sessionKind, deliveryOpen: feedbackDeliveryOpen(access.run), role: access.role, seatedInContest: access.seatedInContest, reviewing: access.reviewing });
+        const permission = permittedAssistance({ sessionKind: access.run.sessionKind, workflowContext: access.workflowContext, deliveryOpen: feedbackDeliveryOpen(access.run), role: access.role, seatedInContest: access.seatedInContest, reviewing: access.reviewing });
         if (permission.corpus === "locked_off") throw new ServerError("ASSISTANCE_WITHHELD", "Corpus evidence is withheld in this context");
         const authored = access.pack === undefined
           ? access.run.opponentPolicy

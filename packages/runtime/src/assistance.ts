@@ -1,4 +1,5 @@
 import type { DrillRun, RunSessionKind } from "./types.js";
+import type { WorkflowContextId } from "./presets.js";
 
 export interface AssistanceConfig {
   readonly version: 4;
@@ -20,6 +21,7 @@ export const SILENT_ASSISTANCE: AssistanceConfig = Object.freeze({
 export type AssistancePermission = "free" | "locked_off" | "sight" | "evidence";
 export interface AssistanceContext {
   readonly sessionKind: RunSessionKind;
+  readonly workflowContext: WorkflowContextId;
   readonly deliveryOpen: boolean;
   readonly role: "solo" | "host" | "participant" | "spectator";
   readonly seatedInContest: boolean;

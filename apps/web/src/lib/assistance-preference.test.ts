@@ -1,7 +1,7 @@
 import { readFileSync } from "node:fs";
 import { describe, expect, it } from "vitest";
 import { SILENT_ASSISTANCE } from "@chess-tabiya/runtime";
-import { ASSISTANCE_PROFILES, PROFILE_DEFAULTS, assistanceKey, assistanceProfile, loadAssistance, saveAssistance } from "./assistance-preference.js";
+import { ASSISTANCE_PROFILES, PROFILE_DEFAULTS, assistanceKey, assistanceProfile, loadAssistance, loadWorkflowPreset, saveAssistance, saveWorkflowPreset, workflowKey } from "./assistance-preference.js";
 
 describe("assistance preference", () => {
   it("defaults silently and keeps pack and position surfaces separate", () => {
@@ -33,13 +33,14 @@ describe("assistance preference", () => {
     expect(loadAssistance("imported", current)).toEqual({ ...SILENT_ASSISTANCE, ambient: "on" });
   });
 
-  it("derives all six profiles with guard and live-session precedence", () => {
-    expect(ASSISTANCE_PROFILES).toEqual(["pack", "position", "imported", "match", "stream", "onramp"]);
+  it("derives all seven contexts with guard and live-session precedence", () => {
+    expect(ASSISTANCE_PROFILES).toEqual(["pack", "position", "imported", "match", "stream", "academy", "onramp"]);
     expect(assistanceProfile({ sessionKind: "pack", feedbackPolicy: "attempt_end" })).toBe("pack");
     expect(assistanceProfile({ sessionKind: "position", feedbackPolicy: "attempt_end" })).toBe("position");
     expect(assistanceProfile({ sessionKind: "imported", feedbackPolicy: "attempt_end" })).toBe("imported");
     expect(assistanceProfile({ sessionKind: "pack", feedbackPolicy: "attempt_end", liveKind: "match" })).toBe("match");
     expect(assistanceProfile({ sessionKind: "position", feedbackPolicy: "attempt_end", liveKind: "stream" })).toBe("stream");
+    expect(assistanceProfile({ sessionKind: "imported", feedbackPolicy: "attempt_end", liveKind: "academy" })).toBe("academy");
     expect(assistanceProfile({ sessionKind: "position", feedbackPolicy: "immediate_guard" })).toBe("onramp");
     expect(assistanceProfile({ sessionKind: "pack", feedbackPolicy: "immediate_guard", liveKind: "stream" })).toBe("onramp");
   });
@@ -69,7 +70,7 @@ describe("assistance preference", () => {
   it("renders settings from the same exhaustive profile list", () => {
     const source = readFileSync(new URL("./AssistanceSettings.svelte", import.meta.url), "utf8");
     expect(source).toContain("{#each ASSISTANCE_PROFILES as kind}");
-    for (const label of ["Curated drill", "Just Play", "Imported game", "Match / Arena", "Streamed session", "On-ramp"]) expect(source).toContain(label);
+    for (const label of ["Curated drill", "Just Play", "Imported game", "Match / Arena", "Streamed session", "Academy", "On-ramp"]) expect(source).toContain(label);
     for (const label of ["Human move split on request", "Corpus counts on request", "External voice"]) expect(source).toContain(label);
   });
 
@@ -85,5 +86,19 @@ describe("assistance preference", () => {
     const screen = readFileSync(new URL("./DrillScreen.svelte", import.meta.url), "utf8");
     expect(panel.split(sentence)).toHaveLength(2);
     expect(screen).not.toContain(sentence);
+  });
+
+  it("stores workflow choice beside technical preferences and refuses disallowed presets", () => {
+    const values = new Map<string, string>();
+    const storage = { getItem: (key: string) => values.get(key) ?? null, setItem: (key: string, value: string) => { values.set(key, value); } };
+    expect(loadWorkflowPreset("position", storage)).toBe("quiet");
+    expect(loadWorkflowPreset("academy", storage)).toBe("guided");
+    saveWorkflowPreset("position", "support", storage);
+    expect(values.get(workflowKey("position"))).toBe(JSON.stringify({ version: 1, preset: "support" }));
+    expect(values.has(assistanceKey("position"))).toBe(false);
+    expect(loadWorkflowPreset("position", storage)).toBe("support");
+    expect(() => saveWorkflowPreset("match", "analysis", storage)).toThrow(/unavailable/u);
+    values.set(workflowKey("academy"), JSON.stringify({ version: 1, preset: "analysis" }));
+    expect(loadWorkflowPreset("academy", storage)).toBe("guided");
   });
 });

@@ -5183,3 +5183,23 @@ RFC is archived and its active-register row moved to the archive table in the sa
 
 **Next:** intent presets can now consume the single on-ramp default owner; learner-module and
 play-composition work can bind named modules to this functioning control path.
+
+## 2026-08-22 — intent-preset vocabulary and context seam checkpoint
+
+**What landed:** the seven workflow contexts, five candidate presets, their eleven-module
+closure, and the literal 24-admitted/11-refused context grid now compile in the runtime. Client
+and server share `deriveWorkflowContext`; on-ramp has precedence and Academy no longer falls
+through to ordinary pack behavior. Candidate preset choices have their own versioned local
+preference namespace, separate from the existing raw assistance configuration.
+
+**What changed:** the production assistance context now carries its derived workflow identity,
+and the documentation reflects seven contexts and six silent fallbacks. The checkpoint makes no
+new assistance promises and does not expose a preset control yet.
+
+**Blocked:** D971 records an omission in the accepted RFC: it gives neither five exact
+`AssistanceConfig` projections nor a literal seven-context config-clamp table. The final
+compiler, preset pill, footer truth, and D943 ceiling discharge remain blocked rather than being
+guessed.
+
+**Next:** amend and re-review those literal tables, then implement the complete 5×7 compiler
+fixtures and activate the preset surface.
