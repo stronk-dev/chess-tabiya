@@ -342,6 +342,21 @@ imported horizon bands. `[V]` (`decomposed-king-state.md`;
 The failed king-exposure conjunction stays failed. Decomposition identifies useful operands and
 their joins; it does not license “king unsafe,” “attack,” “exposed” or “mating net.”
 
+### 4.7 Exact piece mobility is infrastructure, not a headline
+
+D783 retains bishop, knight, rook and queen identities and their before/after legal and locally
+non-losing destination sets. `[V]` (`identity-retaining-mobility.md`;
+`tools/d783-piece-mobility-harness/output.md`)
+
+Generic legal restriction is background or negative-primary (**0.71× authored / 1.03× imported**).
+Locally non-losing destination loss is only mildly selective (**1.14× / 1.35×**), and its
+non-capture subset returns to background (**0.93× / 1.05×**). The useful form is therefore a join
+that retains capture identity and the exact affected piece/squares, not a new “restriction” hint.
+Moved-piece safe-mobility gain is stable but modest (**1.20× / 1.29×**) and remains an on-demand
+activity operand. Losing every safe destination is distinctive only in the imported sample
+(**2.58×** versus an uncertain **1.12×** authored); without attack and bounded-consequence
+predicates it cannot be called trapped, dominated or forced.
+
 ---
 
 ## 5. From evidence to player habits—not invented personalities

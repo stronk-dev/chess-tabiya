@@ -4360,3 +4360,17 @@ With F1's byte-preservation constraint discharged, the story title now carries t
 applies the same `learnerLost` rule already used by the neighboring outcome projection. The paired
 regression fixes the trust leak directly: imported `1-0` renders “Won” for a White learner and “The
 turning point” for a Black learner. No evidence semantics or title ranking changed.
+
+## 2026-08-22 — exact mobility lands as infrastructure, not another noisy label
+
+D783 retained exact bishop/knight/rook/queen identities and their before/after legal and
+`legal-exchange@1`-non-losing destination sets over 717 authored and 577 sealed imported decisions.
+Generic legal restriction is background (0.71×/1.03×); safe reduction is mild (1.14×/1.35×) and
+returns to background without captures (0.93×/1.05×). Moved-piece safe gain is stable but modest
+(1.20×/1.29×). A zero-safe transition reaches 2.58× imported but remains uncertain authored.
+
+The collector consequence is exact sets and identities for hover/joins, not count-only prose.
+“Trapped,” dominated, forced, good and intent remain refused until separate attack and bounded-reply
+predicates exist. Three focused fixtures/censuses pass; no production or authored content changed.
+Phase 2b now has 45 one-edge probes and remains open only for candidate-passer/lever timing and
+bounded reply/search semantics.
