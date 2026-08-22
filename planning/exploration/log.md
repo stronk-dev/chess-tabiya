@@ -5013,3 +5013,26 @@ successor (F12-B, atomic supersession).
 
 **Next:** queue for codex behind the current chain; `assistance-control-wiring`'s review is in
 flight and `learner-rating` is unblocked by today's D945/D946 rulings.
+
+## 2026-08-22 — assistance-control-wiring accepted; the deletion target had moved
+
+**What landed:** `rfc/assistance-control-wiring.md` accepted after independent cross-review (~40
+claims re-derived, 2 failed, corrected in place). The material catch: §2 sent the implementer to
+delete "the pivotal dialog's second named-plan block," but feedback stage 1 had relocated that
+block to the inspector's Recorded-moment section — the pivotal dialog contains nothing to
+delete, so the RFC as written guaranteed a dead-end implementer return. Fixed with the
+grep-stable `data-evidence-consumer` anchor. The D532/D715 scoping was de-staled against
+`intent-presets`' same-day acceptance at four sites, and the §8.2 landing-order seam is now
+mirrored in §3: wiring lands FIRST and owns the on-ramp `guided` default until `ContextContract`
+subsumes it.
+
+**What changed:** the assistance lane is fully specified end to end — wiring (reveal + guided
+channel + on-ramp default) then presets (contexts + compiler + floor). Both accepted, both
+claiming nothing versioned. The returned parent `assistance-controls.md` now has both halves of
+its useful content extracted; what remains of it is a supersession decision, not a draft debt.
+
+**Blocked:** nothing. D308/D309 flip at wiring's implementation commit, which must state the
+named-plan block's final home (D309's own wording is historically dated).
+
+**Next:** queue wiring for codex ahead of intent-presets per the landing order; decide the
+parent RFC's disposition (supersede-and-archive) in a follow-up pass.

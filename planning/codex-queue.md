@@ -64,6 +64,28 @@ with the review's finds carried:
 end of that chain. `semantic-collectors` (Wave-C) is drafting and will slot between the
 collector waves and the module amendment (your order items 2 and 5).
 
+## 0-WIRING-ACCEPTED. `assistance-control-wiring` is accepted — lands FIRST in the assistance pair
+
+Accepted 2026-08-22 after cross-review. Small, dependency-free, and it must land **before**
+`intent-presets` per that RFC's §8.2 seam (wiring owns the on-ramp `guided` default until
+`ContextContract` subsumes it; single-owner in either order, but this order is the recommended
+one). Three things the review changed that you must not miss:
+
+- **The deletion target MOVED.** §2's duplicate named-plan block is NOT in the pivotal dialog —
+  your own stage-1 commits relocated it to the inspector's **Recorded-moment section**
+  (`data-evidence-consumer="inspector.pivotal_marker"`, `DrillScreen.svelte:1139-1141` at review
+  HEAD). The pivotal dialog (`:1206-1214`) contains nothing to delete. Follow the consumer id,
+  not line numbers — you are editing that file right now.
+- The reveal chain is fully shipped already (`RunApi.reveal` → route `"reveal"` →
+  `#refuseWhileMatchLive` → `revealFeedback`); the RFC wires it to the learner control, it does
+  not build it. Criterion 5's no-over-refuse is honest: a PAUSED match passes.
+- **Your implementing commit flips [[D308]]/[[D309]] and must state the named-plan block's final
+  home** — D309's own row text ("pivotal-marker modal") is historically dated.
+
+Criteria 8/11 anchor to exactly two files (`DrillScreen.svelte:1140`, `ShapePanel.svelte:23`) and
+two currently-green tests will break when the gate lands (`tests/browser/drill.spec.ts:128`,
+`screens.test.ts:321`) — that breakage is the criterion working; update them in the same pass.
+
 ## 0-GRADES-ACCEPTED. `move-quality-grades` is accepted — implement after `learner-modules`
 
 Accepted 2026-08-22 after a cross-review that recomputed every constant against fetched sources;

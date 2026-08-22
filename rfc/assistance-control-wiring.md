@@ -1,6 +1,6 @@
 # RFC: Assistance control wiring
 
-- **Status:** draft — ready for independent review
+- **Status:** accepted — 2026-08-22, by claude as register owner on the buildability test, after an independent cross-review (~40 claims re-derived at source, 2 failed, both corrected in place): §2's deletion target had moved — feedback stage 1 relocated the duplicate named-plan block from the pivotal dialog to the inspector's Recorded-moment section (`data-evidence-consumer="inspector.pivotal_marker"`), so the text as drafted sent the implementer to delete nothing — and the D532/D715 scoping was de-staled against `intent-presets`' same-day acceptance, with the §8.2 landing-order seam mirrored into §3. The reveal chain, criterion-1 policy typing, and all counts verified clean at source. *(Prior line for history: draft — ready for independent review)*
 - **Author:** Codex, extracting the dependency-free subset of `assistance-controls`
 - **Created:** 2026-08-22
 - **Design refs:** `design/05-in-run-experience.md` §3a, §3a-i, §3b and §3-forms
@@ -10,7 +10,7 @@
 - **Parent / amends:** `archive/adaptive-guidance.md`; extracts D308/D309 and the ruled on-ramp
   fallback from `assistance-controls.md`
 - **Supersedes / superseded by:** supersedes only parent §§2, 3, 4.1–4.2 and their criteria;
-  D307's real workflow ceiling remains with F5/D715
+  D307's real workflow ceiling is `rfc/intent-presets.md`'s (accepted 2026-08-22, discharging D532/D715)
 - **Planning:** `planning/assistance-control-wiring/` once implementing
 
 ```tabiya-claims
@@ -23,7 +23,7 @@ The runtime, server and HTTP client already support learner-initiated `attempt_e
 but the run screen has no control. Separately, live named-shape guidance ignores its own preference
 while a smaller duplicate is gated by two switches. This RFC wires the missing control, makes the
 `guided` preference own the shape-marker channel, and applies the one non-silent fallback already
-ruled for on-ramp packs. It does not define workflow presets or context ceilings.
+ruled for on-ramp packs. It does not define workflow presets or context ceilings — `rfc/intent-presets.md` does.
 
 ## Motivation
 
@@ -31,8 +31,8 @@ D308 and D309 are defects against shipped intent, not new product choices. A re-
 a job if reveal is reachable, and a learner-choice mode only exists if its switch controls it.
 Leaving these behind D715 would couple two missing buttons to the much larger preset architecture.
 
-Out of scope: `permittedAssistance`, D532's per-context ceilings, F5 presets/modules, detector
-admission, marker selection, new evidence, learner ratings and any automatic reveal.
+Out of scope: `permittedAssistance`, D532's per-context ceilings and the F5 presets/modules (both
+now specified by the accepted `rfc/intent-presets.md`), detector admission, marker selection, new evidence, learner ratings and any automatic reveal.
 
 ## Specification
 
@@ -58,8 +58,8 @@ route or error code; it uses `feedback.revealed`. An already-open empty mutation
 
 ### 2. Guided means the live named-shape channel
 
-The computed shape-marker list is empty unless `assistance.guided === "live"`. The pivotal dialog's
-second, smaller named-plan block is deleted; the full `ShapePanel` remains the sole renderer.
+The computed shape-marker list is empty unless `assistance.guided === "live"`. The second, smaller
+named-plan block — since feedback stage 1 it renders in the inspector's Recorded-moment section (`DrillScreen.svelte` `data-evidence-consumer="inspector.pivotal_marker"`, `:1139-1141` at HEAD), not in the pivotal dialog the parent census named, which now carries no plan content — is deleted; the full `ShapePanel` remains the sole renderer.
 Pivotal sentences, endgame reading, re-voice and marker admission are unchanged.
 
 When guidance is on and no shape fires, the learner-opened structural-reading region states:
@@ -78,6 +78,13 @@ never merged over a learner's explicit `guided: off`. No migration or config-ver
 
 `assistanceProfile`'s shipped `immediate_guard` mapping is the only route to `onramp`. This RFC does
 not implement a rating-driven fade and does not alter which shapes a pack loads.
+
+Seam with `rfc/intent-presets.md` (accepted 2026-08-22, after this draft): its §8.2 assumes this RFC
+lands first, with `PROFILE_DEFAULTS`'s `onramp` value becoming the `onramp` context's
+`defaultPreset: "guided"` projection; if it lands first instead, this RFC rebases to consume its
+`ContextContract` rather than shipping the table. Either way the on-ramp default has exactly one
+owner at landing (its criterion 10), and its §3.1 renames `assistanceProfile` to the runtime
+`deriveWorkflowContext` without changing the `immediate_guard` mapping this section relies on.
 
 ### 4. Implementation surface
 
@@ -128,9 +135,29 @@ None. D532's later ceiling ruling is preserved by explicitly excluding `permitte
 
 ## Open questions
 
-None. D532/D715 is deliberately outside this RFC rather than silently answered.
+None. D532/D715 is deliberately outside this RFC rather than silently answered; since 2026-08-22 it
+is discharged by the accepted `rfc/intent-presets.md`, whose §8.2 landing-order seam §3 now mirrors.
 
 ## Changelog
 
+- 2026-08-22 (cross-review, in place): **(1)** §2's deletion target relocated to where it lives at
+  HEAD — the duplicate named-plan block renders in the inspector's Recorded-moment section
+  (`inspector.pivotal_marker`, `DrillScreen.svelte:1139-1141`), not in the pivotal dialog
+  (`:1206-1214`, which carries no plan content); the parent census and D309 described the
+  pre-stage-1 code, and an implementer sent to the pivotal dialog would find nothing to delete.
+  **(2)** Scoping de-staled against the same-day acceptance of `rfc/intent-presets.md`: the header,
+  summary, out-of-scope list and open questions now name it as D532/D715's discharge site, and §3
+  gains the mirror of its §8.2 landing-order seam (single owner of the on-ramp default, criterion
+  10 there; the `deriveWorkflowContext` rename). §3's `PROFILE_DEFAULTS` paragraph was left
+  line-stable because `intent-presets.md` cites it as `assistance-control-wiring.md:74-77`.
+  Verified clean at source, among ~40 claims: the full reveal chain (`RunApi.reveal` `api.ts:624`,
+  route action `rest.ts:1381`, `service.reveal` + `#refuseWhileMatchLive`/paused-match pass
+  `service.ts:1547-1572,1752-1757`, `revealFeedback`'s attempt_end guard and already-open empty
+  success `runtime.ts:240-259`, `MATCH_LIVE` → the existing alert copy that already says
+  "revealing feedback", `session-controller.ts:78-79`); the ungated `shapeMarkers` and the
+  two-switch duplicate; `session.ts`'s type-locked attempt_end for position/imported and its
+  exclusion for packs; the six profiles / five-silent / four-fallback-site / nine-surface counts;
+  and the two existing real marker tests criterion 11 amends (`tests/browser/drill.spec.ts:128`,
+  `screens.test.ts:321`).
 - 2026-08-22: extracted the dependency-free D308/D309/default subset after D715 proved the parent
   RFC's permission half could not implement the owner's ceiling ruling with its current input shape.
