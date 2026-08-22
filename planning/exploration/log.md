@@ -4655,3 +4655,16 @@ The symbol audit found the production failure the types need to prevent. Story m
 only eval and has no compiled join for the separately declared human, theory, semantic and
 tablebase sources (D912). C4 now hands Review a typed point/delta/mate-transition contract; source
 overlap, engine-version stability and whole-game selection remain research.
+
+## 2026-08-22 — overload earns its name only after the noisy rule is rejected
+
+The first candidate-time overload predicate asked whether a multi-duty defender's recapture lost
+another duty edge. It fired on 52/754 authored and 515/6,991 imported moves—background, not a useful
+semantic tactic. Its supposed positive fixture then falsified it: a queen also defended the first
+target and could recapture safely, so the observed knight recapture proved only the chosen line.
+
+The repaired event requires sole defence of both named targets and a positive legal exchange on a
+retained target after every legal recapture by that defender. It fires on 0 authored and 12
+imported moves. D913 therefore splits the basic foundation into the ordinary multi-duty operand,
+the exact response conflict and the observed later exploitation. Winning, force against every
+opponent reply and engine judgement remain separate authorities.

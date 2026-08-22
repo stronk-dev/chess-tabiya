@@ -495,12 +495,59 @@ cross-version stability or a universal search budget. The exact mate arm covers 
 samples from mate-through-four, not five-plus. Neither arm measures which moments learners find
 useful. Cross-source overlap/disagreement and whole-game selection remain C4/F6 work. `[M]`
 
-## 13. Next research
+## 13. Overload: duty set, response conflict and exploitation are different facts
+
+The external definition is broad but consistent: an overloaded piece carries multiple defensive
+responsibilities it cannot execute together. Lichess's practice page includes defending pieces,
+squares, blocking checks and blockading; Chess.com's terms page likewise defines too many
+simultaneous defensive duties. `[V]`
+([Lichess Overloaded Pieces](https://lichess.org/practice/fundamental-tactics/overloaded-pieces/o734CNqp);
+[Chess.com Overloading](https://www.chess.com/terms/overloading-chess))
+
+That definition does not license labeling every piece with two attack edges as overloaded. The
+first candidate-time rule did exactly that: after a candidate captured one defended target, it
+asked only whether the defender's recapture lost another original duty edge. It fired on **52/754
+authored moves and 515/6,991 imported moves**. `[V]`
+(`tools/d872-semantic-tactics-harness/overload-response-output.md`)
+
+The positive fixture falsified that rule on inspection. A queen also defended the captured rook
+and could recapture without exposing itself; the line only showed the opponent *chose* the knight
+recapture. The position was valid for an observed exploitation sequence and invalid as a
+candidate-time response conflict. `[V]`
+(`tools/d872-semantic-tactics-harness/overload-response.test.ts`)
+
+The admitted exact event requires:
+
+1. one named defender is the sole defender of the captured target and at least one other surviving
+   named target;
+2. the candidate captures the first target and the same defender has at least one legal recapture;
+3. no such recapture preserves every retained sole duty; and
+4. after every such recapture, at least one retained named target is positively capturable under
+   `legal-exchange@1`.
+
+Hard negatives pin one duty, an alternate defender and a recapture that preserves the other duty.
+The strict predicate fires on **0/754 authored moves and 12/6,991 imported moves**, one witness per
+row. `[V]` (`tools/d872-semantic-tactics-harness/overload-response-output.md`)
+
+The versioned foundation therefore keeps three projections:
+
+- `defender_duty_set@1`: exact positional operand listing defender and duties; it may say what the
+  piece defends, not call the position exploitable;
+- `overloaded_defender_response_conflict@1`: the four-clause candidate-time relation above; it may
+  say the same defender cannot recapture without exposing the named target;
+- `overload_exploitation_observed@1`: the already-measured three-edge sequence in which the
+  defender recaptures and the retained target is then positively captured.
+
+`[M]` All-opponent-reply material gain, soundness, best play and whole-position value remain other
+authorities. The zero authored result is content/fixture debt, not a reason to weaken the
+classifier or demote a basic tactic.
+
+## 14. Next research
 
 1. Carry the separately named attraction/deflection/square-clearance contracts into the Wave-C
    collector RFC alongside, not instead of, retained-duty relocation and line-blocker clearance.
-2. Add a reply-qualified overload form separately from the observed five-case convention; do not
-   make it the basic label's floor.
+2. Carry the measured overload duty-set/response-conflict/observed-exploitation split into the
+   collector RFC; do not restore the rejected lost-duty-edge shortcut.
 3. Carry exact mate-through-four and the typed engine-mate join into the collector/Review RFCs;
    never convert mate to centipawns or call king-zone deltas a mating net.
 4. Carry the split promotion geometry/tablebase join into the collector RFC; do not recreate a

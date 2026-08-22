@@ -38,5 +38,7 @@ Generated evidence:
   readings over fixed imported transitions.
 - `review-engine-mate-output.md` — typed engine-mate agreement against the already-proved exact
   mate-through-four population.
+- `overload-response-output.md` — rejected broad duty-edge rule versus the exact sole-defender,
+  positive-consequence response conflict.
 
 The source file is not committed.

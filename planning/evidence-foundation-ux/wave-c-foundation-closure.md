@@ -117,6 +117,13 @@ immediate promotion includes a draw, and unblocked stride/turn ordering agrees o
 loss→win inversions. The collector splits geometry from a tablebase outcome join and abstains on
 outcome outside the domain; D832's underspecified `ruleOfSquareVerdict` is refused.
 
+**Overload response arm answered 2026-08-22:** the broad lost-duty-edge rule is rejected after
+firing on 52/754 authored and 515/6,991 imported moves. The exact candidate-time event requires the
+same piece to be sole defender of the captured and retained targets, at least one legal recapture,
+and a positive named target capture after every such recapture. It fires on 0 authored and 12
+imported moves. Multi-duty state, response conflict and observed exploitation are separate basic
+projections; an all-opponent-reply or winning claim remains stronger and separate.
+
 ### C3 — opening and theory applicability
 
 This is mostly closure of completed R4/R8 research, not a new algorithm hunt:
