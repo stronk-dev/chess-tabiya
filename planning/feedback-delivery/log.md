@@ -143,3 +143,13 @@ the measured learner-value result rather than implementation correctness. The un
 - Marked tooling and brief finalization complete, incorporated [[D1005]] at the brief's entry point,
   and froze the released execution order as pure joins → explorer rationale/census → engine
   normalization. Graduation transitions and authored principle decisions remain held.
+
+## 2026-08-23 — the “43 pure joins” wave stopped on semantic evidence laundering
+
+- Re-derived that 43 is a count of machine-label instances with a matching record kind, not a count
+  of payable `claimBindings`; the accepted claim-backing RFC's zero-run population is 20 claims.
+- Ran a conservative exact span/assertion candidate audit over all 43. Only one candidate passed the
+  shipped validator, and that candidate was false: “one” in “the one common mate” was accepted as a
+  DTM of 1 from a later recorded position.
+- Landed no content bindings. D1008 now owns the missing semantic relation between a prose referent
+  and an assertion; equal value + valid FEN + matching evidence kind is not sufficient grounding.
