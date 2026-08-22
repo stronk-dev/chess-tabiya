@@ -1,6 +1,14 @@
 # RFC: Learner rating
 
-- **Status:** **draft — author round 2026-08-16, on two owner rulings.** **Ruling 1 reverses
+- **Status:** **draft — rulings D945/D946 absorbed 2026-08-22; ready for independent review.**
+  The two blocking open questions are ruled: **question 11** by [[D945]] (earned rewinds — a third
+  shape none of the drafted answers had; R11 stands **unchanged**, the earned economy lives on the
+  encounter-verdict side per accepted `rfc/campaign-core.md` §2, so the boss is **rated when
+  clean, winnable regardless**) and **question 12** by [[D946]] (the witnessed-play seam is
+  **pinned**: a cohort may one day require it; the default stays not-required; nothing is
+  implemented until a real cohort exists — §10a.2a). [[D962]]'s persona/`targetElo` disjointness
+  is recorded at the rated predicate without foreclosing either arm (§5.3). Prior line:
+  **draft — author round 2026-08-16, on two owner rulings.** **Ruling 1 reverses
   R10**: leaderboards and cross-learner comparison are now a **designed surface**, specified in
   §10a as the **cohort standing**, with the refusal's one empirical ground — we do not police
   self-cheating — carried forward as a **stated limitation on the surface itself** rather than as
@@ -13,7 +21,7 @@
   its gauge caveat** is fixed (§7.3 qualification 3 — D424), and the register is re-verified late
   (§9). Prior round: adversarial cross-review 2026-08-16 landed **R15**/**R16** for D395, withdrew
   the §5.4 tablebase adjudication, and corrected the register facts and one calibration `rd`.
-  Not accepted: open questions 3, 5, 6, 8, 9, 11 and 12 stand
+  Not accepted: open questions 3, 5, 6, 8 and 9 stand (11 and 12 ruled 2026-08-22)
 - **Author:** claude
 - **Cross-review:** claude (agent), 2026-08-16 — every figure re-derived from
   `tools/d333-band-outcome-harness/out/` and every code reference relocated **by symbol
@@ -332,7 +340,12 @@ A run is **rated-eligible** iff all of the following hold. Each has its refusal 
    (`"pack" | "position" | "imported"`, `packages/runtime/src/types.ts`); no fourth kind is added
    here, and §5.3a is the whole of the change.
 3. `opponentPolicy.mode === "human_common"` and `targetElo` is one of the four ladder rungs in
-   §4.1. — R1, R3
+   §4.1. — R1, R3. *([[D962]], recorded 2026-08-22: the accepted `rfc/bot-policy.md`'s
+   `RunOpponentPolicy.profile` **forbids** `targetElo` in a profiled request, so a persona'd
+   opponent cannot satisfy this condition as shipped — a rated persona boss needs a
+   rung-calibrated profile (bot-policy §7) or the boss drops the persona. This predicate
+   forecloses **neither** arm; the resolution is owned by `rfc/campaign-core.md` Discharge D1,
+   the deferred rated boss, which this RFC's acceptance unblocks.)*
 4. The engine handshake reported `eloHonored: true` and `appliedTargetElo` resolved to the
    requested rung; `SelectionEngineIdentity.containerDigest` equals the calibration's pinned
    digest. — R1
@@ -595,17 +608,27 @@ affordance and deliberately does not use it.
    refuses exactly the endgame shape it was written to refuse. The mapping from §2b's prose to the
    `plan` mode is an inference, not a schema fact; the precondition is checked per encounter from
    the start FEN either way, never assumed from the mode.
-4. **The rated boss and `06` §5's submitted-branch ruling collide, and the collision is real.**
-   `06` §5 rules that *"rewind stays free inside an encounter; **declaring done** is what
-   counts"*, and R11 voids any rated game containing a rewind. For a rated boss these cannot both
-   hold: either the boss is the one encounter where rewind is closed, or a rated boss is
-   unrateable in practice because the first rewind voids it. This RFC does **not** decide it —
-   `06` is intent tier (law 5) and the ruling is the owner's. **Open question 11.**
+4. **The rated boss and `06` §5's submitted-branch ruling collided — RULED 2026-08-22
+   ([[D945]]), a third shape none of the drafted answers had.** The collision as recorded: `06`
+   §5 ruled *"rewind stays free inside an encounter; **declaring done** is what counts"*, and R11
+   voids any rated game containing a rewind — for a rated boss these could not both hold. The
+   owner's verbatim answer to question 11: *"you have to earn rewinds or proactive branching...
+   not infinite, not forbidden. it's what allows a weaker player to actually win a campaign (on
+   lower floors/acts/whatever)."* Inside campaign encounters, rewind and proactive branching are
+   an **earned economy** — now amended into `06` §2c and made mechanism by the accepted
+   `rfc/campaign-core.md` §2 (`RunService.#campaignCharge`, `CAMPAIGN_REWIND_EXHAUSTED`).
+   **R11 stands unchanged in this RFC**: a rated game containing a rewind — earned or not — is
+   void (predicate condition 7, refusal R11). The earned economy lives entirely on the
+   **encounter-verdict side**: spending an earned rewind can still *win* the boss encounter for
+   the campaign — that is the ruling's point — while the attempt's ratedness follows R11, so the
+   boss is **rated when clean, winnable regardless** (the R11 half is claude's default reading,
+   recorded in [[D945]] as the owner's to veto). The two verdict producers consequence 1 already
+   separates are exactly what make this expressible without a new rule.
 
 **What `design/06-campaign.md` needs — WRITTEN 2026-08-22** (claude on the D439 ruling, law 5;
-all six amendments landed, [[D836]], with the rewind/R11 collision recorded there as the open
-question this RFC's question 11 still holds). The list below stands as the record of what was
-named:
+all six amendments landed, [[D836]]; the rewind/R11 collision, first recorded there as an open
+question, was **ruled the same day** — [[D945]], landed in `06` §2c/§5 by claude on the ruling).
+The list below stands as the record of what was named:
 
 - **§5's encounter vocabulary.** *"Encounters are bounded by the **shipped** `plyHorizon`"* is now
   false of one encounter class. The doc needs a boss row that is bounded by the rules instead, and
@@ -622,7 +645,9 @@ named:
 - **§5's `plyHorizon` corpus claim.** *"36 of 37 packs already declare one, median 12 ply"* is
   stale against the tree measured above (50 of 56, median 11) `[V]` — a bookkeeping fix, listed so
   it lands with the rest.
-- **§2c/§5's rewind ruling**, if and only if open question 11 is answered in R11's favour.
+- **§2c/§5's rewind ruling** — landed 2026-08-22: question 11 was answered by [[D945]]'s earned
+  economy rather than "in R11's favour" or against it, and `06` §2c/§5 now carry the ruled
+  paragraph and the resolution note. R11 is untouched by the amendment.
 
 #### 5.4 No adjudication at all — and why the tablebase is not the exception the draft made it
 
@@ -1057,7 +1082,7 @@ never have generated:
   estimates**, which is why the honour roll is the default (§10a.3);
 - state the provenance where the comparison is made, not in a policy page (§7.4 obligation 6);
 - make *witnessed* play a thing a cohort could one day require rather than a thing we claim
-  (open question 12).
+  (**ruled 2026-08-22, [[D946]]: the seam is pinned** — §10a.2a).
 
 **What it unlocks, which is the half the refusal never weighed.** The owner's ground is the club
 and coach cohort, and the adjacent surface already exists: `rfc/teacher-surface.md` ships
@@ -1348,6 +1373,20 @@ anonymous join** — the same four negatives `teacher-surface` §3.2 already hol
 **no grant** and confers **no read on any run** — a member sees another member's *counts and
 marks*, never their games, their branches, their events or their evidence. Seeing a game still
 requires a grant, minted the way it already is.
+
+#### 10a.2a The witnessed-play seam — pinned by owner ruling, not implemented
+
+**RULED 2026-08-22 ([[D946]]): witnessed play is a thing a classroom/club cohort may one day
+REQUIRE for its standing.** The contract pins the seam now, beside the consent model above,
+because it is cheap to pin and expensive to retrofit: a cohort-level standing option under which
+only games played inside a live session with at least one spectator grant — the shipped
+`run_grants` / live-session machinery, **no new mechanism** — are admitted to that cohort's
+standing, turning §10a.5's *"nobody witnessed them"* from a global caveat into a per-cohort
+choice. **The default stays not-required** (the honour roll remains the default layer per
+§10a.3), and **nothing is implemented until a real cohort exists** — the ruling reserves the
+seam; it commissions no table, no route, no validator. When a cohort RFC builds it, the admission
+predicate joins this section's normative rule as a second reading-surface condition, and the
+§10a.5 disclosure sentence gains its per-cohort variant.
 
 #### 10a.3 What a standing shows — three layers, and the default is the first
 
@@ -1812,8 +1851,10 @@ Rows still proposed:
    bounded by the rules, not by `plyHorizon`), a statement that the rated boss lives in Act II
    only, a fourth class on §2a's difficulty-availability axis, a note on §2b's boss table saying
    which of the three bosses can carry a result, and a corpus fix (*"36 of 37 packs, median 12"* is
-   50 of 56, median 11 `[V]`). **Not acted on here — law 5.** The one part §5.3a does not name a
-   change for is the rewind collision, which is a ruling rather than an edit (open question 11).
+   50 of 56, median 11 `[V]`). **Not acted on here — law 5.** The one part §5.3a did not name a
+   change for was the rewind collision, which was a ruling rather than an edit — **ruled
+   2026-08-22 ([[D945]]) and landed in `06` §2c/§5 by claude on the ruling** (§5.3a consequence 4
+   carries the resolution).
 3. **`coaching-versus-cheating-and-the-band-curve.md` concluded that a learner model *"does
    not and should not exist"* (the sentence sits at `:424`, inside §4c, which is refusing adaptive
    difficulty on §3's ground).** The D332 ruling supersedes the first half. This RFC does **not**
@@ -1963,16 +2004,16 @@ Rows still proposed:
 ## Open questions
 
 Resolved before `accepted`, or deferred to a named future RFC. **Numbering is preserved across
-rounds rather than compacted** — the two questions the owner answered on 2026-08-16 are marked
-answered in place, so every cross-reference in this document and in `league-as-return-loop.md`
-still resolves.
+rounds rather than compacted** — answered questions (1 and 10 on 2026-08-16; 11 and 12 on
+2026-08-22) are marked answered in place, so every cross-reference in this document and in
+`league-as-return-loop.md` still resolves.
 
 1. ~~**Can a campaign boss be rated?**~~ **ANSWERED — owner ruling 2, 2026-08-16: a campaign boss
    is a full game, not a pack.** Neither of the drafted forks was taken. The boss changes, not the
    rating: a rated boss is a `position` session played to a rules-terminal result against a
    calibrated rung. Folded into **§5.3a**, with its four consequences and the six changes
-   `design/06-campaign.md` needs. The one part not settled by the ruling is the rewind collision,
-   carried forward as **open question 11**.
+   `design/06-campaign.md` needs. The one part not settled by the ruling was the rewind
+   collision, carried forward as open question 11 — **since ruled, [[D945]] 2026-08-22.**
 2. **Should 11–20 pieces be rated?** Refused here on n = 48 — the thinnest cell in the study, not
    a measured null. The cheap fix is one arm on the existing harness (`tools/d333-band-outcome-
    harness/`) restricted to that band of material. Defer or run.
@@ -2023,27 +2064,28 @@ still resolves.
 
 **Opened by this round:**
 
-11. **Does a rated boss close rewind, or does a rated boss not exist?** `06` §5's settled ruling is
-    that *"rewind stays free inside an encounter; **declaring done** is what counts"*, and **R11
-    voids any rated game containing a rewind** because otherwise the learner rewinds until they
-    win. For a boss these cannot both hold. Three answers: (a) the boss is the one encounter where
-    rewind is closed, and the campaign says so before the first ply — which prices *this* node's
-    experimentation and reopens §11.4's tension at a place the learner cannot avoid if they want
-    the rating; (b) a boss is played twice — a free encounter and a separately-entered rated
-    attempt, so nothing is closed and the rating is opt-in per boss; (c) bosses run to terminal for
-    the campaign's sake and are simply not rated, which keeps the ruling and drops the rating from
-    the campaign entirely. **This RFC does not choose: `06` is intent tier. Owner call.** (b) is
-    the only one that touches neither the thesis's *"experimentation without cost"* nor R11, and is
-    what the author would recommend if asked.
-12. **May a cohort require witnessed play?** §8b relocates R10's surviving ground from
-    manufacturedness to **provenance**, and a provenance defect has a design response the old
-    framing did not admit: a standing could accept only games played inside a live session with at
-    least one spectator grant — the shipped `run_grants` / live-session machinery, no new
-    mechanism — turning *"nobody witnessed them"* into a per-cohort choice rather than a global
-    caveat. **The default specified here is not to require it**, because it would empty most
-    standings and because we have one learner (`league-as-return-loop.md` C6). Named so the
-    default is not chosen by silence, and because a chess club is exactly the population that
-    would want it. **Owner call.**
+11. ~~**Does a rated boss close rewind, or does a rated boss not exist?**~~ **ANSWERED — owner
+    ruling [[D945]], 2026-08-22, verbatim:** *"you have to earn rewinds or proactive branching...
+    not infinite, not forbidden. it's what allows a weaker player to actually win a campaign (on
+    lower floors/acts/whatever)."* **None of the three drafted answers was taken** — not (a)
+    close-rewind, not (b) played-twice (the author's recommendation), not (c) unrated — and the
+    ruling's fourth shape dissolves the question's premise: inside campaign encounters, rewind
+    and proactive branching are an **earned economy** (charges earned through play, spendable in
+    any encounter including the boss, counts scaling by floor/act — `06` §2c as amended;
+    mechanism in accepted `rfc/campaign-core.md` §2). **R11 stands unchanged**: a rated game
+    containing a rewind, earned or not, is void — the economy lives on the encounter-verdict
+    side, so the boss is **rated when clean, winnable regardless** (the R11 half is claude's
+    default reading, the owner's to veto, recorded in [[D945]]). Folded into §5.3a consequence 4.
+    §11.4's experimentation tension is narrowed rather than reopened: the earned economy is the
+    campaign's own answer to "how often", and the rating's voiding rule adds nothing on top of it
+    that question 8 does not already hold.
+12. ~~**May a cohort require witnessed play?**~~ **ANSWERED — owner ruling [[D946]],
+    2026-08-22: the seam is pinned now** (option *"pin the seam now"*). The contract names
+    witnessed play as a thing a classroom/club cohort may one day **require** for its standing —
+    the shipped `run_grants` / live-session machinery, no new mechanism — beside the classrooms
+    consent model; **the default stays not-required** and the honour roll stays the default
+    layer; **nothing is implemented until a real cohort exists**. Specified as **§10a.2a**, which
+    reserves the seam and commissions no table, route or validator.
 
 ## Changelog
 
@@ -2095,3 +2137,17 @@ still resolves.
   `STORAGE_VERSION` **23**; `opponent-contracts` moved to **implementing**; on the contested
   ladder this RFC is stated as the **fourth claim** (§9.1, [[D423]]). Refusal count stays 16, one
   reversed and narrowed. AC-13 – AC-17 added. Seven ledger rows proposed (§12 items 9–15).
+- 2026-08-22: **absorption round — rulings [[D945]]/[[D946]] close the two blocking open
+  questions; ready for independent review.** **Question 11 ANSWERED by a fourth shape** none of
+  the drafted answers had: the owner's earned-rewind economy (verbatim in the question's
+  resolution and §5.3a consequence 4), landed in `design/06` §2c/§5 and made mechanism by the
+  accepted `rfc/campaign-core.md` §2. **R11 is unchanged** — a rated game containing a rewind,
+  earned or not, is void; the economy lives on the encounter-verdict side, so the boss is *rated
+  when clean, winnable regardless* (claude's default R11 reading, the owner's to veto, recorded
+  in D945). **Question 12 ANSWERED — the witnessed-play seam is pinned** as new **§10a.2a**: a
+  cohort may one day require witnessed play (shipped `run_grants`/live-session machinery, no new
+  mechanism); default not-required; nothing implemented until a real cohort exists. **[[D962]]
+  recorded at the rated predicate** (condition 3): `RunOpponentPolicy.profile` forbids
+  `targetElo`, so a rated persona boss needs a rung-calibrated profile or no persona —
+  foreclosing neither arm; resolution owned by `campaign-core` Discharge D1. No R-rule, §8-table
+  or acceptance-criterion change in this round; open questions 3, 5, 6, 8 and 9 still stand.
