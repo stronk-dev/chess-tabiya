@@ -540,6 +540,12 @@ describe("D723 breadth candidates", () => {
 
     const noValuableTarget = "4k3/8/8/7b/8/5N2/8/4K3 b - - 0 1";
     expect(lineConstraints(noValuableTarget)).toHaveLength(0);
+
+    // pressure-line@1 ray compatibility (breadth-collectors acceptance review): a bishop merely
+    // collinear with a screened enemy rook along a rank is not a pressure line — with the screen
+    // removed the target must lie in the slider's own attack set.
+    const rankCollinearBishop = "4k3/8/8/8/1B1p3r/8/8/4K3 w - - 0 1";
+    expect(lineConstraints(rankCollinearBishop)).toHaveLength(0);
   });
 
   it("pins the added topology conventions with positive and hard-negative fixtures", () => {

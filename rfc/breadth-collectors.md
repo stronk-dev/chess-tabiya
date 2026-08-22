@@ -1,7 +1,9 @@
 # RFC: Breadth collectors — exact middlegame operands after Wave A
 
 - **Status:** draft 2026-08-22 — author amendment repairs D851–D859 after the Codex-side
-  buildability return; an independent Claude acceptance review is still required
+  buildability return; the independent Claude acceptance review ran 2026-08-22, verified the
+  D851–D859 repairs at the harness symbols and applied five blocker corrections in place
+  (changelog); acceptance itself remains the owner/register action
 - **Author:** codex, on the owner-opened breadth/evidence-foundation program and D802 routing
 - **Created:** 2026-08-22
 - **Design refs:** `design/03-product-breadth.md` §Intelligence and explanation;
@@ -110,8 +112,8 @@ Any additional production site returns this RFC for an impact amendment before i
 | `candidate-majority@1` | A pawn is not passed and has no enemy pawn strictly ahead on its file. Supporting pawns are other same-color pawns on an adjacent file whose rank is the subject pawn's rank or any rank behind it from that color's perspective; enemy blockers are opposing pawns on adjacent files strictly ahead of the subject. At least one support is required and support count must be greater than or equal to blocker count. It is the disclosed D788 convention derived from historical Stockfish prior art and deliberately omits that source's backward-pawn classifier. |
 | `king-zone@1` | Up to eight adjacent squares, excluding the king square. Attackers/defenders are distinct non-king pieces controlling at least one zone square. |
 | `king-shelter@1` | Same-color pawns one or two forward ranks from the king on its file or adjacent files. |
-| `material-role-signature@1` | Per color counts of P/N/B/R/Q. Asymmetry is the unordered role-count difference vector; king excluded and no scalar piece-value verdict emitted. |
-| `pressure-line@1` | A bishop/rook/queen slider and an enemy rook/queen target are collinear with exactly one occupied square between them. That screen belongs to the target's color and has lower P1/N3/B3/R5/Q9 role value than the target. A retained relation across a slider move requires the same slider color/role moving from its old to new square plus the exact same screen square/color/role and target square/color/role; a replacement same-role slider does not satisfy it. The values state only the literal role relation. It does not claim the screen is pinned or the pressure matters. |
+| `material-role-signature@1` | Per color counts of P/N/B/R/Q. Asymmetry is the unordered role-count difference vector; its event-comparison magnitude is the D754 harness's sum of the five absolute per-role count differences — unweighted count arithmetic, which is what "increased asymmetry" means. King excluded and no piece-value scalar or verdict emitted. |
+| `pressure-line@1` | A bishop/rook/queen slider and an enemy rook/queen target are collinear with exactly one occupied square between them, **and with that screen square removed the target lies in the slider's own chessops attack set from its square** — diagonals for a bishop, files/ranks for a rook, both for a queen; mere collinearity on a line the slider's role cannot travel (a bishop sharing a rank with the target, e.g. `4k3/8/8/8/1B1p3r/8/8/4K3 w - - 0 1`) never qualifies. That screen belongs to the target's color and has lower P1/N3/B3/R5/Q9 role value than the target; a king never qualifies as the screen. A retained relation across a slider move requires the same slider color/role moving from its old to new square plus the exact same screen square/color/role and target square/color/role; a replacement same-role slider does not satisfy it. The values state only the literal role relation. It does not claim the screen is pinned or the pressure matters. |
 
 Each convention text and limitation ships verbatim in the manifest declaration.
 
@@ -120,9 +122,13 @@ attack set contains the target under current occupancy. A **legal controller** i
 piece only when the target also appears in its actual `allDests()` set after a valid clone makes
 the piece's color the side to move and clears en passant. Thus a pawn's empty diagonal and a
 friendly-occupied target are pseudo-only, an enemy non-king target is legal only when the capture
-is legal, an opposing king square is pseudo-only because kings are never captured, and an
-absolute pin can remove an edge from the legal set without removing it from the pseudo set. If the
-per-color clone is invalid, pseudo control remains available and that color's complete legal set
+is legal, and an absolute pin can remove an edge from the legal set without removing it from the
+pseudo set. An opposing king square is pseudo-only **by abstention, not by `allDests()`
+exclusion**: a pseudo edge onto the enemy king's square is check, and chessops rejects any setup
+whose side to move attacks the other king (`IllegalSetup.OppositeCheck`), so whenever a color
+pseudo-attacks the enemy king that color's turn clone is invalid and its complete legal set
+abstains — no valid legal set ever contains or omits a king square. If the per-color clone is
+invalid for any reason, pseudo control remains available and that color's complete legal set
 abstains `invalid_turn_clone`; individual squares never receive invented occupants.
 
 Pawn-relation rules are literal: an opposing-pawn **contact** is a directed pawn-attack edge; a
@@ -147,8 +153,12 @@ square/color identities, and the unrestricted-rank limitation ships with the dec
   justify deleting the topology needed by touch/hover, theory and bot features.
 - Fixtures: absolute pin separates pseudo from legal control; an empty pawn diagonal and a
   friendly-occupied defended square are pseudo-only; a legal enemy capture appears in both sets;
-  an opposing king square is pseudo-only; pawn newly controls an empty minor destination;
-  controller lost/gained mirror pair; invalid clone abstention leaves pseudo bytes intact.
+  a checking position (e.g. `4k3/8/8/8/8/8/8/4R1K1 b - - 0 1`) retains the checker's pseudo edge
+  onto the king square while that color's complete legal set abstains `invalid_turn_clone` and
+  every other pseudo byte survives — this one fixture pins both the §2 king rule and the
+  abstention rule, because from a legal position a turn-flip clone can only be invalid through
+  opposite check; pawn newly controls an empty minor destination; controller lost/gained mirror
+  pair.
 - This is additive beside the shipped count-only `attacked_squares_changed` reading and
   occupied-target `occupied_attack` event: it retains **all-square controller identity**, which
   neither existing projection carries. It redefines neither id.
@@ -186,7 +196,9 @@ square/color identities, and the unrestricted-rank limitation ships with the dec
 - Measured dispositions are literal per kind: harassment 3.63×/3.18×; locked pair 3.89×/2.08×;
   contact creation 1.03×/.90×; contact execution 9.82×/15.07×; passage creation
   12.46×/13.45×/7.72× by horizon; capture-created passage 21.18×/14.45×/11.58×;
-  candidate gain 2.80×/3.30× and horizon-shaped; passer/candidate advancement phase-gated.
+  candidate gain 2.80×/3.30× and horizon-shaped; protected-passer gain zero early played then
+  2.11×/2.68× in the middle/late bands; connected-pair gain sparse early (one played event) then
+  2.13×/2.73×; passer/candidate advancement phase-gated.
 - No kind says break, favorable, dangerous, winning, minority attack, majority conversion or plan.
   Contact execution is a join over capture identity, not a duplicate capture detector.
 - Fixtures: every kind positive plus geometry-neighbor negatives; direct-lock same-file/adjacent-rank
@@ -205,7 +217,9 @@ square/color identities, and the unrestricted-rank limitation ships with the dec
   survive every applicable edge. Counts: 11/125 and 1/45 authored/imported windows.
 - `derived.pawn.sequence.harassment_pressure@1`: pawn newly attacks a named minor, that exact minor
   relocates on the immediately consecutive reply, and the same `pressure-line@1`
-  slider/screen/target relation survives under §2's exact retention key. It carries two anchors and
+  slider/screen/target relation survives under §2's exact retention key — **the harassed minor is
+  itself the relation's slider**, its relocation being the slider move the retention key is
+  evaluated across, so a relocating knight can never satisfy this kind. It carries two anchors and
   three ordered nodes under the same continuity rule. Counts: 3/6 preserving cases after the
   measured relocation filter.
 - Contact timing is `recorded_run`/`exact`; harassment pressure is
@@ -218,17 +232,27 @@ square/color identities, and the unrestricted-rank limitation ships with the dec
 
 #### 3.5 Defender identities and consequences
 
-- `derived.tactic.defender_exposure@1`: an existing exact occupied-defence edge is lost and the
-  retained target gains a positive `legal-exchange@1` capture. Operands retain defender, target,
-  attacker/capture line and source event ids. The lost edge consumes
-  `rules.square.event.control@1`'s exact **pseudo-controller** delta, not the shipped aggregate
-  `occupied_defence` event, so one defender can disappear while another remains. This reproduces
-  D754/D772's directed attack-edge domain. Measured 4.50×/6.52×.
+- `derived.tactic.defender_exposure@1`: an existing exact occupied-defence edge of the
+  **non-moving side** — an opponent piece's pseudo edge onto an opponent-occupied square — is lost
+  over the played edge, and the retained target (same color and role at the same square) gains a
+  positive `legal-exchange@1` capture. The exposure test is D754's disclosed device verbatim: the
+  after position with the turn returned to the mover and en passant cleared; when that clone is
+  invalid the projection abstains `invalid_turn_clone` and the decision leaves the eligible
+  denominator (675/717 authored and 545/577 imported decisions were eligible). Operands retain
+  defender, target, attacker/capture line, pass-convention id and source event ids. The lost edge
+  consumes `rules.square.event.control@1`'s exact **pseudo-controller** delta, not the shipped
+  aggregate `occupied_defence` event, so one defender can disappear while another remains. This
+  reproduces D754/D772's directed attack-edge domain. Measured 4.50×/6.52×.
 - `derived.tactic.sequence.defender_consequence@1`: manifest-role `event`,
-  `recorded_run`/`convention`, over recorded three-edge paths for (a) exact defender
-  captured, edge lost, exact former target positively captured; (b) defender newly exposed,
-  relocates, edge lost, exact target positively captured. Measured imported counts 29 and 13;
-  authored 0/622, so canonical positive/disagreement fixtures are mandatory before landing. Its
+  `recorded_run`/`convention`, over recorded three-edge paths for (a) an existing defence edge
+  lost on the first edge and the exact former target positively captured on the third, with a
+  retained operand recording whether the first move captured the exact defender; (b) defender
+  newly exposed to a positive `legal-exchange@1` capture under the mover-turn clone of §3.5's
+  pass device (abstaining if invalid), relocating on the reply and losing its former edge, then
+  the exact target positively captured. Measured imported counts: 29 for (a), of which 26 capture
+  the exact defender on the first edge, and 13 for (b) — the D772 harness's three column counts,
+  not two; authored 0/622, so canonical positive/disagreement fixtures are mandatory before
+  landing. Its
   payload carries exactly three consecutive anchors and four ordered board nodes under §3.4's
   continuity rule; defender/target keys must survive or transform only through the explicitly
   recorded capture/relocation edge.
@@ -242,14 +266,17 @@ square/color identities, and the unrestricted-rank limitation ships with the dec
   the board a second time. `position_rules`/`exact`, inspector-only.
 - `derived.material.event.role_asymmetry@1`: before/after vector joined to the existing
   `rules.structural.event.piece_count`, capture and promotion authorities with exact identities.
-  Increased asymmetry measured 2.47×/4.35×. The broader signature-change event is more selective but
+  Increased asymmetry — §2's sum-of-absolute-differences magnitude strictly rising — measured
+  2.47×/4.35×. The broader signature-change event is more selective but
   too generic for a hint; both remain operands for capture/phase/theory modules.
 - No scalar material advantage, imbalance quality or trade recommendation is emitted.
 
 #### 3.7 King state
 
 - `rules.king.reading.zone_state@1`: exact king square; `king-zone@1` squares; distinct attacker and
-  defender identities; legal adjacent escapes; `king-shelter@1` pawns. It consumes
+  defender identities; legal adjacent escapes — computed on the §2 per-color turn clone with en
+  passant cleared, the escape set abstaining `invalid_turn_clone` when that clone is invalid, the
+  D778 device that produced the eligibility denominators; `king-shelter@1` pawns. It consumes
   `rules.square.reading.control@1`'s pseudo-controller set for zone attacker/defender identities
   rather than computing a second attack map; the separate legal-controller set remains available
   for square-entry questions. Convention grounding.
@@ -396,3 +423,23 @@ Unit: projection id; total **18**.
   defender join; pre-move contact state grounds execution; two-/three-edge payload horizons retain
   three/four nodes; pressure and pawn predicates copy their harness bytes; en-passant captured
   square and mover-relative half-open-file joins are pinned. Independent Claude review remains.
+- 2026-08-22: independent Claude acceptance review verified the D851–D859 repairs against the
+  harness sources and corrected five defects the amendment left: (1) the opposing-king-square rule
+  in §2 claimed an `allDests()` exclusion, but chessops `IllegalSetup.OppositeCheck` makes the
+  checking color's turn clone invalid, so king-square control is pseudo-only **by whole-set
+  abstention** — the §3.1 fixture now pins the check position `4k3/8/8/8/8/8/8/4R1K1 b - - 0 1`
+  and no longer demands an unsatisfiable non-check invalid clone; (2) `pressure-line@1` omitted
+  the harness's slider-ray compatibility clause, admitting a bishop merely collinear with a
+  screened rook along a rank (`4k3/8/8/8/1B1p3r/8/8/4K3 w - - 0 1`) — the convention now requires
+  the target inside the slider's own attack set with the screen removed, and excludes king
+  screens; (3) `defender_exposure@1` lacked D754's disclosed pass state and its
+  `invalid_turn_clone` abstention, without which the 4.50×/6.52× eligible denominators
+  (675/717, 545/577) are unreproducible; (4) `defender_consequence@1` paired the imported count
+  29 with the captured-defender kind that measured 26 — the counts are now the harness's three
+  (29 edge-lost, 26 captured subset, 13 relocated); (5) "increased asymmetry" had no ordering
+  over the §2 vector — the D754 sum-of-absolute-per-role-differences magnitude is now the pinned
+  comparison. Also pinned: the harassed minor is itself the surviving pressure relation's slider
+  (§3.4); protected-passer and connected-pair measured priors are quoted in §3.3; the escape-set
+  clone abstention is declared in §3.7. Two labeled boundary fixtures were added to
+  `tools/d723-breadth-harness/breadth.test.ts` (ray compatibility) and
+  `tools/d754-wave-b-harness/wave-b.test.ts` (pass-state opposite-check abstention); both pass.

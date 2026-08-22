@@ -508,6 +508,12 @@ describe("D754 Wave-B candidates", () => {
 
     const inventory = "4k3/8/8/8/8/2p5/3P4/4K3 w - - 0 1";
     expect(materialRoleImbalance(position(playedFen(inventory, "d2c3")))).toBeGreaterThan(materialRoleImbalance(position(inventory)));
+
+    // Pass-state abstention boundary (breadth-collectors acceptance review): whenever the mover
+    // still attacks the enemy king, the mover-turn clone is opposite-check-invalid, so the pass
+    // device abstains rather than evaluating an exposure — the only invalidity a legal position
+    // can produce under a turn flip.
+    expect(passPosition(position("4k3/8/8/8/8/8/8/4R1K1 b - - 0 1"), "white")).toBeUndefined();
   });
 
   it("measures both populations with paired confidence", () => {
