@@ -56,7 +56,7 @@ const blackToMovePack = JSON.parse(
 const digest = `sha256:${"a".repeat(64)}`;
 const at = "2026-08-11T20:00:00.000Z";
 const capabilities: Capabilities = {
-  evidenceManifest: { digest: "fixture", counts: { producers: 20, projections: 126, consumers: 25, bindings: 175, semanticEvents: 33, eligibility: 33, reasons: 15, selectionPolicies: 1 }, availability: [], bindings: [] },
+  evidenceManifest: { digest: "fixture", counts: { producers: 23, projections: 133, consumers: 25, bindings: 179, semanticEvents: 37, eligibility: 37, reasons: 15, selectionPolicies: 1 }, availability: [], bindings: [] },
   engines: [
     {
       id: "maia",

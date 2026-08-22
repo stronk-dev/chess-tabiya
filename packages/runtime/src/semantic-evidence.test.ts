@@ -15,6 +15,7 @@ import {
   selectSemanticEvidence,
   selectLocalSemanticEvidence,
   structuralSemanticEvents,
+  tacticalSemanticEvents,
   transitionSemanticEvents,
   type SemanticEvidenceEvent,
 } from "./semantic-evidence.js";
@@ -146,6 +147,23 @@ describe("semantic evidence runtime", () => {
     expect(families.has("last_of_role")).toBe(true);
     expect(families.has("pawn_contact")).toBe(true);
     expect(values.every((value) => value.projection.id === `rules.transition.event.${value.operands.family}`)).toBe(true);
+  });
+
+  it("emits exact reply/check and exchange-filtered double-attack events from their real producers", () => {
+    const forkFen = "8/2k5/3r4/8/3N4/8/8/4K3 w - - 0 1";
+    const forkAfter = after(forkFen, "d4b5");
+    const forkEvents = tacticalSemanticEvents(forkFen, "d4b5", forkAfter);
+    expect(forkEvents.map((value) => value.projection.id)).toEqual([
+      "rules.tactic.consequence.reply_breadth",
+      "rules.tactic.event.check",
+      "rules.tactic.event.double_attack",
+    ]);
+    expect(forkEvents.find((value) => value.projection.id.endsWith("reply_breadth"))?.operands).toMatchObject({ count: expect.any(Number), horizon: "1 reply" });
+    expect(forkEvents.find((value) => value.projection.id.endsWith("double_attack"))?.operands).toMatchObject({ targets: expect.arrayContaining([expect.objectContaining({ square: "c7", king: true }), expect.objectContaining({ square: "d6", king: false })]) });
+
+    const negativeFen = "4k3/2p3p1/3b3b/8/3N4/8/8/4K3 w - - 0 1";
+    const negativeEvents = tacticalSemanticEvents(negativeFen, "d4f5", after(negativeFen, "d4f5"));
+    expect(negativeEvents.some((value) => value.projection.id.endsWith("double_attack"))).toBe(false);
   });
 
   it("emits castling, promotion and checkmate exact positives", () => {

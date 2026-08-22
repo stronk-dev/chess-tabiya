@@ -223,6 +223,7 @@ export {
   TRANSITION_EVENT_PROJECTION_IDS,
   TRANSITION_GEOMETRY_EVENT_FAMILIES,
   TRANSITION_RULE_EVENT_FAMILIES,
+  TACTICAL_EVENT_PROJECTION_IDS,
 } from "./evidence-catalog.js";
 export {
   assertEvidenceSelectionResult,
@@ -234,6 +235,7 @@ export {
   selectLocalSemanticEvidence,
   selectSemanticEvidence,
   structuralSemanticEvents,
+  tacticalSemanticEvents,
   transitionSemanticEvents,
   type CounterfactualAbsenceOperands,
   type EvidenceSelectionResult,
@@ -244,6 +246,7 @@ export {
   type SemanticSelectionInput,
   type StructuralSemanticEventOperands,
   type TransitionSemanticEventOperands,
+  type TacticalSemanticEventOperands,
 } from "./semantic-evidence.js";
 export {
   declareAuthoredClaimDeliveryEvidence,
@@ -253,6 +256,12 @@ export {
   declareCompareDerivedEvidence,
   declareEndgameReadingEvidence,
   declareEvidenceReferenceResolution,
+  declareLegalExchangeEvidence,
+  declareThreatEvidence,
+  declareDoubleAttackEvidence,
+  declareForkSurvivalEvidence,
+  declareReplyBreadthEvidence,
+  declareCheckEventEvidence,
   declareExplorerPopulationEvidence,
   declareExplorerPositionEvidence,
   declareLivePacketEvidence,
@@ -414,6 +423,38 @@ export type {
   VersionedPolicy,
 } from "./types.js";
 export { LIVE_SESSION_KINDS, MARK_BRUSHES, RUN_OPPONENT_MODES } from "./types.js";
+
+export {
+  EXCHANGE_PIECE_VALUES,
+  LEGAL_EXCHANGE_CONVENTION,
+  captureExchangeClass,
+  exchangeCaptureAt,
+  legalCaptureMovesTo,
+  legalExchange,
+  legalExchangeForMove,
+  type CaptureExchangeClass,
+  type ExchangePieceIdentity,
+  type LegalExchangeBranch,
+  type LegalExchangeResult,
+  type LegalExchangeStep,
+} from "./exchange.js";
+
+export {
+  REPLY_HORIZON,
+  THREAT_CONVENTION,
+  checkEvent,
+  doubleAttackEvent,
+  forkSurvivesReply,
+  replyBreadth,
+  threats,
+  type CheckEvent,
+  type DoubleAttackEvent,
+  type DoubleAttackTarget,
+  type ForkSurvivalResult,
+  type ReplyBreadth,
+  type Threat,
+  type ThreatResult,
+} from "./tactics.js";
 
 export const runtimeBuildInfo = Object.freeze({
   packageName: "@chess-tabiya/runtime",

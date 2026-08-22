@@ -30,7 +30,7 @@ likewise bound or explicitly disposed. This is why the migrated `assistance.arro
 visible as `experimental` even though it has no producer or renderer; omission would hide the very
 gap the manifest exists to expose.
 
-Raw structural tables, transition counts, human-model splits, corpus rows, engine lines, and
+Raw structural tables, exact exchange/tactical predicates, transition counts, human-model splits, corpus rows, engine lines, and
 tablebase detail are **Evidence inspector** material. That label means “inspect the grounded input,”
 not “Tabiya recommends this move.” Guidance modules remain a later selection/presentation layer.
 Registering evidence does not make it learner-visible and does not create another setting.

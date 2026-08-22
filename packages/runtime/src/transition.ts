@@ -89,6 +89,15 @@ export type TransitionSemanticFact =
       readonly from: SquareName;
       readonly to: SquareName;
       readonly detail: Readonly<Record<string, unknown>>;
+    }
+  | {
+      readonly family: "capture";
+      readonly sign: "state";
+      readonly mover: Readonly<Record<string, unknown>>;
+      readonly from: SquareName;
+      readonly to: SquareName;
+      readonly captured: Readonly<{ color: Color; role: Role }>;
+      readonly enPassant: boolean;
     };
 
 type Position = ReturnType<typeof positionFromFen>;
@@ -308,6 +317,7 @@ export function transitionSemanticFacts(beforeFen: string, moveUci: string, afte
       const from = makeSquare(parsed.from), to = makeSquare(parsed.to);
       if (movingPiece.role === "king" && Math.abs((parsed.to % 8) - (parsed.from % 8)) >= 2) facts.push({ family: "castled", sign: "state", mover, from, to, detail: Object.freeze({ resultingKingSquare: Math.floor(parsed.from / 8) * 8 + (parsed.to > parsed.from ? 6 : 2) }) });
       const captured = capturedRole(before, after, moveUci);
+      if (captured !== undefined) facts.push({ family: "capture", sign: "state", mover, from, to, captured: Object.freeze(captured), enPassant: before.board.get(parsed.to) === undefined && movingPiece.role === "pawn" && parsed.from % 8 !== parsed.to % 8 });
       if (movingPiece.role === "pawn" || captured !== undefined) facts.push({ family: "clock_reset", sign: "state", mover, from, to, detail: Object.freeze({ pawnMove: movingPiece.role === "pawn", capture: captured !== undefined }) });
       if (captured !== undefined && after.board.pieces(captured.color, captured.role).isEmpty()) facts.push({ family: "last_of_role", sign: "state", mover, from, to, detail: Object.freeze({ capturedColor: captured.color, capturedRole: captured.role }) });
       if (movingPiece.role === "pawn") {
@@ -348,7 +358,7 @@ export function irreversibility(beforeFen: string, moveUci: string, afterFen: st
   if (move === undefined || !("from" in move)) return undefined;
   const mover = before.board.get(move.from);
   if (mover === undefined) return undefined;
-  if (mover.role === "king" && Math.abs((move.to % 8) - (move.from % 8)) === 2) return { subkind: "castled", color: mover.color };
+  if (mover.role === "king" && Math.abs((move.to % 8) - (move.from % 8)) >= 2) return { subkind: "castled", color: mover.color };
   const captured = capturedRole(before, after, moveUci);
   if (captured !== undefined && after.board.pieces(captured.color, captured.role).isEmpty()) {
     return { subkind: "last_of_role", color: captured.color, role: captured.role, queensOff: captured.role === "queen" && after.board.pieces(mover.color, "queen").isEmpty() };

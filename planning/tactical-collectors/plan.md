@@ -7,7 +7,8 @@ preset, workflow or authorable-vocabulary edits.
 
 ## Execution
 
-1. Build and fixture the legal local-exchange authority.
+1. **Checkpoint complete:** build and fixture the legal local-exchange authority; exact reply,
+   check, capture and fork-survival primitives landed with manifest bindings.
 2. Add the exact castling, capture/development, structural and tactical collectors at the ten
    normative production sites.
 3. Register all 30 projections, typed operands, event families, eligibility and source adapters.

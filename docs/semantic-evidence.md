@@ -8,11 +8,14 @@ modules. It does not itself choose a hint, name a tactic, grade a move, or turn 
 A **reading** describes a position or a reduced transition count. Existing inspector surfaces keep
 using these values. An **event** is an identity-preserving relation across one legal edge: exact
 before/after FENs, canonical UCI, a declared sign, and the pieces, squares, rays, roles or counts
-that make the relation true. F2 registers 22 direct event projections and eleven derived
+that make the relation true. F2 registered 22 direct event projections and eleven derived
 counterfactual-absence projections.
+The tactical foundation adds four direct research events: identity-retaining capture,
+exchange-filtered double attack, complete one-reply breadth, and exact check. Its threat and fork-survival projections remain
+inspector/machine evidence rather than learner modules.
 
 **Eligibility** is an exact event-to-consumer permission. It says that a validated event may reach
-that consumer; it does not say the event is useful, visible or enabled. The initial 33 rows target
+that consumer; it does not say the event is useful, visible or enabled. The current 37 rows target
 only `research.semantic_selection@1`. Existing product consumers receive no new evidence.
 
 **Selection** compares the played edge with every other legal move from the same parent position.
@@ -44,8 +47,8 @@ structured projection. The exact 14-file migration census is executable in
 
 ## Compiled closure and provider behavior
 
-The primary manifest contains 20 producers, 126 projections, 25 consumers and 175 bindings, plus
-33 semantic events, 33 eligibility rows, 15 reasons and one selection policy. All collections
+The primary manifest contains 23 producers, 133 projections, 25 consumers and 179 bindings, plus
+37 semantic events, 37 eligibility rows, 15 reasons and one selection policy. All collections
 contribute to one canonical digest. `/capabilities` reports this tuple and the same digest used at
 startup and by `make semantic-evidence-check`.
 

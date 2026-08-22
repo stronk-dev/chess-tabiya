@@ -1,6 +1,6 @@
 import { readFileSync } from "node:fs";
 
-import { Chess } from "chessops/chess";
+import { Chess, normalizeMove } from "chessops/chess";
 import { INITIAL_FEN, makeFen, parseFen } from "chessops/fen";
 import { parseUci } from "chessops/util";
 import { describe, expect, it } from "vitest";
@@ -8,12 +8,14 @@ import { describe, expect, it } from "vitest";
 import {
   matchesTransitionExpression,
   matchesTransitionFeature,
+  irreversibility,
+  transitionSemanticFacts,
   transitionReading,
 } from "./transition.js";
 
 function after(fen: string, moveUci: string): string {
   const position = Chess.fromSetup(parseFen(fen).unwrap()).unwrap();
-  position.play(parseUci(moveUci)!);
+  position.play(normalizeMove(position, parseUci(moveUci)!));
   return makeFen(position.toSetup());
 }
 
@@ -58,5 +60,21 @@ describe("transition primitives", () => {
     expect(structureImport).toContain("structuralFeatureKinds");
     expect(structureImport).not.toMatch(/structuralReading|structuralDelta|pawnSafety/u);
     expect(source).not.toMatch(/\b(?:structuralReading|structuralDelta|pawnSafety)\s*\(/u);
+  });
+
+  it("retains generic and en-passant capture identities", () => {
+    const ordinary = transitionSemanticFacts(INITIAL_FEN, "e2e4", after(INITIAL_FEN, "e2e4"));
+    expect(ordinary.some((fact) => fact.family === "capture")).toBe(false);
+
+    const epFen = "4k3/8/8/3pP3/8/8/8/4K3 w - d6 0 1";
+    const ep = transitionSemanticFacts(epFen, "e5d6", after(epFen, "e5d6"));
+    expect(ep).toContainEqual(expect.objectContaining({ family: "capture", captured: { color: "black", role: "pawn" }, enPassant: true, from: "e5", to: "d6" }));
+  });
+
+  it("recognizes both castling UCI forms on the reading plane", () => {
+    const fen = "r3k2r/8/8/8/8/8/8/R3K2R w KQkq - 0 1";
+    const result = after(fen, "e1h1");
+    expect(irreversibility(fen, "e1h1", result)).toEqual({ subkind: "castled", color: "white" });
+    expect(irreversibility(fen, "e1g1", result)).toEqual({ subkind: "castled", color: "white" });
   });
 });

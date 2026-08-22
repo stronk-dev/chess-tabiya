@@ -17,8 +17,9 @@ import {
   type SemanticEventSign,
   type VersionedEvidenceId,
 } from "./evidence-contract.js";
-import { declareAvoidanceEvidence, declareStructuralSemanticSourceEvidence, declareTransitionSemanticSourceEvidence } from "./evidence-source-adapters.js";
+import { declareAvoidanceEvidence, declareCheckEventEvidence, declareDoubleAttackEvidence, declareReplyBreadthEvidence, declareStructuralSemanticSourceEvidence, declareTransitionSemanticSourceEvidence } from "./evidence-source-adapters.js";
 import { structuralReading, type StructuralObservation, type StructuralReading } from "./structure.js";
+import { checkEvent, doubleAttackEvent, replyBreadth, type CheckEvent, type DoubleAttackEvent, type ReplyBreadth } from "./tactics.js";
 import { transitionSemanticFacts, type TransitionSemanticFact } from "./transition.js";
 
 const SEMANTIC_EVENT: unique symbol = Symbol("tabiya.evidence.semantic_event");
@@ -113,6 +114,8 @@ export type TransitionSemanticEventOperands = TransitionSemanticFact & {
   readonly move_uci: string;
   readonly after_fen: string;
 };
+
+export type TacticalSemanticEventOperands = DoubleAttackEvent | ReplyBreadth | CheckEvent;
 
 function immutable<T>(value: T): T {
   if (value !== null && typeof value === "object" && !Object.isFrozen(value)) {
@@ -214,8 +217,21 @@ export function transitionSemanticEvents(beforeFen: string, moveUci: string, aft
   }));
 }
 
+export function tacticalSemanticEvents(beforeFen: string, moveUci: string, afterFen: string): readonly SemanticEvidenceEvent<TacticalSemanticEventOperands>[] {
+  const anchor = canonicalAnchor({ beforeFen, moveUci, afterFen, side: positionFromFen(beforeFen).turn });
+  const events: SemanticEvidenceEvent<TacticalSemanticEventOperands>[] = [];
+  const breadth = replyBreadth(anchor.beforeFen, anchor.moveUci);
+  if (breadth.afterFen !== anchor.afterFen) throw new TypeError(`Reply-breadth after FEN does not match ${anchor.moveUci}`);
+  events.push(compileSemanticEvidenceEvent(PRIMARY_EVIDENCE_MANIFEST, { evidence: declareReplyBreadthEvidence(breadth), anchor, sign: "state", operands: breadth }));
+  const check = checkEvent(anchor.beforeFen, anchor.moveUci);
+  if (check !== undefined) events.push(compileSemanticEvidenceEvent(PRIMARY_EVIDENCE_MANIFEST, { evidence: declareCheckEventEvidence(check), anchor, sign: "state", operands: check }));
+  const fork = doubleAttackEvent(anchor.beforeFen, anchor.moveUci);
+  if (fork !== undefined) events.push(compileSemanticEvidenceEvent(PRIMARY_EVIDENCE_MANIFEST, { evidence: declareDoubleAttackEvidence(fork), anchor, sign: "gained", operands: fork }));
+  return Object.freeze(events.sort((left, right) => refKey(left.projection).localeCompare(refKey(right.projection))));
+}
+
 export function localSemanticEvents(beforeFen: string, moveUci: string, afterFen: string): readonly SemanticEvidenceEvent[] {
-  return Object.freeze([...structuralSemanticEvents(beforeFen, moveUci, afterFen), ...transitionSemanticEvents(beforeFen, moveUci, afterFen)]);
+  return Object.freeze([...structuralSemanticEvents(beforeFen, moveUci, afterFen), ...transitionSemanticEvents(beforeFen, moveUci, afterFen), ...tacticalSemanticEvents(beforeFen, moveUci, afterFen)]);
 }
 
 export function compileSemanticEvidenceEvent<T>(manifest: CompiledEvidenceManifest, input: SemanticEventInput<T>): SemanticEvidenceEvent<T> {
@@ -342,7 +358,7 @@ export function selectSemanticEvidence(manifest: CompiledEvidenceManifest, polic
 
 export function selectLocalSemanticEvidence(policyRef: VersionedEvidenceId, input: Omit<SemanticSelectionInput, "playedEvents" | "evaluateAlternative">): EvidenceSelectionResult {
   const cache = new Map<string, StructuralReading>();
-  const events = (edge: { readonly beforeFen: string; readonly moveUci: string; readonly afterFen: string }): readonly SemanticEvidenceEvent[] => Object.freeze([...structuralSemanticEventsCached(edge.beforeFen, edge.moveUci, edge.afterFen, cache), ...transitionSemanticEvents(edge.beforeFen, edge.moveUci, edge.afterFen)]);
+  const events = (edge: { readonly beforeFen: string; readonly moveUci: string; readonly afterFen: string }): readonly SemanticEvidenceEvent[] => Object.freeze([...structuralSemanticEventsCached(edge.beforeFen, edge.moveUci, edge.afterFen, cache), ...transitionSemanticEvents(edge.beforeFen, edge.moveUci, edge.afterFen), ...tacticalSemanticEvents(edge.beforeFen, edge.moveUci, edge.afterFen)]);
   return selectSemanticEvidence(PRIMARY_EVIDENCE_MANIFEST, policyRef, {
     ...input,
     playedEvents: events(input),

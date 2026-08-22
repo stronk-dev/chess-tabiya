@@ -73,10 +73,10 @@ function projection(producerId: string, id: string, plane: EvidencePlane, option
 }
 
 export const EVIDENCE_PRODUCER_IDS = Object.freeze([
-  "rules.structural", "rules.transition", "rules.phase", "rules.pivotal", "rules.endgame",
+  "rules.structural", "rules.transition", "rules.exchange", "rules.tactic", "rules.phase", "rules.pivotal", "rules.endgame",
   "theory.shapes", "authored.structural_condition", "pack.authored", "recorded.engine", "recorded.tablebase", "live.stockfish",
   "live.syzygy", "human.maia", "human.explorer", "theory.opening_identity", "run.record",
-  "derived.compare_narrative", "derived.story", "sourcing.ledger",
+  "derived.compare_narrative", "derived.story", "derived.tactic", "sourcing.ledger",
   "derived.semantic_avoidance",
 ] as const);
 
@@ -112,11 +112,16 @@ export const STRUCTURAL_EVENT_FAMILIES = Object.freeze([
   "king_zone", "line_blockers", "open_file", "passed_pawn", "piece_count", "direct_attack_count",
 ] as const);
 export const TRANSITION_GEOMETRY_EVENT_FAMILIES = Object.freeze(["occupied_attack", "occupied_defence", "slider_ray", "piece_escape", "defended_duty"] as const);
-export const TRANSITION_RULE_EVENT_FAMILIES = Object.freeze(["castled", "clock_reset", "last_of_role", "pawn_contact", "checkmate", "promotion"] as const);
+export const TRANSITION_RULE_EVENT_FAMILIES = Object.freeze(["castled", "clock_reset", "last_of_role", "pawn_contact", "checkmate", "promotion", "capture"] as const);
 export const STRUCTURAL_EVENT_PROJECTION_IDS = Object.freeze(STRUCTURAL_EVENT_FAMILIES.map((family) => `rules.structural.event.${family}`));
 export const TRANSITION_EVENT_PROJECTION_IDS = Object.freeze([...TRANSITION_GEOMETRY_EVENT_FAMILIES, ...TRANSITION_RULE_EVENT_FAMILIES].map((family) => `rules.transition.event.${family}`));
 export const AVOIDANCE_EVENT_PROJECTION_IDS = Object.freeze(STRUCTURAL_EVENT_FAMILIES.map((family) => `derived.semantic_avoidance.${family}`));
-export const SEMANTIC_EVENT_PROJECTION_IDS = Object.freeze([...STRUCTURAL_EVENT_PROJECTION_IDS, ...TRANSITION_EVENT_PROJECTION_IDS, ...AVOIDANCE_EVENT_PROJECTION_IDS]);
+export const TACTICAL_EVENT_PROJECTION_IDS = Object.freeze([
+  "rules.tactic.event.double_attack",
+  "rules.tactic.consequence.reply_breadth",
+  "rules.tactic.event.check",
+] as const);
+export const SEMANTIC_EVENT_PROJECTION_IDS = Object.freeze([...STRUCTURAL_EVENT_PROJECTION_IDS, ...TRANSITION_EVENT_PROJECTION_IDS, ...AVOIDANCE_EVENT_PROJECTION_IDS, ...TACTICAL_EVENT_PROJECTION_IDS]);
 
 const structuralEventOutputs = STRUCTURAL_EVENT_FAMILIES.map((family) => projection("rules.structural", `rules.structural.event.${family}`, "rules", {
   role: "event",
@@ -177,7 +182,7 @@ const transitionEventOutputs = [
   })),
   ...TRANSITION_RULE_EVENT_FAMILIES.map((family) => projection("rules.transition", `rules.transition.event.${family}`, "transition", {
     role: "event", payloadType: "TransitionRuleEventOperands", semantics: `Independent exact transition-rule event for ${family}.`,
-    operands: ["before_fen", "move_uci", "after_fen", "mover", "from", "to", "detail"], signs: ["state"],
+    operands: family === "capture" ? ["before_fen", "move_uci", "after_fen", "mover", "from", "to", "captured", "enPassant"] : ["before_fen", "move_uci", "after_fen", "mover", "from", "to", "detail"], signs: ["state"],
     forms: ["list", "panel", "machine_condition"], limitations: ["An exact rules event carries no learner valence or importance judgement."],
   })),
 ];
@@ -194,9 +199,69 @@ const avoidanceOutputs = STRUCTURAL_EVENT_FAMILIES.map((family) => {
   });
 });
 
+const LEGAL_EXCHANGE_SEMANTICS = "legal-exchange@1 evaluates one specified legal capture by legal recapture-only minimax on its landing square. Either side may stop. Material uses P=1, N=3, B=3, R=5, Q=9; promotion adds promoted-piece minus pawn. Illegal off-line pinned recaptures and illegal king captures are absent; legal along-ray recaptures and X-rays remain. Units are convention material, never centipawns.";
+const THREAT_SEMANTICS = "threat@1 gives the move to the opponent and clears en-passant, then enumerates positive legal-exchange@1 captures and mate in one. It abstains while the side to move is in check. Quiet promotion, deeper mating nets, trapping threats and forking threats are outside this one-ply convention.";
+
+const exchangeOutputs = [
+  projection("rules.exchange", "rules.exchange.predicate.legal_exchange", "rules", {
+    role: "predicate",
+    payloadType: "LegalExchangeResult",
+    semantics: LEGAL_EXCHANGE_SEMANTICS,
+    operands: ["beforeFen", "captureUci", "landingSquare", "capturer", "captured", "branches", "chosenLine", "stopDecisions", "conventionId", "resultUnits"],
+    grounding: "declared_convention",
+    exactness: "convention",
+    forms: ["machine_condition"],
+    limitations: ["Local exchange only: zwischenzugs, replies elsewhere, position value and compensation are outside scope."],
+    disposition: { kind: "experimental", reason: "Machine prerequisite for the research-only tactical collector wave; no direct product consumer is admitted at landing." },
+  }),
+];
+
+const tacticalOutputs = [
+  projection("rules.tactic", "rules.tactic.consequence.threat", "rules", {
+    role: "reading", payloadType: "ThreatResult", semantics: THREAT_SEMANTICS,
+    operands: ["kind", "conventionId", "threats"], signs: ["threatened"], grounding: "declared_convention", exactness: "convention",
+    abstention: { possible: true, reasons: ["pass_while_in_check"] }, answerContent: ["threat"], forms: ["list", "panel", "machine_condition"],
+    dependsOn: [ref("rules.exchange.predicate.legal_exchange")],
+    limitations: ["Threat presence is not a move grade, recommendation, forcing claim or statement of intent."],
+    disposition: { kind: "inspector_only", reason: "D794 measured threat presence near background; module admission waits on Phase 3." },
+  }),
+  projection("rules.tactic", "rules.tactic.event.double_attack", "rules", {
+    role: "event", payloadType: "DoubleAttackEvent", semantics: "The moved piece attacks at least two enemy targets after the move; each non-king target has a positive legal-exchange@1 capture by that piece. Geometry alone never emits this event.",
+    operands: ["beforeFen", "moveUci", "afterFen", "mover", "targets"], signs: ["gained"], grounding: "declared_convention", exactness: "convention",
+    answerContent: ["threat"], forms: ["list", "panel", "machine_condition"], dependsOn: [ref("rules.exchange.predicate.legal_exchange")],
+    limitations: ["An exact double attack is not a universal positive prior or a move grade."],
+  }),
+  projection("rules.tactic", "rules.tactic.consequence.reply_breadth", "rules", {
+    role: "event", payloadType: "ReplyBreadth", semantics: "Complete legal reply UCIs after one triggering legal move. Zero replies is terminal, never only-reply; the exact count is never replaced by a forcing label.",
+    operands: ["triggeringMove", "afterFen", "terminal", "check", "replies", "count", "horizon"], signs: ["state"],
+    answerContent: ["fact"], forms: ["list", "panel", "machine_condition"],
+    limitations: ["One-reply horizon only; reply count is not move quality or practical difficulty."],
+  }),
+  projection("rules.tactic", "rules.tactic.event.check", "rules", {
+    role: "event", payloadType: "CheckEvent", semantics: "Exact check after the triggering move, retaining checking pieces, checked king, attack squares and slider rays.",
+    operands: ["triggeringMove", "checkingPieces", "checkedKing", "attackSquares", "rays"], signs: ["state"],
+    answerContent: ["fact"], forms: ["list", "panel", "machine_condition"],
+    limitations: ["Check is a literal rule event, not a forcing or quality label."],
+  }),
+];
+
+const derivedTacticOutputs = [
+  projection("derived.tactic", "derived.tactic.fork_survives_reply", "derived", {
+    role: "predicate", payloadType: "ForkSurvivalResult", semantics: "For every exact legal reply, the moved piece survives and retains a positive legal-exchange@1 capture of at least one original non-king target on its original square. False results retain refuting replies.",
+    operands: ["matched", "doubleAttack", "replyBreadth", "refutingReplies"], grounding: "declared_convention", exactness: "convention",
+    answerContent: ["threat"], forms: ["machine_condition", "list", "panel"],
+    dependsOn: [ref("rules.tactic.event.double_attack"), ref("rules.tactic.consequence.reply_breadth"), ref("rules.exchange.predicate.legal_exchange")],
+    derivation: { inputs: [ref("rules.tactic.event.double_attack"), ref("rules.tactic.consequence.reply_breadth"), ref("rules.exchange.predicate.legal_exchange")] },
+    limitations: ["One-reply local survival only; no inevitability, quality or whole-position claim."],
+    disposition: { kind: "inspector_only", reason: "Rare bounded consequence retained for inspection and later Review admission; no production module consumes it at landing." },
+  }),
+];
+
 export const EVIDENCE_PRODUCERS: readonly ProducerDeclaration[] = Object.freeze([
   producer("rules.structural", "rules", "packages/runtime/src/structure.ts", "local", structuralOutputs),
   producer("rules.transition", "transition", "packages/runtime/src/transition.ts", "local", [...transitionOutputs, ...transitionEventOutputs]),
+  producer("rules.exchange", "rules", "packages/runtime/src/exchange.ts", "local", exchangeOutputs),
+  producer("rules.tactic", "rules", "packages/runtime/src/tactics.ts", "local", tacticalOutputs),
   producer("rules.phase", "rules", "packages/runtime/src/phase.ts", "local", [projection("rules.phase", "rules.phase.reading", "rules", { payloadType: "PhaseReading", operands: ["fen", "phase", "material", "undevelopedMinors", "provenanceNote"], forms: ["sentence", "panel"] })]),
   producer("rules.pivotal", "rules", "packages/runtime/src/pivotal.ts", "local", [projection("rules.pivotal", "rules.pivotal.marker", "rules", { payloadType: "PivotalMarker", operands: ["nodeId", "kind", "detail", "provenanceNote"], forms: ["timeline_marker", "sentence", "panel"] })]),
   producer("rules.endgame", "rules", "packages/runtime/src/endgame.ts", "local", [projection("rules.endgame", "rules.endgame.reading", "rules", { payloadType: "EndgameReading", operands: ["type", "techniques", "provenanceNote"], forms: ["sentence", "panel"] })]),
@@ -254,6 +319,7 @@ export const EVIDENCE_PRODUCERS: readonly ProducerDeclaration[] = Object.freeze(
     projection("derived.story", "derived.story.rank", "derived", { payloadType: "StoryRank", grounding: "declared_convention", exactness: "convention", operands: ["rank"], semantics: "Fixed kind-priority order with absolute recorded-evaluation delta as a tiebreak; presentation prominence, not chess significance.", answerContent: ["fact", "pattern", "evaluation"], forms: ["list", "panel"], abstention: { possible: true, reasons: ["input_abstained"] }, derivation: { inputs: [ref("derived.story.eval_shift"), ref("derived.story.last_level"), ref("run.record.consequence"), ref("run.record.imported_result"), ref("rules.pivotal.marker"), ref("rules.endgame.reading"), ref("theory.shapes.firing")] } }),
     projection("derived.story", "derived.story.title", "derived", { payloadType: "StoryTitle", grounding: "declared_convention", exactness: "convention", operands: ["title", "rank", "outcome"], semantics: "Fixed title composition over rank, recorded outcome/result, and endgame label; imported result verbs retain the current White-relative convention.", answerContent: ["fact", "pattern", "evaluation"], forms: ["sentence", "panel"], abstention: { possible: true, reasons: ["input_abstained"] }, derivation: { inputs: [ref("derived.story.rank"), ref("run.record.consequence"), ref("run.record.imported_result"), ref("rules.endgame.reading")] } }),
   ]),
+  producer("derived.tactic", "derived", "packages/runtime/src/tactics.ts", "local", derivedTacticOutputs),
   producer("sourcing.ledger", "record", "apps/server/src/sourcing/types.ts; apps/server/src/sourcing/claim-binding.ts", "recorded", [
     projection("sourcing.ledger", "sourcing.ledger.engine_eval", "record", { role: "source_record", payloadType: "engine_eval EvidenceRecord", grounding: "bounded_search", exactness: "measured", confidence: "reported", operands: ["kind", "sourceId", "retrievedAt", "values"], answerContent: ["evaluation"], forms: ["list", "panel"], limitations: ["Offline sourcing record including anchor and provenance; not a runtime engine reading."] }),
     projection("sourcing.ledger", "sourcing.ledger.tablebase_result", "record", { role: "source_record", payloadType: "tablebase_result EvidenceRecord", grounding: "tablebase_exact", operands: ["kind", "sourceId", "retrievedAt", "values"], answerContent: ["fact", "evaluation"], forms: ["list", "panel"], limitations: ["Offline sourcing record including anchor and provenance; not a live tablebase event."] }),
@@ -315,7 +381,7 @@ const CONSUMER_SPECS: readonly ConsumerSpec[] = [
   { id: "guidance.voice_compare", implementation: "rest.ts compare voice; comparisonNarrative", projections: ["run.record.fork", "run.record.move", "run.record.checkpoint_hit", "run.record.objective_transition", "run.record.consequence", "rules.pivotal.marker", "derived.compare.structure_delta", "derived.compare.eval_delta"], timing: ["review"], forms: ["sentence"], answerContent: ["fact", "evaluation", "move"], providerOff: "available" },
   { id: "guidance.voice_story", implementation: "rest.ts story voice and speech; storyMoments; suggestTitle", projections: ["rules.phase.reading", "pack.authored.phase", "rules.structural.reading.named_structure", "rules.pivotal.marker", "rules.endgame.reading", "pack.authored.claim", "theory.shapes.firing", "run.record.consequence", "run.record.imported_result", "derived.story.eval_shift", "derived.story.last_level", "derived.story.title"], timing: ["review"], forms: ["sentence", "audio"], answerContent: ["fact", "pattern", "theory", "principle", "plan", "evaluation"], providerOff: "available" },
   { id: "assistance.arrows", implementation: "apps/web/src/lib/assistance-preference.ts; AssistanceSettings.svelte", disposition: { kind: "experimental", reason: "D546: migrated preference has no producer and no renderer; F5 or an owner ruling decides activation or retirement." } },
-  { id: "research.semantic_selection", implementation: "packages/runtime/src/semantic-evidence.ts; tools/r2-selection-harness", projections: SEMANTIC_EVENT_PROJECTION_IDS, timing: ["analysis"], roles: ["operator"], forms: ["machine_condition"], answerContent: ["fact"], latency: { mode: "sync", maxMs: 4_000 }, budget: { maxFacts: 2, maxForms: 1 } },
+  { id: "research.semantic_selection", implementation: "packages/runtime/src/semantic-evidence.ts; tools/r2-selection-harness", projections: SEMANTIC_EVENT_PROJECTION_IDS, timing: ["analysis"], roles: ["operator"], forms: ["machine_condition"], answerContent: ["fact", "threat"], latency: { mode: "sync", maxMs: 4_000 }, budget: { maxFacts: 2, maxForms: 1 } },
 ];
 
 export const EVIDENCE_CONSUMERS: readonly ConsumerDeclaration[] = Object.freeze(CONSUMER_SPECS.map((spec) => Object.freeze({

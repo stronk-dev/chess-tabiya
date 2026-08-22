@@ -515,7 +515,7 @@ predeclared D545 answer the measurement must confirm or refute.
     `legal-exchange@1` capture by the mover or (b) is the king (check). Grounding
     `declared_convention`, exactness
     `convention`.
-  - `rules.tactic.consequence.fork_survives_reply@1` — the stronger but still local claim:
+  - `derived.tactic.fork_survives_reply@1` — the stronger but still local claim:
     after **every** legal reply, the moved piece still stands and has at least one **legal**
     capture of an original target on its original square whose `legal-exchange@1` result is
     positive, evaluated in the post-reply position. Post-reply legality makes check parries,
@@ -989,7 +989,7 @@ dropping an id is a spec change with a changelog line, never a silent drift.
 | 11 | `rules.tactic.reading.ray_classification@1` | 3.5 | reading |
 | 12 | `rules.tactic.consequence.threat@1` | 3.6 | reading |
 | 13 | `rules.tactic.event.double_attack@1` | 3.7 | event |
-| 14 | `rules.tactic.consequence.fork_survives_reply@1` | 3.7 | predicate |
+| 14 | `derived.tactic.fork_survives_reply@1` | 3.7 | predicate |
 | 15 | `rules.structural.reading.pawn_connectivity@1` | 3.8 | reading |
 | 16 | `rules.structural.event.pawn_islands@1` | 3.8 | event |
 | 17 | `derived.semantic_avoidance.pawn_islands@1` | 3.8 | event |
@@ -1016,6 +1016,13 @@ total stays 30 and the swap is recorded in the changelog and the landing log ent
 - 2026-08-22: owner accepted the repaired contract and opened implementation. No open product
   question was inferred: the accepted scope is the closed 30-projection research/inspector wave;
   module promotion, presets, authored vocabulary and opening identity remain outside it.
+- 2026-08-22: implementation return D827 corrected `fork_survives_reply@1` from the rules plane
+  to `derived.tactic`. F1 rejects declared derivation inputs outside the derived plane. Semantics,
+  operands, role, count and the `tactics.ts` home are unchanged; the guard is not weakened.
+- 2026-08-22: implementation return D828 records the validation closure omitted by §1.1. A1
+  explicitly requires `evidence-manifest-check` and the docs tuple to move, so their exact-count
+  checks and capability fixtures are validation/test sites, not undeclared producer computation.
+  The ten-site production collector census remains unchanged.
 - 2026-08-22: created from `planning/evidence-foundation-ux/phase2-collector-audit.md`
   (HEAD `7eb9210`) with all symbols re-verified at drafting HEAD `6526ccf`; D745 rulings
   encoded; no register claims.

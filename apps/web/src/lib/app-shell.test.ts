@@ -65,7 +65,7 @@ const runSummary: RunSummary = {
 };
 
 const capabilities: Capabilities = {
-  evidenceManifest: { digest: "fixture", counts: { producers: 20, projections: 126, consumers: 25, bindings: 175, semanticEvents: 33, eligibility: 33, reasons: 15, selectionPolicies: 1 }, availability: [], bindings: [] },
+  evidenceManifest: { digest: "fixture", counts: { producers: 23, projections: 133, consumers: 25, bindings: 179, semanticEvents: 37, eligibility: 37, reasons: 15, selectionPolicies: 1 }, availability: [], bindings: [] },
   engines: [],
   policyModes: ["human_common"],
   feedbackPolicies: ["delayed_checkpoint", "segment_end", "immediate_guard"],

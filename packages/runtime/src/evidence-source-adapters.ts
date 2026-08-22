@@ -48,6 +48,12 @@ export const declareStockfishEvalEvidence = <T extends object>(payload: T) => ex
 export const declareSyzygyCategoryEvidence = <T extends object>(payload: T) => exactObject("live.syzygy", "live.syzygy.category", payload, ["category"]);
 export const declareSyzygyDistanceEvidence = <T extends object>(payload: T) => exactObject("live.syzygy", "live.syzygy.distance", payload, ["category"]);
 export const declareEvidenceReferenceResolution = <T extends object>(payload: T) => exactObject("run.record", "run.record.evidence_ref_resolution", payload, ["reference", "text", "sourceLabel"]);
+export const declareLegalExchangeEvidence = <T extends object>(payload: T) => exactObject("rules.exchange", "rules.exchange.predicate.legal_exchange", payload, ["beforeFen", "captureUci", "landingSquare", "capturer", "captured", "branches", "chosenLine", "stopDecisions", "conventionId", "resultUnits"]);
+export const declareThreatEvidence = <T extends object>(payload: T) => exactObject("rules.tactic", "rules.tactic.consequence.threat", payload, ["kind", "conventionId", "threats"]);
+export const declareDoubleAttackEvidence = <T extends object>(payload: T) => exactObject("rules.tactic", "rules.tactic.event.double_attack", payload, ["beforeFen", "moveUci", "afterFen", "mover", "targets"]);
+export const declareForkSurvivalEvidence = <T extends object>(payload: T) => exactObject("derived.tactic", "derived.tactic.fork_survives_reply", payload, ["matched", "doubleAttack", "replyBreadth", "refutingReplies"]);
+export const declareReplyBreadthEvidence = <T extends object>(payload: T) => exactObject("rules.tactic", "rules.tactic.consequence.reply_breadth", payload, ["triggeringMove", "afterFen", "terminal", "check", "replies", "count", "horizon"]);
+export const declareCheckEventEvidence = <T extends object>(payload: T) => exactObject("rules.tactic", "rules.tactic.event.check", payload, ["triggeringMove", "checkingPieces", "checkedKing", "attackSquares", "rays"]);
 
 export function declareStructuralReadingSourceEvidence<T extends { readonly kind: string }>(payload: T): DeclaredEvidence<T> {
   if (!STRUCTURAL_FEATURE_KINDS.includes(payload.kind as (typeof STRUCTURAL_FEATURE_KINDS)[number]) || payload.kind === "pawn_count") throw new TypeError(`Unsupported structural reading evidence kind ${payload.kind}`);
@@ -125,11 +131,12 @@ export function declareStructuralSemanticSourceEvidence<T extends object>(family
 }
 
 export function declareTransitionSemanticSourceEvidence<T extends object>(family: string, payload: T): DeclaredEvidence<T> {
-  const allowed = new Set(["occupied_attack", "occupied_defence", "slider_ray", "piece_escape", "defended_duty", "castled", "clock_reset", "last_of_role", "pawn_contact", "checkmate", "promotion"]);
+  const allowed = new Set(["occupied_attack", "occupied_defence", "slider_ray", "piece_escape", "defended_duty", "castled", "clock_reset", "last_of_role", "pawn_contact", "checkmate", "promotion", "capture"]);
   if (!allowed.has(family)) throw new TypeError(`Unsupported transition semantic family ${family}`);
   const keys = new Set(["occupied_attack", "occupied_defence", "slider_ray", "piece_escape", "defended_duty"]).has(family)
     ? ["before_fen", "move_uci", "after_fen", "subject", "targets_before", "targets_after"]
-    : ["before_fen", "move_uci", "after_fen", "mover", "from", "to", "detail"];
+    : family === "capture" ? ["before_fen", "move_uci", "after_fen", "mover", "from", "to", "captured", "enPassant"]
+      : ["before_fen", "move_uci", "after_fen", "mover", "from", "to", "detail"];
   return exactObject("rules.transition", `rules.transition.event.${family}`, payload, keys);
 }
 
