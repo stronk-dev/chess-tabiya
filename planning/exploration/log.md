@@ -5434,3 +5434,18 @@ claimed at this checkpoint because the persisted run seam has not landed.
 **Next:** D969/D970 still require Claude/owner amendment before the guarded roster. Continue the
 unblocked persisted-profile and typed selection-record work only when its claimed migration order
 is free; do not invent the probe, mate score frame, or band list.
+
+## 2026-08-22 — false-open ledger sweep at shipping symbols
+
+**What landed:** nineteen rows move to their actual terminal state. D28's condition-less outcome
+grading has a four-objective automatic-rule matrix and a played-mate fixture. D662 and D669–D679
+are the implemented F1 author-return boundaries (sealed rendered items, producer/command split,
+exact structural/ref/claim/Explorer/trajectory/sourcing/opponent/route/story payloads). D533/D534
+are the pinned Stockfish-environment and bounded-census CI fixes; D245/D246 the completed 0.27
+graduation corrections; D871 the recorded independent-review correction; D948 the live-lane route
+whose recurring omission class is now guarded by `make work-index`.
+
+**Boundary:** this was not a text-match blanket flip. D568 remains open because its broader six-plane
+architecture includes downstream selection/module work; D546 remains open because registering the
+producerless arrows surface does not give it a producer. Each flipped row already named its own
+implemented/closed disposition and was checked at the referenced symbol or permanent fixture.
