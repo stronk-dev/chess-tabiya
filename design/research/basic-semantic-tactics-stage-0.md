@@ -4,8 +4,9 @@
 mating patterns and promotion threats optional “deep” analysis, or missing basic classifier
 foundation—and what evidence horizon do they require?
 
-**Status:** partial `[V]`; external population/upstream tagger, exact observed sequences and the
-complete-one-reply boundary measured; external agreement plus king/promotion arms remain.
+**Status:** partial `[V]`; external population/upstream tagger, exact observed sequences,
+complete-one-reply boundary and exact next-mate/promotion consequences measured; external detector
+agreement and deeper mating/race horizons remain.
 **Instrument:** `tools/d872-semantic-tactics-harness/`  
 **Authority:** D872 / evidence-foundation Wave C
 
@@ -215,13 +216,54 @@ Instead, the semantic contract has two independent levels:
 without giving a move or promising success. It may add level 2 only when the counterfactual
 predicate holds. The module—not the collector—chooses whether that amount of information is allowed.
 
-## 8. Next research
+## 8. King/promotion arm: exact next-move facts are sparse and useful
+
+The third rules arm separates:
+
+- **mate on the mover's next turn after every legal reply**—an exhaustive two-edge consequence;
+- **same-pawn promotion available under the disclosed pass convention**;
+- **same-pawn promotion still legal after every opponent reply**.
+
+A `mateIn2`-tagged Lichess record supplies the mate positive; a synthetic seventh-rank pawn pair
+separates persistent promotion from a pawn the opponent can remove. `[V]`
+(`tools/d872-semantic-tactics-harness/king-promotion.test.ts`; official puzzle id `000Zo` in the
+bounded source prefix)
+
+| population | played edges | mate next after every reply | seventh-rank pawn | promotion under pass | promotion after every reply |
+|---|---:|---:|---:|---:|---:|
+| authored | 754 | 4 | 17 | 13 | **1** |
+| imported fixed sample | 579 | 0 | 2 | 1 | **0** |
+
+All 13 authored pass-convention promotion rows are quiet, while only one is reply-persistent. The
+sole persistent example is `pawn-breakthrough-convert/w-a7:a6a7`; the four mate examples come from
+the authored mating-technique families. `[V]`
+(`tools/d872-semantic-tactics-harness/king-promotion-output.md`)
+
+The product contract mirrors Stage 2:
+
+1. **promotion availability** may say the named pawn can promote next under the disclosed pass
+   convention and show its path/blockers;
+2. **reply-persistent promotion** may say every legal reply leaves that promotion;
+3. **promotion race/outcome** remains tablebase authority in-domain and requires bounded
+   engine/search outside it;
+4. **mate-next** is exact at its two-edge horizon; a broader “mating net” needs a versioned deeper
+   proof tree and must not be inferred from king-zone or escape counts.
+
+`[M]` This result offers an evidence-backed repair for D832: `promotion_pressure@1` should retain
+the exact availability and all-reply flags instead of exposing an underspecified
+`rule-of-the-square verdict` as if it were an outcome. Distance, blockers and control balance remain
+descriptive operands; Syzygy remains the outcome authority.
+
+## 9. Next research
 
 1. Compare the five externally represented observed families against Lichess as disagreement, reporting
    precision/recall only as agreement metrics.
 2. Add a reply-qualified overload form separately from the observed five-case convention; do not
    make it the basic label's floor.
-3. Add mating-pattern and promotion-consequence arms; do not fold them into defender/line labels.
-4. Admit, narrow or refuse every family independently; then update the Wave-C consumer matrix.
+3. Extend mate-next into bounded mate-depth/tree records and compare engine mate claims with exact
+   shallow proofs; do not call king-zone deltas a mating net.
+4. Add promotion-race/tablebase joins and keep them separate from the now-measured next-promotion
+   forms.
+5. Admit, narrow or refuse every family independently; then update the Wave-C consumer matrix.
 
 No production detector, learner sentence, content edit or RFC is authorized by this Stage-0 result.

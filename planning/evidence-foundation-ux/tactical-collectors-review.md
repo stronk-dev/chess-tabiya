@@ -61,3 +61,22 @@ prior or a substitute for the breadth successor.
 Only after that review may the owner accept the RFC and open implementation. The breadth successor
 can be reviewed in parallel but cannot implement before this RFC supplies its legal-exchange/reply
 prerequisites.
+
+## 2026-08-22 research handoff for the D832 author amendment
+
+Wave-C's king/promotion arm gives the returned `promotion_pressure@1` field a measured exact
+replacement for its unspecified rule-of-the-square verdict:
+
+- same-pawn promotion available next under the disclosed pass convention;
+- same-pawn promotion remains legal after every legal opponent reply;
+- distance, promotion square, blockers and control balance remain descriptive operands;
+- Syzygy remains the only exact outcome authority in-domain.
+
+The first flag occurs on 13/754 authored and 1/579 imported played edges; the stronger all-reply
+flag occurs on 1/754 and 0/579. Canonical stable/removable fixtures pass. The author amendment may
+delete `ruleOfSquareVerdict` and use these exact flags without changing the projection's pressure-
+description-only boundary. If it retains the historical rule, D832 still requires the full
+turn/double-step/boundary convention and it must be labelled convention rather than outcome.
+
+Source: `design/research/basic-semantic-tactics-stage-0.md` §8 and
+`tools/d872-semantic-tactics-harness/king-promotion.test.ts`.

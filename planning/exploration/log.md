@@ -4555,3 +4555,25 @@ events from reply-qualified consequences: “removed this defender/cleared this 
 this defence” is grounded by retained operands; “persistent/unavoidable under every reply” requires
 the rare stronger projection. Support may show the first at its allowed answer distance without
 giving a move; the module ceiling governs presentation.
+
+## 2026-08-22 — Wave-C king/promotion arm splits availability, persistence and outcome
+
+Exact mate on the mover's next turn after every legal reply occurs on 4/754 authored edges and
+0/579 imported fixed-sample edges. Seventh-rank promotion is available under the disclosed pass
+convention on 13 authored and 1 imported edge, but remains legal after every reply on only one
+authored edge and zero imported edges. The one persistent case is the existing pawn-breakthrough
+pack. D832 therefore has a measured repair path: promotion pressure retains distance/control/
+blockers plus exact pass-availability and all-reply flags; an underspecified rule-of-the-square
+verdict does not masquerade as outcome, and Syzygy keeps outcome authority in-domain.
+
+## 2026-08-22 — Wave-C opening identity splits live applicability from game history
+
+The pinned five-file catalogue contains 3,810 rows, correcting two living 3,627-row claims. Its
+named endpoints are unexpectedly clean—3,810 unique transposition keys, zero ambiguous endpoint
+identities—but all-prefix indexing yields 7,854 keys and up to 2,023 descendant opening names at
+one prefix. On 108 fixed imported games, named endpoints cover 401/6,991 nodes (5.7%), any catalogue
+path covers 527 (7.5%), and the deepest named match is median/p90 ply 4/8. Every game later leaves
+its last named endpoint, so a sticky live opening label is stale in 108/108 games. C3 therefore
+hands an RFC three separate facts: exact current named endpoint, current catalogue membership, and
+retrospective deepest named endpoint reached. Absence of an endpoint is not “out of book,” and
+neither FTS nor an LLM may invent applicability.

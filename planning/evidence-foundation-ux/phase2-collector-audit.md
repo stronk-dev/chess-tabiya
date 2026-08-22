@@ -336,21 +336,24 @@ caveat is bounded; for each collector the *negative reading* question is answere
 
 ### 3.11 Opening identity at runtime, transposition-aware
 
-- **Semantics.** *Theory-plane lookup state*: position-keyed (EPD via the existing `transposeKey`)
-  join against the already-fetched `lichess-org/chess-openings` table; deepest match wins;
-  **honest absence** (`no_catalogue_match` abstention is already declared on the sourcing
-  projection — the runtime projection declares the same). This is a **new runtime
+- **Semantics.** *Theory-plane lookup state*: three projections measured separately in
+  `runtime-opening-identity.md`: exact current named endpoint; exact current all-prefix catalogue
+  membership without choosing a descendant name; and retrospective deepest named endpoint actually
+  reached in the game history. **Honest absence** is explicit for each. “Deepest match wins” applies
+  only to the retrospective projection and must never make a live node inherit a stale name. This is a **new runtime
   producer/adapter**, not an admission of the refused record kind: the
   `RECORDED_READING_DISPOSITIONS` refusal ("position naming, not a recorded measurement") stays
   exactly as is. Serves D694's R8/F7 demand and D552's per-opening feedback.
-- **Operands:** ECO, name, matched depth/ply, match basis (`transposition` vs `move-order`),
-  table version/source id.
-- **Fixtures.** Transposition positive (same position via two move orders must name the same
-  opening); out-of-book abstention (must abstain, never fall back to the last match — the
-  non-vacuity core); deepest-match precedence.
-- **Measurement:** coverage rate over the imported-game population (share of games with an
-  identity at ply N), not lift — it is a lookup, not a detector. **Cost:** cheap (table of 3,627
-  rows already fetched and stored). **Consumers:** learner (Review header, theory links, opening
+- **Operands:** ECO, name, matched depth/ply, catalogue membership/candidate count, table
+  version/source id. A move-order/transposition basis requires actual history comparison; the key
+  alone cannot assert it.
+- **Fixtures.** Transposition positive (same position via two move orders must join identically);
+  unnamed prefix with multiple descendant names; named endpoint then exact absence; catalogue
+  exit/re-entry; retrospective deepest-match precedence.
+- **Measurement:** 3,810 rows = 3,810 unique named endpoints; 7,854 all-prefix keys. Over 108 fixed
+  imported games, named endpoints reach 401/6,991 nodes (5.7%), path membership 527 (7.5%), deepest
+  endpoint median/p90 ply 4/8, and sticky identity becomes stale in 108/108 games. **Cost:** cheap.
+  **Consumers:** learner (Review header, theory links, opening
   drills) and bot (repertoire/book priors — Chessiverse's documented layer, D551/D591).
 
 ### 3.12 Promotion-square pressure

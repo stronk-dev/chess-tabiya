@@ -503,7 +503,7 @@ all. Firing rates and lift measured on the same corpus by
 | 10 | **weak square / hole** | **free** — the complement of `pawn_safe_square`, which we already compute | rung 0 | — |
 | 11 | **bad bishop** | **free** — own pawns on the bishop's shade; `bishop_on_shade` already exists and is one of the anti-signals precisely because it stops one step short | rung 0 | 58.94% static at a ≥4 threshold — needs a declared threshold |
 | 12 | **back-rank weakness, trapped piece, X-ray, discovered attack** | **cheap** — one-ply enumeration per candidate piece | rung 0 | — |
-| 13 | **opening identity (ECO + name) at runtime** | **cheap** — `lichess-org/chess-openings` is 3,627 rows keyed by FEN prefix `[V]`; **we already fetch and store it** in `sourcing/openings.ts` and then refuse it | rung 4 (corpus lookup, not a judgement) | the owner's *"Dutch Defense"* |
+| 13 | **opening identity (ECO + name) at runtime** | **cheap** — the pinned `lichess-org/chess-openings` source has 3,810 unique named endpoints and 7,854 all-prefix keys `[V]`; **we already fetch it** in `sourcing/openings.ts` for candidate emission and then refuse runtime identity. Exact endpoint, path membership and retrospective deepest reached are separate facts (`runtime-opening-identity.md`) | rung 4 (corpus lookup, not a judgement) | the owner's *"Dutch Defense"* |
 | 14 | **book depth / "out of book" ply** | **cheap** — the same table, counted to the first miss | rung 4 | — |
 | 15 | **mate-in-N available / missed** | **engine** — mate score, or a bounded mate search | rung 2, exactly grounded | — |
 | 16 | **move-quality grade** (inaccuracy / mistake / blunder) | **engine** + a **published threshold**. Admissible under §4a layer 2 *only* if the number is shown beside the word | rung 2 | — |

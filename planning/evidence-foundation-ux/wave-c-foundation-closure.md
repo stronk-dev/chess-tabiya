@@ -110,13 +110,20 @@ or a king-zone/escape delta is renamed “attack” without a consequence.
 This is mostly closure of completed R4/R8 research, not a new algorithm hunt:
 
 1. audit catalogue ingestion, `transposeKey`, packet omission and every Review/theory consumer;
-2. report coverage by ply/population and preserve multiple identities per transposition key;
-3. fixture two move orders reaching one key, parent+descendant identities, deepest-match ordering
-   and out-of-catalogue abstention;
+2. report named-endpoint and all-prefix coverage by ply/population; preserve the measured uniqueness
+   of named endpoints and never choose among descendant identities at an unnamed prefix;
+3. fixture two move orders reaching one key, unnamed prefixes, retrospective deepest-match ordering,
+   catalogue exit/re-entry and out-of-catalogue abstention;
 4. split the handoff between F4 bundle production and F7 runtime/applicability UX.
 
 **Falsifier:** the adapter carries the last known opening beyond a catalogue match, or LLM/FTS can
 create applicability.
+
+**Answered 2026-08-22:** `design/research/runtime-opening-identity.md` measures 3,810 unique named
+endpoints and 7,854 all-prefix keys. Named endpoints reach 5.7% of fixed imported nodes; deepest
+match is median/p90 ply 4/8; sticky identity becomes stale in 108/108 games. Current named endpoint,
+catalogue membership and retrospective deepest reached are separate projections. The runtime RFC
+and F4/F7 handoff remain.
 
 ### C4 — engine and human consequence operands for Review
 
