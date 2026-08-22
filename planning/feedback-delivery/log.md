@@ -135,3 +135,11 @@ the measured learner-value result rather than implementation correctness. The un
   ledger availability, not satisfaction of the shipped attach path's rationale precondition.
 - Criterion 23 is clean through this commit. A future trip remains an owner escalation, not a code
   defect to waive.
+
+## 2026-08-23 — Criterion-22 brief refreshed from the executable probes
+
+- Replaced “22 directly attachable explorer claims” with the measured split: 22 claims have a
+  ledger, 38 do not, and all 60 are blocked by the absent fixed explorer-rationale provenance line.
+- Marked tooling and brief finalization complete, incorporated [[D1005]] at the brief's entry point,
+  and froze the released execution order as pure joins → explorer rationale/census → engine
+  normalization. Graduation transitions and authored principle decisions remain held.

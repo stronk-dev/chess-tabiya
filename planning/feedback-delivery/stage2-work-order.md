@@ -1,9 +1,12 @@
 # Feedback-delivery Stage 2 — the binding-wave work order
 
-**Drafted 2026-08-22 at HEAD `a3b1e01`. Every population below is re-derived from the tree at
-that commit, not inherited from the RFC** (criterion 22 rejects an inherited count;
-`rfc/feedback-delivery.md:2496-2499`). Status: **R1 RULED 2026-08-22 ([[D949]]): the whole wave holds until Gate F — both arms. Steps 1–2 (tooling) proceed; steps 3+ wait for Gate F.** R2 ruled too ([[D950]]: registry may grow, claude authors counterCases under owner veto), dormant behind Gate F. Original status line: executable pending one owner ruling (R1, §5);
-steps 1–2 are legal to queue immediately.
+**Drafted 2026-08-22 at HEAD `a3b1e01`; refreshed 2026-08-23 after the executable split probe and
+owner ruling [[D1005]]. Every population below is re-derived from the tree, not inherited from the
+RFC** (criterion 22 rejects an inherited count; `rfc/feedback-delivery.md:2496-2499`). Status:
+**tooling landed at `bcb706e`; the binding arm is released now; the graduation arm and the 63–94
+authored decisions remain held.** [[D1005]] amends [[D949]] on the measured split. R2 is ruled too
+([[D950]]: registry may grow, claude authors counterCases under owner veto), dormant until the
+authored arm is released.
 
 This is the commissioning brief criterion 22 requires — the wave `rfc/archive/claim-backing.md`
 was named to own (OQ5) and could not own after archival ([[D476]], [[D514]]). The RFC's own
@@ -25,7 +28,7 @@ the withheld claims, by the three kinds of work §0.2 prices** (`rfc/feedback-de
 measured by criteria 21–23. The RFC stays `implementing` until stage 2's measurement exists;
 criterion 11's ledger flips ride stage 2's commit (`:2365-2366`, `:2469-2470`).
 
-### 1.1 The population, pinned at HEAD `a3b1e01`
+### 1.1 The population, refreshed at HEAD `bcb706e`
 
 Re-derived 2026-08-22 through the **shipped predicate** (`admittedFeedbackClaimIds` /
 `PackRecord.boundClaimIds` via `PackRegistry.loadDefault`, the same path
@@ -39,7 +42,7 @@ Re-derived 2026-08-22 through the **shipped predicate** (`admittedFeedbackClaimI
 | withheld | **98** (34,796 chars) | unchanged — **"98 claims" still holds** |
 | bound (validating binding) | **1** (`philidor-third-rank-hold/philidor-is-drawn`) | unchanged |
 
-`git diff a64e6c5..HEAD -- content/` is empty; the only predicate-path change since stage 1
+`git diff a64e6c5..bcb706e -- content/` is empty; the only predicate-path change since stage 1
 (`e74c10a`/`7944ecb`, routing `claim-binding.ts` records through the evidence manifest) moves no
 count — verified by running the predicate, above.
 
@@ -127,11 +130,11 @@ Ledger-less claim-bearing packs at HEAD: **18**, of which **15 hold 39 machine-l
 |---|---|---|
 | Tablebase legal-successor census | 36 withheld `tablebase_exact` claims / 12 packs; 0 of 277 choice-bearing positions censused | `make tablebase-walk` / `verifySyzygyDraft`; `tablebase.moveCensus@v1` (`claim-binding.ts:118-121`) |
 | Engine pass | 8 claims / 3 packs; 391 `engine_eval` records already warm; 0 ambiguous FENs | `make engine-walk` / `verifyEngineDraft` |
-| Explorer position-census | 60 `corpus_observed` claims / 31 packs; **22 directly attachable** (ledgered), **38 need a sidecar first** | emitter `apps/server/src/sourcing/explorer.ts:268`; `make source-fetch`, `make candidate-attach`, `make verify-draft` |
+| Explorer position-census | 60 `corpus_observed` claims / 31 packs; **22 have ledgers but 0 are attach-ready** because 0/31 packs carry `EXPLORER_RATIONALE`; the other 38 also need a sidecar first | emitter `apps/server/src/sourcing/explorer.ts:268`; `make source-fetch`, `make candidate-attach`, `make verify-draft` |
 | Sidecar creation | the 15 ledger-less machine-labelled packs (39 claims) | `make source-fetch` + `make candidate-attach` pipeline |
 | Bindings over already-committed records | ~20 Bucket-1-style claims (`claim-backing` §4; re-derive at execution) | `claimBindings` entries + `make sourcing-check` |
 | Digest re-stamps | every sidecar a commit's pack edit touches | shipped `digestDrillPack` behavior; `verifyDraft` re-stamps in place |
-| Split probe (job-1 first task) | grep `provenance.sources` per pack for an explorer rationale — `attachExplorerEvidence` throws `ATTACH_SOURCE_LINE_MISSING` without it ([[D409]]) | hours; misses route to (b) |
+| Split probe (landed `bcb706e`) | **0/60 claims, 0/31 packs rationale-ready**; `attachExplorerEvidence` throws `ATTACH_SOURCE_LINE_MISSING` without the exact line ([[D409]]) | all 60 need the fixed provenance-rationale edit; 38 then need sidecars too |
 
 **Roughly 96 of the 98 withheld claims get their *records* mechanically** (the other 2 are
 `claim-backing` Bucket-3 authoring dispositions). But records alone admit only the minority whose
@@ -145,8 +148,10 @@ sentences already bind — §3.2a shows 63–83 of the 98 also need (b).
   on** — a chess judgement rendered to the learner by C8's second form. Plus OQ8's **31 optional**
   `derived_feature`-side decisions: **up to 94 rung-5 provenance decisions**, D462's *"a human
   must judge each one."*
-- **Prose fixes**: `normalizes`-exact spans for the engine claims; quantified sentences for the
-  explorer claims whose packs lack the rationale line (split probe output).
+- **Prose fixes**: `normalizes`-exact spans for the engine claims. The explorer split is now
+  measured separately: all 31 packs need the fixed, already-ruled provenance rationale before the
+  shipped attach command can run; that edit records source/licence basis and does not author a
+  chess claim.
 - **Two tablebase authoring fixes** (`claim-backing` §4 Bucket 3 rows 4–5):
   `philidor-passive-rook-convert/sibling-drill` (copy the sibling record into this pack's ledger
   or drop the cross-reference) and `why-the-skewer-works` (re-label to `derived_feature`, bind
@@ -242,9 +247,9 @@ Sequencing consequences baked into §4:
 | # | step | executor | effort | the landing commit must contain |
 |---|---|---|---|---|
 | 0 | **R1 ruled** (§2c.1) | owner | one ruling | nothing lands; recorded as a BACKLOG row + `planning/feedback-delivery/log.md` entry when ruled |
-| 1 | **Tooling** (§2d): `clearGraduationEntries` + criterion-21(b) accounting + criterion-23 assertion + split probe | codex | 1–2 days | code + tests only; zero content bytes; `planning/feedback-delivery/log.md` entry. D466's flip belongs to `graduation-clearance`'s closeout, not this commit |
-| 2 | **Brief finalization** (criterion 22): re-run §1's derivations at wave start, run the split probe, freeze the (b) queue | codex/claude | hours | this file updated; log entry. Legal under D560 (planning, no content) |
-| 3 | **Instrument runs on ledgered packs**: tablebase census (12 packs / 277 positions), engine pass (3 packs), explorer attach for the 22 | codex | 1.5–2 days total | records + bindings + same-commit sidecar re-stamps; **content-wave closeout**: `design/BACKLOG.md` flips for rows fixed (D110's census half, D231/D147 partials) + `planning/content-era/log.md` entry **in the shipping commit** (CLAUDE.md); [[D432]]'s disposition text corrected in the first explorer commit |
+| 1 | **DONE `bcb706e` — Tooling** (§2d): `clearGraduationEntries` + criterion-21(b) accounting + criterion-23 assertion + split probe | codex | complete | code + tests only; zero content bytes; log entry landed. D466's flip still belongs to `graduation-clearance`'s closeout |
+| 2 | **DONE 2026-08-23 — Brief finalization** (criterion 22): re-run §1's derivations, freeze the measured queue | codex/claude | complete | this correction + log entry; no content bytes |
+| 3 | **Released binding arm**: first the 43 pure joins, then explorer rationale + census (22 ledgered / 38 sidecar-first), then 8 engine normalizations | codex | multi-commit | records + bindings + same-commit sidecar re-stamps; **content-wave closeout** per shipping commit; [[D432]] corrected in the first explorer commit |
 | 4 | **Sidecar creation + explorer runs** for the 38 claims in 15 ledger-less packs | codex | ~1 day | ledgers + records + bindings + re-stamps + content-wave closeout per commit |
 | 5 | **Authoring sessions** (§2b): 63–94 principle decisions, prose fixes, 2 tablebase fixes | owner or claude-on-ruling decides; codex applies | 3–6 sessions over days (law 8 floor); R2 needed if the registry must grow | pack edits + same-commit re-stamps + criterion-20 boundary suite green + content-wave closeout per commit |
 | 6 | **Candidate hygiene** (severable; needs R4): `graduation-clear CHECK=1` sweep, then transitions where predicates hold — the 26 stale re-stamps ride these runs | codex | half day | transition documents + re-stamps + log entry. Not a criterion-21–23 blocker; may trail |
