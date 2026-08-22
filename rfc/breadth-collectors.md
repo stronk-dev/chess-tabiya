@@ -97,12 +97,43 @@ caused or forced the last.
 | `packages/runtime/src/material-state.ts` (new) | role signatures and asymmetry events |
 | `packages/runtime/src/semantic-evidence.ts` | `derived.tactic`, `derived.king` and `derived.activity` joins plus recorded-path sequence compilation |
 | `packages/runtime/src/evidence-catalog.ts` | Appendix-A declarations and dispositions |
+| `packages/runtime/src/evidence-contract.ts` | closed disjunctive derivation declaration required by `open_file | half_open_file` |
 | `packages/runtime/src/evidence-source-adapters.ts` | exact-key, brand-sealed adapters for every new reading/event payload |
 | `packages/runtime/src/index.ts` | public runtime exports |
 | `docs/semantic-evidence.md` | implemented projection semantics and refusal ceilings |
 | `docs/evidence-contract.md` | producer/projection inventory only |
 
 Any additional production site returns this RFC for an impact amendment before implementation.
+
+#### 1.2 Implementation-return amendment — closed disjunctive derivations
+
+Implementation found that F2 can seal only one exact conjunction of derivation inputs. That model
+cannot truthfully represent `derived.activity.event.open_file_occupancy@1`: the event consumes
+either one `rules.structural.reading.open_file@1` **or** one mover-relative
+`rules.structural.reading.half_open_file@1`. Both facts cannot hold for the destination file, so
+declaring both requires a false input; declaring either one drops the other admitted kind. The same
+shape applies to capture-or-promotion role changes. D956 records the class.
+
+The evidence contract therefore gains one bounded additive form. A derived projection may declare
+exactly one of:
+
+- `derivation.inputs`: the existing required conjunction; or
+- `derivation.anyOf`: a non-empty tuple of non-empty, duplicate-free input conjunctions.
+
+Every `anyOf` member is validated independently for existing grounding, exactness, answer-content,
+abstention, existence and cycle rules. A semantic-event declaration inherits the same closed input
+sets. At runtime its supplied derivation inputs must be set-equal to **exactly one** declared member;
+the selected member contributes to the sealed event bytes and manifest digest. A union, subset,
+superset, undeclared third source, empty member, duplicate member, or two byte-distinct members with
+the same projection-id set fails compilation. Existing `derivation.inputs` declarations and bytes
+remain unchanged.
+
+`derived.activity.event.open_file_occupancy@1` declares the two singleton members
+`[[open_file], [half_open_file]]`; the runtime supplies the exact `sourceReading` projection that
+classified the mover's destination file. `derived.material.event.role_asymmetry@1` declares
+members that retain the common material-role reading plus the applicable exact capture, promotion,
+or capture+promotion authority. No detector, sibling projection, or fabricated absence fact is
+introduced to work around the contract.
 
 ### 2. Pinned conventions
 
@@ -372,6 +403,11 @@ Its split from tactical Wave A is an RFC process decision, not a product-intent 
     tactical-collector suites remain green, and the landing report records focused commands.
 14. **B14 — Closeout.** The implementation commit flips D802–D807,
     appends the exploration log entry and archives this RFC per the lifecycle protocol.
+15. **B15 — Disjunctive derivation seal.** `anyOf` accepts each declared input set independently and
+    rejects an empty set, undeclared source, subset, superset, union of members, duplicate member
+    and runtime input set matching no member. Open- and half-open-file occupancy both compile from
+    their exact source reading; capture, promotion and capture-promotion material events retain the
+    exact applicable authority. Existing conjunction-only manifest bytes remain stable.
 
 ## Discharges
 
@@ -443,3 +479,8 @@ Unit: projection id; total **18**.
   clone abstention is declared in §3.7. Two labeled boundary fixtures were added to
   `tools/d723-breadth-harness/breadth.test.ts` (ray compatibility) and
   `tools/d754-wave-b-harness/wave-b.test.ts` (pass-state opposite-check abstention); both pass.
+- 2026-08-22: implementation return D956. F2's conjunction-only derivation declaration cannot
+  represent the accepted `open_file | half_open_file` source union without forging one input or
+  dropping one kind. §1.2/B15 specify a closed additive `derivation.anyOf`; the production-site
+  census adds `evidence-contract.ts`. This amendment requires buildability review before that
+  contract edit and breadth closeout; the other collector slices remain executable.

@@ -14,8 +14,14 @@ The tactical foundation adds four direct research events: identity-retaining cap
 exchange-filtered double attack, complete one-reply breadth, and exact check. Its threat and fork-survival projections remain
 inspector/machine evidence rather than learner modules.
 
+The breadth foundation adds twelve event projections over exact control, mobility, pawn, material,
+king, defender and open-file operands. Recorded two-/three-edge events preserve every node/FEN
+boundary and piece identity; they report observed order only. They deliberately do not name
+overload, deflection, removal, force, success, king exposure, activity, or a plan. Those names and
+their able-to-fail consequence requirements belong to the semantic-collector successor.
+
 **Eligibility** is an exact event-to-consumer permission. It says that a validated event may reach
-that consumer; it does not say the event is useful, visible or enabled. The current 37 rows target
+that consumer; it does not say the event is useful, visible or enabled. The current 58 rows target
 only `research.semantic_selection@1`. Existing product consumers receive no new evidence.
 
 **Selection** compares the played edge with every other legal move from the same parent position.
@@ -47,8 +53,8 @@ structured projection. The exact 14-file migration census is executable in
 
 ## Compiled closure and provider behavior
 
-The primary manifest contains 25 producers, 156 projections, 25 consumers and 188 bindings, plus
-46 semantic events, 46 eligibility rows, 15 reasons and one selection policy. All collections
+The primary manifest contains 33 producers, 174 projections, 25 consumers and 200 bindings, plus
+58 semantic events, 58 eligibility rows, 15 reasons and one selection policy. All collections
 contribute to one canonical digest. `/capabilities` reports this tuple and the same digest used at
 startup and by `make semantic-evidence-check`.
 

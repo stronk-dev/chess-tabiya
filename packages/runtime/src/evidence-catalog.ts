@@ -73,10 +73,10 @@ function projection(producerId: string, id: string, plane: EvidencePlane, option
 }
 
 export const EVIDENCE_PRODUCER_IDS = Object.freeze([
-  "rules.structural", "rules.transition", "rules.castling", "rules.exchange", "rules.tactic", "rules.phase", "rules.pivotal", "rules.endgame",
+  "rules.structural", "rules.transition", "rules.castling", "rules.exchange", "rules.tactic", "rules.square", "rules.mobility", "rules.pawn", "rules.king", "rules.phase", "rules.pivotal", "rules.endgame",
   "theory.shapes", "authored.structural_condition", "pack.authored", "recorded.engine", "recorded.tablebase", "live.stockfish",
   "live.syzygy", "human.maia", "human.explorer", "theory.opening_identity", "run.record",
-  "derived.compare_narrative", "derived.story", "derived.exchange", "derived.tactic", "sourcing.ledger",
+  "derived.compare_narrative", "derived.story", "derived.exchange", "derived.tactic", "derived.pawn", "derived.material", "derived.king", "derived.activity", "sourcing.ledger",
   "derived.semantic_avoidance",
 ] as const);
 
@@ -127,7 +127,14 @@ export const TACTICAL_EVENT_PROJECTION_IDS = Object.freeze([
 export const CASTLING_EVENT_PROJECTION_IDS = Object.freeze(["rules.castling.event.rights_lost"] as const);
 export const DERIVED_EXCHANGE_EVENT_PROJECTION_IDS = Object.freeze(["derived.exchange.capture_class", "derived.exchange.trade_completed"] as const);
 export const DERIVED_TACTIC_EVENT_PROJECTION_IDS = Object.freeze(["derived.tactic.discovered_executed"] as const);
-export const SEMANTIC_EVENT_PROJECTION_IDS = Object.freeze([...STRUCTURAL_EVENT_PROJECTION_IDS, ...TACTICAL_STRUCTURAL_EVENT_PROJECTION_IDS, ...TRANSITION_EVENT_PROJECTION_IDS, ...AVOIDANCE_EVENT_PROJECTION_IDS, ...TACTICAL_AVOIDANCE_EVENT_PROJECTION_IDS, ...TACTICAL_EVENT_PROJECTION_IDS, ...CASTLING_EVENT_PROJECTION_IDS, ...DERIVED_EXCHANGE_EVENT_PROJECTION_IDS, ...DERIVED_TACTIC_EVENT_PROJECTION_IDS]);
+export const BREADTH_EVENT_PROJECTION_IDS = Object.freeze([
+  "rules.square.event.control", "rules.mobility.event.piece_destinations", "rules.pawn.event.dynamics",
+  "derived.pawn.event.transitions", "derived.pawn.sequence.contact_timing", "derived.pawn.sequence.harassment_pressure",
+  "derived.tactic.defender_exposure", "derived.tactic.sequence.defender_consequence",
+  "derived.material.event.role_asymmetry", "rules.king.event.zone_state",
+  "derived.king.captured_zone_defender", "derived.activity.event.open_file_occupancy",
+] as const);
+export const SEMANTIC_EVENT_PROJECTION_IDS = Object.freeze([...STRUCTURAL_EVENT_PROJECTION_IDS, ...TACTICAL_STRUCTURAL_EVENT_PROJECTION_IDS, ...TRANSITION_EVENT_PROJECTION_IDS, ...AVOIDANCE_EVENT_PROJECTION_IDS, ...TACTICAL_AVOIDANCE_EVENT_PROJECTION_IDS, ...TACTICAL_EVENT_PROJECTION_IDS, ...CASTLING_EVENT_PROJECTION_IDS, ...DERIVED_EXCHANGE_EVENT_PROJECTION_IDS, ...DERIVED_TACTIC_EVENT_PROJECTION_IDS, ...BREADTH_EVENT_PROJECTION_IDS]);
 
 /** Closed Appendix-A inventory from tactical-collectors; checked set-equal to the compiled catalogue. */
 export const TACTICAL_COLLECTOR_PROJECTION_IDS = Object.freeze([
@@ -147,6 +154,29 @@ export const TACTICAL_COLLECTOR_PROJECTION_IDS = Object.freeze([
   "derived.tactic.promotion_pressure", "human.maia.candidate_wdl",
   "rules.tactic.consequence.reply_breadth", "rules.tactic.event.check",
 ] as const);
+
+/** Closed Appendix-A inventory from breadth-collectors; checked set-equal at landing. */
+export const BREADTH_COLLECTOR_PROJECTION_IDS = Object.freeze([
+  "rules.square.reading.control", "rules.square.event.control",
+  "rules.mobility.reading.piece_destinations", "rules.mobility.event.piece_destinations",
+  "rules.pawn.reading.contacts", "rules.pawn.reading.candidate_majority", "rules.pawn.event.dynamics",
+  "derived.pawn.event.transitions", "derived.pawn.sequence.contact_timing", "derived.pawn.sequence.harassment_pressure",
+  "derived.tactic.defender_exposure", "derived.tactic.sequence.defender_consequence",
+  "derived.material.reading.role_signature", "derived.material.event.role_asymmetry",
+  "rules.king.reading.zone_state", "rules.king.event.zone_state",
+  "derived.king.captured_zone_defender", "derived.activity.event.open_file_occupancy",
+] as const);
+
+export const BREADTH_CONVENTION_TEXT = Object.freeze({
+  localNonLosing: "local-non-losing@1: For a legal capture destination, legal-exchange@1 >= 0. For a quiet destination, after the piece arrives the opponent has no legal capture of it with legal-exchange@1 > 0. This is one-exchange local safety, never engine safety or goodness.",
+  candidateMajority: "candidate-majority@1: A pawn is not passed and has no enemy pawn strictly ahead on its file. Supporting pawns are other same-color pawns on an adjacent file whose rank is the subject pawn's rank or any rank behind it from that color's perspective; enemy blockers are opposing pawns on adjacent files strictly ahead of the subject. At least one support is required and support count must be greater than or equal to blocker count.",
+  kingZone: "king-zone@1: Up to eight adjacent squares, excluding the king square. Attackers/defenders are distinct non-king pieces controlling at least one zone square.",
+  kingShelter: "king-shelter@1: Same-color pawns one or two forward ranks from the king on its file or adjacent files.",
+  materialRole: "material-role-signature@1: Per color counts of P/N/B/R/Q. Asymmetry is the unordered role-count difference vector; event-comparison magnitude is the sum of the five absolute per-role count differences. King excluded and no piece-value scalar or verdict emitted.",
+  pressureLine: "pressure-line@1: A bishop/rook/queen slider and an enemy rook/queen target are collinear with exactly one occupied square between them, and with that screen removed the target lies in the slider's own chessops attack set from its square. The screen belongs to the target's color, has lower P1/N3/B3/R5/Q9 role value than the target, and is not a king. Retention requires the same slider color/role plus the exact same screen square/color/role and target square/color/role.",
+  squareControl: "Square control uses no hypothetical occupant. A pseudo controller is a piece whose chessops attack set contains the target under current occupancy. A legal controller is that same source piece only when the target also appears in its actual allDests() set after a valid clone makes the piece's color the side to move and clears en passant. Opposing-king-square pseudo control makes the checking color's complete legal set abstain invalid_turn_clone.",
+  pawnRelations: "An opposing-pawn contact is a directed pawn-attack edge; a direct lock is a White pawn immediately below a Black pawn on the same file; a passed pawn's blockers are opposing pawns strictly ahead on its file or either adjacent file; protection is a same-color pawn attack on the subject; and a connected passed pair is any two passed pawns of one color on adjacent files, with rank distance deliberately unrestricted.",
+});
 
 const structuralEventOutputs = STRUCTURAL_EVENT_FAMILIES.map((family) => projection("rules.structural", `rules.structural.event.${family}`, "rules", {
   role: "event",
@@ -384,6 +414,18 @@ const derivedTacticOutputs = [
     limitations: ["Pressure description only; winner, drawing status and outcome words stay with Syzygy."],
     disposition: { kind: "inspector_only", reason: "Exact geometry lands before learner and bot eligibility." },
   }),
+  projection("derived.tactic", "derived.tactic.defender_exposure", "derived", {
+    role: "event", payloadType: "DefenderExposureOperands", semantics: "An exact lost pseudo-controller defence edge of the non-moving side joined to a retained target and positive legal-exchange@1 capture under the mover-turn/en-passant-cleared pass clone.",
+    operands: ["beforeFen", "moveUci", "afterFen", "kind", "passConvention"], signs: ["gained", "state"], grounding: "declared_convention", exactness: "convention", answerContent: ["fact"], forms: ["list", "panel", "lit_squares", "arrows", "machine_condition"],
+    abstention: { possible: true, reasons: ["invalid_turn_clone"] }, dependsOn: [ref("rules.square.event.control"), ref("rules.exchange.predicate.legal_exchange")], derivation: { inputs: [ref("rules.square.event.control"), ref("rules.exchange.predicate.legal_exchange")] },
+    limitations: ["The exact edge/capture join does not name removal, deflection, overload, force, success, safety, or move quality."],
+  }),
+  projection("derived.tactic", "derived.tactic.sequence.defender_consequence", "derived", {
+    role: "event", payloadType: "DefenderConsequenceOperands", semantics: "Three consecutive recorded edges retaining the exact defender/target identity through edge loss or defender relocation and a positive third-edge target capture.",
+    operands: ["kind", "anchors", "nodes", "defender", "target", "firstMoveCapturedDefender", "finalCapture"], signs: ["state"], grounding: "recorded_run", exactness: "convention", answerContent: ["fact"], forms: ["list", "panel", "lit_squares", "arrows", "machine_condition"],
+    dependsOn: [ref("rules.square.event.control"), ref("rules.transition.event.capture"), ref("rules.exchange.predicate.legal_exchange"), ref("run.record.move")], derivation: { inputs: [ref("run.record.move")] },
+    limitations: ["Observed order does not emit removal, deflection, overload, force, tactic success, quality, intent, or causality."],
+  }),
 ];
 
 const derivedExchangeOutputs = [
@@ -403,12 +445,137 @@ const derivedExchangeOutputs = [
   }),
 ];
 
+const inspectorOnly = (reason: string): EvidenceDispositionDeclaration => Object.freeze({ kind: "inspector_only", reason });
+const breadthForms: readonly EvidenceForm[] = Object.freeze(["list", "panel", "lit_squares", "arrows", "piece_halo", "machine_condition"]);
+
+const squareOutputs = [
+  projection("rules.square", "rules.square.reading.control", "rules", {
+    payloadType: "SquareControlReading", semantics: BREADTH_CONVENTION_TEXT.squareControl,
+    operands: ["fen", "colors"], forms: breadthForms,
+    abstention: { possible: true, reasons: ["invalid_turn_clone"] },
+    limitations: ["Pseudo control remains available when one color's complete legal-controller set abstains; no individual target receives an invented occupant."],
+    disposition: inspectorOnly("All-square topology lands for research and advanced inspection before module selection."),
+  }),
+  projection("rules.square", "rules.square.event.control", "rules", {
+    role: "event", payloadType: "SquareControlEvent", semantics: "Exact gained or lost pseudo/legal controller edge joined by controller and target identity.",
+    operands: ["beforeFen", "moveUci", "afterFen", "color", "mode", "sign", "target", "controller"], signs: ["gained", "lost"], forms: breadthForms,
+    limitations: [BREADTH_CONVENTION_TEXT.squareControl, "Controller change carries no significance, safety, or move-quality verdict."],
+  }),
+];
+
+const mobilityOutputs = [
+  projection("rules.mobility", "rules.mobility.reading.piece_destinations", "rules", {
+    payloadType: "PieceDestinationsReading", semantics: BREADTH_CONVENTION_TEXT.localNonLosing,
+    operands: ["fen", "conventionId", "colors"], grounding: "declared_convention", exactness: "convention", forms: breadthForms,
+    dependsOn: [ref("rules.exchange.predicate.legal_exchange")], abstention: { possible: true, reasons: ["invalid_turn_clone"] },
+    limitations: ["B/N/R/Q legal destinations and their local one-exchange subset only; neither set is an engine recommendation."],
+    disposition: inspectorOnly("Exact mobility sets land before module and bot-feature selection."),
+  }),
+  projection("rules.mobility", "rules.mobility.event.piece_destinations", "rules", {
+    role: "event", payloadType: "PieceDestinationsEvent", semantics: "Exact before/after legal and local-non-losing destination sets for one retained B/N/R/Q identity.",
+    operands: ["beforeFen", "moveUci", "afterFen", "color", "piece", "legalBefore", "legalAfter", "legalGained", "legalLost", "safeBefore", "safeAfter", "safeGained", "safeLost", "moved", "zeroSafe"],
+    signs: ["state"], grounding: "declared_convention", exactness: "convention", forms: breadthForms, dependsOn: [ref("rules.mobility.reading.piece_destinations")],
+    limitations: [BREADTH_CONVENTION_TEXT.localNonLosing, "zeroSafe is a literal transition and is never rendered as trapped without the separate attacked-piece predicate."],
+  }),
+];
+
+const pawnOutputs = [
+  projection("rules.pawn", "rules.pawn.reading.contacts", "rules", {
+    payloadType: "PawnContactsReading", semantics: BREADTH_CONVENTION_TEXT.pawnRelations,
+    operands: ["fen", "contacts", "locks", "passed", "connectedPassedPairs"], forms: breadthForms,
+    limitations: ["Connected-passer rank distance is deliberately unrestricted; all pawn and blocker identities remain literal."],
+    disposition: inspectorOnly("Exact pawn relations land before phase-aware learner selection."),
+  }),
+  projection("rules.pawn", "rules.pawn.reading.candidate_majority", "rules", {
+    payloadType: "CandidateMajorityReading", semantics: BREADTH_CONVENTION_TEXT.candidateMajority,
+    operands: ["fen", "conventionId", "candidates"], grounding: "declared_convention", exactness: "convention", forms: breadthForms,
+    limitations: ["The convention deliberately omits a backward-pawn classifier and emits no plan or conversion verdict."],
+    disposition: inspectorOnly("Convention state lands before phase-aware learner selection."),
+  }),
+  projection("rules.pawn", "rules.pawn.event.dynamics", "rules", {
+    role: "event", payloadType: "PawnDynamicsEvent", semantics: "Typed literal gained pawn relation: lock, minor harassment, protected passer, connected passer pair, or candidate-majority state/advance.",
+    operands: ["beforeFen", "moveUci", "afterFen", "kind", "subjects"], signs: ["gained", "state"], grounding: "declared_convention", exactness: "convention", forms: breadthForms,
+    dependsOn: [ref("rules.pawn.reading.contacts"), ref("rules.pawn.reading.candidate_majority")],
+    limitations: [BREADTH_CONVENTION_TEXT.pawnRelations, BREADTH_CONVENTION_TEXT.candidateMajority, "No break, danger, conversion, intent, or plan semantics are emitted."],
+  }),
+];
+
+const kingOutputs = [
+  projection("rules.king", "rules.king.reading.zone_state", "rules", {
+    payloadType: "KingZoneReading", semantics: `${BREADTH_CONVENTION_TEXT.kingZone} ${BREADTH_CONVENTION_TEXT.kingShelter}`,
+    operands: ["fen", "zoneConventionId", "shelterConventionId", "kings"], grounding: "declared_convention", exactness: "convention", forms: breadthForms,
+    dependsOn: [ref("rules.square.reading.control")], abstention: { possible: true, reasons: ["invalid_turn_clone"] },
+    limitations: ["Escape availability uses the per-color turn clone with en passant cleared; zone state emits no exposed, attack, or mating-net verdict."],
+    disposition: inspectorOnly("Decomposed king operands land before capture/phase/module selection."),
+  }),
+  projection("rules.king", "rules.king.event.zone_state", "rules", {
+    role: "event", payloadType: "KingZoneEvent", semantics: "Exact before/after escape, attacker, defender, shelter, and king-location sets under king-zone@1 and king-shelter@1.",
+    operands: ["beforeFen", "moveUci", "afterFen", "color", "king", "attackers", "defenders", "shelter", "escapes"], signs: ["state"], grounding: "declared_convention", exactness: "convention", forms: breadthForms,
+    dependsOn: [ref("rules.king.reading.zone_state")], limitations: [BREADTH_CONVENTION_TEXT.kingZone, BREADTH_CONVENTION_TEXT.kingShelter, "Set fidelity does not widen convention exactness or establish importance."],
+  }),
+];
+
+const derivedPawnOutputs = [
+  projection("derived.pawn", "derived.pawn.event.transitions", "derived", {
+    role: "event", payloadType: "PawnTransitionEvent", semantics: "Exact contact execution and moved-pawn passage transitions joined to the existing capture and passed-pawn authorities.",
+    operands: ["beforeFen", "moveUci", "afterFen", "kind", "pawn"], signs: ["state", "gained"], forms: breadthForms,
+    dependsOn: [ref("rules.pawn.reading.contacts"), ref("rules.transition.event.capture"), ref("rules.structural.event.passed_pawn")], derivation: { inputs: [ref("rules.pawn.reading.contacts")] },
+    limitations: ["Contact creation remains solely rules.transition.event.pawn_contact; observed passage arithmetic carries no outcome or plan language."],
+  }),
+  projection("derived.pawn", "derived.pawn.sequence.contact_timing", "derived", {
+    role: "event", payloadType: "PawnContactTimingSequence", semantics: "Two-edge created/survived or three-edge created/executed recorded path with exact pawn/contact identities and byte-equal boundaries.",
+    operands: ["kind", "anchors", "nodes", "pawn", "contactedPawn"], signs: ["state"], grounding: "recorded_run", exactness: "exact", forms: breadthForms,
+    dependsOn: [ref("rules.transition.event.pawn_contact"), ref("rules.pawn.event.dynamics"), ref("run.record.move")], derivation: { inputs: [ref("run.record.move")] },
+    limitations: ["Observed order does not establish intention, tempo, force, quality, or causality."],
+  }),
+  projection("derived.pawn", "derived.pawn.sequence.harassment_pressure", "derived", {
+    role: "event", payloadType: "HarassmentPressureSequence", semantics: `Pawn newly attacks a bishop, that exact bishop relocates on the consecutive reply, and ${BREADTH_CONVENTION_TEXT.pressureLine}`,
+    operands: ["kind", "anchors", "nodes", "pawn", "minor", "pressure", "conventionId"], signs: ["state"], grounding: "recorded_run", exactness: "convention", forms: breadthForms,
+    dependsOn: [ref("rules.pawn.event.dynamics"), ref("run.record.move")], derivation: { inputs: [ref("run.record.move")] },
+    limitations: ["The harassed minor is the retained relation's slider; a knight cannot satisfy this kind. Observed relocation establishes no force, quality, or intent."],
+  }),
+];
+
+const derivedMaterialOutputs = [
+  projection("derived.material", "derived.material.reading.role_signature", "derived", {
+    payloadType: "MaterialRoleSignatureReading", semantics: BREADTH_CONVENTION_TEXT.materialRole,
+    operands: ["fen", "conventionId", "colors", "asymmetry", "magnitude"], grounding: "position_rules", exactness: "exact", forms: breadthForms,
+    dependsOn: [ref("rules.structural.reading.piece_count")], derivation: { inputs: [ref("rules.structural.reading.piece_count")] },
+    limitations: ["No scalar material advantage, imbalance quality, or exchange advice is emitted."], disposition: inspectorOnly("Exact role vectors are inspector/module operands."),
+  }),
+  projection("derived.material", "derived.material.event.role_asymmetry", "derived", {
+    role: "event", payloadType: "MaterialRoleAsymmetryEvent", semantics: "Exact before/after material-role vectors and strictly rising unweighted asymmetry magnitude, retaining applicable capture/promotion facts.",
+    operands: ["beforeFen", "moveUci", "afterFen", "conventionId", "before", "after", "changedRoles", "increased", "sourceEvents"], signs: ["state"], grounding: "position_rules", exactness: "exact", forms: breadthForms,
+    dependsOn: [ref("derived.material.reading.role_signature"), ref("rules.structural.event.piece_count"), ref("rules.transition.event.capture"), ref("rules.transition.event.promotion")], derivation: { inputs: [ref("derived.material.reading.role_signature")] },
+    limitations: [BREADTH_CONVENTION_TEXT.materialRole, "Role-count change is not a trade recommendation or position evaluation."],
+  }),
+];
+
+const derivedKingOutputs = [projection("derived.king", "derived.king.captured_zone_defender", "derived", {
+  role: "event", payloadType: "CapturedZoneDefenderOperands", semantics: "Exact generic capture identity joined to the captured piece's prior king-zone defender role; en passant uses the destination file and origin rank.",
+  operands: ["beforeFen", "moveUci", "afterFen", "capture", "capturedSquare", "kingColor", "defender"], signs: ["state"], grounding: "declared_convention", exactness: "convention", forms: breadthForms,
+  abstention: { possible: true, reasons: ["input_abstained", "invalid_turn_clone"] },
+  dependsOn: [ref("rules.transition.event.capture"), ref("rules.king.reading.zone_state")], derivation: { inputs: [ref("rules.transition.event.capture"), ref("rules.king.reading.zone_state")] },
+  limitations: ["No second capture detector and no generic weakened-king verdict."],
+})];
+
+const derivedActivityOutputs = [projection("derived.activity", "derived.activity.event.open_file_occupancy", "derived", {
+  role: "event", payloadType: "OpenFileOccupancyOperands", semantics: "A moved rook/queen newly occupies a file already classified open or half-open for that mover, while its source file had neither class.",
+  operands: ["beforeFen", "moveUci", "afterFen", "piece", "fileClass", "sourceReading"], signs: ["gained"], grounding: "position_rules", exactness: "exact", forms: breadthForms,
+  dependsOn: [ref("rules.structural.reading.open_file"), ref("rules.structural.reading.half_open_file")], derivation: { inputs: [ref("rules.structural.reading.open_file")] },
+  limitations: ["Stationary-piece file-class changes do not fire. Occupancy does not imply activity, control, importance, or improvement."],
+})];
+
 export const EVIDENCE_PRODUCERS: readonly ProducerDeclaration[] = Object.freeze([
   producer("rules.structural", "rules", "packages/runtime/src/structure.ts", "local", structuralOutputs),
   producer("rules.transition", "transition", "packages/runtime/src/transition.ts", "local", [...transitionOutputs, ...transitionEventOutputs]),
   producer("rules.castling", "rules", "packages/runtime/src/castling.ts", "local", castlingOutputs),
   producer("rules.exchange", "rules", "packages/runtime/src/exchange.ts", "local", exchangeOutputs),
   producer("rules.tactic", "rules", "packages/runtime/src/tactics.ts", "local", tacticalOutputs),
+  producer("rules.square", "rules", "packages/runtime/src/square-control.ts", "local", squareOutputs),
+  producer("rules.mobility", "rules", "packages/runtime/src/mobility.ts", "local", mobilityOutputs),
+  producer("rules.pawn", "rules", "packages/runtime/src/pawn-dynamics.ts", "local", pawnOutputs),
+  producer("rules.king", "rules", "packages/runtime/src/king-state.ts", "local", kingOutputs),
   producer("rules.phase", "rules", "packages/runtime/src/phase.ts", "local", [
     projection("rules.phase", "rules.phase.reading", "rules", { payloadType: "PhaseReading", operands: ["fen", "phase", "material", "undevelopedMinors", "provenanceNote"], forms: ["sentence", "panel"] }),
     projection("rules.phase", "rules.phase.development", "rules", {
@@ -477,7 +644,11 @@ export const EVIDENCE_PRODUCERS: readonly ProducerDeclaration[] = Object.freeze(
     projection("derived.story", "derived.story.title", "derived", { payloadType: "StoryTitle", grounding: "declared_convention", exactness: "convention", operands: ["title", "rank", "outcome"], semantics: "Fixed title composition over rank, recorded outcome/result, and endgame label; imported result verbs retain the current White-relative convention.", answerContent: ["fact", "pattern", "evaluation"], forms: ["sentence", "panel"], abstention: { possible: true, reasons: ["input_abstained"] }, derivation: { inputs: [ref("derived.story.rank"), ref("run.record.consequence"), ref("run.record.imported_result"), ref("rules.endgame.reading")] } }),
   ]),
   producer("derived.exchange", "derived", "packages/runtime/src/exchange.ts", "local", derivedExchangeOutputs),
-  producer("derived.tactic", "derived", "packages/runtime/src/tactics.ts", "local", derivedTacticOutputs),
+  producer("derived.tactic", "derived", "packages/runtime/src/tactics.ts; packages/runtime/src/semantic-evidence.ts", "local", derivedTacticOutputs),
+  producer("derived.pawn", "derived", "packages/runtime/src/pawn-dynamics.ts", "local", derivedPawnOutputs),
+  producer("derived.material", "derived", "packages/runtime/src/material-state.ts", "local", derivedMaterialOutputs),
+  producer("derived.king", "derived", "packages/runtime/src/semantic-evidence.ts", "local", derivedKingOutputs),
+  producer("derived.activity", "derived", "packages/runtime/src/semantic-evidence.ts", "local", derivedActivityOutputs),
   producer("sourcing.ledger", "record", "apps/server/src/sourcing/types.ts; apps/server/src/sourcing/claim-binding.ts", "recorded", [
     projection("sourcing.ledger", "sourcing.ledger.engine_eval", "record", { role: "source_record", payloadType: "engine_eval EvidenceRecord", grounding: "bounded_search", exactness: "measured", confidence: "reported", operands: ["kind", "sourceId", "retrievedAt", "values"], answerContent: ["evaluation"], forms: ["list", "panel"], limitations: ["Offline sourcing record including anchor and provenance; not a runtime engine reading."] }),
     projection("sourcing.ledger", "sourcing.ledger.tablebase_result", "record", { role: "source_record", payloadType: "tablebase_result EvidenceRecord", grounding: "tablebase_exact", operands: ["kind", "sourceId", "retrievedAt", "values"], answerContent: ["fact", "evaluation"], forms: ["list", "panel"], limitations: ["Offline sourcing record including anchor and provenance; not a live tablebase event."] }),

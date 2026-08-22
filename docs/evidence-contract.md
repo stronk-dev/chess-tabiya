@@ -22,8 +22,8 @@ by a SHA-256 digest. `/capabilities` returns that digest, current producer avail
 consumer-safe binding summary. It never returns engine lines, authored prose, provider secrets, or
 corpus rows.
 
-The current compiled closure is 25 producers, 156 projections, 25 consumers and 188 bindings,
-plus 46 semantic-event declarations, 46 eligibility rows, 15 refusal reasons and one selection
+The current compiled closure is 33 producers, 174 projections, 25 consumers and 200 bindings,
+plus 58 semantic-event declarations, 58 eligibility rows, 15 refusal reasons and one selection
 policy. The executable manifest and semantic-evidence checks own this tuple.
 
 ## Honest homes and raw evidence
@@ -95,3 +95,25 @@ an exported sealed-view consumer rather than at copy or a DOM attribute.
 
 F1 answers eligibility and traceability only. Relevance/lift selection, semantic event valence,
 presets, workflows, theory retrieval, and content migration belong to their later RFCs.
+
+## Breadth collector inventory
+
+The second collector wave adds eight producers and eighteen closed projections without adding a
+learner surface: exact all-square pseudo/legal controllers; B/N/R/Q legal and one-exchange-local
+destination sets; pawn contacts, locks, passage/candidate relations and retained sequences;
+material-role vectors; king zone/shelter/escape sets; defender-exposure/consequence joins; captured
+zone-defender identity; and moved heavy-piece open-file occupancy. All events are eligible only for
+`research.semantic_selection@1`; all five readings are `inspector_only`.
+
+Six named conventions are literal manifest bytes (`local-non-losing@1`,
+`candidate-majority@1`, `king-zone@1`, `king-shelter@1`,
+`material-role-signature@1`, and `pressure-line@1`). They expose their operands and ceilings; none
+is an engine grade, inferred plan, safety verdict, or recommendation. The permanent
+`breadth-collector-measurement` instrument evaluates authored and sealed-imported populations
+separately and retains zeroes.
+
+One typed-contract limitation remains open as D956: the current derivation declaration supports
+only a conjunction, while open-file occupancy consumes an `open_file | half_open_file` source.
+Exact open-file events compile today; half-open payloads remain uncompiled rather than receiving a
+forged source. Breadth closeout waits for the accepted RFC/evidence contract to gain a closed
+disjunctive derivation form.

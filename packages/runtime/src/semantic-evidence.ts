@@ -1,11 +1,11 @@
-import { castlingSide, normalizeMove } from "chessops/chess";
+import { Chess, castlingSide, normalizeMove } from "chessops/chess";
 import { makeFen } from "chessops/fen";
-import type { Color, Move, Role } from "chessops/types";
-import { makeUci, parseUci } from "chessops/util";
+import type { Color, Move, Piece, Role, SquareName } from "chessops/types";
+import { makeSquare, makeUci, opposite, parseSquare, parseUci } from "chessops/util";
 
 import { canonicalFen, positionFromFen } from "./chess.js";
 import { castlingRightsLost, type CastlingRightLostEvent } from "./castling.js";
-import { captureClassEvent, type CaptureClassEvent } from "./exchange.js";
+import { captureClassEvent, legalCaptureMovesTo, legalExchangeForMove, type CaptureClassEvent, type LegalExchangeResult } from "./exchange.js";
 import { PRIMARY_EVIDENCE_MANIFEST, STRUCTURAL_EVENT_FAMILIES } from "./evidence-catalog.js";
 import {
   EvidenceManifestError,
@@ -20,6 +20,30 @@ import {
   type VersionedEvidenceId,
 } from "./evidence-contract.js";
 import { declareAvoidanceEvidence, declareCaptureClassEvidence, declareCastlingRightsLostEvidence, declareCheckEventEvidence, declareDiscoveredExecutedEvidence, declareDiscoveredLatencyEvidence, declareDoubleAttackEvidence, declareLegalExchangeEvidence, declareLoosePieceEventEvidence, declarePawnIslandEventEvidence, declareReplyBreadthEvidence, declareStructuralSemanticSourceEvidence, declareTradeCompletedEvidence, declareTransitionSemanticSourceEvidence } from "./evidence-source-adapters.js";
+import {
+  declareCapturedZoneDefenderEvidence,
+  declareDefenderConsequenceEvidence,
+  declareDefenderExposureEvidence,
+  declareHarassmentPressureEvidence,
+  declareKingZoneEventEvidence,
+  declareKingZoneReadingEvidence,
+  declareMaterialRoleEventEvidence,
+  declareMaterialRoleReadingEvidence,
+  declareMobilityEventEvidence,
+  declareOpenFileOccupancyEvidence,
+  declarePawnContactTimingEvidence,
+  declarePawnContactsEvidence,
+  declarePawnDynamicsEvidence,
+  declarePawnTransitionEvidence,
+  declareSquareControlEventEvidence,
+  declareStructuralReadingSourceEvidence,
+} from "./evidence-source-adapters.js";
+import { kingZoneReading, type KingZoneParticipant } from "./king-state.js";
+import { kingZoneEvents } from "./king-state.js";
+import { materialRoleAsymmetryEvent, materialRoleSignatureReading } from "./material-state.js";
+import { pieceDestinationEvents } from "./mobility.js";
+import { pawnContactsReading, pawnDynamicsEvents, pawnTransitionEvents, type HarassmentPressureSequence, type PawnContactTimingSequence, type RecordedMoveAnchor } from "./pawn-dynamics.js";
+import { squareControlEvents, squareControlReading, type SquareControlEvent } from "./square-control.js";
 import { pawnConnectivityReading, structuralReading, type StructuralObservation, type StructuralReading } from "./structure.js";
 import { checkEvent, discoveredExecutedEvents, discoveredLatencyReading, doubleAttackEvent, loosePieceEvents, replyBreadth, type CheckEvent, type DiscoveredExecutedEvent, type DoubleAttackEvent, type GainedSliderRay, type LoosePieceEvent, type ReplyBreadth } from "./tactics.js";
 import { transitionSemanticFacts, type TransitionSemanticFact } from "./transition.js";
@@ -141,6 +165,48 @@ export interface TradeCompletedEventOperands {
   readonly first: TransitionSemanticEventOperands;
   readonly second: TransitionSemanticEventOperands;
   readonly moveAnchors: readonly unknown[];
+}
+
+export interface DefenderExposureOperands {
+  readonly beforeFen: string;
+  readonly moveUci: string;
+  readonly afterFen: string;
+  readonly kind: "available" | "unavailable";
+  readonly reason?: "invalid_turn_clone";
+  readonly defender?: { readonly square: SquareName; readonly piece: Piece };
+  readonly target?: { readonly square: SquareName; readonly piece: Piece };
+  readonly captures?: readonly LegalExchangeResult[];
+  readonly controllerEvent?: SquareControlEvent;
+  readonly passConvention: "mover-turn-ep-cleared@1";
+}
+
+export interface DefenderConsequenceOperands {
+  readonly kind: "edge_lost_target_captured" | "defender_relocated_target_captured";
+  readonly anchors: readonly RecordedMoveAnchor[];
+  readonly nodes: readonly { readonly nodeId: string; readonly fen: string }[];
+  readonly defender: { readonly before: { readonly square: SquareName; readonly piece: Piece }; readonly after?: { readonly square: SquareName; readonly piece: Piece } };
+  readonly target: { readonly square: SquareName; readonly piece: Piece };
+  readonly firstMoveCapturedDefender: boolean;
+  readonly finalCapture: LegalExchangeResult;
+}
+
+export interface CapturedZoneDefenderOperands {
+  readonly beforeFen: string;
+  readonly moveUci: string;
+  readonly afterFen: string;
+  readonly capture: TransitionSemanticEventOperands;
+  readonly capturedSquare: SquareName;
+  readonly kingColor: Color;
+  readonly defender: KingZoneParticipant;
+}
+
+export interface OpenFileOccupancyOperands {
+  readonly beforeFen: string;
+  readonly moveUci: string;
+  readonly afterFen: string;
+  readonly piece: { readonly before: { readonly square: SquareName; readonly piece: Piece }; readonly after: { readonly square: SquareName; readonly piece: Piece } };
+  readonly fileClass: "open_file" | "half_open_file";
+  readonly sourceReading: StructuralObservation;
 }
 
 function immutable<T>(value: T): T {
@@ -349,9 +415,217 @@ export function tradeCompletedSemanticEvent(
   });
 }
 
+function moverTurnClone(fen: string, mover: Color): Chess | undefined {
+  const position = positionFromFen(fen);
+  const clone = Chess.fromSetup({ ...position.toSetup(), turn: mover, epSquare: undefined });
+  return clone.isOk ? clone.value : undefined;
+}
+
+function exactPiece(position: ReturnType<typeof positionFromFen>, square: SquareName): { readonly square: SquareName; readonly piece: Piece } | undefined {
+  const index = parseSquare(square);
+  const piece = index === undefined ? undefined : position.board.get(index);
+  return piece === undefined ? undefined : Object.freeze({ square, piece });
+}
+
+function sameOccupant(left: Piece, right: Piece): boolean {
+  return left.color === right.color && left.role === right.role && Boolean(left.promoted) === Boolean(right.promoted);
+}
+
+/** Exact lost enemy defence edges joined to positive legal captures under the disclosed pass clone. */
+export function defenderExposureOperands(beforeFen: string, moveUci: string, afterFen: string): readonly DefenderExposureOperands[] {
+  const anchor = canonicalAnchor({ beforeFen, moveUci, afterFen, side: positionFromFen(beforeFen).turn });
+  const pass = moverTurnClone(anchor.afterFen, anchor.side);
+  if (pass === undefined) return Object.freeze([{ beforeFen: anchor.beforeFen, moveUci: anchor.moveUci, afterFen: anchor.afterFen, kind: "unavailable", reason: "invalid_turn_clone", passConvention: "mover-turn-ep-cleared@1" }]);
+  const enemy = opposite(anchor.side);
+  const beforePosition = positionFromFen(anchor.beforeFen);
+  const afterPosition = positionFromFen(anchor.afterFen);
+  const lost = squareControlEvents(anchor.beforeFen, anchor.moveUci, anchor.afterFen).events.filter((event) => event.color === enemy && event.mode === "pseudo" && event.sign === "lost");
+  const result: DefenderExposureOperands[] = [];
+  for (const event of lost) {
+    const targetBefore = exactPiece(beforePosition, event.target);
+    const targetAfter = exactPiece(afterPosition, event.target);
+    if (targetBefore === undefined || targetAfter === undefined || targetBefore.piece.color !== enemy || !sameOccupant(targetBefore.piece, targetAfter.piece)) continue;
+    const targetSquare = parseSquare(event.target)!;
+    const captures = legalCaptureMovesTo(pass, targetSquare).map((capture) => legalExchangeForMove(pass, capture)).filter((value): value is LegalExchangeResult => value !== undefined && value.resultUnits > 0);
+    if (captures.length === 0) continue;
+    result.push(Object.freeze({
+      beforeFen: anchor.beforeFen,
+      moveUci: anchor.moveUci,
+      afterFen: anchor.afterFen,
+      kind: "available",
+      defender: event.controller,
+      target: targetAfter,
+      captures: Object.freeze(captures),
+      controllerEvent: event,
+      passConvention: "mover-turn-ep-cleared@1",
+    }));
+  }
+  return Object.freeze(result);
+}
+
+function canonicalRecordedPath(values: readonly RecordedMoveAnchor[], expected: number): readonly RecordedMoveAnchor[] {
+  if (values.length !== expected) throw new TypeError(`Recorded consequence requires exactly ${expected} anchors`);
+  const result = values.map((value) => {
+    const anchor = canonicalAnchor({ beforeFen: value.beforeFen, moveUci: value.moveUci, afterFen: value.afterFen, side: positionFromFen(value.beforeFen).turn });
+    if (value.beforeNodeId.length === 0 || value.afterNodeId.length === 0 || value.beforeNodeId === value.afterNodeId) throw new TypeError("Recorded consequence requires distinct node ids");
+    return Object.freeze({ beforeNodeId: value.beforeNodeId, afterNodeId: value.afterNodeId, beforeFen: anchor.beforeFen, moveUci: anchor.moveUci, afterFen: anchor.afterFen });
+  });
+  for (let index = 1; index < result.length; index += 1) if (result[index - 1]!.afterNodeId !== result[index]!.beforeNodeId || result[index - 1]!.afterFen !== result[index]!.beforeFen) throw new TypeError("Recorded consequence has a broken node/FEN boundary");
+  return Object.freeze(result);
+}
+
+function recordNodes(anchors: readonly RecordedMoveAnchor[]): readonly { readonly nodeId: string; readonly fen: string }[] {
+  return Object.freeze([{ nodeId: anchors[0]!.beforeNodeId, fen: anchors[0]!.beforeFen }, ...anchors.map((anchor) => ({ nodeId: anchor.afterNodeId, fen: anchor.afterFen }))]);
+}
+
+function defenseEdges(fen: string, color: Color): readonly { readonly defender: { readonly square: SquareName; readonly piece: Piece }; readonly target: { readonly square: SquareName; readonly piece: Piece } }[] {
+  const position = positionFromFen(fen);
+  const control = squareControlReading(fen).colors.find((entry) => entry.color === color)!.pseudo;
+  const result = [];
+  for (const square of control) {
+    const target = exactPiece(position, square.target);
+    if (target?.piece.color !== color) continue;
+    for (const controller of square.controllers) result.push(Object.freeze({ defender: controller, target }));
+  }
+  return Object.freeze(result);
+}
+
+function defenseKey(value: ReturnType<typeof defenseEdges>[number]): string {
+  return `${value.defender.square}:${value.defender.piece.color}:${value.defender.piece.role}:${value.target.square}:${value.target.piece.role}`;
+}
+
+/** Three recorded edges retaining defender/target identity; no force or causal semantics. */
+export function defenderConsequenceOperands(values: readonly RecordedMoveAnchor[]): readonly DefenderConsequenceOperands[] {
+  const anchors = canonicalRecordedPath(values, 3);
+  const firstPosition = positionFromFen(anchors[0]!.beforeFen);
+  const enemy = opposite(firstPosition.turn);
+  const initialEdges = defenseEdges(anchors[0]!.beforeFen, enemy);
+  const afterFirstEdges = new Set(defenseEdges(anchors[0]!.afterFen, enemy).map(defenseKey));
+  const afterReplyEdges = new Set(defenseEdges(anchors[1]!.afterFen, enemy).map(defenseKey));
+  const thirdPosition = positionFromFen(anchors[2]!.beforeFen);
+  const thirdMove = parseUci(anchors[2]!.moveUci);
+  if (thirdMove === undefined || !("from" in thirdMove)) return Object.freeze([]);
+  const finalExchange = legalExchangeForMove(thirdPosition, thirdMove);
+  if (finalExchange === undefined || finalExchange.resultUnits <= 0) return Object.freeze([]);
+  const firstCapture = transitionSemanticFacts(anchors[0]!.beforeFen, anchors[0]!.moveUci, anchors[0]!.afterFen).find((fact) => fact.family === "capture");
+  const replyMove = parseUci(anchors[1]!.moveUci);
+  const results: DefenderConsequenceOperands[] = [];
+  for (const edge of initialEdges) {
+    if (edge.target.square !== finalExchange.captured.square || !sameOccupant(edge.target.piece, finalExchange.captured)) continue;
+    const targetAfterFirst = exactPiece(positionFromFen(anchors[0]!.afterFen), edge.target.square);
+    const targetAfterReply = exactPiece(positionFromFen(anchors[1]!.afterFen), edge.target.square);
+    if (targetAfterFirst === undefined || targetAfterReply === undefined || !sameOccupant(edge.target.piece, targetAfterFirst.piece) || !sameOccupant(edge.target.piece, targetAfterReply.piece)) continue;
+    const capturedDefender = firstCapture?.family === "capture" && firstCapture.to === edge.defender.square && firstCapture.captured.color === edge.defender.piece.color && firstCapture.captured.role === edge.defender.piece.role;
+    if (!afterFirstEdges.has(defenseKey(edge))) {
+      results.push(Object.freeze({ kind: "edge_lost_target_captured", anchors, nodes: recordNodes(anchors), defender: Object.freeze({ before: edge.defender }), target: edge.target, firstMoveCapturedDefender: capturedDefender, finalCapture: finalExchange }));
+      continue;
+    }
+    if (replyMove === undefined || !("from" in replyMove) || makeSquare(replyMove.from) !== edge.defender.square) continue;
+    const relocated = exactPiece(positionFromFen(anchors[1]!.afterFen), makeSquare(replyMove.to));
+    if (relocated === undefined || !sameOccupant(edge.defender.piece, relocated.piece)) continue;
+    const relocatedKey = defenseKey({ defender: relocated, target: edge.target });
+    if (afterReplyEdges.has(relocatedKey)) continue;
+    const beforePass = moverTurnClone(anchors[0]!.beforeFen, firstPosition.turn);
+    const afterPass = moverTurnClone(anchors[0]!.afterFen, firstPosition.turn);
+    const defenderSquare = parseSquare(edge.defender.square)!;
+    if (beforePass === undefined || afterPass === undefined) continue;
+    const attackedBefore = legalCaptureMovesTo(beforePass, defenderSquare).some((capture) => (legalExchangeForMove(beforePass, capture)?.resultUnits ?? 0) > 0);
+    const attackedAfter = legalCaptureMovesTo(afterPass, defenderSquare).some((capture) => (legalExchangeForMove(afterPass, capture)?.resultUnits ?? 0) > 0);
+    if (attackedBefore || !attackedAfter) continue;
+    results.push(Object.freeze({ kind: "defender_relocated_target_captured", anchors, nodes: recordNodes(anchors), defender: Object.freeze({ before: edge.defender, after: relocated }), target: edge.target, firstMoveCapturedDefender: false, finalCapture: finalExchange }));
+  }
+  return Object.freeze(results);
+}
+
+/** Generic capture identity joined to the captured piece's exact prior king-zone defender role. */
+export function capturedZoneDefenderOperands(beforeFen: string, moveUci: string, afterFen: string): readonly CapturedZoneDefenderOperands[] {
+  const anchor = canonicalAnchor({ beforeFen, moveUci, afterFen, side: positionFromFen(beforeFen).turn });
+  const capture = transitionSemanticFacts(anchor.beforeFen, anchor.moveUci, anchor.afterFen).find((fact) => fact.family === "capture");
+  if (capture?.family !== "capture") return Object.freeze([]);
+  const from = parseSquare(capture.from)!;
+  const to = parseSquare(capture.to)!;
+  const capturedIndex = capture.enPassant ? ((Math.floor(from / 8) * 8 + to % 8) as typeof to) : to;
+  const capturedSquare = makeSquare(capturedIndex);
+  const state = kingZoneReading(anchor.beforeFen).kings.find((entry) => entry.color === capture.captured.color)!;
+  return Object.freeze(state.defenders.filter((value) => value.square === capturedSquare && value.piece.role === capture.captured.role).map((defender) => Object.freeze({ beforeFen: anchor.beforeFen, moveUci: anchor.moveUci, afterFen: anchor.afterFen, capture: immutable({ ...capture, before_fen: anchor.beforeFen, move_uci: anchor.moveUci, after_fen: anchor.afterFen }) as TransitionSemanticEventOperands, capturedSquare, kingColor: capture.captured.color, defender })));
+}
+
+/** Moved rook/queen newly occupying an existing open or mover-half-open file classification. */
+export function openFileOccupancyOperands(beforeFen: string, moveUci: string, afterFen: string): OpenFileOccupancyOperands | undefined {
+  const anchor = canonicalAnchor({ beforeFen, moveUci, afterFen, side: positionFromFen(beforeFen).turn });
+  const beforePosition = positionFromFen(anchor.beforeFen);
+  const afterPosition = positionFromFen(anchor.afterFen);
+  const move = parseUci(anchor.moveUci);
+  if (move === undefined || !("from" in move)) return undefined;
+  const prior = beforePosition.board.get(move.from);
+  const current = afterPosition.board.get(move.to);
+  if (prior === undefined || current === undefined || (prior.role !== "rook" && prior.role !== "queen") || !sameOccupant(prior, current)) return undefined;
+  const beforeFile = makeSquare(move.from)[0]!;
+  const afterFile = makeSquare(move.to)[0]!;
+  const eligible = (entry: StructuralObservation, file: string): boolean => entry.file === file && (entry.kind === "open_file" || entry.kind === "half_open_file" && entry.color === prior.color);
+  const beforeClass = structuralReading(anchor.beforeFen).features.find((entry) => eligible(entry, beforeFile));
+  const afterClass = structuralReading(anchor.afterFen).features.find((entry) => eligible(entry, afterFile));
+  if (beforeClass !== undefined || afterClass === undefined || (afterClass.kind !== "open_file" && afterClass.kind !== "half_open_file")) return undefined;
+  return Object.freeze({ beforeFen: anchor.beforeFen, moveUci: anchor.moveUci, afterFen: anchor.afterFen, piece: Object.freeze({ before: Object.freeze({ square: makeSquare(move.from), piece: prior }), after: Object.freeze({ square: makeSquare(move.to), piece: current }) }), fileClass: afterClass.kind, sourceReading: afterClass });
+}
+
+/** Brand-sealed one-edge breadth events. All remain eligible only for research.semantic_selection. */
+export function breadthSemanticEvents(beforeFen: string, moveUci: string, afterFen: string): readonly SemanticEvidenceEvent[] {
+  const anchor = canonicalAnchor({ beforeFen, moveUci, afterFen, side: positionFromFen(beforeFen).turn });
+  const result: SemanticEvidenceEvent[] = [];
+  const controls = squareControlEvents(anchor.beforeFen, anchor.moveUci, anchor.afterFen).events;
+  const controlEvidence = new Map(controls.map((payload) => [payload, declareSquareControlEventEvidence(payload)]));
+  for (const payload of controls) result.push(compileSemanticEvidenceEvent(PRIMARY_EVIDENCE_MANIFEST, { evidence: controlEvidence.get(payload)!, anchor, sign: payload.sign, operands: payload }));
+  for (const payload of pieceDestinationEvents(anchor.beforeFen, anchor.moveUci, anchor.afterFen).events) result.push(compileSemanticEvidenceEvent(PRIMARY_EVIDENCE_MANIFEST, { evidence: declareMobilityEventEvidence(payload), anchor, sign: "state", operands: payload }));
+  for (const payload of pawnDynamicsEvents(anchor.beforeFen, anchor.moveUci, anchor.afterFen)) result.push(compileSemanticEvidenceEvent(PRIMARY_EVIDENCE_MANIFEST, { evidence: declarePawnDynamicsEvidence(payload), anchor, sign: payload.kind === "candidate_majority_advanced" ? "state" : "gained", operands: payload }));
+  const contactsEvidence = declarePawnContactsEvidence(pawnContactsReading(anchor.beforeFen));
+  for (const payload of pawnTransitionEvents(anchor.beforeFen, anchor.moveUci, anchor.afterFen)) result.push(compileSemanticEvidenceEvent(PRIMARY_EVIDENCE_MANIFEST, { evidence: declarePawnTransitionEvidence(payload), derivationInputs: [contactsEvidence], anchor, sign: payload.kind === "moved_pawn_became_passed" || payload.kind === "capture_created_moved_passer" ? "gained" : "state", operands: payload }));
+  for (const payload of defenderExposureOperands(anchor.beforeFen, anchor.moveUci, anchor.afterFen)) {
+    const sources = payload.kind === "available" ? [declareSquareControlEventEvidence(payload.controllerEvent!), ...payload.captures!.map(declareLegalExchangeEvidence)] : [];
+    if (payload.kind === "unavailable") continue;
+    result.push(compileSemanticEvidenceEvent(PRIMARY_EVIDENCE_MANIFEST, { evidence: declareDefenderExposureEvidence(payload), derivationInputs: sources, anchor, sign: "gained", operands: payload }));
+  }
+  const material = materialRoleAsymmetryEvent(anchor.beforeFen, anchor.moveUci, anchor.afterFen);
+  if (material !== undefined) {
+    const readings = [declareMaterialRoleReadingEvidence(materialRoleSignatureReading(anchor.beforeFen)), declareMaterialRoleReadingEvidence(materialRoleSignatureReading(anchor.afterFen))];
+    result.push(compileSemanticEvidenceEvent(PRIMARY_EVIDENCE_MANIFEST, { evidence: declareMaterialRoleEventEvidence(material), derivationInputs: readings, anchor, sign: "state", operands: material }));
+  }
+  for (const payload of kingZoneEvents(anchor.beforeFen, anchor.moveUci, anchor.afterFen)) result.push(compileSemanticEvidenceEvent(PRIMARY_EVIDENCE_MANIFEST, { evidence: declareKingZoneEventEvidence(payload), anchor, sign: "state", operands: payload }));
+  const kingReadingEvidence = declareKingZoneReadingEvidence(kingZoneReading(anchor.beforeFen));
+  const transitionEvents = transitionSemanticEvents(anchor.beforeFen, anchor.moveUci, anchor.afterFen);
+  const capture = transitionEvents.find((event) => event.operands.family === "capture");
+  if (capture !== undefined) for (const payload of capturedZoneDefenderOperands(anchor.beforeFen, anchor.moveUci, anchor.afterFen)) result.push(compileSemanticEvidenceEvent(PRIMARY_EVIDENCE_MANIFEST, { evidence: declareCapturedZoneDefenderEvidence(payload), derivationInputs: [capture.evidence, kingReadingEvidence], anchor, sign: "state", operands: payload }));
+  const activity = openFileOccupancyOperands(anchor.beforeFen, anchor.moveUci, anchor.afterFen);
+  if (activity !== undefined && activity.fileClass === "open_file") {
+    const source = declareStructuralReadingSourceEvidence(activity.sourceReading as StructuralObservation & { readonly kind: string });
+    result.push(compileSemanticEvidenceEvent(PRIMARY_EVIDENCE_MANIFEST, { evidence: declareOpenFileOccupancyEvidence(activity), derivationInputs: [source], anchor, sign: "gained", operands: activity }));
+  }
+  return Object.freeze(result.sort((left, right) => refKey(left.projection).localeCompare(refKey(right.projection)) || left.id.localeCompare(right.id)));
+}
+
+function sequenceAnchor(payload: PawnContactTimingSequence | HarassmentPressureSequence | DefenderConsequenceOperands): SemanticEventAnchor {
+  const edge = payload.anchors.at(-1)!;
+  return Object.freeze({ beforeFen: edge.beforeFen, moveUci: edge.moveUci, afterFen: edge.afterFen, side: positionFromFen(edge.beforeFen).turn });
+}
+
+export function pawnContactTimingSemanticEvent(payload: PawnContactTimingSequence, moveEvidence: readonly DeclaredEvidence<unknown>[]): SemanticEvidenceEvent<PawnContactTimingSequence> {
+  if (moveEvidence.length !== payload.anchors.length || moveEvidence.some((value) => refKey(value.projection) !== "run.record.move@1")) throw new TypeError("Pawn-contact timing requires one run.record.move evidence item per anchor");
+  return compileSemanticEvidenceEvent(PRIMARY_EVIDENCE_MANIFEST, { evidence: declarePawnContactTimingEvidence(payload), derivationInputs: moveEvidence, anchor: sequenceAnchor(payload), sign: "state", operands: payload });
+}
+
+export function harassmentPressureSemanticEvent(payload: HarassmentPressureSequence, moveEvidence: readonly DeclaredEvidence<unknown>[]): SemanticEvidenceEvent<HarassmentPressureSequence> {
+  if (moveEvidence.length !== 2 || moveEvidence.some((value) => refKey(value.projection) !== "run.record.move@1")) throw new TypeError("Harassment pressure requires two run.record.move evidence items");
+  return compileSemanticEvidenceEvent(PRIMARY_EVIDENCE_MANIFEST, { evidence: declareHarassmentPressureEvidence(payload), derivationInputs: moveEvidence, anchor: sequenceAnchor(payload), sign: "state", operands: payload });
+}
+
+export function defenderConsequenceSemanticEvent(payload: DefenderConsequenceOperands, moveEvidence: readonly DeclaredEvidence<unknown>[]): SemanticEvidenceEvent<DefenderConsequenceOperands> {
+  if (moveEvidence.length !== 3 || moveEvidence.some((value) => refKey(value.projection) !== "run.record.move@1")) throw new TypeError("Defender consequence requires three run.record.move evidence items");
+  return compileSemanticEvidenceEvent(PRIMARY_EVIDENCE_MANIFEST, { evidence: declareDefenderConsequenceEvidence(payload), derivationInputs: moveEvidence, anchor: sequenceAnchor(payload), sign: "state", operands: payload });
+}
+
 export function localSemanticEvents(beforeFen: string, moveUci: string, afterFen: string): readonly SemanticEvidenceEvent[] {
   const transitionEvents = transitionSemanticEvents(beforeFen, moveUci, afterFen);
-  return Object.freeze([...structuralSemanticEvents(beforeFen, moveUci, afterFen), ...pawnIslandSemanticEvents(beforeFen, moveUci, afterFen), ...transitionEvents, ...tacticalSemanticEvents(beforeFen, moveUci, afterFen), ...(loosePieceSemanticEvents(beforeFen, moveUci, afterFen) ?? []), ...castlingSemanticEvents(beforeFen, moveUci, afterFen), ...derivedExchangeSemanticEvents(beforeFen, moveUci, afterFen, transitionEvents), ...discoveredExecutedSemanticEvents(beforeFen, moveUci, afterFen, transitionEvents)]);
+  return Object.freeze([...structuralSemanticEvents(beforeFen, moveUci, afterFen), ...pawnIslandSemanticEvents(beforeFen, moveUci, afterFen), ...transitionEvents, ...tacticalSemanticEvents(beforeFen, moveUci, afterFen), ...(loosePieceSemanticEvents(beforeFen, moveUci, afterFen) ?? []), ...castlingSemanticEvents(beforeFen, moveUci, afterFen), ...derivedExchangeSemanticEvents(beforeFen, moveUci, afterFen, transitionEvents), ...discoveredExecutedSemanticEvents(beforeFen, moveUci, afterFen, transitionEvents), ...breadthSemanticEvents(beforeFen, moveUci, afterFen)]);
 }
 
 export function compileSemanticEvidenceEvent<T>(manifest: CompiledEvidenceManifest, input: SemanticEventInput<T>): SemanticEvidenceEvent<T> {

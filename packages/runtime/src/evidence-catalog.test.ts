@@ -6,6 +6,8 @@ import { STRUCTURAL_FEATURE_KINDS, TRANSITION_FEATURE_KINDS } from "@chess-tabiy
 
 import { RULES_EVIDENCE_FACTS } from "./evidence-ref.js";
 import {
+  BREADTH_COLLECTOR_PROJECTION_IDS,
+  BREADTH_CONVENTION_TEXT,
   CURRENT_CONSUMER_OPERATION_IDS,
   EVIDENCE_CONSUMER_IDS,
   EVIDENCE_CONTRACT_DECLARATIONS,
@@ -21,7 +23,7 @@ import { compileEvidenceManifest } from "./evidence-contract.js";
 import { EvidenceManifestError } from "./evidence-contract.js";
 
 const ROOT = new URL("../../../", import.meta.url);
-const EXPECTED_PRODUCERS = Object.freeze(["rules.structural", "rules.transition", "rules.castling", "rules.exchange", "rules.tactic", "rules.phase", "rules.pivotal", "rules.endgame", "theory.shapes", "authored.structural_condition", "pack.authored", "recorded.engine", "recorded.tablebase", "live.stockfish", "live.syzygy", "human.maia", "human.explorer", "theory.opening_identity", "run.record", "derived.compare_narrative", "derived.story", "derived.exchange", "derived.tactic", "sourcing.ledger", "derived.semantic_avoidance"]);
+const EXPECTED_PRODUCERS = Object.freeze(["rules.structural", "rules.transition", "rules.castling", "rules.exchange", "rules.tactic", "rules.square", "rules.mobility", "rules.pawn", "rules.king", "rules.phase", "rules.pivotal", "rules.endgame", "theory.shapes", "authored.structural_condition", "pack.authored", "recorded.engine", "recorded.tablebase", "live.stockfish", "live.syzygy", "human.maia", "human.explorer", "theory.opening_identity", "run.record", "derived.compare_narrative", "derived.story", "derived.exchange", "derived.tactic", "derived.pawn", "derived.material", "derived.king", "derived.activity", "sourcing.ledger", "derived.semantic_avoidance"]);
 
 function jsonFiles(url: URL): readonly URL[] {
   return readdirSync(url, { withFileTypes: true }).flatMap((entry) => {
@@ -45,8 +47,8 @@ describe("primary evidence catalogue", () => {
     expect(CURRENT_CONSUMER_OPERATION_IDS).toHaveLength(23);
     expect(EVIDENCE_CONSUMER_IDS).toEqual([...CURRENT_CONSUMER_OPERATION_IDS, "assistance.arrows", "research.semantic_selection"]);
     expect(manifest.consumers.find((item) => item.id === "assistance.arrows")?.disposition).toEqual(expect.objectContaining({ kind: "experimental" }));
-    expect([manifest.producers.length, manifest.projections.length, manifest.consumers.length, manifest.bindings.length]).toEqual([25, 156, 25, 188]);
-    expect([manifest.semanticEvents.length, manifest.eligibility.length, manifest.reasons.length, manifest.selectionPolicies.length]).toEqual([46, 46, 15, 1]);
+    expect([manifest.producers.length, manifest.projections.length, manifest.consumers.length, manifest.bindings.length]).toEqual([33, 174, 25, 200]);
+    expect([manifest.semanticEvents.length, manifest.eligibility.length, manifest.reasons.length, manifest.selectionPolicies.length]).toEqual([58, 58, 15, 1]);
     expect(new Set(manifest.semanticEvents.map((item) => item.projection.id))).toEqual(new Set(SEMANTIC_EVENT_PROJECTION_IDS));
     expect(new Set(manifest.eligibility.map((item) => `${item.consumer.id}@${item.consumer.version}`))).toEqual(new Set(["research.semantic_selection@1"]));
     expect(manifest.bindings.filter((binding) => SEMANTIC_EVENT_PROJECTION_IDS.includes(binding.projection.id)).every((binding) => binding.consumer.id === "research.semantic_selection")).toBe(true);
@@ -117,5 +119,16 @@ describe("primary evidence catalogue", () => {
     expect(new Set(TACTICAL_COLLECTOR_PROJECTION_IDS).size).toBe(30);
     const compiled = new Set(EVIDENCE_PRODUCERS.flatMap((producer) => producer.outputs.map((output) => output.id)));
     expect(TACTICAL_COLLECTOR_PROJECTION_IDS.every((id) => compiled.has(id))).toBe(true);
+  });
+
+  it("keeps the breadth collector Appendix-A inventory set-equal to eighteen compiled projections", () => {
+    expect(BREADTH_COLLECTOR_PROJECTION_IDS).toHaveLength(18);
+    expect(new Set(BREADTH_COLLECTOR_PROJECTION_IDS).size).toBe(18);
+    const outputs = EVIDENCE_PRODUCERS.flatMap((producer) => producer.outputs);
+    const compiled = new Set(outputs.map((output) => output.id));
+    expect(BREADTH_COLLECTOR_PROJECTION_IDS.every((id) => compiled.has(id))).toBe(true);
+    const breadthIds = new Set<string>(BREADTH_COLLECTOR_PROJECTION_IDS);
+    const manifestText = JSON.stringify(outputs.filter((output) => breadthIds.has(output.id)));
+    expect(Object.values(BREADTH_CONVENTION_TEXT).every((text) => manifestText.includes(text))).toBe(true);
   });
 });

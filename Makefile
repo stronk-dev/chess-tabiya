@@ -1,4 +1,4 @@
-.PHONY: setup typecheck test test-browser schema-check register-check status-parity intent-parity evidence-manifest-check semantic-evidence-check graduation-plan graduation-plan-check tactical-collector-measurement build verify pack-check shape-check expression-census graduation-report pack-preview source-fetch candidate-emit candidate-attach sourcing-check verify-draft tablebase-walk engine-walk up up-engines down
+.PHONY: setup typecheck test test-browser schema-check register-check status-parity intent-parity evidence-manifest-check semantic-evidence-check graduation-plan graduation-plan-check tactical-collector-measurement breadth-collector-measurement build verify pack-check shape-check expression-census graduation-report pack-preview source-fetch candidate-emit candidate-attach sourcing-check verify-draft tablebase-walk engine-walk up up-engines down
 
 setup:
 	pnpm install --frozen-lockfile
@@ -43,6 +43,9 @@ semantic-evidence-check:
 
 tactical-collector-measurement:
 	./node_modules/.bin/vitest run --config tools/tactical-collector-measurement-harness/vitest.config.ts
+
+breadth-collector-measurement:
+	./node_modules/.bin/vitest run --config tools/breadth-collector-measurement-harness/vitest.config.ts
 
 build:
 	pnpm build
