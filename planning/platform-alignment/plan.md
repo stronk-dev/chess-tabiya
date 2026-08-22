@@ -46,7 +46,7 @@ dumping engine data on learners, or repeatedly re-authoring packs as primitives 
 Large content expansion is admitted only when all are true:
 
 - [ ] no active RFC holds a drill-pack schema lane;
-- [ ] shared-resource/register state agrees with the tree;
+- [x] shared-resource/register state agrees with the tree; **PASSES 2026-08-23** — `make register-check` green (C1–C6; 20 active RFCs, 9 live claims) and [[D499]] closed 2026-08-21 by `shared-resource-registers` (implemented + archived). Recorded here because the audit found this clause passing while three documents still called it FAIL — an unrecorded pass is a gate held shut by bookkeeping;
 - [ ] a versioned producer→evidence→consumer manifest has no unexplained orphan;
 - [ ] detector semantics v1 declares sign, grounding, confidence/abstention and validation;
 - [ ] pack capabilities and deprecations have a compatibility policy;
