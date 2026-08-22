@@ -1,7 +1,7 @@
 # RFC: Breadth collectors — exact middlegame operands after Wave A
 
-- **Status:** draft 2026-08-22 — amended after the joint collector buildability review repaired
-  D826; an independent acceptance review is still required
+- **Status:** draft 2026-08-22 — author amendment repairs D851–D859 after the Codex-side
+  buildability return; an independent Claude acceptance review is still required
 - **Author:** codex, on the owner-opened breadth/evidence-foundation program and D802 routing
 - **Created:** 2026-08-22
 - **Design refs:** `design/03-product-breadth.md` §Intelligence and explanation;
@@ -107,13 +107,30 @@ Any additional production site returns this RFC for an impact amendment before i
 | id | exact content |
 |---|---|
 | `local-non-losing@1` | For a legal capture destination, `legal-exchange@1 >= 0`. For a quiet destination, after the piece arrives the opponent has no legal capture of it with `legal-exchange@1 > 0`. This is one-exchange local safety, never engine safety or goodness. |
-| `candidate-majority@1` | A pawn is not passed; has no enemy pawn ahead on its file; has at least one friendly pawn beside/behind on an adjacent file; and that support count is at least the enemy-pawn count ahead on adjacent files. It is the disclosed D788 convention derived from historical Stockfish prior art and deliberately omits that source's backward-pawn classifier. |
+| `candidate-majority@1` | A pawn is not passed and has no enemy pawn strictly ahead on its file. Supporting pawns are other same-color pawns on an adjacent file whose rank is the subject pawn's rank or any rank behind it from that color's perspective; enemy blockers are opposing pawns on adjacent files strictly ahead of the subject. At least one support is required and support count must be greater than or equal to blocker count. It is the disclosed D788 convention derived from historical Stockfish prior art and deliberately omits that source's backward-pawn classifier. |
 | `king-zone@1` | Up to eight adjacent squares, excluding the king square. Attackers/defenders are distinct non-king pieces controlling at least one zone square. |
 | `king-shelter@1` | Same-color pawns one or two forward ranks from the king on its file or adjacent files. |
 | `material-role-signature@1` | Per color counts of P/N/B/R/Q. Asymmetry is the unordered role-count difference vector; king excluded and no scalar piece-value verdict emitted. |
-| `pressure-line@1` | A retained slider→screen→target ray with exactly one lower-value screen and a rook/queen target, using P1/N3/B3/R5/Q9 only to state the literal role relation. It does not claim the screen is pinned or the pressure matters. |
+| `pressure-line@1` | A bishop/rook/queen slider and an enemy rook/queen target are collinear with exactly one occupied square between them. That screen belongs to the target's color and has lower P1/N3/B3/R5/Q9 role value than the target. A retained relation across a slider move requires the same slider color/role moving from its old to new square plus the exact same screen square/color/role and target square/color/role; a replacement same-role slider does not satisfy it. The values state only the literal role relation. It does not claim the screen is pinned or the pressure matters. |
 
 Each convention text and limitation ships verbatim in the manifest declaration.
+
+Square control uses no hypothetical occupant. A **pseudo controller** is a piece whose chessops
+attack set contains the target under current occupancy. A **legal controller** is that same source
+piece only when the target also appears in its actual `allDests()` set after a valid clone makes
+the piece's color the side to move and clears en passant. Thus a pawn's empty diagonal and a
+friendly-occupied target are pseudo-only, an enemy non-king target is legal only when the capture
+is legal, an opposing king square is pseudo-only because kings are never captured, and an
+absolute pin can remove an edge from the legal set without removing it from the pseudo set. If the
+per-color clone is invalid, pseudo control remains available and that color's complete legal set
+abstains `invalid_turn_clone`; individual squares never receive invented occupants.
+
+Pawn-relation rules are literal: an opposing-pawn **contact** is a directed pawn-attack edge; a
+**direct lock** is a White pawn immediately below a Black pawn on the same file; a passed pawn's
+**blockers** are opposing pawns strictly ahead on its file or either adjacent file; **protection**
+is a same-color pawn attack on the subject; and a **connected passed pair** is any two passed pawns
+of one color on adjacent files, with rank distance deliberately unrestricted. Payloads retain both
+square/color identities, and the unrestricted-rank limitation ships with the declaration.
 
 ### 3. Projections and measured dispositions
 
@@ -122,13 +139,16 @@ Each convention text and limitation ships verbatim in the manifest declaration.
 - `rules.square.reading.control@1`: for every square, pseudo-controller identities by color and
   legal-controller identities where a valid side-to-move clone can be constructed. Operands retain
   controller square/role/color, target, legal/pseudo status and abstention reason. En passant is
-  cleared on turn clones. Grounding exact; legal clone invalidity abstains per color.
+  cleared on turn clones. The exact pseudo/`allDests()` boundary is §2; grounding exact; legal clone
+  invalidity abstains for that color's whole legal set while leaving its pseudo set intact.
 - `rules.square.event.control@1`: before/after gained/lost controller sets joined by exact identity.
   Research disposition only. D771's pawn-made-destination-unsafe join measures 1.00×/1.02× and D754
   future-square contest .96×/.95×, so neither earns default prominence. Their low lift does not
   justify deleting the topology needed by touch/hover, theory and bot features.
-- Fixtures: absolute pin separates pseudo from legal control; pawn newly controls an empty minor
-  destination; controller lost/gained mirror pair; invalid clone abstention.
+- Fixtures: absolute pin separates pseudo from legal control; an empty pawn diagonal and a
+  friendly-occupied defended square are pseudo-only; a legal enemy capture appears in both sets;
+  an opposing king square is pseudo-only; pawn newly controls an empty minor destination;
+  controller lost/gained mirror pair; invalid clone abstention leaves pseudo bytes intact.
 - This is additive beside the shipped count-only `attacked_squares_changed` reading and
   occupied-target `occupied_attack` event: it retains **all-square controller identity**, which
   neither existing projection carries. It redefines neither id.
@@ -157,43 +177,61 @@ Each convention text and limitation ships verbatim in the manifest declaration.
   `connected_passer_pair_gained`, `candidate_majority_gained`, `candidate_majority_advanced`.
 - `derived.pawn.event.transitions@1`: typed joins `contact_executed`,
   `moved_pawn_became_passed`, `capture_created_moved_passer`, and `passed_pawn_advanced`. It consumes
-  the existing `rules.transition.event.pawn_contact`, `rules.transition.event.capture@1` and
-  `rules.structural.event.passed_pawn` authorities plus exact move identity. Contact creation is
-  already `pawn_contact` and is **not** emitted again.
+  `rules.pawn.reading.contacts@1` at the before position, the existing
+  `rules.transition.event.capture@1` and `rules.structural.event.passed_pawn` authorities, plus exact
+  move identity. `contact_executed` requires the before-state directed contact from the same moved
+  pawn to the exact captured pawn; the existing `rules.transition.event.pawn_contact` remains the
+  sole authority for contact **creation** and is not an input to execution. Contact creation is
+  **not** emitted again.
 - Measured dispositions are literal per kind: harassment 3.63×/3.18×; locked pair 3.89×/2.08×;
   contact creation 1.03×/.90×; contact execution 9.82×/15.07×; passage creation
   12.46×/13.45×/7.72× by horizon; capture-created passage 21.18×/14.45×/11.58×;
   candidate gain 2.80×/3.30× and horizon-shaped; passer/candidate advancement phase-gated.
 - No kind says break, favorable, dangerous, winning, minority attack, majority conversion or plan.
   Contact execution is a join over capture identity, not a duplicate capture detector.
-- Fixtures: every kind positive plus geometry-neighbor negatives; blocked adjacent-file pawn for
-  passed status; candidate support/blocker boundary pair; early/late eligibility fixtures.
+- Fixtures: every kind positive plus geometry-neighbor negatives; direct-lock same-file/adjacent-rank
+  positive and diagonal/non-adjacent negatives; protected passer versus non-pawn defender;
+  connected passers at equal and unequal ranks plus same-file/non-passed negatives; blocked
+  adjacent-file pawn for passed status; candidate same-rank/behind/ahead support and equality
+  boundary pairs; early/late eligibility fixtures.
 
 #### 3.4 Retained pawn sequences
 
-- `derived.pawn.sequence.contact_timing@1`: observed recorded-path sequences
-  `created_survived_reply` and `created_executed_next_own_move`, retaining the same pawn/contact and
-  all three source nodes. Counts: 11/125 and 1/45 authored/imported windows.
+- `derived.pawn.sequence.contact_timing@1`: observed recorded-path sequences with horizon-typed
+  payloads. `created_survived_reply` carries exactly two consecutive move anchors and three ordered
+  board nodes; `created_executed_next_own_move` carries exactly three consecutive anchors and four
+  ordered nodes. Every anchor retains before/after node ids and FENs plus canonical UCI, adjacent
+  anchors require byte-equal shared node/FEN, and the same moved pawn/contact square identities must
+  survive every applicable edge. Counts: 11/125 and 1/45 authored/imported windows.
 - `derived.pawn.sequence.harassment_pressure@1`: pawn newly attacks a named minor, that exact minor
-  relocates on the reply, and the same `pressure-line@1` slider/screen/target relation survives.
-  Counts: 3/6 preserving cases after the measured relocation filter.
+  relocates on the immediately consecutive reply, and the same `pressure-line@1`
+  slider/screen/target relation survives under §2's exact retention key. It carries two anchors and
+  three ordered nodes under the same continuity rule. Counts: 3/6 preserving cases after the
+  measured relocation filter.
 - Contact timing is `recorded_run`/`exact`; harassment pressure is
   `recorded_run`/`convention` because it consumes `pressure-line@1`. Both use manifest role `event`
   and research-only eligibility. Observed order does not establish intention, tempo, force, retreat
   quality or causality.
-- Fixtures include the owner's `...Bg4 h3 ...Bh5` form, same geometry with a changed target, contact
-  answered by another pawn, captured tracked piece and path discontinuity.
+- Fixtures include the owner's `...Bg4 h3 ...Bh5` form, same geometry with a changed slider,
+  screen or target, a replacement same-role slider, friendly screen/target, contact answered by
+  another pawn, captured tracked piece, wrong horizon and path discontinuity.
 
 #### 3.5 Defender identities and consequences
 
 - `derived.tactic.defender_exposure@1`: an existing exact occupied-defence edge is lost and the
   retained target gains a positive `legal-exchange@1` capture. Operands retain defender, target,
-  attacker/capture line and source event ids. Measured 4.50×/6.52×.
+  attacker/capture line and source event ids. The lost edge consumes
+  `rules.square.event.control@1`'s exact **pseudo-controller** delta, not the shipped aggregate
+  `occupied_defence` event, so one defender can disappear while another remains. This reproduces
+  D754/D772's directed attack-edge domain. Measured 4.50×/6.52×.
 - `derived.tactic.sequence.defender_consequence@1`: manifest-role `event`,
   `recorded_run`/`convention`, over recorded three-edge paths for (a) exact defender
   captured, edge lost, exact former target positively captured; (b) defender newly exposed,
   relocates, edge lost, exact target positively captured. Measured imported counts 29 and 13;
-  authored 0/622, so canonical positive/disagreement fixtures are mandatory before landing.
+  authored 0/622, so canonical positive/disagreement fixtures are mandatory before landing. Its
+  payload carries exactly three consecutive anchors and four ordered board nodes under §3.4's
+  continuity rule; defender/target keys must survive or transform only through the explicitly
+  recorded capture/relocation edge.
 - It never emits removal, deflection, overload, forced or tactic success. Reply-wide causality would
   require a deeper separately versioned consequence.
 
@@ -221,8 +259,12 @@ Each convention text and limitation ships verbatim in the manifest declaration.
   `declared_convention`/`convention`; “exact changes” describes set fidelity, not a widened
   exactness declaration.
 - `derived.king.captured_zone_defender@1`: generic capture identity joined to the captured piece's
-  prior zone-defender role. This is the admitted form of the 6.07×/5.12×/3.94× headline; its
-  non-capture counterpart is 0/.07×/.38× and no generic “weakened king” event exists.
+  prior zone-defender role. Captured-square identity is `capture.to` for an ordinary capture and,
+  for en passant, the square on `capture.to`'s file and `capture.from`'s rank; the derived event
+  retains that arithmetic and requires the before-state defender at the exact resulting square.
+  No second capture detector is permitted. This is the admitted form of the
+  6.07×/5.12×/3.94× headline; its non-capture counterpart is 0/.07×/.38× and no generic
+  “weakened king” event exists.
 - Castling-to-more-shelter is a later derived/module join over Wave A's immutable castling event and
   this RFC's before/after shelter set (measured 10.08×/8.19×/5.31×), not an operand added to the
   prerequisite projection and not a duplicate producer. Escape reduction and zone-attacker gain are phase-aware inspector operands. Direct
@@ -232,8 +274,12 @@ Each convention text and limitation ships verbatim in the manifest declaration.
 
 - `derived.activity.event.open_file_occupancy@1`: a moved rook/queen newly occupies a file whose
   class comes from the shipped `open_file`/`half_open_file` readings, retaining piece and class.
-  Exact pawn identities may be attached from the same admitted position payload, but the join must
-  not recompute or override the source reading's file class. Exact derived join; measured
+  For `half_open_file`, the consumed reading's color must equal the moved heavy piece's color.
+  “Newly occupies” reproduces the D723 probe exactly: the after-position destination file is open or
+  half-open for the mover, while the before-position source file was neither for that mover. It is
+  a moved-piece event; a class change beneath a stationary rook/queen does not fire. Exact pawn
+  identities may be attached from the same admitted position payload, but the join must not
+  recompute or override the source reading's file class. Exact derived join; measured
   1.47×/1.24×, so on-demand only.
 - It does not say active, controls the file, belongs there or improved. Those require mobility,
   target, theory or engine inputs in a module.
@@ -264,12 +310,16 @@ Its split from tactical Wave A is an RFC process decision, not a product-intent 
    semantic-evidence checks pass; no undeclared sibling id appears.
 2. **B2 — Operand fidelity.** Runtime types preserve every named identity/set. A fixture fails any
    implementation that keeps only counts for control, mobility, king or pawn relations.
-3. **B3 — Convention fidelity.** All six §2 texts/limitations appear in the manifest; mirror and
-   boundary fixtures pin orientation, equality and support/blocker cases.
+3. **B3 — Convention fidelity.** All six named §2 convention texts/limitations and the exact
+   square-control/pawn-relation rules beneath the table appear in the manifest; mirror and boundary
+   fixtures pin occupancy, king, orientation, equality, rank and support/blocker cases.
 4. **B4 — No duplicate authorities.** Capture, pawn-contact, passed-pawn, piece-count,
    open/half-open-file, castling, check, occupied-defence and legal-exchange facts are consumed by
-   id, not recomputed under a second meaning. Wave A's castling declaration remains byte-identical;
-   this RFC does not attach shelter operands to it.
+   id, not recomputed under a second meaning. The one deliberate edge-level distinction is explicit:
+   `defender_exposure@1` consumes this RFC's all-controller pseudo-edge delta because shipped
+   `occupied_defence` is only a zero↔nonzero aggregate and cannot carry the research predicate.
+   Wave A's castling declaration remains byte-identical; this RFC does not attach shelter operands
+   to it.
 5. **B5 — Fixtures/non-vacuity.** Every kind has positive and hard-negative canonical fixtures;
    declared abstentions have fixtures. Canonical sets are strict-interior. Population zeroes remain
    visible, specifically the authored defender sequences.
@@ -278,8 +328,9 @@ Its split from tactical Wave A is an RFC process decision, not a product-intent 
    correction and returns the RFC if the product disposition would change.
 7. **B7 — Sign/phase honesty.** Low/mixed kinds stay inspector/on-demand; horizon-gated kinds carry
    the declared phase eligibility operand. No global rank is derived from authored pack lift.
-8. **B8 — Sequence identity.** All three nodes and exact subjects survive compilation; swapping the
-   defender, pawn, minor or target between nodes makes the positive fixture fail.
+8. **B8 — Sequence identity.** Each kind carries its declared two- or three-edge horizon, respectively
+   three or four ordered nodes, with byte-equal shared boundaries. Swapping an anchor, FEN,
+   defender, pawn, minor, slider, screen or target makes the positive fixture fail.
 9. **B9 — Refusal vocabulary.** New manifest semantics/sentence ceilings contain none of:
    `good`, `bad`, `best`, `blunder`, `mistake`, `forced`, `winning`, `weak`, `dominates`, `plan`,
    `intends`, `break now`, `unsafe`, `exposed`, except inside explicit limitation/refusal text.
@@ -340,3 +391,8 @@ Unit: projection id; total **18**.
 - 2026-08-22: joint collector buildability review repaired D826. Castling-to-more-shelter remains
   a later derived/module join instead of mutating Wave A's closed castling event; king-state event
   grounding is explicitly convention-level while its retained set deltas remain exact.
+- 2026-08-22: Codex author-side buildability return repaired D851–D859 in place: actual legal
+  destinations define legal control; exact controller deltas replace aggregate defence for the
+  defender join; pre-move contact state grounds execution; two-/three-edge payload horizons retain
+  three/four nodes; pressure and pawn predicates copy their harness bytes; en-passant captured
+  square and mover-relative half-open-file joins are pinned. Independent Claude review remains.

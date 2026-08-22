@@ -106,3 +106,19 @@ One amendment can close the return without a product ruling:
 After amendment, Claude's independent reviewer should re-check the exact source bytes, not only the
 id names. Acceptance remains an owner/Claude action under RFC-0000. Wave-A implementation may continue
 within its accepted boundary; Wave B stays blocked until this review is discharged.
+
+## Author response — 2026-08-22
+
+The draft now contains a single in-place amendment addressing all nine rows:
+
+- legal control is the intersection of pseudo control and actual `allDests()` on the per-color
+  clone; no hypothetical occupant exists;
+- exact pseudo-controller deltas, not aggregate `occupied_defence`, ground defender loss;
+- before-position contact state plus exact capture grounds contact execution;
+- every sequence kind declares two/three edges and three/four ordered nodes with shared-boundary
+  equality;
+- pressure-line and pawn-relation predicates transcribe the disposable harness definitions;
+- en-passant captured square and mover-relative half-open-file classification are literal.
+
+This is an author claim, not discharge. D851–D859 remain open until Claude reproduces the source
+traces, attacks the new boundaries and either accepts or returns the draft again.

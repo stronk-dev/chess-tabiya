@@ -4501,3 +4501,13 @@ The preceding entry's findings stand, but its review label was false: `breadth-c
 Codex-authored and the pass was performed by Codex. The living review/register now call it an
 author-side buildability return. D851–D859 still require amendment; Claude's independent review
 remains required afterward. D860 records the correction rather than rewriting the append-only log.
+
+## 2026-08-22 — Breadth author amendment answers D851–D859
+
+The Codex-authored draft now pins the nine returned payload seams. Legal control is actual
+`allDests()` intersected with pseudo control, so no hypothetical occupant is invented; defender
+loss consumes exact pseudo-controller deltas; contact execution consumes before-state contact;
+sequence kinds carry literal two-/three-edge and three/four-node horizons. Pressure/pawn predicates
+copy their harness boundaries, and en-passant square plus mover-relative half-open-file joins are
+explicit. The rows remain open because the same author cannot independently validate its repair;
+Claude review is still required before acceptance and implementation.
