@@ -31,3 +31,7 @@ preset, workflow or authorable-vocabulary edits.
   execution bound to latency + gained ray; immediate trade anchors; mover-relative loose-piece
   state; total promotion geometry with typed field absence. **Independent buildability review is
   the remaining hold before these ten projections resume.**
+- The post-review implementation is pre-mapped at
+  `planning/tactical-collectors/final-ten-implementation-map.md`: exact ten absent compiled ids,
+  production homes, join keys, permanent fixtures and focused landing gates. This removes
+  rediscovery but does not bypass the independent-review hold.

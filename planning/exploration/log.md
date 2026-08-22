@@ -4762,3 +4762,24 @@ promotion binding. D832 closes through D922's earlier removal of the rule-of-the
 Focused instruments pass 7/7 in the new boundary harness and 7/7 across the existing promotion and
 consumer-matrix files. Production remains held until an independent buildability review accepts
 the amended bytes; Breadth still follows the complete Tactical landing.
+
+## 2026-08-22 — the final-ten production map is explicit
+
+**What landed:** enumerated the compiled-catalogue delta against tactical-collectors Appendix A.
+Twenty of thirty identities ship; `rules.transition.event.developed@1` is generated from the
+transition family declaration, leaving exactly ten absent ids. Mapped those ten to the accepted
+production homes, existing authorities, identity joins, permanent fixtures and focused landing
+gates in `planning/tactical-collectors/final-ten-implementation-map.md`.
+
+**What changed:** the independent-review hold no longer hides implementation discovery. Once the
+author amendment is accepted, the execution order is state readings, identity-preserving events,
+avoidance generalization, manifest/adapters/exports, measurement and closeout. The map also states
+the dependency chain plainly: final Wave A → breadth collectors → semantic collectors. The final
+semantic wave is ordinary foundation (deflection, clearance, overload and bounded mate evidence),
+not an optional advanced tier.
+
+**Blocked:** production remains held only on the independent buildability review required by the
+RFC status; this planning pass does not waive it.
+
+**Next:** run that independent review, implement the mapped ten, and immediately open the accepted
+breadth collector wave.
