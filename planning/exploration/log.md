@@ -5249,3 +5249,26 @@ return/progression no-rating clauses remain surface-scoped and unchanged.
 period closure, service routes, cohort standings and the learner surface. In parallel dependency
 order, migration 26 is now available to the accepted longitudinal store that powers grounded
 opening, structure, style and habit aggregates without feeding the rating.
+
+## 2026-08-22 — learner-rating service and period checkpoint
+
+**What landed:** calibrated rated-game admission, atomic run/declaration persistence,
+event-driven sealing and voiding, named assistance refusal, period updates, abandonment
+accounting, rating/history routes and the five capability dispositions. A rated game stays
+playable after voiding; only its measurement contribution disappears.
+
+**Verification:** 23 focused server fixtures pass across storage, service, REST and capability
+projection; server typecheck is green. Positive controls include a rules-terminal Fool's Mate
+loss and a twelve-loss period that moves the rating and narrows RD. Negative controls cover an
+off-ladder band, low-material start, wrong engine bytes, fork, engine drift, premature reveal,
+analysis and guidance, double seal, seal-after-void and cross-learner reads.
+
+**What changed:** the backend can now produce a provisional or publishable band-calibrated
+rating without grading a move. No learner UI or cohort computation exists yet, so this remains
+an implementation checkpoint rather than RFC closeout. D974 also repairs the stale capability
+fixture counts exposed by the focused run.
+
+**Blocked/next:** D973 records that `longitudinal-store` is marked accepted while three clauses
+still require answers before implementation. Claude/register owner must reconcile that text;
+meanwhile learner-rating can continue through cohort standings, UI composition and remaining
+acceptance criteria.

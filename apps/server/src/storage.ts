@@ -3,6 +3,8 @@ import { DatabaseSync } from "node:sqlite";
 
 import {
   RuntimeError,
+  glicko2Update,
+  initialRating,
   readBackReplay,
   type DrillRun,
   type DrillRunEvent,
@@ -203,6 +205,94 @@ export interface RepertoireGapRunRecord {
   readonly repertoireId: string;
   readonly gapKey: string;
   readonly createdAt: string;
+}
+
+export type RatedGameState = "open" | "sealed" | "voided";
+export type RatedGameVoidReason =
+  | "rewound"
+  | "forked"
+  | "assistance"
+  | "engine_changed"
+  | "calibration_retired"
+  | "abandoned";
+export type RatedGameResult = "win" | "loss" | "draw";
+export type RatedGameTerminalReason =
+  | "checkmate"
+  | "stalemate"
+  | "insufficient_material"
+  | "fifty_move"
+  | "threefold";
+
+export interface RatedGameRecord {
+  readonly runId: string;
+  readonly learnerId: string;
+  readonly calibrationId: string;
+  readonly opponentBand: number;
+  readonly opponentRating: number;
+  readonly opponentRd: number;
+  readonly learnerSide: "white" | "black";
+  readonly startPieceCount: number;
+  readonly engineIdentityDigest: string;
+  readonly state: RatedGameState;
+  readonly voidReason: RatedGameVoidReason | null;
+  readonly result: RatedGameResult | null;
+  readonly terminalReason: RatedGameTerminalReason | null;
+  readonly plyCount: number | null;
+  readonly periodNo: number | null;
+  readonly startedAt: string;
+  readonly sealedAt: string | null;
+}
+
+export interface OpenRatedGameRecord
+  extends Omit<RatedGameRecord, "state" | "voidReason" | "result" | "terminalReason" | "plyCount" | "periodNo" | "sealedAt"> {
+  readonly state: "open";
+}
+
+export interface LearnerRatingRecord {
+  readonly learnerId: string;
+  readonly calibrationId: string;
+  readonly rating: number;
+  readonly rd: number;
+  readonly volatility: number;
+  readonly seedBand: number | null;
+  readonly ratedGames: number;
+  readonly voidedGames: number;
+  readonly abandonedGames: number;
+  readonly periodNo: number;
+  readonly periodStartedAt: string;
+  readonly updatedAt: string;
+}
+
+export interface RatingPeriodRecord {
+  readonly learnerId: string;
+  readonly periodNo: number;
+  readonly calibrationId: string;
+  readonly openedAt: string;
+  readonly closedAt: string | null;
+  readonly games: number;
+  readonly ratingBefore: number;
+  readonly rdBefore: number;
+  readonly volatilityBefore: number;
+  readonly ratingAfter: number | null;
+  readonly rdAfter: number | null;
+  readonly volatilityAfter: number | null;
+}
+
+export interface RatingStorage {
+  createRatedRun(run: DrillRun, lease: LeaseHolder, title: string, game: OpenRatedGameRecord): void;
+  ratedGame(runId: string): RatedGameRecord | undefined;
+  ratedGames(learnerId: string): readonly RatedGameRecord[];
+  learnerRating(learnerId: string): LearnerRatingRecord | undefined;
+  ratingPeriods(learnerId: string): readonly RatingPeriodRecord[];
+  sealRatedGame(input: {
+    readonly runId: string;
+    readonly result: RatedGameResult;
+    readonly terminalReason: RatedGameTerminalReason;
+    readonly plyCount: number;
+    readonly sealedAt: string;
+  }): RatedGameRecord;
+  voidRatedGame(runId: string, reason: RatedGameVoidReason, at: string): RatedGameRecord;
+  expireRatedGames(at: string): readonly RatedGameRecord[];
 }
 
 /** Persistence boundary for run snapshots, identity, grants, and the writer lease. */
@@ -718,7 +808,7 @@ function storageFailure(message: string, cause: unknown): ServerError {
   return new ServerError("STORAGE_FAILURE", message, { cause });
 }
 
-export class SQLiteRunStorage implements RunStorage, ProgressStorage, LiveSessionStorage, ClassroomStorage {
+export class SQLiteRunStorage implements RunStorage, ProgressStorage, LiveSessionStorage, ClassroomStorage, RatingStorage {
   readonly #database: DatabaseSync;
   readonly #snapshots = new Map<string, StoredRun>();
   readonly #now: () => string;
@@ -794,6 +884,236 @@ export class SQLiteRunStorage implements RunStorage, ProgressStorage, LiveSessio
       }
       throw storageFailure("Could not create run", error);
     }
+  }
+
+  createRatedRun(run: DrillRun, lease: LeaseHolder, title: string, game: OpenRatedGameRecord): void {
+    if (game.runId !== run.id || game.learnerId !== lease.learnerId || game.state !== "open") {
+      throw new ServerError("INVALID_REQUEST", "Rated-game declaration does not match its run owner");
+    }
+    const updatedAt = this.#now();
+    try {
+      this.#database.exec("BEGIN IMMEDIATE");
+      this.#database.prepare(`INSERT INTO drill_runs
+        (id,snapshot_json,active_writer_id,updated_at,summary_json,owner_learner_id,active_writer_learner_id,schema_version)
+        VALUES (?,?,?,?,?,?,?,?)`).run(
+          run.id, JSON.stringify(run), lease.writerId, updatedAt,
+          JSON.stringify(summaryFields(run, title, updatedAt)), lease.learnerId,
+          lease.learnerId, run.schemaVersion,
+        );
+      this.#database.prepare(`INSERT INTO run_grants
+        (run_id,learner_id,role,granted_at,expires_at,granted_via)
+        VALUES (?,?,'host',?,NULL,NULL)`).run(run.id, lease.learnerId, updatedAt);
+      this.#database.prepare(`INSERT INTO rated_games
+        (run_id,learner_id,calibration_id,opponent_band,opponent_rating,opponent_rd,
+         learner_side,start_piece_count,engine_identity_digest,state,started_at)
+        VALUES (?,?,?,?,?,?,?,?,?,'open',?)`).run(
+          game.runId, game.learnerId, game.calibrationId, game.opponentBand,
+          game.opponentRating, game.opponentRd, game.learnerSide,
+          game.startPieceCount, game.engineIdentityDigest, game.startedAt,
+        );
+      const initial = initialRating();
+      const createdRating = this.#database.prepare(`INSERT OR IGNORE INTO learner_ratings
+        (learner_id,calibration_id,rating,rd,volatility,seed_band,rated_games,voided_games,
+         abandoned_games,period_no,period_started_at,updated_at)
+        VALUES (?,?,?,?,?,NULL,0,0,0,0,?,?)`).run(
+          game.learnerId, game.calibrationId, initial.rating, initial.rd,
+          initial.volatility, game.startedAt, game.startedAt,
+        );
+      if (createdRating.changes === 1) {
+        this.#database.prepare(`INSERT INTO rating_periods
+          (learner_id,period_no,calibration_id,opened_at,closed_at,games,
+           rating_before,rd_before,volatility_before,rating_after,rd_after,volatility_after)
+          VALUES (?,0,?,?,NULL,0,?,?,?,NULL,NULL,NULL)`).run(
+            game.learnerId, game.calibrationId, game.startedAt,
+            initial.rating, initial.rd, initial.volatility,
+          );
+      }
+      this.#database.exec("COMMIT");
+      this.#snapshots.set(run.id, Object.freeze({
+        run,
+        activeWriterId: lease.writerId,
+        activeWriterLearnerId: lease.learnerId,
+      }));
+    } catch (error) {
+      this.#rollback();
+      if (error instanceof Error && error.message.includes("UNIQUE constraint failed")) {
+        throw new ServerError("RUN_ALREADY_EXISTS", `Run already exists: ${run.id}`, { cause: error });
+      }
+      throw storageFailure("Could not create rated run", error);
+    }
+  }
+
+  ratedGame(runId: string): RatedGameRecord | undefined {
+    const row = this.#database.prepare("SELECT * FROM rated_games WHERE run_id = ?").get(runId) as Record<string, unknown> | undefined;
+    return row === undefined ? undefined : this.#ratedGameRecord(row);
+  }
+
+  ratedGames(learnerId: string): readonly RatedGameRecord[] {
+    const rows = this.#database.prepare(
+      "SELECT * FROM rated_games WHERE learner_id = ? ORDER BY started_at, run_id",
+    ).all(learnerId) as readonly Record<string, unknown>[];
+    return Object.freeze(rows.map((row) => this.#ratedGameRecord(row)));
+  }
+
+  learnerRating(learnerId: string): LearnerRatingRecord | undefined {
+    const row = this.#database.prepare("SELECT * FROM learner_ratings WHERE learner_id = ?").get(learnerId) as Record<string, unknown> | undefined;
+    if (row === undefined) return undefined;
+    return Object.freeze({
+      learnerId: String(row.learner_id), calibrationId: String(row.calibration_id),
+      rating: Number(row.rating), rd: Number(row.rd), volatility: Number(row.volatility),
+      seedBand: row.seed_band === null ? null : Number(row.seed_band),
+      ratedGames: Number(row.rated_games), voidedGames: Number(row.voided_games),
+      abandonedGames: Number(row.abandoned_games), periodNo: Number(row.period_no),
+      periodStartedAt: String(row.period_started_at), updatedAt: String(row.updated_at),
+    });
+  }
+
+  ratingPeriods(learnerId: string): readonly RatingPeriodRecord[] {
+    const rows = this.#database.prepare(
+      "SELECT * FROM rating_periods WHERE learner_id = ? ORDER BY period_no",
+    ).all(learnerId) as readonly Record<string, unknown>[];
+    return Object.freeze(rows.map((row) => Object.freeze({
+      learnerId: String(row.learner_id), periodNo: Number(row.period_no),
+      calibrationId: String(row.calibration_id), openedAt: String(row.opened_at),
+      closedAt: row.closed_at === null ? null : String(row.closed_at), games: Number(row.games),
+      ratingBefore: Number(row.rating_before), rdBefore: Number(row.rd_before),
+      volatilityBefore: Number(row.volatility_before),
+      ratingAfter: row.rating_after === null ? null : Number(row.rating_after),
+      rdAfter: row.rd_after === null ? null : Number(row.rd_after),
+      volatilityAfter: row.volatility_after === null ? null : Number(row.volatility_after),
+    })));
+  }
+
+  sealRatedGame(input: {
+    readonly runId: string;
+    readonly result: RatedGameResult;
+    readonly terminalReason: RatedGameTerminalReason;
+    readonly plyCount: number;
+    readonly sealedAt: string;
+  }): RatedGameRecord {
+    if (!Number.isSafeInteger(input.plyCount) || input.plyCount < 1) {
+      throw new ServerError("INVALID_REQUEST", "A sealed rated game requires a positive ply count");
+    }
+    const existing = this.ratedGame(input.runId);
+    if (existing === undefined) throw new ServerError("RUN_NOT_FOUND", `Unknown rated game: ${input.runId}`);
+    if (existing.state !== "open") {
+      if (existing.state === "sealed" && existing.result === input.result && existing.terminalReason === input.terminalReason && existing.plyCount === input.plyCount && existing.sealedAt === input.sealedAt) return existing;
+      throw new ServerError("RATED_GAME_CLOSED", "Rated game is already sealed or voided");
+    }
+    const state = this.learnerRating(existing.learnerId);
+    if (state === undefined) throw new ServerError("STORAGE_FAILURE", "Rated game has no learner rating state");
+    try {
+      this.#database.exec("BEGIN IMMEDIATE");
+      const updated = this.#database.prepare(`UPDATE rated_games
+        SET state='sealed',void_reason=NULL,result=?,terminal_reason=?,ply_count=?,period_no=?,sealed_at=?
+        WHERE run_id=? AND state='open'`).run(
+          input.result, input.terminalReason, input.plyCount, state.periodNo,
+          input.sealedAt, input.runId,
+        );
+      if (updated.changes !== 1) throw new ServerError("RATED_GAME_CLOSED", "Rated game closed during projection");
+      this.#database.prepare(`UPDATE rating_periods SET games=games+1
+        WHERE learner_id=? AND period_no=? AND closed_at IS NULL`).run(existing.learnerId, state.periodNo);
+      this.#database.prepare(`UPDATE learner_ratings SET rated_games=rated_games+1,updated_at=?
+        WHERE learner_id=?`).run(input.sealedAt, existing.learnerId);
+
+      const period = this.#database.prepare(`SELECT * FROM rating_periods
+        WHERE learner_id=? AND period_no=?`).get(existing.learnerId, state.periodNo) as Record<string, unknown> | undefined;
+      if (period === undefined) throw new ServerError("STORAGE_FAILURE", "Current rating period is missing");
+      const elapsed = Date.parse(input.sealedAt) - Date.parse(String(period.opened_at));
+      const closes = Number(period.games) >= 12 || (Number(period.games) >= 1 && elapsed >= 7 * 24 * 60 * 60 * 1000);
+      if (closes) {
+        const games = this.#database.prepare(`SELECT opponent_rating,opponent_rd,result FROM rated_games
+          WHERE learner_id=? AND period_no=? AND state='sealed' ORDER BY sealed_at,run_id`).all(
+            existing.learnerId, state.periodNo,
+          ) as unknown as readonly { readonly opponent_rating: number; readonly opponent_rd: number; readonly result: RatedGameResult }[];
+        const next = glicko2Update(state, games.map((game) => ({
+          opponentRating: Number(game.opponent_rating),
+          opponentRd: Number(game.opponent_rd),
+          score: game.result === "win" ? 1 as const : game.result === "draw" ? 0.5 as const : 0 as const,
+        })));
+        const nextPeriod = state.periodNo + 1;
+        this.#database.prepare(`UPDATE rating_periods
+          SET closed_at=?,rating_after=?,rd_after=?,volatility_after=?
+          WHERE learner_id=? AND period_no=?`).run(
+            input.sealedAt, next.rating, next.rd, next.volatility,
+            existing.learnerId, state.periodNo,
+          );
+        this.#database.prepare(`UPDATE learner_ratings
+          SET rating=?,rd=?,volatility=?,period_no=?,period_started_at=?,updated_at=?
+          WHERE learner_id=?`).run(
+            next.rating, next.rd, next.volatility, nextPeriod, input.sealedAt,
+            input.sealedAt, existing.learnerId,
+          );
+        this.#database.prepare(`INSERT INTO rating_periods
+          (learner_id,period_no,calibration_id,opened_at,closed_at,games,
+           rating_before,rd_before,volatility_before,rating_after,rd_after,volatility_after)
+          VALUES (?,?,?,?,NULL,0,?,?,?,NULL,NULL,NULL)`).run(
+            existing.learnerId, nextPeriod, state.calibrationId, input.sealedAt,
+            next.rating, next.rd, next.volatility,
+          );
+      }
+      this.#database.exec("COMMIT");
+      return this.ratedGame(input.runId)!;
+    } catch (error) {
+      this.#rollback();
+      if (error instanceof ServerError) throw error;
+      throw storageFailure("Could not seal rated game", error);
+    }
+  }
+
+  voidRatedGame(runId: string, reason: RatedGameVoidReason, at: string): RatedGameRecord {
+    const existing = this.ratedGame(runId);
+    if (existing === undefined) throw new ServerError("RUN_NOT_FOUND", `Unknown rated game: ${runId}`);
+    if (existing.state !== "open") {
+      if (existing.state === "voided" && existing.voidReason === reason) return existing;
+      throw new ServerError("RATED_GAME_CLOSED", "Rated game is already sealed or voided");
+    }
+    try {
+      this.#database.exec("BEGIN IMMEDIATE");
+      this.#database.prepare(`UPDATE rated_games
+        SET state='voided',void_reason=?,result=NULL,terminal_reason=NULL,ply_count=NULL,sealed_at=?
+        WHERE run_id=? AND state='open'`).run(reason, at, runId);
+      this.#database.prepare(`UPDATE learner_ratings
+        SET voided_games=voided_games+1,
+            abandoned_games=abandoned_games+CASE WHEN ?='abandoned' THEN 1 ELSE 0 END,
+            updated_at=? WHERE learner_id=?`).run(reason, at, existing.learnerId);
+      this.#database.exec("COMMIT");
+      return this.ratedGame(runId)!;
+    } catch (error) {
+      this.#rollback();
+      throw storageFailure("Could not void rated game", error);
+    }
+  }
+
+  expireRatedGames(at: string): readonly RatedGameRecord[] {
+    const timestamp = Date.parse(at);
+    if (!Number.isFinite(timestamp)) throw new ServerError("INVALID_REQUEST", "Rating expiry requires an ISO timestamp");
+    const cutoff = new Date(timestamp - 30 * 24 * 60 * 60 * 1000).toISOString();
+    const rows = this.#database.prepare(`SELECT run_id FROM rated_games
+      WHERE state='open' AND started_at<=? ORDER BY started_at,run_id`).all(cutoff) as unknown as readonly { readonly run_id: string }[];
+    return Object.freeze(rows.map((row) => this.voidRatedGame(String(row.run_id), "abandoned", at)));
+  }
+
+  #ratedGameRecord(row: Record<string, unknown>): RatedGameRecord {
+    return Object.freeze({
+      runId: String(row.run_id),
+      learnerId: String(row.learner_id),
+      calibrationId: String(row.calibration_id),
+      opponentBand: Number(row.opponent_band),
+      opponentRating: Number(row.opponent_rating),
+      opponentRd: Number(row.opponent_rd),
+      learnerSide: row.learner_side as "white" | "black",
+      startPieceCount: Number(row.start_piece_count),
+      engineIdentityDigest: String(row.engine_identity_digest),
+      state: row.state as RatedGameState,
+      voidReason: row.void_reason === null ? null : row.void_reason as RatedGameVoidReason,
+      result: row.result === null ? null : row.result as RatedGameResult,
+      terminalReason: row.terminal_reason === null ? null : row.terminal_reason as RatedGameTerminalReason,
+      plyCount: row.ply_count === null ? null : Number(row.ply_count),
+      periodNo: row.period_no === null ? null : Number(row.period_no),
+      startedAt: String(row.started_at),
+      sealedAt: row.sealed_at === null ? null : String(row.sealed_at),
+    });
   }
 
   read(runId: string): StoredRun | undefined {

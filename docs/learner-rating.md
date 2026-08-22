@@ -16,7 +16,14 @@ SQLite migration 25 creates `learner_ratings`, `rated_games`, `rating_periods`,
 `cohort_standings`, `standing_members`, and `learner_marks`. The migration is additive and does
 not backfill historical games or manufacture historical ratings.
 
-This is an implementation checkpoint, not a live product claim. No rated-game writer, event
-projector, rating route, cohort calculation, or learner-facing rating screen exists yet, so the
-application currently produces and displays no learner rating. Ratings will be selection input
-only; they must never alter evidence rendering, return recommendations, or milestones.
+The server now creates a position run and its open rated-game declaration atomically. Only the
+four measured rungs and starts with at least 21 pieces are admitted, and the live Maia identity
+must match the calibration. Rewind, fork, or engine-identity drift voids the rating contribution
+without deleting the playable run; only a rules-terminal outcome seals it. Server-routed
+guidance, reveal, and analysis remain withheld while the game is open.
+
+Rating periods close after 12 sealed games or after seven days with at least one. The server
+publishes only the abstention-shaped result through `/rating`, with history at
+`/rating/history`; an unplayed prior produces no displayed rating. There is still no
+learner-facing rating screen or cohort-standing calculation. Ratings remain selection input
+only and must never alter evidence rendering, return recommendations, or milestones.

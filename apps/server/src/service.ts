@@ -34,6 +34,10 @@ import {
   storyMoments,
   reviewStoryTitle,
   trajectoryPolicyAt,
+  RATED_OPPONENT_CALIBRATION,
+  RATING_DISCLOSURES,
+  publishRating,
+  ratedOpponentRung,
   shapeFirings,
   type BranchComparison,
   type Decidedness,
@@ -87,6 +91,7 @@ import {
 } from "./pack-registry.js";
 import type { ImportedGameRecord, PublicTokenRecord, RepertoireGapRunRecord, RunDerivation, RunStorage, RunSummary, StoredRun } from "./storage.js";
 import type { ProgressStorage, ScheduleRow, StoredAttempt } from "./storage.js";
+import type { RatingStorage, RatedGameTerminalReason } from "./storage.js";
 import {
   projectAttempts,
   rootKey as progressRootKey,
@@ -232,6 +237,17 @@ function terminalPosition(fen: string): boolean {
   return position.isEnd() || position.halfmoves >= 100;
 }
 
+function ratedTerminalReason(run: DrillRun, nodeId: string): RatedGameTerminalReason {
+  const node = run.nodes.find((candidate) => candidate.id === nodeId);
+  if (node === undefined) throw new ServerError("STORAGE_FAILURE", "Rated outcome references a missing node");
+  const position = Chess.fromSetup(parseFen(node.fen).unwrap()).unwrap();
+  if (position.isCheckmate()) return "checkmate";
+  if (position.isStalemate()) return "stalemate";
+  if (position.isInsufficientMaterial()) return "insufficient_material";
+  if (position.halfmoves >= 100) return "fifty_move";
+  return "threefold";
+}
+
 function seedMoveSan(fen: string, uci: string): string {
   const position = Chess.fromSetup(parseFen(fen).unwrap()).unwrap();
   const move = parseUci(uci);
@@ -297,12 +313,23 @@ export interface ImportGameRequest {
   readonly createdAt?: string;
 }
 
+export interface CreateRatedGameRequest {
+  readonly id: string;
+  readonly start: { readonly fen: string };
+  readonly side: "white" | "black";
+  readonly band: number;
+  readonly policyConfig: CreateRunInput["policyConfig"];
+  readonly seed: number;
+  readonly createdAt?: string;
+}
+
 export class RunService {
   readonly #storage: RunStorage;
   readonly #evidenceQueue: EvidenceJobQueue | undefined;
   readonly #packRegistry: PackRegistry | undefined;
   readonly #evidenceMovetimeMs: number;
   readonly #progress: ProgressStorage | undefined;
+  readonly #rating: RatingStorage | undefined;
   readonly #opponentSelector: OpponentSelector | undefined;
   readonly #importFetch: typeof fetch;
   readonly #shapes: ShapeRegistry | undefined;
@@ -323,6 +350,7 @@ export class RunService {
       readonly packRegistry?: PackRegistry;
       readonly evidenceMovetimeMs?: number;
       readonly progressStorage?: ProgressStorage;
+      readonly ratingStorage?: RatingStorage;
       readonly opponentSelector?: OpponentSelector;
       readonly importFetch?: typeof fetch;
       readonly shapeRegistry?: ShapeRegistry;
@@ -333,6 +361,11 @@ export class RunService {
     this.#evidenceQueue = options.evidenceQueue;
     this.#packRegistry = options.packRegistry;
     this.#progress = options.progressStorage;
+    this.#rating = options.ratingStorage ?? (
+      "createRatedRun" in storage && "ratedGame" in storage
+        ? storage as RunStorage & RatingStorage
+        : undefined
+    );
     this.#opponentSelector = options.opponentSelector;
     this.#importFetch = options.importFetch ?? fetch;
     this.#shapes = options.shapeRegistry;
@@ -494,6 +527,109 @@ export class RunService {
       this.#progress?.markScheduleStarted(input.intent.scheduleId, lease.learnerId, run.id);
     }
     return run;
+  }
+
+  async createRatedGame(input: CreateRatedGameRequest, leaseInput: LeaseHolder | string): Promise<DrillRun> {
+    const lease = this.#lease(leaseInput);
+    if (lease.learnerId === "__legacy") this.#principal("legacy-rated-game");
+    const rating = this.#rating;
+    if (rating === undefined || this.#opponentSelector === undefined) {
+      throw new ServerError("RATING_OPPONENT_UNCALIBRATED", "The calibrated rated opponent is unavailable");
+    }
+    rating.expireRatedGames(input.createdAt ?? new Date().toISOString());
+    const rung = ratedOpponentRung(input.band);
+    if (rung === undefined) {
+      throw new ServerError("RATING_BAND_NOT_ON_LADDER", `Band ${input.band} is not a measured rated-opponent rung`);
+    }
+    const pieceCount = countFenPieces(input.start.fen);
+    if (pieceCount < RATED_OPPONENT_CALIBRATION.minStartPieceCount) {
+      throw new ServerError("RATING_MATERIAL_OUT_OF_RANGE", "Rated games require at least 21 pieces at the start");
+    }
+    let identity: import("@chess-tabiya/runtime").SelectionEngineIdentity;
+    try {
+      this.#opponentSelector.validatePolicy({ mode: "human_common", targetElo: rung.band });
+      identity = this.#opponentSelector.identityFor("human_common", rung.band);
+    } catch (cause) {
+      throw new ServerError("RATING_OPPONENT_UNCALIBRATED", "The calibrated rated opponent handshake failed", { cause });
+    }
+    if (
+      identity.id !== RATED_OPPONENT_CALIBRATION.engine.id ||
+      identity.modelId !== RATED_OPPONENT_CALIBRATION.engine.modelId ||
+      identity.containerDigest !== RATED_OPPONENT_CALIBRATION.engine.containerDigest ||
+      identity.eloHonored !== true ||
+      identity.eloApplied !== rung.band
+    ) {
+      throw new ServerError("RATING_OPPONENT_UNCALIBRATED", "The live opponent identity does not match the measured calibration");
+    }
+    const startedAt = input.createdAt ?? new Date().toISOString();
+    const session = {
+      kind: "position" as const,
+      start: canonicalRunStart({ fen: input.start.fen, side: input.side }),
+      feedbackPolicy: "attempt_end" as const,
+      opponentPolicy: { mode: "human_common" as const, targetElo: rung.band },
+    };
+    let run: DrillRun;
+    try {
+      run = createRun({
+        id: input.id,
+        session,
+        sessionDigest: await digestSessionSource(session),
+        policyConfig: input.policyConfig,
+        seed: input.seed,
+        createdAt: startedAt,
+      });
+    } catch (cause) {
+      throw new ServerError("INVALID_REQUEST", "Rated-game definition is invalid", { cause });
+    }
+    rating.createRatedRun(run, lease, "Rated game", Object.freeze({
+      runId: run.id,
+      learnerId: lease.learnerId,
+      calibrationId: RATED_OPPONENT_CALIBRATION.id,
+      opponentBand: rung.band,
+      opponentRating: rung.rating,
+      opponentRd: rung.rd,
+      learnerSide: input.side,
+      startPieceCount: pieceCount,
+      engineIdentityDigest: RATED_OPPONENT_CALIBRATION.engine.containerDigest,
+      state: "open",
+      startedAt,
+    }));
+    this.#project(run, lease.learnerId, { [run.branches[0]!.id]: { origin: "fresh" } });
+    return run;
+  }
+
+  rating(principal: Principal) {
+    const storage = this.#rating;
+    if (storage === undefined) throw new ServerError("STORAGE_FAILURE", "Rating storage is not configured");
+    const state = storage.learnerRating(principal.learnerId);
+    if (state === undefined) return Object.freeze({ rating: null, disclosures: RATING_DISCLOSURES });
+    const closed = [...storage.ratingPeriods(principal.learnerId)].reverse().find((period) => period.closedAt !== null);
+    const periodGames = closed === undefined
+      ? []
+      : storage.ratedGames(principal.learnerId).filter((game) => game.periodNo === closed.periodNo && game.state === "sealed");
+    const saturated = periodGames.length > 0 && periodGames.every((game) =>
+      (game.opponentBand === 1000 || game.opponentBand === 2200) && game.result === periodGames[0]!.result,
+    ) && (periodGames[0]!.result === "win" || periodGames[0]!.result === "loss");
+    return Object.freeze({
+      rating: publishRating(state, { scoreSaturated: saturated }),
+      internal: Object.freeze({ calibrationId: state.calibrationId, periodNo: state.periodNo }),
+      disclosures: RATING_DISCLOSURES,
+    });
+  }
+
+  ratingHistory(principal: Principal) {
+    const storage = this.#rating;
+    if (storage === undefined) throw new ServerError("STORAGE_FAILURE", "Rating storage is not configured");
+    return Object.freeze({
+      periods: storage.ratingPeriods(principal.learnerId),
+      games: storage.ratedGames(principal.learnerId).filter((game) => game.state !== "open"),
+    });
+  }
+
+  expireRatedGames(at = new Date().toISOString()) {
+    const storage = this.#rating;
+    if (storage === undefined) throw new ServerError("STORAGE_FAILURE", "Rating storage is not configured");
+    return storage.expireRatedGames(at);
   }
 
   async importGame(
@@ -791,6 +927,7 @@ export class RunService {
   }
 
   guidanceAccess(runId: string, principal: Principal, nodeId: string): GuidanceAccess {
+    this.#refuseRatedAssistance(runId);
     const { stored, role } = requireRead(this.#storage, runId, principal);
     const run = stored.run;
     const node = run.nodes.find((candidate) => candidate.id === nodeId);
@@ -1173,6 +1310,7 @@ export class RunService {
       readonly movetime?: number;
     },
   ): readonly EvidenceJob[] {
+    this.#refuseRatedAssistance(runId);
     this.#forWrite(runId, principal, writerId);
     if (input.nodeIds.length < 1 || input.nodeIds.length > 16 || new Set(input.nodeIds).size !== input.nodeIds.length) {
       throw new ServerError("INVALID_REQUEST", "analysis requires 1-16 distinct node ids");
@@ -1558,6 +1696,7 @@ export class RunService {
     const principal = this.#principal(principalOrWriter);
     const writerId = typeof principalOrWriter === "string" ? principalOrWriter : writerOrAt!;
     const at = typeof principalOrWriter === "string" ? writerOrAt : maybeAt;
+    this.#refuseRatedAssistance(runId);
     const { stored, lease } = this.#forWrite(runId, principal, writerId);
     this.#refuseWhileMatchLive(runId,stored.run);
     if (stored.run.feedbackPolicy !== "attempt_end") {
@@ -1781,19 +1920,66 @@ export class RunService {
     learnerId: string,
     origins?: Readonly<Record<string, AttemptOriginInput>>,
   ): void {
-    if (this.#progress === undefined) return;
-    const pack = this.#registeredPack(run)?.document;
-    const projection = projectAttempts({
-      run,
-      learnerId,
-      ...(pack === undefined ? {} : { pack }),
-      ...(pack === undefined ? {} : { resolvePlanSignature: planSignatureResolver(pack, this.#shapes) }),
-      ...(origins === undefined ? {} : { origins }),
+    if (this.#progress !== undefined) {
+      const pack = this.#registeredPack(run)?.document;
+      const projection = projectAttempts({
+        run,
+        learnerId,
+        ...(pack === undefined ? {} : { pack }),
+        ...(pack === undefined ? {} : { resolvePlanSignature: planSignatureResolver(pack, this.#shapes) }),
+        ...(origins === undefined ? {} : { origins }),
+      });
+      const match=this.#matchContext(run.id);
+      const primary=run.branches[0]?.id;
+      const attempts=match===undefined||primary===undefined?projection.attempts:Object.freeze(projection.attempts.map((attempt)=>attempt.branchId===primary?Object.freeze({...attempt,countable:false}):attempt));
+      this.#progress.upsertAttempts(attempts, projection.conceptTags);
+    }
+    this.#projectRatedGame(run);
+  }
+
+  #projectRatedGame(run: DrillRun): void {
+    const rating = this.#rating;
+    const game = rating?.ratedGame(run.id);
+    if (rating === undefined || game?.state !== "open") return;
+    const rewound = run.events.find((event) => event.type === "run.rewound");
+    if (rewound !== undefined) {
+      rating.voidRatedGame(run.id, "rewound", rewound.at);
+      return;
+    }
+    const forked = run.events.find((event) => event.type === "branch.forked");
+    if (run.branches.length !== 1 || forked !== undefined) {
+      rating.voidRatedGame(run.id, "forked", forked?.at ?? new Date().toISOString());
+      return;
+    }
+    const engineChanged = run.events.find((event) => {
+      if (event.type !== "opponent.move_selected") return false;
+      const engine = event.data.selection.engine;
+      return engine.id !== RATED_OPPONENT_CALIBRATION.engine.id ||
+        engine.modelId !== RATED_OPPONENT_CALIBRATION.engine.modelId ||
+        engine.containerDigest !== game.engineIdentityDigest ||
+        engine.eloHonored !== true || engine.eloApplied !== game.opponentBand;
     });
-    const match=this.#matchContext(run.id);
-    const primary=run.branches[0]?.id;
-    const attempts=match===undefined||primary===undefined?projection.attempts:Object.freeze(projection.attempts.map((attempt)=>attempt.branchId===primary?Object.freeze({...attempt,countable:false}):attempt));
-    this.#progress.upsertAttempts(attempts, projection.conceptTags);
+    if (engineChanged !== undefined) {
+      rating.voidRatedGame(run.id, "engine_changed", engineChanged.at);
+      return;
+    }
+    const outcome = run.events.find((event) => event.type === "outcome.reached");
+    if (outcome?.type !== "outcome.reached") return;
+    const node = run.nodes.find((candidate) => candidate.id === outcome.data.nodeId);
+    if (node === undefined) throw new ServerError("STORAGE_FAILURE", "Rated outcome references a missing node");
+    rating.sealRatedGame({
+      runId: run.id,
+      result: outcome.data.outcome,
+      terminalReason: ratedTerminalReason(run, node.id),
+      plyCount: node.ply,
+      sealedAt: outcome.at,
+    });
+  }
+
+  #refuseRatedAssistance(runId: string): void {
+    if (this.#rating?.ratedGame(runId)?.state === "open") {
+      throw new ServerError("ASSISTANCE_WITHHELD", "Server-routed assistance is withheld until the rated game ends");
+    }
   }
 
   #principal(value: Principal | string): Principal {

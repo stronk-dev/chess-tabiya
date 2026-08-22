@@ -35,6 +35,7 @@ import {
 } from "./opponent-selector.js";
 import {
   RunService,
+  type CreateRatedGameRequest,
   type CreateRunRequest,
   type GuidanceAccess,
   type ImportGameRequest,
@@ -473,6 +474,22 @@ function parseCreateInput(value: Record<string, unknown>): CreateRunRequest {
       ? {}
       : { createdAt: requiredString(value.createdAt, "createdAt") }),
     ...(intent === undefined ? {} : { intent }),
+  };
+}
+
+function parseCreateRatedGameInput(value: Record<string, unknown>): CreateRatedGameRequest {
+  value = closedRecord(value, "/", ["id", "start", "side", "band", "policyConfig", "seed", "createdAt"]);
+  const start = closedRecord(value.start, "/start", ["fen"]);
+  const side = requiredString(value.side, "side");
+  if (side !== "white" && side !== "black") throw invalid("side must be white or black");
+  return {
+    id: requiredString(value.id, "id"),
+    start: { fen: requiredString(start.fen, "start.fen") },
+    side,
+    band: requiredSafeInteger(value.band, "band"),
+    policyConfig: parsePolicyConfig(value.policyConfig),
+    seed: requiredSafeInteger(value.seed, "seed"),
+    ...(value.createdAt === undefined ? {} : { createdAt: requiredString(value.createdAt, "createdAt") }),
   };
 }
 
@@ -1053,6 +1070,20 @@ export function createRestHandler(
           { writerId: writerId(request), learnerId: principal.learnerId },
         );
         return json(201, { run });
+      }
+      if (request.method === "POST" && url.pathname === "/rated-games") {
+        const principal = authenticate();
+        const run = await service.createRatedGame(
+          parseCreateRatedGameInput(await parseBody(request)),
+          { writerId: writerId(request), learnerId: principal.learnerId },
+        );
+        return json(201, { run });
+      }
+      if (request.method === "GET" && url.pathname === "/rating/history") {
+        return json(200, service.ratingHistory(authenticate()));
+      }
+      if (request.method === "GET" && url.pathname === "/rating") {
+        return json(200, service.rating(authenticate()));
       }
       if (request.method === "POST" && url.pathname === "/runs/import") {
         const principal = authenticate();
