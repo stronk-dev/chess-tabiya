@@ -11,6 +11,8 @@ import { vacationReading } from "./structure.js";
 const PROMOTIONS: readonly Role[] = Object.freeze(["queen", "rook", "bishop", "knight"]);
 export const THREAT_CONVENTION = "threat@1" as const;
 export const REPLY_HORIZON = "1 reply" as const;
+export const TRAPPED_CONVENTION = "trapped@1" as const;
+export const BACK_RANK_CONVENTION = "back_rank_susceptible@1" as const;
 
 export interface LoosePieceReading {
   readonly fen: string;
@@ -71,6 +73,133 @@ export function loosePieceReading(fen: string): LoosePieceReading {
     sideToMove: position.turn,
     pieces: Object.freeze(pieces.sort((a, b) => a.piece.square.localeCompare(b.piece.square))),
   });
+}
+
+export type TrappedPieceReading =
+  | { readonly kind: "abstained"; readonly reason: "trapped_while_in_check"; readonly conventionId: typeof TRAPPED_CONVENTION; readonly pieces: readonly [] }
+  | { readonly kind: "pieces"; readonly fen: string; readonly sideToMove: Color; readonly conventionId: typeof TRAPPED_CONVENTION; readonly pieces: readonly TrappedPieceState[] };
+
+export interface TrappedPieceState {
+  readonly piece: { readonly square: SquareName; readonly occupant: Piece };
+  readonly attackers: readonly { readonly moveUci: string; readonly exchange: LegalExchangeResult }[];
+  readonly moves: readonly {
+    readonly moveUci: string;
+    readonly kind: "capture" | "quiet";
+    readonly losing: boolean;
+    readonly exchange?: LegalExchangeResult;
+    readonly opponentCaptures?: readonly { readonly moveUci: string; readonly exchange: LegalExchangeResult }[];
+  }[];
+}
+
+export function trappedPieceReading(fen: string): TrappedPieceReading {
+  const position = positionFromFen(fen);
+  if (position.isCheck()) return Object.freeze({ kind: "abstained", reason: "trapped_while_in_check", conventionId: TRAPPED_CONVENTION, pieces: Object.freeze([] as const) });
+  const owner = position.turn;
+  const opponentTurn = position.clone();
+  opponentTurn.turn = opposite(owner);
+  opponentTurn.epSquare = undefined;
+  const pieces: TrappedPieceState[] = [];
+  for (const square of position.board[owner]) {
+    const occupant = position.board.get(square)!;
+    if (occupant.role === "pawn" || occupant.role === "king") continue;
+    const attackers = legalCaptureMovesTo(opponentTurn, square).flatMap((move) => {
+      const exchange = legalExchangeForMove(opponentTurn, move);
+      return exchange === undefined ? [] : [{ moveUci: makeUci(move), exchange }];
+    });
+    if (!attackers.some((value) => value.exchange.resultUnits > 0)) continue;
+    const moves = legalMoves(position).filter((move) => move.from === square).map((move): TrappedPieceState["moves"][number] => {
+      const moveUci = makeUci(move);
+      const exchange = legalExchangeForMove(position, move);
+      if (exchange !== undefined) return Object.freeze({ moveUci, kind: "capture", losing: exchange.resultUnits < 0, exchange });
+      const next = position.clone();
+      next.play(move);
+      const opponentCaptures = legalCaptureMovesTo(next, move.to).flatMap((reply) => {
+        const replyExchange = legalExchangeForMove(next, reply);
+        return replyExchange === undefined ? [] : [{ moveUci: makeUci(reply), exchange: replyExchange }];
+      });
+      return Object.freeze({
+        moveUci,
+        kind: "quiet",
+        losing: opponentCaptures.some((value) => value.exchange.resultUnits > 0),
+        opponentCaptures: Object.freeze(opponentCaptures.sort((a, b) => a.moveUci.localeCompare(b.moveUci))),
+      });
+    });
+    if (moves.some((move) => !move.losing)) continue;
+    pieces.push(Object.freeze({
+      piece: Object.freeze({ square: makeSquare(square), occupant }),
+      attackers: Object.freeze(attackers.sort((a, b) => a.moveUci.localeCompare(b.moveUci))),
+      moves: Object.freeze(moves.sort((a, b) => a.moveUci.localeCompare(b.moveUci))),
+    }));
+  }
+  return Object.freeze({ kind: "pieces", fen: canonicalFen(position), sideToMove: owner, conventionId: TRAPPED_CONVENTION, pieces: Object.freeze(pieces.sort((a, b) => a.piece.square.localeCompare(b.piece.square))) });
+}
+
+export interface BackRankReading {
+  readonly fen: string;
+  readonly conventionId: typeof BACK_RANK_CONVENTION;
+  readonly susceptible: readonly {
+    readonly color: Color;
+    readonly kingSquare: SquareName;
+    readonly escapes: readonly {
+      readonly square: SquareName;
+      readonly blockedByOwn?: { readonly square: SquareName; readonly piece: Piece };
+      readonly attackedBy: readonly { readonly square: SquareName; readonly piece: Piece }[];
+    }[];
+    readonly accessingHeavyPieces: readonly {
+      readonly square: SquareName;
+      readonly piece: Piece;
+      readonly mode: "on_back_rank" | "pawn_clear_file";
+      readonly fileTarget: SquareName;
+      readonly path: readonly SquareName[];
+    }[];
+  }[];
+}
+
+export function backRankReading(fen: string): BackRankReading {
+  const position = positionFromFen(fen);
+  const susceptible: BackRankReading["susceptible"][number][] = [];
+  for (const color of ["white", "black"] as const) {
+    const kingSquare = position.board.kingOf(color);
+    const backRank = color === "white" ? 0 : 7;
+    if (kingSquare === undefined || Math.floor(kingSquare / 8) !== backRank) continue;
+    const enemy = opposite(color);
+    const escapes = [...attacks({ color, role: "king" }, kingSquare, position.board.occupied)]
+      .filter((square) => Math.floor(square / 8) !== backRank)
+      .map((square) => {
+        const own = position.board.get(square);
+        const attackedBy = [...position.board[enemy]].flatMap((attackerSquare) => {
+          const piece = position.board.get(attackerSquare)!;
+          return attacks(piece, attackerSquare, position.board.occupied).has(square) ? [{ square: makeSquare(attackerSquare), piece }] : [];
+        });
+        return Object.freeze({
+          square: makeSquare(square),
+          ...(own?.color === color ? { blockedByOwn: Object.freeze({ square: makeSquare(square), piece: own }) } : {}),
+          attackedBy: Object.freeze(attackedBy.sort((a, b) => a.square.localeCompare(b.square))),
+        });
+      });
+    if (escapes.length === 0 || escapes.some((escape) => escape.blockedByOwn === undefined && escape.attackedBy.length === 0)) continue;
+    const accessingHeavyPieces: BackRankReading["susceptible"][number]["accessingHeavyPieces"][number][] = [];
+    for (const square of position.board[enemy]) {
+      const piece = position.board.get(square)!;
+      if (piece.role !== "rook" && piece.role !== "queen") continue;
+      const fileTarget = ((square % 8) + backRank * 8) as Square;
+      if (Math.floor(square / 8) === backRank) {
+        accessingHeavyPieces.push({ square: makeSquare(square), piece, mode: "on_back_rank", fileTarget: makeSquare(fileTarget), path: Object.freeze([] as SquareName[]) });
+        continue;
+      }
+      const path = [...between(square, fileTarget)].map(makeSquare);
+      const pawnBlocked = [...between(square, fileTarget)].some((pathSquare) => position.board.get(pathSquare)?.role === "pawn");
+      if (!pawnBlocked) accessingHeavyPieces.push({ square: makeSquare(square), piece, mode: "pawn_clear_file", fileTarget: makeSquare(fileTarget), path: Object.freeze(path) });
+    }
+    if (accessingHeavyPieces.length === 0) continue;
+    susceptible.push(Object.freeze({
+      color,
+      kingSquare: makeSquare(kingSquare),
+      escapes: Object.freeze(escapes.sort((a, b) => a.square.localeCompare(b.square))),
+      accessingHeavyPieces: Object.freeze(accessingHeavyPieces.sort((a, b) => a.square.localeCompare(b.square))),
+    }));
+  }
+  return Object.freeze({ fen: canonicalFen(position), conventionId: BACK_RANK_CONVENTION, susceptible: Object.freeze(susceptible) });
 }
 
 export type RayClassificationKind = "absolute_pin" | "relative_pin" | "skewer" | "xray_attack" | "xray_defense";

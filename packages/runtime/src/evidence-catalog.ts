@@ -267,6 +267,19 @@ const tacticalOutputs = [
     limitations: ["Latent one-blocker geometry only; it does not claim the screen should move, that every screen move exposes the ray, or that the relation is important."],
     disposition: { kind: "inspector_only", reason: "Identity-retaining latent geometry lands before measured learner and bot eligibility." },
   }),
+  projection("rules.tactic", "rules.tactic.reading.trapped_piece", "rules", {
+    payloadType: "TrappedPieceReading", semantics: "trapped@1: a non-pawn, non-king piece of the side to move is locally trapped only when the opponent-turn clone has a positive legal-exchange@1 capture on its current square and every legal destination is locally losing. Capture destinations use their own exchange result; quiet destinations retain every positive opponent capture after relocation.",
+    operands: ["kind", "conventionId", "pieces"], grounding: "declared_convention", exactness: "convention", answerContent: ["fact", "threat"], forms: ["list", "panel", "lit_squares", "arrows", "piece_halo", "machine_condition"],
+    abstention: { possible: true, reasons: ["trapped_while_in_check"] }, dependsOn: [ref("rules.exchange.predicate.legal_exchange")],
+    limitations: ["Local exchange and legal destinations only; defending moves, intermezzi, compensation, counterattacks and search-derived claims that the piece is lost are outside scope."],
+    disposition: { kind: "inspector_only", reason: "Rare convention state lands before measured module and bot-feature admission." },
+  }),
+  projection("rules.tactic", "rules.tactic.reading.back_rank", "rules", {
+    payloadType: "BackRankReading", semantics: "back_rank_susceptible@1: the king stands on its back rank, every non-back-rank king escape is blocked by an own piece or attacked, and an enemy rook/queen is already on that rank or has a file path to it containing no pawn of either color. Non-pawn path blockers do not suppress the convention state.",
+    operands: ["fen", "conventionId", "susceptible"], grounding: "declared_convention", exactness: "convention", answerContent: ["fact", "threat"], forms: ["list", "panel", "lit_squares", "arrows", "piece_halo", "machine_condition"],
+    limitations: ["Susceptibility is not mate, a move grade or inferred intent. Rank/diagonal approaches and whether an entry square is defended are outside this convention; exact mate-in-one is a separate projection."],
+    disposition: { kind: "inspector_only", reason: "Convention state lands separately from exact mate and before learner-module selection." },
+  }),
   projection("rules.tactic", "rules.tactic.consequence.threat", "rules", {
     role: "reading", payloadType: "ThreatResult", semantics: THREAT_SEMANTICS,
     operands: ["kind", "conventionId", "threats"], signs: ["threatened"], grounding: "declared_convention", exactness: "convention",

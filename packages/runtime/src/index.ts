@@ -37,7 +37,7 @@ export { appendEvents, deriveSegments, eventsSince, groupsFromEvents, projectRun
 export { feedbackDeliveryOpen, feedbackDisclosed } from "./feedback.js";
 export { consumeShapeFiring, declareShapeFiringEvidence, shapeFiringEvidence, shapeFirings, type ShapeFiring, type ShapeTriggerSource } from "./shape-firing.js";
 export { classifyPhase, developmentReading, isDevelopmentHome, renderPhaseReading, DEVELOPMENT_CONVENTION, DEVELOPMENT_HOMES, ENDGAME_MATERIAL_MAX, DEVELOPED_MATERIAL_MIN, OPENING_UNDEVELOPED_MIN, MIDDLEGAME_UNDEVELOPED_MAX, PHASE_PROVENANCE, type DetectedPhase, type DevelopmentReading, type PhaseReading } from "./phase.js";
-export { discoveredLatencyReading, loosePieceReading, mateInOne, rayClassificationReading, type DiscoveredLatencyReading, type LoosePieceReading, type LoosePieceState, type MateInOneReading, type RayClassification, type RayClassificationKind, type RayClassificationReading } from "./tactics.js";
+export { backRankReading, discoveredLatencyReading, loosePieceReading, mateInOne, rayClassificationReading, trappedPieceReading, BACK_RANK_CONVENTION, TRAPPED_CONVENTION, type BackRankReading, type DiscoveredLatencyReading, type LoosePieceReading, type LoosePieceState, type MateInOneReading, type RayClassification, type RayClassificationKind, type RayClassificationReading, type TrappedPieceReading, type TrappedPieceState } from "./tactics.js";
 export { SILENT_ASSISTANCE, permittedAssistance, reviewingGrant, type AssistanceConfig, type AssistanceContext, type AssistancePermission } from "./assistance.js";
 export { consumePivotalMarkers, liveAdmitted, liveMarkers, pivotalMarkerEvidence, pivotalMarkers, renderPivotalMarker, type PivotalKind, type PivotalMarker, type IrreversibilityDetail, type PhaseChangeDetail, type DivergenceDetail, type CollapseDetail } from "./pivotal.js";
 export {
@@ -273,6 +273,8 @@ export {
   declareRayClassificationEvidence,
   declareMateInOneEvidence,
   declareDiscoveredLatencyEvidence,
+  declareTrappedPieceEvidence,
+  declareBackRankEvidence,
   declareCastlingRightsEvidence,
   declareCastlingRightsLostEvidence,
   declareCastlingLegalityEvidence,

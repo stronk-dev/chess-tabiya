@@ -96,3 +96,17 @@ Append-only.
   25 consumers, 182 bindings and 40 semantic events/eligibility rows.
 - Focused verification: 72 affected runtime/server/web tests green; runtime typecheck, manifest
   check, semantic check and diff hygiene green. No repository-wide verification was run.
+
+## 2026-08-22 — trapped and back-rank convention checkpoint
+
+- Added `trapped@1` with the full disclosed local proof: positive opponent captures on the
+  current square, every legal destination, capture-destination exchange values and positive
+  opponent captures after quiet relocation. In-check positions abstain; immobility alone and the
+  RFC's profitable `RxQ` escape do not fire.
+- Added `back_rank_susceptible@1` with king identity, every non-back-rank escape and its exact
+  own-blocker/attacker reasons, plus enemy heavy-piece access mode and path. Luft, no-heavy and a
+  pawn-blocked file are permanent hard negatives. Exact mate-in-one remains independent.
+- Registered 20 of 30 RFC projections. The compiled manifest is now 25 producers, 146 projections,
+  25 consumers, 182 bindings and 40 semantic events/eligibility rows.
+- Focused verification: 74 affected runtime/server/web tests green; runtime typecheck, manifest
+  check, semantic check and diff hygiene green. No repository-wide verification was run.

@@ -1,6 +1,6 @@
 import { expect, describe, it } from "vitest";
 
-import { checkEvent, discoveredLatencyReading, doubleAttackEvent, forkSurvivesReply, loosePieceReading, mateInOne, rayClassificationReading, replyBreadth, threats } from "./tactics.js";
+import { backRankReading, checkEvent, discoveredLatencyReading, doubleAttackEvent, forkSurvivesReply, loosePieceReading, mateInOne, rayClassificationReading, replyBreadth, threats, trappedPieceReading } from "./tactics.js";
 
 describe("bounded tactical authorities", () => {
   it("records exact reply breadth and treats zero as terminal", () => {
@@ -89,5 +89,33 @@ describe("bounded tactical authorities", () => {
 
     const enemyBlocker = discoveredLatencyReading("7k/8/8/8/4r3/5n2/6B1/4K3 w - - 0 1");
     expect(enemyBlocker.screens.some((value) => value.screen.square === "f3" && value.slider.square === "g2")).toBe(false);
+  });
+
+  it("requires both a positive current capture and no local escape before calling a piece trapped", () => {
+    const trapped = trappedPieceReading("r3k3/8/8/8/8/8/1P6/B3K3 w - - 0 1");
+    expect(trapped.kind).toBe("pieces");
+    if (trapped.kind === "pieces") expect(trapped.pieces).toContainEqual(expect.objectContaining({ piece: expect.objectContaining({ square: "a1" }), attackers: expect.arrayContaining([expect.objectContaining({ moveUci: "a8a1", exchange: expect.objectContaining({ resultUnits: 3 }) })]), moves: [] }));
+
+    const mobilityOnly = trappedPieceReading("4k3/8/8/8/8/8/1P6/B3K3 w - - 0 1");
+    expect(mobilityOnly.kind === "pieces" ? mobilityOnly.pieces : []).toEqual([]);
+
+    const captureEscape = trappedPieceReading("Rqk5/8/P7/8/8/8/6K1/8 w - - 0 1");
+    expect(captureEscape.kind === "pieces" ? captureEscape.pieces.some((value) => value.piece.square === "a8") : true).toBe(false);
+
+    expect(trappedPieceReading("4k3/8/8/8/8/8/4r3/4K3 w - - 0 1")).toEqual({ kind: "abstained", reason: "trapped_while_in_check", conventionId: "trapped@1", pieces: [] });
+  });
+
+  it("keeps back-rank susceptibility separate from mate and records why every escape is unavailable", () => {
+    const positive = backRankReading("r3k3/8/8/8/8/8/5PPP/6K1 w - - 0 1");
+    expect(positive.susceptible).toContainEqual(expect.objectContaining({
+      color: "white",
+      kingSquare: "g1",
+      escapes: expect.arrayContaining([expect.objectContaining({ square: "f2", blockedByOwn: expect.any(Object) }), expect.objectContaining({ square: "g2", blockedByOwn: expect.any(Object) }), expect.objectContaining({ square: "h2", blockedByOwn: expect.any(Object) })]),
+      accessingHeavyPieces: expect.arrayContaining([expect.objectContaining({ square: "a8", mode: "pawn_clear_file", fileTarget: "a1" })]),
+    }));
+
+    expect(backRankReading("r3k3/8/8/8/8/8/5PP1/6K1 w - - 0 1").susceptible.some((value) => value.color === "white")).toBe(false);
+    expect(backRankReading("4k3/8/8/8/8/8/5PPP/6K1 w - - 0 1").susceptible.some((value) => value.color === "white")).toBe(false);
+    expect(backRankReading("r3k3/8/p7/8/8/8/5PPP/6K1 w - - 0 1").susceptible.some((value) => value.color === "white")).toBe(false);
   });
 });
