@@ -4481,3 +4481,16 @@ campaign's climax act cannot carry a rated result. One fork the ruling left open
 as claude-derived-with-veto-hook (D837), one collision as the open question the ruling's
 iff-clause made it (rewind vs R11). Corpus figures re-derived at HEAD rather than copied.
 learner-rating Discharge D1 flips in the same commit. Rows D836-D838.
+
+## 2026-08-22 — breadth collectors returned at the payload boundary
+
+The independent buildability review kept the RFC's 18-id scope and silent detector/significance
+split, then returned nine seams that the prior name-level dependency census could not see. Two
+derived events named authorities whose payloads cannot prove their claim: aggregate
+`occupied_defence` cannot represent loss of one exact defender edge, and contact creation cannot
+prove execution of a pre-existing pawn contact. Three-edge continuations were described as three
+nodes despite containing four board states. Six convention boundaries also admitted different
+implementations: legal control on empty/occupied squares, pressure-line colors and retained
+identity, pawn relation/rank predicates, en-passant's displaced captured square and half-open-file
+color. D851–D859 route one author amendment; no owner product ruling and no implementation were
+invented.
