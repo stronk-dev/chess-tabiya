@@ -4874,3 +4874,27 @@ still obligations of the implementing RFC.
 **Next:** compile the learner-module queue after its dependencies, finish the leak-destination
 cleanup, and execute every remaining acceptance state before archival. The exact remainder is in
 `planning/play-composition/plan.md`.
+
+## 2026-08-22 — the first play vocabulary leaks move behind Inspector
+
+**What landed:** implemented the dependency-free part of `play-composition` §5. Branch-group
+candidates now render legality-checked SAN from the displayed FEN. Checkpoint alternatives no
+longer fall back to raw UCI when their payload carries no authoritative SAN. A pivotal timeline
+mark opens a compact SAN-labelled recorded-moment card; its phase/convention prose and optional
+voice live only in the Recorded moment Inspector section. The named-structure card keeps authored
+plans, watch items and typical mistakes while trigger ASTs, structural success expressions,
+registry ids and provenance move behind its explicit Inspector door.
+
+**What changed:** ordinary play no longer treats diagnostic exactness as the presentation. The
+same information remains inspectable; it is not deleted or silently filtered. A reusable
+`moveSanFromUci(fen, uci)` refuses malformed and illegal moves rather than displaying UCI as a
+fallback. Focused result: web typecheck 0/0, 39 component/unit tests green, and the six affected
+browser journeys green (shape, pivotal, theory checkpoint, branch group and line flows).
+
+**Blocked:** the related-pack relation owns only a UCI in the current projection, so ordinary play
+now says “After the related move” instead of guessing SAN. Supplying authoritative SAN, plus the
+phase/trajectory/compare/tablebase module renderers, remains in the implementing RFC's declared
+module/leak work; no schema was invented in this slice.
+
+**Next:** land the module compiler in dependency order, then finish those typed destinations and
+the complete composition-state matrix.

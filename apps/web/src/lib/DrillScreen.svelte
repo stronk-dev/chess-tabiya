@@ -18,7 +18,7 @@
   import ShapePanel from "./ShapePanel.svelte";
   import GroupPanel from "./GroupPanel.svelte";
   import { renderEvidenceRef } from "./evidence-sentences.js";
-  import { renderStructuralObservation } from "./structural-sentences.js";
+  import { renderStructuralExpressionSpec, renderStructuralObservation } from "./structural-sentences.js";
   import { renderTransitionObservation } from "./transition-sentences.js";
   import { renderCorpusPage } from "./corpus-sentences.js";
   import { corpusEvidence, humanSplitEvidence } from "./inspector-evidence.js";
@@ -45,6 +45,7 @@
   import { assistanceProfile, loadAssistance, saveAssistance, type PreferenceStorage } from "./assistance-preference.js";
   import { runViewportSupport, type RunViewportSupport } from "./viewport-support.js";
   import { playBoardEdge } from "./play-composition.js";
+  import { moveSanFromUci } from "./board-input.js";
 
   type RewindTarget =
     | { readonly nodeId: string }
@@ -159,8 +160,10 @@
   let objectiveOpen = $state(false);
   let sheetOpen = $state(false);
   let openShapeId: string | undefined = $state();
+  let inspectedShapeId: string | undefined = $state();
   let assistance: AssistanceConfig = $state(SILENT_ASSISTANCE);
   let openPivotalNodeId: string | undefined = $state();
+  let pivotalDialogOpen = $state(false);
   let humanSplit: HumanSplitPage | undefined = $state();
   let corpusPage: CorpusPage | undefined = $state();
   let voicePage: VoicePage | undefined = $state();
@@ -271,6 +274,7 @@
     return { nodeId: firing.firstNodeId, entryId: entry.id, label: entry.name, channel: entry.channel };
   }));
   let openShape = $derived(shapes.find((entry) => entry.id === openShapeId));
+  let inspectedShape = $derived(shapes.find((entry) => entry.id === inspectedShapeId));
   let authoredSpineNodeIds = $derived(
     new Set(
       (authoredFeedback?.items ?? []).flatMap((item) =>
@@ -370,6 +374,7 @@
   let projectedPivotal = $derived(assistance.markers === "live" ? pivotalMarkerEvidence(liveMarkers(run, run.activeCursor.branchId, assistanceContext)) : []);
   let pivotalRows = $derived(projectedPivotal.map((marker) => ({ nodeId: marker.nodeId, label: marker.kind.replaceAll("_", " ") })));
   let openPivotal = $derived(openPivotalNodeId === undefined ? [] : projectedPivotal.filter((marker) => marker.nodeId === openPivotalNodeId));
+  let openPivotalNode = $derived(openPivotalNodeId === undefined ? undefined : run.nodes.find((node) => node.id === openPivotalNodeId));
   let guidedShapes = $derived.by(() => {
     if (openPivotalNodeId === undefined || assistance.guided !== "live") return [];
     const target = path.findIndex((node) => node.id === openPivotalNodeId);
@@ -385,7 +390,10 @@
   function setAssistance<Key extends keyof Omit<AssistanceConfig, "version">>(key: Key, value: AssistanceConfig[Key]): void {
     assistance = Object.freeze({ ...assistance, [key]: value });
     saveAssistance(assistanceProfile({ sessionKind: run.sessionKind, feedbackPolicy: run.feedbackPolicy, liveKind: liveSessionKind }), assistance, preferenceStorage());
-    if (key === "markers" && value === "off") openPivotalNodeId = undefined;
+    if (key === "markers" && value === "off") {
+      openPivotalNodeId = undefined;
+      pivotalDialogOpen = false;
+    }
   }
 
   async function requestHumanSplit(): Promise<void> {
@@ -421,8 +429,7 @@
 
   function openPivotalMarker(nodeId: string): void {
     openPivotalNodeId = nodeId; humanSplit = undefined; voicePage = undefined;
-    const sentences = projectedPivotal.filter((marker) => marker.nodeId === nodeId).flatMap(renderPivotalMarker);
-    speakSentences(sentences);
+    pivotalDialogOpen = true;
   }
 
   function groupPreference(groupId: string): "sequential" | "lockstep" {
@@ -891,7 +898,7 @@
             {authoredSpineNodeIds}
             rootNodeId={run.nodes[0]?.id}
             {shapeMarkers}
-            onOpenShape={(entryId) => (openShapeId = entryId)}
+            onOpenShape={(entryId) => { inspectedShapeId = entryId; openShapeId = entryId; }}
             pivotalMarkers={pivotalRows}
             onOpenPivotal={openPivotalMarker}
           />
@@ -911,7 +918,7 @@
           </div>
           {#if pack?.variantOf !== undefined}
             <section class="variant-link" aria-label="Related rehearsal">
-              <span>{pack.variantOf.relation.kind === "root_after_move" ? `After ${pack.variantOf.relation.moveUci}` : pack.variantOf.relation.kind === "same_root_other_side" ? "Same position, other side" : "Same position, other objective"}:</span>
+              <span>{pack.variantOf.relation.kind === "root_after_move" ? "After the related move" : pack.variantOf.relation.kind === "same_root_other_side" ? "Same position, other side" : "Same position, other objective"}:</span>
               <button type="button" disabled={onSelectPack === undefined} onclick={() => onSelectPack?.(pack.variantOf!.packId)}>{pack.variantOf.packId}</button>
             </section>
           {/if}
@@ -1041,7 +1048,7 @@
         </label>
         {#if groupSource === "hand_picked"}
           <p class="capture-help">Move pieces on the board to capture candidates. The run is not changed until Create group.</p>
-          <div class="candidate-chips">{#each groupCandidates as uci}<button type="button" onclick={() => (groupCandidates = groupCandidates.filter((move) => move !== uci))}>{uci} ×</button>{:else}<span>No candidates captured yet.</span>{/each}</div>
+          <div class="candidate-chips">{#each groupCandidates as uci}<button type="button" onclick={() => (groupCandidates = groupCandidates.filter((move) => move !== uci))}>{moveSanFromUci(displayedNode.fen, uci) ?? "Legal candidate"} ×</button>{:else}<span>No candidates captured yet.</span>{/each}</div>
         {:else}
           <label>Members <input type="number" min="2" max="8" bind:value={groupSize} /></label>
         {/if}
@@ -1127,6 +1134,35 @@
           {#if assistancePermission.corpus === "free" && capabilities?.providers.corpus !== "none" && onCorpus !== undefined}<button type="button" onclick={() => void requestCorpus()}>Load corpus counts</button>{/if}
           {#if corpusPage}{#each renderCorpusPage(corpusPage) as sentence}<p class="guidance-sentence">{sentence}</p>{/each}{:else}<p class="honest">No corpus page loaded.</p>{/if}
         </section>
+        <section aria-label="Recorded moment evidence" data-evidence-consumer="inspector.pivotal_marker">
+          <h3>Recorded moment</h3>
+          {#if openPivotalNodeId === undefined}
+            <p class="honest">Open a timeline moment before inspecting its full evidence.</p>
+          {:else}
+            <p class="honest">{openPivotalNode?.moveSan ?? "Start position"} · ply {openPivotalNode?.ply ?? 0}</p>
+            {#each openPivotal as marker}{#each renderPivotalMarker(marker) as sentence}<p class="guidance-sentence">{sentence}</p>{/each}{/each}
+            {#each renderEndgameReading(endgame) as sentence}<p class="guidance-sentence">{sentence}</p>{/each}
+            {#if assistance.guided === "live"}
+              {#each guidedShapes as shape}<section><h4>{shape.name}</h4><p>Named plans for this structure — general to the kind of position, not advice for this one.</p><ul>{#each shape.plans as plan}<li>{plan.label}</li>{/each}</ul></section>{/each}
+            {/if}
+            {#if assistance.voice === "persona" && capabilities?.providers.llm === "external" && onVoice !== undefined}<button type="button" onclick={() => void requestVoice("marker")}>Revoice this evidence</button>{/if}
+            {#if voicePage?.text.includes("Recorded reading at this position:")}<p class="guidance-sentence">{RECORDED_READING_GUARD}</p>{/if}
+            {#if voicePage}<p class="guidance-sentence">{voicePage.text}</p>{/if}
+          {/if}
+        </section>
+        <section aria-label="Named structure evidence" data-evidence-consumer="inspector.shape_trigger">
+          <h3>Named structure</h3>
+          {#if inspectedShape === undefined}
+            <p class="honest">Open a named structure before inspecting its trigger and sources.</p>
+          {:else}
+            <h4>{inspectedShape.name}</h4>
+            <p class="guidance-sentence">{renderStructuralExpressionSpec(inspectedShape.trigger)}</p>
+            <p class="honest">{inspectedShape.id}@{inspectedShape.version} · {inspectedShape.channel} · {inspectedShape.provenance.licence}</p>
+            {#each inspectedShape.provenance.attribution as source}<p>{source.title} — {source.author} ({source.licence}){#if source.url} · <a href={source.url} rel="noreferrer">source</a>{/if}</p>{/each}
+            {#each inspectedShape.provenance.sources as source}<p>{source}</p>{/each}
+            {#each inspectedShape.plans.filter((plan) => plan.success.signature !== null) as plan}<p class="guidance-sentence">{plan.label}: {renderStructuralExpressionSpec(plan.success.signature!)}.</p>{/each}
+          {/if}
+        </section>
       </div>
     </div>
   </div>
@@ -1164,20 +1200,13 @@
   </div>
 {/if}
 
-{#if viewportSupport.supported && openShape}<ShapePanel entry={openShape} onClose={() => (openShapeId = undefined)} />{/if}
-{#if viewportSupport.supported && openPivotalNodeId !== undefined}
+{#if viewportSupport.supported && openShape}<ShapePanel entry={openShape} onClose={() => (openShapeId = undefined)} onInspect={() => { openShapeId = undefined; inspectorOpen = true; }} />{/if}
+{#if viewportSupport.supported && openPivotalNodeId !== undefined && pivotalDialogOpen}
   <div class="modal-backdrop">
     <div class="modal guidance-panel" role="dialog" aria-modal="true" aria-labelledby="pivotal-title" data-evidence-consumer="board.pivotal_marker">
-      <p>Pivotal marker</p><h2 id="pivotal-title">Recorded change</h2>
-      {#each openPivotal as marker}{#each renderPivotalMarker(marker) as sentence}<p class="guidance-sentence">{sentence}</p>{/each}{/each}
-      {#each renderEndgameReading(endgame) as sentence}<p class="guidance-sentence">{sentence}</p>{/each}
-      {#if assistance.guided === "live"}
-        {#each guidedShapes as shape}<section><h3>{shape.name}</h3><p>Named plans for this structure — general to the kind of position, not advice for this one.</p><ul>{#each shape.plans as plan}<li>{plan.label}</li>{/each}</ul></section>{:else}<p class="guidance-sentence">No named structure entry matches this position.</p>{/each}
-      {/if}
-      {#if assistance.voice === "persona" && capabilities?.providers.llm === "external" && onVoice !== undefined}<button type="button" onclick={() => void requestVoice("marker")}>Revoice this packet</button>{/if}
-      {#if voicePage?.text.includes("Recorded reading at this position:")}<p class="guidance-sentence">{RECORDED_READING_GUARD}</p>{/if}
-      {#if voicePage}<p class="guidance-sentence">{voicePage.text}</p>{/if}
-      <button type="button" onclick={() => (openPivotalNodeId = undefined)}>Close</button>
+      <p>Pivotal marker</p><h2 id="pivotal-title">Review {openPivotalNode?.moveSan ?? "this moment"}</h2>
+      <p class="guidance-sentence">A concrete change was recorded at ply {openPivotalNode?.ply ?? 0}. Open its evidence when you want the full diagnostic reading.</p>
+      <div><button type="button" onclick={() => { pivotalDialogOpen = false; inspectorOpen = true; }}>Open in Inspector</button><button type="button" onclick={() => (pivotalDialogOpen = false)}>Close</button></div>
     </div>
   </div>
 {/if}
@@ -1370,7 +1399,6 @@
   .assistance-grid label { display:flex; gap:.4rem; align-items:center; }
   .assistance-grid .honest { color:var(--muted); font-size:.68rem; }
   .guidance-panel { max-height:min(38rem,calc(100dvh - 2rem)); overflow:auto; }
-  .guidance-panel h3 { margin:.6rem 0 .2rem; }
   .guidance-sentence { color:var(--ink)!important; font:400 .85rem/1.45 var(--display-font)!important; text-transform:none!important; }
 
   .structural-facts {

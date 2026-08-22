@@ -232,9 +232,11 @@ describe("Layer 3 screens", () => {
     expect(document.querySelector(".pivotal-marker")).not.toBeNull();
     expect(document.querySelector('.guidance-panel[role="dialog"]')).toBeNull();
     document.querySelector<HTMLButtonElement>(".pivotal-marker")!.click(); await tick();
-    expect(document.querySelector(".guidance-panel")?.textContent).toContain("Tabiya's phase bands");
-    expect(document.querySelector(".guidance-panel")?.textContent).toContain("material-census convention");
-    document.querySelector<HTMLButtonElement>(".guidance-panel button:last-child")!.click(); await tick();
+    expect(document.querySelector(".guidance-panel")?.textContent).toContain("A concrete change was recorded");
+    expect(document.querySelector(".guidance-panel")?.textContent).not.toContain("phase bands");
+    document.querySelector<HTMLButtonElement>(".guidance-panel button")!.click(); await tick();
+    expect(document.querySelector('[aria-label="Recorded moment evidence"]')?.textContent).toContain("material-census convention");
+    document.querySelector<HTMLButtonElement>(".inspector-surface header button")!.click(); await tick();
     const checkbox = document.querySelector<HTMLInputElement>('.assistance-grid input[type="checkbox"]')!;
     checkbox.click(); await tick();
     expect(document.querySelector(".pivotal-marker")).toBeNull();
@@ -309,7 +311,10 @@ describe("Layer 3 screens", () => {
     expect(document.querySelectorAll(".pivotal-marker")).toHaveLength(1);
     document.querySelector<HTMLButtonElement>(".pivotal-marker")!.click();
     await tick();
-    expect(document.querySelector(".guidance-panel")?.textContent).toContain("The queens have left the board.");
+    expect(document.querySelector(".guidance-panel")?.textContent).not.toContain("The queens have left the board.");
+    document.querySelector<HTMLButtonElement>(".guidance-panel button")!.click();
+    await tick();
+    expect(document.querySelector('[aria-label="Recorded moment evidence"]')?.textContent).toContain("The queens have left the board.");
     await unmount(component);
   });
 
@@ -329,8 +334,10 @@ describe("Layer 3 screens", () => {
     expect(document.querySelector<HTMLButtonElement>(".shape-marker")?.textContent).toContain("Carlsbad structure");
     document.querySelector<HTMLButtonElement>(".shape-marker")!.click(); await tick();
     expect(document.querySelector(".shape-panel")?.textContent).toContain("Named plans for this structure — general to the kind of position, not advice for this one.");
-    expect(document.querySelector(".shape-panel")?.textContent).toContain("CC-BY-SA-4.0");
+    expect(document.querySelector(".shape-panel")?.textContent).not.toContain("shape trigger");
     expect(document.querySelector(".shape-panel")?.textContent).toContain("Minority attack");
+    document.querySelector<HTMLButtonElement>(".shape-panel footer button")!.click(); await tick();
+    expect(document.querySelector('[aria-label="Named structure evidence"]')?.textContent).toContain("CC-BY-SA-4.0");
     await unmount(component);
   });
 

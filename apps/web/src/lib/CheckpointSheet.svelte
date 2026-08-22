@@ -134,7 +134,7 @@
               {#if item.kind === "annotation"}
                 <span class="kind">Line note</span><p>{item.text}</p>
               {:else if item.kind === "deviation"}
-                <span class="kind">Alternative {item.anchor.moveUci}</span><p>{item.note}</p>
+                <span class="kind">Alternative move</span><p>{item.note}</p>
               {:else if item.kind === "plan_class"}
                 <span class="kind">Plan option</span><strong>{item.label}</strong>
                 {#if item.shapePlan}

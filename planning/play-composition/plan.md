@@ -23,15 +23,19 @@ remain in their owning RFCs.
    Inspector overlays, phone sheet gestures, stable board DOM identity, keyboard traversal, the
    150 input projections and the multi-user match flows. Current browser result: 30 passed, one
    optional Maia latency test skipped.
+8. The first vocabulary-law slice is live: branch-group candidates use legality-checked SAN;
+   checkpoint alternatives never fall back to raw UCI; pivotal producer prose and shape trigger
+   AST/provenance moved behind explicit Inspector doors. Their ordinary cards retain only SAN,
+   the recorded-moment affordance and authored named plans.
 
 ## Remaining before archive
 
 1. Compile and seat the eleven learner modules once their collector dependencies land; implement
    the one-expanded queue and fact-count badges rather than treating the three structural tabs as
    final module composition.
-2. Remove the remaining ordinary-surface vocabulary leaks named by §5: raw UCI in related-pack and
-   branch-group labels, raw pivotal/compare language, and any producer terminology outside the
-   Inspector. Render SAN and learner-facing chess meaning through registered module renderers.
+2. Remove the remaining ordinary-surface vocabulary leaks named by §5. The related-pack relation
+   currently suppresses its raw UCI until an authoritative SAN projection exists; phase, trajectory,
+   classifier, compare, tablebase and voice families still need their compiled module renderers.
 3. Complete every acceptance state in the 7×16 matrix, including max-load, long objective,
    checkpoint, terminal, promotion and branch-group capture; capture and retain the 112 CI
    screenshots required by A8.

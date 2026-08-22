@@ -150,8 +150,11 @@ test("Just Play reaches a Carlsbad and opens a passive shape marker without muta
   await marker.click();
   const panel = page.getByRole("complementary", { name: "Carlsbad structure" });
   await expect(panel).toContainText("Named plans for this structure — general to the kind of position, not advice for this one.");
-  await expect(panel).toContainText("CC-BY-SA-4.0");
+  await expect(panel).not.toContainText("shape trigger");
   for (const label of ["Minority attack", "Achieve e3-e4", "Land h4-h5 against a hook", "Reach a queenless position with the c-pawn sound", "Get the pawn to a5 with b4 still empty", "Central counter-break"]) await expect(panel.getByText(label, { exact: true })).toBeVisible();
+  await panel.getByRole("button", { name: "Inspect trigger and sources" }).click();
+  await expect(page.getByRole("region", { name: "Named structure evidence" })).toContainText("CC-BY-SA-4.0");
+  await page.getByRole("button", { name: "Return to play" }).click();
   const after = await (await page.request.get(`/runs/${runId}/events?sinceSeq=0`)).json() as { events: unknown[] };
   expect(after.events).toHaveLength(before.events.length);
   await expect(page.getByText("Authored commentary withheld", { exact: false })).toHaveCount(0);
@@ -194,24 +197,29 @@ test("adaptive guidance keeps a queen-exchange phase change passive and removabl
   await page.getByText("Assistance", { exact: true }).click();
   await page.getByLabel("Passive pivotal markers").check();
   await page.getByLabel("Speak opened guidance").check();
-  await expect(page.getByRole("dialog", { name: "Recorded change" })).toHaveCount(0);
+  await expect(page.getByRole("dialog", { name: /Review/ })).toHaveCount(0);
 
   await move(page, "d1", "d8");
   const marker = page.getByRole("button", { name: "Open pivotal marker at ply 1" });
   await expect(marker).toBeVisible();
-  await expect(page.getByRole("dialog", { name: "Recorded change" })).toHaveCount(0);
+  await expect(page.getByRole("dialog", { name: /Review/ })).toHaveCount(0);
 
   await marker.click();
-  const guidance = page.getByRole("dialog", { name: "Recorded change" });
-  await expect(guidance).toContainText("middlegame → endgame, detected by Tabiya's phase bands.");
-  await expect(guidance).toContainText("material-census convention");
-  await expect.poll(() => page.evaluate(() => (window as unknown as { __spoken: string[] }).__spoken)).toEqual([expect.stringContaining("middlegame → endgame")]);
+  const guidance = page.getByRole("dialog", { name: /Review/ });
+  await expect(guidance).toContainText("A concrete change was recorded");
+  await expect(guidance).not.toContainText("phase bands");
+  await expect(guidance).not.toContainText("material-census convention");
+  await expect.poll(() => page.evaluate(() => (window as unknown as { __spoken: string[] }).__spoken)).toEqual([]);
   const rendered = await guidance.innerText();
+  expect(rendered).toContain("Qxd8+");
   expect(rendered).not.toMatch(/\b[a-h][1-8][a-h][1-8][qrbn]?\b/u);
-  expect(rendered).not.toMatch(/\b(?:[KQRBN](?:[a-h1-8]?x?)?[a-h][1-8]|[a-h](?:x[a-h])?[1-8](?:=[QRBN])?)[+#]?\b/u);
   expect(rendered).not.toMatch(/\b(?:weak|strong|good|bad|better|worse|advantage|winning|losing|should|must|best|worst|mistake|blunder|punish|wins|loses)\b/iu);
 
-  await guidance.getByRole("button", { name: "Close" }).click();
+  await guidance.getByRole("button", { name: "Open in Inspector" }).click();
+  const momentEvidence = page.getByRole("region", { name: "Recorded moment evidence" });
+  await expect(momentEvidence).toContainText("middlegame → endgame, detected by Tabiya's phase bands.");
+  await expect(momentEvidence).toContainText("material-census convention");
+  await page.getByRole("button", { name: "Return to play" }).click();
   await page.getByLabel("Passive pivotal markers").uncheck();
   await expect(page.getByRole("button", { name: /Open pivotal marker/ })).toHaveCount(0);
 });
@@ -910,6 +918,10 @@ test("branch group captures three candidates, rotates, recovers evidence, compar
   await move(page, "h2", "h3");
   await move(page, "a2", "a3");
   await expect(page.locator(".candidate-chips button")).toHaveCount(3);
+  await expect(page.locator(".candidate-chips")).toContainText("f3");
+  await expect(page.locator(".candidate-chips")).toContainText("h3");
+  await expect(page.locator(".candidate-chips")).toContainText("a3");
+  expect(await page.locator(".candidate-chips").innerText()).not.toMatch(/\b[a-h][1-8][a-h][1-8][qrbn]?\b/u);
   await page.getByRole("button", { name: "Create group" }).click();
 
   await expect(page.getByText("Branch group · 3 candidates")).toBeVisible();

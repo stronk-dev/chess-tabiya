@@ -74,6 +74,17 @@ function positionFromFen(fen: string): Chess {
   return Chess.fromSetup(parseFen(fen).unwrap()).unwrap();
 }
 
+export function moveSanFromUci(fen: string, uci: string): string | undefined {
+  try {
+    const position = positionFromFen(fen);
+    const move = parseUci(uci);
+    if (move === undefined || !position.isLegal(move)) return undefined;
+    return makeSan(position, move);
+  } catch {
+    return undefined;
+  }
+}
+
 function square(value: string): Square {
   if (!/^[a-h][1-8]$/u.test(value)) throw new TypeError(`Invalid square: ${value}`);
   return value as Square;

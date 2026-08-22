@@ -3,6 +3,7 @@ import { describe, expect, it } from "vitest";
 import {
   BoardInputController,
   boardInputPosition,
+  moveSanFromUci,
   semanticBoardRows,
   visualRows,
 } from "./board-input.js";
@@ -19,6 +20,13 @@ function controller(
 }
 
 describe("BoardInputController", () => {
+  it("renders only legal UCI as SAN for ordinary chrome", () => {
+    expect(moveSanFromUci(INITIAL, "e2e4")).toBe("e4");
+    expect(moveSanFromUci("4k3/8/8/8/8/8/8/4K2R w - - 0 1", "h1h8")).toBe("Rh8+");
+    expect(moveSanFromUci(INITIAL, "e2e5")).toBeUndefined();
+    expect(moveSanFromUci("not a fen", "e2e4")).toBeUndefined();
+  });
+
   it("uses one state machine for pointer and keyboard moves", () => {
     const pointer = controller();
     pointer.dispatch({ type: "pointer_origin", square: "e2" });
