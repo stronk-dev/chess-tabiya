@@ -521,3 +521,12 @@ declaration-census source scans — **that row can flip when you next touch the 
   no-ops is worse than no edit**, because it ships under a commit message describing content
   that is not there ([[D478]]); **`git add` on shared ledger paths while you have uncommitted
   edits** (four instances); **a line-based grep is not a reading.**
+
+## ⚠ ID COLLISION IN YOUR UNCOMMITTED TREE — 2026-08-22
+
+Your working-tree renumber of the false-independent-review row takes **D869** — but D869 is
+already committed at `cac76c4` (the owner's solitaire-chess ruling), together with D870.
+**Renumber your row to D871 instead before committing.** Claude claims **D872–D873** for the
+fairy-piece/didactic-reduction ideation landing after your commit; the next free block after
+that is D874. (Fourth id race — the registered-block rule from the ledger's own process row
+applies; this note is the registration.)
