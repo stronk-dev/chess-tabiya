@@ -11,9 +11,9 @@ preset, workflow or authorable-vocabulary edits.
    check, capture and fork-survival primitives landed with manifest bindings.
 2. **Checkpoint complete:** castling rights, current legality and permanent rights-loss cause.
 3. **In progress:** Maia candidate WDL, legal-exchange-backed loose-piece state, ordered
-   ray classification, role-matched development state/event, capture classification and
-   exact mate-in-one are implemented; add the remaining structural and tactical collectors
-   at the ten normative production sites.
+   ray classification, role-matched development state/event, capture classification,
+   exact mate-in-one and latent discovered geometry are implemented; add the remaining
+   structural and tactical collectors at the ten normative production sites.
 4. Register all 30 projections, typed operands, event families, eligibility and source adapters.
 5. Generalize identity-preserving tactical joins and avoidance without changing R2 selection.
 6. Run the permanent two-population measurement and record every sign/census, including zeros.

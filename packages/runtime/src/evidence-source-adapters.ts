@@ -93,6 +93,7 @@ export const declareCheckEventEvidence = <T extends object>(payload: T) => exact
 export const declareLoosePieceEvidence = <T extends object>(payload: T) => exactObject("rules.tactic", "rules.tactic.reading.loose_piece", payload, ["fen", "sideToMove", "pieces"]);
 export const declareRayClassificationEvidence = <T extends object>(payload: T) => exactObject("rules.tactic", "rules.tactic.reading.ray_classification", payload, ["fen", "rays"]);
 export const declareMateInOneEvidence = <T extends object>(payload: T) => exactObject("rules.tactic", "rules.tactic.consequence.mate_in_one", payload, ["fen", "mates"]);
+export const declareDiscoveredLatencyEvidence = <T extends object>(payload: T) => exactObject("rules.tactic", "rules.tactic.reading.discovered_latency", payload, ["fen", "screens"]);
 export const declareCastlingRightsEvidence = <T extends object>(payload: T) => exactObject("rules.castling", "rules.castling.reading.rights", payload, ["fen", "white", "black"]);
 export const declareCastlingRightsLostEvidence = <T extends object>(payload: T) => exactObject("rules.castling", "rules.castling.event.rights_lost", payload, ["beforeFen", "moveUci", "afterFen", "color", "wing", "cause"]);
 export const declareCastlingLegalityEvidence = <T extends object>(payload: T) => exactObject("rules.castling", "rules.castling.reading.legality", payload, ["color", "wing", "kingSquare", "rookSquare", "legalNow", "inCheck", "blockedSquares", "attackedSquares"]);

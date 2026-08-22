@@ -2,10 +2,11 @@ import { normalizeMove } from "chessops/chess";
 import { attacks, between } from "chessops/attacks";
 import { makeFen } from "chessops/fen";
 import type { Color, Move, NormalMove, Piece, Role, Square, SquareName } from "chessops/types";
-import { makeSquare, makeUci, opposite, parseUci } from "chessops/util";
+import { makeSquare, makeUci, opposite, parseSquare, parseUci } from "chessops/util";
 
 import { canonicalFen, positionFromFen } from "./chess.js";
 import { EXCHANGE_PIECE_VALUES, legalCaptureMovesTo, legalExchangeForMove, type LegalExchangeResult } from "./exchange.js";
+import { vacationReading } from "./structure.js";
 
 const PROMOTIONS: readonly Role[] = Object.freeze(["queen", "rook", "bishop", "knight"]);
 export const THREAT_CONVENTION = "threat@1" as const;
@@ -91,6 +92,59 @@ export interface RayClassification {
 export interface RayClassificationReading {
   readonly fen: string;
   readonly rays: readonly RayClassification[];
+}
+
+export interface DiscoveredLatencyReading {
+  readonly fen: string;
+  readonly screens: readonly {
+    readonly screen: { readonly square: SquareName; readonly piece: Piece };
+    readonly slider: { readonly square: SquareName; readonly piece: Piece };
+    readonly target: { readonly square: SquareName; readonly occupant: Piece };
+    readonly raySquares: readonly SquareName[];
+    readonly discoveredCheck: boolean;
+    readonly captureUci?: string;
+    readonly exchange?: LegalExchangeResult;
+  }[];
+}
+
+export function discoveredLatencyReading(fen: string): DiscoveredLatencyReading {
+  const position = positionFromFen(fen);
+  const screens: DiscoveredLatencyReading["screens"][number][] = [];
+  for (const [screenSquare, screenPiece] of position.board) {
+    if (screenPiece.role === "king") continue;
+    const vacation = vacationReading(fen, makeSquare(screenSquare));
+    if (vacation === null) continue;
+    for (const unblocks of vacation.unblocks) {
+      const sliderSquare = parseSquare(unblocks.slider)!;
+      const slider = position.board.get(sliderSquare);
+      if (slider === undefined || slider.color !== screenPiece.color) continue;
+      for (const targetName of unblocks.gains) {
+        const targetSquare = parseSquare(targetName)!;
+        const target = position.board.get(targetSquare);
+        if (target === undefined || target.color === screenPiece.color) continue;
+        const exposed = position.clone();
+        exposed.board.take(screenSquare);
+        exposed.turn = slider.color;
+        exposed.epSquare = undefined;
+        const capture = target.role === "king" ? undefined : legalCaptureMovesTo(exposed, targetSquare, sliderSquare)[0];
+        const exchange = capture === undefined ? undefined : legalExchangeForMove(exposed, capture);
+        if (target.role !== "king" && (exchange?.resultUnits ?? 0) <= 0) continue;
+        screens.push(Object.freeze({
+          screen: Object.freeze({ square: makeSquare(screenSquare), piece: screenPiece }),
+          slider: Object.freeze({ square: makeSquare(sliderSquare), piece: slider }),
+          target: Object.freeze({ square: targetName, occupant: target }),
+          raySquares: Object.freeze([...between(sliderSquare, targetSquare)].map(makeSquare)),
+          discoveredCheck: target.role === "king",
+          ...(capture === undefined ? {} : { captureUci: makeUci(capture) }),
+          ...(exchange === undefined ? {} : { exchange }),
+        }));
+      }
+    }
+  }
+  return Object.freeze({
+    fen: canonicalFen(position),
+    screens: Object.freeze(screens.sort((a, b) => a.screen.square.localeCompare(b.screen.square) || a.slider.square.localeCompare(b.slider.square) || a.target.square.localeCompare(b.target.square))),
+  });
 }
 
 const SLIDER_DIRECTIONS = Object.freeze({

@@ -260,6 +260,13 @@ const tacticalOutputs = [
     limitations: ["One legal ply only; empty means no mate in one and says nothing about deeper mating nets, move quality or back-rank susceptibility."],
     disposition: { kind: "inspector_only", reason: "Exact one-ply consequence is retained separately from convention states; Phase 3 decides learner presentation." },
   }),
+  projection("rules.tactic", "rules.tactic.reading.discovered_latency", "rules", {
+    payloadType: "DiscoveredLatencyReading", semantics: "A friendly non-king screen is the sole blocker between a friendly slider and an enemy target; removing the screen exposes either exact discovered check or a positive legal-exchange@1 capture. Slider, screen, target, ray and exchange operands are retained.",
+    operands: ["fen", "screens"], grounding: "declared_convention", exactness: "convention", answerContent: ["fact", "pattern", "threat"], forms: ["list", "panel", "lit_squares", "arrows", "piece_halo", "machine_condition"],
+    dependsOn: [ref("rules.exchange.predicate.legal_exchange")],
+    limitations: ["Latent one-blocker geometry only; it does not claim the screen should move, that every screen move exposes the ray, or that the relation is important."],
+    disposition: { kind: "inspector_only", reason: "Identity-retaining latent geometry lands before measured learner and bot eligibility." },
+  }),
   projection("rules.tactic", "rules.tactic.consequence.threat", "rules", {
     role: "reading", payloadType: "ThreatResult", semantics: THREAT_SEMANTICS,
     operands: ["kind", "conventionId", "threats"], signs: ["threatened"], grounding: "declared_convention", exactness: "convention",

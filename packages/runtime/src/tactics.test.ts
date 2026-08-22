@@ -1,6 +1,6 @@
 import { expect, describe, it } from "vitest";
 
-import { checkEvent, doubleAttackEvent, forkSurvivesReply, loosePieceReading, mateInOne, rayClassificationReading, replyBreadth, threats } from "./tactics.js";
+import { checkEvent, discoveredLatencyReading, doubleAttackEvent, forkSurvivesReply, loosePieceReading, mateInOne, rayClassificationReading, replyBreadth, threats } from "./tactics.js";
 
 describe("bounded tactical authorities", () => {
   it("records exact reply breadth and treats zero as terminal", () => {
@@ -72,5 +72,22 @@ describe("bounded tactical authorities", () => {
     expect(exact.mates.map((value) => value.moveUci)).toContain("g6g7");
     expect(exact.mates.find((value) => value.moveUci === "g6g7")).toMatchObject({ matedKing: { square: "h8", piece: { color: "black", role: "king" } } });
     expect(mateInOne("4k3/8/8/8/8/8/4P3/4K3 w - - 0 1").mates).toEqual([]);
+  });
+
+  it("retains latent discovered attacks without mistaking an enemy blocker for our screen", () => {
+    const latent = discoveredLatencyReading("7k/8/8/8/4r3/5N2/6B1/4K3 w - - 0 1");
+    expect(latent.screens).toContainEqual(expect.objectContaining({
+      screen: expect.objectContaining({ square: "f3", piece: expect.objectContaining({ color: "white", role: "knight" }) }),
+      slider: expect.objectContaining({ square: "g2", piece: expect.objectContaining({ color: "white", role: "bishop" }) }),
+      target: expect.objectContaining({ square: "e4", occupant: expect.objectContaining({ color: "black", role: "rook" }) }),
+      discoveredCheck: false,
+      exchange: expect.objectContaining({ resultUnits: 5 }),
+    }));
+
+    const check = discoveredLatencyReading("8/8/8/8/4k3/5N2/6B1/4K3 w - - 0 1");
+    expect(check.screens).toContainEqual(expect.objectContaining({ screen: expect.objectContaining({ square: "f3" }), target: expect.objectContaining({ square: "e4", occupant: expect.objectContaining({ role: "king" }) }), discoveredCheck: true }));
+
+    const enemyBlocker = discoveredLatencyReading("7k/8/8/8/4r3/5n2/6B1/4K3 w - - 0 1");
+    expect(enemyBlocker.screens.some((value) => value.screen.square === "f3" && value.slider.square === "g2")).toBe(false);
   });
 });

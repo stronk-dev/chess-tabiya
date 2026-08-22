@@ -83,3 +83,16 @@ Append-only.
   25 consumers, 182 bindings and 40 semantic events/eligibility rows.
 - Focused verification: 92 affected runtime/server/web tests green; runtime typecheck, manifest
   check, semantic check and diff hygiene green. No repository-wide verification was run.
+
+## 2026-08-22 — discovered-geometry state checkpoint
+
+- Added `rules.tactic.reading.discovered_latency@1` over the already-shipped vacation-ray source.
+  It retains the friendly screen, friendly slider, enemy target, full ray, discovered-check flag
+  and positive local-exchange tree where applicable. An enemy blocker is a hard negative.
+- The projection describes latent geometry only: it does not claim the screen should move, that
+  every destination exposes the ray, or that the relation is important. Learner and bot admission
+  therefore remain downstream measured decisions.
+- Registered 18 of 30 RFC projections. The compiled manifest is now 25 producers, 144 projections,
+  25 consumers, 182 bindings and 40 semantic events/eligibility rows.
+- Focused verification: 72 affected runtime/server/web tests green; runtime typecheck, manifest
+  check, semantic check and diff hygiene green. No repository-wide verification was run.
