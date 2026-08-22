@@ -101,7 +101,7 @@ degraded path that says the stack did not apply.
 ## 5. Execution graph
 
 ```text
-O8 owner ruling
+O8 owner ruling (complete 2026-08-22)
   ├─ tactical-collectors independent review → acceptance → implementation
   ├─ breadth-collectors independent review → acceptance → implementation
   └─ D816 settled-go; D817 settled-refuse; D815 is optional post-tactical research
@@ -118,13 +118,14 @@ optional bot tournament envelope (D708), repertoire and memory waves
 Campaign is not a prerequisite for the bot stack. Campaign may later select an admitted profile,
 but it must not define bot semantics or delay the base roster.
 
-## 6. The only owner ruling still needed before F8 drafting
+## 6. Owner ruling recorded; collector landing is the remaining drafting prerequisite
 
-The existing O8 handoff recommends one composable stack; an initial roster of Human baseline,
-Guarded human and Pawn-heavy; no repertoire or adaptive memory until separately measured; the
-label “human-policy band” rather than a promised Elo; and validation by owner use of the sealed
-packet. Approving that recommendation opens F8 drafting. Rejecting Pawn-heavy narrows the initial
-roster without changing the stack architecture.
+The owner approved the existing O8 recommendation on 2026-08-22: one composable stack; an initial
+roster of Human baseline, Guarded human and Pawn-heavy; no repertoire or adaptive memory until
+separately measured; the label “human-policy band” rather than a promised Elo; and validation by
+owner use of the sealed packet. The product question is closed. F8 drafting starts after the
+tactical and breadth collector contracts land, so it composes the shared evidence vocabulary
+instead of inventing bot-only detectors.
 
 No decision about chat, avatars, bot tournaments, campaign opponents or future repertoire breadth
-is required to open F8.
+is required to draft F8 once that collector prerequisite lands.

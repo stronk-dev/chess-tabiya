@@ -137,7 +137,7 @@ favoured or present on an authored spine.
 
 ## Bot and campaign consequence
 
-**Bots are the next parallel product lane, after an O8 ruling.** F1/F2 are complete and R11's
+**Bots are the next parallel product lane; O8 was ruled 2026-08-22.** F1/F2 are complete and R11's
 mechanical/desk work is complete. F8 can use the same exact atomic facts for policy guards and
 inspection, while its move policy remains a distinct composition of Maia, a disclosed Stockfish
 error guard, repertoire, timing and later memory. The measured production sampler—not raw displayed
@@ -156,15 +156,15 @@ the theory/drill join and the owner session named by R14.
    claim.
 2. Implement and measure the exact atoms, manifest projections and negative fixtures.
 3. Draft the bounded semantic-consequence wave only for consumers whose evidence need is explicit.
-4. In parallel after owner O8, draft F8 against the same catalogue; do not fork detector code.
+4. After the collector contracts land, draft F8 against the same catalogue; do not fork detector code.
 5. Claude's F5 UX pass binds approved atoms and existing providers into modules/presets.
 6. F6/F7/F9 consume the shared results for Review, theory/drills and grounded coaching.
 7. Run R14 and rule O10 only after the repaired core loop is usable.
 
 ## Owner decisions that actually unblock separate work
 
-- **O8:** approve or amend the honest baseline/guarded/pawn-heavy bot policy recommendation; this
-  opens F8 without waiting on F5 visual work.
+- **O8 (ruled 2026-08-22):** the honest baseline/guarded/pawn-heavy bot policy recommendation opens
+  F8 after collector landing, without waiting on F5 visual work.
 - **O5:** approve or amend the allow-listed offline provenance compiler + immutable local theory
   bundle; this opens F4 after F3.
 - **O6:** approve the capability/migration architecture and the zero-forced-semantic-rewrite

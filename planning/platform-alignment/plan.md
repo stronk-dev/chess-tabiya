@@ -276,7 +276,7 @@ R11's mechanical arm is complete and supports a layered bot-policy candidate; D6
 external panel, leaving owner use as the validation instrument. The 2026-08-22 candidate pass also
 settles D816 (engine-priced choice breadth admitted for opponent selection) and D817 (multi-band
 Maia disagreement refused); D815 salience is excluded from the first stack pending exact tactical
-identity measurement. O8 is therefore the remaining owner decision before F8 drafting, while the
+identity measurement. O8 was ruled 2026-08-22; collector landing is the remaining prerequisite before F8 drafting, while the
 two collector drafts follow their own review/acceptance path.
 R3 remains external for real interaction and
 nontechnical-player comprehension, so it does not yet unlock defaults, R7 or R8.

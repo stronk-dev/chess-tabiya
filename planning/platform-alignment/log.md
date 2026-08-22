@@ -926,3 +926,15 @@ Product modules/defaults, schemas and content remain explicitly out of scope.
   claim, followed by bounded semantic consequences and consumer-specific F5/F6/F8 eligibility.
   Bots can proceed after O8 against the same catalogue. Campaign remains behind the repaired core
   loop, F5/F7 and the R14 owner session.
+
+## 2026-08-22 — O8 human-policy bot stack ruled
+
+- The owner approved O8.1–O8.5 as recommended: one versioned composable policy stack; Human
+  baseline, Guarded human and Pawn-heavy as the only initial measured profiles; no repertoire or
+  adaptive memory until separately measured; human-policy-band disclosure instead of promised
+  Elo; and owner-use validation without a population-level human-likeness claim.
+- O8 is no longer a planning blocker. F8 remains sequenced after the tactical and breadth collector
+  contracts so bot policy and learner guidance consume the same registered facts rather than
+  forking detector code.
+- The ruling does not authorize unmeasured personality labels, bot tournaments, repertoire content,
+  chat-driven move choice or hidden difficulty adjustment.

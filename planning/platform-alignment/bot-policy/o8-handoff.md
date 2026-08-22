@@ -1,6 +1,6 @@
 # O8 owner handoff — human-policy bots and honest personalities
 
-**Status:** ready for owner ruling  
+**Status:** **OWNER-RULED 2026-08-22 — O8.1–O8.5 approved as recommended.**
 **Inputs:** R11 mechanical experiment + validated 42-branch blind packet, R5, D333/D335, D551/D561,
 D649, Chessiverse/Otter desk research  
 **Does not claim:** human-likeness from an external panel; owner use remains validation
@@ -33,7 +33,15 @@ tactical identities land and its own experiment passes (`design/research/bot-can
    its transfer ratio near 0.289 over the corpus; UI must not present a target band as a personal or
    guaranteed playing rating.
 
-## Recommended ruling
+## Owner ruling — 2026-08-22
+
+The owner approved all five recommendations after the D816/D817 result and the collector-RFC
+joint review. The clauses below are normative for F8: one composable policy stack; an initial
+Human baseline / Guarded human / Pawn-heavy roster; no unmeasured repertoire or adaptive memory;
+honest human-policy-band disclosure; and owner-use validation without a population-level
+human-likeness claim.
+
+## Approved ruling
 
 ### O8.1 — One composable policy stack
 
@@ -100,8 +108,9 @@ owner-use instrument: replay unlabeled branches, record the first incoherent ply
 guarded, pawn-heavy and weakened-Stockfish control. This validates the selected roster by use; it
 does not become a population claim.
 
-## Consequence of approval
+## Consequence of the ruling
 
-O8 becomes answered and F8 may draft the stack, profile registry, disclosure/calibration contract
-and owner-use packet integration. It may not invent more personality traits, build bot tournaments,
-write a repertoire, or couple persona text to move choice without a registered policy layer.
+O8 is answered. F8 may draft the stack, profile registry, disclosure/calibration contract and
+owner-use packet integration after the tactical and breadth collector contracts land, as the
+dependency map requires. It may not invent more personality traits, build bot tournaments, write a
+repertoire, or couple persona text to move choice without a registered policy layer.
