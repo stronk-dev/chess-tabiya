@@ -1,7 +1,8 @@
 # RFC: Learner modules
 
 - **Status:** draft 2026-08-22 — the Phase-3 / F5 module-contract RFC. Drafted while 2c is
-  implementing and 2d awaits independent acceptance; **implementation of this RFC is sequenced
+  implementing and 2d awaited independent acceptance (2d has since been accepted with its 18
+  ids unchanged — Depends-on, §7, changelog); **implementation of this RFC is sequenced
   after both collector waves land** so every eligibility row binds a compiled projection id, per
   the program routing (`planning/evidence-foundation-ux/plan.md` Phase 3).
 - **Author:** claude (drafted on the D717 program routing, Phase 3)
@@ -17,9 +18,11 @@
   ([[D745]], plan.md).
 - **Depends on:** `rfc/tactical-collectors.md` (2c — **implementing**; supplies `threat@1`,
   `mate_in_one@1`, `loose_piece`, `space`, `pawn_connectivity`, castling and the other Wave-A
-  ids) and `rfc/breadth-collectors.md` (2d — **draft, in independent acceptance review**;
-  supplies square-control, mobility, pawn-dynamics and king-zone ids). The landing-order seam
-  is normative: §7. Builds on the implemented `archive/evidence-contract-manifest.md` (F1) and
+  ids) and `rfc/breadth-collectors.md` (2d — **accepted 2026-08-22**, after this draft, with the
+  independent review's five in-place convention repairs ([[D895]]) and its 18-id Appendix A
+  unchanged — verified in cross-review, which resolves open question 5's contingency: no
+  Appendix-B id moved; supplies square-control, mobility, pawn-dynamics and king-zone ids). The
+  landing-order seam is normative: §7. Builds on the implemented `archive/evidence-contract-manifest.md` (F1) and
   `archive/semantic-evidence-selection.md` (F2).
 - **Parent / amends:** additively extends the compiled evidence catalogue
   (`packages/runtime/src/evidence-catalog.ts`) with a module registry, production consumers,
@@ -84,7 +87,8 @@ moves without"* the first production eligibility rows, named module consumers an
 (gap matrix §6.1). F5 modules, Phase-4 composition, Phase-5 presets, F6 Review Map, F8 bots and
 F9 coaching all wait on this document. `rfc/tactical-collectors.md` §Discharges names this RFC
 as the discharger of its two open rows (production-module eligibility; learner-facing wiring of
-the D745 negative reading).
+the D745 negative reading), and `rfc/breadth-collectors.md` §Discharges names it once more for
+the breadth projections' production-module eligibility (its D1).
 
 **Scope boundary — module contracts + eligibility rows + the registry binding, nothing else:**
 
@@ -129,7 +133,11 @@ licence to invent. The schema lands as `ModuleDeclaration` in
 5. **`timings`** — non-empty subset of the closed vocabulary in §2, each with its initiative
    (`ambient | proactive | on_request | explicit_mode`).
 6. **`answerCeiling`** — the maximum answer content of any output:
-   `none | fact | pattern | threat | candidate_move | principal_variation`. Whether **moves,
+   `none | fact | pattern | threat | candidate_move | principal_variation`. Its consumer image is
+   the shipped `AnswerDistance` union (`evidence-contract.ts:7`) by pinned mapping, not homonym:
+   `candidate_move → candidate_moves`, `none` = an empty `answerContent` set, the rest literal —
+   compiled with the registry so a ceiling token with no shipped image is a build failure (the
+   D523 lesson). Whether **moves,
    rankings, PVs or ratings** are legal in output is this field plus two hard rules: the packet
    compiler refuses `recommendedMoveUci`/PV material for any module whose ceiling is below
    `candidate_move` (the R3 mechanism, `module-contract.ts:78`, made production); and
@@ -137,9 +145,18 @@ licence to invent. The schema lands as `ModuleDeclaration` in
    (`rfc/learner-rating.md` §8/AC-11): the same position and history produce byte-identical
    module output regardless of the learner's rating.
 7. **`ceilings`** — the module's disclosure, session and role ceilings. Effective assistance is
-   `requested preset ∩ workflow/session ceiling ∩ role ∩ source availability` — **every term
-   only narrows; a ceiling only removes** (design/05 §3-forms as amended, quoted). Role values
-   are F1's closed set (`learner`, `host`, `participant`, `spectator`, `author`, `operator`).
+   `requested preset ∩ workflow/session ceiling ∩ honesty/access ∩ source availability` —
+   **every term only narrows; a ceiling only removes** (design/05 §3-forms as amended, quoted —
+   the draft misquoted the third term as `role`; corrected in cross-review). The honesty/access
+   term is encoded at this seam as F1's closed role set (`learner`, `host`, `participant`,
+   `spectator`, `author`, `operator`) plus the §2 disclosure bindings; the encoding only narrows
+   the design term. **The [[D659]] class rule binds every rendering of board state:** any module
+   projection of the board — visual, textual, spoken or assistive — inherits the visible board's
+   assistance conditions and may never widen what the visible board withholds under the effective
+   config; accessibility and alternate forms are renderings of the same admitted content, never a
+   bypass. This binds `rules_floor` (its dots follow the board's own lighting gate exactly as the
+   `accessible-board-input` fix made the semantic grid follow `showDests`) and
+   `sight_on_request`'s marks and captions alike.
 8. **`budgets`** — `maxFacts`, `maxWords` (deterministic-renderer output, per delivery),
    `maxMarks` (lit squares), `maxArrows`. Unused budget **stays empty** — the R2/R3 rule;
    spare budget is never filled with locally-distinctive-but-useless facts (the
@@ -158,15 +175,23 @@ licence to invent. The schema lands as `ModuleDeclaration` in
     everything else queues into the rail with count badges rather than expanding."* Exactly
     one module declares `board_adjacent`. Layout itself is Phase 4.
 12. **`forms`** — non-empty subset of the closed inventory
-    `sentence | card | square | arrow | timeline_mark | panel | spoken_voice`, each of which
-    exists in design/05 §3-forms. **`sound` is deliberately absent**: [[D880]]/[[D881]] flag
+    `sentence | card | square | arrow | timeline_mark | panel | spoken_voice`, each grounded in
+    design/05 §3-forms' inventory (sentence rows/lists; sheets/panels — `card` and `panel` are
+    its two bounded shapes; lit squares; arrows & piece halos, form (c); timeline markers; spoken
+    voice). **The F1 image is a pinned mapping, not homonym** (the D523 lesson): each module form
+    compiles to shipped `EvidenceForm` members (`evidence-contract.ts:6`) —
+    `sentence → sentence`, `card → panel` (a card may additionally carry `list` rows),
+    `square → lit_squares`/`piece_halo`, `arrow → arrows`, `timeline_mark → timeline_marker`,
+    `panel → panel`, `spoken_voice → audio` — verified by the registry invariants, so a module
+    form with no shipped image is a build failure. **`sound` is deliberately absent**: [[D880]]/[[D881]] flag
     the sound form as a design-tier gap (§3-forms has no sound row); no module may use a form
     the design inventory does not carry, and the row is the owner's to write. Two form rules
     bind: a visual form is an **alternate rendering of one admitted fact** — render the same
     content as a sentence; if the sentence would be refused, so is the overlay (design/05
-    §3-forms acceptance test); and `arrow` marks are drawn from an admitted fact's retained
-    squares — the system-arrow producer gap (D546, form (c)) is unchanged and no module here
-    requires a vector producer.
+    §3-forms acceptance test); and `arrow` marks are drawn only from an admitted fact's retained
+    **ordered** operands (a threatened move, a capture line, a ray, a PV move) — a fact
+    retaining only square *sets* draws marks, never arrows — so the system-arrow producer gap
+    (D546, form (c)) is unchanged and no module here requires a vector producer.
 13. **`rendering`** — deterministic rendering is **normative** (R5): registered per-projection
     renderers produce the sealed sentences; the optional LLM boundary is §6.3. Provider-off
     output is byte-identical in claims.
@@ -190,6 +215,18 @@ new** — the R3 harness overloaded `precommit` for `blunder_prevention`, which 
 D881 forbids going forward. Timing attaches to disclosure; form attaches to neither (§3-forms,
 quoted).
 
+**The F1 seam must be extended, not prose-mapped** (added in cross-review — the draft left it
+implicit, which is the D523 class): the shipped closed union `EvidenceTiming`
+(`packages/runtime/src/evidence-contract.ts:5` —
+`precommit | postcommit | checkpoint | attempt_end | terminal | review | analysis`) carries no
+at-commit member. This RFC **adds `at_commit` to that catalog-local union** in the change that
+lands the consumers — digest-moving, register-silent (the union sits in none of the six
+registers) — so D881's slot is typed at the consumer declaration rather than overloaded onto
+`precommit`, which is exactly what D881 forbids. The remaining module timings map onto shipped
+members without extension: module `checkpoint` → shipped `checkpoint`/`attempt_end` per the
+open boundary; module `review` → shipped `review` (`explicit_mode` initiative additionally
+admits `analysis`); `pre_commit`/`post_commit` → `precommit`/`postcommit` literally.
+
 ### §3 — Selection: deterministic, module-local, and R3-honest about lift
 
 One production selection policy, `production.module_local@1`, is added beside the untouched
@@ -211,9 +248,19 @@ research policy. Per module, at a decision point:
       every value is a citation to a recorded measurement (d542, D730, D794 — e.g.
       `pawn_island_gained` 2.13×, `rook_on_seventh` 3.83×, `double_attack` 1.72×/1.96×,
       `check` 2.48×/2.60×). A family with no measured lift orders **after** measured families
-      within its exactness class — absence of measurement is not a zero.
+      within its exactness class — absence of measurement is not a zero. **Table governance,
+      pinned against D368's stale-figure defect** (added in cross-review): `module-lift@1` is a
+      frozen catalog-local object beside the policy; every row carries its value, its citation to
+      the recorded measurement, **and the corpus/commit it was measured against with its
+      derivation date** — a lift value with no measured-at anchor is the D368 class and fails the
+      registry invariant. Rows change only through a changelog'd spec change that re-derives
+      against a named corpus; an absent table is a build failure, never a silent empty ordering.
    4. **Deterministic ties**: the module's `accepts` declaration order, then lowest subject
-      square in a1…h8 order, then event id lexicographic.
+      square in a1…h8 order, then event id lexicographic where the tied candidates are events,
+      then — because reading- and source-record-shaped candidates carry no event id — the
+      canonical serialization of each fact's retained operands, lexicographic. The final key is
+      total by construction: two facts with identical projection id, subject square and operand
+      bytes are the same fact.
 3. **Budget**: keep the top `maxFacts`. Unused budget stays empty. Empty result renders the
    module's `emptyBehavior`.
 
@@ -226,9 +273,15 @@ the closed `accepts` tables — and it never establishes valence, causality, imp
 grade (O3). What measured lift **may** do, and does here, is **order within a module's already
 admitted set**: once semantics have decided a fact may face the learner in this module at this
 time, the recorded measurement of how strongly that family tracks played moves is a legitimate,
-deterministic, citable sequencing key for a bounded budget. Changing a lift value can reorder a
-packet; it can never change what is admissible. That is the entire distinction, and criterion
-A7's negative fixture enforces it.
+deterministic, citable sequencing key for a bounded budget. Changing a lift value can never
+change what is **admissible**; and — stated plainly rather than smuggled (corrected in
+cross-review: the draft said "reorder without changing membership", which is true only when the
+admitted set fits the budget) — when the admitted set exceeds `maxFacts`, lift legitimately
+decides which admitted facts fill the scarce slots. That is the ruled clause working, verbatim:
+local measurement *"may select among already-eligible events but cannot establish valence,
+causality, importance or a move grade"* (design/05 §3 amendment, clause 3). Lift never crosses
+the admission boundary; inside it, lift is a sequencing-and-fill key only. Criterion A7's
+negative fixtures pin both halves.
 
 **The negative reading (D745(2)/D718).** `derived.semantic_avoidance.*` facts carry
 `denominatorRequired`: the compiled packet must retain the numerator and the **complete**
@@ -258,8 +311,10 @@ one is a spec change with a changelog line.
 | 11 | `full_inspector` | review (explicit_mode) | explicit_surface | principal_variation | 20 / 400 / 20 / 8 | open a fact's provenance |
 
 Eligibility summary — unit: **eligibility row** (one literal `(projection id, module consumer)`
-pair); total declared: **179**, of which **177 compile at landing** and **2 are
-declared-awaiting** the grade-family projection (§5). Appendix B is the closed enumeration.
+pair); total declared: **175**, of which **173 compile at landing** and **2 are
+declared-awaiting** the grade-family projection (§5). (Drafted as 179/177; four sight rows were
+removed in cross-review — Appendix B and the changelog carry the correction.) Appendix B is the
+closed enumeration.
 
 #### 4.1 `rules_floor` — legal affordance
 
@@ -277,17 +332,28 @@ declared-awaiting** the grade-family projection (§5). Appendix B is the closed 
 
 - **Intent:** answer one concrete board-sight question without ranking moves. Owner-ruled
   legal pre-commit (D617–D619): *requested exact sight* only.
-- **Accepts (24 rows):** exact, `position_rules`-grounded readings only, square-scoped to the
-  learner's explicit selection: 16 structural readings (the 18 `STRUCTURAL_FEATURE_KINDS`
-  minus retired `pawn_count`, minus `pawn_safe_square` — R1/D566 made the latter ineligible
-  for its advertised meaning); `rules.castling.reading.rights@1` and `.legality@1`;
-  `rules.tactic.reading.rook_on_seventh@1`; and the five exact 2d readings
-  (`rules.square.reading.control@1`, `rules.mobility.reading.piece_destinations@1`,
-  `rules.pawn.reading.contacts@1`, `rules.pawn.reading.candidate_majority@1`,
-  `rules.king.reading.zone_state@1`). Convention-grounded readings (space, loose_piece, ray
-  classification, trapped, discovered latency) are **not** sight: pre-commit exactness is the
-  admission test, and an exchange-conditioned warning pre-commit is threat-radar/Support
-  material, not sight.
+- **Accepts (20 rows):** exact, `position_rules`-grounded readings only, square-scoped to the
+  learner's explicit selection: 15 structural readings (the 18 `STRUCTURAL_FEATURE_KINDS`
+  minus retired `pawn_count`; minus `pawn_safe_square` — R1/D566 made it ineligible for its
+  advertised meaning; and minus `outpost`, removed in cross-review because its matcher consumes
+  the same defective `pawnSafety` result (`structure.ts:352`; the live manifest check names the
+  dependency and D632 records the overclaim's reach) — it stays inspector material until that
+  repair lands rather than entering requested sight under a broken convention);
+  `rules.castling.reading.rights@1` and `.legality@1`;
+  `rules.tactic.reading.rook_on_seventh@1`; and the two **exact** 2d readings
+  (`rules.square.reading.control@1`, `rules.pawn.reading.contacts@1`). Convention-grounded
+  readings are **not** sight: pre-commit exactness is the admission test, and an
+  exchange-conditioned warning pre-commit is threat-radar/Support material, not sight.
+  **Corrected in cross-review (the D523 class — a grammar assumed rather than checked):** the
+  draft admitted five 2d readings as "exact", but the accepted `rfc/breadth-collectors.md`
+  declares three of them convention-grounded — `rules.mobility.reading.piece_destinations@1`
+  (consumes `local-non-losing@1`), `rules.pawn.reading.candidate_majority@1` (the disclosed
+  D788 convention) and `rules.king.reading.zone_state@1` (consumes
+  `king-zone@1`/`king-shelter@1`) — so they fail this module's own admission test and are
+  removed; their inspector home (4.11) is unchanged. The genuinely exact half of the mobility
+  question ("where can this piece legally go") has no standalone exact projection at HEAD or in
+  either accepted collector wave; admitting it to sight needs a separate exact projection or an
+  operand-scoped admission mechanism — a proposed ledger row, not an invention here.
 - **This is not the shipped census query.** R3 measured the defect this contract retires:
   median 2 / p95 9 / max 11 captions and up to 19 marks per selected square with no
   eligibility, selection or budget (`evidence-presentation.md` §2). Here: cap **1 fact**, 6
@@ -313,7 +379,14 @@ declared-awaiting** the grade-family projection (§5). Appendix B is the closed 
 - **Disclosure: narrows, never reveals.** The warning names what the staged move exposes
   ("this leaves your knight capturable at a loss"); it never names a better move, never shows
   the refutation line, and hands the move back (the Chessiverse guard transformed through the
-  owner's ruling). The packet compiler refuses move/PV fields at this ceiling.
+  owner's ruling). The packet compiler refuses move/PV fields at this ceiling. **The boundary
+  cases, stated rather than left to an implementer** (added in cross-review): at a forced move
+  (exactly one legal move) the warning may still fire and state the staged move's consequence —
+  there is no alternative to withhold, so nothing is revealed, and the module never claims the
+  consequence was avoidable; at branching factor two, a warning inevitably identifies the
+  alternative — that narrowing is inherent to any staged-move warning and is precisely why the
+  module is legal only inside an explicitly chosen Support preset (O4), never the rehearsal
+  default.
 - **The one board-adjacent cue** (D841). Cap 1 fact, 1 mark, 20 words.
 - **Empty: `silent`.** A quiet commit is a commit. **The module never says "safe"** — an
   all-clear is a whole-position judgement no rules collector can ground, and criterion A6's
@@ -381,8 +454,10 @@ declared-awaiting** the grade-family projection (§5). Appendix B is the closed 
 - **Accepts (6 rows):** `theory.shapes.firing@1` (authored shape entries with provenance),
   `rules.structural.reading.named_structure@1`, `rules.structural.reading.space@1` (2c, the
   D745-ruled convention with its chess-tradition citation),
-  `rules.structural.reading.pawn_connectivity@1` (2c), `rules.phase.reading@1` (with declared
-  abstention bands — the classifier may abstain out loud), `rules.endgame.reading@1` (named
+  `rules.structural.reading.pawn_connectivity@1` (2c), `rules.phase.reading@1` (its
+  unclassified band renders as itself — the shipped declaration abstains nowhere
+  (`evidence-catalog.ts:341`), so "the phase bands do not classify this position" is a value,
+  never a simulated absence), `rules.endgame.reading@1` (named
   technique, §5b: "this is a Lucena; the technique is the bridge" — never "play Rf4").
 - Cap 1 card / 80 words. Empty: `stated_absence` — "Nothing recognizes this structure", which
   is also the content-coverage signal (D690/D691's starving is visible instead of silent).
@@ -409,6 +484,17 @@ declared-awaiting** the grade-family projection (§5). Appendix B is the closed 
   - **Stage 3 — the move/line**: reveals; legal **only** at this stage, only under an open
     disclosure state, and it is the only place in the ordinary-module set where
     `candidate_move`/`principal_variation` content is legal outside review.
+
+  **The stage gate is typed, not prose** (added in cross-review — the draft's outer ceiling of
+  `principal_variation` would have let the packet compiler pass PV bytes at stage 1): each stage
+  carries its own answer ceiling — stage 1 `pattern`, stage 2 `fact` (subject naming only),
+  stage 3 `candidate_move`/`principal_variation` — and the packet compiler enforces the
+  **requested stage's** ceiling exactly as it enforces module ceilings (`module-contract.ts:78`'s
+  refusal, applied per stage), so a stage-1 or stage-2 packet refuses move/PV material even
+  though the module's outer ceiling permits it at stage 3. Stage 2 may name the subject piece or
+  square of an admitted stage-3-capable fact as a narrowed disclosure of that same fact; the
+  move and the line stay refused until stage 3. A below-3 stage admitting PV bytes is a compile/
+  fixture failure, never a rendering choice (criterion A17).
 - **Accepts (7 rows):** `live.stockfish.eval@1`, `live.stockfish.pv@1` (stage 3 only —
   per-entry restriction), `live.syzygy.result@1`, `live.syzygy.category@1`,
   `live.syzygy.distance@1`, `rules.endgame.reading@1` (stage-1 material),
@@ -448,8 +534,13 @@ declared-awaiting** the grade-family projection (§5). Appendix B is the closed 
 - **Availability honesty is mandatory:** R7 measured 0/29 middlegame/endgame mainlines with
   consecutive recorded evals ([[D880]]) — moments without trajectory ground render as
   moments-without-eval, and the map states what it could not compute.
-- Cap 3 facts / 80 words / 3 marks / 2 arrows per moment. Moves/PV legal (post-game). Empty:
-  `stated_absence`.
+- Cap 3 facts / 80 words / 3 marks / 2 arrows per moment. Moves/PV legal (post-game; note the
+  ceiling is slack at landing — no accepted projection here carries a PV, and a ceiling above
+  what `accepts` can deliver reveals nothing). **The moment count itself is deliberately not
+  bounded here** (named in cross-review rather than left silent): moment selection is the
+  Phase-4/R7 lane's contract — D690 measured 13 and 16 exact moments on the two long
+  trajectories and refused a fixed minimum, and a fixed maximum is likewise not chosen by this
+  RFC. Empty: `stated_absence`.
 - **Not the Story.** `review.story` (D687/D688/D689 defects) is untouched here; re-basing the
   Story onto module selection is named follow-up work, not silently absorbed.
 
@@ -528,7 +619,7 @@ availability rule, working.
    (all eleven minus registry-only `rules_floor`), version 1, appended to
    `EVIDENCE_CONSUMER_IDS`. Each consumer declaration mirrors its module's timing, roles,
    forms, answer content and budgets — and per F1's law, its adapters **only narrow**.
-3. **Eligibility**: `PRODUCTION_ELIGIBILITY_DECLARATIONS` — the 177 literal compiled rows of
+3. **Eligibility**: `PRODUCTION_ELIGIBILITY_DECLARATIONS` — the 173 literal compiled rows of
    Appendix B — joined into `EVIDENCE_MANIFEST.eligibility` beside the 40 research rows
    (which are byte-identical after this change). The manifest digest moves; the docs tuple in
    `docs/semantic-evidence.md` and `docs/evidence-contract.md` moves in the same change.
@@ -575,15 +666,17 @@ empty packet admits no generated sentence at all — the deterministic empty sen
 At drafting HEAD, 2c is **implementing** (part of its Appendix already compiled: the producer
 ids `rules.exchange`, `rules.tactic`, `rules.castling`, `derived.exchange`, `derived.tactic`
 and several event ids are in the catalogue; `loose_piece`/`pawn_islands` events and the
-remaining readings are in flight) and 2d is **draft in independent acceptance review**. The
-rule, stated once and binding:
+remaining readings are in flight) and 2d was **draft in independent acceptance review** — it has
+since been **accepted** (2026-08-22, five in-place convention repairs, [[D895]]) with its 18-id
+Appendix A byte-identical, verified in cross-review. The rule, stated once and binding:
 
 - An eligibility row compiles only when its projection id exists in the compiled catalogue —
   F1 makes anything else a build failure, which is the guard, not a problem.
 - This RFC's **implementation therefore lands after 2c and 2d land** (the plan's own
-  sequencing: *"module declarations bind real ids rather than forecasts"*). If 2d's
-  acceptance changes any of its 18 ids, Appendix B is amended with a changelog line before
-  implementation — ids are cited from a closed accepted list, never guessed.
+  sequencing: *"module declarations bind real ids rather than forecasts"*). The drafted
+  contingency — "if 2d's acceptance changes any of its 18 ids, Appendix B is amended" — is
+  resolved: 2d's acceptance changed none of them, verified against the accepted Appendix A in
+  cross-review; ids are cited from a closed accepted list, never guessed.
 - The two grade rows and the opening-identity runtime join follow the same rule at their own
   pace (§5; 4.7): **declared, honest-empty, never faked.**
 
@@ -613,7 +706,7 @@ unit and total and match the tables they verify.
    exist in `MODULE_DECLARATIONS` with all thirteen §1 fields; `make evidence-manifest-check
    semantic-evidence-check` passes; the docs tuple moves in the same change. Negative: a
    twelfth module id, or a module missing `emptyBehavior`, fails compilation.
-2. **A2 — Eligibility rows.** The compiled manifest contains exactly the **177** Appendix-B
+2. **A2 — Eligibility rows.** The compiled manifest contains exactly the **173** Appendix-B
    compiled rows (unit: `(projection, consumer)` pair) — no more, no fewer — and the 40
    research rows byte-identical. The 2 declared-awaiting grade rows are **absent** from the
    compiled manifest and present in the registry's `awaiting` lists; a test asserts both
@@ -635,9 +728,16 @@ unit and total and match the tables they verify.
    `position-evidence.ts:25`'s refusal stands.
 7. **A7 — Deterministic selection and the lift boundary.** Selection output is byte-identical
    across runs and across permuted input order; a two-fact same-class tie resolves by the
-   declared keys. **Negative (the R3 guard):** a test constructs a fact whose family lift is
-   maximal but whose projection id is not in the module's `accepts` — it must not appear;
-   and swapping two lift values reorders a packet without changing its membership.
+   declared keys, including the reading-shaped operand-serialization key. **Negative (the R3
+   guard), three arms:** (a) a fact whose family lift is maximal but whose projection id is not
+   in the module's `accepts` must not appear, at any budget; (b) with the admitted set within
+   `maxFacts`, swapping two lift values reorders the packet without changing its membership;
+   (c) with the admitted set exceeding `maxFacts`, swapping two lift values changes which
+   admitted facts fill the budget while admitting nothing outside `accepts` — the arm that
+   distinguishes "lift reordered the packet" from "lift changed membership" at the only place
+   lift can lawfully touch membership, so the fixture fails against any policy that lets lift
+   cross the admission boundary and also fails against one that pretends the budget cut is
+   lift-free.
 8. **A8 — Denominator rule.** An avoidance fact whose payload lacks the complete
    numerator/denominator is refused at admission; the rendered sentence contains the
    denominator; the registry invariant rejects (at compile) an avoidance row bound to a
@@ -668,7 +768,15 @@ unit and total and match the tables they verify.
 16. **A16 — Closeout.** The landing commit flips this RFC's recorded ledger rows, appends the
     `planning/exploration/log.md` entry in the same commit (the CLAUDE.md ledger-and-log
     clause), and writes the discharge SHAs into `rfc/tactical-collectors.md`'s D1 and D2 rows
-    (its table names "the Phase-3 RFC's landing commit" as the recording site).
+    **and `rfc/breadth-collectors.md`'s D1 row** (all three tables name the Phase-3 module
+    RFC's landing commit as the recording site — the draft omitted the breadth row; corrected
+    in cross-review).
+17. **A17 — Stage gate (guided_hint).** Against a position with an admitted
+    `live.stockfish.pv@1` fact: the stage-1 packet contains pattern content only; the stage-2
+    packet names at most the subject piece/square and contains no move, line or PV bytes; the
+    stage-3 packet under an open disclosure state may contain them. Negative: a stage-2 packet
+    carrying the PV fails the per-stage compiler refusal; a stage request outside an open
+    disclosure boundary renders the module's declared empty state, never a deferred reveal.
 
 ## Discharges
 
@@ -679,43 +787,103 @@ unit and total and match the tables they verify.
 | D3 | The grade-family projection + versioned per-context convention document ([[D879]]) so the two declared-awaiting rows compile; praise-class refusal and never-rating-conditioned carried into that RFC verbatim | `planning/evidence-foundation-ux/plan.md` | the grade-family RFC's landing commit | |
 
 The unusual honesty note, stated rather than buried: until D1 discharges, the modules are
-production-registered but preset-inert. That is **not** the class-9 wall rebuilt one level up:
-the class-9 rows named a research consumer *by design with no successor*; these rows name
-production consumers whose activation owner is a scheduled, blocked-on-this-RFC phase, held
-open here as a discharge that prevents this RFC from ever archiving around it.
+production-registered but preset-inert. Concretely — the day this RFC lands, **nothing new
+renders to a learner**: `full_inspector` reaches a screen only through the four pre-existing
+inspector bindings it subsumes; `review_map` and every rail module wait on Phase-4 seating (D2)
+and Phase-5 activation (D1); the only executable consumers of the new rows are fixtures and the
+`/capabilities` report. That is **not** the class-9 wall rebuilt one level up: the class-9 rows
+named a research consumer *by design with no successor*; these rows name production consumers
+whose activation owner is a scheduled, blocked-on-this-RFC phase, held open here — and in the
+two accepted collector RFCs' own discharge tables — as discharges that prevent any of the three
+RFCs from ever archiving around it.
 
 ## Open questions
 
 1. **Budget numbers are candidate bounds, not validated defaults** (R2-compatible; R3's
    participant/owner-use arm is the validation instrument). The owner may adjust any budget
    before `accepted`; at acceptance they close.
-2. **Threat radar's pre-commit arm** is drafted under the Support ceiling (4.4) on the O4
-   boundary's logic; if the owner rules requested threat display admissible outside Support
-   (the Lichess `x`-key shape), the ceiling term changes — one field, no structural change.
+2. **Threat radar's pre-commit arm is the one place this draft exceeds a literal ruling**
+   (sharpened in cross-review — the P3(c) pattern, named rather than presupposed): O4
+   pre-commit-authorizes exactly two things — requested exact sight and Support-preset
+   proactive blunder prevention (`assistance-surface-taxonomy.md` §5.1: *"the only
+   pre-commit-timed modules that exist"*) — and an on-request, Support-gated threat display is
+   neither, however close the analogy. The owner decides at acceptance, three ways: (a) strike
+   the pre-commit arm — the module becomes post-commit only, **the conservative default this
+   contract falls back to if the question is unruled at acceptance**; (b) admit the arm inside
+   Support as drafted; (c) admit requested threat display outside Support (the Lichess `x`-key
+   shape). One timing entry and one ceiling term move; no structural change on any branch.
 3. **The grade convention** (cite Lichess win%-drop vs declare our own; per-context ladders)
    belongs to the grade-family RFC (D3), not here.
 4. **Review Story re-basing** onto module selection (D687/D688/D689) is named follow-up work
    for the Phase-4/R7 lane; this RFC's `review_map` deliberately does not absorb
    `review.story`.
-5. **2d acceptance drift**: if the independent review changes any of the 18 breadth ids,
-   Appendix B is amended with a changelog line before implementation (§7).
+5. **2d acceptance drift — RESOLVED in cross-review**: 2d was accepted 2026-08-22 with all 18
+   Appendix-A ids unchanged (the five [[D895]] repairs are convention-text and fixture repairs,
+   not id moves); Appendix B is verified against the accepted list (§7).
 
-## Ledger rows (final ids D898–D901, assigned at landing — the acceptance review of `breadth-collectors` took D895–D897 concurrently)
+## Ledger rows (recorded as D898–D901 — the acceptance review of `breadth-collectors` took D895–D897 concurrently; verified recorded in `design/BACKLOG.md` at cross-review, ledger head D902)
 
-- **D898** — Phase-3 module-contract RFC drafted: 11 module contracts, 179 declared /
-  177 compiled eligibility rows, one production selection policy, at-commit timing slot,
-  grades ruled a projection, sealed-packet LLM boundary bound to F1 §6.1. (this file)
+The recorded D898 row still carries the drafted 179/177 counts; the landing flip corrects it to
+175/173 with this changelog as the citation (the recorded row is the register's to flip, not
+this document's to rewrite).
+
+- **D898** — Phase-3 module-contract RFC drafted: 11 module contracts, 175 declared /
+  173 compiled eligibility rows (drafted 179/177; four sight rows removed in cross-review), one
+  production selection policy, at-commit timing slot, grades ruled a projection, sealed-packet
+  LLM boundary bound to F1 §6.1. (this file)
 - **D899** — Grade-family projection RFC needed: `derived.grade.move_quality@1` + versioned
   per-context convention document, the D879 executable; two declared-awaiting rows in the
   module registry wait on it (Discharges D3).
-- **D900** — Module arrow forms ride retained squares; the system-arrow vector producer
-  (D546 form (c)) remains unbuilt and is now consumed-by-declaration in four module
-  contracts — route to the Phase-4/form lane rather than leaving it orphaned.
+- **D900** — Module arrow forms ride retained operands; the system-arrow vector producer
+  (D546 form (c)) remains unbuilt and is now consumed-by-declaration in the **seven** module
+  contracts carrying a nonzero `maxArrows` (the recorded row says four — corrected here; the
+  count is re-derivable from the §4 table) — route to the Phase-4/form lane rather than leaving
+  it orphaned. Arrow vectors come only from admitted facts whose payloads already retain ordered
+  move/ray operands (a threatened move, a capture line, a ray, a PV move); a fact retaining only
+  square *sets* draws marks, never arrows.
 - **D901** — `review.story` remains outside module selection by scope (open question 4);
   D687/D688/D689 stay open with a named successor lane.
 
 ## Changelog
 
+- 2026-08-22: adversarial cross-review (independent), at HEAD `3a06349` (manifest tuple
+  unchanged: 25/146/25/182 core, 40/40/15/1 semantic, digest `fa700584…`; ledger head verified
+  D902; all cited symbols re-verified — `position-evidence.ts:25`, `guidance.ts:60`,
+  `module-contract.ts:78`, `board-input.ts:legalDestinations`, `BANNED_JUDGEMENTS`,
+  `EVIDENCE_GENERIC_BYPASS`; `register-check`/`status-parity`/`intent-parity` green with the
+  draft present). Blocker corrections, each with its evidence: **(1)** `sight_on_request`
+  admitted five 2d readings as "exact" while the accepted `breadth-collectors` declares three
+  of them convention-grounded (`piece_destinations` via `local-non-losing@1`,
+  `candidate_majority` via the D788 convention, `zone_state` via `king-zone@1`/`king-shelter@1`)
+  — removed as failing the module's own admission test; `outpost` removed with them because its
+  matcher consumes the D566-defective `pawnSafety` (`structure.ts:352`), the same ground on
+  which the draft already excluded `pawn_safe_square`. Eligibility totals corrected
+  **179/177 → 175/173** (sight 24 → 20); Appendix B, §4 caption, §6.3, A2 and the D898 draft
+  text updated; the recorded BACKLOG rows carry the old counts until the landing flip.
+  **(2)** The guided-hint stage gate was prose over an outer `principal_variation` ceiling that
+  the packet compiler would not have enforced at stages 1–2 — per-stage answer ceilings are now
+  typed contract with new criterion A17 (law 8's sharpest edge in this document). **(3)** The
+  §1.7 effective-assistance formula misquoted design/05 §3-forms (`role` for `honesty/access`)
+  — restored, with the role-set encoding stated as the narrowing image; the [[D659]]
+  no-widening-of-the-visible-board rule added as a binding class rule. **(4)** The module
+  form/answer/timing vocabularies had no pinned image onto the shipped `EvidenceForm` /
+  `AnswerDistance` / `EvidenceTiming` unions — mappings pinned, and the `at_commit` extension of
+  the catalog-local `EvidenceTiming` union is now named rather than implicit (the D523 class,
+  three instances). **(5)** §3's "lift can never change membership" over-claimed: within a
+  scarce budget lift lawfully decides which admitted facts fill it (design/05 §3 clause 3) —
+  restated, A7 rewritten to three arms distinguishing reorder from budget-fill from
+  admission-crossing. **(6)** A16 omitted `rfc/breadth-collectors.md`'s D1 from the discharge
+  recording — added (Motivation likewise). **(7)** Staleness against the moved tree repaired:
+  2d is accepted with its 18 ids unchanged (OQ5 resolved; Depends-on/§7 updated); D898–D901 are
+  recorded, head D902. Also: `module-lift@1` governance pinned against D368 (per-row corpus/
+  commit/date anchors, changelog-only changes); selection ties totalized for reading-shaped
+  candidates (operand-serialization final key); blunder-prevention forced-move and
+  branching-factor-two behavior stated; OQ2 sharpened — the pre-commit threat arm exceeds the
+  literal O4 ruling and defaults to post-commit-only if unruled at acceptance; review-map
+  moment-count scope and PV-ceiling slack named; D900's arrow-consumer count corrected to the
+  seven nonzero-`maxArrows` modules; phase-reading "abstention" claim aligned with the shipped
+  no-abstention declaration; preset-inert honesty note made concrete (nothing new renders at
+  landing until D1/D2 discharge).
 - 2026-08-22: created. Drafted at HEAD `e15123c` (manifest tuple 25/146/25/182 core,
   40/40/15/1 semantic, digest `fa700584…`; module/workflow-id production grep 0 hits; ledger
   head D894). All projection ids verified against the compiled catalogue, the 2c Appendix A
@@ -725,12 +893,12 @@ open here as a discharge that prevents this RFC from ever archiving around it.
 ## Appendix B — eligibility row enumeration
 
 Unit: **eligibility row** — one literal `(projection id, module consumer id)` pair. Total
-declared: **179**; compiled at landing: **177**; declared-awaiting: **2** (marked ◇). This is
+declared: **175**; compiled at landing: **173**; declared-awaiting: **2** (marked ◇). This is
 the closed list A2 counts; adding or dropping a row is a spec change with a changelog line.
 
 | module consumer | rows | n |
 |---|---|---:|
-| `module.sight_on_request` | `rules.structural.reading.{outpost, backward_pawn, isolated_pawn, doubled_pawn, passed_pawn, open_file, half_open_file, line_blockers, direct_attack_count, piece_reach_count, named_structure, bishop_on_shade, king_opposition, piece_count, king_zone, piece_distance}@1` (16); `rules.castling.reading.{rights, legality}@1` (2); `rules.tactic.reading.rook_on_seventh@1` (1); `rules.square.reading.control@1`, `rules.mobility.reading.piece_destinations@1`, `rules.pawn.reading.{contacts, candidate_majority}@1`, `rules.king.reading.zone_state@1` (5) | 24 |
+| `module.sight_on_request` | `rules.structural.reading.{backward_pawn, isolated_pawn, doubled_pawn, passed_pawn, open_file, half_open_file, line_blockers, direct_attack_count, piece_reach_count, named_structure, bishop_on_shade, king_opposition, piece_count, king_zone, piece_distance}@1` (15); `rules.castling.reading.{rights, legality}@1` (2); `rules.tactic.reading.rook_on_seventh@1` (1); `rules.square.reading.control@1`, `rules.pawn.reading.contacts@1` (2) | 20 |
 | `module.blunder_prevention` | `rules.tactic.consequence.{threat, mate_in_one}@1`, `rules.tactic.reading.loose_piece@1` | 3 |
 | `module.threat_radar` | `rules.tactic.consequence.{threat, mate_in_one}@1`, `rules.tactic.reading.{loose_piece, back_rank, trapped_piece, ray_classification}@1`, `derived.tactic.defender_exposure@1` | 7 |
 | `module.postcommit_nudge` | `rules.structural.event.{backward_pawn, doubled_pawn, isolated_pawn, passed_pawn, open_file, half_open_file, king_zone, king_opposition}@1` (8); `rules.transition.event.{castled, last_of_role, pawn_contact, checkmate, promotion, capture, developed}@1` (7); `rules.castling.event.rights_lost@1`, `rules.tactic.event.{double_attack, check, loose_piece}@1`, `derived.exchange.{capture_class, trade_completed}@1`, `rules.structural.event.pawn_islands@1` (7); `derived.semantic_avoidance.{backward_pawn, doubled_pawn, isolated_pawn, passed_pawn, open_file, half_open_file, king_zone, king_opposition, loose_piece, pawn_islands}@1` (10); `rules.pawn.event.dynamics@1`, `derived.pawn.event.transitions@1`, `rules.king.event.zone_state@1`, `derived.king.captured_zone_defender@1`, `derived.activity.event.open_file_occupancy@1` (5); ◇ `derived.grade.move_quality@1` (1) | 38 |
@@ -742,4 +910,4 @@ the closed list A2 counts; adding or dropping a row is a spec change with a chan
 | `module.full_inspector` | `rules.tactic.reading.{loose_piece, ray_classification, rook_on_seventh, trapped_piece, back_rank, discovered_latency}@1`, `rules.tactic.consequence.{threat, mate_in_one, reply_breadth}@1`, `rules.structural.reading.{space, pawn_connectivity}@1`, `rules.phase.development@1`, `rules.castling.reading.{rights, legality}@1`, `derived.tactic.{discovered_executed, promotion_pressure}@1` (16); `rules.square.reading.control@1`, `rules.mobility.reading.piece_destinations@1`, `rules.pawn.reading.{contacts, candidate_majority}@1`, `derived.material.reading.role_signature@1`, `rules.king.reading.zone_state@1` (6); `live.stockfish.{eval, wdl, pv}@1`, `human.maia.{policy, candidate_wdl}@1`, `human.explorer.population@1`, `live.syzygy.{result, category, distance}@1`, `recorded.engine.eval@1`, `recorded.tablebase.result@1`, `theory.shapes.firing@1` (12) | 34 |
 | `rules_floor` | — (registry-only; `evidence: none`) | 0 |
 
-Cross-check: 24+3+7+38+6+4+7+8+48+34 = **179**; minus the two ◇ rows = **177** compiled.
+Cross-check: 20+3+7+38+6+4+7+8+48+34 = **175**; minus the two ◇ rows = **173** compiled.
