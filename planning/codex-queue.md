@@ -790,3 +790,18 @@ already committed at `cac76c4` (the owner's solitaire-chess ruling), together wi
 fairy-piece/didactic-reduction ideation landing after your commit; the next free block after
 that is D874. (Fourth id race — the registered-block rule from the ledger's own process row
 applies; this note is the registration.)
+
+## D585 — the ambient "Open assistance" button: wire it or retire it inside the play-composition chrome slice
+
+**(Residue reconciliation 2026-08-22.)** `DrillScreen.svelte:824` renders a chess-piece button
+(`aria-label="Open assistance"`, title cycling Thinking…/Waiting for disclosure/A consequence is
+ready/Present) whenever `assistance.ambient === "on"` — and it has no `onclick`, link, or expanded
+target. It has been dead since the R3 source audit found it (2026-08-20). No document owns it: it
+is not one of `play-composition` §5's 15 leak sites (L2/L5/L6 bracket line 824 and skip it),
+`assistance-control-wiring` never mentions ambient, and `assistance-controls` (returned draft)
+explicitly defers ambient forms. Because `play-composition` is **implementing** and rebuilds this
+exact region, do NOT patch it standalone — fold it into the remaining module-seat/vocabulary
+cleanup slice: either give the button its real target (the per-seat assistance surface the RFC
+composes) or delete it with the rest of the retired chrome, and add one `play-composition`
+changelog line naming `:824` as a 16th chrome site so the production-site discipline
+(A4/A17-class) stays closed. Flip [[D585]] in the commit that does it.

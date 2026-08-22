@@ -5319,3 +5319,31 @@ remain held until their independently reviewed source contract is buildable.
 **Next:** land the two promotion-race projections after D931/D963 review, then compile literal
 Support/Review eligibility for the completed collector ids. Detection remains silent until those
 module and preset contracts select it.
+
+## 2026-08-22 — residue reconciliation applied: 48 rows, none represented by silence
+
+**What landed:** the verified reconciliation packet
+(`planning/platform-alignment/residue-reconciliation.md`) applied to the ledger and queues in
+one pass. The 42 semantic-collector measurement rows (D724–D903 band + D567/D570): **36 flipped
+✅ with the consuming RFC section cited** (their numbers, conventions and refusals were found
+near-verbatim in the accepted collector RFC bodies — the flip survives RFC archival, which is
+why the ledger-side citation was chosen over reopening three accepted documents), **5 annotated
+deliberately-not-flipped** (D803–D806 flip at breadth-collectors' implementation landing per its
+own closeout; D903 at learner-modules' landing with the D898 count correction), **1 record-only**
+(D800 stands as a feasibility record). The six residue threads: D585 routed into
+play-composition's chrome slice (codex-queue paragraph — the dead ambient button is owned by
+nobody's leak table); **D698 flipped ✅** (the stale external-review blocker was ledger-only —
+R11/O8 wait on nothing external under D649); D301 routed to a small `daily-position` RFC behind
+one disposable glyph prototype (drafting-queue entry added); D863 routed to a content-authoring
+wave (both "dead" wirings verified live and content-starved); D549/D552 became research-queue
+**R20/R21** with their startable desk arms named and their measurement arms honestly blocked on
+the store.
+
+**What changed:** every one of the 48 rows now carries either a ✅ citation or a named execution
+destination. The hand-audit caveat stands: `make work-index` (D487, codex-queued) is the only
+version of this guarantee that survives next week.
+
+**Blocked:** nothing new; the deliberate non-flips wait on their own landing commits.
+
+**Next:** codex takes the D585 fold-in with play-composition; the daily-position glyph prototype
+and R20/R21 desk arms are claude-startable.

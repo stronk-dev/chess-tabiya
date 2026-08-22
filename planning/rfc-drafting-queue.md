@@ -601,3 +601,16 @@ It is also the cheapest: three tables and one doctrine section, no code, no sche
 control and one prop, and it makes rungs 3, 4 and 6 reachable in Just Play for the first time. It sits
 in §4 rather than §2 only because law 1 forbids drafting from a `DESIGN-GAP:` row. **If the owner
 rules on D307/D308/D309, that document jumps to the front of this queue.**
+
+---
+
+## Added 2026-08-22 — residue reconciliation (D952 repair)
+
+**daily-position** — one shared position a day + spoiler-free share artifact ([[D301]], twice
+unrouted). Cheapest complete feature in the campaign cluster; all inputs shipped (see the D301
+cell: `public_tokens` + `story_read` anonymous scope at `storage.ts:1306-1317`, the run graph,
+47 packs + 43 mined candidates). Precondition: the glyph prototype (exploration gate, disposable,
+tied to D301 and logged) — the spoiler-free branch-set glyph is the row's named killer; the glyph
+must not become a score. Scope: deterministic date→position rule, the daily run kind, share
+token (story_read reuse or one new scope — a register lane if widened), share artifact =
+branch-set shape, never a score. Explicitly out: notifications, streaks, leaderboards.
