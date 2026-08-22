@@ -4402,3 +4402,20 @@ winning and deeper inevitability. Four focused tests pass, including positive/re
 threat controls. The full research pass costs ~.26/.39 ms per candidate edge in the disposable
 harness. No production or authored content changed. Phase 2b is complete; next work is reconciling
 these residuals into the collector RFC and its executable queue.
+
+## 2026-08-22 — collector architecture reconciled into two explicit waves
+
+The Phase-2b closeout changed the tactical RFC where its own semantics depended on the new evidence:
+it now has 30 closed projection ids, including one exact `reply_breadth@1` authority and an exact
+check event; threat/fork dispositions carry D794's measured rarity; A5 preserves canonical
+non-vacuity without erasing honest population zeroes. Its review packet is refreshed and it remains
+draft pending independent buildability review and owner acceptance.
+
+D802–D807 route the remaining positional breadth into a separate 18-projection
+`breadth-collectors` draft: exact square controllers/mobility sets, pawn status/events, retained
+pawn/defender sequences, material-role state, king operands and open-file occupancy. The split keeps
+the Wave-A RFC bounded while ensuring Phase 2b is executable work rather than a dossier shelf. Both
+drafts claim no shared versioned resource and land research/inspector-only. Production remains
+blocked on acceptance; breadth implementation follows tactical because it consumes legal exchange
+and reply breadth. The draft also consumes the existing pawn-contact, passed-pawn, piece-count and
+open/half-open-file authorities rather than creating duplicate meanings.

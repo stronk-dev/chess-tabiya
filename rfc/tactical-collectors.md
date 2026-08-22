@@ -1,7 +1,7 @@
 # RFC: Tactical collectors
 
-- **Status:** draft — amended 2026-08-22 after the D730 legal-exchange falsification pass;
-  ready for independent buildability review, not accepted
+- **Status:** draft — amended 2026-08-22 after the D730 legal-exchange and D794 bounded-reply
+  falsification passes; ready for refreshed independent buildability review, not accepted
 - **Author:** claude (drafted on the D717 program routing, `planning/evidence-foundation-ux/plan.md` phases 2c/3)
 - **Created:** 2026-08-22
 - **Design refs:** `design/05-in-run-experience.md` §5 (*"detection is cheap, significance is not"* — every collector here ships detection with the significance judgement structurally refused), §3b (guided mode names patterns from a validated library, never recommends); `design/03-product-breadth.md` §Structural reading (the rung-0 layer this extends) and §Intelligence and explanation
@@ -47,7 +47,8 @@ primitives the Phase-2 audit found absent, lossy, or discarded at HEAD — the a
 governing finding being that *"F1/F2 registered the authority mechanics over the
 primitives that existed; they did not add the primitives"* (audit §2). It pins six
 declared conventions (`legal-exchange@1`, `space@1`, `trapped@1`,
-`back_rank_susceptible@1`, `threat@1`, `development@1`), specifies fifteen build items in
+`back_rank_susceptible@1`, `threat@1`, `development@1`) plus the exact `reply_breadth@1`
+contract, specifies fifteen audit build items plus the shared exact check/reply operands in
 the audit's ranked order — legal local exchange first because it is the prerequisite for
 tactical semantics and the bot blunder gate — and registers every collector through the existing F1 contract:
 producer + typed projection + operands + grounding + abstention + fixtures, with
@@ -478,10 +479,31 @@ predeclared D545 answer the measurement must confirm or refute.
   yields `pass_while_in_check`; en-passant is cleared before the hypothetical opponent
   move. **Salience fixture:** a pre-existing
   threat after an unrelated move — `createdByLastMove` must be `false`. Non-vacuity.
-- **Measurement + sign:** new probe; threat-presence lift reported both signs, direction
-  predeclared as negative-primary on the avoidance analogy (a played move rarely leaves a
-  new positive local-exchange threat against oneself); the D674 salience-hierarchy experiment is the
-  designated downstream instrument, not this RFC's gate.
+- **Measurement + sign (D794, pre-acceptance):** threat presence measures **0.91×
+  authored / 1.04× imported** on 126/675 and 208/545 eligible played decisions. A retained
+  attacker→target positive capture survives every legal reply only **1/675 authored and
+  0/545 imported**. Threat presence is therefore inspector/negative/on-demand evidence,
+  not a default positive or blunder label. The D674 salience-hierarchy experiment remains
+  downstream; no missing salience result can widen this disposition.
+- **Shared exact reply projection:** `rules.tactic.consequence.reply_breadth@1` records the
+  triggering move, terminal/check status, complete legal reply UCIs and count, and horizon
+  `1 reply`; manifest role `event`, grounding `position_rules`, exactness `exact`, total
+  after a legal move.
+  Disposition is `inspector_only`; no sentence may replace the count with “forcing.”
+  Zero replies is terminal, never “only reply.” Bounded consequences reference this one
+  object and retain their refuting replies rather than re-enumerating or flattening it.
+  D794 measures mean reply breadth 27.08 authored / 34.45 imported and exactly-one-reply
+  5.16%/.52%; the authored non-check rate (3.77% versus 0/577 imported) is explicitly a
+  pack-composition fact, not a human prior. “Forcing,” best, winning and inevitable are
+  absent from the semantics and sentence ceiling.
+  Fixtures: the D794 exact-one-reply check; checkmate with zero replies; a non-check
+  multiple-reply position; and a fork whose named refuting reply appears byte-for-byte in
+  both the reply object and consequence abstention.
+- **Exact check event:** `rules.tactic.event.check@1` records the triggering move, checking
+  piece(s), checked king and check rays/attack squares; `position_rules`/`exact`, research
+  event disposition. D794 measures 2.48× authored / 2.60× imported. It is a reusable
+  literal event for reply, king-state and Review modules, not a forcing or quality label.
+  Single, discovered and double-check fixtures plus a near-ray hard negative are required.
 
 #### 3.7 Fork (audit §3.2; build-order item 7 — **the one collector the audit's D730–D744 set reserves no row for**; see §Ledger rows)
 
@@ -521,6 +543,13 @@ predeclared D545 answer the measurement must confirm or refute.
   registered primary reading flips to the opponent-relative family
   (`fork_allowed` event + avoidance form) **and that outcome is recorded, not
   rationalized** (law 6).
+- **Bounded-consequence measurement (D794):** the meaningful event fires on **10 authored
+  / 29 imported** played moves; the all-reply consequence fires on **0 / 2** (0% and 6.9%
+  of those played events). Positive and refutable controls pass, while 2/11 legal
+  alternatives satisfy the consequence, so the zero is a population result rather than
+  an unsatisfiable predicate. The consequence remains exact rare Review/drill evidence;
+  it cannot be the everyday fork producer, and a failed consequence retains the defusing
+  reply through `reply_breadth@1`.
 - **Fixtures:** knight fork of king+rook positive. **Hard negative: geometric "fork" of
   two defended pawns — the 0.72× population — MUST NOT fire.** Consequence hard negative:
   double attack parryable by one defending move (state fires; consequence abstains). The
@@ -783,7 +812,7 @@ instrumentation** while the named fallback branch executes (only A9 has a pre-au
 fallback; every other contrary measurement is escalated per law 6, not shipped around).
 
 1. **A1 — Registration completeness.** Every projection id in Appendix A (unit:
-   projection id; total: **28**, stated in that table's caption) exists in the compiled
+   projection id; total: **30**, stated in that table's caption) exists in the compiled
    catalogue; `make evidence-manifest-check semantic-evidence-check` passes; the docs
    tuple in `docs/semantic-evidence.md` and `docs/evidence-contract.md` is updated in the
    same change. A1 counts the same unit as the Appendix A table.
@@ -795,13 +824,18 @@ fallback; every other contrary measurement is escalated per law 6, not shipped a
    along-ray and non-king-pin recapturers counted — the −4 harness control), retains
    X-ray branches, and the space chess-tradition citation is present as declared
    semantics.
-4. **A4 — Dispositions.** Every new state reading carries `inspector_only`; every new
-   event/avoidance projection is eligible only for `research.semantic_selection@1`; grep
+4. **A4 — Dispositions.** Every new state reading plus the reply-breadth operand carries
+   `inspector_only`; every semantic event/avoidance projection (including check) is eligible only
+   for `research.semantic_selection@1`; grep
    over `apps/ packages/` (tests/tools excluded) for the nine R3 module ids and six
    workflow ids still returns **0 production hits**.
 5. **A5 — Four-part fixtures.** Every §3 item has its named positives, hard negatives,
-   abstention fixtures where declared, and a strict-interior corpus census; the suite can
-   express negatives (a `lacks()`-style assertion exists where used).
+   abstention fixtures where declared, and a strict-interior **canonical-fixture** census;
+   the suite can express negatives (a `lacks()`-style assertion exists where used).
+   Authored and imported population censuses are reported separately and may honestly be
+   zero: D794 predeclares the expected zero for authored played
+   `fork_survives_reply@1`. A zero creates or retains a content-coverage row; it never
+   permits weakening the predicate or manufacturing a pack label.
 6. **A6 — Fixtures that start red.** The following are committed before their fixes and
    verified failing at pre-implementation HEAD, then green at landing: the D547
    `e1h1`-form reading-plane pair (§3.2); the en-passant capture-identity fixture (§3.3);
@@ -851,13 +885,20 @@ fallback; every other contrary measurement is escalated per law 6, not shipped a
     filter (a fixture proves a structural family still produces avoidance identically —
     the no-regression half).
 16. **A16 — Closeout protocol.** The landing commit flips the already-recorded rows this
-    RFC ships (D730–D742, D744 and D749) per the completion protocol, leaves deferred
+    RFC ships (D730–D742, D744, D749, D799 and D808) per the completion protocol, leaves deferred
     D743 open, and appends the
     `planning/exploration/log.md` entry — in the same commit (the CLAUDE.md
     ledger-and-log clause).
 17. **A17 — Production-site closure.** The implementation diff's production files are a
     subset of §1.1's ten sites. Any additional production site returns the RFC for an
     amendment naming its responsibility and collision impact before that edit lands.
+18. **A18 — One reply authority.** For every permanent D794 fixture and population row,
+    `reply_breadth@1.replies` is set-equal to chessops' legal moves after the triggering
+    move and `count === replies.length`; zero is terminal rather than only-reply. Threat
+    and fork consequence code consumes this compiled object (no second enumerator), and a
+    failed fork retains at least one reply that actually makes its original-target
+    positive capture unavailable. The permanent measurement reproduces D794's eligible
+    denominators within 10% or reports a deliberate domain correction.
 
 ## Discharges
 
@@ -878,14 +919,17 @@ the machine-read record per the lifecycle contract's grammar.
    kinds in pack conditions, a follow-up RFC claims the pack lane, extends
    `STRUCTURAL_FEATURE_KINDS` + the schema arms + witnesses, and inherits the audit §6
    impact analysis. Deferred, named, not silently chosen.
-3. **Wave B breadth** (D723–D729 and D746–D748: square denial/restriction, pawn dynamics beyond
-   connectivity, activity/coordination, king/imbalance composites, multi-edge
-   persistence): out of this RFC by the audit's own boundary — *"a prioritized
-   foundation, not a complete middlegame ontology"* (D723). The first eleven one-edge
-   probes and the first consecutive-edge census have now landed (`5a20b42`): pawn
-   harassment, locked pairs and defence-edge loss are promising; generic pawn contact and
-   slider alignment are not learner semantics; the preserved-pressure sequence is exact
-   but rare. Exchange/search-dependent Wave-B semantics remain research, not hidden scope here.
+3. **Breadth-collector successor (D802).** Phase 2b is now complete: 49 one-edge probes,
+   three observed-sequence censuses, the legal-exchange prerequisite and bounded reply
+   enumeration are recorded across `wave-b-breadth-probe.md`, `legal-square-denial.md`,
+   `identity-retaining-three-edge-consequences.md`, `pawn-conversion-events.md`,
+   `pawn-lever-and-candidate-timing.md`, `decomposed-king-state.md`,
+   `identity-retaining-mobility.md` and `bounded-reply-semantics.md`. Mobility sets, pawn
+   status/events, king-state operands, material-role asymmetry and retained sequences stay
+   out of this RFC by its Wave-A boundary and are no longer “research later”: D802 assigns
+   them to a separate RFC so this document cannot silently grow from 15 build items into
+   the whole middlegame ontology. `reply_breadth@1` is the one exception because this RFC's
+   own threat/fork consequence semantics already enumerate and consume it.
 4. **Also deliberately out** (audit §5): the per-candidate application adapter (phase 6,
    D669 lane); time-usage modelling (*"expensive, deferred per `human-like-opponents.md`
    §6d"*); plan labels (D530 citation grounding — an owner ruling, not a collector).
@@ -905,7 +949,8 @@ executed-discovered adapter (§3.12) · **D741** threats under `threat@1`,
 runtime opening identity (deferred §3.15) · **D744** Maia WDL repair (§3.16).
 
 **Fork had no reserved row** — the audit's §9 set skipped its own §3.2. D749 now records
-the dedicated exact-event work and D730's measured sign. D750–D753 record the four spec
+the dedicated exact-event work and D730's measured sign. D808 records the shared exact-check
+authority added after bounded-reply measurement. D750–D753 record the four spec
 defects found by the prerequisite pass: pseudo-SEE legality, pass-state abstention,
 undefined trapped-destination semantics, and the gated opening item mixed into an
 implementable RFC. The 2026-08-22 buildability review's convention repairs (this
@@ -917,7 +962,7 @@ D760–D762 carry the concurrent Wave-B probe and its measured consequences.
 
 ## Appendix A — projection id enumeration
 
-Unit: **projection id**; total: **28**. This is the closed list A1 counts; adding or
+Unit: **projection id**; total: **30**. This is the closed list A1 counts; adding or
 dropping an id is a spec change with a changelog line, never a silent drift.
 
 | # | projection id | §3 item | role |
@@ -950,10 +995,12 @@ dropping an id is a spec change with a changelog line, never a silent drift.
 | 26 | `rules.tactic.consequence.mate_in_one@1` | 3.13 | consequence (exact) |
 | 27 | `derived.tactic.promotion_pressure@1` | 3.14 | derived join |
 | 28 | `human.maia.candidate_wdl@1` | 3.16 | source projection |
+| 29 | `rules.tactic.consequence.reply_breadth@1` | 3.6 | event (exact consequence operand) |
+| 30 | `rules.tactic.event.check@1` | 3.6 | exact rules event |
 
 If the A9 fallback branch executes, ids 13–14 are replaced by
 `rules.tactic.event.fork_allowed@1` + `derived.semantic_avoidance.fork_allowed@1` — the
-total stays 28 and the swap is recorded in the changelog and the landing log entry.
+total stays 30 and the swap is recorded in the changelog and the landing log entry.
 
 ## Changelog
 
@@ -985,3 +1032,8 @@ total stays 28 and the swap is recorded in the changelog and the landing log ent
   homed at `tactics.ts`; A6's fork hard-negative labeled red-by-absence; §2.6 back-rank
   cross-reference §3.7 → §3.13; space honesty fixture given a verified satisfiable
   instance; ledger section updated for D754–D758 and review rows from D759.
+- 2026-08-22: reconciled the completed Phase-2b research. Added shared exact
+  `reply_breadth@1` and check projections (30 total), recorded D794's measured threat/fork
+  dispositions and population zeroes, repaired A5 so canonical non-vacuity cannot erase
+  honest population absence, and routed the remaining breadth families to D802 rather
+  than silently expanding this Wave-A RFC.
