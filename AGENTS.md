@@ -147,3 +147,6 @@ From `archive/brief-v2/CHANGE_FROM_V1.md` and `00_CORRECTED_VERDICT.md`:
 - Touching `archive/` — never.
 - Committing — fine on request or at natural checkpoints; never push, publish, deploy,
   or open a PR unless Marco explicitly asks.
+- In the shared worktree, stage only an explicit owned-file list and inspect
+  `git diff --cached --name-only` before every commit. Never absorb another agent's visible edits
+  through `git add -A`, `git add .`, `git commit -a`, or an equivalent broad staging command.

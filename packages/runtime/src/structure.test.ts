@@ -89,13 +89,31 @@ describe("structural predicates", () => {
     expect(evaluateObjectivePredicate(run, { type: "fenPredicate", predicate: { type: "structuralFeature", feature: { kind: "feature", feature: { kind: "backward_pawn", color: "black", file: "c" } } } })).toBe(false);
   });
 
-  it("reports current pawn-file scope and direct counts without balance claims", () => {
+  it("reports maximal pawn-reach scope and direct counts without balance claims", () => {
     const safety = pawnSafety("4k3/8/8/1N6/8/8/P7/4K3 w - - 0 1", "black", "b5");
-    expect(safety.basis).toBe("current_pawn_files");
+    expect(safety.basis).toBe("maximal_pawn_reach@1");
     expect(safety.pushAttackers).toEqual([{ square: "a2", pushes: 2 }]);
     const reading = structuralReading(carlsbad);
     expect(reading.features.some((item) => item.kind === "half_open_file" && item.color === "white" && item.file === "c")).toBe(true);
     expect(JSON.stringify(reading)).not.toMatch(/score|severity|favours|balance/);
+  });
+
+  it("refuses a safety claim when a pawn can migrate onto an attacking file", () => {
+    const captureMigration = pawnSafety("4k3/8/8/1n6/8/8/3P4/4K3 w - - 0 1", "black", "b5");
+    expect(captureMigration.pushAttackers).toEqual([]);
+    expect(captureMigration.captureAttackers).toEqual([{ square: "d2", captures: 1 }]);
+    expect(captureMigration.safe).toBe(false);
+
+    const unreachable = pawnSafety("4k3/8/8/1n6/8/8/7P/4K3 w - - 0 1", "black", "b5");
+    expect(unreachable.pushAttackers).toEqual([]);
+    expect(unreachable.captureAttackers).toEqual([]);
+    expect(unreachable.safe).toBe(true);
+  });
+
+  it("treats blocked pawn routes as potential reach rather than a legal prediction", () => {
+    const blocked = pawnSafety("4k3/8/8/1n6/P7/P7/P7/4K3 w - - 0 1", "black", "b5");
+    expect(blocked.pushAttackers).toEqual([{ square: "a4", pushes: 0 }, { square: "a3", pushes: 1 }, { square: "a2", pushes: 2 }]);
+    expect(blocked.safe).toBe(false);
   });
 
   it("separates connected pawn pairs, directed support, chains, and occupied-file islands", () => {
@@ -166,8 +184,9 @@ describe("structural predicates", () => {
     const squares = Array.from({ length: 64 }, (_, index) => `${"abcdefgh"[index % 8]}${Math.floor(index / 8) + 1}` as SquareName);
     fc.assert(fc.property(fc.constantFrom(...squares), fc.constantFrom("white", "black"), (square, color) => {
       const result = pawnSafety(carlsbad, color, square);
-      expect(result.safe).toBe(result.pushAttackers.length === 0);
+      expect(result.safe).toBe(result.pushAttackers.length === 0 && result.captureAttackers.length === 0);
       expect(result.pushAttackers.every((item) => item.pushes >= 0)).toBe(true);
+      expect(result.captureAttackers.every((item) => item.captures >= 1)).toBe(true);
     }));
   });
 

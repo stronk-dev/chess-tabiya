@@ -24,7 +24,11 @@ the **tactical** family — fork, pin, skewer, discovered attack, hanging piece 
 verbatim. Raw output committed beside it as `output.md` and `candidates-output.md`.
 
 **Machine of record:** Apple M3 Max, Node v26.7.0 arm64, vitest 4.1.10, chessops 0.15.1, at
-`424374f` `[V]`.
+`424374f` `[V]`. **Post-repair refresh (2026-08-22):** D566 changed `pawn_safe_square` from a
+current-file projection to disclosed `maximal_pawn_reach@1`; the same fixed corpus and complete
+alternative population were rerun from base `6677dbb` `[V]`. The aggregate verdict is unchanged,
+but `outpost` falls from 10 to 0 static observations and from 2/717 played firings to 0/717; its 11
+alternative firings give no finite lift. The refreshed raw output is the harness's `output.md`.
 
 **Corpus at HEAD:** 50 packs in `content/drafts/`, **754 spine transitions**, **643 distinct
 positions**, 19,636 legal alternatives enumerated from 717 parent positions `[V]`. (D78's last pass
@@ -39,7 +43,7 @@ measured 754 transitions over 47 packs and 609 positions; the corpus has grown b
 strip fires on **753 of 754 transitions (99.87%)** at **8.83 entries per ply**, and **99.59% of the
 18,470 quiet legal alternatives fire too** — **lift 1.003×** pooled, **1.004×** on D78's
 within-position mean. Against the **1.05×** that got `slider_lines_changed` refused in R3. The
-rung-0 reading prints a **median 80 observations per position** (mean 63.96, max 103), of which
+rung-0 reading prints a **median 80 observations per position** (post-D566 mean 63.94, max 102), of which
 **13.00 per position are unconditional** — the twelve piece counts and the king-to-king distance
 fire in 100% of positions by construction.
 
@@ -49,9 +53,9 @@ structural kind, lift ranges over **an 11× span**, from `named_structure` at **
 firing more on the alternatives than on the played move — and those five are the **four highest-
 volume detectors in the whole reading plus one more**: `line_blockers` (17.97 obs/position),
 `piece_reach_count` (8.29), `pawn_safe_square` (8.29), `direct_attack_count` (7.88),
-`bishop_on_shade` (2.25). Together **44.68 of the mean 63.95 observations per position = 69.9%**.
+`bishop_on_shade` (2.25). Together **44.68 of the post-D566 mean 63.94 observations per position = 69.9%**.
 Adding the 13.00 unconditional observations, **90.2% of the shipped reading carries no
-discriminating information about the move that produced it**, and **6.27 observations per
+discriminating information about the move that produced it**, and **6.26 observations per
 position — 9.8% — are the entire remainder.**
 
 **(c) A ranked surface is dramatically better and costs no new detector** `[V]` (§6c). Restricting
@@ -174,13 +178,15 @@ Measured over the 50 packs and 25 shape entries `[V]`:
 
 **The four kinds no author has ever referenced are, with one exception, the highest-volume rows in
 the learner-facing reading**: `pawn_safe_square` 8.29/position, `piece_reach_count` 8.29/position,
-`outpost` 0.02/position, `pawn_count` 0.00. Two of them are also two of the five anti-discriminating
+`outpost` 0.00/position post-D566, `pawn_count` 0.00. Two of them are also two of the five anti-discriminating
 detectors in §6.
 
 `outpost` deserves a separate note because the design tier leans on it. `design/05` §3a names
 structural description as the rung-0 exemplar, and Q8 found `outpost` firing on 2 of 515 positions.
-At HEAD it fires on **10 observations across 1.56% of 643 positions** `[V]` — the flagship detector
-is true about one position in sixty-four.
+Before D566 it fired on **10 observations across 1.56% of 643 positions**. The repaired maximal-reach
+dependency fires on **0/643 positions** and **0/717 played moves**, while 11/19,636 alternatives
+produce it `[V]`. This is honest abstention, not evidence that the primitive is useless; it does
+mean this corpus supplies no played positive from which to estimate lift.
 
 ---
 
@@ -305,7 +311,7 @@ All `[V]`, n stated, from `tools/d542-classifier-audit-harness/output.md`.
 | quiet alternatives that also fire | 99.4454% | **99.45%** within-position mean; **99.59%** pooled |
 | same-kind share | 91.95% | **91.95%** |
 | **lift** | 1.004× | **1.004×** within-position / **1.003×** pooled |
-| rung-0 median observations/position | 78 | **80** (mean 63.96, p95 96, max 103) |
+| rung-0 median observations/position | 78 | **80** (post-D566 mean 63.94, p95 96, max 102) |
 
 **D78 reproduces exactly.** The one number that moved is the median observations per position,
 78 → 80, and it moved for the reason [[D359]] already identified: the distribution is bimodal by
@@ -313,7 +319,7 @@ phase and the median sits in its gap. Per declared phase at HEAD `[V]`: **endgam
 79, **opening 87**, **middlegame 89** — the middlegame reading is **2.9× the endgame reading**, in
 the phase R4/R9 proved has no oracle.
 
-**The unconditional floor.** Of the mean 63.95 observations, `piece_count` contributes **12.00 in
+**The unconditional floor.** Of the post-D566 mean 63.94 observations, `piece_count` contributes **12.00 in
 100% of positions** and `piece_distance` **1.00 in 100%** `[V]`. Thirteen observations per position
 are emitted before any detector has decided anything, which is why
 `DrillScreen.svelte:858`'s honest-absence string — *"No rung-0 structural observations in this
@@ -342,7 +348,7 @@ parent gains ≥1)`. Denominators: **717 played moves, 19,636 legal alternatives
 | `king_zone` | 9.34% | 3.799% | **2.46×** | 1.57 |
 | `piece_distance` | 21.06% | 9.065% | **2.32×** | 1.00 |
 | `half_open_file` | 4.74% | 2.327% | **2.04×** | 0.94 |
-| `outpost` | 0.28% | 0.163% | **1.71×** | 0.02 |
+| `outpost` (post-D566) | 0.00% | 0.056% | n/a | 0.00 |
 | `backward_pawn` | 2.93% | 2.169% | **1.35×** | 0.21 |
 | `line_blockers` | 75.45% | 82.889% | **0.91×** | **17.97** |
 | `piece_reach_count` | 82.57% | 92.341% | **0.89×** | **8.29** |
@@ -352,9 +358,9 @@ parent gains ≥1)`. Denominators: **717 played moves, 19,636 legal alternatives
 | `pawn_count` | 0.00% | 0.000% | n/a | **0.00** |
 
 **The correlation between volume and worth is negative and it is not subtle.** The five kinds with
-lift below 1.0 supply **44.68 of 63.95 observations per position — 69.9%** `[V]`. The twelve kinds
+lift below 1.0 supply **44.68 of 63.94 observations per position — 69.9%** `[V]`. The twelve kinds
 with lift above 2.0 supply **19.06**, and 13.00 of that is the two unconditional kinds. **The
-conditional, discriminating remainder is 6.27 observations per position: 9.8% of what is printed.**
+conditional, discriminating remainder is 6.26 observations per position: 9.8% of what is printed.**
 
 Note carefully what "lift below 1.0" means. It is not "weakly informative". `piece_reach_count`
 fires on 82.57% of played moves and **92.34%** of the moves not played: told that a piece's
@@ -610,7 +616,7 @@ A **producer manifest** with one row per emitted reading kind carrying, at minim
 
 1. **A feature whose producer abstains too often to be a feature.** `endgameReading` is silent in
    100% of opening and middlegame positions, and its only UI host is the pivotal modal — so a
-   learner must already have a marker before they can see it. `outpost` is true in **1.56%** of
+   learner must already have a marker before they can see it. `outpost` is true in **0%** of
    positions. `named_structure` in **9.49%**. `tempo` verdicts in **4 of 404** content JSON files.
    `matchKeyPoints` in **1 of 404**. Each of these is a surface that looks broken most of the time,
    and none of them declares its own abstention rate anywhere.
@@ -711,7 +717,7 @@ Proposed ledger rows, from **D542** (not written here):
 - **D546** — `irreversibility` misses `e1h1`-form castling: 2 of the corpus's 22, and 100% of
   PGN-imported games.
 - **D547** — `pawn_count` is a declared kind that emits nothing; `phase_change` fires on 0.13%;
-  `outpost` on 1.56%.
+  `outpost` fired on 1.56% under the superseded predicate and 0% after D566.
 - **D548** — the LLM voice packet receives the placeholder kind-name sentence while the screen
   receives the parameterised one.
 

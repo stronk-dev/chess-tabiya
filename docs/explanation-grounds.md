@@ -19,7 +19,7 @@ This page is the cross-system contract. Runtime payload details remain in
 Rung-0 structural grading now has eighteen `rules:structure-*` facts. They render generic detector
 grounds because evidence refs carry the feature kind but not its square/file parameters. Exact
 position-specific sentences are recomputed from the run FEN in the structural-reading surface.
-Those sentences have a no-valence contract; pawn safety states its current-file scope, direct attack
+Those sentences have a no-valence contract; pawn safety states its `maximal_pawn_reach@1` scope, direct attack
 counts never imply a balance, attack reach is not called legal mobility, and outpost/named-structure
 matches identify Tabiya's detector or catalogue convention.
 The three predicate-wave-3 additions are generic piece-count, king-zone, and static

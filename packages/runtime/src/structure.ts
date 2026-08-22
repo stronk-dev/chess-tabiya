@@ -69,7 +69,7 @@ export interface PawnSafety {
   readonly square: SquareName;
   readonly color: Color;
   readonly safe: boolean;
-  readonly basis: "current_pawn_files";
+  readonly basis: "maximal_pawn_reach@1";
   readonly pushAttackers: readonly { readonly square: SquareName; readonly pushes: number }[];
   readonly captureAttackers: readonly { readonly square: SquareName; readonly captures: number }[];
 }
@@ -342,7 +342,14 @@ function pawnSafetyOnPosition(position: ReturnType<typeof positionFromFen>, colo
   }
   pushAttackers.sort((a, b) => a.pushes - b.pushes || a.square.localeCompare(b.square));
   captureAttackers.sort((a, b) => a.captures - b.captures || a.square.localeCompare(b.square));
-  return Object.freeze({ square: squareName, color, safe: pushAttackers.length === 0, basis: "current_pawn_files", pushAttackers: Object.freeze(pushAttackers), captureAttackers: Object.freeze(captureAttackers) });
+  return Object.freeze({
+    square: squareName,
+    color,
+    safe: pushAttackers.length === 0 && captureAttackers.length === 0,
+    basis: "maximal_pawn_reach@1",
+    pushAttackers: Object.freeze(pushAttackers),
+    captureAttackers: Object.freeze(captureAttackers),
+  });
 }
 
 export function pawnSafety(fen: string, color: Color, squareName: SquareName): PawnSafety {
@@ -602,7 +609,7 @@ export function structuralReading(fen: string): StructuralReading {
     if (piece.role === "bishop") values.push({ kind: "bishop_on_shade", color: piece.color, shade: shadeOf(square), squares: [name] });
     if (piece.role === "pawn" && matchesStructuralFeature(fen, { kind: "passed_pawn", color: piece.color, square: name })) values.push({ kind: "passed_pawn", color: piece.color, squares: [name] });
     if (piece.role !== "pawn" && piece.role !== "king") {
-      const detail = pawnSafety(fen, piece.color, name); if (detail.safe || detail.pushAttackers.length > 0) values.push({ kind: "pawn_safe_square", color: piece.color, squares: [name], detail });
+      const detail = pawnSafety(fen, piece.color, name); if (detail.safe || detail.pushAttackers.length > 0 || detail.captureAttackers.length > 0) values.push({ kind: "pawn_safe_square", color: piece.color, squares: [name], detail });
       if (matchesStructuralFeature(fen, { kind: "outpost", color: piece.color, square: name })) values.push({ kind: "outpost", color: piece.color, squares: [name], provenanceNote: "Tabiya's strict outpost detector." });
     }
     if (REACH_ROLES.includes(piece.role as ReachRole)) {

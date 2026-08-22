@@ -13,12 +13,12 @@ export function renderStructuralObservation(observation: StructuralObservation):
   if (observation.kind === "half_open_file") return `${side(observation.color)} has no pawn on the ${observation.file}-file; the other side has one.`;
   if (observation.kind === "pawn_safe_square") {
     const pushes = observation.detail?.pushAttackers[0]?.pushes;
-    const qualifier = observation.detail?.captureAttackers.length ? " A pawn would need a capture to reach an attacking file; capture availability is not evaluated." : "";
-    return pushes === undefined
-      ? `While the current pawn files remain, no opposing pawn can attack ${observation.squares[0]} by advancing on its file.${qualifier}`
-      : `While the current pawn files remain, an opposing pawn can attack ${observation.squares[0]} after ${count(pushes, "push", "pushes")}.${qualifier}`;
+    const captures = observation.detail?.captureAttackers[0]?.captures;
+    if (pushes !== undefined) return `Under maximal pawn-reach geometry, an opposing pawn can reach an attacking square for ${observation.squares[0]} after ${count(pushes, "forward step")}; blockers and move legality are not evaluated.`;
+    if (captures !== undefined) return `Under maximal pawn-reach geometry, an opposing pawn can reach an attacking file for ${observation.squares[0]} after at least ${count(captures, "capture")}; capture availability and move legality are not asserted.`;
+    return `Under maximal pawn-reach geometry, no opposing pawn can reach a square from which it attacks ${observation.squares[0]}.`;
   }
-  if (observation.kind === "outpost") return `Tabiya's strict outpost detector matches ${observation.squares[0]} for ${side(observation.color)}: pawn-supported in enemy territory and currently safe from an opposing pawn advancing on its file.`;
+  if (observation.kind === "outpost") return `Tabiya's strict outpost detector matches ${observation.squares[0]} for ${side(observation.color)}: pawn-supported in enemy territory with no opposing pawn path under maximal pawn-reach geometry.`;
   if (observation.kind === "line_blockers") return `The line through ${observation.squares.join("–")} contains ${count(observation.count, "blocker")}.`;
   if (observation.kind === "direct_attack_count") return `${count(observation.count, `${side(observation.color)} piece`)} directly attack ${observation.squares[0]} in the current occupancy; pins are not evaluated.`;
   if (observation.kind === "piece_reach_count") return `${side(observation.color)}'s ${observation.role} on ${observation.squares[0]} has ${count(observation.count, "attack-reachable square")} in the current occupancy; check and pins are not evaluated.`;
@@ -38,7 +38,7 @@ function comparison(value: "atLeast" | "atMost" | "equal", count: number): strin
 }
 
 function renderFeatureSpec(feature: StructuralFeature): string {
-  if (feature.kind === "pawn_safe_square") return `${feature.square} is currently safe from an opposing pawn advancing on its file for ${feature.color}`;
+  if (feature.kind === "pawn_safe_square") return `no opposing pawn has a maximal-reach path to attack ${feature.square} for ${feature.color}`;
   if (feature.kind === "outpost") return `${feature.square} matches Tabiya's strict outpost detector for ${feature.color}`;
   if (feature.kind === "backward_pawn") return `${feature.color} has a backward pawn on the ${feature.file}-file`;
   if (feature.kind === "isolated_pawn") return `${feature.color} has an isolated pawn on the ${feature.file}-file`;
@@ -85,7 +85,7 @@ function renderFileTemplate(feature: FileTemplateFeature): string {
 }
 
 function renderSquareTemplate(feature: SquareTemplateFeature): string {
-  if (feature.kind === "pawn_safe_square") return `the square is currently safe from an opposing pawn advancing on its file for ${feature.color}`;
+  if (feature.kind === "pawn_safe_square") return `no opposing pawn has a maximal-reach path to attack the square for ${feature.color}`;
   if (feature.kind === "outpost") return `the square matches Tabiya's strict outpost detector for ${feature.color}`;
   if (feature.kind === "passed_pawn") return `${feature.color} has a passed pawn`;
   if (feature.kind === "direct_attack_count") return `the square has ${comparison(feature.comparison, feature.count)} direct ${feature.color} attackers`;

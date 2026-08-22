@@ -4,7 +4,7 @@ import { describe, expect, it } from "vitest";
 import { renderStructuralExpressionSpec, renderStructuralObservation } from "./structural-sentences.js";
 
 const observations: readonly StructuralObservation[] = [
-  { kind: "pawn_safe_square", color: "black", squares: ["b5"], detail: { square: "b5", color: "black", safe: false, basis: "current_pawn_files", pushAttackers: [{ square: "a4", pushes: 1 }], captureAttackers: [] } },
+  { kind: "pawn_safe_square", color: "black", squares: ["b5"], detail: { square: "b5", color: "black", safe: false, basis: "maximal_pawn_reach@1", pushAttackers: [{ square: "a4", pushes: 1 }], captureAttackers: [] } },
   { kind: "outpost", color: "white", squares: ["e5"], provenanceNote: "Tabiya's strict outpost detector." },
   { kind: "backward_pawn", color: "black", file: "c", squares: [] },
   { kind: "isolated_pawn", color: "white", file: "d", squares: [] },
@@ -27,13 +27,24 @@ describe("rung-0 structural sentences", () => {
     const rendered = observations.map(renderStructuralObservation);
     expect(rendered).toHaveLength(15);
     for (const sentence of rendered) expect(sentence).not.toMatch(banned);
-    expect(rendered[0]).toMatch(/while the current/i);
+    expect(rendered[0]).toMatch(/maximal pawn-reach/i);
     expect(rendered[1]).toMatch(/Tabiya's strict outpost detector/i);
     expect(rendered[9]).toMatch(/directly attack/i);
     expect(rendered[10]).toMatch(/attack-reachable/i);
     expect(rendered[12]).toBe("White's bishop on d3 stands on a light square.");
     expect(rendered[13]).toBe("White has 7 pawns.");
     expect(rendered[14]).toBe("White has the direct opposition: kings on e5 and e3 with Black to move.");
+  });
+
+  it("discloses capture migration without claiming the future capture exists", () => {
+    const sentence = renderStructuralObservation({
+      kind: "pawn_safe_square",
+      color: "black",
+      squares: ["b5"],
+      detail: { square: "b5", color: "black", safe: false, basis: "maximal_pawn_reach@1", pushAttackers: [], captureAttackers: [{ square: "d2", captures: 1 }] },
+    });
+    expect(sentence).toContain("after at least 1 capture");
+    expect(sentence).toContain("capture availability and move legality are not asserted");
   });
 });
 

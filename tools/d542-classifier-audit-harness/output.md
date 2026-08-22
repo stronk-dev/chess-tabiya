@@ -5,12 +5,12 @@ Phase: opening 236, middlegame 138, endgame 259, cross_phase 121.
 
 ## 1. Structural reading volume (643 distinct positions)
 
-observations/position: min 18 / median 80 / mean 63.96 / p95 96 / max 103
+observations/position: min 18 / median 80 / mean 63.94 / p95 96 / max 102
 
 | kind | observations | per position | positions where present |
 |---|---|---|---|
 | `pawn_safe_square` | 5330 | 8.29 | 94.87% |
-| `outpost` | 10 | 0.02 | 1.56% |
+| `outpost` | 0 | 0.00 | 0.00% |
 | `backward_pawn` | 137 | 0.21 | 17.57% |
 | `isolated_pawn` | 174 | 0.27 | 25.04% |
 | `doubled_pawn` | 101 | 0.16 | 13.22% |
@@ -37,7 +37,7 @@ Per declared phase (median observations/position):
 ## 2. Compare-strip structure entries (compare-strips.ts:47)
 
 Transitions with >=1 entry: 753/754 = 99.87%.
-Entries per ply: total 6659, mean 8.83, median 9, p95 18, max 24.
+Entries per ply: total 6657, mean 8.83, median 9, p95 18, max 24.
 Axis D parents: 716. Quiet alternatives evaluated: 18470.
 Quiet alternatives that also gain >=1 observation: 18395 = 99.59% (pooled).
 Mean within-position share of quiet alternatives that also gain >=1: 99.45%.
@@ -61,13 +61,13 @@ Denominators: 717 played moves, 19636 legal alternatives (all, not only quiet).
 | `king_zone` | 67 | 9.34% | 746 | 3.799% | 2.46x |
 | `piece_distance` | 151 | 21.06% | 1780 | 9.065% | 2.32x |
 | `half_open_file` | 34 | 4.74% | 457 | 2.327% | 2.04x |
-| `outpost` | 2 | 0.28% | 32 | 0.163% | 1.71x |
 | `backward_pawn` | 21 | 2.93% | 426 | 2.169% | 1.35x |
 | `line_blockers` | 541 | 75.45% | 16276 | 82.889% | 0.91x |
 | `piece_reach_count` | 592 | 82.57% | 18132 | 92.341% | 0.89x |
 | `pawn_safe_square` | 573 | 79.92% | 17767 | 90.482% | 0.88x |
 | `bishop_on_shade` | 123 | 17.15% | 3863 | 19.673% | 0.87x |
 | `direct_attack_count` | 422 | 58.86% | 13342 | 67.947% | 0.87x |
+| `outpost` | 0 | 0.00% | 11 | 0.056% | n/a |
 
 ## 4. PER-KIND discrimination — transition census (transition.ts:344)
 
@@ -75,8 +75,8 @@ Denominators: 717 played moves, 19636 alternatives.
 
 | leaf:direction | played rate | alt rate | LIFT |
 |---|---|---|---|
-| `move_irreversibility:castled` | 2.79% | 0.000% | inf |
 | `move_irreversibility:last_of_role` | 2.93% | 0.122% | 23.96x |
+| `move_irreversibility:castled` | 3.07% | 0.316% | 9.72x |
 | `move_irreversibility:pawn_break` | 8.37% | 4.044% | 2.07x |
 | `defended_duties_changed:released` | 7.95% | 4.242% | 1.87x |
 | `move_irreversibility:clock_zeroed` | 35.29% | 29.028% | 1.22x |
@@ -103,10 +103,10 @@ Transition-kind coverage check: 6 declared kinds, 6 observed on this corpus.
 | 8 | named_structure, doubled_pawn, passed_pawn, open_file, piece_count, isolated_pawn, king_opposition, king_zone | 36.47% | 0.48 | 6.89% | 5.29x |
 
 ## 6. Pivotal markers
-irreversibility fires on 101/754 = 13.40%.
+irreversibility fires on 103/754 = 13.66%.
 - `pawn_break`: 60 (7.96%)
+- `castled`: 22 (2.92%)
 - `last_of_role`: 21 (2.79%)
-- `castled`: 20 (2.65%)
 Phase bands over 643 positions: endgame 256 (39.81%), middlegame 198 (30.79%), opening 103 (16.02%), unclear 86 (13.37%).
 phase_change candidate transitions: 1/754 = 0.13%.
 option_collapse floor (<=3 legal): 65/643 = 10.11%.

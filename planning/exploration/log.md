@@ -5502,3 +5502,31 @@ for every value the same RFC ships.
 
 **Next:** codex implements; the inherited-scheme accessibility asymmetry (§3.3) stands as the
 ruling's forced consequence and remains the owner's to veto.
+
+## 2026-08-22 — D566 maximal pawn-reach repair and corpus refresh
+
+**What landed:** `pawn_safe_square` now uses the versioned `maximal_pawn_reach@1` convention.
+Both direct-file reach and capture migration must be empty before `safe` is true. Permanent
+fixtures cover the old capture-only false positive, an unreachable pawn, and blocked routes that
+remain conservatively reachable. The evidence catalogue, deterministic sentences and canonical
+docs disclose that blockers, capture availability, turn order and move legality are outside the
+convention. No move grade, recommendation, permanence or importance claim was added.
+
+**What changed under measurement:** the complete D542 fixed-corpus run passed over 50 packs / 754
+transitions / 643 positions / 19,636 legal alternatives. `pawn_safe_square` remains high-volume and
+anti-discriminating at 0.88x (79.92% played versus 90.482% alternatives). Dependent `outpost`
+moves from 10 to 0 static observations and from 2/717 played firings (1.71x) to 0/717, with 11
+alternative firings. The repair makes the predicate honest; it does not make either row suitable
+for proactive delivery. D566 closes. The refreshed castling result also re-verifies D547's shipped
+fix: all 22 corpus castlings are observed and the former infinite artefact is now a finite 9.72x.
+
+**Boundary:** D632 stays open. Its dependency reaches 77 authored pack/shape/witness occurrences,
+so F3/Gate F still owes a truth-set migration and human re-evaluation. The accepted learner-module
+table may restore `outpost` only through its already-recorded owner ruling and amendment; this
+defect pass does not silently alter that table or claim useful positive coverage from a zero-witness
+population.
+
+**Coordination note:** the concurrent theming commit `5289327` swept the correct D566/D547 ledger
+and queue edits before these implementation files landed. D989 records the shared-worktree staging
+failure; this implementation commit names the split instead of pretending the same-commit closeout
+held.

@@ -11,7 +11,7 @@ is good, bad, important, or the reason to choose a move.
 Pack schema 0.10 introduced `structuralFeature` as a `fenPredicate` variant and
 `structural_feature` as a success-condition kind. Expressions compose feature leaves with `all`,
 `any`, `not`, `pieceOnSquare`, and—since pack schema 0.13—bounded `quantified` and exact
-orientation `mirrored` nodes. Pack schema 0.18 widens the vocabulary to eighteen closed feature kinds. They are current-file pawn safety;
+orientation `mirrored` nodes. Pack schema 0.18 widens the vocabulary to eighteen closed feature kinds. They are maximal-reach pawn safety;
 Tabiya’s strict outpost detector; backward, isolated, doubled, and passed pawns; open and
 colour-relative half-open files; exact blockers between aligned squares; one colour’s direct attack
 count; attack-reachable square counts for knights, bishops, rooks, and queens; and four code-defined
@@ -34,8 +34,11 @@ piece-target colours flip only under colour reflection. A bishop distance to an 
 opposite-colour square is false for every comparison, including `atLeast: 0`, rather than
 vacuously true.
 
-Pawn safety is explicitly current, not permanent. It ignores future captures into a new file and
-reports that scope in the sentence. Direct attack counts are per colour and are never subtracted
+Pawn safety uses the versioned `maximal_pawn_reach@1` convention. It treats every geometrically
+possible forward route or capture migration onto an attacking file as reachable while deliberately
+ignoring blockers, whether a required capture will exist, turn order, and move legality. A false
+result can therefore be pessimistic; a true result establishes only that no opposing pawn has such
+a geometric path. The reading and evidence catalogue disclose that scope. Direct attack counts are per colour and are never subtracted
 into a “balance.” Attack reach ignores check and pins and is not called legal mobility. Outpost and
 named-structure sentences identify themselves as Tabiya detector/catalogue conventions.
 

@@ -218,7 +218,11 @@ const structuralOutputs = [
     operands: ["fen", "feature", "matched"],
     forms: ["machine_condition"],
     dependsOn: kind === "outpost" ? [ref("rules.structural.predicate.pawn_safe_square")] : [],
-    limitations: kind === "pawn_safe_square" ? ["Enemy-pawn projection is a Tabiya convention, not legal-move safety."] : [],
+    limitations: kind === "pawn_safe_square"
+      ? ["maximal_pawn_reach@1 admits every geometrically possible forward/capture migration while ignoring blockers, capture availability, turn order and move legality; false may therefore be pessimistic, while true establishes only absence of an opposing-pawn reach path."]
+      : kind === "outpost"
+        ? ["Strict outpost means pawn-supported in relative ranks 4–6 and true under maximal_pawn_reach@1; it does not establish permanence, strategic value or legal occupation."]
+        : [],
   })),
   projection("rules.structural", "rules.structural.predicate.result", "rules", {
     role: "predicate",
@@ -234,7 +238,13 @@ const structuralOutputs = [
     semantics: `Position reading emitted by structuralReading for family ${kind}.`,
     operands: kind === "named_structure" ? ["provenanceNote"] : ["kind", "squares"],
     forms: kind === "named_structure" ? ["sentence", "list", "panel", "lit_squares", "piece_halo"] : ["list", "panel", "lit_squares", "piece_halo"],
-    limitations: kind === "pawn_count" ? ["The committed emission census reports zero observations; structuralReading cannot emit this kind."] : ["State alone does not establish relevance or learner valence."],
+    limitations: kind === "pawn_count"
+      ? ["The committed emission census reports zero observations; structuralReading cannot emit this kind."]
+      : kind === "pawn_safe_square"
+        ? ["maximal_pawn_reach@1 ignores blockers, capture availability, turn order and move legality; the observation carries reach geometry, not relevance or learner valence."]
+        : kind === "outpost"
+          ? ["Strict outpost inherits maximal_pawn_reach@1 and does not establish permanence, strategic value or relevance."]
+          : ["State alone does not establish relevance or learner valence."],
     ...(kind === "pawn_count" ? { disposition: retired("Zero emitted observations over the executable committed-corpus census; matcher-only at F1.") } : {}),
   })),
   projection("rules.structural", "rules.structural.reading.pawn_connectivity", "rules", {
