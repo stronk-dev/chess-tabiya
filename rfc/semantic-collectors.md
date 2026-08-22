@@ -1,6 +1,6 @@
 # RFC: Semantic collectors — Wave-C basic tactics after Waves A/B
 
-- **Status:** draft 2026-08-22 — executes the Wave-C foundation-closure handoff
+- **Status:** accepted — 2026-08-22, by claude as register owner on the buildability test, after cross-review with corrections applied in place (seven blockers; all eight observed ids verified **checkable, not intention-inference**, after the causal-binding clauses were pinned from the measured bytes). Two holds ride outside the document and gate implementation, not acceptance: the transient D925 ledger collision (resolved at HEAD) and the promotion-pressure absence-semantics seam — **unavailable must never count as refuted** — now stated at §3.7. *(Prior line for history: draft 2026-08-22 — executes the Wave-C foundation-closure handoff)*
   (`planning/evidence-foundation-ux/wave-c-foundation-closure.md`); ready for independent
   cross-review before acceptance
 - **Author:** claude, on codex's Wave-C order (item 2) and the D872 program
@@ -136,10 +136,17 @@ plus the per-collector spec has found a spec bug, not a licence to invent.
    device verbatim — turn returned to that side, en passant cleared — and abstains
    `invalid_turn_clone` when the clone is not legally constructible, with an in-check
    abstention fixture. The decision leaves the eligible denominator, never counts as a
-   negative. The clauses that use it in this RFC are named per-collector (§3.2's
-   not-already-capturable boundary and §3.3's exposure boundaries); clauses evaluating a side
-   with the real move (overload recaptures, mate replies, race alternation) do not clone and
-   say so.
+   negative. **Verified at the harness bytes (cross-review 2026-08-22): no registered §3
+   clause in this wave flips a turn.** Every observed-sequence clause evaluates only real
+   recorded turns (`semantic-splits.ts`, `sequence.test.ts:138-189`,
+   `counterfactual.test.ts:70-124`); the conflict, mate and race predicates enumerate
+   real-turn legal moves (overload recaptures, mate replies, race alternation) and say so.
+   The device enters this wave only through **consumed sibling inputs** — 2c's amended
+   `promotion_pressure@1` flags and 2d's `defender_exposure@1`, whose abstentions surface
+   here as `input_abstained` — and in the harness's internal relocation falsifier
+   (`sequence.test.ts:95`), which is 2d's `defender_consequence@1` kind (b) reproduced as a
+   cross-check, not a projection of this RFC. A future clause that does flip a turn adopts
+   this item verbatim; none exists in the registered set.
 5. **Dispositions at landing.** Reading projections declare `disposition: "inspector_only"`.
    Event projections are eligible **only** for `research.semantic_selection@1`
    (`evidence-catalog.ts:470`) through the existing eligibility generator. The
@@ -214,9 +221,9 @@ edits no consumer timing.
 
 | Convention | Exact pinned content |
 |---|---|
-| `defence-duty@1` | A **duty** is a directed pseudo defence edge: piece D's chessops attack set, under current occupancy, contains the square of a same-color piece T. Any piece including the king may hold a duty. **Sole defender** = D holds the only such edge onto T. Duties are occupancy-current pseudo edges and deliberately not legality-filtered — an absolutely pinned defender still holds its duty; whether a recapture is *legal* is decided only where a predicate enumerates legal moves. Declared limitation: a pseudo duty may be legally unexecutable; multiple duties are a state, never by themselves exploitable overload. |
+| `defence-duty@1` | A **duty** is a directed pseudo defence edge: piece D's chessops attack set, under current occupancy, contains the square of a same-color piece T. Any piece including the king may hold a duty; **T is never a king** (the harness `duties()` byte — a king is not a defended target under this convention). **Sole defender** = D holds the only such edge onto T. Duties are occupancy-current pseudo edges and deliberately not legality-filtered — an absolutely pinned defender still holds its duty; whether a recapture is *legal* is decided only where a predicate enumerates legal moves. Declared limitation: a pseudo duty may be legally unexecutable; multiple duties are a state, never by themselves exploitable overload. |
 | `overload-conflict@1` | The `9f7112c` four-clause candidate-time relation, verbatim from the measured repair: (1) one named defender is the **sole** defender (`defence-duty@1`) of the captured target **and** of at least one other surviving named target; (2) the candidate captures the first target and the same defender has at least one **legal** recapture on that square; (3) no such recapture preserves every retained sole duty; (4) after **every** such recapture, at least one retained named target is positively capturable under `legal-exchange@1` (the recapturing turn is real — no clone). Abstention `no_legal_recapture`. The broad lost-duty-edge rule (52/754 authored, 515/6,991 imported) is **rejected and pinned as the permanent hard negative**. |
-| `mate-proof@1` | The D908 bounded solver: the declared candidate move is fixed; later attacker moves are existential; **every** defender reply is enumerated; promotions fully enumerated; horizon = **1–4 attacker moves**; node cap **250,000**. Result is exactly one of `proved` (retained horizon and proof-tree digest/node count), `refuted` (at least one legal escaping branch retained), or `budget_exhausted` (abstention — never false, never an engine-derived guess). Five-plus attacker moves is outside this convention: a separately declared offline budget or a typed engine mate authority may serve it later, and the external `mateIn5` tag is a five-**or-more** bucket, never exact evidence. "Mating net" is presentation vocabulary over a proved tree; king-zone counts, reduced escapes and check sequences remain operands that **cannot emit the name**. |
+| `mate-proof@1` | The D908 bounded solver: the declared candidate move is fixed; later attacker moves are existential; **every** defender reply is enumerated; promotions fully enumerated; horizon = **1–4 attacker moves, the candidate counting as attacker move one** (the harness's `2·N−2` remaining-edge accounting: horizon H proves mate delivered on or before the attacker's Hth move, and **H = 1 means the candidate itself mates** — layered beside 2c's `rules.tactic.consequence.mate_in_one@1`, which stays the position-level enumeration authority; this predicate proves one declared candidate and never re-enumerates all mating moves). Node cap **250,000**, with the accounting pinned because the cap verdict is order-dependent (the boundary probe's 250,001 witnesses): **one node per visited position including transposition revisits, incremented before the cap test and every terminal test**, so a capped run reports cap+1; a transposition memo keyed by (four-field FEN, remaining edges, attacker) is consulted after the terminal tests. **Enumeration order is part of the convention**: attacker moves sorted check-giving first, then ascending canonical UCI; defender replies in ascending canonical UCI (the harness's attacker ordering made normative for both sides — its incidental defender order is chessops-internal and not reproducible; the measured node statistics are therefore reference figures under the harness order, and C6 binds the proved/refuted/abstained counts while node statistics are reported with any ordering-driven divergence named). Result is exactly one of `proved` (retained horizon and proof-tree digest/node count), `refuted` (at least one legal escaping root reply retained, or the terminal non-mate state when the candidate ends the game without mate), or `budget_exhausted` (abstention — never false, never an engine-derived guess). **The proof-tree digest is re-derivable from the retained tree; its serialization and hash are pinned in the declaration's semantics at implementation with a changelog line (pin-the-encoding: no digest algorithm is invented here), and the cross-authority join key is candidate + position + horizon — never the digest** (D2's `mate_transition` joins on exactly that key). Five-plus attacker moves is outside this convention: a separately declared offline budget or a typed engine mate authority may serve it later, and the external `mateIn5` tag is a five-**or-more** bucket, never exact evidence. "Mating net" is presentation vocabulary over a proved tree; king-zone counts, reduced escapes and check sequences remain operands that **cannot emit the name**. |
 | `race-arrival@1` | The D909 descriptive ordering: two or more named pawns of opposite colors, each with an **unblocked forward path** under current occupancy, side to move and the initial double push respected, arrival order computed by strict turn alternation with no captures, checks or piece activity modeled. Output is ordering and per-pawn arrival distance, **explicitly descriptive**: the words winning/losing/drawing are structurally absent (measured: 7/10 agreement with Syzygy including two loss→win inversions). Paths blocked or capturable outside the convention abstain `blocked_or_capturable_path_outside_convention`. |
 | `observed-window@1` | Recorded-path windows adopt `breadth-collectors.md` §3.4's continuity rule by reference: N consecutive move anchors, N+1 ordered board nodes, byte-equal shared node/FEN at every join, canonical UCI per anchor, and the named subject identities surviving every applicable edge or transforming only through an explicitly recorded capture/relocation edge. Horizons are per-projection (§3) and part of the identity. Observed order never establishes intent, force, best play or causality. |
 
@@ -252,61 +259,97 @@ mirror fixtures per §1.7. "Measured" figures come from
   `position_rules`/`exact`: the same defender relocates on the played edge and loses a
   named duty; the target survives. Operands: `move`, `defenderBefore`, `defenderAfter`,
   `target`, `lostDuty`. **Never emitted as deflection or attraction** — the alias is
-  measured-refuted (4.5% / 0.5% sensitivity against those tags; D902). Measured prior:
-  0 authored / 13 imported (the D772-reproduced 13). Predeclared: authored zero retained.
+  measured-refuted (4.5% / 0.5% sensitivity against those tags; D902; instrument note:
+  those figures were measured with the harness's *bounded three-edge* relocation falsifier,
+  and the broader one-edge form can only alias worse — the any-piece-attraction lesson).
+  **This one-edge event has no measured census** (cross-review correction: the previously
+  quoted 0/13 is the bounded three-edge count owned by 2d's
+  `derived.tactic.sequence.defender_consequence@1` kind (b) — D772's 13, reproduced by this
+  wave's harness at `sequence.test.ts:79-111` as a cross-check, never this event's prior).
+  Measurement-not-hope per §1.8: census both populations at landing; predeclared direction —
+  strictly more frequent than the bounded 13, present in both populations; both answers
+  recorded.
 
 #### 3.2 Observed defender manipulation — the split contracts
 
-Both are `derived.tactic` observed-sequence events over `observed-window@1` (three-edge
-windows; three anchors / four nodes for deflection, the harness's bounded window for
-attraction), grounding `declared_convention`, exactness `convention` (mixed inputs per §1.3),
-abstention `["continuation_too_short", "input_abstained", "invalid_turn_clone"]`. The
-**not-already-positively-capturable boundary** — the clause that made the relocation predicate
-reproduce D772's 13 instead of over-counting — evaluates the defended piece for the side not to
-move and therefore uses the §1.4 pass device (the harness's
-`Chess.fromSetup({...setup, turn, epSquare: undefined})` at `sequence.test.ts:95`).
+Both are `derived.tactic` observed-sequence events over `observed-window@1`, grounding
+`declared_convention`, exactness `convention` (mixed input groundings per §1.3 — the recorded
+path plus the exact/convention inputs each names), abstention `["continuation_too_short",
+"input_abstained"]`. **Neither clause set flips a turn** (§1.4, verified at the harness
+bytes): every clause evaluates a real recorded turn, so `invalid_turn_clone` is not declared
+here — it would be an unreachable reason with an unconstructible fixture. Horizons are part
+of each identity, pinned below from the measured predicates
+(`semantic-splits.ts:16-61`, the 93.0%/99.9% instruments).
 
-- `derived.tactic.deflection_observed@1` — exact clauses (measured **93.0%** tag
-  sensitivity, 3.1% controls — 371/11,989): the defender held a `defence-duty@1` duty; a
-  bait capture or check displaced that exact defender; the retained target was then
-  captured within the window. Operands: `baitMove`, `defenderBefore`, `defenderAfter`,
-  `lostDuty`, `targetCapture`. Hard negative: relocation without the later target capture.
-  Not forced, not intent — the ceiling names the observed line only.
-- `derived.tactic.attraction_observed@1` — exact clauses (measured **99.9%** sensitivity,
-  0.05% controls — 6/12,094): a **king, queen or rook** captures the bait onto a square;
-  then the king is checked there, or the queen/rook is later captured on that square.
-  Operands: `baitMove`, `heavyPiece`, `arrivalSquare`, `checkOrCaptureConsequence`.
-  **The heavy-piece restriction is load-bearing and pinned**: the any-piece form reached
-  100% sensitivity while firing on **19.0%** of negative controls and is the permanent
-  hard negative (the recall-only-gate lesson, stage-0 §9).
+- `derived.tactic.deflection_observed@1` — **three-edge window** (three anchors / four
+  nodes); exact clauses, pinned from `defenderDutyDisplacedSequence` (measured **93.0%**
+  tag sensitivity, 3.1% controls — 371/11,989): (1) the defender held a `defence-duty@1`
+  duty onto a non-king target in the pre-window position; (2) the displacement is causally
+  bound — **the defender's edge-2 relocation is itself the capture of the bait piece on the
+  bait move's destination square** (bait = an edge-1 mover's piece), **or the edge-1 bait
+  move gave check** (so every legal reply answers it); (3) the relocated defender (same
+  color/role) no longer holds the duty; (4) the target survived edge 1 by square/color/role
+  and is captured on edge 3 by a **positive `legal-exchange@1`** capture. Operands:
+  `baitMove`, `defenderBefore`, `defenderAfter`, `lostDuty`, `targetCapture`. Hard
+  negative: relocation without the later positive target capture. Not forced, not intent —
+  the ceiling names the observed line only.
+- `derived.tactic.attraction_observed@1` — **two declared horizons, both part of the
+  identity**, pinned from `attractedPieceSequence` (measured **99.9%** sensitivity, 0.05%
+  controls — 6/12,094): a **king, queen or rook** captures the bait — an opponent piece on
+  the edge-1 move's destination square — onto that square on edge 2; **on edge 3 the
+  opponent moves a piece that attacks the arrival square**; then either the attracted king
+  stands in check after edge 3 (**three-edge window** closes) or the same-role/color
+  queen/rook is captured on that square **on edge 5** (**five-edge window**). No
+  `legal-exchange@1` positivity is required — the check or the capture of the attracted
+  heavy piece is itself the consequence. Operands: `baitMove`, `heavyPiece`,
+  `arrivalSquare`, `checkOrCaptureConsequence`. **The heavy-piece restriction is
+  load-bearing and pinned**: the any-piece form reached 100% sensitivity while firing on
+  **19.0%** of negative controls and is the permanent hard negative (the recall-only-gate
+  lesson, stage-0 §9; the discriminating minor-piece fixture is wired in
+  `semantic-splits.test.ts`, labeled from this review).
 
 #### 3.3 Observed line tactics
 
 All three are `derived.tactic` observed events over `observed-window@1` three-edge windows
-(the square-clearance window per the harness), grounding `declared_convention`, exactness
-`convention`, abstention `["continuation_too_short", "input_abstained"]` plus
-`invalid_turn_clone` where the exposure boundary clones.
+(three anchors / four nodes), abstention `["continuation_too_short", "input_abstained"]`.
+**No clause clones a turn** (§1.4): `invalid_turn_clone` is not declared on any §3.3 id.
+The first and third ride mixed input groundings and declare
+`declared_convention`/`convention` per §1.3; **square clearance is the exception** — its
+inputs are the recorded path alone, so §1.3's checker *forbids* `declared_convention` for
+it and it declares `recorded_run`/`exact` (breadth's `contact_timing@1` precedent: the
+window horizon is identity, not a grounding downgrade).
 
-- `derived.tactic.line_blocker_clearance_observed@1` — the sole blocker on a named
-  slider→target ray vacates; the same slider/target relation becomes live; the target is
-  captured within the window. Operands: `blocker`, `slider`, `ray`, `target`,
+- `derived.tactic.line_blocker_clearance_observed@1` — clauses pinned from
+  `clearanceSequence` (`sequence.test.ts:138-158`): (1) on edge 1 a **friendly** blocker —
+  same color as the slider — vacates the **sole occupied square strictly between** a named
+  same-side slider (B/R/Q) and an **enemy non-king** target; (2) the slider attacks the
+  target after edge 1; (3) on edge 3 **the same slider, from its unchanged square**,
+  captures the retained target (same square/color/role) with a **positive
+  `legal-exchange@1`** result. Operands: `blocker`, `slider`, `ray`, `target`,
   `targetCapture`. Hard negative: vacation opens a ray with no retained target
   consequence (*"opened geometry without an affected target is only an operand"*).
   Measured: initiations authored 24/26, imported 42/42; observed sequences 23 imported /
   0 authored.
-- `derived.tactic.square_clearance_observed@1` — the upstream-shaped split (measured
-  **98.3%** sensitivity, 2.7% controls — 331/12,365): an exact square is vacated; a later
-  same-side slider moves **to or through** that square within the window. Operands:
-  `vacatedSquare`, `vacatingPiece`, `laterSlider`, `laterMove`. Registered **alongside,
-  not instead of**, the ray-vacating form above — the measured ray form matches the
-  upstream `clearance` family at only 1.1% and must not monopolize the name (D902's
-  anti-alias ruling, applied in both directions).
-- `derived.tactic.interference_observed@1` — a piece interposes on the exact between-set
-  of a named slider→target duty, breaking it; the same target is captured within the
-  window. Operands: `interposingMove`, `slider`, `betweenSquare`, `target`, `brokenDuty`,
-  `targetCapture`. Declared **conservative subset** (37.2% sensitivity, **0.1%**
-  controls): its low tag reach is expected and is not a licence to broaden the detector.
-  Measured: 0 authored / 3 imported. Hard negative: blocker appears on an unrelated ray.
+- `derived.tactic.square_clearance_observed@1` — the upstream-shaped split, clauses pinned
+  from `squareVacatedForSliderSequence` (measured **98.3%** sensitivity, 2.7% controls —
+  331/12,365): an exact square is vacated on edge 1; on edge 3 a same-side slider (B/R/Q),
+  **from a source square other than the vacated one**, makes a **quiet (non-capture)** move
+  **to or through** that square. The quiet clause is load-bearing: the capture-consequence
+  ray form is `line_blocker_clearance_observed@1`'s domain, and the split is what keeps the
+  two ids from double-counting one line. Operands: `vacatedSquare`, `vacatingPiece`,
+  `laterSlider`, `laterMove`. Registered **alongside, not instead of**, the ray-vacating
+  form above — the measured ray form matches the upstream `clearance` family at only 1.1%
+  and must not monopolize the name (D902's anti-alias ruling, applied in both directions).
+- `derived.tactic.interference_observed@1` — clauses pinned from `interferenceSequence`
+  (`sequence.test.ts:160-175`): (1) on edge 1 a piece of the attacking side interposes on
+  the exact between-set of a `defence-duty@1` duty held by an **enemy slider (B/R/Q)** over
+  its own non-king piece; (2) after edge 1 the duty no longer holds while the target
+  survives by square/color/role; (3) on edge 3 the retained target is captured with a
+  **positive `legal-exchange@1`** result. Operands: `interposingMove`, `slider`,
+  `betweenSquare`, `target`, `brokenDuty`, `targetCapture`. Declared **conservative
+  subset** (37.2% sensitivity, **0.1%** controls): its low tag reach is expected and is
+  not a licence to broaden the detector. Measured: 0 authored / 3 imported. Hard negative:
+  blocker appears on an unrelated ray.
 
 #### 3.4 Check zwischenzug
 
@@ -319,7 +362,10 @@ All three are `derived.tactic` observed events over `observed-window@1` three-ed
   `retainedRecapture`. Declared subset: check-intermezzo only (68.5% sensitivity, 0.6%
   controls); quiet zwischenzugs are a later, separately versioned contract. Hard
   negative: a merely delayed quiet recapture. Measured: **7**/6,667 imported four-edge
-  windows; authored 0. No claim that the recapture was expected or best.
+  windows; the authored quad population was **not censused** by the instrument (imported
+  only, `sequence.test.ts:281-283`) — the authored zero is predeclared (stage-0/D926), and
+  C6 requires the landing census to measure it rather than assume it. No claim that the
+  recapture was expected or best.
 
 #### 3.5 Overload — three facts, never one loose classifier (D919; pinned at `9f7112c`)
 
@@ -357,12 +403,20 @@ exist).
   `position_rules`, exactness `exact`; abstention `["budget_exhausted",
   "horizon_above_four"]`. Operands: `candidate`, `attacker`, `maxAttackerMoves`,
   `proofStatus`, `proofDigest`, `rootReplies`, `nodes`; a refutation retains at least one
-  legal escaping branch; the proof horizon and tree digest are part of the payload. The
-  root reply population is consumed from the compiled `reply_breadth@1` object (no second
-  enumerator — Wave A's A18 discipline extends here).
+  legal escaping root reply (or the terminal non-mate state — §2's stalemate case); the
+  proof horizon and tree digest are part of the payload. The root reply population is
+  consumed from the compiled `reply_breadth@1` object via `dependsOn` — **not**
+  `derivation.inputs`, which F1 rejects outside the derived plane (the D827 return; the
+  same rule binds §3.1's rules-plane events) — and no second root enumerator exists
+  (Wave A's A18 discipline extends here); interior tree nodes are necessarily the solver's
+  own enumeration under §2's pinned order. At horizon 1 the predicate is the singleton case
+  of 2c's `mate_in_one@1` for the declared candidate and defers the position-level
+  enumeration to that id (C8's seam, stated).
 - Measured priors (C6's targets): mate-in-2 **240/240** proved, mate-in-3 **240/240**,
   mate-in-4 **120/120**; adjacent-depth controls **0/600** prove early; **zero**
-  cap abstentions through four; nodes median/p90/max 635/4,716/87,255 at depth four. At
+  cap abstentions through four; nodes median/p90/max 635/4,716/87,255 at depth four
+  (reference figures under the harness enumeration order — §2's pinned-order rule governs
+  their reproduction). At
   the declared boundary, 24 `mateIn5`-bucket rows: 19 proved, 2 refuted (genuinely longer
   lines), 3 cap abstentions — the boundary behaves as declared, and the two refutations
   plus three abstentions are **fixtures**, not defects. Played-edge census: mate-next
@@ -389,8 +443,14 @@ Both rows ride 2d's `derived.pawn` producer at `pawn-dynamics.ts`.
   abstention already declared there. Registering a second per-pawn geometry producer
   would be the duplicate-collector failure; the operand mapping
   (`passAvailability → promotionAvailableNext`, `replyPersistence →
-  promotionUnstoppable`) is recorded in the declaration's semantics so the matrix row is
-  traceable to its serving id.
+  promotionUnstoppable`; the matrix row's `sideToMove` rides the reading's position
+  anchor rather than a named operand — the amended §3.14 list carries no `sideToMove`
+  member, verified against the amendment text) is recorded in the declaration's semantics
+  so the matrix row is traceable to its serving id. **Binding hold (D929):** the amended
+  projection's absence semantics are contested — the sibling RFC declares an in-check
+  pass-clone abstention while the matrix row is total and the research helper returns a
+  silent `false` — and this binding waits on that seam amendment; unavailable must never
+  count as refuted (§Ledger).
 - `derived.pawn.promotion_race_geometry@1` — *derived reading* under `race-arrival@1`
   (§2): two-plus named pawns, per-pawn exact arrival convention and ordering. Grounding
   `declared_convention`/`convention` (mixed exact inputs: the passed-pawn/blocker
@@ -518,16 +578,24 @@ shipped around — no criterion here carries a pre-authorized fallback.
    outcome words exist only in the tablebase join.
 6. **C6 — Measured reproduction.** The permanent implementation reproduces, on the
    identical fixed populations, within 10% of eligible denominators or with a named
-   deliberate domain correction: sequence witnesses 26/13/5/23/3 and the 7 zwischenzug
-   windows; conflict 12/6,991 and 0/754; mate 600/600 proved positives, 600/600 rejected
-   adjacent-depth controls, 0 cap abstentions through four; race ordering 7/10 with both
-   inversions; external agreement 93.0%/99.9%/98.3%/99.8%/37.2%/68.5% with their control
-   rates. Authored zeroes are reported as zeroes.
+   deliberate domain correction: sequence witnesses 5/23/3 (overload exploitation,
+   line-blocker clearance, interference) and the 7 zwischenzug windows; defender-removal
+   initiations 46/66 authored and 87/138 imported; conflict 12/6,991 and 0/754; mate
+   600/600 proved positives, 600/600 rejected adjacent-depth controls, 0 cap abstentions
+   through four; race ordering 7/10 with both inversions; external agreement
+   93.0%/99.9%/98.3%/99.8%/37.2%/68.5% with their control rates. **The harness's 26 and 13
+   three-edge counts are NOT this RFC's targets** — they are 2d's
+   `defender_consequence@1` kinds (a-subset/b), reproduced by this wave's instrument as
+   cross-checks; scoring them here would demand a duplicate authority (C8). The
+   one-edge `defender_duty_relocated@1` census and the authored zwischenzug-quad census
+   are measured at landing with predeclared directions (§3.1, §3.4), both answers
+   recorded. Authored zeroes are reported as zeroes.
 7. **C7 — Fixtures that start red, verified at HEAD.** Every §3 fixture family is
    committed before its producer and verified failing at pre-implementation HEAD. All are
-   **red by producer absence**, verified at the symbol at drafting HEAD `7181834`: none of
-   the fourteen ids exists in the compiled catalogue, and the only occurrences of this
-   wave's vocabulary in production code are three refusal/limitation strings
+   **red by producer absence**, verified at the symbol at drafting HEAD `7181834` and
+   re-verified at review HEAD `530bb4a`: none of the fourteen ids exists in the compiled
+   catalogue (grep over `packages/ apps/`: zero hits per id), and the only occurrences of
+   this wave's vocabulary in production code are five refusal/limitation occurrences
    (`evidence-catalog.ts:206,217,247,260,330`) — verified by reading the file, so their
    evidentiary force is post-landing, stated plainly (the Wave-A A6 lesson). The one
    genuinely-misbehaving-shipped-symbol fixture the Wave-C evidence found —
@@ -539,10 +607,14 @@ shipped around — no criterion here carries a pre-authorized fallback.
    recomputed under a second meaning; §3.1's events name their derivation/dependsOn
    inputs; breadth's `defender_exposure@1` remains untouched and unreimplemented.
 9. **C9 — F1 mechanics clean.** Every derived projection declares literal
-   `derivation.inputs`; no declaration widens exactness, grounding, answer content or
-   abstention past its inputs (the `EVIDENCE_DERIVATION_WIDENS` check passes with
-   `input_abstained` present wherever an input abstains); every pass-device clause
-   declares `invalid_turn_clone` with an in-check abstention fixture.
+   `derivation.inputs`; rules-plane events (§3.1, §3.6) use `dependsOn`, never
+   `derivation` (the D827 rule); no declaration widens exactness, grounding, answer
+   content or abstention past its inputs (the `EVIDENCE_DERIVATION_WIDENS` check passes
+   with `input_abstained` present wherever an input abstains — and the same check *forbids*
+   `declared_convention` on a single-grounding derived row, which is why
+   `square_clearance_observed@1` declares `recorded_run`); no registered clause clones a
+   turn (§1.4), so no `invalid_turn_clone` reason is declared anywhere in this wave and a
+   declaration carrying one is a C9 failure.
 10. **C10 — Non-vacuity, honestly split.** Canonical fixture censuses strict-interior for
     every family; authored/imported population censuses reported separately; each authored
     zero creates or retains the D926 content-coverage row and changes no predicate.
@@ -559,9 +631,11 @@ shipped around — no criterion here carries a pre-authorized fallback.
     (their acceptance suites green at the merge base); the `derived.pawn` producer and
     sequence compilation are consumed, not created here.
 15. **C15 — Closeout protocol.** The landing commit flips this RFC's recorded ledger rows
-    (D925 and the rows §Ledger names as shipped), leaves the assigned rows open with their
-    owners, and appends the `planning/exploration/log.md` entry — in the same commit (the
-    CLAUDE.md ledger-and-log clause).
+    (D925 — the Wave-C implementation-wave 💡 row, disambiguated per §Ledger's collision
+    note — and the rows §Ledger names as shipped), leaves the assigned rows open with
+    their owners, and appends the `planning/exploration/log.md` entry — in the same commit
+    (the CLAUDE.md ledger-and-log clause). C15 cannot close while the D925 collision
+    stands unrepaired.
 
 ## Discharges
 
@@ -593,15 +667,31 @@ Recorded rows this RFC encodes (none flipped by drafting): **D872** (the program
 (typed engine operands — D2's evidence), **D919** (overload three-way), **D920** (the
 matrix), **D921** (module-amendment order — D1), **D922** (the sibling amendment §3.7
 binds to). Open defect rows cited, owned elsewhere: **D917**, **D918** (D2); **D904**,
-**D905** (seams, untouched).
+**D905** (seams, untouched); **D929** (the §3.7 promotion-pressure absence-semantics seam,
+in flight — see the collision note below).
 
-Proposed rows, from the verified ledger head **D922** — **proposed here, not written**; they
-enter `design/BACKLOG.md` in this RFC's drafting-registration commit per law 4:
+Registered rows — **written by the drafting commit `530bb4a`** (the draft's "head D922"
+was already stale when it landed: D923/D924 had been taken by the play-composition review
+in flight, and the commit renumbered accordingly):
 
 - **D925** — the 14-id semantic collector implementation wave (this RFC's shipping row;
   flipped by the landing commit per C15).
 - **D926** — authored-corpus witness debt for the observed semantic-tactic families (the
   D4 obligation's ledger anchor; content tier).
+
+**Ledger collision, found by the cross-review 2026-08-22:** the drafting commit also
+recorded the independently found Stockfish-WDL-perspective defect as a second **D925** 🐞
+row, so `design/BACKLOG.md` at commit `530bb4a` holds two D925 rows (verified committed
+head **D926**). The review proposed renumbering the WDL row to **D927** per the D906/D908
+precedent — and found the concurrent C4/Review session's in-flight working tree already
+carries exactly that repair (the WDL row as D927, plus new rows **D928** — the Review
+whole-game selector — and **D929**, below), so the repair needs committing, not
+re-deciding. Every D925 reference in this document means the Wave-C implementation-wave 💡
+row. **D929 🐞 (in flight, `tactical-collectors / semantic-collectors` seam) binds §3.7
+directly:** `promotion_pressure@1` carries three incompatible absence semantics after D922
+(RFC in-check abstention vs. the matrix's total row vs. the helper's silent `false`) — the
+§3.7 binding cannot be implemented until that amendment pins one shape, and this RFC's
+mapping note inherits whatever `invalid_turn_clone` form it rules.
 
 ## Appendix A — registered projection ids
 
@@ -627,6 +717,45 @@ is a spec change with a changelog line.
 
 ## Changelog
 
+- 2026-08-22: adversarial buildability cross-review (independent). Chess/mechanics repairs,
+  each verified at the harness symbol that produced the quoted measurement: **(1)** the §1.4
+  pass-device clause census was wrong — no registered §3 clause flips a turn (the
+  `sequence.test.ts:95` clone belongs to the harness's relocation falsifier, which is 2d's
+  `defender_consequence@1` kind (b) cross-check, not a projection here); `invalid_turn_clone`
+  removed from §3.2/§3.3 declarations, where it was an unreachable reason with an
+  unconstructible fixture, and C9 now fails a declaration that carries it. **(2)** §3.2/§3.3
+  clause texts pinned to the measured predicate bytes the sensitivity figures came from:
+  deflection's displacement is causally bound (the defender's relocation captures the bait,
+  or the bait gave check) and its target capture must be a **positive** `legal-exchange@1`;
+  attraction's two horizons pinned (three-edge check arm; five-edge capture arm with the
+  edge-3 re-attack clause) with no positivity requirement; line-blocker clearance requires
+  the **same slider from its unchanged square** capturing positively; square clearance
+  requires a **quiet** later slider move from a non-vacated source — and declares
+  `recorded_run`/`exact`, because the shipped widening checker *forbids*
+  `declared_convention` on its single-grounding inputs; interference requires the positive
+  target capture. **(3)** `mate-proof@1` made deterministic at the cap boundary: the
+  candidate counts as attacker move one (H=1 = the candidate mates — layered beside 2c's
+  `mate_in_one@1`, seam stated), node accounting and enumeration order pinned, the
+  stalemate refutation case named, and the digest deferred to a pinned-at-implementation
+  encoding with the cross-authority join key fixed as candidate+position+horizon. **(4)**
+  `defender_duty_relocated@1`'s measured prior was mis-attributed — the 0/13 is 2d's
+  bounded three-edge count; the one-edge census is measurement-not-hope at landing, and C6
+  drops 26/13 from this RFC's reproduction targets (scoring them here would demand a C8
+  duplicate authority). **(5)** `defence-duty@1` pins the non-king-target byte; the
+  zwischenzug authored-quad census is named unmeasured rather than zero; C7's refusal-string
+  count corrected to five occurrences and re-verified at review HEAD. **(6)** the §Ledger
+  section records reality: rows D925/D926 were written by drafting commit `530bb4a`, which
+  also created a **D925 collision** with the WDL-perspective defect row — committed head is
+  D926; the concurrent C4 session's in-flight tree already carries the proposed D927
+  renumbering plus rows D928/D929, and D929's promotion-pressure absence-semantics seam is
+  now a named hold on the §3.7 binding; C15 cannot close while the collision stands
+  uncommitted. **(7)** two labeled fixtures added to the disposable harness:
+  the broad-overload rule firing where the strict predicate refuses
+  (`overload-response.test.ts`), and the any-piece attraction discriminator
+  (`semantic-splits.test.ts`) — the two permanent hard negatives now execute instead of
+  being sentences. D922-amendment binding re-verified against the amended §3.14 text
+  (`sideToMove` mapping gap recorded); consumer counts, §4 adjudication and every §3
+  measured figure re-derived against the matrix and stage-0.
 - 2026-08-22: created from `wave-c-foundation-closure.md` and
   `basic-semantic-tactics-stage-0.md` with every cited symbol re-verified at drafting HEAD
   `7181834`; the 20 matrix identities adjudicated 14 registered / 1 bound / 5 assigned; the
