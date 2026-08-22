@@ -15,6 +15,25 @@ this file as a lesson and nothing reads it.
 
 ---
 
+## 0-2D-ACCEPTED. `breadth-collectors` is accepted — implement after 2c lands
+
+Accepted 2026-08-22 on the buildability test after the independent review the plan reserved.
+**Read [[D895]] before implementing** — five conventions were repaired with FENs, and the
+king-square one changes the mechanism: **pseudo-only manifests BY ABSTENTION** (the checking
+side's turn clone is always `OppositeCheck`-invalid; there is no observable legal set that
+excludes the king square). The check position `4k3/8/8/8/8/8/8/4R1K1 b` pins both rules. Also:
+`pressure-line@1` now requires slider-ray compatibility with the screen removed (the labeled
+negative fixture is in the d723 harness and passes); `defender_exposure@1` names its pass-state
+device and abstention; the 29/26 count pairing is fixed; asymmetry is the unweighted five-role
+magnitude. **[[D896]]**: `reply_breadth@1` is over-declared in Depends-on — name a consumer or
+shrink the line while you are in the file. **[[D897]]**: the landing measurement must reproduce
+11/125 and 1/45 within B6's 10% or name the §3.4 domain correction.
+
+**Next after that: `rfc/learner-modules.md` is drafted and heads to cross-review** — the
+wall-breaker (first production module ids; 179 eligibility rows). Do not take it until the
+review lands and it is accepted; when it is, its implementation is the moment the F1/F2
+machinery reaches a learner.
+
 ## THE BATCH DOCUMENT IS LIVE — `planning/defect-triage.md`
 
 All **289** open rows routed. **Work batches, not rows**: one pass, one test run, one commit
