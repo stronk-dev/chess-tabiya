@@ -579,7 +579,46 @@ the Review successor bind them. The currently accepted 175-row module RFC predat
 placeholder names would recreate the manifest's old free-text surface defect. `[V]`
 (`rfc/learner-modules.md` Appendix A; D921)
 
-## 15. Next research
+## 15. Whole-game Review evidence keeps its units and perspective
+
+The shipped Stockfish adapter normalizes `centipawns` and `mateIn` to White, but copies the three
+`wdl` integers without recording or normalizing their subject. Stockfish builds WDL from the same
+root score and its documented neural output is relative to the side to move; its WDL model describes
+the three values as outcome probabilities alongside that evaluation. `[V]`
+([Stockfish `uci.cpp`](https://github.com/official-stockfish/Stockfish/blob/master/src/uci.cpp);
+[Stockfish NNUE documentation](https://official-stockfish.github.io/docs/nnue-pytorch-wiki/docs/nnue.html);
+[Stockfish WDL model](https://github.com/official-stockfish/WDL_model);
+`apps/server/src/evidence-queue.ts:409-426`)
+
+A disposable C4 instrument ran the shipped Stockfish 18 executor at 100 ms over **8 deterministic
+whole imported games: 658 transitions and 661 positions**. Against White-perspective cp, raw
+side-to-move WDL has Pearson **.015** while White-normalized WDL reaches **.847**. Adjacent cp-delta
+sign agreement rises from **49.4%** raw to **68.5%** normalized; raw and normalized WDL deltas agree
+in sign on only **35.1%** of transitions. Raw WDL's median/p90 absolute adjacent change is
+**90.1/100.0 percentage points**, versus **0.6/23.8** after normalization. The current storage
+boundary therefore manufactures alternating-player swings; this is D927, not a Review tuning
+question. `[V]` (`tools/d872-semantic-tactics-harness/review-cross-source-output.md`)
+
+The same run measures factual-source availability without pretending the sources share a scale.
+Selected research semantic facts exist on **509/658 (77.4%)** transitions, exact opening endpoints
+on **24/658 (3.6%)**, and the seven-piece tablebase domain on **55/658 (8.4%)**. At the engine's
+top three cp moments per game, **19/24 (79.2%)** also have at least one of those non-engine factual
+sources. This establishes overlap, not learner usefulness: `research.r2_candidate@1` still admits
+some low-significance local facts, and domain eligibility is not a tablebase result. `[V]` (same
+instrument)
+
+Syzygy itself distinguishes WDL outcome from DTZ, where zero means a move that resets the 50-move
+counter; DTZ is not advantage magnitude or distance to mate. `[V]`
+([Stockfish Syzygy documentation](https://official-stockfish.github.io/docs/stockfish-wiki/Advanced-topics.html#syzygy-tablebases))
+
+The C4 contract is consequently a typed join, not a universal rank: `centipawns | mateIn`,
+perspective-normalized engine WDL, exact tablebase category/DTZ, human-model or Explorer
+probability, opening identity and exact semantic events retain their own units, provenance and
+absence. Source-local rules admit candidates; a whole-game selector may then apply declared family
+priorities/quotas and deterministic ties. It may not convert mate to cp, treat DTZ as evaluation,
+treat human frequency as quality, or subtract WDL without a fixed subject. `[M]`
+
+## 16. Next research
 
 1. Carry the separately named attraction/deflection/square-clearance contracts into the Wave-C
    collector RFC alongside, not instead of, retained-duty relocation and line-blocker clearance.
@@ -589,7 +628,8 @@ placeholder names would recreate the manifest's old free-text surface defect. `[
    never convert mate to centipawns or call king-zone deltas a mating net.
 4. Carry the split promotion geometry/tablebase join into the collector RFC; do not recreate a
    geometric winner field under another name.
-5. Measure cross-source overlap on whole games and compile the C5 consumer matrix before accepting
-   full Review selection; C5 itself is complete.
+5. Carry the measured typed-source join and D927 perspective repair into the Review successor;
+   whole-game overlap is answered, while cross-version engine stability and learner usefulness
+   remain.
 
 No production detector, learner sentence, content edit or RFC is authorized by this Stage-0 result.

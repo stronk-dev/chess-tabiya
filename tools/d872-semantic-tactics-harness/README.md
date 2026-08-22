@@ -38,6 +38,9 @@ Generated evidence:
   readings over fixed imported transitions.
 - `review-engine-mate-output.md` — typed engine-mate agreement against the already-proved exact
   mate-through-four population.
+- `review-cross-source-output.md` — whole-game source-local overlap plus the measured effect of
+  storing Stockfish WDL without a fixed perspective; cp/mate, WDL, exact opening identity,
+  semantic facts and tablebase-domain reach remain separate typed units.
 - `overload-response-output.md` — rejected broad duty-edge rule versus the exact sole-defender,
   positive-consequence response conflict.
 - `consumer-matrix-output.md` — executable candidate projection→consumer/timing/answer-distance

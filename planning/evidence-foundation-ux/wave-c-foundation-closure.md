@@ -172,6 +172,16 @@ instead coerces mate into ±1000 cp (D917), and the post-game pass requests eval
 the other declared sources (D918). Cross-source overlap, engine-version stability and whole-game
 selection remain.
 
+**Whole-game source arm answered 2026-08-22:** 8 deterministic complete imported games contribute
+658 transitions. Raw side-to-move WDL correlates **.015** with White-perspective cp and its adjacent
+delta agrees in sign with cp on **49.4%**; normalizing WDL to White raises those to **.847** and
+**68.5%**. D927 owns the production perspective defect. Selected semantic facts, exact opening
+endpoints or seven-piece tablebase-domain eligibility exist beside **19/24** engine top-three
+moments, so factual Review need not collapse to engine grading. D928 owns the typed whole-game
+selector: source-local admission plus declared family quotas/priorities, never one score spanning
+cp/mate, WDL, human likelihood, opening identity, semantic relations and DTZ. Engine-version
+stability and learner usefulness remain.
+
 ### C5 — cross-consumer closure
 
 Every admitted projection must publish:

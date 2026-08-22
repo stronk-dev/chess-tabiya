@@ -4707,3 +4707,18 @@ F7-owned; whole-game Review selection stays F6-owned; module composition stays F
 bot memory stays F8-owned under O8's deferral. The store must coordinate a landing-position claim
 with `learner-rating` and join portable account export/delete/per-run invalidation in the same
 commit. O9 is still the only gate before F9 RFC drafting.
+
+## 2026-08-22 — whole-game Review evidence exposes a WDL perspective defect
+
+The C4 disposable instrument ran Stockfish 18 at 100 ms over 8 deterministic whole imported games:
+658 transitions and 661 positions. The production adapter's raw side-to-move WDL correlates .015
+with its White-perspective cp and adjacent deltas agree in sign only 49.4%; normalizing WDL to White
+raises those to .847 and 68.5%. Raw versus normalized WDL deltas agree only 35.1%, so D927 is a
+storage-boundary correctness defect, not a selector preference.
+
+The same run keeps source units separate and finds a semantic fact, exact opening endpoint or
+seven-piece tablebase-domain fact beside 19/24 engine top-three moments. D928 therefore gives the
+Review successor a typed source-local selector: each family admits and ranks in its own terms, then
+declared quotas/priorities compose the final map. Mate is never cp, human likelihood is never chess
+quality and DTZ is never advantage magnitude. C4's cross-source overlap arm is answered;
+cross-version stability and learner usefulness remain.
