@@ -174,7 +174,7 @@ describe("engine capabilities", () => {
         },
         evidenceManifest: {
           digest: expect.stringMatching(/^[a-f0-9]{64}$/),
-          counts: { producers: 23, projections: 133, consumers: 25, bindings: 179, semanticEvents: 37, eligibility: 37, reasons: 15, selectionPolicies: 1 },
+          counts: { producers: 24, projections: 136, consumers: 25, bindings: 180, semanticEvents: 38, eligibility: 38, reasons: 15, selectionPolicies: 1 },
           availability: expect.arrayContaining([
             expect.objectContaining({ producerId: "live.stockfish", state: "available" }),
             expect.objectContaining({ producerId: "live.syzygy", state: "available" }),

@@ -4,6 +4,7 @@ import type { Color, Move, Role } from "chessops/types";
 import { makeUci, parseUci } from "chessops/util";
 
 import { canonicalFen, positionFromFen } from "./chess.js";
+import { castlingRightsLost, type CastlingRightLostEvent } from "./castling.js";
 import { PRIMARY_EVIDENCE_MANIFEST, STRUCTURAL_EVENT_FAMILIES } from "./evidence-catalog.js";
 import {
   EvidenceManifestError,
@@ -17,7 +18,7 @@ import {
   type SemanticEventSign,
   type VersionedEvidenceId,
 } from "./evidence-contract.js";
-import { declareAvoidanceEvidence, declareCheckEventEvidence, declareDoubleAttackEvidence, declareReplyBreadthEvidence, declareStructuralSemanticSourceEvidence, declareTransitionSemanticSourceEvidence } from "./evidence-source-adapters.js";
+import { declareAvoidanceEvidence, declareCastlingRightsLostEvidence, declareCheckEventEvidence, declareDoubleAttackEvidence, declareReplyBreadthEvidence, declareStructuralSemanticSourceEvidence, declareTransitionSemanticSourceEvidence } from "./evidence-source-adapters.js";
 import { structuralReading, type StructuralObservation, type StructuralReading } from "./structure.js";
 import { checkEvent, doubleAttackEvent, replyBreadth, type CheckEvent, type DoubleAttackEvent, type ReplyBreadth } from "./tactics.js";
 import { transitionSemanticFacts, type TransitionSemanticFact } from "./transition.js";
@@ -116,6 +117,7 @@ export type TransitionSemanticEventOperands = TransitionSemanticFact & {
 };
 
 export type TacticalSemanticEventOperands = DoubleAttackEvent | ReplyBreadth | CheckEvent;
+export type CastlingSemanticEventOperands = CastlingRightLostEvent;
 
 function immutable<T>(value: T): T {
   if (value !== null && typeof value === "object" && !Object.isFrozen(value)) {
@@ -230,8 +232,15 @@ export function tacticalSemanticEvents(beforeFen: string, moveUci: string, after
   return Object.freeze(events.sort((left, right) => refKey(left.projection).localeCompare(refKey(right.projection))));
 }
 
+export function castlingSemanticEvents(beforeFen: string, moveUci: string, afterFen: string): readonly SemanticEvidenceEvent<CastlingSemanticEventOperands>[] {
+  const anchor = canonicalAnchor({ beforeFen, moveUci, afterFen, side: positionFromFen(beforeFen).turn });
+  return Object.freeze(castlingRightsLost(anchor.beforeFen, anchor.moveUci, anchor.afterFen).map((payload) => compileSemanticEvidenceEvent(PRIMARY_EVIDENCE_MANIFEST, {
+    evidence: declareCastlingRightsLostEvidence(payload), anchor, sign: "lost", operands: payload,
+  })));
+}
+
 export function localSemanticEvents(beforeFen: string, moveUci: string, afterFen: string): readonly SemanticEvidenceEvent[] {
-  return Object.freeze([...structuralSemanticEvents(beforeFen, moveUci, afterFen), ...transitionSemanticEvents(beforeFen, moveUci, afterFen), ...tacticalSemanticEvents(beforeFen, moveUci, afterFen)]);
+  return Object.freeze([...structuralSemanticEvents(beforeFen, moveUci, afterFen), ...transitionSemanticEvents(beforeFen, moveUci, afterFen), ...tacticalSemanticEvents(beforeFen, moveUci, afterFen), ...castlingSemanticEvents(beforeFen, moveUci, afterFen)]);
 }
 
 export function compileSemanticEvidenceEvent<T>(manifest: CompiledEvidenceManifest, input: SemanticEventInput<T>): SemanticEvidenceEvent<T> {
@@ -358,7 +367,7 @@ export function selectSemanticEvidence(manifest: CompiledEvidenceManifest, polic
 
 export function selectLocalSemanticEvidence(policyRef: VersionedEvidenceId, input: Omit<SemanticSelectionInput, "playedEvents" | "evaluateAlternative">): EvidenceSelectionResult {
   const cache = new Map<string, StructuralReading>();
-  const events = (edge: { readonly beforeFen: string; readonly moveUci: string; readonly afterFen: string }): readonly SemanticEvidenceEvent[] => Object.freeze([...structuralSemanticEventsCached(edge.beforeFen, edge.moveUci, edge.afterFen, cache), ...transitionSemanticEvents(edge.beforeFen, edge.moveUci, edge.afterFen), ...tacticalSemanticEvents(edge.beforeFen, edge.moveUci, edge.afterFen)]);
+  const events = (edge: { readonly beforeFen: string; readonly moveUci: string; readonly afterFen: string }): readonly SemanticEvidenceEvent[] => Object.freeze([...structuralSemanticEventsCached(edge.beforeFen, edge.moveUci, edge.afterFen, cache), ...transitionSemanticEvents(edge.beforeFen, edge.moveUci, edge.afterFen), ...tacticalSemanticEvents(edge.beforeFen, edge.moveUci, edge.afterFen), ...castlingSemanticEvents(edge.beforeFen, edge.moveUci, edge.afterFen)]);
   return selectSemanticEvidence(PRIMARY_EVIDENCE_MANIFEST, policyRef, {
     ...input,
     playedEvents: events(input),

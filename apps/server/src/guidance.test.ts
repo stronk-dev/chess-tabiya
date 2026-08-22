@@ -30,7 +30,7 @@ class MaiaClient implements SelectorEngineClient {
 const capabilities: CapabilitiesProvider = {
   async get() {
     return {
-      engines: [], policyModes: ["human_common"], feedbackPolicies: ["delayed_checkpoint", "segment_end", "immediate_guard"], guardBasis: ["rules"], costBasis: ["material"], capabilityDispositions: [], recordedReadingKinds: [], runSchemaVersion: "0.17", evidenceManifest: { digest: "fixture", counts: { producers: 23, projections: 133, consumers: 25, bindings: 179, semanticEvents: 37, eligibility: 37, reasons: 15, selectionPolicies: 1 }, availability: [], bindings: [] },
+      engines: [], policyModes: ["human_common"], feedbackPolicies: ["delayed_checkpoint", "segment_end", "immediate_guard"], guardBasis: ["rules"], costBasis: ["material"], capabilityDispositions: [], recordedReadingKinds: [], runSchemaVersion: "0.17", evidenceManifest: { digest: "fixture", counts: { producers: 24, projections: 136, consumers: 25, bindings: 180, semanticEvents: 38, eligibility: 38, reasons: 15, selectionPolicies: 1 }, availability: [], bindings: [] },
       tempoVerdicts: ["unopened", "open", "in_time", "over_budget", "too_slow", "outpaced", "premature"], tempoGradeable: ["in_time", "over_budget", "too_slow", "premature", "outpaced"], tempoDefaults: { outpaced: "failed" },
       assessmentCategories: ["win", "loss", "draw", "cursed-win", "blessed-loss"],
       objectiveAssessmentSets: { win: ["win"], hold: ["draw", "cursed-win", "blessed-loss"], save: ["loss", "blessed-loss"], resist: ["loss", "blessed-loss"] },

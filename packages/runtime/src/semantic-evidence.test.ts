@@ -10,6 +10,7 @@ import {
   assertEvidenceSelectionResult,
   assertSemanticEvidenceEvent,
   canonicalMoveUci,
+  castlingSemanticEvents,
   compileSemanticEvidenceEvent,
   legalAlternativeEdges,
   selectSemanticEvidence,
@@ -101,6 +102,14 @@ describe("semantic evidence runtime", () => {
     const standard = ruleEvent(fen, "e1g1", "castled");
     const imported = ruleEvent(fen, "e1h1", "castled");
     expect(imported.id).toBe(standard.id);
+  });
+
+  it("emits permanent castling-right loss separately from transient legality", () => {
+    const fen = "r3k2r/8/8/8/8/8/8/R3K2R w KQkq - 0 1";
+    const afterFen = after(fen, "h1h2");
+    const events = castlingSemanticEvents(fen, "h1h2", afterFen);
+    expect(events).toHaveLength(1);
+    expect(events[0]).toMatchObject({ projection: { id: "rules.castling.event.rights_lost", version: 1 }, sign: "lost", operands: { color: "white", wing: "kingside", cause: "rook_moved" } });
   });
 
   it("enumerates ordinary, en-passant, castling and all four promotion roles as replayable exact children", () => {

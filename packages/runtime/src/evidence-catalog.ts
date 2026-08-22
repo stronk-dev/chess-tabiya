@@ -73,7 +73,7 @@ function projection(producerId: string, id: string, plane: EvidencePlane, option
 }
 
 export const EVIDENCE_PRODUCER_IDS = Object.freeze([
-  "rules.structural", "rules.transition", "rules.exchange", "rules.tactic", "rules.phase", "rules.pivotal", "rules.endgame",
+  "rules.structural", "rules.transition", "rules.castling", "rules.exchange", "rules.tactic", "rules.phase", "rules.pivotal", "rules.endgame",
   "theory.shapes", "authored.structural_condition", "pack.authored", "recorded.engine", "recorded.tablebase", "live.stockfish",
   "live.syzygy", "human.maia", "human.explorer", "theory.opening_identity", "run.record",
   "derived.compare_narrative", "derived.story", "derived.tactic", "sourcing.ledger",
@@ -121,7 +121,8 @@ export const TACTICAL_EVENT_PROJECTION_IDS = Object.freeze([
   "rules.tactic.consequence.reply_breadth",
   "rules.tactic.event.check",
 ] as const);
-export const SEMANTIC_EVENT_PROJECTION_IDS = Object.freeze([...STRUCTURAL_EVENT_PROJECTION_IDS, ...TRANSITION_EVENT_PROJECTION_IDS, ...AVOIDANCE_EVENT_PROJECTION_IDS, ...TACTICAL_EVENT_PROJECTION_IDS]);
+export const CASTLING_EVENT_PROJECTION_IDS = Object.freeze(["rules.castling.event.rights_lost"] as const);
+export const SEMANTIC_EVENT_PROJECTION_IDS = Object.freeze([...STRUCTURAL_EVENT_PROJECTION_IDS, ...TRANSITION_EVENT_PROJECTION_IDS, ...AVOIDANCE_EVENT_PROJECTION_IDS, ...TACTICAL_EVENT_PROJECTION_IDS, ...CASTLING_EVENT_PROJECTION_IDS]);
 
 const structuralEventOutputs = STRUCTURAL_EVENT_FAMILIES.map((family) => projection("rules.structural", `rules.structural.event.${family}`, "rules", {
   role: "event",
@@ -216,6 +217,26 @@ const exchangeOutputs = [
   }),
 ];
 
+const castlingOutputs = [
+  projection("rules.castling", "rules.castling.reading.rights", "rules", {
+    payloadType: "CastlingRightsState", semantics: "Exact per-color kingside and queenside castling rights read from the position state.",
+    operands: ["fen", "white", "black"], forms: ["list", "panel"],
+    limitations: ["A held right does not imply castling is currently legal or strategically desirable."],
+    disposition: { kind: "inspector_only", reason: "Exact state input for later modules; no learner module is admitted by this collector RFC." },
+  }),
+  projection("rules.castling", "rules.castling.event.rights_lost", "rules", {
+    role: "event", payloadType: "CastlingRightLostEvent", semantics: "Exact permanent castling-right loss with king-moved, rook-moved, rook-captured or castled cause. No purpose or prevention intent is inferred.",
+    operands: ["beforeFen", "moveUci", "afterFen", "color", "wing", "cause"], signs: ["lost", "preserved"],
+    forms: ["list", "panel", "machine_condition"], limitations: ["Permanent rights state only; transient legality is a separate reading."],
+  }),
+  projection("rules.castling", "rules.castling.reading.legality", "rules", {
+    payloadType: "CastlingLegalityIssue", semantics: "For each held right, records whether castling is legal now and names check, blocked and attacked path squares.",
+    operands: ["color", "wing", "kingSquare", "rookSquare", "legalNow", "inCheck", "blockedSquares", "attackedSquares"], forms: ["list", "panel"],
+    limitations: ["Current legality is transient and does not establish intent, recommendation or future availability."],
+    disposition: { kind: "inspector_only", reason: "Exact state input for later modules; no learner module is admitted by this collector RFC." },
+  }),
+];
+
 const tacticalOutputs = [
   projection("rules.tactic", "rules.tactic.consequence.threat", "rules", {
     role: "reading", payloadType: "ThreatResult", semantics: THREAT_SEMANTICS,
@@ -260,6 +281,7 @@ const derivedTacticOutputs = [
 export const EVIDENCE_PRODUCERS: readonly ProducerDeclaration[] = Object.freeze([
   producer("rules.structural", "rules", "packages/runtime/src/structure.ts", "local", structuralOutputs),
   producer("rules.transition", "transition", "packages/runtime/src/transition.ts", "local", [...transitionOutputs, ...transitionEventOutputs]),
+  producer("rules.castling", "rules", "packages/runtime/src/castling.ts", "local", castlingOutputs),
   producer("rules.exchange", "rules", "packages/runtime/src/exchange.ts", "local", exchangeOutputs),
   producer("rules.tactic", "rules", "packages/runtime/src/tactics.ts", "local", tacticalOutputs),
   producer("rules.phase", "rules", "packages/runtime/src/phase.ts", "local", [projection("rules.phase", "rules.phase.reading", "rules", { payloadType: "PhaseReading", operands: ["fen", "phase", "material", "undevelopedMinors", "provenanceNote"], forms: ["sentence", "panel"] })]),

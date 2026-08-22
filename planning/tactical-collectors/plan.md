@@ -9,12 +9,13 @@ preset, workflow or authorable-vocabulary edits.
 
 1. **Checkpoint complete:** build and fixture the legal local-exchange authority; exact reply,
    check, capture and fork-survival primitives landed with manifest bindings.
-2. Add the exact castling, capture/development, structural and tactical collectors at the ten
+2. **Checkpoint complete:** castling rights, current legality and permanent rights-loss cause.
+3. Add the remaining development, structural and tactical collectors at the ten
    normative production sites.
-3. Register all 30 projections, typed operands, event families, eligibility and source adapters.
-4. Generalize identity-preserving tactical joins and avoidance without changing R2 selection.
-5. Run the permanent two-population measurement and record every sign/census, including zeros.
-6. Reconcile docs, close shipped ledger rows, append lifecycle logs and archive only after A1–A18.
+4. Register all 30 projections, typed operands, event families, eligibility and source adapters.
+5. Generalize identity-preserving tactical joins and avoidance without changing R2 selection.
+6. Run the permanent two-population measurement and record every sign/census, including zeros.
+7. Reconcile docs, close shipped ledger rows, append lifecycle logs and archive only after A1–A18.
 
 ## Holds
 

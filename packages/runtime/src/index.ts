@@ -213,6 +213,7 @@ export {
   EVIDENCE_SELECTION_POLICIES,
   PRIMARY_EVIDENCE_MANIFEST,
   AVOIDANCE_EVENT_PROJECTION_IDS,
+  CASTLING_EVENT_PROJECTION_IDS,
   SEMANTIC_EVENT_DECLARATIONS,
   SEMANTIC_EVENT_PROJECTION_IDS,
   STRUCTURAL_EVENT_FAMILIES,
@@ -229,6 +230,7 @@ export {
   assertEvidenceSelectionResult,
   assertSemanticEvidenceEvent,
   canonicalMoveUci,
+  castlingSemanticEvents,
   compileSemanticEvidenceEvent,
   legalAlternativeEdges,
   localSemanticEvents,
@@ -247,6 +249,7 @@ export {
   type StructuralSemanticEventOperands,
   type TransitionSemanticEventOperands,
   type TacticalSemanticEventOperands,
+  type CastlingSemanticEventOperands,
 } from "./semantic-evidence.js";
 export {
   declareAuthoredClaimDeliveryEvidence,
@@ -262,6 +265,9 @@ export {
   declareForkSurvivalEvidence,
   declareReplyBreadthEvidence,
   declareCheckEventEvidence,
+  declareCastlingRightsEvidence,
+  declareCastlingRightsLostEvidence,
+  declareCastlingLegalityEvidence,
   declareExplorerPopulationEvidence,
   declareExplorerPositionEvidence,
   declareLivePacketEvidence,
@@ -455,6 +461,16 @@ export {
   type Threat,
   type ThreatResult,
 } from "./tactics.js";
+
+export {
+  castlingLegality,
+  castlingRights,
+  castlingRightsLost,
+  type CastlingLegalityIssue,
+  type CastlingRightLostEvent,
+  type CastlingRightsState,
+  type CastlingWing,
+} from "./castling.js";
 
 export const runtimeBuildInfo = Object.freeze({
   packageName: "@chess-tabiya/runtime",

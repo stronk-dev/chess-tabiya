@@ -27,3 +27,14 @@ Append-only.
 - F1 rejected the RFC's rules-plane derivation contradiction (D827); the identity moved to
   `derived.tactic.fork_survives_reply@1`. D828 records the validation-count sites A1 necessarily
   moves. Focused result: 90 tests green, runtime typecheck green, manifest and semantic checks green.
+
+## 2026-08-22 — castling family checkpoint
+
+- Added exact per-color/wing rights state, current-legality readings with named check/blocked/attacked
+  squares, and permanent rights-loss events with `king_moved | rook_moved | rook_captured | castled`
+  causes. The split prevents transient illegality from being presented as permanent loss and never
+  infers that a player intended to prevent castling.
+- Registered 10 of 30 RFC projections. The compiled manifest is now 24 producers, 136 projections,
+  25 consumers, 180 bindings and 38 semantic events/eligibility rows.
+- Focused result after the second checkpoint: 93 tests green, runtime typecheck green, manifest and
+  semantic checks green.

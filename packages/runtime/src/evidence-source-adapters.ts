@@ -54,6 +54,9 @@ export const declareDoubleAttackEvidence = <T extends object>(payload: T) => exa
 export const declareForkSurvivalEvidence = <T extends object>(payload: T) => exactObject("derived.tactic", "derived.tactic.fork_survives_reply", payload, ["matched", "doubleAttack", "replyBreadth", "refutingReplies"]);
 export const declareReplyBreadthEvidence = <T extends object>(payload: T) => exactObject("rules.tactic", "rules.tactic.consequence.reply_breadth", payload, ["triggeringMove", "afterFen", "terminal", "check", "replies", "count", "horizon"]);
 export const declareCheckEventEvidence = <T extends object>(payload: T) => exactObject("rules.tactic", "rules.tactic.event.check", payload, ["triggeringMove", "checkingPieces", "checkedKing", "attackSquares", "rays"]);
+export const declareCastlingRightsEvidence = <T extends object>(payload: T) => exactObject("rules.castling", "rules.castling.reading.rights", payload, ["fen", "white", "black"]);
+export const declareCastlingRightsLostEvidence = <T extends object>(payload: T) => exactObject("rules.castling", "rules.castling.event.rights_lost", payload, ["beforeFen", "moveUci", "afterFen", "color", "wing", "cause"]);
+export const declareCastlingLegalityEvidence = <T extends object>(payload: T) => exactObject("rules.castling", "rules.castling.reading.legality", payload, ["color", "wing", "kingSquare", "rookSquare", "legalNow", "inCheck", "blockedSquares", "attackedSquares"]);
 
 export function declareStructuralReadingSourceEvidence<T extends { readonly kind: string }>(payload: T): DeclaredEvidence<T> {
   if (!STRUCTURAL_FEATURE_KINDS.includes(payload.kind as (typeof STRUCTURAL_FEATURE_KINDS)[number]) || payload.kind === "pawn_count") throw new TypeError(`Unsupported structural reading evidence kind ${payload.kind}`);
