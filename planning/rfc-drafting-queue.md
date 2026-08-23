@@ -873,3 +873,16 @@ at request construction, which is a live correction to that draft.
 variant-portable route to a human-shaped base, and it is unbuilt — fund, defer, or refuse.
 [[D1163]] is free and should run first: it can refute the whole engine-composed family over the
 committed R11 corpus with zero engine calls.
+
+### [[D1165]] — an intent doc cited a ruling that had not been made
+
+`design/06` §5 carried the survival-encounter producer row from 2026-08-22 attributing it to
+*"owner ruling 2026-08-22, D886"* — while [[D886]] read *"owner's to rule; until ruled, all
+survival formats ship authored-bounded"* and stood `💡 open` until [[D1152]] ruled it on
+2026-08-23. Attribution corrected in place; D886 now closed on D1152.
+
+**This is the exact inverse of [[D1150]]** — there claude re-asked a question already answered,
+here claude answered one never asked — and both come from the same missing step: **reconcile the
+document against the ledger's ⚖️ rows before writing.** The cheap guard: an intent-tier ruling
+citation must name a ⚖️ row that exists. Worth folding into the [[D1038]] `refusal-index` family,
+which already checks that a product refusal names a `ruledBy` row.

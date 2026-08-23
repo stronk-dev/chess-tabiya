@@ -365,6 +365,37 @@ that would make it compound is on the refused list (escalating numeric economies
 law-8 violations; a pursuit clock is a retry price by another name). It is a smaller
 promise than Slay the Spire's — and one this product can keep.
 
+**RULED 2026-08-23 ([[D1151]] answering the long-open [[D305]]; written by claude
+on the ruling, owner-vetoable): with the power curve flat, progression is
+denominated in THE CATALOGUE — a collection.** The owner chose it over two live
+alternatives: **shapes met, structures played, with the *what's-missing* mark
+living on the pack card rather than on a progress screen.** It is the most
+chess-shaped of the three and it turns `design/04`'s breadth into the reward
+itself — the run advances by *what you have now seen*, not by a number that
+grows.
+
+- **What this refuses, and why the refusal is the point.** The rejected
+  alternative was the learner's own history (D302's three-axis histogram). It
+  was the only option that gives a flat-power product a progression the learner
+  can *feel*, and it was refused because it would have introduced **the first
+  number this product has ever shown a learner about themselves** — with two
+  measured warnings that numbers outrun their basis standing against it. The
+  floor beneath the catalogue remains cadence-and-completion: a daily position
+  and per-unit mastery marks over a named vocabulary, no number about the
+  learner anywhere.
+- **This does not displace §2a.2's currency; the two answer different
+  questions.** [[D893]] settled what you *gain* — evidence consumers, modules
+  unlocking as the run advances. This settles what progress is *measured in*.
+  You earn abilities by playing and you see your advance as a collection; a
+  future reader should not read the two as rivals.
+- **The known cost, accepted at the ruling: our collection vocabulary is not yet
+  a collection** ([[D300]]). 132 of 156 authored `concepts` are singletons, and
+  the default resolver keys them `pack:${packId}#${raw}`, so the same string in
+  six packs is six keys — today the honest collection is the 25-entry shape
+  library. **Whichever RFC implements this owes that vocabulary first.** That is
+  a prerequisite, not a footnote: a collection screen over a namespaced-apart
+  vocabulary would display 156 things nobody can complete.
+
 **Consequence for the model we copy:** because marginal value goes *negative* past
 the measured noise floor (D78: median 58 observations per position, compare strip
 8.31 entries/ply at 1.01× lift), the optimisation is **the smallest sufficient set,
@@ -410,12 +441,41 @@ vocabulary is therefore two rows:
 | **Authored encounter** (every non-boss node, and the Act I and Act III bosses) | pack | `plyHorizon` | an `ObjectiveState` from `successConditions`, stored as `sealedState` |
 | **Boss game** (the Act II rated boss only) | `position` session | the rules of chess | `terminalOutcome` |
 | **Prediction encounter** (solitaire-chess nodes — owner ruling 2026-08-22, D869) | a fixed recorded game | the game's own length | a **prediction-score threshold** over `prediction.recorded` events against the human distribution |
-| **Survival encounter** (the streak family: resistance plies, rush counts, open-ended avoid-the-blunder — owner ruling 2026-08-22, D886) | an unbounded run | nothing but failure | a **score threshold over an unbounded run** (plies survived / correct count / avoidance streak, each with its declared grounded counter) |
+| **Survival encounter** (the streak family: resistance plies, rush counts, open-ended avoid-the-blunder — proposed 2026-08-22 as [[D886]]; **RULED 2026-08-23, [[D1152]]**) | an unbounded run | nothing but failure | a **score threshold over an unbounded run** (plies survived / correct count / avoidance streak, each with its declared grounded counter) |
 
 *(Amended 2026-08-22 on the owner's D869/D886 rulings, written by claude. The 30-format
 catalogue in `design/research/training-mode-variants.md` seals every surveyed format under
 these four shapes; no format required a fifth, and that closure is the argument the table is
 complete for the formats we know.)*
+
+**RULED 2026-08-23 ([[D1152]] answering [[D886]]; written by claude on the
+ruling, owner-vetoable) — and this paragraph also corrects the row above, which
+was written ahead of its own ruling.** The owner ruled **add the producer**:
+verdict shape 4 is a **score threshold over an unbounded run**. Three things it
+settles:
+
+- **What it unblocks.** Until now every survival format had to ship
+  authored-bounded — a declared `plyHorizon` and the existing authored-verdict
+  machinery — which turned *"survive as long as you can"* into *"survive exactly
+  N"*. Those are different games, and only the second was expressible.
+- **What seals such an encounter, in the vocabulary this table already uses.**
+  Nothing but **failure** bounds the run, so the seal is the run's own
+  termination — the threshold is evaluated against the **declared grounded
+  counter** for that format (plies survived, correct count, avoidance streak),
+  and the verdict object is the encounter verdict the other three rows produce,
+  not a parallel one. As with the boss game, a survival node may carry authored
+  briefing copy and may **not** carry an authored *verdict*, because it has a
+  real one; and as §5 already says, which producer seals a node is a property of
+  the node — the four are not interchangeable and none is computed from another.
+- **It CLOSES the vocabulary rather than opening it.** The 30-row format
+  catalogue needed exactly this one producer and **no fifth**; the table above is
+  complete for every format we have surveyed.
+
+*(Attribution correction, same pass: the survival row was added to this table on
+2026-08-22 citing D886 as an owner ruling. It was not one — [[D886]] read
+*"owner's to rule; until ruled, all survival formats ship authored-bounded"* and
+stood `💡 open` until today. The row is now true; it was written one day early,
+and the row's citation is corrected above rather than quietly left standing.)*
 
 **Which producer seals a node is a property of the node**; the producers are
 not interchangeable and neither is computed from the other — §1 of
