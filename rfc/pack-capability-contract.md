@@ -281,10 +281,74 @@ non-empty, refuses with `PACK_CAPABILITY_UNSUPPORTED` carrying the exact unmet s
 same 422 arm — it is a client error and must not present as 5xx, because 5xx-keyed retry logic
 retries a request that can never succeed.
 
-**What refusal *does* is Open question 1** — boot failure, listing exclusion or per-request 4xx are
-materially different products, and `docs/drill-client.md:16`'s *"refuse-to-serve, not degrade"*
-collides with [[D468]]'s blast radius, where one invalid pack crashed the server at boot. Marked
-owner-level; clause 5 is not tickable until it is ruled.
+**What refusal *does* is RULED — see §5.1** ([[D1077]]). The question was reframed: the three
+candidates this RFC first offered (boot failure, listing exclusion, per-request 4xx) all described
+*what we do to the pack* and skipped *why the capability is missing*, which is what decides it.
+`unmet` therefore resolves into two states by cause — `unsupported` (not configured at startup;
+refused here, at registration, with the pack excluded from the listing and the boot surviving, per
+[[D468]]'s blast radius) and `temporarily_unavailable` (configured but unreachable; **not** resolved
+at registration, because it may reappear). `docs/drill-client.md:16`'s *"refuse-to-serve, not
+degrade"* holds for the first and is wrong for the second. **Gate F clause 5 is unblocked.**
+
+#### §4.4 What an evidence sidecar declares — and why the top-level schema string does not move
+
+**This section exists because a customer asked for it and would otherwise be blocked on the day
+this RFC is accepted.** `rfc/claim-semantic-anchors.md` §7 defers its entire compatibility story
+here: *"F3 must supply the accepted compatibility declaration that distinguishes the old and new
+binding semantics while the top-level evidence sidecar remains `tabiya.sourcing.evidence.v1`, or
+require a top-level move. This RFC does not choose a competing syntax."* The declaration it needs
+was **absent from this RFC's derived scope** (`f3-derivation.md:798-815` lists six in-scope items,
+none of them a sidecar declaration, and never mentions `claim-semantic-anchors`). Absorbing it here
+is correct rather than expansionist: this RFC's subject is *how an artifact declares which evaluator
+semantics its content requires*, and a sidecar's records are evaluated by claim-binding semantics —
+the same class of evaluator-versioned meaning §2.2 defines. Splitting that grammar across two
+documents would manufacture a second spelling, which is the exact defect §2.1 exists to kill.
+
+**The declaration is the same `requires` grammar, in the sidecar's own root:**
+
+```jsonc
+// evidence sidecar root — schema string UNCHANGED
+"schema": "tabiya.sourcing.evidence.v1",
+"requires": [
+  { "id": "claim.binding", "version": 2 }
+]
+```
+
+**The top-level `schema` string does not move, and that is §2.1's rule rather than a concession.**
+Version-as-data means an artifact's identity names *what it is*, never *which semantics evaluate
+it*. `tabiya.sourcing.evidence.v1` identifies the sidecar format — records, abstentions,
+`sourcedAt` — none of which changes when claim-binding semantics change. Moving the identity string
+to `.v2` would encode an evaluator version inside a name, reintroducing the `@1`/`@v1`/structured
+three-spelling defect §2.1 removes. A sidecar whose *format* changes moves its schema string; a
+sidecar whose *evaluator semantics* change declares a requirement.
+
+**Absence, and the one honest difference from §4.1.** §4.1 makes `requires` **required** on a pack,
+because absence-is-permissive is the failure mode [[D1058]] refused. That argument does not
+transfer unchanged: 32 evidence sidecars are already committed with no `requires` key, so requiring
+it would invalidate every one of them on landing. The resolution keeps the refusal without
+rewriting history — **absence is a pinned default, not an open question:**
+
+| stage | a sidecar with no `requires` | authority |
+|---|---|---|
+| before the consumer's Stage B | reads as `claim.binding@1` — an **explicit** default, recorded in the parse result, never inferred from body shape | matches `claim-semantic-anchors` §7's dispatch-by-presence rule byte-for-byte |
+| after the consumer's Stage B | **refused** with `SIDECAR_CAPABILITY_UNSUPPORTED` | the consumer's own Stage B deletes the legacy path |
+
+So this RFC supplies the **grammar and the refusal code**; the consuming RFC supplies the **stage
+timing** at which absence stops meaning v1. Neither invents the other's half. The refusal joins the
+same 422 arm as `PACK_CAPABILITY_UNSUPPORTED` (§4.3), and what refusal *does* is Open question 1's
+subject for sidecars exactly as it is for packs.
+
+**No seventh register, and this resolves a conditional claims block elsewhere.** The sidecar is not
+one of the six shared-resource registers, and `requires` is a key *inside* an artifact this RFC does
+not otherwise version — so nothing here claims a lane beyond the pack-schema 0.30 already declared.
+`claim-semantic-anchors`' claims block reads *"Refresh this block if F3's accepted contract makes
+that seam a registered resource"* — **it does not**, so that block stays `none`. Stated here so the
+refresh is a confirmation rather than an investigation.
+
+**The sidecar stamp is inside the sidecar's own digest**, structurally parallel to §4.1's pack rule:
+a requirement cannot drift from the records it describes. It is *not* inside `digestDrillPack` — a
+pack and its sidecar are separate artifacts with separate digests, and conflating them would make a
+records-only edit churn the pack digest.
 
 ### §5. Deprecation: successor or explicit refusal
 
@@ -316,6 +380,65 @@ immutable), and `plan_consequence` → `structural_feature` with `plan_signature
 (5 kinds, authorable in the schema, **no evaluator**, `refused` at `dispositions.ts:77-82`, carried
 by 7 packs) becomes a `refused` disposition with a `ruledBy` — the format admitting a vocabulary
 the runtime refuses is precisely the state clause 5 exists to make impossible.
+
+#### §5.1 Unavailability has exactly two causes — RULED [[D1077]]
+
+This RFC originally asked *what a refusal does* and offered three answers (boot failure, listing
+exclusion, per-request 4xx). The owner refused the framing: all three describe **what we do to the
+pack** and none names **why the capability is missing**, which is what should decide it. Verbatim:
+
+> *"during runtime capas can get missing right... or reappear? like at least we should be flexible
+> like that. so it would be a 'temporarily unavailable' if it's a runtime issue or outright
+> unsupported if the server is started without the capa outright... other than that how can a capa
+> ever be missing? the operator configures it or not."*
+
+**Normative. A required capability is unmet in exactly one of two states, distinguished by cause:**
+
+| State | Cause | Knowable | May reappear? | The pack is |
+|---|---|---|---|---|
+| **`unsupported`** | not configured at startup — the operator did not deploy it | at boot, statically | no, not without a restart | honestly unavailable **on this deployment**, and says so |
+| **`temporarily_unavailable`** | configured, but currently unreachable — a provider is down, a sidecar process died | only at request time | **yes** — this is the flexibility the ruling asks for | retryable; the run is not destroyed |
+
+**There is no third cause, and that completeness argument is the owner's own:** *"the operator
+configures it or not."* A capability is deployed or it is not; if it is deployed it is reachable or
+it is not. Any future proposal for a third state is therefore a proposal to change the deployment
+model, and must say so.
+
+**Reuse the shipped vocabulary — do not build parallel machinery.** `ProviderOffBehavior`
+(`"available" | "honest_empty" | "unavailable"`) and `AvailabilityMode`
+(`"local" | "recorded" | "provider" | "build_time"`) already exist at
+`packages/runtime/src/evidence-contract.ts:9,11`, and the two ruled states map onto them rather than
+beside them: a capability whose `AvailabilityMode` is `provider` is the only kind that can enter
+`temporarily_unavailable` at all — `local` and `build_time` capabilities are either compiled in or
+absent, so for them `unsupported` is the *only* reachable unmet state. That asymmetry falls out of
+the shipped types and is asserted by criterion 16.
+
+**The precedent to follow is [[D509]], not a new mechanism.** `/capabilities` once advertised
+`perfect_tablebase` and `practical_resistance` while both returned **HTTP 503 for every position**,
+because `ENGINE_MODE=mock` wired an empty fixture. It closed 2026-08-17 by making *an empty fixture
+provider absence*, so both modes **disappear from `/capabilities`** rather than being advertised and
+failing. That is exactly state (a): not configured means not advertised. §4.2's `packCapabilities`
+publication inherits it — **an `unsupported` capability is absent from the published set, not
+present-and-marked** — so `unmet = pack.requires \ runtimeSupported` (§4.3) already computes the
+right thing with no new field.
+
+**What each state does, now derivable rather than chosen:**
+
+- **`unsupported`** is a *static deployment fact*, so it is knowable before any request and the
+  honest response is at registration: `PACK_CAPABILITY_UNSUPPORTED` on the 422 arm (§4.3), the pack
+  excluded from the served listing with the unmet set named in the startup report. It does **not**
+  fail the boot — [[D468]] measured that blast radius (one invalid pack crashed the server) and the
+  ruling's *"honestly unavailable on this deployment"* is a statement the deployment must survive
+  making.
+- **`temporarily_unavailable`** is *transient and may reappear*, so it must **not** be resolved at
+  registration — a pack refused at boot for a provider that returns two minutes later would be
+  wrongly unavailable for the process's lifetime. It is a per-request condition on the 503 arm,
+  retryable, and the run survives it.
+
+**Gate F clause 5 — what it now needs, stated because it was blocked on this question.** Clause 5
+(*"pack capabilities and deprecations have a compatibility policy"*) is **unblocked**: the policy is
+§5's disposition union plus this section's two states. It is tickable when the disposition union,
+the two-state resolution and criterion 16 land — no further ruling is owed.
 
 ### §6. The migration planner and its applier
 
@@ -451,14 +574,36 @@ can fail is the [[D444]] class and one nothing can satisfy is the [[D984]] class
     fails this:* any contract keyed on JSON fields.
 14. **Convention prose is inside the digest.** Editing one character of `BREADTH_CONVENTION_TEXT`
     without a version bump reddens `make capability-check`.
-15. **Instruments stay green.** `make verify` passes with `migration-plan-check` and
+15. **A sidecar declares its evaluator semantics, and absence is explicit (§4.4).** A sidecar
+    carrying `requires: [{id: "claim.binding", version: 2}]` parses as v2 with its schema string
+    still reading `tabiya.sourcing.evidence.v1`; a sidecar with no `requires` parses as
+    `claim.binding@1` **with the default recorded in the parse result**, not inferred; and a
+    sidecar requiring a version the runtime does not publish is refused with
+    `SIDECAR_CAPABILITY_UNSUPPORTED` on the 422 arm. Fixture: all **32** committed sidecars
+    (`git ls-files 'content/**/*.evidence.json'`, **0** of which carry a `requires` key at HEAD)
+    parse as v1 with the explicit default, and one hand-built `claim.binding@3` sidecar is refused.
+    *Wrong implementation that passes criteria 1–14 and fails this:* one treating a missing
+    `requires` as unversioned-and-permissive — the [[D1058]] failure mode, which is why the default
+    must be **recorded** rather than assumed.
+16. **Unavailability resolves to exactly one of two states, by cause ([[D1077]], §5.1).** An
+    `unsupported` capability is **absent** from `/capabilities`' `packCapabilities` set (the
+    [[D509]] rule), so a pack requiring it is refused at registration with
+    `PACK_CAPABILITY_UNSUPPORTED` on the 422 arm and excluded from the listing **without failing
+    the boot**; a `temporarily_unavailable` capability is present in the published set but
+    unreachable at request time, answers on the 503 arm, is **retryable**, and does not destroy the
+    run. Asserted asymmetry: for a capability whose `AvailabilityMode` is `local` or `build_time`,
+    `temporarily_unavailable` is **unreachable** — only `provider` capabilities can enter it.
+    *Wrong implementation that passes criteria 1–15 and fails this:* one resolving both states at
+    registration, which makes a pack permanently unavailable for the process lifetime because a
+    provider was down for two minutes — the precise flexibility the ruling exists to preserve.
+17. **Instruments stay green.** `make verify` passes with `migration-plan-check` and
     `capability-check` wired in.
 
 ## Discharges
 
 | id | the obligation | owner | recorded when discharged | discharged |
 |---|---|---|---|---|
-| D1 | Open question 1 — what a capability refusal *does* (boot failure, listing exclusion, or per-request 4xx). Gate F clause 5 is not tickable until this is ruled | OWNER | the ruling's landing commit | |
+| D1 | Open question 1 — what a capability refusal *does*. **Reframed and ruled by [[D1077]]** 2026-08-23: the question is not what we do to the pack but *why the capability is missing*, and there are exactly two causes (§5.1). Gate F clause 5 is **unblocked** | OWNER | the ruling's landing commit | **discharged 2026-08-23 — [[D1077]], `cc98fcb`** |
 | D2 | The sacrificial pilot must exercise every **required** 1.0 capability (O6.1 clause 6). This RFC specifies what "required" means (§3's scope decision); membership is F7's | claude | the pilot matrix's landing commit | |
 | D3 | Re-stamping all 92 ledger `packDigest` values after the lane-0.30 churn (§4.1) — rides the graduation arm, which [[D949]] holds until Gate F | codex | the implementing commit | |
 | D4 | `EVIDENCE_KINDS` has no version axis (7 members, versioned by membership). Whether capability versions cover evidence kinds or they get their own register | claude | the follow-up RFC's landing commit | |
@@ -466,13 +611,17 @@ can fail is the [[D444]] class and one nothing can satisfy is the [[D984]] class
 
 ## Open questions
 
-1. **⚖ OWNER — what does a capability refusal do?** `docs/drill-client.md:16` documents
-   *"refuse-to-serve, not degrade"*, and [[D468]] measured that blast radius: one invalid pack
-   crashed the server at boot, because `PackRegistry.load` throws during startup. The three
-   candidates are boot failure (current semantics, worst blast radius), **listing exclusion** (the
-   pack loads but is not served, and appears in a startup report — recommended, since it degrades
-   one pack rather than the deployment), and per-request 4xx. Recorded as Discharge D1; clause 5
-   waits on it.
+1. **⚖ RULED 2026-08-23 by [[D1077]] — and the ruling REFRAMED the question rather than picking
+   an option.** This RFC had asked which of boot failure, listing exclusion or per-request 4xx a
+   refusal should be. The owner's answer: all three describe *what we do to the pack* and skip the
+   thing that decides it — **why the capability is missing.** Verbatim: *"during runtime capas can
+   get missing right... or reappear? like at least we should be flexible like that. so it would be
+   a 'temporarily unavailable' if it's a runtime issue or outright unsupported if the server is
+   started without the capa outright... other than that how can a capa ever be missing? the
+   operator configures it or not."* The ruled two-state model is now normative in **§5.1**; the
+   closing observation is load-bearing and is stated there as the model's completeness argument —
+   **there is no third cause.** Discharge D1 is discharged; **Gate F clause 5 is unblocked** (see
+   §5.1's closing paragraph for what it now needs).
 2. **Does digest staleness become fatal?** 26 of 68 pack/ledger pairs are stale at HEAD and nothing
    fails — `EVIDENCE_DIGEST_STALE` is `"warning"` at both emit sites
    (`apps/server/src/sourcing/check.ts:408,468`) and no path upgrades a warning. This RFC's binding
@@ -485,6 +634,13 @@ can fail is the [[D444]] class and one nothing can satisfy is the [[D984]] class
    whoever next edits that row.
 
 ## Ledger rows
+
+**⚠ The numbers below are STALE and will renumber at landing.** They were written when the head was
+D1071; the head has since passed them — **D1073 is codex's** (bot state-directed profile) and
+**D1074–D1076 landed at the `assistance-controls` supersede** (2026-08-23). Per the standing
+protocol a proposed row takes the next free id **in the commit that lands it**, never the id it was
+drafted with. Re-derive against `design/BACKLOG.md` immediately before landing these.
+
 
 Proposed from committed head **D1071** — renumber at landing; codex lands rows continuously.
 
@@ -507,3 +663,20 @@ Proposed from committed head **D1071** — renumber at landing; codex lands rows
 
 - 2026-08-23: created, drafted from `planning/platform-alignment/f3-derivation.md` under
   [[D995]]/[[D996]], with the central lane-vs-sidecar fork ruled by [[D1058]].
+- 2026-08-23 (scope amendment, pre-review): added **§4.4, the evidence-sidecar declaration**, and
+  acceptance criterion 15. **Reason: a cross-document block that acceptance would not have
+  cleared.** `rfc/claim-semantic-anchors.md` §7 defers its entire compatibility story to "the
+  accepted F3 declaration", and its criterion 7 needs the F3 migration plan to exist as an
+  artifact — but the sidecar declaration was **absent from this RFC's derived scope**
+  (`f3-derivation.md:798-815`, which never mentions that RFC), so shipping the derived scope
+  unchanged would have left `claim-semantic-anchors` blocked **on the day this RFC was accepted**.
+  Caught by `planning/platform-alignment/rfc-disposition-packet.md` §3.3 while this draft was still
+  in motion. §4.4 also resolves that RFC's conditional claims block to `none` by stating that the
+  seam does **not** become a registered resource.
+- 2026-08-23 (owner ruling, pre-review): **[[D1077]] reframed and ruled Open question 1.** Added
+  **§5.1** (unavailability has exactly two causes — `unsupported` when not configured at startup,
+  `temporarily_unavailable` when configured but unreachable, with the owner's completeness argument
+  that there is no third cause), rewrote §4.3's refusal paragraph onto it, added acceptance
+  criterion 16, and discharged D1. The ruled model reuses the shipped `ProviderOffBehavior` /
+  `AvailabilityMode` types and the [[D509]] not-configured-means-not-advertised precedent rather
+  than adding parallel machinery. **Gate F clause 5 is unblocked** and needs no further ruling.

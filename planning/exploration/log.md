@@ -6274,3 +6274,47 @@ global completion atoms are sparse, while an adequately covered phase target is 
 but cannot move Maia's concentrated phase-level distribution enough. The next bot experiment must
 change mechanism class to a transposition-aware repertoire or multi-ply route controller with
 declared adherence/deviation/fallthrough. Increasing the weight again is not a research result.
+
+## 2026-08-23 — the assistance-controls supersede, and R1 resolves a two-RFC collision
+
+**What landed:** `rfc/assistance-controls.md` superseded and archived, with its orphans rehomed in
+the same commit rather than deleted by the move. The walk found **(c), not (b)**: three items lived
+only in the parent. [[D1074]] — the shape-marker channel renders live to learners with **no row in
+the live-surface register**, and it is worse than when the parent flagged it, because
+`presets.ts:47-48` now defaults `onramp` and `academy` to `guided`: an unmeasured live surface **on
+by default in two contexts**. [[D1075]] — a standing law-4 breach: the parent noticed the
+shape-catalogue scope question, correctly declined to answer it, then declined to write the row, so
+the archive would have been the moment the idea stopped existing. [[D1076]] — three `design/05`
+naming requests routed under law 5 and never actioned, while **both children declare "Deviations
+from design: None."**; the sharpest is that the reveal control shipped 2026-08-22, so `design/05`
+now reads as prohibiting a surface the product has.
+
+**Ledger discipline, including one row deliberately NOT flipped.** [[D715]] closed — its text was an
+instruction to this RFC and both disjuncts happened. [[D532]] left open: `intent-presets` reserves
+it for its own landing commit, which has not happened. **[[D307]] amended rather than closed** — its
+declared-and-unread defect did not get fixed, it **moved**: `AssistanceContext` now declares *both*
+`sessionKind` and `workflowContext` and the body reads **neither**, so the context carries two unread
+fields instead of one. Closing it would have scored a live defect as discharged.
+
+**R1 — the `CLAIM_ASSERTION_KINDS` collision is resolved, on this RFC's own evidence.**
+`measurement-records` planned to grow the array 15 → 21 while `claim-semantic-anchors` deletes it;
+their acceptance criteria were literal contradictions on one symbol. The narrowing was decided by
+`measurement-records`' §3b, which names both callers of `validateClaimBindings` and proves neither
+can build a census report — so a `census.*` member would never have been evaluated at either site.
+Membership bought only the runtime reachability §3b then spent a deferral clause suppressing. The
+six kinds are now `census-check`-local; the `SourcingIssue.severity` widening is **withdrawn** with
+them, making the claimed surface strictly smaller. Body/register status drift corrected ([[D500]]).
+**Still returned** — OQ1–OQ4 are untouched.
+
+**F3 amended twice before review.** §4.4 added the **evidence-sidecar capability declaration**,
+because `claim-semantic-anchors` §7 defers its whole compatibility story to F3 and that declaration
+was **absent from F3's derived scope** — shipping the derived scope unchanged would have left that
+RFC blocked *on the day F3 was accepted*. Then [[D1077]] landed mid-pass: §5.1 makes the owner's
+two-state model normative (`unsupported` when not configured at startup, `temporarily_unavailable`
+when configured but unreachable), reusing the shipped `ProviderOffBehavior`/`AvailabilityMode` types
+and the [[D509]] not-configured-means-not-advertised precedent. **Gate F clause 5 is unblocked.**
+
+**Blocked:** `claim-semantic-anchors` still needs F3 **accepted**, not merely drafted — its
+criterion 7 requires the F3 migration plan to exist as an artifact.
+
+**Next:** F3 to cross-review; `measurement-records` still needs the author round OQ1–OQ4 require.

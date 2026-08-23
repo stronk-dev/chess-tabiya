@@ -753,3 +753,13 @@ Two states, distinguished by **cause**, not by what we do to the pack:
 (`evidence-contract.ts:9,11`) beside `/capabilities`' disposition kinds. The three options F3
 recorded (boot failure / listing exclusion / per-request 4xx) are superseded — they described
 responses without asking the cause. Also routed here: [[D1076]], [[D494]], and [[D1075]] (the law-4 rehome of assistance-controls' OQ2 — whole shape catalogue vs pack-declared subset, rescued from the archive rather than deleted with it).
+
+**Also routed here at the `assistance-controls` supersede: [[D1074]]** — the shape-marker channel's
+missing live-surface register row. Its real destination is `rfc/archive/live-marker-quality.md`
+§3.1, by that RFC's own stated amendment mechanism (*"Amending [the §3.1 register] is how a kind's
+status changes"*), but an archived RFC is outside `make work-index`'s scanned set and amending a
+shipped register is the register owner's act, not a disposition side-effect — so the row is parked
+here until that amendment lands. **Standing state, not a pending one:** the channel renders live
+behind `guided` today, and `presets.ts:47-48` defaults `onramp` and `academy` to `guided`, so this
+is an unmeasured live surface **on by default in two contexts** with no register row at all.
+

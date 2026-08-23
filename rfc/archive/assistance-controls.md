@@ -1,8 +1,11 @@
 # RFC: Assistance controls — three switches over the ladder, each wired to the wrong thing
 
-- **Status:** draft — returned to author 2026-08-22 on D715. The owner chose option C in D532,
-  but §4.3 and criterion 11 still specify option A, and the current runtime context cannot express
-  the six shipped preference contexts or the ruling's rules-floor example.
+- **Status:** superseded 2026-08-23 — both halves landed as children; no obligation remains.
+  D308/D309 and the on-ramp default shipped in `assistance-control-wiring` (implemented
+  2026-08-22); D532/D715's per-context ceiling is `intent-presets`' (accepted 2026-08-22). §4.3
+  specified the owner-rejected option A and is superseded rather than fixed. Retained as the
+  2026-08-16 HEAD census that produced the D307/D308/D309 dispositions. *(Prior line: draft —
+  returned to author 2026-08-22 on D715.)*
 - **Author:** claude (agent), for Marco
 - **Created:** 2026-08-16
 - **Design refs:** `design/05-in-run-experience.md` §3 (the ladder), §3a-i (the disclosure
@@ -22,9 +25,16 @@
 - **Parent / amends:** amends the shipped assistance surface established by
   `rfc/archive/adaptive-guidance.md` (the `AssistanceConfig` axes and the six profiles) at
   the **controls**, not at the detectors, the permission table or the marker admission rule.
-- **Supersedes / superseded by:** §§2, 3, 4.1–4.2 and their acceptance criteria are
-  superseded by `assistance-control-wiring.md`; this document retains only D307's F5-coordinated
-  permission-ceiling question and its historical audit.
+- **Supersedes / superseded by:** **superseded 2026-08-23.** §§2, 3, 4.1–4.2 and criteria 1–10,
+  12–14 by `rfc/archive/assistance-control-wiring.md` (implemented 2026-08-22); §4.3, Open
+  question 1 and the withdrawn criterion 11 by `rfc/intent-presets.md` (accepted 2026-08-22),
+  which discharges D532/D715 whole and re-states the negative-fixture obligation at its
+  criterion 2. §1's HEAD census and §§2.5, 3.5's audit findings are retained as history only.
+  Three items were rehomed at supersede rather than archived with the document: the shape-marker
+  live-surface register row (§3.5 → [[D1074]], destination `rfc/archive/live-marker-quality.md`
+  §3.1), the shape-catalogue scope question (Open question 2 → [[D1075]]), and the three
+  `design/05` law-5 naming requests plus the rating-driven fade seam (§Deviations → [[D1076]],
+  owner-tier).
 - **Planning:** `planning/assistance-controls/` (once implementing)
 
 *Every code site below was read in full at HEAD on 2026-08-16, not grepped. **Locate by

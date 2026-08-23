@@ -1,6 +1,13 @@
 # RFC: Measurement records — a number a machine produced must say so, and say it in a form that can be re-derived
 
-- **Status:** draft
+- **Status:** draft — **returned to author 2026-08-16** (core sound; four open questions block
+  acceptance: OQ1 packs-vs-shape `measurements`, OQ2 subject-too-narrow, OQ3 the permanent-warning
+  asymmetry, OQ4 whether `census.firesInShape@v1` belongs at all). **Narrowed 2026-08-23 (R1):**
+  the six `census.*` kinds are `census-check`-local and no longer grow `CLAIM_ASSERTION_KINDS`,
+  resolving the collision with `rfc/claim-semantic-anchors.md`; the `SourcingIssue.severity`
+  widening is withdrawn with it. *(Body/register drift corrected here — the register cell has read
+  "returned to author 2026-08-16" since then while this line read a bare `draft`, which is exactly
+  what [[D500]] indicts.)*
 - **Author:** claude (agent), for Marco
 - **Created:** 2026-08-16
 - **Design refs:** `design/04-content-architecture.md` §8 (production model — *"anti-Caro Advance
@@ -339,11 +346,11 @@ and the honest one-line summary is that this RFC makes *corpus* claims self-inva
 | **Migration** | **NONE** | `STORAGE_VERSION` reads **22** (`apps/server/src/storage.ts`, `export const STORAGE_VERSION = 22`). Untouched. If a later revision needs one it takes `STORAGE_VERSION + 1` **at landing**, per the register's standing rule; it needs none. |
 | **`EvidenceKind`** | **NONE** | `EVIDENCE_KINDS` is untouched at seven members. **No record is written by anything here** (§4a explains why a census reading is not a record). |
 | **Ledger schema** | **NONE** | `tabiya.sourcing.evidence.v1` is unchanged. `claimBindings` is read, never reshaped. |
-| **`CLAIM_ASSERTION_KINDS`** | **+6 members** | A **code-level frozen array**, not a versioned resource — the same standing that `rfc/archive/opening-evidence-path.md` §0 gives `EVIDENCE_KINDS`. §3b. |
+| **`CLAIM_ASSERTION_KINDS`** | **NONE** *(was +6 members; narrowed 2026-08-23, R1)* | The six `census.*` kinds are **`census-check`-local** (`CENSUS_ASSERTION_KINDS`), not members of the global array. Neither shipped caller of `validateClaimBindings` can build a census report, so membership would never have been evaluated — it bought only the reachability §3b existed to suppress. Also resolves the contradiction with `claim-semantic-anchors` criterion 1 (*zero production occurrences* of the old array). §3a, §3b. |
 | **Refusal codes** | **+9 new, 7 reused** | §7 carries the register and its collision sweep. **Sweep re-run at cross-review 2026-08-16 across `apps/`, `packages/`, `schemas/`, `rfc/`, `docs/`, `content/`, `design/`, `planning/` and `tools/`, excluding this file and `apps/server/dist/`: all seven new literals, and `measurementRecord` / `measurementSpan` / `censusAssertion`, occur **zero** times**, and no `census.*` assertion kind exists in `CLAIM_ASSERTION_KINDS` (verified: a frozen **15**-member array of `tablebase.*` / `engine.*` / `explorer.*` only). |
-| **`SourcingIssue.severity`** | **+1 member**, `"info"` | `apps/server/src/sourcing/types.ts` declares `severity: "error" \| "warning"`. `CENSUS_ASSERTION_DEFERRED` (§6a) is **info**, so the union widens by one. **Added at cross-review — the draft asserted an info severity the shipped type cannot hold.** The alternative, emitting it as a `warning`, is refused: `sourcing-check` and the runtime registry would then warn on every correct census binding, which is the failure §6a exists to prevent. Every existing consumer switches on `"error"` and treats the rest as non-fatal, so widening is additive. |
+| **`SourcingIssue.severity`** | **NONE** *(was +1 member `"info"`; withdrawn 2026-08-23, R1)* | The widening existed **solely** to carry `CENSUS_ASSERTION_DEFERRED` at info severity, and under R1 that code no longer exists: a `census.*` span cannot reach `sourcing/check.ts:198` or `pack-registry.ts:266` at all, so there is nothing at those sites to defer. `CENSUS_ASSERTION_UNEVALUABLE` is an **error** and the shipped `"error" \| "warning"` union already holds it. R1 therefore makes this RFC's "claims nothing else" surface strictly **smaller**. |
 | **Census report schema** | **`tabiya.authoring.census.v1` unchanged in default mode** | §6b adds a *second* top-level key only in the new `--check` mode; the default report is byte-identical. |
-| **Makefile** | **+1 target**, `census-check` | `verify` gains it. §6d treats the shipped test that pins `verify` free of `expression-census`. |
+| **Makefile** | **+1 target**, `census-check` *(verified absent at HEAD 2026-08-23 — `.PHONY` lists `expression-census` and no `census-check`, so this target is created by this RFC, not wired to an existing one; R1 makes it the sole home of the six `census.*` kinds)* | `verify` gains it. §6d treats the shipped test that pins `verify` free of `expression-census`. |
 
 **Three register facts a reviewer should re-derive rather than trust. The draft's own version of this
 block was two lanes stale within a day, which is the best available evidence for the instruction:**
@@ -510,9 +517,23 @@ subject/cardinal split is what converts eight of twelve failures into zero decis
 
 #### 3a. The six kinds
 
-`CLAIM_ASSERTION_KINDS` (`apps/server/src/sourcing/claim-binding.ts`) gains six members. Each takes a
-**census site** — the `{file, pointer}` pair that is already the census report's own subject key
-(`site.file`, `site.pointer` in `runExpressionCensus`) — and returns an **integer**.
+**Narrowed 2026-08-23 (R1): these six kinds are `census-check`-LOCAL and do NOT join
+`CLAIM_ASSERTION_KINDS`.** They live in a `CENSUS_ASSERTION_KINDS` array owned by `census-check`,
+the one tool that can evaluate them. The reason is inside §3b below and is decisive: the two
+shipped callers of `validateClaimBindings` — `sourcing/check.ts:198` (per-pack, *"the corpus walk
+is not its job"*) and `pack-registry.ts:266` (*"a 192-subject × 827-position census on every pack
+load is not admissible at runtime, at any severity"*) — **can never build a census report, so a
+`census.*` member of the global array would never be evaluated at either site.** Membership bought
+exactly one thing: that *"a pack ledger can declare one, and the runtime registry will evaluate it
+on load"* — which §3b then had to spend a deferral clause **suppressing**. R1 removes the hazard at
+its source instead of deferring around it. This also resolves the collision with
+`rfc/claim-semantic-anchors.md`, whose criterion 1 requires the old array to have **zero production
+occurrences**; the two documents' criteria were literal contradictions on one symbol, and the
+narrowing costs this RFC nothing it was using.
+
+Each kind takes a **census site** — the `{file, pointer}` pair that is already the census report's
+own subject key (`site.file`, `site.pointer` in `runExpressionCensus`) — and returns an
+**integer**.
 
 | Kind | `args` | Returns, from the census report | Class (§4e) |
 |---|---|---|---|
@@ -1065,11 +1086,20 @@ at cross-review, the callers are exactly two:
 | `apps/server/src/sourcing/check.ts:198` | `sourcing-check`, a per-pack authoring tool | it is invoked on one pack or one candidate directory; the corpus walk is not its job |
 | `apps/server/src/pack-registry.ts:266` | **`PackRegistry.loadDefault` — the running server**, feeding `claimBackings` onto `PackRecord` | a 192-subject × 827-position census on every pack load is not admissible at runtime, at any severity |
 
-**The second row is why the deferral clause is load-bearing rather than tidy.** `CLAIM_ASSERTION_KINDS`
-is a single global array, so once the six `census.*` members exist **a pack ledger can declare one**,
-and the runtime registry will evaluate it on load. This RFC gives packs no `measurements` surface
-(§Open questions 1), so nothing in the corpus does this today — but the format permits it from the
-landing commit, and *"nothing does it yet"* is not a seam. So:
+**The second row was why the deferral clause used to be load-bearing — and it is why R1 deletes the
+clause instead.** The original reasoning: `CLAIM_ASSERTION_KINDS` is a single global array, so once
+the six `census.*` members exist **a pack ledger can declare one**, and the runtime registry will
+evaluate it on load. This RFC gives packs no `measurements` surface (§Open questions 1), so nothing
+in the corpus does this today — but the format permits it from the landing commit, and *"nothing
+does it yet"* is not a seam.
+
+**Narrowed 2026-08-23 (R1): the six kinds never join the global array, so the reachability this
+clause suppressed does not exist.** A `census.*` kind is `census-check`-local, and `census-check` is
+the one caller where *"a report is guaranteed present"* — so there is no site at which a census span
+is encountered without a report. `CENSUS_ASSERTION_DEFERRED` and the `SourcingIssue.severity`
+`"info"` widening are both **withdrawn**; `CENSUS_ASSERTION_UNEVALUABLE` (error) remains and fires
+only in `census-check`, exactly as the clause below already said. The block below is retained as the
+record of the hazard and of why suppressing it was the wrong shape:
 
 > When `validateClaimBindings` is called without a census report, a `census.*` span is **skipped and
 > counted**, never refused. It emits **`CENSUS_ASSERTION_DEFERRED`** (info) naming
@@ -1382,10 +1412,16 @@ is untouched: nothing here changes what a learner is shown, and B4 remains unmet
    nothing else" register promise is enforced rather than stated. **The test must assert the values
    the tree has, not the values this RFC remembers**; that is the whole point of the criterion and
    the draft's version of it demonstrates the failure it exists to catch.
-3. `CLAIM_ASSERTION_KINDS` contains **exactly 21 members: the shipped 15 plus the six `census.*`**,
-   and **no `census.observation@v1`, `census.satisfiability@v1`, or any percentage/ratio kind** —
-   asserted as an exact-set equality so a later addition is a deliberate act (§3c, law 8). The
-   `$defs/censusAssertion` `kind` enum (§3d) asserts equal to the six.
+3. **`CLAIM_ASSERTION_KINDS` is UNTOUCHED** *(narrowed 2026-08-23, R1 — was "exactly 21 members")*:
+   the global array still contains **exactly the shipped 15**, and **zero `census.*` members**.
+   The six census kinds are `census-check`-local in `CENSUS_ASSERTION_KINDS`, which contains
+   **exactly those six** and **no `census.observation@v1`, `census.satisfiability@v1`, or any
+   percentage/ratio kind** — asserted as an exact-set equality so a later addition is a deliberate
+   act (§3c, law 8). The `$defs/censusAssertion` `kind` enum (§3d) asserts equal to the six.
+   *Wrong implementation that passes the old criterion and fails this:* one adding the six to the
+   global array, which would make a `census.*` span reachable from `pack-registry.ts:266` — the
+   runtime path §3b spends its deferral clause suppressing, and a literal contradiction of
+   `claim-semantic-anchors` criterion 1.
 4. Fixture case, D368 reproduced: a shape entry with a record asserting `census.fires@v1 = 44` for a
    subject the census reads as `95` produces exactly one `CLAIM_SPAN_CONTRADICTED` at
    `/measurements/{i}/spans/{j}/span`, **error** severity, `census-check` exits non-zero, and the
