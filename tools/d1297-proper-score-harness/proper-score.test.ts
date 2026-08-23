@@ -35,7 +35,19 @@ interface Cache {
   readonly representationCommit: string;
   readonly inputs: Readonly<Record<string, string>>;
   readonly positions: readonly CachePosition[];
+  readonly cacheDigest: string;
+  readonly vocabularySize: number;
+  readonly nonZeroValues: number;
 }
+interface CacheHeader {
+  readonly schema: string;
+  readonly representationCommit: string;
+  readonly inputs: Readonly<Record<string, string>>;
+  readonly names: readonly string[];
+  readonly nonZeroValues: number;
+}
+interface EncodedCandidate extends Omit<CacheCandidate, "raw"> { readonly raw: readonly (readonly [number, number])[] }
+interface EncodedPosition extends Omit<CachePosition, "candidates"> { readonly candidates: readonly EncodedCandidate[] }
 interface ModelPosition {
   readonly source: CachePosition;
   readonly playedIndex: number;
@@ -60,6 +72,26 @@ interface ChoiceMeasure {
 
 function rounded(value: number): number { return Number(value.toFixed(6)); }
 function digest(value: unknown): string { return `sha256:${createHash("sha256").update(JSON.stringify(value)).digest("hex")}`; }
+function readCache(path: string): Cache {
+  const text = readFileSync(path, "utf8");
+  const [headerLine, ...positionLines] = text.trim().split("\n");
+  const header = JSON.parse(headerLine!) as CacheHeader;
+  const positions = positionLines.map((line): CachePosition => {
+    const encoded = JSON.parse(line) as EncodedPosition;
+    return {
+      ...encoded,
+      candidates: encoded.candidates.map((candidate) => ({
+        ...candidate,
+        raw: candidate.raw.map(([index, value]) => {
+          const name = header.names[index];
+          if (name === undefined) throw new Error(`feature index ${String(index)} escaped vocabulary`);
+          return [name, value] as const;
+        }),
+      })),
+    };
+  });
+  return { ...header, positions, vocabularySize: header.names.length, cacheDigest: `sha256:${createHash("sha256").update(text).digest("hex")}` };
+}
 function projectionFor(name: string): string {
   if (name === "num:engine.loss_cp") return "engine";
   return /^[^:]+:(.+?@\d+)/u.exec(name)?.[1] ?? `unscoped:${name}`;
@@ -312,7 +344,7 @@ function run(cache: Cache) {
   }
   const freeze = eligible(validation) && eligible(confirmation);
   return {
-    measuredAt: new Date().toISOString(), cache: { digest: digest(cache), representationCommit: cache.representationCommit, inputs: cache.inputs, games: new Set(cache.positions.map((row) => row.gameId)).size, decisions: cache.positions.length },
+    measuredAt: new Date().toISOString(), cache: { digest: cache.cacheDigest, representationCommit: cache.representationCommit, inputs: cache.inputs, games: new Set(cache.positions.map((row) => row.gameId)).size, decisions: cache.positions.length, candidates: cache.positions.reduce((sum, row) => sum + row.candidates.length, 0), vocabularySize: cache.vocabularySize, nonZeroValues: cache.nonZeroValues },
     optimizer: { kind: "conditional_logit_full_batch_adam", updates: 600, learningRate: 0.03, beta1: 0.9, beta2: 0.999, epsilon: 1e-8, gradientClip: 10, lambdas: LAMBDAS },
     split: { train: [0, 1, 2], validation: 3, confirmation: 4 },
     tuning, selected, validation, confirmation, freeze, frozenModels,
@@ -340,7 +372,7 @@ describe("D1297 proper-score development", () => {
   });
 
   it.skipIf(INPUT === undefined)("runs the bounded seen-population development", () => {
-    const cache = JSON.parse(readFileSync(INPUT!, "utf8")) as Cache;
+    const cache = readCache(INPUT!);
     const result = run(cache);
     expect(result.cache).toMatchObject({ games: 108, decisions: 515 });
     if (WRITE) {

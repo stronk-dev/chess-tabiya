@@ -1,6 +1,6 @@
 // DISPOSABLE research harness — D1162. No production policy, engine, or network calls.
 import { createHash } from "node:crypto";
-import { readFileSync, writeFileSync } from "node:fs";
+import { appendFileSync, readFileSync, writeFileSync } from "node:fs";
 
 import { Chess, normalizeMove } from "chessops/chess";
 import { parseFen } from "chessops/fen";
@@ -309,6 +309,14 @@ function run(inputText: string, probeText: string) {
     if (REPRESENTATION_COMMIT === undefined || !/^[0-9a-f]{40}$/u.test(REPRESENTATION_COMMIT)) {
       throw new Error("feature cache requires a full representation commit");
     }
+    const nameSet = new Set<string>();
+    let nonZeroValues = 0;
+    for (const position of built.positions) for (const candidate of position.candidates) for (const [name, value] of candidate.raw) {
+      nameSet.add(name);
+      if (value !== 0) nonZeroValues += 1;
+    }
+    const names = [...nameSet].sort();
+    const nameIndex = new Map(names.map((name, index) => [name, index]));
     writeFileSync(FEATURE_CACHE, `${JSON.stringify({
       schema: "tabiya.research.d1297-feature-cache.v1",
       representationCommit: REPRESENTATION_COMMIT,
@@ -316,11 +324,18 @@ function run(inputText: string, probeText: string) {
       engine: built.engine,
       sourceExclusions: built.exclusions,
       excludedMixedScore: built.excludedMixedScore,
-      positions: built.positions.map((position) => ({
-        ...position,
-        candidates: position.candidates.map((candidate) => ({ ...candidate, raw: [...candidate.raw] })),
-      })),
+      names,
+      nonZeroValues,
     })}\n`);
+    for (const position of built.positions) {
+      appendFileSync(FEATURE_CACHE, `${JSON.stringify({
+        ...position,
+        candidates: position.candidates.map((candidate) => ({
+          ...candidate,
+          raw: [...candidate.raw].filter(([, value]) => value !== 0).map(([name, value]) => [nameIndex.get(name)!, value]),
+        })),
+      })}\n`);
+    }
   }
   const measures: Record<Arm, DecisionMeasure[]> = { uniform: [], engine: [], evidence: [], combined: [] };
   const choices: Record<string, number> = {};
