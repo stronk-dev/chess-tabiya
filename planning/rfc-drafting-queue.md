@@ -954,3 +954,18 @@ before minting a duplicate.
 - **[[D1212]]** — the B5 question, framed: is casting-over-a-followed-run new B5 investment,
   Phase B wiring, or should casting lead? **Drafting-blocking, and it selects the follower
   architecture too.** Goes to the owner in the next ruling batch.
+
+### Skills, full depth — [[D1220]]–[[D1222]] (the earlier "do not draft" is WITHDRAWN)
+
+`planning/skills/full-depth-derivation.md`. The owner's pushback was right: the earlier v1 supplied
+**one of chess.com Skills' five parts, for one game**.
+
+**[[D1220]] corrects my own [[D1191]]**: valence is a **policy** gap, not a mechanism gap — the
+validator is a biconditional that passes a populated authority today, and five admissible
+authorities are already enumerated. **[[D1221]]**: an authored-valence layer already ships (117
+shape plans, 96 with rules-arithmetic signatures) and the concept vocabulary yields a **~36-row
+taxonomy that already exists** — what is missing is a registry, not a taxonomy.
+
+**Fork 1 — may valence be declared, and by which authority — decides the whole lane** and goes to
+the owner in the next batch. Progress shows as **marks**, which need no floor, no reference
+population and no store.
