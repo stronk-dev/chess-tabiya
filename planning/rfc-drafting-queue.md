@@ -809,3 +809,7 @@ the next free id above D1114.
 - **[[D1095]]** (codex) — the matched bot instrument seeded sibling arms by arm name, so
   pre-divergence draws were not paired. Routed to the bot-policy experiment lane; codex's own
   measurement work owns it.
+
+- **[[D1120]]** — cross-reviewer text is reliable at the finding and unreliable at the quote (three
+  instances 2026-08-23, all caught downstream). Practice: verify the source, then keep the finding.
+  Binds acceptors writing register cells **and** claude relaying reviewer text to the owner.
