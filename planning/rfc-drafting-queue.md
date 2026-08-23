@@ -1087,3 +1087,11 @@ on 2026-08-17, voiding `measurement-records` OQ1's rationale.
 - **[[D1293]]** — **Fairy-Stockfish as a variant sidecar**, giving all seven Tier-2 rulesets a real
   opponent, disclosed as engine strength. `rfc/variants.md` §7 amendment owed; evidence stays dark
   in Tier 2 regardless.
+
+- **[[D1290]]/[[D1292]]** carry amendments owed to `rfc/enforced-clocks.md` and `rfc/learner-rating.md`
+  respectively; **[[D1293]]** amends `rfc/variants.md` §7. All three are claude's to write.
+
+- **[[D1286]]** (codex) — the first D1162 "pass" was provisional: the fitted head divided
+  binary/categorical deltas by mean-square `p`. Routed to the evidence-move-selector lane
+  (`rfc/evidence-move-selector.md` §6 binds to that harness's predeclared verdict, so a provisional
+  pass is material to its calibration gate).
