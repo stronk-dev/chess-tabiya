@@ -6183,3 +6183,18 @@ a bot weight separately passes controlled-trait measurement and never reads lear
 learner card is deterministic-first and shows value, interval, floor, window, reference version and
 exact contributors. An optional LLM may paraphrase one sealed card and may not select, diagnose,
 advise, grade, invent an archetype or recommend a move.
+
+## 2026-08-23 — D1062 shared style atoms measured as bot-policy transforms
+
+Five exact R21 atoms were run independently through the accepted R11 controlled-trait gate on
+D969's corrected 804-cell population. All five preserve strength, severe-error mass and Explorer
+human-match, but none reaches the required ten-point pooled behavior shift at the preregistered ×4
+weight. Extended-center pawn is largest at +5.63 points; early queen and exact castling move less
+than two; the two fianchetto completion events have only three and six declinable cells. Diagnostic
+×8 also fails every atom. Pawn ×4 passes and forcing ×3 fails as able-to-fail controls.
+
+The result separates collector value from bot-profile validity. All five literal atoms remain
+needed for longitudinal habits, Review and drill conditions; none may be registered or named as a
+global bot personality from this transform. A future broader bot wave must preregister a composed,
+phase-scoped or repertoire/stateful mechanism and re-run the full policy gate rather than inherit
+validity from the evidence vocabulary.

@@ -1,0 +1,693 @@
+{
+  "experiment": "D1062",
+  "measuredAt": "2026-08-23T14:01:24.744Z",
+  "parameters": {
+    "temperature": 0.8,
+    "topP": 0.92,
+    "guardCp": 250,
+    "traitMultiplier": 4,
+    "gates": {
+      "traitDelta": 0.1,
+      "lossDeltaCp": 35,
+      "severeRise": 0.01,
+      "humanRetention": 0.9
+    }
+  },
+  "inputs": {
+    "maia": "sha256:61b4e12a4fa6e728ad5cc7bc44276c9cc676ae4be1d29f7c8e4b66d9fc466400",
+    "sf": "sha256:7fd969e9d38c22289a4c7a4958f86ab4ca276386f368f3a0ed605257dabac402",
+    "probes": "sha256:fe081f45d95b6115ee649831882e45561ff7b0d960b6759242ac335654e9cfed",
+    "san": "sha256:4e88eae51cc0df0a5cb4882a2a33679de73c41e3c8f26dfab4def80df3103473"
+  },
+  "population": {
+    "maiaRows": 837,
+    "sfRows": 279,
+    "probePositions": 279,
+    "cells": 804,
+    "abstainedMixedScoreCells": 33,
+    "unmappableCandidates": 0
+  },
+  "production": {
+    "cells": 804,
+    "expectedLossCp": 20.821109,
+    "severe250": 0.004316,
+    "humanMatch": 0.31329
+  },
+  "summary": {
+    "centerPawn": {
+      "guarded": {
+        "cells": 804,
+        "expectedLossCp": 19.463267,
+        "severe250": 0,
+        "humanMatch": 0.313947,
+        "traitRate": 0.120077,
+        "opportunityCells": 195,
+        "conditionalTraitRate": 0.305344
+      },
+      "weighted": {
+        "cells": 804,
+        "expectedLossCp": 19.65015,
+        "severe250": 0,
+        "humanMatch": 0.312083,
+        "traitRate": 0.176383,
+        "opportunityCells": 195,
+        "conditionalTraitRate": 0.537496
+      },
+      "byBand": {
+        "1400": {
+          "guarded": {
+            "cells": 268,
+            "expectedLossCp": 21.61912,
+            "severe250": 0,
+            "humanMatch": 0.282114,
+            "traitRate": 0.12198,
+            "opportunityCells": 71,
+            "conditionalTraitRate": 0.291418
+          },
+          "weighted": {
+            "cells": 268,
+            "expectedLossCp": 21.862105,
+            "severe250": 0,
+            "humanMatch": 0.279561,
+            "traitRate": 0.182413,
+            "opportunityCells": 71,
+            "conditionalTraitRate": 0.51953
+          }
+        },
+        "1600": {
+          "guarded": {
+            "cells": 268,
+            "expectedLossCp": 19.68639,
+            "severe250": 0,
+            "humanMatch": 0.318949,
+            "traitRate": 0.119082,
+            "opportunityCells": 63,
+            "conditionalTraitRate": 0.30022
+          },
+          "weighted": {
+            "cells": 268,
+            "expectedLossCp": 19.776081,
+            "severe250": 0,
+            "humanMatch": 0.317284,
+            "traitRate": 0.173059,
+            "opportunityCells": 63,
+            "conditionalTraitRate": 0.52984
+          }
+        },
+        "1800": {
+          "guarded": {
+            "cells": 268,
+            "expectedLossCp": 17.084292,
+            "severe250": 0,
+            "humanMatch": 0.340777,
+            "traitRate": 0.11917,
+            "opportunityCells": 61,
+            "conditionalTraitRate": 0.326844
+          },
+          "weighted": {
+            "cells": 268,
+            "expectedLossCp": 17.312265,
+            "severe250": 0,
+            "humanMatch": 0.339404,
+            "traitRate": 0.173676,
+            "opportunityCells": 61,
+            "conditionalTraitRate": 0.566315
+          }
+        }
+      }
+    },
+    "earlyQueen": {
+      "guarded": {
+        "cells": 804,
+        "expectedLossCp": 19.463267,
+        "severe250": 0,
+        "humanMatch": 0.313947,
+        "traitRate": 0.028086,
+        "opportunityCells": 71,
+        "conditionalTraitRate": 0.191285
+      },
+      "weighted": {
+        "cells": 804,
+        "expectedLossCp": 19.680215,
+        "severe250": 0,
+        "humanMatch": 0.312253,
+        "traitRate": 0.047535,
+        "opportunityCells": 71,
+        "conditionalTraitRate": 0.411527
+      },
+      "byBand": {
+        "1400": {
+          "guarded": {
+            "cells": 268,
+            "expectedLossCp": 21.61912,
+            "severe250": 0,
+            "humanMatch": 0.282114,
+            "traitRate": 0.02682,
+            "opportunityCells": 25,
+            "conditionalTraitRate": 0.167514
+          },
+          "weighted": {
+            "cells": 268,
+            "expectedLossCp": 21.687867,
+            "severe250": 0,
+            "humanMatch": 0.280579,
+            "traitRate": 0.045708,
+            "opportunityCells": 25,
+            "conditionalTraitRate": 0.369985
+          }
+        },
+        "1600": {
+          "guarded": {
+            "cells": 268,
+            "expectedLossCp": 19.68639,
+            "severe250": 0,
+            "humanMatch": 0.318949,
+            "traitRate": 0.028463,
+            "opportunityCells": 24,
+            "conditionalTraitRate": 0.192842
+          },
+          "weighted": {
+            "cells": 268,
+            "expectedLossCp": 19.966218,
+            "severe250": 0,
+            "humanMatch": 0.316769,
+            "traitRate": 0.048856,
+            "opportunityCells": 24,
+            "conditionalTraitRate": 0.420559
+          }
+        },
+        "1800": {
+          "guarded": {
+            "cells": 268,
+            "expectedLossCp": 17.084292,
+            "severe250": 0,
+            "humanMatch": 0.340777,
+            "traitRate": 0.028975,
+            "opportunityCells": 22,
+            "conditionalTraitRate": 0.2166
+          },
+          "weighted": {
+            "cells": 268,
+            "expectedLossCp": 17.386562,
+            "severe250": 0,
+            "humanMatch": 0.339412,
+            "traitRate": 0.048043,
+            "opportunityCells": 22,
+            "conditionalTraitRate": 0.448883
+          }
+        }
+      }
+    },
+    "castle": {
+      "guarded": {
+        "cells": 804,
+        "expectedLossCp": 19.463267,
+        "severe250": 0,
+        "humanMatch": 0.313947,
+        "traitRate": 0.04784,
+        "opportunityCells": 58,
+        "conditionalTraitRate": 0.507991
+      },
+      "weighted": {
+        "cells": 804,
+        "expectedLossCp": 19.363849,
+        "severe250": 0,
+        "humanMatch": 0.310028,
+        "traitRate": 0.064085,
+        "opportunityCells": 58,
+        "conditionalTraitRate": 0.73318
+      },
+      "byBand": {
+        "1400": {
+          "guarded": {
+            "cells": 268,
+            "expectedLossCp": 21.61912,
+            "severe250": 0,
+            "humanMatch": 0.282114,
+            "traitRate": 0.046298,
+            "opportunityCells": 20,
+            "conditionalTraitRate": 0.520395
+          },
+          "weighted": {
+            "cells": 268,
+            "expectedLossCp": 21.482178,
+            "severe250": 0,
+            "humanMatch": 0.278267,
+            "traitRate": 0.062874,
+            "opportunityCells": 20,
+            "conditionalTraitRate": 0.742506
+          }
+        },
+        "1600": {
+          "guarded": {
+            "cells": 268,
+            "expectedLossCp": 19.68639,
+            "severe250": 0,
+            "humanMatch": 0.318949,
+            "traitRate": 0.046907,
+            "opportunityCells": 19,
+            "conditionalTraitRate": 0.503742
+          },
+          "weighted": {
+            "cells": 268,
+            "expectedLossCp": 19.592033,
+            "severe250": 0,
+            "humanMatch": 0.315168,
+            "traitRate": 0.062744,
+            "opportunityCells": 19,
+            "conditionalTraitRate": 0.727124
+          }
+        },
+        "1800": {
+          "guarded": {
+            "cells": 268,
+            "expectedLossCp": 17.084292,
+            "severe250": 0,
+            "humanMatch": 0.340777,
+            "traitRate": 0.050315,
+            "opportunityCells": 19,
+            "conditionalTraitRate": 0.499182
+          },
+          "weighted": {
+            "cells": 268,
+            "expectedLossCp": 17.017335,
+            "severe250": 0,
+            "humanMatch": 0.336649,
+            "traitRate": 0.066638,
+            "opportunityCells": 19,
+            "conditionalTraitRate": 0.729419
+          }
+        }
+      }
+    },
+    "fianchettoSetup": {
+      "guarded": {
+        "cells": 804,
+        "expectedLossCp": 19.463267,
+        "severe250": 0,
+        "humanMatch": 0.313947,
+        "traitRate": 0.010475,
+        "opportunityCells": 3,
+        "conditionalTraitRate": 0.807249
+      },
+      "weighted": {
+        "cells": 804,
+        "expectedLossCp": 19.456873,
+        "severe250": 0,
+        "humanMatch": 0.314157,
+        "traitRate": 0.010981,
+        "opportunityCells": 3,
+        "conditionalTraitRate": 0.942896
+      },
+      "byBand": {
+        "1400": {
+          "guarded": {
+            "cells": 268,
+            "expectedLossCp": 21.61912,
+            "severe250": 0,
+            "humanMatch": 0.282114,
+            "traitRate": 0.010567,
+            "opportunityCells": 1,
+            "conditionalTraitRate": 0.831988
+          },
+          "weighted": {
+            "cells": 268,
+            "expectedLossCp": 21.618672,
+            "severe250": 0,
+            "humanMatch": 0.282297,
+            "traitRate": 0.011015,
+            "opportunityCells": 1,
+            "conditionalTraitRate": 0.951941
+          }
+        },
+        "1600": {
+          "guarded": {
+            "cells": 268,
+            "expectedLossCp": 19.68639,
+            "severe250": 0,
+            "humanMatch": 0.318949,
+            "traitRate": 0.010214,
+            "opportunityCells": 1,
+            "conditionalTraitRate": 0.737449
+          },
+          "weighted": {
+            "cells": 268,
+            "expectedLossCp": 19.668051,
+            "severe250": 0,
+            "humanMatch": 0.319228,
+            "traitRate": 0.010889,
+            "opportunityCells": 1,
+            "conditionalTraitRate": 0.918268
+          }
+        },
+        "1800": {
+          "guarded": {
+            "cells": 268,
+            "expectedLossCp": 17.084292,
+            "severe250": 0,
+            "humanMatch": 0.340777,
+            "traitRate": 0.010643,
+            "opportunityCells": 1,
+            "conditionalTraitRate": 0.85231
+          },
+          "weighted": {
+            "cells": 268,
+            "expectedLossCp": 17.083896,
+            "severe250": 0,
+            "humanMatch": 0.340947,
+            "traitRate": 0.011039,
+            "opportunityCells": 1,
+            "conditionalTraitRate": 0.958478
+          }
+        }
+      }
+    },
+    "fianchettoScreen": {
+      "guarded": {
+        "cells": 804,
+        "expectedLossCp": 19.463267,
+        "severe250": 0,
+        "humanMatch": 0.313947,
+        "traitRate": 0.009203,
+        "opportunityCells": 6,
+        "conditionalTraitRate": 0.73314
+      },
+      "weighted": {
+        "cells": 804,
+        "expectedLossCp": 19.462787,
+        "severe250": 0,
+        "humanMatch": 0.314123,
+        "traitRate": 0.010554,
+        "opportunityCells": 6,
+        "conditionalTraitRate": 0.91418
+      },
+      "byBand": {
+        "1400": {
+          "guarded": {
+            "cells": 268,
+            "expectedLossCp": 21.61912,
+            "severe250": 0,
+            "humanMatch": 0.282114,
+            "traitRate": 0.009308,
+            "opportunityCells": 2,
+            "conditionalTraitRate": 0.747237
+          },
+          "weighted": {
+            "cells": 268,
+            "expectedLossCp": 21.624537,
+            "severe250": 0,
+            "humanMatch": 0.282349,
+            "traitRate": 0.010593,
+            "opportunityCells": 2,
+            "conditionalTraitRate": 0.919482
+          }
+        },
+        "1600": {
+          "guarded": {
+            "cells": 268,
+            "expectedLossCp": 19.68639,
+            "severe250": 0,
+            "humanMatch": 0.318949,
+            "traitRate": 0.008947,
+            "opportunityCells": 2,
+            "conditionalTraitRate": 0.698908
+          },
+          "weighted": {
+            "cells": 268,
+            "expectedLossCp": 19.673947,
+            "severe250": 0,
+            "humanMatch": 0.319168,
+            "traitRate": 0.010464,
+            "opportunityCells": 2,
+            "conditionalTraitRate": 0.90217
+          }
+        },
+        "1800": {
+          "guarded": {
+            "cells": 268,
+            "expectedLossCp": 17.084292,
+            "severe250": 0,
+            "humanMatch": 0.340777,
+            "traitRate": 0.009353,
+            "opportunityCells": 2,
+            "conditionalTraitRate": 0.753275
+          },
+          "weighted": {
+            "cells": 268,
+            "expectedLossCp": 17.089879,
+            "severe250": 0,
+            "humanMatch": 0.340853,
+            "traitRate": 0.010604,
+            "opportunityCells": 2,
+            "conditionalTraitRate": 0.920888
+          }
+        }
+      }
+    }
+  },
+  "gates": {
+    "centerPawn": {
+      "traitDelta": 0.056306,
+      "lossDeltaCp": -1.170959,
+      "severeRise": -0.004316,
+      "humanRetention": 0.996148,
+      "pass": 0
+    },
+    "earlyQueen": {
+      "traitDelta": 0.019449,
+      "lossDeltaCp": -1.140894,
+      "severeRise": -0.004316,
+      "humanRetention": 0.99669,
+      "pass": 0
+    },
+    "castle": {
+      "traitDelta": 0.016245,
+      "lossDeltaCp": -1.45726,
+      "severeRise": -0.004316,
+      "humanRetention": 0.989588,
+      "pass": 0
+    },
+    "fianchettoSetup": {
+      "traitDelta": 0.000506,
+      "lossDeltaCp": -1.364236,
+      "severeRise": -0.004316,
+      "humanRetention": 1.002768,
+      "pass": 0
+    },
+    "fianchettoScreen": {
+      "traitDelta": 0.001351,
+      "lossDeltaCp": -1.358322,
+      "severeRise": -0.004316,
+      "humanRetention": 1.002659,
+      "pass": 0
+    }
+  },
+  "controls": {
+    "pawn": {
+      "traitDelta": 0.122784,
+      "lossDeltaCp": -0.875535,
+      "severeRise": -0.004316,
+      "humanRetention": 0.987856,
+      "pass": 1
+    },
+    "forcing": {
+      "traitDelta": 0.031213,
+      "lossDeltaCp": -0.855425,
+      "severeRise": -0.004316,
+      "humanRetention": 0.992954,
+      "pass": 0
+    }
+  },
+  "sensitivity": {
+    "centerPawn": {
+      "2": {
+        "metrics": {
+          "cells": 804,
+          "expectedLossCp": 19.465335,
+          "severe250": 0,
+          "humanMatch": 0.313666,
+          "traitRate": 0.147026,
+          "opportunityCells": 195,
+          "conditionalTraitRate": 0.416455
+        },
+        "gate": {
+          "traitDelta": 0.026949,
+          "lossDeltaCp": -1.355774,
+          "severeRise": -0.004316,
+          "humanRetention": 1.001201,
+          "pass": 0
+        }
+      },
+      "8": {
+        "metrics": {
+          "cells": 804,
+          "expectedLossCp": 20.001386,
+          "severe250": 0,
+          "humanMatch": 0.309542,
+          "traitRate": 0.205513,
+          "opportunityCells": 195,
+          "conditionalTraitRate": 0.657601
+        },
+        "gate": {
+          "traitDelta": 0.085436,
+          "lossDeltaCp": -0.819723,
+          "severeRise": -0.004316,
+          "humanRetention": 0.988037,
+          "pass": 0
+        }
+      }
+    },
+    "earlyQueen": {
+      "2": {
+        "metrics": {
+          "cells": 804,
+          "expectedLossCp": 19.55516,
+          "severe250": 0,
+          "humanMatch": 0.313414,
+          "traitRate": 0.036774,
+          "opportunityCells": 71,
+          "conditionalTraitRate": 0.289668
+        },
+        "gate": {
+          "traitDelta": 0.008688,
+          "lossDeltaCp": -1.265949,
+          "severeRise": -0.004316,
+          "humanRetention": 1.000396,
+          "pass": 0
+        }
+      },
+      "8": {
+        "metrics": {
+          "cells": 804,
+          "expectedLossCp": 19.829497,
+          "severe250": 0,
+          "humanMatch": 0.310542,
+          "traitRate": 0.059509,
+          "opportunityCells": 71,
+          "conditionalTraitRate": 0.547111
+        },
+        "gate": {
+          "traitDelta": 0.031423,
+          "lossDeltaCp": -0.991612,
+          "severeRise": -0.004316,
+          "humanRetention": 0.991229,
+          "pass": 0
+        }
+      }
+    },
+    "castle": {
+      "2": {
+        "metrics": {
+          "cells": 804,
+          "expectedLossCp": 19.404464,
+          "severe250": 0,
+          "humanMatch": 0.312003,
+          "traitRate": 0.056335,
+          "opportunityCells": 58,
+          "conditionalTraitRate": 0.62575
+        },
+        "gate": {
+          "traitDelta": 0.008495,
+          "lossDeltaCp": -1.416645,
+          "severeRise": -0.004316,
+          "humanRetention": 0.995892,
+          "pass": 0
+        }
+      },
+      "8": {
+        "metrics": {
+          "cells": 804,
+          "expectedLossCp": 19.340256,
+          "severe250": 0,
+          "humanMatch": 0.308219,
+          "traitRate": 0.070599,
+          "opportunityCells": 58,
+          "conditionalTraitRate": 0.823481
+        },
+        "gate": {
+          "traitDelta": 0.022759,
+          "lossDeltaCp": -1.480853,
+          "severeRise": -0.004316,
+          "humanRetention": 0.983814,
+          "pass": 0
+        }
+      }
+    },
+    "fianchettoSetup": {
+      "2": {
+        "metrics": {
+          "cells": 804,
+          "expectedLossCp": 19.45932,
+          "severe250": 0,
+          "humanMatch": 0.314079,
+          "traitRate": 0.010793,
+          "opportunityCells": 3,
+          "conditionalTraitRate": 0.892481
+        },
+        "gate": {
+          "traitDelta": 0.000318,
+          "lossDeltaCp": -1.361789,
+          "severeRise": -0.004316,
+          "humanRetention": 1.002519,
+          "pass": 0
+        }
+      },
+      "8": {
+        "metrics": {
+          "cells": 804,
+          "expectedLossCp": 19.455496,
+          "severe250": 0,
+          "humanMatch": 0.3142,
+          "traitRate": 0.011084,
+          "opportunityCells": 3,
+          "conditionalTraitRate": 0.970524
+        },
+        "gate": {
+          "traitDelta": 0.000609,
+          "lossDeltaCp": -1.365613,
+          "severeRise": -0.004316,
+          "humanRetention": 1.002905,
+          "pass": 0
+        }
+      }
+    },
+    "fianchettoScreen": {
+      "2": {
+        "metrics": {
+          "cells": 804,
+          "expectedLossCp": 19.462858,
+          "severe250": 0,
+          "humanMatch": 0.314059,
+          "traitRate": 0.010026,
+          "opportunityCells": 6,
+          "conditionalTraitRate": 0.843477
+        },
+        "gate": {
+          "traitDelta": 0.000823,
+          "lossDeltaCp": -1.358251,
+          "severeRise": -0.004316,
+          "humanRetention": 1.002455,
+          "pass": 0
+        }
+      },
+      "8": {
+        "metrics": {
+          "cells": 804,
+          "expectedLossCp": 19.462815,
+          "severe250": 0,
+          "humanMatch": 0.314158,
+          "traitRate": 0.010857,
+          "opportunityCells": 6,
+          "conditionalTraitRate": 0.954888
+        },
+        "gate": {
+          "traitDelta": 0.001654,
+          "lossDeltaCp": -1.358294,
+          "severeRise": -0.004316,
+          "humanRetention": 1.002771,
+          "pass": 0
+        }
+      }
+    }
+  }
+}

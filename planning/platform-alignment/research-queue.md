@@ -114,3 +114,6 @@ claude so `make verify` is green, with no other claim on codex's work:
   and asserts the accepted RFC rather than a stale count.
 - **[[D1055]]** — R21's twelve retained player-habit metrics, **zero production-ready** despite
   the accepted longitudinal store; two wait on runtime opening identity, two on per-game castling.
+- **[[D1062]]** — the independent bot gate for five shared R21 atoms: **0/5** single-atom ×4
+  profiles pass global reach, despite all five preserving strength/error/population-match; the
+  collectors remain required for habits and Review, while bot composition stays a separate wave.
