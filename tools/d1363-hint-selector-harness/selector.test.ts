@@ -39,6 +39,7 @@ const FAMILY_ORDER = [
 ] as const;
 type Family = (typeof FAMILY_ORDER)[number];
 type Arm = (typeof ARMS)[number];
+type Phase = InputRow["phase"];
 
 interface InputProbe { readonly arm: string; readonly pv: readonly string[] }
 interface InputRow {
@@ -182,6 +183,21 @@ function timing(values: readonly number[]) {
   return Object.freeze({ n: values.length, meanMs: values.reduce((sum, value) => sum + value, 0) / Math.max(1, values.length), p50Ms: at(0.5), p95Ms: at(0.95), maxMs: ordered.at(-1) ?? 0 });
 }
 
+function counts(values: readonly string[]): Readonly<Record<string, number>> {
+  const result = new Map<string, number>();
+  for (const value of values) result.set(value, (result.get(value) ?? 0) + 1);
+  return Object.freeze(Object.fromEntries([...result.entries()].sort(([left], [right]) => left.localeCompare(right))));
+}
+
+function candidateBreakdown(candidates: readonly Candidate[]) {
+  return Object.freeze({
+    total: candidates.length,
+    byFamily: counts(candidates.map((candidate) => candidate.family)),
+    byRelation: counts(candidates.map((candidate) => candidate.edgeSideRelation)),
+    byStatus: counts(candidates.map((candidate) => `${candidate.family}:${candidate.status}`)),
+  });
+}
+
 describe("D1363 production-table hint selector", () => {
   it("measures the preregistered table and perspective arms", () => {
     const inputBytes = readFileSync(INPUT);
@@ -220,6 +236,7 @@ describe("D1363 production-table hint selector", () => {
         rootSide,
         firstMoveUci,
         candidateCount: candidates.length,
+        candidateBreakdown: candidateBreakdown(candidates),
         raw,
         rootSideOnly: rootOnly,
         rootEdgeOnly: rootEdge,
@@ -246,6 +263,26 @@ describe("D1363 production-table hint selector", () => {
       });
     };
     const summary = Object.freeze({ depth12: summarize("depth12"), movetime100_a: summarize("movetime100_a") });
+    const phaseSummary = Object.freeze(Object.fromEntries(ARMS.flatMap((arm) =>
+      (["opening", "middlegame", "cross_phase"] as const).map((phase: Phase) => {
+        const members = rows.filter((row) => row.arm === arm && row.phase === phase);
+        const candidates = members.flatMap((row) => {
+          const breakdown = row.candidateBreakdown as ReturnType<typeof candidateBreakdown>;
+          return Object.entries(breakdown.byFamily).flatMap(([family, count]) =>
+            Array.from({ length: count }, () => family));
+        });
+        const rootCandidates = members.reduce((sum, row) => sum + Number((row.candidateBreakdown as ReturnType<typeof candidateBreakdown>).byRelation.root ?? 0), 0);
+        const opponentCandidates = members.reduce((sum, row) => sum + Number((row.candidateBreakdown as ReturnType<typeof candidateBreakdown>).byRelation.opponent ?? 0), 0);
+        return [`${arm}:${phase}`, Object.freeze({
+          positions: members.length,
+          candidates: candidates.length,
+          candidatesByFamily: counts(candidates),
+          candidatesByRelation: { root: rootCandidates, opponent: opponentCandidates, unclassified: 0 },
+          rawReach: members.filter((row) => row.raw !== null).length,
+          rawSelectionsByFamily: counts(members.flatMap((row) => row.raw === null ? [] : [(row.raw as Candidate).family])),
+          rawOpponentSelections: members.filter((row) => row.raw !== null && (row.raw as Candidate).edgeSideRelation === "opponent").length,
+        })];
+      }))) as Readonly<Record<`${Arm}:${Phase}`, Readonly<Record<string, unknown>>>>);
     const runtimeDigest = sha256(RUNTIME_SOURCES.map((file) => `${file.path}\0${readFileSync(file.url)}`).join("\0"));
     const result = Object.freeze({
       experiment: "D1363",
@@ -254,7 +291,17 @@ describe("D1363 production-table hint selector", () => {
       runtimeDigest,
       contract: { families: FAMILY_ORDER, arms: ARMS, horizonPlies: 4, forcedMateAttackerMoves: 4 },
       candidateCounts: Object.fromEntries(FAMILY_ORDER.map((family) => [family, candidateCounts.get(family)])),
+      candidateRelations: {
+        root: rows.reduce((sum, row) => sum + Number((row.candidateBreakdown as ReturnType<typeof candidateBreakdown>).byRelation.root ?? 0), 0),
+        opponent: rows.reduce((sum, row) => sum + Number((row.candidateBreakdown as ReturnType<typeof candidateBreakdown>).byRelation.opponent ?? 0), 0),
+        unclassified: 0,
+      },
+      candidateStatuses: counts(rows.flatMap((row) => {
+        const breakdown = row.candidateBreakdown as ReturnType<typeof candidateBreakdown>;
+        return Object.entries(breakdown.byStatus).flatMap(([status, count]) => Array.from({ length: count }, () => status));
+      })),
       summary,
+      phaseSummary,
       gates: {
         familySetExercised: Object.keys(Object.fromEntries(FAMILY_ORDER.map((family) => [family, candidateCounts.get(family)]))).join("|") === FAMILY_ORDER.join("|"),
         noOpponentRawSelections: summary.depth12.rawOpponentSelections + summary.movetime100_a.rawOpponentSelections === 0,
@@ -276,7 +323,11 @@ describe("D1363 production-table hint selector", () => {
       }), "",
       "## Candidate incidence", "", "| family | candidates |", "|---|---:|",
       ...FAMILY_ORDER.map((family) => `| ${family} | ${candidateCounts.get(family)} |`), "",
+      `Candidate perspective: root ${result.candidateRelations.root}; opponent ${result.candidateRelations.opponent}; unclassified 0.`, "",
+      "## Phase split", "", "| arm / phase | candidates | raw reach | raw opponent selections |", "|---|---:|---:|---:|",
+      ...Object.entries(phaseSummary).map(([key, value]) => `| ${key} | ${String(value.candidates)} | ${String(value.rawReach)}/${String(value.positions)} | ${String(value.rawOpponentSelections)} |`), "",
       `Perspective gate: **${result.gates.noOpponentRawSelections ? "PASS" : "FAIL"}**. A failure returns the selector to the author; it is not a chess-quality verdict.`, "",
+      `Latency-headroom gate: **${result.gates.latencyHeadroom ? "PASS" : "FAIL"}**. This is selector-only latency and does not satisfy the required end-to-end cold/warm/provider-off receipt.`, "",
       "The four readings are diagnostic. Root-side or ply-1 occurrence still does not establish causality, recommendation, or usefulness.", "",
     ];
     writeFileSync(REPORT, lines.join("\n"), "utf8");
