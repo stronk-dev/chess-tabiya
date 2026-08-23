@@ -871,8 +871,10 @@ at request construction, which is a live correction to that draft.
 
 [[D1162]] names the one owner fork: [[D810]]'s evidence-to-move selector is the only
 variant-portable route to a human-shaped base, and it is unbuilt — fund, defer, or refuse.
-[[D1163]] is free and should run first: it can refute the whole engine-composed family over the
-committed R11 corpus with zero engine calls.
+[[D1163]] ran over the surviving R11/D815 capture with zero engine calls. It abstained because the
+Maia positive control did not identify its own bands; all engine-derived profiles nevertheless
+peaked on human 1800, so the game ladder is not funded. D1184 returns the Gate-0 statistic before
+reuse, and D1166 owns the false “committed raw corpus” premise.
 
 ### [[D1165]] — an intent doc cited a ruling that had not been made
 
@@ -928,3 +930,20 @@ not, and `design/06`'s rationale needs correcting (law 5).
 - **[[D1192]]** — a skill *level* is refused twice, a skill *credit* (measured frequency with its
   denominator) is admissible, and denomination 2 (milestones/marks) already ships law-8 clean as the
   template. Carries the D549/D842 corrections.
+
+### Deferral retrofit, batch 1 — [[D1200]]–[[D1202]]
+
+`planning/platform-alignment/deferral-retrofit-batch-1.md`. **68% of the sampled "deferrals" are
+not deferrals**, so the 539 with no destination is really **~120–145 live obligations**. The caveat
+outweighs the relief: archived RFCs skew rhetorical, while the one **active** RFC in the sample hit
+**44%** — the 24 active RFCs likely carry nearly-all-real deferrals, so batch 2 should be active
+RFCs only.
+
+Deliverables ready to apply: 6 Discharges rows for `learner-rating`, 1 at-acceptance row for
+`measurement-records`, 6 ledger rows for the archived RFCs, and 12 owner-tier items drafted as
+O15/O16/O17 plus amendments to O11/O13.
+
+**[[D1201]] is the structural one**: the archiving gate reads only the Discharges register, so
+`teacher-surface` archived carrying an open question assigned to `learner-rating` and nothing saw
+it. **[[D1202]] binds every future batch**: 9% of rows have owners the text never cites — check
+before minting a duplicate.
