@@ -1012,3 +1012,19 @@ Sequencing remains legitimate — but only when the remainder has a **named home
   its declared `"abandoned"` status from the authoritative event log, and `cursor` is defined as
   "the first unsealed layer" with no representation of the completed case. Routed to the
   `campaign-core` implementation lane; both are amendments its implementing commit must carry.
+
+## ⚠ SECOND TEMPLATE REPAIR — [[D1240]], effective immediately
+
+**A derivation hands over a PROCEDURE and a MEASURED BASELINE — never a total.** Three of F3's six
+blockers were one defect: a hand-counted census asserted as an acceptance criterion, so the
+criterion passed only for an implementation that reproduced the mistake. Every arithmetic error
+traced back to the derivation, which also mis-stated its own count.
+
+So: a derivation may report a measurement, but an RFC criterion must assert **set-equality against a
+derivation command**, with any integer baked in **only as a drift tripwire**. If a derivation cannot
+supply the procedure, it says so — it does not supply a number instead.
+
+Also landed: [[D1241]] (F3's sharpest defect was two criteria contradicting each other),
+[[D1242]] (the skills RFC delivers all five depth parts, two of them stronger than the imitated
+surface, with nine forks recorded and none decided), [[D1243]] (codex's work-index fix confirmed
+working on a live case).
