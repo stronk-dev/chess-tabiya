@@ -6242,3 +6242,19 @@ evidence as played history. The handoff therefore requires two adapters and iden
 path compiler for Review, and separately declared hypothetical engine-horizon derivations for
 Guided Hint. The pass also records the accepted three-stage Guided Hint versus owner-ruled four-
 stage contradiction; both RFC/compiler contracts must be amended before implementation.
+
+## 2026-08-23 — D1071/D1072 shared candidate-event packet contract complete
+
+The implemented opponent `CandidateFeatureVector` was falsified as the shared evidence layer. Its
+constructor accepts a strict subset—two of twenty legal moves in the fixed opening probe—while the
+test calls that population “every legal candidate.” It also reduces a sealed semantic event's
+anchor, basis, derivation inputs, stable id and sign to `{source,payload}`, and accepts arbitrary
+finite score bytes without consuming a sealed Stockfish item. There are zero production callers.
+
+The replacement contract is a lower, score-free complete legal-candidate event packet. Its
+identity is canonical full FEN + legal-convention + evidence-manifest + compiler versions; it
+retains original sealed event values and proves set equality with the legal population. Rules
+collection stays available with all providers off. Bot scores, semantic PV horizons and Review
+opportunity denominators are separate exact joins, so neither UI policy nor engine availability
+contaminates the factual cache. Selection-policy identity belongs on the downstream result rather
+than the packet. Implementation still needs an accepted RFC and end-to-end cold/warm measurement.

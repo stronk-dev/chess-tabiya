@@ -1,0 +1,34 @@
+{
+  "canonicalFen": "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1",
+  "exactLegalCount": 20,
+  "acceptedCandidateCount": 2,
+  "completenessRatio": 0.1,
+  "strictSubsetAccepted": true,
+  "arbitraryFiniteScoresAccepted": [
+    900031,
+    900027
+  ],
+  "exampleProjection": {
+    "id": "rules.transition.event.developed",
+    "version": 1
+  },
+  "semanticEnvelopeKeys": [
+    "anchor",
+    "basis",
+    "derivationInputs",
+    "evidence",
+    "id",
+    "operands",
+    "projection",
+    "sign"
+  ],
+  "retainedResultKeys": [
+    "payload",
+    "source"
+  ],
+  "retainedSign": false,
+  "retainedEventId": false,
+  "retainedAnchor": false,
+  "retainedBasis": false,
+  "retainedDerivationInputs": false
+}
