@@ -142,6 +142,13 @@ rewind adds value**.
   remains until an owner/RFC disposition accepts the refusal or funds a materially different
   family. The registered evidence foundation and Maia-based measured roster remain. H5/C5 remain
   unchanged.
+- **Materially different family identified; training gate not met 2026-08-23**
+  (`design/research/non-maia-selector-model-family.md`, D1328). Set-dependent choice can condition
+  each candidate on the whole variable legal set, unlike both refused per-candidate heads. The
+  architecture is admissible but untested in chess here; 515 exposed decisions are a falsification
+  set, not a credible training population for the higher-capacity family. A corpus/feature-cost
+  census and grouped learning curve must precede any fit, and the reserved third population remains
+  sealed. This neither changes H5/C5 nor decides D1271's 1.0 owner fork.
 
 ## Kill criteria
 

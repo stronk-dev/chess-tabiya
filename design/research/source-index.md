@@ -61,4 +61,30 @@ Every entry: URL, Use, Caveat. Evidence labels per `design/research/README.md`
 - Caveat: `[V]` at the exact source commit packaged by `workers/maia/Dockerfile`; future pins must
   be re-audited.
 
-*(next: R53)*
+### R53 — Set-dependent aggregation for choice prediction
+- URL: https://proceedings.mlr.press/v119/rosenfeld20a.html
+- Use: materially distinguishes a legal-set-conditioned choice model from D1297's independent
+  candidate utility; source for the next non-Maia selector family.
+- Caveat: `[V]` architecture/claims from the primary ICML paper; its three evaluations are not chess
+  and no effectiveness transfers to Tabiya without measurement.
+
+### R54 — Set Transformer
+- URL: https://proceedings.mlr.press/v97/lee19d.html
+- Use: permutation-invariant/equivariant interaction architecture over variable-size candidate sets;
+  source for the legal-move-set symmetry requirement.
+- Caveat: `[V]` architecture/complexity from the primary ICML paper; not evaluated on chess and too
+  high-capacity to justify from Tabiya's 515-decision development set alone.
+
+### R55 — Allie: human-aligned chess with time-adaptive search
+- URL: https://arxiv.org/abs/2410.03893
+- Use: sequence, pondering, resignation and search context as parts of a human-policy claim; online
+  strength calibration comparison.
+- Caveat: `[P]` paper-reported results, not reproduced here; not a released Tabiya adapter.
+
+### R56 — ChessMimic: move, clock and outcome prediction by rating band
+- URL: https://arxiv.org/abs/2606.04473
+- Use: independent primary-source evidence that history, rating and clock are declared model inputs,
+  not post-hoc bot cosmetics.
+- Caveat: `[P]` recent preprint; results and released code were not reproduced in this pass.
+
+*(next: R57)*

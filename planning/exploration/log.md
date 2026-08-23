@@ -6825,3 +6825,22 @@ removed mass, survivor count and optimizer diagnostic.
 this mechanism, not overruled D1271's owner-funded non-Maia goal. The selector RFC must present the
 owner fork—accept the 1.0 refusal or authorize a materially different research family. The evidence
 foundation continues unchanged for Support, Review, drills and longitudinal analysis.
+
+## 2026-08-23 — Non-Maia model-family survey separated architecture from data readiness
+
+**What landed:** D1328 compared the two refused evidence selectors against primary work on
+set-dependent choice, set architectures and current human chess policies. It names one materially
+different family: a candidate policy conditioned on the complete, unordered legal-move set. The
+survey also freezes seven prerequisites covering compact registered projections, set equivariance,
+legal-set closure, proper loss, declared context, separate safety and no explanation laundering.
+
+**What changed:** “try a bigger model” is no longer an executable next step. The 515 exposed human
+decisions can falsify compact mechanisms but do not ground training a higher-capacity interaction
+model; the surveyed chess-policy programmes use sequential population data and declared context,
+with Otter alone reporting 6.1 billion training positions. The next bounded generation is a
+data-readiness census and grouped learning curve. No model was fitted and the reserved third
+population was not opened.
+
+**Next:** amend `rfc/evidence-move-selector.md` with the model/data contract and the priced owner
+fork: fund the census, defer the training programme beyond 1.0 while the measured Maia-3 roster
+ships, or explicitly refuse the non-Maia 1.0 goal. H5/C5 remain unchanged.

@@ -1164,3 +1164,7 @@ pack field.
   to every instrument until asked a third time. Rows landed retroactively.
 - **[[D1327]]** — `schedules.variant` lifted for the scheduler read; `variantOf` stays the catalogue
   successor. Narrows [[D1035]].
+- **[[D1328]]** (codex) — a set-dependent legal-choice model is materially different from both
+  refused selectors, but the exposed 515 decisions do not justify fitting it. Routed to the
+  evidence-move-selector lane: declare the compact producer-projection/data-readiness gate and
+  present the owner a priced 1.0 fund/defer/refuse fork. No third-population read or “bigger MLP”.
