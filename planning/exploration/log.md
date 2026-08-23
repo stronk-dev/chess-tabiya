@@ -5649,3 +5649,23 @@ not measurement.
 **Boundary and next:** D969 remains open. Claude's RFC amendment must choose the bounded request and
 typed mate rule, then a real Maia-vector arm must measure exact-completion and latency before any
 guarded production profile or capability-disposition change. No production code changed.
+
+## 2026-08-23 — D969 production Maia-vector population
+
+**What landed:** the disposable guard harness now obtains the real `human_common` vector at every
+server-discoverable production draft root and prices the exact set in one shared Stockfish 18
+search. The final cold run covers 50 roots (20 opening, 14 middlegame, 14 endgame, 2 cross-phase),
+958 candidates and five bounds. An earlier instrument version included five browser fixtures while
+omitting two cross-phase packs; that run was discarded and production discovery now mirrors the
+server filename rule.
+
+**Finding:** node 25k/50k is fast but all-exact on only 16/15 roots and therefore cannot implement
+the measured guard. Depth 8/10/12 is exact 50/50. Depth 8 has Stockfish p95/max 105/129 ms and cold
+Maia+guard max 499 ms, but changes the depth-12 ≥250 cp mask on 7/49 cp-only roots. Depth 10 has
+Stockfish p95/max 404/431 ms, changes 6/49 masks, and reaches 729 ms end-to-end. Depth 12 reaches
+1,258 ms per call. One production root mixes cp and mate at every bound.
+
+**Boundary and next:** no production contract changed. D969 now requires the RFC to choose depth 8
+or 10, rerun R11's predeclared guard-retention gates at that exact depth, declare the selection
+budget, and rule typed mate transitions. Registering a guarded profile before that would reuse a
+depth-12 benefit claim for a different instrument.

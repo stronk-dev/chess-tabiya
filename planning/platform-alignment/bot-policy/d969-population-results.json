@@ -1,0 +1,102 @@
+{
+  "measuredAt": "2026-08-23T08:41:14.649Z",
+  "population": {
+    "positions": 50,
+    "byPhase": { "opening": 20, "middlegame": 14, "endgame": 14, "cross_phase": 2 },
+    "candidateWidth": { "min": 6, "p50": 20, "p90": 20, "max": 20 },
+    "maiaLatencyMs": { "p50": 134.66, "p90": 187.822, "max": 432.115 }
+  },
+  "engine": { "stockfish": "18", "threads": 1, "hashMb": 16, "clearHash": true },
+  "summaries": {
+    "nodes_25000": {
+      "positions": 50, "exactPositions": 16, "exactRate": 0.32,
+      "requestedCandidates": 958, "boundedRows": 34, "missingRows": 0,
+      "matePositions": 1, "mixedScorePositions": 1,
+      "latencyMs": { "p50": 24.712, "p90": 30.439, "p95": 34.218, "max": 40.95 },
+      "endToEndLatencyMs": { "p50": 159.135, "p90": 214.555, "p95": 220.341, "max": 456.916 },
+      "versusDepth12": {
+        "comparablePositions": 16, "severeMaskSetMatches": 14, "severeMaskSetMatchRate": 0.875,
+        "candidateClassifications": 287, "candidateClassificationMatches": 282,
+        "candidateClassificationMatchRate": 0.9826, "falseSevere": 5, "missedSevere": 0
+      },
+      "byPhase": {
+        "opening": { "positions": 20, "exactPositions": 3, "exactRate": 0.15, "boundedRows": 17, "latencyMs": { "p50": 25.148, "p95": 30.439, "max": 34.218 } },
+        "middlegame": { "positions": 14, "exactPositions": 2, "exactRate": 0.1429, "boundedRows": 12, "latencyMs": { "p50": 28.073, "p95": 40.95, "max": 40.95 } },
+        "endgame": { "positions": 14, "exactPositions": 11, "exactRate": 0.7857, "boundedRows": 3, "latencyMs": { "p50": 7.476, "p95": 24.261, "max": 24.261 } },
+        "cross_phase": { "positions": 2, "exactPositions": 0, "exactRate": 0, "boundedRows": 2, "latencyMs": { "p50": 25.173, "p95": 26.981, "max": 26.981 } }
+      }
+    },
+    "nodes_50000": {
+      "positions": 50, "exactPositions": 15, "exactRate": 0.3,
+      "requestedCandidates": 958, "boundedRows": 35, "missingRows": 0,
+      "matePositions": 1, "mixedScorePositions": 1,
+      "latencyMs": { "p50": 49.313, "p90": 60.81, "p95": 63.143, "max": 66.676 },
+      "endToEndLatencyMs": { "p50": 185.323, "p90": 244.016, "p95": 253.888, "max": 490.156 },
+      "versusDepth12": {
+        "comparablePositions": 14, "severeMaskSetMatches": 13, "severeMaskSetMatchRate": 0.9286,
+        "candidateClassifications": 276, "candidateClassificationMatches": 275,
+        "candidateClassificationMatchRate": 0.9964, "falseSevere": 1, "missedSevere": 0
+      },
+      "byPhase": {
+        "opening": { "positions": 20, "exactPositions": 4, "exactRate": 0.2, "boundedRows": 16, "latencyMs": { "p50": 51.77, "p95": 62.132, "max": 66.676 } },
+        "middlegame": { "positions": 14, "exactPositions": 1, "exactRate": 0.0714, "boundedRows": 13, "latencyMs": { "p50": 53.658, "p95": 65.117, "max": 65.117 } },
+        "endgame": { "positions": 14, "exactPositions": 10, "exactRate": 0.7143, "boundedRows": 4, "latencyMs": { "p50": 17.35, "p95": 41.403, "max": 41.403 } },
+        "cross_phase": { "positions": 2, "exactPositions": 0, "exactRate": 0, "boundedRows": 2, "latencyMs": { "p50": 46.745, "p95": 50.539, "max": 50.539 } }
+      }
+    },
+    "depth_8": {
+      "positions": 50, "exactPositions": 50, "exactRate": 1,
+      "requestedCandidates": 958, "boundedRows": 0, "missingRows": 0,
+      "matePositions": 1, "mixedScorePositions": 1,
+      "latencyMs": { "p50": 58.645, "p90": 96.051, "p95": 105.054, "max": 128.563 },
+      "endToEndLatencyMs": { "p50": 209.085, "p90": 269.047, "p95": 286.796, "max": 499.1 },
+      "versusDepth12": {
+        "comparablePositions": 49, "severeMaskSetMatches": 42, "severeMaskSetMatchRate": 0.8571,
+        "candidateClassifications": 938, "candidateClassificationMatches": 928,
+        "candidateClassificationMatchRate": 0.9893, "falseSevere": 5, "missedSevere": 5
+      },
+      "byPhase": {
+        "opening": { "positions": 20, "exactPositions": 20, "exactRate": 1, "boundedRows": 0, "latencyMs": { "p50": 66.445, "p95": 103.118, "max": 107.289 } },
+        "middlegame": { "positions": 14, "exactPositions": 14, "exactRate": 1, "boundedRows": 0, "latencyMs": { "p50": 76.769, "p95": 128.563, "max": 128.563 } },
+        "endgame": { "positions": 14, "exactPositions": 14, "exactRate": 1, "boundedRows": 0, "latencyMs": { "p50": 8.274, "p95": 58.645, "max": 58.645 } },
+        "cross_phase": { "positions": 2, "exactPositions": 2, "exactRate": 1, "boundedRows": 0, "latencyMs": { "p50": 83.734, "p95": 92.006, "max": 92.006 } }
+      }
+    },
+    "depth_10": {
+      "positions": 50, "exactPositions": 50, "exactRate": 1,
+      "requestedCandidates": 958, "boundedRows": 0, "missingRows": 0,
+      "matePositions": 1, "mixedScorePositions": 1,
+      "latencyMs": { "p50": 226.36, "p90": 390.145, "p95": 403.52, "max": 431.356 },
+      "endToEndLatencyMs": { "p50": 398.365, "p90": 534.292, "p95": 562.92, "max": 728.521 },
+      "versusDepth12": {
+        "comparablePositions": 49, "severeMaskSetMatches": 43, "severeMaskSetMatchRate": 0.8776,
+        "candidateClassifications": 938, "candidateClassificationMatches": 931,
+        "candidateClassificationMatchRate": 0.9925, "falseSevere": 3, "missedSevere": 4
+      },
+      "byPhase": {
+        "opening": { "positions": 20, "exactPositions": 20, "exactRate": 1, "boundedRows": 0, "latencyMs": { "p50": 263.705, "p95": 390.396, "max": 431.356 } },
+        "middlegame": { "positions": 14, "exactPositions": 14, "exactRate": 1, "boundedRows": 0, "latencyMs": { "p50": 288.649, "p95": 409.774, "max": 409.774 } },
+        "endgame": { "positions": 14, "exactPositions": 14, "exactRate": 1, "boundedRows": 0, "latencyMs": { "p50": 21.334, "p95": 155.954, "max": 155.954 } },
+        "cross_phase": { "positions": 2, "exactPositions": 2, "exactRate": 1, "boundedRows": 0, "latencyMs": { "p50": 294.096, "p95": 297.506, "max": 297.506 } }
+      }
+    },
+    "depth_12": {
+      "positions": 50, "exactPositions": 50, "exactRate": 1,
+      "requestedCandidates": 958, "boundedRows": 0, "missingRows": 0,
+      "matePositions": 1, "mixedScorePositions": 1,
+      "latencyMs": { "p50": 788.124, "p90": 1073.715, "p95": 1170.433, "max": 1257.549 },
+      "endToEndLatencyMs": { "p50": 940.058, "p90": 1282.866, "p95": 1346.839, "max": 1402.604 },
+      "versusDepth12": {
+        "comparablePositions": 49, "severeMaskSetMatches": 49, "severeMaskSetMatchRate": 1,
+        "candidateClassifications": 938, "candidateClassificationMatches": 938,
+        "candidateClassificationMatchRate": 1, "falseSevere": 0, "missedSevere": 0
+      },
+      "byPhase": {
+        "opening": { "positions": 20, "exactPositions": 20, "exactRate": 1, "boundedRows": 0, "latencyMs": { "p50": 839.763, "p95": 1139.49, "max": 1170.433 } },
+        "middlegame": { "positions": 14, "exactPositions": 14, "exactRate": 1, "boundedRows": 0, "latencyMs": { "p50": 972.58, "p95": 1257.549, "max": 1257.549 } },
+        "endgame": { "positions": 14, "exactPositions": 14, "exactRate": 1, "boundedRows": 0, "latencyMs": { "p50": 60.648, "p95": 277.494, "max": 277.494 } },
+        "cross_phase": { "positions": 2, "exactPositions": 2, "exactRate": 1, "boundedRows": 0, "latencyMs": { "p50": 818.21, "p95": 867.655, "max": 867.655 } }
+      }
+    }
+  }
+}

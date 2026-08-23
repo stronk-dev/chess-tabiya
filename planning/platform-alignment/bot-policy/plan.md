@@ -8,10 +8,14 @@
 multi-ply review remains external
 
 **2026-08-23 production-probe follow-up:** D969's disposable Stockfish 18 harness and dossier land
-at `tools/d969-stockfish-guard-harness/` and
-`design/research/stockfish-candidate-guard-probe.md`. They establish the shared candidate-set
-request and exact-row/mate requirements. The RFC amendment still owns the budget and mate rule;
-guarded profile registration remains blocked until a real-vector completion/latency arm passes.
+at `tools/d969-stockfish-guard-harness/`,
+`design/research/stockfish-candidate-guard-probe.md`, and
+`d969-population-results.json`. The cold population arm covers all 50 production draft roots / 958
+real Maia candidates. It refuses node 25k/50k for 30–32% all-exact availability, admits fixed depth
+8/10 as complete and inside the per-call budget, and refuses depth 12 for latency. Depth 8/10 still
+change the depth-12 ≥250 cp mask on 7/6 of 49 cp-only roots. The RFC amendment must choose a literal
+depth, rerun this plan's predeclared guard-retention gates at that depth, declare the multi-call
+selection budget, and rule the observed mixed mate/cp case before guarded registration.
 
 ## Question
 

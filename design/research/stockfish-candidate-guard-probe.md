@@ -6,10 +6,14 @@
 **Feeds:** D969, `rfc/bot-policy.md` §2.4, F8 A6/A8.
 
 **Verdict:** a single candidate-set search is the viable request shape; independent candidate
-searches are not a common scale. Fixed nodes can stop with bound scores, so “one score per move” is
-not sufficient completeness. Mate scores must remain typed. This pass narrows the amendment but
-does not authorize production registration: the abstention/latency rate still needs measurement on
-real Maia candidate vectors.
+searches are not a common scale. The production-population arm then finds that neither tested node
+bound is usable: only 15–16 of 50 pack roots return an all-exact set. Fixed depth 8/10/12 returns
+all 958 requested Maia candidates exactly. Depth 8 is the only tested arm that keeps both the
+Stockfish call and the cold sequential Maia+guard selection below 500 ms, but its 250 cp mask
+differs from the depth-12 research reference on 7 of 49 cp-only positions. Depth 10 differs on 6
+and needs a separately declared 729 ms selection tail; depth 12 breaches the per-call budget.
+Production registration therefore still requires a literal depth choice plus recalibration of the
+250 cp retention result at that depth. Mate scores remain typed and need a ruled transition policy.
 
 ## Method
 
@@ -28,9 +32,16 @@ move count and performs a distinct root search per PV line `[V]`
 ([official `uci.cpp`](https://github.com/official-stockfish/Stockfish/blob/master/src/uci.cpp),
 [official `search.cpp`](https://github.com/official-stockfish/Stockfish/blob/master/src/search.cpp)).
 
-This is a mechanism probe, not a population estimate: three positions, one machine, one Stockfish
-version, and deliberately small candidate sets. It does not revalidate the 250 cp threshold; that
-comes from the committed 279-position R11 experiment (`planning/platform-alignment/bot-policy/results.json`).
+The follow-up population arm restarted the local server to clear its selection cache, obtained the
+real `human_common` Maia vector at every server-discoverable production draft root (50 positions:
+20 opening, 14 middlegame, 14 endgame and 2 cross-phase), and passed the exact 6–20 returned moves
+to one shared Stockfish search `[V]`
+(`tools/d969-stockfish-guard-harness/population.mts`,
+`planning/platform-alignment/bot-policy/d969-population-results.json`). It compared 25k/50k nodes
+and depth 8/10/12 with a fresh hash and one thread. The 250 cp mask comparison uses depth 12 as the
+reference because the committed 279-position R11 result was calculated at depth 12. This is full
+coverage of current pack roots, not a chess-position population estimate, and it does not by itself
+revalidate R11's threshold or retention gates at a shallower depth.
 
 ## Findings
 
@@ -68,11 +79,35 @@ duplicate, `lowerbound`, or `upperbound` row must abstain the whole guard. Choos
 of a node bound would avoid the observed bounds here but introduces an unmeasured latency tail; the
 amendment cannot choose it from three positions.
 
-### 4. Mate is a separate score domain
+The population arm makes that refusal decisive. At 25k nodes only 16/50 positions were all-exact;
+at 50k, only 15/50 were all-exact. Opening exactness was 15–20%, middlegame 7.1–14.3%, cross-phase
+0%, and endgame 71.4–78.6% `[V]`. More nodes did not monotonically improve exact completion.
+Although both calls were fast (p95 34.2 and 63.1 ms), a guard that abstains on 68–70% of current
+pack roots is not the measured `guard_250` whose benefit the RFC cites.
+
+### 4. Fixed depth separates completeness from calibration
+
+Depth 8, 10 and 12 each returned one exact row for all 958 requested candidates across all 50 pack
+roots `[V]`. Their Stockfish-only p95/max latencies were respectively 105/129 ms, 404/431 ms and
+1,170/1,258 ms. With cold Maia included sequentially, depth 8 remained below 500 ms even at the
+maximum (499.1 ms); depth 10 reached 729 ms; depth 12 reached 1,403 ms. Under
+`design/02-product-shape.md`'s two-axis rule, depth 8 and 10 meet the shallow-Stockfish per-call
+line, depth 12 does not, and any multi-call selection still owes its own declared budget.
+
+Completeness is not calibration. Excluding the one real mixed cp/mate position, depth 8 reproduced
+the depth-12 severe-mask set on 42/49 positions and depth 10 on 43/49. Across 938 candidate labels,
+depth 8 disagreed on 10 (5 false-severe, 5 missed-severe); depth 10 disagreed on 7 (3 false-severe,
+4 missed-severe) `[V]`. Those rates are descriptive, not acceptance gates chosen after the result.
+The RFC cannot retain the depth-12 claim “removes all measured severe mass” while executing a
+shallower score definition. It must rerun R11's predeclared guard-retention gates at the literal
+chosen depth.
+
+### 5. Mate is a separate score domain
 
 The forced-mate position returned `mate 1`, `mate 2`, `mate 3`, and `cp 0` across four legal
-candidates in the same shared probe `[V]`. Stockfish formats mate as a distinct score variant and
-does not pass it through its centipawn conversion `[V]`
+candidates in the same shared probe, and one production pack root also produced a mixed cp/mate
+vector at every tested bound `[V]`. Stockfish formats mate as a distinct score variant and does not
+pass it through its centipawn conversion `[V]`
 ([official `UCIEngine::format_score`](https://github.com/official-stockfish/Stockfish/blob/master/src/uci.cpp)).
 
 A `mate → ±large cp` conversion would invent both magnitude and threshold distance. The guard input
@@ -82,7 +117,7 @@ ordering (for example, losing a forced mate is severe while preserving one is no
 loss) or guard abstention whenever the probe mixes domains. This research does not choose between
 them.
 
-### 5. Score perspective can be pinned once at the root
+### 6. Score perspective can be pinned once at the root
 
 All rows in one shared probe use the same root side-to-move frame. The black-to-move disadvantage
 case returned four negative cp values, while the white-to-move initial case returned the familiar
@@ -103,14 +138,18 @@ The D969 amendment can now be concrete without pretending the remaining measurem
 - mate: retain the typed domain and rule it explicitly or abstain;
 - fallback: any provider error, timeout, incomplete/bounded row, or unruled score-domain mix records
   a guard abstention and leaves the base distribution unchanged;
-- remaining falsifier: replay real production-shaped Maia vectors across the fixed R11 population
-  under the candidate bound(s), report exact-completion and latency distributions, and register no
-  guarded profile until the chosen arm clears a predeclared availability budget.
+- budget choice: node bounds are refused by population completeness; depth 12 is refused for the
+  live shallow-call budget; depth 8 and depth 10 remain candidates with their measured latency and
+  depth-12 disagreement recorded rather than hidden;
+- remaining falsifier: rerun R11's predeclared guard retention gates at the literal chosen depth,
+  declare the multi-call selection budget, and register no guarded profile until both pass.
 
 ## Consequence
 
-D969 is narrowed, not closed. `searchmoves` now has an attested product consumer, and the current
-capability disposition “unmeasured — no attested authoring consumer” is stale in both halves:
-the consumer is opponent selection, not authoring, and a working request shape has been measured.
-Changing that capability row belongs in the RFC implementation after the amendment chooses the
-budget and mate rule; doing it in this research commit would advertise an unaccepted contract.
+D969 is narrowed to one explicit remeasurement and two policy choices, not closed. `searchmoves`
+now has an attested product consumer, and the current capability disposition “unmeasured — no
+attested authoring consumer” is stale in both halves: the consumer is opponent selection, not
+authoring, and a working request shape has been measured. The amendment must choose depth 8 or 10,
+rerun the R11 guard gates at that depth, declare the resulting per-selection budget, and rule the
+typed mate transition. Changing the capability row belongs in the RFC implementation after those
+steps; doing it in this research commit would advertise an unaccepted contract.
