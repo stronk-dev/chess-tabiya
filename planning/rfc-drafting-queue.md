@@ -767,7 +767,7 @@ is an unmeasured live surface **on by default in two contexts** with no register
 - **[[D1078]]** — `make work-index`'s join accepts a *proposed* row id as a destination, so it can
   report green over a genuinely unrouted row. Fix queued for codex alongside [[D1038]].
 
-- **[[D1081]]** — an RFC status line is a load-bearing routing surface; an acceptance can de-route a
+- **[[D1083]]** — an RFC status line is a load-bearing routing surface; an acceptance can de-route a
   row whose only mention lives there. Mirror of [[D1079]]; folds into the same instrument fix.
 - **[[D1082]]** — acceptance practice: a cross-reviewer may draft the *status* half of a register
   cell, but **Parent and Claims are written from the RFC body by the acceptor**. Two instances of a

@@ -154,7 +154,7 @@ by `pack-capability-contract`'s *proposed* D1074 mention. This is [[D526]]/[[D53
 instrument sharing the defect's assumption — and the second routing instrument to return a clean
 reading over a real gap ([[D641]] first, [[D952]] measured it).
 
-**A SECOND instance, the exact mirror ([[D1081]])**: accepting `runtime-opening-identity` de-routed
+**A SECOND instance, the exact mirror ([[D1083]])**: accepting `runtime-opening-identity` de-routed
 [[D1052]], whose **only mention in the whole repository** lived inside the status line the
 acceptance replaced. work-index went red immediately — correctly, this time. Together the two show
 the real root cause: **the join accepts any textual mention as a destination and has no notion of
