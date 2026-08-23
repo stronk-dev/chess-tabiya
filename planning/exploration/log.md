@@ -5898,3 +5898,33 @@ plus special-move set-equality fixtures for bounded-search loops that genuinely 
 able-to-fail set covers pins/check, standard castling UCI, legal versus king-exposing en-passant,
 all four promotions, terminal emptiness, adapter forgeries and modality-ceiling equality. Landing
 is inspector-only; Learner Modules owns the explicit requested-sight binding discharge.
+
+## 2026-08-23 — The primitive foundation was re-derived as a chain, not a detector count
+
+The D717 Phase-1 gap matrix was re-run conceptually against current production symbols and the
+compiled manifest. Its old 17-missing-collector list is now mostly historical: Waves A/B and the
+first 12 Wave-C projections supply the familiar rules, tactical, pawn, king, mobility, exchange and
+semantic operands. The live manifest reports 35 producers / 188 projections / 25 core consumers /
+210 bindings plus 67 semantic events and eligibility rows.
+
+The closure audit records where each requested family actually stops. Exact legal mobility,
+runtime opening identity and the multi-source Review packet are drafted; promotion race is two
+registrations short; learner modules are returned on reducer semantics; presets lack exact config
+and clamp rows; bot profiles/persistence wait on amendments and storage; and longitudinal habits
+have no store. This prevents “a projection exists” from being reported as “Support, Review, bots
+and player analysis can use it.”
+
+D558 is corrected rather than left advertising a missing fork/pin/skewer stack that now ships. Its
+one genuinely unowned collector residue is split to D1023: research a named-target non-mate 2–3-ply
+prevention/prophylaxis query under a declared opponent policy, with horizon, counterfactual and
+causal comparison retained. One-reply survival and square-denial measurements show why neither raw
+attack geometry nor low reply breadth can answer it. No RFC is authorized until that fixed
+experiment exits.
+
+The D1023 experiment is now predeclared rather than left as “do deeper search.” It fixes two named
+target families, an opponent-next/answer/opponent-again horizon, and three authorities that may not
+be collapsed: complete legal replies, official Stockfish at depth 8 with depth 10 as the stability
+control, and Maia's four pre-registered human-policy bands with missing-mass bounds. Ten hard
+negatives guard identity loss, refutable force, check/pass misuse, cp/mate coercion, source
+instability and strategic-language leakage. The next artifact is the disposable harness; the plan
+itself grants no production or RFC authority.
