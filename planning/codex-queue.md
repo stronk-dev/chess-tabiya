@@ -213,6 +213,37 @@ exactly** six days on. Implementation notes:
 - Rows [[D1111]]–[[D1114]] landed at acceptance; [[D1112]] and [[D1114]] **close with the binding
   arm**, [[D1113]] closes with this implementation (§6 gives the note a reader).
 
+## 0-WAVE-2. The full next wave is ordered and priced — `planning/codex-wave-2.md` ([[D1251]])
+
+**27 items, ~37–38 working days, 22 with nothing blocking them.** Built from every audit today and
+priced at the **full ask** ([[D1230]]) — where something is cut, the blocker is named and cited.
+Read the file; the order below is its top ten.
+
+1. **W14 — widen `searchBound` to admit `"depth"`.** ⚠ **NOT one line, and claude said it was**
+   ([[D1250]]): 13 sites, including `rest.ts:260-265`'s hard throw, `schemas/drill_run.schema.json:140`'s
+   enum (**a run-schema rev**), two duplicated inline unions at `opponent-selector.ts:356,379`, and
+   **the ternary at `:658` that silently buckets any non-`nodes` bound into the MOVETIME branch** —
+   a depth-8 bound would be handed an 80 ms timeout. **1 day.** Unblocks 8 of 12 bot profiles.
+2. **W15 — populate `candidate.traits`.** Wider than the roster said: the whole
+   `BotPolicyCandidateInput` path is **test-only**, and production builds `SelectionCandidate`,
+   which has no `traits` field. **1.5 days.** Without it every registered trait multiplies by 1.
+3. **W1 — the trait-gate unit check.** `traitDelta: 12.28` currently passes a `≥0.1` *fraction*
+   test, so the gate accepts for the wrong reason. **0.5 day.**
+4. **W16 — register all TWELVE profiles, not four.** The roster is the deliverable; four was the
+   unblocked subset, not the target.
+5. **W24 — `make refusal-index`**, all six clauses ([[D1038]]). **1.5 days.**
+6. **W25 — the archiving gate must read prose obligations** ([[D1201]]). **1 day.**
+7. **W18/W19 — the famous-game and Chess960 refusal truth-repairs.** ~2 h each; both refusals are
+   still in the code after the owner lifted them.
+8. **W2 — the unqualified requested-Elo at `DrillScreen.svelte:1135`.** 2 h.
+9. **W3 — `void_reason`'s two dead writers.** 1–2 days.
+10. **W8 — campaign's HTTP surface**, 7 numbered parts. **4–6 days.**
+
+**Already done since the audits, do not redo** ([[D1252]]): four client verbs landed, so the
+"8 uncallable routes" headline is now **4** and "25 unreachable mechanisms" is **21**; [[D1085]] is
+closed (its residual is [[D1213]], carried as W26); the work-index durability fix is confirmed on a
+live case.
+
 ## 0-LIVE-SAFETY. ⚠ [[D1210]] — a bot can play into a live game today, with no new code
 
 Two shipped defects compose into a law-8 violation. **Take this before any Phase B work.**
