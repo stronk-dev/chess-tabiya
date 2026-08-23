@@ -1177,3 +1177,8 @@ pack field.
 Drafting order is that list, top-down. Two are teardowns with unlanded recommendations
 ([[D1330]] ranks 9–10), which is the owner's point proved: a teardown can be debt.
 [[D1332]]'s two unconsumed measurements need **reading, not building** — a smaller repair.
+
+- **[[D1331]]** — three corrections to claude's claims (2 unconsumed measurements not 3; the
+  teardown-became-a-lane example was the wrong file; "the coverage matrix is stale by eleven RFCs"
+  is a category error — the stale artifact is `research-to-execution.md`, wrong by 21). Routed here
+  as audit-quality repair alongside [[D1320]]'s practice.
