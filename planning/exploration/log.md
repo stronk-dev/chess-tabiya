@@ -7040,3 +7040,27 @@ has already moved to 189, so it cannot be truthfully pinned until that pass free
 **Next:** add one Node/pnpm-pinned clean-extraction local CI command that runs both workflow
 bodies and records the commit id. After the collector pass lands, reconcile the capability
 snapshot once and run that command on the resulting commit before any push.
+
+## 2026-08-24 — D1405 refuses synchronous whole-run longitudinal projection
+
+**What landed:** the clean-extraction 20/40/80-ply and 25-complete-game arms, canonical aggregate,
+research dossier and coverage/ledger routing. Every receipt names commit `0d4e27f`, the same PGN
+digest and the same compiler/source digest; the aggregator refuses mixed receipts.
+
+**What changed:** native p95 is 11.44/23.43/42.56 seconds against 500 ms — 23×/47×/85× over.
+Exact all-mutation replay work grows 50,385→816,142 evaluated edges. The 25-game rebuild takes
+738.8 seconds (0.0338 games/s) before database work. Whole-run replay after a move is refused;
+incremental new-decision append remains a candidate but needs its own latency distribution, while
+complete rebuild/import projection moves to bounded background work.
+
+**Boundary:** this is a lower bound. The committed one-edge compiler cannot produce the 21
+complete-population/recorded-path families in review blocker B2, and the run excludes database
+transactions and concurrency. The repaired constructor registry must repeat the arms.
+
+**Correction:** the CI process row referenced as D1435 in the immediately preceding append-only
+entry collided with the preset amendment while both writers were active. Its permanent ledger id
+is **D1444**; the earlier log bytes are retained rather than edited.
+
+**Next:** Claude can now amend the longitudinal-store write schedule and keep the RFC returned for
+its other six blockers. Codex returns to D1444's clean-SHA CI parity gate after the manifest pass
+freezes its capability count.
