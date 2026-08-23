@@ -9,6 +9,7 @@ import {
   checkC5,
   checkC6,
   checkC7,
+  checkC8,
   locateClaimBlocks,
   parseActiveRfcRows,
 } from "./register-check.mjs";
@@ -46,6 +47,7 @@ const registers = () => Object.entries(tree).map(([resource, value]) => ({
   head: String(resource === "evidence-kinds" ? value.members.length : value.head),
   body: "",
   headCount: 1,
+  digest: resource === "pack-schema" ? "aaaaaaaaaaaa" : resource === "campaign-schema" ? "bbbbbbbbbbbb" : null,
   landed: resource === "evidence-kinds"
     ? value.members.map((member) => ({ key: member, text: `${member} | seed | pre-register` }))
     : [{ key: String(value.head), text: `${value.head} | seed | landed` }],
@@ -154,11 +156,11 @@ test("C6 fails a hand-written next-free value", () => {
 });
 
 const schemaFiles = () => [
-  { filename: "drill_pack.schema.json", id: "urn:chess-tabiya:schema:drill-pack:0.27", slug: "drill-pack", version: "0.27" },
+  { filename: "drill_pack.schema.json", id: "urn:chess-tabiya:schema:drill-pack:0.27", slug: "drill-pack", version: "0.27", digest: "aaaaaaaaaaaa" },
   { filename: "drill_run.schema.json", id: "urn:chess-tabiya:schema:drill-run:0.17", slug: "drill-run", version: "0.17" },
   { filename: "shape_entry.schema.json", id: "urn:chess-tabiya:schema:shape-entry:0.3", slug: "shape-entry", version: "0.3" },
   { filename: "principle_entry.schema.json", id: "urn:chess-tabiya:schema:principle-entry:0.1", slug: "principle-entry", version: "0.1" },
-  { filename: "campaign.schema.json", id: "urn:chess-tabiya:schema:campaign:1", slug: "campaign", version: "1" },
+  { filename: "campaign.schema.json", id: "urn:chess-tabiya:schema:campaign:1", slug: "campaign", version: "1", digest: "bbbbbbbbbbbb" },
 ];
 
 test("C7 accepts the schemas on disk today", () => {
@@ -191,4 +193,28 @@ test("C2 refuses a lane versioned to a different depth than its head", () => {
 
 test("C2 accepts a bare major lane on a bare major head", () => {
   assert.deepEqual(checkC2([claim({ resource: "campaign-schema", claim: "lane 2" })], tree), []);
+});
+
+test("C8 passes when register digests match the schemas on disk", () => {
+  const files = schemaFiles().filter((file) => ["drill-pack", "campaign"].includes(file.slug));
+  assert.deepEqual(checkC8(files, registers(), []), []);
+});
+
+test("C8 refuses an undeclared schema edit", () => {
+  const files = [{ ...schemaFiles().find((file) => file.slug === "campaign"), digest: "cccccccccccc" }];
+  assert.deepEqual(checkC8(files, registers(), []), [
+    "C8 campaign-schema: campaign.schema.json changed since the register was reconciled (register bbbbbbbbbbbb, disk cccccccccccc) and no live claim declares it",
+  ]);
+});
+
+test("C8 allows an edit that a live claim declares", () => {
+  const files = [{ ...schemaFiles().find((file) => file.slug === "campaign"), digest: "cccccccccccc" }];
+  assert.deepEqual(checkC8(files, registers(), [claim({ resource: "campaign-schema", claim: "lane 2" })]), []);
+});
+
+test("C8 refuses a register that records no digest", () => {
+  const files = [schemaFiles().find((file) => file.slug === "drill-run")];
+  assert.deepEqual(checkC8(files, registers(), []), [
+    "C8 run-schema: register records no schema digest for drill_run.schema.json",
+  ]);
 });

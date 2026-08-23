@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 
+import crypto from "node:crypto";
 import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
@@ -33,9 +34,11 @@ export function readSchemaFiles(root) {
     .filter((name) => name.endsWith(".schema.json"))
     .sort()
     .map((filename) => {
-      const parsed = JSON.parse(fs.readFileSync(path.join(dir, filename), "utf8"));
+      const bytes = fs.readFileSync(path.join(dir, filename));
+      const parsed = JSON.parse(bytes.toString("utf8"));
       const id = typeof parsed.$id === "string" ? parsed.$id.match(ID_PATTERN) : null;
-      return { filename, id: parsed.$id, slug: id?.[1] ?? null, version: id?.[2] ?? null };
+      const digest = crypto.createHash("sha256").update(bytes).digest("hex").slice(0, 12);
+      return { filename, id: parsed.$id, slug: id?.[1] ?? null, version: id?.[2] ?? null, digest };
     });
 }
 
@@ -52,6 +55,31 @@ export function checkC7(files) {
   }
   for (const [slug, [resource]] of Object.entries(SCHEMA_SLUGS)) {
     if (!files.some((file) => file.slug === slug)) errors.push(`C7 ${resource}: no schema on disk carries slug ${slug}`);
+  }
+  return errors;
+}
+
+// C8 — a schema cannot be edited without saying so on the register. The register records the
+// bytes it was last reconciled against; an edit that matches no live claim is an undeclared
+// change, which is the under-declaration the campaign register was opened for. A resource with a
+// live claim is mid-flight and its digest is expected to differ until the lane lands.
+export function checkC8(files, registers, claims) {
+  const errors = [];
+  const byResource = new Map(registers.map((register) => [register.resource, register]));
+  const claimed = new Set(claims.map((claim) => claim.resource));
+  for (const file of files) {
+    const mapping = file.slug ? SCHEMA_SLUGS[file.slug] : null;
+    if (!mapping) continue;
+    const [resource] = mapping;
+    const register = byResource.get(resource);
+    if (!register) continue;
+    if (register.digest === null) {
+      errors.push(`C8 ${resource}: register records no schema digest for ${file.filename}`);
+      continue;
+    }
+    if (register.digest === file.digest) continue;
+    if (claimed.has(resource)) continue;
+    errors.push(`C8 ${resource}: ${file.filename} changed since the register was reconciled (register ${register.digest}, disk ${file.digest}) and no live claim declares it`);
   }
   return errors;
 }
@@ -274,6 +302,8 @@ function parseRegisterSections(markdown) {
     const headMatches = [...body.matchAll(/<!-- register: ([a-z-]+) (?:head|members)=([^ ]+) -->/g)];
     if (headMatches.length === 0) continue;
     const [, resource, head] = headMatches[0];
+    const digestMatch = body.match(/<!-- schema-digest: ([a-z-]+) ([0-9a-f]{12}) -->/);
+    const digest = digestMatch && digestMatch[1] === resource ? digestMatch[2] : null;
     const subsection = (heading) => {
       const marker = `### ${heading}`;
       const markerIndex = body.indexOf(marker);
@@ -291,7 +321,7 @@ function parseRegisterSections(markdown) {
     const claims = claimsText.split("\n").filter(isTableData).map(rowCells)
       .filter((cells) => cells[0] !== "claim")
       .map((cells) => ({ claim: cells[0], rfc: cleanRfc(cells[1]), changes: cells[2], resource }));
-    registers.push({ resource, head, body, landed, claims, headCount: headMatches.length });
+    registers.push({ resource, head, body, landed, claims, digest, headCount: headMatches.length });
   }
   return registers;
 }
@@ -342,6 +372,7 @@ export function auditRepository(root) {
     ...checkC5(c1.claims),
     ...checkC6(tree, registers),
     ...checkC7(files),
+    ...checkC8(files, registers, c1.claims),
   ];
   return { active, claims: c1.claims, tree, registers, errors };
 }
@@ -379,7 +410,7 @@ if (invoked) {
     if (result.errors.length) {
       for (const error of result.errors) console.error(error);
       process.exitCode = 1;
-    } else console.log(`register-check: ${result.active.length} active RFCs, ${result.claims.length} live claims, C1-C7 green`);
+    } else console.log(`register-check: ${result.active.length} active RFCs, ${result.claims.length} live claims, C1-C8 green`);
   } catch (error) {
     console.error(`register-check: ${error.message}`);
     process.exitCode = 1;
