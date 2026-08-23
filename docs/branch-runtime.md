@@ -415,7 +415,16 @@ start there, not in the runtime:
 | 200 | 2.408 / 2.862 / 3.062 | 2.820 / 3.594 / 4.619 | 2.481 / 3.224 / 3.530 |
 | 1000 | 6.303 / 8.024 / 9.494 | 15.705 / 17.017 / 17.051 | 6.643 / 7.947 / 8.384 |
 
-The supported experimental envelope is **at most 1000 events per drill run**.
+The same checked-in instrument was extended on 2026-08-23 to the branch-set
+envelope using Node 26.7.0 on macOS 26.5 arm64. It again used three warm-ups and
+twenty samples per exact size; only the two newly characterized rows are shown:
+
+| Events | Cold replay + graph transport | Rewind (budget <100 ms) | Implicit fork+commit (budget: worry 100 ms / intervene 200 ms) |
+|---:|---:|---:|---:|
+| 2000 | 1.706 / 4.221 / 6.039 | 2.029 / 2.783 / 3.742 | 2.072 / 3.039 / 4.920 |
+| 3000 | 2.400 / 3.984 / 10.101 | 2.702 / 4.027 / 4.101 | 3.155 / 6.484 / 11.463 |
+
+The supported experimental envelope is **at most 3000 events per drill run**.
 That is a documented assumption, not an enforced limit. The benchmark proves the
 interaction budgets only for this environment and envelope; it is not a browser,
 wide-area-network, durable-disk, or marathon-session guarantee.
@@ -431,8 +440,8 @@ wide-area-network, durable-disk, or marathon-session guarantee.
 - The process-local snapshot cache never evicts entries. This is acceptable for
   the current single-user experiment, not an unbounded hosted service.
 - Runtime mutations still perform whole-log projection work. Incremental reducers
-  plus periodic durable snapshots must be evaluated before lifting the 1000-event
-  assumption; 3000+ event sessions have not been accepted or characterized.
+  plus periodic durable snapshots must be evaluated before lifting the 3000-event
+  assumption; sessions above 3000 events have not been accepted or characterized.
 - The runtime exposes only the job-observer and asynchronous-evidence interfaces;
   it contains no Stockfish, Maia, worker scheduling, feedback composition, or
   automatic evidence upgrade implementation.

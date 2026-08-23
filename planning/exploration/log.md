@@ -6689,3 +6689,23 @@ substitution both fail with named sourcing errors.
 **Next:** W20's “15 literal issue codes” premise is stale: the issue channel now includes dynamic
 `PACK_${code}` values and cannot truthfully close by aliasing the existing thrown-error union. Re-scope
 that vocabulary before implementation rather than manufacturing a green but incomplete type.
+
+## 2026-08-23 — The branch runtime envelope reached 3,000 events
+
+**What landed:** the original server-bound latency instrument now keeps 2,000- and 3,000-event
+snapshots in its measured population and asserts the standing p95 interaction bands. The canonical
+runtime documentation records both new rows and lifts the experimental envelope from 1,000 to 3,000
+events; sessions above that remain explicitly uncharacterized.
+
+**What changed:** the accepted 99-branch × 20-ply shape no longer exceeds its runtime's own stated
+envelope. At 3,000 events, p95 cold replay plus graph transport was 3.984 ms, rewind 4.027 ms, and
+implicit fork+commit 6.484 ms on Node 26.7.0/macOS 26.5 arm64. The feared limit did not appear in
+runtime mutation or transport on this local instrument.
+
+**Verification:** the focused latency test passes 1/1 after 3 warm-ups and 20 measured samples for
+each operation at each of 200, 1,000, 2,000 and 3,000 events. The test now fails if rewind crosses
+100 ms p95 or implicit fork+commit crosses 200 ms p95.
+
+**Next:** this does not measure the learner's browser or wide-area transport. If large branch sets
+feel slow, measure the rail and browser composition separately rather than attributing the delay to
+the runtime fold.

@@ -195,13 +195,13 @@ describe("server-bound branch-runtime latency", () => {
     "measures cold projection, rewind, and implicit fork+commit through SQLite and HTTP",
     { timeout: 120_000 },
     async () => {
-      const report = [await measure(200), await measure(1_000)];
+      const report = [await measure(200), await measure(1_000), await measure(2_000), await measure(3_000)];
       console.info(`BRANCH_SERVER_LATENCY ${JSON.stringify(report)}`);
 
       for (const result of report) {
         expect(result.coldProjection.medianMs).toBeGreaterThanOrEqual(0);
-        expect(result.rewind.medianMs).toBeGreaterThanOrEqual(0);
-        expect(result.implicitForkCommit.medianMs).toBeGreaterThanOrEqual(0);
+        expect(result.rewind.p95Ms).toBeLessThan(100);
+        expect(result.implicitForkCommit.p95Ms).toBeLessThan(200);
       }
     },
   );
