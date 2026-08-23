@@ -290,9 +290,9 @@ describe("Layer 3 screens", () => {
     const run = revealFeedback(initial, at).run;
     const onHumanSplit = vi.fn(async () => ({
       nodeId: run.activeCursor.nodeId,
-      engine: { id: "maia", name: "Maia", version: "3", seedHonored: false },
+      engine: { id: "maia", name: "Maia", version: "3", seedHonored: false, eloHonored: false },
       targetElo: 1500,
-      candidates: [{ moveUci: "e8e7", mass: .4, rank: 1 }],
+      candidates: [{ moveUci: "e1e2", mass: .4, rank: 1 }],
     }));
     const assistanceStorage = {
       getItem: () => JSON.stringify({ version: 4, markers: "off", guided: "off", humanSplit: "on_request", corpus: "off", voice: "authored", spoken: "off", boardLighting: "off", arrows: "off", ambient: "off" }),
@@ -313,7 +313,12 @@ describe("Layer 3 screens", () => {
     request!.click();
     expect(onHumanSplit).toHaveBeenCalledWith(run.activeCursor.nodeId);
     document.querySelector<HTMLButtonElement>(".inspector-entry")!.click();
-    await vi.waitFor(() => expect(document.querySelector("[aria-label='Human-model evidence']")?.textContent).toContain("e8e7 40%"));
+    await vi.waitFor(() => {
+      const evidence = document.querySelector("[aria-label='Human-model evidence']")?.textContent;
+      expect(evidence).toContain("Target Elo 1500 was requested but is not recorded as applied");
+      expect(evidence).toContain("Ke2 40%");
+      expect(evidence).not.toContain("e1e2");
+    });
     await unmount(component);
   });
 

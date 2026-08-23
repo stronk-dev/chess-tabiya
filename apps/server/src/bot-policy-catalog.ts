@@ -23,7 +23,8 @@ export interface BotMeasurement {
   readonly dossier: string;
   readonly population: string;
   readonly metric: string;
-  readonly traitDelta: number;
+  /** Absolute change as a fraction in [0, 1], never percentage points. */
+  readonly traitDeltaFraction: number;
   readonly expectedLossShiftCp: number;
   readonly severeMassRise: number;
   readonly explorerMatchRetention: number;
@@ -222,7 +223,9 @@ function assertLayer(layer: BotLayerDeclaration): void {
       fail(`${layer.id} has no cited passing measurement`);
     }
     if (
-      measured.traitDelta < 0.1
+      !Number.isFinite(measured.traitDeltaFraction)
+      || measured.traitDeltaFraction < 0.1
+      || measured.traitDeltaFraction > 1
       || Math.abs(measured.expectedLossShiftCp) > 35
       || measured.severeMassRise > 0.01
       || measured.explorerMatchRetention < 0.9

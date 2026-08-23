@@ -11,6 +11,8 @@ The compiler currently enforces these boundaries:
 - no learner history, rating, style, or habit input in opponent policy;
 - no artificial delay, active memory instance, undisclosed engine guard, or unmeasured
   controlled trait;
+- controlled-trait deltas are typed and checked as fractions in `[0, 1]`; percentage-point
+  values such as `12.28` are rejected instead of accidentally clearing a `0.1` fraction gate;
 - complete-vector transforms must declare the recorded base-model degraded path;
 - sampler temperature is greater than zero and top-p is in `(0, 1]`;
 - every executable model/sampler/guard/repertoire/trait field equals the literal in the

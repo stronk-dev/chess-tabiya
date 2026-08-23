@@ -6649,3 +6649,22 @@ provider gating, exact occurrence selection, the honesty sentence, and the retur
 **Next:** do not expose simulation until the returned N-way payload can resolve scratch nodes and
 replays checkpoint/objective state. Continue independent accepted work while that author round and
 the collector work proceed.
+
+## 2026-08-23 — Bot trait units and human-model presentation stopped overstating evidence
+
+**What landed:** the bot-policy compiler now names controlled-trait change as a fraction and rejects
+non-finite, sub-gate, and above-one values. The human-model inspector separately renders candidate
+moves as SAN and distinguishes a requested Elo from a band the recorded engine actually applied.
+
+**What changed:** D1181's unit-check subdefect is closed without pretending its depth-bound or
+candidate-trait population blockers are solved. D1264 closes the learner-facing trust leak: a
+request no longer reads as engine capability, and UCI transport tokens no longer stand in for chess
+notation. No bot profile, personality claim, or rating claim was added.
+
+**Verification:** the focused bot-policy, outcome-presentation and screen suites pass 43/43; server
+TypeScript and the Svelte/TypeScript check are clean. Negative fixtures reject `12.28`, keep `0.0312`
+below the gate, accept `0.1228`, and show a requested-but-unapplied 1500 band beside `Ke2` rather
+than `e1e2`.
+
+**Next:** resume the preregistered D1162 evidence-to-move screen after the concurrently amended
+threat producer and adapter agree on one payload contract. The stopped run produced no model result.

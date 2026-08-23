@@ -5,6 +5,7 @@ import {
   type ObjectiveState,
   type SelectionEngineIdentity,
 } from "@chess-tabiya/runtime";
+import type { HumanSplitPage } from "./api.js";
 
 type ProjectedAssessment =
   | { readonly kind: "authored"; readonly note: string }
@@ -90,6 +91,18 @@ function engineIdentityKey(identity: SelectionEngineIdentity): string {
     identity.containerDigest ?? null,
     identity.seedHonored,
   ]);
+}
+
+export function humanModelBandSentence(page: Pick<HumanSplitPage, "engine" | "targetElo">): string {
+  const { engine, targetElo } = page;
+  if (targetElo !== null) {
+    return engine.eloHonored === true && engine.eloApplied === targetElo
+      ? `${engine.name} recorded the requested Elo ${targetElo} band as applied.`
+      : `${engine.name}: Target Elo ${targetElo} was requested but is not recorded as applied.`;
+  }
+  return engine.eloApplied === undefined
+    ? `${engine.name}: no rating band was requested or recorded.`
+    : `${engine.name}: no rating band was requested; the engine recorded Elo ${engine.eloApplied} as applied.`;
 }
 
 export function resistanceSentences(run: DrillRun, nodeId: string, pack?: DrillPackDefinition): readonly string[] {

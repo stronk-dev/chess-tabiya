@@ -38,6 +38,7 @@
   import {
     assessmentSentence,
     checkpointResolutionSentence,
+    humanModelBandSentence,
     objectiveGradeSentence,
     projectedGrading,
     resistanceSentences,
@@ -408,6 +409,19 @@
     const decision = displayedNode.actor === "user" ? displayedNode : [...path].reverse().find((node) => node.actor === "user");
     const queryNode = decision?.parentId ?? displayedNode.id;
     corpusPage = corpusEvidence(await onCorpus(queryNode));
+  }
+
+  function humanCandidateSentence(page: HumanSplitPage, candidate: HumanSplitPage["candidates"][number]): string {
+    const fen = run.nodes.find((node) => node.id === page.nodeId)?.fen;
+    const move = fen === undefined ? undefined : moveSanFromUci(fen, candidate.moveUci);
+    const mass = candidate.mass === undefined ? "frequency unavailable" : `${Math.round(candidate.mass * 100)}%`;
+    return `${move ?? "Move notation unavailable"} ${mass}`;
+  }
+
+  function humanCandidateSentences(page: HumanSplitPage): readonly string[] {
+    return page.candidates
+      .filter((candidate) => candidate.offWindow !== true)
+      .map((candidate) => humanCandidateSentence(page, candidate));
   }
 
   async function requestVoice(scope: VoicePage["scope"]): Promise<void> {
@@ -1132,7 +1146,10 @@
         <section aria-label="Human-model evidence" data-evidence-consumer="inspector.human_split">
           <h3>Human move model</h3>
           {#if assistancePermission.humanSplit === "free" && onHumanSplit !== undefined}<button type="button" onclick={() => void requestHumanSplit()}>Load model candidates</button>{/if}
-          {#if humanSplit}<p class="guidance-sentence">{humanSplit.engine.name}, rating target {humanSplit.targetElo ?? "unrated"}: {humanSplit.candidates.filter((candidate) => candidate.offWindow !== true).map((candidate) => `${candidate.moveUci} ${candidate.mass === undefined ? "mass unavailable" : `${Math.round(candidate.mass * 100)}%`}`).join(" · ")}</p>{:else}<p class="honest">No human-model page loaded.</p>{/if}
+          {#if humanSplit}
+            <p class="honest">{humanModelBandSentence(humanSplit)}</p>
+            <p class="guidance-sentence">{humanCandidateSentences(humanSplit).join(" · ")}</p>
+          {:else}<p class="honest">No human-model page loaded.</p>{/if}
         </section>
         <section aria-label="Corpus evidence" data-evidence-consumer="inspector.corpus">
           <h3>Human corpus</h3>

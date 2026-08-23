@@ -121,9 +121,24 @@ describe("compiled bot-policy catalog", () => {
       id: "trait.forcing@1", kind: "controlled_trait", inputs: [], effect: "weight", parameters: { multiplier: 3 },
       parameterCitation: "design/research/bot-policy.md", fallback: "identity", abstentions: [], changesStrength: true,
       classifier: "forcing", multiplier: 3,
-      measurement: { dossier: "design/research/bot-policy.md", population: "R11", metric: "forcing_rate", traitDelta: 0.0302, expectedLossShiftCp: 0, severeMassRise: 0, explorerMatchRetention: 1 },
+      measurement: { dossier: "design/research/bot-policy.md", population: "R11", metric: "forcing_rate", traitDeltaFraction: 0.0312, expectedLossShiftCp: 0, severeMassRise: 0, explorerMatchRetention: 1 },
     };
     expect(() => compileBotProfile(profile([base, sampler, trait, presentation]))).toThrow(/controlled-trait gate/u);
+
+    const wrongUnit = {
+      ...trait,
+      id: "trait.wrong_unit@1",
+      measurement: { ...trait.measurement!, traitDeltaFraction: 12.28 },
+    } satisfies BotLayerDeclaration;
+    expect(() => compileBotProfile(profile([base, sampler, wrongUnit, presentation]))).toThrow(/controlled-trait gate/u);
+
+    const passing = {
+      ...trait,
+      id: "trait.pawn_preference@1",
+      classifier: "pawn_move",
+      measurement: { ...trait.measurement!, traitDeltaFraction: 0.1228 },
+    } satisfies BotLayerDeclaration;
+    expect(compileBotProfile(profile([base, sampler, passing, presentation])).controlledTraits).toEqual(["pawn_move"]);
   });
 
   it("ships no guessed roster while D970 is unresolved", () => {
@@ -181,7 +196,7 @@ describe("compiled bot-policy catalog", () => {
       id: "trait.pawn_preference@1", kind: "controlled_trait", inputs: [], effect: "weight",
       parameters: { multiplier: 4 }, parameterCitation: "design/research/bot-policy.md", fallback: "identity",
       abstentions: [], changesStrength: true, classifier: "pawn_move", multiplier: 4,
-      measurement: { dossier: "design/research/bot-policy.md", population: "R11", metric: "pawn_move_rate", traitDelta: 0.1197, expectedLossShiftCp: -1.01, severeMassRise: 0, explorerMatchRetention: 0.988 },
+      measurement: { dossier: "design/research/bot-policy.md", population: "R11", metric: "pawn_move_rate", traitDeltaFraction: 0.1197, expectedLossShiftCp: -1.01, severeMassRise: 0, explorerMatchRetention: 0.988 },
     };
     const composedProfile = compileBotProfile(profile([base, { ...sampler, topP: 1, parameters: { ...sampler.parameters, topP: 1 } }, guard, trait, presentation]));
     const candidates = [
