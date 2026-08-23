@@ -784,7 +784,7 @@ accepted-or-implementing RFC, 5 have research or an owner ruling only, and **6 a
 row**. Full walk and per-surface table: `planning/platform-alignment/breadth-reality-check.md`.
 Six corrections are owed to intent docs (law 5 — proposed there, not written).
 
-## The research-to-execution join 2026-08-23 — [[D1094]] / [[D1091]]–[[D1093]]
+## The research-to-execution join 2026-08-23 — [[D1095]] / [[D1091]]–[[D1093]]
 
 **31 dossiers concluded "worth building" and have no RFC.** 49 of 110 are cited by no RFC at all.
 Full join: `planning/platform-alignment/research-to-execution.md`.
