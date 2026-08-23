@@ -642,7 +642,7 @@ ask**. The audit owes an instrument proposal alongside the list.
 
 ### Variant lane findings 2026-08-23 (`planning/variants/rfc-derivation.md`)
 
-- **[[D1032]]** — Chess960's measured cost: chessops is 960-native by data model, so five small
+- **[[D1039]]** — Chess960's measured cost: chessops is 960-native by data model, so five small
   edits plus ~20 lines (or zero with pasted FENs). Destination: the variant RFC, drafting gated.
 - **[[D1033]]** — import refuses valid 960 PGN on the header, and a header without a FEN silently
   yields the standard position. One allow-list entry plus a refusal for the FEN-less case; covers

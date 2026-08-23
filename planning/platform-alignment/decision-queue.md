@@ -90,3 +90,31 @@ absent from this file — the file that exists to hold them. Added now, with the
   decision: the encounter-class arm is `campaign-core` Discharge D2's (shapes 3–4); the
   **standalone-mode arm has no lane** — routed today to the variant-family research/RFC seam the
   D870 row owns. No further ruling needed.
+
+---
+
+## The refusal audit 2026-08-23 — [[D1036]]/[[D1037]]/[[D1038]]
+
+The owner asked *"what ELSE has been 'refused' even though i asked for it explicitly this is like
+the 10th time we find out after the fact major compoments are being deferred for no reason."* The
+full join is `planning/platform-alignment/refused-vs-asked.md`: **19 of 80 explicit owner asks are
+refused or have no execution path.**
+
+**This file is part of the defect.** 26 of the 32 open rows naming an owner decision as their
+blocker are missing from it, which is why [[D1038]] specifies deriving it rather than maintaining
+it by hand. Until that instrument lands, the six unruled refusals are listed here so they are at
+least visible where owner decisions belong:
+
+- **[[D327]] variants / Fischer Random** — refused at `capabilities.ts:133` on a product opinion,
+  startup-enforced; laundered into research doctrine as C14 and later cited as settled. Owner
+  reopened it 2026-08-23 ([[D1031]]); the refusal itself still stands in code.
+- **[[D329]] famous-game packs** — masters DB refused at `capabilities.ts:159` on *"licence
+  questions remain unresolved"*; the NEEDS-OWNER question was written 2026-08-16 and never reached
+  this file.
+- **[[D330]]/[[D355]]/[[D357]]/[[D364]] time controls** — refused across three documents;
+  D364's three-way fork is marked *"owner ruling requested 2026-08-16"* and sits in no queue.
+  `clockState` is a zero-reader passthrough reserved for *"a later RFC"* nobody was asked to
+  authorize.
+
+**[[D334]] deserves separate emphasis: an RFC currently in `implementing` is blocked on this owner
+fork** (`campaign-core.md:490`) and the fork is in no queue.
