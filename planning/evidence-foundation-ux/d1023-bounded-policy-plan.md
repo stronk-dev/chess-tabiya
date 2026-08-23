@@ -1,9 +1,12 @@
 # D1023 bounded-policy prevention research — predeclared plan
 
-**Opened:** 2026-08-23  
-**Authority:** D1023 under RFC-0000's disposable exploration gate  
-**State:** predeclared; no production projection, learner wording, profile weight or RFC is
-authorized by this plan
+**Opened:** 2026-08-23
+
+**Authority:** D1023 under RFC-0000's disposable exploration gate
+
+**State:** exact target-identity core and immediate two-population census implemented 2026-08-23
+(9 focused controls); full-horizon census and Stockfish/Maia policy arms remain. No production
+projection, learner wording, profile weight or RFC is authorized by this plan
 
 ## Question
 

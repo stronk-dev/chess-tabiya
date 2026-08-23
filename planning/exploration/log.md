@@ -5928,3 +5928,26 @@ control, and Maia's four pre-registered human-policy bands with missing-mass bou
 negatives guard identity loss, refutable force, check/pass misuse, cp/mate coercion, source
 instability and strategic-language leakage. The next artifact is the disposable harness; the plan
 itself grants no production or RFC authority.
+
+The rules-only D1023 core now runs. Nine focused controls pin immediate preservation/removal,
+target movement across the candidate and reply, existential reintroduction versus the stronger
+preparation-that-survives-every-defence quantifier, captured-attacker removal, check/pass abstention
+and the bounded fact vocabulary. The first failure was useful: the canonical witness was
+`...Ra1, Qc1, ...Rxc1`, not the hand-guessed `...Rb8, ...Rxb1`; the test now asserts the actual
+identity-retaining line rather than a preferred story. Focused Vitest and runtime typecheck are
+green.
+
+The immediate two-population census is now executable and committed as aggregate output. Authored
+spines contain 147 named target identities across 116/754 decisions; played moves remove 120/147
+(81.63%) against 969/4,870 legal alternatives (19.90%), 4.10× lift. The sealed imported sample
+contains 255 identities across 183/579 positions; played removal is 188/255 (73.73%) against
+2,309/8,927 alternatives (25.87%), 2.85×. Decomposition matters: captures of the attacker and
+movement of the target account for most removals, while exchange neutralization and capture becoming
+illegal are the narrower operands useful to downstream explanation. These are immediate threat-
+neutralization facts, not inferred prophylaxis.
+
+The census first produced one imported identity loss: `e8h8` castling moved a tracked rook from h8
+to f8 as a side effect, while the instrument followed only the king's move fields. The harness now
+uses chessops' castling authority to advance both king and rook identities and pins that exact
+Lichess witness. Re-run identity loss is zero in both populations and focused Vitest is 9/9. The
+full-horizon census and Stockfish/Maia arms remain; no projection has been declared early.
