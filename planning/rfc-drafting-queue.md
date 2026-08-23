@@ -1073,3 +1073,17 @@ on 2026-08-17, voiding `measurement-records` OQ1's rationale.
 - **[[D1285]]** (codex) — `rules.tactic.consequence.threat@1`'s abstention violates its own manifest
   operands. Routed to the tactical-collectors implementation lane; codex's own collector work owns
   it and the fix rides their implementing commit.
+
+## Owner rulings 2026-08-23 (fourth batch) — [[D1290]]–[[D1293]]
+
+- **[[D1290]]** — the clock/hint collision is a **ceiling term per context**, not a global clamp.
+  Closes `rfc/enforced-clocks.md`'s acceptance-blocking open question 1.
+- **[[D1291]]** — casting votes run at an **owner-configurable delay** behind the tip; discharges
+  `rfc/casting.md` D3, with the fail-closed live refusal as the default.
+- **[[D1292]]** — **rate all timed games**, control on the label. **The conflict is recorded, not
+  buried**: a rung calibrated at no control is an uncalibrated anchor across ~230 Elo of drift, so
+  the label must carry the control **and the anchor's calibration state**. `learner-rating`
+  amendment owed. If the owner intended rating without that disclosure, they veto this reading.
+- **[[D1293]]** — **Fairy-Stockfish as a variant sidecar**, giving all seven Tier-2 rulesets a real
+  opponent, disclosed as engine strength. `rfc/variants.md` §7 amendment owed; evidence stays dark
+  in Tier 2 regardless.
