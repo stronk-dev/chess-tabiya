@@ -148,6 +148,11 @@ describe("portable account-data foundation", () => {
     expect(exported).toContain('"granted_handles":["owner"]');
     expect(exported).not.toContain("private-partner-id");
     expect(exported).not.toContain("never-export-token-hash");
+    const deletion = storage.deletionPreview("private-owner-id", { kind: "account" }, at);
+    for (const effect of [...deletion.hardDelete, ...deletion.tombstone, ...deletion.revoke, ...deletion.retainedPublished]) {
+      expect(effect.objectIds, effect.label).toHaveLength(effect.count);
+    }
+    expect(deletion.revoke.flatMap((effect) => effect.objectIds)).toContain("story-token");
     storage.close();
   });
 

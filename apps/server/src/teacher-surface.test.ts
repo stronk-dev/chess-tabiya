@@ -7,6 +7,7 @@ import { describe, expect, it } from "vitest";
 import { SQLiteRunStorage } from "./storage.js";
 import { RunService } from "./service.js";
 import { ClassroomService } from "./classroom.js";
+import { LiveSessionService } from "./live-session.js";
 import { IdentityService } from "./identity.js";
 import type { PackRegistry } from "./pack-registry.js";
 import { createRestHandler } from "./rest.js";
@@ -188,7 +189,23 @@ describe("teacher-surface consent storage", () => {
     expect(storage.classroom("account-class")?.archivedAt).toBe(AT);
     const archivedService = new ClassroomService(storage, { get: () => undefined } as unknown as PackRegistry, () => AT);
     expect(archivedService.detail("account-class", { learnerId: coTeacher.id, handle: coTeacher.handle }).classroom.archivedAt).toBe(AT);
-    expect(() => archivedService.invite("account-class", { learnerId: coTeacher.id, handle: coTeacher.handle }, learner.handle, "learner")).toThrow(/unavailable/u);
+    const archivedPrincipal = { learnerId: coTeacher.id, handle: coTeacher.handle } as const;
+    const archivedMutations = [
+      () => archivedService.invite("account-class", archivedPrincipal, learner.handle, "learner"),
+      () => archivedService.respond("account-class", archivedPrincipal, "leave"),
+      () => archivedService.remove("account-class", archivedPrincipal, learner.handle),
+      () => archivedService.assign("account-class", archivedPrincipal, { packId: "pack-a" }),
+      () => archivedService.withdrawAssignment("account-assignment", archivedPrincipal),
+      () => archivedService.submit("account-assignment", archivedPrincipal, run.id),
+      () => archivedService.withdrawSubmission("account-assignment", archivedPrincipal, run.id),
+      () => archivedService.archive("account-class", archivedPrincipal),
+    ];
+    for (const mutation of archivedMutations) expect(mutation).toThrow(/unavailable/u);
+    const coTeacherRun = drillRun("archived-classroom-session-run");
+    storage.create(coTeacherRun, { writerId: "co-teacher-writer", learnerId: coTeacher.id });
+    expect(() => new LiveSessionService(storage).create(archivedPrincipal, {
+      runId: coTeacherRun.id, kind: "academy", title: "Must not schedule", classroomId: "account-class",
+    })).toThrow(/unavailable/u);
 
     const ownerTwo = storage.createLearner({ id: "owner-two", handle: "owner-two", passwordHash: "!", createdAt: AT });
     const runTwo = drillRun("learner-delete-run");

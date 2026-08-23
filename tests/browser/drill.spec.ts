@@ -125,6 +125,47 @@ test("imports one game, opens a grounded story, re-enters play, and exports orig
   expect(text).toContain("Tabiya branch");
 });
 
+test("account lifecycle downloads data, deletes one run, and clears this browser on account deletion", async ({ page }) => {
+  await page.getByRole("button", { name: "Start game" }).click();
+  await expect(page.getByLabel("Chessboard")).toBeVisible();
+  const runId = page.url().split("/").at(-1)!;
+  await page.evaluate((id) => {
+    localStorage.setItem(`chess-tabiya:run:${id}:writer-id`, "writer-secret");
+    localStorage.setItem(`tabiya:mark-scope:${id}`, "branch");
+    localStorage.setItem("tabiya.assistance.v1.position", "device-preference");
+    localStorage.setItem("tabiya.workflow.v1.position", "device-workflow");
+  }, runId);
+
+  await page.goto("/library");
+  await page.getByRole("button", { name: "Delete this run" }).click();
+  await expect(page.getByRole("heading", { name: /Delete .*\?/u })).toBeVisible();
+  await expect(page.getByText("permanently deleted", { exact: false })).toBeVisible();
+  await page.getByRole("button", { name: "Confirm deletion" }).click();
+  await expect(page.getByRole("button", { name: "Delete this run" })).toHaveCount(0);
+  await expect.poll(async () => (await page.request.get(`/runs/${runId}/graph`)).status()).toBe(404);
+  expect(await page.evaluate((id) => [
+    localStorage.getItem(`chess-tabiya:run:${id}:writer-id`),
+    localStorage.getItem(`tabiya:mark-scope:${id}`),
+  ], runId)).toEqual([null, null]);
+
+  await page.goto("/settings");
+  await page.getByLabel("Current password").fill("browser-test-password");
+  const downloadPromise = page.waitForEvent("download");
+  await page.getByRole("button", { name: "Download my data", exact: true }).click();
+  const download = await downloadPromise;
+  expect(download.suggestedFilename()).toMatch(/^tabiya-account-[a-z0-9_]+\.json$/u);
+  await expect(page.getByRole("status")).toContainText("download has started");
+  await expect(page.getByLabel("Current password")).toHaveValue("");
+
+  await page.getByRole("button", { name: "Review deletion effects" }).click();
+  await expect(page.getByRole("heading", { name: "Deletion effects" })).toBeVisible();
+  await expect(page.getByText("Live data is removed immediately", { exact: false })).toBeVisible();
+  await page.getByLabel("Re-enter password").fill("browser-test-password");
+  await page.getByRole("button", { name: "Delete account" }).click();
+  await expect(page.getByRole("button", { name: "Sign in" })).toBeVisible();
+  expect(await page.evaluate(() => Object.keys(localStorage).filter((key) => key.startsWith("tabiya") || key.startsWith("chess-tabiya:")))).toEqual([]);
+});
+
 test("Just Play reaches a Carlsbad and opens a guided shape marker without mutating the run", async ({ page }) => {
   await page.evaluate(() => localStorage.setItem("tabiya.assistance.v1.position", JSON.stringify({ version: 4, markers: "off", guided: "live", humanSplit: "off", corpus: "off", voice: "authored", spoken: "off", boardLighting: "legal", arrows: "off", ambient: "off" })));
   await page.getByLabel("Your side").selectOption("black");

@@ -950,10 +950,34 @@ export class SQLiteRunStorage implements RunStorage, ProgressStorage, LiveSessio
       "cast_by_learner_id", "vote_adapter_learner_id", "handoff_learner_id",
       "white_learner_id", "black_learner_id", "pause_proposed_by",
     ]);
+    const jsonColumns: Readonly<Record<string, string>> = Object.freeze({
+      document_json: "document",
+      headers_json: "headers",
+      checkpoint_ids: "checkpointIds",
+      population_json: "population",
+      gaps_json: "gaps",
+      alternate_gaps_json: "alternateGaps",
+      unknown_json: "unknown",
+      options_json: "options",
+    });
+    const booleanColumns = new Set(["relayed", "countable", "graded", "truncated", "show_record", "show_rating"]);
     const withoutAccountIdentity = (row: Readonly<Record<string, unknown>>): Readonly<Record<string, unknown>> =>
       Object.freeze(Object.fromEntries(Object.entries(row).filter(([key]) => !accountIdentityColumns.has(key))));
+    const portableRecord = (row: Readonly<Record<string, unknown>>, retainIdentity: boolean): Readonly<Record<string, unknown>> => {
+      const source = retainIdentity ? row : withoutAccountIdentity(row);
+      const projected: Record<string, unknown> = {};
+      for (const [key, value] of Object.entries(source)) {
+        const jsonName = jsonColumns[key];
+        if (jsonName !== undefined) {
+          projected[jsonName] = JSON.parse(String(value));
+        } else {
+          projected[key] = booleanColumns.has(key) ? Number(value) === 1 : value;
+        }
+      }
+      return Object.freeze(projected);
+    };
     const tagged = (table: string, sourceRows: readonly Record<string, unknown>[], retainIdentity = false): readonly JsonValue[] =>
-      sourceRows.map((row) => Object.freeze({ table, record: jsonValue(retainIdentity ? row : withoutAccountIdentity(row)) }));
+      sourceRows.map((row) => Object.freeze({ table, record: jsonValue(portableRecord(row, retainIdentity)) }));
     const rows = (sql: string, ...parameters: readonly (string | number)[]): readonly Record<string, unknown>[] =>
       this.#database.prepare(sql).all(...parameters) as readonly Record<string, unknown>[];
     try {
@@ -995,7 +1019,17 @@ export class SQLiteRunStorage implements RunStorage, ProgressStorage, LiveSessio
           sourceBranchId: String(item.sourceBranchId), sourceNodeId: String(item.sourceNodeId),
           kind: String(item.kind) as "flip_sides", createdAt: String(item.createdAt),
         }));
-        return Object.freeze({ id, title, schemaVersion: String(row.schema_version ?? stored.schemaVersion), replayable: stored.replayable, snapshot: stored.snapshot, importedGame: imported === undefined ? null : jsonValue(imported), grants: Object.freeze(grants), derivations: Object.freeze(derivations) });
+        const importedGame = imported === undefined ? null : Object.freeze({
+          sourceKind: imported.source_kind,
+          sourceUrl: imported.source_url,
+          movetextDigest: imported.movetext_digest,
+          headers: JSON.parse(String(imported.headers_json)),
+          result: imported.result,
+          pgn: imported.pgn,
+          licenceNote: imported.licence_note,
+          importedAt: imported.imported_at,
+        });
+        return Object.freeze({ id, title, schemaVersion: String(row.schema_version ?? stored.schemaVersion), replayable: stored.replayable, snapshot: stored.snapshot, importedGame: importedGame === null ? null : jsonValue(importedGame), grants: Object.freeze(grants), derivations: Object.freeze(derivations) });
       });
       const sharedAccess: SharedRunReference[] = rows(
         `SELECT d.id,d.summary_json,g.role,g.granted_at
@@ -1204,31 +1238,61 @@ export class SQLiteRunStorage implements RunStorage, ProgressStorage, LiveSessio
          WHERE link.source_run_id=? AND child.owner_learner_id NOT IN (?,?) ORDER BY child.id`,
       ).all(id, learnerId, LEGACY_ID) as unknown as readonly { readonly id: string }[];
       const links = this.#database.prepare(
-        "SELECT id FROM public_tokens WHERE run_id=? AND scope='story_read' ORDER BY id",
-      ).all(id) as unknown as readonly { readonly id: string }[];
+        `SELECT id FROM public_tokens WHERE revoked_at IS NULL AND
+         (run_id=? OR session_id IN (SELECT id FROM live_sessions WHERE run_id=?)) ORDER BY id`,
+      ).all(id, id) as unknown as readonly { readonly id: string }[];
       return Object.freeze({ id, title, activeForeignGranteeIds: grantees.map((item) => item.learner_id), foreignOwnedDerivedRunIds: derived.map((item) => item.id), anonymousLinkIds: links.map((item) => item.id) });
     });
-    const count = (sql: string, ...parameters: readonly string[]): number => Number((this.#database.prepare(sql).get(...parameters) as { readonly total: number }).total);
+    const ids = (sql: string, ...parameters: readonly string[]): readonly string[] =>
+      Object.freeze((this.#database.prepare(sql).all(...parameters) as unknown as readonly { readonly id: string | number }[]).map((row) => String(row.id)));
+    const progressIds = scope.kind === "run" ? [] : [
+      ...ids("SELECT 'attempt:'||run_id||':'||branch_id AS id FROM attempts WHERE learner_id=? ORDER BY run_id,branch_id", learnerId),
+      ...ids(`SELECT 'concept:'||c.run_id||':'||c.branch_id||':'||c.concept_key AS id FROM attempt_concepts c
+        JOIN attempts a ON a.run_id=c.run_id AND a.branch_id=c.branch_id WHERE a.learner_id=? ORDER BY c.run_id,c.branch_id,c.concept_key`, learnerId),
+      ...ids("SELECT 'schedule:'||id AS id FROM schedules WHERE learner_id=? ORDER BY id", learnerId),
+      ...ids("SELECT 'position:'||transpose_key AS id FROM learner_position_stats WHERE learner_id=? ORDER BY transpose_key", learnerId),
+    ];
+    const markIds = scope.kind === "run" ? [] : ids("SELECT id FROM run_marks WHERE author_learner_id=? ORDER BY id", learnerId);
+    const repertoireIds = scope.kind === "run" ? [] : [
+      ...ids("SELECT id FROM repertoires WHERE owner_learner_id=? ORDER BY id", learnerId),
+      ...ids("SELECT m.repertoire_id||':move:'||m.position_key||':'||m.move_uci AS id FROM repertoire_moves m JOIN repertoires r ON r.id=m.repertoire_id WHERE r.owner_learner_id=? ORDER BY m.repertoire_id,m.position_key,m.move_uci", learnerId),
+      ...ids("SELECT s.repertoire_id||':scan' AS id FROM repertoire_scans s JOIN repertoires r ON r.id=s.repertoire_id WHERE r.owner_learner_id=? ORDER BY s.repertoire_id", learnerId),
+      ...ids("SELECT g.repertoire_id||':gap:'||g.gap_key||':'||g.run_id AS id FROM repertoire_gap_runs g JOIN repertoires r ON r.id=g.repertoire_id WHERE r.owner_learner_id=? ORDER BY g.repertoire_id,g.gap_key,g.run_id", learnerId),
+    ];
+    const draftIds = scope.kind === "run" ? [] : [
+      ...ids("SELECT 'pack:'||id AS id FROM pack_drafts WHERE owner_learner_id=? AND state<>'registered' ORDER BY id", learnerId),
+      ...ids(`SELECT 'playtest:'||p.digest AS id FROM playtest_documents p JOIN pack_drafts d ON d.id=p.draft_id
+        WHERE d.owner_learner_id=? AND d.state<>'registered' ORDER BY p.digest`, learnerId),
+      ...ids("SELECT 'shape:'||id AS id FROM shape_drafts WHERE owner_learner_id=? AND state<>'registered' ORDER BY id", learnerId),
+    ];
+    const behavioralIds = scope.kind === "run" ? [] : [
+      ...ids("SELECT 'rating:'||calibration_id AS id FROM learner_ratings WHERE learner_id=? ORDER BY calibration_id", learnerId),
+      ...ids("SELECT 'game:'||run_id AS id FROM rated_games WHERE learner_id=? ORDER BY run_id", learnerId),
+      ...ids("SELECT 'period:'||period_no AS id FROM rating_periods WHERE learner_id=? ORDER BY period_no", learnerId),
+      ...ids("SELECT 'standing:'||classroom_id AS id FROM standing_members WHERE learner_id=? ORDER BY classroom_id", learnerId),
+      ...ids("SELECT 'mark:'||mark AS id FROM learner_marks WHERE learner_id=? ORDER BY mark", learnerId),
+    ];
     const hardDelete = scope.kind === "run" ? [] : [
-      { kind: "progress" as const, count: count("SELECT count(*) AS total FROM attempts WHERE learner_id=?", learnerId), objectIds: [], label: "Attempt history and progress are permanently deleted" },
-      { kind: "mark" as const, count: count("SELECT count(*) AS total FROM run_marks WHERE author_learner_id=?", learnerId), objectIds: [], label: "Private board marks are permanently deleted" },
-      { kind: "repertoire" as const, count: count("SELECT count(*) AS total FROM repertoires WHERE owner_learner_id=?", learnerId), objectIds: [], label: "Repertoires and their source material are permanently deleted" },
-      { kind: "draft" as const, count: count("SELECT count(*) AS total FROM pack_drafts WHERE owner_learner_id=? AND state<>'registered'", learnerId) + count("SELECT count(*) AS total FROM shape_drafts WHERE owner_learner_id=? AND state<>'registered'", learnerId), objectIds: [], label: "Unpublished drafts are permanently deleted" },
-      { kind: "behavioral_profile" as const, count: count("SELECT count(*) AS total FROM rated_games WHERE learner_id=?", learnerId), objectIds: [], label: "Ratings, game records, and private profile measurements are permanently deleted" },
-      { kind: "account" as const, count: 1, objectIds: [], label: "The learner account and all authenticated sessions are permanently deleted" },
+      { kind: "progress" as const, count: progressIds.length, objectIds: progressIds, label: "Attempt history, concepts, schedules, and position statistics are permanently deleted" },
+      { kind: "mark" as const, count: markIds.length, objectIds: markIds, label: "Private board marks are permanently deleted" },
+      { kind: "repertoire" as const, count: repertoireIds.length, objectIds: repertoireIds, label: "Repertoires, moves, scans, and gap links are permanently deleted" },
+      { kind: "draft" as const, count: draftIds.length, objectIds: draftIds, label: "Unpublished drafts and playtest documents are permanently deleted" },
+      { kind: "behavioral_profile" as const, count: behavioralIds.length, objectIds: behavioralIds, label: "Ratings, game records, periods, standings, and private profile measurements are permanently deleted" },
+      { kind: "account" as const, count: 1, objectIds: ["account"], label: "The learner account and all authenticated sessions are permanently deleted" },
     ];
     const retainedPublished = scope.kind === "run" ? [] : [
-      ...((this.#database.prepare("SELECT pack_id AS id FROM registered_packs WHERE publisher_learner_id=? ORDER BY pack_id,version").all(learnerId) as unknown as readonly { readonly id: string }[]).map((row) => ({ kind: "publication" as const, count: 1, objectIds: [row.id], label: `Published pack ${row.id} remains immutable with deleted-account attribution` }))),
-      ...((this.#database.prepare("SELECT shape_id AS id FROM registered_shapes WHERE publisher_learner_id=? ORDER BY shape_id,version").all(learnerId) as unknown as readonly { readonly id: string }[]).map((row) => ({ kind: "publication" as const, count: 1, objectIds: [row.id], label: `Published shape ${row.id} remains immutable with deleted-account attribution` }))),
+      ...((this.#database.prepare("SELECT pack_id AS id,version FROM registered_packs WHERE publisher_learner_id=? ORDER BY pack_id,version").all(learnerId) as unknown as readonly { readonly id: string; readonly version: string }[]).map((row) => ({ kind: "publication" as const, count: 1, objectIds: [`${row.id}@${row.version}`], label: `Published pack ${row.id} ${row.version} remains immutable with deleted-account attribution` }))),
+      ...((this.#database.prepare("SELECT shape_id AS id,version FROM registered_shapes WHERE publisher_learner_id=? ORDER BY shape_id,version").all(learnerId) as unknown as readonly { readonly id: string; readonly version: string }[]).map((row) => ({ kind: "publication" as const, count: 1, objectIds: [`${row.id}@${row.version}`], label: `Published shape ${row.id} ${row.version} remains immutable with deleted-account attribution` }))),
     ];
     const classroomEffects = scope.kind === "run" ? [] : (this.#database.prepare(
       `SELECT DISTINCT c.id,c.name,
-        (SELECT count(*) FROM classroom_members other WHERE other.classroom_id=c.id AND other.learner_id<>? AND other.state='active') AS other_active
+        (SELECT count(*) FROM classroom_members other WHERE other.classroom_id=c.id AND other.learner_id<>? AND other.state='active') AS other_active,
+        (SELECT count(*) FROM assignment_submissions s JOIN assignments a ON a.id=s.assignment_id WHERE a.classroom_id=c.id) AS submissions
        FROM classrooms c LEFT JOIN classroom_members mine ON mine.classroom_id=c.id
        WHERE c.owner_learner_id=? OR (mine.learner_id=? AND mine.state<>'left') ORDER BY c.id`,
     ).all(learnerId, learnerId, learnerId) as readonly Record<string, unknown>[]).map((row) => ({
       shared: Number(row.other_active) > 0,
-      effect: { kind: "classroom" as const, count: 1, objectIds: [String(row.id)], label: Number(row.other_active) > 0 ? `${String(row.name)} is archived read-only for remaining members` : `${String(row.name)} is permanently deleted` },
+      effect: { kind: "classroom" as const, count: 1, objectIds: [String(row.id)], label: Number(row.other_active) > 0 ? `${String(row.name)} is archived read-only for remaining members with ${Number(row.submissions)} retained submission${Number(row.submissions) === 1 ? "" : "s"}` : `${String(row.name)} and ${Number(row.submissions)} submission${Number(row.submissions) === 1 ? "" : "s"} are permanently deleted` },
     }));
     const fingerprint = (selected as readonly Record<string, unknown>[]).map((row) => Object.freeze({
       id: String(row.id), snapshot: String(row.snapshot_json), updatedAt: String(row.updated_at),

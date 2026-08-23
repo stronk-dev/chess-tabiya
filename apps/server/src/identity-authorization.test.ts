@@ -309,6 +309,12 @@ describe("learner identity and run authorization", () => {
       writerId: "writer-alice",
       body: { op: "grant", handle: "bob", role: "participant" },
     });
+    const sessionResponse = await call(handler, "POST", "/sessions", {
+      cookie: alice.cookie,
+      body: { runId: "orphan-safe-run", kind: "academy", title: "Shared study" },
+    });
+    expect(sessionResponse.status).toBe(201);
+    const sessionId = (await sessionResponse.json() as { session: { id: string } }).session.id;
     const previewResponse = await call(handler, "POST", "/auth/deletion-preview", { cookie: alice.cookie, body: {} });
     const preview = await previewResponse.json() as { digest: string; tombstone: readonly { objectIds: readonly string[] }[] };
     expect(preview.tombstone.flatMap((effect) => effect.objectIds)).toEqual(["orphan-safe-run"]);
@@ -333,6 +339,17 @@ describe("learner identity and run authorization", () => {
       body: {},
     });
     expect(blocked.status).toBe(403);
+    const branchId = storage.read("orphan-safe-run")!.run.branches[0]!.id;
+    const refused = await Promise.all([
+      call(handler, "POST", "/runs/orphan-safe-run/moves", { cookie: bob.cookie, writerId: "writer-bob", body: { uci: "e2e4" } }),
+      call(handler, "POST", "/runs/orphan-safe-run/grants", { cookie: bob.cookie, writerId: "writer-bob", body: { op: "grant", handle: "bob", role: "participant" } }),
+      call(handler, "POST", "/runs/orphan-safe-run/share", { cookie: bob.cookie, body: { branchId } }),
+      call(handler, "POST", "/sessions", { cookie: bob.cookie, body: { runId: "orphan-safe-run", kind: "academy", title: "Reopened" } }),
+      call(handler, "POST", `/sessions/${sessionId}`, { cookie: bob.cookie, body: { op: "close" } }),
+      call(handler, "POST", `/sessions/${sessionId}/board`, { cookie: bob.cookie, writerId: "writer-bob", body: { op: "reclaim" } }),
+      call(handler, "POST", `/sessions/${sessionId}/links`, { cookie: bob.cookie, body: { invitedRole: "spectator" } }),
+    ]);
+    expect(refused.map((response) => response.status)).toEqual([403, 403, 403, 403, 403, 403, 403]);
     expect((await call(handler, "GET", "/auth/session", { cookie: alice.cookie })).status).toBe(401);
     const replacement = await register(handler, "alice");
     expect((await call(handler, "GET", "/runs/orphan-safe-run/graph", {
@@ -370,6 +387,24 @@ describe("learner identity and run authorization", () => {
     expect((await call(handler, "POST", "/runs/delete-one/delete", { cookie: alice.cookie, body: { previewDigest: preview.digest } })).status).toBe(200);
     expect(storage.read("delete-one")).toBeUndefined();
     expect((await call(handler, "GET", "/auth/session", { cookie: alice.cookie })).status).toBe(200);
+  });
+
+  it("turns one shared run into a neutral read-only tombstone without deleting its owner account", async () => {
+    const { handler, storage } = setup();
+    const alice = await register(handler, "alice");
+    const bob = await register(handler, "bob");
+    await call(handler, "POST", "/runs", { cookie: alice.cookie, writerId: "writer-alice", body: runBody("delete-shared") });
+    await call(handler, "POST", "/runs", { cookie: alice.cookie, writerId: "writer-other", body: runBody("keep-unrelated") });
+    await call(handler, "POST", "/runs/delete-shared/grants", { cookie: alice.cookie, writerId: "writer-alice", body: { op: "grant", handle: "bob", role: "participant" } });
+    const preview = await (await call(handler, "POST", "/runs/delete-shared/deletion-preview", { cookie: alice.cookie, body: {} })).json() as { digest: string; tombstone: readonly { objectIds: readonly string[] }[] };
+    expect(preview.tombstone.flatMap((effect) => effect.objectIds)).toContain("delete-shared");
+    expect((await call(handler, "POST", "/runs/delete-shared/delete", { cookie: alice.cookie, body: { previewDigest: preview.digest } })).status).toBe(200);
+    expect((await call(handler, "GET", "/auth/session", { cookie: alice.cookie })).status).toBe(200);
+    expect((await call(handler, "GET", "/runs/delete-shared/graph", { cookie: alice.cookie })).status).toBe(404);
+    expect((await call(handler, "GET", "/runs/keep-unrelated/graph", { cookie: alice.cookie })).status).toBe(200);
+    expect((await call(handler, "GET", "/runs/delete-shared/graph", { cookie: bob.cookie })).status).toBe(200);
+    expect(storage.list(bob.body.learner.id, 20, 0).find((run) => run.id === "delete-shared")).toMatchObject({ title: "Shared run removed by its owner", viewerRole: "spectator" });
+    expect((await call(handler, "POST", "/runs/delete-shared/moves", { cookie: bob.cookie, writerId: "writer-bob", body: { uci: "e2e4" } })).status).toBe(403);
   });
 
   it("locks after ten failures and performs one derivation for every login shape", async () => {
