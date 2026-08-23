@@ -1311,3 +1311,28 @@ cleanup slice: either give the button its real target (the per-seat assistance s
 composes) or delete it with the rest of the retired chrome, and add one `play-composition`
 changelog line naming `:824` as a 16th chrome site so the production-site discipline
 (A4/A17-class) stays closed. Flip [[D585]] in the commit that does it.
+
+## UX repair lane — opened 2026-08-23 by the owner opening the app
+
+The owner listed six UX failures from the running app. **Five were already recorded, some since
+2026-08-16, and none were fixed** ([[D1428]]). The recording worked; the routing did not. This
+section exists so the repairs have a destination a status sweep can see — `planning/ux-work-lane.md`
+holds the sequenced passes but is not a route document, which is exactly how [[D1427]] happened.
+
+- **[[D1427]] — `ux-work-lane.md` Passes A–G need ledger rows.** Its proposed ids were never written
+  and were later taken by unrelated work. The passes cover the raw-info dumps ([[D483]]), the
+  unstyled native controls ([[D484]], priced at ~4 lines and still broken at HEAD), the 352px board
+  and the terminal screen. Nothing can schedule them until they are rows.
+- **[[D1429]] — `arrows` is a fully-plumbed no-op.** Typed, persisted, migrated across four schema
+  versions, permission-clamped, rendered as a three-option `<select>`, and read by **no renderer**.
+  The inertness is pinned by a passing test. The decision text has sat drafted and unasked in
+  `planning/platform-alignment/decision-queue.md:188-197`; it goes to the owner, and until it is
+  ruled the control should not offer a choice the app cannot honour.
+- **[[D1425]] — the theme catalog is owed the ruled set.** Ten schemes exist in the owner's own
+  registries; three shipped and three of four palettes are bespoke, against [[D976]]'s explicit
+  *catalog of known schemes, not one bespoke palette*. Growing it is completing accepted work under a
+  standing ruling, not new scope.
+- **[[D1428]] — presets have no interface at all.** [[D619]] ruled 2026-08-20, `rfc/intent-presets.md`
+  is accepted, and no `.svelte` file mentions presets. Blocked on [[D971]], an RFC amendment nobody
+  wrote, with `compileAssistance` a phantom symbol cited by three documents and present in zero lines
+  of code ([[D985]]). That amendment is the unblock and it is claude's to write.

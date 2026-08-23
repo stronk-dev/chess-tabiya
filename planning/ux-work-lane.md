@@ -655,3 +655,19 @@ one place.
 - I did not verify **D309**'s claim that guided mode fires ungated, which would mean §3a is already
   violated in the opposite direction. If true it changes Q1's framing and should be checked first.
 - I did not exercise **Create**, **Live** with two participants, or `make up-engines`.
+
+## Ledger identity granted 2026-08-23 — [[D1427]]
+
+This file's seven passes had **no ledger rows**. The ids it proposed from D488 were never written and
+were subsequently taken by unrelated work (D488 is K9 latency, D489 a campaign queue row, D495 a
+closed fix), so Passes A–G existed only as prose that `make work-index` cannot see. Seven days, zero
+rows, zero shipped, against repairs priced at single-digit lines.
+
+The lane is now anchored by [[D1427]], and the surrounding findings by [[D1425]] (the theme catalog
+shipped 3 of the owner's 10 schemes, 3 of 4 palettes bespoke), [[D1426]] (the scope audit is blind to
+an omission that never words itself as a cut), [[D1428]] (five of six owner UX complaints were
+already recorded and none were fixed) and [[D1429]] (the `arrows` decision was drafted and never
+asked).
+
+**The lane is live work, not a proposal.** Every pass owes a row before it can be scheduled, and the
+routing failure — not the recording — is what let the owner find all six by opening the app.

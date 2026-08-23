@@ -231,6 +231,13 @@ export interface AppThemeDef {
 
 #### §3.2 The v1 catalog (unit: catalog entries; total: 3 themes / 4 palettes)
 
+> **[[D1425]] 2026-08-23 — this line is an undeclared cut and the catalog is owed the ruled set.**
+> §3.1 counts **ten** schemes in the owner's own registries and adopts their shape as the evidence
+> base for the 12-token contract; this line then ships three, of which `origin` records **one** as
+> `inherited` and three palettes as `tabiya`. [[D976]] ruled for *"a CATALOG of known color schemes,
+> not one bespoke palette"*. Unlike the board and piece axes, the app-theme axis carries no floor
+> citation and no growth path — see [[D1426]] for why no instrument caught it.
+
 1. **`paper`** — `origin: "tabiya"`, light. The shipped warm-paper identity, values
    byte-identical to `App.svelte:930-943` (`--ink #171713`, `--paper #eeeade`,
    `--panel #f8f5ec`, `--line #cbc4b4`, `--accent #3858c8`, `--danger #ad3c32`; the block is
