@@ -1,27 +1,24 @@
-# RFC: Variants — per-surface admission, declared rungs, and Chess960 as the v1 member
+# RFC: Variants — per-surface admission, declared rungs, and the full family
 
-- **Status:** draft — **returned to author 2026-08-23; independent cross-review re-derived 97 claims
-  and failed 27, of which six are return-class.** The mechanism is sound and most of it is now
-  *measured* rather than argued: `startingPosition({Variant:"Chess960"})` really does return the
-  standard position (run at 0.15.1), the `chessgroundDests` refutation holds across 8904 driven
-  gestures with zero mismatches, castling rights really are a `SquareSet` of rook squares, and the
-  claims decision `none` is correct at source. **What returns it:** (1) **Open question 1 argues a
-  fork the owner has already closed** — [[D1153]] ruled *"don't accept the Maia-dark gap — compose a
-  bot that does not depend on Maia"*, the commissioned research returned the same day ([[D1160]],
-  `design/research/non-maia-bot-composition.md:511-514`), and its recommendation is not in this
-  document; OQ1's *"the mechanism is fully determined either way"* is false — the ruled direction
-  costs a new `BotPolicyInput` member, a cp→mass base layer, a sampler and a positive control
-  (`:505`), none of it budgeted. (2) **Criterion 5 has no mechanism and does not close the trap it
-  names** — `availableModes()` takes no position argument, [[D1161]]'s named remedy
-  `policyUsesMaiaBand` is **dead code**, and two paths hardcode `human_common` regardless of the
-  run's policy, so a 960 FEN still reaches Maia. (3) **The far end is worse than "goes dark"** —
-  measured over all 960 arrangements, the pinned sidecar raises **0** and silently deletes **all**
-  castling rights in **858**, then `uci.py:443-444` bare-`return`s and answers `go` from a **stale
-  board**. (4) **§5's amendment describes machinery that does not exist** — all 44 disposition rows
-  are static literals. (5) **Criterion 2 is unsatisfiable by identity** ([[D984]]) — a 960 start FEN
-  *is* a legal standard-chess position under the only predicate the lint has, so no 960 fixture can
-  make its refusal fire. (6) **The corrected criterion 12 is not failable** — see its own note. Every
-  other finding is repaired in place. *(Prior line for history: draft — 2026-08-23.)*
+- **Status:** draft — **six blockers repaired and widened to the full family 2026-08-23, ready for
+  re-review.** The cross-review's six return-class findings are resolved at source, and the document
+  no longer ships the Chess960-only cut it was returned for. **What changed:** (1) **Open question 1
+  is CLOSED, not re-asked** — [[D1153]] ruled *compose a bot that does not depend on Maia*, [[D1160]]
+  returned the priced answer the same day, and [[D1271]] then **funded [[D810]]'s evidence-to-move
+  selector**; §3.7 now carries the ruled position and cites the sibling RFC rather than putting the
+  fork back to the owner. (2) **Suppression moved to request construction** — `positionCommand`
+  (`opponent-selector.ts:310`) is the single site where `position fen` is written to an engine, so
+  criterion 5 asserts there and covers the evidence paths, not the picker. (3) **The stale-board
+  failure is normative body text**, not a review note. (4) **§5 adopts the boot-time kind-vs-spec
+  assertion** — the only one of the three exits that makes criterion 10 failable. (5) **960 drill
+  packs are ADMITTED** — the three asserted blockers all failed at source, [[D327]] asked for them by
+  name, and the cut did not survive [[D1230]]. (6) **Criteria 2 and 12 are rebound to failable
+  forms.** **And the widening, which is the larger repair:** the owner ruled a *family*
+  ([[D1031]]/[[D1042]]) and the previous draft shipped one member. §7 now specifies **Tier 2 as
+  evidence-dark play** in Just Play, import and campaign, and §8 specifies **Tier 3's reduced-army
+  family**, which needs no variant machinery at all. *(Prior lines for history: returned to author
+  2026-08-23 after a cross-review that re-derived 97 claims and failed 27; before that, draft —
+  2026-08-23.)*
 - **Author:** claude (drafted from `planning/variants/rfc-derivation.md`)
 - **Created:** 2026-08-23
 - **Design refs:** `design/06-campaign.md` §3 (the surface-scoped balance law, [[D1042]], at
@@ -43,7 +40,7 @@
 - **Planning:** `planning/variants/`
 
 ```tabiya-claims
-none
+run-schema | lane 0.20 | DrillRun.rules (new, optional, closed union over chessops' RULES minus 'chess'; absent means standard chess — a Tier-2 run is not self-describing because its ruleset is not in the FEN)
 ```
 
 ## Summary
@@ -56,39 +53,38 @@ optional in Just Play, accepted on import and analysis, and legitimate as a camp
 That structure — not a permitted-variants list — is the durable content here, and it is what lets
 every later variant be admitted or refused without re-litigating the law.
 
-**And it ships exactly one member: Chess960**, in Just Play and import only. Chess960 is the sole
-variant where the rules *are* standard chess and only the starting arrangement differs, so every
+**And it ships the family the owner ruled, not one member of it.** Tier 1 (Chess960) reaches every
+surface including drill packs; **Tier 2 reaches Just Play, import/analysis and the campaign as
+evidence-dark play** (§7); **Tier 3's reduced-army family reaches everything** because it is not a
+variant at all — those are legal standard positions and the tablebase turns *on* below seven units
+(§8). What v1 refuses, it refuses for a cited reason: fairy pieces and non-8×8 boards have no library
+support at any price, and xiangqi/shogi is a measurement ([[D328]]) with a named owner.
+
+**Chess960 is the member measured in most depth**, because it is the sole variant where the
+rules *are* standard chess and only the starting arrangement differs — so every
 detector, the phase model, Syzygy, the explorer and Stockfish all survive intact — measured, not
 assumed (§3). The cost is unusually low because `chessops` was written for a 960-native server:
 castling rights are already stored as a set of **rook squares** rather than `KQkq` flags, and
 `normalizeMove` already converts the standard castling dialect *into* king-takes-rook, so
 [[D1029]]'s ruling this morning is the form the library already uses internally.
 
-**The honest cost, stated in the Summary because it must not be discovered later: Maia goes dark.**
-Maia is trained on standard human games and a randomised back rank is out of distribution from move
-one. Three of the five opponent modes depend on it, so a Chess960 Just Play session offers
-`strong_engine` alone. That is a real product degradation, and whether it is acceptable is Open
-question 1 — the fork [[D1030]] found was asserted rather than asked.
+**Maia goes dark outside standard chess, and the owner ruled that we do not accept it.** Maia is
+trained on standard human games; a randomised back rank is out of distribution from move one, and
+the far end is worse than weak play — the pinned sidecar cannot *parse* a 960 position and answers
+`go` from a **stale board** (§3.7, measured). [[D1153]] ruled the response: *"we just need 'bot
+capas'… make some that don't consume maia-produced evidence"*. The commissioned research returned
+the same day ([[D1160]]) and [[D1271]] then **funded [[D810]]'s evidence-to-move selector**, which is
+the durable, variant-portable answer and is being drafted as `rfc/evidence-move-selector.md`. **This
+RFC therefore ships the interim the dossier recommends and does not re-open the fork**: a 960 or
+Tier-2 start offers a **composed Stockfish opponent, disclosed and labelled uncalibrated, and its
+results are unrated** (§3.7). What was Open question 1 is closed by ruling, not carried.
 
-> **CROSS-REVIEW 2026-08-23 — RETURN-CLASS (1), and it rewrites this paragraph.** Two claims here
-> fail at source. **(a) "It is not repairable by any work in this RFC" is false, and the owner has
-> ruled it must be repaired.** [[D1153]], verbatim: *"well we just need 'bot capas'? Like don't we
-> have special bots that consume evidence and shit? So we can make some that don't consume
-> maia-produced evidence?"* — i.e. **don't accept the gap; compose a bot that does not depend on
-> Maia.** The commissioned research returned the same day ([[D1160]],
-> `design/research/non-maia-bot-composition.md`, 631 lines) and its recommendation is on file at
-> `:511-514`: *"960 ships with an engine-composed opponent, disclosed and labelled uncalibrated,
-> with the human-likeness measurement (§5) commissioned in parallel and its result binding on what
-> the card may say."* Engine choice, `:551-553`: **Stockfish for Tier 1**, Fairy-Stockfish is a
-> Tier-2 dependency. This document predates that return and does not carry it. **(b) The mechanism
-> is NOT "fully determined either way"** (Open question 1): the ruled direction is priced at `:505`
-> as one new `BotPolicyInput` member, a cp→mass base layer with its own sampler and positive
-> control, and a `historyCapability` widening — none of which §3.6 budgets. **(c) The degradation is
-> understated, not overstated** — see §3.7's note: the failure is a silently stale board answering
-> `go`, not weak play.
-
-Claims nothing versioned: no pack-schema lane (960 packs are deferred, §6), and no run-schema lane
-(a Chess960 FEN is self-describing, §3.4).
+**Claims one run-schema lane, 0.20**, and it is the honest cost of shipping the family rather than
+one member: a Chess960 FEN is self-describing (§3.4) but **a Tier-2 game is not** — Crazyhouse's
+start *is* the standard FEN, so a run must record its ruleset or every downstream reader mis-reads
+it as standard chess. **No pack-schema lane** — §6's admission of 960 packs needs none, because
+`pack.start.fen` carries the arrangement exactly as a run's start FEN does, so **Gate F clause 1 is
+untouched by this RFC** (it is a Boolean over pack-schema lanes, `plan.md:48`).
 
 ## Motivation
 
@@ -135,7 +131,7 @@ appears in every row with a different answer:
 | **Campaign** | **As far as we like** | A variant campaign is a **new-hero unlock** in the Slay-the-Spire sense — it changes the entire run structure, not a setting on the standard one |
 
 *(Cross-review 2026-08-23: the campaign cell read **"Unrestricted, subject to §2"**. `design/06-campaign.md:291`
-reads **"As far as we like"**, and §2.3 admits Tier 1 only — so the qualifier resolved the owner's
+reads **"As far as we like"**, and §2.3 then admitted Tier 1 only — so the qualifier resolved the owner's
 *"as crazy as we want to"* down to *Chess960 only*, **inside the cell that states the law**. That is
 the same error criterion 12 was rewritten to prevent: a criterion may bound what we ship; it may
 never bound what the owner has ruled — and neither may the law's own restatement. v1's shipped
@@ -179,8 +175,21 @@ aggravation that the number is also false. **Tier 2 therefore suppresses the ins
 than annotating them**, and no Tier-2 surface may display an engine evaluation, a grade, a Maia
 mass, or a tablebase verdict.
 
-**§2.3 What v1 admits.** Tier 1 only. Tiers 2 and 3 are deferred behind Discharges D2 and D3; §2's
-vocabulary exists now so that those RFCs argue from it rather than reinvent it.
+**§2.3 What v1 admits — the family, per surface.** The owner ruled a family ([[D1031]]) under a
+per-surface law ([[D1042]]); v1 ships that, not one member of it. The admitted set is the
+intersection of §1's law with what each tier's rungs can honestly support:
+
+| | Drill packs | Just Play | Import / analysis | Campaign |
+|---|---|---|---|---|
+| **Tier 1** (Chess960) | ✅ **admitted** (§6) — every rung survives, so the standard-only law's own rationale does not reach it | ✅ admitted | ✅ admitted | ✅ admitted |
+| **Tier 2** (7 chessops rulesets) | ❌ refused — evidence-dark, so a drill can ground nothing (§1's law, applied) | ✅ **admitted, evidence-dark** (§7) | ✅ **admitted, evidence-dark** | ✅ **admitted** as evidence-dark play nodes |
+| **Tier 3a** (reduced armies, pawns-only) | ✅ **admitted** — not a variant at all (§8) | ✅ admitted | ✅ admitted | ✅ admitted |
+| **Tier 3b** (fairy pieces, non-8×8) | ❌ refused | ❌ refused | ❌ refused | ❌ refused — **no library support at any price**, cited in §8 |
+| **Tier 3c** (xiangqi, shogi) | — | — | — | — deferred to [[D328]]'s measurement, Discharge D3 |
+
+**The one rule that makes Tier 2 shippable rather than dangerous is §2.2's**: its instruments are
+**suppressed, not annotated**. A tier is admitted to a surface when the surface can be honest about
+what it cannot say — not when every rung survives.
 
 ### §3 — Chess960: measured, not argued
 
@@ -219,11 +228,13 @@ Tier 1 by this RFC's own definition (rules identical, setup differs). The claim 
 one actually needed: 960 is not a separate ruleset. Whether Tier 1 has one member or a dozen is not
 settled by `parseVariant`, and §2's "only true member" cell should read "the only member v1 ships".)*
 
-**§3.4 A Chess960 run needs no new persisted field.** The FEN carries the arrangement and the
-castling rights; `transposeKey` and `canonicalFen` are stable across the notation round-trip
-(§3.1). This RFC therefore claims **no run-schema lane**. Open question 3 records the condition
-under which that changes: a Tier-2 variant is *not* self-describing (the rules are not in the FEN),
-so the first Tier-2 RFC claims a lane for a `rules` field. **The term is `rules`** — chessops' own
+**§3.4 A Chess960 run needs no new persisted field, and this is what distinguishes Tier 1 from
+Tier 2.** The FEN carries the arrangement and the castling rights; `transposeKey` and `canonicalFen`
+are stable across the notation round-trip (§3.1). **A Tier-1 run therefore records nothing extra.**
+The contrast is exactly why this RFC claims a run-schema lane once it admits Tier 2 (§7.5): a
+Tier-2 game is *not* self-describing — its rules are not in the FEN, and Crazyhouse's start *is* the
+standard position — so `DrillRun.rules` exists for that tier and is **absent** for Chess960.
+**The term is `rules`** — chessops' own
 word — because `variant` is taken three times already (`schedules.variant` at
 `apps/server/src/storage.ts:4153`, an unconstrained nullable label sitting **beside** the
 spaced-repetition `kind` column; `retryVariants` at `packages/schema/src/drill-pack/types.ts:256`;
@@ -291,14 +302,15 @@ king move). Neither is a defect in this RFC; both are owed a ledger row. Two con
 
 | # | Obligation | Home | Size |
 |---|---|---|---|
-| 1 | Amend the published refusal with a stated reason (§5) | `apps/server/src/capabilities.ts:133` | **not 1 line — see §5's return-class note; the mechanism §5 describes does not exist** |
+| 1 | Amend the published refusal with a stated reason **and extend the startup gate to assert kind-vs-spec agreement** (§5.2) | `apps/server/src/capabilities.ts:133` + `assertAdvertisedCapabilityDispositions` `:167-188` | the row edit is 1 line; **the gate extension is the real work** and is what makes criterion 10 failable |
 | 2 | Set `UCI_Chess960` on the engine spec; option pass-through is already generic | `apps/server/src/engine-supervisor.ts:330-332` | **not "config" — it changes the castling dialect for STANDARD runs too; see below** |
 | 3 | Lift the import refusal for `Chess960`/`Fischerandom`, with the FEN requirement (§4) | `apps/server/src/pgn-import.ts:32-35` **and the uncounted clone at `apps/server/src/repertoire-pgn.ts:42`** | ~3 lines × 2 sites |
 | 4 | Accept a pasted 960 FEN as a Just Play start | existing start path | none — v1 generates nothing |
-| 5 | Suppress the Maia-backed opponent modes for a 960 start, visibly (§3.7) | `packages/runtime/src/types.ts:76-78`, `apps/server/src/opponent-selector.ts:515-524` | **not "small" — no per-position mode gate exists; see §3.7's note** |
+| 5 | **Refuse a non-standard start at the Maia WRITE** (§3.7b), and filter the offered set as a second, weaker layer | `positionCommand` `apps/server/src/opponent-selector.ts:310` (the single write site); offered set at `:515-524` | **not "small"** — no per-position gate exists, and the guard must cover the evidence paths, not the picker |
 | 6 | Widen the explorer `variant` param — **optional, and v1 declines it** (Open question 2) | `apps/server/src/sourcing/explorer.ts:67` | 1 line in the URL builder (`ExplorerQuery` carries no `variant` field, so a caller-controlled value also touches the type and `normalizeExplorerQuery` `:54-62`) |
+| 7 | **Tier 2** (§7): `DrillRun.rules` on lane 0.20, producer-level instrument suppression (§7.2), and the import arm recording the ruleset (§4.4) | run schema + the story evidence pass + `pgn-import.ts` | **the largest item here — it is the widening, not a rider** |
 
-Items 1–3 and 5 are v1. Item 4 is deliberately *nothing*: a Scharnagl start generator is real new
+Items 1–3, 5 and 7 are v1. Item 4 is deliberately *nothing*: a Scharnagl start generator is real new
 code and v1 does not need it, because a pasted FEN reaches every downstream symbol already —
 **confirmed**, `service.ts:244` uses the same `Chess.fromSetup(parseFen(...))` the pack lint does, and
 `imported_games` (`storage.ts:4386-4396`) has no variant column and no CHECK a 960 import violates.
@@ -339,44 +351,47 @@ Per §2.1 this is declared rather than discovered: the start surface states whic
 chosen start supports and why the others are absent, using the same *availability* vocabulary
 `design/06-campaign.md` uses for difficulty labels. It does not offer a mode and fail later.
 
-> **CROSS-REVIEW 2026-08-23 — RETURN-CLASS (2) and (3). Criterion 5 has no mechanism, and the
-> failure it guards against is worse than this section says.**
+**§3.7a — the far end, normative.** *(Was a cross-review note; it is body text because it is the
+reason suppression must be a hard refusal rather than a filtered picker.)* At the pinned SHA
+(`workers/maia/Dockerfile:3` → `1e13597…`), `maia3/uci.py:422` builds `chess.Board(fen)` **without
+`chess960=True`**. Measured over all **960** Chess960 start positions: **0 raise**; **858 lose ALL
+castling rights**, 84 lose some, 18 are unaffected, **0 fabricate** rights — `clean_castling_rights`
+masks to `BB_A1|BB_H1`/`BB_A8|BB_H8` and requires the king on e1/e8. Then `uci.py:443-444` performs a
+bare `return` when a replayed history move is illegal, leaving `self.board` at the **previous
+position with no error channel**, while `opponent-selector.ts` waits only for `bestmove` — which it
+duly receives, **for a different position**. The board self-reports `Status.BAD_CASTLING_RIGHTS` and
+nothing asks. **The failure is silent and confident, which is why §3.7b guards the write and not the
+menu.**
+
+**§3.7b — suppression is at REQUEST CONSTRUCTION, and there is exactly one site.** The picker is the
+wrong boundary: `availableModes()` (`opponent-selector.ts:515-524`) takes **no position argument** —
+it is a function of engine health alone — and four paths reach Maia without consulting any offered
+set, **two of them hardcoding `human_common` regardless of the run's policy**: `rest.ts:1354-1358`
+(`GET /runs/:id/human-split`, the human-commonality **evidence** path) and `service.ts:1201-1204`
+(`human_replies` group seeding); `rest.ts:1221` and `:1738` take the mode from the request body, and
+`rest.ts` contains **no** `availableModes`/`validatePolicy` call at all. [[D1161]] named
+`policyUsesMaiaBand` as the remedy; it is **dead code** (`engine-band.ts:92-96`, verified zero call
+sites repo-wide).
+
+**Normative:** every Maia request is written by exactly one function — `positionCommand`
+(`opponent-selector.ts:310`), which emits `position fen ${request.startFen}…` and is called at
+`:544`, `:601` and `:653`. **A non-standard start must be refused there**, typed, before any engine
+write, so that no caller — picker, evidence endpoint, group seeding or request body — can route
+around it. The offered set is *also* filtered (§2.1's declared-rungs obligation), but that is a UX
+obligation layered on top of a guard, never the guard itself.
+
+> *Cross-review 2026-08-23, absorbed into §3.7a/§3.7b above rather than left as a note.* Two smaller
+> corrections it also made, kept here because they correct earlier prose: §3.7 originally said
+> `theory_strict` fails for want of **opening-book depth** — at source it is gated on **Maia health**
+> (`opponent-selector.ts:519`) like the other two, and the book-depth reason is a separate true fact
+> that is not the mechanism; and `PositionOpponentPolicy` is a compile-time `interface`, not a
+> runtime guard, so *"suppress visibly"* had no runtime home at that pin. Both are why §3.7b names
+> `positionCommand` instead.
 >
-> *Corrected in place:* §3.7 said `theory_strict` fails for want of **opening-book depth**. At source
-> it is gated on **Maia health** (`opponent-selector.ts:519`) like the other two; the book-depth
-> reason is a separate true fact that is not the mechanism. And `PositionOpponentPolicy` is a
-> compile-time `interface`, not a runtime guard — "suppress visibly" has no runtime home at that pin.
->
-> *Return-class, not fixed:*
-> **(a) There is no per-position mode gate anywhere in the codebase.** `availableModes()`
-> (`opponent-selector.ts:515-524`) takes **no position argument** — it is a function of engine health
-> alone. Criterion 5 ("absent from a 960 start's **offered set**") has nothing to attach to; the
-> obligation is a new parameter and a new predicate, not the "small" of §3.6 item 5.
-> **(b) [[D1161]]'s named remedy is dead code.** `policyUsesMaiaBand` (`engine-band.ts:92-96`) has
-> **zero call sites** in production or test — repo-wide grep returns only its own definition and
-> prose. Suppressing "at `policyUsesMaiaBand`" suppresses nothing; the real request-construction site
-> is `#maia` → `positionCommand` (`opponent-selector.ts:576-614`, FEN out at `:604`).
-> **(c) Four paths reach Maia without consulting any offered set, two of them hardcoding
-> `human_common` regardless of the run's policy** — `rest.ts:1354-1358` (`GET /runs/:id/human-split`,
-> the human-commonality **evidence** path, gated only on assistance permission and
-> `providers.opponent !== "none"`) and `service.ts:1201-1204` (`human_replies` group seeding);
-> `rest.ts:1221` (`POST /select-move`) and `:1738` (`POST /runs/:id/prediction`) take the mode
-> straight from the request body, and `rest.ts` contains **no** `availableModes`/`validatePolicy`
-> call at all. **A 960 run offering `strong_engine` alone still sends its 960 FEN to Maia.**
-> **(d) The far end is not "weak play" and not even "silent castling corruption".** At the pinned
-> SHA (`workers/maia/Dockerfile:3` → `1e13597…`) `maia3/uci.py:422` builds `chess.Board(fen)` with no
-> `chess960=True`. Measured over all **960** Chess960 start positions on the resolved python-chess:
-> **0 raise**; **858** lose *all* castling rights, **84** lose some, **18** are unaffected, **0**
-> fabricate rights — `clean_castling_rights` masks to `BB_A1|BB_H1`/`BB_A8|BB_H8` and requires the
-> king on e1/e8. Then `uci.py:443-444` does a bare `return` when a replayed history move is illegal,
-> leaving `self.board` at the **previous position** with no error channel — and `opponent-selector.ts`
-> waits only for `bestmove`, which it duly receives, **for a different position**. The board even
-> self-reports `Status.BAD_CASTLING_RIGHTS` and nobody asks. Suppression must therefore be at
-> **request construction** and must cover the **evidence** paths, not the offered set.
->
-> *Incidental, outside this RFC:* `workers/maia/Dockerfile:19` pins `python-chess==1.999`, a shim
-> distribution requiring `chess` with **no version constraint**, so the parser this whole trap turns
-> on is unpinned despite `workers/maia/README.md:11` presenting it as a pin.
+> *Incidental, outside this RFC and carried as a ledger row:* `workers/maia/Dockerfile:19` pins
+> `python-chess==1.999`, a shim distribution requiring `chess` with **no version constraint**, so the
+> parser this whole trap turns on is unpinned despite `workers/maia/README.md:11` presenting it as a
+> pin.
 
 ### §4 — Import: one allow-list entry, and its silent-wrong twin
 
@@ -420,23 +435,33 @@ king-takes-rook form — `parseSan` emits `e1h1`/`e1a1`, so `makeUci(move)` at `
 satisfies `exact-legal-mobility`'s conformance predicate for imported 960 castling with no extra
 work.)*
 
-**§4.4 The guard widens per-tier, explicitly.** It must not widen to "any variant `chessops` knows".
-A Tier-2 game admitted at import flows into `importGame` → `createRun` → the story evidence pass →
-Stockfish and Maia, which is §2.2's prohibition reached through the back door. v1 adds exactly two
-strings.
+**§4.4 The guard widens per tier, with the comparison discipline stated.** [[D1042]] accepts weird
+games on import and analysis, so the guard admits **Tier 1 and Tier 2**, and refuses Tier 3b/3c for
+the library-support reason §8 gives. It does **not** widen to *"any variant chessops knows"* by
+accident — the widening is per tier and each tier's admission carries its own downstream contract.
 
-*(Cross-review 2026-08-23 — **"exactly two strings" needs its comparison discipline stated, and the
-number is arguable.** The guard is a **case-sensitive exact match** on the raw header
-(`pgn-import.ts:33`), while §3.3's evidence base — `parseVariant` — **lowercases** and accepts
-sixteen Tier-1-or-standard spellings. Adding literally `"Chess960"` and `"Fischerandom"` leaves
-`Fischerrandom`, `Fischer Random`, `Chess 960`, lowercase forms, and the whole `wild/0`–`wild/8a`
-family refused — while the RFC's own §3.3 argues they are standard chess. That is defensible as a
-conservative allow-list, but it must be a **stated** choice, not an accident of two string literals:
-either (i) match `parseVariant(header) === 'chess'` and rely on §4.3's `FEN`/`SetUp` requirement to
-carry the real safety, or (ii) name a closed lowercase set and say why the other spellings are out.
-Note (i) is the option that keeps `[Variant "From Position"]` — already accepted today — from being
-the loophole that (ii) leaves open: a 960 game exported under that tag imports at HEAD, unguarded by
-§4.3's rule. Criterion 9 inherits whichever is chosen.)*
+**The comparison rule, normative** — because *"add two string literals"* is a choice masquerading as
+an implementation detail. The guard is a **case-sensitive exact match** on the raw header
+(`pgn-import.ts:33`) while `parseVariant` **lowercases** and accepts sixteen Tier-1-or-standard
+spellings, so literal string-matching would refuse `Fischerrandom`, `Fischer Random`, `Chess 960`,
+every lowercase form and the whole `wild/0`–`wild/8a` family — spellings §3.3 argues *are* standard
+chess. **v1 therefore matches on `parseVariant(header)`, not on raw strings:**
+
+- `parseVariant(h) === 'chess'` → **Tier 1**, admitted, subject to §4.3's `FEN`/`SetUp` requirement.
+- `parseVariant(h)` ∈ the seven non-standard `RULES` members → **Tier 2**, admitted, and the run
+  records `rules` (§7.5) so no downstream reader mistakes it for standard chess.
+- `parseVariant(h) === undefined` → **refused**, which is exactly Tier 3b/3c and needs no separate
+  list to maintain.
+
+This also closes a loophole a literal allow-list leaves open: `[Variant "From Position"]` is
+**already accepted today**, so a 960 game exported under that tag imports at HEAD unguarded by
+§4.3's rule. Matching on `parseVariant` puts that path under the same requirement.
+
+**The downstream contract Tier-2 import carries.** An imported Tier-2 game flows
+`importGame` → `createRun` → the story evidence pass → Stockfish and Maia, which is §2.2's
+prohibition reached through the back door. Admission is therefore conditional on the suppression
+being enforced at the producer (§7.2) and on §3.7b's request-construction refusal, both of which this
+RFC specifies — not on a promise that the evidence pass will behave.
 
 ### §5 — The capability refusal is amended, not deleted
 
@@ -452,81 +477,165 @@ but unreachable → temporarily unavailable* — Chess960 support is a **deploym
 configured or it is not. The row must carry the ruling reference so the amendment is
 traceable to [[D1093]]/[[D1031]] rather than appearing as an unexplained flip.
 
-> **CROSS-REVIEW 2026-08-23 — RETURN-CLASS (4). The sentence removed here described machinery that
-> does not exist.** It read: *"The disposition therefore becomes `reached` on a deployment whose
-> engine spec sets the option (§3.6 item 2)."* At source, **every one of the 44 rows in
-> `CAPABILITY_DISPOSITIONS` (`capabilities.ts:120-165`) is a static string literal** — no ternary, no
-> `??`, no variable, no call appears in any `disposition:` position, and the frozen array is passed
-> through untouched at `:359`. Recounted: **17 `reached` / 19 `refused` / 7 `unmeasured` / 1
-> `impossible`**, matching [[D1077]]'s figures exactly. What *is* computed from runtime state in this
-> file is a pointedly different set — `providers()` `:232-264`, `surfaces()` `:266-278`, `policyModes`
-> `:337-346`, the Maia band `:324-332`. Dispositions are excluded by design.
->
-> **Three consequences the author must resolve.** (a) A deployment-conditional disposition is **new
-> code**, not §3.6 item 1's *"1 line + the documented act"*. (b) The startup gate
-> `assertAdvertisedCapabilityDispositions` (`:167-188`) checks that an advertised option **has a
-> row** — it is indifferent to the row's *kind* (`:180`) — so shipping item 2 without item 1 diverges
-> **silently**: the engine runs with `UCI_Chess960` set while the published table still says
-> `refused`, and nothing detects it. (c) Because of (b), **criterion 10 passes on a lie**: flipping
-> the literal to `reached` satisfies *"disposition is no longer `refused`"* on a deployment that never
-> sets the option. Three honest exits, all cheap, none chosen here: make the row `unmeasured` with the
-> §3.6-item-2 handshake as its named `experiment`; or extend `assertAdvertisedCapabilityDispositions`
-> to assert kind-vs-spec agreement at boot (which is what [[D1077]]'s "configured or not" actually
-> asks for and is the only one that makes criterion 10 failable); or flip it statically and say
-> plainly that the table describes the reference deployment. Note also that
-> `apps/server/src/strong-engine.ts:54-58` sets only `Threads`, `Hash`, `MultiPV` — `UCI_Chess960`
-> appears nowhere in the repo outside `capabilities.ts:133`.
+**§5.1 The disposition is not deployment-conditional today, and this RFC does not pretend otherwise.**
+Every one of the **44** rows in `CAPABILITY_DISPOSITIONS` (`capabilities.ts:120-165`) is a **static
+string literal** — no ternary, no `??`, no variable, no call in any `disposition:` position, and the
+frozen array passes through untouched at `:359`. Verified count: **17 `reached` / 19 `refused` / 7
+`unmeasured` / 1 `impossible`**, matching [[D1077]]'s figures. What *is* computed from runtime state
+in this file is a pointedly different set (`providers()` `:232-264`, `surfaces()` `:266-278`,
+`policyModes` `:337-346`, the Maia band `:324-332`); dispositions are excluded by design.
 
-### §6 — What v1 defers, and to whom
+**§5.2 Normative: the boot-time kind-vs-spec assertion.** The startup gate
+`assertAdvertisedCapabilityDispositions` (`:167-188`) currently checks only that an advertised option
+**has a row** — it is indifferent to the row's *kind* (`:180`). That indifference is what would let
+§3.6 item 2 ship without item 1 and diverge **silently**: the engine running with `UCI_Chess960` set
+while the published table still says `refused`, and nothing detecting it.
 
-| Deferred | Why | Home |
+**This RFC extends that gate to assert kind-vs-spec agreement at boot**: if the engine spec sets
+`UCI_Chess960`, the row's disposition may not be `refused`; if it does not, the row may not be
+`reached`. This is [[D1077]]'s *"configured at startup or not"* expressed as a check rather than a
+convention, and it is the reason criterion 10 can fail — under the alternatives (flip the literal
+statically, or mark it `unmeasured` with a named experiment) criterion 10 would pass on a deployment
+that never sets the option. Noted at source: `apps/server/src/strong-engine.ts:54-58` sets only
+`Threads`, `Hash`, `MultiPV`, and `UCI_Chess960` appears nowhere in the repo outside
+`capabilities.ts:133`, so the assertion is red until item 2 lands and green only when both do.
+
+### §6 — Chess960 drill packs are ADMITTED
+
+The previous draft deferred these. **The deferral does not survive [[D1230]]'s test — a cut needs a
+real blocker — because all three blockers it asserted fail at source**, and [[D327]], quoted in this
+RFC's own Motivation, asked for exactly this: *"if we're going to add **packs** with ie fischer
+random or all these other variations"*.
+
+**(a) The pack lint already admits one.** `lintDrillPack`'s only start predicate is
+`startPosition(pack.start.fen)` = `Chess.fromSetup(parseFen(fen).unwrap()).unwrap()`
+(`packages/schema/src/drill-pack/lint.ts:172-173`, called at `:296`, `INVALID_START_FEN` at
+`:299-303`). Measured at 0.15.1: `bqnbnrkr/pppppppp/8/8/8/8/PPPPPPPP/BQNBNRKR w HFhf -` **and** its
+`KQkq` spelling both parse as legal standard `Chess` positions. That is not an accident — it is
+§3.1/§3.3's thesis. Admitting 960 packs is therefore not a lint change; it is the removal of a
+prohibition that was never implemented.
+
+**(b) No pack-schema lane is needed.** §3.4's argument applies verbatim to `pack.start.fen`: the
+arrangement and the castling rights are both in the FEN. **Nothing in the pack schema changes, so
+Gate F clause 1 is untouched.**
+
+**(c) The Gate F reasoning the deferral leaned on was wrong twice.** Clause 1
+(`planning/platform-alignment/plan.md:48`) reads *"no active RFC holds a drill-pack schema lane"* —
+**a Boolean whose threshold is zero**, red continuously since `graduation-clearance` booked 0.28. It
+does not count depth. The depth framing is a *schedule* proxy narrated at `design/BACKLOG.md:390`
+([[D1058]]), and compressing it into "clause 1 counts lane depth" converts a scheduling argument into
+a threshold the clause does not contain. The count was stale too: **four** lanes are held, not three
+(`famous-games.md` booked 0.31 eighteen minutes after this RFC first landed; `register-check` prints
+`pack-schema: head 0.27; next free 0.32`).
+
+**What admission actually requires.** A 960 pack declares its rungs like any other admitted start
+(§2.1) — and for Tier 1 that declaration is *"all of them"*, because §2 measures every detector, the
+phase model, Syzygy, the explorer and Stockfish as surviving. The authoring surface gains a start
+that is not the standard back rank; nothing else moves.
+
+**The law's rationale reaches Tier 2, not Tier 1.** [[D1042]]'s drill-pack row says *standard chess
+only*, and the owner's stated reason is evidence-darkness — *"a drill exists to say something
+grounded about a position, and outside standard chess the evidence stack has nothing true to say"*
+(`design/06-campaign.md:288`). **Tier 1 is not evidence-dark.** The rule keeps its full force
+where it was aimed: Tier 2 drill packs stay refused (§7), for the reason the owner gave.
+
+*(This resolves what cross-review raised as Open question 5 — resolved on the ruling's own rationale
+rather than by re-asking the owner, since the engineering answer is now known and is not a blocker
+in either direction.)*
+
+**A count correction carried from cross-review, because the old row did gate work with it:**
+`content/packs/` is empty and `content/drafts/` holds **56** pack documents; "50 authored packs" is
+reached only by excluding six `*.browser.json` fixture packs, which the validator's own corpus rule
+does **not** exclude (`packJsonFiles`, `apps/server/src/pack-check.ts:44-55`, filters only
+`isSidecarName`) and which are real `DrillPackDefinition`s. The honest phrasing is *"50 authored
+packs (56 documents including six browser fixtures)"*.
+
+### §7 — Tier 2: admitted as evidence-dark play
+
+[[D1042]] admits any variant to Just Play, accepts weird games on import and analysis, and lets the
+campaign go *"as far as we like"*. The previous draft deferred all seven Tier-2 rulesets behind a
+discharge; **§2.2's suppression rule is what makes them shippable, and it is specified here rather
+than postponed.**
+
+**§7.1 The members.** Exactly the seven non-standard members of chessops' `RULES`
+(`dist/types/types.d.ts:54`, verified): `antichess`, `kingofthehill`, `3check`, `atomic`, `horde`,
+`racingkings`, `crazyhouse`. The library ships all seven; move generation, legality and terminal
+detection come free.
+
+**§7.2 What a Tier-2 surface may show.** The branch runtime is FEN-shaped, not rules-shaped, so
+**rewind, fork, compare and the whole consequence loop survive intact** — which is the product's
+actual thesis and the reason Tier 2 is worth admitting at all. What must be **suppressed, not
+annotated** (§2.2): engine evaluations, grades, Maia mass, tablebase verdicts, phase classification,
+and every structural detector. A Tier-2 run renders the board, the move list, the branch tree and
+the learner's own comparisons — and says nothing it cannot ground.
+
+**§7.3 Why suppression rather than a caveat, restated because it is the whole safety argument.** In
+Atomic, Antichess or Crazyhouse a standard-chess evaluator does not fail — it returns a **wrong
+number carrying the full authority of a right one**. Annotating it produces exactly the
+*"Stockfish: +0.54 / Maia: 31%"* dashboard `CLAUDE.md` names as the anti-pattern this product must
+not become, with the aggravation that the number is also false. **No Tier-2 surface may display an
+engine evaluation, a grade, a Maia mass or a tablebase verdict**, and the suppression is enforced at
+the producer, not the renderer.
+
+**§7.4 The opponent.** Maia is dark in Tier 2 for the same reason as Tier 1 and with the same
+failure mode (§3.7a), so §3.7b's request-construction refusal covers it unchanged. `strong_engine`
+is **also** unavailable in Tier 2 — Stockfish does not implement these rulesets, so its move would be
+illegal rather than merely weak. **v1 Tier-2 play is therefore human-vs-human or solo**, and
+[[D1271]]'s funded evidence-to-move selector is the path to a Tier-2 opponent, since a
+feature-and-weights selector is the only base type that ports across rulesets ([[D1160]]).
+Fairy-Stockfish is the engine that *does* implement them and is named there as the Tier-2
+dependency; it is out of scope here and carried by Discharge D2.
+
+**§7.5 The run must record its ruleset.** A Tier-2 game is **not self-describing**: Crazyhouse's
+starting position *is* the standard FEN. Without a recorded ruleset every downstream reader treats
+it as standard chess — which is §4.3's import trap, one layer deeper. Hence this RFC's single claim:
+`DrillRun.rules`, run-schema **lane 0.20**, an optional closed union over the seven, absent meaning
+standard chess. Absence-means-standard keeps every existing run valid with no migration.
+
+**§7.6 Drill packs stay refused for Tier 2**, on [[D1042]]'s own rationale (§6): evidence-dark is
+precisely the case the standard-only rule was aimed at. The pack schema gains nothing here, and
+`pack.start.fen` cannot express a ruleset — which is the same fact stated from the other side.
+
+### §8 — Tier 3: reduced armies admitted, fairy pieces refused, foreign games measured
+
+**§8.1 Reduced armies and pawns-only are ADMITTED EVERYWHERE, and they are not a variant.**
+A pawns-only or reduced-army position is a **legal standard-chess position**: standard rules,
+standard board, standard pieces. Every rung survives unchanged, and the **tablebase turns *on***
+below seven units rather than off — so these are the one member of the family where the evidence
+stack gets *stronger*, not weaker. The derivation calls this *"the highest evidence-per-effort item
+in the family"*, and it needs **nothing from this RFC**: no lint change, no schema change, no lane,
+no admission entry. It is listed here so the family is complete and so nobody defers it again by
+mistaking it for a variant. Drill packs may use it today.
+
+**§8.2 Fairy pieces and non-8×8 boards are REFUSED, with the reason cited.** `parseVariant` returns
+`undefined` for these (`pgn.ts:671-672`'s `default: return;`), and no chessops ruleset implements a
+non-standard piece or a non-8×8 board. This is a **library-support refusal, not a product opinion**
+— the distinction [[D1030]] exists to keep visible — and it is recorded rather than silent so that a
+future library capability reopens it on evidence.
+
+**§8.3 Duck Chess and Fog of War in literal form are REFUSED**, same ground: `parseVariant` returns
+`undefined` for both (confirmed at 0.15.1, alongside Xiangqi, Shogi and Bughouse). Fog's *idea*
+already ships better as the suppressor boss (`rfc/campaign-core.md:219-221`), which is a legibility
+mechanic implemented in standard chess rather than a ruleset we cannot execute.
+
+**§8.4 Xiangqi and shogi are a MEASUREMENT, not a deferral.** [[D328]] accepted degraded support in
+advance; what is unknown is whether the branch runtime is FEN-shaped enough to adapt. The measurement
+is one afternoon — whether `Node.fen` and `transposeKey` are the only FEN-shaped types in the branch
+runtime — and it decides whether this is an adapter over SFEN or a second product sharing a shell.
+Discharge D3 carries it with a named owner and a named artifact.
+
+### §9 — What v1 still defers, and to whom
+
+Each row names a home and an owner; per [[D1230]] a deferral without both is not a deferral.
+
+| Deferred | Why — the actual blocker | Home and owner |
 |---|---|---|
-| **Chess960 drill packs** | **§1 already settles this as law, not as a deferral: drill packs are standard chess only on owner ruling [[D1042]].** Whether Tier 1 counts as "standard chess" for that law is the owner's to say — see Open question 5. **No engineering blocker exists** (cross-review; the three the row previously asserted all fail at source — see below) | Open question 5, then Discharge D1 if admitted |
-| **Tiers 2 and 3** | §2.2's suppression rule must ship before any surface can host them | Discharges D2, D3 |
-| **Solitaire chess** ([[D869]]) | Shares no code with the variant axis; its blocker is the law-8 seal reconciliation `campaign-core.md:489` (D2) already demands, not engineering | its own lane, running in parallel |
-| **Reduced armies / pawns-only** ([[D873]]) | **Not a variant** — legal standard positions, full evidence, and the tablebase turns *on* below 8 units. The highest evidence-per-effort item in the family, and it needs nothing from this RFC | its own lane |
-| **A `rules` field and a Scharnagl generator** | Neither is needed for a pasted-FEN 960 start (§3.4, §3.6) | Discharge D2 claims the lane when Tier 2 arrives |
-| **Duck Chess and Fog of War in literal form** | No library support at any price (`parseVariant` returns `undefined` for both — **confirmed at 0.15.1**, along with Xiangqi, Shogi and Bughouse, via `default: return;` at `pgn.ts:671-672`). Fog's *idea* already ships better as the suppressor boss (`rfc/campaign-core.md:219-221`) | refused, recorded |
-
-> **CROSS-REVIEW 2026-08-23 — RETURN-CLASS (5). The drill-pack row asserted three blockers and all
-> three fail at source.** This matters more than a wrong reason, because [[D327]] — quoted in this
-> RFC's own Motivation — asked for exactly this: *"if we're going to add **packs** with ie fischer
-> random or all these other variations"*. The derivation reserved it as an owner fork
-> (`rfc-derivation.md:515`, gap 7 ⚖, *"Do 960 packs exist at all in v1"*). Deferring it on reasoning
-> that does not hold is the [[D1030]] pattern reproduced inside the document written to correct it,
-> and it is [[D1230]]'s test failed: **a cut needs a real blocker.**
->
-> **(a) The pack lint does not block a 960 pack — it already admits one.** `lintDrillPack`'s start
-> check is `startPosition(pack.start.fen)` = `Chess.fromSetup(parseFen(fen).unwrap()).unwrap()`
-> (`packages/schema/src/drill-pack/lint.ts:172-173`, called at `:296`, error `INVALID_START_FEN` at
-> `:299-303`). Run at 0.15.1: `bqnbnrkr/pppppppp/8/8/8/8/PPPPPPPP/BQNBNRKR w HFhf -` and its `KQkq`
-> spelling both parse as **legal standard `Chess` positions**. That is not an accident — it is this
-> RFC's own §3.1/§3.3 thesis. `docs/drill-pack-format.md:171` is quoted correctly; it simply does not
-> mean what the row needs it to mean.
->
-> **(b) A 960 pack therefore needs no pack-schema lane.** §3.4's argument — a 960 FEN is
-> self-describing, the arrangement and the castling rights are both in the FEN — applies verbatim to
-> `pack.start.fen`. Nothing in the pack schema changes.
->
-> **(c) The Gate F sentence is wrong twice.** Gate F clause 1 is
-> `planning/platform-alignment/plan.md:48`, verbatim: *"no active RFC holds a drill-pack schema
-> lane"* — **a Boolean whose threshold is zero**, red continuously since `graduation-clearance` booked
-> 0.28. It does not count depth; the depth framing is a *schedule* proxy narrated in
-> `design/BACKLOG.md:390` ([[D1058]]), and compressing it into "clause 1 counts lane depth" converts a
-> scheduling argument into a threshold the clause does not contain. And the count is stale: **four**
-> lanes are held, not three — `famous-games.md:14` booked **0.31** at 17:59:58, eighteen minutes after
-> this RFC landed at 17:41:40, and `node tools/register-check.mjs` prints `pack-schema: head 0.27;
-> next free 0.32`. The two rows are now in open contradiction inside one table: `rfc/README.md:35`
-> says this RFC keeps clause 1 *"at three lanes rather than four"*, `:38` says famous-games *"takes
-> Gate F clause 1 from three pack lanes deep to four"*. Whatever the acceptor decides, one of those
-> rows is wrong.
->
-> **(d) "All 50 authored packs are standard" needs its exclusion stated.** `content/packs/` is empty;
-> `content/drafts/` holds **56** pack documents. 50 is reached only by excluding six
-> `*.browser.json` fixture packs — which the validator's own corpus rule does **not** exclude
-> (`packJsonFiles`, `apps/server/src/pack-check.ts:44-55`, filters only `isSidecarName`), and which are
-> real `DrillPackDefinition`s. Since the sentence was doing gate work, it should read "50 authored
-> packs (56 documents including six browser fixtures)".
+| **A Tier-2 opponent** | Stockfish cannot execute these rulesets; the portable base type is [[D1271]]'s funded selector, and Fairy-Stockfish is its Tier-2 engine dependency | `rfc/evidence-move-selector.md` (claude, in drafting) + Discharge D2 |
+| **Xiangqi / shogi** | [[D328]]'s one-afternoon measurement has not been run (§8.4) | Discharge D3, `planning/variants/` (claude) |
+| **A Scharnagl start generator** | Not needed: a pasted FEN reaches every downstream symbol (§3.6 item 4), so v1 generates nothing and loses nothing | Discharge D1 (codex), when a start picker wants it |
+| **960 opening-explorer data** | One line at `explorer.ts:67` buys it, and 960's *point* is having no book — a product question, not a blocker | Open question 2 (OWNER) |
+| **Solitaire chess** ([[D869]]) | Shares no code with the variant axis; its blocker is the law-8 seal reconciliation `campaign-core.md:489` already demands | its own lane, in parallel (claude) |
+| **Fairy pieces, non-8×8, Duck, Fog** | **Refused, not deferred** — no library support at any price (§8.2, §8.3) | recorded refusal; reopens only on a library capability |
 
 ## Deviations from design
 
@@ -541,42 +650,43 @@ correction belongs to the research tier and is recorded as a proposed ledger row
 Numeric criteria carry their computed numbers ([[D984]]); each names the wrong implementation it
 rejects.
 
-1. **The admission matrix is data, not prose.** §1's four surfaces × admitted-tier pairs exist as a
-   single exported table with one entry per surface, and every surface that admits a start consults
-   it. *Wrong implementation rejected:* a per-call `if (variant === "chess960")`, which passes any
-   prose-only reading.
+1. **The admission matrix is data with TWO fields, not prose and not one field.** A single exported
+   table carries, per surface, **(a) the law** — §1's admission verb, which only the owner changes —
+   and **(b) the v1 shipped member set**, which narrows over time. Every surface that admits a start
+   consults (b), and (a) is asserted equal to §1's table. *Wrong implementation rejected:* **collapsing
+   the two fields into one**, which is exactly how the original criterion 12 went wrong — a
+   single-field table must contradict either the owner's law (*Just Play: any variant*) or v1's
+   shipment, and whichever it contradicts becomes machine-enforced. Also rejected: a per-call
+   `if (variant === "chess960")`, which passes any prose-only reading.
 
-   > *Cross-review 2026-08-23 — under-specified three ways, all repairable by the author.* **(i)
-   > §1 has no tiers.** Its cells are admission verbs ("Standard chess only", "Any variant, as an
-   > option", "Accepted", "As far as we like"); "four surfaces × admitted-**tier** pairs" describes a
-   > table §1 does not define. **(ii) The table cannot encode both §1 and §2.3 in one field.** §1's
-   > Just Play cell is *any variant* (the owner's law); §2.3 admits *Tier 1 only* (v1's shipment).
-   > A single-field table must contradict one of them — which is exactly how criterion 12's original
-   > form went wrong. Specify two fields: the **law** per surface, and the **shipped member set**,
-   > with only the latter narrowing over time. **(iii) It collides with the shipped surface
-   > vocabulary.** `SURFACE_IDS` (`capabilities.ts:40-48`) has **seven** members — `play`, `review`,
-   > `learn`, `live`, `create`, `justPlay`, `fromPosition` — and none of §1's four rows is a
-   > `SurfaceId`. In particular **`fromPosition` has no row**, and per §3.6 item 4 that is the surface
-   > a pasted 960 FEN actually starts on. Also worth stating plainly in §2: **no such table exists at
-   > HEAD** — no `admissionMatrix`, no `*_ADMISSION_*` constant, and no surface consults any per-variant
-   > table today (admission is the two hardcoded refusals plus the explorer literal). This is new
-   > construction, not an extension. As written, "every surface that admits a start consults it"
-   > has no assertion form and is passed by an exported table with one reader.
-2. **A drill pack cannot carry a non-standard start.** The pack lint refuses a pack whose start FEN
-   is not legal standard chess, with a fixture asserting the refusal fires. *Rejected:* silently
-   accepting, since all 50 shipped packs are standard and would not notice.
+   > *Cross-review 2026-08-23, now addressed by the two-field form above.* Three sub-findings the
+   > author must still honour in the implementation. **(i)** §1's cells are admission **verbs**, not
+   > tiers, so field (a) stores the verb and field (b) stores the tier set. **(ii)** **No such table
+   > exists at HEAD** — no `admissionMatrix`, no `*_ADMISSION_*` constant, and no surface consults any
+   > per-variant table today (admission is the two hardcoded refusals plus the explorer literal). This
+   > is new construction, not an extension. **(iii)** It collides with the shipped surface vocabulary:
+   > `SURFACE_IDS` (`capabilities.ts:40-48`) has **seven** members — `play`, `review`, `learn`, `live`,
+   > `create`, `justPlay`, `fromPosition` — and none of §1's four rows is a `SurfaceId`. In particular
+   > **`fromPosition` has no row**, and per §3.6 item 4 that is the surface a pasted 960 FEN actually
+   > starts on. The table must either map onto `SurfaceId` or declare its own vocabulary and state the
+   > mapping; "every surface consults it" is otherwise passed by a table with one reader.
+2. **A drill pack may carry a Tier-1 start and may not carry a Tier-2 one.** Two arms, both failable:
+   **(a)** a pack whose start FEN is a randomised back rank (`bqnbnrkr/pppppppp/8/8/8/8/PPPPPPPP/BQNBNRKR w HFhf -`)
+   **lints clean and preserves its start** through `startPosition`; **(b)** a pack that declares a
+   Tier-2 ruleset is **refused at the schema**, since `pack.start.fen` cannot express one and no pack
+   field admits `rules` (§7.6). *Rejected by (a):* adding a back-rank check to the lint — the
+   prohibition §6 removes, which would pass the old criterion and refuse the packs [[D327]] asked for.
+   *Rejected by (b):* accepting a `rules`-bearing pack, which would route an evidence-dark game into
+   the drill surface [[D1042]] reserves for standard chess.
 
-   > **Cross-review 2026-08-23 — RETURN-CLASS (5b): UNSATISFIABLE BY IDENTITY, [[D984]]'s class.**
-   > The lint's only start predicate is `Chess.fromSetup(parseFen(fen).unwrap()).unwrap()`
-   > (`drill-pack/lint.ts:172-173`), and **a Chess960 start FEN *is* a legal standard-chess position
-   > under it** — measured, both Shredder and X-FEN spellings (see §6's note (a)). So **no 960 fixture
-   > can make this refusal fire**, and the criterion can only be discharged with a fixture unrelated
-   > to variants (two kings, a pawn on the eighth), where it asserts behaviour that already ships and
-   > rejects no wrong implementation *of this RFC*. This is the mirror of criterion 12: one criterion
-   > nothing can pass, one nothing can fail, in the same document. The repair is not a better fixture
-   > — it is deciding Open question 5 first, because the criterion is only meaningful if "standard
-   > chess" is given a definition that excludes a 960 back rank, and the RFC's own §3.3 argues it does
-   > not.
+   > *Cross-review 2026-08-23 — the previous form was **unsatisfiable by identity** ([[D984]]): it
+   > asserted the lint **refuses** a non-standard start, but the lint's only start predicate is
+   > `Chess.fromSetup(parseFen(fen).unwrap()).unwrap()` (`drill-pack/lint.ts:172-173`) and **a 960
+   > start FEN IS a legal standard-chess position under it** — measured, in both spellings. No 960
+   > fixture could make that refusal fire. The repair is not a better fixture: it was deciding whether
+   > 960 packs are admitted, which §6 now does on [[D1042]]'s own rationale. With admission settled,
+   > arm (a) asserts the behaviour that ships and arm (b) asserts the boundary that must hold, and
+   > both can go red.*
 3. **A Chess960 FEN starts a Just Play run**, plays to a legal terminal position, and rewind, fork
    and compare all operate on it — asserted on a position with the king **off** the e-file, where
    the phantom-destination branch never fires (§3.5).
@@ -593,22 +703,22 @@ rejects.
    > implementer picks whichever passes. With the form now pinned, the named rejection works: a c/g
    > rewrite maps `b1h1 → b1g1` and fails. SAN half confirmed — `makeSan` renders `O-O` for `b1h1`
    > and `O-O-O` for `b1a1`.
-5. **The three Maia-backed opponent modes are absent from a 960 start's offered set**, and the
-   surface states why. *Rejected:* offering them and failing at selection time — the criterion asserts
-   the offered set, not the failure.
+5. **No non-standard start reaches Maia, asserted at the WRITE and not at the menu.** The strong
+   arm: for a run whose start is not a standard back rank, **no `position fen …` command is written
+   to the Maia engine by any path** — asserted at `positionCommand` (`opponent-selector.ts:310`, the
+   single site, called at `:544`, `:601`, `:653`), with the fixture driving the two paths that
+   hardcode `human_common`: `GET /runs/:id/human-split` (`rest.ts:1354-1358`) and `human_replies`
+   group seeding (`service.ts:1201-1204`). The weak arm, additionally: the three Maia-backed modes are
+   absent from the offered set and the surface says why. *Wrong implementation rejected — and it is
+   the only implementation currently possible:* **filtering the picker and leaving every other Maia
+   caller untouched**, which passes an offered-set criterion while the 960 FEN still reaches a sidecar
+   that answers `go` from a stale board (§3.7a).
 
-   > **Cross-review 2026-08-23 — RETURN-CLASS (2): this criterion guards the wrong boundary and has
-   > no mechanism to attach to.** See §3.7's note for the evidence. In short: `availableModes()` takes
-   > no position argument, so there is no per-start offered set to assert; [[D1161]]'s named remedy
-   > `policyUsesMaiaBand` is dead code; and **the offered set is not the boundary that matters** —
-   > `rest.ts:1354-1358` and `service.ts:1201-1204` hardcode `human_common` and consult no offered
-   > set, so a 960 run passing this criterion still sends its 960 FEN to Maia, which answers from a
-   > **stale board**. The criterion must assert suppression at **request construction** — no
-   > `position fen <960 fen>` is written to the Maia engine for any run whose start is not
-   > standard-back-rank, asserted at `#maia`/`positionCommand` (`opponent-selector.ts:576-614`) and
-   > covering the evidence endpoints — with the offered set as a second, weaker criterion for the UX
-   > half. As written, the wrong implementation that passes is the *only* implementation currently
-   > possible: filter the picker, leave every other Maia caller untouched.
+   > *Cross-review 2026-08-23 — the previous form guarded the offered set, which is the wrong
+   > boundary and had nothing to attach to: `availableModes()` (`opponent-selector.ts:515-524`) takes
+   > **no position argument**, [[D1161]]'s named remedy `policyUsesMaiaBand` (`engine-band.ts:92-96`)
+   > is **dead code with zero call sites**, and four paths reach Maia without consulting any offered
+   > set. Rebound above to the write site, per §3.7b.*
 6. **`strong_engine` in a 960 start returns a legal move** and the engine spec carries
    `UCI_Chess960`. *Rejected:* the option unset, which yields standard-castling moves that are
    illegal in the position.
@@ -626,227 +736,183 @@ rejects.
 8. **A `Chess960` header with no `FEN`/`SetUp` is REFUSED** (§4.3), with the refusal asserted
    explicitly. *Rejected:* defaulting to the standard position, which passes criterion 7 while
    silently corrupting every downstream reading.
-9. **The import guard admits exactly two new strings.** A fixture asserts that `Crazyhouse`,
-   `Atomic`, `Antichess`, `Horde`, `Racing Kings`, `King of the Hill` and `Three-check` remain
-   refused. *Rejected:* widening to `parseVariant`-knows-it, which passes criterion 7 and admits
-   seven rulesets §2.2 forbids.
+9. **The import guard matches on `parseVariant`, and Tier 3 stays refused.** Three arms: **(a)** a
+   `[Variant "Chess960"]` game with `FEN`/`SetUp` imports (criterion 7) **and so do its alternate
+   spellings** — `Fischerandom`, `Chess 960`, lowercase forms and `wild/0`–`wild/8a`, since
+   `parseVariant` maps all sixteen to `'chess'` (§3.3); **(b)** the seven Tier-2 rulesets import **and
+   the resulting run records `rules`** (§7.5); **(c)** `Duck Chess`, `Xiangqi`, `Shogi` and
+   `Bughouse` are **refused**, because `parseVariant` returns `undefined` (§8.2/§8.3). *Rejected by
+   (a):* a case-sensitive two-string allow-list, which refuses spellings §3.3 argues are standard
+   chess and leaves `[Variant "From Position"]` as an unguarded 960 loophole. *Rejected by (b):*
+   admitting a Tier-2 game **without** recording `rules`, which makes every downstream reader treat
+   Crazyhouse as standard chess — §4.3's trap one layer deeper. *Rejected by (c):* widening to
+   "anything chessops parses", since `undefined` is the library saying it cannot execute the game.
+   **Both clones are asserted**: `parsePgnMainline` and `parseRepertoirePgn` (`repertoire-pgn.ts:42`),
+   or the criterion measures one of two guards (§3.6 item 3).
 
-   > *Cross-review 2026-08-23 — this is the strongest criterion in the document and it survives, with
-   > one dependency.* The seven strings are exactly the seven non-standard members of chessops'
-   > `RULES` (`types.ts:78-89`: `antichess, kingofthehill, 3check, atomic, horde, racingkings,
-   > crazyhouse` — 8 members, 7 non-standard), so the fixture is complete against the library. It also
-   > does the protective work criterion 12 gestures at, and unlike criterion 12 it **can fail**. Its
-   > one dependency: "exactly two new strings" must be reconciled with §4.4's note — the guard is a
-   > case-sensitive exact match while §3.3's evidence base lowercases and accepts sixteen spellings,
-   > so the criterion's number follows from a choice the author has not yet stated. Add the second
-   > refusal too: **also assert `parseRepertoirePgn` refuses the same seven** (§3.6 item 3), or the
-   > criterion measures one of the two clones.
-10. **The capability row is amended, not deleted.** `capabilities.ts` contains a `UCI_Chess960` row
-    whose disposition is no longer `refused` and whose reason cites the ruling. *Rejected:* deleting
-    the row, which loses the published-refusal history §5 requires.
+   > *Cross-review 2026-08-23 called the previous form the strongest criterion in the document, with
+   > one dependency: "exactly two new strings" followed from a comparison discipline the author had
+   > not stated. §4.4 now states it, and the criterion follows it. The seven Tier-2 strings are exactly
+   > the seven non-standard members of chessops' `RULES` (verified at
+   > `dist/types/types.d.ts:54` — 8 members, 7 non-standard), so arm (b) is complete against the
+   > library rather than against a hand-list.*
+10. **The published disposition cannot disagree with the engine spec.** `capabilities.ts` contains a
+    `UCI_Chess960` row whose reason cites the ruling, **and the startup gate asserts kind-vs-spec
+    agreement** (§5.2): with the option set, the row may not be `refused`; without it, the row may not
+    be `reached`. *Rejected:* flipping the literal to `reached` on a deployment whose engine spec never
+    sets the option — which the previous form permitted, because all 44 dispositions are static
+    literals and the gate checked row **existence**, not kind. *Also rejected:* deleting the row, which
+    loses the published-refusal history §5 requires.
 
-    > **Cross-review 2026-08-23 — RETURN-CLASS (4): passes on a lie.** All 44 disposition values are
-    > static literals (§5's note), so "no longer `refused`" is satisfied by flipping one string to
-    > `reached` on a deployment whose engine spec never sets the option — and the startup gate checks
-    > row *existence*, not kind, so nothing catches the divergence. As written this criterion cannot
-    > distinguish an honest amendment from a false advertisement, which is the failure mode §5's own
-    > *"a published refusal that vanishes without an act"* paragraph exists to prevent. It becomes
-    > failable under §5's option (ii): assert kind-vs-spec agreement at boot.
-11. **No pack-schema and no run-schema lane are claimed.** `make register-check` is green with this
-    RFC active, and the `tabiya-claims` block reads `none`.
+    > *Cross-review 2026-08-23 — the previous form **passed on a lie**: "no longer `refused`" was
+    > satisfiable by a one-string edit with nothing asserting the engine actually had the option. Of
+    > §5's three honest exits, the boot-time assertion is the only one that makes this criterion
+    > failable, which is why §5.2 adopts it. It is red at HEAD in both directions —
+    > `strong-engine.ts:54-58` sets only `Threads`, `Hash`, `MultiPV`, and `UCI_Chess960` appears
+    > nowhere outside `capabilities.ts:133` — so it goes green only when item 1 and item 2 land
+    > together.*
+11. **The run-schema lane is claimed and no pack-schema lane is.** The `tabiya-claims` block declares
+    `run-schema | lane 0.20` and nothing else; `make register-check` is green with this RFC active,
+    and the declaration joins its Live-claims row byte-exactly (C3). *Rejected:* claiming a pack lane
+    for 960 packs, which §6(b) shows is unnecessary and which would move Gate F clause 1 — a Boolean
+    over pack-schema lanes — for no gain.
 
-    > *Cross-review 2026-08-23 — the decision is CORRECT, the criterion is near-vacuous.* Verified:
-    > nothing in the body touches a versioned resource. `imported_games` (`storage.ts:4386-4396`) has
-    > no variant column and no CHECK a 960 import violates, headers are stored as JSON, the capability
-    > table is unversioned, and §3.4's no-new-field argument holds. `node tools/register-check.mjs`
-    > (read-only; no write call in the tool) prints C1–C6 green over 26 active RFCs and 13 live claims.
-    > But `none` contributes no claim, so **register-check is green repo-wide with or without this
-    > RFC** — the criterion asserts nothing about this document beyond C1's block placement. Keep it,
-    > but do not count it as coverage.
-12. **No Tier-2 surface is REACHABLE BY A LEARNER YET.** A grep-able assertion that no *learner
-    surface* offers a `Rules` value this RFC has not admitted — scoped to offering, never to the
-    type. *Rejected, and this is the correction:* the original criterion asserted that **no code
-    path admits a `Rules` value other than `'chess'`**, which would have **failed the moment anyone
-    implemented [[D1042]]** — the owner's own ruling that Just Play offers *any* variant and the
-    campaign is *unrestricted*. chessops already ships all seven Tier-2 rulesets (§2.2), so the
-    criterion would have frozen a refusal the owner had already lifted, exactly as
-    `capabilities.ts:133` froze the Chess960 refusal it took a year and an owner's temper to find.
-    A criterion may bound what we *ship*; it may never bound what the owner has *ruled*.
+    > *Cross-review 2026-08-23 noted that the previous `none` made this criterion near-vacuous:
+    > register-check was green repo-wide with or without the RFC. With a real claim it asserts
+    > something about this document — C3's byte-exact join is a check the claim can fail.*
+12. **A Tier-2 start is refused by the SHIPPED-MEMBER field, and the LAW field still reads the
+    owner's words.** Two arms against criterion 1's two-field table: **(a)** a fixture requesting a
+    Tier-2 start on a surface whose shipped set excludes it is refused **with a message naming the
+    tier**; **(b)** the law fields for Just Play and campaign read *any variant* and *as far as we
+    like* — [[D1042]]'s wording — regardless of what v1 ships. *Rejected by (a):* a surface that
+    admits by law and forgets to consult the shipped set. *Rejected by (b), and this is the point:*
+    **an implementation that hard-codes the law narrower than the owner ruled** — which is what the
+    original criterion 12 did, asserting no code path may admit a non-`'chess'` ruleset and thereby
+    freezing a refusal the owner had already lifted.
 
-    > **Cross-review 2026-08-23 — RETURN-CLASS (6). The correction is RIGHT IN DIRECTION AND OVERSHOT
-    > INTO THE OPPOSITE ERROR: as rewritten, this criterion CANNOT FAIL.** The diagnosis is confirmed
-    > — the original form *would* have failed the moment anyone implemented [[D1042]], chessops does
-    > ship all seven Tier-2 rulesets, and the stated rule is the correct law. But the replacement is
-    > [[D984]]'s other half, and it is the twin of criterion 2 in the same document.
+    > **Cross-review 2026-08-23 — the previous two forms were BOTH defective, in opposite
+    > directions.** The original *"no code path admits a `Rules` value other than `'chess'`"* would
+    > have failed the moment anyone implemented [[D1042]]. Its [[D1231]] replacement — a bound on what
+    > a learner surface *offers* — **could not fail at all**: chessops' `Rules` type is imported by
+    > **zero** files repo-wide (verified), and the RFC introduced no `rules` field, so the assertion
+    > was true by absence of its referent for every possible implementation. One criterion nothing
+    > could pass and one nothing could fail, in one document. The rebind above has a referent — `rules`
+    > now exists (§7.5) — and both arms can go red.
     >
-    > **Why it cannot fail.** The criterion asserts that no learner surface offers *"a `Rules` value
-    > this RFC has not admitted"*. **There is no `Rules` value anywhere in this codebase.** chessops'
-    > `Rules` type is imported by **zero** files (repo-wide grep over `packages/` and `apps/`); the
-    > only `Rules` tokens are unrelated `sourceLabel: "Rules"` string literals at
-    > `packages/runtime/src/branch-scale.ts:83` and `apps/web/src/lib/evidence-sentences.ts:26`. And
-    > this RFC deliberately introduces none: §3.4 claims **no run-schema lane** on the grounds that a
-    > 960 FEN is self-describing, and §6 reserves the `rules` field for Discharge D2. So the assertion
-    > is **true by absence of its referent, before and after implementation, for every possible
-    > implementation of this RFC**. Nothing an implementer could do would turn it red. The first
-    > implementation that could fail it is D2's — which will carry its own criteria.
-    >
-    > **Two further defects.** (a) It has **no *"Rejected:"* clause naming a wrong implementation** —
-    > its "Rejected, and this is the correction" paragraph rejects the *previous criterion*, which is
-    > changelog material, not an acceptance test. That breaks the rule stated one line above the list:
-    > *"each names the wrong implementation it rejects."* (b) It is **redundant with criterion 9**,
-    > which does the same protective work at the only boundary a Tier-2 ruleset can currently cross,
-    > and which **is** failable.
-    >
-    > **Suggested rebind, failable within this RFC's scope.** Assert that criterion 1's admission table
-    > carries the **law** and the **v1 shipped member set** as two separate fields (per criterion 1's
-    > note (ii)), that the law fields for Just Play and campaign read *any variant* / *as far as we
-    > like*, and that a fixture requesting a Tier-2 start is refused by the **shipped-member** consult
-    > with a message naming the tier. That fails against any implementation which collapses the two
-    > fields — which is precisely what the original criterion 12 did — and it fails against an
-    > implementation that hard-codes the law narrower than [[D1042]]. It bounds what we ship and
-    > records what was ruled, in one test, and it can go red.
-    >
-    > **The rule this criterion states should be promoted out of it.** *"A criterion may bound what we
-    > ship; it may never bound what the owner has ruled"* is a general guard worth more than the
-    > criterion carrying it, and §1's campaign row failed it independently (see §1's note). It belongs
-    > in the RFC template beside [[D984]]'s numeric guard, as a proposed ledger row.
+    > **The rule this criterion carries is promoted out of it** into the RFC template as a proposed
+    > ledger row, with its twin: *a criterion may bound what we ship; it may never bound what the owner
+    > has ruled* — and *a criterion no implementation can turn red is the same defect as one no
+    > implementation can turn green.*
+13. **A Tier-2 run renders no engine evaluation, grade, Maia mass or tablebase verdict**, asserted at
+    the producer rather than the renderer (§7.2/§7.3), with a fixture driving a Crazyhouse import
+    through the story evidence pass. *Rejected:* suppressing in the view layer while the producer
+    still computes and stores a standard-chess centipawn for a position whose rules it does not
+    implement — the wrong number is then one template change from being shown, and §2.2's whole
+    argument is that a wrong number carries the authority of a right one.
+14. **A Tier-2 run keeps its branch runtime.** Rewind, fork, compare and re-entry all operate on a
+    Crazyhouse run, asserted end to end. *Rejected:* gating the consequence loop on evidence
+    availability, which would make the product's own thesis unavailable exactly where §7 admits the
+    tier for.
+15. **A reduced-army position needs no variant machinery.** A pawns-only start (`8/pppppppp/8/8/8/8/PPPPPPPP/4K2k w - -`
+    shape) starts a run, lints as a pack, and **carries no `rules` value** — it is standard chess
+    (§8.1). *Rejected:* routing it through the variant admission path, which would suppress the
+    evidence stack on a position where the tablebase is *more* available than usual, not less.
 
 ## Discharges
 
 | id | the obligation | owner | recorded when discharged | discharged |
 |---|---|---|---|---|
-| D1 | Chess960 drill packs — the pack-lint widening and the pack-schema lane it needs | claude | the packs RFC's landing commit | |
-| D2 | Tier 2 — the `rules` field and its run-schema lane, the instrument-suppression surface (§2.2), and the tablebase/explorer endpoint questions | claude | the Tier-2 RFC's landing commit | |
-| D3 | Tier 3 — [[D328]]'s measurement of whether `Node.fen` and `transposeKey` are the only FEN-shaped types in the branch runtime, which decides whether xiangqi/shogi is an adapter or a second product | claude | `planning/variants/` | |
+| D1 | A Scharnagl start generator, if a start picker ever wants one — v1 accepts pasted FENs and needs none (§3.6 item 4, §9) | codex | the implementing commit that adds a 960 start picker | |
+| D2 | A **Tier-2 opponent** — Fairy-Stockfish as the engine that implements the seven rulesets, consumed through [[D1271]]'s funded selector; also the Tier-2 tablebase/explorer endpoint questions (§7.4) | claude | `rfc/evidence-move-selector.md`'s landing commit | |
+| D3 | **Tier 3c** — [[D328]]'s one-afternoon measurement of whether `Node.fen` and `transposeKey` are the only FEN-shaped types in the branch runtime, which decides whether xiangqi/shogi is an adapter over SFEN or a second product sharing a shell (§8.4) | claude | `planning/variants/` | |
 | D4 | The research-tier correction to `fun-mechanics-outside-roguelikes.md:1130-1133` (Deviations) | claude | the dossier's next edit | |
-| D5 | Implementation of §3.6 and §4 | codex | the implementing commit | |
+| D5 | Implementation of §3.6, §4, §5.2, §6 and §7 | codex | the implementing commit | |
+| D6 | The [[D523]] one-authority repair — `parsePgnMainline` is documented as the sole legality authority and `repertoire-pgn.ts:42` is a byte-identical clone; either consolidate or amend the claim (§4.2) | codex | the implementing commit | |
 
 ## Open questions
 
-1. **⚖ OWNER, BLOCKING ACCEPTANCE — is a Maia-dark Chess960 acceptable?** In 960 the human-opponent
-   modes are unavailable and Just Play offers `strong_engine` alone (§3.7). This is the fork
-   [[D1030]] found was asserted rather than asked: `capabilities.ts:133`'s product rationale
-   supplied an answer to a question nobody put. The mechanism in this RFC is fully determined either
-   way — the ruling governs whether it ships, not what it says.
+**Nothing here blocks acceptance.** The two questions the previous draft marked blocking were both
+already ruled; they are recorded as closed rather than re-asked, per [[D1150]]'s lesson.
 
-   > **Cross-review 2026-08-23 — RETURN-CLASS (1): THIS QUESTION IS STALE AND ITS LAST SENTENCE IS
-   > FALSE.** The owner ruled on it the same day, before this RFC was drafted, and ruled *against* the
-   > framing: [[D1153]] — *"well we just need 'bot capas'? Like don't we have special bots that consume
-   > evidence and shit? So we can make some that don't consume maia-produced evidence? Like isn't
-   > there Fairy-Stockfish as well?"* — i.e. **don't accept the gap; compose a bot that does not
-   > depend on Maia.** That row records research commissioned, with *"the variants RFC's blocking open
-   > question stays open until it returns"*. **It has returned**: [[D1160]],
-   > `design/research/non-maia-bot-composition.md` (631 lines), measured 2026-08-23. Its findings
-   > change this question's options rather than answering it in the old terms:
-   > - **Fairy-Stockfish cannot fill the slot**, and the reason is structural, not a shortfall: the
-   >   base-layer contract is a **distribution, not an engine** — `BotPolicyCandidateInput` requires
-   >   `rawMass` per candidate with `completeness = Σ rawMass`
-   >   (`bot-policy-catalog.ts:131-138,324`, floor at `:455`), and Fairy-Stockfish is alpha-beta +
-   >   NNUE **evaluation** with nothing policy-shaped in its option table. (Cross-review caveat on the
-   >   dossier's own wording: `BotPolicyInput` `:16-19` is **not** a closed union — its third arm is a
-   >   template literal `` `evidence.${string}@${number}` `` — and `assertLayer` `:190-239` never checks
-   >   which input a `human_policy_model` declares, so "only base provider" is vocabulary, not
-   >   enforcement.)
-   > - **The blocker is absent human-trained 960 *weights*, not an absent instrument** — Maia is an
-   >   Lc0 net and lc0 has supported `UCI_Chess960` since v0.23/v0.25. A data problem with a known
-   >   price, not a wall.
-   > - **We do not need Fairy-Stockfish for 960 at all**: the shipped **Stockfish 18 already has
-   >   `UCI_Chess960`** (confirmed here by handshake — `option name UCI_Chess960 type check default
-   >   false`), so `capabilities.ts:133` is a product opinion and nothing more.
-   > - **The recommendation on file** (`:511-514`), verbatim: *"960 ships with an engine-composed
-   >   opponent, disclosed and labelled uncalibrated, with the human-likeness measurement (§5)
-   >   commissioned in parallel and its result binding on what the card may say."* Engine choice
-   >   `:551-553`: **Stockfish for Tier 1**; Fairy-Stockfish is a Tier-2 dependency. Enforcement is
-   >   already free — `REFUSED_PERSONA_CLAIM` (`bot-policy-catalog.ts:172`) and the `uncalibrated`
-   >   label (`:477`), with 960 results **unrated**, no strength number, no ladder, no difficulty dial
-   >   (`:480-486`), and the measurement's five arms predeclared at `:356-410`.
-   >
-   > **And the last sentence — *"the mechanism in this RFC is fully determined either way"* — is
-   > false.** The ruled direction is priced at `:505` as one new `BotPolicyInput` member, a cp→mass
-   > base layer with its own sampler and positive control, and a `historyCapability` widening. None of
-   > that is in §3.6. **Rewrite the question as the owner's actual fork** — *does 960 ship the composed
-   > Stockfish profile now (and this RFC grows §3.6 accordingly), or does 960 wait for 960-trained
-   > weights?* — and carry the dossier's recommendation as the recommended answer. As it stands the
-   > document asks the owner to re-decide something he has already decided, which is [[D1030]]'s defect
-   > with the polarity reversed.
+1. **CLOSED by ruling — the Maia-dark opponent.** The previous draft carried this as
+   *"⚖ OWNER, BLOCKING ACCEPTANCE — is a Maia-dark Chess960 acceptable?"*, and it should not have:
+   **[[D1153]] ruled it the same day and ruled against the framing** — *"we just need 'bot capas'…
+   make some that don't consume maia-produced evidence"*, i.e. **do not accept the gap**. The
+   commissioned research returned that day ([[D1160]]) with the interim on file, and **[[D1271]] then
+   funded [[D810]]'s evidence-to-move selector** as the durable answer. §3.7 carries the ruled
+   position: a composed **Stockfish** opponent, disclosed, labelled uncalibrated, results unrated,
+   with the human-likeness measurement binding on what the card may say — and the portable base type
+   arrives in `rfc/evidence-move-selector.md`. Two corrections that came with the ruling and are
+   folded into §3: **Fairy-Stockfish cannot fill the base-layer slot** (the contract is a
+   *distribution*, not an engine — `BotPolicyCandidateInput` requires `rawMass` per candidate), and
+   **the shipped Stockfish 18 already advertises `UCI_Chess960`** (confirmed by handshake), so
+   `capabilities.ts:133` was never a capability limit.
 2. **⚖ OWNER — is 960 opening-explorer data wanted?** One line at `explorer.ts:67` buys it, and 960's
-   *point* is having no book. v1 declines it; the question is whether that is right.
-3. **Is a 960 result rated?** Glicko-2's arithmetic works, but rating needs a *measured* opponent and
-   Maia is dark, so no calibrated human opponent exists. `capabilities.ts` already refuses rating
-   from engine-adjudicated outcomes. The recommended answer is **unrated, stated**; recorded here
-   rather than decided, because it interacts with `learner-rating`'s accepted predicate.
-
-   > *Cross-review 2026-08-23 — the recommendation is right and now over-determined, but the citation
-   > does not carry it.* The row exists (`capabilities.ts:148`: *"rating from authored, engine- or
-   > tablebase-adjudicated outcomes"*, `refused`) — but a 960 game against `strong_engine` reaches a
-   > **rules-terminal** result, and `:146` marks rating from those `reached`. The refusal that
-   > actually bites is `rfc/learner-rating.md:252` — `strong_engine` *"carries no band and no
-   > calibration"* — which is prose, not a disposition. Cite that instead. The answer is independently
-   > settled by [[D1160]]'s dossier, which makes **unrated** a consequence of the `uncalibrated` label
-   > rather than a recommendation (`:480-486`: no strength number, no ladder, no difficulty dial), so
-   > this question can be closed alongside Open question 1 rather than carried separately.
+   *point* is having no book. v1 declines it; the question is whether that is right. **Not
+   acceptance-blocking** — declining is the conservative default and reversing it is one line.
+3. **CLOSED — a 960 result is unrated, and it follows rather than being chosen.** [[D1160]]'s
+   `uncalibrated` label carries it: no strength number, no ladder, no difficulty dial, so an unrated
+   result is a consequence of the opponent's label rather than a separate policy. The citation that
+   actually bites is `rfc/learner-rating.md:252` — `strong_engine` *"carries no band and no
+   calibration"* — not `capabilities.ts:148`, since a 960 game against `strong_engine` reaches a
+   **rules-terminal** result and `:146` marks rating from those `reached`.
 4. **[[D328]]'s cheap measurement** (Discharge D3) is one afternoon and decides whether westernised
    xiangqi/shogi is an adapter over SFEN or a second product sharing a shell. It should be taken
-   independently of this RFC.
-5. **⚖ OWNER — is Chess960 "standard chess" for the purposes of [[D1042]]'s drill-pack row?**
-   *(Added by cross-review 2026-08-23; it was the derivation's gap 7 ⚖, resolved by the author rather
-   than asked.)* §1 states the law as **drill packs: standard chess only**, and the owner's stated
-   reason is evidence-darkness — *"a drill exists to say something grounded about a position, and
-   outside standard chess the evidence stack has nothing true to say"* (`06-campaign.md:288`). **Tier
-   1 is not evidence-dark**: §2 measures every detector, the phase model, Syzygy, the explorer and
-   Stockfish as surviving intact, and §3.3 shows the library does not treat 960 as a separate ruleset
-   at all. So the ruling's *rationale* does not reach Chess960 even though its *wording* might. The
-   engineering answer is now known and is not a blocker either way: **a 960 pack needs no lint change,
-   no schema change and no lane** (§6's note). [[D327]] asked for this directly — *"if we're going to
-   add packs with ie fischer random"*. Recommended answer: **admit Chess960 packs**, since the
-   evidence stack that justifies the standard-only rule is fully present, and keep the rule's teeth
-   for Tiers 2–3 where it was aimed. Criterion 2 cannot be written until this is ruled.
+   independently of this RFC and does not gate it.
+5. **CLOSED — Chess960 drill packs are admitted (§6).** Cross-review raised this as an owner fork,
+   and it is resolved on **[[D1042]]'s own rationale** rather than by re-asking: the ruling's reason
+   is evidence-darkness, Tier 1 is not evidence-dark, and the three engineering blockers the deferral
+   asserted all fail at source. [[D327]] asked for 960 packs by name. **If the owner reads the
+   standard-only wording as reaching Tier 1 regardless of its rationale, that is a veto to state —
+   but it is a veto of a ruled-in position, not an open question.**
 
-## Ledger rows (proposed — renumber at landing; head D1120 at drafting)
+## Ledger rows (proposed — id assigned at landing; head was **D1285** at repair)
 
-- **D1121 (proposed)** — 🐞 the research dossier's *"a variant node has no grounded instrument
-  behind it"* (`fun-mechanics-outside-roguelikes.md:1130-1133`) is **false for Chess960** and true
-  only for Tiers 2–3; the over-broad form is why the lane sat unrouted for a week.
-- **D1122 (proposed)** — 📊 the derivation's §4.4 latent-defect claim about `chessgroundDests`
-  phantom castling destinations is **refuted at source**: the branch fires only for an e-file king
-  whose a1/h1 rook square is a legal destination, and 960 castling lands the king on the c/g file by
-  rule, so its output is correct whenever it fires (§3.5). One item leaves the cost list.
-- **D1123 (proposed)** — 🐞 `startingPosition({Variant: "Chess960"})` with no FEN header returns the
-  **standard** position, so lifting the import guard without requiring `FEN`/`SetUp` silently
-  imports standard games as 960 (§4.3). *(Cross-review: confirmed by re-running at 0.15.1;
-  `pgn.ts:697-703`, `parseVariant`→`'chess'` at `:698` then `defaultPosition` at `:702`. Contrast
-  `Duck Chess`, which errors — the trap exists only for the spellings this RFC admits.)*
+Unnumbered per [[D1130]]'s convention as it stood; renumber from the head in the landing commit.
 
-*(Rows proposed by cross-review 2026-08-23, for the author to renumber and land:)*
-
-- **D1124 (proposed)** — 🐞 **`parsePgnMainline` is not the sole legality authority it is documented
-  to be.** `repertoire-pgn.ts:42` runs a byte-identical `Variant` guard inside a separate parser with
-  its own `parsePgn` and `startingPosition`, serving repertoire import from pasted PGN and Lichess
-  study URLs (`repertoire.ts:81`). `rfc/live-sources.md:102` asserts the one-authority discipline
-  ([[D523]]) and it is untrue at HEAD. Any variant-guard change must touch both sites or say why not.
-- **D1125 (proposed)** — 🐞 **`policyUsesMaiaBand` is dead code** (`engine-band.ts:92-96`, zero call
-  sites) and is nonetheless named as the remedy in [[D1161]]. Separately, **four paths send a FEN to
-  Maia without consulting any offered mode set**, two of them hardcoding `human_common` regardless of
-  the run's policy (`rest.ts:1354-1358`, `service.ts:1201-1204`; `rest.ts:1221,1738` take the mode
-  from the request body, and `rest.ts` contains no `availableModes`/`validatePolicy` call at all).
-  Any per-start opponent suppression must be built at request construction.
-- **D1126 (proposed)** — 🐞 **The Maia sidecar's parser is unpinned.** `workers/maia/Dockerfile:19`
-  installs `python-chess==1.999`, a shim distribution whose metadata requires `chess` with **no
-  version constraint**, while `workers/maia/README.md:11` presents it as a pin. The library that
-  parses every FEN Maia sees floats, and the 960 castling behaviour measured here depends on it.
-- **D1127 (proposed)** — 📊 **`chessgroundDests` withholds a legal gesture in 960.** With the king on
-  e1 and the rooks off a1/h1, chessops accepts the familiar two-square castle
-  (`normalizeMove(e1c1) = e1b1`, `isLegal` true) but `chessgroundDests` never offers `c1` — the board
-  offers less than the rules layer takes. Completeness/UX gap, not a correctness defect; distinct
-  from D1122, which refutes the *opposite* claim.
-- **D1128 (proposed)** — 🐞 **`tools/evidence-topology-harness/audit.test.ts:41` asserts
-  `CAPABILITY_DISPOSITIONS` has 39 rows; it has 44.** Found incidentally while recounting for §5.
-  Outside this RFC's scope, but it is a red guard nobody is reading.
-- **D1129 (proposed)** — ⚖ **Promote the rule criterion 12 states into the RFC template**, beside
-  [[D984]]'s numeric guard: *a criterion may bound what we ship; it may never bound what the owner has
-  ruled.* It caught its own criterion here and §1's campaign row failed it independently, so it is a
-  general guard rather than a one-off note. Its natural twin, also from this review: **a criterion
-  that no implementation can turn red is the same defect as one no implementation can turn green.**
+- 🐞 the research dossier's *"a variant node has no grounded instrument behind it"*
+  (`fun-mechanics-outside-roguelikes.md:1130-1133`) is **false for Chess960** and true only for
+  Tiers 2–3; the over-broad form is why the lane sat unrouted for a week.
+- 📊 the derivation's §4.4 latent-defect claim about `chessgroundDests` phantom castling destinations
+  is **refuted at source and now measured**: the branch fires only for an e-file king whose a1/h1
+  rook square is a legal destination, and 8904 driven gestures produced **240 phantoms, 0
+  mismatches** (§3.5).
+- 🐞 `startingPosition({Variant: "Chess960"})` with no FEN header returns the **standard** position,
+  so lifting the import guard without requiring `FEN`/`SetUp` silently imports standard games as 960
+  (§4.3). Confirmed at 0.15.1; contrast `Duck Chess`, which errors — the trap exists **only** for the
+  spellings this RFC admits.
+- 🐞 **`parsePgnMainline` is not the sole legality authority it is documented to be.**
+  `repertoire-pgn.ts:42` runs a byte-identical `Variant` guard inside a separate parser with its own
+  `parsePgn` and `startingPosition`, serving repertoire import from pasted PGN and Lichess study
+  URLs. `rfc/live-sources.md:102` asserts the one-authority discipline ([[D523]]) and it is untrue at
+  HEAD. Carried as Discharge D6.
+- 🐞 **`policyUsesMaiaBand` is dead code** (`engine-band.ts:92-96`, zero call sites repo-wide) and is
+  nonetheless named as the remedy in [[D1161]]. Separately, **four paths send a FEN to Maia without
+  consulting any offered mode set**, two hardcoding `human_common` regardless of the run's policy
+  (`rest.ts:1354-1358`, `service.ts:1201-1204`; `rest.ts:1221,1738` take the mode from the request
+  body, and `rest.ts` contains no `availableModes`/`validatePolicy` call at all). §3.7b builds the
+  suppression at request construction because of this.
+- 🐞 **The Maia sidecar's parser is unpinned.** `workers/maia/Dockerfile:19` installs
+  `python-chess==1.999`, a shim distribution whose metadata requires `chess` with **no version
+  constraint**, while `workers/maia/README.md:11` presents it as a pin. The library that parses every
+  FEN Maia sees floats, and §3.7a's measured 960 castling behaviour depends on it.
+- 📊 **`chessgroundDests` withholds a legal gesture in 960.** With the king on e1 and the rooks off
+  a1/h1, chessops accepts the familiar two-square castle (`normalizeMove(e1c1) = e1b1`, `isLegal`
+  true) but `chessgroundDests` never offers `c1` — the board offers less than the rules layer takes.
+  Completeness gap, not a correctness defect.
+- 🐞 **`tools/evidence-topology-harness/audit.test.ts:41` asserts `CAPABILITY_DISPOSITIONS` has 39
+  rows; it has 44.** Found while recounting for §5. Outside this RFC's scope, but it is a red guard
+  nobody is reading.
+- ⚖ **Promote into the RFC template, beside [[D984]]'s numeric guard:** *a criterion may bound what
+  we ship; it may never bound what the owner has ruled* — and its twin, **a criterion that no
+  implementation can turn red is the same defect as one no implementation can turn green.** Both
+  fired inside this document: criterion 12 in each direction across two drafts, criterion 2
+  unsatisfiable, and §1's campaign row narrowing the ruling inside the cell stating it.
+- 🐞 **Gate F clause 1 is a Boolean, not a depth count** (`planning/platform-alignment/plan.md:48`:
+  *"no active RFC holds a drill-pack schema lane"*), red continuously since `graduation-clearance`
+  booked 0.28. The depth framing is a **schedule proxy** narrated at `design/BACKLOG.md:390`
+  ([[D1058]]); compressing it into "clause 1 counts lane depth" converts a scheduling argument into a
+  threshold the clause does not contain, and it was used in this RFC and elsewhere to justify cuts.
 
 ## Changelog
 
@@ -910,3 +976,44 @@ rejects.
   Tier-2 member list against chessops' `RULES`; criterion 9, the strongest criterion here; and the
   `none` claims decision, verified against `imported_games`' CHECK constraints and a read-only
   `register-check` run. Six ledger rows proposed (D1124–D1129).
+
+- 2026-08-23 **repair + widening (this revision).** All six return-class blockers resolved at source,
+  and the document no longer ships the Chess960-only cut it was returned for.
+
+  **The six.** (1) **Open question 1 is closed by ruling, not re-asked** — [[D1153]] ruled *compose a
+  bot that does not depend on Maia*, [[D1160]] priced it the same day, and [[D1271]] funded
+  [[D810]]'s selector; §3.7 carries the ruled interim (composed Stockfish, disclosed, uncalibrated,
+  unrated) and cites `rfc/evidence-move-selector.md` for the durable path. Asking again would have
+  been [[D1150]]'s defect. (2) **Suppression moved from the picker to the write** — §3.7b names
+  `positionCommand` (`opponent-selector.ts:310`), the single site that emits `position fen`, because
+  `availableModes()` takes no position argument, `policyUsesMaiaBand` is dead code, and two paths
+  hardcode `human_common`. (3) **§3.7a is body text** — the sidecar cannot *parse* a 960 position
+  (858 of 960 arrangements lose all castling rights, 0 raise) and then answers `go` from a stale
+  board; the guard exists because the failure is silent and confident. (4) **§5.2 adopts the
+  boot-time kind-vs-spec assertion**, the only one of three exits that makes criterion 10 failable.
+  (5) **§6 admits 960 drill packs** — the three asserted blockers all fail at source, [[D327]] asked
+  for them by name, and the cut failed [[D1230]]; resolved on [[D1042]]'s own rationale
+  (evidence-darkness, which does not reach Tier 1) rather than by re-asking the owner. (6)
+  **Criteria 2 and 12 rebound to failable forms** — they were [[D984]]'s two halves in one document,
+  one unsatisfiable and one unfailable, four criteria apart.
+
+  **The widening, which is the larger repair.** The owner ruled a **family** ([[D1031]]) under a
+  per-surface law ([[D1042]]) and the previous draft shipped one member with the rest behind
+  discharges. §2.3 now states the admitted set per tier per surface; **§7 specifies Tier 2 as
+  evidence-dark play** in Just Play, import and campaign — admitted because §2.2's suppression rule
+  is specified here rather than postponed, and because the branch runtime is FEN-shaped, so the
+  consequence loop survives where the instruments do not; **§8 specifies Tier 3**, admitting the
+  reduced-army family everywhere (it is not a variant — legal standard positions, and the tablebase
+  turns *on* below seven units), refusing fairy pieces and non-8×8 boards on a **library-support**
+  ground rather than a product opinion, and carrying xiangqi/shogi as [[D328]]'s measurement with a
+  named owner. §9's deferral table now gives every row a home **and** an owner, per [[D1230]].
+
+  **Claims changed from `none` to `run-schema | lane 0.20`** — the honest cost of the widening. A
+  Chess960 FEN is self-describing; **a Tier-2 game is not**, since Crazyhouse's start *is* the
+  standard FEN, so `DrillRun.rules` records the ruleset and absence keeps every existing run valid.
+  **No pack-schema lane**, so Gate F clause 1 is untouched — and that clause is a **Boolean at
+  threshold zero**, not a depth count, a correction that removes the reasoning used to justify the
+  pack deferral in the first place.
+
+  **Criteria are now 15**, adding Tier-2 suppression at the producer (13), Tier-2 branch-runtime
+  survival (14) and reduced-army admission without variant machinery (15).
