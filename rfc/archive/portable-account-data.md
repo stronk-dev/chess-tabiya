@@ -1,6 +1,6 @@
 # RFC: Portable account data and dependency-aware deletion
 
-- **Status:** accepted — 2026-08-22, by claude as register owner on the buildability test, after buildability (D711–D714) and an independent cross-review that re-derived ~45 claims at source and failed 5, all corrected in place: the browser-clearing promise named one localStorage prefix where the shipped grammars are three (`tabiya:` / `tabiya.` / `chess-tabiya:`) plus the same-day `tabiya.workflow.v1.*`; the §4.3 tombstone journal record was impossible under `session_journal.kind`'s closed CHECK with no migration claimed (pinned to `session.closed`); the migration-position queue predated the 2026-08-22 acceptances (all three named, with longitudinal-store's D1 hand-off); the migration-24 column enumeration missed `live_sessions.classroom_id`; `archive/teacher-surface.md` joins Parent/amends. *(Prior line for history: draft — buildability review 2026-08-22 corrected D711–D714; independent cross-review 2026-08-22 corrected five findings; ready for acceptance)*
+- **Status:** implemented — 2026-08-23. Deterministic closed-shape export, exact stale-safe account/run deletion previews, dependency-aware hard-delete/tombstone/revoke classification, archived-classroom read-only behavior, publication warnings, browser clearing and canonical lifecycle docs ship in `b4d0654`, `942d22e` and `b44d5f3`. Focused completion audit: 57 server/component tests plus the real browser account-lifecycle journey green. *(Prior: accepted 2026-08-22 after buildability D711–D714 and independent cross-review.)*
 - **Author:** Codex on the owner's 2026-08-21 retention ruling
 - **Created:** 2026-08-21
 - **Design refs:** `design/02-product-shape.md` deployment axis and appliance clauses;
@@ -17,7 +17,7 @@
   `archive/social-match.md`, `archive/board-annotation.md`,
   `archive/teacher-surface.md` (its §4.1a/criterion 9a account-deletion outcome only — §4.6)
 - **Supersedes / superseded by:** —
-- **Planning:** `planning/portable-account-data/` once implementing
+- **Planning:** `planning/archive/portable-account-data/`
 
 ```tabiya-claims
 none
@@ -507,8 +507,8 @@ No other deviation.
 
 | id | the obligation | owner | recorded when discharged | discharged |
 |---|---|---|---|---|
-| D1 | [[D605]] — portable account export | `portable-account-data` | implementation commit satisfying criteria 1–5 and 16–19 | |
-| D2 | [[D606]] — private history survives deletion and no per-run delete exists | `portable-account-data` | implementation commit satisfying criteria 6–17 and 19 | |
+| D1 | [[D605]] — portable account export | `portable-account-data` | implementation commit satisfying criteria 1–5 and 16–19 | `b44d5f3` |
+| D2 | [[D606]] — private history survives deletion and no per-run delete exists | `portable-account-data` | implementation commit satisfying criteria 6–17 and 19 | `b44d5f3` |
 
 ## Open questions
 
@@ -516,6 +516,12 @@ None. The material product boundary was answered by D656. Exact helper names and
 streaming or a bounded temporary file are implementation decisions constrained by §6.
 
 ## Changelog
+
+- 2026-08-23: implementation closed across `b4d0654`, `942d22e` and `b44d5f3`; focused
+  completion audit passed 57 server/component tests and the account-lifecycle browser journey.
+  D605/D606/D657 and the four buildability findings close; planning history reconstructed
+  explicitly because implementation had skipped the required `planning/<slug>/` transition
+  (D1015).
 
 - 2026-08-21: drafted from R18, the F12 split and owner ruling D656; specifies deterministic export,
   exhaustive inventory, stale-safe previews, per-run deletion and the private/shared/published

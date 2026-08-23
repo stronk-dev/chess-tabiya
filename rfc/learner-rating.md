@@ -1144,7 +1144,7 @@ paragraph.**
 `STORAGE_VERSION` is **24** (`apps/server/src/storage.ts`), landed by
 `archive/teacher-surface.md`. This RFC holds the next position — *no longer as the only active
 claimant* (cross-review 2026-08-22): `rfc/longitudinal-store.md`, accepted 2026-08-22, claims
-the position **behind** this one, and `rfc/portable-account-data.md`, accepted the same day,
+the position **behind** this one, and `rfc/archive/portable-account-data.md`, now implemented,
 obliges this migration to **add its six tables' deletion-inventory entries as part of its own
 schema guard** (its §1 queues `learner-rating` by name). It carries **two independent table sets**: the rating's three (§10.1) and the
 standing's three (§10a.7). They land in one migration body because they land in one commit; if
@@ -1251,7 +1251,7 @@ CREATE TABLE rating_periods (
 
 `ON DELETE CASCADE` on `learners(id)` gives account deletion for free, matching migration 2's
 posture rather than the bare-`TEXT` pattern `teacher-surface` adopted for classroom tables.
-*(Checked against `rfc/portable-account-data.md`, accepted 2026-08-22: hard-delete is that RFC's
+*(Checked against `rfc/archive/portable-account-data.md`: hard-delete is that RFC's
 class for records that strand nothing and mint no authorization, which these are — a standing
 entry hard-deleting on account deletion is the same semantics as §10a.7's withdrawal-is-a-DELETE,
 i.e. the ultimate withdrawal, and a mark means nothing without the account. The migration adds
@@ -1633,7 +1633,7 @@ now interact and are added below the table.*
 | `campaign-core.md` (**accepted 2026-08-22**) | Its Discharge D1 owns the deferred rated boss and absorbs [[D945]]'s rated-when-clean reading *"once `learner-rating` is accepted"*; its §2 is the earned-rewind mechanism §5.3a consequence 4 cites | Consistent both directions: its §3.4 defers the rated boss to D1; this RFC's condition-3 note routes the persona/`targetElo` disjointness to the same D1. This RFC's acceptance is what unblocks it |
 | `bot-policy.md` (**accepted 2026-08-22**) | `RunOpponentPolicy.profile` **mutually exclusive** with `targetElo` (its §"profile" rules) — the ground of [[D962]] | Recorded at §3 condition 3 without foreclosing either arm; nothing else touched |
 | `longitudinal-store.md` (**accepted 2026-08-22**) | Claims the migration position **behind this RFC** (its register row names the grammar). Its store is decision-grained (`decision_class`); the rating never reads it — the rating's only outcome input is `attempts.result` on runs created by `POST /rated-games`, so `game`/`predicted` decision classes cannot pool into an update | No collision; the ladder order is register-recorded (§9.1) |
-| `portable-account-data.md` (**accepted 2026-08-22**) | Owns deletion/export semantics; queues this RFC's migration **by name** for deletion-inventory entries | Obligation absorbed: §9.1 records the inventory entries as part of this migration's schema guard; §10.1 records why CASCADE hard-delete is that RFC's correct class for these six tables |
+| `archive/portable-account-data.md` (**implemented 2026-08-23**) | Owns deletion/export semantics; its exhaustive-inventory guard requires this RFC's new tables to declare dispositions at landing | Obligation absorbed: §9.1 records the inventory entries as part of this migration's schema guard; §10.1 records why CASCADE hard-delete is the correct class for these six tables |
 | `intent-presets.md` (**accepted 2026-08-22**) | Compiled assistance contexts and the universal rules floor (`boardLighting` never below `"legal"`) | No interaction needed: the rated refusal is route-layer, outside `permittedAssistance` and outside preset compilation; the rules floor is *mandatory* rendering, which strengthens §5.2's claim that the browser-rendered remainder is not refusable. A rated run needs no context of its own |
 
 ### 11.2 The doctrine collision the draft declared — and did not have

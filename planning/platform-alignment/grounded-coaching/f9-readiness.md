@@ -150,7 +150,7 @@ portable-account inventory in the same landing:
 - no provider receives raw history—the optional LLM receives only a sealed admitted card.
 
 `[V]` R12 re-identifies 35/36 accounts across disjoint halves
-(`design/research/player-style-metrics.md` §6); `rfc/portable-account-data.md` §§2–5 already requires
+(`design/research/player-style-metrics.md` §6); `rfc/archive/portable-account-data.md` §§2–5 already requires
 future behavioral profiles to join its exhaustive inventory.
 
 ## 6. RFC opening condition and first implementation slice

@@ -83,7 +83,6 @@ set execution order.
 | Rows | Primary destination | Next action / gate |
 |---|---|---|
 | D707 | private human-play RFC lane | Scope native play as a private learning primitive, not a competitive service. |
-| D712, D713 | portable-data follow-up | Reconcile archived-classroom reads and add the immutable-publication deletion warning to both Studio surfaces. |
 | D252 | session/board-control defect | Preserve the distinction between match session kind and matching board control, with the divergent case in tests. |
 
 ## Process and direct integrity defects

@@ -354,8 +354,9 @@ CampaignRun per `campaign_id` (partial unique index in the migration; a second s
 typed `CAMPAIGN_RUN_ACTIVE_EXISTS`). Earned state is server-held by ruling (`06:237-239`,
 [[D945]]): none of this ever lives in `AssistanceConfig` or any localStorage key. Deletion
 semantics: cascade on learner deletion — campaign state is private solo history in
-`portable-account-data.md`'s classification, and its export inventory picks these tables up at
-that RFC's F12-B landing (noted there as a body obligation for whichever lands second; no
+`archive/portable-account-data.md`'s classification, and its export inventory picks these tables up
+when this migration lands (the archive's exhaustive-inventory guard makes this an obligation of
+the new tables' landing commit; no
 schema coupling either way).
 
 ### §7. Surfaces — where campaign chrome lives

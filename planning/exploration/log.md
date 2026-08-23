@@ -5725,3 +5725,18 @@ canonical declaration across profiles. Byte-identical shared layers remain legal
 band or any other declared field under the same identity fails compilation. The focused fixture
 constructs exactly the D970 hazard (`model.maia3@1` at bands 1500 and 1800) and a positive shared-
 layer control. No production roster registered and the D970 owner/RFC amendment remains required.
+
+## 2026-08-23 — portable account data completion reconciled and archived
+
+The accepted RFC had already shipped across `b4d0654`, `942d22e` and `b44d5f3` while its active
+status and D605/D606 discharges remained untouched. A completion audit ran nine focused server/
+component files (**57 tests**) plus the real Playwright account-lifecycle journey (**1 passed**).
+The proofs cover deterministic closed-shape export, password confirmation, exact/stale previews,
+private and shared deletion classes, rollback, archived-classroom read-only behavior, Studio
+retention warnings, browser clearing and the refreshed R18 destructive fixture.
+
+`rfc/archive/portable-account-data.md` is now implemented; D605, D606, D657 and D711–D714 close;
+F12-B and the never-started inventory are reconciled. The RFC's implementation had skipped the
+required planning transition, so D1015 records the failure and
+`planning/archive/portable-account-data/` reconstructs the actual commit sequence explicitly as a
+retrospective record rather than manufacturing a clean history.

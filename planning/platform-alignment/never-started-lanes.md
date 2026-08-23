@@ -237,7 +237,7 @@ gated, or have no ledger row at all. Tier reached and the next concrete actor fo
 | **Live sources / casting live tournaments** | D947 ⚖️ commissioned today; `tools/d947-broadcast-roundtrip-harness/` exists; research base D410–D414, D704/D705/D709/D710; design/03 Live surfaces | commission + harness in flight | **in-derivation as of today** (was never-started for 11 days after its research landed) | land the derivation, route D410/D412/D704/D709/D948 into the lane doc, claude-draft the `live-sources` RFC |
 | **Events / tournaments / team relays** | design/03 "Arena and events" row; D412 unrouted (the row is literally about the lane being parked ambiguously) | design named, ledger row parked | **never-started** | owner-ruling: does events ride the live-sources lane or its own; then route D412 |
 | **Author marketplace / content strategy** | D868 📊 "routed to design/04/owner" — no design/04 amendment, no decision-queue row | ledger only | **never-started (dropped hand-off)** | owner-ruling via decision-queue; content side is behind the D560 hold + Gate F anyway |
-| **Import/export** | game-import, pack-studio, repertoire-gap-finding shipped (docs/); `portable-account-data` accepted 2026-08-22 | implemented + accepted RFC | **partially-shipped** | codex implements portable-account-data incl. the D712/D713 promises its draft made |
+| **Import/export** | game-import, pack-studio, repertoire-gap-finding and `archive/portable-account-data.md` ship with canonical docs | implemented | **shipped** | account import remains explicitly out of scope; future cross-instance import requires its own identity/collision contract |
 | **Engine/provider & self-host appliance** | R18 `release-platform-audit.md` (provider-off core proven, 1.0 floor fails); D588 unrouted; O13 "ready" per plan.md | research landed | **research-exists-no-RFC** (F12 blocked on O13 mirror) | claude mirrors O13 into intent per `intent-amendment-handoff.md`, then F12 drafting |
 | **Daily shared position (Wordle-shape)** | D301 — *"the cheapest complete feature in the campaign cluster"* | ledger only, unrouted in **both** audits | **never-started** | claude-draft as a small standalone RFC or the campaign RFC's first encounter; owner picks |
 | **Rewind-from-mistake auto-offered branches** | D550 (Beacon); routed only into `evidence-rework-brief.md` | ledger + brief mention | **never-started** as a surface | design/02 adoption-amendment treatment: claude-research the auto-offer transform, owner rules |
@@ -278,9 +278,9 @@ this pass:
    owner decisions) contains none of them.
 3. **D945's owed intent amendment** — the ruling row itself says design/06 §5 needs the
    boss-economy amendment "claude on this ruling"; not yet executed.
-4. **D712/D713 — portable-account-data's written promises** (tombstone reads for surviving
-   classroom members; pre-deletion disclosure that authored bytes survive) that the accepted
-   draft made and the shipped/planned surfaces don't honor.
+4. **CLOSED 2026-08-23 — D712/D713 portable-account-data promises.** Surviving classroom
+   members have a read-only archived projection and both Studio registration paths disclose
+   immutable-byte retention; permanent regressions landed with the implementation.
 5. **D585 — the dead "Open assistance" button**: a learner-visible control shipped with no
    handler.
 6. **D698 — R11/O8 blocked on a blind review the owner already descoped** (D649): a lane still

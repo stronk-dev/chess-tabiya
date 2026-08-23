@@ -26,8 +26,8 @@ The remaining release blockers are independently real:
 
 | ledger | current gap | primary child |
 |---|---|---|
-| D605 | no versioned account export | F12-B data lifecycle |
-| D606 | solo run history retained as `__legacy`; no run delete | F12-B data lifecycle |
+| D605 | **closed** — deterministic versioned account export ships | F12-B data lifecycle |
+| D606 | **closed** — dependency-aware account/run deletion ships | F12-B data lifecycle |
 | D607 | unsafe loopback/LAN default and incomplete TLS deployment | F12-A deployment |
 | D608 | no supported backup/restore/pre-upgrade/recovery contract | F12-C operations |
 | D609 | dead Maia remains advertised and new requests hang | F12-D provider health |
@@ -88,7 +88,7 @@ Required contract:
 
 Non-goals: federation, Kubernetes, public SaaS billing, an operator account.
 
-### F12-B — portable data and deletion lifecycle — DRAFTED; LANDS AFTER TEACHER-SURFACE
+### F12-B — portable data and deletion lifecycle — IMPLEMENTED 2026-08-23
 
 Owns D605/D606 and the future private-by-default behavioral profile data.
 
@@ -116,10 +116,10 @@ lose all real writers and become read-only; registered pack/shape bytes remain i
 account-identifying publisher metadata becomes a tombstone. The preview must disclose that authored
 bytes already embedded in an immutable shared/published artifact survive with that artifact.
 
-Author review found one landing dependency not visible in R18: accepted `teacher-surface.md`
-creates classroom/submission tables and specifies the pre-D656 opposite deletion outcome. It lands
-first for its already-claimed migration; `portable-account-data.md` then inventories those tables and
-supersedes only its account-deletion clause. D657 records the collision.
+Author review found one landing dependency not visible in R18: `teacher-surface.md` created
+classroom/submission tables and specified the pre-D656 opposite deletion outcome. It landed first;
+`rfc/archive/portable-account-data.md` now inventories those tables and supersedes only its
+account-deletion clause. D657 is closed.
 
 Account-bundle **import** is not implied by O13's export/delete ruling. Server backup/restore belongs
 to F12-C. A future user-level cross-instance import needs its own collision/identity contract.

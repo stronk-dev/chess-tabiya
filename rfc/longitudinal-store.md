@@ -39,7 +39,7 @@
   behind its two claims; and R15 — its §8 refusal and rendering-set, quoted and extended
   to both directions of this store in §5.2 here, enforced as reachability since a
   consumer-less store has no rendered bytes for a byte-identity fixture to compare);
-  `portable-account-data.md` (the two new durable classes join its export/deletion
+  `archive/portable-account-data.md` (the two new durable classes join its export/deletion
   inventory — Discharge D1)
 - **Parent / amends:** —
 - **Supersedes / superseded by:** —
@@ -616,7 +616,7 @@ as absence, never approximated.
    that remain — and keeping `portable-account-data`'s exact per-run deletion preview
    truthful when it counts these rows.
 3. **Export.** Both tables are owner-exportable durable data and join the account-export
-   and deletion inventories that `portable-account-data.md` (O13/D616's Choice-C appliance
+   and deletion inventories that `archive/portable-account-data.md` (O13/D616's Choice-C appliance
    floor) maintains — Discharge D1. Rows are re-derivable, which makes them cheap to
    export and safe to *omit from import* (a future importer may rebuild them from imported
    runs rather than trusting exported aggregates — noted for that future RFC, decided
@@ -719,7 +719,7 @@ negative fixture where it could otherwise pass vacuously.
 
 | id | the obligation | owner | recorded when discharged | discharged |
 |---|---|---|---|---|
-| `D1` | the two durable classes (`learner_observations`, `learner_structure_stats`) enter the account-export and account/per-run deletion inventories — `portable-account-data.md`'s §2 inventory if it is still active at this RFC's landing, else the landed export/deletion docs surface | `longitudinal-store` (self, at landing) | the landing commit | |
+| `D1` | the two durable classes (`learner_observations`, `learner_structure_stats`) enter the account-export and account/per-run deletion inventories required by `archive/portable-account-data.md` and the landed export/deletion docs | `longitudinal-store` (self, at landing) | the landing commit | |
 
 ## Open questions
 
