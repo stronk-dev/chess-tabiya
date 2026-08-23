@@ -138,13 +138,33 @@ grain amendment. Its design refs cite R13 §2 by name. **The queue asks you to a
 has already been drafted and accepted at the RFC tier.** Your ruling on clause 2 is now a
 ratification or a reversal, not an authorization.
 
-**2. That ledger's migration is unlanded, and the queue does not mention the dependency.**
+**2. That ledger's migration is unlanded, and the queue does not mention the dependency — and as of
+today the RFC has been returned to its author.**
 Verified: `grep -rn "learner_observations\|learner_structure_stats" apps packages workers` → **zero
 hits**. `STORAGE_VERSION = 25` (`apps/server/src/storage.ts:631`); migration 25 is *"learner
 ratings, rated games, periods, standings, and marks"* (`storage.ts:3779-3782`). The store would be
-migration 26, claimed *behind* `learner-rating`. It is further blocked by its own three open
-questions, which two ledger rows say must resolve first — `design/BACKLOG.md:50` ([[D973]]) and
-`:303` ([[D1011]]). **So: clause 2 approved today buys nothing executable until D973/D1011 close.**
+migration 26, claimed *behind* `learner-rating`. It is blocked by its own three open questions,
+which two ledger rows say must resolve first — `design/BACKLOG.md:50` ([[D973]]) and `:303`
+([[D1011]]).
+
+**Landed while this memo was being written (`66ee110`, 2026-08-23):** a buildability review returned
+the RFC. `planning/longitudinal-store/codex-buildability-review.md:5` — **verdict RETURN TO AUTHOR /
+REGISTER OWNER**; `:9-13` — *"The accepted label is not buildable yet"*, with the declared ingest set
+at **67 families against a compiler that can construct at most 46**. Five new blocker rows landed:
+[[D1401]] (the ingest/compiler gap — *"all avoidance families that motivate opportunity-normalized
+skills are structurally zero"*), [[D1402]] (`derived_at` makes windows and rebuild byte-equality
+undefined), [[D1403]] (the revision fixture does not bind zero-incidence registry changes),
+[[D1404]] (prediction drill-down refs are ambiguous) and [[D1405]] (the incremental path replays a
+complete legal-alternative census after every mutation with no latency gate — **research required
+before implementation**). `rfc/README.md:21` and the RFC's own status line still read *accepted*.
+
+The review is explicit that the **foundation survives** (`:116-124`): per-run rows, the
+learner+run+version+phase+decision-class grain, owner-only attribution, the
+`occurred <= opportunities` checks, hard-delete cascades, rebuild-as-authority, and *"no prose,
+style label, skill tier, rating input or LLM output in storage."*
+
+**So: clause 2 approved today ratifies an architecture that a same-day review calls right in shape
+and not yet buildable. It buys nothing executable.**
 
 **3. `rfc/learner-rating.md` shipped the largest self-metric surface in the product.**
 Status `:3` — *implementing, 2026-08-22 learner-surface checkpoint; accepted 2026-08-22*. Migration
@@ -192,10 +212,11 @@ Approve, as seven clauses, with two amendments to what the handoff drafted.
    version, denominator, population/window, minimum sample, uncertainty and contributing sources.
    No single profile-confidence badge, no GM twin, no tactical/positional type. *(Unchanged; the
    archetype half is settled by measurement — see below.)*
-2. **Ratify the versioned personal-observation ledger, and name its dependency.** Ratify
-   `rfc/longitudinal-store.md` as the F9 store. **Amendment: the ruling states that nothing renders
-   from it until [[D973]]/[[D1011]] close and migration 26 lands.** This is the dependency the queue
-   row omits.
+2. **Ratify the versioned personal-observation ledger *as an architecture*, and name its
+   dependency.** Ratify the shape of `rfc/longitudinal-store.md` — the part today's review says
+   survives unchanged — as the F9 store. **Amendment: the ruling states that nothing renders from it
+   until [[D973]]/[[D1011]] close, [[D1401]]–[[D1405]] are repaired, and migration 26 lands.** This
+   is the dependency the queue row omits.
 3. **Three separate modules** — Observed habit, Recurring situation, Rehearsal result — as distinct
    seats, never one profile page. They must be compiled into `learner-modules`' registry as real
    module ids; today they exist only in prose.
@@ -263,12 +284,19 @@ licensing a surface whose evidence base is five candidates, none with a longitud
 
 ### Choice 3 — rule now, or after the store's open questions close?
 
-Ruling now is mostly ratification (clause 2 is already an accepted RFC) and unblocks `player-style`
-and `review-map` from drafting against an unruled gate. Ruling later costs nothing mechanically —
-[[D1170]] (`design/BACKLOG.md:427`) records that **the binding constraint in this lane is roughly
-eight weeks of real play, not your signature**, and `player-style.md:230-234` confirms the ≥8-week
-early/late and blitz↔rapid transfer check nobody had listed as a need. Cost of ruling now: you
-ratify a store whose semantics D973/D1011 say are not yet fixed.
+Ruling now unblocks `player-style` and `review-map` from drafting against an unruled gate. Ruling
+later costs nothing mechanically — [[D1170]] (`design/BACKLOG.md:427`) records that **the binding
+constraint in this lane is roughly eight weeks of real play, not your signature**, and
+`player-style.md:230-234` confirms the ≥8-week early/late and blitz↔rapid transfer check nobody had
+listed as a need. Cost of ruling now: you ratify a store whose semantics D973/D1011 say are not
+fixed and which was returned to its author hours ago — hence clause 2's narrowing to the
+architecture rather than the document.
+
+**A note on how the queue reads.** The row says the ruling must *"rule literal habit registry +
+personal-observation ledger + three modules …"*, which reads as an authorization. At HEAD the
+registry is specified in a draft RFC written today, the ledger is a returned RFC, and the three
+modules exist in no RFC and no code. **You are ratifying a direction, not releasing a build.** If
+that framing is wrong for you, that is itself the answer to Choice 3.
 
 **Not a choice, and I am not offering it as one:** archetypes, GM-twin mapping and the
 aggressive↔solid axis. ARI 0.251–0.417 against a preregistered 0.70 gate, with seven of nine
@@ -321,8 +349,9 @@ nicety.
 
 ## What turns on it
 
-- **`rfc/longitudinal-store.md`** — ratification, and whether D973/D1011 are named as the gate on
-  migration 26. Every downstream migration position queues behind it.
+- **`rfc/longitudinal-store.md`** — ratification of the architecture, and whether D973/D1011 and
+  today's D1401–D1405 are named as the gate on migration 26. Every downstream migration position
+  queues behind it; `bot-policy` claims one position behind it (`rfc/README.md:18`).
 - **`rfc/player-style.md`** — drafted today without this ruling. Its §12 splits mechanism-acceptance
   from card-acceptance precisely so it can be accepted before the data exists. Choice 1 determines
   whether its §5 comparator path is licensed or struck.
@@ -340,7 +369,9 @@ nicety.
 
 ## Traceability note
 
-Verified at HEAD `36074c7` on 2026-08-23 by direct read of every file cited. Code line numbers were
+Verified on 2026-08-23 at `36074c7`, refreshed through `66ee110`, by direct read of every file
+cited. The tree moved several times during preparation; the §2 drift note above was rewritten
+after the longitudinal-store return landed mid-memo. Code line numbers were
 re-derived, not copied from the handoff; four handoff citations had drifted and are corrected above.
 No file outside this memo was modified. This memo is planning prose and does not amend protected
 intent (law 5); the `design/03` and return/progression amendments this ruling implies are the
