@@ -826,3 +826,17 @@ Also landed: [[D1131]] (clocks measured as a feature — 108 of 108 paste games 
 6,991 tags; broadcast 1,158 readings and zero declared controls, so abstention is per *field*) and
 [[D1132]] ([[D1061]] settles D357's ordering, not its substance — the pre-commit top-rung criterion
 is live and blocks the enforced-clock successor, not `recorded-clocks`).
+
+## The deferral inventory 2026-08-23 — [[D1133]]/[[D1134]]/[[D1135]]
+
+1,300 recorded scope cuts across 96 RFCs; **539 with no destination**, 167 pointing at documents
+that do not exist, 163 owner decisions in no queue. Receipts:
+`planning/platform-alignment/deferral-inventory.md`.
+
+**The structural cause ([[D1134]]) is the actionable part**: the `## Discharges` register landed
+2026-08-21, so **64 of 96 RFCs predate it**. A deferral in a Discharges row blocks archival and
+shows in `status-parity`; the same deferral one section earlier is tracked by nothing — and 539
+were written one section earlier. The repair is a retrofit pass: lift prose deferrals into
+Discharges rows, RFC by RFC, heaviest first (`learner-rating`, `measurement-records`,
+`archive/predicate-wave-3`, `archive/teacher-surface`, `breadth-collectors` §4 — a whole
+"Refused and deferred" section with zero D-ids).
