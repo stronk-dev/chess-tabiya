@@ -204,6 +204,11 @@
     viewportSupport = runViewportSupport(globalThis.innerWidth, globalThis.innerHeight);
   }
 
+  function openAssistance(): void {
+    compactTab = "evidence";
+    sheetOpen = true;
+  }
+
   let run = $derived(snapshot.run);
   let boardEdge = $derived(playBoardEdge(viewportSupport.width, viewportSupport.height));
   let canWrite = $derived(snapshot.access === "writer");
@@ -821,7 +826,7 @@
         {/if}
       </div>
       <div class="topbar-actions">
-        {#if assistance.ambient === "on"}<button class="ambient" type="button" aria-label="Open assistance" title={busy ? "Thinking…" : snapshot.withheld ? "Waiting for disclosure" : guardEvent ? "A consequence is ready" : "Present"}>♟</button>{/if}
+        {#if assistance.ambient === "on"}<button class="ambient" type="button" aria-label="Open assistance" aria-controls="run-support-region" title={busy ? "Thinking…" : snapshot.withheld ? "Waiting for disclosure" : guardEvent ? "A consequence is ready" : "Present"} onclick={openAssistance}>♟</button>{/if}
         <details class="assistance-control">
           <summary>Assistance</summary>
           <div class="assistance-grid">
@@ -932,7 +937,7 @@
         </nav>
 
         <div class="companion-scroll">
-          <section class="companion-section evidence-seat" class:compact-active={compactTab === "evidence"} aria-label="Support">
+          <section id="run-support-region" class="companion-section evidence-seat" class:compact-active={compactTab === "evidence"} aria-label="Support">
             {#if run.feedbackPolicy === "attempt_end" && canWrite && onReveal !== undefined}
               <section class="evidence-reveal" aria-label="Evidence disclosure">
                 <button type="button" disabled={feedbackDeliveryOpen(run) || busy} onclick={() => void onReveal?.()}>Open evidence for this position</button>

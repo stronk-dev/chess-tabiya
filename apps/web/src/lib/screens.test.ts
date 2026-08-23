@@ -243,6 +243,36 @@ describe("Layer 3 screens", () => {
     await unmount(component);
   });
 
+  it("opens the Support companion from ambient presence", async () => {
+    const run = createRun({
+      id: "ambient-assistance",
+      session: { kind: "position", start: { fen: pack.start.fen, side: "white" }, feedbackPolicy: "attempt_end", opponentPolicy: { mode: "human_common" } },
+      sessionDigest: `sha256:${"9".repeat(64)}`,
+      policyConfig: { seedMode: "fixed", locus: { executedAt: "server", engineIds: [], modelIds: [] } },
+      seed: 1,
+      createdAt: at,
+    });
+    const assistanceStorage = {
+      getItem: () => JSON.stringify({ version: 4, markers: "off", guided: "off", humanSplit: "off", corpus: "off", voice: "authored", spoken: "off", boardLighting: "legal", arrows: "off", ambient: "on" }),
+      setItem: vi.fn(),
+    };
+    const component = mount(DrillScreen, { target: target(), props: {
+      snapshot: { run, access: "writer", pendingEvidence: 0, withheld: false }, assistanceStorage,
+      onMove: vi.fn(), onRewind: vi.fn(), onFork: vi.fn(), onSwitchBranch: vi.fn(), onCompare: vi.fn(),
+      onCloseCompare: vi.fn(), onContinueCheckpoint: vi.fn(), onExport: vi.fn(), onStop: vi.fn(), registerKeyboardRegion,
+    } });
+    await tick();
+
+    const ambient = document.querySelector<HTMLButtonElement>('button[aria-label="Open assistance"]')!;
+    expect(ambient.getAttribute("aria-controls")).toBe("run-support-region");
+    expect(document.querySelector(".rail-stack")?.classList.contains("sheet-open")).toBe(false);
+    ambient.click();
+    await tick();
+    expect(document.querySelector(".rail-stack")?.classList.contains("sheet-open")).toBe(true);
+    expect(document.getElementById("run-support-region")?.classList.contains("compact-active")).toBe(true);
+    await unmount(component);
+  });
+
   it("requests the human-model split without requiring pivotal markers", async () => {
     const initial = createRun({
       id: "split-without-marker",

@@ -5748,3 +5748,12 @@ D719 was stale rather than open. Commit `4818d52` had already changed the shared
 one permanent test covering both standard `e1g1` and chessops-imported `e1h1`. The reading and
 pivotal planes both consume that primitive, so the defect is closed without a new production
 change. The focused transition suite was rerun before the ledger flip.
+
+## 2026-08-23 — ambient assistance now opens Support
+
+D585 is fixed against the already-implemented `polish-surfaces` contract: activating the optional
+topbar persona now selects the Support companion and opens the bounded tablet band or phone sheet.
+The same action leaves desktop in its existing rail composition, and no evidence, permission or
+preset semantics changed. The control names its target through `aria-controls`; the component
+fixture proves both the compact seat selection and open state. D311 narrows from four residues to
+three.
