@@ -639,3 +639,15 @@ asks against shipped/documented refusals is in flight at
 routing decay: `make work-index` catches a ledger row with no lane, but **nothing catches a refusal
 asserted in code, an RFC scope section, or a research verdict that contradicts a standing owner
 ask**. The audit owes an instrument proposal alongside the list.
+
+### Variant lane findings 2026-08-23 (`planning/variants/rfc-derivation.md`)
+
+- **[[D1032]]** — Chess960's measured cost: chessops is 960-native by data model, so five small
+  edits plus ~20 lines (or zero with pasted FENs). Destination: the variant RFC, drafting gated.
+- **[[D1033]]** — import refuses valid 960 PGN on the header, and a header without a FEN silently
+  yields the standard position. One allow-list entry plus a refusal for the FEN-less case; covers
+  paste, Lichess-URL, broadcast and Arena legs together.
+- **[[D1034]]** — Maia dies in Tier 1 (3 of 5 opponent modes); Stockfish is *wrong not missing* in
+  Tier 2. The Tier-1 half is an owner fork the derivation names as Gap 1.
+- **[[D1035]]** — D327's storage premise refuted (name collision) and its importer count restated
+  (24, not 13); five citation drifts corrected.

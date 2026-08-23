@@ -112,6 +112,28 @@ changelogs — each caught something that changes how you implement.
 
 Neither RFC claims anything versioned and neither proposed ledger rows.
 
+## 0-REFUSAL-INDEX. Build `make refusal-index` — [[D1038]], the twin of `make work-index`
+
+The owner asked what else has been refused without their say-so; the audit found **19 of 80
+explicit owner asks refused or laneless**, and named the mechanism ([[D1037]]): nothing has ever
+audited `artifact-declared refusal → owner ruling`. `make work-index` closed
+`ledger row → lane`; this closes the reverse.
+
+Spec (full detail in `planning/platform-alignment/refused-vs-asked.md`):
+
+- **Machine-readable refusal blocks**, reusing the accepted `tabiya-claims` convention ([[D648]]) —
+  the parser precedent already exists in `register-check`.
+- A required **`class: product | technical`** field on every refusal.
+- **FAIL the build on any `product` refusal with no `ruledBy: D<n>`** resolving to a ⚖️ ledger row.
+  On day one this prints `UCI_Chess960` (`capabilities.ts:133`) — that is the acceptance test.
+- A **cross-join** emitting `OWNER-CONTRADICTION: D327 × capabilities.ts:133` when a refusal
+  forecloses a standing owner ask.
+- **Derive `decision-queue.md`** instead of hand-maintaining it: 26 of the 32 open rows naming an
+  owner decision as their blocker are missing from the hand-written file.
+
+Sequencing: take it alongside the binding arm — it is small, it is `make verify`-shaped, and every
+day it does not exist is a day a product refusal can be written with nobody's name on it.
+
 ## 0-UCI-CONVENTION-AMENDED. ⚠ OWNER RULING [[D1029]] REVERSES THE CASTLING NORMALIZATION — read before implementing `exact-legal-mobility`
 
 **Do not normalize castling to `e1g1`.** The accepted RFC said to; the owner caught that this is a
