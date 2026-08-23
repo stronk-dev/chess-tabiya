@@ -5842,3 +5842,9 @@ contract or reduction-quality event sink. Its selection step and A9 still specif
 truncation, contradicting OQ1's required overflow observation. The implementation return names the
 minimum typed schema and able-to-fail fixtures Claude must add. No reducer heuristic, consumer row
 or production packet was invented in this pass.
+
+## 2026-08-23 — Invalid pack refusals are client errors
+
+D1002 is fixed at the shared REST boundary. `PACK_INVALID` now maps to HTTP 422 and preserves its
+typed validation issue details instead of becoming a 500. A direct boundary fixture pins the
+status and response body, providing the refusal contract the F3 capability/deprecation path needs.
