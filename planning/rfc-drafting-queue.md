@@ -738,3 +738,18 @@ Codex took the hint-distance ruling to research within the hour and returned fin
 
 - **[[D1063]]** — `campaignRunState` cannot derive its declared `"abandoned"` status from the
   authoritative event log. Routed to the `campaign-core` implementation lane.
+
+### Capability availability — owner ruling [[D1077]] reframes F3's open question 1
+
+*"during runtime capas can get missing right... or reappear? ... so it would be a 'temporarily
+unavailable' if it's a runtime issue or outright unsupported if the server is started without the
+capa outright... other than that how can a capa ever be missing? the operator configures it or not."*
+
+Two states, distinguished by **cause**, not by what we do to the pack:
+- **not configured at startup → outright unsupported** (static, knowable at boot, honestly listed);
+- **configured but unreachable → temporarily unavailable** (transient, retryable, may reappear).
+
+**F3 must reuse the shipped vocabulary**, not invent: `ProviderOffBehavior` /`AvailabilityMode`
+(`evidence-contract.ts:9,11`) beside `/capabilities`' disposition kinds. The three options F3
+recorded (boot failure / listing exclusion / per-request 4xx) are superseded — they described
+responses without asking the cause. Also routed here: [[D1076]], [[D494]], and [[D1075]] (the law-4 rehome of assistance-controls' OQ2 — whole shape catalogue vs pack-declared subset, rescued from the archive rather than deleted with it).
