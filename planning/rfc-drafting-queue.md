@@ -886,3 +886,19 @@ here claude answered one never asked — and both come from the same missing ste
 document against the ledger's ⚖️ rows before writing.** The cheap guard: an intent-tier ruling
 citation must name a ⚖️ row that exists. Worth folding into the [[D1038]] `refusal-index` family,
 which already checks that a product refusal names a `ruledBy` row.
+
+### Style lane derived — [[D1170]]–[[D1172]]
+
+`planning/style/rfc-derivation.md`. **Not licensed to draft**: [[D1093]] enumerates only
+D1031/D1041/D1060, and style carries a *contrary* routing note ([[D1055]]: foundation amendments and
+measurement precede a D552 surface RFC). More importantly the real gate is **~8 weeks of play**, not
+a signature.
+
+**Three documents, not one** ([[D1172]]): style, skills, and a shared foundation. **V1a — per-game
+review observation cards — ships on the learner's first game and must not be labelled style.**
+Land the five collector atoms early: the store back-derives everything already recorded, so waiting
+costs schedule and buys nothing.
+
+**Guard to carry into any catalogue implementation** ([[D1171]]): the catalogue is the D345
+exposure-restatement pattern, lawful *precisely because it claims no skill* — one careless sentence
+collapses it into the thing R20 disqualifies.
