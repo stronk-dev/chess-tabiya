@@ -772,3 +772,7 @@ is an unmeasured live surface **on by default in two contexts** with no register
 - **[[D1082]]** — acceptance practice: a cross-reviewer may draft the *status* half of a register
   cell, but **Parent and Claims are written from the RFC body by the acceptor**. Two instances of a
   reviewer-supplied cell contradicting its own body, both caught at acceptance.
+
+- **[[D1081]]** (codex's bot-experiment finding) — the first D1078/D1080 sequence generator inherited
+  D35's Stockfish hash-carryover defect; identical guarded-Maia line ids shifted aggregate loss.
+  Routed to the bot-policy experiment lane; its destination is codex's own measurement work.
