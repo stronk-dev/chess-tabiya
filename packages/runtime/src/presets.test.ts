@@ -18,12 +18,16 @@ describe("intent preset foundation", () => {
     expect(() => assertPresetFoundation()).not.toThrow();
   });
 
-  it("admits 24 context/preset pairs and refuses 11", () => {
-    expect(WORKFLOW_CONTEXTS).toHaveLength(7);
-    expect(WORKFLOW_CONTEXT_POLICIES.reduce((sum, context) => sum + context.allowedPresets.length, 0)).toBe(24);
-    expect(35 - 24).toBe(11);
+  it("admits 28 context/preset pairs and refuses 12", () => {
+    expect(WORKFLOW_CONTEXTS).toHaveLength(8);
+    expect(WORKFLOW_CONTEXT_POLICIES.reduce((sum, context) => sum + context.allowedPresets.length, 0)).toBe(28);
+    expect(40 - 28).toBe(12);
     expect(WORKFLOW_CONTEXT_POLICIES.find((context) => context.id === "match")?.allowedPresets).toEqual(["quiet"]);
     expect(WORKFLOW_CONTEXT_POLICIES.find((context) => context.id === "position")?.allowedPresets).toEqual(PRESET_IDS);
+    expect(WORKFLOW_CONTEXT_POLICIES.find((context) => context.id === "campaign")).toEqual(expect.objectContaining({
+      defaultPreset: "guided",
+      allowedPresets: ["quiet", "guided", "theory_only", "analysis"],
+    }));
   });
 
   it("keeps the rules floor in every ceiling and prevention out of non-position contexts", () => {

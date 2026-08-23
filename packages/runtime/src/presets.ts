@@ -3,7 +3,7 @@ import { MODULE_IDS, type ModuleId } from "./module-contract.js";
 import type { LiveSessionKind, RunSessionKind } from "./types.js";
 
 export const WORKFLOW_CONTEXTS = Object.freeze([
-  "pack", "position", "imported", "match", "stream", "academy", "onramp",
+  "pack", "position", "imported", "match", "stream", "academy", "onramp", "campaign",
 ] as const);
 export type WorkflowContextId = (typeof WORKFLOW_CONTEXTS)[number];
 
@@ -46,6 +46,7 @@ export const WORKFLOW_CONTEXT_POLICIES: readonly WorkflowContextPolicy[] = Objec
   { id: "stream", defaultPreset: "quiet", allowedPresets: ["quiet", "guided", "theory_only", "analysis"], moduleCeiling: except("blunder_prevention"), validation: "candidate" },
   { id: "academy", defaultPreset: "guided", allowedPresets: ["quiet", "guided", "theory_only"], moduleCeiling: except("blunder_prevention", "full_inspector"), validation: "candidate" },
   { id: "onramp", defaultPreset: "guided", allowedPresets: ["quiet", "guided", "theory_only"], moduleCeiling: except("blunder_prevention", "full_inspector", "review_map"), validation: "candidate" },
+  { id: "campaign", defaultPreset: "guided", allowedPresets: ["quiet", "guided", "theory_only", "analysis"], moduleCeiling: except("blunder_prevention"), validation: "candidate" },
 ]);
 
 export const PRESET_CONTRACT_ERROR_CODES = Object.freeze([
@@ -88,8 +89,8 @@ export function assertPresetFoundation(
     }
   }
   const admitted = contexts.reduce((sum, context) => sum + context.allowedPresets.length, 0);
-  if (admitted !== 24 || PRESET_IDS.length * WORKFLOW_CONTEXTS.length - admitted !== 11) {
-    throw new PresetContractError("CONTEXT_PRESET_INVALID", `expected 24 admitted and 11 refused pairs; received ${admitted} and ${PRESET_IDS.length * WORKFLOW_CONTEXTS.length - admitted}`);
+  if (admitted !== 28 || PRESET_IDS.length * WORKFLOW_CONTEXTS.length - admitted !== 12) {
+    throw new PresetContractError("CONTEXT_PRESET_INVALID", `expected 28 admitted and 12 refused pairs; received ${admitted} and ${PRESET_IDS.length * WORKFLOW_CONTEXTS.length - admitted}`);
   }
 }
 

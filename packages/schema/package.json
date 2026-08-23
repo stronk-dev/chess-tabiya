@@ -8,6 +8,7 @@
     "./drill-pack": "./src/drill-pack/index.ts",
     "./shape-entry": "./src/shape-entry/index.ts",
     "./principle-entry": "./src/principle-entry/index.ts",
+    "./campaign": "./src/campaign/index.ts",
     "./pack-path": "./src/pack-path/index.ts"
   },
   "scripts": {

@@ -11,6 +11,7 @@ export const PROFILE_DEFAULTS: Readonly<Record<AssistanceProfile, AssistanceConf
   stream: SILENT_ASSISTANCE,
   academy: SILENT_ASSISTANCE,
   onramp: Object.freeze({ ...SILENT_ASSISTANCE, guided: "live" }),
+  campaign: SILENT_ASSISTANCE,
 });
 
 export interface PreferenceStorage { getItem(key: string): string | null; setItem(key: string, value: string): void; }

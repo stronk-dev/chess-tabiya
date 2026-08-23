@@ -1,0 +1,138 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:chess-tabiya:schema:campaign:1",
+  "title": "Tabiya Campaign Document",
+  "type": "object",
+  "required": ["id", "title", "version", "acts", "economy", "startingModules"],
+  "properties": {
+    "id": { "$ref": "#/$defs/id" },
+    "title": { "$ref": "#/$defs/nonEmptyString" },
+    "version": { "type": "integer", "minimum": 1 },
+    "acts": {
+      "type": "array",
+      "minItems": 3,
+      "maxItems": 3,
+      "prefixItems": [
+        { "$ref": "#/$defs/act1" },
+        { "$ref": "#/$defs/act2" },
+        { "$ref": "#/$defs/act3" }
+      ],
+      "items": false
+    },
+    "economy": { "$ref": "#/$defs/economy" },
+    "startingModules": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": { "$ref": "#/$defs/unlockableModule" }
+    }
+  },
+  "additionalProperties": false,
+  "$defs": {
+    "nonEmptyString": { "type": "string", "minLength": 1 },
+    "id": { "type": "string", "pattern": "^[a-z0-9][a-z0-9-]*$" },
+    "unlockableModule": {
+      "enum": [
+        "sight_on_request",
+        "blunder_prevention",
+        "threat_radar",
+        "postcommit_nudge",
+        "structure_nudge",
+        "theory_breadcrumb",
+        "guided_hint",
+        "compare_coach",
+        "review_map",
+        "full_inspector"
+      ]
+    },
+    "encounter": {
+      "type": "object",
+      "required": ["kind", "packId"],
+      "properties": {
+        "kind": { "const": "pack" },
+        "packId": { "$ref": "#/$defs/id" }
+      },
+      "additionalProperties": false
+    },
+    "reward": {
+      "type": "object",
+      "required": ["kind", "moduleId"],
+      "properties": {
+        "kind": { "const": "module_unlock" },
+        "moduleId": { "$ref": "#/$defs/unlockableModule" }
+      },
+      "additionalProperties": false
+    },
+    "node": {
+      "type": "object",
+      "required": ["id", "encounter"],
+      "properties": {
+        "id": { "$ref": "#/$defs/id" },
+        "encounter": { "$ref": "#/$defs/encounter" },
+        "suppress": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": { "$ref": "#/$defs/unlockableModule" }
+        },
+        "reward": { "$ref": "#/$defs/reward" },
+        "boss": { "const": true }
+      },
+      "additionalProperties": false
+    },
+    "layer": {
+      "type": "object",
+      "required": ["choices"],
+      "properties": {
+        "choices": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 3,
+          "items": { "$ref": "#/$defs/node" }
+        }
+      },
+      "additionalProperties": false
+    },
+    "layers": {
+      "type": "array",
+      "minItems": 3,
+      "maxItems": 3,
+      "items": { "$ref": "#/$defs/layer" }
+    },
+    "act1": {
+      "type": "object",
+      "required": ["id", "layers"],
+      "properties": { "id": { "const": "act1" }, "layers": { "$ref": "#/$defs/layers" } },
+      "additionalProperties": false
+    },
+    "act2": {
+      "type": "object",
+      "required": ["id", "layers"],
+      "properties": { "id": { "const": "act2" }, "layers": { "$ref": "#/$defs/layers" } },
+      "additionalProperties": false
+    },
+    "act3": {
+      "type": "object",
+      "required": ["id", "layers"],
+      "properties": { "id": { "const": "act3" }, "layers": { "$ref": "#/$defs/layers" } },
+      "additionalProperties": false
+    },
+    "economy": {
+      "type": "object",
+      "required": ["startingCharges", "actGrants", "validation"],
+      "properties": {
+        "startingCharges": { "type": "integer", "minimum": 0 },
+        "actGrants": {
+          "type": "object",
+          "required": ["act1", "act2", "act3"],
+          "properties": {
+            "act1": { "type": "integer", "minimum": 0 },
+            "act2": { "type": "integer", "minimum": 0 },
+            "act3": { "type": "integer", "minimum": 0 }
+          },
+          "additionalProperties": false
+        },
+        "validation": { "const": "candidate" }
+      },
+      "additionalProperties": false
+    }
+  }
+}

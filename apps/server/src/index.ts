@@ -15,6 +15,7 @@ export {
 } from "./pack-registry.js";
 export { ShapeRegistry, projectShapeEntry, type ShapeRecord, type ShapeSummary } from "./shape-registry.js";
 export { PrincipleRegistry, type PrincipleRecord, type PrincipleSummary } from "./principle-registry.js";
+export { validateCampaignDocument, type CampaignPackLookup, type CampaignValidationResult } from "./campaign-validation.js";
 export { ShapeStudio, type ShapeDraftView } from "./shape-studio.js";
 export {
   DEFAULT_STRONG_ENGINE_PROFILE,

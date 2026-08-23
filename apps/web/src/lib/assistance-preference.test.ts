@@ -33,8 +33,8 @@ describe("assistance preference", () => {
     expect(loadAssistance("imported", current)).toEqual({ ...SILENT_ASSISTANCE, ambient: "on" });
   });
 
-  it("derives all seven contexts with guard and live-session precedence", () => {
-    expect(ASSISTANCE_PROFILES).toEqual(["pack", "position", "imported", "match", "stream", "academy", "onramp"]);
+  it("exposes all eight contexts with guard and live-session precedence", () => {
+    expect(ASSISTANCE_PROFILES).toEqual(["pack", "position", "imported", "match", "stream", "academy", "onramp", "campaign"]);
     expect(assistanceProfile({ sessionKind: "pack", feedbackPolicy: "attempt_end" })).toBe("pack");
     expect(assistanceProfile({ sessionKind: "position", feedbackPolicy: "attempt_end" })).toBe("position");
     expect(assistanceProfile({ sessionKind: "imported", feedbackPolicy: "attempt_end" })).toBe("imported");
@@ -58,7 +58,7 @@ describe("assistance preference", () => {
 
   it("defaults only on-ramp guidance live and preserves an explicit stored off", () => {
     const maximum = { version: 4, markers: "live", guided: "live", humanSplit: "on_request", corpus: "on_request", voice: "persona", spoken: "provider", boardLighting: "evidence", arrows: "evidence", ambient: "on" } as const;
-    for (const profile of ["pack", "position", "imported", "match", "stream"] as const) {
+    for (const profile of ["pack", "position", "imported", "match", "stream", "campaign"] as const) {
       expect(loadAssistance(profile, { getItem: () => null, setItem() {} })).toEqual(SILENT_ASSISTANCE);
     }
     expect(PROFILE_DEFAULTS.onramp).toEqual({ ...SILENT_ASSISTANCE, guided: "live" });
@@ -70,7 +70,7 @@ describe("assistance preference", () => {
   it("renders settings from the same exhaustive profile list", () => {
     const source = readFileSync(new URL("./AssistanceSettings.svelte", import.meta.url), "utf8");
     expect(source).toContain("{#each ASSISTANCE_PROFILES as kind}");
-    for (const label of ["Curated drill", "Just Play", "Imported game", "Match / Arena", "Streamed session", "Academy", "On-ramp"]) expect(source).toContain(label);
+    for (const label of ["Curated drill", "Just Play", "Imported game", "Match / Arena", "Streamed session", "Academy", "On-ramp", "Campaign"]) expect(source).toContain(label);
     for (const label of ["Human move split on request", "Corpus counts on request", "External voice"]) expect(source).toContain(label);
   });
 

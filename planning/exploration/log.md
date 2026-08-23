@@ -5558,3 +5558,24 @@ assistance/theme separation, and mode-aware install chrome.
 floor close. The RFC moves to `awaiting D3`: Claude/owner still owes the protected design/03
 Settings-row amendment ([[D987]]). The distinct owner-use felt-quality pass remains D5/[[D840]];
 it does not hold the implementation code or its mechanical criteria.
+
+## 2026-08-23 — Campaign authored-contract checkpoint
+
+**What landed:** the first dependency-safe slice of `campaign-core`: a closed three-act campaign
+schema; schema-owned generic document types specialized in runtime to the ten unlockable learner
+modules; runtime validation for registered pack references, unavoidable final-layer bosses,
+unique node ids, non-increasing candidate grants and the campaign-context unlock ceiling; and
+`campaign` as the eighth intent/preset context with its own device-local preference namespace.
+
+**Verification:** schema, runtime, server and web typechecks pass. Twenty-five focused tests cover
+the closed schema, exact unlock pool, 28/12 context grid, device preferences, and able-to-fail
+unknown-pack / boss-placement / economy / ceiling / duplicate-id cases.
+
+**Boundary:** no persistence or play mutation moved. The claimed migration remains behind
+`longitudinal-store` and `bot-policy`. [[D1011]] records that longitudinal-store is marked accepted
+while its own three clauses require answers before acceptance/implementation; this checkpoint does
+not infer those answers. The seed campaign remains a content-registry step so encounter selection
+does not masquerade as mechanical schema work.
+
+**Next:** build the campaign registry/seed boundary, then take persistence and the pure event fold
+when the two preceding migration positions are lawful.

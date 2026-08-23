@@ -52,6 +52,7 @@ set execution order.
 | D597, D598, D599, D600, D601, D602, D625 | longitudinal-style research | Establish opportunity denominators, acquisition contract, stability rule, sample floor, grounded-advice boundary, and transparent dimensions before naming archetypes. |
 | D604 | privacy/design ruling | Treat a style vector as identifying behavioral data in storage, export, deletion, and sharing contracts. |
 | D699, D700, D701, D702 | `longitudinal-store` RFC | Add the versioned personal-observation ledger and identity model before any weakness, habit, opening-accuracy, or coaching aggregate. |
+| D1011 | `longitudinal-store` author/register correction | Reconcile the accepted status with the three clauses that explicitly require answers before acceptance/implementation; do not infer the proposed answers in code. |
 
 ## Campaign, drills, and return loops
 
@@ -70,6 +71,7 @@ set execution order.
 |---|---|---|
 | D574, D575, D576, D578 | pack-schema lifecycle RFC lane | Restore unique machine-readable schema identity, pack-declared compatibility, and a reusable read-only migration planner. |
 | D580 | knowledge-retrieval provenance lane | Give stored chunks reproducible source-artifact identity before using them as grounded chess material. |
+| D1007, D1008 | claim-backing contract repair | Replace record-kind/value co-presence with a typed semantic anchor or another able-to-fail entailment relation before any automatic binding wave resumes. |
 | D693 | shape recommendation contract | Distinguish an encountered/teaching reference from a merely prospective authoring suggestion. |
 | D504 | schema test defect | Add the missing principle-entry `$id`/version binding test; the register half is already complete. |
 | D837, D838 | breadth measurement/design review | Preserve the owner-veto boundary on the second axis and establish a comparable historical corpus definition before making trend claims. |

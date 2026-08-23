@@ -15,7 +15,7 @@
   }
 
   let { capabilities, learner, onSignOut, onExport, onDelete, loadDeletionPreview }: Props = $props();
-  const labels: Record<AssistanceProfile, string> = { pack: "Curated drill", position: "Just Play", imported: "Imported game", match: "Match / Arena", stream: "Streamed session", academy: "Academy", onramp: "On-ramp" };
+  const labels: Record<AssistanceProfile, string> = { pack: "Curated drill", position: "Just Play", imported: "Imported game", match: "Match / Arena", stream: "Streamed session", academy: "Academy", onramp: "On-ramp", campaign: "Campaign" };
   let configs: Record<AssistanceProfile, AssistanceConfig> = $state(Object.fromEntries(ASSISTANCE_PROFILES.map((profile) => [profile, SILENT_ASSISTANCE])) as Record<AssistanceProfile, AssistanceConfig>);
   let password = $state("");
   let exportPassword = $state("");
