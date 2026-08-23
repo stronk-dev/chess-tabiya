@@ -695,3 +695,21 @@ rather than to the moves. Rule with an answer once it exists.
 - **[[D1050]]** — `clockState` is per-node and per-move, not per-run; 9 refs; lane claims run 0.19+;
   flag-fall needs a fifth `terminalOutcome` reason behind a STRICT-table CHECK.
 - **[[D1051]]** — D357's precondition (hint-ladder ruling first) was unmet; owner-facing sequencing.
+
+## Owner rulings 2026-08-23 — famous games, hint distance, capability stamp, clock arms
+
+- **[[D1060]] — FULL lift of the famous-game refusal**, not the scoped variant. Obligations still
+  ride it (serialised requests, no systematic index walk, provenance recorded, annotations stripped
+  at the record boundary). The product-scope judgement bundled into the refused row was never an
+  owner decision and does not survive by default — if per-game listings should stay narrow, that is
+  a separate call on its own merits.
+- **[[D1061]] — hint distance ships as an assistance axis** (square → piece → ply-distance → move,
+  derived not authored). Settles [[D357]]'s precondition for the clock lane. **Step 1 is a bestline
+  collection pass**, because 0 of 764 records are `bestline` despite end-to-end plumbing.
+- **[[D1058]] — the capability stamp lives IN THE PACK.** F3 drafts with a pack-schema lane claim;
+  Gate F clause 1 goes from two-deep to three, accepted knowingly for binding integrity over a
+  sidecar that would default permissive on absence.
+- **[[D1059]] — the clock fork is three-way**: depicted (grounded, in imported PGN), **measured**
+  (the learner's own time, already in `Node.createdAt` deltas, retroactive over every run), and
+  predicted (no corpus, law-8-refused). **No arm of the owner's stated idea needs prediction.**
+  The time-control derivation's arm (a) is reshaped accordingly.
