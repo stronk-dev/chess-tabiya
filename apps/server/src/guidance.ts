@@ -19,6 +19,7 @@ import {
   renderPhaseReading,
   renderPivotalMarker,
   renderRecordedReading,
+  renderStructuralObservationChange,
   renderEvidenceItems,
   structuralReading,
   voiceCheck,
@@ -57,7 +58,7 @@ function renderRunRecord(evidence: DeclaredEvidence<unknown>): readonly string[]
 }
 function renderCompareDerived(evidence: DeclaredEvidence<unknown>): readonly string[] {
   const payload = evidence.payload as Readonly<Record<string, unknown>>;
-  if (evidence.projection.id === "derived.compare.structure_delta") return one(`A recorded structural observation changed: ${String((payload.observation as { readonly kind?: unknown }).kind)}. Source: Tabiya structural detector.`);
+  if (evidence.projection.id === "derived.compare.structure_delta") return one(`${renderStructuralObservationChange(payload.observation as Parameters<typeof renderStructuralObservationChange>[0])} Source: Tabiya structural detector.`);
   const delta = Number(payload.delta);
   return one(`Recorded engine evidence changed by ${delta >= 0 ? "+" : ""}${delta} cp at offset ${String(payload.plyOffset)}.`);
 }

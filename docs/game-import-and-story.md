@@ -20,6 +20,11 @@ legally through the shared chessops parser, and both players' historical moves a
 stored as actor plies. No opponent-selection event or engine identity is invented
 for moves that came from the PGN.
 
+The imported primary mainline is immutable at its tip. Both learner-move and opponent-move
+endpoints refuse to extend it; the learner rewinds first, and the ordinary runtime then creates a
+rehearsal branch. This preserves the source record while keeping every historical position
+playable.
+
 The sources are deliberately narrow:
 
 - pasted PGN is retained verbatim;

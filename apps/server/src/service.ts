@@ -953,6 +953,7 @@ export class RunService {
     const uci = typeof principalOrWriter === "string" ? writerOrUci : uciOrOptions as string;
     const options = typeof principalOrWriter === "string" ? uciOrOptions as CommitMoveOptions : maybeOptions;
     const { stored, lease } = this.#forWrite(runId, principal, writerId);
+    this.#refuseImportedMainlineExtension(stored.run);
     const guardedOptions=this.#matchMoveOptions(runId,principal,stored.run,options);
     const pack = this.#requiredRegisteredPack(stored.run);
     this.#requiredEvidenceQueue();
@@ -979,6 +980,7 @@ export class RunService {
     const selection = typeof principalOrWriter === "string" ? writerOrSelection as OpponentSelection : selectionOrOptions as OpponentSelection;
     const options = typeof principalOrWriter === "string" ? selectionOrOptions as AppendOpponentPlyOptions : maybeOptions;
     const { stored, lease } = this.#forWrite(runId, principal, writerId);
+    this.#refuseImportedMainlineExtension(stored.run);
     if(this.#matchContext(runId)!==undefined)throw new ServerError("INVALID_REQUEST","Native matches do not accept opponent selections");
     const pack = this.#requiredRegisteredPack(stored.run);
     this.#requiredEvidenceQueue();
@@ -2063,6 +2065,21 @@ export class RunService {
     const node=run.nodes.find((candidate)=>candidate.id===run.activeCursor.nodeId);
     if(node!==undefined&&terminalPosition(node.fen))return;
     throw new ServerError("MATCH_LIVE","Pause the match before rehearsing or revealing");
+  }
+
+  #refuseImportedMainlineExtension(run: DrillRun): void {
+    if (run.sessionKind !== "imported") return;
+    const primary = run.branches[0];
+    if (primary === undefined || run.activeCursor.branchId !== primary.id) return;
+    const hasPrimaryChild = run.nodes.some((node) =>
+      node.branchId === primary.id && node.parentId === run.activeCursor.nodeId,
+    );
+    if (!hasPrimaryChild) {
+      throw new ServerError(
+        "INVALID_REQUEST",
+        "The imported source mainline is immutable; rewind before creating a rehearsal branch",
+      );
+    }
   }
 
   #matchMoveOptions(runId:string,principal:Principal,run:DrillRun,options:CommitMoveOptions):CommitMoveOptions{

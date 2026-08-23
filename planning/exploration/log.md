@@ -6569,3 +6569,41 @@ no engine or network. D1166 remains open because the raw capture is not committe
 **Next:** do not fund the engine-composed game ladder or make human-like/persona/Elo claims from
 this family. Continue D1162's evidence-to-move head as the independent variant-portable research
 lane, and resume the learner-module integration once D1164 supplies stable novelty identities.
+
+## 2026-08-23 — Compare structure evidence stopped leaking detector identifiers
+
+**What landed:** Compare strips and provider guidance now render the operands actually retained by
+`derived.compare.structure_delta@1` — color, role, squares, file, count, shade, form, and zone —
+through one deterministic runtime renderer. Learners no longer receive raw identifiers such as
+`isolated_pawn` as prose.
+
+**What changed:** D1213 returns the remaining contract mismatch to `learner-modules`. Its A14 asks
+for before/after values, but the declared projection retains only the newly appeared observation;
+the implementation therefore says `appeared` and does not manufacture a missing baseline.
+
+**Verification:** the focused Compare and guidance suites pass 30/30, and the runtime and server
+typechecks are green.
+
+**Next:** the RFC author must either amend A14 to the retained appeared-fact contract or explicitly
+widen the projection and derivation. The production module registry remains returned on D1205,
+D1206, and D1213; the independent reducers stay available.
+
+## 2026-08-23 — Live projections and imported source tips became non-writing boundaries
+
+**What landed:** `/live/overlay/:runId` now resumes through a projection-only controller. It ignores
+an existing browser writer claim, observes the run read-only, and never asks the opponent provider
+for a move. Both server move paths also refuse to extend an imported primary mainline at its tip;
+rewinding and creating a rehearsal branch remains available.
+
+**What changed:** D1210's two independently shipped defects can no longer compose into a fabricated
+move on a followed game. The overlay boundary is stronger than a match-only short circuit: it has no
+writer session even for stream sessions. The imported-run guard protects the source object at the
+server boundary, so a different client cannot bypass it.
+
+**Verification:** the focused import and controller suites pass 30/30. The controller fixture proves
+that a saved writer lease is withheld from the graph request, and the import fixture proves both
+move paths refuse at the tip while rewind-and-branch still succeeds. Server and web typechecks are
+green.
+
+**Next:** live-source Phase B still needs the followed-source object from D1211; this repair does not
+pretend a sealed run can grow. The remaining live-overlay documentation claim is corrected here.

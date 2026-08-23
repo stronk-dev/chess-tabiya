@@ -179,6 +179,7 @@ export class DrillSessionController {
   #lastFollowerRevealSeq = 0;
   #subscribingStore: RunStateStore | undefined;
   #matchMode: MatchMode | undefined;
+  #projectionOnly = false;
 
   constructor(api: DrillClientApi, options: ControllerOptions = {}) {
     this.#api = api;
@@ -199,16 +200,17 @@ export class DrillSessionController {
     return () => this.#subscribers.delete(subscriber);
   }
 
-  async resume(runId: string, options: { readonly matchMode?: MatchMode } = {}): Promise<void> {
+  async resume(runId: string, options: { readonly matchMode?: MatchMode; readonly projectionOnly?: boolean } = {}): Promise<void> {
     this.#patch({ busy: true, error: undefined });
     try {
       this.#matchMode = options.matchMode;
+      this.#projectionOnly = options.projectionOnly === true;
       const eventPage = await this.#api.events(runId, 0);
       const started = eventPage.events[0];
       if (started?.type !== "run.started") {
         throw new TypeError("Cannot resume a run without its run.started event");
       }
-      const claimed = WriterSession.peek(runId, this.#storage);
+      const claimed = this.#projectionOnly ? undefined : WriterSession.peek(runId, this.#storage);
       const [capabilities, graph] = await Promise.all([this.#api.capabilities(), this.#api.graph(runId, claimed?.writerId)]);
       const session =
         graph.viewer.holdsLease && claimed !== undefined
@@ -237,6 +239,8 @@ export class DrillSessionController {
   }
 
   async startPack(packId: string): Promise<void> {
+    this.#projectionOnly = false;
+    this.#matchMode = undefined;
     this.#patch({ busy: true, error: undefined });
     try {
       const [{ document, digest }, capabilities] = await Promise.all([
@@ -272,6 +276,8 @@ export class DrillSessionController {
     readonly side: "white" | "black";
     readonly mode: "human_common" | "strong_engine";
   }): Promise<void> {
+    this.#projectionOnly = false;
+    this.#matchMode = undefined;
     this.#patch({ busy: true, error: undefined });
     try {
       const capabilities = await this.#api.capabilities();
@@ -485,6 +491,7 @@ export class DrillSessionController {
     this.#capabilities = undefined;
     this.#dismissedCheckpointSeq = 0;
     this.#matchMode = undefined;
+    this.#projectionOnly = false;
     this.#state = Object.freeze({ busy: false });
     this.#emit();
   }
@@ -496,7 +503,7 @@ export class DrillSessionController {
   }
 
   async #playOpponentIfNeeded(): Promise<void> {
-    if (this.#matchMode !== undefined) return;
+    if (this.#projectionOnly || this.#matchMode !== undefined) return;
     const pack = this.#state.pack;
     const capabilities = this.#capabilities;
     if (capabilities === undefined) throw new Error("Capabilities are unavailable");

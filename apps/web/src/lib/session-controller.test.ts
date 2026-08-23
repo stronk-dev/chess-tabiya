@@ -798,6 +798,32 @@ describe("DrillSessionController", () => {
     expect(api.requiredRun().nodes).toHaveLength(1);
   });
 
+  it("keeps an overlay projection read-only even when this browser owns the writer lease", async () => {
+    const api = new FakeApi(blackToMovePack, "c8f5", false);
+    await api.createRun(
+      {
+        id: "screen-run",
+        session: { kind: "pack", packId: blackToMovePack.id },
+        policyConfig: {
+          seedMode: "fixed",
+          locus: { executedAt: "server", engineIds: [], modelIds: [] },
+        },
+        seed: 1,
+      },
+      "writer-a",
+    );
+    const storage = new MemoryStorage();
+    WriterSession.claimFor("screen-run", storage, () => "writer-a");
+    const environment = controller(api, storage);
+
+    await environment.controller.resume("screen-run", { projectionOnly: true });
+
+    expect(environment.controller.state.runState?.access).toBe("read_only");
+    expect(environment.api.graphWriterIds).toEqual([undefined]);
+    expect(api.selected).toBeUndefined();
+    expect(api.requiredRun().nodes).toHaveLength(1);
+  });
+
   it("resumes its stored writer claim in writer mode", async () => {
     const api = new FakeApi();
     await api.createRun(

@@ -304,15 +304,12 @@
         [liveSessions,runs,classrooms,packs]=await Promise.all([api.liveSessions?.()??Promise.resolve([]),api.runs(50,0),api.classrooms?.()??Promise.resolve([]),api.packs()]);
       } else if (next.name === "live-session") {
         [liveDetail,liveJournal]=await Promise.all([api.liveSession?.(next.sessionId),api.sessionJournal?.(next.sessionId).then((page)=>page.entries)??Promise.resolve([])]);
-      } else if (next.name === "live-overlay" && session.runState?.run.id !== next.runId) {
+      } else if (next.name === "live-overlay") {
         const related=(await (api.liveSessions?.()??Promise.resolve([]))).find((item)=>item.runId===next.runId);
         activeLiveDetail=related===undefined?undefined:await api.liveSession?.(related.id);
         const matchMode=activeLiveDetail?.match===undefined?undefined:activeLiveDetail.match.pausedAt===null?"live":"paused";
-        await controller.resume(next.runId,{...(matchMode===undefined?{}:{matchMode})});
-      } else if (
-        next.name === "run" &&
-        session.runState?.run.id !== next.runId
-      ) {
+        await controller.resume(next.runId,{projectionOnly:true,...(matchMode===undefined?{}:{matchMode})});
+      } else if (next.name === "run") {
         const related=(await (api.liveSessions?.()??Promise.resolve([]))).find((item)=>item.runId===next.runId);
         activeLiveDetail=related===undefined?undefined:await api.liveSession?.(related.id);
         const matchMode=activeLiveDetail?.match===undefined?undefined:activeLiveDetail.match.pausedAt===null?"live":"paused";

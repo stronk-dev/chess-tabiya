@@ -20,6 +20,7 @@ import {
   observationIdentity,
   pivotalMarkers,
   renderPivotalMarker,
+  renderStructuralObservationChange,
   transitionObjective,
   type DrillRun,
   type OpponentSelection,
@@ -94,6 +95,10 @@ function branchedRun(): DrillRun {
 }
 
 describe("branch comparison", () => {
+  it("renders retained structural operands instead of raw detector ids", () => {
+    expect(renderStructuralObservationChange({ kind: "isolated_pawn", color: "white", file: "d", squares: [] })).toBe("White isolated pawn appeared on the d-file.");
+    expect(renderStructuralObservationChange({ kind: "piece_reach_count", color: "black", role: "knight", squares: ["f6"], count: 5 })).toBe("Black knight piece reach count appeared on f6; count 5.");
+  });
   it("uses one common axis and groups a shared prefix across three branches", () => {
     let run = branchedRun();
     run = rewind(run, run.nodes[0]!.id, at).run;

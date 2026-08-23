@@ -1,6 +1,6 @@
 import { readFileSync } from "node:fs";
 
-import { classifyPhase, declarePhaseReadingEvidence, voiceCheck, type EvidencePacket, type RenderedEvidenceView } from "@chess-tabiya/runtime";
+import { classifyPhase, declareCompareDerivedEvidence, declarePhaseReadingEvidence, voiceCheck, type EvidencePacket, type RenderedEvidenceView } from "@chess-tabiya/runtime";
 import type { DrillPackDefinition } from "@chess-tabiya/schema/drill-pack";
 import { afterEach, describe, expect, it } from "vitest";
 
@@ -47,6 +47,12 @@ function fixturePacket(): EvidencePacket {
 }
 
 describe("adaptive guidance server seams", () => {
+  it("voices compare structure operands instead of raw detector ids", () => {
+    const evidence = declareCompareDerivedEvidence("structure_delta", { observation: { kind: "isolated_pawn", color: "white", file: "d", squares: [] } });
+    const rendered = voiceEvidenceView(fixturePacket(), "compare", [evidence], false).rendered;
+    expect(rendered.items[0]!.sentences).toEqual(["White isolated pawn appeared on the d-file. Source: Tabiya structural detector."]);
+    expect(rendered.items[0]!.sentences.join(" ")).not.toContain("isolated_pawn");
+  });
   it("rejects bare recorded readings at the deterministic consumer boundary", () => {
     if (false) {
       // @ts-expect-error Recorded-reading delivery consumes an admitted view.

@@ -132,6 +132,7 @@ export {
   observationIdentity,
   pawnConnectivityReading,
   pawnSafety,
+  renderStructuralObservationChange,
   spaceReading,
   SPACE_CONVENTION,
   structuralDelta,

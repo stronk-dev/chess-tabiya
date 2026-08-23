@@ -592,6 +592,25 @@ export function observationIdentity(value: StructuralObservation): string {
   if (value.kind === "pawn_safe_square") return JSON.stringify({ kind: value.kind, color: value.color, squares: value.squares });
   return observationKey(value);
 }
+
+/** Render only retained structural operands; the surrounding projection supplies the change verb. */
+export function renderStructuralObservationChange(value: StructuralObservation): string {
+  const subject = [value.color, value.role, value.kind.replaceAll("_", " ")]
+    .filter((part): part is string => part !== undefined)
+    .join(" ");
+  const locations = [
+    ...(value.squares.length === 0 ? [] : [`on ${value.squares.join(", ")}`]),
+    ...(value.file === undefined ? [] : [`on the ${value.file}-file`]),
+  ];
+  const details = [
+    ...(value.count === undefined ? [] : [`count ${value.count}`]),
+    ...(value.shade === undefined ? [] : [`${value.shade}-square`]),
+    ...(value.form === undefined ? [] : [value.form]),
+    ...(value.zone === undefined ? [] : [`${value.zone} zone`]),
+  ];
+  const suffix = [...locations, ...details].join("; ");
+  return `${subject.charAt(0).toUpperCase()}${subject.slice(1)} appeared${suffix === "" ? "" : ` ${suffix}`}.`;
+}
 function canonicalObservations(values: readonly StructuralObservation[]): readonly StructuralObservation[] {
   return Object.freeze([...values].sort((a, b) => STRUCTURAL_FEATURE_KINDS.indexOf(a.kind) - STRUCTURAL_FEATURE_KINDS.indexOf(b.kind) || observationKey(a).localeCompare(observationKey(b))));
 }

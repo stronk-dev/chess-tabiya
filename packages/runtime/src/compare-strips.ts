@@ -1,6 +1,6 @@
 import { branchPath } from "./branch-path.js";
 import { pivotalMarkers, renderPivotalMarker } from "./pivotal.js";
-import { observationIdentity, structuralReading, type StructuralObservation } from "./structure.js";
+import { observationIdentity, renderStructuralObservationChange, structuralReading, type StructuralObservation } from "./structure.js";
 import { STORY_MATE_CP, STORY_PIVOT_CP } from "./story.js";
 import type { BranchComparison, ComparisonEvidenceEntry, ComparisonScore } from "./compare.js";
 import type { DrillRun } from "./types.js";
@@ -73,7 +73,7 @@ export function comparisonStrips(run: DrillRun, comparison: BranchComparison): R
       const current = new Set(observations.map(observationIdentity));
       if (node.id !== fork.id) for (const observation of observations) {
         const key = observationIdentity(observation);
-        if (!previous.has(key) && !common?.has(key)) { const sentence = `A recorded structural observation changed: ${observation.kind}.`; structure.push(stripEntry({ plyOffset: node.ply - fork.ply, nodeId: node.id, sentence, attribution: "Tabiya structural detector", observation }, sentenceEvidence("structure_delta", { observation }))); }
+        if (!previous.has(key) && !common?.has(key)) { const sentence = renderStructuralObservationChange(observation); structure.push(stripEntry({ plyOffset: node.ply - fork.ply, nodeId: node.id, sentence, attribution: "Tabiya structural detector", observation }, sentenceEvidence("structure_delta", { observation }))); }
       }
       previous = current;
     }

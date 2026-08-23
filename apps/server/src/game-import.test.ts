@@ -1,4 +1,5 @@
 import { afterEach, describe, expect, it } from "vitest";
+import type { OpponentSelection } from "@chess-tabiya/runtime";
 
 import { RunService } from "./service.js";
 import { SQLiteRunStorage } from "./storage.js";
@@ -47,6 +48,35 @@ describe("own-game import", () => {
       headers: { White: "Alice", Black: "Bob" },
     });
     expect(storage.list(10, 0)[0]).toMatchObject({ title: "Alice – Bob (*)", sessionKind: "imported" });
+  });
+
+  it("seals the imported source tip while preserving rewind-and-branch rehearsal", async () => {
+    const storage = new SQLiteRunStorage(":memory:", { onMigration: () => {} });
+    stores.push(storage);
+    const executor: EvidenceExecutor = { async execute() { return { kind: "eval", source: "engine_validated", values: { centipawns: 0 } }; } };
+    const service = new RunService(storage, { evidenceQueue: new EvidenceJobQueue(executor, { maxConcurrency: 1 }) });
+    const imported = await service.importGame({
+      id: "import-sealed",
+      side: "white",
+      opponentPolicy: { mode: "human_common" },
+      policyConfig,
+      seed: 13,
+      source: { kind: "pgn", pgn: PGN },
+    }, "writer-sealed");
+    const selection: OpponentSelection = {
+      moveUci: "d2d4",
+      policyModeApplied: "human_common",
+      engine: { id: "maia", name: "Maia", version: "3", seedHonored: true },
+    };
+
+    expect(() => service.move("import-sealed", "writer-sealed", "d2d4")).toThrow(/source mainline is immutable/u);
+    expect(() => service.opponentPly("import-sealed", "writer-sealed", selection)).toThrow(/source mainline is immutable/u);
+    expect(storage.read("import-sealed")!.run.nodes).toHaveLength(imported.run.nodes.length);
+
+    service.rewind("import-sealed", "writer-sealed", { nodeId: imported.run.nodes[0]!.id });
+    const branched = service.move("import-sealed", "writer-sealed", "d2d4");
+    expect(branched.run.branches).toHaveLength(2);
+    expect(branched.run.branches[0]!.id).toBe(imported.run.branches[0]!.id);
   });
 
   it("rejects zero-move, varied, and oversized imports without persisting a run", async () => {
