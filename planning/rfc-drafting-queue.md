@@ -1216,3 +1216,31 @@ no opinion and humans do.
 No scope cut. Both halves are in scope for one document, because the refusal and the oracle are the
 same measurement read from its two ends, and splitting them would let the refusal land while the
 result it protects stays unread.
+
+### Recount 2026-08-23 — [[D1374]]: the remainder is 8, and no teardown is live debt
+
+Ranks 9 and 10 of [[D1330]]'s list do not survive a per-dossier read, which is what
+`dossier-remainder.md` promised and, for rank 9, did not do.
+
+**Rank 9 (`teardown-chessigma-desk`) is routed, and was routed the day it landed.** Its stated
+evidence — *"in no lane and with no ledger row"* — is false three ways, each verified at HEAD:
+six ledger rows landed in the teardown's **own commit** `afc9e18` on 2026-08-16, one of them
+titled *"Adoption candidates from Chessigma, each with its transformation"*; a `chessigma` entry
+in `design/research/capability-watch.json` re-checked 2026-08-20 routes to `review_map` via
+`["R7","O7","F6"]`; and four RFCs specify five of its eight candidates, two of them drafted the
+same morning the audit ran. Of the eight, five are covered, one is refused three times over, and
+three lack only a destination — one parked on the dossier's own *"ledger it, do not fast-track
+it"*, one on an unmade Q2 ruling, and one (a published per-family false-positive figure) belonging
+to `rfc/review-map.md` §6, which already specifies a coverage-gated accuracy figure that abstains.
+
+**Rank 10 double-counts rank 5.** ChessMind's *"course-position → Maia sparring"* is shipped as
+Line Drill; its one open half is `theory-drill-current-joins`, which is rank 5 with row [[D695]].
+
+**So 0 of 14 teardowns are live debt, not 2.** The owner challenged *"mostly teardowns and
+refusals"* twice; [[D1330]] conceded half of it. The full concession is that the phrase was wrong
+in both of its nouns. What [[D1330]] actually found was a defect in its own instrument — the same
+class as [[D1331]]'s three corrections, and it belongs beside them.
+
+**Drafting order is unaffected**: ranks 5–8 were already commissioned and are in flight. Nothing
+new is commissioned by this recount, and [[D1375]] is a correction owed to `rfc/bot-roster.md` §4,
+not a lane.

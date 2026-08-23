@@ -218,6 +218,8 @@ specified work already done.
 
 ### §4 — The twelve profiles
 
+Ledger: [[D1375]] — the adoption row this roster answers is stale in both halves; its *declared repertoire* is refused on measurement here (§6), and its five-to-nine rung figure is refused as a method at §1.
+
 Persona names are **placeholder**: a name is presentation-tier and carries zero policy content. The
 owner or design tier picks the final set; changing a name changes the profile digest and voids any
 calibration, which is why the names ship before calibration rather than after.
