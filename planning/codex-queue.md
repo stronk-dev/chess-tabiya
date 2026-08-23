@@ -213,6 +213,19 @@ exactly** six days on. Implementation notes:
 - Rows [[D1111]]–[[D1114]] landed at acceptance; [[D1112]] and [[D1114]] **close with the binding
   arm**, [[D1113]] closes with this implementation (§6 gives the note a reader).
 
+## 0-ARCHIVE-BLOCK. ⚠ [[D1281]] — do NOT archive `graduation-clearance` yet
+
+It is **accepted**, its planner **landed**, it carries **three live obligations**, and its
+`## Discharges` section reads **`none`** (verified at HEAD). The archiving gate reads only that
+register ([[D1201]]), so archiving it now **destroys three obligations** at the one moment that is
+irreversible. `exact-legal-mobility` is second in line — its only obligation lives in a **Status
+paragraph**, which the gate also cannot see.
+
+**Before either is archived**: paste their Discharges rows from
+`planning/platform-alignment/deferral-retrofit-batch-2.md` (23 are written ready to paste). This is
+the deadline case for W25, the archiving-gate fix — the gate can be fixed after, but these two
+cannot be un-archived.
+
 ## 0-WAVE-2. The full next wave is ordered and priced — `planning/codex-wave-2.md` ([[D1251]])
 
 **27 items, ~37–38 working days, 22 with nothing blocking them.** Built from every audit today and

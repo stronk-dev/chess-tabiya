@@ -1058,3 +1058,14 @@ in one batch, led by B5 casting, the skills valence fork, the review lane's self
   registered opens.
 - **[[D1274]]/[[D1275]] — `rfc/variants.md` returned**, 6 return-class blockers including my own
   overshooting correction and an open question the owner had already closed.
+
+### Deferral retrofit batch 2 — [[D1280]]–[[D1282]]
+
+**Active RFCs are 10% real, not "nearly all"** — batch 1's 44% was a property of `learner-rating`
+being a measurement RFC, not of activeness. 25 real obligations across 24 documents, 23 written as
+ready-to-paste Discharges rows. **And the [[D1230]] scope-cut pathology is confined to today's
+template burst — zero newly minted, two active RFCs mention size at all, one of them rejecting it.**
+
+[[D1281]] is archive-blocking and queued for codex. [[D1282]] names three classes the textual method
+cannot see, and corrects batch 1: **lane 0.28 was never free** — `graduation-clearance` claimed it
+on 2026-08-17, voiding `measurement-records` OQ1's rationale.
