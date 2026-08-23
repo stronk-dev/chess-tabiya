@@ -26,7 +26,7 @@ interface DestinationTarget { readonly family: "destination"; readonly minor: Tr
 type Target = MaterialTarget | DestinationTarget;
 type Score = Readonly<{ kind: "cp" | "mate"; value: number }>;
 
-interface SamplePair {
+export interface SamplePair {
   readonly sourceId: string;
   readonly parentFen: string;
   readonly candidateUci: string;
@@ -226,6 +226,38 @@ function moveFromUci(pos: Chess, uci: string): Move {
   const move = parseUci(uci);
   if (move === undefined || !pos.isLegal(move)) throw new TypeError(`Engine returned illegal move ${uci}`);
   return move;
+}
+
+export interface TargetPolicyState {
+  readonly pos: Chess;
+  readonly target?: Target;
+}
+
+export function startTargetPolicy(pair: SamplePair): TargetPolicyState {
+  return Object.freeze({ pos: position(pair.afterFen), target: target(pair) });
+}
+
+export function targetPolicyFen(state: TargetPolicyState): string {
+  return makeFen(state.pos.toSetup());
+}
+
+export function targetPolicyMoveUci(state: TargetPolicyState): string | undefined {
+  if (state.target === undefined) return undefined;
+  const move = targetMove(state.pos, state.target);
+  return move === undefined ? undefined : uciForEngine(state.pos, move);
+}
+
+export function targetPolicyTerminal(state: TargetPolicyState): boolean {
+  return state.pos.isEnd();
+}
+
+export function advanceTargetPolicy(state: TargetPolicyState, uci: string): TargetPolicyState {
+  if (state.target === undefined) {
+    const next = state.pos.clone();
+    next.play(moveFromUci(state.pos, uci));
+    return Object.freeze({ pos: next });
+  }
+  return playTracked(state.pos, moveFromUci(state.pos, uci), state.target);
 }
 async function line(engine: Stockfish, pair: SamplePair, depth: number): Promise<Readonly<Record<string, unknown>>> {
   let pos = position(pair.afterFen), value: Target | undefined = target(pair);

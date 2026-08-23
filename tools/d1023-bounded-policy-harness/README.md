@@ -37,3 +37,19 @@ D1023_STOCKFISH=1 pnpm exec vitest run \
 It writes the compact, source-identified `stockfish-output.json`. Full legal-root score tables are
 checked in memory and reduced to coverage counts, reached-depth bounds, the selected typed score and
 the engine's own best move; the multi-megabyte transient table is not committed.
+
+Run the Maia policy arm against the local server and Maia sidecar only with its explicit flag:
+
+```sh
+make up-engines
+D1023_MAIA=1 pnpm exec vitest run \
+  tools/d1023-bounded-policy-harness/maia-probe.test.ts \
+  --config tools/d1023-bounded-policy-harness/vitest.config.ts
+```
+
+It writes `maia-output.json` for the same sealed sample at model bands 1000, 1400, 1800 and 2200.
+Each row retains the model identity, band, root probability mass, missing mass, bounded
+`nextExecution` and `secondOpportunity` intervals, and whether every expanded node passed the
+predeclared 90% retained-mass gate. The summary excludes refused rows from positive counts and
+excludes a material pair unless both sides are admitted. Bands are never aggregated into one
+“human probability.”

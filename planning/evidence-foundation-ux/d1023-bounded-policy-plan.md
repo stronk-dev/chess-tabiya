@@ -4,9 +4,12 @@
 
 **Authority:** D1023 under RFC-0000's disposable exploration gate
 
-**State:** exact arms and corrected paired 48+48 provider sample complete. Stockfish arm passes the
-frozen stability gate at 88/96 = 91.67% depth-8/depth-10 category agreement; Maia remains. No
-production projection, learner wording, profile weight or RFC is authorized by this plan
+**State:** **COMPLETE 2026-08-23.** Exact, Stockfish and Maia arms are measured over the corrected
+paired 48+48 provider sample. Stockfish passes the frozen stability gate at 88/96 = 91.67%; Maia
+admits 52/66/77/85 rows at bands 1000/1400/1800/2200 under the frozen per-node 90%-mass gate and
+retains refused rows as unavailable. The bounded collector RFC may now be drafted from
+`design/research/bounded-policy-targets.md`; learner wording, module selection, presets and bot
+weighting remain downstream decisions
 
 ## Question
 

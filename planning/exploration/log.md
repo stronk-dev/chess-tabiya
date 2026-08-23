@@ -6080,3 +6080,31 @@ in the remainder. Second-opportunity availability is mixed (depth 8 played-minus
 authored 4 up / 11 same / 1 down; imported 1 / 12 / 3). These deliberately stratified 16-anchor
 sets validate the operand and its direction per pair; they are not population-frequency estimates.
 The engine-policy arm passes with its depth label retained. Maia remains independent.
+
+## 2026-08-23 — D1023 bounded-policy research complete
+
+The Maia arm ran the corrected 96-row provider sample at bands 1000, 1400, 1800 and 2200 through
+the local `maia-5m` service: 2,596 distinct harness requests per pass. The frozen rule is strict:
+the root and every expanded second node must retain at least 90% returned probability mass, with no
+missing candidate masses. It admits 52/66/77/85 rows by ascending band and refuses the rest. The
+lower-band refusal rate is evidence about top-eight coverage, not permission to weaken the gate or
+call lower-rated play invalid.
+
+The first aggregate was caught counting positive bounds on refused rows and comparing pairs when
+only one side was admitted. Raw row bounds were correct; the summary was not. The published
+aggregate now excludes refused rows and compares a material pair only when both sides pass. Among
+admitted pairs, played-minus-alternative immediate target-selection direction is up/down/unclear
+2/13/3, 3/17/5, 5/17/5 and 4/19/5 across the four bands. Second-opportunity direction is mixed at
+4/5/9, 6/7/12, 8/8/11 and 8/9/11. Bands remain separate; neither table is a population prior.
+
+The first full HTTP pass (after a one-row smoke, so up to 36 requests may already have been cached)
+measured p50/p90/p99/max 91.0/161.7/279.2/1,185.0 ms. Immediate replay measured
+0.4/0.7/1.0/2.7 ms. A true cold-container distribution remains unmeasured and is recorded as such;
+the future consumer RFC prices the provider against its workflow rather than inheriting a latency
+promise.
+
+`design/research/bounded-policy-targets.md` closes the research gate. The admissible foundation is
+several operands, not a classifier: exact removed/preserved/reintroduced/all-defence facts;
+depth-labelled Stockfish target policy; and band-labelled Maia lower/upper bounds with typed
+unavailability. “Prophylaxis,” plan, intent, force and move quality remain refused without a cited
+theory/authored join. D1023 and plan item 2g are closed; the bounded collector RFC is unblocked.
