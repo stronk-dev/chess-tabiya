@@ -211,7 +211,7 @@ function vectorDot(left: Float64Array, right: Float64Array): number {
 function addScaled(base: Float64Array, direction: Float64Array, scale: number): Float64Array {
   return Float64Array.from(base, (value, index) => value + scale * direction[index]!);
 }
-function fit(rows: readonly ModelPosition[], featureCount: number, lambda: number, iterations = 80): { readonly weights: Float64Array; readonly initialLoss: number; readonly finalLoss: number; readonly iterations: number } {
+function fit(rows: readonly ModelPosition[], featureCount: number, lambda: number, iterations = 80): { readonly weights: Float64Array; readonly initialLoss: number; readonly finalLoss: number; readonly iterations: number; readonly gradientInfinity: number } {
   const weights = new Float64Array(featureCount);
   const gradient = new Float64Array(featureCount);
   let loss = objective(rows, weights, lambda, gradient);
@@ -267,7 +267,7 @@ function fit(rows: readonly ModelPosition[], featureCount: number, lambda: numbe
     loss = nextLoss;
     if (weights.some((value) => !Number.isFinite(value))) throw new Error("non-finite conditional-choice coefficient");
   }
-  return { weights, initialLoss, finalLoss: loss, iterations: completed };
+  return { weights, initialLoss, finalLoss: loss, iterations: completed, gradientInfinity: Math.max(...gradient.map(Math.abs)) };
 }
 function measures(prepared: Prepared, weights: Float64Array, folds: ReadonlySet<number>): readonly ChoiceMeasure[] {
   return prepared.positions.filter((row) => folds.has(row.source.fold)).map((row) => {
@@ -384,7 +384,7 @@ function run(cache: Cache) {
     const choice = selected[arm]!;
     const prepared = prepare(cache, ALL_FOLDS, arm, choice.transform);
     const fitted = fit(prepared.positions, prepared.preprocessing.names.length, choice.lambda);
-    const model = { arm, ...choice, preprocessing: prepared.preprocessing, weights: [...fitted.weights].map(rounded), optimization: { initialLoss: rounded(fitted.initialLoss), finalLoss: rounded(fitted.finalLoss), iterations: fitted.iterations } };
+    const model = { arm, ...choice, preprocessing: prepared.preprocessing, weights: [...fitted.weights].map(rounded), optimization: { initialLoss: rounded(fitted.initialLoss), finalLoss: rounded(fitted.finalLoss), iterations: fitted.iterations, gradientInfinity: rounded(fitted.gradientInfinity) } };
     frozenModels[arm] = { ...model, digest: digest(model) };
   }
   const freeze = eligible(validation) && eligible(confirmation);
@@ -397,7 +397,11 @@ function run(cache: Cache) {
 }
 function markdown(result: ReturnType<typeof run>): string {
   const row = (name: string, values: ReturnType<typeof summarize>) => `| ${name} | ${values.crossEntropy.toFixed(6)} | ${(100 * values.topAgreement).toFixed(1)}% | ${values.expectedLossCp.toFixed(1)} | ${(100 * values.severe250).toFixed(1)}% |`;
-  return `# D1297 proper-score selector development\n\nFreeze verdict: **${result.freeze ? "eligible" : "refuted"}**. This is seen-population development, not final clearance.\n\n## Validation\n\n| arm | cross entropy | top choice | expected loss cp | >250 cp mass |\n|---|---:|---:|---:|---:|\n${Object.entries(result.validation).map(([name, values]) => row(name, values)).join("\n")}\n\n## Once-read confirmation\n\n| arm | cross entropy | top choice | expected loss cp | >250 cp mass |\n|---|---:|---:|---:|---:|\n${Object.entries(result.confirmation).map(([name, values]) => row(name, values)).join("\n")}\n`;
+  const optimization = Object.entries(result.frozenModels).map(([name, value]) => {
+    const model = value as { readonly transform: string; readonly lambda: number; readonly optimization: { readonly iterations: number; readonly gradientInfinity: number } };
+    return `| ${name} | ${model.transform} | ${model.lambda} | ${model.optimization.iterations} | ${model.optimization.gradientInfinity.toExponential(3)} |`;
+  }).join("\n");
+  return `# D1297 proper-score selector development\n\nFreeze verdict: **${result.freeze ? "eligible" : "refuted"}**. This is seen-population development, not final clearance.\n\nThe proper model repairs D1297's probability-tail pathology, but the combined arm exceeds the independently declared severe-loss budget on both held-out folds. No third population was opened.\n\n## Validation\n\n| arm | cross entropy | top choice | expected loss cp | >250 cp mass |\n|---|---:|---:|---:|---:|\n${Object.entries(result.validation).map(([name, values]) => row(name, values)).join("\n")}\n\n## Once-read confirmation\n\n| arm | cross entropy | top choice | expected loss cp | >250 cp mass |\n|---|---:|---:|---:|---:|\n${Object.entries(result.confirmation).map(([name, values]) => row(name, values)).join("\n")}\n\n## Full-development optimizer audit\n\n| arm | transform | lambda | iterations | final gradient infinity norm |\n|---|---|---:|---:|---:|\n${optimization}\n\nThe engine fit met the stopping target. Evidence and combined reached the declared 80-iteration bound above the \`1e-6\` tolerance; because the freeze gate already failed, none is promoted as a frozen production model.\n`;
 }
 
 describe("D1297 proper-score development", () => {
@@ -413,6 +417,7 @@ describe("D1297 proper-score development", () => {
     expect(gradient[0]).toBeCloseTo((plus - minus) / (2 * epsilon), 6);
     const fitted = fit([row], 1, 0.01, 80);
     expect(fitted.finalLoss).toBeLessThan(fitted.initialLoss);
+    expect(fitted.gradientInfinity).toBeLessThan(1e-6);
     expect(fitted.weights[0]).toBeGreaterThan(0);
     expect(probabilities(row, fitted.weights)[0]).toBeGreaterThan(0.5);
   });

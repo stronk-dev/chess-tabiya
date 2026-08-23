@@ -6778,3 +6778,27 @@ and 10,000-sample intervals cluster by game.
 diagonal heuristic and mean-probability clearance with a proper-score gate, freeze the model, and
 evaluate on later untouched games from the surviving R2 source prefix. Do not start the multi-ply
 packet or implement the selector until that gate passes; H5/C5 remain unmet.
+
+## 2026-08-23 — The proper-score repair retained signal and refused the standalone selector
+
+**What landed:** D1297's bounded conditional-logit development ran over the already-exposed 515
+decisions / 108 games / 17,359 candidates. It compared only the declared raw and
+projection-balanced transforms and ridge grid, selected on fold 3, then read fold 4 once. The
+machine-readable results, compact report, research dossier and optimizer audit are committed
+together; no third-population game was selected or read.
+
+**What changed:** the model fixes the old probability pathology and retains the representation
+signal. Combined cross entropy beats engine-only on validation (2.454 vs 2.488) and confirmation
+(2.052 vs 2.528); top-choice and expected-loss budgets pass. The standalone freeze still fails:
+severe mass rises +1.97 and +1.34 percentage points, above the independently fixed +1-point ceiling
+on both folds. The evidence/combined full-development fits also hit the declared 80-iteration cap
+above the numerical stopping target, so no coefficient vector is promoted.
+
+**Verification:** the analytic-gradient and monotone-choice controls pass; the full bounded arm
+passes 2/2 in 150.40 s and reproduces the earlier aggregate readings. Cache digest, representation
+commit, raw-input digests and model-output digests are recorded in the JSON result.
+
+**Next:** do not tune this standalone family again and do not spend the reserved third population.
+Preregister a distinct composition using the already-measured, disclosed 250-cp `ErrorGuard`, with
+observed-human-move exclusion as an explicit adverse measure and guarded-engine as the identical-mask
+control. H5/C5 and all human-like, Elo, personality and multi-ply claims remain blocked.

@@ -122,6 +122,15 @@ rewind adds value**.
   >250-cp mass rises 23.0%→43.4%. The representation signal replicates; the diagonal head and its
   non-proper primary gate do not clear. Repair against a proper score and freeze before a third
   untouched population; do not begin multi-ply or alter H5/C5 from this result.
+- **Proper-score repair retains signal and fails the standalone safety freeze 2026-08-23**
+  (`design/research/evidence-to-move-proper-score-repair.md`, D1297). A conditional-logit repair on
+  the already-seen development population fixes the old probability-tail pathology and makes
+  combined cross entropy better than engine-only on validation (**2.454 vs 2.488**) and once-read
+  confirmation (**2.052 vs 2.528**). Four of five predeclared clauses pass on both folds; the same
+  severe-tail clause fails twice: >250-cp mass rises **+1.97 pp** and **+1.34 pp**, above the fixed
+  +1-point ceiling. The standalone base is refused, the third population remains untouched, and a
+  guard-composed successor requires its own preregistration. This still does not compare complete
+  branches or license human-like/Elo/personality language, so H5/C5 remain unchanged.
 
 ## Kill criteria
 
