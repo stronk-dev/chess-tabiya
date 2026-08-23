@@ -6910,3 +6910,22 @@ standing clause added to `planning/rfc-drafting-queue.md`.
 `theory-drill-current-joins`, `shared-candidate-evidence-packet`, `bounded-policy-targets`,
 `theory-knowledge-pipeline` and the two desk teardowns. Four owner decisions remain drafted and
 waiting in `planning/decision-queue.md`, the failure state ([[D1300]]) first.
+
+## 2026-08-23 — Exact Guided Hint selector failed perspective and latency gates
+
+**What landed:** D1363's preregistered instrument replayed the exact seven-family
+`hint-distance` table over the fixed 64-position D1061 population and both stored engine arms from
+a clean extraction. The result records every selected occurrence identity, phase/family/side mix,
+constructor fixtures and selector timing; no engine, network or LLM call occurred.
+
+**What changed:** the RFC's raw precedence is refuted rather than merely unmeasured. It selects an
+opponent edge in 28/72 non-empty rows, including 18 opening rows, while the packet would disclose
+the root side's first move. The candidate pool itself is 78 opponent / 72 root; `loose_piece`
+accounts for 130/150 candidates and 58/72 selections. Root-side filtering reduces reach to 30/64
+depth-12 and 22/64 at 100 ms but does not establish causality or benefit. Depth-12 selector-only
+p95 is 1,529.1 ms against the frozen 1,400-ms headroom, before engine/transport/rendering.
+
+**Next:** keep `rfc/hint-distance.md` returned. Preregister per-family perspective/polarity and a
+closed relation to the root action, then consume D1071's shared score-free packet and measure
+cold/warm/provider-off end to end through the sealed disclosure packet and deterministic renderer.
+Theory/authored/tablebase adapters remain independently available when the engine arm abstains.

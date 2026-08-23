@@ -1,0 +1,6673 @@
+{
+  "experiment": "D1363",
+  "measuredAt": "2026-08-23T20:46:15.892Z",
+  "input": {
+    "path": "planning/evidence-foundation-ux/d1061-bestline-distance-results.json",
+    "sha256": "sha256:53051e9671e801ecb71c209a052b54da53d97873b07d0c85298b8d70043d4162"
+  },
+  "runtimeDigest": "sha256:9b9831400163b62a159377b8a9e1921509bfd665e9aa5b27687dc7f74839159c",
+  "contract": {
+    "families": [
+      "mate_in_one",
+      "forced_mate",
+      "double_attack",
+      "fork_survives_reply",
+      "discovered_executed",
+      "loose_piece",
+      "promotion_pressure"
+    ],
+    "arms": [
+      "depth12",
+      "movetime100_a"
+    ],
+    "horizonPlies": 4,
+    "forcedMateAttackerMoves": 4
+  },
+  "candidateCounts": {
+    "mate_in_one": 0,
+    "forced_mate": 0,
+    "double_attack": 8,
+    "fork_survives_reply": 1,
+    "discovered_executed": 8,
+    "loose_piece": 130,
+    "promotion_pressure": 3
+  },
+  "candidateRelations": {
+    "root": 72,
+    "opponent": 78,
+    "unclassified": 0
+  },
+  "candidateStatuses": {
+    "discovered_executed:gained": 8,
+    "double_attack:gained": 8,
+    "fork_survives_reply:matched": 1,
+    "loose_piece:gained": 30,
+    "loose_piece:lost": 57,
+    "loose_piece:preserved": 43,
+    "promotion_pressure:available:false|available:false": 3
+  },
+  "summary": {
+    "depth12": {
+      "positions": 64,
+      "rawReach": 39,
+      "rootSideReach": 30,
+      "rootEdgeReach": 21,
+      "rootSideLaterReach": 17,
+      "rawOpponentSelections": 16,
+      "rawDiffersFromRootSide": 16,
+      "rawDiffersFromRootEdge": 20,
+      "timingMs": {
+        "n": 64,
+        "meanMs": 1034.61180934375,
+        "p50Ms": 1046.5915840000016,
+        "p95Ms": 1529.0985409999994,
+        "maxMs": 1772.7422080000033
+      }
+    },
+    "movetime100_a": {
+      "positions": 64,
+      "rawReach": 33,
+      "rootSideReach": 22,
+      "rootEdgeReach": 21,
+      "rootSideLaterReach": 5,
+      "rawOpponentSelections": 12,
+      "rawDiffersFromRootSide": 12,
+      "rawDiffersFromRootEdge": 12,
+      "timingMs": {
+        "n": 64,
+        "meanMs": 659.9605196093739,
+        "p50Ms": 556.4020409999994,
+        "p95Ms": 1375.742124999997,
+        "maxMs": 1741.9129170000087
+      }
+    }
+  },
+  "phaseSummary": {
+    "depth12:opening": {
+      "positions": 24,
+      "candidates": 36,
+      "candidatesByFamily": {
+        "discovered_executed": 2,
+        "double_attack": 2,
+        "loose_piece": 32
+      },
+      "candidatesByRelation": {
+        "root": 13,
+        "opponent": 23,
+        "unclassified": 0
+      },
+      "rawReach": 15,
+      "rawSelectionsByFamily": {
+        "discovered_executed": 1,
+        "double_attack": 2,
+        "loose_piece": 12
+      },
+      "rawOpponentSelections": 9
+    },
+    "depth12:middlegame": {
+      "positions": 16,
+      "candidates": 23,
+      "candidatesByFamily": {
+        "discovered_executed": 1,
+        "double_attack": 1,
+        "loose_piece": 21
+      },
+      "candidatesByRelation": {
+        "root": 12,
+        "opponent": 11,
+        "unclassified": 0
+      },
+      "rawReach": 9,
+      "rawSelectionsByFamily": {
+        "discovered_executed": 1,
+        "double_attack": 1,
+        "loose_piece": 7
+      },
+      "rawOpponentSelections": 1
+    },
+    "depth12:cross_phase": {
+      "positions": 24,
+      "candidates": 29,
+      "candidatesByFamily": {
+        "discovered_executed": 1,
+        "double_attack": 2,
+        "fork_survives_reply": 1,
+        "loose_piece": 23,
+        "promotion_pressure": 2
+      },
+      "candidatesByRelation": {
+        "root": 18,
+        "opponent": 11,
+        "unclassified": 0
+      },
+      "rawReach": 15,
+      "rawSelectionsByFamily": {
+        "double_attack": 2,
+        "loose_piece": 13
+      },
+      "rawOpponentSelections": 6
+    },
+    "movetime100_a:opening": {
+      "positions": 24,
+      "candidates": 17,
+      "candidatesByFamily": {
+        "discovered_executed": 2,
+        "double_attack": 2,
+        "loose_piece": 13
+      },
+      "candidatesByRelation": {
+        "root": 4,
+        "opponent": 13,
+        "unclassified": 0
+      },
+      "rawReach": 13,
+      "rawSelectionsByFamily": {
+        "discovered_executed": 2,
+        "double_attack": 2,
+        "loose_piece": 9
+      },
+      "rawOpponentSelections": 9
+    },
+    "movetime100_a:middlegame": {
+      "positions": 16,
+      "candidates": 22,
+      "candidatesByFamily": {
+        "discovered_executed": 1,
+        "double_attack": 1,
+        "loose_piece": 20
+      },
+      "candidatesByRelation": {
+        "root": 12,
+        "opponent": 10,
+        "unclassified": 0
+      },
+      "rawReach": 8,
+      "rawSelectionsByFamily": {
+        "discovered_executed": 1,
+        "double_attack": 1,
+        "loose_piece": 6
+      },
+      "rawOpponentSelections": 0
+    },
+    "movetime100_a:cross_phase": {
+      "positions": 24,
+      "candidates": 23,
+      "candidatesByFamily": {
+        "discovered_executed": 1,
+        "loose_piece": 21,
+        "promotion_pressure": 1
+      },
+      "candidatesByRelation": {
+        "root": 13,
+        "opponent": 10,
+        "unclassified": 0
+      },
+      "rawReach": 12,
+      "rawSelectionsByFamily": {
+        "discovered_executed": 1,
+        "loose_piece": 11
+      },
+      "rawOpponentSelections": 3
+    }
+  },
+  "gates": {
+    "familySetExercised": true,
+    "noOpponentRawSelections": false,
+    "occurrenceIdentity": true,
+    "latencyHeadroom": false
+  },
+  "rows": [
+    {
+      "positionId": "0:anti-dutch-leningrad-white:7023480a69ca",
+      "packId": "anti-dutch-leningrad-white",
+      "phase": "opening",
+      "arm": "depth12",
+      "rootSide": "black",
+      "firstMoveUci": "a7a5",
+      "candidateCount": 2,
+      "candidateBreakdown": {
+        "total": 2,
+        "byFamily": {
+          "loose_piece": 2
+        },
+        "byRelation": {
+          "opponent": 1,
+          "root": 1
+        },
+        "byStatus": {
+          "loose_piece:gained": 1,
+          "loose_piece:lost": 1
+        }
+      },
+      "raw": {
+        "occurrenceId": "sha256:2b42268d9a303887640af42c9b4eefafa3ff2cd9413cc2c01bad44937847e9be",
+        "family": "loose_piece",
+        "ply": 3,
+        "edgeSideRelation": "root",
+        "actor": {
+          "color": "black",
+          "role": "pawn",
+          "from": "c6",
+          "to": "d5"
+        },
+        "targets": [
+          "d5"
+        ],
+        "edgeMoveUci": "c6d5",
+        "firstMoveUci": "a7a5",
+        "status": "gained"
+      },
+      "rootSideOnly": {
+        "occurrenceId": "sha256:2b42268d9a303887640af42c9b4eefafa3ff2cd9413cc2c01bad44937847e9be",
+        "family": "loose_piece",
+        "ply": 3,
+        "edgeSideRelation": "root",
+        "actor": {
+          "color": "black",
+          "role": "pawn",
+          "from": "c6",
+          "to": "d5"
+        },
+        "targets": [
+          "d5"
+        ],
+        "edgeMoveUci": "c6d5",
+        "firstMoveUci": "a7a5",
+        "status": "gained"
+      },
+      "rootEdgeOnly": null,
+      "rootSideLater": {
+        "occurrenceId": "sha256:2b42268d9a303887640af42c9b4eefafa3ff2cd9413cc2c01bad44937847e9be",
+        "family": "loose_piece",
+        "ply": 3,
+        "edgeSideRelation": "root",
+        "actor": {
+          "color": "black",
+          "role": "pawn",
+          "from": "c6",
+          "to": "d5"
+        },
+        "targets": [
+          "d5"
+        ],
+        "edgeMoveUci": "c6d5",
+        "firstMoveUci": "a7a5",
+        "status": "gained"
+      },
+      "rawDiffersFromRootSide": false,
+      "rawDiffersFromRootEdge": true
+    },
+    {
+      "positionId": "0:anti-dutch-leningrad-white:7023480a69ca",
+      "packId": "anti-dutch-leningrad-white",
+      "phase": "opening",
+      "arm": "movetime100_a",
+      "rootSide": "black",
+      "firstMoveUci": "e7e5",
+      "candidateCount": 1,
+      "candidateBreakdown": {
+        "total": 1,
+        "byFamily": {
+          "loose_piece": 1
+        },
+        "byRelation": {
+          "opponent": 1
+        },
+        "byStatus": {
+          "loose_piece:gained": 1
+        }
+      },
+      "raw": {
+        "occurrenceId": "sha256:c32234591c1cd348fed005ae72e6d575ff9750c22893a2632ee19c1aacf77383",
+        "family": "loose_piece",
+        "ply": 2,
+        "edgeSideRelation": "opponent",
+        "actor": {
+          "color": "white",
+          "role": "pawn",
+          "from": "e2",
+          "to": "e4"
+        },
+        "targets": [
+          "e4"
+        ],
+        "edgeMoveUci": "e2e4",
+        "firstMoveUci": "e7e5",
+        "status": "gained"
+      },
+      "rootSideOnly": null,
+      "rootEdgeOnly": null,
+      "rootSideLater": null,
+      "rawDiffersFromRootSide": true,
+      "rawDiffersFromRootEdge": true
+    },
+    {
+      "positionId": "1:caro-kann-advance-black:d346fd43fa86",
+      "packId": "caro-kann-advance-black",
+      "phase": "opening",
+      "arm": "depth12",
+      "rootSide": "white",
+      "firstMoveUci": "g1h3",
+      "candidateCount": 0,
+      "candidateBreakdown": {
+        "total": 0,
+        "byFamily": {},
+        "byRelation": {},
+        "byStatus": {}
+      },
+      "raw": null,
+      "rootSideOnly": null,
+      "rootEdgeOnly": null,
+      "rootSideLater": null,
+      "rawDiffersFromRootSide": false,
+      "rawDiffersFromRootEdge": false
+    },
+    {
+      "positionId": "1:caro-kann-advance-black:d346fd43fa86",
+      "packId": "caro-kann-advance-black",
+      "phase": "opening",
+      "arm": "movetime100_a",
+      "rootSide": "white",
+      "firstMoveUci": "g1h3",
+      "candidateCount": 0,
+      "candidateBreakdown": {
+        "total": 0,
+        "byFamily": {},
+        "byRelation": {},
+        "byStatus": {}
+      },
+      "raw": null,
+      "rootSideOnly": null,
+      "rootEdgeOnly": null,
+      "rootSideLater": null,
+      "rawDiffersFromRootSide": false,
+      "rawDiffersFromRootEdge": false
+    },
+    {
+      "positionId": "2:opponent-intent-early-queen:bd8354970111",
+      "packId": "opponent-intent-early-queen",
+      "phase": "opening",
+      "arm": "depth12",
+      "rootSide": "white",
+      "firstMoveUci": "g1e2",
+      "candidateCount": 0,
+      "candidateBreakdown": {
+        "total": 0,
+        "byFamily": {},
+        "byRelation": {},
+        "byStatus": {}
+      },
+      "raw": null,
+      "rootSideOnly": null,
+      "rootEdgeOnly": null,
+      "rootSideLater": null,
+      "rawDiffersFromRootSide": false,
+      "rawDiffersFromRootEdge": false
+    },
+    {
+      "positionId": "2:opponent-intent-early-queen:bd8354970111",
+      "packId": "opponent-intent-early-queen",
+      "phase": "opening",
+      "arm": "movetime100_a",
+      "rootSide": "white",
+      "firstMoveUci": "g1e2",
+      "candidateCount": 0,
+      "candidateBreakdown": {
+        "total": 0,
+        "byFamily": {},
+        "byRelation": {},
+        "byStatus": {}
+      },
+      "raw": null,
+      "rootSideOnly": null,
+      "rootEdgeOnly": null,
+      "rootSideLater": null,
+      "rawDiffersFromRootSide": false,
+      "rawDiffersFromRootEdge": false
+    },
+    {
+      "positionId": "3:anti-caro-advance-c5-race:2f1b2df1c8d4",
+      "packId": "anti-caro-advance-c5-race",
+      "phase": "opening",
+      "arm": "depth12",
+      "rootSide": "white",
+      "firstMoveUci": "e1h1",
+      "candidateCount": 0,
+      "candidateBreakdown": {
+        "total": 0,
+        "byFamily": {},
+        "byRelation": {},
+        "byStatus": {}
+      },
+      "raw": null,
+      "rootSideOnly": null,
+      "rootEdgeOnly": null,
+      "rootSideLater": null,
+      "rawDiffersFromRootSide": false,
+      "rawDiffersFromRootEdge": false
+    },
+    {
+      "positionId": "3:anti-caro-advance-c5-race:2f1b2df1c8d4",
+      "packId": "anti-caro-advance-c5-race",
+      "phase": "opening",
+      "arm": "movetime100_a",
+      "rootSide": "white",
+      "firstMoveUci": "e1h1",
+      "candidateCount": 0,
+      "candidateBreakdown": {
+        "total": 0,
+        "byFamily": {},
+        "byRelation": {},
+        "byStatus": {}
+      },
+      "raw": null,
+      "rootSideOnly": null,
+      "rootEdgeOnly": null,
+      "rootSideLater": null,
+      "rawDiffersFromRootSide": false,
+      "rawDiffersFromRootEdge": false
+    },
+    {
+      "positionId": "4:anti-scandinavian-white:c5873e5df47f",
+      "packId": "anti-scandinavian-white",
+      "phase": "opening",
+      "arm": "depth12",
+      "rootSide": "black",
+      "firstMoveUci": "e8a8",
+      "candidateCount": 5,
+      "candidateBreakdown": {
+        "total": 5,
+        "byFamily": {
+          "discovered_executed": 1,
+          "loose_piece": 4
+        },
+        "byRelation": {
+          "opponent": 3,
+          "root": 2
+        },
+        "byStatus": {
+          "discovered_executed:gained": 1,
+          "loose_piece:gained": 1,
+          "loose_piece:lost": 2,
+          "loose_piece:preserved": 1
+        }
+      },
+      "raw": {
+        "occurrenceId": "sha256:9cc9e185965ee60d165b2370633a07661b37f262a7e1b69937a1cdd1ba09bd87",
+        "family": "discovered_executed",
+        "ply": 2,
+        "edgeSideRelation": "opponent",
+        "actor": {
+          "color": "white",
+          "role": "knight",
+          "from": "f3",
+          "to": "g5"
+        },
+        "targets": [
+          "f3",
+          "g4"
+        ],
+        "edgeMoveUci": "f3g5",
+        "firstMoveUci": "e8a8",
+        "status": "gained"
+      },
+      "rootSideOnly": {
+        "occurrenceId": "sha256:1da3d145741b10c14a4070467a0cc26c85a77030b94f788af9e704941ebf5616",
+        "family": "loose_piece",
+        "ply": 3,
+        "edgeSideRelation": "root",
+        "actor": {
+          "color": "black",
+          "role": "pawn",
+          "from": "f7",
+          "to": "f7"
+        },
+        "targets": [
+          "f7"
+        ],
+        "edgeMoveUci": "d8d4",
+        "firstMoveUci": "e8a8",
+        "status": "preserved"
+      },
+      "rootEdgeOnly": null,
+      "rootSideLater": {
+        "occurrenceId": "sha256:1da3d145741b10c14a4070467a0cc26c85a77030b94f788af9e704941ebf5616",
+        "family": "loose_piece",
+        "ply": 3,
+        "edgeSideRelation": "root",
+        "actor": {
+          "color": "black",
+          "role": "pawn",
+          "from": "f7",
+          "to": "f7"
+        },
+        "targets": [
+          "f7"
+        ],
+        "edgeMoveUci": "d8d4",
+        "firstMoveUci": "e8a8",
+        "status": "preserved"
+      },
+      "rawDiffersFromRootSide": true,
+      "rawDiffersFromRootEdge": true
+    },
+    {
+      "positionId": "4:anti-scandinavian-white:c5873e5df47f",
+      "packId": "anti-scandinavian-white",
+      "phase": "opening",
+      "arm": "movetime100_a",
+      "rootSide": "black",
+      "firstMoveUci": "e8a8",
+      "candidateCount": 2,
+      "candidateBreakdown": {
+        "total": 2,
+        "byFamily": {
+          "discovered_executed": 1,
+          "loose_piece": 1
+        },
+        "byRelation": {
+          "opponent": 2
+        },
+        "byStatus": {
+          "discovered_executed:gained": 1,
+          "loose_piece:gained": 1
+        }
+      },
+      "raw": {
+        "occurrenceId": "sha256:9cc9e185965ee60d165b2370633a07661b37f262a7e1b69937a1cdd1ba09bd87",
+        "family": "discovered_executed",
+        "ply": 2,
+        "edgeSideRelation": "opponent",
+        "actor": {
+          "color": "white",
+          "role": "knight",
+          "from": "f3",
+          "to": "g5"
+        },
+        "targets": [
+          "f3",
+          "g4"
+        ],
+        "edgeMoveUci": "f3g5",
+        "firstMoveUci": "e8a8",
+        "status": "gained"
+      },
+      "rootSideOnly": null,
+      "rootEdgeOnly": null,
+      "rootSideLater": null,
+      "rawDiffersFromRootSide": true,
+      "rawDiffersFromRootEdge": true
+    },
+    {
+      "positionId": "5:anti-scandinavian-white:4c0213139ef9",
+      "packId": "anti-scandinavian-white",
+      "phase": "opening",
+      "arm": "depth12",
+      "rootSide": "black",
+      "firstMoveUci": "b8d7",
+      "candidateCount": 2,
+      "candidateBreakdown": {
+        "total": 2,
+        "byFamily": {
+          "loose_piece": 2
+        },
+        "byRelation": {
+          "opponent": 1,
+          "root": 1
+        },
+        "byStatus": {
+          "loose_piece:lost": 2
+        }
+      },
+      "raw": {
+        "occurrenceId": "sha256:ae423f81ed7d7c0f3d213cf26df6106b2aacd9f171015296172b22a12b88bdab",
+        "family": "loose_piece",
+        "ply": 2,
+        "edgeSideRelation": "opponent",
+        "actor": {
+          "color": "white",
+          "role": "knight",
+          "from": "e5",
+          "to": "c4"
+        },
+        "targets": [
+          "e5"
+        ],
+        "edgeMoveUci": "e5c4",
+        "firstMoveUci": "b8d7",
+        "status": "lost"
+      },
+      "rootSideOnly": {
+        "occurrenceId": "sha256:a4a28191df43579f1ced76804d5d559dc06a4545fdd689a364d01a207afc454a",
+        "family": "loose_piece",
+        "ply": 3,
+        "edgeSideRelation": "root",
+        "actor": {
+          "color": "black",
+          "role": "queen",
+          "from": "a5",
+          "to": "a6"
+        },
+        "targets": [
+          "a5"
+        ],
+        "edgeMoveUci": "a5a6",
+        "firstMoveUci": "b8d7",
+        "status": "lost"
+      },
+      "rootEdgeOnly": null,
+      "rootSideLater": {
+        "occurrenceId": "sha256:a4a28191df43579f1ced76804d5d559dc06a4545fdd689a364d01a207afc454a",
+        "family": "loose_piece",
+        "ply": 3,
+        "edgeSideRelation": "root",
+        "actor": {
+          "color": "black",
+          "role": "queen",
+          "from": "a5",
+          "to": "a6"
+        },
+        "targets": [
+          "a5"
+        ],
+        "edgeMoveUci": "a5a6",
+        "firstMoveUci": "b8d7",
+        "status": "lost"
+      },
+      "rawDiffersFromRootSide": true,
+      "rawDiffersFromRootEdge": true
+    },
+    {
+      "positionId": "5:anti-scandinavian-white:4c0213139ef9",
+      "packId": "anti-scandinavian-white",
+      "phase": "opening",
+      "arm": "movetime100_a",
+      "rootSide": "black",
+      "firstMoveUci": "b8d7",
+      "candidateCount": 1,
+      "candidateBreakdown": {
+        "total": 1,
+        "byFamily": {
+          "loose_piece": 1
+        },
+        "byRelation": {
+          "opponent": 1
+        },
+        "byStatus": {
+          "loose_piece:lost": 1
+        }
+      },
+      "raw": {
+        "occurrenceId": "sha256:ae423f81ed7d7c0f3d213cf26df6106b2aacd9f171015296172b22a12b88bdab",
+        "family": "loose_piece",
+        "ply": 2,
+        "edgeSideRelation": "opponent",
+        "actor": {
+          "color": "white",
+          "role": "knight",
+          "from": "e5",
+          "to": "c4"
+        },
+        "targets": [
+          "e5"
+        ],
+        "edgeMoveUci": "e5c4",
+        "firstMoveUci": "b8d7",
+        "status": "lost"
+      },
+      "rootSideOnly": null,
+      "rootEdgeOnly": null,
+      "rootSideLater": null,
+      "rawDiffersFromRootSide": true,
+      "rawDiffersFromRootEdge": true
+    },
+    {
+      "positionId": "6:kid-classical-black:825b5d0b8f9b",
+      "packId": "kid-classical-black",
+      "phase": "opening",
+      "arm": "depth12",
+      "rootSide": "white",
+      "firstMoveUci": "f2f4",
+      "candidateCount": 1,
+      "candidateBreakdown": {
+        "total": 1,
+        "byFamily": {
+          "loose_piece": 1
+        },
+        "byRelation": {
+          "opponent": 1
+        },
+        "byStatus": {
+          "loose_piece:gained": 1
+        }
+      },
+      "raw": {
+        "occurrenceId": "sha256:0ab39509031be848b535220a5a273b3f777b1bf914b96434f96b6f1f1cbfb949",
+        "family": "loose_piece",
+        "ply": 2,
+        "edgeSideRelation": "opponent",
+        "actor": {
+          "color": "black",
+          "role": "pawn",
+          "from": "e5",
+          "to": "f4"
+        },
+        "targets": [
+          "f4"
+        ],
+        "edgeMoveUci": "e5f4",
+        "firstMoveUci": "f2f4",
+        "status": "gained"
+      },
+      "rootSideOnly": null,
+      "rootEdgeOnly": null,
+      "rootSideLater": null,
+      "rawDiffersFromRootSide": true,
+      "rawDiffersFromRootEdge": true
+    },
+    {
+      "positionId": "6:kid-classical-black:825b5d0b8f9b",
+      "packId": "kid-classical-black",
+      "phase": "opening",
+      "arm": "movetime100_a",
+      "rootSide": "white",
+      "firstMoveUci": "f2f4",
+      "candidateCount": 0,
+      "candidateBreakdown": {
+        "total": 0,
+        "byFamily": {},
+        "byRelation": {},
+        "byStatus": {}
+      },
+      "raw": null,
+      "rootSideOnly": null,
+      "rootEdgeOnly": null,
+      "rootSideLater": null,
+      "rawDiffersFromRootSide": false,
+      "rawDiffersFromRootEdge": false
+    },
+    {
+      "positionId": "7:anti-caro-advance-early-c5:e1dbe3bbd351",
+      "packId": "anti-caro-advance-early-c5",
+      "phase": "opening",
+      "arm": "depth12",
+      "rootSide": "white",
+      "firstMoveUci": "a2a3",
+      "candidateCount": 2,
+      "candidateBreakdown": {
+        "total": 2,
+        "byFamily": {
+          "loose_piece": 2
+        },
+        "byRelation": {
+          "opponent": 1,
+          "root": 1
+        },
+        "byStatus": {
+          "loose_piece:lost": 1,
+          "loose_piece:preserved": 1
+        }
+      },
+      "raw": {
+        "occurrenceId": "sha256:d5626ec36f785d221f4b60d4abc6910e00f73c301500eff87f4f274b870f6d4e",
+        "family": "loose_piece",
+        "ply": 1,
+        "edgeSideRelation": "root",
+        "actor": {
+          "color": "white",
+          "role": "pawn",
+          "from": "c5",
+          "to": "c5"
+        },
+        "targets": [
+          "c5"
+        ],
+        "edgeMoveUci": "a2a3",
+        "firstMoveUci": "a2a3",
+        "status": "preserved"
+      },
+      "rootSideOnly": {
+        "occurrenceId": "sha256:d5626ec36f785d221f4b60d4abc6910e00f73c301500eff87f4f274b870f6d4e",
+        "family": "loose_piece",
+        "ply": 1,
+        "edgeSideRelation": "root",
+        "actor": {
+          "color": "white",
+          "role": "pawn",
+          "from": "c5",
+          "to": "c5"
+        },
+        "targets": [
+          "c5"
+        ],
+        "edgeMoveUci": "a2a3",
+        "firstMoveUci": "a2a3",
+        "status": "preserved"
+      },
+      "rootEdgeOnly": {
+        "occurrenceId": "sha256:d5626ec36f785d221f4b60d4abc6910e00f73c301500eff87f4f274b870f6d4e",
+        "family": "loose_piece",
+        "ply": 1,
+        "edgeSideRelation": "root",
+        "actor": {
+          "color": "white",
+          "role": "pawn",
+          "from": "c5",
+          "to": "c5"
+        },
+        "targets": [
+          "c5"
+        ],
+        "edgeMoveUci": "a2a3",
+        "firstMoveUci": "a2a3",
+        "status": "preserved"
+      },
+      "rootSideLater": null,
+      "rawDiffersFromRootSide": false,
+      "rawDiffersFromRootEdge": false
+    },
+    {
+      "positionId": "7:anti-caro-advance-early-c5:e1dbe3bbd351",
+      "packId": "anti-caro-advance-early-c5",
+      "phase": "opening",
+      "arm": "movetime100_a",
+      "rootSide": "white",
+      "firstMoveUci": "a2a3",
+      "candidateCount": 1,
+      "candidateBreakdown": {
+        "total": 1,
+        "byFamily": {
+          "loose_piece": 1
+        },
+        "byRelation": {
+          "root": 1
+        },
+        "byStatus": {
+          "loose_piece:preserved": 1
+        }
+      },
+      "raw": {
+        "occurrenceId": "sha256:d5626ec36f785d221f4b60d4abc6910e00f73c301500eff87f4f274b870f6d4e",
+        "family": "loose_piece",
+        "ply": 1,
+        "edgeSideRelation": "root",
+        "actor": {
+          "color": "white",
+          "role": "pawn",
+          "from": "c5",
+          "to": "c5"
+        },
+        "targets": [
+          "c5"
+        ],
+        "edgeMoveUci": "a2a3",
+        "firstMoveUci": "a2a3",
+        "status": "preserved"
+      },
+      "rootSideOnly": {
+        "occurrenceId": "sha256:d5626ec36f785d221f4b60d4abc6910e00f73c301500eff87f4f274b870f6d4e",
+        "family": "loose_piece",
+        "ply": 1,
+        "edgeSideRelation": "root",
+        "actor": {
+          "color": "white",
+          "role": "pawn",
+          "from": "c5",
+          "to": "c5"
+        },
+        "targets": [
+          "c5"
+        ],
+        "edgeMoveUci": "a2a3",
+        "firstMoveUci": "a2a3",
+        "status": "preserved"
+      },
+      "rootEdgeOnly": {
+        "occurrenceId": "sha256:d5626ec36f785d221f4b60d4abc6910e00f73c301500eff87f4f274b870f6d4e",
+        "family": "loose_piece",
+        "ply": 1,
+        "edgeSideRelation": "root",
+        "actor": {
+          "color": "white",
+          "role": "pawn",
+          "from": "c5",
+          "to": "c5"
+        },
+        "targets": [
+          "c5"
+        ],
+        "edgeMoveUci": "a2a3",
+        "firstMoveUci": "a2a3",
+        "status": "preserved"
+      },
+      "rootSideLater": null,
+      "rawDiffersFromRootSide": false,
+      "rawDiffersFromRootEdge": false
+    },
+    {
+      "positionId": "8:anti-london-black:fbc0c15e6636",
+      "packId": "anti-london-black",
+      "phase": "opening",
+      "arm": "depth12",
+      "rootSide": "white",
+      "firstMoveUci": "f1b5",
+      "candidateCount": 1,
+      "candidateBreakdown": {
+        "total": 1,
+        "byFamily": {
+          "loose_piece": 1
+        },
+        "byRelation": {
+          "opponent": 1
+        },
+        "byStatus": {
+          "loose_piece:lost": 1
+        }
+      },
+      "raw": {
+        "occurrenceId": "sha256:eeb2c19af3258751c88d9d3d2ee9e5dc84575d9eb3a35d5b0a915d1aea46ede4",
+        "family": "loose_piece",
+        "ply": 2,
+        "edgeSideRelation": "opponent",
+        "actor": {
+          "color": "black",
+          "role": "pawn",
+          "from": "c5",
+          "to": "c5"
+        },
+        "targets": [
+          "c5"
+        ],
+        "edgeMoveUci": "e7e6",
+        "firstMoveUci": "f1b5",
+        "status": "lost"
+      },
+      "rootSideOnly": null,
+      "rootEdgeOnly": null,
+      "rootSideLater": null,
+      "rawDiffersFromRootSide": true,
+      "rawDiffersFromRootEdge": true
+    },
+    {
+      "positionId": "8:anti-london-black:fbc0c15e6636",
+      "packId": "anti-london-black",
+      "phase": "opening",
+      "arm": "movetime100_a",
+      "rootSide": "white",
+      "firstMoveUci": "f1b5",
+      "candidateCount": 1,
+      "candidateBreakdown": {
+        "total": 1,
+        "byFamily": {
+          "loose_piece": 1
+        },
+        "byRelation": {
+          "opponent": 1
+        },
+        "byStatus": {
+          "loose_piece:preserved": 1
+        }
+      },
+      "raw": {
+        "occurrenceId": "sha256:8c427df43e3711e97d0dd06a01f74bf4c13159a3b0da7edc1c1a30ad0e1bec2c",
+        "family": "loose_piece",
+        "ply": 2,
+        "edgeSideRelation": "opponent",
+        "actor": {
+          "color": "black",
+          "role": "pawn",
+          "from": "c5",
+          "to": "d4"
+        },
+        "targets": [
+          "d4"
+        ],
+        "edgeMoveUci": "c5d4",
+        "firstMoveUci": "f1b5",
+        "status": "preserved"
+      },
+      "rootSideOnly": null,
+      "rootEdgeOnly": null,
+      "rootSideLater": null,
+      "rawDiffersFromRootSide": true,
+      "rawDiffersFromRootEdge": true
+    },
+    {
+      "positionId": "9:anti-caro-advance-early-c5:b0ebacbbefd1",
+      "packId": "anti-caro-advance-early-c5",
+      "phase": "opening",
+      "arm": "depth12",
+      "rootSide": "black",
+      "firstMoveUci": "b8c6",
+      "candidateCount": 3,
+      "candidateBreakdown": {
+        "total": 3,
+        "byFamily": {
+          "loose_piece": 3
+        },
+        "byRelation": {
+          "opponent": 2,
+          "root": 1
+        },
+        "byStatus": {
+          "loose_piece:gained": 1,
+          "loose_piece:lost": 2
+        }
+      },
+      "raw": {
+        "occurrenceId": "sha256:958a9a8a148cfa24bb6bc6b589bdd63e4b2c59d04ec9f9d79088e03c55525240",
+        "family": "loose_piece",
+        "ply": 2,
+        "edgeSideRelation": "opponent",
+        "actor": {
+          "color": "white",
+          "role": "knight",
+          "from": "d4",
+          "to": "c6"
+        },
+        "targets": [
+          "c6"
+        ],
+        "edgeMoveUci": "d4c6",
+        "firstMoveUci": "b8c6",
+        "status": "gained"
+      },
+      "rootSideOnly": {
+        "occurrenceId": "sha256:944f071bdaf683b84021b65c5d98480c0b866e98c37f0ea6566314b380aec165",
+        "family": "loose_piece",
+        "ply": 3,
+        "edgeSideRelation": "root",
+        "actor": {
+          "color": "black",
+          "role": "queen",
+          "from": "d8",
+          "to": "d8"
+        },
+        "targets": [
+          "d8"
+        ],
+        "edgeMoveUci": "b7c6",
+        "firstMoveUci": "b8c6",
+        "status": "lost"
+      },
+      "rootEdgeOnly": null,
+      "rootSideLater": {
+        "occurrenceId": "sha256:944f071bdaf683b84021b65c5d98480c0b866e98c37f0ea6566314b380aec165",
+        "family": "loose_piece",
+        "ply": 3,
+        "edgeSideRelation": "root",
+        "actor": {
+          "color": "black",
+          "role": "queen",
+          "from": "d8",
+          "to": "d8"
+        },
+        "targets": [
+          "d8"
+        ],
+        "edgeMoveUci": "b7c6",
+        "firstMoveUci": "b8c6",
+        "status": "lost"
+      },
+      "rawDiffersFromRootSide": true,
+      "rawDiffersFromRootEdge": true
+    },
+    {
+      "positionId": "9:anti-caro-advance-early-c5:b0ebacbbefd1",
+      "packId": "anti-caro-advance-early-c5",
+      "phase": "opening",
+      "arm": "movetime100_a",
+      "rootSide": "black",
+      "firstMoveUci": "b8c6",
+      "candidateCount": 0,
+      "candidateBreakdown": {
+        "total": 0,
+        "byFamily": {},
+        "byRelation": {},
+        "byStatus": {}
+      },
+      "raw": null,
+      "rootSideOnly": null,
+      "rootEdgeOnly": null,
+      "rootSideLater": null,
+      "rawDiffersFromRootSide": false,
+      "rawDiffersFromRootEdge": false
+    },
+    {
+      "positionId": "10:scandinavian-mainline-black:b06b984b88da",
+      "packId": "scandinavian-mainline-black",
+      "phase": "opening",
+      "arm": "depth12",
+      "rootSide": "black",
+      "firstMoveUci": "a5b6",
+      "candidateCount": 4,
+      "candidateBreakdown": {
+        "total": 4,
+        "byFamily": {
+          "double_attack": 1,
+          "loose_piece": 3
+        },
+        "byRelation": {
+          "opponent": 3,
+          "root": 1
+        },
+        "byStatus": {
+          "double_attack:gained": 1,
+          "loose_piece:lost": 1,
+          "loose_piece:preserved": 2
+        }
+      },
+      "raw": {
+        "occurrenceId": "sha256:2d7b7a0f303295423474629d80283dcfb865973860a435cda6ab4a55c740e1d5",
+        "family": "double_attack",
+        "ply": 1,
+        "edgeSideRelation": "root",
+        "actor": {
+          "color": "black",
+          "role": "queen",
+          "from": "a5",
+          "to": "b6"
+        },
+        "targets": [
+          "b2",
+          "d4"
+        ],
+        "edgeMoveUci": "a5b6",
+        "firstMoveUci": "a5b6",
+        "status": "gained"
+      },
+      "rootSideOnly": {
+        "occurrenceId": "sha256:2d7b7a0f303295423474629d80283dcfb865973860a435cda6ab4a55c740e1d5",
+        "family": "double_attack",
+        "ply": 1,
+        "edgeSideRelation": "root",
+        "actor": {
+          "color": "black",
+          "role": "queen",
+          "from": "a5",
+          "to": "b6"
+        },
+        "targets": [
+          "b2",
+          "d4"
+        ],
+        "edgeMoveUci": "a5b6",
+        "firstMoveUci": "a5b6",
+        "status": "gained"
+      },
+      "rootEdgeOnly": {
+        "occurrenceId": "sha256:2d7b7a0f303295423474629d80283dcfb865973860a435cda6ab4a55c740e1d5",
+        "family": "double_attack",
+        "ply": 1,
+        "edgeSideRelation": "root",
+        "actor": {
+          "color": "black",
+          "role": "queen",
+          "from": "a5",
+          "to": "b6"
+        },
+        "targets": [
+          "b2",
+          "d4"
+        ],
+        "edgeMoveUci": "a5b6",
+        "firstMoveUci": "a5b6",
+        "status": "gained"
+      },
+      "rootSideLater": null,
+      "rawDiffersFromRootSide": false,
+      "rawDiffersFromRootEdge": false
+    },
+    {
+      "positionId": "10:scandinavian-mainline-black:b06b984b88da",
+      "packId": "scandinavian-mainline-black",
+      "phase": "opening",
+      "arm": "movetime100_a",
+      "rootSide": "black",
+      "firstMoveUci": "a5b6",
+      "candidateCount": 4,
+      "candidateBreakdown": {
+        "total": 4,
+        "byFamily": {
+          "double_attack": 1,
+          "loose_piece": 3
+        },
+        "byRelation": {
+          "opponent": 3,
+          "root": 1
+        },
+        "byStatus": {
+          "double_attack:gained": 1,
+          "loose_piece:lost": 1,
+          "loose_piece:preserved": 2
+        }
+      },
+      "raw": {
+        "occurrenceId": "sha256:2d7b7a0f303295423474629d80283dcfb865973860a435cda6ab4a55c740e1d5",
+        "family": "double_attack",
+        "ply": 1,
+        "edgeSideRelation": "root",
+        "actor": {
+          "color": "black",
+          "role": "queen",
+          "from": "a5",
+          "to": "b6"
+        },
+        "targets": [
+          "b2",
+          "d4"
+        ],
+        "edgeMoveUci": "a5b6",
+        "firstMoveUci": "a5b6",
+        "status": "gained"
+      },
+      "rootSideOnly": {
+        "occurrenceId": "sha256:2d7b7a0f303295423474629d80283dcfb865973860a435cda6ab4a55c740e1d5",
+        "family": "double_attack",
+        "ply": 1,
+        "edgeSideRelation": "root",
+        "actor": {
+          "color": "black",
+          "role": "queen",
+          "from": "a5",
+          "to": "b6"
+        },
+        "targets": [
+          "b2",
+          "d4"
+        ],
+        "edgeMoveUci": "a5b6",
+        "firstMoveUci": "a5b6",
+        "status": "gained"
+      },
+      "rootEdgeOnly": {
+        "occurrenceId": "sha256:2d7b7a0f303295423474629d80283dcfb865973860a435cda6ab4a55c740e1d5",
+        "family": "double_attack",
+        "ply": 1,
+        "edgeSideRelation": "root",
+        "actor": {
+          "color": "black",
+          "role": "queen",
+          "from": "a5",
+          "to": "b6"
+        },
+        "targets": [
+          "b2",
+          "d4"
+        ],
+        "edgeMoveUci": "a5b6",
+        "firstMoveUci": "a5b6",
+        "status": "gained"
+      },
+      "rootSideLater": null,
+      "rawDiffersFromRootSide": false,
+      "rawDiffersFromRootEdge": false
+    },
+    {
+      "positionId": "11:anti-caro-advance-early-c5:dfe43bd2e711",
+      "packId": "anti-caro-advance-early-c5",
+      "phase": "opening",
+      "arm": "depth12",
+      "rootSide": "black",
+      "firstMoveUci": "e7e6",
+      "candidateCount": 5,
+      "candidateBreakdown": {
+        "total": 5,
+        "byFamily": {
+          "discovered_executed": 1,
+          "double_attack": 1,
+          "loose_piece": 3
+        },
+        "byRelation": {
+          "opponent": 3,
+          "root": 2
+        },
+        "byStatus": {
+          "discovered_executed:gained": 1,
+          "double_attack:gained": 1,
+          "loose_piece:lost": 1,
+          "loose_piece:preserved": 2
+        }
+      },
+      "raw": {
+        "occurrenceId": "sha256:25a2823d1f8ffca0eb42d062fafdcda33aefb881757bf7b2882c96adcfd635b5",
+        "family": "double_attack",
+        "ply": 3,
+        "edgeSideRelation": "root",
+        "actor": {
+          "color": "black",
+          "role": "knight",
+          "from": "b8",
+          "to": "d7"
+        },
+        "targets": [
+          "c5",
+          "e5"
+        ],
+        "edgeMoveUci": "b8d7",
+        "firstMoveUci": "e7e6",
+        "status": "gained"
+      },
+      "rootSideOnly": {
+        "occurrenceId": "sha256:25a2823d1f8ffca0eb42d062fafdcda33aefb881757bf7b2882c96adcfd635b5",
+        "family": "double_attack",
+        "ply": 3,
+        "edgeSideRelation": "root",
+        "actor": {
+          "color": "black",
+          "role": "knight",
+          "from": "b8",
+          "to": "d7"
+        },
+        "targets": [
+          "c5",
+          "e5"
+        ],
+        "edgeMoveUci": "b8d7",
+        "firstMoveUci": "e7e6",
+        "status": "gained"
+      },
+      "rootEdgeOnly": {
+        "occurrenceId": "sha256:c985af0e1c95a13e0e550d16a7c930151ee2ce68b8bb9f5f7f24dbb0f3b22b1c",
+        "family": "discovered_executed",
+        "ply": 1,
+        "edgeSideRelation": "root",
+        "actor": {
+          "color": "black",
+          "role": "pawn",
+          "from": "e7",
+          "to": "e6"
+        },
+        "targets": [
+          "c5",
+          "d6",
+          "e7"
+        ],
+        "edgeMoveUci": "e7e6",
+        "firstMoveUci": "e7e6",
+        "status": "gained"
+      },
+      "rootSideLater": {
+        "occurrenceId": "sha256:25a2823d1f8ffca0eb42d062fafdcda33aefb881757bf7b2882c96adcfd635b5",
+        "family": "double_attack",
+        "ply": 3,
+        "edgeSideRelation": "root",
+        "actor": {
+          "color": "black",
+          "role": "knight",
+          "from": "b8",
+          "to": "d7"
+        },
+        "targets": [
+          "c5",
+          "e5"
+        ],
+        "edgeMoveUci": "b8d7",
+        "firstMoveUci": "e7e6",
+        "status": "gained"
+      },
+      "rawDiffersFromRootSide": false,
+      "rawDiffersFromRootEdge": true
+    },
+    {
+      "positionId": "11:anti-caro-advance-early-c5:dfe43bd2e711",
+      "packId": "anti-caro-advance-early-c5",
+      "phase": "opening",
+      "arm": "movetime100_a",
+      "rootSide": "black",
+      "firstMoveUci": "e7e6",
+      "candidateCount": 1,
+      "candidateBreakdown": {
+        "total": 1,
+        "byFamily": {
+          "discovered_executed": 1
+        },
+        "byRelation": {
+          "root": 1
+        },
+        "byStatus": {
+          "discovered_executed:gained": 1
+        }
+      },
+      "raw": {
+        "occurrenceId": "sha256:c985af0e1c95a13e0e550d16a7c930151ee2ce68b8bb9f5f7f24dbb0f3b22b1c",
+        "family": "discovered_executed",
+        "ply": 1,
+        "edgeSideRelation": "root",
+        "actor": {
+          "color": "black",
+          "role": "pawn",
+          "from": "e7",
+          "to": "e6"
+        },
+        "targets": [
+          "c5",
+          "d6",
+          "e7"
+        ],
+        "edgeMoveUci": "e7e6",
+        "firstMoveUci": "e7e6",
+        "status": "gained"
+      },
+      "rootSideOnly": {
+        "occurrenceId": "sha256:c985af0e1c95a13e0e550d16a7c930151ee2ce68b8bb9f5f7f24dbb0f3b22b1c",
+        "family": "discovered_executed",
+        "ply": 1,
+        "edgeSideRelation": "root",
+        "actor": {
+          "color": "black",
+          "role": "pawn",
+          "from": "e7",
+          "to": "e6"
+        },
+        "targets": [
+          "c5",
+          "d6",
+          "e7"
+        ],
+        "edgeMoveUci": "e7e6",
+        "firstMoveUci": "e7e6",
+        "status": "gained"
+      },
+      "rootEdgeOnly": {
+        "occurrenceId": "sha256:c985af0e1c95a13e0e550d16a7c930151ee2ce68b8bb9f5f7f24dbb0f3b22b1c",
+        "family": "discovered_executed",
+        "ply": 1,
+        "edgeSideRelation": "root",
+        "actor": {
+          "color": "black",
+          "role": "pawn",
+          "from": "e7",
+          "to": "e6"
+        },
+        "targets": [
+          "c5",
+          "d6",
+          "e7"
+        ],
+        "edgeMoveUci": "e7e6",
+        "firstMoveUci": "e7e6",
+        "status": "gained"
+      },
+      "rootSideLater": null,
+      "rawDiffersFromRootSide": false,
+      "rawDiffersFromRootEdge": false
+    },
+    {
+      "positionId": "12:anti-french-advance-white:96594da40d4d",
+      "packId": "anti-french-advance-white",
+      "phase": "opening",
+      "arm": "depth12",
+      "rootSide": "white",
+      "firstMoveUci": "b2b4",
+      "candidateCount": 3,
+      "candidateBreakdown": {
+        "total": 3,
+        "byFamily": {
+          "loose_piece": 3
+        },
+        "byRelation": {
+          "opponent": 2,
+          "root": 1
+        },
+        "byStatus": {
+          "loose_piece:gained": 1,
+          "loose_piece:preserved": 2
+        }
+      },
+      "raw": {
+        "occurrenceId": "sha256:47c77143b35288ed5dd8a9a3c15642bd70904224fcffa758ab16324f47c8ae6a",
+        "family": "loose_piece",
+        "ply": 2,
+        "edgeSideRelation": "opponent",
+        "actor": {
+          "color": "black",
+          "role": "pawn",
+          "from": "c5",
+          "to": "d4"
+        },
+        "targets": [
+          "d4"
+        ],
+        "edgeMoveUci": "c5d4",
+        "firstMoveUci": "b2b4",
+        "status": "preserved"
+      },
+      "rootSideOnly": {
+        "occurrenceId": "sha256:1aa9360fbd40239cde1ace65deda9ec226ed1596bd034af9209c7832a47e7751",
+        "family": "loose_piece",
+        "ply": 3,
+        "edgeSideRelation": "root",
+        "actor": {
+          "color": "white",
+          "role": "bishop",
+          "from": "c1",
+          "to": "h6"
+        },
+        "targets": [
+          "h6"
+        ],
+        "edgeMoveUci": "c1h6",
+        "firstMoveUci": "b2b4",
+        "status": "gained"
+      },
+      "rootEdgeOnly": null,
+      "rootSideLater": {
+        "occurrenceId": "sha256:1aa9360fbd40239cde1ace65deda9ec226ed1596bd034af9209c7832a47e7751",
+        "family": "loose_piece",
+        "ply": 3,
+        "edgeSideRelation": "root",
+        "actor": {
+          "color": "white",
+          "role": "bishop",
+          "from": "c1",
+          "to": "h6"
+        },
+        "targets": [
+          "h6"
+        ],
+        "edgeMoveUci": "c1h6",
+        "firstMoveUci": "b2b4",
+        "status": "gained"
+      },
+      "rawDiffersFromRootSide": true,
+      "rawDiffersFromRootEdge": true
+    },
+    {
+      "positionId": "12:anti-french-advance-white:96594da40d4d",
+      "packId": "anti-french-advance-white",
+      "phase": "opening",
+      "arm": "movetime100_a",
+      "rootSide": "white",
+      "firstMoveUci": "b2b4",
+      "candidateCount": 1,
+      "candidateBreakdown": {
+        "total": 1,
+        "byFamily": {
+          "loose_piece": 1
+        },
+        "byRelation": {
+          "opponent": 1
+        },
+        "byStatus": {
+          "loose_piece:preserved": 1
+        }
+      },
+      "raw": {
+        "occurrenceId": "sha256:47c77143b35288ed5dd8a9a3c15642bd70904224fcffa758ab16324f47c8ae6a",
+        "family": "loose_piece",
+        "ply": 2,
+        "edgeSideRelation": "opponent",
+        "actor": {
+          "color": "black",
+          "role": "pawn",
+          "from": "c5",
+          "to": "d4"
+        },
+        "targets": [
+          "d4"
+        ],
+        "edgeMoveUci": "c5d4",
+        "firstMoveUci": "b2b4",
+        "status": "preserved"
+      },
+      "rootSideOnly": null,
+      "rootEdgeOnly": null,
+      "rootSideLater": null,
+      "rawDiffersFromRootSide": true,
+      "rawDiffersFromRootEdge": true
+    },
+    {
+      "positionId": "13:anti-dutch-leningrad-white:c4bd5866a331",
+      "packId": "anti-dutch-leningrad-white",
+      "phase": "opening",
+      "arm": "depth12",
+      "rootSide": "white",
+      "firstMoveUci": "g2g3",
+      "candidateCount": 0,
+      "candidateBreakdown": {
+        "total": 0,
+        "byFamily": {},
+        "byRelation": {},
+        "byStatus": {}
+      },
+      "raw": null,
+      "rootSideOnly": null,
+      "rootEdgeOnly": null,
+      "rootSideLater": null,
+      "rawDiffersFromRootSide": false,
+      "rawDiffersFromRootEdge": false
+    },
+    {
+      "positionId": "13:anti-dutch-leningrad-white:c4bd5866a331",
+      "packId": "anti-dutch-leningrad-white",
+      "phase": "opening",
+      "arm": "movetime100_a",
+      "rootSide": "white",
+      "firstMoveUci": "g2g3",
+      "candidateCount": 0,
+      "candidateBreakdown": {
+        "total": 0,
+        "byFamily": {},
+        "byRelation": {},
+        "byStatus": {}
+      },
+      "raw": null,
+      "rootSideOnly": null,
+      "rootEdgeOnly": null,
+      "rootSideLater": null,
+      "rawDiffersFromRootSide": false,
+      "rawDiffersFromRootEdge": false
+    },
+    {
+      "positionId": "14:anti-kid-classical-white:5a048c70a835",
+      "packId": "anti-kid-classical-white",
+      "phase": "opening",
+      "arm": "depth12",
+      "rootSide": "white",
+      "firstMoveUci": "h2h3",
+      "candidateCount": 1,
+      "candidateBreakdown": {
+        "total": 1,
+        "byFamily": {
+          "loose_piece": 1
+        },
+        "byRelation": {
+          "opponent": 1
+        },
+        "byStatus": {
+          "loose_piece:gained": 1
+        }
+      },
+      "raw": {
+        "occurrenceId": "sha256:38926aa968c189a82e2625d03921914f0650189971654428ce29431e352b0ac4",
+        "family": "loose_piece",
+        "ply": 2,
+        "edgeSideRelation": "opponent",
+        "actor": {
+          "color": "black",
+          "role": "pawn",
+          "from": "e7",
+          "to": "e5"
+        },
+        "targets": [
+          "e5"
+        ],
+        "edgeMoveUci": "e7e5",
+        "firstMoveUci": "h2h3",
+        "status": "gained"
+      },
+      "rootSideOnly": null,
+      "rootEdgeOnly": null,
+      "rootSideLater": null,
+      "rawDiffersFromRootSide": true,
+      "rawDiffersFromRootEdge": true
+    },
+    {
+      "positionId": "14:anti-kid-classical-white:5a048c70a835",
+      "packId": "anti-kid-classical-white",
+      "phase": "opening",
+      "arm": "movetime100_a",
+      "rootSide": "white",
+      "firstMoveUci": "h2h3",
+      "candidateCount": 1,
+      "candidateBreakdown": {
+        "total": 1,
+        "byFamily": {
+          "loose_piece": 1
+        },
+        "byRelation": {
+          "opponent": 1
+        },
+        "byStatus": {
+          "loose_piece:gained": 1
+        }
+      },
+      "raw": {
+        "occurrenceId": "sha256:38926aa968c189a82e2625d03921914f0650189971654428ce29431e352b0ac4",
+        "family": "loose_piece",
+        "ply": 2,
+        "edgeSideRelation": "opponent",
+        "actor": {
+          "color": "black",
+          "role": "pawn",
+          "from": "e7",
+          "to": "e5"
+        },
+        "targets": [
+          "e5"
+        ],
+        "edgeMoveUci": "e7e5",
+        "firstMoveUci": "h2h3",
+        "status": "gained"
+      },
+      "rootSideOnly": null,
+      "rootEdgeOnly": null,
+      "rootSideLater": null,
+      "rawDiffersFromRootSide": true,
+      "rawDiffersFromRootEdge": true
+    },
+    {
+      "positionId": "15:opening-principles-black:de505139dc1e",
+      "packId": "opening-principles-black",
+      "phase": "opening",
+      "arm": "depth12",
+      "rootSide": "black",
+      "firstMoveUci": "g8f6",
+      "candidateCount": 1,
+      "candidateBreakdown": {
+        "total": 1,
+        "byFamily": {
+          "loose_piece": 1
+        },
+        "byRelation": {
+          "opponent": 1
+        },
+        "byStatus": {
+          "loose_piece:lost": 1
+        }
+      },
+      "raw": {
+        "occurrenceId": "sha256:17fce4f6b19b9fbc909134edca73898f15866428cfb3be732b9072990b1a2c2e",
+        "family": "loose_piece",
+        "ply": 2,
+        "edgeSideRelation": "opponent",
+        "actor": {
+          "color": "white",
+          "role": "pawn",
+          "from": "e4",
+          "to": "e4"
+        },
+        "targets": [
+          "e4"
+        ],
+        "edgeMoveUci": "f1e1",
+        "firstMoveUci": "g8f6",
+        "status": "lost"
+      },
+      "rootSideOnly": null,
+      "rootEdgeOnly": null,
+      "rootSideLater": null,
+      "rawDiffersFromRootSide": true,
+      "rawDiffersFromRootEdge": true
+    },
+    {
+      "positionId": "15:opening-principles-black:de505139dc1e",
+      "packId": "opening-principles-black",
+      "phase": "opening",
+      "arm": "movetime100_a",
+      "rootSide": "black",
+      "firstMoveUci": "g8f6",
+      "candidateCount": 0,
+      "candidateBreakdown": {
+        "total": 0,
+        "byFamily": {},
+        "byRelation": {},
+        "byStatus": {}
+      },
+      "raw": null,
+      "rootSideOnly": null,
+      "rootEdgeOnly": null,
+      "rootSideLater": null,
+      "rawDiffersFromRootSide": false,
+      "rawDiffersFromRootEdge": false
+    },
+    {
+      "positionId": "16:opening-principles-black:abf9f14281b6",
+      "packId": "opening-principles-black",
+      "phase": "opening",
+      "arm": "depth12",
+      "rootSide": "white",
+      "firstMoveUci": "g1f3",
+      "candidateCount": 2,
+      "candidateBreakdown": {
+        "total": 2,
+        "byFamily": {
+          "loose_piece": 2
+        },
+        "byRelation": {
+          "opponent": 2
+        },
+        "byStatus": {
+          "loose_piece:lost": 1,
+          "loose_piece:preserved": 1
+        }
+      },
+      "raw": {
+        "occurrenceId": "sha256:1d894835e4ac5416afcf4a9a1d95c836fb4c32a8c0c44a16b6a2ff2b0c1e2e4a",
+        "family": "loose_piece",
+        "ply": 2,
+        "edgeSideRelation": "opponent",
+        "actor": {
+          "color": "black",
+          "role": "pawn",
+          "from": "e5",
+          "to": "e5"
+        },
+        "targets": [
+          "e5"
+        ],
+        "edgeMoveUci": "b8c6",
+        "firstMoveUci": "g1f3",
+        "status": "lost"
+      },
+      "rootSideOnly": null,
+      "rootEdgeOnly": null,
+      "rootSideLater": null,
+      "rawDiffersFromRootSide": true,
+      "rawDiffersFromRootEdge": true
+    },
+    {
+      "positionId": "16:opening-principles-black:abf9f14281b6",
+      "packId": "opening-principles-black",
+      "phase": "opening",
+      "arm": "movetime100_a",
+      "rootSide": "white",
+      "firstMoveUci": "g1f3",
+      "candidateCount": 1,
+      "candidateBreakdown": {
+        "total": 1,
+        "byFamily": {
+          "loose_piece": 1
+        },
+        "byRelation": {
+          "opponent": 1
+        },
+        "byStatus": {
+          "loose_piece:lost": 1
+        }
+      },
+      "raw": {
+        "occurrenceId": "sha256:1d894835e4ac5416afcf4a9a1d95c836fb4c32a8c0c44a16b6a2ff2b0c1e2e4a",
+        "family": "loose_piece",
+        "ply": 2,
+        "edgeSideRelation": "opponent",
+        "actor": {
+          "color": "black",
+          "role": "pawn",
+          "from": "e5",
+          "to": "e5"
+        },
+        "targets": [
+          "e5"
+        ],
+        "edgeMoveUci": "b8c6",
+        "firstMoveUci": "g1f3",
+        "status": "lost"
+      },
+      "rootSideOnly": null,
+      "rootEdgeOnly": null,
+      "rootSideLater": null,
+      "rawDiffersFromRootSide": true,
+      "rawDiffersFromRootEdge": true
+    },
+    {
+      "positionId": "17:anti-french-advance-white:cd69be023b15",
+      "packId": "anti-french-advance-white",
+      "phase": "opening",
+      "arm": "depth12",
+      "rootSide": "black",
+      "firstMoveUci": "c7c5",
+      "candidateCount": 0,
+      "candidateBreakdown": {
+        "total": 0,
+        "byFamily": {},
+        "byRelation": {},
+        "byStatus": {}
+      },
+      "raw": null,
+      "rootSideOnly": null,
+      "rootEdgeOnly": null,
+      "rootSideLater": null,
+      "rawDiffersFromRootSide": false,
+      "rawDiffersFromRootEdge": false
+    },
+    {
+      "positionId": "17:anti-french-advance-white:cd69be023b15",
+      "packId": "anti-french-advance-white",
+      "phase": "opening",
+      "arm": "movetime100_a",
+      "rootSide": "black",
+      "firstMoveUci": "c7c5",
+      "candidateCount": 0,
+      "candidateBreakdown": {
+        "total": 0,
+        "byFamily": {},
+        "byRelation": {},
+        "byStatus": {}
+      },
+      "raw": null,
+      "rootSideOnly": null,
+      "rootEdgeOnly": null,
+      "rootSideLater": null,
+      "rawDiffersFromRootSide": false,
+      "rawDiffersFromRootEdge": false
+    },
+    {
+      "positionId": "18:anti-sicilian-najdorf-english-attack:deca726c3462",
+      "packId": "anti-sicilian-najdorf-english-attack",
+      "phase": "opening",
+      "arm": "depth12",
+      "rootSide": "white",
+      "firstMoveUci": "d1d2",
+      "candidateCount": 0,
+      "candidateBreakdown": {
+        "total": 0,
+        "byFamily": {},
+        "byRelation": {},
+        "byStatus": {}
+      },
+      "raw": null,
+      "rootSideOnly": null,
+      "rootEdgeOnly": null,
+      "rootSideLater": null,
+      "rawDiffersFromRootSide": false,
+      "rawDiffersFromRootEdge": false
+    },
+    {
+      "positionId": "18:anti-sicilian-najdorf-english-attack:deca726c3462",
+      "packId": "anti-sicilian-najdorf-english-attack",
+      "phase": "opening",
+      "arm": "movetime100_a",
+      "rootSide": "white",
+      "firstMoveUci": "d1d2",
+      "candidateCount": 0,
+      "candidateBreakdown": {
+        "total": 0,
+        "byFamily": {},
+        "byRelation": {},
+        "byStatus": {}
+      },
+      "raw": null,
+      "rootSideOnly": null,
+      "rootEdgeOnly": null,
+      "rootSideLater": null,
+      "rawDiffersFromRootSide": false,
+      "rawDiffersFromRootEdge": false
+    },
+    {
+      "positionId": "19:scandinavian-mainline-black:9afca7bc2b5f",
+      "packId": "scandinavian-mainline-black",
+      "phase": "opening",
+      "arm": "depth12",
+      "rootSide": "white",
+      "firstMoveUci": "f1c4",
+      "candidateCount": 0,
+      "candidateBreakdown": {
+        "total": 0,
+        "byFamily": {},
+        "byRelation": {},
+        "byStatus": {}
+      },
+      "raw": null,
+      "rootSideOnly": null,
+      "rootEdgeOnly": null,
+      "rootSideLater": null,
+      "rawDiffersFromRootSide": false,
+      "rawDiffersFromRootEdge": false
+    },
+    {
+      "positionId": "19:scandinavian-mainline-black:9afca7bc2b5f",
+      "packId": "scandinavian-mainline-black",
+      "phase": "opening",
+      "arm": "movetime100_a",
+      "rootSide": "white",
+      "firstMoveUci": "h2h3",
+      "candidateCount": 1,
+      "candidateBreakdown": {
+        "total": 1,
+        "byFamily": {
+          "double_attack": 1
+        },
+        "byRelation": {
+          "opponent": 1
+        },
+        "byStatus": {
+          "double_attack:gained": 1
+        }
+      },
+      "raw": {
+        "occurrenceId": "sha256:e09153db74adc950f085f477f0f0567d1e80cedcfc00979c4c429fc382e27774",
+        "family": "double_attack",
+        "ply": 2,
+        "edgeSideRelation": "opponent",
+        "actor": {
+          "color": "black",
+          "role": "queen",
+          "from": "a5",
+          "to": "b6"
+        },
+        "targets": [
+          "b2",
+          "d4"
+        ],
+        "edgeMoveUci": "a5b6",
+        "firstMoveUci": "h2h3",
+        "status": "gained"
+      },
+      "rootSideOnly": null,
+      "rootEdgeOnly": null,
+      "rootSideLater": null,
+      "rawDiffersFromRootSide": true,
+      "rawDiffersFromRootEdge": true
+    },
+    {
+      "positionId": "20:anti-sicilian-najdorf-english-attack:668dc8aad37c",
+      "packId": "anti-sicilian-najdorf-english-attack",
+      "phase": "opening",
+      "arm": "depth12",
+      "rootSide": "black",
+      "firstMoveUci": "b8c6",
+      "candidateCount": 0,
+      "candidateBreakdown": {
+        "total": 0,
+        "byFamily": {},
+        "byRelation": {},
+        "byStatus": {}
+      },
+      "raw": null,
+      "rootSideOnly": null,
+      "rootEdgeOnly": null,
+      "rootSideLater": null,
+      "rawDiffersFromRootSide": false,
+      "rawDiffersFromRootEdge": false
+    },
+    {
+      "positionId": "20:anti-sicilian-najdorf-english-attack:668dc8aad37c",
+      "packId": "anti-sicilian-najdorf-english-attack",
+      "phase": "opening",
+      "arm": "movetime100_a",
+      "rootSide": "black",
+      "firstMoveUci": "b8c6",
+      "candidateCount": 0,
+      "candidateBreakdown": {
+        "total": 0,
+        "byFamily": {},
+        "byRelation": {},
+        "byStatus": {}
+      },
+      "raw": null,
+      "rootSideOnly": null,
+      "rootEdgeOnly": null,
+      "rootSideLater": null,
+      "rawDiffersFromRootSide": false,
+      "rawDiffersFromRootEdge": false
+    },
+    {
+      "positionId": "21:anti-french-advance-white:15c286478f16",
+      "packId": "anti-french-advance-white",
+      "phase": "opening",
+      "arm": "depth12",
+      "rootSide": "black",
+      "firstMoveUci": "c5d4",
+      "candidateCount": 3,
+      "candidateBreakdown": {
+        "total": 3,
+        "byFamily": {
+          "loose_piece": 3
+        },
+        "byRelation": {
+          "opponent": 1,
+          "root": 2
+        },
+        "byStatus": {
+          "loose_piece:gained": 1,
+          "loose_piece:preserved": 2
+        }
+      },
+      "raw": {
+        "occurrenceId": "sha256:ad20639fbcfa545db280b6b95c1baaa5aa0a6812d109e747fcd0b71baf8dd746",
+        "family": "loose_piece",
+        "ply": 1,
+        "edgeSideRelation": "root",
+        "actor": {
+          "color": "black",
+          "role": "pawn",
+          "from": "c5",
+          "to": "d4"
+        },
+        "targets": [
+          "d4"
+        ],
+        "edgeMoveUci": "c5d4",
+        "firstMoveUci": "c5d4",
+        "status": "preserved"
+      },
+      "rootSideOnly": {
+        "occurrenceId": "sha256:ad20639fbcfa545db280b6b95c1baaa5aa0a6812d109e747fcd0b71baf8dd746",
+        "family": "loose_piece",
+        "ply": 1,
+        "edgeSideRelation": "root",
+        "actor": {
+          "color": "black",
+          "role": "pawn",
+          "from": "c5",
+          "to": "d4"
+        },
+        "targets": [
+          "d4"
+        ],
+        "edgeMoveUci": "c5d4",
+        "firstMoveUci": "c5d4",
+        "status": "preserved"
+      },
+      "rootEdgeOnly": {
+        "occurrenceId": "sha256:ad20639fbcfa545db280b6b95c1baaa5aa0a6812d109e747fcd0b71baf8dd746",
+        "family": "loose_piece",
+        "ply": 1,
+        "edgeSideRelation": "root",
+        "actor": {
+          "color": "black",
+          "role": "pawn",
+          "from": "c5",
+          "to": "d4"
+        },
+        "targets": [
+          "d4"
+        ],
+        "edgeMoveUci": "c5d4",
+        "firstMoveUci": "c5d4",
+        "status": "preserved"
+      },
+      "rootSideLater": {
+        "occurrenceId": "sha256:89ce8cd3a38db050c3e6a6d14577385f15e5c8af4c3bb4606398fdf2ce1c9269",
+        "family": "loose_piece",
+        "ply": 3,
+        "edgeSideRelation": "root",
+        "actor": {
+          "color": "black",
+          "role": "pawn",
+          "from": "d4",
+          "to": "d4"
+        },
+        "targets": [
+          "d4"
+        ],
+        "edgeMoveUci": "g7h6",
+        "firstMoveUci": "c5d4",
+        "status": "preserved"
+      },
+      "rawDiffersFromRootSide": false,
+      "rawDiffersFromRootEdge": false
+    },
+    {
+      "positionId": "21:anti-french-advance-white:15c286478f16",
+      "packId": "anti-french-advance-white",
+      "phase": "opening",
+      "arm": "movetime100_a",
+      "rootSide": "black",
+      "firstMoveUci": "c5d4",
+      "candidateCount": 1,
+      "candidateBreakdown": {
+        "total": 1,
+        "byFamily": {
+          "loose_piece": 1
+        },
+        "byRelation": {
+          "root": 1
+        },
+        "byStatus": {
+          "loose_piece:preserved": 1
+        }
+      },
+      "raw": {
+        "occurrenceId": "sha256:ad20639fbcfa545db280b6b95c1baaa5aa0a6812d109e747fcd0b71baf8dd746",
+        "family": "loose_piece",
+        "ply": 1,
+        "edgeSideRelation": "root",
+        "actor": {
+          "color": "black",
+          "role": "pawn",
+          "from": "c5",
+          "to": "d4"
+        },
+        "targets": [
+          "d4"
+        ],
+        "edgeMoveUci": "c5d4",
+        "firstMoveUci": "c5d4",
+        "status": "preserved"
+      },
+      "rootSideOnly": {
+        "occurrenceId": "sha256:ad20639fbcfa545db280b6b95c1baaa5aa0a6812d109e747fcd0b71baf8dd746",
+        "family": "loose_piece",
+        "ply": 1,
+        "edgeSideRelation": "root",
+        "actor": {
+          "color": "black",
+          "role": "pawn",
+          "from": "c5",
+          "to": "d4"
+        },
+        "targets": [
+          "d4"
+        ],
+        "edgeMoveUci": "c5d4",
+        "firstMoveUci": "c5d4",
+        "status": "preserved"
+      },
+      "rootEdgeOnly": {
+        "occurrenceId": "sha256:ad20639fbcfa545db280b6b95c1baaa5aa0a6812d109e747fcd0b71baf8dd746",
+        "family": "loose_piece",
+        "ply": 1,
+        "edgeSideRelation": "root",
+        "actor": {
+          "color": "black",
+          "role": "pawn",
+          "from": "c5",
+          "to": "d4"
+        },
+        "targets": [
+          "d4"
+        ],
+        "edgeMoveUci": "c5d4",
+        "firstMoveUci": "c5d4",
+        "status": "preserved"
+      },
+      "rootSideLater": null,
+      "rawDiffersFromRootSide": false,
+      "rawDiffersFromRootEdge": false
+    },
+    {
+      "positionId": "22:anti-italian-center-attack-black:e7330a4f39d4",
+      "packId": "anti-italian-center-attack-black",
+      "phase": "opening",
+      "arm": "depth12",
+      "rootSide": "white",
+      "firstMoveUci": "c1d2",
+      "candidateCount": 1,
+      "candidateBreakdown": {
+        "total": 1,
+        "byFamily": {
+          "loose_piece": 1
+        },
+        "byRelation": {
+          "root": 1
+        },
+        "byStatus": {
+          "loose_piece:gained": 1
+        }
+      },
+      "raw": {
+        "occurrenceId": "sha256:caa793e46283b195817eb249bb8769d78dd7e1f50c9e30f5238d527a40fdba34",
+        "family": "loose_piece",
+        "ply": 3,
+        "edgeSideRelation": "root",
+        "actor": {
+          "color": "white",
+          "role": "bishop",
+          "from": "d2",
+          "to": "b4"
+        },
+        "targets": [
+          "b4"
+        ],
+        "edgeMoveUci": "d2b4",
+        "firstMoveUci": "c1d2",
+        "status": "gained"
+      },
+      "rootSideOnly": {
+        "occurrenceId": "sha256:caa793e46283b195817eb249bb8769d78dd7e1f50c9e30f5238d527a40fdba34",
+        "family": "loose_piece",
+        "ply": 3,
+        "edgeSideRelation": "root",
+        "actor": {
+          "color": "white",
+          "role": "bishop",
+          "from": "d2",
+          "to": "b4"
+        },
+        "targets": [
+          "b4"
+        ],
+        "edgeMoveUci": "d2b4",
+        "firstMoveUci": "c1d2",
+        "status": "gained"
+      },
+      "rootEdgeOnly": null,
+      "rootSideLater": {
+        "occurrenceId": "sha256:caa793e46283b195817eb249bb8769d78dd7e1f50c9e30f5238d527a40fdba34",
+        "family": "loose_piece",
+        "ply": 3,
+        "edgeSideRelation": "root",
+        "actor": {
+          "color": "white",
+          "role": "bishop",
+          "from": "d2",
+          "to": "b4"
+        },
+        "targets": [
+          "b4"
+        ],
+        "edgeMoveUci": "d2b4",
+        "firstMoveUci": "c1d2",
+        "status": "gained"
+      },
+      "rawDiffersFromRootSide": false,
+      "rawDiffersFromRootEdge": true
+    },
+    {
+      "positionId": "22:anti-italian-center-attack-black:e7330a4f39d4",
+      "packId": "anti-italian-center-attack-black",
+      "phase": "opening",
+      "arm": "movetime100_a",
+      "rootSide": "white",
+      "firstMoveUci": "c1d2",
+      "candidateCount": 1,
+      "candidateBreakdown": {
+        "total": 1,
+        "byFamily": {
+          "loose_piece": 1
+        },
+        "byRelation": {
+          "opponent": 1
+        },
+        "byStatus": {
+          "loose_piece:gained": 1
+        }
+      },
+      "raw": {
+        "occurrenceId": "sha256:ed8429237c229986c221e7dce419516030d568f7f1c0cb2cdcd9fe0908a133ea",
+        "family": "loose_piece",
+        "ply": 2,
+        "edgeSideRelation": "opponent",
+        "actor": {
+          "color": "black",
+          "role": "bishop",
+          "from": "b4",
+          "to": "d2"
+        },
+        "targets": [
+          "d2"
+        ],
+        "edgeMoveUci": "b4d2",
+        "firstMoveUci": "c1d2",
+        "status": "gained"
+      },
+      "rootSideOnly": null,
+      "rootEdgeOnly": null,
+      "rootSideLater": null,
+      "rawDiffersFromRootSide": true,
+      "rawDiffersFromRootEdge": true
+    },
+    {
+      "positionId": "23:anti-dutch-leningrad-white:2744d3f960e8",
+      "packId": "anti-dutch-leningrad-white",
+      "phase": "opening",
+      "arm": "depth12",
+      "rootSide": "black",
+      "firstMoveUci": "c7c6",
+      "candidateCount": 0,
+      "candidateBreakdown": {
+        "total": 0,
+        "byFamily": {},
+        "byRelation": {},
+        "byStatus": {}
+      },
+      "raw": null,
+      "rootSideOnly": null,
+      "rootEdgeOnly": null,
+      "rootSideLater": null,
+      "rawDiffersFromRootSide": false,
+      "rawDiffersFromRootEdge": false
+    },
+    {
+      "positionId": "23:anti-dutch-leningrad-white:2744d3f960e8",
+      "packId": "anti-dutch-leningrad-white",
+      "phase": "opening",
+      "arm": "movetime100_a",
+      "rootSide": "black",
+      "firstMoveUci": "c7c6",
+      "candidateCount": 0,
+      "candidateBreakdown": {
+        "total": 0,
+        "byFamily": {},
+        "byRelation": {},
+        "byStatus": {}
+      },
+      "raw": null,
+      "rootSideOnly": null,
+      "rootEdgeOnly": null,
+      "rootSideLater": null,
+      "rawDiffersFromRootSide": false,
+      "rawDiffersFromRootEdge": false
+    },
+    {
+      "positionId": "24:carlsbad-minority-attack:929ebfb94780",
+      "packId": "carlsbad-minority-attack",
+      "phase": "middlegame",
+      "arm": "depth12",
+      "rootSide": "black",
+      "firstMoveUci": "a7a5",
+      "candidateCount": 0,
+      "candidateBreakdown": {
+        "total": 0,
+        "byFamily": {},
+        "byRelation": {},
+        "byStatus": {}
+      },
+      "raw": null,
+      "rootSideOnly": null,
+      "rootEdgeOnly": null,
+      "rootSideLater": null,
+      "rawDiffersFromRootSide": false,
+      "rawDiffersFromRootEdge": false
+    },
+    {
+      "positionId": "24:carlsbad-minority-attack:929ebfb94780",
+      "packId": "carlsbad-minority-attack",
+      "phase": "middlegame",
+      "arm": "movetime100_a",
+      "rootSide": "black",
+      "firstMoveUci": "a7a5",
+      "candidateCount": 0,
+      "candidateBreakdown": {
+        "total": 0,
+        "byFamily": {},
+        "byRelation": {},
+        "byStatus": {}
+      },
+      "raw": null,
+      "rootSideOnly": null,
+      "rootEdgeOnly": null,
+      "rootSideLater": null,
+      "rawDiffersFromRootSide": false,
+      "rawDiffersFromRootEdge": false
+    },
+    {
+      "positionId": "25:carlsbad-minority-attack:e1521a076d47",
+      "packId": "carlsbad-minority-attack",
+      "phase": "middlegame",
+      "arm": "depth12",
+      "rootSide": "black",
+      "firstMoveUci": "d7f8",
+      "candidateCount": 0,
+      "candidateBreakdown": {
+        "total": 0,
+        "byFamily": {},
+        "byRelation": {},
+        "byStatus": {}
+      },
+      "raw": null,
+      "rootSideOnly": null,
+      "rootEdgeOnly": null,
+      "rootSideLater": null,
+      "rawDiffersFromRootSide": false,
+      "rawDiffersFromRootEdge": false
+    },
+    {
+      "positionId": "25:carlsbad-minority-attack:e1521a076d47",
+      "packId": "carlsbad-minority-attack",
+      "phase": "middlegame",
+      "arm": "movetime100_a",
+      "rootSide": "black",
+      "firstMoveUci": "a7a5",
+      "candidateCount": 0,
+      "candidateBreakdown": {
+        "total": 0,
+        "byFamily": {},
+        "byRelation": {},
+        "byStatus": {}
+      },
+      "raw": null,
+      "rootSideOnly": null,
+      "rootEdgeOnly": null,
+      "rootSideLater": null,
+      "rawDiffersFromRootSide": false,
+      "rawDiffersFromRootEdge": false
+    },
+    {
+      "positionId": "26:carlsbad-minority-attack:5cdcd1a71174",
+      "packId": "carlsbad-minority-attack",
+      "phase": "middlegame",
+      "arm": "depth12",
+      "rootSide": "black",
+      "firstMoveUci": "e4c3",
+      "candidateCount": 2,
+      "candidateBreakdown": {
+        "total": 2,
+        "byFamily": {
+          "loose_piece": 2
+        },
+        "byRelation": {
+          "opponent": 1,
+          "root": 1
+        },
+        "byStatus": {
+          "loose_piece:gained": 1,
+          "loose_piece:lost": 1
+        }
+      },
+      "raw": {
+        "occurrenceId": "sha256:77433235eb9f062acfe52c249c56547214d3d2536efd588d6543204b012cf100",
+        "family": "loose_piece",
+        "ply": 1,
+        "edgeSideRelation": "root",
+        "actor": {
+          "color": "black",
+          "role": "knight",
+          "from": "e4",
+          "to": "c3"
+        },
+        "targets": [
+          "c3"
+        ],
+        "edgeMoveUci": "e4c3",
+        "firstMoveUci": "e4c3",
+        "status": "gained"
+      },
+      "rootSideOnly": {
+        "occurrenceId": "sha256:77433235eb9f062acfe52c249c56547214d3d2536efd588d6543204b012cf100",
+        "family": "loose_piece",
+        "ply": 1,
+        "edgeSideRelation": "root",
+        "actor": {
+          "color": "black",
+          "role": "knight",
+          "from": "e4",
+          "to": "c3"
+        },
+        "targets": [
+          "c3"
+        ],
+        "edgeMoveUci": "e4c3",
+        "firstMoveUci": "e4c3",
+        "status": "gained"
+      },
+      "rootEdgeOnly": {
+        "occurrenceId": "sha256:77433235eb9f062acfe52c249c56547214d3d2536efd588d6543204b012cf100",
+        "family": "loose_piece",
+        "ply": 1,
+        "edgeSideRelation": "root",
+        "actor": {
+          "color": "black",
+          "role": "knight",
+          "from": "e4",
+          "to": "c3"
+        },
+        "targets": [
+          "c3"
+        ],
+        "edgeMoveUci": "e4c3",
+        "firstMoveUci": "e4c3",
+        "status": "gained"
+      },
+      "rootSideLater": null,
+      "rawDiffersFromRootSide": false,
+      "rawDiffersFromRootEdge": false
+    },
+    {
+      "positionId": "26:carlsbad-minority-attack:5cdcd1a71174",
+      "packId": "carlsbad-minority-attack",
+      "phase": "middlegame",
+      "arm": "movetime100_a",
+      "rootSide": "black",
+      "firstMoveUci": "e4c3",
+      "candidateCount": 2,
+      "candidateBreakdown": {
+        "total": 2,
+        "byFamily": {
+          "loose_piece": 2
+        },
+        "byRelation": {
+          "opponent": 1,
+          "root": 1
+        },
+        "byStatus": {
+          "loose_piece:gained": 1,
+          "loose_piece:lost": 1
+        }
+      },
+      "raw": {
+        "occurrenceId": "sha256:77433235eb9f062acfe52c249c56547214d3d2536efd588d6543204b012cf100",
+        "family": "loose_piece",
+        "ply": 1,
+        "edgeSideRelation": "root",
+        "actor": {
+          "color": "black",
+          "role": "knight",
+          "from": "e4",
+          "to": "c3"
+        },
+        "targets": [
+          "c3"
+        ],
+        "edgeMoveUci": "e4c3",
+        "firstMoveUci": "e4c3",
+        "status": "gained"
+      },
+      "rootSideOnly": {
+        "occurrenceId": "sha256:77433235eb9f062acfe52c249c56547214d3d2536efd588d6543204b012cf100",
+        "family": "loose_piece",
+        "ply": 1,
+        "edgeSideRelation": "root",
+        "actor": {
+          "color": "black",
+          "role": "knight",
+          "from": "e4",
+          "to": "c3"
+        },
+        "targets": [
+          "c3"
+        ],
+        "edgeMoveUci": "e4c3",
+        "firstMoveUci": "e4c3",
+        "status": "gained"
+      },
+      "rootEdgeOnly": {
+        "occurrenceId": "sha256:77433235eb9f062acfe52c249c56547214d3d2536efd588d6543204b012cf100",
+        "family": "loose_piece",
+        "ply": 1,
+        "edgeSideRelation": "root",
+        "actor": {
+          "color": "black",
+          "role": "knight",
+          "from": "e4",
+          "to": "c3"
+        },
+        "targets": [
+          "c3"
+        ],
+        "edgeMoveUci": "e4c3",
+        "firstMoveUci": "e4c3",
+        "status": "gained"
+      },
+      "rootSideLater": null,
+      "rawDiffersFromRootSide": false,
+      "rawDiffersFromRootEdge": false
+    },
+    {
+      "positionId": "27:carlsbad-minority-attack:809531fc6341",
+      "packId": "carlsbad-minority-attack",
+      "phase": "middlegame",
+      "arm": "depth12",
+      "rootSide": "black",
+      "firstMoveUci": "e4c3",
+      "candidateCount": 4,
+      "candidateBreakdown": {
+        "total": 4,
+        "byFamily": {
+          "double_attack": 1,
+          "loose_piece": 3
+        },
+        "byRelation": {
+          "opponent": 2,
+          "root": 2
+        },
+        "byStatus": {
+          "double_attack:gained": 1,
+          "loose_piece:gained": 1,
+          "loose_piece:lost": 1,
+          "loose_piece:preserved": 1
+        }
+      },
+      "raw": {
+        "occurrenceId": "sha256:a1d6bc9345fcd5f6640a40d79b089127cb411e181a48fd506cd3601a7d75709d",
+        "family": "double_attack",
+        "ply": 1,
+        "edgeSideRelation": "root",
+        "actor": {
+          "color": "black",
+          "role": "knight",
+          "from": "e4",
+          "to": "c3"
+        },
+        "targets": [
+          "b1",
+          "b5"
+        ],
+        "edgeMoveUci": "e4c3",
+        "firstMoveUci": "e4c3",
+        "status": "gained"
+      },
+      "rootSideOnly": {
+        "occurrenceId": "sha256:a1d6bc9345fcd5f6640a40d79b089127cb411e181a48fd506cd3601a7d75709d",
+        "family": "double_attack",
+        "ply": 1,
+        "edgeSideRelation": "root",
+        "actor": {
+          "color": "black",
+          "role": "knight",
+          "from": "e4",
+          "to": "c3"
+        },
+        "targets": [
+          "b1",
+          "b5"
+        ],
+        "edgeMoveUci": "e4c3",
+        "firstMoveUci": "e4c3",
+        "status": "gained"
+      },
+      "rootEdgeOnly": {
+        "occurrenceId": "sha256:a1d6bc9345fcd5f6640a40d79b089127cb411e181a48fd506cd3601a7d75709d",
+        "family": "double_attack",
+        "ply": 1,
+        "edgeSideRelation": "root",
+        "actor": {
+          "color": "black",
+          "role": "knight",
+          "from": "e4",
+          "to": "c3"
+        },
+        "targets": [
+          "b1",
+          "b5"
+        ],
+        "edgeMoveUci": "e4c3",
+        "firstMoveUci": "e4c3",
+        "status": "gained"
+      },
+      "rootSideLater": null,
+      "rawDiffersFromRootSide": false,
+      "rawDiffersFromRootEdge": false
+    },
+    {
+      "positionId": "27:carlsbad-minority-attack:809531fc6341",
+      "packId": "carlsbad-minority-attack",
+      "phase": "middlegame",
+      "arm": "movetime100_a",
+      "rootSide": "black",
+      "firstMoveUci": "e4c3",
+      "candidateCount": 4,
+      "candidateBreakdown": {
+        "total": 4,
+        "byFamily": {
+          "double_attack": 1,
+          "loose_piece": 3
+        },
+        "byRelation": {
+          "opponent": 2,
+          "root": 2
+        },
+        "byStatus": {
+          "double_attack:gained": 1,
+          "loose_piece:gained": 1,
+          "loose_piece:lost": 1,
+          "loose_piece:preserved": 1
+        }
+      },
+      "raw": {
+        "occurrenceId": "sha256:a1d6bc9345fcd5f6640a40d79b089127cb411e181a48fd506cd3601a7d75709d",
+        "family": "double_attack",
+        "ply": 1,
+        "edgeSideRelation": "root",
+        "actor": {
+          "color": "black",
+          "role": "knight",
+          "from": "e4",
+          "to": "c3"
+        },
+        "targets": [
+          "b1",
+          "b5"
+        ],
+        "edgeMoveUci": "e4c3",
+        "firstMoveUci": "e4c3",
+        "status": "gained"
+      },
+      "rootSideOnly": {
+        "occurrenceId": "sha256:a1d6bc9345fcd5f6640a40d79b089127cb411e181a48fd506cd3601a7d75709d",
+        "family": "double_attack",
+        "ply": 1,
+        "edgeSideRelation": "root",
+        "actor": {
+          "color": "black",
+          "role": "knight",
+          "from": "e4",
+          "to": "c3"
+        },
+        "targets": [
+          "b1",
+          "b5"
+        ],
+        "edgeMoveUci": "e4c3",
+        "firstMoveUci": "e4c3",
+        "status": "gained"
+      },
+      "rootEdgeOnly": {
+        "occurrenceId": "sha256:a1d6bc9345fcd5f6640a40d79b089127cb411e181a48fd506cd3601a7d75709d",
+        "family": "double_attack",
+        "ply": 1,
+        "edgeSideRelation": "root",
+        "actor": {
+          "color": "black",
+          "role": "knight",
+          "from": "e4",
+          "to": "c3"
+        },
+        "targets": [
+          "b1",
+          "b5"
+        ],
+        "edgeMoveUci": "e4c3",
+        "firstMoveUci": "e4c3",
+        "status": "gained"
+      },
+      "rootSideLater": null,
+      "rawDiffersFromRootSide": false,
+      "rawDiffersFromRootEdge": false
+    },
+    {
+      "positionId": "28:carlsbad-minority-attack:335bb7575c24",
+      "packId": "carlsbad-minority-attack",
+      "phase": "middlegame",
+      "arm": "depth12",
+      "rootSide": "white",
+      "firstMoveUci": "g5f6",
+      "candidateCount": 2,
+      "candidateBreakdown": {
+        "total": 2,
+        "byFamily": {
+          "loose_piece": 2
+        },
+        "byRelation": {
+          "opponent": 1,
+          "root": 1
+        },
+        "byStatus": {
+          "loose_piece:preserved": 2
+        }
+      },
+      "raw": {
+        "occurrenceId": "sha256:ef3ce35abbe04505b5679a3420bca933ba056a5298fa618ad9abd936cba73ca9",
+        "family": "loose_piece",
+        "ply": 1,
+        "edgeSideRelation": "root",
+        "actor": {
+          "color": "white",
+          "role": "bishop",
+          "from": "g5",
+          "to": "f6"
+        },
+        "targets": [
+          "f6"
+        ],
+        "edgeMoveUci": "g5f6",
+        "firstMoveUci": "g5f6",
+        "status": "preserved"
+      },
+      "rootSideOnly": {
+        "occurrenceId": "sha256:ef3ce35abbe04505b5679a3420bca933ba056a5298fa618ad9abd936cba73ca9",
+        "family": "loose_piece",
+        "ply": 1,
+        "edgeSideRelation": "root",
+        "actor": {
+          "color": "white",
+          "role": "bishop",
+          "from": "g5",
+          "to": "f6"
+        },
+        "targets": [
+          "f6"
+        ],
+        "edgeMoveUci": "g5f6",
+        "firstMoveUci": "g5f6",
+        "status": "preserved"
+      },
+      "rootEdgeOnly": {
+        "occurrenceId": "sha256:ef3ce35abbe04505b5679a3420bca933ba056a5298fa618ad9abd936cba73ca9",
+        "family": "loose_piece",
+        "ply": 1,
+        "edgeSideRelation": "root",
+        "actor": {
+          "color": "white",
+          "role": "bishop",
+          "from": "g5",
+          "to": "f6"
+        },
+        "targets": [
+          "f6"
+        ],
+        "edgeMoveUci": "g5f6",
+        "firstMoveUci": "g5f6",
+        "status": "preserved"
+      },
+      "rootSideLater": null,
+      "rawDiffersFromRootSide": false,
+      "rawDiffersFromRootEdge": false
+    },
+    {
+      "positionId": "28:carlsbad-minority-attack:335bb7575c24",
+      "packId": "carlsbad-minority-attack",
+      "phase": "middlegame",
+      "arm": "movetime100_a",
+      "rootSide": "white",
+      "firstMoveUci": "g5f6",
+      "candidateCount": 2,
+      "candidateBreakdown": {
+        "total": 2,
+        "byFamily": {
+          "loose_piece": 2
+        },
+        "byRelation": {
+          "opponent": 1,
+          "root": 1
+        },
+        "byStatus": {
+          "loose_piece:preserved": 2
+        }
+      },
+      "raw": {
+        "occurrenceId": "sha256:ef3ce35abbe04505b5679a3420bca933ba056a5298fa618ad9abd936cba73ca9",
+        "family": "loose_piece",
+        "ply": 1,
+        "edgeSideRelation": "root",
+        "actor": {
+          "color": "white",
+          "role": "bishop",
+          "from": "g5",
+          "to": "f6"
+        },
+        "targets": [
+          "f6"
+        ],
+        "edgeMoveUci": "g5f6",
+        "firstMoveUci": "g5f6",
+        "status": "preserved"
+      },
+      "rootSideOnly": {
+        "occurrenceId": "sha256:ef3ce35abbe04505b5679a3420bca933ba056a5298fa618ad9abd936cba73ca9",
+        "family": "loose_piece",
+        "ply": 1,
+        "edgeSideRelation": "root",
+        "actor": {
+          "color": "white",
+          "role": "bishop",
+          "from": "g5",
+          "to": "f6"
+        },
+        "targets": [
+          "f6"
+        ],
+        "edgeMoveUci": "g5f6",
+        "firstMoveUci": "g5f6",
+        "status": "preserved"
+      },
+      "rootEdgeOnly": {
+        "occurrenceId": "sha256:ef3ce35abbe04505b5679a3420bca933ba056a5298fa618ad9abd936cba73ca9",
+        "family": "loose_piece",
+        "ply": 1,
+        "edgeSideRelation": "root",
+        "actor": {
+          "color": "white",
+          "role": "bishop",
+          "from": "g5",
+          "to": "f6"
+        },
+        "targets": [
+          "f6"
+        ],
+        "edgeMoveUci": "g5f6",
+        "firstMoveUci": "g5f6",
+        "status": "preserved"
+      },
+      "rootSideLater": null,
+      "rawDiffersFromRootSide": false,
+      "rawDiffersFromRootEdge": false
+    },
+    {
+      "positionId": "29:carlsbad-minority-attack:15d8aa7a80ff",
+      "packId": "carlsbad-minority-attack",
+      "phase": "middlegame",
+      "arm": "depth12",
+      "rootSide": "black",
+      "firstMoveUci": "g7g6",
+      "candidateCount": 1,
+      "candidateBreakdown": {
+        "total": 1,
+        "byFamily": {
+          "loose_piece": 1
+        },
+        "byRelation": {
+          "opponent": 1
+        },
+        "byStatus": {
+          "loose_piece:lost": 1
+        }
+      },
+      "raw": {
+        "occurrenceId": "sha256:95dae69e84c43b6e78d5971ac428cafbad6c3bf77a304cba57f8bba83d6deda1",
+        "family": "loose_piece",
+        "ply": 4,
+        "edgeSideRelation": "opponent",
+        "actor": {
+          "color": "white",
+          "role": "bishop",
+          "from": "g5",
+          "to": "h4"
+        },
+        "targets": [
+          "g5"
+        ],
+        "edgeMoveUci": "g5h4",
+        "firstMoveUci": "g7g6",
+        "status": "lost"
+      },
+      "rootSideOnly": null,
+      "rootEdgeOnly": null,
+      "rootSideLater": null,
+      "rawDiffersFromRootSide": true,
+      "rawDiffersFromRootEdge": true
+    },
+    {
+      "positionId": "29:carlsbad-minority-attack:15d8aa7a80ff",
+      "packId": "carlsbad-minority-attack",
+      "phase": "middlegame",
+      "arm": "movetime100_a",
+      "rootSide": "black",
+      "firstMoveUci": "g7g6",
+      "candidateCount": 0,
+      "candidateBreakdown": {
+        "total": 0,
+        "byFamily": {},
+        "byRelation": {},
+        "byStatus": {}
+      },
+      "raw": null,
+      "rootSideOnly": null,
+      "rootEdgeOnly": null,
+      "rootSideLater": null,
+      "rawDiffersFromRootSide": false,
+      "rawDiffersFromRootEdge": false
+    },
+    {
+      "positionId": "30:carlsbad-minority-attack:e4fe7f346450",
+      "packId": "carlsbad-minority-attack",
+      "phase": "middlegame",
+      "arm": "depth12",
+      "rootSide": "black",
+      "firstMoveUci": "g7g6",
+      "candidateCount": 0,
+      "candidateBreakdown": {
+        "total": 0,
+        "byFamily": {},
+        "byRelation": {},
+        "byStatus": {}
+      },
+      "raw": null,
+      "rootSideOnly": null,
+      "rootEdgeOnly": null,
+      "rootSideLater": null,
+      "rawDiffersFromRootSide": false,
+      "rawDiffersFromRootEdge": false
+    },
+    {
+      "positionId": "30:carlsbad-minority-attack:e4fe7f346450",
+      "packId": "carlsbad-minority-attack",
+      "phase": "middlegame",
+      "arm": "movetime100_a",
+      "rootSide": "black",
+      "firstMoveUci": "g7g6",
+      "candidateCount": 0,
+      "candidateBreakdown": {
+        "total": 0,
+        "byFamily": {},
+        "byRelation": {},
+        "byStatus": {}
+      },
+      "raw": null,
+      "rootSideOnly": null,
+      "rootEdgeOnly": null,
+      "rootSideLater": null,
+      "rawDiffersFromRootSide": false,
+      "rawDiffersFromRootEdge": false
+    },
+    {
+      "positionId": "31:carlsbad-minority-attack:ae085ecad266",
+      "packId": "carlsbad-minority-attack",
+      "phase": "middlegame",
+      "arm": "depth12",
+      "rootSide": "white",
+      "firstMoveUci": "g5e7",
+      "candidateCount": 4,
+      "candidateBreakdown": {
+        "total": 4,
+        "byFamily": {
+          "loose_piece": 4
+        },
+        "byRelation": {
+          "opponent": 2,
+          "root": 2
+        },
+        "byStatus": {
+          "loose_piece:gained": 1,
+          "loose_piece:lost": 2,
+          "loose_piece:preserved": 1
+        }
+      },
+      "raw": {
+        "occurrenceId": "sha256:86efce5349bf1d9fc0c6e5a729a0b2b608b5d5a987ce43372d408c862d51d4cd",
+        "family": "loose_piece",
+        "ply": 1,
+        "edgeSideRelation": "root",
+        "actor": {
+          "color": "white",
+          "role": "bishop",
+          "from": "g5",
+          "to": "e7"
+        },
+        "targets": [
+          "e7"
+        ],
+        "edgeMoveUci": "g5e7",
+        "firstMoveUci": "g5e7",
+        "status": "preserved"
+      },
+      "rootSideOnly": {
+        "occurrenceId": "sha256:86efce5349bf1d9fc0c6e5a729a0b2b608b5d5a987ce43372d408c862d51d4cd",
+        "family": "loose_piece",
+        "ply": 1,
+        "edgeSideRelation": "root",
+        "actor": {
+          "color": "white",
+          "role": "bishop",
+          "from": "g5",
+          "to": "e7"
+        },
+        "targets": [
+          "e7"
+        ],
+        "edgeMoveUci": "g5e7",
+        "firstMoveUci": "g5e7",
+        "status": "preserved"
+      },
+      "rootEdgeOnly": {
+        "occurrenceId": "sha256:86efce5349bf1d9fc0c6e5a729a0b2b608b5d5a987ce43372d408c862d51d4cd",
+        "family": "loose_piece",
+        "ply": 1,
+        "edgeSideRelation": "root",
+        "actor": {
+          "color": "white",
+          "role": "bishop",
+          "from": "g5",
+          "to": "e7"
+        },
+        "targets": [
+          "e7"
+        ],
+        "edgeMoveUci": "g5e7",
+        "firstMoveUci": "g5e7",
+        "status": "preserved"
+      },
+      "rootSideLater": {
+        "occurrenceId": "sha256:f8ae625d9376e6afdc2c5427dfb29fb7b679383a10a6477a06e9108f114e9526",
+        "family": "loose_piece",
+        "ply": 3,
+        "edgeSideRelation": "root",
+        "actor": {
+          "color": "white",
+          "role": "bishop",
+          "from": "d3",
+          "to": "e4"
+        },
+        "targets": [
+          "e4"
+        ],
+        "edgeMoveUci": "d3e4",
+        "firstMoveUci": "g5e7",
+        "status": "gained"
+      },
+      "rawDiffersFromRootSide": false,
+      "rawDiffersFromRootEdge": false
+    },
+    {
+      "positionId": "31:carlsbad-minority-attack:ae085ecad266",
+      "packId": "carlsbad-minority-attack",
+      "phase": "middlegame",
+      "arm": "movetime100_a",
+      "rootSide": "white",
+      "firstMoveUci": "g5e7",
+      "candidateCount": 4,
+      "candidateBreakdown": {
+        "total": 4,
+        "byFamily": {
+          "loose_piece": 4
+        },
+        "byRelation": {
+          "opponent": 2,
+          "root": 2
+        },
+        "byStatus": {
+          "loose_piece:gained": 1,
+          "loose_piece:lost": 2,
+          "loose_piece:preserved": 1
+        }
+      },
+      "raw": {
+        "occurrenceId": "sha256:86efce5349bf1d9fc0c6e5a729a0b2b608b5d5a987ce43372d408c862d51d4cd",
+        "family": "loose_piece",
+        "ply": 1,
+        "edgeSideRelation": "root",
+        "actor": {
+          "color": "white",
+          "role": "bishop",
+          "from": "g5",
+          "to": "e7"
+        },
+        "targets": [
+          "e7"
+        ],
+        "edgeMoveUci": "g5e7",
+        "firstMoveUci": "g5e7",
+        "status": "preserved"
+      },
+      "rootSideOnly": {
+        "occurrenceId": "sha256:86efce5349bf1d9fc0c6e5a729a0b2b608b5d5a987ce43372d408c862d51d4cd",
+        "family": "loose_piece",
+        "ply": 1,
+        "edgeSideRelation": "root",
+        "actor": {
+          "color": "white",
+          "role": "bishop",
+          "from": "g5",
+          "to": "e7"
+        },
+        "targets": [
+          "e7"
+        ],
+        "edgeMoveUci": "g5e7",
+        "firstMoveUci": "g5e7",
+        "status": "preserved"
+      },
+      "rootEdgeOnly": {
+        "occurrenceId": "sha256:86efce5349bf1d9fc0c6e5a729a0b2b608b5d5a987ce43372d408c862d51d4cd",
+        "family": "loose_piece",
+        "ply": 1,
+        "edgeSideRelation": "root",
+        "actor": {
+          "color": "white",
+          "role": "bishop",
+          "from": "g5",
+          "to": "e7"
+        },
+        "targets": [
+          "e7"
+        ],
+        "edgeMoveUci": "g5e7",
+        "firstMoveUci": "g5e7",
+        "status": "preserved"
+      },
+      "rootSideLater": {
+        "occurrenceId": "sha256:f8ae625d9376e6afdc2c5427dfb29fb7b679383a10a6477a06e9108f114e9526",
+        "family": "loose_piece",
+        "ply": 3,
+        "edgeSideRelation": "root",
+        "actor": {
+          "color": "white",
+          "role": "bishop",
+          "from": "d3",
+          "to": "e4"
+        },
+        "targets": [
+          "e4"
+        ],
+        "edgeMoveUci": "d3e4",
+        "firstMoveUci": "g5e7",
+        "status": "gained"
+      },
+      "rawDiffersFromRootSide": false,
+      "rawDiffersFromRootEdge": false
+    },
+    {
+      "positionId": "32:carlsbad-minority-attack:7dad12c8f48a",
+      "packId": "carlsbad-minority-attack",
+      "phase": "middlegame",
+      "arm": "depth12",
+      "rootSide": "black",
+      "firstMoveUci": "d8e7",
+      "candidateCount": 3,
+      "candidateBreakdown": {
+        "total": 3,
+        "byFamily": {
+          "loose_piece": 3
+        },
+        "byRelation": {
+          "opponent": 1,
+          "root": 2
+        },
+        "byStatus": {
+          "loose_piece:gained": 1,
+          "loose_piece:lost": 2
+        }
+      },
+      "raw": {
+        "occurrenceId": "sha256:0ae5f660afcd1e03328b0acf8ea39dff7bc46073ab71b91517b71765516977a9",
+        "family": "loose_piece",
+        "ply": 1,
+        "edgeSideRelation": "root",
+        "actor": {
+          "color": "black",
+          "role": "queen",
+          "from": "d8",
+          "to": "e7"
+        },
+        "targets": [
+          "d8"
+        ],
+        "edgeMoveUci": "d8e7",
+        "firstMoveUci": "d8e7",
+        "status": "lost"
+      },
+      "rootSideOnly": {
+        "occurrenceId": "sha256:0ae5f660afcd1e03328b0acf8ea39dff7bc46073ab71b91517b71765516977a9",
+        "family": "loose_piece",
+        "ply": 1,
+        "edgeSideRelation": "root",
+        "actor": {
+          "color": "black",
+          "role": "queen",
+          "from": "d8",
+          "to": "e7"
+        },
+        "targets": [
+          "d8"
+        ],
+        "edgeMoveUci": "d8e7",
+        "firstMoveUci": "d8e7",
+        "status": "lost"
+      },
+      "rootEdgeOnly": {
+        "occurrenceId": "sha256:0ae5f660afcd1e03328b0acf8ea39dff7bc46073ab71b91517b71765516977a9",
+        "family": "loose_piece",
+        "ply": 1,
+        "edgeSideRelation": "root",
+        "actor": {
+          "color": "black",
+          "role": "queen",
+          "from": "d8",
+          "to": "e7"
+        },
+        "targets": [
+          "d8"
+        ],
+        "edgeMoveUci": "d8e7",
+        "firstMoveUci": "d8e7",
+        "status": "lost"
+      },
+      "rootSideLater": null,
+      "rawDiffersFromRootSide": false,
+      "rawDiffersFromRootEdge": false
+    },
+    {
+      "positionId": "32:carlsbad-minority-attack:7dad12c8f48a",
+      "packId": "carlsbad-minority-attack",
+      "phase": "middlegame",
+      "arm": "movetime100_a",
+      "rootSide": "black",
+      "firstMoveUci": "d8e7",
+      "candidateCount": 3,
+      "candidateBreakdown": {
+        "total": 3,
+        "byFamily": {
+          "loose_piece": 3
+        },
+        "byRelation": {
+          "opponent": 1,
+          "root": 2
+        },
+        "byStatus": {
+          "loose_piece:gained": 1,
+          "loose_piece:lost": 2
+        }
+      },
+      "raw": {
+        "occurrenceId": "sha256:0ae5f660afcd1e03328b0acf8ea39dff7bc46073ab71b91517b71765516977a9",
+        "family": "loose_piece",
+        "ply": 1,
+        "edgeSideRelation": "root",
+        "actor": {
+          "color": "black",
+          "role": "queen",
+          "from": "d8",
+          "to": "e7"
+        },
+        "targets": [
+          "d8"
+        ],
+        "edgeMoveUci": "d8e7",
+        "firstMoveUci": "d8e7",
+        "status": "lost"
+      },
+      "rootSideOnly": {
+        "occurrenceId": "sha256:0ae5f660afcd1e03328b0acf8ea39dff7bc46073ab71b91517b71765516977a9",
+        "family": "loose_piece",
+        "ply": 1,
+        "edgeSideRelation": "root",
+        "actor": {
+          "color": "black",
+          "role": "queen",
+          "from": "d8",
+          "to": "e7"
+        },
+        "targets": [
+          "d8"
+        ],
+        "edgeMoveUci": "d8e7",
+        "firstMoveUci": "d8e7",
+        "status": "lost"
+      },
+      "rootEdgeOnly": {
+        "occurrenceId": "sha256:0ae5f660afcd1e03328b0acf8ea39dff7bc46073ab71b91517b71765516977a9",
+        "family": "loose_piece",
+        "ply": 1,
+        "edgeSideRelation": "root",
+        "actor": {
+          "color": "black",
+          "role": "queen",
+          "from": "d8",
+          "to": "e7"
+        },
+        "targets": [
+          "d8"
+        ],
+        "edgeMoveUci": "d8e7",
+        "firstMoveUci": "d8e7",
+        "status": "lost"
+      },
+      "rootSideLater": null,
+      "rawDiffersFromRootSide": false,
+      "rawDiffersFromRootEdge": false
+    },
+    {
+      "positionId": "33:carlsbad-minority-attack:d5d1144e7865",
+      "packId": "carlsbad-minority-attack",
+      "phase": "middlegame",
+      "arm": "depth12",
+      "rootSide": "black",
+      "firstMoveUci": "f6g4",
+      "candidateCount": 5,
+      "candidateBreakdown": {
+        "total": 5,
+        "byFamily": {
+          "discovered_executed": 1,
+          "loose_piece": 4
+        },
+        "byRelation": {
+          "opponent": 3,
+          "root": 2
+        },
+        "byStatus": {
+          "discovered_executed:gained": 1,
+          "loose_piece:lost": 1,
+          "loose_piece:preserved": 3
+        }
+      },
+      "raw": {
+        "occurrenceId": "sha256:867f5012b30a27e4ede9ba56d641a3fc99e12f3fd5b4c6dca1f74ef1e29a7993",
+        "family": "discovered_executed",
+        "ply": 1,
+        "edgeSideRelation": "root",
+        "actor": {
+          "color": "black",
+          "role": "knight",
+          "from": "f6",
+          "to": "g4"
+        },
+        "targets": [
+          "f6",
+          "g5"
+        ],
+        "edgeMoveUci": "f6g4",
+        "firstMoveUci": "f6g4",
+        "status": "gained"
+      },
+      "rootSideOnly": {
+        "occurrenceId": "sha256:867f5012b30a27e4ede9ba56d641a3fc99e12f3fd5b4c6dca1f74ef1e29a7993",
+        "family": "discovered_executed",
+        "ply": 1,
+        "edgeSideRelation": "root",
+        "actor": {
+          "color": "black",
+          "role": "knight",
+          "from": "f6",
+          "to": "g4"
+        },
+        "targets": [
+          "f6",
+          "g5"
+        ],
+        "edgeMoveUci": "f6g4",
+        "firstMoveUci": "f6g4",
+        "status": "gained"
+      },
+      "rootEdgeOnly": {
+        "occurrenceId": "sha256:867f5012b30a27e4ede9ba56d641a3fc99e12f3fd5b4c6dca1f74ef1e29a7993",
+        "family": "discovered_executed",
+        "ply": 1,
+        "edgeSideRelation": "root",
+        "actor": {
+          "color": "black",
+          "role": "knight",
+          "from": "f6",
+          "to": "g4"
+        },
+        "targets": [
+          "f6",
+          "g5"
+        ],
+        "edgeMoveUci": "f6g4",
+        "firstMoveUci": "f6g4",
+        "status": "gained"
+      },
+      "rootSideLater": {
+        "occurrenceId": "sha256:12671d99a699c7f90cff0ffdd61b987bf93a65cfd27c7806adc9c4ce9886cd60",
+        "family": "loose_piece",
+        "ply": 3,
+        "edgeSideRelation": "root",
+        "actor": {
+          "color": "black",
+          "role": "queen",
+          "from": "d8",
+          "to": "e7"
+        },
+        "targets": [
+          "d8"
+        ],
+        "edgeMoveUci": "d8e7",
+        "firstMoveUci": "f6g4",
+        "status": "lost"
+      },
+      "rawDiffersFromRootSide": false,
+      "rawDiffersFromRootEdge": false
+    },
+    {
+      "positionId": "33:carlsbad-minority-attack:d5d1144e7865",
+      "packId": "carlsbad-minority-attack",
+      "phase": "middlegame",
+      "arm": "movetime100_a",
+      "rootSide": "black",
+      "firstMoveUci": "f6g4",
+      "candidateCount": 5,
+      "candidateBreakdown": {
+        "total": 5,
+        "byFamily": {
+          "discovered_executed": 1,
+          "loose_piece": 4
+        },
+        "byRelation": {
+          "opponent": 3,
+          "root": 2
+        },
+        "byStatus": {
+          "discovered_executed:gained": 1,
+          "loose_piece:gained": 1,
+          "loose_piece:lost": 1,
+          "loose_piece:preserved": 2
+        }
+      },
+      "raw": {
+        "occurrenceId": "sha256:867f5012b30a27e4ede9ba56d641a3fc99e12f3fd5b4c6dca1f74ef1e29a7993",
+        "family": "discovered_executed",
+        "ply": 1,
+        "edgeSideRelation": "root",
+        "actor": {
+          "color": "black",
+          "role": "knight",
+          "from": "f6",
+          "to": "g4"
+        },
+        "targets": [
+          "f6",
+          "g5"
+        ],
+        "edgeMoveUci": "f6g4",
+        "firstMoveUci": "f6g4",
+        "status": "gained"
+      },
+      "rootSideOnly": {
+        "occurrenceId": "sha256:867f5012b30a27e4ede9ba56d641a3fc99e12f3fd5b4c6dca1f74ef1e29a7993",
+        "family": "discovered_executed",
+        "ply": 1,
+        "edgeSideRelation": "root",
+        "actor": {
+          "color": "black",
+          "role": "knight",
+          "from": "f6",
+          "to": "g4"
+        },
+        "targets": [
+          "f6",
+          "g5"
+        ],
+        "edgeMoveUci": "f6g4",
+        "firstMoveUci": "f6g4",
+        "status": "gained"
+      },
+      "rootEdgeOnly": {
+        "occurrenceId": "sha256:867f5012b30a27e4ede9ba56d641a3fc99e12f3fd5b4c6dca1f74ef1e29a7993",
+        "family": "discovered_executed",
+        "ply": 1,
+        "edgeSideRelation": "root",
+        "actor": {
+          "color": "black",
+          "role": "knight",
+          "from": "f6",
+          "to": "g4"
+        },
+        "targets": [
+          "f6",
+          "g5"
+        ],
+        "edgeMoveUci": "f6g4",
+        "firstMoveUci": "f6g4",
+        "status": "gained"
+      },
+      "rootSideLater": {
+        "occurrenceId": "sha256:141995546932c167c7d4b1b5e4cab7f4f8c7391aa2a83deb07082a3518c52b5c",
+        "family": "loose_piece",
+        "ply": 3,
+        "edgeSideRelation": "root",
+        "actor": {
+          "color": "black",
+          "role": "pawn",
+          "from": "h7",
+          "to": "h7"
+        },
+        "targets": [
+          "h7"
+        ],
+        "edgeMoveUci": "g6h4",
+        "firstMoveUci": "f6g4",
+        "status": "gained"
+      },
+      "rawDiffersFromRootSide": false,
+      "rawDiffersFromRootEdge": false
+    },
+    {
+      "positionId": "34:carlsbad-minority-attack:7e97c916d7e5",
+      "packId": "carlsbad-minority-attack",
+      "phase": "middlegame",
+      "arm": "depth12",
+      "rootSide": "white",
+      "firstMoveUci": "f2f3",
+      "candidateCount": 0,
+      "candidateBreakdown": {
+        "total": 0,
+        "byFamily": {},
+        "byRelation": {},
+        "byStatus": {}
+      },
+      "raw": null,
+      "rootSideOnly": null,
+      "rootEdgeOnly": null,
+      "rootSideLater": null,
+      "rawDiffersFromRootSide": false,
+      "rawDiffersFromRootEdge": false
+    },
+    {
+      "positionId": "34:carlsbad-minority-attack:7e97c916d7e5",
+      "packId": "carlsbad-minority-attack",
+      "phase": "middlegame",
+      "arm": "movetime100_a",
+      "rootSide": "white",
+      "firstMoveUci": "f2f3",
+      "candidateCount": 0,
+      "candidateBreakdown": {
+        "total": 0,
+        "byFamily": {},
+        "byRelation": {},
+        "byStatus": {}
+      },
+      "raw": null,
+      "rootSideOnly": null,
+      "rootEdgeOnly": null,
+      "rootSideLater": null,
+      "rawDiffersFromRootSide": false,
+      "rawDiffersFromRootEdge": false
+    },
+    {
+      "positionId": "35:carlsbad-minority-attack:04db2c6f23f1",
+      "packId": "carlsbad-minority-attack",
+      "phase": "middlegame",
+      "arm": "depth12",
+      "rootSide": "white",
+      "firstMoveUci": "d3e4",
+      "candidateCount": 1,
+      "candidateBreakdown": {
+        "total": 1,
+        "byFamily": {
+          "loose_piece": 1
+        },
+        "byRelation": {
+          "root": 1
+        },
+        "byStatus": {
+          "loose_piece:gained": 1
+        }
+      },
+      "raw": {
+        "occurrenceId": "sha256:0cac4b6171d516581b561a0524b9ef05ee06b029396a3b2dcd789cad6dc5c224",
+        "family": "loose_piece",
+        "ply": 1,
+        "edgeSideRelation": "root",
+        "actor": {
+          "color": "white",
+          "role": "bishop",
+          "from": "d3",
+          "to": "e4"
+        },
+        "targets": [
+          "e4"
+        ],
+        "edgeMoveUci": "d3e4",
+        "firstMoveUci": "d3e4",
+        "status": "gained"
+      },
+      "rootSideOnly": {
+        "occurrenceId": "sha256:0cac4b6171d516581b561a0524b9ef05ee06b029396a3b2dcd789cad6dc5c224",
+        "family": "loose_piece",
+        "ply": 1,
+        "edgeSideRelation": "root",
+        "actor": {
+          "color": "white",
+          "role": "bishop",
+          "from": "d3",
+          "to": "e4"
+        },
+        "targets": [
+          "e4"
+        ],
+        "edgeMoveUci": "d3e4",
+        "firstMoveUci": "d3e4",
+        "status": "gained"
+      },
+      "rootEdgeOnly": {
+        "occurrenceId": "sha256:0cac4b6171d516581b561a0524b9ef05ee06b029396a3b2dcd789cad6dc5c224",
+        "family": "loose_piece",
+        "ply": 1,
+        "edgeSideRelation": "root",
+        "actor": {
+          "color": "white",
+          "role": "bishop",
+          "from": "d3",
+          "to": "e4"
+        },
+        "targets": [
+          "e4"
+        ],
+        "edgeMoveUci": "d3e4",
+        "firstMoveUci": "d3e4",
+        "status": "gained"
+      },
+      "rootSideLater": null,
+      "rawDiffersFromRootSide": false,
+      "rawDiffersFromRootEdge": false
+    },
+    {
+      "positionId": "35:carlsbad-minority-attack:04db2c6f23f1",
+      "packId": "carlsbad-minority-attack",
+      "phase": "middlegame",
+      "arm": "movetime100_a",
+      "rootSide": "white",
+      "firstMoveUci": "d3e4",
+      "candidateCount": 1,
+      "candidateBreakdown": {
+        "total": 1,
+        "byFamily": {
+          "loose_piece": 1
+        },
+        "byRelation": {
+          "root": 1
+        },
+        "byStatus": {
+          "loose_piece:gained": 1
+        }
+      },
+      "raw": {
+        "occurrenceId": "sha256:0cac4b6171d516581b561a0524b9ef05ee06b029396a3b2dcd789cad6dc5c224",
+        "family": "loose_piece",
+        "ply": 1,
+        "edgeSideRelation": "root",
+        "actor": {
+          "color": "white",
+          "role": "bishop",
+          "from": "d3",
+          "to": "e4"
+        },
+        "targets": [
+          "e4"
+        ],
+        "edgeMoveUci": "d3e4",
+        "firstMoveUci": "d3e4",
+        "status": "gained"
+      },
+      "rootSideOnly": {
+        "occurrenceId": "sha256:0cac4b6171d516581b561a0524b9ef05ee06b029396a3b2dcd789cad6dc5c224",
+        "family": "loose_piece",
+        "ply": 1,
+        "edgeSideRelation": "root",
+        "actor": {
+          "color": "white",
+          "role": "bishop",
+          "from": "d3",
+          "to": "e4"
+        },
+        "targets": [
+          "e4"
+        ],
+        "edgeMoveUci": "d3e4",
+        "firstMoveUci": "d3e4",
+        "status": "gained"
+      },
+      "rootEdgeOnly": {
+        "occurrenceId": "sha256:0cac4b6171d516581b561a0524b9ef05ee06b029396a3b2dcd789cad6dc5c224",
+        "family": "loose_piece",
+        "ply": 1,
+        "edgeSideRelation": "root",
+        "actor": {
+          "color": "white",
+          "role": "bishop",
+          "from": "d3",
+          "to": "e4"
+        },
+        "targets": [
+          "e4"
+        ],
+        "edgeMoveUci": "d3e4",
+        "firstMoveUci": "d3e4",
+        "status": "gained"
+      },
+      "rootSideLater": null,
+      "rawDiffersFromRootSide": false,
+      "rawDiffersFromRootEdge": false
+    },
+    {
+      "positionId": "36:carlsbad-minority-attack:a774a4a71380",
+      "packId": "carlsbad-minority-attack",
+      "phase": "middlegame",
+      "arm": "depth12",
+      "rootSide": "white",
+      "firstMoveUci": "d3e4",
+      "candidateCount": 1,
+      "candidateBreakdown": {
+        "total": 1,
+        "byFamily": {
+          "loose_piece": 1
+        },
+        "byRelation": {
+          "root": 1
+        },
+        "byStatus": {
+          "loose_piece:gained": 1
+        }
+      },
+      "raw": {
+        "occurrenceId": "sha256:0cac4b6171d516581b561a0524b9ef05ee06b029396a3b2dcd789cad6dc5c224",
+        "family": "loose_piece",
+        "ply": 1,
+        "edgeSideRelation": "root",
+        "actor": {
+          "color": "white",
+          "role": "bishop",
+          "from": "d3",
+          "to": "e4"
+        },
+        "targets": [
+          "e4"
+        ],
+        "edgeMoveUci": "d3e4",
+        "firstMoveUci": "d3e4",
+        "status": "gained"
+      },
+      "rootSideOnly": {
+        "occurrenceId": "sha256:0cac4b6171d516581b561a0524b9ef05ee06b029396a3b2dcd789cad6dc5c224",
+        "family": "loose_piece",
+        "ply": 1,
+        "edgeSideRelation": "root",
+        "actor": {
+          "color": "white",
+          "role": "bishop",
+          "from": "d3",
+          "to": "e4"
+        },
+        "targets": [
+          "e4"
+        ],
+        "edgeMoveUci": "d3e4",
+        "firstMoveUci": "d3e4",
+        "status": "gained"
+      },
+      "rootEdgeOnly": {
+        "occurrenceId": "sha256:0cac4b6171d516581b561a0524b9ef05ee06b029396a3b2dcd789cad6dc5c224",
+        "family": "loose_piece",
+        "ply": 1,
+        "edgeSideRelation": "root",
+        "actor": {
+          "color": "white",
+          "role": "bishop",
+          "from": "d3",
+          "to": "e4"
+        },
+        "targets": [
+          "e4"
+        ],
+        "edgeMoveUci": "d3e4",
+        "firstMoveUci": "d3e4",
+        "status": "gained"
+      },
+      "rootSideLater": null,
+      "rawDiffersFromRootSide": false,
+      "rawDiffersFromRootEdge": false
+    },
+    {
+      "positionId": "36:carlsbad-minority-attack:a774a4a71380",
+      "packId": "carlsbad-minority-attack",
+      "phase": "middlegame",
+      "arm": "movetime100_a",
+      "rootSide": "white",
+      "firstMoveUci": "d3e4",
+      "candidateCount": 1,
+      "candidateBreakdown": {
+        "total": 1,
+        "byFamily": {
+          "loose_piece": 1
+        },
+        "byRelation": {
+          "root": 1
+        },
+        "byStatus": {
+          "loose_piece:gained": 1
+        }
+      },
+      "raw": {
+        "occurrenceId": "sha256:0cac4b6171d516581b561a0524b9ef05ee06b029396a3b2dcd789cad6dc5c224",
+        "family": "loose_piece",
+        "ply": 1,
+        "edgeSideRelation": "root",
+        "actor": {
+          "color": "white",
+          "role": "bishop",
+          "from": "d3",
+          "to": "e4"
+        },
+        "targets": [
+          "e4"
+        ],
+        "edgeMoveUci": "d3e4",
+        "firstMoveUci": "d3e4",
+        "status": "gained"
+      },
+      "rootSideOnly": {
+        "occurrenceId": "sha256:0cac4b6171d516581b561a0524b9ef05ee06b029396a3b2dcd789cad6dc5c224",
+        "family": "loose_piece",
+        "ply": 1,
+        "edgeSideRelation": "root",
+        "actor": {
+          "color": "white",
+          "role": "bishop",
+          "from": "d3",
+          "to": "e4"
+        },
+        "targets": [
+          "e4"
+        ],
+        "edgeMoveUci": "d3e4",
+        "firstMoveUci": "d3e4",
+        "status": "gained"
+      },
+      "rootEdgeOnly": {
+        "occurrenceId": "sha256:0cac4b6171d516581b561a0524b9ef05ee06b029396a3b2dcd789cad6dc5c224",
+        "family": "loose_piece",
+        "ply": 1,
+        "edgeSideRelation": "root",
+        "actor": {
+          "color": "white",
+          "role": "bishop",
+          "from": "d3",
+          "to": "e4"
+        },
+        "targets": [
+          "e4"
+        ],
+        "edgeMoveUci": "d3e4",
+        "firstMoveUci": "d3e4",
+        "status": "gained"
+      },
+      "rootSideLater": null,
+      "rawDiffersFromRootSide": false,
+      "rawDiffersFromRootEdge": false
+    },
+    {
+      "positionId": "37:carlsbad-minority-attack:dc5740146891",
+      "packId": "carlsbad-minority-attack",
+      "phase": "middlegame",
+      "arm": "depth12",
+      "rootSide": "white",
+      "firstMoveUci": "h2h3",
+      "candidateCount": 0,
+      "candidateBreakdown": {
+        "total": 0,
+        "byFamily": {},
+        "byRelation": {},
+        "byStatus": {}
+      },
+      "raw": null,
+      "rootSideOnly": null,
+      "rootEdgeOnly": null,
+      "rootSideLater": null,
+      "rawDiffersFromRootSide": false,
+      "rawDiffersFromRootEdge": false
+    },
+    {
+      "positionId": "37:carlsbad-minority-attack:dc5740146891",
+      "packId": "carlsbad-minority-attack",
+      "phase": "middlegame",
+      "arm": "movetime100_a",
+      "rootSide": "white",
+      "firstMoveUci": "h2h3",
+      "candidateCount": 0,
+      "candidateBreakdown": {
+        "total": 0,
+        "byFamily": {},
+        "byRelation": {},
+        "byStatus": {}
+      },
+      "raw": null,
+      "rootSideOnly": null,
+      "rootEdgeOnly": null,
+      "rootSideLater": null,
+      "rawDiffersFromRootSide": false,
+      "rawDiffersFromRootEdge": false
+    },
+    {
+      "positionId": "38:carlsbad-minority-attack:ac2c01af658e",
+      "packId": "carlsbad-minority-attack",
+      "phase": "middlegame",
+      "arm": "depth12",
+      "rootSide": "black",
+      "firstMoveUci": "g7g6",
+      "candidateCount": 0,
+      "candidateBreakdown": {
+        "total": 0,
+        "byFamily": {},
+        "byRelation": {},
+        "byStatus": {}
+      },
+      "raw": null,
+      "rootSideOnly": null,
+      "rootEdgeOnly": null,
+      "rootSideLater": null,
+      "rawDiffersFromRootSide": false,
+      "rawDiffersFromRootEdge": false
+    },
+    {
+      "positionId": "38:carlsbad-minority-attack:ac2c01af658e",
+      "packId": "carlsbad-minority-attack",
+      "phase": "middlegame",
+      "arm": "movetime100_a",
+      "rootSide": "black",
+      "firstMoveUci": "g7g6",
+      "candidateCount": 0,
+      "candidateBreakdown": {
+        "total": 0,
+        "byFamily": {},
+        "byRelation": {},
+        "byStatus": {}
+      },
+      "raw": null,
+      "rootSideOnly": null,
+      "rootEdgeOnly": null,
+      "rootSideLater": null,
+      "rawDiffersFromRootSide": false,
+      "rawDiffersFromRootEdge": false
+    },
+    {
+      "positionId": "39:carlsbad-minority-attack:feaa43c5a1b6",
+      "packId": "carlsbad-minority-attack",
+      "phase": "middlegame",
+      "arm": "depth12",
+      "rootSide": "white",
+      "firstMoveUci": "b1e1",
+      "candidateCount": 0,
+      "candidateBreakdown": {
+        "total": 0,
+        "byFamily": {},
+        "byRelation": {},
+        "byStatus": {}
+      },
+      "raw": null,
+      "rootSideOnly": null,
+      "rootEdgeOnly": null,
+      "rootSideLater": null,
+      "rawDiffersFromRootSide": false,
+      "rawDiffersFromRootEdge": false
+    },
+    {
+      "positionId": "39:carlsbad-minority-attack:feaa43c5a1b6",
+      "packId": "carlsbad-minority-attack",
+      "phase": "middlegame",
+      "arm": "movetime100_a",
+      "rootSide": "white",
+      "firstMoveUci": "b1e1",
+      "candidateCount": 0,
+      "candidateBreakdown": {
+        "total": 0,
+        "byFamily": {},
+        "byRelation": {},
+        "byStatus": {}
+      },
+      "raw": null,
+      "rootSideOnly": null,
+      "rootEdgeOnly": null,
+      "rootSideLater": null,
+      "rawDiffersFromRootSide": false,
+      "rawDiffersFromRootEdge": false
+    },
+    {
+      "positionId": "40:trajectory-qgd-exchange-minority:a6bfc78bfa67",
+      "packId": "trajectory-qgd-exchange-minority",
+      "phase": "cross_phase",
+      "arm": "depth12",
+      "rootSide": "white",
+      "firstMoveUci": "b1c3",
+      "candidateCount": 2,
+      "candidateBreakdown": {
+        "total": 2,
+        "byFamily": {
+          "loose_piece": 2
+        },
+        "byRelation": {
+          "root": 2
+        },
+        "byStatus": {
+          "loose_piece:preserved": 2
+        }
+      },
+      "raw": {
+        "occurrenceId": "sha256:67e98543d1ad8b8d3061dadec31b36cd7fdc82cd96bf6ea3532bda3b9c0572c9",
+        "family": "loose_piece",
+        "ply": 1,
+        "edgeSideRelation": "root",
+        "actor": {
+          "color": "white",
+          "role": "pawn",
+          "from": "c4",
+          "to": "c4"
+        },
+        "targets": [
+          "c4"
+        ],
+        "edgeMoveUci": "b1c3",
+        "firstMoveUci": "b1c3",
+        "status": "preserved"
+      },
+      "rootSideOnly": {
+        "occurrenceId": "sha256:67e98543d1ad8b8d3061dadec31b36cd7fdc82cd96bf6ea3532bda3b9c0572c9",
+        "family": "loose_piece",
+        "ply": 1,
+        "edgeSideRelation": "root",
+        "actor": {
+          "color": "white",
+          "role": "pawn",
+          "from": "c4",
+          "to": "c4"
+        },
+        "targets": [
+          "c4"
+        ],
+        "edgeMoveUci": "b1c3",
+        "firstMoveUci": "b1c3",
+        "status": "preserved"
+      },
+      "rootEdgeOnly": {
+        "occurrenceId": "sha256:67e98543d1ad8b8d3061dadec31b36cd7fdc82cd96bf6ea3532bda3b9c0572c9",
+        "family": "loose_piece",
+        "ply": 1,
+        "edgeSideRelation": "root",
+        "actor": {
+          "color": "white",
+          "role": "pawn",
+          "from": "c4",
+          "to": "c4"
+        },
+        "targets": [
+          "c4"
+        ],
+        "edgeMoveUci": "b1c3",
+        "firstMoveUci": "b1c3",
+        "status": "preserved"
+      },
+      "rootSideLater": {
+        "occurrenceId": "sha256:5726178938ad7cd26a90b4c84c63785dd7ebc2c200e64eb5a4edb13b522ccce3",
+        "family": "loose_piece",
+        "ply": 3,
+        "edgeSideRelation": "root",
+        "actor": {
+          "color": "white",
+          "role": "pawn",
+          "from": "c4",
+          "to": "c4"
+        },
+        "targets": [
+          "c4"
+        ],
+        "edgeMoveUci": "c1g5",
+        "firstMoveUci": "b1c3",
+        "status": "preserved"
+      },
+      "rawDiffersFromRootSide": false,
+      "rawDiffersFromRootEdge": false
+    },
+    {
+      "positionId": "40:trajectory-qgd-exchange-minority:a6bfc78bfa67",
+      "packId": "trajectory-qgd-exchange-minority",
+      "phase": "cross_phase",
+      "arm": "movetime100_a",
+      "rootSide": "white",
+      "firstMoveUci": "b1c3",
+      "candidateCount": 1,
+      "candidateBreakdown": {
+        "total": 1,
+        "byFamily": {
+          "loose_piece": 1
+        },
+        "byRelation": {
+          "root": 1
+        },
+        "byStatus": {
+          "loose_piece:preserved": 1
+        }
+      },
+      "raw": {
+        "occurrenceId": "sha256:67e98543d1ad8b8d3061dadec31b36cd7fdc82cd96bf6ea3532bda3b9c0572c9",
+        "family": "loose_piece",
+        "ply": 1,
+        "edgeSideRelation": "root",
+        "actor": {
+          "color": "white",
+          "role": "pawn",
+          "from": "c4",
+          "to": "c4"
+        },
+        "targets": [
+          "c4"
+        ],
+        "edgeMoveUci": "b1c3",
+        "firstMoveUci": "b1c3",
+        "status": "preserved"
+      },
+      "rootSideOnly": {
+        "occurrenceId": "sha256:67e98543d1ad8b8d3061dadec31b36cd7fdc82cd96bf6ea3532bda3b9c0572c9",
+        "family": "loose_piece",
+        "ply": 1,
+        "edgeSideRelation": "root",
+        "actor": {
+          "color": "white",
+          "role": "pawn",
+          "from": "c4",
+          "to": "c4"
+        },
+        "targets": [
+          "c4"
+        ],
+        "edgeMoveUci": "b1c3",
+        "firstMoveUci": "b1c3",
+        "status": "preserved"
+      },
+      "rootEdgeOnly": {
+        "occurrenceId": "sha256:67e98543d1ad8b8d3061dadec31b36cd7fdc82cd96bf6ea3532bda3b9c0572c9",
+        "family": "loose_piece",
+        "ply": 1,
+        "edgeSideRelation": "root",
+        "actor": {
+          "color": "white",
+          "role": "pawn",
+          "from": "c4",
+          "to": "c4"
+        },
+        "targets": [
+          "c4"
+        ],
+        "edgeMoveUci": "b1c3",
+        "firstMoveUci": "b1c3",
+        "status": "preserved"
+      },
+      "rootSideLater": null,
+      "rawDiffersFromRootSide": false,
+      "rawDiffersFromRootEdge": false
+    },
+    {
+      "positionId": "41:trajectory-qgd-exchange-minority:f30d973d35d1",
+      "packId": "trajectory-qgd-exchange-minority",
+      "phase": "cross_phase",
+      "arm": "depth12",
+      "rootSide": "white",
+      "firstMoveUci": "a2a4",
+      "candidateCount": 1,
+      "candidateBreakdown": {
+        "total": 1,
+        "byFamily": {
+          "loose_piece": 1
+        },
+        "byRelation": {
+          "opponent": 1
+        },
+        "byStatus": {
+          "loose_piece:lost": 1
+        }
+      },
+      "raw": {
+        "occurrenceId": "sha256:1007b437e9095f14e84ce554f5ac3772b1bb9b7ce107cb54c1db8de7af9486f5",
+        "family": "loose_piece",
+        "ply": 4,
+        "edgeSideRelation": "opponent",
+        "actor": {
+          "color": "black",
+          "role": "pawn",
+          "from": "h5",
+          "to": "h5"
+        },
+        "targets": [
+          "h5"
+        ],
+        "edgeMoveUci": "g7g6",
+        "firstMoveUci": "a2a4",
+        "status": "lost"
+      },
+      "rootSideOnly": null,
+      "rootEdgeOnly": null,
+      "rootSideLater": null,
+      "rawDiffersFromRootSide": true,
+      "rawDiffersFromRootEdge": true
+    },
+    {
+      "positionId": "41:trajectory-qgd-exchange-minority:f30d973d35d1",
+      "packId": "trajectory-qgd-exchange-minority",
+      "phase": "cross_phase",
+      "arm": "movetime100_a",
+      "rootSide": "white",
+      "firstMoveUci": "a2a4",
+      "candidateCount": 0,
+      "candidateBreakdown": {
+        "total": 0,
+        "byFamily": {},
+        "byRelation": {},
+        "byStatus": {}
+      },
+      "raw": null,
+      "rootSideOnly": null,
+      "rootEdgeOnly": null,
+      "rootSideLater": null,
+      "rawDiffersFromRootSide": false,
+      "rawDiffersFromRootEdge": false
+    },
+    {
+      "positionId": "42:trajectory-caro-advance-chain-bishops:915cce3ee46f",
+      "packId": "trajectory-caro-advance-chain-bishops",
+      "phase": "cross_phase",
+      "arm": "depth12",
+      "rootSide": "white",
+      "firstMoveUci": "g1f1",
+      "candidateCount": 0,
+      "candidateBreakdown": {
+        "total": 0,
+        "byFamily": {},
+        "byRelation": {},
+        "byStatus": {}
+      },
+      "raw": null,
+      "rootSideOnly": null,
+      "rootEdgeOnly": null,
+      "rootSideLater": null,
+      "rawDiffersFromRootSide": false,
+      "rawDiffersFromRootEdge": false
+    },
+    {
+      "positionId": "42:trajectory-caro-advance-chain-bishops:915cce3ee46f",
+      "packId": "trajectory-caro-advance-chain-bishops",
+      "phase": "cross_phase",
+      "arm": "movetime100_a",
+      "rootSide": "white",
+      "firstMoveUci": "g1f1",
+      "candidateCount": 0,
+      "candidateBreakdown": {
+        "total": 0,
+        "byFamily": {},
+        "byRelation": {},
+        "byStatus": {}
+      },
+      "raw": null,
+      "rootSideOnly": null,
+      "rootEdgeOnly": null,
+      "rootSideLater": null,
+      "rawDiffersFromRootSide": false,
+      "rawDiffersFromRootEdge": false
+    },
+    {
+      "positionId": "43:trajectory-qgd-exchange-minority:a30efb5f5469",
+      "packId": "trajectory-qgd-exchange-minority",
+      "phase": "cross_phase",
+      "arm": "depth12",
+      "rootSide": "white",
+      "firstMoveUci": "b2b8",
+      "candidateCount": 2,
+      "candidateBreakdown": {
+        "total": 2,
+        "byFamily": {
+          "double_attack": 1,
+          "fork_survives_reply": 1
+        },
+        "byRelation": {
+          "root": 2
+        },
+        "byStatus": {
+          "double_attack:gained": 1,
+          "fork_survives_reply:matched": 1
+        }
+      },
+      "raw": {
+        "occurrenceId": "sha256:0cc93bded6a3eb0617bf381f5c7b3c5ac071afa33dda4a5c0396f45b8549c20c",
+        "family": "double_attack",
+        "ply": 3,
+        "edgeSideRelation": "root",
+        "actor": {
+          "color": "white",
+          "role": "queen",
+          "from": "c3",
+          "to": "d3"
+        },
+        "targets": [
+          "a6",
+          "h7"
+        ],
+        "edgeMoveUci": "c3d3",
+        "firstMoveUci": "b2b8",
+        "status": "gained"
+      },
+      "rootSideOnly": {
+        "occurrenceId": "sha256:0cc93bded6a3eb0617bf381f5c7b3c5ac071afa33dda4a5c0396f45b8549c20c",
+        "family": "double_attack",
+        "ply": 3,
+        "edgeSideRelation": "root",
+        "actor": {
+          "color": "white",
+          "role": "queen",
+          "from": "c3",
+          "to": "d3"
+        },
+        "targets": [
+          "a6",
+          "h7"
+        ],
+        "edgeMoveUci": "c3d3",
+        "firstMoveUci": "b2b8",
+        "status": "gained"
+      },
+      "rootEdgeOnly": null,
+      "rootSideLater": {
+        "occurrenceId": "sha256:0cc93bded6a3eb0617bf381f5c7b3c5ac071afa33dda4a5c0396f45b8549c20c",
+        "family": "double_attack",
+        "ply": 3,
+        "edgeSideRelation": "root",
+        "actor": {
+          "color": "white",
+          "role": "queen",
+          "from": "c3",
+          "to": "d3"
+        },
+        "targets": [
+          "a6",
+          "h7"
+        ],
+        "edgeMoveUci": "c3d3",
+        "firstMoveUci": "b2b8",
+        "status": "gained"
+      },
+      "rawDiffersFromRootSide": false,
+      "rawDiffersFromRootEdge": true
+    },
+    {
+      "positionId": "43:trajectory-qgd-exchange-minority:a30efb5f5469",
+      "packId": "trajectory-qgd-exchange-minority",
+      "phase": "cross_phase",
+      "arm": "movetime100_a",
+      "rootSide": "white",
+      "firstMoveUci": "b2b8",
+      "candidateCount": 0,
+      "candidateBreakdown": {
+        "total": 0,
+        "byFamily": {},
+        "byRelation": {},
+        "byStatus": {}
+      },
+      "raw": null,
+      "rootSideOnly": null,
+      "rootEdgeOnly": null,
+      "rootSideLater": null,
+      "rawDiffersFromRootSide": false,
+      "rawDiffersFromRootEdge": false
+    },
+    {
+      "positionId": "44:trajectory-qgd-exchange-minority:d5bbde32473c",
+      "packId": "trajectory-qgd-exchange-minority",
+      "phase": "cross_phase",
+      "arm": "depth12",
+      "rootSide": "black",
+      "firstMoveUci": "a8a6",
+      "candidateCount": 1,
+      "candidateBreakdown": {
+        "total": 1,
+        "byFamily": {
+          "loose_piece": 1
+        },
+        "byRelation": {
+          "root": 1
+        },
+        "byStatus": {
+          "loose_piece:lost": 1
+        }
+      },
+      "raw": {
+        "occurrenceId": "sha256:d1c66552dd9e5d1018b59a9bdbe41b5713889d2268666294504e84d02bdf16ed",
+        "family": "loose_piece",
+        "ply": 1,
+        "edgeSideRelation": "root",
+        "actor": {
+          "color": "black",
+          "role": "pawn",
+          "from": "c6",
+          "to": "c6"
+        },
+        "targets": [
+          "c6"
+        ],
+        "edgeMoveUci": "a8a6",
+        "firstMoveUci": "a8a6",
+        "status": "lost"
+      },
+      "rootSideOnly": {
+        "occurrenceId": "sha256:d1c66552dd9e5d1018b59a9bdbe41b5713889d2268666294504e84d02bdf16ed",
+        "family": "loose_piece",
+        "ply": 1,
+        "edgeSideRelation": "root",
+        "actor": {
+          "color": "black",
+          "role": "pawn",
+          "from": "c6",
+          "to": "c6"
+        },
+        "targets": [
+          "c6"
+        ],
+        "edgeMoveUci": "a8a6",
+        "firstMoveUci": "a8a6",
+        "status": "lost"
+      },
+      "rootEdgeOnly": {
+        "occurrenceId": "sha256:d1c66552dd9e5d1018b59a9bdbe41b5713889d2268666294504e84d02bdf16ed",
+        "family": "loose_piece",
+        "ply": 1,
+        "edgeSideRelation": "root",
+        "actor": {
+          "color": "black",
+          "role": "pawn",
+          "from": "c6",
+          "to": "c6"
+        },
+        "targets": [
+          "c6"
+        ],
+        "edgeMoveUci": "a8a6",
+        "firstMoveUci": "a8a6",
+        "status": "lost"
+      },
+      "rootSideLater": null,
+      "rawDiffersFromRootSide": false,
+      "rawDiffersFromRootEdge": false
+    },
+    {
+      "positionId": "44:trajectory-qgd-exchange-minority:d5bbde32473c",
+      "packId": "trajectory-qgd-exchange-minority",
+      "phase": "cross_phase",
+      "arm": "movetime100_a",
+      "rootSide": "black",
+      "firstMoveUci": "a8a6",
+      "candidateCount": 1,
+      "candidateBreakdown": {
+        "total": 1,
+        "byFamily": {
+          "loose_piece": 1
+        },
+        "byRelation": {
+          "root": 1
+        },
+        "byStatus": {
+          "loose_piece:lost": 1
+        }
+      },
+      "raw": {
+        "occurrenceId": "sha256:d1c66552dd9e5d1018b59a9bdbe41b5713889d2268666294504e84d02bdf16ed",
+        "family": "loose_piece",
+        "ply": 1,
+        "edgeSideRelation": "root",
+        "actor": {
+          "color": "black",
+          "role": "pawn",
+          "from": "c6",
+          "to": "c6"
+        },
+        "targets": [
+          "c6"
+        ],
+        "edgeMoveUci": "a8a6",
+        "firstMoveUci": "a8a6",
+        "status": "lost"
+      },
+      "rootSideOnly": {
+        "occurrenceId": "sha256:d1c66552dd9e5d1018b59a9bdbe41b5713889d2268666294504e84d02bdf16ed",
+        "family": "loose_piece",
+        "ply": 1,
+        "edgeSideRelation": "root",
+        "actor": {
+          "color": "black",
+          "role": "pawn",
+          "from": "c6",
+          "to": "c6"
+        },
+        "targets": [
+          "c6"
+        ],
+        "edgeMoveUci": "a8a6",
+        "firstMoveUci": "a8a6",
+        "status": "lost"
+      },
+      "rootEdgeOnly": {
+        "occurrenceId": "sha256:d1c66552dd9e5d1018b59a9bdbe41b5713889d2268666294504e84d02bdf16ed",
+        "family": "loose_piece",
+        "ply": 1,
+        "edgeSideRelation": "root",
+        "actor": {
+          "color": "black",
+          "role": "pawn",
+          "from": "c6",
+          "to": "c6"
+        },
+        "targets": [
+          "c6"
+        ],
+        "edgeMoveUci": "a8a6",
+        "firstMoveUci": "a8a6",
+        "status": "lost"
+      },
+      "rootSideLater": null,
+      "rawDiffersFromRootSide": false,
+      "rawDiffersFromRootEdge": false
+    },
+    {
+      "positionId": "45:trajectory-qgd-exchange-minority:77ea6373d17e",
+      "packId": "trajectory-qgd-exchange-minority",
+      "phase": "cross_phase",
+      "arm": "depth12",
+      "rootSide": "white",
+      "firstMoveUci": "g5f4",
+      "candidateCount": 0,
+      "candidateBreakdown": {
+        "total": 0,
+        "byFamily": {},
+        "byRelation": {},
+        "byStatus": {}
+      },
+      "raw": null,
+      "rootSideOnly": null,
+      "rootEdgeOnly": null,
+      "rootSideLater": null,
+      "rawDiffersFromRootSide": false,
+      "rawDiffersFromRootEdge": false
+    },
+    {
+      "positionId": "45:trajectory-qgd-exchange-minority:77ea6373d17e",
+      "packId": "trajectory-qgd-exchange-minority",
+      "phase": "cross_phase",
+      "arm": "movetime100_a",
+      "rootSide": "white",
+      "firstMoveUci": "h2h3",
+      "candidateCount": 5,
+      "candidateBreakdown": {
+        "total": 5,
+        "byFamily": {
+          "discovered_executed": 1,
+          "loose_piece": 4
+        },
+        "byRelation": {
+          "opponent": 4,
+          "root": 1
+        },
+        "byStatus": {
+          "discovered_executed:gained": 1,
+          "loose_piece:gained": 1,
+          "loose_piece:lost": 2,
+          "loose_piece:preserved": 1
+        }
+      },
+      "raw": {
+        "occurrenceId": "sha256:4c1c4b08d933c054fb19df70a0a6583af44299d73c9453b773984c15a97a9cc2",
+        "family": "discovered_executed",
+        "ply": 2,
+        "edgeSideRelation": "opponent",
+        "actor": {
+          "color": "black",
+          "role": "knight",
+          "from": "f6",
+          "to": "e4"
+        },
+        "targets": [
+          "f6",
+          "g5"
+        ],
+        "edgeMoveUci": "f6e4",
+        "firstMoveUci": "h2h3",
+        "status": "gained"
+      },
+      "rootSideOnly": {
+        "occurrenceId": "sha256:f6b2a9369c202068fcd0342ca43d8be8f3cb6c460f67c8d65ff3220ae5970fd4",
+        "family": "loose_piece",
+        "ply": 3,
+        "edgeSideRelation": "root",
+        "actor": {
+          "color": "white",
+          "role": "bishop",
+          "from": "g5",
+          "to": "e7"
+        },
+        "targets": [
+          "e7"
+        ],
+        "edgeMoveUci": "g5e7",
+        "firstMoveUci": "h2h3",
+        "status": "preserved"
+      },
+      "rootEdgeOnly": null,
+      "rootSideLater": {
+        "occurrenceId": "sha256:f6b2a9369c202068fcd0342ca43d8be8f3cb6c460f67c8d65ff3220ae5970fd4",
+        "family": "loose_piece",
+        "ply": 3,
+        "edgeSideRelation": "root",
+        "actor": {
+          "color": "white",
+          "role": "bishop",
+          "from": "g5",
+          "to": "e7"
+        },
+        "targets": [
+          "e7"
+        ],
+        "edgeMoveUci": "g5e7",
+        "firstMoveUci": "h2h3",
+        "status": "preserved"
+      },
+      "rawDiffersFromRootSide": true,
+      "rawDiffersFromRootEdge": true
+    },
+    {
+      "positionId": "46:trajectory-qgd-exchange-minority:2bab42c1cd2d",
+      "packId": "trajectory-qgd-exchange-minority",
+      "phase": "cross_phase",
+      "arm": "depth12",
+      "rootSide": "white",
+      "firstMoveUci": "c1g5",
+      "candidateCount": 2,
+      "candidateBreakdown": {
+        "total": 2,
+        "byFamily": {
+          "loose_piece": 2
+        },
+        "byRelation": {
+          "root": 2
+        },
+        "byStatus": {
+          "loose_piece:lost": 1,
+          "loose_piece:preserved": 1
+        }
+      },
+      "raw": {
+        "occurrenceId": "sha256:47480d09d11dfb79bd15d71baa9f1f3b28e4a0965c873f0fa2ad91c984c2f4c0",
+        "family": "loose_piece",
+        "ply": 1,
+        "edgeSideRelation": "root",
+        "actor": {
+          "color": "white",
+          "role": "pawn",
+          "from": "c4",
+          "to": "c4"
+        },
+        "targets": [
+          "c4"
+        ],
+        "edgeMoveUci": "c1g5",
+        "firstMoveUci": "c1g5",
+        "status": "preserved"
+      },
+      "rootSideOnly": {
+        "occurrenceId": "sha256:47480d09d11dfb79bd15d71baa9f1f3b28e4a0965c873f0fa2ad91c984c2f4c0",
+        "family": "loose_piece",
+        "ply": 1,
+        "edgeSideRelation": "root",
+        "actor": {
+          "color": "white",
+          "role": "pawn",
+          "from": "c4",
+          "to": "c4"
+        },
+        "targets": [
+          "c4"
+        ],
+        "edgeMoveUci": "c1g5",
+        "firstMoveUci": "c1g5",
+        "status": "preserved"
+      },
+      "rootEdgeOnly": {
+        "occurrenceId": "sha256:47480d09d11dfb79bd15d71baa9f1f3b28e4a0965c873f0fa2ad91c984c2f4c0",
+        "family": "loose_piece",
+        "ply": 1,
+        "edgeSideRelation": "root",
+        "actor": {
+          "color": "white",
+          "role": "pawn",
+          "from": "c4",
+          "to": "c4"
+        },
+        "targets": [
+          "c4"
+        ],
+        "edgeMoveUci": "c1g5",
+        "firstMoveUci": "c1g5",
+        "status": "preserved"
+      },
+      "rootSideLater": {
+        "occurrenceId": "sha256:cd600526ec8c5ac038f4eea315bea37354b836dce645b6111c509908ef74eb4d",
+        "family": "loose_piece",
+        "ply": 3,
+        "edgeSideRelation": "root",
+        "actor": {
+          "color": "white",
+          "role": "pawn",
+          "from": "c4",
+          "to": "c4"
+        },
+        "targets": [
+          "c4"
+        ],
+        "edgeMoveUci": "e2e3",
+        "firstMoveUci": "c1g5",
+        "status": "lost"
+      },
+      "rawDiffersFromRootSide": false,
+      "rawDiffersFromRootEdge": false
+    },
+    {
+      "positionId": "46:trajectory-qgd-exchange-minority:2bab42c1cd2d",
+      "packId": "trajectory-qgd-exchange-minority",
+      "phase": "cross_phase",
+      "arm": "movetime100_a",
+      "rootSide": "white",
+      "firstMoveUci": "c1g5",
+      "candidateCount": 1,
+      "candidateBreakdown": {
+        "total": 1,
+        "byFamily": {
+          "loose_piece": 1
+        },
+        "byRelation": {
+          "root": 1
+        },
+        "byStatus": {
+          "loose_piece:preserved": 1
+        }
+      },
+      "raw": {
+        "occurrenceId": "sha256:47480d09d11dfb79bd15d71baa9f1f3b28e4a0965c873f0fa2ad91c984c2f4c0",
+        "family": "loose_piece",
+        "ply": 1,
+        "edgeSideRelation": "root",
+        "actor": {
+          "color": "white",
+          "role": "pawn",
+          "from": "c4",
+          "to": "c4"
+        },
+        "targets": [
+          "c4"
+        ],
+        "edgeMoveUci": "c1g5",
+        "firstMoveUci": "c1g5",
+        "status": "preserved"
+      },
+      "rootSideOnly": {
+        "occurrenceId": "sha256:47480d09d11dfb79bd15d71baa9f1f3b28e4a0965c873f0fa2ad91c984c2f4c0",
+        "family": "loose_piece",
+        "ply": 1,
+        "edgeSideRelation": "root",
+        "actor": {
+          "color": "white",
+          "role": "pawn",
+          "from": "c4",
+          "to": "c4"
+        },
+        "targets": [
+          "c4"
+        ],
+        "edgeMoveUci": "c1g5",
+        "firstMoveUci": "c1g5",
+        "status": "preserved"
+      },
+      "rootEdgeOnly": {
+        "occurrenceId": "sha256:47480d09d11dfb79bd15d71baa9f1f3b28e4a0965c873f0fa2ad91c984c2f4c0",
+        "family": "loose_piece",
+        "ply": 1,
+        "edgeSideRelation": "root",
+        "actor": {
+          "color": "white",
+          "role": "pawn",
+          "from": "c4",
+          "to": "c4"
+        },
+        "targets": [
+          "c4"
+        ],
+        "edgeMoveUci": "c1g5",
+        "firstMoveUci": "c1g5",
+        "status": "preserved"
+      },
+      "rootSideLater": null,
+      "rawDiffersFromRootSide": false,
+      "rawDiffersFromRootEdge": false
+    },
+    {
+      "positionId": "47:trajectory-qgd-exchange-minority:859711b903e8",
+      "packId": "trajectory-qgd-exchange-minority",
+      "phase": "cross_phase",
+      "arm": "depth12",
+      "rootSide": "black",
+      "firstMoveUci": "e8h8",
+      "candidateCount": 1,
+      "candidateBreakdown": {
+        "total": 1,
+        "byFamily": {
+          "loose_piece": 1
+        },
+        "byRelation": {
+          "opponent": 1
+        },
+        "byStatus": {
+          "loose_piece:lost": 1
+        }
+      },
+      "raw": {
+        "occurrenceId": "sha256:4a5c5f9d0c167067591e8b5dcf6f18b08e6120c46e8e36457251dabfd8e40102",
+        "family": "loose_piece",
+        "ply": 4,
+        "edgeSideRelation": "opponent",
+        "actor": {
+          "color": "white",
+          "role": "bishop",
+          "from": "g5",
+          "to": "h4"
+        },
+        "targets": [
+          "g5"
+        ],
+        "edgeMoveUci": "g5h4",
+        "firstMoveUci": "e8h8",
+        "status": "lost"
+      },
+      "rootSideOnly": null,
+      "rootEdgeOnly": null,
+      "rootSideLater": null,
+      "rawDiffersFromRootSide": true,
+      "rawDiffersFromRootEdge": true
+    },
+    {
+      "positionId": "47:trajectory-qgd-exchange-minority:859711b903e8",
+      "packId": "trajectory-qgd-exchange-minority",
+      "phase": "cross_phase",
+      "arm": "movetime100_a",
+      "rootSide": "black",
+      "firstMoveUci": "e8h8",
+      "candidateCount": 0,
+      "candidateBreakdown": {
+        "total": 0,
+        "byFamily": {},
+        "byRelation": {},
+        "byStatus": {}
+      },
+      "raw": null,
+      "rootSideOnly": null,
+      "rootEdgeOnly": null,
+      "rootSideLater": null,
+      "rawDiffersFromRootSide": false,
+      "rawDiffersFromRootEdge": false
+    },
+    {
+      "positionId": "48:trajectory-caro-advance-chain-bishops:0fea1874b506",
+      "packId": "trajectory-caro-advance-chain-bishops",
+      "phase": "cross_phase",
+      "arm": "depth12",
+      "rootSide": "white",
+      "firstMoveUci": "e1h1",
+      "candidateCount": 0,
+      "candidateBreakdown": {
+        "total": 0,
+        "byFamily": {},
+        "byRelation": {},
+        "byStatus": {}
+      },
+      "raw": null,
+      "rootSideOnly": null,
+      "rootEdgeOnly": null,
+      "rootSideLater": null,
+      "rawDiffersFromRootSide": false,
+      "rawDiffersFromRootEdge": false
+    },
+    {
+      "positionId": "48:trajectory-caro-advance-chain-bishops:0fea1874b506",
+      "packId": "trajectory-caro-advance-chain-bishops",
+      "phase": "cross_phase",
+      "arm": "movetime100_a",
+      "rootSide": "white",
+      "firstMoveUci": "e1h1",
+      "candidateCount": 0,
+      "candidateBreakdown": {
+        "total": 0,
+        "byFamily": {},
+        "byRelation": {},
+        "byStatus": {}
+      },
+      "raw": null,
+      "rootSideOnly": null,
+      "rootEdgeOnly": null,
+      "rootSideLater": null,
+      "rawDiffersFromRootSide": false,
+      "rawDiffersFromRootEdge": false
+    },
+    {
+      "positionId": "49:trajectory-qgd-exchange-minority:679e983552cd",
+      "packId": "trajectory-qgd-exchange-minority",
+      "phase": "cross_phase",
+      "arm": "depth12",
+      "rootSide": "black",
+      "firstMoveUci": "a7a6",
+      "candidateCount": 0,
+      "candidateBreakdown": {
+        "total": 0,
+        "byFamily": {},
+        "byRelation": {},
+        "byStatus": {}
+      },
+      "raw": null,
+      "rootSideOnly": null,
+      "rootEdgeOnly": null,
+      "rootSideLater": null,
+      "rawDiffersFromRootSide": false,
+      "rawDiffersFromRootEdge": false
+    },
+    {
+      "positionId": "49:trajectory-qgd-exchange-minority:679e983552cd",
+      "packId": "trajectory-qgd-exchange-minority",
+      "phase": "cross_phase",
+      "arm": "movetime100_a",
+      "rootSide": "black",
+      "firstMoveUci": "a7a6",
+      "candidateCount": 0,
+      "candidateBreakdown": {
+        "total": 0,
+        "byFamily": {},
+        "byRelation": {},
+        "byStatus": {}
+      },
+      "raw": null,
+      "rootSideOnly": null,
+      "rootEdgeOnly": null,
+      "rootSideLater": null,
+      "rawDiffersFromRootSide": false,
+      "rawDiffersFromRootEdge": false
+    },
+    {
+      "positionId": "50:trajectory-qgd-exchange-minority:f844075a0d57",
+      "packId": "trajectory-qgd-exchange-minority",
+      "phase": "cross_phase",
+      "arm": "depth12",
+      "rootSide": "black",
+      "firstMoveUci": "a6b6",
+      "candidateCount": 2,
+      "candidateBreakdown": {
+        "total": 2,
+        "byFamily": {
+          "loose_piece": 2
+        },
+        "byRelation": {
+          "opponent": 1,
+          "root": 1
+        },
+        "byStatus": {
+          "loose_piece:lost": 1,
+          "loose_piece:preserved": 1
+        }
+      },
+      "raw": {
+        "occurrenceId": "sha256:e9c598d252b5e1dc54638576bfe2817e156a58458beb7db381915d27d9a3f937",
+        "family": "loose_piece",
+        "ply": 2,
+        "edgeSideRelation": "opponent",
+        "actor": {
+          "color": "white",
+          "role": "rook",
+          "from": "b7",
+          "to": "b6"
+        },
+        "targets": [
+          "b6"
+        ],
+        "edgeMoveUci": "b7b6",
+        "firstMoveUci": "a6b6",
+        "status": "preserved"
+      },
+      "rootSideOnly": {
+        "occurrenceId": "sha256:38b67b95a632583611e7b37fd199f452fa6263066f2c04e4f6c8aee28e9b8bc1",
+        "family": "loose_piece",
+        "ply": 3,
+        "edgeSideRelation": "root",
+        "actor": {
+          "color": "black",
+          "role": "pawn",
+          "from": "c6",
+          "to": "c6"
+        },
+        "targets": [
+          "c6"
+        ],
+        "edgeMoveUci": "d8b6",
+        "firstMoveUci": "a6b6",
+        "status": "lost"
+      },
+      "rootEdgeOnly": null,
+      "rootSideLater": {
+        "occurrenceId": "sha256:38b67b95a632583611e7b37fd199f452fa6263066f2c04e4f6c8aee28e9b8bc1",
+        "family": "loose_piece",
+        "ply": 3,
+        "edgeSideRelation": "root",
+        "actor": {
+          "color": "black",
+          "role": "pawn",
+          "from": "c6",
+          "to": "c6"
+        },
+        "targets": [
+          "c6"
+        ],
+        "edgeMoveUci": "d8b6",
+        "firstMoveUci": "a6b6",
+        "status": "lost"
+      },
+      "rawDiffersFromRootSide": true,
+      "rawDiffersFromRootEdge": true
+    },
+    {
+      "positionId": "50:trajectory-qgd-exchange-minority:f844075a0d57",
+      "packId": "trajectory-qgd-exchange-minority",
+      "phase": "cross_phase",
+      "arm": "movetime100_a",
+      "rootSide": "black",
+      "firstMoveUci": "a6b6",
+      "candidateCount": 1,
+      "candidateBreakdown": {
+        "total": 1,
+        "byFamily": {
+          "loose_piece": 1
+        },
+        "byRelation": {
+          "opponent": 1
+        },
+        "byStatus": {
+          "loose_piece:preserved": 1
+        }
+      },
+      "raw": {
+        "occurrenceId": "sha256:e9c598d252b5e1dc54638576bfe2817e156a58458beb7db381915d27d9a3f937",
+        "family": "loose_piece",
+        "ply": 2,
+        "edgeSideRelation": "opponent",
+        "actor": {
+          "color": "white",
+          "role": "rook",
+          "from": "b7",
+          "to": "b6"
+        },
+        "targets": [
+          "b6"
+        ],
+        "edgeMoveUci": "b7b6",
+        "firstMoveUci": "a6b6",
+        "status": "preserved"
+      },
+      "rootSideOnly": null,
+      "rootEdgeOnly": null,
+      "rootSideLater": null,
+      "rawDiffersFromRootSide": true,
+      "rawDiffersFromRootEdge": true
+    },
+    {
+      "positionId": "51:trajectory-qgd-exchange-minority:32306eb77b48",
+      "packId": "trajectory-qgd-exchange-minority",
+      "phase": "cross_phase",
+      "arm": "depth12",
+      "rootSide": "black",
+      "firstMoveUci": "e6d5",
+      "candidateCount": 1,
+      "candidateBreakdown": {
+        "total": 1,
+        "byFamily": {
+          "loose_piece": 1
+        },
+        "byRelation": {
+          "opponent": 1
+        },
+        "byStatus": {
+          "loose_piece:preserved": 1
+        }
+      },
+      "raw": {
+        "occurrenceId": "sha256:c5123c42ef1f65eb54cbdeb092a39061da538c202e52ae97e94e7c5fb3bc6af2",
+        "family": "loose_piece",
+        "ply": 4,
+        "edgeSideRelation": "opponent",
+        "actor": {
+          "color": "white",
+          "role": "bishop",
+          "from": "f4",
+          "to": "d6"
+        },
+        "targets": [
+          "d6"
+        ],
+        "edgeMoveUci": "f4d6",
+        "firstMoveUci": "e6d5",
+        "status": "preserved"
+      },
+      "rootSideOnly": null,
+      "rootEdgeOnly": null,
+      "rootSideLater": null,
+      "rawDiffersFromRootSide": true,
+      "rawDiffersFromRootEdge": true
+    },
+    {
+      "positionId": "51:trajectory-qgd-exchange-minority:32306eb77b48",
+      "packId": "trajectory-qgd-exchange-minority",
+      "phase": "cross_phase",
+      "arm": "movetime100_a",
+      "rootSide": "black",
+      "firstMoveUci": "e6d5",
+      "candidateCount": 0,
+      "candidateBreakdown": {
+        "total": 0,
+        "byFamily": {},
+        "byRelation": {},
+        "byStatus": {}
+      },
+      "raw": null,
+      "rootSideOnly": null,
+      "rootEdgeOnly": null,
+      "rootSideLater": null,
+      "rawDiffersFromRootSide": false,
+      "rawDiffersFromRootEdge": false
+    },
+    {
+      "positionId": "52:trajectory-qgd-exchange-minority:441820a3a31b",
+      "packId": "trajectory-qgd-exchange-minority",
+      "phase": "cross_phase",
+      "arm": "depth12",
+      "rootSide": "white",
+      "firstMoveUci": "d3a6",
+      "candidateCount": 2,
+      "candidateBreakdown": {
+        "total": 2,
+        "byFamily": {
+          "loose_piece": 2
+        },
+        "byRelation": {
+          "opponent": 1,
+          "root": 1
+        },
+        "byStatus": {
+          "loose_piece:gained": 1,
+          "loose_piece:lost": 1
+        }
+      },
+      "raw": {
+        "occurrenceId": "sha256:6930ddd7e82c3832ce17f9326734af9d0658ffb7fcb345a1263b74cf05758caa",
+        "family": "loose_piece",
+        "ply": 1,
+        "edgeSideRelation": "root",
+        "actor": {
+          "color": "white",
+          "role": "bishop",
+          "from": "d3",
+          "to": "a6"
+        },
+        "targets": [
+          "a6"
+        ],
+        "edgeMoveUci": "d3a6",
+        "firstMoveUci": "d3a6",
+        "status": "gained"
+      },
+      "rootSideOnly": {
+        "occurrenceId": "sha256:6930ddd7e82c3832ce17f9326734af9d0658ffb7fcb345a1263b74cf05758caa",
+        "family": "loose_piece",
+        "ply": 1,
+        "edgeSideRelation": "root",
+        "actor": {
+          "color": "white",
+          "role": "bishop",
+          "from": "d3",
+          "to": "a6"
+        },
+        "targets": [
+          "a6"
+        ],
+        "edgeMoveUci": "d3a6",
+        "firstMoveUci": "d3a6",
+        "status": "gained"
+      },
+      "rootEdgeOnly": {
+        "occurrenceId": "sha256:6930ddd7e82c3832ce17f9326734af9d0658ffb7fcb345a1263b74cf05758caa",
+        "family": "loose_piece",
+        "ply": 1,
+        "edgeSideRelation": "root",
+        "actor": {
+          "color": "white",
+          "role": "bishop",
+          "from": "d3",
+          "to": "a6"
+        },
+        "targets": [
+          "a6"
+        ],
+        "edgeMoveUci": "d3a6",
+        "firstMoveUci": "d3a6",
+        "status": "gained"
+      },
+      "rootSideLater": null,
+      "rawDiffersFromRootSide": false,
+      "rawDiffersFromRootEdge": false
+    },
+    {
+      "positionId": "52:trajectory-qgd-exchange-minority:441820a3a31b",
+      "packId": "trajectory-qgd-exchange-minority",
+      "phase": "cross_phase",
+      "arm": "movetime100_a",
+      "rootSide": "white",
+      "firstMoveUci": "d3a6",
+      "candidateCount": 2,
+      "candidateBreakdown": {
+        "total": 2,
+        "byFamily": {
+          "loose_piece": 2
+        },
+        "byRelation": {
+          "opponent": 1,
+          "root": 1
+        },
+        "byStatus": {
+          "loose_piece:gained": 1,
+          "loose_piece:lost": 1
+        }
+      },
+      "raw": {
+        "occurrenceId": "sha256:6930ddd7e82c3832ce17f9326734af9d0658ffb7fcb345a1263b74cf05758caa",
+        "family": "loose_piece",
+        "ply": 1,
+        "edgeSideRelation": "root",
+        "actor": {
+          "color": "white",
+          "role": "bishop",
+          "from": "d3",
+          "to": "a6"
+        },
+        "targets": [
+          "a6"
+        ],
+        "edgeMoveUci": "d3a6",
+        "firstMoveUci": "d3a6",
+        "status": "gained"
+      },
+      "rootSideOnly": {
+        "occurrenceId": "sha256:6930ddd7e82c3832ce17f9326734af9d0658ffb7fcb345a1263b74cf05758caa",
+        "family": "loose_piece",
+        "ply": 1,
+        "edgeSideRelation": "root",
+        "actor": {
+          "color": "white",
+          "role": "bishop",
+          "from": "d3",
+          "to": "a6"
+        },
+        "targets": [
+          "a6"
+        ],
+        "edgeMoveUci": "d3a6",
+        "firstMoveUci": "d3a6",
+        "status": "gained"
+      },
+      "rootEdgeOnly": {
+        "occurrenceId": "sha256:6930ddd7e82c3832ce17f9326734af9d0658ffb7fcb345a1263b74cf05758caa",
+        "family": "loose_piece",
+        "ply": 1,
+        "edgeSideRelation": "root",
+        "actor": {
+          "color": "white",
+          "role": "bishop",
+          "from": "d3",
+          "to": "a6"
+        },
+        "targets": [
+          "a6"
+        ],
+        "edgeMoveUci": "d3a6",
+        "firstMoveUci": "d3a6",
+        "status": "gained"
+      },
+      "rootSideLater": null,
+      "rawDiffersFromRootSide": false,
+      "rawDiffersFromRootEdge": false
+    },
+    {
+      "positionId": "53:trajectory-qgd-exchange-minority:4ea0e27cef32",
+      "packId": "trajectory-qgd-exchange-minority",
+      "phase": "cross_phase",
+      "arm": "depth12",
+      "rootSide": "black",
+      "firstMoveUci": "a1a2",
+      "candidateCount": 3,
+      "candidateBreakdown": {
+        "total": 3,
+        "byFamily": {
+          "loose_piece": 3
+        },
+        "byRelation": {
+          "opponent": 1,
+          "root": 2
+        },
+        "byStatus": {
+          "loose_piece:lost": 1,
+          "loose_piece:preserved": 2
+        }
+      },
+      "raw": {
+        "occurrenceId": "sha256:5d592a8e9df0735ad9c34ebb2d3dbf11c13c51c142ac9b10bc889a87868ff7b8",
+        "family": "loose_piece",
+        "ply": 1,
+        "edgeSideRelation": "root",
+        "actor": {
+          "color": "black",
+          "role": "pawn",
+          "from": "c6",
+          "to": "c6"
+        },
+        "targets": [
+          "c6"
+        ],
+        "edgeMoveUci": "a1a2",
+        "firstMoveUci": "a1a2",
+        "status": "preserved"
+      },
+      "rootSideOnly": {
+        "occurrenceId": "sha256:5d592a8e9df0735ad9c34ebb2d3dbf11c13c51c142ac9b10bc889a87868ff7b8",
+        "family": "loose_piece",
+        "ply": 1,
+        "edgeSideRelation": "root",
+        "actor": {
+          "color": "black",
+          "role": "pawn",
+          "from": "c6",
+          "to": "c6"
+        },
+        "targets": [
+          "c6"
+        ],
+        "edgeMoveUci": "a1a2",
+        "firstMoveUci": "a1a2",
+        "status": "preserved"
+      },
+      "rootEdgeOnly": {
+        "occurrenceId": "sha256:5d592a8e9df0735ad9c34ebb2d3dbf11c13c51c142ac9b10bc889a87868ff7b8",
+        "family": "loose_piece",
+        "ply": 1,
+        "edgeSideRelation": "root",
+        "actor": {
+          "color": "black",
+          "role": "pawn",
+          "from": "c6",
+          "to": "c6"
+        },
+        "targets": [
+          "c6"
+        ],
+        "edgeMoveUci": "a1a2",
+        "firstMoveUci": "a1a2",
+        "status": "preserved"
+      },
+      "rootSideLater": {
+        "occurrenceId": "sha256:dce5b89dfcfc044a9962ac14d05e68a724245abc5fdb59a4d37b0a479b82d021",
+        "family": "loose_piece",
+        "ply": 3,
+        "edgeSideRelation": "root",
+        "actor": {
+          "color": "black",
+          "role": "pawn",
+          "from": "c6",
+          "to": "c6"
+        },
+        "targets": [
+          "c6"
+        ],
+        "edgeMoveUci": "g8f8",
+        "firstMoveUci": "a1a2",
+        "status": "preserved"
+      },
+      "rawDiffersFromRootSide": false,
+      "rawDiffersFromRootEdge": false
+    },
+    {
+      "positionId": "53:trajectory-qgd-exchange-minority:4ea0e27cef32",
+      "packId": "trajectory-qgd-exchange-minority",
+      "phase": "cross_phase",
+      "arm": "movetime100_a",
+      "rootSide": "black",
+      "firstMoveUci": "a1a2",
+      "candidateCount": 3,
+      "candidateBreakdown": {
+        "total": 3,
+        "byFamily": {
+          "loose_piece": 3
+        },
+        "byRelation": {
+          "opponent": 1,
+          "root": 2
+        },
+        "byStatus": {
+          "loose_piece:lost": 1,
+          "loose_piece:preserved": 2
+        }
+      },
+      "raw": {
+        "occurrenceId": "sha256:5d592a8e9df0735ad9c34ebb2d3dbf11c13c51c142ac9b10bc889a87868ff7b8",
+        "family": "loose_piece",
+        "ply": 1,
+        "edgeSideRelation": "root",
+        "actor": {
+          "color": "black",
+          "role": "pawn",
+          "from": "c6",
+          "to": "c6"
+        },
+        "targets": [
+          "c6"
+        ],
+        "edgeMoveUci": "a1a2",
+        "firstMoveUci": "a1a2",
+        "status": "preserved"
+      },
+      "rootSideOnly": {
+        "occurrenceId": "sha256:5d592a8e9df0735ad9c34ebb2d3dbf11c13c51c142ac9b10bc889a87868ff7b8",
+        "family": "loose_piece",
+        "ply": 1,
+        "edgeSideRelation": "root",
+        "actor": {
+          "color": "black",
+          "role": "pawn",
+          "from": "c6",
+          "to": "c6"
+        },
+        "targets": [
+          "c6"
+        ],
+        "edgeMoveUci": "a1a2",
+        "firstMoveUci": "a1a2",
+        "status": "preserved"
+      },
+      "rootEdgeOnly": {
+        "occurrenceId": "sha256:5d592a8e9df0735ad9c34ebb2d3dbf11c13c51c142ac9b10bc889a87868ff7b8",
+        "family": "loose_piece",
+        "ply": 1,
+        "edgeSideRelation": "root",
+        "actor": {
+          "color": "black",
+          "role": "pawn",
+          "from": "c6",
+          "to": "c6"
+        },
+        "targets": [
+          "c6"
+        ],
+        "edgeMoveUci": "a1a2",
+        "firstMoveUci": "a1a2",
+        "status": "preserved"
+      },
+      "rootSideLater": {
+        "occurrenceId": "sha256:dce5b89dfcfc044a9962ac14d05e68a724245abc5fdb59a4d37b0a479b82d021",
+        "family": "loose_piece",
+        "ply": 3,
+        "edgeSideRelation": "root",
+        "actor": {
+          "color": "black",
+          "role": "pawn",
+          "from": "c6",
+          "to": "c6"
+        },
+        "targets": [
+          "c6"
+        ],
+        "edgeMoveUci": "g8f8",
+        "firstMoveUci": "a1a2",
+        "status": "preserved"
+      },
+      "rawDiffersFromRootSide": false,
+      "rawDiffersFromRootEdge": false
+    },
+    {
+      "positionId": "54:trajectory-caro-advance-chain-bishops:0e25d319ba3b",
+      "packId": "trajectory-caro-advance-chain-bishops",
+      "phase": "cross_phase",
+      "arm": "depth12",
+      "rootSide": "white",
+      "firstMoveUci": "a2b3",
+      "candidateCount": 0,
+      "candidateBreakdown": {
+        "total": 0,
+        "byFamily": {},
+        "byRelation": {},
+        "byStatus": {}
+      },
+      "raw": null,
+      "rootSideOnly": null,
+      "rootEdgeOnly": null,
+      "rootSideLater": null,
+      "rawDiffersFromRootSide": false,
+      "rawDiffersFromRootEdge": false
+    },
+    {
+      "positionId": "54:trajectory-caro-advance-chain-bishops:0e25d319ba3b",
+      "packId": "trajectory-caro-advance-chain-bishops",
+      "phase": "cross_phase",
+      "arm": "movetime100_a",
+      "rootSide": "white",
+      "firstMoveUci": "a2b3",
+      "candidateCount": 0,
+      "candidateBreakdown": {
+        "total": 0,
+        "byFamily": {},
+        "byRelation": {},
+        "byStatus": {}
+      },
+      "raw": null,
+      "rootSideOnly": null,
+      "rootEdgeOnly": null,
+      "rootSideLater": null,
+      "rawDiffersFromRootSide": false,
+      "rawDiffersFromRootEdge": false
+    },
+    {
+      "positionId": "55:trajectory-caro-advance-chain-bishops:cc0aaadaeed4",
+      "packId": "trajectory-caro-advance-chain-bishops",
+      "phase": "cross_phase",
+      "arm": "depth12",
+      "rootSide": "white",
+      "firstMoveUci": "e4e5",
+      "candidateCount": 1,
+      "candidateBreakdown": {
+        "total": 1,
+        "byFamily": {
+          "loose_piece": 1
+        },
+        "byRelation": {
+          "root": 1
+        },
+        "byStatus": {
+          "loose_piece:lost": 1
+        }
+      },
+      "raw": {
+        "occurrenceId": "sha256:c7848b69590dd16cc0549511fcf8cf0455cbd4c6dda4a3e476bd403d2ba1e4d6",
+        "family": "loose_piece",
+        "ply": 1,
+        "edgeSideRelation": "root",
+        "actor": {
+          "color": "white",
+          "role": "pawn",
+          "from": "e4",
+          "to": "e5"
+        },
+        "targets": [
+          "e4"
+        ],
+        "edgeMoveUci": "e4e5",
+        "firstMoveUci": "e4e5",
+        "status": "lost"
+      },
+      "rootSideOnly": {
+        "occurrenceId": "sha256:c7848b69590dd16cc0549511fcf8cf0455cbd4c6dda4a3e476bd403d2ba1e4d6",
+        "family": "loose_piece",
+        "ply": 1,
+        "edgeSideRelation": "root",
+        "actor": {
+          "color": "white",
+          "role": "pawn",
+          "from": "e4",
+          "to": "e5"
+        },
+        "targets": [
+          "e4"
+        ],
+        "edgeMoveUci": "e4e5",
+        "firstMoveUci": "e4e5",
+        "status": "lost"
+      },
+      "rootEdgeOnly": {
+        "occurrenceId": "sha256:c7848b69590dd16cc0549511fcf8cf0455cbd4c6dda4a3e476bd403d2ba1e4d6",
+        "family": "loose_piece",
+        "ply": 1,
+        "edgeSideRelation": "root",
+        "actor": {
+          "color": "white",
+          "role": "pawn",
+          "from": "e4",
+          "to": "e5"
+        },
+        "targets": [
+          "e4"
+        ],
+        "edgeMoveUci": "e4e5",
+        "firstMoveUci": "e4e5",
+        "status": "lost"
+      },
+      "rootSideLater": null,
+      "rawDiffersFromRootSide": false,
+      "rawDiffersFromRootEdge": false
+    },
+    {
+      "positionId": "55:trajectory-caro-advance-chain-bishops:cc0aaadaeed4",
+      "packId": "trajectory-caro-advance-chain-bishops",
+      "phase": "cross_phase",
+      "arm": "movetime100_a",
+      "rootSide": "white",
+      "firstMoveUci": "e4e5",
+      "candidateCount": 1,
+      "candidateBreakdown": {
+        "total": 1,
+        "byFamily": {
+          "loose_piece": 1
+        },
+        "byRelation": {
+          "root": 1
+        },
+        "byStatus": {
+          "loose_piece:lost": 1
+        }
+      },
+      "raw": {
+        "occurrenceId": "sha256:c7848b69590dd16cc0549511fcf8cf0455cbd4c6dda4a3e476bd403d2ba1e4d6",
+        "family": "loose_piece",
+        "ply": 1,
+        "edgeSideRelation": "root",
+        "actor": {
+          "color": "white",
+          "role": "pawn",
+          "from": "e4",
+          "to": "e5"
+        },
+        "targets": [
+          "e4"
+        ],
+        "edgeMoveUci": "e4e5",
+        "firstMoveUci": "e4e5",
+        "status": "lost"
+      },
+      "rootSideOnly": {
+        "occurrenceId": "sha256:c7848b69590dd16cc0549511fcf8cf0455cbd4c6dda4a3e476bd403d2ba1e4d6",
+        "family": "loose_piece",
+        "ply": 1,
+        "edgeSideRelation": "root",
+        "actor": {
+          "color": "white",
+          "role": "pawn",
+          "from": "e4",
+          "to": "e5"
+        },
+        "targets": [
+          "e4"
+        ],
+        "edgeMoveUci": "e4e5",
+        "firstMoveUci": "e4e5",
+        "status": "lost"
+      },
+      "rootEdgeOnly": {
+        "occurrenceId": "sha256:c7848b69590dd16cc0549511fcf8cf0455cbd4c6dda4a3e476bd403d2ba1e4d6",
+        "family": "loose_piece",
+        "ply": 1,
+        "edgeSideRelation": "root",
+        "actor": {
+          "color": "white",
+          "role": "pawn",
+          "from": "e4",
+          "to": "e5"
+        },
+        "targets": [
+          "e4"
+        ],
+        "edgeMoveUci": "e4e5",
+        "firstMoveUci": "e4e5",
+        "status": "lost"
+      },
+      "rootSideLater": null,
+      "rawDiffersFromRootSide": false,
+      "rawDiffersFromRootEdge": false
+    },
+    {
+      "positionId": "56:trajectory-qgd-exchange-minority:acf9f17c64a1",
+      "packId": "trajectory-qgd-exchange-minority",
+      "phase": "cross_phase",
+      "arm": "depth12",
+      "rootSide": "black",
+      "firstMoveUci": "c8d7",
+      "candidateCount": 5,
+      "candidateBreakdown": {
+        "total": 5,
+        "byFamily": {
+          "discovered_executed": 1,
+          "double_attack": 1,
+          "loose_piece": 3
+        },
+        "byRelation": {
+          "opponent": 3,
+          "root": 2
+        },
+        "byStatus": {
+          "discovered_executed:gained": 1,
+          "double_attack:gained": 1,
+          "loose_piece:gained": 1,
+          "loose_piece:lost": 2
+        }
+      },
+      "raw": {
+        "occurrenceId": "sha256:29b1bc09aa8e54316f7f381c2dc435b8e5928f96a9239f6df536dc3f7bc2f80f",
+        "family": "double_attack",
+        "ply": 4,
+        "edgeSideRelation": "opponent",
+        "actor": {
+          "color": "white",
+          "role": "pawn",
+          "from": "b5",
+          "to": "c6"
+        },
+        "targets": [
+          "b7",
+          "d7"
+        ],
+        "edgeMoveUci": "b5c6",
+        "firstMoveUci": "c8d7",
+        "status": "gained"
+      },
+      "rootSideOnly": {
+        "occurrenceId": "sha256:7d570dce49a31819b14be24e01fb93cafbf425a2982aa048e37ecbc7b11b38ab",
+        "family": "loose_piece",
+        "ply": 1,
+        "edgeSideRelation": "root",
+        "actor": {
+          "color": "black",
+          "role": "pawn",
+          "from": "c6",
+          "to": "c6"
+        },
+        "targets": [
+          "c6"
+        ],
+        "edgeMoveUci": "c8d7",
+        "firstMoveUci": "c8d7",
+        "status": "lost"
+      },
+      "rootEdgeOnly": {
+        "occurrenceId": "sha256:7d570dce49a31819b14be24e01fb93cafbf425a2982aa048e37ecbc7b11b38ab",
+        "family": "loose_piece",
+        "ply": 1,
+        "edgeSideRelation": "root",
+        "actor": {
+          "color": "black",
+          "role": "pawn",
+          "from": "c6",
+          "to": "c6"
+        },
+        "targets": [
+          "c6"
+        ],
+        "edgeMoveUci": "c8d7",
+        "firstMoveUci": "c8d7",
+        "status": "lost"
+      },
+      "rootSideLater": {
+        "occurrenceId": "sha256:0ba0f3f2cac6e74c189ad2797da812582ffaaa29a25754eadbb3b791bc06bd28",
+        "family": "loose_piece",
+        "ply": 3,
+        "edgeSideRelation": "root",
+        "actor": {
+          "color": "black",
+          "role": "pawn",
+          "from": "h7",
+          "to": "h7"
+        },
+        "targets": [
+          "h7"
+        ],
+        "edgeMoveUci": "g7g6",
+        "firstMoveUci": "c8d7",
+        "status": "lost"
+      },
+      "rawDiffersFromRootSide": true,
+      "rawDiffersFromRootEdge": true
+    },
+    {
+      "positionId": "56:trajectory-qgd-exchange-minority:acf9f17c64a1",
+      "packId": "trajectory-qgd-exchange-minority",
+      "phase": "cross_phase",
+      "arm": "movetime100_a",
+      "rootSide": "black",
+      "firstMoveUci": "e6e5",
+      "candidateCount": 4,
+      "candidateBreakdown": {
+        "total": 4,
+        "byFamily": {
+          "loose_piece": 3,
+          "promotion_pressure": 1
+        },
+        "byRelation": {
+          "opponent": 2,
+          "root": 2
+        },
+        "byStatus": {
+          "loose_piece:gained": 1,
+          "loose_piece:lost": 2,
+          "promotion_pressure:available:false|available:false": 1
+        }
+      },
+      "raw": {
+        "occurrenceId": "sha256:f8d4775bc9f6c49d85247ec83be30e20027a0a74406f09a787d0f20acf2b2679",
+        "family": "loose_piece",
+        "ply": 1,
+        "edgeSideRelation": "root",
+        "actor": {
+          "color": "black",
+          "role": "pawn",
+          "from": "c6",
+          "to": "c6"
+        },
+        "targets": [
+          "c6"
+        ],
+        "edgeMoveUci": "e6e5",
+        "firstMoveUci": "e6e5",
+        "status": "lost"
+      },
+      "rootSideOnly": {
+        "occurrenceId": "sha256:f8d4775bc9f6c49d85247ec83be30e20027a0a74406f09a787d0f20acf2b2679",
+        "family": "loose_piece",
+        "ply": 1,
+        "edgeSideRelation": "root",
+        "actor": {
+          "color": "black",
+          "role": "pawn",
+          "from": "c6",
+          "to": "c6"
+        },
+        "targets": [
+          "c6"
+        ],
+        "edgeMoveUci": "e6e5",
+        "firstMoveUci": "e6e5",
+        "status": "lost"
+      },
+      "rootEdgeOnly": {
+        "occurrenceId": "sha256:f8d4775bc9f6c49d85247ec83be30e20027a0a74406f09a787d0f20acf2b2679",
+        "family": "loose_piece",
+        "ply": 1,
+        "edgeSideRelation": "root",
+        "actor": {
+          "color": "black",
+          "role": "pawn",
+          "from": "c6",
+          "to": "c6"
+        },
+        "targets": [
+          "c6"
+        ],
+        "edgeMoveUci": "e6e5",
+        "firstMoveUci": "e6e5",
+        "status": "lost"
+      },
+      "rootSideLater": {
+        "occurrenceId": "sha256:a77871d7ebc72c6b9d9845bab39a3670c657f51a8a6bd124f479de009c086218",
+        "family": "loose_piece",
+        "ply": 3,
+        "edgeSideRelation": "root",
+        "actor": {
+          "color": "black",
+          "role": "queen",
+          "from": "f6",
+          "to": "f6"
+        },
+        "targets": [
+          "f6"
+        ],
+        "edgeMoveUci": "e8e5",
+        "firstMoveUci": "e6e5",
+        "status": "lost"
+      },
+      "rawDiffersFromRootSide": false,
+      "rawDiffersFromRootEdge": false
+    },
+    {
+      "positionId": "57:trajectory-qgd-exchange-minority:1a24f06f9a6f",
+      "packId": "trajectory-qgd-exchange-minority",
+      "phase": "cross_phase",
+      "arm": "depth12",
+      "rootSide": "white",
+      "firstMoveUci": "b5c6",
+      "candidateCount": 3,
+      "candidateBreakdown": {
+        "total": 3,
+        "byFamily": {
+          "loose_piece": 1,
+          "promotion_pressure": 2
+        },
+        "byRelation": {
+          "opponent": 2,
+          "root": 1
+        },
+        "byStatus": {
+          "loose_piece:lost": 1,
+          "promotion_pressure:available:false|available:false": 2
+        }
+      },
+      "raw": {
+        "occurrenceId": "sha256:ece62a50df5e464d1bab16a98a31093da41cec9de082d1c47d421d52f980dfe0",
+        "family": "loose_piece",
+        "ply": 2,
+        "edgeSideRelation": "opponent",
+        "actor": {
+          "color": "black",
+          "role": "pawn",
+          "from": "b7",
+          "to": "b7"
+        },
+        "targets": [
+          "b7"
+        ],
+        "edgeMoveUci": "e8e7",
+        "firstMoveUci": "b5c6",
+        "status": "lost"
+      },
+      "rootSideOnly": {
+        "occurrenceId": "sha256:53db37b7e6856826f9c9f2cdac6612a64f994c1f94745b00b1d99b9eb301dc00",
+        "family": "promotion_pressure",
+        "ply": 3,
+        "edgeSideRelation": "root",
+        "actor": {
+          "color": "white",
+          "role": "pawn",
+          "from": "c7",
+          "to": "c7"
+        },
+        "targets": [
+          "c8"
+        ],
+        "edgeMoveUci": "c6c7",
+        "firstMoveUci": "b5c6",
+        "status": "available:false|available:false"
+      },
+      "rootEdgeOnly": null,
+      "rootSideLater": {
+        "occurrenceId": "sha256:53db37b7e6856826f9c9f2cdac6612a64f994c1f94745b00b1d99b9eb301dc00",
+        "family": "promotion_pressure",
+        "ply": 3,
+        "edgeSideRelation": "root",
+        "actor": {
+          "color": "white",
+          "role": "pawn",
+          "from": "c7",
+          "to": "c7"
+        },
+        "targets": [
+          "c8"
+        ],
+        "edgeMoveUci": "c6c7",
+        "firstMoveUci": "b5c6",
+        "status": "available:false|available:false"
+      },
+      "rawDiffersFromRootSide": true,
+      "rawDiffersFromRootEdge": true
+    },
+    {
+      "positionId": "57:trajectory-qgd-exchange-minority:1a24f06f9a6f",
+      "packId": "trajectory-qgd-exchange-minority",
+      "phase": "cross_phase",
+      "arm": "movetime100_a",
+      "rootSide": "white",
+      "firstMoveUci": "b5c6",
+      "candidateCount": 1,
+      "candidateBreakdown": {
+        "total": 1,
+        "byFamily": {
+          "loose_piece": 1
+        },
+        "byRelation": {
+          "opponent": 1
+        },
+        "byStatus": {
+          "loose_piece:lost": 1
+        }
+      },
+      "raw": {
+        "occurrenceId": "sha256:ece62a50df5e464d1bab16a98a31093da41cec9de082d1c47d421d52f980dfe0",
+        "family": "loose_piece",
+        "ply": 2,
+        "edgeSideRelation": "opponent",
+        "actor": {
+          "color": "black",
+          "role": "pawn",
+          "from": "b7",
+          "to": "b7"
+        },
+        "targets": [
+          "b7"
+        ],
+        "edgeMoveUci": "e8e7",
+        "firstMoveUci": "b5c6",
+        "status": "lost"
+      },
+      "rootSideOnly": null,
+      "rootEdgeOnly": null,
+      "rootSideLater": null,
+      "rawDiffersFromRootSide": true,
+      "rawDiffersFromRootEdge": true
+    },
+    {
+      "positionId": "58:trajectory-qgd-exchange-minority:4263f01cff2e",
+      "packId": "trajectory-qgd-exchange-minority",
+      "phase": "cross_phase",
+      "arm": "depth12",
+      "rootSide": "black",
+      "firstMoveUci": "g8f6",
+      "candidateCount": 0,
+      "candidateBreakdown": {
+        "total": 0,
+        "byFamily": {},
+        "byRelation": {},
+        "byStatus": {}
+      },
+      "raw": null,
+      "rootSideOnly": null,
+      "rootEdgeOnly": null,
+      "rootSideLater": null,
+      "rawDiffersFromRootSide": false,
+      "rawDiffersFromRootEdge": false
+    },
+    {
+      "positionId": "58:trajectory-qgd-exchange-minority:4263f01cff2e",
+      "packId": "trajectory-qgd-exchange-minority",
+      "phase": "cross_phase",
+      "arm": "movetime100_a",
+      "rootSide": "black",
+      "firstMoveUci": "g8f6",
+      "candidateCount": 0,
+      "candidateBreakdown": {
+        "total": 0,
+        "byFamily": {},
+        "byRelation": {},
+        "byStatus": {}
+      },
+      "raw": null,
+      "rootSideOnly": null,
+      "rootEdgeOnly": null,
+      "rootSideLater": null,
+      "rawDiffersFromRootSide": false,
+      "rawDiffersFromRootEdge": false
+    },
+    {
+      "positionId": "59:trajectory-qgd-exchange-minority:50836c53f3c3",
+      "packId": "trajectory-qgd-exchange-minority",
+      "phase": "cross_phase",
+      "arm": "depth12",
+      "rootSide": "white",
+      "firstMoveUci": "f4e2",
+      "candidateCount": 1,
+      "candidateBreakdown": {
+        "total": 1,
+        "byFamily": {
+          "loose_piece": 1
+        },
+        "byRelation": {
+          "root": 1
+        },
+        "byStatus": {
+          "loose_piece:lost": 1
+        }
+      },
+      "raw": {
+        "occurrenceId": "sha256:bb107ed23c2d6ddc1674ea3e57379f85127711df4958db85cfc65b73d51c9734",
+        "family": "loose_piece",
+        "ply": 1,
+        "edgeSideRelation": "root",
+        "actor": {
+          "color": "white",
+          "role": "knight",
+          "from": "f4",
+          "to": "e2"
+        },
+        "targets": [
+          "f4"
+        ],
+        "edgeMoveUci": "f4e2",
+        "firstMoveUci": "f4e2",
+        "status": "lost"
+      },
+      "rootSideOnly": {
+        "occurrenceId": "sha256:bb107ed23c2d6ddc1674ea3e57379f85127711df4958db85cfc65b73d51c9734",
+        "family": "loose_piece",
+        "ply": 1,
+        "edgeSideRelation": "root",
+        "actor": {
+          "color": "white",
+          "role": "knight",
+          "from": "f4",
+          "to": "e2"
+        },
+        "targets": [
+          "f4"
+        ],
+        "edgeMoveUci": "f4e2",
+        "firstMoveUci": "f4e2",
+        "status": "lost"
+      },
+      "rootEdgeOnly": {
+        "occurrenceId": "sha256:bb107ed23c2d6ddc1674ea3e57379f85127711df4958db85cfc65b73d51c9734",
+        "family": "loose_piece",
+        "ply": 1,
+        "edgeSideRelation": "root",
+        "actor": {
+          "color": "white",
+          "role": "knight",
+          "from": "f4",
+          "to": "e2"
+        },
+        "targets": [
+          "f4"
+        ],
+        "edgeMoveUci": "f4e2",
+        "firstMoveUci": "f4e2",
+        "status": "lost"
+      },
+      "rootSideLater": null,
+      "rawDiffersFromRootSide": false,
+      "rawDiffersFromRootEdge": false
+    },
+    {
+      "positionId": "59:trajectory-qgd-exchange-minority:50836c53f3c3",
+      "packId": "trajectory-qgd-exchange-minority",
+      "phase": "cross_phase",
+      "arm": "movetime100_a",
+      "rootSide": "white",
+      "firstMoveUci": "f4e2",
+      "candidateCount": 1,
+      "candidateBreakdown": {
+        "total": 1,
+        "byFamily": {
+          "loose_piece": 1
+        },
+        "byRelation": {
+          "root": 1
+        },
+        "byStatus": {
+          "loose_piece:lost": 1
+        }
+      },
+      "raw": {
+        "occurrenceId": "sha256:bb107ed23c2d6ddc1674ea3e57379f85127711df4958db85cfc65b73d51c9734",
+        "family": "loose_piece",
+        "ply": 1,
+        "edgeSideRelation": "root",
+        "actor": {
+          "color": "white",
+          "role": "knight",
+          "from": "f4",
+          "to": "e2"
+        },
+        "targets": [
+          "f4"
+        ],
+        "edgeMoveUci": "f4e2",
+        "firstMoveUci": "f4e2",
+        "status": "lost"
+      },
+      "rootSideOnly": {
+        "occurrenceId": "sha256:bb107ed23c2d6ddc1674ea3e57379f85127711df4958db85cfc65b73d51c9734",
+        "family": "loose_piece",
+        "ply": 1,
+        "edgeSideRelation": "root",
+        "actor": {
+          "color": "white",
+          "role": "knight",
+          "from": "f4",
+          "to": "e2"
+        },
+        "targets": [
+          "f4"
+        ],
+        "edgeMoveUci": "f4e2",
+        "firstMoveUci": "f4e2",
+        "status": "lost"
+      },
+      "rootEdgeOnly": {
+        "occurrenceId": "sha256:bb107ed23c2d6ddc1674ea3e57379f85127711df4958db85cfc65b73d51c9734",
+        "family": "loose_piece",
+        "ply": 1,
+        "edgeSideRelation": "root",
+        "actor": {
+          "color": "white",
+          "role": "knight",
+          "from": "f4",
+          "to": "e2"
+        },
+        "targets": [
+          "f4"
+        ],
+        "edgeMoveUci": "f4e2",
+        "firstMoveUci": "f4e2",
+        "status": "lost"
+      },
+      "rootSideLater": null,
+      "rawDiffersFromRootSide": false,
+      "rawDiffersFromRootEdge": false
+    },
+    {
+      "positionId": "60:trajectory-qgd-exchange-minority:cecb48a3b054",
+      "packId": "trajectory-qgd-exchange-minority",
+      "phase": "cross_phase",
+      "arm": "depth12",
+      "rootSide": "white",
+      "firstMoveUci": "b1b2",
+      "candidateCount": 2,
+      "candidateBreakdown": {
+        "total": 2,
+        "byFamily": {
+          "loose_piece": 2
+        },
+        "byRelation": {
+          "root": 2
+        },
+        "byStatus": {
+          "loose_piece:lost": 2
+        }
+      },
+      "raw": {
+        "occurrenceId": "sha256:95027e2bc67a3fe0bf1c783ab0d09ce377d0b30e9368c9a3c900909138178899",
+        "family": "loose_piece",
+        "ply": 1,
+        "edgeSideRelation": "root",
+        "actor": {
+          "color": "white",
+          "role": "rook",
+          "from": "b1",
+          "to": "b2"
+        },
+        "targets": [
+          "b1"
+        ],
+        "edgeMoveUci": "b1b2",
+        "firstMoveUci": "b1b2",
+        "status": "lost"
+      },
+      "rootSideOnly": {
+        "occurrenceId": "sha256:95027e2bc67a3fe0bf1c783ab0d09ce377d0b30e9368c9a3c900909138178899",
+        "family": "loose_piece",
+        "ply": 1,
+        "edgeSideRelation": "root",
+        "actor": {
+          "color": "white",
+          "role": "rook",
+          "from": "b1",
+          "to": "b2"
+        },
+        "targets": [
+          "b1"
+        ],
+        "edgeMoveUci": "b1b2",
+        "firstMoveUci": "b1b2",
+        "status": "lost"
+      },
+      "rootEdgeOnly": {
+        "occurrenceId": "sha256:95027e2bc67a3fe0bf1c783ab0d09ce377d0b30e9368c9a3c900909138178899",
+        "family": "loose_piece",
+        "ply": 1,
+        "edgeSideRelation": "root",
+        "actor": {
+          "color": "white",
+          "role": "rook",
+          "from": "b1",
+          "to": "b2"
+        },
+        "targets": [
+          "b1"
+        ],
+        "edgeMoveUci": "b1b2",
+        "firstMoveUci": "b1b2",
+        "status": "lost"
+      },
+      "rootSideLater": null,
+      "rawDiffersFromRootSide": false,
+      "rawDiffersFromRootEdge": false
+    },
+    {
+      "positionId": "60:trajectory-qgd-exchange-minority:cecb48a3b054",
+      "packId": "trajectory-qgd-exchange-minority",
+      "phase": "cross_phase",
+      "arm": "movetime100_a",
+      "rootSide": "white",
+      "firstMoveUci": "b1b2",
+      "candidateCount": 2,
+      "candidateBreakdown": {
+        "total": 2,
+        "byFamily": {
+          "loose_piece": 2
+        },
+        "byRelation": {
+          "root": 2
+        },
+        "byStatus": {
+          "loose_piece:lost": 2
+        }
+      },
+      "raw": {
+        "occurrenceId": "sha256:95027e2bc67a3fe0bf1c783ab0d09ce377d0b30e9368c9a3c900909138178899",
+        "family": "loose_piece",
+        "ply": 1,
+        "edgeSideRelation": "root",
+        "actor": {
+          "color": "white",
+          "role": "rook",
+          "from": "b1",
+          "to": "b2"
+        },
+        "targets": [
+          "b1"
+        ],
+        "edgeMoveUci": "b1b2",
+        "firstMoveUci": "b1b2",
+        "status": "lost"
+      },
+      "rootSideOnly": {
+        "occurrenceId": "sha256:95027e2bc67a3fe0bf1c783ab0d09ce377d0b30e9368c9a3c900909138178899",
+        "family": "loose_piece",
+        "ply": 1,
+        "edgeSideRelation": "root",
+        "actor": {
+          "color": "white",
+          "role": "rook",
+          "from": "b1",
+          "to": "b2"
+        },
+        "targets": [
+          "b1"
+        ],
+        "edgeMoveUci": "b1b2",
+        "firstMoveUci": "b1b2",
+        "status": "lost"
+      },
+      "rootEdgeOnly": {
+        "occurrenceId": "sha256:95027e2bc67a3fe0bf1c783ab0d09ce377d0b30e9368c9a3c900909138178899",
+        "family": "loose_piece",
+        "ply": 1,
+        "edgeSideRelation": "root",
+        "actor": {
+          "color": "white",
+          "role": "rook",
+          "from": "b1",
+          "to": "b2"
+        },
+        "targets": [
+          "b1"
+        ],
+        "edgeMoveUci": "b1b2",
+        "firstMoveUci": "b1b2",
+        "status": "lost"
+      },
+      "rootSideLater": null,
+      "rawDiffersFromRootSide": false,
+      "rawDiffersFromRootEdge": false
+    },
+    {
+      "positionId": "61:trajectory-caro-advance-chain-bishops:404bf0f66c8a",
+      "packId": "trajectory-caro-advance-chain-bishops",
+      "phase": "cross_phase",
+      "arm": "depth12",
+      "rootSide": "white",
+      "firstMoveUci": "e3c1",
+      "candidateCount": 0,
+      "candidateBreakdown": {
+        "total": 0,
+        "byFamily": {},
+        "byRelation": {},
+        "byStatus": {}
+      },
+      "raw": null,
+      "rootSideOnly": null,
+      "rootEdgeOnly": null,
+      "rootSideLater": null,
+      "rawDiffersFromRootSide": false,
+      "rawDiffersFromRootEdge": false
+    },
+    {
+      "positionId": "61:trajectory-caro-advance-chain-bishops:404bf0f66c8a",
+      "packId": "trajectory-caro-advance-chain-bishops",
+      "phase": "cross_phase",
+      "arm": "movetime100_a",
+      "rootSide": "white",
+      "firstMoveUci": "e3c1",
+      "candidateCount": 0,
+      "candidateBreakdown": {
+        "total": 0,
+        "byFamily": {},
+        "byRelation": {},
+        "byStatus": {}
+      },
+      "raw": null,
+      "rootSideOnly": null,
+      "rootEdgeOnly": null,
+      "rootSideLater": null,
+      "rawDiffersFromRootSide": false,
+      "rawDiffersFromRootEdge": false
+    },
+    {
+      "positionId": "62:trajectory-caro-advance-chain-bishops:16af0d2a3cb0",
+      "packId": "trajectory-caro-advance-chain-bishops",
+      "phase": "cross_phase",
+      "arm": "depth12",
+      "rootSide": "black",
+      "firstMoveUci": "b8c6",
+      "candidateCount": 0,
+      "candidateBreakdown": {
+        "total": 0,
+        "byFamily": {},
+        "byRelation": {},
+        "byStatus": {}
+      },
+      "raw": null,
+      "rootSideOnly": null,
+      "rootEdgeOnly": null,
+      "rootSideLater": null,
+      "rawDiffersFromRootSide": false,
+      "rawDiffersFromRootEdge": false
+    },
+    {
+      "positionId": "62:trajectory-caro-advance-chain-bishops:16af0d2a3cb0",
+      "packId": "trajectory-caro-advance-chain-bishops",
+      "phase": "cross_phase",
+      "arm": "movetime100_a",
+      "rootSide": "black",
+      "firstMoveUci": "b8c6",
+      "candidateCount": 0,
+      "candidateBreakdown": {
+        "total": 0,
+        "byFamily": {},
+        "byRelation": {},
+        "byStatus": {}
+      },
+      "raw": null,
+      "rootSideOnly": null,
+      "rootEdgeOnly": null,
+      "rootSideLater": null,
+      "rawDiffersFromRootSide": false,
+      "rawDiffersFromRootEdge": false
+    },
+    {
+      "positionId": "63:trajectory-qgd-exchange-minority:96e8cf9c5dca",
+      "packId": "trajectory-qgd-exchange-minority",
+      "phase": "cross_phase",
+      "arm": "depth12",
+      "rootSide": "black",
+      "firstMoveUci": "f6d8",
+      "candidateCount": 0,
+      "candidateBreakdown": {
+        "total": 0,
+        "byFamily": {},
+        "byRelation": {},
+        "byStatus": {}
+      },
+      "raw": null,
+      "rootSideOnly": null,
+      "rootEdgeOnly": null,
+      "rootSideLater": null,
+      "rawDiffersFromRootSide": false,
+      "rawDiffersFromRootEdge": false
+    },
+    {
+      "positionId": "63:trajectory-qgd-exchange-minority:96e8cf9c5dca",
+      "packId": "trajectory-qgd-exchange-minority",
+      "phase": "cross_phase",
+      "arm": "movetime100_a",
+      "rootSide": "black",
+      "firstMoveUci": "f6d8",
+      "candidateCount": 0,
+      "candidateBreakdown": {
+        "total": 0,
+        "byFamily": {},
+        "byRelation": {},
+        "byStatus": {}
+      },
+      "raw": null,
+      "rootSideOnly": null,
+      "rootEdgeOnly": null,
+      "rootSideLater": null,
+      "rawDiffersFromRootSide": false,
+      "rawDiffersFromRootEdge": false
+    }
+  ]
+}
