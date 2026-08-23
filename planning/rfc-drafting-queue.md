@@ -1244,3 +1244,50 @@ class as [[D1331]]'s three corrections, and it belongs beside them.
 **Drafting order is unaffected**: ranks 5–8 were already commissioned and are in flight. Nothing
 new is commissioned by this recount, and [[D1375]] is a correction owed to `rfc/bot-roster.md` §4,
 not a lane.
+
+## Hint distance — returned to research 2026-08-23 ([[D1377]], [[D1376]])
+
+`rfc/hint-distance.md` (`85a0584`) is **returned to research**, not rejected. codex's buildability
+review accepts the central primitive — *a useful hint is a semantic event on a searched line, not a
+PV with some moves hidden* — and refuses the document on eight blockers. Two are structural and a
+redraft that only edits prose will not clear them.
+
+**The exploration gate is unmet, and [[D1376]] is why.** The 56/64 and 46/64 reach figures come
+from a harness whose frozen event set shares exactly **two** members with the seven families the
+RFC proposes; four of the seven are not emitted by `localSemanticEvents` at all. The selector's
+refusal table decides whether this feature is useful or usually empty, so it is not incidental —
+law 1 applies. **Before redrafting:** implement the candidate table in a disposable harness with
+real constructors for every proposed family, preregister the perspective/polarity rules B2
+requires, and report reach, family mix, abstentions, latency and phase split on both engine arms.
+Freeze the table only after that. An acceptance criterion cannot stand in for a gate it precedes.
+
+**The redraft must build the redaction, not declare it.** A separately sealed disclosure packet per
+rung whose *runtime bytes* carry only the fields that rung licenses, compiled by the only code
+permitted to read the full horizon, with forge tests, serialization tests and an external-provider
+sentinel proving move, UCI, SAN, ply and squares absent at each lower rung. And it must carry
+occurrence identity, not just declaration identity — an engine job or content digest, since two
+searches with the same projection version are not the same evidence at 65.6% first-move agreement.
+
+**Two of the document's findings survive the return and are not blocked by it**: [[D1343]] (a
+declared `limitations` string that no instrument reads) and [[D1351]] (a ceiling maps to exactly one
+answer image). Both were discovered here and belong to whoever fixes the contract, not to the
+redraft.
+
+No scope cut. The B6 blocker is the owner's stated requirement showing up as a defect — support
+should sometimes expose **only theory** — so per-source ceilings are in scope for the redraft, not
+a follow-up.
+
+### Shared code sites need a pin, the way ledger ids do — [[D1381]]
+
+[[D1130]] as amended by [[D1354]] governs **ledger ids** across concurrent forks. Nothing governs
+**shared code sites**, and on 2026-08-23 two drafts I commissioned the same day —
+`training-mode-variants` and `return-scheduling` — lifted the same pack gate, edited the same
+`service.ts` symbol and claimed the same stale-citation repair, each unaware of the other. They also
+disagreed on the corpus denominator (0 of 56 versus 0 of 92; 56 is reproducible, 92 is not).
+
+**Clause, effective immediately.** A drafting brief must name the code sites and repairs the draft
+expects to own, and the coordinator must check that list against every other in-flight draft before
+commissioning. Where two drafts need the same site, one takes it and the other cites it — recorded
+as a cross-draft ownership pin in `rfc/README.md`, exactly as schema lanes are. A denominator quoted
+from another draft is re-derived, never copied: the two figures above differed by 36 and both
+documents stated theirs as fact.

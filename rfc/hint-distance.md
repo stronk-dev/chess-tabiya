@@ -510,6 +510,8 @@ ground a "best move" sentence even if a renderer tried to write one.
 
 ## Acceptance criteria
 
+> **Returned to research 2026-08-23.** [[D1377]] — eight buildability blockers. [[D1378]] — four of §2's seven eligible families are readings or predicates, not events, so `occurrencePly` has no referent for them. [[D1376]] — the measured reach of the eligible list is 4 of 64, not the band [[D1352]] reported.
+
 1. **The seven horizon projections compile, and no eighth kind of thing does.** The compiled
    manifest contains `derived.hint.horizon.*@1` for exactly the registered eligible families, each
    with `grounding: "declared_convention"`, `exactness: "convention"`, an abstention listing

@@ -542,6 +542,8 @@ beyond it, on evidence the handoff did not have: `league-as-return-loop` landed 
 
 ## Acceptance criteria
 
+> **Cross-review 2026-08-23.** [[D1382]] — criterion 7 is red at HEAD with no proposed remedy, criteria 14 and 15/16 are mutually unsatisfiable at landing, and `ARENA_GAME_MISMATCH` (criterion 3) names no operand to compare.
+
 Each names the wrong implementation that would otherwise pass.
 
 1. **A leg that names a provider but carries no `provider_game_id` is not describable as

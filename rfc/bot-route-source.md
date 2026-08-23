@@ -757,6 +757,8 @@ veto the widening on the same authority that would answer Open question 1.
 
 ## Acceptance criteria
 
+> **Cross-review 2026-08-23.** [[D1383]] — criteria 6, 15, 17 and 18 cannot fail as written. [[D1379]] — the §7.2 `proposedBy` remedy cannot reach the three `SelectionCandidate` consumers and would take pivotal detection and difficulty measurement to zero on affected selections. [[D1384]] — every measured statistic reproduced exactly; criterion 11's 8.3% uses a denominator of 72 where only 47 plies were active, so the honest rate is 12.8%.
+
 1. **The `propose` effect exists and is the only effect that adds rows.** A fixture asserts that for
    every effect other than `propose`, the row set after the layer is set-equal to the row set before
    it. *Wrong implementation that would pass a weaker check: one where a trait silently inserts a

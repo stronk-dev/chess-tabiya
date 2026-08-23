@@ -543,6 +543,8 @@ family passes all five surfaces **without spending any of the law's latitude**. 
 
 ## Acceptance criteria
 
+> **Cross-review 2026-08-23.** [[D1380]] — criteria 3 and 4 name `make schema-check`, which validates no campaign document; criteria 4 and 11 contradict; criterion 10 needs a table from an unlanded migration. [[D1381]] — `rfc/return-scheduling.md` lifts the same gate and claims the same repair, with no cross-draft pin between them.
+
 Numeric criteria carry the number computed at this HEAD, baked as a **drift tripwire** only; set
 membership is asserted against a derivation, never against a hand-summed integer ([[D1240]]).
 
