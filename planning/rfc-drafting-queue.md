@@ -969,3 +969,7 @@ taxonomy that already exists** — what is missing is a registry, not a taxonomy
 **Fork 1 — may valence be declared, and by which authority — decides the whole lane** and goes to
 the owner in the next batch. Progress shows as **marks**, which need no floor, no reference
 population and no store.
+
+- **[[D1221]]** — the shipped authored-valence layer (117 shape plans, 96 rules-grounded) and the
+  ~36-row taxonomy that already exists; the gap is a concept **registry**, not a taxonomy. Routed
+  to the skills lane's foundation work.
