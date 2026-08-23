@@ -12,6 +12,6 @@ export default defineConfig({
   },
   test: {
     include: ["tools/d1023-bounded-policy-harness/**/*.test.ts"],
-    testTimeout: 60_000,
+    testTimeout: 180_000,
   },
 });

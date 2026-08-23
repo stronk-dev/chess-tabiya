@@ -5951,3 +5951,28 @@ to f8 as a side effect, while the instrument followed only the king's move field
 uses chessops' castling authority to advance both king and rook identities and pins that exact
 Lichess witness. Re-run identity loss is zero in both populations and focused Vitest is 9/9. The
 full-horizon census and Stockfish/Maia arms remain; no projection has been declared early.
+
+The complete-reply arm now runs the full declared horizon over every material target and distinct
+legal result in both populations: 147 played + 4,870 alternatives authored, 255 + 8,927 imported.
+No branch reaches the 25,000-node cap (max 2,527; alternative p99 1,979 imported). The result is the
+important correction to the immediate lift: 69/120 authored and 130/188 imported played removals
+restore the same attacker-to-target positive capture within three plies. Immediate “stopped” is
+therefore often temporary. The strong result—one opponent preparation after which every legal
+defence still permits the same capture—is rare: 2/120 authored removals (both identities at one
+decision) and 0/188 imported. A fixed positive now pins the exact `...Be6, Qb3, <any defence>,
+Nxd5` quantifier rather than leaving that non-vacuity claim to a corpus count. This admits useful
+exact operands (`removed_now`, `reintroduced_within_3ply`) while arguing against proactive universal
+prose. Destination-target and provider-policy arms remain before the research exit.
+
+The destination-target arm now closes the exact half too. It retains the one-edge D771 contract:
+the same named bishop/knight can still legally reach the same empty square, but the square changes
+from locally non-losing to a positive exchange capture specifically by the moved pawn. It then
+tracks that identity through the same three-ply horizon. Reach is 75 targets in 754 authored played
+moves and 52 in 579 imported moves (four imported pass-clone abstentions); alternatives contain
+1,875 and 1,749 targets. The existential result nearly saturates—75/75 and 50/52 played—but causal
+decomposition explains why: 72 and 49 first witnesses move or lose the controlling pawn, trivially
+giving the square back. Only 3 and 1 return while that pawn identity remains on its post-candidate
+square. No played or alternative destination target has one preparation that survives every legal
+defence. Thus the one-edge operand remains useful for requested hover/sight, while complete-reply
+search adds no default “stopped their plan” sentence. Stockfish/Maia may still measure which legal
+branches their declared policies actually weight; exact existence alone is the wrong selector.

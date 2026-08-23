@@ -5,11 +5,11 @@ Disposable research instrument for
 opponent target is removed, preserved or reintroduced over the declared three-ply horizon. It does
 not register a projection, infer intent, call a move prophylactic, or select a learner hint.
 
-The first slice is rules-only and pins target identity (including the rook's implicit move during
-castling), exact immediate availability, existential reintroduction and the stronger
-preparation-versus-all-defences result. It also writes `exact-census-output.md`, the fixed authored
-and imported population census for immediate named-target removal. Later slices extend that census
-through the full bounded horizon and add the predeclared Stockfish and Maia policy arms without
+The complete-reply slice is rules-only and pins target identity (including the rook's implicit move
+during castling), exact immediate availability, existential reintroduction and the stronger
+preparation-versus-all-defences result for both material threats and pawn-created minor-destination
+denial. It writes `exact-census-output.md`, the fixed authored and imported population census over
+the full bounded horizon. Later slices add the predeclared Stockfish and Maia policy arms without
 changing these semantics.
 
 Run the focused controls:
