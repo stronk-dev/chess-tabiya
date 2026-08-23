@@ -1,6 +1,6 @@
 # RFC: Learner modules
 
-- **Status:** accepted — 2026-08-22, by claude as register owner on the buildability test, after cross-review (nine blockers fixed in place) and the owner's three rulings (D906: radar pre-commit-in-Support; outpost gated on the priority D566 fix; **budgets demoted to backstops, semantic reducers the mechanism**). *One honesty note: the reducer obligation entered AFTER cross-review on the budgets ruling — the implementer should treat §OQ1's reducer spec as the section to return if underspecified; the return loop is the check.* *(Prior line for history: draft 2026-08-22 — the Phase-3 / F5 module-contract RFC. Drafted while 2c is)*
+- **Status:** accepted — 2026-08-22, by claude as register owner on the buildability test, after cross-review (nine blockers fixed in place) and the owner's three rulings (D906: radar pre-commit-in-Support; outpost gated on the priority D566 fix; **budgets demoted to backstops, semantic reducers the mechanism**). *The honesty note worked exactly as written: the reducer obligation entered AFTER cross-review on the budgets ruling, the implementer was told to return §OQ1 if underspecified, and codex did (`c4d3c8c`) — correctly, because the three reducers were named and none defined. **Amended 2026-08-23 (reducer amendment, §3a)**: one pipeline, `factIdentity@1`, the closed `SUBSUMPTION@1` table, `positionNovelty@1` as bounded recomputation with a true abstention, `reduction_quality@1` with sink/failure-rule/reader, the `maxFacts` contradiction resolved toward truncate-after-reducers (A9 rewritten), a 14th declaration field `noveltyWindow`, six able-to-fail fixtures (A18) and Discharge D4. Status stays **accepted** — this is an amendment, not a re-acceptance; the return loop remains the check.* *(Prior line for history: draft 2026-08-22 — the Phase-3 / F5 module-contract RFC. Drafted while 2c is)*
   implementing and 2d awaited independent acceptance (2d has since been accepted with its 18
   ids unchanged — Depends-on, §7, changelog); **implementation of this RFC is sequenced
   after both collector waves land** so every eligibility row binds a compiled projection id, per
@@ -195,6 +195,14 @@ licence to invent. The schema lands as `ModuleDeclaration` in
 13. **`rendering`** — deterministic rendering is **normative** (R5): registered per-projection
     renderers produce the sealed sentences; the optional LLM boundary is §6.3. Provider-off
     output is byte-identical in claims.
+14. **`noveltyWindow`** *(added by the reducer amendment 2026-08-23)* — a non-negative integer,
+    the number of ancestor nodes §3a.4's novelty reducer compares against on the current branch.
+    Default `3`; `0` disables novelty for that module and is the correct declaration for modules
+    whose whole job is the current staged moment (`rules_floor`, `blunder_prevention`). The field
+    is part of the closed declaration shape, so a module that omits it is a compile failure
+    rather than a silent default. **This takes `ModuleDeclaration` from thirteen fields to
+    fourteen** — the shipped checkpoint (`2a54d05`) must widen the type and its registry
+    completeness check.
 
 ### §2 — Timing vocabulary (the D881 repair)
 
@@ -261,8 +269,9 @@ research policy. Per module, at a decision point:
       canonical serialization of each fact's retained operands, lexicographic. The final key is
       total by construction: two facts with identical projection id, subject square and operand
       bytes are the same fact.
-3. **Budget**: keep the top `maxFacts`. Unused budget stays empty. Empty result renders the
-   module's `emptyBehavior`.
+3. **Reduce, then backstop** — the single pipeline of §3a. Reducers run after ordering; the
+   numeric budget is the last step and a **backstop**, never the reduction mechanism (D906).
+   Unused budget stays empty. Empty result renders the module's `emptyBehavior`.
 
 **The R3 boundary, stated carefully.** R3/D660 bars the corpus-global 294× top-two lift
 ordering from being *policy*: *"the preset algebra filters modules, module eligibility filters
@@ -290,6 +299,178 @@ legal moves would not have"* — **denominator always shown, never on the pre-co
 (ruling quoted). Registry invariant: an avoidance row may only bind to a module none of whose
 timings is `pre_commit` or `at_commit`. In this RFC that is `postcommit_nudge` and
 `review_map` only.
+
+### §3a — The semantic reducers (reducer amendment, 2026-08-23)
+
+**Why this section exists.** The owner's D906 ruling demoted budgets from mechanism to backstop
+and named three semantic reducers as the mechanism. The accepted text named them and defined
+none, and codex returned the RFC on buildability (`planning/learner-modules/implementation-return.md`,
+commit `c4d3c8c`) — correctly: an implementer cannot infer a cross-projection identity, a
+subsumption relation, a novelty window or an instrument sink, and a green fixture would not
+reveal which contract shipped. **The debt was the author's.** This section discharges it. Nothing
+here weakens a reducer into a cap; that is the shape the ruling rejected.
+
+#### 3a.1 One pipeline, replacing the contradictory clauses
+
+`reduceModulePacket@1` — the single ordered pipeline. Every step is total, deterministic and
+pure; each names its input and output type, and no step may widen exactness, grounding, answer
+content or abstention relative to its input (the `EVIDENCE_DERIVATION_WIDENS` discipline,
+`evidence-contract.ts:499`, applied to reduction as well as derivation).
+
+| # | step | symbol | in → out | abstention |
+|---:|---|---|---|---|
+| 1 | Admission (§3 step 1) | `admitModuleFacts` | eligible facts → admitted facts | empty set is honest-empty, not failure |
+| 2 | Deterministic ordering (§3 step 2) | `orderAdmittedFacts` | admitted → ordered | total by construction |
+| 3 | **Exact cross-projection dedup** | `dedupeByFactIdentity` | ordered → ordered | no registered class ⇒ identity is the fact's own key; nothing collapses |
+| 4 | **Declared subsumption** | `applyDeclaredSubsumption` | ordered → ordered | no declared pair ⇒ unrelated; nothing drops |
+| 5 | **Bounded per-position novelty** | `applyPositionNovelty` | ordered → ordered | history unavailable ⇒ **abstain**: the step is identity and records its abstention |
+| 6 | **Backstop + overflow observation** | `applyBackstop` | ordered → delivered packet | over-backstop emits the §3a.5 observation, then keeps the top `maxFacts` |
+
+**The contradiction is resolved in favour of §3 step 3's reading, and A9 is rewritten.** The
+drafted A9 ("facts beyond `maxFacts` are never admitted") cannot coexist with the ruling: if the
+cap cut at admission, the post-reducer set could never be observed to exceed the backstop, and
+the instrument the owner ordered could never fire. It also contradicted A7 arm (c), which already
+pins lift deciding *"which admitted facts fill the scarce slots"* — the truncation reading was
+already load-bearing in the criteria. So: **facts are admitted on semantics alone, reducers run,
+and only then does the backstop truncate — loudly.** Unused budget still stays empty (step 6
+never back-fills); "never admitted" survives only as the rule that a fact outside `accepts` is
+never admitted **at any budget** (A7 arm (a)).
+
+Reducer versioning: `reducerVersion` is a single frozen catalog-local literal `"module-reducers@1"`
+covering steps 3–5 together, carried in every overflow observation (§3a.5). A change to any
+relation table or window bumps it in a changelog'd spec change — the `module-lift@1` governance
+idiom (§3 step 2.3), for the same D368 reason.
+
+#### 3a.2 Exact cross-projection dedup — `factIdentity@1`
+
+**Why `observationIdentity` cannot serve.** `structure.ts:591` accepts only
+`StructuralObservation` and keys on the observation's own JSON; it is unreachable for
+event-shaped, reading-shaped or source-record-shaped facts, and — the decisive defect — a
+projection id is part of no identity it computes, so the *same* fact surfaced through two
+projections is two facts by construction. That is exactly the duplicate a learner sees.
+
+**The identity.** A fact's identity is the pair `(equivalenceClass, subjectKey)`:
+
+- `equivalenceClass` — the fact's **registered class** from the closed table in §3a.3, or, when
+  the projection id appears in no registered class, the projection id itself. Absent registration
+  means *unrelated*: two facts never collapse by inference.
+- `subjectKey` — the canonical serialization of the fact's **retained operands restricted to the
+  class's declared compared fields** (§3a.3 column 3), in the shipped canonicalization
+  (`canonicalizeJson`), with the mover-relative colour retained. Where a class declares no
+  compared fields, the whole retained-operand serialization is used, which is the §3 step 2.4 key
+  already pinned as total.
+
+`dedupeByFactIdentity` keeps the **first** fact of each identity in the §3 step 2 order, which is
+the most conservative representative by construction — exactness class ascends `exact` before
+`convention` before `measured` before `authored`, so the retained fact never widens grounding
+relative to the ones it absorbs. Dropped duplicates are not counted as overflow (they were never
+distinct facts).
+
+**Worked example (must collapse).** `rules.structural.predicate.isolated_pawn` and
+`rules.structural.reading.isolated_pawn` over the same position, same colour, same file: the
+predicate arm reports the feature matched, the reading arm enumerates it. Both are the shipped
+`isolated_pawn` structural feature (`evidence-catalog.ts:111-112` build the two id families from
+one `STRUCTURAL_FEATURE_KINDS` list). Registered class `structural.isolated_pawn`, compared
+fields `{color, file}` ⇒ one identity ⇒ the learner sees one fact.
+
+**Hard negative (must NOT collapse).** `rules.structural.event.isolated_pawn` ("your move left
+this pawn isolated") and `derived.semantic_avoidance.isolated_pawn` ("you avoided leaving a pawn
+isolated; N% of your legal moves would not have"). The avoidance families are generated from the
+*same* `STRUCTURAL_EVENT_FAMILIES` list (`evidence-catalog.ts:124`), so every naive
+family-name-based identity collapses them — and collapsing them inverts the fact's polarity in
+front of a learner. They are in **different** registered classes, permanently, and A18 fixture (f)
+pins it.
+
+#### 3a.3 Declared subsumption — `SUBSUMPTION@1`
+
+Subsumption is a **closed, directed, declared** table living beside the policy in the catalogue
+(`packages/runtime/src/module-reducers.ts`, new), never inferred from renderer prose and never
+from a family name. Each row: `{ specific, general, comparedFields, groundIsRules }`. A row is
+admissible only when the entailment is a **rules fact** — `groundIsRules: true` is checked by a
+registry invariant, so no row may encode a strategic judgement (law 8; the return's own warning
+that inferring entailment from prose "would manufacture chess semantics").
+
+`applyDeclaredSubsumption` drops the `general` fact **only when** a `specific` fact is present in
+the same ordered set *and* their `comparedFields` serializations are equal. The relation is
+applied once, not transitively closed — a transitive chain must be declared row by row, so the
+table is auditable by reading it.
+
+**Worked example (must subsume).** `{ specific: "rules.transition.event.checkmate", general:
+"rules.tactic.event.check", comparedFields: ["nodeId", "moverColor"], groundIsRules: true }` —
+a checkmate *is* a check by the rules of chess; showing "this move gives check" beside "this move
+is checkmate" is a duplicate, not a second fact.
+
+**Hard negative (must NOT subsume).** `rules.structural.event.passed_pawn` and
+`rules.structural.event.isolated_pawn` on the same pawn. They co-occur constantly and correlate
+strongly, and neither entails the other — a passed pawn need not be isolated, an isolated pawn
+need not be passed. No row exists, so nothing drops; A18 fixture (b) asserts the pair survives
+**and** asserts asymmetry (declaring `A ⊃ B` must never drop `A` when only `B` is present).
+
+#### 3a.4 Bounded per-position novelty — `positionNovelty@1`
+
+**No new persistence, and no process-local memory.** The return correctly refuses novelty
+degenerating into in-process state. It does not need to: §A7 makes selection **deterministic and
+byte-identical across runs**, so the packets already delivered on this branch are *recomputable*
+from the persisted run state. Novelty is therefore a projection of the event log, the repo's
+existing idiom, and this RFC's claim stays `none` — no run-schema lane, no migration.
+
+- **Key**: `(branchId, nodeId, factIdentity)` — `factIdentity` from §3a.2.
+- **Window**: the `noveltyWindow` most recent **ancestor** nodes of the current node on the
+  current branch, nearest-first. `noveltyWindow` is a per-module declaration field (14th field;
+  §2 gains it), default `3`, `0` disables novelty for that module.
+- **Source of history**: recomputation of steps 1–4 (admission → ordering → dedup → subsumption)
+  over each ancestor node in the window. **Steps 1–4 only** — novelty never recurses into
+  novelty, which makes the definition well-founded and each ancestor a single bounded pass.
+- **Ordering**: ancestor path order, nearest-first; ties impossible (a node has one parent per
+  branch).
+- **Effect**: a fact whose identity appears in any recomputed ancestor packet within the window is
+  dropped. Rewind and fork are handled by construction — the ancestor path is the *current
+  branch's*, so a forked branch has its own history and a rewound node's descendants are not
+  ancestors.
+- **Honest absence, and the one true abstention**: when the run state needed to recompute an
+  ancestor is unavailable — the module is delivered outside a run, or the branch's ancestor nodes
+  cannot be read — `applyPositionNovelty` is the **identity function** and records
+  `noveltyAbstained: true` on the packet. It never silently behaves as if history were empty
+  (which would claim every fact is novel) and never substitutes process memory. First packet on a
+  branch: the window is simply shorter than `noveltyWindow`; that is a short window, **not**
+  absence, and `noveltyAbstained` stays `false`.
+
+**Durable cross-run novelty is explicitly out of scope** and has a named owner: Discharge D4.
+
+#### 3a.5 The overflow instrument — `reduction_quality@1`
+
+A typed observation, emitted by step 6 when `afterReducers > backstop`:
+
+```ts
+type ReductionQualityObservation = {
+  readonly kind: "reduction_quality@1";
+  readonly moduleId: ModuleId;
+  readonly admitted: number;       // after step 1
+  readonly afterReducers: number;  // after step 5
+  readonly backstop: number;       // the module's maxFacts
+  readonly dropped: number;        // afterReducers - backstop, always > 0 when emitted
+  readonly reducerVersion: "module-reducers@1";
+  readonly noveltyAbstained: boolean;
+};
+```
+
+- **Sink**: a `ReductionQualityRecorder` interface with two shipped implementations — the
+  production default `NULL_RECORDER` (a no-op) and `ArrayRecorder` used by fixtures and the
+  corpus harness. The recorder is injected at selector construction; it is **not** a run event
+  and moves no schema byte.
+- **Transaction/failure behavior**: emission is outside any transaction and wrapped so that a
+  throwing recorder is swallowed after being counted — **an instrument failure never widens
+  assistance, never changes packet content, and never fails a chess move** (the return's
+  requirement, stated as the implementation rule).
+- **Reader**: `make reduction-pressure` — runs the selector across the corpus with `ArrayRecorder`
+  installed and reports, per module, the count and distribution of overflow observations. This is
+  the measurement the ruling asked for: *cap pressure is measured and the reducers improve where
+  the pressure is, never tuned by feel.* Backstop values stay claude/implementer-adjustable
+  without ceremony; the pressure report is what justifies a change.
+
+**Honest scope note.** This instrument measures pressure **over the corpus**, not per learner over
+time. That is the right place for tuning reducers and needs no persistence; durable per-learner
+capture is Discharge D4's, owned by `longitudinal-store`.
 
 ### §4 — The eleven modules
 
@@ -758,8 +939,14 @@ unit and total and match the tables they verify.
    numerator/denominator is refused at admission; the rendered sentence contains the
    denominator; the registry invariant rejects (at compile) an avoidance row bound to a
    module with a `pre_commit` or `at_commit` timing.
-9. **A9 — Budgets.** Facts beyond `maxFacts` are never admitted (unused budget empty, not
-   back-filled); a deterministic-renderer output exceeding `maxWords` fails its fixture;
+9. **A9 — Backstops, rewritten by the reducer amendment (2026-08-23).** The drafted text
+   ("facts beyond `maxFacts` are never admitted") is **withdrawn**: it contradicted A7 arm (c)
+   and made the D906 instrument unobservable (§3a.1). The criterion is now: admission is on
+   semantics alone; reducers run; **only then** does `applyBackstop` truncate, and a
+   post-reducer set exceeding `maxFacts` emits exactly one `reduction_quality@1` observation
+   before truncating (silent truncation fails the fixture). Unused budget stays empty, never
+   back-filled. A fact outside `accepts` is never admitted **at any budget** (A7 arm (a)
+   unchanged). A deterministic-renderer output exceeding `maxWords` fails its fixture;
    marks/arrows beyond caps are not drawn.
 10. **A10 — One board-adjacent cue.** Exactly one module declares `board_adjacent`; a test
     flipping a second module's seat class fails the registry invariant.
@@ -794,6 +981,32 @@ unit and total and match the tables they verify.
     carrying the PV fails the per-stage compiler refusal; a stage request outside an open
     disclosure boundary renders the module's declared empty state, never a deferred reveal.
 
+18. **A18 — The reducers, six able-to-fail fixtures (reducer amendment).** Each arm names the
+    defect it catches; all six are red against any pipeline that omits the step.
+    **(a) Cross-projection duplicate**: a position carrying both
+    `rules.structural.predicate.isolated_pawn` and `rules.structural.reading.isolated_pawn`
+    (same colour, same file) delivers **one** fact. Red against a selector keying on projection
+    id — i.e. against `observationIdentity` used as-is.
+    **(b) Asymmetric subsumption**: with the checkmate/check row declared, a checkmate move's
+    packet contains no separate check fact; and the reverse input (check present, checkmate
+    absent) retains the check — proving the relation is directed, not a symmetric merge. A
+    control asserts `passed_pawn` + `isolated_pawn` on one pawn **both survive** (no row ⇒
+    unrelated).
+    **(c) Unavailable history**: with the ancestor path unreadable, the packet is byte-identical
+    to the no-novelty packet **and** carries `noveltyAbstained: true`. Red against an
+    implementation that treats missing history as "everything is novel".
+    **(d) Novelty-window boundary**: a fact repeated at ancestor distance `noveltyWindow` is
+    dropped; the same fact at distance `noveltyWindow + 1` survives. Pins the bound as declared
+    rather than incidental.
+    **(e) Overflow emission**: a module whose post-reducer set exceeds `maxFacts` emits exactly
+    one `reduction_quality@1` observation whose `dropped` equals `afterReducers - backstop`, and
+    a throwing recorder changes neither the packet bytes nor the move outcome.
+    **(f) The polarity control** — *the arm that must never go green by accident*:
+    `rules.structural.event.isolated_pawn` and `derived.semantic_avoidance.isolated_pawn` in one
+    packet are **not** collapsed. Both are generated from the same family list
+    (`evidence-catalog.ts:124`), so this fails against every family-name-based identity — and
+    collapsing them would invert a fact's polarity in front of a learner.
+
 ## Discharges
 
 | id | the obligation | owner | recorded when discharged | discharged |
@@ -801,6 +1014,7 @@ unit and total and match the tables they verify.
 | D1 | Preset/workflow activation of the ordinary modules — this RFC registers production modules with no preset layer by scope; without Phase 5 they are reachable only by fixtures and the explicit inspector/review surfaces, and the chain's last two links stay open | `planning/evidence-foundation-ux/plan.md` | the Phase-5 preset RFC's landing commit | |
 | D2 | Board-protected composition seating the declared seat classes across viewports — the D718/D841 rebuild; module contracts make the play-column placement non-conformant but only Phase 4 relocates it | `planning/evidence-foundation-ux/plan.md` | the Phase-4 composition RFC's landing commit | |
 | D3 | The grade-family projection + versioned per-context convention document ([[D879]]) so the two declared-awaiting rows compile; praise-class refusal and never-rating-conditioned carried into that RFC verbatim | `planning/evidence-foundation-ux/plan.md` | the grade-family RFC's landing commit | |
+| D4 | **Durable novelty and durable reduction pressure** (reducer amendment 2026-08-23) — §3a.4's novelty is bounded to the current branch's ancestor path by recomputation, and §3a.5's instrument measures pressure over the corpus, not per learner over time. Cross-run/cross-session novelty and durable pressure capture need a persisted delivery record, which is `longitudinal-store`'s grain (accepted; it owns durable learner-facing projections and holds its own migration position). This RFC deliberately claims none and defers both | longitudinal-store | the longitudinal-store implementation commit that adds a module-delivery projection | |
 
 The unusual honesty note, stated rather than buried: until D1 discharges, the modules are
 production-registered but preset-inert. Concretely — the day this RFC lands, **nothing new
@@ -826,6 +1040,12 @@ RFCs from ever archiving around it.
    reduction-quality event rather than silently truncating, so cap pressure is measured and
    the reducers improve where the pressure is — never tuned by feel. Backstop values are
    claude/implementer-adjustable without ceremony; the *mechanism* question is closed.
+   **SPECIFIED 2026-08-23 (reducer amendment).** This clause named the reducers and defined
+   none of them; codex returned the RFC on buildability (`c4d3c8c`) and was right to. §3a now
+   carries the executable contracts — one pipeline, `factIdentity@1`, the closed declared
+   `SUBSUMPTION@1` table, `positionNovelty@1` as a bounded recomputation with a true abstention,
+   and `reduction_quality@1` with its sink, failure rule and reader — plus A18's six able-to-fail
+   fixtures. The obligation is discharged in text; the return loop remains the check.
 2. **Threat radar's pre-commit arm is the one place this draft exceeds a literal ruling**
    (sharpened in cross-review — the P3(c) pattern, named rather than presupposed): O4
    pre-commit-authorizes exactly two things — requested exact sight and Support-preset
@@ -870,6 +1090,36 @@ this document's to rewrite).
 
 ## Changelog
 
+- 2026-08-23: **reducer amendment, clearing codex's buildability return `c4d3c8c`**
+  (`planning/learner-modules/implementation-return.md`). The return was correct and the debt was
+  the author's: the D906 ruling's three semantic reducers were named and none was defined, and
+  §3 step 3 ("keep the top `maxFacts`") contradicted A9 ("never admitted") and OQ1 ("rather than
+  silently truncating") — three readings a green fixture could not distinguish. Added **§3a**:
+  one ordered pipeline (`reduceModulePacket@1`, six total/deterministic steps, none widening
+  under the `EVIDENCE_DERIVATION_WIDENS` discipline); **`factIdentity@1`** as
+  `(equivalenceClass, subjectKey)` with unregistered ⇒ unrelated, stating why
+  `observationIdentity` (`structure.ts:591`) cannot serve — it accepts only
+  `StructuralObservation` and keys on no projection id, so one fact through two projections is
+  two facts by construction; the closed directed **`SUBSUMPTION@1`** table with a
+  `groundIsRules` registry invariant so no row can encode a strategic judgement (law 8);
+  **`positionNovelty@1`** as a bounded *recomputation* over the current branch's ancestor path —
+  no new persistence, no process-local memory, and a true abstention (`noveltyAbstained`) when
+  history is unreadable rather than the dishonest "everything is novel"; and
+  **`reduction_quality@1`** with its typed fields, injected `ReductionQualityRecorder` sink,
+  swallow-after-count failure rule (an instrument failure never widens assistance or fails a
+  move) and its reader `make reduction-pressure`. **The `maxFacts` contradiction is resolved in
+  favour of truncate-after-reducers**, because a cap cutting at admission makes the ordered
+  instrument unobservable and because A7 arm (c) already pinned lift filling scarce slots; **A9
+  is rewritten** accordingly and "never admitted" survives only as the outside-`accepts` rule.
+  Declaration gains a 14th field, `noveltyWindow` (default 3; `0` for `rules_floor` and
+  `blunder_prevention`), so the shipped `2a54d05` checkpoint must widen its type and
+  completeness check. New **A18** carries six able-to-fail fixtures, including the polarity
+  control that keeps `rules.structural.event.isolated_pawn` and
+  `derived.semantic_avoidance.isolated_pawn` distinct — both are generated from the same family
+  list (`evidence-catalog.ts:124`), so every family-name-based identity fails it and collapsing
+  them would invert a fact's polarity in front of a learner. New **Discharge D4** defers durable
+  cross-run novelty and durable pressure capture to `longitudinal-store`. Claims unchanged:
+  **none**.
 - 2026-08-22: adversarial cross-review (independent), at HEAD `3a06349` (manifest tuple
   unchanged: 25/146/25/182 core, 40/40/15/1 semantic, digest `fa700584…`; ledger head verified
   D902; all cited symbols re-verified — `position-evidence.ts:25`, `guidance.ts:60`,
