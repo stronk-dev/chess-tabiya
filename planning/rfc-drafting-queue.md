@@ -1157,3 +1157,10 @@ pack field.
   clauses on validation and confirmation while leaving the third population unread. Routed to the
   evidence-move-selector lane beside [[D1320]]: record this mechanism's refusal, then ask the owner
   whether the 1.0 non-Maia goal is refused or receives a materially different research family.
+
+- **[[D1325]]** — the scheduler's two defects mask each other; a partial repair sends every mastered
+  root from 35 days to 1. Owned by `rfc/return-scheduling.md` criteria 1–3.
+- **[[D1326]]** — the two owner asks in this lane never had ledger rows, so the lane was invisible
+  to every instrument until asked a third time. Rows landed retroactively.
+- **[[D1327]]** — `schedules.variant` lifted for the scheduler read; `variantOf` stays the catalogue
+  successor. Narrows [[D1035]].
