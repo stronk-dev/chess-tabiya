@@ -407,7 +407,7 @@ Spec (full detail in `planning/platform-alignment/refused-vs-asked.md`):
   On day one this prints `UCI_Chess960` (`capabilities.ts:133`) — that is the acceptance test.
 - A **cross-join** emitting `OWNER-CONTRADICTION: D327 × capabilities.ts:133` when a refusal
   forecloses a standing owner ask.
-- **Scope now includes `design/research/` verdicts** ([[D1315]]): a research dossier refuting its own
+- **Scope now includes `design/research/` verdicts** ([[D1320]]): a research dossier refuting its own
   hypothesis is a **refusal**, and if it forecloses a standing owner ask it needs a `ruledBy` like
   any other. The bot dossiers are the proving case — they refuse the five style atoms *"when used as
   a global one-ply Maia candidate weight"*, which does **not** cover the non-Maia base the owner

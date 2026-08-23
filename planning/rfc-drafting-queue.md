@@ -1143,7 +1143,7 @@ pack field.
   three D1093 happened to enumerate. Three derivations stalled on the enumeration; one the owner
   overruled by hand. Owner-vetoable. Unblocks training-methods.
 
-- **[[D1315]]** — research refusals are unruled refusals; the bot ones are mechanism-scoped and do
+- **[[D1320]]** — research refusals are unruled refusals; the bot ones are mechanism-scoped and do
   **not** bind the non-Maia base the owner funded. `rfc/evidence-move-selector.md` owes a section
   stating which prior refusals bind it and which do not; `make refusal-index` extends to
   `design/research/` verdicts.
