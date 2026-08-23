@@ -668,6 +668,8 @@ contradicted.
 
 ## Acceptance criteria
 
+> **Cross-review 2026-08-23.** [[D1385]] — `evaluatedAlternatives` cannot differ from `legalAlternatives` on the main path, and the unevaluated case selects two families the complete population rejects. [[D1386]] — the selector's inline event closure composes eight families where `localSemanticEvents` composes ten. [[D1387]] — alternative events are never checked against the edge they were supplied for. [[D1388]] — the reported `selectionCacheKey` positional defect does not exist.
+
 1. **The population is never an argument.** A fixture attempting to supply `candidates`,
    `legalMoves`, `afterFen`, or any event or reading to the packet compiler **fails to type-check**
    (`.typecheck.ts`), and no runtime predicate is the enforcement. *Wrong implementation that would
