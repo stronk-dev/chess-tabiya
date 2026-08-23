@@ -7002,3 +7002,20 @@ repaired constructor registry must repeat the same measurement before implementa
 
 **Next:** land the disposable harness, run the binding arms from a clean extraction, publish the
 research dossier and route the measured write schedule back into the RFC author round.
+
+## 2026-08-23 — D1405 smoke run corrected the byte instrument before binding
+
+**What happened:** the first shared-tree smoke arm completed but was discarded as required. It
+exposed that the draft harness priced one stored reference per emitted alternative event, while
+the RFC schema stores one decision reference per projection-family row. That would overstate
+storage and answer a different question.
+
+**What changed:** the preregistration now separates the complete event population (count plus
+canonical digest, which proves the compiler workload) from the actual store projection (one
+opportunity/occurrence decision ref per family row). The four fixed timing arms are also executed
+sequentially and write separate receipts before a pure aggregation pass, so a long bulk arm cannot
+erase completed evidence. Population sizes, the 500 ms boundary and the 20→80 shape gate did not
+move.
+
+**Next:** commit the corrected instrument, then generate all four quotable receipts from a clean
+extraction of that commit.

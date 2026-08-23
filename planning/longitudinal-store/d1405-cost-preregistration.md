@@ -50,12 +50,22 @@ For every played decision `(parentFen, uci, fen)`:
 1. run `localSemanticEvents(parentFen, uci, fen)` for the played edge;
 2. enumerate `legalAlternativeEdges(parentFen, uci)`;
 3. run `localSemanticEvents` once for every alternative edge;
-4. retain canonical occurrence refs `{decisionId, projectionId, version, sign, eventId}` for every
-   emitted event, sorted by those fields;
-5. serialize refs with `JSON.stringify` and count UTF-8 bytes.
+4. for reproducibility, sort canonical event-occurrence refs
+   `{decisionId, projectionId, version, sign, eventId}` within each decision and retain the total
+   count plus a digest over the ordered per-decision partitions; the raw alternative-event list is
+   **not** the store shape;
+5. project the RFC's actual row grain `(projectionId, version, phase, decisionClass=game)`: one
+   opportunity ref per decision where any population edge exhibits the family, and one occurrence
+   ref where the played edge does. Canonically sort those decision refs, serialize the two arrays
+   with `JSON.stringify`, and count their UTF-8 bytes.
 
 No engine, provider, network, database, LLM, avoidance relation or recorded-path constructor is
 included. Exceptions fail the run rather than becoming empty events.
+
+**Pre-binding instrument correction.** A discarded shared-tree smoke run initially counted one
+stored ref per emitted alternative event. That is not the RFC schema: the schema stores a decision
+ref once per family row. No smoke timing or byte result is evidence. The binding arms report both
+the complete event-population count/digest and the deduplicated store-shaped row/ref bytes above.
 
 For each native arm, also compute the exact cumulative replay counts implied by invoking this
 whole-prefix projection after every mutation: prefix decisions are `N(N+1)/2`; evaluated-edge
