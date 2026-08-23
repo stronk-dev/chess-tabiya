@@ -713,3 +713,28 @@ rather than to the moves. Rule with an answer once it exists.
   (the learner's own time, already in `Node.createdAt` deltas, retroactive over every run), and
   predicted (no corpus, law-8-refused). **No arm of the owner's stated idea needs prediction.**
   The time-control derivation's arm (a) is reshaped accordingly.
+
+### Hint-distance research findings 2026-08-23 (codex, on ruling [[D1061]])
+
+Codex took the hint-distance ruling to research within the hour and returned findings that
+**qualify the ruling** — routed here so they reach the RFC author rather than sitting unlaned:
+
+- **[[D1069]] — the ruled FOUR-rung hint distance contradicts the accepted THREE-stage Guided Hint
+  contract.** This is a live conflict between an owner ruling and accepted text; it must be
+  resolved in the drafting, not discovered during implementation. Options belong in the RFC's open
+  questions with the trade-off stated, not decided silently.
+- **[[D1064]] — "run a bestline collection pass" names no writable collection path.** Claude's
+  instruction was unbuildable as written; the RFC must name the path or the pass cannot start.
+- **[[D1065]] — a bestline is NOT the four-level hint primitive**; it needs a *selected semantic
+  event*, so the disclosure ladder is not simply a truncation of a principal variation.
+- **[[D1068]] — observed-run sequence identities cannot be reused on an engine PV** without
+  laundering their source, which is the [[D982]] provenance class again.
+- **[[D1070]] — a stageable event is still not necessarily a useful hint target** (measured over 64
+  fixed depths).
+- **[[D1067]] — registered basic multi-edge tactics have constructors but no path compiler or
+  production site**; adjacent, routed here because the hint ladder would consume them.
+
+### Campaign run-state finding
+
+- **[[D1063]]** — `campaignRunState` cannot derive its declared `"abandoned"` status from the
+  authoritative event log. Routed to the `campaign-core` implementation lane.
