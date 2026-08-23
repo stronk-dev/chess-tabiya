@@ -36,7 +36,7 @@ describe("bounded tactical authorities", () => {
   });
 
   it("abstains on a pass while in check and clears en-passant in the pass convention", () => {
-    expect(threats("4k3/8/8/8/8/8/4r3/4K3 w - - 0 1")).toEqual({ kind: "abstained", reason: "pass_while_in_check", conventionId: "threat@1" });
+    expect(threats("4k3/8/8/8/8/8/4r3/4K3 w - - 0 1")).toEqual({ kind: "abstained", reason: "pass_while_in_check", conventionId: "threat@1", threats: [] });
     const value = threats("4k3/8/8/3pP3/8/8/8/4K3 w - d6 0 1");
     expect(value.kind).toBe("threats");
     if (value.kind === "threats") expect(value.threats.some((threat) => threat.threatenedMove === "e5d6")).toBe(false);

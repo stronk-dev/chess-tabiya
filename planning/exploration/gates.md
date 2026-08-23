@@ -105,6 +105,15 @@ rewind adds value**.
   (permutation p .677), and the proposed residual direction holds in only 1/3 bands. Salience-shaped
   error is excluded from the 1.0 bot roster. This does not compare complete branches or establish
   perceived humanness, so H5's statement/status/verdict and C5 remain unchanged.
+- **Evidence-head representation screen passes 2026-08-23**
+  (`design/research/evidence-to-move-head-screen.md`, D1162/D1271). On 268 held-out positions and
+  9,044 legal candidates, evidence-only beats uniform expected move match by
+  **0.033734 [0.024141, 0.045075]** and evidence+engine beats engine-only by
+  **0.018734 [0.009559, 0.029689]**, with position-level bootstrap and a positive direction in all
+  three bands. Secondary cross-entropy, top-choice and safety readings are mixed, and the separate
+  Maia context control still abstains. This funds a second preregistered population and multi-ply
+  coherence study; it does not compare believable branches or license human-like/Elo/personality
+  language, so H5's status/verdict and C5 remain unchanged.
 
 ## Kill criteria
 

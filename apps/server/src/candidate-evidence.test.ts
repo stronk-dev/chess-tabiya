@@ -58,6 +58,21 @@ describe("candidate evidence adapter", () => {
     expect(EVIDENCE_MANIFEST.bindings.filter((binding) => binding.projection.id === projection.id).map((binding) => binding.consumer.id)).toEqual(["opponent.selection"]);
   });
 
+  it("retains the declared empty threat collection when a candidate gives check", () => {
+    const vector = candidateFeatureVector({
+      beforeFen: "4k3/8/8/8/8/8/Q7/4K3 w - - 0 1",
+      engine: ENGINE,
+      candidates: [{ moveUci: "a2e6", scoreCp: 100 }],
+    });
+    const threat = vector.candidates[0]!.results.find((result) => result.source.id === "rules.tactic.consequence.threat");
+    expect(threat?.payload).toEqual({
+      kind: "abstained",
+      reason: "pass_while_in_check",
+      conventionId: "threat@1",
+      threats: [],
+    });
+  });
+
   it("refuses illegal, duplicate, unbounded, empty, and unevaluated candidates", () => {
     const { searchBound: _searchBound, ...unboundedEngine } = ENGINE;
     expect(() => candidateFeatureVector({ beforeFen: START, engine: ENGINE, candidates: [] })).toThrow(/at least one/u);

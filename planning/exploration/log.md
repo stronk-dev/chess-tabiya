@@ -6731,3 +6731,25 @@ green before the concurrent RFC authoring pass began, and a 1,105-row work index
 **Next:** archived references are diagnostic history, not owners. New work must continue to route
 through an active RFC or living planning document, and every future archive transition must update
 the ledger and log in the same commit.
+
+## 2026-08-23 — Registered evidence passed its first move-distribution screen
+
+**What landed:** the preregistered D1162 evidence-to-move screen ran over 268 held-out positions and
+all 9,044 captured legal candidates. Evidence-only beats uniform expected human-move match by
+0.033734 [0.024141, 0.045075]; evidence+engine beats engine-only by 0.018734
+[0.009559, 0.029689]. Coverage is 100% and both directions hold in every measured band.
+
+**What changed:** the first attractive pass was not accepted. Audit found a mean-square/variance
+error and a position-clustering error in the instrument; both were fixed without changing the
+feature plane or verdict rule, and the run was repeated. Construction also exposed a production
+threat-abstention payload that violated its own manifest operands; the producer now retains the
+declared empty collection and a sealed candidate-vector fixture proves it.
+
+**Verification:** corrected D1162 fixed-population tests pass 2/2 in 278.7 s; the separate D1163
+Maia context replay passes 2/2 on the same four digests; focused tactics and candidate-evidence
+tests pass 19/19. The corrected result supersedes the provisional output.
+
+**Next:** this is a representation pass only. Secondary cross-entropy, top-choice and engine-safety
+readings are mixed, every evidence arm selected the maximum ridge penalty, and H5/C5 remain unmet.
+Run the already-required second preregistered population, then multi-ply coherence, before any
+production, human-like, Elo or personality claim.

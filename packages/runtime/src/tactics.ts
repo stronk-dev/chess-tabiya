@@ -982,7 +982,7 @@ export function forkSurvivesReply(event: DoubleAttackEvent, breadth: ReplyBreadt
 }
 
 export type ThreatResult =
-  | { readonly kind: "abstained"; readonly reason: "pass_while_in_check"; readonly conventionId: typeof THREAT_CONVENTION }
+  | { readonly kind: "abstained"; readonly reason: "pass_while_in_check"; readonly conventionId: typeof THREAT_CONVENTION; readonly threats: readonly [] }
   | { readonly kind: "threats"; readonly conventionId: typeof THREAT_CONVENTION; readonly threats: readonly Threat[] };
 
 export interface Threat {
@@ -995,7 +995,7 @@ export interface Threat {
 
 export function threats(fen: string): ThreatResult {
   const position = positionFromFen(fen);
-  if (position.isCheck()) return Object.freeze({ kind: "abstained", reason: "pass_while_in_check", conventionId: THREAT_CONVENTION });
+  if (position.isCheck()) return Object.freeze({ kind: "abstained", reason: "pass_while_in_check", conventionId: THREAT_CONVENTION, threats: Object.freeze([] as const) });
   position.turn = opposite(position.turn);
   position.epSquare = undefined;
   const values: Threat[] = [];
