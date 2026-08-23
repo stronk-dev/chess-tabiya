@@ -651,3 +651,21 @@ ask**. The audit owes an instrument proposal alongside the list.
   Tier 2. The Tier-1 half is an owner fork the derivation names as Gap 1.
 - **[[D1035]]** — D327's storage premise refuted (name collision) and its importer count restated
   (24, not 13); five citation drifts corrected.
+
+## Time controls — lane opened 2026-08-23 by owner ruling [[D1041]]
+
+Both arms ruled in: **simulated pressure in drills** (the owner's 2026-08-16 idea — what a great
+move costs under 10+0, without a clock running during rehearsal) **and real clocks in play**
+(Just Play, matches, campaign encounters). Rows [[D330]]/[[D355]]/[[D357]]/[[D364]] consolidate
+here. Derivation commissioned; carry into it: `clockState` stops being a zero-reader passthrough;
+bots need move-time models (and `bot-policy:638`'s artificial-delay refusal is scoped to
+guard-disclosure honesty, not to clocks); rating interacts with timed play; campaign gains a timed
+encounter class.
+
+## Famous-game packs — licence research commissioned 2026-08-23 by owner ruling [[D1043]]
+
+The masters DB is refused at `capabilities.ts:159` on *"licence questions remain unresolved"*.
+Ruling: resolve it properly. Commissioned check covers the Lichess masters-database terms and
+public-domain historical sources, against the prior that individual game scores are **facts, not
+copyrightable works**, and that any restriction attaches to a database compilation or API terms
+rather than to the moves. Rule with an answer once it exists.

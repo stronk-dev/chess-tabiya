@@ -112,6 +112,39 @@ changelogs — each caught something that changes how you implement.
 
 Neither RFC claims anything versioned and neither proposed ledger rows.
 
+## 0-UNBLOCKS-CAMPAIGN. [[D1040]] — the unlocks fork is RULED; `campaign-core`'s blocker clears
+
+Owner ruling 2026-08-23: **progression is unlocked by PLAYING; WINNING gates the PRESTIGE layer
+only.** `campaign-core.md:490`'s Discharge-D3 blocker is discharged.
+
+- **Core progression is unchanged** — §4.1 already grants a node's reward on ANY verdict after its
+  cross-review, which is exactly this ruling. Do not add a win gate to the core path.
+- **Winning now has a home**: the prestige layer (army building, cosmetic tiers, [[D893]]'s
+  *"nice prestige reward"*) requires an actual win. That is the achievement axis; it must never
+  gate the learning path, consistent with [[D945]]'s earned rewinds existing so a weaker player
+  can finish a campaign.
+- The RFC amendment is claude's and lands shortly; **you may continue the core implementation now**
+  — nothing in the ruled shape contradicts what you have built.
+
+## 0-BALANCE-LAW. [[D1042]] — the variant balance law is SURFACE-SCOPED, and it changes the variant lane
+
+Owner ruling 2026-08-23, verbatim: *"for drill packs these are kinda useless... but for normal play
+it should be an option... heck we can even do analysis on played/imported wierd games... and for
+campaign mode, like unlocking a new hero in slay the spire changes the entire run structure... we
+can go full game/fun with the campaign... as long as the 'educational' run is the main one."*
+
+The law by surface — the SAME variant is treated differently in each:
+
+| Surface | Variants |
+|---|---|
+| Drill packs | **Standard chess only** — a fairy-piece drill teaches nothing the evidence stack can say |
+| Just Play | **Any variant, as an option** |
+| Import / analysis | **Accepted** — a played or imported weird game is analysable |
+| Campaign | **As far as we like**; a variant campaign is a **new-hero unlock** that changes the whole run structure |
+
+**The one constraint: the educational standard-chess run stays the MAIN one.** This supersedes any
+per-variant permit/refuse framing you may see in earlier notes.
+
 ## 0-REFUSAL-INDEX. Build `make refusal-index` — [[D1038]], the twin of `make work-index`
 
 The owner asked what else has been refused without their say-so; the audit found **19 of 80
