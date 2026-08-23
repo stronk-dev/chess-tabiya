@@ -841,3 +841,19 @@ Discharges rows, RFC by RFC, heaviest first (`learner-rating`, `measurement-reco
 `archive/predicate-wave-3`, `archive/teacher-surface`, `breadth-collectors` §4 — a whole
 "Refused and deferred" section with zero D-ids).
 
+
+## Owner rulings 2026-08-23 (second batch) — [[D1150]]–[[D1153]]
+
+- **[[D1150]]** — claude re-asked a settled question ([[D304]], already ruled by [[D1040]] the same
+  day and by [[D893]] before it). D304 is closed; its *"never by winning"* framing was wrong as
+  stated. **Practice, effective now: before any owner question, grep the ledger for a ruling on that
+  row's subject — the ⚖️ rows are the index.**
+- **[[D1151]]** — campaign progression is denominated in **the catalogue**: shapes met, structures
+  played, the what's-missing mark on the pack card. `campaign-core` amendment owed; **[[D300]]'s
+  collection vocabulary is its prerequisite** and must be built first.
+- **[[D1152]]** — add the survival/streak verdict producer to `design/06` §5 (law 5, claude on the
+  ruling). Closes the verdict vocabulary at four; survival formats stop shipping authored-bounded.
+- **[[D1153]]** — do not accept the Maia-dark Chess960 gap: compose a bot that does not depend on
+  Maia. Research commissioned (Fairy-Stockfish as a variant-capable base; engine + guard + traits +
+  sampler gives *controlled* imperfection whose human resemblance is an **open measurement**). The
+  variants RFC's blocking open question stays open until it returns.
