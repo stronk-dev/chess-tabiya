@@ -18,6 +18,9 @@
   [[D1330]] (*"Drafting order is that list, top-down"*, rank 8) under [[D1310]] (*"the drafting
   mandate covers every lane traceable to an explicit owner ask"*); the owner ask is [[D557]],
   *"investigate a SEPARATE theory knowledge-builder … not scraping inside a hint request"*.
+  [[D1374]] of the same day recounted that remainder — ranks 9 and 10 (the two desk teardowns) do
+  not survive a per-dossier read and the count is **8**. **Rank 8 is unmoved by the recount and is
+  now the last of the eight.**
   [[D581]]'s own note says *"design/owner ruling required before RFC"* — that tension is stated
   rather than finessed in §14, and it is why this document is drafted and not proposed for
   acceptance
@@ -718,6 +721,40 @@ sections, the absence of a learner surface, and the fact that the first bundle w
 17-row register and a few hundred passages is a small *corpus*, not a small *contract*, and the
 contract is what an RFC is for.
 
+### §15 — The code sites this draft expects to own, and the one it cites ([[D1381]])
+
+[[D1381]], landed while this draft was being written, requires a draft to name the code sites and
+repairs it expects to own so the coordinator can check them against every other in-flight draft,
+and requires the shared ones to be pinned in `rfc/README.md` the way schema lanes are. The list:
+
+| Site | What this RFC does to it | Contested? |
+|---|---|---|
+| a new builder package (register, fetch, extract, enrich, validate, index, export, search) | creates | no — nothing else writes it |
+| `apps/server/src/sourcing/http.ts` | adds five transport controls (§3.1), changes no existing behaviour | no |
+| `apps/server/src/sourcing/types.ts` — `SourceLicence.spdx` | widens the closed union (§6.2) | no |
+| `apps/server/src/sourcing/check.ts` — `licenceObligations` **only** | splits into a pack-prose arm and an attribution arm (§6.2) | **yes — `pack-population-provenance` owns this file's `evidenceSemantics`, `evidenceSupports`, `PROSE_POINTERS` and its five predicates. Disjoint functions; pinned below** |
+| `schemas/principle_entry.schema.json`, `packages/schema/src/index.ts` (`PRINCIPLE_ENTRY_SCHEMA_VERSION`), `packages/schema/src/principle-entry/index.ts`, `apps/server/src/principle-validation.ts` | lane 0.2 and its biconditional (§10) | no — the principle-entry register carries zero other live claims |
+| `pack-population-provenance` §3's `citable_text` predicate family | adds P6 and P7 (§9) | **yes, by amendment, with that RFC's agreement recorded as Discharge D2** |
+
+**And one site this RFC does not own but depends on, which neither owning document names.**
+`licenceObligations` decides whether a CC-BY-SA source *contributes prose* — and therefore whether
+`ATTRIBUTION_MISSING` fires — partly from `boundAssertions`, which it computes by reading
+`binding.spans` (`check.ts:346`). `rfc/claim-semantic-anchors.md` §2 replaces that shape with
+`contract` + `clauses`, and §5 deletes the old paths from production admission. It names
+`claim-binding.ts`, `evidence-catalog.ts` and `pack-validation.ts`; it mentions `licenceObligations`,
+`boundAssertions` and `ledger-validation` **zero times**. Two readers break:
+
+- `apps/server/src/sourcing/ledger-validation.ts:346` requires
+  `exactKeys(raw, ["claimId", "pointer", "textSha256", "spans"])`, so a V2 binding is rejected as
+  `EVIDENCE_INVALID` **before** any of this reaches the licence layer;
+- `check.ts:346` then reads `binding.spans.flatMap(…)` on a shape that no longer has `spans`.
+
+The consequence is specific to this RFC's subject: **the attribution obligation for every
+machine-bound claim is downstream of the claim-binding shape.** The site belongs to
+`claim-semantic-anchors` — it is that RFC's shape change — and this RFC cites it, does not edit it,
+and records it as Discharge D11 so the join is not discovered at implementation time. Criterion 21
+asserts it from this side.
+
 ## Deviations from design
 
 - **`design/05` §3's ladder places rung 5 (authored claims) above rung 4 (corpus frequency) by
@@ -825,6 +862,13 @@ contract is what an RFC is for.
     *Negative: a `knowledge-builder` service in the release template fails; an optional builder
     profile that is not in the release template is fine.*
 
+21. **The licence layer survives the claim-binding shape change** (§15). A fixture ledger carrying a
+    V2 claim binding reaches `licenceObligations` and still raises `ATTRIBUTION_MISSING` for a
+    share-alike source contributing prose. *Negative at HEAD, and this is the point:* the same
+    fixture today fails at `ledger-validation.ts:346`'s `exactKeys` before the licence layer runs,
+    and `check.ts:346`'s `binding.spans.flatMap` has no `spans` to read — so the criterion is
+    honestly red until `claim-semantic-anchors` lands its shape change **including this reader**.
+
 ## Discharges
 
 | id | the obligation | owner | recorded when discharged | discharged |
@@ -839,6 +883,7 @@ contract is what an RFC is for.
 | D8 | Presenting `cited_source` on the learner-facing principle surface, where `standsOn` is currently typed as bare `string` (`apps/web/src/lib/api.ts:218`) | `review-map` | that RFC's principle/claim rendering section | |
 | D9 | The theory-source half of [[D1367]]'s *"shared source contract"* for the hint ladder — a theory rung must not go dark because Stockfish is absent. **The ladder, its per-source ceilings and its theory-only fixture belong to `hint-distance`; this RFC owns only the source contract underneath them** | `hint-distance` | that RFC's per-source adapter section | |
 | D10 | Decide whether an optional semantic ranking experiment is ever re-opened, against a larger cited corpus and a fresh gold set (`results.md:136-137`) | OWNER | a new RFC and a new register claim, never a flag on this one | |
+| D11 | Carry the V1→V2 claim-binding shape change through the **licence** readers it does not currently name — `ledger-validation.ts:346`'s `exactKeys` and `check.ts:346`'s `boundAssertions` — so the CC-BY-SA attribution obligation keeps firing for machine-bound claims (§15) | `claim-semantic-anchors` | that RFC's §7 migration section | |
 
 ## Open questions
 
@@ -894,6 +939,16 @@ Proposed — ids assigned at landing; head was **D1373** at drafting. (The wave 
   refusal on a mechanism that fails), which is the cheap per-document fix; the class fix — making a
   limitation a typed, checkable predicate rather than prose — still has no home and is worth
   costing before a fourth document inherits the same false comfort.
+- 🐞 **The CC-BY-SA attribution obligation is downstream of the claim-binding shape, and the RFC
+  that replaces that shape names neither reader.** `licenceObligations` decides *contributes prose*
+  partly from `boundAssertions`, computed by reading `binding.spans` (`check.ts:346`); and
+  `ledger-validation.ts:346` pins the binding to `exactKeys(["claimId","pointer","textSha256","spans"])`.
+  `rfc/claim-semantic-anchors.md` replaces `spans` with `clauses` and mentions `licenceObligations`,
+  `boundAssertions` and `ledger-validation` **zero times** — so at Stage B a V2 binding is rejected
+  as `EVIDENCE_INVALID` before the licence layer runs, and if that validator is widened without the
+  licence reader, `ATTRIBUTION_MISSING` stops firing for every machine-bound claim instead of
+  throwing. Owned by `claim-semantic-anchors` (Discharge D11); found from the licence side, which is
+  the only side that was looking.
 - 📊 **The production ineligible-top-1 gate is stricter than the research gate, and nothing has
   measured it.** R4's 2% ceiling was a research threshold over a semantic ranker
   (`knowledge-retrieval/plan.md:60` says so in terms); with eligibility computed by typed predicates
@@ -914,3 +969,12 @@ Proposed — ids assigned at landing; head was **D1373** at drafting. (The wave 
   retrieval rank refused as a fourth, an LLM refused as a fifth — and §11 maps every refusal to the
   mechanism that fails, explicitly avoiding `limitations`, which is checked only for non-emptiness
   ([[D1343]]).
+- 2026-08-23, same day, after [[D1381]] and [[D1374]] landed under this fork: §15 added — the code
+  sites this draft owns, the two it shares (`licenceObligations` beside
+  `pack-population-provenance`'s predicates; the `citable_text` family by amendment), both pinned in
+  `rfc/README.md`. Writing that list surfaced a defect neither owning document names: the CC-BY-SA
+  attribution obligation reads `binding.spans` (`check.ts:346`) and `ledger-validation.ts:346` pins
+  the binding's exact key set, while `claim-semantic-anchors` replaces that shape and mentions
+  neither reader — Discharge D11 and criterion 21, honestly red until that RFC carries it. The
+  [[D1374]] recount is recorded in the exploration-gate line: ranks 9–10 do not survive, the count
+  is 8, and rank 8 is unmoved.

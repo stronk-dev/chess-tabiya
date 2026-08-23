@@ -404,6 +404,8 @@ write to the same union. Whether that resource should get a sixth register is
 `rfc/training-mode-variants.md` Open question 1, addressed to the register owner; until it is
 ruled, this pin is the whole of the serialisation.
 
+Pin, 2026-08-23 (the sourcing check and the citation predicate family, [[D1381]]): **`rfc/pack-population-provenance.md` owns `apps/server/src/sourcing/check.ts`'s `evidenceSemantics`, `evidenceSupports`, `PROSE_POINTERS` and its five predicates P1-P5; `rfc/theory-knowledge-pipeline.md` owns `licenceObligations` alone** and splits it into a pack-prose arm (unchanged, still CC-BY-SA-4.0 wholesale) and an attribution arm (widened to the register's admitted licences), because `check.ts:354-355` currently refuses a CC0 attribution entry outright. The functions are disjoint and no line is claimed twice, so landing order is free in either direction. The one real interaction is the `citable_text` predicate family: `theory-knowledge-pipeline` §9 adds **P6** (`CITATION_SPAN_AMBIGUOUS`) and **P7** (`CITATION_REVISION_UNPINNED`) to it by amendment rather than opening a second family, and that amendment is its Discharge D2 against `pack-population-provenance`'s text. **A third document is cited, not claimed:** `licenceObligations` reads `binding.spans` (`check.ts:346`) and `ledger-validation.ts:346` pins the binding's exact key set, both of which `rfc/claim-semantic-anchors.md` changes without naming either reader - that site is **claim-semantic-anchors'**, recorded as `theory-knowledge-pipeline` Discharge D11 so the join is not found at implementation time.
+
 ## Withdrawn
 
 Kept for the record (RFC-0000: `withdrawn` = abandoned, not superseded). Their
