@@ -10,6 +10,12 @@ function files(root: string): readonly string[] {
 
 export interface GraduationReport { readonly text: string; readonly acceptedPage: string; readonly legacy: number; readonly graduable: readonly string[]; }
 
+export interface GraduationReportCommandOptions {
+  readonly roots?: readonly string[];
+  readonly updateAcceptedPage?: boolean;
+  readonly acceptedPagePath?: string;
+}
+
 export function graduationReport(roots: readonly string[] = ["content/drafts", "content/candidates", "content/packs"]): GraduationReport {
   const accepted: Array<{ packId: string; entry: Exclude<Entry, string> }> = [];
   const graduable: string[] = [];
@@ -59,8 +65,16 @@ export function writeAcceptedConditions(path = "content/accepted-conditions.md")
   return report;
 }
 
+export function runGraduationReport(options: GraduationReportCommandOptions = {}): GraduationReport {
+  const report = graduationReport(options.roots);
+  if (options.updateAcceptedPage === true) {
+    writeFileSync(options.acceptedPagePath ?? "content/accepted-conditions.md", report.acceptedPage);
+  }
+  return report;
+}
+
 if (/graduation-report\.(?:js|ts)$/u.test(process.argv[1] ?? "")) {
-  const report = writeAcceptedConditions();
+  const report = runGraduationReport({ updateAcceptedPage: process.env.UPDATE_ACCEPTED === "1" });
   process.stdout.write(`${report.text}\n`);
   if (report.legacy > 0) process.exitCode = 2;
 }

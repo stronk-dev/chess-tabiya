@@ -18,7 +18,9 @@ the typed blocking form, but candidates never appear in the graduable set.
 
 `make graduation-report` reports each catalogue root separately, lists every pack and every
 blocking condition, writes the grouped accepted-condition audit page at
-`content/accepted-conditions.md`, and refuses a nonzero legacy count.
+`content/accepted-conditions.md`, and refuses a nonzero legacy count. `make graduation-report` is
+read-only; use the deliberately named `make graduation-report-update` only when a reviewed pack
+change is meant to refresh the checked-in accepted-conditions page.
 
 ## Official publication boundary
 

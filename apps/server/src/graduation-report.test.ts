@@ -6,7 +6,7 @@ import { digestDrillPack } from "@chess-tabiya/schema/drill-pack";
 import { resolvePackPath } from "@chess-tabiya/schema/pack-path";
 import { describe, expect, it } from "vitest";
 
-import { graduationReport } from "./graduation-report.js";
+import { graduationReport, runGraduationReport } from "./graduation-report.js";
 import { validatePackDocument } from "./pack-validation.js";
 import { checkSourcingFile } from "./sourcing/check.js";
 
@@ -24,6 +24,20 @@ describe("pack graduation", () => {
     expect(report.text).toContain("**anti-caro-advance-c5-race**");
     expect(report.text).toContain("clears via");
     expect(report.text).not.toMatch(/corpus-wide.*blocking/iu);
+  });
+
+  it("keeps measurement read-only unless accepted-page refresh is explicit", async () => {
+    const temporary = await mkdtemp(join(tmpdir(), "tabiya-graduation-report-"));
+    const acceptedPage = join(temporary, "accepted-conditions.md");
+    try {
+      const report = runGraduationReport({ acceptedPagePath: acceptedPage });
+      await expect(readFile(acceptedPage, "utf8")).rejects.toMatchObject({ code: "ENOENT" });
+      const refreshed = runGraduationReport({ updateAcceptedPage: true, acceptedPagePath: acceptedPage });
+      expect(await readFile(acceptedPage, "utf8")).toBe(refreshed.acceptedPage);
+      expect(refreshed.text).toBe(report.text);
+    } finally {
+      await rm(temporary, { recursive: true, force: true });
+    }
   });
 
   it("resolves one moved pack from either catalogue root and refuses a stale duplicate", async () => {

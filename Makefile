@@ -1,4 +1,4 @@
-.PHONY: setup typecheck test test-browser schema-check register-check status-parity work-index intent-parity evidence-manifest-check semantic-evidence-check account-data-lifecycle-check graduation-plan graduation-plan-check tactical-collector-measurement breadth-collector-measurement build verify pack-check shape-check expression-census graduation-report graduation-clear pack-preview source-fetch candidate-emit candidate-attach sourcing-check verify-draft tablebase-walk engine-walk up up-engines down
+.PHONY: setup typecheck test test-browser schema-check register-check status-parity work-index intent-parity evidence-manifest-check semantic-evidence-check account-data-lifecycle-check graduation-plan graduation-plan-check tactical-collector-measurement breadth-collector-measurement build verify pack-check shape-check expression-census graduation-report graduation-report-update graduation-clear pack-preview source-fetch candidate-emit candidate-attach sourcing-check verify-draft tablebase-walk engine-walk up up-engines down
 
 setup:
 	pnpm install --frozen-lockfile
@@ -104,6 +104,10 @@ sourcing-check:
 graduation-report:
 	pnpm --filter @chess-tabiya/server exec esbuild src/graduation-report.ts --bundle --platform=node --format=esm --outfile=dist/graduation-report.js
 	node apps/server/dist/graduation-report.js
+
+graduation-report-update:
+	pnpm --filter @chess-tabiya/server exec esbuild src/graduation-report.ts --bundle --platform=node --format=esm --outfile=dist/graduation-report.js
+	UPDATE_ACCEPTED=1 node apps/server/dist/graduation-report.js
 
 graduation-clear:
 	@test -n "$(FILE)" || (echo "Usage: make graduation-clear FILE=<path-to-pack.json> [CHECK=1]" >&2; exit 2)
