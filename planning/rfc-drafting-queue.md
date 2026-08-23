@@ -813,3 +813,16 @@ the next free id above D1114.
 - **[[D1120]]** — cross-reviewer text is reliable at the finding and unreliable at the quote (three
   instances 2026-08-23, all caught downstream). Practice: verify the source, then keep the finding.
   Binds acceptors writing register cells **and** claude relaying reviewer text to the owner.
+
+## Proposed-row convention — [[D1130]], adopted 2026-08-23
+
+**Until [[D1079]]'s fix lands, proposed ledger rows are written UNNUMBERED.** Write
+*"proposed — id assigned at landing; head was D&lt;n&gt; at drafting"*. Pre-assigning an id
+manufactures a false destination: `work-index` joins on any textual mention, so a proposed id in an
+RFC satisfies the routing check for a different row that lands with that number first. Caught by the
+`recorded-clocks` fork, which declined to number its four rows and asked for the ruling.
+
+Also landed: [[D1131]] (clocks measured as a feature — 108 of 108 paste games carry `[%clk]`,
+6,991 tags; broadcast 1,158 readings and zero declared controls, so abstention is per *field*) and
+[[D1132]] ([[D1061]] settles D357's ordering, not its substance — the pre-commit top-rung criterion
+is live and blocks the enforced-clock successor, not `recorded-clocks`).
