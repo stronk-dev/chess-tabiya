@@ -6198,3 +6198,23 @@ needed for longitudinal habits, Review and drill conditions; none may be registe
 global bot personality from this transform. A future broader bot wave must preregister a composed,
 phase-scoped or repertoire/stateful mechanism and re-run the full policy gate rather than inherit
 validity from the evidence vocabulary.
+
+## 2026-08-23 — D1061 bestline provider measured; hint distance needs a semantic horizon
+
+The owner-ruled hint-distance axis was tested bottom-up before its RFC. Stockfish returned legal,
+non-empty PVs in all 256 probes over a fixed 64-position sample; fresh 100 ms searches agreed on
+64/64 first moves and agreed with depth 12 on 59/64. Fixed depth 8 versus 12 agrees only 65.6%, so
+engine version and budget must remain part of the item identity.
+
+The blocker is meaning, not collection. `beforeFen + movesUci` does not define whether “square” is
+origin or destination, whether “piece” is exact identity or role, or what event “ply-distance” is
+distance to. The candidate-set census proves the proposed labels are not substitutively monotone.
+The research handoff replaces the raw-vagueness idea with a sealed derived primitive: replay the
+versioned PV through registered semantic collectors, select one eligible event with typed actor and
+target, retain its first occurrence ply and first move, then render cumulative stages. The LLM is
+outside selection and derivation.
+
+The pass also corrects the collection premise: durable content now has 893 records, not 764, and
+its closed kind union cannot contain bestline. Runtime analysis can persist bestline run events;
+`engine-walk` is read-only and does not return a PV. A dynamic runtime path is therefore the first
+implementation candidate; authored bestline sidecars would be a separate schema decision.
