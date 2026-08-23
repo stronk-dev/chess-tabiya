@@ -1352,3 +1352,33 @@ pin is owed: four in-flight drafts write `voice.ts` vocabulary while this claims
 moves run through a separate `includes` test, and `plan` is in no list at all. The escalation vector
 is a **caption**: naming the closed class frees every word in it, which the shipped mate-tier text
 does automatically. Owner question open on whether to scope all four arms.
+
+### [[D1419]] — licence-by-span covers all four arms
+
+Owner ruling 2026-08-23, widening [[D1409]]. The span rule governs judgement words, squares, moves,
+chess nouns and prescriptive verbs alike, because the justification is class-agnostic and the span
+computation is shared. Two gaps stay open and must not be read as covered: **`plan`, `initiative`,
+`compensation` and `pressure` are in no list at all**, so no scoping rule reaches them; and the
+**caption escalation** — a sentence naming the closed class frees every word in it — was offered and
+not taken.
+
+### [[D1408]] put back — the derivation is done ([[D1420]], [[D1421]])
+
+Both ladders are **conventions nobody measured**, so the choice is between two conventions and only
+their consequences are measurable. Measured on 571 club decisions, 962 master ply pairs and 279
+authored drill positions. Recommendation is **2.5 / 10 / 15**, on a derivation rule rather than a
+preference: **the strictest floor, because silence is irrecoverable — no selector can thin a grade
+that was never emitted — and tradition's upper rungs, because the word above the floor is calibrated
+outside this product and the number is co-rendered anyway.** A rung disagreement costs a word; a
+floor disagreement costs the whole sentence. It is the only candidate losing zero drill nudges and
+changing zero review words.
+
+**What the merge loses irreducibly:** review's density budget. Any 2.5 floor takes a club player from
+about 9.4 to 15.4 grades per 40 own moves, and no choice of upper rungs recovers it — only
+*selection* can, which belongs to `review-map` and is not yet specified with a density cap. Mitigated
+by the fact that under the recommendation the **mistake and blunder counts are unchanged**; every
+added grade is the mildest class.
+
+**Acceptance criterion 4 asserts exactly what the ruling abolishes** and must be inverted into a
+byte-identity-across-contexts fixture — that inversion is what makes the ruling permanent rather
+than applied once.
