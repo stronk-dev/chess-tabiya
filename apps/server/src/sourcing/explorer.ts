@@ -13,6 +13,7 @@ import { checkSourcingDirectory, checkSourcingFile } from "./check.js";
 import { emissionJobDigest, readJson, sha256, writeCanonicalJson } from "./canonical.js";
 import { ingestLocalFile } from "./inputs.js";
 import { withSourceLock } from "./lock.js";
+import { readCapturedHttpFixture } from "./fixture-provenance.js";
 import type { ClaimAssertion, EvidenceLedger, EvidenceRecord, SourceEntry, SourceManifest } from "./types.js";
 import { SourcingError } from "./types.js";
 
@@ -149,10 +150,13 @@ export async function fixtureUnavailableExplorer(query: ExplorerQuery): Promise<
 export async function fixtureAvailableExplorer(query: ExplorerQuery): Promise<ExplorerStats> {
   const normalized = normalizeExplorerQuery(query);
   const url = explorerUrl(normalized);
-  const body = new Uint8Array(await readFile(resolve("apps/server/src/sourcing/fixtures/explorer-response.json")));
-  const response = new Response(body, { status: 200, headers: { etag: '"fixture"' } });
-  const offset = Number.parseInt(sha256(url).slice(7, 15), 16) % 86_400_000;
-  return parseStats(body, normalized, source(url, response, body, new Date(Date.parse("2026-08-12T00:00:00.000Z") + offset).toISOString()));
+  const captured = await readCapturedHttpFixture({
+    fixturePath: resolve("apps/server/src/sourcing/fixtures/explorer-response.json"),
+    provenancePath: resolve("apps/server/src/sourcing/fixtures/explorer-response.provenance.json"),
+    expectedUrl: url,
+    licence: { basis: "no-rights-asserted", spdx: null, noticeText: null, rationale: EXPLORER_RATIONALE },
+  });
+  return parseStats(captured.body, normalized, captured.source);
 }
 
 interface ExplorerLine { readonly eco: string; readonly name: string; readonly movesSan: readonly string[]; readonly fen: string }
@@ -247,7 +251,7 @@ export async function attachExplorerEvidence(options: { readonly directory?: str
   if (!(pack.provenance?.sources ?? []).some((source: unknown) => typeof source === "string" && source.includes(EXPLORER_RATIONALE))) throw new SourcingError("ATTACH_SOURCE_LINE_MISSING", `pack provenance.sources must already contain the explorer rationale: ${EXPLORER_RATIONALE}`);
   const anchor = nodePosition(pack, options.spineNodeId);
   const result = await options.client.stats({ ...options.query, fen: anchor.fen });
-  const nextManifest: SourceManifest = { schema: "tabiya.sourcing.manifest.v1", entries: [...manifest.entries.filter((entry: SourceEntry) => !(entry.sourceId === result.source.sourceId && entry.retrievedAt === result.source.retrievedAt && entry.origin.kind === "http" && result.source.origin.kind === "http" && entry.origin.url === result.source.origin.url)), result.source].sort((a, b) => a.sourceId.localeCompare(b.sourceId) || a.retrievedAt.localeCompare(b.retrievedAt)) };
+  const nextManifest: SourceManifest = { schema: "tabiya.sourcing.manifest.v1", entries: [...manifest.entries.filter((entry: SourceEntry) => !(entry.sourceId === result.source.sourceId && entry.retrievedAt === result.source.retrievedAt)), result.source].sort((a, b) => a.sourceId.localeCompare(b.sourceId) || a.retrievedAt.localeCompare(b.retrievedAt)) };
   if (result.kind === "abstention") {
     const nextLedger = { ...ledger, sourcedAt: nextManifest.entries.map((entry) => entry.retrievedAt).sort().at(-1), abstentions: [...ledger.abstentions.filter((value: any) => !(value.kind === "explorer_frequency" && JSON.stringify(value.anchor) === JSON.stringify(anchor.anchor))), { kind: "explorer_frequency", anchor: anchor.anchor, sourceId: result.source.sourceId, retrievedAt: result.source.retrievedAt, reason: result.reason, detail: result.detail }] };
     const temporary = resolve(directory, `.attach-check-${process.pid}`);

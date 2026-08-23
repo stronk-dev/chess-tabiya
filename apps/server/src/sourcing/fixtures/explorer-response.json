@@ -1,14 +1,1 @@
-{
-  "opening": { "eco": "B12", "name": "Caro-Kann Defense: Advance Variation" },
-  "white": 65554,
-  "draws": 6529,
-  "black": 55951,
-  "total": 999999,
-  "moves": [
-    { "uci": "c8f5", "san": "Bf5", "averageRating": 1712, "white": 21000, "draws": 2000, "black": 17204 },
-    { "uci": "c6c5", "san": "c5", "averageRating": 1755, "white": 11000, "draws": 1500, "black": 10500 }
-  ],
-  "topGames": [],
-  "recentGames": [],
-  "history": []
-}
+{"white":4413661,"draws":399068,"black":4533367,"moves":[{"uci":"c8f5","san":"Bf5","averageRating":1705,"white":2739286,"draws":248847,"black":2750379,"game":null,"opening":null},{"uci":"c6c5","san":"c5","averageRating":1694,"white":1264884,"draws":118724,"black":1422986,"game":null,"opening":{"eco":"B12","name":"Caro-Kann Defense: Advance Variation, Botvinnik-Carls Defense"}},{"uci":"e7e6","san":"e6","averageRating":1683,"white":229265,"draws":18319,"black":205598,"game":null,"opening":null},{"uci":"f7f6","san":"f6","averageRating":1594,"white":51158,"draws":3127,"black":36087,"game":null,"opening":null},{"uci":"g7g6","san":"g6","averageRating":1729,"white":32954,"draws":2815,"black":31539,"game":null,"opening":null},{"uci":"a7a6","san":"a6","averageRating":1682,"white":29253,"draws":2466,"black":30727,"game":null,"opening":null},{"uci":"h7h6","san":"h6","averageRating":1690,"white":12678,"draws":1089,"black":11464,"game":null,"opening":null},{"uci":"d8b6","san":"Qb6","averageRating":1727,"white":10652,"draws":894,"black":11694,"game":null,"opening":null},{"uci":"b8d7","san":"Nd7","averageRating":1596,"white":12211,"draws":701,"black":8168,"game":null,"opening":null},{"uci":"h7h5","san":"h5","averageRating":1809,"white":5010,"draws":460,"black":5529,"game":null,"opening":null},{"uci":"c8e6","san":"Be6","averageRating":1607,"white":5926,"draws":342,"black":3811,"game":null,"opening":null},{"uci":"f7f5","san":"f5","averageRating":1700,"white":4263,"draws":332,"black":3703,"game":null,"opening":null}],"recentGames":[],"topGames":[],"opening":{"eco":"B12","name":"Caro-Kann Defense: Advance Variation"}}

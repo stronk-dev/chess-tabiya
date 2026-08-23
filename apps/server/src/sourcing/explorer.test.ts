@@ -19,12 +19,34 @@ import {
   RATING_GROUPS,
   SPEEDS,
   EXPLORER_RATIONALE,
+  type ExplorerStats,
   type ExplorerQuery,
 } from "./explorer.js";
 import { emitOpeningCandidate } from "./openings.js";
 
-const START = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
+const START = "rnbqkbnr/pp2pppp/2p5/3pP3/3P4/8/PPP2PPP/RNBQKBNR b KQkq - 0 3";
 const BASE_QUERY: ExplorerQuery = { fen: START, ratings: [1400, 1600, 1800], speeds: ["blitz", "rapid"], since: "2024-01", until: "2026-07" };
+
+// E1 unit-boundary fake: attachment mechanics need a stable response for the
+// temporary D35 pack, not a false claim that the captured B12 body came from it.
+async function attachmentExplorer(query: ExplorerQuery): Promise<ExplorerStats> {
+  return {
+    kind: "stats",
+    white: 65_554,
+    draws: 6_529,
+    black: 55_951,
+    moves: [{ uci: "c8f5", san: "Bf5", averageRating: 1712, white: 21_000, draws: 2_000, black: 17_204 }],
+    window: { since: query.since, until: query.until },
+    ratings: query.ratings,
+    speeds: query.speeds,
+    source: {
+      sourceId: "lichess-explorer",
+      retrievedAt: "2026-08-12T00:00:00.000Z",
+      origin: { kind: "local-file", path: "test:E1-explorer-attachment", sha256: sha256("E1-explorer-attachment"), bytes: 22 },
+      licence: { basis: "no-rights-asserted", spdx: null, noticeText: null, rationale: EXPLORER_RATIONALE },
+    },
+  };
+}
 
 async function temporary(): Promise<string> { return mkdtemp(resolve(tmpdir(), "tabiya-explorer-")); }
 
@@ -84,11 +106,11 @@ describe("Lichess explorer sourcing", () => {
     const stats = await fixtureAvailableExplorer(BASE_QUERY);
     expect(stats.kind).toBe("stats");
     if (stats.kind !== "stats") return;
-    expect(stats.white + stats.draws + stats.black).toBe(128034);
+    expect(stats.white + stats.draws + stats.black).toBe(9_346_096);
     const move = stats.moves[0]!;
-    expect(move.white + move.draws + move.black).toBe(40204);
+    expect(move.white + move.draws + move.black).toBe(5_738_512);
     expect(stats.window).toEqual({ since: "2024-01", until: "2026-07" });
-    expect(renderExplorerFrequency({ moveSan: move.san, playedCount: 40204, total: 128034, sharePct: 31.4, white: move.white, draws: move.draws, black: move.black, ratings: stats.ratings, speeds: stats.speeds, since: stats.window.since, until: stats.window.until })).toBe("Bf5 is played in 31.4% of 128034 games from this position (Lichess explorer, rating buckets 1400,1600,1800, speeds blitz,rapid, 2024-01 to 2026-07).");
+    expect(renderExplorerFrequency({ moveSan: move.san, playedCount: 5_738_512, total: 9_346_096, sharePct: 61.4, white: move.white, draws: move.draws, black: move.black, ratings: stats.ratings, speeds: stats.speeds, since: stats.window.since, until: stats.window.until })).toBe("Bf5 is played in 61.4% of 9346096 games from this position (Lichess explorer, rating buckets 1400,1600,1800, speeds blitz,rapid, 2024-01 to 2026-07).");
   });
 
   it("emits an honest unavailable priority artifact that strict-checks", async () => {
@@ -115,7 +137,7 @@ describe("Lichess explorer sourcing", () => {
 
   it("attaches evidence to authored prose idempotently without changing the pack", async () => {
     const directory = await attachableCandidate();
-    const args = { directory, moveSan: "Bf5", target: "/feedbackClaims/0/text", span: "31.4%", field: "sharePct" as const, query: { ratings: [1400, 1600, 1800] as const, speeds: ["blitz", "rapid"] as const, since: "2024-01", until: "2026-07" }, client: { stats: fixtureAvailableExplorer } };
+    const args = { directory, moveSan: "Bf5", target: "/feedbackClaims/0/text", span: "31.4%", field: "sharePct" as const, query: { ratings: [1400, 1600, 1800] as const, speeds: ["blitz", "rapid"] as const, since: "2024-01", until: "2026-07" }, client: { stats: attachmentExplorer } };
     await expect(attachExplorerEvidence(args)).resolves.toBe("attached");
     const first = await Promise.all(["pack.json", "evidence.json", "sources.json"].map((file) => readFile(resolve(directory, file))));
     const pack = JSON.parse(first[0]!.toString()) as any;
@@ -134,9 +156,9 @@ describe("Lichess explorer sourcing", () => {
     const directory = await attachableCandidate();
     const before = await Promise.all(["pack.json", "evidence.json", "sources.json"].map((file) => readFile(resolve(directory, file))));
     const query = { ratings: [1400, 1600, 1800] as const, speeds: ["blitz", "rapid"] as const, since: "2024-01", until: "2026-07" };
-    await expect(attachExplorerEvidence({ directory, moveSan: "Bf5", target: "/objective/summary", query, client: { stats: fixtureAvailableExplorer } })).rejects.toMatchObject({ code: "ATTACH_TARGET_FORBIDDEN" });
-    await expect(attachExplorerEvidence({ directory, moveSan: "Bf5", target: "/feedbackClaims/0/text", query, client: { stats: fixtureAvailableExplorer } })).rejects.toMatchObject({ code: "ATTACH_SPAN_REQUIRED" });
-    await expect(attachExplorerEvidence({ directory, moveSan: "Qa9", target: "/feedbackClaims/0/text", span: "31.4%", field: "sharePct", query, client: { stats: fixtureAvailableExplorer } })).rejects.toMatchObject({ code: "MOVE_NOT_IN_RESPONSE" });
+    await expect(attachExplorerEvidence({ directory, moveSan: "Bf5", target: "/objective/summary", query, client: { stats: attachmentExplorer } })).rejects.toMatchObject({ code: "ATTACH_TARGET_FORBIDDEN" });
+    await expect(attachExplorerEvidence({ directory, moveSan: "Bf5", target: "/feedbackClaims/0/text", query, client: { stats: attachmentExplorer } })).rejects.toMatchObject({ code: "ATTACH_SPAN_REQUIRED" });
+    await expect(attachExplorerEvidence({ directory, moveSan: "Qa9", target: "/feedbackClaims/0/text", span: "31.4%", field: "sharePct", query, client: { stats: attachmentExplorer } })).rejects.toMatchObject({ code: "MOVE_NOT_IN_RESPONSE" });
     const unchanged = await Promise.all(["pack.json", "evidence.json", "sources.json"].map((file) => readFile(resolve(directory, file))));
     expect(unchanged.map(sha256)).toEqual(before.map(sha256));
     await expect(attachExplorerEvidence({ directory, moveSan: "Bf5", target: "/feedbackClaims/0/text", span: "31.4%", field: "sharePct", query, client: { stats: fixtureUnavailableExplorer } })).resolves.toBe("abstained");
@@ -150,7 +172,7 @@ describe("Lichess explorer sourcing", () => {
     pack.provenance.sources = [];
     const ledger = await readJson(ledgerPath) as any; ledger.packDigest = await digestDrillPack(pack);
     await writeCanonicalJson(packPath, pack); await writeCanonicalJson(ledgerPath, ledger);
-    const stats = vi.fn(fixtureAvailableExplorer);
+    const stats = vi.fn(attachmentExplorer);
     await expect(attachExplorerEvidence({ directory, moveSan:"Bf5",target:"/feedbackClaims/0/text",span:"31.4%",field:"sharePct",query:{ratings:[1400,1600,1800],speeds:["blitz","rapid"],since:"2024-01",until:"2026-07"},client:{stats} })).rejects.toMatchObject({code:"ATTACH_SOURCE_LINE_MISSING"});
     expect(stats).not.toHaveBeenCalled();
   });
@@ -158,7 +180,7 @@ describe("Lichess explorer sourcing", () => {
   it("fails altered, incomplete, extra, or overreaching template evidence", async () => {
     const directory = await attachableCandidate();
     const query = { ratings: [1400, 1600, 1800] as const, speeds: ["blitz", "rapid"] as const, since: "2024-01", until: "2026-07" };
-    await attachExplorerEvidence({ directory, moveSan: "Bf5", target: "/feedbackClaims/0/text", span: "31.4%", field: "sharePct", query, client: { stats: fixtureAvailableExplorer } });
+    await attachExplorerEvidence({ directory, moveSan: "Bf5", target: "/feedbackClaims/0/text", span: "31.4%", field: "sharePct", query, client: { stats: attachmentExplorer } });
     const ledgerPath = resolve(directory, "evidence.json");
     const packPath = resolve(directory, "pack.json");
     const cleanLedger = await readJson(ledgerPath) as any;

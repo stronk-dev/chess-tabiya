@@ -9,7 +9,7 @@ import type { DrillPackDefinition } from "@chess-tabiya/schema/drill-pack";
 import { afterEach, describe, expect, it } from "vitest";
 
 import { tablebaseWalk } from "./tablebase-walk.js";
-import { fixtureTablebaseQuery } from "./syzygy.js";
+import { fixtureTablebaseQuery, TABLEBASE_FIXTURE_FEN } from "./syzygy.js";
 
 const philidor = JSON.parse(readFileSync(new URL(resolvePackPath("philidor-third-rank-hold"), import.meta.url), "utf8")) as DrillPackDefinition;
 const temporaryDirectories: string[] = [];
@@ -43,7 +43,7 @@ describe("tablebase authoring walker", () => {
       return fixtureTablebaseQuery(fen);
     };
     const options = {
-      fens: [philidor.start.fen],
+      fens: [TABLEBASE_FIXTURE_FEN],
       enumerate: "none" as const,
       cacheRoot,
       query,

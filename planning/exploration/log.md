@@ -6668,3 +6668,24 @@ than `e1e2`.
 
 **Next:** resume the preregistered D1162 evidence-to-move screen after the concurrently amended
 threat producer and adapter agree on one payload contract. The stopped run produced no model result.
+
+## 2026-08-23 — Sourcing fixtures became request-bound captures
+
+**What landed:** the tablebase and Explorer response fixtures now contain real HTTP bodies. Each has
+an F2 provenance sidecar carrying the exact GET URL, real retrieval time, response status, transport
+digest and byte count, plus the repository-byte identity after the declared terminal-newline transform.
+One shared reader verifies both identities before returning the body and its source record.
+
+**What changed:** the old tablebase file was a 243-byte projection of a 6,330-byte response, and the
+old 440-byte Explorer file was hand-shaped even though the original 1,626-byte capture survived in
+the source cache. Worse, both fixture functions relabelled those bytes as a response to any requested
+position. They now refuse a URL mismatch. Tests concerned only with attachment plumbing use an
+explicit E1 boundary fake, so no synthetic number is presented as captured chess evidence.
+
+**Verification:** the focused provenance, Syzygy, Explorer, tablebase-walk and refusal-coverage suites
+pass 33/33; server TypeScript is clean. The negative fixtures prove a one-byte mutation and a request
+substitution both fail with named sourcing errors.
+
+**Next:** W20's “15 literal issue codes” premise is stale: the issue channel now includes dynamic
+`PACK_${code}` values and cannot truthfully close by aliasing the existing thrown-error union. Re-scope
+that vocabulary before implementation rather than manufacturing a green but incomplete type.

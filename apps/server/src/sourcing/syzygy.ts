@@ -16,6 +16,9 @@ import { AUTHORING_PROFILE } from "./authoring-profile.js";
 export { AUTHORING_PROFILE } from "./authoring-profile.js";
 export { countFenPieces } from "./chess-facts.js";
 import { countFenPieces } from "./chess-facts.js";
+import { readCapturedHttpFixture } from "./fixture-provenance.js";
+
+export const TABLEBASE_FIXTURE_FEN = "7k/pp6/8/8/8/8/PP4Q1/7K w - - 0 1";
 
 export const TABLEBASE_RATIONALE = "Syzygy tablebase facts are free of copyright under Feist and Football Dataco; the API transports computed chess facts rather than a third-party work";
 export const AUTHOR_POSITION_RATIONALE = "the author's own position list; a list of FENs states facts about chess positions";
@@ -86,18 +89,14 @@ export function validateAuthoringProfile(profile: { readonly multiPv: number }):
 }
 
 export async function fixtureTablebaseQuery(fen: string): Promise<TablebaseAnswer> {
-  const bytes = await readFile(resolve("apps/server/src/sourcing/fixtures/tablebase-response.json"));
-  const payload = JSON.parse(bytes.toString("utf8")) as TablebasePayload;
-  const retrievedAt = "2026-08-12T00:00:00.000Z";
-  return {
-    payload,
-    source: {
-      sourceId: "syzygy",
-      retrievedAt,
-      origin: { kind: "http", url: `https://tablebase.lichess.org/standard?fen=${encodeURIComponent(fen)}`, status: 200, sha256: sha256(bytes), bytes: bytes.byteLength, etag: null },
-      licence: { basis: "no-rights-asserted", spdx: null, noticeText: null, rationale: TABLEBASE_RATIONALE },
-    },
-  };
+  const url = `https://tablebase.lichess.org/standard?fen=${encodeURIComponent(fen)}`;
+  const captured = await readCapturedHttpFixture({
+    fixturePath: resolve("apps/server/src/sourcing/fixtures/tablebase-response.json"),
+    provenancePath: resolve("apps/server/src/sourcing/fixtures/tablebase-response.provenance.json"),
+    expectedUrl: url,
+    licence: { basis: "no-rights-asserted", spdx: null, noticeText: null, rationale: TABLEBASE_RATIONALE },
+  });
+  return { payload: JSON.parse(new TextDecoder().decode(captured.body)) as TablebasePayload, source: captured.source };
 }
 
 export async function liveTablebaseQuery(fen: string, sourceRoot = resolve("content/sources")): Promise<TablebaseAnswer> {

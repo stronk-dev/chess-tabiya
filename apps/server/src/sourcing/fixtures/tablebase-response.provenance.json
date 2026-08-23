@@ -1,0 +1,19 @@
+{
+  "schema": "tabiya.test-fixture.http-capture.v1",
+  "fixture": "tablebase-response.json",
+  "sourceId": "syzygy",
+  "capture": {
+    "method": "GET",
+    "url": "https://tablebase.lichess.org/standard?fen=7k%2Fpp6%2F8%2F8%2F8%2F8%2FPP4Q1%2F7K%20w%20-%20-%200%201",
+    "retrievedAt": "2026-08-23T17:43:54Z",
+    "status": 200,
+    "etag": null,
+    "sha256": "sha256:029042f1316840cb986c5df1179e2556ddeb71d0bf1c88e0456b54b926615189",
+    "bytes": 6330
+  },
+  "storage": {
+    "transform": "append_lf",
+    "sha256": "sha256:927ddf537235ed9972b83bb6d2e80766223b463d92c877a611c9a450230ad867",
+    "bytes": 6331
+  }
+}

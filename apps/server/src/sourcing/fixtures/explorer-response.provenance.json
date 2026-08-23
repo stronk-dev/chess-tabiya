@@ -1,0 +1,19 @@
+{
+  "schema": "tabiya.test-fixture.http-capture.v1",
+  "fixture": "explorer-response.json",
+  "sourceId": "lichess-explorer",
+  "capture": {
+    "method": "GET",
+    "url": "https://explorer.lichess.org/lichess?variant=standard&fen=rnbqkbnr%2Fpp2pppp%2F2p5%2F3pP3%2F3P4%2F8%2FPPP2PPP%2FRNBQKBNR+b+KQkq+-+0+3&ratings=1400%2C1600%2C1800&speeds=blitz%2Crapid&since=2024-01&until=2026-07&moves=12&topGames=0&recentGames=0&history=false",
+    "retrievedAt": "2026-08-12T14:54:21.105Z",
+    "status": 200,
+    "etag": null,
+    "sha256": "sha256:3bfa79e548ddba72c0bdb7a5c37f44be61cab5cee3dd6fbf131d0d23dec56f05",
+    "bytes": 1626
+  },
+  "storage": {
+    "transform": "append_lf",
+    "sha256": "sha256:55187641b9c213d0c1f006feef2d5fc4649373a39a31d59320460f1361080ce7",
+    "bytes": 1627
+  }
+}
