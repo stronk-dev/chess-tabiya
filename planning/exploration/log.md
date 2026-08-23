@@ -7097,3 +7097,25 @@ combined refusal; the scaffold verifier's own fixtures remain in the schema-chec
 **Next:** run the first binding receipt from a clean Node-24 extraction with checksum-pinned
 Stockfish. D1448 stays implementing until that full command passes; any failure belongs to the
 exact commit named by the run rather than to the shared working tree.
+
+## 2026-08-24 — D1448 first clean-commit run refuses a stale manifest snapshot
+
+**What happened:** `make ci-local` ran from an isolated extraction of commit `f54ee32c`, under
+Linux, Node 24, pnpm 11.18.0 and checksum-pinned Stockfish 18. Frozen install and the complete
+typecheck passed. The test phase reported 1,097 passes and 14 failures, so no PASS receipt was
+issued.
+
+**What changed:** one failure is semantic and locally catchable: the committed capability fixture
+still expects 34 producers / 184 projections / 207 bindings / 65 events and eligibility, while
+the committed compiler returns 35 / 188 / 210 / 67. The concurrent collector pass already edits
+both the fixture and catalogue in the shared tree, so this run records the stale committed seam
+without staging or overwriting that work.
+
+**Boundary:** the other thirteen failures are 5-second timeouts from running an amd64 container
+under ARM emulation, not assertion failures. The timed-out cases completed at roughly 5.03–5.83
+seconds and the census suite took 67.58 seconds. This emulated run is useful for the deterministic
+snapshot mismatch but is not a native performance receipt.
+
+**Next:** after the collector pass freezes and commits its manifest, make a fresh extraction of
+that commit and run parity natively. D1448 remains implementing until both workflow bodies pass
+and the command prints the commit-addressed receipt.
