@@ -30,14 +30,14 @@ describe("Shape Studio", () => {
 
   it("reserves official ids",async()=>{const {studio}=await setup();const draft=await studio.create(principal,official);await expect(studio.register(draft.id,principal)).rejects.toThrow(/official/);});
 
-  it("withdraws mutable drafts and retains registered bytes when the publisher is deleted", async () => {
+  it("deletes mutable drafts and retains immutable registered bytes with tombstoned attribution", async () => {
     const { storage, studio } = await setup();
     const draftDocument = { ...structuredClone(official), id: "mutable-shape", version: "1.0.0" };
     const draft = await studio.create(principal, draftDocument);
     const published = await studio.create(principal, { ...draftDocument, id: "published-shape" });
     await studio.register(published.id, principal);
     storage.deleteLearner(principal.learnerId, "2026-08-14T01:00:00.000Z");
-    expect(storage.shapeDrafts("__legacy").find((row) => row.id === draft.id)?.state).toBe("withdrawn");
-    expect(storage.registeredShapes().find((row) => row.shapeId === "published-shape")?.document).toMatchObject({ id: "published-shape" });
+    expect(storage.shapeDrafts("__legacy").find((row) => row.id === draft.id)).toBeUndefined();
+    expect(storage.registeredShapes().find((row) => row.shapeId === "published-shape")).toMatchObject({ document: { id: "published-shape" }, publisherHandle: "deleted account" });
   });
 });

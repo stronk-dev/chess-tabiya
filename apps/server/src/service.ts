@@ -114,6 +114,7 @@ import {
 import type { LeaseHolder, RunGrant, RunRole } from "./storage.js";
 import { parsePgnMainline, PgnImportError } from "./pgn-import.js";
 import { resolveImportSource, type ImportSource } from "./import-source.js";
+import type { DeletionPreviewV1 } from "./account-data.js";
 
 function ratingGroup(value: PublishedBandValue): string | number {
   if (value.kind === "below") return `below-${value.band}`;
@@ -1317,6 +1318,14 @@ export class RunService {
       : stored.run.branches[0]!.seed + memberIndex + 1;
     const request = this.#selectionRequest(stored.run, node.id, pack, policy, seed);
     return Object.freeze({ selection: await selector.select(request), reusedFromNodeId: null });
+  }
+
+  deletionPreview(runId: string, principal: Principal, at = new Date().toISOString()): DeletionPreviewV1 {
+    return this.#storage.deletionPreview(principal.learnerId, { kind: "run", runId }, at);
+  }
+
+  deleteRun(runId: string, principal: Principal, previewDigest: string, at = new Date().toISOString()): void {
+    this.#storage.deleteOwnedRun(principal.learnerId, runId, at, previewDigest);
   }
 
   runs(principal: Principal, limit: number, offset: number): readonly RunSummary[];

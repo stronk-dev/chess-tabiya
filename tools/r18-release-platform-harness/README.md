@@ -12,3 +12,13 @@ node tools/r18-release-platform-harness/run.mjs \
 The probe registers its own disposable learner, records no password or session token, starts the
 named Anti-Caro pack, and writes mechanical DOM/accessibility, focus, viewport and PWA facts. It
 cannot establish screen-reader-user usability.
+
+The implementation regression arm is separate from the browser probe:
+
+```sh
+make account-data-lifecycle-check
+```
+
+It fails if portable export leaks password material, if account deletion again reassigns a private
+solo run instead of deleting it, if that deletion creates a `__legacy` grant, or if destructive
+integration leaves a foreign-key violation.

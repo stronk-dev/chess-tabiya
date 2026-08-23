@@ -50,16 +50,31 @@ provenance, and the learner-bound lease. Existing runs are assigned to a real
 but non-authenticating `__legacy` sentinel with a host grant. Fresh databases do
 not create that row until it is needed.
 
-Deleting an account reassigns its owned runs and held leases to `__legacy`
-rather than deleting shared artifacts. Other learners' grants survive. A surviving
-participant retains access but needs the host-directed possession policy satisfied
-before writing; a newly registered account
-using the deleted handle inherits nothing because all references use learner ids.
+Deletion is previewed before it mutates anything. A private owned run is permanently
+deleted. A run with an active authenticated collaborator or a foreign-owned derived
+run survives as a read-only tombstone: its owner and writer become `__legacy`, every
+remaining real grant becomes `spectator`, anonymous links are removed, private import
+and mark data is removed, and any live session closes. No collaborator can claim the
+board, mutate grants, mint links, or reopen the session. Re-registering the deleted
+handle inherits nothing because relationships use learner ids.
+
+The preview digest covers the current run snapshots, grants, publications, and shared
+classroom facts. Account and per-run deletion recompute that plan under
+`BEGIN IMMEDIATE`; changed facts produce `DELETION_PREVIEW_STALE` and no mutation.
+Shared classrooms archive as read-only history for active members. Private classrooms
+delete. Registered pack and shape bytes remain immutable, with publisher display
+metadata changed to `deleted account`; unpublished drafts delete.
 
 ## HTTP surface
 
-`/auth/register`, `/auth/login`, `/auth/logout`, `/auth/delete`, and
-`/auth/session` manage the account and cookie. All run routes and the hosted
+`/auth/register`, `/auth/login`, `/auth/logout`, `/auth/session`,
+`POST /auth/export`, `POST /auth/deletion-preview`, and `POST /auth/delete`
+manage the account and cookie. Export and final account deletion re-confirm the
+password. Export returns deterministic canonical JSON with its SHA-256 digest and
+never includes password, session, token, or provider credentials. Final deletion
+also requires the preview digest. `POST /runs/:id/deletion-preview` and
+`POST /runs/:id/delete` provide the same stale-safe flow for one host-owned run.
+All run routes and the hosted
 opponent selector require a session. Run reads additionally require a grant;
 missing grants return 404 to avoid disclosing run existence. Grant management and
 lease claim use JSON POST bodies and retain the device writer header where it is
@@ -86,3 +101,8 @@ revocable. Every invalid-token state deliberately looks like the same 404.
 - Run events still identify chess actors only as user/opponent/system. A live session's
   possession journal derives the learner responsible for ordinary committed plies;
   Arena imports use their leg attribution instead.
+- Account export is not an account-import format. It is a portable, intelligible copy
+  of account data. Object-specific PGN and draft interchange remain separate.
+- Live rows are removed immediately. Existing operator backups may retain an older
+  copy until the deployment's backup policy expires; account deletion cannot rewrite
+  a backup already made.

@@ -1,4 +1,4 @@
-.PHONY: setup typecheck test test-browser schema-check register-check status-parity work-index intent-parity evidence-manifest-check semantic-evidence-check graduation-plan graduation-plan-check tactical-collector-measurement breadth-collector-measurement build verify pack-check shape-check expression-census graduation-report graduation-clear pack-preview source-fetch candidate-emit candidate-attach sourcing-check verify-draft tablebase-walk engine-walk up up-engines down
+.PHONY: setup typecheck test test-browser schema-check register-check status-parity work-index intent-parity evidence-manifest-check semantic-evidence-check account-data-lifecycle-check graduation-plan graduation-plan-check tactical-collector-measurement breadth-collector-measurement build verify pack-check shape-check expression-census graduation-report graduation-clear pack-preview source-fetch candidate-emit candidate-attach sourcing-check verify-draft tablebase-walk engine-walk up up-engines down
 
 setup:
 	pnpm install --frozen-lockfile
@@ -45,6 +45,9 @@ semantic-evidence-check:
 	./node_modules/.bin/esbuild apps/server/src/semantic-evidence-check.ts --bundle --platform=node --format=esm --outfile=apps/server/dist/semantic-evidence-check.js
 	node apps/server/dist/semantic-evidence-check.js
 
+account-data-lifecycle-check:
+	./node_modules/.bin/vitest run apps/server/src/r18-account-data.test.ts
+
 tactical-collector-measurement:
 	./node_modules/.bin/vitest run --config tools/tactical-collector-measurement-harness/vitest.config.ts
 
@@ -54,7 +57,7 @@ breadth-collector-measurement:
 build:
 	pnpm build
 
-verify: typecheck test schema-check register-check status-parity work-index intent-parity evidence-manifest-check semantic-evidence-check graduation-plan-check
+verify: typecheck test schema-check register-check status-parity work-index intent-parity evidence-manifest-check semantic-evidence-check account-data-lifecycle-check graduation-plan-check
 
 pack-check:
 	@test -n "$(FILE)" || (echo "Usage: make pack-check FILE=<path-to-pack.json>" >&2; exit 2)

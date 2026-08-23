@@ -43,6 +43,7 @@
     type ClassroomSummary,
     type ClassroomDetail,
     type AssignedPack,
+    type DeletionPreview,
     ApiError,
   } from "./lib/api.js";
   import { HistoryRouter, routePath, type AppRoute } from "./lib/router.js";
@@ -54,6 +55,7 @@
   import { WriterSession, type KeyValueStorage } from "./lib/writer-session.js";
   import { voteAttribution } from "./lib/live-vote.js";
   import { markAttribution, relayedMarkShapes } from "./lib/live-marks.js";
+  import { clearAccountLocalData, clearRunLocalData } from "./lib/account-local-data.js";
 
   interface Props {
     api?: DrillClientApi;
@@ -86,6 +88,8 @@
   let session: DrillSessionState = $state(controller.state);
   let packs: readonly PackSummary[] = $state([]);
   let runs: readonly RunSummary[] = $state([]);
+  let runDeletion = $state<{ readonly run: RunSummary; readonly preview: DeletionPreview } | undefined>();
+  let runDeletionError = $state<string | undefined>();
   let attempts: readonly ProgressAttempt[] = $state([]);
   let dueSchedules: readonly ProgressSchedule[] = $state([]);
   let milestones: readonly ProgressMilestone[] = $state([]);
@@ -411,9 +415,42 @@
     routerStarted = false;
   }
 
-  async function deleteAccountWithPassword(password: string): Promise<void> {
-    await api.deleteAccount?.(password);
+  async function deleteAccountWithPassword(password: string, previewDigest: string): Promise<void> {
+    await api.deleteAccount?.(password, previewDigest);
+    try { clearAccountLocalData(globalThis.localStorage); } catch { /* storage can be unavailable */ }
     controller.stopSession(); learner = undefined; router.stop?.(); routerStarted = false;
+  }
+
+  async function exportAccountWithPassword(password: string): Promise<void> {
+    if (api.exportAccount === undefined) throw new Error("Account export is unavailable.");
+    const download = await api.exportAccount(password);
+    const url = URL.createObjectURL(download.blob);
+    const anchor = document.createElement("a");
+    anchor.href = url;
+    anchor.download = download.filename;
+    document.body.append(anchor);
+    anchor.click();
+    anchor.remove();
+    setTimeout(() => URL.revokeObjectURL(url), 0);
+  }
+
+  async function reviewRunDeletion(run: RunSummary): Promise<void> {
+    runDeletionError = undefined;
+    try {
+      if (api.runDeletionPreview === undefined) throw new Error("Run deletion is unavailable.");
+      runDeletion = { run, preview: await api.runDeletionPreview(run.id) };
+    } catch (error) { runDeletionError = error instanceof Error ? error.message : String(error); }
+  }
+
+  async function confirmRunDeletion(): Promise<void> {
+    if (runDeletion === undefined || api.deleteRun === undefined) return;
+    runDeletionError = undefined;
+    try {
+      await api.deleteRun(runDeletion.run.id, runDeletion.preview.digest);
+      try { clearRunLocalData(globalThis.localStorage, runDeletion.run.id); } catch { /* storage can be unavailable */ }
+      runs = runs.filter((run) => run.id !== runDeletion!.run.id);
+      runDeletion = undefined;
+    } catch (error) { runDeletionError = error instanceof Error ? error.message : String(error); }
   }
 
   async function exportPgn(branchIds?: readonly string[]): Promise<void> {
@@ -833,9 +870,10 @@
           <div class="row-actions">
             <button type="button" onclick={() => void createDraft()}>Create draft</button>
             <button type="button" disabled={!selectedDraftId} aria-describedby={!selectedDraftId ? "save-disabled" : undefined} onclick={() => void saveDraft()}>Save</button>
-            <button type="button" disabled={!selectedDraftId} aria-describedby={!selectedDraftId ? "register-disabled" : undefined} onclick={() => void registerDraft()}>Register community pack</button>
+            <button type="button" disabled={!selectedDraftId} aria-describedby={!selectedDraftId ? "register-disabled" : "pack-publication-retention"} onclick={() => void registerDraft()}>Register community pack</button>
           </div>
           {#if !selectedDraftId}<p id="save-disabled" class="honest">Select or create a draft before saving.</p><p id="register-disabled" class="honest">Select a valid draft before registration.</p>{/if}
+          {#if selectedDraftId}<p id="pack-publication-retention" class="honest">Registration publishes immutable document bytes, authored prose, licence, and attribution. They remain available with “deleted account” attribution if you later delete your account.</p>{/if}
           {#if selectedDraftId}
             {@const selected = drafts.find((candidate) => candidate.id === selectedDraftId)}
             {#if selected}<ul>{#each selected.validation.issues as issue}<li><code>{issue.path}</code> {issue.code}: {issue.message}</li>{:else}<li>Validation clean.</li>{/each}</ul>{/if}
@@ -856,10 +894,11 @@
             <button type="button" onclick={() => void createShapeDraft()}>Create shape draft</button>
             <button type="button" disabled={!selectedShapeDraftId} aria-describedby={!selectedShapeDraftId ? "shape-selection-required" : undefined} onclick={() => void saveShapeDraft()}>Save shape</button>
             <button type="button" disabled={!selectedShapeDraftId} aria-describedby={!selectedShapeDraftId ? "shape-selection-required" : undefined} onclick={() => void lintShapeDraft()}>Lint + probe</button>
-            <button type="button" disabled={!selectedShapeDraftId} aria-describedby={!selectedShapeDraftId ? "shape-selection-required" : undefined} onclick={() => void registerShapeDraft()}>Register community shape</button>
+            <button type="button" disabled={!selectedShapeDraftId} aria-describedby={!selectedShapeDraftId ? "shape-selection-required" : "shape-publication-retention"} onclick={() => void registerShapeDraft()}>Register community shape</button>
           </div>
           {#if shapeProbeResult !== undefined}<p role="status">Probe trigger: {shapeProbeResult ? "matches" : "does not match"}</p>{/if}
           {#if !selectedShapeDraftId}<p id="shape-selection-required" class="honest">Select or create a shape draft first.</p>{/if}
+          {#if selectedShapeDraftId}<p id="shape-publication-retention" class="honest">Registration publishes immutable shape bytes, authored prose, licence, and attribution. They remain available with “deleted account” attribution if you later delete your account.</p>{/if}
           {#if selectedShapeDraftId}{@const selectedShape=shapeDrafts.find((candidate)=>candidate.id===selectedShapeDraftId)}{#if selectedShape}<ul>{#each selectedShape.validation.issues as issue}<li><code>{issue.path}</code> {issue.code}: {issue.message}</li>{:else}<li>Validation clean.</li>{/each}</ul>{/if}{/if}
         </section>
       </div>
@@ -873,16 +912,17 @@
         <form class="row-actions" onsubmit={(event)=>{event.preventDefault();void createClassroom();}}><label>New classroom <input required bind:value={classroomName} /></label><button type="submit">Create</button></form>
         <div class="item-list">
           {#each classrooms as classroom}
-            <article><div><h3>{classroom.name}</h3><p>{classroom.memberRole} · {classroom.memberState}</p></div>
+            <article><div><h3>{classroom.name}</h3><p>{classroom.memberRole} · {classroom.memberState}{classroom.archivedAt ? " · archived read-only" : ""}</p></div>
               {#if classroom.memberState==="invited"}<div class="row-actions"><button type="button" onclick={()=>void respondClassroom(classroom.id,"accept")}>Accept</button><button type="button" onclick={()=>void respondClassroom(classroom.id,"decline")}>Decline</button></div>{:else}<button type="button" onclick={()=>void openClassroom(classroom.id)}>Open</button>{/if}
             </article>
           {:else}<p>No classrooms yet.</p>{/each}
         </div>
         {#if classroomDetail}
           <article class="classroom-detail">
-            <div class="row-actions"><h3>{classroomDetail.classroom.name}</h3><button type="button" onclick={()=>void respondClassroom(classroomDetail!.classroom.id,"leave")}>Leave</button></div>
+            <div class="row-actions"><h3>{classroomDetail.classroom.name}{classroomDetail.classroom.archivedAt ? " · archived" : ""}</h3>{#if !classroomDetail.classroom.archivedAt}<button type="button" onclick={()=>void respondClassroom(classroomDetail!.classroom.id,"leave")}>Leave</button>{/if}</div>
+            {#if classroomDetail.classroom.archivedAt}<p class="honest">This classroom remains as read-only shared history. Membership, assignments, submissions, and scheduling cannot be changed.</p>{/if}
             <h4>Members</h4><ul>{#each classroomDetail.members as member}<li>@{member.handle} — {member.memberRole}, {member.state}</li>{/each}</ul>
-            {#if classroomDetail.membership.memberRole==="teacher"}
+            {#if classroomDetail.membership.memberRole==="teacher" && !classroomDetail.classroom.archivedAt}
               <form class="row-actions" onsubmit={(event)=>{event.preventDefault();void inviteClassroom();}}><label>Invite handle <input required bind:value={classroomInviteHandle}/></label><label>Role <select bind:value={classroomInviteRole}><option value="learner">Learner</option><option value="teacher">Teacher</option></select></label><button type="submit">Invite</button></form>
               <form class="row-actions" onsubmit={(event)=>{event.preventDefault();void assignClassroomPack();}}><label>Pack <select required bind:value={assignmentPackId}><option value="">Choose a pack</option>{#each packs as pack}<option value={pack.id}>{pack.title}</option>{/each}</select></label><label>Teacher note <input bind:value={assignmentNote}/></label><label>Due <input type="datetime-local" bind:value={assignmentDueAt}/></label><button type="submit">Assign</button></form>
             {/if}
@@ -918,13 +958,25 @@
     <main class="shell-view" aria-labelledby="library-title">
       <p class="eyebrow">Library</p><h1 id="library-title">Packs and run artifacts</h1>
       <section><h2>Rehearsal packs</h2><ul>{#each packs as pack}<li>{pack.title} <small>{pack.reviewStatus.replaceAll("_", " ")}</small></li>{:else}<li>No packs available.</li>{/each}</ul></section>
-      <section><h2>Runs with exportable PGN</h2><ul>{#each runs as run}<li><button class="link-button" type="button" onclick={() => navigate(routePath({ name: "run", runId: run.id }))}>{run.title}</button> <small>{run.branchCount} branches</small></li>{:else}<li>No run artifacts yet.</li>{/each}</ul></section>
+      <section><h2>Runs with exportable PGN</h2><ul>{#each runs as run}<li><button class="link-button" type="button" onclick={() => navigate(routePath({ name: "run", runId: run.id }))}>{run.title}</button> <small>{run.branchCount} branches</small> {#if run.viewerRole === "host"}<button type="button" onclick={() => void reviewRunDeletion(run)}>Delete this run</button>{/if}</li>{:else}<li>No run artifacts yet.</li>{/each}</ul>
+        {#if runDeletion}
+          <aside class="deletion-card" aria-live="polite">
+            <h3>Delete {runDeletion.run.title}?</h3>
+            {#each runDeletion.preview.hardDelete as effect}<p>{effect.label}</p>{/each}
+            {#each runDeletion.preview.tombstone as effect}<p>{effect.label}</p>{/each}
+            {#each runDeletion.preview.revoke as effect}<p>{effect.label}</p>{/each}
+            <p class="honest">{runDeletion.preview.backupNotice}</p>
+            <div class="row-actions"><button type="button" onclick={() => void confirmRunDeletion()}>Confirm deletion</button><button type="button" onclick={() => runDeletion = undefined}>Cancel</button></div>
+          </aside>
+        {/if}
+        {#if runDeletionError}<p role="alert">{runDeletionError}</p>{/if}
+      </section>
     </main>
   {:else if route.name === "settings"}
     <main class="shell-view" aria-labelledby="settings-title">
       <p class="eyebrow">Settings</p><h1 id="settings-title">This deployment</h1>
       <AppearanceSettings />
-      <AssistanceSettings {capabilities} {learner} onSignOut={signOut} onDelete={deleteAccountWithPassword} />
+      <AssistanceSettings {capabilities} {learner} onSignOut={signOut} onExport={exportAccountWithPassword} loadDeletionPreview={() => api.accountDeletionPreview?.() ?? Promise.reject(new Error("Deletion preview is unavailable."))} onDelete={deleteAccountWithPassword} />
       {#if capabilities}<h2>Surface availability</h2><ul>{#each Object.entries(capabilities.surfaces) as [id, availability]}<li>{id}: {PLANNED_SURFACES.includes(id as SurfaceId) ? "planned" : availability}</li>{/each}</ul>{/if}
     </main>
   {:else if route.name === "not-found"}
@@ -988,6 +1040,7 @@
   .import-game label { display: grid; gap: 0.3rem; }
   .import-game input, .import-game textarea { width: 100%; padding: 0.65rem; border: 1px solid var(--line); border-radius: 0.5rem; }
   .row-actions { display: flex; gap: 0.5rem; }
+  .deletion-card { margin-top: 1rem; padding: 1rem; max-width: 42rem; border: 1px solid var(--line); border-radius: 0.8rem; background: var(--panel); }
   .row-actions label { display: grid; gap: 0.25rem; }
   select { padding: 0.65rem; border: 1px solid var(--line); border-radius: 0.55rem; background: var(--panel); }
   .live-overlay { width: 100%; height: 100%; display: grid; grid-template-columns: minmax(0, min(75vh, 70vw)) minmax(12rem, 1fr); gap: 1.5rem; align-items: center; padding: 1rem; overflow: hidden; background: transparent; }

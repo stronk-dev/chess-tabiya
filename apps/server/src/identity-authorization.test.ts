@@ -138,7 +138,7 @@ describe("learner identity and run authorization", () => {
     const beforeBody = await beforeClaim.json() as {
       graph: { viewer: { role: string; mayWrite: boolean; holdsLease: boolean; leaseHeldBy: { learnerId: string } } };
     };
-    expect(beforeBody.graph.viewer).toEqual({
+    expect(beforeBody.graph.viewer).toMatchObject({
       role: "participant",
       mayWrite: true,
       holdsLease: false,
@@ -229,6 +229,24 @@ describe("learner identity and run authorization", () => {
     })).status).toBe(401);
   });
 
+  it("exports deterministic account bytes only after password reconfirmation", async () => {
+    const { handler } = setup();
+    const alice = await register(handler, "alice");
+    const wrong = await call(handler, "POST", "/auth/export", { cookie: alice.cookie, body: { password: "definitely-wrong-password" } });
+    expect(wrong.status).toBe(401);
+    const first = await call(handler, "POST", "/auth/export", { cookie: alice.cookie, body: { password: PASSWORD } });
+    const second = await call(handler, "POST", "/auth/export", { cookie: alice.cookie, body: { password: PASSWORD } });
+    expect(first.status).toBe(200);
+    expect(first.headers.get("content-type")).toBe("application/vnd.tabiya.account+json; version=1");
+    expect(first.headers.get("content-disposition")).toBe('attachment; filename="tabiya-account-alice.json"');
+    expect(first.headers.get("cache-control")).toBe("no-store");
+    const firstText = await first.text();
+    expect(firstText).toBe(await second.text());
+    expect(first.headers.get("x-tabiya-export-sha256")).toMatch(/^sha256:[a-f0-9]{64}$/u);
+    expect(firstText).not.toContain(PASSWORD);
+    expect(firstText).toContain('"kind":"password_hash"');
+  });
+
   it("atomically returns a revoked lease to the acting host", async () => {
     const { handler, storage } = setup();
     const alice = await register(handler, "alice");
@@ -277,7 +295,7 @@ describe("learner identity and run authorization", () => {
     })).status).toBe(404);
   });
 
-  it("reassigns deleted-account runs while preserving another learner's grant", async () => {
+  it("tombstones shared runs read-only while deleting the departing account", async () => {
     const { handler, storage } = setup();
     const alice = await register(handler, "alice");
     const bob = await register(handler, "bob");
@@ -291,9 +309,12 @@ describe("learner identity and run authorization", () => {
       writerId: "writer-alice",
       body: { op: "grant", handle: "bob", role: "participant" },
     });
+    const previewResponse = await call(handler, "POST", "/auth/deletion-preview", { cookie: alice.cookie, body: {} });
+    const preview = await previewResponse.json() as { digest: string; tombstone: readonly { objectIds: readonly string[] }[] };
+    expect(preview.tombstone.flatMap((effect) => effect.objectIds)).toEqual(["orphan-safe-run"]);
     const deleted = await call(handler, "POST", "/auth/delete", {
       cookie: alice.cookie,
-      body: { password: PASSWORD },
+      body: { password: PASSWORD, previewDigest: preview.digest },
     });
     expect(deleted.status).toBe(200);
     expect(storage.read("orphan-safe-run")?.activeWriterLearnerId).toBe("__legacy");
@@ -304,20 +325,51 @@ describe("learner identity and run authorization", () => {
     });
     expect(graph.status).toBe(200);
     expect(await graph.json()).toMatchObject({
-      graph: { viewer: { role: "participant", leaseHeldBy: { handle: "__legacy" } } },
+      graph: { viewer: { role: "spectator", leaseHeldBy: { handle: "__legacy" } } },
     });
     const blocked = await call(handler, "POST", "/runs/orphan-safe-run/lease", {
       cookie: bob.cookie,
       writerId: "writer-bob",
       body: {},
     });
-    expect(blocked.status).toBe(409);
-    expect((await blocked.json() as { error: { code: string } }).error.code).toBe("BOARD_HELD");
+    expect(blocked.status).toBe(403);
     expect((await call(handler, "GET", "/auth/session", { cookie: alice.cookie })).status).toBe(401);
     const replacement = await register(handler, "alice");
     expect((await call(handler, "GET", "/runs/orphan-safe-run/graph", {
       cookie: replacement.cookie,
     })).status).toBe(404);
+  });
+
+  it("hard-deletes private runs and rejects a stale account preview without mutation", async () => {
+    const { handler, storage } = setup();
+    const alice = await register(handler, "alice");
+    const bob = await register(handler, "bob");
+    await call(handler, "POST", "/runs", { cookie: alice.cookie, writerId: "writer-alice", body: runBody("solo-run") });
+    const initial = await (await call(handler, "POST", "/auth/deletion-preview", { cookie: alice.cookie, body: {} })).json() as { digest: string; hardDelete: readonly { objectIds: readonly string[] }[] };
+    expect(initial.hardDelete.flatMap((effect) => effect.objectIds)).toContain("solo-run");
+    await call(handler, "POST", "/runs/solo-run/grants", { cookie: alice.cookie, writerId: "writer-alice", body: { op: "grant", handle: "bob", role: "spectator" } });
+    const stale = await call(handler, "POST", "/auth/delete", { cookie: alice.cookie, body: { password: PASSWORD, previewDigest: initial.digest } });
+    expect(stale.status).toBe(409);
+    expect((await stale.json() as { error: { code: string } }).error.code).toBe("DELETION_PREVIEW_STALE");
+    expect(storage.learnerById(alice.body.learner.id)).toBeDefined();
+    expect(storage.read("solo-run")).toBeDefined();
+    await call(handler, "POST", "/runs/solo-run/grants", { cookie: alice.cookie, writerId: "writer-alice", body: { op: "revoke", handle: "bob" } });
+    const current = await (await call(handler, "POST", "/auth/deletion-preview", { cookie: alice.cookie, body: {} })).json() as { digest: string };
+    expect((await call(handler, "POST", "/auth/delete", { cookie: alice.cookie, body: { password: PASSWORD, previewDigest: current.digest } })).status).toBe(200);
+    expect(storage.read("solo-run")).toBeUndefined();
+  });
+
+  it("previews and deletes one owned run without deleting the account", async () => {
+    const { handler, storage } = setup();
+    const alice = await register(handler, "alice");
+    const bob = await register(handler, "bob");
+    await call(handler, "POST", "/runs", { cookie: alice.cookie, writerId: "writer-alice", body: runBody("delete-one") });
+    expect((await call(handler, "POST", "/runs/delete-one/deletion-preview", { cookie: bob.cookie, body: {} })).status).toBe(404);
+    const preview = await (await call(handler, "POST", "/runs/delete-one/deletion-preview", { cookie: alice.cookie, body: {} })).json() as { digest: string; hardDelete: readonly { objectIds: readonly string[] }[] };
+    expect(preview.hardDelete.flatMap((effect) => effect.objectIds)).toContain("delete-one");
+    expect((await call(handler, "POST", "/runs/delete-one/delete", { cookie: alice.cookie, body: { previewDigest: preview.digest } })).status).toBe(200);
+    expect(storage.read("delete-one")).toBeUndefined();
+    expect((await call(handler, "GET", "/auth/session", { cookie: alice.cookie })).status).toBe(200);
   });
 
   it("locks after ten failures and performs one derivation for every login shape", async () => {

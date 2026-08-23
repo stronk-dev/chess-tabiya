@@ -2,21 +2,26 @@
   import { SILENT_ASSISTANCE, type AssistanceConfig } from "@chess-tabiya/runtime";
   import { onMount } from "svelte";
 
-  import type { Capabilities, Learner } from "./api.js";
+  import type { Capabilities, DeletionEffect, DeletionPreview, Learner } from "./api.js";
   import { ASSISTANCE_PROFILES, loadAssistance, saveAssistance, type AssistanceProfile } from "./assistance-preference.js";
 
   interface Props {
     capabilities?: Capabilities | undefined;
     learner?: Learner | undefined;
     onSignOut: () => void | Promise<void>;
-    onDelete: (password: string) => void | Promise<void>;
+    onExport: (password: string) => void | Promise<void>;
+    onDelete: (password: string, previewDigest: string) => void | Promise<void>;
+    loadDeletionPreview?: () => Promise<DeletionPreview>;
   }
 
-  let { capabilities, learner, onSignOut, onDelete }: Props = $props();
+  let { capabilities, learner, onSignOut, onExport, onDelete, loadDeletionPreview }: Props = $props();
   const labels: Record<AssistanceProfile, string> = { pack: "Curated drill", position: "Just Play", imported: "Imported game", match: "Match / Arena", stream: "Streamed session", academy: "Academy", onramp: "On-ramp" };
   let configs: Record<AssistanceProfile, AssistanceConfig> = $state(Object.fromEntries(ASSISTANCE_PROFILES.map((profile) => [profile, SILENT_ASSISTANCE])) as Record<AssistanceProfile, AssistanceConfig>);
   let password = $state("");
+  let exportPassword = $state("");
+  let exportStatus = $state<string | undefined>();
   let deleteError = $state<string | undefined>();
+  let deletionPreview = $state<DeletionPreview | undefined>();
 
   function storage(): Storage | undefined { try { return globalThis.localStorage; } catch { return undefined; } }
   function set<Key extends keyof Omit<AssistanceConfig, "version">>(kind: AssistanceProfile, key: Key, value: AssistanceConfig[Key]): void {
@@ -26,8 +31,24 @@
   }
   async function removeAccount(): Promise<void> {
     deleteError = undefined;
+    if (deletionPreview === undefined) { deleteError = "Review what will happen before deleting the account."; return; }
     if (password.length === 0) { deleteError = "Re-enter your password before deleting the account."; return; }
-    try { await onDelete(password); password = ""; } catch (error) { deleteError = error instanceof Error ? error.message : String(error); }
+    try { await onDelete(password, deletionPreview.digest); password = ""; } catch (error) { deleteError = error instanceof Error ? error.message : String(error); }
+  }
+  async function previewDeletion(): Promise<void> {
+    deleteError = undefined;
+    try {
+      if (loadDeletionPreview === undefined) throw new Error("Deletion preview is unavailable.");
+      deletionPreview = await loadDeletionPreview();
+    } catch (error) { deleteError = error instanceof Error ? error.message : String(error); }
+  }
+  function effectCount(groups: readonly DeletionEffect[]): number { return groups.reduce((total, effect) => total + effect.count, 0); }
+  async function downloadAccount(): Promise<void> {
+    exportStatus = undefined;
+    if (exportPassword.length === 0) { exportStatus = "Re-enter your password to download your data."; return; }
+    try { await onExport(exportPassword); exportStatus = "Your account data download has started."; }
+    catch (error) { exportStatus = error instanceof Error ? error.message : String(error); }
+    finally { exportPassword = ""; }
   }
   onMount(() => { configs = Object.fromEntries(ASSISTANCE_PROFILES.map((profile) => [profile, loadAssistance(profile, storage())])) as Record<AssistanceProfile, AssistanceConfig>; });
 </script>
@@ -64,10 +85,31 @@
 <section aria-labelledby="account-settings-title">
   <h2 id="account-settings-title">Account</h2><p>Signed in as <strong>@{learner.handle}</strong>.</p>
   <button type="button" onclick={onSignOut}>Sign out</button>
+  <form onsubmit={(event) => { event.preventDefault(); void downloadAccount(); }}>
+    <h3>Download my data</h3>
+    <p class="honest">A portable copy of your runs, progress, authored drafts, publications, and account-scoped activity. Passwords, sessions, provider credentials, and preferences stored only on this device are excluded.</p>
+    <label>Current password <input type="password" autocomplete="current-password" bind:value={exportPassword} /></label>
+    <button type="submit">Download my data</button>
+    {#if exportStatus}<p role="status">{exportStatus}</p>{/if}
+  </form>
   <form onsubmit={(event) => { event.preventDefault(); void removeAccount(); }}>
+    <h3>Delete account</h3>
+    {#if deletionPreview === undefined}
+      <p>First review exactly what will be deleted, what collaborators can still read, and what published work remains.</p>
+      <button type="button" onclick={() => void previewDeletion()}>Review deletion effects</button>
+    {:else}
+      <div class="deletion-preview" aria-live="polite">
+        <h4>Deletion effects</h4>
+        {#if effectCount(deletionPreview.hardDelete) > 0}<h5>Permanently deleted</h5><ul>{#each deletionPreview.hardDelete as effect}<li>{effect.label} ({effect.count})</li>{/each}</ul>{/if}
+        {#if effectCount(deletionPreview.tombstone) > 0}<h5>Kept read-only for collaborators</h5><ul>{#each deletionPreview.tombstone as effect}<li>{effect.label}</li>{/each}</ul>{/if}
+        {#if effectCount(deletionPreview.revoke) > 0}<h5>Access revoked</h5><ul>{#each deletionPreview.revoke as effect}<li>{effect.label} ({effect.count})</li>{/each}</ul>{/if}
+        {#if effectCount(deletionPreview.retainedPublished) > 0}<h5>Published work retained</h5><ul>{#each deletionPreview.retainedPublished as effect}<li>{effect.label}</li>{/each}</ul>{/if}
+        <p class="honest">{deletionPreview.backupNotice}</p>
+      </div>
     <label>Re-enter password <input type="password" autocomplete="current-password" bind:value={password} /></label>
     <button type="submit">Delete account</button>
-    <p class="honest">Shared runs are reassigned, not deleted. There is no password recovery, device list, or global sign-out; sessions expire after 30 days.</p>
+    <p class="honest">This browser's Tabiya writer ids and preferences are cleared after deletion. Other devices may retain obsolete device-local preferences, but every server session is invalidated.</p>
+    {/if}
     {#if deleteError}<p role="alert">{deleteError}</p>{/if}
   </form>
 </section>

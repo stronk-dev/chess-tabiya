@@ -107,6 +107,24 @@ export interface Learner {
   readonly createdAt: string;
 }
 
+export interface DeletionEffect {
+  readonly kind: string;
+  readonly count: number;
+  readonly objectIds: readonly string[];
+  readonly label: string;
+}
+
+export interface DeletionPreview {
+  readonly version: 1;
+  readonly scope: { readonly kind: "account" } | { readonly kind: "run"; readonly runId: string };
+  readonly digest: string;
+  readonly hardDelete: readonly DeletionEffect[];
+  readonly tombstone: readonly DeletionEffect[];
+  readonly revoke: readonly DeletionEffect[];
+  readonly retainedPublished: readonly DeletionEffect[];
+  readonly backupNotice: string;
+}
+
 export interface RunGrant extends LeaseIdentity {
   readonly role: RunRole;
   readonly grantedAt: string;
@@ -729,13 +747,17 @@ export interface DrillClientApi extends RunApi {
   register?(handle: string, password: string, displayName?: string): Promise<Learner>;
   login?(handle: string, password: string): Promise<Learner>;
   logout?(): Promise<void>;
-  deleteAccount?(password: string): Promise<void>;
+  exportAccount?(password: string): Promise<{ readonly blob: Blob; readonly filename: string; readonly digest: string }>;
+  accountDeletionPreview?(): Promise<DeletionPreview>;
+  deleteAccount?(password: string, previewDigest: string): Promise<void>;
   capabilities(): Promise<Capabilities>;
   packs(): Promise<readonly PackSummary[]>;
   pack(packId: string): Promise<PackDocument>;
   shapes(): Promise<readonly ShapeSummary[]>;
   shape(shapeId: string): Promise<ShapeDocument>;
   runs(limit?: number, offset?: number): Promise<readonly RunSummary[]>;
+  runDeletionPreview?(runId: string): Promise<DeletionPreview>;
+  deleteRun?(runId: string, previewDigest: string): Promise<void>;
   selectMove(input: SelectMoveRequest): Promise<OpponentSelection>;
   graph(runId: string, writerId?: string): Promise<RunGraph>;
   claimLease?(runId: string, writerId: string): Promise<void>;
@@ -873,8 +895,33 @@ export class DrillApi implements DrillClientApi {
     await this.#json("/auth/logout", { method: "POST", body: {} });
   }
 
-  async deleteAccount(password: string): Promise<void> {
-    await this.#json("/auth/delete", { method: "POST", body: { password } });
+  async exportAccount(password: string): Promise<{ readonly blob: Blob; readonly filename: string; readonly digest: string }> {
+    const response = await this.#response("/auth/export", { method: "POST", body: { password } });
+    const digest = response.headers.get("x-tabiya-export-sha256");
+    if (digest === null || !/^sha256:[a-f0-9]{64}$/u.test(digest)) {
+      throw new ApiError(502, "INVALID_RESPONSE", "Account export omitted its digest");
+    }
+    return Object.freeze({
+      blob: await response.blob(),
+      filename: attachmentFilename(response.headers.get("content-disposition"), "tabiya-account.json"),
+      digest,
+    });
+  }
+
+  accountDeletionPreview(): Promise<DeletionPreview> {
+    return this.#json("/auth/deletion-preview", { method: "POST", body: {} });
+  }
+
+  async deleteAccount(password: string, previewDigest: string): Promise<void> {
+    await this.#json("/auth/delete", { method: "POST", body: { password, previewDigest } });
+  }
+
+  runDeletionPreview(runId: string): Promise<DeletionPreview> {
+    return this.#json(`/runs/${encoded(runId)}/deletion-preview`, { method: "POST", body: {} });
+  }
+
+  async deleteRun(runId: string, previewDigest: string): Promise<void> {
+    await this.#json(`/runs/${encoded(runId)}/delete`, { method: "POST", body: { previewDigest } });
   }
 
   capabilities(): Promise<Capabilities> {

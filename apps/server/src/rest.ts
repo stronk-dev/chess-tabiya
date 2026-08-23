@@ -629,6 +629,7 @@ export function errorResponse(error: unknown): Response {
                 error.code === "PACK_ID_NOT_YOURS" ||
                 error.code === "SHAPE_ID_NOT_YOURS" ||
                 error.code === "DRAFT_STALE" ||
+                error.code === "DELETION_PREVIEW_STALE" ||
                 error.code === "REPERTOIRE_STALE" ||
                 error.code === "BOARD_HELD" ||
                 error.code === "MATCH_LIVE" ||
@@ -674,7 +675,7 @@ export function errorResponse(error: unknown): Response {
 function parseRunRoute(
   pathname: string,
 ): { runId: string; action: string } | undefined {
-  const match = /^\/runs\/([^/]+)\/(moves|rewind|fork|graph|compare|branch-decidedness|events|evidence|authored-feedback|pgn|grants|lease|reveal|duplicate|schedule|simulate|simulate-enter|prediction|reasoning|reasoning-review|analysis|human-split|corpus|voice|speech|group|group-reply|import|story|share|flip|derivations|distill|marks)$/.exec(
+  const match = /^\/runs\/([^/]+)\/(moves|rewind|fork|graph|compare|branch-decidedness|events|evidence|authored-feedback|pgn|grants|lease|reveal|duplicate|schedule|simulate|simulate-enter|prediction|reasoning|reasoning-review|analysis|human-split|corpus|voice|speech|group|group-reply|import|story|share|flip|derivations|distill|marks|deletion-preview|delete)$/.exec(
     pathname,
   );
   if (!match) return undefined;
@@ -810,11 +811,34 @@ export function createRestHandler(
         if (url.pathname === "/auth/logout") {
           return jsonWithCookie(200, {}, identity.logout(request.headers.get("cookie")));
         }
-        if (url.pathname === "/auth/delete") {
+        if (url.pathname === "/auth/export") {
           const principal = authenticate();
-          const cookie = await identity.deleteAccount(
+          const exported = await identity.exportAccount(
             principal,
             requiredString(value.password, "password"),
+          );
+          return new Response(exported.bytes, {
+            status: 200,
+            headers: {
+              "cache-control": "no-store",
+              "content-type": "application/vnd.tabiya.account+json; version=1",
+              "content-disposition": `attachment; filename="${exported.filename}"`,
+              "x-tabiya-export-sha256": exported.digest,
+            },
+          });
+        }
+        if (url.pathname === "/auth/deletion-preview") {
+          const principal = authenticate();
+          closedRecord(value, "/", []);
+          return json(200, identity.deletionPreview(principal));
+        }
+        if (url.pathname === "/auth/delete") {
+          const principal = authenticate();
+          const body = closedRecord(value, "/", ["password", "previewDigest"]);
+          const cookie = await identity.deleteAccount(
+            principal,
+            requiredString(body.password, "password"),
+            requiredString(body.previewDigest, "previewDigest"),
           );
           return jsonWithCookie(200, {}, cookie);
         }
@@ -1356,6 +1380,17 @@ export function createRestHandler(
       }
 
       const value = await parseBody(request);
+      if (route.action === "deletion-preview") {
+        requireJson(request);
+        closedRecord(value, "/", []);
+        return json(200, service.deletionPreview(route.runId, principal));
+      }
+      if (route.action === "delete") {
+        requireJson(request);
+        const body = closedRecord(value, "/", ["previewDigest"]);
+        service.deleteRun(route.runId, principal, requiredString(body.previewDigest, "previewDigest"));
+        return json(200, { deleted: true });
+      }
       if (route.action === "distill") {
         if (studio === undefined) throw new ServerError("STORAGE_FAILURE", "Pack Studio is not configured");
         requireJson(request);

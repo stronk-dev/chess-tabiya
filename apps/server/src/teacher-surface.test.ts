@@ -167,7 +167,7 @@ describe("teacher-surface consent storage", () => {
     storage.close();
   });
 
-  it("revokes classroom-minted grants before either side of account deletion", () => {
+  it("preserves classroom readers on deletion tombstones and archives shared history", () => {
     const storage = new SQLiteRunStorage(":memory:", { now: () => AT, onMigration: () => {} });
     const owner = storage.createLearner({ id: "owner", handle: "owner", passwordHash: "!", createdAt: AT });
     const coTeacher = storage.createLearner({ id: "co-teacher", handle: "co-teacher", passwordHash: "!", createdAt: AT });
@@ -184,7 +184,11 @@ describe("teacher-surface consent storage", () => {
     expect(storage.runRole(run.id, coTeacher.id)).toBe("spectator");
 
     storage.deleteLearner(owner.id, AT);
-    expect(storage.runRole(run.id, coTeacher.id)).toBeUndefined();
+    expect(storage.runRole(run.id, coTeacher.id)).toBe("spectator");
+    expect(storage.classroom("account-class")?.archivedAt).toBe(AT);
+    const archivedService = new ClassroomService(storage, { get: () => undefined } as unknown as PackRegistry, () => AT);
+    expect(archivedService.detail("account-class", { learnerId: coTeacher.id, handle: coTeacher.handle }).classroom.archivedAt).toBe(AT);
+    expect(() => archivedService.invite("account-class", { learnerId: coTeacher.id, handle: coTeacher.handle }, learner.handle, "learner")).toThrow(/unavailable/u);
 
     const ownerTwo = storage.createLearner({ id: "owner-two", handle: "owner-two", passwordHash: "!", createdAt: AT });
     const runTwo = drillRun("learner-delete-run");
@@ -195,7 +199,8 @@ describe("teacher-surface consent storage", () => {
     storage.createAssignment({ id: "learner-delete-assignment", classroomId: "learner-delete-class", packId: "pack-a", assignedBy: ownerTwo.id, note: null, dueAt: null, createdAt: AT, withdrawnAt: null });
     storage.submitAssignment({ assignmentId: "learner-delete-assignment", learnerId: learner.id, runId: runTwo.id, grantedLearnerIds: [], submittedAt: AT, accessExpiresAt: EXPIRES, withdrawnAt: null }, [ownerTwo.id]);
     storage.deleteLearner(learner.id, AT);
-    expect(storage.runRole(runTwo.id, ownerTwo.id)).toBeUndefined();
+    expect(storage.runRole(runTwo.id, ownerTwo.id)).toBe("spectator");
+    expect(storage.classroom("learner-delete-class")?.archivedAt).toBe(AT);
     storage.close();
   });
 
@@ -207,11 +212,11 @@ describe("teacher-surface consent storage", () => {
     const deletes = source.match(/DELETE FROM run_grants/g)?.length ?? 0;
     const definitions = source.match(/CREATE TABLE run_grants|CREATE INDEX run_grants|columns\("run_grants"\)|ALTER TABLE run_grants/g)?.length ?? 0;
     expect({ references, readers: references - inserts - roleUpdates - deletes - definitions, writers: inserts + roleUpdates })
-      .toEqual({ references: 31, readers: 10, writers: 13 });
+      .toEqual({ references: 39, readers: 14, writers: 15 });
 
     const classroomMigration = source.slice(
       source.lastIndexOf("#addClassroomTables"),
-      source.indexOf("#insertLegacy", source.lastIndexOf("#addClassroomTables")),
+      source.indexOf("#addLearnerRatingTables", source.lastIndexOf("#addClassroomTables")),
     );
     expect(classroomMigration).not.toMatch(/(?:classrooms|classroom_members|assignments|assignment_submissions)[\s\S]*REFERENCES learners\(id\)/);
   });

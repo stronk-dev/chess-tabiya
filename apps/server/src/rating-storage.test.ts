@@ -104,7 +104,7 @@ describe("rated-game storage", () => {
 
     expect(storage.sealRatedGame(terminal)).toMatchObject({ state: "sealed", result: "win", terminalReason: "checkmate", plyCount: 47 });
     expect(storage.sealRatedGame(terminal)).toMatchObject({ state: "sealed", result: "win" });
-    expect(() => storage.voidRatedGame(run.id, "rewound", LATER)).toThrow(/already sealed or voided/u);
+    expect(() => storage.voidRatedGame(run.id, "rewound", LATER)).toThrowError(expect.objectContaining({ code: "RATED_GAME_CLOSED" }));
     expect(() => storage.sealRatedGame({ ...terminal, result: "loss" })).toThrow(/already sealed or voided/u);
     expect(storage.learnerRating("learner-a")).toMatchObject({ ratedGames: 1, periodNo: 0 });
     expect(storage.ratingPeriods("learner-a")[0]).toMatchObject({ games: 1, closedAt: null });
@@ -149,7 +149,7 @@ describe("rated-game storage", () => {
 
     expect(storage.voidRatedGame(run.id, "forked", LATER)).toMatchObject({ state: "voided", voidReason: "forked", sealedAt: LATER });
     expect(storage.voidRatedGame(run.id, "forked", "2026-08-22T13:00:00.000Z")).toMatchObject({ state: "voided", voidReason: "forked", sealedAt: LATER });
-    expect(() => storage.voidRatedGame(run.id, "rewound", LATER)).toThrow(/already sealed or voided/u);
+    expect(() => storage.voidRatedGame(run.id, "rewound", LATER)).toThrowError(expect.objectContaining({ code: "RATED_GAME_CLOSED" }));
     expect(() => storage.sealRatedGame({ runId: run.id, result: "draw", terminalReason: "stalemate", plyCount: 70, sealedAt: LATER })).toThrow(/already sealed or voided/u);
     expect(storage.learnerRating("learner-a")).toMatchObject({ voidedGames: 1, abandonedGames: 0 });
     storage.close();

@@ -14,6 +14,16 @@ import {
 import { DRILL_RUN_SCHEMA_VERSION } from "@chess-tabiya/schema";
 
 import { ServerError } from "./errors.js";
+import {
+  buildAccountBundle,
+  planDeletion,
+  storedRunExport,
+  type AccountBundleV1,
+  type JsonValue,
+  type OwnedRunExport,
+  type SharedRunReference,
+  type DeletionPreviewV1,
+} from "./account-data.js";
 import { projectAttempts, type AttemptRow, type ConceptTagRow } from "./progress.js";
 import {
   BOARD_CONTROLS,
@@ -331,6 +341,12 @@ export interface RatingStorage {
 
 /** Persistence boundary for run snapshots, identity, grants, and the writer lease. */
 export interface RunStorage {
+  /** Schema-only account-data guard; exposes names, never rows or the database handle. */
+  applicationTableNames(): readonly string[];
+  applicationIdentityFields(): readonly string[];
+  accountBundle(learnerId: string): AccountBundleV1;
+  deletionPreview(learnerId: string, scope: DeletionPreviewV1["scope"], at: string): DeletionPreviewV1;
+  deleteOwnedRun(learnerId: string, runId: string, at: string, expectedPreviewDigest: string): void;
   create(run: DrillRun, lease: LeaseHolder, title?: string): void;
   read(runId: string): StoredRun | undefined;
   list(learnerId: string, limit: number, offset: number): readonly RunSummary[];
@@ -365,7 +381,7 @@ export interface RunStorage {
   learnerById(learnerId: string): Learner | undefined;
   recordLoginFailure(learnerId: string, at: string): void;
   clearLoginFailures(learnerId: string): void;
-  deleteLearner(learnerId: string, at: string): void;
+  deleteLearner(learnerId: string, at: string, expectedPreviewDigest?: string): void;
 
   createSession(learnerId: string, tokenHash: string, expiresAt: string): void;
   learnerBySessionToken(tokenHash: string, now: string): Learner | undefined;
@@ -866,6 +882,217 @@ export class SQLiteRunStorage implements RunStorage, ProgressStorage, LiveSessio
       ) STRICT
     `);
     this.#migrate();
+  }
+
+  applicationTableNames(): readonly string[] {
+    const rows = this.#database
+      .prepare("SELECT name FROM sqlite_schema WHERE type = 'table' AND name NOT LIKE 'sqlite_%' ORDER BY name")
+      .all() as unknown as readonly { readonly name: string }[];
+    return Object.freeze(rows.map((row) => row.name));
+  }
+
+  applicationIdentityFields(): readonly string[] {
+    const fields: string[] = [];
+    for (const table of this.applicationTableNames()) {
+      const columns = this.#database.prepare(`PRAGMA table_info(${table})`).all() as unknown as readonly { readonly name: string }[];
+      for (const { name } of columns) {
+        if (name === "learner_id" || name.endsWith("_learner_id") || ["created_by", "proposed_by", "assigned_by", "invited_by"].includes(name)) fields.push(`${table}.${name}`);
+      }
+    }
+    fields.push(
+      "learners.id", "learners.handle", "learners.display_name", "drill_runs.active_writer_id",
+      "registered_packs.publisher_handle", "registered_shapes.publisher_handle",
+      "live_sessions.rotation_json[]", "session_journal.payload.changedByLearnerId",
+      "session_journal.payload.holderLearnerId", "session_votes.voter_key",
+      "session_invitations.invited_handle", "arena_legs.reference_player_handle",
+      "public_tokens.invited_handle", "assignment_submissions.granted_learner_ids[]",
+      "match_states.pause_proposed_by",
+    );
+    return Object.freeze(fields.sort());
+  }
+
+  foreignKeyViolationCount(): number {
+    return this.#database.prepare("PRAGMA foreign_key_check").all().length;
+  }
+
+  accountBundle(learnerId: string): AccountBundleV1 {
+    const jsonValue = (value: unknown): JsonValue => {
+      if (value === null || typeof value === "string" || typeof value === "boolean") return value;
+      if (typeof value === "number") return value;
+      if (typeof value === "bigint") return Number(value);
+      if (Buffer.isBuffer(value)) return value.toString("utf8");
+      if (Array.isArray(value)) return Object.freeze(value.map(jsonValue));
+      if (typeof value === "object") {
+        const result: Record<string, JsonValue> = {};
+        for (const [key, child] of Object.entries(value)) result[key] = jsonValue(child);
+        return Object.freeze(result);
+      }
+      throw new TypeError(`Cannot export stored ${typeof value} value`);
+    };
+    const tagged = (table: string, rows: readonly Record<string, unknown>[]): readonly JsonValue[] =>
+      rows.map((row) => Object.freeze({ table, record: jsonValue(row) }));
+    const rows = (sql: string, ...parameters: readonly (string | number)[]): readonly Record<string, unknown>[] =>
+      this.#database.prepare(sql).all(...parameters) as readonly Record<string, unknown>[];
+    try {
+      this.#database.exec("BEGIN");
+      const account = this.#database.prepare("SELECT handle,display_name,created_at FROM learners WHERE id=?").get(learnerId) as Record<string, unknown> | undefined;
+      if (account === undefined) throw new ServerError("UNAUTHENTICATED", "Authentication required");
+      const ownedRows = rows("SELECT id,snapshot_json,summary_json,schema_version FROM drill_runs WHERE owner_learner_id=? ORDER BY id", learnerId);
+      const ownedRuns: OwnedRunExport[] = ownedRows.map((row) => {
+        const id = String(row.id);
+        const stored = storedRunExport(String(row.snapshot_json), DRILL_RUN_SCHEMA_VERSION);
+        let title = id;
+        try {
+          const summary = JSON.parse(String(row.summary_json)) as { readonly title?: unknown };
+          if (typeof summary.title === "string") title = summary.title;
+        } catch { /* the lossless snapshot arm below is the authoritative diagnostic */ }
+        const grants = rows(
+          `SELECT l.handle AS granteeHandle,g.role,g.granted_at AS grantedAt,g.expires_at AS expiresAt,g.granted_via AS grantedVia
+           FROM run_grants g JOIN learners l ON l.id=g.learner_id WHERE g.run_id=? ORDER BY l.handle,g.role`, id,
+        ).map(jsonValue);
+        const imported = this.#database.prepare(
+          "SELECT source_kind,source_url,movetext_digest,headers_json,result,pgn,licence_note,imported_at FROM imported_games WHERE run_id=?",
+        ).get(id) as Record<string, unknown> | undefined;
+        return Object.freeze({ id, title, schemaVersion: String(row.schema_version ?? stored.schemaVersion), replayable: stored.replayable, snapshot: stored.snapshot, importedGame: imported === undefined ? null : jsonValue(imported), grants: Object.freeze(grants) });
+      });
+      const sharedAccess: SharedRunReference[] = rows(
+        `SELECT d.id,d.summary_json,g.role,g.granted_at
+         FROM run_grants g JOIN drill_runs d ON d.id=g.run_id
+         WHERE g.learner_id=? AND d.owner_learner_id<>? ORDER BY d.id`, learnerId, learnerId,
+      ).map((row) => {
+        let title = String(row.id);
+        try { const summary = JSON.parse(String(row.summary_json)) as { readonly title?: unknown }; if (typeof summary.title === "string") title = summary.title; } catch { /* retain id title */ }
+        const contributions = tagged("run_marks", rows("SELECT id,scope,scope_key,brush,orig,dest,relayed,created_at FROM run_marks WHERE run_id=? AND author_learner_id=? ORDER BY id", String(row.id), learnerId));
+        return Object.freeze({ runId: String(row.id), title, role: String(row.role) as SharedRunReference["role"], grantedAt: String(row.granted_at), contributions });
+      });
+      const progress = [
+        ...tagged("attempts", rows("SELECT * FROM attempts WHERE learner_id=? ORDER BY run_id,branch_id", learnerId)),
+        ...tagged("attempt_concepts", rows("SELECT c.* FROM attempt_concepts c JOIN attempts a ON a.run_id=c.run_id AND a.branch_id=c.branch_id WHERE a.learner_id=? ORDER BY c.run_id,c.branch_id,c.concept_key", learnerId)),
+        ...tagged("schedules", rows("SELECT * FROM schedules WHERE learner_id=? ORDER BY id", learnerId)),
+        ...tagged("learner_position_stats", rows("SELECT * FROM learner_position_stats WHERE learner_id=? ORDER BY transpose_key", learnerId)),
+      ];
+      const marks = tagged("run_marks", rows("SELECT id,run_id,scope,scope_key,brush,orig,dest,relayed,created_at FROM run_marks WHERE author_learner_id=? ORDER BY id", learnerId));
+      const repertoireRows = rows("SELECT * FROM repertoires WHERE owner_learner_id=? ORDER BY id", learnerId);
+      const repertoireIds = repertoireRows.map((row) => String(row.id));
+      const repertoireChildren = (table: string): readonly JsonValue[] => repertoireIds.flatMap((id) => tagged(table, rows(`SELECT * FROM ${table} WHERE repertoire_id=? ORDER BY rowid`, id)));
+      const repertoires = [
+        ...tagged("repertoires", repertoireRows),
+        ...repertoireChildren("repertoire_moves"),
+        ...repertoireChildren("repertoire_scans"),
+        ...repertoireChildren("repertoire_gap_runs"),
+      ];
+      const packDraftRows = rows("SELECT * FROM pack_drafts WHERE owner_learner_id=? ORDER BY id", learnerId);
+      const drafts = [
+        ...tagged("pack_drafts", packDraftRows),
+        ...packDraftRows.flatMap((draft) => tagged("playtest_documents", rows("SELECT * FROM playtest_documents WHERE draft_id=? ORDER BY digest", String(draft.id)))),
+        ...tagged("shape_drafts", rows("SELECT * FROM shape_drafts WHERE owner_learner_id=? ORDER BY id", learnerId)),
+      ];
+      const publications = [
+        ...tagged("registered_packs", rows("SELECT * FROM registered_packs WHERE publisher_learner_id=? ORDER BY pack_id,version", learnerId)),
+        ...tagged("registered_shapes", rows("SELECT * FROM registered_shapes WHERE publisher_learner_id=? ORDER BY shape_id,version", learnerId)),
+      ];
+      const ownedRunIds = new Set(ownedRuns.map((run) => run.id));
+      const liveRows = rows("SELECT id,run_id,kind,title,board_control,scheduled_for,created_at,closed_at,classroom_id FROM live_sessions ORDER BY id").filter((row) => ownedRunIds.has(String(row.run_id)));
+      const classroomRows = rows(
+        `SELECT DISTINCT c.id,c.name,c.created_at,c.archived_at,
+          CASE WHEN c.owner_learner_id=? THEN 'owner' ELSE 'member' END AS relationship
+         FROM classrooms c LEFT JOIN classroom_members m ON m.classroom_id=c.id
+         WHERE c.owner_learner_id=? OR m.learner_id=? ORDER BY c.id`, learnerId, learnerId, learnerId,
+      );
+      const liveAndSocial = [
+        ...tagged("live_sessions", liveRows),
+        ...liveRows.flatMap((liveRow) => tagged("session_journal", rows("SELECT seq,at,kind,run_seq,payload_json FROM session_journal WHERE session_id=? ORDER BY seq", String(liveRow.id)))),
+        ...tagged("public_tokens", rows("SELECT id,scope,run_id,session_id,created_at,revoked_at FROM public_tokens WHERE created_by=? ORDER BY id", learnerId).map((row) => ({ ...row, existed: true }))),
+        ...tagged("classrooms", classroomRows),
+      ];
+      const behavioralProfiles = [
+        ...tagged("learner_ratings", rows("SELECT * FROM learner_ratings WHERE learner_id=? ORDER BY calibration_id", learnerId)),
+        ...tagged("rated_games", rows("SELECT * FROM rated_games WHERE learner_id=? ORDER BY run_id", learnerId)),
+        ...tagged("rating_periods", rows("SELECT * FROM rating_periods WHERE learner_id=? ORDER BY period_no", learnerId)),
+        ...tagged("standing_members", rows("SELECT * FROM standing_members WHERE learner_id=? ORDER BY classroom_id", learnerId)),
+        ...tagged("learner_marks", rows("SELECT * FROM learner_marks WHERE learner_id=? ORDER BY earned_at,run_id", learnerId)),
+        ...tagged("cohort_standings", rows("SELECT * FROM cohort_standings WHERE opened_by_learner_id=? ORDER BY classroom_id", learnerId)),
+      ];
+      const bundle = buildAccountBundle({
+        source: { applicationVersion: "0.0.0", storageVersion: STORAGE_VERSION, runSchemaVersion: DRILL_RUN_SCHEMA_VERSION },
+        account: { handle: String(account.handle), displayName: account.display_name === null ? null : String(account.display_name), createdAt: String(account.created_at) },
+        ownedRuns,
+        sharedAccess,
+        progress,
+        marks,
+        repertoires,
+        drafts,
+        publications,
+        liveAndSocial,
+        behavioralProfiles,
+      });
+      this.#database.exec("COMMIT");
+      return bundle;
+    } catch (error) {
+      this.#rollback();
+      if (error instanceof ServerError) throw error;
+      throw storageFailure("Could not export learner account data", error);
+    }
+  }
+
+  deletionPreview(learnerId: string, scope: DeletionPreviewV1["scope"], at: string): DeletionPreviewV1 {
+    const learner = this.#database.prepare("SELECT 1 AS found FROM learners WHERE id=? AND id<>?").get(learnerId, LEGACY_ID);
+    if (learner === undefined) throw new ServerError("UNAUTHENTICATED", "Authentication required");
+    const selected = scope.kind === "account"
+      ? this.#database.prepare("SELECT id,summary_json,snapshot_json,updated_at FROM drill_runs WHERE owner_learner_id=? ORDER BY id").all(learnerId)
+      : this.#database.prepare("SELECT id,summary_json,snapshot_json,updated_at FROM drill_runs WHERE id=? AND owner_learner_id=?").all(scope.runId, learnerId);
+    if (scope.kind === "run" && selected.length === 0) throw new ServerError("RUN_NOT_FOUND", "Run not found");
+    const runs = (selected as readonly Record<string, unknown>[]).map((row) => {
+      const id = String(row.id);
+      let title = id;
+      try { const summary = JSON.parse(String(row.summary_json)) as { readonly title?: unknown }; if (typeof summary.title === "string") title = summary.title; } catch { /* stable id fallback */ }
+      const grantees = this.#database.prepare(
+        `SELECT learner_id FROM run_grants WHERE run_id=? AND learner_id NOT IN (?,?)
+         AND (expires_at IS NULL OR expires_at>?) ORDER BY learner_id`,
+      ).all(id, learnerId, LEGACY_ID, at) as unknown as readonly { readonly learner_id: string }[];
+      const derived = this.#database.prepare(
+        `SELECT child.id FROM run_derivations link JOIN drill_runs child ON child.id=link.derived_run_id
+         WHERE link.source_run_id=? AND child.owner_learner_id NOT IN (?,?) ORDER BY child.id`,
+      ).all(id, learnerId, LEGACY_ID) as unknown as readonly { readonly id: string }[];
+      const links = this.#database.prepare(
+        "SELECT id FROM public_tokens WHERE run_id=? AND scope='story_read' ORDER BY id",
+      ).all(id) as unknown as readonly { readonly id: string }[];
+      return Object.freeze({ id, title, activeForeignGranteeIds: grantees.map((item) => item.learner_id), foreignOwnedDerivedRunIds: derived.map((item) => item.id), anonymousLinkIds: links.map((item) => item.id) });
+    });
+    const count = (sql: string, ...parameters: readonly string[]): number => Number((this.#database.prepare(sql).get(...parameters) as { readonly total: number }).total);
+    const hardDelete = scope.kind === "run" ? [] : [
+      { kind: "progress" as const, count: count("SELECT count(*) AS total FROM attempts WHERE learner_id=?", learnerId), objectIds: [], label: "Attempt history and progress are permanently deleted" },
+      { kind: "mark" as const, count: count("SELECT count(*) AS total FROM run_marks WHERE author_learner_id=?", learnerId), objectIds: [], label: "Private board marks are permanently deleted" },
+      { kind: "repertoire" as const, count: count("SELECT count(*) AS total FROM repertoires WHERE owner_learner_id=?", learnerId), objectIds: [], label: "Repertoires and their source material are permanently deleted" },
+      { kind: "draft" as const, count: count("SELECT count(*) AS total FROM pack_drafts WHERE owner_learner_id=? AND state<>'registered'", learnerId) + count("SELECT count(*) AS total FROM shape_drafts WHERE owner_learner_id=? AND state<>'registered'", learnerId), objectIds: [], label: "Unpublished drafts are permanently deleted" },
+      { kind: "behavioral_profile" as const, count: count("SELECT count(*) AS total FROM rated_games WHERE learner_id=?", learnerId), objectIds: [], label: "Ratings, game records, and private profile measurements are permanently deleted" },
+      { kind: "account" as const, count: 1, objectIds: [], label: "The learner account and all authenticated sessions are permanently deleted" },
+    ];
+    const retainedPublished = scope.kind === "run" ? [] : [
+      ...((this.#database.prepare("SELECT pack_id AS id FROM registered_packs WHERE publisher_learner_id=? ORDER BY pack_id,version").all(learnerId) as unknown as readonly { readonly id: string }[]).map((row) => ({ kind: "publication" as const, count: 1, objectIds: [row.id], label: `Published pack ${row.id} remains immutable with deleted-account attribution` }))),
+      ...((this.#database.prepare("SELECT shape_id AS id FROM registered_shapes WHERE publisher_learner_id=? ORDER BY shape_id,version").all(learnerId) as unknown as readonly { readonly id: string }[]).map((row) => ({ kind: "publication" as const, count: 1, objectIds: [row.id], label: `Published shape ${row.id} remains immutable with deleted-account attribution` }))),
+    ];
+    const classroomEffects = scope.kind === "run" ? [] : (this.#database.prepare(
+      `SELECT DISTINCT c.id,c.name,
+        (SELECT count(*) FROM classroom_members other WHERE other.classroom_id=c.id AND other.learner_id<>? AND other.state='active') AS other_active
+       FROM classrooms c LEFT JOIN classroom_members mine ON mine.classroom_id=c.id
+       WHERE c.owner_learner_id=? OR (mine.learner_id=? AND mine.state<>'left') ORDER BY c.id`,
+    ).all(learnerId, learnerId, learnerId) as readonly Record<string, unknown>[]).map((row) => ({
+      shared: Number(row.other_active) > 0,
+      effect: { kind: "classroom" as const, count: 1, objectIds: [String(row.id)], label: Number(row.other_active) > 0 ? `${String(row.name)} is archived read-only for remaining members` : `${String(row.name)} is permanently deleted` },
+    }));
+    const fingerprint = (selected as readonly Record<string, unknown>[]).map((row) => Object.freeze({
+      id: String(row.id), snapshot: String(row.snapshot_json), updatedAt: String(row.updated_at),
+      grants: (this.#database.prepare("SELECT learner_id,role,granted_at,expires_at,granted_via FROM run_grants WHERE run_id=? ORDER BY learner_id").all(String(row.id)) as readonly Record<string, unknown>[]).map((grant) => Object.freeze({ ...grant }) as unknown as JsonValue),
+    }));
+    return planDeletion({
+      scope,
+      runs,
+      hardDelete: [...hardDelete, ...classroomEffects.filter((item) => !item.shared).map((item) => item.effect)],
+      tombstone: classroomEffects.filter((item) => item.shared).map((item) => item.effect),
+      retainedPublished,
+      stateFingerprint: Object.freeze({ runs: fingerprint, publications: retainedPublished, classrooms: classroomEffects }),
+    });
   }
 
   create(run: DrillRun, lease: LeaseHolder, title?: string): void;
@@ -1621,76 +1848,182 @@ export class SQLiteRunStorage implements RunStorage, ProgressStorage, LiveSessio
     }
   }
 
-  deleteLearner(learnerId: string, at: string): void {
+  deleteOwnedRun(learnerId: string, runId: string, at: string, expectedPreviewDigest: string): void {
     const legacyWriterId = `writer-legacy-${randomUUID()}`;
     try {
       this.#database.exec("BEGIN IMMEDIATE");
+      const preview = this.deletionPreview(learnerId, { kind: "run", runId }, at);
+      if (preview.digest !== expectedPreviewDigest) throw new ServerError("DELETION_PREVIEW_STALE", "Deletion preview is stale; review the current effects before trying again", { details: { digest: preview.digest } });
       this.#insertLegacy(at);
-      const onlyHostRuns = this.#database
-        .prepare(
-          `SELECT mine.run_id
-           FROM run_grants mine
-           WHERE mine.learner_id = ? AND mine.role = 'host'
-             AND (mine.expires_at IS NULL OR mine.expires_at > ?)
-             AND 1 = (SELECT count(*) FROM run_grants hosts
-                      WHERE hosts.run_id = mine.run_id AND hosts.role = 'host'
-                        AND (hosts.expires_at IS NULL OR hosts.expires_at > ?))`,
-        )
-        .all(learnerId, at, at) as unknown as readonly { readonly run_id: string }[];
-      const activeRuns = this.#database
-        .prepare("SELECT id FROM drill_runs WHERE active_writer_learner_id = ?")
-        .all(learnerId) as unknown as readonly { readonly id: string }[];
-      this.#database
-        .prepare("UPDATE drill_runs SET owner_learner_id = ? WHERE owner_learner_id = ?")
-        .run(LEGACY_ID, learnerId);
-      this.#database
-        .prepare(
-          `UPDATE drill_runs
-           SET active_writer_learner_id = ?, active_writer_id = ?
-           WHERE active_writer_learner_id = ?`,
-        )
-        .run(LEGACY_ID, legacyWriterId, learnerId);
-      for (const row of activeRuns) {
-        const session = this.#database.prepare("SELECT id FROM live_sessions WHERE run_id=?").get(row.id) as {id?:unknown}|undefined;
+      const shared = preview.tombstone.some((effect) => effect.kind === "shared_run" && effect.objectIds.includes(runId));
+      if (!shared) {
+        this.#database.prepare("DELETE FROM public_tokens WHERE run_id=?").run(runId);
+        this.#database.prepare("DELETE FROM run_derivations WHERE source_run_id=? OR derived_run_id=?").run(runId, runId);
+        this.#database.prepare("DELETE FROM repertoire_gap_runs WHERE run_id=?").run(runId);
+        this.#database.prepare("UPDATE schedules SET source_run_id=NULL WHERE source_run_id=?").run(runId);
+        this.#database.prepare("UPDATE schedules SET started_run_id=NULL WHERE started_run_id=?").run(runId);
+        this.#database.prepare("UPDATE pack_drafts SET seed_ref=NULL WHERE seed_kind='run' AND seed_ref=?").run(runId);
+        this.#database.prepare("DELETE FROM drill_runs WHERE id=? AND owner_learner_id=?").run(runId, learnerId);
+      } else {
+        const row = this.#database.prepare("SELECT summary_json FROM drill_runs WHERE id=?").get(runId) as { readonly summary_json: string };
+        let summary: Record<string, unknown> = {};
+        try { summary = JSON.parse(row.summary_json) as Record<string, unknown>; } catch { /* neutral projection below */ }
+        this.#database.prepare("UPDATE drill_runs SET owner_learner_id=?,active_writer_learner_id=?,active_writer_id=?,summary_json=? WHERE id=?").run(LEGACY_ID, LEGACY_ID, legacyWriterId, JSON.stringify({ ...summary, title: "Shared run from deleted account" }), runId);
+        this.#database.prepare("DELETE FROM run_grants WHERE run_id=? AND learner_id=?").run(runId, learnerId);
+        this.#database.prepare("UPDATE run_grants SET role='spectator' WHERE run_id=? AND learner_id<>?").run(runId, LEGACY_ID);
+        this.#database.prepare("INSERT OR REPLACE INTO run_grants(run_id,learner_id,role,granted_at,expires_at,granted_via) VALUES (?,?,'host',?,NULL,NULL)").run(runId, LEGACY_ID, at);
+        const session = this.#database.prepare("SELECT id,closed_at FROM live_sessions WHERE run_id=?").get(runId) as { readonly id?: unknown; readonly closed_at?: unknown } | undefined;
         if (typeof session?.id === "string") {
-          this.#appendSessionJournal(session.id,"board.granted",null,this.#runSeq(row.id),{holderLearnerId:LEGACY_ID},at);
+          this.#database.prepare("DELETE FROM public_tokens WHERE session_id=?").run(session.id);
+          this.#database.prepare("UPDATE live_sessions SET closed_at=COALESCE(closed_at,?),vote_adapter_learner_id=NULL,handoff_learner_id=NULL,created_by=? WHERE id=?").run(at, LEGACY_ID, session.id);
+          if (session.closed_at === null) this.#appendSessionJournal(session.id, "session.closed", null, this.#runSeq(runId), { reason: "run_deleted" }, at);
         }
+        this.#database.prepare("DELETE FROM public_tokens WHERE run_id=?").run(runId);
+        this.#database.prepare("DELETE FROM imported_games WHERE run_id=?").run(runId);
+        this.#database.prepare("DELETE FROM run_marks WHERE run_id=? AND author_learner_id=?").run(runId, learnerId);
+        this.#database.prepare("DELETE FROM attempts WHERE run_id=? AND learner_id=?").run(runId, learnerId);
+      }
+      this.#database.prepare("DELETE FROM learner_position_stats WHERE learner_id=?").run(learnerId);
+      this.#database.prepare(
+        `INSERT INTO learner_position_stats(learner_id,transpose_key,seen_count)
+         SELECT learner_id,root_transpose_key,count(*) FROM attempts
+         WHERE learner_id=? AND countable=1 GROUP BY learner_id,root_transpose_key`,
+      ).run(learnerId);
+      this.#database.exec("COMMIT");
+      this.#snapshots.delete(runId);
+    } catch (error) {
+      this.#rollback();
+      if (error instanceof ServerError) throw error;
+      throw storageFailure("Could not delete run", error);
+    }
+  }
+
+  deleteLearner(learnerId: string, at: string, expectedPreviewDigest?: string): void {
+    const legacyWriterId = `writer-legacy-${randomUUID()}`;
+    try {
+      this.#database.exec("BEGIN IMMEDIATE");
+      const preview = this.deletionPreview(learnerId, { kind: "account" }, at);
+      if (expectedPreviewDigest !== undefined && preview.digest !== expectedPreviewDigest) {
+        throw new ServerError("DELETION_PREVIEW_STALE", "Deletion preview is stale; review the current effects before trying again", { details: { digest: preview.digest } });
+      }
+      this.#insertLegacy(at);
+      const departing = this.#database.prepare("SELECT handle FROM learners WHERE id=?").get(learnerId) as { readonly handle: string };
+      const hardRunIds = preview.hardDelete.filter((effect) => effect.kind === "run").flatMap((effect) => effect.objectIds);
+      const tombstoneRunIds = preview.tombstone.filter((effect) => effect.kind === "shared_run").flatMap((effect) => effect.objectIds);
+      const hardClassroomIds = preview.hardDelete.filter((effect) => effect.kind === "classroom").flatMap((effect) => effect.objectIds);
+      const sharedClassroomIds = preview.tombstone.filter((effect) => effect.kind === "classroom").flatMap((effect) => effect.objectIds);
+      const deletionScopedKey = `deleted-${randomUUID()}`;
+      for (const runId of hardRunIds) {
+        this.#database.prepare("DELETE FROM public_tokens WHERE run_id=?").run(runId);
+        this.#database.prepare("DELETE FROM run_derivations WHERE source_run_id=? OR derived_run_id=?").run(runId, runId);
+        this.#database.prepare("DELETE FROM repertoire_gap_runs WHERE run_id=?").run(runId);
+        this.#database.prepare("UPDATE schedules SET source_run_id=NULL WHERE source_run_id=?").run(runId);
+        this.#database.prepare("UPDATE schedules SET started_run_id=NULL WHERE started_run_id=?").run(runId);
+        this.#database.prepare("UPDATE pack_drafts SET seed_ref=NULL WHERE seed_kind='run' AND seed_ref=?").run(runId);
+        this.#database.prepare("DELETE FROM drill_runs WHERE id=? AND owner_learner_id=?").run(runId, learnerId);
+      }
+      for (const runId of tombstoneRunIds) {
+        const row = this.#database.prepare("SELECT summary_json FROM drill_runs WHERE id=?").get(runId) as { readonly summary_json: string };
+        let summary: Record<string, unknown> = {};
+        try { summary = JSON.parse(row.summary_json) as Record<string, unknown>; } catch { /* retain only neutral title */ }
+        this.#database.prepare(
+          "UPDATE drill_runs SET owner_learner_id=?,active_writer_learner_id=?,active_writer_id=?,summary_json=? WHERE id=?",
+        ).run(LEGACY_ID, LEGACY_ID, `${legacyWriterId}-${runId}`, JSON.stringify({ ...summary, title: "Shared run from deleted account" }), runId);
+        this.#database.prepare("DELETE FROM run_grants WHERE run_id=? AND learner_id=?").run(runId, learnerId);
+        this.#database.prepare("UPDATE run_grants SET role='spectator' WHERE run_id=? AND learner_id<>?").run(runId, LEGACY_ID);
+        this.#database.prepare(
+          "INSERT OR REPLACE INTO run_grants(run_id,learner_id,role,granted_at,expires_at,granted_via) VALUES (?,?,'host',?,NULL,NULL)",
+        ).run(runId, LEGACY_ID, at);
+        const session = this.#database.prepare("SELECT id,closed_at FROM live_sessions WHERE run_id=?").get(runId) as { readonly id?: unknown; readonly closed_at?: unknown } | undefined;
+        if (typeof session?.id === "string") {
+          this.#database.prepare("DELETE FROM public_tokens WHERE session_id=?").run(session.id);
+          this.#database.prepare("UPDATE live_sessions SET closed_at=COALESCE(closed_at,?),vote_adapter_learner_id=NULL,handoff_learner_id=NULL,created_by=? WHERE id=?").run(at, LEGACY_ID, session.id);
+          if (session.closed_at === null) this.#appendSessionJournal(session.id, "session.closed", null, this.#runSeq(runId), { reason: "account_deleted" }, at);
+        }
+        this.#database.prepare("DELETE FROM public_tokens WHERE run_id=?").run(runId);
+        this.#database.prepare("DELETE FROM imported_games WHERE run_id=?").run(runId);
+        this.#database.prepare("DELETE FROM run_marks WHERE run_id=? AND author_learner_id=?").run(runId, learnerId);
       }
       this.#database.prepare(
-        "UPDATE pack_drafts SET state = CASE WHEN state = 'registered' THEN state ELSE 'withdrawn' END, owner_learner_id = ? WHERE owner_learner_id = ?",
-      ).run(LEGACY_ID, learnerId);
+        "DELETE FROM playtest_documents WHERE draft_id IN (SELECT id FROM pack_drafts WHERE owner_learner_id=? AND state<>'registered')",
+      ).run(learnerId);
+      this.#database.prepare("DELETE FROM pack_drafts WHERE owner_learner_id=? AND state<>'registered'").run(learnerId);
+      this.#database.prepare("UPDATE pack_drafts SET owner_learner_id=? WHERE owner_learner_id=? AND state='registered'").run(LEGACY_ID, learnerId);
       this.#database.prepare(
-        "UPDATE registered_packs SET publisher_learner_id = ? WHERE publisher_learner_id = ?",
+        "UPDATE registered_packs SET publisher_learner_id=?,publisher_handle='deleted account' WHERE publisher_learner_id=?",
       ).run(LEGACY_ID, learnerId);
+      this.#database.prepare("DELETE FROM shape_drafts WHERE owner_learner_id=? AND state<>'registered'").run(learnerId);
+      this.#database.prepare("UPDATE shape_drafts SET owner_learner_id=? WHERE owner_learner_id=? AND state='registered'").run(LEGACY_ID, learnerId);
       this.#database.prepare(
-        "UPDATE shape_drafts SET state = CASE WHEN state = 'registered' THEN state ELSE 'withdrawn' END, owner_learner_id = ? WHERE owner_learner_id = ?",
-      ).run(LEGACY_ID, learnerId);
-      this.#database.prepare(
-        "UPDATE registered_shapes SET publisher_learner_id = ? WHERE publisher_learner_id = ?",
+        "UPDATE registered_shapes SET publisher_learner_id=?,publisher_handle='deleted account' WHERE publisher_learner_id=?",
       ).run(LEGACY_ID, learnerId);
       const repertoireRows=this.#database.prepare("SELECT id FROM repertoires WHERE owner_learner_id=?").all(learnerId) as unknown as readonly {id:string}[];
       for(const row of repertoireRows)this.#deleteRepertoireRows(row.id);
-      const classroomRows=this.#database.prepare("SELECT id FROM classrooms WHERE owner_learner_id=?").all(learnerId) as unknown as readonly {id:string}[];
-      for(const row of classroomRows){
-        this.#database.prepare("UPDATE classrooms SET archived_at=COALESCE(archived_at,?) WHERE id=?").run(at,row.id);
-        this.#revokeClassroomSubmissionGrants(row.id);
+      for (const classroomId of hardClassroomIds) {
+        this.#database.prepare("DELETE FROM classrooms WHERE id=?").run(classroomId);
       }
-      const memberships=this.#database.prepare("SELECT classroom_id FROM classroom_members WHERE learner_id=? AND state<>'left'").all(learnerId) as unknown as readonly {classroom_id:string}[];
-      for(const row of memberships)this.#revokeClassroomSubmissionGrants(row.classroom_id,learnerId);
-      this.#database.prepare("DELETE FROM assignment_submissions WHERE learner_id=?").run(learnerId);
-      this.#database.prepare("DELETE FROM classroom_members WHERE learner_id=?").run(learnerId);
+      for (const classroomId of sharedClassroomIds) {
+        this.#database.prepare("UPDATE classrooms SET archived_at=COALESCE(archived_at,?),owner_learner_id=CASE WHEN owner_learner_id=? THEN ? ELSE owner_learner_id END WHERE id=?").run(at, learnerId, deletionScopedKey, classroomId);
+        this.#database.prepare("DELETE FROM classroom_members WHERE classroom_id=? AND state='invited' AND (learner_id=? OR invited_by=?)").run(classroomId, learnerId, learnerId);
+        this.#database.prepare("UPDATE classroom_members SET invited_by=? WHERE classroom_id=? AND invited_by=?").run(deletionScopedKey, classroomId, learnerId);
+        this.#database.prepare("UPDATE classroom_members SET learner_id=? WHERE classroom_id=? AND learner_id=?").run(deletionScopedKey, classroomId, learnerId);
+        this.#database.prepare("UPDATE assignments SET assigned_by=? WHERE classroom_id=? AND assigned_by=?").run(deletionScopedKey, classroomId, learnerId);
+        const submissions = this.#database.prepare(
+          `SELECT s.assignment_id,s.learner_id,s.run_id,s.granted_learner_ids
+           FROM assignment_submissions s JOIN assignments a ON a.id=s.assignment_id WHERE a.classroom_id=?`,
+        ).all(classroomId) as readonly Record<string, unknown>[];
+        for (const submission of submissions) {
+          const granted = (JSON.parse(String(submission.granted_learner_ids)) as string[]).filter((id) => id !== learnerId);
+          this.#database.prepare(
+            `UPDATE assignment_submissions SET learner_id=CASE WHEN learner_id=? THEN ? ELSE learner_id END,granted_learner_ids=?
+             WHERE assignment_id=? AND learner_id=? AND run_id=?`,
+          ).run(learnerId, deletionScopedKey, JSON.stringify(granted), String(submission.assignment_id), String(submission.learner_id), String(submission.run_id));
+        }
+      }
+      this.#database.prepare("DELETE FROM classroom_members WHERE state='invited' AND (learner_id=? OR invited_by=?)").run(learnerId, learnerId);
+      this.#database.prepare("UPDATE classroom_members SET invited_by=? WHERE invited_by=?").run(deletionScopedKey, learnerId);
+      this.#database.prepare("UPDATE classroom_members SET learner_id=? WHERE learner_id=?").run(deletionScopedKey, learnerId);
+      this.#database.prepare("UPDATE assignments SET assigned_by=? WHERE assigned_by=?").run(deletionScopedKey, learnerId);
+      const remainingSubmissions = this.#database.prepare("SELECT assignment_id,learner_id,run_id,granted_learner_ids FROM assignment_submissions").all() as readonly Record<string, unknown>[];
+      for (const submission of remainingSubmissions) {
+        const granted = (JSON.parse(String(submission.granted_learner_ids)) as string[]).filter((id) => id !== learnerId);
+        this.#database.prepare(
+          `UPDATE assignment_submissions SET learner_id=CASE WHEN learner_id=? THEN ? ELSE learner_id END,granted_learner_ids=?
+           WHERE assignment_id=? AND learner_id=? AND run_id=?`,
+        ).run(learnerId, deletionScopedKey, JSON.stringify(granted), String(submission.assignment_id), String(submission.learner_id), String(submission.run_id));
+      }
       this.#database.prepare("UPDATE live_sessions SET created_by = ? WHERE created_by = ?").run(LEGACY_ID,learnerId);
+      this.#database.prepare("UPDATE live_sessions SET vote_adapter_learner_id=NULL WHERE vote_adapter_learner_id=?").run(learnerId);
+      this.#database.prepare("UPDATE live_sessions SET handoff_learner_id=NULL WHERE handoff_learner_id=?").run(learnerId);
+      const rotations = this.#database.prepare("SELECT id,rotation_json FROM live_sessions WHERE rotation_json IS NOT NULL").all() as readonly Record<string, unknown>[];
+      for (const rotation of rotations) {
+        const ids = (JSON.parse(String(rotation.rotation_json)) as string[]).filter((id) => id !== learnerId);
+        this.#database.prepare("UPDATE live_sessions SET rotation_json=? WHERE id=?").run(JSON.stringify(ids), String(rotation.id));
+      }
+      this.#database.prepare("UPDATE session_journal SET actor_learner_id=NULL WHERE actor_learner_id=?").run(learnerId);
+      const journalRows = this.#database.prepare("SELECT session_id,seq,payload_json FROM session_journal").all() as readonly Record<string, unknown>[];
+      for (const journal of journalRows) {
+        const payload = JSON.parse(String(journal.payload_json)) as Record<string, unknown>;
+        let changed = false;
+        if (payload.holderLearnerId === learnerId) { payload.holderLearnerId = LEGACY_ID; changed = true; }
+        if (payload.changedByLearnerId === learnerId) { payload.changedByLearnerId = deletionScopedKey; changed = true; }
+        if (changed) this.#database.prepare("UPDATE session_journal SET payload_json=? WHERE session_id=? AND seq=?").run(JSON.stringify(payload), String(journal.session_id), Number(journal.seq));
+      }
+      this.#database.prepare("DELETE FROM session_invitations WHERE invited_handle=?").run(departing.handle);
+      this.#database.prepare("DELETE FROM public_tokens WHERE invited_handle=?").run(departing.handle);
+      this.#database.prepare("DELETE FROM session_votes WHERE voter_key=?").run(`learner:${learnerId}`);
+      this.#database.prepare("UPDATE arena_legs SET reference_player_handle='deleted learner' WHERE reference_player_handle=?").run(departing.handle);
+      this.#database.prepare("UPDATE match_states SET white_learner_id=NULL WHERE white_learner_id=?").run(learnerId);
+      this.#database.prepare("UPDATE match_states SET black_learner_id=NULL WHERE black_learner_id=?").run(learnerId);
+      this.#database.prepare("UPDATE match_states SET pause_proposed_by=NULL WHERE pause_proposed_by=?").run(learnerId);
+      this.#database.prepare("UPDATE cohort_standings SET opened_by_learner_id=? WHERE opened_by_learner_id=?").run(deletionScopedKey, learnerId);
       this.#database.prepare("DELETE FROM run_marks WHERE author_learner_id = ?").run(learnerId);
       this.#database.prepare("DELETE FROM learners WHERE id = ?").run(learnerId);
-      const restore = this.#database.prepare(
-        `INSERT OR IGNORE INTO run_grants (run_id, learner_id, role, granted_at, expires_at, granted_via)
-         VALUES (?, ?, 'host', ?, NULL, NULL)`,
-      );
-      for (const row of onlyHostRuns) restore.run(row.run_id, LEGACY_ID, at);
       this.#database.exec("COMMIT");
-      for (const row of activeRuns) this.#snapshots.delete(row.id);
+      for (const runId of [...hardRunIds, ...tombstoneRunIds]) this.#snapshots.delete(runId);
     } catch (error) {
       this.#rollback();
+      if (error instanceof ServerError) throw error;
       throw storageFailure("Could not delete learner", error);
     }
   }

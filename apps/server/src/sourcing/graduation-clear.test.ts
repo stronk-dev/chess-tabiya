@@ -72,7 +72,7 @@ describe("graduation clearance writer", () => {
       pack.provenance.graduationBlockers = [{ id: "authored", state: "blocking", statement: "Replace placeholder.", clearance: { kind: "pointer_authored", subject: "/objective/summary", placeholder: "not the current summary", instrument: "author" } }];
       await writeFile(file, `${JSON.stringify(pack, null, 2)}\n`, "utf8");
       const before = await readFile(file, "utf8");
-      await expect(clearGraduationEntries(file, { census: { subjects: [] } })).rejects.toMatchObject<Partial<GraduationClearanceError>>({ code: "GRADUATION_CLEARANCE_VACUOUS" });
+      await expect(clearGraduationEntries(file, { census: { subjects: [] } })).rejects.toMatchObject({ code: "GRADUATION_CLEARANCE_VACUOUS" } satisfies Partial<GraduationClearanceError>);
       expect(await readFile(file, "utf8")).toBe(before);
       await expect(readFile(file.replace(/\.json$/u, ".graduation.json"), "utf8")).rejects.toMatchObject({ code: "ENOENT" });
     } finally {

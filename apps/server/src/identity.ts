@@ -7,6 +7,8 @@ import {
 } from "node:crypto";
 
 import { ServerError } from "./errors.js";
+import { serializeAccountBundle } from "./account-data.js";
+import type { DeletionPreviewV1 } from "./account-data.js";
 import type { Learner, RunStorage, StoredLearner } from "./storage.js";
 import type { Principal } from "./authorization.js";
 
@@ -162,7 +164,27 @@ export class IdentityService {
     return this.expiredCookie();
   }
 
-  async deleteAccount(principal: Principal, password: string): Promise<string> {
+  deletionPreview(principal: Principal): DeletionPreviewV1 {
+    return this.#storage.deletionPreview(principal.learnerId, { kind: "account" }, this.#now().toISOString());
+  }
+
+  async deleteAccount(principal: Principal, password: string, previewDigest: string): Promise<string> {
+    await this.#confirmPassword(principal, password);
+    this.#storage.deleteLearner(principal.learnerId, this.#now().toISOString(), previewDigest);
+    return this.expiredCookie();
+  }
+
+  async exportAccount(principal: Principal, password: string): Promise<{
+    readonly bytes: Uint8Array<ArrayBuffer>;
+    readonly digest: `sha256:${string}`;
+    readonly filename: string;
+  }> {
+    await this.#confirmPassword(principal, password);
+    const serialized = serializeAccountBundle(this.#storage.accountBundle(principal.learnerId));
+    return Object.freeze({ ...serialized, filename: `tabiya-account-${principal.handle}.json` });
+  }
+
+  async #confirmPassword(principal: Principal, password: string): Promise<void> {
     validatePassword(password);
     const stored = this.#storage.learnerByHandle(principal.handle);
     const parsed = stored === undefined ? undefined : parseHash(stored.passwordHash);
@@ -177,8 +199,7 @@ export class IdentityService {
       }
       throw new ServerError("UNAUTHENTICATED", "Invalid handle or password");
     }
-    this.#storage.deleteLearner(principal.learnerId, this.#now().toISOString());
-    return this.expiredCookie();
+    this.#storage.clearLoginFailures(principal.learnerId);
   }
 
   expiredCookie(): string {

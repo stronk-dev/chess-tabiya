@@ -52,7 +52,7 @@ export class ClassroomService {
   }
 
   detail(id: string, principal: Principal) {
-    const membership = this.member(id, principal.learnerId);
+    const membership = this.readMember(id, principal.learnerId);
     const classroom = this.storage.classroom(id);
     if (classroom === undefined) throw unavailable();
     const assignments = this.storage.assignmentsForClassroom(id);
@@ -195,12 +195,16 @@ export class ClassroomService {
     this.storage.withdrawAssignmentSubmission(id, principal.learnerId, runId, this.now());
   }
 
-  #memberRecord(id: string, learnerId: string, allowInvited = false): ClassroomMemberRecord {
+  #memberRecord(id: string, learnerId: string, allowInvited = false, allowArchived = false): ClassroomMemberRecord {
     const classroom = this.storage.classroom(id);
     const membership = this.storage.classroomMember(id, learnerId);
-    if (classroom === undefined || classroom.archivedAt !== null || membership === undefined ||
+    if (classroom === undefined || (!allowArchived && classroom.archivedAt !== null) || membership === undefined ||
       (membership.state !== "active" && !(allowInvited && membership.state === "invited"))) throw unavailable();
     return membership;
+  }
+
+  private readMember(id: string, learnerId: string): ClassroomMemberRecord {
+    return this.#memberRecord(id, learnerId, false, true);
   }
 
   private member(id: string, learnerId: string, allowInvited = false): ClassroomMemberRecord {
