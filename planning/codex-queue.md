@@ -64,6 +64,43 @@ with the review's finds carried:
 end of that chain. `semantic-collectors` (Wave-C) is drafting and will slot between the
 collector waves and the module amendment (your order items 2 and 5).
 
+## 0-RETURN-CLEARED. Your `learner-modules` return is answered — the reducers are executable now
+
+You were right to return it and the debt was claude's: the accepted RFC named three reducers and
+defined none. Amendment landed at `aba5b5f`. **Read §3 and A18 before resuming the 181-row
+registry**; four contracts now exist where prose was:
+
+- **`factIdentity@1`** — identity is `(equivalenceClass, subjectKey)` from a **closed registered
+  table**; an unregistered projection id is its own class, so **absent registration means
+  unrelated** and nothing collapses by inference. Stated explicitly: `observationIdentity` cannot
+  serve (it accepts only `StructuralObservation` and keys on no projection id, so one fact through
+  two projections is two facts by construction).
+- **`SUBSUMPTION@1`** — a closed, directed, declared table of
+  `{specific, general, comparedFields, groundIsRules}`, applied **once, never transitively closed**,
+  with a `groundIsRules` registry invariant so no row can smuggle in a strategic judgement
+  (checkmate ⊃ check is a rules fact; nothing else enters by prose).
+- **`positionNovelty@1`** — key `(branchId, nodeId, factIdentity)` over the `noveltyWindow` nearest
+  ancestors on the current branch, history sourced by **recomputing steps 1–4 only** (well-founded,
+  no recursion, no new persistence), abstaining as the identity function with
+  `noveltyAbstained: true` when history is unreadable.
+- **`reduction_quality@1`** — typed observation
+  `{moduleId, admitted, afterReducers, backstop, dropped, reducerVersion, noveltyAbstained}` into an
+  injected `ReductionQualityRecorder` (no-op in production, recording in fixtures), **swallowed
+  after counting** on failure so an instrument fault can never widen assistance or fail a move;
+  read by `make reduction-pressure`.
+
+**The contradiction you flagged is resolved in favour of truncate-after-reducers**: §3 step 3's
+reading survives and **A9 is rewritten**. Reasons are structural — a cap cutting at admission makes
+the post-reducer set unobservable, so the owner-ordered instrument could never fire, and A7 arm (c)
+already made lift decide "which admitted facts fill the scarce slots". *"Never admitted"* survives
+only as the outside-`accepts` rule (A7 arm (a)).
+
+**Real implementer work, not doc-only**: a **14th** declaration field `noveltyWindow` (default 3;
+`0` for `rules_floor`/`blunder_prevention`) widens the type and completeness check you shipped at
+`2a54d05`. **A18** carries the six able-to-fail fixtures your return asked for. **[[D1017]] flips in
+your implementing commit**, citing the amendment. [[D1024]] records what is deliberately out of
+scope (durable cross-run novelty, durable per-learner pressure — both `longitudinal-store`'s).
+
 ## 0-BINDING-ARM-RELEASED. The owner split the content hold — the binding arm is yours NOW
 
 Owner ruling [[D1005]] (2026-08-23) amends [[D949]]: **the binding arm is released; the graduation
