@@ -99,6 +99,13 @@ evidence remains available to Support, Review, drills, player analysis and futur
 try a different cp boundary on these data. If all clauses pass, commit the exact model and mask
 digests before selecting or evaluating the third population.
 
+**Post-run process correction (does not change a feature, threshold, measure or verdict):** D1320
+landed concurrently and correctly distinguishes a measured mechanism refusal from an owner-tier
+product refusal. Read “withdrawn” above as this research lane's recommended disposition for the
+exact conditional-logit-plus-250-cp-guard mechanism. Because D1271 is a standing owner ruling to
+fund a non-Maia base, removing the selector goal from 1.0 requires an explicit owner/RFC
+disposition. A different model family is new research, not a retry of this plan.
+
 ## Still blocked after a pass
 
 A development pass would fund only the untouched single-ply population. Multi-ply owner use is

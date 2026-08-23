@@ -6802,3 +6802,26 @@ commit, raw-input digests and model-output digests are recorded in the JSON resu
 Preregister a distinct composition using the already-measured, disclosed 250-cp `ErrorGuard`, with
 observed-human-move exclusion as an explicit adverse measure and guarded-engine as the identical-mask
 control. H5/C5 and all human-like, Elo, personality and multi-ply claims remain blocked.
+
+## 2026-08-23 — The declared guard composition failed on two different clauses
+
+**What landed:** D1312 composed the fixed proper-score selector with R11's disclosed, inclusive
+250-cp guard. The plan and able-to-fail fixture were committed before the result. Guarded engine is
+the identical-mask control; excluded observed moves stay explicit refusals; the reserved third
+population was neither selected nor read.
+
+**What changed:** the guard repairs the severe tail and usually leaves broad choice (median 24 and
+23 surviving legal moves). Pooled observed-move survival passes at 96.6% and 93.5%. The selector is
+still unstable: validation guarded-combined cross entropy is 2.313 against guarded-engine 2.294,
+while confirmation reverses strongly to 1.862 against 2.250 but admits only 14/17 low-band human
+moves (82.4%, floor 85%). Different clauses reject the two folds, so this exact composition is
+returned and cannot be boundary-tuned on these data.
+
+**Verification:** the guard boundary/renormalization/empty-mask fixture and measured arm pass 3/3
+with one unrelated full D1297 arm skipped in 20.71 s. The JSON records every group, model digest,
+removed mass, survivor count and optimizer diagnostic.
+
+**Next:** D1320 corrects the product consequence without changing the result: research has refuted
+this mechanism, not overruled D1271's owner-funded non-Maia goal. The selector RFC must present the
+owner fork—accept the 1.0 refusal or authorize a materially different research family. The evidence
+foundation continues unchanged for Support, Review, drills and longitudinal analysis.

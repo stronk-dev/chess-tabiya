@@ -542,7 +542,12 @@ function guardMarkdown(result: ReturnType<typeof guardDevelopment>): string {
     const value = result[fold];
     return `| ${fold} | ${value.survival.pooled.admitted}/${value.survival.pooled.decisions} (${(100 * value.survival.pooled.rate).toFixed(1)}%) | ${value.arms.engine.guardedConditional.crossEntropy.toFixed(6)} | ${value.arms.combined.guardedConditional.crossEntropy.toFixed(6)} | ${value.arms.engine.removedMass.toFixed(4)} | ${value.arms.combined.removedMass.toFixed(4)} | ${value.eligible ? "pass" : "fail"} |`;
   }).join("\n");
-  return `# D1312 declared error-guard composition\n\nDevelopment verdict: **${result.eligible ? "eligible" : "refuted"}**. This does not read the reserved third population.\n\n| fold | observed moves admitted | guarded engine CE | guarded combined CE | engine mass removed | combined mass removed | gate |\n|---|---:|---:|---:|---:|---:|---|\n${rows}\n\nCross entropy is conditional on the observed move surviving the declared 250-cp mask. Excluded human moves are explicit refusals, not epsilon-smoothed predictions.\n`;
+  const bands = (["validation", "confirmation"] as const).flatMap((fold) => Object.entries(result[fold].survival.ratingBand).map(([band, value]) => `| ${fold} | ${band} | ${value.admitted}/${value.decisions} | ${(100 * value.rate).toFixed(1)}% |`)).join("\n");
+  const failures = (["validation", "confirmation"] as const).map((fold) => {
+    const failed = Object.entries(result[fold].gate).filter(([, passed]) => !passed).map(([name]) => name);
+    return `- ${fold}: ${failed.length === 0 ? "none" : failed.join(", ")}`;
+  }).join("\n");
+  return `# D1312 declared error-guard composition\n\nDevelopment verdict: **${result.eligible ? "eligible" : "refuted"}**. This does not read the reserved third population.\n\n| fold | observed moves admitted | guarded engine CE | guarded combined CE | engine mass removed | combined mass removed | gate |\n|---|---:|---:|---:|---:|---:|---|\n${rows}\n\n## Rating-band survival\n\n| fold | rating band | admitted | rate |\n|---|---|---:|---:|\n${bands}\n\n## Failed clauses\n\n${failures}\n\nCross entropy is conditional on the observed move surviving the declared 250-cp mask. Excluded human moves are explicit refusals, not epsilon-smoothed predictions. Because different able-to-fail clauses fail on the two folds, this exact composition is returned rather than retuned. D1320 requires an owner/RFC disposition before the standing non-Maia-base goal can leave the 1.0 roster.\n`;
 }
 
 describe("D1297 proper-score development", () => {

@@ -131,6 +131,17 @@ rewind adds value**.
   +1-point ceiling. The standalone base is refused, the third population remains untouched, and a
   guard-composed successor requires its own preregistration. This still does not compare complete
   branches or license human-like/Elo/personality language, so H5/C5 remain unchanged.
+- **Declared guard composition fails; owner disposition owed for the 1.0 goal 2026-08-23**
+  (`design/research/evidence-to-move-guard-composition.md`, D1312). The fixed 250-cp mask admits
+  96.6% and 93.5% of observed moves pooled and repairs the severe tail without usually collapsing
+  choice (median 24/23 survivors). It does not stabilize the evidence policy: on validation,
+  guarded combined cross entropy is **2.313 vs guarded engine 2.294**; on confirmation, the
+  1000–1399 band admits **14/17 (82.4%)**, below the predeclared 85% floor. Different clauses fail
+  on the two folds, so the cp boundary is not retuned and the reserved third population remains
+  unread. This exact mechanism is returned. Per D1320, D1271's standing owner-funded non-Maia goal
+  remains until an owner/RFC disposition accepts the refusal or funds a materially different
+  family. The registered evidence foundation and Maia-based measured roster remain. H5/C5 remain
+  unchanged.
 
 ## Kill criteria
 

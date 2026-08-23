@@ -1152,3 +1152,8 @@ pack field.
   same safety clause on two held-out folds. Routed to the evidence-move-selector lane: that RFC's
   §6 binds to this harness's predeclared verdict, so a repair that still fails safety is material
   to its calibration gate.
+
+- **[[D1312]]** (codex) — the separately preregistered 250-cp guard composition fails different
+  clauses on validation and confirmation while leaving the third population unread. Routed to the
+  evidence-move-selector lane beside [[D1320]]: record this mechanism's refusal, then ask the owner
+  whether the 1.0 non-Maia goal is refused or receives a materially different research family.

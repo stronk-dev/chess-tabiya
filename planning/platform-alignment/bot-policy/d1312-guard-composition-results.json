@@ -1,0 +1,390 @@
+{
+  "schema": "tabiya.research.d1312-guard-composition.v1",
+  "measuredAt": "2026-08-23T19:31:30.738Z",
+  "cache": {
+    "digest": "sha256:2b568785a0c9f3129fbe1bbd311adc87984733e2b52ee1a32696b09bda4302c1",
+    "representationCommit": "633f541e245edd1737ee9224c6ed90c26fa009a9",
+    "games": 108,
+    "decisions": 515
+  },
+  "guard": {
+    "thresholdCp": 250,
+    "inclusive": true,
+    "fallbackPermitted": false
+  },
+  "validation": {
+    "survival": {
+      "pooled": {
+        "decisions": 117,
+        "admitted": 113,
+        "rate": 0.965812
+      },
+      "ratingBand": {
+        "1000-1399": {
+          "decisions": 47,
+          "admitted": 45,
+          "rate": 0.957447
+        },
+        "1400-1799": {
+          "decisions": 32,
+          "admitted": 32,
+          "rate": 1
+        },
+        "1800-2199": {
+          "decisions": 38,
+          "admitted": 36,
+          "rate": 0.947368
+        }
+      },
+      "speed": {
+        "blitz": {
+          "decisions": 42,
+          "admitted": 39,
+          "rate": 0.928571
+        },
+        "bullet": {
+          "decisions": 23,
+          "admitted": 23,
+          "rate": 1
+        },
+        "rapid": {
+          "decisions": 52,
+          "admitted": 51,
+          "rate": 0.980769
+        }
+      },
+      "ply": {
+        "8": {
+          "decisions": 23,
+          "admitted": 23,
+          "rate": 1
+        },
+        "16": {
+          "decisions": 24,
+          "admitted": 24,
+          "rate": 1
+        },
+        "24": {
+          "decisions": 22,
+          "admitted": 21,
+          "rate": 0.954545
+        },
+        "32": {
+          "decisions": 18,
+          "admitted": 17,
+          "rate": 0.944444
+        },
+        "40": {
+          "decisions": 16,
+          "admitted": 15,
+          "rate": 0.9375
+        },
+        "48": {
+          "decisions": 14,
+          "admitted": 13,
+          "rate": 0.928571
+        }
+      }
+    },
+    "survivorCounts": {
+      "minimum": 1,
+      "median": 24,
+      "p90": 31,
+      "maximum": 38,
+      "singletonRate": 0.025641
+    },
+    "arms": {
+      "engine": {
+        "unguarded": {
+          "games": 25,
+          "decisions": 117,
+          "playedMass": 0.186181,
+          "crossEntropy": 2.488178,
+          "topAgreement": 0.309333,
+          "expectedLossCp": 55.510073,
+          "severe250": 0.019814,
+          "playedMassTail": {
+            "minimum": 0.000003,
+            "p10": 0.027248,
+            "median": 0.084611,
+            "p90": 0.69889,
+            "maximum": 1,
+            "below1e6": 0,
+            "below1e4": 0.008547,
+            "below1e2": 0.042735
+          }
+        },
+        "guardedConditional": {
+          "games": 25,
+          "decisions": 113,
+          "playedMass": 0.200328,
+          "crossEntropy": 2.293956,
+          "topAgreement": 0.318,
+          "expectedLossCp": 50.088875,
+          "severe250": 0,
+          "playedMassTail": {
+            "minimum": 0.003301,
+            "p10": 0.029741,
+            "median": 0.088662,
+            "p90": 0.735004,
+            "maximum": 1,
+            "below1e6": 0,
+            "below1e4": 0,
+            "below1e2": 0.00885
+          }
+        },
+        "removedMass": 0.019814,
+        "optimization": {
+          "iterations": 8,
+          "gradientInfinity": 0,
+          "finalLoss": 2.47135
+        },
+        "modelDigest": "sha256:d5bcd32dc56482485b3a093d8c7b64ed1749c35f379c343d93705edbd207862a"
+      },
+      "combined": {
+        "unguarded": {
+          "games": 25,
+          "decisions": 117,
+          "playedMass": 0.197853,
+          "crossEntropy": 2.453996,
+          "topAgreement": 0.306667,
+          "expectedLossCp": 61.928425,
+          "severe250": 0.039493,
+          "playedMassTail": {
+            "minimum": 0.000053,
+            "p10": 0.022422,
+            "median": 0.111503,
+            "p90": 0.662021,
+            "maximum": 1,
+            "below1e6": 0,
+            "below1e4": 0.008547,
+            "below1e2": 0.068376
+          }
+        },
+        "guardedConditional": {
+          "games": 25,
+          "decisions": 113,
+          "playedMass": 0.218811,
+          "crossEntropy": 2.312672,
+          "topAgreement": 0.315333,
+          "expectedLossCp": 50.429893,
+          "severe250": 0,
+          "playedMassTail": {
+            "minimum": 0.005913,
+            "p10": 0.026004,
+            "median": 0.121014,
+            "p90": 0.71235,
+            "maximum": 1,
+            "below1e6": 0,
+            "below1e4": 0,
+            "below1e2": 0.044248
+          }
+        },
+        "removedMass": 0.039493,
+        "optimization": {
+          "iterations": 80,
+          "gradientInfinity": 0.007954,
+          "finalLoss": 1.974539
+        },
+        "modelDigest": "sha256:7f8ee6642fe8daab1d569905890826d9e40dec1688ff86d68be28709d6adbd61"
+      }
+    },
+    "gate": {
+      "pooledHumanSurvival": true,
+      "ratingBandFloor": true,
+      "conditionalCrossEntropy": false,
+      "expectedLoss": true,
+      "topChoice": true,
+      "nonemptyMask": true
+    },
+    "eligible": false
+  },
+  "confirmation": {
+    "survival": {
+      "pooled": {
+        "decisions": 108,
+        "admitted": 101,
+        "rate": 0.935185
+      },
+      "ratingBand": {
+        "1000-1399": {
+          "decisions": 17,
+          "admitted": 14,
+          "rate": 0.823529
+        },
+        "1400-1799": {
+          "decisions": 40,
+          "admitted": 38,
+          "rate": 0.95
+        },
+        "1800-2199": {
+          "decisions": 51,
+          "admitted": 49,
+          "rate": 0.960784
+        }
+      },
+      "speed": {
+        "blitz": {
+          "decisions": 29,
+          "admitted": 28,
+          "rate": 0.965517
+        },
+        "bullet": {
+          "decisions": 54,
+          "admitted": 50,
+          "rate": 0.925926
+        },
+        "rapid": {
+          "decisions": 25,
+          "admitted": 23,
+          "rate": 0.92
+        }
+      },
+      "ply": {
+        "8": {
+          "decisions": 17,
+          "admitted": 17,
+          "rate": 1
+        },
+        "16": {
+          "decisions": 19,
+          "admitted": 19,
+          "rate": 1
+        },
+        "24": {
+          "decisions": 21,
+          "admitted": 20,
+          "rate": 0.952381
+        },
+        "32": {
+          "decisions": 20,
+          "admitted": 18,
+          "rate": 0.9
+        },
+        "40": {
+          "decisions": 17,
+          "admitted": 16,
+          "rate": 0.941176
+        },
+        "48": {
+          "decisions": 14,
+          "admitted": 11,
+          "rate": 0.785714
+        }
+      }
+    },
+    "survivorCounts": {
+      "minimum": 1,
+      "median": 23,
+      "p90": 31,
+      "maximum": 41,
+      "singletonRate": 0.074074
+    },
+    "arms": {
+      "engine": {
+        "unguarded": {
+          "games": 21,
+          "decisions": 108,
+          "playedMass": 0.186291,
+          "crossEntropy": 2.527598,
+          "topAgreement": 0.287302,
+          "expectedLossCp": 50.540837,
+          "severe250": 0.019198,
+          "playedMassTail": {
+            "minimum": 0.000204,
+            "p10": 0.017551,
+            "median": 0.069968,
+            "p90": 0.634944,
+            "maximum": 0.999946,
+            "below1e6": 0,
+            "below1e4": 0,
+            "below1e2": 0.046296
+          }
+        },
+        "guardedConditional": {
+          "games": 21,
+          "decisions": 101,
+          "playedMass": 0.206299,
+          "crossEntropy": 2.249685,
+          "topAgreement": 0.304762,
+          "expectedLossCp": 46.602379,
+          "severe250": 0,
+          "playedMassTail": {
+            "minimum": 0.010966,
+            "p10": 0.028677,
+            "median": 0.074795,
+            "p90": 0.697793,
+            "maximum": 1,
+            "below1e6": 0,
+            "below1e4": 0,
+            "below1e2": 0
+          }
+        },
+        "removedMass": 0.019198,
+        "optimization": {
+          "iterations": 8,
+          "gradientInfinity": 0,
+          "finalLoss": 2.494856
+        },
+        "modelDigest": "sha256:54c5f8bbb4eeca43ad5ae3ca935eaa8f3056e2ba5dff220d6959518ddecdbc7c"
+      },
+      "combined": {
+        "unguarded": {
+          "games": 21,
+          "decisions": 108,
+          "playedMass": 0.255968,
+          "crossEntropy": 2.052202,
+          "topAgreement": 0.375397,
+          "expectedLossCp": 53.096421,
+          "severe250": 0.032577,
+          "playedMassTail": {
+            "minimum": 0.001737,
+            "p10": 0.024137,
+            "median": 0.130488,
+            "p90": 0.788088,
+            "maximum": 0.999991,
+            "below1e6": 0,
+            "below1e4": 0,
+            "below1e2": 0.018519
+          }
+        },
+        "guardedConditional": {
+          "games": 21,
+          "decisions": 101,
+          "playedMass": 0.277971,
+          "crossEntropy": 1.862308,
+          "topAgreement": 0.392063,
+          "expectedLossCp": 44.738196,
+          "severe250": 0,
+          "playedMassTail": {
+            "minimum": 0.009204,
+            "p10": 0.037146,
+            "median": 0.141751,
+            "p90": 0.799404,
+            "maximum": 1,
+            "below1e6": 0,
+            "below1e4": 0,
+            "below1e2": 0.009901
+          }
+        },
+        "removedMass": 0.032577,
+        "optimization": {
+          "iterations": 80,
+          "gradientInfinity": 0.006513,
+          "finalLoss": 2.082895
+        },
+        "modelDigest": "sha256:94577765d5628ffe9ed47b644b80741d7bd0ca0a918f95d727abcf0b1d1cc41b"
+      }
+    },
+    "gate": {
+      "pooledHumanSurvival": true,
+      "ratingBandFloor": false,
+      "conditionalCrossEntropy": true,
+      "expectedLoss": true,
+      "topChoice": true,
+      "nonemptyMask": true
+    },
+    "eligible": false
+  },
+  "eligible": false
+}
