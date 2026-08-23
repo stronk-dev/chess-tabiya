@@ -6607,3 +6607,25 @@ green.
 
 **Next:** live-source Phase B still needs the followed-source object from D1211; this repair does not
 pretend a sealed run can grow. The remaining live-overlay documentation claim is corrected here.
+
+## 2026-08-23 — Campaign event semantics reached the persistence boundary
+
+**What landed:** the migration-independent campaign core now has a pure, exported state fold over
+the accepted five-event grammar. It derives path progression, nine-layer completion, charge
+inventory, any-verdict module unlocks, and prestige eligibility without adding a score or chess
+judgement.
+
+**What changed:** the implementation stopped at two buildability gaps rather than laundering them
+into storage: the accepted event grammar cannot express `abandoned`, and its required cursor cannot
+represent a fully sealed campaign. D1233/D1234 record the return; the checkpoint takes stored
+lifecycle status explicitly and uses a nullable cursor without exposing either as a persistence
+contract.
+
+**Verification:** the focused campaign contract/state suite passes 15/15 and the runtime TypeScript
+project is clean. Negative fixtures fail non-contiguous streams, unknown/out-of-order nodes,
+inactive seals/spends, duplicate grants/seals, forged rewards, exhausted charges, and lifecycle
+conflicts.
+
+**Next:** the RFC author pins abandonment authority and the terminal cursor shape. The migration,
+routes and campaign surface then resume behind the already ordered longitudinal/bot-policy schema
+work; this checkpoint needs no rework whichever of the two explicit lifecycle authorities wins.
