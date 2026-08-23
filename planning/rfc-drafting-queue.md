@@ -1138,3 +1138,7 @@ pack field.
   (the 2,516-name D1297 vector). Routed to the evidence-move-selector lane: `rfc/evidence-move-selector.md`
   §1's feature set is exactly where an implicit verbosity prior would enter, and its portability
   table is the place to refuse it.
+
+- **[[D1310]]** — the drafting mandate covers every lane traceable to an explicit owner ask, not the
+  three D1093 happened to enumerate. Three derivations stalled on the enumeration; one the owner
+  overruled by hand. Owner-vetoable. Unblocks training-methods.
