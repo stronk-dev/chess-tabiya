@@ -1007,3 +1007,8 @@ Sequencing remains legitimate — but only when the remainder has a **named home
 - **[[D1213]]** (codex) — `learner-modules` A14 demands before/after operands that
   `derived.compare.structure_delta@1` does not retain. Routed to the learner-modules implementation
   lane; codex's own module work owns it.
+
+- **[[D1233]]/[[D1234]]** (codex, campaign-core implementation) — `campaignRunState` cannot derive
+  its declared `"abandoned"` status from the authoritative event log, and `cursor` is defined as
+  "the first unsealed layer" with no representation of the completed case. Routed to the
+  `campaign-core` implementation lane; both are amendments its implementing commit must carry.
