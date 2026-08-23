@@ -230,6 +230,42 @@ derivation's gap-11 find that a persona'd rated boss is unrateable at HEAD: `pro
 `rfc/learner-rating.md:324-347`); not a `position` session; not horizon-free. It seals exactly
 like every other node.
 
+**3.5 The prestige layer — the one place winning gates anything** ([[D1040]], owner ruling
+2026-08-23). The ruling gives winning a home without letting it touch the learning path. **This
+subsection names the gate and its seam; it does not design what prestige contains** — army
+building, cosmetic tiers and [[D893]]'s *"nice prestige reward"* stay deferred to Discharge D3's
+successor amendment.
+
+**The gate, defined against shipped vocabulary rather than invented.** A node is *won* when its
+§4.1 seal carries `verdict === "achieved"` — the absorbing-success member of `ObjectiveState`
+(`packages/runtime/src/types.ts:4-11`), already mapped 1:1 from the submitted tip and already
+persisted in the `node_sealed` payload. Nothing new is computed, stored or judged; the prestige
+gate is a **read over seals that already exist**:
+
+```
+prestigeEligible(campaignRunId) = every sealed node's verdict === "achieved"
+```
+
+**Why not `terminalOutcome`.** `RunOutcome` (`"win" | "loss" | "draw"`, `outcome.ts:3`) is the
+vocabulary of a **rules-terminal game**, and a v1 campaign node is not one (§3.4: not a rated
+game, not a `position` session, not horizon-free). Using it would require inventing a mapping
+from an authored objective to a game result — exactly the invention this section refuses. When
+the rated boss lands (Discharge D1), that encounter class *does* produce a `RunOutcome`, and the
+prestige gate may extend to read it there; v1 does not anticipate that shape.
+
+**Three properties this layer must keep, stated now so the deferred amendment cannot quietly drop
+them:**
+
+1. **Prestige never gates progression.** No `module_unlock`, no charge grant, no map advance and
+   no node availability may read `prestigeEligible`. The §3.2 composition is closed at three
+   narrowing gates and prestige is not among them — a fourth term would make winning a
+   precondition for learning, which the ruling forbids.
+2. **Prestige is a projection, not a table.** It folds from `campaign_events` like §4.2's
+   roll-up, inherits the same determinism discipline, and adds no persistence — consistent with
+   §6's single migration position, which this subsection does not widen.
+3. **Prestige is outside the evidence plane.** It speaks about a run's outcomes, never about
+   chess; law 8 is untouched because nothing here renders or grades a move.
+
 ### §4. Sealing — the submitted branch, node verdicts, and the roll-up
 
 **4.1 Declaring done.** The ruling (`06:441-444`): *"a node remembers the branch you SUBMIT…
@@ -246,8 +282,8 @@ active encounter, reads the submitted branch tip's objective state (`Node.object
 `apps/server/src/progress.ts:127`; in a trajectory pack the tip carries the final leg's state,
 earlier legs having sealed as `TrajectoryLegSpan.sealedState`, `trajectory.ts:15`), appends
 `node_sealed { nodeId, runId, branchId, verdict }`, appends the §2.1 `charge_earned` grant,
-appends `module_unlocked` for the node's `reward` if it carries one (whatever the verdict — the
-same finishing-not-winning principle as §2.1 and ADR-0007's unlocked-by-playing; refused at
+appends `module_unlocked` for the node's `reward` if it carries one (**whatever the verdict** —
+the same finishing-not-winning principle as §2.1 and ADR-0007's unlocked-by-playing; refused at
 append if outside the ceiling, §3.2), and
 advances the map cursor. The node verdict vocabulary **is** `ObjectiveState`'s absorbing subset
 plus the non-absorbing fallback: `verdict = "achieved" | "failed" | "transitioned" | "open"`,
@@ -257,6 +293,15 @@ enters: the seal is a copy of the pack's own objective machinery. The verdict is
 whose only home is the `node_sealed` payload** — it is not the shipped `AttemptVerdict`
 (`"open" | "unstable" | "stable"`, `progress.ts:62`), which stays untouched; the two share the
 `"open"` token but not a type.
+
+**RULED 2026-08-23 ([[D1040]]) — the any-verdict grant above is the settled core behaviour, not
+an unexamined default.** The owner ruled *progression is unlocked by PLAYING; WINNING gates the
+PRESTIGE layer only*. This paragraph's `module_unlocked`-on-any-verdict append **is** that
+ruling, and it is recorded here so no future reader re-opens it as an oversight: a `failed` seal
+grants the node's reward exactly as an `achieved` seal does. The ruling is consistent with
+[[D945]]'s earned-rewind economy, whose stated point is that a weaker player can still finish a
+campaign — a core path gated on winning would have made both mechanisms decorative. Where winning
+*does* gate is §3.5.
 
 **4.2 The run-level roll-up** — `06:452-454`'s *"computed nowhere"*, the smallest new part,
 built here as a **projection, not a table** (the `attempts`/rating-as-projection precedent):
@@ -274,8 +319,11 @@ campaignRunState(campaignRunId): {
 computed by folding `campaign_events` in `seq` order. **Determinism discipline inherited from
 `rfc/longitudinal-store.md`:** rebuild from the event log byte-equals the incrementally
 maintained state (criterion 9); the fold is pure; no wall-clock reads inside it. `completed`
-means nine seals; a campaign "win" for D893's prestige purposes is deferred with the prestige
-fork (Discharge D3) — v1 reports verdict counts and invents no aggregate score.
+means nine seals. A campaign *"win"* for [[D893]]'s prestige purposes is now **defined** by
+[[D1040]] — §3.5's `prestigeEligible` read over the seals this fold already carries — while what
+prestige *contains* stays deferred (Discharge D3's successor). v1 reports verdict counts, adds no
+field to the state above, and still invents no aggregate score: eligibility is derivable from
+`nodes` as it stands.
 
 **4.3 Path-scoped seals stand.** Rewinding inside a later encounter never edits an earlier
 node's seal — seals are append-only events; *"rewinding to a clean line erases it — that is the
@@ -487,7 +535,7 @@ own units.
 |---|---|---|---|---|
 | D1 | The Act II rated boss — absorbs [[D945]]'s ruled reading (earned rewinds can win the encounter; ratedness follows R11 unchanged: rated when clean, winnable regardless) as a v2 amendment once `learner-rating` is accepted, resolving the persona/`targetElo` disjointness (a profile forbids the rung field the rated predicate requires — calibrate a profile per bot-policy §7 or the boss drops the persona) | `planning/campaign/` | the amendment's registration | |
 | D2 | Prediction (shape 3) and survival (shape 4) encounter classes — each needs a seal mechanism absent at HEAD (the prediction-score threshold must be authored-parameter-shaped and reconciled with format v0.9's no-verdict rule; survival needs grounded counters and an unbounded-run objective), and each re-cuts its formats as play-the-consequence, never find-the-tactic | `planning/campaign/` | that amendment's registration | |
-| D3 | Army-building / prestige — blocked on the OWNER fork: D893(3)'s *"unlocks harder bosses"* versus D334's *"winning may unlock convenience and variety, never content"*; is a harder boss variety or content? Not specifiable until ruled | OWNER | the ruling's log entry; the amendment citing it | |
+| D3 | Army-building / prestige — was blocked on the OWNER fork: D893(3)'s *"unlocks harder bosses"* versus D334's *"winning may unlock convenience and variety, never content"* | OWNER | the ruling's log entry; the amendment citing it | **DISCHARGED 2026-08-23 by owner ruling [[D1040]]** (*"progression is unlocked by PLAYING; WINNING gates the PRESTIGE layer only"*), landed at `1300303`. The fork resolves without answering its own question: the harder-boss-versus-content dispute is dissolved rather than settled, because **winning may not gate content OR variety on the core path at all** — §4.1's any-verdict grant is the ruled core behaviour, and winning gates only the §3.5 prestige layer, which is defined to touch no progression term. What prestige *contains* (army building, cosmetic tiers) is deferred to this row's successor amendment; the **gate and its seam are specified now** (§3.5) |
 | D4 | Evidence-dark fun nodes and cosmetic rewards (D887's marked-play class) and time controls (nothing exists to build on — `clockState` is an untyped passthrough) | `planning/campaign/` | that amendment's registration | |
 | D5 | v1 implementation per this specification, criteria 1–14 | codex | the implementing commits; ledger flips per §9 | |
 
@@ -498,8 +546,10 @@ set).
 
 ## Open questions
 
-1. **[OWNER — deferred with scope] The prestige/D334 fork** (Discharge D3). Not blocking: v1
-   contains no prestige axis.
+1. **~~[OWNER — deferred with scope] The prestige/D334 fork~~ — ANSWERED 2026-08-23 by
+   [[D1040]]** (Discharge D3, discharged). Winning gates the prestige layer only and never the
+   core path; the gate is specified in §3.5, its contents remain deferred. v1 still contains no
+   prestige *axis* — it now contains the ruled *definition* of one.
 2. **[OWNER — veto window] The §2a second-axis reading** (Deviation 2). Proceeding on the
    claude-derived reading; a veto lands as a one-line amendment while v1 carries no rated
    result.
@@ -554,3 +604,17 @@ set).
   type over the byte-exact eleven, the eighth-context slot (seven shipped members verified),
   the intent-presets D3 hand-off wording, the claims-line grammar (byte-equal to the register
   row), and criterion 11's failable 16-state comparison.
+- 2026-08-23 (**owner ruling [[D1040]], amendment by claude**): *"progression is unlocked by
+  PLAYING; WINNING gates the PRESTIGE layer only."* **Discharge D3 is discharged** — the
+  army-versus-content fork it was blocked on is **dissolved rather than settled**, because
+  winning may gate neither on the core path. §4.1's any-verdict `module_unlocked` grant is
+  recorded as the *ruled* core behaviour rather than an unexamined default (a `failed` seal
+  grants the reward exactly as an `achieved` one does), §4.2's deferred campaign-"win" is now
+  defined, and **new §3.5** names the prestige gate and its seam: `prestigeEligible` is a read
+  over seals that already exist (`verdict === "achieved"`, the absorbing-success member of the
+  shipped `ObjectiveState`), not `terminalOutcome`/`RunOutcome`, which is the vocabulary of a
+  rules-terminal game that a v1 node is not (§3.4). Three properties are pinned so the deferred
+  contents amendment cannot quietly drop them: prestige never gates progression (the §3.2
+  composition stays closed at three narrowing terms), prestige is a projection adding no
+  persistence, and prestige is outside the evidence plane. **What prestige contains stays
+  deferred**; only the gate is specified.

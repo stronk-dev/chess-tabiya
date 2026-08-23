@@ -291,7 +291,15 @@ document. Its primary navigation must have room for the whole spectrum:
 | Live | Stream, academy/hosted session, events/spectate |
 | Create | pack studio, imports, session-to-pack, publication channel |
 | Library | packs, games, positions, concepts, historical sources |
-| Settings | opponent/rating, feedback/evidence, engines/models, LLM, data, accessibility |
+| Settings | opponent/rating, feedback/evidence, engines/models, LLM, data, accessibility, **appearance** |
+
+**Appearance added 2026-08-23 (claude on owner ruling [[D976]]/[[D982]], law 5; owner-vetoable —
+`theming` Discharge D3).** The accepted `rfc/theming.md` gives Settings a surface this row did not
+name: **three independent selectors — app theme, board theme, piece set** — plus the animation
+preference. It is deliberately *not* an assistance control and is unreachable from the assistance
+compiler in both directions ([[D493]]'s boundary, pinned by that RFC): a theme changes how the
+product looks, never what it is willing to say. The owner's own framing is the reason it is three
+axes rather than one setting: *"have app theme, board theme, pieces theme. done."*
 
 Inside a run, the shared shell has stable regions:
 

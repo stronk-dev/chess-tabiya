@@ -268,6 +268,43 @@ board themes): the owner's chosen looser clause, so fun nodes stay worth visitin
 blurring what counts as learning. The owner's own sentence is the law's spirit: *"we don't
 need to forget we're learning chess here."*
 
+**RULED 2026-08-23 ([[D1042]], written by claude on the ruling; owner-vetoable) — the balance
+law is SURFACE-SCOPED, not variant-scoped.** The owner's verbatim answer, when asked where the
+line between an interesting variant and no-longer-learning-chess falls: *"again like for drill
+packs these are kinda useless right... but for normal play it should be an option if people want
+to do that... heck we can even do analysis on played/imported wierd games???? and again for
+campaign mode, like unlocking a new hero in slay the spire changes the entire run structure, we
+can have these kind of weird campaign variations and more... we can go full game/fun with the
+campaign... as crazy as we want to... as long as the 'educational' run is the main one."*
+
+**The question was asked wrongly and the ruling corrects it.** Every prior framing — including
+the D887 clause immediately above — asked *which variants are permitted*. The owner answered
+*per surface*: the same variant is refused in one place and welcome in another, so permission is
+a property of **where it appears**, not of the variant. A per-variant law needs re-ruling for
+every variant nobody has thought of yet; this one does not.
+
+| Surface | Variants | Why |
+|---|---|---|
+| **Drill packs** | **Standard chess only** | *"for drill packs these are kinda useless"* — a drill exists to say something grounded about a position, and outside standard chess the evidence stack has nothing true to say |
+| **Just Play** | **Any variant, as an option** | *"for normal play it should be an option if people want to do that"* — play is not training; nothing is claimed, so nothing can be claimed falsely |
+| **Import / analysis** | **Accepted** | *"we can even do analysis on played/imported wierd games"* — a game that was actually played is a record, and refusing to look at it teaches nobody anything |
+| **Campaign** | **As far as we like** | *"we can go full game/fun with the campaign... as crazy as we want to"* |
+
+**A variant campaign is a NEW-HERO unlock, not a rule tweak.** The owner's analogy is precise and
+load-bearing: *"like unlocking a new hero in slay the spire changes the entire run structure."* A
+Slay-the-Spire character is not a modifier applied to the same run — it changes the deck, the
+mechanics and what the run is *about*. So a variant campaign is a **different campaign**, not a
+setting on the standard one; §5's act ladder, the economy and the unlock pool are all free to
+differ. This is the shape army-building already had at §1's clause 3 (*"a campaign VARIANT in
+the character-select sense"*), now generalized to every variant.
+
+**The single constraint, and it is the whole safeguard: the educational standard-chess run
+remains the MAIN one.** Variant campaigns are alternates reached from it, never the default and
+never the thing a new learner meets first. The §3 laws above are unchanged and still bind
+inside every campaign — an evidence-dark node still seals no verdict, credits no skill and gates
+no content, whichever campaign it sits in. What the ruling widens is *how far a campaign may
+travel*; what it does not widen is *what may be claimed while travelling*.
+
 ## 4. What is not decided here
 
 R6, R7 and R8 remain unanswered and are experiential: whether a rewind budget

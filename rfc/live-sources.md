@@ -140,6 +140,37 @@ upstream default we do not control, with no test"* (D410, verbatim).
 loses only data we must not show anyway). **New symbol:** `sanitizeBroadcastPgn(pgn)`
 in `import-source.ts`:
 
+> **AMENDED 2026-08-23 ([[D1048]]) — extract clock tags BEFORE the strip.** Two contracts
+> accepted the same day pointed in opposite directions: this section destroys the `[%clk]` tags
+> the time-control lane ([[D1041]]) is built on — the harness measured **902** of them in one
+> finished round. The amendment adds an **extraction step ahead of the strip**; the strip itself
+> is unchanged and the fail-closed assertion keeps every character it had.
+>
+> **Why this is safe, and why it is not a hole in [[D410]].** A clock reading is a **measured
+> fact about the game** — how much time remained on a clock, recorded by the organiser's
+> equipment — not another product's **judgement of a move**. D410's trap is that
+> *"another product's verdict on a move enters our corpus as authored truth"*: `[%eval]`,
+> `Blunder.`, `??`. A clock asserts nothing about move quality and grades nothing, so it sits on
+> the opposite side of that line. The distinction is the same one law 8 draws everywhere in this
+> repo — render measured evidence, never manufactured judgement.
+>
+> **The extraction, specified:** before any stripping, `sanitizeBroadcastPgn` parses `[%clk H:MM:SS]`
+> occurrences into a typed, per-ply structure and returns it alongside the sanitized PGN —
+> `{ pgn: string; clocks: readonly { readonly ply: number; readonly remaining: string }[] }`. The
+> structure carries **no PGN annotation syntax by construction** (integers and a duration
+> string), so nothing it holds can re-enter the movetext. Its storage home is a typed field
+> beside `ImportedGameRecord.pgn` (`storage.ts:156-166`) and is **claimed by the time-control
+> lane, not by this RFC** — Phase A neither persists nor reads `clocks`; it only stops
+> destroying them, and the field's schema, lane and migration are that lane's to claim. A
+> consumer arriving before then finds the extraction available and the storage absent, which is
+> the honest state rather than a silent one.
+>
+> **Criterion 3 is unchanged and still fails closed.** Its assertion is over the **movetext of
+> the stored record**, where a clock tag remains exactly as forbidden as an eval: the extraction
+> lifts clocks *out* and the strip then removes them, so the movetext still contains zero `[%clk`.
+> The guarantee did not need narrowing — it needed the extraction to happen first. Criterion 11
+> below covers the new step.
+
 - removes all `{...}` comments (which is where Lichess keeps evals, clocks, and
   literate verdicts — measured: zero fixture games carried `(...)` variations in
   movetext, the verdict sentences live inside comments), all `;` rest-of-line
@@ -310,6 +341,15 @@ named where non-obvious.
     byte-identically, and an unknown `source_kind` is still refused. (Catches
     both the unwritable-record defect cross-review found and a rebuild that
     silently drops the CHECK.)
+12. **Clock extraction survives the strip ([[D1048]], amendment 2026-08-23):** running
+    `sanitizeBroadcastPgn` over the committed finished-round fixture returns a `clocks`
+    array of **exactly 902 entries** — the harness's measured `[%clk]` count — each with an
+    integer `ply` and a `H:MM:SS` `remaining` string, **while criterion 3's movetext
+    assertion still passes on the same call's `pgn`**. Both arms must hold in one
+    invocation. (Catches the two failures that matter in opposite directions: a strip that
+    runs first and destroys the timing data the time-control lane needs, and an extraction
+    that leaks a clock tag back into the stored movetext. A fixture whose `clocks` is empty
+    fails, so the criterion cannot pass vacuously on a sanitizer that never extracts.)
 
 ### 7. Ledger rows this RFC closes
 
@@ -406,3 +446,18 @@ at landing** — these are current, not promised.
   longitudinal claims-none halves (no digest or rebuild reads
   `ImportedGameRecord.pgn`; `movetextDigest` is over parsed moves and unaffected
   by stripping).
+- 2026-08-23 (**[[D1048]] amendment by claude**): **extract clock tags before the strip.** This
+  RFC and the time-control lane ([[D1041]]) were progressed hours apart the same day and pointed
+  in opposite directions — §3's sanitizer destroyed the `[%clk]` tags (902 measured in one
+  finished round) that lane is built on, and criterion 3 asserted their absence, failing closed.
+  §3 now specifies an **extraction step ahead of the strip**, returning
+  `{ pgn, clocks: { ply, remaining }[] }`. The strip is unchanged and **criterion 3 needed no
+  narrowing**: its assertion is over the stored *movetext*, where a clock tag stays exactly as
+  forbidden as an eval — the extraction lifts clocks out before the strip removes them. New
+  **criterion 12** requires both arms in one invocation (902 entries extracted **and** the
+  movetext assertion still green), and fails on an empty `clocks` so it cannot pass vacuously.
+  The stated principle: a clock reading is a **measured fact about the game**, not another
+  product's **judgement of a move**, so it sits on the opposite side of [[D410]]'s line from
+  evals and verdicts. Storage of `clocks` is **claimed by the time-control lane, not here** —
+  Phase A stops destroying the data and persists nothing, leaving that field's schema, lane and
+  migration to the RFC that will read it.

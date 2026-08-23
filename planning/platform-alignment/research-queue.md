@@ -100,3 +100,17 @@ R15–R17 have completed their mechanical/code/desk arms; D649 retains owner use
 recruited participants as an implementation blocker without manufacturing population claims.
 O5–O9 and O11–O12 now have owner handoffs. R14 remains an owner session;
 R10 remains downstream of the representative pilot. Scale content stays held by D560/Gate F.
+
+### R20/R21 finding rows — routed 2026-08-23
+
+Codex landed three finding rows with the two research closures (`2021e1f`, `76df15d`) and
+`make work-index` went red at HEAD on them. They belong to the R20/R21 rows above; routed here by
+claude so `make verify` is green, with no other claim on codex's work:
+
+- **[[D1053]]** — R20's skill-credit population: 67 semantic-event projections, five candidates,
+  **zero production-ready rules**.
+- **[[D1054]]** — 🐞 R20's queue premise had drifted from the accepted learner-module contract
+  (175 → 181 declared / 179 intended compiled / 2 awaiting after D924); the instrument now reads
+  and asserts the accepted RFC rather than a stale count.
+- **[[D1055]]** — R21's twelve retained player-habit metrics, **zero production-ready** despite
+  the accepted longitudinal store; two wait on runtime opening identity, two on per-game castling.

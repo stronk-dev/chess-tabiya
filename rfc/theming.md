@@ -1,6 +1,6 @@
 # RFC: Theming — three axes, schemes inherited whole
 
-- **Status:** awaiting D3 — implementation complete 2026-08-23; criteria 1–13 are green and D4 is discharged. The remaining holds are the owner-tier Settings intent amendment (D3) and the owner-use felt-quality pass (D5/D840); neither is unfinished implementation. Accepted 2026-08-22 by claude after three author/review passes; the full acceptance history remains in the changelog and RFC index.
+- **Status:** awaiting D1 — implementation complete 2026-08-23; criteria 1–13 are green and D4 is discharged. **D3 discharged 2026-08-23**: the owner-tier Settings intent amendment is written into `design/03-product-breadth.md` by claude under that row's own "claude may write it on the ruling" clause ([[D976]]/[[D982]]), owner-vetoable in place. The remaining holds are both owner-tier and neither is unfinished implementation: **D1**, the roster pick from the licensed candidate lists (second piece set, any additional board theme, the `--warning` repair variant, the olive-square repair), and **D5**, the felt-quality pass that rides the owner's own session ([[D840]]'s flip). Accepted 2026-08-22 by claude after three author/review passes; the full acceptance history remains in the changelog and RFC index.
 - **Author:** claude (drafted from `planning/theming/rfc-derivation.md`, restructured on [[D982]] after two cross-review passes — see the changelog)
 - **Created:** 2026-08-22
 - **Design refs:** `design/03-product-breadth.md` shell table (Settings row — amendment owed, Deviation 1); `design/05-in-run-experience.md` §3a (assistance silence is untouched by any theme); ledger rows [[D839]] (the commission), [[D840]] (the animation defect), [[D875]] (the measured floor), [[D976]]/[[D977]]/[[D982]] (the three owner rulings this RFC encodes)
@@ -601,7 +601,7 @@ owner's felt pass (D5) and may trail the code landing.
 |---|---|---|---|---|
 | D1 | Owner picks the shipped roster from the licensed candidate lists — the second piece set, any additional board theme, the `--warning` repair variant, and the olive-square repair choice (Open questions 1–3 resolve here) | OWNER | logged rulings after real sessions, the [[D649]] owner-use gate | |
 | D2 | Cosmetic-reward gating — the campaign consumes these catalogs **by id** as its evidence-dark payout pool ([[D887]]/[[D893]]); nothing here builds earning | `campaign-core.md` | the campaign cosmetics slice's landing commit | |
-| D3 | The design/03 Settings-row amendment naming appearance (row B, law 5) | OWNER | the ruling's landing commit (claude may write it on the ruling) | |
+| D3 | The design/03 Settings-row amendment naming appearance (row B, law 5) | OWNER | the ruling's landing commit (claude may write it on the ruling) | **DISCHARGED 2026-08-23** — written by claude on the [[D976]]/[[D982]] rulings under the row's own "claude may write it on the ruling" clause, and marked owner-vetoable in place. `design/03-product-breadth.md`'s shell table Settings row now names **appearance**, with the three-axis shape (app theme / board theme / piece set) and the not-assistance boundary stated beneath it |
 | D4 | Implementation — tokens, three catalogs, the split, the preference, the sweeps; flips [[D839]]/[[D983]]/[[D875]] and records play-composition D3 discharged in the same commit | codex | the implementing commit | **2026-08-23 — complete; 3 app themes / 2 boards / 2 piece sets, live validated preference, split skin/paint, animation, sweeps, Settings, docs and browser gates** |
 | D5 | Felt-quality verification — [[D840]]'s flip rides the owner's own session, plus the inherited play-composition OQ3 echo decision made in that pass | OWNER | the play-session log entry | |
 | D6 | Criterion 10(c) — the assistance compiler does not exist at HEAD ([[D985]]); when it lands under whatever name [[D971]]'s amendment gives it, its input type joins criterion 10(a)'s no-shared-key assertion | `intent-presets.md` | the commit that builds the compiler | |
@@ -721,3 +721,13 @@ in the ledger: they are gaps left by the id-block renumbering whose convention
   alone miss a silent edit to `ink`/`surface`/`line`/`accent-soft`/`shadow-color` and row C's
   actual near-miss was a value edit, not a ratio change. §3.3's gate asymmetry was verified as
   honestly implemented and is left as [[D982]]'s forced consequence, the owner's to veto.
+- 2026-08-23 (**Discharge D3 discharged, by claude on the rulings**): the `design/03` Settings-row
+  appearance amendment is written, under that row's own *"claude may write it on the ruling"*
+  clause and marked owner-vetoable in place. The shell table's Settings row now names
+  **appearance**, with the three-axis shape (app theme / board theme / piece set), the animation
+  preference, and the [[D493]] not-assistance boundary stated beneath it — *a theme changes how
+  the product looks, never what it is willing to say*. The awaiting pointer moves **D3 → D1**: the
+  remaining holds are the owner's roster pick (second piece set, additional board theme, the
+  `--warning` repair variant, the olive-square repair) and D5's felt-quality pass, which rides the
+  owner's own session. Neither is unfinished implementation — D4 is discharged and criteria 1–13
+  are green.
