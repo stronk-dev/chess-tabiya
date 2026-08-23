@@ -1039,3 +1039,22 @@ had no row at all ([[D1260]], now recorded, [[D1193]] struck).
 in one batch, led by B5 casting, the skills valence fork, the review lane's self-block, and
 [[D1162]]'s fund/defer/refuse on the evidence-to-move selector, which blocks `rfc/variants.md`.
 [[D1263]] specs the derived queue that stops this recurring; it pairs with `make refusal-index`.
+
+## Owner rulings 2026-08-23 (third batch) — [[D1270]]–[[D1275]]
+
+- **[[D1270]] — skills valence: GROUNDED ONLY, and the owner authors NOTHING.** *"why do I have to
+  author anything? didn't we do the research?"* The question was mis-framed: valence comes from rules
+  facts and measured outcomes **plus the authored-valence layer that already ships** ([[D1221]]).
+  Ungrounded concepts are **counted, never credited**. `rfc/skills.md` amendment owed — fork 1
+  closes, and its owner-authoring premise is struck.
+- **[[D1271]] — FUND [[D810]]'s evidence-to-move selector.** Its own RFC and lane are owed; it
+  unblocks `rfc/variants.md`'s acceptance and every variant's personality axis.
+- **[[D1272]] — casting is SEPARATE BUT INTEGRATED; live-following is ungated.** *"a live game is
+  just a live game... you can just open it like an imported game... but it updates."* Dissolves the
+  B5 question: `rfc/live-following.md` open question 1 resolves to **ungated**, the follower may
+  take the held stream, and **casting gets its own lane** rather than a discharge row.
+- **[[D1273]] — review at FULL depth plus accuracy and longitudinal.** Front-loads the store work
+  style and skills also need. The review RFC is commissioned; remaining O7 sub-choices ride it as
+  registered opens.
+- **[[D1274]]/[[D1275]] — `rfc/variants.md` returned**, 6 return-class blockers including my own
+  overshooting correction and an open question the owner had already closed.
