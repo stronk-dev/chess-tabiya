@@ -112,6 +112,23 @@ changelogs — each caught something that changes how you implement.
 
 Neither RFC claims anything versioned and neither proposed ledger rows.
 
+## 0-UCI-CONVENTION-AMENDED. ⚠ OWNER RULING [[D1029]] REVERSES THE CASTLING NORMALIZATION — read before implementing `exact-legal-mobility`
+
+**Do not normalize castling to `e1g1`.** The accepted RFC said to; the owner caught that this is a
+**one-way door away from Chess960**, where king-takes-rook is the only castling form that survives a
+randomized back rank. Three layers were sharing one field and the fix is to separate them:
+
+- **Move identity** = king-takes-rook (`e1h1`) — the superset, valid for standard chess AND 960.
+  This is what the server already emits; **leave it alone**.
+- **Semantic projection** = the king's destination square, derived for evidence purposes. This is
+  what `board-input.ts:205-207` actually wanted when it normalized — keep the projection, drop the
+  identity rewrite.
+- **Display** = SAN (`O-O`), unchanged and already correct via `moveSanFromUci`.
+
+Criterion 7 and §1.2's byte-identity claim must be re-read against this amendment; the RFC is being
+amended, so **do not start its castling arm until the amendment lands**. The rest of
+`exact-legal-mobility` (the 14 `allDests()` sites, the exact-mobility projection) is unaffected.
+
 ## 0-UCI-CONVENTION. Two notation rows ride `exact-legal-mobility` — [[D1027]]/[[D1028]]
 
 The owner asked whether `e1h1` is proper PGN (it is not — PGN/SAN says `O-O`; `e1h1` is

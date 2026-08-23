@@ -614,3 +614,28 @@ tied to D301 and logged) — the spoiler-free branch-set glyph is the row's name
 must not become a score. Scope: deterministic date→position rule, the daily run kind, share
 token (story_read reuse or one new scope — a register lane if widened), share artifact =
 branch-set shape, never a score. Explicitly out: notifications, streaks, leaderboards.
+
+## Variant family lane — opened 2026-08-23 by owner ruling [[D1031]]
+
+*"why only 960? the idea was to offer many different variants as we need the campaign mode to be
+interesting and it's also fun to be able play/import/analyse fantasy games or w/e."*
+
+Consolidates five idea rows the owner raised over a week and that never became a lane: [[D327]]
+(Just Play variants incl. Fischer Random), [[D328]] (westernised xiangqi/shogi, degraded support
+accepted), [[D869]]/[[D870]] (solitaire chess standalone + campaign encounter class; a FAMILY, not
+one), [[D873]]/[[D887]] (fairy pieces, reduced armies, balanced against *"we don't need to forget
+we're learning chess here"*). Derivation in flight at `planning/variants/rfc-derivation.md`;
+[[D327]]'s degradation-tier frame is its spine, and the existing research base
+(`design/research/fun-mechanics-outside-roguelikes.md`) rates Chess960 top-three as a **legibility**
+mechanic rewarding calculation over recall. Chess960 is likely the cheapest — standard rules, only
+setup and castling differ, so the whole detector stack survives.
+
+## Refusal accountability — [[D1030]]
+
+*"what ELSE has been 'refused' even though i asked for it explicitly this is like the 10th time we
+find out after the fact major compoments are being deferred for no reason."* The full join of owner
+asks against shipped/documented refusals is in flight at
+`planning/platform-alignment/refused-vs-asked.md`. The instrument gap is named and distinct from
+routing decay: `make work-index` catches a ledger row with no lane, but **nothing catches a refusal
+asserted in code, an RFC scope section, or a research verdict that contradicts a standing owner
+ask**. The audit owes an instrument proposal alongside the list.
