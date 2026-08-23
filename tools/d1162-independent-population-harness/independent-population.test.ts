@@ -13,6 +13,8 @@ import type { TransferPosition } from "./extract.js";
 const INPUT = process.env.TABIYA_D1162_TRANSFER_INPUT;
 const PROBE = process.env.TABIYA_D1162_TRANSFER_PROBE;
 const WRITE = process.env.TABIYA_D1162_TRANSFER_WRITE === "1";
+const FEATURE_CACHE = process.env.TABIYA_D1162_FEATURE_CACHE;
+const REPRESENTATION_COMMIT = process.env.TABIYA_D1162_REPRESENTATION_COMMIT;
 const RESULT = new URL("../../planning/platform-alignment/bot-policy/d1162-independent-population-results.json", import.meta.url);
 const REPORT = new URL("../../planning/platform-alignment/bot-policy/d1162-independent-population-results.md", import.meta.url);
 const LAMBDAS = [0.01, 0.1, 1, 10] as const;
@@ -303,6 +305,23 @@ function validationLoss(prepared: Prepared, weights: ReadonlyMap<string, number>
 
 function run(inputText: string, probeText: string) {
   const built = build(inputText, probeText);
+  if (FEATURE_CACHE !== undefined) {
+    if (REPRESENTATION_COMMIT === undefined || !/^[0-9a-f]{40}$/u.test(REPRESENTATION_COMMIT)) {
+      throw new Error("feature cache requires a full representation commit");
+    }
+    writeFileSync(FEATURE_CACHE, `${JSON.stringify({
+      schema: "tabiya.research.d1297-feature-cache.v1",
+      representationCommit: REPRESENTATION_COMMIT,
+      inputs: built.inputs,
+      engine: built.engine,
+      sourceExclusions: built.exclusions,
+      excludedMixedScore: built.excludedMixedScore,
+      positions: built.positions.map((position) => ({
+        ...position,
+        candidates: position.candidates.map((candidate) => ({ ...candidate, raw: [...candidate.raw] })),
+      })),
+    })}\n`);
+  }
   const measures: Record<Arm, DecisionMeasure[]> = { uniform: [], engine: [], evidence: [], combined: [] };
   const choices: Record<string, number> = {};
   for (const arm of ["engine", "evidence", "combined"] as const) for (const outer of [0, 1, 2, 3, 4]) {

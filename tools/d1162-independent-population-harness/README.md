@@ -40,3 +40,8 @@ TABIYA_D1162_TRANSFER_WRITE=1 pnpm exec vitest run \
   tools/d1162-independent-population-harness/independent-population.test.ts \
   --config tools/d1162-independent-population-harness/vitest.config.ts
 ```
+
+For D1297 development, the same clean-snapshot run can additionally write the sparse candidate
+cache by setting `TABIYA_D1162_FEATURE_CACHE` and the full
+`TABIYA_D1162_REPRESENTATION_COMMIT`. The cache is a disposable `/private/tmp` artifact and is not
+production model data.
