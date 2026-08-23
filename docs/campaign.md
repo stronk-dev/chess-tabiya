@@ -18,6 +18,12 @@ never silently migrates to a newer authored document. Duplicate identities and i
 fail closed; a deployment with no `content/campaigns/` directory exposes an empty registry rather
 than fabricated seed content.
 
+The runtime also owns the pure module chokepoint. `campaignModuleInventory` combines the permanent
+rules floor, authored starting modules and earned unlocks, rejecting anything outside the campaign
+context ceiling. `effectiveCampaignModules` then computes campaign ceiling ∩ earned inventory ∩
+boss suppression ∩ chosen preset in canonical module order. Suppression can only narrow the result
+and can never remove `rules_floor`; a preset cannot expose an unearned module.
+
 The workflow context `campaign` is registered separately from pack/position/imported sessions. Its
 candidate default preset is Guided, Support is unavailable, and the campaign preference keys share
 the existing device-local assistance/workflow grammar. This registration does not make a run a

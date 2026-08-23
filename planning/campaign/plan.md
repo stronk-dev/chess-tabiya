@@ -11,6 +11,8 @@ shared register declares.
 - [x] Register `campaign` as the eighth workflow context with its isolated browser preference key.
 - [x] Add a version-retaining content registry that validates every document against the live pack
   registry and keeps an absent content directory honestly empty.
+- [x] Enforce the pure campaign module chokepoint: campaign ceiling ∩ earned inventory ∩ boss
+  suppression ∩ chosen preset, with the rules floor permanently present.
 - [ ] Add the seed campaign through that registry; keep every balance number candidate and
   do not manufacture chess claims while choosing authored encounters.
 - [ ] Land `campaign_runs` / `campaign_events` at the claimed migration turn, then the pure event

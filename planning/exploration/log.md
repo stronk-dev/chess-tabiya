@@ -5616,3 +5616,19 @@ pinned version and absent-directory behavior.
 **Boundary and next:** no encounter ordering was authored under law 8, and no migration moved. Seed
 content is its own candidate-content step. Durable campaign state still waits behind
 longitudinal-store and bot-policy exactly as the register declares.
+
+## 2026-08-23 — Campaign module-algebra checkpoint
+
+**What landed:** campaign module composition is now one runtime chokepoint. Inventory is the
+permanent rules floor plus authored starting modules plus earned unlocks, all constrained by the
+campaign workflow ceiling. Effective modules are the exact intersection of that ceiling, earned
+inventory, boss suppression and the chosen preset, returned in canonical registry order.
+
+**Refusals:** an unlock outside the campaign ceiling fails with
+`CAMPAIGN_UNLOCK_OUTSIDE_CEILING`; attempting to suppress `rules_floor` fails with
+`CAMPAIGN_RULES_FLOOR_SUPPRESSED`. A preset cannot expose an unearned module, and boss suppression
+cannot add one.
+
+**Verification and boundary:** runtime typecheck and the focused campaign/preset tests pass. This
+is pure composition only: it adds no seed encounters, storage, routes or UI and does not advance
+the blocked migration position.
