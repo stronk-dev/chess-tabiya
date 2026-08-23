@@ -1382,3 +1382,22 @@ added grade is the mildest class.
 **Acceptance criterion 4 asserts exactly what the ruling abolishes** and must be inverted into a
 byte-identity-across-contexts fixture — that inversion is what makes the ruling permanent rather
 than applied once.
+
+### [[D1422]] / [[D1423]] — the ladder is settled, and review selects rather than caps
+
+**`2.5 / 10 / 15`**, landing as `grade-convention@2` through a register amendment against accepted
+`rfc/move-quality-grades.md`. Criterion 4 inverts into a byte-identity-across-contexts fixture.
+
+**The density cap is rejected.** The owner's answer was not "show fewer" but *"we can do a lot of
+moves as long as it's clear which ones are more brief info vs review the move."* That is a **two-tier
+presentation** requirement plus a **ranked selector**, and it belongs to `rfc/review-map.md`. Ranking
+signals named by the owner: entropy change, blunders, excellent moves, tactical positions achieved,
+phase transitions.
+
+**Ground each signal before ranking on it.** Four are reachable — entropy over a measured policy
+distribution, blunders from the ladder, phase transition from shipped detection, tactical positions
+from the collector families. **One is not**: [[D1424]] — the ladder measures Win%-point *loss* and has
+no positive class, so *excellent moves* has no mechanism at all. A move that loses nothing scores
+zero and is indistinguishable from every other move that loses nothing. Praising a move needs a
+different measurement from declining to fault it, and inventing one is the law-8 anti-pattern by
+name. The selector ships with four signals and an open row for the fifth, not with a fabricated one.

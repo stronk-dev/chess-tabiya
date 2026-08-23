@@ -323,6 +323,8 @@ is proposed as a ledger row below and named as open question 6.
 
 ## Acceptance criteria
 
+> **Owner rulings 2026-08-23.** [[D1422]] — one ladder everywhere at **2.5/10/15**; criterion 4 must invert into a byte-identity-across-contexts fixture. [[D1423]] — the density cap is **rejected**: review may carry many moments provided it distinguishes a **brief note** from a **full review-this-move** moment, and ranks by educational value. [[D1424]] — one named signal, *excellent moves*, has no mechanism: the ladder measures loss only and has no positive class.
+
 > **Owner ruling 2026-08-23 — [[D1409]] blocks acceptance of this document.** A judgement word is permitted only inside the exact rendered sentence that grounds it, byte-matched, and banned everywhere else in the output including elsewhere in the same packet. The Review Map may not land before `voiceCheck` enforces that. [[D1408]] — one grade ladder everywhere; [[D1406]]/[[D1407]] record why.
 
 Each names the wrong implementation that would otherwise pass.
