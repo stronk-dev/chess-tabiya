@@ -5757,3 +5757,12 @@ The same action leaves desktop in its existing rail composition, and no evidence
 preset semantics changed. The control names its target through `aria-controls`; the component
 fixture proves both the compact seat selection and open state. D311 narrows from four residues to
 three.
+
+## 2026-08-23 — promotion-complete tablebase claim validation
+
+D520's cannot-fire is removed. The tablebase walker and claim validator now consume one exact
+legal-move enumerator that expands a back-rank pawn destination into queen, rook, bishop and knight
+promotions. Both the validator's reachability closure and `tablebase.moveCensus@v1` use those same
+successors. A permanent end-to-end claim-binding fixture records every successor of a promotion
+position, proves the four distinct UCI promotions and admits the completed census. No pack or
+evidence sidecar changed.

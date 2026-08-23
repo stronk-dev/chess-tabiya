@@ -3,6 +3,7 @@ import { describe, expect, it } from "vitest";
 
 import { sha256 } from "./canonical.js";
 import { consumeClaimBindingRecords, validateClaimBindings } from "./claim-binding.js";
+import { legalSuccessors } from "./legal-moves.js";
 import type { ClaimBinding, EvidenceLedger, SourcingIssue } from "./types.js";
 
 const START = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
@@ -60,5 +61,43 @@ describe("claim bindings",()=>{
     expect(codes(pack(judgement,["corpus_observed","author_principle"]),ledger([authored]))).toContain("CLAIM_LABEL_UNEARNED");
     const rate="f5 scores 90.9% for White";
     expect(codes(pack(rate,["author_principle"]),ledger([binding(rate,{textSha256:sha256(rate),spans:[{span:rate,authored:true}]})]))).toContain("CLAIM_READING_UNATTRIBUTED");
+  });
+
+  it("admits a complete tablebase census with all four promotion roles", () => {
+    const fen = "7k/P7/8/8/8/8/8/7K w - - 0 1";
+    const successors = legalSuccessors(fen);
+    expect(successors.filter((row) => row.uci.startsWith("a7a8")).map((row) => row.uci)).toEqual([
+      "a7a8b", "a7a8n", "a7a8q", "a7a8r",
+    ]);
+    expect(new Set(successors.map((row) => row.fen)).size).toBe(successors.length);
+
+    const text = `There are ${successors.length} legal moves.`;
+    const document = {
+      ...pack(text, ["tablebase_exact"]),
+      start: { fen, side: "white" },
+    } as DrillPackDefinition;
+    const claimBinding = binding(text, {
+      textSha256: sha256(text),
+      spans: [{ span: String(successors.length), assertion: { kind: "tablebase.moveCensus@v1", args: { fen }, select: "total" } }],
+    });
+    const evidence: EvidenceLedger = {
+      schema: "tabiya.sourcing.evidence.v1",
+      sourcedAt: "2026-08-16T00:00:00.000Z",
+      records: successors.map((successor) => ({
+        kind: "tablebase_result",
+        anchor: { fen: successor.fen },
+        sourceId: "fixture",
+        retrievedAt: "2026-08-16T00:00:00.000Z",
+        grounds: "machine_validation",
+        values: { fen: successor.fen, category: "draw" },
+        supports: ["/start/fen"],
+      })),
+      abstentions: [],
+      claimBindings: [claimBinding],
+    };
+    const issues: SourcingIssue[] = [];
+
+    expect(validateClaimBindings(document, evidence, issues)).toHaveLength(1);
+    expect(issues).toEqual([]);
   });
 });

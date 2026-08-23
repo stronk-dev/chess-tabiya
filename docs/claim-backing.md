@@ -8,8 +8,11 @@ and pointer drift therefore fail closed.
 Each binding names verbatim spans. Instrument spans use one closed, versioned assertion that is
 re-derived solely from records already present in that ledger; authored spans remain attributed to
 the author. The validator never fetches or runs an engine. Assertion FENs must be reachable from the
-pack, tablebase census assertions require every legal successor, and undeclared machine-shaped
-tokens are refused. A rate without a recorded population cannot be routed into authored opinion.
+pack, tablebase census assertions require every legal successor (including queen, rook, bishop and
+knight promotion outcomes), and undeclared machine-shaped tokens are refused. The tablebase walker
+and claim validator use the same exact legal-move enumerator, so a recorded census cannot disagree
+with validation merely because a pawn reached the back rank. A rate without a recorded population
+cannot be routed into authored opinion.
 
 The v1 assertion registry covers tablebase category, DTM, DTZ, piece count, move category, line
 uniformity, legal-move censuses and unique moves; engine centipawns and depth; and explorer totals,

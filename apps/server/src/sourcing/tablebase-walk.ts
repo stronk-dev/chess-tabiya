@@ -7,17 +7,15 @@ import { Chess } from "chessops/chess";
 import { makeFen, parseFen } from "chessops/fen";
 import { makeSan } from "chessops/san";
 import { makeUci, parseUci } from "chessops/util";
-import type { Move } from "chessops/types";
 
 import { countFenPieces } from "./chess-facts.js";
 import { liveTablebaseQuery, type TablebaseAnswer, type TablebasePayload } from "./syzygy.js";
 import { learnerCategory } from "./tablebase-category.js";
 import { readJson, writeCanonicalJson } from "./canonical.js";
+import { legalMoves } from "./legal-moves.js";
 import { SourcingError } from "./types.js";
 
 const OFFLINE_FIXTURES = resolve("apps/server/src/sourcing/fixtures/verify-draft.json");
-const PROMOTIONS = ["queen", "rook", "bishop", "knight"] as const;
-
 interface WalkPosition { readonly fen: string; readonly pointer: string; readonly ply: number }
 
 function position(fen: string): Chess {
@@ -43,16 +41,6 @@ function packPositions(pack: DrillPackDefinition): readonly WalkPosition[] {
   };
   walk(pack.spine ?? [], pack.start.fen, "/spine", 0);
   return Object.freeze(values);
-}
-
-function legalMoves(board: Chess): readonly Move[] {
-  const moves: Move[] = [];
-  for (const [from, destinations] of board.allDests()) for (const to of destinations) {
-    const promotion = board.board.getRole(from) === "pawn" && (to < 8 || to >= 56);
-    if (promotion) for (const role of PROMOTIONS) { const move: Move = { from, to, promotion: role }; if (board.isLegal(move)) moves.push(move); }
-    else { const move: Move = { from, to }; if (board.isLegal(move)) moves.push(move); }
-  }
-  return moves.sort((left, right) => makeUci(left).localeCompare(makeUci(right)));
 }
 
 function terminal(payload: TablebasePayload): string | null {

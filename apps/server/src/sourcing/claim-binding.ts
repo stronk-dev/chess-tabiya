@@ -1,8 +1,7 @@
 import type { DrillPackDefinition } from "@chess-tabiya/schema/drill-pack";
 import { Chess } from "chessops/chess";
 import { makeFen, parseFen } from "chessops/fen";
-import { makeSan } from "chessops/san";
-import { makeUci, parseUci } from "chessops/util";
+import { parseUci } from "chessops/util";
 import { assertConsumerEvidenceView, declareSourcingRecordEvidence, evidenceForConsumer, type ConsumerEvidenceView } from "@chess-tabiya/runtime";
 
 import type { TablebaseCategory } from "../tablebase.js";
@@ -10,6 +9,7 @@ import { EVIDENCE_MANIFEST } from "../evidence-manifest.js";
 import { learnerCategory } from "./tablebase-category.js";
 import { sha256 } from "./canonical.js";
 import { issue, object } from "./ledger-validation.js";
+import { legalMoves, legalSuccessors } from "./legal-moves.js";
 import type { ClaimAssertion, ClaimBinding, EvidenceLedger, EvidenceRecord, SourcingIssue } from "./types.js";
 
 export const CLAIM_ASSERTION_KINDS = Object.freeze([
@@ -51,8 +51,8 @@ function positions(pack: DrillPackDefinition): { readonly reached: ReadonlySet<s
   walk(pack.spine ?? [], root, [pack.start.fen]);
   for (const fen of [...reached]) {
     const board = Chess.fromSetup(parseFen(fen).unwrap()).unwrap();
-    for (const [from, destinations] of board.allDests()) for (const to of destinations) {
-      const next = board.clone(); next.play({ from, to }); reached.add(makeFen(next.toSetup()));
+    for (const move of legalMoves(board)) {
+      const next = board.clone(); next.play(move); reached.add(makeFen(next.toSetup()));
     }
   }
   return { reached, pathSets: paths };
@@ -68,17 +68,6 @@ function categoryFor(pack: DrillPackDefinition, fen: string, record: EvidenceRec
   if (typeof category !== "string") return;
   const side = fen.split(" ")[1] === "b" ? "black" : "white";
   return learnerCategory(side, category as TablebaseCategory, pack.start.side);
-}
-
-function legalSuccessors(fen: string): readonly { readonly fen: string; readonly san: string; readonly uci: string }[] {
-  const board = Chess.fromSetup(parseFen(fen).unwrap()).unwrap();
-  const result: { fen: string; san: string; uci: string }[] = [];
-  for (const [from, destinations] of board.allDests()) for (const to of destinations) {
-    const move = { from, to };
-    const san = makeSan(board, move), uci = makeUci(move), next = board.clone();
-    next.play(move); result.push({ fen: makeFen(next.toSetup()), san, uci });
-  }
-  return result;
 }
 
 function requiredFen(assertion: ClaimAssertion): string | undefined {
