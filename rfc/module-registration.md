@@ -900,6 +900,8 @@ drafted and never asked), so neither is assumed. Three things follow:
 
 ## Acceptance criteria
 
+> **Rows landed 2026-08-24.** [[D1444]] — the layer was returned with a paper trail, but its ids are already production currency and a campaign can reward a module that resolves to nothing. [[D1445]] — `MODULE_ANSWER_IMAGE` is exact-match, no ceiling maps to `evaluation`, and the just-ruled grade has nowhere to live. [[D1446]] — binding needs fifteen dispositions deleted atomically, and `pack.authored.classifier@1` has never existed. [[D1447]] — the `arrows` clamp is unenforced and square sight is keyboard-unreachable.
+
 Every criterion names the tree state that makes it RED. A criterion that cannot fail is a named
 defect class here ([[D444]]/[[D984]]/[[D1274]]), so each carries its falsifier.
 
