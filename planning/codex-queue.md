@@ -1,5 +1,22 @@
 # Codex queue — rewritten in full 2026-08-16
 
+## 0-MODULE-REDUCER-RETURN. D1164 blocks only the novelty arm
+
+The accepted learner-module reducer amendment is partially executable. The fourteen-field
+declaration, registered deduplication, directed rules-only subsumption, and loud post-reducer
+backstop are implemented in the current checkpoint. `positionNovelty@1` returns to the author:
+unregistered facts key on all retained operands, including per-node anchors, so a real ancestor
+can never match the current event. See `planning/learner-modules/novelty-identity-return.md`.
+Resume the novelty arm only after the RFC closes every novelty-enabled projection over stable
+compared fields or an explicit exemption, with distinct-node boundary fixtures.
+
+## 0-BOT-FREE-SCREEN. D1163 is running; D1166 corrects its source claim
+
+Run the preregistered 3×3 Maia positive-control and engine-derived band matrix before funding any
+game ladder for an engine-composed bot. The raw R11 capture was not committed despite the earlier
+claim; the surviving Stockfish source is witnessed by D815 and differs from R11's aggregate-file
+digest. The harness pins the corrected four-source lineage and changes no experimental parameter.
+
 **Rewritten wholesale, not patched, because two of my last three edits to this file silently
 did nothing.** They were scripted string replacements anchored on section headings you had
 already rewritten at `a702372`; the anchors stopped matching, the replacements no-opped, and I
@@ -185,6 +202,27 @@ exactly** six days on. Implementation notes:
   now three-deep** (0.28 `graduation-clearance`, 0.29 this, 0.30 F3).
 - Rows [[D1111]]–[[D1114]] landed at acceptance; [[D1112]] and [[D1114]] **close with the binding
   arm**, [[D1113]] closes with this implementation (§6 gives the note a reader).
+
+## 0-BOT-ROSTER. The roster exists — and two blockers explain the empty catalog ([[D1180]]–[[D1183]])
+
+`planning/bot-roster/roster.md`: **12 profiles, 3 families × 4 bands** (1000/1400/1800/2200), with
+band and family **orthogonal by measurement** (guard 1.36 cp, trait 1.01 cp — two orders below
+perception). Calibration priced: 12,400 games, 16 arms, ~4–5 h.
+
+**The two blockers are yours and they are why `BOT_POLICY_PROFILES` is empty ([[D1181]]):**
+- **`ErrorGuardLayer.searchBound` is `"nodes" | "movetime"` (`types.ts:99`) — depth is not
+  expressible**, and depth 8 is the only measured bound while node bounds are refused doctrine.
+  **Blocks 8 of 12 profiles.** Widening the union is the unblock.
+- **Nothing populates `candidate.traits` outside a test**, so a registered trait multiplies by **1
+  everywhere**. Personalities cannot work until the selector populates it.
+Also: the RFC quotes **depth-12** guard numbers as production (depth 8 is the measurement), and the
+trait gate has **no unit check**.
+
+**Ship the smallest real range first**: family A at four bands is registrable **today** with zero
+blockers ([[D970]] licenses it, no D969 dependency). Six profiles once traits are populated.
+
+**[[D1183]] — do not run the pre-screen twice**: your `tools/d1163-engine-composed-bot-harness/` and
+the roster's Gate 0 are the same free move-match screen over the committed R11 corpus. Reconcile.
 
 ## 0-UNREACHABLE. 25 mechanisms nobody can reach — [[D1140]]/[[D1141]]/[[D1142]]
 
