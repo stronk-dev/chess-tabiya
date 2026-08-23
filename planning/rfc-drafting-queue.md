@@ -1110,3 +1110,20 @@ on 2026-08-17, voiding `measurement-records` OQ1's rationale.
   Unblocks when that axis lands; [[D1069]] owns its conflict with the guided-hint contract.
 - **[[D1296]]** — admitting Fairy-Stockfish admits an **opponent, not an evaluation**. `variants`
   §7.4b pins it and criterion 17 re-asserts zero evaluations with the engine present.
+
+### Two dossiers reconciled — [[D1300]]–[[D1304]]
+
+**Campaign** (`planning/campaign/roguelike-reconciliation.md`): 37 findings — 13 reflected, 7 only in
+`design/06` and absent from the RFC, 1 contradicted, **11 absent and live**, 3 superseded.
+**14 amendments owed** (10 claude-on-a-ruling, 4 OWNER). [[D1300]] is the owner question that was
+never asked. Corrections to my own claims: the dossier **is** cited (by 10 files including
+`design/06`) — it is `rfc/campaign-core.md` that cites zero research; and the recording row is
+[[D1092]], not the D1094 I named.
+
+**Training methods** (`planning/training-methods/rfc-derivation.md`): **RFC not licensed** —
+[[D1093]] enumerates only variants/time-controls/famous-games — so the fork must take its scope
+question to the owner. Recommended shape is **two documents**: a successor to the archived
+return-and-progression RFC (scheduler and queue over shipped tables, **no lane, no migration, no new
+table**), and a pack-format RFC for pass marks, the guided pass and tempo sets. Split on failure
+isolation: [[D1302]] is a **defect against an accepted RFC** and must not wait behind an unruled
+pack field.
