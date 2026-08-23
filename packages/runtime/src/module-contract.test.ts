@@ -44,6 +44,7 @@ function declaration(id: ModuleId): ModuleDeclaration {
     seatClass: id === "rules_floor" ? "board_input" as const : id === "blunder_prevention" ? "board_adjacent" as const : id === "review_map" ? "timeline" as const : id === "full_inspector" ? "explicit_surface" as const : "rail" as const,
     forms: Object.freeze([id === "rules_floor" ? "square" as const : "sentence" as const]),
     rendering: "deterministic" as const,
+    noveltyWindow: id === "rules_floor" || id === "blunder_prevention" ? 0 : 3,
   });
 }
 
@@ -70,6 +71,8 @@ describe("learner module contract compiler", () => {
     expect(() => compileModuleRegistry(valid().slice(1))).toThrowError(expect.objectContaining<Partial<ModuleContractError>>({ code: "MODULE_REGISTRY_INCOMPLETE" }));
     const changed = valid().map((module) => module.id === "threat_radar" ? { ...module, seatClass: "board_adjacent" as const } : module);
     expect(() => compileModuleRegistry(changed)).toThrowError(expect.objectContaining<Partial<ModuleContractError>>({ code: "MODULE_BOARD_ADJACENT_COUNT" }));
+    const missingNovelty = valid().map((module) => module.id === "threat_radar" ? { ...module, noveltyWindow: undefined } : module) as unknown as readonly ModuleDeclaration[];
+    expect(() => compileModuleRegistry(missingNovelty)).toThrowError(expect.objectContaining<Partial<ModuleContractError>>({ code: "MODULE_DECLARATION_INCOMPLETE" }));
   });
 
   it("rejects avoidance without a denominator or at a pre-commit timing", () => {

@@ -395,13 +395,15 @@ Every label is time-control scoped.
 3. **Move-match rate against band-binned human games** — the Maia paper's own instrument, which
    makes arm C directly comparable to the published 33–41% (search-based) vs 46–52% (Maia) split
    `[V]` (§2.1). This is the single cheapest discriminator and it needs no games played at all: it
-   runs offline over the committed R11 capture corpus (837 position-band cells, three bands,
-   MultiPV-20, zero engine calls) `[P]` (`human-like-opponents.md` §9.1).
+   runs offline over the surviving R11/D815 capture (837 position-band cells, three bands,
+   MultiPV-20, zero engine calls); the raw capture is not committed and D1166 owns that
+   reproducibility debt `[P]` (`human-like-opponents.md` §9.1; D1166).
 
-**Predeclare the bounds before reading results** (the R11 discipline). **Run experiment 3 first** —
-it is free, it uses committed captures, and if arm C's move-match rate lands at Stockfish's 33–41%
-with a rating-rising curve rather than a band-peaked one, the family is refuted before a single game
-is played and the 500–800-game ladder is never funded.
+**Predeclare the bounds before reading results** (the R11 discipline). **Experiment 3 ran as
+D1163** — it was free and used the surviving capture. Its formal verdict abstained because the
+Maia positive control did not identify its own bands; all engine-derived profiles nevertheless
+peaked on the 1800 human band. The game ladder is not funded from that screen `[V]`
+(`engine-composed-band-discriminator.md`).
 
 **Stated limitation:** this instrument measures *distributional* resemblance. Perceived humanness
 over 10–20 plies is H5/C5, whose denominator is still zero (`gates.md`; [[D649]] descoped recruited

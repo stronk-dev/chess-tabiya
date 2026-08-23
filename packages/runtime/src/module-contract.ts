@@ -58,7 +58,7 @@ export type ModuleEmptyBehavior =
   | { readonly kind: "stated_absence"; readonly sentence: string }
   | { readonly kind: "unavailable_source"; readonly sentence: string };
 
-/** The thirteen-field learner-module contract. It selects no chess facts by itself. */
+/** The fourteen-field learner-module contract. It selects no chess facts by itself. */
 export interface ModuleDeclaration {
   readonly id: ModuleId;
   readonly intent: string;
@@ -73,6 +73,7 @@ export interface ModuleDeclaration {
   readonly seatClass: ModuleSeatClass;
   readonly forms: readonly ModuleForm[];
   readonly rendering: "deterministic";
+  readonly noveltyWindow: number;
 }
 
 export interface ModuleEvidenceClosure {
@@ -143,6 +144,7 @@ function assertDeclaration(module: ModuleDeclaration): void {
   if (module.timings.length === 0 || !unique(module.timings.map((value) => value.timing)) || module.forms.length === 0 || !unique(module.forms)) fail("MODULE_DECLARATION_INCOMPLETE", `${module.id} has an empty or duplicate timing/form declaration`);
   if (module.ceilings.disclosure.length === 0 || module.ceilings.sessions.length === 0 || module.ceilings.roles.length === 0 || !module.ceilings.visibleBoardParity) fail("MODULE_CEILING_INVALID", `${module.id} has an empty ceiling or does not inherit visible-board assistance`);
   if (![module.budgets.maxFacts, module.budgets.maxWords, module.budgets.maxArrows].every((value) => Number.isSafeInteger(value) && value >= 0) || module.budgets.maxMarks !== null && (!Number.isSafeInteger(module.budgets.maxMarks) || module.budgets.maxMarks < 0)) fail("MODULE_CEILING_INVALID", `${module.id} has an invalid backstop budget`);
+  if (!Number.isSafeInteger(module.noveltyWindow) || module.noveltyWindow < 0) fail("MODULE_DECLARATION_INCOMPLETE", `${module.id} has an invalid novelty window`);
   for (const form of module.forms) if (MODULE_FORM_IMAGE[form] === undefined) fail("MODULE_FORM_UNMAPPED", `${module.id} uses unmapped form ${form}`);
   const timingImage = module.timings.flatMap((value) => MODULE_TIMING_IMAGE[value.timing]);
   if (!subset(module.ceilings.disclosure, timingImage)) fail("MODULE_CEILING_INVALID", `${module.id} disclosure ceiling exceeds its module timing image`);

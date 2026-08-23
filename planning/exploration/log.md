@@ -6530,3 +6530,42 @@ routed with zero orphan rows.
 **Next:** Claude amends N-way comparison on this buildability return. Codex resumes it only when
 the preview payload and parity rules are accepted; meanwhile the longitudinal/campaign migration
 chain remains blocked by D1011's unresolved accepted-RFC questions rather than by missing code.
+
+## 2026-08-23 — Module reducers reached a real-ancestor identity boundary
+
+**What landed:** the learner-module checkpoint widens declarations to the accepted fourteen-field
+shape and implements exact registered deduplication, directed rules-only subsumption, bounded
+novelty with honest abstention, and loud post-reducer backstops whose recorder cannot affect the
+delivered packet.
+
+**What changed:** D1164 returns only the novelty-identity closure to the RFC author. For an
+unregistered event, `factIdentity@1` includes `nodeId` and move anchors, so two real ancestor nodes
+cannot match. The previous boundary shape could pass only by reusing one node id. The checkpoint
+therefore abstains rather than presenting every anchored event as novel.
+
+**Verification:** focused module contract/reducer tests pass and runtime typecheck is green. The
+fixtures pin polarity separation, directed checkmate→check subsumption, non-subsumption of passed
+and isolated pawns, distinct-node novelty abstention, and recorder-failure byte stability.
+
+**Next:** author the D1164 stable-identity/exemption closure; meanwhile continue the independent
+module registry and presentation work without claiming `positionNovelty@1` complete.
+
+## 2026-08-23 — The free engine-composed bot screen abstained before the ladder
+
+**What landed:** D1163's preregistered, zero-engine-call screen replayed 268 positions and wrote
+the complete 3×3 Maia and five-profile engine matrices plus paired bootstrap intervals. The roster
+now cites this one harness, closing D1183 without duplicate work.
+
+**What changed:** the formal verdict abstains because the Maia positive control did not identify
+its own bands: 1400/1600/1800 peaked on human 1600/1800/1800. The directional evidence is still
+unanimous: Stockfish argmax and every guarded Boltzmann probe peaked on human 1800. Temperature
+reduced move-match magnitude but did not create lower-band identity. D1184 records that the Gate-0
+statistic itself must be replaced under a new preregistration before reuse.
+
+**Verification:** the focused harness passed 2/2, pins all four source digests, excludes 11 mixed
+mate/cp positions without coercion, uses 10,000 deterministic paired bootstrap samples, and invokes
+no engine or network. D1166 remains open because the raw capture is not committed.
+
+**Next:** do not fund the engine-composed game ladder or make human-like/persona/Elo claims from
+this family. Continue D1162's evidence-to-move head as the independent variant-portable research
+lane, and resume the learner-module integration once D1164 supplies stable novelty identities.

@@ -220,8 +220,8 @@ therefore the fraction of positions in which the class holds intermediate mass �
 mean share.** ⊕
 
 **Which makes the screen concrete and free.** For any proposed classifier, compute over the
-committed R11 capture corpus (837 position-band cells, three bands, MultiPV-20, **zero engine
-calls**) the per-position class mass share, report the fraction of cells with share in (0.05, 0.80),
+surviving R11/D815 capture (837 position-band cells, three bands, MultiPV-20, **zero engine
+calls**; raw inputs uncommitted under D1166) the per-position class mass share, report the fraction of cells with share in (0.05, 0.80),
 and then simulate the multiplier exactly — the R11 harness already does pure arithmetic over those
 captured rows `[V]` (`bot-policy.md` §11, `tools/r11-bot-policy-harness/`). **No trait below is
 proposed on intuition; each is a screening candidate and the screen costs nothing.**
@@ -265,18 +265,27 @@ Reuses `tools/d333-band-outcome-harness/` verbatim per `maia-band-outcome-transf
 
 ### 3.1 Gate 0 — the free arm, run before anything is funded
 
-Move-match rate per band over the **already-committed** R11 capture corpus: 837 position-band cells,
-bands 1400/1600/1800, MultiPV-20, Stockfish depth-12 scores and Lichess explorer frequencies already
-present — **zero engine calls, zero games, zero new data** `[V]` (`bot-policy.md` §3, §11;
-[[D1163]]).
+The single D1163 harness replayed the surviving R11/D815 capture: 268 positions after withholding
+11 mixed mate/cp rows, bands 1400/1600/1800, Stockfish depth-12 scores and Lichess explorer
+frequencies — **zero engine calls, zero games, zero new data** `[V]`
+(`tools/d1163-engine-composed-bot-harness/`; `design/research/engine-composed-band-discriminator.md`).
+The raw capture is **not committed** and remains D1166's reproducibility debt.
 
 - **Pass shape:** each profile's move-match curve **peaks at its own band**, in the shape Maia's
   46–52% does `[V]` (`human-like-opponents.md` §2.1).
 - **Fail shape:** flat or **rising with the rating being predicted**, in the shape depth-limited
   Stockfish's 33–41% does — depth 15 matches 1900s five points better than 1100s `[V]` (ibid.).
-- **Coverage gap, stated:** the committed corpus carries 1400/1600/1800, not the roster's 1000 and
+- **Coverage gap, stated:** the surviving capture carries 1400/1600/1800, not the roster's 1000 and
   2200. Recapture cost is **279 positions × 2 bands = 558 MultiPV-20 probes** at a measured
   ~230.8 ms median `[V]` (`maia-band-calibrated-range.md` §3) ≈ **2.2 minutes** ⊕. Do it.
+
+**Measured outcome (2026-08-23): Gate 0 abstains and the game ladder is not funded.** Its Maia
+positive control failed the declared band-identity test (1400/1600/1800 profiles peaked on human
+1600/1800/1800), while Stockfish argmax and all four cp-Boltzmann profiles peaked on human 1800.
+That adverse direction is consistent with the fail shape, but the failed positive control bars the
+formal refutation. D1184 requires a new preregistered statistic/population before this gate is
+reused; do not reinterpret the result or rerun a duplicate instrument. `[V]`
+(`planning/platform-alignment/bot-policy/d1163-engine-composed-results.json`)
 
 ### 3.2 Arms
 
@@ -455,7 +464,7 @@ id/version/digest, the disclosure card, the controlled-trait list, and `calibrat
 | **1** | register **family A**, the four `human-baseline-*` | nothing else; D970 licenses exactly these four with **no D969 dependency** `[V]` | **4** |
 | **2** | `searchBound: "depth"` widening + RFC amendment pinning depth 8, the multi-call budget and the mixed-domain abstention → register **family B** | one type union member + RFC authoring; *"D969 has no remaining empirical arm"* `[V]` | **8** |
 | **3** | register `trait.pawn_preference@1` citing the depth-8 numbers → **family C** | wave 0's registry (a trait with nothing to classify multiplies by 1) | **12** |
-| **4** | Gate 0 free screen over 3–5 new classifiers → at most one or two new traits → a fourth family | nothing; the corpus is committed | 12 + |
+| **4** | Gate 0 free screen over 3–5 new classifiers → at most one or two new traits → a fourth family | D1166 reproducible capture/rebuild recipe | 12 + |
 | **5** | the §3 ladder | ~12,400 games, 4–5 h | 12, now with numbers |
 
 **The smallest roster that is genuinely a *range*: 4** — family A's four bands, spanning **346.8
@@ -482,7 +491,7 @@ beyond wave 0, they make the locked door open, and every later wave is additive.
 | 2 | **Repertoire** | Measured out, not undecided: **79.2%** fallthrough on both arms against a 25% ceiling `[V]`. ⟳ **Correction:** [[D1142]] records `RepertoirePolicy`/`MemoryPolicy` as *"absent from the source tree entirely"* — that is a **name-scoped artifact**. `RepertoireLayer` (`:65-70`) and `MemoryLayer` (`:87-90`) both exist, both are members of `BotLayerDeclaration` (`:102, :105`), the composer executes a repertoire prior (`:484-492`) and refuses a memory instance (`:195`). The RFC's *prose* names are what is absent | No. A root-conditioned opening layer through ply 24 with explicit fallthrough is a different object and remains sacrificial research (D560/Gate F) |
 | 3 | **Memory** | Ruled off (O8.3) and compile-refused `[V]` | Only if cross-game memory becomes opt-in exportable/deletable learner data under O13/F12 |
 | 4 | **Personalities are bounded by what Stage A arithmetic can classify** | The vocabulary is *what a pure function of (position, move) can label*. Stage B's `candidateFeatureVector` ships ([[D813]] ✅) and the record carries `features` — but **`features` never enters the composition** `[V]` ([[D1162]]); traits key on `traits: string[]` and nothing populates it | **YES.** Fund the features→traits binding, or accept that personalities are board-arithmetic classes permanently |
-| 5 | **The genuine article is unbuilt** | [[D810]]'s evidence-to-move selector — features → weights → distribution with **no policy net underneath** — is a fourth thing neither the RFC nor the code contains, and it is the only **variant-portable** route to a human-shaped base. Its training set (the R11 capture corpus) is committed | **YES.** Fund / defer / **refuse explicitly** — a refusal must be recorded, not implied ([[D1030]]'s pattern) |
+| 5 | **The genuine article is unbuilt** | [[D810]]'s evidence-to-move selector — features → weights → distribution with **no policy net underneath** — is a fourth thing neither the RFC nor the code contains, and it is the only **variant-portable** route to a human-shaped base. The available R11/D815 capture is a screening set, not a committed training corpus (D1166) | **YES.** Fund / defer / **refuse explicitly** — a refusal must be recorded, not implied ([[D1030]]'s pattern) |
 | 6 | **Absolute human Elo** | Discharges D4. Until ruled, the band-relative calibrated figure with its citation is the ceiling of what any card may show | **YES — this is the fork that decides whether a card ever shows a human-scale number.** Anchor accounts / learner Glicko / stay band-relative |
 | 7 | **Time control** | The ladder is untimed; the label rule wants a clock; maia1's own rating spans ~230 Elo across time controls `[V]` | Sub-fork of 6 |
 | 8 | **Timing behaviour** | No clock input exists anywhere in the opponent path `[V]`; fake delays are refused ([[D820]]) | Not a fork — a corpus/model programme |

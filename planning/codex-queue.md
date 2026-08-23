@@ -10,12 +10,13 @@ can never match the current event. See `planning/learner-modules/novelty-identit
 Resume the novelty arm only after the RFC closes every novelty-enabled projection over stable
 compared fields or an explicit exemption, with distinct-node boundary fixtures.
 
-## 0-BOT-FREE-SCREEN. D1163 is running; D1166 corrects its source claim
+## 0-BOT-FREE-SCREEN. D1163 measured; ladder not funded
 
-Run the preregistered 3×3 Maia positive-control and engine-derived band matrix before funding any
-game ladder for an engine-composed bot. The raw R11 capture was not committed despite the earlier
-claim; the surviving Stockfish source is witnessed by D815 and differs from R11's aggregate-file
-digest. The harness pins the corrected four-source lineage and changes no experimental parameter.
+The preregistered 3×3 Maia positive-control and engine-derived band matrix ran over 268 positions.
+Formal verdict: abstain because the Maia positive control failed band identity. Direction: all five
+engine-derived profiles peak on the 1800 human band, so temperature did not create lower-band human
+choice. Do not fund the game ladder. D1162's evidence-to-move head remains independent work; D1166
+owes a reproducible raw snapshot/rebuild recipe, and D1184 returns the Gate-0 statistic before reuse.
 
 **Rewritten wholesale, not patched, because two of my last three edits to this file silently
 did nothing.** They were scripted string replacements anchored on section headings you had
