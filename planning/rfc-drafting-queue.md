@@ -1168,3 +1168,12 @@ pack field.
   refused selectors, but the exposed 515 decisions do not justify fitting it. Routed to the
   evidence-move-selector lane: declare the compact producer-projection/data-readiness gate and
   present the owner a priced 1.0 fund/defer/refuse fork. No third-population read or “bigger MLP”.
+
+## THE FINITE REMAINDER — [[D1330]]
+
+**10 live-debt dossiers**, not ~50. Full classification: `planning/platform-alignment/dossier-remainder.md`
+(118 artifacts: 85 discharged, 9 refusals, 12 inert intel, 2 unconsumed measurements, **10 live**).
+
+Drafting order is that list, top-down. Two are teardowns with unlanded recommendations
+([[D1330]] ranks 9–10), which is the owner's point proved: a teardown can be debt.
+[[D1332]]'s two unconsumed measurements need **reading, not building** — a smaller repair.
