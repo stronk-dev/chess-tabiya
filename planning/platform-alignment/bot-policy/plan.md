@@ -119,3 +119,23 @@ same pinned image found median returned raw mass 0.999625 and minimum 0.979540; 
 further suppresses the omitted low-probability tail. This is sufficiently complete for this
 mechanical screen, but a production RFC must transform the complete in-engine vector rather than
 the server's truncated display window.
+
+## 2026-08-23 — D970 production-band roster synthesis
+
+**What landed:** `design/research/maia-production-band-roster.md` turns the existing D333
+16,660-game result into a literal production-roster recommendation, and
+`d970-roster-handoff.md` gives the RFC author exact amendment text and fixtures.
+
+**Finding:** `[1000,1400,1800,2200]` is the only non-post-hoc 1.0 set. It is the
+pre-registered four-rung ladder and every adjacent score interval is disjoint. A raw 100-point
+grid is below learner-session resolution; band 2400 is not earned by the measured top-range
+increment; interpolated extra rungs need another run. These values are model bands, not human Elo,
+and low-material play must carry the measured attenuation disclosure.
+
+**Catalog correction:** varying band under one `model.maia3@1` identity would give that versioned
+identity several meanings. D1014 requires exact band-specific model-layer identities now and a
+catalog-wide conflicting-declaration fixture before registration.
+
+**Boundary and next:** research does not choose a default. Owner/Claude amends the accepted RFC;
+the four unguarded baselines can then register. Guarded-human and pawn-heavy remain blocked on
+D969 and require per-digest calibration.

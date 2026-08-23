@@ -5702,3 +5702,18 @@ The draft claims none of the current six shared-resource registers and is intent
 accepted: its compatibility clause must name F3's literal capability/version declaration after
 that in-flight RFC stabilizes. This is dependency discipline, not an owner question. No content or
 production code changed and Feedback Delivery Stage 2 remains stopped.
+
+## 2026-08-23 — D970 Human-baseline roster narrowed to four measured bands
+
+`design/research/maia-production-band-roster.md` reuses the committed D333 outcome run rather
+than launching a new engine experiment. The only literal 1.0 roster directly supported by the
+pre-registration is `[1000,1400,1800,2200]`: every adjacent score interval is disjoint; the
+measured 100-point steps are below learner-session resolution; and the top-range 2000→2400
+increment crosses parity. The bands remain model inputs, not human Elo labels, and their
+difficulty leverage is explicitly attenuated at ten or fewer pieces.
+
+The pass also found D1014: `compileBotPolicyCatalog` does not prevent one versioned layer identity
+from carrying different declarations in different profiles. The handoff therefore uses
+band-specific model-layer identities and requires a negative cross-profile fixture. No production
+profile or default changed. `planning/platform-alignment/bot-policy/d970-roster-handoff.md`
+contains the exact owner/RFC amendment; guarded and pawn-heavy variants remain behind D969.
