@@ -783,3 +783,17 @@ is an unmeasured live surface **on by default in two contexts** with no register
 accepted-or-implementing RFC, 5 have research or an owner ruling only, and **6 are a bare ledger
 row**. Full walk and per-surface table: `planning/platform-alignment/breadth-reality-check.md`.
 Six corrections are owed to intent docs (law 5 — proposed there, not written).
+
+## The research-to-execution join 2026-08-23 — [[D1090]]–[[D1093]]
+
+**31 dossiers concluded "worth building" and have no RFC.** 49 of 110 are cited by no RFC at all.
+Full join: `planning/platform-alignment/research-to-execution.md`.
+
+**The mechanism ([[D1091]])**: research feeding an *evidence collector* reaches an RFC reliably;
+research feeding a *product surface* stalls at "lane opened" — and all ten top owner asks are
+surface research. Fix the pipeline, not just the backlog: R20/R21 must name their dossier files
+like every other R-row, and the coverage matrix's Feeds column must name RFCs, not only design docs.
+
+**[[D1093]] records the drafting mandate** so no fork stops at the gate: the owner's *"make sure we
+have all the DEPTH and BREADTH"* plus the per-lane rulings open product-surface drafting in the
+ruled lanes. Three commissioned today: time controls, variants, famous games.
