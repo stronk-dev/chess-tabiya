@@ -6338,3 +6338,37 @@ and the [[D509]] not-configured-means-not-advertised precedent. **Gate F clause 
 criterion 7 requires the F3 migration plan to exist as an artifact.
 
 **Next:** F3 to cross-review; `measurement-records` still needs the author round OQ1–OQ4 require.
+
+## 2026-08-23 — exact-legal-mobility and runtime-opening-identity accepted after their returns
+
+**What landed:** both RFCs, returned by codex earlier the same day and re-reviewed independently,
+are accepted.
+
+`exact-legal-mobility` (22 claims re-derived, 7 failed): the center catch is that **`isLegal`
+cannot police the castling dialect** — `isLegal(e1g1)` and `isLegal(e1h1)` are both true and play
+to identical successor FENs, so the adapter rule meant to enforce identity accepted a wrong-dialect
+payload; conformance is now a normalize-round-trip. **[[D1027]]'s ingest half had been deferred as
+"a future UCI join" while it is already the present**: engine `bestmove` is in the other dialect
+because `UCI_Chess960` is refused, and 21 castling `moveUci` values sit committed across 13 packs —
+two of three inbound populations. Criterion 7 kept its teeth but the amendment had deleted the
+red-at-HEAD evidence proving so (restored; the *web* arm is the red one now). [[D1028]] had been
+flipped at closeout and fixed nowhere in the body. And the mandatory Chess960 fixture omitted its
+own degenerate case: on a shuffled back rank the king castles to the square it already occupies, so
+any consumer assuming `from !== to` breaks on the fixture added to catch exactly that class of
+assumption.
+
+`runtime-opening-identity` (22 claims, 2 failed): the corrected source pin is confirmed **without
+trusting the fetch that produced it** — `git hash-object` reproduces the cited blob id locally, and
+the superseded value shares 15 leading hex characters with the true one, which no genuine hash of
+different bytes does. Both failures were about the *provenance of the correction* rather than the
+correction: an unverified authority had been made load-bearing, and three in-repo witnesses
+(including the production path's own manifests) carried the right value all along, so no shipped
+byte was ever wrong.
+
+**What changed:** the register holds no returned RFC. Both claim nothing versioned. A residue is
+recorded rather than hidden: [[D1029]] names three layers and the mobility RFC names two, kept
+honest by criterion 15 making the naming failable.
+
+**Blocked:** nothing on either.
+
+**Next:** codex implements both; mobility's criterion 7 starts **red on the web arm** by design.

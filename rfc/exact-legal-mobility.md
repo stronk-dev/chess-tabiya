@@ -1,15 +1,35 @@
 # RFC: Exact legal mobility
 
-- **Status:** draft — amendment 2026-08-23, **returned for cross-review before implementation
-  closeout.** The RFC was accepted earlier that day, then owner ruling [[D1029]] reversed its
-  castling normalization before implementation: move identity stays Chess960-safe king-to-rook;
-  semantic destination is the king's c/g landing square; display stays SAN. The non-castling
-  contract remains accepted. The amendment also incorporates the implementation audit at
-  `planning/exact-legal-mobility/d1029-consumer-audit.md`: the old review saw the web/server
-  disagreement but missed three downstream destination consumers and a semantic canonicalizer
-  which would rewrite identity. Acceptance must be re-declared on those able-to-fail seams.
-  *(Prior state for history: accepted 2026-08-23 by claude after an independent review failed 8 of
-  20 claims, including a false byte-identity assertion.)*
+- **Status:** accepted — 2026-08-23, by claude as register owner on the buildability test, after an
+  independent cross-review that re-derived 22 claims and failed 7, all corrected in place. The
+  center catch: **`isLegal` cannot police the castling dialect** — `isLegal(e1g1)` and
+  `isLegal(e1h1)` are BOTH true and play to identical successor FENs (`chess.js:333` falls back to
+  `normalizeMove`), so §2's "replays legally from the FEN" rule admitted a wrong-dialect payload;
+  identity conformance is now `makeUci(normalizeMove(pos, parseUci(uci))) === uci`. **[[D1027]]'s
+  ingest half was deferred as "a future UCI join" and is false at HEAD**: engine `bestmove` is
+  already in the other dialect (because `UCI_Chess960` is refused at `capabilities.ts:133`) and
+  **21 castling `moveUci` values are committed across 13 `content/drafts/*.json` packs** — two of
+  three inbound populations, not zero (now criterion 15). **Criterion 7 kept its teeth but the
+  amendment deleted the evidence proving it**, restored arm-by-arm with the *web* arm now the red
+  one (`board-input.ts:205-207`). Also corrected: the census split broke to 7/7 against its own 8/6
+  enumeration; **[[D1028]] was flipped at closeout and fixed nowhere in the body** (the derivation
+  is deleted in §1.2 item 1, with a negative control that stubs **both** filters — a control
+  downstream of them measures nothing); the retained blast-radius sweep priced the *reversed*
+  direction; and the mandatory Chess960 fixture omitted its own degenerate case — from
+  `1r4kr/8/8/8/8/8/8/1R4KR w HBhb - 0 1`, `g1h1` is O-O with the king's semantic destination
+  **equal to its origin**, so a consumer assuming `from !== to` breaks on the very fixture added to
+  catch e/a/h assumptions. The 960-superset premise was confirmed by running chessops:
+  `normalizeMove(e1g1) → e1h1`, castling rights parse as a `SquareSet` of **rook squares**, and
+  `makeSan` renders `O-O` from the rook form; the 14-site census re-verified exact.
+  **Named residue at acceptance:** [[D1029]] names *three* layers and this RFC names two — the
+  semantic destination is derived and its convention is named (`MOVE_DESTINATION_CONVENTION`), but
+  the field is still bare `to` and the display layer has no named constant. Accepted as a residue
+  rather than a spec gap: criterion 15 makes the naming failable, so an implementation cannot leave
+  it decorative.
+  *(Prior state for history: draft — amendment 2026-08-23 returned for cross-review before
+  implementation closeout, after [[D1029]] reversed the castling normalization; before that,
+  accepted 2026-08-23 after an independent review failed 8 of 20 claims, including a false
+  byte-identity assertion.)*
 - **Author:** codex, on the D904 evidence-foundation routing
 - **Created:** 2026-08-23
 - **Design refs:** `design/05-in-run-experience.md` §3 (rung-0 rules-derived sight and requested
@@ -112,6 +132,31 @@ Explorer claim evaluation matches on SAN (`apps/server/src/sourcing/claim-bindin
 future UCI join must validate both declared conventions rather than inferring equivalence from the
 field name.
 
+**D1027's ingest half is not a future problem, and the amendment's reversal is what makes it
+present tense.** Cross-review measured the inbound populations at HEAD and two of the three are
+already in the *other* dialect:
+
+| inbound boundary | dialect at HEAD | measured |
+|---|---|---|
+| engine `bestmove` (`apps/server/src/opponent-selector.ts:353`) | **king-destination** (`e1g1`) | `UCI_Chess960` is declared **refused** at `apps/server/src/capabilities.ts:133` ("the shipped drill format is standard chess only"), so Stockfish and Maia emit standard UCI |
+| committed pack move bytes | **king-destination** | **21** castling `moveUci` values across **13** `content/drafts/*.json` packs |
+| Lichess opening explorer | king-to-rook | `priority-wave4b-bg4/priority.json` |
+
+So the ingest boundary must carry a named `INBOUND_MOVE_DIALECT` declaration per source and an
+explicit conversion to `MOVE_IDENTITY_CONVENTION`, recorded at the point of conversion. It may not
+be a silent `parseUci`. The runtime exports the single conversion — `chessops`' `normalizeMove` maps
+`e1g1 → e1h1` and `e1c1 → e1a1` (verified at 0.15.1), so both dialects converge on identity and
+**criterion 13's "no content changes" stays satisfiable**: the 21 committed pack bytes are
+normalized on ingest rather than rewritten on disk.
+
+**`isLegal` cannot police the dialect, so no criterion may lean on it.** Verified by running
+chessops 0.15.1 at HEAD over `r3k2r/8/8/8/8/8/8/R3K2R w KQkq - 0 1`: `isLegal` returns `true` for
+`e1g1` *and* `e1h1`, and `play` produces the byte-identical successor FEN
+`r3k2r/8/8/8/8/8/8/R4RK1 b kq - 1 1` for both (`chess.js:333` tries `normalizeMove` on miss).
+"Replays legally from the FEN" is therefore satisfied by a payload in the wrong dialect. Identity
+conformance is `makeUci(normalizeMove(position, parseUci(uci))) === uci`, and that is the assertion
+the adapter and the fixtures use.
+
 A pawn destination on the last rank expands to four distinct moves, one for each promotion role.
 En-passant retains its ordinary from/to UCI; this projection does not add an inferred
 captured-square operand. Duplicate UCI is a hard failure.
@@ -128,6 +173,12 @@ The actual-turn roots move onto the helper in the same implementation:
    `exactLegalMoveMap`; pointer/touch, keyboard, text and semantic-grid input therefore share the
    same move identities as evidence sight. Pointer/semantic selection uses each move's `to`, while
    submission uses its `uci`; SAN and either common castling spelling normalize to that identity.
+   **This also discharges [[D1028]]:** the four promotion identities arrive from the authority's
+   explicit role list and the web's `ROLES.map((role) => role[0] === "k" ? "n" : role[0])`
+   derivation at `board-input.ts:210` is deleted, not merely filtered. Verified at HEAD: that
+   expression evaluates to `p,n,b,r,q,n` — an illegal `e7e8p` (chessops `parseUci` accepts it and
+   `isLegal` rejects it) plus a king/knight duplicate that only `!entries.includes(uci)` removes.
+   Criterion 5 carries the negative control.
 2. `apps/server/src/sourcing/legal-moves.ts` imports/re-exports the runtime enumerator and retains
    its SAN/successor composition locally; claim binding and tablebase walk no longer own a second
    move generator. Its existing king-to-rook castling identity stays byte-compatible.
@@ -154,8 +205,13 @@ prose): ten in `packages/runtime` (`pawn-dynamics.ts:473`, `mate-proof.ts:38`, `
 `tempo.ts:118`, `exchange.ts:76`, `square-control.ts:85`, `pivotal.ts:26`,
 `semantic-evidence.ts:974`, `tactics.ts:795`, `mobility.ts:82`), one in `apps/web`
 (`board-input.ts:200`) and three in `apps/server` (`application.ts:104`,
-`opponent-selector.ts:307`, `sourcing/legal-moves.ts:12`). Seven actual-turn roots move onto the
-authority. Seven clone/bounded-search sites remain local with a named reason and CI classification.
+`opponent-selector.ts:307`, `sourcing/legal-moves.ts:12`). **Eight** actual-turn roots move onto the
+authority — the eight named in items 1–4 above (`board-input.ts`, `sourcing/legal-moves.ts`,
+`mobility.ts`, `tempo.ts`, `pivotal.ts`, `semantic-evidence.ts`, `application.ts`,
+`opponent-selector.ts`). **Six** clone/bounded-search sites remain local with a named reason and CI
+classification (`pawn-dynamics.ts`, `mate-proof.ts`, `king-state.ts`, `exchange.ts`,
+`square-control.ts`, `tactics.ts`). Every one of the fourteen appears in exactly one of those two
+lists; 8 + 6 = 14 is asserted arithmetic, not prose.
 
 The census classifies each site into exactly one of two kinds, because they are not testable the
 same way:
@@ -201,8 +257,12 @@ derived proposition and must declare its own projection, answer distance and ass
 
 The exact adapter accepts only the four declared top-level operands and recursively validates each
 piece/move row. In particular it refuses a move whose `from` differs from its piece square, whose
-role/color differs from the board occupant, whose UCI does not replay legally from `fen`, or whose
-promotion member disagrees with the UCI suffix. F1's wrapper then seals that validated payload.
+role/color differs from the board occupant, whose UCI does not replay legally from `fen`, whose UCI
+is not already in `MOVE_IDENTITY_CONVENTION` form
+(`makeUci(normalizeMove(position, parseUci(uci))) === uci`, since replay-legality alone accepts both
+castling dialects), whose `to` is not the semantic destination derived from `fen` plus that
+identity, or whose promotion member disagrees with the UCI suffix. F1's wrapper then seals that
+validated payload.
 
 ## 3. Delivery and assistance boundary
 
@@ -267,7 +327,11 @@ existing declaration. It is not silently rebound to requested sight.
 
 1. Add the runtime exact-move types/helper and exhaustive focused fixtures.
 2. Move server sourcing and web input onto it. Preserve king-to-rook identity; split semantic
-   destination from submission and pin SAN display.
+   destination from submission and pin SAN display; delete the web's `ROLES`-derived promotion
+   suffixes in the same edit (D1028).
+   In the same step, declare the inbound dialects and their conversion at the ingest boundary —
+   engine `bestmove`, committed pack `moveUci`, Lichess explorer `uci` — so no wrong-dialect byte
+   enters the runtime vocabulary unconverted (D1027's second half).
 3. Add the exact mobility reading and strict evidence adapter.
 4. Register the projection inspector-only and update manifest counts/digest fixtures.
 5. Add the remaining-enumerator census, set-equality controls, and the D1029 destination-consumer
@@ -293,7 +357,10 @@ existing declaration. It is not silently rebound to requested sight.
    legality; the illegal move is absent from input, evidence and successor walk alike.
 5. **Promotion:** one promotion position emits exactly q/r/b/n UCI identities on the same
    destination; square sight deduplicates the destination while keyboard/text submission retains
-   all four choices.
+   all four choices. **[[D1028]] negative control:** the suffix set comes from an explicit
+   four-role list, and a fixture proves the web emits no `p` or duplicate `n` suffix **with
+   `isLegal` and the dedupe filter stubbed out** — the current derivation is correct only because
+   those two filters run, so a test downstream of them passes at HEAD and measures nothing.
 6. **Terminal emptiness:** checkmate and stalemate each return a typed exact map whose `pieces`
    array is **non-empty** — one row per side-to-move piece — with every `moves` array empty, and
    neither produces an abstention, an error or `unavailable`. (An empty `pieces` array passes a
@@ -307,8 +374,25 @@ existing declaration. It is not silently rebound to requested sight.
    route and transition operands agree on c/g while SAN agrees on `O-O`/`O-O-O`. A Chess960
    fixture with king/rooks off e/a/h proves identity remains replayable and destination remains c/g.
    Deleting one promotion or conflating either castling layer fails the fixture.
+   **This criterion is red at HEAD in both halves, and the amendment did not weaken it — it moved
+   which arm is red.** Identity: `board-input.ts:205-207` rewrites a/h to c/g today, so web
+   submission returns `e1g1`/`e1c1` where the criterion demands `e1h1`/`e1a1`; the server arm
+   (`sourcing/legal-moves.ts:12-27`) is already green. Destination: `board-model.ts`
+   `parsedLastMove` slices the raw UCI, `compare-strips.ts` appends the raw target to piece routes,
+   and `semantic-evidence.ts` `canonicalMoveUci` rewrites identity itself — all three fail the c/g
+   half against a king-to-rook identity. A criterion that only pinned `to` would have gone green on
+   the reversal alone; pinning both layers plus SAN on the same fixture row is what keeps it a
+   red-to-green control. **Chess960 degenerate geometry is part of the fixture:** with the king on
+   g1 and a rook on h1, `g1h1` is O-O and the king's semantic destination is **`g1` — equal to its
+   origin** (verified in chessops 0.15.1: `1r4kr/8/8/8/8/8/8/1R4KR w HBhb - 0 1` emits `g1h1` = O-O
+   → `1r4kr/8/8/8/8/8/8/1R3RK1`, and `g1b1` = O-O-O → king c1, rook d1). Last-move highlight and
+   piece route must render a zero-length route rather than throwing or reporting no move, and the
+   rook may land on the king's origin square.
 8. **Adapter integrity:** wrong origin, role, color, destination, promotion suffix, illegal UCI,
    duplicate UCI and missing top-level operand each fail before `DeclaredEvidence` construction.
+   **A castling row in the king-destination dialect (`e1g1` with `to: g1`) is rejected**, which is
+   the one adapter case replay-legality cannot catch — chessops accepts and plays `e1g1` identically
+   to `e1h1`.
 9. **Manifest closure:** producer count is unchanged, projection count moves by exactly one, and
    the new id is exact/inspector-only with no learner binding at the checkpoint. Relabelling the
    old convention projection exact fails.
@@ -326,12 +410,24 @@ existing declaration. It is not silently rebound to requested sight.
     clone/bounded-search sites carry a named reason and a recorded statement that set-equality
     against `exactLegalMoves(fen)` does not apply. Demanding the five controls of a color-flipped
     clone would be unsatisfiable by construction, so the two classes are asserted separately. An
-    unclassified new loop fails CI.
+    unclassified new loop fails CI. The split is **8 actual-turn roots / 6 clone-or-bounded**, and
+    the census asserts that arithmetic so a site cannot be dropped from both lists.
 13. **Scope:** no pack/run/shape/principle schema, migration, content, preset or bot profile changes;
     register/status parity and focused runtime/web/server tests pass.
 14. **Closeout:** implementation updates canonical docs, flips D904/D1022/D1027/D1028/D1029,
     appends the RFC log, records the learner binding as still undischarged, and only then may await
-    that binding.
+    that binding. D1027 and D1028 may be flipped only on criteria 15 and 5 respectively; flipping a
+    ledger row whose obligation the RFC only half-states is the failure this criterion exists to
+    prevent.
+15. **Dialect naming, both boundaries ([[D1027]]):** `MOVE_IDENTITY_CONVENTION` and
+    `MOVE_DESTINATION_CONVENTION` are exported literals asserted by a fixture at the emit boundary,
+    and every inbound `uci` population carries a named source dialect plus a recorded conversion at
+    the ingest boundary: engine `bestmove` (king-destination, because `UCI_Chess960` is refused at
+    `capabilities.ts:133`), committed pack `moveUci` bytes (king-destination, 21 castling values in
+    13 `content/drafts/*.json` packs), and Lichess explorer `uci` (king-to-rook). A fixture feeds
+    `e1g1` from a king-destination source and proves it is stored and compared as `e1h1` with the
+    conversion recorded — not accepted silently, which `parseUci` + `isLegal` would do. An inbound
+    site with no declared dialect fails CI.
 
 ## Discharges
 
@@ -360,6 +456,60 @@ a new preset, module prominence policy or move-quality meaning.
   destination and SAN display. The implementation audit added board last-move highlight,
   comparison route and semantic-event identity/destination as able-to-fail consumers; a Chess960
   fixture is now mandatory. Status returned for independent cross-review before closeout.
+- 2026-08-23 cross-review (amendment pass, independent): 22 claims re-derived at source, **7
+  failed**. Everything numeric was recounted and every chessops behavior was re-run at 0.15.1.
+  (A) **The census arithmetic broke in the amendment.** §1.2 said "Seven actual-turn roots … Seven
+  clone/bounded-search," but its own items 1–4 enumerate **eight** migrating sites, leaving **six**.
+  The pre-amendment "three move onto the authority, leaving 11" was correct for its own §1.2, which
+  named three; item 4 added five more and the totals were not re-derived. Changelog item (7) below
+  keeps the old 3/11 figures as history — they are no longer the RFC's split. The 14-site census
+  itself re-verified exactly at HEAD: all fourteen file:line references match, and
+  `evidence-catalog.ts:189` is correctly the only excluded prose occurrence (15 raw hits − 1).
+  (B) **Criterion 7 is still failable, but the amendment deleted the evidence that it is.** The
+  original said "fails at HEAD and is expected to"; the amendment removed the sentence while
+  reversing the direction, which is exactly the shape of a criterion that flips to vacuous. Verified
+  it did not: `board-input.ts:205-207` still rewrites a/h→c/g, so the identity half is red on the
+  web arm (the server arm is now green instead), and `board-model.ts` `parsedLastMove`,
+  `compare-strips.ts` route append and `semantic-evidence.ts` `canonicalMoveUci` are all red on the
+  destination half. The red-at-HEAD statement is restored with the arm-by-arm evidence.
+  (C) **`isLegal` does not discriminate the two dialects, so the adapter rule was unenforceable.**
+  Run at 0.15.1 over `r3k2r/8/8/8/8/8/8/R3K2R w KQkq - 0 1`: `isLegal(e1g1)` and `isLegal(e1h1)` are
+  both `true` and `play` yields the identical successor `r3k2r/8/8/8/8/8/8/R4RK1 b kq - 1 1`
+  (`chess.js:333` falls back to `normalizeMove`). §2's "UCI does not replay legally" therefore
+  admits wrong-dialect payloads; identity conformance is now
+  `makeUci(normalizeMove(pos, parseUci(uci))) === uci`, with criterion 8 carrying the case.
+  (D) **[[D1027]]'s ingest half was deferred to "a future UCI join," which is false at HEAD.** Two
+  inbound populations are already in the king-destination dialect: engine `bestmove`
+  (`opponent-selector.ts:353`) — because `UCI_Chess960` is *refused* at `capabilities.ts:133`, so
+  Stockfish and Maia emit standard UCI — and **21** castling `moveUci` values committed across
+  **13** `content/drafts/*.json` packs. Only the explorer is king-to-rook. Named ingest declaration,
+  recorded conversion and new criterion 15 added; the same paragraph shows criterion 13's
+  "no content changes" survives, because ingest normalizes rather than rewriting bytes on disk.
+  (E) **The blast-radius measurement in item (1) below measured the *opposite* direction.** It swept
+  `content/**/*.evidence.json` `uci` assertion arguments for a normalize-to-c/g change. The
+  amendment reverses the change, so the affected population is different: pack `moveUci` bytes,
+  semantic-event `move_uci`/`to`/`resultingKingSquare` operands (`semantic-evidence.ts:365-371`),
+  `legalAlternativeEdges` keys (`:974`) and the committed `strong-engine-51.json` fixture. Re-measured
+  above; retained here so the stale sweep is not read as current.
+  (F) **[[D1028]] was flipped by criterion 14 and fixed nowhere in the body.** Verified the defect at
+  HEAD: `ROLES.map((role) => role[0] === "k" ? "n" : role[0])` at `board-input.ts:210` evaluates to
+  `p,n,b,r,q,n`; chessops `parseUci("e7e8p")` parses and `isLegal` returns `false`, and the duplicate
+  `n` survives only `!entries.includes(uci)`. §1.2 item 1 now deletes the derivation and criterion 5
+  gains a negative control **with both filters stubbed** — a control downstream of them passes at
+  HEAD and measures nothing, which is the same defect class as (B).
+  (G) **Chess960 degenerate geometry was unstated in the mandatory 960 fixture.** Verified: from
+  `1r4kr/8/8/8/8/8/8/1R4KR w HBhb - 0 1`, `g1h1` is O-O with the king's semantic destination `g1`
+  — **equal to its origin** — and `g1b1` is O-O-O with the rook landing on d1. A destination consumer
+  that assumes `from !== to` breaks on the very fixture the amendment added to catch e/a/h
+  assumptions. Criterion 7 now names it.
+  Re-derived and unchanged by this pass: the D1039 chessops facts hold — `normalizeMove(e1g1)→e1h1`,
+  `normalizeMove(e1c1)→e1a1`, castling rights are a `SquareSet` of rook squares (`a1,h1,a8,h8` in the
+  standard fixture, `b1,h1,b8,h8` in a shuffled one), and `makeSan` renders `O-O`/`O-O-O` from the
+  rook form — so king-takes-rook is genuinely the 960-general superset and the ruling costs nothing;
+  `normalizeMove` is a free function from `chessops/chess`, not a `Position` method. The audit's four
+  destination consumers all exist as described. Criterion 1's arithmetic recomputes (16 rows / 10
+  non-empty / 20 moves) and criterion 6's non-empty-`pieces` rule is right. The server's explicit
+  `PROMOTIONS` list is byte-exact at `sourcing/legal-moves.ts:7`.
 - 2026-08-23 cross-review: eight corrections, one of them a false statement about existing behavior.
   (1) **§1.2's "prove public behavior byte-identical" is false for the server arm.** Verified by
   running chessops at HEAD: `allDests()` + `makeUci` over `r3k2r/8/8/8/8/8/8/R3K2R w KQkq - 0 1`

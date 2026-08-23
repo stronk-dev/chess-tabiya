@@ -1,27 +1,29 @@
 # RFC: Runtime opening identity
 
-- **Status:** draft — factual source-pin amendment 2026-08-23, returned for independent
-  cross-review before implementation. The first implementation fetch reproduced four source
-  SHA-256 values but proved the accepted `b.tsv` pin was a transcription error: upstream commit
-  `4b8622759e7ae6f93f011cc6c83a3823401ab45e`, GitHub blob
-  `c4c7f890f471eb7106df6327356d4f1e3a5a262f`, the older source register and its executable fetcher
-  all yield `310f0997d5a26ac6c9abfabac028e47e78f24356a6ba322cfffbf8f5a3f88d25`. D1052 records the
-  failed acceptance premise; the D894 README is corrected. *(Prior status: accepted — 2026-08-23,
-  by claude as register owner on the buildability test, after
-  an independent cross-review that re-derived 22 claims and failed 9, two of them blocking.
-  **`vendor/` does not exist**, so §1.1's present-tense claim that a clean checkout rebuilds
-  without a network request was false — the only reader fetches from `raw.githubusercontent.com`
-  (`openings.ts:97`); restated as the **first implementation obligation**, with the five SHA-256
-  values pinned. Criterion 2's shared-parser rule was **unsatisfiable at HEAD**: `parseRows` is
-  module-private while `normalizeOpeningPgn` is exported, so a compiler could only satisfy it by
-  duplicating the row parsing the criterion forbids — exporting it is now an obligation. §1.2
-  never said path keys **exclude the initial position**, the omission that decides whether
-  3,810/7,854 reproduce at all, which is why criterion 1 now also asserts the **2,023** maximum
-  descendant count. And criterion 14's 2 ms p95 **could not fail** — a linear scan of all 7,854
-  keys fits inside it — now 50 µs p95 plus a size-independence assertion. Re-derived clean:
-  `CHESS_OPENINGS_COMMIT` byte-exact, 3,810 / 7,854 / 2,023 exact, and 401 of 6,991 recomputing
-  to 5.7%. *(Prior line for history: draft 2026-08-23 — executes Semantic Collectors discharge D3
-  from completed D894 research; independent buildability review required before acceptance.)*)
+- **Status:** accepted — 2026-08-23, by claude as register owner on the buildability test, after an
+  independent cross-review that re-derived 22 claims and failed 2, both corrected in place. **The
+  corrected `b.tsv` pin is confirmed without trusting the fetch that produced it**: `git
+  hash-object` reproduces the cited GitHub blob id `c4c7f890…` locally from the vendored bytes, and
+  the superseded value **shares its first 15 hex characters** with the true one — 60 shared bits,
+  which no genuine SHA-256 of different bytes would produce — so it is provably a corrupted copy
+  rather than a hash of anything. **Both failures were about the provenance of the correction, not
+  the correction.** (1) The return note mis-stated why acceptance failed: the accepted status said
+  the hashes were *pinned*, never *re-derived*, so the real defect is narrower and more useful —
+  an **unverified authority was made load-bearing** for criterion 1. (2) The single-source hash
+  check itself: **three in-repo witnesses carried the correct value all along**, including the
+  production sourcing path's own committed `sources.json` manifests, so **no production or content
+  byte was ever wrong** — the defect was confined to a disposable harness README that criterion 1
+  reads; [[D1052]] remains the record of that failed acceptance premise, and the D894 harness
+  README is corrected. §1.1 and criterion 1 now require cross-witness agreement plus byte
+  counts. All numbers
+  recomputed from the vendored bytes rather than from the dossier: **3,810 / 7,854 / 2,023**, with
+  401-of-6,991 = 5.7% reproducing three independent ways. Two criteria were sharpened rather than
+  failed: criterion 6's maximum-descendant key is now literal (the position after `1.e4`) so the
+  fixture needs no harness re-run, and criterion 7 names its corpus file.
+  *(Prior state for history: draft — factual source-pin amendment 2026-08-23 returned for
+  independent cross-review; before that, accepted 2026-08-23 after a review failed 9 of 22 claims,
+  two blocking — `vendor/` did not exist so §1.1's clean-checkout claim was false, and criterion
+  2's shared-parser rule was unsatisfiable while `parseRows` stayed module-private.)*
 - **Author:** codex, on the D717 evidence-foundation routing and D743/D894
 - **Created:** 2026-08-23
 - **Design refs:** `design/03-product-breadth.md` theory/Review/bot surfaces;
@@ -99,6 +101,19 @@ network request or an operator-supplied directory. The five SHA-256 values to ma
 `tools/d894-opening-runtime-harness/README.md:10-16` — **not** in the D894 dossier, which only
 points at them — and the compiler test reads them from there. Source refresh is an explicit later
 update, never an implicit fetch during install, CI or server start.
+
+**One copy of a hash is not an authority, and this RFC has already paid for that lesson.** The
+`b.tsv` pin was wrong through acceptance while **three** in-repo witnesses carried the correct
+value: `tools/knowledge-retrieval-harness/prepare.mjs:12` and
+`planning/platform-alignment/knowledge-retrieval/source-register.csv:3` (both committed 2026-08-20,
+*two days before* the harness README was written), and the production sourcing path's own committed
+manifests — e.g. `content/candidates/b90-sicilian-defense-najdorf-variation-english-attack/sources.json`
+records `sha256:310f0997…f88d25` with `bytes: 77372` for the same commit's `b.tsv`, retrieved
+2026-08-04. **No production or content byte was ever wrong; only the disposable instrument's README
+was**, which is also why pinning a production compiler test to a disposable tool's README is the
+fragile half of §1.1. The compiler test therefore asserts the five values **agree across the
+witnesses**, not merely that the vendored bytes match one table, and it asserts the byte counts
+alongside the hashes.
 
 Input parsing reuses the sourcing emitter's own parsers; two independent parsers are forbidden. Both
 halves are named because only one of them is exported today: the PGN half is
@@ -418,6 +433,13 @@ move.
    `descendantEndpointCount` of **2,023**. All three figures are asserted, because 3,810 and 7,854
    alone are also produced by a compiler that seeds the initial position and then drops it; the
    2,023 maximum is what pins the exclusion. Deleting, duplicating or corrupting one row fails.
+   The hash check is **cross-witness**: the five values must agree between
+   `tools/d894-opening-runtime-harness/README.md:10-16`,
+   `tools/knowledge-retrieval-harness/prepare.mjs`,
+   `planning/platform-alignment/knowledge-retrieval/source-register.csv` and the vendored bytes, and
+   the recorded byte counts must match too (`b.tsv` is **77,372** bytes). A single-source hash check
+   is what let a wrong `b.tsv` pin survive acceptance. All four figures were reproduced from the
+   vendored bytes by cross-review 2026-08-23.
 2. **Shared parser:** sourcing emission and catalogue compilation call `parseRows` and
    `normalizeOpeningPgn` from `apps/server/src/sourcing/openings.ts`; a source sweep rejects a
    second TSV or PGN parser. `parseRows` is exported by this implementation — the criterion is not
@@ -431,10 +453,17 @@ move.
 6. **Unnamed prefix:** the D894 maximum-descendant prefix key returns membership with
    `descendantEndpointCount` exactly **2,023** and current endpoint absent; no ECO/name field exists
    in the membership type or serialized response. ("count >1" is satisfied by any prefix in the
-   catalogue and measures nothing.)
+   catalogue and measures nothing.) The key is literal, so the fixture needs no re-run of D894: it is
+   the position after `1.e4` — `rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq -` — recomputed
+   from the vendored bytes by cross-review 2026-08-23. That it is *also* the shallowest interesting
+   prefix is the point: the largest fan-out in the catalogue sits one ply into the game, which is
+   exactly where a naive implementation would be tempted to name it.
 7. **Stale carry:** a named endpoint followed by absence returns absence live while deepest-reached
    retains the earlier visit. The fixture is a **named imported game from the D894 population,
-   identified in the test by file and game index**, at the exact ply pair where its last named
+   identified in the test by file and game index** — that population is the committed
+   `tools/r2-selection-harness/imported-sample.pgn` (108 games, reached by D894 through
+   `tools/research-chess/populations.ts`, which declares itself research-only, so the production test
+   declares it a test-only input rather than importing research code) — at the exact ply pair where its last named
    endpoint is followed by a non-endpoint position — not an unnamed "witness". D894 measured this
    holds for **108/108** games (`design/research/runtime-opening-identity.md:71-74`), so the fixture
    is a specimen of a total property and the test asserts both.
@@ -457,7 +486,9 @@ move.
     and absent from the image** by `tools/verify-packaging.mjs`; the two halves are separate
     assertions, since §1.1 requires the files to exist and this criterion requires them not to ship.
 14. **Performance:** after load, both current lookups complete synchronously under **50 µs p95** over
-    all 6,991 fixed imported positions on the existing CI runner; artifact load and map construction
+    all 6,991 fixed imported positions (the same committed corpus as criterion 7; its ply bands sum
+    to 6,991 and its named-endpoint column to 401 at
+    `design/research/runtime-opening-identity.md:64-69`) on the existing CI runner; artifact load and map construction
     are reported separately and bounded below 250 ms. The drafted 2 ms ceiling could not fail: two
     hash lookups plus one `transposeKey` cost single-digit microseconds, and even a **linear scan of
     all 7,854 keys** stays under it, so the criterion could not distinguish §1.3's "immutable maps"
@@ -495,6 +526,47 @@ move.
   The other four hashes reproduced. Returned to draft because the acceptance paragraph explicitly
   claimed all five values were independently re-derived clean; source closure cannot be waived by
   treating a false pin as implementation detail. No projection semantics or scope changed.
+- 2026-08-23 cross-review (source-pin amendment, independent): 22 claims re-derived at source, **2
+  failed**. The correction itself holds, and it now holds on evidence rather than on one fetch.
+  **Verified without trusting the fetch:** `git hash-object` over the vendored `b.tsv` returns
+  `c4c7f890f471eb7106df6327356d4f1e3a5a262f` — byte-for-byte the GitHub blob id the amendment cites,
+  computed locally — and its SHA-256 is `310f0997d5a26ac6c9abfabac028e47e78f24356a6ba322cfffbf8f5a3f88d25`.
+  All five vendored hashes match the corrected README table. The superseded value shares its **first
+  15 hex characters** with the true one and then diverges, which no independent SHA-256 of different
+  bytes does (60 shared bits); it is provably a corrupted copy of the correct value, not a hash of
+  anything. A grep confirms the wrong value now appears **nowhere** in the tree.
+  **All four numbers recomputed from the vendored bytes**, not from the dossier: 3,810 source rows,
+  3,810 unique endpoint keys, **0** duplicates, **7,854** path keys, maximum
+  `descendantEndpointCount` **2,023**. The root-seeded variant yields 7,855 and 3,810, confirming
+  §1.2's argument arithmetically. The dossier's own band table sums to 6,991 positions / 401 named /
+  527 on-path, so 401/6,991 = 5.7% holds three ways.
+  (a) **The return note mis-stated why acceptance failed.** It says the acceptance paragraph
+  "explicitly claimed all five values were independently re-derived clean." It did not: the accepted
+  status says the values were **pinned**, and its "re-derived clean" list contains
+  `CHESS_OPENINGS_COMMIT`, 3,810 / 7,854 / 2,023 and 401 of 6,991 — no hashes. The real defect is
+  narrower and more useful: the review made an **unverified** authority load-bearing for criterion 1.
+  Corrected here rather than in the return note, which stands as history.
+  (b) **One copy of a hash was treated as an authority while three in-repo witnesses disagreed
+  with it.** `prepare.mjs:12` and `source-register.csv:3` were committed 2026-08-20, two days before
+  the harness README was written, and the production sourcing path's committed
+  `content/candidates/*/sources.json` manifests carry the correct hash with `bytes: 77372` from the
+  2026-08-04 fetch. So **no production or content byte was ever wrong** — the defect was confined to
+  a disposable instrument's README, which criterion 1 nevertheless reads. §1.1 and criterion 1 now
+  require cross-witness agreement plus byte counts.
+  Two criteria were sharpened rather than failed: criterion 6 named "the D894 maximum-descendant
+  prefix key" without saying which key, so the fixture could not be written without re-running the
+  harness — it is the position after `1.e4`, now literal; and criterion 7's "identified by file and
+  game index" did not name the file — it is the committed
+  `tools/r2-selection-harness/imported-sample.pgn` (108 games, verified), reached through
+  research-only code that a production test must not import.
+  Re-verified from the earlier review's corrections, all intact: criterion 2's `parseRows` export
+  obligation (`openings.ts:36` private, `normalizeOpeningPgn` exported at `:46`, network fetch at
+  `:97`); criterion 14's 50 µs p95 **and** its size-independence clause; criterion 1's 2,023
+  assertion; `vendor/` still absent from the repo at HEAD, so §1.1's obligation framing remains
+  correct; `CHESS_OPENINGS_COMMIT`/`RETRIEVED_AT` byte-exact at `openings.ts:16-17`; `run.record`
+  carries exactly **7** projections at `evidence-catalog.ts:782-790` with `theory.opening_identity`
+  at `:781`; `run.record.move` operands are `["context", "offset", "moveSan"]` with no FEN; the
+  manifest delta of two producers and four projections is internally consistent.
 - 2026-08-23 cross-review: nine corrections, two of them buildability blockers as drafted.
   (1) **§1.1 asserted the vendoring in the present tense and `vendor/` does not exist.** The only
   path that reads these files today fetches them from `raw.githubusercontent.com`

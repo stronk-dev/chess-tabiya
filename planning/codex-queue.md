@@ -64,53 +64,49 @@ with the review's finds carried:
 end of that chain. `semantic-collectors` (Wave-C) is drafting and will slot between the
 collector waves and the module amendment (your order items 2 and 5).
 
-## 0-TWO-ACCEPTED. Your `exact-legal-mobility` and `runtime-opening-identity` drafts are accepted
+## 0-TWO-RE-ACCEPTED. Both RFCs you returned are accepted again — read this, it supersedes the earlier section
 
-Both cross-reviewed and accepted 2026-08-23; corrections are already in the files. Read the
-changelogs — each caught something that changes how you implement.
+You returned `exact-legal-mobility` (D1029 castling amendment) and `runtime-opening-identity`
+(source-pin amendment). Both were independently re-reviewed and **accepted 2026-08-23**;
+corrections are in the files. The second review failed 7 of 22 claims on mobility and 2 of 22 on
+opening identity — so read the changelogs, not your memory of the first acceptance.
 
-**`exact-legal-mobility` — criterion 7 starts RED at HEAD, and that is correct.**
-- §1.2's *“prove public behavior byte-identical”* was **false**. chessops emits `e1a1`/`e1h1` for
-  castling and **never** `e1g1`/`e1c1`; `board-input.ts:205-207` normalizes a/h→c/g and
-  `sourcing/legal-moves.ts:12-27` does not, so **the two layers already disagree on every castling
-  move**. Criterion 7 fails at HEAD and turns green only on the real change.
-- **The castling UCI normalization is an accepted, deliberate, content-visible behavior change —
-  not a refactor.** Do not "preserve existing behavior" on the server arm; that is the bug. Blast
-  radius is measured: exactly one `uci` assertion argument exists in all committed sidecars
-  (`philidor-third-rank-hold`, `h6h8`, not castling), so **zero committed bindings change
-  validity**, and census/unique-move assertions return SAN.
-- **Two `uci` conventions now live under one field name.** Lichess's explorer uses the rook form
-  and its bytes are already committed (`content/candidates/priority-wave4b-bg4/priority.json`
-  carries `{"san": "O-O", "uci": "e1h1"}`). Explorer claim evaluation matches on **SAN**
-  (`claim-binding.ts:135`), so nothing breaks today — but **no code may start joining the two
-  without an explicit conversion**.
-- **§3's binding route is closed and stays closed**: `board.selected_square_sight@1` declares
-  `projections: allStructuralReadingIds`, derived from the **pack schema's**
-  `STRUCTURAL_FEATURE_KINDS`. Widening it is a pack-schema change criterion 13 forbids and `none`
-  does not cover. The same fact proves nothing auto-binds.
-- **The census is 14 production `allDests()` sites**, three of which move onto the authority and
-  **11 of which need classification** — materially more than "there are other local enumerators".
-- Criterion 12 is now **two classes**: the color-flipped clone enumerators
-  (`square-control.ts:85`, `king-state.ts:100`) cannot equal the actual-turn authority's legal set
-  by construction, and the catalogue already declares that convention and its `invalid_turn_clone`
-  abstention.
+**`exact-legal-mobility` — four things that change how you implement:**
 
-**`runtime-opening-identity` — `vendor/` must be created first.**
-- **`vendor/` does not exist at HEAD.** The only reader fetches from `raw.githubusercontent.com`
-  (`openings.ts:97`), so the RFC's rebuild-without-network property is an **obligation, not a
-  description**. Creating the vendored artifact with the five pinned SHA-256 values is the **first
-  implementation step**; nothing downstream is honest until it exists.
-- **Export `parseRows`; do not duplicate it.** `normalizeOpeningPgn` is exported
-  (`openings.ts:46`) but `parseRows` (`:36`) is module-private, so criterion 2's shared-parser rule
-  is unsatisfiable at HEAD — and duplicating the row parsing is the exact thing it forbids.
-- **Path keys exclude the initial position.** The instrument pushes a key only after each played
-  move, which is why the maximum descendant count is **2,023** and not the 3,810 a root-seeded
-  compiler yields. Criterion 1 asserts 2,023 alongside 3,810/7,854 **because the first two figures
-  alone do not detect the error**.
-- Criterion 14 is now **50 µs p95 plus a size-independence assertion** — the old 2 ms budget could
-  not fail, since a linear scan of all 7,854 keys fits inside it.
+- **Criterion 7 starts RED on the WEB arm**, and that is correct. The direction reversed: the
+  server arm is green now, and `board-input.ts:205-207` still rewrites a/h→c/g, so the **identity**
+  half is red there; `board-model.ts` `parsedLastMove`, `compare-strips.ts`' route append and
+  `semantic-evidence.ts` `canonicalMoveUci` are red on the **destination** half. Pin both layers
+  plus SAN on one fixture row — that is what keeps it red-to-green rather than vacuous.
+- **`isLegal` cannot police the dialect.** `isLegal(e1g1)` and `isLegal(e1h1)` are **both** true
+  and play to identical successor FENs (`chess.js:333` falls back to `normalizeMove`). Do not use
+  replay-legality to enforce identity; conformance is
+  `makeUci(normalizeMove(pos, parseUci(uci))) === uci`.
+- **Ingest normalization is criterion 15 and is NOT optional or future.** Two of three inbound
+  populations are already in the other dialect at HEAD: engine `bestmove` (because `UCI_Chess960`
+  is refused at `capabilities.ts:133`) and **21 castling `moveUci` values across 13
+  `content/drafts/*.json` packs**. Only the explorer is king-to-rook. Ingest **normalizes and
+  records the conversion** — it does not rewrite content bytes, which is how criterion 13's
+  "no content changes" survives.
+- **The degenerate 960 fixture case**: from `1r4kr/8/8/8/8/8/8/1R4KR w HBhb - 0 1`, `g1h1` is O-O
+  with the king's semantic destination **equal to its origin** (`g1`), and `g1b1` is O-O-O with the
+  rook landing on d1. Any destination consumer assuming `from !== to` breaks on the very fixture
+  added to catch e/a/h assumptions.
+- [[D1028]] is fixed in the body now (the `ROLES.map(... "k" ? "n" ...)` derivation is deleted in
+  §1.2 item 1). Its negative control **stubs both filters** — a control downstream of `isLegal` and
+  the dedupe passes at HEAD and measures nothing.
 
-Neither RFC claims anything versioned and neither proposed ledger rows.
+**`runtime-opening-identity` — two obligations first:**
+
+- **`vendor/` must be created as the first implementation obligation.** It does not exist at HEAD;
+  the only reader fetches from `raw.githubusercontent.com` (`openings.ts:97`), so the
+  clean-checkout-rebuilds claim is an obligation, not a fact.
+- **Export `parseRows` rather than duplicating it.** It is module-private at `openings.ts:36` while
+  `normalizeOpeningPgn` is exported at `:46`; criterion 2 forbids the duplication that privacy
+  would otherwise force.
+- The corrected `b.tsv` pin is `310f0997…f88d25`, confirmed locally by `git hash-object` against
+  blob `c4c7f890…`. Criterion 1 now requires **cross-witness agreement plus byte counts** — one
+  copy of a hash is not an authority, which is the whole lesson of the return.
 
 ## 0-UNBLOCKS-CAMPAIGN. [[D1040]] — the unlocks fork is RULED; `campaign-core`'s blocker clears
 
