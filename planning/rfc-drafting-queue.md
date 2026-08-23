@@ -1127,3 +1127,14 @@ return-and-progression RFC (scheduler and queue over shipped tables, **no lane, 
 table**), and a pack-format RFC for pass marks, the guided pass and tempo sets. Split on failure
 isolation: [[D1302]] is a **defect against an accepted RFC** and must not wait behind an unruled
 pack field.
+
+- **[[D1301]]** — a valid v1 campaign document may have no run-to-run variance (loadout unbuilt,
+  synergy refuted, path choice has no minimum) and two of three nine-node arguments are dead at
+  HEAD. Routed to the campaign amendments owed by the reconciliation.
+- **[[D1303]]** — D863's wiring counts corrected and its omitted fourth (`prediction`, 0 packs)
+  named; routed to the training-methods content half in `planning/content-wave-work-order.md`.
+
+- **[[D1299]]** (codex) — generic payload flattening makes producer verbosity an implicit bot prior
+  (the 2,516-name D1297 vector). Routed to the evidence-move-selector lane: `rfc/evidence-move-selector.md`
+  §1's feature set is exactly where an implicit verbosity prior would enter, and its portability
+  table is the place to refuse it.
