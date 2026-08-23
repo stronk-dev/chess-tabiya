@@ -1028,3 +1028,14 @@ Also landed: [[D1241]] (F3's sharpest defect was two criteria contradicting each
 [[D1242]] (the skills RFC delivers all five depth parts, two of them stronger than the imitated
 surface, with nine forks recorded and none decided), [[D1243]] (codex's work-index fix confirmed
 working on a live case).
+
+### Owner-decision repair — [[D1260]]–[[D1263]]
+
+`planning/platform-alignment/owner-decision-repair.md`. **16 instances where a ruling was missing or
+contradicted**; the gate surface was split ([[D1261]], now mirrored) and the owner's skills ruling
+had no row at all ([[D1260]], now recorded, [[D1193]] struck).
+
+**[[D1262]] — 36 owner decisions genuinely outstanding, 8 blocking now.** The eight go to the owner
+in one batch, led by B5 casting, the skills valence fork, the review lane's self-block, and
+[[D1162]]'s fund/defer/refuse on the evidence-to-move selector, which blocks `rfc/variants.md`.
+[[D1263]] specs the derived queue that stops this recurring; it pairs with `make refusal-index`.
