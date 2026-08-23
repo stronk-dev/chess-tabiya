@@ -134,6 +134,14 @@ export interface OwnedRunExport {
   readonly snapshot: StoredRunExport;
   readonly importedGame: JsonValue | null;
   readonly grants: readonly JsonValue[];
+  readonly derivations: readonly {
+    readonly derivedRunId: string;
+    readonly sourceRunId: string;
+    readonly sourceBranchId: string;
+    readonly sourceNodeId: string;
+    readonly kind: "flip_sides";
+    readonly createdAt: string;
+  }[];
 }
 
 export interface SharedRunReference {
@@ -253,6 +261,95 @@ function projection(value: unknown, at: string): asserts value is Projection<Jso
   if (record.projectionVersion !== 1 || !Array.isArray(record.provenance) || !record.provenance.every((item) => typeof item === "string")) throw new TypeError(`${at} has an invalid projection header`);
 }
 
+function recordValue(value: unknown, at: string): Record<string, unknown> {
+  if (value === null || typeof value !== "object" || Array.isArray(value)) throw new TypeError(`${at} must be an object`);
+  return value as Record<string, unknown>;
+}
+
+function stringValue(value: unknown, at: string): string {
+  if (typeof value !== "string") throw new TypeError(`${at} must be a string`);
+  return value;
+}
+
+function arrayValue(value: unknown, at: string): readonly unknown[] {
+  if (!Array.isArray(value)) throw new TypeError(`${at} must be an array`);
+  return value;
+}
+
+function validateJsonValue(value: unknown, at: string): void {
+  if (value === null || typeof value === "string" || typeof value === "boolean") return;
+  if (typeof value === "number" && Number.isFinite(value)) return;
+  if (Array.isArray(value)) { value.forEach((item, index) => validateJsonValue(item, `${at}[${index}]`)); return; }
+  if (typeof value === "object") {
+    for (const [key, child] of Object.entries(value)) validateJsonValue(child, `${at}.${key}`);
+    return;
+  }
+  throw new TypeError(`${at} is not a JSON value`);
+}
+
+function validateTaggedRecords(value: unknown, at: string): void {
+  const exportable = new Set(ACCOUNT_DATA_INVENTORY.filter((entry) => entry.exportDisposition !== "exclude").map((entry) => entry.store));
+  for (const [index, item] of arrayValue(value, at).entries()) {
+    const tagged = recordValue(item, `${at}[${index}]`);
+    exactKeys(tagged, ["table", "record"], `${at}[${index}]`);
+    const tableName = stringValue(tagged.table, `${at}[${index}].table`);
+    if (!exportable.has(tableName)) throw new TypeError(`${at}[${index}].table is not exportable`);
+    recordValue(tagged.record, `${at}[${index}].record`);
+    validateJsonValue(tagged.record, `${at}[${index}].record`);
+  }
+}
+
+function validateOwnedRuns(value: unknown): void {
+  const seen = new Set<string>();
+  for (const [index, item] of arrayValue(value, "ownedRuns.value").entries()) {
+    const run = recordValue(item, `ownedRuns.value[${index}]`);
+    exactKeys(run, ["id", "title", "schemaVersion", "replayable", "snapshot", "importedGame", "grants", "derivations"], `ownedRuns.value[${index}]`);
+    const id = stringValue(run.id, `ownedRuns.value[${index}].id`);
+    if (seen.has(id)) throw new TypeError(`ownedRuns.value contains duplicate run ${id}`);
+    seen.add(id);
+    stringValue(run.title, `ownedRuns.value[${index}].title`);
+    stringValue(run.schemaVersion, `ownedRuns.value[${index}].schemaVersion`);
+    if (typeof run.replayable !== "boolean") throw new TypeError(`ownedRuns.value[${index}].replayable must be a boolean`);
+    const snapshot = recordValue(run.snapshot, `ownedRuns.value[${index}].snapshot`);
+    if (snapshot.kind === "parsed") {
+      exactKeys(snapshot, ["kind", "value"], `ownedRuns.value[${index}].snapshot`);
+      const document = recordValue(snapshot.value, `ownedRuns.value[${index}].snapshot.value`);
+      validateJsonValue(document, `ownedRuns.value[${index}].snapshot.value`);
+      if (document.id !== id) throw new TypeError(`ownedRuns.value[${index}] snapshot id does not match its export id`);
+      if (run.replayable !== true) throw new TypeError(`ownedRuns.value[${index}] parsed snapshot must be replayable`);
+    } else if (snapshot.kind === "raw") {
+      exactKeys(snapshot, ["kind", "utf8", "diagnostic"], `ownedRuns.value[${index}].snapshot`);
+      stringValue(snapshot.utf8, `ownedRuns.value[${index}].snapshot.utf8`);
+      const diagnostic = recordValue(snapshot.diagnostic, `ownedRuns.value[${index}].snapshot.diagnostic`);
+      exactKeys(diagnostic, ["code", "message"], `ownedRuns.value[${index}].snapshot.diagnostic`);
+      if (!["INVALID_JSON", "UNSUPPORTED_RUN_SCHEMA", "INVALID_RUN_DOCUMENT"].includes(String(diagnostic.code))) throw new TypeError(`ownedRuns.value[${index}] diagnostic code is invalid`);
+      stringValue(diagnostic.message, `ownedRuns.value[${index}].snapshot.diagnostic.message`);
+      if (run.replayable !== false) throw new TypeError(`ownedRuns.value[${index}] raw snapshot cannot be replayable`);
+    } else throw new TypeError(`ownedRuns.value[${index}].snapshot kind is invalid`);
+    if (run.importedGame !== null) validateJsonValue(run.importedGame, `ownedRuns.value[${index}].importedGame`);
+    arrayValue(run.grants, `ownedRuns.value[${index}].grants`).forEach((grant, grantIndex) => validateJsonValue(grant, `ownedRuns.value[${index}].grants[${grantIndex}]`));
+    for (const [derivationIndex, derivationValue] of arrayValue(run.derivations, `ownedRuns.value[${index}].derivations`).entries()) {
+      const derivation = recordValue(derivationValue, `ownedRuns.value[${index}].derivations[${derivationIndex}]`);
+      exactKeys(derivation, ["derivedRunId", "sourceRunId", "sourceBranchId", "sourceNodeId", "kind", "createdAt"], `ownedRuns.value[${index}].derivations[${derivationIndex}]`);
+      for (const field of ["derivedRunId", "sourceRunId", "sourceBranchId", "sourceNodeId", "createdAt"] as const) stringValue(derivation[field], `ownedRuns.value[${index}].derivations[${derivationIndex}].${field}`);
+      if (derivation.kind !== "flip_sides") throw new TypeError(`ownedRuns.value[${index}].derivations[${derivationIndex}].kind is invalid`);
+      if (derivation.derivedRunId !== id && derivation.sourceRunId !== id) throw new TypeError(`ownedRuns.value[${index}] contains an unrelated derivation`);
+    }
+  }
+}
+
+function validateSharedAccess(value: unknown): void {
+  for (const [index, item] of arrayValue(value, "sharedAccess.value").entries()) {
+    const shared = recordValue(item, `sharedAccess.value[${index}]`);
+    exactKeys(shared, ["runId", "title", "role", "grantedAt", "contributions"], `sharedAccess.value[${index}]`);
+    stringValue(shared.runId, `sharedAccess.value[${index}].runId`);
+    stringValue(shared.title, `sharedAccess.value[${index}].title`);
+    if (!["host", "participant", "spectator"].includes(String(shared.role))) throw new TypeError(`sharedAccess.value[${index}].role is invalid`);
+    stringValue(shared.grantedAt, `sharedAccess.value[${index}].grantedAt`);
+    validateTaggedRecords(shared.contributions, `sharedAccess.value[${index}].contributions`);
+  }
+}
+
 export function validateAccountBundleV1(value: unknown): asserts value is AccountBundleV1 {
   if (value === null || typeof value !== "object" || Array.isArray(value)) throw new TypeError("account bundle must be an object");
   exactKeys(value, TOP_LEVEL_KEYS, "account bundle");
@@ -263,6 +360,23 @@ export function validateAccountBundleV1(value: unknown): asserts value is Accoun
   const source = bundle.source as Record<string, unknown>;
   if (typeof source.applicationVersion !== "string" || !Number.isSafeInteger(source.storageVersion) || typeof source.runSchemaVersion !== "string") throw new TypeError("source is invalid");
   for (const key of TOP_LEVEL_KEYS.slice(3)) projection(bundle[key], key);
+  const accountProjection = bundle.account as Projection<unknown>;
+  const account = recordValue(accountProjection.value, "account.value");
+  exactKeys(account, ["handle", "displayName", "createdAt"], "account.value");
+  stringValue(account.handle, "account.value.handle");
+  if (account.displayName !== null) stringValue(account.displayName, "account.value.displayName");
+  stringValue(account.createdAt, "account.value.createdAt");
+  validateOwnedRuns((bundle.ownedRuns as Projection<unknown>).value);
+  validateSharedAccess((bundle.sharedAccess as Projection<unknown>).value);
+  for (const key of ["progress", "marks", "repertoires", "drafts", "publications", "liveAndSocial", "behavioralProfiles"] as const) {
+    validateTaggedRecords((bundle[key] as Projection<unknown>).value, `${key}.value`);
+  }
+  for (const [index, item] of arrayValue((bundle.exclusions as Projection<unknown>).value, "exclusions.value").entries()) {
+    const exclusion = recordValue(item, `exclusions.value[${index}]`);
+    exactKeys(exclusion, ["kind", "reason"], `exclusions.value[${index}]`);
+    stringValue(exclusion.kind, `exclusions.value[${index}].kind`);
+    stringValue(exclusion.reason, `exclusions.value[${index}].reason`);
+  }
 }
 
 export type DeletionEffectKind =

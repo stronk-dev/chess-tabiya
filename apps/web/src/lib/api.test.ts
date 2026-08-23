@@ -31,6 +31,36 @@ function json(value: unknown, init: ResponseInit = {}): Response {
 }
 
 describe("DrillApi", () => {
+  it("keeps account export opaque and binds both two-phase deletion flows", async () => {
+    const calls: { readonly url: string; readonly init?: RequestInit }[] = [];
+    const digest = `sha256:${"f".repeat(64)}`;
+    const preview = { version: 1, scope: { kind: "account" }, digest, hardDelete: [], tombstone: [], revoke: [], retainedPublished: [], backupNotice: "deployment managed" };
+    const api = new DrillApi("http://tabiya.test", async (input, init) => {
+      const url = String(input);
+      calls.push({ url, ...(init === undefined ? {} : { init }) });
+      if (url.endsWith("/auth/export")) return new Response("opaque-account-bytes", { headers: { "content-type": "application/vnd.tabiya.account+json; version=1", "content-disposition": 'attachment; filename="tabiya-account-alice.json"', "x-tabiya-export-sha256": digest } });
+      if (url.endsWith("/auth/deletion-preview")) return json(preview);
+      if (url.includes("/deletion-preview")) return json({ ...preview, scope: { kind: "run", runId: "run / one" } });
+      return json({});
+    });
+
+    const exported = await api.exportAccount("export-password");
+    expect(exported.filename).toBe("tabiya-account-alice.json");
+    expect(exported.digest).toBe(digest);
+    expect(await exported.blob.text()).toBe("opaque-account-bytes");
+    expect(await api.accountDeletionPreview()).toEqual(preview);
+    expect(await api.runDeletionPreview("run / one")).toMatchObject({ scope: { kind: "run", runId: "run / one" } });
+    await api.deleteAccount("delete-password", digest);
+    await api.deleteRun("run / one", digest);
+    expect(calls.map((call) => [call.url, call.init?.method, call.init?.body])).toEqual([
+      ["http://tabiya.test/auth/export", "POST", JSON.stringify({ password: "export-password" })],
+      ["http://tabiya.test/auth/deletion-preview", "POST", JSON.stringify({})],
+      ["http://tabiya.test/runs/run%20%2F%20one/deletion-preview", "POST", JSON.stringify({})],
+      ["http://tabiya.test/auth/delete", "POST", JSON.stringify({ password: "delete-password", previewDigest: digest })],
+      ["http://tabiya.test/runs/run%20%2F%20one/delete", "POST", JSON.stringify({ previewDigest: digest })],
+    ]);
+  });
+
   it("binds invitations and raw PGN arena imports without losing their types", async () => {
     const calls: { readonly url: string; readonly init?: RequestInit }[] = [];
     const invitation = {

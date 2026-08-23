@@ -1344,6 +1344,8 @@ Deepening one of these never re-opens whether the surface exists.
 Not accepted RFC-tier decisions; they predate validation. Treated as standing defaults
 until their trigger fires or an owner ruling changes them.
 
+| D1009 ✅ | **`learner_position_stats` was never maintained during normal progress projection.** `upsertAttempts` inserted/updated attempts and automatic schedules but never wrote the statistics table; the only live writer was portable-account-data's per-run deletion rebuild. The projection now has one shared rebuild path used after every attempt mutation and after per-run deletion, with a two-runs-to-one regression fixture. | ✅ fixed 2026-08-23 in the portable-account-data implementation wave |
+
 | ADR | Decision | Revisit trigger |
 |---|---|---|
 | ADR-0001 | Curated-first content: **authored** packs before automatic lesson generation | ⚠️ **superseded in part 2026-08-13 (owner ruling): the *reviewed* half is struck.** There is no review workflow; packs ship from the repo with honest provenance. Curated-first survives as authored-not-generated, which is the half ADR-0005 also protects. Revisit trigger for the surviving half: C6 met and mining quality proven |

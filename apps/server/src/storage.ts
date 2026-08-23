@@ -611,7 +611,20 @@ export interface StorageMigrationLog {
 export interface SQLiteRunStorageOptions {
   readonly now?: () => string;
   readonly onMigration?: (entry: StorageMigrationLog) => void;
+  /** Test-only transaction fault hook used to prove destructive-path rollback. */
+  readonly failDeletionAfterEffectGroup?: (group: DeletionEffectGroup) => void;
 }
+
+export type DeletionEffectGroup =
+  | "run_references"
+  | "run_transition"
+  | "position_stats"
+  | "owned_runs"
+  | "published_artifacts"
+  | "repertoires"
+  | "classrooms"
+  | "retained_identity_scrub"
+  | "learner_state";
 
 export const STORAGE_VERSION = 25;
 const LEGACY_ID = "__legacy";
@@ -863,10 +876,12 @@ export class SQLiteRunStorage implements RunStorage, ProgressStorage, LiveSessio
   readonly #snapshots = new Map<string, StoredRun>();
   readonly #now: () => string;
   readonly #onMigration: (entry: StorageMigrationLog) => void;
+  readonly #failDeletionAfterEffectGroup: ((group: DeletionEffectGroup) => void) | undefined;
 
   constructor(filename = ":memory:", options: SQLiteRunStorageOptions = {}) {
     this.#database = new DatabaseSync(filename);
     this.#now = options.now ?? (() => new Date().toISOString());
+    this.#failDeletionAfterEffectGroup = options.failDeletionAfterEffectGroup;
     this.#onMigration =
       options.onMigration ??
       ((entry) => console.info(`storage migration ${entry.version}: ${entry.name}`));
@@ -929,14 +944,32 @@ export class SQLiteRunStorage implements RunStorage, ProgressStorage, LiveSessio
       }
       throw new TypeError(`Cannot export stored ${typeof value} value`);
     };
-    const tagged = (table: string, rows: readonly Record<string, unknown>[]): readonly JsonValue[] =>
-      rows.map((row) => Object.freeze({ table, record: jsonValue(row) }));
+    const accountIdentityColumns = new Set([
+      "learner_id", "owner_learner_id", "author_learner_id", "publisher_learner_id",
+      "opened_by_learner_id", "created_by", "proposed_by", "assigned_by", "invited_by",
+      "cast_by_learner_id", "vote_adapter_learner_id", "handoff_learner_id",
+      "white_learner_id", "black_learner_id", "pause_proposed_by",
+    ]);
+    const withoutAccountIdentity = (row: Readonly<Record<string, unknown>>): Readonly<Record<string, unknown>> =>
+      Object.freeze(Object.fromEntries(Object.entries(row).filter(([key]) => !accountIdentityColumns.has(key))));
+    const tagged = (table: string, sourceRows: readonly Record<string, unknown>[], retainIdentity = false): readonly JsonValue[] =>
+      sourceRows.map((row) => Object.freeze({ table, record: jsonValue(retainIdentity ? row : withoutAccountIdentity(row)) }));
     const rows = (sql: string, ...parameters: readonly (string | number)[]): readonly Record<string, unknown>[] =>
       this.#database.prepare(sql).all(...parameters) as readonly Record<string, unknown>[];
     try {
       this.#database.exec("BEGIN");
       const account = this.#database.prepare("SELECT handle,display_name,created_at FROM learners WHERE id=?").get(learnerId) as Record<string, unknown> | undefined;
       if (account === undefined) throw new ServerError("UNAUTHENTICATED", "Authentication required");
+      const handleFor = (id: unknown): string | null => {
+        if (id === null || typeof id !== "string") return null;
+        const found = this.#database.prepare("SELECT handle FROM learners WHERE id=?").get(id) as { readonly handle?: unknown } | undefined;
+        return typeof found?.handle === "string" ? found.handle : null;
+      };
+      const handlesFor = (idsJson: unknown): readonly string[] => {
+        const parsed = JSON.parse(String(idsJson)) as unknown;
+        if (!Array.isArray(parsed) || parsed.some((id) => typeof id !== "string")) throw new TypeError("Stored learner-id array is invalid");
+        return Object.freeze(parsed.map(handleFor).filter((handle): handle is string => handle !== null).sort());
+      };
       const ownedRows = rows("SELECT id,snapshot_json,summary_json,schema_version FROM drill_runs WHERE owner_learner_id=? ORDER BY id", learnerId);
       const ownedRuns: OwnedRunExport[] = ownedRows.map((row) => {
         const id = String(row.id);
@@ -953,7 +986,16 @@ export class SQLiteRunStorage implements RunStorage, ProgressStorage, LiveSessio
         const imported = this.#database.prepare(
           "SELECT source_kind,source_url,movetext_digest,headers_json,result,pgn,licence_note,imported_at FROM imported_games WHERE run_id=?",
         ).get(id) as Record<string, unknown> | undefined;
-        return Object.freeze({ id, title, schemaVersion: String(row.schema_version ?? stored.schemaVersion), replayable: stored.replayable, snapshot: stored.snapshot, importedGame: imported === undefined ? null : jsonValue(imported), grants: Object.freeze(grants) });
+        const derivations = rows(
+          `SELECT derived_run_id AS derivedRunId,source_run_id AS sourceRunId,source_branch_id AS sourceBranchId,
+             source_node_id AS sourceNodeId,kind,created_at AS createdAt
+           FROM run_derivations WHERE source_run_id=? OR derived_run_id=? ORDER BY derived_run_id,source_run_id`, id, id,
+        ).map((item) => Object.freeze({
+          derivedRunId: String(item.derivedRunId), sourceRunId: String(item.sourceRunId),
+          sourceBranchId: String(item.sourceBranchId), sourceNodeId: String(item.sourceNodeId),
+          kind: String(item.kind) as "flip_sides", createdAt: String(item.createdAt),
+        }));
+        return Object.freeze({ id, title, schemaVersion: String(row.schema_version ?? stored.schemaVersion), replayable: stored.replayable, snapshot: stored.snapshot, importedGame: imported === undefined ? null : jsonValue(imported), grants: Object.freeze(grants), derivations: Object.freeze(derivations) });
       });
       const sharedAccess: SharedRunReference[] = rows(
         `SELECT d.id,d.summary_json,g.role,g.granted_at
@@ -992,18 +1034,125 @@ export class SQLiteRunStorage implements RunStorage, ProgressStorage, LiveSessio
         ...tagged("registered_shapes", rows("SELECT * FROM registered_shapes WHERE publisher_learner_id=? ORDER BY shape_id,version", learnerId)),
       ];
       const ownedRunIds = new Set(ownedRuns.map((run) => run.id));
-      const liveRows = rows("SELECT id,run_id,kind,title,board_control,scheduled_for,created_at,closed_at,classroom_id FROM live_sessions ORDER BY id").filter((row) => ownedRunIds.has(String(row.run_id)));
+      const liveRows = rows("SELECT * FROM live_sessions ORDER BY id").filter((row) => ownedRunIds.has(String(row.run_id)));
+      const liveSessionIds = liveRows.map((row) => String(row.id));
+      const exportedLiveRows = liveRows.map((row) => Object.freeze({
+        id: row.id,
+        run_id: row.run_id,
+        kind: row.kind,
+        title: row.title,
+        board_control: row.board_control,
+        scheduled_for: row.scheduled_for,
+        vote_adapter_handle: handleFor(row.vote_adapter_learner_id),
+        rotation_handles: row.rotation_json === null ? null : handlesFor(row.rotation_json),
+        handoff_handle: handleFor(row.handoff_learner_id),
+        rotation_cursor: row.rotation_cursor,
+        creator_handle: handleFor(row.created_by),
+        created_at: row.created_at,
+        closed_at: row.closed_at,
+        classroom_id: row.classroom_id,
+      }));
+      const journalRows = liveSessionIds.flatMap((sessionId) => rows(
+        "SELECT session_id,seq,at,kind,actor_learner_id,run_seq,payload_json FROM session_journal WHERE session_id=? ORDER BY seq",
+        sessionId,
+      )).map((row) => {
+        const payload = JSON.parse(String(row.payload_json)) as Record<string, unknown>;
+        const holderHandle = handleFor(payload.holderLearnerId);
+        const changedByHandle = handleFor(payload.changedByLearnerId);
+        delete payload.holderLearnerId;
+        delete payload.changedByLearnerId;
+        return Object.freeze({
+          session_id: row.session_id,
+          seq: row.seq,
+          at: row.at,
+          kind: row.kind,
+          actor_handle: handleFor(row.actor_learner_id),
+          run_seq: row.run_seq,
+          payload: Object.freeze({ ...payload, ...(holderHandle === null ? {} : { holderHandle }), ...(changedByHandle === null ? {} : { changedByHandle }) }),
+        });
+      });
+      const proposalRows = [
+        ...liveSessionIds.flatMap((sessionId) => rows(
+          `SELECT p.id,p.session_id,p.node_id,p.move_uci,l.handle AS proposed_by_handle,p.at,p.status,p.resolved_run_seq
+           FROM session_proposals p JOIN learners l ON l.id=p.proposed_by WHERE p.session_id=? ORDER BY p.id`, sessionId,
+        )),
+        ...rows(
+          `SELECT p.id,p.session_id,p.node_id,p.move_uci,l.handle AS proposed_by_handle,p.at,p.status,p.resolved_run_seq
+           FROM session_proposals p JOIN learners l ON l.id=p.proposed_by
+           WHERE p.proposed_by=? AND p.session_id NOT IN (SELECT id FROM live_sessions WHERE run_id IN (SELECT id FROM drill_runs WHERE owner_learner_id=?)) ORDER BY p.id`, learnerId, learnerId,
+        ),
+      ];
+      const voteWindowRows = liveSessionIds.flatMap((sessionId) => rows(
+        "SELECT id,session_id,node_id,prompt,options_json,opens_at,closes_at,state,applied_option_uci FROM session_vote_windows WHERE session_id=? ORDER BY id", sessionId,
+      ));
+      const voteRows = [
+        ...liveSessionIds.flatMap((sessionId) => rows(
+          `SELECT v.session_id,v.window_id,l.handle AS cast_by_handle,v.choice_uci,v.at
+           FROM session_votes v JOIN learners l ON l.id=v.cast_by_learner_id WHERE v.session_id=? ORDER BY v.window_id,l.handle`, sessionId,
+        )),
+        ...rows(
+          `SELECT v.session_id,v.window_id,l.handle AS cast_by_handle,v.choice_uci,v.at
+           FROM session_votes v JOIN learners l ON l.id=v.cast_by_learner_id
+           WHERE v.cast_by_learner_id=? AND v.session_id NOT IN (SELECT id FROM live_sessions WHERE run_id IN (SELECT id FROM drill_runs WHERE owner_learner_id=?)) ORDER BY v.session_id,v.window_id`, learnerId, learnerId,
+        ),
+      ];
+      const invitationRows = liveSessionIds.flatMap((sessionId) => rows(
+        "SELECT id,session_id,leg,invited_handle,invited_role,external_challenge_url,state,created_at FROM session_invitations WHERE session_id=? ORDER BY id", sessionId,
+      ));
+      const arenaRows = liveSessionIds.flatMap((sessionId) => rows(
+        "SELECT session_id,leg,reference_player_handle,external_challenge_url,pgn,result,branch_id,imported_at FROM arena_legs WHERE session_id=? ORDER BY leg", sessionId,
+      ));
+      const matchRows = liveSessionIds.flatMap((sessionId) => rows(
+        "SELECT session_id,white_learner_id,black_learner_id,paused_at,pause_proposed_by FROM match_states WHERE session_id=?", sessionId,
+      )).map((row) => Object.freeze({
+        session_id: row.session_id,
+        white_handle: handleFor(row.white_learner_id),
+        black_handle: handleFor(row.black_learner_id),
+        paused_at: row.paused_at,
+        pause_proposed_by_handle: handleFor(row.pause_proposed_by),
+      }));
       const classroomRows = rows(
         `SELECT DISTINCT c.id,c.name,c.created_at,c.archived_at,
           CASE WHEN c.owner_learner_id=? THEN 'owner' ELSE 'member' END AS relationship
          FROM classrooms c LEFT JOIN classroom_members m ON m.classroom_id=c.id
          WHERE c.owner_learner_id=? OR m.learner_id=? ORDER BY c.id`, learnerId, learnerId, learnerId,
       );
+      const classroomIds = classroomRows.map((row) => String(row.id));
+      const memberRows = classroomIds.flatMap((classroomId) => rows(
+        `SELECT m.classroom_id,l.handle,m.member_role,m.state,inviter.handle AS invited_by_handle,m.invited_at,m.joined_at,m.left_at
+         FROM classroom_members m LEFT JOIN learners l ON l.id=m.learner_id LEFT JOIN learners inviter ON inviter.id=m.invited_by
+         WHERE m.classroom_id=? ORDER BY COALESCE(l.handle,m.learner_id)`, classroomId,
+      ));
+      const assignmentRows = classroomIds.flatMap((classroomId) => rows(
+        `SELECT a.id,a.classroom_id,a.pack_id,l.handle AS assigned_by_handle,a.note,a.due_at,a.created_at,a.withdrawn_at
+         FROM assignments a LEFT JOIN learners l ON l.id=a.assigned_by WHERE a.classroom_id=? ORDER BY a.id`, classroomId,
+      ));
+      const submissionRows = classroomIds.flatMap((classroomId) => rows(
+        `SELECT s.assignment_id,s.learner_id,s.run_id,s.granted_learner_ids,s.submitted_at,s.access_expires_at,s.withdrawn_at
+         FROM assignment_submissions s JOIN assignments a ON a.id=s.assignment_id WHERE a.classroom_id=? ORDER BY s.assignment_id,s.run_id`, classroomId,
+      )).map((row) => Object.freeze({
+        assignment_id: row.assignment_id,
+        learner_handle: handleFor(row.learner_id) ?? "deleted learner",
+        run_id: row.run_id,
+        granted_handles: handlesFor(row.granted_learner_ids),
+        submitted_at: row.submitted_at,
+        access_expires_at: row.access_expires_at,
+        withdrawn_at: row.withdrawn_at,
+      }));
       const liveAndSocial = [
-        ...tagged("live_sessions", liveRows),
-        ...liveRows.flatMap((liveRow) => tagged("session_journal", rows("SELECT seq,at,kind,run_seq,payload_json FROM session_journal WHERE session_id=? ORDER BY seq", String(liveRow.id)))),
+        ...tagged("live_sessions", exportedLiveRows),
+        ...tagged("session_journal", journalRows),
+        ...tagged("session_proposals", proposalRows),
+        ...tagged("session_vote_windows", voteWindowRows),
+        ...tagged("session_votes", voteRows),
+        ...tagged("session_invitations", invitationRows),
+        ...tagged("arena_legs", arenaRows),
+        ...tagged("match_states", matchRows),
         ...tagged("public_tokens", rows("SELECT id,scope,run_id,session_id,created_at,revoked_at FROM public_tokens WHERE created_by=? ORDER BY id", learnerId).map((row) => ({ ...row, existed: true }))),
         ...tagged("classrooms", classroomRows),
+        ...tagged("classroom_members", memberRows),
+        ...tagged("assignments", assignmentRows),
+        ...tagged("assignment_submissions", submissionRows),
       ];
       const behavioralProfiles = [
         ...tagged("learner_ratings", rows("SELECT * FROM learner_ratings WHERE learner_id=? ORDER BY calibration_id", learnerId)),
@@ -1863,12 +2012,13 @@ export class SQLiteRunStorage implements RunStorage, ProgressStorage, LiveSessio
         this.#database.prepare("UPDATE schedules SET source_run_id=NULL WHERE source_run_id=?").run(runId);
         this.#database.prepare("UPDATE schedules SET started_run_id=NULL WHERE started_run_id=?").run(runId);
         this.#database.prepare("UPDATE pack_drafts SET seed_ref=NULL WHERE seed_kind='run' AND seed_ref=?").run(runId);
+        this.#deletionEffectGroup("run_references");
         this.#database.prepare("DELETE FROM drill_runs WHERE id=? AND owner_learner_id=?").run(runId, learnerId);
       } else {
         const row = this.#database.prepare("SELECT summary_json FROM drill_runs WHERE id=?").get(runId) as { readonly summary_json: string };
         let summary: Record<string, unknown> = {};
         try { summary = JSON.parse(row.summary_json) as Record<string, unknown>; } catch { /* neutral projection below */ }
-        this.#database.prepare("UPDATE drill_runs SET owner_learner_id=?,active_writer_learner_id=?,active_writer_id=?,summary_json=? WHERE id=?").run(LEGACY_ID, LEGACY_ID, legacyWriterId, JSON.stringify({ ...summary, title: "Shared run from deleted account" }), runId);
+        this.#database.prepare("UPDATE drill_runs SET owner_learner_id=?,active_writer_learner_id=?,active_writer_id=?,summary_json=? WHERE id=?").run(LEGACY_ID, LEGACY_ID, legacyWriterId, JSON.stringify({ ...summary, title: "Shared run removed by its owner" }), runId);
         this.#database.prepare("DELETE FROM run_grants WHERE run_id=? AND learner_id=?").run(runId, learnerId);
         this.#database.prepare("UPDATE run_grants SET role='spectator' WHERE run_id=? AND learner_id<>?").run(runId, LEGACY_ID);
         this.#database.prepare("INSERT OR REPLACE INTO run_grants(run_id,learner_id,role,granted_at,expires_at,granted_via) VALUES (?,?,'host',?,NULL,NULL)").run(runId, LEGACY_ID, at);
@@ -1883,12 +2033,9 @@ export class SQLiteRunStorage implements RunStorage, ProgressStorage, LiveSessio
         this.#database.prepare("DELETE FROM run_marks WHERE run_id=? AND author_learner_id=?").run(runId, learnerId);
         this.#database.prepare("DELETE FROM attempts WHERE run_id=? AND learner_id=?").run(runId, learnerId);
       }
-      this.#database.prepare("DELETE FROM learner_position_stats WHERE learner_id=?").run(learnerId);
-      this.#database.prepare(
-        `INSERT INTO learner_position_stats(learner_id,transpose_key,seen_count)
-         SELECT learner_id,root_transpose_key,count(*) FROM attempts
-         WHERE learner_id=? AND countable=1 GROUP BY learner_id,root_transpose_key`,
-      ).run(learnerId);
+      this.#deletionEffectGroup("run_transition");
+      this.#rebuildPositionStats(learnerId);
+      this.#deletionEffectGroup("position_stats");
       this.#database.exec("COMMIT");
       this.#snapshots.delete(runId);
     } catch (error) {
@@ -1944,6 +2091,7 @@ export class SQLiteRunStorage implements RunStorage, ProgressStorage, LiveSessio
         this.#database.prepare("DELETE FROM imported_games WHERE run_id=?").run(runId);
         this.#database.prepare("DELETE FROM run_marks WHERE run_id=? AND author_learner_id=?").run(runId, learnerId);
       }
+      this.#deletionEffectGroup("owned_runs");
       this.#database.prepare(
         "DELETE FROM playtest_documents WHERE draft_id IN (SELECT id FROM pack_drafts WHERE owner_learner_id=? AND state<>'registered')",
       ).run(learnerId);
@@ -1957,8 +2105,10 @@ export class SQLiteRunStorage implements RunStorage, ProgressStorage, LiveSessio
       this.#database.prepare(
         "UPDATE registered_shapes SET publisher_learner_id=?,publisher_handle='deleted account' WHERE publisher_learner_id=?",
       ).run(LEGACY_ID, learnerId);
+      this.#deletionEffectGroup("published_artifacts");
       const repertoireRows=this.#database.prepare("SELECT id FROM repertoires WHERE owner_learner_id=?").all(learnerId) as unknown as readonly {id:string}[];
       for(const row of repertoireRows)this.#deleteRepertoireRows(row.id);
+      this.#deletionEffectGroup("repertoires");
       for (const classroomId of hardClassroomIds) {
         this.#database.prepare("DELETE FROM classrooms WHERE id=?").run(classroomId);
       }
@@ -1992,6 +2142,7 @@ export class SQLiteRunStorage implements RunStorage, ProgressStorage, LiveSessio
            WHERE assignment_id=? AND learner_id=? AND run_id=?`,
         ).run(learnerId, deletionScopedKey, JSON.stringify(granted), String(submission.assignment_id), String(submission.learner_id), String(submission.run_id));
       }
+      this.#deletionEffectGroup("classrooms");
       this.#database.prepare("UPDATE live_sessions SET created_by = ? WHERE created_by = ?").run(LEGACY_ID,learnerId);
       this.#database.prepare("UPDATE live_sessions SET vote_adapter_learner_id=NULL WHERE vote_adapter_learner_id=?").run(learnerId);
       this.#database.prepare("UPDATE live_sessions SET handoff_learner_id=NULL WHERE handoff_learner_id=?").run(learnerId);
@@ -2017,8 +2168,10 @@ export class SQLiteRunStorage implements RunStorage, ProgressStorage, LiveSessio
       this.#database.prepare("UPDATE match_states SET black_learner_id=NULL WHERE black_learner_id=?").run(learnerId);
       this.#database.prepare("UPDATE match_states SET pause_proposed_by=NULL WHERE pause_proposed_by=?").run(learnerId);
       this.#database.prepare("UPDATE cohort_standings SET opened_by_learner_id=? WHERE opened_by_learner_id=?").run(deletionScopedKey, learnerId);
+      this.#deletionEffectGroup("retained_identity_scrub");
       this.#database.prepare("DELETE FROM run_marks WHERE author_learner_id = ?").run(learnerId);
       this.#database.prepare("DELETE FROM learners WHERE id = ?").run(learnerId);
+      this.#deletionEffectGroup("learner_state");
       this.#database.exec("COMMIT");
       for (const runId of [...hardRunIds, ...tombstoneRunIds]) this.#snapshots.delete(runId);
     } catch (error) {
@@ -2026,6 +2179,19 @@ export class SQLiteRunStorage implements RunStorage, ProgressStorage, LiveSessio
       if (error instanceof ServerError) throw error;
       throw storageFailure("Could not delete learner", error);
     }
+  }
+
+  #deletionEffectGroup(group: DeletionEffectGroup): void {
+    this.#failDeletionAfterEffectGroup?.(group);
+  }
+
+  #rebuildPositionStats(learnerId: string): void {
+    this.#database.prepare("DELETE FROM learner_position_stats WHERE learner_id=?").run(learnerId);
+    this.#database.prepare(
+      `INSERT INTO learner_position_stats(learner_id,transpose_key,seen_count)
+       SELECT learner_id,root_transpose_key,count(*) FROM attempts
+       WHERE learner_id=? AND countable=1 GROUP BY learner_id,root_transpose_key`,
+    ).run(learnerId);
   }
 
   createSession(learnerId: string, tokenHash: string, expiresAt: string): void {
@@ -2361,6 +2527,9 @@ export class SQLiteRunStorage implements RunStorage, ProgressStorage, LiveSessio
         );
         rows.forEach((row, index) => number.run(index + 1, row.run_id, row.branch_id));
         this.#refreshAutoSchedule(learnerId, rootKey);
+      }
+      for (const learnerId of new Set(attempts.map((attempt) => attempt.learnerId))) {
+        this.#rebuildPositionStats(learnerId);
       }
       this.#database.exec("COMMIT");
     } catch (error) {
