@@ -1,25 +1,15 @@
 # RFC: Exact legal mobility
 
-- **Status:** accepted — 2026-08-23, by claude as register owner on the buildability test, after
-  an independent cross-review that re-derived 20 claims and failed 8 — the center one a **false
-  statement about existing behavior**. §1.2 claimed the change would "prove public behavior
-  byte-identical"; verified by running chessops at HEAD, `allDests()` + `makeUci` over
-  `r3k2r/8/8/8/8/8/8/R3K2R w KQkq - 0 1` returns `e1a1 … e1h1` and **never produces**
-  `e1g1`/`e1c1` — so the web input layer (which normalizes a/h→c/g at `board-input.ts:205-207`)
-  and server sourcing (`sourcing/legal-moves.ts:12-27`, which does not) **already disagree on
-  every castling move**, and criterion 7 correctly **fails at HEAD**, turning green only on the
-  real change. **The castling UCI normalization is therefore accepted as a deliberate,
-  content-visible behavior change, not a refactor** — taken because the two layers already
-  disagree and one of them is wrong, with the blast radius **measured rather than assumed**:
-  exactly one `uci` assertion argument exists in all committed evidence sidecars
-  (`philidor-third-rank-hold`, `h6h8`, not a castling move), so **zero committed bindings change
-  validity**. Three further corrections: §3's binding route ran through a list derived from the
-  **pack schema's** `STRUCTURAL_FEATURE_KINDS` and was closed to this projection — which
-  incidentally proves nothing auto-binds; criterion 12 was **unsatisfiable by identity** for the
-  deliberately color-flipped clone enumerators (the [[D984]] class) and is now split into two
-  classes; and the census is **14** production `allDests()` sites, 11 of them still needing
-  classification. *(Prior line for history: draft 2026-08-23 — executes D904 from completed D783
-  research; independent buildability review required before acceptance.)*
+- **Status:** draft — amendment 2026-08-23, **returned for cross-review before implementation
+  closeout.** The RFC was accepted earlier that day, then owner ruling [[D1029]] reversed its
+  castling normalization before implementation: move identity stays Chess960-safe king-to-rook;
+  semantic destination is the king's c/g landing square; display stays SAN. The non-castling
+  contract remains accepted. The amendment also incorporates the implementation audit at
+  `planning/exact-legal-mobility/d1029-consumer-audit.md`: the old review saw the web/server
+  disagreement but missed three downstream destination consumers and a semantic canonicalizer
+  which would rewrite identity. Acceptance must be re-declared on those able-to-fail seams.
+  *(Prior state for history: accepted 2026-08-23 by claude after an independent review failed 8 of
+  20 claims, including a false byte-identity assertion.)*
 - **Author:** codex, on the D904 evidence-foundation routing
 - **Created:** 2026-08-23
 - **Design refs:** `design/05-in-run-experience.md` §3 (rung-0 rules-derived sight and requested
@@ -48,7 +38,9 @@ versions rather than a single shared-resource head.
 ## Summary
 
 Add `rules.mobility.reading.legal_moves@1`: the complete exact legal-move map for the side to move
-in one FEN, retaining origin, destination, role, UCI and promotion identity. The projection is the
+in one FEN, retaining origin, **move identity**, **semantic destination**, role and promotion
+identity. Castling makes the distinction observable: `uci` is chessops' Chess960-safe king-to-rook
+identity, `to` is the king's c/g landing square, and display remains SAN `O-O`/`O-O-O`. The projection is the
 rules fact needed by selected-square/touch/hover sight. It says where a piece can legally move; it
 does not say which destination is safe, good, likely, theoretical or recommended.
 
@@ -95,6 +87,10 @@ export function exactLegalMoves(fen: string): readonly ExactLegalMove[];
 export function exactLegalMoveMap(fen: string): ExactLegalMoveMap;
 ```
 
+The runtime also exports literal `MOVE_IDENTITY_CONVENTION = "chessops-king-takes-rook@1"` and
+`MOVE_DESTINATION_CONVENTION = "king-landing-square@1"` constants. A field named `uci` without a
+declared convention is not sufficient at a source/runtime boundary.
+
 The helper parses and canonicalizes the FEN through the shipped runtime parser, enumerates the
 actual side to move only, checks every emitted move with `Chess.isLegal`, and sorts by UCI.
 `pieces` contains **one row for every piece of the side to move**, sorted by origin square, and a
@@ -104,23 +100,17 @@ tautological, since every side-to-move piece is on the board; the rule it was re
 one stated here, and criterion 1 now counts the rows.) `ExactLegalMoveMap.fen` is the canonical full
 FEN and every move's color equals `turn`.
 
-The authority normalizes chessops' castling destination representation to standard UCI king
-destinations (`e1g1`, `e1c1`, `e8g8`, `e8c8`). **This is a real conversion, not a formality, and it
-is the one place where §1.2 is not a pure refactor.** Verified at HEAD: chessops' `allDests()` +
-`makeUci` over `r3k2r/8/8/8/8/8/8/R3K2R w KQkq - 0 1` returns
-`e1a1 e1d1 e1d2 e1e2 e1f1 e1f2 e1h1` — the king-to-rook form, with `e1g1`/`e1c1` **not produced at
-all**. `apps/web/src/lib/board-input.ts:205-207` already converts a/h files to c/g;
-`apps/server/src/sourcing/legal-moves.ts:12-27` does not. **The two layers therefore already
-disagree on every castling move**, which is precisely what criterion 7 exists to catch and why it
-fails at HEAD before this RFC lands.
+The authority **does not normalize castling identity to the king's destination**. It emits the
+chessops king-to-rook form (`e1h1`, `e1a1` in standard chess), because that same identity survives
+Chess960. The move row's separate `to` is `g1`/`c1`; a square overlay and piece route consume `to`,
+whereas replay/submission consumes `uci`. SAN display remains `O-O`/`O-O-O`.
 
-A separate consequence must be recorded rather than discovered later: `uci` in this repo now names
-two conventions. Ours is the king-destination form; **Lichess's opening explorer uses the rook form**
-and its bytes are already committed — `content/candidates/priority-wave4b-bg4/priority.json` carries
-`{"san": "O-O", "uci": "e1h1"}`. Any consumer joining our enumerator's UCI to an explorer
-`topMoves[].uci` is comparing two different conventions under one field name. Explorer claim
-evaluation matches on **SAN**, not UCI (`apps/server/src/sourcing/claim-binding.ts:135`), so nothing
-breaks today; no code may start matching those two `uci` fields without an explicit conversion.
+Lichess opening-explorer bytes already use king-to-rook identity —
+`content/candidates/priority-wave4b-bg4/priority.json` contains
+`{"san":"O-O","uci":"e1h1"}` — but source and runtime remain separately declared boundaries.
+Explorer claim evaluation matches on SAN (`apps/server/src/sourcing/claim-binding.ts:135`). A
+future UCI join must validate both declared conventions rather than inferring equivalence from the
+field name.
 
 A pawn destination on the last rank expands to four distinct moves, one for each promotion role.
 En-passant retains its ordinary from/to UCI; this projection does not add an inferred
@@ -132,24 +122,28 @@ error. Legal emptiness is evidence.
 
 ### 1.2 One authority, explicit consumers
 
-Three existing paths move onto the helper in the same implementation:
+The actual-turn roots move onto the helper in the same implementation:
 
 1. `apps/web/src/lib/board-input.ts` derives its origin-to-UCI map from
    `exactLegalMoveMap`; pointer/touch, keyboard, text and semantic-grid input therefore share the
-   same move identities as evidence sight.
+   same move identities as evidence sight. Pointer/semantic selection uses each move's `to`, while
+   submission uses its `uci`; SAN and either common castling spelling normalize to that identity.
 2. `apps/server/src/sourcing/legal-moves.ts` imports/re-exports the runtime enumerator and retains
    its SAN/successor composition locally; claim binding and tablebase walk no longer own a second
-   move generator. **This arm is not byte-identical and must not be described as such:**
-   `legalSuccessors()` emits `e1h1`/`e1a1` for castling today and emits `e1g1`/`e1c1` afterwards.
-   The blast radius is measured rather than assumed — a sweep of every `content/**/*.evidence.json`
-   claim binding finds exactly **one** assertion carrying a `uci` argument
-   (`philidor-third-rank-hold`, `h6h8`), which is not a castling move, so **zero committed bindings
-   change validity**. `legalSuccessors().san` is what the census and unique-move assertions return
-   (`claim-binding.ts:107,117,121`), so no census value moves either. The change is real, bounded,
-   and the fixture in criterion 7 pins it.
+   move generator. Its existing king-to-rook castling identity stays byte-compatible.
 3. `packages/runtime/src/mobility.ts` uses the helper for the actual-turn exact projection. Its
    existing B/N/R/Q opposite-turn and `local-non-losing@1` calculations remain private to the
    convention projection.
+4. The simple actual-turn counts/lists in `tempo.ts`, `pivotal.ts`, `semantic-evidence.ts`,
+   `application.ts` and `opponent-selector.ts` consume the same authority rather than retaining
+   five more root enumerators.
+
+Four destination consumers are explicitly in scope because the D1029 audit proves that sharing
+identity without sharing destination still produces wrong chess: `board-input.ts`,
+`board-model.ts` last-move highlighting, `compare-strips.ts` piece routes, and castling operands in
+`semantic-evidence.ts`. Each derives the king's c/g square from the exact move row plus the
+pre-move FEN. No consumer slices castling `uci` and calls the rook's original square a piece
+destination.
 
 The bounded mate/tactic/search functions may need promotion expansion, reply ordering or cloned
 positions in a shape that the source projection does not. They are not blindly replaced.
@@ -160,8 +154,8 @@ prose): ten in `packages/runtime` (`pawn-dynamics.ts:473`, `mate-proof.ts:38`, `
 `tempo.ts:118`, `exchange.ts:76`, `square-control.ts:85`, `pivotal.ts:26`,
 `semantic-evidence.ts:974`, `tactics.ts:795`, `mobility.ts:82`), one in `apps/web`
 (`board-input.ts:200`) and three in `apps/server` (`application.ts:104`,
-`opponent-selector.ts:307`, `sourcing/legal-moves.ts:12`). The three named above move onto the
-authority, leaving **11** to classify.
+`opponent-selector.ts:307`, `sourcing/legal-moves.ts:12`). Seven actual-turn roots move onto the
+authority. Seven clone/bounded-search sites remain local with a named reason and CI classification.
 
 The census classifies each site into exactly one of two kinds, because they are not testable the
 same way:
@@ -272,12 +266,12 @@ existing declaration. It is not silently rebound to requested sight.
 ## 5. Implementation order
 
 1. Add the runtime exact-move types/helper and exhaustive focused fixtures.
-2. Move server sourcing and web input onto it. Web input is byte-identical; server sourcing changes
-   castling UCI by design, and step 2 lands the §1.2 sweep proving no committed binding or census
-   value moves with it.
+2. Move server sourcing and web input onto it. Preserve king-to-rook identity; split semantic
+   destination from submission and pin SAN display.
 3. Add the exact mobility reading and strict evidence adapter.
 4. Register the projection inspector-only and update manifest counts/digest fixtures.
-5. Add the remaining-enumerator census and set-equality controls.
+5. Add the remaining-enumerator census, set-equality controls, and the D1029 destination-consumer
+   closure for board highlight, comparison route and semantic castling operands.
 6. Update runtime, drill-client, evidence-manifest and sourcing documentation.
 7. Complete ledger/log/register closeout; leave the learner binding on D904's named discharge.
 
@@ -292,8 +286,9 @@ existing declaration. It is not silently rebound to requested sight.
    is deterministic under repeated calls.
 2. **Pins and check:** an absolutely pinned piece omits illegal destinations, while a check position
    emits only legal evasions. Pseudo-attacks never enter this projection.
-3. **Castling:** legal king- and queen-side castling emit standard king-destination UCI exactly
-   once; rights without a clear/legal path emit neither move.
+3. **Castling:** legal king- and queen-side castling emit king-to-rook identity exactly once and
+   separately retain the king's c/g semantic destination; rights without a clear/legal path emit
+   neither move. SAN renders `O-O`/`O-O-O`.
 4. **En-passant:** one legal and one king-exposing illegal en-passant fixture separate exact
    legality; the illegal move is absent from input, evidence and successor walk alike.
 5. **Promotion:** one promotion position emits exactly q/r/b/n UCI identities on the same
@@ -305,12 +300,13 @@ existing declaration. It is not silently rebound to requested sight.
    test that only checks "zero moves", which is why the row rule is asserted here too.) The two
    terminals are distinguished by the caller from the input FEN's check state; this projection
    deliberately adds no terminal operand.
-7. **Cross-layer equality:** for every permanent special-move fixture, runtime projection, web input
-   and server sourcing return set-equal UCI, with castling pinned to the literal `e1g1`/`e1c1`/
-   `e8g8`/`e8c8`. This criterion **fails at HEAD** and is expected to: `sourcing/legal-moves.ts`
-   returns `e1h1`/`e1a1` today while `board-input.ts` returns `e1g1`/`e1c1`, so a test written
-   before the change is a genuine red-to-green control rather than a restatement. Deleting one
-   promotion or changing one castling destination fails all three arms.
+7. **Cross-layer identity and destination:** for every permanent special-move fixture, runtime
+   projection, web submission and server sourcing return set-equal move identity. Standard-castling
+   identity is pinned to literal `e1h1`/`e1a1`/`e8h8`/`e8a8`; the same rows' semantic destinations
+   are `g1`/`c1`/`g8`/`c8`. Pointer destination, semantic board, last-move highlight, comparison
+   route and transition operands agree on c/g while SAN agrees on `O-O`/`O-O-O`. A Chess960
+   fixture with king/rooks off e/a/h proves identity remains replayable and destination remains c/g.
+   Deleting one promotion or conflating either castling layer fails the fixture.
 8. **Adapter integrity:** wrong origin, role, color, destination, promotion suffix, illegal UCI,
    duplicate UCI and missing top-level operand each fail before `DeclaredEvidence` construction.
 9. **Manifest closure:** producer count is unchanged, projection count moves by exactly one, and
@@ -318,7 +314,9 @@ existing declaration. It is not silently rebound to requested sight.
    old convention projection exact fails.
 10. **Modality ceiling:** a focused board fixture proves pointer/touch, keyboard semantic cells and
     spoken/ARIA output reveal equal destination sets at the same ceiling and equally reveal none
-    when requested sight is withheld. Ordinary legal submission remains functional.
+    when requested sight is withheld. For castling, all three expose the king's c/g destination
+    while the committed move retains king-to-rook identity. Ordinary legal submission remains
+    functional.
 11. **No verdict laundering:** production renderers for this projection contain none of `safe`,
     `unsafe`, `good`, `bad`, `best`, `trapped`, `restricted`, `outpost`, `threat`, `blunder` or
     `mistake`; a negative fixture attempts at least `safe` and is refused.
@@ -331,8 +329,9 @@ existing declaration. It is not silently rebound to requested sight.
     unclassified new loop fails CI.
 13. **Scope:** no pack/run/shape/principle schema, migration, content, preset or bot profile changes;
     register/status parity and focused runtime/web/server tests pass.
-14. **Closeout:** implementation updates canonical docs, flips D904 and D1022, appends the RFC log,
-    records the learner binding as still undischarged, and only then may await that binding.
+14. **Closeout:** implementation updates canonical docs, flips D904/D1022/D1027/D1028/D1029,
+    appends the RFC log, records the learner binding as still undischarged, and only then may await
+    that binding.
 
 ## Discharges
 
@@ -356,6 +355,11 @@ a new preset, module prominence policy or move-quality meaning.
 ## Changelog
 
 - 2026-08-23: initial draft from D904 and the completed D783/accessible-input evidence.
+- 2026-08-23 owner amendment D1029: reversed the accepted king-destination UCI normalization.
+  Castling now retains Chess960-safe king-to-rook move identity, a separate king-landing semantic
+  destination and SAN display. The implementation audit added board last-move highlight,
+  comparison route and semantic-event identity/destination as able-to-fail consumers; a Chess960
+  fixture is now mandatory. Status returned for independent cross-review before closeout.
 - 2026-08-23 cross-review: eight corrections, one of them a false statement about existing behavior.
   (1) **§1.2's "prove public behavior byte-identical" is false for the server arm.** Verified by
   running chessops at HEAD: `allDests()` + `makeUci` over `r3k2r/8/8/8/8/8/8/R3K2R w KQkq - 0 1`

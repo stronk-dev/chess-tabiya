@@ -6108,3 +6108,22 @@ several operands, not a classifier: exact removed/preserved/reintroduced/all-def
 depth-labelled Stockfish target policy; and band-labelled Maia lower/upper bounds with typed
 unavailability. “Prophylaxis,” plan, intent, force and move quality remain refused without a cited
 theory/authored join. D1023 and plan item 2g are closed; the bounded collector RFC is unblocked.
+
+## 2026-08-23 — exact-legal-mobility returned for the D1029 amendment
+
+Implementation began from the accepted RFC and was stopped before landing when the newer owner
+ruling D1029 was re-read: castling move identity stays Chess960-safe king-to-rook; semantic
+destination is the king's c/g landing square; display stays SAN. The obsolete king-destination UCI
+change is not committed.
+
+The correction exposed a larger buildability gap than the original review found. A production
+consumer audit identified three additional raw-target assumptions—board last-move highlighting,
+comparison piece routes and transition-event operands—plus `canonicalMoveUci`, which currently
+rewrites castling identity itself. Fixing only the new legal-move helper would therefore leave four
+different visible/data projections disagreeing about where the king went.
+
+The RFC is amended and returned to draft for independent cross-review. It now requires identity,
+semantic destination and SAN to be tested separately, includes all four consumers, and adds a
+nonstandard Chess960 fixture so an e/a/h-only implementation cannot pass. The non-castling
+implementation work remains locally green but is held from closeout until the amendment is
+accepted. The audit is `planning/exact-legal-mobility/d1029-consumer-audit.md`.
