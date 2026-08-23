@@ -5848,3 +5848,23 @@ or production packet was invented in this pass.
 D1002 is fixed at the shared REST boundary. `PACK_INVALID` now maps to HTTP 422 and preserves its
 typed validation issue details instead of becoming a 500. A direct boundary fixture pins the
 status and response body, providing the refusal contract the F3 capability/deprecation path needs.
+
+## 2026-08-23 — Runtime opening identity RFC drafted
+
+The completed D894 measurement now has a bounded implementation contract. The draft keeps exact
+current named endpoint, current catalogue-path membership and retrospective deepest endpoint as
+three versioned projections. It compiles the already-pinned five-file CC0 source into a canonical
+offline artifact and refuses sticky names, descendant guessing, “out of book,” book-policy moves,
+theory prose and LLM/FTS applicability.
+
+Author-side buildability review found that the retrospective projection's original input,
+`run.record.move@1`, does not carry a FEN. The draft now adds the narrow
+`run.record.position@1` fact and obeys F1's mixed-grounding/abstention rules instead of hiding the
+position as an undeclared input. It also requires the five pinned CC0 inputs to be vendored so a
+clean checkout can reproduce the artifact without a build-time network dependency.
+
+The draft's able-to-fail controls include the two-move-order transposition, a many-descendant
+unnamed prefix, live absence after a prior match, exit/re-entry, mixed-artifact refusal, unavailable
+source states and runtime-image leakage. D743 advances to drafted; implementation waits on an
+independent buildability review. Semantic Collectors D3 should record the drafting SHA after its
+concurrent author amendment lands.
