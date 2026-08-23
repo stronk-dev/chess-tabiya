@@ -263,6 +263,48 @@ function writeJson(path: string, value: unknown): void {
   writeFileSync(path, `${JSON.stringify(value, null, 2)}\n`, "utf8");
 }
 
+function compactProjection(value: Record<string, unknown>): Record<string, unknown> {
+  const storeRows = value.storeRows ?? [];
+  const decisionMeasures = value.decisionMeasures ?? [];
+  return Object.freeze({
+    pathId: value.pathId,
+    plies: value.plies,
+    elapsedMs: value.elapsedMs,
+    decisions: value.decisions,
+    legalAlternatives: value.legalAlternatives,
+    evaluatedEdges: value.evaluatedEdges,
+    emittedEvents: value.emittedEvents,
+    referenceBytes: value.referenceBytes,
+    eventPopulationDigest: value.eventPopulationDigest,
+    familyCounts: value.familyCounts,
+    storeRowCount: Array.isArray(storeRows) ? storeRows.length : 0,
+    storeRowsDigest: sha256(JSON.stringify(storeRows)),
+    decisionMeasuresDigest: sha256(JSON.stringify(decisionMeasures)),
+  });
+}
+
+function compactFragment(value: Record<string, unknown>): Record<string, unknown> {
+  const rows = Array.isArray(value.rows) ? value.rows as Record<string, unknown>[] : [];
+  return Object.freeze({
+    experiment: value.experiment,
+    measuredAt: value.measuredAt,
+    commit: value.commit,
+    pgnSha256: value.pgnSha256,
+    sourceDigest: value.sourceDigest,
+    sourcePaths: value.sourcePaths,
+    arm: value.arm,
+    contract: value.contract,
+    selectedPaths: value.selectedPaths,
+    timingMs: value.timingMs,
+    totals: value.totals,
+    ...(value.cumulativeReplay === undefined ? {} : { cumulativeReplay: value.cumulativeReplay }),
+    ...(value.gate === undefined ? {} : { gate: value.gate }),
+    ...(value.totalWallMs === undefined ? {} : { totalWallMs: value.totalWallMs }),
+    ...(value.gamesPerSecond === undefined ? {} : { gamesPerSecond: value.gamesPerSecond }),
+    rows: Object.freeze(rows.map(compactProjection)),
+  });
+}
+
 describe("D1405 longitudinal projection cost", () => {
   it("measures one isolated arm or aggregates the four frozen receipts", () => {
     const outputDir = process.env.D1405_RESULT_DIR;
@@ -328,7 +370,11 @@ describe("D1405 longitudinal projection cost", () => {
     const receipts = Object.values(fragments);
     const receiptKeys = receipts.map((value) => [value.commit, value.pgnSha256, value.sourceDigest].join("\0"));
     expect(new Set(receiptKeys).size).toBe(1);
-    const native = Object.freeze({ "20": fragments["20"], "40": fragments["40"], "80": fragments["80"] });
+    const native = Object.freeze({
+      "20": compactFragment(fragments["20"]!),
+      "40": compactFragment(fragments["40"]!),
+      "80": compactFragment(fragments["80"]!),
+    });
     const native20 = native["20"] as { readonly timingMs: ReturnType<typeof timing> };
     const native80 = native["80"] as { readonly timingMs: ReturnType<typeof timing> };
     const growthRatio = native80.timingMs.p95Ms / Math.max(Number.EPSILON, native20.timingMs.p95Ms);
@@ -343,7 +389,7 @@ describe("D1405 longitudinal projection cost", () => {
       contract: Object.freeze({ lengths: LENGTHS, nativePaths: NATIVE_PATHS, bulkPaths: BULK_PATHS, budgetMs: BUDGET_MS }),
       native,
       growth: Object.freeze({ p95Ratio80To20: growthRatio, gate: growthRatio < 4 ? "PASS" : "FAIL" }),
-      bulk: fragments.bulk,
+      bulk: compactFragment(fragments.bulk!),
     });
     const jsonPath = resolve(outputDir, "d1405-longitudinal-cost-results.json");
     const reportPath = resolve(outputDir, "d1405-longitudinal-cost-results.md");
