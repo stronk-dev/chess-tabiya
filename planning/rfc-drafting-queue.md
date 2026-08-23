@@ -1339,3 +1339,16 @@ native matches.
 **[[D1416]] — bot tournaments, leagues and operator accounts are deferred past 1.0, not refused.**
 Each owes a home and an owner. Check first whether the operator account is redundant against the
 shipped Teacher surface rather than opening a lane for it.
+
+### [[D1409]] repair — what it closes and what it does not ([[D1417]], [[D1418]])
+
+Enforceable with **no signature change**: `RenderedEvidenceView` already carries the sentence
+partition and `voice.ts:112` discards it. Stop joining and the ruling holds. Home is a **follow-up
+RFC** against implemented `rfc/archive/adaptive-guidance.md`, which states the packet-relative rule
+in the exact words D1409 overturns — not an amendment, per RFC-0000 rule 3. A cross-draft ownership
+pin is owed: four in-flight drafts write `voice.ts` vocabulary while this claims mechanism only.
+
+**It does not close the quoted-prose case.** Three of four arms stay packet-relative, squares and
+moves run through a separate `includes` test, and `plan` is in no list at all. The escalation vector
+is a **caption**: naming the closed class frees every word in it, which the shipped mate-tier text
+does automatically. Owner question open on whether to scope all four arms.
