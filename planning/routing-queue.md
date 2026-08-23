@@ -29,6 +29,7 @@ set execution order.
 | Rows | Primary destination | Next action / gate |
 |---|---|---|
 | D965, D966, D967, D968 | `learner-modules` amendment | Return the accepted document for the literal enumeration, reducer grammar, per-module ceilings, and cumulative answer-distance sets; re-review before module implementation. |
+| D1016, D1017 | `learner-modules` author/implementation return | Record `2a54d05` as a real contract-compiler checkpoint, then specify the cross-projection reducer relations, bounded novelty history, overflow observation and one non-contradictory pipeline before the 181-row registry/selector resumes. |
 | D878, D903 | learner-module implementation | Preserve the measured seven-axis taxonomy and land the corrected 175/173 eligibility counts with the module compiler. |
 | D624 | module evidence-shape research | Feed the competitor finding into module contracts: learner intent selects evidence-shaped modules, never raw sources. |
 | D559, D623, D114, D115, D356, D358 | grounded Review research/RFC lane | Specify a replayable Review Map with useful pivotal selection and conditional-scope carrying; do not turn it into an engine review screen. |

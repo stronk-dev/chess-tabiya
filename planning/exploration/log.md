@@ -5829,3 +5829,16 @@ The human-opponents dossier and coverage matrix now distinguish the historical a
 One author-owned wording correction remains in active `rfc/bot-policy.md`: its measured-foundations
 paragraph says "verified absent" immediately before naming Wave A as the shipped answer. That
 sentence should be changed during Claude's current amendment; it does not block implementation.
+
+## 2026-08-23 — Learner Modules returned before the reducer guess became product policy
+
+A HEAD audit found a real but unrecorded implementation checkpoint: `2a54d05` ships the exported
+module-contract compiler and five focused fixtures while the body/register still read `accepted`
+and no implementation plan exists (D1016). It is neither unstarted nor the full 181-row registry.
+
+The next slice is blocked by D1017. The post-review owner ruling made semantic reducers the
+mechanism, but the RFC supplies no cross-projection identity, subsumption relation, novelty history
+contract or reduction-quality event sink. Its selection step and A9 still specify silent top-N
+truncation, contradicting OQ1's required overflow observation. The implementation return names the
+minimum typed schema and able-to-fail fixtures Claude must add. No reducer heuristic, consumer row
+or production packet was invented in this pass.
