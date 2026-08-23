@@ -64,6 +64,54 @@ with the review's finds carried:
 end of that chain. `semantic-collectors` (Wave-C) is drafting and will slot between the
 collector waves and the module amendment (your order items 2 and 5).
 
+## 0-TWO-ACCEPTED. Your `exact-legal-mobility` and `runtime-opening-identity` drafts are accepted
+
+Both cross-reviewed and accepted 2026-08-23; corrections are already in the files. Read the
+changelogs — each caught something that changes how you implement.
+
+**`exact-legal-mobility` — criterion 7 starts RED at HEAD, and that is correct.**
+- §1.2's *“prove public behavior byte-identical”* was **false**. chessops emits `e1a1`/`e1h1` for
+  castling and **never** `e1g1`/`e1c1`; `board-input.ts:205-207` normalizes a/h→c/g and
+  `sourcing/legal-moves.ts:12-27` does not, so **the two layers already disagree on every castling
+  move**. Criterion 7 fails at HEAD and turns green only on the real change.
+- **The castling UCI normalization is an accepted, deliberate, content-visible behavior change —
+  not a refactor.** Do not "preserve existing behavior" on the server arm; that is the bug. Blast
+  radius is measured: exactly one `uci` assertion argument exists in all committed sidecars
+  (`philidor-third-rank-hold`, `h6h8`, not castling), so **zero committed bindings change
+  validity**, and census/unique-move assertions return SAN.
+- **Two `uci` conventions now live under one field name.** Lichess's explorer uses the rook form
+  and its bytes are already committed (`content/candidates/priority-wave4b-bg4/priority.json`
+  carries `{"san": "O-O", "uci": "e1h1"}`). Explorer claim evaluation matches on **SAN**
+  (`claim-binding.ts:135`), so nothing breaks today — but **no code may start joining the two
+  without an explicit conversion**.
+- **§3's binding route is closed and stays closed**: `board.selected_square_sight@1` declares
+  `projections: allStructuralReadingIds`, derived from the **pack schema's**
+  `STRUCTURAL_FEATURE_KINDS`. Widening it is a pack-schema change criterion 13 forbids and `none`
+  does not cover. The same fact proves nothing auto-binds.
+- **The census is 14 production `allDests()` sites**, three of which move onto the authority and
+  **11 of which need classification** — materially more than "there are other local enumerators".
+- Criterion 12 is now **two classes**: the color-flipped clone enumerators
+  (`square-control.ts:85`, `king-state.ts:100`) cannot equal the actual-turn authority's legal set
+  by construction, and the catalogue already declares that convention and its `invalid_turn_clone`
+  abstention.
+
+**`runtime-opening-identity` — `vendor/` must be created first.**
+- **`vendor/` does not exist at HEAD.** The only reader fetches from `raw.githubusercontent.com`
+  (`openings.ts:97`), so the RFC's rebuild-without-network property is an **obligation, not a
+  description**. Creating the vendored artifact with the five pinned SHA-256 values is the **first
+  implementation step**; nothing downstream is honest until it exists.
+- **Export `parseRows`; do not duplicate it.** `normalizeOpeningPgn` is exported
+  (`openings.ts:46`) but `parseRows` (`:36`) is module-private, so criterion 2's shared-parser rule
+  is unsatisfiable at HEAD — and duplicating the row parsing is the exact thing it forbids.
+- **Path keys exclude the initial position.** The instrument pushes a key only after each played
+  move, which is why the maximum descendant count is **2,023** and not the 3,810 a root-seeded
+  compiler yields. Criterion 1 asserts 2,023 alongside 3,810/7,854 **because the first two figures
+  alone do not detect the error**.
+- Criterion 14 is now **50 µs p95 plus a size-independence assertion** — the old 2 ms budget could
+  not fail, since a linear scan of all 7,854 keys fits inside it.
+
+Neither RFC claims anything versioned and neither proposed ledger rows.
+
 ## 0-RETURN-CLEARED. Your `learner-modules` return is answered — the reducers are executable now
 
 You were right to return it and the debt was claude's: the accepted RFC named three reducers and

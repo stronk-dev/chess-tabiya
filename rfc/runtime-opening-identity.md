@@ -1,7 +1,20 @@
 # RFC: Runtime opening identity
 
-- **Status:** draft 2026-08-23 — executes Semantic Collectors discharge D3 from completed D894
-  research; independent buildability review required before acceptance
+- **Status:** accepted — 2026-08-23, by claude as register owner on the buildability test, after
+  an independent cross-review that re-derived 22 claims and failed 9, two of them blocking.
+  **`vendor/` does not exist**, so §1.1's present-tense claim that a clean checkout rebuilds
+  without a network request was false — the only reader fetches from `raw.githubusercontent.com`
+  (`openings.ts:97`); restated as the **first implementation obligation**, with the five SHA-256
+  values pinned. Criterion 2's shared-parser rule was **unsatisfiable at HEAD**: `parseRows` is
+  module-private while `normalizeOpeningPgn` is exported, so a compiler could only satisfy it by
+  duplicating the row parsing the criterion forbids — exporting it is now an obligation. §1.2
+  never said path keys **exclude the initial position**, the omission that decides whether
+  3,810/7,854 reproduce at all, which is why criterion 1 now also asserts the **2,023** maximum
+  descendant count. And criterion 14's 2 ms p95 **could not fail** — a linear scan of all 7,854
+  keys fits inside it — now 50 µs p95 plus a size-independence assertion. Re-derived clean:
+  `CHESS_OPENINGS_COMMIT` byte-exact, 3,810 / 7,854 / 2,023 exact, and 401 of 6,991 recomputing
+  to 5.7%. *(Prior line for history: draft 2026-08-23 — executes Semantic Collectors discharge D3
+  from completed D894 research; independent buildability review required before acceptance.)*
 - **Author:** codex, on the D717 evidence-foundation routing and D743/D894
 - **Created:** 2026-08-23
 - **Design refs:** `design/03-product-breadth.md` theory/Review/bot surfaces;
@@ -69,15 +82,26 @@ network. The compiler records:
   the compiler's declared repo-relative source-file list, sorted by path, with each path and its
   raw bytes length-delimited; an undeclared helper import fails the compiler-source closure test.
 
-The five pinned CC0 files and their licence notice are vendored under
-`vendor/chess-openings/4b8622759e7ae6f93f011cc6c83a3823401ab45e/`. A clean checkout can therefore
-rebuild and verify the artifact without a network request or an operator-supplied directory. The
-implementation must match the five SHA-256 values already frozen in D894 before compiling; source
-refresh is an explicit later update, never an implicit fetch during install, CI or server start.
+**The vendoring is this RFC's first implementation obligation, not an existing fact.** `vendor/`
+does not exist at drafting HEAD, and the only code path that reads these files today fetches them
+over the network at authoring time (`apps/server/src/sourcing/openings.ts:97` builds a
+`raw.githubusercontent.com` URL). The implementation therefore *adds*
+`vendor/chess-openings/4b8622759e7ae6f93f011cc6c83a3823401ab45e/` containing the five TSVs and the
+CC0-1.0 licence notice, after which a clean checkout can rebuild and verify the artifact without a
+network request or an operator-supplied directory. The five SHA-256 values to match are frozen at
+`tools/d894-opening-runtime-harness/README.md:10-16` — **not** in the D894 dossier, which only
+points at them — and the compiler test reads them from there. Source refresh is an explicit later
+update, never an implicit fetch during install, CI or server start.
 
-Input parsing reuses one exported TSV/PGN normalizer with the sourcing emitter; two independent
-parsers are forbidden. Each row must contain one ECO, one non-empty name and one legal non-empty
-mainline from the standard initial position. Any malformed row refuses the entire build.
+Input parsing reuses the sourcing emitter's own parsers; two independent parsers are forbidden. Both
+halves are named because only one of them is exported today: the PGN half is
+`normalizeOpeningPgn` (`openings.ts:46`, already exported, already returning one `{uci, san, fen}`
+per played move), and the TSV row half is `parseRows` (`openings.ts:36`), which is **module-private
+at HEAD and must be exported** — otherwise the compiler necessarily re-implements it and fails
+criterion 2 for a reason no symbol names. `parseRows` also fixes the header contract this section
+otherwise leaves implicit: the first line must be exactly `eco\tname\tpgn`. Each row must contain
+one ECO, one non-empty name and one legal non-empty mainline from the standard initial position.
+Any malformed row refuses the entire build.
 
 ### 1.2 Private canonical artifact
 
@@ -120,8 +144,17 @@ order cannot change the output bytes.
 
 The compiler refuses duplicate named endpoint keys, even if the duplicate spelling happens to be
 equal. D894 measured zero duplicates; making uniqueness executable prevents a later source update
-from silently introducing a tie policy. Prefix rows collapse repeated visits within one source
-line and count distinct descendant named endpoints.
+from silently introducing a tie policy.
+
+**`pathMembership` is keyed on positions reached *after* at least one move; the standard initial
+position is never a path key.** This is not a detail — it is the reason the measured numbers are
+7,854 and 2,023 rather than 7,855 and 3,810. The D894 instrument pushes a key only after playing
+each mainline move (`tools/d894-opening-runtime-harness/opening-runtime.test.ts:42-47`), and
+`normalizeOpeningPgn` has the same shape, so an implementer who seeds the start position gets both
+counts wrong and fails criterion 1 without the spec ever having told them why. A row's own endpoint
+key **is** among its path keys, so `descendantEndpointCount` counts named endpoints at or below the
+key — including the key itself when the key is an endpoint — and is never zero for a member. Prefix
+rows collapse repeated visits within one source line (`new Set(row.pathKeys)`) before counting.
 
 The ordinary runtime image receives only this compiled artifact, not raw TSV inputs, candidate
 packs or authoring sidecars. A packaging fixture rejects absolute paths and any field not in the
@@ -290,7 +323,19 @@ with the deepest historical match.
 ## 3. Evidence manifest and consumers
 
 Add producer `theory.opening.runtime` with the two source projections in §§2.1–2.2, add the §2.3
-projection to the existing `run.record` producer, and add producer `derived.opening` with §2.4.
+projection to the existing `run.record` producer (which carries **7** projections at HEAD,
+`packages/runtime/src/evidence-catalog.ts:782-790`), and add producer `derived.opening` with §2.4.
+
+**Two adjacent namespaces now exist and must not be conflated.** `theory.opening_identity` is the
+shipped *build-time authoring* producer whose single projection is `theory.opening_identity.record`
+(`evidence-catalog.ts:781`), an `opening_identity` **EvidenceRecord** written into a pack's sourcing
+ledger. `theory.opening.runtime` is this RFC's *runtime* producer over the compiled artifact. They
+share neither payload, grounding path nor consumer, and no projection of one may be substituted for
+the other. Separately: `claim-semantic-anchors` removes `theory.opening_identity.record` from
+`authoring.claim_binding@1` (nothing can evaluate it today), and its D3 hands the question of
+whether opening facts return to claim binding to this RFC. This RFC's answer is *not yet*: none of
+the three projections here is claim-bindable, because claim binding requires a registered
+deterministic clause renderer and §3 lands all four `inspector_only`.
 Each projection has a typed payload, literal operands, limitations and availability reasons.
 `derived.opening.deepest_reached@1` declares `theory.opening.current_endpoint@1` plus
 `run.record.position@1` as derivation inputs. Its manifest declaration uses `plane: "derived"`,
@@ -333,7 +378,8 @@ history endpoint. It consumes recorded nodes already authorized for the caller.
 Deterministic renderers may produce only:
 
 - current endpoint matched: `Current position: {ECO} {name}. Source: Lichess chess-openings
-  {shortCommit}.`;
+  {shortCommit}.` — `{shortCommit}` is the first **7** characters of `CHESS_OPENINGS_COMMIT`
+  (`4b86227`), fixed here so the renderer's bytes are snapshot-testable;
 - current endpoint absent: no ordinary learner sentence; inspector may show `No exact named
   endpoint for this position in the installed catalogue.`;
 - membership: inspector-only count language, never a name;
@@ -359,20 +405,32 @@ move.
 
 ## 7. Acceptance criteria
 
-1. **Source closure:** the compiler accepts the five pinned TSVs and emits exactly 3,810 unique
-   named endpoints and 7,854 path keys; deleting, duplicating or corrupting one row fails.
-2. **Shared parser:** sourcing emission and catalogue compilation call the same exported row/PGN
-   normalizer; a source sweep rejects a second parser.
+1. **Source closure:** the compiler accepts the five vendored TSVs, verifies their SHA-256 against
+   the five values at `tools/d894-opening-runtime-harness/README.md:10-16`, and emits exactly
+   **3,810** unique named endpoints and **7,854** path keys, with a maximum
+   `descendantEndpointCount` of **2,023**. All three figures are asserted, because 3,810 and 7,854
+   alone are also produced by a compiler that seeds the initial position and then drops it; the
+   2,023 maximum is what pins the exclusion. Deleting, duplicating or corrupting one row fails.
+2. **Shared parser:** sourcing emission and catalogue compilation call `parseRows` and
+   `normalizeOpeningPgn` from `apps/server/src/sourcing/openings.ts`; a source sweep rejects a
+   second TSV or PGN parser. `parseRows` is exported by this implementation — the criterion is not
+   satisfiable against HEAD, where it is module-private.
 3. **Determinism:** shuffled input enumeration and object-key order produce byte-identical artifact
    and digest; changing one name, ECO, line or source byte changes the digest.
 4. **Endpoint uniqueness:** a duplicate endpoint key fails the build rather than choosing first or
    deepest.
 5. **Transposition:** two distinct legal move orders reaching one key produce byte-identical current
    endpoint and membership payloads except for their explicit `observedPly` when those differ.
-6. **Unnamed prefix:** the D894 many-descendant prefix returns membership with count >1 and current
-   endpoint absent; no ECO/name field exists in the membership type or serialized response.
-7. **Stale carry:** a named endpoint followed by the fixed exact-abstention witness returns absence
-   live while deepest-reached retains the earlier visit.
+6. **Unnamed prefix:** the D894 maximum-descendant prefix key returns membership with
+   `descendantEndpointCount` exactly **2,023** and current endpoint absent; no ECO/name field exists
+   in the membership type or serialized response. ("count >1" is satisfied by any prefix in the
+   catalogue and measures nothing.)
+7. **Stale carry:** a named endpoint followed by absence returns absence live while deepest-reached
+   retains the earlier visit. The fixture is a **named imported game from the D894 population,
+   identified in the test by file and game index**, at the exact ply pair where its last named
+   endpoint is followed by a non-endpoint position — not an unnamed "witness". D894 measured this
+   holds for **108/108** games (`design/research/runtime-opening-identity.md:71-74`), so the fixture
+   is a specimen of a total property and the test asserts both.
 8. **Exit/re-entry:** a recorded path exits and later transposes back; live results follow each
    current key and history retains both visits in deterministic order.
 9. **Source propagation:** all three payloads carry the exact commit/artifact digest; mixing lookup
@@ -387,10 +445,17 @@ move.
 12. **Law 8/refusal sweep:** production renderers contain none of §5's prohibited vocabulary and no
     LLM/FTS/embedding import enters applicability code.
 13. **Packaging:** the runtime image contains the compiled artifact and no raw TSV, candidate pack,
-    evidence sidecar, source job or absolute local path.
-14. **Performance:** after load, both current lookups complete synchronously under 2 ms p95 over all
-    6,991 fixed imported positions on the existing CI runner; artifact load and map construction
-    are reported separately and bounded below 250 ms.
+    evidence sidecar, source job or absolute local path. The vendored
+    `vendor/chess-openings/<commit>/` tree is a build input and is asserted **present in the repo
+    and absent from the image** by `tools/verify-packaging.mjs`; the two halves are separate
+    assertions, since §1.1 requires the files to exist and this criterion requires them not to ship.
+14. **Performance:** after load, both current lookups complete synchronously under **50 µs p95** over
+    all 6,991 fixed imported positions on the existing CI runner; artifact load and map construction
+    are reported separately and bounded below 250 ms. The drafted 2 ms ceiling could not fail: two
+    hash lookups plus one `transposeKey` cost single-digit microseconds, and even a **linear scan of
+    all 7,854 keys** stays under it, so the criterion could not distinguish §1.3's "immutable maps"
+    from an O(n) scan — the thing it exists to check. The criterion is additionally structural: the
+    p95 measured over the full artifact and over a 100-key artifact must not differ by more than 2×.
 15. **HTTP boundary:** valid lookup, invalid FEN/ply and unavailable catalogue fixtures pin 200/400/
     200 status respectively; responses contain no moves or descendant names.
 16. **Scope:** no pack/schema/migration/content/assistance/preset/bot-profile bytes change; register,
@@ -418,3 +483,40 @@ move.
 ## Changelog
 
 - 2026-08-23: initial draft from the completed D894 instrument and Semantic Collectors D3.
+- 2026-08-23 cross-review: nine corrections, two of them buildability blockers as drafted.
+  (1) **§1.1 asserted the vendoring in the present tense and `vendor/` does not exist.** The only
+  path that reads these files today fetches them from `raw.githubusercontent.com`
+  (`openings.ts:97`), so "a clean checkout can rebuild without a network request" was false at
+  HEAD. Restated as this RFC's first obligation, and the five SHA-256 values pinned to
+  `tools/d894-opening-runtime-harness/README.md:10-16` — the D894 dossier only points at them
+  (`:35`), it does not carry them.
+  (2) **Criterion 2 named no symbol, and half of it is unsatisfiable at HEAD.** `normalizeOpeningPgn`
+  is exported (`openings.ts:46`); `parseRows` (`:36`) is module-private, so the compiler would have
+  had to duplicate row parsing — the exact thing the criterion forbids. Both are now named and the
+  export is an explicit obligation. The `eco\tname\tpgn` header contract came with it.
+  (3) **§1.2 never said path keys exclude the initial position**, and that omission is what makes
+  criterion 1 reproducible or not: the D894 instrument pushes a key only after each played move
+  (`opening-runtime.test.ts:42-47`), which is why the maximum descendant count is **2,023** and not
+  the 3,810 that a root-seeded compiler yields. Stated, and criterion 1 now asserts 2,023 alongside
+  3,810/7,854 precisely because the first two figures alone do not detect the error.
+  (4) `descendantEndpointCount` misdescribed its own value — a row's own endpoint key is among its
+  path keys, so the count includes the key itself when the key is an endpoint. Corrected in place.
+  (5) Criterion 6's "count >1" is true of essentially every prefix in the catalogue; pinned to 2,023.
+  (6) Criterion 7 rested on "the fixed exact-abstention witness", which names nothing; replaced with
+  an identified game/ply fixture plus the 108/108 total property it specimens.
+  (7) **Criterion 14's 2 ms p95 could not fail.** Two hash lookups and a `transposeKey` cost single-
+  digit microseconds and a linear scan of all 7,854 keys also fits inside 2 ms, so the bound could
+  not distinguish §1.3's immutable maps from an O(n) scan. Tightened to 50 µs p95 with a structural
+  size-independence assertion.
+  (8) §3 now separates `theory.opening_identity` (shipped build-time authoring producer,
+  `evidence-catalog.ts:781`) from this RFC's `theory.opening.runtime`, and answers
+  `claim-semantic-anchors`'s new D3 explicitly: not claim-bindable at this landing.
+  (9) `{shortCommit}` pinned to 7 characters so §5's renderer is snapshot-testable; criterion 13
+  split into repo-present and image-absent assertions.
+  Re-derived and unchanged: `CHESS_OPENINGS_COMMIT` is byte-exact at `openings.ts:16` and
+  `CHESS_OPENINGS_RETRIEVED_AT` at `:17`; **3,810** / **7,854** / **2,023** / **401 of 6,991** are all
+  exact in `design/research/runtime-opening-identity.md:49-53,71-72`, and 401/6,991 recomputes to
+  **5.7%**; `run.record.move`'s operands are `["context", "offset", "moveSan"]` with no FEN, so
+  §2.3's premise holds byte-exactly; `transposeKey` is `canonicalFen(...).split(" ", 4).join(" ")`
+  (`chess.ts:16-19`); the manifest delta of two producers and four projections is internally
+  consistent; and the `none` claims block is correct — nothing here touches the six registers.

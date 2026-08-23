@@ -5992,3 +5992,42 @@ populated strata; imported has 10,983 across 39. The artifact records every stra
 selected count plus the exact source id, FENs, candidate, target identities and exact outcome for
 all 96 rows. This means engine/model availability can cause an explicit abstention but cannot swap
 in a friendlier position.
+
+
+## 2026-08-23 — two of codex's own RFCs accepted; one was wrong about the code it was changing
+
+**What landed:** `rfc/exact-legal-mobility.md` and `rfc/runtime-opening-identity.md` accepted
+after independent cross-review (corrections applied in place before acceptance). Both were drafted
+by codex today; both claim nothing versioned.
+
+**What the review caught.** `exact-legal-mobility` failed 8 of 20 claims, and the center one was a
+**false statement about existing behavior**: §1.2 promised the change would "prove public behavior
+byte-identical", but chessops emits `e1a1`/`e1h1` for castling and never `e1g1`/`e1c1`, so the web
+input layer (which normalizes at `board-input.ts:205-207`) and server sourcing
+(`sourcing/legal-moves.ts:12-27`, which does not) **already disagree on every castling move**.
+Criterion 7 correctly fails at HEAD. The server-side castling UCI normalization is therefore
+**accepted as a deliberate, content-visible behavior change** — one layer is wrong and this fixes
+it — with the blast radius measured rather than assumed: exactly one `uci` assertion argument
+exists in all committed evidence sidecars (`philidor-third-rank-hold`, `h6h8`, not a castling
+move), so **zero committed bindings change validity**. Also: §3's binding route ran through a list
+derived from the **pack schema's** `STRUCTURAL_FEATURE_KINDS` and was closed to this projection
+(which incidentally proves nothing auto-binds), and criterion 12 was **unsatisfiable by identity**
+for the deliberately color-flipped clone enumerators — the [[D984]] class, twice in two days.
+
+`runtime-opening-identity` failed 9 of 22, two blocking: **`vendor/` does not exist**, so its
+present-tense claim that a clean checkout rebuilds without a network request was false (the only
+reader fetches from GitHub); and criterion 2's shared-parser rule was **unsatisfiable at HEAD**
+because `parseRows` is module-private, so a compiler could satisfy it only by duplicating the
+parsing the criterion forbids. Criterion 14's 2 ms budget **could not fail** — a linear scan of all
+7,854 keys fits inside it.
+
+**What changed:** the register carries two more accepted RFCs, both implementable today with no
+unlanded dependency. Neither proposed ledger rows, so none were landed.
+
+**Blocked:** `claim-semantic-anchors` cannot be accepted regardless of draft quality — §7 blocks on
+an F3 capability contract that has not landed, and it collides with `measurement-records`' plan to
+grow `CLAIM_ASSERTION_KINDS` from 15 to 21; the two cannot both land. `review-evidence-compiler` is
+gated on [[D921]]'s Wave-C module amendment, still open.
+
+**Next:** codex implements both; the F3 RFC and the D921 amendment are the two unblocks that free
+the remaining pair.
