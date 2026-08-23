@@ -5883,3 +5883,18 @@ stores only the engine request id even though C4 measured material cross-version
 entire values object unchanged (D1021). Both are explicit source-boundary criteria now. The draft
 does not invent the final Review Map ranking: D928 remains a discharge because the research proved
 source overlap/stability, not which moments learners find useful.
+
+## 2026-08-23 — Exact legal mobility RFC drafted
+
+D904 now has a bounded source contract. `rules.mobility.reading.legal_moves@1` exposes the complete
+actual-turn legal map for all six roles while the existing B/N/R/Q `local-non-losing@1` reading
+stays convention-grounded. The split lets requested touch/hover sight ask the literal rules
+question without laundering safe, good, trapped or recommended destinations into an exact fact.
+
+The source audit found the same legal-move identity independently enumerated across runtime, web
+input and server sourcing (D1022). The draft therefore makes one runtime helper authoritative for
+evidence, all board input modes and claim/tablebase successor walking, and requires a source census
+plus special-move set-equality fixtures for bounded-search loops that genuinely remain local. The
+able-to-fail set covers pins/check, standard castling UCI, legal versus king-exposing en-passant,
+all four promotions, terminal emptiness, adapter forgeries and modality-ceiling equality. Landing
+is inspector-only; Learner Modules owns the explicit requested-sight binding discharge.
