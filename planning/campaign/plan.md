@@ -26,3 +26,18 @@ shared register declares.
 Current external dependency: `longitudinal-store.md` has a contradictory acceptance state
 ([[D1011]]); `bot-policy.md` still holds D969/D970. Neither blocks the completed authored-contract
 checkpoint, and neither is inferred here.
+
+## Roguelike reconciliation — landed amendments and their residue (2026-08-23)
+
+Ten claude-owned amendments landed ([[D1314]]); the four owner-tier ones are drafted in
+`planning/platform-alignment/decision-queue.md`. Two rows route here:
+
+- **[[D1313]]** — the reveal-budget alternative (price *looking*, not *retrying*) now has a row
+  under law 4. It is **not** a reopening of [[D945]]; its destination is **R6's re-tabling of the
+  candidate numbers**, where an already-shipped `attempt_end` window with a natural expiry is the
+  obvious comparison against the earned-charge economy.
+- **[[D1315]]** — the four stale `learner-modules` citations, corrected in place. Destination: the
+  campaign implementation lane, because **criterion 5 tests the ten-member unlock type against the
+  table the broken citation pointed at** — whoever implements that criterion should confirm the
+  repaired ranges still resolve when they get there ([[D368]]'s class: a citation written once and
+  never re-derived).

@@ -71,7 +71,7 @@ Line citations to shipped code were spot-re-verified at drafting HEAD:
 `RunSessionKind` (`packages/runtime/src/types.ts:36`), `ObjectiveState` (`types.ts:4-10`),
 `ABSORBING` (`packages/runtime/src/trajectory.ts:6`), `RunService.reveal`
 (`apps/server/src/service.ts:1547`), `rewind` import and service path (`service.ts:31,717`),
-the module table (`rfc/learner-modules.md:299-311`), `STORAGE_VERSION = 24`
+the module table (`rfc/learner-modules.md:480-492`), `STORAGE_VERSION = 24`
 (`apps/server/src/storage.ts:476`).
 
 ### §1. Objects and vocabulary
@@ -121,6 +121,23 @@ path choice dodge the act boss, which the act ladder does not intend (`06:436-43
 shape ends every act at its boss). Path choice is
 the StS gesture (D893: *"in Slay the Spire you choose paths"*): the learner picks one node per
 layer; unpicked alternatives stay unvisited for this CampaignRun.
+
+**Path choice has no declared minimum, and in v1 that makes run-to-run variance an authoring
+property rather than a guaranteed one** (amendment 2026-08-23, claude on measured evidence;
+`planning/campaign/roguelike-reconciliation.md` Am. 7). `choices: Node[]` is `1..3`, and only
+layer 3 is linted (to its single boss). A document whose every layer offers exactly one node
+validates, and such a CampaignRun replays identically every time. That was tolerable while the
+loadout was expected to carry variance — but the loadout is not in this RFC (zero occurrences of
+`lens`, `loadout` or `slot`), synergy discovery is **refused** on measurement ([[D277]]: best
+conjunction 35.7%/2.73× against best single leaf 69.4%/12.64×, 0 of 7 beating their components),
+and the catalogue is fixed within a run. **Path choice is therefore the only run-to-run variance
+v1 has**, and nothing requires a document to supply any.
+
+v1 ships the posture rather than a lint: `CAMPAIGN_PATH_WIDTH` is a **warning**, not an error,
+naming every layer of width 1 outside layer 3. Warning rather than error because a deliberately
+linear teaching document is a legitimate artifact and this RFC does not know it is not the intent;
+error would refuse a shape the design never prohibited. **Criterion 15** makes the warning
+failable in both directions.
 
 **Map progression** is strictly forward: layer N+1 opens when a node in layer N seals (§4). No
 node re-entry after seal — retrying a node means retrying it before declaring done (§2 prices
@@ -189,8 +206,9 @@ inventory (inner gate), never honesty (outer gate).
 ### §3. Progression — unlocks, inventory, and the suppressor boss
 
 **3.1 Module unlocks.** `NodeReward { kind: "module_unlock"; moduleId: UnlockableModuleId }`.
-The pool is **exactly ten**: the closed eleven of `rfc/learner-modules.md:299-311` minus
-`rules_floor`, which registers no evidence consumer (`learner-modules.md:325`), is *"not
+The pool is **exactly ten**: the closed eleven of `rfc/learner-modules.md:480-492` minus
+`rules_floor`, which registers no evidence consumer (`learner-modules.md:506`, restated at
+`:887`), is *"not
 assistance"* and appears in no ceiling complement (`rfc/intent-presets.md:172-174`) — an
 earnable rules floor would break the floor-and-ceiling token, so the exclusion is a **type**:
 `UnlockableModuleId = Exclude<ModuleId, "rules_floor">`, with a compile-time test asserting the
@@ -471,6 +489,34 @@ composition, and `06:308-311` orders composition **last** (D717). So:
    alternative (refusing to submit an unfinished line) would price experimentation exactly the
    way the thesis forbids.
 
+4. **The rank-1 offered-choice draft with a real skip is absent; `reward` is one authored
+   constant per node** (amendment 2026-08-23, claude on measured evidence;
+   `planning/campaign/roguelike-reconciliation.md` Am. 3). `roguelike-run-design.md:168-184`
+   ranks an offered lens menu *first* of its eight mechanisms, at **zero authoring minutes**,
+   on the reasoning that *"declining is a move — the skip is what makes the offer a decision
+   rather than a gift"*, and prices the offer space at `C(34,3) = 5,984`. This RFC ships
+   `reward?: NodeReward` (§1): a fixed grant the author writes once, with no menu and no skip.
+   **v1 may be right to cut it** — an offer needs a chooser surface this RFC does not
+   specify — but the cut is a deviation from the design's highest-ranked variety driver and was
+   not previously recorded as one.
+5. **The rank-2 run-defining opening choice is absent; `startingModules` is a document
+   constant** (Am. 4, same basis). `roguelike:186-206` ranks a run-defining opening choice
+   second — Neow's disadvantage-paired-with-reward — as the genre's cheapest variety device.
+   Here `startingModules` (§1) is a **document** field, so **every CampaignRun of a document
+   starts identically**. Again possibly right for v1; again a deviation, not an absence of one.
+6. **Device E — player-elected run length — is dropped, and it was one of only two surviving
+   bounding devices** (Am. 6, same basis). `roguelike:104` and `:527-530` name it
+   *"the cheapest way to serve both 'not too long' and 'I want more'"* — which is the owner's
+   own framing of the problem (`roguelike:3-5`). Deviation 1's fixed shape (3 acts × 3 layers)
+   forecloses it. The fixed shape stands as v1 scope control; what was missing is that the
+   device it displaces was named, costed at zero, and dropped silently.
+
+**Deviations 4–6 share one shape and one consequence.** Each is a zero-authoring-cost variety
+device the design ranked highly and this RFC does not carry; together with the absent loadout
+and [[D277]]'s refutation of synergy, they are why §1's path-choice paragraph can say that
+**path choice is the only run-to-run variance v1 has**. Recorded together so the successor
+weighs them as a set rather than one at a time.
+
 None other: the economy, the two-gate law, the suppressor, the submitted-branch seal, and the
 server-held inventory are transcriptions of ruled text.
 
@@ -528,13 +574,22 @@ own units.
 14. **Migration hygiene**: the migration is create-table/index only, `STRICT`, literal CHECKs,
     lands as `STORAGE_VERSION + 1` at its queue turn behind `bot-policy`, and the register row
     flips in the landing commit (C1–C6, P1–P6 green).
+15. **`CAMPAIGN_PATH_WIDTH` is a discriminating warning** (§1, amendment 2026-08-23): a fixture
+    document whose act-1 layers 1 and 2 each carry **one** choice emits the warning naming both
+    layers and **does not** emit an error; the seed fixture (layers of width 3, layer 3 the
+    boss's only choice) emits **no** `CAMPAIGN_PATH_WIDTH` warning at all. *Rejected
+    implementations:* one that warns on layer 3 (whose width-1 is required by
+    `CAMPAIGN_BOSS_PLACEMENT`, so warning there fires on every valid document and measures
+    nothing — the [[D444]] class); and one that raises an error, which would refuse the linear
+    teaching document §1 declines to prohibit.
 
 ## Discharges
 
 | id | the obligation | owner | recorded when discharged | discharged |
 |---|---|---|---|---|
 | D1 | The Act II rated boss — absorbs [[D945]]'s ruled reading (earned rewinds can win the encounter; ratedness follows R11 unchanged: rated when clean, winnable regardless) as a v2 amendment once `learner-rating` is accepted, resolving the persona/`targetElo` disjointness (a profile forbids the rung field the rated predicate requires — calibrate a profile per bot-policy §7 or the boss drops the persona) | `planning/campaign/` | the amendment's registration | |
-| D2 | Prediction (shape 3) and survival (shape 4) encounter classes — each needs a seal mechanism absent at HEAD (the prediction-score threshold must be authored-parameter-shaped and reconciled with format v0.9's no-verdict rule; survival needs grounded counters and an unbounded-run objective), and each re-cuts its formats as play-the-consequence, never find-the-tactic | `planning/campaign/` | that amendment's registration | |
+| D2 | Prediction (shape 3) and survival (shape 4) encounter classes — each needs a seal mechanism absent at HEAD (the prediction-score threshold must be authored-parameter-shaped and reconciled with format v0.9's no-verdict rule; survival needs grounded counters and an unbounded-run objective), and each re-cuts its formats as play-the-consequence, never find-the-tactic. **Amended 2026-08-23 (claude on [[D1152]]): survival breaks the run's minute bound, and the amendment must carry it.** Every v1 encounter is bounded by device D — the shipped `authoredBoundary.plyHorizon` (`06:416-428`) — so a run's minute envelope is the sum of its nine horizons. A survival encounter is bounded by *"nothing but failure"* (`06:444`), which makes shape 4 **the one class device D does not bound**: with it the envelope stops being that sum and the *"~35–55 minutes"* frame (`06:406-410`) no longer follows from the node count. The successor amendment specifies survival's own bound (a ply cap, a wall-clock cap, or an explicit statement that the class is unbounded and the run frame excludes it) — it may not simply inherit the horizon language | `planning/campaign/` | that amendment's registration | |
+| D6 | **The [[D1151]] catalogue-progression surface** (amendment 2026-08-23, claude on that ruling). The owner ruled campaign progression denominated in *the catalogue* — shapes met, structures played, the what's-missing mark **on the pack card** rather than a progress screen (`06:368-397`) — and this RFC has no seam for it: no collection surface, and §7's node-card vocabulary is a **closed list** (`:415-419`) that cannot express a what's-missing mark. The successor owes (a) the surface, (b) the mark's home on the pack card, and (c) the [[D300]] vocabulary prerequisite, which is **already counted and need not be re-derived**: the supply-side census is **15 of 49 lenses and 9 of 25 shapes unnamed** (`roguelike-run-design.md:294-311`), so the prerequisite is a bounded naming job against a measured denominator rather than an open-ended vocabulary design. Carries the standing guard from [[D1171]]: the catalogue is lawful **precisely because it claims nothing about the learner**, and one careless sentence collapses it into the skill-credit shape R20 disqualifies | `planning/campaign/` | that amendment's registration | |
 | D3 | Army-building / prestige — was blocked on the OWNER fork: D893(3)'s *"unlocks harder bosses"* versus D334's *"winning may unlock convenience and variety, never content"* | OWNER | the ruling's log entry; the amendment citing it | **DISCHARGED 2026-08-23 by owner ruling [[D1040]]** (*"progression is unlocked by PLAYING; WINNING gates the PRESTIGE layer only"*), landed at `1300303`. The fork resolves without answering its own question: the harder-boss-versus-content dispute is dissolved rather than settled, because **winning may not gate content OR variety on the core path at all** — §4.1's any-verdict grant is the ruled core behaviour, and winning gates only the §3.5 prestige layer, which is defined to touch no progression term. What prestige *contains* (army building, cosmetic tiers) is deferred to this row's successor amendment; the **gate and its seam are specified now** (§3.5) |
 | D4 | Evidence-dark fun nodes and cosmetic rewards (D887's marked-play class) and time controls (nothing exists to build on — `clockState` is an untyped passthrough) | `planning/campaign/` | that amendment's registration | |
 | D5 | v1 implementation per this specification, criteria 1–14 | codex | the implementing commits; ledger flips per §9 | |

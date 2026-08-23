@@ -409,6 +409,26 @@ converging numbers rather than taste — 9 nodes consume 24.3% of the catalogue
 **2.2 agent-hours** rather than 9.75; and a Spire node is a 60–90 s combat, so node
 parity would overshoot minute parity roughly fourfold.
 
+*(**Grounds refreshed 2026-08-23 by claude on measured evidence — the shape stands,
+two of its three stated grounds do not, and law 3 requires saying so. Owner-vetoable.**
+The three numbers above were derived over **37 packs carrying 1 middlegame pack**.
+Re-derived at HEAD over the 56 pack documents in `content/drafts/` — sidecar
+`.evidence/.job/.sources` files excluded, phase counts 23 opening / 16 middlegame /
+14 endgame / 3 cross_phase `[V]`: **9 nodes now consume 16.1% of the catalogue, giving
+6.2 runs before repetition, not 4.1**; fifteen nodes give 26.8% and 3.7 runs. And
+**the middlegame bill is zero** — the 2.2-agent-hour figure priced authoring the
+middlegame packs Act II needs, and **16 of them now exist**, which also retires
+`design/research/roguelike-run-design.md` §5b requirement 3's *"Act II is impossible
+today"*. So argument 1 has moved against the nine-node shape (repetition is now half
+as pressing, which if anything argues for a **longer** run) and argument 2 has been
+discharged by content rather than satisfied by design. **Only argument 3 — the
+minute-parity comparison — still stands, and it is the one marked `[M]`**: no
+per-attempt timing telemetry exists (`roguelike-run-design.md:19-25`, `:554-556`), so
+the surviving ground is the unmeasured one. One owner run with a clock converts it
+`[V]`. The nine-node shape is **not** amended here: this is a correction of grounds,
+not of conclusion, and the shape may well be right for reasons the original numbers
+happened to state badly.)*
+
 **Acts are the difficulty-availability tiers of §2a, so stakes escalate in
 DECIDABILITY:** Act I outcome-measured (`theory_strict`), Act II authored
 (`human_common` plus an authored plan), Act III tablebase-measured

@@ -118,3 +118,80 @@ least visible where owner decisions belong:
 
 **[[D334]] deserves separate emphasis: an RFC currently in `implementing` is blocked on this owner
 fork** (`campaign-core.md:490`) and the fork is in no queue.
+
+---
+
+## Campaign — four owner decisions from the roguelike reconciliation (2026-08-23)
+
+Source: `planning/campaign/roguelike-reconciliation.md` §7. Ten of the fourteen amendments were
+claude-on-a-ruling and are landed ([[D1314]]). **These four cannot be written under law 5** — each
+needs a decision nobody has made. `rfc/campaign-core.md` is **implementing right now**, so items 2
+and 5 touch schema mid-build; that sequencing is the author's call, not this file's.
+
+### 1. [[D1300]] — does a campaign run have a FAILURE STATE? (Amendment 8)
+
+**The question the dossier flagged and nobody asked.** `roguelike-run-design.md:548` requirement 8
+is literally *"An owner ruling on §4d — failure state or not"*. It was never put, and what shipped
+answered it by default.
+
+- **(a) Move the priced act from retrying to declaring done.** Rewind and fork stay free *within*
+  an encounter; the run's outcome is decided by the attempt you **submit**; failing an act boss
+  ends the run. The dossier's own view, on the grounds that it is *"the only proposal in the whole
+  campaign cluster that adds run tension without pricing anything the thesis sells"*. Introduces a
+  verb the product does not have — *submit* — and interacts with [[D1233]]: a losing condition
+  needs a fourth `status` value and an event kind.
+- **(b) No failure state — what ships today.** *"Honest, cheap, and strictly weaker… a presentation
+  layer over the existing catalogue"* (§4d). Costs nothing; leaves `design/06:516-522` asserting
+  *"a run that cannot be lost is a playlist, not a run"* **while describing one**, which must then
+  be corrected in `06` rather than left standing.
+
+**Either way `06` §5 needs an edit** — (a) to specify the losing path, (b) to stop contradicting
+itself. **[[D1040]] does not settle this**: it ruled what *gates progression*; §4d(a) shows
+granting-on-failure and run-ending are **separable axes**, and the RFC currently presents them as
+one settled pair.
+
+### 2. Which object is the deck — the 34-lens loadout, or the ten modules? (Amendment 2)
+
+`design/06:39-46` states the deck is a **per-lens loadout with a slot budget over 34 lenses**
+(278,256 distinct five-slot builds, at zero authoring cost). `rfc/campaign-core.md:191-201` makes
+it **ten module unlocks**, and the RFC contains **zero occurrences** of `lens`, `loadout` or `slot`
+`[V]`. Two live documents describe different progression objects while the RFC is being built.
+
+- **(a) `06` §1 is superseded by [[D893]]'s evidence-consumer currency** — say so in `06`, and the
+  ten modules are the deck.
+- **(b) The RFC is missing an object its design authority requires** — the loadout returns, and
+  with it the variance Deviations 4–6 and [[D1301]] say v1 lacks.
+
+**Carry §4b's measured ceiling either way** (`roguelike:388-401`): the RFC bounds nothing about how
+many modules may be simultaneously effective, and [[D78]] measured the **all-on state as the
+unreadable one**. Claude may draft the reconciliation once the object is chosen; choosing is the
+owner's.
+
+### 3. Should the act ladder be LINTED, or is it authoring convention? (Amendment 5, lint half)
+
+`design/06:412-416` makes acts the difficulty-availability tiers — *"stakes escalate in
+DECIDABILITY"*, Act I outcome-measured, Act II authored, Act III tablebase-measured. But
+`campaign-core`'s `Act` (`:99-101`) carries **no phase, no policy and no label**, and none of its
+four validator rules checks one — so **a nine-opening-pack document validates today** and would
+contradict the design's central escalation claim.
+
+- **(a) Lint it** — acts declare their tier and the validator enforces it. Makes the design's claim
+  true by construction; constrains authoring, and needs the missing human-outcome
+  `DecidednessGround` (`06:48-57`) to express Act I properly.
+- **(b) Authoring convention in v1** — state plainly in the RFC that act semantics are conventional
+  and unenforced. Cheap and honest; leaves the escalation claim unbacked.
+
+Claude may write the **statement** under (b) on `06` §2a's authority; **the lint is the owner's
+call**, which is why the whole item sits here. Rank 4's advance-visible difficulty label
+(`roguelike:234-251`) rides whichever is chosen.
+
+### 4. [[D546]] `arrows` — activate it, or retire it? (Amendment 13)
+
+`roguelike-run-design.md` §5b requirement 6: *"a slot with no perception behind it would be an
+unlockable that unlocks nothing."* Still inert at HEAD `[V]` — `evidence-catalog.ts:892` carries
+disposition `experimental`, and `evidence-catalog.test.ts:49-50` **pins the inertness in a test**.
+The disposition's own reason names its resolver: *"F5 or an owner ruling"*.
+
+**Sharper now than when written**: under [[D1151]]'s catalogue denomination, a catalogue entry that
+can **never be met** is a permanently incomplete collection — the learner is shown a hole they
+cannot fill. Cheap to decide today; visible the day the catalogue surface ships.
