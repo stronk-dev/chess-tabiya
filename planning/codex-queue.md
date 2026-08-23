@@ -141,6 +141,31 @@ The law by surface — the SAME variant is treated differently in each:
 **The one constraint: the educational standard-chess run stays the MAIN one.** This supersedes any
 per-variant permit/refuse framing you may see in earlier notes.
 
+## 0-BREADTH-AUDIT. Five defects the breadth reality-check measured — [[D1085]]–[[D1089]]
+
+`planning/platform-alignment/breadth-reality-check.md` measured 66 surfaces from design/03's own
+inventory: **38 shipped / 12 partial / 16 absent to a user.** Five findings are code work and
+[[D1085]] is the most severe user-visible defect currently known.
+
+- **[[D1085]] — the comparison strips render with ZERO CHILDREN while `compare.test.ts` is green.**
+  Both sparkline containers render empty; structure/timing and piece routes empty. This is the
+  product's thesis surface — the thing that explains the consequence you rewound to see. The
+  measuring harness built from a dirty tree, so **reproduce at a clean HEAD first**, then fix the
+  test that passes over it (a green test above an empty container is the [[D1079]] class again).
+- **[[D1086]] — [[D1060]] was ruled and the code still refuses.** `capabilities.ts:159` still
+  carries the famous-game refusal the owner lifted; `explorer.ts:74` still pins `topGames=0`. Apply
+  the lift with its obligations (serialised requests, no systematic index walk, provenance
+  recorded, annotations stripped at the record boundary).
+- **[[D1087]] — `BOT_POLICY_PROFILES = compileBotPolicyCatalog([])`.** The catalog is a literal
+  empty array and the sampler has no production caller. The grammar is accepted; the instances are
+  not written. A learner currently picks between two words.
+- **[[D1088]] — `grade.ts` has zero callers**, and the client has **no verb for
+  `POST /rated-games`**, so the Record tab can only ever say empty. Two shipped-and-unreachable
+  mechanisms.
+- **[[D1089]] — the gate surface is SPLIT at HEAD**: `gates.md:239` calls `/settings` display-only
+  while Settings ships 72 toggles. `make intent-parity` exists to prevent exactly this; find out
+  why it did not catch it — that is an instrument question, not a doc edit.
+
 ## 0-WORK-INDEX-DEFECT. [[D1079]] — `make work-index` can report green on an unrouted row
 
 **The instrument has the defect it exists to catch.** Its join is a bare textual mention

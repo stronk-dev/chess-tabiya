@@ -776,3 +776,10 @@ is an unmeasured live surface **on by default in two contexts** with no register
 - **[[D1081]]** (codex's bot-experiment finding) — the first D1078/D1080 sequence generator inherited
   D35's Stockfish hash-carryover defect; identical guarded-Maia line ids shifted aggregate loss.
   Routed to the bot-policy experiment lane; its destination is codex's own measurement work.
+
+### Breadth reality-check 2026-08-23 — rows [[D1085]]–[[D1089]]
+
+66 surfaces measured: **38 shipped / 12 partial / 16 absent**. Of the 16 absent, 5 have an
+accepted-or-implementing RFC, 5 have research or an owner ruling only, and **6 are a bare ledger
+row**. Full walk and per-surface table: `planning/platform-alignment/breadth-reality-check.md`.
+Six corrections are owed to intent docs (law 5 — proposed there, not written).
