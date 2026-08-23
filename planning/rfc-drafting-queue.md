@@ -857,3 +857,19 @@ Discharges rows, RFC by RFC, heaviest first (`learner-rating`, `measurement-reco
   Maia. Research commissioned (Fairy-Stockfish as a variant-capable base; engine + guard + traits +
   sampler gives *controlled* imperfection whose human resemblance is an **open measurement**). The
   variants RFC's blocking open question stays open until it returns.
+
+### The non-Maia bot answer — [[D1160]]–[[D1163]]
+
+The base layer's contract is **a distribution, not an engine**, so Fairy-Stockfish cannot fill the
+slot (no policy-shaped output) — **but Maia is an Lc0 net and lc0 does 960**, so the blocker is
+**absent human-trained 960 weights, not an absent instrument**. Shipped Stockfish 18 already has
+`UCI_Chess960`; our refusal there is a product opinion.
+
+Two traps ([[D1161]]): synthesized `rawMass` makes the completeness gate pass **vacuously**, and
+the pinned Maia adapter **cannot parse a 960 FEN** — so `rfc/variants.md` criterion 5 must suppress
+at request construction, which is a live correction to that draft.
+
+[[D1162]] names the one owner fork: [[D810]]'s evidence-to-move selector is the only
+variant-portable route to a human-shaped base, and it is unbuilt — fund, defer, or refuse.
+[[D1163]] is free and should run first: it can refute the whole engine-composed family over the
+committed R11 corpus with zero engine calls.
