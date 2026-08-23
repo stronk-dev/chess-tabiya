@@ -677,7 +677,7 @@
         onReveal={() => controller.reveal()}
         onRewind={(target) => controller.rewind(target)}
         onFork={(label, intent) => controller.fork(label, intent)}
-        onSwitchBranch={(nodeId) => controller.switchBranch(nodeId)}
+        onSwitchBranch={(nodeId, branchId) => controller.switchBranch(nodeId, branchId)}
         onCompare={(branchIds) => controller.compare(branchIds)}
         onClassifyBranches={(branchIds) => api.branchDecidedness(session.runState!.run.id, branchIds)}
         onCloseCompare={() => controller.closeCompare()}

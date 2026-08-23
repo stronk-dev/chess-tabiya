@@ -387,7 +387,7 @@ export class DrillSessionController {
     } catch (error) { this.#fail(error); }
   }
 
-  async rewind(target: { readonly nodeId: string } | { readonly checkpointId: string }): Promise<void> {
+  async rewind(target: { readonly nodeId: string; readonly branchId?: string } | { readonly checkpointId: string; readonly branchId?: never }): Promise<void> {
     this.#patch({ busy: true, checkpoint: undefined, comparison: undefined });
     try {
       await this.#requiredStore().rewind(target);
@@ -436,8 +436,8 @@ export class DrillSessionController {
     }
   }
 
-  async switchBranch(leafNodeId: string): Promise<void> {
-    await this.rewind({ nodeId: leafNodeId });
+  async switchBranch(leafNodeId: string, branchId: string): Promise<void> {
+    await this.rewind({ nodeId: leafNodeId, branchId });
     if (this.#state.error === undefined) {
       this.#patch({ busy: true });
       try {

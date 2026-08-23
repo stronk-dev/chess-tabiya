@@ -161,6 +161,26 @@ describe("fork and rewind semantics", () => {
     ]);
   });
 
+  it("selects an exact branch when multiple branches occupy the rewind node", () => {
+    const initial = newRun();
+    const rootId = initial.nodes[0]!.id;
+    const forked = fork(initial, rootId, { label: "shared-root", at }).run;
+    const primary = forked.branches[0]!;
+    const alternative = forked.branches[1]!;
+    expect(primary.forkNodeId).toBe(rootId);
+    expect(alternative.forkNodeId).toBe(rootId);
+
+    const selected = rewind(forked, rootId, at, undefined, primary.id);
+    expect(selected.run.activeCursor).toEqual({ nodeId: rootId, branchId: primary.id });
+    expect(selected.emitted.at(-1)).toMatchObject({
+      type: "run.rewound",
+      data: { toNodeId: rootId, branchId: primary.id },
+    });
+
+    const advanced = commitMove(forked, "e2e4", { at }).run;
+    expect(() => rewind(advanced, advanced.activeCursor.nodeId, at, undefined, primary.id)).toThrow(/not on branch/u);
+  });
+
   it("notifies the job observer with nodes leaving the active path", () => {
     let run = newRun();
     run = commitMove(run, "e2e4", { at }).run;

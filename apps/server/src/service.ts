@@ -284,8 +284,8 @@ function compatibleAppliedMode(
 }
 
 export type RewindTarget =
-  | { readonly nodeId: string; readonly checkpointId?: never }
-  | { readonly checkpointId: string; readonly nodeId?: never };
+  | { readonly nodeId: string; readonly branchId?: string; readonly checkpointId?: never }
+  | { readonly checkpointId: string; readonly nodeId?: never; readonly branchId?: never };
 
 export interface CreateRunRequest {
   readonly id: string;
@@ -1026,7 +1026,12 @@ export class RunService {
             at,
             this.#evidenceQueue,
           )
-        : rewind(stored.run, target.nodeId, at, this.#evidenceQueue);
+        : (() => {
+            if (target.branchId !== undefined && !branchPath(stored.run, target.branchId).some((node) => node.id === target.nodeId)) {
+              throw new ServerError("INVALID_REQUEST", "Rewind node is not on the named branch");
+            }
+            return rewind(stored.run, target.nodeId, at, this.#evidenceQueue, target.branchId);
+          })();
     this.#storage.save(result.run, lease);
     this.#project(result.run, lease.learnerId);
     return result;

@@ -48,8 +48,8 @@
   import { moveSanFromUci } from "./board-input.js";
 
   type RewindTarget =
-    | { readonly nodeId: string }
-    | { readonly checkpointId: string };
+    | { readonly nodeId: string; readonly branchId?: string }
+    | { readonly checkpointId: string; readonly branchId?: never };
 
   interface Props {
     pack?: DrillPackDefinition | undefined;
@@ -73,7 +73,7 @@
     onReveal?: (() => void | Promise<void>) | undefined;
     onRewind: (target: RewindTarget) => void | Promise<void>;
     onFork: (label?: string, intent?: string) => void | Promise<void>;
-    onSwitchBranch: (leafNodeId: string) => void | Promise<void>;
+    onSwitchBranch: (leafNodeId: string, branchId: string) => void | Promise<void>;
     onCompare: (branchIds: readonly string[]) => void | Promise<void>;
     onClassifyBranches?: (branchIds: readonly string[]) => Promise<Readonly<Record<string, Decidedness>>>;
     onCloseCompare: () => void;
@@ -459,7 +459,7 @@
     if (before === undefined || groupPreference(before.groupId) !== "lockstep" || checkpoint !== undefined) return;
     const next = before.members[(beforeIndex + 1) % before.members.length];
     if (next === undefined || next.branchId === run.activeCursor.branchId) return;
-    await onSwitchBranch(branchPath(run, next.branchId).at(-1)!.id);
+    await onSwitchBranch(branchPath(run, next.branchId).at(-1)!.id, next.branchId);
   }
 
   async function createGroup(): Promise<void> {
@@ -476,7 +476,7 @@
   async function nextGroupMember(group: BranchGroup): Promise<void> {
     const current = group.members.findIndex((member) => member.branchId === run.activeCursor.branchId);
     const next = group.members[(current + 1) % group.members.length];
-    if (next !== undefined) await onSwitchBranch(branchPath(run, next.branchId).at(-1)!.id);
+    if (next !== undefined) await onSwitchBranch(branchPath(run, next.branchId).at(-1)!.id, next.branchId);
   }
   function interactiveTarget(event: KeyboardEvent): boolean {
     return event.composedPath().some((target) =>
@@ -571,7 +571,7 @@
   }
   async function switchVisibleBranch(nodeId: string, branchId: string): Promise<void> {
     pinnedExpanded = [...new Set([...pinnedExpanded, branchId])];
-    await onSwitchBranch(nodeId);
+    await onSwitchBranch(nodeId, branchId);
   }
 
   function preview(nodeId: string): void {
@@ -707,7 +707,7 @@
       const branch = cards[Number(event.key) - 1];
       if (branch !== undefined) {
         event.preventDefault();
-        void onSwitchBranch(branch.leafNodeId);
+        void onSwitchBranch(branch.leafNodeId, branch.id);
         return true;
       }
     } else if (

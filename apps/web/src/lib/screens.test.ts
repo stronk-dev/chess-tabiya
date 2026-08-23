@@ -758,6 +758,8 @@ describe("Layer 3 screens", () => {
     await tick();
     const main = document.querySelector<HTMLElement>("main.drill")!;
     expect(document.activeElement).toBe(main);
+    expect(document.querySelector<HTMLElement>(".rail")?.dataset.activeBranchId).toBe(run.activeCursor.branchId);
+    expect(document.querySelector<HTMLButtonElement>('.branch-card[aria-current="true"]')?.textContent).toContain(run.branches.find((branch) => branch.id === run.activeCursor.branchId)?.label);
 
     key("r");
     expect(onRewind).toHaveBeenCalledWith({ checkpointId: "plan-commitment" });
@@ -779,7 +781,7 @@ describe("Layer 3 screens", () => {
 
     main.focus();
     key("1");
-    expect(onSwitchBranch).toHaveBeenCalledWith("screen-run:node:3");
+    expect(onSwitchBranch).toHaveBeenCalledWith("screen-run:node:3", run.branches[0]!.id);
     const compareKey = new KeyboardEvent("keydown", {
       key: "c", code: "KeyC", altKey: true, bubbles: true, cancelable: true,
     });

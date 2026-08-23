@@ -315,7 +315,7 @@ class FakeApi implements DrillClientApi {
     const result =
       input.nodeId === undefined
         ? rewindToCheckpoint(this.requiredRun(), input.checkpointId, at)
-        : rewind(this.requiredRun(), input.nodeId, at);
+        : rewind(this.requiredRun(), input.nodeId, at, undefined, input.branchId);
     this.run = result.run;
     return result;
   }
@@ -599,6 +599,11 @@ describe("DrillSessionController", () => {
     expect(environment.controller.state.comparison).toBeDefined();
     environment.controller.closeCompare();
     expect(environment.controller.state.comparison).toBeUndefined();
+    await environment.controller.switchBranch(branches[1]!.forkNodeId, branches[0]!.id);
+    expect(environment.controller.state.runState?.run.activeCursor).toEqual({
+      nodeId: branches[1]!.forkNodeId,
+      branchId: branches[0]!.id,
+    });
     await environment.controller.rewind({ checkpointId: "plan-commitment" });
     expect(environment.controller.state.runState?.run.activeCursor.nodeId).toBe(
       "screen-run:node:1",

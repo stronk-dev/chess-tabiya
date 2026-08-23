@@ -96,8 +96,10 @@ has authored children, the pack fails with `OBJECTIVE_ABSORBS_BEFORE_AUTHORED_BO
 transition at an authored leaf remains valid. This binds authoring to the core loop: a pack cannot
 validate consequence moves that its own objective makes unplayable.
 - `rewind(nodeId)` changes only the cursor and appends `run.rewound`. Existing
-  nodes and branches remain unchanged. Rewind by the latest matching checkpoint is
-  also available.
+  nodes and branches remain unchanged. A caller switching branches may additionally
+  supply `branchId`; the node must lie on that branch's path, and the emitted cursor
+  retains that exact branch even when several branches occupy the same node. Rewind
+  by the latest matching checkpoint is also available.
 
 Opponent plies use `appendOpponentPly(selection)`, not a bare opponent
 `commitMove`. The writer supplies the authoritative v0.4 selection (chosen move,
@@ -289,7 +291,9 @@ requests supply `kind: position`, start, `attempt_end`, and a selectable
 human/strong opponent policy. Unknown create-body fields are rejected with
 their JSON pointer.
 
-Rewind bodies contain exactly one of `nodeId` or `checkpointId`. User/system move
+Rewind bodies contain exactly one of `nodeId` or `checkpointId`. A node rewind may
+also name `branchId`; checkpoint rewinds may not. The server refuses a node that is
+not on the named branch rather than guessing from shared node identity. User/system move
 bodies contain `uci` and may contain `actor`, `at`, and `clockState`; opponent
 move bodies contain the selector's `selection` plus optional `at`/`clockState`.
 Fork bodies contain

@@ -1621,11 +1621,15 @@ export function createRestHandler(
       if (route.action === "rewind") {
         const nodeId = optionalString(value.nodeId, "nodeId");
         const checkpointId = optionalString(value.checkpointId, "checkpointId");
+        const branchId = optionalString(value.branchId, "branchId");
         if ((nodeId === undefined) === (checkpointId === undefined)) {
           throw invalid("rewind requires exactly one of nodeId or checkpointId");
         }
+        if (checkpointId !== undefined && branchId !== undefined) {
+          throw invalid("branchId is valid only with a nodeId rewind");
+        }
         const target: RewindTarget =
-          nodeId === undefined ? { checkpointId: checkpointId! } : { nodeId };
+          nodeId === undefined ? { checkpointId: checkpointId! } : { nodeId, ...(branchId === undefined ? {} : { branchId }) };
         return json(
           200,
           service.rewind(

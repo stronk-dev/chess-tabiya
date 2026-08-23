@@ -29,7 +29,7 @@
   let unclassified = $derived(branches.filter((branch) => decidedness[branch.id]?.state !== "decided").length);
 </script>
 
-<aside class="rail" aria-labelledby="branch-title">
+<aside class="rail" aria-labelledby="branch-title" data-active-branch-id={activeBranchId}>
   <div class="heading">
     <h2 id="branch-title">Branches</h2>
     <span>{branches.length} branches · {settled.length} settled · {hidden.length} hidden by you · {unclassified} not classified</span>
@@ -42,6 +42,7 @@
           type="button"
           onclick={() => onSwitch(branch.leafNodeId, branch.id)}
           aria-label={`Switch to branch ${index + 1}: ${branch.label}`}
+          aria-current={branch.id === activeBranchId ? "true" : undefined}
         >
           <span class="number">{index + 1}</span>
           <span class="copy">

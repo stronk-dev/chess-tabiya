@@ -154,11 +154,22 @@ describe("branch-runtime REST binding", () => {
     });
     expect(forked.status).toBe(200);
     const forkedBody = await forked.json() as {
-      run: { branches: { label: string; intent?: string }[] };
+      run: { branches: { id: string; label: string; intent?: string }[] };
     };
     expect(forkedBody.run.branches.at(-1)).toMatchObject({
       label: "named experiment",
       intent: "try another center",
+    });
+    const namedBranch = forkedBody.run.branches.at(-1)!;
+    const selectedSharedNode = await request(handler, "POST", "/runs/rest-run/rewind", {
+      nodeId: rootId,
+      branchId: namedBranch.id,
+      at,
+    });
+    expect(selectedSharedNode.status).toBe(200);
+    expect((await selectedSharedNode.json() as { run: { activeCursor: unknown } }).run.activeCursor).toEqual({
+      nodeId: rootId,
+      branchId: namedBranch.id,
     });
   });
 

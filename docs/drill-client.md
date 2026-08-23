@@ -277,7 +277,9 @@ The drill screen composes three regions:
 - a bottom active-line timeline whose checkpoint markers support a
   click-preview followed by explicit rewind confirmation; and
 - a right branch rail with branch label, first divergent move, optional intent,
-  live objective-state chip, branch switching, and compare selection.
+  live objective-state chip, branch switching, and compare selection. A switch carries
+  both the leaf node and branch id, so an empty fork or another shared-node state remains
+  observable and selects the intended branch rather than whichever branch the node implies.
 
 The checkpoint sheet takes focus and exposes continue, rewind, compare when
 the authored checkpoint allows it, and stop. Objective transitions are never

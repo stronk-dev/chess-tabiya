@@ -5,6 +5,7 @@ import { parseUci } from "chessops/util";
 import { DRILL_RUN_SCHEMA_VERSION } from "@chess-tabiya/schema";
 
 import { canonicalFen, positionFromFen, transposeKey } from "./chess.js";
+import { branchPath } from "./branch-path.js";
 import {
   illegalMove,
   runTerminated,
@@ -387,17 +388,21 @@ export function rewind(
   nodeId: string,
   at?: string,
   jobObserver?: JobObserver,
+  cursorBranchId?: string,
 ): MutationResult {
   const target = getNode(run, nodeId);
+  if (cursorBranchId !== undefined && !branchPath(run, cursorBranchId).some((node) => node.id === target.id)) {
+    throw new TypeError(`Node ${nodeId} is not on branch ${cursorBranchId}`);
+  }
   const targetPathIds = new Set(historyFrom(run, target.id).map((node) => node.id));
   const prunedNodeIds = Object.freeze(
     historyFrom(run, run.activeCursor.nodeId)
       .filter((node) => !targetPathIds.has(node.id))
       .map((node) => node.id),
   );
-  const branchId = isAncestor(run, nodeId, run.activeCursor.nodeId)
+  const branchId = cursorBranchId ?? (isAncestor(run, nodeId, run.activeCursor.nodeId)
     ? run.activeCursor.branchId
-    : target.branchId;
+    : target.branchId);
   const next = appendEvents(run, [
     {
       type: "run.rewound",

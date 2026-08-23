@@ -652,12 +652,14 @@ export interface PlayerMoveRequest extends MoveOptions {
 export type RewindRequest =
   | {
       readonly nodeId: string;
+      readonly branchId?: string;
       readonly checkpointId?: never;
       readonly at?: string;
     }
   | {
       readonly checkpointId: string;
       readonly nodeId?: never;
+      readonly branchId?: never;
       readonly at?: string;
     };
 

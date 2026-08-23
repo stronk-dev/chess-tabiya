@@ -13,7 +13,7 @@
     startSide: StartSide;
     advanceMode: AdvanceMode;
     onAdvanceMode: (mode: AdvanceMode) => void;
-    onEnter: (leafNodeId: string) => void | Promise<void>;
+    onEnter: (leafNodeId: string, branchId: string) => void | Promise<void>;
     onCompare: () => void | Promise<void>;
     onAnalyze: (nodeIds: readonly string[]) => void | Promise<void>;
   }
@@ -99,7 +99,7 @@
   <div class="canvas" data-zoom={zoom} style={`--members:${group.members.length}`}>
     {#each cells as cell}
       <article data-group-member={cell.member.branchId} class:active={cell.member.branchId === run.activeCursor.branchId}>
-        <button class="cell-heading" type="button" onclick={() => onEnter(cell.leaf.id)}>
+        <button class="cell-heading" type="button" onclick={() => onEnter(cell.leaf.id, cell.member.branchId)}>
           <strong>{cell.branch.label}</strong>
           <span>{cell.leaf.objectiveState}{cell.outcome === undefined ? "" : ` · ${cell.outcome}`}</span>
         </button>
