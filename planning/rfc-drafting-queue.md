@@ -902,3 +902,7 @@ costs schedule and buys nothing.
 **Guard to carry into any catalogue implementation** ([[D1171]]): the catalogue is the D345
 exposure-restatement pattern, lawful *precisely because it claims no skill* — one careless sentence
 collapses it into the thing R20 disqualifies.
+
+- **[[D1182]]** — correction to [[D1142]]: `RepertoireLayer`/`MemoryLayer` exist and are executed;
+  the sweep searched the RFC's type names rather than the shipped ones. Routed here as an
+  audit-quality correction alongside [[D1120]]'s practice.
