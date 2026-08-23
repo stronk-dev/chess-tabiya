@@ -5993,6 +5993,22 @@ selected count plus the exact source id, FENs, candidate, target identities and 
 all 96 rows. This means engine/model availability can cause an explicit abstention but cannot swap
 in a friendlier position.
 
+The Stockfish arm ran twice and reproduced the same semantic verdict. Stockfish 18, one thread,
+16 MiB hash and full legal-root MultiPV at depths 8 and 10 produced 313/313 complete root tables;
+every entry reached its requested depth. The neutral platform tiebreak differed from Stockfish's
+own tie choice on 5/313 probes, retained explicitly rather than hidden. Across the sealed 96 pairs,
+the two depths agree on the `(next execution, second-opportunity availability)` category for 85
+(88.54%), below the predeclared 90% gate. Eleven disagreements include two immediate material
+execution flips and nine second-opportunity flips. Depth 8 reads 6 immediate executions / 13 second
+opportunities; depth 10 reads 4 / 18. The engine-policy prevention arm is therefore refused without
+changing the threshold or sample; exact operands remain valid.
+
+The committed provider artifact is compact, not a raw MultiPV dump: it retains per-probe legal-root
+count = returned-entry count, min/max reached depth, selected UCI + typed cp/mate score, Stockfish's
+own best move, category and latency. Cold 313-probe p50/p90/p99/max is
+68.8/356.0/598.4/702.8 ms. Warm latency is recorded as unmeasured rather than simulated because the
+semantic arm already failed its stability gate. Maia remains an independent human-policy question.
+
 
 ## 2026-08-23 — two of codex's own RFCs accepted; one was wrong about the code it was changing
 

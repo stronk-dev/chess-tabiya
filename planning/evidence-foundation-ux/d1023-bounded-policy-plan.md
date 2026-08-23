@@ -4,10 +4,9 @@
 
 **Authority:** D1023 under RFC-0000's disposable exploration gate
 
-**State:** both exact target families and the full-horizon two-population census implemented;
-deterministic 48+48 provider sample sealed 2026-08-23 (11 focused controls). Stockfish/Maia
-measurements remain. No production projection, learner wording, profile weight or RFC is authorized
-by this plan
+**State:** exact arms and deterministic 48+48 provider sample complete. Stockfish arm measured and
+refused 2026-08-23 at 85/96 depth-8/depth-10 category agreement (<90% frozen gate); Maia remains.
+No production projection, learner wording, profile weight or RFC is authorized by this plan
 
 ## Question
 

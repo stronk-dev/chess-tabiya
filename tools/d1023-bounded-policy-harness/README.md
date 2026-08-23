@@ -23,3 +23,15 @@ pnpm exec vitest run --config tools/d1023-bounded-policy-harness/vitest.config.t
 ```
 
 The exhaustive fixed-population test takes about 150 seconds on the 2026-08-23 reference machine.
+
+Run the Stockfish policy arm only with the explicit provider flag:
+
+```sh
+D1023_STOCKFISH=1 pnpm exec vitest run \
+  tools/d1023-bounded-policy-harness/stockfish-probe.test.ts \
+  --config tools/d1023-bounded-policy-harness/vitest.config.ts
+```
+
+It writes the compact, source-identified `stockfish-output.json`. Full legal-root score tables are
+checked in memory and reduced to coverage counts, reached-depth bounds, the selected typed score and
+the engine's own best move; the multi-megabyte transient table is not committed.
