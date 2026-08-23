@@ -231,7 +231,12 @@ Read the file; the order below is its top ten.
    test, so the gate accepts for the wrong reason. **0.5 day.**
 4. **W16 — register all TWELVE profiles, not four.** The roster is the deliverable; four was the
    unblocked subset, not the target.
-5. **W24 — `make refusal-index`**, all six clauses ([[D1038]]). **1.5 days.**
+5. **W24 — `make refusal-index`**, all six clauses ([[D1038]]). **1.5 days.** **Take it together
+   with deriving `decision-queue.md`** ([[D1263]]): same family, same four source channels, and its
+   sharpest clause is that **silent exclusion is the defect** — an owner row that cannot be filled
+   must fail loudly rather than vanish. Two of its checks catch real instances from today with one
+   grep each: an intent-tier ruling citation that resolves to no ⚖️ row ([[D1165]]), and a ruling
+   naming a code site with no commit ([[D1060]], **still unapplied at `capabilities.ts:159`**).
 6. **W25 — the archiving gate must read prose obligations** ([[D1201]]). **1 day.**
 7. **W18/W19 — the famous-game and Chess960 refusal truth-repairs.** ~2 h each; both refusals are
    still in the code after the owner lifted them.

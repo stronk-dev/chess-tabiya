@@ -327,3 +327,34 @@ currently unfalsifiable, which makes any verdict resting on them theater:
 
 Recorded rather than quietly dropped: a success metric with no mechanism behind
 it is exactly the small-n evaluation problem already ledgered in `BACKLOG.md`.
+
+---
+
+## Gate rulings mirrored 2026-08-23 (claude on the owner's rulings, law 5)
+
+**This section exists because the gate surface was SPLIT.** Four owner rulings changed gate state
+and none had reached this file — which is the canonical gate document, so a reader here would have
+been told the campaign gate is shut and the content hold is whole. **Both false, by owner ruling.**
+Law 5 requires gate definitions to be mirrored so the gate surface is never split; that requirement
+was unmet from the moment each ruling landed until now.
+
+- **[[D949]] — the content hold is ACTIVE and covers the binding wave WHOLE.** The owner chose the
+  strict reading over the recommended split, accepting that the first play session waits behind
+  Gate F. *(Superseded in part by D1005 below — read them together.)*
+- **[[D1005]] — the hold is SPLIT: the binding arm is RELEASED, the graduation arm stays held.**
+  Amends D949 on measurement that did not exist when it was made: the binding arm's dependencies
+  have been frozen since the packs were written, it is 41% pure script and 0% chess judgement, and
+  one pack goes from 1 of 4 claims to 4 of 4. The graduation arm remains held behind lane 0.28's
+  breaking change. **The line: the binding arm may retire binding debt, never graduation state.**
+- **[[D953]] — the campaign-RFC gate is WAIVED.** `planning/campaign-research-queue.md`'s *"no
+  campaign RFC may be drafted until the narrowed R6–R8 experiential closure"* no longer holds. R6's
+  design half was ruled the same day ([[D945]], earned rewinds); R7/R8 remain open and experiential,
+  and the v1 RFC's play-derived amendments are their landing site.
+- **[[D1093]] — the drafting mandate.** The owner's *"make sure we have all the DEPTH and BREADTH"*
+  plus the per-lane rulings ([[D1031]] variants, [[D1041]] time controls, [[D1060]] famous games)
+  constitute the owner ruling RFC-0000's exploration gate requires. **Product-surface RFCs in those
+  ruled lanes may be drafted.** Three RFCs cite this as their licence; it belongs here.
+
+**Gate F itself** (`planning/platform-alignment/plan.md`) is unchanged by these except clause 7,
+amended on [[D996]] to *"measured and ruled per release"*, and clause 2, recorded as passing on
+[[D992]].
