@@ -149,6 +149,12 @@ rewind adds value**.
   set, not a credible training population for the higher-capacity family. A corpus/feature-cost
   census and grouped learning curve must precede any fit, and the reserved third population remains
   sealed. This neither changes H5/C5 nor decides D1271's 1.0 owner fork.
+- **Fresh-source arm passes; full training gate remains open 2026-08-23**
+  (`design/research/non-maia-selector-data-readiness.md`, D1329). A separate June CC0 prefix yields
+  50,992 complete games / 3.02m decisions, 100% legal replay and ≥99.9704% rating/time/clock
+  coverage. The v1 cell criterion omitted its rating-band set, so no population verdict is assigned;
+  v2 freezes 36 roster-derived cells and a 256 MiB range before the next read. Projection
+  completeness/cost, owner budget and learning curve remain unmeasured. H5/C5 remain unchanged.
 
 ## Kill criteria
 

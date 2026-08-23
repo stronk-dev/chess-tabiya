@@ -6844,3 +6844,20 @@ population was not opened.
 **Next:** amend `rfc/evidence-move-selector.md` with the model/data contract and the priced owner
 fork: fund the census, defer the training programme beyond 1.0 while the measured Maia-3 roster
 ships, or explicitly refuse the non-Maia 1.0 goal. H5/C5 remain unchanged.
+
+## 2026-08-23 — Fresh-source census passed mechanics and caught an undefined cell gate
+
+**What landed:** D1329's aggregate-only harness measured a fixed 16 MiB prefix from the June 2026
+Lichess CC0 standard dump, separate from every July selector population. It found 50,992 complete
+games and 3.02m eligible decisions; all 50,818 eligible non-bot finished games replay legally.
+Ratings cover 100% and clocks/time controls 99.9704%. Synthetic controls prove missing values remain
+missing. Output contains counts/digests only—no game, player, position or move identity.
+
+**What changed:** the source is not the immediate blocker. The preregistration's fifth gate was: it
+said “preregistered rating cells” without listing them. D1162's 1000–2199 reading passes all 27
+cells; an all-emitted-bands reading fails several edge cells. No interpretation was selected after
+the fact. V2 now freezes 36 cells derived from the production roster and a 256 MiB final range.
+
+**Next:** run that fixed range, then the outcome-blind producer projection/cost arm after the
+collector implementation stabilizes. A model fit, learning-curve generation and the owner compute
+budget all remain downstream; the reserved D1297 population remains sealed.

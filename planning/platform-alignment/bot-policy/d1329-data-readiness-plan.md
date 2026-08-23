@@ -83,3 +83,21 @@ guard and stopping rule are frozen.
 - `design/research/non-maia-selector-data-readiness.md`
 
 The harness is disposable research code. It does not enter production packages.
+
+## V1 source-arm result and V2 criterion repair — recorded before the second range
+
+The 16 MiB source arm exposed a defect in clause 5: “each preregistered ... rating × speed × window
+cell” named no rating-band set. The same counts pass if read as D1162's 1000–2199 scope and fail if
+read as every band the census emits. No result is assigned to that clause.
+
+The final source-size census is now frozen as:
+
+- compressed byte range `0-268435455` (256 MiB) from the same June URL;
+- rating bands `1000-1399`, `1400-1799`, `1800-2199`, `2200-2599`, derived from D970's production
+  roster edge; `under-1000` and `2600-plus` are reported but outside this gate;
+- speeds `bullet`, `blitz`, `rapid`; `other` is reported but outside this gate;
+- windows `opening-8-16`, `middlegame-17-40`, `late-41-plus`;
+- 36 required cells, each still needing ≥10,000 decisions after exclusions.
+
+The prefix size may not be enlarged again if a cell fails. This repair changes an undefined
+criterion into an able-to-fail one; it does not alter a model, feature or outcome threshold.

@@ -87,4 +87,11 @@ Every entry: URL, Use, Caveat. Evidence labels per `design/research/README.md`
   not post-hoc bot cosmetics.
 - Caveat: `[P]` recent preprint; results and released code were not reproduced in this pass.
 
-*(next: R57)*
+### R57 — Lichess open database
+- URL: https://database.lichess.org/
+- Use: CC0 human-game source for the D1329 training-data census; documents Elo tags, `%clk`, BOT
+  titles, variants, partial Zstandard decompression and known data issues.
+- Caveat: `[V]` source contract and a fresh June-2026 prefix; chronological-prefix counts are not a
+  representative month-wide population estimate.
+
+*(next: R58)*
