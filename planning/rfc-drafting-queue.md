@@ -805,3 +805,7 @@ ruled lanes. Three commissioned today: time controls, variants, famous games.
 **Registered id block: D1110–D1114 is claude's** (claimed 2026-08-23 after four collisions in ten
 minutes — codex is landing rows continuously and chasing the head does not converge). Codex takes
 the next free id above D1114.
+
+- **[[D1095]]** (codex) — the matched bot instrument seeded sibling arms by arm name, so
+  pre-divergence draws were not paired. Routed to the bot-policy experiment lane; codex's own
+  measurement work owns it.
