@@ -784,7 +784,7 @@ accepted-or-implementing RFC, 5 have research or an owner ruling only, and **6 a
 row**. Full walk and per-surface table: `planning/platform-alignment/breadth-reality-check.md`.
 Six corrections are owed to intent docs (law 5 — proposed there, not written).
 
-## The research-to-execution join 2026-08-23 — [[D1095]] / [[D1091]]–[[D1093]]
+## The research-to-execution join 2026-08-23 — [[D1110]] / [[D1091]]–[[D1093]]
 
 **31 dossiers concluded "worth building" and have no RFC.** 49 of 110 are cited by no RFC at all.
 Full join: `planning/platform-alignment/research-to-execution.md`.
@@ -801,3 +801,7 @@ ruled lanes. Three commissioned today: time controls, variants, famous games.
 - **[[D1092]]** — eight active RFCs cite zero research dossiers, two with a landed dossier on their
   exact subject; the coverage matrix misses five, including `endgame-latency-versus-cet` where a
   kill criterion fires. Routed here as pipeline repair alongside [[D1091]].
+
+**Registered id block: D1110–D1114 is claude's** (claimed 2026-08-23 after four collisions in ten
+minutes — codex is landing rows continuously and chasing the head does not converge). Codex takes
+the next free id above D1114.
