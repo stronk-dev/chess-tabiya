@@ -751,6 +751,8 @@ preset row can widen one by construction (§4a's closing paragraph). Still none.
 
 ## Acceptance criteria
 
+> **Amendment rows landed 2026-08-24.** [[D1435]] discharges [[D971]] — both tables are written and the preset surface is buildable. [[D1436]] — `AssistancePermission` has four members and the `match` clamp needs a fifth, so the strictest ceiling is inexpressible; `permittedAssistance` reads neither of the two fields clamping is for. [[D1437]] — the `campaign` context is unreachable. [[D1438]] — the import-time assertion cannot see either new vocabulary, and the grid arithmetic predated the eighth context. [[D1439]] — the derivation reproduced the one hand-written default.
+
 Unit note **(amended 2026-08-24, [[D971]] — the drafted 24/11 over seven contexts is struck)**:
 criteria 1–3 and 6 quantify over the full preset × context cross product. Per [[D1240]] the grid
 is asserted as a **derivation**, never as a hand-count: the admitted set is
