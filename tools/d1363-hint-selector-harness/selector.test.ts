@@ -237,6 +237,7 @@ describe("D1363 production-table hint selector", () => {
         firstMoveUci,
         candidateCount: candidates.length,
         candidateBreakdown: candidateBreakdown(candidates),
+        candidateOccurrences: Object.freeze(candidates),
         raw,
         rootSideOnly: rootOnly,
         rootEdgeOnly: rootEdge,
