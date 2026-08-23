@@ -15,6 +15,10 @@ JSON. The bundle separates owned run snapshots from references to runs owned by 
 learners. It includes progress, marks, repertoires, authored drafts, immutable
 publications, live/social history, and rating/profile records.
 
+The server emits the canonical bytes as a 64 KiB-chunked response stream and imposes
+no account-size refusal. It does not create a temporary export file, so account export
+has no temporary-disk allocation or cleanup bound; cancellation stops further chunks.
+
 The export deliberately excludes password hashes, failed-login and lock state,
 sessions, bearer tokens and token hashes, provider credentials, deployment
 configuration, and installation-wide official content. Browser-local writer ids,

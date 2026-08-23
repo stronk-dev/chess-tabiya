@@ -75,6 +75,22 @@ function jsonWithCookie(status: number, value: unknown, cookie: string): Respons
   });
 }
 
+function byteStream(bytes: Uint8Array<ArrayBuffer>, chunkSize = 64 * 1024): ReadableStream<Uint8Array<ArrayBuffer>> {
+  let offset = 0;
+  return new ReadableStream({
+    pull(controller) {
+      if (offset >= bytes.byteLength) {
+        controller.close();
+        return;
+      }
+      const end = Math.min(offset + chunkSize, bytes.byteLength);
+      controller.enqueue(bytes.slice(offset, end));
+      offset = end;
+    },
+    cancel() { offset = bytes.byteLength; },
+  });
+}
+
 function escapeHtml(value: string): string {
   return value
     .replaceAll("&", "&amp;")
@@ -817,7 +833,7 @@ export function createRestHandler(
             principal,
             requiredString(value.password, "password"),
           );
-          return new Response(exported.bytes, {
+          return new Response(byteStream(exported.bytes), {
             status: 200,
             headers: {
               "cache-control": "no-store",

@@ -70,7 +70,11 @@ describe("portable account-data foundation", () => {
     const { marks: _missing, ...missingSection } = value;
     expect(() => validateAccountBundleV1(missingSection)).toThrow(/unknown or missing/u);
     expect(() => validateAccountBundleV1({ ...value, progress: { ...value.progress, projectionVersion: 2 } })).toThrow(/projection header/u);
-    expect(() => validateAccountBundleV1({ ...value, marks: { ...value.marks, value: [{ table: "learner_sessions", record: {} }] } })).toThrow(/not exportable/u);
+    expect(() => validateAccountBundleV1({ ...value, marks: { ...value.marks, value: [{ table: "learner_sessions", record: {} }] } })).toThrow(/not an account-record table/u);
+    expect(() => validateAccountBundleV1({
+      ...value,
+      marks: { ...value.marks, value: [{ table: "run_marks", record: { id: "mark-one", run_id: "run-one", scope: "position", scope_key: "position-one", brush: "green", orig: "e2", dest: "e4", relayed: false, created_at: "2026-08-23T00:00:00.000Z", surprise: "must fail closed" } }] },
+    })).toThrow(/unknown or missing fields for run_marks/u);
     expect(() => validateAccountBundleV1({
       ...value,
       ownedRuns: {

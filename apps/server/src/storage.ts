@@ -22,6 +22,8 @@ import {
   type JsonValue,
   type OwnedRunExport,
   type SharedRunReference,
+  type AccountRecordTable,
+  type TaggedAccountRecord,
   type DeletionPreviewV1,
 } from "./account-data.js";
 import { projectAttempts, type AttemptRow, type ConceptTagRow } from "./progress.js";
@@ -976,8 +978,8 @@ export class SQLiteRunStorage implements RunStorage, ProgressStorage, LiveSessio
       }
       return Object.freeze(projected);
     };
-    const tagged = (table: string, sourceRows: readonly Record<string, unknown>[], retainIdentity = false): readonly JsonValue[] =>
-      sourceRows.map((row) => Object.freeze({ table, record: jsonValue(portableRecord(row, retainIdentity)) }));
+    const tagged = <Table extends AccountRecordTable>(table: Table, sourceRows: readonly Record<string, unknown>[], retainIdentity = false): readonly TaggedAccountRecord<Table>[] =>
+      sourceRows.map((row) => Object.freeze({ table, record: jsonValue(portableRecord(row, retainIdentity)) }) as TaggedAccountRecord<Table>);
     const rows = (sql: string, ...parameters: readonly (string | number)[]): readonly Record<string, unknown>[] =>
       this.#database.prepare(sql).all(...parameters) as readonly Record<string, unknown>[];
     try {
@@ -1006,7 +1008,11 @@ export class SQLiteRunStorage implements RunStorage, ProgressStorage, LiveSessio
         const grants = rows(
           `SELECT l.handle AS granteeHandle,g.role,g.granted_at AS grantedAt,g.expires_at AS expiresAt,g.granted_via AS grantedVia
            FROM run_grants g JOIN learners l ON l.id=g.learner_id WHERE g.run_id=? ORDER BY l.handle,g.role`, id,
-        ).map(jsonValue);
+        ).map((grant) => Object.freeze({
+          granteeHandle: String(grant.granteeHandle), role: String(grant.role) as "host" | "participant" | "spectator",
+          grantedAt: String(grant.grantedAt), expiresAt: grant.expiresAt === null ? null : String(grant.expiresAt),
+          grantedVia: grant.grantedVia === null ? null : String(grant.grantedVia),
+        }));
         const imported = this.#database.prepare(
           "SELECT source_kind,source_url,movetext_digest,headers_json,result,pgn,licence_note,imported_at FROM imported_games WHERE run_id=?",
         ).get(id) as Record<string, unknown> | undefined;
@@ -1019,17 +1025,19 @@ export class SQLiteRunStorage implements RunStorage, ProgressStorage, LiveSessio
           sourceBranchId: String(item.sourceBranchId), sourceNodeId: String(item.sourceNodeId),
           kind: String(item.kind) as "flip_sides", createdAt: String(item.createdAt),
         }));
-        const importedGame = imported === undefined ? null : Object.freeze({
-          sourceKind: imported.source_kind,
-          sourceUrl: imported.source_url,
-          movetextDigest: imported.movetext_digest,
-          headers: JSON.parse(String(imported.headers_json)),
-          result: imported.result,
-          pgn: imported.pgn,
-          licenceNote: imported.licence_note,
-          importedAt: imported.imported_at,
-        });
-        return Object.freeze({ id, title, schemaVersion: String(row.schema_version ?? stored.schemaVersion), replayable: stored.replayable, snapshot: stored.snapshot, importedGame: importedGame === null ? null : jsonValue(importedGame), grants: Object.freeze(grants), derivations: Object.freeze(derivations) });
+        let importedGame: OwnedRunExport["importedGame"] = null;
+        if (imported !== undefined) {
+          const parsedHeaders = JSON.parse(String(imported.headers_json)) as unknown;
+          if (parsedHeaders === null || typeof parsedHeaders !== "object" || Array.isArray(parsedHeaders) || Object.values(parsedHeaders).some((header) => typeof header !== "string")) {
+            throw new TypeError("Stored imported-game headers are invalid");
+          }
+          importedGame = Object.freeze({
+            sourceKind: String(imported.source_kind), sourceUrl: imported.source_url === null ? null : String(imported.source_url),
+            movetextDigest: String(imported.movetext_digest), headers: Object.freeze({ ...(parsedHeaders as Record<string, string>) }),
+            result: String(imported.result), pgn: String(imported.pgn), licenceNote: String(imported.licence_note), importedAt: String(imported.imported_at),
+          });
+        }
+        return Object.freeze({ id, title, schemaVersion: String(row.schema_version ?? stored.schemaVersion), replayable: stored.replayable, snapshot: stored.snapshot, importedGame, grants: Object.freeze(grants), derivations: Object.freeze(derivations) });
       });
       const sharedAccess: SharedRunReference[] = rows(
         `SELECT d.id,d.summary_json,g.role,g.granted_at
@@ -1050,7 +1058,7 @@ export class SQLiteRunStorage implements RunStorage, ProgressStorage, LiveSessio
       const marks = tagged("run_marks", rows("SELECT id,run_id,scope,scope_key,brush,orig,dest,relayed,created_at FROM run_marks WHERE author_learner_id=? ORDER BY id", learnerId));
       const repertoireRows = rows("SELECT * FROM repertoires WHERE owner_learner_id=? ORDER BY id", learnerId);
       const repertoireIds = repertoireRows.map((row) => String(row.id));
-      const repertoireChildren = (table: string): readonly JsonValue[] => repertoireIds.flatMap((id) => tagged(table, rows(`SELECT * FROM ${table} WHERE repertoire_id=? ORDER BY rowid`, id)));
+      const repertoireChildren = <Table extends "repertoire_moves" | "repertoire_scans" | "repertoire_gap_runs">(table: Table): readonly TaggedAccountRecord<Table>[] => repertoireIds.flatMap((id) => tagged(table, rows(`SELECT * FROM ${table} WHERE repertoire_id=? ORDER BY rowid`, id)));
       const repertoires = [
         ...tagged("repertoires", repertoireRows),
         ...repertoireChildren("repertoire_moves"),

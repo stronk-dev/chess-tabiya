@@ -1,5 +1,7 @@
 import { createHash } from "node:crypto";
 
+import { readBackReplay, type DrillRun } from "@chess-tabiya/runtime";
+
 export const ACCOUNT_BUNDLE_MEDIA_TYPE = "application/vnd.tabiya.account+json; version=1";
 export const ACCOUNT_BUNDLE_FORMAT = "tabiya-account-export" as const;
 export const ACCOUNT_BUNDLE_VERSION = 1 as const;
@@ -111,6 +113,53 @@ export function assertIdentityTransformInventory(identityFields: readonly string
 export type JsonScalar = string | number | boolean | null;
 export type JsonValue = JsonScalar | readonly JsonValue[] | { readonly [key: string]: JsonValue };
 
+/** Closed field sets for every table-discriminated row emitted by account export V1. */
+export const ACCOUNT_TAGGED_RECORD_FIELDS = {
+  attempts: [["run_id", "branch_id", "session_kind", "pack_id", "pack_digest", "root_key", "root_node_id", "root_transpose_key", "branch_label", "branch_intent", "branch_seed", "attempt_no", "countable", "graded", "objective_state", "verdict", "result", "user_ply_count", "checkpointIds", "origin", "schedule_id", "root_due_at_start", "derived_from_run_id", "started_at", "ended_at"]],
+  attempt_concepts: [["run_id", "branch_id", "pack_id", "concept_key", "label"]],
+  schedules: [["id", "root_key", "session_kind", "pack_id", "root_transpose_key", "kind", "variant", "origin", "state", "due_at", "created_at", "source_run_id", "source_node_id", "started_run_id"]],
+  learner_position_stats: [["transpose_key", "seen_count"]],
+  run_marks: [
+    ["id", "run_id", "scope", "scope_key", "brush", "orig", "dest", "relayed", "created_at"],
+    ["id", "scope", "scope_key", "brush", "orig", "dest", "relayed", "created_at"],
+  ],
+  repertoires: [["id", "name", "side", "root_fen", "target_elo", "coverage_denominator", "source_kind", "source_url", "original_pgn", "licence_note", "digest", "created_at", "updated_at"]],
+  repertoire_moves: [["repertoire_id", "position_key", "move_uci", "move_san", "representative_fen", "rank", "origin", "created_at"]],
+  repertoire_scans: [["repertoire_id", "scanned_at", "repertoire_digest", "population", "gaps", "alternateGaps", "unknown", "uncovered_mass", "truncated", "source_failures", "queries_used", "unreached_keys"]],
+  repertoire_gap_runs: [["run_id", "repertoire_id", "gap_key", "created_at"]],
+  pack_drafts: [["id", "pack_id", "document", "digest", "state", "seed_kind", "seed_ref", "created_at", "updated_at"]],
+  playtest_documents: [["digest", "draft_id", "document", "created_at"]],
+  shape_drafts: [["id", "shape_id", "document", "digest", "state", "created_at", "updated_at"]],
+  registered_packs: [["pack_id", "version", "digest", "document", "publisher_handle", "draft_id", "registered_at"]],
+  registered_shapes: [["shape_id", "version", "digest", "document", "publisher_handle", "draft_id", "registered_at"]],
+  live_sessions: [["id", "run_id", "kind", "title", "board_control", "scheduled_for", "vote_adapter_handle", "rotation_handles", "handoff_handle", "rotation_cursor", "creator_handle", "created_at", "closed_at", "classroom_id"]],
+  session_journal: [["session_id", "seq", "at", "kind", "actor_handle", "run_seq", "payload"]],
+  session_proposals: [["id", "session_id", "node_id", "move_uci", "proposed_by_handle", "at", "status", "resolved_run_seq"]],
+  session_vote_windows: [["id", "session_id", "node_id", "prompt", "options", "opens_at", "closes_at", "state", "applied_option_uci"]],
+  session_votes: [["session_id", "window_id", "cast_by_handle", "choice_uci", "at"]],
+  session_invitations: [["id", "session_id", "leg", "invited_handle", "invited_role", "external_challenge_url", "state", "created_at"]],
+  arena_legs: [["session_id", "leg", "reference_player_handle", "external_challenge_url", "pgn", "result", "branch_id", "imported_at"]],
+  match_states: [["session_id", "white_handle", "black_handle", "paused_at", "pause_proposed_by_handle"]],
+  public_tokens: [["id", "scope", "run_id", "session_id", "created_at", "revoked_at", "existed"]],
+  classrooms: [["id", "name", "created_at", "archived_at", "relationship"]],
+  classroom_members: [["classroom_id", "handle", "member_role", "state", "invited_by_handle", "invited_at", "joined_at", "left_at"]],
+  assignments: [["id", "classroom_id", "pack_id", "assigned_by_handle", "note", "due_at", "created_at", "withdrawn_at"]],
+  assignment_submissions: [["assignment_id", "learner_handle", "run_id", "granted_handles", "submitted_at", "access_expires_at", "withdrawn_at"]],
+  learner_ratings: [["calibration_id", "rating", "rd", "volatility", "seed_band", "rated_games", "voided_games", "abandoned_games", "period_no", "period_started_at", "updated_at"]],
+  rated_games: [["run_id", "calibration_id", "opponent_band", "opponent_rating", "opponent_rd", "learner_side", "start_piece_count", "engine_identity_digest", "state", "void_reason", "result", "terminal_reason", "ply_count", "period_no", "started_at", "sealed_at"]],
+  rating_periods: [["period_no", "calibration_id", "opened_at", "closed_at", "games", "rating_before", "rd_before", "volatility_before", "rating_after", "rd_after", "volatility_after"]],
+  standing_members: [["classroom_id", "show_record", "show_rating", "published_at"]],
+  learner_marks: [["mark", "calibration_id", "run_id", "earned_at"]],
+  cohort_standings: [["classroom_id", "window_from", "window_to", "opened_at", "closed_at"]],
+} as const satisfies Readonly<Record<string, readonly (readonly string[])[]>>;
+
+export type AccountRecordTable = keyof typeof ACCOUNT_TAGGED_RECORD_FIELDS;
+type AccountRecordField<T extends AccountRecordTable> = (typeof ACCOUNT_TAGGED_RECORD_FIELDS)[T][number][number];
+export type AccountRecord<T extends AccountRecordTable> = Readonly<{ readonly [K in AccountRecordField<T>]: JsonValue }>;
+export type TaggedAccountRecord<T extends AccountRecordTable = AccountRecordTable> = T extends AccountRecordTable
+  ? { readonly table: T; readonly record: AccountRecord<T> }
+  : never;
+
 export interface Projection<T> {
   readonly projectionVersion: 1;
   readonly provenance: readonly string[];
@@ -123,8 +172,27 @@ export interface StoredRunDiagnostic {
 }
 
 export type StoredRunExport =
-  | { readonly kind: "parsed"; readonly value: JsonValue }
+  | { readonly kind: "parsed"; readonly value: DrillRun }
   | { readonly kind: "raw"; readonly utf8: string; readonly diagnostic: StoredRunDiagnostic };
+
+export interface ImportedGameExport {
+  readonly sourceKind: string;
+  readonly sourceUrl: string | null;
+  readonly movetextDigest: string;
+  readonly headers: Readonly<Record<string, string>>;
+  readonly result: string;
+  readonly pgn: string;
+  readonly licenceNote: string;
+  readonly importedAt: string;
+}
+
+export interface RunGrantExport {
+  readonly granteeHandle: string;
+  readonly role: "host" | "participant" | "spectator";
+  readonly grantedAt: string;
+  readonly expiresAt: string | null;
+  readonly grantedVia: string | null;
+}
 
 export interface OwnedRunExport {
   readonly id: string;
@@ -132,8 +200,8 @@ export interface OwnedRunExport {
   readonly schemaVersion: string;
   readonly replayable: boolean;
   readonly snapshot: StoredRunExport;
-  readonly importedGame: JsonValue | null;
-  readonly grants: readonly JsonValue[];
+  readonly importedGame: ImportedGameExport | null;
+  readonly grants: readonly RunGrantExport[];
   readonly derivations: readonly {
     readonly derivedRunId: string;
     readonly sourceRunId: string;
@@ -149,7 +217,7 @@ export interface SharedRunReference {
   readonly title: string;
   readonly role: "host" | "participant" | "spectator";
   readonly grantedAt: string;
-  readonly contributions: readonly JsonValue[];
+  readonly contributions: readonly TaggedAccountRecord<"run_marks">[];
 }
 
 export interface AccountBundleV1 {
@@ -159,13 +227,13 @@ export interface AccountBundleV1 {
   readonly account: Projection<{ readonly handle: string; readonly displayName: string | null; readonly createdAt: string }>;
   readonly ownedRuns: Projection<readonly OwnedRunExport[]>;
   readonly sharedAccess: Projection<readonly SharedRunReference[]>;
-  readonly progress: Projection<readonly JsonValue[]>;
-  readonly marks: Projection<readonly JsonValue[]>;
-  readonly repertoires: Projection<readonly JsonValue[]>;
-  readonly drafts: Projection<readonly JsonValue[]>;
-  readonly publications: Projection<readonly JsonValue[]>;
-  readonly liveAndSocial: Projection<readonly JsonValue[]>;
-  readonly behavioralProfiles: Projection<readonly JsonValue[]>;
+  readonly progress: Projection<readonly TaggedAccountRecord[]>;
+  readonly marks: Projection<readonly TaggedAccountRecord<"run_marks">[]>;
+  readonly repertoires: Projection<readonly TaggedAccountRecord[]>;
+  readonly drafts: Projection<readonly TaggedAccountRecord[]>;
+  readonly publications: Projection<readonly TaggedAccountRecord[]>;
+  readonly liveAndSocial: Projection<readonly TaggedAccountRecord[]>;
+  readonly behavioralProfiles: Projection<readonly TaggedAccountRecord[]>;
   readonly exclusions: Projection<readonly { readonly kind: string; readonly reason: string }[]>;
 }
 
@@ -174,13 +242,13 @@ export interface AccountBundleInput {
   readonly account: AccountBundleV1["account"]["value"];
   readonly ownedRuns: readonly OwnedRunExport[];
   readonly sharedAccess: readonly SharedRunReference[];
-  readonly progress: readonly JsonValue[];
-  readonly marks: readonly JsonValue[];
-  readonly repertoires: readonly JsonValue[];
-  readonly drafts: readonly JsonValue[];
-  readonly publications: readonly JsonValue[];
-  readonly liveAndSocial: readonly JsonValue[];
-  readonly behavioralProfiles: readonly JsonValue[];
+  readonly progress: readonly TaggedAccountRecord[];
+  readonly marks: readonly TaggedAccountRecord<"run_marks">[];
+  readonly repertoires: readonly TaggedAccountRecord[];
+  readonly drafts: readonly TaggedAccountRecord[];
+  readonly publications: readonly TaggedAccountRecord[];
+  readonly liveAndSocial: readonly TaggedAccountRecord[];
+  readonly behavioralProfiles: readonly TaggedAccountRecord[];
 }
 
 function projected<T>(provenance: readonly string[], value: T): Projection<T> {
@@ -188,7 +256,7 @@ function projected<T>(provenance: readonly string[], value: T): Projection<T> {
 }
 
 export function buildAccountBundle(input: AccountBundleInput): AccountBundleV1 {
-  return Object.freeze({
+  const bundle = Object.freeze({
     format: ACCOUNT_BUNDLE_FORMAT,
     formatVersion: ACCOUNT_BUNDLE_VERSION,
     source: Object.freeze({ ...input.source }),
@@ -210,22 +278,34 @@ export function buildAccountBundle(input: AccountBundleInput): AccountBundleV1 {
       Object.freeze({ kind: "browser_local", reason: "Writer ids, assistance preferences, and workflow preferences are stored only on each device and are not account-scoped." }),
     ])),
   });
+  validateAccountBundleV1(bundle);
+  return bundle;
 }
 
 export function storedRunExport(snapshotUtf8: string, supportedSchemaVersion?: string): { readonly replayable: boolean; readonly snapshot: StoredRunExport; readonly schemaVersion: string } {
+  let value: unknown;
   try {
-    const value = JSON.parse(snapshotUtf8) as unknown;
-    if (value === null || typeof value !== "object" || Array.isArray(value)) throw new TypeError("run document is not an object");
-    const schemaVersion = (value as { readonly schemaVersion?: unknown }).schemaVersion;
-    if (typeof schemaVersion !== "string") {
-      return Object.freeze({ replayable: false, schemaVersion: "unknown", snapshot: Object.freeze({ kind: "raw", utf8: snapshotUtf8, diagnostic: Object.freeze({ code: "INVALID_RUN_DOCUMENT", message: "Stored run has no string schemaVersion" }) }) });
-    }
-    if (supportedSchemaVersion !== undefined && schemaVersion !== supportedSchemaVersion) {
-      return Object.freeze({ replayable: false, schemaVersion, snapshot: Object.freeze({ kind: "raw", utf8: snapshotUtf8, diagnostic: Object.freeze({ code: "UNSUPPORTED_RUN_SCHEMA", message: `Stored run schema ${schemaVersion} is not replayable by ${supportedSchemaVersion}` }) }) });
-    }
-    return Object.freeze({ replayable: true, schemaVersion, snapshot: Object.freeze({ kind: "parsed", value: value as JsonValue }) });
+    value = JSON.parse(snapshotUtf8) as unknown;
   } catch (error) {
     return Object.freeze({ replayable: false, schemaVersion: "unknown", snapshot: Object.freeze({ kind: "raw", utf8: snapshotUtf8, diagnostic: Object.freeze({ code: "INVALID_JSON", message: error instanceof Error ? error.message : "Stored run is not valid JSON" }) }) });
+  }
+  if (value === null || typeof value !== "object" || Array.isArray(value)) {
+    return Object.freeze({ replayable: false, schemaVersion: "unknown", snapshot: Object.freeze({ kind: "raw", utf8: snapshotUtf8, diagnostic: Object.freeze({ code: "INVALID_RUN_DOCUMENT", message: "Stored run document is not an object" }) }) });
+  }
+  const document = value as { readonly id?: unknown; readonly schemaVersion?: unknown; readonly events?: unknown };
+  if (typeof document.schemaVersion !== "string") {
+    return Object.freeze({ replayable: false, schemaVersion: "unknown", snapshot: Object.freeze({ kind: "raw", utf8: snapshotUtf8, diagnostic: Object.freeze({ code: "INVALID_RUN_DOCUMENT", message: "Stored run has no string schemaVersion" }) }) });
+  }
+  if (supportedSchemaVersion !== undefined && document.schemaVersion !== supportedSchemaVersion) {
+    return Object.freeze({ replayable: false, schemaVersion: document.schemaVersion, snapshot: Object.freeze({ kind: "raw", utf8: snapshotUtf8, diagnostic: Object.freeze({ code: "UNSUPPORTED_RUN_SCHEMA", message: `Stored run schema ${document.schemaVersion} is not replayable by ${supportedSchemaVersion}` }) }) });
+  }
+  try {
+    if (!Array.isArray(document.events)) throw new TypeError("Stored run has no event array");
+    const replayed = readBackReplay(document.events).run;
+    if (typeof document.id !== "string" || replayed.id !== document.id) throw new TypeError("Stored run id does not match its event stream");
+    return Object.freeze({ replayable: true, schemaVersion: document.schemaVersion, snapshot: Object.freeze({ kind: "parsed", value: replayed }) });
+  } catch (error) {
+    return Object.freeze({ replayable: false, schemaVersion: document.schemaVersion, snapshot: Object.freeze({ kind: "raw", utf8: snapshotUtf8, diagnostic: Object.freeze({ code: "INVALID_RUN_DOCUMENT", message: error instanceof Error ? error.message : "Stored run cannot be replayed" }) }) });
   }
 }
 
@@ -288,13 +368,16 @@ function validateJsonValue(value: unknown, at: string): void {
 }
 
 function validateTaggedRecords(value: unknown, at: string): void {
-  const exportable = new Set(ACCOUNT_DATA_INVENTORY.filter((entry) => entry.exportDisposition !== "exclude").map((entry) => entry.store));
   for (const [index, item] of arrayValue(value, at).entries()) {
     const tagged = recordValue(item, `${at}[${index}]`);
     exactKeys(tagged, ["table", "record"], `${at}[${index}]`);
     const tableName = stringValue(tagged.table, `${at}[${index}].table`);
-    if (!exportable.has(tableName)) throw new TypeError(`${at}[${index}].table is not exportable`);
-    recordValue(tagged.record, `${at}[${index}].record`);
+    if (!(tableName in ACCOUNT_TAGGED_RECORD_FIELDS)) throw new TypeError(`${at}[${index}].table is not an account-record table`);
+    const record = recordValue(tagged.record, `${at}[${index}].record`);
+    const variants = ACCOUNT_TAGGED_RECORD_FIELDS[tableName as AccountRecordTable];
+    const actual = Object.keys(record).sort();
+    const matched = variants.some((fields) => JSON.stringify(actual) === JSON.stringify([...fields].sort()));
+    if (!matched) throw new TypeError(`${at}[${index}].record has unknown or missing fields for ${tableName}`);
     validateJsonValue(tagged.record, `${at}[${index}].record`);
   }
 }
@@ -316,6 +399,9 @@ function validateOwnedRuns(value: unknown): void {
       const document = recordValue(snapshot.value, `ownedRuns.value[${index}].snapshot.value`);
       validateJsonValue(document, `ownedRuns.value[${index}].snapshot.value`);
       if (document.id !== id) throw new TypeError(`ownedRuns.value[${index}] snapshot id does not match its export id`);
+      if (!Array.isArray(document.events)) throw new TypeError(`ownedRuns.value[${index}] parsed snapshot has no event array`);
+      const replayed = readBackReplay(document.events).run;
+      if (canonicalJson(document as JsonValue) !== canonicalJson(replayed as unknown as JsonValue)) throw new TypeError(`ownedRuns.value[${index}] parsed snapshot is not a closed replay projection`);
       if (run.replayable !== true) throw new TypeError(`ownedRuns.value[${index}] parsed snapshot must be replayable`);
     } else if (snapshot.kind === "raw") {
       exactKeys(snapshot, ["kind", "utf8", "diagnostic"], `ownedRuns.value[${index}].snapshot`);
@@ -326,8 +412,23 @@ function validateOwnedRuns(value: unknown): void {
       stringValue(diagnostic.message, `ownedRuns.value[${index}].snapshot.diagnostic.message`);
       if (run.replayable !== false) throw new TypeError(`ownedRuns.value[${index}] raw snapshot cannot be replayable`);
     } else throw new TypeError(`ownedRuns.value[${index}].snapshot kind is invalid`);
-    if (run.importedGame !== null) validateJsonValue(run.importedGame, `ownedRuns.value[${index}].importedGame`);
-    arrayValue(run.grants, `ownedRuns.value[${index}].grants`).forEach((grant, grantIndex) => validateJsonValue(grant, `ownedRuns.value[${index}].grants[${grantIndex}]`));
+    if (run.importedGame !== null) {
+      const imported = recordValue(run.importedGame, `ownedRuns.value[${index}].importedGame`);
+      exactKeys(imported, ["sourceKind", "sourceUrl", "movetextDigest", "headers", "result", "pgn", "licenceNote", "importedAt"], `ownedRuns.value[${index}].importedGame`);
+      for (const field of ["sourceKind", "movetextDigest", "result", "pgn", "licenceNote", "importedAt"] as const) stringValue(imported[field], `ownedRuns.value[${index}].importedGame.${field}`);
+      if (imported.sourceUrl !== null) stringValue(imported.sourceUrl, `ownedRuns.value[${index}].importedGame.sourceUrl`);
+      const headers = recordValue(imported.headers, `ownedRuns.value[${index}].importedGame.headers`);
+      for (const [header, headerValue] of Object.entries(headers)) stringValue(headerValue, `ownedRuns.value[${index}].importedGame.headers.${header}`);
+    }
+    for (const [grantIndex, grantValue] of arrayValue(run.grants, `ownedRuns.value[${index}].grants`).entries()) {
+      const grant = recordValue(grantValue, `ownedRuns.value[${index}].grants[${grantIndex}]`);
+      exactKeys(grant, ["granteeHandle", "role", "grantedAt", "expiresAt", "grantedVia"], `ownedRuns.value[${index}].grants[${grantIndex}]`);
+      stringValue(grant.granteeHandle, `ownedRuns.value[${index}].grants[${grantIndex}].granteeHandle`);
+      if (!["host", "participant", "spectator"].includes(String(grant.role))) throw new TypeError(`ownedRuns.value[${index}].grants[${grantIndex}].role is invalid`);
+      stringValue(grant.grantedAt, `ownedRuns.value[${index}].grants[${grantIndex}].grantedAt`);
+      if (grant.expiresAt !== null) stringValue(grant.expiresAt, `ownedRuns.value[${index}].grants[${grantIndex}].expiresAt`);
+      if (grant.grantedVia !== null) stringValue(grant.grantedVia, `ownedRuns.value[${index}].grants[${grantIndex}].grantedVia`);
+    }
     for (const [derivationIndex, derivationValue] of arrayValue(run.derivations, `ownedRuns.value[${index}].derivations`).entries()) {
       const derivation = recordValue(derivationValue, `ownedRuns.value[${index}].derivations[${derivationIndex}]`);
       exactKeys(derivation, ["derivedRunId", "sourceRunId", "sourceBranchId", "sourceNodeId", "kind", "createdAt"], `ownedRuns.value[${index}].derivations[${derivationIndex}]`);
