@@ -73,7 +73,7 @@ set execution order.
 |---|---|---|
 | D574, D575, D576, D578 | pack-schema lifecycle RFC lane | Restore unique machine-readable schema identity, pack-declared compatibility, and a reusable read-only migration planner. |
 | D580 | knowledge-retrieval provenance lane | Give stored chunks reproducible source-artifact identity before using them as grounded chess material. |
-| D1007, D1008 | claim-backing contract repair | Replace record-kind/value co-presence with a typed semantic anchor or another able-to-fail entailment relation before any automatic binding wave resumes. |
+| D1007, D1008 | claim-backing contract repair | Research is complete: specify proposition-first claim facts, registered deterministic clause renderers, one-binding compatibility and whole-clause-only automatic migration before the binding wave resumes. Reuse F1/F3 identity/version machinery; do not create a parallel evidence vocabulary. |
 | D693 | shape recommendation contract | Distinguish an encountered/teaching reference from a merely prospective authoring suggestion. |
 | D504 | schema test defect | Add the missing principle-entry `$id`/version binding test; the register half is already complete. |
 | D837, D838 | breadth measurement/design review | Preserve the owner-veto boundary on the second axis and establish a comparable historical corpus definition before making trend claims. |

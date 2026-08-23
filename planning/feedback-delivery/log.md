@@ -153,3 +153,14 @@ the measured learner-value result rather than implementation correctness. The un
   DTM of 1 from a later recorded position.
 - Landed no content bindings. D1008 now owns the missing semantic relation between a prose referent
   and an assertion; equal value + valid FEN + matching evidence kind is not sufficient grounding.
+
+## 2026-08-23 — D1008 research defines the repair and keeps Stage 2 stopped
+
+- The code/standards pass confirms the current binding has a selector and provenance relation but
+  no proposition relation. Web Annotation and PROV improve the two things already present;
+  nanopublications demonstrate the missing assertion/provenance separation.
+- The repair gate is literal: typed proposition, admitted record inputs, registered deterministic
+  full-clause renderer, and whole-clause equality. Token equality is removed as an automatic
+  backing licence.
+- The one live Philidor binding needs an explicit compatibility migration. The 43 candidates remain
+  evidence for the contract defect, not a content work queue, until the follow-up RFC lands.

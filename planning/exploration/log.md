@@ -5669,3 +5669,24 @@ Stockfish p95/max 404/431 ms, changes 6/49 masks, and reaches 729 ms end-to-end.
 or 10, rerun R11's predeclared guard-retention gates at that exact depth, declare the selection
 budget, and rule typed mate transitions. Registering a guarded profile before that would reuse a
 depth-12 benefit claim for a different instrument.
+
+## 2026-08-23 — D1008 semantic-anchor research closes the claim-binding exploration gate
+
+**What landed:** `design/research/claim-semantic-anchors.md` traces the only validator-green
+automatic candidate through the shipped binding contract and compares the missing relation with
+the W3C Web Annotation, PROV-O and Nanopublication separations. The implementation proves claim
+identity, location, pack scope, record provenance, value equality, token coverage and label
+earning; it never represents the clause's subject-predicate-object proposition.
+
+**Verdict:** stronger hashes, selectors or provenance cannot reject “the one common mate” → DTM 1.
+The bounded repair is proposition-first: a typed fact backed by declared records, then one
+registered deterministic renderer whose complete clause must equal the selected claim clause.
+Automatic migration is permitted only on whole-clause equality. Arbitrary legacy prose needs an
+explicit reviewed rewrite/annotation; an LLM is downstream phrasing only, never the admission
+authority.
+
+**Boundary and next:** no content binding or production contract changed, and the 43-row wave stays
+stopped. D1008's research question is answered and the owner's continuing foundation-first
+instruction opens a follow-up draft to the implemented claim-backing RFC. It must reuse F1's
+projection/rendering authority, coordinate compatibility with F3, migrate the one live Philidor
+binding explicitly, and pass six able-to-fail fixtures before Feedback Delivery Stage 2 resumes.
