@@ -5784,3 +5784,12 @@ now crosses the client, request parser and service into the already-versioned
 Permanent runtime and REST fixtures select an exact branch while two branches share the root; the
 screen keyboard fixture proves the UI no longer discards the id. Existing node-only and checkpoint
 rewinds remain compatible.
+
+## 2026-08-23 — absent-checkpoint evidence reaches comparison
+
+D722 is fixed at the boundary specified by the frozen N-way comparison contract. A missed
+checkpoint remains a comparative set-membership fact computed by `compareBranches`; the
+`CompareView` consequence row now converts that id to the deliberately transient
+`pack-absent:<checkpoint>` key and resolves its sentence through the registered evidence renderer.
+The key is never persisted into the run. A component fixture proves the production row uses the
+authored checkpoint label rather than the former hand-written id-only duplicate.

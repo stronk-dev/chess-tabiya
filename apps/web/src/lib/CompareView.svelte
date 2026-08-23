@@ -1,6 +1,6 @@
 <script lang="ts">
   import type { DrillPackDefinition } from "@chess-tabiya/schema/drill-pack";
-  import { comparisonEngineTrajectory, comparisonNarrative, comparisonStrips, positionStructureEvidence, structuralReading, type BranchComparison, type ComparisonEvidenceEntry, type DrillRun, type ObjectiveTimelineEntry } from "@chess-tabiya/runtime";
+  import { comparisonEngineTrajectory, comparisonNarrative, comparisonStrips, packAbsentEvidenceRef, positionStructureEvidence, structuralReading, type BranchComparison, type ComparisonEvidenceEntry, type DrillRun, type ObjectiveTimelineEntry } from "@chess-tabiya/runtime";
   import { onMount } from "svelte";
   import Chessboard from "./Chessboard.svelte";
   import HonestControl from "./HonestControl.svelte";
@@ -147,7 +147,10 @@
         <p>{consequence?.decision ? `Decision: ${consequence.decision.moveSan} at +${consequence.decision.plyOffset}.` : "No moves on this branch yet."}</p>
         <p>{consequence?.plies ?? 0} plies · objective {consequence?.objectiveState ?? "unknown"}</p>
         {#if consequence?.deepestScore}<p>Recorded engine evaluation at +{consequence.deepestScore.plyOffset}: {score({ ...consequence.deepestScore, nodeId: "", evidenceRefs: [], kind: "eval", source: "engine_validated" })}</p>{/if}
-        {#each consequence?.checkpointsMissed ?? [] as checkpoint}<p>Checkpoint not reached on this branch: {checkpoint}.</p>{/each}
+        {#each consequence?.checkpointsMissed ?? [] as checkpoint}
+          {@const absentRef = packAbsentEvidenceRef(checkpoint)}
+          <p data-evidence-ref={absentRef}>{renderEvidenceRef(absentRef, pack).text}</p>
+        {/each}
         {#each entries as entry}
           <div><strong>{entry.from} → {entry.to}</strong>{#each entry.grounds as ground}<p>{ground.sourceLabel}: {ground.text}</p>{/each}</div>
         {/each}

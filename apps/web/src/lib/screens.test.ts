@@ -628,6 +628,9 @@ describe("Layer 3 screens", () => {
     expect(document.body.textContent).toContain("active → achieved");
     expect(document.body.textContent).toContain("objective achieved");
     expect(document.body.textContent).toContain("M-2");
+    expect(document.querySelector('[data-evidence-ref="pack-absent:timing-window"]')?.textContent).toBe(
+      "Checkpoint not reached on this branch: Critical race resolved.",
+    );
     expect(document.body.textContent).toContain("Evidence inspector: recorded branch strips");
     const compareSections = [...document.querySelectorAll(".compare > section")];
     expect(compareSections.indexOf(document.querySelector(".narrative")!)).toBeLessThan(
