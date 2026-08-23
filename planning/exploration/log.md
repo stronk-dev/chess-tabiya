@@ -6127,3 +6127,16 @@ semantic destination and SAN to be tested separately, includes all four consumer
 nonstandard Chess960 fixture so an e/a/h-only implementation cannot pass. The non-castling
 implementation work remains locally green but is held from closeout until the amendment is
 accepted. The audit is `planning/exact-legal-mobility/d1029-consumer-audit.md`.
+
+## 2026-08-23 — runtime-opening source pin failed on first implementation read
+
+Vendoring the five local CC0 inputs exercised `runtime-opening-identity` criterion 1 before any
+compiler was written. Four SHA-256 values reproduced. `b.tsv` did not: the accepted D894 README
+recorded `310f0997d5a26ac0284e56349b44ff39ce508a53b1a04bfbe57318470844b168`, while a fresh fetch from
+the exact pinned commit produced `310f0997d5a26ac6c9abfabac028e47e78f24356a6ba322cfffbf8f5a3f88d25`.
+GitHub's contents API identifies the fetched bytes as blob
+`c4c7f890f471eb7106df6327356d4f1e3a5a262f`; the older knowledge-retrieval source register and
+its executable prepare script independently carry the same corrected SHA. The README is corrected
+and D1052 records the false acceptance premise. The downloaded sources remain uncommitted while
+the RFC returns for its narrow factual refresh; no compiler is built against an authority known to
+be false.

@@ -1,6 +1,13 @@
 # RFC: Runtime opening identity
 
-- **Status:** accepted — 2026-08-23, by claude as register owner on the buildability test, after
+- **Status:** draft — factual source-pin amendment 2026-08-23, returned for independent
+  cross-review before implementation. The first implementation fetch reproduced four source
+  SHA-256 values but proved the accepted `b.tsv` pin was a transcription error: upstream commit
+  `4b8622759e7ae6f93f011cc6c83a3823401ab45e`, GitHub blob
+  `c4c7f890f471eb7106df6327356d4f1e3a5a262f`, the older source register and its executable fetcher
+  all yield `310f0997d5a26ac6c9abfabac028e47e78f24356a6ba322cfffbf8f5a3f88d25`. D1052 records the
+  failed acceptance premise; the D894 README is corrected. *(Prior status: accepted — 2026-08-23,
+  by claude as register owner on the buildability test, after
   an independent cross-review that re-derived 22 claims and failed 9, two of them blocking.
   **`vendor/` does not exist**, so §1.1's present-tense claim that a clean checkout rebuilds
   without a network request was false — the only reader fetches from `raw.githubusercontent.com`
@@ -14,7 +21,7 @@
   keys fits inside it — now 50 µs p95 plus a size-independence assertion. Re-derived clean:
   `CHESS_OPENINGS_COMMIT` byte-exact, 3,810 / 7,854 / 2,023 exact, and 401 of 6,991 recomputing
   to 5.7%. *(Prior line for history: draft 2026-08-23 — executes Semantic Collectors discharge D3
-  from completed D894 research; independent buildability review required before acceptance.)*
+  from completed D894 research; independent buildability review required before acceptance.)*)
 - **Author:** codex, on the D717 evidence-foundation routing and D743/D894
 - **Created:** 2026-08-23
 - **Design refs:** `design/03-product-breadth.md` theory/Review/bot surfaces;
@@ -483,6 +490,11 @@ move.
 ## Changelog
 
 - 2026-08-23: initial draft from the completed D894 instrument and Semantic Collectors D3.
+- 2026-08-23 implementation return: corrected the `b.tsv` SHA-256 authority in the referenced D894
+  README after a fresh fetch from the exact pinned commit disagreed with the accepted transcription.
+  The other four hashes reproduced. Returned to draft because the acceptance paragraph explicitly
+  claimed all five values were independently re-derived clean; source closure cannot be waived by
+  treating a false pin as implementation detail. No projection semantics or scope changed.
 - 2026-08-23 cross-review: nine corrections, two of them buildability blockers as drafted.
   (1) **§1.1 asserted the vendoring in the present tense and `vendor/` does not exist.** The only
   path that reads these files today fetches them from `raw.githubusercontent.com`
