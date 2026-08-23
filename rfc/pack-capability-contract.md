@@ -1,10 +1,10 @@
 # RFC: Pack capability contract — semantic versions, handshake, deprecation and migration
 
-- **Status:** draft — 2026-08-23
+- **Status:** draft — **returned to author 2026-08-23, on six return-class blockers from independent cross-review** (~65 claims checked, 17 failed). **The mechanism holds and the [[D566]] acceptance test is real, not decorative**: criterion 13's three predicate-bearing documents are exactly `content/shapes/{knight-vs-bishop,maroczy-bind,open-centre}.json`, all inside §7's included roots, and `digest.ts:69` digests every byte with no field filter — so no pack byte and no `packDigest` moved when `pawn_safe_square`'s meaning changed, and a source-region digest is the only thing that would have caught it. Lane 0.30 is genuinely next-free, the claims block joins character-for-character to its register row, and every §7 population count reproduces at HEAD. **What returns it:** (1) **criterion 4 pins a census that is wrong at source** — `BREADTH_CONVENTION_TEXT` has **8** entries at HEAD (`evidence-catalog.ts:183-190`), so prose conventions are **13**, not 12, and `89+60+13+12+17=191` is satisfiable **only by an implementation that drops a convention** ([[D984]]'s class); the wrong figure also sits in the Summary, §2.4 **and the register row**, so the repair must be one commit or it manufactures a body/register split. (2) **No closure argument, and the enumeration is provably open**: `SimpleTrigger` (6 arms, `packages/schema/src/drill-pack/types.ts:82-89`) has **no census row** — while §2.5 names it as one of exactly two twice-interpreted vocabularies whose two sites criterion 6 asserts — and `TransitionExpression` (5) is likewise absent, while `rules_fact` (3) and `fenPredicate` (4) are **double-counted** as standalone vocabularies though they are fields inside other arms. A census that both omits and double-counts is not a closure; the fix is a **procedure over the schema's 52 `$defs`** and the tree's exhaustive `never` switches, not a hand-count. (3) **Four of criterion 4's five terms are arithmetically wrong**, inherited from the derivation: §3a sums to **90** not 89, §3a-ter to **62** not 60, §3f has **16** rows not 17, and the derivation's own prose says 15 where its heading says 16. (4) **Criteria 8 and 16 are mutually unsatisfiable** — C8 requires `packCapabilities` set-equal the registry while C16 + §5.1's [[D509]] rule requires an unsupported capability to be **absent** from the published set, and every deployment carries at least one (`plan_defense`/`human_external` ship `refused`; `ENGINE_MODE=mock` drops the providers, the literal D509 case §5.1 cites as precedent). (5) **§4.4 does not satisfy `claim-semantic-anchors` §7 and its "byte-for-byte" table is false**: §7 dispatches on a `contract` key **per binding object** (`{id:"claim.binding",version:2}`, refusal `CLAIM_BINDING_VERSION_UNSUPPORTED`) while §4.4 supplies a `requires` array at the **sidecar root** (refusal `SIDECAR_CAPABILITY_UNSUPPORTED`) — different granularity, and §7's Stage A keeps one legacy binding running inside a file the V2 parser also reads, which a per-document declaration makes impossible; §7 also *refuses* an explicit `claim.binding@1` where criterion 15 requires **recording** it. §4.4 must adopt §7's per-binding `contract` grammar rather than assert equivalence with it. (6) **`claim.binding` is required by §4.4 and absent from the enumeration** — register it and criterion 4's 191 breaks; don't and §4.3's `unmet` set refuses **every** sidecar declaring it. **Gate F clauses 5 and 6 are NOT tickable on this draft**: clause 5's policy rests on criterion 16, which contradicts criterion 8; §7's population definition — the strongest part of the document — survives intact, but its tripwire omits `content/packs/` and its criterion-4 sibling cannot be satisfied. Non-blocking corrections are applied in place, including **criterion 15's sidecar population 32 → 68** (the drafted glob dropped all 36 candidate sidecars — §7's own defect class recurring inside a criterion) and five citation errors, among them *"refuse-to-serve, not degrade"* attributed to `docs/drill-client.md:16`, **which contains no such string anywhere in the file**. *(Prior line for history: draft — 2026-08-23.)*
 - **Author:** claude (drafted from `planning/platform-alignment/f3-derivation.md`, the HEAD derivation of every surface this document versions)
 - **Created:** 2026-08-23
 - **Design refs:** `design/research/pack-primitive-stability.md` §6 (R6's six-part model); `planning/platform-alignment/plan.md` Gate F clauses 1, 5, 6, 7
-- **Exploration gate:** O6.1 approved as [[D995]] and O6.2 ruled as [[D996]]; `planning/platform-alignment/theory-drill/o5-o6-handoff.md:100` reads verbatim `O6.1 + O6.2 approved → F3 may draft`
+- **Exploration gate:** O6.1 approved as [[D995]] and O6.2 ruled as [[D996]]; `planning/platform-alignment/theory-drill/o5-o6-handoff.md:96` reads verbatim `O6.1 + O6.2 approved → F3 may draft` (line corrected from `:100`, a code fence, by cross-review 2026-08-23)
 - **Depends on:** `archive/evidence-contract-manifest.md` (F1 — the 188-projection manifest this versions), `rfc/graduation-clearance.md` (accepted — lane 0.28, the planner precedent in its §6.5)
 - **Parent / amends:** — (this is F3 in `planning/platform-alignment/rfc-graph.md:70`)
 - **Supersedes / superseded by:** —
@@ -81,7 +81,7 @@ declared-vs-consumed mismatch rows.
 
 ### §1. The approved contract, quoted
 
-`planning/platform-alignment/theory-drill/o5-o6-handoff.md:52-58`, verbatim:
+`planning/platform-alignment/theory-drill/o5-o6-handoff.md:54-61`, verbatim:
 
 > Approve R6's six-part model: immutable released artifacts; pack-required/runtime-supported semantic
 > capability versions; evaluator semantics versioned independently from JSON fields; one read-only
@@ -287,8 +287,10 @@ candidates this RFC first offered (boot failure, listing exclusion, per-request 
 `unmet` therefore resolves into two states by cause — `unsupported` (not configured at startup;
 refused here, at registration, with the pack excluded from the listing and the boot surviving, per
 [[D468]]'s blast radius) and `temporarily_unavailable` (configured but unreachable; **not** resolved
-at registration, because it may reappear). `docs/drill-client.md:16`'s *"refuse-to-serve, not
-degrade"* holds for the first and is wrong for the second. **Gate F clause 5 is unblocked.**
+at registration, because it may reappear). `planning/archive/drill-client/log.md:49`'s
+*"refuse-to-serve, not degrade"* holds for the first and is wrong for the second. **Gate F clause 5
+is unblocked.** (Source corrected from `docs/drill-client.md:16` by cross-review 2026-08-23 — that
+file contains no such string; the derivation's `f3-derivation.md:578` carries the same miscite.)
 
 #### §4.4 What an evidence sidecar declares — and why the top-level schema string does not move
 
@@ -442,7 +444,7 @@ the two-state resolution and criterion 16 land — no further ruling is owed.
 
 ### §6. The migration planner and its applier
 
-Three commands, following the separation of powers `graduation-clearance.md:2445-2449` states
+Three commands, following the separation of powers `graduation-clearance.md:2457-2458` states
 outright — *"a checker that also rewrites the thing it judges is the rubber stamp in a new
 costume"*:
 
@@ -475,7 +477,7 @@ deciding per release, so the plan's job is to be *rulable*: mechanical and judge
 the judgement population named by exact identity, and no way to proceed past it silently.
 
 **The tripwire** generalises the two shipped refusal-on-drift assertions — `graduation-clearance-plan.mjs:197`
-(`corpus.documents !== 92`) and `semantic-evidence-check.ts:25` (`outpostDocuments.length !== 3`).
+(`corpus.documents !== 92`) and `semantic-evidence-check.ts:26` (`outpostDocuments.length !== 3`).
 A plan whose measured population is baked into an assertion cannot go stale silently: the moment
 the corpus moves, CI reddens and a human re-baselines.
 
@@ -579,9 +581,14 @@ can fail is the [[D444]] class and one nothing can satisfy is the [[D984]] class
     still reading `tabiya.sourcing.evidence.v1`; a sidecar with no `requires` parses as
     `claim.binding@1` **with the default recorded in the parse result**, not inferred; and a
     sidecar requiring a version the runtime does not publish is refused with
-    `SIDECAR_CAPABILITY_UNSUPPORTED` on the 422 arm. Fixture: all **32** committed sidecars
-    (`git ls-files 'content/**/*.evidence.json'`, **0** of which carry a `requires` key at HEAD)
-    parse as v1 with the explicit default, and one hand-built `claim.binding@3` sidecar is refused.
+    `SIDECAR_CAPABILITY_UNSUPPORTED` on the 422 arm. Fixture: all **68** committed sidecars
+    (every document carrying `schema: "tabiya.sourcing.evidence.v1"` — 32 in `content/drafts/` as
+    `*.evidence.json` and 36 in `content/candidates/*/evidence.json`; **0** of which carry a
+    `requires` key at HEAD) parse as v1 with the explicit default, and one hand-built
+    `claim.binding@3` sidecar is refused. *(Corrected from "32, `git ls-files
+    'content/**/*.evidence.json'`" by cross-review 2026-08-23: that glob is a naming-convention
+    filter over one of the two content roots and silently drops all 36 candidate sidecars — the
+    exact defect class §7 exists to kill, recurring inside a criterion.)*
     *Wrong implementation that passes criteria 1–14 and fails this:* one treating a missing
     `requires` as unversioned-and-permissive — the [[D1058]] failure mode, which is why the default
     must be **recorded** rather than assumed.
@@ -673,6 +680,19 @@ Proposed from committed head **D1071** — renumber at landing; codex lands rows
   Caught by `planning/platform-alignment/rfc-disposition-packet.md` §3.3 while this draft was still
   in motion. §4.4 also resolves that RFC's conditional claims block to `none` by stating that the
   seam does **not** become a registered resource.
+- 2026-08-23 (cross-review): five citation/measurement corrections applied in place; **six
+  return-class blockers reported, not fixed** (see the reviewer's report). Corrected here:
+  (1) the exploration-gate line cite `o5-o6-handoff.md:100` → `:96` (`:100` is a code fence; the
+  `rfc/README.md` Active row carries the same wrong line and is not this reviewer's file to edit);
+  (2) §1's quote range `:52-58` → `:54-61` (the drafted range excluded the second quoted paragraph);
+  (3) §5.1's *"refuse-to-serve, not degrade"* re-sourced from `docs/drill-client.md:16` — which
+  contains no such string anywhere in the file — to `planning/archive/drill-client/log.md:49`;
+  (4) §6's *"rubber stamp in a new costume"* cite `graduation-clearance.md:2445-2449` → `:2457-2458`;
+  (5) §6's tripwire cite `semantic-evidence-check.ts:25` → `:26` (`:25` is the definition, `:26` the
+  assertion); and (6) **criterion 15's sidecar population 32 → 68** — the drafted
+  `git ls-files 'content/**/*.evidence.json'` is a filename-convention filter that matches only the
+  `content/drafts/` naming and drops all 36 `content/candidates/*/evidence.json` sidecars; 68
+  documents carry `schema: "tabiya.sourcing.evidence.v1"` at HEAD, 0 with a `requires` key.
 - 2026-08-23 (owner ruling, pre-review): **[[D1077]] reframed and ruled Open question 1.** Added
   **§5.1** (unavailability has exactly two causes — `unsupported` when not configured at startup,
   `temporarily_unavailable` when configured but unreachable, with the owner's completeness argument

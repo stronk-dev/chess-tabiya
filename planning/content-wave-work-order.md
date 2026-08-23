@@ -757,3 +757,21 @@ The state-of-the-corpus audit produced three rows; this work order is their dest
   accepted-but-unimplemented RFCs (`bot-policy`, `campaign-core`, `longitudinal-store`) are ruled
   consumers of exactly these families. Correction applied in `planning/content-era/pilot-matrix.md`;
   no pilot cell changes.
+
+## `pack-population-provenance` acceptance findings 2026-08-23 — [[D1111]]–[[D1114]]
+
+Four measured findings that sat unrouted in the draft's own §Ledger-rows block for six days. Landed
+as real rows at acceptance; this work order is their destination.
+
+- **[[D1111]]** — `cost: "unmeasurable"` grew four → **seven in six packs**; §7 refuses it a corpus
+  basis on purpose, so the **growth rate is the only signal**. Watch it; no action until it moves.
+- **[[D1112]]** — **16 packs whose ledger exists and is silent on the kind their label requires**:
+  0 explorer records of either kind across 68 ledgers / 893 records, against 60 `corpus_observed`
+  labels in 31 packs. **Closes with the binding arm's explorer census** ([[D1005]] released it) —
+  the same emptiness [[D993]] measured from the other side.
+- **[[D1113]]** — `timingWindows[].note` has **no reader anywhere in the tree** while three authors
+  fought its 400-char cap. Closes at this RFC's implementation, which both widens the field and
+  gives it a reader.
+- **[[D1114]]** — `EVIDENCE_TYPE_UNBACKED`'s ledger arm is dark on **67 of 68** ledgers because only
+  one carries any `claimBindings`. Closes with the binding arm; it is the validator-side twin of
+  [[D1000]].

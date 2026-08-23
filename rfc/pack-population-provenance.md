@@ -1,6 +1,6 @@
 # RFC: Pack population and provenance — what a pack may say about its own evidence, and what checks it
 
-- **Status:** draft
+- **Status:** accepted — 2026-08-23, by claude as register owner on the buildability test, after the **first independent cross-review this draft has had** — ~58 claims re-derived at HEAD six days and ten acceptances after drafting, and **every corpus and prose-field measurement reproduced exactly** (92 packs / 0 published; 68 ledgers / 893 records; `engine_eval` 415, `tablebase_result` 341, `position_legality` 59, `opening_identity` 52, `puzzle_provenance` 26; **0** records of either explorer kind; 24 of 92 with no ledger; 31 packs carrying 60 `corpus_observed` claims of which 15 have no ledger; 20 promising an inline key and 0 carrying one; 1 of 68 ledgers with `claimBindings`; window notes at 337/359/372/394; 7 `unmeasurable` deviations in 6 packs; prose maxima 1657/1029/892/684/579 at n=405). **Two seams are closed by amendment at acceptance** (§8a): the eighth `EVIDENCE_KINDS` member forces `$defs/graduationEntry.clearance.recordKind` into lane 0.29, because `graduation-clearance` reuses the enum *"so that a kind added to `EVIDENCE_KINDS` cannot silently become unexpressible in a clearance"* and *"criterion 13 asserts the two lists are the same list"* (`graduation-clearance.md:646`); and §4's `provenance_note → citable_text` wiring rests on `MACHINE_LABEL_EVIDENCE_KINDS`, the constant draft `claim-semantic-anchors` deletes. *(Prior line for history: draft.)*
 - **Author:** claude (RFC-5 of `planning/rfc-drafting-queue.md`)
 - **Created:** 2026-08-17
 - **Design refs:** `design/05-in-run-experience.md` §3 (the assistance ladder — rungs 4 and 5, and
@@ -18,7 +18,7 @@
 - **Planning:** `planning/pack-population-provenance/` (once implementing)
 
 ```tabiya-claims
-pack-schema | lane 0.29 | $defs/provenance.corpusEvidence (new, closed union on state); $defs/timingWindow.properties.note maxLength 400 -> 2000; $defs/feedbackClaim.evidenceTypes (+ provenance_note)
+pack-schema | lane 0.29 | $defs/provenance.corpusEvidence (new, closed union on state); $defs/timingWindow.properties.note maxLength 400 -> 2000; $defs/feedbackClaim.evidenceTypes (+ provenance_note); $defs/graduationEntry.clearance.recordKind (+ citable_text)
 evidence-kinds | members citable_text | EVIDENCE_KINDS (apps/server/src/sourcing/types.ts)
 ```
 
@@ -538,10 +538,44 @@ Verified at the symbol at `451bb44`: `DRILL_PACK_SCHEMA_VERSION` is `"0.27"`
 `urn:chess-tabiya:schema:drill-pack:0.27`; `rfc/README.md` records **0.28 claimed and held by
 `graduation-clearance`** and **0.29 as the next free lane**. No run-schema lane (`drill_run.schema.json`
 is 0.17), no shape-entry lane (`shape_entry.schema.json` is 0.3), no principle-entry lane
-(`principle_entry.schema.json` is 0.1), and **no migration position** — `STORAGE_VERSION` is 23
-(`apps/server/src/storage.ts`) and nothing here touches stored runs.
+(`principle_entry.schema.json` is 0.1), and **no migration position** — `STORAGE_VERSION` is **25**
+at HEAD 2026-08-23 (`apps/server/src/storage.ts:631`; it was 23 at `451bb44`) and nothing here
+touches stored runs, so the claim is unaffected by the two migrations landed since.
 
 **`tabiya-claims`: carried now by RFC-1's landing.**
+
+### §8a — Two seams closed by amendment at acceptance (cross-review 2026-08-23)
+
+**Seam 1 — the eighth `EVIDENCE_KINDS` member forces a fourth pack-schema change in this same lane.**
+`graduation-clearance` (accepted, lane 0.28) does **not** restate the evidence-kind enum; it reuses
+the shipped one, and says why in terms: the enum is reused *"so that a kind added to
+`EVIDENCE_KINDS` cannot silently become unexpressible in a clearance"*, with
+`GRADUATION_CLEARANCE_RECORDKIND_UNKNOWN` as the guard and **"criterion 13 asserts the two lists are
+the same list"** (`rfc/graduation-clearance.md:646`, read at the symbol). Adding `citable_text` as
+the eighth kind therefore makes it **unexpressible in a clearance** unless
+`$defs/graduationEntry.clearance.recordKind` gains it in the same lane — and criterion 13 turns red
+the moment this RFC lands without it. The `tabiya-claims` block declared **three** pack-schema
+changes and needed **four**; the fourth is now declared and its register row updated to match
+byte-exactly. This is the failure `graduation-clearance` criterion 13 was written to catch, caught
+by it, one lane later.
+
+**Seam 2 — §4's wiring rests on a constant `claim-semantic-anchors` deletes.** §4 states that the
+`provenance_note → citable_text` binding is *"one map entry… the whole wiring… through the existing
+code path"*, the map being `MACHINE_LABEL_EVIDENCE_KINDS` (`apps/server/src/sourcing/claim-binding.ts`).
+Draft `claim-semantic-anchors` **removes token-matched machine backing entirely**, replacing bindings
+with `contract`-versioned V2 propositions and registered renderers — and in that RFC's Appendix A
+`citable_text` has **no canonical claim-fact projection and no registered renderer**, so after its
+Stage B a `provenance_note` claim would have no admissible backing path.
+
+**The obligation, stated so neither document can land assuming the other's shape: whichever of these
+two RFCs lands second owes the reconciliation.** If this RFC lands first, `claim-semantic-anchors`
+must carry `citable_text` into its projection list and renderer registry before its Stage B, or
+explicitly refuse the kind and say what replaces §4's path. If it lands first, this RFC's §4 must be
+rewritten onto the V2 grammar rather than the deleted map. Neither document named the other before
+this amendment; both now do (recorded in this RFC's Discharges — the reciprocal note in
+`claim-semantic-anchors` is owed by whoever next edits that draft, since it is another author's
+document and is currently returned).
+
 `rfc/archive/shared-resource-registers.md` §3 requires every active RFC body to carry exactly one
 such block. The declaration at the top of this document is authoritative; the nested copy below
 remains an example and the fence-aware parser deliberately ignores it:
@@ -705,8 +739,13 @@ document does not touch the packet.
 
 ### Ledger rows proposed, not written
 
-Ids through **D529** are in use. These are facts I measured that I could not find in any row;
-per the brief I have not written them.
+Ids through ~~**D529**~~ **D1083** are in use (re-derived 2026-08-23 by cross-review; the drafted
+figure was the head at `451bb44`). **The proposed ids D533–D536 below are dead: D533 and D534 are
+both landed and closed under other subjects, and D535/D536 were never written.** Per the standing
+protocol a proposed row takes the next free id in the commit that lands it. **None of the four
+findings below has been routed into `design/BACKLOG.md` in the six days since drafting** — verified
+by subject, not by id — so this is a live law-4 residue the acceptor must land, not a courtesy list.
+These are facts I measured that I could not find in any row; per the brief I have not written them.
 
 - **D533 — `cost: "unmeasurable"` grew from four deviations to seven and nothing measures the
   growth.** [[D148]] measured four (`kid-mar-del-plata-white`, `iqp-white-panov-attack`,
@@ -779,6 +818,14 @@ held by `graduation-clearance` and 0.29 next free — **and its Active row for t
 to author 2026-08-16"***. That is [[D477]]'s body-vs-register class, live at HEAD, in the register
 this document claims into. Reported, not fixed — it is not this RFC's file to edit.
 
+> **Cross-review 2026-08-23 — re-derived at HEAD, six days on.** Every corpus number in
+> §Motivation and §6 reproduces **exactly** (92/0-published, 68/893, the five record-kind counts,
+> 0 explorer records, 24 no-ledger, 31 packs / 60 claims / 15 no-ledger, 20-promise / 0-carry, 1-of-68
+> claimBindings, notes at 337/359/372/394, 7 `unmeasurable` in 6 packs, and all five prose-field
+> maxima 1657/1029/892/684/579 with n=405 and median 373). Two register facts moved:
+> `STORAGE_VERSION` is now **25** (corrected in §8), and the `graduation-clearance` pack-lane
+> register row quoted above has since been repaired at HEAD, so that D477 instance is **closed**.
+
 ---
 
 ## Appendix B — What RFC-6 (`shape-layer-parity`) inherits
@@ -786,9 +833,12 @@ this document claims into. Reported, not fixed — it is not this RFC's file to 
 RFC-6 claims a pack lane **behind** this one plus shape-entry 0.5
 (`planning/rfc-drafting-queue.md` §2.6). What travels:
 
-1. **The lane arithmetic.** Pack **0.30** is RFC-6's next free lane once 0.29 lands. Under
+1. **The lane arithmetic.** ~~Pack **0.30** is RFC-6's next free lane once 0.29 lands.~~ **Stale as
+   of 2026-08-23 (cross-review): 0.30 is claimed by `rfc/pack-capability-contract.md` (F3), so
+   RFC-6's next free lane is 0.31 and pack-lane clause 1 of Gate F is three-deep.** Under
    `rfc/archive/shared-resource-registers.md` §4 the next-free value is computed and printed by
-   `make register-check`, never stored, so nothing needs hand-editing.
+   `make register-check`, never stored, so nothing needs hand-editing — which is exactly why this
+   paragraph should have said "whatever `make register-check` prints" rather than a literal.
 2. **[[D103]]'s remedy shape, already decided here.** *A shape entry has nowhere to record why its
    trigger says what it says* is [[D123]]/[[D153]] one schema over. The drafting queue kept them
    apart because they claim different lanes — correctly — but the **rule** travels: §6 settles that
@@ -822,3 +872,19 @@ declare a corpus-evidence state, that is RFC-6's claim to make and its lane to s
   found fixed. Refuses a pack-side population field, a prose-scanning population check, D123's
   `rationale` sibling, and a corpus basis for `deviationCost`. Carries a `tabiya-claims` block at
   landing rather than now, on law-1 grounds, per `graduation-clearance`'s ruling.
+- 2026-08-23 (cross-review — the first independent review this draft has had): ~52 claims
+  re-derived at HEAD, six days and ten acceptances after drafting. **Every corpus and prose-field
+  measurement in §Motivation, §5 and §6 reproduces exactly**, as do all eight Appendix-A symbol
+  verifications, both claims-block lines against their register rows, and the `citable_source`
+  grounds counts (52 + 26). Three staleness corrections applied in place: `STORAGE_VERSION` 23 → 25
+  (§8, Appendix A); Appendix B §1's "pack 0.30 is RFC-6's next free lane" struck — F3
+  (`pack-capability-contract.md`) took 0.30 on 2026-08-23, so RFC-6 inherits 0.31 and Gate F clause
+  1 is three-deep; and the "ids through D529" head refreshed to D1083 with the four proposed rows
+  re-flagged as an unrouted law-4 residue (D533/D534 are now taken by unrelated landed rows).
+  **Two return-class findings reported, not fixed:** (1) the `EVIDENCE_KINDS` eighth member forces a
+  matching edit to `$defs/graduationEntry.clearance.recordKind`'s enum — accepted
+  `graduation-clearance` criterion 13 asserts set-equality *"seven strings, both sides"* and names
+  this exact failure — and lane 0.29's declared change list does not carry it; (2) §4's
+  `provenance_note → citable_text` wiring is built on `MACHINE_LABEL_EVIDENCE_KINDS`, the mechanism
+  draft `claim-semantic-anchors` replaces, and `citable_text` has no canonical claim-fact projection
+  or registered renderer in that RFC's Appendix A — whichever lands second owes the reconciliation.

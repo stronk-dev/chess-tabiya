@@ -141,6 +141,51 @@ The law by surface — the SAME variant is treated differently in each:
 **The one constraint: the educational standard-chess run stays the MAIN one.** This supersedes any
 per-variant permit/refuse framing you may see in earlier notes.
 
+## 0-F3-RETURNED. `pack-capability-contract` is RETURNED — do not implement, and Gate F 5/6 are not tickable
+
+Cross-review found **six return-class blockers** (~65 claims, 17 failed). **Do not start any F3
+work.** The mechanism is sound — the [[D566]] acceptance test is **real, not decorative**: criterion
+13's three predicate-bearing documents are exactly
+`content/shapes/{knight-vs-bishop,maroczy-bind,open-centre}.json`, all inside §7's included roots,
+and `digest.ts:69` digests every byte with no field filter, so nothing shipped would have caught
+`pawn_safe_square`'s drift and a source-region digest does. Lane 0.30 is next-free and every §7
+population count reproduces.
+
+**What must be fixed before it returns to review** (author's work, not yours):
+1. **Criterion 4's census is wrong at source** — `BREADTH_CONVENTION_TEXT` has **8** entries at HEAD
+   (`evidence-catalog.ts:183-190`), so conventions are **13** not 12 and `89+60+13+12+17=191` passes
+   **only for an implementation that drops a convention**.
+2. **No closure argument**: `SimpleTrigger` (6 arms) and `TransitionExpression` (5) have no census
+   row, while `rules_fact`/`fenPredicate` are double-counted. Needs a **procedure over the schema's
+   52 `$defs`**, not a hand-count.
+3. §3a sums to **90** not 89; §3a-ter to **62** not 60; §3f has **16** rows not 17.
+4. **Criteria 8 and 16 are mutually unsatisfiable** (set-equal the registry vs absent-when-unsupported).
+5. **§4.4 does not satisfy `claim-semantic-anchors` §7** — per-binding `contract` vs sidecar-root
+   `requires`; the "byte-for-byte" table is false.
+6. **`claim.binding` is required by §4.4 and absent from the enumeration.**
+
+**Gate F clauses 5 and 6 are NOT tickable on this draft** — clause 5 rests on criterion 16.
+
+## 0-PACK-PROVENANCE-ACCEPTED. RFC-5 accepted with two seams closed — implement at lane 0.29
+
+Accepted 2026-08-23 after its first independent cross-review; **every corpus number reproduced
+exactly** six days on. Implementation notes:
+
+- **The claims block now declares FOUR pack-schema changes, not three.** The fourth is
+  `$defs/graduationEntry.clearance.recordKind (+ citable_text)` and it is **not optional**:
+  `graduation-clearance` reuses `EVIDENCE_KINDS` *"so that a kind added to `EVIDENCE_KINDS` cannot
+  silently become unexpressible in a clearance"*, and **criterion 13 asserts the two lists are the
+  same list** (`graduation-clearance.md:646`). Land the eighth kind without it and **criterion 13
+  turns red**.
+- **§4's wiring depends on `MACHINE_LABEL_EVIDENCE_KINDS`, which draft `claim-semantic-anchors`
+  deletes.** §8a states the rule: **whichever of the two lands second owes the reconciliation.** If
+  you implement this first, that RFC must carry `citable_text` into its projection list and renderer
+  registry before its Stage B.
+- **Lane arithmetic moved today**: F3 took 0.30, so RFC-6 inherits **0.31** and **Gate F clause 1 is
+  now three-deep** (0.28 `graduation-clearance`, 0.29 this, 0.30 F3).
+- Rows [[D1111]]–[[D1114]] landed at acceptance; [[D1112]] and [[D1114]] **close with the binding
+  arm**, [[D1113]] closes with this implementation (§6 gives the note a reader).
+
 ## 0-BREADTH-AUDIT. Five defects the breadth reality-check measured — [[D1085]]–[[D1089]]
 
 `planning/platform-alignment/breadth-reality-check.md` measured 66 surfaces from design/03's own
