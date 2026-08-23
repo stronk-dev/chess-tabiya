@@ -49,7 +49,9 @@ global navigation resumes. Standalone comparison is not a route: Review opens a 
 The measured record is deliberately separate from `/learn`: return scheduling remains an attempt
 history rather than a score. `/rating` renders only the publication already shaped by the server,
 including abstention, intervals, sample counts and fixed disclosures; it never derives a grade or
-reorders history. A classroom standing lives inside that classroom on `/live`. Joining is a
+reorders history. Its one start card offers only measured opponent rung and side; technical run,
+seed and engine configuration are fixed by the workflow and the resulting run opens on the normal
+play board. A classroom standing lives inside that classroom on `/live`. Joining is a
 two-step learner gesture whose confirmation repeats the permanent unwitnessed-games limitation;
 record and rating visibility remain independently revocable. The table preserves the server's
 result order and prints no client-derived rank.

@@ -43,6 +43,12 @@ their classroom on `/live`. Publication requires a separate confirmation that re
 unwitnessed-games limitation; record and rating visibility are independent, and withdrawal is
 immediate. The client preserves server ordering and derives no rank, percentile or praise copy.
 
+The same screen starts a rated game through a guided card: choose one of the four measured rungs
+and White or Black, then play from the standard initial position. Run identity, seed, writer claim,
+fixed engine policy and start-position details stay behind the workflow. The card says at the point
+of choice that a Maia band is not an external chess rating and that rewind or live assistance
+voids only the rating contribution, not the saved game.
+
 Ratings remain selection input only and must never alter evidence rendering, return
 recommendations, or milestones. Rated campaign entry and the RFC's remaining validation arms are
 not supplied by these reading surfaces.

@@ -47,12 +47,19 @@ describe("learner rating surfaces", () => {
   });
 
   it("does not invent a provisional label or point estimate when the server abstains", async () => {
+    const start = vi.fn(async () => {});
     const component = mount(RatingScreen, { target: target(), props: { api: {
       rating: async () => ({ rating: null, disclosures: [] }),
       ratingHistory: async () => ({ periods: [], games: [] }),
       learnerMarks: async () => [],
-    } as unknown as DrillClientApi } });
+    } as unknown as DrillClientApi, onStart: start } });
     await vi.waitFor(() => expect(document.body.textContent).toContain("No rated-game result has been recorded"));
+    expect(document.body.textContent).toContain("Start rated game");
+    const selects = [...document.querySelectorAll<HTMLSelectElement>("select")];
+    selects[0]!.value = "1800"; selects[0]!.dispatchEvent(new Event("change", { bubbles: true }));
+    selects[1]!.value = "black"; selects[1]!.dispatchEvent(new Event("change", { bubbles: true }));
+    document.querySelector<HTMLButtonElement>("button[type=submit]")!.click();
+    await vi.waitFor(() => expect(start).toHaveBeenCalledWith(1800, "black"));
     expect(document.body.textContent).not.toContain("Current publication");
     expect(document.body.textContent).not.toContain("1500");
     expect(document.body.textContent).not.toContain("provisional");

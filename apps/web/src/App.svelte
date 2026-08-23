@@ -351,6 +351,21 @@
     } catch (error) { importError = error instanceof Error ? error.message : String(error); }
   }
 
+  async function startRatedGame(band: 1000 | 1400 | 1800 | 2200, side: "white" | "black"): Promise<void> {
+    if (api.createRatedGame === undefined) throw new Error("Rated games are unavailable");
+    const runId = `rated-${crypto.randomUUID()}`;
+    const writer = WriterSession.claimFor(runId, storage);
+    const run = await api.createRatedGame({
+      id: runId,
+      start: { fen: "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1" },
+      side,
+      band,
+      policyConfig: { seedMode: "fixed", locus: { executedAt: "server", engineIds: [], modelIds: [] } },
+      seed: Math.floor(Math.random() * 2_147_483_647),
+    }, writer.writerId);
+    navigate(routePath({ name: "run", runId: run.id }));
+  }
+
   async function enterStoryMoment(runId: string, nodeId: string): Promise<void> {
     const writer = WriterSession.peek(runId, storage);
     if (writer === undefined) throw new Error("This device does not hold the imported run writer session");
@@ -953,7 +968,7 @@
       {#if session.runState}{@const node=session.runState.run.nodes.find((candidate)=>candidate.id===session.runState!.run.activeCursor.nodeId)}{#if node}<Chessboard fen={node.fen} startSide={session.runState.run.start.side} overlays={relayedMarkShapes(activeLiveDetail)} disabled={true} onMove={()=>{}}/><aside><p class="eyebrow">Tabiya live</p><h1>{node.objectiveState}</h1><p>{session.runState.run.branches.length} branches</p>{#if activeLiveDetail && markAttribution(activeLiveDetail)}<p>{markAttribution(activeLiveDetail)}</p>{/if}{#if activeLiveDetail?.vote}<p>{activeLiveDetail.vote.window.prompt}</p><ul>{#each activeLiveDetail.vote.tally as item}<li>{item.label}: {item.count}</li>{/each}</ul><p>{voteAttribution(activeLiveDetail)}</p>{/if}{#if session.runState.withheld}<p>Host is ahead; evidence is withheld until this run discloses.</p>{/if}</aside>{/if}{:else}<p role="alert">Overlay run unavailable.</p>{/if}
     </main>
   {:else if route.name === "rating"}
-    <RatingScreen {api} />
+    <RatingScreen {api} onStart={startRatedGame} />
   {:else if route.name === "library"}
     <main class="shell-view" aria-labelledby="library-title">
       <p class="eyebrow">Library</p><h1 id="library-title">Packs and run artifacts</h1>

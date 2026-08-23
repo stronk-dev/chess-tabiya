@@ -10,14 +10,21 @@
     RatingView,
   } from "./api.js";
 
-  interface Props { api: DrillClientApi }
-  let { api }: Props = $props();
+  interface Props {
+    api: DrillClientApi;
+    onStart?: (band: 1000 | 1400 | 1800 | 2200, side: "white" | "black") => Promise<void>;
+  }
+  let { api, onStart }: Props = $props();
 
   let ratingView: RatingView | undefined = $state();
   let history: RatingHistoryPage | undefined = $state();
   let marks: readonly LearnerMark[] = $state([]);
   let loading = $state(true);
   let error: string | undefined = $state();
+  let startError: string | undefined = $state();
+  let starting = $state(false);
+  let selectedBand: "1000" | "1400" | "1800" | "2200" = $state("1400");
+  let selectedSide: "white" | "black" = $state("white");
 
   onMount(() => { void load(); });
 
@@ -57,6 +64,19 @@
     const parsed = new Date(value);
     return Number.isNaN(parsed.valueOf()) ? value : parsed.toLocaleDateString();
   }
+
+
+  async function start(): Promise<void> {
+    if (onStart === undefined) return;
+    starting = true;
+    startError = undefined;
+    try {
+      await onStart(Number(selectedBand) as 1000 | 1400 | 1800 | 2200, selectedSide);
+    } catch (cause) {
+      startError = cause instanceof Error ? cause.message : String(cause);
+      starting = false;
+    }
+  }
 </script>
 
 <main class="rating-view" aria-labelledby="rating-title">
@@ -71,6 +91,35 @@
   {:else if error}
     <div class="error" role="alert"><p>{error}</p><button type="button" onclick={() => void load()}>Try again</button></div>
   {:else}
+    {#if onStart}
+      <section class="start-card" aria-labelledby="start-rated-title">
+        <div>
+          <p class="eyebrow">Play a measured game</p>
+          <h2 id="start-rated-title">Choose the opponent; keep the game clean.</h2>
+          <p>One full game from the normal starting position. Rewinds and live assistance void the rating result, but never delete the game.</p>
+        </div>
+        <form onsubmit={(event) => { event.preventDefault(); void start(); }}>
+          <label>Opponent
+            <select value={selectedBand} disabled={starting} onchange={(event) => selectedBand = event.currentTarget.value as typeof selectedBand}>
+              <option value="1000">Band 1000 · first rung</option>
+              <option value="1400">Band 1400 · steady</option>
+              <option value="1800">Band 1800 · testing</option>
+              <option value="2200">Band 2200 · top measured rung</option>
+            </select>
+          </label>
+          <label>Your side
+            <select value={selectedSide} disabled={starting} onchange={(event) => selectedSide = event.currentTarget.value as typeof selectedSide}>
+              <option value="white">White</option>
+              <option value="black">Black</option>
+            </select>
+          </label>
+          <button type="submit" disabled={starting}>{starting ? "Starting…" : "Start rated game"}</button>
+        </form>
+        <p class="honest">Band labels describe this calibrated Maia ladder. They are not FIDE, Lichess, or Chess.com ratings.</p>
+        {#if startError}<p role="alert" class="error">{startError}</p>{/if}
+      </section>
+    {/if}
+
     {#if ratingView?.rating}
       {@const publication = ratingView.rating}
       <section class="rating-card" aria-labelledby="current-rating-title">
@@ -121,6 +170,12 @@
   section { margin-top: 1.5rem; }
   .eyebrow { color: var(--muted); font: 700 0.72rem/1.2 ui-monospace, monospace; letter-spacing: .08em; text-transform: uppercase; }
   .rating-card { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 1.5rem; align-items: end; padding: clamp(1rem, 3vw, 1.75rem); border: 1px solid var(--line); border-radius: 1rem; background: var(--panel); }
+  .start-card { display: grid; grid-template-columns: minmax(0, 1fr) minmax(18rem, .8fr); gap: 1.5rem; align-items: end; padding: clamp(1rem, 3vw, 1.75rem); border: 1px solid var(--line); border-radius: 1rem; background: var(--panel); }
+  .start-card form { display: grid; grid-template-columns: 1fr 1fr; gap: .75rem; align-items: end; }
+  .start-card label { display: grid; gap: .35rem; color: var(--muted); font-size: .8rem; }
+  .start-card select, .start-card button { min-height: 2.75rem; padding: .6rem .7rem; border: 1px solid var(--line); border-radius: .6rem; background: var(--paper); color: var(--ink); }
+  .start-card button { grid-column: 1 / -1; background: var(--accent); color: var(--accent-text); font-weight: 700; cursor: pointer; }
+  .start-card .honest { grid-column: 1 / -1; margin-bottom: 0; color: var(--muted); }
   .rating-card h2 { font-size: clamp(1.8rem, 5vw, 3.2rem); }
   .interval { color: var(--muted); margin-bottom: 0; }
   dl { display: flex; gap: 1.5rem; margin: 0; }
@@ -138,5 +193,5 @@
   th, td { padding: .7rem; border-bottom: 1px solid var(--line); text-align: left; }
   th { color: var(--muted); font-size: .72rem; text-transform: uppercase; }
   .error { padding: 1rem; border: 1px solid var(--warning); border-radius: .75rem; }
-  @media (max-width: 620px) { .rating-card { grid-template-columns: 1fr; } dl { flex-wrap: wrap; } }
+  @media (max-width: 720px) { .start-card, .rating-card { grid-template-columns: 1fr; } .start-card form { grid-template-columns: 1fr; } .start-card button { grid-column: auto; } dl { flex-wrap: wrap; } }
 </style>

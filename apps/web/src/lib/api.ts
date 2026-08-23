@@ -553,6 +553,16 @@ export interface CreateRunRequest {
   };
 }
 
+export interface CreateRatedGameRequest {
+  readonly id: string;
+  readonly start: { readonly fen: string };
+  readonly side: "white" | "black";
+  readonly band: 1000 | 1400 | 1800 | 2200;
+  readonly policyConfig: PolicyConfig;
+  readonly seed: number;
+  readonly createdAt?: string;
+}
+
 export interface ProgressAttempt {
   readonly runId: string;
   readonly branchId: string;
@@ -817,6 +827,7 @@ export interface DrillClientApi extends RunApi {
   withdrawSubmission?(id:string,runId:string):Promise<void>;
   rating?(): Promise<RatingView>;
   ratingHistory?(): Promise<RatingHistoryPage>;
+  createRatedGame?(input: CreateRatedGameRequest, writerId: string): Promise<DrillRun>;
   learnerMarks?(): Promise<readonly LearnerMark[]>;
   cohortStanding?(classroomId: string): Promise<CohortStandingView>;
   updateCohortStanding?(classroomId: string, input:
@@ -1107,6 +1118,7 @@ export class DrillApi implements DrillClientApi {
   async withdrawSubmission(id:string,runId:string):Promise<void>{await this.#json(`/assignments/${encoded(id)}/submissions`,{method:"POST",body:{op:"withdraw",runId}});}
   rating():Promise<RatingView>{return this.#json("/rating");}
   ratingHistory():Promise<RatingHistoryPage>{return this.#json("/rating/history");}
+  async createRatedGame(input:CreateRatedGameRequest,writerId:string):Promise<DrillRun>{const body=await this.#json<{readonly run:DrillRun}>("/rated-games",{method:"POST",writerId,body:input});return body.run;}
   async learnerMarks():Promise<readonly LearnerMark[]>{const body=await this.#json<{readonly marks:readonly LearnerMark[]}>("/marks");return body.marks;}
   cohortStanding(classroomId:string):Promise<CohortStandingView>{return this.#json(`/cohorts/${encoded(classroomId)}/standing`);}
   async updateCohortStanding(classroomId:string,input:

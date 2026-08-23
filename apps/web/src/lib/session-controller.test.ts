@@ -381,7 +381,7 @@ class FakeApi implements DrillClientApi {
         };
   }
 
-  async applyEvidence(): Promise<MutationResult> {
+  async applyEvidence(_runId: string, _resultSeq: number, _writerId: string): Promise<MutationResult> {
     throw new Error("not used");
   }
 

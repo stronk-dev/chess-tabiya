@@ -6453,3 +6453,20 @@ and zero unrouted rows after reconciliation.
 
 **Next:** use the corrected executable index to select work; never quote a raw mention census as
 proof of ownership again.
+
+## 2026-08-23 — The measured Record can start the games it reports
+
+**What landed:** the client now binds `POST /rated-games` and the `/rating` screen offers one
+guided start card over the four calibrated rungs and learner side. It creates a standard-position
+run with the existing fixed server policy, persists the writer claim, and opens the normal board.
+
+**What changed:** D1088 narrows rather than closes. The permanently empty Record path is repaired;
+the independent Review gaps remain — move-quality grades still have no production caller and the
+post-game surface still lacks the full move review/summary this row names. The UI exposes no raw
+engine, seed, policy, or FEN settings, and states that Maia bands are not external ratings.
+
+**Verification:** rating API/surface plus Compare-controller focused tests 25/25; web typecheck
+reports zero errors and zero warnings. No broad suite was rerun.
+
+**Next:** the F6/O7 Review implementation must compile grades and whole-game moments without
+folding them into this rating record or turning the product into an engine-verdict screen.
