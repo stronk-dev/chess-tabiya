@@ -757,6 +757,8 @@ otherwise on the same authority that would answer Open question 1.
 
 ## Acceptance criteria
 
+> **Cross-review 2026-08-23 — [[D1411]] blocks acceptance.** The [[D755]] escape clause this document amends does not exist in `rfc/breadth-collectors.md`, so criterion 16 has nothing to amend; and §4.2 publishes an interval for a move that is not legal in 222 of 384 band-rows, which criterion 9 accidentally contradicts.
+
 > **Findings landed 2026-08-23.** [[D1389]] — `offWindow` has five readers and is settable by an untrusted caller. [[D1390]] — declared latency is derived from availability alone. [[D1391]] — no shipped or drafted grammar can express a target-preserving bot goal. [[D1392]] — the dossier re-derived with zero drift; its two unreported directions are recorded.
 
 Every criterion can fail ([[D451]]). Where a criterion quotes a measured number, the number is the

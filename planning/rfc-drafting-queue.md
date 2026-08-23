@@ -1291,3 +1291,23 @@ commissioning. Where two drafts need the same site, one takes it and the other c
 as a cross-draft ownership pin in `rfc/README.md`, exactly as schema lanes are. A denominator quoted
 from another draft is re-derived, never copied: the two figures above differed by 36 and both
 documents stated theirs as fact.
+
+## Owner rulings 2026-08-23 (third batch) — the grade ladder and the word guard
+
+**[[D1408]] — one grade ladder everywhere.** The `practice` (2.5/6/14 Win%-points) and `report`
+(5/10/15) ladders collapse to a single set of thresholds used on every surface. A move must not
+change its label according to which screen the learner is on. The owner accepted the stated cost —
+review was set stricter so a whole-game report would not cry wolf — because the drift is the one
+`rfc/move-quality-grades.md:405-408` names as its own counter-example. **Which** thresholds is not
+ruled and is claude's to derive and put back. `move-quality-grades` is accepted, so this lands as a
+register amendment, never a direct edit.
+
+**[[D1409]] — a judgement word is bound to the sentence that grounds it.** Permitted only inside the
+exact rendered sentence that grounds it, byte-matched; banned everywhere else in the output,
+including elsewhere in the same packet. This closes [[D1406]]'s widening without removing grades, and
+it survives future producers: a new grounded sentence licenses its own words and nothing else. It is
+**not** folded into O7 — it is a live defect with its own repair, and `rfc/review-map.md` may not be
+accepted before `voiceCheck` enforces it.
+
+Both rulings bear on `rfc/theory-knowledge-pipeline.md`: [[D1410]] finding 4 is exactly the
+packet-relative hole, reached through quoted third-party prose rather than through a grade.

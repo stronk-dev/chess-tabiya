@@ -771,6 +771,8 @@ asserts it from this side.
 
 ## Acceptance criteria
 
+> **Cross-review 2026-08-23 — [[D1410]] blocks acceptance.** The law-8 argument is prose at four points it claims are structural: `TheoryQuery` carries no position, a phase-only eligibility set reconstructs whole-bundle retrieval, prose keys are authored rather than typed, and quoted prose in the packet neutralises the word guard ([[D1409]] repairs the last). Also [[D1395]]'s five HTTP controls have no criterion, so this document does not close it.
+
 > **Findings landed 2026-08-23.** [[D1393]] — the attribution gate opens silently when `claim-semantic-anchors` lands. [[D1394]] — a CC0 source cannot be attributed. [[D1395]] — the source fetcher has no SSRF guard, redirect limit or byte ceiling. [[D1396]] — 0 of 893 records support a load-bearing pointer.
 
 1. **The corpus baseline is a command, not this document's arithmetic** ([[D1240]]).

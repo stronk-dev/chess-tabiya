@@ -454,9 +454,11 @@ population, several opinionated derivations, none of them contaminating the fact
 **§6.2 — The shipped cache is the counter-example, and it is a defect at HEAD.**
 `selectionCacheKey` (`opponent-selector.ts:264-278`) is
 `[policyConfigDigest, targetElo, profile.id, profile.version, profile.digest, packId, seed,
-sha256(startFen + every history move)]`. `[V]` Every term is policy or session; **not one is the
-position**. Two consequences, both measured by reading: the same position reached by two move orders
-is two entries, and no other consumer can ever hit it. And it is **unbounded** — `#cache` is a plain
+sha256(startFen + every history move)]`. `[V]` **Corrected ([[D1388]]/[[D1413]]): the last term IS positional** —
+a start position plus every history move determines the position, so the earlier "no positional
+term" reading was wrong and is retracted. What survives is that the key is **history-shaped rather
+than position-shaped**: the same position reached by two move orders is two entries, and no other
+consumer can ever hit it. And it is **unbounded** — `#cache` is a plain
 `Map` (`:469`) with no LRU, no TTL and no eviction anywhere in the class; `cacheSize()` (`:506`)
 reports the growth and nothing acts on it. `[V]` Single-flight is present and correct (the promise is
 stored before resolution and deleted on rejection, `:495-503`) and is the pattern §6.3 keeps.
@@ -668,6 +670,8 @@ contradicted.
 
 ## Acceptance criteria
 
+> **Cross-review 2026-08-23 — [[D1412]] blocks acceptance.** The seal does not reject a reconstruction (executed: `RECONSTRUCTION REJECTED BY SEAL? false`), and asserting an event mints a second sealed twin. [[D1413]] — this document still asserts the retracted [[D1388]] claim in two places while quoting its own retraction.
+
 > **Cross-review 2026-08-23.** [[D1385]] — `evaluatedAlternatives` cannot differ from `legalAlternatives` on the main path, and the unevaluated case selects two families the complete population rejects. [[D1386]] — the selector's inline event closure composes eight families where `localSemanticEvents` composes ten. [[D1387]] — alternative events are never checked against the edge they were supplied for. [[D1388]] — the reported `selectionCacheKey` positional defect does not exist.
 
 1. **The population is never an argument.** A fixture attempting to supply `candidates`,
@@ -822,9 +826,10 @@ D1354; corrected here per §0.7.)*
   the absence of a producer keeps it dark.
 - **🐞** — **The shipped selection cache is keyed on policy and session and is unbounded.**
   `selectionCacheKey` (`opponent-selector.ts:264-278`) is a policy-config digest, target Elo, the
-  profile triple, pack id, seed and `sha256(startFen + every history move)` — **not one term is the
-  position**, so the same position by two move orders is two entries and no other consumer can hit
-  it. `#cache` is a plain `Map` (`:469`) with no eviction anywhere in the class; `cacheSize()`
+  profile triple, pack id, seed and `sha256(startFen + every history move)` — the last term is positional, so the
+  retracted "no positional term" claim does not stand ([[D1388]]); what stands is that the key is
+  **history-shaped**, so the same position by two move orders is two entries and no other consumer
+  can hit it. `#cache` is a plain `Map` (`:469`) with no eviction anywhere in the class; `cacheSize()`
   (`:506`) reports growth and nothing acts on it. Single-flight is present and correct (`:495-503`).
 - **📊** — **The candidate vector loses six envelope fields, not five.** [[D1072]]'s row and the
   harness assert five absences; the sixth is **`evidence`** itself — the sealed `DeclaredEvidence`

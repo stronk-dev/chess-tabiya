@@ -323,6 +323,8 @@ is proposed as a ledger row below and named as open question 6.
 
 ## Acceptance criteria
 
+> **Owner ruling 2026-08-23 — [[D1409]] blocks acceptance of this document.** A judgement word is permitted only inside the exact rendered sentence that grounds it, byte-matched, and banned everywhere else in the output including elsewhere in the same packet. The Review Map may not land before `voiceCheck` enforces that. [[D1408]] — one grade ladder everywhere; [[D1406]]/[[D1407]] record why.
+
 Each names the wrong implementation that would otherwise pass.
 
 1. **The move list renders every ply of the mainline**, with SAN, ply number and side. *Fails if* a
