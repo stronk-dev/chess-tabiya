@@ -906,3 +906,18 @@ collapses it into the thing R20 disqualifies.
 - **[[D1182]]** — correction to [[D1142]]: `RepertoireLayer`/`MemoryLayer` exist and are executed;
   the sweep searched the RFC's type names rather than the shipped ones. Routed here as an
   audit-quality correction alongside [[D1120]]'s practice.
+
+### Skills lane derived — [[D1190]]–[[D1193]]
+
+`planning/skills/rfc-derivation.md`. **Not licensed**: [[D1093]] enumerates only D1031/D1041/D1060,
+and the owner sentence it derives from names *style*, not skills. The real gate is **O9, ready for
+the owner** — but O9 covers habit cards, a ledger and three modules and **says nothing about
+credits, milestones or tiers**, so even full approval leaves half of [[D549]] unlicensed.
+
+**Recommendation ([[D1193]]): do not draft a skills RFC.** The first visible pixel of D549 ships
+inside the **review** RFC as a per-game observation card. v1 = one ruling + [[D300]] (one injectable
+class) + implementing the accepted store. Nothing new is built.
+
+**[[D1190]] is owed to the owner**: I framed [[D1151]] on *"the first number about the learner"*,
+which is **already shipped** (`RatingScreen.svelte`). The ruling may stand; its stated ground does
+not, and `design/06`'s rationale needs correcting (law 5).
