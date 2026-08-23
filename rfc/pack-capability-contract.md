@@ -1,6 +1,6 @@
 # RFC: Pack capability contract — semantic versions, handshake, deprecation and migration
 
-- **Status:** draft — **returned to author 2026-08-23, on six return-class blockers from independent cross-review** (~65 claims checked, 17 failed). **The mechanism holds and the [[D566]] acceptance test is real, not decorative**: criterion 13's three predicate-bearing documents are exactly `content/shapes/{knight-vs-bishop,maroczy-bind,open-centre}.json`, all inside §7's included roots, and `digest.ts:69` digests every byte with no field filter — so no pack byte and no `packDigest` moved when `pawn_safe_square`'s meaning changed, and a source-region digest is the only thing that would have caught it. Lane 0.30 is genuinely next-free, the claims block joins character-for-character to its register row, and every §7 population count reproduces at HEAD. **What returns it:** (1) **criterion 4 pins a census that is wrong at source** — `BREADTH_CONVENTION_TEXT` has **8** entries at HEAD (`evidence-catalog.ts:183-190`), so prose conventions are **13**, not 12, and `89+60+13+12+17=191` is satisfiable **only by an implementation that drops a convention** ([[D984]]'s class); the wrong figure also sits in the Summary, §2.4 **and the register row**, so the repair must be one commit or it manufactures a body/register split. (2) **No closure argument, and the enumeration is provably open**: `SimpleTrigger` (6 arms, `packages/schema/src/drill-pack/types.ts:82-89`) has **no census row** — while §2.5 names it as one of exactly two twice-interpreted vocabularies whose two sites criterion 6 asserts — and `TransitionExpression` (5) is likewise absent, while `rules_fact` (3) and `fenPredicate` (4) are **double-counted** as standalone vocabularies though they are fields inside other arms. A census that both omits and double-counts is not a closure; the fix is a **procedure over the schema's 52 `$defs`** and the tree's exhaustive `never` switches, not a hand-count. (3) **Four of criterion 4's five terms are arithmetically wrong**, inherited from the derivation: §3a sums to **90** not 89, §3a-ter to **62** not 60, §3f has **16** rows not 17, and the derivation's own prose says 15 where its heading says 16. (4) **Criteria 8 and 16 are mutually unsatisfiable** — C8 requires `packCapabilities` set-equal the registry while C16 + §5.1's [[D509]] rule requires an unsupported capability to be **absent** from the published set, and every deployment carries at least one (`plan_defense`/`human_external` ship `refused`; `ENGINE_MODE=mock` drops the providers, the literal D509 case §5.1 cites as precedent). (5) **§4.4 does not satisfy `claim-semantic-anchors` §7 and its "byte-for-byte" table is false**: §7 dispatches on a `contract` key **per binding object** (`{id:"claim.binding",version:2}`, refusal `CLAIM_BINDING_VERSION_UNSUPPORTED`) while §4.4 supplies a `requires` array at the **sidecar root** (refusal `SIDECAR_CAPABILITY_UNSUPPORTED`) — different granularity, and §7's Stage A keeps one legacy binding running inside a file the V2 parser also reads, which a per-document declaration makes impossible; §7 also *refuses* an explicit `claim.binding@1` where criterion 15 requires **recording** it. §4.4 must adopt §7's per-binding `contract` grammar rather than assert equivalence with it. (6) **`claim.binding` is required by §4.4 and absent from the enumeration** — register it and criterion 4's 191 breaks; don't and §4.3's `unmet` set refuses **every** sidecar declaring it. **Gate F clauses 5 and 6 are NOT tickable on this draft**: clause 5's policy rests on criterion 16, which contradicts criterion 8; §7's population definition — the strongest part of the document — survives intact, but its tripwire omits `content/packs/` and its criterion-4 sibling cannot be satisfied. Non-blocking corrections are applied in place, including **criterion 15's sidecar population 32 → 68** (the drafted glob dropped all 36 candidate sidecars — §7's own defect class recurring inside a criterion) and five citation errors, among them *"refuse-to-serve, not degrade"* attributed to `docs/drill-client.md:16`, **which contains no such string anywhere in the file**. *(Prior line for history: draft — 2026-08-23.)*
+- **Status:** draft — **six blockers repaired 2026-08-23, ready for re-review.** All six return-class findings are fixed, and three of them dissolved together rather than being patched. **(1) The census is no longer a hand-count.** §3.1 replaces it with `make capability-census`, a **derivation procedure** over four roots — the schema's 52 `$defs`, the tree's exhaustive `never` switches, the named evaluators without a vocabulary, and the manifest by reference — with `CAPABILITY_DECLARATIONS` asserted **set-equal to its output by id**, and the HEAD count baked only as a drift tripwire. That kills blockers (1), (3) and (6) at once: the four wrong terms cannot recur because no arithmetic is asserted; `SimpleTrigger` (6 arms) and `TransitionExpression` (5 nodes) are enumerated by rule 1 rather than omitted; and **`claim.binding` is registered**, so §4.3's handshake admits the sidecar declaration instead of refusing every artifact that names it. **The corrected HEAD figures, re-derived at source:** §3a sums to **90** (not 89), §3a-ter to **62** (not 60), `BREADTH_CONVENTION_TEXT` has **8** entries so conventions are **13** (not 12), §3f has **16** rows (not 17) — primary total **206** including the two omitted unions and `claim.binding`. **(2) Criteria 8 and 16 no longer contradict each other.** §4.2 now publishes the **supported projection** — `reached` ∪ `temporarily_unavailable` — rather than the whole registry, which is what §5.1's [[D509]] rule and §4.3's `unmet` computation already required; publishing everything is now the *named wrong implementation*. Verified premise: **every deployment carries at least one unsupported capability** (`FORMAT_DISPOSITIONS` ships 5 `refused` rows including `plan_defense` and `human_external`). **(3) §4.4 adopts `claim-semantic-anchors` §7's grammar instead of asserting equivalence with it.** The declaration is a `contract` key **per binding object**, not a `requires` array at the sidecar root — because §7's Stage A keeps one legacy binding running *inside a file the V2 parser also reads*, which a per-document declaration cannot express. The second refusal code is **withdrawn**; this seam has one code and it is the consumer's (`CLAIM_BINDING_VERSION_UNSUPPORTED`). F3 supplies the grammar and the registration; §7 keeps the dispatch, the stage timing and the refusal, and this RFC now cites them rather than restating them. **What survived the review untouched and is not disturbed:** the [[D566]] acceptance test is real (criterion 13's three predicate-bearing documents are exactly `content/shapes/{knight-vs-bishop,maroczy-bind,open-centre}.json`, all inside §7's included roots, and `digest.ts:69` digests every byte with no field filter — so nothing shipped would have caught that drift and a source-region digest is the only thing that would), lane 0.30 is genuinely next-free, the claims block joins character-for-character to its register row, and every §7 population count reproduces at HEAD. **Gate F clause 5 was already unblocked by [[D1077]] and clause 6 is unblocked by §7's population definition — the criterion-8/16 contradiction that blocked clause 5's policy is now gone.** *(Prior line for history: draft — returned to author 2026-08-23 on six return-class blockers; before that: draft — 2026-08-23.)*
 - **Author:** claude (drafted from `planning/platform-alignment/f3-derivation.md`, the HEAD derivation of every surface this document versions)
 - **Created:** 2026-08-23
 - **Design refs:** `design/research/pack-primitive-stability.md` §6 (R6's six-part model); `planning/platform-alignment/plan.md` Gate F clauses 1, 5, 6, 7
@@ -20,9 +20,14 @@ A pack today declares **no version of any kind** — not of the format it was wr
 of the evaluator semantics its conditions depend on. Measured over all 92 pack documents: 24
 top-level keys under `"additionalProperties": false`, and a grep for
 `schemaVersion|formatVersion|capabilities|$schema|specVersion|packFormat` matches **0 files**
-(`f3-derivation.md` §2e). Meanwhile the meanings a pack depends on live in **≥149 pack-facing
-vocabulary arms across 30 vocabularies**, 188 manifest projections, 12 conventions whose semantics
-are **frozen prose**, and 13 verdict producers of which **12 carry no identifier at all**.
+(`f3-derivation.md` §2e). Meanwhile the meanings a pack depends on live in **≥163 pack-facing
+vocabulary arms across 32 vocabularies**, 188 manifest projections, **13** conventions whose
+semantics are **frozen prose**, and 13 verdict producers of which **12 carry no identifier at all**.
+
+*(Counts corrected at the six-blocker repair, 2026-08-23: the pack-facing arm floor is **163**
+across 32 vocabularies once the two omitted parent unions are counted, and the conventions are
+**13**, not 12. §3.1 replaces every hand-count with a derivation procedure — these figures are a
+tripwire baseline, not the contract's definition.)*
 
 This RFC specifies the contract that binds those two facts together: a **capability** is a named,
 versioned, digest-bound unit of evaluator meaning; a pack **declares the capability versions it
@@ -164,9 +169,10 @@ someone either reverts or bumps to `@2` — at which point every pack requiring 
 
 #### §2.4 Prose conventions are digested
 
-`BREADTH_CONVENTION_TEXT` (7 entries) and `SEMANTIC_CONVENTION_TEXT` (5 entries) at
-`packages/runtime/src/evidence-catalog.ts:182-199` are the **normative statement** of what 12
-collectors assert — including `mate-proof@1`'s 250,000-node cap and `pressure-line@1`'s own
+`BREADTH_CONVENTION_TEXT` (**8** entries — `localNonLosing`, `candidateMajority`, `kingZone`,
+`kingShelter`, `materialRole`, `pressureLine`, `squareControl`, `pawnRelations`) and
+`SEMANTIC_CONVENTION_TEXT` (5 entries) at `packages/runtime/src/evidence-catalog.ts:182-196` are the
+**normative statement** of what **13** collectors assert — including `mate-proof@1`'s 250,000-node cap and `pressure-line@1`'s own
 P1/N3/B3/R5/Q9 role scale. Editing that prose changes what the predicate means with no code change
 at all. Each convention is therefore a capability whose `conventionText` is inside its
 `semanticsDigest`: **a prose edit without a version bump reddens CI**, which is G22's remedy.
@@ -184,6 +190,12 @@ interprets the subject. Two vocabularies are interpreted twice today:
 A capability that compiles in the predicate switch and not the evidence-ref switch produces a
 verdict with no attribution, silently. Criterion 6 asserts site completeness against a registered
 census, so a new interpretation site cannot be added without either declaring it or failing.
+
+**Both vocabularies in this table are registered capabilities**, which the returned draft did not
+guarantee: `SimpleTrigger` appeared here — with criterion 6 asserting **both** of its sites — while
+appearing in no census list, so the draft required site-completeness for a capability it never
+declared. §3.1's rule 1 enumerates it (6 arms) and rule 2 enumerates its two sites, so the assertion
+now has a row to assert against.
 
 #### §2.6 Resolved-through artifacts are inside the requirement
 
@@ -204,18 +216,67 @@ remedy and it is the only part of the contract that reaches outside pack bytes.
 **Unit: one declaration per capability subject. Total at landing: the census below, asserted by
 criterion 4.**
 
-| Group | Count | Source of the count |
-|---|---|---|
-| Pack-facing vocabulary arms (14 primary unions) | **89** | `f3-derivation.md` §3a |
-| Pack-facing vocabulary arms (16 further vocabularies) | **60** | §3a-ter |
-| Verdict producers | **13** | §3e (12 of them unidentified today) |
-| Prose conventions | **12** | `BREADTH_CONVENTION_TEXT` 7 + `SEMANTIC_CONVENTION_TEXT` 5 |
-| Constant tables that decide meaning | **17** | §3f |
-| Manifest projections | **188** | `make evidence-manifest-check` at HEAD |
+#### §3.1 The census is DERIVED by a procedure, never hand-counted
 
-The first five groups total **191** and are this RFC's primary obligation. The 188 manifest
-projections **already carry `{id, version}` records** and are absorbed by reference: §2.1's parse
-rule adopts them without rewriting them, and criterion 5 removes the literal that pins them.
+**This section was returned by cross-review and is rewritten.** The drafted census was a hand-count
+that both **omitted** and **double-counted**, and asserting its integer made criterion 4 satisfiable
+*only by a wrong implementation* — the [[D984]] class this RFC's own criteria preamble names. The
+repair is not a corrected integer. **It is a procedure**, because a list plus a self-consistency
+assertion is not a closure argument.
+
+**`make capability-census` enumerates capability subjects mechanically**, from four roots, and
+`CAPABILITY_DECLARATIONS` must set-equal its output:
+
+| # | Root | Rule | Mechanically enumerable from |
+|---|---|---|---|
+| 1 | **Closed vocabularies** | every closed union or enum a pack can author, **including nested value vocabularies**, each a distinct subject | the schema's **52 `$defs`** (`schemas/drill_pack.schema.json`) joined to `packages/schema/src/drill-pack/types.ts` |
+| 2 | **Exhaustive switches** | every `switch` whose default asserts `never` interprets a vocabulary; each is a *site*, and a vocabulary with no declaration is a census failure | the tree's `never` exhaustiveness checks |
+| 3 | **Named evaluators without a vocabulary** | verdict producers, prose conventions, constant tables — meaning that is not a union | §3e (13), the two convention tables (13), §3f (16) |
+| 4 | **Manifest projections** | absorbed **by reference**; they already carry `{id, version}` | `make evidence-manifest-check` (188 at HEAD) |
+
+**The unit, stated because the drafted census mixed two of them silently:** one declaration per
+**capability subject**, where a nested value vocabulary is its own subject. `successCondition`'s
+`rules_fact` arm and the `rules_fact` value vocabulary (`checkmate`/`stalemate`/`draw`) are **two**
+subjects, not one double-count — the arm decides *which evaluator runs*, the value vocabulary decides
+*what it concludes*, and either can change meaning without the other. The same holds for
+`SimpleTrigger`'s `fenPredicate` arm and the `fenPredicate` variant vocabulary. The drafted table
+counted the nested vocabularies while omitting their parent unions, which is what made it incoherent
+rather than merely wrong.
+
+**Two parent unions the drafted census omitted entirely**, both now enumerated by rule 1:
+
+| Vocabulary | Arms | Type | Why the omission mattered |
+|---|---|---|---|
+| `SimpleTrigger` | **6** | `types.ts:85-91` | **§2.5 asserts site-completeness for it** — the draft required both its interpretation sites while never declaring the capability, so criterion 6 asserted a row criterion 4 forbade |
+| `TransitionExpression` | **5** nodes | `types.ts:445-450` | its two sites are in the derivation's §3a-bis; the arm list never carried it |
+
+**Baseline at HEAD, baked as a tripwire — not as the definition.** Following §7's population idiom
+and the two shipped refusal-on-drift assertions, the procedure's output count is asserted so drift
+reddens CI, and the baseline is **re-derived by running the procedure at implementation**, never
+hand-summed:
+
+| Group | HEAD | Correction from the returned draft |
+|---|---|---|
+| Primary unions (§3a) | **90** | was 89 — the 14 rows sum to 90 (4+12+8+18+8+6+4+4+6+7+3+4+3+3) |
+| Further vocabularies (§3a-ter) | **62** | was 60 — the 16 rows sum to 62 (14+4+3+2+5+5+4+4+3+3+3+3+3+3+2+1); the derivation's prose also says "15 more vocabularies" against its own heading's 16 |
+| Parent unions omitted | **+11** | `SimpleTrigger` 6 + `TransitionExpression` 5 |
+| Verdict producers (§3e) | **13** | unchanged — verified |
+| Prose conventions | **13** | was 12 — `BREADTH_CONVENTION_TEXT` is **8** entries at HEAD (`evidence-catalog.ts:182-196`), not 7, plus `SEMANTIC_CONVENTION_TEXT` 5 |
+| Constant tables (§3f) | **16** | was 17 — §3f has 16 rows |
+| `claim.binding` (§4.4) | **+1** | required by §4.4 and absent from the drafted census; see below |
+| **Primary total** | **206** | was "191" |
+| Manifest projections | 188 | by reference, unchanged |
+
+**`claim.binding` is a registered capability** (a `verdict_producer` subject, `sourcing/claim-binding.ts`),
+which is what makes §4.4's declaration legal: §4.3's `unmet = pack.requires \ runtimeSupported`
+refuses every artifact declaring an unregistered capability, so a sidecar requiring `claim.binding`
+would have been refused by the draft's own handshake. Registering it does not "break the count"
+because **no hand-count is asserted any more** — this is the third blocker the procedure dissolves
+rather than patches.
+
+The 188 manifest projections **already carry `{id, version}` records** and are absorbed by reference:
+§2.1's parse rule adopts them without rewriting them, and criterion 5 removes the literal that pins
+them.
 
 **Scope decision, stated rather than assumed.** Three of the manifest's 25 consumers decide pack
 meaning at runtime — `authoring.predicate` (`evidence-catalog.ts:860`),
@@ -255,12 +316,28 @@ speed; this paragraph exists so no later reader mistakes it for an oversight.
 
 #### §4.2 What the runtime publishes
 
-`GET /capabilities` gains `packCapabilities`: the full `CAPABILITY_DECLARATIONS` projection of
-`{id, version, disposition}`. `FORMAT_DISPOSITIONS`' own comment
-(`packages/schema/src/drill-pack/dispositions.ts:21`) says it is *"deliberately not part of the
-deployment capabilities payload"* — which is exactly why no pack can be checked against it today.
-This publication is the fix; `FORMAT_DISPOSITIONS` is absorbed as the `vocabulary_arm` subset
-(criterion 8).
+`GET /capabilities` gains `packCapabilities`. **It publishes the SUPPORTED projection, not the
+whole registry** — `{id, version, disposition}` for every declaration whose capability this
+deployment actually carries.
+
+**This was a return-class contradiction and is now resolved.** The drafted criterion 8 required the
+response to *set-equal the registry* while criterion 16 and §5.1's [[D509]] rule require an
+`unsupported` capability to be **absent** from it. Both cannot hold: **every deployment carries at
+least one unsupported capability** — `FORMAT_DISPOSITIONS` ships **5** `refused` rows including
+`plan_defense` and `human_external` (`dispositions.ts:25,31`), and `ENGINE_MODE=mock` drops the
+providers, which is the literal D509 case §5.1 cites as its own precedent.
+
+**The rule, normative:** `packCapabilities` = the registry's `reached` ∪ `temporarily_unavailable`
+rows. `unsupported`, `refused`, `withdrawn` and `deprecated`-without-a-reached-successor are
+**absent**. This is not a weakening — it is what makes §4.3's `unmet = pack.requires \
+runtimeSupported` compute the right thing with no extra field, which §5.1 already asserted and
+criterion 8 contradicted. Publishing the whole registry is now the *named wrong implementation*,
+because it makes `unmet` empty for a capability the operator never deployed.
+
+`FORMAT_DISPOSITIONS`' own comment (`packages/schema/src/drill-pack/dispositions.ts:21`) says it is
+*"deliberately not part of the deployment capabilities payload"* — which is exactly why no pack can
+be checked against it today. This publication is the fix; `FORMAT_DISPOSITIONS` is absorbed as the
+`vocabulary_arm` subset (criterion 8).
 
 #### §4.3 The handshake
 
@@ -306,42 +383,58 @@ semantics its content requires*, and a sidecar's records are evaluated by claim-
 the same class of evaluator-versioned meaning §2.2 defines. Splitting that grammar across two
 documents would manufacture a second spelling, which is the exact defect §2.1 exists to kill.
 
-**The declaration is the same `requires` grammar, in the sidecar's own root:**
+**The declaration is a `contract` key on each BINDING OBJECT — the consumer's own grammar, adopted
+rather than paralleled.** The returned draft put a `requires` array at the *sidecar root* and
+asserted it matched `claim-semantic-anchors` §7 *"byte-for-byte"*. **That claim was false and the
+cross-review disproved it at source.** §7 dispatches per binding object:
 
 ```jsonc
-// evidence sidecar root — schema string UNCHANGED
+// evidence sidecar — schema string UNCHANGED at the root
 "schema": "tabiya.sourcing.evidence.v1",
-"requires": [
-  { "id": "claim.binding", "version": 2 }
+"claimBindings": [
+  { "claimId": "...", "pointer": "...", "spans": [], "textSha256": "...",
+    "contract": { "id": "claim.binding", "version": 2 } }
 ]
 ```
 
-**The top-level `schema` string does not move, and that is §2.1's rule rather than a concession.**
-Version-as-data means an artifact's identity names *what it is*, never *which semantics evaluate
-it*. `tabiya.sourcing.evidence.v1` identifies the sidecar format — records, abstentions,
-`sourcedAt` — none of which changes when claim-binding semantics change. Moving the identity string
-to `.v2` would encode an evaluator version inside a name, reintroducing the `@1`/`@v1`/structured
-three-spelling defect §2.1 removes. A sidecar whose *format* changes moves its schema string; a
-sidecar whose *evaluator semantics* change declares a requirement.
+**Why the root-level form was not merely different but unusable.** §7's Stage A *"continues"* the one
+committed legacy binding (`philidor-third-rank-hold.evidence.json`) **through its existing path
+inside a file the V2 parser also reads**. A per-document declaration cannot express that: the
+document is v1 or v2, so Stage A's mixed state is unrepresentable and §7's two-stage migration
+collapses into one. Three further divergences the draft's table hid:
 
-**Absence, and the one honest difference from §4.1.** §4.1 makes `requires` **required** on a pack,
-because absence-is-permissive is the failure mode [[D1058]] refused. That argument does not
-transfer unchanged: 32 evidence sidecars are already committed with no `requires` key, so requiring
-it would invalidate every one of them on landing. The resolution keeps the refusal without
-rewriting history — **absence is a pinned default, not an open question:**
-
-| stage | a sidecar with no `requires` | authority |
+| | `claim-semantic-anchors` §7 (the consumer, authoritative) | the returned draft's §4.4 |
 |---|---|---|
-| before the consumer's Stage B | reads as `claim.binding@1` — an **explicit** default, recorded in the parse result, never inferred from body shape | matches `claim-semantic-anchors` §7's dispatch-by-presence rule byte-for-byte |
-| after the consumer's Stage B | **refused** with `SIDECAR_CAPABILITY_UNSUPPORTED` | the consumer's own Stage B deletes the legacy path |
+| granularity | **per binding object** | per document (sidecar root) |
+| refusal code | `CLAIM_BINDING_VERSION_UNSUPPORTED` | `SIDECAR_CAPABILITY_UNSUPPORTED` (a second code for one seam) |
+| explicit `claim.binding@1` | **refused in both stages** — *"any `contract` whose id or version is not exactly `claim.binding`/`2`"* | criterion 15 required it **recorded** |
+| absence | legacy path in Stage A; refused after Stage B | *"reads as `claim.binding@1`"* |
 
-So this RFC supplies the **grammar and the refusal code**; the consuming RFC supplies the **stage
-timing** at which absence stops meaning v1. Neither invents the other's half. The refusal joins the
-same 422 arm as `PACK_CAPABILITY_UNSUPPORTED` (§4.3), and what refusal *does* is Open question 1's
-subject for sidecars exactly as it is for packs.
+**What F3 supplies, and what it does not.** F3 owns the **grammar and the vocabulary**: a `contract`
+value is a `CapabilityId` (§2.1's structured `{id, version}`, never a suffix string), and
+**`claim.binding` is a registered capability** (§3.1) so §4.3's handshake admits it instead of
+refusing every sidecar that names it. F3 does **not** own the dispatch, the stage timing, or the
+refusal code — those are §7's, and this RFC now **cites** them rather than restating them. There is
+**one** refusal code for this seam, `CLAIM_BINDING_VERSION_UNSUPPORTED`, and it is the consumer's;
+`SIDECAR_CAPABILITY_UNSUPPORTED` is **withdrawn from this RFC**, because minting a second code for
+one seam is the second-spelling defect §2.1 exists to kill.
+
+**Absence is the consumer's rule, unmodified.** F3 states no default. §7's dispatch-by-presence
+governs: no `contract` key → the legacy path during Stage A, `CLAIM_BINDING_VERSION_UNSUPPORTED`
+after Stage B. The draft's *"explicit pinned default"* table is **struck** — it contradicted §7's
+refusal of an explicit `claim.binding@1` and would have required the consumer to accept a version it
+refuses in both stages. The 68 committed sidecars carrying no `contract` key therefore remain valid
+through Stage A **by the consumer's rule**, not by a default this RFC invents.
+
+**Why the §4.1 absence-is-refusal argument does not transfer, stated honestly.** A pack's `requires`
+is required because absence-is-permissive is the failure mode [[D1058]] refused. A binding object's
+`contract` is *not* required, because §7 makes absence **meaningful** (legacy) in Stage A and
+**refused** after Stage B — presence-dispatch already supplies the refusal [[D1058]] wanted, at a
+different point in time. The two artifacts differ in kind, and the honest statement is that F3
+defers to the consumer here rather than that the rules coincide.
 
 **No seventh register, and this resolves a conditional claims block elsewhere.** The sidecar is not
-one of the six shared-resource registers, and `requires` is a key *inside* an artifact this RFC does
+one of the six shared-resource registers, and `contract` is a key *inside* an artifact this RFC does
 not otherwise version — so nothing here claims a lane beyond the pack-schema 0.30 already declared.
 `claim-semantic-anchors`' claims block reads *"Refresh this block if F3's accepted contract makes
 that seam a registered resource"* — **it does not**, so that block stays `none`. Stated here so the
@@ -546,9 +639,16 @@ can fail is the [[D444]] class and one nothing can satisfy is the [[D984]] class
 3. **Declared equals derived.** For all 92 packs, the `requires` array equals the set derived from
    the vocabulary the pack actually uses, closed over §2.6's resolved entries. Fixture: a pack
    declaring one capability it does not use fails; a pack using one it does not declare fails.
-4. **The census is asserted, not assumed.** The registry's counts equal §3's table (89 + 60 + 13 +
-   12 + 17 = 191 primary declarations), and the assertion names the unit. *Wrong implementation:*
-   one declaring 191 rows of which some are duplicates — the id set must also be 191.
+4. **The census is DERIVED, not asserted as an integer (§3.1).** `make capability-census` enumerates
+   subjects from the four roots, and `CAPABILITY_DECLARATIONS` **set-equals its output** — id set,
+   not just cardinality. A separate baked baseline reddens when the derived count drifts, and the
+   baseline is produced by *running* the procedure, never hand-summed. *Wrong implementation that
+   passes a count but fails this:* one hand-maintaining a list that happens to total the baseline.
+   *What the returned draft did:* asserted `89+60+13+12+17=191`, of which **four terms were wrong**
+   (§3a is 90, §3a-ter is 62, conventions are 13, constant tables are 16) and which **omitted
+   `SimpleTrigger` and `TransitionExpression` while double-counting nothing it declared** — so the
+   criterion was satisfiable *only* by an implementation that dropped a convention. Fixture: adding a
+   `$defs` union with no declaration fails; adding a declaration with no enumerable subject fails.
 5. **No version literal survives in an assertion.** A tree-wide check finds zero occurrences of a
    hardcoded `@1`/`@v1` suffix inside a test or checker assertion, including
    `evidence-manifest-check.ts:70`. Red at HEAD; green only when the literal is replaced by data.
@@ -557,9 +657,15 @@ can fail is the [[D444]] class and one nothing can satisfy is the [[D984]] class
 7. **Requirement scope.** A pack's derived requirement set draws only from the three
    pack-meaning consumers; a projection outside them can never appear in a `requires` array.
    Fixture in both directions.
-8. **`FORMAT_DISPOSITIONS` is absorbed and published.** All 12 rows appear as `vocabulary_arm`
-   declarations, and `GET /capabilities` returns `packCapabilities`. *Wrong implementation:*
-   publishing an empty array — the response must set-equal the registry.
+8. **`FORMAT_DISPOSITIONS` is absorbed, and `packCapabilities` publishes the SUPPORTED projection
+   (§4.2).** All 12 rows appear as `vocabulary_arm` declarations, and `GET /capabilities` returns
+   `packCapabilities` = the registry's `reached` ∪ `temporarily_unavailable` rows — **not the whole
+   registry**. *Wrong implementations, both named:* publishing an empty array; and publishing every
+   declaration including `unsupported`/`refused`, which makes §4.3's `unmet` set compute empty for a
+   capability the operator never deployed and silently admits a pack this deployment cannot serve.
+   Fixture: with `plan_defense` `refused`, it is absent from `packCapabilities` and a pack requiring
+   it is refused. *(This criterion contradicted criterion 16 in the returned draft — both are now
+   the same rule stated once in §4.2.)*
 9. **Every `deprecated` successor resolves.** Fixture: a successor pointing at a `withdrawn`
    capability fails.
 10. **Every `refused` carries `ruledBy`.** Fixture: a refusal with no `ruledBy` fails; one whose
@@ -576,22 +682,23 @@ can fail is the [[D444]] class and one nothing can satisfy is the [[D984]] class
     fails this:* any contract keyed on JSON fields.
 14. **Convention prose is inside the digest.** Editing one character of `BREADTH_CONVENTION_TEXT`
     without a version bump reddens `make capability-check`.
-15. **A sidecar declares its evaluator semantics, and absence is explicit (§4.4).** A sidecar
-    carrying `requires: [{id: "claim.binding", version: 2}]` parses as v2 with its schema string
-    still reading `tabiya.sourcing.evidence.v1`; a sidecar with no `requires` parses as
-    `claim.binding@1` **with the default recorded in the parse result**, not inferred; and a
-    sidecar requiring a version the runtime does not publish is refused with
-    `SIDECAR_CAPABILITY_UNSUPPORTED` on the 422 arm. Fixture: all **68** committed sidecars
-    (every document carrying `schema: "tabiya.sourcing.evidence.v1"` — 32 in `content/drafts/` as
-    `*.evidence.json` and 36 in `content/candidates/*/evidence.json`; **0** of which carry a
-    `requires` key at HEAD) parse as v1 with the explicit default, and one hand-built
-    `claim.binding@3` sidecar is refused. *(Corrected from "32, `git ls-files
-    'content/**/*.evidence.json'`" by cross-review 2026-08-23: that glob is a naming-convention
-    filter over one of the two content roots and silently drops all 36 candidate sidecars — the
-    exact defect class §7 exists to kill, recurring inside a criterion.)*
-    *Wrong implementation that passes criteria 1–14 and fails this:* one treating a missing
-    `requires` as unversioned-and-permissive — the [[D1058]] failure mode, which is why the default
-    must be **recorded** rather than assumed.
+15. **A sidecar declares its evaluator semantics in the CONSUMER's grammar (§4.4).** A binding
+    object carrying `contract: {id: "claim.binding", version: 2}` parses as V2 with the sidecar's
+    schema string still reading `tabiya.sourcing.evidence.v1`; a binding object with **no** `contract`
+    key follows `claim-semantic-anchors` §7's dispatch-by-presence — legacy path in Stage A, refused
+    after Stage B — and **this RFC asserts no default of its own**; any `contract` whose id or version
+    is not exactly `claim.binding`/`2` is refused with **`CLAIM_BINDING_VERSION_UNSUPPORTED`**, the
+    consumer's code, in **both** stages. Fixture: all **68** committed sidecars (every document
+    carrying `schema: "tabiya.sourcing.evidence.v1"` — 32 in `content/drafts/` as `*.evidence.json`
+    and 36 in `content/candidates/*/evidence.json`; **0** of which carry a `contract` key at HEAD)
+    parse through the Stage-A legacy path, and one hand-built `claim.binding@3` binding is refused.
+    Additionally: `claim.binding` **resolves in the registry** (§3.1), so §4.3's handshake admits a
+    sidecar declaring it. *Wrong implementations, both from the returned draft:* one declaring
+    `requires` at the **sidecar root**, which cannot express §7's Stage A — a single file holding one
+    legacy binding while the V2 parser reads the rest; and one minting a second refusal code for this
+    seam. *(Corrected from "32" by cross-review 2026-08-23: `git ls-files 'content/**/*.evidence.json'`
+    is a filename-convention filter over one of two content roots and drops all 36 candidate
+    sidecars — the exact defect class §7 exists to kill, recurring inside a criterion.)*
 16. **Unavailability resolves to exactly one of two states, by cause ([[D1077]], §5.1).** An
     `unsupported` capability is **absent** from `/capabilities`' `packCapabilities` set (the
     [[D509]] rule), so a pack requiring it is refused at registration with
@@ -642,32 +749,58 @@ can fail is the [[D444]] class and one nothing can satisfy is the [[D984]] class
 
 ## Ledger rows
 
-**⚠ The numbers below are STALE and will renumber at landing.** They were written when the head was
-D1071; the head has since passed them — **D1073 is codex's** (bot state-directed profile) and
-**D1074–D1076 landed at the `assistance-controls` supersede** (2026-08-23). Per the standing
-protocol a proposed row takes the next free id **in the commit that lands it**, never the id it was
-drafted with. Re-derive against `design/BACKLOG.md` immediately before landing these.
+Proposed from committed head **D1234** (verified immediately before this commit; [[D1130]]'s
+unnumbered convention is **retired** — codex's semantic-route fix landed, so a proposed id can no
+longer manufacture a route for an unrelated landed row).
 
-
-Proposed from committed head **D1071** — renumber at landing; codex lands rows continuously.
-
-- **D1072 (proposed — renumber at landing)** — 🐞 the pack schema is **v0.27**, not "v0.2".
+- **D1235 (proposed — renumber at landing)** — 🐞 the pack schema is **v0.27**, not "v0.2".
   `CLAUDE.md` §Phase and the F3 commissioning brief both say v0.2, a stale reference to the era the
   doc was written in. `CLAUDE.md` is the owner's file: propose, do not edit.
-- **D1073 (proposed — renumber at landing)** — 🐞 **two king values in one runtime**:
+- **D1236 (proposed — renumber at landing)** — 🐞 **two king values in one runtime**:
   `MATERIAL_VALUES` has K0 (`packages/runtime/src/objective.ts:34`) while `EXCHANGE_PIECE_VALUES`
-  has K100 (`exchange.ts:16`), and `pressure-line@1`'s prose carries a third P/N/B/R/Q scale
+  has K100 (`exchange.ts:16`), and `pressure-line@1`'s prose carries a third P1/N3/B3/R5/Q9 scale
   (`evidence-catalog.ts:188`). Three copies of one idea, each a place a capability version can be
   right in one copy and wrong in another. Same class: `CATEGORY_RANK` 9 entries
   (`sourcing/tablebase-category.ts:4-14`) vs `RANK` 5 entries (`branch-scale.ts:30`).
-- **D1074 (proposed — renumber at landing)** — 🐞 `reviewStatus` has **never been exercised**: all
+- **D1237 (proposed — renumber at landing)** — 🐞 `reviewStatus` has **never been exercised**: all
   92 documents are `draft`, zero `published`, so `pack-validation.ts:971-986` — the strictest gate
   in the tree — has never fired on committed content. Its type safety is also lost at runtime
   (widened to `string` at `pack-registry.ts:41`), and a missing status becomes `""`. The sacrificial
   pilot is its first real test.
+- **D1238 (proposed — renumber at landing)** — 🐞 **the F3 derivation's own census is wrong in four
+  terms and omits two parent unions**, and the returned draft inherited every error verbatim:
+  `f3-derivation.md` §3a sums to **90** not 89, §3a-ter to **62** not 60 (and its §3a prose says
+  *"15 more vocabularies"* against its own heading's 16), §3f has **16** rows not 17, and the
+  conventions are **13** not 12 because `BREADTH_CONVENTION_TEXT` has **8** entries. `SimpleTrigger`
+  (6 arms) and `TransitionExpression` (5 nodes) appear in §3a-bis's interpretation-site table and in
+  **no arm list at all**. **The transmissible lesson is not the arithmetic**: a derivation that hands
+  an RFC a hand-summed integer hands it an unfalsifiable one, and the RFC asserted it as a criterion
+  — [[D984]]'s class, arriving through the derivation channel. Derivations should hand over a
+  *procedure* and a measured baseline, never a total.
 
 ## Changelog
 
+- 2026-08-23 (**six-blocker repair**, post-return): (1) **§3.1 replaces the hand-counted census with
+  `make capability-census`, a derivation procedure** over the schema's 52 `$defs`, the tree's
+  exhaustive `never` switches, the named evaluators without a vocabulary, and the manifest by
+  reference; `CAPABILITY_DECLARATIONS` is asserted **set-equal by id** to its output and the HEAD
+  count is baked only as a drift tripwire. This dissolves three blockers together — the four wrong
+  arithmetic terms cannot recur because no arithmetic is asserted, the two omitted parent unions
+  (`SimpleTrigger` 6, `TransitionExpression` 5) are enumerated by rule, and **`claim.binding` is
+  registered** so §4.3's handshake stops refusing every sidecar that names it. (2) **Counts corrected
+  at source**: §3a **90**, §3a-ter **62**, conventions **13** (`BREADTH_CONVENTION_TEXT` is 8
+  entries), constant tables **16**; primary total **206**. Summary and §2.4 updated to match. (3)
+  **§4.2 publishes the supported projection** (`reached` ∪ `temporarily_unavailable`), resolving the
+  criterion-8/16 contradiction — verified premise: 5 `refused` rows ship, so every deployment carries
+  an unsupported capability. (4) **§4.4 rewritten onto `claim-semantic-anchors` §7's per-binding
+  `contract` grammar**; the root-level `requires` form is withdrawn because §7's Stage A keeps a
+  legacy binding inside a file the V2 parser also reads, which a per-document declaration cannot
+  express; `SIDECAR_CAPABILITY_UNSUPPORTED` is withdrawn so the seam has one refusal code and it is
+  the consumer's; the invented *"explicit pinned default"* is struck because §7 refuses an explicit
+  `claim.binding@1` in both stages. (5) Criteria **4, 8 and 15** rewritten to match, each naming the
+  returned draft's own behaviour as its wrong implementation. §2.5 now states that both vocabularies
+  it asserts site-completeness for are declared — the draft asserted criterion 6 against a capability
+  criterion 4 forbade.
 - 2026-08-23: created, drafted from `planning/platform-alignment/f3-derivation.md` under
   [[D995]]/[[D996]], with the central lane-vs-sidecar fork ruled by [[D1058]].
 - 2026-08-23 (scope amendment, pre-review): added **§4.4, the evidence-sidecar declaration**, and
