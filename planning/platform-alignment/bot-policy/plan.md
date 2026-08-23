@@ -7,6 +7,12 @@
 **Status:** mechanical experiment in progress; instrument correction recorded below; blinded
 multi-ply review remains external
 
+**2026-08-23 production-probe follow-up:** D969's disposable Stockfish 18 harness and dossier land
+at `tools/d969-stockfish-guard-harness/` and
+`design/research/stockfish-candidate-guard-probe.md`. They establish the shared candidate-set
+request and exact-row/mate requirements. The RFC amendment still owns the budget and mate rule;
+guarded profile registration remains blocked until a real-vector completion/latency arm passes.
+
 ## Question
 
 Which separable policy layers can change a bot's declared board behaviour without destroying the

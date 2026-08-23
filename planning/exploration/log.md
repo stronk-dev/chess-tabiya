@@ -5632,3 +5632,20 @@ cannot add one.
 **Verification and boundary:** runtime typecheck and the focused campaign/preset tests pass. This
 is pure composition only: it adds no seed encounters, storage, routes or UI and does not advance
 the blocked migration position.
+
+## 2026-08-23 — D969 Stockfish candidate-guard mechanism probe
+
+**What landed:** a disposable Stockfish 18 harness compared unrestricted, shared candidate-set and
+independent `searchmoves` searches over three positions / thirteen legal candidates at fixed-node
+and fixed-depth bounds. The research dossier updates the bot-policy coverage row and narrows D969.
+
+**Finding:** one shared `MultiPV=N searchmoves <candidate...>` request returned every candidate and
+is the only measured common comparison frame. Independent fixed-node probes can rate a restricted
+candidate above the separately searched unrestricted best. Fixed-node output can also end in
+`upperbound`/`lowerbound` despite carrying a score, and a forced-mate set produces typed `mate 1`,
+`mate 2`, `mate 3` and `cp 0` together. Score presence is not completeness; mate-to-cp coercion is
+not measurement.
+
+**Boundary and next:** D969 remains open. Claude's RFC amendment must choose the bounded request and
+typed mate rule, then a real Maia-vector arm must measure exact-completion and latency before any
+guarded production profile or capability-disposition change. No production code changed.
