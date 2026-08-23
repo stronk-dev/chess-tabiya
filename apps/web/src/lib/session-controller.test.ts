@@ -4,6 +4,7 @@ import { readFileSync } from "node:fs";
 
 import type { DrillPackDefinition } from "@chess-tabiya/schema/drill-pack";
 import {
+  attachEvidence,
   appendOpponentPly,
   appendEvents,
   commitMove,
@@ -614,6 +615,58 @@ describe("DrillSessionController", () => {
 
     environment.controller.stopSession();
     expect(environment.controller.state).toEqual({ busy: false });
+  });
+
+  it("drains ready branch evidence before taking the comparison snapshot", async () => {
+    const api = new FakeApi();
+    const environment = controller(api);
+    await environment.controller.startPack(pack.id);
+    await environment.controller.move("c1e3");
+    await environment.controller.continueCheckpoint();
+    await environment.controller.continueCheckpoint();
+    await environment.controller.fork("second look", "test intent");
+    const branches = environment.controller.state.runState!.run.branches;
+    const pendingNodes = environment.controller.state.runState!.run.nodes
+      .filter((node) => node.parentId !== null && node.evidenceRefs.length === 0)
+      .map((node) => node.id);
+    const callOrder: string[] = [];
+    vi.spyOn(api, "evidence").mockImplementation(async () => {
+      callOrder.push("evidence");
+      return {
+        results: pendingNodes.map((nodeId, index) => ({
+          seq: index + 1,
+          jobId: `compare-evidence-${index + 1}`,
+          runId: api.requiredRun().id,
+          nodeId,
+          evidenceRefs: [`engine:compare-${index + 1}`],
+          payload: { kind: "eval" as const, source: "engine_validated" as const, values: { centipawns: index * 12 } },
+        })),
+        nextSeq: pendingNodes.length,
+      };
+    });
+    vi.spyOn(api, "applyEvidence").mockImplementation(async (_runId, resultSeq) => {
+      callOrder.push(`apply:${resultSeq}`);
+      const nodeId = pendingNodes[resultSeq - 1]!;
+      const result = attachEvidence(api.requiredRun(), nodeId, [`engine:compare-${resultSeq}`], {
+        kind: "eval", source: "engine_validated", values: { centipawns: (resultSeq - 1) * 12 },
+      }, at);
+      api.run = result.run;
+      return result;
+    });
+    const compare = vi.spyOn(api, "compare").mockImplementation(async (_runId, branchIds) => {
+      callOrder.push("compare");
+      return compareBranches(api.requiredRun(), branchIds);
+    });
+
+    await environment.controller.compare([branches[0]!.id, branches[1]!.id]);
+
+    expect(callOrder.at(-1)).toBe("compare");
+    expect(callOrder.slice(0, -1)).toEqual([
+      "evidence",
+      ...pendingNodes.map((_, index) => `apply:${index + 1}`),
+    ]);
+    expect(compare).toHaveBeenCalledOnce();
+    expect(Object.values(environment.controller.state.comparison!.evidence).flat()).not.toHaveLength(0);
   });
 
   it("creates a group and routes its opponent reply through the group journal seam", async () => {

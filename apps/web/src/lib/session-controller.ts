@@ -450,9 +450,14 @@ export class DrillSessionController {
   }
 
   async compare(branchIds: readonly string[]): Promise<void> {
-    const run = this.#requiredRun().run;
     this.#patch({ busy: true, error: undefined, checkpoint: undefined });
     try {
+      const store = this.#requiredStore();
+      // Comparison is a committed/review surface. Drain any ready evidence before the
+      // server snapshots the branches; otherwise the comparison can permanently capture
+      // empty strips while the normal evidence poll attaches the same results one tick later.
+      await store.pollEvidence();
+      const run = store.snapshot.run;
       const comparison = await this.#api.compare(run.id, branchIds);
       this.#patch({
         busy: false,

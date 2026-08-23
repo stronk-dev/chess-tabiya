@@ -874,6 +874,16 @@ test("served Najdorf pack plays, rewinds, branches, compares, and exports", asyn
       sparklines.every((sparkline) => sparkline.querySelectorAll("span").length > 0),
     ),
   ).toBe(true);
+  await expect.poll(() =>
+    page.locator(".strip-band article").evaluateAll((articles) =>
+      articles.every((article) => {
+        const details = article.querySelectorAll("details");
+        const facts = details[0]?.querySelectorAll("p").length ?? 0;
+        const routes = [...(details[1]?.querySelectorAll("p") ?? [])];
+        return facts > 0 && routes.length > 0 && routes.every((route) => !route.textContent?.includes("No piece route"));
+      }),
+    ),
+  ).toBe(true);
   await page.getByRole("button", { name: "Narrative" }).click();
   await expect(page.getByText(/recorded branches share/)).toBeVisible();
   await expect(page.getByRole("heading", { name: "quiet setup" })).toHaveCount(2);

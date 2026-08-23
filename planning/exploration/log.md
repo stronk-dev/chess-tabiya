@@ -6415,3 +6415,22 @@ human likeness, coherence and fun are unclaimed.
 
 **Next:** bind D1084 into the F8 author/review pass, then measure a multi-route repertoire/profile
 composition rather than another scalar Maia multiplier.
+
+## 2026-08-23 — Compare's empty branch strips fixed at the evidence-snapshot boundary
+
+**What landed:** D1085. `DrillSessionController.compare` now drains every ready staged-evidence
+result before requesting the server's immutable branch comparison. The focused core-loop browser
+test proves both branches carry recorded-eval dots, structure/timing facts and actual piece routes;
+the controller test pins evidence/apply-before-compare ordering.
+
+**What changed:** the product finding was confirmed and the instrument accusation was corrected.
+The old ordering called `/compare` before `/evidence`; two engine results attached immediately
+afterward and the mounted snapshot never changed. The existing browser assertion was already red on
+the empty sparkline children, so this was not a green test over an empty surface. The new assertion
+widens the proof to all three strips rather than weakening the existing engine requirement.
+
+**Verification:** `session-controller.test.ts` 21/21; the exact `served Najdorf pack plays,
+rewinds, branches, compares, and exports` browser flow 1/1. No broad suite was rerun.
+
+**Next:** the UX composition pass may change how Compare presents these facts; it now receives the
+recorded inputs before first paint instead of a stale pre-evidence snapshot.
