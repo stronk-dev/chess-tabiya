@@ -1,5 +1,10 @@
-import { describe, expect, it } from "vitest";
+import { mkdtempSync, rmSync } from "node:fs";
+import { tmpdir } from "node:os";
+import { join } from "node:path";
+import { DatabaseSync } from "node:sqlite";
+
 import { commitMove, createRun } from "@chess-tabiya/runtime";
+import { describe, expect, it } from "vitest";
 
 import {
   ACCOUNT_BUNDLE_FORMAT,
@@ -134,8 +139,31 @@ describe("portable account-data foundation", () => {
     storage.setClassroomMemberState("classroom-one", "private-partner-id", "active", at);
     storage.createAssignment({ id: "assignment-one", classroomId: "classroom-one", packId: "social-pack", assignedBy: "private-owner-id", note: "Try both branches", dueAt: null, createdAt: at, withdrawnAt: null });
     storage.submitAssignment({ assignmentId: "assignment-one", learnerId: "private-partner-id", runId: submittedRun.id, grantedLearnerIds: [], submittedAt: at, accessExpiresAt: "2026-09-23T00:00:00.000Z", withdrawnAt: null }, ["private-owner-id"]);
+    storage.replaceRunMarks({ runId: arenaRun.id, learnerId: "private-owner-id", scope: "position", scopeKey: arenaRun.nodes[0]!.transposeKey, shapes: [{ brush: "blue", orig: "e2", dest: "e4" }], relayed: false, at });
+    storage.createSchedule({ id: "schedule-one", learnerId: "private-owner-id", rootKey: "social-root", sessionKind: "pack", packId: "social-pack", rootTransposeKey: arenaRun.nodes[0]!.transposeKey, kind: "varied", variant: null, origin: "learner", dueAt: at, createdAt: at, sourceRunId: arenaRun.id, sourceNodeId: arenaRun.nodes[0]!.id });
+    storage.createRepertoire!({ id: "repertoire-one", ownerLearnerId: "private-owner-id", name: "Main repertoire", side: "white", rootFen: arenaRun.start.fen, targetElo: 1600, coverageDenominator: 100, sourceKind: "pgn_paste", sourceUrl: null, originalPgn: "1. e4", licenceNote: "Learner supplied", digest: `sha256:${"1".repeat(64)}`, createdAt: at, updatedAt: at }, [{ repertoireId: "repertoire-one", positionKey: arenaRun.nodes[0]!.transposeKey, moveUci: "e2e4", moveSan: "e4", representativeFen: arenaRun.nodes[0]!.fen, rank: 0, origin: "imported", createdAt: at }]);
+    storage.saveRepertoireScan!({
+      repertoireId: "repertoire-one", scannedAt: at, repertoireDigest: `sha256:${"1".repeat(64)}`,
+      population: [{ positionKey: arenaRun.nodes[0]!.transposeKey, mass: 1 }], gaps: [], alternateGaps: [], unknown: [],
+      uncoveredMass: 0, truncated: false, sourceFailures: 0, queriesUsed: 1, unreachedKeys: 0,
+    });
+    storage.createPackDraft({ id: "private-pack-draft", packId: "private-pack", ownerLearnerId: "private-owner-id", document: { id: "private-pack", nested: { exact: true } }, digest: `sha256:${"b".repeat(64)}`, state: "draft", seedKind: "blank", seedRef: null, createdAt: at, updatedAt: at });
+    storage.storePlaytestDocument(`sha256:${"c".repeat(64)}`, "private-pack-draft", { id: "playtest-document" }, at);
+    storage.createShapeDraft({ id: "published-shape-draft", shapeId: "published-shape", ownerLearnerId: "private-owner-id", document: { id: "published-shape", version: "1.0.0" }, digest: `sha256:${"d".repeat(64)}`, state: "draft", createdAt: at, updatedAt: at });
+    storage.registerShapeDraft({ shapeId: "published-shape", version: "1.0.0", digest: `sha256:${"d".repeat(64)}`, document: { id: "published-shape", version: "1.0.0" }, publisherHandle: "owner", publisherLearnerId: "private-owner-id", draftId: "published-shape-draft", registeredAt: at });
+    const ratedRun = makeRun("rated-run", 4);
+    storage.createRatedRun(ratedRun, { writerId: "rated-writer", learnerId: "private-owner-id" }, "Rated run", { runId: ratedRun.id, learnerId: "private-owner-id", calibrationId: "fixture-calibration", opponentBand: 1500, opponentRating: 1500, opponentRd: 50, learnerSide: "white", startPieceCount: 32, engineIdentityDigest: "fixture-engine", state: "open", startedAt: at });
+    storage.sealRatedGame({ runId: ratedRun.id, result: "win", terminalReason: "checkmate", plyCount: 24, sealedAt: at });
+    storage.createCohortStanding({ classroomId: "classroom-one", openedByLearnerId: "private-owner-id", windowFrom: at, windowTo: null, openedAt: at, closedAt: null });
+    storage.publishStandingMember({ classroomId: "classroom-one", learnerId: "private-owner-id", showRecord: true, showRating: true, publishedAt: at });
 
     const bundle = storage.accountBundle("private-owner-id");
+    for (const section of [bundle.ownedRuns, bundle.sharedAccess, bundle.progress, bundle.marks, bundle.repertoires, bundle.drafts, bundle.publications, bundle.liveAndSocial, bundle.behavioralProfiles]) {
+      expect(section.value).not.toHaveLength(0);
+    }
+    expect(new Set((bundle.repertoires.value as readonly { readonly table: string }[]).map((item) => item.table))).toEqual(
+      new Set(["repertoires", "repertoire_moves", "repertoire_scans"]),
+    );
     const tables = new Set((bundle.liveAndSocial.value as readonly { readonly table: string }[]).map((item) => item.table));
     expect(tables).toEqual(new Set([
       "live_sessions", "session_journal", "session_proposals", "session_vote_windows", "session_votes",
@@ -171,6 +199,37 @@ describe("portable account-data foundation", () => {
     expect(preview.tombstone.flatMap((effect) => effect.objectIds)).toEqual(["derived-source", "shared"]);
     expect(preview.revoke.flatMap((effect) => effect.objectIds)).toEqual(["share-private"]);
     expect(planDeletion({ scope: { kind: "account" }, runs: [], hardDelete: [], retainedPublished: [] }).digest).not.toBe(preview.digest);
+  });
+
+  it("scrubs departing contributions from a shared run without rewriting its move and event bytes", () => {
+    const at = "2026-08-23T00:00:00.000Z";
+    const storage = new SQLiteRunStorage(":memory:", { onMigration: () => {}, now: () => at });
+    storage.createLearner({ id: "scrub-owner", handle: "scrub-owner", passwordHash: "!", createdAt: at });
+    storage.createLearner({ id: "scrub-reader", handle: "scrub-reader", passwordHash: "!", createdAt: at });
+    const base = createRun({ id: "scrub-run", packId: "scrub-pack", packDigest: `sha256:${"4".repeat(64)}`, startFen: "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1", seed: 4, createdAt: at, policyConfig: { seedMode: "fixed", locus: { executedAt: "server", engineIds: [], modelIds: [] } } });
+    const run = commitMove(base, "e2e4", { at }).run;
+    const lease = { writerId: "scrub-writer", learnerId: "scrub-owner" } as const;
+    storage.createImportedRun!(run, lease, "Shared imported run", {
+      runId: run.id, sourceKind: "pgn_paste", sourceUrl: null, movetextDigest: `sha256:${"5".repeat(64)}`,
+      headers: { Event: "Private import metadata" }, result: "*", pgn: "1. e4 *", licenceNote: "Learner supplied", importedAt: at,
+    });
+    storage.grantRole(run.id, "scrub-reader", "participant", lease, at);
+    storage.replaceRunMarks({ runId: run.id, learnerId: "scrub-owner", scope: "position", scopeKey: run.nodes[0]!.transposeKey, shapes: [{ brush: "green", orig: "e2", dest: "e4" }], relayed: false, at });
+    const attempts = projectAttempts({ run, learnerId: "scrub-owner" });
+    storage.upsertAttempts(attempts.attempts, attempts.conceptTags);
+
+    const eventBytes = JSON.stringify(storage.read(run.id)!.run.events);
+    const preview = storage.deletionPreview("scrub-owner", { kind: "account" }, at);
+    expect(preview.tombstone.flatMap((effect) => effect.objectIds)).toContain(run.id);
+    storage.deleteLearner("scrub-owner", at, preview.digest);
+
+    expect(JSON.stringify(storage.read(run.id)!.run.events)).toBe(eventBytes);
+    expect(storage.importedGame!(run.id)).toBeUndefined();
+    expect(storage.runMarks(run.id, "scrub-owner")).toEqual([]);
+    expect(storage.progress("scrub-owner")).toEqual([]);
+    expect(storage.runRole(run.id, "scrub-reader")).toBe("spectator");
+    expect(storage.foreignKeyViolationCount()).toBe(0);
+    storage.close();
   });
 
   it("tombstones a source needed by a foreign-owned derivation and deletes a private chain", () => {
@@ -251,6 +310,31 @@ describe("portable account-data foundation", () => {
     expect(storedRunExport('{"id":"missing-schema"}', "0.17")).toMatchObject({ replayable: false, snapshot: { kind: "raw", diagnostic: { code: "INVALID_RUN_DOCUMENT" } } });
     const old = '{"schemaVersion":"0.16","id":"old"}';
     expect(storedRunExport(old, "0.17")).toMatchObject({ replayable: false, schemaVersion: "0.16", snapshot: { kind: "raw", utf8: old, diagnostic: { code: "UNSUPPORTED_RUN_SCHEMA" } } });
+  });
+
+  it("exports quarantined database snapshots losslessly instead of dropping the owned runs", () => {
+    const directory = mkdtempSync(join(tmpdir(), "tabiya-account-export-"));
+    const filename = join(directory, "fixture.sqlite");
+    try {
+      let storage = new SQLiteRunStorage(filename, { onMigration: () => {}, now: () => "2026-08-23T00:00:00.000Z" });
+      storage.createLearner({ id: "quarantine-owner", handle: "quarantine-owner", passwordHash: "!", createdAt: "2026-08-23T00:00:00.000Z" });
+      const makeRun = (id: string, seed: number) => createRun({ id, packId: "quarantine-pack", packDigest: `sha256:${"e".repeat(64)}`, startFen: "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1", seed, createdAt: "2026-08-23T00:00:00.000Z", policyConfig: { seedMode: "fixed", locus: { executedAt: "server", engineIds: [], modelIds: [] } } });
+      storage.create(makeRun("invalid-json-run", 1), { writerId: "writer-invalid", learnerId: "quarantine-owner" });
+      storage.create(makeRun("future-schema-run", 2), { writerId: "writer-future", learnerId: "quarantine-owner" });
+      storage.close();
+      const database = new DatabaseSync(filename);
+      database.prepare("UPDATE drill_runs SET snapshot_json=?,schema_version=? WHERE id=?").run("{not-json", "unknown", "invalid-json-run");
+      const future = '{"id":"future-schema-run","schemaVersion":"99.0","events":[]}';
+      database.prepare("UPDATE drill_runs SET snapshot_json=?,schema_version=? WHERE id=?").run(future, "99.0", "future-schema-run");
+      database.close();
+      storage = new SQLiteRunStorage(filename, { onMigration: () => {} });
+      const runs = storage.accountBundle("quarantine-owner").ownedRuns.value;
+      expect(runs.find((run) => run.id === "invalid-json-run")).toMatchObject({ replayable: false, snapshot: { kind: "raw", utf8: "{not-json", diagnostic: { code: "INVALID_JSON" } } });
+      expect(runs.find((run) => run.id === "future-schema-run")).toMatchObject({ replayable: false, snapshot: { kind: "raw", utf8: future, diagnostic: { code: "UNSUPPORTED_RUN_SCHEMA" } } });
+      storage.close();
+    } finally {
+      rmSync(directory, { recursive: true, force: true });
+    }
   });
 
   it.each(["run_references", "run_transition", "position_stats"] satisfies readonly DeletionEffectGroup[])(

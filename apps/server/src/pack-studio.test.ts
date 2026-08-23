@@ -75,6 +75,27 @@ describe("Pack Studio", () => {
     expect(freshRegistry.byDigest(registered.digest)?.summary).toMatchObject({ id: "restart-pack", channel: "community" });
   });
 
+  it("deletes mutable drafts and playtests while retaining exact registered bytes with tombstoned attribution", async () => {
+    const { storage, studio } = await setup();
+    const mutableDocument = structuredClone(fixture);
+    mutableDocument.id = "mutable-pack";
+    mutableDocument.version = "1.0.0";
+    mutableDocument.provenance = { reviewStatus: "draft", sources: ["mutable source"] };
+    const mutable = studio.create(principal, { document: mutableDocument });
+    studio.playtest(mutable.id, principal);
+    const publishedDocument = structuredClone(mutableDocument);
+    publishedDocument.id = "published-pack";
+    const published = studio.register(studio.create(principal, { document: publishedDocument }).id, principal);
+    const before = structuredClone(storage.registeredPacks().find((row) => row.packId === "published-pack")!);
+    const preview = storage.deletionPreview(principal.learnerId, { kind: "account" }, "2026-08-23T00:00:00.000Z");
+    expect(preview.retainedPublished.flatMap((effect) => effect.objectIds)).toContain("published-pack@1.0.0");
+    storage.deleteLearner(principal.learnerId, "2026-08-23T00:00:00.000Z", preview.digest);
+    expect(storage.packDrafts("__legacy").find((row) => row.id === mutable.id)).toBeUndefined();
+    expect(storage.playtestDocuments().some((row) => row.document && (row.document as { id?: string }).id === "mutable-pack")).toBe(false);
+    expect(storage.registeredPacks().find((row) => row.packId === "published-pack")).toEqual({ ...before, publisherHandle: "deleted account", publisherLearnerId: "__legacy" });
+    expect(storage.registeredPacks().find((row) => row.packId === "published-pack")).toMatchObject({ document: published.document, digest: published.digest });
+  });
+
   it("blocks only outstanding graduation entries and admits resolved history", async () => {
     const { studio } = await setup();
     const document = structuredClone(fixture);
