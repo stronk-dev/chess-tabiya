@@ -6009,6 +6009,16 @@ own best move, category and latency. Cold 313-probe p50/p90/p99/max is
 68.8/356.0/598.4/702.8 ms. Warm latency is recorded as unmeasured rather than simulated because the
 semantic arm already failed its stability gate. Maia remains an independent human-policy question.
 
+Execution of the Maia comparison caught a defect in the first provider sample before a model call.
+The 48 arbitrary stratified rows per population were individually valid but did not retain the join
+needed by the plan's played-versus-alternative delta: most compared different positions or targets.
+The defect is sharper for destination denial—the named square/pawn/minor relation is created by the
+candidate, so a different candidate usually has no same target at all. D1031 replaces the sample
+shape with 16 material anchors carrying played + one hash-selected alternative over the exact same
+attacker/victim, plus 16 standalone destination probes per population. Material deltas remain;
+destination deltas are inapplicable rather than manufactured. The prior Stockfish run remains a
+valid instrument check but its verdict cannot be carried onto the corrected sample without rerun.
+
 
 ## 2026-08-23 — two of codex's own RFCs accepted; one was wrong about the code it was changing
 
@@ -6047,3 +6057,26 @@ gated on [[D921]]'s Wave-C module amendment, still open.
 
 **Next:** codex implements both; the F3 RFC and the D921 amendment are the two unblocks that free
 the remaining pair.
+
+## 2026-08-23 — D1023 provider sample corrected and Stockfish re-derived
+
+The preceding D1023 log entry named its sample-join defect D1031. A concurrent owner/Claude pass
+claimed D1031 for the variant-family ruling before this work landed; the bounded-policy defect is
+D1032. The duplicate was corrected in the ledger rather than allowing one id to name two jobs.
+
+The corrected sample now has 16 material anchors per population with an executable
+played/alternative same-source, same-attacker and same-victim assertion (32 rows), plus 16
+standalone destination rows; zero joins fail. Stockfish was rerun rather than carrying the old
+verdict forward. On the corrected population, Stockfish 18 depth-8/depth-10 category agreement is
+88/96 = 91.67%, clearing the frozen 90% gate; all 308 root tables are complete and every entry
+reaches its requested depth. The earlier 85/96 finding remains historical evidence about the
+invalid unpaired sample, not the current verdict. Corrected cold p50/p90/p99/max is
+72.0/337.0/630.8/735.1 ms.
+
+The paired material arm now supports the comparison the old sample could not. At both depths, the
+played candidate reduces immediate engine-policy target selection versus its hash-selected legal
+alternative in 9/16 authored anchors and 5/16 imported anchors, increases it in 1/16 each, and ties
+in the remainder. Second-opportunity availability is mixed (depth 8 played-minus-alternative:
+authored 4 up / 11 same / 1 down; imported 1 / 12 / 3). These deliberately stratified 16-anchor
+sets validate the operand and its direction per pair; they are not population-frequency estimates.
+The engine-policy arm passes with its depth label retained. Maia remains independent.

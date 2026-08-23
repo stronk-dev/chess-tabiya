@@ -535,32 +535,31 @@ function destinationCensus(rows: readonly ResearchRow[], alternatives: boolean):
   return Object.freeze({ candidates, abstained, targets, bounded: freezeBounded(bounded), reintroducedByPawnRelinquish, reintroducedOther, reintroducedExamples: Object.freeze(reintroducedExamples), universalExamples: Object.freeze(universalExamples), providerPairs: Object.freeze(providerPairs) });
 }
 
-function sampleCell(pair: ProviderPair): string {
-  const exact = pair.exact.immediate === "preserved"
+function exactCell(pair: ProviderPair): string {
+  return pair.exact.immediate === "preserved"
     ? "preserved"
     : pair.exact.preparationSurvivesEveryDefence
       ? "removed_universal"
       : pair.exact.reintroducedWithin3Ply
         ? "removed_reintroduced"
         : "removed_not_reintroduced";
-  return `${pair.played ? "played" : "alternative"}|${pair.targetFamily}|${pair.phase}|${exact}`;
 }
 
 function sampleDigest(pair: ProviderPair): string {
   return createHash("sha256").update(`${pair.sourceId}|${pair.candidateUci}|${pair.targetFamily}|${JSON.stringify(pair.target)}`).digest("hex");
 }
 
-function providerSample(population: string, pairs: readonly ProviderPair[]): Readonly<Record<string, unknown>> {
-  const byCell = new Map<string, ProviderPair[]>();
-  for (const pair of pairs) {
-    const cell = sampleCell(pair);
-    const values = byCell.get(cell) ?? [];
-    values.push(pair);
-    byCell.set(cell, values);
+function roundRobin<T>(values: readonly T[], count: number, cellFor: (value: T) => string, digestFor: (value: T) => string): { readonly selected: readonly T[]; readonly strata: readonly Readonly<Record<string, unknown>>[] } {
+  const byCell = new Map<string, T[]>();
+  for (const value of values) {
+    const cell = cellFor(value), found = byCell.get(cell) ?? [];
+    found.push(value);
+    byCell.set(cell, found);
   }
-  const cells = [...byCell].map(([cell, values]) => ({ cell, values: values.toSorted((left, right) => sampleDigest(left).localeCompare(sampleDigest(right))), cursor: 0 })).sort((left, right) => left.cell.localeCompare(right.cell));
-  const selected: ProviderPair[] = [];
-  while (selected.length < 48) {
+  const cells = [...byCell].map(([cell, found]) => ({ cell, values: found.toSorted((left, right) => digestFor(left).localeCompare(digestFor(right))), cursor: 0 }))
+    .sort((left, right) => createHash("sha256").update(left.cell).digest("hex").localeCompare(createHash("sha256").update(right.cell).digest("hex")));
+  const selected: T[] = [];
+  while (selected.length < count) {
     let advanced = false;
     for (const cell of cells) {
       const value = cell.values[cell.cursor];
@@ -568,15 +567,48 @@ function providerSample(population: string, pairs: readonly ProviderPair[]): Rea
       selected.push(value);
       cell.cursor += 1;
       advanced = true;
-      if (selected.length === 48) break;
+      if (selected.length === count) break;
     }
     if (!advanced) break;
+  }
+  return Object.freeze({ selected: Object.freeze(selected), strata: Object.freeze(cells.map((cell) => Object.freeze({ cell: cell.cell, available: cell.values.length, selected: cell.cursor }))) });
+}
+
+function providerSample(population: string, pairs: readonly ProviderPair[]): Readonly<Record<string, unknown>> {
+  const materialGroups = new Map<string, ProviderPair[]>();
+  for (const pair of pairs.filter((value) => value.targetFamily === "material")) {
+    const key = `${pair.sourceId}|${JSON.stringify(pair.target)}`;
+    const found = materialGroups.get(key) ?? [];
+    found.push(pair);
+    materialGroups.set(key, found);
+  }
+  const anchors = [...materialGroups].flatMap(([key, values]) => {
+    const played = values.find((value) => value.played), alternatives = values.filter((value) => !value.played);
+    return played === undefined || alternatives.length === 0 ? [] : [{ key, played, alternatives }];
+  });
+  const material = roundRobin(anchors, 16, (anchor) => `${anchor.played.phase}|${exactCell(anchor.played)}`, (anchor) => createHash("sha256").update(anchor.key).digest("hex"));
+  const materialRows = material.selected.flatMap((anchor) => [anchor.played, anchor.alternatives.toSorted((left, right) => sampleDigest(left).localeCompare(sampleDigest(right)))[0]!]);
+  const destination = roundRobin(
+    pairs.filter((value) => value.targetFamily === "destination"),
+    16,
+    (pair) => `${pair.played ? "played" : "alternative"}|${pair.phase}|${exactCell(pair)}`,
+    sampleDigest,
+  );
+  const selected = [...materialRows, ...destination.selected];
+  for (let index = 0; index < materialRows.length; index += 2) {
+    const played = materialRows[index]!, alternative = materialRows[index + 1]!;
+    if (!played.played || alternative.played || played.sourceId !== alternative.sourceId || JSON.stringify(played.target) !== JSON.stringify(alternative.target)) {
+      throw new TypeError("Material provider pair lost its same-target join");
+    }
   }
   return Object.freeze({
     population,
     available: pairs.length,
     selected: selected.length,
-    strata: Object.freeze(cells.map((cell) => Object.freeze({ cell: cell.cell, available: cell.values.length, selected: cell.cursor }))),
+    materialAnchorsAvailable: anchors.length,
+    materialAnchorStrata: material.strata,
+    destinationRowsAvailable: pairs.filter((value) => value.targetFamily === "destination").length,
+    destinationStrata: destination.strata,
     rows: Object.freeze(selected),
   });
 }
@@ -726,7 +758,7 @@ describe("D1023 exact target identity core", () => {
     writeFileSync(PROVIDER_SAMPLE, `${JSON.stringify({
       version: 1,
       generatedAt: "2026-08-23",
-      rule: "round-robin over played/alternative × target family × detected phase × exact result; sha256 order within stratum",
+      rule: "16 material anchors round-robin by phase × played exact result, each with played + one same-target SHA-256 alternative; 16 standalone destination rows round-robin by played/alternative × phase × exact result",
       populations: providerPopulations,
     }, null, 2)}\n`, "utf8");
   });

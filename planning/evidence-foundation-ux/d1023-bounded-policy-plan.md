@@ -4,9 +4,9 @@
 
 **Authority:** D1023 under RFC-0000's disposable exploration gate
 
-**State:** exact arms and deterministic 48+48 provider sample complete. Stockfish arm measured and
-refused 2026-08-23 at 85/96 depth-8/depth-10 category agreement (<90% frozen gate); Maia remains.
-No production projection, learner wording, profile weight or RFC is authorized by this plan
+**State:** exact arms and corrected paired 48+48 provider sample complete. Stockfish arm passes the
+frozen stability gate at 88/96 = 91.67% depth-8/depth-10 category agreement; Maia remains. No
+production projection, learner wording, profile weight or RFC is authorized by this plan
 
 ## Question
 
@@ -112,11 +112,18 @@ Report each band separately. A cross-band aggregate or one â€œhuman probabilityâ
 may establish a population-model likelihood, never the objective quality of the candidate or why a
 person chose it.
 
-The source-backed arms do not run over every legal edge. After the complete-reply census, take a
-deterministic hash sample of **48 target/candidate pairs from each population** (96 total),
-stratified as evenly as availability permits across played/alternative, target family, phase and
-the exact arm's removed/preserved/reintroduced result. The sample rule and shortages are emitted
-before provider calls. Maia expands at most eight moves per node after its existing temperature
+The source-backed arms do not run over every legal edge. After the complete-reply census, take
+**48 target/candidate rows from each population** (96 total) in two declared parts:
+
+- 16 material-target anchors, round-robin across phase and the played candidate's exact result;
+  include the played candidate and one SHA-256-selected legal alternative for the **same exact
+  attacker/target identity** (32 rows);
+- 16 destination-target rows, round-robin across played/alternative, phase and exact result (16
+  rows). These are standalone policy-return probes: a target created by one pawn candidate usually
+  has no same-target identity under another candidate, so no unrelated-square delta is invented.
+
+The sample rule and shortages are emitted before provider calls. Maia expands at most eight moves
+per node after its existing temperature
 0.8 / top-p 0.92 transform; discarded and unreturned mass remains in the bound. If the kept tree
 accounts for less than 90% mass at any node, that branch abstains rather than being renormalized.
 
@@ -131,8 +138,9 @@ distinct result position. Preserve the full denominator and report:
 
 - exact alternatives which remove/preserve/reintroduce the same target;
 - Stockfish depth-8/depth-10 category and target-line agreement;
-- Maia per-band lower/upper `next_execution_mass` and `second_opportunity_available_mass`, plus
-  like-for-like candidate delta intervals with no invented categorical threshold;
+- Maia per-band lower/upper `next_execution_mass` and `second_opportunity_available_mass`; for
+  material targets only, like-for-like played-minus-alternative delta intervals over the paired
+  identity, with no invented categorical threshold. Destination delta is explicitly inapplicable;
 - source disagreement as first-class output;
 - candidate cost and abstention by source.
 

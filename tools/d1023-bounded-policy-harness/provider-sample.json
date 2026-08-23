@@ -1,215 +1,155 @@
 {
   "version": 1,
   "generatedAt": "2026-08-23",
-  "rule": "round-robin over played/alternative × target family × detected phase × exact result; sha256 order within stratum",
+  "rule": "16 material anchors round-robin by phase × played exact result, each with played + one same-target SHA-256 alternative; 16 standalone destination rows round-robin by played/alternative × phase × exact result",
   "populations": [
     {
       "population": "authored pack spines",
       "available": 6967,
       "selected": 48,
-      "strata": [
+      "materialAnchorsAvailable": 147,
+      "materialAnchorStrata": [
         {
-          "cell": "alternative|destination|endgame|removed_reintroduced",
-          "available": 14,
-          "selected": 2
-        },
-        {
-          "cell": "alternative|destination|middlegame|removed_not_reintroduced",
-          "available": 16,
-          "selected": 2
-        },
-        {
-          "cell": "alternative|destination|middlegame|removed_reintroduced",
-          "available": 723,
-          "selected": 2
-        },
-        {
-          "cell": "alternative|destination|opening|removed_not_reintroduced",
-          "available": 24,
-          "selected": 2
-        },
-        {
-          "cell": "alternative|destination|opening|removed_reintroduced",
-          "available": 566,
-          "selected": 2
-        },
-        {
-          "cell": "alternative|destination|unclear|removed_not_reintroduced",
+          "cell": "endgame|removed_reintroduced",
           "available": 8,
           "selected": 2
         },
         {
-          "cell": "alternative|destination|unclear|removed_reintroduced",
-          "available": 524,
-          "selected": 2
-        },
-        {
-          "cell": "alternative|material|endgame|preserved",
-          "available": 291,
-          "selected": 2
-        },
-        {
-          "cell": "alternative|material|endgame|removed_not_reintroduced",
-          "available": 6,
-          "selected": 2
-        },
-        {
-          "cell": "alternative|material|endgame|removed_reintroduced",
-          "available": 74,
-          "selected": 2
-        },
-        {
-          "cell": "alternative|material|endgame|removed_universal",
+          "cell": "endgame|removed_not_reintroduced",
           "available": 9,
           "selected": 2
         },
         {
-          "cell": "alternative|material|middlegame|preserved",
-          "available": 2126,
-          "selected": 2
-        },
-        {
-          "cell": "alternative|material|middlegame|removed_not_reintroduced",
-          "available": 53,
-          "selected": 1
-        },
-        {
-          "cell": "alternative|material|middlegame|removed_reintroduced",
-          "available": 396,
-          "selected": 1
-        },
-        {
-          "cell": "alternative|material|opening|preserved",
-          "available": 650,
-          "selected": 1
-        },
-        {
-          "cell": "alternative|material|opening|removed_not_reintroduced",
-          "available": 17,
-          "selected": 1
-        },
-        {
-          "cell": "alternative|material|opening|removed_reintroduced",
-          "available": 205,
-          "selected": 1
-        },
-        {
-          "cell": "alternative|material|unclear|preserved",
-          "available": 834,
-          "selected": 1
-        },
-        {
-          "cell": "alternative|material|unclear|removed_not_reintroduced",
-          "available": 28,
-          "selected": 1
-        },
-        {
-          "cell": "alternative|material|unclear|removed_reintroduced",
-          "available": 181,
-          "selected": 1
-        },
-        {
-          "cell": "played|destination|middlegame|removed_reintroduced",
-          "available": 20,
-          "selected": 1
-        },
-        {
-          "cell": "played|destination|opening|removed_reintroduced",
-          "available": 20,
-          "selected": 1
-        },
-        {
-          "cell": "played|destination|unclear|removed_reintroduced",
-          "available": 35,
-          "selected": 1
-        },
-        {
-          "cell": "played|material|endgame|preserved",
-          "available": 3,
-          "selected": 1
-        },
-        {
-          "cell": "played|material|endgame|removed_not_reintroduced",
-          "available": 9,
-          "selected": 1
-        },
-        {
-          "cell": "played|material|endgame|removed_reintroduced",
-          "available": 8,
-          "selected": 1
-        },
-        {
-          "cell": "played|material|middlegame|preserved",
+          "cell": "middlegame|preserved",
           "available": 10,
+          "selected": 2
+        },
+        {
+          "cell": "unclear|removed_reintroduced",
+          "available": 13,
           "selected": 1
         },
         {
-          "cell": "played|material|middlegame|removed_not_reintroduced",
-          "available": 29,
+          "cell": "opening|removed_not_reintroduced",
+          "available": 5,
           "selected": 1
         },
         {
-          "cell": "played|material|middlegame|removed_reintroduced",
+          "cell": "opening|preserved",
+          "available": 5,
+          "selected": 1
+        },
+        {
+          "cell": "middlegame|removed_reintroduced",
           "available": 30,
           "selected": 1
         },
         {
-          "cell": "played|material|middlegame|removed_universal",
-          "available": 2,
-          "selected": 1
-        },
-        {
-          "cell": "played|material|opening|preserved",
-          "available": 5,
-          "selected": 1
-        },
-        {
-          "cell": "played|material|opening|removed_not_reintroduced",
-          "available": 5,
-          "selected": 1
-        },
-        {
-          "cell": "played|material|opening|removed_reintroduced",
-          "available": 16,
-          "selected": 1
-        },
-        {
-          "cell": "played|material|unclear|preserved",
-          "available": 9,
-          "selected": 1
-        },
-        {
-          "cell": "played|material|unclear|removed_not_reintroduced",
+          "cell": "unclear|removed_not_reintroduced",
           "available": 8,
           "selected": 1
         },
         {
-          "cell": "played|material|unclear|removed_reintroduced",
-          "available": 13,
+          "cell": "opening|removed_reintroduced",
+          "available": 16,
+          "selected": 1
+        },
+        {
+          "cell": "middlegame|removed_not_reintroduced",
+          "available": 29,
+          "selected": 1
+        },
+        {
+          "cell": "unclear|preserved",
+          "available": 9,
+          "selected": 1
+        },
+        {
+          "cell": "middlegame|removed_universal",
+          "available": 2,
+          "selected": 1
+        },
+        {
+          "cell": "endgame|preserved",
+          "available": 3,
+          "selected": 1
+        }
+      ],
+      "destinationRowsAvailable": 1950,
+      "destinationStrata": [
+        {
+          "cell": "alternative|unclear|removed_reintroduced",
+          "available": 524,
+          "selected": 2
+        },
+        {
+          "cell": "alternative|opening|removed_not_reintroduced",
+          "available": 24,
+          "selected": 2
+        },
+        {
+          "cell": "played|unclear|removed_reintroduced",
+          "available": 35,
+          "selected": 2
+        },
+        {
+          "cell": "alternative|endgame|removed_reintroduced",
+          "available": 14,
+          "selected": 2
+        },
+        {
+          "cell": "played|opening|removed_reintroduced",
+          "available": 20,
+          "selected": 2
+        },
+        {
+          "cell": "alternative|middlegame|removed_reintroduced",
+          "available": 723,
+          "selected": 2
+        },
+        {
+          "cell": "alternative|opening|removed_reintroduced",
+          "available": 566,
+          "selected": 1
+        },
+        {
+          "cell": "played|middlegame|removed_reintroduced",
+          "available": 20,
+          "selected": 1
+        },
+        {
+          "cell": "alternative|middlegame|removed_not_reintroduced",
+          "available": 16,
+          "selected": 1
+        },
+        {
+          "cell": "alternative|unclear|removed_not_reintroduced",
+          "available": 8,
           "selected": 1
         }
       ],
       "rows": [
         {
-          "sourceId": "trajectory-caro-advance-chain-bishops/p50-kd7",
-          "parentFen": "4k3/pp2bppp/4p3/3pP3/3P4/1P4P1/1P2KPP1/2B5 b - - 4 25",
-          "candidateUci": "g7g5",
-          "afterFen": "4k3/pp2bp1p/4p3/3pP1p1/3P4/1P4P1/1P2KPP1/2B5 w - - 0 26",
-          "played": false,
+          "sourceId": "rook-4v3-same-side-hold/w-f3",
+          "parentFen": "6k1/5pp1/7p/8/3rP3/8/5PPP/R3K3 w - - 4 3",
+          "candidateUci": "f2f3",
+          "afterFen": "6k1/5pp1/7p/8/3rP3/5P2/6PP/R3K3 b - - 0 3",
+          "played": true,
           "phase": "endgame",
-          "targetFamily": "destination",
+          "targetFamily": "material",
           "target": {
-            "minor": {
-              "color": "white",
-              "role": "bishop",
-              "square": "c1"
-            },
-            "controllingPawn": {
+            "attacker": {
               "color": "black",
-              "role": "pawn",
-              "square": "g5"
+              "role": "rook",
+              "promoted": false,
+              "square": "d4"
             },
-            "square": "f4"
+            "target": {
+              "color": "white",
+              "role": "pawn",
+              "square": "e4"
+            },
+            "baselineMoveUci": "d4e4"
           },
           "exact": {
             "immediate": "removed",
@@ -218,25 +158,54 @@
           }
         },
         {
-          "sourceId": "kid-mar-del-plata-white/f5-storm",
-          "parentFen": "r1bq1rk1/pppnnpbp/3p2p1/3Pp3/2P1P3/2NN4/PP2BPPP/R1BQ1RK1 b - - 4 10",
-          "candidateUci": "c7c5",
-          "afterFen": "r1bq1rk1/pp1nnpbp/3p2p1/2pPp3/2P1P3/2NN4/PP2BPPP/R1BQ1RK1 w - c6 0 11",
+          "sourceId": "rook-4v3-same-side-hold/w-f3",
+          "parentFen": "6k1/5pp1/7p/8/3rP3/8/5PPP/R3K3 w - - 4 3",
+          "candidateUci": "h2h3",
+          "afterFen": "6k1/5pp1/7p/8/3rP3/7P/5PP1/R3K3 b - - 0 3",
           "played": false,
-          "phase": "middlegame",
-          "targetFamily": "destination",
+          "phase": "endgame",
+          "targetFamily": "material",
           "target": {
-            "minor": {
-              "color": "white",
-              "role": "knight",
-              "square": "d3"
-            },
-            "controllingPawn": {
+            "attacker": {
               "color": "black",
-              "role": "pawn",
-              "square": "c5"
+              "role": "rook",
+              "promoted": false,
+              "square": "d4"
             },
-            "square": "b4"
+            "target": {
+              "color": "white",
+              "role": "pawn",
+              "square": "e4"
+            },
+            "baselineMoveUci": "d4e4"
+          },
+          "exact": {
+            "immediate": "preserved",
+            "reintroducedWithin3Ply": false,
+            "preparationSurvivesEveryDefence": false
+          }
+        },
+        {
+          "sourceId": "trajectory-caro-advance-chain-bishops/p44-rc1",
+          "parentFen": "6k1/ppr1bppp/4p3/3pP3/3P4/1P2B1P1/1P3PP1/2R3K1 b - - 1 22",
+          "candidateUci": "c7c1",
+          "afterFen": "6k1/pp2bppp/4p3/3pP3/3P4/1P2B1P1/1P3PP1/2r3K1 w - - 0 23",
+          "played": true,
+          "phase": "endgame",
+          "targetFamily": "material",
+          "target": {
+            "attacker": {
+              "color": "white",
+              "role": "rook",
+              "promoted": false,
+              "square": "c1"
+            },
+            "target": {
+              "color": "black",
+              "role": "rook",
+              "square": "c7"
+            },
+            "baselineMoveUci": "c1c7"
           },
           "exact": {
             "immediate": "removed",
@@ -245,25 +214,837 @@
           }
         },
         {
-          "sourceId": "london-system-white/p13-bg3",
-          "parentFen": "r1bqk2r/pp3ppp/2nbpn2/2pp4/3P1B2/2P1PN2/PP1N1PPP/R2QKB1R w KQkq - 1 7",
-          "candidateUci": "g2g4",
-          "afterFen": "r1bqk2r/pp3ppp/2nbpn2/2pp4/3P1BP1/2P1PN2/PP1N1P1P/R2QKB1R b KQkq - 0 7",
+          "sourceId": "trajectory-caro-advance-chain-bishops/p44-rc1",
+          "parentFen": "6k1/ppr1bppp/4p3/3pP3/3P4/1P2B1P1/1P3PP1/2R3K1 b - - 1 22",
+          "candidateUci": "e7c5",
+          "afterFen": "6k1/ppr2ppp/4p3/2bpP3/3P4/1P2B1P1/1P3PP1/2R3K1 w - - 2 23",
+          "played": false,
+          "phase": "endgame",
+          "targetFamily": "material",
+          "target": {
+            "attacker": {
+              "color": "white",
+              "role": "rook",
+              "promoted": false,
+              "square": "c1"
+            },
+            "target": {
+              "color": "black",
+              "role": "rook",
+              "square": "c7"
+            },
+            "baselineMoveUci": "c1c7"
+          },
+          "exact": {
+            "immediate": "removed",
+            "reintroducedWithin3Ply": true,
+            "preparationSurvivesEveryDefence": false
+          }
+        },
+        {
+          "sourceId": "trajectory-qgd-exchange-minority/p42-ba6",
+          "parentFen": "r1b1r1k1/6p1/2p1pq1p/3p4/3P4/2QBP3/1R3PPP/5RK1 b - - 1 21",
+          "candidateUci": "c8a6",
+          "afterFen": "r3r1k1/6p1/b1p1pq1p/3p4/3P4/2QBP3/1R3PPP/5RK1 w - - 2 22",
+          "played": true,
+          "phase": "middlegame",
+          "targetFamily": "material",
+          "target": {
+            "attacker": {
+              "color": "white",
+              "role": "queen",
+              "promoted": false,
+              "square": "c3"
+            },
+            "target": {
+              "color": "black",
+              "role": "pawn",
+              "square": "c6"
+            },
+            "baselineMoveUci": "c3c6"
+          },
+          "exact": {
+            "immediate": "preserved",
+            "reintroducedWithin3Ply": false,
+            "preparationSurvivesEveryDefence": false
+          }
+        },
+        {
+          "sourceId": "trajectory-qgd-exchange-minority/p42-ba6",
+          "parentFen": "r1b1r1k1/6p1/2p1pq1p/3p4/3P4/2QBP3/1R3PPP/5RK1 b - - 1 21",
+          "candidateUci": "f6h4",
+          "afterFen": "r1b1r1k1/6p1/2p1p2p/3p4/3P3q/2QBP3/1R3PPP/5RK1 w - - 2 22",
           "played": false,
           "phase": "middlegame",
+          "targetFamily": "material",
+          "target": {
+            "attacker": {
+              "color": "white",
+              "role": "queen",
+              "promoted": false,
+              "square": "c3"
+            },
+            "target": {
+              "color": "black",
+              "role": "pawn",
+              "square": "c6"
+            },
+            "baselineMoveUci": "c3c6"
+          },
+          "exact": {
+            "immediate": "preserved",
+            "reintroducedWithin3Ply": false,
+            "preparationSurvivesEveryDefence": false
+          }
+        },
+        {
+          "sourceId": "anti-london-black/p10-e6",
+          "parentFen": "r1bqkb1r/pp2pppp/2n2n2/2pp4/3P1B2/4PN2/PPPN1PPP/R2QKB1R b KQkq - 2 5",
+          "candidateUci": "e7e6",
+          "afterFen": "r1bqkb1r/pp3ppp/2n1pn2/2pp4/3P1B2/4PN2/PPPN1PPP/R2QKB1R w KQkq - 0 6",
+          "played": true,
+          "phase": "unclear",
+          "targetFamily": "material",
+          "target": {
+            "attacker": {
+              "color": "white",
+              "role": "pawn",
+              "promoted": false,
+              "square": "d4"
+            },
+            "target": {
+              "color": "black",
+              "role": "pawn",
+              "square": "c5"
+            },
+            "baselineMoveUci": "d4c5"
+          },
+          "exact": {
+            "immediate": "removed",
+            "reintroducedWithin3Ply": true,
+            "preparationSurvivesEveryDefence": false
+          }
+        },
+        {
+          "sourceId": "anti-london-black/p10-e6",
+          "parentFen": "r1bqkb1r/pp2pppp/2n2n2/2pp4/3P1B2/4PN2/PPPN1PPP/R2QKB1R b KQkq - 2 5",
+          "candidateUci": "h8g8",
+          "afterFen": "r1bqkbr1/pp2pppp/2n2n2/2pp4/3P1B2/4PN2/PPPN1PPP/R2QKB1R w KQq - 3 6",
+          "played": false,
+          "phase": "unclear",
+          "targetFamily": "material",
+          "target": {
+            "attacker": {
+              "color": "white",
+              "role": "pawn",
+              "promoted": false,
+              "square": "d4"
+            },
+            "target": {
+              "color": "black",
+              "role": "pawn",
+              "square": "c5"
+            },
+            "baselineMoveUci": "d4c5"
+          },
+          "exact": {
+            "immediate": "preserved",
+            "reintroducedWithin3Ply": false,
+            "preparationSurvivesEveryDefence": false
+          }
+        },
+        {
+          "sourceId": "trajectory-caro-advance-chain-bishops/p05-e5",
+          "parentFen": "rnbqkbnr/pp2pppp/2p5/3p4/3PP3/8/PPP2PPP/RNBQKBNR w KQkq - 0 3",
+          "candidateUci": "e4e5",
+          "afterFen": "rnbqkbnr/pp2pppp/2p5/3pP3/3P4/8/PPP2PPP/RNBQKBNR b KQkq - 0 3",
+          "played": true,
+          "phase": "opening",
+          "targetFamily": "material",
+          "target": {
+            "attacker": {
+              "color": "black",
+              "role": "pawn",
+              "promoted": false,
+              "square": "d5"
+            },
+            "target": {
+              "color": "white",
+              "role": "pawn",
+              "square": "e4"
+            },
+            "baselineMoveUci": "d5e4"
+          },
+          "exact": {
+            "immediate": "removed",
+            "reintroducedWithin3Ply": false,
+            "preparationSurvivesEveryDefence": false
+          }
+        },
+        {
+          "sourceId": "trajectory-caro-advance-chain-bishops/p05-e5",
+          "parentFen": "rnbqkbnr/pp2pppp/2p5/3p4/3PP3/8/PPP2PPP/RNBQKBNR w KQkq - 0 3",
+          "candidateUci": "a2a4",
+          "afterFen": "rnbqkbnr/pp2pppp/2p5/3p4/P2PP3/8/1PP2PPP/RNBQKBNR b KQkq - 0 3",
+          "played": false,
+          "phase": "opening",
+          "targetFamily": "material",
+          "target": {
+            "attacker": {
+              "color": "black",
+              "role": "pawn",
+              "promoted": false,
+              "square": "d5"
+            },
+            "target": {
+              "color": "white",
+              "role": "pawn",
+              "square": "e4"
+            },
+            "baselineMoveUci": "d5e4"
+          },
+          "exact": {
+            "immediate": "preserved",
+            "reintroducedWithin3Ply": false,
+            "preparationSurvivesEveryDefence": false
+          }
+        },
+        {
+          "sourceId": "anti-scandinavian-white/p5-d4-vs-nf6",
+          "parentFen": "rnbqkb1r/ppp1pppp/5n2/3P4/8/8/PPPP1PPP/RNBQKBNR w KQkq - 1 3",
+          "candidateUci": "d2d4",
+          "afterFen": "rnbqkb1r/ppp1pppp/5n2/3P4/3P4/8/PPP2PPP/RNBQKBNR b KQkq - 0 3",
+          "played": true,
+          "phase": "opening",
+          "targetFamily": "material",
+          "target": {
+            "attacker": {
+              "color": "black",
+              "role": "knight",
+              "promoted": false,
+              "square": "f6"
+            },
+            "target": {
+              "color": "white",
+              "role": "pawn",
+              "square": "d5"
+            },
+            "baselineMoveUci": "f6d5"
+          },
+          "exact": {
+            "immediate": "preserved",
+            "reintroducedWithin3Ply": false,
+            "preparationSurvivesEveryDefence": false
+          }
+        },
+        {
+          "sourceId": "anti-scandinavian-white/p5-d4-vs-nf6",
+          "parentFen": "rnbqkb1r/ppp1pppp/5n2/3P4/8/8/PPPP1PPP/RNBQKBNR w KQkq - 1 3",
+          "candidateUci": "g1e2",
+          "afterFen": "rnbqkb1r/ppp1pppp/5n2/3P4/8/8/PPPPNPPP/RNBQKB1R b KQkq - 2 3",
+          "played": false,
+          "phase": "opening",
+          "targetFamily": "material",
+          "target": {
+            "attacker": {
+              "color": "black",
+              "role": "knight",
+              "promoted": false,
+              "square": "f6"
+            },
+            "target": {
+              "color": "white",
+              "role": "pawn",
+              "square": "d5"
+            },
+            "baselineMoveUci": "f6d5"
+          },
+          "exact": {
+            "immediate": "preserved",
+            "reintroducedWithin3Ply": false,
+            "preparationSurvivesEveryDefence": false
+          }
+        },
+        {
+          "sourceId": "carlsbad-minority-attack/qxe7-recapture",
+          "parentFen": "r1bqrnk1/pp2Bppp/2p5/3p4/3Pn3/2NBP3/PPQ1NPPP/1R3RK1 b - - 0 12",
+          "candidateUci": "d8e7",
+          "afterFen": "r1b1rnk1/pp2qppp/2p5/3p4/3Pn3/2NBP3/PPQ1NPPP/1R3RK1 w - - 0 13",
+          "played": true,
+          "phase": "middlegame",
+          "targetFamily": "material",
+          "target": {
+            "attacker": {
+              "color": "white",
+              "role": "bishop",
+              "promoted": false,
+              "square": "d3"
+            },
+            "target": {
+              "color": "black",
+              "role": "knight",
+              "square": "e4"
+            },
+            "baselineMoveUci": "d3e4"
+          },
+          "exact": {
+            "immediate": "removed",
+            "reintroducedWithin3Ply": true,
+            "preparationSurvivesEveryDefence": false
+          }
+        },
+        {
+          "sourceId": "carlsbad-minority-attack/qxe7-recapture",
+          "parentFen": "r1bqrnk1/pp2Bppp/2p5/3p4/3Pn3/2NBP3/PPQ1NPPP/1R3RK1 b - - 0 12",
+          "candidateUci": "e4c5",
+          "afterFen": "r1bqrnk1/pp2Bppp/2p5/2np4/3P4/2NBP3/PPQ1NPPP/1R3RK1 w - - 1 13",
+          "played": false,
+          "phase": "middlegame",
+          "targetFamily": "material",
+          "target": {
+            "attacker": {
+              "color": "white",
+              "role": "bishop",
+              "promoted": false,
+              "square": "d3"
+            },
+            "target": {
+              "color": "black",
+              "role": "knight",
+              "square": "e4"
+            },
+            "baselineMoveUci": "d3e4"
+          },
+          "exact": {
+            "immediate": "removed",
+            "reintroducedWithin3Ply": true,
+            "preparationSurvivesEveryDefence": false
+          }
+        },
+        {
+          "sourceId": "trajectory-qgd-exchange-minority/p54-ra5",
+          "parentFen": "6k1/1R4p1/r1p1p2p/Q2p4/3P4/4P2P/5PP1/6K1 b - - 0 27",
+          "candidateUci": "a6a5",
+          "afterFen": "6k1/1R4p1/2p1p2p/r2p4/3P4/4P2P/5PP1/6K1 w - - 0 28",
+          "played": true,
+          "phase": "unclear",
+          "targetFamily": "material",
+          "target": {
+            "attacker": {
+              "color": "white",
+              "role": "queen",
+              "promoted": false,
+              "square": "a5"
+            },
+            "target": {
+              "color": "black",
+              "role": "rook",
+              "square": "a6"
+            },
+            "baselineMoveUci": "a5a6"
+          },
+          "exact": {
+            "immediate": "removed",
+            "reintroducedWithin3Ply": false,
+            "preparationSurvivesEveryDefence": false
+          }
+        },
+        {
+          "sourceId": "trajectory-qgd-exchange-minority/p54-ra5",
+          "parentFen": "6k1/1R4p1/r1p1p2p/Q2p4/3P4/4P2P/5PP1/6K1 b - - 0 27",
+          "candidateUci": "a6b6",
+          "afterFen": "6k1/1R4p1/1rp1p2p/Q2p4/3P4/4P2P/5PP1/6K1 w - - 1 28",
+          "played": false,
+          "phase": "unclear",
+          "targetFamily": "material",
+          "target": {
+            "attacker": {
+              "color": "white",
+              "role": "queen",
+              "promoted": false,
+              "square": "a5"
+            },
+            "target": {
+              "color": "black",
+              "role": "rook",
+              "square": "a6"
+            },
+            "baselineMoveUci": "a5a6"
+          },
+          "exact": {
+            "immediate": "preserved",
+            "reintroducedWithin3Ply": false,
+            "preparationSurvivesEveryDefence": false
+          }
+        },
+        {
+          "sourceId": "open-centre-ruy-exchange/nb3-retreat",
+          "parentFen": "r1bqkbnr/1pp3pp/p4p2/2p5/3NP3/8/PPP2PPP/RNBQ1RK1 w kq - 0 8",
+          "candidateUci": "d4b3",
+          "afterFen": "r1bqkbnr/1pp3pp/p4p2/2p5/4P3/1N6/PPP2PPP/RNBQ1RK1 b kq - 1 8",
+          "played": true,
+          "phase": "opening",
+          "targetFamily": "material",
+          "target": {
+            "attacker": {
+              "color": "black",
+              "role": "pawn",
+              "promoted": false,
+              "square": "c5"
+            },
+            "target": {
+              "color": "white",
+              "role": "knight",
+              "square": "d4"
+            },
+            "baselineMoveUci": "c5d4"
+          },
+          "exact": {
+            "immediate": "removed",
+            "reintroducedWithin3Ply": true,
+            "preparationSurvivesEveryDefence": false
+          }
+        },
+        {
+          "sourceId": "open-centre-ruy-exchange/nb3-retreat",
+          "parentFen": "r1bqkbnr/1pp3pp/p4p2/2p5/3NP3/8/PPP2PPP/RNBQ1RK1 w kq - 0 8",
+          "candidateUci": "d1e1",
+          "afterFen": "r1bqkbnr/1pp3pp/p4p2/2p5/3NP3/8/PPP2PPP/RNB1QRK1 b kq - 1 8",
+          "played": false,
+          "phase": "opening",
+          "targetFamily": "material",
+          "target": {
+            "attacker": {
+              "color": "black",
+              "role": "pawn",
+              "promoted": false,
+              "square": "c5"
+            },
+            "target": {
+              "color": "white",
+              "role": "knight",
+              "square": "d4"
+            },
+            "baselineMoveUci": "c5d4"
+          },
+          "exact": {
+            "immediate": "preserved",
+            "reintroducedWithin3Ply": false,
+            "preparationSurvivesEveryDefence": false
+          }
+        },
+        {
+          "sourceId": "italian-center-attack-white/p18-nxd5",
+          "parentFen": "r1bqk2r/ppp2ppp/2n2n2/3P4/2BP4/5N2/PP1N1PPP/R2QK2R b KQkq - 0 9",
+          "candidateUci": "f6d5",
+          "afterFen": "r1bqk2r/ppp2ppp/2n5/3n4/2BP4/5N2/PP1N1PPP/R2QK2R w KQkq - 0 10",
+          "played": true,
+          "phase": "middlegame",
+          "targetFamily": "material",
+          "target": {
+            "attacker": {
+              "color": "white",
+              "role": "pawn",
+              "promoted": false,
+              "square": "d5"
+            },
+            "target": {
+              "color": "black",
+              "role": "knight",
+              "square": "c6"
+            },
+            "baselineMoveUci": "d5c6"
+          },
+          "exact": {
+            "immediate": "removed",
+            "reintroducedWithin3Ply": false,
+            "preparationSurvivesEveryDefence": false
+          }
+        },
+        {
+          "sourceId": "italian-center-attack-white/p18-nxd5",
+          "parentFen": "r1bqk2r/ppp2ppp/2n2n2/3P4/2BP4/5N2/PP1N1PPP/R2QK2R b KQkq - 0 9",
+          "candidateUci": "a7a5",
+          "afterFen": "r1bqk2r/1pp2ppp/2n2n2/p2P4/2BP4/5N2/PP1N1PPP/R2QK2R w KQkq - 0 10",
+          "played": false,
+          "phase": "middlegame",
+          "targetFamily": "material",
+          "target": {
+            "attacker": {
+              "color": "white",
+              "role": "pawn",
+              "promoted": false,
+              "square": "d5"
+            },
+            "target": {
+              "color": "black",
+              "role": "knight",
+              "square": "c6"
+            },
+            "baselineMoveUci": "d5c6"
+          },
+          "exact": {
+            "immediate": "preserved",
+            "reintroducedWithin3Ply": false,
+            "preparationSurvivesEveryDefence": false
+          }
+        },
+        {
+          "sourceId": "italian-center-attack-white/p11-cxd4",
+          "parentFen": "r1bqk2r/pppp1ppp/2n2n2/2b5/2BpP3/2P2N2/PP3PPP/RNBQK2R w KQkq - 0 6",
+          "candidateUci": "c3d4",
+          "afterFen": "r1bqk2r/pppp1ppp/2n2n2/2b5/2BPP3/5N2/PP3PPP/RNBQK2R b KQkq - 0 6",
+          "played": true,
+          "phase": "unclear",
+          "targetFamily": "material",
+          "target": {
+            "attacker": {
+              "color": "black",
+              "role": "knight",
+              "promoted": false,
+              "square": "f6"
+            },
+            "target": {
+              "color": "white",
+              "role": "pawn",
+              "square": "e4"
+            },
+            "baselineMoveUci": "f6e4"
+          },
+          "exact": {
+            "immediate": "preserved",
+            "reintroducedWithin3Ply": false,
+            "preparationSurvivesEveryDefence": false
+          }
+        },
+        {
+          "sourceId": "italian-center-attack-white/p11-cxd4",
+          "parentFen": "r1bqk2r/pppp1ppp/2n2n2/2b5/2BpP3/2P2N2/PP3PPP/RNBQK2R w KQkq - 0 6",
+          "candidateUci": "f3h4",
+          "afterFen": "r1bqk2r/pppp1ppp/2n2n2/2b5/2BpP2N/2P5/PP3PPP/RNBQK2R b KQkq - 1 6",
+          "played": false,
+          "phase": "unclear",
+          "targetFamily": "material",
+          "target": {
+            "attacker": {
+              "color": "black",
+              "role": "knight",
+              "promoted": false,
+              "square": "f6"
+            },
+            "target": {
+              "color": "white",
+              "role": "pawn",
+              "square": "e4"
+            },
+            "baselineMoveUci": "f6e4"
+          },
+          "exact": {
+            "immediate": "preserved",
+            "reintroducedWithin3Ply": false,
+            "preparationSurvivesEveryDefence": false
+          }
+        },
+        {
+          "sourceId": "iqp-black-tarrasch-defence/be6-develop",
+          "parentFen": "r1bq1rk1/pp3pp1/5b1p/3p4/3P4/2N3P1/PP3PBP/R2Q1RK1 b - - 0 13",
+          "candidateUci": "c8e6",
+          "afterFen": "r2q1rk1/pp3pp1/4bb1p/3p4/3P4/2N3P1/PP3PBP/R2Q1RK1 w - - 1 14",
+          "played": true,
+          "phase": "middlegame",
+          "targetFamily": "material",
+          "target": {
+            "attacker": {
+              "color": "white",
+              "role": "knight",
+              "promoted": false,
+              "square": "c3"
+            },
+            "target": {
+              "color": "black",
+              "role": "pawn",
+              "square": "d5"
+            },
+            "baselineMoveUci": "c3d5"
+          },
+          "exact": {
+            "immediate": "removed",
+            "reintroducedWithin3Ply": true,
+            "preparationSurvivesEveryDefence": true
+          }
+        },
+        {
+          "sourceId": "iqp-black-tarrasch-defence/be6-develop",
+          "parentFen": "r1bq1rk1/pp3pp1/5b1p/3p4/3P4/2N3P1/PP3PBP/R2Q1RK1 b - - 0 13",
+          "candidateUci": "d8d6",
+          "afterFen": "r1b2rk1/pp3pp1/3q1b1p/3p4/3P4/2N3P1/PP3PBP/R2Q1RK1 w - - 1 14",
+          "played": false,
+          "phase": "middlegame",
+          "targetFamily": "material",
+          "target": {
+            "attacker": {
+              "color": "white",
+              "role": "knight",
+              "promoted": false,
+              "square": "c3"
+            },
+            "target": {
+              "color": "black",
+              "role": "pawn",
+              "square": "d5"
+            },
+            "baselineMoveUci": "c3d5"
+          },
+          "exact": {
+            "immediate": "preserved",
+            "reintroducedWithin3Ply": false,
+            "preparationSurvivesEveryDefence": false
+          }
+        },
+        {
+          "sourceId": "trajectory-qgd-exchange-minority/p59-rc6",
+          "parentFen": "6k1/2R3p1/2p1p2p/3p4/3P4/4P2P/r4PPK/8 w - - 4 30",
+          "candidateUci": "c7c6",
+          "afterFen": "6k1/6p1/2R1p2p/3p4/3P4/4P2P/r4PPK/8 b - - 0 30",
+          "played": true,
+          "phase": "endgame",
+          "targetFamily": "material",
+          "target": {
+            "attacker": {
+              "color": "black",
+              "role": "rook",
+              "promoted": false,
+              "square": "a2"
+            },
+            "target": {
+              "color": "white",
+              "role": "pawn",
+              "square": "f2"
+            },
+            "baselineMoveUci": "a2f2"
+          },
+          "exact": {
+            "immediate": "preserved",
+            "reintroducedWithin3Ply": false,
+            "preparationSurvivesEveryDefence": false
+          }
+        },
+        {
+          "sourceId": "trajectory-qgd-exchange-minority/p59-rc6",
+          "parentFen": "6k1/2R3p1/2p1p2p/3p4/3P4/4P2P/r4PPK/8 w - - 4 30",
+          "candidateUci": "g2g4",
+          "afterFen": "6k1/2R3p1/2p1p2p/3p4/3P2P1/4P2P/r4P1K/8 b - - 0 30",
+          "played": false,
+          "phase": "endgame",
+          "targetFamily": "material",
+          "target": {
+            "attacker": {
+              "color": "black",
+              "role": "rook",
+              "promoted": false,
+              "square": "a2"
+            },
+            "target": {
+              "color": "white",
+              "role": "pawn",
+              "square": "f2"
+            },
+            "baselineMoveUci": "a2f2"
+          },
+          "exact": {
+            "immediate": "preserved",
+            "reintroducedWithin3Ply": false,
+            "preparationSurvivesEveryDefence": false
+          }
+        },
+        {
+          "sourceId": "rook-4v3-same-side-hold/w-f4",
+          "parentFen": "6k1/5pp1/7p/3rP3/8/8/5PPP/R5K1 w - - 1 2",
+          "candidateUci": "f2f4",
+          "afterFen": "6k1/5pp1/7p/3rP3/5P2/8/6PP/R5K1 b - - 0 2",
+          "played": true,
+          "phase": "endgame",
+          "targetFamily": "material",
+          "target": {
+            "attacker": {
+              "color": "black",
+              "role": "rook",
+              "promoted": false,
+              "square": "d5"
+            },
+            "target": {
+              "color": "white",
+              "role": "pawn",
+              "square": "e5"
+            },
+            "baselineMoveUci": "d5e5"
+          },
+          "exact": {
+            "immediate": "removed",
+            "reintroducedWithin3Ply": true,
+            "preparationSurvivesEveryDefence": false
+          }
+        },
+        {
+          "sourceId": "rook-4v3-same-side-hold/w-f4",
+          "parentFen": "6k1/5pp1/7p/3rP3/8/8/5PPP/R5K1 w - - 1 2",
+          "candidateUci": "h2h4",
+          "afterFen": "6k1/5pp1/7p/3rP3/7P/8/5PP1/R5K1 b - - 0 2",
+          "played": false,
+          "phase": "endgame",
+          "targetFamily": "material",
+          "target": {
+            "attacker": {
+              "color": "black",
+              "role": "rook",
+              "promoted": false,
+              "square": "d5"
+            },
+            "target": {
+              "color": "white",
+              "role": "pawn",
+              "square": "e5"
+            },
+            "baselineMoveUci": "d5e5"
+          },
+          "exact": {
+            "immediate": "preserved",
+            "reintroducedWithin3Ply": false,
+            "preparationSurvivesEveryDefence": false
+          }
+        },
+        {
+          "sourceId": "pawn-breakthrough-convert/b-bxc6",
+          "parentFen": "8/pp6/2P1k3/PP6/8/8/6K1/8 b - - 0 1",
+          "candidateUci": "b7c6",
+          "afterFen": "8/p7/2p1k3/PP6/8/8/6K1/8 w - - 0 2",
+          "played": true,
+          "phase": "endgame",
+          "targetFamily": "material",
+          "target": {
+            "attacker": {
+              "color": "white",
+              "role": "pawn",
+              "promoted": false,
+              "square": "c6"
+            },
+            "target": {
+              "color": "black",
+              "role": "pawn",
+              "square": "b7"
+            },
+            "baselineMoveUci": "c6b7"
+          },
+          "exact": {
+            "immediate": "removed",
+            "reintroducedWithin3Ply": false,
+            "preparationSurvivesEveryDefence": false
+          }
+        },
+        {
+          "sourceId": "pawn-breakthrough-convert/b-bxc6",
+          "parentFen": "8/pp6/2P1k3/PP6/8/8/6K1/8 b - - 0 1",
+          "candidateUci": "b7b6",
+          "afterFen": "8/p7/1pP1k3/PP6/8/8/6K1/8 w - - 0 2",
+          "played": false,
+          "phase": "endgame",
+          "targetFamily": "material",
+          "target": {
+            "attacker": {
+              "color": "white",
+              "role": "pawn",
+              "promoted": false,
+              "square": "c6"
+            },
+            "target": {
+              "color": "black",
+              "role": "pawn",
+              "square": "b7"
+            },
+            "baselineMoveUci": "c6b7"
+          },
+          "exact": {
+            "immediate": "removed",
+            "reintroducedWithin3Ply": false,
+            "preparationSurvivesEveryDefence": false
+          }
+        },
+        {
+          "sourceId": "italian-center-attack-white/p17-exd5",
+          "parentFen": "r1bqk2r/ppp2ppp/2n2n2/3p4/2BPP3/5N2/PP1N1PPP/R2QK2R w KQkq - 0 9",
+          "candidateUci": "e4d5",
+          "afterFen": "r1bqk2r/ppp2ppp/2n2n2/3P4/2BP4/5N2/PP1N1PPP/R2QK2R b KQkq - 0 9",
+          "played": true,
+          "phase": "middlegame",
+          "targetFamily": "material",
+          "target": {
+            "attacker": {
+              "color": "black",
+              "role": "knight",
+              "promoted": false,
+              "square": "f6"
+            },
+            "target": {
+              "color": "white",
+              "role": "pawn",
+              "square": "e4"
+            },
+            "baselineMoveUci": "f6e4"
+          },
+          "exact": {
+            "immediate": "preserved",
+            "reintroducedWithin3Ply": false,
+            "preparationSurvivesEveryDefence": false
+          }
+        },
+        {
+          "sourceId": "italian-center-attack-white/p17-exd5",
+          "parentFen": "r1bqk2r/ppp2ppp/2n2n2/3p4/2BPP3/5N2/PP1N1PPP/R2QK2R w KQkq - 0 9",
+          "candidateUci": "f3e5",
+          "afterFen": "r1bqk2r/ppp2ppp/2n2n2/3pN3/2BPP3/8/PP1N1PPP/R2QK2R b KQkq - 1 9",
+          "played": false,
+          "phase": "middlegame",
+          "targetFamily": "material",
+          "target": {
+            "attacker": {
+              "color": "black",
+              "role": "knight",
+              "promoted": false,
+              "square": "f6"
+            },
+            "target": {
+              "color": "white",
+              "role": "pawn",
+              "square": "e4"
+            },
+            "baselineMoveUci": "f6e4"
+          },
+          "exact": {
+            "immediate": "preserved",
+            "reintroducedWithin3Ply": false,
+            "preparationSurvivesEveryDefence": false
+          }
+        },
+        {
+          "sourceId": "anti-scandinavian-white/p15-ne5",
+          "parentFen": "rn2kb1r/ppp1pppp/5nb1/q7/3P2P1/2N2N1P/PPP2P2/R1BQKB1R w KQkq - 1 8",
+          "candidateUci": "d4d5",
+          "afterFen": "rn2kb1r/ppp1pppp/5nb1/q2P4/6P1/2N2N1P/PPP2P2/R1BQKB1R b KQkq - 0 8",
+          "played": false,
+          "phase": "unclear",
           "targetFamily": "destination",
           "target": {
             "minor": {
               "color": "black",
               "role": "knight",
-              "square": "f6"
+              "square": "b8"
             },
             "controllingPawn": {
               "color": "white",
               "role": "pawn",
-              "square": "g4"
+              "square": "d5"
             },
-            "square": "h5"
+            "square": "c6"
           },
           "exact": {
             "immediate": "removed",
@@ -299,470 +1080,52 @@
           }
         },
         {
-          "sourceId": "french-advance-black/p6-c5",
-          "parentFen": "rnbqkbnr/ppp2ppp/4p3/3pP3/3P4/8/PPP2PPP/RNBQKBNR b KQkq - 0 3",
-          "candidateUci": "a7a6",
-          "afterFen": "rnbqkbnr/1pp2ppp/p3p3/3pP3/3P4/8/PPP2PPP/RNBQKBNR w KQkq - 0 4",
-          "played": false,
-          "phase": "opening",
-          "targetFamily": "destination",
-          "target": {
-            "minor": {
-              "color": "white",
-              "role": "bishop",
-              "square": "f1"
-            },
-            "controllingPawn": {
-              "color": "black",
-              "role": "pawn",
-              "square": "a6"
-            },
-            "square": "b5"
-          },
-          "exact": {
-            "immediate": "removed",
-            "reintroducedWithin3Ply": true,
-            "preparationSurvivesEveryDefence": false
-          }
-        },
-        {
-          "sourceId": "open-centre-ruy-exchange/nd4-centralize",
-          "parentFen": "r3kbnr/1pp3pp/p3bp2/8/2p1PB2/1N6/PPP2PPP/RN1R2K1 w kq - 0 11",
-          "candidateUci": "f2f3",
-          "afterFen": "r3kbnr/1pp3pp/p3bp2/8/2p1PB2/1N3P2/PPP3PP/RN1R2K1 b kq - 0 11",
-          "played": false,
+          "sourceId": "anti-italian-center-attack-black/p7-c3",
+          "parentFen": "r1bqk1nr/pppp1ppp/2n5/2b1p3/2B1P3/5N2/PPPP1PPP/RNBQK2R w KQkq - 4 4",
+          "candidateUci": "c2c3",
+          "afterFen": "r1bqk1nr/pppp1ppp/2n5/2b1p3/2B1P3/2P2N2/PP1P1PPP/RNBQK2R b KQkq - 0 4",
+          "played": true,
           "phase": "unclear",
           "targetFamily": "destination",
           "target": {
             "minor": {
               "color": "black",
               "role": "bishop",
-              "square": "e6"
-            },
-            "controllingPawn": {
-              "color": "white",
-              "role": "pawn",
-              "square": "f3"
-            },
-            "square": "g4"
-          },
-          "exact": {
-            "immediate": "removed",
-            "reintroducedWithin3Ply": false,
-            "preparationSurvivesEveryDefence": false
-          }
-        },
-        {
-          "sourceId": "anti-scandinavian-white/p15-ne5",
-          "parentFen": "rn2kb1r/ppp1pppp/5nb1/q7/3P2P1/2N2N1P/PPP2P2/R1BQKB1R w KQkq - 1 8",
-          "candidateUci": "d4d5",
-          "afterFen": "rn2kb1r/ppp1pppp/5nb1/q2P4/6P1/2N2N1P/PPP2P2/R1BQKB1R b KQkq - 0 8",
-          "played": false,
-          "phase": "unclear",
-          "targetFamily": "destination",
-          "target": {
-            "minor": {
-              "color": "black",
-              "role": "knight",
-              "square": "b8"
-            },
-            "controllingPawn": {
-              "color": "white",
-              "role": "pawn",
-              "square": "d5"
-            },
-            "square": "c6"
-          },
-          "exact": {
-            "immediate": "removed",
-            "reintroducedWithin3Ply": true,
-            "preparationSurvivesEveryDefence": false
-          }
-        },
-        {
-          "sourceId": "trajectory-caro-advance-chain-bishops/p42-rc7",
-          "parentFen": "2r3k1/ppR1bppp/4p3/3pP3/3P4/1P2B1P1/1P3PP1/1R4K1 b - - 0 21",
-          "candidateUci": "e7h4",
-          "afterFen": "2r3k1/ppR2ppp/4p3/3pP3/3P3b/1P2B1P1/1P3PP1/1R4K1 w - - 1 22",
-          "played": false,
-          "phase": "endgame",
-          "targetFamily": "material",
-          "target": {
-            "attacker": {
-              "color": "white",
-              "role": "rook",
-              "promoted": false,
-              "square": "c7"
-            },
-            "target": {
-              "color": "black",
-              "role": "rook",
-              "square": "c8"
-            },
-            "baselineMoveUci": "c7c8"
-          },
-          "exact": {
-            "immediate": "preserved",
-            "reintroducedWithin3Ply": false,
-            "preparationSurvivesEveryDefence": false
-          }
-        },
-        {
-          "sourceId": "pawn-breakthrough-convert/b-bxc6",
-          "parentFen": "8/pp6/2P1k3/PP6/8/8/6K1/8 b - - 0 1",
-          "candidateUci": "b7b6",
-          "afterFen": "8/p7/1pP1k3/PP6/8/8/6K1/8 w - - 0 2",
-          "played": false,
-          "phase": "endgame",
-          "targetFamily": "material",
-          "target": {
-            "attacker": {
-              "color": "white",
-              "role": "pawn",
-              "promoted": false,
-              "square": "c6"
-            },
-            "target": {
-              "color": "black",
-              "role": "pawn",
-              "square": "b7"
-            },
-            "baselineMoveUci": "c6b7"
-          },
-          "exact": {
-            "immediate": "removed",
-            "reintroducedWithin3Ply": false,
-            "preparationSurvivesEveryDefence": false
-          }
-        },
-        {
-          "sourceId": "trajectory-caro-advance-chain-bishops/p42-rc7",
-          "parentFen": "2r3k1/ppR1bppp/4p3/3pP3/3P4/1P2B1P1/1P3PP1/1R4K1 b - - 0 21",
-          "candidateUci": "b7b6",
-          "afterFen": "2r3k1/p1R1bppp/1p2p3/3pP3/3P4/1P2B1P1/1P3PP1/1R4K1 w - - 0 22",
-          "played": false,
-          "phase": "endgame",
-          "targetFamily": "material",
-          "target": {
-            "attacker": {
-              "color": "white",
-              "role": "rook",
-              "promoted": false,
-              "square": "c7"
-            },
-            "target": {
-              "color": "black",
-              "role": "pawn",
-              "square": "b7"
-            },
-            "baselineMoveUci": "c7b7"
-          },
-          "exact": {
-            "immediate": "removed",
-            "reintroducedWithin3Ply": true,
-            "preparationSurvivesEveryDefence": false
-          }
-        },
-        {
-          "sourceId": "philidor-passive-rook-convert/w-rxh8",
-          "parentFen": "R6r/4k3/8/4K3/4P3/8/8/8 w - - 3 3",
-          "candidateUci": "a8a5",
-          "afterFen": "7r/4k3/8/R3K3/4P3/8/8/8 b - - 4 3",
-          "played": false,
-          "phase": "endgame",
-          "targetFamily": "material",
-          "target": {
-            "attacker": {
-              "color": "black",
-              "role": "rook",
-              "promoted": false,
-              "square": "h8"
-            },
-            "target": {
-              "color": "white",
-              "role": "rook",
-              "square": "a8"
-            },
-            "baselineMoveUci": "h8a8"
-          },
-          "exact": {
-            "immediate": "removed",
-            "reintroducedWithin3Ply": true,
-            "preparationSurvivesEveryDefence": true
-          }
-        },
-        {
-          "sourceId": "italian-center-attack-white/p18-nxd5",
-          "parentFen": "r1bqk2r/ppp2ppp/2n2n2/3P4/2BP4/5N2/PP1N1PPP/R2QK2R b KQkq - 0 9",
-          "candidateUci": "a7a5",
-          "afterFen": "r1bqk2r/1pp2ppp/2n2n2/p2P4/2BP4/5N2/PP1N1PPP/R2QK2R w KQkq - 0 10",
-          "played": false,
-          "phase": "middlegame",
-          "targetFamily": "material",
-          "target": {
-            "attacker": {
-              "color": "white",
-              "role": "pawn",
-              "promoted": false,
-              "square": "d5"
-            },
-            "target": {
-              "color": "black",
-              "role": "knight",
-              "square": "c6"
-            },
-            "baselineMoveUci": "d5c6"
-          },
-          "exact": {
-            "immediate": "preserved",
-            "reintroducedWithin3Ply": false,
-            "preparationSurvivesEveryDefence": false
-          }
-        },
-        {
-          "sourceId": "trajectory-caro-advance-chain-bishops/p25-hg3",
-          "parentFen": "r2qk2r/pp2bppp/2n1p3/3pP3/3P4/3Q1Nn1/PP3PPP/R1B2RK1 w kq - 0 13",
-          "candidateUci": "f2g3",
-          "afterFen": "r2qk2r/pp2bppp/2n1p3/3pP3/3P4/3Q1NP1/PP4PP/R1B2RK1 b kq - 0 13",
-          "played": false,
-          "phase": "middlegame",
-          "targetFamily": "material",
-          "target": {
-            "attacker": {
-              "color": "black",
-              "role": "knight",
-              "promoted": false,
-              "square": "g3"
-            },
-            "target": {
-              "color": "white",
-              "role": "rook",
-              "square": "f1"
-            },
-            "baselineMoveUci": "g3f1"
-          },
-          "exact": {
-            "immediate": "removed",
-            "reintroducedWithin3Ply": false,
-            "preparationSurvivesEveryDefence": false
-          }
-        },
-        {
-          "sourceId": "trajectory-caro-advance-chain-bishops/p29-rab1",
-          "parentFen": "r4rk1/pp2bppp/1qn1p3/3pP3/3P4/3QBNP1/PP3PP1/R4RK1 w - - 3 15",
-          "candidateUci": "e3c1",
-          "afterFen": "r4rk1/pp2bppp/1qn1p3/3pP3/3P4/3Q1NP1/PP3PP1/R1B2RK1 b - - 4 15",
-          "played": false,
-          "phase": "middlegame",
-          "targetFamily": "material",
-          "target": {
-            "attacker": {
-              "color": "black",
-              "role": "queen",
-              "promoted": false,
-              "square": "b6"
-            },
-            "target": {
-              "color": "white",
-              "role": "pawn",
-              "square": "b2"
-            },
-            "baselineMoveUci": "b6b2"
-          },
-          "exact": {
-            "immediate": "removed",
-            "reintroducedWithin3Ply": true,
-            "preparationSurvivesEveryDefence": false
-          }
-        },
-        {
-          "sourceId": "anti-caro-advance-early-c5/be3-shield",
-          "parentFen": "rnbqkbnr/pp3ppp/4p3/2PpP3/8/8/PPP2PPP/RNBQKBNR w KQkq - 0 5",
-          "candidateUci": "b1a3",
-          "afterFen": "rnbqkbnr/pp3ppp/4p3/2PpP3/8/N7/PPP2PPP/R1BQKBNR b KQkq - 1 5",
-          "played": false,
-          "phase": "opening",
-          "targetFamily": "material",
-          "target": {
-            "attacker": {
-              "color": "black",
-              "role": "bishop",
-              "promoted": false,
-              "square": "f8"
-            },
-            "target": {
-              "color": "white",
-              "role": "pawn",
               "square": "c5"
             },
-            "baselineMoveUci": "f8c5"
-          },
-          "exact": {
-            "immediate": "preserved",
-            "reintroducedWithin3Ply": false,
-            "preparationSurvivesEveryDefence": false
-          }
-        },
-        {
-          "sourceId": "trajectory-qgd-exchange-minority/p05-nc3",
-          "parentFen": "rnbqkbnr/ppp2ppp/4p3/3p4/2PP4/8/PP2PPPP/RNBQKBNR w KQkq - 0 3",
-          "candidateUci": "c4d5",
-          "afterFen": "rnbqkbnr/ppp2ppp/4p3/3P4/3P4/8/PP2PPPP/RNBQKBNR b KQkq - 0 3",
-          "played": false,
-          "phase": "opening",
-          "targetFamily": "material",
-          "target": {
-            "attacker": {
-              "color": "black",
-              "role": "pawn",
-              "promoted": false,
-              "square": "d5"
-            },
-            "target": {
-              "color": "white",
-              "role": "pawn",
-              "square": "c4"
-            },
-            "baselineMoveUci": "d5c4"
-          },
-          "exact": {
-            "immediate": "removed",
-            "reintroducedWithin3Ply": false,
-            "preparationSurvivesEveryDefence": false
-          }
-        },
-        {
-          "sourceId": "anti-sicilian-najdorf-english-attack/p9-nc3",
-          "parentFen": "rnbqkb1r/pp2pppp/3p1n2/8/3NP3/8/PPP2PPP/RNBQKB1R w KQkq - 1 5",
-          "candidateUci": "e4e5",
-          "afterFen": "rnbqkb1r/pp2pppp/3p1n2/4P3/3N4/8/PPP2PPP/RNBQKB1R b KQkq - 0 5",
-          "played": false,
-          "phase": "opening",
-          "targetFamily": "material",
-          "target": {
-            "attacker": {
-              "color": "black",
-              "role": "knight",
-              "promoted": false,
-              "square": "f6"
-            },
-            "target": {
-              "color": "white",
-              "role": "pawn",
-              "square": "e4"
-            },
-            "baselineMoveUci": "f6e4"
-          },
-          "exact": {
-            "immediate": "removed",
-            "reintroducedWithin3Ply": true,
-            "preparationSurvivesEveryDefence": false
-          }
-        },
-        {
-          "sourceId": "scandinavian-mainline-black/p12-bh5-vs-h3",
-          "parentFen": "rn2kb1r/ppp1pppp/5n2/q7/3P2b1/2N2N1P/PPP2PP1/R1BQKB1R b KQkq - 0 6",
-          "candidateUci": "a5a4",
-          "afterFen": "rn2kb1r/ppp1pppp/5n2/8/q2P2b1/2N2N1P/PPP2PP1/R1BQKB1R w KQkq - 1 7",
-          "played": false,
-          "phase": "unclear",
-          "targetFamily": "material",
-          "target": {
-            "attacker": {
-              "color": "white",
-              "role": "pawn",
-              "promoted": false,
-              "square": "h3"
-            },
-            "target": {
-              "color": "black",
-              "role": "bishop",
-              "square": "g4"
-            },
-            "baselineMoveUci": "h3g4"
-          },
-          "exact": {
-            "immediate": "preserved",
-            "reintroducedWithin3Ply": false,
-            "preparationSurvivesEveryDefence": false
-          }
-        },
-        {
-          "sourceId": "italian-center-attack-white/p10-exd4",
-          "parentFen": "r1bqk2r/pppp1ppp/2n2n2/2b1p3/2BPP3/2P2N2/PP3PPP/RNBQK2R b KQkq - 0 5",
-          "candidateUci": "c5d4",
-          "afterFen": "r1bqk2r/pppp1ppp/2n2n2/4p3/2BbP3/2P2N2/PP3PPP/RNBQK2R w KQkq - 0 6",
-          "played": false,
-          "phase": "unclear",
-          "targetFamily": "material",
-          "target": {
-            "attacker": {
-              "color": "white",
-              "role": "pawn",
-              "promoted": false,
-              "square": "d4"
-            },
-            "target": {
-              "color": "black",
-              "role": "pawn",
-              "square": "e5"
-            },
-            "baselineMoveUci": "d4e5"
-          },
-          "exact": {
-            "immediate": "removed",
-            "reintroducedWithin3Ply": false,
-            "preparationSurvivesEveryDefence": false
-          }
-        },
-        {
-          "sourceId": "anti-italian-center-attack-black/p9-d4",
-          "parentFen": "r1bqk2r/pppp1ppp/2n2n2/2b1p3/2B1P3/2P2N2/PP1P1PPP/RNBQK2R w KQkq - 1 5",
-          "candidateUci": "c4f7",
-          "afterFen": "r1bqk2r/pppp1Bpp/2n2n2/2b1p3/4P3/2P2N2/PP1P1PPP/RNBQK2R b KQkq - 0 5",
-          "played": false,
-          "phase": "unclear",
-          "targetFamily": "material",
-          "target": {
-            "attacker": {
-              "color": "black",
-              "role": "knight",
-              "promoted": false,
-              "square": "f6"
-            },
-            "target": {
-              "color": "white",
-              "role": "pawn",
-              "square": "e4"
-            },
-            "baselineMoveUci": "f6e4"
-          },
-          "exact": {
-            "immediate": "removed",
-            "reintroducedWithin3Ply": true,
-            "preparationSurvivesEveryDefence": false
-          }
-        },
-        {
-          "sourceId": "grunfeld-exchange-fianchetto/e5-advance",
-          "parentFen": "r2q1rk1/pp2ppbp/2n3p1/8/3PP1b1/4BN2/P3BPPP/R2Q1RK1 w - - 1 12",
-          "candidateUci": "e4e5",
-          "afterFen": "r2q1rk1/pp2ppbp/2n3p1/4P3/3P2b1/4BN2/P3BPPP/R2Q1RK1 b - - 0 12",
-          "played": true,
-          "phase": "middlegame",
-          "targetFamily": "destination",
-          "target": {
-            "minor": {
-              "color": "black",
-              "role": "bishop",
-              "square": "g7"
-            },
             "controllingPawn": {
               "color": "white",
               "role": "pawn",
-              "square": "e5"
+              "square": "c3"
             },
-            "square": "f6"
+            "square": "d4"
+          },
+          "exact": {
+            "immediate": "removed",
+            "reintroducedWithin3Ply": true,
+            "preparationSurvivesEveryDefence": false
+          }
+        },
+        {
+          "sourceId": "trajectory-caro-advance-chain-bishops/p50-kd7",
+          "parentFen": "4k3/pp2bppp/4p3/3pP3/3P4/1P4P1/1P2KPP1/2B5 b - - 4 25",
+          "candidateUci": "g7g5",
+          "afterFen": "4k3/pp2bp1p/4p3/3pP1p1/3P4/1P4P1/1P2KPP1/2B5 w - - 0 26",
+          "played": false,
+          "phase": "endgame",
+          "targetFamily": "destination",
+          "target": {
+            "minor": {
+              "color": "white",
+              "role": "bishop",
+              "square": "c1"
+            },
+            "controllingPawn": {
+              "color": "black",
+              "role": "pawn",
+              "square": "g5"
+            },
+            "square": "f4"
           },
           "exact": {
             "immediate": "removed",
@@ -798,389 +1161,25 @@
           }
         },
         {
-          "sourceId": "anti-italian-center-attack-black/p7-c3",
-          "parentFen": "r1bqk1nr/pppp1ppp/2n5/2b1p3/2B1P3/5N2/PPPP1PPP/RNBQK2R w KQkq - 4 4",
-          "candidateUci": "c2c3",
-          "afterFen": "r1bqk1nr/pppp1ppp/2n5/2b1p3/2B1P3/2P2N2/PP1P1PPP/RNBQK2R b KQkq - 0 4",
-          "played": true,
-          "phase": "unclear",
+          "sourceId": "london-system-white/p13-bg3",
+          "parentFen": "r1bqk2r/pp3ppp/2nbpn2/2pp4/3P1B2/2P1PN2/PP1N1PPP/R2QKB1R w KQkq - 1 7",
+          "candidateUci": "g2g4",
+          "afterFen": "r1bqk2r/pp3ppp/2nbpn2/2pp4/3P1BP1/2P1PN2/PP1N1P1P/R2QKB1R b KQkq - 0 7",
+          "played": false,
+          "phase": "middlegame",
           "targetFamily": "destination",
           "target": {
             "minor": {
               "color": "black",
-              "role": "bishop",
-              "square": "c5"
+              "role": "knight",
+              "square": "f6"
             },
             "controllingPawn": {
               "color": "white",
               "role": "pawn",
-              "square": "c3"
-            },
-            "square": "d4"
-          },
-          "exact": {
-            "immediate": "removed",
-            "reintroducedWithin3Ply": true,
-            "preparationSurvivesEveryDefence": false
-          }
-        },
-        {
-          "sourceId": "trajectory-qgd-exchange-minority/p59-rc6",
-          "parentFen": "6k1/2R3p1/2p1p2p/3p4/3P4/4P2P/r4PPK/8 w - - 4 30",
-          "candidateUci": "c7c6",
-          "afterFen": "6k1/6p1/2R1p2p/3p4/3P4/4P2P/r4PPK/8 b - - 0 30",
-          "played": true,
-          "phase": "endgame",
-          "targetFamily": "material",
-          "target": {
-            "attacker": {
-              "color": "black",
-              "role": "rook",
-              "promoted": false,
-              "square": "a2"
-            },
-            "target": {
-              "color": "white",
-              "role": "pawn",
-              "square": "f2"
-            },
-            "baselineMoveUci": "a2f2"
-          },
-          "exact": {
-            "immediate": "preserved",
-            "reintroducedWithin3Ply": false,
-            "preparationSurvivesEveryDefence": false
-          }
-        },
-        {
-          "sourceId": "trajectory-caro-advance-chain-bishops/p42-rc7",
-          "parentFen": "2r3k1/ppR1bppp/4p3/3pP3/3P4/1P2B1P1/1P3PP1/1R4K1 b - - 0 21",
-          "candidateUci": "c8c7",
-          "afterFen": "6k1/ppr1bppp/4p3/3pP3/3P4/1P2B1P1/1P3PP1/1R4K1 w - - 0 22",
-          "played": true,
-          "phase": "endgame",
-          "targetFamily": "material",
-          "target": {
-            "attacker": {
-              "color": "white",
-              "role": "rook",
-              "promoted": false,
-              "square": "c7"
-            },
-            "target": {
-              "color": "black",
-              "role": "rook",
-              "square": "c8"
-            },
-            "baselineMoveUci": "c7c8"
-          },
-          "exact": {
-            "immediate": "removed",
-            "reintroducedWithin3Ply": false,
-            "preparationSurvivesEveryDefence": false
-          }
-        },
-        {
-          "sourceId": "trajectory-mate-bishop-knight/p15-kd6",
-          "parentFen": "3k4/4N3/2K5/8/8/6B1/8/8 w - - 14 8",
-          "candidateUci": "c6d6",
-          "afterFen": "3k4/4N3/3K4/8/8/6B1/8/8 b - - 15 8",
-          "played": true,
-          "phase": "endgame",
-          "targetFamily": "material",
-          "target": {
-            "attacker": {
-              "color": "black",
-              "role": "king",
-              "promoted": false,
-              "square": "d8"
-            },
-            "target": {
-              "color": "white",
-              "role": "knight",
-              "square": "e7"
-            },
-            "baselineMoveUci": "d8e7"
-          },
-          "exact": {
-            "immediate": "removed",
-            "reintroducedWithin3Ply": true,
-            "preparationSurvivesEveryDefence": false
-          }
-        },
-        {
-          "sourceId": "french-advance-chain-white/na4-hit",
-          "parentFen": "r3kb1r/pp1b1ppp/1qn1p3/3pPn2/3P4/2N2N2/PP2BPPP/R1BQ1RK1 w kq - 3 10",
-          "candidateUci": "c3a4",
-          "afterFen": "r3kb1r/pp1b1ppp/1qn1p3/3pPn2/N2P4/5N2/PP2BPPP/R1BQ1RK1 b kq - 4 10",
-          "played": true,
-          "phase": "middlegame",
-          "targetFamily": "material",
-          "target": {
-            "attacker": {
-              "color": "black",
-              "role": "knight",
-              "promoted": false,
-              "square": "c6"
-            },
-            "target": {
-              "color": "white",
-              "role": "pawn",
-              "square": "d4"
-            },
-            "baselineMoveUci": "c6d4"
-          },
-          "exact": {
-            "immediate": "preserved",
-            "reintroducedWithin3Ply": false,
-            "preparationSurvivesEveryDefence": false
-          }
-        },
-        {
-          "sourceId": "carlsbad-minority-attack/bxc6-consequence",
-          "parentFen": "r1b1rnk1/1p2qpp1/p1p4p/1P1p4/3Pn3/2NBP3/P1Q1NPPP/1R3RK1 w - - 0 15",
-          "candidateUci": "b5c6",
-          "afterFen": "r1b1rnk1/1p2qpp1/p1P4p/3p4/3Pn3/2NBP3/P1Q1NPPP/1R3RK1 b - - 0 15",
-          "played": true,
-          "phase": "middlegame",
-          "targetFamily": "material",
-          "target": {
-            "attacker": {
-              "color": "black",
-              "role": "pawn",
-              "promoted": false,
-              "square": "c6"
-            },
-            "target": {
-              "color": "white",
-              "role": "pawn",
-              "square": "b5"
-            },
-            "baselineMoveUci": "c6b5"
-          },
-          "exact": {
-            "immediate": "removed",
-            "reintroducedWithin3Ply": false,
-            "preparationSurvivesEveryDefence": false
-          }
-        },
-        {
-          "sourceId": "carlsbad-minority-attack/bxc6-recapture",
-          "parentFen": "r1b1rnk1/1p2qpp1/p1P4p/3p4/3Pn3/2NBP3/P1Q1NPPP/1R3RK1 b - - 0 15",
-          "candidateUci": "b7c6",
-          "afterFen": "r1b1rnk1/4qpp1/p1p4p/3p4/3Pn3/2NBP3/P1Q1NPPP/1R3RK1 w - - 0 16",
-          "played": true,
-          "phase": "middlegame",
-          "targetFamily": "material",
-          "target": {
-            "attacker": {
-              "color": "white",
-              "role": "knight",
-              "promoted": false,
-              "square": "c3"
-            },
-            "target": {
-              "color": "black",
-              "role": "pawn",
-              "square": "d5"
-            },
-            "baselineMoveUci": "c3d5"
-          },
-          "exact": {
-            "immediate": "removed",
-            "reintroducedWithin3Ply": true,
-            "preparationSurvivesEveryDefence": false
-          }
-        },
-        {
-          "sourceId": "iqp-black-tarrasch-defence/be6-develop",
-          "parentFen": "r1bq1rk1/pp3pp1/5b1p/3p4/3P4/2N3P1/PP3PBP/R2Q1RK1 b - - 0 13",
-          "candidateUci": "c8e6",
-          "afterFen": "r2q1rk1/pp3pp1/4bb1p/3p4/3P4/2N3P1/PP3PBP/R2Q1RK1 w - - 1 14",
-          "played": true,
-          "phase": "middlegame",
-          "targetFamily": "material",
-          "target": {
-            "attacker": {
-              "color": "white",
-              "role": "bishop",
-              "promoted": false,
-              "square": "g2"
-            },
-            "target": {
-              "color": "black",
-              "role": "pawn",
-              "square": "d5"
-            },
-            "baselineMoveUci": "g2d5"
-          },
-          "exact": {
-            "immediate": "removed",
-            "reintroducedWithin3Ply": true,
-            "preparationSurvivesEveryDefence": true
-          }
-        },
-        {
-          "sourceId": "anti-london-black/p8-nc6",
-          "parentFen": "rnbqkb1r/pp2pppp/5n2/2pp4/3P1B2/4PN2/PPP2PPP/RN1QKB1R b KQkq - 0 4",
-          "candidateUci": "b8c6",
-          "afterFen": "r1bqkb1r/pp2pppp/2n2n2/2pp4/3P1B2/4PN2/PPP2PPP/RN1QKB1R w KQkq - 1 5",
-          "played": true,
-          "phase": "opening",
-          "targetFamily": "material",
-          "target": {
-            "attacker": {
-              "color": "white",
-              "role": "pawn",
-              "promoted": false,
-              "square": "d4"
-            },
-            "target": {
-              "color": "black",
-              "role": "pawn",
-              "square": "c5"
-            },
-            "baselineMoveUci": "d4c5"
-          },
-          "exact": {
-            "immediate": "preserved",
-            "reintroducedWithin3Ply": false,
-            "preparationSurvivesEveryDefence": false
-          }
-        },
-        {
-          "sourceId": "anti-scandinavian-white/p3-exd5",
-          "parentFen": "rnbqkbnr/ppp1pppp/8/3p4/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2",
-          "candidateUci": "e4d5",
-          "afterFen": "rnbqkbnr/ppp1pppp/8/3P4/8/8/PPPP1PPP/RNBQKBNR b KQkq - 0 2",
-          "played": true,
-          "phase": "opening",
-          "targetFamily": "material",
-          "target": {
-            "attacker": {
-              "color": "black",
-              "role": "pawn",
-              "promoted": false,
-              "square": "d5"
-            },
-            "target": {
-              "color": "white",
-              "role": "pawn",
-              "square": "e4"
-            },
-            "baselineMoveUci": "d5e4"
-          },
-          "exact": {
-            "immediate": "removed",
-            "reintroducedWithin3Ply": false,
-            "preparationSurvivesEveryDefence": false
-          }
-        },
-        {
-          "sourceId": "opponent-intent-early-queen/b3-g6",
-          "parentFen": "r1bqkbnr/pppp1ppp/2n5/4p2Q/2B1P3/8/PPPP1PPP/RNB1K1NR b KQkq - 3 3",
-          "candidateUci": "g7g6",
-          "afterFen": "r1bqkbnr/pppp1p1p/2n3p1/4p2Q/2B1P3/8/PPPP1PPP/RNB1K1NR w KQkq - 0 4",
-          "played": true,
-          "phase": "opening",
-          "targetFamily": "material",
-          "target": {
-            "attacker": {
-              "color": "white",
-              "role": "bishop",
-              "promoted": false,
-              "square": "c4"
-            },
-            "target": {
-              "color": "black",
-              "role": "pawn",
-              "square": "f7"
-            },
-            "baselineMoveUci": "c4f7"
-          },
-          "exact": {
-            "immediate": "removed",
-            "reintroducedWithin3Ply": true,
-            "preparationSurvivesEveryDefence": false
-          }
-        },
-        {
-          "sourceId": "anti-italian-center-attack-black/p10-exd4",
-          "parentFen": "r1bqk2r/pppp1ppp/2n2n2/2b1p3/2BPP3/2P2N2/PP3PPP/RNBQK2R b KQkq - 0 5",
-          "candidateUci": "e5d4",
-          "afterFen": "r1bqk2r/pppp1ppp/2n2n2/2b5/2BpP3/2P2N2/PP3PPP/RNBQK2R w KQkq - 0 6",
-          "played": true,
-          "phase": "unclear",
-          "targetFamily": "material",
-          "target": {
-            "attacker": {
-              "color": "white",
-              "role": "knight",
-              "promoted": false,
-              "square": "f3"
-            },
-            "target": {
-              "color": "black",
-              "role": "pawn",
-              "square": "e5"
-            },
-            "baselineMoveUci": "f3e5"
-          },
-          "exact": {
-            "immediate": "preserved",
-            "reintroducedWithin3Ply": false,
-            "preparationSurvivesEveryDefence": false
-          }
-        },
-        {
-          "sourceId": "anti-italian-center-attack-black/p10-exd4",
-          "parentFen": "r1bqk2r/pppp1ppp/2n2n2/2b1p3/2BPP3/2P2N2/PP3PPP/RNBQK2R b KQkq - 0 5",
-          "candidateUci": "e5d4",
-          "afterFen": "r1bqk2r/pppp1ppp/2n2n2/2b5/2BpP3/2P2N2/PP3PPP/RNBQK2R w KQkq - 0 6",
-          "played": true,
-          "phase": "unclear",
-          "targetFamily": "material",
-          "target": {
-            "attacker": {
-              "color": "white",
-              "role": "pawn",
-              "promoted": false,
-              "square": "d4"
-            },
-            "target": {
-              "color": "black",
-              "role": "bishop",
-              "square": "c5"
-            },
-            "baselineMoveUci": "d4c5"
-          },
-          "exact": {
-            "immediate": "removed",
-            "reintroducedWithin3Ply": false,
-            "preparationSurvivesEveryDefence": false
-          }
-        },
-        {
-          "sourceId": "scandinavian-mainline-black/p12-bh5-vs-h3",
-          "parentFen": "rn2kb1r/ppp1pppp/5n2/q7/3P2b1/2N2N1P/PPP2PP1/R1BQKB1R b KQkq - 0 6",
-          "candidateUci": "g4h5",
-          "afterFen": "rn2kb1r/ppp1pppp/5n2/q6b/3P4/2N2N1P/PPP2PP1/R1BQKB1R w KQkq - 1 7",
-          "played": true,
-          "phase": "unclear",
-          "targetFamily": "material",
-          "target": {
-            "attacker": {
-              "color": "white",
-              "role": "pawn",
-              "promoted": false,
-              "square": "h3"
-            },
-            "target": {
-              "color": "black",
-              "role": "bishop",
               "square": "g4"
             },
-            "baselineMoveUci": "h3g4"
+            "square": "h5"
           },
           "exact": {
             "immediate": "removed",
@@ -1189,45 +1188,18 @@
           }
         },
         {
-          "sourceId": "trajectory-caro-advance-chain-bishops/p38-rc7",
-          "parentFen": "r1r3k1/pp2bppp/4p3/3pP3/3P4/1P2B1P1/1P3PP1/1R3RK1 b - - 0 19",
-          "candidateUci": "g7g5",
-          "afterFen": "r1r3k1/pp2bp1p/4p3/3pP1p1/3P4/1P2B1P1/1P3PP1/1R3RK1 w - - 0 20",
+          "sourceId": "french-advance-black/p6-c5",
+          "parentFen": "rnbqkbnr/ppp2ppp/4p3/3pP3/3P4/8/PPP2PPP/RNBQKBNR b KQkq - 0 3",
+          "candidateUci": "a7a6",
+          "afterFen": "rnbqkbnr/1pp2ppp/p3p3/3pP3/3P4/8/PPP2PPP/RNBQKBNR w KQkq - 0 4",
           "played": false,
-          "phase": "endgame",
+          "phase": "opening",
           "targetFamily": "destination",
           "target": {
             "minor": {
               "color": "white",
               "role": "bishop",
-              "square": "e3"
-            },
-            "controllingPawn": {
-              "color": "black",
-              "role": "pawn",
-              "square": "g5"
-            },
-            "square": "f4"
-          },
-          "exact": {
-            "immediate": "removed",
-            "reintroducedWithin3Ply": true,
-            "preparationSurvivesEveryDefence": false
-          }
-        },
-        {
-          "sourceId": "scandinavian-mainline-black/p14-o-o-o",
-          "parentFen": "r3kb1r/ppp1pppp/2n2n2/q7/3P2b1/2N2N2/PPP1BPPP/R1BQ1RK1 b kq - 6 7",
-          "candidateUci": "a7a6",
-          "afterFen": "r3kb1r/1pp1pppp/p1n2n2/q7/3P2b1/2N2N2/PPP1BPPP/R1BQ1RK1 w kq - 0 8",
-          "played": false,
-          "phase": "middlegame",
-          "targetFamily": "destination",
-          "target": {
-            "minor": {
-              "color": "white",
-              "role": "knight",
-              "square": "c3"
+              "square": "f1"
             },
             "controllingPawn": {
               "color": "black",
@@ -1238,30 +1210,30 @@
           },
           "exact": {
             "immediate": "removed",
-            "reintroducedWithin3Ply": false,
+            "reintroducedWithin3Ply": true,
             "preparationSurvivesEveryDefence": false
           }
         },
         {
-          "sourceId": "berlin-queenless-press/ne7-retreat",
-          "parentFen": "r3kb1r/ppp2ppp/2p1b3/4Pn2/6P1/2N2N1P/PPP2P2/R1B2RK1 b - - 0 11",
-          "candidateUci": "f7f6",
-          "afterFen": "r3kb1r/ppp3pp/2p1bp2/4Pn2/6P1/2N2N1P/PPP2P2/R1B2RK1 w - - 0 12",
-          "played": false,
+          "sourceId": "grunfeld-exchange-fianchetto/e5-advance",
+          "parentFen": "r2q1rk1/pp2ppbp/2n3p1/8/3PP1b1/4BN2/P3BPPP/R2Q1RK1 w - - 1 12",
+          "candidateUci": "e4e5",
+          "afterFen": "r2q1rk1/pp2ppbp/2n3p1/4P3/3P2b1/4BN2/P3BPPP/R2Q1RK1 b - - 0 12",
+          "played": true,
           "phase": "middlegame",
           "targetFamily": "destination",
           "target": {
             "minor": {
-              "color": "white",
+              "color": "black",
               "role": "bishop",
-              "square": "c1"
+              "square": "g7"
             },
             "controllingPawn": {
-              "color": "black",
+              "color": "white",
               "role": "pawn",
-              "square": "f6"
+              "square": "e5"
             },
-            "square": "g5"
+            "square": "f6"
           },
           "exact": {
             "immediate": "removed",
@@ -1270,79 +1242,52 @@
           }
         },
         {
-          "sourceId": "anti-caro-advance-early-c5/nxd4-central",
-          "parentFen": "rnbqkbnr/pp2pppp/8/3pP3/3p4/5N2/PPP2PPP/RNBQKB1R w KQkq - 0 5",
-          "candidateUci": "e5e6",
-          "afterFen": "rnbqkbnr/pp2pppp/4P3/3p4/3p4/5N2/PPP2PPP/RNBQKB1R b KQkq - 0 5",
+          "sourceId": "kid-mar-del-plata-white/f5-storm",
+          "parentFen": "r1bq1rk1/pppnnpbp/3p2p1/3Pp3/2P1P3/2NN4/PP2BPPP/R1BQ1RK1 b - - 4 10",
+          "candidateUci": "c7c5",
+          "afterFen": "r1bq1rk1/pp1nnpbp/3p2p1/2pPp3/2P1P3/2NN4/PP2BPPP/R1BQ1RK1 w - c6 0 11",
           "played": false,
-          "phase": "opening",
+          "phase": "middlegame",
           "targetFamily": "destination",
           "target": {
             "minor": {
-              "color": "black",
-              "role": "bishop",
-              "square": "c8"
+              "color": "white",
+              "role": "knight",
+              "square": "d3"
             },
             "controllingPawn": {
-              "color": "white",
-              "role": "pawn",
-              "square": "e6"
-            },
-            "square": "d7"
-          },
-          "exact": {
-            "immediate": "removed",
-            "reintroducedWithin3Ply": false,
-            "preparationSurvivesEveryDefence": false
-          }
-        },
-        {
-          "sourceId": "trajectory-qgd-exchange-minority/p07-cd5",
-          "parentFen": "rnbqkb1r/ppp2ppp/4pn2/3p4/2PP4/2N5/PP2PPPP/R1BQKBNR w KQkq - 2 4",
-          "candidateUci": "a2a3",
-          "afterFen": "rnbqkb1r/ppp2ppp/4pn2/3p4/2PP4/P1N5/1P2PPPP/R1BQKBNR b KQkq - 0 4",
-          "played": false,
-          "phase": "opening",
-          "targetFamily": "destination",
-          "target": {
-            "minor": {
               "color": "black",
-              "role": "bishop",
-              "square": "f8"
-            },
-            "controllingPawn": {
-              "color": "white",
               "role": "pawn",
-              "square": "a3"
+              "square": "c5"
             },
             "square": "b4"
           },
           "exact": {
             "immediate": "removed",
-            "reintroducedWithin3Ply": true,
+            "reintroducedWithin3Ply": false,
             "preparationSurvivesEveryDefence": false
           }
         },
         {
-          "sourceId": "anti-scandinavian-white/p12-nc6-vs-be2",
-          "parentFen": "rn2kb1r/ppp1pppp/5n2/q7/3P2b1/2N2N2/PPP1BPPP/R1BQK2R b KQkq - 4 6",
-          "candidateUci": "a7a6",
-          "afterFen": "rn2kb1r/1pp1pppp/p4n2/q7/3P2b1/2N2N2/PPP1BPPP/R1BQK2R w KQkq - 0 7",
+          "sourceId": "open-centre-ruy-exchange/nd4-centralize",
+          "parentFen": "r3kbnr/1pp3pp/p3bp2/8/2p1PB2/1N6/PPP2PPP/RN1R2K1 w kq - 0 11",
+          "candidateUci": "f2f3",
+          "afterFen": "r3kbnr/1pp3pp/p3bp2/8/2p1PB2/1N3P2/PPP3PP/RN1R2K1 b kq - 0 11",
           "played": false,
           "phase": "unclear",
           "targetFamily": "destination",
           "target": {
             "minor": {
-              "color": "white",
+              "color": "black",
               "role": "bishop",
-              "square": "e2"
+              "square": "e6"
             },
             "controllingPawn": {
-              "color": "black",
+              "color": "white",
               "role": "pawn",
-              "square": "a6"
+              "square": "f3"
             },
-            "square": "b5"
+            "square": "g4"
           },
           "exact": {
             "immediate": "removed",
@@ -1378,54 +1323,25 @@
           }
         },
         {
-          "sourceId": "rook-4v3-same-side-hold/b-rd4",
-          "parentFen": "6k1/5pp1/7p/8/4P3/8/3r1PPP/R3K3 b - - 3 2",
-          "candidateUci": "d2d1",
-          "afterFen": "6k1/5pp1/7p/8/4P3/8/5PPP/R2rK3 w - - 4 3",
+          "sourceId": "anti-caro-advance-early-c5/nxd4-central",
+          "parentFen": "rnbqkbnr/pp2pppp/8/3pP3/3p4/5N2/PPP2PPP/RNBQKB1R w KQkq - 0 5",
+          "candidateUci": "e5e6",
+          "afterFen": "rnbqkbnr/pp2pppp/4P3/3p4/3p4/5N2/PPP2PPP/RNBQKB1R b KQkq - 0 5",
           "played": false,
-          "phase": "endgame",
-          "targetFamily": "material",
+          "phase": "opening",
+          "targetFamily": "destination",
           "target": {
-            "attacker": {
-              "color": "white",
-              "role": "king",
-              "promoted": false,
-              "square": "e1"
-            },
-            "target": {
+            "minor": {
               "color": "black",
-              "role": "rook",
-              "square": "d2"
+              "role": "bishop",
+              "square": "c8"
             },
-            "baselineMoveUci": "e1d2"
-          },
-          "exact": {
-            "immediate": "preserved",
-            "reintroducedWithin3Ply": false,
-            "preparationSurvivesEveryDefence": false
-          }
-        },
-        {
-          "sourceId": "trajectory-qgd-exchange-minority/p59-rc6",
-          "parentFen": "6k1/2R3p1/2p1p2p/3p4/3P4/4P2P/r4PPK/8 w - - 4 30",
-          "candidateUci": "f2f3",
-          "afterFen": "6k1/2R3p1/2p1p2p/3p4/3P4/4PP1P/r5PK/8 b - - 0 30",
-          "played": false,
-          "phase": "endgame",
-          "targetFamily": "material",
-          "target": {
-            "attacker": {
-              "color": "black",
-              "role": "rook",
-              "promoted": false,
-              "square": "a2"
-            },
-            "target": {
+            "controllingPawn": {
               "color": "white",
               "role": "pawn",
-              "square": "f2"
+              "square": "e6"
             },
-            "baselineMoveUci": "a2f2"
+            "square": "d7"
           },
           "exact": {
             "immediate": "removed",
@@ -1434,26 +1350,25 @@
           }
         },
         {
-          "sourceId": "mate-bishop-knight/p15-kd6",
-          "parentFen": "3k4/4N3/2K5/8/8/6B1/8/8 w - - 14 8",
-          "candidateUci": "e7g8",
-          "afterFen": "3k2N1/8/2K5/8/8/6B1/8/8 b - - 15 8",
-          "played": false,
-          "phase": "endgame",
-          "targetFamily": "material",
+          "sourceId": "anti-sicilian-najdorf-english-attack/e6-scheveningen",
+          "parentFen": "rnbqkb1r/1p2pppp/p2p1n2/8/3NP3/2N1B3/PPP2PPP/R2QKB1R b KQkq - 1 6",
+          "candidateUci": "e7e6",
+          "afterFen": "rnbqkb1r/1p3ppp/p2ppn2/8/3NP3/2N1B3/PPP2PPP/R2QKB1R w KQkq - 0 7",
+          "played": true,
+          "phase": "unclear",
+          "targetFamily": "destination",
           "target": {
-            "attacker": {
-              "color": "black",
-              "role": "king",
-              "promoted": false,
-              "square": "d8"
-            },
-            "target": {
+            "minor": {
               "color": "white",
               "role": "knight",
-              "square": "e7"
+              "square": "d4"
             },
-            "baselineMoveUci": "d8e7"
+            "controllingPawn": {
+              "color": "black",
+              "role": "pawn",
+              "square": "e6"
+            },
+            "square": "f5"
           },
           "exact": {
             "immediate": "removed",
@@ -1462,312 +1377,25 @@
           }
         },
         {
-          "sourceId": "trajectory-caro-advance-chain-bishops/p42-rc7",
-          "parentFen": "2r3k1/ppR1bppp/4p3/3pP3/3P4/1P2B1P1/1P3PP1/1R4K1 b - - 0 21",
-          "candidateUci": "g8f8",
-          "afterFen": "2r2k2/ppR1bppp/4p3/3pP3/3P4/1P2B1P1/1P3PP1/1R4K1 w - - 1 22",
+          "sourceId": "trajectory-caro-advance-chain-bishops/p38-rc7",
+          "parentFen": "r1r3k1/pp2bppp/4p3/3pP3/3P4/1P2B1P1/1P3PP1/1R3RK1 b - - 0 19",
+          "candidateUci": "g7g5",
+          "afterFen": "r1r3k1/pp2bp1p/4p3/3pP1p1/3P4/1P2B1P1/1P3PP1/1R3RK1 w - - 0 20",
           "played": false,
           "phase": "endgame",
-          "targetFamily": "material",
+          "targetFamily": "destination",
           "target": {
-            "attacker": {
-              "color": "white",
-              "role": "rook",
-              "promoted": false,
-              "square": "c7"
-            },
-            "target": {
-              "color": "black",
-              "role": "bishop",
-              "square": "e7"
-            },
-            "baselineMoveUci": "c7e7"
-          },
-          "exact": {
-            "immediate": "removed",
-            "reintroducedWithin3Ply": true,
-            "preparationSurvivesEveryDefence": true
-          }
-        },
-        {
-          "sourceId": "carlsbad-minority-attack/bxe7-trade",
-          "parentFen": "r1bqrnk1/pp2bppp/2p5/3p2B1/3Pn3/2NBP3/PPQ1NPPP/1R3RK1 w - - 10 12",
-          "candidateUci": "g1h1",
-          "afterFen": "r1bqrnk1/pp2bppp/2p5/3p2B1/3Pn3/2NBP3/PPQ1NPPP/1R3R1K b - - 11 12",
-          "played": false,
-          "phase": "middlegame",
-          "targetFamily": "material",
-          "target": {
-            "attacker": {
-              "color": "black",
-              "role": "knight",
-              "promoted": false,
-              "square": "e4"
-            },
-            "target": {
+            "minor": {
               "color": "white",
               "role": "bishop",
+              "square": "e3"
+            },
+            "controllingPawn": {
+              "color": "black",
+              "role": "pawn",
               "square": "g5"
             },
-            "baselineMoveUci": "e4g5"
-          },
-          "exact": {
-            "immediate": "preserved",
-            "reintroducedWithin3Ply": false,
-            "preparationSurvivesEveryDefence": false
-          }
-        }
-      ]
-    },
-    {
-      "population": "sealed imported fixed-ply sample",
-      "available": 10983,
-      "selected": 48,
-      "strata": [
-        {
-          "cell": "alternative|destination|endgame|removed_not_reintroduced",
-          "available": 1,
-          "selected": 1
-        },
-        {
-          "cell": "alternative|destination|endgame|removed_reintroduced",
-          "available": 11,
-          "selected": 2
-        },
-        {
-          "cell": "alternative|destination|middlegame|removed_not_reintroduced",
-          "available": 30,
-          "selected": 2
-        },
-        {
-          "cell": "alternative|destination|middlegame|removed_reintroduced",
-          "available": 809,
-          "selected": 2
-        },
-        {
-          "cell": "alternative|destination|opening|removed_not_reintroduced",
-          "available": 8,
-          "selected": 2
-        },
-        {
-          "cell": "alternative|destination|opening|removed_reintroduced",
-          "available": 547,
-          "selected": 2
-        },
-        {
-          "cell": "alternative|destination|unclear|removed_not_reintroduced",
-          "available": 3,
-          "selected": 2
-        },
-        {
-          "cell": "alternative|destination|unclear|removed_reintroduced",
-          "available": 340,
-          "selected": 2
-        },
-        {
-          "cell": "alternative|material|endgame|preserved",
-          "available": 195,
-          "selected": 2
-        },
-        {
-          "cell": "alternative|material|endgame|removed_not_reintroduced",
-          "available": 3,
-          "selected": 2
-        },
-        {
-          "cell": "alternative|material|endgame|removed_reintroduced",
-          "available": 46,
-          "selected": 1
-        },
-        {
-          "cell": "alternative|material|middlegame|preserved",
-          "available": 4879,
-          "selected": 1
-        },
-        {
-          "cell": "alternative|material|middlegame|removed_not_reintroduced",
-          "available": 134,
-          "selected": 1
-        },
-        {
-          "cell": "alternative|material|middlegame|removed_reintroduced",
-          "available": 1444,
-          "selected": 1
-        },
-        {
-          "cell": "alternative|material|middlegame|removed_universal",
-          "available": 24,
-          "selected": 1
-        },
-        {
-          "cell": "alternative|material|opening|preserved",
-          "available": 734,
-          "selected": 1
-        },
-        {
-          "cell": "alternative|material|opening|removed_not_reintroduced",
-          "available": 19,
-          "selected": 1
-        },
-        {
-          "cell": "alternative|material|opening|removed_reintroduced",
-          "available": 166,
-          "selected": 1
-        },
-        {
-          "cell": "alternative|material|unclear|preserved",
-          "available": 810,
-          "selected": 1
-        },
-        {
-          "cell": "alternative|material|unclear|removed_not_reintroduced",
-          "available": 195,
-          "selected": 1
-        },
-        {
-          "cell": "alternative|material|unclear|removed_reintroduced",
-          "available": 273,
-          "selected": 1
-        },
-        {
-          "cell": "alternative|material|unclear|removed_universal",
-          "available": 5,
-          "selected": 1
-        },
-        {
-          "cell": "played|destination|middlegame|removed_reintroduced",
-          "available": 15,
-          "selected": 1
-        },
-        {
-          "cell": "played|destination|opening|removed_not_reintroduced",
-          "available": 1,
-          "selected": 1
-        },
-        {
-          "cell": "played|destination|opening|removed_reintroduced",
-          "available": 27,
-          "selected": 1
-        },
-        {
-          "cell": "played|destination|unclear|removed_not_reintroduced",
-          "available": 1,
-          "selected": 1
-        },
-        {
-          "cell": "played|destination|unclear|removed_reintroduced",
-          "available": 8,
-          "selected": 1
-        },
-        {
-          "cell": "played|material|endgame|preserved",
-          "available": 2,
-          "selected": 1
-        },
-        {
-          "cell": "played|material|endgame|removed_not_reintroduced",
-          "available": 1,
-          "selected": 1
-        },
-        {
-          "cell": "played|material|endgame|removed_reintroduced",
-          "available": 6,
-          "selected": 1
-        },
-        {
-          "cell": "played|material|middlegame|preserved",
-          "available": 50,
-          "selected": 1
-        },
-        {
-          "cell": "played|material|middlegame|removed_not_reintroduced",
-          "available": 40,
-          "selected": 1
-        },
-        {
-          "cell": "played|material|middlegame|removed_reintroduced",
-          "available": 88,
-          "selected": 1
-        },
-        {
-          "cell": "played|material|opening|preserved",
-          "available": 5,
-          "selected": 1
-        },
-        {
-          "cell": "played|material|opening|removed_not_reintroduced",
-          "available": 8,
-          "selected": 1
-        },
-        {
-          "cell": "played|material|opening|removed_reintroduced",
-          "available": 17,
-          "selected": 1
-        },
-        {
-          "cell": "played|material|unclear|preserved",
-          "available": 10,
-          "selected": 1
-        },
-        {
-          "cell": "played|material|unclear|removed_not_reintroduced",
-          "available": 9,
-          "selected": 1
-        },
-        {
-          "cell": "played|material|unclear|removed_reintroduced",
-          "available": 19,
-          "selected": 1
-        }
-      ],
-      "rows": [
-        {
-          "sourceId": "https://lichess.org/eC6uvelI#48",
-          "parentFen": "5rk1/1p1bpp1p/p2pn1p1/8/P1P1P3/2B2P2/2P3PP/R4RK1 b - - 2 24",
-          "candidateUci": "a6a5",
-          "afterFen": "5rk1/1p1bpp1p/3pn1p1/p7/P1P1P3/2B2P2/2P3PP/R4RK1 w - - 0 25",
-          "played": false,
-          "phase": "endgame",
-          "targetFamily": "destination",
-          "target": {
-            "minor": {
-              "color": "white",
-              "role": "bishop",
-              "square": "c3"
-            },
-            "controllingPawn": {
-              "color": "black",
-              "role": "pawn",
-              "square": "a5"
-            },
-            "square": "b4"
-          },
-          "exact": {
-            "immediate": "removed",
-            "reintroducedWithin3Ply": false,
-            "preparationSurvivesEveryDefence": false
-          }
-        },
-        {
-          "sourceId": "https://lichess.org/jA71yBXB#48",
-          "parentFen": "1k2r3/1pp1r2p/p5pn/5P2/P7/1B5P/P1P5/4RRK1 b - - 0 24",
-          "candidateUci": "c7c6",
-          "afterFen": "1k2r3/1p2r2p/p1p3pn/5P2/P7/1B5P/P1P5/4RRK1 w - - 0 25",
-          "played": false,
-          "phase": "endgame",
-          "targetFamily": "destination",
-          "target": {
-            "minor": {
-              "color": "white",
-              "role": "bishop",
-              "square": "b3"
-            },
-            "controllingPawn": {
-              "color": "black",
-              "role": "pawn",
-              "square": "c6"
-            },
-            "square": "d5"
+            "square": "f4"
           },
           "exact": {
             "immediate": "removed",
@@ -1776,45 +1404,18 @@
           }
         },
         {
-          "sourceId": "https://lichess.org/hjh8d0Z8#40",
-          "parentFen": "r1b2r1k/pp4pp/1qp5/7P/4QB2/2P2N2/P4PP1/2KR3R b - - 0 20",
-          "candidateUci": "h7h6",
-          "afterFen": "r1b2r1k/pp4p1/1qp4p/7P/4QB2/2P2N2/P4PP1/2KR3R w - - 0 21",
-          "played": false,
-          "phase": "middlegame",
-          "targetFamily": "destination",
-          "target": {
-            "minor": {
-              "color": "white",
-              "role": "knight",
-              "square": "f3"
-            },
-            "controllingPawn": {
-              "color": "black",
-              "role": "pawn",
-              "square": "h6"
-            },
-            "square": "g5"
-          },
-          "exact": {
-            "immediate": "removed",
-            "reintroducedWithin3Ply": false,
-            "preparationSurvivesEveryDefence": false
-          }
-        },
-        {
-          "sourceId": "https://lichess.org/pUkgyxDV#16",
-          "parentFen": "r1bq1rk1/ppp2ppp/2np1n2/4p3/2B1P3/2NPPN1P/PPP3P1/R2QK2R b KQ - 0 8",
+          "sourceId": "anti-sicilian-najdorf-english-attack/p10-a6",
+          "parentFen": "rnbqkb1r/pp2pppp/3p1n2/8/3NP3/2N5/PPP2PPP/R1BQKB1R b KQkq - 2 5",
           "candidateUci": "a7a6",
-          "afterFen": "r1bq1rk1/1pp2ppp/p1np1n2/4p3/2B1P3/2NPPN1P/PPP3P1/R2QK2R w KQ - 0 9",
-          "played": false,
-          "phase": "middlegame",
+          "afterFen": "rnbqkb1r/1p2pppp/p2p1n2/8/3NP3/2N5/PPP2PPP/R1BQKB1R w KQkq - 0 6",
+          "played": true,
+          "phase": "opening",
           "targetFamily": "destination",
           "target": {
             "minor": {
               "color": "white",
               "role": "knight",
-              "square": "c3"
+              "square": "d4"
             },
             "controllingPawn": {
               "color": "black",
@@ -1830,93 +1431,12 @@
           }
         },
         {
-          "sourceId": "https://lichess.org/ktZ3spXM#8",
-          "parentFen": "rnbqk1nr/pppp1pbp/4p1p1/4P3/3P4/5N2/PPP2PPP/RNBQKB1R b KQkq - 1 4",
-          "candidateUci": "d7d5",
-          "afterFen": "rnbqk1nr/ppp2pbp/4p1p1/3pP3/3P4/5N2/PPP2PPP/RNBQKB1R w KQkq d6 0 5",
+          "sourceId": "berlin-queenless-press/ne7-retreat",
+          "parentFen": "r3kb1r/ppp2ppp/2p1b3/4Pn2/6P1/2N2N1P/PPP2P2/R1B2RK1 b - - 0 11",
+          "candidateUci": "f7f6",
+          "afterFen": "r3kb1r/ppp3pp/2p1bp2/4Pn2/6P1/2N2N1P/PPP2P2/R1B2RK1 w - - 0 12",
           "played": false,
-          "phase": "opening",
-          "targetFamily": "destination",
-          "target": {
-            "minor": {
-              "color": "white",
-              "role": "bishop",
-              "square": "f1"
-            },
-            "controllingPawn": {
-              "color": "black",
-              "role": "pawn",
-              "square": "d5"
-            },
-            "square": "c4"
-          },
-          "exact": {
-            "immediate": "removed",
-            "reintroducedWithin3Ply": false,
-            "preparationSurvivesEveryDefence": false
-          }
-        },
-        {
-          "sourceId": "https://lichess.org/6a0z3iBG#8",
-          "parentFen": "rnbqkbnr/pp3ppp/2pp4/4p3/3PP3/2N2N2/PPP2PPP/R1BQKB1R b KQkq - 0 4",
-          "candidateUci": "b7b5",
-          "afterFen": "rnbqkbnr/p4ppp/2pp4/1p2p3/3PP3/2N2N2/PPP2PPP/R1BQKB1R w KQkq - 0 5",
-          "played": false,
-          "phase": "opening",
-          "targetFamily": "destination",
-          "target": {
-            "minor": {
-              "color": "white",
-              "role": "bishop",
-              "square": "f1"
-            },
-            "controllingPawn": {
-              "color": "black",
-              "role": "pawn",
-              "square": "b5"
-            },
-            "square": "c4"
-          },
-          "exact": {
-            "immediate": "removed",
-            "reintroducedWithin3Ply": true,
-            "preparationSurvivesEveryDefence": false
-          }
-        },
-        {
-          "sourceId": "https://lichess.org/fd37KgOs#16",
-          "parentFen": "rnbqk2r/pp3p1p/3ppnp1/2pP2B1/2P1P3/2PB4/P4PPP/R2QK1NR b KQkq - 1 8",
-          "candidateUci": "e6e5",
-          "afterFen": "rnbqk2r/pp3p1p/3p1np1/2pPp1B1/2P1P3/2PB4/P4PPP/R2QK1NR w KQkq - 0 9",
-          "played": false,
-          "phase": "unclear",
-          "targetFamily": "destination",
-          "target": {
-            "minor": {
-              "color": "white",
-              "role": "bishop",
-              "square": "g5"
-            },
-            "controllingPawn": {
-              "color": "black",
-              "role": "pawn",
-              "square": "e5"
-            },
-            "square": "f4"
-          },
-          "exact": {
-            "immediate": "removed",
-            "reintroducedWithin3Ply": false,
-            "preparationSurvivesEveryDefence": false
-          }
-        },
-        {
-          "sourceId": "https://lichess.org/ktZ3spXM#16",
-          "parentFen": "rnbq1rk1/p2pnpbp/2p1p1p1/1p2P3/3P4/1B3N2/PPP2PPP/RNBQ1RK1 b - - 1 8",
-          "candidateUci": "g6g5",
-          "afterFen": "rnbq1rk1/p2pnpbp/2p1p3/1p2P1p1/3P4/1B3N2/PPP2PPP/RNBQ1RK1 w - - 0 9",
-          "played": false,
-          "phase": "unclear",
+          "phase": "middlegame",
           "targetFamily": "destination",
           "target": {
             "minor": {
@@ -1927,22 +1447,160 @@
             "controllingPawn": {
               "color": "black",
               "role": "pawn",
-              "square": "g5"
+              "square": "f6"
             },
-            "square": "f4"
+            "square": "g5"
           },
           "exact": {
             "immediate": "removed",
             "reintroducedWithin3Ply": true,
             "preparationSurvivesEveryDefence": false
           }
+        }
+      ]
+    },
+    {
+      "population": "sealed imported fixed-ply sample",
+      "available": 10983,
+      "selected": 48,
+      "materialAnchorsAvailable": 255,
+      "materialAnchorStrata": [
+        {
+          "cell": "endgame|removed_reintroduced",
+          "available": 6,
+          "selected": 2
         },
+        {
+          "cell": "endgame|removed_not_reintroduced",
+          "available": 1,
+          "selected": 1
+        },
+        {
+          "cell": "middlegame|preserved",
+          "available": 50,
+          "selected": 2
+        },
+        {
+          "cell": "unclear|removed_reintroduced",
+          "available": 19,
+          "selected": 2
+        },
+        {
+          "cell": "opening|removed_not_reintroduced",
+          "available": 8,
+          "selected": 2
+        },
+        {
+          "cell": "opening|preserved",
+          "available": 5,
+          "selected": 1
+        },
+        {
+          "cell": "middlegame|removed_reintroduced",
+          "available": 88,
+          "selected": 1
+        },
+        {
+          "cell": "unclear|removed_not_reintroduced",
+          "available": 9,
+          "selected": 1
+        },
+        {
+          "cell": "opening|removed_reintroduced",
+          "available": 17,
+          "selected": 1
+        },
+        {
+          "cell": "middlegame|removed_not_reintroduced",
+          "available": 40,
+          "selected": 1
+        },
+        {
+          "cell": "unclear|preserved",
+          "available": 10,
+          "selected": 1
+        },
+        {
+          "cell": "endgame|preserved",
+          "available": 2,
+          "selected": 1
+        }
+      ],
+      "destinationRowsAvailable": 1801,
+      "destinationStrata": [
+        {
+          "cell": "alternative|unclear|removed_reintroduced",
+          "available": 340,
+          "selected": 2
+        },
+        {
+          "cell": "alternative|opening|removed_not_reintroduced",
+          "available": 8,
+          "selected": 2
+        },
+        {
+          "cell": "alternative|endgame|removed_not_reintroduced",
+          "available": 1,
+          "selected": 1
+        },
+        {
+          "cell": "played|unclear|removed_reintroduced",
+          "available": 8,
+          "selected": 2
+        },
+        {
+          "cell": "alternative|endgame|removed_reintroduced",
+          "available": 11,
+          "selected": 1
+        },
+        {
+          "cell": "played|opening|removed_reintroduced",
+          "available": 27,
+          "selected": 1
+        },
+        {
+          "cell": "alternative|middlegame|removed_reintroduced",
+          "available": 809,
+          "selected": 1
+        },
+        {
+          "cell": "alternative|opening|removed_reintroduced",
+          "available": 547,
+          "selected": 1
+        },
+        {
+          "cell": "played|middlegame|removed_reintroduced",
+          "available": 15,
+          "selected": 1
+        },
+        {
+          "cell": "alternative|middlegame|removed_not_reintroduced",
+          "available": 30,
+          "selected": 1
+        },
+        {
+          "cell": "played|unclear|removed_not_reintroduced",
+          "available": 1,
+          "selected": 1
+        },
+        {
+          "cell": "played|opening|removed_not_reintroduced",
+          "available": 1,
+          "selected": 1
+        },
+        {
+          "cell": "alternative|unclear|removed_not_reintroduced",
+          "available": 3,
+          "selected": 1
+        }
+      ],
+      "rows": [
         {
           "sourceId": "https://lichess.org/a0Xo4b5J#48",
           "parentFen": "7k/ppp2prp/8/2p2R2/4P3/P1P3P1/1PPr1R1P/6K1 b - - 2 24",
-          "candidateUci": "g7g5",
-          "afterFen": "7k/ppp2p1p/8/2p2Rr1/4P3/P1P3P1/1PPr1R1P/6K1 w - - 3 25",
-          "played": false,
+          "candidateUci": "d2d1",
+          "afterFen": "7k/ppp2prp/8/2p2R2/4P3/P1P3P1/1PP2R1P/3r2K1 w - - 3 25",
+          "played": true,
           "phase": "endgame",
           "targetFamily": "material",
           "target": {
@@ -1955,41 +1613,13 @@
             "target": {
               "color": "black",
               "role": "pawn",
-              "square": "f7"
+              "square": "c5"
             },
-            "baselineMoveUci": "f5f7"
-          },
-          "exact": {
-            "immediate": "preserved",
-            "reintroducedWithin3Ply": false,
-            "preparationSurvivesEveryDefence": false
-          }
-        },
-        {
-          "sourceId": "https://lichess.org/a0Xo4b5J#48",
-          "parentFen": "7k/ppp2prp/8/2p2R2/4P3/P1P3P1/1PPr1R1P/6K1 b - - 2 24",
-          "candidateUci": "d2f2",
-          "afterFen": "7k/ppp2prp/8/2p2R2/4P3/P1P3P1/1PP2r1P/6K1 w - - 0 25",
-          "played": false,
-          "phase": "endgame",
-          "targetFamily": "material",
-          "target": {
-            "attacker": {
-              "color": "white",
-              "role": "rook",
-              "promoted": false,
-              "square": "f2"
-            },
-            "target": {
-              "color": "black",
-              "role": "rook",
-              "square": "d2"
-            },
-            "baselineMoveUci": "f2d2"
+            "baselineMoveUci": "f5c5"
           },
           "exact": {
             "immediate": "removed",
-            "reintroducedWithin3Ply": false,
+            "reintroducedWithin3Ply": true,
             "preparationSurvivesEveryDefence": false
           }
         },
@@ -2022,477 +1652,6 @@
           }
         },
         {
-          "sourceId": "https://lichess.org/jRvAGgUA#32",
-          "parentFen": "r1bq1rk1/pp3pbp/6p1/2p1Pp2/3P4/2P1B3/PP2N1PP/R2Q1RK1 b - - 1 16",
-          "candidateUci": "d8d7",
-          "afterFen": "r1b2rk1/pp1q1pbp/6p1/2p1Pp2/3P4/2P1B3/PP2N1PP/R2Q1RK1 w - - 2 17",
-          "played": false,
-          "phase": "middlegame",
-          "targetFamily": "material",
-          "target": {
-            "attacker": {
-              "color": "white",
-              "role": "pawn",
-              "promoted": false,
-              "square": "d4"
-            },
-            "target": {
-              "color": "black",
-              "role": "pawn",
-              "square": "c5"
-            },
-            "baselineMoveUci": "d4c5"
-          },
-          "exact": {
-            "immediate": "preserved",
-            "reintroducedWithin3Ply": false,
-            "preparationSurvivesEveryDefence": false
-          }
-        },
-        {
-          "sourceId": "https://lichess.org/PjNuhBw6#32",
-          "parentFen": "r2q1r2/1p2Pp1k/3pb1pp/p7/P2p4/2NB3P/1PPQ1PP1/R3K2R b KQ - 0 16",
-          "candidateUci": "h7g8",
-          "afterFen": "r2q1rk1/1p2Pp2/3pb1pp/p7/P2p4/2NB3P/1PPQ1PP1/R3K2R w KQ - 1 17",
-          "played": false,
-          "phase": "middlegame",
-          "targetFamily": "material",
-          "target": {
-            "attacker": {
-              "color": "white",
-              "role": "pawn",
-              "promoted": false,
-              "square": "e7"
-            },
-            "target": {
-              "color": "black",
-              "role": "rook",
-              "square": "f8"
-            },
-            "baselineMoveUci": "e7f8b"
-          },
-          "exact": {
-            "immediate": "removed",
-            "reintroducedWithin3Ply": false,
-            "preparationSurvivesEveryDefence": false
-          }
-        },
-        {
-          "sourceId": "https://lichess.org/TSqMPWqg#48",
-          "parentFen": "r4rk1/1bp3pp/p2p4/5p2/1P1N3q/P3PPP1/4Q2P/3R1RK1 b - - 0 24",
-          "candidateUci": "h4g5",
-          "afterFen": "r4rk1/1bp3pp/p2p4/5pq1/1P1N4/P3PPP1/4Q2P/3R1RK1 w - - 1 25",
-          "played": false,
-          "phase": "middlegame",
-          "targetFamily": "material",
-          "target": {
-            "attacker": {
-              "color": "white",
-              "role": "pawn",
-              "promoted": false,
-              "square": "g3"
-            },
-            "target": {
-              "color": "black",
-              "role": "queen",
-              "square": "h4"
-            },
-            "baselineMoveUci": "g3h4"
-          },
-          "exact": {
-            "immediate": "removed",
-            "reintroducedWithin3Ply": true,
-            "preparationSurvivesEveryDefence": false
-          }
-        },
-        {
-          "sourceId": "https://lichess.org/qp73QwEx#24",
-          "parentFen": "r5nr/pp1b1kpp/2npNp2/3p4/8/1B1P4/PPP1NPPP/R2QK2R b KQ - 0 12",
-          "candidateUci": "f7e6",
-          "afterFen": "r5nr/pp1b2pp/2npkp2/3p4/8/1B1P4/PPP1NPPP/R2QK2R w KQ - 0 13",
-          "played": false,
-          "phase": "middlegame",
-          "targetFamily": "material",
-          "target": {
-            "attacker": {
-              "color": "white",
-              "role": "bishop",
-              "promoted": false,
-              "square": "b3"
-            },
-            "target": {
-              "color": "black",
-              "role": "pawn",
-              "square": "d5"
-            },
-            "baselineMoveUci": "b3d5"
-          },
-          "exact": {
-            "immediate": "removed",
-            "reintroducedWithin3Ply": true,
-            "preparationSurvivesEveryDefence": true
-          }
-        },
-        {
-          "sourceId": "https://lichess.org/hjh8d0Z8#8",
-          "parentFen": "rnbqkbnr/pppp2pp/8/5p2/3QP3/2N5/PPP2PPP/R1B1KBNR b KQkq - 0 4",
-          "candidateUci": "b8a6",
-          "afterFen": "r1bqkbnr/pppp2pp/n7/5p2/3QP3/2N5/PPP2PPP/R1B1KBNR w KQkq - 1 5",
-          "played": false,
-          "phase": "opening",
-          "targetFamily": "material",
-          "target": {
-            "attacker": {
-              "color": "white",
-              "role": "pawn",
-              "promoted": false,
-              "square": "e4"
-            },
-            "target": {
-              "color": "black",
-              "role": "pawn",
-              "square": "f5"
-            },
-            "baselineMoveUci": "e4f5"
-          },
-          "exact": {
-            "immediate": "preserved",
-            "reintroducedWithin3Ply": false,
-            "preparationSurvivesEveryDefence": false
-          }
-        },
-        {
-          "sourceId": "https://lichess.org/MczHMjGe#8",
-          "parentFen": "rn1qkbnr/ppp2ppp/3p4/4p3/4PPb1/5N1P/PPPP2P1/RNBQKB1R b KQkq - 0 4",
-          "candidateUci": "e5f4",
-          "afterFen": "rn1qkbnr/ppp2ppp/3p4/8/4Ppb1/5N1P/PPPP2P1/RNBQKB1R w KQkq - 0 5",
-          "played": false,
-          "phase": "opening",
-          "targetFamily": "material",
-          "target": {
-            "attacker": {
-              "color": "white",
-              "role": "pawn",
-              "promoted": false,
-              "square": "f4"
-            },
-            "target": {
-              "color": "black",
-              "role": "pawn",
-              "square": "e5"
-            },
-            "baselineMoveUci": "f4e5"
-          },
-          "exact": {
-            "immediate": "removed",
-            "reintroducedWithin3Ply": false,
-            "preparationSurvivesEveryDefence": false
-          }
-        },
-        {
-          "sourceId": "https://lichess.org/8wEHH2r7#8",
-          "parentFen": "rn1qkbnr/pp2pppp/2p5/3pPb2/3P4/3B4/PPP2PPP/RNBQK1NR b KQkq - 2 4",
-          "candidateUci": "e7e6",
-          "afterFen": "rn1qkbnr/pp3ppp/2p1p3/3pPb2/3P4/3B4/PPP2PPP/RNBQK1NR w KQkq - 0 5",
-          "played": false,
-          "phase": "opening",
-          "targetFamily": "material",
-          "target": {
-            "attacker": {
-              "color": "white",
-              "role": "bishop",
-              "promoted": false,
-              "square": "d3"
-            },
-            "target": {
-              "color": "black",
-              "role": "bishop",
-              "square": "f5"
-            },
-            "baselineMoveUci": "d3f5"
-          },
-          "exact": {
-            "immediate": "removed",
-            "reintroducedWithin3Ply": true,
-            "preparationSurvivesEveryDefence": false
-          }
-        },
-        {
-          "sourceId": "https://lichess.org/KVXX8PGo#48",
-          "parentFen": "1rr3k1/5ppp/4pb2/ppBp4/1P6/P5P1/2P2P1P/1R1BR1K1 b - - 1 24",
-          "candidateUci": "c8c7",
-          "afterFen": "1r4k1/2r2ppp/4pb2/ppBp4/1P6/P5P1/2P2P1P/1R1BR1K1 w - - 2 25",
-          "played": false,
-          "phase": "unclear",
-          "targetFamily": "material",
-          "target": {
-            "attacker": {
-              "color": "white",
-              "role": "pawn",
-              "promoted": false,
-              "square": "b4"
-            },
-            "target": {
-              "color": "black",
-              "role": "pawn",
-              "square": "a5"
-            },
-            "baselineMoveUci": "b4a5"
-          },
-          "exact": {
-            "immediate": "preserved",
-            "reintroducedWithin3Ply": false,
-            "preparationSurvivesEveryDefence": false
-          }
-        },
-        {
-          "sourceId": "https://lichess.org/gnZKEbgl#16",
-          "parentFen": "2rqkbnr/ppp3Pp/2n5/8/8/2p3P1/PPP1PP1P/R1BQK1NR b KQk - 0 8",
-          "candidateUci": "e8f7",
-          "afterFen": "2rq1bnr/ppp2kPp/2n5/8/8/2p3P1/PPP1PP1P/R1BQK1NR w KQ - 1 9",
-          "played": false,
-          "phase": "unclear",
-          "targetFamily": "material",
-          "target": {
-            "attacker": {
-              "color": "white",
-              "role": "pawn",
-              "promoted": false,
-              "square": "g7"
-            },
-            "target": {
-              "color": "black",
-              "role": "bishop",
-              "square": "f8"
-            },
-            "baselineMoveUci": "g7f8b"
-          },
-          "exact": {
-            "immediate": "removed",
-            "reintroducedWithin3Ply": false,
-            "preparationSurvivesEveryDefence": false
-          }
-        },
-        {
-          "sourceId": "https://lichess.org/fd37KgOs#24",
-          "parentFen": "rnb1k2r/pp3p2/3p1n1p/q1pP2p1/4P3/1QPB2B1/P4PPP/R3K1NR b KQkq - 2 12",
-          "candidateUci": "e8d7",
-          "afterFen": "rnb4r/pp1k1p2/3p1n1p/q1pP2p1/4P3/1QPB2B1/P4PPP/R3K1NR w KQ - 3 13",
-          "played": false,
-          "phase": "unclear",
-          "targetFamily": "material",
-          "target": {
-            "attacker": {
-              "color": "white",
-              "role": "bishop",
-              "promoted": false,
-              "square": "g3"
-            },
-            "target": {
-              "color": "black",
-              "role": "pawn",
-              "square": "d6"
-            },
-            "baselineMoveUci": "g3d6"
-          },
-          "exact": {
-            "immediate": "removed",
-            "reintroducedWithin3Ply": true,
-            "preparationSurvivesEveryDefence": false
-          }
-        },
-        {
-          "sourceId": "https://lichess.org/8wEHH2r7#16",
-          "parentFen": "rn1qk1nr/pp3ppp/4p3/2bpP3/8/2NQB3/PPP2PPP/R3K1NR b KQkq - 1 8",
-          "candidateUci": "b8a6",
-          "afterFen": "r2qk1nr/pp3ppp/n3p3/2bpP3/8/2NQB3/PPP2PPP/R3K1NR w KQkq - 2 9",
-          "played": false,
-          "phase": "unclear",
-          "targetFamily": "material",
-          "target": {
-            "attacker": {
-              "color": "white",
-              "role": "bishop",
-              "promoted": false,
-              "square": "e3"
-            },
-            "target": {
-              "color": "black",
-              "role": "bishop",
-              "square": "c5"
-            },
-            "baselineMoveUci": "e3c5"
-          },
-          "exact": {
-            "immediate": "removed",
-            "reintroducedWithin3Ply": true,
-            "preparationSurvivesEveryDefence": true
-          }
-        },
-        {
-          "sourceId": "https://lichess.org/hU10ITVj#24",
-          "parentFen": "rnbq1rk1/5ppp/3bpn2/p2p4/1pPP4/1P2PNB1/2BN1PPP/R2QK2R b KQ - 0 12",
-          "candidateUci": "d5c4",
-          "afterFen": "rnbq1rk1/5ppp/3bpn2/p7/1ppP4/1P2PNB1/2BN1PPP/R2QK2R w KQ - 0 13",
-          "played": true,
-          "phase": "middlegame",
-          "targetFamily": "destination",
-          "target": {
-            "minor": {
-              "color": "white",
-              "role": "bishop",
-              "square": "c2"
-            },
-            "controllingPawn": {
-              "color": "black",
-              "role": "pawn",
-              "square": "c4"
-            },
-            "square": "d3"
-          },
-          "exact": {
-            "immediate": "removed",
-            "reintroducedWithin3Ply": true,
-            "preparationSurvivesEveryDefence": false
-          }
-        },
-        {
-          "sourceId": "https://lichess.org/ZHWGswJq#8",
-          "parentFen": "rnbqkb1r/pppp1ppp/4p3/8/3Pn3/3B1N2/PPP2PPP/RNBQK2R b KQkq - 1 4",
-          "candidateUci": "d7d5",
-          "afterFen": "rnbqkb1r/ppp2ppp/4p3/3p4/3Pn3/3B1N2/PPP2PPP/RNBQK2R w KQkq - 0 5",
-          "played": true,
-          "phase": "opening",
-          "targetFamily": "destination",
-          "target": {
-            "minor": {
-              "color": "white",
-              "role": "bishop",
-              "square": "d3"
-            },
-            "controllingPawn": {
-              "color": "black",
-              "role": "pawn",
-              "square": "d5"
-            },
-            "square": "c4"
-          },
-          "exact": {
-            "immediate": "removed",
-            "reintroducedWithin3Ply": false,
-            "preparationSurvivesEveryDefence": false
-          }
-        },
-        {
-          "sourceId": "https://lichess.org/kL85VmlC#8",
-          "parentFen": "rnbqkbnr/pp2pppp/2p5/8/3Pp3/2N2P2/PPP3PP/R1BQKBNR b KQkq - 0 4",
-          "candidateUci": "e4f3",
-          "afterFen": "rnbqkbnr/pp2pppp/2p5/8/3P4/2N2p2/PPP3PP/R1BQKBNR w KQkq - 0 5",
-          "played": true,
-          "phase": "opening",
-          "targetFamily": "destination",
-          "target": {
-            "minor": {
-              "color": "white",
-              "role": "knight",
-              "square": "g1"
-            },
-            "controllingPawn": {
-              "color": "black",
-              "role": "pawn",
-              "square": "f3"
-            },
-            "square": "e2"
-          },
-          "exact": {
-            "immediate": "removed",
-            "reintroducedWithin3Ply": true,
-            "preparationSurvivesEveryDefence": false
-          }
-        },
-        {
-          "sourceId": "https://lichess.org/fd37KgOs#24",
-          "parentFen": "rnb1k2r/pp3p2/3p1n1p/q1pP2p1/4P3/1QPB2B1/P4PPP/R3K1NR b KQkq - 2 12",
-          "candidateUci": "a7a6",
-          "afterFen": "rnb1k2r/1p3p2/p2p1n1p/q1pP2p1/4P3/1QPB2B1/P4PPP/R3K1NR w KQkq - 0 13",
-          "played": true,
-          "phase": "unclear",
-          "targetFamily": "destination",
-          "target": {
-            "minor": {
-              "color": "white",
-              "role": "bishop",
-              "square": "d3"
-            },
-            "controllingPawn": {
-              "color": "black",
-              "role": "pawn",
-              "square": "a6"
-            },
-            "square": "b5"
-          },
-          "exact": {
-            "immediate": "removed",
-            "reintroducedWithin3Ply": false,
-            "preparationSurvivesEveryDefence": false
-          }
-        },
-        {
-          "sourceId": "https://lichess.org/F6Bb9Zr3#16",
-          "parentFen": "rnbq1rk1/ppp2ppp/3b1p2/8/8/2P3P1/P1PPNPBP/R1BQK2R b KQ - 4 8",
-          "candidateUci": "c7c6",
-          "afterFen": "rnbq1rk1/pp3ppp/2pb1p2/8/8/2P3P1/P1PPNPBP/R1BQK2R w KQ - 0 9",
-          "played": true,
-          "phase": "unclear",
-          "targetFamily": "destination",
-          "target": {
-            "minor": {
-              "color": "white",
-              "role": "bishop",
-              "square": "g2"
-            },
-            "controllingPawn": {
-              "color": "black",
-              "role": "pawn",
-              "square": "c6"
-            },
-            "square": "d5"
-          },
-          "exact": {
-            "immediate": "removed",
-            "reintroducedWithin3Ply": true,
-            "preparationSurvivesEveryDefence": false
-          }
-        },
-        {
-          "sourceId": "https://lichess.org/JpzfY1Ph#48",
-          "parentFen": "4k2r/1p3p1p/5np1/1P1p1p2/p2N4/3KP3/5PPP/R7 b k - 0 24",
-          "candidateUci": "f6e4",
-          "afterFen": "4k2r/1p3p1p/6p1/1P1p1p2/p2Nn3/3KP3/5PPP/R7 w k - 1 25",
-          "played": true,
-          "phase": "endgame",
-          "targetFamily": "material",
-          "target": {
-            "attacker": {
-              "color": "white",
-              "role": "rook",
-              "promoted": false,
-              "square": "a1"
-            },
-            "target": {
-              "color": "black",
-              "role": "pawn",
-              "square": "a4"
-            },
-            "baselineMoveUci": "a1a4"
-          },
-          "exact": {
-            "immediate": "preserved",
-            "reintroducedWithin3Ply": false,
-            "preparationSurvivesEveryDefence": false
-          }
-        },
-        {
           "sourceId": "https://lichess.org/pQZ75avT#40",
           "parentFen": "4r1k1/ppp2p1p/2n3p1/8/3b1P2/7P/PP4P1/1RB1R2K b - - 0 20",
           "candidateUci": "e8e1",
@@ -2521,11 +1680,11 @@
           }
         },
         {
-          "sourceId": "https://lichess.org/a0Xo4b5J#48",
-          "parentFen": "7k/ppp2prp/8/2p2R2/4P3/P1P3P1/1PPr1R1P/6K1 b - - 2 24",
-          "candidateUci": "d2d1",
-          "afterFen": "7k/ppp2prp/8/2p2R2/4P3/P1P3P1/1PP2R1P/3r2K1 w - - 3 25",
-          "played": true,
+          "sourceId": "https://lichess.org/pQZ75avT#40",
+          "parentFen": "4r1k1/ppp2p1p/2n3p1/8/3b1P2/7P/PP4P1/1RB1R2K b - - 0 20",
+          "candidateUci": "c6b4",
+          "afterFen": "4r1k1/ppp2p1p/6p1/8/1n1b1P2/7P/PP4P1/1RB1R2K w - - 1 21",
+          "played": false,
           "phase": "endgame",
           "targetFamily": "material",
           "target": {
@@ -2533,42 +1692,14 @@
               "color": "white",
               "role": "rook",
               "promoted": false,
-              "square": "f2"
+              "square": "e1"
             },
             "target": {
               "color": "black",
               "role": "rook",
-              "square": "d2"
+              "square": "e8"
             },
-            "baselineMoveUci": "f2d2"
-          },
-          "exact": {
-            "immediate": "removed",
-            "reintroducedWithin3Ply": true,
-            "preparationSurvivesEveryDefence": false
-          }
-        },
-        {
-          "sourceId": "https://lichess.org/MNHJ5B9Z#40",
-          "parentFen": "1k1rr3/ppp3pp/3q4/3P1B2/1P6/4B3/P4PP1/RN1QR1K1 b - - 0 20",
-          "candidateUci": "e8e5",
-          "afterFen": "1k1r4/ppp3pp/3q4/3PrB2/1P6/4B3/P4PP1/RN1QR1K1 w - - 1 21",
-          "played": true,
-          "phase": "middlegame",
-          "targetFamily": "material",
-          "target": {
-            "attacker": {
-              "color": "white",
-              "role": "bishop",
-              "promoted": false,
-              "square": "f5"
-            },
-            "target": {
-              "color": "black",
-              "role": "pawn",
-              "square": "h7"
-            },
-            "baselineMoveUci": "f5h7"
+            "baselineMoveUci": "e1e8"
           },
           "exact": {
             "immediate": "preserved",
@@ -2577,26 +1708,138 @@
           }
         },
         {
-          "sourceId": "https://lichess.org/GeGxAAq6#24",
-          "parentFen": "r1b2rk1/ppp4p/2pb3p/4Pq2/8/2P2NP1/PP1N1P1P/R2QK2R b KQ - 0 12",
-          "candidateUci": "d6e5",
-          "afterFen": "r1b2rk1/ppp4p/2p4p/4bq2/8/2P2NP1/PP1N1P1P/R2QK2R w KQ - 0 13",
+          "sourceId": "https://lichess.org/cXj7tMkk#32",
+          "parentFen": "2kr3r/ppp1pp1p/6p1/3P4/2P1P3/q2Q3P/P4PP1/1K1R3R b - - 0 16",
+          "candidateUci": "c7c6",
+          "afterFen": "2kr3r/pp2pp1p/2p3p1/3P4/2P1P3/q2Q3P/P4PP1/1K1R3R w - - 0 17",
           "played": true,
           "phase": "middlegame",
           "targetFamily": "material",
           "target": {
             "attacker": {
               "color": "white",
-              "role": "pawn",
+              "role": "queen",
               "promoted": false,
-              "square": "e5"
+              "square": "d3"
             },
             "target": {
               "color": "black",
-              "role": "bishop",
-              "square": "d6"
+              "role": "queen",
+              "square": "a3"
             },
-            "baselineMoveUci": "e5d6"
+            "baselineMoveUci": "d3a3"
+          },
+          "exact": {
+            "immediate": "preserved",
+            "reintroducedWithin3Ply": false,
+            "preparationSurvivesEveryDefence": false
+          }
+        },
+        {
+          "sourceId": "https://lichess.org/cXj7tMkk#32",
+          "parentFen": "2kr3r/ppp1pp1p/6p1/3P4/2P1P3/q2Q3P/P4PP1/1K1R3R b - - 0 16",
+          "candidateUci": "h8e8",
+          "afterFen": "2krr3/ppp1pp1p/6p1/3P4/2P1P3/q2Q3P/P4PP1/1K1R3R w - - 1 17",
+          "played": false,
+          "phase": "middlegame",
+          "targetFamily": "material",
+          "target": {
+            "attacker": {
+              "color": "white",
+              "role": "queen",
+              "promoted": false,
+              "square": "d3"
+            },
+            "target": {
+              "color": "black",
+              "role": "queen",
+              "square": "a3"
+            },
+            "baselineMoveUci": "d3a3"
+          },
+          "exact": {
+            "immediate": "preserved",
+            "reintroducedWithin3Ply": false,
+            "preparationSurvivesEveryDefence": false
+          }
+        },
+        {
+          "sourceId": "https://lichess.org/9l0YS4kF#16",
+          "parentFen": "r1b1k1nr/ppp2ppp/2n1p3/2bP4/2B2B2/P2P1N2/1PP2PPP/RN1Q1RK1 b kq - 0 8",
+          "candidateUci": "e6e5",
+          "afterFen": "r1b1k1nr/ppp2ppp/2n5/2bPp3/2B2B2/P2P1N2/1PP2PPP/RN1Q1RK1 w kq - 0 9",
+          "played": true,
+          "phase": "unclear",
+          "targetFamily": "material",
+          "target": {
+            "attacker": {
+              "color": "white",
+              "role": "bishop",
+              "promoted": false,
+              "square": "f4"
+            },
+            "target": {
+              "color": "black",
+              "role": "pawn",
+              "square": "c7"
+            },
+            "baselineMoveUci": "f4c7"
+          },
+          "exact": {
+            "immediate": "removed",
+            "reintroducedWithin3Ply": true,
+            "preparationSurvivesEveryDefence": false
+          }
+        },
+        {
+          "sourceId": "https://lichess.org/9l0YS4kF#16",
+          "parentFen": "r1b1k1nr/ppp2ppp/2n1p3/2bP4/2B2B2/P2P1N2/1PP2PPP/RN1Q1RK1 b kq - 0 8",
+          "candidateUci": "c5d4",
+          "afterFen": "r1b1k1nr/ppp2ppp/2n1p3/3P4/2Bb1B2/P2P1N2/1PP2PPP/RN1Q1RK1 w kq - 1 9",
+          "played": false,
+          "phase": "unclear",
+          "targetFamily": "material",
+          "target": {
+            "attacker": {
+              "color": "white",
+              "role": "bishop",
+              "promoted": false,
+              "square": "f4"
+            },
+            "target": {
+              "color": "black",
+              "role": "pawn",
+              "square": "c7"
+            },
+            "baselineMoveUci": "f4c7"
+          },
+          "exact": {
+            "immediate": "preserved",
+            "reintroducedWithin3Ply": false,
+            "preparationSurvivesEveryDefence": false
+          }
+        },
+        {
+          "sourceId": "https://lichess.org/50gVKdhE#8",
+          "parentFen": "r1bqk1nr/pppp1ppp/2n5/2b1p3/3PP3/2P2N2/PP3PPP/RNBQKB1R b KQkq - 0 4",
+          "candidateUci": "e5d4",
+          "afterFen": "r1bqk1nr/pppp1ppp/2n5/2b5/3pP3/2P2N2/PP3PPP/RNBQKB1R w KQkq - 0 5",
+          "played": true,
+          "phase": "opening",
+          "targetFamily": "material",
+          "target": {
+            "attacker": {
+              "color": "white",
+              "role": "pawn",
+              "promoted": false,
+              "square": "d4"
+            },
+            "target": {
+              "color": "black",
+              "role": "pawn",
+              "square": "e5"
+            },
+            "baselineMoveUci": "d4e5"
           },
           "exact": {
             "immediate": "removed",
@@ -2605,30 +1848,30 @@
           }
         },
         {
-          "sourceId": "https://lichess.org/ty2aVHes#24",
-          "parentFen": "r3kb1r/1pp1pppn/p6p/3Pq3/2P5/2N1B1P1/PP3PBP/R2bK2R b KQkq - 1 12",
-          "candidateUci": "d1h5",
-          "afterFen": "r3kb1r/1pp1pppn/p6p/3Pq2b/2P5/2N1B1P1/PP3PBP/R3K2R w KQkq - 2 13",
-          "played": true,
-          "phase": "middlegame",
+          "sourceId": "https://lichess.org/50gVKdhE#8",
+          "parentFen": "r1bqk1nr/pppp1ppp/2n5/2b1p3/3PP3/2P2N2/PP3PPP/RNBQKB1R b KQkq - 0 4",
+          "candidateUci": "g8e7",
+          "afterFen": "r1bqk2r/ppppnppp/2n5/2b1p3/3PP3/2P2N2/PP3PPP/RNBQKB1R w KQkq - 1 5",
+          "played": false,
+          "phase": "opening",
           "targetFamily": "material",
           "target": {
             "attacker": {
               "color": "white",
-              "role": "rook",
+              "role": "pawn",
               "promoted": false,
-              "square": "a1"
+              "square": "d4"
             },
             "target": {
               "color": "black",
-              "role": "bishop",
-              "square": "d1"
+              "role": "pawn",
+              "square": "e5"
             },
-            "baselineMoveUci": "a1d1"
+            "baselineMoveUci": "d4e5"
           },
           "exact": {
-            "immediate": "removed",
-            "reintroducedWithin3Ply": true,
+            "immediate": "preserved",
+            "reintroducedWithin3Ply": false,
             "preparationSurvivesEveryDefence": false
           }
         },
@@ -2661,54 +1904,54 @@
           }
         },
         {
-          "sourceId": "https://lichess.org/GF5vtBlD#8",
-          "parentFen": "rnbqkb1r/ppp2ppp/3p1n2/4p3/3PP3/2N2N2/PPP2PPP/R1BQKB1R b KQkq - 0 4",
-          "candidateUci": "e5d4",
-          "afterFen": "rnbqkb1r/ppp2ppp/3p1n2/8/3pP3/2N2N2/PPP2PPP/R1BQKB1R w KQkq - 0 5",
-          "played": true,
+          "sourceId": "https://lichess.org/UNkqj1pt#8",
+          "parentFen": "rnbqkb1r/pppp1ppp/5n2/4P3/3p4/5N2/PPP2PPP/RNBQKB1R b KQkq - 0 4",
+          "candidateUci": "b8a6",
+          "afterFen": "r1bqkb1r/pppp1ppp/n4n2/4P3/3p4/5N2/PPP2PPP/RNBQKB1R w KQkq - 1 5",
+          "played": false,
           "phase": "opening",
           "targetFamily": "material",
           "target": {
             "attacker": {
               "color": "white",
-              "role": "pawn",
+              "role": "queen",
               "promoted": false,
-              "square": "d4"
+              "square": "d1"
             },
             "target": {
               "color": "black",
               "role": "pawn",
-              "square": "e5"
+              "square": "d4"
             },
-            "baselineMoveUci": "d4e5"
+            "baselineMoveUci": "d1d4"
           },
           "exact": {
-            "immediate": "removed",
+            "immediate": "preserved",
             "reintroducedWithin3Ply": false,
             "preparationSurvivesEveryDefence": false
           }
         },
         {
-          "sourceId": "https://lichess.org/2c6ywL9u#8",
-          "parentFen": "r1bqkbnr/pp1ppppp/2n5/8/3pP3/2P2N2/PP3PPP/RNBQKB1R b KQkq - 0 4",
-          "candidateUci": "d4c3",
-          "afterFen": "r1bqkbnr/pp1ppppp/2n5/8/4P3/2p2N2/PP3PPP/RNBQKB1R w KQkq - 0 5",
+          "sourceId": "https://lichess.org/QJE0UbfB#24",
+          "parentFen": "r1bq1rk1/pp2ppb1/3p4/2pP1N1p/1n4p1/3P2P1/PPP2PBP/R1BQR1K1 b - - 2 12",
+          "candidateUci": "c8f5",
+          "afterFen": "r2q1rk1/pp2ppb1/3p4/2pP1b1p/1n4p1/3P2P1/PPP2PBP/R1BQR1K1 w - - 0 13",
           "played": true,
-          "phase": "opening",
+          "phase": "middlegame",
           "targetFamily": "material",
           "target": {
             "attacker": {
               "color": "white",
-              "role": "knight",
+              "role": "rook",
               "promoted": false,
-              "square": "f3"
+              "square": "e1"
             },
             "target": {
               "color": "black",
               "role": "pawn",
-              "square": "d4"
+              "square": "e7"
             },
-            "baselineMoveUci": "f3d4"
+            "baselineMoveUci": "e1e7"
           },
           "exact": {
             "immediate": "removed",
@@ -2717,26 +1960,26 @@
           }
         },
         {
-          "sourceId": "https://lichess.org/KVXX8PGo#48",
-          "parentFen": "1rr3k1/5ppp/4pb2/ppBp4/1P6/P5P1/2P2P1P/1R1BR1K1 b - - 1 24",
-          "candidateUci": "d5d4",
-          "afterFen": "1rr3k1/5ppp/4pb2/ppB5/1P1p4/P5P1/2P2P1P/1R1BR1K1 w - - 0 25",
-          "played": true,
-          "phase": "unclear",
+          "sourceId": "https://lichess.org/QJE0UbfB#24",
+          "parentFen": "r1bq1rk1/pp2ppb1/3p4/2pP1N1p/1n4p1/3P2P1/PPP2PBP/R1BQR1K1 b - - 2 12",
+          "candidateUci": "b4d3",
+          "afterFen": "r1bq1rk1/pp2ppb1/3p4/2pP1N1p/6p1/3n2P1/PPP2PBP/R1BQR1K1 w - - 0 13",
+          "played": false,
+          "phase": "middlegame",
           "targetFamily": "material",
           "target": {
             "attacker": {
               "color": "white",
-              "role": "pawn",
+              "role": "rook",
               "promoted": false,
-              "square": "b4"
+              "square": "e1"
             },
             "target": {
               "color": "black",
               "role": "pawn",
-              "square": "a5"
+              "square": "e7"
             },
-            "baselineMoveUci": "b4a5"
+            "baselineMoveUci": "e1e7"
           },
           "exact": {
             "immediate": "preserved",
@@ -2773,26 +2016,194 @@
           }
         },
         {
-          "sourceId": "https://lichess.org/SYvvvC7f#48",
-          "parentFen": "r1bN1k2/ppp3pp/1b1p4/1N6/8/1n6/1PK1B1PP/2B1R3 b - - 1 24",
-          "candidateUci": "b3d4",
-          "afterFen": "r1bN1k2/ppp3pp/1b1p4/1N6/3n4/8/1PK1B1PP/2B1R3 w - - 2 25",
+          "sourceId": "https://lichess.org/ZHWGswJq#24",
+          "parentFen": "r1bq1rnk/pppnbp1p/4p2B/3p4/3P1P2/3B4/PPP3PP/RN1Q1RK1 b - - 0 12",
+          "candidateUci": "e7h4",
+          "afterFen": "r1bq1rnk/pppn1p1p/4p2B/3p4/3P1P1b/3B4/PPP3PP/RN1Q1RK1 w - - 1 13",
+          "played": false,
+          "phase": "unclear",
+          "targetFamily": "material",
+          "target": {
+            "attacker": {
+              "color": "white",
+              "role": "bishop",
+              "promoted": false,
+              "square": "h6"
+            },
+            "target": {
+              "color": "black",
+              "role": "rook",
+              "square": "f8"
+            },
+            "baselineMoveUci": "h6f8"
+          },
+          "exact": {
+            "immediate": "preserved",
+            "reintroducedWithin3Ply": false,
+            "preparationSurvivesEveryDefence": false
+          }
+        },
+        {
+          "sourceId": "https://lichess.org/kL85VmlC#8",
+          "parentFen": "rnbqkbnr/pp2pppp/2p5/8/3Pp3/2N2P2/PPP3PP/R1BQKBNR b KQkq - 0 4",
+          "candidateUci": "e4f3",
+          "afterFen": "rnbqkbnr/pp2pppp/2p5/8/3P4/2N2p2/PPP3PP/R1BQKBNR w KQkq - 0 5",
+          "played": true,
+          "phase": "opening",
+          "targetFamily": "material",
+          "target": {
+            "attacker": {
+              "color": "white",
+              "role": "knight",
+              "promoted": false,
+              "square": "c3"
+            },
+            "target": {
+              "color": "black",
+              "role": "pawn",
+              "square": "e4"
+            },
+            "baselineMoveUci": "c3e4"
+          },
+          "exact": {
+            "immediate": "removed",
+            "reintroducedWithin3Ply": true,
+            "preparationSurvivesEveryDefence": false
+          }
+        },
+        {
+          "sourceId": "https://lichess.org/kL85VmlC#8",
+          "parentFen": "rnbqkbnr/pp2pppp/2p5/8/3Pp3/2N2P2/PPP3PP/R1BQKBNR b KQkq - 0 4",
+          "candidateUci": "c8h3",
+          "afterFen": "rn1qkbnr/pp2pppp/2p5/8/3Pp3/2N2P1b/PPP3PP/R1BQKBNR w KQkq - 1 5",
+          "played": false,
+          "phase": "opening",
+          "targetFamily": "material",
+          "target": {
+            "attacker": {
+              "color": "white",
+              "role": "knight",
+              "promoted": false,
+              "square": "c3"
+            },
+            "target": {
+              "color": "black",
+              "role": "pawn",
+              "square": "e4"
+            },
+            "baselineMoveUci": "c3e4"
+          },
+          "exact": {
+            "immediate": "preserved",
+            "reintroducedWithin3Ply": false,
+            "preparationSurvivesEveryDefence": false
+          }
+        },
+        {
+          "sourceId": "https://lichess.org/pQZ75avT#32",
+          "parentFen": "rn2r1k1/ppp2p1p/6p1/8/3bQP2/8/PP4PP/R1B2R1K b - - 0 16",
+          "candidateUci": "e8e4",
+          "afterFen": "rn4k1/ppp2p1p/6p1/8/3brP2/8/PP4PP/R1B2R1K w - - 0 17",
+          "played": true,
+          "phase": "middlegame",
+          "targetFamily": "material",
+          "target": {
+            "attacker": {
+              "color": "white",
+              "role": "queen",
+              "promoted": false,
+              "square": "e4"
+            },
+            "target": {
+              "color": "black",
+              "role": "rook",
+              "square": "e8"
+            },
+            "baselineMoveUci": "e4e8"
+          },
+          "exact": {
+            "immediate": "removed",
+            "reintroducedWithin3Ply": false,
+            "preparationSurvivesEveryDefence": false
+          }
+        },
+        {
+          "sourceId": "https://lichess.org/pQZ75avT#32",
+          "parentFen": "rn2r1k1/ppp2p1p/6p1/8/3bQP2/8/PP4PP/R1B2R1K b - - 0 16",
+          "candidateUci": "e8c8",
+          "afterFen": "rnr3k1/ppp2p1p/6p1/8/3bQP2/8/PP4PP/R1B2R1K w - - 1 17",
+          "played": false,
+          "phase": "middlegame",
+          "targetFamily": "material",
+          "target": {
+            "attacker": {
+              "color": "white",
+              "role": "queen",
+              "promoted": false,
+              "square": "e4"
+            },
+            "target": {
+              "color": "black",
+              "role": "rook",
+              "square": "e8"
+            },
+            "baselineMoveUci": "e4e8"
+          },
+          "exact": {
+            "immediate": "removed",
+            "reintroducedWithin3Ply": true,
+            "preparationSurvivesEveryDefence": false
+          }
+        },
+        {
+          "sourceId": "https://lichess.org/CmcgG2om#48",
+          "parentFen": "3rr1k1/pp3ppp/1n6/8/3p1BP1/P4B1P/1P3PK1/4R2R b - - 5 24",
+          "candidateUci": "e8e1",
+          "afterFen": "3r2k1/pp3ppp/1n6/8/3p1BP1/P4B1P/1P3PK1/4r2R w - - 0 25",
           "played": true,
           "phase": "unclear",
           "targetFamily": "material",
           "target": {
             "attacker": {
               "color": "white",
-              "role": "king",
+              "role": "bishop",
               "promoted": false,
-              "square": "c2"
+              "square": "f3"
             },
             "target": {
               "color": "black",
-              "role": "knight",
-              "square": "b3"
+              "role": "pawn",
+              "square": "b7"
             },
-            "baselineMoveUci": "c2b3"
+            "baselineMoveUci": "f3b7"
+          },
+          "exact": {
+            "immediate": "preserved",
+            "reintroducedWithin3Ply": false,
+            "preparationSurvivesEveryDefence": false
+          }
+        },
+        {
+          "sourceId": "https://lichess.org/CmcgG2om#48",
+          "parentFen": "3rr1k1/pp3ppp/1n6/8/3p1BP1/P4B1P/1P3PK1/4R2R b - - 5 24",
+          "candidateUci": "e8e4",
+          "afterFen": "3r2k1/pp3ppp/1n6/8/3prBP1/P4B1P/1P3PK1/4R2R w - - 6 25",
+          "played": false,
+          "phase": "unclear",
+          "targetFamily": "material",
+          "target": {
+            "attacker": {
+              "color": "white",
+              "role": "bishop",
+              "promoted": false,
+              "square": "f3"
+            },
+            "target": {
+              "color": "black",
+              "role": "pawn",
+              "square": "b7"
+            },
+            "baselineMoveUci": "f3b7"
           },
           "exact": {
             "immediate": "removed",
@@ -2801,187 +2212,82 @@
           }
         },
         {
-          "sourceId": "https://lichess.org/Bq21teR2#48",
-          "parentFen": "3b1rk1/R4ppp/4pn2/4N3/3P1B2/4P2P/5PP1/6K1 b - - 2 24",
-          "candidateUci": "h7h5",
-          "afterFen": "3b1rk1/R4pp1/4pn2/4N2p/3P1B2/4P2P/5PP1/6K1 w - - 0 25",
+          "sourceId": "https://lichess.org/JpzfY1Ph#48",
+          "parentFen": "4k2r/1p3p1p/5np1/1P1p1p2/p2N4/3KP3/5PPP/R7 b k - 0 24",
+          "candidateUci": "f6e4",
+          "afterFen": "4k2r/1p3p1p/6p1/1P1p1p2/p2Nn3/3KP3/5PPP/R7 w k - 1 25",
+          "played": true,
+          "phase": "endgame",
+          "targetFamily": "material",
+          "target": {
+            "attacker": {
+              "color": "white",
+              "role": "rook",
+              "promoted": false,
+              "square": "a1"
+            },
+            "target": {
+              "color": "black",
+              "role": "pawn",
+              "square": "a4"
+            },
+            "baselineMoveUci": "a1a4"
+          },
+          "exact": {
+            "immediate": "preserved",
+            "reintroducedWithin3Ply": false,
+            "preparationSurvivesEveryDefence": false
+          }
+        },
+        {
+          "sourceId": "https://lichess.org/JpzfY1Ph#48",
+          "parentFen": "4k2r/1p3p1p/5np1/1P1p1p2/p2N4/3KP3/5PPP/R7 b k - 0 24",
+          "candidateUci": "f6g8",
+          "afterFen": "4k1nr/1p3p1p/6p1/1P1p1p2/p2N4/3KP3/5PPP/R7 w k - 1 25",
           "played": false,
           "phase": "endgame",
-          "targetFamily": "destination",
+          "targetFamily": "material",
           "target": {
-            "minor": {
+            "attacker": {
               "color": "white",
-              "role": "knight",
-              "square": "e5"
+              "role": "rook",
+              "promoted": false,
+              "square": "a1"
             },
-            "controllingPawn": {
+            "target": {
               "color": "black",
               "role": "pawn",
-              "square": "h5"
+              "square": "a4"
             },
-            "square": "g4"
+            "baselineMoveUci": "a1a4"
           },
           "exact": {
-            "immediate": "removed",
-            "reintroducedWithin3Ply": true,
-            "preparationSurvivesEveryDefence": false
-          }
-        },
-        {
-          "sourceId": "https://lichess.org/CmcgG2om#24",
-          "parentFen": "r2qr1k1/pp3ppp/2nb4/2pn1b2/8/PQ1P1NPP/1P3PB1/RNB2K1R b - - 6 12",
-          "candidateUci": "f7f6",
-          "afterFen": "r2qr1k1/pp4pp/2nb1p2/2pn1b2/8/PQ1P1NPP/1P3PB1/RNB2K1R w - - 0 13",
-          "played": false,
-          "phase": "middlegame",
-          "targetFamily": "destination",
-          "target": {
-            "minor": {
-              "color": "white",
-              "role": "knight",
-              "square": "f3"
-            },
-            "controllingPawn": {
-              "color": "black",
-              "role": "pawn",
-              "square": "f6"
-            },
-            "square": "g5"
-          },
-          "exact": {
-            "immediate": "removed",
+            "immediate": "preserved",
             "reintroducedWithin3Ply": false,
             "preparationSurvivesEveryDefence": false
           }
         },
         {
-          "sourceId": "https://lichess.org/SbXfrIkH#16",
-          "parentFen": "r1bqk2r/pp1npp2/2pp2pn/7p/3PP3/2NB1N1P/PPPQ1PP1/R3K2R b KQkq - 3 8",
-          "candidateUci": "b7b5",
-          "afterFen": "r1bqk2r/p2npp2/2pp2pn/1p5p/3PP3/2NB1N1P/PPPQ1PP1/R3K2R w KQkq - 0 9",
-          "played": false,
-          "phase": "middlegame",
-          "targetFamily": "destination",
+          "sourceId": "https://lichess.org/a0Xo4b5J#40",
+          "parentFen": "7k/ppp2prp/2p1b3/8/4P2N/P1P3P1/1PPr1R1P/R5K1 b - - 2 20",
+          "candidateUci": "d2d6",
+          "afterFen": "7k/ppp2prp/2prb3/8/4P2N/P1P3P1/1PP2R1P/R5K1 w - - 3 21",
+          "played": true,
+          "phase": "endgame",
+          "targetFamily": "material",
           "target": {
-            "minor": {
+            "attacker": {
               "color": "white",
-              "role": "knight",
-              "square": "c3"
+              "role": "rook",
+              "promoted": false,
+              "square": "f2"
             },
-            "controllingPawn": {
+            "target": {
               "color": "black",
-              "role": "pawn",
-              "square": "b5"
+              "role": "rook",
+              "square": "d2"
             },
-            "square": "a4"
-          },
-          "exact": {
-            "immediate": "removed",
-            "reintroducedWithin3Ply": true,
-            "preparationSurvivesEveryDefence": false
-          }
-        },
-        {
-          "sourceId": "https://lichess.org/eC6uvelI#8",
-          "parentFen": "r1bqkbnr/pp1ppppp/8/2p1n3/2B1P3/1Q6/PPPP1PPP/RNB1K1NR b KQkq - 5 4",
-          "candidateUci": "e7e6",
-          "afterFen": "r1bqkbnr/pp1p1ppp/4p3/2p1n3/2B1P3/1Q6/PPPP1PPP/RNB1K1NR w KQkq - 0 5",
-          "played": false,
-          "phase": "opening",
-          "targetFamily": "destination",
-          "target": {
-            "minor": {
-              "color": "white",
-              "role": "bishop",
-              "square": "c4"
-            },
-            "controllingPawn": {
-              "color": "black",
-              "role": "pawn",
-              "square": "e6"
-            },
-            "square": "d5"
-          },
-          "exact": {
-            "immediate": "removed",
-            "reintroducedWithin3Ply": false,
-            "preparationSurvivesEveryDefence": false
-          }
-        },
-        {
-          "sourceId": "https://lichess.org/RbdZDMbi#8",
-          "parentFen": "r1bqkbnr/pp1npppp/2p5/3p4/8/3P1NP1/PPP1PPBP/RNBQK2R b KQkq - 0 4",
-          "candidateUci": "g7g5",
-          "afterFen": "r1bqkbnr/pp1npp1p/2p5/3p2p1/8/3P1NP1/PPP1PPBP/RNBQK2R w KQkq - 0 5",
-          "played": false,
-          "phase": "opening",
-          "targetFamily": "destination",
-          "target": {
-            "minor": {
-              "color": "white",
-              "role": "bishop",
-              "square": "c1"
-            },
-            "controllingPawn": {
-              "color": "black",
-              "role": "pawn",
-              "square": "g5"
-            },
-            "square": "f4"
-          },
-          "exact": {
-            "immediate": "removed",
-            "reintroducedWithin3Ply": true,
-            "preparationSurvivesEveryDefence": false
-          }
-        },
-        {
-          "sourceId": "https://lichess.org/FLpiXGM1#16",
-          "parentFen": "r3kbnr/pp1npppp/2p5/q6b/6P1/2NP1N1P/PPPB1P2/R2QKB1R b KQkq - 0 8",
-          "candidateUci": "h7h6",
-          "afterFen": "r3kbnr/pp1nppp1/2p4p/q6b/6P1/2NP1N1P/PPPB1P2/R2QKB1R w KQkq - 0 9",
-          "played": false,
-          "phase": "unclear",
-          "targetFamily": "destination",
-          "target": {
-            "minor": {
-              "color": "white",
-              "role": "knight",
-              "square": "f3"
-            },
-            "controllingPawn": {
-              "color": "black",
-              "role": "pawn",
-              "square": "h6"
-            },
-            "square": "g5"
-          },
-          "exact": {
-            "immediate": "removed",
-            "reintroducedWithin3Ply": false,
-            "preparationSurvivesEveryDefence": false
-          }
-        },
-        {
-          "sourceId": "https://lichess.org/ZHWGswJq#16",
-          "parentFen": "rnbq1rk1/ppp1bppp/4pn2/3p4/3P2N1/3B1P2/PPP3PP/RNBQ1RK1 b - - 2 8",
-          "candidateUci": "g7g5",
-          "afterFen": "rnbq1rk1/ppp1bp1p/4pn2/3p2p1/3P2N1/3B1P2/PPP3PP/RNBQ1RK1 w - - 0 9",
-          "played": false,
-          "phase": "unclear",
-          "targetFamily": "destination",
-          "target": {
-            "minor": {
-              "color": "white",
-              "role": "bishop",
-              "square": "c1"
-            },
-            "controllingPawn": {
-              "color": "black",
-              "role": "pawn",
-              "square": "g5"
-            },
-            "square": "f4"
+            "baselineMoveUci": "f2d2"
           },
           "exact": {
             "immediate": "removed",
@@ -3018,30 +2324,602 @@
           }
         },
         {
-          "sourceId": "https://lichess.org/a0Xo4b5J#40",
-          "parentFen": "7k/ppp2prp/2p1b3/8/4P2N/P1P3P1/1PPr1R1P/R5K1 b - - 2 20",
-          "candidateUci": "d2f2",
-          "afterFen": "7k/ppp2prp/2p1b3/8/4P2N/P1P3P1/1PP2r1P/R5K1 w - - 0 21",
-          "played": false,
-          "phase": "endgame",
+          "sourceId": "https://lichess.org/9FTgKq10#24",
+          "parentFen": "rn1q1rk1/ppp2ppp/3p4/4P3/2BP1n1N/2P3P1/PP3KbP/RN1Q3R b - - 0 12",
+          "candidateUci": "g2h1",
+          "afterFen": "rn1q1rk1/ppp2ppp/3p4/4P3/2BP1n1N/2P3P1/PP3K1P/RN1Q3b w - - 0 13",
+          "played": true,
+          "phase": "middlegame",
           "targetFamily": "material",
           "target": {
             "attacker": {
               "color": "white",
-              "role": "rook",
+              "role": "pawn",
               "promoted": false,
-              "square": "f2"
+              "square": "g3"
             },
             "target": {
               "color": "black",
-              "role": "rook",
+              "role": "knight",
+              "square": "f4"
+            },
+            "baselineMoveUci": "g3f4"
+          },
+          "exact": {
+            "immediate": "preserved",
+            "reintroducedWithin3Ply": false,
+            "preparationSurvivesEveryDefence": false
+          }
+        },
+        {
+          "sourceId": "https://lichess.org/9FTgKq10#24",
+          "parentFen": "rn1q1rk1/ppp2ppp/3p4/4P3/2BP1n1N/2P3P1/PP3KbP/RN1Q3R b - - 0 12",
+          "candidateUci": "d6e5",
+          "afterFen": "rn1q1rk1/ppp2ppp/8/4p3/2BP1n1N/2P3P1/PP3KbP/RN1Q3R w - - 0 13",
+          "played": false,
+          "phase": "middlegame",
+          "targetFamily": "material",
+          "target": {
+            "attacker": {
+              "color": "white",
+              "role": "pawn",
+              "promoted": false,
+              "square": "g3"
+            },
+            "target": {
+              "color": "black",
+              "role": "knight",
+              "square": "f4"
+            },
+            "baselineMoveUci": "g3f4"
+          },
+          "exact": {
+            "immediate": "preserved",
+            "reintroducedWithin3Ply": false,
+            "preparationSurvivesEveryDefence": false
+          }
+        },
+        {
+          "sourceId": "https://lichess.org/Sodns02o#24",
+          "parentFen": "rnb2rk1/pp2qppp/8/3Pp3/4p3/P3P3/1P1N1PPP/R2QKB1R b KQ - 0 12",
+          "candidateUci": "f7f5",
+          "afterFen": "rnb2rk1/pp2q1pp/8/3Ppp2/4p3/P3P3/1P1N1PPP/R2QKB1R w KQ - 0 13",
+          "played": true,
+          "phase": "unclear",
+          "targetFamily": "material",
+          "target": {
+            "attacker": {
+              "color": "white",
+              "role": "knight",
+              "promoted": false,
               "square": "d2"
             },
-            "baselineMoveUci": "f2d2"
+            "target": {
+              "color": "black",
+              "role": "pawn",
+              "square": "e4"
+            },
+            "baselineMoveUci": "d2e4"
+          },
+          "exact": {
+            "immediate": "removed",
+            "reintroducedWithin3Ply": true,
+            "preparationSurvivesEveryDefence": false
+          }
+        },
+        {
+          "sourceId": "https://lichess.org/Sodns02o#24",
+          "parentFen": "rnb2rk1/pp2qppp/8/3Pp3/4p3/P3P3/1P1N1PPP/R2QKB1R b KQ - 0 12",
+          "candidateUci": "e7e6",
+          "afterFen": "rnb2rk1/pp3ppp/4q3/3Pp3/4p3/P3P3/1P1N1PPP/R2QKB1R w KQ - 1 13",
+          "played": false,
+          "phase": "unclear",
+          "targetFamily": "material",
+          "target": {
+            "attacker": {
+              "color": "white",
+              "role": "knight",
+              "promoted": false,
+              "square": "d2"
+            },
+            "target": {
+              "color": "black",
+              "role": "pawn",
+              "square": "e4"
+            },
+            "baselineMoveUci": "d2e4"
+          },
+          "exact": {
+            "immediate": "preserved",
+            "reintroducedWithin3Ply": false,
+            "preparationSurvivesEveryDefence": false
+          }
+        },
+        {
+          "sourceId": "https://lichess.org/GF5vtBlD#8",
+          "parentFen": "rnbqkb1r/ppp2ppp/3p1n2/4p3/3PP3/2N2N2/PPP2PPP/R1BQKB1R b KQkq - 0 4",
+          "candidateUci": "e5d4",
+          "afterFen": "rnbqkb1r/ppp2ppp/3p1n2/8/3pP3/2N2N2/PPP2PPP/R1BQKB1R w KQkq - 0 5",
+          "played": true,
+          "phase": "opening",
+          "targetFamily": "material",
+          "target": {
+            "attacker": {
+              "color": "white",
+              "role": "pawn",
+              "promoted": false,
+              "square": "d4"
+            },
+            "target": {
+              "color": "black",
+              "role": "pawn",
+              "square": "e5"
+            },
+            "baselineMoveUci": "d4e5"
           },
           "exact": {
             "immediate": "removed",
             "reintroducedWithin3Ply": false,
+            "preparationSurvivesEveryDefence": false
+          }
+        },
+        {
+          "sourceId": "https://lichess.org/GF5vtBlD#8",
+          "parentFen": "rnbqkb1r/ppp2ppp/3p1n2/4p3/3PP3/2N2N2/PPP2PPP/R1BQKB1R b KQkq - 0 4",
+          "candidateUci": "f8e7",
+          "afterFen": "rnbqk2r/ppp1bppp/3p1n2/4p3/3PP3/2N2N2/PPP2PPP/R1BQKB1R w KQkq - 1 5",
+          "played": false,
+          "phase": "opening",
+          "targetFamily": "material",
+          "target": {
+            "attacker": {
+              "color": "white",
+              "role": "pawn",
+              "promoted": false,
+              "square": "d4"
+            },
+            "target": {
+              "color": "black",
+              "role": "pawn",
+              "square": "e5"
+            },
+            "baselineMoveUci": "d4e5"
+          },
+          "exact": {
+            "immediate": "preserved",
+            "reintroducedWithin3Ply": false,
+            "preparationSurvivesEveryDefence": false
+          }
+        },
+        {
+          "sourceId": "https://lichess.org/ktZ3spXM#16",
+          "parentFen": "rnbq1rk1/p2pnpbp/2p1p1p1/1p2P3/3P4/1B3N2/PPP2PPP/RNBQ1RK1 b - - 1 8",
+          "candidateUci": "g6g5",
+          "afterFen": "rnbq1rk1/p2pnpbp/2p1p3/1p2P1p1/3P4/1B3N2/PPP2PPP/RNBQ1RK1 w - - 0 9",
+          "played": false,
+          "phase": "unclear",
+          "targetFamily": "destination",
+          "target": {
+            "minor": {
+              "color": "white",
+              "role": "bishop",
+              "square": "c1"
+            },
+            "controllingPawn": {
+              "color": "black",
+              "role": "pawn",
+              "square": "g5"
+            },
+            "square": "f4"
+          },
+          "exact": {
+            "immediate": "removed",
+            "reintroducedWithin3Ply": true,
+            "preparationSurvivesEveryDefence": false
+          }
+        },
+        {
+          "sourceId": "https://lichess.org/ktZ3spXM#8",
+          "parentFen": "rnbqk1nr/pppp1pbp/4p1p1/4P3/3P4/5N2/PPP2PPP/RNBQKB1R b KQkq - 1 4",
+          "candidateUci": "d7d5",
+          "afterFen": "rnbqk1nr/ppp2pbp/4p1p1/3pP3/3P4/5N2/PPP2PPP/RNBQKB1R w KQkq d6 0 5",
+          "played": false,
+          "phase": "opening",
+          "targetFamily": "destination",
+          "target": {
+            "minor": {
+              "color": "white",
+              "role": "bishop",
+              "square": "f1"
+            },
+            "controllingPawn": {
+              "color": "black",
+              "role": "pawn",
+              "square": "d5"
+            },
+            "square": "c4"
+          },
+          "exact": {
+            "immediate": "removed",
+            "reintroducedWithin3Ply": false,
+            "preparationSurvivesEveryDefence": false
+          }
+        },
+        {
+          "sourceId": "https://lichess.org/eC6uvelI#48",
+          "parentFen": "5rk1/1p1bpp1p/p2pn1p1/8/P1P1P3/2B2P2/2P3PP/R4RK1 b - - 2 24",
+          "candidateUci": "a6a5",
+          "afterFen": "5rk1/1p1bpp1p/3pn1p1/p7/P1P1P3/2B2P2/2P3PP/R4RK1 w - - 0 25",
+          "played": false,
+          "phase": "endgame",
+          "targetFamily": "destination",
+          "target": {
+            "minor": {
+              "color": "white",
+              "role": "bishop",
+              "square": "c3"
+            },
+            "controllingPawn": {
+              "color": "black",
+              "role": "pawn",
+              "square": "a5"
+            },
+            "square": "b4"
+          },
+          "exact": {
+            "immediate": "removed",
+            "reintroducedWithin3Ply": false,
+            "preparationSurvivesEveryDefence": false
+          }
+        },
+        {
+          "sourceId": "https://lichess.org/F6Bb9Zr3#16",
+          "parentFen": "rnbq1rk1/ppp2ppp/3b1p2/8/8/2P3P1/P1PPNPBP/R1BQK2R b KQ - 4 8",
+          "candidateUci": "c7c6",
+          "afterFen": "rnbq1rk1/pp3ppp/2pb1p2/8/8/2P3P1/P1PPNPBP/R1BQK2R w KQ - 0 9",
+          "played": true,
+          "phase": "unclear",
+          "targetFamily": "destination",
+          "target": {
+            "minor": {
+              "color": "white",
+              "role": "bishop",
+              "square": "g2"
+            },
+            "controllingPawn": {
+              "color": "black",
+              "role": "pawn",
+              "square": "c6"
+            },
+            "square": "d5"
+          },
+          "exact": {
+            "immediate": "removed",
+            "reintroducedWithin3Ply": true,
+            "preparationSurvivesEveryDefence": false
+          }
+        },
+        {
+          "sourceId": "https://lichess.org/jA71yBXB#48",
+          "parentFen": "1k2r3/1pp1r2p/p5pn/5P2/P7/1B5P/P1P5/4RRK1 b - - 0 24",
+          "candidateUci": "c7c6",
+          "afterFen": "1k2r3/1p2r2p/p1p3pn/5P2/P7/1B5P/P1P5/4RRK1 w - - 0 25",
+          "played": false,
+          "phase": "endgame",
+          "targetFamily": "destination",
+          "target": {
+            "minor": {
+              "color": "white",
+              "role": "bishop",
+              "square": "b3"
+            },
+            "controllingPawn": {
+              "color": "black",
+              "role": "pawn",
+              "square": "c6"
+            },
+            "square": "d5"
+          },
+          "exact": {
+            "immediate": "removed",
+            "reintroducedWithin3Ply": true,
+            "preparationSurvivesEveryDefence": false
+          }
+        },
+        {
+          "sourceId": "https://lichess.org/kL85VmlC#8",
+          "parentFen": "rnbqkbnr/pp2pppp/2p5/8/3Pp3/2N2P2/PPP3PP/R1BQKBNR b KQkq - 0 4",
+          "candidateUci": "e4f3",
+          "afterFen": "rnbqkbnr/pp2pppp/2p5/8/3P4/2N2p2/PPP3PP/R1BQKBNR w KQkq - 0 5",
+          "played": true,
+          "phase": "opening",
+          "targetFamily": "destination",
+          "target": {
+            "minor": {
+              "color": "white",
+              "role": "knight",
+              "square": "g1"
+            },
+            "controllingPawn": {
+              "color": "black",
+              "role": "pawn",
+              "square": "f3"
+            },
+            "square": "e2"
+          },
+          "exact": {
+            "immediate": "removed",
+            "reintroducedWithin3Ply": true,
+            "preparationSurvivesEveryDefence": false
+          }
+        },
+        {
+          "sourceId": "https://lichess.org/pUkgyxDV#16",
+          "parentFen": "r1bq1rk1/ppp2ppp/2np1n2/4p3/2B1P3/2NPPN1P/PPP3P1/R2QK2R b KQ - 0 8",
+          "candidateUci": "a7a6",
+          "afterFen": "r1bq1rk1/1pp2ppp/p1np1n2/4p3/2B1P3/2NPPN1P/PPP3P1/R2QK2R w KQ - 0 9",
+          "played": false,
+          "phase": "middlegame",
+          "targetFamily": "destination",
+          "target": {
+            "minor": {
+              "color": "white",
+              "role": "knight",
+              "square": "c3"
+            },
+            "controllingPawn": {
+              "color": "black",
+              "role": "pawn",
+              "square": "a6"
+            },
+            "square": "b5"
+          },
+          "exact": {
+            "immediate": "removed",
+            "reintroducedWithin3Ply": true,
+            "preparationSurvivesEveryDefence": false
+          }
+        },
+        {
+          "sourceId": "https://lichess.org/6a0z3iBG#8",
+          "parentFen": "rnbqkbnr/pp3ppp/2pp4/4p3/3PP3/2N2N2/PPP2PPP/R1BQKB1R b KQkq - 0 4",
+          "candidateUci": "b7b5",
+          "afterFen": "rnbqkbnr/p4ppp/2pp4/1p2p3/3PP3/2N2N2/PPP2PPP/R1BQKB1R w KQkq - 0 5",
+          "played": false,
+          "phase": "opening",
+          "targetFamily": "destination",
+          "target": {
+            "minor": {
+              "color": "white",
+              "role": "bishop",
+              "square": "f1"
+            },
+            "controllingPawn": {
+              "color": "black",
+              "role": "pawn",
+              "square": "b5"
+            },
+            "square": "c4"
+          },
+          "exact": {
+            "immediate": "removed",
+            "reintroducedWithin3Ply": true,
+            "preparationSurvivesEveryDefence": false
+          }
+        },
+        {
+          "sourceId": "https://lichess.org/hU10ITVj#24",
+          "parentFen": "rnbq1rk1/5ppp/3bpn2/p2p4/1pPP4/1P2PNB1/2BN1PPP/R2QK2R b KQ - 0 12",
+          "candidateUci": "d5c4",
+          "afterFen": "rnbq1rk1/5ppp/3bpn2/p7/1ppP4/1P2PNB1/2BN1PPP/R2QK2R w KQ - 0 13",
+          "played": true,
+          "phase": "middlegame",
+          "targetFamily": "destination",
+          "target": {
+            "minor": {
+              "color": "white",
+              "role": "bishop",
+              "square": "c2"
+            },
+            "controllingPawn": {
+              "color": "black",
+              "role": "pawn",
+              "square": "c4"
+            },
+            "square": "d3"
+          },
+          "exact": {
+            "immediate": "removed",
+            "reintroducedWithin3Ply": true,
+            "preparationSurvivesEveryDefence": false
+          }
+        },
+        {
+          "sourceId": "https://lichess.org/hjh8d0Z8#40",
+          "parentFen": "r1b2r1k/pp4pp/1qp5/7P/4QB2/2P2N2/P4PP1/2KR3R b - - 0 20",
+          "candidateUci": "h7h6",
+          "afterFen": "r1b2r1k/pp4p1/1qp4p/7P/4QB2/2P2N2/P4PP1/2KR3R w - - 0 21",
+          "played": false,
+          "phase": "middlegame",
+          "targetFamily": "destination",
+          "target": {
+            "minor": {
+              "color": "white",
+              "role": "knight",
+              "square": "f3"
+            },
+            "controllingPawn": {
+              "color": "black",
+              "role": "pawn",
+              "square": "h6"
+            },
+            "square": "g5"
+          },
+          "exact": {
+            "immediate": "removed",
+            "reintroducedWithin3Ply": false,
+            "preparationSurvivesEveryDefence": false
+          }
+        },
+        {
+          "sourceId": "https://lichess.org/fd37KgOs#24",
+          "parentFen": "rnb1k2r/pp3p2/3p1n1p/q1pP2p1/4P3/1QPB2B1/P4PPP/R3K1NR b KQkq - 2 12",
+          "candidateUci": "a7a6",
+          "afterFen": "rnb1k2r/1p3p2/p2p1n1p/q1pP2p1/4P3/1QPB2B1/P4PPP/R3K1NR w KQkq - 0 13",
+          "played": true,
+          "phase": "unclear",
+          "targetFamily": "destination",
+          "target": {
+            "minor": {
+              "color": "white",
+              "role": "bishop",
+              "square": "d3"
+            },
+            "controllingPawn": {
+              "color": "black",
+              "role": "pawn",
+              "square": "a6"
+            },
+            "square": "b5"
+          },
+          "exact": {
+            "immediate": "removed",
+            "reintroducedWithin3Ply": false,
+            "preparationSurvivesEveryDefence": false
+          }
+        },
+        {
+          "sourceId": "https://lichess.org/ZHWGswJq#8",
+          "parentFen": "rnbqkb1r/pppp1ppp/4p3/8/3Pn3/3B1N2/PPP2PPP/RNBQK2R b KQkq - 1 4",
+          "candidateUci": "d7d5",
+          "afterFen": "rnbqkb1r/ppp2ppp/4p3/3p4/3Pn3/3B1N2/PPP2PPP/RNBQK2R w KQkq - 0 5",
+          "played": true,
+          "phase": "opening",
+          "targetFamily": "destination",
+          "target": {
+            "minor": {
+              "color": "white",
+              "role": "bishop",
+              "square": "d3"
+            },
+            "controllingPawn": {
+              "color": "black",
+              "role": "pawn",
+              "square": "d5"
+            },
+            "square": "c4"
+          },
+          "exact": {
+            "immediate": "removed",
+            "reintroducedWithin3Ply": false,
+            "preparationSurvivesEveryDefence": false
+          }
+        },
+        {
+          "sourceId": "https://lichess.org/fd37KgOs#16",
+          "parentFen": "rnbqk2r/pp3p1p/3ppnp1/2pP2B1/2P1P3/2PB4/P4PPP/R2QK1NR b KQkq - 1 8",
+          "candidateUci": "e6e5",
+          "afterFen": "rnbqk2r/pp3p1p/3p1np1/2pPp1B1/2P1P3/2PB4/P4PPP/R2QK1NR w KQkq - 0 9",
+          "played": false,
+          "phase": "unclear",
+          "targetFamily": "destination",
+          "target": {
+            "minor": {
+              "color": "white",
+              "role": "bishop",
+              "square": "g5"
+            },
+            "controllingPawn": {
+              "color": "black",
+              "role": "pawn",
+              "square": "e5"
+            },
+            "square": "f4"
+          },
+          "exact": {
+            "immediate": "removed",
+            "reintroducedWithin3Ply": false,
+            "preparationSurvivesEveryDefence": false
+          }
+        },
+        {
+          "sourceId": "https://lichess.org/ZHWGswJq#16",
+          "parentFen": "rnbq1rk1/ppp1bppp/4pn2/3p4/3P2N1/3B1P2/PPP3PP/RNBQ1RK1 b - - 2 8",
+          "candidateUci": "g7g5",
+          "afterFen": "rnbq1rk1/ppp1bp1p/4pn2/3p2p1/3P2N1/3B1P2/PPP3PP/RNBQ1RK1 w - - 0 9",
+          "played": false,
+          "phase": "unclear",
+          "targetFamily": "destination",
+          "target": {
+            "minor": {
+              "color": "white",
+              "role": "bishop",
+              "square": "c1"
+            },
+            "controllingPawn": {
+              "color": "black",
+              "role": "pawn",
+              "square": "g5"
+            },
+            "square": "f4"
+          },
+          "exact": {
+            "immediate": "removed",
+            "reintroducedWithin3Ply": true,
+            "preparationSurvivesEveryDefence": false
+          }
+        },
+        {
+          "sourceId": "https://lichess.org/eC6uvelI#8",
+          "parentFen": "r1bqkbnr/pp1ppppp/8/2p1n3/2B1P3/1Q6/PPPP1PPP/RNB1K1NR b KQkq - 5 4",
+          "candidateUci": "e7e6",
+          "afterFen": "r1bqkbnr/pp1p1ppp/4p3/2p1n3/2B1P3/1Q6/PPPP1PPP/RNB1K1NR w KQkq - 0 5",
+          "played": false,
+          "phase": "opening",
+          "targetFamily": "destination",
+          "target": {
+            "minor": {
+              "color": "white",
+              "role": "bishop",
+              "square": "c4"
+            },
+            "controllingPawn": {
+              "color": "black",
+              "role": "pawn",
+              "square": "e6"
+            },
+            "square": "d5"
+          },
+          "exact": {
+            "immediate": "removed",
+            "reintroducedWithin3Ply": false,
+            "preparationSurvivesEveryDefence": false
+          }
+        },
+        {
+          "sourceId": "https://lichess.org/RpFyUtKu#8",
+          "parentFen": "r1bqkb1r/pppp1ppp/2n2n2/4p3/8/1PN3P1/P1PPPPBP/R1BQK1NR b KQkq - 0 4",
+          "candidateUci": "d7d5",
+          "afterFen": "r1bqkb1r/ppp2ppp/2n2n2/3pp3/8/1PN3P1/P1PPPPBP/R1BQK1NR w KQkq - 0 5",
+          "played": true,
+          "phase": "unclear",
+          "targetFamily": "destination",
+          "target": {
+            "minor": {
+              "color": "white",
+              "role": "bishop",
+              "square": "g2"
+            },
+            "controllingPawn": {
+              "color": "black",
+              "role": "pawn",
+              "square": "d5"
+            },
+            "square": "e4"
+          },
+          "exact": {
+            "immediate": "removed",
+            "reintroducedWithin3Ply": true,
             "preparationSurvivesEveryDefence": false
           }
         }

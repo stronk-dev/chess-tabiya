@@ -12,9 +12,11 @@ denial. It writes `exact-census-output.md`, the fixed authored and imported popu
 the full bounded horizon. Later slices add the predeclared Stockfish and Maia policy arms without
 changing these semantics.
 
-`provider-sample.json` is the sealed 48+48 source-backed sample. It round-robins over
-played/alternative × target family × detected phase × exact-result strata and orders candidates
-inside each stratum by SHA-256. Provider availability cannot change which rows are asked.
+`provider-sample.json` is the sealed 48+48 source-backed sample. Each population carries 16
+material anchors as an exact played/hash-selected-alternative pair over the same attacker/victim,
+plus 16 standalone destination rows. Round-robin strata cover phase/exact result for material and
+played/alternative × phase/exact result for destination; SHA-256 orders within strata. Provider
+availability cannot change which rows are asked.
 
 Run the focused controls:
 
