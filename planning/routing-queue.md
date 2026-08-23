@@ -40,7 +40,7 @@ set execution order.
 
 | Rows | Primary destination | Next action / gate |
 |---|---|---|
-| D969, D970, D1014 | `bot-policy` amendment | D970 research recommends exact bands `[1000,1400,1800,2200]`; owner/RFC action is prepared in `planning/platform-alignment/bot-policy/d970-roster-handoff.md`. Also pin D969's bounded Stockfish probe/score-mate behavior and D1014's catalog-wide layer-identity rule before production registration. |
+| D969, D970 | `bot-policy` amendment | D970 research recommends exact bands `[1000,1400,1800,2200]`; owner/RFC action is prepared in `planning/platform-alignment/bot-policy/d970-roster-handoff.md`. Also pin D969's bounded Stockfish probe/score-mate behavior before production registration. D1014's catalog-wide layer-identity guard is implemented. |
 | D1012 | bot-policy composed sampler | Make seeded draws invariant to provider emission order by applying the accepted neutral-tiebreak authority at the draw boundary. |
 | D1013 | bot-policy compiler | Bind executable typed layer fields to the generic parameter map so profile digest, disclosure and runtime behavior cannot disagree. |
 | D590, D591, D592, D593, D594, D595, D596 | bot-policy research and measurement | Turn Maia policy, bounded-error guard, opening/repertoire layers, and observable traits into measured contracts; require blind behavioral validation where the row calls for it. |

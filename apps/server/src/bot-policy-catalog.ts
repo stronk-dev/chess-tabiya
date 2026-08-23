@@ -275,10 +275,19 @@ export function compileBotProfile(profile: BotProfileDeclaration): CompiledBotPr
 export function compileBotPolicyCatalog(profiles: readonly BotProfileDeclaration[]): readonly CompiledBotProfile[] {
   const compiled = profiles.map(compileBotProfile);
   const keys = new Set<string>();
+  const declarationByLayerId = new Map<string, string>();
   for (const profile of compiled) {
     const key = `${profile.id}@${profile.version}`;
     if (keys.has(key)) fail(`duplicate profile ${key}`);
     keys.add(key);
+    for (const layer of profile.layers) {
+      const declaration = canonicalizeJson(layer as unknown as JsonValue);
+      const prior = declarationByLayerId.get(layer.id);
+      if (prior !== undefined && prior !== declaration) {
+        fail(`${layer.id} has conflicting declarations across profiles`);
+      }
+      declarationByLayerId.set(layer.id, declaration);
+    }
   }
   return Object.freeze(compiled.sort((left, right) => left.id.localeCompare(right.id) || left.version - right.version));
 }

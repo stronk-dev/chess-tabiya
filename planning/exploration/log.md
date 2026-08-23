@@ -5717,3 +5717,11 @@ from carrying different declarations in different profiles. The handoff therefor
 band-specific model-layer identities and requires a negative cross-profile fixture. No production
 profile or default changed. `planning/platform-alignment/bot-policy/d970-roster-handoff.md`
 contains the exact owner/RFC amendment; guarded and pawn-heavy variants remain behind D969.
+
+## 2026-08-23 — bot layer identities are catalog-wide
+
+D1014 is fixed in `compileBotPolicyCatalog`: every repeated layer `id@version` is joined to its
+canonical declaration across profiles. Byte-identical shared layers remain legal; changing the
+band or any other declared field under the same identity fails compilation. The focused fixture
+constructs exactly the D970 hazard (`model.maia3@1` at bands 1500 and 1800) and a positive shared-
+layer control. No production roster registered and the D970 owner/RFC amendment remains required.

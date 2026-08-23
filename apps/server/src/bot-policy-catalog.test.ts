@@ -79,6 +79,23 @@ describe("compiled bot-policy catalog", () => {
     expect(() => compileBotPolicyCatalog([a, a])).toThrow(/duplicate profile/u);
   });
 
+  it("requires a versioned layer identity to mean one declaration across profiles", () => {
+    const conflictingBase: BotLayerDeclaration = {
+      ...base,
+      band: 1800,
+      parameters: { band: 1800 },
+    };
+    expect(() => compileBotPolicyCatalog([
+      profile(),
+      { ...profile([conflictingBase, sampler, presentation]), id: "human-baseline-1800" },
+    ])).toThrow(/model\.maia3@1 has conflicting declarations across profiles/u);
+
+    expect(compileBotPolicyCatalog([
+      profile(),
+      { ...profile(), id: "same-layers-another-profile" },
+    ])).toHaveLength(2);
+  });
+
   it.each([
     ["duplicate authority", [base, { ...base, id: "model.other@1" }, sampler, presentation]],
     ["incomplete without degraded path", [base, { ...sampler, degradedPath: undefined }, presentation]],
