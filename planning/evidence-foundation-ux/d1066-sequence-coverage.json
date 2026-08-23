@@ -1,0 +1,49 @@
+{
+  "measuredAt": "2026-08-23T14:32:42.524Z",
+  "population": {
+    "positions": 64,
+    "arm": "depth12"
+  },
+  "families": {
+    "deflection": {
+      "windows": 634,
+      "events": 0,
+      "lines": 0
+    },
+    "attraction_3": {
+      "windows": 634,
+      "events": 0,
+      "lines": 0
+    },
+    "attraction_5": {
+      "windows": 506,
+      "events": 0,
+      "lines": 0
+    },
+    "line_blocker_clearance": {
+      "windows": 634,
+      "events": 1,
+      "lines": 1
+    },
+    "square_clearance": {
+      "windows": 634,
+      "events": 21,
+      "lines": 8
+    },
+    "interference": {
+      "windows": 634,
+      "events": 0,
+      "lines": 0
+    },
+    "check_zwischenzug": {
+      "windows": 570,
+      "events": 0,
+      "lines": 0
+    },
+    "overload_exploitation": {
+      "windows": 634,
+      "events": 0,
+      "lines": 0
+    }
+  }
+}

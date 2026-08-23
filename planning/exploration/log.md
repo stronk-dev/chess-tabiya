@@ -6218,3 +6218,27 @@ The pass also corrects the collection premise: durable content now has 893 recor
 its closed kind union cannot contain bestline. Runtime analysis can persist bestline run events;
 `engine-walk` is read-only and does not return a PV. A dynamic runtime path is therefore the first
 implementation candidate; authored bestline sidecars would be a separate schema decision.
+
+## 2026-08-23 — D1066 semantic-horizon reach and source split measured
+
+The fixed D1061 PVs were replayed through the sealed semantic event layer and R2's complete-
+alternative selection convention after the accepted nudge-family filter. A candidate that admits
+only literal actor/target events and disables alternative-only avoidance reaches 56/64 depth-12
+lines within four plies (87.5%), passing the preregistered 80% gate. The 100-ms arm reaches 46/64;
+among 44 jointly non-empty positions, first projection agrees 37/44 and occurrence ply 39/44.
+Engine version and budget therefore remain part of the derived horizon identity.
+
+The reuse gate fails: 115/237 compatibility selections lack one stage target, and the first
+depth-12 family is generic `developed` on 11/56 lines. R2 measures distinctiveness, not teaching
+value; the hint contract needs its own precedence/refusal table and theory/authored/tablebase
+fallback. Cold compile plus selection costs mean 329 ms / p95 799 ms per searched edge, against
+mean 38.7 / p95 66.5 ms after cache warmup, so a versioned candidate/event packet shared with bot
+policy is now a product dependency rather than an optimization footnote.
+
+The multi-edge arm found 21 square-clearance and one line-blocker-clearance witness in the fixed
+depth-12 lines, but no production caller can emit them: the seven sequence constructors are test-
+only. Their existing source is `recorded_run`; using them on a Stockfish PV would launder provider
+evidence as played history. The handoff therefore requires two adapters and identities: a recorded-
+path compiler for Review, and separately declared hypothetical engine-horizon derivations for
+Guided Hint. The pass also records the accepted three-stage Guided Hint versus owner-ruled four-
+stage contradiction; both RFC/compiler contracts must be amended before implementation.
