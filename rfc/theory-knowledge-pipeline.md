@@ -771,6 +771,8 @@ asserts it from this side.
 
 ## Acceptance criteria
 
+> **Findings landed 2026-08-23.** [[D1393]] — the attribution gate opens silently when `claim-semantic-anchors` lands. [[D1394]] — a CC0 source cannot be attributed. [[D1395]] — the source fetcher has no SSRF guard, redirect limit or byte ceiling. [[D1396]] — 0 of 893 records support a load-bearing pointer.
+
 1. **The corpus baseline is a command, not this document's arithmetic** ([[D1240]]).
    `make theory-source-census` prints, from the committed tree: ledger count, record count and
    per-kind split; the number of records supporting a `PROSE_POINTERS` pointer; the number of
