@@ -39,6 +39,17 @@ test("reports missing routes and duplicate ledger identities", () => {
   assert.deepEqual(result.unrouted, ["D8", "D8"]);
 });
 
+test("reports archive-only references without treating an immutable RFC as an owner", () => {
+  const result = buildWorkIndex({
+    ledger: "| D9 🐞 | stranded obligation | open |\n",
+    documents: { "rfc/archive/old.md": "## Open questions\n\nD9 was deferred here.\n" },
+  });
+  assert.deepEqual(result.unrouted, ["D9"]);
+  assert.deepEqual(result.routes[0].destinations, []);
+  assert.deepEqual(result.routes[0].archivedDestinations, ["rfc/archive/old.md"]);
+  assert.deepEqual(result.archiveOnly.map((route) => route.id), ["D9"]);
+});
+
 test("does not treat RFC status, changelog, or proposed ledger rows as durable routes", () => {
   const result = buildWorkIndex({
     ledger: [
@@ -90,17 +101,17 @@ test("does not treat a proposed ledger section in a planning document as a route
   assert.deepEqual(result.routes.find((route) => route.id === "D31")?.destinations, ["planning/lane/plan.md"]);
 });
 
-test("discovers only active RFCs and route-shaped living planning documents", () => {
+test("discovers active and archived RFCs plus route-shaped living planning documents", () => {
   const root = fs.mkdtempSync(path.join(os.tmpdir(), "tabiya-work-index-"));
   fs.mkdirSync(path.join(root, "rfc/archive"), { recursive: true });
   fs.mkdirSync(path.join(root, "planning/lane"), { recursive: true });
-  fs.writeFileSync(path.join(root, "rfc/README.md"), "## Active\n\n| RFC | Status |\n|---|---|\n| `active.md` | accepted |\n\n## Archive\n");
+  fs.writeFileSync(path.join(root, "rfc/README.md"), "## Active\n\n| RFC | Status |\n|---|---|\n| `active.md` | accepted |\n\n## Archive\n\n| RFC | Status |\n|---|---|\n| `archive/old.md` | implemented |\n");
   fs.writeFileSync(path.join(root, "rfc/active.md"), "D1");
   fs.writeFileSync(path.join(root, "rfc/inactive.md"), "D2");
   fs.writeFileSync(path.join(root, "rfc/archive/old.md"), "D3");
   fs.writeFileSync(path.join(root, "planning/lane/plan.md"), "D4");
   fs.writeFileSync(path.join(root, "planning/lane/results.md"), "D5");
   fs.writeFileSync(path.join(root, "planning/lane/log.md"), "D6");
-  assert.deepEqual(routeDocumentPaths(root), ["planning/lane/plan.md", "rfc/active.md"]);
+  assert.deepEqual(routeDocumentPaths(root), ["planning/lane/plan.md", "rfc/active.md", "rfc/archive/old.md"]);
   fs.rmSync(root, { recursive: true, force: true });
 });

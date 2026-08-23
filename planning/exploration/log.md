@@ -6709,3 +6709,25 @@ each operation at each of 200, 1,000, 2,000 and 3,000 events. The test now fails
 **Next:** this does not measure the learner's browser or wide-area transport. If large branch sets
 feel slow, measure the rail and browser composition separately rather than attributing the delay to
 the runtime fold.
+
+## 2026-08-23 — RFC archival became a two-ended checked transition
+
+**What landed:** status parity now reads prose obligations as well as Discharges, and rejects an
+implemented or archived process-era RFC whose Open questions have neither an explicit disposition
+nor a living ledger route. A seventh parity rule rejects an RFC archival change that omits either
+the shared ledger or the exploration log. The generated work index now reads registered archived
+RFCs, exposes those references separately, and never treats immutable text as a living owner.
+
+**What changed:** the archive is no longer a routing blind spot. At landing, 107 open rows retain a
+historical reference in an archived RFC, but every one also has a living destination: 0 are
+archive-only and 0 are unrouted. `graduation-clearance` can no longer become implemented while an
+unrouted prose question survives merely because its Discharges section says `none`; concurrent
+authoring also moved exact legal mobility's remaining module binding into an explicit Discharge.
+
+**Verification:** 21 focused parity/index tests pass. The repository instruments report P1–P7
+green before the concurrent RFC authoring pass began, and a 1,105-row work index with 623 open, 623 routed,
+0 unrouted, and 107 carrying archived references.
+
+**Next:** archived references are diagnostic history, not owners. New work must continue to route
+through an active RFC or living planning document, and every future archive transition must update
+the ledger and log in the same commit.

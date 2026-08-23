@@ -2,8 +2,8 @@ import assert from "node:assert/strict";
 import test from "node:test";
 
 import {
-  bodyStatus, checkP1, checkP2, checkP3, checkP4, checkP5, checkP6,
-  parseDischarges, parseStatus,
+  bodyStatus, checkP1, checkP2, checkP3, checkP4, checkP5, checkP6, checkP7,
+  parseDischarges, parseOpenQuestionObligations, parseStatus,
 } from "./status-parity.mjs";
 
 const record = (token = "draft", pointer = null) => ({ rfc: "one.md", status: { token, pointer } });
@@ -66,6 +66,17 @@ test("P5 passes awaiting and fails implemented with an open row", () => {
   assert.match(checkP5([record("implemented")], { "one.md": document("implemented") }, { "one.md": [row] }, {})[0], /implemented with an open discharge/);
 });
 
+test("P5 rejects an implemented or archived RFC with an unrouted prose obligation", () => {
+  const openQuestion = `${document("implemented")}\n1. **Who owns the remaining corpus wave?**\n\nThis still needs a decision.\n`;
+  assert.match(checkP5([record("implemented")], { "one.md": openQuestion }, { "one.md": [] }, {})[0], /unrouted open question/);
+  assert.match(checkP5([], {}, {}, { "archive/one.md": openQuestion })[0], /archived with unrouted open question/);
+});
+
+test("open-question parser ignores answered or ledger-routed questions", () => {
+  const markdown = `${document()}\n**Q1 — Is this answered?**\nAnswered: yes.\n\n**Q2 — Who owns this?**\nRouted to D42.\n\n**Q3 — Is this loose?**\nStill open.\n`;
+  assert.deepEqual(parseOpenQuestionObligations(markdown).map((row) => row.heading), ["Q3 — Is this loose?"]);
+});
+
 test("P6 passes two valid owner forms", () => {
   const discharges = { "one.md": [
     { id: "D1", owner: "`OWNER`", discharged: "", rfc: "one.md" },
@@ -80,6 +91,12 @@ test("P6 fails one archived owner among two cells", () => {
     { id: "D2", owner: "`archived-rfc`", discharged: "", rfc: "one.md" },
   ] };
   assert.match(checkP6(discharges, ["one.md"], () => false)[0], /invalid or archived owner/);
+});
+
+test("P7 requires ledger and exploration log in every archival change set", () => {
+  assert.deepEqual(checkP7({ committed: ["rfc/archive/one.md", "design/BACKLOG.md", "planning/exploration/log.md"] }), []);
+  assert.match(checkP7({ staged: ["rfc/archive/one.md", "design/BACKLOG.md"] })[0], /exploration\/log/);
+  assert.match(checkP7({ committed: ["rfc/archive/one.md", "planning/exploration/log.md"] })[0], /BACKLOG/);
 });
 
 test("discharge parser rejects a section with neither declaration form", () => {

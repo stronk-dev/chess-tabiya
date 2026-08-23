@@ -2,6 +2,7 @@
 
 import fs from "node:fs";
 import path from "node:path";
+import { execFileSync } from "node:child_process";
 import { fileURLToPath } from "node:url";
 import { parseActiveRfcRows } from "./register-check.mjs";
 
@@ -59,6 +60,26 @@ export function parseDischarges(markdown, rfc) {
   return { error: null, rows };
 }
 
+export function parseOpenQuestionObligations(markdown) {
+  const heading = markdown.match(/^## Open questions\s*$/m);
+  if (!heading) return [];
+  const rest = markdown.slice(heading.index + heading[0].length);
+  const next = rest.search(/^##\s/m);
+  const lines = (next < 0 ? rest : rest.slice(0, next)).split("\n");
+  const starts = lines.flatMap((line, index) => {
+    const question = line.match(/^\s*(?:\d+\.\s+)?(?:\*\*)?(Q\d+\b[^\n]*|[^\n*][^\n]*\?)(?:\*\*)?\s*$/i);
+    return question ? [{ index, heading: clean(question[1]).replace(/\*+$/u, "").trim() }] : [];
+  });
+  return starts.flatMap((start, index) => {
+    const end = starts[index + 1]?.index ?? lines.length;
+    const text = lines.slice(start.index, end).join("\n");
+    const resolved = /\b(?:answered|resolved|closed|withdrawn|declined|dissolved)\b/i.test(text)
+      || /\*\*(?:No|Yes)[—:.,\s]/i.test(text);
+    const routed = /\bD\d+[a-z]?\b/i.test(text);
+    return resolved || routed ? [] : [{ heading: start.heading, text }];
+  });
+}
+
 export function checkP1(records, bodies) {
   const errors = [];
   for (const record of records) {
@@ -113,10 +134,27 @@ export function checkP5(records, bodies, activeDischarges, archiveBodies) {
     if (activeDischarges[record.rfc]?.some((row) => !row.discharged) && bodyStatus(bodies[record.rfc]).token === "implemented") {
       errors.push(`P5 ${record.rfc}: implemented with an open discharge`);
     }
+    if (bodyStatus(bodies[record.rfc]).token === "implemented") {
+      for (const question of parseOpenQuestionObligations(bodies[record.rfc])) errors.push(`P5 ${record.rfc}: implemented with unrouted open question: ${question.heading}`);
+    }
   }
   for (const [file, markdown] of Object.entries(archiveBodies)) {
     const parsed = parseDischarges(markdown, file);
-    if (!parsed.error && parsed.rows.some((row) => !row.discharged)) errors.push(`P5 ${file}: archived with an open discharge`);
+    if (!parsed.error) {
+      if (parsed.rows.some((row) => !row.discharged)) errors.push(`P5 ${file}: archived with an open discharge`);
+      for (const question of parseOpenQuestionObligations(markdown)) errors.push(`P5 ${file}: archived with unrouted open question: ${question.heading}`);
+    }
+  }
+  return errors;
+}
+
+export function checkP7(changeSets) {
+  const errors = [];
+  for (const [label, files] of Object.entries(changeSets)) {
+    const archived = files.some((file) => /^rfc\/archive\/[^/]+\.md$/u.test(file));
+    if (!archived) continue;
+    if (!files.includes("design/BACKLOG.md")) errors.push(`P7 ${label}: RFC archival without design/BACKLOG.md in the same change`);
+    if (!files.includes("planning/exploration/log.md")) errors.push(`P7 ${label}: RFC archival without planning/exploration/log.md in the same change`);
   }
   return errors;
 }
@@ -151,11 +189,18 @@ export function auditRepository(root) {
   const archiveBodies = Object.fromEntries(archiveFiles.map((file) => [file, fs.readFileSync(path.join(rfcRoot, file), "utf8")]));
   const rootFiles = markdownFiles(rfcRoot).filter((name) => !["README.md", "template.md"].includes(name));
   const p4 = checkP4(records, bodies);
+  const changeSets = {};
+  try {
+    const names = (args) => execFileSync("git", args, { cwd: root, encoding: "utf8", stdio: ["ignore", "pipe", "ignore"] }).split("\n").map((line) => line.trim()).filter(Boolean);
+    changeSets.committed = names(["diff", "--name-only", "HEAD^", "HEAD"]);
+    changeSets.staged = names(["diff", "--cached", "--name-only"]);
+  } catch { /* non-git fixture root */ }
   const errors = [
     ...checkP1(records, bodies), ...checkP2(records, bodies),
     ...checkP3(records.map(({ rfc }) => rfc).sort(), rootFiles, archiveRows.sort(), archiveFiles, archiveBodies),
     ...p4.errors, ...checkP5(records, bodies, p4.discharges, archiveBodies),
     ...checkP6(p4.discharges, records.map(({ rfc }) => rfc), (relative) => fs.existsSync(path.join(root, relative))),
+    ...checkP7(changeSets),
   ];
   return { records, archiveFiles, discharges: p4.discharges, errors };
 }
@@ -169,6 +214,6 @@ if (invoked) {
     process.exitCode = 1;
   } else {
     const open = Object.values(result.discharges).flat().filter((row) => !row.discharged).length;
-    console.log(`status-parity: ${result.records.length} active, ${result.archiveFiles.length} archived, ${open} open discharges, P1-P6 green`);
+    console.log(`status-parity: ${result.records.length} active, ${result.archiveFiles.length} archived, ${open} open discharges, P1-P7 green`);
   }
 }

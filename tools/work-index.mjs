@@ -5,6 +5,7 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 
 import { parseActiveRfcRows } from "./register-check.mjs";
+import { parseArchiveRows } from "./status-parity.mjs";
 
 const CLOSED = new Set(["✅", "⛔"]);
 const ROUTE_BASENAME = /(?:queue|plan|work-order|handoff|roadmap|triage|brief)\.md$/u;
@@ -43,11 +44,12 @@ function markdownFiles(root, relative) {
 export function routeDocumentPaths(root) {
   const readme = fs.readFileSync(path.join(root, "rfc/README.md"), "utf8");
   const activeRfcs = parseActiveRfcRows(readme).map((name) => `rfc/${name}`);
+  const archivedRfcs = parseArchiveRows(readme).map((name) => `rfc/${name}`);
   const planning = markdownFiles(root, "planning").filter((relative) => {
     if (EXCLUDED.has(relative) || relative.endsWith("/log.md")) return false;
     return ROUTE_EXACT.has(relative) || ROUTE_BASENAME.test(path.basename(relative));
   });
-  return Object.freeze([...new Set([...activeRfcs, ...planning])].sort());
+  return Object.freeze([...new Set([...activeRfcs, ...archivedRfcs, ...planning])].sort());
 }
 
 function mention(text, id) { return new RegExp(`\\b${id}\\b`, "u").test(text); }
@@ -86,6 +88,7 @@ function durableRfcText(markdown) {
 }
 
 function durableRouteText(relative, markdown) {
+  if (relative.startsWith("rfc/archive/")) return withoutProposedLedgerSections(markdown);
   if (relative.startsWith("rfc/")) return durableRfcText(markdown);
   return withoutProposedLedgerSections(markdown);
 }
@@ -107,14 +110,20 @@ export function buildWorkIndex({ ledger, documents }) {
   const duplicateIds = [...new Set(rows.map((row) => row.id).filter((id, index, all) => all.indexOf(id) !== index))].sort();
   const openRows = rows.filter((row) => row.open);
   const routes = openRows.map((row) => {
-    const destinations = Object.entries(documents).filter(([relative, text]) => durableMention(relative, text, row.id)).map(([relative]) => relative)
+    const mentions = Object.entries(documents).filter(([relative, text]) => durableMention(relative, text, row.id)).map(([relative]) => relative);
+    const archivedDestinations = mentions.filter((relative) => relative.startsWith("rfc/archive/")).sort();
+    const destinations = mentions.filter((relative) => !relative.startsWith("rfc/archive/"))
       .sort((left, right) => routePriority(left) - routePriority(right) || left.localeCompare(right));
-    return Object.freeze({ ...row, primary: destinations[0] ?? null, destinations: Object.freeze(destinations) });
+    return Object.freeze({ ...row, primary: destinations[0] ?? null, destinations: Object.freeze(destinations), archivedDestinations: Object.freeze(archivedDestinations) });
   });
+  const archivedReferences = routes.filter((route) => route.archivedDestinations.length > 0);
+  const archiveOnly = archivedReferences.filter((route) => route.primary === null);
   return Object.freeze({
     rows: Object.freeze(rows),
     openRows: Object.freeze(openRows),
     routes: Object.freeze(routes),
+    archivedReferences: Object.freeze(archivedReferences),
+    archiveOnly: Object.freeze(archiveOnly),
     duplicateIds: Object.freeze(duplicateIds),
     unrouted: Object.freeze(routes.filter((route) => route.primary === null).map((route) => route.id)),
   });
@@ -129,15 +138,16 @@ export function auditRepository(root) {
 function print(result, json = false) {
   if (json) {
     process.stdout.write(`${JSON.stringify({
-      totals: { ledger: result.rows.length, open: result.openRows.length, routed: result.openRows.length - result.unrouted.length, unrouted: result.unrouted.length },
+      totals: { ledger: result.rows.length, open: result.openRows.length, routed: result.openRows.length - result.unrouted.length, unrouted: result.unrouted.length, archivedReferences: result.archivedReferences.length, archiveOnly: result.archiveOnly.length },
       duplicateIds: result.duplicateIds,
       routes: result.routes,
     }, null, 2)}\n`);
     return;
   }
-  console.log(`work-index: ${result.rows.length} ledger rows; ${result.openRows.length} open; ${result.openRows.length - result.unrouted.length} routed; ${result.unrouted.length} unrouted`);
+  console.log(`work-index: ${result.rows.length} ledger rows; ${result.openRows.length} open; ${result.openRows.length - result.unrouted.length} routed; ${result.unrouted.length} unrouted; ${result.archivedReferences.length} with archived references`);
   if (result.duplicateIds.length) console.error(`duplicate ledger ids: ${result.duplicateIds.join(", ")}`);
   if (result.unrouted.length) console.error(`unrouted open rows: ${result.unrouted.join(", ")}`);
+  if (result.archiveOnly.length) console.error(`archive-only open rows: ${result.archiveOnly.map((route) => route.id).join(", ")}`);
 }
 
 const invoked = process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url);
