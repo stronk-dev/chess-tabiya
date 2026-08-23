@@ -527,8 +527,11 @@ standing perceptual step for H5/C5 and is not re-proposed here.)
   move pre-play; the single structural gap under D810/D811 (§6).
 - **D814** — SEE as a rules producer; prerequisite for honest tactic eligibility (D544/D545)
   and for blind-spot personas (§6c, §8).
-- **D815** — Salience/recency features as a `derived.*` join of `structuralDelta` against
-  `run.record.move` (threat-just-created, attacker-just-moved); gated on experiment 2 (§9).
+- **D815** — **Measured and refused for 1.0 on 2026-08-23.** The successor dossier
+  `threat-salience-and-human-error.md` ran experiment 2 against exact `threat@1` identities: the
+  stationary-created class covered only 7 positions, the augmented grouped-CV model worsened
+  RMSE, and the proposed direction held in only 1/3 bands. Exact threat evidence survives; the
+  salience-shaped bot-error inference does not.
 - **D816** — Sharpness/only-move projection (multipv spread) with an
   `→ opponent.selection`-only binding; the grading refusal at `capabilities.ts:124` stands
   unchanged (§6b).

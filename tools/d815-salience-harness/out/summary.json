@@ -1,0 +1,129 @@
+{
+  "measuredAt": "2026-08-23T10:23:36.635Z",
+  "parameters": {
+    "severeCp": 250,
+    "folds": 10,
+    "permutations": 200,
+    "ridge": 1e-9,
+    "seed": "0xd8152026"
+  },
+  "inputs": {
+    "positions": "sha256:1ca60f3f6e1a85f2ed67addfe624270bafa4fe904aab8bd280051725449b58bb",
+    "probes": "sha256:fe081f45d95b6115ee649831882e45561ff7b0d960b6759242ac335654e9cfed",
+    "san": "sha256:4e88eae51cc0df0a5cb4882a2a33679de73c41e3c8f26dfab4def80df3103473",
+    "sf": "sha256:890c60150f28c7f930a07553b2df4d80cf4fd903ebca33837e7aefe42219844e"
+  },
+  "population": {
+    "extracted": 638,
+    "probes": 279,
+    "stockfish": 279,
+    "usablePositions": 193,
+    "usableCells": 570,
+    "withheld": {
+      "no_history": 12,
+      "typed_mate_score": 11,
+      "threat_abstained": 4,
+      "history_replay_failed": 4,
+      "zero_explorer_total": 55
+    },
+    "unresolvedSanRows": 0,
+    "mappingCoverage": {
+      "min": 0.9129937,
+      "median": 0.99663707,
+      "max": 1
+    },
+    "flags": {
+      "attackerJustMoved": 29,
+      "stationaryThreatCreated": 7,
+      "retainedThreat": 10,
+      "noCurrentThreat": 153
+    }
+  },
+  "models": {
+    "base": {
+      "rmse": 0.02299829,
+      "mae": 0.00777372,
+      "r2": -0.0004031
+    },
+    "augmented": {
+      "rmse": 0.02310803,
+      "mae": 0.00803974,
+      "r2": -0.00997281
+    }
+  },
+  "residuals": {
+    "attackerJustMoved": {
+      "cells": 83,
+      "mean": -0.0028370012539284868,
+      "median": -0.005013744954078291
+    },
+    "stationaryThreatCreated": {
+      "cells": 20,
+      "mean": -0.0029339891319869744,
+      "median": -0.00509214555438438
+    },
+    "byBand": {
+      "1400": {
+        "attackerJustMoved": {
+          "cells": 26,
+          "mean": -0.00042817668692972366,
+          "median": -0.003885557739809146
+        },
+        "stationaryThreatCreated": {
+          "cells": 6,
+          "mean": -0.0038423788956246587,
+          "median": -0.004616664523980825
+        }
+      },
+      "1600": {
+        "attackerJustMoved": {
+          "cells": 28,
+          "mean": -0.0049088574586185875,
+          "median": -0.005406454424773959
+        },
+        "stationaryThreatCreated": {
+          "cells": 7,
+          "mean": -0.007174683454959237,
+          "median": -0.0070894066416928745
+        }
+      },
+      "1800": {
+        "attackerJustMoved": {
+          "cells": 29,
+          "mean": -0.0029962241853300395,
+          "median": -0.005013744954078291
+        },
+        "stationaryThreatCreated": {
+          "cells": 7,
+          "mean": 0.0020853249883890155,
+          "median": -0.005013744954078291
+        }
+      }
+    }
+  },
+  "permutation": {
+    "percentile": 0.325,
+    "pValue": 0.67661692,
+    "improvementMedian": -0.00369398,
+    "improvementP95": 0.00008487
+  },
+  "criteria": {
+    "coverage": {
+      "attackerPositions": 29,
+      "stationaryPositions": 7,
+      "pass": false
+    },
+    "incremental": {
+      "improvement": -0.00477155,
+      "permutationPercentile": 0.325,
+      "pValue": 0.67661692,
+      "pass": false
+    },
+    "direction": {
+      "pooledDirection": false,
+      "bandsInDirection": 1,
+      "pass": false
+    }
+  },
+  "verdict": "kill_for_1_0"
+}

@@ -98,6 +98,13 @@ rewind adds value**.
   owner use, which may reject an incoherent 1.0 profile but cannot establish the population claim
   in H5/C5. R11's narrower policy-architecture question is mechanically and desk-complete; H5's
   main statement remains untested rather than silently treated as passed.
+- **One proposed human-error mechanism refused 2026-08-23**
+  (`design/research/threat-salience-and-human-error.md`, D815). On R11's retained population,
+  exact attacker-just-moved / stationary-threat-created flags fail all three predeclared gates:
+  stationary coverage is 7 positions against a 20-position floor, grouped-CV RMSE worsens 0.477%
+  (permutation p .677), and the proposed residual direction holds in only 1/3 bands. Salience-shaped
+  error is excluded from the 1.0 bot roster. This does not compare complete branches or establish
+  perceived humanness, so H5's statement/status/verdict and C5 remain unchanged.
 
 ## Kill criteria
 

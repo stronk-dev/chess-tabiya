@@ -5803,3 +5803,16 @@ abstains on all 11 mixed mate/cp positions instead of converting mate to a synth
 same verdict holds over 804 cells. Depth 10 changes no gate decision and carries the previously
 measured 729 ms cold tail, leaving depth 8 as the sole measured 1.0 candidate. D969 now waits on the
 bot-policy amendment declaring depth, budget and mixed-domain fallback, not on further research.
+
+## 2026-08-23 — D815 threat-salience family refused for 1.0
+
+The frozen D815 plan ran against the retained R11 population with exact before/after `threat@1`
+identities. After typed exclusions, 193 positions / 570 band cells remained. All three admission
+clauses failed: stationary-threat-created covered 7 positions against the 20-position floor; adding
+the salience flags worsened grouped-CV RMSE by 0.477% with permutation p .677; and the hypothesized
+residual direction was false pooled and present in only one of three bands.
+
+The result kills salience-shaped error from the 1.0 bot roster. It does not remove exact threat
+evidence from Support, Review or drill modules, and it does not establish or refute H5/C5's
+complete-branch human-likeness claim. `rfc/bot-policy.md` D2 can now close as a measured refusal;
+no replacement bot feature is admitted by this run.

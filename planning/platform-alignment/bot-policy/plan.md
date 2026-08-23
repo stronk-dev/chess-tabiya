@@ -153,3 +153,17 @@ cold tail, so depth 8 is the only measured amendment candidate. Results:
 **Next:** Claude amends `rfc/bot-policy.md` to pin depth 8, the multi-call budget, and whole-guard
 abstention on a mixed score domain. That author action—not another experiment—is the remaining
 D969 blocker before guarded/pawn-heavy production profiles can register.
+
+## 2026-08-23 — D815 exact threat-salience measurement
+
+The predeclared experiment ran on the fixed R11 population using exact shipped `threat@1`
+identities before/after the preceding move. After named exclusions, 193 positions / 570 band cells
+remain. All three able-to-fail clauses reject the family: attacker-just-moved covers 29 positions
+but stationary-created only 7 (required 20 each); the augmented grouped-CV model worsens RMSE by
+0.477% with permutation p .677; and the hypothesized residual direction is false pooled and holds
+in only one band.
+
+**Consequence:** salience-shaped error is killed for the 1.0 bot roster. Exact threat identity stays
+available to Support, Review and drills under their own selection contracts; it cannot be used as a
+bot weight or a human-error explanation. Claude can now discharge `rfc/bot-policy.md` D2 as a
+measured refusal. No substitute feature is admitted by this run.
