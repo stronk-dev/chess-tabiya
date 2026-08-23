@@ -48,10 +48,14 @@ For each of `engine`, `evidence`, `combined`, minimize:
 
 `mean_game(mean_decision(-score(played) + logsumexp(scores))) + lambda * ||weights||² / 2`.
 
-Use deterministic full-batch Adam from zero weights, 600 updates, learning rate 0.03,
-`beta1=0.9`, `beta2=0.999`, epsilon `1e-8`, and gradient-norm clipping at 10. The implementation
-must carry an analytic-gradient finite-difference control and a monotone synthetic choice fixture.
-Non-finite loss, probability or coefficient is a hard failure.
+The compact pre-model census contains **2,516 raw names and 6,499,814 non-zero values** across
+17,359 candidates. Use deterministic full-batch L-BFGS from zero weights: memory 10, at most 80
+iterations, gradient infinity-norm tolerance `1e-6`, Armijo constant `1e-4`, backtracking factor
+0.5 and at most 20 line-search steps. L-BFGS is a numerical solver for the same convex objective,
+not another model candidate; the bounded algorithm replaces the unrun 600-update Adam plan after
+the cache census priced that plan at tens of billions of sparse operations. The implementation
+must carry an analytic-gradient finite-difference control, an objective-decrease assertion and a
+monotone synthetic choice fixture. Non-finite loss, probability or coefficient is a hard failure.
 
 This is a **development** split, not another inferential five-fold result: train on game folds
 0/1/2 (62 games), choose `lambda` from `{0.01, 0.1, 1, 10, 100}` and `raw` versus

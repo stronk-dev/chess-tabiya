@@ -203,26 +203,71 @@ function objective(rows: readonly ModelPosition[], weights: Float64Array, lambda
   if (!Number.isFinite(loss)) throw new Error("non-finite conditional-choice objective");
   return loss;
 }
-function fit(rows: readonly ModelPosition[], featureCount: number, lambda: number, updates = 600): Float64Array {
+function vectorDot(left: Float64Array, right: Float64Array): number {
+  let result = 0;
+  for (let index = 0; index < left.length; index += 1) result += left[index]! * right[index]!;
+  return result;
+}
+function addScaled(base: Float64Array, direction: Float64Array, scale: number): Float64Array {
+  return Float64Array.from(base, (value, index) => value + scale * direction[index]!);
+}
+function fit(rows: readonly ModelPosition[], featureCount: number, lambda: number, iterations = 80): { readonly weights: Float64Array; readonly initialLoss: number; readonly finalLoss: number; readonly iterations: number } {
   const weights = new Float64Array(featureCount);
-  const first = new Float64Array(featureCount);
-  const second = new Float64Array(featureCount);
   const gradient = new Float64Array(featureCount);
-  for (let update = 1; update <= updates; update += 1) {
-    objective(rows, weights, lambda, gradient);
-    const norm = Math.sqrt(gradient.reduce((sum, value) => sum + value * value, 0));
-    const scale = norm > 10 ? 10 / norm : 1;
-    for (let index = 0; index < weights.length; index += 1) {
-      const value = gradient[index]! * scale;
-      first[index] = 0.9 * first[index]! + 0.1 * value;
-      second[index] = 0.999 * second[index]! + 0.001 * value * value;
-      const correctedFirst = first[index]! / (1 - 0.9 ** update);
-      const correctedSecond = second[index]! / (1 - 0.999 ** update);
-      weights[index] -= 0.03 * correctedFirst / (Math.sqrt(correctedSecond) + 1e-8);
-      if (!Number.isFinite(weights[index])) throw new Error("non-finite conditional-choice coefficient");
+  let loss = objective(rows, weights, lambda, gradient);
+  const initialLoss = loss;
+  const history: { readonly s: Float64Array; readonly y: Float64Array; readonly rho: number }[] = [];
+  let completed = 0;
+  for (; completed < iterations; completed += 1) {
+    if (Math.max(...gradient.map(Math.abs)) <= 1e-6) break;
+    const q = Float64Array.from(gradient);
+    const alphas: number[] = [];
+    for (let index = history.length - 1; index >= 0; index -= 1) {
+      const item = history[index]!;
+      const alpha = item.rho * vectorDot(item.s, q);
+      alphas[index] = alpha;
+      for (let feature = 0; feature < q.length; feature += 1) q[feature] -= alpha * item.y[feature]!;
     }
+    const latest = history.at(-1);
+    const scale = latest === undefined ? 1 : vectorDot(latest.s, latest.y) / Math.max(1e-12, vectorDot(latest.y, latest.y));
+    const direction = Float64Array.from(q, (value) => value * scale);
+    for (let index = 0; index < history.length; index += 1) {
+      const item = history[index]!;
+      const beta = item.rho * vectorDot(item.y, direction);
+      for (let feature = 0; feature < direction.length; feature += 1) direction[feature] += item.s[feature]! * (alphas[index]! - beta);
+    }
+    for (let feature = 0; feature < direction.length; feature += 1) direction[feature] = -direction[feature]!;
+    let directional = vectorDot(gradient, direction);
+    if (!(directional < 0)) {
+      for (let feature = 0; feature < direction.length; feature += 1) direction[feature] = -gradient[feature]!;
+      directional = -vectorDot(gradient, gradient);
+    }
+    let step = 1;
+    let nextWeights = addScaled(weights, direction, step);
+    let nextLoss = objective(rows, nextWeights, lambda);
+    let searches = 0;
+    while (nextLoss > loss + 1e-4 * step * directional && searches < 20) {
+      step *= 0.5;
+      nextWeights = addScaled(weights, direction, step);
+      nextLoss = objective(rows, nextWeights, lambda);
+      searches += 1;
+    }
+    if (!(nextLoss < loss) || !Number.isFinite(nextLoss)) throw new Error("L-BFGS line search failed to decrease objective");
+    const nextGradient = new Float64Array(featureCount);
+    objective(rows, nextWeights, lambda, nextGradient);
+    const s = Float64Array.from(weights, (value, index) => nextWeights[index]! - value);
+    const y = Float64Array.from(gradient, (value, index) => nextGradient[index]! - value);
+    const curvature = vectorDot(s, y);
+    if (curvature > 1e-12) {
+      history.push({ s, y, rho: 1 / curvature });
+      if (history.length > 10) history.shift();
+    }
+    weights.set(nextWeights);
+    gradient.set(nextGradient);
+    loss = nextLoss;
+    if (weights.some((value) => !Number.isFinite(value))) throw new Error("non-finite conditional-choice coefficient");
   }
-  return weights;
+  return { weights, initialLoss, finalLoss: loss, iterations: completed };
 }
 function measures(prepared: Prepared, weights: Float64Array, folds: ReadonlySet<number>): readonly ChoiceMeasure[] {
   return prepared.positions.filter((row) => folds.has(row.source.fold)).map((row) => {
@@ -313,8 +358,8 @@ function run(cache: Cache) {
       const prepared = prepare(cache, TRAIN_FOLDS, arm, transform);
       const train = prepared.positions.filter((row) => TRAIN_FOLDS.has(row.source.fold));
       for (const lambda of LAMBDAS) {
-        const weights = fit(train, prepared.preprocessing.names.length, lambda);
-        candidates.push({ transform, lambda, crossEntropy: gameMetric(measures(prepared, weights, validationFold), "crossEntropy") });
+        const fitted = fit(train, prepared.preprocessing.names.length, lambda);
+        candidates.push({ transform, lambda, crossEntropy: gameMetric(measures(prepared, fitted.weights, validationFold), "crossEntropy") });
       }
     }
     candidates.sort((left, right) => left.crossEntropy - right.crossEntropy || right.lambda - left.lambda ||
@@ -327,8 +372,8 @@ function run(cache: Cache) {
     for (const arm of ARMS) {
       const choice = selected[arm]!;
       const prepared = prepare(cache, trainingFolds, arm, choice.transform);
-      const weights = fit(prepared.positions.filter((row) => trainingFolds.has(row.source.fold)), prepared.preprocessing.names.length, choice.lambda);
-      result[arm] = summarize(measures(prepared, weights, evaluationFolds));
+      const fitted = fit(prepared.positions.filter((row) => trainingFolds.has(row.source.fold)), prepared.preprocessing.names.length, choice.lambda);
+      result[arm] = summarize(measures(prepared, fitted.weights, evaluationFolds));
     }
     return result;
   };
@@ -338,14 +383,14 @@ function run(cache: Cache) {
   for (const arm of ARMS) {
     const choice = selected[arm]!;
     const prepared = prepare(cache, ALL_FOLDS, arm, choice.transform);
-    const weights = fit(prepared.positions, prepared.preprocessing.names.length, choice.lambda);
-    const model = { arm, ...choice, preprocessing: prepared.preprocessing, weights: [...weights].map(rounded) };
+    const fitted = fit(prepared.positions, prepared.preprocessing.names.length, choice.lambda);
+    const model = { arm, ...choice, preprocessing: prepared.preprocessing, weights: [...fitted.weights].map(rounded), optimization: { initialLoss: rounded(fitted.initialLoss), finalLoss: rounded(fitted.finalLoss), iterations: fitted.iterations } };
     frozenModels[arm] = { ...model, digest: digest(model) };
   }
   const freeze = eligible(validation) && eligible(confirmation);
   return {
     measuredAt: new Date().toISOString(), cache: { digest: cache.cacheDigest, representationCommit: cache.representationCommit, inputs: cache.inputs, games: new Set(cache.positions.map((row) => row.gameId)).size, decisions: cache.positions.length, candidates: cache.positions.reduce((sum, row) => sum + row.candidates.length, 0), vocabularySize: cache.vocabularySize, nonZeroValues: cache.nonZeroValues },
-    optimizer: { kind: "conditional_logit_full_batch_adam", updates: 600, learningRate: 0.03, beta1: 0.9, beta2: 0.999, epsilon: 1e-8, gradientClip: 10, lambdas: LAMBDAS },
+    optimizer: { kind: "conditional_logit_lbfgs", memory: 10, maxIterations: 80, gradientInfinityTolerance: 1e-6, armijo: 1e-4, backtracking: 0.5, maxLineSearchSteps: 20, lambdas: LAMBDAS },
     split: { train: [0, 1, 2], validation: 3, confirmation: 4 },
     tuning, selected, validation, confirmation, freeze, frozenModels,
   };
@@ -366,9 +411,10 @@ describe("D1297 proper-score development", () => {
     const plus = objective([row], new Float64Array([weights[0]! + epsilon]), 0.01);
     const minus = objective([row], new Float64Array([weights[0]! - epsilon]), 0.01);
     expect(gradient[0]).toBeCloseTo((plus - minus) / (2 * epsilon), 6);
-    const fitted = fit([row], 1, 0.01, 200);
-    expect(fitted[0]).toBeGreaterThan(0);
-    expect(probabilities(row, fitted)[0]).toBeGreaterThan(0.5);
+    const fitted = fit([row], 1, 0.01, 80);
+    expect(fitted.finalLoss).toBeLessThan(fitted.initialLoss);
+    expect(fitted.weights[0]).toBeGreaterThan(0);
+    expect(probabilities(row, fitted.weights)[0]).toBeGreaterThan(0.5);
   });
 
   it.skipIf(INPUT === undefined)("runs the bounded seen-population development", () => {
