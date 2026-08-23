@@ -383,15 +383,15 @@ throughout: the bot consuming engine evidence to *pick its own move* grades nobo
 **Cost: engine calls (bounded multipv per bot decision); no new producer class beyond the
 candidate join.**
 
-**(c) Candidate-level material safety (SEE) — verified absent, cheap arithmetic.** No
-static exchange evaluation exists anywhere in `packages/runtime` or `apps/server` `[V]`
-(grep this pass; the only `#exchange` is UCI plumbing in `engine-supervisor.ts`). Our own
-measurement is the argument: `fork_created` carries 0.72× lift on geometry alone — below
-1.0 — because geometry without a material test points the wrong way (D545 `[V]`), and R1
-already ruled the semantic tactic label needs eligibility/value (D565 via D544 `[V]`). SEE
-is the standard bounded-arithmetic eligibility test, and per-candidate SEE is the
-difference between "the bot hung its queen" and "the bot chose a candidate whose SEE it
-was allowed to mis-read at its band". **Cost: cheap arithmetic, well-specified algorithm.**
+**(c) Candidate-level material safety — implemented after this dossier's original audit.**
+The original 2026-08-21 absence finding was true at that HEAD and is now superseded by
+`legal-exchange-prerequisite.md` and `rfc/tactical-collectors.md`. `legal-exchange@1` ships in
+`packages/runtime/src/exchange.ts` as legal recapture-only minimax and is consumed by tactics,
+mobility and semantic evidence `[V]`. It is deliberately not called Stockfish SEE and returns
+convention material units, never centipawns, move quality or whole-position truth. Its measured
+exchange-filtered fork lift is 1.72× authored / 1.96× imported; moved-piece-en-prise is robustly
+negative-primary at 0.36× / 0.57× `[V]` (`legal-exchange-prerequisite.md`). The candidate adapter
+can therefore reuse this shipped primitive rather than inventing a second material evaluator.
 
 **(d) Time-usage modelling — nothing ships, most expensive, defer.** No clock input exists
 anywhere in the opponent path `[V]` (`bot-policy.md` §2). Doing it honestly needs a model
@@ -409,12 +409,12 @@ monotonic/transitional position taxonomy is this signal formalized `[P]`, and An
 "skill-anomalous positions" are its inversion `[P]`. **Cost: engine calls × bands at
 runtime; zero cost to prototype on committed captures.**
 
-**Synthesis.** The owner is right that something is missing, and it is not another model —
-it is a **candidate-evidence producer class**: the declared vocabulary, applied per
-candidate, with SEE and the salience/recency join added to it. Two of five families are
-free arithmetic, two ride existing producers, one is deferred. This also resolves the
-D544 connection: the tactical family the guidance lane needs and the feature set the bot
-lane needs are the same detectors, which is D810's shared-registry argument made concrete.
+**Synthesis, updated 2026-08-23.** The owner was right that the missing layer was not another model
+but candidate application of declared evidence. D813 now ships that adapter and D730 supplies its
+local material predicate. D815 has since refused salience-shaped error for 1.0; D816 admits
+engine-priced choice breadth; D817 refuses multi-band disagreement; time remains deferred. The
+shared-registry argument survives with narrower, measured inputs rather than the five speculative
+families this section originally proposed.
 
 ---
 
@@ -525,8 +525,8 @@ standing perceptual step for H5/C5 and is not re-proposed here.)
 
 - **D813** — Candidate-evidence producer class: declared detectors applied per candidate
   move pre-play; the single structural gap under D810/D811 (§6).
-- **D814** — SEE as a rules producer; prerequisite for honest tactic eligibility (D544/D545)
-  and for blind-spot personas (§6c, §8).
+- **D814** — **Closed by D730's shipped `legal-exchange@1`**; the original absence finding is
+  superseded by `legal-exchange-prerequisite.md` and the tactical-collector implementation.
 - **D815** — **Measured and refused for 1.0 on 2026-08-23.** The successor dossier
   `threat-salience-and-human-error.md` ran experiment 2 against exact `threat@1` identities: the
   stationary-created class covered only 7 positions, the augmented grouped-CV model worsened

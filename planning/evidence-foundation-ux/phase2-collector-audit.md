@@ -5,6 +5,10 @@
 > recapture-only minimax (`legal-exchange@1`), not the pinned-attacker-inclusive swap described
 > below. `rfc/tactical-collectors.md` carries the amended normative form. Historical audit text is
 > retained so the falsified assumption remains visible.
+>
+> **2026-08-23 landing correction:** `legal-exchange@1` and all 30 tactical projections now ship;
+> D730 and the duplicate discovery row D814 are closed. The dated HEAD table below remains the
+> input audit, not a description of current production.
 
 **Commissioned by the D717 program routing** (`planning/evidence-foundation-ux/plan.md`, phase 2).
 Re-derived at HEAD `ccb378d`, 2026-08-22. Method: every state claim below was verified **at the

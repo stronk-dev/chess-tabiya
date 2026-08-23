@@ -5816,3 +5816,16 @@ The result kills salience-shaped error from the 1.0 bot roster. It does not remo
 evidence from Support, Review or drill modules, and it does not establish or refute H5/C5's
 complete-branch human-likeness claim. `rfc/bot-policy.md` D2 can now close as a measured refusal;
 no replacement bot feature is admitted by this run.
+
+## 2026-08-23 — D814 reconciled to the shipped legal-exchange primitive
+
+D814's older bot-foundation row still said static exchange was absent after D730 and the tactical
+collector implementation had shipped `legal-exchange@1`. The symbol-level check found the
+predicate registered and exported, with production consumers in tactics, mobility and semantic
+evidence and permanent two-population measurements already recorded. D814 closes as the duplicate
+discovery row; no second evaluator is built.
+
+The human-opponents dossier and coverage matrix now distinguish the historical absence from HEAD.
+One author-owned wording correction remains in active `rfc/bot-policy.md`: its measured-foundations
+paragraph says "verified absent" immediately before naming Wave A as the shipped answer. That
+sentence should be changed during Claude's current amendment; it does not block implementation.
