@@ -8,6 +8,10 @@ const INPUT = process.env.TABIYA_D1297_FEATURE_CACHE;
 const WRITE = process.env.TABIYA_D1297_WRITE === "1";
 const RESULT = new URL("../../planning/platform-alignment/bot-policy/d1297-proper-score-results.json", import.meta.url);
 const REPORT = new URL("../../planning/platform-alignment/bot-policy/d1297-proper-score-results.md", import.meta.url);
+const GUARD_INPUT = process.env.TABIYA_D1312_FEATURE_CACHE;
+const GUARD_WRITE = process.env.TABIYA_D1312_WRITE === "1";
+const GUARD_RESULT = new URL("../../planning/platform-alignment/bot-policy/d1312-guard-composition-results.json", import.meta.url);
+const GUARD_REPORT = new URL("../../planning/platform-alignment/bot-policy/d1312-guard-composition-results.md", import.meta.url);
 const LAMBDAS = [0.01, 0.1, 1, 10, 100] as const;
 const TRANSFORMS = ["raw", "projection-balanced"] as const;
 const ARMS = ["engine", "evidence", "combined"] as const;
@@ -404,6 +408,143 @@ function markdown(result: ReturnType<typeof run>): string {
   return `# D1297 proper-score selector development\n\nFreeze verdict: **${result.freeze ? "eligible" : "refuted"}**. This is seen-population development, not final clearance.\n\nThe proper model repairs D1297's probability-tail pathology, but the combined arm exceeds the independently declared severe-loss budget on both held-out folds. No third population was opened.\n\n## Validation\n\n| arm | cross entropy | top choice | expected loss cp | >250 cp mass |\n|---|---:|---:|---:|---:|\n${Object.entries(result.validation).map(([name, values]) => row(name, values)).join("\n")}\n\n## Once-read confirmation\n\n| arm | cross entropy | top choice | expected loss cp | >250 cp mass |\n|---|---:|---:|---:|---:|\n${Object.entries(result.confirmation).map(([name, values]) => row(name, values)).join("\n")}\n\n## Full-development optimizer audit\n\n| arm | transform | lambda | iterations | final gradient infinity norm |\n|---|---|---:|---:|---:|\n${optimization}\n\nThe engine fit met the stopping target. Evidence and combined reached the declared 80-iteration bound above the \`1e-6\` tolerance; because the freeze gate already failed, none is promoted as a frozen production model.\n`;
 }
 
+function applyGuard(probability: readonly number[], lossCp: readonly number[]) {
+  const admitted = lossCp.map((loss) => loss <= 250);
+  const retained = probability.reduce((sum, value, index) => sum + (admitted[index] ? value : 0), 0);
+  if (!(retained > 0)) throw new Error("D1312 guard retained no probability mass");
+  const normalized = probability.map((value, index) => admitted[index] ? value / retained : 0);
+  if (normalized.some((value) => !Number.isFinite(value))) throw new Error("D1312 guard emitted non-finite probability");
+  return { admitted, probability: normalized, removedMass: 1 - retained };
+}
+
+function groupedScalarMean(rows: readonly { readonly gameId: string; readonly value: number }[]): number {
+  const games = new Map<string, number[]>();
+  for (const row of rows) {
+    const found = games.get(row.gameId) ?? [];
+    found.push(row.value);
+    games.set(row.gameId, found);
+  }
+  const means = [...games.values()].map((values) => values.reduce((sum, value) => sum + value, 0) / values.length);
+  return means.reduce((sum, value) => sum + value, 0) / means.length;
+}
+
+function guardDevelopment(cache: Cache) {
+  if (cache.schema !== "tabiya.research.d1297-feature-cache.v1" || cache.representationCommit !== "633f541e245edd1737ee9224c6ed90c26fa009a9") throw new Error("D1312 feature cache identity changed");
+  const choices = {
+    engine: { transform: "raw" as const, lambda: 0.01 },
+    combined: { transform: "projection-balanced" as const, lambda: 0.01 },
+  };
+  const evaluate = (label: "validation" | "confirmation", trainingFolds: ReadonlySet<number>, evaluationFold: number) => {
+    const fitted = Object.fromEntries((Object.keys(choices) as (keyof typeof choices)[]).map((arm) => {
+      const choice = choices[arm];
+      const prepared = prepare(cache, trainingFolds, arm, choice.transform);
+      const training = prepared.positions.filter((row) => trainingFolds.has(row.source.fold));
+      const model = fit(training, prepared.preprocessing.names.length, choice.lambda);
+      return [arm, { choice, prepared, model }];
+    })) as Record<keyof typeof choices, { readonly choice: (typeof choices)[keyof typeof choices]; readonly prepared: Prepared; readonly model: ReturnType<typeof fit> }>;
+    const engineRows = fitted.engine.prepared.positions.filter((row) => row.source.fold === evaluationFold);
+    const combinedRows = fitted.combined.prepared.positions.filter((row) => row.source.fold === evaluationFold);
+    if (engineRows.length !== combinedRows.length || engineRows.some((row, index) => row.source.id !== combinedRows[index]!.source.id)) throw new Error(`${label} arm populations diverged`);
+
+    const admittedHuman: { source: CachePosition; admitted: boolean }[] = [];
+    const survivorCounts: number[] = [];
+    const guardedMeasures: Record<keyof typeof choices, ChoiceMeasure[]> = { engine: [], combined: [] };
+    const removedMass: Record<keyof typeof choices, { gameId: string; value: number }[]> = { engine: [], combined: [] };
+    for (let rowIndex = 0; rowIndex < engineRows.length; rowIndex += 1) {
+      const engineRow = engineRows[rowIndex]!;
+      const combinedRow = combinedRows[rowIndex]!;
+      const bestCp = Math.max(...engineRow.source.candidates.map((candidate) => candidate.scoreCp));
+      const losses = engineRow.source.candidates.map((candidate) => bestCp - candidate.scoreCp);
+      const survivors = losses.filter((loss) => loss <= 250).length;
+      if (survivors === 0) throw new Error(`D1312 empty guard mask at ${engineRow.source.id}`);
+      survivorCounts.push(survivors);
+      const playedAdmitted = losses[engineRow.playedIndex]! <= 250;
+      admittedHuman.push({ source: engineRow.source, admitted: playedAdmitted });
+      for (const arm of Object.keys(choices) as (keyof typeof choices)[]) {
+        const row = arm === "engine" ? engineRow : combinedRow;
+        const raw = probabilities(row, fitted[arm].model.weights);
+        const guarded = applyGuard(raw, losses);
+        removedMass[arm].push({ gameId: row.source.gameId, value: guarded.removedMass });
+        if (!playedAdmitted) continue;
+        let expectedLossCp = 0;
+        for (let index = 0; index < guarded.probability.length; index += 1) expectedLossCp += guarded.probability[index]! * losses[index]!;
+        guardedMeasures[arm].push({
+          id: row.source.id,
+          gameId: row.source.gameId,
+          playedMass: guarded.probability[row.playedIndex]!,
+          crossEntropy: -Math.log(guarded.probability[row.playedIndex]!),
+          topAgreement: guarded.probability.indexOf(Math.max(...guarded.probability)) === row.playedIndex ? 1 : 0,
+          expectedLossCp,
+          severe250: 0,
+        });
+      }
+    }
+    const survivalGroups = (key: "ratingBand" | "speed" | "ply") => Object.fromEntries([...new Set(admittedHuman.map((row) => String(row.source[key])))].sort().map((value) => {
+      const rows = admittedHuman.filter((row) => String(row.source[key]) === value);
+      const admitted = rows.filter((row) => row.admitted).length;
+      return [value, { decisions: rows.length, admitted, rate: rounded(admitted / rows.length) }];
+    }));
+    const admitted = admittedHuman.filter((row) => row.admitted).length;
+    const survival = {
+      pooled: { decisions: admittedHuman.length, admitted, rate: rounded(admitted / admittedHuman.length) },
+      ratingBand: survivalGroups("ratingBand"),
+      speed: survivalGroups("speed"),
+      ply: survivalGroups("ply"),
+    };
+    const guarded = { engine: summarize(guardedMeasures.engine), combined: summarize(guardedMeasures.combined) };
+    const gate = {
+      pooledHumanSurvival: survival.pooled.rate >= 0.9,
+      ratingBandFloor: Object.values(survival.ratingBand).every((row) => row.rate >= 0.85),
+      conditionalCrossEntropy: guarded.combined.crossEntropy < guarded.engine.crossEntropy,
+      expectedLoss: guarded.combined.expectedLossCp - guarded.engine.expectedLossCp <= 35,
+      topChoice: guarded.combined.topAgreement >= guarded.engine.topAgreement - 0.05,
+      nonemptyMask: survivorCounts.every((count) => count > 0),
+    };
+    return {
+      survival,
+      survivorCounts: {
+        minimum: Math.min(...survivorCounts),
+        median: quantile(survivorCounts, 0.5),
+        p90: quantile(survivorCounts, 0.9),
+        maximum: Math.max(...survivorCounts),
+        singletonRate: rounded(survivorCounts.filter((count) => count === 1).length / survivorCounts.length),
+      },
+      arms: Object.fromEntries((Object.keys(choices) as (keyof typeof choices)[]).map((arm) => [arm, {
+        unguarded: summarize(measures(fitted[arm].prepared, fitted[arm].model.weights, new Set([evaluationFold]))),
+        guardedConditional: guarded[arm],
+        removedMass: rounded(groupedScalarMean(removedMass[arm])),
+        optimization: {
+          iterations: fitted[arm].model.iterations,
+          gradientInfinity: rounded(fitted[arm].model.gradientInfinity),
+          finalLoss: rounded(fitted[arm].model.finalLoss),
+        },
+        modelDigest: digest({ choice: choices[arm], preprocessing: fitted[arm].prepared.preprocessing, weights: [...fitted[arm].model.weights].map(rounded) }),
+      }])),
+      gate,
+      eligible: Object.values(gate).every(Boolean),
+    };
+  };
+  const validation = evaluate("validation", TRAIN_FOLDS, 3);
+  const confirmation = evaluate("confirmation", TRAIN_VALIDATION_FOLDS, 4);
+  return {
+    schema: "tabiya.research.d1312-guard-composition.v1",
+    measuredAt: new Date().toISOString(),
+    cache: { digest: cache.cacheDigest, representationCommit: cache.representationCommit, games: new Set(cache.positions.map((row) => row.gameId)).size, decisions: cache.positions.length },
+    guard: { thresholdCp: 250, inclusive: true, fallbackPermitted: false },
+    validation,
+    confirmation,
+    eligible: validation.eligible && confirmation.eligible,
+  };
+}
+
+function guardMarkdown(result: ReturnType<typeof guardDevelopment>): string {
+  const rows = (["validation", "confirmation"] as const).map((fold) => {
+    const value = result[fold];
+    return `| ${fold} | ${value.survival.pooled.admitted}/${value.survival.pooled.decisions} (${(100 * value.survival.pooled.rate).toFixed(1)}%) | ${value.arms.engine.guardedConditional.crossEntropy.toFixed(6)} | ${value.arms.combined.guardedConditional.crossEntropy.toFixed(6)} | ${value.arms.engine.removedMass.toFixed(4)} | ${value.arms.combined.removedMass.toFixed(4)} | ${value.eligible ? "pass" : "fail"} |`;
+  }).join("\n");
+  return `# D1312 declared error-guard composition\n\nDevelopment verdict: **${result.eligible ? "eligible" : "refuted"}**. This does not read the reserved third population.\n\n| fold | observed moves admitted | guarded engine CE | guarded combined CE | engine mass removed | combined mass removed | gate |\n|---|---:|---:|---:|---:|---:|---|\n${rows}\n\nCross entropy is conditional on the observed move surviving the declared 250-cp mask. Excluded human moves are explicit refusals, not epsilon-smoothed predictions.\n`;
+}
+
 describe("D1297 proper-score development", () => {
   it("checks the analytic gradient and learns a monotone synthetic choice", () => {
     const source = { id: "p", gameId: "g", fold: 0, candidates: [{ scoreCp: 0 }, { scoreCp: 0 }] } as unknown as CachePosition;
@@ -429,6 +570,26 @@ describe("D1297 proper-score development", () => {
     if (WRITE) {
       writeFileSync(RESULT, `${JSON.stringify(result, null, 2)}\n`);
       writeFileSync(REPORT, markdown(result));
+    }
+  });
+});
+
+describe("D1312 declared error-guard composition", () => {
+  it("keeps the inclusive boundary, renormalizes, and refuses an empty mask", () => {
+    const result = applyGuard([0.2, 0.3, 0.5], [0, 250, 251]);
+    expect(result.admitted).toEqual([true, true, false]);
+    expect(result.probability).toEqual([0.4, 0.6, 0]);
+    expect(result.removedMass).toBeCloseTo(0.5);
+    expect(() => applyGuard([0.5, 0.5], [251, 300])).toThrow("retained no probability mass");
+  });
+
+  it.skipIf(GUARD_INPUT === undefined)("measures the fixed composition on both held-out folds", () => {
+    const cache = readCache(GUARD_INPUT!);
+    const result = guardDevelopment(cache);
+    expect(result.cache).toMatchObject({ games: 108, decisions: 515 });
+    if (GUARD_WRITE) {
+      writeFileSync(GUARD_RESULT, `${JSON.stringify(result, null, 2)}\n`);
+      writeFileSync(GUARD_REPORT, guardMarkdown(result));
     }
   });
 });
