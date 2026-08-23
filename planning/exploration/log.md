@@ -6275,6 +6275,26 @@ but cannot move Maia's concentrated phase-level distribution enough. The next bo
 change mechanism class to a transposition-aware repertoire or multi-ply route controller with
 declared adherence/deviation/fallthrough. Increasing the weight again is not a research result.
 
+## 2026-08-23 — D1078 multi-ply route filter measured and refused
+
+A 24-branch local Maia/Stockfish run changed mechanism class from weighting to exact finite-state
+filtering. At every controlled opening ply the candidate restricted guarded Maia to moves lowering
+the typed g-pawn/bishop/knight target distance; absence fell through explicitly. The route arm
+adheres on all 10/10 opportunities, retains every selected move inside Maia's window, adds only
+3.82 cp mean loss, creates zero severe moves and adds no repetition.
+
+It cannot sustain the route. Only 2/12 branches expose two opportunities, 62/72 controlled plies
+fall through and 1/12 completes. The matched guarded paths contain 23 opportunities in five
+multi-opportunity branches while the steered paths contain ten in two: choosing the first route
+move changes the later candidate path and usually removes the next step. One branch plays `Nf3`,
+falls through until that occupancy is undone, then plays `Nf3` again. Local distance decrease is
+not monotone plan continuity.
+
+The shortlist-filter profile is refused. A true route/repertoire layer must declare its own
+candidate source and preserve completed subgoals, with Maia and Stockfish recorded as admission or
+fallback sources rather than misrepresented as the generator. The narrow next falsifier is a
+monotone controller; otherwise the exit is a transposition-aware repertoire, not another weight.
+
 ## 2026-08-23 — the assistance-controls supersede, and R1 resolves a two-RFC collision
 
 **What landed:** `rfc/assistance-controls.md` superseded and archived, with its orphans rehomed in
