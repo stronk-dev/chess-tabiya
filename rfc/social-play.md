@@ -90,7 +90,8 @@ claimed the streamer half of that fence under [[D1272]], leaving the social half
 own game on someone else's board, and our own bots playing each other — named by two RFCs and
 owned by neither. That is [[D1330]]'s rank-2 live debt, and this RFC is it.
 
-The scope boundary is drawn by three prior rulings, all consumed rather than reopened:
+The scope boundary is drawn by three prior **findings**, all consumed rather than reopened.
+**Corrected 2026-08-23 ([[D1400]]): these are not rulings.** [[D707]] and [[D710]] are measurements, [[D708]], [[D709]] and [[D819]] are candidate rows, and [[D709]] cites the O12 handoff — so this document presupposes the O12 ruling rather than consuming one. The scope fence stands or falls with that ruling; the memo is `planning/platform-alignment/o12-decision-memo.md`.
 
 - **[[D707]]/[[D709]] — the shape is hybrid.** Native private rehearsal matches are preserved;
   rated, clocked and public play is delegated to an optional chess-network adapter, Lichess
@@ -144,6 +145,8 @@ asserted by a test, matching how `branch_id`, `pgn` and `imported_at` already be
 | 3 | **Native private play never states its absent guarantees in the interface.** `docs/live-sessions.md:46-47` states them; `apps/web/src` contains **0** occurrences of *casual* and **0** of *no clock* | grep over `apps/web/src` | §5 |
 
 ### §2 — The three authorities, and the one sentence the adapter may never say
+
+Ledger: [[D1400]] — this document's scope fence cites five ledger rows as *prior rulings*; none is one. The fence presupposes the O12 ruling and cannot be accepted before it.
 
 `social-play-and-event-boundary.md` §3 divides trust three ways, and this RFC adopts the division
 as a normative rule rather than a description:
