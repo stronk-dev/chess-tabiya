@@ -1069,3 +1069,7 @@ template burst — zero newly minted, two active RFCs mention size at all, one o
 [[D1281]] is archive-blocking and queued for codex. [[D1282]] names three classes the textual method
 cannot see, and corrects batch 1: **lane 0.28 was never free** — `graduation-clearance` claimed it
 on 2026-08-17, voiding `measurement-records` OQ1's rationale.
+
+- **[[D1285]]** (codex) — `rules.tactic.consequence.threat@1`'s abstention violates its own manifest
+  operands. Routed to the tactical-collectors implementation lane; codex's own collector work owns
+  it and the fix rides their implementing commit.
