@@ -1,4 +1,5 @@
 // DISPOSABLE research harness — D1023. Not production code.
+import { createHash } from "node:crypto";
 import { writeFileSync } from "node:fs";
 
 import { attacks } from "chessops/attacks";
@@ -9,12 +10,14 @@ import { kingCastlesTo, makeSquare, makeUci, opposite, parseSquare, parseUci, ro
 import { describe, expect, it } from "vitest";
 
 import { exchangeCaptureAt, legalExchangeForMove } from "../../packages/runtime/src/exchange.js";
+import { classifyPhase } from "../../packages/runtime/src/phase.js";
 import { threats, type Threat } from "../../packages/runtime/src/tactics.js";
 import { authoredRows, importedRows, legalOutcomes, type ResearchRow } from "../research-chess/populations.js";
 
 const NODE_CAP = 25_000;
 const PROMOTIONS: readonly Role[] = ["queen", "rook", "bishop", "knight"];
 const OUTPUT = new URL("./exact-census-output.md", import.meta.url).pathname;
+const PROVIDER_SAMPLE = new URL("./provider-sample.json", import.meta.url).pathname;
 
 interface TrackedPiece {
   readonly color: Color;
@@ -335,6 +338,48 @@ interface Census {
   readonly identityLostExamples: readonly string[];
   readonly playedReintroducedExamples: readonly string[];
   readonly playedUniversalExamples: readonly string[];
+  readonly providerPairs: readonly ProviderPair[];
+}
+
+interface ProviderPair {
+  readonly sourceId: string;
+  readonly parentFen: string;
+  readonly candidateUci: string;
+  readonly afterFen: string;
+  readonly played: boolean;
+  readonly phase: ReturnType<typeof classifyPhase>["phase"];
+  readonly targetFamily: "material" | "destination";
+  readonly target: Readonly<Record<string, unknown>>;
+  readonly exact: {
+    readonly immediate: ExactTargetResult["immediate"];
+    readonly reintroducedWithin3Ply: boolean;
+    readonly preparationSurvivesEveryDefence: boolean;
+  };
+}
+
+function providerPair(row: ResearchRow, candidateUci: string, afterFen: string, played: boolean, named: MaterialTarget | DestinationTarget, result: ExactTargetResult): ProviderPair {
+  const target = named.kind === "material"
+    ? {
+        attacker: { ...named.attacker, square: makeSquare(named.attacker.square) },
+        target: { ...named.target, square: makeSquare(named.target.square) },
+        baselineMoveUci: named.baselineMoveUci,
+      }
+    : {
+        minor: { ...named.minor, square: makeSquare(named.minor.square) },
+        controllingPawn: named.controllingPawn === undefined ? null : { ...named.controllingPawn, square: makeSquare(named.controllingPawn.square) },
+        square: makeSquare(named.square),
+      };
+  return Object.freeze({
+    sourceId: row.id,
+    parentFen: row.parentFen,
+    candidateUci,
+    afterFen,
+    played,
+    phase: classifyPhase(row.parentFen).phase,
+    targetFamily: named.kind,
+    target: Object.freeze(target),
+    exact: Object.freeze({ immediate: result.immediate, reintroducedWithin3Ply: result.reintroducedWithin3Ply, preparationSurvivesEveryDefence: result.preparationSurvivesEveryDefence }),
+  });
 }
 
 interface BoundedCounts {
@@ -400,6 +445,7 @@ function census(rows: readonly ResearchRow[]): Census {
   const identityLostExamples: string[] = [];
   const playedReintroducedExamples: string[] = [];
   const playedUniversalExamples: string[] = [];
+  const providerPairs: ProviderPair[] = [];
   const playedBounded = emptyBoundedCounts();
   const alternativeBounded = emptyBoundedCounts();
   let decisionsWithTargets = 0, targetCount = 0;
@@ -412,6 +458,7 @@ function census(rows: readonly ResearchRow[]): Census {
     for (const named of targets) {
       const playedResult = immediateAnalysis(row.parentFen, row.uci, named);
       const playedHorizon = examine(row.parentFen, row.uci, named);
+      providerPairs.push(providerPair(row, row.uci, row.fen, true, named, playedHorizon));
       recordBounded(playedBounded, playedHorizon);
       if (playedHorizon.reintroducedWithin3Ply && playedReintroducedExamples.length < 12) {
         playedReintroducedExamples.push(`${row.id}:${named.baselineMoveUci}->${playedHorizon.witness?.join(",") ?? row.uci}`);
@@ -425,13 +472,15 @@ function census(rows: readonly ResearchRow[]): Census {
       if (playedResult.status === "identity_lost" && identityLostExamples.length < 12) identityLostExamples.push(`${row.id}:${named.baselineMoveUci}->${row.uci}`);
       for (const candidate of alternativeRows) {
         const result = immediateAnalysis(row.parentFen, candidate.uci, named);
-        recordBounded(alternativeBounded, examine(row.parentFen, candidate.uci, named));
+        const alternativeHorizon = examine(row.parentFen, candidate.uci, named);
+        recordBounded(alternativeBounded, alternativeHorizon);
+        providerPairs.push(providerPair(row, candidate.uci, candidate.fen, false, named, alternativeHorizon));
         alternatives[result.status] += 1;
         alternativeCauses[result.cause] += 1;
       }
     }
   }
-  return Object.freeze({ decisions: rows.length, decisionsWithTargets, targets: targetCount, played: Object.freeze(played), alternatives: Object.freeze(alternatives), playedCauses: Object.freeze(playedCauses), alternativeCauses: Object.freeze(alternativeCauses), playedBounded: freezeBounded(playedBounded), alternativeBounded: freezeBounded(alternativeBounded), examples: Object.freeze(examples), identityLostExamples: Object.freeze(identityLostExamples), playedReintroducedExamples: Object.freeze(playedReintroducedExamples), playedUniversalExamples: Object.freeze(playedUniversalExamples) });
+  return Object.freeze({ decisions: rows.length, decisionsWithTargets, targets: targetCount, played: Object.freeze(played), alternatives: Object.freeze(alternatives), playedCauses: Object.freeze(playedCauses), alternativeCauses: Object.freeze(alternativeCauses), playedBounded: freezeBounded(playedBounded), alternativeBounded: freezeBounded(alternativeBounded), examples: Object.freeze(examples), identityLostExamples: Object.freeze(identityLostExamples), playedReintroducedExamples: Object.freeze(playedReintroducedExamples), playedUniversalExamples: Object.freeze(playedUniversalExamples), providerPairs: Object.freeze(providerPairs) });
 }
 
 function percent(part: number, total: number): string {
@@ -447,12 +496,14 @@ interface DestinationCensus {
   readonly reintroducedOther: number;
   readonly reintroducedExamples: readonly string[];
   readonly universalExamples: readonly string[];
+  readonly providerPairs: readonly ProviderPair[];
 }
 
 function destinationCensus(rows: readonly ResearchRow[], alternatives: boolean): DestinationCensus {
   const bounded = emptyBoundedCounts();
   const reintroducedExamples: string[] = [];
   const universalExamples: string[] = [];
+  const providerPairs: ProviderPair[] = [];
   let candidates = 0, abstained = 0, targets = 0;
   let reintroducedByPawnRelinquish = 0, reintroducedOther = 0;
   for (const row of rows) {
@@ -469,6 +520,7 @@ function destinationCensus(rows: readonly ResearchRow[], alternatives: boolean):
       targets += namedTargets.length;
       for (const named of namedTargets) {
         const result = examineDestination(choice.fen, choice.uci, named);
+        providerPairs.push(providerPair(row, choice.uci, choice.fen, !alternatives, named, result));
         recordBounded(bounded, result);
         if (result.reintroducedWithin3Ply) {
           if (result.witnessCause === "controlling_pawn_moved_or_captured") reintroducedByPawnRelinquish += 1;
@@ -480,7 +532,53 @@ function destinationCensus(rows: readonly ResearchRow[], alternatives: boolean):
       }
     }
   }
-  return Object.freeze({ candidates, abstained, targets, bounded: freezeBounded(bounded), reintroducedByPawnRelinquish, reintroducedOther, reintroducedExamples: Object.freeze(reintroducedExamples), universalExamples: Object.freeze(universalExamples) });
+  return Object.freeze({ candidates, abstained, targets, bounded: freezeBounded(bounded), reintroducedByPawnRelinquish, reintroducedOther, reintroducedExamples: Object.freeze(reintroducedExamples), universalExamples: Object.freeze(universalExamples), providerPairs: Object.freeze(providerPairs) });
+}
+
+function sampleCell(pair: ProviderPair): string {
+  const exact = pair.exact.immediate === "preserved"
+    ? "preserved"
+    : pair.exact.preparationSurvivesEveryDefence
+      ? "removed_universal"
+      : pair.exact.reintroducedWithin3Ply
+        ? "removed_reintroduced"
+        : "removed_not_reintroduced";
+  return `${pair.played ? "played" : "alternative"}|${pair.targetFamily}|${pair.phase}|${exact}`;
+}
+
+function sampleDigest(pair: ProviderPair): string {
+  return createHash("sha256").update(`${pair.sourceId}|${pair.candidateUci}|${pair.targetFamily}|${JSON.stringify(pair.target)}`).digest("hex");
+}
+
+function providerSample(population: string, pairs: readonly ProviderPair[]): Readonly<Record<string, unknown>> {
+  const byCell = new Map<string, ProviderPair[]>();
+  for (const pair of pairs) {
+    const cell = sampleCell(pair);
+    const values = byCell.get(cell) ?? [];
+    values.push(pair);
+    byCell.set(cell, values);
+  }
+  const cells = [...byCell].map(([cell, values]) => ({ cell, values: values.toSorted((left, right) => sampleDigest(left).localeCompare(sampleDigest(right))), cursor: 0 })).sort((left, right) => left.cell.localeCompare(right.cell));
+  const selected: ProviderPair[] = [];
+  while (selected.length < 48) {
+    let advanced = false;
+    for (const cell of cells) {
+      const value = cell.values[cell.cursor];
+      if (value === undefined) continue;
+      selected.push(value);
+      cell.cursor += 1;
+      advanced = true;
+      if (selected.length === 48) break;
+    }
+    if (!advanced) break;
+  }
+  return Object.freeze({
+    population,
+    available: pairs.length,
+    selected: selected.length,
+    strata: Object.freeze(cells.map((cell) => Object.freeze({ cell: cell.cell, available: cell.values.length, selected: cell.cursor }))),
+    rows: Object.freeze(selected),
+  });
 }
 
 describe("D1023 exact target identity core", () => {
@@ -566,11 +664,12 @@ describe("D1023 exact target identity core", () => {
     });
   });
 
-  it("censuses immediate named-target removal over both fixed populations", () => {
-    const populations = [
-      { name: "authored pack spines", result: census(authoredRows()) },
-      { name: "sealed imported fixed-ply sample", result: census(importedRows()) },
+  it("censuses both named-target families over the full bounded horizon", () => {
+    const sources = [
+      { name: "authored pack spines", rows: authoredRows() },
+      { name: "sealed imported fixed-ply sample", rows: importedRows() },
     ] as const;
+    const populations = sources.map((source) => ({ ...source, result: census(source.rows) }));
     const lines = [
       "# D1023 exact named-target census",
       "",
@@ -605,7 +704,8 @@ describe("D1023 exact target identity core", () => {
       expect(result.alternativeBounded.budgetExhausted).toBe(0);
     }
     lines.push("## Pawn-created minor-destination targets", "", "A destination target is the same named bishop/knight and empty square: legal and locally non-losing before a pawn move, still legal but locally losing specifically to the moved pawn after it. Bounded return asks whether that same minor-to-square move becomes locally non-losing again after one opponent preparation and one defender reply.", "", "| population | played candidates / abstained / targets | alternative candidates / abstained / targets | target return played / alternatives | survives every defence played / alternatives |", "|---|---:|---:|---:|---:|");
-    for (const { name, rows } of [{ name: "authored pack spines", rows: authoredRows() }, { name: "sealed imported fixed-ply sample", rows: importedRows() }] as const) {
+    const providerPopulations: Readonly<Record<string, unknown>>[] = [];
+    for (const { name, rows, result: material } of populations) {
       const played = destinationCensus(rows, false), alternative = destinationCensus(rows, true);
       lines.push(
         `| ${name} | ${played.candidates} / ${played.abstained} / ${played.targets} | ${alternative.candidates} / ${alternative.abstained} / ${alternative.targets} | ${played.bounded.reintroduced}/${played.bounded.evaluated} / ${alternative.bounded.reintroduced}/${alternative.bounded.evaluated} | ${played.bounded.survivesEveryDefence}/${played.bounded.evaluated} / ${alternative.bounded.survivesEveryDefence}/${alternative.bounded.evaluated} |`,
@@ -618,7 +718,16 @@ describe("D1023 exact target identity core", () => {
       );
       expect(played.abstained).toBeLessThan(5);
       expect(alternative.bounded.budgetExhausted).toBe(0);
+      const sample = providerSample(name, [...material.providerPairs, ...played.providerPairs, ...alternative.providerPairs]);
+      providerPopulations.push(sample);
+      expect(sample.selected).toBe(48);
     }
     writeFileSync(OUTPUT, `${lines.join("\n").trimEnd()}\n`, "utf8");
+    writeFileSync(PROVIDER_SAMPLE, `${JSON.stringify({
+      version: 1,
+      generatedAt: "2026-08-23",
+      rule: "round-robin over played/alternative × target family × detected phase × exact result; sha256 order within stratum",
+      populations: providerPopulations,
+    }, null, 2)}\n`, "utf8");
   });
 });

@@ -4,9 +4,10 @@
 
 **Authority:** D1023 under RFC-0000's disposable exploration gate
 
-**State:** both exact target families and the full-horizon two-population census implemented
-2026-08-23 (11 focused controls); Stockfish/Maia policy arms remain. No production projection,
-learner wording, profile weight or RFC is authorized by this plan
+**State:** both exact target families and the full-horizon two-population census implemented;
+deterministic 48+48 provider sample sealed 2026-08-23 (11 focused controls). Stockfish/Maia
+measurements remain. No production projection, learner wording, profile weight or RFC is authorized
+by this plan
 
 ## Question
 
@@ -101,8 +102,12 @@ unavoidability or intention.
 Use the measured candidate human-policy bands `[1000, 1400, 1800, 2200]`, identified as model
 bands—not Elo promises and not treated as a production-default ruling. At each policy node retain
 the complete returned candidate distribution, model
-identity, band and unmapped/unlisted mass. Compute lower/upper bounds on target execution within the
-horizon; never redistribute missing mass.
+identity, band and unmapped/unlisted mass. Preserve two different quantities: at `P1`,
+`next_execution_mass` is the mass assigned to actually selecting the named target move; after one
+opponent move and one defender answer, `second_opportunity_available_mass` is the path mass arriving
+at a `P3` state where the target is available again. Do not sum them. Actual execution from `P3`
+would be a fourth ply and is outside this version. Compute lower/upper bounds for each quantity;
+never redistribute missing mass.
 
 Report each band separately. A cross-band aggregate or one “human probability” is forbidden. Maia
 may establish a population-model likelihood, never the objective quality of the candidate or why a
@@ -127,8 +132,8 @@ distinct result position. Preserve the full denominator and report:
 
 - exact alternatives which remove/preserve/reintroduce the same target;
 - Stockfish depth-8/depth-10 category and target-line agreement;
-- Maia per-band lower/upper target-success mass and a before/after delta interval, with no invented
-  categorical threshold;
+- Maia per-band lower/upper `next_execution_mass` and `second_opportunity_available_mass`, plus
+  like-for-like candidate delta intervals with no invented categorical threshold;
 - source disagreement as first-class output;
 - candidate cost and abstention by source.
 

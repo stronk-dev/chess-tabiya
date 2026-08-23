@@ -12,8 +12,14 @@ denial. It writes `exact-census-output.md`, the fixed authored and imported popu
 the full bounded horizon. Later slices add the predeclared Stockfish and Maia policy arms without
 changing these semantics.
 
+`provider-sample.json` is the sealed 48+48 source-backed sample. It round-robins over
+played/alternative × target family × detected phase × exact-result strata and orders candidates
+inside each stratum by SHA-256. Provider availability cannot change which rows are asked.
+
 Run the focused controls:
 
 ```sh
 pnpm exec vitest run --config tools/d1023-bounded-policy-harness/vitest.config.ts
 ```
+
+The exhaustive fixed-population test takes about 150 seconds on the 2026-08-23 reference machine.

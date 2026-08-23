@@ -5976,3 +5976,19 @@ square. No played or alternative destination target has one preparation that sur
 defence. Thus the one-edge operand remains useful for requested hover/sight, while complete-reply
 search adds no default “stopped their plan” sentence. Stockfish/Maia may still measure which legal
 branches their declared policies actually weight; exact existence alone is the wrong selector.
+
+Before launching the provider arms, their horizon language was made executable. “Target execution
+within the horizon” had conflated an action with a state: Maia can assign mass to selecting the
+target immediately at P1, but after the P1/P2 policy edges the experiment only arrives at P3, the
+opponent's second decision state. It cannot claim the target was executed there without an
+undeclared fourth ply. D1025 now splits `next_execution_mass` from
+`second_opportunity_available_mass`, forbids summing them and leaves actual P3 execution outside
+v1. This correction landed before any provider number could inherit the ambiguity.
+
+The provider population is now sealed before source calls. Each corpus contributes 48 pairs by
+round-robin over played/alternative × material/destination × detected phase × exact-result strata,
+with SHA-256 ordering only inside a stratum. The authored pool has 6,967 eligible pairs across 36
+populated strata; imported has 10,983 across 39. The artifact records every stratum's available and
+selected count plus the exact source id, FENs, candidate, target identities and exact outcome for
+all 96 rows. This means engine/model availability can cause an explicit abstention but cannot swap
+in a friendlier position.
