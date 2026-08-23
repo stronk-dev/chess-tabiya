@@ -6295,6 +6295,25 @@ candidate source and preserve completed subgoals, with Maia and Stockfish record
 fallback sources rather than misrepresented as the generator. The narrow next falsifier is a
 monotone controller; otherwise the exit is a transposition-aware repertoire, not another weight.
 
+## 2026-08-23 — D1081 correction and D1080 monotone route result
+
+The first D1080 matched control invalidated the provisional D1078 engine numbers: identical
+guarded-Maia line ids changed aggregate loss when only the sibling arm changed. The disposable
+generator inherited D35's hash-carryover hazard. Every independent best/candidate search now starts
+with `ucinewgame`, Clear Hash and a ready barrier. D1078 repeated byte-identically after timestamp
+removal (digest `4c0842…`), and D1078/D1080's twelve guarded baseline traces byte-match (`a22c8d…`).
+The append-only correction is: D1078 baseline/route loss is **20.31/20.00 cp (−0.31)**, not
+18.17/21.99 (+3.82). Its opportunity, fallthrough and 1/12-completion verdict is unchanged.
+
+The corrected monotone controller makes 9 progress and 58 distance-preserving selections, all
+inside guarded Maia, but completes only 1/12 branches. It has just one multi-opportunity branch,
+two forced regressions where Maia supplies no non-worsening candidate, and nine own-path
+opportunities against the matched baseline's 23. Safety passes (13.21 versus 20.31 cp, zero severe,
+no added repetition); candidate availability fails. D1080 is refused, closing local weighting,
+progress filtering and preservation filtering as route-identity mechanisms. The next honest bot
+layer must supply candidates from a versioned transposition-aware route/repertoire source and
+record Maia/Stockfish as admission or fallback rather than as the route author.
+
 ## 2026-08-23 — the assistance-controls supersede, and R1 resolves a two-RFC collision
 
 **What landed:** `rfc/assistance-controls.md` superseded and archived, with its orphans rehomed in

@@ -16,7 +16,8 @@ Only **2/12 branches (16.7%)** expose two route opportunities, against a 70% gat
 
 When an opportunity exists, the controller is exact: **10/10** choices reduce the typed target
 distance, all ten come from guarded Maia's returned window, none loses 250 cp, and adherence is
-100%. Mean selected-move loss rises only **18.17 → 21.99 cp (+3.82)** against matched guarded Maia;
+100%. After D1081's hash-isolated rerun, mean selected-move loss is **20.31 → 20.00 cp
+(−0.31)** against matched guarded Maia;
 severe-loss rate stays zero and maximum position repetition stays one. Safety is not the blocker.
 
 The blocker is candidate generation and sequence continuity. Matched guarded-Maia trajectories
@@ -55,8 +56,13 @@ It never injects a missing move, parses prose, reads learner state or asks an LL
 
 | arm | branches | branches with ≥2 opportunities | opportunities | adherence | completed | fallthroughs | mean loss | severe | max repetition |
 |---|---:|---:|---:|---:|---:|---:|---:|---:|---:|
-| guarded Maia | 12 | 5 | 23 | n/a | 0 | 0 | 18.17 cp | 0.0% | 1 |
-| route controller | 12 | 2 | 10 | 100% | 1 | 62 | 21.99 cp | 0.0% | 1 |
+| guarded Maia | 12 | 5 | 23 | n/a | 0 | 0 | 20.31 cp | 0.0% | 1 |
+| route controller | 12 | 2 | 10 | 100% | 1 | 62 | 20.00 cp | 0.0% | 1 |
+
+D1081 correction: every independent Stockfish search now begins with `ucinewgame`, Clear Hash and
+a ready barrier. A full D1078 repeat is byte-identical after removing the timestamp, and its
+guarded baseline traces byte-match D1080. The provisional loss numbers were order-contaminated;
+the reach, choice and completion traces were unchanged.
 
 The one completion is the clean positive control: Black plays `g6`, `Bg7`, `Nf6` on controlled
 plies 2/4/6 in `anti-dutch-leningrad-white`, with distance 3→2→1→0. This proves the controller and
