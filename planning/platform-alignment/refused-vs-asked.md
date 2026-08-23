@@ -58,7 +58,7 @@ Six ledger rows, forming two clusters.
 |---|---|
 | **Asked** | 2026-08-16, verbatim: *"are they all opening vs midgame vs endgame? cause what if we want packs based off of famous previous games?"* |
 | **Refusal lives at** | `apps/server/src/capabilities.ts:159` — Explorer `topGames / recentGames / masters database`, `disposition: "refused"`, reason *"Per-game scope and licence questions remain unresolved"*. **That is the exact instrument a famous-game pack would source from**, refused on a question that is *unresolved* rather than answered — a deferral wearing a refusal's clothes. Second half of the gap is a schema absence, not a refusal: `$defs/provenance` requires only `reviewStatus` and offers `sources` as a bare `string[]`; `sourceGame` occurs zero times, so *"from Kasparov–Topalov, Wijk aan Zee 1999"* is prose nothing can read. |
-| **Ever put to the owner?** | **No — and this one was explicitly flagged for the owner and then dropped.** `planning/defect-triage.md:473` classifies D329 **NEEDS-OWNER** with the question written out: *"Are famous-game packs in scope as a first-class provenance axis?"* That question was written on 2026-08-16 and **never copied into `decision-queue.md`**. |
+| **Ever put to the owner?** | **No — and this one was explicitly flagged for the owner and then dropped.** `planning/rfc-drafting-queue.md:473` classifies D329 **NEEDS-OWNER** with the question written out: *"Are famous-game packs in scope as a first-class provenance axis?"* That question was written on 2026-08-16 and **never copied into `decision-queue.md`**. |
 | **Current status** | **REFUSED-adjacent + unruled.** Routed only to `defect-triage.md`, `work-register.md` §4c (*"queued 2026-08-16, not launched"*) and `ux-work-lane.md:549`. No RFC, no lane. |
 | **Cheapest next step** | Two lines in `decision-queue.md`: the NEEDS-OWNER question, and the licence question behind `capabilities.ts:159`. `work-register.md:180` already prices the build: *"D329 is the cheapest and most independent — a `sourceGame` object on `provenance`, one pack-schema lane, no runtime change,"* with `variantOf` as the existing precedent. |
 
@@ -448,3 +448,18 @@ The repo proves that every engine capability has a disposition and never proves 
 disposition has an owner — so a product opinion typed once into a code table becomes a startup
 invariant, gets promoted into a research constraint, gets cited as settled by every document
 downstream, and is discovered only when the owner asks the same question a second time.
+
+
+---
+
+## Addendum 2026-08-23 — the mechanical incentive ([[D1045]])
+
+The licence research found the missing half of this document's diagnosis. `assertAdvertisedCapabilityDispositions`
+requires an `experiment` for every `unmeasured` disposition and requires **nothing** for a `refused`
+one. Filing an open question as a refusal is therefore the cheapest way to make it stop costing
+anything — which is literally what happened to [[D329]]: a NEEDS-OWNER question became
+`disposition: "refused"`, reason *"licence questions remain unresolved"*, and went quiet for a week.
+
+The pattern is not merely unaudited. **It is rewarded by a shipped guard.** [[D1038]]'s
+`make refusal-index` must therefore require a `refused` row to carry at least as much justification
+as an `unmeasured` one, on top of the `class` / `ruledBy` fields already specified.

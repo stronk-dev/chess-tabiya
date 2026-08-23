@@ -163,6 +163,12 @@ Spec (full detail in `planning/platform-alignment/refused-vs-asked.md`):
   forecloses a standing owner ask.
 - **Derive `decision-queue.md`** instead of hand-maintaining it: 26 of the 32 open rows naming an
   owner decision as their blocker are missing from the hand-written file.
+- **A `refused` row must carry at least as much justification as an `unmeasured` one** ([[D1045]]).
+  The shipped `assertAdvertisedCapabilityDispositions` demands an `experiment` for every
+  `unmeasured` disposition and **nothing at all** for a `refused` one — so filing an open question
+  as a refusal is the cheapest way to make it stop costing anything, which is exactly what happened
+  to [[D329]]'s licence question. The guard actively rewards the defect; closing that asymmetry is
+  part of this instrument.
 
 Sequencing: take it alongside the binding arm — it is small, it is `make verify`-shaped, and every
 day it does not exist is a day a product refusal can be written with nobody's name on it.

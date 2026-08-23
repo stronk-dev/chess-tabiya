@@ -669,3 +669,17 @@ Ruling: resolve it properly. Commissioned check covers the Lichess masters-datab
 public-domain historical sources, against the prior that individual game scores are **facts, not
 copyrightable works**, and that any restriction attaches to a database compilation or API terms
 rather than to the moves. Rule with an answer once it exists.
+
+### Famous-game licence verdict 2026-08-23 (`design/research/famous-game-sources-licensing.md`)
+
+- **[[D1044]]** — the refusal is **not supported on its licence limb**. Lichess's terms are silent
+  on the masters DB (the Puzzles tag in the same document *does* declare public domain — the
+  silence is meaningful); the per-game PGN endpoint returns a bare score with zero annotations;
+  game scores are facts under *Feist* for the US and probably the EU. The real EU exposure is the
+  **database right on systematic extraction**, which constrains harvesting method, not games.
+- **[[D1046]]** — the coverage gap is **1930–2018**, where no source carries an affirmative grant,
+  which is what makes the lift substantive: broadcasts (CC BY-SA 4.0) cover modern elite only and
+  Project Gutenberg covers pre-1929 annotated classics. Also: `provenance` already has `licence`
+  and `attribution` slots, so only a `sourceGame` object is missing.
+- **[[D1045]]** — routed to the [[D1038]] instrument (a `refused` row costs less than an
+  `unmeasured` one, which is the incentive behind the whole defect class).
