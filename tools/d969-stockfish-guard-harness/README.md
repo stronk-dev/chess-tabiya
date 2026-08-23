@@ -30,3 +30,23 @@ node tools/d969-stockfish-guard-harness/population.mts
 
 It emits aggregates only. Override the server with `TABIYA_D969_BASE_URL`; set
 `TABIYA_D969_PER_PHASE` only when intentionally running a smaller deterministic sample.
+
+To rerun the original R11 retention gates at literal fixed depths, use the retained R11 raw
+population rather than substituting the smaller 50-root latency population:
+
+```sh
+TABIYA_R11_INPUT_DIR=/private/tmp/d815-bot.example \
+  node tools/d969-stockfish-guard-harness/probe-r11-depths.mts
+
+TABIYA_R11_INPUT_DIR=/private/tmp/d815-bot.example \
+TABIYA_R11_SF_FILE=sf-d8.jsonl \
+TABIYA_R11_MIXED_SCORE_POLICY=abstain \
+TABIYA_R11_WRITE=1 \
+TABIYA_R11_RESULT_FILE=planning/platform-alignment/bot-policy/d969-depth8-abstain-results.json \
+TABIYA_R11_REPORT_FILE=planning/platform-alignment/bot-policy/d969-depth8-abstain-results.md \
+  pnpm exec vitest run --config tools/r11-bot-policy-harness/vitest.config.ts
+```
+
+Repeat with `sf-d10.jsonl`. The probe takes the 279 FENs and exact legal-root sets from the
+committed experiment's retained `sf-d12.jsonl`, but none of the depth-12 scores enter either
+shallower run.

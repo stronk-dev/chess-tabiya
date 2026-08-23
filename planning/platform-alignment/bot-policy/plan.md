@@ -139,3 +139,17 @@ catalog-wide conflicting-declaration fixture before registration.
 **Boundary and next:** research does not choose a default. Owner/Claude amends the accepted RFC;
 the four unguarded baselines can then register. Guarded-human and pawn-heavy remain blocked on
 D969 and require per-digest calibration.
+
+## 2026-08-23 — D969 full-population fixed-depth recalibration
+
+The exact predeclared R11 population was repriced at fixed depth 8 and 10: 279 positions, 837
+position-band cells, every legal root move, one shared candidate-set search. Both depths pass the
+original guard-retention gate and retain pawn ×4; forcing/quiet ×3 still fail. The production-shaped
+arm abstains rather than coercing mate to cp on 11 mixed-domain positions (33 cells), leaving 804
+cells; every verdict is unchanged. Depth 10 buys no retained layer and carries the measured 729 ms
+cold tail, so depth 8 is the only measured amendment candidate. Results:
+`d969-depth8-abstain-results.{json,md}` and `d969-depth10-abstain-results.{json,md}`.
+
+**Next:** Claude amends `rfc/bot-policy.md` to pin depth 8, the multi-call budget, and whole-guard
+abstention on a mixed score domain. That author action—not another experiment—is the remaining
+D969 blocker before guarded/pawn-heavy production profiles can register.

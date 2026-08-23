@@ -6,14 +6,14 @@
 **Feeds:** D969, `rfc/bot-policy.md` §2.4, F8 A6/A8.
 
 **Verdict:** a single candidate-set search is the viable request shape; independent candidate
-searches are not a common scale. The production-population arm then finds that neither tested node
-bound is usable: only 15–16 of 50 pack roots return an all-exact set. Fixed depth 8/10/12 returns
-all 958 requested Maia candidates exactly. Depth 8 is the only tested arm that keeps both the
-Stockfish call and the cold sequential Maia+guard selection below 500 ms, but its 250 cp mask
-differs from the depth-12 research reference on 7 of 49 cp-only positions. Depth 10 differs on 6
-and needs a separately declared 729 ms selection tail; depth 12 breaches the per-call budget.
-Production registration therefore still requires a literal depth choice plus recalibration of the
-250 cp retention result at that depth. Mate scores remain typed and need a ruled transition policy.
+searches are not a common scale. Neither tested node bound is usable. Fixed depth 8/10/12 returns
+complete exact sets, and the full predeclared R11 population has now been rerun at depth 8 and 10.
+Both depths pass the original guard-retention gate; both retain only the pawn ×4 trait and refuse
+forcing/quiet ×3. The result survives the conservative typed policy that abstains on all 11/279
+mixed mate/cp positions. Depth 10 changes no gate outcome and carries a measured 729 ms cold
+selection tail, while depth 8 stays below 500 ms. **Depth 8 is therefore the only measured 1.0
+candidate** `[M]`; the RFC still must declare that literal, its multi-call budget, and whether the
+measured mixed-domain abstention is the product rule before any guarded profile registers.
 
 ## Method
 
@@ -124,6 +124,33 @@ case returned four negative cp values, while the white-to-move initial case retu
 positive-best ordering `[V]`. The production record should state `perspective: "root_side_to_move"`
 and never flip individual candidates after their moves; comparison happens at the root.
 
+### 7. The predeclared retention gates at depth 8 and 10
+
+The follow-up did not substitute the easier 50-root latency population. It retained the exact R11
+inputs: 279 positions, 837 position-band cells, the same Maia/explorer rows, SAN mapping, production
+sampler reconstruction, 250 cp guard, trait multipliers and acceptance thresholds. The new probe
+priced every legal root move from the retained population in one shared `MultiPV=N searchmoves`
+call at depth 8 and depth 10. Every requested row was present and exact; input digests and aggregate
+outputs are in `planning/platform-alignment/bot-policy/d969-depth{8,10}-abstain-results.json` `[V]`.
+
+The first comparison reproduced the historical harness's mate-to-large-cp conversion only as a
+negative control. It is not a production result. Both new depth files contain the same **11 mixed
+mate/cp positions** (3.94% of positions; 33 band cells), so the production-shaped rerun used the
+already-declared safe fallback: abstain the guard for the whole mixed-domain position and leave the
+base Maia distribution unchanged. The evaluated population is therefore 804 cells; no mate score
+is assigned a centipawn magnitude `[V]`.
+
+| fixed depth | guard severe mass removed | strengthening | human-match retention | guard | pawn ×4 | forcing ×3 | quiet ×3 |
+|---:|---:|---:|---:|---|---|---|---|
+| 8 | 100% | 1.36 cp | 100.21% | pass | pass (+12.28 pp) | fail (+3.12 pp) | fail (+2.31 pp) |
+| 10 | 100% | 1.52 cp | 100.29% | pass | pass (+12.33 pp) | fail (+3.13 pp) | fail (+2.32 pp) |
+
+Both depths make the same four predeclared decisions `[V]`. Depth 10's small score differences buy
+no retained layer and no human-match improvement that changes a gate, while the earlier cold
+population timing records a 729 ms end-to-end maximum versus 499.1 ms at depth 8 `[V]`. This is the
+missing empirical basis for choosing depth 8; it is not evidence that the resulting bot feels
+human, coherent or fun.
+
 ## Amendment inputs
 
 The D969 amendment can now be concrete without pretending the remaining measurement is done:
@@ -139,17 +166,19 @@ The D969 amendment can now be concrete without pretending the remaining measurem
 - fallback: any provider error, timeout, incomplete/bounded row, or unruled score-domain mix records
   a guard abstention and leaves the base distribution unchanged;
 - budget choice: node bounds are refused by population completeness; depth 12 is refused for the
-  live shallow-call budget; depth 8 and depth 10 remain candidates with their measured latency and
-  depth-12 disagreement recorded rather than hidden;
-- remaining falsifier: rerun R11's predeclared guard retention gates at the literal chosen depth,
-  declare the multi-call selection budget, and register no guarded profile until both pass.
+  live shallow-call budget; depth 8 is the only measured candidate because depth 10 changes no
+  gate outcome while carrying the 729 ms tail;
+- mixed domains: abstaining on all 11 mixed mate/cp positions is measured and preserves the gate
+  verdicts; any more permissive typed transition policy is a fresh contract and needs its own
+  fixtures;
+- remaining author action: declare depth 8, the multi-call selection budget and the score-domain
+  fallback in the RFC, then bind those literals into the composed profile digest.
 
 ## Consequence
 
-D969 is narrowed to one explicit remeasurement and two policy choices, not closed. `searchmoves`
-now has an attested product consumer, and the current capability disposition “unmeasured — no
-attested authoring consumer” is stale in both halves: the consumer is opponent selection, not
-authoring, and a working request shape has been measured. The amendment must choose depth 8 or 10,
-rerun the R11 guard gates at that depth, declare the resulting per-selection budget, and rule the
-typed mate transition. Changing the capability row belongs in the RFC implementation after those
-steps; doing it in this research commit would advertise an unaccepted contract.
+D969 has no remaining empirical arm. `searchmoves` has an attested opponent-selection consumer;
+depth 8 passes the exact predeclared gates on the exact population; typed mixed-domain abstention
+costs 3.94% of positions and preserves the verdict; and depth 10 buys no gate outcome. What remains
+is RFC authoring, not more measurement: pin the depth-8 request, budget and abstention semantics,
+then register only the guarded and pawn-heavy profiles their exact composed digests earn. Changing
+the production capability row still belongs in that implementation, not in this research commit.

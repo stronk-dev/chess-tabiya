@@ -5793,3 +5793,13 @@ checkpoint remains a comparative set-membership fact computed by `compareBranche
 `pack-absent:<checkpoint>` key and resolves its sentence through the registered evidence renderer.
 The key is never persisted into the run. A component fixture proves the production row uses the
 authored checkpoint label rather than the former hand-written id-only duplicate.
+
+## 2026-08-23 — D969 guard recalibrated at production candidate depths
+
+The exact R11 population (279 positions / 837 Maia-band cells) was repriced with one shared
+Stockfish 18 candidate-set search at fixed depth 8 and 10. Both depths pass the predeclared 250 cp
+guard gate and retain pawn ×4; forcing/quiet ×3 remain refused. A second, production-shaped reading
+abstains on all 11 mixed mate/cp positions instead of converting mate to a synthetic cp value; the
+same verdict holds over 804 cells. Depth 10 changes no gate decision and carries the previously
+measured 729 ms cold tail, leaving depth 8 as the sole measured 1.0 candidate. D969 now waits on the
+bot-policy amendment declaring depth, budget and mixed-domain fallback, not on further research.
