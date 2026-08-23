@@ -853,6 +853,8 @@ All four join `make verify`.
 
 ## Acceptance criteria
 
+> **Rows landed 2026-08-24.** [[D1440]] — `make schema-check` is red at HEAD because `verify-scaffold.mjs` pins the verify chain by exact literal and the Makefile already exceeds it. [[D1441]] — `evidenceKindLabel` labels one member of four. [[D1442]] — the enums learners see are single ordinary words, so registry totality is the only arm that can catch them; the theming hole is 16 declarations across 7 files. [[D1443]] — the dossier named this fix on 2026-08-20 and the contract closed at a `forms` field that a plain sentence satisfies.
+
 Each names the tree state that makes it RED. A criterion that cannot be made to fail is a defect
 class in this repo ([[D444]]/[[D984]]/[[D1274]]).
 
