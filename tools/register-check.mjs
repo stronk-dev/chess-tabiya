@@ -9,16 +9,52 @@ export const RESOURCE_NAMES = Object.freeze([
   "run-schema",
   "shape-entry-schema",
   "principle-entry-schema",
+  "campaign-schema",
   "migration",
   "evidence-kinds",
 ]);
 
-const SCHEMAS = Object.freeze({
-  "pack-schema": ["DRILL_PACK_SCHEMA_VERSION", "drill_pack.schema.json"],
-  "run-schema": ["DRILL_RUN_SCHEMA_VERSION", "drill_run.schema.json"],
-  "shape-entry-schema": ["SHAPE_ENTRY_SCHEMA_VERSION", "shape_entry.schema.json"],
-  "principle-entry-schema": ["PRINCIPLE_ENTRY_SCHEMA_VERSION", "principle_entry.schema.json"],
+// Keyed by the slug inside the schema's own $id, so the set of registered schemas is
+// derived from schemas/ rather than restated here. A schema on disk whose slug is
+// absent fails C7 instead of being skipped.
+const SCHEMA_SLUGS = Object.freeze({
+  "drill-pack": ["pack-schema", "DRILL_PACK_SCHEMA_VERSION"],
+  "drill-run": ["run-schema", "DRILL_RUN_SCHEMA_VERSION"],
+  "shape-entry": ["shape-entry-schema", "SHAPE_ENTRY_SCHEMA_VERSION"],
+  "principle-entry": ["principle-entry-schema", "PRINCIPLE_ENTRY_SCHEMA_VERSION"],
+  campaign: ["campaign-schema", null],
 });
+
+const ID_PATTERN = /^urn:chess-tabiya:schema:([a-z-]+):([0-9.]+)$/;
+
+export function readSchemaFiles(root) {
+  const dir = path.join(root, "schemas");
+  return fs.readdirSync(dir)
+    .filter((name) => name.endsWith(".schema.json"))
+    .sort()
+    .map((filename) => {
+      const parsed = JSON.parse(fs.readFileSync(path.join(dir, filename), "utf8"));
+      const id = typeof parsed.$id === "string" ? parsed.$id.match(ID_PATTERN) : null;
+      return { filename, id: parsed.$id, slug: id?.[1] ?? null, version: id?.[2] ?? null };
+    });
+}
+
+export function checkC7(files) {
+  const errors = [];
+  for (const file of files) {
+    if (!file.slug) {
+      errors.push(`C7 ${file.filename}: $id ${JSON.stringify(file.id)} is not a versioned urn:chess-tabiya:schema id`);
+      continue;
+    }
+    const mapping = SCHEMA_SLUGS[file.slug];
+    if (!mapping) errors.push(`C7 ${file.filename}: schema slug ${file.slug} has no register resource`);
+    else if (!RESOURCE_NAMES.includes(mapping[0])) errors.push(`C7 ${file.filename}: resource ${mapping[0]} is not a register resource`);
+  }
+  for (const [slug, [resource]] of Object.entries(SCHEMA_SLUGS)) {
+    if (!files.some((file) => file.slug === slug)) errors.push(`C7 ${resource}: no schema on disk carries slug ${slug}`);
+  }
+  return errors;
+}
 
 const rowCells = (line) => line.trim().replace(/^\||\|$/g, "").split("|").map((cell) => cell.trim());
 const isTableData = (line) => /^\s*\|/.test(line) && !/^\s*\|\s*:?-+/.test(line);
@@ -75,7 +111,7 @@ export function parseClaimBlock(block, rfc) {
     }
     const [resource, claim, changes] = cells;
     if (!RESOURCE_NAMES.includes(resource)) throw new Error(`${rfc}: unknown resource ${resource}`);
-    if (resource.endsWith("-schema") && !/^lane \d+(?:\.\d+)+$/.test(claim)) {
+    if (resource.endsWith("-schema") && !/^lane \d+(?:\.\d+)*$/.test(claim)) {
       throw new Error(`${rfc}: invalid schema claim ${claim}`);
     }
     if (resource === "migration" && !/^(position next|position behind [a-z0-9-]+|\d+)$/.test(claim)) {
@@ -133,10 +169,18 @@ export const compareVersions = (left, right) => {
 };
 
 export function checkC2(claims, tree) {
-  return claims
-    .filter(({ resource }) => resource.endsWith("-schema"))
+  const schemaClaims = claims.filter(({ resource }) => resource.endsWith("-schema"));
+  const errors = schemaClaims
     .filter(({ resource, claim }) => compareVersions(claim.slice(5), tree[resource].head) <= 0)
     .map(({ rfc, resource, claim }) => `C2 ${rfc}: ${resource} ${claim} is not above tree head ${tree[resource].head}`);
+  // A lane must be versioned to the same depth as the head it advances, or "lane 1"
+  // reads as above 0.27 while naming a different axis entirely.
+  for (const { rfc, resource, claim } of schemaClaims) {
+    const parts = claim.slice(5).split(".").length;
+    const headParts = String(tree[resource].head).split(".").length;
+    if (parts !== headParts) errors.push(`C2 ${rfc}: ${resource} ${claim} has ${parts} version part(s); head ${tree[resource].head} has ${headParts}`);
+  }
+  return errors;
 }
 
 const claimKey = ({ rfc, resource, claim, changes }) => `${rfc}|${resource}|${claim}|${changes}`;
@@ -258,15 +302,18 @@ const requireMatch = (text, regex, label) => {
   return match[1];
 };
 
-export function deriveTree(root) {
+export function deriveTree(root, files = readSchemaFiles(root)) {
   const index = fs.readFileSync(path.join(root, "packages/schema/src/index.ts"), "utf8");
   const tree = {};
-  for (const [resource, [constant, filename]] of Object.entries(SCHEMAS)) {
-    const constantHead = requireMatch(index, new RegExp(`${constant}\\s*=\\s*"([0-9.]+)"`), constant);
-    const schema = JSON.parse(fs.readFileSync(path.join(root, "schemas", filename), "utf8"));
-    const schemaHead = requireMatch(schema.$id, /:([0-9.]+)$/, `${filename} $id`);
-    if (constantHead !== schemaHead) throw new Error(`${constant} ${constantHead} disagrees with ${filename} ${schemaHead}`);
-    tree[resource] = { head: constantHead };
+  for (const file of files) {
+    const mapping = file.slug ? SCHEMA_SLUGS[file.slug] : null;
+    if (!mapping) continue;
+    const [resource, constant] = mapping;
+    if (constant) {
+      const constantHead = requireMatch(index, new RegExp(`${constant}\\s*=\\s*"([0-9.]+)"`), constant);
+      if (constantHead !== file.version) throw new Error(`${constant} ${constantHead} disagrees with ${file.filename} ${file.version}`);
+    }
+    tree[resource] = { head: file.version };
   }
   const storage = fs.readFileSync(path.join(root, "apps/server/src/storage.ts"), "utf8");
   const storageHead = Number(requireMatch(storage, /export const STORAGE_VERSION\s*=\s*(\d+)/, "STORAGE_VERSION"));
@@ -283,7 +330,8 @@ export function auditRepository(root) {
   const readme = fs.readFileSync(path.join(root, "rfc/README.md"), "utf8");
   const active = parseActiveRfcRows(readme).filter((rfc) => rfc !== "0000-rfc-process.md");
   const documents = Object.fromEntries(active.map((rfc) => [rfc, fs.readFileSync(path.join(root, "rfc", rfc), "utf8")]));
-  const tree = deriveTree(root);
+  const files = readSchemaFiles(root);
+  const tree = deriveTree(root, files);
   const registers = parseRegisterSections(readme);
   const c1 = checkC1(documents);
   const errors = [
@@ -293,6 +341,7 @@ export function auditRepository(root) {
     ...checkC4(tree, registers),
     ...checkC5(c1.claims),
     ...checkC6(tree, registers),
+    ...checkC7(files),
   ];
   return { active, claims: c1.claims, tree, registers, errors };
 }
@@ -330,7 +379,7 @@ if (invoked) {
     if (result.errors.length) {
       for (const error of result.errors) console.error(error);
       process.exitCode = 1;
-    } else console.log(`register-check: ${result.active.length} active RFCs, ${result.claims.length} live claims, C1-C6 green`);
+    } else console.log(`register-check: ${result.active.length} active RFCs, ${result.claims.length} live claims, C1-C7 green`);
   } catch (error) {
     console.error(`register-check: ${error.message}`);
     process.exitCode = 1;

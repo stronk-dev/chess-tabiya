@@ -6875,3 +6875,38 @@ chronological range proves availability and pipeline mechanics, not month-wide r
 **Next:** measure outcome-blind producer success/cardinality/time/bytes after the collector wave
 stabilizes, then price 10k/100k/1m and ask the owner for a budget. No model fit is authorized and the
 reserved D1297 population remains sealed.
+
+## 2026-08-23 — Four-draft wave landed, and the register learned to count its own schemas
+
+**What landed:** four RFC drafts, written concurrently and each verified at HEAD —
+`social-play.md` (`4dbb624`), `training-mode-variants.md` (`05f8c80`), `hint-distance.md`
+(`85a0584`) and `bot-route-source.md` (`a8f1a76`). Ranks 1–4 of [[D1330]]'s live debt. Fourteen
+findings landed as ledger rows D1341–D1354, each routed to the spec section that owns it.
+
+**What changed, and the one that matters beyond this wave:** `schemas/campaign.schema.json` has
+shipped since `976d523` carrying a versioned `$id`, loaded and validated at runtime, **with no
+register, no version constant, and no owning RFC** — and `register-check` could not notice,
+because its schema set was a hand-written list of four filenames. Every check agreed because
+every check read the same list; C4 skipped an unregistered resource outright. The schema set is
+now derived from `schemas/`, keyed by the slug in each `$id`, and **C7** refuses a schema with no
+register resource, an `$id` that is not a versioned tabiya urn, or a register whose schema has
+left the tree. C2 gained an arity clause, without which `lane 1` would have read as *above*
+`0.27` on the pack schema. The campaign register is open, and its landed row records
+**no owning RFC** rather than back-attributing one.
+
+**What was blocked and is not:** the prediction encounter gate was dead in both clauses (0 of 56
+pack documents carry a prediction interaction); `training-mode-variants` lifts it. The
+`live.stockfish.pv@1` projection declares *"never a guidance binding"* and `learner-modules` §4.8
+binds it in two guidance presets — the instance is repaired by `hint-distance`, the class is
+[[D1343]] and open, because `limitations` is a machine-readable field the machine reads only for
+length.
+
+**What went wrong in our own process:** three of the four drafts shipped a `## Ledger rows`
+section inside the RFC and touched `design/BACKLOG.md` not at all. Deferring ids under a four-way
+race was right; leaving nobody to land them was not. Reconciled here as [[D1354]], with the
+standing clause added to `planning/rfc-drafting-queue.md`.
+
+**Next:** cross-review the four fresh drafts independently, then ranks 5–10 of [[D1330]] —
+`theory-drill-current-joins`, `shared-candidate-evidence-packet`, `bounded-policy-targets`,
+`theory-knowledge-pipeline` and the two desk teardowns. Four owner decisions remain drafted and
+waiting in `planning/decision-queue.md`, the failure state ([[D1300]]) first.

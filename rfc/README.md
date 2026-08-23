@@ -189,6 +189,36 @@ predecessor renegotiates here rather than renumbering unilaterally.
 | claim | claimant RFC | changes | declared at |
 |---|---|---|---|
 
+## Campaign-schema-version register
+
+<!-- register: campaign-schema head=1 -->
+
+Opened 2026-08-23 by the register owner. `schemas/campaign.schema.json` shipped at `976d523`
+with a versioned `$id` and no register, and `tools/register-check.mjs` could not notice because
+its schema set was a hand-written list of four rather than a reading of `schemas/`. Two active
+drafts write to `$defs/encounter`. The list is now derived from disk and C7 refuses any schema
+whose slug has no register resource. This lane is a bare major integer because the shipped `$id`
+is; unlike the other four it has **no version constant in `packages/schema/src/index.ts`**, so its
+head is derived from the `$id` alone — a constant is owed by whichever RFC first needs a consumer
+to compare against, not manufactured here with nothing to read it.
+
+### Landed
+
+| version | owner RFC | what it changed | landed at |
+|---|---|---|---|
+| 1 | **none — shipped without one** | established the authored campaign contract and its schema | `976d523` |
+
+`976d523` carries no owning RFC in `rfc/archive/`; the only documents that reference the schema
+are the active drafts `campaign-core.md` and `training-mode-variants.md`, both of which write to
+`$defs/encounter`. The lane is therefore registered as landed-without-an-owner rather than
+back-attributed to a document that never governed it. `campaign-core.md` is the standing
+candidate to adopt the lane when it is accepted.
+
+### Live claims
+
+| claim | claimant RFC | changes | declared at |
+|---|---|---|---|
+
 ## Evidence-kinds register
 
 <!-- register: evidence-kinds members=7 -->

@@ -8,6 +8,7 @@ import {
   checkC4,
   checkC5,
   checkC6,
+  checkC7,
   locateClaimBlocks,
   parseActiveRfcRows,
 } from "./register-check.mjs";
@@ -17,6 +18,7 @@ const tree = {
   "run-schema": { head: "1.0" },
   "shape-entry-schema": { head: "0.3" },
   "principle-entry-schema": { head: "0.1" },
+  "campaign-schema": { head: "1" },
   migration: { head: 4 },
   "evidence-kinds": { members: ["alpha", "beta"] },
 };
@@ -149,4 +151,44 @@ test("C6 fails a hand-written next-free value", () => {
   const rows = registers();
   rows[0].body = "| — | next free 1.3 |";
   assert.match(checkC6(tree, rows)[0], /hand-written next-free/);
+});
+
+const schemaFiles = () => [
+  { filename: "drill_pack.schema.json", id: "urn:chess-tabiya:schema:drill-pack:0.27", slug: "drill-pack", version: "0.27" },
+  { filename: "drill_run.schema.json", id: "urn:chess-tabiya:schema:drill-run:0.17", slug: "drill-run", version: "0.17" },
+  { filename: "shape_entry.schema.json", id: "urn:chess-tabiya:schema:shape-entry:0.3", slug: "shape-entry", version: "0.3" },
+  { filename: "principle_entry.schema.json", id: "urn:chess-tabiya:schema:principle-entry:0.1", slug: "principle-entry", version: "0.1" },
+  { filename: "campaign.schema.json", id: "urn:chess-tabiya:schema:campaign:1", slug: "campaign", version: "1" },
+];
+
+test("C7 accepts the schemas on disk today", () => {
+  assert.deepEqual(checkC7(schemaFiles()), []);
+});
+
+test("C7 refuses a versioned schema with no register resource", () => {
+  const extra = { filename: "arena.schema.json", id: "urn:chess-tabiya:schema:arena:0.1", slug: "arena", version: "0.1" };
+  assert.deepEqual(checkC7([...schemaFiles(), extra]), [
+    "C7 arena.schema.json: schema slug arena has no register resource",
+  ]);
+});
+
+test("C7 refuses a schema whose $id is not a versioned tabiya urn", () => {
+  const loose = { filename: "loose.schema.json", id: "https://example.test/loose.json", slug: null, version: null };
+  assert.deepEqual(checkC7([...schemaFiles(), loose]), [
+    'C7 loose.schema.json: $id "https://example.test/loose.json" is not a versioned urn:chess-tabiya:schema id',
+  ]);
+});
+
+test("C7 refuses a register resource whose schema left the tree", () => {
+  const without = schemaFiles().filter((file) => file.slug !== "campaign");
+  assert.deepEqual(checkC7(without), ["C7 campaign-schema: no schema on disk carries slug campaign"]);
+});
+
+test("C2 refuses a lane versioned to a different depth than its head", () => {
+  const errors = checkC2([claim({ resource: "campaign-schema", claim: "lane 1.1" })], tree);
+  assert.deepEqual(errors, ["C2 one.md: campaign-schema lane 1.1 has 2 version part(s); head 1 has 1"]);
+});
+
+test("C2 accepts a bare major lane on a bare major head", () => {
+  assert.deepEqual(checkC2([claim({ resource: "campaign-schema", claim: "lane 2" })], tree), []);
 });

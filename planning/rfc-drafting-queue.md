@@ -822,6 +822,15 @@ manufactures a false destination: `work-index` joins on any textual mention, so 
 RFC satisfies the routing check for a different row that lands with that number first. Caught by the
 `recorded-clocks` fork, which declined to number its four rows and asked for the ruling.
 
+**Amended 2026-08-23 by [[D1354]] — the convention had only half a lifecycle.** Writing rows
+unnumbered is correct and stays; what it never said is **who numbers them, and when**. Three of
+the four drafts in the 2026-08-23 wave followed this section to the letter and shipped fourteen
+findings in RFC bodies that reached `design/BACKLOG.md` not at all. **The coordinator lands every
+proposed row before commissioning the next wave**, assigning ids from the current head and routing
+each to the durable spec section that owns it — a row's home is a section that *specifies* the
+repair, never the `## Ledger rows` section, which `work-index` excludes from durable text by
+design. Law 4 is satisfied by the ledger, not by a proposal to write to it.
+
 Also landed: [[D1131]] (clocks measured as a feature — 108 of 108 paste games carry `[%clk]`,
 6,991 tags; broadcast 1,158 readings and zero declared controls, so abstention is per *field*) and
 [[D1132]] ([[D1061]] settles D357's ordering, not its substance — the pre-commit top-rung criterion

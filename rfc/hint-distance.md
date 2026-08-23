@@ -160,6 +160,8 @@ eligible set becomes a **registry**, and a family is refused by not existing.
 
 #### 1.2 The horizon cannot carry a principal variation
 
+Ledger: [[D1343]] — the instance is repaired here; the class (a declared `limitations` string that no instrument reads) is not.
+
 `live.stockfish.pv@1` carries `answerContent: ["move", "principal_variation"]`. Each horizon
 projection declares `[...family, "move"]` and omits `principal_variation`, which the widening
 check permits (subset) and which makes the PV **structurally unreachable** through this
@@ -203,6 +205,8 @@ stage nothing within four plies, and 18 of 64 do at the 100 ms budget. `guided_h
 engine move.
 
 ### §2 — The eligible family set, the precedence table, and the refusal ([[D1070]])
+
+Ledger: [[D1352]] — reach after the refusal table is a bounded range, not a number.
 
 `module-contract.ts:162` already enforces:
 
@@ -280,6 +284,8 @@ mix `recorded_run` with `bounded_search`, and the constructors would reject the 
 contract ever ran.
 
 ### §4 — The rungs are a disclosure step, not a fourth stage ([[D1069]])
+
+Ledger: [[D1351]] — a ceiling maps to exactly one answer image, so it reads as a lattice and is not one. [[D1353]] — the mapped-type clamp makes `AssistancePermission`'s `"legal"` member redundant.
 
 **The contradiction, exactly.** `learner-modules` §4.8 and `module-contract.ts:155` hard-code
 three stages and the literal join `"1:pattern|2:fact|3:principal_variation"`;

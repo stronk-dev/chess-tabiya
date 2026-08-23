@@ -232,6 +232,8 @@ Criterion 12 makes that self-enforcing rather than remembered.
 
 #### §3.3 The invitation and retrieval state machines
 
+Ledger: [[D1344]] — the shipped `state` field is rendered to the host with no producer for two of its values.
+
 `session_invitations.state` gains its missing producers — no schema change, the `CHECK` already
 admits all three values:
 
@@ -283,6 +285,8 @@ Four rules bind it:
    product decision from opponent *connection*.
 
 #### §3.5 Return, and its verification
+
+Ledger: [[D1346]] — today any PGN with the right starting position imports as any leg.
 
 When authorized, the adapter observes the game to completion and imports the PGN into the
 originating run as a branch — the path `importLeg` already walks. Three verifications, two of
@@ -354,6 +358,8 @@ outcome grade. Discharge D11.
 
 ### §5 — The honest label for native private play
 
+Ledger: [[D1345]] — the guarantees this section names are documented and unrendered.
+
 [[D707]] is measured and its remedy is one rendered sentence. A live session of `kind === "match"`
 renders, in its header, a fixed non-configurable line:
 
@@ -412,6 +418,8 @@ Discharge D4 routes it there rather than building a second rating story here.
 
 #### §6.3 Two OAuths, two lanes — the collision this section exists to prevent
 
+Ledger: [[D1349]] — the collision this section exists to prevent.
+
 `live-following.md:74` fences out *"Chat bridge, Twitch/YouTube/OAuth integration"*, and
 `professional-workflow-conformance` §3 describes the vote adapter's provider bridge. Those are a
 **chat** credential for a **streaming platform**, owned by the casting lane. This RFC's OAuth is a
@@ -438,6 +446,8 @@ Discharge D5 — routed to OWNER through `planning/intent-amendment-handoff.md`,
 ### §7 — The local bot event
 
 #### §7.1 The provenance half already exists, and is stronger than the ask
+
+Ledger: [[D1347]] — `profileDigest` already exceeds [[D708]]'s ask.
 
 [[D708]] asks for *"event id, exact entrant policy ids and versions, every child game run, result,
 Review target"*. Measured at HEAD, `BotPolicyDecisionRecord` already carries `profileId`,
@@ -474,6 +484,8 @@ as they consume any other run — which is what makes the whole feature cheap, a
 criterion 15 asserts by running Review over an event game with no event-aware code path.
 
 #### §7.3 Standings are arithmetic, and say so
+
+Ledger: [[D1348]] — native two-human play is uncountable and imported Arena legs are countable, and nobody chose that.
 
 A standings table is permitted as deterministic arithmetic over recorded results: games, wins,
 draws, losses, points. It is rendered beneath one fixed sentence:

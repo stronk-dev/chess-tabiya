@@ -340,6 +340,8 @@ drift in the same direction the `:1204 → :1512` drift ran. Criterion 8 asserts
 
 #### §4.2 The unblock
 
+Ledger: [[D1350]] — the gate is dead in both clauses, and its citation has now drifted twice.
+
 Solitaire chess is the producer this gate blocks, and it produces on imported games — which by
 construction have no pack. The gate widens to admit a **prediction anchor** from either source:
 
