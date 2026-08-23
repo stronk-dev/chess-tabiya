@@ -203,6 +203,10 @@ swept.
 - **[[D1143]] closes the Pack Studio pair as one boundary repair:** derive playtest identity, seed,
   and policy on the server exactly as the accepted RFC specifies, then bind Playtest and confirmed
   Withdraw in the selected-draft action bar. Do not expose those assembly fields as author settings.
+- **Do not bind `/simulate` yet. [[D1154]] returns the implemented N-way contract:** its comparison
+  names scratch nodes the only renderer cannot resolve, and promotion omits the checkpoint/objective
+  orchestration the RFC says it replays. The exact amendment checklist is
+  `planning/n-way-simulation/implementation-return.md`.
 - **`compileModuleRegistry` has never been called** — which weakens [[D1069]]'s premise about the
   hint ladder contradicting the guided-hint contract; re-check that before acting on it.
 - **[[D1087]] was generous**: `trait.pawn_preference@1` is **test-file only**, and

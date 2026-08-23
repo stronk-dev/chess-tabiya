@@ -6509,3 +6509,24 @@ and web typechecks are green with zero Svelte diagnostics. No broad suite was re
 **Next:** simulation is the remaining bounded core-loop binding. Reasoning review waits for the
 Review contract because its task/provider boundary is already a recorded trust defect; Campaign
 still needs its HTTP/application RFC rather than an improvised route family.
+
+## 2026-08-23 — Simulation returned before an empty preview became product UX
+
+**What landed:** D1154 and a symbol-level implementation return for N-way scratch simulation.
+The endpoint comparison references nodes that never cross the HTTP boundary, so the only renderer
+would show every simulated row as ended. Both preview and promotion also omit pack orchestration,
+meaning checkpoint and objective consequences disappear from the demonstration and the real branch.
+
+**What changed:** `/simulate` and `/simulate-enter` are no longer classified as two missing client
+calls. They are a returned cross-layer contract with seven concrete repairs: self-contained preview
+state, one shared authored-walk derivation, orchestration parity, authored labels, never-silent
+truncation/subvariation fields, writer scoping, and one unambiguous batch bound. No misleading UI
+was added over the incomplete payload.
+
+**Verification:** the return was re-derived at `RunService.simulate`, `enterSimulation`,
+`BranchComparison.NodeRef`, `CompareView`, and `comparisonNode`; the work index remains 573/573
+routed with zero orphan rows.
+
+**Next:** Claude amends N-way comparison on this buildability return. Codex resumes it only when
+the preview payload and parity rules are accepted; meanwhile the longitudinal/campaign migration
+chain remains blocked by D1011's unresolved accepted-RFC questions rather than by missing code.
