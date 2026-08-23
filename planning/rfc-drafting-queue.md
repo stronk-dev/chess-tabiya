@@ -1095,3 +1095,18 @@ on 2026-08-17, voiding `measurement-records` OQ1's rationale.
   binary/categorical deltas by mean-square `p`. Routed to the evidence-move-selector lane
   (`rfc/evidence-move-selector.md` §6 binds to that harness's predeclared verdict, so a provisional
   pass is material to its calibration gate).
+
+### The three ruling amendments — [[D1294]]–[[D1296]]
+
+`rfc/enforced-clocks.md`, `rfc/learner-rating.md` and `rfc/variants.md` amended on [[D1290]],
+[[D1292]] and [[D1293]].
+
+- **[[D1294]]** — [[D1292]] contradicted `enforced-clocks` §4, drafted ninety minutes earlier. The
+  override is written **in place**: the measured ~230 Elo drift stands, the honesty moves from
+  refusal to disclosure, criterion 6 is rewritten, and Discharge D1 narrows to the calibration
+  design. Deleting §4 would have erased a measured blocker the owner overrode knowingly.
+- **[[D1295]]** — the hint ceiling is specified against [[D1061]]'s **unlanded** axis, so
+  `enforced-clocks` criterion 13 is **honestly red** until it exists rather than passing vacuously.
+  Unblocks when that axis lands; [[D1069]] owns its conflict with the guided-hint contract.
+- **[[D1296]]** — admitting Fairy-Stockfish admits an **opponent, not an evaluation**. `variants`
+  §7.4b pins it and criterion 17 re-asserts zero evaluations with the engine present.

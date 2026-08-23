@@ -345,6 +345,11 @@ A run is **rated-eligible** iff all of the following hold. Each has its refusal 
    rung-calibrated profile (bot-policy §7) or the boss drops the persona. This predicate
    forecloses **neither** arm; the resolution is owned by `rfc/campaign-core.md` Discharge D1,
    the deferred rated boss, which this RFC's acceptance unblocks.)*
+3a. **Time control does not gate rating ([[D1292]], owner ruling 2026-08-23).** A timed game is
+   rated like any other; the control is **not** a precondition. What it does instead is enter the
+   **label** — see §7.4 obligation 7 — because the anchor's calibration at that control may not
+   exist. This condition is deliberately *not* a refusal: the owner chose widest coverage over the
+   recommended rate-where-calibrated, and the honesty mechanism is disclosure rather than exclusion.
 4. The engine handshake reported `eloHonored: true` and `appliedTargetElo` resolved to the
    requested rung; `SelectionEngineIdentity.containerDigest` equals the calibration's pinned
    digest. — R1
@@ -956,6 +961,25 @@ Every surface that prints the rating prints, in the same view:
    a comparison. **Added by owner ruling 1**, which reversed R10 without reversing its ground:
    §8b sets out why this obligation is the reversal's whole price.
 
+7. **the time control the game was played at, and the anchor's calibration state at that
+   control** — added by owner ruling [[D1292]], 2026-08-23. Where the rung was calibrated at a
+   different control from the one played, the surface says so **on the rating itself**, not in a
+   footnote: the anchor's strength at the played control is unmeasured, and a rating computed
+   against it is not the quantity it appears to be. **The measured basis for the disclosure**:
+   `bot-policy:592` records maia1's own rating spanning **~230 Elo across time controls against the
+   same human pool** `[V]`, so an untimed rung used to rate a `180+0` game can be wrong by more than
+   a rung. Calibration at a control **improves this label** — it does not gate the rating.
+
+**Obligation 7 records a conflict rather than resolving it, and that is deliberate.** The
+recommendation put to the owner was *rate where calibrated, abstain elsewhere*; the owner chose
+**rate all timed games, control on the label**. The two are not reconcilable by arithmetic, so the
+disclosure is where the honesty goes. **What this is adjacent to and not identical with**: [[D819]]'s
+label rule binds a ***bot's*** stated Elo — *a stated Elo is a measured claim with its measurement
+cited, or it is not stated* — and it is untouched here, because no bot's label changes. This is the
+***learner's*** rating resting on an anchor whose strength at the played control is unmeasured. The
+distinction is real and is why obligation 7 is a disclosure rather than a violation; it is also thin
+enough that stating it is the only honest way to carry it.
+
 *Correction by cross-review on obligation 4: the draft printed **≈290**, which is the wrong
 quantity for the span it is attached to.* 289.6 Elo is the corpus-wide value of `[1000, **2400**]`
 (`derived.json` → `thresholds.coverage.observedFullRangeElo`); the corpus-wide value of
@@ -963,9 +987,10 @@ quantity for the span it is attached to.* 289.6 Elo is the corpus-wide value of 
 `[V]`. A normative disclosure printing a 16% understatement of its own instrument's span is the
 disclosure failing at its one job.
 
-Copy is not specified here beyond these **six** obligations (*"five" corrected by cross-review:
-ruling 1's obligation 6 made it six*), which are testable — 1–5 in §AC-6, 6 in §AC-16 — **and is
-bounded by R16, which is where the copy itself becomes a law-8 surface.**
+Copy is not specified here beyond these **seven** obligations (*"five" corrected by cross-review
+to six when ruling 1's obligation 6 landed; **seven** since [[D1292]] added obligation 7*), which are
+testable — 1–5 in §AC-6, 6 in §AC-16, 7 in §AC-18 — **and is bounded by R16, which is where the copy
+itself becomes a law-8 surface.**
 
 ### 8. Refusals
 
@@ -2052,6 +2077,17 @@ Rows still proposed:
   (d) no `objective`, `ObjectiveState`, `successConditions` or `sealedState` value is reachable
   from the rated-game projector — the R2 half of §5.3a, asserted over the module graph the way
   AC-11 asserts R15.
+- **AC-18 (a rating against an uncalibrated anchor says so, and the label cannot omit it).**
+  Obligation 7, made failable in three arms. (a) **Positive**: a rated game played at `180+0`
+  against a rung whose calibration record covers no time control renders the control **and** the
+  anchor's uncalibrated state, asserted on the rendered string rather than on the model. (b) **The
+  omission fixture, which is the criterion's whole point**: a label built for that same game with
+  the calibration state removed **must fail** the disclosure check — a passing build here means the
+  disclosure is decorative and obligation 7 has not shipped. (c) **Negative control**: a game played
+  at a control the rung *is* calibrated for renders the control without the uncalibrated marker, so
+  the marker is discriminating rather than always-on. *A wrong implementation prints the time
+  control and stops there* — the readable half of [[D1292]] without the half that makes it honest,
+  which is exactly what obligation 7 exists to prevent.
 
 ## Discharges
 
@@ -2147,6 +2183,18 @@ rounds rather than compacted** — answered questions (1 and 10 on 2026-08-16; 1
 
 ## Changelog
 
+- 2026-08-23 (amendment, [[D1292]]) — **timed games rate.** Predicate condition **3a** states that
+  the time control does **not** gate rating; §7.4 gains **obligation 7** (the control *and* the
+  anchor's calibration state at that control), taking the obligation count from six to seven; **AC-18**
+  makes it failable in three arms, the load-bearing one being an omission fixture that must be RED —
+  a passing build there means the disclosure is decorative. The conflict is carried, not hidden: the
+  recommendation was *rate where calibrated, abstain elsewhere*, the owner chose widest coverage, and
+  `bot-policy:592`'s ~230 Elo cross-control drift means an untimed rung is an uncalibrated anchor for
+  a `180+0` game. [[D819]]'s label rule is **untouched** — it binds a *bot's* stated Elo and no bot
+  label changes here; this is the *learner's* rating resting on that anchor, which is why obligation 7
+  is a disclosure rather than a violation. **The owner may veto this reading** if they intended rating
+  without the disclosure; D1292's row records it as claude's reading, taken as the ruling's content
+  unless the owner says otherwise.
 - 2026-08-22: **cohort-backend checkpoint.** Permanent event-derived marks, one-standing-per-
   classroom storage, self-publication and withdrawal, per-layer visibility, result ordering,
   per-band records, abstention-shaped grouped ratings, the permanent unwitnessed-game limitation,

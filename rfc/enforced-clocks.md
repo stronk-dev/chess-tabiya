@@ -1,6 +1,6 @@
 # RFC: Enforced clocks — the real-clock arm of the time-control lane
 
-- **Status:** draft — 2026-08-23
+- **Status:** draft — 2026-08-23; **amended 2026-08-23 on [[D1290]] and [[D1292]]**. D1290 closes the acceptance-blocking open question 1: the clock/hint collision is a **ceiling term per context** (§4a, criterion 13), not a global clamp. D1292 **overrides §4's unrated verdict** — timed games rate, and the anchor's calibration state moves onto the label (`learner-rating` §7.4 obligation 7 / AC-18); criterion 6 is rewritten from a refusal into a disclosure. Ready for review
 - **Author:** claude
 - **Created:** 2026-08-23
 - **Design refs:** `design/05-in-run-experience.md` §invariants (*"Rewind is an experiment, not an undo"*, *"The run is the sole source of chess truth"*); `design/03-product-breadth.md` §Play
@@ -204,7 +204,7 @@ project has now caught twice by review and once, here, by derivation.
 writes either. *A wrong impl either skips the migration — and the successor discovers it the
 expensive way — or starts writing `'flagged'` into rated games this RFC does not rate.*
 
-### §4 — Timed games are unrated in v1, and the blocker is measured
+### §4 — Timed games ARE rated, and the measured blocker becomes a label ([[D1292]])
 
 `learner-rating`'s rated predicate has eight conditions (`:335-354`). A clock breaks exactly one,
 and it is not the one the derivation expected.
@@ -230,14 +230,62 @@ optimal play by both sides from here** — a counterfactual."* A flag-fall is th
 about the game **as actually played**, decided by the same rulebook `chessops` implements. It is a
 result, not an adjudication.
 
-So: **v1 rates nothing timed.** The remainder is Discharge D1, owned, with the exact question named
-(does `timeControl` join the rung identity, or does a timed ladder get its own calibration?). This
-is sequencing under [[D1230]], not a scope cut: the blocker is a measured 230-Elo transfer failure
-plus an owner fork, both cited.
+**OVERRIDDEN 2026-08-23 by [[D1292]], and the override is recorded rather than absorbed.** This
+section was drafted to conclude *"v1 rates nothing timed"*. The owner ruled the opposite — **rate all
+timed games, with the time control on the label** — choosing widest coverage over the recommended
+rate-where-calibrated. **The measurement above is not withdrawn**: the ~230 Elo of cross-control
+drift is still true, and a rung calibrated at no control is still an **uncalibrated anchor** for a
+`180+0` game.
 
-**Criterion 6**: a timed run cannot be created with `rated: true`; the refusal is typed. *A wrong
-impl rates it against an untimed rung and publishes an Elo whose measurement does not cover the
-game it describes.*
+**What changes is where the honesty lives.** It moves from a *refusal* to a *disclosure*: rating
+proceeds, and the label carries both the time control **and** the anchor's calibration state at that
+control, so a rating earned against an uncalibrated anchor says so on its face. Calibration then
+*improves the label* rather than gating the rating. The mechanism is `learner-rating` §7.4
+**obligation 7**, amended under the same ruling and fixtured there by **AC-18**, whose omission arm
+fails a build that prints the control and stops.
+
+**Condition 3 therefore no longer breaks.** The table above records the drift as the *reason for the
+disclosure*, not as a precondition failure; `learner-rating`'s predicate gains **condition 3a**,
+which states explicitly that the control does not gate rating. Condition 8 was already resolved by
+§3 and is unaffected.
+
+**Criterion 6** is rewritten accordingly (below): a timed run **may** be created with `rated: true`,
+and what is refused is a *label that omits the calibration state*. *A wrong impl reads this ruling as
+"rate timed games" and stops there* — publishing an Elo whose measurement does not cover the game it
+describes, with nothing on the surface saying so, which is the readable half of D1292 without the
+half that makes it honest.
+
+### §4a — The hint ceiling is a context term, not a global clamp ([[D1290]])
+
+**The collision, stated once.** A live clock creates *pre-commit* pressure. Under pressure the
+rational learner reads the shortest item that resolves the most of the decision — and `move`, the
+top rung of [[D1061]]'s hint distance, is the cheapest thing this product can print. So a clock does
+not merely coexist with the assistance ladder; it **tilts toward the top rung**. That is [[D317]]'s
+criterion — *an item is cheating iff `distance === "move"` while a committing decision depends on
+it* — and [[D1132]] correctly predicted it would land here rather than on `recorded-clocks`, where a
+depicted past clock creates no pressure on a live decision.
+
+**The ruling: the surface decides, not one global rule.** Per [[D1290]], **a timed context declares
+its own hint ceiling**. A rated timed game may clamp the top rung; a casual timed drill need not.
+
+**Where it is declared, in shipped shape.** `intent-presets` §3's `ContextContract.configClamp` is
+`Readonly<Partial<Record<keyof AssistanceConfig, AssistancePermission>>>` — a per-context clamp over
+assistance axes, and §2's algebra makes every ceiling term **narrowing-only**: *"A workflow or
+session ceiling can only remove assistance, never add it."* The hint ceiling is a `configClamp`
+entry, so it inherits that property by construction and cannot widen a rung anywhere.
+
+**The axis it clamps is [[D1061]]'s, and this RFC does not invent it.** Hint distance is a ruled but
+unlanded axis: `AssistanceConfig` at HEAD carries `guided: "off" | "live"` and no distance field
+(`packages/runtime/src/assistance.ts:4-15`, verified), and [[D1069]] found the ruled four-rung ladder
+contradicts the accepted three-stage guided-hint contract — a conflict that RFC owns, not this one.
+**This RFC's obligation is therefore narrow and precise**: when that axis lands, it lands as a
+`configClamp`-clampable key, and **every timed context declares an explicit entry for it**. Silence
+is not permitted, because an absent clamp reads as "free" and that is the tilt.
+
+**Two wrong implementations this forecloses**, both of which would satisfy a loosely-written rule:
+one global clamp applied whenever any clock runs (which is the rule the owner refused — it removes a
+legitimate option from casual timed play), and no clamp at all (which is the tilt shipped as a
+default). Criterion 13 fails both.
 
 ### §5 — A rewind never costs time
 
@@ -393,9 +441,12 @@ Each names what a wrong implementation would do to pass it.
 5. **The CHECK is widened once and unused in v1.** `terminal_reason` accepts `'flagged'` and
    `'flagged_insufficient_material'`; no v1 path writes either. *Wrong impl skips the rebuild, or
    writes values into games this RFC does not rate.*
-6. **Timed runs are unrated.** Creating one with `rated: true` is refused with a typed error.
-   *Wrong impl rates it against a rung calibrated at no control, publishing an Elo its measurement
-   does not cover.*
+6. **Timed runs rate, and their label carries the anchor's calibration state ([[D1292]]).**
+   Creating a timed run with `rated: true` **succeeds**; what fails is a published label for that
+   game omitting either the time control or the anchor's calibration state at it. Asserted against
+   `learner-rating` **AC-18**, whose omission arm must be red for this criterion to mean anything.
+   *Wrong impl refuses the run (the pre-D1292 draft), or rates it and prints the control alone —
+   publishing an Elo whose measurement does not cover the game, with nothing saying so.*
 7. **No run-level time, and a fork inherits its node's reading.** `DrillRun` and `CreateRunInput`
    carry no time-typed field; a fork's first `clockState` equals the forked node's. *Wrong impl
    pools time at the run level — D364's altitude slide, which nothing else would catch.*
@@ -414,12 +465,23 @@ Each names what a wrong implementation would do to pass it.
     `void_reason: 'abandoned'` path (`storage.ts:4575`). *Wrong impl leaves the void path in place,
     so the arm's strongest argument ships as prose.* **Runs behind D1** — fixtured now, enforced
     when timed games rate.
+13. **Every timed context declares an explicit hint ceiling, and it is per-context ([[D1290]]).**
+    Two arms. (a) **Completeness**: for every `WorkflowContextId` whose contract admits a clock, the
+    `ContextContract.configClamp` carries an explicit entry for [[D1061]]'s hint-distance axis —
+    **absence fails**, because an absent clamp reads as "free" and that is the tilt §4a describes.
+    (b) **Discrimination**: at least two timed contexts declare **different** values, asserted over
+    the contract table rather than a single instance. *Wrong impl A applies one global clamp
+    whenever any clock runs — the rule the owner refused, since it removes a legitimate option from
+    casual timed play; wrong impl B declares nothing and ships the tilt as a default. Arm (a) fails
+    B, arm (b) fails A.* **Runs behind the hint-distance axis landing** ([[D1069]] owns its conflict
+    with the three-stage guided-hint contract); this criterion is red until it exists, which is the
+    honest state rather than a silent pass.
 
 ## Discharges
 
 | id | the obligation | owner | recorded when discharged | discharged |
 |---|---|---|---|---|
-| D1 | Rated timed play — does `timeControl` join the rung identity, or does a timed ladder get its own calibration? Carries criterion 12's enforcement and the `terminal_reason` values this RFC lands unused | `OWNER` | `planning/platform-alignment/decision-queue.md` | |
+| D1 | **Narrowed by [[D1292]]**: *whether* timed play rates is ruled (it does, with the calibration state on the label). What remains is the calibration design — does `timeControl` join the rung identity, or does a timed ladder get its own calibration? — which now improves the label rather than gating the rating. Still carries criterion 12's enforcement and the `terminal_reason` values this RFC lands unused | `OWNER` | `planning/platform-alignment/decision-queue.md` | |
 | D2 | Two-sided bot clocks — needs a `bot-policy` §2.7 amendment and a resolution to `movetime`'s non-reproducibility against criterion A3 | `claude` | that amendment's registration | |
 | D3 | Delay, Bronstein and multi-stage controls | `claude` | the successor RFC's registration | |
 | D4 | Does flagging lose a campaign encounter, and does a flagged encounter still pay its reward and charge grant under [[D1040]]? | `OWNER` | `planning/platform-alignment/decision-queue.md` | |
@@ -430,16 +492,12 @@ Each names what a wrong implementation would do to pass it.
 
 ## Open questions
 
-1. **⚖️ ACCEPTANCE-BLOCKING — [[D357]]'s cheating gradient, which [[D1132]] predicted would land
-   here.** [[D1061]] ruled hint distance and settled D357's *ordering* precondition, but not its
-   substance: D317's criterion is *an item is cheating iff `distance === "move"` while a committing
-   decision depends on it* — a question about the **pre-commit availability of the top rung**.
-   `recorded-clocks` was unaffected because a depicted past clock creates no pressure on a live
-   decision. **This RFC creates exactly that pressure.** Under time pressure the rational learner
-   reads the shortest item that resolves the most of the decision, and `move` is the cheapest thing
-   this product can print — so a clock measurably *tilts toward* the top rung rather than balancing
-   it. **This must be ruled before acceptance**, because the answer changes whether the top rung is
-   reachable while a clock runs.
+1. **✅ RULED 2026-08-23 by [[D1290]] — no longer acceptance-blocking.** [[D357]]'s cheating
+   gradient, which [[D1132]] predicted would land here, is resolved as **a ceiling term per
+   context**: a timed context declares its own hint ceiling through `intent-presets` §2's
+   narrowing-only algebra, so a rated timed game may clamp the top rung while a casual timed drill
+   need not. Specified in §4a; made failable by criterion 13. The surface decides, not one global
+   rule.
 2. **⚖️ Does a timed drill ever *fail* the learner, or is enforcement confined to play?** [[D1041]]
    ruled *"real clocks in play"* and *"simulated pressure in drills"* — `recorded-clocks` reads the
    drill half as informational. If a drill's clock may expire, gap 3 of the derivation re-opens and
@@ -465,6 +523,16 @@ Each names what a wrong implementation would do to pass it.
 
 ## Changelog
 
+- 2026-08-23 (amendment, [[D1290]] + [[D1292]]) — **D1290**: open question 1 closes; §4a specifies the
+  hint ceiling as a `ContextContract.configClamp` entry under `intent-presets` §2's narrowing-only
+  algebra, and criterion 13 makes both wrong implementations (one global clamp / no clamp) fail.
+  The axis itself is [[D1061]]'s and unlanded, so criterion 13 is honestly red until it exists.
+  **D1292**: §4's *"v1 rates nothing timed"* is **overridden** — the ~230 Elo drift measurement
+  stands, but the honesty moves from refusal to disclosure; criterion 6 is rewritten from a typed
+  refusal into a label obligation bound to `learner-rating` AC-18, and Discharge D1 is narrowed to
+  the calibration design. **The owner may veto the disclosure reading of D1292** (rating without the
+  calibration state on the label); the ruling row records that this reading is claude's, taken as
+  the ruling's content unless the owner says otherwise.
 - 2026-08-23 — drafted from `planning/time-controls/rfc-derivation.md` §4–§5 under [[D1093]] and
   [[D1041]], as the successor `recorded-clocks` Discharge D1 names and whose absence the [[D1230]]
   scope audit counted. Priced at the full arm per D1230: server authority, flag-fall, the control

@@ -577,14 +577,44 @@ not become, with the aggravation that the number is also false. **No Tier-2 surf
 engine evaluation, a grade, a Maia mass or a tablebase verdict**, and the suppression is enforced at
 the producer, not the renderer.
 
-**§7.4 The opponent.** Maia is dark in Tier 2 for the same reason as Tier 1 and with the same
-failure mode (§3.7a), so §3.7b's request-construction refusal covers it unchanged. `strong_engine`
-is **also** unavailable in Tier 2 — Stockfish does not implement these rulesets, so its move would be
-illegal rather than merely weak. **v1 Tier-2 play is therefore human-vs-human or solo**, and
-[[D1271]]'s funded evidence-to-move selector is the path to a Tier-2 opponent, since a
-feature-and-weights selector is the only base type that ports across rulesets ([[D1160]]).
-Fairy-Stockfish is the engine that *does* implement them and is named there as the Tier-2
-dependency; it is out of scope here and carried by Discharge D2.
+**§7.4 The opponent — Fairy-Stockfish, admitted as a variant sidecar ([[D1293]]).** Maia is dark in
+Tier 2 for the same reason as Tier 1 and with the same failure mode (§3.7a), so §3.7b's
+request-construction refusal covers it unchanged. `strong_engine` is **also** unavailable — shipped
+Stockfish does not implement these rulesets, so its move would be *illegal* rather than merely weak.
+
+**Fairy-Stockfish supplies the opponent for all seven.** The owner ruled it in; the previous draft's
+*"human-vs-human or solo in v1"* is superseded. Three facts close it:
+
+- **It implements every Tier-2 member natively**, so its moves are legal where Stockfish's would not
+  be — which is the entire gap this closes.
+- **The licence question is closed, in our own terms**: GPL-3.0 into AGPL-3.0 is expressly permitted
+  by `LICENSE:552-558` ([[D1160]]).
+- **It sidecars on the shipped pattern.** `engine-supervisor.ts:330` passes engine options verbatim,
+  so a second UCI sidecar needs no supervisor change — and unlike the Maia path it requires **no
+  Python and no GPU**.
+
+**§7.4a What it is disclosed as, and what it is never disclosed as.** `fairy_stockfish` is an
+**engine-strength** opponent. It is **never** described as human-like, human-shaped, or as playing
+like a person of any rating — the compiler's `REFUSED_PERSONA_CLAIM` already refuses the word, and
+this RFC adds no exemption. A learner choosing it is choosing *a legal opponent in a ruleset nothing
+else can play*, not a modelled human.
+
+**§7.4b The evidence boundary survives the new opponent, and this is the clause that matters.**
+[[D1034]] is unchanged by admitting an engine: §7.3's suppression is a statement about *evaluations
+in these rulesets*, not about *which binary produced them*. **Fairy-Stockfish's own evaluation in
+Atomic or Crazyhouse is equally not evidence we may render** — it is that engine's opinion under a
+ruleset for which we have measured nothing, and printing it would rebuild the refused dashboard with
+a different logo. So: Fairy-Stockfish **selects moves and never annotates them**. Its evaluation
+never reaches a projection, a grade, a module or a rendered surface, and §7.3's producer-level
+suppression is the enforcement point, unamended.
+
+**§7.4c What this does and does not change.** It changes exactly one thing: whether a learner can
+play a Tier-2 variant **alone**. It does not widen what a Tier-2 surface may show (§7.2, §7.3), does
+not make Tier-2 results rateable, and does not make the opponent human-shaped. [[D1271]]'s funded
+evidence-to-move selector (`rfc/evidence-move-selector.md`) remains the eventual **human-shaped**
+route across rulesets, since a feature-and-weights selector is the only base type that ports
+([[D1160]]); Fairy-Stockfish is the interim that makes the tier playable meanwhile, and Discharge D2
+is re-pointed accordingly rather than carrying the whole opponent question.
 
 **§7.5 The run must record its ruleset.** A Tier-2 game is **not self-describing**: Crazyhouse's
 starting position *is* the standard FEN. Without a recorded ruleset every downstream reader treats
@@ -817,13 +847,25 @@ rejects.
     shape) starts a run, lints as a pack, and **carries no `rules` value** — it is standard chess
     (§8.1). *Rejected:* routing it through the variant admission path, which would suppress the
     evidence stack on a position where the tablebase is *more* available than usual, not less.
+16. **Fairy-Stockfish is offered as engine strength and never as a person.** Every learner-facing
+    string naming the `fairy_stockfish` opponent passes `REFUSED_PERSONA_CLAIM`, and a fixture
+    asserting a persona-flavoured label for it **fails**. *Rejected:* copy calling it "plays like a
+    club player" or attaching any rating-shaped claim — the tier has no calibration and
+    [[D819]]'s label rule binds a stated Elo to a cited measurement, which does not exist here.
+17. **The evidence boundary holds against the new opponent.** With a `fairy_stockfish` opponent
+    selected on a Crazyhouse run, the producer-level suppression of §7.3 is asserted to emit
+    **zero** evaluations, grades, masses and tablebase verdicts — the same assertion as criterion
+    13, re-run with the engine present. *Rejected:* letting Fairy-Stockfish's own evaluation reach a
+    projection because "it implements the ruleset" — it is an unmeasured opinion under rules we have
+    calibrated nothing against, and rendering it rebuilds the refused dashboard with a different
+    logo (§7.4b).
 
 ## Discharges
 
 | id | the obligation | owner | recorded when discharged | discharged |
 |---|---|---|---|---|
 | D1 | A Scharnagl start generator, if a start picker ever wants one — v1 accepts pasted FENs and needs none (§3.6 item 4, §9) | codex | the implementing commit that adds a 960 start picker | |
-| D2 | A **Tier-2 opponent** — Fairy-Stockfish as the engine that implements the seven rulesets, consumed through [[D1271]]'s funded selector; also the Tier-2 tablebase/explorer endpoint questions (§7.4) | claude | `rfc/evidence-move-selector.md`'s landing commit | |
+| D2 | A **human-shaped** Tier-2 opponent through [[D1271]]'s funded selector (`rfc/evidence-move-selector.md`) — the engine-strength half is **discharged by [[D1293]]** and specified in §7.4; also the Tier-2 tablebase/explorer endpoint questions (§7.4) | claude | `rfc/evidence-move-selector.md`'s landing commit | |
 | D3 | **Tier 3c** — [[D328]]'s one-afternoon measurement of whether `Node.fen` and `transposeKey` are the only FEN-shaped types in the branch runtime, which decides whether xiangqi/shogi is an adapter over SFEN or a second product sharing a shell (§8.4) | claude | `planning/variants/` | |
 | D4 | The research-tier correction to `fun-mechanics-outside-roguelikes.md:1130-1133` (Deviations) | claude | the dossier's next edit | |
 | D5 | Implementation of §3.6, §4, §5.2, §6 and §7 | codex | the implementing commit | |
@@ -916,6 +958,16 @@ Unnumbered per [[D1130]]'s convention as it stood; renumber from the head in the
 
 ## Changelog
 
+- 2026-08-23 (amendment, [[D1293]]) — **Fairy-Stockfish is admitted as a variant sidecar**, so all
+  seven Tier-2 rulesets get a real opponent; §7.4's *"human-vs-human or solo in v1"* is superseded.
+  Licence closed in our own terms (GPL-3.0 into AGPL-3.0, `LICENSE:552-558`); it sidecars on the
+  shipped pattern (`engine-supervisor.ts:330`, no Python, no GPU). New **§7.4a** pins the disclosure
+  (engine strength, never human-like — `REFUSED_PERSONA_CLAIM` unamended) and **§7.4b** pins the
+  clause that matters: [[D1034]]'s boundary is **unchanged**, and Fairy-Stockfish's *own* evaluation
+  in these rulesets is equally not evidence we may render — it selects moves and never annotates
+  them. Criteria **16** (persona refusal, with a failing fixture) and **17** (the evidence-dark
+  boundary re-asserted with the engine present) make both failable. Discharge D2 is re-pointed to the
+  **human-shaped** opponent via [[D1271]]'s selector; the engine-strength half is discharged here.
 - 2026-08-23 — drafted from `planning/variants/rfc-derivation.md` under owner rulings [[D1093]]
   (drafting mandate), [[D1031]] (the lane is a family) and [[D1042]] (the surface-scoped balance
   law). Scoped to Chess960 in Just Play and import; packs and Tiers 2–3 deferred behind named
