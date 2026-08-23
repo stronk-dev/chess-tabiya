@@ -1191,3 +1191,28 @@ Drafting order is that list, top-down. Two are teardowns with unlanded recommend
   teardown-became-a-lane example was the wrong file; "the coverage matrix is stale by eleven RFCs"
   is a category error — the stale artifact is `research-to-execution.md`, wrong by 21). Routed here
   as audit-quality repair alongside [[D1320]]'s practice.
+
+## Human-outcome boundary — lane opened 2026-08-23 by the coordinator ([[D1356]])
+
+`design/research/human-outcome-coverage-depth.md` is the last of [[D1330]]'s two unconsumed
+measurements; its sibling `semantic-horizon-coverage` was consumed by `rfc/hint-distance.md` the
+same day ([[D1355]]). Both halves of this dossier are unread, and they fail in opposite directions.
+
+**The negative half is a refusal nobody declares.** Human-outcome coverage ends at ply ~20 and is
+zero from ply 27, and the dossier's own recommendation (`:689-690`) is *"a named refusal, not a
+silent fallback."* What shipped instead is five prose caveats — `bot-roster.md:57`, `:317`, `:399`
+and `bot-policy.md:354` — each honest, none enforceable. A drafter must specify what the system
+**does** past the boundary: which projections abstain, what the abstention is called, what renders
+in its place, and what instrument makes a silent fallback fail. [[D1343]] is the same class one
+tier down and should be resolved consistently with it, not separately.
+
+**The positive half is an oracle with no consumer.** The move-level human-outcome result — median
+**9.7 pp** separation, with **475 of 2814** pairs Stockfish cannot separate at all — is exactly the
+evidence law 8 wants rendered, and nothing reads it. Every `wdl` reference in
+`review-evidence-compiler.md` and `learner-modules.md` is *Stockfish* WDL, a different object;
+`learner-rating.md` uses bands. The 475 pairs are the sharpest case: positions where the engine has
+no opinion and humans do.
+
+No scope cut. Both halves are in scope for one document, because the refusal and the oracle are the
+same measurement read from its two ends, and splitting them would let the refusal land while the
+result it protects stays unread.
