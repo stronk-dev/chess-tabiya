@@ -1,6 +1,6 @@
 # RFC: Intent presets — the workflow/preset layer over the module foundation
 
-- **Status:** implementing — 2026-08-22 foundation checkpoint landed: the closed vocabularies, module/context tables, context derivation, and separate preference namespace are implemented. D971 blocks the exact config projections and clamps, compiler, preset pill, and footer pending amendment and re-review. *(Accepted 2026-08-22 by claude after cross-review; prior line: draft — 2026-08-22.)*
+- **Status:** implementing — 2026-08-22 foundation checkpoint landed: the closed vocabularies, module/context tables, context derivation, and separate preference namespace are implemented. **Amended 2026-08-24 on [[D971]] — the amendment discharges D971 whole and unblocks the preset UI.** §4a pins the literal nine-field `AssistanceConfig` projection of all five presets; §3.2 pins the literal nine-field `configClamp` of all eight contexts (the word "the same ceilings" is struck); §5.1 names what compiles what and where it lives, closing [[D985]]'s phantom symbol; §5.2 lands the orphaned `loadWorkflowPreset`/`saveWorkflowPreset` on a caller; §7.1 states what the preset UI can now be built from. The context axis is corrected from seven to the **eight** that ship (`campaign` registered by `campaign-core`, Discharge D3) and the acceptance grid from 24/11 to the shipped **28 admitted / 12 refused**. Ready for re-review. *(Accepted 2026-08-22 by claude after cross-review; prior line: draft — 2026-08-22.)*
 - **Author:** claude (drafted from `planning/evidence-foundation-ux/presets-head-derivation.md`, the HEAD derivation of every surface this document composes)
 - **Created:** 2026-08-22
 - **Design refs:** `design/05-in-run-experience.md` §3-forms O4 amendment (the algebra), §3a (silence default), §5 Q4; `design/03-product-breadth.md` §Play, §Review and explore, §Live and community, shell table
@@ -47,9 +47,12 @@ baseline.
 
 Out of scope: opponent policy (bot-policy's seam ends at `run.opponentPolicy`; §8.1), module
 eligibility (the D660 bar; §9), theming/animation (play-composition Discharge D3's lane),
-campaign encounter rules (`design/06` — campaign *consumes* this contract as one more context
-when its RFC arrives; it is deliberately **not** one of the seven contexts here), and any
-change to authored pack bytes.
+campaign encounter rules (`design/06` — campaign *consumes* this contract; **its RFC arrived on
+2026-08-22 and registered `campaign` as the eighth context**, so the drafted "not one of the
+contexts here" is superseded: the context is in §3's table and §3.2's clamp, and its encounter
+rules remain `campaign-core`'s), and any change to authored pack bytes. **Also out of scope,
+added 2026-08-24:** the visual form of the pill and footer (§7.1), and any tenth
+`AssistanceConfig` field (§9a).
 
 ## Specification
 
@@ -82,10 +85,18 @@ eight-name shorthand is retired by proposed row [[D942]].
 
 ```ts
 export const WORKFLOW_CONTEXTS = Object.freeze([
-  "pack", "position", "imported", "match", "stream", "academy", "onramp",
+  "pack", "position", "imported", "match", "stream", "academy", "onramp", "campaign",
 ] as const);
 export type WorkflowContextId = (typeof WORKFLOW_CONTEXTS)[number];
 ```
+
+**Amended 2026-08-24 ([[D971]]): eight contexts, not seven.** The list above is the shipped
+constant verbatim (`packages/runtime/src/presets.ts:5-8`). `campaign` was registered by
+`rfc/campaign-core.md` §5 on 2026-08-22, discharging this RFC's own Discharge D3, and the
+seven-context arithmetic elsewhere in this document was never re-derived after that landing.
+Every count in this document is now eight-context: **5 × 8 = 40 pairs, 28 admitted, 12
+refused**, which is exactly what `assertPresetFoundation` asserts at import time
+(`presets.ts:91-94`).
 
 This is the shipped `ASSISTANCE_PROFILES` set (`assistance-preference.ts:4`) **plus
 `academy`**; `AssistanceProfile` becomes a re-export of `WorkflowContextId` at landing (one
@@ -113,8 +124,8 @@ The four terms, typed against what ships:
 | term | type at HEAD | this RFC |
 |---|---|---|
 | requested preset | absent | `PresetId` + the learner's stored per-context choice (§6) |
-| workflow/session ceiling | absent (the D532 debt) | `ContextContract` per `WorkflowContextId` (§3) |
-| honesty/access | `AssistanceContext` (`assistance.ts:21-27`): `deliveryOpen`, `role`, `seatedInContest`, `reviewing` — with `sessionKind` declared-and-unread | `AssistanceContext` gains `workflowContext: WorkflowContextId` and `permittedAssistance` reads it (§3.1); role stays this term's business — the plan row's "role" is a subset of honesty/access, exactly as `learner-modules` §1.7 encodes it |
+| workflow/session ceiling | **partly shipped**: `moduleCeiling` lands (`presets.ts:41-50`), `configClamp` does not exist — the [[D971]] half | `ContextContract` per `WorkflowContextId` (§3), with the literal `configClamp` in **§3.2** |
+| honesty/access | `AssistanceContext` (`assistance.ts:22-29`): `deliveryOpen`, `role`, `seatedInContest`, `reviewing` — with **both** `sessionKind` and `workflowContext` declared-and-unread at HEAD (`:30-33`) | `permittedAssistance` becomes the pointwise minimum of access and `contextClamp` (§3.2), so `workflowContext` is read and `sessionKind` is removed; role stays this term's business — the plan row's "role" is a subset of honesty/access, exactly as `learner-modules` §1.7 encodes it |
 | source availability | shipped: `AvailabilityMode`, `ProviderOffBehavior` (`evidence-contract.ts:9,11`), `/capabilities` providers | consumed, not reinvented — a module whose sources are absent renders its declared `emptyBehavior`; the preset layer never masks an honest-empty |
 
 ### §3. Context contracts — the D532 table
@@ -127,9 +138,22 @@ export interface ContextContract {
   readonly defaultPreset: PresetId;
   readonly allowedPresets: readonly PresetId[];
   readonly moduleCeiling: readonly ModuleId[];     // learner-modules' closed 11-id union
-  readonly configClamp: Readonly<Partial<Record<keyof AssistanceConfig, AssistancePermission>>>;
+  readonly configClamp: ConfigClamp;               // §3.2 — TOTAL over the nine fields
 }
+
+/** Amended 2026-08-24 ([[D971]]): total, and `version` is not a clamped field. */
+export type ConfigClamp =
+  Readonly<Record<keyof Omit<AssistanceConfig, "version">, AssistancePermission>>;
 ```
+
+**The `Partial` in the drafted signature is struck.** A partial clamp cannot be checked for
+completeness: a missing key reads as "unclamped" and is indistinguishable from a key nobody
+wrote, which is the *"a guard that cannot fail is not a decision"* shape [[D532]] refused. The
+clamp is now the same total nine-key record `permittedAssistance` already returns
+(`assistance.ts:31` — `Readonly<Record<keyof Omit<AssistanceConfig, "version">,
+AssistancePermission>>`), so the two ∩ terms are pointwise-comparable **by type**, and
+`keyof AssistanceConfig` no longer admits `version` as a clampable field (it did in the
+drafted signature — a live type defect, not a style note).
 
 `ModuleId` is the closed eleven-id union — `ModuleDeclaration["id"]` from the registry
 `learner-modules` lands in `evidence-catalog.ts` — exported **once** beside that registry
@@ -147,9 +171,18 @@ what the context **may never show** — because that is the sentence D532 requir
 | `stream` | `quiet` | `quiet`, `guided`, `theory_only`, `analysis` | `blunder_prevention` | the streamer *"may cheat on themselves"* (`design/05:435-437`) — analysis is offerable; relayed marks stay attribution-governed (`design/05:199`), cited not re-derived |
 | `academy` | `guided` | `quiet`, `guided`, `theory_only` | `blunder_prevention`, `full_inspector` (the coach relays; the participant's own inspector waits for the review surface) | `design/05:199`; `design/03:84-86` |
 | `onramp` | `guided` | `quiet`, `guided`, `theory_only` | `blunder_prevention`, `full_inspector`, `review_map` | wiring RFC's `onramp` `guided: "live"` fallback (`assistance-control-wiring.md:74-77`) — same value, now with a reason attached |
+| `campaign` | `guided` | `quiet`, `guided`, `theory_only`, `analysis` | `blunder_prevention` | **added 2026-08-24** — transcribed from the shipped row `presets.ts:49`, registered by `rfc/campaign-core.md` §5 on Discharge D3. Not re-argued here; campaign-core owns its ceiling |
 
-`configClamp` carries the same ceilings for the nine legacy fields. To express the rules floor,
-`AssistancePermission` (`assistance.ts:20`) gains one member:
+Every row above is byte-checked against `WORKFLOW_CONTEXT_POLICIES` (`presets.ts:41-50`) as of
+this amendment; the eight `moduleCeiling` values ship as `except(...)` complements, which is why
+the table's column is the complement.
+
+**The drafted sentence *"`configClamp` carries the same ceilings for the nine legacy fields"* is
+STRUCK (2026-08-24, [[D971]]).** It was the whole of that defect: "the same ceilings" names no
+value, and the module ceiling and the config ceiling do not even range over the same vocabulary.
+**§3.2 is the literal table**; the paragraph below states only the vocabulary it is written in.
+
+To express the rules floor, `AssistancePermission` (`assistance.ts:21`) gains one member:
 
 ```ts
 export type AssistancePermission = "free" | "locked_off" | "legal" | "sight" | "evidence";
@@ -186,6 +219,129 @@ at the mechanism, not patched at one call site. Acceptance criterion 5 requires 
 to produce **different** permissions than HEAD for at least three contexts, so the wiring
 cannot land vacuous (the [[D444]] lesson).
 
+**Amended 2026-08-24 ([[D971]]) — the derivation landed and the reading did not.**
+`deriveWorkflowContext` ships (`presets.ts:107-116`) with the academy branch, and
+`assistance-preference.ts:5` re-exports it as `assistanceProfile`, so half of this section is
+done. The other half is **not**: `permittedAssistance` at HEAD (`assistance.ts:31-34`) reads
+`deliveryOpen`, `seatedInContest`, `role` and `reviewing` and reads **neither** `sessionKind`
+**nor** `workflowContext` — `AssistanceContext` now carries *two* declared-and-unread fields
+where D307(a) reported one. §3.2's clamp table is the value that body has been missing, and
+§3.2's `permittedAssistance` definition is what makes criterion 5 satisfiable.
+
+#### §3.2 `configClamp` — the literal table for all eight contexts
+
+**Written in the shipped permission vocabulary.** Each of the nine fields has a totally ordered
+domain; a clamp token names the highest admissible value in that domain. The token spellings are
+the ones `permittedAssistance` already returns (`assistance.ts:34`) — `free`/`locked_off` for
+the six two- and three-valued switches, `sight`/`evidence` for the two lit-board fields — plus
+`"legal"` for the rules floor. Nothing new is invented:
+
+| field | domain, lowest → highest | admissible clamp tokens | what the token means |
+|---|---|---|---|
+| `markers` | `off` < `live` | `free`, `locked_off` | `locked_off` ⇒ compiled `"off"` |
+| `guided` | `off` < `live` | `free`, `locked_off` | `locked_off` ⇒ compiled `"off"` |
+| `humanSplit` | `off` < `on_request` | `free`, `locked_off` | `locked_off` ⇒ compiled `"off"` |
+| `corpus` | `off` < `on_request` | `free`, `locked_off` | `locked_off` ⇒ compiled `"off"` |
+| `voice` | `authored` < `persona` | `free`, `locked_off` | `locked_off` ⇒ compiled `"authored"` — the field's own floor, not an absent field |
+| `spoken` | `off` < `browser` < `provider` | `free`, `locked_off` | `locked_off` ⇒ compiled `"off"` |
+| `boardLighting` | `off` < `legal` < `sight` < `evidence` | `legal`, `sight`, `evidence` **only** | token `T` ⇒ the range `["legal", T]` — floor *and* ceiling (§3); `free`/`locked_off` are a registry-invariant failure here |
+| `arrows` | `off` < `sight` < `evidence` | `locked_off`, `sight`, `evidence` | `evidence` is this field's `free`; `permittedAssistance` already spells it `"evidence"` |
+| `ambient` | `off` < `on` | `free`, `locked_off` | `locked_off` ⇒ compiled `"off"` |
+
+**The table.** Rows are in `WORKFLOW_CONTEXTS` order (`presets.ts:5-8`) so a transcription
+mismatch is a diff, not a search:
+
+| context | `markers` | `guided` | `humanSplit` | `corpus` | `voice` | `spoken` | `boardLighting` | `arrows` | `ambient` |
+|---|---|---|---|---|---|---|---|---|---|
+| `pack` | `free` | `free` | `free` | `free` | `free` | `free` | `evidence` | `evidence` | `free` |
+| `position` | `free` | `free` | `free` | `free` | `free` | `free` | `evidence` | `evidence` | `free` |
+| `imported` | `free` | `free` | `free` | `free` | `free` | `free` | `evidence` | `evidence` | `free` |
+| `match` | `locked_off` | `locked_off` | `locked_off` | `locked_off` | `locked_off` | `locked_off` | **`legal`** | `locked_off` | `locked_off` |
+| `stream` | `free` | `free` | `free` | `free` | `free` | `free` | `evidence` | `evidence` | `free` |
+| `academy` | `free` | `free` | **`locked_off`** | `free` | `free` | `free` | **`sight`** | **`sight`** | `free` |
+| `onramp` | `free` | `free` | **`locked_off`** | `free` | `free` | `free` | **`sight`** | **`sight`** | `free` |
+| `campaign` | `free` | `free` | `free` | `free` | `free` | `free` | `evidence` | `evidence` | `free` |
+
+**Every cell is derived, and here is the derivation** — one rule, applied to the shipped
+`moduleCeiling` (`presets.ts:41-50`), so the two ceilings can never drift apart by hand:
+
+> A context's clamp on field `F` is **the highest value of `F` that some module in that
+> context's `moduleCeiling` can drive**, floored at the rules floor. If no admitted module
+> drives `F`, the clamp is `F`'s floor.
+
+The field-to-module bindings the rule reads, each grounded in a shipped consumer:
+
+| field | driven by | shipped consumer |
+|---|---|---|
+| `markers` | any module that renders without a learner request at post-commit or review — `postcommit_nudge`, `structure_nudge`, `review_map` | `DrillScreen.svelte:384` (`projectedPivotal` ← `liveMarkers`) |
+| `guided` | `structure_nudge` (the named-shape module, `answerCeiling: pattern`) | `DrillScreen.svelte:282,1140` (shape firings) |
+| `humanSplit` | `full_inspector` — the raw human-model split is inspector content, [[D619]]'s *"explicit analysis inspector for raw evidence/providers"* | `DrillScreen.svelte:851-854,1148` |
+| `corpus` | `theory_breadcrumb` (accepts `human.explorer.population@1`, `learner-modules.md` §4.7) or `full_inspector` | `DrillScreen.svelte:855-857` |
+| `voice` | **provider-channel field, not module-driven** (see the split below) — clamped `free` wherever the ceiling admits any content-bearing module, and to its floor where it admits none | `DrillScreen.svelte:1167` |
+| `spoken` | **provider-channel field, not module-driven** — same rule; clamping it where content exists would be an accessibility clamp with no honesty gain | `DrillScreen.svelte:432-442` |
+| `boardLighting` | `legal` from `rules_floor` always; `sight` from any module with `maxMarks > 0`; `evidence` from `full_inspector` | `DrillScreen.svelte:380,978` |
+| `arrows` | `sight` from any module with `maxArrows > 0`; `evidence` from `full_inspector` | `learner-modules.md` §4 arrow budgets |
+| `ambient` | any module with `on_request` initiative — the ambient control is the *opener* for the request channel | `DrillScreen.svelte:845` |
+
+Working the rule against the eight shipped ceilings gives exactly the table above:
+
+- `position`, `pack`, `imported`, `stream`, `campaign` admit `full_inspector`, so both lit-board
+  fields reach `evidence` and `humanSplit`/`corpus` are `free`. (`blunder_prevention` is excluded
+  from every ceiling except `position`'s, and that exclusion drives **no** config field — it is a
+  `board_adjacent` sentence with `maxMarks: 1`, `maxArrows: 0`, already covered by `sight`. Which
+  is the honest reading of the Support ceiling: it is a *module* restriction, and the nine legacy
+  fields cannot express it. The `allowedPresets` refusal is what enforces it, not the clamp.)
+- `academy` and `onramp` exclude `full_inspector`, so `humanSplit` locks off and both lit-board
+  fields stop at `sight`. `onramp` additionally excludes `review_map`, which changes no field
+  (`markers` still has `postcommit_nudge`/`structure_nudge`; `arrows` still has
+  `threat_radar`/`compare_coach`).
+- `match` admits `rules_floor` alone. `rules_floor` declares `maxArrows: 0`, no marks and
+  `evidence: none` (`learner-modules.md` §4.1), so every field falls to its floor and
+  `boardLighting` is `"legal"` exactly — which is the sentence §3 already carried and this
+  table now *derives* rather than asserts. `voice` and `spoken` fall too, and only here: a
+  context that admits no content-bearing module has nothing to revoice and nothing to speak,
+  so their `locked_off` costs no accessibility and keeps `design/03:93-98`'s byte-identical
+  disclosure whole.
+
+**The nine fields split two ways, and the split is what makes the rule total.** Seven of them —
+`markers`, `guided`, `humanSplit`, `corpus`, `boardLighting`, `arrows`, `ambient` — are
+**admission and affordance** fields: each one decides whether a class of content may reach the
+learner, so each is driven by the modules that produce that class. The other two — `voice` and
+`spoken` — are **provider channels**: they choose *how* already-admitted content is rendered
+(an LLM revoicing, a speech synthesizer) and admit nothing on their own. [[D619]] is explicit
+that presets *"do not ask a nontechnical player to toggle Stockfish/Maia/classifier sources"*,
+so the two provider fields are **outside the module-driven derivation entirely**: no preset
+moves them (§4a pins both at their floor in all five) and no context clamps them except where
+the ceiling admits no content at all. Stating the split is what stops the derivation rule
+quietly meaning two different things in two tables.
+
+**`permittedAssistance` is the pointwise minimum of the two ∩ terms, and that is how the unread
+field starts being read.** The shipped body becomes the *access* term only, and the exported
+function composes:
+
+```ts
+export function accessPermission(context: AssistanceContext): ConfigClamp;   // the HEAD body, renamed
+export function contextClamp(id: WorkflowContextId): ConfigClamp;            // §3.2's table, from presets.ts
+export function permittedAssistance(context: AssistanceContext): ConfigClamp {
+  return pointwiseMin(accessPermission(context), contextClamp(context.workflowContext));
+}
+```
+
+`permittedAssistance` keeps its shipped name, signature and return type, so **every existing
+call site is correct without edit** (`DrillScreen.svelte:380,851,855,1060-1061,1148`) and gains
+the context ceiling for free. `pointwiseMin` is per-field under the domain order in the first
+table of this section, with `boardLighting`'s `["legal", T]` range semantics applied after the
+minimum so the floor cannot be minimised away. Criterion 5's non-vacuity is now *computable*
+rather than hoped for: against the HEAD body under a permissive access (`solo`,
+`deliveryOpen: true`, not seated), the composed function differs for `match` (nine fields),
+`academy` (three fields) and `onramp` (three fields), and agrees for the other five — which is
+correct, because those five carry the full ceiling.
+
+**`AssistanceContext.sessionKind` is removed at this landing.** With `workflowContext` read,
+`sessionKind` is the last declared-and-unread field and it is strictly derivable
+(`deriveWorkflowContext`); keeping it is the [[D523]] two-sources-one-value shape that compiler
+rule 0 exists to refuse. Closing D307(a) means the struct has **zero** unread fields, not one.
+
 ### §4. Presets — the candidate five
 
 Promoted from R3 (`tools/r3-presentation-harness/workflow-contract.ts:29-60`) with module
@@ -210,6 +366,101 @@ exactly as in R3 — not a delta, restated because `guided` gained a post-commit
 11 registered ids exactly — every module reachable through some preset or the explicit
 surfaces, none dangling (criterion 6).
 
+### §4a. The config projection — the literal nine fields for all five presets
+
+**Added 2026-08-24 ([[D971]]).** Compiler rule 4 says the compiled config *"starts from the
+preset's config projection"*. This section is that projection. `PresetDeclaration` gains one
+field, and the shipped file already has the other four:
+
+```ts
+export interface PresetDeclaration {
+  readonly id: PresetId;
+  readonly label: string;
+  readonly promise: string;
+  readonly modules: readonly ModuleId[];
+  readonly config: Omit<AssistanceConfig, "version">;   // NEW — §4a; version is stamped 4 by the compiler
+  readonly validation: "candidate";
+}
+```
+
+`version` is deliberately **not** in the projection. A preset does not choose a schema version;
+the compiler stamps `version: 4` on its output (§5), so a preset row cannot express a migration
+and `assertPresetFoundation` has one fewer thing to police.
+
+**The table.** Rows in `PRESET_IDS` order (`presets.ts:10-12`); every cell is a literal member
+of the shipped `AssistanceConfig` union (`assistance.ts:4-15`):
+
+| preset | `markers` | `guided` | `humanSplit` | `corpus` | `voice` | `spoken` | `boardLighting` | `arrows` | `ambient` |
+|---|---|---|---|---|---|---|---|---|---|
+| `quiet` | `off` | `off` | `off` | `off` | `authored` | `off` | `legal` | `off` | `off` |
+| `guided` | `live` | `live` | `off` | `off` | `authored` | `off` | `sight` | `sight` | `on` |
+| `theory_only` | `off` | `off` | `off` | `off` | `authored` | `off` | `legal` | `off` | `on` |
+| `support` | `live` | `off` | `off` | `off` | `authored` | `off` | `sight` | `sight` | `on` |
+| `analysis` | `live` | `off` | `on_request` | `on_request` | `authored` | `off` | `evidence` | `evidence` | `on` |
+
+`quiet`'s row is `SILENT_ASSISTANCE` minus `version` (`assistance.ts:17-19`), byte-for-byte.
+That is not a coincidence and it is the check worth keeping: the silence default (`design/05`
+§3a) and the Quiet preset must be the same nine values or one of them is wrong.
+
+**Every cell is derived by the same rule as §3.2's clamp**, applied to the preset's own module
+list instead of the context's ceiling:
+
+> A preset's projection of field `F` is **the highest value of `F` that some module in
+> `preset.modules` drives**, floored at the rules floor. If no module in the preset drives `F`,
+> the projection is `F`'s floor. The rule ranges over the **seven module-driven fields** only;
+> the two provider channels `voice` and `spoken` sit outside it by [[D619]] (§3.2's split) and
+> are pinned at their floor in every preset.
+
+Field by field, with the modules that force each non-floor value:
+
+- **`markers`** — `live` wherever the preset admits a module that renders *without* a learner
+  request after the commit: `postcommit_nudge` (post_commit, proactive) in `guided` and
+  `support`, `structure_nudge` (post_commit, proactive) in `guided`, `review_map` (review,
+  automatic) in `analysis`. `quiet` and `theory_only` admit no such module — `theory_breadcrumb`
+  is `on_request` — so both stay `off`, which is §3a's silence default holding by derivation
+  rather than by assertion.
+- **`guided`** — `live` only in the `guided` preset, the only one carrying `structure_nudge`.
+  **This is a derived consequence worth naming rather than discovering in a fixture:
+  `analysis` projects `guided: "off"`.** Analyze does not carry `structure_nudge` (§4's module
+  table, unchanged), and named-pattern guidance is a *guidance* channel, not an evidence
+  channel; Analyze's width is `full_inspector`, not more nudging. A learner who wants both sets
+  `guided: "live"` by hand and rule 4's stored-value supremacy keeps it.
+- **`humanSplit`, `corpus`** — `on_request` only in `analysis`. Both switches open the **raw
+  evidence inspector** (`DrillScreen.svelte:851-857`), which is [[D619]]'s *"explicit analysis
+  inspector for raw evidence/providers"* and nothing else's. `theory_only` carries
+  `theory_breadcrumb`, which does consume `human.explorer.population@1` — but it renders it as
+  one cited pointer under a 1-fact/60-word cap (`learner-modules.md` §4.7), which is the
+  module's own rendering and not the raw-counts switch. The two layers meet only in the
+  compiler (§5); a module's source access is never a config field.
+- **`voice`** — `authored` in **all five**. Persona voice selects an LLM provider, and D619's
+  governing sentence is that presets *"do not ask a nontechnical player to toggle
+  Stockfish/Maia/classifier sources"*. A provider is not an amount of help, so no preset moves
+  it; a learner who has turned it on keeps it through rule 4 in every preset.
+- **`spoken`** — `off` in all five, for the same reason plus one more: `spoken` is an output
+  channel over content already admitted by the other eight fields, and a preset that silently
+  started speaking would be the surprise §7's footer exists to prevent. Stored value survives.
+- **`boardLighting`** — `legal` floor always. `sight` where a preset admits a module with
+  `maxMarks > 0` (`sight_on_request` 6, `structure_nudge` 4, `threat_radar` 4, `postcommit_nudge`
+  2, `compare_coach` 2, `guided_hint` 1 — `learner-modules.md` §4). `evidence` only in
+  `analysis`, via `full_inspector`. `theory_only`'s modules declare `maxMarks: 0`/`—`, so it
+  stays at `legal` — which is exactly its promise (*"no evaluation, no candidates, no line"*)
+  arriving as a value rather than as copy.
+- **`arrows`** — `off` where every admitted module declares `maxArrows: 0` (`quiet`:
+  `rules_floor` 0; `theory_only`: + `theory_breadcrumb` 0). `sight` where some module declares
+  arrows (`guided`, `support`). `evidence` in `analysis` (`full_inspector` 8, `review_map` 2).
+- **`ambient`** — `on` wherever the preset admits at least one `on_request` module, because the
+  ambient control *is* the opener for the request channel (`DrillScreen.svelte:845`). `quiet`
+  admits only `rules_floor`, whose initiative is `ambient` and whose seat is `board_input`:
+  there is nothing to open, so an opener would be an affordance that opens an empty region.
+  Quiet's *"unless you ask"* is asked through the preset pill (§7), not through an empty drawer.
+
+**Where a projection meets a clamp, the clamp wins — always, and by construction.** The `∩`
+algebra is settled (`design/05:230-232`, *"every term only narrows"*); a preset can never raise
+a ceiling. Two worked instances, because they are the ones an implementer will hit first:
+`analysis` in `academy` cannot arise at all (`academy.allowedPresets` excludes it — a typed
+refusal, rule 1), and `quiet` in `match` compiles `boardLighting: "legal"` from both terms
+independently, which is the permanent [[D493]] fixture.
+
 ### §5. The compiler
 
 One pure function, no I/O, no clock (new, `presets.ts`):
@@ -229,7 +480,7 @@ export interface CompiledAssistance {
   readonly suppressed: readonly SuppressionRecord[];  // every removal, with its removing term
 }
 export interface SuppressionRecord {
-  readonly subject: ModuleId | keyof AssistanceConfig;
+  readonly subject: ModuleId | keyof Omit<AssistanceConfig, "version">;   // amended: `version` is not suppressible
   readonly by: "context_ceiling" | "access" | "availability" | "stored_choice";
 }
 ```
@@ -244,7 +495,12 @@ membership):
    sources for one value with no equality check is the [[D523]] class in a signature).
 1. `preset.modules ∩ context.moduleCeiling` — a preset not in `allowedPresets` is refused
    before compilation with a typed error; the UI never offers it (criterion 2).
-2. `∩ access` — the existing `permittedAssistance` clamps, now context-aware (§3.1);
+2. `∩ context ∩ access` — **amended 2026-08-24**: the compiler calls `contextClamp(context)`
+   and `accessPermission(access)` **separately** (§3.2), takes the pointwise minimum, and
+   labels each suppression by whichever term is strictly lower — `"context_ceiling"` when the
+   context clamp is lower or the two tie, `"access"` when access is strictly lower. Splitting
+   the call is what keeps `SuppressionRecord.by` truthful now that `permittedAssistance`
+   composes both; the footer's sentence (§7) is only as honest as this label.
    `reviewing` widens exactly as it does today, nothing else does.
 3. `∩ availability` — a module whose declared sources are absent stays **in** `modules` and
    renders its declared `emptyBehavior` (`silent | stated_absence | unavailable_source`);
@@ -252,7 +508,8 @@ membership):
    `"browser"` or `"off"`), never honesty states. Absence is stated, never simulated
    (invariant 5).
 4. `∩ stored` — **stored explicit choices beat preset defaults, in both directions.** The
-   compiled `config` starts from the preset's config projection and is overridden per-field by
+   compiled `config` starts from the preset's config projection — **`presetDeclaration(preset).config`,
+   the literal nine values in §4a's table** — and is overridden per-field by
    the learner's stored v4 values, except where a `configClamp` term narrows below the stored
    value (a clamp is a ceiling; a stored "off" always survives — with the single ruled
    exception of `boardLighting`, which never compiles below `"legal"`, §3). Applying a preset **never
@@ -270,6 +527,66 @@ A preset **filters modules and never touches eligibility** — *"the preset alge
 modules, module eligibility filters events"* (`assistance-surface-taxonomy.md:521`, the D660
 bar as carried by `learner-modules.md:267-284`). The compiler's inputs contain no event,
 evidence-packet, or eligibility type; its signature is the enforcement (criterion 6).
+
+#### §5.1 What compiles what, and where it lives — closing [[D985]]
+
+**Added 2026-08-24.** `compileAssistance` is cited by `rfc/theming.md:383`,
+`rfc/review-map.md:384` and `planning/theming/rfc-derivation.md:275` and exists in **zero lines
+of code**: at HEAD the only occurrence in the tree is this RFC's own §5 code block. That is the
+moved/absent-target class, and it happened because §5 declared a signature without ever naming
+a file, an export surface or a caller. Named now, so a future citation resolves:
+
+| symbol | file | exported by | called by |
+|---|---|---|---|
+| `compileAssistance` | `packages/runtime/src/presets.ts` | `packages/runtime/src/index.ts` (the existing barrel that already exports `PRESET_IDS`, `deriveWorkflowContext`, `workflowContextPolicy`) | the web client only, at the one seat in §5.2 |
+| `contextClamp` | `packages/runtime/src/presets.ts` — beside `WORKFLOW_CONTEXT_POLICIES`, whose `configClamp` field it reads | runtime barrel | `permittedAssistance`; `compileAssistance` rule 2 |
+| `accessPermission` | `packages/runtime/src/assistance.ts` — the HEAD `permittedAssistance` body, renamed | runtime barrel | `permittedAssistance`; `compileAssistance` rule 2 |
+| `permittedAssistance` | `packages/runtime/src/assistance.ts` — becomes the pointwise minimum (§3.2) | runtime barrel (unchanged) | every shipped call site, unedited |
+| `PRESET_DECLARATIONS[].config` | `packages/runtime/src/presets.ts:31-38` — the new §4a field on the shipped rows | already exported | `compileAssistance` rule 4 |
+
+**One caller, and it is client-side.** `compileAssistance` is a pure function over
+`(preset, context, access, stored, availability)`; three of those five live in the browser
+(`stored` is `localStorage`, `preset` is `localStorage`, `availability` is the already-fetched
+`/capabilities` payload), so compiling on the server would mean shipping localStorage to it.
+The compiler therefore lives in `packages/runtime` (so the server *can* call it, and so
+`assertPresetFoundation`'s import-time checks cover it) and is **called from the web client**.
+The server continues to build `AssistanceContext` and to enforce its own refusals server-side —
+the compiler is not a security boundary and this RFC does not claim it as one; `permittedAssistance`
+and the shipped route refusals remain that.
+
+#### §5.2 The one seat, and the two orphaned functions — [[D971]]'s live half
+
+`apps/web/src/lib/assistance-preference.ts:20-39` ships `loadWorkflowPreset` and
+`saveWorkflowPreset` against the `tabiya.workflow.v1.*` grammar §6 specifies, complete with the
+`allowedPresets` validation and the fall-to-default posture. **Nothing calls either one outside
+`assistance-preference.test.ts`.** The storage half of §6 landed and the reading half did not,
+which is why the owner can open the app and find no presets: the value exists and nothing asks
+for it.
+
+The seat is `DrillScreen.svelte`, which already owns every consumer of the nine fields and
+already derives the context three times over — `assistanceProfile({ sessionKind,
+feedbackPolicy, liveKind })` at `:378` (into `assistanceContext.workflowContext`), `:396` (the
+save path) and `:766` (the load path), with `permittedAssistance(assistanceContext)` at `:379`.
+The context is therefore already in hand at the seat; the preset is not. It becomes:
+
+```ts
+const context   = deriveWorkflowContext({ sessionKind, feedbackPolicy, liveKind });
+const preset    = loadWorkflowPreset(context, storage());          // ← the orphan, called
+const compiled  = compileAssistance({ preset, context, access: assistanceContext,
+                                      stored: loadAssistance(context, storage()),
+                                      availability });
+```
+
+`compiled.config` replaces the `assistance` object the nine switches read; `compiled.modules`
+and `compiled.suppressed` are what §7's pill and footer render. Choosing a preset calls
+`saveWorkflowPreset(context, next, storage())` — the second orphan — and re-derives; it writes
+`tabiya.workflow.v1.*` and never `tabiya.assistance.v1.*` (rule 4). The existing per-field
+switches keep writing `tabiya.assistance.v1.*` through `saveAssistance`, unchanged, which is
+what makes stored-value supremacy observable rather than asserted.
+
+The three repeated `assistanceProfile({...})` calls collapse into the single `context`
+`$derived` above at the same edit — three copies of one derivation is the [[D523]] shape, and
+the compiler's rule 0 equality check would otherwise be comparing a value against itself.
 
 ### §6. Persistence — where the choice lives
 
@@ -307,8 +624,10 @@ technical source preferences."* Concretely:
   and the suppression stated when it is (*"Support isn't available in a match"* — rendered
   from `SuppressionRecord`, which is what the record type exists for). Invariant 5 applied to
   configuration itself.
-- **Settings** keeps the six-profile grid and gains the seventh context; raw switches remain
-  the Advanced surface per design/05 — the pill is the ordinary view.
+- **Settings** keeps the per-context grid, which already ships all **eight** contexts with
+  labels (`AssistanceSettings.svelte:19`, including `campaign: "Campaign"`); raw switches remain
+  the Advanced surface per design/05 — the pill is the ordinary view. (The drafted *"gains the
+  seventh context"* was already stale at this amendment; the grid gained both.)
 - **The validation gate** (the [[D906]](3) budgets→backstops shape; R3's exit is owner use,
   `design/research/evidence-presentation.md:5`; [[D649]]: validation is the owner's own use):
   every entry in the preset table and the context table carries `validation: "candidate"`.
@@ -316,6 +635,32 @@ technical source preferences."* Concretely:
   `planning/exploration/log.md` after real sessions; the lint in criterion 8 fails any entry
   that drops the marker without a ruling citation. Acceptance of this RFC does **not** freeze
   the names — it freezes the algebra, the types, and the ceilings' ruled floors (§9).
+
+#### §7.1 What the preset UI can now be built from — and what this amendment does NOT decide
+
+**Added 2026-08-24 ([[D971]]).** This amendment pins values, not pixels. The pill and the footer
+belong to the client surface (`play-composition` Discharge D1; the theming lane owns their
+appearance), and nothing below chooses a layout, a control shape, a colour, a viewport
+breakpoint or a copy voice. What it does do is remove every "we cannot render this because the
+value does not exist" blocker. Enumerated, so the surface author can check the list rather than
+re-derive it:
+
+| the surface needs | it reads | now pinned at |
+|---|---|---|
+| which presets to offer in this context | `workflowContextPolicy(context).allowedPresets` | shipped, `presets.ts:41-50` |
+| which one is active on entry | `loadWorkflowPreset(context, storage)` | shipped, `assistance-preference.ts:20-35`; §5.2 gives it its caller |
+| the pill's text | `presetDeclaration(preset).label` | shipped, `presets.ts:31-38` |
+| the footer's text when nothing is suppressed | `presetDeclaration(preset).promise` | shipped, `presets.ts:31-38` |
+| the footer's text when something is suppressed | `compiled.suppressed` — one `{subject, by}` per removal | §5 rule 2's `by` labelling, amended above |
+| what the board, rail and inspector actually render | `compiled.config`, nine fields | **§4a's projection table ∩ §3.2's clamp table** — the two things that did not exist |
+| whether an option must be absent rather than disabled | `allowedPresets` membership, enforced by the rule-1 typed refusal | criterion 2, one browser fixture per context |
+| whether the learner's own switch survives a preset change | rule 4, stored-value supremacy in both directions | criterion 4 |
+
+**Still not decided here, with its owner named:** the pill's and footer's visual form, seating
+and motion (`rfc/play-composition.md` Discharge D1 → the Phase-4 composition work, plus
+`rfc/theming.md`); the *wording* of labels and promises, which ship as `validation: "candidate"`
+and are the owner's to reshape in play (Discharge D1 of this RFC); and the hint-distance rung
+control, which is not a field of v4 at all (§9a).
 
 ### §8. Seams
 
@@ -338,6 +683,12 @@ it ships that default itself and wiring rebases to consume `ContextContract`. Ei
 on-ramp default exists exactly once (the [[D523]] class: a grammar stated once and assumed
 elsewhere is how this fails — criterion 10 asserts single ownership at landing). Bot-policy's
 `session-controller.ts` member is disjoint; no file-level conflict beyond ordinary rebase.
+
+**Resolved 2026-08-24: wiring landed first, and both sources now exist.** `PROFILE_DEFAULTS`
+ships (`assistance-preference.ts:6-15`) alongside `WORKFLOW_CONTEXT_POLICIES`
+(`presets.ts:41-50`), so the "exactly once" this section promised is currently *twice*.
+Criterion 10, amended, resolves it by deletion rather than by agreement: §4a derives the
+`onramp` value, so the constant has nothing left to own.
 
 #### §8.3 Three role vocabularies, one pinned mapping
 
@@ -368,34 +719,63 @@ is cited, none is re-argued:
 | Match: byte-identical disclosure for both players | `design/03:93-98` |
 | Relayed marks are attribution-governed, not rung-governed | `design/05:199` |
 
+#### §9a. The projection is nine fields, and a tenth is not assumed
+
+**Added 2026-08-24.** `AssistanceConfig` ships `version: 4` with **nine** fields
+(`assistance.ts:4-15`). `rfc/hint-distance.md` proposes a tenth, `hintDistance`, taking
+`AssistanceConfig` to v5 and *"`configClamp` retyped per field in one line"* — and that RFC was
+**returned to research** (`planning/rfc-drafting-queue.md:1250`, `85a0584`). §4a and §3.2 are
+therefore written over nine fields exactly, with no reserved slot and no forward-compatible
+shim: a field that does not exist cannot be projected, and inventing its values here would be
+the same defect [[D971]] records, one version later.
+
+The seam, so the successor does not have to guess: when `hintDistance` lands, it takes **one new
+column in §4a's table and one in §3.2's**, both derived by the rules already stated there
+(`guided_hint`'s staged ceiling drives the projection; a context's `moduleCeiling` membership of
+`guided_hint` drives the clamp). `rfc/enforced-clocks.md` criterion 13 clamps that column per
+context under [[D1290]] — *"a ceiling term per context, not a global clamp"* — which is exactly
+a `configClamp` cell and needs nothing new from this document. Until then, criterion 13 is
+honestly red ([[D1295]]) and this RFC claims nothing about it.
+
 ## Deviations from design
 
 None. The algebra is quoted verbatim from `design/05:230-232`; the plan row's
 `preset ∩ ceiling ∩ role ∩ availability` phrasing is treated as the paraphrase it is
 (role ⊂ honesty/access), which is conformance, not deviation. The one vocabulary design does
 not contain — the seventh context `academy` — extends `ASSISTANCE_PROFILES`, which is code,
-not design tier; design/03's Academy surface is its anchor.
+not design tier; design/03's Academy surface is its anchor. **Amended 2026-08-24:** the same
+sentence now covers the eighth, `campaign`, whose anchor is `design/06-campaign.md` by way of
+`rfc/campaign-core.md` §5. §4a's projections and §3.2's clamps are values chosen under
+`design/05:230-232`'s narrowing algebra, not extensions of it — no term is widened, and no
+preset row can widen one by construction (§4a's closing paragraph). Still none.
 
 ## Acceptance criteria
 
-Unit note: criteria 1–3 and 6 quantify over the full preset × context cross product —
-**5 × 7 = 35 pairs**, of which the `allowedPresets` tables admit **24** (position 5 + pack 4 +
-imported 4 + match 1 + stream 4 + academy 3 + onramp 3; the other 11 must be refused,
-criterion 2 counts them).
+Unit note **(amended 2026-08-24, [[D971]] — the drafted 24/11 over seven contexts is struck)**:
+criteria 1–3 and 6 quantify over the full preset × context cross product. Per [[D1240]] the grid
+is asserted as a **derivation**, never as a hand-count: the admitted set is
+`WORKFLOW_CONTEXT_POLICIES.flatMap(c => c.allowedPresets.map(p => [c.id, p]))` and the refused
+set is its complement in `WORKFLOW_CONTEXTS × PRESET_IDS`. At HEAD that derivation yields
+**5 × 8 = 40 pairs, 28 admitted, 12 refused**, which is byte-identical to the numbers
+`assertPresetFoundation` already enforces at import time (`presets.ts:91-94`). The two integers
+are **drift tripwires only** — a fixture may not restate them as its own arithmetic.
 
-1. **Pointwise narrowing, exhaustively.** For all 24 admitted pairs:
+1. **Pointwise narrowing, exhaustively.** For every admitted pair:
    `compiled.modules ⊆ preset.modules` and `compiled.modules ⊆ context.moduleCeiling`, and
-   for every `AssistanceConfig` field the compiled value ≤ the clamp under the permission
-   order. Flip-a-constant check: widening any single ceiling entry makes exactly the fixtures
-   naming that entry fail.
-2. **Refusal is typed and total.** All 11 disallowed pairs produce the typed refusal, and the
+   for every `AssistanceConfig` field the compiled value ≤ the clamp under the per-field domain
+   order pinned in §3.2's first table. Flip-a-constant check: widening any single ceiling entry
+   makes exactly the fixtures naming that entry fail.
+2. **Refusal is typed and total.** Every refused pair produces the typed refusal, and the
    pill menu for each context offers exactly `allowedPresets` — a browser fixture per context
    asserts the absent options are absent (discharging, strengthened from one fixture to one
    per context, the negative-fixture obligation from `assistance-controls.md:697-701`).
 3. **The rules floor is unexpressible-off.** Type level: `AssistancePermission` includes
-   `"legal"` and no compiler path emits `boardLighting: "off"`. Test level: all 24 compiled
-   outputs have `boardLighting ∈ {"legal","sight","evidence"}` and `modules ∋ rules_floor`;
+   `"legal"` and no compiler path emits `boardLighting: "off"`. Test level: every compiled
+   output has `boardLighting ∈ {"legal","sight","evidence"}` and `modules ∋ rules_floor`;
    the D493 regression fixture (quiet × each context ⇒ `"legal"` exactly) is permanent.
+   **The type-level arm is red at HEAD and must be made green by this landing**:
+   `assistance.ts:21` ships four members and the fifth, `"legal"`, does not exist, so the
+   §3.2 `match` row is currently inexpressible.
 4. **Stored-value supremacy, both directions.** Fixture A: stored `guided: "off"`, apply
    preset `guided` ⇒ compiled `guided: "off"` and `tabiya.assistance.v1.*` byte-unchanged.
    Fixture B: stored `arrows: "sight"` in a context whose clamp is `locked_off` ⇒ compiled
@@ -406,8 +786,12 @@ criterion 2 counts them).
    the census test); the fixture matrix over
    `sessionKind × feedbackPolicy × liveKind ∈ {—, match, stream, academy}` matches on both
    sides; and `permittedAssistance` returns a **different** permission set than the HEAD body
-   for at least `match`, `stream`, and `onramp` inputs — recorded as before/after pairs so
-   the criterion measures a change, not a run ([[D444]]/[[D482]]).
+   — **amended 2026-08-24**: for `match`, `academy` and `onramp` under a fixed permissive
+   access (`solo`, `deliveryOpen: true`, `seatedInContest: false`, `reviewing: false`), which is
+   what §3.2's table actually produces. The drafted `stream` is **struck**: `stream` carries the
+   full `configClamp`, so demanding a difference there would have demanded a wrong answer — the
+   [[D444]] guard pointed at a cell that must not move. Recorded as before/after pairs, and the
+   agreeing five contexts are recorded too, so the criterion measures a change and its boundary.
 6. **Module closure and eligibility isolation.** Set equality:
    `⋃ preset.modules = the 11 registered ids` (fails when a module registers without a
    home or a preset names a ghost). Type level: `presets.ts` imports no eligibility, event,
@@ -430,18 +814,60 @@ criterion 2 counts them).
    decision reopens by its own terms.
 10. **On-ramp default has one owner.** At landing, exactly one source defines the on-ramp
     `guided` default (grep-census over `PROFILE_DEFAULTS`/`ContextContract`), whichever
-    landing order §8.2 resolved to.
+    landing order §8.2 resolved to. **Amended 2026-08-24 — the census has a determinate
+    answer now, and it is a deletion.** Both sources exist at HEAD:
+    `PROFILE_DEFAULTS.onramp = { ...SILENT_ASSISTANCE, guided: "live" }`
+    (`assistance-preference.ts:13`) and `WORKFLOW_CONTEXT_POLICIES` `onramp.defaultPreset =
+    "guided"` (`presets.ts:48`). §4a's projection of the `guided` preset is
+    `SILENT_ASSISTANCE` with `guided: "live"` **plus** `markers: "live"`, `boardLighting:
+    "sight"`, `arrows: "sight"`, `ambient: "on"` — so the wiring RFC's constant is the
+    projection's `guided` field and nothing else, i.e. a strict subset that is now derived.
+    `PROFILE_DEFAULTS` is therefore **deleted** at this landing and `loadAssistance`'s fallback
+    becomes `SILENT_ASSISTANCE` for every context, with the per-context default arriving
+    through `compileAssistance` where it belongs. The criterion passes by there being one
+    source, not two agreeing ones.
 11. **Academy stops falling through.** `deriveWorkflowContext({liveKind: "academy", ...})`
     = `"academy"`, with the pre-fix behavior (fall-through to the run's `sessionKind`
-    profile) as the named regression the fixture kills.
+    profile) as the named regression the fixture kills. **Shipped** (`presets.ts:107-116`);
+    the fixture is the part still owed.
+12. **The projection and the clamp are transcribed, not invented.** *(New, [[D971]].)*
+    `PRESET_DECLARATIONS[i].config` is deep-equal to §4a's table row for row, and
+    `WORKFLOW_CONTEXT_POLICIES[i].configClamp` to §3.2's, asserted over all five and all eight
+    with **no `Partial`** — a missing key is a type error, not a default. Both tables are then
+    re-derived from the module bindings (§3.2's and §4a's derivation rules) by a second,
+    independent assertion, so a hand-edited cell that no module justifies fails even if both
+    literal tables agree with each other.
+13. **`quiet` is the silence default, byte-for-byte.** *(New, [[D971]].)*
+    `presetDeclaration("quiet").config` deep-equals `SILENT_ASSISTANCE` minus `version`
+    (`assistance.ts:17-19`). Regression named: if either moves independently, `design/05` §3a's
+    silence default and the Quiet preset have quietly forked.
+14. **The clamp is read, and the two unread fields are gone.** *(New, [[D971]], closing
+    [[D307]](a).)* `permittedAssistance(context)` equals
+    `pointwiseMin(accessPermission(context), contextClamp(context.workflowContext))` over the
+    full input matrix; `AssistanceContext` declares no field the runtime does not read
+    (`sessionKind` removed, §3.2); and a lint asserts that no exported symbol in
+    `assistance.ts`/`presets.ts` takes a parameter it never references. Non-vacuity is
+    criterion 5's before/after pairs.
+15. **The orphans have a caller, and the symbol exists.** *(New, [[D971]]/[[D985]].)* A
+    grep-census asserts `loadWorkflowPreset` and `saveWorkflowPreset` each have ≥1 non-test
+    caller, and that `compileAssistance` has ≥1 non-test caller and ≥1 definition — the census
+    that would have caught the phantom. Paired negative control: the census fails when the
+    `DrillScreen.svelte` seat (§5.2) is reverted.
+16. **The preset UI renders from the compiled values only.** *(New, [[D971]].)* The pill and
+    footer read `compiled` and never `PRESET_DECLARATIONS` directly; a fixture in `match`
+    asserts the footer states the suppression (`SuppressionRecord{by: "context_ceiling"}`)
+    rather than the preset promise, and a fixture in `position` asserts the reverse. This is
+    criterion 7's D971 half: it fails if the surface renders a promise the config does not keep.
 
 ## Discharges
 
 | id | the obligation | owner | recorded when discharged | discharged |
 |---|---|---|---|---|
-| D1 | Owner-use validation of every `candidate` entry (names, labels, promises, defaults, allowedPresets, the Support-offering set) — confirmed/renamed/re-tabled by logged rulings after real sessions; until then candidates ship as candidates | OWNER | the log entries recording the rulings; the commit dropping each `candidate` marker cites its ruling | |
+| D1 | Owner-use validation of every `candidate` entry (names, labels, promises, defaults, allowedPresets, the Support-offering set — **and, from 2026-08-24, the 45 projection cells of §4a and the 72 clamp cells of §3.2**, which are derived from shipped module contracts but are still candidates the owner reshapes in play) — confirmed/renamed/re-tabled by logged rulings after real sessions; until then candidates ship as candidates | OWNER | the log entries recording the rulings; the commit dropping each `candidate` marker cites its ruling | |
 | D2 | Server-side per-learner workflow persistence (the personalization era's store) — deferred; localStorage is v1's honest scope. The future RFC claims its own migration position (behind `bot-policy` at HEAD ordering) | `planning/exploration/plan.md` | that RFC's registration | |
 | D3 | Campaign as an eighth context — `design/06`'s encounter rules compose this contract (a campaign encounter is a `ContextContract` with encounter-authored ceilings); nothing here forecloses it and nothing here builds it | `planning/exploration/plan.md` | the campaign RFC's registration | discharged 2026-08-22 — `rfc/campaign-core.md` registered at `5b52698`, accepted same day; its §5 registers `campaign` per this contract's §3 invariant with the seeded contract row |
+| D4 | **The tenth field.** `hintDistance` gets one column in §4a's projection table and one in §3.2's clamp table, both derived by the rules already written there, plus the v4→v5 migration arm. **Genuinely blocked, blocker named:** `rfc/hint-distance.md` is *returned to research* (`planning/rfc-drafting-queue.md:1250`, `85a0584`), so the field's domain and its ordering do not exist to project. Nothing here reserves a slot or shims one (§9a) | claude — `rfc/hint-distance.md`'s author | that RFC's landing commit, which adds both columns in the same commit per the completion protocol | |
+| D5 | **The `compiled.modules` consumer.** §4a and §3.2 make `compiled.config` fully renderable today — every one of its nine fields has a shipped consumer in `DrillScreen.svelte`. `compiled.modules` has **none**: zero module ids exist in production code at HEAD. **Genuinely blocked, blocker named:** `rfc/learner-modules.md`'s implementation (accepted, in flight). The preset pill, the footer's promise sentence and the whole config half do **not** wait on it — they read `compiled.config` and `compiled.suppressed` — so this discharge blocks module rendering only, and is not a reason to defer the surface | codex — the `rfc/learner-modules.md` implementation lane | the commit registering the eleven module ids in production | |
 
 **Discharged BY this RFC's landing** (the SHAs are written into the counterparties' tables in
 the landing commit, per their own "recorded when discharged" cells): `learner-modules.md`
@@ -472,7 +898,79 @@ the table absorbs the ruling without re-opening the RFC.
   `AssistanceContext.role` + `solo`, `EvidenceRole` + `author`/`operator`); §8.3 pins the
   injection mapping; unification into one vocabulary is real future work nobody owns yet.
 
+### Proposed by the 2026-08-24 amendment
+
+Written **unnumbered** per [[D1130]] as amended by [[D1354]] — *proposed; id assigned at
+landing; head was D1434 at drafting*. Each row's durable home is the specification section
+named in its own text, never this list.
+
+- **proposed** — 🐞 **`assertPresetFoundation` runs at import time and checks nothing about the
+  config.** `presets.ts:97` calls it as a module side effect and it validates ids, module
+  ghosts, module-union closure, preset sets and the 28/12 grid — but `PresetDeclaration` has no
+  `config` field to validate and `WorkflowContextPolicy` has no `configClamp`, so the two
+  vocabularies most likely to drift are the two the startup assertion cannot see. Home: §4a's
+  `PresetDeclaration` shape and §3.2's `ConfigClamp`; enforced by criterion 12.
+- **proposed** — 🐞 **the `campaign` workflow context is unreachable from
+  `deriveWorkflowContext`.** `RunSessionKind` is `"pack" | "position" | "imported"`
+  (`types.ts:36`) and `LiveSessionKind` is `"stream" | "academy" | "match"` (`:38`), so the
+  function's final `return input.sessionKind` can never yield `"campaign"` and no branch
+  produces it (`presets.ts:107-116`). The eighth context is registered, defaulted, ceilinged
+  and settings-labelled, and nothing can derive it. Either campaign runs pass the context
+  explicitly (in which case `deriveWorkflowContext` is not the single derivation criterion 5
+  asserts) or campaign encounters silently compile as `pack`/`position`. Home: §3.1; owner:
+  `rfc/campaign-core.md`'s implementation lane, which registered the context.
+- **proposed** — 🐞 **`PROFILE_DEFAULTS` is a second per-context default authority and outlives
+  its reason.** `assistance-preference.ts:6-15` maps all eight contexts to full
+  `AssistanceConfig` values, seven of them `SILENT_ASSISTANCE` and one hand-written; §4a
+  derives the same information from preset membership. Criterion 10 now resolves by deleting
+  it. Home: §4a and criterion 10.
+- **proposed** — 🐞 **`AssistanceSettings.svelte` is the 54-control raw matrix the Motivation
+  section names as the negative baseline, and it shipped an eighth column.** Nine raw switches
+  × eight contexts = 72 controls in one grid (`AssistanceSettings.svelte:60-73`), with no
+  preset anywhere in the file — and a repo-wide grep for `preset` over `*.svelte` returns
+  **zero hits**, which is the owner's *"where are the presets?"* measured. Home: §7.1; the
+  surface work is `play-composition` Discharge D1's, not this document's.
+- **proposed** — 📊 **the preset config projection reproduces the one hand-written default the
+  wiring RFC shipped.** `guided`'s projection carries `guided: "live"`, which is exactly
+  `PROFILE_DEFAULTS.onramp`'s single deviation from silence, and `onramp.defaultPreset` is
+  `"guided"`. A derivation that independently reproduces a value chosen by hand three days
+  earlier is the cheapest evidence available that the derivation rule is the right one. Home:
+  §4a's derivation rule and criterion 10.
+
 ## Changelog
+
+- 2026-08-24 (**amendment, [[D971]]** — the D971 blocker discharged whole; also touches
+  [[D985]], [[D307]](a), [[D619]], [[D1428]]): **(1) §4a is new** — the literal nine-field
+  `AssistanceConfig` projection of all five presets, 45 cells, each a member of the shipped v4
+  union, plus the single derivation rule that produces them from the presets' own module lists
+  and the per-field module bindings that rule reads. `quiet` is `SILENT_ASSISTANCE` byte-for-byte
+  (criterion 13). **(2) §3.2 is new** — the literal nine-field `configClamp` for all eight
+  contexts, 72 cells, derived from the shipped `moduleCeiling` by the same rule, preceded by the
+  per-field domain orders that give the permission tokens meaning. The drafted sentence *"carries
+  the same ceilings"* is struck, and `Partial` is struck from `ConfigClamp` — a clamp with
+  optional keys cannot be checked for completeness, and `keyof AssistanceConfig` wrongly admitted
+  `version`. **(3) `permittedAssistance` is defined** as the pointwise minimum of
+  `accessPermission` (the HEAD body, renamed) and `contextClamp` (§3.2), keeping its name,
+  signature and every unedited call site while finally *reading* `workflowContext`; criterion 5's
+  non-vacuity becomes computable, and its drafted `stream` arm is struck as a demand for a wrong
+  answer. `AssistanceContext.sessionKind` is removed, so D307(a)'s two unread fields become zero.
+  **(4) §5.1/§5.2 are new** — what compiles what and where it lives, with the file, the export
+  barrel and the single client caller named, closing [[D985]]'s phantom; and the seat that lands
+  the two orphaned functions `loadWorkflowPreset`/`saveWorkflowPreset`, which ship complete at
+  `assistance-preference.ts:20-39` with no non-test caller. **(5) The context axis is corrected
+  from seven to eight** everywhere — `campaign` shipped on 2026-08-22 discharging D3 and the
+  arithmetic was never re-derived — and the acceptance grid from **24/11 to 28/12**, now asserted
+  as a derivation over `WORKFLOW_CONTEXT_POLICIES` with the integers as drift tripwires only
+  ([[D1240]]). This matches `assertPresetFoundation` (`presets.ts:91-94`) exactly. **(6) Five
+  new criteria** (12–16): table transcription plus independent re-derivation, the silence-default
+  identity, the read-clamp/no-unread-field lint, the non-test-caller census that would have caught
+  the phantom, and the compiled-truth fixture pair. **(7) §7.1 states exactly what the preset UI
+  can now be built from** and what it still cannot, with owners named; **§9a refuses the tenth
+  field** — `hint-distance` is returned to research, so `hintDistance` is not projected, not
+  reserved and not shimmed, and its seam is Discharge D4. **(8) Two Discharge rows added** for the
+  only two genuinely blocked parts of the full ask (D4 the tenth field, D5 the
+  `compiled.modules` consumer); neither blocks the config half or the surface. Five proposed
+  ledger rows, unnumbered per [[D1130]]/[[D1354]].
 
 - 2026-08-22 (cross-review, in place): **(1)** the acceptance grid recounted from this RFC's
   own `allowedPresets` tables — **24 admitted / 11 refused**, not the drafted 19/16
