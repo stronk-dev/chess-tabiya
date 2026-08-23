@@ -112,6 +112,25 @@ changelogs — each caught something that changes how you implement.
 
 Neither RFC claims anything versioned and neither proposed ledger rows.
 
+## 0-UCI-CONVENTION. Two notation rows ride `exact-legal-mobility` — [[D1027]]/[[D1028]]
+
+The owner asked whether `e1h1` is proper PGN (it is not — PGN/SAN says `O-O`; `e1h1` is
+**Chess960 UCI**, `e1g1` is **standard UCI**) and whether promotion has the same problem. Both
+answers land in your `exact-legal-mobility` implementation:
+
+- **[[D1027]] — name the dialect, do not re-derive it.** The accepted RFC makes the server
+  normalize to `e1g1`, which is the owner's *"stay close to what is familiar"* ruling. The missing
+  half: state the convention in a **named type/constant at both boundaries**. Inbound Lichess
+  explorer bytes use the 960 form (`{"san":"O-O","uci":"e1h1"}` is committed in
+  `content/candidates/priority-wave4b-bg4/priority.json`), so an ingest conversion must be
+  **recorded, not assumed**. Nothing learner-facing changes — the UI renders SAN through
+  `moveSanFromUci`.
+- **[[D1028]] — the web's promotion list is correct by accident.** `board-input.ts` maps every
+  chessops role's first letter with a `k → n` special case, so `"pawn"` produces `e7e8p` and
+  `"king"` produces a second `n`; only `isLegal()` and a dedupe keep the output right. Consume the
+  server's explicit `PROMOTIONS` list instead. **No dialect mismatch here** — both sides already
+  emit lowercase `q/r/b/n`; this is fragility, not a live defect.
+
 ## 0-RETURN-CLEARED. Your `learner-modules` return is answered — the reducers are executable now
 
 You were right to return it and the debt was claude's: the accepted RFC named three reducers and

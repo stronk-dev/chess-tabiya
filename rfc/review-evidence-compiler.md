@@ -106,6 +106,16 @@ interface WhiteWdlPoint {
 }
 ```
 
+**`wdl_white` is a read-time projection, never a second durable payload.** It is declared from the
+stored raw `kind: "wdl"` payload plus that payload's own request FEN; nothing new is attached to the
+run. This is not a stylistic choice: `schemas/drill_run.schema.json` (drill-run **0.17**) constrains
+`evidence.attached.data.payload` with `additionalProperties: false` over a **closed** `kind` enum
+`["eval", "wdl", "bestline", "tablebase"]`, so a durably attached `wdl_white` payload is literally
+unwritable without a run-schema claim. The provenance additions of §1.1 *are* writable, because
+`payload.values` is declared `additionalProperties: true` — which is exactly why this RFC's
+`tabiya-claims` block can stay `none`. Any future change that attaches a new payload `kind` must
+claim the run schema.
+
 For White to move, output equals raw `{win, draw, loss}`. For Black to move, output swaps win/loss
 and retains draw. All values are safe integers in `[0,1000]` and must sum to 1000; otherwise the
 projection abstains `invalid_source_payload`. It is a second `live.stockfish` source projection,
@@ -191,8 +201,22 @@ is `appeared`; mate→cp is `disappeared`; mate→mate may carry both `side_chan
 `no_mate_transition`; cp→cp abstains `no_mate_operand`. It retains both points and never computes
 magnitude across the type boundary.
 
-The optional exact proof is linked by the packet only when its `beforeFen`, `candidate`, `afterFen`
-and attacker equal the recorded edge and the proof status is `proved`. Engine agreement never
+The optional exact proof is linked by the packet only when its `candidate`, `attacker` and
+`proofDigest` equal the recorded edge's and the proof status is `proved`, with the edge itself
+identified by the packet's own `nodeId` and parent `positionKey`.
+
+**The drafted join keys were `beforeFen`/`afterFen`, and those are not readable.**
+`ForcedMateAfterMoveProof` does carry both fields (`packages/runtime/src/mate-proof.ts:16-21`), but
+the projection's **declared operands** are exactly
+`["candidate", "attacker", "maxAttackerMoves", "proofStatus", "proofDigest", "rootReplies", "nodes"]`
+(`packages/runtime/src/evidence-catalog.ts:440-449`, adapter at
+`evidence-source-adapters.ts:131`) — `beforeFen` and `afterFen` are absent from it. They survive at
+runtime only because `exactObject` seals the whole payload by reference
+(`evidence-source-adapters.ts:17-26`), which is the precise leak §1.1 exists to close. Joining on
+them would make this RFC depend on bytes it is simultaneously removing. Node identity plus the
+declared `candidate`/`attacker`/`proofDigest` is exact and reads only declared operands; if a later
+pass wants the FEN endpoints as a join key, it must add them to the projection's operand list as a
+declared manifest delta and count it in criterion 15. Engine agreement never
 upgrades bounded search to rules proof; both remain separately declared evidence items. A missing,
 refuted, capped or horizon-ineligible proof leaves the engine transition unchanged and unlinked.
 
@@ -234,6 +258,14 @@ interface ReviewEvidencePacket {
 }
 ```
 
+`positionKey` is exactly `Node.transposeKey` (`packages/runtime/src/types.ts:114`), produced by
+`transposeKey(fen)` (`packages/runtime/src/chess.ts:16`) — **not** a locally re-derived FEN prefix.
+The repo already carries at least two other position keys under the same word
+(`apps/server/src/opponent-selector.ts:254` takes the first five FEN fields;
+`tools/r11-bot-policy-harness/generate-blind-set.mts:120` takes four), so a packet that says only
+"position identity" would join on whichever one the implementer reached for, and criterion 14's
+determinism test would pass under any of them. The name is pinned here for that reason.
+
 `compileReviewEvidence` accepts the authorized recorded branch plus declared source items. It never
 accepts raw sentences. It validates each item's F1 runtime seal, joins only on literal node/edge/
 position/candidate identities, sorts nodes by ply then node id, sorts items by projection id/version
@@ -257,7 +289,19 @@ The post-game pass is capability-aware and idempotent:
   exist;
 - Stockfish eval and WDL are requested for every node at the one configured Review bound when the
   judge provider is available; durable, failed and outstanding sets are tracked independently per
-  `{nodeId, kind, engine identity, bound}`;
+  `{nodeId, kind, engine identity, bound}`. **Three shipped symbols must change for that key to
+  exist, and all three are named here because none of them carries it today:**
+  (a) `EvidenceQueue.enqueueProducer`'s attempt key is `` `${input.runId}\0${input.nodeId}\0${input.kind}` ``
+  (`apps/server/src/evidence-queue.ts:123`) — with no bound and no engine in it, a second request at
+  a *different* bound is swallowed by `#producerAttempts.has(key)` and silently reuses the first
+  bound's result, the exact opposite of criterion 12; (b) `EvidenceQueue.outstanding()` returns
+  `Pick<EvidenceJob, "id" | "runId" | "nodeId" | "kind">` (`evidence-queue.ts:174`), which cannot
+  express a per-bound outstanding set at all; (c) `EvidenceJob` carries no engine identity —
+  `StockfishEvidenceExecutor` holds `#engineId` as private constructor state
+  (`evidence-queue.ts:361-370`), so identity is a property of the executor, not of the work item, and
+  must move onto the job (or be read from the executor's `ReviewEngineIdentity`) before it can key
+  anything. `enqueue()` itself performs no deduplication; Review's repeat-read path is
+  `enqueueProducer`, and criterion 12 is asserted against that path;
 - tablebase is requested only inside the provider's declared material domain;
 - Maia, Explorer and PV remain `not_requested` in the baseline pass. A later explicit Analyze or
   Review module may request them and recompile the packet; they are never hidden prerequisites;
@@ -294,8 +338,24 @@ deleted.
 - `last_level` evaluates cp points only; a mate point cannot satisfy or fail the within-one-pawn
   convention;
 - Story's deterministic rank remains explicitly a compatibility presentation order, not chess
-  significance: outcome, mate transition, cp pivot, last-level, phase/endgame, irreversibility,
-  shape, then other facts; ties use ply then node id;
+  significance: outcome, mate transition, cp pivot, last-level, **phase change, endgame entry**,
+  irreversibility, shape, then other facts — **nine bands, not eight**. HEAD's ladder
+  (`packages/runtime/src/story.ts:182`) gives `phase_change` priority **3** and `endgame_entry`
+  priority **4**; the drafted "phase/endgame" collapsed two live bands into one, which would have
+  changed the order this bullet calls preserved. Mate transition takes a new band at position 1 and
+  every band below it shifts by one;
+- **the second tiebreak survives only for cp-typed moments, and this must be said.** HEAD sorts
+  within a band by `|evalAfter.centipawns − evalBefore.centipawns|` descending before ply
+  (`story.ts:183`). Once `StoryEvaluation` becomes the typed `ReviewEnginePoint`, a mate-typed point
+  has no `centipawns` member, and the shipped expression would silently read `undefined ?? 0` — every
+  mate moment sorting to the tail of its band. Refusal 1 forbids restoring the magnitude by
+  converting mate to cp. The rule is therefore explicit: the magnitude tiebreak applies **only** when
+  both endpoints of a moment are `kind: "centipawns"`; a moment with any mate-typed endpoint skips
+  the magnitude comparison and is ordered by ply then node id within its band, ahead of cp moments
+  with equal ply. An implementer who reads only the band list above and deletes the magnitude
+  tiebreak changes live output; one who keeps it verbatim breaks the type. Both are wrong;
+- ties use ply then node id (HEAD reaches the same result through a stable sort over the
+  ply/node-id-ordered moment list at `story.ts:181`, so this is a statement of existing behavior);
 - the public shared story receives only the same compiled/selected items as the authorized Story
   consumer. Raw packet rows and provider absence internals do not leak into the share.
 
@@ -336,17 +396,29 @@ not evidence for the final Review Map policy.
 
 ## 8. Acceptance criteria
 
-1. **Typed source:** cp and mate fixtures compile into the discriminated point; both/neither, mate
-   zero, non-integer score and missing provenance abstain or fail as specified.
+1. **Typed source:** cp and mate fixtures compile into the discriminated point. The five negatives
+   are pinned to one outcome each, because "abstain or fail" is satisfied by an implementation that
+   only ever does one of them: a payload carrying **both** requested bounds and a payload carrying
+   **neither** are *refused before attachment* (§1.1, a thrown refusal, not an abstention); **mate
+   distance zero** and a **non-integer score** are *refused* by the source adapter as
+   `invalid_source_payload`; a row **missing engine identity/version** *abstains*
+   `legacy_provenance_missing` and stays inspector-readable. A test asserting the abstention codes
+   must also assert that the two refusal cases produce no evidence item at all.
 2. **No move leak:** an eval payload containing `bestMoveUci` and PV produces byte-identical
    `engine_point` output to the same payload without them; those keys are absent recursively.
 3. **Identity:** every new live eval/WDL row carries exact capability id/name/version and one search
    bound; changing version or bound changes the evidence/packet digest.
 4. **Legacy:** a persisted pre-RFC row remains readable in the inspector and yields
    `legacy_provenance_missing` for Review—never an invented current version.
-5. **WDL perspective:** paired White/Black-to-move fixtures normalize by identity/swap, sum to
-   1000 and reproduce C4's fixed normalized values; the old raw timeline reproduces the known
-   alternating-player hard negative and is rejected by the Review consumer.
+5. **WDL perspective:** paired White/Black-to-move fixtures normalize by identity/swap and sum to
+   1000. Over C4's fixed population (**658 transitions, 661 positions** across eight imported games,
+   `design/research/basic-semantic-tactics-stage-0.md:612-616`) the instrument reproduces the
+   measured constants to their stated precision: Pearson **.015** raw versus **.847** normalized
+   against White-perspective cp; adjacent cp-delta sign agreement **49.4%** raw versus **68.5%**
+   normalized; median/p90 absolute adjacent change **90.1/100.0** percentage points raw versus
+   **0.6/23.8** normalized. The raw timeline's alternating-player swing is the hard negative and is
+   rejected by the Review consumer. (Unquoted, "reproduce C4's fixed normalized values" is passed by
+   any number the harness happens to emit.)
 6. **Cp-only delta:** cp→cp returns exact signed difference and retains both operands; cp→mate,
    mate→cp and mate→mate abstain `mate_operand`.
 7. **Comparable operands:** a one-character engine-version mismatch and movetime/depth mismatch
@@ -356,12 +428,20 @@ not evidence for the final Review Map policy.
 9. **No sentinel:** a repository sweep plus a runtime fixture proves `STORY_MATE_CP` and ±1000 mate
    conversion are absent; +1000 genuine cp remains +1000 cp.
 10. **Exact-proof join:** an exact matching proved fixture creates the packet link over both sealed
-    evidence digests; mismatched candidate/FEN/attacker, refuted and budget-exhausted fixtures do
-    not.
+    evidence digests; mismatched `candidate`, mismatched `attacker`, mismatched `proofDigest`,
+    mismatched packet `nodeId`, refuted and budget-exhausted fixtures do not. A test asserts the
+    join reads **only** declared operands of
+    `rules.tactic.consequence.forced_mate_after_move@1` — reaching `beforeFen`/`afterFen` off the
+    sealed payload fails the criterion even when the resulting link is correct.
 11. **Partial packet:** each family state has a positive fixture; provider-off plus successful eval
     renders the eval item while retaining the other family's unavailability.
 12. **Idempotence:** repeated Story/Review reads enqueue no duplicate jobs for an identical
-    `{node,kind,engine,bound}`; changing the bound creates distinct work and cannot reuse results.
+    `{node,kind,engine,bound}`; changing the bound creates distinct work and cannot reuse results,
+    and changing the engine version does the same. The hard negative is the shipped behavior: a test
+    pins that `enqueueProducer` at movetime *m* followed by `enqueueProducer` at movetime *m′ ≠ m*
+    for the same `{runId,nodeId,kind}` yields **two** jobs and two distinct results. Under HEAD's
+    three-part attempt key (`evidence-queue.ts:123`) the second call returns `undefined`, so this
+    criterion fails before the change and passes after it.
 13. **Readiness:** pending/failed/empty/not-requested are distinct; deprecated `ready` becomes true
     when all requested work terminates even when optional providers are off.
 14. **Determinism:** shuffled events/items/provider completion order produce byte-identical packet
@@ -371,7 +451,10 @@ not evidence for the final Review Map policy.
     Packet input bindings, source-id list and adapter-map keys are set-equal and non-empty; deleting
     or adding one member fails. No consumer uses raw eval/WDL as Review prose.
 16. **Story:** cp pivot, mate transition, last-level and public-share fixtures render without raw
-    UCI, provider ids as prose, duplicate facts or cross-type arithmetic.
+    UCI, provider ids as prose, duplicate facts or cross-type arithmetic. The rank is fixtured at
+    both changed points: `phase_change` still precedes `endgame_entry` (nine bands, not the drafted
+    eight), and a band containing one cp moment with a large `|Δcp|` plus one mate-typed moment
+    orders the mate moment by ply rather than by a magnitude read off a missing `centipawns` member.
 17. **Performance:** compiling 661 fixed positions from durable items is below 50 ms p95 on the CI
     runner; provider time is reported separately and excluded from this local bound.
 18. **Scope/closeout:** no pack/content/preset/assistance/bot bytes change. Focused runtime/server/
@@ -395,3 +478,39 @@ The existing Story order is preserved only as a labelled compatibility conventio
 ## Changelog
 
 - 2026-08-23: initial draft from D916–D928 and Semantic Collectors discharge D2.
+- 2026-08-23 cross-review: eight corrections, three of them buildability blockers as drafted.
+  (1) **§4.1's `{nodeId, kind, engine identity, bound}` tracking had no home.** HEAD's attempt key is
+  `runId\0nodeId\0kind` (`evidence-queue.ts:123`), `outstanding()` projects only
+  `id/runId/nodeId/kind` (`:174`), and `EvidenceJob` has no engine identity at all — the executor
+  holds `#engineId` privately (`:361-370`). Criterion 12's "changing the bound creates distinct work"
+  is **false at HEAD in the reuse direction**: the second bound's job is never enqueued. All three
+  symbols are now named and criterion 12 states the hard negative.
+  (2) **§3.2 joined on `beforeFen`/`afterFen`, which are not declared operands** of
+  `rules.tactic.consequence.forced_mate_after_move` (`evidence-catalog.ts:440-449`); they are visible
+  only because `exactObject` seals payloads by reference (`evidence-source-adapters.ts:17-26`) — the
+  leak §1.1 closes. Join moved to `candidate`/`attacker`/`proofDigest` + node identity; criterion 10
+  now forbids reading the undeclared fields.
+  (3) **`positionKey` had no derivation.** Pinned to `Node.transposeKey` (`types.ts:114`,
+  `chess.ts:16`); two rival FEN-prefix keys under the same word exist at
+  `opponent-selector.ts:254` and `r11-bot-policy-harness/generate-blind-set.mts:120`, and criterion
+  14 would have passed under any of them (D982 class).
+  (4) **§5 collapsed two live rank bands.** `phase_change` is priority 3 and `endgame_entry` is 4 at
+  `story.ts:182`; "phase/endgame" would have tied them while claiming preservation. Nine bands now.
+  (5) **§5 omitted HEAD's `|Δcp|`-descending second tiebreak** (`story.ts:183`), which silently reads
+  `undefined ?? 0` for every mate point once the score is a union and cannot be restored without
+  violating refusal 1. The cp-only rule is now stated and fixtured in criterion 16.
+  (6) `live.stockfish.wdl_white@1` pinned as a read-time projection: `evidence.attached.data.payload`
+  is `additionalProperties: false` over a closed `kind` enum in `schemas/drill_run.schema.json`
+  (0.17), so a durable `wdl_white` payload is unwritable and would break the `none` claims block.
+  §1.1's provenance additions *are* writable because `payload.values` is `additionalProperties: true`
+  — checked, and this is what keeps `none` correct.
+  (7) Criterion 1's "abstain or fail as specified" was passed by an implementation that only ever
+  did one; each of the five negatives now names its single outcome.
+  (8) Criterion 5's "reproduce C4's fixed normalized values" named no value; the six measured
+  constants are quoted at their stated precision.
+  Re-derived and unchanged: **661 positions / 658 transitions** are both correct
+  (`basic-semantic-tactics-stage-0.md:612-616`) — the two figures are not a discrepancy;
+  `STORY_MATE_CP = 1000` (`story.ts:33`), the ±1000 mate map (`:104`), the same-range clamp (`:107`)
+  and `STORY_PIVOT_CP = 150` (`:34`) are as described; D1020 (executor takes only `engineId`) and
+  D1021 (`exactObject` seals by reference) are both accurate; `EngineIdentity` does expose
+  `{id, name, version}` (`engine-supervisor.ts:15-20`); all eleven cited ledger rows exist.

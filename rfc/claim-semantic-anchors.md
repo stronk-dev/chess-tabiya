@@ -130,7 +130,7 @@ ascending order, must not overlap, and together must cover every non-whitespace 
 claim. Punctuation belongs to one adjacent clause. The old unique-substring search and the
 `segments()` heuristic are removed from production validation.
 
-### Appendix A — Canonical claim-fact projections
+### 3. Canonical claim-fact projections (Appendix A)
 
 One canonical list in `packages/runtime/src/evidence-catalog.ts` replaces
 `CLAIM_ASSERTION_KINDS`; the server imports the typed identities instead of copying strings. The
@@ -160,6 +160,19 @@ raw sourcing dependency under F1. `authoring.claim_binding@1` stops accepting ra
 `sourcing.ledger.*` projections and accepts only `sourcing.claim.*` projections. A source record
 cannot therefore bypass proposition evaluation merely because its kind is admitted.
 
+**`theory.opening_identity.record` is the fourth admitted projection at HEAD** and is *not* a
+`sourcing.ledger.*` id, so the sentence above does not reach it. Its disposition is fixed
+explicitly: `CLAIM_RECORD_PROJECTION` (`apps/server/src/sourcing/claim-binding.ts:161-166`) declares
+four record kinds — `engine_eval`, `tablebase_result`, `explorer_position_census` and
+`opening_identity` — and `evidence-catalog.ts:880` mirrors all four on the consumer, but `evaluate()`
+has no `opening.*` branch, so no assertion kind can read an opening record and **zero claim bytes are
+backed by one today**. This RFC therefore **removes `opening_identity` / `theory.opening_identity.record`
+from `authoring.claim_binding@1` along with the three ledger projections**: admitting a projection no
+proposition can consume is exactly the record-kind co-presence licence §5 step 9 abolishes. Restoring
+opening facts to claim binding is `runtime-opening-identity`'s to propose as a `sourcing.claim.opening.*`
+projection with typed args and a registered renderer; this RFC neither adds nor reserves one, and D3
+records the seam.
+
 Evaluation preserves the current reachability, unique-record, complete-census, authored-line and
 learner-relative-category rules. It additionally retains every qualifier needed to interpret the
 object: side/perspective, population, window, rating band, engine identity/depth and selected
@@ -183,8 +196,10 @@ function renderClaimClause(
 ): RenderedClaimClause;
 ```
 
-The registry compiler proves the admitted facts' ordered projection tuple is set-and-order equal
-to the renderer declaration. `renderClaimClause` returns a brand-sealed value not constructible by
+The registry compiler proves the admitted facts' ordered projection tuple is **element-wise equal
+at every index and of equal length** to the renderer declaration. (Not "set equality": a renderer
+may legitimately accept the same projection twice with different args — see the explorer window
+row below — which a set comparison cannot express.) `renderClaimClause` returns a brand-sealed value not constructible by
 callers. The renderer returns exactly one non-empty string. The server compares that string byte
 for byte with `selector.exact`; no normalization, token equivalence, stemming, number-word
 conversion or LLM judgement is permitted.
@@ -195,12 +210,29 @@ compound tuples needed by real authored prose:
 | Renderer | Accepted ordered facts | Canonical output |
 |---|---|---|
 | `claim.clause.tablebase.position_summary@1` | category, piece count | `This exact position is a tablebase {category} (Syzygy, {n} pieces).` |
-| `claim.clause.engine.reading@1` | centipawns, depth | `The engine records {signed-pawn-eval} at depth {depth}.` |
-| `claim.clause.explorer.move_population@1` | move share, rating band, window | `{SAN} appears in {share}% of the recorded {min}–{max} games from {since} to {until}.` |
+| `claim.clause.engine.reading@1` | centipawns, depth | `{engine} records {signed-pawn-eval} at depth {depth}.` |
+| `claim.clause.explorer.move_population@1` | move share, rating band, window(`since`), window(`until`) | `{SAN} appears in {share}% of the recorded games by players rated {min}–{max}, {since} to {until}.` |
+
+Two corrections to the drafted table are load-bearing rather than editorial.
+**First, the explorer row accepts four facts, not three.** `sourcing.claim.explorer.window` returns
+**one** boundary per fact — `assertion.select` is a single `"since" | "until"`
+(`claim-binding.ts:136`, `value = record.values[assertion.select ?? "since"]`) — so a three-fact
+tuple cannot supply both `{since}` and `{until}`, and the drafted declaration was unsatisfiable by
+its own template.
+**Second, the engine row names the engine.** Appendix A retains engine identity as a qualifier
+precisely because a bare *"the engine records +0.54 at depth 20"* is a reading whose owner the
+learner-visible bytes do not state — the D982 failure exactly, in a sentence this contract
+guarantees. `{engine}` is `engineName` + `engineVersion` from the `engine_eval` record (both are
+present on every committed record: e.g. `Stockfish` / `18` in
+`content/drafts/anti-kid-classical-white.evidence.json`), so the canonical output is
+`Stockfish 18 records +0.63 at depth 22.` `{signed-pawn-eval}` is signed under the record's stored
+`perspective`; a renderer whose output does not make the perspective recoverable must state it.
+The widening rule below is extended to match.
 
 Single-fact outputs use fixed, source-naming sentences defined beside the registry and snapshot
 tested. They may hide FEN from learner text because the subject remains in the proposition; they
-may not hide a population or engine depth when omission would widen the fact. Changing output
+may not hide a population, an engine identity, an engine depth or an evaluation perspective when
+omission would widen the fact or leave the reading's owner unstated. Changing output
 bytes or semantics requires a renderer version bump under F3 and a dry-run over bound clauses.
 
 ### 5. Validation algorithm
@@ -246,6 +278,15 @@ not an automatic binding.
 ### 7. Compatibility and migration
 
 The landing has two atomic stages:
+
+**Version dispatch is by presence, not by value.** The one committed legacy binding
+(`content/drafts/philidor-third-rank-hold.evidence.json`) carries exactly `claimId`, `pointer`,
+`spans`, `textSha256` and **no `contract` field**; V2 requires
+`contract: { id: "claim.binding", version: 2 }`. The parser therefore routes a binding object with
+no `contract` key to the legacy path during Stage A and to
+`CLAIM_BINDING_VERSION_UNSUPPORTED` after Stage B, and routes any `contract` whose id or version is
+not exactly `claim.binding`/`2` to `CLAIM_BINDING_VERSION_UNSUPPORTED` in both stages. No binding is
+ever inferred from the shape of its body.
 
 **Stage A — mechanism:** land the canonical projections, grouped renderer seal, V2 parser/validator,
 dry-run migration planner and negative fixtures on the implementation branch. The one known legacy
@@ -295,8 +336,12 @@ does not add a learner surface or change assistance policy.
    `CLAIM_ASSERTION_KINDS` definition has zero production occurrences.
 2. Every fact argument variant is exact-key validated; one missing, one extra and one wrong-typed
    field fail for every family (tablebase, engine, explorer).
-3. The exact D1008 fixture—“the one common mate” paired with DTM 1—fails with
-   `CLAIM_CLAUSE_RENDER_MISMATCH`.
+3. The exact D1008 fixture—`mate-two-bishops/result-not-moves`'s “the one common mate” paired with
+   `tablebase.dtm@v1 = 1` at `7k/8/6K1/2B5/8/8/B7/8 w - - 16 9`—**re-expressed as a V2 binding**
+   whose machine clause selects that phrase and declares the `sourcing.claim.tablebase.dtm`
+   fact fails with `CLAIM_CLAUSE_RENDER_MISMATCH`, not with a version or coverage code. The same
+   fixture left in V1 form fails with `CLAIM_BINDING_VERSION_UNSUPPORTED`; both are asserted, so a
+   version rejection cannot be mistaken for a semantic one.
 4. A right predicate/value at the wrong FEN, and a right record kind with the wrong qualifier, each
    fail before rendering.
 5. A right proposition paired with an arbitrary unregistered paraphrase fails automatic binding.
@@ -305,12 +350,19 @@ does not add a learner surface or change assistance policy.
 7. Changing a renderer or projection version makes the previous binding fail closed or appear in
    the explicit F3 migration plan; no “latest” lookup exists.
 8. Positive fixtures bind one tablebase, one engine and one explorer proposition and pass the same
-   facts through authoring validation plus one learner-facing compiled consumer without a raw
-   packet-sentence side channel.
+   facts through authoring validation plus one learner-facing compiled consumer. The side-channel
+   half is asserted concretely, not as an absence: the learner-facing consumer's output for those
+   fixtures is byte-equal to the corresponding `selector.exact` slices, and the legacy
+   `AssertionResult.rendered` inspector strings (`claim-binding.ts:93,101,107,117,121,126,141`)
+   appear **zero** times in any value reaching a learner-facing consumer.
 9. A compound renderer fails when inputs are permuted, omitted, added or substituted with a raw
-   sourcing projection.
-10. Clause ranges cover all non-whitespace claim bytes exactly once; overlap, gaps, drift and
-    Unicode code-unit/code-point confusion each fail.
+   sourcing projection. `claim.clause.explorer.move_population@1` is exercised at its full arity:
+   the four-fact tuple renders, and the three-fact tuple that omits either window boundary fails
+   with `CLAIM_PROPOSITION_INPUT_MISMATCH` rather than rendering a sentence with an empty operand.
+10. Clause ranges cover all non-whitespace claim **code points** exactly once; overlap, gaps, drift
+    and Unicode code-unit/code-point confusion each fail. (The unit is code points throughout, per
+    §2 — the drafted "bytes" here contradicted the section it tests, in the one criterion whose
+    subject is unit confusion.)
 11. The existing Philidor binding is the only legacy binding at Stage-A HEAD; Stage B leaves zero
     legacy bindings and preserves one admitted `philidor-is-drawn` claim.
 12. The corpus candidate audit still reports the 43 legacy candidates as unbound; no heuristic
@@ -319,6 +371,13 @@ does not add a learner surface or change assistance policy.
     `make register-check`, `make status-parity` and `make work-index` pass after Stage B.
 14. The implementation updates `docs/claim-backing.md`, the RFC register, D1007/D1008, Feedback
     Delivery's log, the exploration log and the content-era log in their owning commits.
+15. §6's boundary is failable, not declarative: `authoring.claim_binding@1`'s admitted projection
+    set is exactly the `sourcing.claim.*` list (`opening_identity` and all three
+    `sourcing.ledger.*` ids removed, asserted against `evidence-catalog.ts`), and the only value a
+    voice/paraphrase caller can accept from this path is a brand-sealed `RenderedClaimClause` — a
+    test passing a plain `string`, a `DeclaredEvidence`, or a forged object literal in its place
+    fails to type-check **and** throws at runtime, the same seal `renderEvidenceItems` already
+    enforces via `EVIDENCE_GENERIC_BYPASS` (`evidence-contract.ts:401`).
 
 ## Discharges
 
@@ -326,6 +385,7 @@ does not add a learner surface or change assistance policy.
 |---|---|---|---|---|
 | D1 | Name the literal F3 capability/version declaration and top-level ledger compatibility rule | `planning/platform-alignment/` | the F3 RFC refresh commit | |
 | D2 | Resume Feedback Delivery Stage 2 only after Stage B and the six negative fixture classes pass | `feedback-delivery` | the resumed Stage-2 content commit | |
+| D3 | Decide whether opening facts return to claim binding as `sourcing.claim.opening.*` with typed args and a registered renderer, or stay author-attributed | `runtime-opening-identity` | that RFC's projection section | |
 
 ## Open questions
 
@@ -336,3 +396,26 @@ against the accepted F3 contract and return it if the required representation ca
 
 - 2026-08-23: created from D1008's code/standards research; proposition-first binding, grouped
   registered rendering, whole-clause equality and one-binding migration specified.
+- 2026-08-23 cross-review: nine corrections. (1) `claim.clause.explorer.move_population@1` was
+  **unsatisfiable as declared** — three accepted facts for a template needing four operands, because
+  `sourcing.claim.explorer.window` returns one boundary per fact (`claim-binding.ts:136`); arity
+  raised to four and criterion 9 now exercises it. (2) `claim.clause.engine.reading@1` rendered a
+  learner-visible engine reading that never named the engine — the D982 shape; `{engine}` added from
+  the records' `engineName`/`engineVersion`, and the widening rule extended to engine identity and
+  perspective. (3) **`theory.opening_identity.record` was silently dropped**: it is a fourth admitted
+  projection at `evidence-catalog.ts:880` and `claim-binding.ts:161-166`, and is not a
+  `sourcing.ledger.*` id, so §3's exclusion sentence did not reach it — its removal is now explicit,
+  with new D3 handing the restoration question to `runtime-opening-identity`. (4) "set-and-order
+  equal" replaced with element-wise tuple equality, which the duplicated window projection requires.
+  (5) §7 gained the V1/V2 dispatch rule — the committed legacy binding has **no** `contract` field,
+  so dispatch is by presence. (6) Criterion 3 pinned to the exact pack/claim/FEN and split so a
+  version rejection cannot be mistaken for a semantic one. (7) Criterion 8's "without a raw
+  packet-sentence side channel" was unfailable as written and is now an assertion over the seven
+  named inspector-string sites. (8) Criterion 10 said "bytes" in the one criterion whose subject is
+  code-unit/code-point confusion; corrected to code points. (9) §6 had **zero** acceptance coverage
+  for a law-8 boundary; criterion 15 added. Re-derived and unchanged: `CLAIM_ASSERTION_KINDS` is 15
+  members (`claim-binding.ts:15-21`) and Appendix A is set-equal at 15; D1007's 43 = 36
+  `tablebase_exact` + 7 `engine_validated`; "the one common mate" is byte-exact at
+  `content/drafts/mate-two-bishops.json:397`; exactly one `claimBindings` file with exactly one
+  binding exists in `content/`; all seven criterion-13 make targets exist; `dist/` is gitignored so
+  criterion 1's "zero production occurrences" is reachable.
