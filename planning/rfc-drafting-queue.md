@@ -683,3 +683,15 @@ rather than to the moves. Rule with an answer once it exists.
   and `attribution` slots, so only a `sourceGame` object is missing.
 - **[[D1045]]** — routed to the [[D1038]] instrument (a `refused` row costs less than an
   `unmeasured` one, which is the incentive behind the whole defect class).
+
+### Time-control derivation findings 2026-08-23 (`planning/time-controls/rfc-derivation.md`)
+
+- **[[D1047]]** — claude's own D1041 row mischaracterized `bot-policy`'s refusal; §2.7's *"there is
+  no timing layer, deliberately"* is compile-enforced. **v1 ships no bot clock**; only learner runs.
+- **[[D1048]]** — `live-sources` (accepted the same day) strips the `[%clk]` tags this lane needs,
+  failing closed. Extract-before-strip amendment owed before either lands.
+- **[[D1049]]** — arm (a) splits: **depicted** clock times are grounded and already in the database
+  retroactively; **predicted** deliberation time has no corpus and is law-8-forbidden to invent.
+- **[[D1050]]** — `clockState` is per-node and per-move, not per-run; 9 refs; lane claims run 0.19+;
+  flag-fall needs a fifth `terminalOutcome` reason behind a STRICT-table CHECK.
+- **[[D1051]]** — D357's precondition (hint-ladder ruling first) was unmet; owner-facing sequencing.
