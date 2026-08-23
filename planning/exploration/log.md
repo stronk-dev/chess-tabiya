@@ -5690,3 +5690,15 @@ stopped. D1008's research question is answered and the owner's continuing founda
 instruction opens a follow-up draft to the implemented claim-backing RFC. It must reuse F1's
 projection/rendering authority, coordinate compatibility with F3, migrate the one live Philidor
 binding explicitly, and pass six able-to-fail fixtures before Feedback Delivery Stage 2 resumes.
+
+## 2026-08-23 — semantic-claim follow-up drafted
+
+`rfc/claim-semantic-anchors.md` turns the research verdict into a bounded two-stage contract. Stage
+A builds 15 typed claim-fact projections, a sealed grouped renderer and the V2 validator; Stage B
+rewrites/migrates the one live Philidor binding and deletes the legacy production reader. The
+acceptance matrix preserves the exact D1008 counterexample and five independent failure classes.
+
+The draft claims none of the current six shared-resource registers and is intentionally not
+accepted: its compatibility clause must name F3's literal capability/version declaration after
+that in-flight RFC stabilizes. This is dependency discipline, not an owner question. No content or
+production code changed and Feedback Delivery Stage 2 remains stopped.
