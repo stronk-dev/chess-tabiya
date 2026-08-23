@@ -947,3 +947,10 @@ O15/O16/O17 plus amendments to O11/O13.
 `teacher-surface` archived carrying an open question assigned to `learner-rating` and nothing saw
 it. **[[D1202]] binds every future batch**: 9% of rows have owners the text never cites — check
 before minting a duplicate.
+
+- **[[D1203]]/[[D1204]]** — the two shipped defects that compose into [[D1210]]: the unguarded
+  moves route on imported mainlines, and the write-capable overlay whose opponent guard covers
+  `match` only. Both are codex work, queued in `planning/codex-queue.md` §0-LIVE-SAFETY.
+- **[[D1212]]** — the B5 question, framed: is casting-over-a-followed-run new B5 investment,
+  Phase B wiring, or should casting lead? **Drafting-blocking, and it selects the follower
+  architecture too.** Goes to the owner in the next ruling batch.
