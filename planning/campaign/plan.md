@@ -41,3 +41,8 @@ Ten claude-owned amendments landed ([[D1314]]); the four owner-tier ones are dra
   table the broken citation pointed at** — whoever implements that criterion should confirm the
   repaired ranges still resolve when they get there ([[D368]]'s class: a citation written once and
   never re-derived).
+
+- **[[D1316]]** — `campaign-core`'s `learner-modules` citations had drifted ~181 lines after a §3a
+  insertion, and the ten-member unlock type was derived from the stale anchor. Repaired in the
+  amendment pass (`16e59e4`); the criterion now tests the ten-member type against the table rather
+  than against a line number. [[D368]]'s class — a figure written once and never re-derived.
