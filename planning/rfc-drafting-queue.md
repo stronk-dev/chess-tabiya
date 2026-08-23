@@ -763,3 +763,6 @@ here until that amendment lands. **Standing state, not a pending one:** the chan
 behind `guided` today, and `presets.ts:47-48` defaults `onramp` and `academy` to `guided`, so this
 is an unmeasured live surface **on by default in two contexts** with no register row at all.
 
+
+- **[[D1078]]** — `make work-index`'s join accepts a *proposed* row id as a destination, so it can
+  report green over a genuinely unrouted row. Fix queued for codex alongside [[D1038]].

@@ -145,6 +145,29 @@ The law by surface — the SAME variant is treated differently in each:
 **The one constraint: the educational standard-chess run stays the MAIN one.** This supersedes any
 per-variant permit/refuse framing you may see in earlier notes.
 
+## 0-WORK-INDEX-DEFECT. [[D1078]] — `make work-index` can report green on an unrouted row
+
+**The instrument has the defect it exists to catch.** Its join is a bare textual mention
+(`tools/work-index.mjs:68`: `documents.filter(([, text]) => mention(text, row.id))`), so **any**
+occurrence of an id counts as a destination — including a *proposed* row id inside an RFC's own
+"Ledger rows (proposed — renumber at landing)" block. Those blocks name ids that are not yet landed
+and **routinely collide** with rows that land first, because the ledger head moves constantly.
+
+Caught concretely 2026-08-23: **D1074 landed genuinely unrouted and work-index passed**, satisfied
+by `pack-capability-contract`'s *proposed* D1074 mention. This is [[D526]]/[[D539]]'s class — the
+instrument sharing the defect's assumption — and the second routing instrument to return a clean
+reading over a real gap ([[D641]] first, [[D952]] measured it).
+
+**Fix**: a destination must not be a document that *proposes* that same id. Either exclude
+proposed-row blocks from the join (they are syntactically marked — "(proposed — renumber at
+landing)"), or require the destination to be a route-shaped document that does not also claim the
+id as future. Add a fixture that is **red before the fix**: a landed row whose only mention is a
+proposed-row block must fail.
+
+**Until this lands, every "0 unrouted" reading is an upper bound, not a proof** — including the
+ones already reported to the owner. Take it with `make refusal-index` ([[D1038]]); they are the
+same family and the same afternoon's work.
+
 ## 0-REFUSAL-INDEX. Build `make refusal-index` — [[D1038]], the twin of `make work-index`
 
 The owner asked what else has been refused without their say-so; the audit found **19 of 80
