@@ -6140,3 +6140,24 @@ its executable prepare script independently carry the same corrected SHA. The RE
 and D1052 records the false acceptance premise. The downloaded sources remain uncommitted while
 the RFC returns for its narrow factual refresh; no compiler is built against an authority known to
 be false.
+
+## 2026-08-23 — R20 grounded skills taxonomy desk arm complete
+
+The complete current semantic-event registry was classified through a disposable set-equality
+instrument: 67 projections resolve to 47 habit-only facts, 11 Review-only facts, 4 operands
+refused as skills and 5 candidate credits. Zero candidates are production-ready. Each candidate
+has a literal legal-alternative opportunity denominator, but none has a longitudinal game floor,
+cross-time-control stability result or versioned reference distribution. Neutral detector
+occurrence is therefore not converted into learner mastery by naming it a skill.
+
+The five candidates are loose-piece avoidance, double-attack conversion, immediate-mate
+conversion, discovered execution and promotion completion. Openings and strategy remain honest
+empty states for credit: the two measured opening metrics are habits with no production
+projection, while current strategy events have neutral valence. The measurement arm is
+pre-registered at 25/50/100/200 games with R12 transfer and D345/D603 anti-farming gates, and
+remains blocked on the longitudinal-store decisions D973/D1011.
+
+The pass also corrected its input census. The accepted learner-module Appendix B now says 181
+declared eligibility rows, 179 intended to compile and two awaiting; the R20 queue's 175-row
+premise predated D924. The instrument asserts the authoritative Appendix-B sentence so this count
+cannot drift silently again.
