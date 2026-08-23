@@ -5868,3 +5868,18 @@ unnamed prefix, live absence after a prior match, exit/re-entry, mixed-artifact 
 source states and runtime-image leakage. D743 advances to drafted; implementation waits on an
 independent buildability review. Semantic Collectors D3 should record the drafting SHA after its
 concurrent author amendment lands.
+
+## 2026-08-23 — Review evidence compiler RFC drafted
+
+Wave-C C4's typed Review handoff is now an implementation contract rather than two unowned rows.
+The draft deletes Story's mate-to-±1000-cp coercion, separates cp delta from mate transition,
+normalizes Stockfish WDL to an explicit White perspective, carries engine version/search bound,
+and compiles a partial nine-family packet whose pending, failed, absent, off and not-requested
+states cannot collapse into one boolean.
+
+The author-side source audit found two narrower defects while tracing the path. Runtime evidence
+stores only the engine request id even though C4 measured material cross-version instability
+(D1020), and `live.stockfish.eval@1`'s adapter claims to exclude `bestMoveUci` while sealing the
+entire values object unchanged (D1021). Both are explicit source-boundary criteria now. The draft
+does not invent the final Review Map ranking: D928 remains a discharge because the research proved
+source overlap/stability, not which moments learners find useful.
