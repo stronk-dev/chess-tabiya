@@ -145,7 +145,7 @@ The law by surface — the SAME variant is treated differently in each:
 **The one constraint: the educational standard-chess run stays the MAIN one.** This supersedes any
 per-variant permit/refuse framing you may see in earlier notes.
 
-## 0-WORK-INDEX-DEFECT. [[D1078]] — `make work-index` can report green on an unrouted row
+## 0-WORK-INDEX-DEFECT. [[D1079]] — `make work-index` can report green on an unrouted row
 
 **The instrument has the defect it exists to catch.** Its join is a bare textual mention
 (`tools/work-index.mjs:68`: `documents.filter(([, text]) => mention(text, row.id))`), so **any**
