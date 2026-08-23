@@ -7064,3 +7064,36 @@ is **D1444**; the earlier log bytes are retained rather than edited.
 **Next:** Claude can now amend the longitudinal-store write schedule and keep the RFC returned for
 its other six blockers. Codex returns to D1444's clean-SHA CI parity gate after the manifest pass
 freezes its capability count.
+
+## 2026-08-24 — D1440 scaffold guard admits stronger verification chains
+
+**What landed:** the scaffold verifier now treats `verify` prerequisites as a required set instead
+of an exact ordered string. Missing targets and missing required checks fail; extra checks are
+legal. Three able-to-fail fixtures run inside `pnpm schema:check` before the live verifier.
+
+**What changed:** adding `work-index` and `account-data-lifecycle-check` had made the stronger
+verification chain fail its own stale guard. That closed-list assumption is removed rather than
+updated to a new closed list, so the next instrument does not reproduce the defect.
+
+**Correction:** concurrent ledger work assigned D1444 to the module-layer finding after the CI row
+had taken that number. The CI parity defect's permanent id is **D1448**. Earlier append-only log
+references remain unchanged.
+
+**Next:** D1448 adds the clean-commit, Node-24/pnpm-11.18 parity entry point that runs both workflow
+bodies and reports the exact commit it validated.
+
+## 2026-08-24 — D1448 local CI parity gate implemented
+
+**What landed:** `make ci-local` pins Node 24 and pnpm 11.18.0, requires the same executable
+Stockfish contract as verify CI, refuses any tracked or untracked working-tree change, runs the
+frozen install plus `make verify` and `make test-browser`, then rechecks HEAD and the tree before
+printing a commit-addressed PASS receipt. `.node-version` makes the required runtime discoverable.
+
+**What changed:** focused-suite success can no longer be presented as CI parity. On the current
+shared tree the command refuses for the correct three reasons — Node 26, dirty concurrent bytes
+and no `SF_CMD` — before running anything. Unit fixtures pin both the clean preflight and the
+combined refusal; the scaffold verifier's own fixtures remain in the schema-check chain.
+
+**Next:** run the first binding receipt from a clean Node-24 extraction with checksum-pinned
+Stockfish. D1448 stays implementing until that full command passes; any failure belongs to the
+exact commit named by the run rather than to the shared working tree.

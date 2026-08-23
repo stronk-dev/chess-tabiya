@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "build": "pnpm -r --if-present build",
-    "schema:check": "node tools/verify-scaffold.mjs && node tools/verify-packaging.mjs",
+    "schema:check": "node --test tools/verify-scaffold.test.mjs tools/ci-local.test.mjs && node tools/verify-scaffold.mjs && node tools/verify-packaging.mjs",
     "test": "vitest run",
     "test:browser": "playwright test",
     "test:maia": "vitest run --config vitest.maia.config.ts",

@@ -23,6 +23,16 @@ const requiredPackages = new Map([
 
 const failures = [];
 
+export function missingMakeDependencies(makefile, target, requiredDependencies) {
+  const escapedTarget = target.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+  const rule = makefile.match(new RegExp(`^${escapedTarget}:\\s*(.+)$`, "m"));
+  const dependencies = new Set(rule?.[1]?.trim().split(/\s+/) ?? []);
+  return {
+    ruleFound: Boolean(rule),
+    missing: requiredDependencies.filter((dependency) => !dependencies.has(dependency)),
+  };
+}
+
 async function requirePath(path) {
   try {
     await access(resolve(root, path));
@@ -101,8 +111,26 @@ if (!license.includes("GNU AFFERO GENERAL PUBLIC LICENSE") || !license.includes(
 }
 
 const makefile = await readText("Makefile");
-if (!/^verify: typecheck test schema-check register-check status-parity intent-parity evidence-manifest-check semantic-evidence-check graduation-plan-check$/m.test(makefile)) {
-  failures.push("Makefile: verify must depend on typecheck, test, schema-check, register-check, status-parity, intent-parity, evidence-manifest-check, semantic-evidence-check, and graduation-plan-check");
+const requiredVerifyDependencies = [
+  "typecheck",
+  "test",
+  "schema-check",
+  "register-check",
+  "status-parity",
+  "intent-parity",
+  "evidence-manifest-check",
+  "semantic-evidence-check",
+  "graduation-plan-check",
+];
+const verifyDependencies = missingMakeDependencies(
+  makefile,
+  "verify",
+  requiredVerifyDependencies,
+);
+if (!verifyDependencies.ruleFound || verifyDependencies.missing.length > 0) {
+  failures.push(
+    `Makefile: verify is missing required dependencies: ${verifyDependencies.missing.join(", ") || "verify rule"}`,
+  );
 }
 
 const workflow = await readText(".github/workflows/verify.yml");
