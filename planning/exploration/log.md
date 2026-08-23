@@ -5740,3 +5740,11 @@ F12-B and the never-started inventory are reconciled. The RFC's implementation h
 required planning transition, so D1015 records the failure and
 `planning/archive/portable-account-data/` reconstructs the actual commit sequence explicitly as a
 retrospective record rather than manufacturing a clean history.
+
+## 2026-08-23 — imported-castling residue reconciled
+
+D719 was stale rather than open. Commit `4818d52` had already changed the shared
+`irreversibility` primitive from an exact two-file king delta to a delta of at least two and added
+one permanent test covering both standard `e1g1` and chessops-imported `e1h1`. The reading and
+pivotal planes both consume that primitive, so the defect is closed without a new production
+change. The focused transition suite was rerun before the ledger flip.
