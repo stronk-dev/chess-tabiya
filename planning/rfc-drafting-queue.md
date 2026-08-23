@@ -921,3 +921,10 @@ class) + implementing the accepted store. Nothing new is built.
 **[[D1190]] is owed to the owner**: I framed [[D1151]] on *"the first number about the learner"*,
 which is **already shipped** (`RatingScreen.svelte`). The ruling may stand; its stated ground does
 not, and `design/06`'s rationale needs correcting (law 5).
+
+- **[[D1191]]** — the skills roll-up has one defensible shape and zero instances; the blocker is
+  `evidence-catalog.ts:951`'s `valence: "none"` hard literal over all 67 projections. Routed to the
+  skills lane's foundation work.
+- **[[D1192]]** — a skill *level* is refused twice, a skill *credit* (measured frequency with its
+  denominator) is admissible, and denomination 2 (milestones/marks) already ships law-8 clean as the
+  template. Carries the D549/D842 corrections.
