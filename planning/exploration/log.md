@@ -5600,3 +5600,19 @@ catalog remains deliberately empty. No profile is advertised and no run/event sc
 **Next:** D969 must pin the real Stockfish guard probe and D970 the literal roster. The policy
 record then attaches to `OpponentSelection` at run-schema 0.18 after longitudinal-store's lawful
 migration turn; this checkpoint does not jump either dependency.
+
+## 2026-08-23 — Campaign registry checkpoint
+
+**What landed:** `CampaignRegistry` validates authored documents against the live pack registry,
+retains exact `(campaign id, document version)` records for future pinned runs, computes canonical
+digests, rejects duplicate identities, and keeps a missing content directory honestly empty.
+`docs/campaign.md` records the boundary: the contract/registry exist; runs, routes, seed content and
+surfaces do not.
+
+**Verification:** server typecheck and nine focused campaign validation/registry tests pass,
+including two retained versions, digest separation, invalid pack joins, duplicate identity, absent
+pinned version and absent-directory behavior.
+
+**Boundary and next:** no encounter ordering was authored under law 8, and no migration moved. Seed
+content is its own candidate-content step. Durable campaign state still waits behind
+longitudinal-store and bot-policy exactly as the register declares.

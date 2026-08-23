@@ -9,7 +9,9 @@ shared register declares.
 - [x] Validator: registered packs, unavoidable bosses, unique node ids, non-increasing candidate
   economy, and campaign-context unlock ceiling.
 - [x] Register `campaign` as the eighth workflow context with its isolated browser preference key.
-- [ ] Add the seed campaign through the content registry; keep every balance number candidate and
+- [x] Add a version-retaining content registry that validates every document against the live pack
+  registry and keeps an absent content directory honestly empty.
+- [ ] Add the seed campaign through that registry; keep every balance number candidate and
   do not manufacture chess claims while choosing authored encounters.
 - [ ] Land `campaign_runs` / `campaign_events` at the claimed migration turn, then the pure event
   fold and byte-equality rebuild fixture.
