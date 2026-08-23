@@ -345,4 +345,26 @@ describe("DrillApi", () => {
       { url: "http://tabiya.test/packs/drafts/draft%20%2F%20one/withdraw", init: expect.objectContaining({ method: "POST", body: "{}" }) },
     ]);
   });
+
+  it("binds reasoning review to the recorded checkpoint occurrence", async () => {
+    const calls: { readonly url: string; readonly init?: RequestInit }[] = [];
+    const response = {
+      provider: "external" as const,
+      proposals: [{
+        keyPointId: "kp-one",
+        quotation: "I would improve the knight",
+        text: "Possible mention, proposed by the configured language model and not a detection: you wrote \"I would improve the knight\" — the author's point \"Improve the worst piece\".",
+      }],
+    };
+    const api = new DrillApi("http://tabiya.test", async (input, init) => {
+      calls.push({ url: String(input), ...(init === undefined ? {} : { init }) });
+      return json(response);
+    });
+
+    await expect(api.reasoningReview("run / one", 37)).resolves.toEqual(response);
+    expect(calls).toEqual([{
+      url: "http://tabiya.test/runs/run%20%2F%20one/reasoning-review",
+      init: expect.objectContaining({ method: "POST", body: JSON.stringify({ checkpointEventSeq: 37 }) }),
+    }]);
+  });
 });

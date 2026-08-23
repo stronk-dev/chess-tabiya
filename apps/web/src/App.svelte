@@ -787,6 +787,7 @@
         onContinueCheckpoint={() => controller.continueCheckpoint()}
         onPrediction={(uci) => controller.recordPrediction(uci)}
         onReasoning={(input) => controller.recordReasoning(input)}
+        onReasoningReview={capabilities?.providers.llm === "external" && api.reasoningReview !== undefined ? (checkpointEventSeq) => api.reasoningReview!(session.runState!.run.id, checkpointEventSeq) : undefined}
         onExport={exportPgn}
         onLoadMarks={api.marks === undefined ? undefined : () => api.marks!(session.runState!.run.id)}
         onSaveMarks={api.replaceMarks === undefined ? undefined : (input) => api.replaceMarks!(session.runState!.run.id, input)}

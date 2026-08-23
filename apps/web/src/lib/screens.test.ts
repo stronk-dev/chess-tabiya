@@ -733,6 +733,63 @@ describe("Layer 3 screens", () => {
     await unmount(component);
   });
 
+  it("offers provider-gated reasoning review and renders only the checked fixed frame", async () => {
+    const onReasoningReview = vi.fn(async () => ({
+      provider: "external" as const,
+      proposals: [{
+        keyPointId: "improve-piece",
+        quotation: "I would improve the knight",
+        text: "Possible mention, proposed by the configured language model and not a detection: you wrote \"I would improve the knight\" — the author's point \"Improve the worst piece\".",
+      }],
+    }));
+    const component = mount(CheckpointSheet, {
+      target: target(),
+      props: {
+        run: branchedRun(),
+        checkpoint: {
+          id: "reasoning-checkpoint",
+          label: "State the plan",
+          nodeId: "node-1",
+          eventSeq: 12,
+          actions: [],
+          interaction: { type: "stated_reasoning" as const },
+        },
+        reasoning: {
+          checkpointId: "reasoning-checkpoint",
+          occurrences: [{
+            eventSeq: 13,
+            checkpointEventSeq: 12,
+            branchId: "main",
+            skipped: false,
+            transcript: { candidates: ["Ne5"], plan: "I would improve the knight", fears: "" },
+            detections: [{ keyPointId: "improve-piece", status: "not_detected" }],
+            keyPoints: [{ id: "improve-piece", label: "Improve the worst piece", ground: { kind: "claim", claimId: "piece-activity" }, attribution: "Authored claim: piece activity" }],
+          }],
+          previous: null,
+          absenceSentence: "No earlier attempt has stated reasoning at this checkpoint.",
+          honestySentence: "Detected means literal phrase overlap, not correctness.",
+        },
+        onReasoningReview,
+        canCompare: false,
+        onContinue: vi.fn(),
+        onRewind: vi.fn(),
+        onCompare: vi.fn(),
+        onStop: vi.fn(),
+      },
+    });
+    await tick();
+
+    expect(document.body.textContent).toContain("It cannot add a detection or grade your reasoning.");
+    const reviewButton = [...document.querySelectorAll<HTMLButtonElement>("button")]
+      .find((button) => button.textContent?.includes("another possible mention"));
+    reviewButton!.click();
+    await vi.waitFor(() => expect(onReasoningReview).toHaveBeenCalledWith(12));
+    await tick();
+    expect(document.body.textContent).toContain("Possible mention, proposed by the configured language model and not a detection");
+    expect(document.body.textContent).toContain("I would improve the knight");
+    await unmount(component);
+  });
+
   it("maps every keyboard command and keeps modal focus accessible", async () => {
     const run = branchedRun();
     const onRewind = vi.fn();

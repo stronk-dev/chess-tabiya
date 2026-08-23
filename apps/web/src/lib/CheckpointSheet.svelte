@@ -3,7 +3,7 @@
 
   import HonestControl from "./HonestControl.svelte";
   import { recognizedCheckpointActions, type CheckpointNotice } from "./screen-model.js";
-  import type { AuthoredFeedbackItem, ReasoningPage, ShapeEntryView } from "./api.js";
+  import type { AuthoredFeedbackItem, ReasoningPage, ReasoningReviewPage, ShapeEntryView } from "./api.js";
   import OutcomeContext from "./OutcomeContext.svelte";
   import type { DrillRun } from "@chess-tabiya/runtime";
   import type { Node } from "@chess-tabiya/runtime";
@@ -28,6 +28,7 @@
     startSide?: StartSide;
     onPrediction?: (uci: string) => void | Promise<void>;
     onReasoning?: (input: { readonly transcript?: import("@chess-tabiya/runtime").ReasoningTranscript; readonly skipped?: true }) => void | Promise<void>;
+    onReasoningReview?: ((checkpointEventSeq: number) => Promise<ReasoningReviewPage>) | undefined;
     reasoning?: ReasoningPage;
     shapes?: readonly ShapeEntryView[];
   }
@@ -48,6 +49,7 @@
     startSide = "white",
     onPrediction = () => {},
     onReasoning = () => {},
+    onReasoningReview,
     reasoning,
     shapes = [],
   }: Props = $props();
@@ -58,6 +60,9 @@
   let recognizedActions = $derived(recognizedCheckpointActions(checkpoint.actions));
   let currentReasoning = $derived(reasoning?.occurrences.find((item) => item.checkpointEventSeq === checkpoint.eventSeq));
   let previousReasoning = $derived(reasoning?.previous ?? (reasoning?.occurrences.filter((item) => item.eventSeq !== currentReasoning?.eventSeq).at(-1) ?? null));
+  let review = $state<ReasoningReviewPage | undefined>();
+  let reviewBusy = $state(false);
+  let reviewError = $state<string | undefined>();
 
   function matchedWords(detection: import("@chess-tabiya/runtime").ReasoningDetection): string {
     if (!currentReasoning?.transcript || !detection.match) return "";
@@ -67,6 +72,19 @@
 
   function submitReasoning(): void {
     void onReasoning({ transcript: { candidates: candidates.split("\n").map((item) => item.trim()).filter(Boolean), plan, fears } });
+  }
+
+  async function requestReasoningReview(): Promise<void> {
+    if (onReasoningReview === undefined || currentReasoning === undefined) return;
+    reviewBusy = true;
+    reviewError = undefined;
+    try {
+      review = await onReasoningReview(currentReasoning.checkpointEventSeq);
+    } catch (error) {
+      reviewError = error instanceof Error ? error.message : String(error);
+    } finally {
+      reviewBusy = false;
+    }
   }
 
   onMount(() => heading?.focus());
@@ -114,7 +132,13 @@
             <section aria-label="The author's points"><h4>The author's points</h4>
               {#if currentReasoning.keyPoints && currentReasoning.detections}
                 <p class="honesty">{reasoning?.honestySentence}</p>
-                <ul>{#each currentReasoning.keyPoints as point, index}<li><strong>{point.label}</strong><p>{currentReasoning.detections[index]?.status === "detected" ? `Mentioned — matched '${matchedWords(currentReasoning.detections[index]!)}'` : "Not detected in your words."}</p><small>{point.attribution}</small></li>{/each}</ul>
+                <ul>{#each currentReasoning.keyPoints as point, index}<li><strong>{point.label}</strong><p>{currentReasoning.detections[index]?.status === "detected" ? `Mentioned — matched '${matchedWords(currentReasoning.detections[index]!)}'` : "Not detected in your words."}</p>{#each review?.proposals.filter((proposal) => proposal.keyPointId === point.id) ?? [] as proposal}<p class="proposal">{proposal.text}</p>{/each}<small>{point.attribution}</small></li>{/each}</ul>
+                {#if onReasoningReview !== undefined}
+                  <button type="button" disabled={reviewBusy} onclick={() => void requestReasoningReview()}>{reviewBusy ? "Checking your exact words…" : "Check for another possible mention"}</button>
+                  <p class="honesty">The configured language model may select your exact words. It cannot add a detection or grade your reasoning.</p>
+                  {#if review !== undefined && review.proposals.length === 0}<p>No additional possible mentions were proposed.</p>{/if}
+                  {#if reviewError}<p role="alert">{reviewError}</p>{/if}
+                {/if}
               {:else}<p>Author points remain withheld until this segment opens.</p>{/if}
             </section>
             <section aria-label="Your previous attempt"><h4>Your previous attempt</h4>{#if previousReasoning?.skipped}<p>Declined to state reasoning.</p>{:else if previousReasoning?.transcript}<p><strong>Candidates</strong> {previousReasoning.transcript.candidates.join("; ") || "None listed"}</p><p><strong>Plan</strong> {previousReasoning.transcript.plan}</p><p><strong>Fears</strong> {previousReasoning.transcript.fears || "None listed"}</p>{:else}<p>{reasoning?.absenceSentence}</p>{/if}</section>
@@ -233,6 +257,7 @@
   .reasoning-columns h4, .reasoning-columns p { margin: 0 0 0.45rem; }
   .reasoning-columns ul { padding-left: 1rem; }
   .honesty { color: var(--muted); }
+  .proposal { padding-left: 0.65rem; border-left: 2px solid var(--accent); }
   @media (max-width: 760px) { .reasoning-columns, .reasoning-entry { grid-template-columns: 1fr; } }
 
   .authored-feedback {

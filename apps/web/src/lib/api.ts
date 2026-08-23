@@ -248,6 +248,17 @@ export interface ReasoningPage {
   readonly honestySentence: string;
 }
 
+export interface ReasoningReviewProposal {
+  readonly keyPointId: string;
+  readonly quotation: string;
+  readonly text: string;
+}
+
+export interface ReasoningReviewPage {
+  readonly provider: "external";
+  readonly proposals: readonly ReasoningReviewProposal[];
+}
+
 export interface EngineCapability {
   readonly id: string;
   readonly kind: "opponent" | "judge";
@@ -789,6 +800,7 @@ export interface DrillClientApi extends RunApi {
   branchDecidedness(runId: string, branchIds: readonly string[]): Promise<Readonly<Record<string, import("@chess-tabiya/runtime").Decidedness>>>;
   authoredFeedback(runId: string): Promise<AuthoredFeedbackPage>;
   reasoning(runId: string, checkpointId: string): Promise<ReasoningPage>;
+  reasoningReview?(runId: string, checkpointEventSeq: number): Promise<ReasoningReviewPage>;
   humanSplit(runId: string, nodeId: string): Promise<HumanSplitPage>;
   corpus(runId: string, nodeId: string): Promise<CorpusPage>;
   voice(runId: string, nodeId: string, scope: VoicePage["scope"]): Promise<VoicePage>;
@@ -1343,6 +1355,13 @@ export class DrillApi implements DrillClientApi {
 
   reasoning(runId: string, checkpointId: string): Promise<ReasoningPage> {
     return this.#json(`/runs/${encoded(runId)}/reasoning?checkpointId=${encoded(checkpointId)}`);
+  }
+
+  reasoningReview(runId: string, checkpointEventSeq: number): Promise<ReasoningReviewPage> {
+    return this.#json(`/runs/${encoded(runId)}/reasoning-review`, {
+      method: "POST",
+      body: { checkpointEventSeq },
+    });
   }
 
   applyEvidence(

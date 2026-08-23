@@ -1,6 +1,6 @@
 <script lang="ts">
   import type { DrillPackDefinition } from "@chess-tabiya/schema/drill-pack";
-  import type { Capabilities, CorpusPage, HumanSplitPage, ReasoningPage, RunRole, SessionKind, ShapeEntryView, VoicePage } from "./api.js";
+  import type { Capabilities, CorpusPage, HumanSplitPage, ReasoningPage, ReasoningReviewPage, RunRole, SessionKind, ShapeEntryView, VoicePage } from "./api.js";
   import { BRANCH_COLLAPSE_FLOOR, MARK_BRUSHES, MAX_COMPARISON_BRANCHES, SILENT_ASSISTANCE, branchPath, classifyPhase, collapsedBranchIds, endgameReading, feedbackDeliveryOpen, groupsFromEvents, historyFrom, liveMarkers, moveTransitionEvidence, permittedAssistance, pivotalMarkerEvidence, positionStructureEvidence, renderEndgameReading, renderPhaseReading, renderPivotalMarker, selectedSquareSightEvidence, shapeFiringEvidence, shapeFirings, structuralReading, transitionReading, trajectoryVerdict, type AssistanceConfig, type BranchComparison, type BranchGroup, type Decidedness, type RunMark } from "@chess-tabiya/runtime";
   import type { DrawShape } from "@lichess-org/chessground/draw";
   import { onDestroy, onMount, tick } from "svelte";
@@ -80,6 +80,7 @@
     onContinueCheckpoint: () => void | Promise<void>;
     onPrediction?: (uci: string) => void | Promise<void>;
     onReasoning?: (input: { readonly transcript?: import("@chess-tabiya/runtime").ReasoningTranscript; readonly skipped?: true }) => void | Promise<void>;
+    onReasoningReview?: ((checkpointEventSeq: number) => Promise<ReasoningReviewPage>) | undefined;
     onExport: (branchIds?: readonly string[]) => void | Promise<void>;
     onLoadMarks?: (() => Promise<readonly RunMark[]>) | undefined;
     onSaveMarks?: ((input: { readonly nodeId:string;readonly branchId:string;readonly scope:"position"|"branch";readonly shapes:readonly Pick<RunMark,"brush"|"orig"|"dest">[] }) => Promise<readonly RunMark[]>) | undefined;
@@ -127,6 +128,7 @@
     onContinueCheckpoint,
     onPrediction = () => {},
     onReasoning = () => {},
+    onReasoningReview,
     onExport,
     onLoadMarks,
     onSaveMarks,
@@ -1068,6 +1070,7 @@
     {startSide}
     {onPrediction}
     {onReasoning}
+    {onReasoningReview}
     {...(reasoning === undefined ? {} : { reasoning })}
     {checkpoint}
     authoredItems={checkpointAuthoredItems}

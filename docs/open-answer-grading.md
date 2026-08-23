@@ -21,6 +21,10 @@ reasoning-quality verdict is produced. A configured LLM may only propose an addi
 match by returning a key-point ID plus a verbatim quotation from the learner. The server
 checks that pair and renders a fixed attributed frame; provider prose is discarded, the
 proposal never changes durable detections, and two invalid responses produce silence.
+After a transcript is recorded and authored points are disclosed, the checkpoint sheet
+offers this review only when an external language-model provider is configured. The
+control repeats the boundary before invocation, renders accepted proposals beside their
+named authored point, and reports honest empty output when the provider proposes none.
 
 Transcripts are grant-scoped run data. They do not enter public story cards, PGN, pack
 projection, or match-opponent surfaces. Previous-attempt comparison is owner-only and

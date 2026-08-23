@@ -6629,3 +6629,23 @@ conflicts.
 **Next:** the RFC author pins abandonment authority and the terminal cursor shape. The migration,
 routes and campaign surface then resume behind the already ordered longitudinal/bot-policy schema
 work; this checkpoint needs no rework whichever of the two explicit lifecycle authorities wins.
+
+## 2026-08-23 — The checked reasoning comparator became reachable
+
+**What landed:** the checkpoint sheet now offers the already-implemented reasoning-review route
+when an external language-model provider is configured. It sends only the recorded checkpoint
+sequence, renders only the server's checked fixed-frame proposals beside the matching authored
+point, and gives empty/error states without changing the durable detections.
+
+**What changed:** D1141 drains from four to five of eight formerly unreachable routes. The client
+states the boundary at the control: the provider may select exact learner words, but cannot add a
+detection or grade the reasoning. No provider means no control. The two `/simulate` routes remain
+returned on D1154; `/progress/metrics` remains intentionally operator-only.
+
+**Verification:** focused API and screen suites pass 25/25 and the web TypeScript project is clean.
+The API fixture pins URL encoding and the checkpoint event payload; the surface fixture pins
+provider gating, exact occurrence selection, the honesty sentence, and the returned fixed frame.
+
+**Next:** do not expose simulation until the returned N-way payload can resolve scratch nodes and
+replays checkpoint/objective state. Continue independent accepted work while that author round and
+the collector work proceed.
