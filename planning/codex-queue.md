@@ -1,5 +1,14 @@
 # Codex queue — rewritten in full 2026-08-16
 
+## 0-MODULE-REGISTRY-RETURN. D1205/D1206 block declarations, not reducers
+
+Do not invent the 179-row manifest closure. Appendix B literally enumerates 173 compiled rows
+while claiming 179; §4.11 names the missing six, but A2 makes Appendix B normative. More seriously,
+none of the eleven §4 declarations chooses literal `ceilings.sessions` or `ceilings.roles`, even
+though both are required fields and the compiler accepts any non-empty session strings. Claude must
+amend the two closed tables and add forbidden-role/session negatives. See
+`planning/learner-modules/registry-return.md`. Reducer work and unrelated collectors continue.
+
 ## 0-MODULE-REDUCER-RETURN. D1164 blocks only the novelty arm
 
 The accepted learner-module reducer amendment is partially executable. The fourteen-field
@@ -203,6 +212,26 @@ exactly** six days on. Implementation notes:
   now three-deep** (0.28 `graduation-clearance`, 0.29 this, 0.30 F3).
 - Rows [[D1111]]–[[D1114]] landed at acceptance; [[D1112]] and [[D1114]] **close with the binding
   arm**, [[D1113]] closes with this implementation (§6 gives the note a reader).
+
+## 0-LIVE-SAFETY. ⚠ [[D1210]] — a bot can play into a live game today, with no new code
+
+Two shipped defects compose into a law-8 violation. **Take this before any Phase B work.**
+
+1. **`POST /runs/:id/moves` is unguarded against extending an imported game's own mainline.**
+   Latent until `Result "*"` imports exist — which is precisely what the live lane creates.
+2. **`/live/overlay/:runId` mounts a WRITE-CAPABLE controller** whose opponent-play guard covers
+   **`match` only**, so a `stream` cast will **ask Maia for a move and commit it**.
+
+Composed, the product manufactures a chess claim about a game **still in progress**. Guard both:
+the moves route must refuse extension of an imported mainline, and the overlay's opponent guard
+must cover every live kind, not just `match`.
+
+**[[D1211]] — two more, same lane.** Append-to-run is **structurally impossible**: run identity is
+sealed (`movetextDigest` → `sessionDigest` in `events[0]`, re-derived on read at `events.ts:377`,
+no writer), so a followed broadcast needs a **followed-source object**, not a growing run. And the
+accepted `live-sources` cites `storage.ts:3356` for `source_kind`'s CHECK **four times, including
+inside its `tabiya-claims` block** — it is at **:4388**. Fix the citations before implementing
+against them.
 
 ## 0-BOT-ROSTER. The roster exists — and two blockers explain the empty catalog ([[D1180]]–[[D1183]])
 
