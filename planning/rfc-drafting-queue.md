@@ -1311,3 +1311,31 @@ accepted before `voiceCheck` enforces it.
 
 Both rulings bear on `rfc/theory-knowledge-pipeline.md`: [[D1410]] finding 4 is exactly the
 packet-relative hole, reached through quoted third-party prose rather than through a grade.
+
+## Owner rulings 2026-08-23 (O12) — native-first, and what it costs us
+
+**[[D1414]] — 1.0 human play is native-first.** Rated and clocked human play is built here, not
+delegated. The owner took this with the cost stated: pairing, ratings, abuse handling and a
+competition surface we own end to end, against [[D710]]'s finding that the official Lichess API
+already exposes that substrate. That is the owner's call to make and it is made.
+
+**`rfc/social-play.md` is returned, not amended.** It was drafted against the hybrid, and [[D1400]]
+already found it cited that hybrid as settled by three rulings that do not exist. The fence is now
+contradicted rather than merely unauthorized, so the redraft rebuilds §2's authorities from
+[[D1414]] and demotes the provider round trip from *the* mechanism for rated play to one import path.
+Its existing verified machinery survives — the envelope, the additive schema repair, the invitation
+and retrieval state machines, game-identity verification, the bot-event tables — because those are
+about a game arriving from elsewhere, which native-first does not abolish.
+
+**The follow-up question the ruling does not answer, and which claude must not assume:** does
+native-first include a **public matchmaking pool** in 1.0, or only private/friend play plus native
+ratings? Pairing strangers brings abuse handling, reporting and moderation with it; pairing friends
+does not. This goes back to the owner before the redraft fixes a scope.
+
+**[[D1415]] — two-human play counts toward the return loop**, native or imported. The current
+asymmetry is an accident of which branch fires, and the repair removes the forcing that zeroes
+native matches.
+
+**[[D1416]] — bot tournaments, leagues and operator accounts are deferred past 1.0, not refused.**
+Each owes a home and an owner. Check first whether the operator account is redundant against the
+shipped Teacher surface rather than opening a lane for it.

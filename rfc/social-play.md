@@ -146,6 +146,8 @@ asserted by a test, matching how `branch_id`, `pgn` and `imported_at` already be
 
 ### §2 — The three authorities, and the one sentence the adapter may never say
 
+**RETURNED 2026-08-23 by owner ruling [[D1414]] — this document's scope fence is contradicted, not merely unauthorized.** O12 ruled 1.0 human play **native-first**: rated and clocked play is built here, not delegated to a chess-network adapter. The hybrid this RFC was drafted against is overturned, so §2's authorities and the adapter-as-the-answer-for-rated-play premise need rebuilding rather than annotating. [[D1415]] additionally rules that two-human play counts toward the return loop natively as well as imported, and [[D1416]] converts §8's hosted-league and operator-account **refusals** into post-1.0 **deferrals**, which owe a home and an owner. The provider round trip is not refused — it is demoted to one import path among others.
+
 Ledger: [[D1400]] — this document's scope fence cites five ledger rows as *prior rulings*; none is one. The fence presupposes the O12 ruling and cannot be accepted before it.
 
 `social-play-and-event-boundary.md` §3 divides trust three ways, and this RFC adopts the division
