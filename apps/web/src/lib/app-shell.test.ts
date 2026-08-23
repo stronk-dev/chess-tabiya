@@ -410,9 +410,10 @@ describe("application shell", () => {
     await vi.waitFor(() => expect(document.body.textContent).toContain(`${pack.id} · draft`));
     document.querySelector<HTMLButtonElement>("aside[aria-label='Your drafts'] button")!.click();
     const withdraw = [...document.querySelectorAll<HTMLButtonElement>("button")].find((button) => button.textContent === "Withdraw…")!;
+    await vi.waitFor(() => expect(withdraw.disabled).toBe(false));
     withdraw.click();
     expect(withdrawPackDraft).not.toHaveBeenCalled();
-    expect(document.body.textContent).toContain("Existing private playtest runs keep their exact tested bytes.");
+    await vi.waitFor(() => expect(document.body.textContent).toContain("Existing private playtest runs keep their exact tested bytes."));
     const confirm = [...document.querySelectorAll<HTMLButtonElement>("button")].find((button) => button.textContent === "Confirm withdrawal")!;
     confirm.click();
     await vi.waitFor(() => expect(withdrawPackDraft).toHaveBeenCalledWith(draft.id));

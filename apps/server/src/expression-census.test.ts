@@ -125,7 +125,7 @@ describe("expression census", () => {
     const two = canonicalizeJson(runExpressionCensus({ witnesses }));
     expect(two).toBe(one);
     expect(packFiles().map((name) => [name, statSync(name).mtimeMs, createHash("sha256").update(readFileSync(name)).digest("hex")])).toEqual(before);
-  }, 20_000);
+  }, 60_000);
 
   it("reuses the shipped walker and leaves the verification gate report-free", () => {
     const source = readFileSync(new URL("./expression-census.ts", import.meta.url), "utf8");
@@ -178,7 +178,7 @@ describe("expression census", () => {
     for (const namespace of ["schema", "error", "assistance", "runtime"] as const) {
       expect(mutated.totals[namespace].subjects).toBe(baseline.totals[namespace].subjects + 1);
     }
-  }, 20_000);
+  }, 60_000);
 
   it("finds producerless error codes without misclassifying the six observed near misses", () => {
     const rows = fullDeclarationReport.declarations.filter((row: any) => row.namespace === "error");

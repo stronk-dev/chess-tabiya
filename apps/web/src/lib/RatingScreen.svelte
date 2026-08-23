@@ -174,7 +174,7 @@
   .start-card form { display: grid; grid-template-columns: 1fr 1fr; gap: .75rem; align-items: end; }
   .start-card label { display: grid; gap: .35rem; color: var(--muted); font-size: .8rem; }
   .start-card select, .start-card button { min-height: 2.75rem; padding: .6rem .7rem; border: 1px solid var(--line); border-radius: .6rem; background: var(--paper); color: var(--ink); }
-  .start-card button { grid-column: 1 / -1; background: var(--accent); color: var(--accent-text); font-weight: 700; cursor: pointer; }
+  .start-card button { grid-column: 1 / -1; background: var(--accent); color: var(--on-accent); font-weight: 700; cursor: pointer; }
   .start-card .honest { grid-column: 1 / -1; margin-bottom: 0; color: var(--muted); }
   .rating-card h2 { font-size: clamp(1.8rem, 5vw, 3.2rem); }
   .interval { color: var(--muted); margin-bottom: 0; }

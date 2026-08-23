@@ -7019,3 +7019,24 @@ move.
 
 **Next:** commit the corrected instrument, then generate all four quotable receipts from a clean
 extraction of that commit.
+
+## 2026-08-24 — Both CI failures reproduced and routed to clean-SHA parity
+
+**What landed:** exact inspection of GitHub Actions runs 32670024753 (`make verify`) and
+32670024735 (`make test-browser`) at `f0d5460`, including the uploaded Playwright traces. D1435
+records the process defect. Five deterministic failures were repaired without weakening their
+claims: the phantom theme token, `derivationAnyOf` fixture construction, two Svelte/browser test
+races, and the shape-marker test's wrong assistance primitive. The declaration-census assertions
+remain unchanged but have a 60 s machine envelope instead of 20 s.
+
+**What changed:** the failures were not hidden CI-only behavior. The exact workflow commands can
+catch them locally; they simply were not both run at the final committed SHA after shared
+manifest/UI changes. One browser failure was environment-sensitive because its 500 ms animation
+sampler started before opening and filling the move form. Local Node is v26.7.0 while CI pins Node
+24, and the repo's `engines` range does not enforce parity. The live capability snapshot remains
+owned by the concurrent collector pass: its expected count moved 184→188 while the dirty catalog
+has already moved to 189, so it cannot be truthfully pinned until that pass freezes.
+
+**Next:** add one Node/pnpm-pinned clean-extraction local CI command that runs both workflow
+bodies and records the commit id. After the collector pass lands, reconcile the capability
+snapshot once and run that command on the resulting commit before any push.

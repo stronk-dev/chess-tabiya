@@ -84,7 +84,8 @@ describe("semantic evidence runtime", () => {
                       : "fixture",
       ])));
       const evidence = declareEvidence(projection.producer, declaration.projection, operands);
-      const derivationInputs = (declaration.derivationInputs ?? []).map((input) => {
+      const derivationMember = declaration.derivationAnyOf?.[0] ?? declaration.derivationInputs ?? [];
+      const derivationInputs = derivationMember.map((input) => {
         const source = PRIMARY_EVIDENCE_MANIFEST.projections.find((candidate) => candidate.id === input.id && candidate.version === input.version)!;
         return declareEvidence(source.producer, input, Object.freeze({ fixture: true }));
       });

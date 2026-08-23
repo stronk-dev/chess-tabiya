@@ -49,6 +49,8 @@ test("appearance axes apply live without replacing the board or its position", a
   expect(after.background).not.toBe(before.background);
   expect(after.pieces).toEqual(before.pieces);
 
+  await shell.getByText("Enter a move").click();
+  await shell.getByLabel("Move in SAN or UCI").fill("e2e4");
   await page.evaluate(() => {
     type AnimationSample = { at: number; transforms: string[] };
     const target = window as unknown as { __themeAnimationSamples: AnimationSample[] };
@@ -62,8 +64,6 @@ test("appearance axes apply live without replacing the board or its position", a
     };
     requestAnimationFrame(sample);
   });
-  await shell.getByText("Enter a move").click();
-  await shell.getByLabel("Move in SAN or UCI").fill("e2e4");
   await shell.getByRole("button", { name: "Submit move" }).click();
   await expect.poll(() => page.evaluate(() => {
     type AnimationSample = { at: number; transforms: string[] };

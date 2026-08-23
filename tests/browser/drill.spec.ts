@@ -340,6 +340,8 @@ test("Pack B references the Carlsbad entry while its pack prose stays server-wit
   await expect(page.getByRole("button", { name: "Position structure" })).toHaveAttribute("aria-expanded", "false");
   await expect(page.locator(".structural-facts")).toHaveCount(0);
   await page.getByRole("button", { name: "Return to play" }).click();
+  await page.getByText("Assistance", { exact: true }).click();
+  await page.getByLabel("Named-pattern guidance").check();
   const marker = page.getByRole("button", { name: /Carlsbad structure/ });
   await expect(marker).toBeVisible();
   await marker.click();
