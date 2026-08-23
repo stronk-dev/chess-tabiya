@@ -6753,3 +6753,28 @@ tests pass 19/19. The corrected result supersedes the provisional output.
 readings are mixed, every evidence arm selected the maximum ridge penalty, and H5/C5 remain unmet.
 Run the already-required second preregistered population, then multi-ply coherence, before any
 production, human-like, Elo or personality claim.
+
+## 2026-08-23 — Independent evidence population replicated signal and rejected the fitted head
+
+**What landed:** D1162's second preregistered population ran on 571 unique, non-overlapping
+positions from 108 rated Lichess games across three speeds, three rating bands and plies 8–48.
+Stockfish 18 returned a set-exact depth-12 score for every one of 19,172 legal candidates. After
+the declared mixed mate/cp exclusion, all four arms shared 515 decisions / 17,359 candidates.
+
+**What changed:** the formal mean-probability gate passes strongly: evidence−uniform is 0.104498
+[0.081307, 0.129304], combined−engine is 0.078447 [0.056700, 0.101782], and no rating band
+inverts. The head is nevertheless returned rather than promoted. Combined cross entropy is 6.451
+against engine-only 2.958, top-choice agreement falls 33.5%→15.8%, expected loss rises 167→251 cp,
+and >250-cp mass rises 23.0%→43.4%. The non-proper primary rewarded a distribution that puts high
+mass on a subset and nearly zero on many other observed moves. D1297 records the gate defect.
+
+**Verification:** the preregistration was committed separately at `633f541`; its synthetic
+controls pass 1/1 before the population arm. The full arm passes 2/2 in 413.41 s from a clean clone
+of that commit, isolated from the concurrent semantic-collector implementation. The committed PGN
+and first-screen Stockfish digests match; all 571 engine/generated legal sets are identical; folds
+and 10,000-sample intervals cluster by game.
+
+**Next:** use the two seen populations only for replacement-model development. Replace the
+diagonal heuristic and mean-probability clearance with a proper-score gate, freeze the model, and
+evaluate on later untouched games from the surviving R2 source prefix. Do not start the multi-ply
+packet or implement the selector until that gate passes; H5/C5 remain unmet.

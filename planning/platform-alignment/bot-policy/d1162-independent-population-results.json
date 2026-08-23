@@ -1,0 +1,660 @@
+{
+  "measuredAt": "2026-08-23T18:48:26.953Z",
+  "inputs": {
+    "positions": "sha256:8607ede5c3cb85bb8bcfb3d27d823596df0d69d2ff4e220044146129392a244c",
+    "probe": "sha256:032135f3bbbac58c39804c555337c27dbf5c86d9ea82d767a528417bbcc237f9"
+  },
+  "sourceExclusions": {
+    "rawDecisions": 579,
+    "duplicateFenIdentities": 3,
+    "duplicateDecisions": 7,
+    "firstScreenOverlap": 1
+  },
+  "engine": {
+    "name": "Stockfish",
+    "version": "18"
+  },
+  "population": {
+    "positions": 515,
+    "games": 108,
+    "legalCandidates": 17359,
+    "excludedMixedScore": 56,
+    "legalSetCoverage": 1,
+    "folds": {
+      "0": {
+        "games": 11,
+        "decisions": 45
+      },
+      "1": {
+        "games": 25,
+        "decisions": 128
+      },
+      "2": {
+        "games": 26,
+        "decisions": 117
+      },
+      "3": {
+        "games": 25,
+        "decisions": 117
+      },
+      "4": {
+        "games": 21,
+        "decisions": 108
+      }
+    }
+  },
+  "parameters": {
+    "lambdas": [
+      0.01,
+      0.1,
+      1,
+      10
+    ],
+    "categoricalFloor": 0.05,
+    "bootstrapSamples": 10000,
+    "bootstrapSeed": "0x1162b",
+    "bootstrapUnit": "game"
+  },
+  "choices": {
+    "engine:0": 0.01,
+    "engine:1": 0.01,
+    "engine:2": 0.01,
+    "engine:3": 0.01,
+    "engine:4": 0.01,
+    "evidence:0": 10,
+    "evidence:1": 10,
+    "evidence:2": 10,
+    "evidence:3": 10,
+    "evidence:4": 10,
+    "combined:0": 10,
+    "combined:1": 10,
+    "combined:2": 10,
+    "combined:3": 10,
+    "combined:4": 10
+  },
+  "summary": {
+    "uniform": {
+      "games": 108,
+      "decisions": 515,
+      "playedMass": 0.038526,
+      "crossEntropy": 3.460367,
+      "topAgreement": 0.33534,
+      "expectedLossCp": 249.891284,
+      "severe250": 0.38036
+    },
+    "engine": {
+      "games": 108,
+      "decisions": 515,
+      "playedMass": 0.067002,
+      "crossEntropy": 2.957891,
+      "topAgreement": 0.33534,
+      "expectedLossCp": 166.904498,
+      "severe250": 0.230493
+    },
+    "evidence": {
+      "games": 108,
+      "decisions": 515,
+      "playedMass": 0.143024,
+      "crossEntropy": 6.511241,
+      "topAgreement": 0.150617,
+      "expectedLossCp": 254.684219,
+      "severe250": 0.441818
+    },
+    "combined": {
+      "games": 108,
+      "decisions": 515,
+      "playedMass": 0.14545,
+      "crossEntropy": 6.451142,
+      "topAgreement": 0.158333,
+      "expectedLossCp": 250.572662,
+      "severe250": 0.43408
+    }
+  },
+  "slices": {
+    "ratingBand": {
+      "1000-1399": {
+        "uniform": {
+          "games": 36,
+          "decisions": 166,
+          "playedMass": 0.037056,
+          "crossEntropy": 3.474528,
+          "topAgreement": 0.282407,
+          "expectedLossCp": 264.101175,
+          "severe250": 0.398164
+        },
+        "engine": {
+          "games": 36,
+          "decisions": 166,
+          "playedMass": 0.062688,
+          "crossEntropy": 3.006671,
+          "topAgreement": 0.282407,
+          "expectedLossCp": 178.321681,
+          "severe250": 0.251954
+        },
+        "evidence": {
+          "games": 36,
+          "decisions": 166,
+          "playedMass": 0.167219,
+          "crossEntropy": 7.435606,
+          "topAgreement": 0.178241,
+          "expectedLossCp": 235.632406,
+          "severe250": 0.391575
+        },
+        "combined": {
+          "games": 36,
+          "decisions": 166,
+          "playedMass": 0.168834,
+          "crossEntropy": 7.388055,
+          "topAgreement": 0.178241,
+          "expectedLossCp": 232.452192,
+          "severe250": 0.385454
+        }
+      },
+      "1400-1799": {
+        "uniform": {
+          "games": 36,
+          "decisions": 171,
+          "playedMass": 0.034356,
+          "crossEntropy": 3.494375,
+          "topAgreement": 0.343519,
+          "expectedLossCp": 245.632825,
+          "severe250": 0.359279
+        },
+        "engine": {
+          "games": 36,
+          "decisions": 171,
+          "playedMass": 0.064324,
+          "crossEntropy": 2.968727,
+          "topAgreement": 0.343519,
+          "expectedLossCp": 160.161506,
+          "severe250": 0.207222
+        },
+        "evidence": {
+          "games": 36,
+          "decisions": 171,
+          "playedMass": 0.137701,
+          "crossEntropy": 5.989867,
+          "topAgreement": 0.146296,
+          "expectedLossCp": 264.465977,
+          "severe250": 0.463931
+        },
+        "combined": {
+          "games": 36,
+          "decisions": 171,
+          "playedMass": 0.140392,
+          "crossEntropy": 5.923351,
+          "topAgreement": 0.160185,
+          "expectedLossCp": 259.339791,
+          "severe250": 0.454759
+        }
+      },
+      "1800-2199": {
+        "uniform": {
+          "games": 36,
+          "decisions": 178,
+          "playedMass": 0.044167,
+          "crossEntropy": 3.412197,
+          "topAgreement": 0.380093,
+          "expectedLossCp": 239.939851,
+          "severe250": 0.383638
+        },
+        "engine": {
+          "games": 36,
+          "decisions": 178,
+          "playedMass": 0.073995,
+          "crossEntropy": 2.898274,
+          "topAgreement": 0.380093,
+          "expectedLossCp": 162.230306,
+          "severe250": 0.232304
+        },
+        "evidence": {
+          "games": 36,
+          "decisions": 178,
+          "playedMass": 0.124151,
+          "crossEntropy": 6.108249,
+          "topAgreement": 0.127315,
+          "expectedLossCp": 263.954275,
+          "severe250": 0.469949
+        },
+        "combined": {
+          "games": 36,
+          "decisions": 178,
+          "playedMass": 0.127123,
+          "crossEntropy": 6.042021,
+          "topAgreement": 0.136574,
+          "expectedLossCp": 259.926002,
+          "severe250": 0.462027
+        }
+      }
+    },
+    "speed": {
+      "bullet": {
+        "uniform": {
+          "games": 36,
+          "decisions": 182,
+          "playedMass": 0.044635,
+          "crossEntropy": 3.39848,
+          "topAgreement": 0.339352,
+          "expectedLossCp": 239.890918,
+          "severe250": 0.359373
+        },
+        "engine": {
+          "games": 36,
+          "decisions": 182,
+          "playedMass": 0.072764,
+          "crossEntropy": 2.952576,
+          "topAgreement": 0.339352,
+          "expectedLossCp": 156.406568,
+          "severe250": 0.205826
+        },
+        "evidence": {
+          "games": 36,
+          "decisions": 182,
+          "playedMass": 0.164354,
+          "crossEntropy": 6.442133,
+          "topAgreement": 0.178704,
+          "expectedLossCp": 265.688997,
+          "severe250": 0.453602
+        },
+        "combined": {
+          "games": 36,
+          "decisions": 182,
+          "playedMass": 0.166321,
+          "crossEntropy": 6.380886,
+          "topAgreement": 0.187963,
+          "expectedLossCp": 262.083553,
+          "severe250": 0.446278
+        }
+      },
+      "blitz": {
+        "uniform": {
+          "games": 36,
+          "decisions": 169,
+          "playedMass": 0.040243,
+          "crossEntropy": 3.469515,
+          "topAgreement": 0.349537,
+          "expectedLossCp": 253.557129,
+          "severe250": 0.367296
+        },
+        "engine": {
+          "games": 36,
+          "decisions": 169,
+          "playedMass": 0.07087,
+          "crossEntropy": 2.953264,
+          "topAgreement": 0.349537,
+          "expectedLossCp": 172.74045,
+          "severe250": 0.224985
+        },
+        "evidence": {
+          "games": 36,
+          "decisions": 169,
+          "playedMass": 0.13362,
+          "crossEntropy": 6.790477,
+          "topAgreement": 0.134259,
+          "expectedLossCp": 247.252285,
+          "severe250": 0.406343
+        },
+        "combined": {
+          "games": 36,
+          "decisions": 169,
+          "playedMass": 0.136536,
+          "crossEntropy": 6.732983,
+          "topAgreement": 0.148148,
+          "expectedLossCp": 243.009606,
+          "severe250": 0.398548
+        }
+      },
+      "rapid": {
+        "uniform": {
+          "games": 36,
+          "decisions": 164,
+          "playedMass": 0.0307,
+          "crossEntropy": 3.513106,
+          "topAgreement": 0.31713,
+          "expectedLossCp": 256.225804,
+          "severe250": 0.414411
+        },
+        "engine": {
+          "games": 36,
+          "decisions": 164,
+          "playedMass": 0.057373,
+          "crossEntropy": 2.967832,
+          "topAgreement": 0.31713,
+          "expectedLossCp": 171.566475,
+          "severe250": 0.26067
+        },
+        "evidence": {
+          "games": 36,
+          "decisions": 164,
+          "playedMass": 0.131098,
+          "crossEntropy": 6.301113,
+          "topAgreement": 0.138889,
+          "expectedLossCp": 251.111376,
+          "severe250": 0.46551
+        },
+        "combined": {
+          "games": 36,
+          "decisions": 164,
+          "playedMass": 0.133492,
+          "crossEntropy": 6.239558,
+          "topAgreement": 0.138889,
+          "expectedLossCp": 246.624825,
+          "severe250": 0.457413
+        }
+      }
+    },
+    "ply": {
+      "8": {
+        "uniform": {
+          "games": 98,
+          "decisions": 98,
+          "playedMass": 0.03261,
+          "crossEntropy": 3.433871,
+          "topAgreement": 0.346939,
+          "expectedLossCp": 171.428745,
+          "severe250": 0.246048
+        },
+        "engine": {
+          "games": 98,
+          "decisions": 98,
+          "playedMass": 0.050298,
+          "crossEntropy": 3.049618,
+          "topAgreement": 0.346939,
+          "expectedLossCp": 119.017079,
+          "severe250": 0.140746
+        },
+        "evidence": {
+          "games": 98,
+          "decisions": 98,
+          "playedMass": 0.103285,
+          "crossEntropy": 6.182802,
+          "topAgreement": 0.122449,
+          "expectedLossCp": 175.181022,
+          "severe250": 0.304823
+        },
+        "combined": {
+          "games": 98,
+          "decisions": 98,
+          "playedMass": 0.105621,
+          "crossEntropy": 6.138342,
+          "topAgreement": 0.142857,
+          "expectedLossCp": 171.908157,
+          "severe250": 0.297543
+        }
+      },
+      "16": {
+        "uniform": {
+          "games": 102,
+          "decisions": 102,
+          "playedMass": 0.036219,
+          "crossEntropy": 3.474882,
+          "topAgreement": 0.333333,
+          "expectedLossCp": 228.765134,
+          "severe250": 0.361061
+        },
+        "engine": {
+          "games": 102,
+          "decisions": 102,
+          "playedMass": 0.064613,
+          "crossEntropy": 2.994709,
+          "topAgreement": 0.333333,
+          "expectedLossCp": 159.64796,
+          "severe250": 0.217039
+        },
+        "evidence": {
+          "games": 102,
+          "decisions": 102,
+          "playedMass": 0.126333,
+          "crossEntropy": 6.160978,
+          "topAgreement": 0.147059,
+          "expectedLossCp": 244.526409,
+          "severe250": 0.477507
+        },
+        "combined": {
+          "games": 102,
+          "decisions": 102,
+          "playedMass": 0.128044,
+          "crossEntropy": 6.101947,
+          "topAgreement": 0.147059,
+          "expectedLossCp": 240.354039,
+          "severe250": 0.468138
+        }
+      },
+      "24": {
+        "uniform": {
+          "games": 96,
+          "decisions": 96,
+          "playedMass": 0.036511,
+          "crossEntropy": 3.486166,
+          "topAgreement": 0.364583,
+          "expectedLossCp": 275.420788,
+          "severe250": 0.431725
+        },
+        "engine": {
+          "games": 96,
+          "decisions": 96,
+          "playedMass": 0.069758,
+          "crossEntropy": 2.90585,
+          "topAgreement": 0.364583,
+          "expectedLossCp": 187.336459,
+          "severe250": 0.272901
+        },
+        "evidence": {
+          "games": 96,
+          "decisions": 96,
+          "playedMass": 0.1933,
+          "crossEntropy": 6.561892,
+          "topAgreement": 0.1875,
+          "expectedLossCp": 260.53275,
+          "severe250": 0.483562
+        },
+        "combined": {
+          "games": 96,
+          "decisions": 96,
+          "playedMass": 0.196159,
+          "crossEntropy": 6.499843,
+          "topAgreement": 0.1875,
+          "expectedLossCp": 255.694106,
+          "severe250": 0.475624
+        }
+      },
+      "32": {
+        "uniform": {
+          "games": 86,
+          "decisions": 86,
+          "playedMass": 0.042115,
+          "crossEntropy": 3.464964,
+          "topAgreement": 0.325581,
+          "expectedLossCp": 312.11212,
+          "severe250": 0.464925
+        },
+        "engine": {
+          "games": 86,
+          "decisions": 86,
+          "playedMass": 0.07341,
+          "crossEntropy": 2.879366,
+          "topAgreement": 0.325581,
+          "expectedLossCp": 196.320574,
+          "severe250": 0.279327
+        },
+        "evidence": {
+          "games": 86,
+          "decisions": 86,
+          "playedMass": 0.138357,
+          "crossEntropy": 6.569588,
+          "topAgreement": 0.127907,
+          "expectedLossCp": 314.937599,
+          "severe250": 0.478841
+        },
+        "combined": {
+          "games": 86,
+          "decisions": 86,
+          "playedMass": 0.140166,
+          "crossEntropy": 6.497391,
+          "topAgreement": 0.127907,
+          "expectedLossCp": 310.611499,
+          "severe250": 0.470724
+        }
+      },
+      "40": {
+        "uniform": {
+          "games": 76,
+          "decisions": 76,
+          "playedMass": 0.030836,
+          "crossEntropy": 3.535405,
+          "topAgreement": 0.342105,
+          "expectedLossCp": 276.609823,
+          "severe250": 0.412009
+        },
+        "engine": {
+          "games": 76,
+          "decisions": 76,
+          "playedMass": 0.061462,
+          "crossEntropy": 3.004018,
+          "topAgreement": 0.342105,
+          "expectedLossCp": 179.775903,
+          "severe250": 0.242709
+        },
+        "evidence": {
+          "games": 76,
+          "decisions": 76,
+          "playedMass": 0.137843,
+          "crossEntropy": 7.15877,
+          "topAgreement": 0.144737,
+          "expectedLossCp": 290.358322,
+          "severe250": 0.487125
+        },
+        "combined": {
+          "games": 76,
+          "decisions": 76,
+          "playedMass": 0.140714,
+          "crossEntropy": 7.091352,
+          "topAgreement": 0.144737,
+          "expectedLossCp": 286.687288,
+          "severe250": 0.481446
+        }
+      },
+      "48": {
+        "uniform": {
+          "games": 57,
+          "decisions": 57,
+          "playedMass": 0.060397,
+          "crossEntropy": 3.347325,
+          "topAgreement": 0.350877,
+          "expectedLossCp": 271.66861,
+          "severe250": 0.40924
+        },
+        "engine": {
+          "games": 57,
+          "decisions": 57,
+          "playedMass": 0.095885,
+          "crossEntropy": 2.845765,
+          "topAgreement": 0.350877,
+          "expectedLossCp": 169.512882,
+          "severe250": 0.238043
+        },
+        "evidence": {
+          "games": 57,
+          "decisions": 57,
+          "playedMass": 0.161851,
+          "crossEntropy": 6.574154,
+          "topAgreement": 0.175439,
+          "expectedLossCp": 288.574496,
+          "severe250": 0.518781
+        },
+        "combined": {
+          "games": 57,
+          "decisions": 57,
+          "playedMass": 0.165526,
+          "crossEntropy": 6.507431,
+          "topAgreement": 0.175439,
+          "expectedLossCp": 283.552825,
+          "severe250": 0.510551
+        }
+      }
+    }
+  },
+  "primary": {
+    "evidenceVsUniform": {
+      "games": 108,
+      "decisions": 515,
+      "mean": 0.104498,
+      "ci95": [
+        0.081307,
+        0.129304
+      ]
+    },
+    "combinedVsEngine": {
+      "games": 108,
+      "decisions": 515,
+      "mean": 0.078447,
+      "ci95": [
+        0.0567,
+        0.101782
+      ]
+    },
+    "byBand": {
+      "1000-1399": {
+        "evidenceVsUniform": {
+          "games": 36,
+          "decisions": 166,
+          "mean": 0.130164,
+          "ci95": [
+            0.079952,
+            0.184265
+          ]
+        },
+        "combinedVsEngine": {
+          "games": 36,
+          "decisions": 166,
+          "mean": 0.106146,
+          "ci95": [
+            0.058923,
+            0.158392
+          ]
+        }
+      },
+      "1400-1799": {
+        "evidenceVsUniform": {
+          "games": 36,
+          "decisions": 171,
+          "mean": 0.103345,
+          "ci95": [
+            0.066495,
+            0.141838
+          ]
+        },
+        "combinedVsEngine": {
+          "games": 36,
+          "decisions": 171,
+          "mean": 0.076068,
+          "ci95": [
+            0.042322,
+            0.111203
+          ]
+        }
+      },
+      "1800-2199": {
+        "evidenceVsUniform": {
+          "games": 36,
+          "decisions": 178,
+          "mean": 0.079984,
+          "ci95": [
+            0.050248,
+            0.110879
+          ]
+        },
+        "combinedVsEngine": {
+          "games": 36,
+          "decisions": 178,
+          "mean": 0.053128,
+          "ci95": [
+            0.025292,
+            0.082209
+          ]
+        }
+      }
+    }
+  },
+  "verdict": "pass"
+}

@@ -114,6 +114,14 @@ rewind adds value**.
   Maia context control still abstains. This funds a second preregistered population and multi-ply
   coherence study; it does not compare believable branches or license human-like/Elo/personality
   language, so H5's status/verdict and C5 remain unchanged.
+- **Independent evidence-head population formally passes, fitted head returned 2026-08-23**
+  (`design/research/evidence-to-move-independent-population.md`, D1162/D1297). On 515 held-out
+  decisions from 108 different games, both preregistered mean played-move-probability contrasts
+  pass with positive game-bootstrap intervals and no rating-band inversion. But the combined
+  head's cross entropy worsens from 2.958 to 6.451, top-choice agreement falls 33.5%→15.8%, and
+  >250-cp mass rises 23.0%→43.4%. The representation signal replicates; the diagonal head and its
+  non-proper primary gate do not clear. Repair against a proper score and freeze before a third
+  untouched population; do not begin multi-ply or alter H5/C5 from this result.
 
 ## Kill criteria
 
