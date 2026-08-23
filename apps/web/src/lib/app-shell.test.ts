@@ -339,4 +339,45 @@ describe("application shell", () => {
     expect(document.body.textContent).toContain("/missing");
     await unmount(component);
   });
+
+  it("expands recorded attempts into honestly labelled related rehearsals", async () => {
+    history.replaceState(null, "", "/learn");
+    const base = api();
+    const relatedProgress = vi.fn(async () => [
+      { relation: "same_position" as const, runId: "earlier-run", branchId: "main", attemptCount: 2 },
+      { relation: "same_pack" as const, runId: "pack-run", branchId: "main", attemptCount: 1 },
+    ]);
+    const learnApi: DrillClientApi = {
+      ...base,
+      async progress() {
+        return [{
+          runId: run.id,
+          branchId: run.branches[0]!.id,
+          packId: pack.id,
+          branchLabel: "main",
+          attemptNo: 1,
+          countable: true,
+          graded: true,
+          verdict: "stable",
+          result: null,
+          userPlyCount: 3,
+          origin: "fresh",
+          endedAt: "2026-08-23T12:00:00.000Z",
+        }];
+      },
+      relatedProgress,
+    };
+    const component = mount(App, {
+      target: target(),
+      props: { api: learnApi, router: new HistoryRouter(window), storage: new MemoryStorage() },
+    });
+
+    await vi.waitFor(() => expect(document.body.textContent).toContain(`${pack.id} · attempt 1`));
+    document.querySelector<HTMLButtonElement>("button[aria-expanded='false']")!.click();
+    await vi.waitFor(() => expect(document.body.textContent).toContain("Same position · 2 attempts on that material"));
+    expect(document.body.textContent).toContain("Same pack, different position · 1 attempt on that material");
+    expect(relatedProgress).toHaveBeenCalledWith(run.id, run.branches[0]!.forkNodeId);
+    expect(document.body.textContent).toContain("not a mastery score");
+    await unmount(component);
+  });
 });

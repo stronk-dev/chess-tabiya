@@ -6470,3 +6470,22 @@ reports zero errors and zero warnings. No broad suite was rerun.
 
 **Next:** the F6/O7 Review implementation must compile grades and whole-game moments without
 folding them into this rating record or turning the product into an engine-verdict screen.
+
+## 2026-08-23 — Related rehearsal is reachable without inventing a skill dashboard
+
+**What landed:** the client binds `GET /progress/related`; every recorded attempt on Learn can
+expand into at most three of the learner's own nearby rehearsals. The module resolves the attempt's
+branch root through the run graph and presents only the server's three exact relations: same
+position, same pack/different position, or same idea in this pack.
+
+**What changed:** D1141's dead-route count falls again. The separate `/progress/metrics` endpoint
+remains operator/reporting-only: its voluntary-return and second-attempt rows are product-success
+measurements, not permission to infer mastery, weakness, or a player type. Canonical documentation
+now reflects the shipped related expansion and preserves that boundary.
+
+**Verification:** focused API and mounted Learn-surface tests 10/10; web typecheck reports zero
+errors and zero warnings. No broad suite was rerun.
+
+**Next:** continue draining accepted, unreachable product verbs. Pack-draft playtest/withdraw and
+run simulation are the remaining bounded client bindings; Campaign and Review require their
+respective accepted/amended contracts rather than ad-hoc UI.

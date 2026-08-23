@@ -588,6 +588,13 @@ export interface ProgressSchedule {
   readonly sourceRunId: string | null;
 }
 
+export interface RelatedProgressAttempt {
+  readonly relation: "same_position" | "same_pack" | "same_concept_in_pack";
+  readonly runId: string;
+  readonly branchId: string;
+  readonly attemptCount: number;
+}
+
 export interface PackDraft {
   readonly id: string;
   readonly packId: string;
@@ -801,6 +808,7 @@ export interface DrillClientApi extends RunApi {
   distillRun?(runId:string,input:{readonly packId:string;readonly title:string;readonly branchId?:string}):Promise<DistillResult>;
   progress?(): Promise<readonly ProgressAttempt[]>;
   dueProgress?(): Promise<readonly ProgressSchedule[]>;
+  relatedProgress?(runId: string, nodeId: string): Promise<readonly RelatedProgressAttempt[]>;
   dismissSchedule?(scheduleId: string): Promise<void>;
   duplicateRun?(runId: string, input: { readonly id: string; readonly seed: number; readonly scheduleId?: string }, writerId: string): Promise<DrillRun>;
   packDrafts?(): Promise<readonly PackDraft[]>;
@@ -1029,6 +1037,12 @@ export class DrillApi implements DrillClientApi {
   async dueProgress(): Promise<readonly ProgressSchedule[]> {
     const body = await this.#json<{ readonly schedules: readonly ProgressSchedule[] }>("/progress/due");
     return body.schedules;
+  }
+
+  async relatedProgress(runId: string, nodeId: string): Promise<readonly RelatedProgressAttempt[]> {
+    const query = new URLSearchParams({ runId, nodeId });
+    const body = await this.#json<{ readonly related: readonly RelatedProgressAttempt[] }>(`/progress/related?${query}`);
+    return body.related;
   }
 
   async dismissSchedule(scheduleId: string): Promise<void> {

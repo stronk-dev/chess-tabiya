@@ -318,4 +318,16 @@ describe("DrillApi", () => {
       details: { reason: "lease held elsewhere" },
     });
   });
+
+  it("binds related progress with encoded run and node identities", async () => {
+    const calls: string[] = [];
+    const related = [{ relation: "same_position" as const, runId: "other run", branchId: "main", attemptCount: 2 }];
+    const api = new DrillApi("http://tabiya.test", async (input) => {
+      calls.push(String(input));
+      return json({ related });
+    });
+
+    await expect(api.relatedProgress("run / one", "node ? one")).resolves.toEqual(related);
+    expect(calls).toEqual(["http://tabiya.test/progress/related?runId=run+%2F+one&nodeId=node+%3F+one"]);
+  });
 });

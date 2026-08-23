@@ -27,6 +27,7 @@
     type Learner,
     type ProgressAttempt,
     type ProgressSchedule,
+    type RelatedProgressAttempt,
     type PackDraft,
     type ShapeDraft,
     type LiveSessionSummary,
@@ -171,6 +172,7 @@
   let repertoireStudyUrl=$state("");
   let repertoireError:string|undefined=$state();
   let recommendations:readonly ProgressRecommendation[]=$state([]);
+  let relatedAttempts: Record<string, { readonly status: "loading" | "loaded" | "error"; readonly items: readonly RelatedProgressAttempt[]; readonly message?: string }> = $state({});
 
   const keyboardDispatcher = new ShellKeyboardDispatcher({
     navigate,
@@ -225,6 +227,39 @@
     return Number.isNaN(date.valueOf()) ? value : date.toLocaleString();
   }
 
+  function relatedAttemptKey(attempt: ProgressAttempt): string {
+    return `${attempt.runId}\0${attempt.branchId}`;
+  }
+
+  function relatedAttemptLabel(relation: RelatedProgressAttempt["relation"]): string {
+    if (relation === "same_position") return "Same position";
+    if (relation === "same_pack") return "Same pack, different position";
+    return "Same idea in this pack";
+  }
+
+  async function toggleRelatedAttempts(attempt: ProgressAttempt): Promise<void> {
+    const key = relatedAttemptKey(attempt);
+    if (relatedAttempts[key] !== undefined) {
+      const { [key]: _closed, ...remaining } = relatedAttempts;
+      relatedAttempts = remaining;
+      return;
+    }
+    relatedAttempts = { ...relatedAttempts, [key]: { status: "loading", items: [] } };
+    try {
+      if (api.relatedProgress === undefined) throw new Error("Related attempts are unavailable");
+      const graph = await api.graph(attempt.runId);
+      const branch = graph.branches.find((candidate) => candidate.id === attempt.branchId);
+      if (branch === undefined) throw new Error("The recorded branch is no longer available");
+      const items = await api.relatedProgress(attempt.runId, branch.forkNodeId);
+      relatedAttempts = { ...relatedAttempts, [key]: { status: "loaded", items } };
+    } catch (error) {
+      relatedAttempts = {
+        ...relatedAttempts,
+        [key]: { status: "error", items: [], message: error instanceof Error ? error.message : String(error) },
+      };
+    }
+  }
+
   async function loadRoute(next: AppRoute): Promise<void> {
     const generation = ++loadGeneration;
     routeLoading = true;
@@ -248,6 +283,7 @@
       } else if (next.name === "settings") {
         capabilities = await api.capabilities();
       } else if (next.name === "learn") {
+        relatedAttempts = {};
         [attempts, dueSchedules, milestones, repertoires, recommendations, assignedPacks, runs] = await Promise.all([
           api.progress?.() ?? Promise.resolve([]),
           api.dueProgress?.() ?? Promise.resolve([]),
@@ -854,12 +890,27 @@
         <h2 id="recorded-title">What is recorded</h2>
         <div class="item-list">
           {#each attempts as attempt}
-            <article>
-              <div>
-                <h3>{attempt.packId ?? "Position rehearsal"} · attempt {attempt.attemptNo || "—"}</h3>
-                <p>{attempt.graded ? attempt.verdict : "not graded"} · {attempt.userPlyCount} learner plies · {readableDate(attempt.endedAt)}</p>
+            {@const related = relatedAttempts[relatedAttemptKey(attempt)]}
+            <article class="recorded-attempt">
+              <div class="recorded-attempt-header">
+                <div>
+                  <h3>{attempt.packId ?? "Position rehearsal"} · attempt {attempt.attemptNo || "—"}</h3>
+                  <p>{attempt.graded ? attempt.verdict : "not graded"} · {attempt.userPlyCount} learner plies · {readableDate(attempt.endedAt)}</p>
+                </div>
+                <div class="row-actions">
+                  <button type="button" aria-expanded={related !== undefined} onclick={() => void toggleRelatedAttempts(attempt)}>{related === undefined ? "Related attempts" : "Hide related"}</button>
+                  <button type="button" onclick={() => navigate(routePath({ name: "run", runId: attempt.runId }))}>Open run</button>
+                </div>
               </div>
-              <button type="button" onclick={() => navigate(routePath({ name: "run", runId: attempt.runId }))}>Open run</button>
+              {#if related?.status === "loading"}<p role="status">Finding your nearest related attempts…</p>
+              {:else if related?.status === "error"}<p role="alert">{related.message}</p>
+              {:else if related?.status === "loaded"}
+                <ul class="related-attempts" aria-label={`Related attempts for ${attempt.packId ?? "this position"}`}>
+                  {#each related.items as item}
+                    <li><span><strong>{relatedAttemptLabel(item.relation)}</strong> · {item.attemptCount} {item.attemptCount === 1 ? "attempt" : "attempts"} on that material</span><button type="button" onclick={() => navigate(routePath({ name: "run", runId: item.runId }))}>Open</button></li>
+                  {:else}<li>No other recorded attempts match this position or pack yet.</li>{/each}
+                </ul>
+              {/if}
             </article>
           {:else}<p>No attempts recorded yet.</p>{/each}
         </div>
@@ -1048,6 +1099,11 @@
   button:disabled { cursor: not-allowed; opacity: 0.55; }
   .item-list { display: grid; gap: 0.7rem; max-height: min(55dvh, 36rem); margin-top: 2rem; overflow: auto; }
   .item-list article { display: flex; align-items: center; justify-content: space-between; gap: 1rem; padding: 1rem; border: 1px solid var(--line); border-radius: 0.8rem; background: var(--panel); }
+  .item-list article.recorded-attempt { display: grid; align-items: stretch; }
+  .recorded-attempt-header, .related-attempts li { display: flex; align-items: center; justify-content: space-between; gap: 1rem; }
+  .recorded-attempt-header > div:first-child, .related-attempts span { min-width: 0; }
+  .related-attempts { display: grid; gap: 0.5rem; margin: 0; padding: 0.75rem 0 0; border-top: 1px solid var(--line); list-style: none; }
+  .related-attempts li + li { padding-top: 0.5rem; border-top: 1px solid var(--line); }
   .live-wall { grid-template-columns: repeat(auto-fit, minmax(20rem, 1fr)); }
   .live-wall article { display: grid; grid-template-columns: 7rem minmax(0, 1fr) auto; }
   .mini-board { inline-size: 7rem; block-size: 7rem; overflow: hidden; }

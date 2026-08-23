@@ -32,6 +32,7 @@ The HTTP surface is:
 
 - `GET /progress` — learner-scoped attempt history.
 - `GET /progress/due` — due pending schedules, blocked first.
+- `GET /progress/related` — at most three of the learner's own least-rehearsed related attempts.
 - `POST /progress/schedules/:id` with `dismiss` — learner-scoped dismissal.
 - `POST /runs/:id/duplicate` — a new owned run without mutating the source.
 - `POST /runs/:id/schedule` — a writer-leased explicit return.
@@ -67,8 +68,9 @@ taxonomy.
 ## Current limits
 
 The first implementation does not import bulk personal PGN history or rank
-recommendations by inferred skill. Related-position expansion and longitudinal product-success SQL
-remain operator/reporting work rather than claims made by the learner UI. The scheduler is
+recommendations by inferred skill. Related-position expansion is available from each recorded
+attempt and labels only same-position, same-pack, or same-concept-in-pack relations. Longitudinal
+product-success SQL remains operator/reporting work rather than a claim made by the learner UI. The scheduler is
 intentionally small and explainable; it is not an FSRS/SM-2 mastery model.
 
 Repertoire-gap entries are ordinary `position` runs. Their first countable attempt
