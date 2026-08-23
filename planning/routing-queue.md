@@ -96,6 +96,23 @@ set execution order.
 | D511 | documentation evidence defect | Replace or explicitly qualify the n=1 latency envelope; do not present it as a measured distribution. |
 | D131 | inference-boundary research | Preserve the distinction between policing numerals and policing inference; do not claim a complete mechanical check. |
 
+## Durable-route reconciliation — D1079/D1083
+
+The semantic-route fix exposed nineteen rows whose only prior mentions were RFC metadata,
+changelogs, or proposed-ledger blocks. These are explicit destinations, not inferred mentions:
+
+| Rows | Primary destination | Next action / gate |
+|---|---|---|
+| D501, D492 | derived work-index/process lane | Keep historical counts as evidence; only the executable index may assert current coverage. |
+| D963 | `semantic-collectors` promotion-race discharge | Specify exact geometry inputs and the live-or-recorded Syzygy alternative bound before the two held projections land. |
+| D960, D961 | `campaign-core` implementation/reopen contract | Preserve campaign/play naming and the explicit run-identity reopen condition during campaign persistence work. |
+| D935, D936, D937 | `bot-policy` implementation and follow-up measurement | Register real profiles, retain catalog identity in selections, and measure the disclosed endgame-floor layer before enabling it. |
+| D929, D930 | `longitudinal-store` implementation | Ship the event-log projection and keep every later consumer behind its typed learner-scoped read contract. |
+| D910, D911 | `play-composition` completion | Compile module seats and finish the phone/tablet placement corrections in the remaining viewport matrix. |
+| D907, D905, D898 | `learner-modules` implementation | Land the typed vocabulary images and semantic reducer pipeline before module composition is declared complete. |
+| D758, D760, D762 | tactical/semantic collector follow-up | Preserve exact operands and measured insufficiency; compose significance only in a declared consumer. |
+| D342 | bot/rating research-method lane | Require effect-size thresholds with confidence intervals for dial usefulness; direction-only gates do not discharge scale. |
+
 ## Ordering
 
 1. Accepted implementation work remains ahead of draft/research lanes.

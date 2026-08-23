@@ -6434,3 +6434,22 @@ rewinds, branches, compares, and exports` browser flow 1/1. No broad suite was r
 
 **Next:** the UX composition pass may change how Compare presents these facts; it now receives the
 recorded inputs before first paint instead of a stale pre-evidence snapshot.
+
+## 2026-08-23 — Work-index now proves durable ownership, not textual coincidence
+
+**What landed:** D1079/D1083. The route join now ignores RFC metadata, summaries, open questions,
+changelogs and ledger-row blocks, and ignores explicitly proposed/not-written ledger sections in
+planning documents. Permanent red fixtures cover status-only, changelog-only and proposed-only
+mentions.
+
+**What changed:** the stricter reader exposed nineteen genuinely ownerless rows that the old bare
+text search called routed. They are now assigned explicitly in `planning/routing-queue.md` to the
+semantic collectors, campaign, bot, longitudinal, composition, learner-module, tactical and
+research-method lanes. D1130's temporary unnumbered-proposal convention is retired; provisional
+numbers remain non-authoritative and cannot satisfy the route check.
+
+**Verification:** `tools/work-index.test.mjs` 6/6; the repository audit reports zero duplicates
+and zero unrouted rows after reconciliation.
+
+**Next:** use the corrected executable index to select work; never quote a raw mention census as
+proof of ownership again.

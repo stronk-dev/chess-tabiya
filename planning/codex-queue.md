@@ -211,7 +211,11 @@ inventory: **38 shipped / 12 partial / 16 absent to a user.** Five findings are 
   while Settings ships 72 toggles. `make intent-parity` exists to prevent exactly this; find out
   why it did not catch it — that is an instrument question, not a doc edit.
 
-## 0-WORK-INDEX-DEFECT. [[D1079]] — `make work-index` can report green on an unrouted row
+## 0-WORK-INDEX-DEFECT — COMPLETE 2026-08-23. [[D1079]]/[[D1083]]
+
+The semantic route reader, red fixtures, and nineteen-row reconciliation landed together. The
+incident analysis below is retained as the reason the check no longer accepts RFC status,
+changelog, open-question, summary, or proposed-ledger mentions as ownership.
 
 **The instrument has the defect it exists to catch.** Its join is a bare textual mention
 (`tools/work-index.mjs:68`: `documents.filter(([, text]) => mention(text, row.id))`), so **any**

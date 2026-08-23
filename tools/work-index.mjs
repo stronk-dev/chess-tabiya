@@ -52,6 +52,48 @@ export function routeDocumentPaths(root) {
 
 function mention(text, id) { return new RegExp(`\\b${id}\\b`, "u").test(text); }
 
+function headingDepth(line) {
+  return line.match(/^(#{1,6})\s+/u)?.[1].length ?? 0;
+}
+
+function withoutProposedLedgerSections(markdown) {
+  const lines = markdown.split("\n");
+  const kept = [];
+  let skippedDepth = 0;
+  for (const line of lines) {
+    const depth = headingDepth(line);
+    if (skippedDepth && depth && depth <= skippedDepth) skippedDepth = 0;
+    if (!skippedDepth && depth && /ledger rows?/iu.test(line) && /propos|not written|renumber/iu.test(line)) {
+      skippedDepth = depth;
+    }
+    if (!skippedDepth) kept.push(line);
+  }
+  return kept.join("\n");
+}
+
+function durableRfcText(markdown) {
+  const lines = withoutProposedLedgerSections(markdown).split("\n");
+  const kept = [];
+  let durable = false;
+  for (const line of lines) {
+    if (line.startsWith("## ")) {
+      const heading = line.slice(3).trim();
+      durable = !/^(?:summary|motivation|open questions?|deviations from design|ledger rows?|changelog)\b/iu.test(heading);
+    }
+    if (durable) kept.push(line);
+  }
+  return kept.join("\n");
+}
+
+function durableRouteText(relative, markdown) {
+  if (relative.startsWith("rfc/")) return durableRfcText(markdown);
+  return withoutProposedLedgerSections(markdown);
+}
+
+function durableMention(relative, text, id) {
+  return mention(durableRouteText(relative, text), id);
+}
+
 function routePriority(relative) {
   if (relative.startsWith("rfc/")) return 0;
   if (/(?:queue|work-order|triage)\.md$/u.test(relative)) return 1;
@@ -65,7 +107,7 @@ export function buildWorkIndex({ ledger, documents }) {
   const duplicateIds = [...new Set(rows.map((row) => row.id).filter((id, index, all) => all.indexOf(id) !== index))].sort();
   const openRows = rows.filter((row) => row.open);
   const routes = openRows.map((row) => {
-    const destinations = Object.entries(documents).filter(([, text]) => mention(text, row.id)).map(([relative]) => relative)
+    const destinations = Object.entries(documents).filter(([relative, text]) => durableMention(relative, text, row.id)).map(([relative]) => relative)
       .sort((left, right) => routePriority(left) - routePriority(right) || left.localeCompare(right));
     return Object.freeze({ ...row, primary: destinations[0] ?? null, destinations: Object.freeze(destinations) });
   });

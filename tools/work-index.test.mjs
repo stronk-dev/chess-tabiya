@@ -25,7 +25,7 @@ test("routes an open row to a living queue or active RFC and exposes every refer
     ledger: "| D10 🐞 | defect | open |\n| D11 ✅ | done | closed |\n",
     documents: {
       "planning/codex-queue.md": "Take D10 after the compiler.",
-      "rfc/feature.md": "Owns [[D10]].",
+      "rfc/feature.md": "- **Status:** accepted — D99\n\n## Specification\n\nOwns [[D10]].",
     },
   });
   assert.equal(result.unrouted.length, 0);
@@ -37,6 +37,57 @@ test("reports missing routes and duplicate ledger identities", () => {
   const result = buildWorkIndex({ ledger: "| D8 💡 | idea | open |\n| D8 🐞 | duplicate | open |\n", documents: {} });
   assert.deepEqual(result.duplicateIds, ["D8"]);
   assert.deepEqual(result.unrouted, ["D8", "D8"]);
+});
+
+test("does not treat RFC status, changelog, or proposed ledger rows as durable routes", () => {
+  const result = buildWorkIndex({
+    ledger: [
+      "| D20 🐞 | status-only | open |",
+      "| D21 🐞 | proposed-only | open |",
+      "| D22 🐞 | changelog-only | open |",
+      "| D23 🐞 | specified | open |",
+      "| D24 🐞 | discharged | open |",
+    ].join("\n"),
+    documents: {
+      "rfc/feature.md": [
+        "- **Status:** accepted — owns D20",
+        "",
+        "## Summary",
+        "Summary mentions D21 but does not own it.",
+        "",
+        "## Specification",
+        "The implementation owns D23.",
+        "",
+        "## Discharges",
+        "D24 is discharged by this RFC.",
+        "",
+        "## Ledger rows (proposed — renumber at landing)",
+        "- D21 future row.",
+        "",
+        "## Changelog",
+        "A prior status mentioned D22.",
+      ].join("\n"),
+    },
+  });
+  assert.deepEqual(result.unrouted, ["D20", "D21", "D22"]);
+  assert.deepEqual(result.routes.find((route) => route.id === "D23")?.destinations, ["rfc/feature.md"]);
+  assert.deepEqual(result.routes.find((route) => route.id === "D24")?.destinations, ["rfc/feature.md"]);
+});
+
+test("does not treat a proposed ledger section in a planning document as a route", () => {
+  const result = buildWorkIndex({
+    ledger: "| D30 🐞 | proposed-only | open |\n| D31 🐞 | queued | open |\n",
+    documents: {
+      "planning/lane/plan.md": [
+        "D31 is assigned to the implementation pass.",
+        "",
+        "## Proposed ledger rows — not written",
+        "D30 may be allocated later.",
+      ].join("\n"),
+    },
+  });
+  assert.deepEqual(result.unrouted, ["D30"]);
+  assert.deepEqual(result.routes.find((route) => route.id === "D31")?.destinations, ["planning/lane/plan.md"]);
 });
 
 test("discovers only active RFCs and route-shaped living planning documents", () => {
