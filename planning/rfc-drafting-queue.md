@@ -840,3 +840,4 @@ were written one section earlier. The repair is a retrofit pass: lift prose defe
 Discharges rows, RFC by RFC, heaviest first (`learner-rating`, `measurement-records`,
 `archive/predicate-wave-3`, `archive/teacher-surface`, `breadth-collectors` §4 — a whole
 "Refused and deferred" section with zero D-ids).
+
