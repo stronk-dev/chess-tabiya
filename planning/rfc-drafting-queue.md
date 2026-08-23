@@ -1147,3 +1147,8 @@ pack field.
   **not** bind the non-Maia base the owner funded. `rfc/evidence-move-selector.md` owes a section
   stating which prior refusals bind it and which do not; `make refusal-index` extends to
   `design/research/` verdicts.
+
+- **[[D1311]]** (codex) — the proper-score repair retains the representation signal but fails the
+  same safety clause on two held-out folds. Routed to the evidence-move-selector lane: that RFC's
+  §6 binds to this harness's predeclared verdict, so a repair that still fails safety is material
+  to its calibration gate.
