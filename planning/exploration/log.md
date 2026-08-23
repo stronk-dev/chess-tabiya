@@ -6161,3 +6161,25 @@ The pass also corrected its input census. The accepted learner-module Appendix B
 declared eligibility rows, 179 intended to compile and two awaiting; the R20 queue's 175-row
 premise predated D924. The instrument asserts the authoritative Appendix-B sentence so this count
 cannot drift silently again.
+
+## 2026-08-23 — R21 longitudinal style-feedback desk contract complete
+
+An executable set-equality join now covers all twelve persistently retained R12 habit metrics,
+their exact inputs/denominators, measured 25–200-game floors, uncertainty/source requirements,
+production dependencies and shared bot/style feature atoms. The result is zero production-ready
+metrics. Two opening rows need runtime identity and pinned reference artifacts; two castling rows
+cannot be reproduced by the accepted store's generic per-decision opportunity denominator; eight
+need literal collector/store extensions. Every row still needs early/late and blitz/rapid transfer
+beyond R12's 59-hour high-activity sample.
+
+This narrows the standing claim that the store, rather than collectors, was the blocker. The store
+is necessary and insufficient for the metrics already measured: its semantic-event ingest excludes
+opening identity, clock spend and the R12 configuration/move-role atoms, while its castling grain
+measures a different population. No surface RFC is opened against those gaps.
+
+The contract also pins the bot seam the owner asked for. A feature id has one literal meaning, but
+the learner and bot consumers share neither state nor proof: a habit passes R12 stability/privacy;
+a bot weight separately passes controlled-trait measurement and never reads learner history. The
+learner card is deterministic-first and shows value, interval, floor, window, reference version and
+exact contributors. An optional LLM may paraphrase one sealed card and may not select, diagnose,
+advise, grade, invent an archetype or recommend a move.
