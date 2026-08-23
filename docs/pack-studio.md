@@ -50,8 +50,12 @@ playtesting, registering, withdrawing, and exporting drafts/packs under `/packs/
 `DRAFT_STALE` with the current digest.
 
 `/create` exposes the real JSON document, validation issues with paths, create/save actions,
-and community registration. It is intentionally a low-level authoring instrument rather than
-a visual chess-content editor.
+private playtesting, confirmed withdrawal, and community registration. Save & playtest persists
+the current editor bytes and opens a real run; the server—not the author—chooses its run id, safe
+random seed, and per-run policy configuration. Invalid drafts name their blocking validation
+issues instead of offering an inert action. Withdrawal makes mutable bytes read-only while earlier
+private playtests keep resolving their exact digest. Studio remains an intentionally low-level
+authoring instrument rather than a visual chess-content editor.
 
 `POST /runs/:id/distill` lets a run host turn played branches into an ordinary
 learner-owned draft with `seedKind: run`. It copies only recorded move facts,

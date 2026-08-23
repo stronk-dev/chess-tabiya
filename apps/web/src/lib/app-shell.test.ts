@@ -380,4 +380,43 @@ describe("application shell", () => {
     expect(document.body.textContent).toContain("not a mastery score");
     await unmount(component);
   });
+
+  it("saves and starts a validation-clean Studio draft without authoring run policy", async () => {
+    history.replaceState(null, "", "/create");
+    const draft = { id: "draft-one", packId: pack.id, document: pack, digest, state: "draft" as const, validation: { valid: true, issues: [] } };
+    const updatePackDraft = vi.fn(async () => draft);
+    const playtestPackDraft = vi.fn(async (_draftId: string, _writerId: string) => ({ run, url: `/play/run/${run.id}` }));
+    const studioApi: DrillClientApi = { ...api(), async packDrafts() { return [draft]; }, updatePackDraft, playtestPackDraft };
+    const component = mount(App, { target: target(), props: { api: studioApi, router: new HistoryRouter(window), storage: new MemoryStorage() } });
+
+    await vi.waitFor(() => expect(document.body.textContent).toContain(`${pack.id} · draft`));
+    document.querySelector<HTMLButtonElement>("aside[aria-label='Your drafts'] button")!.click();
+    await vi.waitFor(() => expect(document.querySelector<HTMLButtonElement>("button.primary")?.disabled).toBe(false));
+    document.querySelector<HTMLButtonElement>("button.primary")!.click();
+    await vi.waitFor(() => expect(playtestPackDraft).toHaveBeenCalled());
+    expect(updatePackDraft).toHaveBeenCalledWith(draft.id, draft.digest, expect.objectContaining({ id: pack.id }));
+    expect(playtestPackDraft).toHaveBeenCalledWith(draft.id, expect.stringMatching(/^writer-/));
+    await vi.waitFor(() => expect(location.pathname).toBe(`/play/run/${run.id}`));
+    await unmount(component);
+  });
+
+  it("requires confirmation before withdrawing a mutable Studio draft", async () => {
+    history.replaceState(null, "", "/create");
+    const draft = { id: "draft-one", packId: pack.id, document: pack, digest, state: "draft" as const, validation: { valid: true, issues: [] } };
+    const withdrawPackDraft = vi.fn(async () => undefined);
+    const studioApi: DrillClientApi = { ...api(), async packDrafts() { return [draft]; }, withdrawPackDraft };
+    const component = mount(App, { target: target(), props: { api: studioApi, router: new HistoryRouter(window), storage: new MemoryStorage() } });
+
+    await vi.waitFor(() => expect(document.body.textContent).toContain(`${pack.id} · draft`));
+    document.querySelector<HTMLButtonElement>("aside[aria-label='Your drafts'] button")!.click();
+    const withdraw = [...document.querySelectorAll<HTMLButtonElement>("button")].find((button) => button.textContent === "Withdraw…")!;
+    withdraw.click();
+    expect(withdrawPackDraft).not.toHaveBeenCalled();
+    expect(document.body.textContent).toContain("Existing private playtest runs keep their exact tested bytes.");
+    const confirm = [...document.querySelectorAll<HTMLButtonElement>("button")].find((button) => button.textContent === "Confirm withdrawal")!;
+    confirm.click();
+    await vi.waitFor(() => expect(withdrawPackDraft).toHaveBeenCalledWith(draft.id));
+    await vi.waitFor(() => expect(document.body.textContent).toContain("This draft is withdrawn; its saved bytes remain read-only."));
+    await unmount(component);
+  });
 });

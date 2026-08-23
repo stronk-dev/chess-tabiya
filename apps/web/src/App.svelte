@@ -98,6 +98,8 @@
   let drafts: readonly PackDraft[] = $state([]);
   let studioJson = $state("");
   let selectedDraftId: string | undefined = $state();
+  let studioActionError: string | undefined = $state();
+  let withdrawConfirmId: string | undefined = $state();
   let shapeDrafts: readonly ShapeDraft[] = $state([]);
   let shapeStudioJson = $state("");
   let selectedShapeDraftId: string | undefined = $state();
@@ -183,6 +185,8 @@
   });
 
   let recentRun = $derived(runs[0]);
+  let selectedPackDraft = $derived(drafts.find((candidate) => candidate.id === selectedDraftId));
+  let selectedPackRegistrationBlock = $derived(registrationBlockReason(selectedPackDraft));
   let runContext = $derived(
     route.name === "run" && session.runState
       ? {
@@ -519,27 +523,78 @@
   }
 
   async function createDraft(): Promise<void> {
-    const document = JSON.parse(studioJson) as unknown;
-    const draft = await api.createPackDraft?.(document);
-    if (draft !== undefined) {
-      drafts = [draft, ...drafts];
-      selectedDraftId = draft.id;
-      studioJson = JSON.stringify(draft.document, null, 2);
-    }
+    studioActionError = undefined;
+    try {
+      const document = JSON.parse(studioJson) as unknown;
+      const draft = await api.createPackDraft?.(document);
+      if (draft !== undefined) {
+        drafts = [draft, ...drafts];
+        selectedDraftId = draft.id;
+        studioJson = JSON.stringify(draft.document, null, 2);
+      }
+    } catch (error) { studioActionError = error instanceof Error ? error.message : String(error); }
+  }
+
+  async function persistSelectedDraft(): Promise<PackDraft | undefined> {
+    const draft = drafts.find((candidate) => candidate.id === selectedDraftId);
+    if (draft === undefined || draft.state !== "draft") return undefined;
+    const saved = await api.updatePackDraft?.(draft.id, draft.digest, JSON.parse(studioJson));
+    if (saved !== undefined) drafts = drafts.map((candidate) => candidate.id === saved.id ? saved : candidate);
+    return saved;
   }
 
   async function saveDraft(): Promise<void> {
-    const draft = drafts.find((candidate) => candidate.id === selectedDraftId);
-    if (draft === undefined) return;
-    const saved = await api.updatePackDraft?.(draft.id, draft.digest, JSON.parse(studioJson));
-    if (saved !== undefined) drafts = drafts.map((candidate) => candidate.id === saved.id ? saved : candidate);
+    studioActionError = undefined;
+    try { await persistSelectedDraft(); }
+    catch (error) { studioActionError = error instanceof Error ? error.message : String(error); }
+  }
+
+  async function playtestDraft(): Promise<void> {
+    studioActionError = undefined;
+    try {
+      const draft = await persistSelectedDraft();
+      if (draft === undefined) throw new Error("Select a mutable draft before playtesting");
+      if (!draft.validation.valid) throw new Error("Fix the validation errors before playtesting");
+      if (api.playtestPackDraft === undefined) throw new Error("Pack playtesting is unavailable");
+      const writerId = `writer-${crypto.randomUUID()}`;
+      const result = await api.playtestPackDraft(draft.id, writerId);
+      WriterSession.claimFor(result.run.id, storage, () => writerId);
+      navigate(result.url);
+    } catch (error) { studioActionError = error instanceof Error ? error.message : String(error); }
+  }
+
+  async function withdrawDraft(draftId: string): Promise<void> {
+    const draft = drafts.find((candidate) => candidate.id === draftId);
+    if (draft === undefined || api.withdrawPackDraft === undefined) return;
+    studioActionError = undefined;
+    try {
+      await api.withdrawPackDraft(draft.id);
+      drafts = drafts.map((candidate) => candidate.id === draft.id ? { ...candidate, state: "withdrawn" } : candidate);
+      withdrawConfirmId = undefined;
+    } catch (error) { studioActionError = error instanceof Error ? error.message : String(error); }
+  }
+
+  function registrationBlockReason(draft: PackDraft | undefined): string | undefined {
+    if (draft === undefined) return "Select a draft first.";
+    if (draft.state !== "draft") return `This draft is ${draft.state} and cannot be changed.`;
+    if (!draft.validation.valid) return "Fix the validation errors first.";
+    const document = draft.document as Record<string, unknown>;
+    const provenance = document.provenance as Record<string, unknown> | undefined;
+    const blockers = provenance?.graduationBlockers;
+    if (Array.isArray(blockers) && blockers.some((entry) => typeof entry === "object" && entry !== null && (entry as Record<string, unknown>).state === "blocking")) {
+      return "Resolve the declared graduation blockers first.";
+    }
+    return undefined;
   }
 
   async function registerDraft(): Promise<void> {
     const draft = drafts.find((candidate) => candidate.id === selectedDraftId);
     if (draft === undefined) return;
-    await api.registerPackDraft?.(draft.id);
-    drafts = await (api.packDrafts?.() ?? Promise.resolve([]));
+    studioActionError = undefined;
+    try {
+      await api.registerPackDraft?.(draft.id);
+      drafts = await (api.packDrafts?.() ?? Promise.resolve([]));
+    } catch (error) { studioActionError = error instanceof Error ? error.message : String(error); }
   }
 
   async function createShapeDraft(): Promise<void> {
@@ -925,7 +980,7 @@
         <aside aria-label="Your drafts">
           <h2>Your drafts</h2>
           {#each drafts as draft}
-            <button type="button" onclick={() => { selectedDraftId = draft.id; studioJson = JSON.stringify(draft.document, null, 2); }}>
+            <button type="button" onclick={() => { selectedDraftId = draft.id; studioJson = JSON.stringify(draft.document, null, 2); studioActionError = undefined; withdrawConfirmId = undefined; }}>
               {draft.packId} · {draft.state}
             </button>
           {:else}<p>No database drafts yet. Paste a v0.8 pack to begin.</p>{/each}
@@ -935,15 +990,18 @@
           <textarea id="studio-json" bind:value={studioJson} spellcheck="false"></textarea>
           <div class="row-actions">
             <button type="button" onclick={() => void createDraft()}>Create draft</button>
-            <button type="button" disabled={!selectedDraftId} aria-describedby={!selectedDraftId ? "save-disabled" : undefined} onclick={() => void saveDraft()}>Save</button>
-            <button type="button" disabled={!selectedDraftId} aria-describedby={!selectedDraftId ? "register-disabled" : "pack-publication-retention"} onclick={() => void registerDraft()}>Register community pack</button>
+            <button type="button" disabled={selectedPackDraft?.state !== "draft"} aria-describedby={selectedPackDraft?.state !== "draft" ? "draft-action-disabled" : undefined} onclick={() => void saveDraft()}>Save</button>
+            <button class="primary" type="button" disabled={selectedPackDraft?.state !== "draft" || !selectedPackDraft?.validation.valid} aria-describedby={selectedPackDraft?.state !== "draft" ? "draft-action-disabled" : !selectedPackDraft.validation.valid ? "playtest-disabled" : undefined} onclick={() => void playtestDraft()}>Save &amp; playtest</button>
+            <button type="button" disabled={selectedPackRegistrationBlock !== undefined} aria-describedby={selectedPackRegistrationBlock !== undefined ? "register-disabled" : "pack-publication-retention"} onclick={() => void registerDraft()}>Register community pack</button>
+            <button type="button" disabled={selectedPackDraft?.state !== "draft"} aria-describedby={selectedPackDraft?.state !== "draft" ? "draft-action-disabled" : undefined} onclick={() => { if (selectedPackDraft) withdrawConfirmId = selectedPackDraft.id; }}>Withdraw…</button>
           </div>
-          {#if !selectedDraftId}<p id="save-disabled" class="honest">Select or create a draft before saving.</p><p id="register-disabled" class="honest">Select a valid draft before registration.</p>{/if}
-          {#if selectedDraftId}<p id="pack-publication-retention" class="honest">Registration publishes immutable document bytes, authored prose, licence, and attribution. They remain available with “deleted account” attribution if you later delete your account.</p>{/if}
-          {#if selectedDraftId}
-            {@const selected = drafts.find((candidate) => candidate.id === selectedDraftId)}
-            {#if selected}<ul>{#each selected.validation.issues as issue}<li><code>{issue.path}</code> {issue.code}: {issue.message}</li>{:else}<li>Validation clean.</li>{/each}</ul>{/if}
-          {/if}
+          {#if selectedPackDraft?.state !== "draft"}<p id="draft-action-disabled" class="honest">{selectedPackDraft ? `This draft is ${selectedPackDraft.state}; its saved bytes remain read-only.` : "Select or create a draft first."}</p>{/if}
+          {#if selectedPackDraft?.state === "draft" && !selectedPackDraft.validation.valid}<p id="playtest-disabled" class="honest">Fix the listed validation errors before the real run can start.</p>{/if}
+          {#if selectedPackRegistrationBlock !== undefined}<p id="register-disabled" class="honest">{selectedPackRegistrationBlock}</p>{/if}
+          {#if selectedPackDraft}<p id="pack-publication-retention" class="honest">Playtesting stays private and preserves the tested bytes. Registration publishes immutable document bytes, authored prose, licence, and attribution; those remain available with “deleted account” attribution if you later delete your account.</p>{/if}
+          {#if selectedPackDraft && withdrawConfirmId === selectedPackDraft.id}<aside class="deletion-card"><h3>Withdraw this draft?</h3><p>It becomes read-only and cannot be registered. Existing private playtest runs keep their exact tested bytes.</p><div class="row-actions"><button type="button" onclick={() => void withdrawDraft(selectedPackDraft.id)}>Confirm withdrawal</button><button type="button" onclick={() => withdrawConfirmId = undefined}>Cancel</button></div></aside>{/if}
+          {#if studioActionError}<p role="alert">{studioActionError}</p>{/if}
+          {#if selectedPackDraft}<ul>{#each selectedPackDraft.validation.issues as issue}<li><code>{issue.path}</code> {issue.code}: {issue.message}</li>{:else}<li>Validation clean.</li>{/each}</ul>{/if}
         </section>
       </div>
       <p class="honest">Community registration does not make a pack official. Official packs enter through git and the deployment image.</p>

@@ -330,4 +330,19 @@ describe("DrillApi", () => {
     await expect(api.relatedProgress("run / one", "node ? one")).resolves.toEqual(related);
     expect(calls).toEqual(["http://tabiya.test/progress/related?runId=run+%2F+one&nodeId=node+%3F+one"]);
   });
+
+  it("keeps Pack Studio playtest assembly server-owned and binds withdrawal", async () => {
+    const calls: { readonly url: string; readonly init?: RequestInit }[] = [];
+    const api = new DrillApi("http://tabiya.test", async (input, init) => {
+      calls.push({ url: String(input), ...(init === undefined ? {} : { init }) });
+      return String(input).endsWith("/playtest") ? json({ run, url: `/play/run/${run.id}` }, { status: 201 }) : json({ withdrawn: true });
+    });
+
+    await expect(api.playtestPackDraft("draft / one", "writer-one")).resolves.toMatchObject({ url: `/play/run/${run.id}` });
+    await api.withdrawPackDraft("draft / one");
+    expect(calls).toEqual([
+      { url: "http://tabiya.test/packs/drafts/draft%20%2F%20one/playtest", init: expect.objectContaining({ method: "POST", body: "{}", headers: expect.objectContaining({ "x-writer-id": "writer-one" }) }) },
+      { url: "http://tabiya.test/packs/drafts/draft%20%2F%20one/withdraw", init: expect.objectContaining({ method: "POST", body: "{}" }) },
+    ]);
+  });
 });

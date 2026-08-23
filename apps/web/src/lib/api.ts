@@ -814,7 +814,9 @@ export interface DrillClientApi extends RunApi {
   packDrafts?(): Promise<readonly PackDraft[]>;
   createPackDraft?(document: unknown): Promise<PackDraft>;
   updatePackDraft?(draftId: string, digest: string, document: unknown): Promise<PackDraft>;
+  playtestPackDraft?(draftId: string, writerId: string): Promise<{ readonly run: DrillRun; readonly url: string }>;
   registerPackDraft?(draftId: string): Promise<PackSummary>;
+  withdrawPackDraft?(draftId: string): Promise<void>;
   shapeDrafts?(): Promise<readonly ShapeDraft[]>;
   createShapeDraft?(document: unknown): Promise<ShapeDraft>;
   updateShapeDraft?(draftId: string, digest: string, document: unknown): Promise<ShapeDraft>;
@@ -1086,11 +1088,21 @@ export class DrillApi implements DrillClientApi {
     return (await response.json() as { readonly draft: PackDraft }).draft;
   }
 
+  playtestPackDraft(draftId: string, writerId: string): Promise<{ readonly run: DrillRun; readonly url: string }> {
+    return this.#json(`/packs/drafts/${encoded(draftId)}/playtest`, {
+      method: "POST", writerId, body: {},
+    });
+  }
+
   async registerPackDraft(draftId: string): Promise<PackSummary> {
     const body = await this.#json<{ readonly pack: { readonly summary: PackSummary } }>(`/packs/drafts/${encoded(draftId)}/register`, {
       method: "POST", body: {},
     });
     return body.pack.summary;
+  }
+
+  async withdrawPackDraft(draftId: string): Promise<void> {
+    await this.#json(`/packs/drafts/${encoded(draftId)}/withdraw`, { method: "POST", body: {} });
   }
 
   async shapeDrafts(): Promise<readonly ShapeDraft[]> {

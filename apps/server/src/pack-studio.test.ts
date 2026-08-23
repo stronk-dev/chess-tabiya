@@ -4,6 +4,8 @@ import { afterEach, describe, expect, it } from "vitest";
 
 import { PackRegistry, projectPackDocument } from "./pack-registry.js";
 import { PackStudio } from "./pack-studio.js";
+import { createRestHandler } from "./rest.js";
+import { RunService } from "./service.js";
 import { SQLiteRunStorage } from "./storage.js";
 
 const fixture = JSON.parse(readFileSync(new URL("../../../schemas/drill_pack.example.json", import.meta.url), "utf8")) as any;
@@ -123,5 +125,37 @@ describe("Pack Studio", () => {
     new PackStudio(storage, fresh).hydrate();
     expect(fresh.get("playtest-only")).toBeUndefined();
     expect(fresh.byDigest(record.digest)?.document.id).toBe("playtest-only");
+  });
+
+  it("derives playtest run assembly at the HTTP boundary", async () => {
+    const storage = new SQLiteRunStorage();
+    stores.push(storage);
+    storage.createLearner({ id: "__legacy", handle: "legacy-playtest", createdAt: "2026-08-23T00:00:00.000Z", passwordHash: "!" });
+    const registry = await PackRegistry.fromDocuments([{ source: "official", value: fixture }]);
+    const studio = new PackStudio(storage, registry);
+    const document = structuredClone(fixture);
+    document.id = "derived-playtest";
+    document.provenance = { reviewStatus: "draft", sources: [] };
+    const draft = studio.create({ learnerId: "__legacy", handle: "__legacy" }, { document });
+    const handler = createRestHandler(new RunService(storage, { packRegistry: registry }), undefined, undefined, undefined, studio);
+    const response = await handler(new Request(`http://server.test/packs/drafts/${draft.id}/playtest`, {
+      method: "POST",
+      headers: { "content-type": "application/json", "x-writer-id": "writer-playtest" },
+      body: "{}",
+    }));
+
+    expect(response.status).toBe(201);
+    const body = await response.json() as { readonly run: { readonly id: string; readonly branches: readonly { readonly seed: number }[]; readonly policyConfig: { readonly seedMode: string } }; readonly url: string };
+    expect(body.run.id).toMatch(/^[0-9a-f-]{36}$/u);
+    expect(Number.isSafeInteger(body.run.branches[0]?.seed)).toBe(true);
+    expect(body.run.policyConfig.seedMode).toBe("per_run");
+    expect(body.url).toBe(`/play/run/${body.run.id}`);
+
+    const clientAssembly = await handler(new Request(`http://server.test/packs/drafts/${draft.id}/playtest`, {
+      method: "POST",
+      headers: { "content-type": "application/json", "x-writer-id": "writer-playtest" },
+      body: JSON.stringify({ id: "client-id", seed: 1, policyConfig: {} }),
+    }));
+    expect(clientAssembly.status).toBe(400);
   });
 });

@@ -6489,3 +6489,23 @@ errors and zero warnings. No broad suite was rerun.
 **Next:** continue draining accepted, unreachable product verbs. Pack-draft playtest/withdraw and
 run simulation are the remaining bounded client bindings; Campaign and Review require their
 respective accepted/amended contracts rather than ad-hoc UI.
+
+## 2026-08-23 — Pack Studio's measured playtest loop reaches an author
+
+**What landed:** D1143. The selected-draft action bar now saves and opens a validation-clean draft
+as a real private run, and offers withdrawal behind an explicit effect summary and confirmation.
+Registration is disabled with the exact local blocker for absent selection, immutable state,
+validation failure, or a declared blocking graduation entry.
+
+**What changed:** the client binding exposed a server/RFC contradiction before copying it. The
+accepted playtest contract says the server owns run id, safe random seed, and per-run policy; the
+route required all three from the caller. The route now rejects client assembly fields, derives
+them itself, and returns the canonical run URL. Authors see one Save & playtest action rather than
+engine/policy/seed plumbing. D1141 falls to three genuinely uncallable routes.
+
+**Verification:** focused Pack Studio server, API, and mounted author-surface tests 20/20; server
+and web typechecks are green with zero Svelte diagnostics. No broad suite was rerun.
+
+**Next:** simulation is the remaining bounded core-loop binding. Reasoning review waits for the
+Review contract because its task/provider boundary is already a recorded trust defect; Campaign
+still needs its HTTP/application RFC rather than an improvised route family.

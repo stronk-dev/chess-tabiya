@@ -200,6 +200,9 @@ swept.
   (`:1184`), `GET /progress/metrics` (`:1191`), `POST /runs/:id/reasoning-review` (`:1420`),
   `/simulate` (`:1699`), `/simulate-enter` (`:1707`), `/packs/drafts/:id/playtest` (`:1058`),
   `/packs/drafts/:id/withdraw` (`:1069`). **The server work is done; the client verb is missing.**
+- **[[D1143]] closes the Pack Studio pair as one boundary repair:** derive playtest identity, seed,
+  and policy on the server exactly as the accepted RFC specifies, then bind Playtest and confirmed
+  Withdraw in the selected-draft action bar. Do not expose those assembly fields as author settings.
 - **`compileModuleRegistry` has never been called** — which weakens [[D1069]]'s premise about the
   hint ladder contradicting the guided-hint contract; re-check that before acting on it.
 - **[[D1087]] was generous**: `trait.pawn_preference@1` is **test-file only**, and
