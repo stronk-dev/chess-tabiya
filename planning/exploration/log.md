@@ -6987,3 +6987,18 @@ drafts commissioned the same day lifted the same gate and claimed the same repai
 **Next:** the `hint-distance` redraft is gated on a selector exploration pass; the four owner
 decisions in `planning/decision-queue.md` remain, [[D1300]] first. `work-index` carries 12 unrouted
 rows belonging to the `hint-distance` and `bot-route-source` review lanes.
+## 2026-08-23 — Longitudinal projection cost frozen before measurement
+
+**What landed:** D1405 preregisters a clean-extraction cost instrument over the fixed 108-game,
+6,991-ply imported sample. It measures terminal 20/40/80-ply whole-prefix mutations on eight fixed
+paths per arm, 25 complete bulk-import games, exact legal-alternative/event/reference volume and
+the cumulative replay counts implied by running the same projection after every move.
+
+**What changed:** the longitudinal-store return now has an executable research gate rather than a
+general warning about quadratic work. The existing 500 ms post-move server-side envelope is the
+frozen refusal boundary. This first pass is explicitly a lower bound: committed
+`localSemanticEvents` cannot construct the 21 population/path families identified by B2, so the
+repaired constructor registry must repeat the same measurement before implementation.
+
+**Next:** land the disposable harness, run the binding arms from a clean extraction, publish the
+research dossier and route the measured write schedule back into the RFC author round.
