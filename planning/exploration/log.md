@@ -6258,3 +6258,19 @@ collection stays available with all providers off. Bot scores, semantic PV horiz
 opportunity denominators are separate exact joins, so neither UI policy nor engine availability
 contaminates the factual cache. Selection-policy identity belongs on the downstream result rather
 than the packet. Implementation still needs an accepted RFC and end-to-end cold/warm measurement.
+
+## 2026-08-23 — D1073 state-directed opening profile measured and refused
+
+The stronger follow-up to D1062 replaces a sparse completion event with an exact opening target
+potential: own pawn g3/g6, bishop g2/g7 and knight f3/f6, with a candidate firing only when it
+reduces the typed occupancy distance. It clears the new coverage gate—80/447 opening cells offer a
+guarded progress/non-progress choice—and preserves strength, severe-error mass, Explorer match and
+byte-identical non-opening fallthrough.
+
+It still fails controlled reach. A ×4 post-guard weight moves opening route probability only
+10.36→15.21% (+4.85 points); diagnostic ×8 reaches +6.83, below the preregistered ten-point gate.
+The candidate profile is refused. Two mechanism classes have now failed for different reasons:
+global completion atoms are sparse, while an adequately covered phase target is locally effective
+but cannot move Maia's concentrated phase-level distribution enough. The next bot experiment must
+change mechanism class to a transposition-aware repertoire or multi-ply route controller with
+declared adherence/deviation/fallthrough. Increasing the weight again is not a research result.

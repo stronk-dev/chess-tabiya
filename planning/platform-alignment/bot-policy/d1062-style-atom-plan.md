@@ -3,7 +3,7 @@
 **Opened:** 2026-08-23
 **Authority:** D1056/D1062, R11, O8; disposable research only
 **Status:** complete — 0/5 candidate arms pass; details in
-`d1060-style-atom-results.{json,md}` and `design/research/shared-style-atoms-as-bot-traits.md`
+`d1062-style-atom-results.{json,md}` and `design/research/shared-style-atoms-as-bot-traits.md`
 
 ## Question
 

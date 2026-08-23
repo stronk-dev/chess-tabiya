@@ -1,0 +1,117 @@
+{
+  "experiment": "D1073",
+  "measuredAt": "2026-08-23T14:59:53.561Z",
+  "parameters": {
+    "temperature": 0.8,
+    "topP": 0.92,
+    "guardCp": 250,
+    "multiplier": 4,
+    "gates": {
+      "routeDelta": 0.1,
+      "opportunityCoverage": 0.1,
+      "lossDeltaCp": 35,
+      "severeRise": 0.01,
+      "humanRetention": 0.9
+    }
+  },
+  "inputs": {
+    "maia": "sha256:61b4e12a4fa6e728ad5cc7bc44276c9cc676ae4be1d29f7c8e4b66d9fc466400",
+    "sf": "sha256:7fd969e9d38c22289a4c7a4958f86ab4ca276386f368f3a0ed605257dabac402",
+    "probes": "sha256:fe081f45d95b6115ee649831882e45561ff7b0d960b6759242ac335654e9cfed",
+    "san": "sha256:4e88eae51cc0df0a5cb4882a2a33679de73c41e3c8f26dfab4def80df3103473"
+  },
+  "population": {
+    "maiaRows": 837,
+    "sfRows": 279,
+    "probePositions": 279,
+    "cells": 804,
+    "abstainedMixedScoreCells": 33,
+    "unmappableCandidates": 0,
+    "openingCells": 447
+  },
+  "production": {
+    "cells": 804,
+    "expectedLossCp": 20.821109,
+    "severe250": 0.004316,
+    "humanMatch": 0.31329
+  },
+  "all": {
+    "base": {
+      "cells": 804,
+      "expectedLossCp": 19.463267,
+      "severe250": 0,
+      "humanMatch": 0.313947,
+      "routeRate": 0.082662,
+      "opportunityCells": 128,
+      "conditionalRouteRate": 0.362973
+    },
+    "weighted": {
+      "cells": 804,
+      "expectedLossCp": 19.225334,
+      "severe250": 0,
+      "humanMatch": 0.313319,
+      "routeRate": 0.10964,
+      "opportunityCells": 128,
+      "conditionalRouteRate": 0.532428
+    }
+  },
+  "opening": {
+    "base": {
+      "cells": 447,
+      "expectedLossCp": 18.387335,
+      "severe250": 0,
+      "humanMatch": 0.416471,
+      "routeRate": 0.10357,
+      "opportunityCells": 80,
+      "conditionalRouteRate": 0.4037
+    },
+    "weighted": {
+      "cells": 447,
+      "expectedLossCp": 17.959374,
+      "severe250": 0,
+      "humanMatch": 0.415342,
+      "routeRate": 0.152094,
+      "opportunityCells": 80,
+      "conditionalRouteRate": 0.674827
+    }
+  },
+  "gates": {
+    "routeDelta": 0.048524,
+    "opportunityCoverage": 0.178971,
+    "lossDeltaCp": -1.595776,
+    "severeRise": -0.004316,
+    "humanRetention": 1.000093,
+    "outsideStable": true,
+    "pass": false
+  },
+  "controls": {
+    "pawn": {
+      "cells": 804,
+      "expectedLossCp": 19.945575,
+      "severe250": 0,
+      "humanMatch": 0.309485,
+      "routeRate": 0.458155,
+      "opportunityCells": 403,
+      "conditionalRouteRate": 0.636122
+    },
+    "forcing": {
+      "cells": 804,
+      "expectedLossCp": 19.965684,
+      "severe250": 0,
+      "humanMatch": 0.311082,
+      "routeRate": 0.237007,
+      "opportunityCells": 138,
+      "conditionalRouteRate": 0.504011
+    }
+  },
+  "sensitivity": {
+    "2": {
+      "routeRate": 0.12855194415143725,
+      "routeDelta": 0.024981487337736363
+    },
+    "8": {
+      "routeRate": 0.17185079359347352,
+      "routeDelta": 0.06828033677977263
+    }
+  }
+}

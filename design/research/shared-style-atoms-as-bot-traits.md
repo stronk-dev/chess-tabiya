@@ -2,7 +2,7 @@
 
 **Question:** D1062, follow-up to platform-alignment R11/R21
 **Date:** 2026-08-23
-**Instrument:** `tools/d1060-style-bot-harness/`
+**Instrument:** `tools/d1062-style-bot-harness/`
 **Status:** measurement complete; five candidate profile arms refused at the measured transform
 
 ## Verdict
@@ -13,7 +13,7 @@ play moves the most, from **12.01% to 17.64% (+5.63 percentage points)**, below 
 points. Early queen, castling, fianchetto completion and fianchetto-with-knight completion move by
 1.94, 1.62, 0.05 and 0.14 points. All five preserve the strength, severe-error and Explorer-match
 clauses; all fail on control reach. `[V]`
-(`planning/platform-alignment/bot-policy/d1060-style-atom-results.json`)
+(`planning/platform-alignment/bot-policy/d1062-style-atom-results.json`)
 
 This closes one tempting shortcut: a literal event that supports Review or longitudinal counting
 does not automatically support a visible bot identity. It does **not** reject the atoms themselves.
@@ -31,8 +31,8 @@ The disposable instrument reuses D969's fixed raw data without new provider call
 - production sampling at temperature .8/top-p .92, followed by the fixed depth-8 250-cp guard;
 - exactly ×4 mass on each named atom, then normalization.
 
-`[V]` (`d1060-style-atom-results.json` input hashes/population; preregistered
-`d1060-style-atom-plan.md`)
+`[V]` (`d1062-style-atom-results.json` input hashes/population; preregistered
+`d1062-style-atom-plan.md`)
 
 The pawn ×4 positive control reproduces D969's expected loss **19.945575 cp**, Explorer match
 **0.309485**, and passing verdict. Forcing ×3 reproduces expected loss **19.965684 cp**, Explorer
@@ -55,7 +55,7 @@ configuration does not. `[V]` (`style-atoms.test.ts` fixtures)
 | fianchetto setup completion | 3 | 1.05% | 1.10% | +0.05 pp | 80.7→94.3% | fail |
 | fianchetto knight-screen completion | 6 | 0.92% | 1.06% | +0.14 pp | 73.3→91.4% | fail |
 
-`[V]` (`d1060-style-atom-results.md`)
+`[V]` (`d1062-style-atom-results.md`)
 
 The local and pooled readings answer different questions. Where a declinable choice exists, the
 weight changes behavior substantially. Globally, the configurations are too sparse or the
@@ -67,7 +67,7 @@ express. `[V]` (same result, opportunity diagnostics)
 The preregistered ×2/×8 sensitivity does not rescue the verdict. Even ×8 moves extended-center
 pawn play by only **8.54 points**; the other four remain at or below 3.14 points. These are
 diagnostics, not post-hoc replacement arms, but they rule out the simplest explanation that ×4 was
-just slightly too weak. `[V]` (`d1060-style-atom-results.json` `sensitivity`)
+just slightly too weak. `[V]` (`d1062-style-atom-results.json` `sensitivity`)
 
 ## 3. Architectural consequence
 
