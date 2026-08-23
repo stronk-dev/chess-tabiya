@@ -154,7 +154,15 @@ by `pack-capability-contract`'s *proposed* D1074 mention. This is [[D526]]/[[D53
 instrument sharing the defect's assumption — and the second routing instrument to return a clean
 reading over a real gap ([[D641]] first, [[D952]] measured it).
 
-**Fix**: a destination must not be a document that *proposes* that same id. Either exclude
+**A SECOND instance, the exact mirror ([[D1081]])**: accepting `runtime-opening-identity` de-routed
+[[D1052]], whose **only mention in the whole repository** lived inside the status line the
+acceptance replaced. work-index went red immediately — correctly, this time. Together the two show
+the real root cause: **the join accepts any textual mention as a destination and has no notion of
+what a destination IS.**
+
+**Fix**: a destination must be a *durable* mention — a route-shaped planning document, or an RFC's
+Specification/Discharges body — and never a status line, a changelog entry, or a proposed-row
+block. A destination must also not be a document that *proposes* that same id. Either exclude
 proposed-row blocks from the join (they are syntactically marked — "(proposed — renumber at
 landing)"), or require the destination to be a route-shaped document that does not also claim the
 id as future. Add a fixture that is **red before the fix**: a landed row whose only mention is a
