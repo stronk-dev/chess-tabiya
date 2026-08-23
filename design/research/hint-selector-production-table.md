@@ -30,8 +30,8 @@ first move caused, enabled, avoided or answered the later event. It also lowers 
 30/64 at depth 12 and 22/64 at 100 ms. Restricting to the first edge reaches 21/64 in both arms.
 Those are diagnostic bounds, not candidate product policies.
 
-The selector also fails its machine-local latency headroom: depth-12 p95 is **1,529.1 ms** against
-the preregistered 1,400-ms boundary. The 100-ms arm is inside that boundary at 1,375.7 ms. These
+The selector also fails its machine-local latency headroom: depth-12 p95 is **1,595.9 ms** against
+the preregistered 1,400-ms boundary. The 100-ms arm is inside that boundary at 1,362.7 ms. These
 figures exclude the engine request, transport, packet compilation and rendering, so they do not
 satisfy the required cold/warm/provider-off end-to-end receipt.
 

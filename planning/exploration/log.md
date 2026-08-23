@@ -6923,12 +6923,31 @@ opponent edge in 28/72 non-empty rows, including 18 opening rows, while the pack
 the root side's first move. The candidate pool itself is 78 opponent / 72 root; `loose_piece`
 accounts for 130/150 candidates and 58/72 selections. Root-side filtering reduces reach to 30/64
 depth-12 and 22/64 at 100 ms but does not establish causality or benefit. Depth-12 selector-only
-p95 is 1,529.1 ms against the frozen 1,400-ms headroom, before engine/transport/rendering.
+p95 is 1,595.9 ms against the frozen 1,400-ms headroom, before engine/transport/rendering.
 
 **Next:** keep `rfc/hint-distance.md` returned. Preregister per-family perspective/polarity and a
 closed relation to the root action, then consume D1071's shared score-free packet and measure
 cold/warm/provider-off end to end through the sealed disclosure packet and deterministic renderer.
 Theory/authored/tablebase adapters remain independently available when the engine arm abstains.
+
+## 2026-08-23 — Relation-safe Guided Hint selection measured the honest-empty majority
+
+**What landed:** D1397 projected every one of D1363's 150 exact occurrences through a
+preregistered three-relation grammar and family/sign admission table. The 115-ms focused suite
+passes 2/2, including permanent opponent-precedence and disallowed-sign injections. The projection
+recomputes no chess truth and changes no production code.
+
+**What changed:** only 35/150 occurrences are eligible. The strict-direct selector reaches 10/64
+positions in both engine arms; allowing a later root-side event in the exact searched line reaches
+16/64 at depth 12 and remains 10/64 at 100 ms. Immediate family/status/relation agrees 10/10 across
+arms, while all six extra later-line positions are depth-only. Refusals are 78 opponent events, 16
+self-exposure-created loose-piece events, 20 preserved self-risk events and one non-persistent
+promotion. The seven-family ladder is therefore a sparse supplemental module, not universal help.
+
+**Next:** Claude may amend the RFC's perspective/sign table from D1397, but acceptance still waits
+for D1071's shared candidate/event packet, a sealed rung disclosure path and cold/warm/provider-off
+end-to-end measurement. Independent theory, authored and tablebase modules provide grounded
+fallback; silence remains correct when none is available. Owner use later judges usefulness.
 
 ## 2026-08-23 — Live-debt ranks 5–8 drafted; one draft returned; three shipped defects fail silent
 

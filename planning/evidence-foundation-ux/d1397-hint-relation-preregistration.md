@@ -1,10 +1,10 @@
-# D1391 — relation-safe engine-hint selector preregistration
+# D1397 — relation-safe engine-hint selector preregistration
 
 - **Frozen:** 2026-08-23, before emitting the full D1363 candidate population or reading any
   relation-safe selection result
 - **Purpose:** test the smallest perspective/polarity contract that can replace the refuted raw
   precedence in `rfc/hint-distance.md`
-- **Instrument:** disposable research under `tools/d1391-hint-relation-harness/`
+- **Instrument:** disposable research under `tools/d1397-hint-relation-harness/`
 - **Production code:** none
 
 ## Question
@@ -25,7 +25,7 @@ committed `depth12` and `movetime100_a` PV arms, at most four legal plies, and t
 loose_piece | promotion_pressure`.
 
 The D1363 input digest, runtime-source digest and every candidate's occurrence digest must match
-the committed result. The D1391 collection pass may add every exact candidate occurrence to the
+the committed result. The D1397 collection pass may add every exact candidate occurrence to the
 artifact; it may not add, remove, reorder or reinterpret a constructor.
 
 ## Frozen relation grammar
@@ -88,6 +88,6 @@ counts by phase and engine arm, plus exact position ids.
 
 A passing result establishes a source-safe occurrence selector, not learner usefulness. The
 separate cold/warm/provider-off end-to-end latency gate remains blocked on the shared score-free
-candidate/event packet and the sealed disclosure/render path. An RFC may consume D1391 only if it
+candidate/event packet and the sealed disclosure/render path. An RFC may consume D1397 only if it
 keeps these identities separate and preserves theory/authored/tablebase fallback when the engine
 selector is empty.

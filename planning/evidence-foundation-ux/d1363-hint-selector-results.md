@@ -4,8 +4,8 @@ Input: `sha256:53051e9671e801ecb71c209a052b54da53d97873b07d0c85298b8d70043d4162`
 
 | arm | raw reach | root-side reach | root-edge reach | raw opponent selections | raw ≠ root-side | p95 selector time |
 |---|---:|---:|---:|---:|---:|---:|
-| depth12 | 39/64 (60.9%) | 30/64 (46.9%) | 21/64 (32.8%) | 16 | 16 | 1529.1 ms |
-| movetime100_a | 33/64 (51.6%) | 22/64 (34.4%) | 21/64 (32.8%) | 12 | 12 | 1375.7 ms |
+| depth12 | 39/64 (60.9%) | 30/64 (46.9%) | 21/64 (32.8%) | 16 | 16 | 1595.9 ms |
+| movetime100_a | 33/64 (51.6%) | 22/64 (34.4%) | 21/64 (32.8%) | 12 | 12 | 1362.7 ms |
 
 ## Candidate incidence
 

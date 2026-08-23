@@ -1,0 +1,3068 @@
+{
+  "experiment": "D1397",
+  "measuredAt": "2026-08-23T20:59:52.692Z",
+  "input": {
+    "path": "planning/evidence-foundation-ux/d1363-hint-selector-results.json",
+    "sha256": "sha256:f039dc2407bfee238fe97f9e3ad3ecc4eb8ca22d854d39dcfacd460a3c9fab00",
+    "d1061Input": "sha256:53051e9671e801ecb71c209a052b54da53d97873b07d0c85298b8d70043d4162",
+    "runtimeDigest": "sha256:9b9831400163b62a159377b8a9e1921509bfd665e9aa5b27687dc7f74839159c"
+  },
+  "contract": {
+    "families": [
+      "mate_in_one",
+      "forced_mate",
+      "double_attack",
+      "fork_survives_reply",
+      "discovered_executed",
+      "loose_piece",
+      "promotion_pressure"
+    ],
+    "relations": [
+      "root_direct",
+      "opponent_line_event",
+      "root_followup_in_line"
+    ],
+    "policies": [
+      "strict_direct",
+      "strict_horizon"
+    ]
+  },
+  "population": {
+    "candidates": 150,
+    "byFamily": {
+      "mate_in_one": 0,
+      "forced_mate": 0,
+      "double_attack": 8,
+      "fork_survives_reply": 1,
+      "discovered_executed": 8,
+      "loose_piece": 130,
+      "promotion_pressure": 3
+    },
+    "byRelation": {
+      "opponent_line_event": 78,
+      "root_direct": 48,
+      "root_followup_in_line": 24
+    },
+    "admitted": 35,
+    "refusals": {
+      "opponent_line_event": 78,
+      "promotion_not_reply_persistent": 1,
+      "self_exposure_created": 16,
+      "self_risk_preserved": 20
+    }
+  },
+  "summary": {
+    "depth12": {
+      "positions": 64,
+      "strictDirectReach": 10,
+      "strictHorizonReach": 16,
+      "strictDirectSelections": {
+        "discovered_executed:gained": 2,
+        "double_attack:gained": 2,
+        "loose_piece:lost": 6
+      },
+      "strictHorizonSelections": {
+        "discovered_executed:gained:root_direct": 1,
+        "double_attack:gained:root_direct": 2,
+        "double_attack:gained:root_followup_in_line": 2,
+        "loose_piece:lost:root_direct": 6,
+        "loose_piece:lost:root_followup_in_line": 5
+      }
+    },
+    "movetime100_a": {
+      "positions": 64,
+      "strictDirectReach": 10,
+      "strictHorizonReach": 10,
+      "strictDirectSelections": {
+        "discovered_executed:gained": 2,
+        "double_attack:gained": 2,
+        "loose_piece:lost": 6
+      },
+      "strictHorizonSelections": {
+        "discovered_executed:gained:root_direct": 2,
+        "double_attack:gained:root_direct": 2,
+        "loose_piece:lost:root_direct": 6
+      }
+    }
+  },
+  "crossArmDiagnostic": {
+    "strictDirect": {
+      "either": 10,
+      "both": 10,
+      "sameFamilyStatusRelation": 10,
+      "sameFirstMove": 9,
+      "sameOccurrence": 9
+    },
+    "strictHorizon": {
+      "either": 16,
+      "both": 10,
+      "sameFamilyStatusRelation": 9,
+      "sameFirstMove": 9,
+      "sameOccurrence": 8
+    }
+  },
+  "cells": {
+    "depth12:opening": {
+      "positions": 24,
+      "candidates": 36,
+      "admitted": 6,
+      "strictDirectReach": 2,
+      "strictHorizonReach": 5,
+      "strictHorizonSelections": {
+        "double_attack:gained:root_direct": 1,
+        "double_attack:gained:root_followup_in_line": 1,
+        "loose_piece:lost:root_followup_in_line": 3
+      },
+      "refusals": {
+        "opponent_line_event": 23,
+        "self_exposure_created": 3,
+        "self_risk_preserved": 4
+      }
+    },
+    "depth12:middlegame": {
+      "positions": 16,
+      "candidates": 23,
+      "admitted": 5,
+      "strictDirectReach": 3,
+      "strictHorizonReach": 3,
+      "strictHorizonSelections": {
+        "discovered_executed:gained:root_direct": 1,
+        "double_attack:gained:root_direct": 1,
+        "loose_piece:lost:root_direct": 1
+      },
+      "refusals": {
+        "opponent_line_event": 11,
+        "self_exposure_created": 5,
+        "self_risk_preserved": 2
+      }
+    },
+    "depth12:cross_phase": {
+      "positions": 24,
+      "candidates": 29,
+      "admitted": 11,
+      "strictDirectReach": 5,
+      "strictHorizonReach": 8,
+      "strictHorizonSelections": {
+        "double_attack:gained:root_followup_in_line": 1,
+        "loose_piece:lost:root_direct": 5,
+        "loose_piece:lost:root_followup_in_line": 2
+      },
+      "refusals": {
+        "opponent_line_event": 11,
+        "promotion_not_reply_persistent": 1,
+        "self_exposure_created": 1,
+        "self_risk_preserved": 5
+      }
+    },
+    "movetime100_a:opening": {
+      "positions": 24,
+      "candidates": 17,
+      "admitted": 2,
+      "strictDirectReach": 2,
+      "strictHorizonReach": 2,
+      "strictHorizonSelections": {
+        "discovered_executed:gained:root_direct": 1,
+        "double_attack:gained:root_direct": 1
+      },
+      "refusals": {
+        "opponent_line_event": 13,
+        "self_risk_preserved": 2
+      }
+    },
+    "movetime100_a:middlegame": {
+      "positions": 16,
+      "candidates": 22,
+      "admitted": 4,
+      "strictDirectReach": 3,
+      "strictHorizonReach": 3,
+      "strictHorizonSelections": {
+        "discovered_executed:gained:root_direct": 1,
+        "double_attack:gained:root_direct": 1,
+        "loose_piece:lost:root_direct": 1
+      },
+      "refusals": {
+        "opponent_line_event": 10,
+        "self_exposure_created": 6,
+        "self_risk_preserved": 2
+      }
+    },
+    "movetime100_a:cross_phase": {
+      "positions": 24,
+      "candidates": 23,
+      "admitted": 7,
+      "strictDirectReach": 5,
+      "strictHorizonReach": 5,
+      "strictHorizonSelections": {
+        "loose_piece:lost:root_direct": 5
+      },
+      "refusals": {
+        "opponent_line_event": 10,
+        "self_exposure_created": 1,
+        "self_risk_preserved": 5
+      }
+    }
+  },
+  "gates": {
+    "d1363Reproduced": true,
+    "relationTotal": true,
+    "noOpponentAdmission": true,
+    "selectedRootOnly": true
+  },
+  "rows": [
+    {
+      "positionId": "0:anti-dutch-leningrad-white:7023480a69ca",
+      "packId": "anti-dutch-leningrad-white",
+      "phase": "opening",
+      "arm": "depth12",
+      "candidateCount": 2,
+      "relations": {
+        "opponent_line_event": 1,
+        "root_followup_in_line": 1
+      },
+      "admitted": 0,
+      "refusals": {
+        "opponent_line_event": 1,
+        "self_exposure_created": 1
+      },
+      "strictDirect": null,
+      "strictHorizon": null
+    },
+    {
+      "positionId": "0:anti-dutch-leningrad-white:7023480a69ca",
+      "packId": "anti-dutch-leningrad-white",
+      "phase": "opening",
+      "arm": "movetime100_a",
+      "candidateCount": 1,
+      "relations": {
+        "opponent_line_event": 1
+      },
+      "admitted": 0,
+      "refusals": {
+        "opponent_line_event": 1
+      },
+      "strictDirect": null,
+      "strictHorizon": null
+    },
+    {
+      "positionId": "1:caro-kann-advance-black:d346fd43fa86",
+      "packId": "caro-kann-advance-black",
+      "phase": "opening",
+      "arm": "depth12",
+      "candidateCount": 0,
+      "relations": {},
+      "admitted": 0,
+      "refusals": {},
+      "strictDirect": null,
+      "strictHorizon": null
+    },
+    {
+      "positionId": "1:caro-kann-advance-black:d346fd43fa86",
+      "packId": "caro-kann-advance-black",
+      "phase": "opening",
+      "arm": "movetime100_a",
+      "candidateCount": 0,
+      "relations": {},
+      "admitted": 0,
+      "refusals": {},
+      "strictDirect": null,
+      "strictHorizon": null
+    },
+    {
+      "positionId": "2:opponent-intent-early-queen:bd8354970111",
+      "packId": "opponent-intent-early-queen",
+      "phase": "opening",
+      "arm": "depth12",
+      "candidateCount": 0,
+      "relations": {},
+      "admitted": 0,
+      "refusals": {},
+      "strictDirect": null,
+      "strictHorizon": null
+    },
+    {
+      "positionId": "2:opponent-intent-early-queen:bd8354970111",
+      "packId": "opponent-intent-early-queen",
+      "phase": "opening",
+      "arm": "movetime100_a",
+      "candidateCount": 0,
+      "relations": {},
+      "admitted": 0,
+      "refusals": {},
+      "strictDirect": null,
+      "strictHorizon": null
+    },
+    {
+      "positionId": "3:anti-caro-advance-c5-race:2f1b2df1c8d4",
+      "packId": "anti-caro-advance-c5-race",
+      "phase": "opening",
+      "arm": "depth12",
+      "candidateCount": 0,
+      "relations": {},
+      "admitted": 0,
+      "refusals": {},
+      "strictDirect": null,
+      "strictHorizon": null
+    },
+    {
+      "positionId": "3:anti-caro-advance-c5-race:2f1b2df1c8d4",
+      "packId": "anti-caro-advance-c5-race",
+      "phase": "opening",
+      "arm": "movetime100_a",
+      "candidateCount": 0,
+      "relations": {},
+      "admitted": 0,
+      "refusals": {},
+      "strictDirect": null,
+      "strictHorizon": null
+    },
+    {
+      "positionId": "4:anti-scandinavian-white:c5873e5df47f",
+      "packId": "anti-scandinavian-white",
+      "phase": "opening",
+      "arm": "depth12",
+      "candidateCount": 5,
+      "relations": {
+        "opponent_line_event": 3,
+        "root_followup_in_line": 2
+      },
+      "admitted": 1,
+      "refusals": {
+        "opponent_line_event": 3,
+        "self_risk_preserved": 1
+      },
+      "strictDirect": null,
+      "strictHorizon": {
+        "candidate": {
+          "occurrenceId": "sha256:5949228196a845ac259a67ddbd3b22308677091ad8158beae1bf23e5bb0536a5",
+          "family": "loose_piece",
+          "ply": 3,
+          "edgeSideRelation": "root",
+          "actor": {
+            "color": "black",
+            "role": "bishop",
+            "from": "g4",
+            "to": "g4"
+          },
+          "targets": [
+            "g4"
+          ],
+          "edgeMoveUci": "d8d4",
+          "firstMoveUci": "e8a8",
+          "status": "lost"
+        },
+        "relation": "root_followup_in_line",
+        "admitted": true
+      }
+    },
+    {
+      "positionId": "4:anti-scandinavian-white:c5873e5df47f",
+      "packId": "anti-scandinavian-white",
+      "phase": "opening",
+      "arm": "movetime100_a",
+      "candidateCount": 2,
+      "relations": {
+        "opponent_line_event": 2
+      },
+      "admitted": 0,
+      "refusals": {
+        "opponent_line_event": 2
+      },
+      "strictDirect": null,
+      "strictHorizon": null
+    },
+    {
+      "positionId": "5:anti-scandinavian-white:4c0213139ef9",
+      "packId": "anti-scandinavian-white",
+      "phase": "opening",
+      "arm": "depth12",
+      "candidateCount": 2,
+      "relations": {
+        "opponent_line_event": 1,
+        "root_followup_in_line": 1
+      },
+      "admitted": 1,
+      "refusals": {
+        "opponent_line_event": 1
+      },
+      "strictDirect": null,
+      "strictHorizon": {
+        "candidate": {
+          "occurrenceId": "sha256:a4a28191df43579f1ced76804d5d559dc06a4545fdd689a364d01a207afc454a",
+          "family": "loose_piece",
+          "ply": 3,
+          "edgeSideRelation": "root",
+          "actor": {
+            "color": "black",
+            "role": "queen",
+            "from": "a5",
+            "to": "a6"
+          },
+          "targets": [
+            "a5"
+          ],
+          "edgeMoveUci": "a5a6",
+          "firstMoveUci": "b8d7",
+          "status": "lost"
+        },
+        "relation": "root_followup_in_line",
+        "admitted": true
+      }
+    },
+    {
+      "positionId": "5:anti-scandinavian-white:4c0213139ef9",
+      "packId": "anti-scandinavian-white",
+      "phase": "opening",
+      "arm": "movetime100_a",
+      "candidateCount": 1,
+      "relations": {
+        "opponent_line_event": 1
+      },
+      "admitted": 0,
+      "refusals": {
+        "opponent_line_event": 1
+      },
+      "strictDirect": null,
+      "strictHorizon": null
+    },
+    {
+      "positionId": "6:kid-classical-black:825b5d0b8f9b",
+      "packId": "kid-classical-black",
+      "phase": "opening",
+      "arm": "depth12",
+      "candidateCount": 1,
+      "relations": {
+        "opponent_line_event": 1
+      },
+      "admitted": 0,
+      "refusals": {
+        "opponent_line_event": 1
+      },
+      "strictDirect": null,
+      "strictHorizon": null
+    },
+    {
+      "positionId": "6:kid-classical-black:825b5d0b8f9b",
+      "packId": "kid-classical-black",
+      "phase": "opening",
+      "arm": "movetime100_a",
+      "candidateCount": 0,
+      "relations": {},
+      "admitted": 0,
+      "refusals": {},
+      "strictDirect": null,
+      "strictHorizon": null
+    },
+    {
+      "positionId": "7:anti-caro-advance-early-c5:e1dbe3bbd351",
+      "packId": "anti-caro-advance-early-c5",
+      "phase": "opening",
+      "arm": "depth12",
+      "candidateCount": 2,
+      "relations": {
+        "opponent_line_event": 1,
+        "root_direct": 1
+      },
+      "admitted": 0,
+      "refusals": {
+        "opponent_line_event": 1,
+        "self_risk_preserved": 1
+      },
+      "strictDirect": null,
+      "strictHorizon": null
+    },
+    {
+      "positionId": "7:anti-caro-advance-early-c5:e1dbe3bbd351",
+      "packId": "anti-caro-advance-early-c5",
+      "phase": "opening",
+      "arm": "movetime100_a",
+      "candidateCount": 1,
+      "relations": {
+        "root_direct": 1
+      },
+      "admitted": 0,
+      "refusals": {
+        "self_risk_preserved": 1
+      },
+      "strictDirect": null,
+      "strictHorizon": null
+    },
+    {
+      "positionId": "8:anti-london-black:fbc0c15e6636",
+      "packId": "anti-london-black",
+      "phase": "opening",
+      "arm": "depth12",
+      "candidateCount": 1,
+      "relations": {
+        "opponent_line_event": 1
+      },
+      "admitted": 0,
+      "refusals": {
+        "opponent_line_event": 1
+      },
+      "strictDirect": null,
+      "strictHorizon": null
+    },
+    {
+      "positionId": "8:anti-london-black:fbc0c15e6636",
+      "packId": "anti-london-black",
+      "phase": "opening",
+      "arm": "movetime100_a",
+      "candidateCount": 1,
+      "relations": {
+        "opponent_line_event": 1
+      },
+      "admitted": 0,
+      "refusals": {
+        "opponent_line_event": 1
+      },
+      "strictDirect": null,
+      "strictHorizon": null
+    },
+    {
+      "positionId": "9:anti-caro-advance-early-c5:b0ebacbbefd1",
+      "packId": "anti-caro-advance-early-c5",
+      "phase": "opening",
+      "arm": "depth12",
+      "candidateCount": 3,
+      "relations": {
+        "opponent_line_event": 2,
+        "root_followup_in_line": 1
+      },
+      "admitted": 1,
+      "refusals": {
+        "opponent_line_event": 2
+      },
+      "strictDirect": null,
+      "strictHorizon": {
+        "candidate": {
+          "occurrenceId": "sha256:944f071bdaf683b84021b65c5d98480c0b866e98c37f0ea6566314b380aec165",
+          "family": "loose_piece",
+          "ply": 3,
+          "edgeSideRelation": "root",
+          "actor": {
+            "color": "black",
+            "role": "queen",
+            "from": "d8",
+            "to": "d8"
+          },
+          "targets": [
+            "d8"
+          ],
+          "edgeMoveUci": "b7c6",
+          "firstMoveUci": "b8c6",
+          "status": "lost"
+        },
+        "relation": "root_followup_in_line",
+        "admitted": true
+      }
+    },
+    {
+      "positionId": "9:anti-caro-advance-early-c5:b0ebacbbefd1",
+      "packId": "anti-caro-advance-early-c5",
+      "phase": "opening",
+      "arm": "movetime100_a",
+      "candidateCount": 0,
+      "relations": {},
+      "admitted": 0,
+      "refusals": {},
+      "strictDirect": null,
+      "strictHorizon": null
+    },
+    {
+      "positionId": "10:scandinavian-mainline-black:b06b984b88da",
+      "packId": "scandinavian-mainline-black",
+      "phase": "opening",
+      "arm": "depth12",
+      "candidateCount": 4,
+      "relations": {
+        "opponent_line_event": 3,
+        "root_direct": 1
+      },
+      "admitted": 1,
+      "refusals": {
+        "opponent_line_event": 3
+      },
+      "strictDirect": {
+        "candidate": {
+          "occurrenceId": "sha256:2d7b7a0f303295423474629d80283dcfb865973860a435cda6ab4a55c740e1d5",
+          "family": "double_attack",
+          "ply": 1,
+          "edgeSideRelation": "root",
+          "actor": {
+            "color": "black",
+            "role": "queen",
+            "from": "a5",
+            "to": "b6"
+          },
+          "targets": [
+            "b2",
+            "d4"
+          ],
+          "edgeMoveUci": "a5b6",
+          "firstMoveUci": "a5b6",
+          "status": "gained"
+        },
+        "relation": "root_direct",
+        "admitted": true
+      },
+      "strictHorizon": {
+        "candidate": {
+          "occurrenceId": "sha256:2d7b7a0f303295423474629d80283dcfb865973860a435cda6ab4a55c740e1d5",
+          "family": "double_attack",
+          "ply": 1,
+          "edgeSideRelation": "root",
+          "actor": {
+            "color": "black",
+            "role": "queen",
+            "from": "a5",
+            "to": "b6"
+          },
+          "targets": [
+            "b2",
+            "d4"
+          ],
+          "edgeMoveUci": "a5b6",
+          "firstMoveUci": "a5b6",
+          "status": "gained"
+        },
+        "relation": "root_direct",
+        "admitted": true
+      }
+    },
+    {
+      "positionId": "10:scandinavian-mainline-black:b06b984b88da",
+      "packId": "scandinavian-mainline-black",
+      "phase": "opening",
+      "arm": "movetime100_a",
+      "candidateCount": 4,
+      "relations": {
+        "opponent_line_event": 3,
+        "root_direct": 1
+      },
+      "admitted": 1,
+      "refusals": {
+        "opponent_line_event": 3
+      },
+      "strictDirect": {
+        "candidate": {
+          "occurrenceId": "sha256:2d7b7a0f303295423474629d80283dcfb865973860a435cda6ab4a55c740e1d5",
+          "family": "double_attack",
+          "ply": 1,
+          "edgeSideRelation": "root",
+          "actor": {
+            "color": "black",
+            "role": "queen",
+            "from": "a5",
+            "to": "b6"
+          },
+          "targets": [
+            "b2",
+            "d4"
+          ],
+          "edgeMoveUci": "a5b6",
+          "firstMoveUci": "a5b6",
+          "status": "gained"
+        },
+        "relation": "root_direct",
+        "admitted": true
+      },
+      "strictHorizon": {
+        "candidate": {
+          "occurrenceId": "sha256:2d7b7a0f303295423474629d80283dcfb865973860a435cda6ab4a55c740e1d5",
+          "family": "double_attack",
+          "ply": 1,
+          "edgeSideRelation": "root",
+          "actor": {
+            "color": "black",
+            "role": "queen",
+            "from": "a5",
+            "to": "b6"
+          },
+          "targets": [
+            "b2",
+            "d4"
+          ],
+          "edgeMoveUci": "a5b6",
+          "firstMoveUci": "a5b6",
+          "status": "gained"
+        },
+        "relation": "root_direct",
+        "admitted": true
+      }
+    },
+    {
+      "positionId": "11:anti-caro-advance-early-c5:dfe43bd2e711",
+      "packId": "anti-caro-advance-early-c5",
+      "phase": "opening",
+      "arm": "depth12",
+      "candidateCount": 5,
+      "relations": {
+        "opponent_line_event": 3,
+        "root_direct": 1,
+        "root_followup_in_line": 1
+      },
+      "admitted": 2,
+      "refusals": {
+        "opponent_line_event": 3
+      },
+      "strictDirect": {
+        "candidate": {
+          "occurrenceId": "sha256:c985af0e1c95a13e0e550d16a7c930151ee2ce68b8bb9f5f7f24dbb0f3b22b1c",
+          "family": "discovered_executed",
+          "ply": 1,
+          "edgeSideRelation": "root",
+          "actor": {
+            "color": "black",
+            "role": "pawn",
+            "from": "e7",
+            "to": "e6"
+          },
+          "targets": [
+            "c5",
+            "d6",
+            "e7"
+          ],
+          "edgeMoveUci": "e7e6",
+          "firstMoveUci": "e7e6",
+          "status": "gained"
+        },
+        "relation": "root_direct",
+        "admitted": true
+      },
+      "strictHorizon": {
+        "candidate": {
+          "occurrenceId": "sha256:25a2823d1f8ffca0eb42d062fafdcda33aefb881757bf7b2882c96adcfd635b5",
+          "family": "double_attack",
+          "ply": 3,
+          "edgeSideRelation": "root",
+          "actor": {
+            "color": "black",
+            "role": "knight",
+            "from": "b8",
+            "to": "d7"
+          },
+          "targets": [
+            "c5",
+            "e5"
+          ],
+          "edgeMoveUci": "b8d7",
+          "firstMoveUci": "e7e6",
+          "status": "gained"
+        },
+        "relation": "root_followup_in_line",
+        "admitted": true
+      }
+    },
+    {
+      "positionId": "11:anti-caro-advance-early-c5:dfe43bd2e711",
+      "packId": "anti-caro-advance-early-c5",
+      "phase": "opening",
+      "arm": "movetime100_a",
+      "candidateCount": 1,
+      "relations": {
+        "root_direct": 1
+      },
+      "admitted": 1,
+      "refusals": {},
+      "strictDirect": {
+        "candidate": {
+          "occurrenceId": "sha256:c985af0e1c95a13e0e550d16a7c930151ee2ce68b8bb9f5f7f24dbb0f3b22b1c",
+          "family": "discovered_executed",
+          "ply": 1,
+          "edgeSideRelation": "root",
+          "actor": {
+            "color": "black",
+            "role": "pawn",
+            "from": "e7",
+            "to": "e6"
+          },
+          "targets": [
+            "c5",
+            "d6",
+            "e7"
+          ],
+          "edgeMoveUci": "e7e6",
+          "firstMoveUci": "e7e6",
+          "status": "gained"
+        },
+        "relation": "root_direct",
+        "admitted": true
+      },
+      "strictHorizon": {
+        "candidate": {
+          "occurrenceId": "sha256:c985af0e1c95a13e0e550d16a7c930151ee2ce68b8bb9f5f7f24dbb0f3b22b1c",
+          "family": "discovered_executed",
+          "ply": 1,
+          "edgeSideRelation": "root",
+          "actor": {
+            "color": "black",
+            "role": "pawn",
+            "from": "e7",
+            "to": "e6"
+          },
+          "targets": [
+            "c5",
+            "d6",
+            "e7"
+          ],
+          "edgeMoveUci": "e7e6",
+          "firstMoveUci": "e7e6",
+          "status": "gained"
+        },
+        "relation": "root_direct",
+        "admitted": true
+      }
+    },
+    {
+      "positionId": "12:anti-french-advance-white:96594da40d4d",
+      "packId": "anti-french-advance-white",
+      "phase": "opening",
+      "arm": "depth12",
+      "candidateCount": 3,
+      "relations": {
+        "opponent_line_event": 2,
+        "root_followup_in_line": 1
+      },
+      "admitted": 0,
+      "refusals": {
+        "opponent_line_event": 2,
+        "self_exposure_created": 1
+      },
+      "strictDirect": null,
+      "strictHorizon": null
+    },
+    {
+      "positionId": "12:anti-french-advance-white:96594da40d4d",
+      "packId": "anti-french-advance-white",
+      "phase": "opening",
+      "arm": "movetime100_a",
+      "candidateCount": 1,
+      "relations": {
+        "opponent_line_event": 1
+      },
+      "admitted": 0,
+      "refusals": {
+        "opponent_line_event": 1
+      },
+      "strictDirect": null,
+      "strictHorizon": null
+    },
+    {
+      "positionId": "13:anti-dutch-leningrad-white:c4bd5866a331",
+      "packId": "anti-dutch-leningrad-white",
+      "phase": "opening",
+      "arm": "depth12",
+      "candidateCount": 0,
+      "relations": {},
+      "admitted": 0,
+      "refusals": {},
+      "strictDirect": null,
+      "strictHorizon": null
+    },
+    {
+      "positionId": "13:anti-dutch-leningrad-white:c4bd5866a331",
+      "packId": "anti-dutch-leningrad-white",
+      "phase": "opening",
+      "arm": "movetime100_a",
+      "candidateCount": 0,
+      "relations": {},
+      "admitted": 0,
+      "refusals": {},
+      "strictDirect": null,
+      "strictHorizon": null
+    },
+    {
+      "positionId": "14:anti-kid-classical-white:5a048c70a835",
+      "packId": "anti-kid-classical-white",
+      "phase": "opening",
+      "arm": "depth12",
+      "candidateCount": 1,
+      "relations": {
+        "opponent_line_event": 1
+      },
+      "admitted": 0,
+      "refusals": {
+        "opponent_line_event": 1
+      },
+      "strictDirect": null,
+      "strictHorizon": null
+    },
+    {
+      "positionId": "14:anti-kid-classical-white:5a048c70a835",
+      "packId": "anti-kid-classical-white",
+      "phase": "opening",
+      "arm": "movetime100_a",
+      "candidateCount": 1,
+      "relations": {
+        "opponent_line_event": 1
+      },
+      "admitted": 0,
+      "refusals": {
+        "opponent_line_event": 1
+      },
+      "strictDirect": null,
+      "strictHorizon": null
+    },
+    {
+      "positionId": "15:opening-principles-black:de505139dc1e",
+      "packId": "opening-principles-black",
+      "phase": "opening",
+      "arm": "depth12",
+      "candidateCount": 1,
+      "relations": {
+        "opponent_line_event": 1
+      },
+      "admitted": 0,
+      "refusals": {
+        "opponent_line_event": 1
+      },
+      "strictDirect": null,
+      "strictHorizon": null
+    },
+    {
+      "positionId": "15:opening-principles-black:de505139dc1e",
+      "packId": "opening-principles-black",
+      "phase": "opening",
+      "arm": "movetime100_a",
+      "candidateCount": 0,
+      "relations": {},
+      "admitted": 0,
+      "refusals": {},
+      "strictDirect": null,
+      "strictHorizon": null
+    },
+    {
+      "positionId": "16:opening-principles-black:abf9f14281b6",
+      "packId": "opening-principles-black",
+      "phase": "opening",
+      "arm": "depth12",
+      "candidateCount": 2,
+      "relations": {
+        "opponent_line_event": 2
+      },
+      "admitted": 0,
+      "refusals": {
+        "opponent_line_event": 2
+      },
+      "strictDirect": null,
+      "strictHorizon": null
+    },
+    {
+      "positionId": "16:opening-principles-black:abf9f14281b6",
+      "packId": "opening-principles-black",
+      "phase": "opening",
+      "arm": "movetime100_a",
+      "candidateCount": 1,
+      "relations": {
+        "opponent_line_event": 1
+      },
+      "admitted": 0,
+      "refusals": {
+        "opponent_line_event": 1
+      },
+      "strictDirect": null,
+      "strictHorizon": null
+    },
+    {
+      "positionId": "17:anti-french-advance-white:cd69be023b15",
+      "packId": "anti-french-advance-white",
+      "phase": "opening",
+      "arm": "depth12",
+      "candidateCount": 0,
+      "relations": {},
+      "admitted": 0,
+      "refusals": {},
+      "strictDirect": null,
+      "strictHorizon": null
+    },
+    {
+      "positionId": "17:anti-french-advance-white:cd69be023b15",
+      "packId": "anti-french-advance-white",
+      "phase": "opening",
+      "arm": "movetime100_a",
+      "candidateCount": 0,
+      "relations": {},
+      "admitted": 0,
+      "refusals": {},
+      "strictDirect": null,
+      "strictHorizon": null
+    },
+    {
+      "positionId": "18:anti-sicilian-najdorf-english-attack:deca726c3462",
+      "packId": "anti-sicilian-najdorf-english-attack",
+      "phase": "opening",
+      "arm": "depth12",
+      "candidateCount": 0,
+      "relations": {},
+      "admitted": 0,
+      "refusals": {},
+      "strictDirect": null,
+      "strictHorizon": null
+    },
+    {
+      "positionId": "18:anti-sicilian-najdorf-english-attack:deca726c3462",
+      "packId": "anti-sicilian-najdorf-english-attack",
+      "phase": "opening",
+      "arm": "movetime100_a",
+      "candidateCount": 0,
+      "relations": {},
+      "admitted": 0,
+      "refusals": {},
+      "strictDirect": null,
+      "strictHorizon": null
+    },
+    {
+      "positionId": "19:scandinavian-mainline-black:9afca7bc2b5f",
+      "packId": "scandinavian-mainline-black",
+      "phase": "opening",
+      "arm": "depth12",
+      "candidateCount": 0,
+      "relations": {},
+      "admitted": 0,
+      "refusals": {},
+      "strictDirect": null,
+      "strictHorizon": null
+    },
+    {
+      "positionId": "19:scandinavian-mainline-black:9afca7bc2b5f",
+      "packId": "scandinavian-mainline-black",
+      "phase": "opening",
+      "arm": "movetime100_a",
+      "candidateCount": 1,
+      "relations": {
+        "opponent_line_event": 1
+      },
+      "admitted": 0,
+      "refusals": {
+        "opponent_line_event": 1
+      },
+      "strictDirect": null,
+      "strictHorizon": null
+    },
+    {
+      "positionId": "20:anti-sicilian-najdorf-english-attack:668dc8aad37c",
+      "packId": "anti-sicilian-najdorf-english-attack",
+      "phase": "opening",
+      "arm": "depth12",
+      "candidateCount": 0,
+      "relations": {},
+      "admitted": 0,
+      "refusals": {},
+      "strictDirect": null,
+      "strictHorizon": null
+    },
+    {
+      "positionId": "20:anti-sicilian-najdorf-english-attack:668dc8aad37c",
+      "packId": "anti-sicilian-najdorf-english-attack",
+      "phase": "opening",
+      "arm": "movetime100_a",
+      "candidateCount": 0,
+      "relations": {},
+      "admitted": 0,
+      "refusals": {},
+      "strictDirect": null,
+      "strictHorizon": null
+    },
+    {
+      "positionId": "21:anti-french-advance-white:15c286478f16",
+      "packId": "anti-french-advance-white",
+      "phase": "opening",
+      "arm": "depth12",
+      "candidateCount": 3,
+      "relations": {
+        "opponent_line_event": 1,
+        "root_direct": 1,
+        "root_followup_in_line": 1
+      },
+      "admitted": 0,
+      "refusals": {
+        "opponent_line_event": 1,
+        "self_risk_preserved": 2
+      },
+      "strictDirect": null,
+      "strictHorizon": null
+    },
+    {
+      "positionId": "21:anti-french-advance-white:15c286478f16",
+      "packId": "anti-french-advance-white",
+      "phase": "opening",
+      "arm": "movetime100_a",
+      "candidateCount": 1,
+      "relations": {
+        "root_direct": 1
+      },
+      "admitted": 0,
+      "refusals": {
+        "self_risk_preserved": 1
+      },
+      "strictDirect": null,
+      "strictHorizon": null
+    },
+    {
+      "positionId": "22:anti-italian-center-attack-black:e7330a4f39d4",
+      "packId": "anti-italian-center-attack-black",
+      "phase": "opening",
+      "arm": "depth12",
+      "candidateCount": 1,
+      "relations": {
+        "root_followup_in_line": 1
+      },
+      "admitted": 0,
+      "refusals": {
+        "self_exposure_created": 1
+      },
+      "strictDirect": null,
+      "strictHorizon": null
+    },
+    {
+      "positionId": "22:anti-italian-center-attack-black:e7330a4f39d4",
+      "packId": "anti-italian-center-attack-black",
+      "phase": "opening",
+      "arm": "movetime100_a",
+      "candidateCount": 1,
+      "relations": {
+        "opponent_line_event": 1
+      },
+      "admitted": 0,
+      "refusals": {
+        "opponent_line_event": 1
+      },
+      "strictDirect": null,
+      "strictHorizon": null
+    },
+    {
+      "positionId": "23:anti-dutch-leningrad-white:2744d3f960e8",
+      "packId": "anti-dutch-leningrad-white",
+      "phase": "opening",
+      "arm": "depth12",
+      "candidateCount": 0,
+      "relations": {},
+      "admitted": 0,
+      "refusals": {},
+      "strictDirect": null,
+      "strictHorizon": null
+    },
+    {
+      "positionId": "23:anti-dutch-leningrad-white:2744d3f960e8",
+      "packId": "anti-dutch-leningrad-white",
+      "phase": "opening",
+      "arm": "movetime100_a",
+      "candidateCount": 0,
+      "relations": {},
+      "admitted": 0,
+      "refusals": {},
+      "strictDirect": null,
+      "strictHorizon": null
+    },
+    {
+      "positionId": "24:carlsbad-minority-attack:929ebfb94780",
+      "packId": "carlsbad-minority-attack",
+      "phase": "middlegame",
+      "arm": "depth12",
+      "candidateCount": 0,
+      "relations": {},
+      "admitted": 0,
+      "refusals": {},
+      "strictDirect": null,
+      "strictHorizon": null
+    },
+    {
+      "positionId": "24:carlsbad-minority-attack:929ebfb94780",
+      "packId": "carlsbad-minority-attack",
+      "phase": "middlegame",
+      "arm": "movetime100_a",
+      "candidateCount": 0,
+      "relations": {},
+      "admitted": 0,
+      "refusals": {},
+      "strictDirect": null,
+      "strictHorizon": null
+    },
+    {
+      "positionId": "25:carlsbad-minority-attack:e1521a076d47",
+      "packId": "carlsbad-minority-attack",
+      "phase": "middlegame",
+      "arm": "depth12",
+      "candidateCount": 0,
+      "relations": {},
+      "admitted": 0,
+      "refusals": {},
+      "strictDirect": null,
+      "strictHorizon": null
+    },
+    {
+      "positionId": "25:carlsbad-minority-attack:e1521a076d47",
+      "packId": "carlsbad-minority-attack",
+      "phase": "middlegame",
+      "arm": "movetime100_a",
+      "candidateCount": 0,
+      "relations": {},
+      "admitted": 0,
+      "refusals": {},
+      "strictDirect": null,
+      "strictHorizon": null
+    },
+    {
+      "positionId": "26:carlsbad-minority-attack:5cdcd1a71174",
+      "packId": "carlsbad-minority-attack",
+      "phase": "middlegame",
+      "arm": "depth12",
+      "candidateCount": 2,
+      "relations": {
+        "opponent_line_event": 1,
+        "root_direct": 1
+      },
+      "admitted": 0,
+      "refusals": {
+        "opponent_line_event": 1,
+        "self_exposure_created": 1
+      },
+      "strictDirect": null,
+      "strictHorizon": null
+    },
+    {
+      "positionId": "26:carlsbad-minority-attack:5cdcd1a71174",
+      "packId": "carlsbad-minority-attack",
+      "phase": "middlegame",
+      "arm": "movetime100_a",
+      "candidateCount": 2,
+      "relations": {
+        "opponent_line_event": 1,
+        "root_direct": 1
+      },
+      "admitted": 0,
+      "refusals": {
+        "opponent_line_event": 1,
+        "self_exposure_created": 1
+      },
+      "strictDirect": null,
+      "strictHorizon": null
+    },
+    {
+      "positionId": "27:carlsbad-minority-attack:809531fc6341",
+      "packId": "carlsbad-minority-attack",
+      "phase": "middlegame",
+      "arm": "depth12",
+      "candidateCount": 4,
+      "relations": {
+        "opponent_line_event": 2,
+        "root_direct": 2
+      },
+      "admitted": 1,
+      "refusals": {
+        "opponent_line_event": 2,
+        "self_exposure_created": 1
+      },
+      "strictDirect": {
+        "candidate": {
+          "occurrenceId": "sha256:a1d6bc9345fcd5f6640a40d79b089127cb411e181a48fd506cd3601a7d75709d",
+          "family": "double_attack",
+          "ply": 1,
+          "edgeSideRelation": "root",
+          "actor": {
+            "color": "black",
+            "role": "knight",
+            "from": "e4",
+            "to": "c3"
+          },
+          "targets": [
+            "b1",
+            "b5"
+          ],
+          "edgeMoveUci": "e4c3",
+          "firstMoveUci": "e4c3",
+          "status": "gained"
+        },
+        "relation": "root_direct",
+        "admitted": true
+      },
+      "strictHorizon": {
+        "candidate": {
+          "occurrenceId": "sha256:a1d6bc9345fcd5f6640a40d79b089127cb411e181a48fd506cd3601a7d75709d",
+          "family": "double_attack",
+          "ply": 1,
+          "edgeSideRelation": "root",
+          "actor": {
+            "color": "black",
+            "role": "knight",
+            "from": "e4",
+            "to": "c3"
+          },
+          "targets": [
+            "b1",
+            "b5"
+          ],
+          "edgeMoveUci": "e4c3",
+          "firstMoveUci": "e4c3",
+          "status": "gained"
+        },
+        "relation": "root_direct",
+        "admitted": true
+      }
+    },
+    {
+      "positionId": "27:carlsbad-minority-attack:809531fc6341",
+      "packId": "carlsbad-minority-attack",
+      "phase": "middlegame",
+      "arm": "movetime100_a",
+      "candidateCount": 4,
+      "relations": {
+        "opponent_line_event": 2,
+        "root_direct": 2
+      },
+      "admitted": 1,
+      "refusals": {
+        "opponent_line_event": 2,
+        "self_exposure_created": 1
+      },
+      "strictDirect": {
+        "candidate": {
+          "occurrenceId": "sha256:a1d6bc9345fcd5f6640a40d79b089127cb411e181a48fd506cd3601a7d75709d",
+          "family": "double_attack",
+          "ply": 1,
+          "edgeSideRelation": "root",
+          "actor": {
+            "color": "black",
+            "role": "knight",
+            "from": "e4",
+            "to": "c3"
+          },
+          "targets": [
+            "b1",
+            "b5"
+          ],
+          "edgeMoveUci": "e4c3",
+          "firstMoveUci": "e4c3",
+          "status": "gained"
+        },
+        "relation": "root_direct",
+        "admitted": true
+      },
+      "strictHorizon": {
+        "candidate": {
+          "occurrenceId": "sha256:a1d6bc9345fcd5f6640a40d79b089127cb411e181a48fd506cd3601a7d75709d",
+          "family": "double_attack",
+          "ply": 1,
+          "edgeSideRelation": "root",
+          "actor": {
+            "color": "black",
+            "role": "knight",
+            "from": "e4",
+            "to": "c3"
+          },
+          "targets": [
+            "b1",
+            "b5"
+          ],
+          "edgeMoveUci": "e4c3",
+          "firstMoveUci": "e4c3",
+          "status": "gained"
+        },
+        "relation": "root_direct",
+        "admitted": true
+      }
+    },
+    {
+      "positionId": "28:carlsbad-minority-attack:335bb7575c24",
+      "packId": "carlsbad-minority-attack",
+      "phase": "middlegame",
+      "arm": "depth12",
+      "candidateCount": 2,
+      "relations": {
+        "opponent_line_event": 1,
+        "root_direct": 1
+      },
+      "admitted": 0,
+      "refusals": {
+        "opponent_line_event": 1,
+        "self_risk_preserved": 1
+      },
+      "strictDirect": null,
+      "strictHorizon": null
+    },
+    {
+      "positionId": "28:carlsbad-minority-attack:335bb7575c24",
+      "packId": "carlsbad-minority-attack",
+      "phase": "middlegame",
+      "arm": "movetime100_a",
+      "candidateCount": 2,
+      "relations": {
+        "opponent_line_event": 1,
+        "root_direct": 1
+      },
+      "admitted": 0,
+      "refusals": {
+        "opponent_line_event": 1,
+        "self_risk_preserved": 1
+      },
+      "strictDirect": null,
+      "strictHorizon": null
+    },
+    {
+      "positionId": "29:carlsbad-minority-attack:15d8aa7a80ff",
+      "packId": "carlsbad-minority-attack",
+      "phase": "middlegame",
+      "arm": "depth12",
+      "candidateCount": 1,
+      "relations": {
+        "opponent_line_event": 1
+      },
+      "admitted": 0,
+      "refusals": {
+        "opponent_line_event": 1
+      },
+      "strictDirect": null,
+      "strictHorizon": null
+    },
+    {
+      "positionId": "29:carlsbad-minority-attack:15d8aa7a80ff",
+      "packId": "carlsbad-minority-attack",
+      "phase": "middlegame",
+      "arm": "movetime100_a",
+      "candidateCount": 0,
+      "relations": {},
+      "admitted": 0,
+      "refusals": {},
+      "strictDirect": null,
+      "strictHorizon": null
+    },
+    {
+      "positionId": "30:carlsbad-minority-attack:e4fe7f346450",
+      "packId": "carlsbad-minority-attack",
+      "phase": "middlegame",
+      "arm": "depth12",
+      "candidateCount": 0,
+      "relations": {},
+      "admitted": 0,
+      "refusals": {},
+      "strictDirect": null,
+      "strictHorizon": null
+    },
+    {
+      "positionId": "30:carlsbad-minority-attack:e4fe7f346450",
+      "packId": "carlsbad-minority-attack",
+      "phase": "middlegame",
+      "arm": "movetime100_a",
+      "candidateCount": 0,
+      "relations": {},
+      "admitted": 0,
+      "refusals": {},
+      "strictDirect": null,
+      "strictHorizon": null
+    },
+    {
+      "positionId": "31:carlsbad-minority-attack:ae085ecad266",
+      "packId": "carlsbad-minority-attack",
+      "phase": "middlegame",
+      "arm": "depth12",
+      "candidateCount": 4,
+      "relations": {
+        "opponent_line_event": 2,
+        "root_direct": 1,
+        "root_followup_in_line": 1
+      },
+      "admitted": 0,
+      "refusals": {
+        "opponent_line_event": 2,
+        "self_exposure_created": 1,
+        "self_risk_preserved": 1
+      },
+      "strictDirect": null,
+      "strictHorizon": null
+    },
+    {
+      "positionId": "31:carlsbad-minority-attack:ae085ecad266",
+      "packId": "carlsbad-minority-attack",
+      "phase": "middlegame",
+      "arm": "movetime100_a",
+      "candidateCount": 4,
+      "relations": {
+        "opponent_line_event": 2,
+        "root_direct": 1,
+        "root_followup_in_line": 1
+      },
+      "admitted": 0,
+      "refusals": {
+        "opponent_line_event": 2,
+        "self_exposure_created": 1,
+        "self_risk_preserved": 1
+      },
+      "strictDirect": null,
+      "strictHorizon": null
+    },
+    {
+      "positionId": "32:carlsbad-minority-attack:7dad12c8f48a",
+      "packId": "carlsbad-minority-attack",
+      "phase": "middlegame",
+      "arm": "depth12",
+      "candidateCount": 3,
+      "relations": {
+        "opponent_line_event": 1,
+        "root_direct": 2
+      },
+      "admitted": 2,
+      "refusals": {
+        "opponent_line_event": 1
+      },
+      "strictDirect": {
+        "candidate": {
+          "occurrenceId": "sha256:0ae5f660afcd1e03328b0acf8ea39dff7bc46073ab71b91517b71765516977a9",
+          "family": "loose_piece",
+          "ply": 1,
+          "edgeSideRelation": "root",
+          "actor": {
+            "color": "black",
+            "role": "queen",
+            "from": "d8",
+            "to": "e7"
+          },
+          "targets": [
+            "d8"
+          ],
+          "edgeMoveUci": "d8e7",
+          "firstMoveUci": "d8e7",
+          "status": "lost"
+        },
+        "relation": "root_direct",
+        "admitted": true
+      },
+      "strictHorizon": {
+        "candidate": {
+          "occurrenceId": "sha256:0ae5f660afcd1e03328b0acf8ea39dff7bc46073ab71b91517b71765516977a9",
+          "family": "loose_piece",
+          "ply": 1,
+          "edgeSideRelation": "root",
+          "actor": {
+            "color": "black",
+            "role": "queen",
+            "from": "d8",
+            "to": "e7"
+          },
+          "targets": [
+            "d8"
+          ],
+          "edgeMoveUci": "d8e7",
+          "firstMoveUci": "d8e7",
+          "status": "lost"
+        },
+        "relation": "root_direct",
+        "admitted": true
+      }
+    },
+    {
+      "positionId": "32:carlsbad-minority-attack:7dad12c8f48a",
+      "packId": "carlsbad-minority-attack",
+      "phase": "middlegame",
+      "arm": "movetime100_a",
+      "candidateCount": 3,
+      "relations": {
+        "opponent_line_event": 1,
+        "root_direct": 2
+      },
+      "admitted": 2,
+      "refusals": {
+        "opponent_line_event": 1
+      },
+      "strictDirect": {
+        "candidate": {
+          "occurrenceId": "sha256:0ae5f660afcd1e03328b0acf8ea39dff7bc46073ab71b91517b71765516977a9",
+          "family": "loose_piece",
+          "ply": 1,
+          "edgeSideRelation": "root",
+          "actor": {
+            "color": "black",
+            "role": "queen",
+            "from": "d8",
+            "to": "e7"
+          },
+          "targets": [
+            "d8"
+          ],
+          "edgeMoveUci": "d8e7",
+          "firstMoveUci": "d8e7",
+          "status": "lost"
+        },
+        "relation": "root_direct",
+        "admitted": true
+      },
+      "strictHorizon": {
+        "candidate": {
+          "occurrenceId": "sha256:0ae5f660afcd1e03328b0acf8ea39dff7bc46073ab71b91517b71765516977a9",
+          "family": "loose_piece",
+          "ply": 1,
+          "edgeSideRelation": "root",
+          "actor": {
+            "color": "black",
+            "role": "queen",
+            "from": "d8",
+            "to": "e7"
+          },
+          "targets": [
+            "d8"
+          ],
+          "edgeMoveUci": "d8e7",
+          "firstMoveUci": "d8e7",
+          "status": "lost"
+        },
+        "relation": "root_direct",
+        "admitted": true
+      }
+    },
+    {
+      "positionId": "33:carlsbad-minority-attack:d5d1144e7865",
+      "packId": "carlsbad-minority-attack",
+      "phase": "middlegame",
+      "arm": "depth12",
+      "candidateCount": 5,
+      "relations": {
+        "opponent_line_event": 3,
+        "root_direct": 1,
+        "root_followup_in_line": 1
+      },
+      "admitted": 2,
+      "refusals": {
+        "opponent_line_event": 3
+      },
+      "strictDirect": {
+        "candidate": {
+          "occurrenceId": "sha256:867f5012b30a27e4ede9ba56d641a3fc99e12f3fd5b4c6dca1f74ef1e29a7993",
+          "family": "discovered_executed",
+          "ply": 1,
+          "edgeSideRelation": "root",
+          "actor": {
+            "color": "black",
+            "role": "knight",
+            "from": "f6",
+            "to": "g4"
+          },
+          "targets": [
+            "f6",
+            "g5"
+          ],
+          "edgeMoveUci": "f6g4",
+          "firstMoveUci": "f6g4",
+          "status": "gained"
+        },
+        "relation": "root_direct",
+        "admitted": true
+      },
+      "strictHorizon": {
+        "candidate": {
+          "occurrenceId": "sha256:867f5012b30a27e4ede9ba56d641a3fc99e12f3fd5b4c6dca1f74ef1e29a7993",
+          "family": "discovered_executed",
+          "ply": 1,
+          "edgeSideRelation": "root",
+          "actor": {
+            "color": "black",
+            "role": "knight",
+            "from": "f6",
+            "to": "g4"
+          },
+          "targets": [
+            "f6",
+            "g5"
+          ],
+          "edgeMoveUci": "f6g4",
+          "firstMoveUci": "f6g4",
+          "status": "gained"
+        },
+        "relation": "root_direct",
+        "admitted": true
+      }
+    },
+    {
+      "positionId": "33:carlsbad-minority-attack:d5d1144e7865",
+      "packId": "carlsbad-minority-attack",
+      "phase": "middlegame",
+      "arm": "movetime100_a",
+      "candidateCount": 5,
+      "relations": {
+        "opponent_line_event": 3,
+        "root_direct": 1,
+        "root_followup_in_line": 1
+      },
+      "admitted": 1,
+      "refusals": {
+        "opponent_line_event": 3,
+        "self_exposure_created": 1
+      },
+      "strictDirect": {
+        "candidate": {
+          "occurrenceId": "sha256:867f5012b30a27e4ede9ba56d641a3fc99e12f3fd5b4c6dca1f74ef1e29a7993",
+          "family": "discovered_executed",
+          "ply": 1,
+          "edgeSideRelation": "root",
+          "actor": {
+            "color": "black",
+            "role": "knight",
+            "from": "f6",
+            "to": "g4"
+          },
+          "targets": [
+            "f6",
+            "g5"
+          ],
+          "edgeMoveUci": "f6g4",
+          "firstMoveUci": "f6g4",
+          "status": "gained"
+        },
+        "relation": "root_direct",
+        "admitted": true
+      },
+      "strictHorizon": {
+        "candidate": {
+          "occurrenceId": "sha256:867f5012b30a27e4ede9ba56d641a3fc99e12f3fd5b4c6dca1f74ef1e29a7993",
+          "family": "discovered_executed",
+          "ply": 1,
+          "edgeSideRelation": "root",
+          "actor": {
+            "color": "black",
+            "role": "knight",
+            "from": "f6",
+            "to": "g4"
+          },
+          "targets": [
+            "f6",
+            "g5"
+          ],
+          "edgeMoveUci": "f6g4",
+          "firstMoveUci": "f6g4",
+          "status": "gained"
+        },
+        "relation": "root_direct",
+        "admitted": true
+      }
+    },
+    {
+      "positionId": "34:carlsbad-minority-attack:7e97c916d7e5",
+      "packId": "carlsbad-minority-attack",
+      "phase": "middlegame",
+      "arm": "depth12",
+      "candidateCount": 0,
+      "relations": {},
+      "admitted": 0,
+      "refusals": {},
+      "strictDirect": null,
+      "strictHorizon": null
+    },
+    {
+      "positionId": "34:carlsbad-minority-attack:7e97c916d7e5",
+      "packId": "carlsbad-minority-attack",
+      "phase": "middlegame",
+      "arm": "movetime100_a",
+      "candidateCount": 0,
+      "relations": {},
+      "admitted": 0,
+      "refusals": {},
+      "strictDirect": null,
+      "strictHorizon": null
+    },
+    {
+      "positionId": "35:carlsbad-minority-attack:04db2c6f23f1",
+      "packId": "carlsbad-minority-attack",
+      "phase": "middlegame",
+      "arm": "depth12",
+      "candidateCount": 1,
+      "relations": {
+        "root_direct": 1
+      },
+      "admitted": 0,
+      "refusals": {
+        "self_exposure_created": 1
+      },
+      "strictDirect": null,
+      "strictHorizon": null
+    },
+    {
+      "positionId": "35:carlsbad-minority-attack:04db2c6f23f1",
+      "packId": "carlsbad-minority-attack",
+      "phase": "middlegame",
+      "arm": "movetime100_a",
+      "candidateCount": 1,
+      "relations": {
+        "root_direct": 1
+      },
+      "admitted": 0,
+      "refusals": {
+        "self_exposure_created": 1
+      },
+      "strictDirect": null,
+      "strictHorizon": null
+    },
+    {
+      "positionId": "36:carlsbad-minority-attack:a774a4a71380",
+      "packId": "carlsbad-minority-attack",
+      "phase": "middlegame",
+      "arm": "depth12",
+      "candidateCount": 1,
+      "relations": {
+        "root_direct": 1
+      },
+      "admitted": 0,
+      "refusals": {
+        "self_exposure_created": 1
+      },
+      "strictDirect": null,
+      "strictHorizon": null
+    },
+    {
+      "positionId": "36:carlsbad-minority-attack:a774a4a71380",
+      "packId": "carlsbad-minority-attack",
+      "phase": "middlegame",
+      "arm": "movetime100_a",
+      "candidateCount": 1,
+      "relations": {
+        "root_direct": 1
+      },
+      "admitted": 0,
+      "refusals": {
+        "self_exposure_created": 1
+      },
+      "strictDirect": null,
+      "strictHorizon": null
+    },
+    {
+      "positionId": "37:carlsbad-minority-attack:dc5740146891",
+      "packId": "carlsbad-minority-attack",
+      "phase": "middlegame",
+      "arm": "depth12",
+      "candidateCount": 0,
+      "relations": {},
+      "admitted": 0,
+      "refusals": {},
+      "strictDirect": null,
+      "strictHorizon": null
+    },
+    {
+      "positionId": "37:carlsbad-minority-attack:dc5740146891",
+      "packId": "carlsbad-minority-attack",
+      "phase": "middlegame",
+      "arm": "movetime100_a",
+      "candidateCount": 0,
+      "relations": {},
+      "admitted": 0,
+      "refusals": {},
+      "strictDirect": null,
+      "strictHorizon": null
+    },
+    {
+      "positionId": "38:carlsbad-minority-attack:ac2c01af658e",
+      "packId": "carlsbad-minority-attack",
+      "phase": "middlegame",
+      "arm": "depth12",
+      "candidateCount": 0,
+      "relations": {},
+      "admitted": 0,
+      "refusals": {},
+      "strictDirect": null,
+      "strictHorizon": null
+    },
+    {
+      "positionId": "38:carlsbad-minority-attack:ac2c01af658e",
+      "packId": "carlsbad-minority-attack",
+      "phase": "middlegame",
+      "arm": "movetime100_a",
+      "candidateCount": 0,
+      "relations": {},
+      "admitted": 0,
+      "refusals": {},
+      "strictDirect": null,
+      "strictHorizon": null
+    },
+    {
+      "positionId": "39:carlsbad-minority-attack:feaa43c5a1b6",
+      "packId": "carlsbad-minority-attack",
+      "phase": "middlegame",
+      "arm": "depth12",
+      "candidateCount": 0,
+      "relations": {},
+      "admitted": 0,
+      "refusals": {},
+      "strictDirect": null,
+      "strictHorizon": null
+    },
+    {
+      "positionId": "39:carlsbad-minority-attack:feaa43c5a1b6",
+      "packId": "carlsbad-minority-attack",
+      "phase": "middlegame",
+      "arm": "movetime100_a",
+      "candidateCount": 0,
+      "relations": {},
+      "admitted": 0,
+      "refusals": {},
+      "strictDirect": null,
+      "strictHorizon": null
+    },
+    {
+      "positionId": "40:trajectory-qgd-exchange-minority:a6bfc78bfa67",
+      "packId": "trajectory-qgd-exchange-minority",
+      "phase": "cross_phase",
+      "arm": "depth12",
+      "candidateCount": 2,
+      "relations": {
+        "root_direct": 1,
+        "root_followup_in_line": 1
+      },
+      "admitted": 0,
+      "refusals": {
+        "self_risk_preserved": 2
+      },
+      "strictDirect": null,
+      "strictHorizon": null
+    },
+    {
+      "positionId": "40:trajectory-qgd-exchange-minority:a6bfc78bfa67",
+      "packId": "trajectory-qgd-exchange-minority",
+      "phase": "cross_phase",
+      "arm": "movetime100_a",
+      "candidateCount": 1,
+      "relations": {
+        "root_direct": 1
+      },
+      "admitted": 0,
+      "refusals": {
+        "self_risk_preserved": 1
+      },
+      "strictDirect": null,
+      "strictHorizon": null
+    },
+    {
+      "positionId": "41:trajectory-qgd-exchange-minority:f30d973d35d1",
+      "packId": "trajectory-qgd-exchange-minority",
+      "phase": "cross_phase",
+      "arm": "depth12",
+      "candidateCount": 1,
+      "relations": {
+        "opponent_line_event": 1
+      },
+      "admitted": 0,
+      "refusals": {
+        "opponent_line_event": 1
+      },
+      "strictDirect": null,
+      "strictHorizon": null
+    },
+    {
+      "positionId": "41:trajectory-qgd-exchange-minority:f30d973d35d1",
+      "packId": "trajectory-qgd-exchange-minority",
+      "phase": "cross_phase",
+      "arm": "movetime100_a",
+      "candidateCount": 0,
+      "relations": {},
+      "admitted": 0,
+      "refusals": {},
+      "strictDirect": null,
+      "strictHorizon": null
+    },
+    {
+      "positionId": "42:trajectory-caro-advance-chain-bishops:915cce3ee46f",
+      "packId": "trajectory-caro-advance-chain-bishops",
+      "phase": "cross_phase",
+      "arm": "depth12",
+      "candidateCount": 0,
+      "relations": {},
+      "admitted": 0,
+      "refusals": {},
+      "strictDirect": null,
+      "strictHorizon": null
+    },
+    {
+      "positionId": "42:trajectory-caro-advance-chain-bishops:915cce3ee46f",
+      "packId": "trajectory-caro-advance-chain-bishops",
+      "phase": "cross_phase",
+      "arm": "movetime100_a",
+      "candidateCount": 0,
+      "relations": {},
+      "admitted": 0,
+      "refusals": {},
+      "strictDirect": null,
+      "strictHorizon": null
+    },
+    {
+      "positionId": "43:trajectory-qgd-exchange-minority:a30efb5f5469",
+      "packId": "trajectory-qgd-exchange-minority",
+      "phase": "cross_phase",
+      "arm": "depth12",
+      "candidateCount": 2,
+      "relations": {
+        "root_followup_in_line": 2
+      },
+      "admitted": 2,
+      "refusals": {},
+      "strictDirect": null,
+      "strictHorizon": {
+        "candidate": {
+          "occurrenceId": "sha256:0cc93bded6a3eb0617bf381f5c7b3c5ac071afa33dda4a5c0396f45b8549c20c",
+          "family": "double_attack",
+          "ply": 3,
+          "edgeSideRelation": "root",
+          "actor": {
+            "color": "white",
+            "role": "queen",
+            "from": "c3",
+            "to": "d3"
+          },
+          "targets": [
+            "a6",
+            "h7"
+          ],
+          "edgeMoveUci": "c3d3",
+          "firstMoveUci": "b2b8",
+          "status": "gained"
+        },
+        "relation": "root_followup_in_line",
+        "admitted": true
+      }
+    },
+    {
+      "positionId": "43:trajectory-qgd-exchange-minority:a30efb5f5469",
+      "packId": "trajectory-qgd-exchange-minority",
+      "phase": "cross_phase",
+      "arm": "movetime100_a",
+      "candidateCount": 0,
+      "relations": {},
+      "admitted": 0,
+      "refusals": {},
+      "strictDirect": null,
+      "strictHorizon": null
+    },
+    {
+      "positionId": "44:trajectory-qgd-exchange-minority:d5bbde32473c",
+      "packId": "trajectory-qgd-exchange-minority",
+      "phase": "cross_phase",
+      "arm": "depth12",
+      "candidateCount": 1,
+      "relations": {
+        "root_direct": 1
+      },
+      "admitted": 1,
+      "refusals": {},
+      "strictDirect": {
+        "candidate": {
+          "occurrenceId": "sha256:d1c66552dd9e5d1018b59a9bdbe41b5713889d2268666294504e84d02bdf16ed",
+          "family": "loose_piece",
+          "ply": 1,
+          "edgeSideRelation": "root",
+          "actor": {
+            "color": "black",
+            "role": "pawn",
+            "from": "c6",
+            "to": "c6"
+          },
+          "targets": [
+            "c6"
+          ],
+          "edgeMoveUci": "a8a6",
+          "firstMoveUci": "a8a6",
+          "status": "lost"
+        },
+        "relation": "root_direct",
+        "admitted": true
+      },
+      "strictHorizon": {
+        "candidate": {
+          "occurrenceId": "sha256:d1c66552dd9e5d1018b59a9bdbe41b5713889d2268666294504e84d02bdf16ed",
+          "family": "loose_piece",
+          "ply": 1,
+          "edgeSideRelation": "root",
+          "actor": {
+            "color": "black",
+            "role": "pawn",
+            "from": "c6",
+            "to": "c6"
+          },
+          "targets": [
+            "c6"
+          ],
+          "edgeMoveUci": "a8a6",
+          "firstMoveUci": "a8a6",
+          "status": "lost"
+        },
+        "relation": "root_direct",
+        "admitted": true
+      }
+    },
+    {
+      "positionId": "44:trajectory-qgd-exchange-minority:d5bbde32473c",
+      "packId": "trajectory-qgd-exchange-minority",
+      "phase": "cross_phase",
+      "arm": "movetime100_a",
+      "candidateCount": 1,
+      "relations": {
+        "root_direct": 1
+      },
+      "admitted": 1,
+      "refusals": {},
+      "strictDirect": {
+        "candidate": {
+          "occurrenceId": "sha256:d1c66552dd9e5d1018b59a9bdbe41b5713889d2268666294504e84d02bdf16ed",
+          "family": "loose_piece",
+          "ply": 1,
+          "edgeSideRelation": "root",
+          "actor": {
+            "color": "black",
+            "role": "pawn",
+            "from": "c6",
+            "to": "c6"
+          },
+          "targets": [
+            "c6"
+          ],
+          "edgeMoveUci": "a8a6",
+          "firstMoveUci": "a8a6",
+          "status": "lost"
+        },
+        "relation": "root_direct",
+        "admitted": true
+      },
+      "strictHorizon": {
+        "candidate": {
+          "occurrenceId": "sha256:d1c66552dd9e5d1018b59a9bdbe41b5713889d2268666294504e84d02bdf16ed",
+          "family": "loose_piece",
+          "ply": 1,
+          "edgeSideRelation": "root",
+          "actor": {
+            "color": "black",
+            "role": "pawn",
+            "from": "c6",
+            "to": "c6"
+          },
+          "targets": [
+            "c6"
+          ],
+          "edgeMoveUci": "a8a6",
+          "firstMoveUci": "a8a6",
+          "status": "lost"
+        },
+        "relation": "root_direct",
+        "admitted": true
+      }
+    },
+    {
+      "positionId": "45:trajectory-qgd-exchange-minority:77ea6373d17e",
+      "packId": "trajectory-qgd-exchange-minority",
+      "phase": "cross_phase",
+      "arm": "depth12",
+      "candidateCount": 0,
+      "relations": {},
+      "admitted": 0,
+      "refusals": {},
+      "strictDirect": null,
+      "strictHorizon": null
+    },
+    {
+      "positionId": "45:trajectory-qgd-exchange-minority:77ea6373d17e",
+      "packId": "trajectory-qgd-exchange-minority",
+      "phase": "cross_phase",
+      "arm": "movetime100_a",
+      "candidateCount": 5,
+      "relations": {
+        "opponent_line_event": 4,
+        "root_followup_in_line": 1
+      },
+      "admitted": 0,
+      "refusals": {
+        "opponent_line_event": 4,
+        "self_risk_preserved": 1
+      },
+      "strictDirect": null,
+      "strictHorizon": null
+    },
+    {
+      "positionId": "46:trajectory-qgd-exchange-minority:2bab42c1cd2d",
+      "packId": "trajectory-qgd-exchange-minority",
+      "phase": "cross_phase",
+      "arm": "depth12",
+      "candidateCount": 2,
+      "relations": {
+        "root_direct": 1,
+        "root_followup_in_line": 1
+      },
+      "admitted": 1,
+      "refusals": {
+        "self_risk_preserved": 1
+      },
+      "strictDirect": null,
+      "strictHorizon": {
+        "candidate": {
+          "occurrenceId": "sha256:cd600526ec8c5ac038f4eea315bea37354b836dce645b6111c509908ef74eb4d",
+          "family": "loose_piece",
+          "ply": 3,
+          "edgeSideRelation": "root",
+          "actor": {
+            "color": "white",
+            "role": "pawn",
+            "from": "c4",
+            "to": "c4"
+          },
+          "targets": [
+            "c4"
+          ],
+          "edgeMoveUci": "e2e3",
+          "firstMoveUci": "c1g5",
+          "status": "lost"
+        },
+        "relation": "root_followup_in_line",
+        "admitted": true
+      }
+    },
+    {
+      "positionId": "46:trajectory-qgd-exchange-minority:2bab42c1cd2d",
+      "packId": "trajectory-qgd-exchange-minority",
+      "phase": "cross_phase",
+      "arm": "movetime100_a",
+      "candidateCount": 1,
+      "relations": {
+        "root_direct": 1
+      },
+      "admitted": 0,
+      "refusals": {
+        "self_risk_preserved": 1
+      },
+      "strictDirect": null,
+      "strictHorizon": null
+    },
+    {
+      "positionId": "47:trajectory-qgd-exchange-minority:859711b903e8",
+      "packId": "trajectory-qgd-exchange-minority",
+      "phase": "cross_phase",
+      "arm": "depth12",
+      "candidateCount": 1,
+      "relations": {
+        "opponent_line_event": 1
+      },
+      "admitted": 0,
+      "refusals": {
+        "opponent_line_event": 1
+      },
+      "strictDirect": null,
+      "strictHorizon": null
+    },
+    {
+      "positionId": "47:trajectory-qgd-exchange-minority:859711b903e8",
+      "packId": "trajectory-qgd-exchange-minority",
+      "phase": "cross_phase",
+      "arm": "movetime100_a",
+      "candidateCount": 0,
+      "relations": {},
+      "admitted": 0,
+      "refusals": {},
+      "strictDirect": null,
+      "strictHorizon": null
+    },
+    {
+      "positionId": "48:trajectory-caro-advance-chain-bishops:0fea1874b506",
+      "packId": "trajectory-caro-advance-chain-bishops",
+      "phase": "cross_phase",
+      "arm": "depth12",
+      "candidateCount": 0,
+      "relations": {},
+      "admitted": 0,
+      "refusals": {},
+      "strictDirect": null,
+      "strictHorizon": null
+    },
+    {
+      "positionId": "48:trajectory-caro-advance-chain-bishops:0fea1874b506",
+      "packId": "trajectory-caro-advance-chain-bishops",
+      "phase": "cross_phase",
+      "arm": "movetime100_a",
+      "candidateCount": 0,
+      "relations": {},
+      "admitted": 0,
+      "refusals": {},
+      "strictDirect": null,
+      "strictHorizon": null
+    },
+    {
+      "positionId": "49:trajectory-qgd-exchange-minority:679e983552cd",
+      "packId": "trajectory-qgd-exchange-minority",
+      "phase": "cross_phase",
+      "arm": "depth12",
+      "candidateCount": 0,
+      "relations": {},
+      "admitted": 0,
+      "refusals": {},
+      "strictDirect": null,
+      "strictHorizon": null
+    },
+    {
+      "positionId": "49:trajectory-qgd-exchange-minority:679e983552cd",
+      "packId": "trajectory-qgd-exchange-minority",
+      "phase": "cross_phase",
+      "arm": "movetime100_a",
+      "candidateCount": 0,
+      "relations": {},
+      "admitted": 0,
+      "refusals": {},
+      "strictDirect": null,
+      "strictHorizon": null
+    },
+    {
+      "positionId": "50:trajectory-qgd-exchange-minority:f844075a0d57",
+      "packId": "trajectory-qgd-exchange-minority",
+      "phase": "cross_phase",
+      "arm": "depth12",
+      "candidateCount": 2,
+      "relations": {
+        "opponent_line_event": 1,
+        "root_followup_in_line": 1
+      },
+      "admitted": 1,
+      "refusals": {
+        "opponent_line_event": 1
+      },
+      "strictDirect": null,
+      "strictHorizon": {
+        "candidate": {
+          "occurrenceId": "sha256:38b67b95a632583611e7b37fd199f452fa6263066f2c04e4f6c8aee28e9b8bc1",
+          "family": "loose_piece",
+          "ply": 3,
+          "edgeSideRelation": "root",
+          "actor": {
+            "color": "black",
+            "role": "pawn",
+            "from": "c6",
+            "to": "c6"
+          },
+          "targets": [
+            "c6"
+          ],
+          "edgeMoveUci": "d8b6",
+          "firstMoveUci": "a6b6",
+          "status": "lost"
+        },
+        "relation": "root_followup_in_line",
+        "admitted": true
+      }
+    },
+    {
+      "positionId": "50:trajectory-qgd-exchange-minority:f844075a0d57",
+      "packId": "trajectory-qgd-exchange-minority",
+      "phase": "cross_phase",
+      "arm": "movetime100_a",
+      "candidateCount": 1,
+      "relations": {
+        "opponent_line_event": 1
+      },
+      "admitted": 0,
+      "refusals": {
+        "opponent_line_event": 1
+      },
+      "strictDirect": null,
+      "strictHorizon": null
+    },
+    {
+      "positionId": "51:trajectory-qgd-exchange-minority:32306eb77b48",
+      "packId": "trajectory-qgd-exchange-minority",
+      "phase": "cross_phase",
+      "arm": "depth12",
+      "candidateCount": 1,
+      "relations": {
+        "opponent_line_event": 1
+      },
+      "admitted": 0,
+      "refusals": {
+        "opponent_line_event": 1
+      },
+      "strictDirect": null,
+      "strictHorizon": null
+    },
+    {
+      "positionId": "51:trajectory-qgd-exchange-minority:32306eb77b48",
+      "packId": "trajectory-qgd-exchange-minority",
+      "phase": "cross_phase",
+      "arm": "movetime100_a",
+      "candidateCount": 0,
+      "relations": {},
+      "admitted": 0,
+      "refusals": {},
+      "strictDirect": null,
+      "strictHorizon": null
+    },
+    {
+      "positionId": "52:trajectory-qgd-exchange-minority:441820a3a31b",
+      "packId": "trajectory-qgd-exchange-minority",
+      "phase": "cross_phase",
+      "arm": "depth12",
+      "candidateCount": 2,
+      "relations": {
+        "opponent_line_event": 1,
+        "root_direct": 1
+      },
+      "admitted": 0,
+      "refusals": {
+        "opponent_line_event": 1,
+        "self_exposure_created": 1
+      },
+      "strictDirect": null,
+      "strictHorizon": null
+    },
+    {
+      "positionId": "52:trajectory-qgd-exchange-minority:441820a3a31b",
+      "packId": "trajectory-qgd-exchange-minority",
+      "phase": "cross_phase",
+      "arm": "movetime100_a",
+      "candidateCount": 2,
+      "relations": {
+        "opponent_line_event": 1,
+        "root_direct": 1
+      },
+      "admitted": 0,
+      "refusals": {
+        "opponent_line_event": 1,
+        "self_exposure_created": 1
+      },
+      "strictDirect": null,
+      "strictHorizon": null
+    },
+    {
+      "positionId": "53:trajectory-qgd-exchange-minority:4ea0e27cef32",
+      "packId": "trajectory-qgd-exchange-minority",
+      "phase": "cross_phase",
+      "arm": "depth12",
+      "candidateCount": 3,
+      "relations": {
+        "opponent_line_event": 1,
+        "root_direct": 1,
+        "root_followup_in_line": 1
+      },
+      "admitted": 0,
+      "refusals": {
+        "opponent_line_event": 1,
+        "self_risk_preserved": 2
+      },
+      "strictDirect": null,
+      "strictHorizon": null
+    },
+    {
+      "positionId": "53:trajectory-qgd-exchange-minority:4ea0e27cef32",
+      "packId": "trajectory-qgd-exchange-minority",
+      "phase": "cross_phase",
+      "arm": "movetime100_a",
+      "candidateCount": 3,
+      "relations": {
+        "opponent_line_event": 1,
+        "root_direct": 1,
+        "root_followup_in_line": 1
+      },
+      "admitted": 0,
+      "refusals": {
+        "opponent_line_event": 1,
+        "self_risk_preserved": 2
+      },
+      "strictDirect": null,
+      "strictHorizon": null
+    },
+    {
+      "positionId": "54:trajectory-caro-advance-chain-bishops:0e25d319ba3b",
+      "packId": "trajectory-caro-advance-chain-bishops",
+      "phase": "cross_phase",
+      "arm": "depth12",
+      "candidateCount": 0,
+      "relations": {},
+      "admitted": 0,
+      "refusals": {},
+      "strictDirect": null,
+      "strictHorizon": null
+    },
+    {
+      "positionId": "54:trajectory-caro-advance-chain-bishops:0e25d319ba3b",
+      "packId": "trajectory-caro-advance-chain-bishops",
+      "phase": "cross_phase",
+      "arm": "movetime100_a",
+      "candidateCount": 0,
+      "relations": {},
+      "admitted": 0,
+      "refusals": {},
+      "strictDirect": null,
+      "strictHorizon": null
+    },
+    {
+      "positionId": "55:trajectory-caro-advance-chain-bishops:cc0aaadaeed4",
+      "packId": "trajectory-caro-advance-chain-bishops",
+      "phase": "cross_phase",
+      "arm": "depth12",
+      "candidateCount": 1,
+      "relations": {
+        "root_direct": 1
+      },
+      "admitted": 1,
+      "refusals": {},
+      "strictDirect": {
+        "candidate": {
+          "occurrenceId": "sha256:c7848b69590dd16cc0549511fcf8cf0455cbd4c6dda4a3e476bd403d2ba1e4d6",
+          "family": "loose_piece",
+          "ply": 1,
+          "edgeSideRelation": "root",
+          "actor": {
+            "color": "white",
+            "role": "pawn",
+            "from": "e4",
+            "to": "e5"
+          },
+          "targets": [
+            "e4"
+          ],
+          "edgeMoveUci": "e4e5",
+          "firstMoveUci": "e4e5",
+          "status": "lost"
+        },
+        "relation": "root_direct",
+        "admitted": true
+      },
+      "strictHorizon": {
+        "candidate": {
+          "occurrenceId": "sha256:c7848b69590dd16cc0549511fcf8cf0455cbd4c6dda4a3e476bd403d2ba1e4d6",
+          "family": "loose_piece",
+          "ply": 1,
+          "edgeSideRelation": "root",
+          "actor": {
+            "color": "white",
+            "role": "pawn",
+            "from": "e4",
+            "to": "e5"
+          },
+          "targets": [
+            "e4"
+          ],
+          "edgeMoveUci": "e4e5",
+          "firstMoveUci": "e4e5",
+          "status": "lost"
+        },
+        "relation": "root_direct",
+        "admitted": true
+      }
+    },
+    {
+      "positionId": "55:trajectory-caro-advance-chain-bishops:cc0aaadaeed4",
+      "packId": "trajectory-caro-advance-chain-bishops",
+      "phase": "cross_phase",
+      "arm": "movetime100_a",
+      "candidateCount": 1,
+      "relations": {
+        "root_direct": 1
+      },
+      "admitted": 1,
+      "refusals": {},
+      "strictDirect": {
+        "candidate": {
+          "occurrenceId": "sha256:c7848b69590dd16cc0549511fcf8cf0455cbd4c6dda4a3e476bd403d2ba1e4d6",
+          "family": "loose_piece",
+          "ply": 1,
+          "edgeSideRelation": "root",
+          "actor": {
+            "color": "white",
+            "role": "pawn",
+            "from": "e4",
+            "to": "e5"
+          },
+          "targets": [
+            "e4"
+          ],
+          "edgeMoveUci": "e4e5",
+          "firstMoveUci": "e4e5",
+          "status": "lost"
+        },
+        "relation": "root_direct",
+        "admitted": true
+      },
+      "strictHorizon": {
+        "candidate": {
+          "occurrenceId": "sha256:c7848b69590dd16cc0549511fcf8cf0455cbd4c6dda4a3e476bd403d2ba1e4d6",
+          "family": "loose_piece",
+          "ply": 1,
+          "edgeSideRelation": "root",
+          "actor": {
+            "color": "white",
+            "role": "pawn",
+            "from": "e4",
+            "to": "e5"
+          },
+          "targets": [
+            "e4"
+          ],
+          "edgeMoveUci": "e4e5",
+          "firstMoveUci": "e4e5",
+          "status": "lost"
+        },
+        "relation": "root_direct",
+        "admitted": true
+      }
+    },
+    {
+      "positionId": "56:trajectory-qgd-exchange-minority:acf9f17c64a1",
+      "packId": "trajectory-qgd-exchange-minority",
+      "phase": "cross_phase",
+      "arm": "depth12",
+      "candidateCount": 5,
+      "relations": {
+        "opponent_line_event": 3,
+        "root_direct": 1,
+        "root_followup_in_line": 1
+      },
+      "admitted": 2,
+      "refusals": {
+        "opponent_line_event": 3
+      },
+      "strictDirect": {
+        "candidate": {
+          "occurrenceId": "sha256:7d570dce49a31819b14be24e01fb93cafbf425a2982aa048e37ecbc7b11b38ab",
+          "family": "loose_piece",
+          "ply": 1,
+          "edgeSideRelation": "root",
+          "actor": {
+            "color": "black",
+            "role": "pawn",
+            "from": "c6",
+            "to": "c6"
+          },
+          "targets": [
+            "c6"
+          ],
+          "edgeMoveUci": "c8d7",
+          "firstMoveUci": "c8d7",
+          "status": "lost"
+        },
+        "relation": "root_direct",
+        "admitted": true
+      },
+      "strictHorizon": {
+        "candidate": {
+          "occurrenceId": "sha256:7d570dce49a31819b14be24e01fb93cafbf425a2982aa048e37ecbc7b11b38ab",
+          "family": "loose_piece",
+          "ply": 1,
+          "edgeSideRelation": "root",
+          "actor": {
+            "color": "black",
+            "role": "pawn",
+            "from": "c6",
+            "to": "c6"
+          },
+          "targets": [
+            "c6"
+          ],
+          "edgeMoveUci": "c8d7",
+          "firstMoveUci": "c8d7",
+          "status": "lost"
+        },
+        "relation": "root_direct",
+        "admitted": true
+      }
+    },
+    {
+      "positionId": "56:trajectory-qgd-exchange-minority:acf9f17c64a1",
+      "packId": "trajectory-qgd-exchange-minority",
+      "phase": "cross_phase",
+      "arm": "movetime100_a",
+      "candidateCount": 4,
+      "relations": {
+        "opponent_line_event": 2,
+        "root_direct": 1,
+        "root_followup_in_line": 1
+      },
+      "admitted": 2,
+      "refusals": {
+        "opponent_line_event": 2
+      },
+      "strictDirect": {
+        "candidate": {
+          "occurrenceId": "sha256:f8d4775bc9f6c49d85247ec83be30e20027a0a74406f09a787d0f20acf2b2679",
+          "family": "loose_piece",
+          "ply": 1,
+          "edgeSideRelation": "root",
+          "actor": {
+            "color": "black",
+            "role": "pawn",
+            "from": "c6",
+            "to": "c6"
+          },
+          "targets": [
+            "c6"
+          ],
+          "edgeMoveUci": "e6e5",
+          "firstMoveUci": "e6e5",
+          "status": "lost"
+        },
+        "relation": "root_direct",
+        "admitted": true
+      },
+      "strictHorizon": {
+        "candidate": {
+          "occurrenceId": "sha256:f8d4775bc9f6c49d85247ec83be30e20027a0a74406f09a787d0f20acf2b2679",
+          "family": "loose_piece",
+          "ply": 1,
+          "edgeSideRelation": "root",
+          "actor": {
+            "color": "black",
+            "role": "pawn",
+            "from": "c6",
+            "to": "c6"
+          },
+          "targets": [
+            "c6"
+          ],
+          "edgeMoveUci": "e6e5",
+          "firstMoveUci": "e6e5",
+          "status": "lost"
+        },
+        "relation": "root_direct",
+        "admitted": true
+      }
+    },
+    {
+      "positionId": "57:trajectory-qgd-exchange-minority:1a24f06f9a6f",
+      "packId": "trajectory-qgd-exchange-minority",
+      "phase": "cross_phase",
+      "arm": "depth12",
+      "candidateCount": 3,
+      "relations": {
+        "opponent_line_event": 2,
+        "root_followup_in_line": 1
+      },
+      "admitted": 0,
+      "refusals": {
+        "opponent_line_event": 2,
+        "promotion_not_reply_persistent": 1
+      },
+      "strictDirect": null,
+      "strictHorizon": null
+    },
+    {
+      "positionId": "57:trajectory-qgd-exchange-minority:1a24f06f9a6f",
+      "packId": "trajectory-qgd-exchange-minority",
+      "phase": "cross_phase",
+      "arm": "movetime100_a",
+      "candidateCount": 1,
+      "relations": {
+        "opponent_line_event": 1
+      },
+      "admitted": 0,
+      "refusals": {
+        "opponent_line_event": 1
+      },
+      "strictDirect": null,
+      "strictHorizon": null
+    },
+    {
+      "positionId": "58:trajectory-qgd-exchange-minority:4263f01cff2e",
+      "packId": "trajectory-qgd-exchange-minority",
+      "phase": "cross_phase",
+      "arm": "depth12",
+      "candidateCount": 0,
+      "relations": {},
+      "admitted": 0,
+      "refusals": {},
+      "strictDirect": null,
+      "strictHorizon": null
+    },
+    {
+      "positionId": "58:trajectory-qgd-exchange-minority:4263f01cff2e",
+      "packId": "trajectory-qgd-exchange-minority",
+      "phase": "cross_phase",
+      "arm": "movetime100_a",
+      "candidateCount": 0,
+      "relations": {},
+      "admitted": 0,
+      "refusals": {},
+      "strictDirect": null,
+      "strictHorizon": null
+    },
+    {
+      "positionId": "59:trajectory-qgd-exchange-minority:50836c53f3c3",
+      "packId": "trajectory-qgd-exchange-minority",
+      "phase": "cross_phase",
+      "arm": "depth12",
+      "candidateCount": 1,
+      "relations": {
+        "root_direct": 1
+      },
+      "admitted": 1,
+      "refusals": {},
+      "strictDirect": {
+        "candidate": {
+          "occurrenceId": "sha256:bb107ed23c2d6ddc1674ea3e57379f85127711df4958db85cfc65b73d51c9734",
+          "family": "loose_piece",
+          "ply": 1,
+          "edgeSideRelation": "root",
+          "actor": {
+            "color": "white",
+            "role": "knight",
+            "from": "f4",
+            "to": "e2"
+          },
+          "targets": [
+            "f4"
+          ],
+          "edgeMoveUci": "f4e2",
+          "firstMoveUci": "f4e2",
+          "status": "lost"
+        },
+        "relation": "root_direct",
+        "admitted": true
+      },
+      "strictHorizon": {
+        "candidate": {
+          "occurrenceId": "sha256:bb107ed23c2d6ddc1674ea3e57379f85127711df4958db85cfc65b73d51c9734",
+          "family": "loose_piece",
+          "ply": 1,
+          "edgeSideRelation": "root",
+          "actor": {
+            "color": "white",
+            "role": "knight",
+            "from": "f4",
+            "to": "e2"
+          },
+          "targets": [
+            "f4"
+          ],
+          "edgeMoveUci": "f4e2",
+          "firstMoveUci": "f4e2",
+          "status": "lost"
+        },
+        "relation": "root_direct",
+        "admitted": true
+      }
+    },
+    {
+      "positionId": "59:trajectory-qgd-exchange-minority:50836c53f3c3",
+      "packId": "trajectory-qgd-exchange-minority",
+      "phase": "cross_phase",
+      "arm": "movetime100_a",
+      "candidateCount": 1,
+      "relations": {
+        "root_direct": 1
+      },
+      "admitted": 1,
+      "refusals": {},
+      "strictDirect": {
+        "candidate": {
+          "occurrenceId": "sha256:bb107ed23c2d6ddc1674ea3e57379f85127711df4958db85cfc65b73d51c9734",
+          "family": "loose_piece",
+          "ply": 1,
+          "edgeSideRelation": "root",
+          "actor": {
+            "color": "white",
+            "role": "knight",
+            "from": "f4",
+            "to": "e2"
+          },
+          "targets": [
+            "f4"
+          ],
+          "edgeMoveUci": "f4e2",
+          "firstMoveUci": "f4e2",
+          "status": "lost"
+        },
+        "relation": "root_direct",
+        "admitted": true
+      },
+      "strictHorizon": {
+        "candidate": {
+          "occurrenceId": "sha256:bb107ed23c2d6ddc1674ea3e57379f85127711df4958db85cfc65b73d51c9734",
+          "family": "loose_piece",
+          "ply": 1,
+          "edgeSideRelation": "root",
+          "actor": {
+            "color": "white",
+            "role": "knight",
+            "from": "f4",
+            "to": "e2"
+          },
+          "targets": [
+            "f4"
+          ],
+          "edgeMoveUci": "f4e2",
+          "firstMoveUci": "f4e2",
+          "status": "lost"
+        },
+        "relation": "root_direct",
+        "admitted": true
+      }
+    },
+    {
+      "positionId": "60:trajectory-qgd-exchange-minority:cecb48a3b054",
+      "packId": "trajectory-qgd-exchange-minority",
+      "phase": "cross_phase",
+      "arm": "depth12",
+      "candidateCount": 2,
+      "relations": {
+        "root_direct": 2
+      },
+      "admitted": 2,
+      "refusals": {},
+      "strictDirect": {
+        "candidate": {
+          "occurrenceId": "sha256:95027e2bc67a3fe0bf1c783ab0d09ce377d0b30e9368c9a3c900909138178899",
+          "family": "loose_piece",
+          "ply": 1,
+          "edgeSideRelation": "root",
+          "actor": {
+            "color": "white",
+            "role": "rook",
+            "from": "b1",
+            "to": "b2"
+          },
+          "targets": [
+            "b1"
+          ],
+          "edgeMoveUci": "b1b2",
+          "firstMoveUci": "b1b2",
+          "status": "lost"
+        },
+        "relation": "root_direct",
+        "admitted": true
+      },
+      "strictHorizon": {
+        "candidate": {
+          "occurrenceId": "sha256:95027e2bc67a3fe0bf1c783ab0d09ce377d0b30e9368c9a3c900909138178899",
+          "family": "loose_piece",
+          "ply": 1,
+          "edgeSideRelation": "root",
+          "actor": {
+            "color": "white",
+            "role": "rook",
+            "from": "b1",
+            "to": "b2"
+          },
+          "targets": [
+            "b1"
+          ],
+          "edgeMoveUci": "b1b2",
+          "firstMoveUci": "b1b2",
+          "status": "lost"
+        },
+        "relation": "root_direct",
+        "admitted": true
+      }
+    },
+    {
+      "positionId": "60:trajectory-qgd-exchange-minority:cecb48a3b054",
+      "packId": "trajectory-qgd-exchange-minority",
+      "phase": "cross_phase",
+      "arm": "movetime100_a",
+      "candidateCount": 2,
+      "relations": {
+        "root_direct": 2
+      },
+      "admitted": 2,
+      "refusals": {},
+      "strictDirect": {
+        "candidate": {
+          "occurrenceId": "sha256:95027e2bc67a3fe0bf1c783ab0d09ce377d0b30e9368c9a3c900909138178899",
+          "family": "loose_piece",
+          "ply": 1,
+          "edgeSideRelation": "root",
+          "actor": {
+            "color": "white",
+            "role": "rook",
+            "from": "b1",
+            "to": "b2"
+          },
+          "targets": [
+            "b1"
+          ],
+          "edgeMoveUci": "b1b2",
+          "firstMoveUci": "b1b2",
+          "status": "lost"
+        },
+        "relation": "root_direct",
+        "admitted": true
+      },
+      "strictHorizon": {
+        "candidate": {
+          "occurrenceId": "sha256:95027e2bc67a3fe0bf1c783ab0d09ce377d0b30e9368c9a3c900909138178899",
+          "family": "loose_piece",
+          "ply": 1,
+          "edgeSideRelation": "root",
+          "actor": {
+            "color": "white",
+            "role": "rook",
+            "from": "b1",
+            "to": "b2"
+          },
+          "targets": [
+            "b1"
+          ],
+          "edgeMoveUci": "b1b2",
+          "firstMoveUci": "b1b2",
+          "status": "lost"
+        },
+        "relation": "root_direct",
+        "admitted": true
+      }
+    },
+    {
+      "positionId": "61:trajectory-caro-advance-chain-bishops:404bf0f66c8a",
+      "packId": "trajectory-caro-advance-chain-bishops",
+      "phase": "cross_phase",
+      "arm": "depth12",
+      "candidateCount": 0,
+      "relations": {},
+      "admitted": 0,
+      "refusals": {},
+      "strictDirect": null,
+      "strictHorizon": null
+    },
+    {
+      "positionId": "61:trajectory-caro-advance-chain-bishops:404bf0f66c8a",
+      "packId": "trajectory-caro-advance-chain-bishops",
+      "phase": "cross_phase",
+      "arm": "movetime100_a",
+      "candidateCount": 0,
+      "relations": {},
+      "admitted": 0,
+      "refusals": {},
+      "strictDirect": null,
+      "strictHorizon": null
+    },
+    {
+      "positionId": "62:trajectory-caro-advance-chain-bishops:16af0d2a3cb0",
+      "packId": "trajectory-caro-advance-chain-bishops",
+      "phase": "cross_phase",
+      "arm": "depth12",
+      "candidateCount": 0,
+      "relations": {},
+      "admitted": 0,
+      "refusals": {},
+      "strictDirect": null,
+      "strictHorizon": null
+    },
+    {
+      "positionId": "62:trajectory-caro-advance-chain-bishops:16af0d2a3cb0",
+      "packId": "trajectory-caro-advance-chain-bishops",
+      "phase": "cross_phase",
+      "arm": "movetime100_a",
+      "candidateCount": 0,
+      "relations": {},
+      "admitted": 0,
+      "refusals": {},
+      "strictDirect": null,
+      "strictHorizon": null
+    },
+    {
+      "positionId": "63:trajectory-qgd-exchange-minority:96e8cf9c5dca",
+      "packId": "trajectory-qgd-exchange-minority",
+      "phase": "cross_phase",
+      "arm": "depth12",
+      "candidateCount": 0,
+      "relations": {},
+      "admitted": 0,
+      "refusals": {},
+      "strictDirect": null,
+      "strictHorizon": null
+    },
+    {
+      "positionId": "63:trajectory-qgd-exchange-minority:96e8cf9c5dca",
+      "packId": "trajectory-qgd-exchange-minority",
+      "phase": "cross_phase",
+      "arm": "movetime100_a",
+      "candidateCount": 0,
+      "relations": {},
+      "admitted": 0,
+      "refusals": {},
+      "strictDirect": null,
+      "strictHorizon": null
+    }
+  ]
+}
