@@ -1336,3 +1336,28 @@ holds the sequenced passes but is not a route document, which is exactly how [[D
   is accepted, and no `.svelte` file mentions presets. Blocked on [[D971]], an RFC amendment nobody
   wrote, with `compileAssistance` a phantom symbol cited by three documents and present in zero lines
   of code ([[D985]]). That amendment is the unblock and it is claude's to write.
+
+### The measurement, and the one fact underneath all six complaints — [[D1430]], [[D1431]]
+
+**[[D1430]] is the finding.** The eleven-module learner layer that was supposed to sit between the
+evidence engine and the screen **was never built**. `compileModuleRegistry` is exported and never
+called with declarations in production; there is not one `ModuleDeclaration` outside tests, and no
+`.svelte` file names a module id. Three modules — `blunder_prevention`, `threat_radar`,
+`guided_hint` — have no analogue at all; the other eight exist as ad-hoc precursors with no seat,
+no budget and no `emptyBehavior`. Every one of the owner's six complaints is a symptom of this:
+what he is looking at is the evidence engine with nothing on top of it.
+
+**[[D1431]] is the number.** Over 42 specified assistance affordances: **17 exist (40%)** and
+**8 are designed components (19%)**. Presets 0/7, modules 0/11, hint rungs 0/6. The owner's 75% is
+accurate for that surface and understates the quality half. Whole-product breadth is a much
+healthier number — the routes, timeline, branch rail, compare, live sessions, imports and studio all
+ship — so the honest shape is **broad and shallow**, and B1–B11 is largely truthful.
+
+**Do not fix the symptoms first.** Restyling the raw dumps ([[D1434]]) without the module layer
+reproduces the same surface in nicer type. The order is: register the modules, then the preset pill
+([[D971]]'s amendment), then the ladder rungs, then the components those seats render into.
+
+Supporting rows: [[D1432]] (only 2 of 3 themes work per mode; the third silently no-ops while showing
+as selected), [[D1433]] (the theming criterion cannot match named CSS colours, so the hard-coded
+whites that shipped pass it), [[D1434]] (`JSON.stringify` to a learner; the only chart is a row of
+identical bullets).
