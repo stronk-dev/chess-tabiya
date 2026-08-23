@@ -6391,3 +6391,27 @@ honest by criterion 15 making the naming failable.
 **Blocked:** nothing on either.
 
 **Next:** codex implements both; mobility's criterion 7 starts **red on the web arm** by design.
+
+## 2026-08-23 — generated bot route source passes after four pre-verdict instrument corrections
+
+**What landed:** D1084's disposable matched 12-branch experiment and
+`generated-bot-route-source.md`. A separately identified exact-legal route source completes the
+kingside-fianchetto target in **9/12** branches versus paired guarded Maia's **1/12**. It makes 31
+progress and 10 preservation selections with zero regressions: 26 retain Maia mass, 15 require the
+recorded source/Stockfish tiebreak, 55 candidates are refused, maximum admitted loss is 234 cp,
+severe frequency remains zero and repetition does not rise. All eight frozen gates pass.
+
+**What changed:** source → guard → human-policy preference → explicit fallback is now measured
+architecture rather than an assumption. It feeds F8 and the shared candidate-packet join, but does
+not license a route catalogue, personality or human-like claim. D1095 corrected common randomness,
+the generated opportunity denominator, incomplete MultiPV results and chessops-to-orthodox castling
+conversion before the favorable verdict was accepted. Earlier D1078/D1080 reach findings stand;
+their matched-randomness claim is now bounded. A repeat of the final run produced the same
+normalized artifact digest, `6beda443…`.
+
+**Blocked:** product implementation still requires F8's accepted/amended RFC; route instances need
+licensed/authored semantics and transposition state. C5 remains unmet pending owner blind use, so
+human likeness, coherence and fun are unclaimed.
+
+**Next:** bind D1084 into the F8 author/review pass, then measure a multi-route repertoire/profile
+composition rather than another scalar Maia multiplier.

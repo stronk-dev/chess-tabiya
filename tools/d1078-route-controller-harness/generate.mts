@@ -5,14 +5,14 @@ import { readFile, readdir, writeFile } from "node:fs/promises";
 import { join } from "node:path";
 import { createInterface } from "node:readline";
 
-import { Chess, normalizeMove } from "../../apps/server/node_modules/chessops/dist/esm/chess.js";
+import { castlingSide, Chess, normalizeMove } from "../../apps/server/node_modules/chessops/dist/esm/chess.js";
 import { makeFen, parseFen } from "../../apps/server/node_modules/chessops/dist/esm/fen.js";
 import { makeSanAndPlay } from "../../apps/server/node_modules/chessops/dist/esm/san.js";
 import { isNormal } from "../../apps/server/node_modules/chessops/dist/esm/types.js";
-import { parseSquare, parseUci } from "../../apps/server/node_modules/chessops/dist/esm/util.js";
+import { kingCastlesTo, makeUci, parseSquare, parseUci } from "../../apps/server/node_modules/chessops/dist/esm/util.js";
 
 type Color = "white" | "black";
-type Arm = "guarded_maia" | "route_controller" | "monotone_route_controller";
+type Arm = "guarded_maia" | "route_controller" | "monotone_route_controller" | "generated_route_controller";
 interface Candidate { readonly moveUci: string; readonly mass?: number }
 interface MaiaPacket { readonly moveUci: string; readonly candidates: readonly Candidate[]; readonly engine: Record<string, unknown> }
 interface Pack { readonly id: string; readonly phase: string; readonly start: { readonly fen: string }; readonly objective?: { readonly summary?: string } }
@@ -20,6 +20,8 @@ interface Trace {
   readonly ply: number; readonly turn: Color; readonly controlled: boolean; readonly arm: Arm;
   readonly activeBefore: boolean;
   readonly applied: "guarded_maia" | "route_progress" | "route_preserve"; readonly fallback?: string;
+  readonly selectionSource?: "guarded_maia" | "route_source+maia_mass" | "route_source+stockfish_tiebreak";
+  readonly routeCandidates?: number; readonly admittedRouteCandidates?: number;
   readonly beforeDistance: number; readonly afterDistance: number; readonly opportunity: boolean;
   readonly moveUci: string; readonly san: string; readonly stockfishBest: string;
   readonly stockfishLossCp: number | null; readonly maiaMass: number | null;
@@ -33,9 +35,11 @@ interface Line {
 const ROOT = new URL("../../", import.meta.url).pathname;
 const DRAFTS = join(ROOT, "content/drafts");
 const IS_D1080 = process.env.TABIYA_D1080 === "1";
-const EXPERIMENT = IS_D1080 ? "D1080" : "D1078";
-const RESULT = join(ROOT, `planning/platform-alignment/bot-policy/${IS_D1080 ? "d1080-monotone-route" : "d1078-route-controller"}-results.json`);
-const REPORT = join(ROOT, `planning/platform-alignment/bot-policy/${IS_D1080 ? "d1080-monotone-route" : "d1078-route-controller"}-results.md`);
+const IS_D1084 = process.env.TABIYA_D1084 === "1";
+const EXPERIMENT = IS_D1084 ? "D1084" : IS_D1080 ? "D1080" : "D1078";
+const OUTPUT_STEM = IS_D1084 ? "d1084-generated-route" : IS_D1080 ? "d1080-monotone-route" : "d1078-route-controller";
+const RESULT = join(ROOT, `planning/platform-alignment/bot-policy/${OUTPUT_STEM}-results.json`);
+const REPORT = join(ROOT, `planning/platform-alignment/bot-policy/${OUTPUT_STEM}-results.md`);
 const BASE_URL = process.env.TABIYA_D1078_BASE_URL ?? "http://127.0.0.1:3000";
 const STOCKFISH = process.env.STOCKFISH_PATH ?? "stockfish";
 const PLIES = 12, ROOTS = 6, SF_NODES = 25_000, TARGET_ELO = 1800, TEMPERATURE = 0.8, TOP_P = 0.92, GUARD_CP = 250;
@@ -71,6 +75,19 @@ function routeDistanceAfter(board: Chess, side: Color, uci: string): number | un
   const after = board.clone();
   after.play(move);
   return targetDistance(after, side);
+}
+function legalMoves(board: Chess): readonly string[] {
+  const moves: string[] = [];
+  for (const [from, destinations] of board.allDests()) for (const to of destinations) {
+    const piece = board.board.get(from);
+    if (piece?.role === "pawn" && (to < 8 || to >= 56)) for (const promotion of ["queen", "rook", "bishop", "knight"] as const) moves.push(makeUci({ from, to, promotion }));
+    else {
+      const internal = { from, to };
+      const side = castlingSide(board, internal);
+      moves.push(makeUci(side === undefined ? internal : { from, to: kingCastlesTo(board.turn, side) }));
+    }
+  }
+  return Object.freeze([...new Set(moves)].sort());
 }
 function normalized(rows: Iterable<readonly [string, number]>): Map<string, number> {
   const kept = [...rows].filter(([, value]) => Number.isFinite(value) && value > 0);
@@ -167,6 +184,16 @@ class UciEngine {
     }
     return result;
   }
+  async scoreMove(startFen: string, history: readonly string[], move: string): Promise<number> {
+    await this.resetSearch();
+    this.send("setoption name MultiPV value 1"); this.position(startFen, history);
+    this.send(`go nodes ${SF_NODES} searchmoves ${move}`);
+    const rows = await this.until((line) => line.startsWith("bestmove "));
+    const info = [...rows].reverse().find((line) => line.startsWith("info ") && line.includes(` pv ${move}`));
+    const score = info === undefined ? undefined : UciEngine.score(info);
+    if (score === undefined) throw new Error(`missing isolated score ${move}`);
+    return score;
+  }
   close(): void { this.send("quit"); }
 }
 
@@ -200,22 +227,55 @@ async function roots(): Promise<readonly Pack[]> {
 
 async function generateLine(engine: UciEngine, pack: Pack, arm: Arm, controlledColor: Color): Promise<Line> {
   const id = `${pack.id}:${arm}:${controlledColor}`, board = position(pack.start.fen), history: string[] = [], trace: Trace[] = [];
+  const pairedRandomKey = `${pack.id}:${controlledColor}`;
   let completed = targetDistance(board, controlledColor) === 0;
   for (let ply = 0; ply < PLIES && !board.isEnd(); ply += 1) {
     const turn = color(board), controlled = turn === controlledColor, currentFen = makeFen(board.toSetup());
-    const packet = await maia(pack.start.fen, history, Number.parseInt(sha(`${id}:${ply}`).slice(0, 8), 16));
+    const packet = await maia(pack.start.fen, history, Number.parseInt(sha(`${pairedRandomKey}:${ply}`).slice(0, 8), 16));
     if (observedMaiaEngine === undefined) observedMaiaEngine = Object.freeze({ ...packet.engine });
     else if (JSON.stringify(packet.engine) !== JSON.stringify(observedMaiaEngine)) throw new Error("Maia engine identity changed inside D1078");
     const base = productionDistribution(packet.candidates), best = await engine.best(pack.start.fen, history);
-    const scores = await engine.scores(pack.start.fen, history, [...new Set([...base.keys(), best.move])]);
+    const beforeDistance = targetDistance(board, controlledColor), activeBefore = controlled && !completed;
+    const generated = activeBefore && arm === "generated_route_controller"
+      ? legalMoves(board).map((move) => ({ move, distance: routeDistanceAfter(board, controlledColor, move)! })) : [];
+    const generatedProgress = generated.filter((candidate) => candidate.distance < beforeDistance);
+    const generatedPreserving = generated.filter((candidate) => candidate.distance === beforeDistance);
+    const sourceCandidates = generatedProgress.length > 0 ? generatedProgress : generatedPreserving;
+    const scores = await engine.scores(pack.start.fen, history, [...new Set([...base.keys(), ...sourceCandidates.map((candidate) => candidate.move), best.move])]);
+    if (arm === "generated_route_controller") for (const candidate of sourceCandidates) {
+      if (!scores.has(candidate.move)) scores.set(candidate.move, await engine.scoreMove(pack.start.fen, history, candidate.move));
+    }
     const losses = new Map([...scores].map(([move, score]) => [move, Math.max(0, best.score - score)]));
-    const safe = guarded(base, losses), beforeDistance = targetDistance(board, controlledColor);
+    const safe = guarded(base, losses);
     let selected = safe, applied: Trace["applied"] = "guarded_maia", fallback: string | undefined;
-    const activeBefore = controlled && !completed;
+    let selectionSource: NonNullable<Trace["selectionSource"]> = "guarded_maia";
+    let routeCandidates = 0, admittedRouteCandidates = 0;
     const progress = activeBefore
       ? [...safe].filter(([move]) => routeProgress(board, controlledColor, move)) : [];
-    const opportunity = progress.length > 0;
-    if (controlled && arm !== "guarded_maia") {
+    const opportunity = arm === "generated_route_controller" ? generatedProgress.length > 0 : progress.length > 0;
+    if (controlled && arm === "generated_route_controller") {
+      if (completed) fallback = "route_complete";
+      else {
+        routeCandidates = sourceCandidates.length;
+        const admitted = sourceCandidates.filter((candidate) => (losses.get(candidate.move) ?? Number.POSITIVE_INFINITY) <= GUARD_CP);
+        admittedRouteCandidates = admitted.length;
+        if (admitted.length === 0) fallback = sourceCandidates.length === 0 ? "no_progress_or_preserving_candidate" : "route_candidates_guard_refused";
+        else {
+          const massed = admitted.filter((candidate) => (base.get(candidate.move) ?? 0) > 0);
+          if (massed.length > 0) {
+            selected = normalized(massed.map((candidate) => [candidate.move, base.get(candidate.move)!] as const));
+            selectionSource = "route_source+maia_mass";
+          } else {
+            const chosen = [...admitted].sort((left, right) =>
+              (losses.get(left.move) ?? Number.POSITIVE_INFINITY) - (losses.get(right.move) ?? Number.POSITIVE_INFINITY)
+              || left.move.localeCompare(right.move))[0]!;
+            selected = new Map([[chosen.move, 1]]);
+            selectionSource = "route_source+stockfish_tiebreak";
+          }
+          applied = generatedProgress.length > 0 ? "route_progress" : "route_preserve";
+        }
+      }
+    } else if (controlled && arm !== "guarded_maia") {
       if (completed) fallback = "route_complete";
       else if (opportunity) { selected = normalized(progress); applied = "route_progress"; }
       else if (arm === "monotone_route_controller") {
@@ -224,12 +284,14 @@ async function generateLine(engine: UciEngine, pack: Pack, arm: Arm, controlledC
         else fallback = "no_nonworsening_candidate";
       } else fallback = "no_progress_candidate";
     }
-    const moveUci = deterministicDraw(selected, `${id}:${ply}:draw`), parsed = parseUci(moveUci);
-    if (parsed === undefined || !isNormal(parsed) || !board.isLegal(parsed)) throw new Error(`${id} illegal ${moveUci}`);
-    const san = makeSanAndPlay(board, normalizeMove(board, parsed)), afterDistance = targetDistance(board, controlledColor);
+    const moveUci = deterministicDraw(selected, `${pairedRandomKey}:${ply}:draw`), parsed = parseUci(moveUci);
+    const normalizedMove = parsed === undefined || !isNormal(parsed) ? undefined : normalizeMove(board, parsed);
+    if (normalizedMove === undefined || !board.isLegal(normalizedMove)) throw new Error(`${id} illegal ${moveUci}`);
+    const san = makeSanAndPlay(board, normalizedMove), afterDistance = targetDistance(board, controlledColor);
     history.push(moveUci);
     if (afterDistance === 0) completed = true;
-    trace.push({ ply: ply + 1, turn, controlled, arm, activeBefore, applied, ...(fallback === undefined ? {} : { fallback }),
+    trace.push({ ply: ply + 1, turn, controlled, arm, activeBefore, applied, selectionSource,
+      ...(arm === "generated_route_controller" && controlled ? { routeCandidates, admittedRouteCandidates } : {}), ...(fallback === undefined ? {} : { fallback }),
       beforeDistance, afterDistance, opportunity, moveUci, san, stockfishBest: best.move,
       stockfishLossCp: losses.get(moveUci) ?? null, maiaMass: base.get(moveUci) ?? null });
   }
@@ -256,6 +318,10 @@ function summarize(lines: readonly Line[], arm: Arm) {
     severe250Rate: losses.filter((value) => value >= 250).length / losses.length,
     routeMovesInMaiaWindow: [...progress, ...preserving].filter((row) => row.maiaMass !== null).length,
     controllerSelections: progress.length + preserving.length,
+    routeSourceMaiaSelections: controlled.filter((row) => row.selectionSource === "route_source+maia_mass").length,
+    routeSourceEngineSelections: controlled.filter((row) => row.selectionSource === "route_source+stockfish_tiebreak").length,
+    rejectedRouteCandidates: controlled.reduce((sum, row) => sum + Math.max(0, (row.routeCandidates ?? 0) - (row.admittedRouteCandidates ?? 0)), 0),
+    maxRouteSelectionLossCp: Math.max(0, ...controlled.filter((row) => row.applied !== "guarded_maia").flatMap((row) => row.stockfishLossCp === null ? [] : [row.stockfishLossCp])),
     regressions: controlled.filter((row) => row.activeBefore && row.afterDistance > row.beforeDistance).length,
     repetitionMax: Math.max(...selected.map((line) => line.repetitionMax)),
   };
@@ -266,13 +332,13 @@ async function main(): Promise<void> {
   const packs = await roots(), engine = new UciEngine(); await engine.initialize();
   const lines: Line[] = [];
   try {
-    const arms: readonly Arm[] = IS_D1080 ? ["guarded_maia", "monotone_route_controller"] : ["guarded_maia", "route_controller"];
+    const arms: readonly Arm[] = IS_D1084 ? ["guarded_maia", "generated_route_controller"] : IS_D1080 ? ["guarded_maia", "monotone_route_controller"] : ["guarded_maia", "route_controller"];
     for (const pack of packs) for (const controlledColor of ["white", "black"] as const) for (const arm of arms) {
       const line = await generateLine(engine, pack, arm, controlledColor); lines.push(line);
       console.log(`${line.id} complete=${line.completed} plies=${line.historyUci.length}`);
     }
   } finally { engine.close(); }
-  const routeArm: Arm = IS_D1080 ? "monotone_route_controller" : "route_controller";
+  const routeArm: Arm = IS_D1084 ? "generated_route_controller" : IS_D1080 ? "monotone_route_controller" : "route_controller";
   const baseline = summarize(lines, "guarded_maia"), route = summarize(lines, routeArm);
   const sharedGates = {
     adherence: route.adherence === 1,
@@ -281,7 +347,12 @@ async function main(): Promise<void> {
     maiaWindow: route.routeMovesInMaiaWindow === route.controllerSelections,
     repetition: route.repetitionMax <= baseline.repetitionMax,
   };
-  const gates = IS_D1080
+  const gates = IS_D1084
+    ? { completion: route.completed / route.branches >= 0.70, monotone: route.regressions === 0,
+      legalAndGuarded: route.maxRouteSelectionLossCp <= GUARD_CP, sourceRecorded: route.controllerSelections === route.routeSourceMaiaSelections + route.routeSourceEngineSelections,
+      loss: sharedGates.loss, severe: sharedGates.severe, repetition: sharedGates.repetition,
+      nonVacuousSourceMix: route.routeSourceMaiaSelections > 0 && route.routeSourceEngineSelections > 0 && route.rejectedRouteCandidates > 0 && route.fallthroughs > 0 }
+    : IS_D1080
     ? { completion: route.completed / route.branches >= 0.70, ...sharedGates, monotone: route.regressions === 0 }
     : { exercise: route.branchesWithTwoOpportunities / route.branches >= 0.70, completion: route.completed / route.branches >= 0.70, ...sharedGates };
   const pass = Object.values(gates).every(Boolean);
@@ -290,11 +361,12 @@ async function main(): Promise<void> {
     rootPopulation: packs.map((pack) => ({ packId: pack.id, fen: pack.start.fen })), baseline, route, gates: { ...gates, pass }, lines };
   await writeFile(RESULT, `${JSON.stringify(result, null, 2)}\n`);
   const pct = (value: number) => `${(100 * value).toFixed(1)}%`;
-  const report = `# ${EXPERIMENT} ${IS_D1080 ? "monotone" : "finite-state"} route controller — results\n\n` +
+  const report = `# ${EXPERIMENT} ${IS_D1084 ? "generated-candidate" : IS_D1080 ? "monotone" : "finite-state"} route controller — results\n\n` +
     `Population: ${route.branches} route and ${baseline.branches} matched guarded-Maia branches; ${PLIES} plies from ${packs.length} fixed authored opening roots with each controlled color.\n\n` +
     `| arm | branches | ≥2 opportunities | opportunities | progress | preserve | regressions | completed | fallthroughs | mean loss | severe | max repetition |\n|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|\n` +
     `| guarded Maia | ${baseline.branches} | ${baseline.branchesWithTwoOpportunities} | ${baseline.opportunities} | ${baseline.progressSelections} | ${baseline.preservingSelections} | ${baseline.regressions} | ${baseline.completed} | ${baseline.fallthroughs} | ${baseline.meanLossCp.toFixed(2)} cp | ${pct(baseline.severe250Rate)} | ${baseline.repetitionMax} |\n` +
-    `| ${IS_D1080 ? "monotone route" : "route controller"} | ${route.branches} | ${route.branchesWithTwoOpportunities} | ${route.opportunities} | ${route.progressSelections} | ${route.preservingSelections} | ${route.regressions} | ${route.completed} | ${route.fallthroughs} | ${route.meanLossCp.toFixed(2)} cp | ${pct(route.severe250Rate)} | ${route.repetitionMax} |\n\n` +
+    `| ${IS_D1084 ? "generated route" : IS_D1080 ? "monotone route" : "route controller"} | ${route.branches} | ${route.branchesWithTwoOpportunities} | ${route.opportunities} | ${route.progressSelections} | ${route.preservingSelections} | ${route.regressions} | ${route.completed} | ${route.fallthroughs} | ${route.meanLossCp.toFixed(2)} cp | ${pct(route.severe250Rate)} | ${route.repetitionMax} |\n\n` +
+    (IS_D1084 ? `Route source: Maia-mass selections ${route.routeSourceMaiaSelections}; Stockfish-tiebreak selections ${route.routeSourceEngineSelections}; rejected candidates ${route.rejectedRouteCandidates}; max admitted loss ${route.maxRouteSelectionLossCp.toFixed(0)} cp.\n\n` : "") +
     `Gates: ${Object.entries(gates).map(([key, value]) => `${key}=${value ? "PASS" : "FAIL"}`).join("; ")}. Overall **${pass ? "PASS" : "FAIL"}**.\n`;
   await writeFile(REPORT, report);
   console.log(report);
