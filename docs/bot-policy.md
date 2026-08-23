@@ -13,12 +13,23 @@ The compiler currently enforces these boundaries:
   controlled trait;
 - complete-vector transforms must declare the recorded base-model degraded path;
 - sampler temperature is greater than zero and top-p is in `(0, 1]`;
+- every executable model/sampler/guard/repertoire/trait field equals the literal in the
+  profile's digested parameter map;
 - presentation copy cannot assert the v1 vocabulary of unmeasured playing styles.
 
 The shipped arithmetic reconstructs Maia's played distribution from raw legal policy
-mass, applies the measured temperature and top-p rule with a deterministic tie-break,
-supports declared trait multipliers, and draws from the final distribution using a
-caller-supplied deterministic unit value.
+mass, applies the measured temperature and top-p rule, then runs the one ordered stack:
+optional repertoire prior, optional guard, and measured trait multipliers. It derives the
+draw from the recorded seed plus the caller's position/history key. Final-mass ties and
+the decision record's candidate rows use the same declared tiebreak, so provider emission
+order cannot change either the move or the bytes recorded about it.
+
+`composeBotPolicySelection` emits the complete §6 decision object: profile identity and
+digest, sampler, completeness, applied/degraded state, every layer action, canonical
+candidate masses, guard losses, literal feature ids, and chosen final mass. This object is
+not yet attached to `OpponentSelection`; doing that is the claimed run-schema 0.18 and
+migration checkpoint, still ordered behind the longitudinal store. Historical selections
+therefore still gain no inferred policy record.
 
 No production profile is registered yet. This is intentional and machine-visible as an
 empty `BOT_POLICY_PROFILES`: D970 must pin the concrete band/profile roster, while D969

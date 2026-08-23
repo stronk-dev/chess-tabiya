@@ -41,6 +41,8 @@ set execution order.
 | Rows | Primary destination | Next action / gate |
 |---|---|---|
 | D969, D970 | `bot-policy` amendment | Pin the authorized bounded Stockfish probe, score/mate normalization, completeness behavior, and exact Human-baseline roster before production profile registration. |
+| D1012 | bot-policy composed sampler | Make seeded draws invariant to provider emission order by applying the accepted neutral-tiebreak authority at the draw boundary. |
+| D1013 | bot-policy compiler | Bind executable typed layer fields to the generic parameter map so profile digest, disclosure and runtime behavior cannot disagree. |
 | D590, D591, D592, D593, D594, D595, D596 | bot-policy research and measurement | Turn Maia policy, bounded-error guard, opening/repertoire layers, and observable traits into measured contracts; require blind behavioral validation where the row calls for it. |
 | D620, D621 | bot repertoire research | Separate root repertoire/population from continuation policy before exposing a repertoire personality. |
 | D236, D261, D340, D343 | bot implementation evidence | Carry measured per-mille encoding, prompt/default limits, explicit seed behavior, and symmetric-band findings into the bot RFC/fixtures. |

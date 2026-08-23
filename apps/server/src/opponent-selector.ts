@@ -34,6 +34,7 @@ import { appliedTargetElo } from "./engine-band.js";
 import { EVIDENCE_MANIFEST } from "./evidence-manifest.js";
 import {
   BOT_POLICY_PROFILES,
+  seededPolicyUnit,
   type CompiledBotProfile,
 } from "./bot-policy-catalog.js";
 import {
@@ -397,11 +398,6 @@ function engineIdentity(client: SelectorEngineClient, engineId: string): EngineI
   return identity;
 }
 
-function unitInterval(seed: number, hash: string): number {
-  const bytes = createHash("sha256").update(`${seed}\0${hash}`).digest();
-  return bytes.readUInt32BE(0) / 0x1_0000_0000;
-}
-
 function sampleWeighted(
   candidates: readonly SelectionCandidate[],
   seed: number,
@@ -409,7 +405,7 @@ function sampleWeighted(
 ): string | undefined {
   const total = candidates.reduce((sum, candidate) => sum + (candidate.mass ?? 0), 0);
   if (total <= 0) return undefined;
-  let cursor = unitInterval(seed, hash) * total;
+  let cursor = seededPolicyUnit(seed, hash) * total;
   for (const candidate of candidates) {
     cursor -= candidate.mass ?? 0;
     if (cursor < 0) return candidate.moveUci;
@@ -431,7 +427,7 @@ function sampleRankWeighted(
 
 function sampleUniform(moves: readonly string[], seed: number, hash: string): string {
   if (moves.length === 0) throw invalid("Cannot sample an empty spine child set");
-  return moves[Math.floor(unitInterval(seed, hash) * moves.length)]!;
+  return moves[Math.floor(seededPolicyUnit(seed, hash) * moves.length)]!;
 }
 
 function addSpinePosition(

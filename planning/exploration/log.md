@@ -5579,3 +5579,24 @@ does not masquerade as mechanical schema work.
 
 **Next:** build the campaign registry/seed boundary, then take persistence and the pure event fold
 when the two preceding migration positions are lawful.
+
+## 2026-08-23 — Bot-policy composed-selection checkpoint
+
+**What landed:** the pure composed bot stack now executes one compiled profile over a provider
+vector: Maia reconstruction/top-p, optional repertoire prior, guard masking with explicit
+provider/empty abstention, measured trait weighting, seed+history draw, and the exact explainable
+decision record. The incomplete-vector branch records the profile as unapplied and returns the
+base model's move without laundering it into profile attribution.
+
+**Two defects closed before integration:** [[D1012]] found that the old final draw restored
+provider order after correctly tiebreaking top-p membership; final-mass draw order and considered
+rows are now canonical, with a permutation fixture producing byte-identical output. [[D1013]]
+found two parameter authorities: profiles could digest one generic map and execute different typed
+fields. The compiler now binds all executable layer parameters to the digested literals.
+
+**Verification:** server typecheck and 58 focused catalog/selector tests pass. The production
+catalog remains deliberately empty. No profile is advertised and no run/event schema moves.
+
+**Next:** D969 must pin the real Stockfish guard probe and D970 the literal roster. The policy
+record then attaches to `OpponentSelection` at run-schema 0.18 after longitudinal-store's lawful
+migration turn; this checkpoint does not jump either dependency.
