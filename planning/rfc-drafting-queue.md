@@ -916,7 +916,10 @@ and the owner sentence it derives from names *style*, not skills. The real gate 
 the owner** — but O9 covers habit cards, a ledger and three modules and **says nothing about
 credits, milestones or tiers**, so even full approval leaves half of [[D549]] unlicensed.
 
-**Recommendation ([[D1193]]): do not draft a skills RFC.** The first visible pixel of D549 ships
+**~~Recommendation ([[D1193]]): do not draft a skills RFC.~~ WITHDRAWN — the owner rejected this
+outright** (*"what do you mean no rfc at all? does it have the depth we need?"*), and the
+full-depth derivation ([[D1222]]) confirms it supplied **one of chess.com Skills' five parts, for
+one game**. Draft the RFC. The superseded text follows for history:** The first visible pixel of D549 ships
 inside the **review** RFC as a per-game observation card. v1 = one ruling + [[D300]] (one injectable
 class) + implementing the accepted store. Nothing new is built.
 
@@ -973,3 +976,34 @@ population and no store.
 - **[[D1221]]** — the shipped authored-valence layer (117 shape plans, 96 rules-grounded) and the
   ~36-row taxonomy that already exists; the gap is a concept **registry**, not a taxonomy. Routed
   to the skills lane's foundation work.
+
+
+## ⚠ TEMPLATE REPAIR — [[D1230]], effective immediately
+
+**The `## Recommended scope cut` section is STRUCK from every lane derivation.** It is replaced by:
+
+> **## The full ask, its cost, and what — if anything — blocks it**
+
+A derivation prices the **whole thing the owner asked for**. If part of it is genuinely blocked, it
+names the blocker (law 8, absent data, an unbuilt dependency, an owner ruling) and cites it. If
+nothing blocks it, **it is in scope** — document size, reviewer convenience and "a landable
+document beats a comprehensive one" are **not blockers** and may not appear as reasons.
+
+Banned reasoning, quoted from the audit because it was mine: *"first visible pixel"*, *"the
+smallest real range"*, *"a landable document beats a comprehensive one"*, *"the cheapest real
+path"*. **And never narrow the question put to the owner to fit a slice already chosen** — that was
+the worst instance found (`style/rfc-derivation.md:474`).
+
+Sequencing remains legitimate — but only when the remainder has a **named home and a named owner**.
+*"A successor RFC"* with no such document is not sequencing; the audit found **27** of those.
+
+- **[[D1231]]** — `rfc/variants.md` criterion 12 corrected before acceptance: it would have
+  machine-enforced a refusal the owner had already lifted. Rule recorded — *a criterion may bound
+  what we ship; it may never bound what the owner has ruled.*
+- **[[D1232]]** — the owner's rejection of D1193 existed only in conversation; recorded now. **A
+  sweep for other unrecorded verbal rulings from this session is owed**, and 40 of 44 owner-touching
+  rows created today are missing from `decision-queue.md`.
+
+- **[[D1213]]** (codex) — `learner-modules` A14 demands before/after operands that
+  `derived.compare.structure_delta@1` does not retain. Routed to the learner-modules implementation
+  lane; codex's own module work owns it.

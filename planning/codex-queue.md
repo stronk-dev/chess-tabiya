@@ -248,7 +248,7 @@ perception). Calibration priced: 12,400 games, 16 arms, ~4–5 h.
 Also: the RFC quotes **depth-12** guard numbers as production (depth 8 is the measurement), and the
 trait gate has **no unit check**.
 
-**Ship the smallest real range first**: family A at four bands is registrable **today** with zero
+**Ship family A's four bands first because they are UNBLOCKED, not because they are small** — the other eight wait on a `"depth"` union member and a populated `candidate.traits`, both named in [[D1181]]. The full roster is twelve; nothing about that is deferred: family A at four bands is registrable **today** with zero
 blockers ([[D970]] licenses it, no D969 dependency). Six profiles once traits are populated.
 
 **[[D1183]] — do not run the pre-screen twice**: your `tools/d1163-engine-composed-bot-harness/` and

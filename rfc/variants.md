@@ -304,9 +304,15 @@ rejects.
     the row, which loses the published-refusal history §5 requires.
 11. **No pack-schema and no run-schema lane are claimed.** `make register-check` is green with this
     RFC active, and the `tabiya-claims` block reads `none`.
-12. **No Tier-2 surface exists.** A grep-able assertion that no code path admits a `Rules` value
-    other than `'chess'`. *Rejected:* an unreferenced Tier-2 branch, which is how §2.2's prohibition
-    would leak in ahead of its RFC.
+12. **No Tier-2 surface is REACHABLE BY A LEARNER YET.** A grep-able assertion that no *learner
+    surface* offers a `Rules` value this RFC has not admitted — scoped to offering, never to the
+    type. *Rejected, and this is the correction:* the original criterion asserted that **no code
+    path admits a `Rules` value other than `'chess'`**, which would have **failed the moment anyone
+    implemented [[D1042]]** — the owner's own ruling that Just Play offers *any* variant and the
+    campaign is *unrestricted*. chessops already ships all seven Tier-2 rulesets (§2.2), so the
+    criterion would have frozen a refusal the owner had already lifted, exactly as
+    `capabilities.ts:133` froze the Chess960 refusal it took a year and an owner's temper to find.
+    A criterion may bound what we *ship*; it may never bound what the owner has *ruled*.
 
 ## Discharges
 
