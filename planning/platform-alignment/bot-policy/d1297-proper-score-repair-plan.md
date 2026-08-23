@@ -44,7 +44,7 @@ sign or rating interaction is selected by looking at individual held-out moves.
 
 ## Proper conditional-choice fit
 
-For each outer fold and each of `engine`, `evidence`, `combined`, minimize:
+For each of `engine`, `evidence`, `combined`, minimize:
 
 `mean_game(mean_decision(-score(played) + logsumexp(scores))) + lambda * ||weights||² / 2`.
 
@@ -53,11 +53,14 @@ Use deterministic full-batch Adam from zero weights, 600 updates, learning rate 
 must carry an analytic-gradient finite-difference control and a monotone synthetic choice fixture.
 Non-finite loss, probability or coefficient is a hard failure.
 
-Choose `lambda` from `{0.01, 0.1, 1, 10, 100}` on inner fold `(outer + 1) mod 5`, training on the
-other three game folds. Ties choose the larger penalty. Refit on all four outer-training folds.
-The transform (`raw` or `projection-balanced`) is selected by pooled outer-fold development log
-loss, with ties choosing projection-balanced. This selection is a development act and licenses no
-confidence interval on the same population.
+This is a **development** split, not another inferential five-fold result: train on game folds
+0/1/2 (62 games), choose `lambda` from `{0.01, 0.1, 1, 10, 100}` and `raw` versus
+`projection-balanced` on fold 3 (25 games), then read fold 4 (21 games) exactly once as an internal
+confirmation. Ties choose the larger penalty and projection-balanced transform. A candidate that
+fails confirmation is rejected; nothing is changed in response. Refit the frozen candidate on all
+108 development games only for the later third-population evaluation. This bounded three-way
+development design is intentionally cheaper than nested CV because statistical clearance belongs
+to the untouched third population, not data already exposed by D1297.
 
 ## Development measures and freeze rule
 
@@ -65,16 +68,17 @@ Report game-averaged cross entropy, played-move probability, top-choice agreemen
 Stockfish loss and mass above 250 cp. Also report played-probability quantiles and fractions below
 `1e-6`, `1e-4` and `1e-2`, so another arithmetic/geometric split cannot hide.
 
-A candidate is eligible to freeze only if, under game-keyed outer CV:
+A candidate is eligible to freeze only if all five rules hold on both validation and the once-read
+confirmation fold:
 
 - evidence-only cross entropy is below uniform;
 - combined cross entropy is below engine-only;
-- each log-loss improvement has a game-bootstrap 95% upper bound below zero;
 - combined expected loss is no more than 35 cp above engine-only;
 - combined >250-cp mass is no more than one percentage point above engine-only;
 - combined top-choice agreement is no more than five percentage points below engine-only.
 
-If neither transform qualifies, the standalone evidence-to-move base is refuted for 1.0. Do not
+The game-bootstrap upper-bound-below-zero rule is reserved for the untouched third population,
+where it is inferential rather than a post-selection interval. If neither transform qualifies, the standalone evidence-to-move base is refuted for 1.0. Do not
 add hidden layers, band interactions, feature selection or a wider search after seeing the result;
 those would require a separately named development generation.
 
@@ -90,6 +94,7 @@ complete legal-set capture and mixed-score exclusion. Selection may not inspect 
 engine score or played-move likelihood.
 
 The final preregistration pins the extracted population and frozen model digests before fitting or
-reading its result. Pass only if all six development freeze rules reproduce on the third population
-without tuning. A pass funds multi-ply owner-use packet generation; a failure returns or withdraws
+reading its result. Pass only if all five directional/safety rules reproduce on the third population
+without tuning **and** both log-loss improvements have game-bootstrap 95% upper bounds below zero.
+A pass funds multi-ply owner-use packet generation; a failure returns or withdraws
 the selector RFC. Neither result licenses `human-like`, Elo, personality, skill or causal prose.
