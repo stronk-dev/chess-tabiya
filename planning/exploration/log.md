@@ -6929,3 +6929,42 @@ p95 is 1,529.1 ms against the frozen 1,400-ms headroom, before engine/transport/
 closed relation to the root action, then consume D1071's shared score-free packet and measure
 cold/warm/provider-off end to end through the sealed disclosure packet and deterministic renderer.
 Theory/authored/tablebase adapters remain independently available when the engine arm abstains.
+
+## 2026-08-23 — Live-debt ranks 5–8 drafted; one draft returned; three shipped defects fail silent
+
+**What landed:** four RFCs — `theory-drill-current-joins` (`1f31dfe`), `shared-candidate-evidence-packet`
+(`3a291ab`), `bounded-policy-targets` (`2549ce6`) and `theory-knowledge-pipeline` (`de59c8a`) —
+plus the corrections that close [[D1330]]'s list. Ranks 9 and 10 were **struck**: the Chessigma
+teardown was routed the day it landed (six ledger rows in its own commit, a `capability-watch`
+route, four RFCs), and rank 10 double-counted rank 5. **0 of 14 teardowns are live debt, not 2.**
+
+**What was returned:** `rfc/hint-distance.md`, on eight buildability blockers from codex plus two
+structural findings from cross-review. Its central primitive survives — *a useful hint is a semantic
+event on a searched line, not a PV with some moves hidden* — but the redaction is declared rather
+than built (the payload carries the answer move at every rung), *an event appears in the PV* is not
+a reason for the learner's first move, four of its seven eligible families are readings or
+predicates rather than events, and its measured reach is **4 of 64**, not the 31–56/64 band
+[[D1352]] recorded. That row was the coordinator's and is corrected as [[D1376]].
+
+**Three shipped defects that fail silent, all verified at the line.** `evaluatedAlternatives`
+cannot differ from `legalAlternatives` on the main path, and the unevaluated case selects two
+families the complete population rejects — a failure that *strengthens* the claim a learner sees
+([[D1385]]). `offWindow`, whose whole meaning is *exclude from measurement*, is accepted as caller
+input on an ingested selection ([[D1389]]). And the attribution gate reads `binding.spans` while
+`claim-semantic-anchors` replaces that shape without naming the licence reader once, so
+`ATTRIBUTION_MISSING` would stop firing for every machine-bound claim ([[D1393]]).
+
+**What changed in the instruments:** C7 derives the schema set from `schemas/` and C8 refuses an
+undeclared schema edit by digest — the second added because cross-review showed the first did not
+force a schema-editing RFC to declare a lane.
+
+**What went wrong in our own process:** the shared worktree cost real work. The coordinator swept
+codex's in-flight ledger rows into one commit and a fork's draft into another; a fork's
+`checkout-index` clobbered another fork's register row. All were recovered by their owners.
+Pathspec-limited commits and content-hash staging are now the practice, and [[D1381]] adds the
+missing clause: shared **code sites** must be pinned the way ledger ids already are, after two
+drafts commissioned the same day lifted the same gate and claimed the same repair.
+
+**Next:** the `hint-distance` redraft is gated on a selector exploration pass; the four owner
+decisions in `planning/decision-queue.md` remain, [[D1300]] first. `work-index` carries 12 unrouted
+rows belonging to the `hint-distance` and `bot-route-source` review lanes.
