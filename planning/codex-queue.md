@@ -186,6 +186,27 @@ exactly** six days on. Implementation notes:
 - Rows [[D1111]]–[[D1114]] landed at acceptance; [[D1112]] and [[D1114]] **close with the binding
   arm**, [[D1113]] closes with this implementation (§6 gives the note a reader).
 
+## 0-UNREACHABLE. 25 mechanisms nobody can reach — [[D1140]]/[[D1141]]/[[D1142]]
+
+`planning/platform-alignment/unreachable-mechanisms.md`. Complete, correct, tested code that **no
+user can reach**. This is the category that produced today's worst findings by accident; it is now
+swept.
+
+- **[[D1140]] is the worst: `campaign-core` is `implementing` and `rest.ts` has ZERO campaign
+  routes** (verified: no occurrence of "campaign" in the router). No HTTP surface at all. The
+  client's only trace is an assistance label and an empty state that can never be non-empty.
+- **8 uncallable routes**, each with a complete service implementation behind it: `POST
+  /rated-games` (`:1115`) — which is why the Record tab can only say empty — `GET /progress/related`
+  (`:1184`), `GET /progress/metrics` (`:1191`), `POST /runs/:id/reasoning-review` (`:1420`),
+  `/simulate` (`:1699`), `/simulate-enter` (`:1707`), `/packs/drafts/:id/playtest` (`:1058`),
+  `/packs/drafts/:id/withdraw` (`:1069`). **The server work is done; the client verb is missing.**
+- **`compileModuleRegistry` has never been called** — which weakens [[D1069]]'s premise about the
+  hint ladder contradicting the guided-hint contract; re-check that before acting on it.
+- **[[D1087]] was generous**: `trait.pawn_preference@1` is **test-file only**, and
+  `RepertoirePolicy`/`MemoryPolicy` are **absent from source entirely**.
+- **`bestline` and the explorer census are DATA orphans**: reachable code, empty corpus. Opposite
+  repair from the others — they need a *run*, not a caller.
+
 ## 0-BREADTH-AUDIT. Five defects the breadth reality-check measured — [[D1085]]–[[D1089]]
 
 `planning/platform-alignment/breadth-reality-check.md` measured 66 surfaces from design/03's own
