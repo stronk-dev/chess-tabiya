@@ -78,7 +78,28 @@ Handoff point 2 ("add an explicit Academy assistance profile … it must not rea
 `position` preferences") is **this ruling applied to one named workflow**, not a new decision. The
 dossier says so itself (`professional-workflow-conformance.md:99-103`).
 
-### 2.5 [[D649]] (owner, 2026-08-21) — external participants descoped
+### 2.5 [[D619]] (owner, 2026-08-20) — coach/stream workflows already select composed modules
+
+`design/BACKLOG.md:215`, verbatim: *"Normal Review, Just Play, drills, campaign, **coach/stream**
+and Analyze workflows select composed modules and defaults; they do not ask a nontechnical player to
+toggle Stockfish/Maia/classifier sources."*
+
+**You have already ruled the preset half of handoff point 1**, naming coach/stream by name. What
+that ruling does *not* say is anything about separate evidence producers or a per-viewer truth path
+— which is why clause 1 of §5 narrows to exactly that residue rather than restating D619.
+
+### 2.6 The streamer self-cheating ruling (owner, 2026-08-12) — and casting asks to narrow it
+
+`design/BACKLOG.md:71`: *"**RULED 2026-08-12: the streamer may cheat on themselves, and that is
+documented rather than engineered against.**"* The row states the reasoning: per-viewer reveal
+cannot enforce the alternative, because *"under any account model a player can hold a second
+account, be granted spectator on their own run, and read what they are playing blind."*
+
+That ruling is load-bearing in shipped code — `intent-presets.md:149` gives the `stream` context
+`analysis` **because** of it. **Fork B in §6 is therefore a request to narrow a ruling you have
+already made, not a fresh question**, and it is framed that way there.
+
+### 2.7 [[D649]] (owner, 2026-08-21) — external participants descoped
 
 `decision-queue.md:24`: *"it's a personal project; I will share it once it's perfect."* Handoff
 point 8's participant clause is spent. Your own use remains the validation.
@@ -237,10 +258,12 @@ Rule these six; the other two handoff points are withdrawn as already-settled.
 
 1. **Shared-truth workflow presets — and this is the clause that actually needs your signature.**
    Coach and Streamer are workflow presets over the shared manifest, run disclosure and modules.
-   **No per-viewer evidence fork, no coach-only classifier or LLM truth.** [[D705]] states this and
-   [[D705]] is an idea row; `casting.md:87,268` and `live-following.md:381` already cite it as a
-   ruling (§4.3). Ruling it converts a circular citation into a real one; declining to rule it means
-   two active RFCs need their premise re-sourced before acceptance.
+   **No per-viewer evidence fork, no coach-only classifier or LLM truth.** The *preset* half is
+   already yours ([[D619]], §2.5, naming coach/stream); **the unruled residue is the truth-path
+   half.** [[D705]] states it and [[D705]] is an idea row; `casting.md:87,268` and
+   `live-following.md:381` already cite it as a ruling (§4.3). Ruling it converts a circular
+   citation into a real one; declining means two active RFCs need their premise re-sourced before
+   acceptance.
 2. **The Academy profile is ratified as shipped, not commissioned.** `academy` is a first-class
    workflow context with `defaultPreset: "guided"`, allowed presets `quiet | guided | theory_only`,
    and `blunder_prevention` + `full_inspector` off its ceiling (`presets.ts:47`). This settles
@@ -284,24 +307,28 @@ form has none beyond generality. **Evidence does not discriminate — this is a 
 a coached session feels like.** If you pick A1, say so, because the handoff's point 3 currently
 reads as authorizing A2.
 
-### Fork B — does the host keep an assistance tier above the viewer during a live cast?
+### Fork B — narrowing your 2026-08-12 self-cheating ruling for live sources only
 
-`docs/live-sessions.md` records an accepted limitation, quoted at `rfc/casting.md:163-166`:
-*"A streamer cannot be forced to play blind while their audience sees more evidence… it does not
-pretend to prevent a host from cheating on themselves."* `intent-presets.md:149` bakes that
-reasoning into the `stream` ceiling's rationale — it admits `analysis` *because* the streamer may
-cheat on themselves.
+**This is not a new question. You ruled it on 2026-08-12** (§2.6): *"the streamer may cheat on
+themselves, and that is documented rather than engineered against."* `docs/live-sessions.md` records
+it as an accepted limitation, quoted at `rfc/casting.md:163-166`, and `intent-presets.md:149` bakes
+it into the shipped `stream` ceiling's rationale — that context admits `analysis` *because* of it.
 
-`rfc/casting.md:171-174` **narrows it** for live sources only: *"while `sourceGameLive`, the host's
-evidence ceiling and the viewer's are the same ceiling. There is no host tier."*
+`rfc/casting.md:171-174` **asks to narrow it**, for live-followed sources only: *"while
+`sourceGameLive`, the host's evidence ceiling and the viewer's are the same ceiling. There is no
+host tier."* Its argument is that the 2026-08-12 ruling was made about **rehearsal**, where cheating
+on yourself is a private act with no victim, and that the subject changed when the board became a
+game two other people are currently playing.
 
 | option | cost |
 |---|---|
 | **B1 — accept the narrowing (recommended)** | Costs a streamer their private analysis drawer while casting a game two players are still playing. That is the point: the board is somebody else's live game. Releases automatically when the source game finishes |
 | **B2 — keep the host tier** | Cheaper for the streamer, and consistent with the shipped `stream` ceiling. But it makes our product the assistance device in an ongoing tournament game, visible to a broadcast |
 
-This is a **law-8-adjacent honesty call**, so it is yours rather than the RFC's. It is the one
-substantive thing in the casting lane that is not already decided.
+This is a **law-8-adjacent honesty call over a ruling you already made**, so it is yours rather than
+the RFC's — and if you decline, `casting.md` §3.3 and its criterion 7 must be rewritten rather than
+left standing against your 2026-08-12 decision. B1 is a *narrowing scoped by `sourceGameLive`*, not
+a reversal: it releases automatically and leaves rehearsal untouched.
 
 ### Fork C — where does the [[D1291]] delay parameter live?
 
