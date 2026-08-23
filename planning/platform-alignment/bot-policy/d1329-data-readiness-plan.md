@@ -101,3 +101,7 @@ The final source-size census is now frozen as:
 
 The prefix size may not be enlarged again if a cell fails. This repair changes an undefined
 criterion into an able-to-fail one; it does not alter a model, feature or outcome threshold.
+
+**V2 result:** pass. The fixed range yields 827,067 complete games / 48,470,810 eligible decisions;
+all 36 cells clear 10,000, with a minimum of 13,809. Source clauses 1–5 are complete. Clauses 6–7
+remain the outcome-blind projection census and owner cost ceiling.

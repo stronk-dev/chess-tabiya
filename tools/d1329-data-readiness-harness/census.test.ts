@@ -1,8 +1,8 @@
-import { readFileSync, writeFileSync } from "node:fs";
+import { writeFileSync } from "node:fs";
 
 import { describe, expect, it } from "vitest";
 
-import { censusPgn } from "./census.js";
+import { censusPgn, censusPgnFiles } from "./census.js";
 
 const INPUT = process.env.TABIYA_D1329_PGN;
 const COMPRESSED = process.env.TABIYA_D1329_PGN_ZST;
@@ -46,14 +46,12 @@ describe("D1329 aggregate-only data readiness", () => {
     expect(result.decisions.timeControlCoverage).toBe(0);
   });
 
-  it.skipIf(INPUT === undefined || COMPRESSED === undefined)("measures the fresh June prefix", () => {
-    const text = readFileSync(INPUT!, "utf8");
-    const compressed = readFileSync(COMPRESSED!);
+  it.skipIf(INPUT === undefined || COMPRESSED === undefined)("measures the fresh June prefix", async () => {
     const started = performance.now();
-    const result = censusPgn(text, compressed);
+    const result = await censusPgnFiles(INPUT!, COMPRESSED!);
     const elapsedMs = performance.now() - started;
     expect(result.source.month).toBe("2026-06");
-    expect(result.source.compressedPrefixBytes).toBe(compressed.byteLength);
+    expect(result.source.compressedPrefixBytes).toBeGreaterThan(0);
     expect(result.games.completeBlocks).toBeGreaterThan(1_000);
     expect(result.games.legalReplay / result.games.eligible).toBeGreaterThanOrEqual(0.995);
     expect(result.decisions.ratingCoverage).toBeGreaterThanOrEqual(0.95);

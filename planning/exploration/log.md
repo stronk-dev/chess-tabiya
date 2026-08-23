@@ -6861,3 +6861,17 @@ the fact. V2 now freezes 36 cells derived from the production roster and a 256 M
 **Next:** run that fixed range, then the outcome-blind producer projection/cost arm after the
 collector implementation stabilizes. A model fit, learning-curve generation and the owner compute
 budget all remain downstream; the reserved D1297 population remains sealed.
+
+## 2026-08-23 — Repaired selector source-size gate passed all 36 cells
+
+**What landed:** the precommitted 256 MiB June range streamed 1.92 GB without retaining corpus
+records. It contains 827,067 complete games / 48.47m eligible decisions; 823,782 eligible games
+replay legally with zero failures. Rating coverage is 100%, clock/time-control coverage 99.9481%.
+
+**What changed:** all 36 frozen 1000–2599 × bullet/blitz/rapid × ply-window cells exceed the 10k
+floor; the minimum is 13,809 at 2200–2599 rapid opening. Source clauses 1–5 are complete. The
+chronological range proves availability and pipeline mechanics, not month-wide representativeness.
+
+**Next:** measure outcome-blind producer success/cardinality/time/bytes after the collector wave
+stabilizes, then price 10k/100k/1m and ask the owner for a budget. No model fit is authorized and the
+reserved D1297 population remains sealed.

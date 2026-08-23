@@ -155,6 +155,10 @@ rewind adds value**.
   coverage. The v1 cell criterion omitted its rating-band set, so no population verdict is assigned;
   v2 freezes 36 roster-derived cells and a 256 MiB range before the next read. Projection
   completeness/cost, owner budget and learning curve remain unmeasured. H5/C5 remain unchanged.
+- **Repaired source-size gate passes 2026-08-23** (`design/research/non-maia-selector-data-readiness.md`,
+  D1329). The precommitted 256 MiB range yields 827,067 complete games / 48.47m eligible decisions;
+  all 36 roster-derived cells clear 10k (minimum 13,809), with zero illegal replays. Source clauses
+  1–5 are complete. Projection completeness/cost and owner budget remain open; H5/C5 remain unchanged.
 
 ## Kill criteria
 

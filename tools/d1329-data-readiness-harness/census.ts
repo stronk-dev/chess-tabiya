@@ -1,5 +1,7 @@
 // DISPOSABLE research harness — D1329. Aggregate-only PGN census; no model fitting.
 import { createHash } from "node:crypto";
+import { createReadStream, statSync } from "node:fs";
+import { createInterface } from "node:readline";
 
 import { Chess } from "chessops/chess";
 import { parsePgn, startingPosition } from "chessops/pgn";
@@ -220,6 +222,92 @@ export function censusPgn(
       clockCoverage: round(decisionsWithClock / Math.max(1, eligibleDecisions)),
       ratingCoverage: round(decisionsWithRating / Math.max(1, eligibleDecisions)),
       timeControlCoverage: round(decisionsWithTimeControl / Math.max(1, eligibleDecisions)),
+    },
+  };
+}
+
+async function hashFile(path: string): Promise<string> {
+  const hash = createHash("sha256");
+  for await (const chunk of createReadStream(path)) hash.update(chunk as Buffer);
+  return `sha256:${hash.digest("hex")}`;
+}
+
+function addRecord(target: Record<string, number>, source: Readonly<Record<string, number>>): void {
+  for (const [key, value] of Object.entries(source)) target[key] = (target[key] ?? 0) + value;
+}
+
+/** Stream a partial dump without retaining any game, move, position, or player identity. */
+export async function censusPgnFiles(pgnPath: string, compressedPath: string): Promise<CensusResult> {
+  const games = {
+    completeBlocks: 0,
+    parsed: 0,
+    eligible: 0,
+    legalReplay: 0,
+    illegalReplay: 0,
+    excludedBots: 0,
+    excludedUnfinished: 0,
+    excludedVariant: 0,
+    missingRating: 0,
+    missingTimeControl: 0,
+    firstUtc: null as string | null,
+    lastUtc: null as string | null,
+  };
+  const decisions = {
+    eligible: 0,
+    withRating: 0,
+    withTimeControl: 0,
+    withClock: 0,
+    byCell: {} as Record<string, number>,
+  };
+  const input = createInterface({ input: createReadStream(pgnPath, { encoding: "utf8" }), crlfDelay: Infinity });
+  let lines: string[] = [];
+  const consume = (): void => {
+    if (lines.length === 0) return;
+    const one = censusPgn(`${lines.join("\n")}\n[Event "partial"]\n`, new Uint8Array());
+    games.completeBlocks += one.games.completeBlocks;
+    games.parsed += one.games.parsed;
+    games.eligible += one.games.eligible;
+    games.legalReplay += one.games.legalReplay;
+    games.illegalReplay += one.games.illegalReplay;
+    games.excludedBots += one.games.excludedBots;
+    games.excludedUnfinished += one.games.excludedUnfinished;
+    games.excludedVariant += one.games.excludedVariant;
+    games.missingRating += one.games.missingRating;
+    games.missingTimeControl += one.games.missingTimeControl;
+    if (one.games.firstUtc !== null && (games.firstUtc === null || one.games.firstUtc < games.firstUtc)) games.firstUtc = one.games.firstUtc;
+    if (one.games.lastUtc !== null && (games.lastUtc === null || one.games.lastUtc > games.lastUtc)) games.lastUtc = one.games.lastUtc;
+    decisions.eligible += one.decisions.eligible;
+    decisions.withRating += one.decisions.withRating;
+    decisions.withTimeControl += one.decisions.withTimeControl;
+    decisions.withClock += one.decisions.withClock;
+    addRecord(decisions.byCell, one.decisions.byCell);
+  };
+  for await (const line of input) {
+    if (line.startsWith("[Event ") && lines.length > 0) {
+      consume();
+      lines = [];
+    }
+    lines.push(line);
+  }
+  // The range ends inside a Zstandard frame. The last PGN block is deliberately not consumed.
+
+  return {
+    schema: "tabiya.research.d1329-data-readiness.v1",
+    source: {
+      ...SOURCE,
+      compressedPrefixSha256: await hashFile(compressedPath),
+      compressedPrefixBytes: statSync(compressedPath).size,
+      decompressedPrefixSha256: await hashFile(pgnPath),
+      decompressedPrefixBytes: statSync(pgnPath).size,
+      trailingPartialBlocksDropped: lines.length > 0 ? 1 : 0,
+    },
+    games,
+    decisions: {
+      ...decisions,
+      byCell: Object.fromEntries(Object.entries(decisions.byCell).sort(([left], [right]) => left.localeCompare(right))),
+      clockCoverage: round(decisions.withClock / Math.max(1, decisions.eligible)),
+      ratingCoverage: round(decisions.withRating / Math.max(1, decisions.eligible)),
+      timeControlCoverage: round(decisions.withTimeControl / Math.max(1, decisions.eligible)),
     },
   };
 }
