@@ -814,7 +814,14 @@ the next free id above D1114.
   instances 2026-08-23, all caught downstream). Practice: verify the source, then keep the finding.
   Binds acceptors writing register cells **and** claude relaying reviewer text to the owner.
 
-## Proposed-row convention — [[D1130]], adopted 2026-08-23
+## Proposed-row convention — [[D1130]], **RETIRED** (see [[D1503]])
+
+> **Corrected 2026-08-24.** `design/BACKLOG.md:414` retired [[D1130]] — proposed rows no longer
+> satisfy `make work-index`, so numbering them cannot manufacture a route — while this section
+> still described it as adopted, and twelve UX briefs cited it today. **What stands:** a drafter
+> may still leave rows unnumbered under a concurrent race, and the **coordinator lands them and
+> routes them to a durable spec section** ([[D1354]]). What is retired is the claim that numbering
+> is what makes a row real. The history below is kept as the record.
 
 **Until [[D1079]]'s fix lands, proposed ledger rows are written UNNUMBERED.** Write
 *"proposed — id assigned at landing; head was D&lt;n&gt; at drafting"*. Pre-assigning an id

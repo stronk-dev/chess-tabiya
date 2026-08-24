@@ -1598,3 +1598,47 @@ check-red vanishes for tritanopes. [[D1433]]'s family, third instance.
 **[[D1495]]: three premises I briefed were wrong**, including olive's contrast failure, which is
 already repaired at HEAD. Recorded because briefing an agent from a stale premise is the same failure
 as putting one to the owner.
+
+### Campaign and progression — [[D1496]]–[[D1500]]
+
+`design/research/ux-campaign.md` (`28d92356`). **[[D1496]] answers [[D945]] with a mechanism, not a
+preference**: *punitive is a function of attribution.* A resource feels punitive when its loss is
+attributed to the learner's **error** — charges are spent by a gesture they choose, and income is
+verdict-blind, so three words defuse the whole schema: **win or lose**. Two rules worth defending:
+the balance belongs on the map, because the RFC currently seats it in **the coaching seat**, which
+teaches that the coach is metered; and the carry-forward pool **prices early experimentation**, so
+the rational play is to experiment least where the product most wants it.
+
+**[[D1497]]: the campaign has no door.** Zero hits for `campaign` across all six intent documents —
+including the complete surface map — no route, and an empty planned-surface list. The intent tier
+owes the surface before anyone builds it.
+
+**[[D1498]]: the reward pool is eight, not ten** — `threat_radar` can be granted and can never turn
+on — and choosing Analyze to use one earned module **silently removes four others**. Progression by
+playing is currently intersected with a dropdown.
+
+**[[D1499]]** decomposes [[D1300]] into three questions, one already answered, with six costed options
+and four properties that should hold regardless. **[[D1500]] corrects [[D1437]]**, which I landed
+wrong: the ceiling inherits correctly; the harm is the default preset.
+
+### Opponents and bot identity — [[D1501]]–[[D1503]]
+
+`design/research/ux-opponents.md` (`02c4f2d5`, `70562d9a`). **[[D1501]] answers the owner's question**:
+a card may describe **the machinery and its absences in the language of what the learner will
+experience**, and may never describe the bot as *a kind of chess player*. *"What makes it a someone is
+not an adjective — it is a specific flaw, a specific refusal, and a record of what it has done to
+you."* The refusals — *no opening book · no memory · endgame unmeasured · cannot hand you a piece
+above 250 cp* — are the most personality-dense sentences available, because **no competitor prints
+them**.
+
+**[[D1502]]: replace the persona word-filter with a provenance rule.** Eight banned adjectives do not
+stop *"she likes to keep the position closed and grind"*; requiring every card sentence to carry the
+id of the layer or measurement it restates does, and it generalises a compile rule the guard already
+has. Measured alongside: **Just Play silently plays Maia at band 1500**, the opponent's strength is
+classified as *learner assistance*, and **a Just Play game says nothing about its opponent, ever**.
+The framing constraint: `design/00-thesis.md:136` refuses *"a generic bot ladder"*, so the picker
+without the card **is** the refused object.
+
+This dossier also self-corrected twice mid-flight — removing a fabricated chess.com framing and an
+illustrative bot card once it found the roster is not in our corpus, and re-crediting the opponent-
+choice findings to [[D1473]] rather than presenting them as new.
