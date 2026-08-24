@@ -48,7 +48,7 @@ describe("primary evidence catalogue", () => {
     expect(CURRENT_CONSUMER_OPERATION_IDS).toHaveLength(23);
     expect(EVIDENCE_CONSUMER_IDS).toEqual([...CURRENT_CONSUMER_OPERATION_IDS, "assistance.arrows", "research.semantic_selection"]);
     expect(manifest.consumers.find((item) => item.id === "assistance.arrows")?.disposition).toEqual(expect.objectContaining({ kind: "experimental" }));
-    expect([manifest.producers.length, manifest.projections.length, manifest.consumers.length, manifest.bindings.length]).toEqual([35, 188, 25, 210]);
+    expect([manifest.producers.length, manifest.projections.length, manifest.consumers.length, manifest.bindings.length]).toEqual([35, 189, 25, 210]);
     expect([manifest.semanticEvents.length, manifest.eligibility.length, manifest.reasons.length, manifest.selectionPolicies.length]).toEqual([67, 67, 15, 1]);
     expect(new Set(manifest.semanticEvents.map((item) => item.projection.id))).toEqual(new Set(SEMANTIC_EVENT_PROJECTION_IDS));
     expect(new Set(manifest.eligibility.map((item) => `${item.consumer.id}@${item.consumer.version}`))).toEqual(new Set(["research.semantic_selection@1"]));
@@ -65,6 +65,21 @@ describe("primary evidence catalogue", () => {
     });
     expect(grade?.derivation?.inputs).toEqual([{ id: "recorded.engine.eval", version: 1 }, { id: "live.stockfish.eval", version: 1 }]);
     expect(grade?.answerContent).not.toContain("move");
+  });
+
+  it("registers exact legal moves without binding an ordinary learner consumer", () => {
+    const manifest = compileEvidenceManifest(EVIDENCE_CONTRACT_DECLARATIONS);
+    const projection = manifest.projections.find((item) => item.id === "rules.mobility.reading.legal_moves");
+    expect(projection).toMatchObject({
+      grounding: "position_rules",
+      exactness: "exact",
+      operands: ["fen", "turn", "pieces"],
+      answerContent: ["fact", "candidate_moves"],
+      disposition: { kind: "inspector_only" },
+    });
+    expect(manifest.bindings.some((binding) => binding.projection.id === projection?.id)).toBe(false);
+    const old = manifest.projections.find((item) => item.id === "rules.mobility.reading.piece_destinations");
+    expect(old).toMatchObject({ grounding: "declared_convention", exactness: "convention" });
   });
 
   it("refuses a grade that gains move content or loses its declared inputs", () => {
@@ -149,6 +164,7 @@ describe("primary evidence catalogue", () => {
     expect(projection("rules.structural.reading.space")).toEqual(["fen", "conventionId", "colors", "differentials"]);
     expect(projection("rules.tactic.reading.rook_on_seventh")).toEqual(["fen", "rooks"]);
     expect(projection("derived.tactic.promotion_pressure")).toEqual(["fen", "pawns"]);
+    expect(projection("rules.mobility.reading.legal_moves")).toEqual(["fen", "turn", "pieces"]);
   });
 
   it("keeps the tactical collector Appendix-A inventory set-equal to thirty compiled projections", () => {

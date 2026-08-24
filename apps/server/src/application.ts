@@ -3,10 +3,9 @@ import { dirname, extname, join, normalize, resolve } from "node:path";
 
 import { Chess } from "chessops/chess";
 import { parseFen } from "chessops/fen";
-import type { Move, Role } from "chessops/types";
-import { makeUci, parseUci } from "chessops/util";
+import { parseUci } from "chessops/util";
 
-import type { EvidencePayload } from "@chess-tabiya/runtime";
+import { canonicalFen, exactLegalMoves, type EvidencePayload } from "@chess-tabiya/runtime";
 
 import {
   assertAdvertisedCapabilityDispositions,
@@ -78,7 +77,6 @@ export interface ChessTabiyaApplication {
   close(): Promise<void>;
 }
 
-const PROMOTIONS: readonly Role[] = ["queen", "rook", "bishop", "knight"];
 const CONTENT_TYPES: Readonly<Record<string, string>> = Object.freeze({
   ".css": "text/css; charset=utf-8",
   ".html": "text/html; charset=utf-8",
@@ -100,23 +98,7 @@ function legalMoves(fen: string, history: readonly string[]): readonly string[] 
     position.play(move);
   }
 
-  const moves: string[] = [];
-  for (const [from, destinations] of position.allDests()) {
-    for (const to of destinations) {
-      const reachesBackRank =
-        position.board.getRole(from) === "pawn" && (to < 8 || to >= 56);
-      if (reachesBackRank) {
-        for (const promotion of PROMOTIONS) {
-          const move: Move = { from, to, promotion };
-          if (position.isLegal(move)) moves.push(makeUci(move));
-        }
-      } else {
-        const move: Move = { from, to };
-        if (position.isLegal(move)) moves.push(makeUci(move));
-      }
-    }
-  }
-  return Object.freeze(moves.sort());
+  return Object.freeze(exactLegalMoves(canonicalFen(position)).map((move) => move.uci));
 }
 
 function positionCommand(request: EngineRequest): {

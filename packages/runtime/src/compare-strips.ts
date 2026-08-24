@@ -7,6 +7,7 @@ import type { DrillRun } from "./types.js";
 import { assertConsumerEvidenceView, evidenceForConsumer, type ConsumerEvidenceView, type DeclaredEvidence } from "./evidence-contract.js";
 import { declareCompareDerivedEvidence, declarePivotalMarkerEvidence, declareRunRecordEvidence } from "./evidence-source-adapters.js";
 import { PRIMARY_EVIDENCE_MANIFEST } from "./evidence-catalog.js";
+import { exactMoveDestination, exactMoveIdentity } from "./legal-moves.js";
 
 export interface StripEntry { readonly plyOffset: number; readonly nodeId: string; readonly sentence: string; readonly attribution: string; readonly observation?: StructuralObservation; readonly evidence?: DeclaredEvidence<unknown> }
 export interface PieceRoute { readonly pieceId: string; readonly squares: readonly string[] }
@@ -84,8 +85,11 @@ export function comparisonStrips(run: DrillRun, comparison: BranchComparison): R
     ].sort((a, b) => a.plyOffset - b.plyOffset || a.nodeId.localeCompare(b.nodeId));
     const routeMap = new Map<string, string[]>();
     for (const node of path.slice(1)) {
-      const move = node.moveUci?.slice(0, 4); if (move === undefined) continue;
-      const from = move.slice(0, 2), to = move.slice(2, 4);
+      if (node.moveUci === null) continue;
+      const parent = run.nodes.find((candidate) => candidate.id === node.parentId);
+      if (parent === undefined) throw new TypeError(`Comparison route node ${node.id} has no parent`);
+      const move = exactMoveIdentity(parent.fen, node.moveUci);
+      const from = move.slice(0, 2), to = exactMoveDestination(parent.fen, move);
       const existing = [...routeMap].find(([, squares]) => squares.at(-1) === from);
       if (existing === undefined) routeMap.set(from, [from, to]); else existing[1].push(to);
     }

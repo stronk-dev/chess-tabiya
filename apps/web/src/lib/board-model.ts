@@ -40,12 +40,23 @@ function key(value: string): Key {
   return value as Key;
 }
 
-function parsedLastMove(uci?: string | null): readonly [Key, Key] | undefined {
+export function displayedLastMove(fen: string, uci?: string | null): readonly [Key, Key] | undefined {
   if (uci === undefined || uci === null) return undefined;
   if (!/^[a-h][1-8][a-h][1-8][qrbn]?$/.test(uci)) {
     throw new TypeError(`Invalid last-move UCI: ${uci}`);
   }
-  return Object.freeze([key(uci.slice(0, 2)), key(uci.slice(2, 4))]);
+  const chess = position(fen);
+  const from = key(uci.slice(0, 2));
+  const encodedTo = key(uci.slice(2, 4));
+  const encodedSquare = parseSquare(encodedTo);
+  if (encodedSquare === undefined || chess.board.get(encodedSquare) !== undefined) {
+    return Object.freeze([from, encodedTo]);
+  }
+  const mover = chess.turn === "white" ? "black" : "white";
+  const kingSquare = chess.board.kingOf(mover);
+  if (kingSquare === undefined) return Object.freeze([from, encodedTo]);
+  const kingTo = key(String.fromCharCode(97 + (kingSquare % 8)) + String(Math.floor(kingSquare / 8) + 1));
+  return Object.freeze([from, kingTo[0] === "c" || kingTo[0] === "g" ? kingTo : encodedTo]);
 }
 
 export function boardModel(
@@ -54,7 +65,7 @@ export function boardModel(
   lastMove?: string | null,
 ): BoardModel {
   const chess = position(fen);
-  const parsed = parsedLastMove(lastMove);
+  const parsed = displayedLastMove(fen, lastMove);
   return Object.freeze({
     fen,
     orientation: startSide,

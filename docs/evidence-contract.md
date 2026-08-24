@@ -22,7 +22,7 @@ by a SHA-256 digest. `/capabilities` returns that digest, current producer avail
 consumer-safe binding summary. It never returns engine lines, authored prose, provider secrets, or
 corpus rows.
 
-The current compiled closure is 34 producers, 187 projections, 25 consumers and 209 bindings,
+The current compiled closure is 35 producers, 189 projections, 25 consumers and 210 bindings,
 plus 67 semantic-event declarations, 67 eligibility rows, 15 refusal reasons and one selection
 policy. The executable manifest and semantic-evidence checks own this tuple.
 
@@ -30,6 +30,15 @@ The additional inert projection is `derived.grade.move_quality@1`: it thresholds
 same-instrument engine readings under the cited `grade-convention@1`, retains typed mate scores,
 and can carry evaluation only. It remains `experimental` until the post-commit and Review module
 consumers compile; catalogue presence alone does not make it visible.
+
+`rules.mobility.reading.legal_moves@1` is likewise additive and inspector-only. It is the complete
+position-rules-exact legal move map for the FEN's actual side to move: every side-to-move piece has
+a row, including pieces with no legal move. Move identity retains chessops' Chess960-safe
+king-to-rook UCI while the separate destination operand names the king's landing square; display
+remains SAN. Moves also retain role and all four promotion identities. It is not the older
+`piece_destinations@1` convention, which intentionally analyzes both-color turn clones and joins
+one-exchange local safety. Registration creates no learner binding; the requested-sight module owns
+that later delivery decision.
 
 ## Honest homes and raw evidence
 

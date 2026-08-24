@@ -3,6 +3,7 @@ import type { Color } from "chessops/types";
 import { permittedAssistance, type AssistanceContext } from "./assistance.js";
 import { branchPath } from "./branch-path.js";
 import { positionFromFen } from "./chess.js";
+import { exactLegalMoves } from "./legal-moves.js";
 import { classifyPhase, type DetectedPhase } from "./phase.js";
 import type { DrillRun, Node, OpponentSelection } from "./types.js";
 import { irreversibility, type IrreversibilityDetail } from "./transition.js";
@@ -21,12 +22,7 @@ const PROVENANCE = "Tabiya's pivotal-marker convention";
 const DEFINITE = new Set<DetectedPhase>(["opening", "middlegame", "endgame"]);
 
 function legalCount(fen: string): number {
-  const position = positionFromFen(fen);
-  let count = 0;
-  for (const [from, destinations] of position.allDests()) for (const to of destinations) {
-    if (position.isLegal({ from, to })) count += position.board.getRole(from) === "pawn" && (to < 8 || to >= 56) ? 4 : 1;
-  }
-  return count;
+  return exactLegalMoves(fen).length;
 }
 
 

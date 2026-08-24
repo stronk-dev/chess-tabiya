@@ -1,7 +1,7 @@
 import { mkdir, readFile, rename, rm, writeFile } from "node:fs/promises";
 import { basename, dirname, extname, resolve } from "node:path";
 
-import { transposeKey } from "@chess-tabiya/runtime";
+import { normalizeInboundMove, transposeKey } from "@chess-tabiya/runtime";
 import { digestDrillPack, type SpineNode } from "@chess-tabiya/schema/drill-pack";
 import { Chess } from "chessops/chess";
 import { makeFen, parseFen } from "chessops/fen";
@@ -196,7 +196,7 @@ export async function emitExplorerPriority(options: PriorityEmitOptions): Promis
     entries.push(result.source);
     if (result.kind === "abstention") { abstentions.push({ eco: line.eco, name: line.name, reason: result.reason, detail: result.detail, sourceId: result.source.sourceId, retrievedAt: result.source.retrievedAt }); continue; }
     const total = result.white + result.draws + result.black;
-    rows.push({ eco: line.eco, name: line.name, movesSan: line.movesSan, transposeKey: transposeKey(line.fen), total, whitePct: pct(result.white, total), drawPct: pct(result.draws, total), blackPct: pct(result.black, total), topMoves: result.moves.map((move) => { const playedCount = move.white + move.draws + move.black; return { san: move.san, uci: move.uci, playedCount, sharePct: pct(playedCount, total) }; }), sourceId: result.source.sourceId, retrievedAt: result.source.retrievedAt });
+    rows.push({ eco: line.eco, name: line.name, movesSan: line.movesSan, transposeKey: transposeKey(line.fen), total, whitePct: pct(result.white, total), drawPct: pct(result.draws, total), blackPct: pct(result.black, total), topMoves: result.moves.map((move) => { const playedCount = move.white + move.draws + move.black; return { san: move.san, uci: normalizeInboundMove(line.fen, move.uci, "lichess_explorer").moveUci, playedCount, sharePct: pct(playedCount, total) }; }), sourceId: result.source.sourceId, retrievedAt: result.source.retrievedAt });
   }
   rows.sort((a, b) => b.total - a.total || a.eco.localeCompare(b.eco) || a.name.localeCompare(b.name));
   const sourcedAt = entries.map((entry) => entry.retrievedAt).sort().at(-1)!;

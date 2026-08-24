@@ -2,6 +2,22 @@ import { DRILL_RUN_SCHEMA_VERSION } from "@chess-tabiya/schema";
 
 export { canonicalFen, transposeKey } from "./chess.js";
 export {
+  PROMOTION_ROLES,
+  MOVE_DESTINATION_CONVENTION,
+  MOVE_IDENTITY_CONVENTION,
+  INBOUND_MOVE_DIALECT,
+  exactLegalMoveMap,
+  exactLegalMoves,
+  exactMoveDestination,
+  exactMoveIdentity,
+  normalizeInboundMove,
+  type ExactLegalMove,
+  type ExactLegalMoveMap,
+  type InboundMoveConversion,
+  type InboundMoveSource,
+  type PromotionRole as ExactPromotionRole,
+} from "./legal-moves.js";
+export {
   deviationAnchors,
   insideAuthoredBoundary,
   lineMembership,
@@ -202,6 +218,7 @@ export {
   type SessionSource,
 } from "./session.js";
 export { attachEvidence } from "./evidence.js";
+export { declareExactLegalMovesEvidence } from "./evidence-source-adapters.js";
 export {
   GRADE_CONVENTION,
   assertMoveQualityGradeSentence,
@@ -667,6 +684,7 @@ export {
 
 export {
   LOCAL_NON_LOSING_CONVENTION,
+  legalMovesReading,
   pieceDestinationEvents,
   pieceDestinationsReading,
   type ColorPieceDestinations,
@@ -674,6 +692,7 @@ export {
   type PieceDestinationsEvent,
   type PieceDestinationsEventResult,
   type PieceDestinationsReading,
+  type LegalMovesReading,
 } from "./mobility.js";
 
 export {

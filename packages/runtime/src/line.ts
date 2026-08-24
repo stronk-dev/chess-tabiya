@@ -8,6 +8,7 @@ import type { DrillPackDefinition, SpineNode } from "@chess-tabiya/schema/drill-
 import { transposeKey } from "./chess.js";
 import { evaluateObjectivePredicate, type FenPredicate } from "./objective.js";
 import { historyFrom } from "./runtime.js";
+import { exactMoveIdentity } from "./legal-moves.js";
 import type { DrillRun, Node } from "./types.js";
 
 export type LineVerdict = "on_line" | "classified_deviation" | "unknown";
@@ -132,10 +133,13 @@ export function lineMembership(
       const spineNodeId = spineNodeIdFor(index, node);
       const parent = run.nodes.find((candidate) => candidate.id === node.parentId);
       const deviation = (pack.deviations ?? []).find((candidate) => {
-        if (node.moveUci !== candidate.moveUci || parent === undefined) return false;
-        if ("fen" in candidate.at) return transposeKey(candidate.at.fen) === parent.transposeKey;
-        if ("atStart" in candidate.at) return transposeKey(pack.start.fen) === parent.transposeKey;
-        return anchors.get(candidate.at.spineNodeId) === parent.transposeKey;
+        if (parent === undefined) return false;
+        const atAnchor = "fen" in candidate.at
+          ? transposeKey(candidate.at.fen) === parent.transposeKey
+          : "atStart" in candidate.at
+            ? transposeKey(pack.start.fen) === parent.transposeKey
+            : anchors.get(candidate.at.spineNodeId) === parent.transposeKey;
+        return atAnchor && node.moveUci === exactMoveIdentity(parent.fen, candidate.moveUci);
       });
       const insideBoundary = insideAuthoredBoundary(pack, run, node);
       const verdict: LineVerdict =

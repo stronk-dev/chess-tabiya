@@ -1,10 +1,11 @@
-import { Chess, castlingSide, normalizeMove } from "chessops/chess";
+import { Chess, normalizeMove } from "chessops/chess";
 import { attacks, between } from "chessops/attacks";
 import { makeFen } from "chessops/fen";
 import type { Color, Move, Piece, Role, SquareName } from "chessops/types";
 import { makeSquare, makeUci, opposite, parseSquare, parseUci } from "chessops/util";
 
 import { canonicalFen, positionFromFen } from "./chess.js";
+import { exactLegalMoves, exactMoveDestination, exactMoveIdentity } from "./legal-moves.js";
 import { castlingRightsLost, type CastlingRightLostEvent } from "./castling.js";
 import { captureClassEvent, legalCaptureMovesTo, legalExchangeForMove, type CaptureClassEvent, type LegalExchangeResult } from "./exchange.js";
 import { PRIMARY_EVIDENCE_MANIFEST, STRUCTURAL_EVENT_FAMILIES } from "./evidence-catalog.js";
@@ -283,13 +284,7 @@ function genericBypass(message: string): never {
 }
 
 export function canonicalMoveUci(beforeFen: string, moveUci: string): string {
-  const position = positionFromFen(beforeFen);
-  const parsed = parseUci(moveUci.toLowerCase());
-  if (parsed === undefined || !("from" in parsed)) throw new TypeError(`Invalid semantic-event move ${moveUci}`);
-  const side = castlingSide(position, parsed);
-  if (side === undefined) return makeUci(parsed);
-  const rank = Math.floor(parsed.from / 8);
-  return makeUci({ from: parsed.from, to: (rank * 8 + (side === "h" ? 6 : 2)) as typeof parsed.to });
+  return exactMoveIdentity(beforeFen, moveUci);
 }
 
 function canonicalAnchor(anchor: SemanticEventAnchor): SemanticEventAnchor {
@@ -364,7 +359,8 @@ function declareTransitionEventEvidence(payload: TransitionSemanticEventOperands
 export function transitionSemanticEvents(beforeFen: string, moveUci: string, afterFen: string): readonly SemanticEvidenceEvent<TransitionSemanticEventOperands>[] {
   const anchor = canonicalAnchor({ beforeFen, moveUci, afterFen, side: positionFromFen(beforeFen).turn });
   return Object.freeze(transitionSemanticFacts(beforeFen, moveUci, afterFen).map((fact) => {
-    const normalizedFact = fact.family === "castled" ? { ...fact, from: anchor.moveUci.slice(0, 2), to: anchor.moveUci.slice(2, 4), detail: Object.freeze({ ...fact.detail, resultingKingSquare: anchor.moveUci.slice(2, 4) }) } : fact;
+    const destination = fact.family === "castled" ? exactMoveDestination(anchor.beforeFen, anchor.moveUci) : undefined;
+    const normalizedFact = fact.family === "castled" ? { ...fact, from: anchor.moveUci.slice(0, 2), to: destination, detail: Object.freeze({ ...fact.detail, resultingKingSquare: destination }) } : fact;
     const payload = immutable({ ...normalizedFact, before_fen: anchor.beforeFen, move_uci: anchor.moveUci, after_fen: anchor.afterFen }) as TransitionSemanticEventOperands;
     return compileSemanticEvidenceEvent(PRIMARY_EVIDENCE_MANIFEST, { evidence: declareTransitionEventEvidence(payload), anchor, sign: payload.sign, operands: payload });
   }));
@@ -964,22 +960,16 @@ export function assertSemanticEvidenceEvent(manifest: CompiledEvidenceManifest, 
   if (rebuilt.id !== event.id || evidenceDigest(rebuilt.basis) !== evidenceDigest(event.basis)) genericBypass("semantic event seal does not match its declared bytes");
 }
 
-const PROMOTIONS: readonly Role[] = ["queen", "rook", "bishop", "knight"];
-
 export function legalAlternativeEdges(beforeFen: string, committedMoveUci: string): readonly { readonly beforeFen: string; readonly moveUci: string; readonly afterFen: string }[] {
   const position = positionFromFen(beforeFen);
   const canonicalBefore = canonicalFen(position);
   const committed = canonicalMoveUci(canonicalBefore, committedMoveUci);
-  const moves: Move[] = [];
-  for (const [from, destinations] of position.allDests()) for (const to of destinations) {
-    const reachesBackRank = position.board.getRole(from) === "pawn" && (to < 8 || to >= 56);
-    if (reachesBackRank) for (const promotion of PROMOTIONS) moves.push({ from, to, promotion });
-    else moves.push({ from, to });
-  }
   const byUci = new Map<string, Move>();
-  for (const move of moves) {
-    const canonical = canonicalMoveUci(canonicalBefore, makeUci(move));
-    if (canonical !== committed) byUci.set(canonical, normalizeMove(position, move));
+  for (const exact of exactLegalMoves(canonicalBefore)) {
+    const parsed = parseUci(exact.uci);
+    if (parsed === undefined) throw new TypeError(`Exact legal move has invalid UCI ${exact.uci}`);
+    const canonical = canonicalMoveUci(canonicalBefore, exact.uci);
+    if (canonical !== committed) byUci.set(canonical, normalizeMove(position, parsed));
   }
   return Object.freeze([...byUci].sort(([left], [right]) => left.localeCompare(right)).map(([moveUci, move]) => {
     const child = position.clone();

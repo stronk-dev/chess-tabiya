@@ -11,6 +11,8 @@ import {
   evidenceForConsumer,
   PolicyMassError,
   humanConcessionMass,
+  exactLegalMoves,
+  normalizeInboundMove,
   transposeKey,
   type OpponentSelection,
   type RunOpponentMode,
@@ -303,14 +305,7 @@ function currentPosition(request: SelectMoveRequest): Chess {
 }
 
 function legalMoveCount(position: Chess): number {
-  let count = 0;
-  for (const [from, destinations] of position.allDests()) {
-    const promotions = position.board.getRole(from) === "pawn"
-      ? [...destinations].filter((to) => to < 8 || to >= 56).length
-      : 0;
-    count += destinations.size() + promotions * 3;
-  }
-  return count;
+  return exactLegalMoves(makeFen(position.toSetup())).length;
 }
 
 function positionCommand(request: SelectMoveRequest): string {
@@ -319,7 +314,7 @@ function positionCommand(request: SelectMoveRequest): string {
   }`;
 }
 
-function candidateLines(lines: readonly string[]): readonly SelectionCandidate[] {
+function candidateLines(lines: readonly string[], fen: string): readonly SelectionCandidate[] {
   const candidates = new Map<string, SelectionCandidate>();
   for (const line of lines) {
     if (!line.startsWith("info ")) continue;
@@ -335,7 +330,7 @@ function candidateLines(lines: readonly string[]): readonly SelectionCandidate[]
       throw invalid(`Engine returned invalid policy mass: ${massMatch![1]}`);
     }
     const candidate: SelectionCandidate = Object.freeze({
-      moveUci: moveMatch[1]!,
+      moveUci: normalizeInboundMove(fen, moveMatch[1]!, "engine_bestmove").moveUci,
       rank: Number(rankMatch[1]),
       ...(mass === undefined ? {} : { mass }),
       ...(scoreMatch === null ? {} : { scoreCp: Number(scoreMatch[1]) }),
@@ -348,12 +343,16 @@ function candidateLines(lines: readonly string[]): readonly SelectionCandidate[]
   );
 }
 
-function bestMove(lines: readonly string[]): string {
+function bestMove(lines: readonly string[], fen: string): string {
   const match = lines
     .map((line) => /^bestmove ([a-h][1-8][a-h][1-8][qrbn]?)\b/.exec(line))
     .find((candidate) => candidate !== null);
   if (!match) throw invalid("Engine returned no legal bestmove");
-  return match[1]!;
+  return normalizeInboundMove(fen, match[1]!, "engine_bestmove").moveUci;
+}
+
+function requestPositionFen(request: SelectMoveRequest): string {
+  return makeFen(currentPosition(request).toSetup());
 }
 
 function selectionIdentity(
@@ -555,8 +554,8 @@ export class OpponentSelector {
       timeoutMs: Math.max(5_000, this.#strongEngineMovetimeMs * 10),
     }));
     return makeSelection(
-      bestMove(lines),
-      candidateLines(lines),
+      bestMove(lines, requestPositionFen(request)),
+      candidateLines(lines, requestPositionFen(request)),
       engineIdentity(this.#client, this.#strongEngineId),
       "strong_engine",
     );
@@ -625,12 +624,13 @@ export class OpponentSelector {
     const requestedWidth = Math.max(8, legalMoveCount(currentPosition(request)));
     const width = maximum === undefined ? requestedWidth : Math.min(requestedWidth, maximum);
     let result = await this.#maia(request, width);
-    let candidates = candidateLines(result.lines);
-    let moveUci = bestMove(result.lines);
+    const fen = requestPositionFen(request);
+    let candidates = candidateLines(result.lines, fen);
+    let moveUci = bestMove(result.lines, fen);
     if (!candidates.some((candidate) => candidate.moveUci === moveUci)) {
       result = await this.#maia(request, width);
-      candidates = candidateLines(result.lines);
-      moveUci = bestMove(result.lines);
+      candidates = candidateLines(result.lines, fen);
+      moveUci = bestMove(result.lines, fen);
     }
     if (!candidates.some((candidate) => candidate.moveUci === moveUci)) {
       const maxRank = candidates.reduce((rank, candidate) => Math.max(rank, candidate.rank), 0);
@@ -664,8 +664,8 @@ export class OpponentSelector {
       timeoutMs: searchBound.kind === "nodes" ? 5_000 : Math.max(5_000, searchBound.value * 10),
     }));
     return makeSelection(
-      bestMove(lines),
-      candidateLines(lines),
+      bestMove(lines, requestPositionFen(request)),
+      candidateLines(lines, requestPositionFen(request)),
       engineIdentity(this.#client, this.#strongEngineId),
       "strong_engine",
       undefined,
@@ -682,8 +682,9 @@ export class OpponentSelector {
       return this.#humanCommon(request);
     }
     const result = await this.#maia(request, Math.max(8, children.length));
-    const allowed = new Set(children.map((child) => child.moveUci));
-    const matching = candidateLines(result.lines).filter((candidate) =>
+    const fen = requestPositionFen(request);
+    const allowed = new Set(children.map((child) => normalizeInboundMove(fen, child.moveUci, "pack_move_uci").moveUci));
+    const matching = candidateLines(result.lines, fen).filter((candidate) =>
       allowed.has(candidate.moveUci),
     );
     const hash = historyHash(request);
@@ -786,7 +787,7 @@ export class OpponentSelector {
         historyUci: Object.freeze([...request.historyUci, candidate.uci]),
       });
       const maia = await this.#maia(childRequest, Math.max(8, legalMoveCount(child)));
-      const policy = candidateLines(maia.lines);
+      const policy = candidateLines(maia.lines, childFen);
       const conceding = new Set(
         childTablebase.moves
           .filter((reply) => invertTablebaseCategory(reply.category) !== childTablebase.category)

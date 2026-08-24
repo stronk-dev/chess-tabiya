@@ -8,6 +8,7 @@ import {
 import { branchPath } from "./branch-path.js";
 import { canonicalFen, positionFromFen } from "./chess.js";
 import { exportPgn } from "./pgn.js";
+import { exactMoveIdentity } from "./legal-moves.js";
 import { commitMove, createRun, fork, historyFrom } from "./runtime.js";
 import { isPackSession } from "./session.js";
 import type { Actor, DrillRun, Node, RunMark } from "./types.js";
@@ -91,7 +92,8 @@ function sharedPrefix(
   let length = 0;
   for (const move of moves) {
     const child = run.nodes.find(
-      (candidate) => candidate.parentId === node.id && candidate.moveUci === move.uci,
+      (candidate) => candidate.parentId === node.id &&
+        candidate.moveUci === exactMoveIdentity(node.fen, move.uci),
     );
     if (!child) break;
     node = child;

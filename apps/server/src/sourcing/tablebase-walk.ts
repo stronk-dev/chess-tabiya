@@ -3,16 +3,16 @@ import { resolve } from "node:path";
 
 import { canonicalizeJson, type DrillPackDefinition, type SpineNode } from "@chess-tabiya/schema/drill-pack";
 import { transposeKey } from "@chess-tabiya/runtime";
-import { Chess } from "chessops/chess";
+import { Chess, normalizeMove } from "chessops/chess";
 import { makeFen, parseFen } from "chessops/fen";
 import { makeSan } from "chessops/san";
-import { makeUci, parseUci } from "chessops/util";
+import { parseUci } from "chessops/util";
 
 import { countFenPieces } from "./chess-facts.js";
 import { liveTablebaseQuery, type TablebaseAnswer, type TablebasePayload } from "./syzygy.js";
 import { learnerCategory } from "./tablebase-category.js";
 import { readJson, writeCanonicalJson } from "./canonical.js";
-import { legalMoves } from "./legal-moves.js";
+import { exactLegalMoves } from "./legal-moves.js";
 import { SourcingError } from "./types.js";
 
 const OFFLINE_FIXTURES = resolve("apps/server/src/sourcing/fixtures/verify-draft.json");
@@ -103,9 +103,12 @@ export async function tablebaseWalk(options: TablebaseWalkOptions): Promise<Read
     const root = await probe(item.fen, item.pointer);
     const shouldEnumerate = (options.enumerate ?? "decision") === "all" || ((options.enumerate ?? "decision") === "decision" && board.turn === learner);
     const moves: unknown[] = [];
-    if (shouldEnumerate) for (const move of legalMoves(board)) {
+    if (shouldEnumerate) for (const exact of exactLegalMoves(item.fen)) {
+      const parsed = parseUci(exact.uci);
+      if (parsed === undefined) throw new SourcingError("DRAFT_PACK_INVALID", `invalid exact legal move ${exact.uci}`);
+      const move = normalizeMove(board, parsed);
       const next = board.clone();
-      const san = makeSan(board, move), uci = makeUci(move);
+      const san = makeSan(board, move), uci = exact.uci;
       next.play(move);
       const fen = makeFen(next.toSetup()), answer = await probe(fen, `${item.pointer}/moves/${uci}`);
       if (answer !== undefined) moves.push({ uci, san, learnerCategory: learnerCategory(next.turn, answer.category as import("../tablebase.js").TablebaseCategory, learner), dtz: answer.dtz, dtm: answer.dtm, terminal: terminal(answer) });

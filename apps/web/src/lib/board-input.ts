@@ -1,10 +1,13 @@
 import type { Color, Piece, SquareName } from "chessops/types";
-import { Chess } from "chessops/chess";
+import { Chess, normalizeMove } from "chessops/chess";
 import { parseFen } from "chessops/fen";
 import { makeSan, parseSan } from "chessops/san";
 import { makeSquare, makeUci, parseSquare, parseUci } from "chessops/util";
 
+import { exactLegalMoveMap, exactMoveDestination } from "@chess-tabiya/runtime";
+
 import type { PromotionRole } from "./board-model.js";
+import { displayedLastMove } from "./board-model.js";
 
 export type Square = SquareName;
 
@@ -49,13 +52,6 @@ export interface BoardInputResult {
   readonly moveUci?: string;
 }
 
-const ROLES: readonly PromotionRole[] = Object.freeze([
-  "queen",
-  "rook",
-  "bishop",
-  "knight",
-]);
-
 const ROLE_NAME: Readonly<Record<PromotionRole, string>> = Object.freeze({
   queen: "queen",
   rook: "rook",
@@ -94,8 +90,8 @@ function unique<T>(values: readonly T[]): readonly T[] {
   return Object.freeze([...new Set(values)]);
 }
 
-function destinationOf(uci: string): Square {
-  return square(uci.slice(2, 4));
+function semanticDestinationOf(fen: string, uci: string): Square {
+  return exactMoveDestination(fen, uci);
 }
 
 function roleFor(uci: string): PromotionRole | undefined {
@@ -195,30 +191,9 @@ function legalUcis(input: BoardInputPosition): readonly string[] {
  * semantic projection intentionally keeps only the king destination.
  */
 export function legalMovesForFen(fen: string): ReadonlyMap<Square, readonly string[]> {
-  const chess = positionFromFen(fen);
-  const result = new Map<Square, string[]>();
-  for (const [fromNumber, destinations] of chess.allDests()) {
-    const from = makeSquare(fromNumber);
-    const piece = chess.board.get(fromNumber);
-    for (const toNumber of destinations) {
-      let to = makeSquare(toNumber);
-      if (piece?.role === "king" && from[0] === "e" && (to[0] === "a" || to[0] === "h")) {
-        to = square(`${to[0] === "a" ? "c" : "g"}${to[1]}`);
-      }
-      const base = `${from}${to}`;
-      const promotion = piece?.role === "pawn" && (to[1] === "1" || to[1] === "8");
-      const ucis = promotion ? ROLES.map((role) => `${base}${role[0] === "k" ? "n" : role[0]}`) : [base];
-      for (const uci of ucis) {
-        const parsed = parseUci(uci);
-        if (parsed !== undefined && chess.isLegal(parsed)) {
-          const entries = result.get(from) ?? [];
-          if (!entries.includes(uci)) entries.push(uci);
-          result.set(from, entries);
-        }
-      }
-    }
-  }
-  return new Map([...result].map(([from, moves]) => [from, Object.freeze(moves)]));
+  return new Map(exactLegalMoveMap(fen).pieces.flatMap((row) => row.moves.length === 0
+    ? []
+    : [[row.piece.square, Object.freeze(row.moves.map((move) => move.uci))] as const]));
 }
 
 export interface SemanticCell {
@@ -239,7 +214,7 @@ export function semanticBoardRows(
 ): readonly (readonly SemanticCell[])[] {
   const chess = positionFromFen(input.fen);
   const destinations = new Set(state.legalDestinations);
-  const lastDestination = input.lastMove === undefined || input.lastMove === null ? undefined : input.lastMove.slice(2, 4);
+  const lastDestination = displayedLastMove(input.fen, input.lastMove)?.[1];
   const checkedKing = chess.isCheck() ? chess.board.kingOf(input.sideToMove) : undefined;
   const checkedSquare = checkedKing === undefined ? undefined : makeSquare(checkedKing);
   return Object.freeze(visualRows(input.orientation).map((row) => Object.freeze(row.map((name) => {
@@ -342,7 +317,7 @@ export class BoardInputController {
     if (legal === undefined || legal.length === 0) {
       return this.#result(this.#stateWith({ activeSquare: origin, lastAnnouncement: `Square ${origin} cannot start a legal move.` }));
     }
-    const destinations = unique(legal.map(destinationOf));
+    const destinations = unique(legal.map((uci) => semanticDestinationOf(this.#input.fen, uci)));
     return this.#result(Object.freeze({
       phase: "origin_selected",
       activeSquare: origin,
@@ -363,7 +338,7 @@ export class BoardInputController {
   #destination(destination: Square): BoardInputResult {
     const origin = this.#state.origin;
     if (origin === null) return this.#select(destination);
-    const candidates = (this.#input.legalMoves.get(origin) ?? []).filter((uci) => destinationOf(uci) === destination);
+    const candidates = (this.#input.legalMoves.get(origin) ?? []).filter((uci) => semanticDestinationOf(this.#input.fen, uci) === destination);
     if (candidates.length === 0) {
       return this.#result(this.#stateWith({
         activeSquare: destination,
@@ -399,13 +374,19 @@ export class BoardInputController {
     const entered = normaliseMoveText(value);
     if (entered.length === 0) return this.#result(this.#stateWith({ lastAnnouncement: "Enter a legal SAN or UCI move." }));
     const legal = legalUcis(this.#input);
+    const chess = positionFromFen(this.#input.fen);
     const compact = entered.replaceAll(/\s+/gu, "").toLocaleLowerCase("en-US");
     const uci = parseUci(compact);
-    if (uci !== undefined && this.#isLegalUci(makeUci(uci))) return this.#commit(makeUci(uci));
+    if (uci !== undefined) {
+      const identity = makeUci(normalizeMove(chess, uci));
+      if (this.#isLegalUci(identity)) return this.#commit(identity);
+    }
 
-    const chess = positionFromFen(this.#input.fen);
     const directSan = parseSan(chess, entered);
-    if (directSan !== undefined && this.#isLegalUci(makeUci(directSan))) return this.#commit(makeUci(directSan));
+    if (directSan !== undefined) {
+      const identity = makeUci(normalizeMove(chess, directSan));
+      if (this.#isLegalUci(identity)) return this.#commit(identity);
+    }
     const equivalent = legal.find((candidate) => {
       const move = parseUci(candidate);
       return move !== undefined && normaliseSan(makeSan(chess, move)) === normaliseSan(entered);
@@ -425,7 +406,7 @@ export class BoardInputController {
     const chess = positionFromFen(this.#input.fen);
     const move = parseUci(moveUci);
     const notation = move === undefined ? moveUci : makeSan(chess, move);
-    const destination = destinationOf(moveUci);
+    const destination = semanticDestinationOf(this.#input.fen, moveUci);
     return this.#result(this.#idle(destination, `Move committed: ${notation}.`), moveUci);
   }
 }

@@ -96,6 +96,9 @@ describe("evidence job queue", () => {
           ...(request.resetSearchState === undefined ? {} : { resetSearchState: request.resetSearchState }),
           ...(request.signal === undefined ? {} : { signal: request.signal }),
         });
+        if (request.commands.some((command) => command.includes("4k3/8/8/8/8/8/8/4K3 b"))) {
+          return ["info depth 15 score mate 3 pv e8e7", "bestmove e8e7"];
+        }
         if (request.commands.includes("setoption name UCI_ShowWDL value true")) {
           return ["info depth 17 score cp 21 wdl 412 537 51 pv e2e4", "bestmove e2e4"];
         }

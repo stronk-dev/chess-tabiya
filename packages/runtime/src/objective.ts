@@ -6,6 +6,7 @@ import { RuntimeError, unknownNode } from "./errors.js";
 import { evidenceForConsumer } from "./evidence-contract.js";
 import { PRIMARY_EVIDENCE_MANIFEST } from "./evidence-catalog.js";
 import { appendEvents } from "./events.js";
+import { exactMoveIdentity } from "./legal-moves.js";
 import { assertObjectiveTransition } from "./objective-state.js";
 import type { StructuralExpression } from "./structure.js";
 import { declareStructuralPredicateEvidence, structuralEvidenceForObjective } from "./structural-evidence.js";
@@ -281,9 +282,10 @@ export function evaluateObjectivePredicate(
       );
     }
     case "deviationPlayed": {
-      if (node.moveUci !== predicate.moveUci || node.parentId === null) return false;
+      if (node.parentId === null || node.moveUci === null) return false;
       const parent = run.nodes.find((candidate) => candidate.id === node.parentId);
-      return parent?.transposeKey === predicate.fromTransposeKey;
+      return parent?.transposeKey === predicate.fromTransposeKey &&
+        node.moveUci === exactMoveIdentity(parent.fen, predicate.moveUci);
     }
     case "nodePly":
       return node.ply === predicate.ply;

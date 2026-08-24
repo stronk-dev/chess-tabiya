@@ -60,6 +60,25 @@ describe("timing-window projection", () => {
     expect(state).toMatchObject({ verdict: "too_slow", satisfied: 1, learnerMoves: 2, spend: 1 });
   });
 
+  it("keeps castling identity separate from its semantic destination", () => {
+    const fen = "r3k2r/8/8/8/8/8/8/R3K2R w KQkq - 0 1";
+    let run = createRun({
+      id: "tempo-castling",
+      packId: "tempo-pack",
+      packDigest: digest,
+      startFen: fen,
+      policyConfig: { seedMode: "fixed", locus: { executedAt: "server", engineIds: [], modelIds: [] } },
+      seed: 1,
+      createdAt: "2026-08-15T12:00:00.000Z",
+    });
+    run = commitMove(run, "e1g1").run;
+    const path = tempoMovesFromRun(run);
+    expect(path[0]).toMatchObject({ moveUci: "e1h1", toSquare: "g1" });
+    expect(windowStates([window({
+      readiness: { mode: "all", of: [{ moveUci: "e1g1" }] },
+    })], path, "white")[0]).toMatchObject({ ready: true, satisfied: 1 });
+  });
+
   it("publishes the unauthored outpaced default without inventing a detector", () => {
     expect(unauthoredTempoTransition("outpaced")).toBe("failed");
     expect(unauthoredTempoTransition("too_slow")).toBeNull();

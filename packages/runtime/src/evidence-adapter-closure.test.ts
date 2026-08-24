@@ -1,7 +1,8 @@
 import { readFileSync, readdirSync } from "node:fs";
 import { describe, expect, it } from "vitest";
 
-import { declareAuthoredClaimEvidence, declareCompareDerivedEvidence, declareLivePacketEvidence, declareRunRecordEvidence } from "./evidence-source-adapters.js";
+import { declareAuthoredClaimEvidence, declareCompareDerivedEvidence, declareExactLegalMovesEvidence, declareLivePacketEvidence, declareRunRecordEvidence } from "./evidence-source-adapters.js";
+import { exactLegalMoveMap } from "./legal-moves.js";
 
 const ROOT = new URL("../../../", import.meta.url);
 const MIGRATED_PRODUCTION_FILES = Object.freeze([
@@ -68,5 +69,17 @@ describe("exact evidence source-adapter closure", () => {
     const maia = declareLivePacketEvidence({ kind: "bestline", source: "human_model_predicted", values: { moves: ["e2e4"] } });
     expect(maia.producer.id).toBe("human.maia");
     expect(maia.projection.id).toBe("human.maia.event");
+  });
+
+  it("seals only the authority's complete exact legal move payload", () => {
+    const payload = exactLegalMoveMap("r3k2r/8/8/8/8/8/8/R3K2R w KQkq - 0 1");
+    expect(declareExactLegalMovesEvidence(payload).payload).toBe(payload);
+    const mutate = (change: unknown) => declareExactLegalMovesEvidence(change as typeof payload);
+    expect(() => mutate({ ...payload, safe: true })).toThrow(/must contain only/u);
+    expect(() => mutate({ ...payload, turn: "black" })).toThrow(/does not equal/u);
+    expect(() => mutate({ ...payload, pieces: payload.pieces.slice(1) })).toThrow(/does not equal/u);
+    expect(() => mutate({ ...payload, pieces: payload.pieces.map((row, index) => index === 0 ? { ...row, piece: { ...row.piece, role: "queen" } } : row) })).toThrow(/does not equal/u);
+    expect(() => mutate({ ...payload, pieces: payload.pieces.map((row, index) => index === 0 ? { ...row, moves: row.moves.slice(1) } : row) })).toThrow(/does not equal/u);
+    expect(() => mutate({ turn: payload.turn, pieces: payload.pieces })).toThrow(/must contain only/u);
   });
 });

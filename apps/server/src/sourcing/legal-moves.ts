@@ -1,29 +1,24 @@
-import { Chess } from "chessops/chess";
+import { Chess, normalizeMove } from "chessops/chess";
 import { makeFen, parseFen } from "chessops/fen";
 import { makeSan } from "chessops/san";
-import { makeUci } from "chessops/util";
+import { parseUci } from "chessops/util";
 import type { Move } from "chessops/types";
 
-const PROMOTIONS = Object.freeze(["queen", "rook", "bishop", "knight"] as const);
+import { exactLegalMoves } from "@chess-tabiya/runtime";
+
+export { exactLegalMoves } from "@chess-tabiya/runtime";
+
+function internalMove(board: Chess, uci: string): Move {
+  const parsed = parseUci(uci);
+  if (parsed === undefined) throw new TypeError(`Invalid exact legal move UCI: ${uci}`);
+  const move = normalizeMove(board, parsed);
+  if (!board.isLegal(move)) throw new TypeError(`Exact legal move is not legal: ${uci}`);
+  return move;
+}
 
 /** Enumerate exact legal moves, including every promotion role. */
 export function legalMoves(board: Chess): readonly Move[] {
-  const moves: Move[] = [];
-  for (const [from, destinations] of board.allDests()) {
-    for (const to of destinations) {
-      const promotes = board.board.getRole(from) === "pawn" && (to < 8 || to >= 56);
-      if (promotes) {
-        for (const promotion of PROMOTIONS) {
-          const move: Move = { from, to, promotion };
-          if (board.isLegal(move)) moves.push(move);
-        }
-      } else {
-        const move: Move = { from, to };
-        if (board.isLegal(move)) moves.push(move);
-      }
-    }
-  }
-  return Object.freeze(moves.sort((left, right) => makeUci(left).localeCompare(makeUci(right))));
+  return Object.freeze(exactLegalMoves(makeFen(board.toSetup())).map((move) => internalMove(board, move.uci)));
 }
 
 export interface LegalSuccessor {
@@ -35,10 +30,11 @@ export interface LegalSuccessor {
 /** Replay every exact legal move and retain the notation and successor identity. */
 export function legalSuccessors(fen: string): readonly LegalSuccessor[] {
   const board = Chess.fromSetup(parseFen(fen).unwrap()).unwrap();
-  return Object.freeze(legalMoves(board).map((move) => {
+  return Object.freeze(exactLegalMoves(fen).map((exact) => {
+    const move = internalMove(board, exact.uci);
     const next = board.clone();
     next.play(move);
-    const successor = { fen: makeFen(next.toSetup()), san: makeSan(board, move), uci: makeUci(move) };
+    const successor = { fen: makeFen(next.toSetup()), san: makeSan(board, move), uci: exact.uci };
     return Object.freeze(successor);
   }));
 }

@@ -1,6 +1,15 @@
 # RFC: Exact legal mobility
 
-- **Status:** accepted — 2026-08-23, by claude as register owner on the buildability test, after an
+- **Status:** **awaiting D1 — implementation complete 2026-08-24.** One runtime authority now
+  drives exact actual-turn move identity, web input, server sourcing, engine candidates, semantic
+  alternatives and simple counts. Runtime events store Chess960-safe king-to-rook identities;
+  board, ARIA, Compare routes and transition operands use the separate king landing square; SAN
+  remains `O-O`. The permanent census is 8 migrated roots / 6 local search enumerators, and the
+  named engine/pack/Explorer dialect boundary records conversion instead of trusting a `uci`
+  field. The exact projection is registered inspector-only. D1 remains intentionally
+  undischarged: `learner-modules` must bind requested square sight under its accepted ceiling, and
+  this implementation does not choose that UX policy.
+  **Accepted 2026-08-23**, by claude as register owner on the buildability test, after an
   independent cross-review that re-derived 22 claims and failed 7, all corrected in place. The
   center catch: **`isLegal` cannot police the castling dialect** — `isLegal(e1g1)` and
   `isLegal(e1h1)` are BOTH true and play to identical successor FENs (`chess.js:333` falls back to

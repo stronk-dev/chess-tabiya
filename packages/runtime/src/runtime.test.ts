@@ -60,6 +60,12 @@ function expectRuntimeError(
 }
 
 describe("path-keyed node model", () => {
+  it("stores standard-UCI castling in the runtime identity convention", () => {
+    const moved = commitMove(newRun("r3k2r/8/8/8/8/8/8/R3K2R w KQkq - 0 1"), "e1g1", { at }).run;
+    expect(moved.nodes.at(-1)).toMatchObject({ moveUci: "e1h1", moveSan: "O-O" });
+    expect(moved.events.at(-1)).toMatchObject({ type: "move.committed", data: { node: { moveUci: "e1h1" } } });
+  });
+
   it("keeps transposed positions as distinct nodes linked by their full path", () => {
     let run = newRun();
     for (const uci of ["g1f3", "g8f6", "f3g1", "f6g8"]) {

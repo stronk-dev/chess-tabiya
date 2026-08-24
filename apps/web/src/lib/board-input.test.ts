@@ -107,12 +107,23 @@ describe("BoardInputController", () => {
     expect(controller(fen).dispatch({ type: "text_move", value: "a7a8r" }).moveUci).toBe("a7a8r");
   });
 
+  it("keeps castling identity separate from its semantic destination", () => {
+    const fen = "4k2r/8/8/8/8/8/8/4K2R w K - 0 1";
+    const castle = controller(fen);
+    castle.dispatch({ type: "pointer_origin", square: "e1" });
+    expect(castle.state.legalDestinations).toContain("g1");
+    expect(castle.state.legalDestinations).not.toContain("h1");
+    const committed = castle.dispatch({ type: "pointer_destination", square: "g1" });
+    expect(committed.moveUci).toBe("e1h1");
+    expect(committed.state.activeSquare).toBe("g1");
+  });
+
   it("normalizes SAN and UCI without sending an ambiguous or illegal text move", () => {
     expect(controller().dispatch({ type: "text_move", value: " E2E4 " }).moveUci).toBe("e2e4");
     expect(controller("4k3/7p/8/8/8/8/8/4K2R w - - 0 1").dispatch({ type: "text_move", value: "Rxh7" }).moveUci).toBe("h1h7");
     expect(controller("4k3/8/8/8/8/8/8/4K2R w - - 0 1").dispatch({ type: "text_move", value: "Rh8+" }).moveUci).toBe("h1h8");
     const castle = controller("4k2r/8/8/8/8/8/8/4K2R w K - 0 1");
-    expect(castle.dispatch({ type: "text_move", value: "0-0" }).moveUci).toBe("e1g1");
+    expect(castle.dispatch({ type: "text_move", value: "0-0" }).moveUci).toBe("e1h1");
     const passant = controller("4k3/8/8/3pP3/8/8/8/4K3 w - d6 0 1");
     expect(passant.dispatch({ type: "text_move", value: "exd6" }).moveUci).toBe("e5d6");
     const ambiguous = controller("4k3/8/8/8/8/2N3N1/8/4K3 w - - 0 1");

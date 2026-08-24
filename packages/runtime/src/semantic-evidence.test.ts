@@ -110,10 +110,12 @@ describe("semantic evidence runtime", () => {
 
   it("canonicalizes both castling encodings to one resulting-king-square event identity", () => {
     const fen = "r3k2r/8/8/8/8/8/8/R3K2R w KQkq - 0 1";
-    expect(canonicalMoveUci(fen, "e1h1")).toBe("e1g1");
+    expect(canonicalMoveUci(fen, "e1g1")).toBe("e1h1");
     const standard = ruleEvent(fen, "e1g1", "castled");
     const imported = ruleEvent(fen, "e1h1", "castled");
     expect(imported.id).toBe(standard.id);
+    const emitted = transitionSemanticEvents(fen, "e1g1", after(fen, "e1g1")).find((event) => event.operands.family === "castled");
+    expect(emitted?.operands).toMatchObject({ move_uci: "e1h1", to: "g1", detail: { resultingKingSquare: "g1" } });
   });
 
   it("emits permanent castling-right loss separately from transient legality", () => {
@@ -128,7 +130,7 @@ describe("semantic evidence runtime", () => {
     const fixtures = [
       { fen: INITIAL_FEN, move: "e2e4", contains: "d2d4" },
       { fen: "4k3/8/8/3pP3/8/8/8/4K3 w - d6 0 1", move: "e5d6", contains: "e5e6" },
-      { fen: "r3k2r/8/8/8/8/8/8/R3K2R w KQkq - 0 1", move: "e1g1", contains: "e1c1" },
+      { fen: "r3k2r/8/8/8/8/8/8/R3K2R w KQkq - 0 1", move: "e1g1", contains: "e1a1" },
       { fen: "4k3/P7/8/8/8/8/8/4K3 w - - 0 1", move: "a7a8q", contains: "a7a8n" },
     ];
     for (const fixture of fixtures) {

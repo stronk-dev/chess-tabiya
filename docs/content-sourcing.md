@@ -118,6 +118,19 @@ Structural content has a separate offline instrument, `make expression-census`. 
 may exhibit satisfiability, but neither high nor zero coverage is chess evidence; the command
 never promotes, rewrites, or grounds authored claims.
 
+Source successor enumeration imports the runtime exact-move authority. Its `uci` uses chessops'
+Chess960-safe king-to-rook identity (`e1h1`/`e1a1`); the evidence projection separately retains the
+king's semantic landing square (`g1`/`c1`) and display uses SAN. Lichess Explorer source records
+also use king-to-rook bytes, but source identity and runtime identity remain separately declared
+boundaries. Claim evaluation joins Explorer moves by SAN today; a future UCI join must name and
+validate its convention rather than trusting an equal field name.
+
+The three inbound move populations are named explicitly by `INBOUND_MOVE_DIALECT`: engine
+`bestmove` and authored pack moves arrive as standard UCI (king destination), while Lichess
+Explorer arrives in king-to-rook form. `normalizeInboundMove` records the source and both
+conventions, converts before runtime comparison, and rejects an Explorer byte that is not already
+in its declared dialect. The event log stores only the normalized runtime identity.
+
 Generated endgame packs are spine-less outcome drills. The opponent is explicitly
 `strong_engine` or `human_common`, the checkpoint is aligned to a learner ply, and roots in
 tablebase range state that `perfect_tablebase` is selectable only where its provider is

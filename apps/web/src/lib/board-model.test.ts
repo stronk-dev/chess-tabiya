@@ -45,4 +45,9 @@ describe("board model", () => {
       ),
     ).toBeUndefined();
   });
+
+  it("highlights a castling identity at the king landing square", () => {
+    expect(boardModel("r3k2r/8/8/8/8/8/8/R4RK1 b kq - 1 1", "white", "e1h1").lastMove).toEqual(["e1", "g1"]);
+    expect(boardModel("2kr3r/8/8/8/8/8/8/R3K2R w KQ - 1 2", "black", "e8a8").lastMove).toEqual(["e8", "c8"]);
+  });
 });

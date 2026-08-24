@@ -14,6 +14,7 @@ import {
   unknownNode,
 } from "./errors.js";
 import { appendEvents } from "./events.js";
+import { exactMoveIdentity } from "./legal-moves.js";
 import { terminalOutcome } from "./outcome.js";
 import type {
   Actor,
@@ -264,18 +265,6 @@ export function commitMove(
   uci: string,
   options: CommitMoveOptions = {},
 ): MutationResult {
-  if (options.actor === "opponent") {
-    if (options.selection === undefined) {
-      throw new TypeError(
-        "Opponent moves require appendOpponentPly with an authoritative selection",
-      );
-    }
-    if (options.selection.moveUci !== uci) {
-      throw new TypeError("Opponent selection and committed move disagree");
-    }
-  } else if (options.selection !== undefined) {
-    throw new TypeError("Only opponent moves may carry an opponent selection");
-  }
   const cursorNode = getNode(original, original.activeCursor.nodeId);
   const position = positionFromFen(cursorNode.fen);
   const cursorHasOutcome = original.events.some(
@@ -285,13 +274,28 @@ export function commitMove(
     throw runTerminated(cursorNode.id);
   }
 
-  const move = parseUci(uci);
-  if (!move || !isNormal(move)) throw illegalMove(uci, "malformed-UCI");
-  const movingColor = position.board.getColor(move.from);
-  if (movingColor !== undefined && movingColor !== position.turn) {
-    throw illegalMove(uci, "wrong-side");
+  const inputMove = parseUci(uci);
+  if (!inputMove || !isNormal(inputMove)) throw illegalMove(uci, "malformed-UCI");
+  const inputMovingColor = position.board.getColor(inputMove.from);
+  if (inputMovingColor !== undefined && inputMovingColor !== position.turn) throw illegalMove(uci, "wrong-side");
+  if (!position.isLegal(inputMove)) throw illegalMove(uci, "not-a-legal-move");
+  const identity = exactMoveIdentity(cursorNode.fen, uci);
+  let selection = options.selection;
+  if (options.actor === "opponent") {
+    if (selection === undefined) {
+      throw new TypeError(
+        "Opponent moves require appendOpponentPly with an authoritative selection",
+      );
+    }
+    const selectedIdentity = exactMoveIdentity(cursorNode.fen, selection.moveUci);
+    if (selectedIdentity !== identity) throw new TypeError("Opponent selection and committed move disagree");
+    if (selection.moveUci !== selectedIdentity) selection = Object.freeze({ ...selection, moveUci: selectedIdentity });
+  } else if (selection !== undefined) {
+    throw new TypeError("Only opponent moves may carry an opponent selection");
   }
-  if (!position.isLegal(move)) throw illegalMove(uci, "not-a-legal-move");
+
+  const move = parseUci(identity);
+  if (!move || !isNormal(move)) throw illegalMove(uci, "malformed-UCI");
 
   const at = timestamp(options.at);
   let run = original;
@@ -313,8 +317,8 @@ export function commitMove(
         data: {
           nodeId: run.activeCursor.nodeId,
           branchId: run.activeCursor.branchId,
-          moveUci: uci,
-          selection: options.selection!,
+          moveUci: identity,
+          selection: selection!,
         },
       },
     ]);
@@ -330,7 +334,7 @@ export function commitMove(
     parentId: run.activeCursor.nodeId,
     fen,
     transposeKey: transposeKey(fen),
-    moveUci: uci,
+    moveUci: identity,
     moveSan: san,
     ply: cursorNode.ply + 1,
     actor: options.actor ?? "user",

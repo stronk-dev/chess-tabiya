@@ -4,6 +4,7 @@ import { makeSquare, makeUci, parseUci } from "chessops/util";
 
 import { canonicalFen, positionFromFen } from "./chess.js";
 import { legalCaptureMovesTo, legalExchangeForMove } from "./exchange.js";
+import { exactLegalMoveMap, exactLegalMoves, type ExactLegalMoveMap } from "./legal-moves.js";
 
 export const LOCAL_NON_LOSING_CONVENTION = "local-non-losing@1" as const;
 const COLORS = Object.freeze(["white", "black"] as const);
@@ -56,6 +57,12 @@ export interface PieceDestinationsEventResult {
   }[];
 }
 
+export type LegalMovesReading = ExactLegalMoveMap;
+
+export function legalMovesReading(fen: string): LegalMovesReading {
+  return exactLegalMoveMap(fen);
+}
+
 function turnClone(fen: string, color: Color): Chess | undefined {
   const position = positionFromFen(fen);
   const clone = Chess.fromSetup({ ...position.toSetup(), turn: color, epSquare: undefined });
@@ -75,16 +82,16 @@ function colorReading(fen: string, color: Color): ColorPieceDestinations {
   const position = turnClone(fen, color);
   if (position === undefined) return Object.freeze({ kind: "unavailable", color, reason: "invalid_turn_clone", pieces: Object.freeze([] as const) });
   const pieces: PieceDestinations[] = [];
+  const exact = exactLegalMoves(canonicalFen(position));
   for (const square of position.board[color]) {
     const occupant = position.board.get(square)!;
     if (!ROLES.has(occupant.role)) continue;
-    const legalMoves: Move[] = [];
-    const destinations = position.allDests().get(square);
-    if (destinations !== undefined) for (const to of destinations) {
-      const move: Move = { from: square, to };
-      if (position.isLegal(move)) legalMoves.push(move);
-    }
-    const legal = legalMoves.map((move) => makeSquare((move as { readonly to: Square }).to)).sort();
+    const legalMoves = exact.filter((move) => move.from === makeSquare(square)).map((move) => {
+      const parsed = parseUci(move.uci);
+      if (parsed === undefined || !("from" in parsed)) throw new TypeError(`Invalid exact legal move ${move.uci}`);
+      return normalizeMove(position, parsed);
+    });
+    const legal = exact.filter((move) => move.from === makeSquare(square)).map((move) => move.to).sort();
     const localNonLosing = legalMoves.filter((move) => locallyNonLosing(position, move)).map((move) => makeSquare((move as { readonly to: Square }).to)).sort();
     pieces.push(Object.freeze({ piece: Object.freeze({ square: makeSquare(square), occupant }), legal: Object.freeze(legal), localNonLosing: Object.freeze(localNonLosing) }));
   }

@@ -18,12 +18,14 @@ import {
   canonicalRunStart,
   digestSessionSource,
   deriveWorkflowContext,
+  exactMoveIdentity,
   isPackSession,
   lineMembership,
   MARK_BRUSHES,
   branchDecidedness,
   MAX_COMPARISON_BRANCHES,
   matchKeyPoints,
+  normalizeInboundMove,
   opponentMovesFromEvents,
   permittedAssistance,
   reviewingGrant,
@@ -1183,7 +1185,9 @@ export class RunService {
       const choices = (spineId === undefined
         ? pack.document.spine
         : findSpineNode(pack.document.spine ?? [], spineId)?.children) ?? [];
-      candidates = Object.freeze(choices.slice(0, requestedSize).map((choice) => choice.moveUci));
+      candidates = Object.freeze(choices.slice(0, requestedSize).map((choice) =>
+        normalizeInboundMove(sourceNode.fen, choice.moveUci, "pack_move_uci").moveUci,
+      ));
     } else {
       const permission = permittedAssistance({
         sessionKind: stored.run.sessionKind,
@@ -1208,6 +1212,7 @@ export class RunService {
     if (candidates.length < 2) {
       throw new ServerError("GROUP_SEEDS_UNAVAILABLE", "At least two group seeds are required");
     }
+    candidates = Object.freeze(candidates.map((moveUci) => exactMoveIdentity(sourceNode.fen, moveUci)));
     if (candidates.length > 8) {
       throw new ServerError("TOO_MANY_BRANCHES", "At most eight branches may be grouped", { details: { count: candidates.length, limit: 8 } });
     }

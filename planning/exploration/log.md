@@ -7141,3 +7141,28 @@ seconds; unrelated process and workspace jobs were visibly skipped.
 
 **Next:** run the explicit Node-24/Stockfish/Compose/browser parity command end to end. D1448
 remains implementing until it passes; push behavior is restored independently of that receipt.
+
+## 2026-08-24 — exact legal mobility implemented; requested-sight binding remains
+
+**What landed:** one exact actual-turn move authority now serves runtime commits, web input,
+server sourcing, engine candidates, semantic alternatives and simple move counts. The exact
+`rules.mobility.reading.legal_moves@1` projection is registered inspector-only with a strict
+adapter. The permanent census classifies all fourteen original enumerators as eight migrated roots
+and six named local searches.
+
+**What changed:** castling no longer overloads one `to` field with three meanings. Runtime events
+store Chess960-safe king-to-rook identity, board/ARIA/Compare/transition consumers use the king's
+semantic landing square, and display remains SAN `O-O`/`O-O-O`. Standard-UCI engine and authored
+pack bytes and Lichess Explorer bytes have named source dialects and an explicit recorded
+conversion boundary. Promotion q/r/b/n now comes from the same explicit authority in every input
+mode.
+
+**What the implementation pass caught:** the checkpoint's green census asserted 7/7 against the
+accepted RFC's 8/6 contract and had never edited two required destination consumers. The repaired
+fixtures pin the 8/6 split, standard and Chess960 castling (including a king destination equal to
+its origin), en-passant, four promotions, stored runtime identity, board highlight, Compare route,
+transition operands and SAN.
+
+**Still open:** RFC Discharge D1. `learner-modules` owns the requested-square-sight binding and its
+assistance ceiling. This implementation registers the exact operand but deliberately reveals no
+new learner-facing hint or proactive move list.

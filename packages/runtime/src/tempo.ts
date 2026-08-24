@@ -5,9 +5,10 @@ import type {
 } from "@chess-tabiya/schema/drill-pack";
 import type { Color, Role, SquareName } from "chessops/types";
 import { isNormal } from "chessops/types";
-import { makeSquare, parseUci } from "chessops/util";
+import { parseUci } from "chessops/util";
 
 import { positionFromFen } from "./chess.js";
+import { exactLegalMoves, exactMoveDestination, exactMoveIdentity } from "./legal-moves.js";
 import { matchesStructuralExpression } from "./structure.js";
 import type { DrillRun, Node } from "./types.js";
 
@@ -112,19 +113,23 @@ export function tempoMovesFromRun(
       moveUci: node.moveUci!,
       mover: piece.color,
       role: piece.role,
-      toSquare: makeSquare(move.to),
+      toSquare: exactMoveDestination(parent.fen, node.moveUci!),
       beforeFen: parent.fen,
       fen: node.fen,
-      legalMoveCountBefore: [...position.allDests().values()].reduce(
-        (total, destinations) => total + destinations.size(),
-        0,
-      ),
+      legalMoveCountBefore: exactLegalMoves(parent.fen).length,
     });
   }));
 }
 
 function moveMatches(move: TempoMove, condition: MoveCondition): boolean {
-  if ("moveUci" in condition) return move.moveUci === condition.moveUci;
+  if ("moveUci" in condition) {
+    if (move.moveUci === condition.moveUci) return true;
+    try {
+      return move.moveUci === exactMoveIdentity(move.beforeFen, condition.moveUci);
+    } catch {
+      return false;
+    }
+  }
   return (
     move.mover === condition.piece.color &&
     move.role === condition.piece.role &&

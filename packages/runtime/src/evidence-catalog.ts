@@ -596,6 +596,15 @@ const squareOutputs = [
 ];
 
 const mobilityOutputs = [
+  projection("rules.mobility", "rules.mobility.reading.legal_moves", "rules", {
+    payloadType: "ExactLegalMoveMap",
+    semantics: "Complete exact legal moves for the supplied FEN's actual side to move, retaining Chess960-safe king-to-rook move identity separately from semantic destination, plus origin, role and promotion identity.",
+    operands: ["fen", "turn", "pieces"],
+    answerContent: ["fact", "candidate_moves"],
+    forms: ["list", "lit_squares", "piece_halo", "panel", "machine_condition"],
+    limitations: ["Legality is not safety, quality, likelihood, theory, recommendation, or a move grade. The projection always contains the complete legal set."],
+    disposition: inspectorOnly("Exact legal sight lands before the learner-module requested-sight binding."),
+  }),
   projection("rules.mobility", "rules.mobility.reading.piece_destinations", "rules", {
     payloadType: "PieceDestinationsReading", semantics: BREADTH_CONVENTION_TEXT.localNonLosing,
     operands: ["fen", "conventionId", "colors"], grounding: "declared_convention", exactness: "convention", forms: breadthForms,

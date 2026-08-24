@@ -2,6 +2,7 @@ import { readFileSync } from "node:fs";
 
 import { INITIAL_FEN } from "chessops/fen";
 import {
+  exactLegalMoves,
   readBackReplay,
   type CreateRunInput,
   type OpponentSelection,
@@ -348,7 +349,17 @@ describe("pure opponent selector", () => {
   it("drives a captured float32 policy vector through practical selection", async () => {
     const lines = maiaPolicyFixture.candidates.map(({ moveUci: move, mass }) => ({ move, mass }));
     const selector = new OpponentSelector(
-      new FakeEngineClient(() => maiaLines(lines[0]!.move, lines)),
+      new FakeEngineClient((_engineId, engineRequest) => {
+        const command = engineRequest.commands.find((candidate) => candidate.startsWith("position fen ")) ?? "";
+        const b3 = command.endsWith("moves c3b3");
+        const fen = b3 ? practicalB3 : practicalC2;
+        const refused = b3 ? "h1h3" : "e2f2";
+        const legal = exactLegalMoves(fen).map((move) => move.uci).filter((move) => move !== refused);
+        const raw = legal.map((move, index) => ({ move, mass: lines[index % lines.length]!.mass }));
+        const total = raw.reduce((sum, candidate) => sum + candidate.mass, 0);
+        const candidates = raw.map((candidate) => ({ ...candidate, mass: candidate.mass / total }));
+        return maiaLines(candidates[0]!.move, candidates);
+      }),
       { tablebaseSource: practicalTablebase() },
     );
     await expect(selector.select({

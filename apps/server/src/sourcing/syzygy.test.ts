@@ -173,7 +173,7 @@ describe("Syzygy sourcing", () => {
     const executor = new StockfishEvidenceExecutor({
       async execute(_engineId, request) {
         requests.push(request);
-        return ["info depth 22 multipv 1 score cp 12 pv e2e4", "bestmove e2e4"];
+        return ["info depth 22 multipv 1 score cp 12 pv e4e5", "bestmove e4e5"];
       },
     }, "stockfish-authoring", 1);
     await executor.execute({ id: "job", runId: "run", nodeId: "node", fen: ROOK_4V3, kind: "eval", depth: 22, timeoutMs: 120_000 }, new AbortController().signal);

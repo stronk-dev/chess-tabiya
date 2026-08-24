@@ -267,6 +267,9 @@ describe("branch comparison", () => {
 
     const comparison = compareBranches(run, run.branches.map((branch) => branch.id));
     const strips = comparisonStrips(run, comparison);
+    const castlingRoute = Object.values(strips).flatMap((strip) => strip.routes).find((route) => route.squares.includes("e1"));
+    expect(castlingRoute?.squares).toContain("g1");
+    expect(castlingRoute?.squares).not.toContain("h1");
     const forkNode = run.nodes.find((node) => node.id === comparison.forkNodeId)!;
     for (const column of comparison.columns) {
       const pathIds = new Set(branchPath(run, column.branchId).filter((node) => node.ply >= forkNode.ply).map((node) => node.id));

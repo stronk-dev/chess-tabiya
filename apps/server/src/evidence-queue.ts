@@ -1,5 +1,6 @@
 import {
   engineEvidenceRef,
+  normalizeInboundMove,
   tablebaseEvidenceRef,
   type EvidenceKind,
   type EvidencePayload,
@@ -408,7 +409,7 @@ export class StockfishEvidenceExecutor implements EvidenceExecutor {
           ...(score[1] === "cp"
             ? { centipawns: whitePerspectiveScore(Number(score[2]), job.fen) }
             : { mateIn: whitePerspectiveScore(Number(score[2]), job.fen) }),
-          ...(bestMove === undefined || bestMove === "(none)" ? {} : { bestMoveUci: bestMove }),
+          ...(bestMove === undefined || bestMove === "(none)" ? {} : { bestMoveUci: normalizeInboundMove(job.fen, bestMove, "engine_bestmove").moveUci }),
           ...(depthValue(line) === undefined ? {} : { depth: depthValue(line) }),
         }),
       });
