@@ -13,6 +13,7 @@ const ROUTE_EXACT = new Set([
   "planning/app-reality-check.md",
   "planning/content-wave-work-order.md",
   "planning/open-work-inventory.md",
+  "planning/roadmap-to-done.md",
 ]);
 const EXCLUDED = new Set([
   "planning/WORK.md",

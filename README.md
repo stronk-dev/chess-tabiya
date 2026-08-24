@@ -90,7 +90,7 @@ Install dependencies and run the standard checks:
 make setup
 make verify
 make build
-make test-browser
+make test-browser-ci
 ```
 
 Useful content-authoring commands:
@@ -103,8 +103,9 @@ make graduation-report
 make graduation-plan
 ```
 
-See [docs/development.md](docs/development.md) for the complete toolchain,
-verification contract, engine setup, release images, and authoring instruments.
+See [docs/development.md](docs/development.md) for the complete toolchain, engine setup, release
+images, and authoring instruments, and [docs/testing.md](docs/testing.md) for the test-tier and CI
+contract.
 
 ## Architecture
 

@@ -1,138 +1,56 @@
-# WORK — the single entry point
+# WORK — start here
 
-**Read this first. Everything else in `planning/` is a lane this file points at.**
+This file is navigation. The authoritative strategic rollup is
+[`planning/roadmap-to-done.md`](roadmap-to-done.md); its checked ownership map is
+[`planning/roadmap-1.0.json`](roadmap-1.0.json).
 
-Created 2026-08-16 after the owner asked *"why is none of that indexed?"* and the answer was
-that it was: `planning/work-register.md` states the right invariant — *"every open defect
-appears exactly once, with a destination"* — and was **121 rows stale**, missing every row
-created on the project's two highest-output days ([[D487]]).
+## Four different questions, four authorities
 
-> **Executable index:** `make work-index` now derives open rows from the ledger, discovers living
-> queue documents and active RFCs, and fails on duplicate ids or any open row with no destination.
-> `node tools/work-index.mjs --json` exposes the complete join for review. Counts below are retained
-> as dated history, not current inventory.
-
-**Snapshot date: 2026-08-16.** Ledger at **D487**, 289 open rows at the time of the routing pass.
-
-**Post-snapshot audit 2026-08-20:** D641 measured 589 pre-intervention ids / 355 open and found 75
-open ids absent from every living non-log planning document and active RFC. D99 was stale-closed;
-the remaining 74 are routed in `planning/platform-alignment/unrouted-defect-refresh.md`. The ledger
-now has 590 ids / 354 open. This removes known zero-mention omissions; it does **not** make this
-hand-written file current or prove unique ownership. D487 and `make work-register` remain open.
-
----
-
-## The six lanes
-
-| Lane | Document | What it holds |
+| Question | Authority | Check |
 |---|---|---|
-| **Implementation** | `planning/codex-queue.md` | What the implementer takes next, in order |
-| **Defects** | `planning/defect-triage.md` | All 289 open rows routed into 9 batches + 7 buckets |
-| **RFCs to draft** | `planning/rfc-drafting-queue.md` | **40 unowned rows → 7 documents (4:1).** Write `shared-resource-registers` first — not the most valuable, but the only one currently *producing wrong work*: three of four registers are wrong at HEAD and five of the seven documents must claim a lane |
-| **Research** | `planning/research-queue.md` | Hypotheses, kill criteria and measurement questions, ranked |
-| **UX** | `planning/ux-work-lane.md` | What to fix so a person can use the thing |
-| **Integrated 1.0 alignment** | `planning/platform-alignment/plan.md` | D555/D563's bottom-up capability program: research queue → owner/design decisions → RFC graph → implementation/content/release proof. Its `execution-queue.md` is authoritative for that program |
-| **Cross-lane ownership** | `planning/routing-queue.md` | Explicit next lawful lanes for open rows that otherwise exist only in audits or historical prose; checked by `make work-index` |
+| What does full 1.0 require, and in what dependency order? | `planning/roadmap-to-done.md` | `make roadmap-check` |
+| What ideas, defects and rulings exist? | `design/BACKLOG.md` | `make work-index` |
+| Which RFC owns a contract/resource and what state is it in? | `rfc/README.md` | `make status-parity register-check` |
+| What does the learner-facing audit require item by item? | `planning/ux-implementation-index.md` | covered by `make roadmap-check` |
 
-Reality check on what a user actually sees: `planning/app-reality-check.md`.
+Do not copy counts from these registers into a new queue. Run the checks. A row being cited is not
+the same as being assigned, and an RFC being implemented is not the same as its capability being
+complete.
 
----
+## Taking work
 
-## 0. The two instruments that stop this rotting
+1. Pick the next lawful item from the capability wave in `roadmap-to-done.md`.
+2. Follow its source row/RFC/research link. `make work-index` prints the complete current join.
+3. Respect the exploration/RFC gate and all resource claims in `rfc/README.md`.
+4. Deliver a vertical slice through evidence, state, production API, UX/defaults, content fixture,
+   verification and release impact. If a dimension is intentionally absent, record why.
+5. Close out the ledger and required log in the same commit. Update docs and propose protected
+   intent flow-back where shipped reality changed. Update the roadmap if capability state changed.
 
-Both are `make verify` targets, both are small, and both exist because a **normative rule
-written in prose has no reader**. That is now the dominant defect class in this repo.
+## Source lanes
 
-- **`make work-index`** ([[D487]]/[[D952]]) — implemented: derive routing from column 1 of
-  `design/BACKLOG.md`, join active RFCs and living queues, and fail on duplicate ids or zero-route
-  open rows. The JSON report exposes every reference. Semantic conflict detection remains the
-  narrowed residual of D487; repeated references are often dependency citations, so treating every
-  multi-reference row as a conflict would be a false guard.
-- **`make status-parity`** ([[D477]]) — implemented: compare every Active row in
-  `rfc/README.md` to the RFC body's `**Status:**` line. The executable result is authoritative;
-  this file no longer hand-copies an incident count.
+These documents retain detail and evidence. They do not compete with the roadmap:
 
-Same family: [[D450]] (a permission rule in a doc that no test reads), [[D459]] (the defect
-table's own header mislabels column 3 and produced four misreads).
+- Implementation history/tactical orders: `planning/codex-queue.md`, `codex-wave-2.md`,
+  `codex-wave-3.md`, `review-return-plan.md`.
+- Defects and routing: `planning/defect-triage.md`, `routing-queue.md`,
+  `rfc-drafting-queue.md`.
+- Research: `planning/exploration/plan.md`, `research-queue.md`,
+  `platform-alignment/research-queue.md`, and the program directories beneath `planning/`.
+- Integrated evidence and dependency synthesis: `planning/platform-alignment/plan.md`,
+  `1.0-capability-map.md`, `execution-queue.md`, `rfc-graph.md`.
+- UX evidence: the twelve `design/research/ux-*.md` dossiers and
+  `planning/ux-implementation-index.md`.
+- Content: `planning/content-era/plan.md`, `content-wave-work-order.md`, graduation/provenance RFCs.
+- Release/platform: `planning/platform-alignment/release-platform/` and the Operations capability.
 
-## 0b. Owner rulings of 2026-08-16 — act on these
+Historical snapshot claims inside those files remain useful as receipts. They cannot override a
+live register or declare a 1.0 capability complete.
 
-- **[[D502]] — the corpus reaches learners through BOTH channels.** A **disclosed draft channel
-  now** (all 56 behind an *unreviewed draft* badge; the registry already carries
-  `channel: "official" | "community"` and the UI renders it), and a **graduated shelf** as packs
-  earn it. **Not by flipping `NODE_ENV`.** Unblocks K1–K4, K8, R6–R8 and a real play session, and
-  gives the graduation machinery a consumer.
-- **[[D502]] — the schema example fixture is removed from the served library.** It is a format
-  fixture, not content; it validates the schema in tests and never reaches a user.
-- **[[D493]] is a defect fix, not a ruling** — `SILENT_ASSISTANCE.boardLighting` was flipped
-  `"legal"` → `"off"` at `f304384` **the same day**, on a constant-tidiness rationale, while the
-  docs and all three migration branches still say `"legal"`. **One token.** Silence over
-  *evidence* stays; the rules floor was never on the ladder.
+## Non-negotiable completion rule
 
-## 1. Live and user-affecting — outranks everything below
-
-- **[[D468]]** the server fails to boot on the first graduated pack carrying an acceptance —
-  40 of 56 drafts carry one; **[[D469]]** `release.yml` pushes the image with no content gate.
-- **[[D481]]** `make up` serves **one** pack, the schema fixture, because `compose.yaml` never
-  sets `NODE_ENV=development` and `content/packs/` holds only `.gitkeep`.
-- **[[D482]]** every browser test backing a breadth gate runs under a configuration `make up`
-  cannot produce — **the mechanical reason 736 green tests and an empty app are both true.**
-
-## 2. What is scheduled vs what is not
-
-Of 289 open rows at the routing pass:
-
-| | Rows | State |
-|---|---:|---|
-| Batch-ready, queued | 72 | in `defect-triage.md`, 9 batches |
-| Content — mechanical | 27 | five jobs, three of them a shipped `make` target at the corpus |
-| Already done or half-done | 59 | flipping them is one commit and no code |
-| Duplicate / record-only | 20 | |
-| **Needs an RFC nobody has drafted** | **~29** | 47 rows less ~18 already owned |
-| **Needs an owner decision** | **22** | yours |
-| **Needs research** | **19** | |
-| **Needs authored chess judgement** | **23** | law 8 forbids generating it |
-
-**≈93 rows have no path to being done today.** The row count understates it: the largest
-unscheduled things are not rows.
-
-## 3. Unscheduled and bigger than any row
-
-- **Campaign mode** — zero implementation, no RFC in any state, a 245-line design doc that
-  calls itself intent ([[D486]]). Every document is honest about its own tier; **nothing
-  aggregates**, which is why this file exists.
-- **Stage 2 of the binding wave** — 98 claims a landed ruling requires *before anyone plays*,
-  and its named owner was archived ([[D476]]). **Nobody owns it.**
-- **Six changes owed to `design/06-campaign.md`** from the boss ruling ([[D439]]). Law 5 —
-  owner or claude-on-a-ruling only.
-- **The breadth-gate criteria themselves.** B2's is *"each completes one fixture run"*. **Not
-  one of the eleven was written in a form a person could fail** ([[D482]]). Rewriting them is
-  design-tier and on nobody's list.
-
-## 4. Gated on the owner playing a run — **on real content, which is the correction**
-
-**"Nobody has played since 2026-08-12" is FALSE and was repeated all session, including into a
-published report** ([[D489]]). A run was played to termination, forked and compared on
-**2026-08-16**. *(This section carried the error for one commit after the row was written, which
-is the point of the row.)*
-
-**The true statement is narrower and still damning: the OWNER has not played, and nobody has
-played REAL CONTENT** — production served one schema fixture, so the run that happened exercised
-four plies of a format example. **This changes the action**: the deferred questions are not
-waiting on a calendar slot, they are waiting on [[D502]] shipping the draft channel.
-
-- **H1–H4** untested; **K1–K5, K8, K9** have no evidence either way — and **K1–K4/K8 are
-  unmeasurable while the product serves one fixture**, so [[D481]] is their blocker too.
-- **R6, R7, R8** deferred until the loop has been felt. **R6 is two-thirds already resolved** by
-  `design/06` §2c; only the retry budget is genuinely experiential.
-- Runtime playtest cost — the open half of **K10**.
-- **[[D488]] — K9 has never had OUR side measured.** The competitor's latency is on file from
-  2026-08-11; ours is absent. **An afternoon with a shipped browser suite, and the only kill
-  criterion testable today** without a content wave, an owner ruling or a human subject.
-
-## Maintenance rule
-
-**Every lane document above states its own snapshot date and the commit it was measured at.**
-A lane with no date is not current. Current coverage comes only from `make work-index`; do not
-copy its totals into this file. Human ownership decisions that cannot be derived live in
-`planning/routing-queue.md`, and the checker makes omissions and duplicate identities fail CI.
+“Backend exists”, “endpoint exists”, “component exists”, and “tests pass” are checkpoints, not
+product completion. A 1.0 capability closes only when its complete learner/operator journey passes
+all eight roadmap dimensions and the release artifact proves it. Bare schemas, orphan reducers,
+unreachable endpoints, raw evidence dumps, hidden campaign modes, primitive-first settings, empty
+content shelves, and test-only configurations therefore remain open work.

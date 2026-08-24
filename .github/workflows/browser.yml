@@ -21,7 +21,12 @@ jobs:
           cache: pnpm
       - run: pnpm install --frozen-lockfile
       - run: pnpm exec playwright install --with-deps chromium
-      - run: make test-browser
+      - name: Product browser journeys
+        run: make test-browser-smoke
+      - name: Real-content browser integration
+        run: make test-browser-content
+      - name: Responsive and accessible interaction matrices
+        run: make test-browser-matrix
       - if: failure()
         uses: actions/upload-artifact@v6
         with:

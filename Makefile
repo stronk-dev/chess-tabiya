@@ -1,4 +1,4 @@
-.PHONY: setup check typecheck test test-browser ci-local schema-check register-check status-parity work-index intent-parity evidence-manifest-check semantic-evidence-check account-data-lifecycle-check learner-rating-bracket learner-rating-bracket-check learner-rating-isolation-check graduation-plan graduation-plan-check tactical-collector-measurement breadth-collector-measurement build verify pack-check shape-check expression-census graduation-report graduation-report-update graduation-clear pack-preview source-fetch candidate-emit candidate-attach sourcing-check verify-draft tablebase-walk engine-walk up up-engines down
+.PHONY: setup check typecheck test test-browser test-browser-smoke test-browser-content test-browser-matrix test-browser-ci ci-local schema-check register-check status-parity work-index roadmap-check intent-parity evidence-manifest-check semantic-evidence-check account-data-lifecycle-check learner-rating-bracket learner-rating-bracket-check learner-rating-isolation-check graduation-plan graduation-plan-check tactical-collector-measurement breadth-collector-measurement build verify pack-check shape-check expression-census graduation-report graduation-report-update graduation-clear pack-preview source-fetch candidate-emit candidate-attach sourcing-check verify-draft tablebase-walk engine-walk up up-engines down
 
 setup:
 	pnpm install --frozen-lockfile
@@ -13,6 +13,17 @@ test:
 
 test-browser:
 	pnpm test:browser
+
+test-browser-smoke:
+	./node_modules/.bin/playwright test --grep-invert "@content|@matrix"
+
+test-browser-content:
+	./node_modules/.bin/playwright test --grep "@content"
+
+test-browser-matrix:
+	./node_modules/.bin/playwright test --grep "@matrix"
+
+test-browser-ci: test-browser-smoke test-browser-content test-browser-matrix
 
 ci-local:
 	node tools/ci-local.mjs
@@ -31,6 +42,10 @@ status-parity:
 work-index:
 	node --test tools/work-index.test.mjs
 	node tools/work-index.mjs
+
+roadmap-check:
+	node --test tools/roadmap-check.test.mjs
+	node tools/roadmap-check.mjs
 
 intent-parity:
 	node --test tools/intent-parity-harness/audit.test.mjs
@@ -73,7 +88,7 @@ breadth-collector-measurement:
 build:
 	pnpm build
 
-verify: typecheck test schema-check register-check status-parity work-index intent-parity evidence-manifest-check semantic-evidence-check account-data-lifecycle-check learner-rating-bracket-check learner-rating-isolation-check graduation-plan-check
+verify: typecheck test schema-check register-check status-parity work-index roadmap-check intent-parity evidence-manifest-check semantic-evidence-check account-data-lifecycle-check learner-rating-bracket-check learner-rating-isolation-check graduation-plan-check
 
 pack-check:
 	@test -n "$(FILE)" || (echo "Usage: make pack-check FILE=<path-to-pack.json>" >&2; exit 2)

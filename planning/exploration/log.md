@@ -7269,3 +7269,51 @@ property generates 250 sequences of up to 30 win/loss/draw seals and fork/rewind
 one run, then asserts one record, at most one sealed result and exact agreement with the learner's
 `ratedGames` counter. This discharges AC-10's generated arm instead of relying on the primary-key
 argument alone.
+
+## 2026-08-24 — full-1.0 roadmap rebuilt from vertical capability chains
+
+**What landed:** [[D1504]] closes with a replacement rather than a row-by-row refresh. The roadmap
+now has fourteen owned capabilities, each held to evidence, state, production API, experience,
+defaults, content, verification and release. Its machine registry assigns all 46 active product
+RFCs exactly once, all twelve UX dossiers, all 569 stable UX item ids, every current client route,
+and twenty API-family obligations. `make roadmap-check` enforces the joins and is part of
+`make verify`; `planning/WORK.md` is reduced to navigation and completion protocol.
+
+**What changed:** “implemented” can no longer mean one layer exists. The unit of completion is the
+whole collector→fact→selection→state→application API→opinionated UX→content→release chain. The
+execution program freezes evidence/content contracts before broad authoring, then lands durable
+state and production APIs, rebuilds the client around journeys/presets, graduates content, and
+finishes with release-artifact journeys plus owner use.
+
+**New finding:** [[D1532]]. `/rated-games`, `/rating`, `/rating/history`, `/marks`, and cohort
+standing are implemented in `rest.ts`, but absent from `application.ts:isApiPath`; the deployed
+application routes them to static handling. Direct REST tests and client callers therefore
+overstated production reach. The roadmap now distinguishes implemented from application-routed and
+requires production-boundary/container tests for advertised families.
+
+**Still open:** the map makes the work visible; it does not make the product complete. Current
+release blockers include unfinished evidence/claim/module contracts, zero graduated packs,
+campaign with no API/route/content, an empty bot roster, incomplete longitudinal storage and
+Review, 569 UX items at mixed states, and deployment/backup/upgrade/licensing proof.
+
+## 2026-08-24 — browser CI split by contract and castling-note join repaired
+
+**What failed:** GitHub browser run `32730112523` reached Pack A's classified castling deviation,
+rendered the theory verdict, and omitted its authored alternative note. The retained Playwright
+trace showed the server response contained the note. The client compared the pack's standard-UCI
+`e1g1` with the runtime's Chess960-safe `e1h1` as raw strings, so the supporting-note join failed.
+
+**What landed:** checkpoint authored-item selection is now a framework-free function that
+normalizes both spellings with `exactMoveIdentity` at the parent position. Its synthetic contract
+covers the two castling encodings and a same-move/wrong-class negative. The Svelte screen consumes
+that function. The real-pack browser scenario now asserts the semantic `Alternative move` item and
+non-empty note rather than pinning the mutable sentence *"Castling into the break"*.
+
+**CI/test contract:** [[D1533]] records the wider debt. Required browser checks are split into
+named product-journey, real-content-integration and responsive/accessibility matrix commands;
+GitHub runs them as separate steps, `make test-browser-ci` composes them locally, and scaffold
+verification refuses workflow/local-parity drift. `docs/testing.md` names what each tier proves and
+what it may not substitute for. Results: 23 smoke journeys passed with one optional Maia check
+skipped, 4 content integrations passed, 7 interaction matrices passed, and `make verify` passed
+1,129 tests across 171 files plus every process/schema/manifest gate. [[D1507]] closes; production
+boundary, container, migration and release proof remain open under [[D1533]] and capability 14.

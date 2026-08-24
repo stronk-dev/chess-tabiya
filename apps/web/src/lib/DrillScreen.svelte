@@ -33,7 +33,7 @@
     whyBanner,
   } from "./screen-model.js";
   import type { RunStateSnapshot } from "./run-state.js";
-  import type { AuthoredFeedbackItem, AuthoredFeedbackPage, CreateGroupRequest } from "./api.js";
+  import type { AuthoredFeedbackPage, CreateGroupRequest } from "./api.js";
   import type { RegisterKeyboardRegion } from "./keyboard.js";
   import {
     assessmentSentence,
@@ -47,6 +47,7 @@
   import { runViewportSupport, type RunViewportSupport } from "./viewport-support.js";
   import { playBoardEdge } from "./play-composition.js";
   import { moveSanFromUci } from "./board-input.js";
+  import { checkpointAuthoredItems as selectCheckpointAuthoredItems } from "./checkpoint-authored-items.js";
 
   type RewindTarget =
     | { readonly nodeId: string; readonly branchId?: string }
@@ -295,27 +296,7 @@
   let checkpointAuthoredItems = $derived(
     checkpoint === undefined
       ? []
-      : (() => {
-          const all = authoredFeedback?.items ?? [];
-          const current = all.filter(
-            (item) => item.revealedBy.eventSeq === checkpoint.eventSeq,
-          );
-          const verdicts = current.filter(
-            (item): item is Extract<AuthoredFeedbackItem, { kind: "theory_verdict" }> =>
-              item.kind === "theory_verdict" && item.verdict === "classified_deviation",
-          );
-          const supportingNotes = all.filter(
-            (item) =>
-              item.kind === "deviation" &&
-              verdicts.some(
-                (verdict) =>
-                  verdict.anchor.moveUci === item.anchor.moveUci &&
-                  verdict.deviationClass === item.deviationClass,
-              ) &&
-              !current.some((candidate) => candidate.id === item.id),
-          );
-          return [...current, ...supportingNotes];
-        })(),
+      : selectCheckpointAuthoredItems(checkpoint.eventSeq, authoredFeedback, run),
   );
   let terminalAuthoredItems = $derived(
     terminalEvent?.type !== "outcome.reached"

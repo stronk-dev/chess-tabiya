@@ -33,6 +33,10 @@ export function missingMakeDependencies(makefile, target, requiredDependencies) 
   };
 }
 
+export function missingRequiredText(text, required) {
+  return required.filter((value) => !text.includes(value));
+}
+
 async function requirePath(path) {
   try {
     await access(resolve(root, path));
@@ -136,6 +140,21 @@ if (!verifyDependencies.ruleFound || verifyDependencies.missing.length > 0) {
 const workflow = await readText(".github/workflows/verify.yml");
 if (!workflow.includes("pnpm install --frozen-lockfile") || !workflow.includes("make verify")) {
   failures.push("CI workflow: expected frozen install followed by make verify");
+}
+
+const browserWorkflow = await readText(".github/workflows/browser.yml");
+const missingBrowserTiers = missingRequiredText(browserWorkflow, [
+  "make test-browser-smoke",
+  "make test-browser-content",
+  "make test-browser-matrix",
+]);
+if (missingBrowserTiers.length > 0) {
+  failures.push(`browser CI workflow: missing named tiers: ${missingBrowserTiers.join(", ")}`);
+}
+
+const ciLocal = await readText("tools/ci-local.mjs");
+if (!ciLocal.includes('run("make", ["verify"]') || !ciLocal.includes('run("make", ["test-browser-ci"]')) {
+  failures.push("local CI parity: expected make verify followed by make test-browser-ci");
 }
 
 const workspace = await readText("pnpm-workspace.yaml");

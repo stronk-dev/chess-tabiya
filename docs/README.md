@@ -6,6 +6,8 @@ accepted implementation contracts remain in `rfc/`; work history remains in `pla
 Implemented foundation:
 
 - `development.md` — workspace layout, toolchain, and verification commands.
+- `testing.md` — named unit/contract, content-integration, browser-journey,
+  responsive/accessibility, local-parity, and release-proof tiers.
 - `branch-runtime.md` — immutable run tree, rewind/fork/objective/replay semantics,
   comparison and PGN export, REST/lease/storage behavior, measured envelope, and
   current limitations.

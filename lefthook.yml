@@ -27,8 +27,10 @@ pre-commit:
         - "design/**/*.md"
         - "rfc/**/*.md"
         - "planning/**/*.md"
-        - "tools/{register-check,status-parity,work-index,intent-parity-harness}/**/*"
-      run: make register-check status-parity work-index intent-parity
+        - "planning/roadmap-1.0.json"
+        - "tools/{register-check,status-parity,work-index,roadmap-check,intent-parity-harness}/**/*"
+        - "tools/roadmap-check*.mjs"
+      run: make register-check status-parity work-index roadmap-check intent-parity
 
     - name: scaffold
       glob:

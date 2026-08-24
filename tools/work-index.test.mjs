@@ -112,6 +112,7 @@ test("discovers active and archived RFCs plus route-shaped living planning docum
   fs.writeFileSync(path.join(root, "planning/lane/plan.md"), "D4");
   fs.writeFileSync(path.join(root, "planning/lane/results.md"), "D5");
   fs.writeFileSync(path.join(root, "planning/lane/log.md"), "D6");
-  assert.deepEqual(routeDocumentPaths(root), ["planning/lane/plan.md", "rfc/active.md", "rfc/archive/old.md"]);
+  fs.writeFileSync(path.join(root, "planning/roadmap-to-done.md"), "D7");
+  assert.deepEqual(routeDocumentPaths(root), ["planning/lane/plan.md", "planning/roadmap-to-done.md", "rfc/active.md", "rfc/archive/old.md"]);
   fs.rmSync(root, { recursive: true, force: true });
 });

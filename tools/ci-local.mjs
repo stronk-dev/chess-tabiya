@@ -77,7 +77,7 @@ export function main() {
   console.log("local CI parity start");
   run("pnpm", ["install", "--frozen-lockfile"]);
   run("make", ["verify"], { ...process.env, ENGINES_REQUIRED: "1" });
-  run("make", ["test-browser"]);
+  run("make", ["test-browser-ci"]);
   console.log("local CI parity PASS");
 }
 

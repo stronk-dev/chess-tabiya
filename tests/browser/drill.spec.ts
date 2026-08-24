@@ -316,7 +316,7 @@ test("runtime corpus counts stay silent until reveal and render population facts
   await expect(corpus).toContainText("Last recorded game in this population: 2019-04.");
 });
 
-test("Pack B references the Carlsbad entry while its pack prose stays server-withheld", async ({ page }) => {
+test("@content Pack B references the Carlsbad entry while its pack prose stays server-withheld", async ({ page }) => {
   const list = await page.request.get("/packs");
   const packs = await list.json() as { id: string; title: string }[];
   const pack = packs.find((candidate) => candidate.id === "carlsbad-minority-attack")!;
@@ -586,7 +586,7 @@ test("Outcome Drill can grade a terminal loss as successful resistance", async (
   ).toBeVisible();
 });
 
-test("Pack C names authored assessment and the opponent that actually moved", async ({ page }) => {
+test("@content Pack C names authored assessment and the opponent that actually moved", async ({ page }) => {
   const card = page.getByRole("article").filter({ hasText: "Rook endings: holding 3 against 4" });
   await card.getByRole("button", { name: /Open position/ }).click();
   await expect(page.getByText("Eleven pieces are on the board", { exact: false })).toBeVisible();
@@ -784,7 +784,7 @@ async function liveInputMove(
   expect((await submitted).postDataJSON()).toMatchObject({ uci });
 }
 
-test("served Najdorf pack plays, rewinds, branches, compares, and exports", async ({
+test("@content served Najdorf pack plays, rewinds, branches, compares, and exports", async ({
   page,
 }) => {
   const list = await page.request.get("/packs");
@@ -1044,7 +1044,7 @@ test("branch group captures three candidates, rotates, recovers evidence, compar
   expect((pgn.match(/\(/gu) ?? []).length).toBeGreaterThanOrEqual(2);
 });
 
-test("Pack A withholds its line, grades the boundary, and renders authored theory", async ({
+test("@content Pack A withholds its line, grades the boundary, and renders authored theory", async ({
   page,
 }) => {
   const card = page
@@ -1085,7 +1085,11 @@ test("Pack A withholds its line, grades the boundary, and renders authored theor
   await expect(boundarySheet.getByRole("heading", { name: "You are past the authored line" })).toBeVisible();
   await expect(boundarySheet.getByText("concept_violation", { exact: false })).toHaveCount(0);
   await expect(boundarySheet.getByText("the pack has authored commentary about this alternative", { exact: false })).toBeVisible();
-  await expect(boundarySheet.getByText("Castling into the break", { exact: false })).toBeVisible();
+  const authoredAlternative = boundarySheet
+    .getByRole("listitem")
+    .filter({ hasText: "Alternative move" });
+  await expect(authoredAlternative).toBeVisible();
+  await expect(authoredAlternative.locator("p")).not.toHaveText("");
   await expect(page.getByText("Objective: follow_theory — degraded", { exact: false })).toBeVisible();
   await expect(boundarySheet.getByText("Applied policy: theory_strict", { exact: false })).toBeVisible();
 });
@@ -1153,7 +1157,7 @@ test("a granted spectator follows a run without receiving a write control", asyn
   await spectatorContext.close();
 });
 
-test("every shell route owns the viewport at supported desktop and tablet projections", async ({
+test("@matrix every shell route owns the viewport at supported desktop and tablet projections", async ({
   page,
 }) => {
   const projections = [
@@ -1211,7 +1215,7 @@ test("every shell route owns the viewport at supported desktop and tablet projec
   }
 });
 
-test("play composition keeps one exact board rectangle through overlays and companion gestures", async ({ page }) => {
+test("@matrix play composition keeps one exact board rectangle through overlays and companion gestures", async ({ page }) => {
   await page.goto("/play");
   await page
     .getByRole("article")
@@ -1277,7 +1281,7 @@ test("a committed move updates the stable board instance instead of remounting i
   )).toBe(true);
 });
 
-test("served endgame packs keep the board above the timeline at supported desktop projections", async ({
+test("@matrix served endgame packs keep the board above the timeline at supported desktop projections", async ({
   page,
 }) => {
   // This is a layout corpus, not a provider test. The packaged mock correctly
@@ -1305,7 +1309,7 @@ test("served endgame packs keep the board above the timeline at supported deskto
   }
 });
 
-test("served endgame packs submit the exact drawn move through every permanent input projection", async ({
+test("@matrix served endgame packs submit the exact drawn move through every permanent input projection", async ({
   page, browser,
 }) => {
   test.setTimeout(180_000);
@@ -1341,7 +1345,7 @@ test("served endgame packs submit the exact drawn move through every permanent i
   }
 });
 
-test("the semantic board remains a complete interactive grid after a keyboard move", async ({ page }) => {
+test("@matrix the semantic board remains a complete interactive grid after a keyboard move", async ({ page }) => {
   await page.goto("/play");
   await page
     .getByRole("article")
@@ -1360,7 +1364,7 @@ test("the semantic board remains a complete interactive grid after a keyboard mo
   await expect(page.locator(".input-status")).toContainText("Move committed:");
 });
 
-test("normal Tab traversal reaches every drill region in both directions and exits", async ({ page }) => {
+test("@matrix normal Tab traversal reaches every drill region in both directions and exits", async ({ page }) => {
   await page.goto("/play");
   await page
     .getByRole("article")
@@ -1411,7 +1415,7 @@ test("normal Tab traversal reaches every drill region in both directions and exi
   for (const item of expected) expect(backward.has(item), `reverse traversal missed ${item}`).toBe(true);
 });
 
-test("mobile shell, settings, and install manifest preserve the run regions", async ({ page }) => {
+test("@matrix mobile shell, settings, and install manifest preserve the run regions", async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 });
   await page.goto("/settings");
   const position = page.getByRole("group", { name: "Just Play" });
