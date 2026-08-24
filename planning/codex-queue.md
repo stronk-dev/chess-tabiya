@@ -1733,3 +1733,25 @@ omits **exactly** the check that fires on a `none` claims block.
 
 **[[D1527]]** — two census tripwires reproduce over **no** constructible scope. The argument survives
 because it rests on a **zero**, which is scope-proof where a count is not.
+
+### The complete enumeration — [[D1528]]–[[D1531]]
+
+`planning/ux-implementation-index.md` (`3bcb4098`). **569 distinct items** from 1,118 raw
+extractions: **312 buildable now**, 98 blocked on a ruling, 97 on an RFC, 38 already done, 24 wrong.
+
+**[[D1528]] is the measurement of the failure the owner named.** Of 507 live items, **234 (46%) are
+in no queue at all**, another **218 are ledgered and unqueued**, and **only 55 are queued** —
+**89% sit where no worker reads them**, including **195 of the 312 buildable-now items**. He was the
+index for 89% of this work.
+
+**[[D1529]]: the schema cannot express an event.** 37 tables, zero pairing/round/tournament; one
+session per run with no aggregate; nothing addresses an opponent; submissions have no result column;
+one standing per classroom **ever**; one gold per learner for all time; `public_tokens.scope` is a
+**single-value CHECK**. And **native ratings needs the same rebuild a tournament needs** — which is
+why [[D1520]]'s readiness constraint is live, not theoretical.
+
+**[[D1530]]: three dossier recommendations must not reach an RFC** — an uncapped annotated move list
+that is structurally the named death shape; "narrowness" as praise in different words, which retires
+my own [[D1476]]; and a decided-position threshold declared as cited values after conceding it is
+unpinnable. **[[D1531]]** corrects wave-3 item 7: `<main>` is not missing, 17 landmarks ship, and the
+"fix" would have nested landmarks.

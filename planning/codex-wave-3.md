@@ -33,7 +33,8 @@ Highest value first:
    then declines the event. **Done:** shortcuts work from the tab stops a keyboard user actually
    reaches, with a key that returns focus to the region.
 7. The remaining ten: `KeyboardHelp` clipping with no `overflow`; the skip link targeting the nav it
-   should skip; no `<main>`; a static `<title>` across twelve routes; route changes moving no focus
+   should skip (**[[D1531]]: `<main>` is NOT missing — 17 landmarks ship, and adding one would nest
+   landmarks; the skip-link target is the whole defect**); a static `<title>` across twelve routes; route changes moving no focus
    and announcing nothing; the busy live region `display:none` below 60rem so *"Thinking…"* is never
    announced on a phone; `ShapePanel` with no dialog role, focus move, restore or Escape; two
    sub-24px targets; `<kbd>` inside accessible names; phone tabs with no selected state.
