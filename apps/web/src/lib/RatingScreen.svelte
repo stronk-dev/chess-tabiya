@@ -1,7 +1,6 @@
 <script lang="ts">
   import { onMount } from "svelte";
 
-  import type { PublishedBandValue, RatingPublication } from "@chess-tabiya/runtime/rating";
   import type {
     DrillClientApi,
     LearnerMark,
@@ -9,6 +8,7 @@
     RatingHistoryPage,
     RatingView,
   } from "./api.js";
+  import { publishedBandInterval, publishedBandLabel } from "./learner-copy.js";
 
   interface Props {
     api: DrillClientApi;
@@ -42,16 +42,6 @@
     } finally {
       loading = false;
     }
-  }
-
-  function band(value: PublishedBandValue): string {
-    if (value.kind === "below") return `below band ${value.band}`;
-    if (value.kind === "above") return `above band ${value.band}`;
-    return `band ${Math.round(value.value)}`;
-  }
-
-  function interval(publication: RatingPublication): string {
-    return `${band(publication.interval[0])} to ${band(publication.interval[1])}`;
   }
 
   function gameResult(game: RatedGameHistoryItem): string {
@@ -126,9 +116,9 @@
         <div>
           <p class="eyebrow">Current publication</p>
           <h2 id="current-rating-title">
-            {publication.pointEstimate ? band(publication.pointEstimate) : "Interval only"}
+            {publication.pointEstimate ? publishedBandLabel(publication.pointEstimate) : "Interval only"}
           </h2>
-          <p class="interval">{interval(publication)}</p>
+          <p class="interval">{publishedBandInterval(publication)}</p>
         </div>
         <dl>
           <div><dt>State</dt><dd>{publication.state}</dd></div>

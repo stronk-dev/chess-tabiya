@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
 import test from "node:test";
 
-import { buildInitialRegistry, parseUxWorkItems, validateWorkItemRegistry } from "./work-item-registry.mjs";
+import { buildInitialRegistry, parseUxWorkItems, synchronizeRegistry, validateWorkItemRegistry } from "./work-item-registry.mjs";
 
 const dimensions = Object.fromEntries(["evidence", "state", "api", "experience", "defaults", "content", "verification", "release"].map((name) => [name, ["partial", `${name} condition`]]));
 const roadmap = {
@@ -45,4 +45,15 @@ test("refuses additions or deletions on either side of the registry join", () =>
   const registry = buildInitialRegistry(index, roadmap);
   const result = validateWorkItemRegistry({ ...registry, items: registry.items.slice(1) }, expected, roadmap);
   assert(result.errors.some((error) => error.includes("work-item coverage mismatch")));
+});
+
+test("synchronizes an explicitly completed source item to a closed assignment", () => {
+  const completed = index.replace(
+    "| ARR-a1 | §1 | Start the loop | none | cheap | 🏆 |",
+    "| ARR-a1 | §1 | Start the loop | implemented |",
+  ).replace("## (a) BUILDABLE NOW", "## (d) ALREADY DONE AT HEAD");
+  const registry = synchronizeRegistry(completed, roadmap);
+  const item = registry.items.find((candidate) => candidate.id === "ARR-a1");
+  assert.equal(item?.state, "completed");
+  assert.equal(item?.assignment, "closed");
 });

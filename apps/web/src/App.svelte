@@ -8,6 +8,7 @@
   import PackList from "./lib/PackList.svelte";
   import JustPlayStarter from "./lib/JustPlayStarter.svelte";
   import GameStoryScreen from "./lib/GameStoryScreen.svelte";
+  import { attemptVerdictLabel, corpusPopulationLabel } from "./lib/learner-copy.js";
   import RatingScreen from "./lib/RatingScreen.svelte";
   import CohortStanding from "./lib/CohortStanding.svelte";
   import ShellFrame from "./lib/ShellFrame.svelte";
@@ -903,7 +904,7 @@
               {#if page?.status==="pending"}<p>Scanning…</p>{/if}
               {#if page?.scan}
                 <div class="gap-results" aria-label={`Gaps for ${repertoire.name}`}>
-                  <p>{JSON.stringify(page.scan.population)}</p><p class="honest">{page.scan.guard}.</p>
+                  <p>{corpusPopulationLabel(page.scan.population)}</p><p class="honest">{page.scan.guard}.</p>
                   {#if page.scan.partiality}<p class="honest">{page.scan.partiality}</p>{/if}
                   {#each page.scan.gaps as gap,index}
                     <div class="gap-row"><span>{gap.replySan||"First move"} · {gap.gamesUntilSeen?`about 1 in ${gap.gamesUntilSeen} games`:"frequency unavailable"} · {gap.state}</span>{#if index===0}<button type="button" onclick={()=>void enterRepertoireGap(repertoire.id,gap.key)}>Go to biggest gap</button>{/if}</div>
@@ -948,7 +949,7 @@
               <div class="recorded-attempt-header">
                 <div>
                   <h3>{attempt.packId ?? "Position rehearsal"} · attempt {attempt.attemptNo || "—"}</h3>
-                  <p>{attempt.graded ? attempt.verdict : "not graded"} · {attempt.userPlyCount} learner plies · {readableDate(attempt.endedAt)}</p>
+                  <p>{attempt.graded ? attemptVerdictLabel(attempt.verdict) : "Not graded"} · {attempt.userPlyCount} learner plies · {readableDate(attempt.endedAt)}</p>
                 </div>
                 <div class="row-actions">
                   <button type="button" aria-expanded={related !== undefined} onclick={() => void toggleRelatedAttempts(attempt)}>{related === undefined ? "Related attempts" : "Hide related"}</button>

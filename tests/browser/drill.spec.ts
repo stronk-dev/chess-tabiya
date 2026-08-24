@@ -565,7 +565,7 @@ test("Outcome Drill resolves a non-terminal hold and remains playable", async ({
   await expect(page.getByText("not a proof of the position", { exact: false })).toBeVisible();
   const checkpointSheet = page.getByRole("dialog");
   await expect(checkpointSheet.getByText("Deterministic mock opponent", { exact: false })).toBeVisible();
-  await expect(checkpointSheet.getByText("Applied policy: theory_strict", { exact: false })).toBeVisible();
+  await expect(checkpointSheet.getByText("Applied resistance: Authored theory replies", { exact: false })).toBeVisible();
   await page.getByRole("button", { name: "Continue" }).click();
   await expect(page.getByRole("dialog")).toHaveCount(0);
   await clickMove(page, "f1", "b5");
@@ -590,7 +590,7 @@ test("@content Pack C names authored assessment and the opponent that actually m
   const card = page.getByRole("article").filter({ hasText: "Rook endings: holding 3 against 4" });
   await card.getByRole("button", { name: /Open position/ }).click();
   await expect(page.getByText("Eleven pieces are on the board", { exact: false })).toBeVisible();
-  await expect(page.getByText("Requested resistance: human_common, target Elo 1900", { exact: false })).toBeVisible();
+  await expect(page.getByText("Requested resistance: Human-model replies, target Elo 1900", { exact: false })).toBeVisible();
   await expect(page.getByText("Deterministic mock opponent", { exact: false })).toBeVisible();
   await expect(page.getByText("Maia", { exact: false })).toHaveCount(0);
 });
@@ -1091,13 +1091,13 @@ test("@content Pack A withholds its line, grades the boundary, and renders autho
   await expect(authoredAlternative).toBeVisible();
   await expect(authoredAlternative.locator("p")).not.toHaveText("");
   await expect(page.getByText("Objective: follow_theory — degraded", { exact: false })).toBeVisible();
-  await expect(boundarySheet.getByText("Applied policy: theory_strict", { exact: false })).toBeVisible();
+  await expect(boundarySheet.getByText("Applied resistance: Authored theory replies", { exact: false })).toBeVisible();
 });
 
 test("Line Drill crosses a cap on-line, continues, and renders unknown honestly", async ({ page }) => {
   const card = page.getByRole("article").filter({ hasText: "Line Drill boundary browser fixture" });
   await card.getByRole("button", { name: /Open position/ }).click();
-  await expect(page.getByText("Requested resistance: theory_strict", { exact: false })).toBeVisible();
+  await expect(page.getByText("Requested resistance: Authored theory replies", { exact: false })).toBeVisible();
   await expect(page.getByText("No opponent move has been played yet.")).toBeVisible();
 
   await move(page, "c1", "e3");
@@ -1113,7 +1113,7 @@ test("Line Drill crosses a cap on-line, continues, and renders unknown honestly"
   await expect(page.getByRole("heading", { name: "The pack is silent here" })).toBeVisible();
   await expect(page.getByText("Ply 5, a3: this pack has no statement about this move.")).toBeVisible();
   await expect(page.getByText("Unknown is not a judgement", { exact: false })).toBeVisible();
-  await expect(page.getByRole("dialog").getByText("Applied policy: theory_strict", { exact: false })).toBeVisible();
+  await expect(page.getByRole("dialog").getByText("Applied resistance: Authored theory replies", { exact: false })).toBeVisible();
   await expect(page.getByText("predate policy recording", { exact: false })).toHaveCount(0);
 });
 

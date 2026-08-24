@@ -419,6 +419,20 @@ describe("DrillSessionController", () => {
       "Pause the live match before rewinding, branching, or revealing feedback.",
     );
   });
+
+  it("routes resume failures through the same recovery copy as in-session mutations", async () => {
+    const environment = controller();
+    vi.spyOn(environment.api, "events").mockRejectedValueOnce(
+      new ApiError(409, "RUN_TERMINATED", "Run is terminal at node: opaque-id"),
+    );
+
+    await environment.controller.resume("finished-run");
+
+    expect(environment.controller.state).toMatchObject({
+      busy: false,
+      error: "This attempt is complete. Rewind to an earlier move to try another branch.",
+    });
+  });
   it("does not select another opponent move after the learner delivers mate", async () => {
     const terminalPack = {
       ...pack,

@@ -1,8 +1,8 @@
 <script lang="ts">
   import { onMount } from "svelte";
 
-  import type { PublishedBandValue, RatingPublication } from "@chess-tabiya/runtime/rating";
   import { ApiError, type CohortStandingEntry, type CohortStandingView, type DrillClientApi } from "./api.js";
+  import { publishedBandInterval, publishedBandLabel } from "./learner-copy.js";
 
   interface Props {
     api: DrillClientApi;
@@ -57,12 +57,6 @@
   }
 
   function iso(value: string): string { return new Date(value).toISOString(); }
-  function band(value: PublishedBandValue): string {
-    if (value.kind === "below") return `below ${value.band}`;
-    if (value.kind === "above") return `above ${value.band}`;
-    return String(Math.round(value.value));
-  }
-  function interval(value: RatingPublication): string { return `${band(value.interval[0])}–${band(value.interval[1])}`; }
   function markBand(mark: CohortStandingEntry["marks"][number]): number { return mark.band; }
 </script>
 
@@ -113,7 +107,7 @@
           <td>{#each entry.marks as mark}<span class={`mark ${mark.mark}`} title={`Beat band ${markBand(mark)} on ${new Date(mark.earnedAt).toLocaleDateString()}`}>{markBand(mark)}</span>{:else}<span class="muted">None recorded</span>{/each}</td>
           <td>{entry.record ? `${entry.record.wins}–${entry.record.draws}–${entry.record.losses}` : "Hidden"}{#if entry.record}<small>{entry.record.games} games · {entry.record.abandoned} abandoned</small>{/if}</td>
           <td>{#if entry.record?.byOpponentBand.length}{#each entry.record.byOpponentBand as split}<span class="split">{split.opponentBand}: {split.wins}–{split.draws}–{split.losses}</span>{/each}{:else}<span class="muted">Not shown</span>{/if}</td>
-          <td>{#if entry.rating}{entry.rating.pointEstimate ? `Band ${band(entry.rating.pointEstimate)}` : ""}<small>Interval {interval(entry.rating)}</small>{:else}<span class="muted">Not shown</span>{/if}</td>
+          <td>{#if entry.rating}{entry.rating.pointEstimate ? publishedBandLabel(entry.rating.pointEstimate) : ""}<small>Interval {publishedBandInterval(entry.rating)}</small>{:else}<span class="muted">Not shown</span>{/if}</td>
         </tr>{:else}<tr><td colspan="5">No learner has published an entry.</td></tr>{/each}</tbody>
       </table></div>
 

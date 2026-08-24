@@ -7381,3 +7381,27 @@ its narrower citation/route question; it is no longer treated as assignment proo
 passes. The machine roadmap now names the item registry and its prefix-to-source join, and the
 governance capability stays honestly partial because generic non-UX ledger rows do not yet carry
 the same lifecycle state.
+
+## 2026-08-24 — learner-facing truth boundary closes eight queued defects
+
+**What landed:** [[D1536]] removes eight instances where internal representation escaped or was
+mistaken for identity. Resume uses the controller's recovery mapping. Story evaluations name their
+White-side perspective and render pawn units; story kinds and attempt verdicts use exhaustive
+learner vocabulary. Repertoire population is a readable Lichess source/rating/speed/date
+disclosure. Rating and cohort screens share one band formatter. Requested and applied resistance
+modes use one complete learner vocabulary rather than ids such as `human_common`.
+
+**The non-copy repair:** comparison routes now track the occupant that actually moved rather than
+joining routes on the last square string. A regression moves a knight onto c3, captures it with a
+pawn, then advances that pawn; the knight ends on c3 and the pawn continues to c4. Castling,
+en-passant removal and promotion retain the same identity model.
+
+**Flow-back:** ATR-a1/a2/a4/a7/a8/a9, CLP-a4 and OPP-a2 move from buildable to complete in the
+persistent 1.0 registry. It now reports 499 live / 304 queued / 46 complete, still zero unassigned.
+The broader bot-persona provenance row [[D1502]] remains open; replacing a raw resistance id does
+not pretend to solve the card or roster.
+
+**Verification:** exact CI parity passed under the repository-pinned Node 24, pnpm 11.18.0 and
+Stockfish 18: 1,148/1,148 unit and integration tests; all type, build, schema, process, manifest,
+opening, rating, graduation and packaging checks; 23 product browser journeys (one optional live
+Maia latency probe skipped), 4 real-content integrations and 7 responsive/accessibility matrices.

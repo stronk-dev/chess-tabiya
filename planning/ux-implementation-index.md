@@ -23,31 +23,31 @@ blocker named and its queue status checked. It is not a selection.
 |---|---|
 | **Raw extractions across twelve dossiers** | **1,118** |
 | **Distinct items after collapsing restatements** | **569** |
-| **(a) Buildable now** — no ruling, no missing document | **312** |
+| **(a) Buildable now** — no ruling, no missing document | **304** |
 | **(b) Blocked on an owner ruling** | **98** |
 | **(c) Blocked on an RFC** | **97** |
-| **(d) Already done at HEAD** | **38** |
+| **(d) Already done at HEAD** | **46** |
 | **(e) Superseded, stale or wrong** | **24** |
 | | |
-| **Already queued** (named as work in a queue document) | **55** |
-| **Ledgered but unqueued** (a `design/BACKLOG.md` row names it; no queue does) | **218** |
-| **⚠ IN NO QUEUE AT ALL** | **234** |
+| **Already queued** (named as work in a queue document) | **54** |
+| **Ledgered but unqueued** (a `design/BACKLOG.md` row names it; no queue does) | **217** |
+| **⚠ IN NO QUEUE AT ALL** | **228** |
 | **Tournament-readiness flags** ([[D1520]]) | **84** |
 
-The queue counts are taken over the **507 live items** — groups (a), (b) and (c). Groups (d) and (e)
+The queue counts are taken over the **499 live items** — groups (a), (b) and (c). Groups (d) and (e)
 are done or retired, so a queue status for them is moot.
 
-**234 — 46% of everything still live — is the number the owner is angry about.** It is not a
+**228 — 46% of everything still live — is the number the owner is angry about.** It is not a
 backlog of nice-to-haves. It contains the opponent identity bar, observed traits, the whole
 first-run flow, the phase catalogue the design tier records as *shipped*, the entire
 data-disclosure surface, the audience preview, the streamer mode, the coach's simul-wall signals,
 twenty-three unspecified responsive surfaces, and the four opponent teardowns that would end the
 *"nothing in the corpus has been driven hands-on"* limit.
 
-**A second number matters almost as much: 218 items are ledgered and unqueued.** [[D1428]] found
+**A second number matters almost as much: 217 items are ledgered and unqueued.** [[D1428]] found
 that pattern on the owner's six UX complaints — *the recording works and the routing does not* — and
 [[D1523]] found the instrument cannot tell the two apart. For routing purposes `ledger` is much
-closer to `none` than to `wave3`: **452 of 507 live items, 89%, are in no queue a worker reads.**
+closer to `none` than to `wave3`: **445 of 499 live items, 89%, are in no queue a worker reads.**
 
 ---
 
@@ -98,7 +98,7 @@ per-item state with an owner — is what makes this the last one.
 ## (a) BUILDABLE NOW — 312 items
 
 Nothing here waits on an owner ruling, an RFC acceptance, or a document anybody still owes.
-**195 of them are in no queue at all.**
+**189 of them are in no queue at all.**
 
 ### Arrival and getting into a session — `ux-arrival-and-start.md`
 
@@ -153,7 +153,6 @@ Nothing here waits on an owner ruling, an RFC acceptance, or a document anybody 
 | CLP-a1 | §1.2 d2 / §12 rec 1 | Render `branch.intent` on the compare surface. It is captured at the fork and thrown away at the payoff screen | ledger | [[D1464]] | |
 | CLP-a2 | §1.2 d1 / §7.2 L2 | Render `ComparisonRow.groups` — the per-ply equivalence partition is computed and **no renderer reads it** | ledger | [[D1464]] | |
 | CLP-a3 | §7.2 | Render `rows[].nodes[].actor` so the grid can distinguish a learner's ply from the opponent's | ledger | [[D1464]] | |
-| CLP-a4 | §1.2 d10 / §12 rec 13 | Fix piece-route chaining: UCI string-slicing produces `e2: e2 → e4 → e5` and labels routes by origin square | none | | |
 | CLP-a5 | §1.2 d7 | Stop rendering the same eval data three times, unaligned, with no shared ply axis | none | | |
 | CLP-a6 | §1.2 d9 / §12 rec 9 | **Stop calling the compare surface an "Evidence inspector"** — it says so four times on the screen that carries the originality claim | none | self-description of the rejected shape | |
 | CLP-a7 | §12 rec 4 (Layer 2) | Render `transposeKey` so re-convergence is visible | none | | |
@@ -179,15 +178,9 @@ Nothing here waits on an owner ruling, an RFC acceptance, or a document anybody 
 
 | id | § | what it is | queued? | note | 🏆 |
 |---|---|---|---|---|---|
-| ATR-a1 | §1.1 | Route `session-controller.resume()` through `sessionErrorMessage` — it is the one catch that bypasses it, so a raw runtime message can still reach a learner | none | | |
-| ATR-a2 | §1.2 | `GameStoryScreen` renders raw centipawn integers with a ` cp` suffix | none | | |
 | ATR-a3 | §1.2 | The story rail is at most eight moments (`story.rank.slice(0,8)`) with **no move list** | none | | |
-| ATR-a4 | §1.2 | Internal enum members reach the learner by underscore substitution: `eval pivot`, `option collapse` | none | | |
 | ATR-a5 | §1.2 | **A false provenance footer ships**: *"rendered from recorded engine evidence"* on rules-marker cards | ledger | [[D687]] | |
 | ATR-a6 | §1.2 | Ranked-8 client versus chronological-8 server divergence inside `publicStory` | ledger | [[D688]] | |
-| ATR-a7 | §1.3 | Attempt rows print the raw `AttemptVerdict` enum (`stable` / `unstable` / `open`) | none | | |
-| ATR-a8 | §1.3 | `{JSON.stringify(page.scan.population)}` is rendered to a learner | lane | ux-work-lane [[D1434]] family | |
-| ATR-a9 | §1.4 | Two `band()` formatters disagree one screen apart | none | frozen-template discipline does not cover rating surfaces | |
 | ATR-a10 | §1.4 | 24 of 31 on-ramp packs claim *"opponent near your rating"* over a puzzle-difficulty rating, with no learner rating in that path | none | a shipped surface claiming personalisation it does not have | |
 | ATR-a11 | §1.7 | **The compare screen's prominence is inverted**: the grounded narrative is 7th of 8 and collapsed, beneath an expanded engine sparkline — on the screen every *Retry from here* lands on | ledger | [[D1478]] | |
 | ATR-a12 | §2.3 | Terminal sheet: order the two doors *Play it again from here* then *Review the whole game* | none | | |
@@ -419,7 +412,6 @@ Nothing here waits on an owner ruling, an RFC acceptance, or a document anybody 
 | id | § | what it is | queued? | note | 🏆 |
 |---|---|---|---|---|---|
 | OPP-a1 | §0.2 / §1 rec-2 | **Always send a band from Just Play.** The starter sends no `targetElo`, `appliedTargetElo` falls to `profile.default`, and the default is Maia's UCI spin value `1500` — a rung nobody chose, nobody measured, and no learner is ever told about | ledger | [[D1502]]; `TARGET_ELO_REQUIRED` exists as the refusal and never fires | |
-| OPP-a2 | §0.1c / §3 rec-3 | `Requested resistance: human_common` renders a raw internal identifier to learners (`outcome-presentation.ts:112`) | ledger | [[D1502]]; verified at HEAD | |
 | OPP-a3 | §3 rec-4 | Render the resistance sentences in Just Play — they are gated on `pack !== undefined`, which is backwards: the pack-less game is the one with no author to explain it | ledger | [[D1502]] | |
 | OPP-a4 | §3 rec-1 | **Ship the opponent identity bar**: name, art, rung, one word of family. Greenfield — `avatar` occurs **zero** times in `apps/web/src` | none | ⚠ the owner's example. In no queue at all | |
 | OPP-a5 | §3 rec-5 | Announce a mid-run opponent change in the bar when `flipRun` changes resistance | none | | |
@@ -850,6 +842,14 @@ Verified in this pass at `0d347288`. Several are things a dossier records as mis
 | ARR-d3 | arrival §6.3 D4 | The opponent choice belongs beside the preset, not inside it — already ruled by `intent-presets` §8.1 and adopted rather than reopened | |
 | SET-d1 | settings §6A-5 / §6B-3 / §6C-1 | Three things already right: account sign-out / download / delete; side in the flow; and light-vs-dark absent an override applying live with no reload | |
 | SET-d2 | settings §1-h | Appearance applies live and says so; inherited palettes publish their measured sub-AA pairs | keep |
+| ATR-a1 | after-run §1.1 | Resume failures use the same recovery copy as in-session mutations; raw terminal node ids no longer escape | implemented 2026-08-24; controller regression |
+| ATR-a2 | after-run §1.2 | Story evaluations name White's perspective and render pawn units rather than raw centipawn integers | implemented 2026-08-24; copy regression |
+| ATR-a4 | after-run §1.2 | Story moment kinds use an exhaustive learner vocabulary rather than underscore substitution | implemented 2026-08-24; copy regression |
+| ATR-a7 | after-run §1.3 | Attempt verdicts render objective meaning rather than the `AttemptVerdict` enum | implemented 2026-08-24; copy regression |
+| ATR-a8 | after-run §1.3 | Explorer population metadata renders as a readable source/rating/speed/date disclosure instead of JSON | implemented 2026-08-24; copy regression |
+| ATR-a9 | after-run §1.4 | Rating and cohort surfaces share one point and interval formatter | implemented 2026-08-24; copy regression |
+| CLP-a4 | core-loop §1.2 d10 / §12 rec 13 | Piece routes retain occupant identity across captures and special moves, and label the piece rather than its origin square | implemented 2026-08-24; capture-chain regression |
+| OPP-a2 | opponents §0.1c / §3 rec-3 | Requested and applied resistance use a complete learner vocabulary; internal mode ids do not render | implemented 2026-08-24; all modes covered |
 
 ---
 

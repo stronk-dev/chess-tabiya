@@ -125,6 +125,10 @@ export function buildInitialRegistry(indexSource, roadmap) {
   });
 }
 
+export function synchronizeRegistry(indexSource, roadmap) {
+  return buildInitialRegistry(indexSource, roadmap);
+}
+
 export function main(root = process.cwd()) {
   const read = (relative) => fs.readFileSync(path.join(root, relative), "utf8");
   const roadmap = JSON.parse(read("planning/roadmap-1.0.json"));
@@ -133,6 +137,11 @@ export function main(root = process.cwd()) {
   if (process.argv.includes("--bootstrap")) {
     if (fs.existsSync(registryPath)) throw new Error(`${roadmap.workItemRegistry} already exists`);
     fs.writeFileSync(registryPath, `${JSON.stringify(buildInitialRegistry(read("planning/ux-implementation-index.md"), roadmap), null, 2)}\n`);
+    return;
+  }
+  if (process.argv.includes("--sync")) {
+    fs.writeFileSync(registryPath, `${JSON.stringify(synchronizeRegistry(read("planning/ux-implementation-index.md"), roadmap), null, 2)}\n`);
+    console.log(`work-item-sync: reconciled ${expected.length} items from planning/ux-implementation-index.md`);
     return;
   }
   const registry = JSON.parse(fs.readFileSync(registryPath, "utf8"));

@@ -104,21 +104,34 @@ export function humanModelBandSentence(page: { readonly engine: SelectionEngineI
     : `${engine.name}: no rating band was requested; the engine recorded Elo ${engine.eloApplied} as applied.`;
 }
 
+const RESISTANCE_MODE_LABELS = Object.freeze({
+  human_common: "Human-model replies",
+  theory_strict: "Authored theory replies",
+  strong_engine: "Strong engine",
+  perfect_tablebase: "Perfect tablebase",
+  practical_resistance: "Practical tablebase resistance",
+  enumerated: "Enumerated group reply",
+} as const);
+
+export function resistanceModeLabel(mode: keyof typeof RESISTANCE_MODE_LABELS): string {
+  return RESISTANCE_MODE_LABELS[mode];
+}
+
 export function resistanceSentences(run: DrillRun, nodeId: string, pack?: DrillPackDefinition): readonly string[] {
   const resistance = resistanceOnPath(run, nodeId, pack);
   const requested = resistance.requested;
   const target = requested.targetElo === undefined ? "" : `, target Elo ${requested.targetElo}`;
-  const lines = [`Requested resistance: ${requested.mode}${target} — the pack's request.`];
+  const lines = [`Requested resistance: ${resistanceModeLabel(requested.mode)}${target} — the pack's request.`];
   for (const leg of resistance.requestedByLeg ?? []) {
     const legTarget = leg.policy.targetElo === undefined ? "" : `, target Elo ${leg.policy.targetElo}`;
-    lines.push(`Leg ${leg.legId}: requested ${leg.policy.mode}${legTarget}; ${leg.plyCount} opponent plies recorded.`);
+    lines.push(`Leg ${leg.legId}: requested ${resistanceModeLabel(leg.policy.mode)}${legTarget}; ${leg.plyCount} opponent plies recorded.`);
   }
   if (resistance.engines.length === 0) {
     return [
       ...lines,
       "No opponent move has been played yet.",
       ...(requested.mode === "theory_strict"
-        ? ["`theory_strict` has authored replies only inside this pack's spine. `plyHorizon` caps authored support; the spine index governs authored replies; the two can end at different plies."]
+        ? ["Authored theory replies exist only inside this pack's spine. The authored horizon and the available replies can end at different moves."]
         : []),
       "Not perfect play.",
     ];
@@ -127,8 +140,8 @@ export function resistanceSentences(run: DrillRun, nodeId: string, pack?: DrillP
     const total = resistance.applied.reduce((sum, entry) => sum + entry.plyCount, 0);
     lines.push(
       resistance.applied.length === 1
-        ? `Applied policy: ${resistance.applied[0]!.mode} — recorded per move by the selector.`
-        : `Applied policy: ${resistance.applied.map((entry) => `${entry.mode} for ${entry.plyCount} plies`).join(", ")} — recorded per move by the selector.`,
+        ? `Applied resistance: ${resistanceModeLabel(resistance.applied[0]!.mode)} — recorded per move by the selector.`
+        : `Applied resistance: ${resistance.applied.map((entry) => `${resistanceModeLabel(entry.mode)} for ${entry.plyCount} plies`).join(", ")} — recorded per move by the selector.`,
     );
     void total;
   }
@@ -163,7 +176,7 @@ export function resistanceSentences(run: DrillRun, nodeId: string, pack?: DrillP
     lines.push("The run records which engine played, not which policy it applied, so this names the engine, not proof that the requested policy produced these moves.");
   }
   if (requested.mode === "theory_strict") {
-    lines.push("`theory_strict` has authored replies only inside this pack's spine. `plyHorizon` caps authored support; the spine index governs authored replies; the two can end at different plies.");
+    lines.push("Authored theory replies exist only inside this pack's spine. The authored horizon and the available replies can end at different moves.");
   }
   lines.push("Not perfect play.");
   return lines;

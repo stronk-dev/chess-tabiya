@@ -233,7 +233,7 @@ export class DrillSessionController {
     } catch (error) {
       this.#patch({
         busy: false,
-        error: error instanceof Error ? error.message : String(error),
+        error: sessionErrorMessage(error),
       });
     }
   }

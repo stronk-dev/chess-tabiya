@@ -2,6 +2,7 @@
   import { reviewStoryTitle } from "@chess-tabiya/runtime";
   import type { GameStory } from "./api.js";
   import Chessboard from "./Chessboard.svelte";
+  import { recordedEvaluationTrajectory, storyMomentLabel } from "./learner-copy.js";
 
   interface Props {
     story: GameStory;
@@ -46,10 +47,10 @@
       <div class="board"><Chessboard fen={selected.fen} startSide={story.side} disabled={true} onMove={() => {}} /></div>
       <article>
         <p class="eyebrow">Ply {selected.ply}{selected.san ? ` · ${selected.san}` : ""}</p>
-        <h2>{selected.kinds.map((kind) => kind.replaceAll("_", " ")).join(" + ")}</h2>
+        <h2>{selected.kinds.map(storyMomentLabel).join(" + ")}</h2>
         {#each selected.sentences as sentence}<p>{sentence}</p>{/each}
         {#if voiceText}<p class="voice">{voiceText}</p>{/if}
-        {#if selected.evalBefore && selected.evalAfter}<p class="evaluation">Recorded trajectory: {selected.evalBefore.centipawns} → {selected.evalAfter.centipawns} cp</p>{/if}
+        {#if selected.evalBefore && selected.evalAfter}<p class="evaluation">{recordedEvaluationTrajectory(selected.evalBefore.centipawns, selected.evalAfter.centipawns)}</p>{/if}
         <button class="primary" type="button" disabled={!story.ready} aria-describedby={!story.ready ? "story-pending-reason" : undefined} onclick={() => onEnter(selected.entryNodeId)}>Re-enter and play from here</button>
         {#if onVoice}<button type="button" onclick={async () => voiceText = await onVoice!(selected.nodeId)}>Narrate grounded moment</button>{/if}
         {#if !story.ready}<span id="story-pending-reason" class="sr-only">Wait for the recorded evidence pass to finish.</span>{/if}
@@ -58,7 +59,7 @@
   {:else}<p>No grounded moments were detected in this game.</p>{/if}
   <ol class="rail" aria-label="Game story moments">
     {#each ranked as moment, index}
-      <li><button type="button" class:active={moment.nodeId === selected?.nodeId} onclick={() => selectedId = moment.nodeId}><span>{index + 1}</span><strong>{moment.kinds[0]?.replaceAll("_", " ") ?? "moment"}</strong><small>ply {moment.ply}{moment.san ? ` · ${moment.san}` : ""}</small></button></li>
+      <li><button type="button" class:active={moment.nodeId === selected?.nodeId} onclick={() => selectedId = moment.nodeId}><span>{index + 1}</span><strong>{moment.kinds[0] ? storyMomentLabel(moment.kinds[0]) : "Moment"}</strong><small>ply {moment.ply}{moment.san ? ` · ${moment.san}` : ""}</small></button></li>
     {/each}
   </ol>
 </main>

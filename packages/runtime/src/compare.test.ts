@@ -209,6 +209,35 @@ describe("branch comparison", () => {
     const first = comparisonNarrative(run, comparison, strips);
     expect(comparisonNarrative(run, comparison, strips)).toEqual(first);
     expect(JSON.stringify(first)).not.toMatch(/\b(better|worse|should|best)\b/i);
+    expect(Object.values(strips).flatMap((strip) => strip.routes).some((route) => route.pieceId === "White knight from g1")).toBe(true);
+  });
+
+  it("retains moving-piece identity across captures instead of chaining through a vacated square", () => {
+    const startFen = "4k3/8/8/1n6/8/8/3P4/4K3 b - - 0 1";
+    let run = createRun({
+      id: "compare-capture-routes",
+      session: {
+        kind: "position",
+        start: { fen: startFen, side: "black" },
+        feedbackPolicy: "attempt_end",
+        opponentPolicy: { mode: "human_common" },
+      },
+      sessionDigest: `sha256:${"c".repeat(64)}`,
+      policyConfig: { seedMode: "fixed", locus: { executedAt: "server", engineIds: [], modelIds: [] } },
+      seed: 31,
+      createdAt: at,
+    });
+    const root = run.activeCursor.nodeId;
+    for (const move of ["b5c3", "d2c3", "e8e7", "c3c4"]) run = commitMove(run, move, { at }).run;
+    const captureBranch = run.activeCursor.branchId;
+    run = rewind(run, root, at).run;
+    run = fork(run, root, { at }).run;
+    for (const move of ["b5a3", "d2d3"]) run = commitMove(run, move, { at }).run;
+    const comparison = compareBranches(run, [captureBranch, run.activeCursor.branchId]);
+    const routes = comparisonStrips(run, comparison)[captureBranch]!.routes;
+
+    expect(routes).toContainEqual({ pieceId: "Black knight from b5", squares: ["b5", "c3"] });
+    expect(routes).toContainEqual({ pieceId: "White pawn from d2", squares: ["d2", "c3", "c4"] });
   });
 
   it("filters observations shared anywhere past the fork and preserves their parameters", () => {

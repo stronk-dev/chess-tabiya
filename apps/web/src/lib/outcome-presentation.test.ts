@@ -13,6 +13,7 @@ import {
   checkpointResolutionSentence,
   objectiveGradeSentence,
   resistanceSentences,
+  resistanceModeLabel,
   type ProjectedGrading,
 } from "./outcome-presentation.js";
 
@@ -37,6 +38,15 @@ function run() {
 }
 
 describe("outcome presentation honesty", () => {
+  it("maps every resistance identifier to learner-facing language", () => {
+    expect(resistanceModeLabel("human_common")).toBe("Human-model replies");
+    expect(resistanceModeLabel("theory_strict")).toBe("Authored theory replies");
+    expect(resistanceModeLabel("strong_engine")).toBe("Strong engine");
+    expect(resistanceModeLabel("perfect_tablebase")).toBe("Perfect tablebase");
+    expect(resistanceModeLabel("practical_resistance")).toBe("Practical tablebase resistance");
+    expect(resistanceModeLabel("enumerated")).toBe("Enumerated group reply");
+  });
+
   it("labels authored and ledger-verified root assessments differently", () => {
     const authored: ProjectedGrading = {
       assessedBy: { kind: "authored", note: "Author's stated root." },
@@ -73,9 +83,9 @@ describe("outcome presentation honesty", () => {
   it("states the request before play and the recorded engine after play without claiming policy", () => {
     const before = run();
     expect(resistanceSentences(before, before.activeCursor.nodeId)).toEqual([
-      "Requested resistance: theory_strict, target Elo 1900 — the pack's request.",
+      "Requested resistance: Authored theory replies, target Elo 1900 — the pack's request.",
       "No opponent move has been played yet.",
-      "`theory_strict` has authored replies only inside this pack's spine. `plyHorizon` caps authored support; the spine index governs authored replies; the two can end at different plies.",
+      "Authored theory replies exist only inside this pack's spine. The authored horizon and the available replies can end at different moves.",
       "Not perfect play.",
     ]);
     let after = commitMove(before, "e2e4", { actor: "user", at }).run;
@@ -92,7 +102,7 @@ describe("outcome presentation honesty", () => {
     after = appendOpponentPly(after, selection, { at }).run;
     const text = resistanceSentences(after, after.activeCursor.nodeId).join(" ");
     expect(text).toContain("Deterministic mock opponent (mock-opponent v1)");
-    expect(text).toContain("Applied policy: theory_strict");
+    expect(text).toContain("Applied resistance: Authored theory replies");
     expect(text).not.toContain("not which policy it applied");
     expect(text).not.toContain("actually played");
     expect(text).not.toContain("Maia");
@@ -108,7 +118,7 @@ describe("outcome presentation honesty", () => {
     const text = resistanceSentences(migrated, migrated.activeCursor.nodeId).join(" ");
     expect(text).toContain("1 of these plies predate policy recording.");
     expect(text).toContain("The run records which engine played, not which policy it applied");
-    expect(text).not.toContain("Applied policy:");
+    expect(text).not.toContain("Applied resistance:");
   });
 
   it("distinguishes a requested Elo band from one the recorded engine applied", () => {
