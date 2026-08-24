@@ -48,6 +48,7 @@ import { RepertoireService } from "./repertoire.js";
 import { ClassroomService } from "./classroom.js";
 import type { TtsProvider } from "./external-tts.js";
 import { FixtureTablebaseSource, LichessTablebaseSource, type TablebaseSource } from "./tablebase.js";
+import { loadOpeningCatalogue } from "./opening-catalogue.js";
 
 export type EngineMode = "mock" | "maia";
 
@@ -69,6 +70,7 @@ export interface ApplicationOptions {
   readonly corpusSource?: CorpusSource;
   readonly ttsProvider?: TtsProvider;
   readonly tablebaseSource?: TablebaseSource | null;
+  readonly openingCataloguePath?: string;
 }
 
 export interface ChessTabiyaApplication {
@@ -200,6 +202,7 @@ function isApiPath(pathname: string): boolean {
     pathname === "/auth" ||
     pathname.startsWith("/auth/") ||
     pathname === "/capabilities" ||
+    pathname === "/opening-identity" ||
     pathname === "/packs" ||
     pathname.startsWith("/packs/") ||
     pathname === "/shapes" ||
@@ -306,6 +309,7 @@ export async function createApplication(
     && !candidateTablebaseSource.configured
     ? undefined
     : candidateTablebaseSource;
+  const openingCatalogue = await loadOpeningCatalogue(options.openingCataloguePath ?? join(process.cwd(), "apps", "server", "artifacts", "runtime-opening-catalogue.json"));
 
   if (engineMode === "maia") {
     const stockfish = options.stockfishCommand ?? "stockfish";
@@ -325,7 +329,7 @@ export async function createApplication(
     capabilities = new EngineCapabilities(supervisor, [
       "stockfish-analysis",
       "maia-5m",
-    ], { engineMode: "maia", llmAvailable: options.voiceProvider !== undefined, corpus: corpusSource === undefined ? "none" : "lichess-explorer", tts: options.ttsProvider === undefined ? "none" : "external", tablebase: tablebaseSource?.kind ?? "none" });
+    ], { engineMode: "maia", llmAvailable: options.voiceProvider !== undefined, corpus: corpusSource === undefined ? "none" : "lichess-explorer", tts: options.ttsProvider === undefined ? "none" : "external", tablebase: tablebaseSource?.kind ?? "none", openingCatalogue });
     evidenceExecutor = new StockfishEvidenceExecutor(
       supervisor,
       analysisSpec.id,
@@ -339,7 +343,7 @@ export async function createApplication(
       ...(tablebaseSource === undefined ? {} : { tablebaseSource }),
     });
     capabilities = new EngineCapabilities(mock, ["mock-opponent"], {
-      engineMode: "mock", llmAvailable: options.voiceProvider !== undefined, corpus: "mock", tts: options.ttsProvider === undefined ? "none" : "external", tablebase: tablebaseSource?.kind ?? "none",
+      engineMode: "mock", llmAvailable: options.voiceProvider !== undefined, corpus: "mock", tts: options.ttsProvider === undefined ? "none" : "external", tablebase: tablebaseSource?.kind ?? "none", openingCatalogue,
     });
     evidenceExecutor = new MockEvidenceExecutor();
   }
@@ -362,7 +366,7 @@ export async function createApplication(
   const live = new LiveSessionService(storage, { runService: service });
   const repertoires = new RepertoireService(storage, service, corpusSource);
   const classrooms = new ClassroomService(storage, registry);
-  const api = createRestHandler(service, selector, capabilities, identity, studio, live, shapes, shapeStudio, options.voiceProvider, options.voicePersona, corpusSource, repertoires, options.ttsProvider, options.reasoningReviewProvider, classrooms);
+  const api = createRestHandler(service, selector, capabilities, identity, studio, live, shapes, shapeStudio, options.voiceProvider, options.voicePersona, corpusSource, repertoires, options.ttsProvider, options.reasoningReviewProvider, classrooms, openingCatalogue);
   const staticDirectory =
     options.staticDirectory ?? join(process.cwd(), "apps", "web", "dist");
   const handler: RestHandler = async (request) => {

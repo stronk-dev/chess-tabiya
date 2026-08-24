@@ -26,14 +26,14 @@ export interface OpeningEmitOptions {
   readonly tsvPath?: string;
 }
 
-interface OpeningRow { readonly eco: string; readonly name: string; readonly pgn: string }
-interface NormalizedMove { readonly uci: string; readonly san: string; readonly fen: string }
+export interface OpeningRow { readonly eco: string; readonly name: string; readonly pgn: string }
+export interface NormalizedOpeningMove { readonly uci: string; readonly san: string; readonly fen: string }
 
 function slug(value: string): string {
   return value.toLowerCase().replaceAll(/[^a-z0-9]+/g, "-").replaceAll(/^-+|-+$/g, "");
 }
 
-function parseRows(tsv: string): OpeningRow[] {
+export function parseRows(tsv: string): OpeningRow[] {
   const lines = tsv.replaceAll("\r\n", "\n").split("\n");
   if (lines.shift() !== "eco\tname\tpgn") throw new SourcingError("OPENINGS_HEADER_INVALID", "expected eco, name, pgn TSV header");
   return lines.filter((line) => line.trim() !== "").map((line, index) => {
@@ -43,11 +43,11 @@ function parseRows(tsv: string): OpeningRow[] {
   });
 }
 
-export function normalizeOpeningPgn(pgn: string): NormalizedMove[] {
+export function normalizeOpeningPgn(pgn: string): NormalizedOpeningMove[] {
   const games = parsePgn(pgn);
   if (games.length !== 1) throw new SourcingError("OPENINGS_PGN_INVALID", "opening row must contain exactly one PGN game");
   const position = Chess.default();
-  const moves: NormalizedMove[] = [];
+  const moves: NormalizedOpeningMove[] = [];
   for (const data of games[0]!.moves.mainline()) {
     const move = parseSan(position, data.san);
     if (!move || !position.isLegal(move)) throw new SourcingError("OPENINGS_PGN_ILLEGAL", `illegal SAN in opening row: ${data.san}`);
@@ -59,7 +59,7 @@ export function normalizeOpeningPgn(pgn: string): NormalizedMove[] {
   return moves;
 }
 
-function spineChain(moves: readonly NormalizedMove[], absoluteStart: number): readonly SpineNode[] {
+function spineChain(moves: readonly NormalizedOpeningMove[], absoluteStart: number): readonly SpineNode[] {
   let children: readonly SpineNode[] = [];
   for (let index = moves.length - 1; index >= 0; index -= 1) {
     const move = moves[index]!;

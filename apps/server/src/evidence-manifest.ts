@@ -7,6 +7,7 @@ import {
 } from "@chess-tabiya/runtime";
 
 import type { CapabilityProviders } from "./capabilities.js";
+import type { OpeningCatalogueAvailability } from "./opening-catalogue.js";
 import { RECORDED_READING_DISPOSITIONS } from "./position-evidence.js";
 import { EVIDENCE_KINDS } from "./sourcing/types.js";
 
@@ -86,24 +87,25 @@ export function assertEvidenceManifest(): CompiledEvidenceManifest {
   return EVIDENCE_MANIFEST;
 }
 
-function providerState(producerId: string, providers: CapabilityProviders): EvidenceProducerAvailability {
+function providerState(producerId: string, providers: CapabilityProviders, openingCatalogue?: OpeningCatalogueAvailability): EvidenceProducerAvailability {
   const result = (() => {
     if (producerId === "live.stockfish") return providers.judge === "none" ? ["unavailable", "Stockfish judge provider is unavailable."] : ["available", `Stockfish judge provider: ${providers.judge}.`];
     if (producerId === "live.syzygy") return providers.tablebase === "none" ? ["honest_empty", "Tablebase provider is unavailable; out-of-domain and provider-off are explicit."] : ["available", `Tablebase provider: ${providers.tablebase}.`];
     if (producerId === "human.maia") return providers.opponent === "none" ? ["unavailable", "Human-model opponent provider is unavailable."] : ["available", `Opponent provider: ${providers.opponent}.`];
     if (producerId === "human.explorer") return providers.corpus === "none" ? ["honest_empty", "Human corpus provider is unavailable."] : ["available", `Corpus provider: ${providers.corpus}.`];
+    if (producerId === "theory.opening.runtime") return openingCatalogue?.kind === "available" ? ["available", "Pinned local runtime opening catalogue is available."] : ["unavailable", openingCatalogue?.reason ?? "artifact_missing"];
     return ["available", "Local, recorded or build-time declaration is available without an external provider."];
   })() as readonly [EvidenceAvailabilityState, string];
   return Object.freeze({ producerId, version: 1, state: result[0], reason: result[1] });
 }
 
-export function evidenceManifestCapabilities(providers: CapabilityProviders): EvidenceManifestCapabilities {
+export function evidenceManifestCapabilities(providers: CapabilityProviders, openingCatalogue?: OpeningCatalogueAvailability): EvidenceManifestCapabilities {
   assertEvidenceManifest();
   const consumerById = new Map(EVIDENCE_MANIFEST.consumers.map((consumer) => [consumer.id, consumer]));
   return Object.freeze({
     digest: EVIDENCE_MANIFEST.digest,
     counts: Object.freeze({ producers: EVIDENCE_MANIFEST.producers.length, projections: EVIDENCE_MANIFEST.projections.length, consumers: EVIDENCE_MANIFEST.consumers.length, bindings: EVIDENCE_MANIFEST.bindings.length, semanticEvents: EVIDENCE_MANIFEST.semanticEvents.length, eligibility: EVIDENCE_MANIFEST.eligibility.length, reasons: EVIDENCE_MANIFEST.reasons.length, selectionPolicies: EVIDENCE_MANIFEST.selectionPolicies.length }),
-    availability: Object.freeze(EVIDENCE_MANIFEST.producers.map((producer) => providerState(producer.id, providers))),
+    availability: Object.freeze(EVIDENCE_MANIFEST.producers.map((producer) => providerState(producer.id, providers, openingCatalogue))),
     bindings: Object.freeze(EVIDENCE_MANIFEST.bindings.map((binding) => Object.freeze({
       consumerId: binding.consumer.id,
       consumerVersion: binding.consumer.version,

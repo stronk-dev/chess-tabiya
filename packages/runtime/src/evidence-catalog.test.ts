@@ -24,7 +24,7 @@ import { compileEvidenceManifest } from "./evidence-contract.js";
 import { EvidenceManifestError } from "./evidence-contract.js";
 
 const ROOT = new URL("../../../", import.meta.url);
-const EXPECTED_PRODUCERS = Object.freeze(["rules.structural", "rules.transition", "rules.castling", "rules.exchange", "rules.tactic", "rules.square", "rules.mobility", "rules.pawn", "rules.king", "rules.phase", "rules.pivotal", "rules.endgame", "theory.shapes", "authored.structural_condition", "pack.authored", "recorded.engine", "recorded.tablebase", "live.stockfish", "live.syzygy", "human.maia", "human.explorer", "theory.opening_identity", "run.record", "derived.compare_narrative", "derived.story", "derived.grade", "derived.exchange", "derived.tactic", "derived.pawn", "derived.material", "derived.king", "derived.activity", "derived.opponent", "sourcing.ledger", "derived.semantic_avoidance"]);
+const EXPECTED_PRODUCERS = Object.freeze(["rules.structural", "rules.transition", "rules.castling", "rules.exchange", "rules.tactic", "rules.square", "rules.mobility", "rules.pawn", "rules.king", "rules.phase", "rules.pivotal", "rules.endgame", "theory.shapes", "authored.structural_condition", "pack.authored", "recorded.engine", "recorded.tablebase", "live.stockfish", "live.syzygy", "human.maia", "human.explorer", "theory.opening_identity", "theory.opening.runtime", "run.record", "derived.compare_narrative", "derived.story", "derived.opening", "derived.grade", "derived.exchange", "derived.tactic", "derived.pawn", "derived.material", "derived.king", "derived.activity", "derived.opponent", "sourcing.ledger", "derived.semantic_avoidance"]);
 
 function jsonFiles(url: URL): readonly URL[] {
   return readdirSync(url, { withFileTypes: true }).flatMap((entry) => {
@@ -48,12 +48,21 @@ describe("primary evidence catalogue", () => {
     expect(CURRENT_CONSUMER_OPERATION_IDS).toHaveLength(23);
     expect(EVIDENCE_CONSUMER_IDS).toEqual([...CURRENT_CONSUMER_OPERATION_IDS, "assistance.arrows", "research.semantic_selection"]);
     expect(manifest.consumers.find((item) => item.id === "assistance.arrows")?.disposition).toEqual(expect.objectContaining({ kind: "experimental" }));
-    expect([manifest.producers.length, manifest.projections.length, manifest.consumers.length, manifest.bindings.length]).toEqual([35, 189, 25, 210]);
+    expect([manifest.producers.length, manifest.projections.length, manifest.consumers.length, manifest.bindings.length]).toEqual([37, 193, 25, 210]);
     expect([manifest.semanticEvents.length, manifest.eligibility.length, manifest.reasons.length, manifest.selectionPolicies.length]).toEqual([67, 67, 15, 1]);
     expect(new Set(manifest.semanticEvents.map((item) => item.projection.id))).toEqual(new Set(SEMANTIC_EVENT_PROJECTION_IDS));
     expect(new Set(manifest.eligibility.map((item) => `${item.consumer.id}@${item.consumer.version}`))).toEqual(new Set(["research.semantic_selection@1"]));
     expect(manifest.bindings.filter((binding) => SEMANTIC_EVENT_PROJECTION_IDS.includes(binding.projection.id)).every((binding) => binding.consumer.id === "research.semantic_selection")).toBe(true);
     expect(manifest.digest).toBe(createHash("sha256").update(canonical({ producers: manifest.producers, projections: manifest.projections, consumers: manifest.consumers, bindings: manifest.bindings, semanticEvents: manifest.semanticEvents, eligibility: manifest.eligibility, reasons: manifest.reasons, selectionPolicies: manifest.selectionPolicies })).digest("hex"));
+  });
+
+  it("registers all four runtime opening projections as inspector-only exact evidence", () => {
+    const manifest = compileEvidenceManifest(EVIDENCE_CONTRACT_DECLARATIONS);
+    const ids = ["theory.opening.current_endpoint", "theory.opening.catalogue_membership", "run.record.position", "derived.opening.deepest_reached"];
+    const projections = ids.map((id) => manifest.projections.find((projection) => projection.id === id));
+    expect(projections.every((projection) => projection?.exactness === "exact" && projection.disposition?.kind === "inspector_only")).toBe(true);
+    expect(projections.every((projection) => !manifest.bindings.some((binding) => binding.projection.id === projection?.id))).toBe(true);
+    expect(projections[3]?.derivation).toEqual({ inputs: [{ id: "theory.opening.current_endpoint", version: 1 }, { id: "run.record.position", version: 1 }] });
   });
 
   it("registers move quality as an inert, evaluation-only derived projection", () => {

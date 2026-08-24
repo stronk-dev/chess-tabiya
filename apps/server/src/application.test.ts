@@ -135,6 +135,38 @@ describe("development application mock opponent", () => {
     }
   });
 
+  it("serves exact opening identity through the production boundary and reports honest catalogue failure", async () => {
+    application = await createApplication({ engineMode: "mock", cookieSecure: false });
+    await new Promise<void>((resolve, reject) => {
+      application!.server.once("error", reject);
+      application!.server.listen(0, "127.0.0.1", resolve);
+    });
+    let address = application.server.address() as AddressInfo;
+    let origin = `http://127.0.0.1:${address.port}`;
+    const exact = await fetch(`${origin}/opening-identity?fen=${encodeURIComponent("rnbqkbnr/pppppppp/8/8/8/7N/PPPPPPPP/RNBQKB1R b KQkq - 1 1")}&ply=1`);
+    expect(exact.status, await exact.clone().text()).toBe(200);
+    expect(await exact.json()).toMatchObject({ currentEndpoint: { kind: "matched", eco: "A00", name: "Amar Opening" }, catalogueMembership: { kind: "member" } });
+    const invalidFen = await fetch(`${origin}/opening-identity?fen=not-a-fen&ply=1`);
+    expect(invalidFen.status).toBe(400);
+    expect(await invalidFen.json()).toMatchObject({ error: { code: "INVALID_REQUEST" } });
+    const invalidPly = await fetch(`${origin}/opening-identity?fen=${encodeURIComponent("rnbqkbnr/pppppppp/8/8/8/7N/PPPPPPPP/RNBQKB1R b KQkq - 1 1")}&ply=-1`);
+    expect(invalidPly.status).toBe(400);
+    await application.close();
+
+    application = await createApplication({ engineMode: "mock", cookieSecure: false, openingCataloguePath: "/definitely/missing/runtime-opening-catalogue.json" });
+    await new Promise<void>((resolve, reject) => {
+      application!.server.once("error", reject);
+      application!.server.listen(0, "127.0.0.1", resolve);
+    });
+    address = application.server.address() as AddressInfo;
+    origin = `http://127.0.0.1:${address.port}`;
+    const unavailable = await fetch(`${origin}/opening-identity?fen=${encodeURIComponent("rnbqkbnr/pppppppp/8/8/8/7N/PPPPPPPP/RNBQKB1R b KQkq - 1 1")}&ply=1`);
+    expect(unavailable.status).toBe(200);
+    expect(await unavailable.json()).toEqual({ currentEndpoint: { kind: "abstained", projectionId: "theory.opening.current_endpoint@1", reason: "artifact_missing" }, catalogueMembership: { kind: "abstained", projectionId: "theory.opening.catalogue_membership@1", reason: "artifact_missing" } });
+    const capabilities = await (await fetch(`${origin}/capabilities`)).json() as { evidenceManifest: { availability: { producerId: string; state: string; reason: string }[] } };
+    expect(capabilities.evidenceManifest.availability.find((row) => row.producerId === "theory.opening.runtime")).toEqual({ producerId: "theory.opening.runtime", version: 1, state: "unavailable", reason: "artifact_missing" });
+  });
+
   it("imports a private repertoire, scans ranked gaps, and enters one atomically",async()=>{
     application=await createApplication({development:true,engineMode:"mock",cookieSecure:false});await new Promise<void>((resolve,reject)=>{application!.server.once("error",reject);application!.server.listen(0,"127.0.0.1",resolve);});const address=application.server.address() as AddressInfo,origin=`http://127.0.0.1:${address.port}`;
     const registered=await fetch(`${origin}/auth/register`,{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify({handle:"repertoire_owner",password:"repertoire-owner-password"})}),cookie=registered.headers.get("set-cookie")!.split(";",1)[0]!;

@@ -334,6 +334,7 @@
   "apiFamilies": [
     ["/auth", "account_data", "live"],
     ["/capabilities", "operations", "live"],
+    ["/opening-identity", "evidence", "live"],
     ["/packs", "theory_content", "live"],
     ["/shapes", "theory_content", "live"],
     ["/runs", "rehearsal", "live"],

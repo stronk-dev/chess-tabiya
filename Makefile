@@ -1,4 +1,4 @@
-.PHONY: setup check typecheck test test-browser test-browser-smoke test-browser-content test-browser-matrix test-browser-ci ci-local schema-check register-check status-parity work-index roadmap-check intent-parity evidence-manifest-check semantic-evidence-check account-data-lifecycle-check learner-rating-bracket learner-rating-bracket-check learner-rating-isolation-check graduation-plan graduation-plan-check tactical-collector-measurement breadth-collector-measurement build verify pack-check shape-check expression-census graduation-report graduation-report-update graduation-clear pack-preview source-fetch candidate-emit candidate-attach sourcing-check verify-draft tablebase-walk engine-walk up up-engines down
+.PHONY: setup check typecheck test test-browser test-browser-smoke test-browser-content test-browser-matrix test-browser-ci ci-local schema-check register-check status-parity work-index roadmap-check intent-parity evidence-manifest-check semantic-evidence-check opening-catalogue opening-catalogue-check account-data-lifecycle-check learner-rating-bracket learner-rating-bracket-check learner-rating-isolation-check graduation-plan graduation-plan-check tactical-collector-measurement breadth-collector-measurement build verify pack-check shape-check expression-census graduation-report graduation-report-update graduation-clear pack-preview source-fetch candidate-emit candidate-attach sourcing-check verify-draft tablebase-walk engine-walk up up-engines down
 
 setup:
 	pnpm install --frozen-lockfile
@@ -65,6 +65,12 @@ semantic-evidence-check:
 	./node_modules/.bin/esbuild apps/server/src/semantic-evidence-check.ts --bundle --platform=node --format=esm --outfile=apps/server/dist/semantic-evidence-check.js
 	node apps/server/dist/semantic-evidence-check.js
 
+opening-catalogue: build
+	node apps/server/dist/opening-catalogue-build.js
+
+opening-catalogue-check: build
+	node apps/server/dist/opening-catalogue-build.js --check
+
 account-data-lifecycle-check:
 	./node_modules/.bin/vitest run apps/server/src/r18-account-data.test.ts
 
@@ -88,7 +94,7 @@ breadth-collector-measurement:
 build:
 	pnpm build
 
-verify: typecheck test schema-check register-check status-parity work-index roadmap-check intent-parity evidence-manifest-check semantic-evidence-check account-data-lifecycle-check learner-rating-bracket-check learner-rating-isolation-check graduation-plan-check
+verify: typecheck test schema-check register-check status-parity work-index roadmap-check intent-parity evidence-manifest-check semantic-evidence-check opening-catalogue-check account-data-lifecycle-check learner-rating-bracket-check learner-rating-isolation-check graduation-plan-check
 
 pack-check:
 	@test -n "$(FILE)" || (echo "Usage: make pack-check FILE=<path-to-pack.json>" >&2; exit 2)

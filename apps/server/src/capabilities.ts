@@ -25,6 +25,7 @@ import {
   evidenceManifestCapabilities,
   type EvidenceManifestCapabilities,
 } from "./evidence-manifest.js";
+import type { OpeningCatalogueAvailability } from "./opening-catalogue.js";
 
 export const SUPPORTED_POLICY_MODES: readonly OpponentPolicyMode[] = RUN_OPPONENT_MODES;
 
@@ -286,6 +287,7 @@ export class EngineCapabilities implements CapabilitiesProvider {
   readonly #corpus: CapabilityProviders["corpus"];
   readonly #tts: CapabilityProviders["tts"];
   readonly #tablebase: CapabilityProviders["tablebase"];
+  readonly #openingCatalogue: OpeningCatalogueAvailability | undefined;
 
   constructor(
     client: CapabilityEngineClient,
@@ -297,6 +299,7 @@ export class EngineCapabilities implements CapabilitiesProvider {
       readonly corpus?: CapabilityProviders["corpus"];
       readonly tts?: CapabilityProviders["tts"];
       readonly tablebase?: CapabilityProviders["tablebase"];
+      readonly openingCatalogue?: OpeningCatalogueAvailability;
     },
   ) {
     this.#client = client;
@@ -306,6 +309,7 @@ export class EngineCapabilities implements CapabilitiesProvider {
     this.#corpus = options.corpus ?? "none";
     this.#tts = options.tts ?? "none";
     this.#tablebase = options.tablebase ?? "none";
+    this.#openingCatalogue = options.openingCatalogue;
     this.#strongEngineProfile = resolveStrongEngineProfile(
       options.strongEngineProfile,
     );
@@ -370,7 +374,7 @@ export class EngineCapabilities implements CapabilitiesProvider {
       }),
       providers: providerState,
       surfaces: surfaces(providerState),
-      evidenceManifest: evidenceManifestCapabilities(providerState),
+      evidenceManifest: evidenceManifestCapabilities(providerState, this.#openingCatalogue),
     });
   }
 }

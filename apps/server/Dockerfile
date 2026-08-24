@@ -39,6 +39,7 @@ COPY --from=stockfish /opt/stockfish/source /usr/share/doc/stockfish/source
 
 WORKDIR /app
 COPY --from=build /app/apps/server/dist apps/server/dist
+COPY --from=build /app/apps/server/artifacts apps/server/artifacts
 COPY --from=build /app/apps/web/dist apps/web/dist
 COPY --from=build /app/schemas schemas
 COPY --from=build /app/content content

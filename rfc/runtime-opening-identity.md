@@ -450,14 +450,16 @@ move.
    deepest.
 5. **Transposition:** two distinct legal move orders reaching one key produce byte-identical current
    endpoint and membership payloads except for their explicit `observedPly` when those differ.
-6. **Unnamed prefix:** the D894 maximum-descendant prefix key returns membership with
-   `descendantEndpointCount` exactly **2,023** and current endpoint absent; no ECO/name field exists
-   in the membership type or serialized response. ("count >1" is satisfied by any prefix in the
-   catalogue and measures nothing.) The key is literal, so the fixture needs no re-run of D894: it is
-   the position after `1.e4` — `rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq -` — recomputed
-   from the vendored bytes by cross-review 2026-08-23. That it is *also* the shallowest interesting
-   prefix is the point: the largest fan-out in the catalogue sits one ply into the game, which is
-   exactly where a naive implementation would be tempted to name it.
+6. **Membership/name separation:** the D894 maximum-descendant prefix key after `1.e4` returns
+   membership with `descendantEndpointCount` exactly **2,023** and independently returns its exact
+   endpoint, `B00 King's Pawn Game`; the membership type and its serialized member still contain no
+   ECO/name field. A separate unnamed multi-descendant hard negative is the position after
+   `1.d4 Nf6 2.c4 e6` —
+   `rnbqkb1r/pppp1ppp/4pn2/8/2PP4/8/PP2PPPP/RNBQKBNR w KQkq -` — which returns membership count
+   **304** and current endpoint absent. These two fixtures make both prohibited joins fail: suppressing
+   a real exact name because the key fans out, and selecting a descendant name where no endpoint
+   exists. The earlier accepted wording called `1.e4` unnamed; implementation re-derived the pinned
+   bytes and found the exact `B00` source row before landing (D1534).
 7. **Stale carry:** a named endpoint followed by absence returns absence live while deepest-reached
    retains the earlier visit. The fixture is a **named imported game from the D894 population,
    identified in the test by file and game index** — that population is the committed
@@ -604,3 +606,9 @@ move.
   §2.3's premise holds byte-exactly; `transposeKey` is `canonicalFen(...).split(" ", 4).join(" ")`
   (`chess.ts:16-19`); the manifest delta of two producers and four projections is internally
   consistent; and the `none` claims block is correct — nothing here touches the six registers.
+
+- 2026-08-24 implementation amendment: criterion 6's accepted claim that `1.e4` was unnamed was
+  false against the pinned source, which contains `B00 King's Pawn Game`. Split the fixture into the
+  true maximum-fan-out endpoint (`1.e4`, 2,023 descendants) and a true unnamed fan-out hard negative
+  (`1.d4 Nf6 2.c4 e6`, 304 descendants). No projection meaning or scope changed; D1534 records the
+  factual correction and executable witnesses.

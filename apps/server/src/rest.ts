@@ -28,6 +28,7 @@ import {
 
 import { ServerError } from "./errors.js";
 import type { CapabilitiesProvider } from "./capabilities.js";
+import { openingIdentityAt, type OpeningCatalogueAvailability } from "./opening-catalogue.js";
 import type { TtsProvider } from "./external-tts.js";
 import { projectPackDocument } from "./pack-registry.js";
 import {
@@ -785,6 +786,7 @@ export function createRestHandler(
   ttsProvider?: TtsProvider,
   reasoningReviewProvider?: ReasoningReviewProvider,
   classrooms?: ClassroomService,
+  openingCatalogue?: OpeningCatalogueAvailability,
 ): RestHandler {
   return async (request) => {
     try {
@@ -952,6 +954,17 @@ export function createRestHandler(
           );
         }
         return json(200, await capabilities.get());
+      }
+      if (url.pathname === "/opening-identity") {
+        if (request.method !== "GET") return json(405, { error: { code: "METHOD_NOT_ALLOWED", message: "Method not allowed" } });
+        if (openingCatalogue === undefined) throw new ServerError("STORAGE_FAILURE", "Opening catalogue is not configured");
+        const fen = url.searchParams.get("fen");
+        const rawPly = url.searchParams.get("ply");
+        if (fen === null || fen.trim() === "" || rawPly === null || !/^(?:0|[1-9][0-9]*)$/.test(rawPly)) throw invalid("fen and a non-negative integer ply are required");
+        const ply = Number(rawPly);
+        if (!Number.isSafeInteger(ply)) throw invalid("ply must be a non-negative safe integer");
+        try { return json(200, openingIdentityAt(openingCatalogue, fen, ply)); }
+        catch { throw invalid("fen must be a legal chess position"); }
       }
       const publicStoryRoute = /^\/api\/shared\/([^/]+)\/story$/.exec(url.pathname);
       if (request.method === "GET" && publicStoryRoute !== null) {

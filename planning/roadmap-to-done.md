@@ -105,6 +105,11 @@ research found both sharp signals and overwhelming noise. Some families await di
 contracts; operand retention is incomplete; claim anchoring and pack compatibility are unresolved;
 producer-to-selector-to-consumer closure is not yet a release invariant.
 
+Runtime opening identity is now a complete foundation slice: its pinned local artifact, exact
+endpoint/path/history projections, typed availability, production API route, and image boundary
+ship. Its learner-facing Review, theory, bot, and longitudinal bindings deliberately remain owned
+by those capabilities rather than being smuggled in as raw labels.
+
 **Required breadth:** structures and changes; attacks/defences; hanging, overload, deflection,
 clearance, attraction, discovered attack, pins, skewers, forks, trapped pieces and mating nets;
 king/castling/promotion state; space/development/files/diagonals/outposts; multi-ply and bounded

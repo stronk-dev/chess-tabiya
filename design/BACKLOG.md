@@ -13,6 +13,12 @@ exploration gate opens). Honesty note: everything marked 🔬 below rests on the
 
 Archive homes are cited as `arch/NN §…` = `archive/brief-v2/NN_….md`.
 
+## Current implementation findings
+
+| Topic | Status | Home |
+|---|---|---|
+| D1534 — **The accepted runtime-opening RFC's “unnamed 1.e4” fixture was factually false.** The production compiler found the pinned source row `B00 King's Pawn Game — 1. e4`; the same key truthfully has 2,023 descendant endpoints. The contract now tests the two independent meanings instead of forcing them to disagree: current endpoint may expose the exact key's own identity, while membership exposes only the descendant count. A real unnamed multi-descendant hard negative is the position after `1.d4 Nf6 2.c4 e6`, with 304 descendants and no endpoint. This was caught before product bytes encoded the false absence | ✅ corrected 2026-08-24 | `rfc/runtime-opening-identity.md` criterion 6; compiler-backed positive and hard-negative fixtures |
+
 ## Core systems (designed in the brief, awaiting exploration → RFCs)
 
 | Topic | Status | Home |

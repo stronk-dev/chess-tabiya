@@ -1,4 +1,5 @@
 import { readFileSync, writeFileSync } from "node:fs";
+import { existsSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { spawnSync } from "node:child_process";
@@ -110,6 +111,13 @@ required(
   readFileSync("apps/server/Dockerfile", "utf8").includes("install-stockfish-linux /opt/stockfish"),
   "Production image must install the shared Stockfish pin",
 );
+const openingCommit = "4b8622759e7ae6f93f011cc6c83a3823401ab45e";
+for (const name of ["COPYING.txt", "a.tsv", "b.tsv", "c.tsv", "d.tsv", "e.tsv"]) {
+  required(existsSync(`vendor/chess-openings/${openingCommit}/${name}`), `Pinned opening source is missing ${name}`);
+}
+const serverDockerfile = readFileSync("apps/server/Dockerfile", "utf8");
+required(serverDockerfile.includes("COPY --from=build /app/apps/server/artifacts apps/server/artifacts"), "Production image must contain the compiled runtime opening catalogue");
+required(!serverDockerfile.includes("COPY vendor"), "Production image must not copy raw opening TSV inputs");
 const stockfishInstaller = readFileSync("tools/install-stockfish-linux.sh", "utf8");
 for (const expected of [
   'STOCKFISH_VERSION="18"',
