@@ -55,6 +55,7 @@ describe("Chessboard", () => {
       turnColor: "black",
       check: true,
       lastMove: ["e1", "e8"],
+      animation: { enabled: true, duration: 250 },
       highlight: { lastMove: true, check: true },
       movable: { color: "black", free: false, showDests: true },
     });
