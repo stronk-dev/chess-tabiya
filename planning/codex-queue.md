@@ -1415,3 +1415,63 @@ a ladder whose top rungs are usually empty is a different product.
 **[[D1458]] bounds this whole wave**: no product in the competitor corpus has ever been driven
 hands-on, and the dossiers say so themselves. Every competitor `[V]` means *we read the page*, never
 *we used it*. CLAUDE.md's *"hands-on beats desk research"* is unmet across the entire corpus.
+
+### Settings, theming and identity — [[D1459]]–[[D1463]]
+
+`design/research/ux-settings-and-identity.md` (`78ded2eb`). **The two complaints are one**
+([[D1459]]): the layer that turns capabilities into choices exists twice in this codebase and ships
+zero times — five presets no `.svelte` imports, ten schemes of which three ship. Repair arithmetic:
+**77 controls → ~8 ordinary + 10 Advanced**, with the split being setting / flow / inferred.
+
+- **Stays a setting**: app theme, board, pieces, mode override, animation; spoken and external voice
+  as **one** control each rather than eight copies; account; accessibility.
+- **Moves into the flow**: the preset, opponent strength as the measured 1000/1400/1800/2200 roster
+  rather than *"Human-common / Strong engine"*, and the inspector requests — which are requests, not
+  preferences.
+- **Inferred and never asked**: mode from device, reduced motion (but **disclosed**), the workflow
+  context, provider availability, the per-context ceilings.
+
+[[D1460]] is the sharpest defect: our theme fallback is the **inverse** of the file we copied from —
+we drop the theme, the owner's store moves the mode and keeps it. [[D1461]] — `interaction-paint.css`
+has zero `var()` and the criterion passes *because* the file ignores theming. [[D1462]] — settings
+never asks what is permitted, so Match renders nine controls that cannot take effect, and
+`HonestControl` is used 7× in run screens and 0× here. [[D1463]] — the preview design, at near-zero
+cost, since the miniature board already ships in five places.
+
+### The core loop — [[D1464]]–[[D1468]]
+
+`design/research/ux-core-loop.md` (`71ac2332`). **The compare surface discards five facts that
+already ship** and draws N separate boards at an aligned ply — the one arrangement that hides a
+difference. The answer to *how does a learner see it* is five layers, and the obvious one is the
+trap: **two eval curves and a rewind button is the engine review screen we must not become.**
+Layer 1 is the divergence **on one board**, with the learner's own intent under each candidate.
+
+**[[D1466]] is the honest part.** The positional diff is *selection*-blocked, not presentation-
+blocked — the difference strip fires on 97.3% of plies at 1.017× lift, and a difference present at
+97% of plies is the weather. Four things are genuinely unvisualisable and get narrated with grounds:
+causation, plans, prophylaxis, practical difficulty. Layers 1, 2, 4 and 5 ship now.
+
+**[[D1468]] is escalated and should be settled before any positioning leans on preserved attempts.**
+Our own competitor record contradicts itself twice on exactly the discriminator we claim, and with
+[[D1458]] — nothing in the corpus driven hands-on — a confirmed competitor with preserved branches
+would be **kill-criterion evidence**, which law 6 says is logged and escalated, never rationalised.
+
+### Live, casting and social — [[D1469]]–[[D1472]], and two loose core-loop rows
+
+`design/research/ux-live-and-social.md` (`1f48ffe7`). **[[D1469]] is the finding that reframes the
+owner's complaint**: the explanation primitive already exists and **fails the build** when a
+*disabled* control has no reason — it is simply never required of an *offered* surface. One clause in
+an enforced contract, not a new component. Plus an **audience preview**: one button rendering exactly
+what a viewer sees.
+
+[[D1470]] — two selects jointly decide which product you get and neither names it; the error path
+renders nothing; and **there is no viewer scope at all**, against two design-tier promises.
+[[D1471]] — the casting fence is a one-line scope/instrument mismatch that only became a fence when
+[[D1272]] gave casting its own lane; until it moves the screen is illegal, not unbuilt.
+[[D1472]] — native-first falsifies the fixed casual label on every native rated row.
+
+Also routed here: **[[D1465]]** — `resistanceSentences()` is wired only to the terminal sheet, so two
+branches played against *different resistance* are compared as if they were not, on the surface whose
+whole purpose is replay under different resistance; mid-run compare is blanked with no statement, so
+a withheld comparison looks like a broken one. **[[D1467]]** — the core loop runs five-sixths of a
+circle, with both dead handoffs at the end and no compare door on the review surface.
