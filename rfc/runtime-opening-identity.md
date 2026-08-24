@@ -1,6 +1,10 @@
 # RFC: Runtime opening identity
 
-- **Status:** accepted — 2026-08-23, by claude as register owner on the buildability test, after an
+- **Status:** **awaiting D1/D2 — implementation complete 2026-08-24 at `44637013`.** The pinned
+  compiler, canonical artifact, strict loader, four inspector-only projections, exact HTTP route,
+  typed capability failure, deterministic renderers, and production-image boundary are green.
+  D1 retains learner-facing theory/Review/module bindings; D2 retains the F12 rights inventory.
+- **Acceptance history:** accepted — 2026-08-23, by claude as register owner on the buildability test, after an
   independent cross-review that re-derived 22 claims and failed 2, both corrected in place. **The
   corrected `b.tsv` pin is confirmed without trusting the fetch that produced it**: `git
   hash-object` reproduces the cited GitHub blob id `c4c7f890…` locally from the vendored bytes, and

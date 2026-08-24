@@ -7334,3 +7334,31 @@ and full profile APIs remain absent.
 four registered prefixes as `live`; `make roadmap-check` must now fail if a future edit removes
 their application allow-list entries. Container/release-image reachability remains a separate
 capability-14 obligation rather than being inferred from this process-level server test.
+
+## 2026-08-24 — runtime opening identity lands end to end
+
+**What landed:** `44637013` compiles the pinned five-file CC0 Lichess chess-openings source into a
+canonical private runtime artifact with 3,810 unique endpoints, 7,854 path keys and maximum
+descendant count 2,023. The runtime exposes exact current endpoint, path membership, recorded
+position and retrospective deepest-reached as four separately typed inspector-only projections.
+The application loads once, starts honestly when the artifact is missing/invalid/mismatched,
+publishes the exact producer state through `/capabilities`, and routes
+`GET /opening-identity?fen=&ply=` through the production API boundary.
+
+**What changed:** opening identity is no longer sourcing-only data that the runtime fetches and
+discards. Review, theory, bot and longitudinal work now have a stable evidence source, but none was
+silently bound: runtime-opening D1 retains learner/module bindings and D2 retains the F12 rights
+inventory. `semantic-collectors.md` D3 is discharged at the landing SHA.
+
+**Negative result:** criterion 6 was false as accepted. The pinned catalogue does name the position
+after `1.e4` as `B00 King's Pawn Game`, while that same key has 2,023 descendants. D1534 amends the
+criterion into two independent fixtures: the named maximum-fan-out key, and the genuinely unnamed
+304-descendant key after `1.d4 Nf6 2.c4 e6`. The compiler caught the false absence before product
+bytes encoded it.
+
+**Verification:** strict engine-required `make verify` passed 1,141 tests across 174 files and every
+schema/process/manifest/roadmap gate. Source/compiler closure, malformed/duplicate/digest failures,
+transpositions, stale carry on imported game 0, exit/re-entry, renderer vocabulary, full-corpus
+latency, application routing and typed unavailability have dedicated tests. A real production
+image was built and served `A00 Amar Opening`; it contains the compiled artifact and contains
+neither `vendor/` nor any TSV file.
