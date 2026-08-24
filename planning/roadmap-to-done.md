@@ -42,8 +42,8 @@ A capability is not complete because one link exists. That makes the current sta
 - API breadth was **overstated by REST branch counts**: [[D1532]] found five implemented rating
   families omitted from `application.ts:isApiPath`. They are production-routed now and guarded at
   the real HTTP application boundary; the roadmap retains the distinction for every future family.
-- UX is **an architectural rebuild, not polish**: 569 distinct items; 312 buildable now, 98 waiting
-  on a ruling, 97 on an RFC, 38 done, and 24 stale/wrong. Panels still stack above/between content,
+- UX is **an architectural rebuild, not polish**: 569 distinct items; 304 buildable now, 98 waiting
+  on a ruling, 97 on an RFC, 46 done, and 24 stale/wrong. Panels still stack above/between content,
   the board changes size, and evidence leaks as implementation detail.
 
 Run these for current counts; prose counts are dated evidence, not authority:
@@ -89,7 +89,7 @@ route fails `make roadmap-check` until it has an owner.
 
 **State: partial.** The ledger, RFC register, work index, status parity, shared-resource register,
 intent parity, and persistent UX-item registry are real. The 569-item register now distinguishes
-312 queued, 98 owner-blocked, 97 RFC-blocked, 38 complete and 24 retired items, with zero live
+304 queued, 98 owner-blocked, 97 RFC-blocked, 46 complete and 24 retired items, with zero live
 items unassigned; a source-row edit or a new id fails until its durable state is reconciled. Generic
 non-UX ledger rows still answer “mentioned?” more reliably than “actively delivered?”, so the
 capability remains partial rather than overstated as proven.
@@ -174,9 +174,9 @@ Primary RFCs: `learner-modules`, `module-registration`, `hint-distance`,
 
 **State: fragments exist, complete Review does not.** Import, story/share, grades, moments, progress
 and retry primitives exist at uneven depths. The current result is neither a strong after-game
-understanding surface nor Tabiya's distinctive return-to-rehearsal loop: raw cp/enums can leak,
-story is capped to opaque cards, the move/phase arc is missing, and engine graphics outrank grounded
-explanation.
+understanding surface nor Tabiya's distinctive return-to-rehearsal loop. [[D1536]] closes the known
+raw cp/enum leaks; story is still capped to opaque cards, the move/phase arc is missing, and engine
+graphics outrank grounded explanation.
 
 **1.0 exit:** native, bot, imported, social and campaign games compile to one Review Map: opening
 and phase arc; navigable move timeline; bounded grounded moments; separate grade, human rarity,
@@ -334,13 +334,14 @@ UX owner: IMP items.
 
 <!-- roadmap-capability: operations -->
 
-**State: unit/process CI exists; release proof incomplete.** Verify, browser and tag-release
-workflows exist; Node/pnpm/Stockfish are pinned in CI; local parity is explicit. [[D1533]] shows the
-required browser suite still mixes product behavior with mutable draft-pack prose, so a red check
-does not identify whether code, a stable acceptance fixture, or authored content broke. Missing:
-production-boundary coverage, a clean full local receipt, container/Compose smoke and migration
-upgrade, live degradation health, safe profiles, runtime content allow-list, backup/restore/update/
-rollback, SBOM/notices/signatures, model/runtime rights, and complete multi-architecture proof.
+**State: required test ownership is separated; release proof is incomplete.** Software contracts,
+repository governance, real-content compatibility, browser journeys and interaction matrices are
+separate named gates; Node/pnpm/Stockfish are pinned and local parity runs the same required tiers.
+The mutable graduation-plan census is now a manual authoring instrument rather than a software
+gate. Missing: release-container production-boundary coverage, Compose smoke and prior-schema
+migration, live degradation health, safe profiles, runtime content allow-list, backup/restore/
+update/rollback, SBOM/notices/signatures, model/runtime rights, and complete multi-architecture
+proof.
 
 **1.0 exit:** documented commands reproduce CI without hijacking normal commits/pushes; every gate
 has one named test tier and failure meaning; product contracts use synthetic fixtures, content
@@ -391,13 +392,14 @@ API/client consumer.
 | Layer | Exists | Still required |
 |---|---|---|
 | Fast local | Lefthook staged diff/type/process/scaffold selection | Stay fast; no full-suite commit/push hijack |
-| Unit / contract | `make verify` includes Vitest and process checks | Synthetic, framework-free contracts; no mutable authored prose or direct-handler substitutes for boundaries |
-| Content acceptance | Schema, provenance and graduation instruments exist but are scattered | One named target for real-pack semantics, citations, compatibility and graduation; failures identify the pack and rule |
-| Browser smoke | `make test-browser` runs every Playwright scenario together | Stable acceptance fixtures, semantic roles and core journeys only; separate content and exhaustive matrices |
-| Accessibility / responsive | Board/input/layout matrices exist in the same browser file | Named post-gesture, input, viewport, zoom and accessibility tier with useful artifacts |
+| Software contracts | `make verify-software` | Continue replacing real-corpus dependencies with synthetic fixtures where content bytes are not the subject; no direct-handler substitutes for boundaries |
+| Repository governance | `make verify-governance` | Extend persistent assignment beyond UX rows without turning research measurements into product gates |
+| Content acceptance | `make verify-content` owns tests that deliberately read committed corpus bytes | Add per-pack schema/provenance/compatibility diagnostics; keep graduation readiness and authored quality as explicit content-wave instruments |
+| Browser smoke | `make test-browser-smoke` | Stable acceptance fixtures, semantic roles and core journeys only |
+| Accessibility / responsive | `make test-browser-matrix` | Extend post-gesture, input, viewport, zoom and accessibility coverage with useful artifacts |
 | Working tree | `make check` plus named browser/content targets | Clean supported-toolchain receipts; all roadmap/product gates wired |
 | Exact parity | `make ci-local` | One documented setup and repeatable full pass |
-| GitHub | verify + browser on push/PR | Separate job names for contracts, content, browser, accessibility and production boundary; container/migration/packaging proof and useful artifacts |
+| GitHub | named software, governance, content, browser, and matrix jobs on push/PR | Add production-boundary/container/migration jobs and useful non-browser artifacts |
 | Release | tag builds server/Maia and digest-pinned Compose | smoke, upgrade, backup/restore, rollback, rights/SBOM/signing, safe profiles |
 | Self-host | dev Compose + release template | reverse proxy/TLS, CPU-default tier, live degradation, operator docs |
 
@@ -406,13 +408,31 @@ API/client consumer.
 This is dependency order, not a single-thread rule. Parallel work is welcome when it does not cross
 an unaccepted contract or claimed resource/migration lane.
 
+The machine map now carries nine guarded dependency milestones, each with a current state, exact
+next action, dependencies, capability coverage and exit. `make roadmap-check` refuses an unknown
+dependency, a cycle, a missing exit/action, or any 1.0 capability absent from that graph. The
+readable spine is:
+
+| Order | Milestone | Outcome |
+|---:|---|---|
+| 0 | Release truth | Separately owned CI/test tiers and durable work truth |
+| 1a | Foundation contracts | Critical evidence/module/state/experience RFCs accepted and resource-safe |
+| 1b | Evidence-to-consumer spine | Collectors close through selectors into modules, bots, Review and content compatibility |
+| 2a | Stable board and presets | One stable board composition; opinionated flows; primitives under Advanced |
+| 2b | Durable product state | Longitudinal, bot, campaign and social state survives rebuild/upgrade and lifecycle operations |
+| 2c | Production API closure | Every advertised verb crosses the application and release-container boundary |
+| 3 | Complete learner journeys | All core and breadth routes work end to end with defaults, errors, return and accessibility |
+| 4 | Official content | A varied pilot, then the complete phase/form/campaign matrix on the stable foundation |
+| 5 | Release candidate proof | Clean-host install, provider-off, migration, backup/restore, rollback and owner use |
+
 ### Wave 0 — make “done” enforceable
 
 1. Keep work/status/register/intent/roadmap checks green.
 2. Keep all 569 UX items in `planning/work-items-1.0.json`; a new item must acquire a capability
    owner and assignment before the guard greens. Extend the same state model to generic queue-only
    ledger rows as touched; do not make a fifth snapshot.
-3. Finish [[D1448]] and [[D1533]] with exact local parity and the remaining container/migration/release tiers; preserve [[D1532]]'s production-boundary family test.
+3. Preserve the separated test tiers from [[D1533]]/[[D1538]] and finish the remaining
+   container/migration/release tiers; preserve [[D1532]]'s production-boundary family test.
 4. Land research coverage and manifest-freshness guards; preserve negative results.
 
 ### Wave 1 — freeze evidence/content contracts before broad authoring

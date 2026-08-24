@@ -3,12 +3,12 @@ import test from "node:test";
 
 import { missingMakeDependencies, missingRequiredText } from "./verify-scaffold.mjs";
 
-const required = ["typecheck", "test", "schema-check"];
+const required = ["verify-software", "verify-governance", "verify-content"];
 
 test("verify dependency guard permits additional checks", () => {
   assert.deepEqual(
     missingMakeDependencies(
-      "verify: typecheck test work-index schema-check account-data-lifecycle-check\n",
+      "verify: verify-software verify-governance verify-content extra-check\n",
       "verify",
       required,
     ),
@@ -18,8 +18,8 @@ test("verify dependency guard permits additional checks", () => {
 
 test("verify dependency guard reports a missing required check", () => {
   assert.deepEqual(
-    missingMakeDependencies("verify: typecheck schema-check\n", "verify", required),
-    { ruleFound: true, missing: ["test"] },
+    missingMakeDependencies("verify: verify-software verify-governance\n", "verify", required),
+    { ruleFound: true, missing: ["verify-content"] },
   );
 });
 

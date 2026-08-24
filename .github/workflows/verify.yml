@@ -8,7 +8,7 @@ permissions:
   contents: read
 
 jobs:
-  verify:
+  software-contracts:
     runs-on: ubuntu-24.04
     env:
       ENGINES_REQUIRED: "1"
@@ -26,4 +26,35 @@ jobs:
           tools/install-stockfish-linux.sh "$RUNNER_TEMP/stockfish"
           echo "SF_CMD=$RUNNER_TEMP/stockfish/bin/stockfish" >> "$GITHUB_ENV"
       - run: pnpm install --frozen-lockfile
-      - run: make verify
+      - name: Software contracts
+        run: make verify-software
+
+  repository-governance:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v7
+      - uses: pnpm/action-setup@v6
+        with:
+          version: 11.18.0
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - name: Repository governance
+        run: make verify-governance
+
+  real-content-contracts:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v7
+      - uses: pnpm/action-setup@v6
+        with:
+          version: 11.18.0
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - name: Real-content compatibility
+        run: make verify-content

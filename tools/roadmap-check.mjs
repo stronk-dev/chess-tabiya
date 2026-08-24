@@ -20,6 +20,7 @@ export const REQUIRED_DIMENSIONS = Object.freeze([
 const DIMENSION_STATES = new Set(["proven", "partial", "blocked", "broken", "missing", "not_applicable"]);
 const ROUTE_STATES = new Set(["live", "live_but_inadequate", "missing"]);
 const API_STATES = new Set(["live", "live_direct", "implemented_but_unreachable", "missing"]);
+const MILESTONE_STATES = new Set(["active", "implementing", "queued", "blocked_contract", "blocked_foundation", "complete"]);
 
 const sameSet = (left, right) =>
   left.size === right.size && [...left].every((value) => right.has(value));
@@ -59,6 +60,43 @@ export function validateRegistry(registry, context) {
   const capabilityIds = registry.capabilities.map((capability) => capability.id);
   const capabilitySet = new Set(capabilityIds);
   for (const id of duplicates(capabilityIds)) errors.push(`duplicate capability ${id}`);
+
+  const milestones = registry.executionPlan?.milestones ?? [];
+  const milestoneIds = milestones.map((milestone) => milestone.id);
+  const milestoneSet = new Set(milestoneIds);
+  for (const id of duplicates(milestoneIds)) errors.push(`duplicate execution milestone ${id}`);
+  const executionCoverage = new Set();
+  for (const milestone of milestones) {
+    if (!Number.isInteger(milestone.wave) || milestone.wave < 0) errors.push(`${milestone.id}: invalid execution wave`);
+    if (!MILESTONE_STATES.has(milestone.state)) errors.push(`${milestone.id}: invalid milestone state ${milestone.state}`);
+    if (!milestone.nextAction?.trim() || !milestone.exit?.trim()) errors.push(`${milestone.id}: nextAction and exit are required`);
+    for (const capability of milestone.capabilities ?? []) {
+      if (!capabilitySet.has(capability)) errors.push(`${milestone.id}: unknown capability ${capability}`);
+      executionCoverage.add(capability);
+    }
+    for (const dependency of milestone.dependsOn ?? []) {
+      if (!milestoneSet.has(dependency)) errors.push(`${milestone.id}: unknown dependency ${dependency}`);
+      if (dependency === milestone.id) errors.push(`${milestone.id}: milestone cannot depend on itself`);
+    }
+  }
+  for (const capability of capabilityIds) {
+    if (!executionCoverage.has(capability)) errors.push(`${capability}: absent from execution plan`);
+  }
+  const visiting = new Set();
+  const visited = new Set();
+  const byMilestone = new Map(milestones.map((milestone) => [milestone.id, milestone]));
+  function visit(id) {
+    if (visiting.has(id)) {
+      errors.push(`execution plan contains a dependency cycle at ${id}`);
+      return;
+    }
+    if (visited.has(id)) return;
+    visiting.add(id);
+    for (const dependency of byMilestone.get(id)?.dependsOn ?? []) visit(dependency);
+    visiting.delete(id);
+    visited.add(id);
+  }
+  for (const id of milestoneIds) visit(id);
   if (!sameSet(new Set(registry.definitionOfDone), new Set(REQUIRED_DIMENSIONS))) {
     errors.push("definitionOfDone must be set-equal to the eight required completion dimensions");
   }
@@ -163,7 +201,7 @@ export function main(root = process.cwd()) {
     process.exitCode = 1;
     return;
   }
-  console.log(`roadmap-check: ${registry.capabilities.length} capabilities, ${result.activeProductRfcCount} active product RFCs, ${uxFiles.length} UX dossiers, ${result.uxItemCount} UX items, ${registry.appRoutes.length} app-route obligations, ${registry.apiFamilies.length} API families; R1-R9 green`);
+  console.log(`roadmap-check: ${registry.capabilities.length} capabilities, ${registry.executionPlan.milestones.length} dependency milestones, ${result.activeProductRfcCount} active product RFCs, ${uxFiles.length} UX dossiers, ${result.uxItemCount} UX items, ${registry.appRoutes.length} app-route obligations, ${registry.apiFamilies.length} API families; R1-R10 green`);
 }
 
 if (process.argv[1] && fileURLToPath(import.meta.url) === path.resolve(process.argv[1])) main();

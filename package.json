@@ -7,6 +7,8 @@
     "build": "pnpm -r --if-present build",
     "schema:check": "node --test tools/verify-scaffold.test.mjs tools/ci-local.test.mjs && node tools/verify-scaffold.mjs && node tools/verify-packaging.mjs && lefthook validate",
     "test": "vitest run",
+    "test:software": "vitest run --config vitest.software.config.ts",
+    "test:content": "vitest run --config vitest.content.config.ts",
     "test:browser": "playwright test",
     "test:maia": "vitest run --config vitest.maia.config.ts",
     "typecheck": "pnpm -r --if-present typecheck",

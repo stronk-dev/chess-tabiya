@@ -61,9 +61,11 @@ make up-engines
 make down
 ```
 
-`make verify` is the required local/CI gate and runs strict type checking, Vitest (including
-fast-check runtime invariants), and schema/scaffold plus deployment-manifest
-verification. It also runs `make register-check`, which joins every active RFC's
+`make verify` is the aggregate local gate. GitHub presents its three owners separately:
+`make verify-software` runs types, synthetic/runtime contracts and compiled manifests;
+`make verify-governance` runs the registers, roadmap and process invariants; and
+`make verify-content` runs tests that deliberately read committed corpus bytes. It also runs
+`make register-check`, which joins every active RFC's
 `tabiya-claims` declaration to the six shared-resource registers, derives their landed heads
 from the tree, refuses collisions, and prints the current next lanes. `make build` separately
 proves the Svelte production bundle. `make status-parity` binds the Active and Archive tables to
@@ -107,7 +109,9 @@ when `OUT` is supplied. It never promotes or rewrites content.
 `make graduation-plan` is the read-only D560 migration instrument. It re-derives the accepted
 graduation classifier over drafts, inventories candidate emitter templates, and reports the
 judgment-bearing residue. It does not activate pack schema 0.28 or write packs, sidecars, or
-clearance transitions; `make verify` runs its population and no-silent-default guard.
+clearance transitions. Its exact-population guard is intentionally manual: `make
+graduation-plan-check` belongs to graduation/content-wave planning and cannot fail an unrelated
+software push.
 
 `make expression-census` is the offline, report-only structural-expression instrument. It
 separates corpus coverage from three-valued satisfiability and never treats a zero firing count

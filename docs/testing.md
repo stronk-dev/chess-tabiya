@@ -7,12 +7,15 @@ is not proof that the production application routes an endpoint.
 | Tier | Command | Owns | Must not substitute for |
 |---|---|---|---|
 | Fast commit checks | Lefthook `pre-commit` | Staged diff hygiene and affected package/process checks | Full CI or a push gate |
-| Unit and contract | `make verify` | Types, framework-free reducers/selectors, server contracts, schemas, registers and process invariants | Browser behavior or deployed routing |
+| Software contracts | `make verify-software` | Types, framework-free reducers/selectors, server contracts, schemas and compiled runtime manifests | Real-corpus acceptance, process ledgers, browser behavior or deployed routing |
+| Repository governance | `make verify-governance` | RFC/register/work/roadmap/intent consistency and test-tier ownership | Product behavior, content quality or release proof |
+| Real-content contracts | `make verify-content` | Schema and application compatibility against committed draft/pack/candidate bytes | Graduation readiness, authored chess judgement or software contracts already expressible with synthetic fixtures |
 | Browser journeys | `make test-browser-smoke` | Stable user journeys asserted through roles, state and outcomes | Mutable authored prose or exhaustive viewport coverage |
 | Real-content integration | `make test-browser-content` | Representative draft/pack integration with the application | Chess-truth validation or product behavior already expressible with a synthetic fixture |
 | Responsive/accessibility matrices | `make test-browser-matrix` | Post-gesture geometry, input projections, semantic board and navigation | A resting screenshot |
 | Complete browser gate | `make test-browser-ci` | The same three named browser tiers used by GitHub | Release-image, migration or backup proof |
-| Exact local CI | `make ci-local` | Pinned Node/pnpm, Stockfish and Compose preflight, then `make verify` and `make test-browser-ci` | Ordinary development checks |
+| Full non-browser gate | `make verify` | Software + governance + real-content targets, matching the three required GitHub jobs | Browser or release-image proof |
+| Exact local CI | `make ci-local` | Pinned Node/pnpm, Stockfish and Compose preflight, then all required non-browser and browser tiers | Ordinary development checks |
 
 `make test-browser` remains a convenient single Playwright invocation for local debugging. GitHub
 runs the named browser tiers separately so the failing step says whether the regression is a core
@@ -23,6 +26,12 @@ Content is shipped product data and therefore still receives schema, provenance,
 integration validation. Its exact prose is not pinned unless the wording itself is a declared public
 contract. Browser tests assert semantic labels and effects such as an `Alternative move` item being
 present; content instruments identify which pack and content rule failed.
+
+`make graduation-plan-check` is deliberately not a required CI dependency. It freezes the current
+draft/candidate population and classification plan for an authoring migration; changing that
+population is planning evidence, not a software regression. Run it while working on graduation or
+content-wave planning. `make test-tier-check` prevents a test that reads real corpus bytes from
+silently entering the software-contract suite.
 
 Release proof remains a separate roadmap obligation: application-boundary API reachability,
 container boot, prior-schema migration, provider degradation, backup/restore, update/rollback and

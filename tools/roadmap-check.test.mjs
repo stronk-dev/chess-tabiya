@@ -26,6 +26,10 @@ test("rejects duplicate RFC ownership and an unassigned UX prefix", () => {
       { id: "one", owner: "a", release: "core", rfcs: ["a.md"], completion: dimensions },
       { id: "two", owner: "b", release: "core", rfcs: ["a.md"], completion: dimensions },
     ],
+    executionPlan: { milestones: [
+      { id: "cycle-a", wave: 0, state: "active", capabilities: ["one"], dependsOn: ["cycle-b"], nextAction: "act", exit: "exit" },
+      { id: "cycle-b", wave: 1, state: "queued", capabilities: ["two"], dependsOn: ["cycle-a"], nextAction: "act", exit: "exit" },
+    ] },
     uxSources: { "ux-test.md": "one" },
     uxItemPrefixes: { ARR: "one" },
     uxItemSources: { ARR: "ux-test.md" },
@@ -42,4 +46,5 @@ test("rejects duplicate RFC ownership and an unassigned UX prefix", () => {
   });
   assert(result.errors.some((error) => error.includes("assigned more than once")));
   assert(result.errors.some((error) => error.includes("NEW-a1")));
+  assert(result.errors.some((error) => error.includes("dependency cycle")));
 });

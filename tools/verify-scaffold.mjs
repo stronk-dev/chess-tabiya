@@ -115,17 +115,7 @@ if (!license.includes("GNU AFFERO GENERAL PUBLIC LICENSE") || !license.includes(
 }
 
 const makefile = await readText("Makefile");
-const requiredVerifyDependencies = [
-  "typecheck",
-  "test",
-  "schema-check",
-  "register-check",
-  "status-parity",
-  "intent-parity",
-  "evidence-manifest-check",
-  "semantic-evidence-check",
-  "graduation-plan-check",
-];
+const requiredVerifyDependencies = ["verify-software", "verify-governance", "verify-content"];
 const verifyDependencies = missingMakeDependencies(
   makefile,
   "verify",
@@ -138,8 +128,13 @@ if (!verifyDependencies.ruleFound || verifyDependencies.missing.length > 0) {
 }
 
 const workflow = await readText(".github/workflows/verify.yml");
-if (!workflow.includes("pnpm install --frozen-lockfile") || !workflow.includes("make verify")) {
-  failures.push("CI workflow: expected frozen install followed by make verify");
+const missingVerifyTiers = missingRequiredText(workflow, [
+  "make verify-software",
+  "make verify-governance",
+  "make verify-content",
+]);
+if (!workflow.includes("pnpm install --frozen-lockfile") || missingVerifyTiers.length > 0) {
+  failures.push(`CI workflow: missing named verification tiers: ${missingVerifyTiers.join(", ")}`);
 }
 
 const browserWorkflow = await readText(".github/workflows/browser.yml");

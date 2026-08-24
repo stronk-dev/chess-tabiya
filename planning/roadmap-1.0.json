@@ -288,6 +288,92 @@
       }
     }
   ],
+  "executionPlan": {
+    "policy": "Milestones are dependency gates, not feature-name checklists. A downstream milestone may start in parallel only where it does not consume an unfinished contract.",
+    "milestones": [
+      {
+        "id": "release-truth",
+        "wave": 0,
+        "state": "implementing",
+        "capabilities": ["governance", "operations"],
+        "dependsOn": [],
+        "nextAction": "Keep software, governance, real-content, browser-smoke and interaction-matrix checks separately named; remove mutable graduation census from required software CI; generate the capability status receipt.",
+        "exit": "Every required check has one owner and failure meaning; all live 1.0 work is assigned; local parity matches GitHub; no planning census masquerades as a product contract."
+      },
+      {
+        "id": "foundation-contracts",
+        "wave": 1,
+        "state": "active",
+        "capabilities": ["evidence", "support", "review", "theory_content", "bots", "learner_model", "campaign", "social_play", "professional"],
+        "dependsOn": ["release-truth"],
+        "nextAction": "Complete independent review and acceptance for pack capability/claim anchors, module registration/presentation, review compiler/map, longitudinal store, bot roster/route source, social play and casting; do not implement a draft contract early.",
+        "exit": "Every shared schema, migration, evidence, module and persistence seam needed by 1.0 has an accepted RFC, an unambiguous register claim, and executable negative criteria."
+      },
+      {
+        "id": "evidence-to-consumer-spine",
+        "wave": 1,
+        "state": "active",
+        "capabilities": ["evidence", "support", "review", "bots", "learner_model", "theory_content"],
+        "dependsOn": ["foundation-contracts"],
+        "nextAction": "Finish the held semantic projections, capability/claim compatibility, complete-candidate packet, selectors, grade/review projections and the eleven registered learner modules; bind each producer to real module, bot and Review consumers.",
+        "exit": "Collector to fact to selector to typed module/bot/Review is closed at runtime; every path can abstain; raw producer strings are inspector-only; content compatibility is computable before pack edits."
+      },
+      {
+        "id": "stable-board-and-presets",
+        "wave": 2,
+        "state": "queued",
+        "capabilities": ["accessibility", "support", "rehearsal"],
+        "dependsOn": ["evidence-to-consumer-spine"],
+        "nextAction": "Replace stacked board-column panels with one stable board region plus companion/drawer regions; finish preset composition and render evidence as typed components with touch, hover, focus and screen-reader parity.",
+        "exit": "Quiet, Guided, Support, Drill, Review, Campaign, Academy and Stream open useful by default; the board never shrinks or moves; every primitive remains available under Advanced."
+      },
+      {
+        "id": "durable-product-state",
+        "wave": 2,
+        "state": "blocked_contract",
+        "capabilities": ["learner_model", "bots", "campaign", "social_play", "account_data", "operations"],
+        "dependsOn": ["foundation-contracts"],
+        "nextAction": "Land migrations in register order: longitudinal jobs/observations, bot policy/roster state, campaign state, clocks/variants/social results; extend export, deletion, backup and rebuild with each object.",
+        "exit": "Every workflow survives restart, retry, upgrade and projection rebuild with owner/actor identity, immutable inputs, idempotence, lifecycle coverage and no workstation-only state."
+      },
+      {
+        "id": "production-api-closure",
+        "wave": 2,
+        "state": "blocked_foundation",
+        "capabilities": ["evidence", "theory_content", "learner_model", "bots", "campaign", "social_play", "professional", "account_data", "operations"],
+        "dependsOn": ["durable-product-state"],
+        "nextAction": "Route principles/theory, longitudinal/profile, registered opponents, campaign, native/social/clocks and professional verbs through createApplication with typed auth, errors, availability and release-container tests.",
+        "exit": "No feature is declared live from a direct REST handler alone; every advertised family crosses the production application and release-image boundary."
+      },
+      {
+        "id": "complete-learner-journeys",
+        "wave": 3,
+        "state": "blocked_foundation",
+        "capabilities": ["rehearsal", "support", "review", "theory_content", "bots", "learner_model", "campaign", "social_play", "professional", "accessibility", "account_data"],
+        "dependsOn": ["stable-board-and-presets", "production-api-closure"],
+        "nextAction": "Ship full vertical journeys for arrival/rehearsal, whole-game Review/return, theory/library, human-like bots/history, profile/style/skills, campaign, human play, coach/classroom/stream and account lifecycle; close their UX items by observed behavior, not component presence.",
+        "exit": "Every route has opinionated defaults, loading/empty/error/recovery, responsive and accessible behavior, return doors, and no raw enum/JSON/cp or settings-first workflow."
+      },
+      {
+        "id": "official-content",
+        "wave": 4,
+        "state": "blocked_foundation",
+        "capabilities": ["theory_content", "rehearsal", "support", "review", "bots", "learner_model", "campaign", "social_play", "professional"],
+        "dependsOn": ["evidence-to-consumer-spine", "complete-learner-journeys"],
+        "nextAction": "Reground theory and principles, refresh manifests, graduate a varied pilot, then author the opening/middlegame/endgame/training-form/campaign/bot/Review matrix against stable capability declarations.",
+        "exit": "The release contains an allow-listed official corpus exercising every important handshake, counter-case, honest-empty state and complete campaign without blind mass rewrites."
+      },
+      {
+        "id": "release-candidate-proof",
+        "wave": 5,
+        "state": "blocked_foundation",
+        "capabilities": ["governance", "evidence", "rehearsal", "support", "review", "theory_content", "bots", "learner_model", "campaign", "social_play", "professional", "accessibility", "account_data", "operations"],
+        "dependsOn": ["official-content"],
+        "nextAction": "Exercise the ten release journeys against digest-pinned images on clean hosts, including provider-off degradation, migration, backup/restore, update/rollback, accessibility, rights/SBOM and owner-device use.",
+        "exit": "Every core and breadth capability proves all applicable completion dimensions or has an explicit owner-approved descope; the owner can use the release without interpreting implementation vocabulary."
+      }
+    ]
+  },
   "uxSources": {
     "ux-arrival-and-start.md": "rehearsal",
     "ux-in-run.md": "support",

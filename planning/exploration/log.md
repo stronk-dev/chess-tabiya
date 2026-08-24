@@ -7405,3 +7405,33 @@ not pretend to solve the card or roster.
 Stockfish 18: 1,148/1,148 unit and integration tests; all type, build, schema, process, manifest,
 opening, rating, graduation and packaging checks; 23 product browser journeys (one optional live
 Maia latency probe skipped), 4 real-content integrations and 7 responsive/accessibility matrices.
+
+## 2026-08-24 — the full 1.0 plan becomes executable and CI gains test ownership
+
+**What failed:** the rebuilt roadmap covered fourteen capabilities and assigned all 569 UX items,
+but its readable counts were already one commit stale and its execution program was prose. A
+capability assignment prevented loss without telling a worker what dependency had to land next.
+At the same time, required `make verify` put software contracts, repository governance,
+real-corpus compatibility and the graduation planner's exact mutable population behind one job
+name. That made a changed authoring census look like a software regression.
+
+**What landed:** [[D1537]] refreshes the rollup to 304 queued / 46 complete and removes the repaired
+raw-cp/enum Review claim. [[D1539]] adds nine machine-readable dependency milestones spanning work
+truth, foundation RFCs, the evidence-to-consumer spine, stable board/presets, durable state,
+production APIs, every full learner/professional journey, official content and release proof.
+Roadmap rule R10 refuses cycles, unknown dependencies, missing next actions/exits and any 1.0
+capability absent from the execution graph.
+
+[[D1538]] splits the required non-browser gate into `verify-software`, `verify-governance` and
+`verify-content`. The 16 files that intentionally consume committed corpus bytes are excluded from
+the 159-file software suite and owned by the content suite; `test-tier-check` refuses a new
+`content/drafts`, `content/packs` or `content/candidates` reader that is not assigned there. No
+test was deleted: 985 software + 163 content = the same 1,148. The read-only graduation population
+guard remains available as `make graduation-plan-check`, but it is no longer a required product-CI
+dependency. Browser smoke, real-content journeys and interaction matrices remain separately named.
+
+**Verification:** exact local parity under Node 24.19.0, pnpm 11.18.0 and Stockfish 18 passed:
+985/985 software tests, 163/163 real-content tests, every schema/build/manifest/rating/governance
+gate, 23 browser smoke journeys (one optional live-Maia latency probe skipped), 4/4 real-content
+browser integrations and 7/7 responsive/accessibility matrices. `local CI parity PASS` was emitted
+after the final matrix.

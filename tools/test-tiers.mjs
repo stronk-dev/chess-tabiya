@@ -1,0 +1,18 @@
+export const CONTENT_CONTRACT_TESTS = Object.freeze([
+  "apps/server/src/authored-consequence-lifecycle.test.ts",
+  "apps/server/src/evidence-at-runtime.test.ts",
+  "apps/server/src/expression-census.test.ts",
+  "apps/server/src/feedback-delivery.test.ts",
+  "apps/server/src/graduation-report.test.ts",
+  "apps/server/src/guidance.test.ts",
+  "apps/server/src/opening-evidence.test.ts",
+  "apps/server/src/opponent-contracts.test.ts",
+  "apps/server/src/pack-authoring.test.ts",
+  "apps/server/src/principle-registry.test.ts",
+  "apps/server/src/reasoning.test.ts",
+  "apps/server/src/refusal-coverage.test.ts",
+  "apps/server/src/sourcing/explorer.test.ts",
+  "apps/server/src/sourcing/graduation-clear.test.ts",
+  "apps/server/src/validator-integrity.test.ts",
+  "packages/schema/src/drill-pack.test.ts",
+]);
