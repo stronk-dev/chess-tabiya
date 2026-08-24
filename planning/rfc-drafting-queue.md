@@ -1408,3 +1408,25 @@ no positive class, so *excellent moves* has no mechanism at all. A move that los
 zero and is indistinguishable from every other move that loses nothing. Praising a move needs a
 different measurement from declining to fault it, and inventing one is the law-8 anti-pattern by
 name. The selector ships with four signals and an open row for the fifth, not with a fabricated one.
+
+## Owner rulings 2026-08-24 — the fences come down, the campaign gets a door
+
+**[[D1513]] — lift both fences.** Two of the owner's four UX asks were **illegal by our own tests**.
+*Casting:* `rfc/live-following.md` criterion 12's scope clause says *"introduced by this RFC's
+implementation"* while its instrument greps the **whole tree** — they agreed until [[D1272]] gave
+casting its own lane, so it now forbids a surface it was never written to forbid. **Narrow the
+instrument to the diff.** *Onboarding:* `rfc/archive/adaptive-guidance.md:367` is about **guided
+mode**, not arrival; lifting it costs nothing it was protecting, and
+`design/research/ux-arrival-and-start.md` already specifies the first run as **the loop itself, not a
+tour**. Both lanes are open.
+
+**[[D1514]] — the campaign is a first-class surface, and the `design/03` amendment is authorised.**
+It had an intent document, ~950 lines of shipped mechanism, and **zero mentions across all six intent
+documents including the complete surface map**. It gets a route and a place in the IA alongside Learn
+and Play. Claude may write the amendment **on this ruling** (law 5 satisfied). The owner accepted the
+tension: zero packs have graduated, so the door initially opens onto very little.
+
+**[[D1515]] — the failure state was NOT ruled.** The owner declined all four costed options and
+redirected to research; the row and its three constraints are in
+`planning/campaign-research-queue.md` as **R12**. Do not draft a campaign failure RFC from it — it is
+a GAP row under law 1 until the research lands.

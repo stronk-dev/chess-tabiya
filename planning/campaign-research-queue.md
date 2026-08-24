@@ -69,3 +69,35 @@ R1–R5/R9/R11 earned **one design doc** — `design/06-campaign.md` — rather 
 rows reassembled from memory. R6–R8 now feed platform R14/O10: they either support shipping that
 wrapper in 1.0, narrow it, or defer it. Only an O10 “ship” ruling may open F10; the old thematic
 queue is not RFC authority.
+
+## R12 — the depleting resource: consequence without attribution ([[D1515]], 2026-08-24)
+
+**Commissioned by owner redirect, not by a ruling.** Presented with four costed failure-state
+options, the owner declined all four: *"sounds like we need to do more research... losing needs
+consequences... but a puzzle failure shouldn't end a run... there's a balance in resources/HP..."*
+
+**Three constraints, and they eliminate three of the four options already costed:**
+
+1. **Losing must have consequences** — *nothing ends the run*, today's shipped behaviour, is refused.
+2. **A single node failure must not end a run** — the act-boss cliff is refused as the *only*
+   mechanism, and so is any binary end condition.
+3. **The consequence is a depleting resource** — an HP-shaped pool. This is neither the failure-budget
+   counter nor the terms-setting option as costed, and **no document in this repo specifies it**.
+
+**The hard question, and it is genuinely open.** [[D1496]] established that *punitive is a function of
+attribution*: the earned-rewind economy is non-punitive precisely because charges are spent by **a
+gesture the learner chooses** and income is **verdict-blind**. A pool that depletes **on failure**
+attributes loss to the learner's error — the exact property that design avoids. So: **what resource
+can deplete on failure and still not read as punishment?** Candidate directions worth testing, none
+endorsed: depletion the learner *spends* rather than *loses* (converting failure into a choice);
+a pool that measures **the run's** remaining scope rather than the learner's standing; a resource
+that regenerates on evidence of learning rather than on success; and the [[D945]] interaction — a
+weaker player must still be able to win on lower floors, so the pool cannot simply scale with skill.
+
+**Also unresolved and part of this question:** whether the pool is run-scoped or act-scoped
+([[D1496]] found the carry-forward version quietly prices early experimentation, so the rational play
+is to experiment least where the product most wants it); and what a learner sees when it is low,
+given [[D1496]]'s rule that the counter must never appear at the moment of the mistake.
+
+**Do not draft a campaign failure RFC from this row.** It is a GAP row under law 1 until the research
+lands.
