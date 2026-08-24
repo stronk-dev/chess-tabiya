@@ -1475,3 +1475,33 @@ branches played against *different resistance* are compared as if they were not,
 whole purpose is replay under different resistance; mid-run compare is blanked with no statement, so
 a withheld comparison looks like a broken one. **[[D1467]]** — the core loop runs five-sixths of a
 circle, with both dead handoffs at the end and no compare door on the review surface.
+
+### Arrival, and after the run — [[D1473]]–[[D1478]]
+
+`ux-arrival-and-start.md` (`9935df1e`) and `ux-after-the-run.md` (`06b4af9e`) close the six-dossier
+UX wave.
+
+**[[D1473]] is the one to feel bad about**: we built a genuinely good start form — named four-rung
+opponent picker, side picker, promise sentence, honest-label footer — and put it behind a nav item
+called **"Record"**, while the surface `design/03` calls the primary way in offers **four words** and
+sends no `targetElo`. The design exists; it is behind the wrong door. And **nobody owns a pre-run
+preset choice**: `intent-presets` §7 seats the pill inside the run, §7.1 declines its visual form,
+and §8.1 explicitly permits the start form to carry it.
+
+**[[D1474]]** — the pack card renders none of `objective.summary`, `difficulty.label`, `concepts`,
+phase or the rating window, and leads 56 cards with *"unreviewed draft · community"*. No filter,
+search, sort or phase navigation exists at all, against `design/03`'s promise of phase as
+first-class navigation with B7 recorded shipped.
+
+**[[D1475]] makes [[D1423]] derivable rather than chosen**: the tier boundary is **the door**, not the
+severity — a tier-2 moment is one where *Retry from here* means something. Severity double-counts
+the grade chip, drops four of the owner's five signals, and makes the whole column negative. The
+0..3 bound then applies to **doors only**, which is an owner decision.
+
+**[[D1476]] re-cuts [[D1424]]**: the fifth signal is **narrowness** — *"Only one move held this"* —
+not excellence. `BANNED_JUDGEMENTS` carries `brilliant`, `excellent` and `precise`, so praise is
+unsayable by construction while narrowness uses no banned word. The two tempting substitutes, human
+rarity and outcome correlation, are both refused by standing law and are what gets built by accident.
+
+**[[D1477]]** retires an unreproducible claim before it reached a design document. **[[D1478]]** — the
+compare screen leads with a ≈1.01× instrument and hides the narrative in slot 7 of 8, collapsed.
