@@ -1361,3 +1361,29 @@ Supporting rows: [[D1432]] (only 2 of 3 themes work per mode; the third silently
 as selected), [[D1433]] (the theming criterion cannot match named CSS colours, so the hard-coded
 whites that shipped pass it), [[D1434]] (`JSON.stringify` to a learner; the only chart is a row of
 identical bullets).
+
+## Client rebuild — scoped 2026-08-24 ([[D1449]]–[[D1453]])
+
+**The owner's read is supported by measurement.** The client partitions **46% load-bearing /
+32% screen scaffolding / 21% mixed**, and the 32% that a rebuild discards — 3,568 lines over ten
+files, 2,875 of them in `DrillScreen.svelte` and `App.svelte` — has **zero co-located tests**
+([[D1453]]). The layer below has been reduced to asserting on that scaffolding's **source text**
+because there is no behaviour to assert on ([[D1449]]), which means our own suite resists the
+refactor. The real safety net is the Playwright suite: **464 role/label/text assertions that survive
+a rebuild**. Repair the source-text tests first, get Playwright green, then rebuild behind it.
+
+**The three new specs are necessary and are not the rebuild** ([[D1450]]). Each disclaims layout in
+its own words and points at `play-composition.md` Discharge D1 — an obligation, not a document.
+Nobody owns the screen. They also stop at the in-run column and answer none of the owner's four
+complaints.
+
+**Two of those four are fenced by our own accepted documents** ([[D1451]]): `live-following.md`
+criterion 12 grep-asserts that no stream-side surface exists, and `adaptive-guidance.md:367` states
+*"guided mode is a choice, never an onboarding state"*. Building what the owner asked for is
+presently a test failure by design. **Two owner rulings are owed before client work is legal.**
+
+**The argument against incremental repair is measured** ([[D1452]]): the control matrix grew from 54
+to 72 controls — 33% — during the eight days its own defect row stayed open.
+
+**Order of work:** the two rulings → a layout owner for the screen → source-text test repair →
+rebuild behind Playwright, carrying bucket A untouched.
