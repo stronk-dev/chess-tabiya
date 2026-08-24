@@ -1505,3 +1505,28 @@ rarity and outcome correlation, are both refused by standing law and are what ge
 
 **[[D1477]]** retires an unreproducible claim before it reached a design document. **[[D1478]]** — the
 compare screen leads with a ≈1.01× instrument and hides the narrative in slot 7 of 8, collapsed.
+
+### Teacher and classroom — [[D1479]]–[[D1483]]
+
+`design/research/ux-teacher-and-classroom.md` (`f247f5ac`). **[[D1479]] is a doctrine proposal, not a
+repair**: a coach's wall may order by **elapsed time** and never by evaluation, because an
+eval-shaped *"struggling"* signal is a **manufactured verdict about a person shown to a different
+person** — law 8's worst form, stated more sharply than the doctrine currently carries it. The three
+honest triage facts already ship and `lastMoveAt` is in the payload and dropped.
+
+**[[D1480]]** — `resolveProposal` has a route and a client method and **no button**: a learner can
+propose a move and a coach cannot accept it, which is the coached session's central gesture. The
+teacher's submission list shows dates with no handles, and *"who has not submitted"* has no
+representation at all.
+
+**[[D1481]] resolves an open question cheaply**: the operator **account** deferred by [[D1416]] is
+redundant — `teacher-surface` already shipped the delegated-capability model and `design/02:98`
+refuses the account form. Two objects are genuinely missing and should replace it in the deferral: a
+round/pairing aggregate and a declared result.
+
+**[[D1482]]** — the cohort contract is right and implemented; what nobody decided is **who reads it**.
+A member who publishes nothing reads everything, which makes declining legible. Owner decision on
+read symmetry; the `abandoned`-shares-a-toggle defect and the touch-invisible mark verb need none.
+
+**[[D1483]]** — the classroom competitor record is **empty**, the teardown owed in August never
+happened, and this is the strongest candidate for the first hands-on pass in the programme.
