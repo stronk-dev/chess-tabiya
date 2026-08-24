@@ -103,6 +103,38 @@ describe("development application mock opponent", () => {
     expect(descriptor.policyModes).not.toContain("practical_resistance");
   });
 
+  it("routes every rating API family through the production application boundary", async () => {
+    application = await createApplication({ development: true, engineMode: "mock", cookieSecure: false });
+    await new Promise<void>((resolve, reject) => {
+      application!.server.once("error", reject);
+      application!.server.listen(0, "127.0.0.1", resolve);
+    });
+    const address = application.server.address() as AddressInfo;
+    const origin = `http://127.0.0.1:${address.port}`;
+    const registered = await fetch(`${origin}/auth/register`, {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({ handle: "rating_boundary", password: "rating-boundary-password" }),
+    });
+    expect(registered.status).toBe(201);
+    const cookie = registered.headers.get("set-cookie")!.split(";", 1)[0]!;
+
+    const expectations = [
+      ["/rated-games", 404],
+      ["/rating", 200],
+      ["/rating/history", 200],
+      ["/marks", 200],
+      ["/cohorts/not-a-classroom/standing", 404],
+    ] as const;
+    for (const [path, status] of expectations) {
+      const response = await fetch(`${origin}${path}`, { headers: { cookie } });
+      const body = await response.text();
+      expect(response.status, `${path}: ${body}`).toBe(status);
+      expect(response.headers.get("content-type"), path).toContain("application/json");
+      expect(body, path).not.toContain("<!doctype html>");
+    }
+  });
+
   it("imports a private repertoire, scans ranked gaps, and enters one atomically",async()=>{
     application=await createApplication({development:true,engineMode:"mock",cookieSecure:false});await new Promise<void>((resolve,reject)=>{application!.server.once("error",reject);application!.server.listen(0,"127.0.0.1",resolve);});const address=application.server.address() as AddressInfo,origin=`http://127.0.0.1:${address.port}`;
     const registered=await fetch(`${origin}/auth/register`,{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify({handle:"repertoire_owner",password:"repertoire-owner-password"})}),cookie=registered.headers.get("set-cookie")!.split(";",1)[0]!;

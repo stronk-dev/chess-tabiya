@@ -37,9 +37,9 @@ A capability is not complete because one link exists. That makes the current sta
   empty.
 - Content is **a large draft corpus, zero official product**: no graduated pack, and
   manifest/graduation truth remains release-blocking.
-- API breadth is **overstated by REST branch counts**: [[D1532]] shows five implemented rating
-  families omitted from `application.ts:isApiPath`, so handler tests can pass while the deployed
-  application cannot route them.
+- API breadth was **overstated by REST branch counts**: [[D1532]] found five implemented rating
+  families omitted from `application.ts:isApiPath`. They are production-routed now and guarded at
+  the real HTTP application boundary; the roadmap retains the distinction for every future family.
 - UX is **an architectural rebuild, not polish**: 569 distinct items; 312 buildable now, 98 waiting
   on a ruling, 97 on an RFC, 38 done, and 24 stale/wrong. Panels still stack above/between content,
   the board changes size, and evidence leaks as implementation detail.
@@ -221,7 +221,8 @@ Primary RFCs: `bot-policy`, `bot-roster`, `bot-route-source`. UX owner: OPP item
 **State: rating partly surfaced; longitudinal spine draft.** Rating arithmetic/storage and a narrow
 screen exist. Observation store, actor-complete events, background projection, style, skill
 credits, opening performance, drill-down, privacy/sharing and recommendations do not form a
-product. [[D1532]] also means five rating families are intercepted at the production boundary.
+product. [[D1532]] repaired the five rating/marks/standing families at the production boundary;
+longitudinal/profile APIs remain absent.
 
 **1.0 exit:** owned immutable events rebuild idempotent observations/aggregates; metrics show
 occurrence/opportunity, phase/decision class, revision, uncertainty, examples and abstention;
@@ -359,8 +360,7 @@ own the residual.
 
 | State | Families |
 |---|---|
-| Production-routed | `/auth`, `/capabilities`, `/packs`, `/shapes`, `/runs`, `/progress`, `/repertoires`, `/classrooms`, `/assignments`, `/api/shared`, `/shared`, `/select-move`, `/sessions`; `/healthz` direct |
-| Implemented but intercepted ([[D1532]]) | `/rated-games`, `/rating`, `/marks`, `/cohorts` |
+| Production-routed | `/auth`, `/capabilities`, `/packs`, `/shapes`, `/runs`, `/progress`, `/repertoires`, `/classrooms`, `/assignments`, `/api/shared`, `/shared`, `/select-move`, `/sessions`, `/rated-games`, `/rating`, `/marks`, `/cohorts`; `/healthz` direct |
 | Required and missing | `/principles`, `/campaign` |
 
 This is a family inventory, not a completeness claim. Each capability exit names remaining verbs,
@@ -398,7 +398,7 @@ an unaccepted contract or claimed resource/migration lane.
 
 1. Keep work/status/register/intent/roadmap checks green.
 2. Assign generic queue-only rows to capability slices as touched; do not make a fifth snapshot.
-3. Finish [[D1448]] and [[D1533]] with named test tiers and exact local parity; add production-boundary API tests and repair [[D1532]].
+3. Finish [[D1448]] and [[D1533]] with exact local parity and the remaining container/migration/release tiers; preserve [[D1532]]'s production-boundary family test.
 4. Land research coverage and manifest-freshness guards; preserve negative results.
 
 ### Wave 1 — freeze evidence/content contracts before broad authoring

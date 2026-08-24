@@ -169,7 +169,7 @@
       "completion": {
         "evidence": ["partial", "Every metric has occurrence and opportunity denominators, actor attribution, phase/decision splits, revision, confidence, and source drill-down."],
         "state": ["blocked", "Background longitudinal jobs, observations, aggregates, rating periods, skills, and style cards persist idempotently."],
-        "api": ["broken", "Rating families are implemented but five prefixes are excluded by the production API allow-list; longitudinal/profile APIs are absent."],
+        "api": ["partial", "Rating, history, rated-game, marks, and cohort-standing families cross the production application boundary; longitudinal/profile APIs are absent."],
         "experience": ["partial", "Rating works as a narrow surface; complete history, opening performance, skill credit, style dimensions, privacy, sharing, and grounded recommendations do not."],
         "defaults": ["blocked", "Profiles abstain until denominators clear; no universal confidence badge, GM twin, personality verdict, weakness ranking, or advice leakage."],
         "content": ["blocked", "Metric explanations, examples, counterexamples, and related drills exist for every published dimension."],
@@ -345,10 +345,10 @@
     ["/shared", "social_play", "live"],
     ["/select-move", "bots", "live"],
     ["/sessions", "social_play", "live"],
-    ["/rated-games", "learner_model", "implemented_but_unreachable"],
-    ["/rating", "learner_model", "implemented_but_unreachable"],
-    ["/marks", "learner_model", "implemented_but_unreachable"],
-    ["/cohorts", "learner_model", "implemented_but_unreachable"],
+    ["/rated-games", "learner_model", "live"],
+    ["/rating", "learner_model", "live"],
+    ["/marks", "learner_model", "live"],
+    ["/cohorts", "learner_model", "live"],
     ["/principles", "theory_content", "missing"],
     ["/campaign", "campaign", "missing"],
     ["/healthz", "operations", "live_direct"]

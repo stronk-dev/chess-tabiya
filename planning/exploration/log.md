@@ -7317,3 +7317,20 @@ what it may not substitute for. Results: 23 smoke journeys passed with one optio
 skipped, 4 content integrations passed, 7 interaction matrices passed, and `make verify` passed
 1,129 tests across 171 files plus every process/schema/manifest gate. [[D1507]] closes; production
 boundary, container, migration and release proof remain open under [[D1533]] and capability 14.
+
+## 2026-08-24 — rating families cross the production application boundary
+
+**What failed:** the REST handler implemented `/rated-games`, `/rating`, `/rating/history`,
+`/marks`, and `/cohorts/:id/standing`, but `createApplication` did not classify any of them as API
+paths. The deployed server therefore served SPA fallback bytes while direct REST tests stayed green.
+
+**What landed:** `application.ts:isApiPath` admits all five families. The regression starts the real
+application HTTP server, registers a learner, requests all five paths, and asserts REST-layer JSON
+for successful reads and routed not-found cases. This closes [[D1532]] and changes the learner-model
+API dimension from broken to partial: existing rating surfaces are reachable, while longitudinal
+and full profile APIs remain absent.
+
+**Verification:** the focused application suite passes 5/5. The machine roadmap reclassifies the
+four registered prefixes as `live`; `make roadmap-check` must now fail if a future edit removes
+their application allow-list entries. Container/release-image reachability remains a separate
+capability-14 obligation rather than being inferred from this process-level server test.

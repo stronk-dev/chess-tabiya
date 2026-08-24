@@ -214,6 +214,12 @@ function isApiPath(pathname: string): boolean {
     pathname.startsWith("/classrooms/") ||
     pathname === "/assignments" ||
     pathname.startsWith("/assignments/") ||
+    pathname === "/rated-games" ||
+    pathname === "/rating" ||
+    pathname.startsWith("/rating/") ||
+    pathname === "/marks" ||
+    pathname === "/cohorts" ||
+    pathname.startsWith("/cohorts/") ||
     pathname.startsWith("/api/shared/") ||
     pathname.startsWith("/shared/") ||
     pathname === "/select-move"
