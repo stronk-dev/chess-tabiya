@@ -2046,6 +2046,11 @@ Rows still proposed:
      panel, feedback events and voice packet are **byte-identical** across ratings. This is the
      falsifiable form of *"selection, yes; rendering, never"*: if a rating ever conditions a
      sentence, the bytes differ.
+  **Discharged 2026-08-24:** rating moved out of the general runtime barrel to the explicit
+  `@chess-tabiya/runtime/rating` subpath. `make learner-rating-isolation-check` resolves the real
+  TypeScript graph from all seven roots in both directions (with an injected-edge positive
+  control), then compares guard, public-feedback, outcome and voice bytes across four materially
+  different rating publications.
 - **AC-12 (the rating's own copy is inside the denylist, not around it).** The rating surface
   emits only a frozen sentence set; a test asserts (a) that set is exhaustive of the surface's
   text, (b) the **shipped `BANNED_JUDGEMENTS` constant** intersects it nowhere — asserted by

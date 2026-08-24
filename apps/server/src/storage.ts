@@ -3,14 +3,16 @@ import { DatabaseSync } from "node:sqlite";
 
 import {
   RuntimeError,
-  glicko2Update,
-  initialRating,
   readBackReplay,
   type DrillRun,
   type DrillRunEvent,
   type ObjectiveState,
   type RunMark,
 } from "@chess-tabiya/runtime";
+import {
+  glicko2Update,
+  initialRating,
+} from "@chess-tabiya/runtime/rating";
 import { DRILL_RUN_SCHEMA_VERSION } from "@chess-tabiya/schema";
 
 import { ServerError } from "./errors.js";

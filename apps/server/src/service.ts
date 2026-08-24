@@ -36,10 +36,6 @@ import {
   storyMoments,
   reviewStoryTitle,
   trajectoryPolicyAt,
-  RATED_OPPONENT_CALIBRATION,
-  RATING_DISCLOSURES,
-  publishRating,
-  ratedOpponentRung,
   shapeFirings,
   type BranchComparison,
   type Decidedness,
@@ -58,11 +54,17 @@ import {
   type RunOpponentMode,
   type RunOpponentPolicy,
   type PositionOpponentPolicy,
-  type PublishedBandValue,
   type ReasoningTranscript,
   type RunMark,
   RuntimeError,
 } from "@chess-tabiya/runtime";
+import {
+  RATED_OPPONENT_CALIBRATION,
+  RATING_DISCLOSURES,
+  publishRating,
+  ratedOpponentRung,
+  type PublishedBandValue,
+} from "@chess-tabiya/runtime/rating";
 import { createHash, randomBytes, randomUUID } from "node:crypto";
 import { canonicalizeJson, normalizeShapeReferences } from "@chess-tabiya/schema/drill-pack";
 import { Chess } from "chessops/chess";

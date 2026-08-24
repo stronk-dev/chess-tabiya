@@ -241,27 +241,6 @@ export {
   type MoveQualityResult,
 } from "./grade.js";
 export {
-  GLICKO2_CONSTANTS,
-  RATED_OPPONENT_BANDS,
-  RATED_OPPONENT_CALIBRATION,
-  RATING_DISCLOSURES,
-  RatingContractError,
-  assertRatedOpponentCalibration,
-  bandEquivalent,
-  glicko2Update,
-  initialRating,
-  publishRating,
-  ratedOpponentRung,
-  type GlickoResult,
-  type LearnerRatingState,
-  type PublishedBandValue,
-  type RatedOpponentBand,
-  type RatedOpponentCalibration,
-  type RatedOpponentRung,
-  type RatingPublication,
-  type RatingState,
-} from "./rating.js";
-export {
   EVIDENCE_MANIFEST_ERROR_CODES,
   EvidenceManifestError,
   compileEvidenceManifest,

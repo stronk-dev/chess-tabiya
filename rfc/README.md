@@ -12,7 +12,8 @@ first `D<n>` token is machine-read as its discharge pointer.
 three-model × two-arrival simulation narrows the publication bracket to **1500–1800 BCS** and
 measures the clock-closing arm at 17–20 periods p50 / 18–23 p90 inside the supported cells. This
 supersedes that row's retained historical clause saying the arm is unrun; rated campaign entry and
-owner-use validation remain.
+owner-use validation remain. **AC-11 is also discharged:** rating now has a dedicated package
+subpath, an AST-resolved two-way import-graph guard, and a multi-rating rendered-byte fixture.
 
 | RFC | Status | Parent | Implementation |
 |---|---|---|---|

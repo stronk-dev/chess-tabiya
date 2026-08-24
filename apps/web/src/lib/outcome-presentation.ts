@@ -5,7 +5,6 @@ import {
   type ObjectiveState,
   type SelectionEngineIdentity,
 } from "@chess-tabiya/runtime";
-import type { HumanSplitPage } from "./api.js";
 
 type ProjectedAssessment =
   | { readonly kind: "authored"; readonly note: string }
@@ -93,7 +92,7 @@ function engineIdentityKey(identity: SelectionEngineIdentity): string {
   ]);
 }
 
-export function humanModelBandSentence(page: Pick<HumanSplitPage, "engine" | "targetElo">): string {
+export function humanModelBandSentence(page: { readonly engine: SelectionEngineIdentity; readonly targetElo: number | null }): string {
   const { engine, targetElo } = page;
   if (targetElo !== null) {
     return engine.eloHonored === true && engine.eloApplied === targetElo

@@ -1,7 +1,7 @@
 import {
-  RATED_OPPONENT_CALIBRATION,
   type OpponentSelection,
 } from "@chess-tabiya/runtime";
+import { RATED_OPPONENT_CALIBRATION } from "@chess-tabiya/runtime/rating";
 import { afterEach, describe, expect, it } from "vitest";
 
 import type { EngineHealth, EngineIdentity, EngineRequest } from "./engine-supervisor.js";

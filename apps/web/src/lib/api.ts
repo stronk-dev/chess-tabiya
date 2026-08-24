@@ -22,9 +22,9 @@ import type {
   ReasoningDetection,
   ReasoningTranscript,
   RunMark,
-  RatingPublication,
   StoryMoment,
 } from "@chess-tabiya/runtime";
+import type { RatingPublication } from "@chess-tabiya/runtime/rating";
 
 export interface PackSummary {
   readonly id: string;

@@ -7241,3 +7241,22 @@ step.
 **Still open:** this validates only BCS interval coverage and readiness. It does not human-anchor
 the scale, establish opponent humanity, detect cheating, complete rated campaign entry or discharge
 owner-use validation.
+
+## 2026-08-24 — learner-rating AC-11 becomes an actual build boundary
+
+**What landed:** rating is no longer re-exported from the general `@chess-tabiya/runtime` barrel;
+its six real consumers use the explicit `@chess-tabiya/runtime/rating` subpath. A TypeScript-resolved
+graph walks the seven rendering roots named by AC-11 — guard, guard conditions, voice, outcome
+presentation, feedback, objective and claim binding — and refuses reachability to or from
+`rating.ts`. The test includes an injected-edge positive control, so an empty graph cannot pass.
+
+**What the first run caught:** splitting the barrel was insufficient. Web outcome presentation
+imported the broad API type file solely for `HumanSplitPage`; that API file legitimately imports
+`RatingPublication`, creating a type-only but real path back to rating. The presentation function
+now accepts the exact two-field structural input it reads, removing that hidden connection rather
+than teaching the graph to ignore type imports.
+
+**Second arm:** four materially different rating states produce different rating-publication bytes
+but byte-identical guard events, public feedback, objective/outcome text and sealed voice evidence.
+`make learner-rating-isolation-check` runs both arms and is a required `make verify` dependency.
+D1512 closes; this is the executable basis on which D395's earlier closure now rests.

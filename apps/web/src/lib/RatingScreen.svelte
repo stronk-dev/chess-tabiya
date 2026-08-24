@@ -1,7 +1,7 @@
 <script lang="ts">
   import { onMount } from "svelte";
 
-  import type { PublishedBandValue, RatingPublication } from "@chess-tabiya/runtime";
+  import type { PublishedBandValue, RatingPublication } from "@chess-tabiya/runtime/rating";
   import type {
     DrillClientApi,
     LearnerMark,
