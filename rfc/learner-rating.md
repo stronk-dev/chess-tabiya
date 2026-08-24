@@ -2033,6 +2033,10 @@ Rows still proposed:
   **zero** rated results, and a property test over generated run logs asserts
   `|rated results| ≤ 1` per run, always. `rated_games`' `run_id` primary key makes "the same run
   twice" structurally unrepresentable, which is the other half of R11.
+  **Discharged 2026-08-24:** the fork integration fixture now proves a voided multi-branch run
+  cannot subsequently seal and leaves `ratedGames === 0`; a 250-run property test generates up to
+  30 conflicting seal/void actions and asserts one stored row, at most one sealed result, and an
+  exactly matching learner counter after every sequence.
 - **AC-11 (R15 is a build failure, not a review finding).** Two tests, and they are the reason
   D395 can be closed:
   1. **Module-graph reachability.** No module in the rendering set —

@@ -132,6 +132,9 @@ describe("rated-game service", () => {
     service.fork(run.id, principal, lease.writerId, run.nodes[0]!.id, { at: AT });
     expect(storage.ratedGame(run.id)).toMatchObject({ state: "voided", voidReason: "forked" });
     expect(storage.read(run.id)?.run.branches).toHaveLength(2);
+    expect(() => storage.sealRatedGame({ runId: run.id, result: "win", terminalReason: "checkmate", plyCount: 8, sealedAt: AT })).toThrowError(expect.objectContaining({ code: "RATED_GAME_CLOSED" }));
+    expect(storage.ratedGames(principal.learnerId).filter((game) => game.state === "sealed")).toEqual([]);
+    expect(storage.learnerRating(principal.learnerId)).toMatchObject({ ratedGames: 0, voidedGames: 1 });
   });
 
   it("seals only a rules-terminal game and records the exact terminal cause", async () => {

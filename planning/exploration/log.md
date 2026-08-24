@@ -7260,3 +7260,12 @@ than teaching the graph to ignore type imports.
 but byte-identical guard events, public feedback, objective/outcome text and sealed voice evidence.
 `make learner-rating-isolation-check` runs both arms and is a required `make verify` dependency.
 D1512 closes; this is the executable basis on which D395's earlier closure now rests.
+
+## 2026-08-24 — learner-rating AC-10 generated one-result invariant
+
+**What landed:** the fork integration case now tries to seal the already-voided run and proves the
+storage authority refuses it, with zero sealed games and zero rated-game increments. A fast-check
+property generates 250 sequences of up to 30 win/loss/draw seals and fork/rewind/abandon voids over
+one run, then asserts one record, at most one sealed result and exact agreement with the learner's
+`ratedGames` counter. This discharges AC-10's generated arm instead of relying on the primary-key
+argument alone.

@@ -1,4 +1,5 @@
 import { createRun } from "@chess-tabiya/runtime";
+import fc from "fast-check";
 import { describe, expect, it } from "vitest";
 
 import {
@@ -153,6 +154,37 @@ describe("rated-game storage", () => {
     expect(() => storage.sealRatedGame({ runId: run.id, result: "draw", terminalReason: "stalemate", plyCount: 70, sealedAt: LATER })).toThrow(/already sealed or voided/u);
     expect(storage.learnerRating("learner-a")).toMatchObject({ voidedGames: 1, abandonedGames: 0 });
     storage.close();
+  });
+
+  it("permits at most one rated result for every generated seal/void action sequence", () => {
+    fc.assert(fc.property(
+      fc.array(fc.constantFrom("seal_win", "seal_loss", "seal_draw", "void_fork", "void_rewind", "void_abandon"), { minLength: 1, maxLength: 30 }),
+      (actions) => {
+        const storage = new SQLiteRunStorage(":memory:", { onMigration: () => {} });
+        storage.createLearner({ id: "learner-a", handle: "a", passwordHash: "!", createdAt: AT });
+        const run = ratedRun("rated-generated");
+        storage.createRatedRun(run, { writerId: "writer-a", learnerId: "learner-a" }, "Rated game", declaration(run.id, "learner-a"));
+        for (const action of actions) {
+          try {
+            if (action.startsWith("seal_")) {
+              const result = action.slice("seal_".length) as "win" | "loss" | "draw";
+              storage.sealRatedGame({ runId: run.id, result, terminalReason: result === "draw" ? "stalemate" : "checkmate", plyCount: 42, sealedAt: LATER });
+            } else {
+              const reason = action === "void_fork" ? "forked" : action === "void_rewind" ? "rewound" : "abandoned";
+              storage.voidRatedGame(run.id, reason, LATER);
+            }
+          } catch {
+            // Conflicting later actions must refuse; the final record is the property under test.
+          }
+        }
+        const records = storage.ratedGames("learner-a");
+        expect(records).toHaveLength(1);
+        expect(records[0]!.state).not.toBe("open");
+        expect(records.filter((record) => record.state === "sealed")).toHaveLength(records[0]!.state === "sealed" ? 1 : 0);
+        expect(storage.learnerRating("learner-a")!.ratedGames).toBe(records[0]!.state === "sealed" ? 1 : 0);
+        storage.close();
+      },
+    ), { numRuns: 250 });
   });
 
   it("expires open games after thirty days and counts abandonment separately", () => {
