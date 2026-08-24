@@ -7362,3 +7362,22 @@ transpositions, stale carry on imported game 0, exit/re-entry, renderer vocabula
 latency, application routing and typed unavailability have dedicated tests. A real production
 image was built and served `A00 Amar Opening`; it contains the compiled artifact and contains
 neither `vendor/` nor any TSV file.
+
+## 2026-08-24 — the exhaustive 1.0 UX inventory becomes persistent assignment state
+
+**What failed:** [[D1523]] showed that `work-index` proves only that a ledger id appears in a living
+document. It cannot distinguish assignment from citation. [[D1528]] measured the consequence over
+the twelve UX dossiers: 569 distinct items, 507 live, and 452 outside any queue a worker read.
+
+**What landed:** [[D1535]] adds `planning/work-items-1.0.json`, a set-equal per-item join over the
+exhaustive UX index. Every item retains its source section and digest, capability, capability owner,
+lifecycle state and explicit capability-queue assignment. The guard refuses missing/extra ids,
+source drift, duplicate ids, wrong owners, live unassigned work and closed work retaining a live
+assignment. Initial state is 312 queued, 98 owner-blocked, 97 RFC-blocked, 38 complete and 24
+retired — 569/569 registered and zero unassigned. The historical ledger `work-index` remains for
+its narrower citation/route question; it is no longer treated as assignment proof.
+
+**Verification:** `make work-item-check roadmap-check work-index status-parity register-check`
+passes. The machine roadmap now names the item registry and its prefix-to-source join, and the
+governance capability stays honestly partial because generic non-UX ledger rows do not yet carry
+the same lifecycle state.

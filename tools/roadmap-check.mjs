@@ -53,6 +53,9 @@ export function parseUxItemIds(source) {
 
 export function validateRegistry(registry, context) {
   const errors = [];
+  if (registry.workItemRegistry !== "planning/work-items-1.0.json") {
+    errors.push("workItemRegistry must name planning/work-items-1.0.json");
+  }
   const capabilityIds = registry.capabilities.map((capability) => capability.id);
   const capabilitySet = new Set(capabilityIds);
   for (const id of duplicates(capabilityIds)) errors.push(`duplicate capability ${id}`);
@@ -102,6 +105,12 @@ export function validateRegistry(registry, context) {
   }
   for (const prefix of Object.keys(registry.uxItemPrefixes)) {
     if (!uxItemIds.some((id) => id.startsWith(`${prefix}-`))) errors.push(`unused UX prefix assignment ${prefix}`);
+  }
+  if (!sameSet(new Set(Object.keys(registry.uxItemPrefixes)), new Set(Object.keys(registry.uxItemSources ?? {})))) {
+    errors.push("uxItemSources must cover exactly the declared UX item prefixes");
+  }
+  for (const [prefix, source] of Object.entries(registry.uxItemSources ?? {})) {
+    if (!declaredUx.has(source)) errors.push(`${prefix}: unknown UX source ${source}`);
   }
 
   const declaredRouteNames = registry.appRoutes.map(([name]) => name);
@@ -154,7 +163,7 @@ export function main(root = process.cwd()) {
     process.exitCode = 1;
     return;
   }
-  console.log(`roadmap-check: ${registry.capabilities.length} capabilities, ${result.activeProductRfcCount} active product RFCs, ${uxFiles.length} UX dossiers, ${result.uxItemCount} UX items, ${registry.appRoutes.length} app-route obligations, ${registry.apiFamilies.length} API families; R1-R8 green`);
+  console.log(`roadmap-check: ${registry.capabilities.length} capabilities, ${result.activeProductRfcCount} active product RFCs, ${uxFiles.length} UX dossiers, ${result.uxItemCount} UX items, ${registry.appRoutes.length} app-route obligations, ${registry.apiFamilies.length} API families; R1-R9 green`);
 }
 
 if (process.argv[1] && fileURLToPath(import.meta.url) === path.resolve(process.argv[1])) main();

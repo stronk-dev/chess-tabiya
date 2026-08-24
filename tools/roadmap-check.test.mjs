@@ -20,6 +20,7 @@ test("rejects duplicate RFC ownership and an unassigned UX prefix", () => {
     "evidence", "state", "api", "experience", "defaults", "content", "verification", "release",
   ].map((name) => [name, ["partial", `${name} condition`]]));
   const result = validateRegistry({
+    workItemRegistry: "planning/work-items-1.0.json",
     definitionOfDone: Object.keys(dimensions),
     capabilities: [
       { id: "one", owner: "a", release: "core", rfcs: ["a.md"], completion: dimensions },
@@ -27,6 +28,7 @@ test("rejects duplicate RFC ownership and an unassigned UX prefix", () => {
     ],
     uxSources: { "ux-test.md": "one" },
     uxItemPrefixes: { ARR: "one" },
+    uxItemSources: { ARR: "ux-test.md" },
     appRoutes: [["home", "one", "live"]],
     apiFamilies: [["/healthz", "one", "live_direct"]],
   }, {

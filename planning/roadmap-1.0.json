@@ -1,6 +1,7 @@
 {
   "schemaVersion": 1,
   "authority": "planning/roadmap-to-done.md",
+  "workItemRegistry": "planning/work-items-1.0.json",
   "definitionOfDone": [
     "evidence",
     "state",
@@ -314,6 +315,20 @@
     "A11": "accessibility",
     "OPP": "bots",
     "CMP": "campaign"
+  },
+  "uxItemSources": {
+    "ARR": "ux-arrival-and-start.md",
+    "INR": "ux-in-run.md",
+    "CLP": "ux-core-loop.md",
+    "ATR": "ux-after-the-run.md",
+    "LIV": "ux-live-and-social.md",
+    "SET": "ux-settings-and-identity.md",
+    "TCH": "ux-teacher-and-classroom.md",
+    "IMP": "ux-import-and-account.md",
+    "AUT": "ux-authoring-and-library.md",
+    "A11": "ux-accessibility-and-mobile.md",
+    "OPP": "ux-opponents.md",
+    "CMP": "ux-campaign.md"
   },
   "appRoutes": [
     ["home", "rehearsal", "live"],

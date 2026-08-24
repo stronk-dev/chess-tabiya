@@ -1,12 +1,14 @@
 # Full 1.0 roadmap — the authoritative product rollup
 
 **Owner:** coordinator · **Rebuilt:** 2026-08-24 under [[D1504]] · **Machine map:**
-`planning/roadmap-1.0.json` · **Guard:** `make roadmap-check`
+`planning/roadmap-1.0.json` · **Per-item state:** `planning/work-items-1.0.json` · **Guards:**
+`make roadmap-check work-item-check`
 
 This is the one strategic answer to “what remains before a full 1.0?”. `design/BACKLOG.md` remains
 the idea/defect ledger, `rfc/README.md` the lifecycle/resource register,
 `planning/ux-implementation-index.md` the exhaustive UX inventory, and `make work-index` the live
-row-to-destination join. Those are source registers, not competing roadmaps.
+ledger-row-to-destination join. `planning/work-items-1.0.json` is the persistent assignment state
+for all 569 UX items. Those are source registers, not competing roadmaps.
 
 The old version said feature work was empty, 39 packs were committed, and no product RFC was
 active. HEAD has 46 active product RFCs, zero graduated packs, 569 indexed UX items, and whole
@@ -48,6 +50,7 @@ Run these for current counts; prose counts are dated evidence, not authority:
 
 ```sh
 make work-index
+make work-item-check
 make status-parity
 make register-check
 make roadmap-check
@@ -85,15 +88,19 @@ route fails `make roadmap-check` until it has an owner.
 <!-- roadmap-capability: governance -->
 
 **State: partial.** The ledger, RFC register, work index, status parity, shared-resource register,
-and intent parity are real. They answer “mentioned?” and “internally consistent?”, not yet “assigned
-to a full capability and actively delivered?” for every generic queue row. The UX index measured
-the consequence: 452 of 507 live UX items were ledger-only or in no worker queue.
+intent parity, and persistent UX-item registry are real. The 569-item register now distinguishes
+312 queued, 98 owner-blocked, 97 RFC-blocked, 38 complete and 24 retired items, with zero live
+items unassigned; a source-row edit or a new id fails until its durable state is reconciled. Generic
+non-UX ledger rows still answer “mentioned?” more reliably than “actively delivered?”, so the
+capability remains partial rather than overstated as proven.
 
 **1.0 exit:** coverage stays green; generic queue-only rows are assigned as touched; RFC, content,
 research and release closeout flows into its register, log, docs, intent proposal, and this rollup;
 measurement records retain inputs, revisions, failures and reproducible commands.
 
-Primary RFC: `measurement-records`. Debt: [[D1504]], [[D1505]], [[D1523]], [[D1528]].
+Primary RFC: `measurement-records`. Debt: [[D1504]], [[D1505]]; [[D1523]]/[[D1528]] are discharged
+for the exhaustive UX inventory by [[D1535]] and `make work-item-check`, while the generic-ledger
+extension stays inside the exit above.
 
 ### 2. Evidence collection, semantic events, selection, and grounding
 
@@ -402,7 +409,9 @@ an unaccepted contract or claimed resource/migration lane.
 ### Wave 0 — make “done” enforceable
 
 1. Keep work/status/register/intent/roadmap checks green.
-2. Assign generic queue-only rows to capability slices as touched; do not make a fifth snapshot.
+2. Keep all 569 UX items in `planning/work-items-1.0.json`; a new item must acquire a capability
+   owner and assignment before the guard greens. Extend the same state model to generic queue-only
+   ledger rows as touched; do not make a fifth snapshot.
 3. Finish [[D1448]] and [[D1533]] with exact local parity and the remaining container/migration/release tiers; preserve [[D1532]]'s production-boundary family test.
 4. Land research coverage and manifest-freshness guards; preserve negative results.
 
@@ -470,7 +479,9 @@ eight dimensions proven or an explicit owner-approved descope.
 ## How the other work documents are used
 
 - `planning/WORK.md`: navigation only; points here first.
-- `planning/ux-implementation-index.md`: exhaustive UX register; item prefixes assign work here.
+- `planning/ux-implementation-index.md`: exhaustive UX source register; descriptions and blockers live here.
+- `planning/work-items-1.0.json`: persistent per-item lifecycle and capability assignment; workers
+  select from this file and update state instead of curating another queue snapshot.
 - `codex-wave-2.md`, `codex-wave-3.md`, `codex-queue.md`: tactical/history; cannot declare product
   completion.
 - `platform-alignment/1.0-capability-map.md`: research-era synthesis; evidence, not current status.
