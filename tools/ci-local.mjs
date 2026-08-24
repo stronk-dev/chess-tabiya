@@ -10,6 +10,7 @@ export function preflightFailures({
   pnpmVersion,
   status,
   stockfishCommand,
+  dockerComposeAvailable,
 }) {
   const failures = [];
   const nodeMajor = Number(nodeVersion.replace(/^v/, "").split(".")[0]);
@@ -28,6 +29,9 @@ export function preflightFailures({
   }
   if (!stockfishCommand) {
     failures.push("SF_CMD must name an executable Stockfish binary, as it does in CI");
+  }
+  if (!dockerComposeAvailable) {
+    failures.push("Docker Compose must be available because schema verification renders every deployment profile");
   }
   return failures;
 }
@@ -60,11 +64,16 @@ export function main() {
       : REQUIRED_PNPM_VERSION;
   const status = capture("git", ["status", "--porcelain=v1", "--untracked-files=normal"]);
   const stockfishCommand = requireExecutable(process.env.SF_CMD) ? process.env.SF_CMD : "";
+  const dockerComposeAvailable =
+    nodeMajor === REQUIRED_NODE_MAJOR
+      ? capture("docker", ["compose", "version"]) !== ""
+      : true;
   const failures = preflightFailures({
     nodeVersion: process.version,
     pnpmVersion,
     status,
     stockfishCommand,
+    dockerComposeAvailable,
   });
   if (failures.length > 0) {
     console.error(`local CI parity refused:\n- ${failures.join("\n- ")}`);

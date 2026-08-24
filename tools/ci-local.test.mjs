@@ -12,6 +12,7 @@ const valid = {
   pnpmVersion: REQUIRED_PNPM_VERSION,
   status: "",
   stockfishCommand: "/tmp/stockfish",
+  dockerComposeAvailable: true,
 };
 
 test("clean pinned committed bytes pass parity preflight", () => {
@@ -26,12 +27,14 @@ test("toolchain drift and dirty bytes are all refused", () => {
       pnpmVersion: "11.17.0",
       status: " M packages/runtime/src/index.ts",
       stockfishCommand: "",
+      dockerComposeAvailable: false,
     }),
     [
       "Node 24 is required; found v26.7.0. Use .node-version before running CI parity.",
       "pnpm 11.18.0 is required; found 11.17.0.",
       "the working tree is dirty; CI parity only validates committed bytes",
       "SF_CMD must name an executable Stockfish binary, as it does in CI",
+      "Docker Compose must be available because schema verification renders every deployment profile",
     ],
   );
 });
