@@ -48,6 +48,20 @@ owner or claude-on-an-owner-ruling may write. **The ledger is a register every t
 to**, exactly as `rfc/README.md` is, and an implementer flipping the rows its own commit ships
 is the protocol working rather than a law-5 breach.
 
+**A completion that falsifies an intent sentence must SAY SO — the protocol propagated downward
+only.** Archiving flips ledger rows and appends to the log; nothing required anyone to notice that
+shipping the thing made a `design/` sentence false. **Added 2026-08-24 by claude on measured evidence
+and the owner's to veto:** `142bca95` wrote *"does NOT exist"* into `design/03`'s B6 and B7 at 20:22
+and `0939070c` **shipped both at 22:24**, correctly flipping the ledger rows and never touching
+`design/03`. Both agents obeyed the protocol exactly. Law 5 rightly forbids an implementer editing
+intent — so the only legal path was a proposal nobody was required to make, and **twelve intent
+sentences went stale by that route**, `campaign` reaching **0 hits across `design/00`–`05`** against
+~950 lines of shipped mechanism. **The clause:** a change set that falsifies a sentence in
+`design/00`–`06` adds a **proposed intent amendment** — the file, the exact sentence, and what is now
+true — to `planning/platform-alignment/` in the same commit. The implementer never edits intent; they
+are required to *report* that intent now disagrees with the tree. Not doing so is how a rollup rebuilt
+today drifts again by the same route ([[D1505]]).
+
 **RFC completion protocol includes the ledger AND the log.** Archiving an
 implemented RFC flips the `design/BACKLOG.md` rows it ships (💡→✅ with a one-line
 summary) **and appends its entry to `planning/exploration/log.md`** in the same
