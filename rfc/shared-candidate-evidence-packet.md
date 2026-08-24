@@ -173,9 +173,14 @@ specifies.
    (`planning/platform-alignment/dossier-remainder.md:232`); rank 5 is `theory-drill-current-joins`.
    `[V]` Off by one, in a row that otherwise points at exactly the right document. Not repaired here
    — that file belongs to a concurrent draft — and recorded for its author.
-7. **The ledger head is D1373, not D1354.** The drafting brief for this document stated D1354; the
-   ledger's maximum id at HEAD is **D1373**. `[V]` The `## Ledger rows` section states the head it
-   actually observed, per [[D1130]].
+7. **The ledger head at drafting was D1384, not D1354 and not D1373.** The drafting brief stated
+   D1354; an earlier version of this correction stated D1373, which was itself wrong. Re-derived
+   from the drafting commit: `git show 3a291abb:design/BACKLOG.md` has a maximum row id of
+   **D1384**. `[V]` The correction is retained rather than deleted because *the correction was the
+   thing that drifted* — a document whose job is to record what the source got wrong recorded its
+   own observation wrong, in the one field it was correcting. [[D1503]] has since retired the D1130
+   numbering convention, so the `## Ledger rows` section names no head at all and the proposed rows
+   below are unnumbered.
 
 **What the research established and this RFC carries forward unchanged**, each re-verified:
 
@@ -403,18 +408,50 @@ the convention. Criterion 6.
 
 **§5.1 — Sealed events are retained as the original values.** `events[]` holds the
 `SemanticEvidenceEvent` objects `localSemanticEvents` returned — **the same object references**, not
-copies, so `assertSemanticEvidenceEvent` (`semantic-evidence.ts:961-966`) still passes on them. All
+copies, so `assertSemanticEvidenceEvent` (`semantic-evidence.ts:956-961`) still passes on them. All
 eight envelope fields survive: `id`, `projection`, `evidence` (with its producer and its `DECLARED`
 brand), `derivationInputs`, `anchor`, `sign`, `operands`, `basis`. `[V]` This is the direct repair of
 §0's correction 2: six fields the vector drops, retained. Criterion 7 asserts the assertion passes on
 every retained event and that all eight keys are present, including `evidence.producer`.
 
-**§5.2 — Reconstruction is not retention.** A consumer that needs a sign, an anchor or a producer
-reads it; it does not recompute it. Recomputation defeats the cache (which is the point of the
-packet) and, worse, produces an object that is byte-equal but **unbranded** — `SEMANTIC_EVENT_VALUES`
-is a `WeakSet` of the exact values `compileSemanticEvidenceEvent` produced (`:54`, `:957`), so a
-reconstructed event fails `assertSemanticEvidenceEvent` and any consumer that skips the assertion is
-running on an unsealed value. `[V]` Criterion 8 is the must-fail fixture.
+**§5.2 — Reconstruction is not retention, and the seal is not what stops it.** A consumer that needs
+a sign, an anchor or a producer reads it; it does not recompute it.
+
+**An earlier draft said the seal enforces that, and it does not. Executed at HEAD:** `[V]`
+
+```text
+RECONSTRUCTION REJECTED BY SEAL? false     (sameRef: false, sameId: true)
+```
+
+`SEMANTIC_EVENT_VALUES` is a `WeakSet` (`semantic-evidence.ts:55`) and
+`compileSemanticEvidenceEvent` **adds every value it produces to it** (`:952`). A "reconstruction" is
+just another call to that function, so the rebuilt object is a WeakSet member on the same line that
+created it and `assertSemanticEvidenceEvent` (`:956-961`) passes on it. There is no unbranded state
+for the seal to catch: the brand is minted by the act of rebuilding.
+
+**And it is worse than merely permissive — asserting an event mints a second sealed twin.**
+`assertSemanticEvidenceEvent` calls `compileSemanticEvidenceEvent` at `:959` to recompute `id` and
+`basis` for comparison, and that call runs `:952`, so **every assertion adds a fresh object to the
+WeakSet**. A hot path that asserts once per event per request grows the sealed-value population by
+one object per assertion. They are unreachable and therefore garbage-collectable, so this is not a
+leak — but it means the WeakSet is not, and has never been, a record of "values the compiler
+originally produced". It is a record of "values the compiler has ever produced, including during
+verification".
+
+**What the seal actually guarantees, stated at its real strength.** `SEMANTIC_EVENT_VALUES` proves
+one thing: the object was produced by `compileSemanticEvidenceEvent` against *some* manifest, rather
+than hand-built or JSON-parsed. That is a real and useful guarantee — it is exactly what stops a
+caller from asserting a plain object literal into a consumer — and it is **not** an identity
+guarantee. Two structurally identical events compiled from the same inputs are indistinguishable to
+the seal, by construction.
+
+**So the retention rule is enforced by reference identity, not by the seal.** The packet holds the
+same object references `localSemanticEvents` returned (§5.1), and the rule is:
+`packet.candidates[i].events[j]` **is** (`===`) the value the compiler produced. A row admitting a
+different object — even a byte-identical, correctly sealed one — is refused by the packet's own
+admission check, because the packet is the thing that knows which value it compiled and the WeakSet
+is not. Criterion 8 tests that check, and tests it against a **rebuilt, sealed, passing** event, which
+is the only fixture that distinguishes the two mechanisms.
 
 **§5.3 — The emitted closure is derived, not listed.** The packet's per-candidate event families are
 whatever `localSemanticEvents` composes, and the compiler exports that set as a **derivation**:
@@ -474,14 +511,29 @@ key compile once.
 convention, the move-identity convention or the compiler version produces a **new key**; the old
 entry is missed and eventually evicted. No compiled packet is ever edited. **Provider state cannot
 invalidate a packet**, because a packet has no provider input (§8) — provider-off invalidates or
-abstains the dependent *join* and leaves the population untouched. Criterion 14.
+abstains the dependent *join* and leaves the population untouched. Criterion 21. (An earlier draft
+pointed this section at criterion 14, which is about the claims decision and says nothing about
+invalidation; §6.4 had no criterion at all.)
 
-**§6.5 — Process-local, and a persisted form is refused rather than deferred.** The first and only
-implementation is process-local, because the seals are `WeakSet` membership (`:54`) and do not
-survive serialisation. A cross-process form is a **different projection** with a different problem:
-it would need a serialised receipt carrying every literal source digest and a re-seal on admission,
-and until someone writes that RFC, JSON that resembles a semantic event is not the event. §11.5
-records this as a refusal with its exit named.
+**§6.5 — Process-local, and a persisted form is refused rather than deferred — re-argued on
+something true.** An earlier draft rested this refusal on §5.2's false premise: that a rebuilt event
+fails the seal. It does not (§5.2), so "the seals do not survive serialisation" proves nothing about
+a persisted packet — a reader could deserialise and re-run `compileSemanticEvidenceEvent`, and the
+result would pass `assertSemanticEvidenceEvent` exactly as an original does.
+
+**The true reason is that re-sealing across a process boundary re-seals against a *different*
+manifest, and nothing in the seal notices.** `compileSemanticEvidenceEvent` takes the manifest as its
+first argument and checks the event against *that* manifest's declarations; `assertSemanticEvidenceEvent`
+then rebuilds against whatever manifest **its own caller** passes and compares `id` and
+`evidenceDigest(basis)` (`:959-960`). So a persisted packet is admissible exactly when the reading
+process's manifest agrees with the writing process's — and **the packet's stored `manifestDigest` is
+the only thing that could establish that**, which means the guarantee has to come from a receipt, not
+from the seal. Concretely, a cross-process form needs three things this RFC does not specify:
+a serialised receipt carrying every literal source digest, a re-seal on admission that compares the
+receipt's `manifestDigest` to the reading process's compiled digest **before** rebuilding, and a typed
+refusal when they differ. Until someone writes that RFC, JSON that resembles a semantic event is not
+the event — **not because the seal rejects it, but because nothing has checked what vocabulary it was
+sealed against.** §11 item 5 records this as a refusal with its exit named.
 
 ### §7 — Three consumers, three exact joins, three honest abstentions
 
@@ -612,7 +664,9 @@ and the operator-only and LLM boundaries. That is the whole mechanism.
    distinction between a fact and an opinion, expressed as a cache identity; the shipped selector
    cache (§6.2) is what the alternative looks like.
 5. **A persisted or cross-process packet** — §6.5. Refused with its exit named: a serialised receipt
-   with a re-seal on admission, in its own RFC.
+   with a re-seal on admission that compares the receipt's `manifestDigest` against the reading
+   process's compiled digest **before** rebuilding, in its own RFC. **Not** refused on the ground
+   that the seal rejects a rebuild — it does not (§5.2).
 6. **Any provider inside the packet** — §8.1. Engine, Maia, tablebase, Explorer and LLM are all joins,
    and every one of them may be off while the packet still compiles.
 7. **A distance, salience, valence, rank or grade field** — §9.2. There is nowhere to put one, which
@@ -620,8 +674,11 @@ and the operator-only and LLM boundaries. That is the whole mechanism.
 8. **Lifecycle state on a position key** — [[D1373]]'s rule, adopted verbatim: *"the position key may
    cache only position-derived"* facts. A packet is position-derived; nothing about a run, a route
    age, a rewind or a learner may be stored under its key.
-9. **Reconstructing a sealed event instead of retaining it** — §5.2, because the reconstruction is
-   unbranded and any consumer skipping the assertion runs on an unsealed value.
+9. **Reconstructing a sealed event instead of retaining it** — §5.2. **Not** because the
+   reconstruction is unbranded: it is correctly branded and passes `assertSemanticEvidenceEvent`
+   (executed). Because the packet's guarantee is *"this is the value the compiler produced for this
+   candidate"*, and only reference identity carries that; a rebuild also defeats the cache the packet
+   exists to be.
 
 ### §12 — Implementation surface
 
@@ -658,6 +715,8 @@ rather than aspirational — criterion 14.
 | proposed 📊 | the event envelope loses **six** fields, not five — `evidence`, and with it the producer | §0.2, §5.1 | criterion 7 |
 | proposed 📊 | the D1071 cold/warm pair is not a controlled A/B of one computation | §0.4, §10 hold 2 | criterion 12 |
 | proposed 📊 | the packet is the population both sibling coverage obligations are stated against | §2 | criteria 2, 5, 15 |
+| proposed 🐞 | `SEMANTIC_EVENT_VALUES` does not distinguish a rebuild from the original, and asserting an event mints a second sealed twin | §5.2, §6.5 | criterion 8 (a rebuild that *passes* the seal) |
+| proposed 🐞 | a criterion citing `register-check` C1–C7 omits C8, the only check that fires on a `none` claims block | criterion 14 | criterion 14 |
 
 ## Deviations from design
 
@@ -670,7 +729,7 @@ contradicted.
 
 ## Acceptance criteria
 
-> **Cross-review 2026-08-23 — [[D1412]] blocks acceptance.** The seal does not reject a reconstruction (executed: `RECONSTRUCTION REJECTED BY SEAL? false`), and asserting an event mints a second sealed twin. [[D1413]] — this document still asserts the retracted [[D1388]] claim in two places while quoting its own retraction.
+> **Cross-review 2026-08-23 — [[D1412]] repaired 2026-08-24.** Reproduced by execution at HEAD: `RECONSTRUCTION REJECTED BY SEAL? false` (`sameRef: false`, `sameId: true`), and `assertSemanticEvidenceEvent` calls `compileSemanticEvidenceEvent` at `semantic-evidence.ts:959`, which runs `SEMANTIC_EVENT_VALUES.add` at `:952` — so asserting an event does mint a second sealed twin. §5.2 is re-argued on **reference identity** (the packet knows which value it compiled; the WeakSet does not), §6.5 and §11 item 5 are re-argued on **manifest-vocabulary agreement** instead of on the false premise, and criterion 8's parenthetical is inverted back: identity is compared **by reference**, and a byte-identical correctly-sealed rebuild is the fixture. Criterion 14 now names C1–**C8**, criterion 6 is re-pointed from the compiler to the packet readers that actually take a caller UCI, and criteria 5 and 12 are given tree states that make them red.
 
 > **Cross-review 2026-08-23.** [[D1385]] — `evaluatedAlternatives` cannot differ from `legalAlternatives` on the main path, and the unevaluated case selects two families the complete population rejects. [[D1386]] — the selector's inline event closure composes eight families where `localSemanticEvents` composes ten. [[D1387]] — alternative events are never checked against the edge they were supplied for. [[D1388]] — the reported `selectionCacheKey` positional defect does not exist.
 
@@ -690,22 +749,51 @@ contradicted.
 4. **Scope narrows evidence, never candidates.** A fixture asserts all three scopes produce identical
    `candidates.map(r => r.moveUci)`, that a narrow packet is not served for a wide request, and that a
    wide packet projects to satisfy a narrow one.
-5. **One packet serves both the played row and the alternative denominator.** From a single packet, a
-   fixture derives Review's `|alternatives| = |candidates| − 1` and the bot's row for the played move,
-   and asserts the alternative set is set-equal to `legalAlternativeEdges`' output for the same edge.
-   *This is §4.3's difference made failable in both directions.*
-6. **The dialect is closed.** A foreign-dialect castling UCI (`e1g1` where the convention says
-   `e1h1`) presented to the compiler fails with a typed error naming
-   `MOVE_IDENTITY_CONVENTION`; the 960 degenerate case from `exact-legal-mobility` (`g1h1` where the
-   king's semantic destination equals its origin) compiles.
+5. **One packet serves both the played row and the alternative denominator — compared on `(moveUci,
+   afterFen)` pairs, not on cardinality.** The cardinality arm alone **cannot fail**:
+   `alternatives = candidates.filter(row => row.moveUci !== playedUci)` makes
+   `|alternatives| = |candidates| − 1` an arithmetic consequence of criterion 2's set-equality, and
+   both sides of the `legalAlternativeEdges` comparison read the same `exactLegalMoves` authority
+   (`semantic-evidence.ts:968`), so a moveUci-only comparison restates criterion 2. What *can* differ
+   is the **child FEN and the canonical dialect**, because `legalAlternativeEdges` re-canonicalizes
+   every uci through `canonicalMoveUci` (`:971`) and computes its own `afterFen` by a separate
+   `position.play` path (`:977-978`), while the packet derives both in its compiler. So: from a
+   single packet, a fixture derives Review's alternative set and the bot's played row, and asserts
+   the packet's `(moveUci, afterFen)` **pair set** is set-equal to `legalAlternativeEdges`' pair set
+   **plus** the played edge's pair — on an ordinary root, a **castling** root (where
+   `canonicalMoveUci` is the transform that could diverge) and a **promotion** root (four identities
+   per promoting move). *Concrete RED: a compiler that retains `exactLegalMoves`' raw `uci` where
+   `legalAlternativeEdges` retains the canonicalized form — the pair sets diverge on the castling
+   root while cardinality stays equal, which is the dialect defect §4 says has already bitten twice.
+   Second RED: a compiler that derives `afterFen` by a different play path — the pair sets diverge
+   on the promotion root.*
+6. **The dialect is closed at the readers, which are the only things that take a caller UCI.** An
+   earlier version of this criterion presented a foreign-dialect UCI **to the compiler** — but §3.2
+   gives the compiler no move parameter at all (a caller supplies `beforeFen` and a request scope),
+   and criterion 1 makes supplying one a type error, so the fixture tested an input criterion 1
+   forbids and could never run. The surface that really takes a caller UCI is the **packet readers**:
+   `alternatives(packet, playedUci)` (§4.3) and Review's played-row lookup (§7.3). So: a
+   foreign-dialect castling UCI (`e1g1` where `MOVE_IDENTITY_CONVENTION` says `e1h1`) passed to
+   either reader fails with a typed error naming the convention, and is **not** silently normalised
+   on ingest (§4.4); the 960 degenerate case from `exact-legal-mobility` (`g1h1` where the king's
+   semantic destination equals its origin) resolves to its row. *Concrete RED: a reader that calls
+   `canonicalMoveUci` on its argument before looking it up — it succeeds on `e1g1`, which is exactly
+   the "normalise on ingest" §4.4 refuses, and the criterion catches it.*
 7. **Sealed events survive whole.** For every retained event, `assertSemanticEvidenceEvent` passes and
    `Object.keys(event).sort()` equals the eight-field envelope, **including `evidence`, and
    `evidence.producer` is present**. *Fails if the packet copies, freezes or re-wraps events —
    §0's correction 2 made failable.*
-8. **Reconstruction is refused.** A must-fail fixture rebuilds an identical event with
-   `compileSemanticEvidenceEvent` from retained bytes, admits it to a packet row, and the packet
-   refuses it as not being the original value. *Fails if identity is compared by digest rather than by
-   seal.*
+8. **Reconstruction is refused, by reference identity — and the fixture is a rebuild that *passes*
+   the seal.** A must-fail fixture rebuilds an identical event with `compileSemanticEvidenceEvent`
+   from the retained bytes of an original, asserts the rebuild **passes**
+   `assertSemanticEvidenceEvent` and has the same `id` and `basis` digest, then admits it to a packet
+   row and asserts the packet refuses it as not being the value it compiled. *Wrong implementation
+   that would pass a weaker check: one whose admission test is `assertSemanticEvidenceEvent`, or a
+   digest comparison, or `SEMANTIC_EVENT_VALUES.has` — **all three accept the rebuild** (executed at
+   HEAD: `RECONSTRUCTION REJECTED BY SEAL? false`), so only a `===` comparison against the compiled
+   value goes red.* The parenthetical in the earlier draft — *"fails if identity is compared by
+   digest rather than by seal"* — was inverted: the seal is the weaker of the two, and comparing by
+   seal is the defect this criterion catches.
 9. **The closure is derived.** `make candidate-closure-census` emits the emitted projection ids over a
    fixed position sweep, and the packet's declared closure is asserted **set-equal by id** to that
    output. A projection added to `localSemanticEvents` and not to the declaration fails. HEAD counts
@@ -721,18 +809,33 @@ contradicted.
     manifest digest, legal convention, move-identity convention, compiler version or scope produce
     different ids. *Fails if any policy term leaks into the key — the shipped selector cache (§6.2)
     is the negative example.*
-12. **End-to-end cold and warm latency is measured, on one computation.** The same packet-serving
-    hint and bot request is timed cold and warm on a declared machine, and both figures are recorded
-    with the D1071 baseline cited beside them **as a different measurement** (§0's correction 4). No
-    threshold is baked; the obligation is a recorded number with its procedure.
+12. **End-to-end cold and warm latency is measured on *one* computation, and the record proves it.**
+    No threshold is baked — a threshold here would be invented rather than measured — so the
+    criterion is failable on the **shape and provenance of the record**, which is the property
+    §0's correction 4 says D1071 lacked. The recorded artifact must exist at the path Discharge D2
+    names and must carry: the cold figure, the warm figure, the machine declaration, the procedure,
+    the D1071 baseline cited **as a different measurement**, and — the load-bearing field — the
+    **`packetId` of each run, asserted equal**. *Concrete RED, and it is the exact defect being
+    corrected: a recorded pair whose two runs carry different `packetId`s is two computations, not a
+    cold/warm pair, which is what `tools/d1066-semantic-horizon-harness/semantic-horizon.test.ts:215-220`
+    did by timing `horizonSelection` and `moduleSelection` as if they were one. Second RED: an
+    artifact with figures and no procedure — a number with no way to reproduce it is not a
+    measurement.*
 13. **Single-flight and the bound both work.** Two concurrent requests for one key compile **once**; a
     rejected compilation is not memoised; and exceeding the declared maximum evicts the
     least-recently-used entry rather than growing. *Fails against an unbounded `Map` — which is what
     ships today.*
-14. **The claims decision stays true at implementation time.** `register-check` C1–C7 green with this
-    RFC's claims block reading `none`, **and** an assertion that the implementation touched no file
-    under `schemas/` or `packages/schema/`. *Forces renegotiation in the register rather than a
-    silent widening.*
+14. **The claims decision stays true at implementation time, and C8 is named because it is the check
+    a `none` claim needs.** `register-check` **C1–C8** green with this RFC's claims block reading
+    `none`, **and** an assertion that the implementation touched no file under `schemas/` or
+    `packages/schema/`. The tool runs eight checks (`tools/register-check.mjs:366-375`); an earlier
+    version of this criterion named C1–C7 and so omitted **exactly the one that fires on this RFC's
+    risk**: C8 fails when a schema file's bytes differ from the digest the register was reconciled
+    against **and no live claim declares the resource** (`register-check.mjs:66-84`). With a `none`
+    claims block, `claimed.has(resource)` is false for every resource, so C8 is the only check that
+    catches a schema byte-change smuggled in under this RFC. *Concrete RED: edit one byte of any
+    `schemas/*.schema.json` during implementation — C1–C7 stay green and C8 fails, which is the whole
+    point.* *Forces renegotiation in the register rather than a silent widening.*
 15. **MultiPV is refused as the population, and `evaluated_subset` is honest.** A join built over a
     MultiPV result presented as the legal population fails; a declared capped subset succeeds and is
     marked `evaluated_subset`; and a complete-alternative claim over an `evaluated_subset` value
@@ -750,6 +853,19 @@ contradicted.
     sealed selected items, and a must-fail fixture attempts to pass a packet to it.
 20. **The implementation surface counts 6 production source files**, the same unit §12's caption
     states.
+21. **Invalidation is by key and never by mutation, and provider state cannot reach it** (§6.4 — the
+    section that had no criterion). Four arms. **(a)** A compiled packet is frozen: a fixture asserts
+    every mutation attempt on a served packet throws in strict mode, and that the cache never hands
+    out a value it later edits. **(b)** Changing any one of the six key terms — manifest digest,
+    legal convention, move-identity convention, compiler version, FEN, scope — produces a **different
+    `packetId`** and a fresh compilation, with the old entry still intact until eviction rather than
+    overwritten. **(c)** Turning every provider off and on again produces the **same** `packetId` and
+    the **same** cache hit, since a packet has no provider input (§8.1). **(d)** A dependent join
+    abstains under provider-off while the packet it read is unchanged and still served.
+    *Concrete RED for (b): an implementation that mutates a cached packet's `manifestDigest` in place
+    on a manifest change — the id stops identifying the bytes and (a) fails too. Concrete RED for
+    (c): any provider term leaking into the key, which is criterion 11's defect seen from the
+    invalidation side.*
 
 ## Discharges
 
@@ -789,7 +905,9 @@ contradicted.
 
 ## Ledger rows
 
-*(Proposed — ids assigned at landing; head was **D1373** at drafting. The drafting brief stated
+*(Proposed — ids assigned at landing; unnumbered per [[D1503]], which retires the D1130 head-stating
+convention. Historical note, since §0's correction 7 turns on it: the head at the drafting commit
+`3a291abb` was **D1384**. The drafting brief stated
 D1354; corrected here per §0.7.)*
 
 - **🐞** — **`selectSemanticEvidence` takes the counterfactual population from a caller callback and
@@ -861,6 +979,25 @@ D1354; corrected here per §0.7.)*
   harness's own legal enumerator omits promotion identities
   (`candidate-packet.test.ts:34-41` against `legal-moves.ts:42-46`), so it would **understate** the
   completeness gap in any promoting position.
+- **🐞** — **`SEMANTIC_EVENT_VALUES` does not prove what every reader assumes it proves, and
+  asserting an event mints a second sealed twin.** `compileSemanticEvidenceEvent` adds **every**
+  value it produces to the WeakSet (`semantic-evidence.ts:952`), so a rebuild from retained
+  in-process bytes is a member on the line that created it — executed at HEAD:
+  `RECONSTRUCTION REJECTED BY SEAL? false`, with `sameRef: false` and `sameId: true`. Worse,
+  `assertSemanticEvidenceEvent` **itself calls** `compileSemanticEvidenceEvent` (`:959`) to recompute
+  `id` and `basis` for comparison, so each assertion adds a fresh object to the set. The values are
+  unreachable and collectable, so it is not a leak — but the WeakSet is a record of *"values this
+  compiler has ever produced, including during verification"*, not *"values that were originally
+  produced"*. What the seal really guarantees is that an object came from the compiler rather than
+  from a literal or `JSON.parse`; it is **not** an identity guarantee and never was. Any RFC that
+  argues a retention or persistence rule from "a reconstruction fails the seal" is arguing from a
+  false premise.
+- **🐞** — **A criterion citing `register-check` C1–C7 omits the only check that fires on a `none`
+  claims block.** The tool runs **C1–C8** (`tools/register-check.mjs:366-375`). C8 fails when a
+  schema file's bytes differ from the register's reconciled digest **and no live claim declares the
+  resource** (`:66-84`) — and with `none` claimed, `claimed.has(resource)` is false for every
+  resource, so C8 is precisely the gate a no-claim RFC needs. Naming C1–C7 is not a rounding error;
+  it names the seven checks that cannot catch the thing being asserted.
 
 ## Changelog
 
@@ -874,3 +1011,24 @@ D1354; corrected here per §0.7.)*
   `evidence-move-selector.md` and `bot-route-source.md` determined in §2: composes beneath both,
   subsumes neither, and is the object their two contradictory coverage obligations are both measured
   against.
+- 2026-08-24 — **[[D1412]] repaired.** Both halves reproduced by execution before anything was
+  changed. **§5.2's central claim was false**: `RECONSTRUCTION REJECTED BY SEAL? false`. The section
+  is re-argued on **reference identity** — the packet knows which value it compiled and the WeakSet
+  does not — and the seal's real strength is stated (it proves an object came from the compiler, not
+  that it is *the* object). §6.5 and §11 item 5 leaned on the same false premise and are re-argued on
+  **manifest-vocabulary agreement**: a persisted packet is admissible exactly when the reading
+  process's manifest matches the writing process's, and only a receipt can establish that, because
+  `assertSemanticEvidenceEvent` rebuilds against whatever manifest its own caller passes (`:959`).
+  Criterion 8's parenthetical was inverted and is corrected: the seal is the **weaker** of the two
+  comparisons, so the fixture is a rebuild that **passes** every seal-shaped check and is refused
+  only by `===`. Also repaired: criterion 14 now names **C1–C8** and says why C8 is the check a
+  `none` claim needs; criterion 6 is re-pointed from the compiler (which §3.2 gives no move
+  parameter, so criterion 1 forbids the input the fixture required) to the packet readers that do
+  take a caller UCI; criterion 5 is re-specified on `(moveUci, afterFen)` **pairs** over castling and
+  promotion roots, since its cardinality arm was an arithmetic consequence of criterion 2; criterion
+  12 is made failable on the record's shape and on the two runs sharing a `packetId`, which is the
+  D1071 defect §0.4 records; §6.4 gains criterion 21 (it had pointed at criterion 14, which is about
+  something else); and §0's correction 7 is itself corrected — the ledger head at the drafting commit
+  `3a291abb` was **D1384**, not the D1373 the correction asserted, so the correction had drifted in
+  the field it existed to correct. [[D1503]] retires the head-stating convention, so the proposed
+  rows are unnumbered.

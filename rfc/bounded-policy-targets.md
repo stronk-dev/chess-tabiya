@@ -5,8 +5,8 @@
 - **Created:** 2026-08-23
 - **Design refs:** `design/00-thesis.md` (the instrument doctrine — *"Stockfish validates, Maia predicts, the corpus witnesses — none of them can teach why"* — is the whole shape of this RFC: three arms, three authorities, no fourth voice); `design/05-in-run-experience.md` §assistance ladder (these projections are requested operands, never a default stream). No design-tier section owns the named-target family; its intent authority is [[D558]]'s split and the [[D1023]] research closure, and a `design/` section remains owner work under law 5.
 - **Exploration gate:** [[D1023]] ✅ — *"Named-target 2–3-ply prevention research is complete… The RFC may define exact removal/return plus policy-labelled bounds; intent, plan, prophylaxis and move quality remain refused without theory/authored joins."* The harness ran under `rfc/0000-rfc-process.md` §Exploration gate as a labelled disposable instrument. [[D1330]] ranked the resulting dossier **live debt rank 7**: *"[[D1023]] says drafting is unblocked and **no draft exists**."* That absence is what this RFC closes.
-- **Depends on:** implemented `archive/evidence-contract-manifest.md` (F1 — the producer/projection/binding grammar and its compiler). `rfc/tactical-collectors.md` (awaiting) ships `rules.tactic.consequence.threat@1` and `rules.exchange.predicate.legal_exchange@1`, which are the exact inputs the rules arm is defined over — the harness imports both from `packages/runtime` rather than reimplementing them. `rfc/breadth-collectors.md` (awaiting) owns the contested-destination disposition this RFC closes one clause of (§2.5, criterion 16).
-- **Parent / amends:** amends `rfc/breadth-collectors.md` §4 in one clause — [[D755]]'s escape hatch (*"unless a bounded continuation proves denial"*) is measured shut for the pawn-created destination family and the text still reads as open (§2.5). Amends nothing in `bot-policy.md`; §5 reconciles with it and with `bot-route-source.md` **without editing either**, and states why each reconciliation is a composition rule rather than an amendment.
+- **Depends on:** implemented `archive/evidence-contract-manifest.md` (F1 — the producer/projection/binding grammar and its compiler). `rfc/tactical-collectors.md` (awaiting) ships `rules.tactic.consequence.threat@1` and `rules.exchange.predicate.legal_exchange@1`, which are the exact inputs the rules arm is defined over — the harness imports both from `packages/runtime` rather than reimplementing them. `rfc/breadth-collectors.md` (awaiting) registers the retained topology this family is measured over — `rules.square.event.control@1`, research disposition, *"D771's pawn-made-destination-unsafe join measures 1.00×/1.02×"* (`breadth-collectors.md:182-184`) — and this RFC leaves that disposition exactly as it stands.
+- **Parent / amends:** **amends nothing.** An earlier draft claimed to amend `rfc/breadth-collectors.md` §4 in one clause. That claim was false and is withdrawn: at HEAD `rfc/breadth-collectors.md` contains **zero** occurrences of `bounded continuation`, `contested destination`, `prevention` or `D755`, and its §4 (`:345-358`) is a six-bullet refusal list with no conditional in it. [[D755]]'s escape hatch (*"unless a bounded continuation proves denial"*) exists only in its own ledger row (`design/BACKLOG.md:678`), so there is no RFC-tier text to amend; §1.6 states the actual relationship and criterion 16 is rebuilt on the sites where the clause really appears. Amends nothing in `bot-policy.md` either; §5 reconciles with it and with `bot-route-source.md` **without editing either**, and states why each reconciliation is a composition rule rather than an amendment.
 - **Supersedes / superseded by:** —
 - **Planning:** `planning/bounded-policy-targets/` (once implementing)
 
@@ -30,7 +30,7 @@ exactly as all 189 shipped projections are. `[V]` No `STRUCTURAL_FEATURE_KINDS` 
 drafting HEAD `476d5a0`: pack 0.27 (next free 0.33), run 0.17 (0.18–0.22 live-claimed, next free
 0.23), shape-entry 0.3, principle-entry 0.1, campaign 1, migration 25, evidence-kinds 7 members —
 **this RFC contests none of them, and in particular does not touch `bot-policy.md`'s unlanded
-run-schema lane 0.18 or the `bot-route-source.md` cross-draft pin that rides it** (`rfc/README.md:366-377`).
+run-schema lane 0.18 or the `bot-route-source.md` cross-draft pin that rides it** (`rfc/README.md:386-397`).
 `EvidenceGrounding` (`packages/runtime/src/evidence-contract.ts:3`) gains no member; §6.2 explains
 why the mixed-grounding arms take the existing `declared_convention` value and why the compiler
 *forces* that choice rather than leaving it to taste. The register row for this draft is added to
@@ -79,8 +79,10 @@ and 50/52 imported pawn-created minor-destination targets become locally non-los
 every defence. `[V]` [[D755]] left exactly one door open — *"call it a contested destination, not
 'prevention,' **unless a bounded continuation proves denial**"* — and the bounded continuation has
 now run and closed it. No destination bounded-return projection registers here; the measurement lands
-as a permanent negative fixture and `breadth-collectors` §4's clause is amended so no implementer
-reads it as still open (§2.5, criterion 16).
+as a permanent negative fixture (criterion 15). **The clause is not in an RFC**: it lives in the
+[[D755]] ledger row alone (`design/BACKLOG.md:678`), so this RFC becomes its document of record
+rather than amending someone else's text, and criterion 16 asserts that no living-tier occurrence of
+the clause is left standing without a citation of this closure (§1.6, §2.5).
 
 **The bot consumer is specified in full and registers nothing, and the blockers are structural rather
 than editorial** (§5): the layer that could carry a target-removal preference is a **multiplier**
@@ -286,15 +288,34 @@ touch/hover, theory joins, bot features and opportunity-normalized habits; never
 [[D771]]'s, unregistered at HEAD and routed to `breadth-collectors`. §2.5 adds only the bounded
 result, and the bounded result is negative.
 
-**§1.6 — [[D755]]. Measured shut by this evidence, and its text is amended.** *"A pawn controlling a
-future bishop/knight square is not the same event as harassing an occupied minor… call it a contested
-destination, not 'prevention,' **unless a bounded continuation proves denial**."* `[V]` The row is
-closed and consumed by `breadth-collectors.md` §3.1/§4, whose refusal is written with that conditional
-intact. The bounded continuation has now run over the full population and returns **0/75 authored and
-0/52 imported** surviving every defence, with **72/75** and **49/50** of the returns caused by the
-controlling pawn moving or being captured. `[V]` The conditional is not merely unmet — it is measured
-shut for this family, and an implementer reading `breadth-collectors` §4 today would think it is still
-a door. One textual amendment, made failable by criterion 16 rather than performed in this commit.
+**§1.6 — [[D755]]. Measured shut by this evidence, and the clause is not where an earlier draft said
+it was.** *"A pawn controlling a future bishop/knight square is not the same event as harassing an
+occupied minor… call it a contested destination, not 'prevention,' **unless a bounded continuation
+proves denial**."* `[V]` (`design/BACKLOG.md:678`) The bounded continuation has now run over the full
+population and returns **0/75 authored and 0/52 imported** surviving every defence, with **72/75** and
+**49/50** of the returns caused by the controlling pawn moving or being captured. `[V]` The
+conditional is not merely unmet; it is measured shut for this family.
+
+**Where the clause actually lives, checked rather than inherited.** An earlier draft of this RFC
+asserted in four places that `rfc/breadth-collectors.md` §4 carries the conditional *"written with
+that conditional intact"*, and made amending it criterion 16. **That was false.** At HEAD
+`rfc/breadth-collectors.md` contains **zero** occurrences of `bounded continuation`, `contested
+destination`, `prevention` or `D755`; its §4 (`:345-358`) is a six-bullet refusal list — global
+"restriction"/"activity"/"weak square"/"outpost"/"pawn break"/"king attack"/"initiative" events,
+generic slider coordination, a longer-than-three-edge search, engine/Maia/explorer/theory joins,
+player types, authorable vocabulary — and none of the six carries a conditional of any kind. `[V]`
+What that document *does* carry for this family is a disposition, not a door: `rules.square.event.control@1`
+is **research disposition only**, on the ground that *"D771's pawn-made-destination-unsafe join
+measures 1.00×/1.02× and D754 future-square contest .96×/.95×, so neither earns default prominence"*
+(`:181-184`). `[V]` That disposition is unchanged by this RFC and needs no edit: a negative bounded
+result is exactly what a research disposition already licenses.
+
+So there is **no RFC-tier text to amend**. The clause survives in one living-tier place — the D755
+ledger row's own disposition cell, whose *"prevention requires a bounded continuation and is refused
+as a default label per §4"* asserts a flow-back into `breadth-collectors` §4 that the text does not
+bear out. [[D1503]] retires the numbering convention and this RFC does not write `design/BACKLOG.md`,
+so the closure lands as a **proposed ledger row** below and as criterion 16's grep, which is red at
+HEAD and stays red until the row lands.
 
 ### §2 — The rules arm: one exact target, three plies, two quantifiers
 
@@ -361,8 +382,11 @@ non-losing again after one preparation and one reply. Measured over the full pop
 
 The return is essentially universal and it is essentially *not about the defender at all* — in 121 of
 125 returns the pawn that created the denial left. **No destination bounded-return projection
-registers.** What registers is the measurement as a permanent negative fixture (criterion 15) and the
-[[D755]] amendment (criterion 16). This is following the evidence to a smaller registered surface,
+registers.** What registers is the measurement as a permanent negative fixture (criterion 15); the
+[[D755]] clause itself is closed by record here and by criterion 16's grep over the one living-tier
+site that still carries it (§1.6) — **not** by an amendment to `rfc/breadth-collectors.md`, which
+does not contain the clause and whose research disposition for `rules.square.event.control@1` this
+RFC leaves exactly as it stands. This is following the evidence to a smaller registered surface,
 which is the opposite of a scope cut: the full ask here was *"can we say the square is prevented for
 three plies"*, and the full answer is **no, and here is the executable proof**.
 
@@ -423,12 +447,31 @@ than of the model.
 **§4.2 — Two intervals, named for what they measure.**
 
 - **`next_execution_mass`** — the mass the model assigns to *actually playing* the target capture at
-  the opponent's next move. When the target move is present in the returned candidate list its mass
-  is known and the interval is the degenerate `[m, m]`; when it is absent the interval is
-  `[0, missingMass]` where `missingMass = max(0, 1 − Σ returned mass)`. (`maia-probe.mts:89-91`)
-  The measured size of that second case matters and is small but not zero: across all 384 band-rows
-  the minimum `returnedMass` is **0.9542** and 17 rows fall below 0.99, so an absent target is
-  bounded at up to about **4.6%** rather than at an unbounded unknown. `[V]`
+  the opponent's next move. **"Absent" is two different events and they get two different answers.**
+  The harness collapses them (`maia-probe.mts:86-91`: one `targetMassKnown` boolean gates
+  `[m, m]` against `[0, missingMass]`), and that collapse is a defect this RFC corrects rather than
+  ports — see §4.2a. The specified rule is three-armed:
+
+  | at the node after the candidate | interval | measured over the 384 band-rows |
+  |---|---|---:|
+  | the target exists (`targetPolicyMoveUci` defined) **and** the returned page carries its mass | `[m, m]` | **136** |
+  | the target **does not exist** — it is not a legal, still-identified, still-positive capture for the side to move | `[0, 0]`, plus a typed `absence` cause | **248** |
+  | the target exists but the returned page does not carry it | `[0, missingMass]`, `missingMass = max(0, 1 − Σ returned mass)` | **0** |
+
+  The middle arm is the correction. A move the opponent cannot make carries **exactly zero** mass,
+  and `missingMass` is residual probability spread over the *legal* moves the page did return — it
+  can never contain a move that is not in the legal set. Publishing `[0, missingMass]` there does not
+  bound an unknown; it invents one, which is the mirror image of the fabricated uncertainty §4.3
+  refuses for a mass-less row. Criterion 9.
+
+  The third arm is the only place `missingMass` is an honest bound, and it is **unexercised**:
+  `targetUci !== null && targetMass === null` holds on **0 of 384** band-rows, because the provider
+  returns the complete legal set with a mass on every candidate (`missingCandidateMasses === 0`
+  everywhere, minimum `returnedMass` **0.9542**, 17 rows below 0.99, so the bound would be at most
+  about **4.6%**). `[V]` Like `identity_lost` (§2.2) and the mass-completeness clause (§4.3) it is a
+  real guard with no production exercise, and it ships with a declared negative fixture rather than
+  as dead code.
+
 - **`second_opportunity_available_mass`** — the mass of paths that arrive at a state where the exact
   target capture is **available again**, summed over expanded first moves × expanded replies. The
   lower bound is the mass of paths verified available; the upper bound is `1 − knownFailure`, where
@@ -439,17 +482,44 @@ renormalized away** (`bounds()` at `:81-83` takes `max(lower, 1 − knownFailure
 no division by retained mass anywhere in the probe). `[V]` [[D1025]]'s separation is structural here:
 these are two objects computed at two different nodes, and §8.7 refuses their sum.
 
+**§4.2a — What the middle arm is made of, and why it is not a rare edge.** `targetPolicyMoveUci`
+returns `undefined` for four distinct reasons (`stockfish-probe.mts:101-110`, `:244-248`), and all
+four occur in the sealed sample. Decomposed over the 248 rows: `[V]`
+
+| cause | rows | family |
+|---|---:|---|
+| identity lost — attacker, victim or minor is no longer the same piece, or the destination square is now occupied | **76** | material |
+| the capture is **not a legal move** at all | **16** | material |
+| legal, but the exchange is no longer positive (`resultUnits ≤ 0`) — the target as defined no longer exists | **28** | material |
+| legal, but the destination is no longer locally non-losing | **128** | destination |
+| unexplained | **0** | — |
+
+**222 of the 248** currently carry `nextExecution.upper > 0` in the committed harness output, up to
+**0.0458**, and **117** of them are exactly criterion 9's requested fixture population — target
+unavailable at ply 1, positive `secondOpportunity.lower` at ply 3 — of which **108** publish a
+fabricated non-zero upper today. `[V]` So this is not a corner: it is the majority arm of the
+projection, and the typed `absence` cause is what a consumer needs in its place, because *"the
+attacker is gone"*, *"that capture is illegal now"* and *"that capture no longer wins material"* are
+three different statements about the same board — the same argument §2.3 makes for the immediate
+cause vocabulary, at the policy node.
+
 **§4.3 — The refusal, and the two clauses it has.** A row is admitted only when the root **and every
 expanded second node** satisfy `keptMass ≥ 0.9` **and** `missingCandidateMasses === 0`
 (`maia-probe.mts:93`, `:103`). The failure is a typed refusal `retained_mass_below_gate`, and a
 refused row is excluded from every positive count rather than counted as zero. The second clause has
 never fired in measurement (**0 across all 384 band-rows**) and it is the clause that matters most in
-production, because of what produces a mass-less candidate: `opponent-selector.ts:633` injects
+production, because of what produces a mass-less candidate: `opponent-selector.ts:639` injects
 `Object.freeze({ moveUci, rank: maxRank + 1, offWindow: true as const })` when Maia's own `bestmove`
 is missing from its returned list — **a row with no `mass` field at all**. `[V]` Treating that row as
 mass 0 would understate `returnedMass`, silently widen `missingMass`, and push the fabricated
 uncertainty into the upper bound of a published interval. **Rule: a distribution containing a
 mass-less candidate refuses; it is never zeroed.** Criterion 10.
+
+**This is the same defect §4.2's middle arm commits in the other direction**, and naming the pair is
+the point: there, `missingMass` was published as the ceiling for a move that cannot be played at all;
+here, a row with no mass would be counted as a floor of zero. Both manufacture a number where the
+instrument has none. The rule in both directions: **an interval may only be widened by mass the
+expansion actually failed to see, never by mass that does not exist.**
 
 **§4.4 — Availability is monotone in band, and that is a confound, not a quality signal.** Admission
 runs **52 / 66 / 77 / 85** of 96 at bands 1000 / 1400 / 1800 / 2200, decomposing into **12 / 9 / 5 / 4**
@@ -521,15 +591,27 @@ mass at all, and §4.3 refuses the whole distribution rather than excluding the 
 presence means the returned page is not a complete distribution. Criterion 10 covers the second;
 criterion 14 covers the first.
 
-**§5.3 — This RFC marks nothing `offWindow`, and there are five readers of that field, not three.**
-`bot-route-source.md` §7.2 correctly names three **exclusion** consumers — `service.ts:1206` filters
-off-window candidates out of the published distribution, `pivotal.ts:32` excludes them from pivotal
-detection, `practical-difficulty.ts:37` excludes them from difficulty measurement. `[V]` Two further
-readers exist and change the risk picture: **`feedback-policy.ts:39` propagates the field into the
-public run event**, so it is client-visible, and **`rest.ts:183` and `:231` accept it on an ingested
-selection**, so a client can *set* it. `[V]` A measurement-exclusion marker that an untrusted caller
-can set on a candidate is worth knowing about before anything else is hung on it; this RFC hangs
-nothing on it and criterion 14 asserts no bounded-target payload carries or produces the field.
+**§5.3 — This RFC marks nothing `offWindow`, and there are six readers of that field and four
+exclusion consumers, not three and three.** `bot-route-source.md` §7.2 names three **exclusion**
+consumers, all of which check out: `apps/server/src/service.ts:1214` filters off-window candidates
+out of the published distribution, `packages/runtime/src/pivotal.ts:32` excludes them from pivotal
+detection, `packages/runtime/src/practical-difficulty.ts:37` excludes them from difficulty
+measurement. `[V]` Three further readers exist and change the risk picture:
+
+- **`apps/web/src/lib/DrillScreen.svelte:423`** — a **fourth exclusion consumer**, filtering
+  `candidate.offWindow !== true` **client-side**, and it is named by nobody: not by
+  `bot-route-source.md` §7.2, not by [[D1389]] (which recorded five readers), not by any test that
+  greps the field. `[V]` It is the only exclusion site outside `apps/server`/`packages/runtime`, so a
+  server-side census of the field's consumers misses it by construction.
+- **`apps/server/src/feedback-policy.ts:39`** propagates the field into the public run event, so it
+  is client-visible. `[V]`
+- **`apps/server/src/rest.ts:183` and `:231`** accept it on an ingested selection, so a client can
+  *set* it. `[V]`
+
+A measurement-exclusion marker that an untrusted caller can set, that a client-side renderer also
+acts on, and whose consumer count has now been undercounted twice in a row is worth knowing about
+before anything else is hung on it. This RFC hangs nothing on it and criterion 14 asserts no
+bounded-target payload carries or produces the field.
 
 **§5.4 — A bot preference over these quantities is not expressible as a trait, and the reason is
 mechanical.** `bot-policy` §2.5's `ControlledTrait` is *"a declared candidate classifier … and a
@@ -607,10 +689,20 @@ and that has to be argued rather than slipped in.** `candidateCollectorInputs`
 alternative provider evaluation, not a local collector result."* `[V]` That reason is about **WDL
 being an evaluation** — a competing verdict on the position — and it does not reach policy mass, whose
 own shipped limitation reads *"Policy mass describes model choice, not move quality"* (`:782`). So
-the exclusion does not bind, but its existence means this is a first, and criterion 17 makes the
-distinction failable: a fixture attempting to feed `human.maia.candidate_wdl` into
-`derived.bounded_target.policy_bounds@1` must fail, so the door opened here is exactly one
-projection wide.
+the exclusion does not bind, but its existence means this is a first.
+
+**And the compiler will not hold the door, which had to be checked rather than assumed.** An earlier
+draft made criterion 17 *"a fixture feeding `human.maia.candidate_wdl` into
+`derived.bounded_target.policy_bounds@1` fails to compile."* It would not fail.
+`compileEvidenceManifest`'s derivation rules (`evidence-contract.ts:482-501`) test four widenings —
+exactness, grounding, answer content, abstention — and adding a `human_model` input satisfies all
+four *more* easily, not less: it enlarges `inputAnswers` (so `answersWiden` gets weaker), it forces
+the `declared_convention` grounding this projection already declares, its `exactness: "measured"`
+cannot widen a `convention` output, and its abstention is already covered by the required
+`input_abstained` reason. `[V]` `candidateCollectorInputs`' exclusion is a **list construction in the
+catalogue**, not a compiler invariant — there is no `EVIDENCE_*` failure code for a `human_model`
+derivation input anywhere in `evidence-contract.ts`. Criterion 17 is therefore rebuilt as a
+set-equality assertion over the compiled manifest, which is the only thing that can actually go red.
 
 **§6.4 — Disposition, not binding, and the reason is that the binding is not this RFC's to make.**
 Every projection here lands `disposition: inspector_only` — the shipped discipline for a reading that
@@ -628,7 +720,9 @@ disposition whose `reason` names its blocking contract.
 **§6.5 — The census is a procedure, and the integers are tripwires.** `make bounded-target-census`
 recomputes, from the committed harness artifacts and the compiled catalogue: the registered id set,
 the four census arms of §0.1, the destination table of §2.5, the Stockfish agreement and coverage
-counts of §0.4, and the four-band admission decomposition of §0.5. Criteria assert **set-equality
+counts of §0.4, the four-band admission decomposition of §0.5, and the
+target-availability decomposition of §4.2a (136 present / 248 absent, split 76 / 16 / 28 / 128 with
+zero unexplained, and the 117-row criterion-9 fixture population). Criteria assert **set-equality
 against the command's output**; the integers in this document are baked in only as drift tripwires
 ([[D1240]]). Where a criterion quotes a measured number the number is the predeclared direction; a
 contrary measurement is recorded and escalated under law 6, never shipped around.
@@ -680,8 +774,10 @@ home (Discharge D9) rather than patched from inside a collector RFC.
    to `BANNED_JUDGEMENTS`.
 2. **Collapsing ∃∃ into ∃∀.** §2.4; measured at 69 versus 2 and 130 versus 0.
 3. **A multi-band fan-out, a cross-band average, or any band-disagreement statistic.** [[D817]], §1.3.
-4. **Renormalizing missing or tail mass.** §4.2; the interval width *is* the unseen mass and dividing
-   it away manufactures confidence.
+4. **Renormalizing missing or tail mass — and, in the other direction, publishing missing mass as the
+   ceiling for a move that cannot be played.** §4.2/§4.2a; the interval width *is* the unseen mass.
+   Dividing it away manufactures confidence; attaching it to a non-existent target manufactures
+   doubt. Both are the same defect and both are refused.
 5. **Inferring anything about lower-rated play from a lower admission rate.** §4.4; the gradient is a
    property of an eight-move expansion, not of the players.
 6. **A default stream of sentences.** The dossier: *"They do not authorize a default stream of
@@ -689,8 +785,8 @@ home (Discharge D9) rather than patched from inside a collector RFC.
 7. **Summing `next_execution_mass` and `second_opportunity_available_mass`.** [[D1025]], §1.1 —
    different nodes, different events, and one of them is availability rather than execution.
 8. **Inheriting either depth on Stockfish disagreement.** §3.3; the eight rows abstain.
-9. **Reusing `offWindow`, or emitting it.** §5.3 — three exclusion consumers, one propagation site
-   and a client-settable ingest path.
+9. **Reusing `offWindow`, or emitting it.** §5.3 — four exclusion consumers (one of them in the web
+   client), one propagation site and a client-settable ingest path.
 10. **Reading `OpponentSelection.candidates` as a mass basis.** §5.1 — the guard asymmetry makes that
     list a different object per selection.
 11. **A three-ply denial claim for the pawn-created destination family.** §2.5; 0/75, 0/52, with 121
@@ -718,12 +814,13 @@ and not additional implementation homes): `packages/runtime/src/evidence-catalog
 literal producer list at `:27` and the count tuples at `:51-52`),
 `apps/server/src/evidence-manifest.test.ts:40`, `apps/server/src/evidence-manifest-check.ts`,
 `docs/evidence-contract.md`, `docs/semantic-evidence.md`, and `Makefile` (the census target). **The
-count tuple is a moving target at drafting time and the RFC says so rather than pinning a number that
-is already stale**: the last commit carries `[35, 188, 25, 210]` and the working tree carries
-`[35, 189, 25, 210]` because the in-flight `exact-legal-mobility` implementation is adding
-`rules.mobility.reading.legal_moves@1`. `[V]` Criterion 18 asserts the delta this RFC contributes
-(**+2 producers, +6 projections, +0 bindings**, since every id is disposed rather than bound), not an
-absolute total.
+count tuple is a moving target and the RFC pins the id sets rather than the integers**: at HEAD it
+reads `[35, 189, 25, 210]` at `evidence-catalog.test.ts:51` and
+`{producers: 35, projections: 189, consumers: 25, bindings: 210, …}` at
+`apps/server/src/evidence-manifest.test.ts:40`, both of which moved during drafting when
+`exact-legal-mobility` landed `rules.mobility.reading.legal_moves@1`. `[V]` Criterion 18 therefore
+asserts **set differences over the compiled id sets plus an unchanged binding count**, not an
+absolute tuple and not a hand-counted delta.
 
 ### §10 — Where each finding is specified
 
@@ -735,12 +832,14 @@ makes the repair failable, so an implementer can work from the defect rather tha
 | conditional durability is the discriminating statistic and is unreported | §0.2, §2.4 | criteria 4, 5 |
 | the ∀-arm has no measured lift and reverses between populations | §0.2, §2.4 | criterion 5 |
 | Maia admission is monotone in band, so aggregates are confounded | §4.4 | criterion 11 |
-| an `offWindow` row has no mass and must refuse, not zero — and has five readers, not three | §4.3, §5.3 | criteria 10, 14 |
+| an `offWindow` row has no mass and must refuse, not zero — and has six readers and four exclusion consumers, not five and three | §4.3, §5.3 | criteria 10, 14 |
+| `[0, missingMass]` was published for a target that is not a legal, still-identified, still-positive capture — 248 of 384 band-rows, 222 with a non-zero upper | §4.2, §4.2a | criterion 9 |
+| the compiler does not refuse a `human_model` derivation input, so the "door is one projection wide" guard has to be a manifest assertion | §6.3 | criterion 17 |
 | [[D1372]]'s returned XOR would make the obvious basis rule drop 26 of 41 route selections; the basis is keyed on base mass instead | §5.2 | criterion 14 (two-armed) |
 | the second-opportunity arm measures availability, never execution | §4.2, §1.1 | criterion 9 |
 | the 90% gate is a property of the eight-move expansion budget | §4.1, §4.4 | criterion 11 |
 | [[D815]]'s bot refusal is written wider than its salience-scoped evidence | §1.4, §5.5 | Open question 1 |
-| [[D755]]'s "unless a bounded continuation proves denial" is measured shut | §1.6, §2.5 | criteria 15, 16 |
+| [[D755]]'s "unless a bounded continuation proves denial" is measured shut — and lives in a ledger row, not in `breadth-collectors.md` §4 | §1.6, §2.5 | criteria 15, 16 |
 | no derived projection takes a `human_model` input, and the exclusion's reason does not reach policy mass | §6.3 | criterion 17 |
 | a derived producer is declared `sync` even when every input is a provider | §7.1 | Discharge D9 |
 | neither the shipped nor the drafted layer grammar can express a target-preserving bot goal | §5.4, §5.5 | Discharge D8 |
@@ -757,9 +856,9 @@ otherwise on the same authority that would answer Open question 1.
 
 ## Acceptance criteria
 
-> **Cross-review 2026-08-23 — [[D1411]] blocks acceptance.** The [[D755]] escape clause this document amends does not exist in `rfc/breadth-collectors.md`, so criterion 16 has nothing to amend; and §4.2 publishes an interval for a move that is not legal in 222 of 384 band-rows, which criterion 9 accidentally contradicts.
+> **Cross-review 2026-08-23 — [[D1411]] repaired 2026-08-24, both blockers cleared.** The amendment target was verified absent at HEAD and the claim withdrawn: `rfc/breadth-collectors.md` carries no occurrence of the [[D755]] escape clause, so front matter, §1.6, §2.5 and criterion 16 are rebuilt on the one site that does carry it (`design/BACKLOG.md:678`) and this RFC amends nothing. §4.2 is re-specified three-armed: `[0, 0]` with a typed cause when the target is not a legal, still-identified, still-positive capture (248/384 rows, decomposed in §4.2a), `[0, missingMass]` only when the target exists and the page omits it (0/384, a declared negative fixture), and `[m, m]` otherwise (136/384). Criterion 9 was correct and is kept, with its measured fixture population named.
 
-> **Findings landed 2026-08-23.** [[D1389]] — `offWindow` has five readers and is settable by an untrusted caller. [[D1390]] — declared latency is derived from availability alone. [[D1391]] — no shipped or drafted grammar can express a target-preserving bot goal. [[D1392]] — the dossier re-derived with zero drift; its two unreported directions are recorded.
+> **Findings landed 2026-08-23.** [[D1389]] — `offWindow` is settable by an untrusted caller. [[D1390]] — declared latency is derived from availability alone. [[D1391]] — no shipped or drafted grammar can express a target-preserving bot goal. [[D1392]] — the dossier re-derived with zero drift; its two unreported directions are recorded. **Amended 2026-08-24:** [[D1389]]'s reader count was itself short — `offWindow` has **six** readers and **four** exclusion consumers (§5.3).
 
 Every criterion can fail ([[D451]]). Where a criterion quotes a measured number, the number is the
 predeclared direction and a drift tripwire; a contrary measurement is recorded and escalated per
@@ -786,9 +885,19 @@ law 6, never shipped around. Where a criterion asserts a total, it asserts **set
    return payload carries `reintroducedWithin3Ply`, `preparationSurvivesEveryDefence`, a witness line
    for each true arm and a refutation line when the ∀-arm is false. A payload folding them into one
    boolean is a must-fail fixture. *This is §2.4's measured 69-vs-2 spread made unrepeatable.*
-5. **The ∀-arm may not select.** A fixture supplies a candidate whose only distinguishing property is
-   `preparationSurvivesEveryDefence: true` and asserts no selection API returns it as a chosen
-   moment. *Fails if a moment can be chosen on a statistic measured at 0% versus 1.26%.*
+5. **The ∀-arm may not select, asserted against the shipped selection machinery rather than against
+   an absent API.** There is no moment-selection API for this family (every id is `inspector_only`,
+   §6.4), so "no selection API returns it" is unfalsifiable. What *does* exist is
+   `EVIDENCE_SELECTION_POLICIES` (`evidence-catalog.ts:983`) and the compiler's
+   `EVIDENCE_POLICY_CRITICAL_REFUSED` check (`evidence-contract.ts:572`), which fails a policy whose
+   `criticalEvents` names a projection with no `eligible` eligibility row. Two arms: **(a)** a
+   must-fail fixture adds `rules.bounded_target.reading.bounded_return@1` to a selection policy's
+   `criticalEvents` and asserts compilation fails with exactly `EVIDENCE_POLICY_CRITICAL_REFUSED`;
+   **(b)** a set assertion over the compiled manifest asserts `manifest.eligibility` contains **no**
+   row for any `rules.bounded_target.*` or `derived.bounded_target.*` id, so arm (a) cannot be
+   satisfied later by quietly adding one. *Concrete RED: add an `eligible` eligibility row for the
+   bounded-return id — arm (b) goes red immediately, and arm (a) stops failing, which is why both are
+   required. Fails if a moment can be chosen on a statistic measured at 0% versus 1.26%.*
 6. **The cap abstains rather than truncating.** A synthetic fixture exceeding 25,000 visited positions
    returns `budget_exhausted` with no `reintroducedWithin3Ply: false` claim attached. *Wrong
    implementation that would pass a weaker check: one returning a partial search as a complete
@@ -801,11 +910,22 @@ law 6, never shipped around. Where a criterion asserts a total, it asserts **set
    each must return `depth_category_unstable`, and the remaining 88 must return a category. A
    fixture that inherits depth 10's answer on a disagreeing row must fail. *Set-equality against the
    census; 88/96 is the tripwire.*
-9. **`next_execution_mass` and `second_opportunity_available_mass` are never summed, and the second is
-   named for availability.** The permanent provider fixture [[D1025]] asked for: a row where the
-   target is unavailable at ply 1 and available on some ply-3 path asserts a zero first interval and
-   a positive second, and any code path adding them is a must-fail fixture. *This is the row's own
-   requested closure.*
+9. **A target that does not exist gets `[0, 0]`, not an interval; the two masses are never summed;
+   and the second is named for availability.** The permanent provider fixture [[D1025]] asked for,
+   with the fixture population now named. Three arms:
+   **(a)** a row where the target is unavailable at ply 1 and available on some ply-3 path asserts a
+   **zero-width** first interval (`lower === 0 && upper === 0`) and a positive second — the sealed
+   sample supplies **117** such rows, of which **108** publish `nextExecution.upper > 0` today, up to
+   **0.0458**, so the fixture is red against the committed harness output and porting `maia-probe.mts`
+   unchanged fails it;
+   **(b)** a row where the target exists but the returned page omits it asserts `[0, missingMass]` —
+   **0 of 384** measured, so this arm ships as a synthetic negative fixture with a hand-built page,
+   exactly like criterion 10's;
+   **(c)** any code path adding the two masses is a must-fail fixture.
+   *Wrong implementation that would pass a weaker check: one that ports the harness's single
+   `targetMassKnown` boolean (`maia-probe.mts:88-91`), which cannot tell arm (a) from arm (b) and
+   publishes `missingMass` as the ceiling for a move the opponent cannot make. This criterion is a
+   correction of the instrument, not a port of it (§4.2a).*
 10. **A mass-less candidate refuses the distribution.** A fixture supplies a page containing
     `{ moveUci, rank, offWindow: true }` with no `mass` and asserts `retained_mass_below_gate`, not a
     zero-mass row. *Fails if the row is treated as mass 0, which would widen the published upper
@@ -820,26 +940,53 @@ law 6, never shipped around. Where a criterion asserts a total, it asserts **set
     recorded `OpponentSelection` whose guard abstained (unmasked base) and asserts the projection
     does not read `candidates` from it. *Fails if the guard asymmetry can leak into a measurement.*
 14. **No bounded-target payload produces or carries `offWindow`, and the mass basis is keyed on base
-    mass rather than on `proposedBy`.** Asserted against all five readers of the off-window field
-    (`service.ts:1206`, `pivotal.ts:32`, `practical-difficulty.ts:37`, `feedback-policy.ts:39`,
-    `rest.ts:231`). The basis half is a **two-armed** fixture ([[D1372]]): a row with `proposedBy`
+    mass rather than on `proposedBy`.** Asserted against all **six** readers of the off-window field
+    (`apps/server/src/service.ts:1214`, `packages/runtime/src/pivotal.ts:32`,
+    `packages/runtime/src/practical-difficulty.ts:37`, `apps/web/src/lib/DrillScreen.svelte:423`,
+    `apps/server/src/feedback-policy.ts:39`, `apps/server/src/rest.ts:231`), and the reader set is
+    itself asserted by a repo-wide grep so a seventh cannot appear unnamed — **which is how the
+    Svelte one was missed twice**. *Concrete RED: a grep restricted to `apps/server` and
+    `packages/runtime`, which is what produced the earlier count of five.* The basis half is a
+    **two-armed** fixture ([[D1372]]): a row with `proposedBy`
     **and** `rawMass` is **included**, and a row with `proposedBy` and no `rawMass` is **excluded**.
     *Fails if provenance is used as the basis predicate, which would drop 26 of D1084's 41 route
     selections out of a human-mass denominator.*
 15. **The destination negative is a permanent fixture.** `make bounded-target-census` reproduces
     0/75 and 0/52 surviving every defence and 72/75 and 49/50 pawn-departure returns, set-equal to the
     committed census; a registered destination bounded-return projection is a must-fail fixture.
-16. **`breadth-collectors.md` §4's [[D755]] clause is amended** to record that the bounded
-    continuation ran and returned zero survivals for this family, citing this RFC. Asserted by
-    `make refusal-index` ([[D1038]]) once it lands, and by grep until then. *Fails if the escape
-    clause is left readable as open.*
-17. **The `human_model` door is exactly one projection wide.** A fixture feeding
-    `human.maia.candidate_wdl` into `derived.bounded_target.policy_bounds@1` fails to compile.
-    (§6.3.)
-18. **The manifest delta is +2 producers, +6 projections, +0 bindings**, counted by the same unit §9
-    states, asserted as a delta against the pre-change compiled manifest rather than an absolute
-    tuple. *Fails if a binding is smuggled in, and does not fail merely because a concurrent RFC
-    moved the total.*
+16. **No living-tier occurrence of the [[D755]] escape clause is left standing without this
+    closure.** `grep -rn "bounded continuation" design/ rfc/ docs/ planning/` must return, for every
+    hit outside this document, a line that also cites the measured result (0/75 and 0/52 surviving
+    every defence). Two arms, and the first is the reason the criterion exists at all:
+    **(a)** `rfc/breadth-collectors.md` must contain **zero** occurrences of `bounded continuation`,
+    `contested destination`, `prevention` or `D755` — it does at HEAD, so this arm is green and its
+    job is to keep a later editor from *inserting* the door into an RFC on the strength of the D755
+    row's flow-back claim;
+    **(b)** the D755 ledger row (`design/BACKLOG.md:678`) must carry the closure. It does not at
+    HEAD, so **this arm is RED today**, and [[D1503]] forbids this RFC from writing
+    `design/BACKLOG.md` — it goes green when the proposed ledger row below lands, not before.
+    Asserted by grep, and by `make refusal-index` ([[D1038]]) once it lands. *Fails if the escape
+    clause is left readable as open anywhere it actually appears — which is a ledger row, never
+    `breadth-collectors.md` §4.*
+17. **The `human_model` door is exactly one projection wide, asserted over the compiled manifest
+    because the compiler does not enforce it.** §6.3 checked and the compiler admits a `human_model`
+    derivation input without complaint, so a "fails to compile" fixture would simply never pass. The
+    assertion instead: the set of derived projections whose `derivation.inputs` contain any
+    `human.*` id is **set-equal to `{derived.bounded_target.policy_bounds@1}`**, computed from
+    `compileEvidenceManifest(EVIDENCE_CONTRACT_DECLARATIONS)`. *Concrete RED: add
+    `ref("human.maia.candidate_wdl")` to `derived.opponent.candidate_feature_vector@1`'s derivation
+    inputs — it compiles clean, and only this assertion catches it.*
+18. **The registered surface grows by exactly the named ids and by no binding**, asserted as set
+    differences rather than as a tuple or a hand-counted delta, so a concurrent RFC moving the totals
+    cannot turn it red for the wrong reason. Three arms against the compiled manifest:
+    **(a)** `EVIDENCE_PRODUCER_IDS` gains exactly `{rules.bounded_target, derived.bounded_target}`;
+    **(b)** the projection id set gains exactly the six ids of §6.1;
+    **(c)** `manifest.bindings.length` is **unchanged**, since every id is disposed rather than
+    bound — pinned at **210** at HEAD (`evidence-catalog.test.ts:51`,
+    `apps/server/src/evidence-manifest.test.ts:40`) and re-read from the pre-change commit if it has
+    moved by implementation time. *Concrete RED for (c): register any adapter for a
+    `*.bounded_target.*` projection — the count goes to 211 while arms (a) and (b) stay green.
+    Concrete RED for (b): register a seventh id under either producer.*
 
 ## Discharges
 
@@ -906,12 +1053,34 @@ law 6, never shipped around. Where a criterion asserts a total, it asserts **set
   `missingMass`, and pushes fabricated uncertainty into a published upper bound. The shipped harness
   gate is `missingCandidateMasses === 0` (`maia-probe.mts:93`) and it fired **zero times in 384
   band-rows** — a real guard with no production exercise.
-- **🐞** — **`offWindow` has five readers, not the three named in `bot-route-source.md` §7.2, and one
-  of them is client-settable.** The three exclusion consumers are correct (`service.ts:1206`,
-  `pivotal.ts:32`, `practical-difficulty.ts:37`); additionally `feedback-policy.ts:39` **propagates**
-  the field into the public run event and `rest.ts:183`/`:231` **accept it on an ingested selection**.
-  A measurement-exclusion marker an untrusted caller can set is worth knowing before anything is hung
-  on it.
+- **🐞** — **`offWindow` has six readers and four exclusion consumers — not the three named in
+  `bot-route-source.md` §7.2, and not the five [[D1389]] recorded — and the sixth is named by
+  nobody.** The three server/runtime exclusion consumers are correct (`apps/server/src/service.ts:1214`,
+  `packages/runtime/src/pivotal.ts:32`, `packages/runtime/src/practical-difficulty.ts:37`);
+  `apps/server/src/feedback-policy.ts:39` **propagates** the field into the public run event and
+  `apps/server/src/rest.ts:183`/`:231` **accept it on an ingested selection**. The one both counts
+  missed is **`apps/web/src/lib/DrillScreen.svelte:423`**, which filters `offWindow !== true`
+  **client-side** — a fourth exclusion consumer, and the only one outside `apps/server` and
+  `packages/runtime`, which is exactly why two successive server-scoped censuses of the field missed
+  it. A measurement-exclusion marker an untrusted caller can set, that a renderer also acts on, and
+  that has now been undercounted twice, is worth knowing before anything is hung on it.
+- **🐞** — **The D1023 Maia probe publishes a non-zero mass ceiling for a move the opponent cannot
+  play — 222 of 384 band-rows.** `maia-probe.mts:88-91` gates on one `targetMassKnown` boolean, so
+  `[0, missingMass]` is emitted both when the target exists and the page omits it and when the target
+  **does not exist at all**. The second case is 248 of 384 rows (76 identity lost, 16 the capture is
+  illegal, 28 the exchange is no longer positive, 128 the destination is no longer locally
+  non-losing; 0 unexplained), and the first case is **0 of 384** — the provider returns the complete
+  legal set with a mass on every candidate. So the arm fires **only** where it is wrong, up to
+  **0.0458** of fabricated uncertainty, and it is the exact mirror of the mass-less-row defect the
+  same probe's gate refuses. The correct value is a zero-width `[0, 0]` plus a typed absence cause;
+  the shipped implementation corrects the harness rather than porting it.
+- **🐞** — **`compileEvidenceManifest` does not refuse a `human_model` input to a derived
+  projection.** `candidateCollectorInputs`' exclusion of `human.maia.candidate_wdl`
+  (`evidence-catalog.ts:715-719`) is a list construction, not an invariant: the derivation checks at
+  `evidence-contract.ts:482-501` test only exactness, grounding, answer-content and abstention
+  widening, and a `human_model` input relaxes all four rather than tightening them. Any RFC asserting
+  that a `human_model` derivation input "fails to compile" is asserting something the compiler does
+  not do; the guard has to be a set assertion over the compiled manifest.
 - **📊** — **[[D1025]]'s separation is honoured in the instrument and provable at the line.**
   `maia-probe.mts:108` adds path mass when the target move is **available** at the opponent's second
   decision state; no code path anywhere in the harness assigns mass to *selecting* it there. The
@@ -923,11 +1092,19 @@ law 6, never shipped around. Where a criterion asserts a total, it asserts **set
   at p .677); its wording refuses any bot weight inferred from exact threats, which reaches every
   operand derived from `rules.tactic.consequence.threat@1`. Not lifted here: no bot layer registers,
   and the scope goes to the owner.
-- **📊** — **[[D755]]'s escape clause is measured shut for the pawn-created destination family.**
+- **📊** — **[[D755]]'s escape clause is measured shut for the pawn-created destination family — and
+  it never reached the RFC tier, so the closure belongs in the row itself.**
   *"Call it a contested destination, not 'prevention,' unless a bounded continuation proves denial."*
   The bounded continuation ran over the full population: **0/75 authored and 0/52 imported** survive
   every defence, and **72/75** and **49/50** of the returns happen because the controlling pawn moved
-  or was captured. `breadth-collectors.md` §4 still reads as though the door is open and is amended.
+  or was captured. The D755 row's disposition cell claims the conditional was consumed by
+  `rfc/breadth-collectors.md` §3.1/§4; **it was not** — that document has zero occurrences of
+  `bounded continuation`, `contested destination`, `prevention` or `D755` at HEAD, and its §4 is a
+  six-bullet refusal list with no conditional. What §3.1 does carry is a research disposition for
+  `rules.square.event.control@1` on D771's 1.00×/1.02×, which the negative result leaves untouched.
+  This is a **flow-back claim that does not reproduce in the destination document** — the same class
+  the 2026-08-15 reconciliation gate was built to catch, found here one tier lower than it looked
+  for.
 - **📊** — **No derived projection in the evidence catalogue takes a `human_model` input, and the one
   exclusion that exists does not reach policy mass.** `candidateCollectorInputs`
   (`evidence-catalog.ts:715-721`) filters `human.maia.candidate_wdl` out of
@@ -963,3 +1140,21 @@ law 6, never shipped around. Where a criterion asserts a total, it asserts **set
   mid-drafting and returned `bot-route-source.md`'s `rawMass`/`proposedBy` XOR: §5.2's basis rule is
   keyed on **base mass** rather than on proposal provenance, which is correct under both the drafted
   invariant and its repair, and criterion 14 became two-armed.
+- 2026-08-24 — **[[D1411]] repaired; both blockers cleared, and the repair is a withdrawal plus a
+  correction rather than a rewrite.** (1) The amendment claim is withdrawn: `rfc/breadth-collectors.md`
+  carries no occurrence of the [[D755]] escape clause at HEAD and its §4 has no conditional, so front
+  matter, §1.6, §2.5 and criterion 16 now state the real relationship — the clause lives in its ledger
+  row alone, this RFC amends nothing, and criterion 16 is a two-armed grep whose ledger arm is red
+  until the proposed row lands ([[D1503]] forbids writing `design/BACKLOG.md` from here). (2) §4.2 is
+  re-specified three-armed with §4.2a's decomposition of all 248 unavailable-target rows; criterion 9
+  was already correct and keeps its zero-width first interval, now with its 117-row fixture population
+  named and the harness's own 108 fabricated uppers as the RED state. Also corrected in passing:
+  `offWindow` has six readers and four exclusion consumers (`DrillScreen.svelte:423` is named by
+  nobody, and [[D1389]]'s count of five was short); `opponent-selector.ts:633`→`:639` and
+  `service.ts:1206`→`:1214`; `rfc/README.md:366-377`→`:386-397`; §9's count-tuple note re-pinned to
+  HEAD's `[35, 189, 25, 210]`; and criteria 5, 17 and 18 rebuilt on mechanisms that can go red —
+  respectively `EVIDENCE_POLICY_CRITICAL_REFUSED`, a manifest set-equality (the compiler does **not**
+  refuse a `human_model` derivation input, §6.3), and set differences over the compiled id sets. The
+  remaining citations reported as drifted — `evidence-catalog.ts` −9, `evidence-source-adapters.ts:18-28`
+  −1, `pivotal.ts:32`→`:36`, and "HEAD compiles 188" — **do not reproduce**: all resolve exactly at
+  HEAD, which now compiles 189 since `exact-legal-mobility` landed.

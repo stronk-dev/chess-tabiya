@@ -30,7 +30,13 @@
   `evidence.json` / `pack.json`); accepted `rfc/runtime-opening-identity.md` (the opening
   applicability keys and its frozen-input precedent); accepted `rfc/pack-population-provenance.md`
   (the `citable_text` record kind and the `provenance_note` claim label); draft
-  `rfc/pack-capability-contract.md` (F3) for the bundle-compatibility declaration
+  `rfc/pack-capability-contract.md` (F3) for the bundle-compatibility declaration. **Two dependencies
+  that gate parts of the surface rather than the whole:** `rfc/runtime-opening-identity.md` is
+  accepted but **unlanded**, and its two readings are the ground projections for the
+  `opening.endpoint` and `opening.path` key kinds — until it lands, those two kinds refuse
+  `key_ground_missing` (§5, criterion 7c); and [[D1409]]/[[D1419]]'s span-scoped `voiceCheck` repair
+  is **owed on `packages/runtime/src/voice.ts`**, and no theory passage may enter a packet before it
+  lands (§11.1, criterion 24b)
 - **Parent / amends:** **amends `rfc/pack-population-provenance.md` §3** (two predicates on the
   `citable_text` record contract — accepted 2026-08-23 and **unlanded**, so this is an amendment to
   an unimplemented contract, not a change to shipped behaviour). Consumes, and does not redefine,
@@ -48,7 +54,7 @@ principle-entry-schema | lane 0.2 | provenance.sources items become a closed uni
 - **No pack-schema lane.** Nothing in `schemas/drill_pack.schema.json` describes an evidence
   record, and `$defs/provenance` types `licence` as `nonEmptyString` and `attribution` as
   `array of object` — the CC-BY-SA-4.0 restriction §6 widens lives **entirely** in
-  `apps/server/src/sourcing/check.ts:341,354-355`, not in the schema. Verified by reading the
+  `apps/server/src/sourcing/check.ts:342` and `:353`, not in the schema. Verified by reading the
   schema's `$defs/provenance` at HEAD.
 - **No `evidence-kinds` member.** `citable_text` is already claimed by accepted
   `pack-population-provenance.md` and is the right kind; §9 amends its *predicates*, not the
@@ -97,21 +103,24 @@ non-emptiness (`packages/runtime/src/evidence-contract.ts:452`) and would be dec
 
 The corpus already contains a citation layer. Nothing reads it.
 
-| Fact | Measured at HEAD |
-|---|---|
-| Committed evidence records | **893** across **68** ledgers — `engine_eval` 415, `tablebase_result` 341, `position_legality` 59, `opening_identity` 52, `puzzle_provenance` 26 |
-| Records supporting **any** `PROSE_POINTERS` pointer (`check.ts:36-42`) | **0** |
-| Free-text `provenance.sources` strings on pack documents | **378** across **65** documents, **49** of them containing a URL |
-| Typed `provenance.attribution` entries | **31** across **22** documents |
-| Packs declaring `provenance.licence: "CC-BY-SA-4.0"` | **54** |
-| Principle-registry entries (`content/principles/`) | **13** |
-| — with `standsOn: "authors_practice"` | **13 of 13** |
-| — whose `provenance.sources` is the single sentence *"Synthesized from the authored claims in content/drafts during the claim-backing migration; no machine or external source establishes the judgement."* | **13 of 13** |
+| Fact | Measured at HEAD | scope walked |
+|---|---|---|
+| Committed evidence records | **893** across **68** ledgers — `engine_eval` 415, `tablebase_result` 341, `position_legality` 59, `opening_identity` 52, `puzzle_provenance` 26 | `content/**/*.json` |
+| Records supporting **any** `PROSE_POINTERS` pointer (`check.ts:36-42`) | **0** | every scope below |
+| Free-text `provenance.sources` strings on pack documents | *as printed by the census* — see criterion 1 | **undetermined; the drafted 378 / 65 / 49 reproduces over no scope** |
+| Typed `provenance.attribution` entries | **31** across **22** documents | `content/drafts/**` |
+| Packs declaring `provenance.licence: "CC-BY-SA-4.0"` | *as printed by the census* — see criterion 1 | **undetermined; the drafted 54 reproduces over no scope** |
+| Principle-registry entries (`content/principles/`) | **13** | `content/principles/**` |
+| — with `standsOn: "authors_practice"` | **13 of 13** | `content/principles/**` |
+| — whose `provenance.sources` is the single sentence *"Synthesized from the authored claims in content/drafts during the claim-backing migration; no machine or external source establishes the judgement."* | **13 of 13** | `content/principles/**` |
 
 The unit of every count above is **one committed document or one committed record**, and every one
 is reproduced by the single derivation command criterion 1 pins. The integers are drift tripwires
 ([[D1240]]); the criterion asserts set-equality against the command's output, never against this
-table.
+table. **The scope column is not decoration** — a re-derivation at HEAD found the drafted table
+mixing three different scopes silently and carrying two rows that reproduce over none of them
+(criterion 1). The argument survives intact because it rests on the **0**, which reproduces over
+every scope: whatever the exact denominator, no committed record supports a prose pointer.
 
 Read together they say one thing. **Not one byte of prose in this repository is grounded in a
 source that any instrument can check.** 378 hand-written citation sentences and 49 URLs sit in a
@@ -169,7 +178,7 @@ did not, and they change the specification rather than decorate it.
    user agent, a 429/5xx retry ladder and nothing else. "Reuse the patterns" is therefore net-new
    work, priced in §3, not a copy.
 3. **"an immutable exact-key/SQLite-FTS bundle"** (`:39`) is right and incomplete: `content/sources/`
-   is **gitignored** (`.gitignore:14`), so the pinned bytes a span points into are not in the
+   is **gitignored** (`.gitignore:11`), so the pinned bytes a span points into are not in the
    repository. A bundle that ships spans without shipping or re-deriving the bytes is
    unverifiable. §3.3 resolves this with immutable **revision** URLs plus a fail-closed digest
    re-check, which needs no committed prose bytes — and it is a stricter control than the dossier
@@ -177,7 +186,7 @@ did not, and they change the specification rather than decorate it.
 4. **"allow-listed sources"** (`:38`) is not currently expressible. `SourceLicence.spdx` is a closed
    two-member union — `"CC0-1.0" | "CC-BY-SA-4.0"` (`apps/server/src/sourcing/types.ts:1-13`) — and
    `licenceObligations` rejects any pack `provenance.licence` or attribution entry that is not
-   **exactly** `"CC-BY-SA-4.0"` (`check.ts:341,354-355`). Two consequences neither dossier records:
+   **exactly** `"CC-BY-SA-4.0"` (`check.ts:342`, `:353`). Two consequences neither dossier records:
    a **CC0 source cannot be attributed at all** (an attribution row licensed `CC0-1.0` raises
    `LICENCE_MIXED`), and a third licence is unrepresentable. §6 specifies the repair.
 
@@ -197,18 +206,47 @@ absence of a fourth is the whole law-8 argument.
 | Origin | The sentence it licenses | What establishes it | What fails if it is faked |
 |---|---|---|---|
 | **A. Quoted source bytes** | *"⟨source⟩, at revision ⟨r⟩, code points ⟨a⟩–⟨b⟩, says: ⟨exact text⟩"* | a pinned revision URL, a source digest, an exact span, and a licence permitting quotation and redistribution | §6's licence gate, §9's `CITATION_SPAN_AMBIGUOUS` / `CITATION_REVISION_UNPINNED`, the existing `CITATION_SOURCE_UNRETRIEVABLE` |
-| **B. A typed applicability predicate** | *"this position satisfies ⟨key⟩"* | a registered F1 projection evaluated over the position (§5's key table names one per key) | the F1 compiler: `EVIDENCE_DERIVATION_WIDENS` (`evidence-contract.ts:493-499`), `EVIDENCE_DEPENDENCY_MISSING`, `EVIDENCE_PROJECTION_INCOMPLETE` |
-| **C. An authored declaration** | *"⟨author⟩ claims ⟨X⟩"* | the shipped authored-clause path — `author_principle` labelling, `CLAIM_PRINCIPLE_MISSING`, and the principle registry | `claim-semantic-anchors` §5 step 8; `pack-population-provenance` §4 fence 1 |
+| **B. A typed applicability predicate, *recomputed* over the position** | *"this position satisfies ⟨key⟩"* | a registered F1 projection evaluated over the FEN carried by the query itself (§8 rule 0), never a key the caller asserted | `THEORY_KEY_UNGROUNDED` at query time (§8 rule 0); the F1 compiler: `EVIDENCE_DERIVATION_WIDENS` (`evidence-contract.ts:493-499`), `EVIDENCE_DEPENDENCY_MISSING`, `EVIDENCE_PROJECTION_INCOMPLETE` |
+| **C. An authored declaration** | *"⟨author⟩ claims ⟨X⟩"*, and — see below — *"⟨reviewer⟩ judged this passage applicable to ⟨key⟩ on ⟨date⟩"* | the shipped authored-clause path — `author_principle` labelling, `CLAIM_PRINCIPLE_MISSING`, and the principle registry | `claim-semantic-anchors` §5 step 8; `pack-population-provenance` §4 fence 1 |
 
 **A source saying a thing is origin A, never origin B.** *"Wikibooks says …c5 controls b5"* is a
 quotation. *"…c5 controls b5"* is a chess claim this pipeline may not make, and the rules layer
 already makes it better. The pipeline is a librarian, not a coach.
 
+**Origin B has to be an instrument, and an earlier draft left it as prose.** The sentence *"a
+registered F1 projection evaluated over the position"* was written into this table while §8's
+`TheoryQuery` carried **no FEN, node or run at all** — `{eligibility, text?, limit}`. The keys were
+therefore *caller-supplied assertions* that the pipeline indexed against without ever seeing the
+position they claimed to describe, which is [[D1389]]'s shape (a projection whose stated ground is a
+thing nothing in the call path can read) at the centre of the law-8 case. §8 rule 0 repairs it: the
+query carries the position, every eligibility key is **recomputed** from it by its registered ground
+projection before any index is touched, and a caller key the ground does not produce is a refusal
+rather than a filter. The table row above is now true because the mechanism exists, not because the
+sentence is written down.
+
+**And for prose sources, origin B is mostly origin C, which this document must say plainly.** §5
+rule 4 already concedes that where a key cannot be derived — *"and for prose sources it usually
+cannot"* — the key is **authored by the reviewing human**. `THEORY_KEY_UNATTRIBUTED` (§6.3) checks
+only that a reviewer and a date are named; **nothing checks that the key holds**, and nothing could,
+because the key is a judgement about a passage's applicability rather than a measurement over a
+position. So for the corpus this pipeline exists to build, the *typical* admitted passage is admitted
+by origin C wearing origin B's clothes. That is not a defect to be argued away — it is the honest
+shape of citing prose — but it must be **carried in the data and in the rendered sentence**, which
+§5 rule 6 and §8 rule 7 now require: a passage's keys are partitioned into derived and authored arms,
+a result records which arm admitted it, and a passage admitted only by an authored key may be
+rendered only in origin C's sentence form, never in origin B's.
+
 **The fourth origin, refused by name: retrieval rank.** *"The index scored this passage 0.83"* is
 not a licence to say anything at all. It orders an already-eligible set (§8) and no other thing.
 This is `runtime-opening-identity.md:73` read forward rather than as a prohibition, and it is
 `design/05` §3's amendment clause 2 (*"Eligibility precedes selection"*, owner ruling O2) applied to
-prose instead of to events.
+prose instead of to events. **The refusal is only real if an eligible set cannot be the whole
+bundle**, and in the drafted type it could be: `phase` and `side` are members of the closed key union,
+so `eligibility: [{ kind: "phase", value: "middlegame" }]` admits every middlegame passage and FTS
+rank alone chooses among them — the fourth origin reconstructed exactly, through a legal query, with
+criterion 10 green throughout because every returned passage *is* in the materialized eligible set.
+§8 rule 0b closes it with a specificity floor: `phase` and `side` may **narrow** an eligible set and
+may never **constitute** one.
 
 **The fifth, also refused: an LLM.** No language model participates in fetching, extracting,
 chunking, keying, validating, indexing, ranking or selecting. §11 enumerates the mechanisms.
@@ -299,7 +337,7 @@ endpoints (`theory-sourcing.md` §2, §5) is a property of the shipped client an
 
 #### 3.3 Reproducibility without committing prose bytes
 
-`content/sources/` is gitignored (`.gitignore:14`), so the pinned bytes are a local build input, not
+`content/sources/` is gitignored (`.gitignore:11`), so the pinned bytes are a local build input, not
 a repository artifact. Rather than commit prose (which would make every build a redistribution
 event of every source, reviewed or not), reproducibility is carried by three facts:
 
@@ -360,21 +398,33 @@ semantics, and **no member matches on substrings**.
 Table unit: **one applicability key kind**; total **11**. The acceptance criterion asserts
 set-equality against the compiled key union, not against this integer ([[D1240]]).
 
-| Key kind | Domain | Match semantics | Ground projection / source, at HEAD |
-|---|---|---|---|
-| `position.exact` | normalized FEN | equality | rules arithmetic |
-| `position.transposition` | `transposeKey(fen)` | equality | `packages/runtime/src/chess.ts:16` |
-| `opening.endpoint` | catalogue endpoint id | equality | `theory.opening.current_endpoint@1` (`runtime-opening-identity` §0) |
-| `opening.path` | catalogue path id | membership | `theory.opening.catalogue_membership@1` |
-| `opening.eco` | an ECO **interval**, e.g. `E60`–`E99` | letter equality **and** integer interval containment | the five pinned `chess-openings` TSVs, `CHESS_OPENINGS_COMMIT` (`openings.ts:16`) |
-| `phase` | `opening \| middlegame \| endgame` | equality | `rules.phase.reading` (`evidence-catalog.ts:746`) |
-| `material.signature` | role multiset per side | declared per key: `equal` or `superset` | `derived.material.reading.role_signature` (`evidence-catalog.ts:681`) |
-| `structure.named` | registered structure id | equality | `rules.structural.reading.named_structure` (`evidence-catalog.ts:237-240`) |
-| `shape` | registered shape-entry id | equality | `theory.shapes.firing` (`evidence-catalog.ts:757`) |
-| `motif` | one member of `SEMANTIC_EVENT_PROJECTION_IDS` | equality on the projection id | 67 members at HEAD (`evidence-catalog.ts:149`) |
-| `side` | `white \| black` | equality | FEN side to move |
+| Key kind | Domain | Match semantics | Ground projection / source | compiled at HEAD? |
+|---|---|---|---|---|
+| `position.exact` | normalized FEN | equality | rules arithmetic | ✅ |
+| `position.transposition` | `transposeKey(fen)` | equality | `packages/runtime/src/chess.ts:16` | ✅ |
+| `opening.endpoint` | catalogue endpoint id | equality | `theory.opening.current_endpoint@1` (`rfc/runtime-opening-identity.md:60`) | ❌ **specified only, not compiled** |
+| `opening.path` | catalogue path id | membership | `theory.opening.catalogue_membership@1` (`rfc/runtime-opening-identity.md:62`) | ❌ **specified only, not compiled** |
+| `opening.eco` | an ECO **interval**, e.g. `E60`–`E99` | letter equality **and** integer interval containment | the five pinned `chess-openings` TSVs, `CHESS_OPENINGS_COMMIT` (`apps/server/src/sourcing/openings.ts:18`) | ✅ |
+| `phase` | `opening \| middlegame \| endgame` | equality | `rules.phase.reading` (`evidence-catalog.ts:746`) | ✅ |
+| `material.signature` | role multiset per side | declared per key: `equal` or `superset` | `derived.material.reading.role_signature` (`evidence-catalog.ts:681`) | ✅ |
+| `structure.named` | registered structure id | equality | `rules.structural.reading.named_structure` (`evidence-catalog.ts:237-240`) | ✅ |
+| `shape` | registered shape-entry id | equality | `theory.shapes.firing` (`evidence-catalog.ts:757`) | ✅ |
+| `motif` | one member of `SEMANTIC_EVENT_PROJECTION_IDS` | equality on the projection id | 67 members at HEAD (`evidence-catalog.ts:149`) | ✅ |
+| `side` | `white \| black` | equality | FEN side to move | ✅ |
 
-Five rules that make the table a mechanism rather than a list:
+**The last column is new and it corrects a false claim.** An earlier draft headed this column
+*"Ground projection / source, **at HEAD**"* for all eleven rows. Two of the eleven are not at HEAD:
+`theory.opening.current_endpoint@1` and `theory.opening.catalogue_membership@1` appear **only** in
+`rfc/runtime-opening-identity.md` (accepted 2026-08-23, **not landed**) and in **zero** lines of
+`packages/runtime/src/` or `apps/server/src/`. `[V]` The compiled catalogue's only opening producer
+is `theory.opening_identity` with the single projection `theory.opening_identity.record`
+(`evidence-catalog.ts:790`), which is an authoring-provenance source record, not either of these
+readings. §8 rule 0's `key_ground_missing` refusal is what this costs: **the two `opening.*` key
+kinds are inadmissible at query time until `runtime-opening-identity` lands**, and criterion 7 asserts
+the refusal rather than letting the kinds sit in the union as dead members. That is a real dependency,
+recorded in `Depends on:`, not a table footnote.
+
+Six rules that make the table a mechanism rather than a list:
 
 1. **There is no free-text key kind and no `contains` arm.** The union above is exhaustive and
    `ApplicabilityKey` is a discriminated union with literal `kind` values; a string tag does not
@@ -397,6 +447,18 @@ Five rules that make the table a mechanism rather than a list:
 5. **A passage with zero keys is never eligible.** It is retained (so its provenance survives) and
    is unreachable by §8's contract. There is no "no keys means match anything" fallback; that
    reading is exactly how a librarian becomes a coach.
+6. **The two arms of rule 4 are a partition in the data, not a note in this RFC — because for prose
+   they are the majority arm, and nothing checks that an authored key holds.** A passage carries
+   `derivedKeys` (emitted by a named ground projection over the source's own structured content) and
+   `authoredKeys` (reviewer-supplied, each carrying `reviewer` and `reviewedAt`), and the two lists
+   are never merged. `THEORY_KEY_UNATTRIBUTED` (§6.3) is a **naming** check — it asserts a reviewer
+   and a date are present and cannot assert that the key is true of the passage, because the key is a
+   judgement rather than a measurement. So an `authoredKeys` entry is **origin C** (§1), it is
+   labelled as such all the way to §8's `admittedBy.origin: "authored_applicability"`, and the
+   sentence a consumer may render about it names the reviewer rather than the position. Stating this
+   is not a concession — it is the difference between a librarian who says *"a human decided this
+   page is about rook endings"* and one who says *"this position is a rook ending"* on the same
+   evidence. Criterion 23.
 
 ### §6 — Validate, quarantine, and the licence ceiling
 
@@ -414,9 +476,9 @@ state) aborts the export with `THEORY_BUILD_INCOMPLETE`.
 `licenceObligations` (`check.ts:340-356`) enforces two rules that were written for a wholesale
 CC-BY-SA content posture:
 
-- `check.ts:341` — a pack `provenance.licence` other than exactly `"CC-BY-SA-4.0"` raises
+- `check.ts:342` — a pack `provenance.licence` other than exactly `"CC-BY-SA-4.0"` raises
   `LICENCE_MIXED`;
-- `check.ts:354-355` — **every** attribution entry whose `licence` is not exactly `"CC-BY-SA-4.0"`
+- `check.ts:353` — **every** attribution entry whose `licence` is not exactly `"CC-BY-SA-4.0"`
   raises `LICENCE_MIXED`.
 
 Two consequences, neither of them previously recorded. **A CC0 source cannot be attributed at all**
@@ -522,18 +584,62 @@ predicates (§8) an ineligible result is not a ranking miss — it is a contract
 ### §8 — Retrieval: eligibility first, ranking inside it, never the reverse
 
 ```ts
+/** The nine kinds that can constitute an eligible set. `phase` and `side` are NOT members. */
+type SpecificApplicabilityKey = Extract<ApplicabilityKey, { kind:
+  | "position.exact" | "position.transposition" | "opening.endpoint" | "opening.path"
+  | "opening.eco" | "material.signature" | "structure.named" | "shape" | "motif" }>;
+
 interface TheoryQuery {
-  readonly eligibility: readonly [ApplicabilityKey, ...ApplicabilityKey[]];  // required, non-empty
-  readonly text?: string;                                                    // ranking only
+  readonly position: {                       // rule 0: the subject the keys are about
+    readonly fen: string;                    // normalized; the only thing keys are recomputed over
+    readonly nodeId?: string;                // provenance for the caller's own audit; never read by retrieval
+    readonly runId?: string;
+  };
+  readonly eligibility: readonly [SpecificApplicabilityKey, ...ApplicabilityKey[]];  // rule 0b
+  readonly text?: string;                                                            // ranking only
   readonly limit: number;
 }
 
+type TheoryPassageRef = {
+  readonly passageId: string;
+  readonly sourceId: string;
+  readonly sectionRef: string;
+  readonly attributedQuotation: string;      // rule 7: the quote and its attribution are one string
+  /** rule 7: which arm of the passage's key partition admitted it. */
+  readonly admittedBy:
+    | { readonly origin: "derived"; readonly keys: readonly ApplicabilityKey[] }
+    | { readonly origin: "authored_applicability"; readonly keys: readonly ApplicabilityKey[];
+        readonly reviewer: string; readonly reviewedAt: string };
+};
+
 type TheoryResult =
   | { readonly kind: "passages"; readonly passages: readonly TheoryPassageRef[]; readonly eligibleCount: number }
-  | { readonly kind: "empty"; readonly reason: "no_eligible_passage" | "bundle_absent" | "bundle_incompatible" };
+  | { readonly kind: "empty"; readonly reason: "no_eligible_passage" | "bundle_absent" | "bundle_incompatible" }
+  | { readonly kind: "refused"; readonly reason: "key_ungrounded" | "eligibility_underspecified" | "key_ground_missing";
+      readonly key: ApplicabilityKey };
 ```
 
-Six rules:
+**Two gating rules, then seven ordering rules.**
+
+**Rule 0 — the query carries the position, and every key is recomputed over it before any index is
+consulted.** `search` evaluates each `eligibility` key's registered ground projection (§5's table)
+against `position.fen` and compares the result to the key the caller supplied. A key the ground
+projection does not produce, or whose ground **abstains**, returns
+`{ kind: "refused", reason: "key_ungrounded" }` — it is **not** silently dropped and **not** used
+as a filter. A key whose ground projection is absent from the compiled F1 manifest returns
+`key_ground_missing` (the query-time twin of §6.3's build-time `THEORY_KEY_GROUND_MISSING`).
+*This is what makes origin B an evaluation rather than a caller assertion (§1).* The caller may
+therefore not widen its own eligibility by asserting a key the position does not satisfy, which is
+the only way a caller could have reached passages outside its position's admitted set.
+
+**Rule 0b — `phase` and `side` may narrow an eligible set and may never constitute one.** The first
+tuple member is typed `SpecificApplicabilityKey`, so `eligibility: [{ kind: "phase", … }]` does not
+typecheck, and the runtime re-checks it (a JSON caller does not typecheck) returning
+`{ kind: "refused", reason: "eligibility_underspecified" }`. Without this the closed key union
+admits a whole-bundle search through a legal query and rank alone selects among the results — the
+fourth origin §1 refuses by name, reconstructed with every other rule still green.
+
+**Rules 1–8.**
 
 1. **`eligibility` is required and non-empty in the type.** There is no overload, default or
    sentinel that searches the whole bundle. A query with no keys does not typecheck.
@@ -556,6 +662,19 @@ Six rules:
    engine or human-model quantity.
 6. **The runtime never fetches.** The bundle is the only source. There is no request-time scrape,
    which is the misreading [[D557]] was raised to correct.
+7. **A result says which origin admitted it, and a quotation never leaves the store without its
+   attribution.** `admittedBy.origin` is `"derived"` only when every key that admitted the passage
+   came from the derived arm of §5 rule 6's partition; a passage admitted by an authored key carries
+   `"authored_applicability"` with the reviewer and date the `THEORY_KEY_UNATTRIBUTED` check already
+   demands. A consumer may render an `"authored_applicability"` passage only in origin C's sentence
+   form (*"⟨reviewer⟩ judged this passage applicable to ⟨key⟩ on ⟨date⟩"*), never in origin B's
+   (*"this position satisfies ⟨key⟩"*). And `attributedQuotation` is **one string** containing the
+   attribution and the quoted span together, so there is no representation of a bare quotation for a
+   renderer to emit — §11's origin-A sentence form becomes a data shape instead of an instruction.
+8. **The eligible set is a function of the position, not of the caller.** Rules 0, 0b and 2 compose
+   to one property an implementer can test directly: for a fixed `position.fen`, the union of every
+   passage reachable by any admissible query is fixed, and no caller-supplied field widens it.
+   Criterion 22.
 
 ### §9 — Consumption: a passage becomes evidence only through the ledger
 
@@ -648,6 +767,56 @@ refusal somewhere that fails.
 already-admitted, already-sealed packet at a requested directness, through the existing bounded
 voice path. It may not shorten a quotation — a shortened quote is an adaptation, and adaptation is a
 licence question (§6.2 rule 3), not a rendering one.
+
+#### 11.1 — This is the first thing to put third-party chess prose into the packet, and the word guard is packet-relative
+
+`voiceCheck` compares the model's output against `view.items.flatMap(item => item.sentences)`
+(`voice.ts:112`) and `absentWords` flags a word **only when it is absent from that joined string**
+(`voice.ts:107`). `[V]` Every arm — squares, UCI, SAN, `CHESS_LEXICON`, `BANNED_JUDGEMENTS` (32
+members, `:93`), `PRESCRIPTIVE_VERBS` — is scoped to the whole packet. A quoted theory passage is
+third-party prose written by chess authors for chess readers, so admitting one **hands the renderer
+that passage's squares, its moves, and its judgement words for use anywhere in the output**. Nothing
+before this RFC put such prose into a packet: the shipped packet carries structures, observations,
+markers, an endgame reading, shape refs, authored clauses and recorded engine/tablebase readings
+(`voice.ts:52-64`), all of which are Tabiya-composed.
+
+**Two owner rulings land on exactly this and they are checked rather than assumed.** [[D1409]]:
+*"a judgement word is permitted **only inside the exact rendered sentence that grounds it,
+byte-matched**, and is banned everywhere else in the output — including elsewhere in the same
+packet."* [[D1419]] extends it: *"the span rule governs **judgement words, squares, moves, chess
+nouns and prescriptive verbs alike**"*, because *"leaving any arm packet-relative rebuilds the
+condition that made [[D1406]] possible."* Together they close the arm that matters most here: with
+the span rule on all four arms, a quotation licenses its own words **inside its own byte-matched
+sentence and nowhere else**, so the leakage this section would otherwise create does not exist.
+**That is the case closed, and it was closed by the owner rather than by this document.**
+
+**Three things remain, stated because they are the residue rather than the whole problem:**
+
+1. **`plan` is in no list at all, and neither are `initiative`, `compensation` or `pressure`.**
+   [[D1419]] names this explicitly as *"not fixed and not ruled"*, and it reproduces at HEAD: none of
+   the four appears in `CHESS_LEXICON`, `BANNED_JUDGEMENTS` or `PRESCRIPTIVE_VERBS`, and the only
+   occurrence of the string `plan` anywhere in `voice.ts` is the `plans: readonly ShapeEntryRef[]`
+   packet field at `:59`. `[V]` No scoping rule reaches a word no list contains, and **theory prose is the
+   single largest new source of exactly those four words** in the product. This RFC does not lift
+   them and does not add them (a `BANNED_JUDGEMENTS` widening is a rendering-contract change with its
+   own consumers); it records that admitting theory prose materially raises the exposure of an
+   already-open ruling, and routes it as Discharge D12.
+2. **`voiceCheck` has no attribution arm.** It checks tokens and words and never checks that a
+   rendered quotation names its source, so under the span rule an LLM may emit the quoted sentence
+   byte-for-byte with no *"Wikibooks says"* and pass every arm. §1's origin-A sentence form
+   (*"⟨source⟩, at revision ⟨r⟩ … says: ⟨exact text⟩"*) was therefore prose, not a mechanism. **§8
+   rule 7 makes it a data shape instead**: the packet item is `attributedQuotation`, one string
+   containing attribution and quote together, so byte-matching the quote necessarily carries the
+   attribution and there is no representation of a bare quotation for a renderer to reach.
+   Criterion 24.
+3. **The caption escalation stands open**, by [[D1419]]'s own words — *"a sentence that merely names
+   the closed class frees every word in it — was offered as a third option and not taken"*. A quoted
+   passage is a long sentence naming many things, so the span rule narrows the escalation to that
+   sentence but does not remove it. Not this RFC's to rule; named so it is not discovered later.
+
+**And the repair is owed, not shipped.** `voice.ts:107` is packet-relative at HEAD; [[D1409]]'s row
+reads *"repair owed on `packages/runtime/src/voice.ts`"*. No theory passage may enter a packet before
+it lands — criterion 24 asserts the span-scoped guard is in place, and is **red at HEAD**.
 
 ### §12 — Refused by name, with the measurement
 
@@ -771,17 +940,44 @@ asserts it from this side.
 
 ## Acceptance criteria
 
-> **Cross-review 2026-08-23 — [[D1410]] blocks acceptance.** The law-8 argument is prose at four points it claims are structural: `TheoryQuery` carries no position, a phase-only eligibility set reconstructs whole-bundle retrieval, prose keys are authored rather than typed, and quoted prose in the packet neutralises the word guard ([[D1409]] repairs the last). Also [[D1395]]'s five HTTP controls have no criterion, so this document does not close it.
+> **Cross-review 2026-08-23 — [[D1410]] repaired 2026-08-24; all four law-8 points now have a mechanism.** (1) `TheoryQuery` carries `position.fen` and §8 rule 0 **recomputes** every eligibility key over it, refusing `key_ungrounded` rather than filtering on a caller assertion. (2) §8 rule 0b adds a specificity floor: `phase` and `side` may narrow an eligible set and may never constitute one, in the type and again at runtime. (3) §5 rule 6 makes the derived/authored key split a partition in the data, carried to §8's `admittedBy.origin` and to the sentence form a consumer may render — origin B does collapse into origin C for prose, and the document now says so and labels it. (4) [[D1409]] + [[D1419]] **do** close the leakage arm (the span rule on all four arms); §11.1 states the three-part residue — `plan`/`initiative`/`compensation`/`pressure` are in no list at all, `voiceCheck` has no attribution arm (repaired by §8 rule 7's `attributedQuotation`), and the caption escalation stands open by [[D1419]]'s own words. Criteria 22–27 are new; [[D1395]]'s five HTTP controls are criterion 25 and the eight orphaned refusal codes are criterion 26.
 
 > **Findings landed 2026-08-23.** [[D1393]] — the attribution gate opens silently when `claim-semantic-anchors` lands. [[D1394]] — a CC0 source cannot be attributed. [[D1395]] — the source fetcher has no SSRF guard, redirect limit or byte ceiling. [[D1396]] — 0 of 893 records support a load-bearing pointer.
 
-1. **The corpus baseline is a command, not this document's arithmetic** ([[D1240]]).
+1. **The corpus baseline is a command, and every row of it declares its own scope** ([[D1240]]).
    `make theory-source-census` prints, from the committed tree: ledger count, record count and
    per-kind split; the number of records supporting a `PROSE_POINTERS` pointer; the number of
    `provenance.sources` strings and of `provenance.attribution` entries; and the principle registry's
-   size and `standsOn` distribution. The criterion asserts the census output is **set-equal by
-   document id** to the tree's content, with **893 / 68 / 0 / 378 / 31 / 13 / 13** baked only as
-   drift tripwires. *Negative: a hand-maintained count in a test fixture fails, because the census
+   size and `standsOn` distribution. **Each row prints its scope beside its number** — the glob it
+   walked, the key path it read, and the predicate it counted — and the criterion asserts the census
+   output is **set-equal by document id** to the tree's content within each declared scope.
+   *Concrete RED: a census row that prints an integer with no scope glob fails, which is what
+   produced the defect below.*
+
+   **Why the scope declaration is the criterion rather than a nicety.** The Motivation table's
+   integers were re-derived at HEAD and **they do not share a scope, and three of them reproduce over
+   no scope at all**: `[V]`
+   - **893 records / 68 ledgers** and the per-kind split `engine_eval` 415, `tablebase_result` 341,
+     `position_legality` 59, `opening_identity` 52, `puzzle_provenance` 26 reproduce **exactly** over
+     all of `content/**/*.json` — 764 records in `content/drafts`, 129 in `content/candidates`.
+   - **31 attribution entries across 22 documents** reproduces **exactly** over `content/drafts`
+     **alone** — over all of `content/` it is 46 across 37.
+   - **13 / 13** principle entries reproduce over `content/principles`.
+   - **378 `provenance.sources` strings across 65 documents, 49 with a URL** reproduces over
+     **neither**: all of `content/` gives 513 / 127 / 75; `content/drafts` gives 369 / 53 / 40;
+     drafts excluding `.browser.json` fixtures gives 366 / 50 / 40; drafts + principles gives
+     382 / 66 / 40; de-duplicating the strings gives 428 unique / 50 unique URLs. No scope I could
+     construct yields 378 / 65 / 49.
+   - **54 packs declaring `provenance.licence: "CC-BY-SA-4.0"`** likewise reproduces over neither:
+     all of `content/` gives 119, `content/drafts` gives 45, drafts + principles 58, drafts + shapes
+     70.
+
+   Those five integers are therefore **struck as tripwires** and the Motivation table marks them
+   *"as printed by the census"*. The three that do reproduce keep their tripwire status **with their
+   scope named**: `893 / 68` and the per-kind split at `content/**`, `31 / 22` at `content/drafts/**`,
+   `13 / 13` at `content/principles/**`. The load-bearing zero — **0 records supporting a
+   `PROSE_POINTERS` pointer** — reproduces over every scope, which is the one number the argument
+   actually rests on. *Negative: a hand-maintained count in a test fixture fails, because the census
    must read the corpus.*
 2. **The register refuses what the dossier refuses.** Five committed negative fixtures — a TWIC
    origin, a PGN Mentor origin, the ecochessopeningcodes compilation, a bulk Lichess study, and the
@@ -804,11 +1000,21 @@ asserts it from this side.
    `text` equals the `[spanStart, spanEnd)` slice of the pinned bytes, `textSha256` matches, and
    `passageId` is stable across a rebuild from scratch. One fixture source contains an astral-plane
    character before a quoted span; a code-unit implementation returns a shifted slice and fails.
-7. **The applicability key union is set-equal to §5's kinds, and no member matches a substring.**
-   The compiled `ApplicabilityKey` union is set-equal by `kind` to the §5 table (11 at drafting, as
-   a tripwire), and a test asserts no member's evaluator calls `includes`, `indexOf`, `startsWith`
-   or a `RegExp` over passage text or key values. *Negative: adding a `{ kind: "tag"; value: string }`
-   member fails set-equality, and a substring evaluator fails the second arm.*
+7. **The applicability key union is set-equal to §5's kinds, no member matches a substring, and a
+   kind whose ground projection is not compiled is refused rather than dead.** Three arms.
+   **(a)** The compiled `ApplicabilityKey` union is set-equal by `kind` to the §5 table (11 at
+   drafting, as a tripwire). **(b)** A test asserts no member's evaluator calls `includes`,
+   `indexOf`, `startsWith` or a `RegExp` over passage text or key values. **(c)** For every kind, the
+   named ground projection is looked up in `compileEvidenceManifest(EVIDENCE_CONTRACT_DECLARATIONS)`;
+   a kind whose ground is absent must return `{ kind: "refused", reason: "key_ground_missing" }` at
+   query time and must be rejected at build time with `THEORY_KEY_GROUND_MISSING`. *Concrete RED at
+   HEAD, and this is the point:* `theory.opening.current_endpoint@1` and
+   `theory.opening.catalogue_membership@1` are **not in the compiled catalogue** — they exist only in
+   `rfc/runtime-opening-identity.md` — so arm (c) requires `opening.endpoint` and `opening.path` to
+   refuse today and to start working, with no code change to this pipeline, when that RFC lands.
+   *Negative: adding a `{ kind: "tag"; value: string }` member fails set-equality; a substring
+   evaluator fails arm (b); a build that emits an `opening.endpoint` key against today's catalogue
+   fails arm (c).*
 8. **The [[D579]] fixture is permanent and named.** The four R4 rook-and-pawn queries return the
    rook-endings passage and **do not** return the generic pawn-endings passage; the fixture file is
    named for D579. *Negative: an enricher that emits a `phase`-only key for both passages fails,
@@ -820,6 +1026,12 @@ asserts it from this side.
     passage's id is a member of the materialized eligible set for that query, asserted over all
     committed queries. *Negative: an implementation that computes FTS first and intersects
     afterwards can return a passage when the intersection is empty and fails this arm.*
+    **What this criterion cannot catch, and why criterion 22 exists.** Membership in the eligible set
+    is trivially satisfied by making the eligible set large: under the drafted type,
+    `eligibility: [{ kind: "phase", value: "middlegame" }]` materializes every middlegame passage and
+    every returned result is a member, so this criterion stays green while FTS rank alone selects the
+    answer. This criterion checks that eligibility **precedes** selection; criterion 22 checks that
+    eligibility is **a function of the position**, which is the half that carries the law-8 argument.
 11. **The twelve hard negatives return `kind: "empty"`.** The R4 negatives — including the 4K
     livestream, football offside, Kubernetes and saxophone queries (`results.md:99-103`) — produce
     no passage at any rank. *Negative: a fallback that drops the most specific key and retries
@@ -873,6 +1085,68 @@ asserts it from this side.
     and `check.ts:346`'s `binding.spans.flatMap` has no `spans` to read — so the criterion is
     honestly red until `claim-semantic-anchors` lands its shape change **including this reader**.
 
+22. **Eligibility is a function of the position, and no caller-supplied field widens it** (§8 rules
+    0, 0b, 8 — the mechanical form of origin B). Four arms, each with a named RED state.
+    **(a)** For a fixed `position.fen`, a fixture enumerates every admissible query and asserts the
+    union of reachable passages equals the set computed by evaluating all eleven ground projections
+    over that FEN. *RED: a `search` that reads `eligibility` without recomputing.*
+    **(b)** A query supplying a key the position does not satisfy — e.g. `phase: "endgame"` on a FEN
+    whose `rules.phase.reading` returns `middlegame` — returns
+    `{ kind: "refused", reason: "key_ungrounded" }`. *RED: an implementation that drops the key and
+    proceeds, or that uses it as a filter — both return passages and fail.*
+    **(c)** A key whose ground projection **abstains** on that FEN returns the same refusal, not an
+    empty filter. *RED: treating abstention as "no match", which silently narrows instead of
+    refusing (§5 rule 3's discipline at query time).*
+    **(d)** `eligibility: [{ kind: "phase", … }]` and `eligibility: [{ kind: "side", … }]` return
+    `{ kind: "refused", reason: "eligibility_underspecified" }` from the runtime check, and do not
+    typecheck. *RED, and this is the concrete tree state the drafted type permitted: a phase-only
+    query that returns every middlegame passage ranked by FTS, with criteria 10 and 11 both green.*
+23. **The derived/authored key partition survives into the rendered sentence** (§5 rule 6, §8 rule
+    7). A passage carrying only `authoredKeys` is returned with
+    `admittedBy.origin: "authored_applicability"` and a non-empty `reviewer`/`reviewedAt`; a
+    renderer fixture asserts the origin-C sentence form is used and the origin-B form
+    (*"this position satisfies …"*) is not. *RED: an implementation that merges `derivedKeys` and
+    `authoredKeys` into one list — the origin becomes unrecoverable and the fixture fails.*
+    *Also RED:* a passage carrying an authored key with no reviewer fails `THEORY_KEY_UNATTRIBUTED`
+    at build (§6.3), which is the one thing that check does assert.
+24. **A quotation cannot leave the store without its attribution, and no theory passage enters a
+    packet before the span-scoped voice guard lands** (§11.1). Two arms.
+    **(a)** `TheoryPassageRef` has no field containing the quoted span alone; `attributedQuotation`
+    is one string and a fixture asserts every rendered theory item's text contains the source
+    attribution as a prefix. *RED: adding a bare `quotedText` field to the ref — the fixture greps
+    the type and fails.*
+    **(b)** A fixture asserts `voiceCheck`'s four arms are **span-scoped** ([[D1409]], [[D1419]]) —
+    a judgement word, square, move, chess noun or prescriptive verb appearing in one packet item may
+    not be emitted inside a different sentence of the output. ***Red at HEAD, deliberately:***
+    `voice.ts:107`'s `absentWords` is packet-relative today and [[D1409]]'s row records the repair as
+    *"owed on `packages/runtime/src/voice.ts`"*. This criterion does not implement that repair; it
+    refuses to admit theory prose until someone does.
+25. **The five HTTP controls exist and each fails on a fixture** ([[D1395]], §3.1 — the finding this
+    document landed and then did not close). One fixture per control, all against the builder's
+    client: an SSRF attempt (`http://127.0.0.1:…`, `http://169.254.169.254/…`, and a DNS name
+    resolving to a private address) is refused **and refused again after a redirect**; a redirect
+    chain exceeding the limit is refused; a redirect to a different registrable domain is refused; a
+    body exceeding the byte ceiling aborts mid-stream rather than buffering; a `Content-Type` outside
+    the allow-list is refused. *RED at HEAD: `apps/server/src/sourcing/http.ts` is 49 lines with none
+    of the five, so all five fixtures fail against the shipped client.*
+26. **Every refusal code this RFC mints has a fixture, asserted as a set rather than by hand.** A
+    test enumerates the builder's exported error-code union and asserts it is **set-equal** to the
+    set of codes exercised by the committed fixtures. At drafting, eight codes had no criterion at
+    all — `THEORY_SOURCE_NOT_REDISTRIBUTABLE`, `THEORY_BUILD_INCOMPLETE`, `THEORY_SPAN_INVALID`,
+    `THEORY_PASSAGE_DIGEST_MISMATCH`, `THEORY_ATTRIBUTION_MISSING`, `THEORY_KEY_GROUND_MISSING`,
+    `THEORY_KEY_UNATTRIBUTED`, `THEORY_PASSAGE_ID_COLLISION` — so each now needs one:
+    a quotation-only source is refused at bundle entry; an unclassified passage aborts the export; an
+    out-of-range and a surrogate-splitting span are refused; a `text` whose digest disagrees with its
+    slice is refused; a share-alike source with no `attributionText` is refused; a key naming an
+    uncompiled ground projection is refused (criterion 7c); an authored key with no reviewer is
+    refused; two passages colliding on `passageId` with different bytes are refused.
+    *RED: minting a ninth code without a fixture fails set-equality — which is the exact defect this
+    criterion exists to prevent, since it is the one the cross-review found.*
+27. **The three new query refusals are typed, not thrown.** `TheoryResult`'s `refused` arm carries
+    the offending key, and a fixture asserts `search` never throws for a well-formed but inadmissible
+    query. *RED: an implementation that throws — a caller cannot distinguish "your key is ungrounded"
+    from "the bundle is broken", and the honest-empty discipline (criterion 19) collapses.*
+
 ## Discharges
 
 | id | the obligation | owner | recorded when discharged | discharged |
@@ -888,6 +1162,8 @@ asserts it from this side.
 | D9 | The theory-source half of [[D1367]]'s *"shared source contract"* for the hint ladder — a theory rung must not go dark because Stockfish is absent. **The ladder, its per-source ceilings and its theory-only fixture belong to `hint-distance`; this RFC owns only the source contract underneath them** | `hint-distance` | that RFC's per-source adapter section | |
 | D10 | Decide whether an optional semantic ranking experiment is ever re-opened, against a larger cited corpus and a fresh gold set (`results.md:136-137`) | OWNER | a new RFC and a new register claim, never a flag on this one | |
 | D11 | Carry the V1→V2 claim-binding shape change through the **licence** readers it does not currently name — `ledger-validation.ts:346`'s `exactKeys` and `check.ts:346`'s `boundAssertions` — so the CC-BY-SA attribution obligation keeps firing for machine-bound claims (§15) | `claim-semantic-anchors` | that RFC's §7 migration section | |
+| D12 | `plan`, `initiative`, `compensation` and `pressure` are in **no** `voice.ts` guard list, so no scoping rule reaches them ([[D1419]], explicitly unruled). Admitting third-party theory prose is the single largest new source of those four words; decide whether the rendering contract's word lists widen before theory prose reaches a packet (§11.1) | OWNER, then `review-map` | a `voice.ts` widening or a recorded refusal | |
+| D13 | [[D1419]]'s **caption escalation** — a sentence that merely names the closed class frees every word in it — stands open by the ruling's own words. A quoted passage is exactly such a sentence, so the span rule narrows it without removing it (§11.1) | OWNER | the follow-up RFC [[D1419]] routes to `rfc/archive/adaptive-guidance.md` | |
 
 ## Open questions
 
@@ -921,7 +1197,7 @@ Proposed — ids assigned at landing; head was **D1373** at drafting. (The wave 
   through it. Fixed by §9 plus the builder; the *measurement* is the row.
 - 🐞 **A CC0 source cannot be attributed, and a third licence cannot be named.**
   `licenceObligations` raises `LICENCE_MIXED` for any attribution entry whose `licence` is not
-  exactly `"CC-BY-SA-4.0"` (`check.ts:354-355`) and `SourceLicence.spdx` is a closed two-member
+  exactly `"CC-BY-SA-4.0"` (`check.ts:353`) and `SourceLicence.spdx` is a closed two-member
   union (`sourcing/types.ts:1-13`). So courtesy attribution of the CC0 Lichess data fails the check,
   and the allow-list the owner asked for is capped at two SPDX identifiers before it starts. Repair
   in §6.2; the row records that one constant is doing two different jobs.
@@ -982,3 +1258,31 @@ Proposed — ids assigned at landing; head was **D1373** at drafting. (The wave 
   neither reader — Discharge D11 and criterion 21, honestly red until that RFC carries it. The
   [[D1374]] recount is recorded in the exploration-gate line: ranks 9–10 do not survive, the count
   is 8, and rank 8 is unmoved.
+- 2026-08-24: **[[D1410]] repaired.** The law-8 argument was prose at four points it claimed were
+  structural, and each now has a mechanism that can go red. **Origin B had no instrument**:
+  `TheoryQuery` carried no FEN, node or run, so a registered projection was never evaluated over
+  anything — §8 rule 0 adds `position.fen` and **recomputes** every eligibility key over it, refusing
+  `key_ungrounded` instead of filtering on a caller assertion (criterion 22a–c). **A whole-bundle
+  search was expressible** through `eligibility: [{ kind: "phase", … }]` with criteria 10 and 11 both
+  green — §8 rule 0b adds a specificity floor in the type and again at runtime (criterion 22d), and
+  criterion 10 now says in terms what it cannot catch. **Prose applicability is authored, not typed**
+  — §5 rule 6 makes the derived/authored split a partition carried to §8's `admittedBy.origin` and to
+  the sentence form a consumer may render, and §1 states plainly that for prose the typical passage is
+  origin C wearing origin B's clothes (criterion 23). **The packet/word-guard case is closed by the
+  owner, not by this document**: [[D1409]] and [[D1419]] put the span rule on all four `voiceCheck`
+  arms, which removes the leakage; §11.1 states the three-part residue — `plan`/`initiative`/
+  `compensation`/`pressure` are in no list at all (D12), `voiceCheck` has no attribution arm (repaired
+  by §8 rule 7's single `attributedQuotation` string, criterion 24a), and the caption escalation stands
+  open by [[D1419]]'s own words (D13) — and the span repair is **owed on `voice.ts` at HEAD**, so
+  criterion 24b is red and refuses to admit theory prose until it lands. Also closed: [[D1395]]'s five
+  HTTP controls become criterion 25 (red at HEAD against the 49-line client); the **eight** refusal
+  codes with no criterion become criterion 26, asserted as set-equality so a ninth cannot appear
+  unfixtured; §5's *"at HEAD"* column is corrected — `theory.opening.current_endpoint@1` and
+  `theory.opening.catalogue_membership@1` are **not compiled**, existing only in
+  `rfc/runtime-opening-identity.md`, so those two key kinds refuse `key_ground_missing` until it lands
+  (criterion 7c); and criterion 1 now requires the census to print a **scope** beside every integer,
+  because a re-derivation found the Motivation table silently mixing three scopes and carrying two
+  rows — 378/65/49 sources strings and 54 CC-BY-SA-4.0 packs — that reproduce over **none** of them.
+  The argument survives because it rests on the **0** prose-pointer records, which reproduces
+  everywhere. Two citations corrected in passing: `.gitignore:14`→`:11` and the CC-BY-SA-4.0
+  restriction at `check.ts:341,354-355`→`:342,:353`.
