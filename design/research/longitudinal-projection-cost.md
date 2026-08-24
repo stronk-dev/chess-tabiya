@@ -80,3 +80,38 @@ decision rule did not move. `[V]`
   `9d575c4e61d4e328a91d441bd6b191ae9f51c9fff426d6d86a4a278c7991e5cf`
 - every timing fragment and the aggregate name commit `0d4e27f`; the aggregator refuses mixed
   commit/PGN/source receipts. `[V]`
+
+## D1405b — the single-decision escape hatch also fails
+
+The amended RFC removed whole-run work from requests and left one conditional candidate: derive
+only the newly appended decision if the complete admitted revision-1 adapter set plus SQLite publish
+fits the existing 500 ms p95 envelope. The D1405b arm was preregistered before measurement and run
+from committed extraction `68cd2320` inside the repository's Node **24.10.0** build image on arm64.
+It selected 24 opening, 24 middlegame and 24 endgame decisions, warmed three per phase, and measured
+each selected decision twice in reverse pass order (144 observations). The prototype registry was
+set-equal to all 67 declared semantic ids: 46 one-edge, 13 complete-population avoidance and eight
+declared-deferred path families. `[V]`
+
+| phase | n | combined p50 | combined p95 | max | gate |
+|---|---:|---:|---:|---:|---|
+| opening | 48 | 604.9 ms | **786.7 ms** | 869.9 ms | fail |
+| middlegame | 48 | 850.3 ms | **1,027.0 ms** | 1,290.6 ms | fail |
+| endgame | 48 | 277.5 ms | **499.5 ms** | 550.6 ms | pass at p95 |
+| **overall** | **144** | **589.8 ms** | **959.9 ms** | **1,290.6 ms** | **fail** |
+
+SQLite is not the problem: transaction p95 was **0.242 ms** overall. The collector was 959.8 ms
+p95 and emitted 459,238 exact events across 4,586 evaluated edges; the 13 population adapters found
+324 avoidance opportunities and the fixture published 4,130 rows. Per-position median p95 was
+946.5 ms over 72 positions, so the refusal is not one repeated noisy invocation. `[V]`
+
+**Verdict:** revision 1 projects every semantic decision in the background. The request transaction
+may persist only the durable job watermark; it may not call the legal enumerator or any semantic
+adapter. This is a stronger result than the whole-run refusal: incrementality removes quadratic
+replay but not the breadth cost of the exact legal population at one decision. `[V]`
+
+The result remains a prototype lower bound for accepted production adapters. It is binding in the
+refusal direction — adding the eight deferred path constructors cannot make the measured work
+faster by itself — and the final worker still owes throughput/batch sizing rather than a request
+latency claim. Full receipt:
+`planning/longitudinal-store/d1405b-single-decision-results.json`; preregistration:
+`planning/longitudinal-store/d1405-single-decision-preregistration.md`. `[V]`

@@ -154,10 +154,12 @@ revision and failure code. A future consumer must require `complete` at the requ
 render honest unavailability. Partial rows are never silently presented as a complete learner
 history. No consumer lands in this RFC.
 
-The worker may not claim the 500 ms interaction budget until a preregistered single-decision arm,
-including all admitted adapters and the database transaction, passes it. Failure moves native
-projection to the same background-only schedule as imports; it never moves work back into the
-request. D1405's fixed 20/40/80 and bulk arms are rerun after the final registry lands.
+Native projection is **background-only at revision 1**. D1405b's preregistered Node-24 arm over all
+59 admitted edge/population families plus SQLite publish measured 959.9 ms combined p95 overall,
+786.7 ms opening and 1,027.0 ms middlegame against 500 ms; SQLite itself was 0.242 ms p95. The
+request path therefore persists only the job watermark and may not call a legal enumerator or
+semantic adapter. Final production adapters rerun the arm for worker sizing, never to move the work
+back into the request. D1405's fixed 20/40/80 and bulk arms are rerun after the final registry lands.
 
 ### D. Revision identity and attribution
 
@@ -213,10 +215,12 @@ These replace AC-1–AC-11 for the amended design:
 11. **Boundaries:** no learner renderer, rating, classroom, cohort, provider or LLM module reaches
     the store; no production reader exists beyond the worker/rebuild at landing. Synthetic graph
     edges make each arm fail.
-12. **Performance:** the preregistered one-decision worker arm includes all admitted adapters and
-    SQLite publish. It may choose native incremental processing only below 500 ms p95; otherwise
-    native work remains background-only. The final registry reruns D1405's prefix/bulk arms and no
-    request performs them.
+12. **Performance:** D1405b's committed Node-24 receipt fixes revision 1 as background-only: the
+    59-family single-decision prototype is 959.9 ms combined p95 overall and 1,027.0 ms in the
+    middlegame. A reachability test proves the request can call only the job-watermark writer, not
+    a legal enumerator or semantic adapter. The accepted production registry reruns D1405b and
+    D1405's prefix/bulk arms for worker batch sizing; no result may move projection into a request
+    without a later RFC and a new pre-registered gate.
 
 ## Motivation
 

@@ -7191,3 +7191,25 @@ until a run-schema amendment provides durable attribution.
 job-backed design and first run the preregistered all-adapter one-decision latency arm; if it misses
 500 ms p95, native projection stays background-only. No content, habit, style, Review or campaign
 consumer may read partial rows.
+
+## 2026-08-24 — D1405b refuses synchronous single-decision longitudinal projection
+
+**What landed:** the preregistered 72-position / 144-observation arm ran from committed extraction
+`68cd2320` inside the repository's genuine Node 24.10.0 build image. Its prototype registry is
+set-equal to all 67 semantic event ids: 46 one-edge and 13 complete-population families measured,
+eight path families declared deferred. The full receipt, harness and coverage-matrix update are
+committed artifacts.
+
+**Result:** combined p50/p95 is 589.8/959.9 ms overall; opening p95 786.7 ms, middlegame 1,027.0 ms,
+endgame 499.5 ms, against the pre-existing 500 ms envelope. SQLite publish is 0.242 ms p95; the
+collector is the cost. The earlier accidental arm64 run under a Homebrew path labelled `node@24`
+was discarded when the binary reported Node 26.7.0; no number from it is cited.
+
+**What changed:** the amended RFC no longer leaves native incremental projection conditional.
+Revision 1 writes only the durable job watermark on a request and projects every semantic decision
+in bounded background work. Final production adapters rerun the instruments for worker throughput
+and batch sizing, not to regain an interactive path without a later RFC and new gate.
+
+**Next:** independent buildability re-review can now judge a fully selected schedule. On acceptance,
+implementation begins with the durable job/state table and request-path reachability refusal before
+any collector code.
