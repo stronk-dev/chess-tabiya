@@ -969,3 +969,14 @@ surface that cannot reach its own feature — are both fixable before the trunk 
   to a nontechnical chess player. Every module name, preset label, promise sentence, honest-empty
   sentence and component in this document is a **candidate**. The participant arm is preregistered
   and unrun.
+
+
+## Ledger rows landed 2026-08-24
+
+- [[D1454]] — not one assistance control names a learner's question; every one names a producer.
+- [[D1455]] — `module-registration` admits an engine PV into `guided_hint` against that projection's
+  own declared refusal; the narrowing edit does not wait for `hint-distance`.
+- [[D1456]] — an honest empty can carry the loop, and the rung is a request rather than a setting.
+- [[D1457]] — hint reach is unmeasured and the harness must report per rung; keyboard square-sight
+  parity and the preset pill ship ahead of the module layer.
+- [[D1458]] — no competitor in the corpus has been driven hands-on, and the dossiers say so.

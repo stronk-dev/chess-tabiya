@@ -900,6 +900,8 @@ drafted and never asked), so neither is assumed. Three things follow:
 
 ## Acceptance criteria
 
+> **[[D1455]] — narrowing edit owed before acceptance.** §4's consumer table admits `live.stockfish.pv` into `module.guided_hint` at stage 3, and the stage-3 ceiling is `principal_variation` — while `evidence-catalog.ts:772` declares that projection's own limitation as *"Explicit Analyze consumer only; never a guidance binding."* Pressing hint a third time would hand an engine line to a guidance module, which is [[D317]]'s shape. This is [[D1343]] reached by a second document. The edit only ever **narrows** what a guidance module may print, so it does not wait for `rfc/hint-distance.md`'s redraft.
+
 > **Rows landed 2026-08-24.** [[D1444]] — the layer was returned with a paper trail, but its ids are already production currency and a campaign can reward a module that resolves to nothing. [[D1445]] — `MODULE_ANSWER_IMAGE` is exact-match, no ceiling maps to `evaluation`, and the just-ruled grade has nowhere to live. [[D1446]] — binding needs fifteen dispositions deleted atomically, and `pack.authored.classifier@1` has never existed. [[D1447]] — the `arrows` clamp is unenforced and square sight is keyboard-unreachable.
 
 Every criterion names the tree state that makes it RED. A criterion that cannot fail is a named

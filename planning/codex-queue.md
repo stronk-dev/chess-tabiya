@@ -1387,3 +1387,31 @@ to 72 controls — 33% — during the eight days its own defect row stayed open.
 
 **Order of work:** the two rulings → a layout owner for the screen → source-text test repair →
 rebuild behind Playwright, carrying bucket A untouched.
+
+### In-run UX specification landed — [[D1454]], [[D1456]], [[D1457]], [[D1458]]
+
+`design/research/ux-in-run.md` (`037a7018`) specifies the in-run experience from the learner's side.
+
+**[[D1454]] is the owner's complaint stated precisely.** Every assistance control in the run screen
+names a **producer**, not a question — *Open human-model evidence inspector*, *Load corpus counts*,
+*Position structure*, *Revoice this evidence*, *Inspector*. The only learner-shaped word is a tab
+labelled *Support*, which opens the same producer list. The repair is a binding, not a redesign:
+`rfc/module-registration.md` §1.4 already writes each module's intent in the first person, so
+`label = declaration.intent` turns the rail into a list of questions.
+
+**[[D1456]] is the strongest product idea in the wave.** An honest empty can **carry the loop**:
+competitors' empty hints are dead ends because their loop terminates in an answer, and ours forks.
+*"Nothing recognizes this structure"* becomes *play it and see* or *rewind* — our most frequent
+failure state doing the thesis's work, and structurally uncopyable by anyone whose payoff is the
+right answer. Same section: the hint rung is a **request**, not a setting; a config field asks the
+learner to predict in advance how stuck they will be.
+
+**[[D1457]] — two things ship ahead of the module layer**, needing no ruling: **keyboard
+square-sight parity** (a defect, not a design choice) and the **preset pill and disclosure footer**,
+unblocked by [[D1435]] today. Silence with no standing statement is indistinguishable from
+breakage, which is what ships now. The hint reach re-run must report **per rung**, not per family —
+a ladder whose top rungs are usually empty is a different product.
+
+**[[D1458]] bounds this whole wave**: no product in the competitor corpus has ever been driven
+hands-on, and the dossiers say so themselves. Every competitor `[V]` means *we read the page*, never
+*we used it*. CLAUDE.md's *"hands-on beats desk research"* is unmet across the entire corpus.
