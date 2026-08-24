@@ -1530,3 +1530,25 @@ read symmetry; the `abandoned`-shares-a-toggle defect and the touch-invisible ma
 
 **[[D1483]]** — the classroom competitor record is **empty**, the teardown owed in August never
 happened, and this is the strongest candidate for the first hands-on pass in the programme.
+
+### Import, account and data — [[D1484]]–[[D1487]]
+
+`design/research/ux-import-and-account.md` (`94cf20d8`). **[[D1484]] is the line that lands it**:
+*the only complete statement of what we know about a learner is the one we show them on their way out
+the door.* The deletion preview is excellent; the Account section names five nouns for 40 tables, and
+**`privacy` appears 0 times in the whole web client**. Generate the disclosure from
+`ACCOUNT_DATA_INVENTORY` — it already throws at startup on drift, so it cannot go stale like prose,
+and `planDeletion` already computes the counts.
+
+**[[D1485]]** — the stated reason for refusing guests is false at HEAD: nothing merges (every table
+keys on learner id) and `__legacy` is already a second identity model. `GET /packs` and
+`GET /capabilities` are already unauthenticated; only a blanket client branch hides the catalogue.
+And the share funnel dead-ends — the public story card's only CTA is hardcoded to the password gate.
+
+**[[D1486]]** — two PGN refusals discard data already parsed, and chess.com users are routed into one
+of them. `clocks=false` is irreversible for every game imported before it changes. Third parties'
+handles are stored and exported undisclosed.
+
+**[[D1487]]** — two intent sentences are falsified by shipped code, both named rather than edited.
+And an absence result worth falsifying: **no competitor in this corpus is documented as shipping any
+data-rights surface at all**, because the matrix has no column for it.
