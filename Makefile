@@ -1,7 +1,11 @@
-.PHONY: setup typecheck test test-browser ci-local schema-check register-check status-parity work-index intent-parity evidence-manifest-check semantic-evidence-check account-data-lifecycle-check graduation-plan graduation-plan-check tactical-collector-measurement breadth-collector-measurement build verify pack-check shape-check expression-census graduation-report graduation-report-update graduation-clear pack-preview source-fetch candidate-emit candidate-attach sourcing-check verify-draft tablebase-walk engine-walk up up-engines down
+.PHONY: setup hooks typecheck test test-browser ci-local schema-check register-check status-parity work-index intent-parity evidence-manifest-check semantic-evidence-check account-data-lifecycle-check graduation-plan graduation-plan-check tactical-collector-measurement breadth-collector-measurement build verify pack-check shape-check expression-census graduation-report graduation-report-update graduation-clear pack-preview source-fetch candidate-emit candidate-attach sourcing-check verify-draft tablebase-walk engine-walk up up-engines down
 
 setup:
 	pnpm install --frozen-lockfile
+	$(MAKE) hooks
+
+hooks:
+	git config core.hooksPath .githooks
 
 typecheck:
 	pnpm typecheck

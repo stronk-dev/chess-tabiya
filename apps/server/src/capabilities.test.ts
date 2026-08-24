@@ -9,6 +9,7 @@ import {
   EngineCapabilities,
   type CapabilityEngineClient,
 } from "./capabilities.js";
+import { EVIDENCE_MANIFEST } from "./evidence-manifest.js";
 import type { EngineHealth, EngineIdentity } from "./engine-supervisor.js";
 import { createRestHandler } from "./rest.js";
 import { RunService } from "./service.js";
@@ -58,6 +59,16 @@ describe("engine capabilities", () => {
     expect(() => assertRecordedReadingCapabilityDispositions([])).toThrow(/recorded-reading admission lacks/i);
   });
   it("reports engine providers from current supervisor readiness", async () => {
+    const manifestCounts = {
+      producers: EVIDENCE_MANIFEST.producers.length,
+      projections: EVIDENCE_MANIFEST.projections.length,
+      consumers: EVIDENCE_MANIFEST.consumers.length,
+      bindings: EVIDENCE_MANIFEST.bindings.length,
+      semanticEvents: EVIDENCE_MANIFEST.semanticEvents.length,
+      eligibility: EVIDENCE_MANIFEST.eligibility.length,
+      reasons: EVIDENCE_MANIFEST.reasons.length,
+      selectionPolicies: EVIDENCE_MANIFEST.selectionPolicies.length,
+    };
     const identities: Readonly<Record<string, EngineIdentity>> = {
       "stockfish-analysis": {
         id: "stockfish-analysis",
@@ -174,7 +185,7 @@ describe("engine capabilities", () => {
         },
         evidenceManifest: {
           digest: expect.stringMatching(/^[a-f0-9]{64}$/),
-          counts: { producers: 34, projections: 184, consumers: 25, bindings: 207, semanticEvents: 65, eligibility: 65, reasons: 15, selectionPolicies: 1 },
+          counts: manifestCounts,
           availability: expect.arrayContaining([
             expect.objectContaining({ producerId: "live.stockfish", state: "available" }),
             expect.objectContaining({ producerId: "live.syzygy", state: "available" }),

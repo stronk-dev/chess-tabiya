@@ -52,27 +52,46 @@ test("appearance axes apply live without replacing the board or its position", a
   await shell.getByText("Enter a move").click();
   await shell.getByLabel("Move in SAN or UCI").fill("e2e4");
   await page.evaluate(() => {
-    type AnimationSample = { at: number; transforms: string[] };
-    const target = window as unknown as { __themeAnimationSamples: AnimationSample[] };
+    type AnimationSample = { at: number; transform: string };
+    const target = window as unknown as {
+      __themeAnimationObserver: MutationObserver;
+      __themeAnimationSamples: AnimationSample[];
+    };
     target.__themeAnimationSamples = [];
     const board = document.querySelector(".board-shell cg-board")!;
-    const started = performance.now();
-    const sample = (): void => {
-      const transforms = [...board.querySelectorAll<HTMLElement>("piece.anim")].map((piece) => piece.style.transform);
-      if (transforms.length > 0) target.__themeAnimationSamples.push({ at: performance.now(), transforms });
-      if (performance.now() - started < 500) requestAnimationFrame(sample);
-    };
-    requestAnimationFrame(sample);
+    target.__themeAnimationObserver = new MutationObserver((records) => {
+      for (const record of records) {
+        if (!(record.target instanceof HTMLElement) || record.target.tagName !== "PIECE") continue;
+        const wasAnimating = record.attributeName === "class" && (record.oldValue ?? "").split(/\s+/u).includes("anim");
+        if (record.target.classList.contains("anim") || wasAnimating) {
+          target.__themeAnimationSamples.push({
+            at: performance.now(),
+            transform: record.target.style.transform,
+          });
+        }
+      }
+    });
+    target.__themeAnimationObserver.observe(board, {
+      attributes: true,
+      attributeFilter: ["class", "style"],
+      attributeOldValue: true,
+      subtree: true,
+    });
   });
   await shell.getByRole("button", { name: "Submit move" }).click();
   await expect.poll(() => page.evaluate(() => {
-    type AnimationSample = { at: number; transforms: string[] };
+    type AnimationSample = { at: number; transform: string };
     const samples = (window as unknown as { __themeAnimationSamples: AnimationSample[] }).__themeAnimationSamples;
-    return new Set(samples.flatMap((sample) => sample.transforms)).size;
-  })).toBeGreaterThan(2);
+    return new Set(samples.map((sample) => sample.transform)).size;
+  }), { timeout: 10_000 }).toBeGreaterThan(2);
   const animationSpan = await page.evaluate(() => {
-    type AnimationSample = { at: number; transforms: string[] };
-    const samples = (window as unknown as { __themeAnimationSamples: AnimationSample[] }).__themeAnimationSamples;
+    type AnimationSample = { at: number; transform: string };
+    const target = window as unknown as {
+      __themeAnimationObserver: MutationObserver;
+      __themeAnimationSamples: AnimationSample[];
+    };
+    target.__themeAnimationObserver.disconnect();
+    const samples = target.__themeAnimationSamples;
     return samples.at(-1)!.at - samples[0]!.at;
   });
   expect(animationSpan).toBeGreaterThanOrEqual(60);

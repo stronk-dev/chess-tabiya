@@ -138,6 +138,11 @@ if (!workflow.includes("pnpm install --frozen-lockfile") || !workflow.includes("
   failures.push("CI workflow: expected frozen install followed by make verify");
 }
 
+const prePushHook = await readText(".githooks/pre-push");
+if (!prePushHook.includes("exec make ci-local")) {
+  failures.push("pre-push hook: expected the clean-SHA CI parity gate");
+}
+
 const workspace = await readText("pnpm-workspace.yaml");
 const requiredWorkspaceSettings = [
   "storeDir: .cache/pnpm-store",
