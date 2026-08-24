@@ -7455,3 +7455,21 @@ that contract is accepted.
 passed 987/987 software tests, builds and compiled manifests before the work-index correctly
 refused the two still-open rows; this same-commit closeout resolves that process failure, followed
 by a clean governance rerun.
+
+## 2026-08-24 — refusal vocabulary becomes closed and test-visible
+
+**What failed:** the fixed-refusal census found constructor calls and object literals but not the
+members of the closed `ServerErrorCode` and `SourcingErrorCode` unions. `SourcingIssue.code` was
+not closed at all. A refusal could therefore be declared as supported behavior without ever being
+emitted or directly exercised, while the coverage gate still passed.
+
+**What landed:** [[D1542]] adds a typed `SourcingIssueCode`, closes every sourcing issue producer
+against it, and maps the open-ended pack-validator namespace through a typed `PACK_INVALID`
+envelope that preserves the underlying validator code in its message. The coverage census now
+joins all three declared vocabularies with emitted codes. A unit fixture proves declared-only
+members are discovered; the first real run exposed `ENGINE_ASSESSMENT_UNGROUNDED`, and a strict
+publication-boundary integration now exercises that refusal directly instead of adding it to the
+accepted-debt fixture.
+
+**Verification:** server typecheck and 36 focused sourcing/refusal tests pass. Full exact repository
+verification follows this closeout in the same checkpoint.

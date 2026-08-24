@@ -59,7 +59,16 @@ function discoveredRefusalCodes(source: string): Set<string> {
   return new Set(patterns.flatMap((pattern) => [...source.matchAll(pattern)].map((match) => match[1]!)));
 }
 
+function declaredRefusalCodes(source: string): Set<string> {
+  const declarations = [...source.matchAll(/export type (?:ServerErrorCode|SourcingErrorCode|SourcingIssueCode)\s*=([\s\S]*?);/gu)];
+  return new Set(declarations.flatMap(([, body]) => [...body!.matchAll(/["']([A-Z][A-Z0-9_]+)["']/gu)].map((match) => match[1]!)));
+}
+
 describe("fixed refusal-code coverage", () => {
+  it("discovers declared refusal codes even when no constructor emits them", () => {
+    expect(declaredRefusalCodes('export type SourcingIssueCode = "DECLARED_ONLY";')).toEqual(new Set(["DECLARED_ONLY"]));
+  });
+
   it("pins lint refusals whose shapes are otherwise easy to regress", () => {
     const duplicate = clone(example);
     duplicate.spine.push({ ...duplicate.spine[0], id: duplicate.spine[0].id });
@@ -298,7 +307,7 @@ describe("fixed refusal-code coverage", () => {
       ...productionSources(new URL("./", import.meta.url)),
       ...productionSources(new URL("../../../packages/", import.meta.url)),
     ].join("\n");
-    const fixedCodes = discoveredRefusalCodes(emitters);
+    const fixedCodes = new Set([...discoveredRefusalCodes(emitters), ...declaredRefusalCodes(emitters)]);
     const corpus = [
       ...testSources(new URL("./", import.meta.url)),
       ...testSources(new URL("../../../packages/", import.meta.url)),

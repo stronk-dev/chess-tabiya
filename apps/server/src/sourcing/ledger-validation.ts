@@ -32,7 +32,7 @@ function manufacturedTablebaseTimestamp(url: string): string | undefined {
 }
 
 export function issue(
-  code: string,
+  code: SourcingIssue["code"],
   path: string,
   message: string,
   severity: "error" | "warning" = "error",

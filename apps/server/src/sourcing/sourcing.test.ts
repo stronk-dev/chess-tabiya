@@ -149,6 +149,32 @@ describe("content sourcing foundation", () => {
     expect(result.issues).toContainEqual(expect.objectContaining({ code: "EVIDENCE_DIGEST_STALE", severity: "warning" }));
   });
 
+  it("refuses an engine-assessed objective without matching engine evidence", async () => {
+    const directory = await candidate();
+    await mutate(resolve(directory, "pack.json"), (pack) => {
+      pack.objective.grading = {
+        assessedBy: {
+          kind: "engine",
+          score: { kind: "cp", centipawns: 0 },
+          perspective: "white",
+          depth: 22,
+          engineId: "stockfish",
+          engineVersion: "18",
+          sourceId: "stockfish",
+          retrievedAt: "2026-08-24T00:00:00.000Z",
+        },
+        resolveAt: { kind: "terminal" },
+      };
+    });
+
+    const result = await checkSourcingDirectory(directory, { strict: true });
+    expect(result.issues).toContainEqual(expect.objectContaining({
+      code: "ENGINE_ASSESSMENT_UNGROUNDED",
+      path: "/objective/grading/assessedBy",
+      severity: "error",
+    }));
+  });
+
   it("accepts local-file and engine origins and an abstention-only fetchless candidate", async () => {
     const directory = await candidate();
     const ledger = await readJson(resolve(directory, "evidence.json")) as EvidenceLedger;

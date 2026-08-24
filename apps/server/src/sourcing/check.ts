@@ -378,7 +378,7 @@ export async function checkSourcingDirectory(directory: string, options: { reado
     try {
       pack = await readJson(resolve(absolute, "pack.json"));
       const result = validatePackDocument(pack);
-      issues.push(...result.issues.map((value) => issue(`PACK_${value.code}`, value.path, value.message, value.severity)));
+      issues.push(...result.issues.map((value) => issue("PACK_INVALID", value.path, `[${value.code}] ${value.message}`, value.severity)));
       if (object(pack)) {
         const provenance = object(pack.provenance) ? pack.provenance : {};
         if (strict && provenance.reviewStatus !== "draft") issues.push(issue("CANDIDATE_ALREADY_PROMOTED", "/provenance/reviewStatus", "sourcing candidates must remain draft"));
@@ -447,7 +447,7 @@ export async function checkSourcingFile(file: string, options: { readonly strict
   try {
     pack = await readJson(absolute);
     const result = validatePackDocument(pack);
-    issues.push(...result.issues.map((value) => issue(`PACK_${value.code}`, value.path, value.message, value.severity)));
+    issues.push(...result.issues.map((value) => issue("PACK_INVALID", value.path, `[${value.code}] ${value.message}`, value.severity)));
   } catch (error) { issues.push(issue("PACK_READ_ERROR", "/pack.json", error instanceof Error ? error.message : String(error))); }
   try { ledger = validateLedger(await readJson(resolve(directory, `${stem}.evidence.json`)), issues); }
   catch (error) { issues.push(issue("EVIDENCE_READ_ERROR", "/evidence.json", error instanceof Error ? error.message : String(error))); }
