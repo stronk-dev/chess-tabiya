@@ -1717,3 +1717,19 @@ repeatedly, and appears in **zero** queue documents; a named blocker ([[D1516]])
 not an excuse for absence. **[[D1520]]** — [[D1416]] deferred tournaments, leagues and operator
 accounts **as features**; the **architecture must be ready for them**, which is a standing constraint
 on every 1.0 decision, starting with the run/pairing aggregate and the declared result ([[D1481]]).
+
+### Three blocked drafts repaired — [[D1524]]–[[D1527]]
+
+`e7661103`. All three blockers cleared. **[[D1525]] is the one worth carrying forward**: [[D1389]]'s
+`offWindow` census was short because **two successive censuses scoped themselves to the server tier**
+and the missed reader is the only one in the client. A census that does not declare its scope answers
+a narrower question than the one asked — the same shape as [[D1523]]. Every census here should be
+repo-wide or say what it excluded.
+
+**[[D1526]]** — three documents assert mechanisms that do not exist: a `human_model` derivation input
+**compiles fine** (the widening checks get easier, not harder); `assertSemanticEvidenceEvent` mints a
+sealed twin on every call, so no retention rule may be argued from that set; and naming `C1–C7`
+omits **exactly** the check that fires on a `none` claims block.
+
+**[[D1527]]** — two census tripwires reproduce over **no** constructible scope. The argument survives
+because it rests on a **zero**, which is scope-proof where a count is not.
