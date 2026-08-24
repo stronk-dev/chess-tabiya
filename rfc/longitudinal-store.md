@@ -1,19 +1,14 @@
 # RFC: Longitudinal store — the personal observation ledger
 
-- **Status:** accepted — 2026-08-22, by claude as register owner on the buildability test, after cross-review (corrections in place; the **grain amendment** — `decision_class` in the PK, [[D934]] — is the substantive change, made because the drafted key would have pooled the historic player's moves, the learner's rehearsal and their predictions into one habit denominator: the exact corruption the store exists to prevent). Three open questions resolve before implementation per their own clauses; the crash-window honesty note and AC-11's derivation-digest pin ride the criteria. *(Prior line for history: draft 2026-08-22 — adversarial cross-review on the buildability test)*
-  completed 2026-08-22 with corrections applied in place: the observation grain gains
-  **`decision_class` (played / game / predicted)** with owner-only attribution over
-  durable records — the played/predicted/reviewed separation `session_kind` alone cannot
-  carry — plus the crash-window transactionality statement, the accumulation-order and
-  forced-move pins, the AC-11 digest-and-rev fixture, and the refs-dominated size term in
-  open question 2. Verdict: **accept-after-corrections** (corrections applied; the three
-  open questions still resolve before `accepted`, per their own clauses). Original line:
-  the thrice-named blocker, specified as a storage projection
-  with no learner-facing surface. [[D844]] names the store, not a collector, as the tip
-  sentence's blocker; [[D842]] needs opportunity denominators over time; Wave C's consumer
-  matrix holds habit classification at **zero rows** until this exists
-  (`rfc/semantic-collectors.md` §5.1). This RFC ships the store and its rebuild instrument
-  only; every reader of it is a later RFC
+- **Status:** draft — returned 2026-08-23 on the Codex buildability review and D1405
+  cost gate; amended 2026-08-24, awaiting independent re-review. The 2026-08-22
+  acceptance is retained below as history, not as implementation authority. The amendment
+  replaces synchronous whole-run replay with a durable append/background schedule, closes the
+  67-family constructor gap with a typed adapter registry, makes decision references and
+  observation time exact, and binds the derivation revision to the registry even when a new
+  family has zero incidence.
+  *(Prior state: accepted 2026-08-22 by claude as register owner after the grain amendment;
+  returned 2026-08-23 when the later buildability pass made that acceptance unsafe.)*
 - **Author:** claude
 - **Created:** 2026-08-22
 - **Design refs:** `design/03-product-breadth.md` §Learn and return;
@@ -39,14 +34,14 @@
   behind its two claims; and R15 — its §8 refusal and rendering-set, quoted and extended
   to both directions of this store in §5.2 here, enforced as reachability since a
   consumer-less store has no rendered bytes for a byte-identity fixture to compare);
-  `archive/portable-account-data.md` (the two new durable classes join its export/deletion
+  `archive/portable-account-data.md` (the three new durable classes join its export/deletion
   inventory — Discharge D1)
 - **Parent / amends:** —
 - **Supersedes / superseded by:** —
 - **Planning:** `planning/longitudinal-store/` (once implementing)
 
 ```tabiya-claims
-migration | position behind learner-rating | learner_observations; learner_structure_stats
+migration | position behind learner-rating | learner_observations; learner_structure_stats; learner_observation_jobs
 ```
 
 ## Summary
@@ -62,6 +57,166 @@ instrument — never a second source of truth. It ships **no learner-facing surf
 route, no client code, no habit card, no skill credit, no tip. Those are F6/F9 lanes with
 their own RFCs; what they all block on today is that **no declared-evidence observation
 survives the run that produced it**, and this RFC removes exactly that blocker.
+
+## 2026-08-24 buildability amendment (normative)
+
+This section supersedes conflicting text in §§2–4, 6–7 and AC-1–AC-11 until the older
+sections are folded on re-review. It exists because the first implementation attempt followed the
+accepted text literally and reproduced the exact failure D1405 measured: a single first move took
+hundreds of milliseconds in an isolated fixture, while the preregistered complete prefixes took
+11.44 / 23.43 / 42.56 seconds p95 at 20 / 40 / 80 plies. No request path may run the whole-run
+projection.
+
+### A. Closed constructor registry, not one broad event list
+
+`LONGITUDINAL_INGEST_REGISTRY` is the only admission authority. It is set-equal to
+`SEMANTIC_EVENT_PROJECTION_IDS`, but each member carries one of these dispositions:
+
+```ts
+type LongitudinalConstructor =
+  | { kind: "edge"; adapter: "local_semantic_event" }
+  | { kind: "population"; adapter: "complete_candidate_relation"; baseProjectionId: string }
+  | { kind: "path"; adapter: "recorded_sequence"; status: "deferred"; reason: string };
+```
+
+- **Edge** admits the 46 families constructible from one exact legal edge by
+  `localSemanticEvents`.
+- **Population** admits the 13 `derived.semantic_avoidance.*` families through a new
+  unbudgeted complete-candidate adapter. It does not call the presentation selector: selection
+  thresholds, eligibility and `maxFacts` cannot decide what is persisted. For base family `F`, a
+  decision is an opportunity only when the exact legal population contains at least one edge that
+  exhibits `F` and at least one that does not. The avoidance occurrence is the played/predicted
+  edge not exhibiting `F`; its alternative share is the share that does exhibit `F`. This is the
+  declinable-denominator meaning [[D842]] requires and makes the all-ones negative control fail.
+- **Path** declares, but does not admit at revision 1, the eight multi-edge families:
+  `derived.exchange.trade_completed` and the seven observed Wave-C sequence families. A recorded
+  occurrence exists, but no complete counterfactual path population or declinable-opportunity
+  denominator exists at HEAD. Storing occurrence-only rows would violate `opportunities > 0` and
+  manufacture a rate. Their registry rows are closed as `deferred`, not silently unreachable.
+
+The registry test is set-equal in both directions, proves every admitted id reaches exactly one
+live adapter, and proves every deferred id carries a non-empty reason. This replaces the false
+claim that all 67 members can be constructed by `localSemanticEvents` ([[D1401]]).
+
+### B. Exact decision references and immutable time
+
+The two JSON ref arrays contain a closed `DecisionRef`, not a node-id string:
+
+```ts
+type DecisionRef =
+  | { kind: "move"; nodeId: string; eventSeq: number }
+  | { kind: "prediction"; nodeId: string; checkpointId: string; eventSeq: number };
+```
+
+Canonical order is `(eventSeq, kind, nodeId, checkpointId?)`. The prediction event sequence is
+part of the first `(nodeId, checkpointId)` identity, so two checkpoints on one node reopen the
+right evidence rather than aliasing. Both arrays are schema-validated on write and read.
+
+`derived_at` is removed. Each row instead carries **`observed_at`**, equal to the immutable
+`run.started.at` event. It is a run-observation timestamp, not a claim about when an imported game
+was historically played; imported PGN date normalization remains outside revision 1. Rebuilds at
+later wall clocks therefore produce byte-identical rows and do not make old imports recent.
+
+### C. Durable projection schedule
+
+The migration creates three STRICT tables: the two data tables in §2 (with typed refs and
+`observed_at`) plus `learner_observation_jobs`:
+
+```sql
+CREATE TABLE learner_observation_jobs (
+  run_id TEXT PRIMARY KEY REFERENCES drill_runs(id) ON DELETE CASCADE,
+  learner_id TEXT NOT NULL REFERENCES learners(id) ON DELETE CASCADE,
+  requested_seq INTEGER NOT NULL,
+  completed_seq INTEGER NOT NULL DEFAULT 0,
+  derived_rev INTEGER NOT NULL,
+  state TEXT NOT NULL CHECK (state IN ('pending','running','complete','failed')),
+  failure_code TEXT,
+  updated_at TEXT NOT NULL,
+  CHECK (completed_seq <= requested_seq),
+  CHECK ((state = 'failed') = (failure_code IS NOT NULL))
+) STRICT;
+```
+
+Every persisted run mutation upserts only this cheap job watermark in the run-persist transaction;
+it does **not** enumerate legal alternatives. A worker claims jobs in bounded batches:
+
+1. Native mutations process newly appended decision/events from `(completed_seq, requested_seq]`
+   transactionally with the watermark. Reprocessing the same interval is byte-idempotent. Rewind,
+   fork, group and outcome events update structure rows through the same interval.
+2. Imports and revision changes run as bounded background whole-run rebuilds. They publish rows and
+   `completed_seq` atomically only after the complete projection succeeds; prior-revision rows are
+   never relabelled as current.
+3. Run close enqueues an authoritative complete rebuild. `make longitudinal-rebuild` remains the
+   operator comparison/repair instrument and uses the same adapters.
+
+The typed read contract returns `{ state, rows }`; `state` includes requested/completed sequence,
+revision and failure code. A future consumer must require `complete` at the requested sequence or
+render honest unavailability. Partial rows are never silently presented as a complete learner
+history. No consumer lands in this RFC.
+
+The worker may not claim the 500 ms interaction budget until a preregistered single-decision arm,
+including all admitted adapters and the database transaction, passes it. Failure moves native
+projection to the same background-only schedule as imports; it never moves work back into the
+request. D1405's fixed 20/40/80 and bulk arms are rerun after the final registry lands.
+
+### D. Revision identity and attribution
+
+`OBSERVATION_DERIVATION_REV` is paired with two digests: (1) the canonical derivation-fixture
+output and (2) the canonical constructor registry, including projection versions, adapter kinds,
+base-family joins and deferred reasons. Adding a zero-incidence family changes digest 2 and forces
+a visible revision decision.
+
+Move authorship remains owner-or-nothing from durable session/match records. [[D1510]] records
+that prediction events at
+HEAD contain no actor id although a non-owner writer can record one. Revision 1 therefore admits a
+prediction only when owner authorship is provable (a non-shared run); predictions in a live/shared
+run are honest absence. Adding actor identity to the run event is a run-schema amendment, not a
+guess by this projection.
+
+### E. Open-question resolutions for re-review
+
+1. `theory.shapes` does **not** enter revision 1. Its opportunity population is not the exact-legal
+   edge population and must arrive through its own adapter plus revision bump.
+2. Bulk import has no synchronous cap because it has no synchronous projection. The durable job
+   exposes progress/failure; operator batch size is measured, not embedded as a product truth.
+3. Any RFC changing an admitted adapter, registry membership/version or decision semantics owns
+   the revision bump and rebuild discharge. A bump outside an accepted RFC is a lifecycle defect.
+
+### F. Replacement acceptance criteria
+
+These replace AC-1–AC-11 for the amended design:
+
+1. **Additive migration:** schema reflection shows exactly the three tables and their indexes were
+   added; no pre-existing row or schema object changes. A fixture mutation of `drill_runs` fails.
+2. **Registry closure:** all 67 current semantic ids appear exactly once as admitted-edge,
+   admitted-population or deferred-path; every admitted row invokes its named live adapter and
+   every deferred row has a reason. Missing, duplicate and ghost ids each fail.
+3. **Declinable population:** hand fixtures cover played-exhibits, played-avoids, all-exhibit,
+   none-exhibit and forced-move populations. Only mixed populations count as avoidance
+   opportunities; the all-exhibit/none-exhibit controls produce no avoidance row.
+4. **Exact references:** two prediction checkpoints on one node persist distinct typed refs; an
+   invalid ref object and an unsorted ref array are rejected.
+5. **Owner attribution:** owner, grant-holder and seated-opponent moves are separated from durable
+   records. A shared-run prediction with no durable actor produces no row; the same event in a
+   non-shared run does.
+6. **Immutable time:** a rebuild under a later wall clock produces identical `observed_at` and
+   byte-identical data rows. No read filter or window uses job `updated_at`.
+7. **Cheap request path:** a mutation-path test fails if any semantic constructor or legal-move
+   census is reachable before the response; it asserts only the job watermark changes.
+8. **Durable worker:** claim, retry, crash-before-publish and crash-after-publish fixtures prove
+   row+watermark atomicity and idempotency. A failed job retains a closed failure code and can be
+   retried without duplicate counts.
+9. **Authoritative equality:** count tamper, typed-ref-element tamper and missing-run rows each make
+   the rebuild comparison name the exact run/row; repair restores equality.
+10. **Revision pair:** fixture-output and constructor-registry digests are both paired with the
+    revision. A zero-incidence registry addition fails the latter.
+11. **Boundaries:** no learner renderer, rating, classroom, cohort, provider or LLM module reaches
+    the store; no production reader exists beyond the worker/rebuild at landing. Synthetic graph
+    edges make each arm fail.
+12. **Performance:** the preregistered one-decision worker arm includes all admitted adapters and
+    SQLite publish. It may choose native incremental processing only below 500 ms p95; otherwise
+    native work remains background-only. The final registry reruns D1405's prefix/bulk arms and no
+    request performs them.
 
 ## Motivation
 
@@ -719,32 +874,19 @@ negative fixture where it could otherwise pass vacuously.
 
 | id | the obligation | owner | recorded when discharged | discharged |
 |---|---|---|---|---|
-| `D1` | the two durable classes (`learner_observations`, `learner_structure_stats`) enter the account-export and account/per-run deletion inventories required by `archive/portable-account-data.md` and the landed export/deletion docs | `longitudinal-store` (self, at landing) | the landing commit | |
+| `D1` | the three durable classes (`learner_observations`, `learner_structure_stats`, `learner_observation_jobs`) enter the account-export and account/per-run deletion inventories required by `archive/portable-account-data.md` and the landed export/deletion docs | `longitudinal-store` (self, at landing) | the landing commit | |
 
-## Open questions
+## Resolved questions (2026-08-24 amendment)
 
-1. **Does `theory.shapes` join the ingest set in v1?** Shape firings are the
-   highest-lift shipped detector family (named_structure 9.96×) and
-   `shapeRecommendations`' 50-run replay cap is the measured cost of leaving them
-   unstored. Proposal: no at landing (the semantic-event set is the coherent F2 unit; a
-   shapes family needs its own opportunity definition, which is not the legal-alternative
-   population), yes as the first post-landing rev bump once that definition is written.
-   Resolve before `accepted`.
-2. **Bulk-import scale.** A learner importing thousands of games multiplies rows by
-   (families × phases × classes) per game — the ingest set is **40 families** at HEAD (11
-   structural + 13 transition + 11 avoidance + 3 tactical + 1 castling + 1 exchange), so
-   the per-run ceiling is ~120 family rows per class — and the honest cost term is not
-   the counts but the **refs arrays**: `opportunity_refs` can hold every decision of a
-   long game per firing family, so a dense family costs O(decisions) per row and a bulk
-   import is O(games × families × decisions) bytes in the worst case, not "small rows."
-   SQLite is ratified for this deployment shape, but no measurement exists. Proposal:
-   accept without a cap; measure on the owner's own import corpus ([[D649]]) — refs bytes
-   specifically, not just row counts — and let a future rev move refs to a side table or
-   window them if the measurement demands it (a rev bump and rebuild, not a data loss).
-   Resolve or explicitly defer before `accepted`.
-3. **Who bumps `derived_rev`.** Proposal: any RFC that changes the derivation or the
-   ingest set names the bump and the rebuild in its own acceptance criteria (the pattern
-   §4.4 assumes); a bump outside an RFC is a defect. Resolve before `accepted`.
+1. **Does `theory.shapes` join revision 1? No.** Its high measured lift makes it the first
+   candidate for a later revision, but shape opportunities are not the exact-legal edge
+   population. It enters only with its own adapter, denominator and revision bump.
+2. **How is bulk-import scale bounded? Off the request path.** D1405 measured 25 games at
+   738.8 seconds before the missing adapters and database work. Imports enqueue durable bounded
+   background work with visible state; no product request waits for complete projection.
+3. **Who bumps `derived_rev`? The changing RFC.** Any accepted RFC that changes an admitted
+   adapter, registry member/version or decision semantics names the bump and rebuild in its own
+   criteria. A bump outside an RFC is a lifecycle defect.
 
 ## Ledger rows
 
@@ -784,3 +926,11 @@ head after that renumbering and **not yet written**:
   crash-shape deletion); (6) open question 2 re-costed — refs arrays, not row counts, are
   the size term; (7) ledger section reconciled: D929/D930 landed, the HEAD D929 collision
   named, D932 proposed for the grain amendment.
+- 2026-08-23: returned to author after the buildability review found unresolved acceptance
+  questions, 21 unreachable event families, nondeterministic time, weak prediction refs, a
+  zero-incidence revision hole and an unmeasured quadratic request path.
+- 2026-08-24: amended after D1405 refused whole-run request projection by 23×–85×. Added
+  constructor dispositions, declinable avoidance semantics, typed refs, immutable observation
+  time, durable job scheduling/freshness, paired revision digests and replacement criteria;
+  recorded [[D1510]] rather than guessing shared-prediction authorship. Awaiting independent
+  re-review; no production implementation is authorized yet.

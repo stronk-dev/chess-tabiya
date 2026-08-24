@@ -532,8 +532,9 @@ to before running it.
 Owner ruling: *"retire NONE. these are still important for bots, ui, etc."* If you see a retirement
 recommendation in `planning/content-era/pilot-matrix.md`, it is withdrawn — the correction is
 appended at the foot of that file. The census misread "ruled workflow" as "shipped consumer";
-`bot-policy`, `campaign-core` and `longitudinal-store` are all accepted and all consume these
-families. **Do not delete or deprecate any of the four.**
+`bot-policy` and `campaign-core` consume these families; `longitudinal-store` is draft again after
+the D1405 return and its 2026-08-24 amendment keeps the relevant event families declared through
+an explicit admitted/deferred constructor registry. **Do not delete or deprecate any of the four.**
 
 ## 0-THEMING-ACCEPTED. `theming` is accepted — three axes, schemes inherited whole
 
@@ -568,10 +569,10 @@ done."*) after cross-review + restructure + verification (138 claims, 12 correct
 
 ## 0-RATING-ACCEPTED. `learner-rating` is accepted — it HEADS the migration train
 
-Accepted 2026-08-22 after independent cross-review (~80 claims, 14 corrected). Its two table
-sets hold the FIRST migration positions (both `position next`), so nothing behind it —
-longitudinal-store, bot-policy stamp, campaign-core, live-sources — can land its migration
-before yours. Read the review-corrected file; what changed materially:
+Accepted 2026-08-22 after independent cross-review (~80 claims, 14 corrected), and migration 25
+has landed. The next claimant is the returned `longitudinal-store` RFC; everything behind it stays
+held until that amendment is independently re-accepted. Read the review-corrected file; what
+changed materially:
 
 - **The withholding set grew**: `/reveal` and `/analysis` join `ASSISTANCE_WITHHELD` for rated
   runs, and `POST /rated-games` pins `feedbackPolicy: "attempt_end"` — the review proved a rated

@@ -7166,3 +7166,28 @@ transition operands and SAN.
 **Still open:** RFC Discharge D1. `learner-modules` owns the requested-square-sight binding and its
 assistance ceiling. This implementation registers the exact operand but deliberately reveals no
 new learner-facing hint or proactive move list.
+
+## 2026-08-24 — longitudinal-store return amended; refused implementation removed
+
+**What changed:** the RFC and register now agree that `longitudinal-store` is draft and awaiting
+independent re-review. The amendment replaces the one-edge/all-events fiction with a set-equal
+constructor registry: 46 one-edge families, 13 complete-population avoidance families, and eight
+recorded-path families explicitly deferred until they have a declinable opportunity denominator.
+It also replaces node-id refs with typed move/prediction identities, derives immutable
+`observed_at` from `run.started.at`, binds the revision to both output and registry digests, and
+resolves all three previously acceptance-blocking open questions.
+
+**Measured consequence retained:** D1405's 11.44/23.43/42.56-second p95 at 20/40/80 plies rules
+out semantic whole-run replay in a request. The amended schedule writes only a durable job
+watermark on mutation, processes bounded event intervals in a worker, and reserves complete
+projection for imports, close and authoritative rebuild. The uncommitted synchronous migration
+and projection implementation was removed from the shared tree rather than left as plausible code.
+
+**New finding:** `prediction.recorded` carries no actor even though `recordPrediction` permits a
+non-owner writer. D1510 records why revision 1 must treat shared-run predictions as honest absence
+until a run-schema amendment provides durable attribution.
+
+**Next:** independent buildability review of the amendment. If accepted, implement the three-table
+job-backed design and first run the preregistered all-adapter one-decision latency arm; if it misses
+500 ms p95, native projection stays background-only. No content, habit, style, Review or campaign
+consumer may read partial rows.
