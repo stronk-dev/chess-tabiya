@@ -1,4 +1,4 @@
-.PHONY: setup check typecheck test test-browser ci-local schema-check register-check status-parity work-index intent-parity evidence-manifest-check semantic-evidence-check account-data-lifecycle-check graduation-plan graduation-plan-check tactical-collector-measurement breadth-collector-measurement build verify pack-check shape-check expression-census graduation-report graduation-report-update graduation-clear pack-preview source-fetch candidate-emit candidate-attach sourcing-check verify-draft tablebase-walk engine-walk up up-engines down
+.PHONY: setup check typecheck test test-browser ci-local schema-check register-check status-parity work-index intent-parity evidence-manifest-check semantic-evidence-check account-data-lifecycle-check learner-rating-bracket learner-rating-bracket-check graduation-plan graduation-plan-check tactical-collector-measurement breadth-collector-measurement build verify pack-check shape-check expression-census graduation-report graduation-report-update graduation-clear pack-preview source-fetch candidate-emit candidate-attach sourcing-check verify-draft tablebase-walk engine-walk up up-engines down
 
 setup:
 	pnpm install --frozen-lockfile
@@ -53,6 +53,13 @@ semantic-evidence-check:
 account-data-lifecycle-check:
 	./node_modules/.bin/vitest run apps/server/src/r18-account-data.test.ts
 
+learner-rating-bracket:
+	./node_modules/.bin/esbuild tools/learner-rating-bracket-harness/simulate.ts --bundle --platform=node --format=esm --outfile=/tmp/tabiya-learner-rating-bracket.mjs
+	node /tmp/tabiya-learner-rating-bracket.mjs --update
+
+learner-rating-bracket-check:
+	node --test tools/learner-rating-bracket-harness/check.test.mjs
+
 tactical-collector-measurement:
 	./node_modules/.bin/vitest run --config tools/tactical-collector-measurement-harness/vitest.config.ts
 
@@ -62,7 +69,7 @@ breadth-collector-measurement:
 build:
 	pnpm build
 
-verify: typecheck test schema-check register-check status-parity work-index intent-parity evidence-manifest-check semantic-evidence-check account-data-lifecycle-check graduation-plan-check
+verify: typecheck test schema-check register-check status-parity work-index intent-parity evidence-manifest-check semantic-evidence-check account-data-lifecycle-check learner-rating-bracket-check graduation-plan-check
 
 pack-check:
 	@test -n "$(FILE)" || (echo "Usage: make pack-check FILE=<path-to-pack.json>" >&2; exit 2)

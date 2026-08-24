@@ -8,6 +8,12 @@ Status cells and RFC body Status lines begin with one of the seven lifecycle tok
 emphasis is stripped. Dates and text after the first separator are prose; only an `awaiting` cell's
 first `D<n>` token is machine-read as its discharge pointer.
 
+**Register correction, 2026-08-24:** `learner-rating` AC-7 is discharged. Its preregistered
+three-model × two-arrival simulation narrows the publication bracket to **1500–1800 BCS** and
+measures the clock-closing arm at 17–20 periods p50 / 18–23 p90 inside the supported cells. This
+supersedes that row's retained historical clause saying the arm is unrun; rated campaign entry and
+owner-use validation remain.
+
 | RFC | Status | Parent | Implementation |
 |---|---|---|---|
 | `0000-rfc-process.md` | accepted | — | process |

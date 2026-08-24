@@ -45,8 +45,8 @@ export const GLICKO2_CONSTANTS = Object.freeze({
   scale: 173.7178,
   publicationRd: 60,
   abandonmentShareLimit: 0.25,
-  bracketLow: 1006.2,
-  bracketHigh: 2098.4,
+  bracketLow: 1500,
+  bracketHigh: 1800,
 });
 
 export interface RatingState {
@@ -70,8 +70,8 @@ export interface LearnerRatingState extends RatingState {
 
 export type PublishedBandValue =
   | { readonly kind: "band"; readonly value: number }
-  | { readonly kind: "below"; readonly band: 1000 }
-  | { readonly kind: "above"; readonly band: 2200 };
+  | { readonly kind: "below"; readonly band: number }
+  | { readonly kind: "above"; readonly band: number };
 
 export interface RatingPublication {
   readonly state: "provisional" | "published" | "bounded";
@@ -88,6 +88,7 @@ export const RATING_DISCLOSURES = Object.freeze([
   "The band ladder from 1000 to 2200 spans about 480 BCS at full material and about 346.8 across the authored corpus; 100 band points correspond to about 40 BCS at full material.",
   "Server-routed assistance was withheld; browser-rendered assistance and help outside this tab cannot be detected.",
   "These games were played alone against a bot and nobody witnessed them.",
+  "Point estimates are published only inside the multi-model-supported 1500–1800 BCS bracket; outside it, only a bound is shown.",
 ] as const);
 
 export class RatingContractError extends TypeError {
@@ -200,15 +201,23 @@ export function bandEquivalent(rating: number): PublishedBandValue {
   return Object.freeze({ kind: "above", band: 2200 });
 }
 
-export function publishRating(value: LearnerRatingState, options: { readonly scoreSaturated?: boolean } = {}): RatingPublication | undefined {
+function publicationBound(direction: "low" | "high"): PublishedBandValue {
+  const edge = bandEquivalent(direction === "low" ? GLICKO2_CONSTANTS.bracketLow : GLICKO2_CONSTANTS.bracketHigh);
+  if (edge.kind === "below" || edge.kind === "above") return edge;
+  return Object.freeze({ kind: direction === "low" ? "below" : "above", band: Math.round(edge.value) });
+}
+
+export function publishRating(value: LearnerRatingState, options: { readonly scoreSaturation?: "low" | "high" } = {}): RatingPublication | undefined {
   if (value.ratedGames === 0) return undefined;
   const interval = Object.freeze([bandEquivalent(value.rating - 2 * value.rd), bandEquivalent(value.rating + 2 * value.rd)] as const);
   const abandonedShare = value.abandonedGames / (value.ratedGames + value.abandonedGames);
   if (value.rd > GLICKO2_CONSTANTS.publicationRd || abandonedShare > GLICKO2_CONSTANTS.abandonmentShareLimit) {
     return Object.freeze({ state: "provisional", interval, ratedGames: value.ratedGames, abandonedGames: value.abandonedGames });
   }
-  if (options.scoreSaturated || value.rating < GLICKO2_CONSTANTS.bracketLow || value.rating > GLICKO2_CONSTANTS.bracketHigh) {
-    return Object.freeze({ state: "bounded", interval, pointEstimate: bandEquivalent(value.rating), ratedGames: value.ratedGames, abandonedGames: value.abandonedGames });
+  const boundDirection = options.scoreSaturation
+    ?? (value.rating < GLICKO2_CONSTANTS.bracketLow ? "low" : value.rating > GLICKO2_CONSTANTS.bracketHigh ? "high" : undefined);
+  if (boundDirection !== undefined) {
+    return Object.freeze({ state: "bounded", interval, pointEstimate: publicationBound(boundDirection), ratedGames: value.ratedGames, abandonedGames: value.abandonedGames });
   }
   return Object.freeze({ state: "published", interval, pointEstimate: bandEquivalent(value.rating), ratedGames: value.ratedGames, abandonedGames: value.abandonedGames });
 }

@@ -67,12 +67,15 @@ describe("learner rating foundation", () => {
     expect(abandoned).toMatchObject({ state: "provisional" });
     expect(abandoned).not.toHaveProperty("pointEstimate");
     expect(publishRating(base)).toMatchObject({ state: "published", pointEstimate: { kind: "band", value: 1400 } });
+    expect(publishRating({ ...base, rating: GLICKO2_CONSTANTS.bracketLow - 1 })).toMatchObject({ state: "bounded", pointEstimate: { kind: "below", band: 1400 } });
     expect(publishRating({ ...base, rating: GLICKO2_CONSTANTS.bracketHigh + 1 })).toMatchObject({ state: "bounded", pointEstimate: { kind: "above", band: 2200 } });
-    expect(publishRating(base, { scoreSaturated: true })).toMatchObject({ state: "bounded" });
+    expect(publishRating(base, { scoreSaturation: "low" })).toMatchObject({ state: "bounded", pointEstimate: { kind: "below", band: 1400 } });
+    expect(publishRating(base, { scoreSaturation: "high" })).toMatchObject({ state: "bounded", pointEstimate: { kind: "above", band: 2200 } });
   });
 
   it("keeps the complete authored rating copy outside the judgement vocabulary", () => {
-    expect(RATING_DISCLOSURES).toHaveLength(6);
+    expect(RATING_DISCLOSURES).toHaveLength(7);
+    expect([GLICKO2_CONSTANTS.bracketLow, GLICKO2_CONSTANTS.bracketHigh]).toEqual([1500, 1800]);
     for (const sentence of RATING_DISCLOSURES) {
       const words = new Set(sentence.toLowerCase().match(/[a-z]+/gu) ?? []);
       expect(BANNED_JUDGEMENTS.filter((word) => words.has(word))).toEqual([]);

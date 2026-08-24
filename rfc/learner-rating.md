@@ -1,6 +1,6 @@
 # RFC: Learner rating
 
-- **Status:** **implementing — 2026-08-22 learner-surface checkpoint.** The calibrated Glicko-2 core, migration 25, atomic rated-game admission, mutation projector, period update, abandonment accounting, named assistance refusal, rating/history routes, permanent marks, consented classroom-standing read/write paths, dedicated measured-record view, and classroom standing composition are implemented. No historical game is backfilled; the server abstains before evidence supports publication; the client preserves that abstention and derives no ranking or praise. Rated campaign entry, owner-use validation, and the remaining acceptance graph still belong to this RFC. **Accepted 2026-08-22, by claude as register owner on the buildability test, after an independent cross-review that re-derived ~80 claims at source and failed 14, all corrected in place.** The center catch: R6's refused-route enumeration was incomplete — a rated run could read live Stockfish lines mid-game via `/reveal` → `/analysis` → `/evidence`, routes the withholding set never named (now in `ASSISTANCE_WITHHELD`, `POST /rated-games` pins `feedbackPolicy: "attempt_end"`, AC-5 extended). The Glicko-2 arithmetic verified clean end-to-end to four decimals; the void mechanism verified event/branch-keyed across all four persisted rewind-family paths; the five remaining open questions (3/5/6/8/9) are registered opens, judged non-blocking per review. Rows: D980/D981 landed at acceptance; D395 flips closed with R15/R16 intact. Prior line: **implementing — 2026-08-22 cohort-backend checkpoint**; before that: **draft — independent cross-review complete 2026-08-22 (verdict: accept-after-corrections); awaiting acceptance**.
+- **Status:** **implementing — 2026-08-24 AC-7 measurement checkpoint.** The preregistered multi-model, two-arrival simulation is complete and reproducible under Node 24.10.0. Only true-BCS grid points 1450–1750 clear all six model × arrival cells, so the published bracket is narrowed from the provisional [1006, 2098] model window to the conservative rounded **[1500, 1800] BCS** result; constants, learner-facing copy, bounds and cheap CI receipt move together. The calibrated Glicko-2 core, migration 25, atomic rated-game admission, mutation projector, period update, abandonment accounting, named assistance refusal, rating/history routes, permanent marks, consented classroom-standing read/write paths, dedicated measured-record view, and classroom standing composition are implemented. No historical game is backfilled; the server abstains before evidence supports publication; the client preserves that abstention and derives no ranking or praise. Rated campaign entry, owner-use validation, and the remaining acceptance graph still belong to this RFC. **Accepted 2026-08-22, by claude as register owner on the buildability test, after an independent cross-review that re-derived ~80 claims at source and failed 14, all corrected in place.** The center catch: R6's refused-route enumeration was incomplete — a rated run could read live Stockfish lines mid-game via `/reveal` → `/analysis` → `/evidence`, routes the withholding set never named (now in `ASSISTANCE_WITHHELD`, `POST /rated-games` pins `feedbackPolicy: "attempt_end"`, AC-5 extended). The Glicko-2 arithmetic verified clean end-to-end to four decimals; the void mechanism verified event/branch-keyed across all four persisted rewind-family paths; the five remaining open questions (3/5/6/8/9) are registered opens, judged non-blocking per review. Rows: D980/D981 landed at acceptance; D395 flips closed with R15/R16 intact. Prior line: **implementing — 2026-08-22 learner-surface checkpoint**; before that: **implementing — 2026-08-22 cohort-backend checkpoint**.
   The two blocking open questions are ruled: **question 11** by [[D945]] (earned rewinds — a fourth
   shape none of the drafted answers had; R11 stands **unchanged**, the earned economy lives on the
   encounter-verdict side per accepted `rfc/campaign-core.md` §2, so the boss is **rated when
@@ -806,7 +806,7 @@ attributes as bands rather than values
 | `ratedGames === 0` | Nothing. Not "unrated", not "1500" — the surface does not exist yet |
 | `RD > 60` | **Provisional**: the interval only, with no point estimate, and the game count |
 | `RD ≤ 60` and inside the bracket (§7.3) | Point estimate + interval, both as band-equivalents |
-| `RD ≤ 60` and outside the bracket | A **bound** only: *"above band 2200"* / *"below band 1000"* |
+| `RD ≤ 60` and outside the bracket | A **bound** only at the measured bracket edge: with AC-7's result, *"above band 2200"* / *"below band 1400"* |
 | Score saturated at 1.0 or 0.0 against the extreme rung over the period | A **bound** only, regardless of RD |
 | `abandonedGames / (ratedGames + abandonedGames) > 0.25` | **Provisional**: interval only, no point estimate, regardless of RD — plus both counts. **Added by cross-review; see §11.3** |
 
@@ -850,9 +850,10 @@ i.e. a skirt of
 D = 400 · log10(0.93301 / 0.06699) = 400 · log10(13.927) = 457.5 Elo
 ```
 
-and a window of **[855, 2250], 1395 points**. **The published constant stays 306 and the window
-stays [1006, 2098]** — the narrower of the two is the one to publish, and the sensitivity form is
-the one whose tolerance is easiest to state. What is corrected is the prose: **this is a
+and a window of **[855, 2250], 1395 points**. **Before AC-7 ran, the provisional modelling
+constant stayed 306 and the candidate window stayed [1006, 2098]** — the narrower of the two was
+the one carried into the falsifier, and the sensitivity form was the one whose tolerance was
+easiest to state. What is corrected in this derivation is the prose: **this is a
 sensitivity tolerance, chosen, not a noise-matched threshold, derived.** The 60-Elo number does
 one job here and it is a different one — it sets the RD ≤ 60 publication threshold in §7.2 — and
 the draft's sentence invited it to be read as the window's source.
@@ -936,10 +937,17 @@ the truth on ≥90% of replicates. Three things the draft's version lacked are *
   magnitude below what this criterion can resolve, which is why that shortfall is a statement
   about the *arithmetic as derived* and not something AC-7 can adjudicate.)
 
-**The bracket is whatever that simulation says it is.** If it comes back narrower than
-[1006, 2098] — and under (c) it will — the constant moves and the copy moves with it. This is an
-acceptance criterion (§AC-7), not a future study. **Until AC-7 runs, the pool span
-[1312.4, 1792.2] is the operative bracket** and the wider window is not printed anywhere.
+**AC-7 discharged 2026-08-24.** The preregistered instrument ran 2,000 deterministic trials in
+each of 78 cells (13 true ratings × three response models × two arrival schedules) through the
+exact shipped `glicko2Update`. The clearing grid is **1450, 1550, 1650, 1750**; the conservative
+reported bracket is therefore **[1500, 1800] BCS**. The old [1006, 2098] window is retained above
+as the falsified modelling derivation, not a publication range. At three games/week the clearing
+cells reach RD ≤ 60 in 17–20 periods at p50 and 18–23 at p90; outside the clearing run, some tail
+cells do not become publishable within the 104-period cap. One 1750/draw-floor/count-closing cell
+is borderline (90.1% empirical coverage, Wilson lower bound 88.7%); per the preregistration it may
+not widen the bracket and does not invalidate this narrowing. The sealed result is
+`planning/learner-rating/ac7-bracket-results.json`; the human-readable report and pre-run method
+sit beside it. Constants, learner-facing copy and bound construction move with this result.
 
 #### 7.4 The disclosures, normative
 
@@ -2012,6 +2020,10 @@ Rows still proposed:
   derived under, and a simulator drawing from it cannot falsify it. **Nor does a run at one
   arrival rate**: "12 games or 7 days" has no meaning until the rate is stated, and the
   clock-closing arm is the one that decides whether an ordinary learner ever publishes.
+  **Discharged 2026-08-24:** 78/78 cells ran with 2,000 trials each under both arrival schedules;
+  the cross-model/inter-arrival clearing grid was 1450–1750 and the conservative rounded bracket
+  is [1500, 1800]. The source-sealed receipt is checked by `make learner-rating-bracket-check`;
+  a full deterministic rerun is `make learner-rating-bracket`.
 - **AC-8 (the cross-check is a diagnostic and stays one).** Maia's `0.5 + cp/2000` expected score
   is recorded alongside rated games and compared against the rating's predicted score in a
   report; a test asserts it reaches no update path.

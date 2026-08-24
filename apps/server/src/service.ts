@@ -625,11 +625,13 @@ export class RunService {
     const periodGames = closed === undefined
       ? []
       : storage.ratedGames(principal.learnerId).filter((game) => game.periodNo === closed.periodNo && game.state === "sealed");
-    const saturated = periodGames.length > 0 && periodGames.every((game) =>
-      (game.opponentBand === 1000 || game.opponentBand === 2200) && game.result === periodGames[0]!.result,
-    ) && (periodGames[0]!.result === "win" || periodGames[0]!.result === "loss");
+    const scoreSaturation = periodGames.length > 0 && periodGames.every((game) => game.opponentBand === 2200 && game.result === "win")
+      ? "high" as const
+      : periodGames.length > 0 && periodGames.every((game) => game.opponentBand === 1000 && game.result === "loss")
+        ? "low" as const
+        : undefined;
     return Object.freeze({
-      rating: publishRating(state, { scoreSaturated: saturated }),
+      rating: publishRating(state, scoreSaturation === undefined ? {} : { scoreSaturation }),
       internal: Object.freeze({ calibrationId: state.calibrationId, periodNo: state.periodNo }),
       disclosures: RATING_DISCLOSURES,
     });

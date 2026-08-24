@@ -262,11 +262,13 @@ round-tripped through `pgn-import.ts`"*)
 coherent as written, and the arm that decides whether an ordinary learner ever publishes has still
 not been run"*)
 - **Question:** under a clock-closing period rule, how many periods until a rating is publishable?
-- **Settled by:** AC-7 of `rfc/learner-rating.md` as rewritten — two arrival rates, one
-  count-closing and one clock-closing, intersection across three response models.
+- **Settled 2026-08-24 by:** AC-7 of `rfc/learner-rating.md` — two arrival rates, one
+  count-closing and one clock-closing, intersected across three response models. Clearing cells
+  reach RD ≤ 60 in **17–20 clock-closing periods at p50 and 18–23 at p90**; tail cells can remain
+  unpublished through the 104-period cap. The supported bracket narrows to **1500–1800 BCS**.
 - **Cost:** [day] (a simulation, no engine time). **Gating: A.**
-- **Unblocks:** `learner-rating` cannot be accepted on an unrun falsifier; the RFC is **draft** `[V]`
-  and its own status line records the AC-7 rewrite landing this round `[V]`.
+- **Artifact:** `planning/learner-rating/ac7-bracket-results.json`, source-sealed by
+  `make learner-rating-bracket-check`; the complete rerun is `make learner-rating-bracket`.
 - **Note:** the *generalisable* half of D420 — *"a falsifier that simulates under the assumption it
   tests is not a falsifier"* — is **not research**. It is a standing rule (§6.7).
 

@@ -7213,3 +7213,31 @@ and batch sizing, not to regain an interactive path without a later RFC and new 
 **Next:** independent buildability re-review can now judge a fully selected schedule. On acceptance,
 implementation begins with the durable job/state table and request-path reachability refusal before
 any collector code.
+
+## 2026-08-24 — learner-rating AC-7 narrows the publishable bracket
+
+**What ran:** the AC-7 method was preregistered before its first result, then 2,000 deterministic
+trials ran in each of 78 cells: thirteen true BCS points, logistic / slope-matched Thurstone /
+fixed-20%-draw response families, and both 12-game count-closing and 3-game clock-closing weekly
+schedules. Every period called the shipped `glicko2Update`; no duplicate estimator was used. The
+source and result digests reproduced exactly in the repository's Node 24.10.0 arm64 image.
+
+**Result:** only grid points 1450, 1550, 1650 and 1750 clear ≥90% empirical coverage in every
+model-arrival cell with all 2,000 trials reaching RD ≤ 60. Per the frozen rounding rule, the
+supported publication bracket is **1500–1800 BCS**, not the provisional model-derived
+[1006, 2098]. In the slow arm, clearing cells become publishable in 17–20 periods at p50 and
+18–23 at p90. Tail cells can remain unpublishable through the 104-period cap. One
+1750/draw-floor/count-closing cell is reported borderline at 90.1% coverage with an 88.7% Wilson
+lower bound; it cannot widen the bracket and this run narrows it.
+
+**What changed:** `GLICKO2_CONSTANTS`, learner-facing disclosure copy and a cheap source-sealed CI
+receipt move together. Applying the narrower bracket exposed D1511: `bounded` previously returned
+the raw interpolated point and was honest only because the old bracket lay outside the measured
+rungs; boolean saturation also carried no direction. Bounds are now explicit at the measured edge,
+and saturation is typed high/low at the server authority. D980, D420 and D442 close on the retained
+receipt; the full Monte Carlo rerun remains an explicit expensive target, not a normal verification
+step.
+
+**Still open:** this validates only BCS interval coverage and readiness. It does not human-anchor
+the scale, establish opponent humanity, detect cheating, complete rated campaign entry or discharge
+owner-use validation.
