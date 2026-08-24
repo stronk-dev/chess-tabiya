@@ -76,3 +76,44 @@ public-matchmaking question under [[D1414]]; cohort read symmetry ([[D1482]]).
 by the same route; ~97 proposed dossier rows to land and route; repairs to the three blocked drafts
 ([[D1410]], [[D1411]], [[D1412]]); the `social-play` rebuild on native-first; the `hint-distance`
 redraft behind codex's selector gate.
+
+## ⚠ THIS FILE IS A CURATED SUBSET — [[D1522]], 2026-08-24
+
+Fifteen hand-picked items against **hundreds** of recommendations across twelve UX dossiers. The
+owner named the failure: *"why do i have to explicitly keep mentioning every single little thing?"*
+Curating is the defect — everything unselected leaves the visible surface, and the owner becomes the
+index.
+
+**`planning/ux-implementation-index.md` is the complete enumeration**: every dossier item classified
+(buildable now / blocked on a ruling / blocked on an RFC / already done / superseded), cross-checked
+against every queue, with **in no queue at all** as a first-class count. Its buildable-now items are
+appended below this file's section 5. **Work from the index, not from this list.**
+
+Two items the owner had to name himself, both now tracked:
+
+- **Bot personas / the honest bot card** ([[D1501]], [[D1502]]) — `design/research/ux-opponents.md`
+  specifies it in full and it was queued **nowhere**. A card may describe the machinery and its
+  absences in the language of what the learner will experience, never the bot as *a kind of chess
+  player*; and the persona word-filter must become a **provenance rule**, since eight banned
+  adjectives do not stop *"she likes to keep the position closed and grind"*.
+- **Native ratings** ([[D1521]]) — ruled in scope by [[D1414]], **zero** occurrences in any queue.
+  Blocked by [[D1516]]: `rated_games.run_id` is a PRIMARY KEY, one rated game per run, against a
+  native match that is one run with two learners. **A named blocker is a queue entry, not an excuse
+  for absence.**
+
+**Standing constraint added today** ([[D1520]]): [[D1416]] deferred tournaments, leagues and operator
+accounts **as features**; the **architecture must be ready for them**. Every 1.0 decision that would
+make a later tournament expensive or impossible is in scope — the run/pairing aggregate and the
+declared result ([[D1481]]) are the two already known.
+
+### Why three enumerations did not stick — [[D1523]]
+
+`work-index`'s entire check is *does this row's id appear as a string in a durable document*. It
+cannot distinguish **queued** from **merely mentioned**. So each enumeration wrote a document, the
+document cited the ids, the gate went green, and the work stayed undone — and because the
+classification lived in the snapshot rather than on the item, the next enumeration began from zero.
+
+**A fourth enumeration is not the fix.** The fix is a **persistent per-item state** — todo / doing /
+blocked / done, with an owner — and an instrument that measures **assignment** rather than citation.
+Until that exists, treat every "0 unrouted" line in this repository as saying nothing about whether
+any work will happen.

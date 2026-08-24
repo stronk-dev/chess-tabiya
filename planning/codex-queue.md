@@ -1699,3 +1699,21 @@ different. Third unreproducible finding retired today.
 deferred object may not hold a 1.0 migration position, and **added** run-schema lane 0.23 for resign
 and draw, which the routing pass found with no owner. The mechanism is sharp: a game ending with no
 move cannot be an `outcome.reached`, because appending one **corrupts every later read of that run**.
+
+### The queue defect itself — [[D1520]]–[[D1523]]
+
+**[[D1523]] is the mechanism and it explains the other three.** `work-index`'s entire check is
+`mention(text, id)` — *does this row's id appear as a string in a durable document*. It cannot tell
+**queued** from **merely mentioned**, so three separate enumerations each wrote a document, the
+document cited the ids, the gate reported green, and the work stayed undone. Because the
+classification lived in the snapshot rather than on the item, each enumeration restarted from zero.
+**A fourth enumeration is not the fix**; a persistent per-item state (todo / doing / blocked / done,
+with an owner) and an instrument that measures **assignment** is.
+
+**[[D1522]]** — the coordinator curated instead of enumerating: fifteen hand-picked items against
+hundreds of dossier recommendations, which is why the owner had to name **bot personas** and
+**native ratings** himself. **[[D1521]]** — native ratings is ruled in scope by [[D1414]], asked for
+repeatedly, and appears in **zero** queue documents; a named blocker ([[D1516]]) is a queue entry,
+not an excuse for absence. **[[D1520]]** — [[D1416]] deferred tournaments, leagues and operator
+accounts **as features**; the **architecture must be ready for them**, which is a standing constraint
+on every 1.0 decision, starting with the run/pairing aggregate and the declared result ([[D1481]]).
