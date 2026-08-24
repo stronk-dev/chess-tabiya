@@ -7435,3 +7435,23 @@ dependency. Browser smoke, real-content journeys and interaction matrices remain
 gate, 23 browser smoke journeys (one optional live-Maia latency probe skipped), 4/4 real-content
 browser integrations and 7/7 responsive/accessibility matrices. `local CI parity PASS` was emitted
 after the final matrix.
+
+## 2026-08-24 — imported mainline trust and lifted-refusal truth repair
+
+**What landed:** [[D1540]] gives imported runs one shared recorded-mainline identity. Story and the
+branch-collapse reducer both call it, so branch zero can no longer be auto-folded merely because a
+recorded imported loss is an objective shortfall. The negative fixture creates nine branches,
+makes every one a shortfall, leaves the imported mainline inactive/unpinned/uncompared and proves
+that another losing branch collapses while the game the learner imported remains visible.
+
+[[D1541]] repairs two startup-enforced capability statements that contradicted owner rulings.
+Stockfish `UCI_Chess960` and Explorer per-game/masters retrieval now report `unmeasured`, name the
+accepted implementation/fixture work required, and no longer claim the product refuses them.
+This does not implement either draft RFC early: the variants and famous-game fetch paths remain
+with their owning documents, and [[D1086]] stays partial because `topGames=0` is unchanged until
+that contract is accepted.
+
+**Verification:** runtime/server typechecks and the 18 focused tests pass. The full exact gate
+passed 987/987 software tests, builds and compiled manifests before the work-index correctly
+refused the two still-open rows; this same-commit closeout resolves that process failure, followed
+by a clean governance rerun.

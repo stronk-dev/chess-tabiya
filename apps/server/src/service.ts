@@ -20,6 +20,7 @@ import {
   deriveWorkflowContext,
   exactMoveIdentity,
   isPackSession,
+  importedMainlineBranchId,
   lineMembership,
   MARK_BRUSHES,
   branchDecidedness,
@@ -877,9 +878,10 @@ export class RunService {
   story(runId: string, principal: Principal, requestedBranchId?: string) {
     const run = requireRead(this.#storage, runId, principal).stored.run;
     const outcomeEvents = run.events.filter((event): event is Extract<DrillRunEvent,{type:"outcome.reached"}> => event.type === "outcome.reached");
-    const defaultBranch = run.sessionKind === "imported" ? run.branches[0]?.id : [...outcomeEvents].reverse().map((event)=>run.nodes.find((node)=>node.id===event.data.nodeId)?.branchId).find((id)=>id!==undefined);
+    const recordedMainline = importedMainlineBranchId(run);
+    const defaultBranch = recordedMainline ?? [...outcomeEvents].reverse().map((event)=>run.nodes.find((node)=>node.id===event.data.nodeId)?.branchId).find((id)=>id!==undefined);
     const branchId = requestedBranchId ?? defaultBranch;
-    const importedMainline = run.sessionKind === "imported" && branchId === run.branches[0]?.id;
+    const importedMainline = recordedMainline !== undefined && branchId === recordedMainline;
     const branchOutcome = outcomeEvents.find((event)=>run.nodes.find((node)=>node.id===event.data.nodeId)?.branchId===branchId);
     if (branchId === undefined || (!importedMainline && branchOutcome === undefined)) throw new ServerError("STORY_UNAVAILABLE","This branch has no terminal story");
     if (!feedbackDisclosed(run)) throw new ServerError("ASSISTANCE_WITHHELD", "Reveal the finished game before opening its story");

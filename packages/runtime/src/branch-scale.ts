@@ -72,11 +72,16 @@ export function branchDecidedness(
   })));
 }
 
+export function importedMainlineBranchId(run: DrillRun): string | undefined {
+  return run.sessionKind === "imported" ? run.branches[0]?.id : undefined;
+}
+
 export function collapsedBranchIds(run: DrillRun, decidedness: Readonly<Record<string, Decidedness>>, compareIds: ReadonlySet<string>, pinnedExpanded: ReadonlySet<string>): ReadonlySet<string> {
   if (run.branches.length <= BRANCH_COLLAPSE_FLOOR) return new Set();
+  const importedMainline = importedMainlineBranchId(run);
   return new Set(run.branches.flatMap((branch) => {
     const fact = decidedness[branch.id];
-    return fact?.state === "decided" && fact.shortfall && branch.id !== run.activeCursor.branchId && !compareIds.has(branch.id) && !pinnedExpanded.has(branch.id) ? [branch.id] : [];
+    return fact?.state === "decided" && fact.shortfall && branch.id !== importedMainline && branch.id !== run.activeCursor.branchId && !compareIds.has(branch.id) && !pinnedExpanded.has(branch.id) ? [branch.id] : [];
   }));
 }
 

@@ -46,4 +46,17 @@ describe("branch-set scale", () => {
     const run = manyBranches(), id = run.branches[0]!.id;
     expect(branchDecidedness(run, { tablebase: { [id]: { category: "loss", pieces: 7, sourceId: "syzygy" } } })[id]).toMatchObject({ state: "decided", admitted: false, shortfall: false });
   });
+
+  it("never collapses the recorded mainline of an imported game", () => {
+    const base = manyBranches();
+    const run = Object.freeze({ ...base, sessionKind: "imported" as const });
+    const ids = run.branches.map((branch) => branch.id);
+    const facts = branchDecidedness(run, {
+      objective: "win",
+      tablebase: Object.fromEntries(ids.map((id) => [id, { category: "loss" as const, pieces: 7, sourceId: "syzygy" }])),
+    });
+    const collapsed = collapsedBranchIds(run, facts, new Set(), new Set());
+    expect(collapsed.has(ids[0]!)).toBe(false);
+    expect(collapsed.has(ids[1]!)).toBe(true);
+  });
 });

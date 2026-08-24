@@ -54,6 +54,15 @@ function healthClient(
 }
 
 describe("engine capabilities", () => {
+  it("reports owner-lifted variant and famous-game capabilities as pending rather than refused", () => {
+    for (const capability of ["UCI_Chess960", "topGames / recentGames / masters database"]) {
+      expect(CAPABILITY_DISPOSITIONS.find((row) => row.capability === capability)).toMatchObject({
+        disposition: "unmeasured",
+        experiment: expect.any(String),
+      });
+    }
+  });
+
   it("binds admitted recorded readings to reached instrument dispositions", () => {
     expect(() => assertRecordedReadingCapabilityDispositions()).not.toThrow();
     expect(() => assertRecordedReadingCapabilityDispositions([])).toThrow(/recorded-reading admission lacks/i);
