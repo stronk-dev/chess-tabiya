@@ -50,3 +50,30 @@ session, shaped by it.
 Community/social depth beyond match+friend-links, native matchmaking, mobile
 native apps, monetization (Q2 axes open by choice; ADR-0007 binds progression
 regardless), public launch anything.
+
+---
+
+## ⚠ THIS DOCUMENT IS 828 COMMITS STALE — [[D1504]], 2026-08-24
+
+Last substantive update **2026-08-14**, while the header above calls this *"the single checkable
+index of completed vs open"* and *"updated as waves land"*. **Six of eleven rows are false**,
+including both load-bearing ones:
+
+- *"the feature column is empty / no active product RFCs"* → **46 active product RFCs** (25 draft,
+  10 accepted, 7 implementing, 5 awaiting).
+- *"39 packs committed"* → `content/packs/` holds **only `.gitkeep`**, and
+  `docs/pack-graduation.md:3-5` states *"the current corpus has no graduable pack."* **Zero
+  graduated** — and [[D1508]] found all 32 sourcing manifests stale against their own packs, so
+  whether content **can** graduate is itself open.
+- *"gamification deliberately post-session"* → `design/06-campaign.md` exists and
+  `rfc/campaign-core.md` has been implementing since 2026-08-23.
+
+**It is the oldest of nine rollup documents.** The rollup layer has forked and nobody owns the fork,
+which is why the owner's question — *are we on track for a proper 1.0* — could not be answered from
+the document that exists to answer it. Full reconciliation, with the honest state and the twelve
+proposed intent amendments, is in
+`planning/platform-alignment/tier-reconciliation-2026-08-24.md` ([[D1506]]).
+
+**Do not repair this file row-by-row.** [[D1505]] found the mechanism: the completion protocol
+propagates a change **down** into the ledger and the log and has **no clause propagating it up**, so
+a rollup rebuilt today drifts again by the same route. The clause comes first.

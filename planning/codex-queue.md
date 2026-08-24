@@ -1642,3 +1642,34 @@ without the card **is** the refused object.
 This dossier also self-corrected twice mid-flight — removing a fabricated chess.com framing and an
 illustrative bot card once it found the roster is not in our corpus, and re-crediting the opponent-
 choice findings to [[D1473]] rather than presenting them as new.
+
+### Four-tier reconciliation — [[D1504]]–[[D1509]]
+
+`planning/platform-alignment/tier-reconciliation-2026-08-24.md` (`e6b4a578`), answering the owner's
+question *"are we still on track for a PROPER 1.0?"*
+
+**[[D1504]]: the document that exists to answer that cannot be trusted to.** `roadmap-to-done.md` is
+**828 commits stale**, six of eleven rows false — *"no active product RFCs"* against **46**, and
+*"39 packs committed"* against a `content/packs/` holding only `.gitkeep` and **zero graduated**.
+It is the oldest of **nine** rollup documents; the rollup layer has forked and nobody owns the fork.
+
+**[[D1505]] is the mechanism, and it must be fixed before any rollup is rebuilt.** The completion
+protocol propagates a change **down** into the ledger and the log and has **no clause propagating it
+up into intent**. Proof: one commit wrote *"does NOT exist"* into `design/03` at 20:22 and another
+shipped the same two gates at 22:24, correctly flipping the ledger and never touching intent. Both
+obeyed the protocol; law 5 rightly forbids an implementer editing intent, so the only legal path is
+a proposal nobody is required to make. Twelve stale sentences follow.
+
+**[[D1506]] is the honest state**: 1,126 tests and all eleven `verify` gates green, registers and the
+25-step migration chain contiguous — against **zero graduated packs**, **449 open defects**, and ~35
+documents of specified-but-unbuilt product behind **9 routes and 23 components**. Broad, deep
+underneath, thin where a learner meets it.
+
+**[[D1507]]** corrects the coordinator: `schema-check` is **green**; the red gate is **`test-browser`**,
+failing where the boundary sheet announces authored commentary and does not render it — with the only
+step chaining it to `verify` created and deleted the same day.
+
+**[[D1508]]** — all 32 sourcing manifests are stale against their own packs, found by accident, which
+puts *"full content"* in question. **[[D1509]]** — `register-check` derives migration heads from the
+**working tree**, so one agent's uncommitted edit blocks the pre-commit hook for everyone and forces
+the `--no-verify` escape the hook exists to prevent.
