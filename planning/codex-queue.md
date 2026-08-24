@@ -1552,3 +1552,49 @@ handles are stored and exported undisclosed.
 **[[D1487]]** — two intent sentences are falsified by shipped code, both named rather than edited.
 And an absence result worth falsifying: **no competitor in this corpus is documented as shipping any
 data-rights surface at all**, because the matrix has no column for it.
+
+### Authoring and library — [[D1488]]–[[D1491]]
+
+`design/research/ux-authoring-and-library.md` (`f757d4bc`). **[[D1488]]: this is a wiring problem, not
+a build problem.** The pack-lint endpoint accepts unsaved bytes and has **no client caller**, so an
+author must upload a draft to be told it is wrong; Studio and `make pack-check` **do not run the same
+checks** despite the docs saying they do, leaving four codes unreachable, fixable with two
+constructor arguments; and `GET /principles` **does not exist** while a finished browse projection
+sits in the registry.
+
+**[[D1489]] is the cost, measured**: a median pack is 471 pretty-printed lines, authors hand-write
+both UCI and SAN for every node, and **four separate authoring waves built themselves a throwaway
+chessboard** because the tool has none. Nobody read that as a requirement.
+
+**[[D1490]]: delete the `library` route.** Eighteen lines rendering a worse, unclickable copy of the
+pack list plus a worse copy of the run list under a heading promising an export it does not offer —
+and zero shapes, principles or theory, which are the things it is named for. **But the content is
+real**: 284 authored units across 25 shapes, with 21/25 shapes and 12/13 principles actually reused
+across packs, against `concepts` — the only vocabulary the card shows — at 168 distinct and **143
+used exactly once**. The two vocabularies users cannot see are the two that became shared.
+
+**[[D1491]]**: no teardown of **any** product's authoring editor exists, so every screen-anatomy claim
+here is `[M]` — a harder ceiling than [[D1458]]. Two free accounts and an hour fixes it.
+
+### Accessibility and small screens — [[D1492]]–[[D1495]]
+
+`design/research/ux-accessibility-and-mobile.md` (`e756015d`). **[[D1492]]: the product is not usable
+end-to-end by keyboard, and the board is the best surface in the app** — the break is
+`interactiveTarget()` classing every button in the path as interactive, so all nine drill shortcuts
+are dead at all twelve verified tab stops, with no key to return focus and no announcement. Twelve
+defects in this pass **need no ruling at all**.
+
+**[[D1493]]: below 360×680 the run refuses to mount.** iPhone SE refused; every phone in landscape
+refused and misclassified as tablet; a 1280px viewport at 400% zoom refused, which is a **WCAG
+Reflow failure by construction**; and the whole iPhone 12–15 Pro class is refused *permanently*
+because `overflow:hidden` stops the address bar ever collapsing — while the same phone works as an
+installed PWA. The refusal's own 24px rationale supports a floor ~1.7× smaller.
+
+**[[D1494]]: our contrast criterion is chroma-only.** `last-move` passes at ΔE 36.3 while measuring
+**1.02:1 luminance** — the square telling you what your opponent just played is invisible in
+monochrome and the check rates it fine. The capture indicator is not even in the population, and
+check-red vanishes for tritanopes. [[D1433]]'s family, third instance.
+
+**[[D1495]]: three premises I briefed were wrong**, including olive's contrast failure, which is
+already repaired at HEAD. Recorded because briefing an agent from a stale premise is the same failure
+as putting one to the owner.
