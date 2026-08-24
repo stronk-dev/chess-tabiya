@@ -19,6 +19,17 @@ normal game against a human-like opponent while truly applying an opening/middle
 strategy"* (`design/05-in-run-experience.md:536-538`) `[V]` — and the one with the largest gap
 between what has been measured and what a learner can see.
 
+**Its relationship to `ux-arrival-and-start.md`, stated before anything else.** That dossier's
+**§4.5** is a thirteen-row competitor table on opponent selection and its **§6 "Feature D — choosing
+an opponent"** is a complete pass on *choosing*, with four recommendations D1–D4, landed as
+[[D1473]] `[V]`. **This dossier does not re-derive any of it and does not supersede it.** §1 below
+inherits D1–D4 by citation and adds only what the arrival frame could not reach — the arrival frame
+ends at the first move, and five of the six features here begin after it. The genuinely new material
+is: the 1500 derivation (§0.2), the card itself (§2), the identity bar (§3), personality's three
+registers and the provenance rule (§5), the bot's own miss as a surface (§6), the cross-session
+relationship (§7), and a direct answer to the owner's two bot questions (§8). Where a finding is
+inherited, it says so and cites §6.3's D-number.
+
 **Scope.** How a learner **chooses** an opponent, **understands** one before playing it, **knows who
 they are playing** during the game, **reads its behaviour** afterwards, and **forms a relationship**
 with one across sessions. Bot identity, personas, strength labelling, and the honesty rules that
@@ -68,11 +79,11 @@ bot card may say — and its central recommendation is a mechanism that makes an
    `profile.default`; the profile default is Maia's UCI spin default `1500`, which survives because
    it happens to sit inside the configured `[1000, 2400]` clamp. ⊕ from four `[V]` facts (§0.2).
    1500 is a UCI formality, not a product decision, and the learner is never told it.
-3. **The better picker already exists and is filed under the wrong word.** `/rating` ships a
-   four-rung named picker — *Band 1000 · first rung*, *1400 · steady*, *1800 · testing*, *2200 · top
-   measured rung* — with an honest disclaimer beneath it `[V]`. It is reachable only through a nav
-   item called **"Record"** (`ShellFrame.svelte:30`) `[V]`, i.e. the product's only real opponent
-   chooser is hidden behind a word that means *history*.
+3. **The better picker already exists and is filed under the wrong word — inherited, not new.**
+   [[D1473]] and `ux-arrival-and-start.md` §6.3 D1 established this three days ago: `/rating`'s
+   four-rung named picker (*first rung* / *steady* / *testing* / *top measured rung*) with its
+   honest footer is the best start form in the app, behind a nav item called **"Record"** `[V]`.
+   This dossier confirms it independently and carries it forward rather than re-deriving it.
 4. **The catalog is empty, and that is not neglect — the measured bot cannot be expressed.**
    `BOT_POLICY_PROFILES = compileBotPolicyCatalog([])` `[V]` (`bot-policy-catalog.ts:299`). Twelve
    profiles are specified; eight are blocked because `searchBound` cannot express **depth** and four
@@ -212,7 +223,9 @@ tell them apart:
    cannot express at all.
 
 Underneath all four sits the expectation that **an opponent is a noun, not an adjective on a
-slider**. People say *"I played Nelson"* and *"I lost to Maia 1900"*; they do not say *"I played
+slider**. People say *"I played Nelson"* and *"I lost to Maia 1900"* `[M]` — how players talk is
+model knowledge here, and the specific bot name is illustration, not a corpus-backed chess.com fact
+(§1 records that chess.com's named roster is **not** in this corpus). They do not say *"I played
 difficulty 6"*. A named opponent is rematchable, recommendable, and complainable-about; a slider
 position is none of those.
 
@@ -239,11 +252,25 @@ Every claim `[P]`; the corpus is desk-only ([[D1458]]).
   thin opponent-identity bar (chess.com, lichess mobile)"* `[V]/[P]` as the source itself labels it.
   The identity bar is the field's settled answer to *who am I playing*, and it survives even Zen
   Mode's de-cluttering `[P]` (`competitor-play-ux.md:56`).
-- **Chess.com's bot roster is a gallery of named characters with per-bot strength.** The practitioner
-  map at `design/research/human-like-opponents.md:455-481` records chess.com bots as carrying
-  *"Komodo Skill per bot"* for strength, *"persona presets"* for aggression, *"per-bot books of
-  varying quality"* for repertoire, *"Adaptive"* bots for memory, and — the presentation row —
-  *"avatars/celebrity"* `[V]` within that dossier's own labelling, `[P]` as a claim about chess.com.
+- **⚠ Chess.com's bot-selection screen is NOT in this corpus, and the intuition that it is a grid of
+  character cards is `[M]`.** This is the sharpest competitor finding of the pass and it is a
+  negative one. Across both chess.com teardowns, `competitor-play-ux.md`, `competitor-matrix.csv` and
+  the love/hate sweep there are **no named bots, no bot bios, no bot avatars, no displayed bot Elo
+  labels and no description of the Play Bots picker grid**. `ux-arrival-and-start.md:387-390` already
+  says so in terms: *"Nothing in the corpus describes Chessiverse's bot-selection screen… The
+  intuition that 'a bot picker is obviously a grid of character cards' is `[M]` and is not evidenced
+  here."* `[V]` What **is** evidenced about chess.com's opponents: Komodo became the platform's
+  **"Computer1"–"Computer20"** `[V]` desk (`teardown-chesscom-platform-desk.md:125-128`); **Play
+  Coach ships four coaches *"each with their own looks and voice"*** with a one-game-per-month free
+  ceiling `[V]` desk (`:103-111`); the matrix records the species as unestablished — *"P adaptive AI
+  (unspecified)"* and *"P bots"* `[V]` (`competitor-matrix.csv:40,12`); bot games are *"always
+  unrated"* and carry a 3/2/1-crown assistance economy `[P]`; and *"Bot Chat personality messages"*
+  are **authored scripts** `[V]` (`assistance-surface-taxonomy.md:126`). The practitioner map's
+  chess.com column — *"Komodo Skill per bot"*, *"persona presets"*, *"per-bot books of varying
+  quality"*, *"Adaptive"* bots, presentation *"avatars/celebrity"* `[P]`
+  (`human-like-opponents.md:455-481`) — is the strongest characterisation available and it is a
+  dimension map, not a screen description. **No recommendation in this dossier rests on chess.com's
+  picker**, and a hands-on teardown of it is the first item in Residuals.
 - **Chessiverse is the closest competitor to what this product is trying to build, and its own
   documentation says the personality is mostly discovered rather than controlled.** [[D591]]: *"It
   says it lets neural nets vary, measures thousands of generated games, assigns Guardian→Savage
@@ -270,9 +297,14 @@ Every claim `[P]`; the corpus is desk-only ([[D1458]]).
   is a marketing decision, where our four rungs are the ones whose adjacent intervals are measured
   disjoint.
 
-The transferable pattern, stated once: **the field's opponent picker is a gallery of named
-characters with faces and numbers, and every number on it is unvalidated.** We have the opposite
-problem — measured numbers and no characters.
+The transferable pattern, stated once and bounded by what is actually evidenced: **the field's
+opponent picker leads with a number, and not one of those numbers has ever been validated against
+humans by the party publishing it** `[V]` verdict, four `[V]` constituents
+(`human-like-opponents.md:66-70`). 365Chess sells *"Level 1 (ELO ~1300)"* through *"Level 10 (ELO
+~2700)"* `[P]`; ChessMind ships six Elo-labelled bands `[P]`; Chessigma offers *"Nine sparring
+partners, each with a real repertoire"* and a *"Bot at your level"* whose species and calibration are
+**undisclosed** `[P]` (`teardown-chessigma-desk.md:97,99,295-298`). We have the opposite problem —
+**measured numbers we refuse to print, and no characters at all.**
 
 ### What we should do, and why it differs
 
@@ -308,10 +340,31 @@ problem — measured numbers and no characters.
    §Rejected both refuse weakened Stockfish as the *default* opponent; full-strength Stockfish as an
    explicitly-labelled wall is a different object and is not refused.
 
-**Why this differs from the field.** Chess.com's gallery sorts by a number nobody validated; ours
-sorts by four rungs whose adjacent 95% confidence intervals are disjoint over 1,020 games per rung
-`[V]` (`rfc/bot-roster.md` §1). The competitive claim is not *more bots* — it is **the only ladder
-whose rungs are measured to be distinguishable**, and the picker should say that in one line.
+**Why this differs from the field.** The genre sorts by a number nobody validated; ours sorts by four
+rungs whose adjacent 95% confidence intervals are disjoint over 1,020 games per rung `[V]`
+(`rfc/bot-roster.md` §1). The competitive claim is not *more bots* — it is **the only ladder whose
+rungs are measured to be distinguishable**, and the picker should say that in one line.
+
+**The constraint this recommendation must clear, stated rather than stepped around.**
+`design/00-thesis.md:136` lists **"a generic bot ladder"** under *What it is not* `[V]`. A four-rung
+picker in `/play` is a bot ladder, so the recommendation has to earn its exemption or be refused.
+Three things make it not the refused object, and all three must actually ship or the refusal
+applies:
+
+1. **The ladder is not the product; it is a control variable.** `design/03:146-157` makes resistance
+   the thing held constant while the learner varies their own move `[V]`. A rung exists so branches
+   are comparable, which is the opposite of a ladder you climb for its own sake.
+2. **The rungs are measured, and the generic ones are refused with their numbers** — a 100-point
+   grid buys 22.1–26.9 Elo, below the perception floor; band 2400 crosses parity at p = .21; and the
+   five-to-nine-rung interpolation is refused **as a method** `[V]` (`rfc/bot-roster.md` §1). A
+   product that refuses twenty rungs because it measured them is not shipping a generic ladder.
+3. **The card is not a rung.** §2's three registers and §7's relationship half are what make the
+   entry an opponent rather than a difficulty setting. **If only item 1 of §1's recommendations
+   ships and §§2–7 do not, the result IS the refused object** — a nicer difficulty slider — and this
+   dossier's recommendation should be read as failing rather than partially delivered.
+
+That reading is mine and the thesis is intent tier, so §11.1 puts it to the owner rather than
+settling it here.
 
 ### Cost and dependencies
 
@@ -369,6 +422,19 @@ it.
   says 12 games as a floor and *"ideally 50+"*; ChessBase reports 100–200-game Style Reports
   fluctuating significantly, with a natural curve only above 200. **Neither publishes a reproducible
   stability curve** `[P]` ([[D598]]).
+- **The perceptual asymmetry — the best single piece of evidence for expectation 4, and it is the
+  vendor's own.** [[D592]] `[P]` (`design/research/bot-policy.md:56-61`, same Chessiverse article):
+  *"users may call a bot's one-move piece drop **inhuman** even when similarly rated people make
+  large errors. Its stated response is to prefer errors **with a mitigating tactical
+  circumstance**."* The dossier is careful that this is vendor experience, not a validated
+  threshold — but it *"demonstrates why population frequency plus centipawn loss cannot complete a
+  human-likeness claim."* **Learners judge where the error sits, not how often it happens.**
+- **What bot users actually say, in one sentence** `[P]` Reddit
+  (`competitor-love-hate-sweep.md:56-58`): they value *"distinct styles, chosen openings, variety and
+  a low-stress alternative to human play"*; they report *"implausible strength, one-move blunders,
+  generic/overwritten chat, **weaker middlegame/endgame identity** and accessibility/layout
+  defects."* Read as a card brief: **the loved half is exactly what a card promises, and the hated
+  half is exactly what a card over-promises.**
 - **The one thing every competitor's card gets right:** it is a *card*. A face, a name, a one-line
   handle, a number, and a button. The form is settled and we should not reinvent it `[P]`.
 
@@ -444,11 +510,12 @@ same profile without the trait"* and may print nothing else in this register.
 └──────────────────────────────────────────────────────────┘
 ```
 
-**Why this differs from the field.** Chess.com's card says *"Nelson, 1300"* and the number is
-unvalidated `[P]`. Chessiverse's card says *"Savage"* and its own documentation says the label was
-assigned after the fact and is barely controlled `[P]` ([[D591]]). **Ours says less about what kind
-of player it is and far more about what it will do to you** — and the sentence that makes it
-trustworthy, *"we have not measured this"*, is a sentence no competitor is willing to write.
+**Why this differs from the field.** The genre's card leads with a rating nobody validated `[V]`
+verdict, and Chessiverse's leads with a style label its own documentation says is *"classified after
+generation"* — *"we do very little to influence it. Instead, we measure the output"* `[P]`
+([[D591]]). **Ours says less about what kind of player it is and far more about what it will do to
+you** — and the sentence that makes it trustworthy, *"we have not measured this"*, is one no
+competitor is willing to write.
 
 ### The line, stated in one sentence
 
@@ -548,6 +615,16 @@ they expect the number to mean the same thing in every position.
   Elo**, below the ~60-Elo session-resolution floor `[V]`, so a 200-point step is close to the edge
   of perceptibility. Their ladder is smoother-looking and less distinguishable; ours is coarser and
   measured.
+- **One competitor did close the human loop, and its method is the one we would have to copy.**
+  Chessiverse ran a dense bot-vs-bot ladder for *relative* strength, then **deployed four calibration
+  bots on Lichess (833 / 1057 / 1454 / 2009)** to earn real ratings against humans, scaled everything
+  else to them, and **recalibrated three times**; self-reported-rating feedback was *tried and
+  dropped* `[P]` (`human-like-opponents.md:306-310`,
+  [how-chessiverse-ratings-work](https://chessiverse.com/articles/how-chessiverse-ratings-work)). The
+  only other closer is **Allie** — online evaluation against 1000–2600 humans, 49 Elo mean skill gap
+  `[P]`. *"That is the entire list found in this pass."* This matters for §8.2: the anchor problem
+  has exactly one known solution in the field, and it is **anchor accounts on a public server**, not
+  arithmetic.
 - The field's number is therefore a **product affordance dressed as a measurement**.
 
 ### What we should do, and why it differs
@@ -605,8 +682,8 @@ Decomposed from the user's side, a personality is four things:
 1. **A name and a face.** Free. Carries no chess claim.
 2. **A predictable tendency** — something it does that another bot doesn't, that you notice within a
    game, and that you can plan against.
-3. **A flaw.** The most memorable bots are memorable for what they get wrong. "Nelson hangs
-   everything" is a personality; "Nelson is 1300" is not.
+3. **A flaw.** The most memorable bots are memorable for what they get wrong. *"It hangs
+   everything"* is a personality; *"it is 1300"* is not. `[M]`
 4. **Consistency across games.** If it is a someone, it is the same someone next Tuesday.
 
 Note what is *not* on that list: an adjective. Nobody experiences "aggressive"; they experience being
@@ -645,6 +722,17 @@ The learner-visible payoff: **the same word may be legal in one zone and illegal
 says *"in your 4 games, it captured on b2 3 times out of 3 opportunities"*. That is not a loophole —
 it is the difference between a promise and a report, and it is exactly the distinction
 `human-like-opponents.md` says every vendor blurs `[V]`.
+
+**A name is free under law 8 and is NOT perceptually neutral, and our own instrument design says
+so.** The shipped docs state the legal half plainly: *"It keeps move policy separate from
+presentation: **a name, avatar, or bio cannot change a move.**"* `[V]` (`docs/bot-policy.md:5`). But
+the blind-review protocol's step 3 is *"show reviewers board replay only, **never bot name, avatar,
+chat or policy label**"* `[V]` (`design/research/bot-policy.md:205-218`) — the repo's own instrument
+treats the presentation layer as a **contaminant of perception**. Both are true, and the combination
+is the design rule: a name cannot change what the bot plays, and it will absolutely change what a
+learner believes it played. That is an argument for naming carefully rather than blandly, and it is
+a second reason the card's claims must be layer-grounded (§5.3) — the name is doing perceptual work
+no measurement checks.
 
 **5.2 Build observed traits. They are licensed, unbuilt, and they are the answer to "personality".**
 
@@ -822,6 +910,16 @@ see, and never in the policy.
   a genuine gap in the matrix rather than a finding.
 - Chessiverse lists repeat-loss repertoire adaptation as **stated future work**, not shipped `[P]`
   (`human-like-opponents.md:479`).
+- **The corpus's clearest evidence that hidden adaptation destroys trust is a real user saying so.**
+  A long-term Dr. Wolf user with 800+ wins: *"**If the game is actively using AI to adapt to my level
+  of play without me increasing difficulty, then it's pointless**"* `[V]` App Store review
+  (`teardown-drwolf-desk.md:160-165`), recorded in the same section as the *"astronomical"*
+  Advanced→Expert difficulty cliff. Note what the complaint is: not that adaptation is unpleasant,
+  but that it **voids the meaning of the result**. That is the same argument O8.3 makes from the
+  other direction, and it is why §7's promise is a product feature rather than an apology.
+- Chess.com's bot games are *"always unrated"*, with a 3/2/1-crown economy keyed to hints and undos
+  `[P]` (`fun-mechanics-outside-roguelikes.md:1185-1187`) — i.e. the field's answer to "did this
+  count" is a separate currency, where ours is a void rule on a real rating.
 
 ### What we should do, and why it differs
 
@@ -915,8 +1013,15 @@ exactly 0.500000 with standard error exactly 0.0** — *"the most confident poss
 1. **Unguided matches produce a band-relative ladder, not a human anchor.** The pool is our own
    engines. Nothing in this repo ties band 1400's real strength to any human rating pool `[V]`
    (`rfc/learner-rating.md` §2, "Anchor"). The field's own record is the warning: **maia1's published
-   label is 1100 and it measures 1434–1666** `[P]` ([[D819]]). Whether any card may ever show an
-   absolute human-scale Elo is **Discharge D5, owner-owned** `[V]`.
+   label is 1100 and it measures 1434–1666 — and spans ~230 Elo across time controls against the
+   same human pool, so "the bot's Elo" is not even one number** `[V]`
+   (`human-like-opponents.md:253,303-304`). **The anchor has exactly one known solution in the
+   field**, and it is not arithmetic: Chessiverse deployed **four calibration bots on Lichess
+   (833 / 1057 / 1454 / 2009)**, scaled everything else to them, and recalibrated three times `[P]`
+   (§4). If Discharge D5 is ever ruled *yes*, that is the shape of the work, plus the standing rule
+   that **every verified calibration in the field is time-control-specific — "a '1400' claim must
+   name its clock"** `[V]` (`human-like-opponents.md:334-335`), while our own harness plays
+   **untimed** engine-vs-engine with no clock anywhere in the opponent path `[V]`.
 2. **The ladder is narrow where you want it wide.** ~480 Elo at full material against a 1000→2000
    product journey, and it compresses to **−72.4 Elo** below ten pieces `[V]`. So "unguided matches"
    resolve *which rung a profile sits on*; they cannot manufacture range that the underlying dial
@@ -946,6 +1051,27 @@ one abstained gate away from being able to start.*
 ---
 
 ## 9. Reconciliation — what this contradicts and what it confirms
+
+### 9.0 Against `ux-arrival-and-start.md` §4.5 and §6 — inherited, not superseded
+
+That dossier landed three days before this one and its §6 is a complete pass on *choosing* an
+opponent. The division of labour, stated so no reader has to guess which document owns what:
+
+| its finding | status here |
+|---|---|
+| §6.3 **D1** — the four-rung `/rating` form is the best start form in the app and is behind the wrong door ([[D1473]]) | **inherited and confirmed independently.** §1 recommendation 1 restates it as a recommendation; §9.2 item 3 and §11.6 carry the IA half |
+| §6.3 **D2** — named opponents with a character and no number; band ⊥ family makes a two-axis picker possible | **inherited.** §1 recommendation 3 restates it; §§2 and 5 are the part D2 does not reach — *what the card actually says* |
+| §6.3 **D3** — convey difficulty without asserting a rating, via ladder position, family character, and your own result | **inherited and extended.** §4 adds the endgame-attenuation consequence; §7 builds out D3's third device into the relationship half |
+| §6.3 **D4** — opponent choice sits beside the preset, never inside it (`rfc/intent-presets.md` §8.1) | **adopted unchanged, not reopened** |
+| §6.4 — the roster **picker surface** is *unowned*: `bot-policy` says it is Just Play / `play-composition` work, and `play-composition` stops at the in-run column | **confirmed, and this dossier is the missing content for it** rather than a competing claim on ownership |
+| §4.5's thirteen-row competitor table | **the source for most of §§1–4's competitor claims here**, cited per claim rather than restated wholesale |
+
+**What is new here and not in that dossier:** the 1500 derivation (§0.2), the assistance-gating of
+the applied band and the pack-gating of the resistance sentences (§0.1), the card's three registers
+and the provenance rule (§§2, 5.3), the identity bar (§3), observed traits as the answer to
+personality (§5.2), the bot's own miss as a legal surface (§6), the cross-session relationship (§7),
+and the direct answers to the owner's two questions (§8). **Where the two dossiers touch, this one
+defers.**
 
 ### 9.1 Confirmations
 
@@ -1041,6 +1167,16 @@ authority, and the absence is accepted and recorded. *Consequence of (c):* every
 repeats the same disclaimer, and no gate in `planning/exploration/gates.md` names the opponent
 surface.
 
+**Rider, and it is the sharper half.** `design/00-thesis.md:136` lists **"a generic bot ladder"**
+under *What it is not* `[V]`. §1 recommends putting a four-rung picker on the primary play surface,
+which is a bot ladder. §1's *"the constraint this recommendation must clear"* argues it is exempt on
+three grounds — the rung is a control variable, the generic rungs are refused **with their
+measurements**, and §§2–7 make the entry an opponent rather than a setting — **and explicitly states
+that if only the picker ships and the card and record do not, the result IS the refused object.**
+That reading is claude's and the thesis is intent tier. The owner should either ratify the exemption
+with its three conditions or refuse the picker, because *"ship the picker now, the card later"* is
+the failure mode the exemption is written to prevent.
+
 **11.2 — Is the opponent's applied band assistance, or is it chrome?**
 Today it renders only inside the evidence inspector behind `assistancePermission.humanSplit`. Moving
 it to a permanent identity bar changes what `design/05`'s silent profile shows by default.
@@ -1072,7 +1208,17 @@ than three times.
 
 ---
 
-## 12. Proposed ledger rows (UNNUMBERED per [[D1130]]; head was **D1478** at drafting; NOT written)
+## 12. Proposed ledger rows — NOT written
+
+Written **unnumbered** per [[D1130]] as amended by [[D1354]]: proposed, id assigned at landing, head
+was **D1478** at drafting (`design/BACKLOG.md:1762`). **One governance contradiction, flagged rather
+than resolved:** `design/BACKLOG.md:414` records [[D1130]] as **✅ retired 2026-08-23** — *"drafts
+may again show provisional numbers when useful, clearly marked proposed/renumber-at-landing"* —
+while `planning/rfc-drafting-queue.md:817-834` still presents the unnumbered convention as adopted,
+and drafts as recent as 2026-08-24 follow it (`rfc/intent-presets.md:905`) `[V]`. Unnumbered is the
+safe intersection of both readings and is what this dossier uses. Per [[D1354]] the rows below are
+the coordinator's to land, routed to the durable section that specifies each repair — never to a
+`## Ledger rows` section, which `work-index` excludes from durable text by design.
 
 - 🐞 **Just Play silently plays Maia at band 1500, a rung nobody chose and nobody measured.** The
   starter sends no `targetElo`; `appliedTargetElo` falls to `profile.default`; the profile default is
@@ -1126,6 +1272,31 @@ than three times.
 - 💡 **[[D561]] should be re-read as a UX defect.** Its architectural half is discharged — the layers
   exist as an accepted, compiled grammar with digests and gates. Its live half is that no instance and
   no surface exist, which is a different owner and a different fix.
+- 📊 **A four-rung picker on the primary play surface collides with the thesis's "not a generic bot
+  ladder", and the exemption has three conditions that must ship together.** `design/00-thesis.md:136`
+  `[V]`. The rung is a control variable (`design/03:146-157`), the generic rungs are refused *with
+  their measurements* (100-point steps buy 22.1–26.9 Elo; 2400 crosses parity at p = .21; the
+  five-to-nine-rung interpolation is refused as a **method**), and the card plus the record are what
+  make the entry an opponent. **Shipping the picker without the card produces exactly the refused
+  object.** Owner ratification or refusal owed — this is an intent question, not a UX one.
+- 📊 **Chess.com's bot-selection screen is not in our corpus, and "a bot picker is obviously a grid
+  of character cards" is `[M]`.** No named bots, bios, avatars or displayed bot Elo labels appear in
+  either chess.com teardown, the play-UX dossier, the matrix or the love/hate sweep; the matrix
+  records the species as unestablished (*"P adaptive AI (unspecified)"*, *"P bots"*).
+  `ux-arrival-and-start.md:387-390` already flags the same `[M]` for Chessiverse. Any future RFC that
+  cites a chess.com bot roster as precedent is citing model knowledge. First hands-on teardown owed.
+- 📊 **The field has exactly one known solution to the anchor problem and it is not arithmetic.**
+  Chessiverse deployed four calibration bots on Lichess (833 / 1057 / 1454 / 2009), scaled everything
+  to them and recalibrated three times `[P]`; Allie evaluated online against 1000–2600 humans at a
+  49-Elo mean skill gap `[P]`. *"That is the entire list."* If Discharge D5 is ever ruled yes, this
+  is the shape of the work — and every field calibration is time-control-specific while our harness
+  is untimed.
+- 📊 **Learners judge where an error sits, not how often one happens — and the only direct evidence
+  is the vendor's.** [[D592]] `[P]`: users call a one-move piece drop *inhuman* even when
+  similarly-rated people make large errors; Chessiverse's response is to prefer errors *with a
+  mitigating tactical circumstance*. This is the user-side twin of [[D811]]'s mechanical finding and
+  it is the strongest argument for the guarded family being the **default** opponent rather than an
+  option.
 - 🐞 **The teardown protocol never asks how a competitor presents its opponent, which is why bots got
   a mention in six UX dossiers and a pass in none.** The three questions in
   `design/research/README.md` are E1 threat, one good feature, and love/hate. A case-insensitive
@@ -1148,7 +1319,16 @@ than three times.
    and the `maia1/5/9` account presentation; Chessiverse's bot detail page; ChessMind's six-band
    picker, which its own teardown calls *"the closest stack neighbor in the entire matrix"*. I did
    **not** verify any of these in a browser in this pass, and the three-question teardown format
-   (`design/research/README.md`) would answer them properly.
+   (`design/research/README.md`) would answer them properly. **Two protocols already exist for it**:
+   the Noctie protocol (~20 moves at a stated level, logging FENs — `teardown-chessigma-desk.md:457`)
+   and the 30-minute hands-on incumbent pass (`competitor-play-ux.md:351-355`).
+   **Two corpus hygiene items found in this pass and not repaired here:** Chessiverse has **two
+   conflicting rows in `competitor-matrix.csv`** (`:16` and `:58`) that disagree on its human-likeness
+   cell, so *"the matrix says"* is ambiguous for the one vendor most relevant to this dossier; and
+   `human-like-opponents.md` — the source of much of §§2, 5 and 6 here — is desk-only and **discloses
+   a summarizer fabrication incident** on the Chabris numbers, with its own instruction to
+   *"spot-check any `[P]` number against its PDF before it becomes load-bearing in an RFC."* I did
+   not re-fetch any of its primary sources.
    **A second, structural gap in the matrix:** no teardown in the corpus asks an *opponent-identity*
    question. `teardown-noctie-desk.md`'s four questions are about takebacks, side-by-side comparison
    and review, and a case-insensitive search of it for *bot*, *opponent* and *persona* returns
