@@ -1674,3 +1674,28 @@ step chaining it to `verify` created and deleted the same day.
 puts *"full content"* in question. **[[D1509]]** — `register-check` derives migration heads from the
 **working tree**, so one agent's uncommitted edit blocks the pre-commit hook for everyone and forces
 the `--no-verify` escape the hook exists to prevent.
+
+### social-play rebuilt on native-first — [[D1516]]–[[D1519]]
+
+`rfc/social-play.md` rebuilt at `06709d8f`, with an intent amendment filed under the clause added
+today.
+
+**[[D1516]] is a cost the ruling bought that nobody had priced.** `rated_games.run_id` is a PRIMARY
+KEY — one rated game per run — while a native match is **one run with two learners**, and
+`opponent_band` and `engine_identity_digest` are both `NOT NULL` and presuppose a bot. On a STRICT
+table that is a **rebuild**, not an additive column. It surfaced only when the rebuild reached the
+rating seam. Handed to `learner-rating` rather than absorbed.
+
+**[[D1517]] corrects me.** My [[D1382]] criterion-7 row indicted six sites; two of them make **no
+network calls at all** and are the pattern the criterion should demand, and two more declare
+themselves *"DISPOSABLE research instrument … Not production."* on their first line. The criterion is
+now an allowlist set-equality over a derivation — correct and failable.
+
+**[[D1518]]** retires a bug two dossiers record as live: the seated-player assistance asymmetry is
+already closed in shipped code. The real residual is a **non-seated host**, which is narrower and
+different. Third unreproducible finding retired today.
+
+**[[D1519]]** — the rebuild **narrowed** its migration claim by removing three tables, because a
+deferred object may not hold a 1.0 migration position, and **added** run-schema lane 0.23 for resign
+and draw, which the routing pass found with no owner. The mechanism is sharp: a game ending with no
+move cannot be an `outcome.reached`, because appending one **corrupts every later read of that run**.
