@@ -1,0 +1,43 @@
+glob_matcher: doublestar
+
+pre-commit:
+  parallel: true
+  jobs:
+    - name: staged-diff
+      run: git diff --cached --check
+
+    - name: runtime-typecheck
+      glob: "packages/runtime/**/*.{ts,js}"
+      run: pnpm --filter @chess-tabiya/runtime typecheck
+
+    - name: schema-typecheck
+      glob: "packages/schema/**/*.{ts,js}"
+      run: pnpm --filter @chess-tabiya/schema typecheck
+
+    - name: server-typecheck
+      glob: "apps/server/**/*.{ts,js}"
+      run: pnpm --filter @chess-tabiya/server typecheck
+
+    - name: web-typecheck
+      glob: "apps/web/**/*.{ts,js,svelte}"
+      run: pnpm --filter @chess-tabiya/web typecheck
+
+    - name: process-contracts
+      glob:
+        - "design/**/*.md"
+        - "rfc/**/*.md"
+        - "planning/**/*.md"
+        - "tools/{register-check,status-parity,work-index,intent-parity-harness}/**/*"
+      run: make register-check status-parity work-index intent-parity
+
+    - name: scaffold
+      glob:
+        - "Makefile"
+        - "package.json"
+        - "pnpm-lock.yaml"
+        - "pnpm-workspace.yaml"
+        - "lefthook.yml"
+        - ".github/workflows/**/*"
+        - "tools/verify-scaffold*"
+        - "tools/ci-local*"
+      run: node --test tools/verify-scaffold.test.mjs tools/ci-local.test.mjs && node tools/verify-scaffold.mjs && ./node_modules/.bin/lefthook validate

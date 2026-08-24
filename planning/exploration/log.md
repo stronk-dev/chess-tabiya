@@ -7119,3 +7119,25 @@ snapshot mismatch but is not a native performance receipt.
 **Next:** after the collector pass freezes and commits its manifest, make a fresh extraction of
 that commit and run parity natively. D1448 remains implementing until both workflow bodies pass
 and the command prints the commit-addressed receipt.
+
+## 2026-08-24 — D1448 checking workflow corrected after pre-push overreach
+
+**What changed:** the ad-hoc repository `pre-push` hook is removed and the local
+`core.hooksPath` override is unset. It had coupled every push to Node 24, a clean shared tree,
+Stockfish, Docker Compose, the full unit suite and the browser suite. That is not a useful Git
+hook contract and was not authorized by the requirement for locally reproducible CI.
+
+The repository now uses pinned Lefthook with one `pre-commit` hook. It always checks the staged
+diff, selects a workspace-specific typecheck only when that workspace has staged source, runs
+the process registers only for staged design/RFC/planning changes, and runs fast scaffold/config
+fixtures for affected infrastructure files. The complete verification and browser bodies remain
+explicit commands: `make check` for the current working tree and `make ci-local` for the pinned
+CI toolchain. Neither command is attached to push.
+
+**Measured result:** the first over-broad hook passed but took 77.39 seconds, because it ran the
+whole workspace typecheck and deployment packaging. After splitting by staged workspace and
+removing packaging from commit time, the same staged infrastructure change passed in 0.27
+seconds; unrelated process and workspace jobs were visibly skipped.
+
+**Next:** run the explicit Node-24/Stockfish/Compose/browser parity command end to end. D1448
+remains implementing until it passes; push behavior is restored independently of that receipt.

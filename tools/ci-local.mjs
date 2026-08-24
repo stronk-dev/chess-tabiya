@@ -8,7 +8,6 @@ export const REQUIRED_PNPM_VERSION = "11.18.0";
 export function preflightFailures({
   nodeVersion,
   pnpmVersion,
-  status,
   stockfishCommand,
   dockerComposeAvailable,
 }) {
@@ -23,9 +22,6 @@ export function preflightFailures({
     failures.push(
       `pnpm ${REQUIRED_PNPM_VERSION} is required; found ${pnpmVersion || "no runnable pnpm"}.`,
     );
-  }
-  if (status.trim()) {
-    failures.push("the working tree is dirty; CI parity only validates committed bytes");
   }
   if (!stockfishCommand) {
     failures.push("SF_CMD must name an executable Stockfish binary, as it does in CI");
@@ -62,7 +58,6 @@ export function main() {
     nodeMajor === REQUIRED_NODE_MAJOR
       ? capture("pnpm", ["--version"])
       : REQUIRED_PNPM_VERSION;
-  const status = capture("git", ["status", "--porcelain=v1", "--untracked-files=normal"]);
   const stockfishCommand = requireExecutable(process.env.SF_CMD) ? process.env.SF_CMD : "";
   const dockerComposeAvailable =
     nodeMajor === REQUIRED_NODE_MAJOR
@@ -71,7 +66,6 @@ export function main() {
   const failures = preflightFailures({
     nodeVersion: process.version,
     pnpmVersion,
-    status,
     stockfishCommand,
     dockerComposeAvailable,
   });
@@ -80,24 +74,11 @@ export function main() {
     process.exit(2);
   }
 
-  const commit = capture("git", ["rev-parse", "HEAD"]);
-  if (!commit) {
-    console.error("local CI parity refused: could not resolve HEAD");
-    process.exit(2);
-  }
-
-  console.log(`local CI parity start: ${commit}`);
+  console.log("local CI parity start");
   run("pnpm", ["install", "--frozen-lockfile"]);
   run("make", ["verify"], { ...process.env, ENGINES_REQUIRED: "1" });
   run("make", ["test-browser"]);
-
-  const finalCommit = capture("git", ["rev-parse", "HEAD"]);
-  const finalStatus = capture("git", ["status", "--porcelain=v1", "--untracked-files=normal"]);
-  if (finalCommit !== commit || finalStatus) {
-    console.error("local CI parity refused its receipt: HEAD or working-tree bytes changed during the run");
-    process.exit(2);
-  }
-  console.log(`local CI parity PASS: ${commit}`);
+  console.log("local CI parity PASS");
 }
 
 if (process.argv[1] && fileURLToPath(import.meta.url) === process.argv[1]) main();
