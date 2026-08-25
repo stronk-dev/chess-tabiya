@@ -7749,3 +7749,14 @@ turning it into a sentence.
 **Verification:** a negative fixture proves a forged `pawn_count` observation cannot render, and a
 positive fixture preserves the authored-expression sentence. The ordinary fourteen emitted
 structural kinds retain their valence/claim-boundary sweep.
+
+## 2026-08-25 — Campaign path-width posture becomes executable
+
+**What landed:** campaign-core criterion 15 now runs in the authored-document validator.
+Every non-boss layer offering only one choice emits `CAMPAIGN_PATH_WIDTH`; the mandatory
+single-choice boss layer never does. The diagnostic is a warning, so deliberately linear teaching
+campaigns remain valid as the accepted contract requires.
+
+**Verification:** the linear fixture names exactly act 1 layers 1 and 2 without an error, while the
+width-3 seed emits no path-width warning. The focused seven-test campaign-validation suite and the
+server typecheck pass. AUT-a17 and [[D1552]] close on those executable fixtures.

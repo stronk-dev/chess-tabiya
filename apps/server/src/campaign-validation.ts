@@ -38,6 +38,10 @@ function issue(code: string, path: string, message: string, source: PackValidati
   return Object.freeze({ severity: "error", source, code, path, message });
 }
 
+function warning(code: string, path: string, message: string): PackValidationIssue {
+  return Object.freeze({ severity: "warning", source: "runtime", code, path, message });
+}
+
 function schemaIssue(error: ErrorObject): PackValidationIssue {
   const missing = error.keyword === "required" ? error.params.missingProperty : undefined;
   const path = typeof missing === "string" ? `${error.instancePath}/${token(missing)}` : error.instancePath || "/";
@@ -60,6 +64,13 @@ export function validateCampaignDocument(value: unknown, packs: CampaignPackLook
       issues.push(issue("CAMPAIGN_BOSS_PLACEMENT", `/acts/${actIndex}/layers`, "each act must end in one unavoidable boss as the final layer's sole choice"));
     }
     for (const [layerIndex, layer] of act.layers.entries()) {
+      if (layerIndex < 2 && layer.choices.length === 1) {
+        issues.push(warning(
+          "CAMPAIGN_PATH_WIDTH",
+          `/acts/${actIndex}/layers/${layerIndex}/choices`,
+          `act ${actIndex + 1} layer ${layerIndex + 1} offers one path; add alternatives unless this campaign is deliberately linear`,
+        ));
+      }
       for (const [choiceIndex, node] of layer.choices.entries()) {
         const path = `/acts/${actIndex}/layers/${layerIndex}/choices/${choiceIndex}`;
         if (nodeIds.has(node.id)) issues.push(issue("CAMPAIGN_NODE_ID_DUPLICATE", `${path}/id`, `duplicate campaign node id ${node.id}`));
@@ -80,7 +91,7 @@ export function validateCampaignDocument(value: unknown, packs: CampaignPackLook
   }
 
   return Object.freeze({
-    valid: issues.length === 0,
+    valid: issues.every((candidate) => candidate.severity !== "error"),
     issues: Object.freeze(issues),
     document,
   });

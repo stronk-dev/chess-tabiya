@@ -2429,17 +2429,21 @@
     {
       "id": "AUT-a17",
       "sourceState": "queued",
-      "state": "queued",
+      "state": "completed",
       "capability": "theory_content",
       "owner": "content-and-theory",
-      "assignment": "capability:theory_content",
+      "assignment": "closed",
       "sourceDocument": "ux-authoring-and-library.md",
       "sourceSection": "§3.3f (campaign §3)",
       "sourceHeading": "Authoring and library — `ux-authoring-and-library.md`",
       "summary": "Land `CAMPAIGN_PATH_WIDTH` — absent repo-wide, so a fully linear campaign validates silently against criterion 15",
       "legacyRoute": "ledger",
       "note": "[[D277]]; a defect against an accepted RFC, not a design question",
-      "sourceDigest": "sha256:5bb128e6ffb3ce46ce843da43941cf69345f97da9f0fa8a01f90ec6280ac1d4b"
+      "sourceDigest": "sha256:5bb128e6ffb3ce46ce843da43941cf69345f97da9f0fa8a01f90ec6280ac1d4b",
+      "completion": {
+        "completedOn": "2026-08-25",
+        "evidence": "campaign validator emits non-blocking CAMPAIGN_PATH_WIDTH warnings for every width-1 non-boss layer; discriminating fixtures cover linear and width-3 documents"
+      }
     },
     {
       "id": "AUT-a18",

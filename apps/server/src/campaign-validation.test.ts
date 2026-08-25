@@ -25,18 +25,18 @@ function campaign(): CampaignDocument {
     startingModules: Object.freeze(["sight_on_request" as const]),
     acts: Object.freeze([
       Object.freeze({ id: "act1" as const, layers: Object.freeze([
-        Object.freeze({ choices: Object.freeze([node("a1-l1", { reward: "postcommit_nudge" })]) }),
-        Object.freeze({ choices: Object.freeze([node("a1-l2")]) }),
+        Object.freeze({ choices: Object.freeze([node("a1-l1a", { reward: "postcommit_nudge" }), node("a1-l1b"), node("a1-l1c")]) }),
+        Object.freeze({ choices: Object.freeze([node("a1-l2a"), node("a1-l2b"), node("a1-l2c")]) }),
         Object.freeze({ choices: Object.freeze([node("a1-boss", { boss: true })]) }),
       ] as const) }),
       Object.freeze({ id: "act2" as const, layers: Object.freeze([
-        Object.freeze({ choices: Object.freeze([node("a2-l1", { reward: "structure_nudge" })]) }),
-        Object.freeze({ choices: Object.freeze([node("a2-l2")]) }),
+        Object.freeze({ choices: Object.freeze([node("a2-l1a", { reward: "structure_nudge" }), node("a2-l1b"), node("a2-l1c")]) }),
+        Object.freeze({ choices: Object.freeze([node("a2-l2a"), node("a2-l2b"), node("a2-l2c")]) }),
         Object.freeze({ choices: Object.freeze([node("a2-boss", { boss: true })]) }),
       ] as const) }),
       Object.freeze({ id: "act3" as const, layers: Object.freeze([
-        Object.freeze({ choices: Object.freeze([node("a3-l1", { reward: "theory_breadcrumb" })]) }),
-        Object.freeze({ choices: Object.freeze([node("a3-l2")]) }),
+        Object.freeze({ choices: Object.freeze([node("a3-l1a", { reward: "theory_breadcrumb" }), node("a3-l1b"), node("a3-l1c")]) }),
+        Object.freeze({ choices: Object.freeze([node("a3-l2a"), node("a3-l2b"), node("a3-l2c")]) }),
         Object.freeze({ choices: Object.freeze([node("a3-boss", { boss: true })]) }),
       ] as const) }),
     ] as const),
@@ -48,10 +48,30 @@ function codes(value: unknown): readonly string[] {
 }
 
 describe("campaign document validation", () => {
-  it("accepts the closed three-act, nine-node seed shape", () => {
+  it("accepts the closed three-act seed shape without path-width warnings", () => {
     const result = validateCampaignDocument(campaign(), packs);
     expect(result.valid, JSON.stringify(result.issues)).toBe(true);
-    expect(result.document?.acts.flatMap((act) => act.layers.flatMap((layer) => layer.choices))).toHaveLength(9);
+    expect(result.issues).not.toContainEqual(expect.objectContaining({ code: "CAMPAIGN_PATH_WIDTH" }));
+    expect(result.document?.acts.flatMap((act) => act.layers.flatMap((layer) => layer.choices))).toHaveLength(21);
+  });
+
+  it("warns for every linear non-boss layer without invalidating the document", () => {
+    const value = structuredClone(campaign()) as unknown as {
+      acts: [{ layers: [{ choices: CampaignNode[] }, { choices: CampaignNode[] }, { choices: CampaignNode[] }] }, ...CampaignDocument["acts"]];
+    };
+    value.acts[0].layers[0].choices.splice(1);
+    value.acts[0].layers[1].choices.splice(1);
+
+    const result = validateCampaignDocument(value, packs);
+    expect(result.valid, JSON.stringify(result.issues)).toBe(true);
+    expect(result.issues.filter((candidate) => candidate.code === "CAMPAIGN_PATH_WIDTH")).toEqual([
+      expect.objectContaining({ severity: "warning", path: "/acts/0/layers/0/choices" }),
+      expect.objectContaining({ severity: "warning", path: "/acts/0/layers/1/choices" }),
+    ]);
+    expect(result.issues).not.toContainEqual(expect.objectContaining({
+      code: "CAMPAIGN_PATH_WIDTH",
+      path: "/acts/0/layers/2/choices",
+    }));
   });
 
   it("refuses unknown packs", () => {
@@ -80,7 +100,7 @@ describe("campaign document validation", () => {
 
   it("refuses duplicate node ids and schema-open additions", () => {
     const duplicate = structuredClone(campaign()) as unknown as { acts: { layers: { choices: { id: string }[] }[] }[] };
-    duplicate.acts[1]!.layers[0]!.choices[0]!.id = "a1-l1";
+    duplicate.acts[1]!.layers[0]!.choices[0]!.id = "a1-l1a";
     expect(codes(duplicate)).toContain("CAMPAIGN_NODE_ID_DUPLICATE");
     expect(codes({ ...campaign(), invented: true })).toContain("SCHEMA_ADDITIONALPROPERTIES");
   });
