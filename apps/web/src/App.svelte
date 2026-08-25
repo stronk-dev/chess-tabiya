@@ -2,6 +2,7 @@
   import "./lib/theme/base.css";
 
   import { onDestroy, onMount, tick, untrack } from "svelte";
+  import { DRILL_PACK_SCHEMA_VERSION } from "@chess-tabiya/schema";
 
   import DrillScreen from "./lib/DrillScreen.svelte";
   import Chessboard from "./lib/Chessboard.svelte";
@@ -59,6 +60,7 @@
   import { voteAttribution } from "./lib/live-vote.js";
   import { markAttribution, relayedMarkShapes } from "./lib/live-marks.js";
   import { clearAccountLocalData, clearRunLocalData } from "./lib/account-local-data.js";
+  import { requiredFieldStates, splitValidationIssues } from "./lib/pack-validation-presentation.js";
 
   interface Props {
     api?: DrillClientApi;
@@ -128,6 +130,7 @@
   let selectedShapeDraftId: string | undefined = $state();
   let shapeProbeFen = $state("");
   let shapeProbeResult: boolean | undefined = $state();
+  let shapeActionError: string | undefined = $state();
   let liveSessions: readonly LiveSessionSummary[] = $state([]);
   let classrooms: readonly ClassroomSummary[] = $state([]);
   let classroomDetail: ClassroomDetail | undefined = $state();
@@ -220,6 +223,8 @@
   let openAssignments = $derived(assignedPacks.filter((assignment) => assignment.withdrawnAt === null));
   let selectedPackDraft = $derived(drafts.find((candidate) => candidate.id === selectedDraftId));
   let displayedPackValidation = $derived(packBufferValidation ?? selectedPackDraft?.validation);
+  let packRequiredFields = $derived(requiredFieldStates(studioJson));
+  let packValidationSections = $derived(splitValidationIssues(displayedPackValidation?.issues ?? []));
   let selectedPackRegistrationBlock = $derived(registrationBlockReason(selectedPackDraft));
   let runContext = $derived(
     route.name === "run" && session.runState
@@ -698,22 +703,41 @@
   }
 
   async function createShapeDraft(): Promise<void> {
-    const draft = await api.createShapeDraft?.(JSON.parse(shapeStudioJson));
-    if (draft !== undefined) { shapeDrafts = [draft, ...shapeDrafts]; selectedShapeDraftId = draft.id; shapeStudioJson = JSON.stringify(draft.document, null, 2); }
+    shapeActionError = undefined;
+    try {
+      if (api.createShapeDraft === undefined) throw new Error("Shape draft creation is unavailable.");
+      const draft = await api.createShapeDraft(JSON.parse(shapeStudioJson));
+      shapeDrafts = [draft, ...shapeDrafts]; selectedShapeDraftId = draft.id; shapeStudioJson = JSON.stringify(draft.document, null, 2);
+    } catch (error) { shapeActionError = error instanceof Error ? error.message : String(error); }
   }
   async function saveShapeDraft(): Promise<void> {
     const draft = shapeDrafts.find((candidate) => candidate.id === selectedShapeDraftId); if (draft === undefined) return;
-    const saved = await api.updateShapeDraft?.(draft.id, draft.digest, JSON.parse(shapeStudioJson));
-    if (saved !== undefined) shapeDrafts = shapeDrafts.map((candidate) => candidate.id === saved.id ? saved : candidate);
+    shapeActionError = undefined;
+    try {
+      if (api.updateShapeDraft === undefined) throw new Error("Shape draft saving is unavailable.");
+      const saved = await api.updateShapeDraft(draft.id, draft.digest, JSON.parse(shapeStudioJson));
+      shapeDrafts = shapeDrafts.map((candidate) => candidate.id === saved.id ? saved : candidate);
+    } catch (error) { shapeActionError = error instanceof Error ? error.message : String(error); }
   }
   async function lintShapeDraft(): Promise<void> {
     const draft = shapeDrafts.find((candidate) => candidate.id === selectedShapeDraftId); if (draft === undefined) return;
-    const validation = await api.lintShapeDraft?.(draft.id, JSON.parse(shapeStudioJson), shapeProbeFen);
-    shapeProbeResult = validation?.probeMatches;
+    shapeActionError = undefined;
+    shapeProbeResult = undefined;
+    try {
+      if (api.lintShapeDraft === undefined) throw new Error("Shape validation is unavailable.");
+      const validation = await api.lintShapeDraft(draft.id, JSON.parse(shapeStudioJson), shapeProbeFen);
+      shapeDrafts = shapeDrafts.map((candidate) => candidate.id === draft.id ? { ...candidate, validation } : candidate);
+      shapeProbeResult = validation.probeMatches;
+    } catch (error) { shapeActionError = error instanceof Error ? error.message : String(error); }
   }
   async function registerShapeDraft(): Promise<void> {
-    if (selectedShapeDraftId === undefined) return; await api.registerShapeDraft?.(selectedShapeDraftId);
-    shapeDrafts = await (api.shapeDrafts?.() ?? Promise.resolve([]));
+    if (selectedShapeDraftId === undefined) return;
+    shapeActionError = undefined;
+    try {
+      if (api.registerShapeDraft === undefined) throw new Error("Shape registration is unavailable.");
+      await api.registerShapeDraft(selectedShapeDraftId);
+      shapeDrafts = await (api.shapeDrafts?.() ?? Promise.resolve([]));
+    } catch (error) { shapeActionError = error instanceof Error ? error.message : String(error); }
   }
 
   async function createLive(runId:string):Promise<void>{const created=await api.createLiveSession?.({runId,kind:liveKind,title:`${liveKind} session`,boardControl:liveBoardControl,...(liveClassroomId?{classroomId:liveClassroomId}:{}),...(liveScheduledFor?{scheduledFor:new Date(liveScheduledFor).toISOString()}:{}),...(liveBoardControl==="match"?{matchPlayers:{...(liveMatchWhite?{white:liveMatchWhite}:{}),...(liveMatchBlack?{black:liveMatchBlack}:{})}}:{})});if(created){navigate(routePath({name:"live-session",sessionId:created.id}));}}
@@ -1114,7 +1138,7 @@
             <button type="button" onclick={() => { selectedDraftId = draft.id; studioJson = JSON.stringify(draft.document, null, 2); studioActionError = undefined; withdrawConfirmId = undefined; }}>
               {draft.packId} · {draft.state}
             </button>
-          {:else}<p>No database drafts yet. Paste a v0.8 pack to begin.</p>{/each}
+          {:else}<p>No database drafts yet. Paste a v{DRILL_PACK_SCHEMA_VERSION} pack to begin.</p>{/each}
         </aside>
         <section>
           <label for="studio-json">Pack JSON</label>
@@ -1133,7 +1157,18 @@
           {#if selectedPackDraft && withdrawConfirmId === selectedPackDraft.id}<aside class="deletion-card"><h3>Withdraw this draft?</h3><p>It becomes read-only and cannot be registered. Existing private playtest runs keep their exact tested bytes.</p><div class="row-actions"><button type="button" onclick={() => void withdrawDraft(selectedPackDraft.id)}>Confirm withdrawal</button><button type="button" onclick={() => withdrawConfirmId = undefined}>Cancel</button></div></aside>{/if}
           {#if studioActionError}<p role="alert">{studioActionError}</p>{/if}
           {#if packLintError}<p role="alert">{packLintError}</p>{/if}
-          {#if selectedPackDraft && displayedPackValidation}<ul aria-label="Pack validation results">{#each displayedPackValidation.issues as issue}<li><code>{issue.path}</code> {issue.code}: {issue.message}</li>{:else}<li>{packLintState === "ready" ? "Unsaved bytes are validation clean." : "Saved bytes are validation clean."}</li>{/each}</ul>{/if}
+          <section class="validation-summary" aria-labelledby="required-pack-fields">
+            <h3 id="required-pack-fields">Required fields</h3>
+            <ul aria-label="Required pack fields">{#each packRequiredFields as item}<li class:missing={!item.present}><code>{item.field}</code> — {item.present ? "present" : "missing"}</li>{/each}</ul>
+          </section>
+          {#if selectedPackDraft && displayedPackValidation}
+            <div class="validation-sections" aria-label="Pack validation results">
+              {#if packValidationSections.incomplete.length > 0}<section><h3>Still needed</h3><ul>{#each packValidationSections.incomplete as issue}<li><code>{issue.path}</code> {issue.message}</li>{/each}</ul></section>{/if}
+              {#if packValidationSections.wrong.length > 0}<section><h3>Needs correction</h3><ul>{#each packValidationSections.wrong as issue}<li><code>{issue.path}</code> {issue.code}: {issue.message}</li>{/each}</ul></section>{/if}
+              {#if packValidationSections.warnings.length > 0}<section><h3>Warnings</h3><ul>{#each packValidationSections.warnings as issue}<li><code>{issue.path}</code> {issue.code}: {issue.message}</li>{/each}</ul></section>{/if}
+              {#if displayedPackValidation.issues.length === 0}<p>{packLintState === "ready" ? "Unsaved bytes are validation clean." : "Saved bytes are validation clean."}</p>{/if}
+            </div>
+          {/if}
         </section>
       </div>
       <p class="honest">Community registration does not make a pack official. Official packs enter through git and the deployment image.</p>
@@ -1141,7 +1176,7 @@
       <div class="studio-grid">
         <aside aria-label="Your shape drafts">
           <h3>Your shape drafts</h3>
-          {#each shapeDrafts as draft}<button type="button" onclick={() => { selectedShapeDraftId = draft.id; shapeStudioJson = JSON.stringify(draft.document, null, 2); }}>{draft.shapeId} · {draft.state}</button>{:else}<p>No shape drafts yet.</p>{/each}
+          {#each shapeDrafts as draft}<button type="button" onclick={() => { selectedShapeDraftId = draft.id; shapeStudioJson = JSON.stringify(draft.document, null, 2); shapeActionError = undefined; }}>{draft.shapeId} · {draft.state}</button>{:else}<p>No shape drafts yet.</p>{/each}
         </aside>
         <section>
           <label for="shape-studio-json">Shape JSON</label><textarea id="shape-studio-json" bind:value={shapeStudioJson} spellcheck="false"></textarea>
@@ -1153,6 +1188,7 @@
             <button type="button" disabled={!selectedShapeDraftId} aria-describedby={!selectedShapeDraftId ? "shape-selection-required" : "shape-publication-retention"} onclick={() => void registerShapeDraft()}>Register community shape</button>
           </div>
           {#if shapeProbeResult !== undefined}<p role="status">Probe trigger: {shapeProbeResult ? "matches" : "does not match"}</p>{/if}
+          {#if shapeActionError}<p role="alert">{shapeActionError}</p>{/if}
           {#if !selectedShapeDraftId}<p id="shape-selection-required" class="honest">Select or create a shape draft first.</p>{/if}
           {#if selectedShapeDraftId}<p id="shape-publication-retention" class="honest">Registration publishes immutable shape bytes, authored prose, licence, and attribution. They remain available with “deleted account” attribution if you later delete your account.</p>{/if}
           {#if selectedShapeDraftId}{@const selectedShape=shapeDrafts.find((candidate)=>candidate.id===selectedShapeDraftId)}{#if selectedShape}<ul>{#each selectedShape.validation.issues as issue}<li><code>{issue.path}</code> {issue.code}: {issue.message}</li>{:else}<li>Validation clean.</li>{/each}</ul>{/if}{/if}
@@ -1324,6 +1360,13 @@
   .studio-grid aside { display: grid; align-content: start; gap: 0.5rem; overflow: auto; }
   .studio-grid section { display: grid; gap: 0.5rem; min-width: 0; }
   .studio-grid textarea { width: 100%; min-height: 42vh; padding: 0.8rem; font: 0.8rem/1.4 ui-monospace, monospace; }
+  .validation-summary, .validation-sections > section { padding: 0.8rem; border: 1px solid var(--line); border-radius: 0.65rem; background: var(--panel); }
+  .validation-summary h3, .validation-sections h3 { margin: 0; font: 600 1rem var(--display-font); }
+  .validation-summary ul { display: grid; grid-template-columns: repeat(auto-fit, minmax(9rem, 1fr)); gap: 0.3rem 0.8rem; margin: 0; padding: 0; list-style: none; }
+  .validation-summary li { color: var(--muted); }
+  .validation-summary li.missing { color: var(--danger); }
+  .validation-sections { display: grid; gap: 0.6rem; }
+  .validation-sections ul { margin: 0; padding-inline-start: 1.2rem; }
   .empty-state p { max-width: 42rem; color: var(--muted); font-size: 1.05rem; }
   section + section { margin-top: 2rem; }
   li { margin: 0.45rem 0; }

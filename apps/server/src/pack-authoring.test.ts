@@ -122,6 +122,29 @@ describe("pack authoring validation", () => {
     );
   });
 
+  it("reports only the selected discriminator branch for incomplete unions", () => {
+    const outcome = structuredClone(fixture) as unknown as {
+      objective: { successConditions: unknown[] };
+    };
+    outcome.objective.successConditions[0] = { kind: "outcome" };
+    const outcomeIssues = validatePackDocument(outcome).issues;
+    expect(outcomeIssues).toEqual([
+      expect.objectContaining({ code: "SCHEMA_REQUIRED", path: "/objective/successConditions/0/result" }),
+    ]);
+
+    const structure = structuredClone(fixture) as unknown as {
+      objective: { successConditions: unknown[] };
+    };
+    structure.objective.successConditions[0] = {
+      kind: "structural_feature",
+      feature: { kind: "feature", feature: { kind: "outpost", color: "white" } },
+    };
+    const structureIssues = validatePackDocument(structure).issues;
+    expect(structureIssues).toEqual([
+      expect.objectContaining({ code: "SCHEMA_REQUIRED", path: "/objective/successConditions/0/feature/feature/square" }),
+    ]);
+  });
+
   it("combines shipped chess lints and executable-policy checks", () => {
     const candidate = structuredClone(fixture) as DrillPackDefinition;
     (candidate.spine![0] as { moveUci: string }).moveUci = "a1a8";

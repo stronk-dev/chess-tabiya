@@ -614,7 +614,7 @@ export interface PackDraft {
   readonly document: unknown;
   readonly digest: string;
   readonly state: "draft" | "registered" | "withdrawn";
-  readonly validation: { readonly valid: boolean; readonly issues: readonly { readonly code: string; readonly path: string; readonly message: string }[] };
+  readonly validation: { readonly valid: boolean; readonly issues: readonly { readonly severity?: "error" | "warning"; readonly code: string; readonly path: string; readonly message: string }[] };
 }
 
 export type PackValidation = PackDraft["validation"];
@@ -625,7 +625,7 @@ export interface ShapeDraft {
   readonly document: unknown;
   readonly digest: string;
   readonly state: "draft" | "registered" | "withdrawn";
-  readonly validation: { readonly valid: boolean; readonly issues: readonly { readonly code: string; readonly path: string; readonly message: string }[]; readonly probeMatches?: boolean };
+  readonly validation: { readonly valid: boolean; readonly issues: readonly { readonly severity?: "error" | "warning"; readonly code: string; readonly path: string; readonly message: string }[]; readonly probeMatches?: boolean };
 }
 
 export interface SelectMoveRequest {

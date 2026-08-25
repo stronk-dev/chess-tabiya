@@ -21,6 +21,7 @@ import type {
   PackDraft,
   PackSummary,
   RunSummary,
+  ShapeDraft,
 } from "./api.js";
 import { HistoryRouter } from "./router.js";
 import { WriterSession, type KeyValueStorage } from "./writer-session.js";
@@ -463,6 +464,41 @@ describe("application shell", () => {
     await vi.waitFor(() => expect(document.body.textContent).toContain("JSON is not valid:"));
     expect(lintPackDraft).toHaveBeenCalledTimes(callsBeforeMalformed);
     expect(updatePackDraft).not.toHaveBeenCalled();
+    await unmount(component);
+  });
+
+  it("shows every rejected shape action instead of dropping the promise", async () => {
+    history.replaceState(null, "", "/create");
+    const shapeDraft: ShapeDraft = {
+      id: "shape-draft-one",
+      shapeId: "shape-one",
+      document: { id: "shape-one" },
+      digest,
+      state: "draft",
+      validation: { valid: true, issues: [] },
+    };
+    const shapeApi: DrillClientApi = {
+      ...api(),
+      async packDrafts() { return []; },
+      async shapeDrafts() { return [shapeDraft]; },
+      async createShapeDraft() { throw new Error("create shape failed"); },
+      async updateShapeDraft() { throw new Error("save shape failed"); },
+      async lintShapeDraft() { throw new Error("lint shape failed"); },
+      async registerShapeDraft() { throw new Error("register shape failed"); },
+    };
+    const component = mount(App, { target: target(), props: { api: shapeApi, router: new HistoryRouter(window), storage: new MemoryStorage() } });
+
+    await vi.waitFor(() => expect(document.body.textContent).toContain("Paste a v0.27 pack to begin."));
+    document.querySelector<HTMLButtonElement>("aside[aria-label='Your shape drafts'] button")!.click();
+    for (const [label, message] of [
+      ["Create shape draft", "create shape failed"],
+      ["Save shape", "save shape failed"],
+      ["Lint + probe", "lint shape failed"],
+      ["Register community shape", "register shape failed"],
+    ] as const) {
+      [...document.querySelectorAll<HTMLButtonElement>("button")].find((button) => button.textContent === label)!.click();
+      await vi.waitFor(() => expect(document.querySelector<HTMLElement>("p[role='alert']")?.textContent).toBe(message));
+    }
     await unmount(component);
   });
 

@@ -2630,45 +2630,57 @@
     {
       "id": "AUT-a4",
       "sourceState": "queued",
-      "state": "queued",
+      "state": "completed",
       "capability": "theory_content",
       "owner": "content-and-theory",
-      "assignment": "capability:theory_content",
+      "assignment": "closed",
       "sourceDocument": "ux-authoring-and-library.md",
       "sourceSection": "§5 C2/C3",
       "sourceHeading": "Authoring and library — `ux-authoring-and-library.md`",
       "summary": "Split *incomplete* from *wrong*; present the required-field set as a checklist; collapse the `oneOf` explosion by filtering on the discriminating key **before** display",
       "legacyRoute": "none",
       "note": "C3 must land with C1 or continuous linting makes things worse — see the ordering objection at the end",
-      "sourceDigest": "sha256:86a1777c1dcc7f432fc6d5ce6c4683ea042c1f1cb6077a94f036715ce8c6ff8f"
+      "sourceDigest": "sha256:86a1777c1dcc7f432fc6d5ce6c4683ea042c1f1cb6077a94f036715ce8c6ff8f",
+      "completion": {
+        "completedOn": "2026-08-25",
+        "evidence": "shared validator selects discriminated oneOf branches; Studio renders schema-bound required checklist plus separate incomplete, wrong, and warning sections"
+      }
     },
     {
       "id": "AUT-a5",
       "sourceState": "queued",
-      "state": "queued",
+      "state": "completed",
       "capability": "theory_content",
       "owner": "content-and-theory",
-      "assignment": "capability:theory_content",
+      "assignment": "closed",
       "sourceDocument": "ux-authoring-and-library.md",
       "sourceSection": "§9 G5",
       "sourceHeading": "Authoring and library — `ux-authoring-and-library.md`",
       "summary": "Add the shape editor's missing error path — four handlers have no `try`/`catch` and no error element",
       "legacyRoute": "none",
-      "sourceDigest": "sha256:2fbe14f7c32d993b4481c01254155d6386f78fa28d9c94478b88ee9ec0e8300d"
+      "sourceDigest": "sha256:2fbe14f7c32d993b4481c01254155d6386f78fa28d9c94478b88ee9ec0e8300d",
+      "completion": {
+        "completedOn": "2026-08-25",
+        "evidence": "all four shape create/save/lint/register handlers catch rejected operations in a visible alert; lint refreshes displayed validation"
+      }
     },
     {
       "id": "AUT-a6",
       "sourceState": "queued",
-      "state": "queued",
+      "state": "completed",
       "capability": "theory_content",
       "owner": "content-and-theory",
-      "assignment": "capability:theory_content",
+      "assignment": "closed",
       "sourceDocument": "ux-authoring-and-library.md",
       "sourceSection": "§3 A3",
       "sourceHeading": "Authoring and library — `ux-authoring-and-library.md`",
       "summary": "Derive the version string from the schema `$id`. The studio's only instructional string names format **0.8**; the shipped schema is **0.27**",
       "legacyRoute": "none",
-      "sourceDigest": "sha256:0cd6788548dd3748920c1f59c8465fbbae538d837d69427450f88358803ee91d"
+      "sourceDigest": "sha256:0cd6788548dd3748920c1f59c8465fbbae538d837d69427450f88358803ee91d",
+      "completion": {
+        "completedOn": "2026-08-25",
+        "evidence": "Studio pack-format instruction imports the schema-bound DRILL_PACK_SCHEMA_VERSION constant"
+      }
     },
     {
       "id": "AUT-a7",

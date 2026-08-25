@@ -66,9 +66,12 @@ While a mutable pack is selected, the client debounces the editor buffer for 300
 unsaved bytes to `POST /packs/drafts/:id/lint`. Superseded responses cannot replace newer results,
 malformed JSON is reported locally without a request, and transport failure is distinct from a
 validation result. Save remains available for incomplete work; playtest stays disabled until the
-current unsaved buffer is validation-clean. The result list still exposes validator paths and codes;
-grouping incomplete fields separately from contradictory content is a later presentation contract,
-not implied by the live wiring.
+current unsaved buffer is validation-clean. The editor derives its format label from the schema
+version constant and its ten-field checklist from a schema-bound required-field constant. Validation
+renders missing required fields separately from wrong values and warnings. Discriminated `oneOf`
+unions are filtered at the shared validator boundary, so an `outcome` condition reports only the
+selected outcome arm and a structural feature reports only its selected `kind`, identically in Studio
+and `make pack-check`.
 
 `POST /runs/:id/distill` lets a run host turn played branches into an ordinary
 learner-owned draft with `seedKind: run`. It copies only recorded move facts,
@@ -80,12 +83,13 @@ impossible until a human supplies and grounds the missing judgment.
 The distillation emitter validates the completed document before returning it
 and refuses `EMITTED_PACK_INVALID`, matching every other pack emitter.
 
-## Pack format 0.8
+## Publication posture introduced in pack format 0.8
 
-Schema 0.8 narrows `reviewStatus` to `schema_example | draft | published` and removes the
+Format 0.8 narrowed `reviewStatus` to `schema_example | draft | published` and removed the
 typed `reviewers` property. Because provenance remains open for historical metadata, old
 `reviewers` arrays still parse but have no trust-bearing consumer. Published packs require
-sources; Studio alone writes the published state.
+sources; Studio alone writes the published state. This is historical provenance behavior, not the
+current format number shown by the editor.
 ## Shape-entry authoring
 
 Shape-entry authoring extends the pack workflow described above. Shape drafts use
@@ -93,3 +97,5 @@ Shape-entry authoring extends the pack workflow described above. Shape drafts us
 immutable `/register`, and `/shapes/:id/export`. Official ids are reserved; channel is
 server-derived. Migration 10 stores `shape_drafts` and `registered_shapes`, and account
 deletion withdraws mutable drafts while retaining published bytes and attribution.
+Create, save, lint/probe, and register failures all render through one visible alert path; lint
+results replace the selected draft's displayed validation instead of leaving the saved result stale.

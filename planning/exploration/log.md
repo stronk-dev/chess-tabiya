@@ -7760,3 +7760,16 @@ campaigns remain valid as the accepted contract requires.
 **Verification:** the linear fixture names exactly act 1 layers 1 and 2 without an error, while the
 width-3 seed emits no path-width warning. The focused seven-test campaign-validation suite and the
 server typecheck pass. AUT-a17 and [[D1552]] close on those executable fixtures.
+
+## 2026-08-25 — Studio validation becomes author-facing instead of schema-shaped
+
+**What landed:** continuous pack lint now filters discriminated unions at the shared validator, so
+the CLI and Studio both report only the arm selected by the document's `kind` or `type`. Studio
+separates missing required fields from wrong values and warnings, shows all ten top-level required
+fields as a checklist, and derives the displayed pack-format version from the schema constant. The
+shape editor now renders failures from create, save, lint/probe, and register; a successful lint
+also replaces the stale saved validation shown beside the editor.
+
+**Verification:** actual 8-arm success-condition and 18-arm structural-feature fixtures each reduce
+to one selected-arm missing-field error. Four focused files pass 80 tests; schema, server, and Svelte
+typechecks pass with zero Svelte warnings. AUT-a4, AUT-a5, AUT-a6, and [[D1553]] close.

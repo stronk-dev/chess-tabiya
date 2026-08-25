@@ -92,19 +92,22 @@ export interface PackSiblingLookup {
 }
 
 let schemaValidator: ValidateFunction | undefined;
+let schemaDocument: Record<string, unknown> | undefined;
+
+function livingSchema(): Record<string, unknown> {
+  if (schemaDocument !== undefined) return schemaDocument;
+  const path = fileURLToPath(
+    new URL("../../../schemas/drill_pack.schema.json", import.meta.url),
+  );
+  schemaDocument = JSON.parse(readFileSync(path, "utf8")) as Record<string, unknown>;
+  return schemaDocument;
+}
 
 function validator(): ValidateFunction {
   if (schemaValidator !== undefined) return schemaValidator;
-  const schemaPath = fileURLToPath(
-    new URL("../../../schemas/drill_pack.schema.json", import.meta.url),
-  );
-  const schema = JSON.parse(readFileSync(schemaPath, "utf8")) as Record<
-    string,
-    unknown
-  >;
   const ajv = new Ajv2020({ allErrors: true, strict: true });
   addFormats(ajv);
-  schemaValidator = ajv.compile(schema);
+  schemaValidator = ajv.compile(livingSchema());
   return schemaValidator;
 }
 
@@ -143,6 +146,121 @@ function schemaIssue(error: ErrorObject): PackValidationIssue {
     code: `SCHEMA_${error.keyword.toUpperCase()}`,
     path: schemaPath(error),
     message: error.message ?? `failed ${error.keyword}`,
+  });
+}
+
+function pointerValue(root: unknown, pointer: string): unknown {
+  if (pointer === "" || pointer === "#") return root;
+  const path = pointer.startsWith("#") ? pointer.slice(1) : pointer;
+  if (!path.startsWith("/")) return undefined;
+  return path.slice(1).split("/").reduce<unknown>((value, part) => {
+    if (value === null || typeof value !== "object") return undefined;
+    const key = part.replaceAll("~1", "/").replaceAll("~0", "~");
+    return (value as Record<string, unknown>)[key];
+  }, root);
+}
+
+interface DiscriminatorSelection {
+  readonly instancePath: string;
+  readonly oneOfPath: string;
+  readonly branchIndex: number;
+}
+
+interface DiscriminatedUnion {
+  readonly discriminator: "kind" | "type";
+  readonly branches: ReadonlyMap<string, readonly number[]>;
+}
+
+let discriminatedUnions: readonly DiscriminatedUnion[] | undefined;
+
+function schemaDiscriminatedUnions(): readonly DiscriminatedUnion[] {
+  if (discriminatedUnions !== undefined) return discriminatedUnions;
+  const found: DiscriminatedUnion[] = [];
+  const visit = (candidate: unknown): void => {
+    if (candidate === null || typeof candidate !== "object") return;
+    if (Array.isArray(candidate)) {
+      candidate.forEach(visit);
+      return;
+    }
+    const object = candidate as Record<string, unknown>;
+    if (Array.isArray(object.oneOf)) {
+      for (const discriminator of ["kind", "type"] as const) {
+        const branches = new Map<string, number[]>();
+        for (const [index, branch] of object.oneOf.entries()) {
+          if (branch === null || typeof branch !== "object" || Array.isArray(branch)) continue;
+          const properties = (branch as Record<string, unknown>).properties;
+          if (properties === null || typeof properties !== "object" || Array.isArray(properties)) continue;
+          const property = (properties as Record<string, unknown>)[discriminator];
+          if (property === null || typeof property !== "object" || Array.isArray(property)) continue;
+          const declaration = property as Record<string, unknown>;
+          const values = typeof declaration.const === "string"
+            ? [declaration.const]
+            : Array.isArray(declaration.enum)
+              ? declaration.enum.filter((value): value is string => typeof value === "string")
+              : [];
+          for (const value of values) branches.set(value, [...(branches.get(value) ?? []), index]);
+        }
+        if (branches.size > 0 && object.oneOf.every((_, index) => [...branches.values()].some((indices) => indices.includes(index)))) {
+          found.push(Object.freeze({ discriminator, branches }));
+        }
+      }
+    }
+    Object.values(object).forEach(visit);
+  };
+  visit(livingSchema());
+  discriminatedUnions = Object.freeze(found);
+  return discriminatedUnions;
+}
+
+function discriminatorSelection(error: ErrorObject, value: unknown, errors: readonly ErrorObject[]): DiscriminatorSelection | undefined {
+  if (error.keyword !== "oneOf") return undefined;
+  const instance = pointerValue(value, error.instancePath);
+  if (instance === null || typeof instance !== "object" || Array.isArray(instance)) return undefined;
+  for (const discriminator of ["kind", "type"] as const) {
+    const selectedValue = (instance as Record<string, unknown>)[discriminator];
+    if (typeof selectedValue !== "string") continue;
+    const mismatchedValues = new Set(errors.flatMap((candidate) => {
+      if (!(["const", "enum"] as const).includes(candidate.keyword as "const" | "enum") || candidate.instancePath !== `${error.instancePath}/${discriminator}`) return [];
+      const branchMatch = candidate.schemaPath.match(/^(.*\/oneOf)\/\d+\/properties\/(kind|type)\/(const|enum)$/);
+      if (branchMatch?.[1] !== error.schemaPath || branchMatch[2] !== discriminator) return [];
+      const allowed = candidate.keyword === "const" ? [candidate.params.allowedValue] : candidate.params.allowedValues;
+      return Array.isArray(allowed) ? allowed.filter((value): value is string => typeof value === "string") : [];
+    }));
+    const matching = schemaDiscriminatedUnions().filter((union) => {
+      if (union.discriminator !== discriminator || union.branches.get(selectedValue)?.length !== 1) return false;
+      if (union.branches.size !== new Set([...mismatchedValues, selectedValue]).size) return false;
+      return [...mismatchedValues].every((candidate) => union.branches.has(candidate));
+    });
+    const branchIndices = new Set(matching.map((union) => union.branches.get(selectedValue)![0]!));
+    if (branchIndices.size === 1) return Object.freeze({ instancePath: error.instancePath, oneOfPath: error.schemaPath, branchIndex: [...branchIndices][0]! });
+  }
+  return undefined;
+}
+
+function discriminatorAwareErrors(errors: readonly ErrorObject[], value: unknown): readonly ErrorObject[] {
+  const oneOfGroups = errors
+    .filter((error) => error.keyword === "oneOf")
+    .map((error) => Object.freeze({ error, selection: discriminatorSelection(error, value, errors) }));
+  const selections = oneOfGroups.flatMap(({ selection }) => selection === undefined ? [] : [selection]);
+  if (selections.length === 0) return errors;
+  return errors.filter((error) => {
+    const shadowed = oneOfGroups.find(({ error: group, selection }) =>
+      selection === undefined &&
+      selections.some((selected) => selected.instancePath === group.instancePath) &&
+      (error.schemaPath === group.schemaPath || error.schemaPath.startsWith(`${group.schemaPath}/`)) &&
+      (error.instancePath === group.instancePath || error.instancePath.startsWith(`${group.instancePath}/`))
+    );
+    if (shadowed !== undefined) return false;
+    const selection = selections
+      .filter((candidate) => error.schemaPath === candidate.oneOfPath || error.schemaPath.startsWith(`${candidate.oneOfPath}/`))
+      .filter((candidate) => error.instancePath === candidate.instancePath || error.instancePath.startsWith(`${candidate.instancePath}/`))
+      .sort((left, right) => right.instancePath.length - left.instancePath.length)[0];
+    if (selection === undefined) return true;
+    if (error.schemaPath === selection.oneOfPath) return false;
+    const branchPrefix = `${selection.oneOfPath}/`;
+    const branchToken = error.schemaPath.slice(branchPrefix.length).split("/", 1)[0] ?? "";
+    if (/^\d+$/.test(branchToken)) return Number(branchToken) === selection.branchIndex;
+    return true;
   });
 }
 
@@ -1364,7 +1482,7 @@ export function validatePackDocument(value: unknown, options: {
   if (!validate(value)) {
     return Object.freeze({
       valid: false,
-      issues: Object.freeze((validate.errors ?? []).map(schemaIssue)),
+      issues: Object.freeze(discriminatorAwareErrors(validate.errors ?? [], value).map(schemaIssue)),
     });
   }
 

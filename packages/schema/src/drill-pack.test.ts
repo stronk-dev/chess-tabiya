@@ -4,7 +4,7 @@ import Ajv2020 from "ajv/dist/2020.js";
 import addFormats from "ajv-formats";
 import { describe, expect, it } from "vitest";
 
-import { DRILL_PACK_SCHEMA_VERSION } from "./index.js";
+import { DRILL_PACK_REQUIRED_FIELDS, DRILL_PACK_SCHEMA_VERSION } from "./index.js";
 import {
   CHECKPOINT_ACTIONS,
   DEVIATION_MISTAKES,
@@ -63,6 +63,7 @@ describe("drill_pack.schema.json v0.27", () => {
     });
     expect(DRILL_PACK_SCHEMA_VERSION).toBe("0.27");
     expect(schema.description).toContain(`v${DRILL_PACK_SCHEMA_VERSION}`);
+    expect(DRILL_PACK_REQUIRED_FIELDS).toEqual(schema.required);
   });
 
   it("binds schema vocabularies to the shared constants", () => {
