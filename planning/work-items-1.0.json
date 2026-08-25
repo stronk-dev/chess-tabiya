@@ -725,17 +725,21 @@
     {
       "id": "ARR-a1",
       "sourceState": "queued",
-      "state": "queued",
+      "state": "completed",
       "capability": "rehearsal",
       "owner": "core-loop",
-      "assignment": "capability:rehearsal",
+      "assignment": "closed",
       "sourceDocument": "ux-arrival-and-start.md",
       "sourceSection": "§2.3 A1",
       "sourceHeading": "Arrival and getting into a session — `ux-arrival-and-start.md`",
       "summary": "The scripted first run: the loop itself on rails over a real `startPack` run — commit, consequence, rewind, the other move, both attempts on screen",
       "legacyRoute": "none",
       "note": "fence lifted today by [[D1513]]; ~6 copy strings and a step cursor, no new runtime",
-      "sourceDigest": "sha256:54a00b80b5384169ba8ec25c695335521621485acfbdd1aa4d1dfc37145e8e93"
+      "sourceDigest": "sha256:54a00b80b5384169ba8ec25c695335521621485acfbdd1aa4d1dfc37145e8e93",
+      "completion": {
+        "completedOn": "2026-08-25",
+        "evidence": "designated persisted first-run guide derived from commit/consequence/rewind/fork boundaries; truthful pack-less objective and rewind copy; component and browser acceptance"
+      }
     },
     {
       "id": "ARR-a10",
@@ -967,32 +971,40 @@
     {
       "id": "ARR-a22",
       "sourceState": "queued",
-      "state": "queued",
+      "state": "completed",
       "capability": "rehearsal",
       "owner": "core-loop",
-      "assignment": "capability:rehearsal",
+      "assignment": "closed",
       "sourceDocument": "ux-arrival-and-start.md",
       "sourceSection": "§8.3 F1",
       "sourceHeading": "Arrival and getting into a session — `ux-arrival-and-start.md`",
       "summary": "The objective region states the promise, not the absence — *\"Nothing is authored about this position — Tabiya reads it as you play\"*",
       "legacyRoute": "none",
       "note": "1 string; pivotal detection ships",
-      "sourceDigest": "sha256:0580b201460e0041462b240840161b944efe233fc0d86144fa699fae27602116"
+      "sourceDigest": "sha256:0580b201460e0041462b240840161b944efe233fc0d86144fa699fae27602116",
+      "completion": {
+        "completedOn": "2026-08-25",
+        "evidence": "designated persisted first-run guide derived from commit/consequence/rewind/fork boundaries; truthful pack-less objective and rewind copy; component and browser acceptance"
+      }
     },
     {
       "id": "ARR-a23",
       "sourceState": "queued",
-      "state": "queued",
+      "state": "completed",
       "capability": "rehearsal",
       "owner": "core-loop",
-      "assignment": "capability:rehearsal",
+      "assignment": "closed",
       "sourceDocument": "ux-arrival-and-start.md",
       "sourceSection": "§8.3 F2",
       "sourceHeading": "Arrival and getting into a session — `ux-arrival-and-start.md`",
       "summary": "The consequence contract, said once, at the first board",
       "legacyRoute": "none",
       "note": "1 string",
-      "sourceDigest": "sha256:73be908320ad5ba22476b1be3033e7b0204ecfa23ff8b7e76ee9ecc8f3ead006"
+      "sourceDigest": "sha256:73be908320ad5ba22476b1be3033e7b0204ecfa23ff8b7e76ee9ecc8f3ead006",
+      "completion": {
+        "completedOn": "2026-08-25",
+        "evidence": "designated persisted first-run guide derived from commit/consequence/rewind/fork boundaries; truthful pack-less objective and rewind copy; component and browser acceptance"
+      }
     },
     {
       "id": "ARR-a24",
@@ -1027,17 +1039,21 @@
     {
       "id": "ARR-a3",
       "sourceState": "queued",
-      "state": "queued",
+      "state": "completed",
       "capability": "rehearsal",
       "owner": "core-loop",
-      "assignment": "capability:rehearsal",
+      "assignment": "closed",
       "sourceDocument": "ux-arrival-and-start.md",
       "sourceSection": "§2.3 A3",
       "sourceHeading": "Arrival and getting into a session — `ux-arrival-and-start.md`",
       "summary": "Name the silence at the first board, not in settings — *\"Tabiya doesn't comment while you're deciding.\"*",
       "legacyRoute": "ledger",
       "note": "[[D494]]; 1 first-run-scoped string",
-      "sourceDigest": "sha256:59d989469c1eb274b644e5b320cdd0e70c990dd0e84f4c8dce7e57eb1320662c"
+      "sourceDigest": "sha256:59d989469c1eb274b644e5b320cdd0e70c990dd0e84f4c8dce7e57eb1320662c",
+      "completion": {
+        "completedOn": "2026-08-25",
+        "evidence": "designated persisted first-run guide derived from commit/consequence/rewind/fork boundaries; truthful pack-less objective and rewind copy; component and browser acceptance"
+      }
     },
     {
       "id": "ARR-a4",
@@ -2948,17 +2964,21 @@
     {
       "id": "CLP-a10",
       "sourceState": "queued",
-      "state": "queued",
+      "state": "completed",
       "capability": "rehearsal",
       "owner": "core-loop",
-      "assignment": "capability:rehearsal",
+      "assignment": "closed",
       "sourceDocument": "ux-core-loop.md",
       "sourceSection": "§4 R2",
       "sourceHeading": "The core loop — `ux-core-loop.md`",
       "summary": "The rewind offer names what survives: *\"Your attempt is kept. Going back makes a second one.\"*",
       "legacyRoute": "none",
       "note": "copy must respect fork timing or it lies",
-      "sourceDigest": "sha256:18bfa1702ba8c6a1d8e41bb0a54ae40d7aff2b91072af4b967f6c998e44cb584"
+      "sourceDigest": "sha256:18bfa1702ba8c6a1d8e41bb0a54ae40d7aff2b91072af4b967f6c998e44cb584",
+      "completion": {
+        "completedOn": "2026-08-25",
+        "evidence": "designated persisted first-run guide derived from commit/consequence/rewind/fork boundaries; truthful pack-less objective and rewind copy; component and browser acceptance"
+      }
     },
     {
       "id": "CLP-a11",
@@ -3051,16 +3071,20 @@
     {
       "id": "CLP-a17",
       "sourceState": "queued",
-      "state": "queued",
+      "state": "completed",
       "capability": "rehearsal",
       "owner": "core-loop",
-      "assignment": "capability:rehearsal",
+      "assignment": "closed",
       "sourceDocument": "ux-core-loop.md",
       "sourceSection": "§2 C2",
       "sourceHeading": "The core loop — `ux-core-loop.md`",
       "summary": "The first commit of a run states the rule once: *\"You will play this out.\"*",
       "legacyRoute": "none",
-      "sourceDigest": "sha256:fd68fab776be4851500e6c7685b627d258a213a06d61d0573186f0c1ff4d0b45"
+      "sourceDigest": "sha256:fd68fab776be4851500e6c7685b627d258a213a06d61d0573186f0c1ff4d0b45",
+      "completion": {
+        "completedOn": "2026-08-25",
+        "evidence": "designated persisted first-run guide derived from commit/consequence/rewind/fork boundaries; truthful pack-less objective and rewind copy; component and browser acceptance"
+      }
     },
     {
       "id": "CLP-a18",

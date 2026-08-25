@@ -81,21 +81,24 @@
     {/each}
   </ol>
   {#if previewNodeId}
-    <HonestControl
-      disabled={!canConfirm}
-      reasonId="timeline-rewind-readonly"
-      reason="This read-only view can inspect earlier positions but cannot rewind the shared run."
-    >
-      {#snippet children(describedBy)}
-        <button
-          class="confirm"
-          type="button"
-          disabled={!canConfirm}
-          aria-describedby={describedBy}
-          onclick={() => onConfirm(previewNodeId)}
-        >Rewind to preview <kbd>Enter</kbd></button>
-      {/snippet}
-    </HonestControl>
+    <div class="rewind-offer">
+      <span>Your attempt is kept. Going back makes a second one.</span>
+      <HonestControl
+        disabled={!canConfirm}
+        reasonId="timeline-rewind-readonly"
+        reason="This read-only view can inspect earlier positions but cannot rewind the shared run."
+      >
+        {#snippet children(describedBy)}
+          <button
+            class="confirm"
+            type="button"
+            disabled={!canConfirm}
+            aria-describedby={describedBy}
+            onclick={() => onConfirm(previewNodeId)}
+          >Rewind to preview <kbd>Enter</kbd></button>
+        {/snippet}
+      </HonestControl>
+    </div>
   {/if}
 </section>
 
@@ -176,6 +179,17 @@
     height: 0.4rem;
     border-radius: 50%;
     background: var(--warning);
+  }
+
+  .rewind-offer {
+    display: grid;
+    gap: 0.35rem;
+  }
+
+  .rewind-offer > span {
+    color: var(--muted);
+    font-size: 0.72rem;
+    line-height: 1.3;
   }
 
   .authored-marker {

@@ -48,6 +48,7 @@
   import { playBoardEdge } from "./play-composition.js";
   import { moveSanFromUci } from "./board-input.js";
   import { checkpointAuthoredItems as selectCheckpointAuthoredItems } from "./checkpoint-authored-items.js";
+  import { rehearsalGuideStep } from "./rehearsal-guide.js";
 
   type RewindTarget =
     | { readonly nodeId: string; readonly branchId?: string }
@@ -71,6 +72,7 @@
     liveSessionKind?: SessionKind | undefined;
     seatedInContest?: boolean | undefined;
     reviewing?: boolean | undefined;
+    firstRehearsal?: boolean | undefined;
     onMove: (uci: string) => void | Promise<void>;
     onReveal?: (() => void | Promise<void>) | undefined;
     onRewind: (target: RewindTarget) => void | Promise<void>;
@@ -98,6 +100,7 @@
     onStory?: (() => void) | undefined;
     onFlip?: ((nodeId: string) => void | Promise<void>) | undefined;
     onSelectPack?: ((packId: string) => void | Promise<void>) | undefined;
+    onFirstRehearsalComplete?: (() => void) | undefined;
     registerKeyboardRegion: RegisterKeyboardRegion;
   }
 
@@ -119,6 +122,7 @@
     liveSessionKind,
     seatedInContest = false,
     reviewing = false,
+    firstRehearsal = false,
     onMove,
     onReveal,
     onRewind,
@@ -146,6 +150,7 @@
     onStory,
     onFlip,
     onSelectPack,
+    onFirstRehearsalComplete,
     registerKeyboardRegion,
   }: Props = $props();
 
@@ -203,6 +208,7 @@
   let ownMarks: readonly RunMark[] = $state([]);
   let markScope: "position" | "branch" = $state("position");
   let markTimer: ReturnType<typeof setTimeout> | undefined;
+  let guideOpenedForRunId: string | undefined = $state();
 
   function measureViewport(): void {
     viewportSupport = runViewportSupport(globalThis.innerWidth, globalThis.innerHeight);
@@ -217,6 +223,12 @@
   let boardEdge = $derived(playBoardEdge(viewportSupport.width, viewportSupport.height));
   let canWrite = $derived(snapshot.access === "writer");
   let currentNode = $derived(activeNode(run));
+  let guide = $derived(firstRehearsal ? rehearsalGuideStep(run) : undefined);
+  let objectiveSentence = $derived(
+    pack === undefined
+      ? "Nothing is authored about this position — Tabiya reads it as you play, and marks the moments worth returning to."
+      : packObjective(pack),
+  );
 
   function changedMarks(shapes: readonly DrawShape[]): void {
     if (onSaveMarks === undefined || previewNodeId !== undefined) return;
@@ -581,6 +593,17 @@
     await onRewind({ nodeId });
   }
 
+  async function rewindFirstRehearsal(): Promise<void> {
+    if (!canWrite || guide?.rewindNodeId === undefined) return;
+    await onRewind({ nodeId: guide.rewindNodeId });
+  }
+
+  async function compareFirstRehearsal(): Promise<void> {
+    if (guide?.compareBranchIds === undefined || guide.compareBranchIds.length < 2) return;
+    await onCompare(guide.compareBranchIds);
+    onFirstRehearsalComplete?.();
+  }
+
   function stepTimeline(delta: number): void {
     if (comparison !== undefined) {
       compareStep = Math.max(
@@ -776,6 +799,14 @@
   });
 
   $effect(() => {
+    if (firstRehearsal && guideOpenedForRunId !== run.id) {
+      guideOpenedForRunId = run.id;
+      compactTab = "evidence";
+      sheetOpen = true;
+    }
+  });
+
+  $effect(() => {
     comparison;
     compareStep = 0;
   });
@@ -900,9 +931,9 @@
             onOpenPivotal={openPivotalMarker}
           />
         </div>
-        <button class="objective-line" type="button" onclick={() => (objectiveOpen = true)} title={pack === undefined ? "No pack is loaded" : packObjective(pack)}>
+        <button class="objective-line" type="button" onclick={() => (objectiveOpen = true)} title={objectiveSentence}>
           <span>Objective</span>
-          <strong>{pack === undefined ? "No pack is loaded." : packObjective(pack)}</strong>
+          <strong>{objectiveSentence}</strong>
           <small>{detectedPhase.phase}</small>
         </button>
       </section>
@@ -911,7 +942,7 @@
         <div class="companion-identity">
           <div class="objective-copy">
             <p>Objective</p>
-            <h1 id="drill-title">{pack === undefined ? "No pack is loaded. Nothing is claimed about this position." : packObjective(pack)}</h1>
+            <h1 id="drill-title">{objectiveSentence}</h1>
           </div>
           {#if pack?.variantOf !== undefined}
             <section class="variant-link" aria-label="Related rehearsal">
@@ -935,6 +966,23 @@
 
         <div class="companion-scroll">
           <section id="run-support-region" class="companion-section evidence-seat" class:compact-active={compactTab === "evidence"} aria-label="Support">
+            {#if guide}
+              <section class="rehearsal-guide" aria-labelledby="rehearsal-guide-title" aria-live="polite">
+                <div class="guide-progress" aria-label={`First rehearsal, step ${guide.ordinal} of 4`}>
+                  {#each [1, 2, 3, 4] as step}
+                    <span class:reached={step <= guide.ordinal}></span>
+                  {/each}
+                </div>
+                <p>First rehearsal · {guide.ordinal} of 4</p>
+                <h2 id="rehearsal-guide-title">{guide.title}</h2>
+                {#each guide.body as sentence}<p class="guide-body">{sentence}</p>{/each}
+                {#if guide.rewindNodeId !== undefined}
+                  <button class="primary" type="button" disabled={!canWrite || busy} onclick={() => void rewindFirstRehearsal()}>Go back to the decision</button>
+                {:else if guide.compareBranchIds !== undefined}
+                  <button class="primary" type="button" disabled={guide.compareBranchIds.length < 2 || busy} onclick={() => void compareFirstRehearsal()}>Compare both attempts</button>
+                {/if}
+              </section>
+            {/if}
             {#if run.feedbackPolicy === "attempt_end" && canWrite && onReveal !== undefined}
               <section class="evidence-reveal" aria-label="Evidence disclosure">
                 <button type="button" disabled={feedbackDeliveryOpen(run) || busy} onclick={() => void onReveal?.()}>Open evidence for this position</button>
@@ -1105,7 +1153,7 @@
   <div class="modal-backdrop">
     <div class="modal objective-dialog" role="dialog" aria-modal="true" aria-labelledby="objective-dialog-title">
       <p>Objective</p>
-      <h2 id="objective-dialog-title">{pack === undefined ? "No pack is loaded. Nothing is claimed about this position." : packObjective(pack)}</h2>
+      <h2 id="objective-dialog-title">{objectiveSentence}</h2>
       <button type="button" onclick={() => (objectiveOpen = false)}>Return to the board</button>
     </div>
   </div>
@@ -1402,6 +1450,15 @@
   .guard-prompt { display:grid; gap:.65rem; margin:0; padding:.65rem; border:1px solid var(--accent); border-radius:.7rem; background:color-mix(in srgb,var(--accent) 9%,var(--panel)); }
   .guard-prompt p { margin:.2rem 0 0; font-size:.78rem; color:var(--muted); }
   .guard-actions { display:flex; flex:none; gap:.45rem; }
+  .rehearsal-guide { display:grid; gap:.45rem; padding:.8rem; border:1px solid var(--accent); border-radius:.8rem; background:color-mix(in srgb,var(--accent) 7%,var(--panel)); }
+  .rehearsal-guide > p, .rehearsal-guide h2 { margin:0; }
+  .rehearsal-guide > p:first-of-type { color:var(--accent); font:700 .62rem ui-monospace,monospace; letter-spacing:.08em; text-transform:uppercase; }
+  .rehearsal-guide h2 { font:600 1.05rem/1.2 var(--display-font); }
+  .rehearsal-guide .guide-body { color:var(--muted); font-size:.8rem; line-height:1.4; }
+  .rehearsal-guide button { justify-self:start; padding:.55rem .7rem; border:1px solid var(--accent); border-radius:.6rem; background:var(--accent); color:white; }
+  .guide-progress { display:grid; grid-template-columns:repeat(4,1fr); gap:.25rem; }
+  .guide-progress span { height:.2rem; border-radius:999px; background:var(--line); }
+  .guide-progress span.reached { background:var(--accent); }
   .assistance-control summary { cursor:pointer; }
   .assistance-grid { position:absolute; top:calc(100% + .4rem); right:0; display:grid; width:min(23rem,calc(100vw - 2rem)); gap:.45rem; padding:.7rem; border:1px solid var(--line); border-radius:.6rem; background:var(--panel); box-shadow:var(--shadow); }
   .assistance-grid label { display:flex; gap:.4rem; align-items:center; }

@@ -7586,3 +7586,28 @@ and the always-present rewind control still conflicts with the consequence-timed
 **Verification:** 35 focused objective, Group Panel and Compare component tests pass, including a
 fixture where two distinct recorded nodes share a `transposeKey`; full browser and repository
 gates follow before the checkpoint is committed.
+
+## 2026-08-25 — The first rehearsal demonstrates the loop instead of describing it
+
+**What landed:** the no-history Home action now selects the designated short consequence pack and
+starts an ordinary persisted `startPack` run. The existing Support seat carries a four-step guide
+derived solely from recorded events: decide in stated silence, play until a consequence boundary,
+rewind to the original decision, finish a genuinely forked alternative, then compare the two
+preserved attempts. The guide stores only the run id so it survives reload; it creates no tutorial
+run type, evidence, grade, or chess claim. Its rewind action cannot exist before a checkpoint,
+segment, guard, or outcome event, and its compare action cannot exist before the second branch has
+its own consequence boundary.
+
+The pack-less objective no longer leads with an internal absence. It truthfully says that nothing
+is authored and names the product promise: the position is read as play creates moments worth
+returning to. Every timeline rewind preview now says that the current attempt survives before the
+learner confirms it. [[D494]] narrows to preset naming only; ARR-a1, ARR-a3, ARR-a22, ARR-a23,
+CLP-a10 and CLP-a17 close in the executable 1.0 registry.
+
+**Verification:** 32 focused guide/screen/shell tests and the complete typecheck pass. The required
+browser suite passes 35/35 with the optional Maia latency probe skipped; its new first-user journey
+checks the real persisted run, guide reload, and unchanged board rectangle. The seven-projection
+composition matrix, mobile regions, semantic board, full Tab traversal, and all served endgame
+interaction projections remain green. Full repository verification passes 1,000 software tests,
+164 content tests, all schema/build/packaging checks, 1,354 routed ledger rows, the 569-item work
+registry and every roadmap/register/status/intent parity gate.

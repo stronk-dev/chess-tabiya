@@ -47,11 +47,15 @@ global navigation resumes. Standalone comparison is not a route: Review opens a 
 `/play/run/:runId`, where the existing controller can project and compare it.
 
 Home is useful with or without history. With history it leads with Continue and preserves the
-lease-aware resume behavior. Without history it starts the first available rehearsal directly;
+lease-aware resume behavior. Without history it starts the designated short consequence rehearsal directly;
 it never renders an empty resume card or requires a second “Go to Play” click. Due schedules and
 open coach assignments render as counts with verbs, and phase starters reuse the same registered
 pack summaries as the catalogue. The product's commit → consequence → rewind → branch loop is
-stated above the first choice instead of being discoverable only after a run starts.
+stated above the first choice instead of being discoverable only after a run starts. That first
+run is the ordinary persisted `startPack` run with a client-only, event-derived four-step guide:
+decide in deliberate silence, play to a recorded consequence boundary, rewind to the original
+decision, finish the alternative, then compare the two preserved branches. The guide survives a
+reload by retaining only its run id; it creates no tutorial run type or chess claims.
 
 The Play entry keeps workflow choices bounded. Human-like play uses the four named, calibrated
 Maia rungs already used by rated play and sends the selected `targetElo` into the run's opponent

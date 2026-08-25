@@ -154,6 +154,33 @@ afterEach(() => {
 });
 
 describe("Layer 3 screens", () => {
+  it("turns a real first run into a four-step rehearsal and opens its two preserved attempts", async () => {
+    const run = branchedRun();
+    const onCompare = vi.fn();
+    const onFirstRehearsalComplete = vi.fn();
+    const component = mount(DrillScreen, { target: target(), props: {
+      pack,
+      firstRehearsal: true,
+      snapshot: { run, access: "writer", pendingEvidence: 0, withheld: false },
+      onMove: vi.fn(), onRewind: vi.fn(), onFork: vi.fn(), onSwitchBranch: vi.fn(),
+      onCompare, onCloseCompare: vi.fn(), onContinueCheckpoint: vi.fn(),
+      onExport: vi.fn(), onStop: vi.fn(), onFirstRehearsalComplete, registerKeyboardRegion,
+    } });
+    await tick();
+
+    const guide = document.querySelector<HTMLElement>(".rehearsal-guide")!;
+    expect(guide.textContent).toContain("First rehearsal · 4 of 4");
+    expect(guide.textContent).toContain("Both consequences survived");
+    const compare = [...guide.querySelectorAll<HTMLButtonElement>("button")]
+      .find((button) => button.textContent?.includes("Compare both attempts"))!;
+    compare.click();
+    await tick();
+
+    expect(onCompare).toHaveBeenCalledWith(run.branches.slice(0, 2).map((branch) => branch.id));
+    expect(onFirstRehearsalComplete).toHaveBeenCalledOnce();
+    await unmount(component);
+  });
+
   it("keeps a drawn mark in parent state and saves it against the node where the gesture began", async () => {
     vi.useFakeTimers();
     const run = branchedRun();
@@ -367,7 +394,7 @@ describe("Layer 3 screens", () => {
       onMove: vi.fn(), onRewind: vi.fn(), onFork: vi.fn(), onSwitchBranch: vi.fn(), onCompare: vi.fn(), onCloseCompare: vi.fn(), onContinueCheckpoint: vi.fn(), onExport: vi.fn(), onStop: vi.fn(), registerKeyboardRegion,
     } });
     await tick();
-    expect(document.body.textContent).toContain("No pack is loaded. Nothing is claimed about this position.");
+    expect(document.body.textContent).toContain("Nothing is authored about this position — Tabiya reads it as you play");
     expect(document.querySelector<HTMLButtonElement>(".shape-marker")?.textContent).toContain("Carlsbad structure");
     document.querySelector<HTMLButtonElement>(".shape-marker")!.click(); await tick();
     expect(document.querySelector(".shape-panel")?.textContent).toContain("Named plans for this structure — general to the kind of position, not advice for this one.");

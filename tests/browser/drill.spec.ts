@@ -95,6 +95,25 @@ const ENDGAME_INTERACTION_PACKS = [
 
 test.beforeEach(async ({ page }) => register(page));
 
+test("a first learner enters the real rehearsal loop with a persistent event-derived guide", async ({ page }) => {
+  await page.getByRole("link", { name: "Home" }).click();
+  await page.getByRole("button", { name: "Start the first rehearsal" }).click();
+  await expect(page).toHaveURL(/\/play\/run\/run-/u);
+  await expect(page.getByLabel("Chessboard")).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Make one decision." })).toBeVisible();
+  await expect(page.getByText("Tabiya does not comment while you are deciding.", { exact: false })).toBeVisible();
+  await expect(page.getByText("This attempt will stay recorded.", { exact: false })).toBeVisible();
+  const viewport = page.viewportSize();
+  if (viewport === null) throw new Error("Playwright did not report a viewport");
+  await assertRunViewport(page, viewport);
+
+  const runId = page.url().split("/").at(-1)!;
+  expect(await page.evaluate(() => localStorage.getItem("tabiya.first-rehearsal.v1.run"))).toBe(runId);
+  await page.reload();
+  await expect(page.getByRole("heading", { name: "Make one decision." })).toBeVisible();
+  await assertRunViewport(page, viewport);
+});
+
 test("imports one game, opens a grounded story, re-enters play, and exports original plus branch", async ({ page }) => {
   await page.getByRole("link", { name: "Review" }).click();
   await page.getByLabel("PGN").fill(`[Event "Browser import"]
@@ -175,7 +194,7 @@ test("Just Play reaches a Carlsbad and opens a guided shape marker without mutat
   await page.getByRole("button", { name: "Start and keep the game" }).click();
   await expect(page.getByLabel("Chessboard")).toBeVisible();
   await expect(page.getByRole("button", { name: /Carlsbad structure/ })).toHaveCount(0);
-  await expect(page.getByText("No pack is loaded. Nothing is claimed about this position.")).toBeVisible();
+  await expect(page.getByRole("heading", { name: /Nothing is authored about this position/ })).toBeVisible();
 
   await move(page, "c7", "c6", "black");
   const marker = page.getByRole("button", { name: /Carlsbad structure/ });
@@ -547,7 +566,7 @@ test("terminal flip preserves the source and milestones link back into played ru
   const sourceId = page.url().split("/").at(-1)!;
   await page.getByRole("button", { name: "Replay this as Black" }).click();
   await expect(page).toHaveURL(/\/play\/run\/flip-/);
-  await expect(page.getByText("No pack is loaded. Nothing is claimed about this position.")).toBeVisible();
+  await expect(page.getByRole("heading", { name: /Nothing is authored about this position/ })).toBeVisible();
   await expect(page.getByLabel("Opposite-side replay source")).toContainText(sourceId);
   await page.goto("/learn");
   await expect(page.getByRole("heading", { name: "Milestones" })).toBeVisible();
@@ -1158,6 +1177,7 @@ test("a granted spectator follows a run without receiving a write control", asyn
   await expect(page.getByText("Active line 3 plies")).toBeVisible();
   await expect(spectator.getByText("Active line 3 plies")).toBeVisible({ timeout: 4_000 });
   await spectator.getByRole("button", { name: /^Ply 1:/ }).click();
+  await expect(spectator.getByText("Your attempt is kept. Going back makes a second one.")).toBeVisible();
   const rewind = spectator.getByRole("button", { name: /^Rewind to preview/ });
   await expect(rewind).toBeDisabled();
   await expect(rewind).toHaveAttribute("aria-describedby", "timeline-rewind-readonly");
@@ -1449,7 +1469,7 @@ test("@matrix mobile shell, settings, and install manifest preserve the run regi
       expect(await page.getByLabel("Chessboard").boundingBox()).toEqual(calmRect);
     }
     await page.locator(".objective-line").click();
-    await expect(page.getByRole("dialog", { name: /No pack is loaded/ })).toBeVisible();
+    await expect(page.getByRole("dialog", { name: /Nothing is authored about this position/ })).toBeVisible();
     expect(await page.getByLabel("Chessboard").boundingBox()).toEqual(calmRect);
     await page.getByRole("button", { name: "Return to the board" }).click();
   }

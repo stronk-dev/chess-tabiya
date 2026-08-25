@@ -152,7 +152,8 @@ to resume a position run without fetching a pack. The Play route now supplies Ju
 initial position or legal FEN, learner side, and human-common or strong-engine resistance.
 The controller rebuilds opponent requests from persisted run identity, including initial
 opponent turns, and the ordinary board/timeline/branch/compare/export surfaces remain active.
-The objective region explicitly says that no pack is loaded and nothing is claimed.
+The pack-less objective region states the same absence as a product promise: nothing is authored
+about the position, so Tabiya reads it as play creates recorded moments worth returning to.
 
 The public pack projection still omits annotations, deviations, claims, plan
 classes, concepts, and checkpoint triggers instead of relying on client-side
@@ -288,6 +289,13 @@ The drill screen composes three regions:
   live objective-state chip, branch switching, and compare selection. A switch carries
   both the leaf node and branch id, so an empty fork or another shared-node state remains
   observable and selects the intended branch rather than whichever branch the node implies.
+
+The designated first rehearsal adds no fourth region. Its narration occupies the existing Support
+seat beside the board (or the existing compact sheet) and derives its step only from committed run
+events. It cannot offer rewind before a checkpoint, segment, guard, or outcome boundary; after the
+rewind it cannot claim a second attempt until `branch.forked` exists. The compare action uses the
+two recorded branch ids and retires the client-only guide. Any timeline rewind preview states that
+the current attempt survives before confirmation.
 
 The checkpoint sheet takes focus and exposes continue, rewind, compare when
 the authored checkpoint allows it, and stop. Objective transitions are never

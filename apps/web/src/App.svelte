@@ -76,6 +76,17 @@
   );
   const router = untrack(() => routerProp ?? new HistoryRouter());
   const storage = untrack(() => storageProp);
+  const FIRST_REHEARSAL_RUN_KEY = "tabiya.first-rehearsal.v1.run";
+  function firstRehearsalStorage(): KeyValueStorage | undefined {
+    if (storage !== undefined) return storage;
+    try { return globalThis.localStorage; } catch { return undefined; }
+  }
+  function storedFirstRehearsalRunId(): string | undefined {
+    const value = firstRehearsalStorage()?.getItem(FIRST_REHEARSAL_RUN_KEY);
+    return value === null || value === undefined || value === "" ? undefined : value;
+  }
+  let firstRehearsalRunId: string | undefined = $state(storedFirstRehearsalRunId());
+  let startingFirstRehearsal = false;
   const themeController = provideTheme(new ThemeController(storage));
   const MIN_LIVE_VOTE_OPTIONS = 2;
   const MAX_LIVE_VOTE_OPTIONS = 8;
@@ -84,7 +95,13 @@
 
   const controller = new DrillSessionController(api, {
     ...(storage === undefined ? {} : { storage }),
-    onRunStarted: ({ runId }) => router.navigate(routePath({ name: "run", runId })),
+    onRunStarted: ({ runId }) => {
+      if (startingFirstRehearsal) {
+        firstRehearsalRunId = runId;
+        firstRehearsalStorage()?.setItem(FIRST_REHEARSAL_RUN_KEY, runId);
+      }
+      router.navigate(routePath({ name: "run", runId }));
+    },
   });
   let route: AppRoute = $state(router.route);
   let session: DrillSessionState = $state(controller.state);
@@ -192,6 +209,9 @@
       return pack === undefined ? [] : [pack];
     }),
   );
+  let firstRehearsalPack = $derived(
+    packs.find((pack) => pack.id === "conversion-up-a-piece") ?? phaseStarters[0],
+  );
   let openAssignments = $derived(assignedPacks.filter((assignment) => assignment.withdrawnAt === null));
   let selectedPackDraft = $derived(drafts.find((candidate) => candidate.id === selectedDraftId));
   let selectedPackRegistrationBlock = $derived(registrationBlockReason(selectedPackDraft));
@@ -208,6 +228,20 @@
   function navigate(path: string): void {
     if (shellHelpOpen) closeShellHelp();
     router.navigate(path);
+  }
+
+  async function startFirstRehearsal(packId: string): Promise<void> {
+    startingFirstRehearsal = true;
+    try {
+      await controller.startPack(packId);
+    } finally {
+      startingFirstRehearsal = false;
+    }
+  }
+
+  function completeFirstRehearsal(): void {
+    firstRehearsalRunId = undefined;
+    firstRehearsalStorage()?.setItem(FIRST_REHEARSAL_RUN_KEY, "");
   }
 
   function focusPrimaryNavigation(): void {
@@ -756,9 +790,9 @@
         <section class="start-card" aria-labelledby="start-title">
           <p class="eyebrow">Start here</p>
           <h2 id="start-title">Choose one real position. Your attempt begins immediately.</h2>
-          {#if phaseStarters[0]}
-            <p>{phaseStarters[0].objectiveSummary}</p>
-            <button class="primary" type="button" onclick={() => controller.startPack(phaseStarters[0]!.id)}>Start the first rehearsal</button>
+          {#if firstRehearsalPack}
+            <p>{firstRehearsalPack.objectiveSummary}</p>
+            <button class="primary" type="button" onclick={() => void startFirstRehearsal(firstRehearsalPack!.id)}>Start the first rehearsal</button>
           {:else}
             <p>No rehearsal pack is available from this deployment.</p>
           {/if}
@@ -820,6 +854,7 @@
         liveSessionKind={activeLiveDetail?.session.kind}
         seatedInContest={session.viewer?.seatedInContest}
         reviewing={session.viewer?.reviewing}
+        firstRehearsal={session.runState.run.id === firstRehearsalRunId}
         onMove={(uci) => controller.move(uci)}
         onReveal={() => controller.reveal()}
         onRewind={(target) => controller.rewind(target)}
@@ -847,6 +882,7 @@
         onStory={session.runState.run.events.some((event) => event.type === "outcome.reached") ? () => navigate(routePath({ name: "story", runId: session.runState!.run.id })) : undefined}
         onFlip={(nodeId) => flipRun(session.runState!.run.id, nodeId)}
         onSelectPack={(packId) => controller.startPack(packId)}
+        onFirstRehearsalComplete={completeFirstRehearsal}
         registerKeyboardRegion={keyboardDispatcher.registerRegion}
       />
       {#if activeLiveDetail}
