@@ -605,6 +605,7 @@ describe("server-side feedback withholding", () => {
       alternative.id,
       [mainBranch!.id, alternativeBranch!.id],
     );
+    expect(withheld.machineFeedback).toBe("withheld");
     expect(withheld.objectiveTimelines[mainBranch!.id]![0]!.evidenceRefs).toEqual([
       rulesEvidenceRef("material"),
     ]);
@@ -612,6 +613,8 @@ describe("server-side feedback withholding", () => {
       rulesEvidenceRef("material"),
     ]);
     expect(withheld.evidence).toEqual({ [mainBranch!.id]: [], [alternativeBranch!.id]: [] });
+    expect(withheld.consequences[mainBranch!.id]!.deepestScore).toBeNull();
+    expect(withheld.consequences[alternativeBranch!.id]!.deepestScore).toBeNull();
 
     const revealed = reachCheckpoint(alternative, "reveal", at).run;
     environment.storage.save(revealed, "writer-a");
@@ -619,6 +622,7 @@ describe("server-side feedback withholding", () => {
       revealed.id,
       [mainBranch!.id, alternativeBranch!.id],
     );
+    expect(visible.machineFeedback).toBe("available");
     expect(visible.objectiveTimelines[mainBranch!.id]![0]!.evidenceRefs).toContain(
       engineEvidenceRef("main-eval"),
     );
@@ -639,6 +643,8 @@ describe("server-side feedback withholding", () => {
         score: { kind: "mate", movesTo: -3 },
       }),
     ]);
+    expect(visible.consequences[mainBranch!.id]!.deepestScore).toEqual({ plyOffset: 1, score: { kind: "cp", value: 18 } });
+    expect(visible.consequences[alternativeBranch!.id]!.deepestScore).toEqual({ plyOffset: 1, score: { kind: "mate", movesTo: -3 } });
   });
 
   it("segment_end stays closed at the first checkpoint and opens on segment completion", async () => {

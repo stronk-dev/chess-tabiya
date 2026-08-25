@@ -198,26 +198,28 @@
     </HonestControl>
   </div>
 
-  <section class="trajectory" aria-label="Recorded engine evaluation">
-    <h3>Recorded engine evaluation</h3>
-    <span class="fork-marker">Fork</span>
-    {#each comparison.columns as column}
-      <div class="trajectory-row">
-        <strong>{column.label}</strong>
-        <div class="evidence-cell" data-ply-offset="0">
-          {#each (trajectories[column.branchId] ?? []).filter((entry) => entry.plyOffset === 0) as entry}
-            <span class="evidence-entry">{score(entry)}</span>
-          {/each}
+  {#if comparison.machineFeedback === "available"}
+    <section class="trajectory" aria-label="Recorded engine evaluation">
+      <h3>Recorded engine evaluation</h3>
+      <span class="fork-marker">Fork</span>
+      {#each comparison.columns as column}
+        <div class="trajectory-row">
+          <strong>{column.label}</strong>
+          <div class="evidence-cell" data-ply-offset="0">
+            {#each (trajectories[column.branchId] ?? []).filter((entry) => entry.plyOffset === 0) as entry}
+              <span class="evidence-entry">{score(entry)}</span>
+            {/each}
+          </div>
         </div>
-      </div>
-    {/each}
-  </section>
+      {/each}
+    </section>
+  {/if}
 
   <section class="strip-band" aria-label="Recorded per-branch differences" data-evidence-consumer="compare.structure_strip">
     <h3>Recorded differences by branch</h3>
     {#each comparison.columns as column}
       <article><strong>{column.label}</strong>
-        <div class="sparkline" aria-label={`${column.label} recorded evaluation points`}>{#each strips[column.branchId]?.evalTrail ?? [] as point}<span data-ply-offset={point.plyOffset} title={score({ ...point, evidenceRefs: [], kind: "eval", source: "engine_validated" })}>●</span>{/each}</div>
+        {#if comparison.machineFeedback === "available"}<div class="sparkline" aria-label={`${column.label} recorded evaluation points`}>{#each strips[column.branchId]?.evalTrail ?? [] as point}<span data-ply-offset={point.plyOffset} title={score({ ...point, evidenceRefs: [], kind: "eval", source: "engine_validated" })}>●</span>{/each}</div>{/if}
         <details><summary>Structure and timing facts</summary>{#each strips[column.branchId]?.structure ?? [] as entry}<p>+{entry.plyOffset}: {entry.observation ? renderStructuralObservation(entry.observation) : entry.sentence} {entry.attribution}.</p>{/each}{#each strips[column.branchId]?.timing ?? [] as entry}<p>+{entry.plyOffset}: {entry.sentence} {entry.attribution}.</p>{/each}</details>
         <details><summary>Piece routes</summary>{#each strips[column.branchId]?.routes ?? [] as route}<p>{route.pieceId}: {route.squares.join(" → ")}</p>{:else}<p>No piece route past the fork.</p>{/each}</details>
       </article>
@@ -232,7 +234,7 @@
         <p>{consequence?.decision ? `Decision: ${consequence.decision.moveSan} at +${consequence.decision.plyOffset}.` : "No moves on this branch yet."}</p>
         <p>{consequence?.plies ?? 0} plies · objective {consequence?.objectiveState ?? "unknown"}</p>
         {#if consequence}<p>Opponent: {resistanceModeLabel(consequence.resistance.requested.mode)}{consequence.resistance.requested.targetElo === undefined ? "" : ` · target ${consequence.resistance.requested.targetElo}`}.</p>{/if}
-        {#if consequence?.deepestScore}<p>Recorded engine evaluation at +{consequence.deepestScore.plyOffset}: {score({ ...consequence.deepestScore, nodeId: "", evidenceRefs: [], kind: "eval", source: "engine_validated" })}</p>{/if}
+        {#if comparison.machineFeedback === "available" && consequence?.deepestScore}<p>Recorded engine evaluation at +{consequence.deepestScore.plyOffset}: {score({ ...consequence.deepestScore, nodeId: "", evidenceRefs: [], kind: "eval", source: "engine_validated" })}</p>{/if}
         {#each consequence?.checkpointsMissed ?? [] as checkpoint}
           {@const absentRef = packAbsentEvidenceRef(checkpoint)}
           <p data-evidence-ref={absentRef}>{renderEvidenceRef(absentRef, pack).text}</p>
@@ -240,9 +242,9 @@
         {#each entries as entry}
           <div><strong>{entry.from} → {entry.to}</strong>{#each entry.grounds as ground}<p>{ground.sourceLabel}: {ground.text}</p>{/each}</div>
         {/each}
-        <div class="scores" aria-label={`${column.label} recorded engine evaluations`} data-evidence-consumer="compare.engine_trajectory">
+        {#if comparison.machineFeedback === "available"}<div class="scores" aria-label={`${column.label} recorded engine evaluations`} data-evidence-consumer="compare.engine_trajectory">
           {#each trajectories[column.branchId] ?? [] as entry}<span data-ply-offset={entry.plyOffset}>+{entry.plyOffset}: {score(entry)}</span>{/each}
-        </div>
+        </div>{/if}
         {#if consequence}
           <details><summary>Opponent and authored-line context</summary>
             {#each resistanceSentences(run, column.leafNodeId, pack) as sentence}<p>{sentence}</p>{/each}

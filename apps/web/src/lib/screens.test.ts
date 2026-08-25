@@ -736,6 +736,31 @@ describe("Layer 3 screens", () => {
     await unmount(component);
   });
 
+  it("renders no machine score through any summary field while comparison feedback is withheld", async () => {
+    const run = branchedRun();
+    const full = compareBranches(run, run.branches.map((branch) => branch.id));
+    const comparison = {
+      ...full,
+      machineFeedback: "withheld" as const,
+      evidence: Object.fromEntries(full.columns.map((column) => [column.branchId, []])),
+      lines: Object.fromEntries(full.columns.map((column) => [column.branchId, []])),
+      consequences: Object.fromEntries(Object.entries(full.consequences).map(([branchId, consequence]) => [
+        branchId,
+        { ...consequence, deepestScore: null },
+      ])),
+    };
+    const component = mount(CompareView, { target: target(), props: {
+      run, pack, comparison, startSide: "white", step: 0,
+      onStep: vi.fn(), onClose: vi.fn(),
+    } });
+    await tick();
+
+    expect(document.querySelector('[aria-label="Recorded engine evaluation"]')).toBeNull();
+    expect(document.querySelector('[data-evidence-consumer="compare.engine_trajectory"]')).toBeNull();
+    expect(document.body.textContent).not.toContain("M-2");
+    await unmount(component);
+  });
+
   it("announces positional re-convergence independently from shared node identity", async () => {
     const source = branchedRun();
     const comparison = compareBranches(source, source.branches.map((branch) => branch.id));

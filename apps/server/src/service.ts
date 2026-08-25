@@ -217,6 +217,7 @@ function comparisonWithoutEngineFeedback(
     );
   return Object.freeze({
     ...comparison,
+    machineFeedback: "withheld",
     objectiveTimelines: Object.freeze(Object.fromEntries(
       Object.entries(comparison.objectiveTimelines).map(([id, entries]) => [id, publicTimeline(entries)]),
     )),
@@ -225,6 +226,12 @@ function comparisonWithoutEngineFeedback(
     )),
     lines: Object.freeze(Object.fromEntries(
       comparison.columns.map((column) => [column.branchId, Object.freeze([])]),
+    )),
+    consequences: Object.freeze(Object.fromEntries(
+      Object.entries(comparison.consequences).map(([branchId, consequence]) => [
+        branchId,
+        Object.freeze({ ...consequence, deepestScore: null }),
+      ]),
     )),
   });
 }

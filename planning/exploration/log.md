@@ -7611,3 +7611,22 @@ composition matrix, mobile regions, semantic board, full Tab traversal, and all 
 interaction projections remain green. Full repository verification passes 1,000 software tests,
 164 content tests, all schema/build/packaging checks, 1,354 routed ledger rows, the 569-item work
 registry and every roadmap/register/status/intent parity gate.
+
+## 2026-08-25 — Withheld comparison means no machine result in any field
+
+**What landed:** [[D1550]] closes the disclosure leak in mid-run comparison. The comparison
+payload now carries one typed `machineFeedback` authority. Its withheld server projection removes
+machine evidence and lines, filters machine references from public objective timelines, and nulls
+the derived consequence summary score that previously survived those filters. Compare admits its
+trajectory, sparkline, score summary and machine consumer only when that authority is available.
+
+**Boundary retained:** this is a policy-enforcement repair, not the learner-facing abstention
+module. [[D1465]] and CLP-c2 still own the one region-level explanation for why machine comparison
+is unavailable; CLP-c2 remains blocked on the draft evidence-presentation RFC.
+
+**Verification:** the 44 focused runtime/server/client comparison tests pass, including negative
+response and rendered-surface fixtures. The complete workspace typecheck reports zero errors and
+zero Svelte warnings. The browser suite passes all 35 required journeys with only the optional
+live Maia latency probe skipped. Full repository verification passes 1,001 software tests, 164
+content tests, build/schema/packaging checks, 1,355 routed ledger rows, and every register,
+roadmap, status, intent and test-tier gate.

@@ -14,6 +14,14 @@ checkpoints use a fixed pack-grounded absence sentence. Objective-timeline
 grounds resolve payloads from the same run snapshot, so recorded engine and
 tablebase references do not remain in a permanent “details pending” state.
 
+`BranchComparison.machineFeedback` is the single disclosure authority for
+machine-derived comparison fields. When feedback is withheld, the server removes
+machine evidence and lines, filters machine references from public timelines,
+and replaces every consequence summary score with `null`. The client admits no
+engine trajectory, sparkline, summary score, or engine-trajectory consumer in
+that state. It cannot infer availability from whether one of those collections
+happens to be empty.
+
 The branch rail provides manual checkboxes and “compare all forked here.” The
 same selection drives branch-selective PGN export. The comparison screen renders
 an N-column board grid and per-branch strips; shared-prefix groups are one

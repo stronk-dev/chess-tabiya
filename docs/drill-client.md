@@ -314,13 +314,17 @@ and checkpoint hits render as separate strips. Each objective change is rendered
 sentence table; an empty ground set fails instead of manufacturing explanatory
 copy. Recorded resistance and authored-line membership are present per consequence.
 The deterministic grounded narrative is expanded before engine graphics; raw
-producer terminology remains in machine attributes, not learner labels. A per-side recorded engine trajectory plots the comparison's
-White-perspective centipawn or mate scores at their aligned ply offsets and
-marks the common fork. The engine deployment supplies Stockfish; the mock
-deployment remains honestly labeled as recorded engine evidence rather than
-claiming a provider identity absent from the payload. Engine arrows, move
-recommendations, and human-frequency overlays remain absent; the fork arrows are
-only moves the learner already played.
+producer terminology remains in machine attributes, not learner labels. When
+`machineFeedback` is available, a per-side recorded engine trajectory plots the
+comparison's White-perspective centipawn or mate scores at their aligned ply
+offsets and marks the common fork. When it is withheld, the server removes the
+machine fields and the client admits none of the trajectory, sparkline, summary
+score, or machine consumer; an empty collection is never treated as the policy
+signal. The engine deployment supplies Stockfish; the mock deployment remains
+honestly labeled as recorded engine evidence rather than claiming a provider
+identity absent from the payload. Engine arrows, move recommendations, and
+human-frequency overlays remain absent; the fork arrows are only moves the
+learner already played.
 
 Outcome Drill adds a compact context surface above the board and in checkpoint
 or terminal sheets. It keeps four facts separate: the root assessment, the

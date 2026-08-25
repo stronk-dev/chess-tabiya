@@ -98,6 +98,7 @@ export interface BranchConsequence {
 }
 
 export interface BranchComparison {
+  readonly machineFeedback: "available" | "withheld";
   readonly forkNodeId: string;
   readonly columns: readonly BranchColumn[];
   readonly rows: readonly ComparisonRow[];
@@ -301,6 +302,7 @@ export function compareBranches(
     };
   }
   return deepFreeze({
+    machineFeedback: "available",
     forkNodeId: fork.id,
     columns,
     rows,
