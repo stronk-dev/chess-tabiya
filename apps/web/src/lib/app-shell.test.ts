@@ -3,7 +3,7 @@
 import type { Api } from "@lichess-org/chessground/api";
 import type { Config } from "@lichess-org/chessground/config";
 import type { DrillPackDefinition } from "@chess-tabiya/schema/drill-pack";
-import { createRun } from "@chess-tabiya/runtime";
+import { commitMove, createRun } from "@chess-tabiya/runtime";
 import { mount, tick, unmount } from "svelte";
 import { afterEach, describe, expect, it, vi } from "vitest";
 
@@ -291,6 +291,85 @@ describe("application shell", () => {
     await vi.waitFor(() => expect(document.activeElement?.id).toBe("shortcut-title"));
     key("Escape");
     await vi.waitFor(() => expect(document.activeElement).toBe(main));
+    await unmount(component);
+  });
+
+  it("sends the author's title when distilling a completed run", async () => {
+    const terminalRun = commitMove(createRun({
+      id: "distill-run",
+      session: {
+        kind: "position",
+        start: { fen: "7k/8/5KQ1/8/8/8/8/8 w - - 0 1", side: "white" },
+        feedbackPolicy: "attempt_end",
+        opponentPolicy: { mode: "human_common" },
+      },
+      sessionDigest: digest,
+      policyConfig: {
+        seedMode: "fixed",
+        locus: { executedAt: "server", engineIds: [], modelIds: [] },
+      },
+      seed: 17,
+      createdAt: "2026-08-25T12:00:00.000Z",
+    }), "g6g7", { at: "2026-08-25T12:01:00.000Z" }).run;
+    const draft: PackDraft = {
+      id: "distilled-draft",
+      packId: "distilled-distill-run",
+      document: pack,
+      digest,
+      state: "draft",
+      validation: { valid: false, issues: [] },
+    };
+    const distillRun = vi.fn(async () => ({ draft, proposals: [], dropped: [] }));
+    const base = api();
+    const distillApi: DrillClientApi = {
+      ...base,
+      async events(_runId: string, sinceSeq = 0) {
+        return {
+          events: terminalRun.events.filter((event) => event.seq > sinceSeq),
+          nextSeq: terminalRun.events.at(-1)!.seq,
+        };
+      },
+      async graph() {
+        return {
+          id: terminalRun.id,
+          viewer: {
+            role: "host" as const,
+            mayWrite: true,
+            holdsLease: true,
+            leaseHeldBy: { learnerId: "learner-a", handle: "alice" },
+            seatedInContest: false,
+            reviewing: false,
+          },
+          nodes: terminalRun.nodes,
+          branches: terminalRun.branches,
+          activeCursor: terminalRun.activeCursor,
+        };
+      },
+      distillRun,
+      async packDrafts() { return []; },
+    };
+    history.replaceState(null, "", "/play/run/distill-run");
+    const component = mount(App, {
+      target: target(),
+      props: { api: distillApi, router: new HistoryRouter(window), storage: new MemoryStorage() },
+    });
+
+    await vi.waitFor(() => expect(document.body.textContent).toContain("Distill to draft"));
+    document.querySelector<HTMLButtonElement>("aside[aria-label='Distill run'] > button")!.click();
+    await vi.waitFor(() => expect(document.querySelector("#distilled-draft-title")).not.toBeNull());
+    const input = document.querySelector<HTMLInputElement>("#distilled-draft-title")!;
+    input.value = "  My mating-net branches  ";
+    input.dispatchEvent(new Event("input", { bubbles: true }));
+    document.querySelector<HTMLFormElement>("form[aria-label='Name distilled draft']")!.dispatchEvent(
+      new SubmitEvent("submit", { bubbles: true, cancelable: true }),
+    );
+
+    await vi.waitFor(() => expect(distillRun).toHaveBeenCalledWith("distill-run", {
+      packId: "distilled-distill-run",
+      title: "My mating-net branches",
+      branchId: terminalRun.activeCursor.branchId,
+    }));
+    await vi.waitFor(() => expect(location.pathname).toBe("/create"));
     await unmount(component);
   });
 

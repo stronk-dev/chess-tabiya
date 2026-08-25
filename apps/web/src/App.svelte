@@ -16,6 +16,7 @@
   import ShellKeyboardHelp from "./lib/ShellKeyboardHelp.svelte";
   import AssistanceSettings from "./lib/AssistanceSettings.svelte";
   import AppearanceSettings from "./lib/AppearanceSettings.svelte";
+  import DistillDraftForm from "./lib/DistillDraftForm.svelte";
   import { ThemeController } from "./lib/theme/controller.js";
   import { provideTheme } from "./lib/theme/context.js";
   import {
@@ -131,6 +132,9 @@
   let shapeProbeFen = $state("");
   let shapeProbeResult: boolean | undefined = $state();
   let shapeActionError: string | undefined = $state();
+  let distillDraftRunId: string | undefined = $state();
+  let distillDraftBusy = $state(false);
+  let distillDraftError: string | undefined = $state();
   let liveSessions: readonly LiveSessionSummary[] = $state([]);
   let classrooms: readonly ClassroomSummary[] = $state([]);
   let classroomDetail: ClassroomDetail | undefined = $state();
@@ -537,7 +541,25 @@
   async function createRepertoire():Promise<void>{repertoireError=undefined;try{if(api.createRepertoire===undefined)throw new Error("Repertoire import is unavailable");const created=await api.createRepertoire({name:repertoireName,side:repertoireSide,targetElo:1600,coverageDenominator:100,source:repertoireStudyUrl.trim()?{kind:"lichess_study",url:repertoireStudyUrl}:{kind:"pgn",pgn:repertoirePgn}});repertoires=[created,...repertoires];repertoireName="";repertoirePgn="";repertoireStudyUrl="";}catch(error){repertoireError=error instanceof Error?error.message:String(error);}}
   async function scanRepertoire(id:string):Promise<void>{await api.scanRepertoire?.(id);for(let index=0;index<50;index++){const page=await api.repertoireGaps?.(id);if(page!==undefined){repertoirePages={...repertoirePages,[id]:page};if(page.status==="ready")break;}await new Promise((resolve)=>setTimeout(resolve,100));}repertoires=await(api.repertoires?.()??Promise.resolve(repertoires));}
   async function enterRepertoireGap(id:string,gapKey:string):Promise<void>{const result=await api.enterRepertoireGap?.(id,gapKey);if(result===undefined)return;if(result.writerId!==null)WriterSession.claimFor(result.runId,storage,()=>result.writerId!);navigate(routePath({name:"run",runId:result.runId}));}
-  async function distillActiveRun():Promise<void>{const run=session.runState?.run;if(run===undefined||api.distillRun===undefined)return;const result=await api.distillRun(run.id,{packId:`distilled-${run.id}`,title:"Distilled rehearsal",branchId:run.activeCursor.branchId});drafts=[result.draft,...drafts.filter((item)=>item.id!==result.draft.id)];selectedDraftId=result.draft.id;studioJson=JSON.stringify(result.draft.document,null,2);navigate("/create");}
+  async function distillActiveRun(title: string): Promise<void> {
+    const run = session.runState?.run;
+    if (run === undefined || distillDraftRunId !== run.id) return;
+    distillDraftError = undefined;
+    distillDraftBusy = true;
+    try {
+      if (api.distillRun === undefined) throw new Error("Session distillation is unavailable.");
+      const result = await api.distillRun(run.id, { packId: `distilled-${run.id}`, title, branchId: run.activeCursor.branchId });
+      drafts = [result.draft, ...drafts.filter((item) => item.id !== result.draft.id)];
+      selectedDraftId = result.draft.id;
+      studioJson = JSON.stringify(result.draft.document, null, 2);
+      distillDraftRunId = undefined;
+      navigate("/create");
+    } catch (error) {
+      distillDraftError = error instanceof Error ? error.message : String(error);
+    } finally {
+      distillDraftBusy = false;
+    }
+  }
 
   async function authenticate(): Promise<void> {
     authError = undefined;
@@ -974,7 +996,7 @@
         <aside class="session-banner" aria-label="Run story"><strong>Attempt complete</strong><span>Your recorded moments are ready to read and replay.</span><button type="button" onclick={() => navigate(routePath({ name: "story", runId: session.runState!.run.id }))}>Story</button></aside>
       {/if}
       {#if session.viewer?.role === "host" && session.runState.run.events.some((event) => event.type === "outcome.reached")}
-        <aside class="session-banner" aria-label="Distill run"><strong>Authoring seed</strong><span>Turn these recorded branches into a blocked draft for human judgment.</span><button type="button" onclick={()=>void distillActiveRun()}>Distill to draft</button></aside>
+        <aside class="session-banner" aria-label="Distill run"><strong>Authoring seed</strong><span>Turn these recorded branches into a blocked draft for human judgment.</span>{#if distillDraftRunId === session.runState.run.id}<DistillDraftForm busy={distillDraftBusy} error={distillDraftError} onSubmit={distillActiveRun} onCancel={() => { distillDraftRunId = undefined; distillDraftError = undefined; }} />{:else}<button type="button" onclick={() => { distillDraftRunId = session.runState!.run.id; distillDraftError = undefined; }}>Distill to draft</button>{/if}</aside>
       {/if}
       {#if derivations?.source}
         <aside class="session-banner" aria-label="Opposite-side replay source"><strong>Opposite-side replay</strong><span>Mirror of run {derivations.source.sourceRunId} from its recorded position.</span><button type="button" onclick={() => navigate(routePath({ name: "run", runId: derivations!.source!.sourceRunId }))}>Open source</button></aside>

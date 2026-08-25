@@ -7784,3 +7784,14 @@ graduation report remains its own instrument.
 **Verification:** a mounted Studio fixture begins at one blocking and one discharged condition,
 changes the condition state in the textarea without saving, and reaches zero blocking and two
 discharged. The focused 14-test web pair and Svelte typecheck pass. AUT-a8 and [[D1554]] close.
+
+## 2026-08-25 — Distillation asks the author what the rehearsal is
+
+**What landed:** a completed run now opens a required title form before creating a distilled pack.
+The client trims the author-supplied title, sends it with the run and active branch, and navigates
+only after the server returns the blocked draft. Request failures stay visible on the run.
+
+**Verification:** a mounted application fixture commits a checkmating move, opens the host-only
+distillation form, enters a title, and proves the exact title, generated pack id, and active branch
+reach `distillRun` before `/create` opens. Together with the form fixture, 13 focused tests pass and
+the web package typecheck is clean. AUT-a7 and [[D1555]] close.

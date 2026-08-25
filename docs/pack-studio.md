@@ -86,6 +86,10 @@ needed, returns classless fork proposals, and always declares graduation
 blockers. It never copies authored grading, deviation classes, claims, plan
 classes, annotations, or engine evidence. Registration therefore remains
 impossible until a human supplies and grounds the missing judgment.
+After a run ends, the host must name the rehearsal before the request is sent;
+the entered title is trimmed and becomes the draft title. Creation failures stay
+on the completed run as a visible error, so the client neither invents a title nor
+navigates to a draft that was not created.
 The distillation emitter validates the completed document before returning it
 and refuses `EMITTED_PACK_INVALID`, matching every other pack emitter.
 

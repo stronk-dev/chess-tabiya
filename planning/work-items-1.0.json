@@ -2685,17 +2685,21 @@
     {
       "id": "AUT-a7",
       "sourceState": "queued",
-      "state": "queued",
+      "state": "completed",
       "capability": "theory_content",
       "owner": "content-and-theory",
-      "assignment": "capability:theory_content",
+      "assignment": "closed",
       "sourceDocument": "ux-authoring-and-library.md",
       "sourceSection": "§3 A4",
       "sourceHeading": "Authoring and library — `ux-authoring-and-library.md`",
       "summary": "Ask the author for a title instead of hardcoding *\"Distilled rehearsal\"* on every distilled draft",
       "legacyRoute": "none",
       "tournamentReady": true,
-      "sourceDigest": "sha256:aec03e0217ebfa5514ffddf81608918de4074e53ca6c52bc5bae11d76f9e281a"
+      "sourceDigest": "sha256:aec03e0217ebfa5514ffddf81608918de4074e53ca6c52bc5bae11d76f9e281a",
+      "completion": {
+        "completedOn": "2026-08-25",
+        "evidence": "completed-run title form passes the trimmed author title, generated pack id, and active branch through distillRun before opening the returned draft"
+      }
     },
     {
       "id": "AUT-a8",
