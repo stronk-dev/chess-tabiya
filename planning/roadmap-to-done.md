@@ -178,6 +178,9 @@ source is unavailable, but 1.0 may not defer required emitters behind that avail
 [[D1568]] separates two coupled obligations: existing directed evidence needs a typed one-fact
 relation overlay and applied assistance clamp, while genuinely lossy transition emitters must
 retain the missing piece/square identities before their modules can claim closure.
+[[D1569]] keeps the guided-hint producer family literal: its module binding imports the measured
+per-family horizon registry only after the selector/redaction gate, never a generic or wildcard
+projection that launders different derivations into one id.
 
 ### 5. Whole-game Review, story, share, and return
 

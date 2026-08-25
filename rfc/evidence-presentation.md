@@ -1,8 +1,8 @@
 # RFC: evidence-presentation — the component vocabulary between a typed fact and a pixel
 
-- **Status:** draft, amended 2026-08-25 on [[D1564]]/[[D1568]] — arrow activation is a 1.0
+- **Status:** draft, amended 2026-08-25 on [[D1564]]/[[D1568]]/[[D1569]] — arrow activation is a 1.0
   obligation, split between existing exact relation operands, a typed relation renderer, and the
-  genuinely missing transition/staged-hint operand retention. It is no longer an owner-held
+  genuinely missing transition/per-family hint-horizon operand retention. It is no longer an owner-held
   optional future producer.
 - **Author:** claude (evidence-presentation fork), from `design/research/evidence-presentation.md`
   (R3, 2026-08-20) and the HEAD census recorded as [[D1431]]/[[D1434]]
@@ -491,9 +491,10 @@ budget, and draws it. A component that queries anything is the defect the dossie
   relation renderers, not replacement chess collectors.
 - **Mandatory producer repairs:** the six legacy transition families in Discharge D4 must retain
   their exact subject/source/target squares before they can construct this component or
-  `square_set`. The final direct stage of `guided_hint` must consume a separately declared,
-  bounded hint-target projection from `hint-distance`; raw `live.stockfish.pv` is not converted
-  into a guidance arrow ([[D1455]]). Neither absence may be used to declare 1.0 presentation
+  `square_set`. The final direct rung of `guided_hint` must consume one selected member of the
+  literal, measured `HINT_HORIZON_PROJECTION_IDS` registry from `hint-distance`; raw
+  `live.stockfish.pv` is not converted into a guidance arrow, and unlike hint families are not
+  laundered through one generic projection ([[D1455]], [[D1569]]). Neither absence may be used to declare 1.0 presentation
   complete.
 - **Renders as:** lit nodes and at most the owning module's arrow budget, with focus/touch parity.
   Focusing the caption exposes the relation; focusing either endpoint exposes the same caption.
@@ -1007,7 +1008,8 @@ class in this repo ([[D444]]/[[D984]]/[[D1274]]).
     set-equal.** A derived census lists every module-eligible projection that declares `arrows`,
     whether its retained payload constructs `relation_overlay`, and the exact registered
     renderer. Existing directed projections in §3.6a must all resolve; the six D4 transition
-    families and the guided-hint target remain named RED rows until their producer contracts land.
+    families and every measured guided-hint horizon family remain named RED rows until their
+    producer contracts and sealed rung compiler land.
     *RED:* join two members of an unordered square set, attach an edge not present in the payload,
     or remove one directed projection's renderer. *Wrong impl:* a Svelte component recomputing
     attacks from FEN, which creates a second chess authority after admission.
@@ -1133,11 +1135,13 @@ Proposed — ids assigned at landing; head was **D1434** at drafting.
 
 ## Changelog
 
+- 2026-08-25 — corrected on [[D1569]]. The guided-hint overlay consumes a selected member of the
+  measured per-family horizon registry, never a generic hint-target wrapper or raw PV.
 - 2026-08-25 — amended on [[D1564]]/[[D1568]]. The former “no vector producer” statement was
   split after re-deriving the catalogue: many exact payloads already retain directed relations,
   while six legacy transition families genuinely lose squares. Added the thirteenth component,
   `relation_overlay`, sealed it to the same admitted evidence item as its equivalent sentence,
-  made existing directed projections renderer obligations, and converted transition/hint-target
+  made existing directed projections renderer obligations, and converted transition/hint-horizon
   gaps from dark optional arms into explicit producer-coverage failures. Arrow activation is no
   longer an owner question.
 - 2026-08-24 — drafted on the owner's *"where are all the nice ux components?"* commission, from

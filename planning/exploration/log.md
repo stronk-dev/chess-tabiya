@@ -7904,3 +7904,17 @@ producer obligations with able-to-fail coverage, not honest-empty excuses.
 
 **Next:** finish the two RFC amendments, take them through independent buildability review, then
 implement the producer→relation→module→board path in dependency order.
+
+## 2026-08-25 — Generic hint-target wrapper refused during cross-document audit
+
+Reading `hint-distance.md` against the new module amendment found that the proposed
+`derived.guidance.hint_target@1` would repeat a defect the older RFC had already ruled out. Hint
+families do not share derivation inputs or answer-content images, so one shared derived projection
+cannot truthfully represent them under `evidence-contract.ts`'s per-member widening rule. The
+actual family list also remains research-returned by [[D1376]]–[[D1378]].
+
+**Changed:** [[D1569]] records the correction. `module-registration` consumes a literal,
+set-equal `HINT_HORIZON_PROJECTION_IDS` registry only after `hint-distance`'s relation-safe and
+sealed-disclosure gates settle its members. No wildcard and no generic wrapper enters the
+manifest. The mistake was caught in authoring, before any production type or content depended on
+it.

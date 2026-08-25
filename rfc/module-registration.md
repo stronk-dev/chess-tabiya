@@ -1,6 +1,6 @@
 # RFC: Module registration — the eleven declarations, the compile site, and the seats
 
-- **Status:** draft, amended 2026-08-25 on [[D1564]]/[[D1568]]. The [[D1430]] document: the learner-module layer exists as a
+- **Status:** draft, amended 2026-08-25 on [[D1564]]/[[D1568]]/[[D1569]]. The [[D1430]] document: the learner-module layer exists as a
   contract, a compiler, a reducer pipeline and a preset algebra, and **has never been
   instantiated**. This RFC writes the instances, calls the compiler in production, and gives each
   module a seat a person can look at.
@@ -24,8 +24,8 @@
   implementing `rfc/move-quality-grades.md` (its projection landed — §0.3);
   accepted `rfc/tactical-collectors.md` and `rfc/breadth-collectors.md` (the projection ids).
   The arrow form additionally consumes `rfc/evidence-presentation.md`'s amended sealed
-  `relation_overlay`; the six lossy transition emitters and the bounded guided-hint target are
-  mandatory producer dependencies, not optional availability arms.
+  `relation_overlay`; the six lossy transition emitters and the measured per-family guided-hint
+  horizon registry are mandatory producer dependencies, not optional availability arms.
 - **Parent / amends:** amends `rfc/learner-modules.md` §1.6 (the answer-ceiling image, which as
   shipped is an exact-match map and not a ceiling), §1.7 (`ceilings.sessions`/`ceilings.roles`,
   undeclared for all eleven — [[D1206]]), §4.2 (`outpost`/`pawn_safe_square` return on the owner's
@@ -152,9 +152,12 @@ amendment they asked for, plus the registration and the seats they were blocking
 **Scope boundary — declarations, the compile site, the read path, the seats, and nothing else:**
 
 - **No duplicate collectors.** Existing exact relation payloads are reused. Every accepted
-  projection id below is verified present in the compiled catalogue at HEAD, with two exceptions
-  declared-awaiting rather than fabricated: `pack.authored.classifier@1` (§0.3) and
-  `derived.guidance.hint_target@1` (§1.3/§6), whose bounded producer is owned by `hint-distance`.
+  projection id below is verified present in the compiled catalogue at HEAD, except
+  `pack.authored.classifier@1` (§0.3), which is declared-awaiting rather than fabricated.
+  `guided_hint` is a harder dependency: its ordered accepts list imports the literal, set-equal
+  `HINT_HORIZON_PROJECTION_IDS` supplied by `hint-distance`; this RFC cannot be accepted or
+  implemented while that registry is absent. A generic or wildcard hint projection is forbidden
+  by [[D1569]].
 - **No new preset names, no new workflow contexts.** `presets.ts` ships both closed lists with
   `validation: "candidate"`; this RFC reads them and adds a registry invariant tying them to the
   declarations. Confirming or renaming a candidate is the owner's, per `intent-presets.md` §7.
@@ -360,15 +363,17 @@ the declarations.
 | `module.postcommit_nudge` | 8 `rules.structural.event.*` (the 11 `STRUCTURAL_EVENT_FAMILIES` at `evidence-catalog.ts:115-118` minus the refused `piece_count`, `direct_attack_count`, `line_blockers`); 7 `rules.transition.event.*` (`TRANSITION_RULE_EVENT_FAMILIES` minus `clock_reset`); `rules.castling.event.rights_lost`, `rules.tactic.event.{double_attack, check, loose_piece}`, `derived.exchange.{capture_class, trade_completed}`, `rules.structural.event.pawn_islands`; 10 `derived.semantic_avoidance.*`; `rules.pawn.event.dynamics`, `derived.pawn.event.transitions`, `rules.king.event.zone_state`, `derived.king.captured_zone_defender`, `derived.activity.event.open_file_occupancy`; `derived.grade.move_quality` | 38 |
 | `module.structure_nudge` | `theory.shapes.firing`; `rules.structural.reading.{named_structure, space, pawn_connectivity}`; `rules.phase.reading`; `rules.endgame.reading` | 6 |
 | `module.theory_breadcrumb` | `pack.authored.claim`; `theory.shapes.firing`; `human.explorer.population` **(operand-scoped, §2.3)**; `theory.opening_identity.record` | 4 |
-| `module.guided_hint` | `live.syzygy.{result, category, distance}`; `rules.endgame.reading`; `pack.authored.claim`; ◇ `derived.guidance.hint_target` (bounded stage 1 pattern / stage 2 fact / stage 3 move; never raw PV) | 6 |
+| `module.guided_hint` | `live.syzygy.{result, category, distance}`; `rules.endgame.reading`; `pack.authored.claim`; then the literal ordered expansion `...HINT_HORIZON_PROJECTION_IDS` (one measured `derived.hint.horizon.<family>@1` per eligible family; never raw PV) | `5 + H` |
 | `module.compare_coach` | `derived.compare.{structure_delta, eval_delta, engine_trajectory, piece_route}`; `run.record.{fork, consequence, objective_transition, checkpoint_hit}` | 8 |
 | `module.review_map` | the 37 compiled nudge event/avoidance ids re-declared; `rules.pivotal.marker`, `rules.phase.reading`, `rules.endgame.reading`; `recorded.engine.eval`, `recorded.tablebase.result`; `live.stockfish.{eval, wdl}`; `run.record.{objective_transition, consequence, imported_result}`; `derived.grade.move_quality` | 48 |
 | `module.full_inspector` | `rules.tactic.reading.{loose_piece, ray_classification, rook_on_seventh, trapped_piece, back_rank, discovered_latency}`, `rules.tactic.consequence.{threat, mate_in_one, reply_breadth}`, `rules.structural.reading.{space, pawn_connectivity}`, `rules.phase.development`, `rules.castling.reading.{rights, legality}`, `derived.tactic.{discovered_executed, promotion_pressure}` (16); `rules.square.reading.control`, `rules.mobility.reading.piece_destinations`, `rules.pawn.reading.{contacts, candidate_majority}`, `derived.material.reading.role_signature`, `rules.king.reading.zone_state` (6); `live.stockfish.{eval, wdl, pv}`, `human.maia.{policy, candidate_wdl}`, `human.explorer.population`, `live.syzygy.{result, category, distance}`, `recorded.engine.eval`, `recorded.tablebase.result`, `theory.shapes.firing` (12); `rules.phase.reading`, `rules.pivotal.marker`, `derived.compare.{structure_delta, eval_delta}`, `derived.story.rank` (5); ◇ `pack.authored.classifier` (1) | 40 |
 
-Tripwires: declared **182**; compiled **180**; declared-awaiting **2**
-(`pack.authored.classifier@1` in `full_inspector`, `derived.guidance.hint_target@1` in
-`guided_hint`). The two grade rows compile (§0.3). Every non-◇ id above was verified present
-in the compiled catalogue at `f0d5460`. `[V]`
+Here `H = HINT_HORIZON_PROJECTION_IDS.length`; it is derived from the final measured registry,
+not pinned to this draft's returned seven-family table. Landing tripwires are therefore declared
+**`181 + H`**, compiled **`180 + H`**, and declared-awaiting **1**
+(`pack.authored.classifier@1` in `full_inspector`). The horizon rows are compile-time dependencies,
+not awaiting placeholders. The two grade rows compile (§0.3). Every non-horizon, non-◇ id above
+was verified present in the compiled catalogue at `f0d5460`. `[V]`
 
 `selection.familyPrecedence` is, for each module, its `accepts` order verbatim — the compiler
 requires order-equality (`module-contract.ts:163`), so the table above is simultaneously the
@@ -400,8 +405,9 @@ The compiler requires both non-empty (`module-contract.ts:143`); §1.3 of `learn
 `theory_breadcrumb` `["sentence","card"]`; `guided_hint` `["sentence","square","arrow"]`; `compare_coach`
 `["sentence","card","arrow"]`; `review_map` `["timeline_mark","card","sentence","square","arrow"]`; `full_inspector`
 `["panel","card","sentence","square","arrow"]`. `guided_hint`'s arrow budget is reserved for
-its bounded stage-3 hint-target projection and cannot be spent by raw Stockfish PV; the registry
-cannot land while that declared-awaiting producer remains absent (§6, [[D1455]]). Every active arrow form is backed by
+the selected per-family horizon's direct-move rung and cannot be spent by raw Stockfish PV; the
+registry cannot land until the literal horizon registry and sealed rung compiler exist (§6,
+[[D1455]], [[D1569]]). Every active arrow form is backed by
 the set-equal relation-renderer closure in `evidence-presentation.md` §3.6a.
 
 #### 1.5 `noveltyWindow`, and the [[D1164]] closure it needs
@@ -477,7 +483,7 @@ from the barrel today.
 #### 2.2 Step 2 — the manifest join
 
 In `evidence-catalog.ts`: ten `module.*` ids appended to `EVIDENCE_CONSUMER_IDS` (25 → 35);
-`PRODUCTION_ELIGIBILITY_DECLARATIONS`, the 180 compiled rows of §1.3, joined into
+`PRODUCTION_ELIGIBILITY_DECLARATIONS`, the `180 + H` compiled rows of §1.3, joined into
 `EVIDENCE_MANIFEST.eligibility` beside the 67 research rows, which stay byte-identical;
 `production.module_local@1` appended to `EVIDENCE_SELECTION_POLICIES` beside the untouched
 `research.r2_candidate@1`. The manifest digest moves; the docs tuples in `docs/semantic-evidence.md`
@@ -858,13 +864,14 @@ Activation is one coupled landing:
 Two producer debts are deliberately not hidden by that reuse. The six legacy transition families
 measured by evidence-presentation D4 must retain exact piece/square identities before their nudge
 and Review overlays can compile. `guided_hint` cannot turn raw `live.stockfish.pv` into an arrow
-([[D1455]]); `hint-distance` must declare a bounded stage-3 hint-target projection with its source,
-answer distance and abstention. Both are 1.0 closure failures until implemented, not reasons to
+([[D1455]]); `hint-distance` must export the measured literal per-family horizon ids, each with
+its own source inputs, answer distance, relation polarity and abstention, plus the sealed rung
+compiler. Both are 1.0 closure failures until implemented, not reasons to
 leave every other arrow dark or to simulate availability.
 
 Arrow-bearing modules are `sight_on_request`, `blunder_prevention`, `threat_radar`,
 `postcommit_nudge`, `compare_coach`, `review_map` and `full_inspector`; `guided_hint` joins when its
-bounded target producer lands. `structure_nudge` and `theory_breadcrumb` remain square/card
+per-family horizon registry and rung compiler land. `structure_nudge` and `theory_breadcrumb` remain square/card
 components because their evidence is a shape/citation, not a directed relation. The module budget
 is a maximum, never a request to fill the board.
 
@@ -889,11 +896,12 @@ is a maximum, never a request to fill the board.
 
 ## Acceptance criteria
 
-> **[[D1455]] — discharged in the 2026-08-25 draft amendment.** Raw `live.stockfish.eval` and
-> `live.stockfish.pv` are removed from `module.guided_hint`. The module instead carries one
-> declared-awaiting `derived.guidance.hint_target@1`, bounded by `hint-distance` and staged as
-> pattern → fact → move. Acceptance remains red until that producer exists; a missing target does
-> not license the forbidden PV binding.
+> **[[D1455]] narrowed and [[D1569]] corrected in the 2026-08-25 draft amendment.** Raw
+> `live.stockfish.eval` and `live.stockfish.pv` are removed from `module.guided_hint`. The module
+> instead imports the literal, ordered `HINT_HORIZON_PROJECTION_IDS` produced by `hint-distance`;
+> each family retains its own declared inputs and passes through the sealed rung compiler.
+> Acceptance remains red until that measured registry exists; a missing family does not license
+> a generic wrapper or the forbidden PV binding.
 
 > **Rows landed 2026-08-24.** [[D1444]] — the layer was returned with a paper trail, but its ids are already production currency and a campaign can reward a module that resolves to nothing. [[D1445]] — `MODULE_ANSWER_IMAGE` is exact-match, no ceiling maps to `evaluation`, and the just-ruled grade has nowhere to live. [[D1446]] — binding needs fifteen dispositions deleted atomically, and `pack.authored.classifier@1` has never existed. [[D1447]] — the `arrows` clamp is unenforced and square sight is keyboard-unreachable.
 
@@ -910,12 +918,14 @@ defect class here ([[D444]]/[[D984]]/[[D1274]]), so each carries its falsifier.
 2. **A2 — The eligibility set, asserted by derivation, not by count** ([[D1240]]).
    `make module-registry-census` emits the declared rows from `MODULE_DECLARATIONS` and the
    compiled ids from `EVIDENCE_MANIFEST`; the test asserts **set-equality** between the compiled
-   eligibility rows and the census output, with 180/182/2 baked only as a drift tripwire. The 67
+   eligibility rows and the census output, with `180 + H` / `181 + H` / `1` baked only as derived
+   drift tripwires. The 67
    research rows are byte-identical. **RED at HEAD:** eligibility is 67 rows against one research
    consumer. **Negative:** a test asserts `pack.authored.classifier@1` is **absent** from the
-   compiled manifest and **present** in `full_inspector`'s `awaiting`; a sibling negative pins
-   `derived.guidance.hint_target@1` in `guided_hint.awaiting`. The criterion cannot pass vacuously
-   while either unbuilt projection silently compiles.
+   compiled manifest and **present** in `full_inspector`'s `awaiting`; a sibling negative deletes
+   one id from `HINT_HORIZON_PROJECTION_IDS` while leaving it in the measured registry and
+   compilation fails set-equality. The criterion cannot pass vacuously through an awaiting
+   wildcard or incomplete horizon family.
 3. **A3 — Sessions and roles are derived, not typed in** ([[D1206]]). A fixture mutates one
    `WORKFLOW_CONTEXT_POLICIES` row's `moduleCeiling` and asserts the registry **fails to compile**
    because a module's `ceilings.sessions` no longer matches. A second fixture flips one forbidden
@@ -995,8 +1005,8 @@ defect class here ([[D444]]/[[D984]]/[[D1274]]), so each carries its falsifier.
     `review`, `feedbackDeliveryOpen` for `post_commit`. A module delivering at a timing whose
     boundary event is absent fails, which **voids this RFC's `none` claim rather than hiding it**
     (`intent-presets.md` §6's reopen condition, made executable).
-17. **A17 — Stage gate.** Against a position with an admitted
-    `derived.guidance.hint_target@1` fact: stage 1 carries pattern content only, stage 2 names at
+17. **A17 — Stage gate.** Against a position with one selected admitted
+    `derived.hint.horizon.<family>@1` fact: stage 1 carries pattern content only, stage 2 names at
     most the subject square and carries no move bytes, and stage 3 under an open disclosure
     boundary may carry its one bounded move/arrow. The target retains and cites its engine,
     tablebase, theory or authored inputs; raw `live.stockfish.pv` is never a module binding. A
@@ -1024,7 +1034,7 @@ defect class here ([[D444]]/[[D984]]/[[D1274]]), so each carries its falsifier.
 | D4 | Before/after operands for `derived.compare.structure_delta@1` — A14 is narrowed to what the projection retains (§4.9); widening the derivation to carry a before observation is real work with a real cost and is not smuggled in here | review-evidence-compiler | the commit that widens the projection or records the refusal | |
 | D5 | Durable per-learner module-delivery records — this RFC's `none` claim rests on packets being recomputable from run state (§tabiya-claims); which stage of a hint a learner requested is not, and durable capture is `longitudinal-store`'s declared grain | longitudinal-store | the longitudinal-store commit adding a module-delivery projection | |
 | D6 | Per-timing role narrowing — `ModuleTimingDeclaration` carries timing and initiative only, so `compare_coach` takes the narrower role set across both its arms (§1.2). A spectator loses nothing reachable today, but the contract cannot express what it should | learner-modules | the learner-modules amendment commit | |
-| D7 | `derived.guidance.hint_target@1` — the bounded, staged output that may power the final guided-hint arrow without binding raw Stockfish PV. Its evidence inputs, answer distance, abstention and counterfactual scope are owned by the `hint-distance` redraft; module registration remains RED while it is only declared-awaiting | hint-distance | the accepted producer amendment and implementation commit | |
+| D7 | `HINT_HORIZON_PROJECTION_IDS` plus the sealed rung compiler — one measured projection per eligible family, each retaining its own evidence inputs, relation polarity, answer distance, abstention and counterfactual scope. The module imports the literal ordered set and remains RED while the registry is absent or differs from the selector's measured eligible set | hint-distance | the accepted producer amendment and implementation commit | |
 
 ## Open questions
 
@@ -1091,10 +1101,15 @@ Proposed — ids assigned at landing; head was **D1444** at drafting (**D1434** 
 
 ## Changelog
 
+- 2026-08-25: corrected on [[D1569]]. Removed the invented generic hint-target projection;
+  `guided_hint` now imports the measured, literal per-family horizon registry and cannot compile
+  until its sealed rung compiler lands. Counts are derived as `181 + H` / `180 + H` / `1`, so
+  neither a stale seven-family hand count nor an awaiting wildcard can satisfy closure.
 - 2026-08-25: amended on [[D1564]]/[[D1568]]. Arrow activation and proactive structure markers
   are no longer open owner questions. Re-derived the “no producer” claim into existing exact
   directed payloads versus genuinely lossy emitters; added the sealed relation-overlay and
-  `effectiveArrows` contract; made transition retention and a bounded guided-hint target hard
+  `effectiveArrows` contract; made transition retention and the per-family guided-hint horizon
+  registry hard
   producer dependencies; removed raw Stockfish eval/PV from `guided_hint`; and changed A13/A17
   from inertness checks into able-to-fail activation and stage-boundary checks.
 - 2026-08-24: created. Drafted at HEAD `f0d5460` (manifest tuple 35/188/25/210 core, 67/67/15/1
