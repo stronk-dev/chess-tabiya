@@ -12,6 +12,7 @@ export interface PrincipleSummary {
   readonly version: string;
   readonly digest: string;
   readonly name: string;
+  readonly statement: string;
   readonly phases: PrincipleEntryDefinition["phases"];
   readonly licence: string;
 }
@@ -71,7 +72,7 @@ export class PrincipleRegistry {
     const record = freeze({
       document: frozen,
       digest,
-      summary: freeze({ id: frozen.id, version: frozen.version, digest, name: frozen.name, phases: frozen.phases, licence: frozen.provenance.licence }),
+      summary: freeze({ id: frozen.id, version: frozen.version, digest, name: frozen.name, statement: frozen.statement, phases: frozen.phases, licence: frozen.provenance.licence }),
     });
     if (this.#records.has(frozen.id)) throw new ServerError("PACK_INVALID", `Duplicate principle id ${frozen.id}`);
     this.#records.set(frozen.id, record);

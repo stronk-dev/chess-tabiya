@@ -2339,17 +2339,21 @@
     {
       "id": "AUT-a11",
       "sourceState": "queued",
-      "state": "queued",
+      "state": "completed",
       "capability": "theory_content",
       "owner": "content-and-theory",
-      "assignment": "capability:theory_content",
+      "assignment": "closed",
       "sourceDocument": "ux-authoring-and-library.md",
       "sourceSection": "§6 D2",
       "sourceHeading": "Authoring and library — `ux-authoring-and-library.md`",
       "summary": "Every registry-backed field becomes a picker showing name and statement, never a text input",
       "legacyRoute": "none",
       "note": "depends on AUT-a2",
-      "sourceDigest": "sha256:8113c4bb1b919d39b393510579c645a3f23a8235308b8c8c1907f90511faa44b"
+      "sourceDigest": "sha256:8113c4bb1b919d39b393510579c645a3f23a8235308b8c8c1907f90511faa44b",
+      "completion": {
+        "completedOn": "2026-08-25",
+        "evidence": "Pack Studio edits top-level and trajectory-leg shape references with relation plus per-feedback-claim principles through live named registry pickers; principle statements cross the production endpoint."
+      }
     },
     {
       "id": "AUT-a12",

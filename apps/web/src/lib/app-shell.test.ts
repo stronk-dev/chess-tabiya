@@ -659,7 +659,7 @@ describe("application shell", () => {
         ];
       },
       async principles() {
-        return [{ id: "orphan-principle", version: "1", digest, name: "Loose principle", phases: ["middlegame"], licence: "CC-BY-SA-4.0", usedByPacks: 0 }];
+        return [{ id: "orphan-principle", version: "1", digest, name: "Loose principle", statement: "A grounded statement.", phases: ["middlegame"], licence: "CC-BY-SA-4.0", usedByPacks: 0 }];
       },
       async capabilities() {
         return { ...capabilities, unsupportedPolicyModes: [{ mode: "plan_defense", reason: "No move selector implements this declared mode." }] };
@@ -713,6 +713,44 @@ describe("application shell", () => {
     });
     expect(document.body.textContent).toContain("cannot represent a credited CC0 entry");
     expect(document.body.textContent).toContain("does not track licensing per paragraph");
+    await unmount(component);
+  });
+
+  it("edits every pack registry reference through named pickers", async () => {
+    history.replaceState(null, "", "/create");
+    const packDocument = {
+      ...pack,
+      shapes: [],
+      feedbackClaims: [{ id: "claim-one", text: "Development must precede the break.", evidenceTypes: ["author_principle"] }],
+      provenance: { ...pack.provenance, reviewStatus: "draft" as const },
+    };
+    const draft = { id: "vocabulary-draft", packId: pack.id, document: packDocument, digest, state: "draft" as const, validation: { valid: true, issues: [] } };
+    const studioApi: DrillClientApi = {
+      ...api(),
+      async packDrafts() { return [draft]; },
+      async shapes() { return [{ id: "carlsbad", version: "1", digest, name: "Carlsbad structure", phases: ["middlegame"], licence: "CC-BY-SA-4.0", channel: "official", usedByPacks: 4 }]; },
+      async principles() { return [{ id: "development-first", version: "1", digest, name: "Development before action", statement: "Finish development before opening the position.", phases: ["opening", "middlegame"], licence: "CC-BY-SA-4.0", usedByPacks: 7 }]; },
+    };
+    const component = mount(App, { target: target(), props: { api: studioApi, router: new HistoryRouter(window), storage: new MemoryStorage() } });
+
+    await vi.waitFor(() => expect(document.body.textContent).toContain(`${pack.id} · draft`));
+    document.querySelector<HTMLButtonElement>("aside[aria-label='Your drafts'] button")!.click();
+    await vi.waitFor(() => expect(document.querySelector("#vocabulary-editor-title")?.textContent).toBe("Pack vocabulary"));
+    const shapeLabel = [...document.querySelectorAll<HTMLLabelElement>(".vocabulary-editor .picker-choice")].find((label) => label.textContent?.includes("Carlsbad structure"))!;
+    shapeLabel.querySelector<HTMLInputElement>("input")!.click();
+    await tick();
+    const relation = shapeLabel.parentElement!.querySelector<HTMLSelectElement>("select")!;
+    relation.value = "prospective";
+    relation.dispatchEvent(new Event("change", { bubbles: true }));
+    await tick();
+    const principleLabel = [...document.querySelectorAll<HTMLLabelElement>(".vocabulary-editor .picker-choice")].find((label) => label.textContent?.includes("Development before action"))!;
+    expect(principleLabel.textContent).toContain("Finish development before opening the position.");
+    principleLabel.querySelector<HTMLInputElement>("input")!.click();
+    await tick();
+
+    const bytes = JSON.parse(document.querySelector<HTMLTextAreaElement>("#studio-json")!.value);
+    expect(bytes.shapes).toEqual([{ shape: "carlsbad", relation: "prospective" }]);
+    expect(bytes.feedbackClaims[0].principles).toEqual(["development-first"]);
     await unmount(component);
   });
 

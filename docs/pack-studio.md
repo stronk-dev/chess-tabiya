@@ -17,6 +17,13 @@ route lists zero-use shapes and principles without treating them as invalid. It 
 the runtime's declared unsupported policy modes and their reasons; these are unavailable
 capabilities, not merely unused content.
 
+Registry-backed pack fields have a structured view beside the JSON. It covers top-level shape
+references, shape references on every trajectory leg, and principle references on every feedback
+claim. Shape choices show catalogue name, phase, current pack reach, and their `present` versus
+`prospective` relation. Principle choices show the registry's name and complete grounded statement,
+not only its id. Edits write the live buffer and preserve unrelated fields; removing the last
+principle deletes the array rather than emitting an invalid empty list.
+
 ## Provenance while editing
 
 The provenance panel writes into the same unsaved JSON buffer as the pack editor. Sources are

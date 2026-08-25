@@ -63,6 +63,7 @@ export interface PrincipleSummary {
   readonly version: string;
   readonly digest: string;
   readonly name: string;
+  readonly statement: string;
   readonly phases: readonly ("opening" | "middlegame" | "endgame")[];
   readonly licence: string;
   readonly usedByPacks: number;

@@ -7858,3 +7858,16 @@ unrelated bytes, and that a refusal-note edit cannot overwrite a structural plan
 test fills the reason, chooses the null signature, and verifies the exact unsaved shape bytes and
 honesty copy. Seventeen focused tests pass and the web typecheck is clean. AUT-a24 and [[D1560]]
 close; AUT-a25 still owns structural expression authoring.
+
+## 2026-08-25 — Pack registry fields become meaning-bearing pickers
+
+**What landed:** the existing principle summary now includes its statement at the public production
+boundary. Studio projects every shape field (pack and trajectory legs) and every feedback-claim
+principle field as catalogue choices, retaining shape relation and writing the unsaved pack buffer.
+
+**Verification:** pure fixtures cover legacy and relational shape forms, both shape scopes,
+per-claim principle additions/removals, and unrelated-byte retention. Production application tests
+require the principle statement. A mounted Studio test chooses a shape, changes it to prospective,
+selects a principle after reading its statement, and verifies exact JSON bytes. Nineteen focused
+web tests and thirteen registry/application tests pass; server and web typechecks are clean.
+AUT-a11 and [[D1561]] close.

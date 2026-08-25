@@ -92,7 +92,7 @@ describe("development application mock opponent", () => {
     const response = await fetch(`http://127.0.0.1:${address.port}/principles`);
     expect(response.status).toBe(200);
     expect(response.headers.get("content-type")).toContain("application/json");
-    const body = await response.json() as { principles: { id: string; name: string; phases: string[]; licence: string; usedByPacks: number }[] };
+    const body = await response.json() as { principles: { id: string; name: string; statement: string; phases: string[]; licence: string; usedByPacks: number }[] };
     expect(body.principles.length).toBeGreaterThan(0);
     expect(body.principles.map((principle) => principle.id)).toEqual(
       [...body.principles.map((principle) => principle.id)].sort(),
@@ -100,6 +100,7 @@ describe("development application mock opponent", () => {
     expect(body.principles[0]).toEqual(expect.objectContaining({
       id: expect.any(String),
       name: expect.any(String),
+      statement: expect.any(String),
       phases: expect.any(Array),
       licence: expect.any(String),
       usedByPacks: expect.any(Number),
