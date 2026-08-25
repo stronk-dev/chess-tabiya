@@ -172,6 +172,9 @@ renderers over sealed items, never graders, selectors, chess authorities, or ava
 
 Primary RFCs: `learner-modules`, `module-registration`, `hint-distance`,
 `evidence-presentation`, `intent-presets`. UX owners: INR and SET items.
+Owner ruling [[D1564]] makes producer coverage part of this exit: the evidence layer owes the
+typed operands required by every promised module. Presentation work may abstain honestly while a
+source is unavailable, but 1.0 may not defer required emitters behind that availability state.
 
 ### 5. Whole-game Review, story, share, and return
 
@@ -212,8 +215,9 @@ counter-cases and honest empties. Runtime ships an allow-listed immutable conten
 
 Primary RFCs: `graduation-clearance`, `pack-population-provenance`,
 `theory-knowledge-pipeline`, `theory-drill-current-joins`, `famous-games`. UX owner: AUT items.
-Owner-blocked fork: [[D1562]] / AUT-a9 waits on whether the Create position door funds a board;
-the four-door chooser must not ship as a boardless placeholder while that decision is open.
+Owner ruling [[D1563]] funds the authoring board, community-author workflow, Knowledge replacement,
+principle provenance and official-content review instrument. The four-door chooser must not ship as
+a boardless placeholder; it is now implementation work rather than an owner fork.
 
 ### 7. Human-like bots, personalities, roster, and bot events
 
@@ -232,6 +236,8 @@ trait observability, severe-loss, latency, reproducibility and provider-off gate
 events create ordinary Reviewable games without claiming public-event operations.
 
 Primary RFCs: `bot-policy`, `bot-roster`, `bot-route-source`. UX owner: OPP items.
+Owner ruling [[D1566]] fixes picker placement, persistent persona grain, visible identity,
+band-relative honesty and clock-labelled calibration; the drafts still own their mechanisms.
 
 ### 8. Rating, longitudinal history, skills, style, and recommendations
 
@@ -267,6 +273,9 @@ One varied campaign is authored and replayed end-to-end. Library remains open; p
 sold.
 
 Primary RFCs: `campaign-core`, `training-mode-variants`. UX owner: CMP items.
+Owner ruling [[D1565]] requires two explicit progression horizons: a run-scoped inventory of
+drip-fed theory, modules and tools that matters in later encounters and bosses, plus durable
+long-term rewards across runs. Exact consequential failure arithmetic remains research-owned.
 
 ### 10. Human play, live sources, clocks, variants, and social return
 
@@ -285,6 +294,9 @@ future event/round/pairing/result aggregate without pretending 1.0 runs a public
 
 Primary RFCs: `live-sources`, `live-following`, `social-play`, `recorded-clocks`,
 `enforced-clocks`, `variants`. UX owner: LIV items shared with professional workflows.
+[[D1567]] reopens the public-pool cost model for a no-chat product. The 1.0 decision must price
+automatic pairing, avoid/block, abort/stall controls, rate limits and operator evidence directly,
+without assuming a social-network moderation stack or assuming chess-only play has no abuse case.
 
 ### 11. Coach, classroom, streamer, casting, and audience workflows
 

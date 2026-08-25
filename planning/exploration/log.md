@@ -7877,3 +7877,12 @@ AUT-a11 and [[D1561]] close.
 **What changed:** AUT-a9 moved from queued to owner-blocked. Its own source requires owner decision
 4—whether authoring funds a board—before the position door can be specified. No partial chooser was
 built. [[D1562]] records the state mismatch; the expression builder AUT-a25 remains executable.
+
+## 2026-08-25 — Owner resolves the cross-surface 1.0 bundle
+
+**Rulings:** full authoring includes a shared board and community workflow ([[D1563]]); evidence
+producers must supply the operands needed by every promised support module rather than postponing
+arrows/highlights behind presentation ([[D1564]]); campaign separates run-scoped drip-fed tools from
+persistent rewards ([[D1565]]); and the recommended bot, Review, accessibility and appearance
+directions are approved ([[D1566]]). Public matchmaking is returned for a no-chat-specific cost
+derivation instead of inheriting a generic moderation objection ([[D1567]]).

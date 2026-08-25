@@ -500,7 +500,7 @@
     {
       "id": "A11-b1",
       "sourceState": "blocked_owner",
-      "state": "blocked_owner",
+      "state": "queued",
       "capability": "accessibility",
       "owner": "client-platform",
       "assignment": "capability:accessibility",
@@ -514,7 +514,7 @@
     {
       "id": "A11-b2",
       "sourceState": "blocked_owner",
-      "state": "blocked_owner",
+      "state": "queued",
       "capability": "accessibility",
       "owner": "client-platform",
       "assignment": "capability:accessibility",
@@ -529,7 +529,7 @@
     {
       "id": "A11-b3",
       "sourceState": "blocked_owner",
-      "state": "blocked_owner",
+      "state": "queued",
       "capability": "accessibility",
       "owner": "client-platform",
       "assignment": "capability:accessibility",
@@ -544,7 +544,7 @@
     {
       "id": "A11-b4",
       "sourceState": "blocked_owner",
-      "state": "blocked_owner",
+      "state": "queued",
       "capability": "accessibility",
       "owner": "client-platform",
       "assignment": "capability:accessibility",
@@ -558,7 +558,7 @@
     {
       "id": "A11-b5",
       "sourceState": "blocked_owner",
-      "state": "blocked_owner",
+      "state": "queued",
       "capability": "accessibility",
       "owner": "client-platform",
       "assignment": "capability:accessibility",
@@ -572,7 +572,7 @@
     {
       "id": "A11-b6",
       "sourceState": "blocked_owner",
-      "state": "blocked_owner",
+      "state": "queued",
       "capability": "accessibility",
       "owner": "client-platform",
       "assignment": "capability:accessibility",
@@ -586,7 +586,7 @@
     {
       "id": "A11-b7",
       "sourceState": "blocked_owner",
-      "state": "blocked_owner",
+      "state": "queued",
       "capability": "accessibility",
       "owner": "client-platform",
       "assignment": "capability:accessibility",
@@ -1758,7 +1758,7 @@
     {
       "id": "ATR-b1",
       "sourceState": "blocked_owner",
-      "state": "blocked_owner",
+      "state": "queued",
       "capability": "review",
       "owner": "review-and-return",
       "assignment": "capability:review",
@@ -1772,7 +1772,7 @@
     {
       "id": "ATR-b2",
       "sourceState": "blocked_owner",
-      "state": "blocked_owner",
+      "state": "blocked_rfc",
       "capability": "review",
       "owner": "review-and-return",
       "assignment": "capability:review",
@@ -1800,7 +1800,7 @@
     {
       "id": "ATR-b4",
       "sourceState": "blocked_owner",
-      "state": "blocked_owner",
+      "state": "blocked_rfc",
       "capability": "review",
       "owner": "review-and-return",
       "assignment": "capability:review",
@@ -1843,7 +1843,7 @@
     {
       "id": "ATR-b7",
       "sourceState": "blocked_owner",
-      "state": "blocked_owner",
+      "state": "blocked_rfc",
       "capability": "review",
       "owner": "review-and-return",
       "assignment": "capability:review",
@@ -2754,7 +2754,7 @@
     {
       "id": "AUT-a9",
       "sourceState": "queued",
-      "state": "blocked_owner",
+      "state": "queued",
       "capability": "theory_content",
       "owner": "content-and-theory",
       "assignment": "capability:theory_content",
@@ -2769,7 +2769,7 @@
     {
       "id": "AUT-b1",
       "sourceState": "blocked_owner",
-      "state": "blocked_owner",
+      "state": "queued",
       "capability": "theory_content",
       "owner": "content-and-theory",
       "assignment": "capability:theory_content",
@@ -2783,7 +2783,7 @@
     {
       "id": "AUT-b2",
       "sourceState": "blocked_owner",
-      "state": "blocked_owner",
+      "state": "queued",
       "capability": "theory_content",
       "owner": "content-and-theory",
       "assignment": "capability:theory_content",
@@ -2812,7 +2812,7 @@
     {
       "id": "AUT-b4",
       "sourceState": "blocked_owner",
-      "state": "blocked_owner",
+      "state": "queued",
       "capability": "theory_content",
       "owner": "content-and-theory",
       "assignment": "capability:theory_content",
@@ -2827,7 +2827,7 @@
     {
       "id": "AUT-b5",
       "sourceState": "blocked_owner",
-      "state": "blocked_owner",
+      "state": "queued",
       "capability": "theory_content",
       "owner": "content-and-theory",
       "assignment": "capability:theory_content",
@@ -2841,7 +2841,7 @@
     {
       "id": "AUT-b6",
       "sourceState": "blocked_owner",
-      "state": "blocked_owner",
+      "state": "queued",
       "capability": "theory_content",
       "owner": "content-and-theory",
       "assignment": "capability:theory_content",
@@ -2855,7 +2855,7 @@
     {
       "id": "AUT-b7",
       "sourceState": "blocked_owner",
-      "state": "blocked_owner",
+      "state": "queued",
       "capability": "theory_content",
       "owner": "content-and-theory",
       "assignment": "capability:theory_content",
@@ -4172,7 +4172,7 @@
     {
       "id": "CMP-b2",
       "sourceState": "blocked_owner",
-      "state": "blocked_owner",
+      "state": "blocked_rfc",
       "capability": "campaign",
       "owner": "campaign",
       "assignment": "capability:campaign",
@@ -4186,7 +4186,7 @@
     {
       "id": "CMP-b3",
       "sourceState": "blocked_owner",
-      "state": "blocked_owner",
+      "state": "blocked_rfc",
       "capability": "campaign",
       "owner": "campaign",
       "assignment": "capability:campaign",
@@ -4200,7 +4200,7 @@
     {
       "id": "CMP-b4",
       "sourceState": "blocked_owner",
-      "state": "blocked_owner",
+      "state": "queued",
       "capability": "campaign",
       "owner": "campaign",
       "assignment": "capability:campaign",
@@ -4215,7 +4215,7 @@
     {
       "id": "CMP-b5",
       "sourceState": "blocked_owner",
-      "state": "blocked_owner",
+      "state": "blocked_rfc",
       "capability": "campaign",
       "owner": "campaign",
       "assignment": "capability:campaign",
@@ -4259,7 +4259,7 @@
     {
       "id": "CMP-b8",
       "sourceState": "blocked_owner",
-      "state": "blocked_owner",
+      "state": "blocked_rfc",
       "capability": "campaign",
       "owner": "campaign",
       "assignment": "capability:campaign",
@@ -5415,7 +5415,7 @@
     {
       "id": "INR-b1",
       "sourceState": "blocked_owner",
-      "state": "blocked_owner",
+      "state": "blocked_rfc",
       "capability": "support",
       "owner": "assistance-and-presentation",
       "assignment": "capability:support",
@@ -5429,7 +5429,7 @@
     {
       "id": "INR-b2",
       "sourceState": "blocked_owner",
-      "state": "blocked_owner",
+      "state": "blocked_rfc",
       "capability": "support",
       "owner": "assistance-and-presentation",
       "assignment": "capability:support",
@@ -5443,7 +5443,7 @@
     {
       "id": "INR-b3",
       "sourceState": "blocked_owner",
-      "state": "blocked_owner",
+      "state": "blocked_rfc",
       "capability": "support",
       "owner": "assistance-and-presentation",
       "assignment": "capability:support",
@@ -6197,7 +6197,7 @@
     {
       "id": "LIV-b5",
       "sourceState": "blocked_owner",
-      "state": "blocked_owner",
+      "state": "queued",
       "capability": "social_play",
       "owner": "live-and-social",
       "assignment": "capability:social_play",
@@ -6741,7 +6741,7 @@
     {
       "id": "OPP-b1",
       "sourceState": "blocked_owner",
-      "state": "blocked_owner",
+      "state": "blocked_rfc",
       "capability": "bots",
       "owner": "bot-play",
       "assignment": "capability:bots",
@@ -6770,7 +6770,7 @@
     {
       "id": "OPP-b2",
       "sourceState": "blocked_owner",
-      "state": "blocked_owner",
+      "state": "blocked_rfc",
       "capability": "bots",
       "owner": "bot-play",
       "assignment": "capability:bots",
@@ -6784,7 +6784,7 @@
     {
       "id": "OPP-b3",
       "sourceState": "blocked_owner",
-      "state": "blocked_owner",
+      "state": "queued",
       "capability": "bots",
       "owner": "bot-play",
       "assignment": "capability:bots",
@@ -6798,7 +6798,7 @@
     {
       "id": "OPP-b4",
       "sourceState": "blocked_owner",
-      "state": "blocked_owner",
+      "state": "blocked_rfc",
       "capability": "bots",
       "owner": "bot-play",
       "assignment": "capability:bots",
@@ -6812,7 +6812,7 @@
     {
       "id": "OPP-b5",
       "sourceState": "blocked_owner",
-      "state": "blocked_owner",
+      "state": "blocked_rfc",
       "capability": "bots",
       "owner": "bot-play",
       "assignment": "capability:bots",
@@ -6826,7 +6826,7 @@
     {
       "id": "OPP-b6",
       "sourceState": "blocked_owner",
-      "state": "blocked_owner",
+      "state": "blocked_rfc",
       "capability": "bots",
       "owner": "bot-play",
       "assignment": "capability:bots",
@@ -6841,7 +6841,7 @@
     {
       "id": "OPP-b7",
       "sourceState": "blocked_owner",
-      "state": "blocked_owner",
+      "state": "queued",
       "capability": "bots",
       "owner": "bot-play",
       "assignment": "capability:bots",
@@ -6855,7 +6855,7 @@
     {
       "id": "OPP-b8",
       "sourceState": "blocked_owner",
-      "state": "blocked_owner",
+      "state": "blocked_rfc",
       "capability": "bots",
       "owner": "bot-play",
       "assignment": "capability:bots",
@@ -7560,7 +7560,7 @@
     {
       "id": "SET-b1",
       "sourceState": "blocked_owner",
-      "state": "blocked_owner",
+      "state": "blocked_rfc",
       "capability": "support",
       "owner": "assistance-and-presentation",
       "assignment": "capability:support",
@@ -7574,7 +7574,7 @@
     {
       "id": "SET-b2",
       "sourceState": "blocked_owner",
-      "state": "blocked_owner",
+      "state": "blocked_rfc",
       "capability": "support",
       "owner": "assistance-and-presentation",
       "assignment": "capability:support",
@@ -7588,7 +7588,7 @@
     {
       "id": "SET-b3",
       "sourceState": "blocked_owner",
-      "state": "blocked_owner",
+      "state": "blocked_rfc",
       "capability": "support",
       "owner": "assistance-and-presentation",
       "assignment": "capability:support",
