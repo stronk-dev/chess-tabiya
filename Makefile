@@ -1,4 +1,4 @@
-.PHONY: setup check typecheck test test-software test-content test-tier-check test-browser test-browser-smoke test-browser-content test-browser-matrix test-browser-ci ci-local schema-check register-check status-parity work-index work-item-check roadmap-check intent-parity evidence-manifest-check semantic-evidence-check opening-catalogue opening-catalogue-check account-data-lifecycle-check learner-rating-bracket learner-rating-bracket-check learner-rating-isolation-check graduation-plan graduation-plan-check tactical-collector-measurement breadth-collector-measurement build verify-software verify-governance verify-content verify pack-check shape-check expression-census graduation-report graduation-report-update graduation-clear pack-preview source-fetch candidate-emit candidate-attach sourcing-check verify-draft tablebase-walk engine-walk up up-engines down
+.PHONY: setup check typecheck test test-software test-content test-tier-check test-browser test-browser-smoke test-browser-content test-browser-matrix test-browser-ci ci-local schema-check register-check status-parity work-index work-item-check roadmap-receipt roadmap-check intent-parity evidence-manifest-check semantic-evidence-check opening-catalogue opening-catalogue-check account-data-lifecycle-check learner-rating-bracket learner-rating-bracket-check learner-rating-isolation-check graduation-plan graduation-plan-check tactical-collector-measurement breadth-collector-measurement build verify-software verify-governance verify-content verify pack-check shape-check expression-census graduation-report graduation-report-update graduation-clear pack-preview source-fetch candidate-emit candidate-attach sourcing-check verify-draft tablebase-walk engine-walk up up-engines down
 
 setup:
 	pnpm install --frozen-lockfile
@@ -60,6 +60,11 @@ work-item-check:
 roadmap-check:
 	node --test tools/roadmap-check.test.mjs
 	node tools/roadmap-check.mjs
+	node --test tools/roadmap-receipt.test.mjs
+	node tools/roadmap-receipt.mjs
+
+roadmap-receipt:
+	node tools/roadmap-receipt.mjs --write
 
 intent-parity:
 	node --test tools/intent-parity-harness/audit.test.mjs

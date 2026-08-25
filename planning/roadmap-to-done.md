@@ -2,7 +2,7 @@
 
 **Owner:** coordinator · **Rebuilt:** 2026-08-24 under [[D1504]] · **Machine map:**
 `planning/roadmap-1.0.json` · **Per-item state:** `planning/work-items-1.0.json` · **Guards:**
-`make roadmap-check work-item-check`
+`make roadmap-check work-item-check` · **Generated status:** `planning/roadmap-1.0.receipt.json`
 
 This is the one strategic answer to “what remains before a full 1.0?”. `design/BACKLOG.md` remains
 the idea/defect ledger, `rfc/README.md` the lifecycle/resource register,
@@ -55,6 +55,11 @@ make status-parity
 make register-check
 make roadmap-check
 ```
+
+`make roadmap-receipt` deliberately updates the checked status artefact; ordinary verification
+never rewrites it. `make roadmap-check` fails when any joined source changes without the receipt,
+so a release/status report cannot silently survive changed milestones, RFC ownership, routes,
+API reach or item assignments.
 
 ## What “full” means
 

@@ -8,7 +8,7 @@ is not proof that the production application routes an endpoint.
 |---|---|---|---|
 | Fast commit checks | Lefthook `pre-commit` | Staged diff hygiene and affected package/process checks | Full CI or a push gate |
 | Software contracts | `make verify-software` | Types, framework-free reducers/selectors, server contracts, schemas and compiled runtime manifests | Real-corpus acceptance, process ledgers, browser behavior or deployed routing |
-| Repository governance | `make verify-governance` | RFC/register/work/roadmap/intent consistency and test-tier ownership | Product behavior, content quality or release proof |
+| Repository governance | `make verify-governance` | RFC/register/work/roadmap/intent consistency, a source-sealed 1.0 status receipt, and test-tier ownership | Product behavior, content quality or release proof |
 | Real-content contracts | `make verify-content` | Schema and application compatibility against committed draft/pack/candidate bytes | Graduation readiness, authored chess judgement or software contracts already expressible with synthetic fixtures |
 | Browser journeys | `make test-browser-smoke` | Stable user journeys asserted through roles, state and outcomes | Mutable authored prose or exhaustive viewport coverage |
 | Real-content integration | `make test-browser-content` | Representative draft/pack integration with the application | Chess-truth validation or product behavior already expressible with a synthetic fixture |

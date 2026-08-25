@@ -7473,3 +7473,26 @@ accepted-debt fixture.
 
 **Verification:** server typecheck and 36 focused sourcing/refusal tests pass. Full exact repository
 verification follows this closeout in the same checkpoint.
+
+## 2026-08-25 — the first 1.0 execution milestone closes on a source-sealed receipt
+
+**What landed:** [[D1543]] turns the full-1.0 registry into a deterministic status artefact rather
+than another hand-written summary. `planning/roadmap-1.0.receipt.json` records all nine dependency
+milestones, fourteen capabilities, eight completion dimensions, 46 RFC assignments, 569 UX-item
+states and the route/API reach split. It carries digests of the roadmap, item registry, RFC
+register, UX index, router and the two production API boundaries.
+
+**Failure semantics:** `make roadmap-check` now distinguishes an upstream source change from
+internal receipt corruption and fails both. Its two negative fixtures prove those arms; ordinary
+verification checks but never rewrites the receipt. A deliberate `make roadmap-receipt` is the
+only update path.
+
+**Flow-back:** the `release-truth` milestone is complete: software, governance, real-content and
+the three browser contracts are separately named; mutable graduation population is outside the
+required product gate; all live 1.0 UX work is assigned; and the status answer is sealed to its
+authorities. [[D1505]] also closes at its actual mechanism boundary: `AGENTS.md` already requires a
+same-commit proposed intent amendment whenever shipped reality falsifies protected intent, while
+the individual stale sentences remain owned by their own amendment rows.
+
+**Verification:** receipt unit tests, roadmap R1-R10 and the 1,348-row work index are green; full
+repository governance follows before commit.

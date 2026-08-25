@@ -294,10 +294,10 @@
       {
         "id": "release-truth",
         "wave": 0,
-        "state": "implementing",
+        "state": "complete",
         "capabilities": ["governance", "operations"],
         "dependsOn": [],
-        "nextAction": "Keep software, governance, real-content, browser-smoke and interaction-matrix checks separately named; remove mutable graduation census from required software CI; generate the capability status receipt.",
+        "nextAction": "Maintain the separately named verification tiers and refresh the source-sealed capability receipt whenever a joined authority changes.",
         "exit": "Every required check has one owner and failure meaning; all live 1.0 work is assigned; local parity matches GitHub; no planning census masquerades as a product contract."
       },
       {

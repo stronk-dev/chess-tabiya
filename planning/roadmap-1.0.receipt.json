@@ -1,0 +1,1055 @@
+{
+  "schemaVersion": 1,
+  "authority": "planning/roadmap-to-done.md",
+  "sourceDigests": {
+    "roadmap": "sha256:4fb3454fb36f426b6b9d74258f59dd83049d427935aed756efc1bc58506a31bf",
+    "workItems": "sha256:68f3151ee9b9d2fa89458e088825c67d279d2ed971d9676762f11eb187b6b688",
+    "rfcRegister": "sha256:b9ff713359cf22d0549d8a5c356121e62f3bd2da3278f6593ca0876cd73d0ffb",
+    "uxIndex": "sha256:b47b81de41e880bbf6dfd283283c7a42a54a8a97f466e61e793ea169d5161ef8",
+    "router": "sha256:db0f9165c98f25ab4e0b5cbbc211a83a690eb61a5b9a00ece4a75688a7a58b62",
+    "application": "sha256:1e8b785cfaebfccb4c494506cee358f8138cdc64d513eb32c214be446b0a49d5",
+    "rest": "sha256:c15a82d5d3a4e197c01bc3cab7610f3a5e7cf67f9f42f423da520815cc287ca6"
+  },
+  "summary": {
+    "capabilities": 14,
+    "releaseClasses": {
+      "core": 12,
+      "breadth": 2,
+      "post_1_0": 0
+    },
+    "assignedRfcs": 46,
+    "workItems": {
+      "queued": 304,
+      "blocked_owner": 98,
+      "blocked_rfc": 97,
+      "completed": 46,
+      "retired": 24
+    },
+    "dimensionStates": {
+      "proven": 1,
+      "partial": 48,
+      "blocked": 45,
+      "broken": 0,
+      "missing": 10,
+      "not_applicable": 8
+    },
+    "appRoutes": {
+      "live": 8,
+      "live_but_inadequate": 5,
+      "missing": 1
+    },
+    "apiFamilies": {
+      "live": 18,
+      "live_direct": 1,
+      "implemented_but_unreachable": 0,
+      "missing": 2
+    }
+  },
+  "milestones": [
+    {
+      "id": "release-truth",
+      "wave": 0,
+      "state": "complete",
+      "capabilities": [
+        "governance",
+        "operations"
+      ],
+      "dependsOn": [],
+      "nextAction": "Maintain the separately named verification tiers and refresh the source-sealed capability receipt whenever a joined authority changes.",
+      "exit": "Every required check has one owner and failure meaning; all live 1.0 work is assigned; local parity matches GitHub; no planning census masquerades as a product contract."
+    },
+    {
+      "id": "foundation-contracts",
+      "wave": 1,
+      "state": "active",
+      "capabilities": [
+        "evidence",
+        "support",
+        "review",
+        "theory_content",
+        "bots",
+        "learner_model",
+        "campaign",
+        "social_play",
+        "professional"
+      ],
+      "dependsOn": [
+        "release-truth"
+      ],
+      "nextAction": "Complete independent review and acceptance for pack capability/claim anchors, module registration/presentation, review compiler/map, longitudinal store, bot roster/route source, social play and casting; do not implement a draft contract early.",
+      "exit": "Every shared schema, migration, evidence, module and persistence seam needed by 1.0 has an accepted RFC, an unambiguous register claim, and executable negative criteria."
+    },
+    {
+      "id": "evidence-to-consumer-spine",
+      "wave": 1,
+      "state": "active",
+      "capabilities": [
+        "evidence",
+        "support",
+        "review",
+        "bots",
+        "learner_model",
+        "theory_content"
+      ],
+      "dependsOn": [
+        "foundation-contracts"
+      ],
+      "nextAction": "Finish the held semantic projections, capability/claim compatibility, complete-candidate packet, selectors, grade/review projections and the eleven registered learner modules; bind each producer to real module, bot and Review consumers.",
+      "exit": "Collector to fact to selector to typed module/bot/Review is closed at runtime; every path can abstain; raw producer strings are inspector-only; content compatibility is computable before pack edits."
+    },
+    {
+      "id": "stable-board-and-presets",
+      "wave": 2,
+      "state": "queued",
+      "capabilities": [
+        "accessibility",
+        "support",
+        "rehearsal"
+      ],
+      "dependsOn": [
+        "evidence-to-consumer-spine"
+      ],
+      "nextAction": "Replace stacked board-column panels with one stable board region plus companion/drawer regions; finish preset composition and render evidence as typed components with touch, hover, focus and screen-reader parity.",
+      "exit": "Quiet, Guided, Support, Drill, Review, Campaign, Academy and Stream open useful by default; the board never shrinks or moves; every primitive remains available under Advanced."
+    },
+    {
+      "id": "durable-product-state",
+      "wave": 2,
+      "state": "blocked_contract",
+      "capabilities": [
+        "learner_model",
+        "bots",
+        "campaign",
+        "social_play",
+        "account_data",
+        "operations"
+      ],
+      "dependsOn": [
+        "foundation-contracts"
+      ],
+      "nextAction": "Land migrations in register order: longitudinal jobs/observations, bot policy/roster state, campaign state, clocks/variants/social results; extend export, deletion, backup and rebuild with each object.",
+      "exit": "Every workflow survives restart, retry, upgrade and projection rebuild with owner/actor identity, immutable inputs, idempotence, lifecycle coverage and no workstation-only state."
+    },
+    {
+      "id": "production-api-closure",
+      "wave": 2,
+      "state": "blocked_foundation",
+      "capabilities": [
+        "evidence",
+        "theory_content",
+        "learner_model",
+        "bots",
+        "campaign",
+        "social_play",
+        "professional",
+        "account_data",
+        "operations"
+      ],
+      "dependsOn": [
+        "durable-product-state"
+      ],
+      "nextAction": "Route principles/theory, longitudinal/profile, registered opponents, campaign, native/social/clocks and professional verbs through createApplication with typed auth, errors, availability and release-container tests.",
+      "exit": "No feature is declared live from a direct REST handler alone; every advertised family crosses the production application and release-image boundary."
+    },
+    {
+      "id": "complete-learner-journeys",
+      "wave": 3,
+      "state": "blocked_foundation",
+      "capabilities": [
+        "rehearsal",
+        "support",
+        "review",
+        "theory_content",
+        "bots",
+        "learner_model",
+        "campaign",
+        "social_play",
+        "professional",
+        "accessibility",
+        "account_data"
+      ],
+      "dependsOn": [
+        "stable-board-and-presets",
+        "production-api-closure"
+      ],
+      "nextAction": "Ship full vertical journeys for arrival/rehearsal, whole-game Review/return, theory/library, human-like bots/history, profile/style/skills, campaign, human play, coach/classroom/stream and account lifecycle; close their UX items by observed behavior, not component presence.",
+      "exit": "Every route has opinionated defaults, loading/empty/error/recovery, responsive and accessible behavior, return doors, and no raw enum/JSON/cp or settings-first workflow."
+    },
+    {
+      "id": "official-content",
+      "wave": 4,
+      "state": "blocked_foundation",
+      "capabilities": [
+        "theory_content",
+        "rehearsal",
+        "support",
+        "review",
+        "bots",
+        "learner_model",
+        "campaign",
+        "social_play",
+        "professional"
+      ],
+      "dependsOn": [
+        "evidence-to-consumer-spine",
+        "complete-learner-journeys"
+      ],
+      "nextAction": "Reground theory and principles, refresh manifests, graduate a varied pilot, then author the opening/middlegame/endgame/training-form/campaign/bot/Review matrix against stable capability declarations.",
+      "exit": "The release contains an allow-listed official corpus exercising every important handshake, counter-case, honest-empty state and complete campaign without blind mass rewrites."
+    },
+    {
+      "id": "release-candidate-proof",
+      "wave": 5,
+      "state": "blocked_foundation",
+      "capabilities": [
+        "governance",
+        "evidence",
+        "rehearsal",
+        "support",
+        "review",
+        "theory_content",
+        "bots",
+        "learner_model",
+        "campaign",
+        "social_play",
+        "professional",
+        "accessibility",
+        "account_data",
+        "operations"
+      ],
+      "dependsOn": [
+        "official-content"
+      ],
+      "nextAction": "Exercise the ten release journeys against digest-pinned images on clean hosts, including provider-off degradation, migration, backup/restore, update/rollback, accessibility, rights/SBOM and owner-device use.",
+      "exit": "Every core and breadth capability proves all applicable completion dimensions or has an explicit owner-approved descope; the owner can use the release without interpreting implementation vocabulary."
+    }
+  ],
+  "capabilities": [
+    {
+      "id": "governance",
+      "name": "Work truth, measurement, and release accounting",
+      "release": "core",
+      "owner": "coordinator",
+      "rfcCount": 1,
+      "workItems": {
+        "queued": 0,
+        "blocked_owner": 0,
+        "blocked_rfc": 0,
+        "completed": 0,
+        "retired": 0
+      },
+      "routes": {
+        "live": 0,
+        "live_but_inadequate": 0,
+        "missing": 0
+      },
+      "apiFamilies": {
+        "live": 0,
+        "live_direct": 0,
+        "implemented_but_unreachable": 0,
+        "missing": 0
+      },
+      "completion": {
+        "evidence": [
+          "partial",
+          "Measurements retain inputs, revisions, and negative results."
+        ],
+        "state": [
+          "partial",
+          "Every live item has one durable state, one owner, and one capability."
+        ],
+        "api": [
+          "not_applicable",
+          "This slice governs delivery rather than a product endpoint."
+        ],
+        "experience": [
+          "not_applicable",
+          "This slice has no learner surface."
+        ],
+        "defaults": [
+          "not_applicable",
+          "This slice has no learner configuration."
+        ],
+        "content": [
+          "partial",
+          "Research, RFC, implementation, content, and release closeouts flow back into this roadmap."
+        ],
+        "verification": [
+          "partial",
+          "Roadmap coverage, work routing, RFC state, registers, and protected intent are checked."
+        ],
+        "release": [
+          "partial",
+          "A release cannot claim 1.0 while any core capability remains incomplete."
+        ]
+      }
+    },
+    {
+      "id": "evidence",
+      "name": "Evidence collection, semantic events, selection, and grounding",
+      "release": "core",
+      "owner": "evidence-foundation",
+      "rfcCount": 10,
+      "workItems": {
+        "queued": 0,
+        "blocked_owner": 0,
+        "blocked_rfc": 0,
+        "completed": 0,
+        "retired": 0
+      },
+      "routes": {
+        "live": 0,
+        "live_but_inadequate": 0,
+        "missing": 0
+      },
+      "apiFamilies": {
+        "live": 1,
+        "live_direct": 0,
+        "implemented_but_unreachable": 0,
+        "missing": 0
+      },
+      "completion": {
+        "evidence": [
+          "partial",
+          "Typed engine, tablebase, human-model, explorer, theory, structural, tactical, transition, counterfactual, and availability facts preserve operands and provenance."
+        ],
+        "state": [
+          "partial",
+          "Collected facts compile into one versioned packet and semantic-event vocabulary without raw-string side channels."
+        ],
+        "api": [
+          "partial",
+          "Every admitted producer is requestable or scheduled through a declared server path with abstention and latency semantics."
+        ],
+        "experience": [
+          "blocked",
+          "No ordinary learner surface consumes raw producers; modules receive selected facts only."
+        ],
+        "defaults": [
+          "blocked",
+          "Consumer-specific eligibility, sign, novelty, importance, phase, and answer-distance policies are compiled rather than inferred in UI code."
+        ],
+        "content": [
+          "blocked",
+          "Pack capabilities and claim anchors declare exactly which evidence each authored statement needs."
+        ],
+        "verification": [
+          "partial",
+          "Positive, hard-negative, mirrored, counterfactual, imported, and external labelled fixtures cover every family and detect vacuous predicates."
+        ],
+        "release": [
+          "blocked",
+          "The production manifest proves producer to projection to selector to consumer reach and honest unavailability."
+        ]
+      }
+    },
+    {
+      "id": "rehearsal",
+      "name": "Arrival, play, consequence, rewind, branch, compare, and replay",
+      "release": "core",
+      "owner": "core-loop",
+      "rfcCount": 2,
+      "workItems": {
+        "queued": 48,
+        "blocked_owner": 15,
+        "blocked_rfc": 11,
+        "completed": 6,
+        "retired": 4
+      },
+      "routes": {
+        "live": 3,
+        "live_but_inadequate": 0,
+        "missing": 0
+      },
+      "apiFamilies": {
+        "live": 1,
+        "live_direct": 0,
+        "implemented_but_unreachable": 0,
+        "missing": 0
+      },
+      "completion": {
+        "evidence": [
+          "partial",
+          "The loop can consume grounded evidence without becoming an engine review screen."
+        ],
+        "state": [
+          "proven",
+          "Immutable run graph, forks, rewinds, comparisons, leases, and pack-optional runs survive resume."
+        ],
+        "api": [
+          "partial",
+          "All run actions are reachable through the production application and carry typed errors."
+        ],
+        "experience": [
+          "partial",
+          "A first-time learner can start, understand the consequence horizon, finish, rewind, compare, and replay without settings or internal vocabulary."
+        ],
+        "defaults": [
+          "blocked",
+          "Just Play, plan, outcome, trajectory, and imported-game flows each start with an opinionated composition."
+        ],
+        "content": [
+          "blocked",
+          "Each training form has representative official content and honest empty behavior."
+        ],
+        "verification": [
+          "partial",
+          "Desktop, phone, keyboard, touch, resume, branch, compare, and failure paths run as full journeys."
+        ],
+        "release": [
+          "blocked",
+          "The complete loop passes against the release image and persisted database, not fixtures alone."
+        ]
+      }
+    },
+    {
+      "id": "support",
+      "name": "Guided support, theory-only nudges, prevention, and advanced analysis",
+      "release": "core",
+      "owner": "assistance-and-presentation",
+      "rfcCount": 5,
+      "workItems": {
+        "queued": 38,
+        "blocked_owner": 9,
+        "blocked_rfc": 19,
+        "completed": 5,
+        "retired": 0
+      },
+      "routes": {
+        "live": 0,
+        "live_but_inadequate": 1,
+        "missing": 0
+      },
+      "apiFamilies": {
+        "live": 0,
+        "live_direct": 0,
+        "implemented_but_unreachable": 0,
+        "missing": 0
+      },
+      "completion": {
+        "evidence": [
+          "blocked",
+          "Each module names its eligible projections, disclosure distance, timing, role, and abstention."
+        ],
+        "state": [
+          "partial",
+          "Preset, workflow context, assistance ceiling, learner overrides, and disclosure events compose deterministically."
+        ],
+        "api": [
+          "blocked",
+          "Module views and availability come from one server contract; provider use cannot widen evidence."
+        ],
+        "experience": [
+          "missing",
+          "Ordinary play shows named learner questions and compact modules, never a dump of producer strings; the board does not shrink or move between stacked panels."
+        ],
+        "defaults": [
+          "blocked",
+          "Quiet, Guided, Support, Drill, Review, Stream, Academy, and Campaign start useful; 72 primitive controls remain Advanced."
+        ],
+        "content": [
+          "blocked",
+          "Theory-only, pattern, square, piece, distance, move, prevention, and honest-empty examples are authored and tested."
+        ],
+        "verification": [
+          "blocked",
+          "Leakage, word budget, interruption, source-off, LLM-off, per-context ceiling, and responsive layout matrices pass."
+        ],
+        "release": [
+          "blocked",
+          "Provider-off support remains truthful and useful; Advanced exposes every primitive without becoming the default workflow."
+        ]
+      }
+    },
+    {
+      "id": "review",
+      "name": "Whole-game review, Review Map, story, share, and return",
+      "release": "core",
+      "owner": "review-and-return",
+      "rfcCount": 5,
+      "workItems": {
+        "queued": 22,
+        "blocked_owner": 8,
+        "blocked_rfc": 22,
+        "completed": 11,
+        "retired": 4
+      },
+      "routes": {
+        "live": 1,
+        "live_but_inadequate": 1,
+        "missing": 0
+      },
+      "apiFamilies": {
+        "live": 0,
+        "live_direct": 0,
+        "implemented_but_unreachable": 0,
+        "missing": 0
+      },
+      "completion": {
+        "evidence": [
+          "partial",
+          "Grades, phases, opening identity, semantic changes, human context, and source-normalized values remain separate evidence."
+        ],
+        "state": [
+          "partial",
+          "Review moments retain exact run, node, learner side, source, selection reason, and retry target."
+        ],
+        "api": [
+          "partial",
+          "Import, story, review compilation, sharing, retry, and return scheduling are reachable and paginated."
+        ],
+        "experience": [
+          "missing",
+          "A whole-game map and move timeline explain a bounded set of grounded moments, opening/phase arc, and next actions without dumping scores or only eight opaque cards."
+        ],
+        "defaults": [
+          "blocked",
+          "Review prioritizes grounded narrative and replay doors; raw engine traces are opt-in inspector material."
+        ],
+        "content": [
+          "blocked",
+          "Representative games cover blunder, missed chance, quiet improvement, theory departure, tactic, endgame, decided position, and honest no-comment cases."
+        ],
+        "verification": [
+          "blocked",
+          "Learner-side result, cp/WDL/mate/DTZ normalization, suppression, chronology, sharing, and LLM-off truth have end-to-end fixtures."
+        ],
+        "release": [
+          "blocked",
+          "A finished native, bot, imported, campaign, and social game each enters the same review-and-return journey."
+        ]
+      }
+    },
+    {
+      "id": "theory_content",
+      "name": "Theory, library, authoring, packs, provenance, and graduation",
+      "release": "core",
+      "owner": "content-and-theory",
+      "rfcCount": 5,
+      "workItems": {
+        "queued": 27,
+        "blocked_owner": 7,
+        "blocked_rfc": 6,
+        "completed": 3,
+        "retired": 1
+      },
+      "routes": {
+        "live": 1,
+        "live_but_inadequate": 1,
+        "missing": 0
+      },
+      "apiFamilies": {
+        "live": 3,
+        "live_direct": 0,
+        "implemented_but_unreachable": 0,
+        "missing": 1
+      },
+      "completion": {
+        "evidence": [
+          "partial",
+          "Licensed, revision-pinned theory and exact chess evidence back principles, shapes, claims, and opening identities."
+        ],
+        "state": [
+          "partial",
+          "Draft, official, provenance, capability, migration, and graduation states are machine-readable and non-vacuous."
+        ],
+        "api": [
+          "missing",
+          "Principles, shapes, theory search, packs, author lint/playtest/register/withdraw, and exact drill joins have production application routes."
+        ],
+        "experience": [
+          "missing",
+          "Searchable phase-first library and author workflow support find, understand, rehearse, return, preview, validate, and publish."
+        ],
+        "defaults": [
+          "blocked",
+          "Learners see official material first with disclosed community drafts; authors see advanced provenance and capability detail."
+        ],
+        "content": [
+          "missing",
+          "A varied official 1.0 corpus spans openings, middlegames, endgames, trajectories, modes, levels, structures, tactics, and counter-cases."
+        ],
+        "verification": [
+          "blocked",
+          "Fresh manifests, capability plans, citations, source licences, negative fixtures, regression playtests, and graduation reports gate every official item."
+        ],
+        "release": [
+          "blocked",
+          "The runtime image contains only an allow-listed immutable content bundle; zero stale or workstation-local provenance paths ship."
+        ]
+      }
+    },
+    {
+      "id": "bots",
+      "name": "Human-like opponents, personalities, roster, and bot events",
+      "release": "core",
+      "owner": "bot-play",
+      "rfcCount": 3,
+      "workItems": {
+        "queued": 18,
+        "blocked_owner": 10,
+        "blocked_rfc": 14,
+        "completed": 4,
+        "retired": 3
+      },
+      "routes": {
+        "live": 0,
+        "live_but_inadequate": 0,
+        "missing": 0
+      },
+      "apiFamilies": {
+        "live": 1,
+        "live_direct": 0,
+        "implemented_but_unreachable": 0,
+        "missing": 0
+      },
+      "completion": {
+        "evidence": [
+          "partial",
+          "Maia bands, candidate probabilities, guards, routes, repertoire, traits, memory, clock behavior, and endgame behavior are measured separately."
+        ],
+        "state": [
+          "blocked",
+          "Named profile digests persist every model, bound, proposal, guard, trait, and fallback used for a move."
+        ],
+        "api": [
+          "partial",
+          "Opponent discovery and selection expose only registered profiles and reproduce their policy after resume."
+        ],
+        "experience": [
+          "missing",
+          "A learner chooses an honest bot card and experiences its behavior in play, history, rematches, review, and local bot tournaments."
+        ],
+        "defaults": [
+          "blocked",
+          "Strength is a measured rung, personality is behavior, and no generic Elo knob or adjective-only persona is presented."
+        ],
+        "content": [
+          "blocked",
+          "The 4 by 3 roster, openings/routes, profile copy, names, absences, and calibration reports are populated."
+        ],
+        "verification": [
+          "blocked",
+          "Blind human-likeness, strength, trait observability, off-window proposal, fallback, severe-loss, clock, phase, and reproducibility gates pass per profile."
+        ],
+        "release": [
+          "blocked",
+          "CPU-capable provider-off opponents remain playable and every stronger optional engine degrades visibly."
+        ]
+      }
+    },
+    {
+      "id": "learner_model",
+      "name": "Rating, longitudinal observations, skills, style, and recommendations",
+      "release": "core",
+      "owner": "learner-history",
+      "rfcCount": 4,
+      "workItems": {
+        "queued": 0,
+        "blocked_owner": 0,
+        "blocked_rfc": 0,
+        "completed": 0,
+        "retired": 0
+      },
+      "routes": {
+        "live": 2,
+        "live_but_inadequate": 0,
+        "missing": 0
+      },
+      "apiFamilies": {
+        "live": 5,
+        "live_direct": 0,
+        "implemented_but_unreachable": 0,
+        "missing": 0
+      },
+      "completion": {
+        "evidence": [
+          "partial",
+          "Every metric has occurrence and opportunity denominators, actor attribution, phase/decision splits, revision, confidence, and source drill-down."
+        ],
+        "state": [
+          "blocked",
+          "Background longitudinal jobs, observations, aggregates, rating periods, skills, and style cards persist idempotently."
+        ],
+        "api": [
+          "partial",
+          "Rating, history, rated-game, marks, and cohort-standing families cross the production application boundary; longitudinal/profile APIs are absent."
+        ],
+        "experience": [
+          "partial",
+          "Rating works as a narrow surface; complete history, opening performance, skill credit, style dimensions, privacy, sharing, and grounded recommendations do not."
+        ],
+        "defaults": [
+          "blocked",
+          "Profiles abstain until denominators clear; no universal confidence badge, GM twin, personality verdict, weakness ranking, or advice leakage."
+        ],
+        "content": [
+          "blocked",
+          "Metric explanations, examples, counterexamples, and related drills exist for every published dimension."
+        ],
+        "verification": [
+          "partial",
+          "Rating isolation and calibration pass; actor attribution, rebuild, privacy, longitudinal cost, recommendation, and presentation gates remain."
+        ],
+        "release": [
+          "blocked",
+          "Learners can export/delete all profile data and rebuild projections from immutable owned events."
+        ]
+      }
+    },
+    {
+      "id": "campaign",
+      "name": "Campaign, progression, encounters, resources, and failure",
+      "release": "core",
+      "owner": "campaign",
+      "rfcCount": 2,
+      "workItems": {
+        "queued": 29,
+        "blocked_owner": 11,
+        "blocked_rfc": 15,
+        "completed": 4,
+        "retired": 4
+      },
+      "routes": {
+        "live": 0,
+        "live_but_inadequate": 0,
+        "missing": 1
+      },
+      "apiFamilies": {
+        "live": 0,
+        "live_direct": 0,
+        "implemented_but_unreachable": 0,
+        "missing": 1
+      },
+      "completion": {
+        "evidence": [
+          "partial",
+          "Encounter eligibility and rewards spend only registered pack, module, rating, skill, and bot facts."
+        ],
+        "state": [
+          "partial",
+          "Schema, registry, and deterministic fold exist; persistence, abandoned-run rebuild, failure economy, and versioned authored campaigns do not."
+        ],
+        "api": [
+          "missing",
+          "Enter, read, seal, fail, reward, spend, unlock, resume, and abandon endpoints do not exist."
+        ],
+        "experience": [
+          "missing",
+          "There is no campaign route, map, encounter flow, resource explanation, failure result, or return path in the web app."
+        ],
+        "defaults": [
+          "blocked",
+          "Campaign has an opinionated preset and earned modules never disappear because of an unrelated settings choice."
+        ],
+        "content": [
+          "missing",
+          "No authored campaign exists; 1.0 needs a complete, replayable pilot with varied encounter and boss forms."
+        ],
+        "verification": [
+          "blocked",
+          "State-fold, persistence, crash/retry, reward conservation, failure consequence, accessibility, campaign-to-review, and full-run browser tests pass."
+        ],
+        "release": [
+          "blocked",
+          "The campaign survives upgrade and backup/restore and never locks the open library or sells progression."
+        ]
+      }
+    },
+    {
+      "id": "social_play",
+      "name": "Human play, imports, clocks, live following, variants, and social return",
+      "release": "breadth",
+      "owner": "live-and-social",
+      "rfcCount": 6,
+      "workItems": {
+        "queued": 25,
+        "blocked_owner": 11,
+        "blocked_rfc": 7,
+        "completed": 3,
+        "retired": 3
+      },
+      "routes": {
+        "live": 1,
+        "live_but_inadequate": 1,
+        "missing": 0
+      },
+      "apiFamilies": {
+        "live": 3,
+        "live_direct": 0,
+        "implemented_but_unreachable": 0,
+        "missing": 0
+      },
+      "completion": {
+        "evidence": [
+          "partial",
+          "Provider identity, live/finished state, clocks, result, variant, fair-play boundary, and source sanitization are retained."
+        ],
+        "state": [
+          "partial",
+          "Sessions and imports exist; native pairing, two-player rating, live-source growth, enforced clocks, invitation transitions, and event-ready aggregation remain."
+        ],
+        "api": [
+          "partial",
+          "Sessions work; provider challenge/follow/result return, native pairing, clocks, variants, and complete invitation lifecycle are unfinished."
+        ],
+        "experience": [
+          "partial",
+          "Live screens exist but creation, joining, voting, Arena, native play, pause consent, errors, and return are not coherent guided workflows."
+        ],
+        "defaults": [
+          "blocked",
+          "Casual native, rated native, imported, live-follow, Arena, and match each have explicit terms and assistance ceilings."
+        ],
+        "content": [
+          "partial",
+          "Representative provider, clock, result, malformed input, variant, disconnect, and rematch fixtures exist across all supported paths."
+        ],
+        "verification": [
+          "blocked",
+          "Two-device play, resume, timeout, draw, result attribution, abuse boundary, provider-off fallback, review, and tournament-readiness tests pass."
+        ],
+        "release": [
+          "blocked",
+          "The release states what is native, provider-backed, casual, rated, enforced, or unsupported without implying public matchmaking operations."
+        ]
+      }
+    },
+    {
+      "id": "professional",
+      "name": "Coach, classroom, streamer, casting, and audience workflows",
+      "release": "breadth",
+      "owner": "professional-workflows",
+      "rfcCount": 1,
+      "workItems": {
+        "queued": 33,
+        "blocked_owner": 10,
+        "blocked_rfc": 1,
+        "completed": 3,
+        "retired": 1
+      },
+      "routes": {
+        "live": 0,
+        "live_but_inadequate": 1,
+        "missing": 0
+      },
+      "apiFamilies": {
+        "live": 2,
+        "live_direct": 0,
+        "implemented_but_unreachable": 0,
+        "missing": 0
+      },
+      "completion": {
+        "evidence": [
+          "partial",
+          "All projections inherit role, assistance ceiling, withholding, delay, attribution, and learner consent."
+        ],
+        "state": [
+          "partial",
+          "Classrooms, assignments, sessions, proposals, marks, and votes exist; invitation transitions and durable compositions remain incomplete."
+        ],
+        "api": [
+          "partial",
+          "Teacher/live endpoints exist; viewer links, audience voting client, provider bridge, submissions review, and full role enforcement remain."
+        ],
+        "experience": [
+          "missing",
+          "Teach Live, Review Submission, Stream, audience preview, streamer chrome, simul overview, and explained setup are not complete workflows."
+        ],
+        "defaults": [
+          "blocked",
+          "Academy and Stream compositions are named presets, not inherited Just Play settings or raw role controls."
+        ],
+        "content": [
+          "blocked",
+          "Worked coach, submission, cast, vote, delayed-evidence, and honest-empty scenarios ship."
+        ],
+        "verification": [
+          "blocked",
+          "Role-bypass, accessibility projection, consent, audience truth, delay, reconnect, overlay, and two-account abuse cases pass."
+        ],
+        "release": [
+          "blocked",
+          "No workflow promises chat, moderation, delay, provider integration, or authority that the deployment does not provide."
+        ]
+      }
+    },
+    {
+      "id": "accessibility",
+      "name": "Responsive layout, accessible board input, theming, and PWA",
+      "release": "core",
+      "owner": "client-platform",
+      "rfcCount": 2,
+      "workItems": {
+        "queued": 34,
+        "blocked_owner": 7,
+        "blocked_rfc": 1,
+        "completed": 4,
+        "retired": 4
+      },
+      "routes": {
+        "live": 0,
+        "live_but_inadequate": 0,
+        "missing": 0
+      },
+      "apiFamilies": {
+        "live": 0,
+        "live_direct": 0,
+        "implemented_but_unreachable": 0,
+        "missing": 0
+      },
+      "completion": {
+        "evidence": [
+          "not_applicable",
+          "This slice consumes product semantics but creates no chess truth."
+        ],
+        "state": [
+          "partial",
+          "One board-input controller and theme preferences exist; global focus, responsive composition, and offline/update state remain."
+        ],
+        "api": [
+          "not_applicable",
+          "Existing APIs must remain usable under every supported input and viewport."
+        ],
+        "experience": [
+          "partial",
+          "Board input is broad; page layout still stacks around and shrinks the board, overflows, traps shortcuts, refuses device classes, and lacks a coherent mobile shell."
+        ],
+        "defaults": [
+          "partial",
+          "Device theme and permanent board cells have defaults; animation, density, panel placement, and small-screen composition do not."
+        ],
+        "content": [
+          "partial",
+          "Piece assets and themes exist; previews, licence presentation, offline shell, and update UX remain."
+        ],
+        "verification": [
+          "partial",
+          "Board matrices pass; every route still needs keyboard, screen-reader, zoom, contrast, reduced-motion, phone, tablet, desktop, and post-gesture layout proof."
+        ],
+        "release": [
+          "blocked",
+          "PWA install/update/offline behavior, supported viewport floor, asset licences, and owner-device discharge are complete."
+        ]
+      }
+    },
+    {
+      "id": "account_data",
+      "name": "Identity, privacy, import/export, backup, and deletion",
+      "release": "core",
+      "owner": "account-and-data",
+      "rfcCount": 0,
+      "workItems": {
+        "queued": 30,
+        "blocked_owner": 10,
+        "blocked_rfc": 1,
+        "completed": 3,
+        "retired": 0
+      },
+      "routes": {
+        "live": 0,
+        "live_but_inadequate": 0,
+        "missing": 0
+      },
+      "apiFamilies": {
+        "live": 1,
+        "live_direct": 0,
+        "implemented_but_unreachable": 0,
+        "missing": 0
+      },
+      "completion": {
+        "evidence": [
+          "not_applicable",
+          "This slice transports provenance but creates no chess truth."
+        ],
+        "state": [
+          "partial",
+          "Identity, authorization, account export/delete, and writer leases exist; guest/claim, complete bundle, and future profile/social coverage remain."
+        ],
+        "api": [
+          "partial",
+          "Auth/export/delete work; account-level import, portability versioning, backup/restore, and complete object coverage remain."
+        ],
+        "experience": [
+          "partial",
+          "Login exists; first-run account timing, disclosure, destructive previews, download progress, import conflicts, and recovery are unfinished."
+        ],
+        "defaults": [
+          "blocked",
+          "Private self-hosting, data minimization, explicit sharing, and no ambient coach access are the defaults."
+        ],
+        "content": [
+          "not_applicable",
+          "Fixtures cover account object classes rather than chess content."
+        ],
+        "verification": [
+          "partial",
+          "Lifecycle tests exist; full export round-trip, deletion, restore, multi-user isolation, shared links, guest claim, and future schema fixtures remain."
+        ],
+        "release": [
+          "blocked",
+          "A documented, tested backup/restore/update/rollback path and complete portable account bundle ship."
+        ]
+      }
+    },
+    {
+      "id": "operations",
+      "name": "CI parity, packaging, deployment, observability, and release",
+      "release": "core",
+      "owner": "release-engineering",
+      "rfcCount": 0,
+      "workItems": {
+        "queued": 0,
+        "blocked_owner": 0,
+        "blocked_rfc": 0,
+        "completed": 0,
+        "retired": 0
+      },
+      "routes": {
+        "live": 0,
+        "live_but_inadequate": 0,
+        "missing": 0
+      },
+      "apiFamilies": {
+        "live": 1,
+        "live_direct": 1,
+        "implemented_but_unreachable": 0,
+        "missing": 0
+      },
+      "completion": {
+        "evidence": [
+          "not_applicable",
+          "This slice verifies evidence machinery but creates no chess truth."
+        ],
+        "state": [
+          "partial",
+          "Schema/register/work/intent checks and three workflows exist; many research harnesses and release states are not enforced."
+        ],
+        "api": [
+          "partial",
+          "Health exists; capability/degradation health, readiness, metrics policy, and production-boundary endpoint coverage remain."
+        ],
+        "experience": [
+          "blocked",
+          "Install, first boot, engine degradation, backup, restore, update, rollback, and failure diagnostics are not one guided operator workflow."
+        ],
+        "defaults": [
+          "partial",
+          "Compose boots with mock and insecure-cookie development defaults; safe public and private profiles are not complete."
+        ],
+        "content": [
+          "blocked",
+          "Runtime content allow-list, licence notices, SBOM, model/runtime rights, and multi-architecture asset tiers remain."
+        ],
+        "verification": [
+          "partial",
+          "Unit contracts, real-content acceptance, browser smoke, accessibility matrices, production-boundary smoke, migrations, and release proof must be separate named tiers; mutable draft prose cannot be the assertion language of product smoke."
+        ],
+        "release": [
+          "blocked",
+          "A clean machine can install a digest-pinned release, run it safely, observe degradation, upgrade and roll back without data loss."
+        ]
+      }
+    }
+  ]
+}
