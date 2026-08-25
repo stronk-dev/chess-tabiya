@@ -16,7 +16,7 @@ async function packFiles(root: string, includeBrowser = false): Promise<string[]
 
 describe("pack graduation", () => {
   it("reports no legacy entries, no accidental graduable pack, and a fresh accepted page", async () => {
-    const report = graduationReport();
+    const report = await graduationReport();
     expect(report.legacy).toBe(0);
     expect(report.graduable).toEqual([]);
     expect(await readFile("content/accepted-conditions.md", "utf8")).toBe(report.acceptedPage);
@@ -30,9 +30,9 @@ describe("pack graduation", () => {
     const temporary = await mkdtemp(join(tmpdir(), "tabiya-graduation-report-"));
     const acceptedPage = join(temporary, "accepted-conditions.md");
     try {
-      const report = runGraduationReport({ acceptedPagePath: acceptedPage });
+      const report = await runGraduationReport({ acceptedPagePath: acceptedPage });
       await expect(readFile(acceptedPage, "utf8")).rejects.toMatchObject({ code: "ENOENT" });
-      const refreshed = runGraduationReport({ updateAcceptedPage: true, acceptedPagePath: acceptedPage });
+      const refreshed = await runGraduationReport({ updateAcceptedPage: true, acceptedPagePath: acceptedPage });
       expect(await readFile(acceptedPage, "utf8")).toBe(refreshed.acceptedPage);
       expect(refreshed.text).toBe(report.text);
     } finally {
@@ -83,10 +83,46 @@ describe("pack graduation", () => {
 
   it("gates every published pack strictly and keeps draft sourcing debt from growing", async () => {
     const published = await packFiles("content/packs");
-    for (const file of published) expect((await checkSourcingFile(file)).valid, file).toBe(true);
+    for (const file of published) {
+      const result = await checkSourcingFile(file);
+      expect(result.valid, file).toBe(true);
+      expect(result.issues, file).not.toContainEqual(expect.objectContaining({ code: "EVIDENCE_DIGEST_STALE" }));
+    }
     const drafts = await packFiles("content/drafts");
     const failing: string[] = [];
     for (const file of drafts) if (!(await checkSourcingFile(file)).valid) failing.push(file);
     expect(failing.length, failing.join("\n")).toBeLessThanOrEqual(18);
+  });
+
+  it("withholds an otherwise-graduable pack until its evidence digest is re-confirmed", async () => {
+    const temporary = await mkdtemp(join(tmpdir(), "tabiya-graduation-freshness-"));
+    try {
+      const source = resolvePackPath("anti-caro-advance");
+      const packPath = join(temporary, basename(source));
+      await copyFile(source, packPath);
+      const pack = JSON.parse(await readFile(packPath, "utf8"));
+      pack.provenance.graduationBlockers = [];
+      await writeFile(packPath, `${JSON.stringify(pack, null, 2)}\n`);
+      const ledgerPath = packPath.replace(/\.json$/u, ".evidence.json");
+      await copyFile(source.replace(/\.json$/u, ".evidence.json"), ledgerPath);
+
+      const stale = await graduationReport([temporary]);
+      expect(stale.graduable).toEqual([]);
+      expect(stale.evidenceDigests).toMatchObject({ paired: 1, fresh: 0, stale: 1, invalid: 0, withheld: [pack.id] });
+
+      const ledger = JSON.parse(await readFile(ledgerPath, "utf8"));
+      ledger.packDigest = await digestDrillPack(pack);
+      await writeFile(ledgerPath, `${JSON.stringify(ledger)}\n`);
+      const fresh = await graduationReport([temporary]);
+      expect(fresh.graduable).toEqual([pack.id]);
+      expect(fresh.evidenceDigests).toMatchObject({ paired: 1, fresh: 1, stale: 0, invalid: 0, withheld: [] });
+
+      await writeFile(ledgerPath, "{ malformed", "utf8");
+      const invalid = await graduationReport([temporary]);
+      expect(invalid.graduable).toEqual([]);
+      expect(invalid.evidenceDigests).toMatchObject({ paired: 1, fresh: 0, stale: 0, invalid: 1, withheld: [pack.id] });
+    } finally {
+      await rm(temporary, { recursive: true, force: true });
+    }
   });
 });

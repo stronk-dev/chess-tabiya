@@ -9,7 +9,7 @@ is not proof that the production application routes an endpoint.
 | Fast commit checks | Lefthook `pre-commit` | Staged diff hygiene, affected package checks, and process contracts over an isolated Git-index snapshot | Full CI or a push gate |
 | Software contracts | `make verify-software` | Types, framework-free reducers/selectors, server contracts, schemas and compiled runtime manifests | Real-corpus acceptance, process ledgers, browser behavior or deployed routing |
 | Repository governance | `make verify-governance` | RFC/register/work/roadmap/intent consistency, a source-sealed 1.0 status receipt, and test-tier ownership | Product behavior, content quality or release proof |
-| Real-content contracts | `make verify-content` | Schema and application compatibility against committed draft/pack/candidate bytes | Graduation readiness, authored chess judgement or software contracts already expressible with synthetic fixtures |
+| Real-content contracts | `make verify-content` | Schema and application compatibility against committed draft/pack/candidate bytes, including the published-pack evidence-digest invariant | Authored chess judgement or software contracts already expressible with synthetic fixtures |
 | Browser journeys | `make test-browser-smoke` | Stable user journeys asserted through roles, state and outcomes | Mutable authored prose or exhaustive viewport coverage |
 | Real-content integration | `make test-browser-content` | Representative draft/pack integration with the application | Chess-truth validation or product behavior already expressible with a synthetic fixture |
 | Responsive/accessibility matrices | `make test-browser-matrix` | Post-gesture geometry, input projections, semantic board and navigation | A resting screenshot |
@@ -53,6 +53,11 @@ draft/candidate population and classification plan for an authoring migration; c
 population is planning evidence, not a software regression. Run it while working on graduation or
 content-wave planning. `make test-tier-check` prevents a test that reads real corpus bytes from
 silently entering the software-contract suite.
+
+`make graduation-report` is the author-facing freshness census. It may report stale working
+candidates without failing CI; it fails only when stale or unreadable evidence would otherwise be
+called graduable. The real-content suite also examines every published pack directly, so moving a
+stale pair into `content/packs/` cannot bypass the report by changing roots.
 
 Release proof remains a separate roadmap obligation: application-boundary API reachability,
 container boot, prior-schema migration, provider degradation, backup/restore, update/rollback and

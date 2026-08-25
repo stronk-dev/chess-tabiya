@@ -7693,3 +7693,19 @@ progress without making another worker's unstaged migration or RFC bytes part of
 unstaged value and an untracked file; the snapshot contains only the staged value. The runner's
 target set is exact, Lefthook validation passes, and scaffold verification now fails if the hook is
 changed back to a working-tree command.
+
+## 2026-08-25 — Evidence digest freshness gates graduation
+
+**What landed:** [[D1508]] closes with a corrected subject and a fail-closed publication boundary.
+The stale field is the evidence ledger's `packDigest`, not a source manifest. The graduation report
+now recomputes every paired digest, exposes fresh/stale/invalid counts, withholds any stale or
+unreadable pair that would otherwise be graduable, and exits non-zero for that condition. Drafts
+without a ledger remain possible; strict sourcing still decides whether their claims require one.
+Real-content CI separately refuses a stale pair under `content/packs/`, so moving a file between
+catalogue roots cannot evade the report.
+
+**Current evidence:** the full read-only census finds 68 pairs: 42 fresh, 26 stale, 0 invalid. The
+original 32/32 claim is stale in both artifact name and value: all 32 flat draft pairs are fresh;
+the 26 mismatches are candidates that remain blocked for independent authoring reasons. No ledger
+was re-stamped by this change. A synthetic blocker-free pack is withheld while stale, admitted
+after re-confirmation, and withheld again when its ledger is malformed.

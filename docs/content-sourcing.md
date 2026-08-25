@@ -35,6 +35,14 @@ wholesale candidate licence, and draft-only status. A changed pack digest is a w
 broken anchors and unsupported claims are errors. Outside `content/candidates/` the same
 inspection is advisory so hand-authored packs do not acquire sidecar requirements.
 
+Digest drift is advisory while a draft is being edited, but it is not graduable. `make
+graduation-report` recomputes every paired evidence-ledger `packDigest`, reports fresh, stale and
+invalid counts, withholds any otherwise-graduable pack whose ledger is stale or unreadable, and
+exits non-zero when such a pack exists. Packs with no evidence ledger are not rejected merely for
+the absence: the strict published-pack sourcing check separately refuses any claims that require
+one. Real-content CI pins both sides with an able-to-fail stale→fresh fixture and requires every
+file in `content/packs/` to have no `EVIDENCE_DIGEST_STALE` issue.
+
 Licence obligations are derived rather than stored as booleans. The accepted rows are
 CC0-1.0, CC-BY-SA-4.0 with notice text, and `no-rights-asserted` with a rationale. Every
 emitted candidate declares CC-BY-SA-4.0 wholesale. Evidence records may not support prose

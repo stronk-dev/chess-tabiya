@@ -45,7 +45,7 @@ describe("graduation clearance writer", () => {
       const ledger = JSON.parse(await readFile(file.replace(/\.json$/u, ".evidence.json"), "utf8"));
       expect(ledger.packDigest).toBe(await digestDrillPack(pack));
       expect(JSON.parse(await readFile(file.replace(/\.json$/u, ".graduation.json"), "utf8"))).toEqual(result);
-      expect(graduationReport([directory]).text).toContain("documents: 1;");
+      expect((await graduationReport([directory])).text).toContain("documents: 1;");
     } finally {
       await rm(directory, { recursive: true, force: true });
     }

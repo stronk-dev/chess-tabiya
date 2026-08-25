@@ -1,5 +1,7 @@
-import { readFileSync, readdirSync, writeFileSync } from "node:fs";
-import { resolve } from "node:path";
+import { existsSync, readFileSync, readdirSync, writeFileSync } from "node:fs";
+import { basename, dirname, extname, resolve } from "node:path";
+
+import { digestDrillPack } from "@chess-tabiya/schema/drill-pack";
 
 type Entry = string | { readonly id: string; readonly state: "blocking" | "resolved" | "accepted"; readonly statement: string; readonly clearedBy?: string; readonly accepted?: { readonly kind: string; readonly ruling: string; readonly rulingRef: string } };
 
@@ -8,7 +10,19 @@ function files(root: string): readonly string[] {
   return readdirSync(root, { withFileTypes: true }).filter((entry) => entry.isFile() && entry.name.endsWith(".json") && !/\.(?:evidence|graduation|job|sources)\.json$/u.test(entry.name)).map((entry) => resolve(root, entry.name)).sort();
 }
 
-export interface GraduationReport { readonly text: string; readonly acceptedPage: string; readonly legacy: number; readonly graduable: readonly string[]; }
+export interface GraduationReport {
+  readonly text: string;
+  readonly acceptedPage: string;
+  readonly legacy: number;
+  readonly graduable: readonly string[];
+  readonly evidenceDigests: Readonly<{
+    paired: number;
+    fresh: number;
+    stale: number;
+    invalid: number;
+    withheld: readonly string[];
+  }>;
+}
 
 export interface GraduationReportCommandOptions {
   readonly roots?: readonly string[];
@@ -16,9 +30,31 @@ export interface GraduationReportCommandOptions {
   readonly acceptedPagePath?: string;
 }
 
-export function graduationReport(roots: readonly string[] = ["content/drafts", "content/candidates", "content/packs"]): GraduationReport {
+function evidencePath(packFile: string): string {
+  const name = basename(packFile);
+  if (name === "pack.json") return resolve(dirname(packFile), "evidence.json");
+  return resolve(dirname(packFile), `${name.slice(0, -extname(name).length)}.evidence.json`);
+}
+
+function evidenceDigest(packFile: string): { readonly state: "missing" | "invalid" | "present"; readonly digest?: string } {
+  const path = evidencePath(packFile);
+  if (!existsSync(path)) return { state: "missing" };
+  try {
+    const ledger = JSON.parse(readFileSync(path, "utf8")) as { packDigest?: unknown };
+    return typeof ledger.packDigest === "string" ? { state: "present", digest: ledger.packDigest } : { state: "invalid" };
+  } catch {
+    return { state: "invalid" };
+  }
+}
+
+export async function graduationReport(roots: readonly string[] = ["content/drafts", "content/candidates", "content/packs"]): Promise<GraduationReport> {
   const accepted: Array<{ packId: string; entry: Exclude<Entry, string> }> = [];
   const graduable: string[] = [];
+  const withheld: string[] = [];
+  let paired = 0;
+  let fresh = 0;
+  let stale = 0;
+  let invalid = 0;
   let legacy = 0;
   const sections: string[] = [];
   for (const root of roots) {
@@ -28,7 +64,17 @@ export function graduationReport(roots: readonly string[] = ["content/drafts", "
     for (const { file, document } of documents) {
       const entries = document.provenance?.graduationBlockers ?? [];
       const blocking = entries.filter((entry) => typeof entry === "string" || entry.state === "blocking");
-      if (root !== "content/candidates" && !file.endsWith(".browser.json") && blocking.length === 0) graduable.push(document.id);
+      const storedDigest = evidenceDigest(file);
+      const digestFresh = storedDigest.state === "present" ? storedDigest.digest === await digestDrillPack(document) : undefined;
+      if (storedDigest.state !== "missing") {
+        paired += 1;
+        if (storedDigest.state === "invalid") invalid += 1;
+        else if (digestFresh) fresh += 1;
+        else stale += 1;
+      }
+      const otherwiseGraduable = root !== "content/candidates" && !file.endsWith(".browser.json") && blocking.length === 0;
+      if (otherwiseGraduable && digestFresh !== false && storedDigest.state !== "invalid") graduable.push(document.id);
+      if (otherwiseGraduable && (digestFresh === false || storedDigest.state === "invalid")) withheld.push(document.id);
       for (const entry of entries) {
         if (typeof entry === "string") { counts.legacy += 1; legacy += 1; continue; }
         counts[entry.state] += 1;
@@ -39,7 +85,8 @@ export function graduationReport(roots: readonly string[] = ["content/drafts", "
         resolved: entries.filter((entry) => typeof entry !== "string" && entry.state === "resolved").length,
         accepted: entries.filter((entry) => typeof entry !== "string" && entry.state === "accepted").length,
       };
-      documentLines.push(`- **${document.id}** — blocking ${stateCounts.blocking}; resolved ${stateCounts.resolved}; accepted ${stateCounts.accepted}`);
+      const digestState = storedDigest.state === "missing" ? "no evidence ledger" : storedDigest.state === "invalid" ? "evidence ledger INVALID" : digestFresh ? "evidence digest fresh" : "evidence digest STALE";
+      documentLines.push(`- **${document.id}** — blocking ${stateCounts.blocking}; resolved ${stateCounts.resolved}; accepted ${stateCounts.accepted}; ${digestState}`);
       for (const entry of blocking) {
         if (typeof entry === "string") documentLines.push(`  - **legacy** — ${entry}`);
         else documentLines.push(`  - **${entry.id}** — ${entry.statement}; clears via ${entry.clearedBy ?? "(unspecified)"}`);
@@ -56,17 +103,24 @@ export function graduationReport(roots: readonly string[] = ["content/drafts", "
     acceptedLines.push("");
   }
   const page = ["# Accepted graduation conditions", "", "Generated by `make graduation-report`; edit the pack records, not this page.", "", ...acceptedLines].join("\n");
-  return Object.freeze({ text: [...sections, `## Graduable drafts and packs\n\n${graduable.sort().join("\n") || "(none)"}`, ""].join("\n\n"), acceptedPage: page, legacy, graduable: Object.freeze(graduable) });
+  const digestSummary = `## Evidence-ledger digest freshness\n\npaired: ${paired}; fresh: ${fresh}; stale: ${stale}; invalid: ${invalid}; otherwise-graduable packs withheld: ${withheld.length}\n\n${withheld.sort().join("\n") || "(none)"}`;
+  return Object.freeze({
+    text: [...sections, digestSummary, `## Graduable drafts and packs\n\n${graduable.sort().join("\n") || "(none)"}`, ""].join("\n\n"),
+    acceptedPage: page,
+    legacy,
+    graduable: Object.freeze(graduable),
+    evidenceDigests: Object.freeze({ paired, fresh, stale, invalid, withheld: Object.freeze(withheld) }),
+  });
 }
 
-export function writeAcceptedConditions(path = "content/accepted-conditions.md"): GraduationReport {
-  const report = graduationReport();
+export async function writeAcceptedConditions(path = "content/accepted-conditions.md"): Promise<GraduationReport> {
+  const report = await graduationReport();
   writeFileSync(path, report.acceptedPage);
   return report;
 }
 
-export function runGraduationReport(options: GraduationReportCommandOptions = {}): GraduationReport {
-  const report = graduationReport(options.roots);
+export async function runGraduationReport(options: GraduationReportCommandOptions = {}): Promise<GraduationReport> {
+  const report = await graduationReport(options.roots);
   if (options.updateAcceptedPage === true) {
     writeFileSync(options.acceptedPagePath ?? "content/accepted-conditions.md", report.acceptedPage);
   }
@@ -74,7 +128,7 @@ export function runGraduationReport(options: GraduationReportCommandOptions = {}
 }
 
 if (/graduation-report\.(?:js|ts)$/u.test(process.argv[1] ?? "")) {
-  const report = runGraduationReport({ updateAcceptedPage: process.env.UPDATE_ACCEPTED === "1" });
+  const report = await runGraduationReport({ updateAcceptedPage: process.env.UPDATE_ACCEPTED === "1" });
   process.stdout.write(`${report.text}\n`);
-  if (report.legacy > 0) process.exitCode = 2;
+  if (report.legacy > 0 || report.evidenceDigests.withheld.length > 0) process.exitCode = 2;
 }
