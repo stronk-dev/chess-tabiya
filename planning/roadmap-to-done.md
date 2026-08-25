@@ -170,7 +170,7 @@ attention; theory-only and honest-empty paths are first-class; touch/hover/focus
 resize the board; every primitive remains configurable under Advanced. LLM/TTS are optional
 renderers over sealed items, never graders, selectors, chess authorities, or availability gates.
 
-Primary RFCs: `learner-modules`, `module-registration`, `hint-distance`,
+Primary RFCs: `learner-modules`, `module-registration`, `hint-distance`, `assistance-config-register`,
 `evidence-presentation`, `intent-presets`. UX owners: INR and SET items.
 Owner ruling [[D1564]] makes producer coverage part of this exit: the evidence layer owes the
 typed operands required by every promised module. Presentation work may abstain honestly while a
@@ -192,8 +192,10 @@ The 2026-08-26 rebuild now makes that gate concrete: one operator horizon per me
 one learner disclosure per family×rung, physical omission of higher-rung bytes, and one
 per-decision Hint/A-little-more interaction. [[D1582]] keeps the F1 trust boundary honest across
 REST: admitted views remain server-local and terminate in a closed digest-checked delivery receipt.
-The rebuild still awaits independent review, the shared packet, and [[D1581]]'s AssistanceConfig
-register before implementation; no UX work may substitute raw engine/PV strings while it waits.
+The rebuild still awaits independent review and the shared packet. [[D1581]]'s process-only
+`assistance-config-register` draft now specifies the missing normalized-shape/head register and
+sole v5 claim; it too awaits independent review before implementation. No UX work may substitute
+raw engine/PV strings while those dependencies wait.
 [[D1570]]–[[D1576]] return the shared candidate packet to buildability research before it becomes
 the denominator for bots, hints and Review: bind or demote the packet in F1, retain literal engine
 evidence in scored joins, name the execution/cache owner, make cache identities coherent and

@@ -8020,3 +8020,26 @@ shared-resource register.
 `planning/evidence-foundation-ux/hint-distance-rebuild-review-handoff.md`. Implementation remains
 blocked on that decision, the accepted/implemented shared candidate packet, the AssistanceConfig
 register, and the integrated Node-24 production-path latency receipt.
+
+## 2026-08-26 — AssistanceConfig register gate passed; one hint statement corrected
+
+Audited `AssistanceConfig` against all three RFC-0000 rule-7 limbs, its v1-v4 git history, runtime
+export, browser persistence/migrations and both live RFCs meeting at v5. The Node-24 declaration
+census reports 32 assistance subjects with no consumer-zero rows, but its own implementation proves
+it is not the resource authority: it extracts string members only, omits numeric `version=4`, and
+token-level producer/consumer counts intentionally overcount common literals.
+
+**Verdict:** the narrow process exploration gate passes. The register should derive head 4 and a
+format/order-insensitive digest from the normalized interface shape; it permits one live claim at
+exactly head+1. Guided Hint owns v5 because it introduces `hintDistance`; `intent-presets` consumes
+that version through its existing Discharge D4 and does not open a competing claim. The evidence is
+in `design/research/assistance-config-shared-resource.md`; [[D1581]] is research-complete, not
+implementation-authorised.
+
+**Correction:** the hint rebuild said theory-only was “not a new preset id.” `theory_only` is
+already exported in `PRESET_IDS` with a `rules_floor + theory_breadcrumb` module set and broad
+workflow admission. [[D1583]] records and corrects the sentence before independent review; the
+source-separation architecture is unchanged.
+
+**Next:** draft the process-only AssistanceConfig register RFC with able-to-fail version, shape,
+formatting and claimant fixtures. Runtime v5 still waits on independent hint/packet review.

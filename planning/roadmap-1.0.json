@@ -84,6 +84,7 @@
         "learner-modules.md",
         "module-registration.md",
         "hint-distance.md",
+        "assistance-config-register.md",
         "evidence-presentation.md",
         "intent-presets.md"
       ],

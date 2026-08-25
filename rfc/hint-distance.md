@@ -342,9 +342,9 @@ could represent only the engine case, and global engine abstention would have di
 | what structure/pattern is present | `structure_nudge` | shapes + exact structural/endgame readings | remains available |
 | exact tablebase condition or endgame measurement | registered endgame/Review presentation | Syzygy/tablebase evidence | provider-specific empty only |
 
-The table's unit is **support concern**; total four. Presets compose modules. A theory-only
-composition disables `guided_hint` and enables theory/structure modules; it does not ask the engine
-module to impersonate theory; this phrase names a composition rule, not a new preset id. Support may enable all eligible modules while the reducer/budgets
+The table's unit is **support concern**; total four. Presets compose modules. The shipped
+`theory_only` preset disables `guided_hint` and enables `rules_floor + theory_breadcrumb`; it does
+not ask the engine module to impersonate theory. Support may enable all eligible modules while the reducer/budgets
 still choose at most the registered module allowance. Advanced source controls remain diagnostic,
 not the ordinary workflow.
 
