@@ -451,7 +451,7 @@
     ["/rating", "learner_model", "live"],
     ["/marks", "learner_model", "live"],
     ["/cohorts", "learner_model", "live"],
-    ["/principles", "theory_content", "missing"],
+    ["/principles", "theory_content", "live"],
     ["/campaign", "campaign", "missing"],
     ["/healthz", "operations", "live_direct"]
   ]

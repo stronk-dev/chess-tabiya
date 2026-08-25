@@ -207,6 +207,7 @@ function isApiPath(pathname: string): boolean {
     pathname.startsWith("/packs/") ||
     pathname === "/shapes" ||
     pathname.startsWith("/shapes/") ||
+    pathname === "/principles" ||
     pathname === "/runs" ||
     pathname.startsWith("/runs/") ||
     pathname === "/progress" ||
@@ -366,7 +367,7 @@ export async function createApplication(
   const live = new LiveSessionService(storage, { runService: service });
   const repertoires = new RepertoireService(storage, service, corpusSource);
   const classrooms = new ClassroomService(storage, registry);
-  const api = createRestHandler(service, selector, capabilities, identity, studio, live, shapes, shapeStudio, options.voiceProvider, options.voicePersona, corpusSource, repertoires, options.ttsProvider, options.reasoningReviewProvider, classrooms, openingCatalogue);
+  const api = createRestHandler(service, selector, capabilities, identity, studio, live, shapes, shapeStudio, options.voiceProvider, options.voicePersona, corpusSource, repertoires, options.ttsProvider, options.reasoningReviewProvider, classrooms, openingCatalogue, principles);
   const staticDirectory =
     options.staticDirectory ?? join(process.cwd(), "apps", "web", "dist");
   const handler: RestHandler = async (request) => {

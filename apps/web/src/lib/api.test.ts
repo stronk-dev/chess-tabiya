@@ -153,6 +153,7 @@ describe("DrillApi", () => {
       }
       if (url.endsWith("/packs")) return json([]);
       if (url.endsWith("/shapes")) return json({ shapes: [] });
+      if (url.endsWith("/principles")) return json({ principles: [] });
       if (url.endsWith("/packs/pack-one")) {
         return json(
           { id: "pack-one", version: "0.2", start: { fen: run.nodes[0]!.fen, side: "white" } },
@@ -231,6 +232,7 @@ describe("DrillApi", () => {
     expect(PLANNED_SURFACES).toEqual([]);
     await api.packs();
     await api.shapes();
+    await api.principles();
     expect((await api.pack("pack-one")).digest).toBe(run.packDigest);
     await api.createRun(createInput, "writer-one");
     await api.runs(20, 5);
@@ -276,6 +278,7 @@ describe("DrillApi", () => {
       "/runs/run%20%2F%20one/corpus",
       "/packs",
       "/shapes",
+      "/principles",
       "/packs/pack-one",
       "/runs",
       "/runs",

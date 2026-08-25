@@ -7795,3 +7795,16 @@ only after the server returns the blocked draft. Request failures stay visible o
 distillation form, enters a title, and proves the exact title, generated pack id, and active branch
 reach `distillRun` before `/create` opens. Together with the form fixture, 13 focused tests pass and
 the web package typecheck is clean. AUT-a7 and [[D1555]] close.
+
+## 2026-08-25 — The principle registry reaches the application boundary
+
+**What landed:** the existing official principle registry now has a public, id-sorted
+`GET /principles` summary route and a typed browser client method. The application router names the
+path explicitly, so a deployed server cannot silently serve the SPA document in its place. The
+canonical shell documentation also stops describing the shipped Studio as an empty state and does
+not pre-empt the owner's pending decision about `/library`.
+
+**Verification:** a real `createApplication` server returns JSON summaries with stable catalogue
+fields in sorted order, and the browser API's complete-surface fixture proves the `/principles`
+request. The focused application, registry, and browser API suites pass 18 tests; server and web
+typechecks are clean. AUT-a3, AUT-a18, and [[D1556]] close.

@@ -54,6 +54,11 @@ playtesting, registering, withdrawing, and exporting drafts/packs under `/packs/
 `/packs/:id/export`. Draft reads are owner-scoped. `PUT` requires `If-Match`; stale editors get
 `DRAFT_STALE` with the current digest.
 
+`GET /principles` exposes the existing official principle registry as a stable, id-sorted summary
+catalogue, and the typed browser API consumes the same shape. It is public like the pack and shape
+catalogues. This closes the missing data boundary for later registry-backed authoring controls; it
+does not turn ungrounded principle entries into endorsed chess truth.
+
 `/create` exposes the real JSON document, validation issues with paths, create/save actions,
 private playtesting, confirmed withdrawal, and community registration. Save & playtest persists
 the current editor bytes and opens a real run; the server—not the author—chooses its run id, safe

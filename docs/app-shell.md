@@ -25,8 +25,8 @@ an explicit not-found view rather than crashing the application.
 | `/live` | Classroom roster/assignment management, consented classroom standings, scheduled pack nights, live-session index, native-match simul wall, and creation from hosted runs |
 | `/live/session/:sessionId` | Members, match pause state, friend links, board control, proposals, votes, invitations, Arena legs, and journal |
 | `/live/overlay/:runId` | Chrome-free spectator/stream projection of a live run |
-| `/create` | Honest empty state for the authoring program |
-| `/library` | Read-only pack and run-artifact lists |
+| `/create` | Pack and shape authoring with persistent drafts, continuous validation, playtest, graduation readiness, and community registration |
+| `/library` | Read-only pack and run-artifact inventory; its knowledge-browser replacement remains an owner decision |
 | `/settings` | Appearance, provider, deployment-surface, and shortcut information |
 
 Public `/shared/:token` pages sit outside the authenticated shell. Story tokens render a
@@ -73,6 +73,11 @@ play board. A classroom standing lives inside that classroom on `/live`. Joining
 two-step learner gesture whose confirmation repeats the permanent unwitnessed-games limitation;
 record and rating visibility remain independently revocable. The table preserves the server's
 result order and prints no client-derived rank.
+
+The application boundary also exposes the official principle registry at `GET /principles` as an
+id-sorted summary catalogue. The browser client preserves each entry's id, version, digest, name,
+phases, and licence. This is the data path required by authoring pickers and a future knowledge
+surface; it does not itself settle whether `/library` becomes that surface.
 
 ## Run index and SQLite migration
 

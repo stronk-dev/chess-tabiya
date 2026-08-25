@@ -57,6 +57,15 @@ export interface ShapeSummary {
   readonly publisherHandle?: string;
 }
 
+export interface PrincipleSummary {
+  readonly id: string;
+  readonly version: string;
+  readonly digest: string;
+  readonly name: string;
+  readonly phases: readonly ("opening" | "middlegame" | "endgame")[];
+  readonly licence: string;
+}
+
 export type ShapeEntryView = ShapeEntryDefinition & {
   readonly channel: "official" | "community";
   readonly publisherHandle?: string;
@@ -788,6 +797,7 @@ export interface DrillClientApi extends RunApi {
   packs(): Promise<readonly PackSummary[]>;
   pack(packId: string): Promise<PackDocument>;
   shapes(): Promise<readonly ShapeSummary[]>;
+  principles?(): Promise<readonly PrincipleSummary[]>;
   shape(shapeId: string): Promise<ShapeDocument>;
   runs(limit?: number, offset?: number): Promise<readonly RunSummary[]>;
   runDeletionPreview?(runId: string): Promise<DeletionPreview>;
@@ -989,6 +999,11 @@ export class DrillApi implements DrillClientApi {
   async shapes(): Promise<readonly ShapeSummary[]> {
     const body = await this.#json<{ readonly shapes: readonly ShapeSummary[] }>("/shapes");
     return body.shapes;
+  }
+
+  async principles(): Promise<readonly PrincipleSummary[]> {
+    const body = await this.#json<{ readonly principles: readonly PrincipleSummary[] }>("/principles");
+    return body.principles;
   }
 
   async shape(shapeId: string): Promise<ShapeDocument> {

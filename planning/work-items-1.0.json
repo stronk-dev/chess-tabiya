@@ -2448,17 +2448,21 @@
     {
       "id": "AUT-a18",
       "sourceState": "queued",
-      "state": "queued",
+      "state": "completed",
       "capability": "theory_content",
       "owner": "content-and-theory",
-      "assignment": "capability:theory_content",
+      "assignment": "closed",
       "sourceDocument": "ux-authoring-and-library.md",
       "sourceSection": "§1.5-13 / §11.3",
       "sourceHeading": "Authoring and library — `ux-authoring-and-library.md`",
       "summary": "`docs/app-shell.md:28-29` describes a `/create` that predates the studio and a `/library` proposed for replacement",
       "legacyRoute": "none",
       "note": "filed three times in the dossier; one repair",
-      "sourceDigest": "sha256:5e837f3590b3bc9c70cdfab69197cb8244c89e3a27c1da80c595d18de90ee890"
+      "sourceDigest": "sha256:5e837f3590b3bc9c70cdfab69197cb8244c89e3a27c1da80c595d18de90ee890",
+      "completion": {
+        "completedOn": "2026-08-25",
+        "evidence": "canonical app-shell route table describes the shipped Studio and preserves the unresolved Library replacement decision"
+      }
     },
     {
       "id": "AUT-a19",
@@ -2615,17 +2619,21 @@
     {
       "id": "AUT-a3",
       "sourceState": "queued",
-      "state": "queued",
+      "state": "completed",
       "capability": "theory_content",
       "owner": "content-and-theory",
-      "assignment": "capability:theory_content",
+      "assignment": "closed",
       "sourceDocument": "ux-authoring-and-library.md",
       "sourceSection": "§6 D1",
       "sourceHeading": "Authoring and library — `ux-authoring-and-library.md`",
       "summary": "**Ship `GET /principles`.** `rest.ts` contains the string `principle` **zero** times while `principle-registry.ts:63` holds a finished, sorted browse projection",
       "legacyRoute": "wave3 #12",
       "note": "[[D695]]",
-      "sourceDigest": "sha256:be884e8ba97fcffa1ab5b7243a2ebe33c0d3036af06f07188477e8dede9656d5"
+      "sourceDigest": "sha256:be884e8ba97fcffa1ab5b7243a2ebe33c0d3036af06f07188477e8dede9656d5",
+      "completion": {
+        "completedOn": "2026-08-25",
+        "evidence": "public id-sorted GET /principles reaches the production application boundary and has a typed DrillApi client method"
+      }
     },
     {
       "id": "AUT-a4",

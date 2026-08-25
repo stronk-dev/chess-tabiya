@@ -60,6 +60,7 @@ import { publicMutationPayload } from "./feedback-policy.js";
 import { reasoningMatchCheck, type ReasoningProposal } from "./reasoning.js";
 import { distillRun } from "./distill.js";
 import type { ClassroomService } from "./classroom.js";
+import type { PrincipleRegistry } from "./principle-registry.js";
 
 export type RestHandler = (request: Request) => Promise<Response>;
 
@@ -787,6 +788,7 @@ export function createRestHandler(
   reasoningReviewProvider?: ReasoningReviewProvider,
   classrooms?: ClassroomService,
   openingCatalogue?: OpeningCatalogueAvailability,
+  principles?: PrincipleRegistry,
 ): RestHandler {
   return async (request) => {
     try {
@@ -1013,6 +1015,10 @@ export function createRestHandler(
       if (request.method === "GET" && url.pathname === "/shapes") {
         if (shapes === undefined) throw new ServerError("STORAGE_FAILURE", "Shape registry is not configured");
         return json(200, { shapes: shapes.list() });
+      }
+      if (request.method === "GET" && url.pathname === "/principles") {
+        if (principles === undefined) throw new ServerError("STORAGE_FAILURE", "Principle registry is not configured");
+        return json(200, { principles: principles.list() });
       }
       if (request.method === "GET" && /^\/shapes\/[^/]+$/.test(url.pathname)) {
         if (shapes === undefined) throw new ServerError("STORAGE_FAILURE", "Shape registry is not configured");

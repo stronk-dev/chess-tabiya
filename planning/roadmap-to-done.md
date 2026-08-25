@@ -378,8 +378,8 @@ own the residual.
 
 | State | Families |
 |---|---|
-| Production-routed | `/auth`, `/capabilities`, `/packs`, `/shapes`, `/runs`, `/progress`, `/repertoires`, `/classrooms`, `/assignments`, `/api/shared`, `/shared`, `/select-move`, `/sessions`, `/rated-games`, `/rating`, `/marks`, `/cohorts`; `/healthz` direct |
-| Required and missing | `/principles`, `/campaign` |
+| Production-routed | `/auth`, `/capabilities`, `/packs`, `/shapes`, `/principles`, `/runs`, `/progress`, `/repertoires`, `/classrooms`, `/assignments`, `/api/shared`, `/shared`, `/select-move`, `/sessions`, `/rated-games`, `/rating`, `/marks`, `/cohorts`; `/healthz` direct |
+| Required and missing | `/campaign` |
 
 This is a family inventory, not a completeness claim. Each capability exit names remaining verbs,
 authorization, errors, availability and journey proof.
