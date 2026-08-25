@@ -17,6 +17,7 @@
   import AssistanceSettings from "./lib/AssistanceSettings.svelte";
   import AppearanceSettings from "./lib/AppearanceSettings.svelte";
   import DistillDraftForm from "./lib/DistillDraftForm.svelte";
+  import PackProvenanceEditor from "./lib/PackProvenanceEditor.svelte";
   import { ThemeController } from "./lib/theme/controller.js";
   import { provideTheme } from "./lib/theme/context.js";
   import {
@@ -1227,6 +1228,7 @@
           <p class="honest">Registration publishes immutable bytes. Resolve each blocking condition in the document before registering.</p>
         </aside>
       </div>
+      <PackProvenanceEditor documentJson={studioJson} onDocumentJson={(documentJson) => studioJson = documentJson} />
       <p class="honest">Community registration does not make a pack official. Official packs enter through git and the deployment image.</p>
       <section class="vocabulary-status" aria-labelledby="vocabulary-status-title">
         <p class="eyebrow">Authoring capabilities</p>

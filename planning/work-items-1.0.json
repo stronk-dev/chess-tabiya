@@ -2373,17 +2373,21 @@
     {
       "id": "AUT-a13",
       "sourceState": "queued",
-      "state": "queued",
+      "state": "completed",
       "capability": "theory_content",
       "owner": "content-and-theory",
-      "assignment": "capability:theory_content",
+      "assignment": "closed",
       "sourceDocument": "ux-authoring-and-library.md",
       "sourceSection": "§7 E1/E4",
       "sourceHeading": "Authoring and library — `ux-authoring-and-library.md`",
       "summary": "The provenance panel, filled as the author works, naming the two clean licence postures — and stating honestly that a CC0 source **cannot** be credited rather than degrading silently",
       "legacyRoute": "ledger",
       "note": "[[D1394]]",
-      "sourceDigest": "sha256:19ee5a2e6c6e72d97f759db517575ba6318e30b3f2d440427bf951cfb9ce9a8e"
+      "sourceDigest": "sha256:19ee5a2e6c6e72d97f759db517575ba6318e30b3f2d440427bf951cfb9ce9a8e",
+      "completion": {
+        "completedOn": "2026-08-25",
+        "evidence": "Structured unsaved-buffer provenance editor records source references, explicit whole-pack posture, and repeatable attribution notices while preserving unsupported bytes honestly."
+      }
     },
     {
       "id": "AUT-a14",
@@ -2422,17 +2426,21 @@
     {
       "id": "AUT-a16",
       "sourceState": "queued",
-      "state": "queued",
+      "state": "completed",
       "capability": "theory_content",
       "owner": "content-and-theory",
-      "assignment": "capability:theory_content",
+      "assignment": "closed",
       "sourceDocument": "ux-authoring-and-library.md",
       "sourceSection": "§7 E5 / E-mixing",
       "sourceHeading": "Authoring and library — `ux-authoring-and-library.md`",
       "summary": "Two named refusals to write down: **do not** build per-claim citation UI or auto-rewrite authored prose; **never** build a per-field or per-paragraph attribution model",
       "legacyRoute": "none",
       "note": "provenance will not survive edits",
-      "sourceDigest": "sha256:223fb453035c4142c8afc55053db3cc5cb39f444da2da394b329dacd92ec63dc"
+      "sourceDigest": "sha256:223fb453035c4142c8afc55053db3cc5cb39f444da2da394b329dacd92ec63dc",
+      "completion": {
+        "completedOn": "2026-08-25",
+        "evidence": "Canonical Studio docs and rendered authoring copy explicitly refuse per-claim/per-field/per-paragraph licensing and automatic authored-prose rewrites."
+      }
     },
     {
       "id": "AUT-a17",

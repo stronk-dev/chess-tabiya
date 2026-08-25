@@ -17,6 +17,22 @@ route lists zero-use shapes and principles without treating them as invalid. It 
 the runtime's declared unsupported policy modes and their reasons; these are unavailable
 capabilities, not merely unused content.
 
+## Provenance while editing
+
+The provenance panel writes into the same unsaved JSON buffer as the pack editor. Sources are
+entered one id or URL per line. Authors choose one whole-pack prose posture: original prose with
+sources used only as references, or prose licensed CC BY-SA 4.0 wholesale. The latter exposes
+repeatable source-id, notice, URL, and retrieval-date credit rows and stamps each row with the
+whole-pack licence. Switching to the original-prose posture explicitly clears licence and credit
+rows; unsupported or mixed existing bytes are shown as a third state and are never rewritten on
+load.
+
+The UI states the current CC0 limitation rather than making the pack look fully credited:
+`LICENCE_MIXED` still refuses a CC0 attribution row, which remains [[D1394]] and is owned by the
+theory-knowledge pipeline. Studio can record a CC0 source reference but cannot yet validate a
+credited CC0 posture. Provenance is intentionally whole-pack. There is no per-claim, per-field, or
+per-paragraph licensing model, and Studio never rewrites authored prose automatically.
+
 ## Sources and publication channels
 
 Packs loaded from git, the image, or an operator's development draft path are `official`.

@@ -7831,3 +7831,18 @@ does not mean invalid.
 tests prove both catalogues carry derived counts; and a mounted `/create` test proves an author sees
 only zero-use entries plus the unsupported-mode reason. Sixty-one focused tests pass, with server and
 web typechecks clean. AUT-a12 and [[D1558]] close.
+
+## 2026-08-25 — Provenance becomes a structured authoring step
+
+**What landed:** Studio edits provenance in the unsaved pack buffer through explicit whole-pack
+postures. Authors can record references and CC-BY-SA credit notices without hand-editing the JSON;
+mixed or unsupported existing bytes are preserved and called out. The UI also states that credited
+CC0 remains unsupported by the checker and refuses the tempting per-paragraph and automatic-rewrite
+models.
+
+**Verification:** pure fixtures prove unrelated provenance survives edits, source ids are
+de-duplicated, credits receive the wholesale licence, clearing credits requires an explicit posture
+change, and unsupported bytes remain an honest third state. A mounted Studio test selects the
+CC-BY-SA posture, adds a credit, and reads the resulting unsaved textarea bytes. Seventeen focused
+tests pass and the web typecheck is clean. AUT-a13, AUT-a16, and [[D1559]] close; [[D1394]] remains
+open under the theory-knowledge pipeline.

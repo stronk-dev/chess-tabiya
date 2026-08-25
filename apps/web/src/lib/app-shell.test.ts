@@ -642,6 +642,44 @@ describe("application shell", () => {
     await unmount(component);
   });
 
+  it("writes an explicit whole-pack provenance posture into the unsaved buffer", async () => {
+    history.replaceState(null, "", "/create");
+    const draft = {
+      id: "provenance-draft",
+      packId: pack.id,
+      document: { ...pack, provenance: { reviewStatus: "draft" as const, sources: ["reference-only"] } },
+      digest,
+      state: "draft" as const,
+      validation: { valid: true, issues: [] },
+    };
+    const studioApi: DrillClientApi = { ...api(), async packDrafts() { return [draft]; } };
+    const component = mount(App, { target: target(), props: { api: studioApi, router: new HistoryRouter(window), storage: new MemoryStorage() } });
+
+    await vi.waitFor(() => expect(document.body.textContent).toContain(`${pack.id} · draft`));
+    document.querySelector<HTMLButtonElement>("aside[aria-label='Your drafts'] button")!.click();
+    await vi.waitFor(() => expect(document.querySelector("#provenance-editor-title")?.textContent).toBe("Provenance"));
+    const posture = [...document.querySelectorAll<HTMLInputElement>("input[name='pack-provenance-posture']")].find((input) => input.parentElement?.textContent?.includes("CC BY-SA"))!;
+    posture.click();
+    await tick();
+    [...document.querySelectorAll<HTMLButtonElement>("button")].find((button) => button.textContent === "Add credit")!.click();
+    await tick();
+    const sourceId = [...document.querySelectorAll<HTMLInputElement>(".credit-row input")].find((input) => input.parentElement?.textContent?.includes("Source id"))!;
+    sourceId.value = "wikibooks-french";
+    sourceId.dispatchEvent(new Event("input", { bubbles: true }));
+    await tick();
+
+    const bytes = JSON.parse(document.querySelector<HTMLTextAreaElement>("#studio-json")!.value);
+    expect(bytes.provenance).toMatchObject({
+      reviewStatus: "draft",
+      sources: ["reference-only"],
+      licence: "CC-BY-SA-4.0",
+      attribution: [{ sourceId: "wikibooks-french", licence: "CC-BY-SA-4.0" }],
+    });
+    expect(document.body.textContent).toContain("cannot represent a credited CC0 entry");
+    expect(document.body.textContent).toContain("does not track licensing per paragraph");
+    await unmount(component);
+  });
+
   it("requires confirmation before withdrawing a mutable Studio draft", async () => {
     history.replaceState(null, "", "/create");
     const draft = { id: "draft-one", packId: pack.id, document: pack, digest, state: "draft" as const, validation: { valid: true, issues: [] } };
