@@ -27,6 +27,13 @@ integration validation. Its exact prose is not pinned unless the wording itself 
 contract. Browser tests assert semantic labels and effects such as an `Alternative move` item being
 present; content instruments identify which pack and content rule failed.
 
+Application and runtime unit tests assert exported values, mounted DOM, reducer output and events;
+they do not parse `.svelte` source text or pin private variable names, class expressions, or literal
+CSS declarations. Layout, hit-target and region-reach contracts run against rendered boxes and
+interactive state in the browser matrix. A research or governance census may inspect source only
+when source topology is itself the named subject, and it must not stand in for a product-behavior
+test.
+
 `make graduation-plan-check` is deliberately not a required CI dependency. It freezes the current
 draft/candidate population and classification plan for an authoring migration; changing that
 population is planning evidence, not a software regression. Run it while working on graduation or

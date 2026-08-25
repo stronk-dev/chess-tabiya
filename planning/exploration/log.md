@@ -7630,3 +7630,25 @@ zero Svelte warnings. The browser suite passes all 35 required journeys with onl
 live Maia latency probe skipped. Full repository verification passes 1,001 software tests, 164
 content tests, build/schema/packaging checks, 1,355 routed ledger rows, and every register,
 roadmap, status, intent and test-tier gate.
+
+## 2026-08-25 — Client tests stop pinning the Svelte implementation
+
+**What landed:** [[D1449]] narrows. App/runtime unit suites no longer open `.svelte` files and
+assert private `$state` declarations, class-expression strings, duplicated prose or literal CSS.
+The same contracts now run at their behavioral boundary: mounted Settings proves all eight
+contexts and every unavailable voice control's visible reason; the live shape and recorded-reading
+workflows prove their copy appears once in the correct surface; mounted DrillScreen and the browser
+matrix prove compact-region reach; the browser measures permanent target boxes at the supported
+mobile projections; adaptive guidance is tested through its reducers and permissions.
+
+**Residual retained:** source inspection still exists in explicitly named research/governance
+harnesses, and the compiled evidence manifest still names client file paths as consumer
+implementations. Those are the remaining half of [[D1449]]; this wave does not misreport them as
+behavioral proof or close the row.
+
+**Verification:** 47 focused app/runtime tests and the complete workspace typecheck pass with zero
+Svelte errors or warnings. The exact browser-CI entrypoint passes 24 stable journeys (one optional
+live Maia probe skipped), 4 real-content integrations and all 7 responsive/accessibility matrix
+tests. Full repository verification passes 995 software tests, 164 content tests, build/schema/
+packaging checks, 1,355 routed ledger rows, and every register, roadmap, status, intent and test-tier
+gate.

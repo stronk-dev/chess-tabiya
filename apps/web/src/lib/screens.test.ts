@@ -42,13 +42,14 @@ import CheckpointSheet from "./CheckpointSheet.svelte";
 import DrillScreen from "./DrillScreen.svelte";
 import JustPlayStarter from "./JustPlayStarter.svelte";
 import PackList from "./PackList.svelte";
-import type { PackSummary, ShapeEntryView } from "./api.js";
+import type { Capabilities, PackSummary, ShapeEntryView } from "./api.js";
 import type {
   RegionKeyboardHandler,
   RegisterKeyboardRegion,
 } from "./keyboard.js";
 import { latestCheckpoint } from "./screen-model.js";
 import { assistanceKey } from "./assistance-preference.js";
+import { RECORDED_READING_GUARD } from "./recorded-reading-sentences.js";
 
 const pack = JSON.parse(fixtureJson) as DrillPackDefinition;
 const carlsbad = { ...JSON.parse(carlsbadJson), channel: "official" } as ShapeEntryView;
@@ -253,9 +254,11 @@ describe("Layer 3 screens", () => {
     const initial = createRun({ id: "pivotal-ui", session: { kind: "position", start: { fen: "r3k2r/ppppqppp/2nbbn2/8/8/2NBBN2/PPPPQPPP/R3K2R w KQkq - 0 1", side: "white" }, feedbackPolicy: "attempt_end", opponentPolicy: { mode: "human_common" } }, sessionDigest: `sha256:${"c".repeat(64)}`, policyConfig: { seedMode: "fixed", locus: { executedAt: "server", engineIds: [], modelIds: [] } }, seed: 1, createdAt: at });
     const child = { ...initial.nodes[0]!, id: "pivotal-ui:node:1", parentId: initial.nodes[0]!.id, fen: "4k2r/8/8/8/8/8/RP6/4K3 b - - 0 1", transposeKey: "4k2r/8/8/8/8/8/RP6/4K3 b - -", moveUci: "a2a3", moveSan: "a3", ply: 1, actor: "user" as const };
     const run = { ...initial, nodes: [...initial.nodes, child], activeCursor: { nodeId: child.id, branchId: initial.activeCursor.branchId } } as DrillRun;
-    const preferences = new Map([[assistanceKey("position"), JSON.stringify({ version: 2, markers: "live", guided: "off", humanSplit: "off", corpus: "off", voice: "authored" })]]);
+    const preferences = new Map([[assistanceKey("position"), JSON.stringify({ version: 4, markers: "live", guided: "off", humanSplit: "off", corpus: "off", voice: "persona", spoken: "off", boardLighting: "legal", arrows: "off", ambient: "off" })]]);
     const assistanceStorage = { getItem: (key: string) => preferences.get(key) ?? null, setItem: (key: string, value: string) => { preferences.set(key, value); } };
-    const component = mount(DrillScreen, { target: target(), props: { snapshot: { run, access: "writer", pendingEvidence: 0, withheld: false }, assistanceStorage, onMove: vi.fn(), onRewind: vi.fn(), onFork: vi.fn(), onSwitchBranch: vi.fn(), onCompare: vi.fn(), onCloseCompare: vi.fn(), onContinueCheckpoint: vi.fn(), onExport: vi.fn(), onStop: vi.fn(), registerKeyboardRegion } });
+    const capabilities = { providers: { opponent: "mock", judge: "mock", llm: "external", corpus: "none", tts: "none", tablebase: "none" } } as Capabilities;
+    const onVoice = vi.fn(async () => ({ text: "Recorded reading at this position: fixture fact.", source: "provider" as const, scope: "marker" as const }));
+    const component = mount(DrillScreen, { target: target(), props: { snapshot: { run, access: "writer", pendingEvidence: 0, withheld: false }, assistanceStorage, capabilities, onVoice, onMove: vi.fn(), onRewind: vi.fn(), onFork: vi.fn(), onSwitchBranch: vi.fn(), onCompare: vi.fn(), onCloseCompare: vi.fn(), onContinueCheckpoint: vi.fn(), onExport: vi.fn(), onStop: vi.fn(), registerKeyboardRegion } });
     await tick();
     expect(document.querySelector(".pivotal-marker")).not.toBeNull();
     expect(document.querySelector('.guidance-panel[role="dialog"]')).toBeNull();
@@ -264,6 +267,10 @@ describe("Layer 3 screens", () => {
     expect(document.querySelector(".guidance-panel")?.textContent).not.toContain("phase bands");
     document.querySelector<HTMLButtonElement>(".guidance-panel button")!.click(); await tick();
     expect(document.querySelector('[aria-label="Recorded moment evidence"]')?.textContent).toContain("material-census convention");
+    const revoice = [...document.querySelectorAll<HTMLButtonElement>("button")].find((button) => button.textContent === "Revoice this evidence")!;
+    revoice.click(); await tick();
+    expect(onVoice).toHaveBeenCalledOnce();
+    await vi.waitFor(() => expect([...document.querySelectorAll("p")].filter((element) => element.textContent === RECORDED_READING_GUARD)).toHaveLength(1));
     document.querySelector<HTMLButtonElement>(".inspector-surface header button")!.click(); await tick();
     const checkbox = document.querySelector<HTMLInputElement>('.assistance-grid input[type="checkbox"]')!;
     checkbox.click(); await tick();

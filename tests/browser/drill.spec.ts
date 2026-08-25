@@ -1458,6 +1458,13 @@ test("@matrix mobile shell, settings, and install manifest preserve the run regi
     await assertRunViewport(page, viewport);
     const calmRect = await page.getByLabel("Chessboard").boundingBox();
     expect(calmRect).not.toBeNull();
+    const permanentTargets = page.locator(".compact-tabs button:visible, .timeline-strip button:visible");
+    for (let index = 0; index < await permanentTargets.count(); index += 1) {
+      const box = await permanentTargets.nth(index).boundingBox();
+      expect(box, `permanent run target ${index} has no rendered box`).not.toBeNull();
+      expect(box!.width, `permanent run target ${index} is too narrow`).toBeGreaterThanOrEqual(24);
+      expect(box!.height, `permanent run target ${index} is too short`).toBeGreaterThanOrEqual(24);
+    }
     for (const tab of ["Support", "Branches", "Actions"] as const) {
       await page.getByRole("button", { name: tab }).click();
       await assertRunViewport(page, viewport);

@@ -1,7 +1,18 @@
-import { readFileSync } from "node:fs";
-import { describe, expect, it } from "vitest";
+// @vitest-environment happy-dom
+
+import { mount, tick, unmount } from "svelte";
+import { afterEach, describe, expect, it, vi } from "vitest";
 import { SILENT_ASSISTANCE } from "@chess-tabiya/runtime";
 import { ASSISTANCE_PROFILES, PROFILE_DEFAULTS, assistanceKey, assistanceProfile, loadAssistance, loadWorkflowPreset, saveAssistance, saveWorkflowPreset, workflowKey } from "./assistance-preference.js";
+import AssistanceSettings from "./AssistanceSettings.svelte";
+
+afterEach(() => document.body.replaceChildren());
+
+function target(): HTMLElement {
+  const element = document.createElement("div");
+  document.body.append(element);
+  return element;
+}
 
 describe("assistance preference", () => {
   it("defaults silently and keeps pack and position surfaces separate", () => {
@@ -67,25 +78,26 @@ describe("assistance preference", () => {
     expect(loadAssistance("onramp", { getItem: () => "malformed", setItem() {} })).toEqual(PROFILE_DEFAULTS.onramp);
   });
 
-  it("renders settings from the same exhaustive profile list", () => {
-    const source = readFileSync(new URL("./AssistanceSettings.svelte", import.meta.url), "utf8");
-    expect(source).toContain("{#each ASSISTANCE_PROFILES as kind}");
-    for (const label of ["Curated drill", "Just Play", "Imported game", "Match / Arena", "Streamed session", "Academy", "On-ramp", "Campaign"]) expect(source).toContain(label);
-    for (const label of ["Human move split on request", "Corpus counts on request", "External voice"]) expect(source).toContain(label);
-  });
+  it("renders every context and exposes a visible reason for unavailable voice controls", async () => {
+    const component = mount(AssistanceSettings, { target: target(), props: {
+      onSignOut: vi.fn(), onExport: vi.fn(), onDelete: vi.fn(),
+    } });
+    await tick();
 
-  it("keeps unavailable-control reasons visible", () => {
-    const source = readFileSync(new URL("./HonestControl.svelte", import.meta.url), "utf8");
-    expect(source).toContain("display: block");
-    expect(source).not.toContain("clip: rect(0, 0, 0, 0)");
-  });
-
-  it("keeps the named-plan explanation in the shape panel only", () => {
-    const sentence = "Named plans for this structure — general to the kind of position, not advice for this one.";
-    const panel = readFileSync(new URL("./ShapePanel.svelte", import.meta.url), "utf8");
-    const screen = readFileSync(new URL("./DrillScreen.svelte", import.meta.url), "utf8");
-    expect(panel.split(sentence)).toHaveLength(2);
-    expect(screen).not.toContain(sentence);
+    const legends = [...document.querySelectorAll("fieldset legend")].map((element) => element.textContent?.trim());
+    expect(legends).toEqual(["Curated drill", "Just Play", "Imported game", "Match / Arena", "Streamed session", "Academy", "On-ramp", "Campaign"]);
+    expect(document.querySelectorAll('input[type="checkbox"]')).toHaveLength(ASSISTANCE_PROFILES.length * 6);
+    for (const fieldset of document.querySelectorAll("fieldset")) {
+      const control = [...fieldset.querySelectorAll<HTMLInputElement>('input[type="checkbox"]')]
+        .find((input) => input.parentElement?.textContent?.includes("External voice"))!;
+      expect(control.disabled).toBe(true);
+      const reasonId = control.getAttribute("aria-describedby")!;
+      const reason = document.getElementById(reasonId)!;
+      expect(reason.textContent).toContain("No external voice provider is configured");
+      expect(reason.hidden).toBe(false);
+      expect(reason.getAttribute("aria-hidden")).toBeNull();
+    }
+    await unmount(component);
   });
 
   it("stores workflow choice beside technical preferences and refuses disallowed presets", () => {

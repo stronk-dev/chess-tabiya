@@ -138,22 +138,6 @@ describe("adaptive guidance runtime", () => {
     ]);
   });
 
-  it("narrows only the unasked client projection", () => {
-    const sources = {
-      story: readFileSync(new URL("./story.ts", import.meta.url), "utf8"),
-      comparison: readFileSync(new URL("./compare-strips.ts", import.meta.url), "utf8"),
-      evidence: readFileSync(new URL("../../../apps/server/src/guidance.ts", import.meta.url), "utf8"),
-      client: readFileSync(new URL("../../../apps/web/src/lib/DrillScreen.svelte", import.meta.url), "utf8"),
-    };
-    expect(sources.story).toContain("pivotalMarkers(run, branchId)");
-    expect(sources.comparison).toContain("pivotalMarkers(run, column.branchId)");
-    expect(sources.evidence).toContain("pivotalMarkers(input.run, input.node.branchId)");
-    expect(sources.story).not.toContain("liveMarkers");
-    expect(sources.comparison).not.toContain("liveMarkers");
-    expect(sources.evidence).not.toContain("liveMarkers");
-    expect(sources.client.match(/liveMarkers\(/gu)).toHaveLength(1);
-  });
-
   it("implements the assistance table with silence as the universal default", () => {
     expect(SILENT_ASSISTANCE).toEqual({ version: 4, markers: "off", guided: "off", humanSplit: "off", corpus: "off", voice: "authored", spoken: "off", boardLighting: "legal", arrows: "off", ambient: "off" });
     expect(permittedAssistance({ sessionKind: "pack", workflowContext: "pack", deliveryOpen: false, role: "solo", seatedInContest: false, reviewing: false }).humanSplit).toBe("locked_off");
