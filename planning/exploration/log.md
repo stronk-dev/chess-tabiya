@@ -8043,3 +8043,14 @@ source-separation architecture is unchanged.
 
 **Next:** draft the process-only AssistanceConfig register RFC with able-to-fail version, shape,
 formatting and claimant fixtures. Runtime v5 still waits on independent hint/packet review.
+## 2026-08-26 — Module-registration returned on end-to-end buildability
+
+An independent code-grounded review returned `rfc/module-registration.md` before acceptance with
+seven blockers ([[D1585]]–[[D1591]]). The draft's central direction stands—typed modules over one
+evidence pool—but its answer-distance order is false, explorer narrowing retains candidate moves,
+the reducer has no branded reseal into rendering, and no named server-to-client module operation
+exists. The role intersection also removes `rules_floor` from a match participant, the staged-move
+guard lacks a five-input controller protocol, and one sight-ceiling premise names projections not
+in its own table. The review lives at
+`planning/learner-modules/module-registration-cross-review.md`. No production, protected design,
+schema, migration or content bytes moved.

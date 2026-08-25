@@ -1,6 +1,9 @@
 # RFC: Module registration — the eleven declarations, the compile site, and the seats
 
-- **Status:** draft, amended 2026-08-26 on [[D1564]]/[[D1568]]/[[D1569]]/[[D1577]]/[[D1578]] and the rebuilt `hint-distance` contract. The [[D1430]] document: the learner-module layer exists as a
+- **Status:** draft — returned 2026-08-26 by independent buildability review on
+  [[D1585]]–[[D1591]] (`planning/learner-modules/module-registration-cross-review.md`); prior
+  amendment 2026-08-26 on [[D1564]]/[[D1568]]/[[D1569]]/[[D1577]]/[[D1578]] and the rebuilt
+  `hint-distance` contract. The [[D1430]] document: the learner-module layer exists as a
   contract, a compiler, a reducer pipeline and a preset algebra, and **has never been
   instantiated**. This RFC writes the instances, calls the compiler in production, and gives each
   module a seat a person can look at.
