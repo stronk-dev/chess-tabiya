@@ -5,6 +5,11 @@ same living pack validator as `make pack-check`, saves incomplete drafts, allows
 validation-clean drafts against the real run service, and registers immutable community
 versions.
 
+Studio lint, saved-draft validation, playtest admission, and registration all receive the same
+shape, principle, and sibling-pack lookups. Unknown or off-phase principles and unknown or
+unproven `variantOf` relations therefore fail in Studio instead of appearing clean until a later
+CLI check.
+
 ## Sources and publication channels
 
 Packs loaded from git, the image, or an operator's development draft path are `official`.

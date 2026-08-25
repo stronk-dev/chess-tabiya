@@ -2470,17 +2470,21 @@
     {
       "id": "AUT-a2",
       "sourceState": "queued",
-      "state": "queued",
+      "state": "completed",
       "capability": "theory_content",
       "owner": "content-and-theory",
-      "assignment": "capability:theory_content",
+      "assignment": "closed",
       "sourceDocument": "ux-authoring-and-library.md",
       "sourceSection": "§5 C4",
       "sourceHeading": "Authoring and library — `ux-authoring-and-library.md`",
       "summary": "Pass principles and sibling packs into `PackStudio` — two constructor arguments; four codes are currently unreachable in Studio and the docs claim otherwise",
       "legacyRoute": "wave3 #11",
       "note": "[[D1488]]",
-      "sourceDigest": "sha256:028a2579249b35502d21acbd693263ca0dacbfd9c52b855a8aac9c0cd9b5f52e"
+      "sourceDigest": "sha256:028a2579249b35502d21acbd693263ca0dacbfd9c52b855a8aac9c0cd9b5f52e",
+      "completion": {
+        "completedOn": "2026-08-25",
+        "evidence": "PackStudio validation parity: four formerly unreachable codes covered by apps/server/src/pack-studio.test.ts"
+      }
     },
     {
       "id": "AUT-a20",

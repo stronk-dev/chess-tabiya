@@ -4,6 +4,7 @@ import { afterEach, describe, expect, it } from "vitest";
 
 import { PackRegistry, projectPackDocument } from "./pack-registry.js";
 import { PackStudio } from "./pack-studio.js";
+import { PrincipleRegistry } from "./principle-registry.js";
 import { createRestHandler } from "./rest.js";
 import { RunService } from "./service.js";
 import { SQLiteRunStorage } from "./storage.js";
@@ -20,7 +21,8 @@ describe("Pack Studio", () => {
     stores.push(storage);
     storage.createLearner({ id: principal.learnerId, handle: principal.handle, createdAt: "2026-08-13T14:00:00.000Z", passwordHash: "!" });
     const registry = await PackRegistry.fromDocuments([{ source: "official", value: fixture }]);
-    return { storage, registry, studio: new PackStudio(storage, registry) };
+    const principles = await PrincipleRegistry.loadDefault();
+    return { storage, registry, principles, studio: new PackStudio(storage, registry, undefined, principles) };
   }
 
   it("stores invalid drafts, enforces optimistic concurrency, and publishes an immutable community version", async () => {
@@ -65,14 +67,14 @@ describe("Pack Studio", () => {
   });
 
   it("hydrates registered versions after restart", async () => {
-    const { storage, studio } = await setup();
+    const { storage, studio, principles } = await setup();
     const document = structuredClone(fixture);
     document.id = "restart-pack";
     document.version = "1.0.0";
     document.provenance = { reviewStatus: "draft", sources: ["source"] };
     const registered = studio.register(studio.create(principal, { document }).id, principal);
     const freshRegistry = await PackRegistry.fromDocuments([{ source: "official", value: fixture }]);
-    const freshStudio = new PackStudio(storage, freshRegistry);
+    const freshStudio = new PackStudio(storage, freshRegistry, undefined, principles);
     freshStudio.hydrate();
     expect(freshRegistry.byDigest(registered.digest)?.summary).toMatchObject({ id: "restart-pack", channel: "community" });
   });
@@ -112,7 +114,7 @@ describe("Pack Studio", () => {
   });
 
   it("keeps playtest bytes digest-resolvable without publishing the draft", async () => {
-    const { storage, studio, registry } = await setup();
+    const { storage, studio, registry, principles } = await setup();
     const document = structuredClone(fixture);
     document.id = "playtest-only";
     document.provenance = { reviewStatus: "draft", sources: [] };
@@ -122,7 +124,7 @@ describe("Pack Studio", () => {
     expect(registry.byDigest(record.digest)?.document.id).toBe("playtest-only");
 
     const fresh = await PackRegistry.fromDocuments([{ source: "official", value: fixture }]);
-    new PackStudio(storage, fresh).hydrate();
+    new PackStudio(storage, fresh, undefined, principles).hydrate();
     expect(fresh.get("playtest-only")).toBeUndefined();
     expect(fresh.byDigest(record.digest)?.document.id).toBe("playtest-only");
   });
@@ -132,7 +134,8 @@ describe("Pack Studio", () => {
     stores.push(storage);
     storage.createLearner({ id: "__legacy", handle: "legacy-playtest", createdAt: "2026-08-23T00:00:00.000Z", passwordHash: "!" });
     const registry = await PackRegistry.fromDocuments([{ source: "official", value: fixture }]);
-    const studio = new PackStudio(storage, registry);
+    const principles = await PrincipleRegistry.loadDefault();
+    const studio = new PackStudio(storage, registry, undefined, principles);
     const document = structuredClone(fixture);
     document.id = "derived-playtest";
     document.provenance = { reviewStatus: "draft", sources: [] };
@@ -157,5 +160,46 @@ describe("Pack Studio", () => {
       body: JSON.stringify({ id: "client-id", seed: 1, policyConfig: {} }),
     }));
     expect(clientAssembly.status).toBe(400);
+  });
+
+  it("runs the principle and sibling-pack checks used by pack-check", async () => {
+    const { storage, registry, studio } = await setup();
+    const unknownPrinciple = structuredClone(fixture);
+    unknownPrinciple.feedbackClaims[0].principles = ["not-a-registered-principle"];
+    expect(studio.lint(unknownPrinciple).issues).toContainEqual(expect.objectContaining({
+      code: "CLAIM_PRINCIPLE_UNKNOWN",
+      path: "/feedbackClaims/0/principles/0",
+    }));
+
+    const wrongPhaseStudio = new PackStudio(storage, registry, undefined, {
+      get: (id: string) => id === fixture.feedbackClaims[0].principles[0]
+        ? { document: { phases: ["endgame"] as const } }
+        : undefined,
+    });
+    expect(wrongPhaseStudio.lint(fixture).issues).toContainEqual(expect.objectContaining({
+      code: "CLAIM_PRINCIPLE_OFF_PHASE",
+      path: "/feedbackClaims/0/principles/0",
+    }));
+
+    const unknownSibling = structuredClone(fixture);
+    unknownSibling.variantOf = {
+      packId: "not-a-registered-pack",
+      relation: { kind: "same_root_other_side" },
+    };
+    expect(studio.lint(unknownSibling).issues).toContainEqual(expect.objectContaining({
+      code: "VARIANT_PACK_UNKNOWN",
+      path: "/variantOf/packId",
+    }));
+
+    const unprovenSibling = structuredClone(fixture);
+    unprovenSibling.id = "unproven-sibling-variant";
+    unprovenSibling.variantOf = {
+      packId: fixture.id,
+      relation: { kind: "same_root_other_side" },
+    };
+    expect(studio.lint(unprovenSibling).issues).toContainEqual(expect.objectContaining({
+      code: "VARIANT_RELATION_UNPROVEN",
+      path: "/variantOf/relation",
+    }));
   });
 });

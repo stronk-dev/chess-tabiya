@@ -5,7 +5,14 @@ import { canonicalizeJson, type DrillPackDefinition, type JsonValue } from "@che
 import type { Principal } from "./authorization.js";
 import { ServerError } from "./errors.js";
 import { PackRegistry } from "./pack-registry.js";
-import { graduationEntryIsBlocking, validatePackDocument, type PackValidationResult } from "./pack-validation.js";
+import {
+  graduationEntryIsBlocking,
+  validatePackDocument,
+  type PackPrincipleLookup,
+  type PackShapeLookup,
+  type PackSiblingLookup,
+  type PackValidationResult,
+} from "./pack-validation.js";
 import { SQLiteRunStorage, type StoredPackDraft } from "./storage.js";
 import type { ShapeRegistry } from "./shape-registry.js";
 
@@ -41,12 +48,21 @@ export interface StudioDraftView extends StoredPackDraft {
 export class PackStudio {
   readonly #storage: SQLiteRunStorage;
   readonly #registry: PackRegistry;
-  readonly #shapes: ShapeRegistry | undefined;
+  readonly #shapes: PackShapeLookup | undefined;
+  readonly #principles: PackPrincipleLookup;
+  readonly #packs: PackSiblingLookup;
 
-  constructor(storage: SQLiteRunStorage, registry: PackRegistry, shapes?: ShapeRegistry) {
+  constructor(
+    storage: SQLiteRunStorage,
+    registry: PackRegistry,
+    shapes: ShapeRegistry | undefined,
+    principles: PackPrincipleLookup,
+  ) {
     this.#storage = storage;
     this.#registry = registry;
     this.#shapes = shapes;
+    this.#principles = principles;
+    this.#packs = Object.freeze({ get: (id: string) => registry.get(id)?.document });
   }
 
   hydrate(): void {
@@ -84,7 +100,7 @@ export class PackStudio {
   }
 
   lint(document: unknown): PackValidationResult {
-    return validatePackDocument(document, { ...(this.#shapes === undefined ? {} : { shapes: this.#shapes }) });
+    return validatePackDocument(document, this.#validationOptions());
   }
 
   update(id: string, principal: Principal, expectedDigest: string, document: unknown, at = new Date().toISOString()): StudioDraftView {
@@ -123,7 +139,7 @@ export class PackStudio {
       throw new ServerError("GRADUATION_BLOCKERS_OUTSTANDING", "Clear declared graduation blockers before registration");
     }
     provenance.reviewStatus = "published";
-    const validation = validatePackDocument(raw, { ...(this.#shapes === undefined ? {} : { shapes: this.#shapes }) });
+    const validation = validatePackDocument(raw, this.#validationOptions());
     if (!validation.valid || validation.document === undefined) {
       throw new ServerError("PACK_INVALID", "Draft cannot be registered while validation errors remain", { details: { issues: validation.issues } });
     }
@@ -151,7 +167,15 @@ export class PackStudio {
     return Object.freeze({ format: "chess-tabiya-pack", version: 1, document: row.document, digest: row.digest, publisherHandle: row.publisherHandle });
   }
 
+  #validationOptions() {
+    return {
+      ...(this.#shapes === undefined ? {} : { shapes: this.#shapes }),
+      principles: this.#principles,
+      packs: this.#packs,
+    };
+  }
+
   #view(row: StoredPackDraft): StudioDraftView {
-    return Object.freeze({ ...row, validation: validatePackDocument(row.document, { ...(this.#shapes === undefined ? {} : { shapes: this.#shapes }) }) });
+    return Object.freeze({ ...row, validation: validatePackDocument(row.document, this.#validationOptions()) });
   }
 }

@@ -7709,3 +7709,16 @@ original 32/32 claim is stale in both artifact name and value: all 32 flat draft
 the 26 mismatches are candidates that remain blocked for independent authoring reasons. No ledger
 was re-stamped by this change. A synthetic blocker-free pack is withheld while stale, admitted
 after re-confirmation, and withheld again when its ledger is malformed.
+
+## 2026-08-25 — Pack Studio reaches validator parity for shared vocabularies
+
+**What landed:** the AUT-a2 arm of [[D1488]] closes. Pack Studio now supplies the principle registry
+and its live pack registry to every validation path: unsaved lint, stored draft views, playtest, and
+registration. The command-line and web authoring paths can no longer disagree about unknown or
+off-phase principles, unknown sibling packs, or unproven `variantOf` relations.
+
+**Verification:** one focused test exercises all four formerly unreachable codes —
+`CLAIM_PRINCIPLE_UNKNOWN`, `CLAIM_PRINCIPLE_OFF_PHASE`, `VARIANT_PACK_UNKNOWN`, and
+`VARIANT_RELATION_UNPROVEN` — and the server typecheck passes. The remaining [[D1488]] work is the
+unsaved-buffer client wiring; `GET /principles` remains new surface and still needs the RFC boundary
+identified by the complete UX index rather than being smuggled in as a trivial route.

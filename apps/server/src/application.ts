@@ -294,7 +294,7 @@ export async function createApplication(
       ? {}
       : { draftFiles: options.draftPackFiles }),
   });
-  const studio = new PackStudio(storage, registry, shapes);
+  const studio = new PackStudio(storage, registry, shapes, principles);
   studio.hydrate();
   const engineMode = options.engineMode ?? "mock";
   let supervisor: EngineSupervisor | undefined;
