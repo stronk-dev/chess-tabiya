@@ -295,17 +295,24 @@ shown bare: `screen-model.ts` rejects an empty evidence-ref set before
 `WhyBanner.svelte` renders the sentence table.
 
 The comparison screen consumes the server/runtime `BranchComparison` payload.
-Its synchronized stepper positions both boards on the aligned pair; an absent
-side is dimmed and labeled `Line ended`. Objective timelines and checkpoint
-hits render as separate strips. Each objective change is rendered as
+It leads with one fork board carrying every recorded candidate arrow, then lists
+the move, actor and the learner's recorded intent for each attempt. Its synchronized
+stepper positions the deeper per-branch boards on the aligned pair; an absent
+side is dimmed and labeled `Line ended`. The surface states shared recorded-node
+groups separately from same-position re-convergence by `transposeKey`, and every
+cell uses the shared learner-relative material calculation. Objective timelines
+and checkpoint hits render as separate strips. Each objective change is rendered as
 `from → to` and every recorded ground is resolved through the existing evidence
 sentence table; an empty ground set fails instead of manufacturing explanatory
-copy. A per-side recorded engine trajectory plots the comparison's
+copy. Recorded resistance and authored-line membership are present per consequence.
+The deterministic grounded narrative is expanded before engine graphics; raw
+producer terminology remains in machine attributes, not learner labels. A per-side recorded engine trajectory plots the comparison's
 White-perspective centipawn or mate scores at their aligned ply offsets and
 marks the common fork. The engine deployment supplies Stockfish; the mock
 deployment remains honestly labeled as recorded engine evidence rather than
 claiming a provider identity absent from the payload. Engine arrows, move
-labels, deltas, and human-frequency overlays remain absent.
+recommendations, and human-frequency overlays remain absent; the fork arrows are
+only moves the learner already played.
 
 Outcome Drill adds a compact context surface above the board and in checkpoint
 or terminal sheets. It keeps four facts separate: the root assessment, the

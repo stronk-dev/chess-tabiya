@@ -146,8 +146,8 @@ function activeNode(run: DrillRun): Node {
   return node;
 }
 
-function materialScore(node: Node, color: Color): number {
-  const position = positionFromFen(node.fen);
+function materialScore(fen: string, color: Color): number {
+  const position = positionFromFen(fen);
   let score = 0;
   for (const [role, value] of Object.entries(MATERIAL_VALUES) as [Role, number][]) {
     score += position.board[role].intersect(position.board[color]).size() * value;
@@ -157,8 +157,12 @@ function materialScore(node: Node, color: Color): number {
 
 export function materialBalance(run: DrillRun, perspective: Color): number {
   const node = activeNode(run);
-  const own = materialScore(node, perspective);
-  const other = materialScore(node, opposite(perspective));
+  return materialBalanceAt(node.fen, perspective);
+}
+
+export function materialBalanceAt(fen: string, perspective: Color): number {
+  const own = materialScore(fen, perspective);
+  const other = materialScore(fen, opposite(perspective));
   return own - other;
 }
 

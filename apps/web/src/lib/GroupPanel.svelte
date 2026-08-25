@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { branchPath, type BranchGroup, type DrillRun } from "@chess-tabiya/runtime";
+  import { branchPath, materialBalanceAt, type BranchGroup, type DrillRun } from "@chess-tabiya/runtime";
 
   import Chessboard from "./Chessboard.svelte";
   import type { StartSide } from "./board-model.js";
@@ -59,18 +59,6 @@
       : "Varied resistance: each branch faces its own opponent draw.";
   }
 
-  function materialBalance(fen: string): number {
-    const placement = fen.split(" ")[0] ?? "";
-    const values: Readonly<Record<string, number>> = { p: 1, n: 3, b: 3, r: 5, q: 9, k: 0 };
-    let white = 0, black = 0;
-    for (const symbol of placement) {
-      const value = values[symbol.toLowerCase()];
-      if (value === undefined) continue;
-      if (symbol === symbol.toUpperCase()) white += value;
-      else black += value;
-    }
-    return startSide === "white" ? white - black : black - white;
-  }
 </script>
 
 <section class="group-panel" aria-labelledby={`group-${group.groupId}`}>
@@ -107,7 +95,7 @@
           <dl>
             <div><dt>Last move</dt><dd>{cell.leaf.moveSan ?? "No move"}</dd></div>
             <div><dt>Plies</dt><dd>{cell.plyCount}</dd></div>
-            <div><dt>Material</dt><dd>{materialBalance(cell.leaf.fen) >= 0 ? "+" : ""}{materialBalance(cell.leaf.fen)}</dd></div>
+            <div><dt>Material</dt><dd>{materialBalanceAt(cell.leaf.fen, startSide) >= 0 ? "+" : ""}{materialBalanceAt(cell.leaf.fen, startSide)}</dd></div>
             <div><dt>Checkpoints</dt><dd>{cell.checkpointCount}</dd></div>
           </dl>
           {#if !cell.hasEvidence}<p class="absence">No recorded engine evidence for this branch leaf.</p>{/if}

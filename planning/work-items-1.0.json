@@ -1352,17 +1352,21 @@
     {
       "id": "ATR-a11",
       "sourceState": "queued",
-      "state": "queued",
+      "state": "completed",
       "capability": "review",
       "owner": "review-and-return",
-      "assignment": "capability:review",
+      "assignment": "closed",
       "sourceDocument": "ux-after-the-run.md",
       "sourceSection": "§1.7",
       "sourceHeading": "After the run — `ux-after-the-run.md`",
       "summary": "**The compare screen's prominence is inverted**: the grounded narrative is 7th of 8 and collapsed, beneath an expanded engine sparkline — on the screen every *Retry from here* lands on",
       "legacyRoute": "ledger",
       "note": "[[D1478]]",
-      "sourceDigest": "sha256:2d5c868e1c7047412162b31af28f4ad6d21fc7522f6084d17442a03700d8e019"
+      "sourceDigest": "sha256:2d5c868e1c7047412162b31af28f4ad6d21fc7522f6084d17442a03700d8e019",
+      "completion": {
+        "completedOn": "2026-08-25",
+        "evidence": "one-board divergence projection with branch intent; actor/material/alignment/re-convergence facts; learner copy replacing inspector labels; expanded grounded narrative; Compare component/runtime fixtures"
+      }
     },
     {
       "id": "ATR-a12",
@@ -2925,17 +2929,21 @@
     {
       "id": "CLP-a1",
       "sourceState": "queued",
-      "state": "queued",
+      "state": "completed",
       "capability": "rehearsal",
       "owner": "core-loop",
-      "assignment": "capability:rehearsal",
+      "assignment": "closed",
       "sourceDocument": "ux-core-loop.md",
       "sourceSection": "§1.2 d2 / §12 rec 1",
       "sourceHeading": "The core loop — `ux-core-loop.md`",
       "summary": "Render `branch.intent` on the compare surface. It is captured at the fork and thrown away at the payoff screen",
       "legacyRoute": "ledger",
       "note": "[[D1464]]",
-      "sourceDigest": "sha256:109bb25e65b320aea59018db7363cd948305a762b0450a7411ee9bf0ec6fd867"
+      "sourceDigest": "sha256:109bb25e65b320aea59018db7363cd948305a762b0450a7411ee9bf0ec6fd867",
+      "completion": {
+        "completedOn": "2026-08-25",
+        "evidence": "one-board divergence projection with branch intent; actor/material/alignment/re-convergence facts; learner copy replacing inspector labels; expanded grounded narrative; Compare component/runtime fixtures"
+      }
     },
     {
       "id": "CLP-a10",
@@ -3087,17 +3095,21 @@
     {
       "id": "CLP-a2",
       "sourceState": "queued",
-      "state": "queued",
+      "state": "completed",
       "capability": "rehearsal",
       "owner": "core-loop",
-      "assignment": "capability:rehearsal",
+      "assignment": "closed",
       "sourceDocument": "ux-core-loop.md",
       "sourceSection": "§1.2 d1 / §7.2 L2",
       "sourceHeading": "The core loop — `ux-core-loop.md`",
       "summary": "Render `ComparisonRow.groups` — the per-ply equivalence partition is computed and **no renderer reads it**",
       "legacyRoute": "ledger",
       "note": "[[D1464]]",
-      "sourceDigest": "sha256:4156b91b4c835369dea59289430d97b741c10255937c0c660a8fc2a4c91d1b36"
+      "sourceDigest": "sha256:4156b91b4c835369dea59289430d97b741c10255937c0c660a8fc2a4c91d1b36",
+      "completion": {
+        "completedOn": "2026-08-25",
+        "evidence": "one-board divergence projection with branch intent; actor/material/alignment/re-convergence facts; learner copy replacing inspector labels; expanded grounded narrative; Compare component/runtime fixtures"
+      }
     },
     {
       "id": "CLP-a20",
@@ -3176,17 +3188,21 @@
     {
       "id": "CLP-a3",
       "sourceState": "queued",
-      "state": "queued",
+      "state": "completed",
       "capability": "rehearsal",
       "owner": "core-loop",
-      "assignment": "capability:rehearsal",
+      "assignment": "closed",
       "sourceDocument": "ux-core-loop.md",
       "sourceSection": "§7.2",
       "sourceHeading": "The core loop — `ux-core-loop.md`",
       "summary": "Render `rows[].nodes[].actor` so the grid can distinguish a learner's ply from the opponent's",
       "legacyRoute": "ledger",
       "note": "[[D1464]]",
-      "sourceDigest": "sha256:caa8e8df68df4d7894c65e9d71b954fb8e88439e4c6df0706b0e0a81c88b38d8"
+      "sourceDigest": "sha256:caa8e8df68df4d7894c65e9d71b954fb8e88439e4c6df0706b0e0a81c88b38d8",
+      "completion": {
+        "completedOn": "2026-08-25",
+        "evidence": "one-board divergence projection with branch intent; actor/material/alignment/re-convergence facts; learner copy replacing inspector labels; expanded grounded narrative; Compare component/runtime fixtures"
+      }
     },
     {
       "id": "CLP-a4",
@@ -3219,45 +3235,57 @@
     {
       "id": "CLP-a6",
       "sourceState": "queued",
-      "state": "queued",
+      "state": "completed",
       "capability": "rehearsal",
       "owner": "core-loop",
-      "assignment": "capability:rehearsal",
+      "assignment": "closed",
       "sourceDocument": "ux-core-loop.md",
       "sourceSection": "§1.2 d9 / §12 rec 9",
       "sourceHeading": "The core loop — `ux-core-loop.md`",
       "summary": "**Stop calling the compare surface an \"Evidence inspector\"** — it says so four times on the screen that carries the originality claim",
       "legacyRoute": "none",
       "note": "self-description of the rejected shape",
-      "sourceDigest": "sha256:dc99f2f3105b9d0f38cee69607a75012afcc64cee00c2e5077152a547bb3ccb4"
+      "sourceDigest": "sha256:dc99f2f3105b9d0f38cee69607a75012afcc64cee00c2e5077152a547bb3ccb4",
+      "completion": {
+        "completedOn": "2026-08-25",
+        "evidence": "one-board divergence projection with branch intent; actor/material/alignment/re-convergence facts; learner copy replacing inspector labels; expanded grounded narrative; Compare component/runtime fixtures"
+      }
     },
     {
       "id": "CLP-a7",
       "sourceState": "queued",
-      "state": "queued",
+      "state": "completed",
       "capability": "rehearsal",
       "owner": "core-loop",
-      "assignment": "capability:rehearsal",
+      "assignment": "closed",
       "sourceDocument": "ux-core-loop.md",
       "sourceSection": "§12 rec 4 (Layer 2)",
       "sourceHeading": "The core loop — `ux-core-loop.md`",
       "summary": "Render `transposeKey` so re-convergence is visible",
       "legacyRoute": "none",
-      "sourceDigest": "sha256:35baa003b873f5f69d3662d687bc2d73817feee988f8b27c8c31ba996c0eed7b"
+      "sourceDigest": "sha256:35baa003b873f5f69d3662d687bc2d73817feee988f8b27c8c31ba996c0eed7b",
+      "completion": {
+        "completedOn": "2026-08-25",
+        "evidence": "one-board divergence projection with branch intent; actor/material/alignment/re-convergence facts; learner copy replacing inspector labels; expanded grounded narrative; Compare component/runtime fixtures"
+      }
     },
     {
       "id": "CLP-a8",
       "sourceState": "queued",
-      "state": "queued",
+      "state": "completed",
       "capability": "rehearsal",
       "owner": "core-loop",
-      "assignment": "capability:rehearsal",
+      "assignment": "closed",
       "sourceDocument": "ux-core-loop.md",
       "sourceSection": "§7.2",
       "sourceHeading": "The core loop — `ux-core-loop.md`",
       "summary": "Render `materialBalance(fen)` in compare — it ships and `GroupPanel` uses it; `CompareView` has the FENs and does not",
       "legacyRoute": "none",
-      "sourceDigest": "sha256:9c2879204f1ceab6c0cc4f9ae6f73488156e9b345c8a727e13a8588665dd7c94"
+      "sourceDigest": "sha256:9c2879204f1ceab6c0cc4f9ae6f73488156e9b345c8a727e13a8588665dd7c94",
+      "completion": {
+        "completedOn": "2026-08-25",
+        "evidence": "one-board divergence projection with branch intent; actor/material/alignment/re-convergence facts; learner copy replacing inspector labels; expanded grounded narrative; Compare component/runtime fixtures"
+      }
     },
     {
       "id": "CLP-a9",

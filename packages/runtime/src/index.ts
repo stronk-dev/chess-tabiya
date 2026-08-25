@@ -508,6 +508,7 @@ export {
   evaluateObjective,
   evaluateObjectivePredicate,
   materialBalance,
+  materialBalanceAt,
   requestObjectiveEvidence,
   transitionObjective,
   type FenPredicate,

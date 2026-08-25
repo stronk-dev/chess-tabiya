@@ -685,23 +685,45 @@ describe("Layer 3 screens", () => {
     expect(document.querySelector('[data-evidence-ref="pack-absent:timing-window"]')?.textContent).toBe(
       "Checkpoint not reached on this branch: Critical race resolved.",
     );
-    expect(document.body.textContent).toContain("Evidence inspector: recorded branch strips");
+    expect(document.body.textContent).toContain("Where the attempts split");
+    expect(document.body.textContent).toContain("Intent: Test Black's expansion");
+    expect(document.body.textContent).toContain("Recorded differences by branch");
+    expect(document.body.textContent).toContain("Opponent and authored-line context");
+    expect(document.body.textContent).not.toContain("Evidence inspector");
     const compareSections = [...document.querySelectorAll(".compare > section")];
     expect(compareSections.indexOf(document.querySelector(".narrative")!)).toBeLessThan(
       compareSections.indexOf(document.querySelector(".trajectory")!),
     );
     expect(document.querySelector(".boards")?.getAttribute("data-zoom")).toBe("near");
-    expect(document.querySelectorAll(".boards [aria-label='Chessboard']")).toHaveLength(1);
+    expect(document.querySelectorAll("[aria-label='Chessboard']")).toHaveLength(2);
+    expect(chessground.configs[0]!.drawable!.autoShapes).toHaveLength(2);
     document.querySelector<HTMLButtonElement>(".zoom-control button")!.click();
     await tick();
     expect(document.querySelector(".boards")?.getAttribute("data-zoom")).toBe("far");
-    expect(document.querySelectorAll(".boards [aria-label='Chessboard']")).toHaveLength(0);
+    expect(document.querySelectorAll("[aria-label='Chessboard']")).toHaveLength(1);
     expect(document.body.textContent).toContain("active");
     expect(document.querySelectorAll(".sparkline span")).toHaveLength(comparison.columns.reduce((total,column)=>total+comparison.evidence[column.branchId]!.length,0));
-    document.querySelector<HTMLButtonElement>(".narrative > button")!.click();
-    await tick();
     expect(document.body.textContent).toContain("recorded branches share");
+    expect(document.querySelector<HTMLButtonElement>(".narrative-heading button")?.getAttribute("aria-expanded")).toBe("true");
     expectDisabledControlsExplained();
+    await unmount(component);
+  });
+
+  it("announces positional re-convergence independently from shared node identity", async () => {
+    const source = branchedRun();
+    const comparison = compareBranches(source, source.branches.map((branch) => branch.id));
+    const row = comparison.rows[0]!;
+    const [leftId, rightId] = comparison.columns.map((column) => row.nodes[column.branchId]!.id);
+    const leftKey = source.nodes.find((node) => node.id === leftId)!.transposeKey;
+    const run = { ...source, nodes: source.nodes.map((node) => node.id === rightId ? { ...node, transposeKey: leftKey } : node) };
+    const component = mount(CompareView, { target: target(), props: {
+      run, pack, comparison, startSide: "white", step: 1,
+      onStep: vi.fn(), onClose: vi.fn(),
+    } });
+    await tick();
+
+    expect(document.body.textContent).toContain("re-converged to the same chess position");
+    expect(document.body.textContent).toContain("The recorded paths are separate at this ply");
     await unmount(component);
   });
 

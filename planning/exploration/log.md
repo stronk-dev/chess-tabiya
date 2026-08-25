@@ -7563,3 +7563,26 @@ this unrelated accepted Review repair did not invent that missing policy.
 **Verification:** the runtime selection/provenance fixtures, the dynamic-card fixtures, and the
 server public-share contract pass together. Full browser and repository gates follow this
 closeout before commit.
+
+## 2026-08-25 — Compare becomes a payoff instead of an evidence inventory
+
+**What landed:** [[D1464]] closes as one vertical Compare wave. The surface now begins with one
+fork board showing the recorded candidate arrows together, followed by each move's SAN, actor and
+the learner's own branch intent. The aligned projection states recorded-node sharing separately
+from chess-position re-convergence, shows learner-relative material, and carries resistance and
+authored-line context through to each consequence. The deterministic grounded narrative is open
+before the engine graphics. Four visible “Evidence inspector” labels are replaced with learner
+questions/facts while their machine consumer ids remain intact.
+
+**Correction:** [[D1549]] records and repairs a stale premise in the UX dossier. There was no
+shared per-position material primitive: runtime read only the active cursor and Group Panel had a
+private FEN counter. `materialBalanceAt` is now the one authority used by runtime, Group Panel and
+Compare, with both learner perspectives pinned.
+
+**Residual:** [[D1465]] narrows but stays open. Resistance, source labels and piece identity are
+fixed; the deliberately withheld mid-run comparison still needs one region-level explanation,
+and the always-present rewind control still conflicts with the consequence-timed offer.
+
+**Verification:** 35 focused objective, Group Panel and Compare component tests pass, including a
+fixture where two distinct recorded nodes share a `transposeKey`; full browser and repository
+gates follow before the checkpoint is committed.

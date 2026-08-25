@@ -1319,6 +1319,15 @@ composes) or delete it with the rest of the retired chrome, and add one `play-co
 changelog line naming `:824` as a 16th chrome site so the production-site discipline
 (A4/A17-class) stays closed. Flip [[D585]] in the commit that does it.
 
+## D1549 — share material arithmetic in the compare-payoff wave
+
+[[D1549]] corrects CLP-a8's stale implementation premise before wiring it. Runtime
+`materialBalance` reads the active cursor and Group Panel owns a private FEN parser; there is no
+shared per-position function for an aligned Compare cell. Add `materialBalanceAt(fen, perspective)`
+as the authority, retain `materialBalance(run, perspective)` as its active-node wrapper, migrate
+Group Panel, and consume the same function in Compare. Close it with the CLP-a1/a2/a3/a6/a7/a8
+payoff wave; do not add a third parser.
+
 ## UX repair lane — opened 2026-08-23 by the owner opening the app
 
 The owner listed six UX failures from the running app. **Five were already recorded, some since

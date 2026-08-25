@@ -872,7 +872,11 @@ test("@content served Najdorf pack plays, rewinds, branches, compares, and expor
     page.getByText("The comparison is already at its first aligned position."),
   ).toBeVisible();
   await expect(page.locator(".boards article")).toHaveCount(2);
-  await expect(page.getByRole("heading", { name: "Evidence inspector: recorded branch strips" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Where the attempts split" })).toBeVisible();
+  await expect(page.locator(".divergence [aria-label='Chessboard']")).toBeVisible();
+  await expect(page.locator(".divergence").getByText("Compare a lower-commitment setup", { exact: true })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Recorded differences by branch" })).toBeVisible();
+  await expect(page.getByText("Evidence inspector")).toHaveCount(0);
   await expect(page.locator(".sparkline")).toHaveCount(2);
   await expect.poll(() =>
     page.locator(".sparkline").evaluateAll((sparklines) =>
@@ -889,7 +893,7 @@ test("@content served Najdorf pack plays, rewinds, branches, compares, and expor
       }),
     ),
   ).toBe(true);
-  await page.getByRole("button", { name: "Narrative" }).click();
+  await expect(page.getByRole("region", { name: "Grounded comparison" })).toBeVisible();
   await expect(page.getByText(/recorded branches share/)).toBeVisible();
   await expect(page.getByRole("heading", { name: "quiet setup" })).toHaveCount(2);
   await expect(page.getByText("active → achieved")).toBeVisible();

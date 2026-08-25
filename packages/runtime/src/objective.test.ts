@@ -10,6 +10,7 @@ import {
   createRun,
   evaluateObjective,
   evaluateObjectivePredicate,
+  materialBalanceAt,
   reachCheckpoint,
   requestObjectiveEvidence,
   transitionObjective,
@@ -254,7 +255,11 @@ describe("engine-free predicates", () => {
   });
 
   it("evaluates material balance in deterministic pawn units", () => {
-    const queenUp = newRun("7k/8/8/8/8/8/4KQ2/8 w - - 0 1");
+    const fen = "7k/8/8/8/8/8/4KQ2/8 w - - 0 1";
+    const queenUp = newRun(fen);
+
+    expect(materialBalanceAt(fen, "white")).toBe(9);
+    expect(materialBalanceAt(fen, "black")).toBe(-9);
 
     expect(
       evaluateObjectivePredicate(queenUp, {
