@@ -1,0 +1,76 @@
+{
+  "experiment": "D1573-D1574 candidate packet buildability envelope",
+  "measuredAt": "2026-08-26",
+  "head": "7dff5801aa6c48859cadf227369e9757ee398153",
+  "machine": {
+    "platform": "macOS 26.5 arm64",
+    "node": "v26.7.0"
+  },
+  "input": {
+    "source": "planning/evidence-foundation-ux/d1061-bestline-distance-results.json",
+    "roots": 64,
+    "scope": "every exact legal move; localSemanticEvents on each child edge"
+  },
+  "moves": {
+    "p50": 35,
+    "p95": 47,
+    "max": 50
+  },
+  "events": {
+    "p50": 3779,
+    "p95": 5482,
+    "max": 5803
+  },
+  "structuralJsonBytes": {
+    "meaning": "UTF-8 bytes of JSON.stringify(events) summed per root; deterministic structural proxy, not V8 heap usage",
+    "p50": 5132694,
+    "p95": 7435492,
+    "max": 7882857
+  },
+  "compileMs": {
+    "p50": 613.6095,
+    "p95": 862.703,
+    "max": 921.76375
+  },
+  "closure": {
+    "declaredSemanticEvents": 67,
+    "observed": 41,
+    "declaredNotObserved": 26,
+    "observedNotDeclared": 0,
+    "notObserved": [
+      "derived.exchange.trade_completed@1",
+      "derived.pawn.sequence.contact_timing@1",
+      "derived.pawn.sequence.harassment_pressure@1",
+      "derived.semantic_avoidance.backward_pawn@1",
+      "derived.semantic_avoidance.direct_attack_count@1",
+      "derived.semantic_avoidance.doubled_pawn@1",
+      "derived.semantic_avoidance.half_open_file@1",
+      "derived.semantic_avoidance.isolated_pawn@1",
+      "derived.semantic_avoidance.king_opposition@1",
+      "derived.semantic_avoidance.king_zone@1",
+      "derived.semantic_avoidance.line_blockers@1",
+      "derived.semantic_avoidance.loose_piece@1",
+      "derived.semantic_avoidance.open_file@1",
+      "derived.semantic_avoidance.passed_pawn@1",
+      "derived.semantic_avoidance.pawn_islands@1",
+      "derived.semantic_avoidance.piece_count@1",
+      "derived.tactic.attraction_observed@1",
+      "derived.tactic.check_zwischenzug_observed@1",
+      "derived.tactic.deflection_observed@1",
+      "derived.tactic.interference_observed@1",
+      "derived.tactic.line_blocker_clearance_observed@1",
+      "derived.tactic.overload_exploitation_observed@1",
+      "derived.tactic.sequence.defender_consequence@1",
+      "derived.tactic.square_clearance_observed@1",
+      "rules.transition.event.checkmate@1",
+      "rules.transition.event.promotion@1"
+    ]
+  },
+  "maximum": {
+    "packId": "anti-sicilian-najdorf-english-attack",
+    "moves": 48,
+    "events": 5803,
+    "structuralJsonBytes": 7882857,
+    "compileMs": 921.76375
+  }
+}

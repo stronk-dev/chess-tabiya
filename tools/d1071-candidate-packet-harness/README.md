@@ -34,3 +34,12 @@ population. It does not, and the failure mode is the dangerous direction. Its fi
 
 The file asserts each of these, so it turns red when the RFC's repair lands. That is intended: it is
 a falsifier, not a regression suite.
+
+## `buildability-envelope.test.ts` — added 2026-08-26 for D1573/D1574
+
+This file measures complete one-edge populations across the fixed 64-position D1061 sample. It
+records legal moves, sealed-event count, compile time and JSON structural bytes per root, then
+compares the observed projection set with the declared semantic-event catalogue. Structural JSON
+bytes are a reproducible size proxy, not V8 heap usage. The sample is deliberately expected to
+miss declared families: that negative control demonstrates why a position sweep may measure
+prevalence and cost but may not define the compiler's closed emitter vocabulary.

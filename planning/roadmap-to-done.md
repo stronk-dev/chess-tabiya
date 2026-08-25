@@ -181,6 +181,15 @@ retain the missing piece/square identities before their modules can claim closur
 [[D1569]] keeps the guided-hint producer family literal: its module binding imports the measured
 per-family horizon registry only after the selector/redaction gate, never a generic or wildcard
 projection that launders different derivations into one id.
+[[D1570]]–[[D1576]] return the shared candidate packet to buildability research before it becomes
+the denominator for bots, hints and Review: bind or demote the packet in F1, retain literal engine
+evidence in scored joins, name the execution/cache owner, make cache identities coherent and
+memory-bounded, derive the emitter closure from code rather than a sample, and enumerate the
+runtime/server symbol migration plus real consumer entry points. The buildability amendment now
+specifies those obligations; independent review and the Node-24 latency/heap receipt gate
+acceptance. [[D1576]] prevents the engine join from solving provenance with a fake run node: one
+generic typed fixed-bound position evaluation feeds both candidate scoring and Review's derived
+node-scoped point.
 
 ### 5. Whole-game Review, story, share, and return
 

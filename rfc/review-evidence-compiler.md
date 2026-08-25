@@ -1,7 +1,8 @@
 # RFC: Review evidence compiler
 
-- **Status:** draft 2026-08-23 — executes Semantic Collectors discharge D2 from D916–D928;
-  independent buildability review required before acceptance
+- **Status:** draft, buildability amendment 2026-08-26 on [[D1576]] — executes Semantic Collectors
+  discharge D2 from D916–D928; depends on the shared node-free engine source below and requires
+  independent buildability review before acceptance
 - **Author:** codex, on the D717 evidence-foundation routing and the completed Wave-C C4 research
 - **Created:** 2026-08-23
 - **Design refs:** `design/03-product-breadth.md` Review/Analyze surfaces;
@@ -11,7 +12,8 @@
   across eight imported games
 - **Depends on:** implemented F1 evidence manifest; the implemented
   `rules.tactic.consequence.forced_mate_after_move@1` for the optional exact-proof packet link;
-  the D921 learner-module/Wave-C amendment for literal Review input eligibility before acceptance
+  the D921 learner-module/Wave-C amendment for literal Review input eligibility before acceptance;
+  `rfc/shared-candidate-evidence-packet.md` §8.3 for `live.stockfish.position_eval@1`
 - **Parent / amends:** replaces Story's untyped engine scalar and supplies
   `rfc/semantic-collectors.md` Discharge D2; it does not choose the final Review Map module policy
 - **Supersedes / superseded by:** —
@@ -37,16 +39,18 @@ The result is both narrow and dishonest: mate distance disappears, cp↔mate tra
 scalar swings, raw WDL alternates perspective, and every missing source is indistinguishable from
 “nothing interesting happened.”
 
-This RFC lands four foundation projections and one packet compiler:
+This RFC consumes one shared source, lands four Review projections, and lands one packet compiler:
 
-1. `live.stockfish.eval_point@1` — a typed `centipawns | mate` union with explicit perspective,
-   engine version and search bound;
-2. `derived.review.eval_delta@1` — cp→cp only, with both points retained;
-3. `derived.review.mate_transition@1` — mate appearance, disappearance or mate→mate distance/side
+1. `live.stockfish.position_eval@1` — the shared node-free typed `centipawns | mate` source over an
+   exact canonical FEN, engine identity and one search bound;
+2. `derived.review.eval_point@1` — binds that source to an exact `run.record.position@1` item rather
+   than placing a run node on the source;
+3. `derived.review.eval_delta@1` — cp→cp only, with both points retained;
+4. `derived.review.mate_transition@1` — mate appearance, disappearance or mate→mate distance/side
    change, never a cp conversion;
-4. `live.stockfish.wdl_white@1` — Stockfish's raw side-to-move WDL normalized to White with the
+5. `live.stockfish.wdl_white@1` — Stockfish's raw side-to-move WDL normalized to White with the
    original subject retained;
-5. `compileReviewEvidence` — joins independently available declared evidence by exact run/node/move
+6. `compileReviewEvidence` — joins independently available declared evidence by exact run/node/move
    identity and records a typed state for every source family.
 
 The packet is not a ranking and not prose. It gives later Review modules enough grounded material
@@ -78,11 +82,13 @@ single bound remain readable as raw inspector evidence but abstain from every pr
 RFC with `legacy_provenance_missing`.
 
 `declareStockfishEvalEvidence` stops sealing the generic payload by reference ([[D1021]]). It constructs an
-exact filtered `live.stockfish.eval@1` payload containing only score and declared provenance;
+exact filtered `live.stockfish.position_eval@1` payload containing only score, the exact canonical
+request FEN and declared provenance;
 `bestMoveUci`, PV and MultiPV bytes remain in their separately permitted raw/PV projections and do
-not cross the fact/evaluation adapter. The new `eval_point` projection is the flattened typed
-Review source over that filtered payload. This repairs the existing manifest limitation for every
-consumer, not only Story.
+not cross the fact/evaluation adapter. The source has no run or node identity. Review's
+`derived.review.eval_point@1` joins it to `run.record.position@1` only after exact FEN equality.
+This repairs the existing manifest limitation for every consumer, not only Story, without making a
+hypothetical candidate pretend to be a recorded run node ([[D1576]]).
 
 ### 1.2 WDL perspective
 
@@ -126,7 +132,7 @@ measurement, not a later run-record derivation.
 No WDL delta or grade lands here. A graph may plot the three normalized values; a later source-local
 selector must declare any subtraction or threshold as its own projection.
 
-## 2. Typed engine point
+## 2. Shared position evaluation and Review node point
 
 ```ts
 type ReviewEngineScore =
@@ -134,35 +140,51 @@ type ReviewEngineScore =
   | { readonly kind: "mate"; readonly side: "white" | "black";
       readonly distance: number; readonly unit: "moves" };
 
-interface ReviewEnginePoint {
-  readonly projectionId: "live.stockfish.eval_point@1";
-  readonly nodeId: string;
-  readonly positionKey: string;
+interface StockfishPositionEvaluation {
+  readonly projectionId: "live.stockfish.position_eval@1";
+  readonly fen: string; // exact canonical six-field request FEN
+  readonly transposeKey: string;
   readonly perspective: "white";
   readonly score: ReviewEngineScore;
   readonly engine: ReviewEngineIdentity;
   readonly bound: ReviewSearchBound;
+}
+
+interface ReviewEnginePoint {
+  readonly projectionId: "derived.review.eval_point@1";
+  readonly position: DeclaredEvidence<RecordedPosition>; // run.record.position@1
+  readonly evaluation: DeclaredEvidence<StockfishPositionEvaluation>;
 }
 ```
 
 The source executor already normalizes `centipawns` and signed `mateIn` to White. The narrow source
 adapter makes that perspective explicit, converts signed mate to
 `{side, distance: abs(mateIn), unit: "moves"}`,
-and rejects zero mate distance. The executor records its request `nodeId`, canonical FEN/key,
-engine identity and bound in the same payload. The projection belongs to `live.stockfish`, uses
+and rejects zero mate distance. The executor records its exact canonical request FEN,
+`transposeKey`, engine identity and bound in the same payload. `live.stockfish.position_eval@1`
+belongs to `live.stockfish`, uses
 grounding `bounded_search`, exactness `measured`, answer content `evaluation`, forms `list | panel`,
 and abstention reasons `provider_unavailable | legacy_provenance_missing |
 invalid_source_payload`.
+
+`derived.review.eval_point@1` consumes one position evaluation and one
+`run.record.position@1`. It emits only when their canonical six-field FEN is byte-identical, retains
+both sealed inputs literally, and takes its node identity only from the recorded position. Its
+grounding is `declared_convention`, exactness `convention`, confidence `exact`, answer content
+`evaluation`, and forms `list | panel | machine_condition`. A FEN mismatch abstains
+`position_mismatch`; a missing source or recorded position abstains `input_abstained`. A
+`transposeKey` match is not enough: clocks are part of the source measurement identity even when
+the board occupancy transposes.
 
 The payload contains neither best move nor principal variation. Cp is never clamped. Mate is never
 assigned a cp sentinel.
 
 ## 3. Derived transitions
 
-Both transition projections consume two `live.stockfish.eval_point@1` items. They are general
+Both transition projections consume two `derived.review.eval_point@1` items. They are general
 typed comparisons, not claims that the points are adjacent; `compileReviewEvidence` chooses
-adjacent same-branch pairs by the recorded path. The points must use the same engine `{id,version}`
-and identical requested bound. A mismatch abstains rather than subtracting measurements with
+adjacent same-branch pairs by the recorded path. The nested evaluations must use the same engine
+`{id,version}` and identical requested bound. A mismatch abstains rather than subtracting measurements with
 different operands.
 
 ### 3.1 Cp delta
@@ -170,14 +192,16 @@ different operands.
 ```ts
 interface ReviewEvalDelta {
   readonly projectionId: "derived.review.eval_delta@1";
-  readonly before: ReviewEnginePoint & { readonly score: { readonly kind: "centipawns"; readonly value: number } };
-  readonly after: ReviewEnginePoint & { readonly score: { readonly kind: "centipawns"; readonly value: number } };
+  readonly before: ReviewEnginePoint;
+  readonly after: ReviewEnginePoint;
   readonly deltaCp: number;
 }
 ```
 
-`deltaCp = after.score.value - before.score.value` in White perspective. The projection is
-`bounded_search`, `measured`, answer content `evaluation`, forms `sentence | list | panel`, and
+Both nested `evaluation.payload.score` values must be `centipawns`; then
+`deltaCp = after.evaluation.payload.score.value - before.evaluation.payload.score.value` in White
+perspective. The projection is `declared_convention`, `convention`, answer content `evaluation`,
+forms `sentence | list | panel`, and
 abstains `missing_endpoint | mate_operand | engine_mismatch | bound_mismatch | input_abstained`.
 It says only that one recorded measurement changed. It is not a grade, blunder label, pivotality
 claim or recommendation.
@@ -349,7 +373,8 @@ deleted.
   (`story.ts:183`). Once `StoryEvaluation` becomes the typed `ReviewEnginePoint`, a mate-typed point
   has no `centipawns` member, and the shipped expression would silently read `undefined ?? 0` — every
   mate moment sorting to the tail of its band. Refusal 1 forbids restoring the magnitude by
-  converting mate to cp. The rule is therefore explicit: the magnitude tiebreak applies **only** when
+  converting mate to cp. The repaired path reads the nested retained
+  `evaluation.payload.score`; the rule is explicit: the magnitude tiebreak applies **only** when
   both endpoints of a moment are `kind: "centipawns"`; a moment with any mate-typed endpoint skips
   the magnitude comparison and is ordered by ply then node id within its band, ahead of cp moments
   with equal ply. An implementer who reads only the band list above and deletes the magnitude
@@ -396,7 +421,11 @@ not evidence for the final Review Map policy.
 
 ## 8. Acceptance criteria
 
-1. **Typed source:** cp and mate fixtures compile into the discriminated point. The five negatives
+1. **Typed source and node derivation:** cp and mate fixtures compile into
+   `live.stockfish.position_eval@1` with exact canonical six-field FEN and no node/run field. An
+   exact-FEN `run.record.position@1` item derives `derived.review.eval_point@1` retaining both sealed
+   inputs; a fake node on the source is a type error, and a FEN mismatch abstains
+   `position_mismatch`. The five source negatives
    are pinned to one outcome each, because "abstain or fail" is satisfied by an implementation that
    only ever does one of them: a payload carrying **both** requested bounds and a payload carrying
    **neither** are *refused before attachment* (§1.1, a thrown refusal, not an abstention); **mate
@@ -405,9 +434,10 @@ not evidence for the final Review Map policy.
    `legacy_provenance_missing` and stays inspector-readable. A test asserting the abstention codes
    must also assert that the two refusal cases produce no evidence item at all.
 2. **No move leak:** an eval payload containing `bestMoveUci` and PV produces byte-identical
-   `engine_point` output to the same payload without them; those keys are absent recursively.
+   `position_eval` output to the same payload without them; those keys are absent recursively.
 3. **Identity:** every new live eval/WDL row carries exact capability id/name/version and one search
-   bound; changing version or bound changes the evidence/packet digest.
+   bound; position evaluation carries exact canonical FEN and transpose key but no node id; changing
+   FEN, version or bound changes the evidence/packet digest.
 4. **Legacy:** a persisted pre-RFC row remains readable in the inspector and yields
    `legacy_provenance_missing` for Review—never an invented current version.
 5. **WDL perspective:** paired White/Black-to-move fixtures normalize by identity/swap and sum to
@@ -446,7 +476,8 @@ not evidence for the final Review Map policy.
     when all requested work terminates even when optional providers are off.
 14. **Determinism:** shuffled events/items/provider completion order produce byte-identical packet
     and digest.
-15. **Manifest/adapter closure:** four projections compile with literal operands/inputs,
+15. **Manifest/adapter closure:** the shared `live.stockfish.position_eval@1` source plus this RFC's
+    four projections compile with literal operands/inputs,
     dispositions and negative widening fixtures; counts/digest move by the declared delta.
     Packet input bindings, source-id list and adapter-map keys are set-equal and non-empty; deleting
     or adding one member fails. No consumer uses raw eval/WDL as Review prose.
@@ -459,7 +490,14 @@ not evidence for the final Review Map policy.
     runner; provider time is reported separately and excluded from this local bound.
 18. **Scope/closeout:** no pack/content/preset/assistance/bot bytes change. Focused runtime/server/
     browser Story tests, status parity, register check and work index pass; D917/D927 close, D918
-    advances to compiled-packet complete, and Semantic Collectors D2 records the implementation SHA.
+    advances to compiled-packet complete, Semantic Collectors D2 records the implementation SHA,
+    and shared-packet Discharge D8 records the same reconciliation SHA.
+19. **One engine-score authority:** a repository receipt finds one production constructor for
+    `live.stockfish.position_eval@1`; candidate-vector scoring and Review node-point derivation both
+    consume it. No `live.stockfish.eval_point@1` declaration remains, no Review adapter can seal a
+    node id into the source, and no candidate adapter can manufacture one. A fixture with the same
+    position evaluation joined to a matching recorded node succeeds while the same evaluation used
+    directly as a Review node point fails.
 
 ## Discharges
 
@@ -477,6 +515,15 @@ The existing Story order is preserved only as a labelled compatibility conventio
 
 ## Changelog
 
+- 2026-08-26 buildability amendment ([[D1576]]): the drafted
+  `live.stockfish.eval_point@1` falsely made `nodeId` an operand of the engine measurement, which
+  made it unusable for hypothetical candidate children and invited fabricated run nodes. The source
+  is now the shared, node-free `live.stockfish.position_eval@1` owned by
+  `shared-candidate-evidence-packet.md`: exact canonical FEN, transpose key, White-perspective typed
+  cp/mate score, engine identity and one bound. Review derives
+  `derived.review.eval_point@1` only by exact-FEN joining that source to
+  `run.record.position@1`, retaining both sealed inputs. Criteria 1–3, 15, 18 and 19 make the split
+  failable and prohibit a second engine-score authority.
 - 2026-08-23: initial draft from D916–D928 and Semantic Collectors discharge D2.
 - 2026-08-23 cross-review: eight corrections, three of them buildability blockers as drafted.
   (1) **§4.1's `{nodeId, kind, engine identity, bound}` tracking had no home.** HEAD's attempt key is

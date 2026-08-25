@@ -7918,3 +7918,33 @@ set-equal `HINT_HORIZON_PROJECTION_IDS` registry only after `hint-distance`'s re
 sealed-disclosure gates settle its members. No wildcard and no generic wrapper enters the
 manifest. The mistake was caught in authoring, before any production type or content depended on
 it.
+
+## 2026-08-26 — Shared candidate packet returned to buildability and measured at full roots
+
+Re-ran the D1071 packet falsifier at HEAD, then enumerated every exact legal child at all 64 fixed
+D1061 roots with the full `localSemanticEvents` closure. The original architectural verdict holds:
+bot selection, guided hints and Review need one complete score-free legal-candidate population, and
+the shipped callback/vector paths do not provide it. The drafting state did not yet define a
+buildable implementation.
+
+**Measured:** legal moves p50/p95/max 35/47/50; retained semantic events
+3,779/5,482/5,803; structural JSON 5.13/7.44/7.88 MB; cold compile
+614/863/922 ms. The sweep observed only 41 of 67 declared event projections, including missing
+basic rare families such as checkmate and promotion, so a fixed corpus cannot serve as the emitted
+schema. The instrument and deterministic receipt live in
+`tools/d1071-candidate-packet-harness/buildability-envelope.test.ts` and
+`planning/evidence-foundation-ux/d1573-candidate-packet-envelope.json`; the dossier is
+`design/research/shared-candidate-packet-buildability.md`.
+
+**Changed:** [[D1570]]–[[D1576]] are specified in the packet's buildability amendment. The RFC now
+pins the exact F1 tuple and operator bindings, retains literal packet/engine evidence in scored
+joins, injects one per-process population service, uses immutable scope projections and a dual
+8-entry/56,000-retained-item LRU, derives the event closure from code with per-member able-to-fail
+fixtures, and names the runtime/server migration. One node-free
+`live.stockfish.position_eval@1` becomes the engine-score source for hypothetical candidates;
+Review derives its node-scoped point from that source plus `run.record.position@1`, so neither path
+invents a node id or creates a second score authority.
+
+**Next:** independent cross-review of both amended RFCs; record the Node-24 same-work latency,
+heap/RSS and cache receipt; then accept and implement the packet before any hint, bot or Review
+consumer builds its own denominator.
