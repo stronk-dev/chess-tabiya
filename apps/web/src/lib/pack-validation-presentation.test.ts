@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import { requiredFieldStates, splitValidationIssues } from "./pack-validation-presentation.js";
+import { graduationEntries, requiredFieldStates, splitValidationIssues } from "./pack-validation-presentation.js";
 
 describe("pack validation presentation", () => {
   it("derives the required-field checklist from unsaved JSON", () => {
@@ -19,5 +19,18 @@ describe("pack validation presentation", () => {
     expect(sections.incomplete.map((issue) => issue.path)).toEqual(["/title"]);
     expect(sections.wrong.map((issue) => issue.path)).toEqual(["/mode"]);
     expect(sections.warnings.map((issue) => issue.path)).toEqual(["/spine"]);
+  });
+
+  it("projects graduation state from unsaved bytes and fails legacy entries closed", () => {
+    expect(graduationEntries("{")).toBeUndefined();
+    expect(graduationEntries(JSON.stringify({ provenance: { graduationBlockers: [
+      { id: "grounding", state: "resolved", statement: "Evidence attached." },
+      "Legacy prose blocker",
+      null,
+    ] } }))).toEqual([
+      { id: "grounding", state: "resolved", statement: "Evidence attached.", legacy: false },
+      { id: "legacy-2", state: "blocking", statement: "Legacy prose blocker", legacy: true },
+      { id: "invalid-3", state: "blocking", statement: "Malformed graduation entry; fix the document before publication.", legacy: true },
+    ]);
   });
 });

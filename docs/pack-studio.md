@@ -73,6 +73,12 @@ unions are filtered at the shared validator boundary, so an `outcome` condition 
 selected outcome arm and a structural feature reports only its selected `kind`, identically in Studio
 and `make pack-check`.
 
+The pack editor's right-hand column projects `provenance.graduationBlockers` from the current unsaved
+JSON, not the last saved draft. It counts blocking versus discharged conditions and shows each stable
+id, state, and statement. Legacy string entries and malformed entries display as blocking, matching
+the validator's fail-closed posture. This per-draft column does not pretend to replace the separate
+corpus-wide `make graduation-report` instrument.
+
 `POST /runs/:id/distill` lets a run host turn played branches into an ordinary
 learner-owned draft with `seedKind: run`. It copies only recorded move facts,
 remaps portable fired checkpoints, substitutes a mechanical checkpoint when

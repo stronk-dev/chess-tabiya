@@ -2700,16 +2700,20 @@
     {
       "id": "AUT-a8",
       "sourceState": "queued",
-      "state": "queued",
+      "state": "completed",
       "capability": "theory_content",
       "owner": "content-and-theory",
-      "assignment": "capability:theory_content",
+      "assignment": "closed",
       "sourceDocument": "ux-authoring-and-library.md",
       "sourceSection": "§8 F1",
       "sourceHeading": "Authoring and library — `ux-authoring-and-library.md`",
       "summary": "The graduation blocker list becomes the studio's primary right-hand column",
       "legacyRoute": "none",
-      "sourceDigest": "sha256:96c9590bb4a27e25989ab4aafd7951f42d0d1d11b0103b93052f760fb687935a"
+      "sourceDigest": "sha256:96c9590bb4a27e25989ab4aafd7951f42d0d1d11b0103b93052f760fb687935a",
+      "completion": {
+        "completedOn": "2026-08-25",
+        "evidence": "Pack Studio third column projects unsaved graduation conditions with blocking/discharged counts, stable ids, statements, and fail-closed legacy handling"
+      }
     },
     {
       "id": "AUT-a9",

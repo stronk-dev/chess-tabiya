@@ -60,7 +60,7 @@
   import { voteAttribution } from "./lib/live-vote.js";
   import { markAttribution, relayedMarkShapes } from "./lib/live-marks.js";
   import { clearAccountLocalData, clearRunLocalData } from "./lib/account-local-data.js";
-  import { requiredFieldStates, splitValidationIssues } from "./lib/pack-validation-presentation.js";
+  import { graduationEntries, requiredFieldStates, splitValidationIssues } from "./lib/pack-validation-presentation.js";
 
   interface Props {
     api?: DrillClientApi;
@@ -225,6 +225,8 @@
   let displayedPackValidation = $derived(packBufferValidation ?? selectedPackDraft?.validation);
   let packRequiredFields = $derived(requiredFieldStates(studioJson));
   let packValidationSections = $derived(splitValidationIssues(displayedPackValidation?.issues ?? []));
+  let packGraduationEntries = $derived(graduationEntries(studioJson));
+  let blockingGraduationEntries = $derived(packGraduationEntries?.filter((entry) => entry.state === "blocking") ?? []);
   let selectedPackRegistrationBlock = $derived(registrationBlockReason(selectedPackDraft));
   let runContext = $derived(
     route.name === "run" && session.runState
@@ -1131,7 +1133,7 @@
     <main class="shell-view studio" aria-labelledby="create-title">
       <p class="eyebrow">Create / Pack Studio</p>
       <h1 id="create-title">Author against the real validator.</h1>
-      <div class="studio-grid">
+      <div class="studio-grid pack-studio-grid">
         <aside aria-label="Your drafts">
           <h2>Your drafts</h2>
           {#each drafts as draft}
@@ -1170,6 +1172,28 @@
             </div>
           {/if}
         </section>
+        <aside class="graduation-column" aria-labelledby="graduation-column-title">
+          <p class="eyebrow">Publication readiness</p>
+          <h2 id="graduation-column-title">Graduation conditions</h2>
+          {#if packGraduationEntries === undefined}
+            <p>Fix the JSON syntax to inspect graduation conditions.</p>
+          {:else if packGraduationEntries.length === 0}
+            <p>No graduation conditions are declared in these bytes.</p>
+          {:else}
+            <p><strong>{blockingGraduationEntries.length}</strong> blocking · {packGraduationEntries.length - blockingGraduationEntries.length} discharged</p>
+            <ol class="graduation-list">
+              {#each packGraduationEntries as entry}
+                <li class:blocking={entry.state === "blocking"}>
+                  <span>{entry.state.replaceAll("_", " ")}</span>
+                  <code>{entry.id}</code>
+                  <p>{entry.statement}</p>
+                  {#if entry.legacy}<small>Legacy or malformed entry; validation treats this as blocking.</small>{/if}
+                </li>
+              {/each}
+            </ol>
+          {/if}
+          <p class="honest">Registration publishes immutable bytes. Resolve each blocking condition in the document before registering.</p>
+        </aside>
       </div>
       <p class="honest">Community registration does not make a pack official. Official packs enter through git and the deployment image.</p>
       <h2>Shape library editor</h2>
@@ -1357,6 +1381,7 @@
   .live-overlay { width: 100%; height: 100%; display: grid; grid-template-columns: minmax(0, min(75vh, 70vw)) minmax(12rem, 1fr); gap: 1.5rem; align-items: center; padding: 1rem; overflow: hidden; background: transparent; }
   .live-overlay aside { padding: 1rem; border-radius: 0.8rem; background: var(--scrim-strong); color: var(--paper); }
   .studio-grid { display: grid; grid-template-columns: minmax(12rem, 18rem) minmax(0, 1fr); gap: 1rem; }
+  .pack-studio-grid { grid-template-columns: minmax(12rem, 16rem) minmax(0, 1fr) minmax(16rem, 22rem); }
   .studio-grid aside { display: grid; align-content: start; gap: 0.5rem; overflow: auto; }
   .studio-grid section { display: grid; gap: 0.5rem; min-width: 0; }
   .studio-grid textarea { width: 100%; min-height: 42vh; padding: 0.8rem; font: 0.8rem/1.4 ui-monospace, monospace; }
@@ -1367,6 +1392,15 @@
   .validation-summary li.missing { color: var(--danger); }
   .validation-sections { display: grid; gap: 0.6rem; }
   .validation-sections ul { margin: 0; padding-inline-start: 1.2rem; }
+  .graduation-column { max-height: min(72dvh, 52rem); padding: 0.8rem; border: 1px solid var(--line); border-radius: 0.8rem; background: var(--panel); }
+  .graduation-column h2 { margin: 0; font: 600 1.2rem var(--display-font); }
+  .graduation-list { display: grid; gap: 0.6rem; margin: 0; padding: 0; list-style: none; }
+  .graduation-list li { display: grid; gap: 0.25rem; padding: 0.65rem; border: 1px solid var(--line); border-radius: 0.55rem; }
+  .graduation-list li.blocking { border-color: var(--danger); }
+  .graduation-list span { color: var(--muted); font: 700 0.68rem/1.2 ui-monospace, monospace; letter-spacing: 0.08em; text-transform: uppercase; }
+  .graduation-list li.blocking span { color: var(--danger); }
+  .graduation-list code, .graduation-list p { overflow-wrap: anywhere; }
+  .graduation-list p { margin: 0; }
   .empty-state p { max-width: 42rem; color: var(--muted); font-size: 1.05rem; }
   section + section { margin-top: 2rem; }
   li { margin: 0.45rem 0; }

@@ -421,6 +421,34 @@ describe("application shell", () => {
     await unmount(component);
   });
 
+  it("shows graduation conditions from the current unsaved Studio bytes", async () => {
+    history.replaceState(null, "", "/create");
+    const documentWithConditions = structuredClone(pack) as unknown as Record<string, unknown>;
+    documentWithConditions.provenance = {
+      ...(documentWithConditions.provenance as Record<string, unknown>),
+      graduationBlockers: [
+        { id: "needs-source", state: "blocking", statement: "Attach the source." },
+        { id: "engine-checked", state: "resolved", statement: "Engine evidence attached.", resolved: { at: "2026-08-25", by: "fixture" } },
+      ],
+    };
+    const draft = { id: "draft-one", packId: pack.id, document: documentWithConditions, digest, state: "draft" as const, validation: { valid: true, issues: [] } };
+    const studioApi: DrillClientApi = { ...api(), async packDrafts() { return [draft]; }, async lintPackDraft() { return draft.validation; } };
+    const component = mount(App, { target: target(), props: { api: studioApi, router: new HistoryRouter(window), storage: new MemoryStorage() } });
+
+    await vi.waitFor(() => expect(document.body.textContent).toContain(`${pack.id} · draft`));
+    document.querySelector<HTMLButtonElement>("aside[aria-label='Your drafts'] button")!.click();
+    await vi.waitFor(() => expect(document.querySelector(".graduation-column")?.textContent).toContain("1 blocking · 1 discharged"));
+    expect(document.querySelector(".graduation-column")?.textContent).toContain("needs-source");
+
+    const next = structuredClone(documentWithConditions) as Record<string, unknown>;
+    (next.provenance as { graduationBlockers: { state: string }[] }).graduationBlockers[0]!.state = "resolved";
+    const textarea = document.querySelector<HTMLTextAreaElement>("#studio-json")!;
+    textarea.value = JSON.stringify(next, null, 2);
+    textarea.dispatchEvent(new Event("input", { bubbles: true }));
+    await vi.waitFor(() => expect(document.querySelector(".graduation-column")?.textContent).toContain("0 blocking · 2 discharged"));
+    await unmount(component);
+  });
+
   it("debounces unsaved Studio lint, reports invalid JSON locally, and never saves while typing", async () => {
     history.replaceState(null, "", "/create");
     const draft = { id: "draft-one", packId: pack.id, document: pack, digest, state: "draft" as const, validation: { valid: true, issues: [] } };

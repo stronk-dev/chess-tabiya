@@ -7773,3 +7773,14 @@ also replaces the stale saved validation shown beside the editor.
 **Verification:** actual 8-arm success-condition and 18-arm structural-feature fixtures each reduce
 to one selected-arm missing-field error. Four focused files pass 80 tests; schema, server, and Svelte
 typechecks pass with zero Svelte warnings. AUT-a4, AUT-a5, AUT-a6, and [[D1553]] close.
+
+## 2026-08-25 — Graduation conditions become the Studio's third column
+
+**What landed:** Pack Studio projects graduation conditions from the current unsaved editor bytes,
+showing the blocking/discharged count and each condition's stable id, state, and statement. Legacy
+and malformed entries render as blocking. The column is explicitly per-draft; the corpus-wide
+graduation report remains its own instrument.
+
+**Verification:** a mounted Studio fixture begins at one blocking and one discharged condition,
+changes the condition state in the textarea without saving, and reaches zero blocking and two
+discharged. The focused 14-test web pair and Svelte typecheck pass. AUT-a8 and [[D1554]] close.
