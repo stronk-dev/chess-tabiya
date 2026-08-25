@@ -17,23 +17,26 @@ const observations: readonly StructuralObservation[] = [
   { kind: "piece_reach_count", color: "white", role: "bishop", squares: ["g2"], count: 5 },
   { kind: "named_structure", squares: [], provenanceNote: "Tabiya catalogue convention: Carlsbad." },
   { kind: "bishop_on_shade", color: "white", shade: "light", squares: ["d3"] },
-  { kind: "pawn_count", color: "white", count: 7, squares: [] },
   { kind: "king_opposition", color: "white", form: "direct", squares: ["e5", "e3"] },
 ];
 
 describe("rung-0 structural sentences", () => {
-  it("renders all fifteen without valence, permanence, or attack-balance conclusions", () => {
+  it("renders all fourteen emitted kinds without valence, permanence, or attack-balance conclusions", () => {
     const banned = /\b(weak|strong|good|bad|better|worse|advantage|winning|losing|should|must|best|worst|mistake|blunder|punish|wins|loses|never|balance|defended)\b/i;
     const rendered = observations.map(renderStructuralObservation);
-    expect(rendered).toHaveLength(15);
+    expect(rendered).toHaveLength(14);
     for (const sentence of rendered) expect(sentence).not.toMatch(banned);
     expect(rendered[0]).toMatch(/maximal pawn-reach/i);
     expect(rendered[1]).toMatch(/Tabiya's strict outpost detector/i);
     expect(rendered[9]).toMatch(/directly attack/i);
     expect(rendered[10]).toMatch(/attack-reachable/i);
     expect(rendered[12]).toBe("White's bishop on d3 stands on a light square.");
-    expect(rendered[13]).toBe("White has 7 pawns.");
-    expect(rendered[14]).toBe("White has the direct opposition: kings on e5 and e3 with Black to move.");
+    expect(rendered[13]).toBe("White has the direct opposition: kings on e5 and e3 with Black to move.");
+  });
+
+  it("refuses the retired pawn_count reading while keeping its authored-expression prose", () => {
+    expect(() => renderStructuralObservation({ kind: "pawn_count", color: "white", count: 7, squares: [] })).toThrow(/matcher-only/u);
+    expect(renderStructuralExpressionSpec({ kind: "feature", feature: { kind: "pawn_count", color: "white", basis: "count", comparison: "equal", count: 7 } })).toBe("white has exactly 7 pawns");
   });
 
   it("discloses capture migration without claiming the future capture exists", () => {

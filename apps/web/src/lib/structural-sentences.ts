@@ -24,7 +24,7 @@ export function renderStructuralObservation(observation: StructuralObservation):
   if (observation.kind === "piece_reach_count") return `${side(observation.color)}'s ${observation.role} on ${observation.squares[0]} has ${count(observation.count, "attack-reachable square")} in the current occupancy; check and pins are not evaluated.`;
   if (observation.kind === "named_structure") return observation.provenanceNote ?? "A Tabiya catalogue structure matches this position.";
   if (observation.kind === "bishop_on_shade") return `${side(observation.color)}'s bishop on ${observation.squares[0]} stands on a ${observation.shade} square.`;
-  if (observation.kind === "pawn_count") return `${side(observation.color)} has ${count(observation.count, "pawn")}.`;
+  if (observation.kind === "pawn_count") throw new TypeError("pawn_count is matcher-only; use piece_count with role pawn for emitted readings");
   if (observation.kind === "king_opposition") return `${side(observation.color)} has the ${observation.form} opposition: kings on ${observation.squares.join(" and ")} with ${side(observation.color === "white" ? "black" : "white")} to move.`;
   if (observation.kind === "piece_count") return `${side(observation.color)} has ${count(observation.count, observation.role ?? "piece")}.`;
   if (observation.kind === "king_zone") return `${side(observation.color)}'s king on ${observation.squares[0]} stands ${observation.zone === "corner" ? "on a1, a8, h1 or h8" : "on the a-file, the h-file, the first rank or the eighth rank"}.`;

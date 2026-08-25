@@ -7737,3 +7737,15 @@ zero save calls while typing, and zero server calls for malformed JSON. The focu
 shell suite passes, and Svelte typecheck reports zero errors and zero warnings. AUT-a4 still owns
 human grouping of incomplete-versus-wrong diagnostics; this change does not call raw validator rows
 a finished authoring UX.
+
+## 2026-08-25 — Retired pawn-count readings fail closed at presentation
+
+**What landed:** [[D720]] and the residual [[D548]] close without deleting the authored predicate.
+`pawn_count` remains a deprecated matcher for existing pack expressions, while emitted evidence uses
+`piece_count` with role `pawn`. The catalogue, source adapter, consumer admission, and guidance path
+already retired it; the last learner renderer now refuses the impossible observation instead of
+turning it into a sentence.
+
+**Verification:** a negative fixture proves a forged `pawn_count` observation cannot render, and a
+positive fixture preserves the authored-expression sentence. The ordinary fourteen emitted
+structural kinds retain their valence/claim-boundary sweep.
