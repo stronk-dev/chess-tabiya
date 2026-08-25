@@ -7652,3 +7652,31 @@ live Maia probe skipped), 4 real-content integrations and all 7 responsive/acces
 tests. Full repository verification passes 995 software tests, 164 content tests, build/schema/
 packaging checks, 1,355 routed ledger rows, and every register, roadmap, status, intent and test-tier
 gate.
+
+## 2026-08-25 — Evidence consumers become callable contracts
+
+**What landed:** [[D1449]] narrows again. The manifest gate no longer opens twenty-three named
+source files and searches for strings that merely resemble consumer anchors. Runtime, server and
+web now register the actual callable for every current consumer operation. The catalogue records
+that callable's exported name, and `make evidence-manifest-check` requires exact operation-id set
+equality, version 1, uniqueness, a declaration for every registration, and exact
+declaration-to-callable-name equality. Removing or renaming an operation now fails at its exported
+boundary rather than succeeding because stale text remains in a file; behavior remains covered by
+the operation's own tests.
+
+The producer/acquisition direction remains explicitly outside the consumer census. The former
+source-grep assertion around external voice was not treated as proof of data flow: existing
+guidance tests exercise the sealed rendered view and reject a forged sentence paired with admitted
+evidence. Research and governance harnesses may still inspect source when topology is their stated
+subject; they remain the only residual in D1449 and may not substitute for behavioral tests.
+
+**Verification:** the complete workspace typecheck passes with zero Svelte errors or warnings.
+The callable-registry and sealed-guidance focused suite passes 23 tests, including able-to-fail
+fixtures for missing, duplicate, renamed, future-version and non-callable registrations. The
+compiled manifest check passes with all twenty-three production operation bindings present.
+
+**Count correction:** [[D1551]] fixes two stale hand-written summaries discovered while checking
+that output. The executable tuple is 37 producers / 193 projections / 25 consumers / 210 bindings,
+plus 67 semantic events / 67 eligibility rows / 15 refusal reasons / one policy; the prior
+35/189 figures were not retained merely because the unaffected consumer/binding counts still
+matched.

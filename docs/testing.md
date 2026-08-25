@@ -34,6 +34,13 @@ interactive state in the browser matrix. A research or governance census may ins
 when source topology is itself the named subject, and it must not stand in for a product-behavior
 test.
 
+The evidence-manifest consumer census follows the same rule. Runtime, server, and web register the
+twenty-three real consumer callables; the manifest check requires their IDs and exported function
+names to agree exactly with the compiled catalogue. It does not open implementation files or grep
+for anchor text. Provider-input safety is covered separately by behavior tests over sealed rendered
+views, including a forged-sentence negative, so the topology census is not mistaken for data-flow
+proof.
+
 `make graduation-plan-check` is deliberately not a required CI dependency. It freezes the current
 draft/candidate population and classification plan for an authoring migration; changing that
 population is planning evidence, not a software regression. Run it while working on graduation or

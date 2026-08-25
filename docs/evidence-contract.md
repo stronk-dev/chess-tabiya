@@ -22,7 +22,7 @@ by a SHA-256 digest. `/capabilities` returns that digest, current producer avail
 consumer-safe binding summary. It never returns engine lines, authored prose, provider secrets, or
 corpus rows.
 
-The current compiled closure is 35 producers, 189 projections, 25 consumers and 210 bindings,
+The current compiled closure is 37 producers, 193 projections, 25 consumers and 210 bindings,
 plus 67 semantic-event declarations, 67 eligibility rows, 15 refusal reasons and one selection
 policy. The executable manifest and semantic-evidence checks own this tuple.
 
@@ -104,8 +104,17 @@ before traffic is served.
 6. If no honest consumer exists, record one explicit disposition. Do not add a wildcard, legacy
    bypass, generic packet renderer, or user-facing primitive switch.
 
-F1's bind stage covers twenty-three production operations. Producer computation and provider
-acquisition are deliberately outside that consumer census; authored structural AST inputs and
+F1's bind stage covers twenty-three production operations. Each package registers the actual
+exported callable for every operation with `evidenceConsumerOperation`; the catalogue's
+`implementation` value is that callable's exact export name. `make evidence-manifest-check`
+combines the runtime, server, and web registries and requires exact ID-set equality, version 1,
+one registration per ID, a manifest declaration, and exact declaration-to-function-name equality.
+It does not infer consumption from file paths or search source text for a matching string.
+Removing or renaming a registered consumer therefore breaks the compiled contract at the
+operation boundary; behavioral tests remain responsible for what the callable does.
+
+Producer computation and provider acquisition are deliberately outside that consumer census;
+authored structural AST inputs and
 computed results, evidence-reference resolution, normalized versus delivery claims, Explorer page
 versus frontier results, recorded comparison points, sourcing-ledger records, and raw opponent
 provider results all retain distinct payload identities. Every registered operation is anchored at

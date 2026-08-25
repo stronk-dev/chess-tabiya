@@ -245,6 +245,8 @@ export {
   EvidenceManifestError,
   compileEvidenceManifest,
   evidenceForConsumer,
+  evidenceConsumerOperation,
+  assertEvidenceConsumerOperations,
   assertConsumerEvidenceView,
   assertRenderedEvidenceView,
   renderEvidenceItems,
@@ -256,6 +258,7 @@ export {
   type DeclaredEvidence,
   type EvidenceBinding,
   type EvidenceContractDeclarations,
+  type EvidenceConsumerOperation,
   type EvidenceDisposition,
   type EvidenceDerivation,
   type EvidenceForm,
@@ -279,6 +282,7 @@ export {
   type SemanticEventSign,
   type VersionedEvidenceId,
 } from "./evidence-contract.js";
+export { RUNTIME_EVIDENCE_CONSUMER_OPERATIONS } from "./evidence-consumer-operations.js";
 export {
   CURRENT_CONSUMER_OPERATION_IDS,
   EVIDENCE_ADAPTERS,

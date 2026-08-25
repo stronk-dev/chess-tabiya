@@ -128,7 +128,7 @@ This was checked against the catalogue rather than the RFCs.
 | `BREADTH_COLLECTOR_PROJECTION_IDS` | **18** | Wave B, same mix | `evidence-catalog.ts:171-180`; `rfc/breadth-collectors.md:425-447` |
 | Wave C (semantic collectors) | **14 registered / 12 compile** | 9 events + 3 readings/predicates/consequences; the 2 promotion-race ids are **unimplemented and negative-asserted** | `rfc/semantic-collectors.md:697-716`; absence asserted `evidence-catalog.test.ts:106` |
 | `SEMANTIC_EVENT_PROJECTION_IDS` | **67** | **only the event-role projections**, across all waves plus the pre-collector structural/transition/avoidance events | `evidence-catalog.ts:149` (concat of 11 sub-lists, `:115-148`) |
-| whole manifest | **189 projections** / 35 producers / 25 consumers / 210 bindings | | `docs/evidence-contract.md:25` |
+| whole manifest | **193 projections** / 37 producers / 25 consumers / 210 bindings | | `docs/evidence-contract.md:25`; `make evidence-manifest-check` |
 
 Overlap is real and must not be double-counted: `rules.tactic.event.double_attack@1` is tactical
 collector #13 **and** a member of the 67; `rules.tactic.reading.loose_piece` is tactical #8 and is

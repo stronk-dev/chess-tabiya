@@ -68,6 +68,42 @@ export interface ConsumerDeclaration {
   readonly disposition?: EvidenceDispositionDeclaration;
 }
 
+export interface EvidenceConsumerOperation {
+  readonly consumer: VersionedEvidenceId;
+  readonly operation: CallableFunction;
+}
+
+export function evidenceConsumerOperation(
+  id: string,
+  operation: CallableFunction,
+): EvidenceConsumerOperation {
+  if (id.trim() === "") throw new TypeError("Evidence consumer operation id must not be empty");
+  if (typeof operation !== "function") throw new TypeError(`Evidence consumer operation ${id} must be callable`);
+  return Object.freeze({ consumer: Object.freeze({ id, version: 1 }), operation });
+}
+
+export function assertEvidenceConsumerOperations(
+  expectedIds: readonly string[],
+  declarations: readonly ConsumerDeclaration[],
+  operations: readonly EvidenceConsumerOperation[],
+): void {
+  const expected = [...expectedIds].sort();
+  const ids = operations.map((entry) => entry.consumer.id);
+  if (new Set(ids).size !== ids.length) throw new TypeError("Evidence consumer operations contain a duplicate id");
+  if ([...ids].sort().join("\0") !== expected.join("\0")) {
+    throw new TypeError("Evidence consumer operations are not set-equal to the current operation catalogue");
+  }
+  const byId = new Map(declarations.map((declaration) => [declaration.id, declaration]));
+  for (const entry of operations) {
+    if (entry.consumer.version !== 1) throw new TypeError(`Evidence consumer operation ${entry.consumer.id} has unsupported version ${entry.consumer.version}`);
+    const declaration = byId.get(entry.consumer.id);
+    if (declaration === undefined) throw new TypeError(`Evidence consumer operation ${entry.consumer.id} has no manifest declaration`);
+    if (declaration.implementation !== entry.operation.name) {
+      throw new TypeError(`Evidence consumer operation ${entry.consumer.id} declares ${declaration.implementation} but exports ${entry.operation.name}`);
+    }
+  }
+}
+
 export interface AdapterDeclaration {
   readonly id: string;
   readonly version: number;
