@@ -1525,17 +1525,21 @@
     {
       "id": "ATR-a22",
       "sourceState": "queued",
-      "state": "queued",
+      "state": "completed",
       "capability": "review",
       "owner": "review-and-return",
-      "assignment": "capability:review",
+      "assignment": "closed",
       "sourceDocument": "ux-after-the-run.md",
       "sourceSection": "§3.8",
       "sourceHeading": "After the run — `ux-after-the-run.md`",
       "summary": "**`App.svelte:369-371` throws on any device other than the one that played the run**, killing the primary CTA",
       "legacyRoute": "none",
       "tournamentReady": true,
-      "sourceDigest": "sha256:33650820efe0c84ed16272ac2d82f32be59810e5b355e9692183459008792eda"
+      "sourceDigest": "sha256:33650820efe0c84ed16272ac2d82f32be59810e5b355e9692183459008792eda",
+      "completion": {
+        "completedOn": "2026-08-25",
+        "evidence": "shared ranked-story reducer; manifest-derived multi-source card provenance; current-device writer lease claim; focused runtime/web/server fixtures and browser re-entry journey"
+      }
     },
     {
       "id": "ATR-a23",
@@ -1654,32 +1658,40 @@
     {
       "id": "ATR-a5",
       "sourceState": "queued",
-      "state": "queued",
+      "state": "completed",
       "capability": "review",
       "owner": "review-and-return",
-      "assignment": "capability:review",
+      "assignment": "closed",
       "sourceDocument": "ux-after-the-run.md",
       "sourceSection": "§1.2",
       "sourceHeading": "After the run — `ux-after-the-run.md`",
       "summary": "**A false provenance footer ships**: *\"rendered from recorded engine evidence\"* on rules-marker cards",
       "legacyRoute": "ledger",
       "note": "[[D687]]",
-      "sourceDigest": "sha256:8cf251e4bf335f545b732965b8df26b4aff39cf9dd04deecd8975dea86f675c1"
+      "sourceDigest": "sha256:8cf251e4bf335f545b732965b8df26b4aff39cf9dd04deecd8975dea86f675c1",
+      "completion": {
+        "completedOn": "2026-08-25",
+        "evidence": "shared ranked-story reducer; manifest-derived multi-source card provenance; current-device writer lease claim; focused runtime/web/server fixtures and browser re-entry journey"
+      }
     },
     {
       "id": "ATR-a6",
       "sourceState": "queued",
-      "state": "queued",
+      "state": "completed",
       "capability": "review",
       "owner": "review-and-return",
-      "assignment": "capability:review",
+      "assignment": "closed",
       "sourceDocument": "ux-after-the-run.md",
       "sourceSection": "§1.2",
       "sourceHeading": "After the run — `ux-after-the-run.md`",
       "summary": "Ranked-8 client versus chronological-8 server divergence inside `publicStory`",
       "legacyRoute": "ledger",
       "note": "[[D688]]",
-      "sourceDigest": "sha256:88fb6e480cfa739ed1927a8e8ab753bb019c47a363e1c898f3e6b3803c8dfd3b"
+      "sourceDigest": "sha256:88fb6e480cfa739ed1927a8e8ab753bb019c47a363e1c898f3e6b3803c8dfd3b",
+      "completion": {
+        "completedOn": "2026-08-25",
+        "evidence": "shared ranked-story reducer; manifest-derived multi-source card provenance; current-device writer lease claim; focused runtime/web/server fixtures and browser re-entry journey"
+      }
     },
     {
       "id": "ATR-a7",

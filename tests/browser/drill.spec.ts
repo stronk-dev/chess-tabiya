@@ -111,6 +111,7 @@ test("imports one game, opens a grounded story, re-enters play, and exports orig
   const enter = page.getByRole("button", { name: "Re-enter and play from here" });
   await expect(enter).toBeEnabled({ timeout: 15_000 });
   const runId = page.url().split("/").at(-1)!;
+  await page.evaluate((id) => localStorage.removeItem(`chess-tabiya:run:${id}:writer-id`), runId);
   await enter.click();
   await expect(page).toHaveURL(new RegExp(`/play/run/${runId}$`));
   await expect(page.getByLabel("Chessboard")).toBeVisible();

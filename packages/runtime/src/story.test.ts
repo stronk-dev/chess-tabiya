@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import { attachEvidence, commitMove, createRun, renderReviewStoryEvidence, storyDeclaredEvidence, storyMoments, suggestTitle } from "./index.js";
+import { attachEvidence, commitMove, createRun, renderReviewStoryEvidence, selectedStoryMoments, storyDeclaredEvidence, storyEvidenceSourceLabels, storyMoments, suggestTitle, type StoryMoment } from "./index.js";
 
 if (false) {
   // @ts-expect-error review story rendering consumes only a compiled evidence view.
@@ -26,6 +26,7 @@ describe("grounded game story", () => {
     const story = storyMoments(run, run.activeCursor.branchId, { recordedResult: "0-1" });
     expect(story.moments.some((moment) => moment.kinds.includes("eval_pivot") && moment.sentences.some((sentence) => sentence.includes("+265 cp")))).toBe(true);
     expect(story.moments.at(-1)).toMatchObject({ kinds: expect.arrayContaining(["outcome"]), entryNodeId: path[2]!.id });
+    expect(storyEvidenceSourceLabels(story.moments.at(-1)!)).toEqual(["Recorded engine analysis", "Recorded game"]);
   });
 
   it("grounds a board-terminal outcome at the terminal node but enters its playable parent", () => {
@@ -48,5 +49,15 @@ describe("grounded game story", () => {
     const base = { moments: [], rank: [], outcome: { kind: "recorded_result" as const, result: "1-0" as const } };
     expect(suggestTitle({ ...base, side: "white" })).toBe("Won at the finish");
     expect(suggestTitle({ ...base, side: "black" })).toBe("The turning point at the finish");
+  });
+
+  it("selects by rank before restoring chronology", () => {
+    const moment = (nodeId: string, ply: number): StoryMoment => ({
+      nodeId, entryNodeId: nodeId, ply, san: null, fen: "8/8/8/8/8/8/8/8 w - - 0 1",
+      kinds: [], sentences: [], evidence: [], phase: "endgame",
+    });
+    const moments = [moment("early", 2), moment("unranked", 3), moment("late", 8), moment("middle", 5)];
+    expect(selectedStoryMoments({ moments, rank: ["late", "middle", "early", "unranked"] }, 3).map((item) => item.nodeId)).toEqual(["early", "middle", "late"]);
+    expect(() => selectedStoryMoments({ moments, rank: [] }, -1)).toThrow(/non-negative/u);
   });
 });

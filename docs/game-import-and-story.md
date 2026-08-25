@@ -84,16 +84,26 @@ was recorded there.
 Every moment contains deterministic attributed sentences, FEN, ply/SAN, phase,
 and separate `nodeId` and `entryNodeId`. A terminal fact stays grounded at its
 terminal node but enters its playable parent. The payload returns all moments plus
-a deterministic rank; the client displays up to eight and orders them by ply.
+a deterministic rank. One shared reducer selects the ranked eight for both the
+private and public story, then restores game chronology for display; sharing can
+therefore neither omit a reviewed moment nor promote an unrelated early moment.
 Optional story voice uses the existing evidence-packet checker and deterministic
 fallback. It may phrase the packet but cannot add chess claims.
 
+The selected moment shows the grounding sources resolved from its admitted evidence
+and the manifest's derivation chain. The downloadable card carries every admitted
+sentence rather than silently retaining only the first, lists those same sources,
+and grows vertically for a longer packet instead of clipping it. It never labels a
+rules or authored-catalogue fact as engine analysis.
+
 ## Re-entry and export
 
-The story is not a read-only review. Selecting a moment rewinds to its
-`entryNodeId` and explicitly creates a `story-reentry` branch before opening the
-run screen. Creating the branch immediately preserves the imported continuation
-even when the selected moment is the original leaf. The learner then plays through
+The story is not a read-only review. Selecting a moment claims the run's writer
+lease for the current device, rewinds to its `entryNodeId`, and explicitly creates
+a `story-reentry` branch before opening the run screen. Creating the branch
+immediately preserves the imported continuation even when the selected moment is
+the original leaf; claiming the lease makes the primary action work when the story
+is opened on a different device. The learner then plays through
 the ordinary opponent, evidence, structural-reading, rewind, comparison, and
 branch-group machinery.
 

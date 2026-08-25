@@ -724,6 +724,12 @@ else moves.
 Accepted 2026-08-22 after cross-review; corrections in place — **trust the RFC file at HEAD, not
 any earlier conversation**. What you need going in:
 
+- **RETURNED on [[D1548]] before the config/UI continuation:** the amended compiler input erases
+  whether the stored all-off v4 value came from an explicit learner write or from
+  `loadAssistance`'s absent-key fallback. Do not activate preset defaults by guessing. Resume only
+  after the RFC carries preference presence and pairs first-use Guided with explicit-all-off
+  preservation fixtures. The already-landed vocabulary/context foundation remains valid.
+
 - **Two new vocabularies to name in code**: seven `WorkflowContextId`s (the six shipped
   `ASSISTANCE_PROFILES` + `academy` — [[D943]]: academy currently falls through to its run's
   `sessionKind` profile and inherits solo defaults; your implementation closes that row) and

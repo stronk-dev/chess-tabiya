@@ -419,8 +419,9 @@
   }
 
   async function enterStoryMoment(runId: string, nodeId: string): Promise<void> {
-    const writer = WriterSession.peek(runId, storage);
-    if (writer === undefined) throw new Error("This device does not hold the imported run writer session");
+    const writer = WriterSession.claimFor(runId, storage);
+    if (api.claimLease === undefined) throw new Error("Taking this game board is unavailable");
+    await api.claimLease(runId, writer.writerId);
     await api.rewind(runId, { nodeId }, writer.writerId);
     await api.fork(runId, { nodeId, label: "story-reentry", intent: "Play a different continuation from this story moment" }, writer.writerId);
     navigate(routePath({ name: "run", runId }));

@@ -7541,3 +7541,25 @@ the arrival/catalogue redesign; those tests now bind to the new headings, FEN di
 action, selected-rating corpus scope, and honest unknown-phase copy. Plain `make verify` selected
 Node 24 and Stockfish, passed all 993 software tests, then stopped at the deliberately open D1547
 row; the row was closed and the complete gate rerun.
+
+## 2026-08-25 — Review sharing and re-entry stop changing the evidence story
+
+**What landed:** [[D687]] and [[D688]] close at their recorded depth. One runtime reducer selects
+the ranked eight moments and restores chronology for both the private client and public share.
+The downloadable card no longer drops every sentence after the first or launders all facts into
+an engine label: it renders the complete admitted packet, resolves each leaf grounding through
+the compiled evidence manifest, lists the sources, and expands vertically for longer packets.
+The same provenance is visible beside the selected private moment.
+
+The primary Story action now claims the writer lease for the current device before rewind and
+fork, so opening a review away from the device that played the game no longer makes re-entry throw.
+The browser journey deliberately deletes its local writer id before taking that action.
+
+**Contract return:** [[D1548]] records why the implementing intent-presets RFC still cannot be
+built truthfully: an absent preference and an explicit all-off preference arrive at the compiler
+as the same value. Preset implementation remains returned until the contract carries presence;
+this unrelated accepted Review repair did not invent that missing policy.
+
+**Verification:** the runtime selection/provenance fixtures, the dynamic-card fixtures, and the
+server public-share contract pass together. Full browser and repository gates follow this
+closeout before commit.

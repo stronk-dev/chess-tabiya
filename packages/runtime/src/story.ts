@@ -92,6 +92,54 @@ export function reviewStoryTitle(story: StoryTitleInput): string {
   return reviewStoryEvidence([titleEvidence]).items[0]!.sentences[0]!;
 }
 
+/** Selects the bounded ranked set, then restores game chronology for rendering. */
+export function selectedStoryMoments(
+  story: Pick<StoryProjection, "moments" | "rank">,
+  limit = 8,
+): readonly StoryMoment[] {
+  if (!Number.isSafeInteger(limit) || limit < 0) throw new TypeError("Story moment limit must be a non-negative integer");
+  const byId = new Map(story.moments.map((moment) => [moment.nodeId, moment]));
+  return Object.freeze(story.rank.slice(0, limit)
+    .flatMap((nodeId) => byId.get(nodeId) ?? [])
+    .sort((left, right) => left.ply - right.ply || left.nodeId.localeCompare(right.nodeId)));
+}
+
+const STORY_SOURCE_LABELS = Object.freeze({
+  position_rules: "Board rules",
+  declared_convention: "Tabiya convention",
+  bounded_search: "Recorded engine analysis",
+  tablebase_exact: "Exact tablebase",
+  human_model: "Human-move model",
+  human_corpus: "Human game corpus",
+  cited_theory: "Cited chess theory",
+  authored_claim: "Authored catalogue",
+  recorded_run: "Recorded game",
+} as const);
+
+/** Resolves each admitted story fact to the leaf grounding sources declared by the evidence manifest. */
+export function storyEvidenceSourceLabels(
+  moment: Pick<StoryMoment, "evidence">,
+): readonly string[] {
+  const byProjection = new Map(PRIMARY_EVIDENCE_MANIFEST.projections.map((projection) => [`${projection.id}@${projection.version}`, projection]));
+  const labels = new Set<string>();
+  const visiting = new Set<string>();
+  const visit = (projectionId: string, version: number): void => {
+    const key = `${projectionId}@${version}`;
+    if (visiting.has(key)) return;
+    const projection = byProjection.get(key);
+    if (projection === undefined) throw new TypeError(`Story evidence names undeclared projection ${key}`);
+    visiting.add(key);
+    if (projection.plane === "derived" && projection.derivation?.inputs !== undefined) {
+      for (const input of projection.derivation.inputs) visit(input.id, input.version);
+    } else {
+      labels.add(STORY_SOURCE_LABELS[projection.grounding]);
+    }
+    visiting.delete(key);
+  };
+  for (const evidence of moment.evidence) visit(evidence.projection.id, evidence.projection.version);
+  return Object.freeze([...labels]);
+}
+
 function evaluation(run: DrillRun, node: Node): StoryEvaluation | undefined {
   const event = [...run.events].reverse().find((candidate) =>
     candidate.type === "evidence.attached" && candidate.data.nodeId === node.id &&

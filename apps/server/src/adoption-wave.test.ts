@@ -2,6 +2,8 @@ import { createHash } from "node:crypto";
 
 import { afterEach, describe, expect, it } from "vitest";
 
+import { selectedStoryMoments } from "@chess-tabiya/runtime";
+
 import { EvidenceJobQueue, type EvidenceExecutor } from "./evidence-queue.js";
 import { RunService } from "./service.js";
 import { SQLiteRunStorage } from "./storage.js";
@@ -41,6 +43,7 @@ describe("adoption wave server contracts", () => {
     const card = service.publicStory(share.token);
     expect(card).toMatchObject({ title: expect.any(String), outcome: { kind: "board_terminal" } });
     expect(Object.keys(card).sort()).toEqual(["moments", "outcome", "productLink", "title"]);
+    expect(card.moments.map((moment) => moment.nodeId)).toEqual(selectedStoryMoments(story).map((moment) => moment.nodeId));
     const milestones = service.milestones(principal);
     expect(milestones.map((item) => item.kind)).toContain("first_attempt");
     expect(new Set(milestones.map((item) => item.kind)).size).toBe(milestones.length);

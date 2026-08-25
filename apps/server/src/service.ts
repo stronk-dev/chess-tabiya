@@ -35,6 +35,7 @@ import {
   rewind,
   rewindToCheckpoint,
   storyMoments,
+  selectedStoryMoments,
   reviewStoryTitle,
   trajectoryPolicyAt,
   shapeFirings,
@@ -920,7 +921,7 @@ export class RunService {
   }
   shares(runId:string,principal:Principal){const {role}=requireRead(this.#storage,runId,principal);if(!mayManageGrants(role))throw new ServerError("FORBIDDEN","Only the host may list shares");return this.#storage.publicTokens?.(runId,principal.learnerId).map(({tokenHash,...record})=>record)??[];}
   revokeShare(runId:string,principal:Principal,tokenId:string,at=new Date().toISOString()){const {role}=requireRead(this.#storage,runId,principal);if(!mayManageGrants(role))throw new ServerError("FORBIDDEN","Only the host may revoke shares");this.#storage.revokePublicToken?.(runId,tokenId,principal.learnerId,at);}
-  publicStory(token:string){const record=this.#storage.publicTokenByHash?.(createHash("sha256").update(token).digest("hex"));if(record?.scope!=="story_read")throw new ServerError("RUN_NOT_FOUND","Shared story not found");const learner=this.#storage.learnerById(record.createdBy);if(learner===undefined)throw new ServerError("RUN_NOT_FOUND","Shared story not found");const story=this.story(record.runId,{learnerId:learner.id,handle:learner.handle},record.branchId);return Object.freeze({title:reviewStoryTitle(story),outcome:story.outcome,moments:story.moments.slice(0,8).map((moment)=>Object.freeze({nodeId:moment.nodeId,ply:moment.ply,san:moment.san,fen:moment.fen,sentences:moment.sentences})),productLink:"/"});}
+  publicStory(token:string){const record=this.#storage.publicTokenByHash?.(createHash("sha256").update(token).digest("hex"));if(record?.scope!=="story_read")throw new ServerError("RUN_NOT_FOUND","Shared story not found");const learner=this.#storage.learnerById(record.createdBy);if(learner===undefined)throw new ServerError("RUN_NOT_FOUND","Shared story not found");const story=this.story(record.runId,{learnerId:learner.id,handle:learner.handle},record.branchId);return Object.freeze({title:reviewStoryTitle(story),outcome:story.outcome,moments:selectedStoryMoments(story).map((moment)=>Object.freeze({nodeId:moment.nodeId,ply:moment.ply,san:moment.san,fen:moment.fen,sentences:moment.sentences})),productLink:"/"});}
 
   async flip(runId:string,principal:Principal,nodeId:string,resistance?:"human_common"|"strong_engine"){
     const access=requireRead(this.#storage,runId,principal);if(!mayWrite(access.role))throw new ServerError("FORBIDDEN","This learner may not create a replay from this run");
