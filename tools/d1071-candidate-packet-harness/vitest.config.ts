@@ -18,5 +18,6 @@ export default defineConfig({
   test: {
     include: ["tools/d1071-candidate-packet-harness/*.test.ts"],
     disableConsoleIntercept: true,
+    execArgv: ["--expose-gc"],
   },
 });

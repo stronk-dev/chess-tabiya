@@ -7970,3 +7970,30 @@ so a new capture producer would duplicate authority.
 
 **Next:** independently cross-review the two amended drafts, then implement the event-form,
 relation-adapter and module-admission hand-off rather than modifying the old transition readings.
+
+## 2026-08-26 — Node-24 packet receipt falsified equal-item cache weight
+
+Ran the amended candidate packet's exact event-only and event+reading shapes under Node 24.19.0 in
+fresh Vitest workers, forcing GC before and after each retained-cache measurement. The same
+50-legal-move witness compiles cold in 972.32 ms and reads warm in 0.011 ms with an identical
+packet id. The receipt explicitly cites D1071's strict-subset falsifier and D1573's Node-26 sweep as
+different measurements rather than laundering either into this pair.
+
+**Measured:** eight event-only stress packets retain 37,804 events, 52.20 MB structural JSON,
+52.28 MB heap and a 224.41 MB fresh-process RSS delta. The equal-item full-scope control still
+passes 44,433/56,000 while retaining 91.78 MB heap and a 293.27 MB RSS delta. Its added 6,629
+readings cost 4.31× an event per incremental heap item and 2.00× per structural byte. The first
+conservative repair rounds that coefficient up: `events + 5×readings` retains six mixed roots at
+52,975 weight, 51.22 MB structural JSON, 67.17 MB heap and 259.95 MB RSS. All cache bounds and the
+same-id assertion pass. The executable negative/control/repair arms and receipt are under
+`tools/d1071-candidate-packet-harness/` and
+`planning/evidence-foundation-ux/d1579-candidate-packet-node24-envelope.json`.
+
+**Changed:** [[D1579]] returns the RFC's equal-item unit and amends it to typed weighted retention,
+keeping the bad formula as an able-to-fail control. [[D1580]] records that O13/F12 declare semantic
+resource tiers but no numeric heap/RSS ceiling; the mechanism may be bounded and implemented, but
+neither this research nor the RFC manufactures a release-pass threshold.
+
+**Next:** independent cross-review of the completed buildability/cache amendment. On acceptance,
+implement the one packet/service and re-run this exact Node-24 receipt over production symbols;
+F12 separately owes the numeric appliance-tier gate.

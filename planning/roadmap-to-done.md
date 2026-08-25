@@ -197,6 +197,13 @@ specifies those obligations; independent review and the Node-24 latency/heap rec
 acceptance. [[D1576]] prevents the engine join from solving provenance with a fake run node: one
 generic typed fixed-bound position evaluation feeds both candidate scoring and Review's derived
 node-scoped point.
+[[D1579]] closes the Node-24 receipt and corrects the cache unit before implementation: an equal
+event/reading count admits 91.78 MB mixed heap while the same eight event-only entries retain
+52.28 MB. The typed initial weight is therefore `events + 5×readings`; its corrected 56,000-weight
+trial retains six mixed stress roots / 67.17 MB and preserves the equal-item arm as a negative
+control. [[D1580]] keeps release clearance honest: the ruled core/cpu/accelerated tiers still name no
+numeric heap/RSS ceiling, so the packet can be bounded, cross-reviewed and implemented but cannot
+claim appliance-tier clearance until F12 supplies the predicate.
 
 ### 5. Whole-game Review, story, share, and return
 

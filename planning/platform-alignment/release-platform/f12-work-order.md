@@ -36,6 +36,7 @@ The remaining release blockers are independently real:
 | D612 | no keyboard or assistive chess move entry | F12-F accessible input |
 | D613 | unmodified Tab is captured and traps focus | F12-F accessible input |
 | D615 | CPU Maia image is 5.11 GB with proprietary-labelled CUDA payload | F12-E engine matrix |
+| D1580 | core/cpu/accelerated tiers name no numeric heap/RSS envelope, so bounded runtime caches cannot receive a release verdict | F12-E resource matrix + F12-H proof |
 
 D616/O13 adds five positive obligations beyond merely closing those defects: offline
 knowledge/tablebase support; service-worker update semantics; signed/attested images;
@@ -173,6 +174,9 @@ Independent portion, ready after the resource-tier ruling below:
 - publish signatures and SLSA-style provenance/attestations for every digest-pinned image and
   Compose artifact;
 - verify amd64 and arm64 artifacts and record idle/peak memory plus model/startup budgets.
+- publish numeric steady-state and bounded-operation heap/RSS ceilings for `core`, `cpu` and
+  `accelerated`, with named failure/degradation behavior. A cache being configurable is not a
+  release predicate; the D1579 packet receipt is the first concrete consumer of this budget.
 
 Blocked portion:
 

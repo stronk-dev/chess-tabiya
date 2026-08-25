@@ -1,0 +1,101 @@
+{
+  "experiment": "D1573/D1579 candidate packet Node-24 cache envelope",
+  "measuredAt": "2026-08-26",
+  "head": "b20cbe01",
+  "machine": {
+    "node": "v24.19.0",
+    "platform": "darwin 25.5.0 arm64",
+    "cpu": "Apple M3 Max"
+  },
+  "input": {
+    "source": "planning/evidence-foundation-ux/d1061-bestline-distance-results.json",
+    "selection": "16 roots with the greatest exact legal-move count",
+    "releaseNode": "/opt/homebrew/opt/node@24/bin/node",
+    "gc": "forced twice immediately before and after each cache measurement in a fresh Vitest worker"
+  },
+  "differentMeasurements": {
+    "d1071": {
+      "artifact": "planning/evidence-foundation-ux/d1071-shared-candidate-packet-results.json",
+      "meaning": "strict-subset and provenance-loss correctness falsifier; not a cold/warm timing"
+    },
+    "d1573": {
+      "artifact": "planning/evidence-foundation-ux/d1573-candidate-packet-envelope.json",
+      "meaning": "64-root Node-26 prevalence and structural-size sweep; not this Node-24 same-work/cache measurement"
+    }
+  },
+  "coldWarm": {
+    "procedure": "compile the same highest-legal-count root once, insert it, then read its exact id from the same in-process cache",
+    "packId": "trajectory-qgd-exchange-minority",
+    "phase": "cross_phase",
+    "legalMoves": 50,
+    "packetIds": {
+      "cold": "b924f39b2f9cb7616c3fe04e5edb186009412891199e810b034bfbfc8ed6dbd5",
+      "warm": "b924f39b2f9cb7616c3fe04e5edb186009412891199e810b034bfbfc8ed6dbd5"
+    },
+    "coldMs": 972.321833,
+    "warmMs": 0.011
+  },
+  "declaredBounds": {
+    "maxEntries": 8,
+    "maxRetainedWeight": 56000
+  },
+  "equalItemNegativeControl": {
+    "formula": "events + readings",
+    "entries": 8,
+    "retainedWeight": 44433,
+    "eventItems": 37804,
+    "readingItems": 6629,
+    "structuralJsonBytes": 70463982,
+    "heapUsedDeltaBytes": 91784456,
+    "rssDeltaBytes": 293273600,
+    "eventStructuralBytesPerItem": 1379.2917680668713,
+    "readingStructuralBytesPerItem": 2754.7041786091418
+  },
+  "eventOnly": {
+    "formula": "events + 5 * readings",
+    "entries": 8,
+    "retainedWeight": 37804,
+    "eventItems": 37804,
+    "readingItems": 0,
+    "structuralJsonBytes": 52203656,
+    "heapUsedDeltaBytes": 52281280,
+    "rssDeltaBytes": 224411648,
+    "compileMs": {
+      "p50": 753.428249999999,
+      "p95": 984.4869160000001,
+      "max": 984.4869160000001
+    },
+    "evictions": 8,
+    "oversize": 0
+  },
+  "eventAndReadingCorrected": {
+    "formula": "events + 5 * readings",
+    "coefficientBasis": "the equal-item control adds 6,629 readings and 39,503,176 heap bytes over event-only; incremental reading/event heap ratio 4.31, rounded up",
+    "entries": 6,
+    "retainedWeight": 52975,
+    "eventItems": 28000,
+    "readingItems": 4995,
+    "structuralJsonBytes": 51221767,
+    "heapUsedDeltaBytes": 67168568,
+    "rssDeltaBytes": 259948544,
+    "compileMs": {
+      "p50": 871.8822080000009,
+      "p95": 1132.163834,
+      "max": 1132.163834
+    },
+    "evictions": 10,
+    "oversize": 0
+  },
+  "derived": {
+    "equalItemFullToEventOnlyHeapRatio": 1.7556,
+    "incrementalReadingToEventHeapPerItemRatio": 4.31,
+    "incrementalReadingToEventStructuralBytesPerItemRatio": 1.997,
+    "finding": "events + readings is not a memory-homogeneous retained-item unit",
+    "correctedTrial": "events + 5 * readings keeps both scopes under the declared weight bound and reduces the mixed cache from eight to six stress roots"
+  },
+  "limitations": [
+    "RSS is a fresh-process high-water delta and includes allocator pages touched during compilation, not only bytes resident in the final cache.",
+    "The coefficient is calibrated on the 16 highest-legal-count fixed roots; implementation must keep the equal-item negative control and re-run the receipt on the production compiler.",
+    "No numeric core/cpu release memory ceiling exists yet, so this receipt can compare mechanisms but cannot decide whether 67.17 MB heap / 259.95 MB RSS uplift clears the appliance tier."
+  ]
+}

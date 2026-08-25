@@ -152,7 +152,37 @@ target that pressures the implementation to hide required production changes. `[
 ## Verdict
 
 The lower primitive remains the correct architecture and the original research is sound on the
-need for it. The current RFC is **not buildable yet**. Return it for an amendment covering
-[[D1570]]–[[D1576]], then cross-review the exact manifest tuple, packet/vector payloads, cache
-topology and dual bound. Only after that acceptance should production implementation begin. The
-measured packet is large enough that “add an LRU” is not a safe implementation instruction.
+need for it. At this audit point the RFC was **not buildable**; the 2026-08-26 amendment subsequently
+specified [[D1570]]–[[D1576]]. Cross-review still owes the exact manifest tuple, packet/vector
+payloads, cache topology and dual bound before acceptance. The measured packet is large enough that
+“add an LRU” is not a safe implementation instruction.
+
+## Node-24 continuation — the equal-item weight fails
+
+The follow-up receipt runs the amended exact event-only and event+reading scopes under Node
+24.19.0 in fresh Vitest workers with forced GC. One 50-legal-move root compiles cold in 972.32 ms
+and reads warm in 0.011 ms; both runs carry packet id
+`b924f39b…fc8ed6dbd5`. The earlier D1071 strict-subset artifact and the Node-26 64-root structural
+sweep remain explicitly separate measurements. `[V]`
+`tools/d1071-candidate-packet-harness/node24-memory-envelope.test.ts`;
+`planning/evidence-foundation-ux/d1579-candidate-packet-node24-envelope.json`.
+
+The first full-scope negative control exposes a defect in the amended bound. Eight event-only
+packets retain 37,804 events and add 52.28 MB heap. With the RFC's equal-item formula, eight mixed
+packets retain 37,804 events + 6,629 readings and add 91.78 MB heap. Those readings add 39.50 MB:
+4.31 times the event heap cost per item. Their independently measured structural JSON cost is
+2.00 times per item. `events + readings` is therefore not a memory-homogeneous unit even though it
+stays below 56,000. `[V]` [[D1579]].
+
+A conservative executable repair trial rounds the heap ratio up and uses
+`events + 5 × readings`. Under the same 56,000 bound it retains six stress roots, 28,000 events,
+4,995 readings, 52,975 weighted units, 51.22 MB structural JSON and 67.17 MB heap. The event-only
+arm remains eight roots / 52.28 MB heap. This supports a typed weighted unit and keeps the
+equal-item arm as its able-to-fail control; it does not establish a final release threshold. `[V]`
+
+That last distinction matters because the RFC's criterion says the defaults change if the release
+memory envelope is exceeded, while the ruled `core`/`cpu`/`accelerated` tiers declare no numeric
+heap or RSS ceiling. The fresh-process RSS deltas are 224.41 MB event-only and 259.95 MB corrected
+mixed, including allocator pages touched during compilation. The receipt can compare mechanisms;
+without a numeric tier budget it cannot honestly call either number a release pass. [[D1580]]
+routes that missing predicate to the packet/F12 boundary rather than manufacturing one here.

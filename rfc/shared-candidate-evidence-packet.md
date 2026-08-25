@@ -1,8 +1,10 @@
 # RFC: Shared candidate evidence packet — the compiled legal population three consumers are measured against
 
-- **Status:** draft, buildability amendment 2026-08-26 on [[D1570]]–[[D1576]] — the lower
-  primitive remains supported, but implementation is blocked until the exact manifest tuple,
-  joined engine payload, process owner and weighted-cache fixtures below survive cross-review
+- **Status:** draft, buildability/cache amendment 2026-08-26 on [[D1570]]–[[D1580]] — the lower
+  primitive remains supported. The exact manifest tuple, joined engine payload and process owner
+  are specified; the Node-24 receipt returned equal-item cache weight and the corrected typed
+  weight below now awaits cross-review. [[D1580]] holds numeric appliance-tier clearance, not the
+  bounded mechanism, because F12 declares no memory ceiling yet
 - **Author:** claude (drafted from `design/research/shared-candidate-evidence-packet.md` and `tools/d1071-candidate-packet-harness/`; every carried claim re-verified at HEAD, with seven corrections recorded)
 - **Created:** 2026-08-23
 - **Design refs:** `design/05-in-run-experience.md` §5 (*"detection is cheap, significance is not"* — the split this RFC executes in code: one factual population, separate opinionated derivations) and §3b-i (*"The LLM is the voice, never the source"*); `design/03-product-breadth.md` §Play (opponent selection) and §Intelligence and explanation
@@ -572,15 +574,27 @@ stored before resolution and deleted on rejection, `:495-503`) and is the patter
 
 **§6.3 — Single-flight and a measured dual bound.** Packet construction is single-flight per key —
 the in-flight promise is stored, and deleted on rejection so a failure is not memoised. The cache is
-an LRU bounded by both **entry count** and deterministic **retained-item weight**. Defaults are
-`maxEntries: 8` and `maxRetainedItems: 56_000`, where weight is the sum of candidate events and
-readings in the frozen packet. Both are constructor options injected at §6.0's composition root.
+an LRU bounded by both **entry count** and deterministic **typed retained weight**. The initial
+configurable defaults are `maxEntries: 8` and `maxRetainedWeight: 56_000`, with
+`packetWeight = eventCount + 5 × readingCount`. Both are constructor options injected at §6.0's
+composition root. Event and reading counts are reported separately in stats so the coefficient is
+observable rather than hidden inside one integer.
 
 The event-only fixed population measured p95 5,482 and max 5,803 events; eight maximum packets are
-46,424 events and about 63 MB of structural JSON before V8 overhead. The 56,000 item default leaves
-room for the specified per-child readings while remaining an explicit initial envelope, not a heap
-claim. `[V]` `d1573-candidate-packet-envelope.json`. A Node-24 RSS/heap receipt under event-only and
-event+reading scopes is required by criterion 12 before the default can be called release-cleared.
+46,424 events and about 63 MB of structural JSON before V8 overhead. The first Node-24 full-scope
+trial proves equal weight is wrong: 37,804 events add 52.28 MB heap, while adding 6,629 readings
+raises the same eight-entry cache to 91.78 MB. The incremental reading/event heap-per-item ratio is
+4.31 (structural JSON independently reads 2.00×), so the corrected trial rounds up to 5. It retains
+six stress roots at 52,975 weight, 51.22 MB structural JSON and 67.17 MB heap; event-only retains
+eight at 37,804 weight and 52.28 MB heap. `[V]`
+`planning/evidence-foundation-ux/d1579-candidate-packet-node24-envelope.json`; [[D1579]]. The
+equal-item arm remains a mandatory negative control.
+
+These are **initial mechanism defaults, not a release-tier clearance**. O13/F12 name `core`, `cpu`
+and `accelerated` but provide no numeric heap/RSS ceiling, so “the envelope is exceeded” has no
+testable predicate today. [[D1580]] requires F12 to supply that release predicate; this RFC keeps
+the cache bounded/configurable and criterion 12 records the measured bytes without manufacturing a
+pass threshold.
 
 Insertion evicts least-recently-used settled entries until **both** bounds hold. In-flight entries
 are never evicted; if their settlement would exceed a bound by itself, the packet is returned but
@@ -989,15 +1003,21 @@ contradicted.
     cold/warm pair, which is what `tools/d1066-semantic-horizon-harness/semantic-horizon.test.ts:215-220`
     did by timing `horizonSelection` and `moduleSelection` as if they were one. Second RED: an
     artifact with figures and no procedure — a number with no way to reproduce it is not a
-    measurement.* The same Node-24 receipt records event-only and event+reading retained weight,
-    structural bytes, heap/RSS delta and cache stats under the default 8/56,000 dual bound; if the
-    release memory envelope is exceeded, the defaults change before acceptance rather than being
-    rationalized after landing.
+    measurement.* The Node-24 receipt at
+    `planning/evidence-foundation-ux/d1579-candidate-packet-node24-envelope.json` records event-only,
+    equal-item negative-control and corrected event+reading arms: typed retained weight, separate
+    event/reading counts, structural bytes, heap/RSS delta and cache stats under the initial
+    8/56,000 dual bound. It must reproduce the equal-item arm retaining materially more heap while
+    still passing that bad bound, and the corrected `events + 5×readings` arm staying within weight.
+    The receipt does **not** call the result release-cleared; [[D1580]] keeps that decision red until
+    F12 names a numeric resource-tier predicate. This splits a buildable bounded mechanism from an
+    unavailable release threshold instead of inventing one.
 13. **Single-flight and both bounds work.** Two concurrent requests for one key compile **once**; a
-    rejected compilation is not memoised; exceeding either 8 entries or 56,000 retained items
+    rejected compilation is not memoised; exceeding either 8 entries or 56,000 retained weight
     evicts least-recently-used settled entries until both hold; in-flight entries survive; one
-    oversize packet is served uncached and counted. Projection hits do no chess work and carry their
-    own scope/id. *Fails against an unbounded or entry-count-only `Map`.*
+    oversize packet is served uncached and counted. Deleting the reading coefficient (or changing
+    it to 1) fails the Node-24 negative control. Projection hits do no chess work and carry their
+    own scope/id. *Fails against an unbounded, entry-count-only or untyped-item `Map`.*
 14. **The claims decision stays true at implementation time, and C8 is named because it is the check
     a `none` claim needs.** `register-check` **C1–C8** green with this RFC's claims block reading
     `none`, **and** an assertion that the implementation touched no file under `schemas/` or
@@ -1062,7 +1082,7 @@ contradicted.
 | id | the obligation | owner | recorded when discharged | discharged |
 |---|---|---|---|---|
 | D1 | Repair the shipped `OpponentSelector` cache: key it on the packet identity plus the policy derivation rather than on a full-history hash, and bound it (§6.2) | codex | `planning/evidence-foundation-ux/` | |
-| D2 | Measure end-to-end cold and warm hint and bot latency on one computation and record it beside the D1071 baseline as a distinct measurement (§0.4, criterion 12) | claude | `planning/evidence-foundation-ux/` | |
+| D2 | Measure end-to-end cold and warm latency on one computation and record it beside the D1071 baseline as a distinct measurement; measure both cache scopes and preserve the equal-item falsifier (§0.4, criterion 12) | codex | `planning/evidence-foundation-ux/d1579-candidate-packet-node24-envelope.json` | discharged 2026-08-26 for the pre-implementation envelope; implementation re-runs the same receipt on production symbols |
 | D3 | Register a production hint selection policy; only `research.r2_candidate@1` exists and it is `disposition: "experimental"` (§10 hold 3) | claude | `rfc/hint-distance.md` | |
 | D4 | Correct `hint-distance.md:593`'s [[D1330]] rank citation from 5 to 6 (§0.6) | claude | `rfc/hint-distance.md` | |
 | D5 | Fold the packet's population into `review-evidence-compiler.md`'s opportunity/avoidance denominator when that RFC implements (§2.5) | claude | `planning/evidence-foundation-ux/` | |
@@ -1197,6 +1217,15 @@ D1354; corrected here per §0.7.)*
   it names the seven checks that cannot catch the thing being asserted.
 
 ## Changelog
+
+- 2026-08-26 — Node-24 cache amendment on [[D1579]]/[[D1580]]. The same-id cold/warm pair is now
+  measured (972.32 ms / 0.011 ms on the 50-move witness), and separate fresh-process scopes record
+  structural bytes, heap/RSS and cache stats. Equal event/reading weight fails: eight mixed packets
+  add 91.78 MB heap versus 52.28 MB event-only. The typed weight becomes
+  `events + 5×readings`, keeping its equal-item negative control; the corrected mixed trial retains
+  six roots / 67.17 MB heap under 52,975/56,000 weight. Numeric release clearance stays with F12,
+  whose ruled tiers currently name no memory ceiling; the RFC no longer pretends “exceeded” is a
+  testable branch.
 
 - 2026-08-23 — drafted on [[D1071]]/[[D1072]], routed by [[D1330]] as live-debt rank 6 and named as
   the target of `hint-distance.md` Discharge D5. Every dossier claim re-verified at HEAD; **seven

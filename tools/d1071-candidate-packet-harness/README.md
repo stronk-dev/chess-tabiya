@@ -43,3 +43,31 @@ compares the observed projection set with the declared semantic-event catalogue.
 bytes are a reproducible size proxy, not V8 heap usage. The sample is deliberately expected to
 miss declared families: that negative control demonstrates why a position sweep may measure
 prevalence and cost but may not define the compiler's closed emitter vocabulary.
+
+## `node24-memory-envelope.test.ts` — added 2026-08-26 for D1573
+
+This file is the pre-acceptance release-envelope instrument for the proposed packet and cache
+shape. It compiles the exact event-only and event+reading scopes, measures one cold compile and
+same-id warm cache read, and fills an 8-entry/56,000-retained-weight LRU with the sixteen
+highest-legal-count D1061 roots, and records structural bytes plus V8 heap/RSS deltas after forced
+GC. The first equal-item trial showed that one reading retained about 4.31 times one event's
+incremental heap, so the corrected trial uses `events + 5 × readings`; it also reports the two
+categories separately. It deliberately duplicates the currently server-private `childReadings` authority inside the
+disposable harness; the RFC's implementation criterion requires that duplicate to disappear when
+the authority moves into runtime.
+
+The equal-item full-scope arm remains as an executable negative control. The corrected full-scope
+arm runs separately with the calibrated coefficient, so the receipt preserves both the falsifier
+and the proposed repair rather than overwriting the bad result with a better default.
+
+Run the receipt under the repository's release Node major:
+
+```sh
+/opt/homebrew/opt/node@24/bin/node node_modules/vitest/vitest.mjs run \
+  --config tools/d1071-candidate-packet-harness/vitest.config.ts \
+  tools/d1071-candidate-packet-harness/node24-memory-envelope.test.ts
+```
+
+For an acceptance receipt, run the cold/warm arm and each scope arm as three separate invocations
+with Vitest's `-t` filter. That gives each heap/RSS delta a fresh process instead of comparing one
+scope against V8's allocator high-water mark from the previous scope.
