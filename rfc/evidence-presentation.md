@@ -1,9 +1,10 @@
 # RFC: evidence-presentation — the component vocabulary between a typed fact and a pixel
 
-- **Status:** draft, amended 2026-08-25 on [[D1564]]/[[D1568]]/[[D1569]] — arrow activation is a 1.0
-  obligation, split between existing exact relation operands, a typed relation renderer, and the
-  genuinely missing transition/per-family hint-horizon operand retention. It is no longer an owner-held
-  optional future producer.
+- **Status:** draft, amended 2026-08-26 on [[D1564]]/[[D1568]]/[[D1569]]/[[D1577]]/[[D1578]] —
+  arrow activation is a 1.0 obligation. The transition-event hand-off is measured: five geometry
+  event families already retain their relations; the live work is forms, adapters, module admission,
+  routing capture overlays through the existing capture-class endpoint, and the per-family
+  hint-horizon contract.
 - **Author:** claude (evidence-presentation fork), from `design/research/evidence-presentation.md`
   (R3, 2026-08-20) and the HEAD census recorded as [[D1431]]/[[D1434]]
 - **Created:** 2026-08-24
@@ -34,8 +35,8 @@
   `rfc/review-map.md` (their outputs are operands here, and this RFC adds no selection)
 - **Owner ruling consumed:** [[D1564]] — every promised support option must have the typed
   producer operands it needs; arrows/highlights are activated, not retired or left dark behind
-  availability. [[D1568]] records the re-derived split between existing relation evidence and
-  genuinely lossy emitters.
+  availability. [[D1568]] records the original split; [[D1577]] corrects its transition half after
+  proving the newer event authority reconstructs every legacy count on all 754 committed edges.
 - **Parent / amends:** amends nothing. **Repairs in place** the rendering half of
   `rfc/archive/adaptive-guidance.md`, `rfc/archive/n-way-comparison.md` and
   `rfc/archive/runtime-corpus-evidence.md` — each shipped a correct producer and a joined
@@ -489,9 +490,16 @@ budget, and draws it. A component that queries anything is the defect the dossie
   `PieceDestinationsReading/Event`, exact move anchors, and the observed semantic-tactic payloads
   already retain ordered identities and already declare the `arrows` form. They need registered
   relation renderers, not replacement chess collectors.
-- **Mandatory producer repairs:** the six legacy transition families in Discharge D4 must retain
-  their exact subject/source/target squares before they can construct this component or
-  `square_set`. The final direct rung of `guided_hint` must consume one selected member of the
+- **Transition-event hand-off:** the five
+  `TRANSITION_GEOMETRY_EVENT_FAMILIES` already retain exact subject and before/after target sets.
+  [[D1577]] reconstructs every corresponding legacy count edge-by-edge across 754 committed edges
+  while all 5,314 event facts retain their minimum identities. Their manifest rows gain
+  `lit_squares | arrows`, and the relation-renderer registry maps those literal operands; the lossy
+  legacy count readings remain pack/inspector compatibility inputs and are not widened into a
+  second event authority. [[D1578]] pins capture relations to the already-admitted
+  `derived.exchange.capture_class@1`, whose `exchange.captured.square` distinguishes en-passant's
+  victim from the landing square; raw `capture@1` cannot own that overlay. The final
+  direct rung of `guided_hint` must consume one selected member of the
   literal, measured `HINT_HORIZON_PROJECTION_IDS` registry from `hint-distance`; raw
   `live.stockfish.pv` is not converted into a guidance arrow, and unlike hint families are not
   laundered through one generic projection ([[D1455]], [[D1569]]). Neither absence may be used to declare 1.0 presentation
@@ -1007,9 +1015,11 @@ class in this repo ([[D444]]/[[D984]]/[[D1274]]).
 13a. **`relation_overlay` is sealed to one admitted fact and the arrow coverage join is
     set-equal.** A derived census lists every module-eligible projection that declares `arrows`,
     whether its retained payload constructs `relation_overlay`, and the exact registered
-    renderer. Existing directed projections in §3.6a must all resolve; the six D4 transition
-    families and every measured guided-hint horizon family remain named RED rows until their
-    producer contracts and sealed rung compiler land.
+    renderer. Existing directed projections in §3.6a and all five
+    `TRANSITION_GEOMETRY_EVENT_FAMILIES` must resolve. A capture relation remains a named RED row
+    until its adapter consumes `capture_class`'s literal captured square and refuses raw
+    `capture@1`; every measured guided-hint horizon family
+    remains RED until its producer contract and sealed rung compiler land.
     *RED:* join two members of an unordered square set, attach an edge not present in the payload,
     or remove one directed projection's renderer. *Wrong impl:* a Svelte component recomputing
     attacks from FEN, which creates a second chess authority after admission.
@@ -1058,7 +1068,7 @@ class in this repo ([[D444]]/[[D984]]/[[D1274]]).
 | D1 | The `design/05` §3-forms amendment naming the component layer beneath the form inventory, and the `design/03:323` B1-residual correction (Deviations 1–2) — law 5 work, not this RFC's | OWNER | `planning/intent-amendment-handoff.md` | |
 | D2 | Seat ids, seat budgets and the module→seat binding these components render into | claude (the concurrent `rfc/module-registration.md` fork; the pin is in `rfc/README.md`) | that RFC's landing commit | |
 | D3 | `docs/evidence-presentation.md` — the canonical description of the shipped vocabulary, plus the `docs/theming.md` note for §8.4's widened sweep | codex | this RFC's implementing commit | |
-| D4 | **The six legacy transition families lose the square identities required by `square_set` and `relation_overlay`**: A3 measured 0/3,371 transition observations retaining squares. [[D1564]] makes the retention repair a 1.0 producer obligation; honest-empty cannot discharge it | `semantic-collectors.md` | the emitter-retention landing with the 0/3,371 negative turned into set-equal typed coverage | |
+| D4 | **Transition identities hand off from legacy counts to the shipped event authority.** [[D1577]] confirms the legacy readings remain lossy (0/3,373 with squares) but proves all five geometry families count-equivalent edge-by-edge and all 5,314 event facts identity-bearing. Add their forms/adapters/module bindings; preserve old count predicates. [[D1578]] routes capture overlays through the existing capture-class endpoint and refuses raw-capture inference | `module-registration.md` + this RFC | the set-equal event→relation→module landing, including ordinary/en-passant capture-class fixtures | research half discharged 2026-08-26 by [[D1577]]; implementation open |
 | D5 | **Arrow activation has two halves.** Existing exact directed payloads in §3.6a need the sealed `relation_overlay`, while the `arrows` preference needs a real `effectiveArrows` consumption clamp. [[D1564]] resolves the former owner fork as **activate**; [[D1568]] records why this is not a request for a duplicate chess collector | `module-registration.md` + this RFC | the coupled relation-renderer/clamp landing | owner half discharged 2026-08-25 by [[D1564]]; implementation open |
 | D6 | The `distribution` operand for Maia policy carries an **optional** `mass` (`DrillScreen.svelte:417` renders *"frequency unavailable"* when absent). Whether a candidate with no mass may appear in a distribution at all is a selection question | `learner-modules.md` | that RFC's next amendment | |
 | D7 | The `rfc/theming.md` criterion-2 repair itself — this RFC's §8.4 guards the **component tree**; the shipped sweep at `theme.test.ts:221` still cannot see the 16 sites in §7b outside it | `theming.md` | that RFC's next revision ([[D1433]]) | |
@@ -1135,11 +1145,18 @@ Proposed — ids assigned at landing; head was **D1434** at drafting.
 
 ## Changelog
 
+- 2026-08-26 — corrected on [[D1577]]/[[D1578]]. The statement that all six transition
+  producers still lacked identity was stale: the legacy count readings do, but the newer event
+  layer reconstructs every geometry count and irreversibility leaf over all 754 committed edges,
+  with 5,314/5,314 facts retaining their minimum subject/move identities. D4 now owns the actual
+  hand-off—forms, relation adapters and module admission—while preserving legacy predicates. One
+  capture endpoint correction remains explicit: raw `capture@1` cannot locate an en-passant victim,
+  while the existing admitted `capture_class@1` can and must own that relation adapter.
 - 2026-08-25 — corrected on [[D1569]]. The guided-hint overlay consumes a selected member of the
   measured per-family horizon registry, never a generic hint-target wrapper or raw PV.
 - 2026-08-25 — amended on [[D1564]]/[[D1568]]. The former “no vector producer” statement was
   split after re-deriving the catalogue: many exact payloads already retain directed relations,
-  while six legacy transition families genuinely lose squares. Added the thirteenth component,
+  while the legacy transition readings genuinely lose squares. Added the thirteenth component,
   `relation_overlay`, sealed it to the same admitted evidence item as its equivalent sentence,
   made existing directed projections renderer obligations, and converted transition/hint-horizon
   gaps from dark optional arms into explicit producer-coverage failures. Arrow activation is no
@@ -1152,7 +1169,7 @@ Proposed — ids assigned at landing; head was **D1434** at drafting.
   after finding that the single-word enums defeat every regex (§6, criterion 5); the [[D1433]]
   hole re-derived at 16 sites and its criterion given a self-check so it cannot be emptied (§7,
   criterion 11); nine discharges recorded, of which **two are genuine blockers with named
-  owners** — D4's missing square operands for all six transition families and the then-unruled
+  owners** — D4's then-unresolved transition hand-off and the then-unruled
   D5 arrow activation. The 2026-08-25 amendment supersedes D5's producer diagnosis without
   erasing its history. Cross-draft ownership pin with `rfc/module-registration.md` recorded in
   `rfc/README.md` per [[D1381]].

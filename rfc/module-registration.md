@@ -1,6 +1,6 @@
 # RFC: Module registration — the eleven declarations, the compile site, and the seats
 
-- **Status:** draft, amended 2026-08-25 on [[D1564]]/[[D1568]]/[[D1569]]. The [[D1430]] document: the learner-module layer exists as a
+- **Status:** draft, amended 2026-08-26 on [[D1564]]/[[D1568]]/[[D1569]]/[[D1577]]/[[D1578]]. The [[D1430]] document: the learner-module layer exists as a
   contract, a compiler, a reducer pipeline and a preset algebra, and **has never been
   instantiated**. This RFC writes the instances, calls the compiler in production, and gives each
   module a seat a person can look at.
@@ -24,8 +24,10 @@
   implementing `rfc/move-quality-grades.md` (its projection landed — §0.3);
   accepted `rfc/tactical-collectors.md` and `rfc/breadth-collectors.md` (the projection ids).
   The arrow form additionally consumes `rfc/evidence-presentation.md`'s amended sealed
-  `relation_overlay`; the six lossy transition emitters and the measured per-family guided-hint
-  horizon registry are mandatory producer dependencies, not optional availability arms.
+  `relation_overlay`; the existing identity-preserving transition-event layer, its literal
+  relation adapters, and the measured per-family guided-hint horizon registry are mandatory
+  dependencies, not optional availability arms. The legacy count readings remain compatibility
+  inputs for pack predicates and do not become a second learner-facing event authority.
 - **Parent / amends:** amends `rfc/learner-modules.md` §1.6 (the answer-ceiling image, which as
   shipped is an exact-match map and not a ceiling), §1.7 (`ceilings.sessions`/`ceilings.roles`,
   undeclared for all eleven — [[D1206]]), §4.2 (`outpost`/`pawn_safe_square` return on the owner's
@@ -360,17 +362,17 @@ the declarations.
 | `module.sight_on_request` | the 17 `rules.structural.reading.*` kinds — `STRUCTURAL_FEATURE_KINDS` (`packages/schema/src/drill-pack/types.ts:372-377`) minus retired `pawn_count`, **including `outpost` and `pawn_safe_square` per C5**; `rules.castling.reading.{rights, legality}`; `rules.tactic.reading.rook_on_seventh`; `rules.square.reading.control`; `rules.pawn.reading.contacts` | 22 |
 | `module.blunder_prevention` | `rules.tactic.consequence.{threat, mate_in_one}`; `rules.tactic.reading.loose_piece` — all three evaluated on the staged-move result position | 3 |
 | `module.threat_radar` | the blunder three; `rules.tactic.reading.{back_rank, trapped_piece, ray_classification}`; `derived.tactic.defender_exposure` | 7 |
-| `module.postcommit_nudge` | 8 `rules.structural.event.*` (the 11 `STRUCTURAL_EVENT_FAMILIES` at `evidence-catalog.ts:115-118` minus the refused `piece_count`, `direct_attack_count`, `line_blockers`); 7 `rules.transition.event.*` (`TRANSITION_RULE_EVENT_FAMILIES` minus `clock_reset`); `rules.castling.event.rights_lost`, `rules.tactic.event.{double_attack, check, loose_piece}`, `derived.exchange.{capture_class, trade_completed}`, `rules.structural.event.pawn_islands`; 10 `derived.semantic_avoidance.*`; `rules.pawn.event.dynamics`, `derived.pawn.event.transitions`, `rules.king.event.zone_state`, `derived.king.captured_zone_defender`, `derived.activity.event.open_file_occupancy`; `derived.grade.move_quality` | 38 |
+| `module.postcommit_nudge` | 8 `rules.structural.event.*` (the 11 `STRUCTURAL_EVENT_FAMILIES` at `evidence-catalog.ts:115-118` minus the refused `piece_count`, `direct_attack_count`, `line_blockers`); all 5 `TRANSITION_GEOMETRY_EVENT_FAMILIES`; 7 `rules.transition.event.*` (`TRANSITION_RULE_EVENT_FAMILIES` minus `clock_reset`); `rules.castling.event.rights_lost`, `rules.tactic.event.{double_attack, check, loose_piece}`, `derived.exchange.{capture_class, trade_completed}`, `rules.structural.event.pawn_islands`; 10 `derived.semantic_avoidance.*`; `rules.pawn.event.dynamics`, `derived.pawn.event.transitions`, `rules.king.event.zone_state`, `derived.king.captured_zone_defender`, `derived.activity.event.open_file_occupancy`; `derived.grade.move_quality` | 43 |
 | `module.structure_nudge` | `theory.shapes.firing`; `rules.structural.reading.{named_structure, space, pawn_connectivity}`; `rules.phase.reading`; `rules.endgame.reading` | 6 |
 | `module.theory_breadcrumb` | `pack.authored.claim`; `theory.shapes.firing`; `human.explorer.population` **(operand-scoped, §2.3)**; `theory.opening_identity.record` | 4 |
 | `module.guided_hint` | `live.syzygy.{result, category, distance}`; `rules.endgame.reading`; `pack.authored.claim`; then the literal ordered expansion `...HINT_HORIZON_PROJECTION_IDS` (one measured `derived.hint.horizon.<family>@1` per eligible family; never raw PV) | `5 + H` |
 | `module.compare_coach` | `derived.compare.{structure_delta, eval_delta, engine_trajectory, piece_route}`; `run.record.{fork, consequence, objective_transition, checkpoint_hit}` | 8 |
-| `module.review_map` | the 37 compiled nudge event/avoidance ids re-declared; `rules.pivotal.marker`, `rules.phase.reading`, `rules.endgame.reading`; `recorded.engine.eval`, `recorded.tablebase.result`; `live.stockfish.{eval, wdl}`; `run.record.{objective_transition, consequence, imported_result}`; `derived.grade.move_quality` | 48 |
+| `module.review_map` | the 42 compiled nudge event/avoidance ids re-declared; `rules.pivotal.marker`, `rules.phase.reading`, `rules.endgame.reading`; `recorded.engine.eval`, `recorded.tablebase.result`; `live.stockfish.{eval, wdl}`; `run.record.{objective_transition, consequence, imported_result}`; `derived.grade.move_quality` | 53 |
 | `module.full_inspector` | `rules.tactic.reading.{loose_piece, ray_classification, rook_on_seventh, trapped_piece, back_rank, discovered_latency}`, `rules.tactic.consequence.{threat, mate_in_one, reply_breadth}`, `rules.structural.reading.{space, pawn_connectivity}`, `rules.phase.development`, `rules.castling.reading.{rights, legality}`, `derived.tactic.{discovered_executed, promotion_pressure}` (16); `rules.square.reading.control`, `rules.mobility.reading.piece_destinations`, `rules.pawn.reading.{contacts, candidate_majority}`, `derived.material.reading.role_signature`, `rules.king.reading.zone_state` (6); `live.stockfish.{eval, wdl, pv}`, `human.maia.{policy, candidate_wdl}`, `human.explorer.population`, `live.syzygy.{result, category, distance}`, `recorded.engine.eval`, `recorded.tablebase.result`, `theory.shapes.firing` (12); `rules.phase.reading`, `rules.pivotal.marker`, `derived.compare.{structure_delta, eval_delta}`, `derived.story.rank` (5); ◇ `pack.authored.classifier` (1) | 40 |
 
 Here `H = HINT_HORIZON_PROJECTION_IDS.length`; it is derived from the final measured registry,
 not pinned to this draft's returned seven-family table. Landing tripwires are therefore declared
-**`181 + H`**, compiled **`180 + H`**, and declared-awaiting **1**
+**`191 + H`**, compiled **`190 + H`**, and declared-awaiting **1**
 (`pack.authored.classifier@1` in `full_inspector`). The horizon rows are compile-time dependencies,
 not awaiting placeholders. The two grade rows compile (§0.3). Every non-horizon, non-◇ id above
 was verified present in the compiled catalogue at `f0d5460`. `[V]`
@@ -483,7 +485,7 @@ from the barrel today.
 #### 2.2 Step 2 — the manifest join
 
 In `evidence-catalog.ts`: ten `module.*` ids appended to `EVIDENCE_CONSUMER_IDS` (25 → 35);
-`PRODUCTION_ELIGIBILITY_DECLARATIONS`, the `180 + H` compiled rows of §1.3, joined into
+`PRODUCTION_ELIGIBILITY_DECLARATIONS`, the `190 + H` compiled rows of §1.3, joined into
 `EVIDENCE_MANIFEST.eligibility` beside the 67 research rows, which stay byte-identical;
 `production.module_local@1` appended to `EVIDENCE_SELECTION_POLICIES` beside the untouched
 `research.r2_candidate@1`. The manifest digest moves; the docs tuples in `docs/semantic-evidence.md`
@@ -861,9 +863,14 @@ Activation is one coupled landing:
    presets. It is no longer an inert top-level control and no disabled “future producer” copy
    remains.
 
-Two producer debts are deliberately not hidden by that reuse. The six legacy transition families
-measured by evidence-presentation D4 must retain exact piece/square identities before their nudge
-and Review overlays can compile. `guided_hint` cannot turn raw `live.stockfish.pv` into an arrow
+Two closure debts are deliberately not hidden by that reuse. [[D1577]] proves the newer five-family
+transition-event layer reconstructs every legacy geometry count across 754 committed edges and
+retains identities on all 5,314 facts. Nudge and Review therefore import
+`TRANSITION_GEOMETRY_EVENT_FAMILIES` and route those admitted events through the sealed relation
+adapter; the lossy count readings remain compatibility inputs rather than being widened into a
+second authority. [[D1578]] routes capture overlays through the already-admitted
+`derived.exchange.capture_class@1`, whose exchange operand retains en-passant's victim square; raw
+`capture@1` is refused as the relation source. `guided_hint` cannot turn raw `live.stockfish.pv` into an arrow
 ([[D1455]]); `hint-distance` must export the measured literal per-family horizon ids, each with
 its own source inputs, answer distance, relation polarity and abstention, plus the sealed rung
 compiler. Both are 1.0 closure failures until implemented, not reasons to
@@ -918,7 +925,7 @@ defect class here ([[D444]]/[[D984]]/[[D1274]]), so each carries its falsifier.
 2. **A2 — The eligibility set, asserted by derivation, not by count** ([[D1240]]).
    `make module-registry-census` emits the declared rows from `MODULE_DECLARATIONS` and the
    compiled ids from `EVIDENCE_MANIFEST`; the test asserts **set-equality** between the compiled
-   eligibility rows and the census output, with `180 + H` / `181 + H` / `1` baked only as derived
+   eligibility rows and the census output, with `190 + H` / `191 + H` / `1` baked only as derived
    drift tripwires. The 67
    research rows are byte-identical. **RED at HEAD:** eligibility is 67 rows against one research
    consumer. **Negative:** a test asserts `pack.authored.classifier@1` is **absent** from the
@@ -987,9 +994,12 @@ defect class here ([[D444]]/[[D984]]/[[D1274]]), so each carries its falsifier.
     role/context permission, module form and `maxArrows`. A fixture lowers each term independently
     and proves the board result only shrinks. `assistance.arrows` loses its disposition in the same
     commit that binds the consumer, and the Advanced control visibly changes the effective output.
-    **RED at HEAD:** the control renders three selectable options and applies none of them; no
-    sealed relation renderer exists. **Negative:** an arbitrary `{orig,dest}` attached by a Svelte
-    caller and a relation reconstructed from FEN both fail the renderer/coverage guards.
+    `module.postcommit_nudge` and `module.review_map` each import all five literal
+    `TRANSITION_GEOMETRY_EVENT_FAMILIES`; deletion of one family fails set equality. **RED at HEAD:**
+    the control renders three selectable options and applies none of them; no sealed relation
+    renderer exists. **Negative:** an arbitrary `{orig,dest}` attached by a Svelte caller, a
+    relation reconstructed from FEN, and a capture overlay sourced from raw `capture@1` rather than
+    `capture_class`'s literal victim square all fail the renderer/coverage guards.
 14. **A14 — The compare renderer, narrowed to retained operands** ([[D1213]]).
     `derived.compare.structure_delta@1` renders kind, colour, role, squares/file and count as an
     `appeared` fact on both screen and voice paths; a fixture demanding a before/after pair is
@@ -1101,14 +1111,20 @@ Proposed — ids assigned at landing; head was **D1444** at drafting (**D1434** 
 
 ## Changelog
 
+- 2026-08-26: corrected on [[D1577]]/[[D1578]]. The newer transition event authority, not the
+  lossy legacy readings, is the module input. Added all five
+  `TRANSITION_GEOMETRY_EVENT_FAMILIES` to both nudge and Review, moving the derived eligibility
+  tripwires by ten. The relation adapter remains selection/budget-clamped. Capture overlays consume
+  the already-admitted `capture_class` endpoint; raw capture is a permanent negative because its
+  landing square is not en-passant's victim square.
 - 2026-08-25: corrected on [[D1569]]. Removed the invented generic hint-target projection;
   `guided_hint` now imports the measured, literal per-family horizon registry and cannot compile
-  until its sealed rung compiler lands. Counts are derived as `181 + H` / `180 + H` / `1`, so
+  until its sealed rung compiler lands. Counts are derived as `191 + H` / `190 + H` / `1`, so
   neither a stale seven-family hand count nor an awaiting wildcard can satisfy closure.
 - 2026-08-25: amended on [[D1564]]/[[D1568]]. Arrow activation and proactive structure markers
   are no longer open owner questions. Re-derived the “no producer” claim into existing exact
-  directed payloads versus genuinely lossy emitters; added the sealed relation-overlay and
-  `effectiveArrows` contract; made transition retention and the per-family guided-hint horizon
+  directed payloads versus what the pass then classified as lossy emitters; added the sealed
+  relation-overlay and `effectiveArrows` contract; made transition hand-off and the per-family guided-hint horizon
   registry hard
   producer dependencies; removed raw Stockfish eval/PV from `guided_hint`; and changed A13/A17
   from inertness checks into able-to-fail activation and stage-boundary checks.

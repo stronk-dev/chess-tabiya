@@ -178,6 +178,13 @@ source is unavailable, but 1.0 may not defer required emitters behind that avail
 [[D1568]] separates two coupled obligations: existing directed evidence needs a typed one-fact
 relation overlay and applied assistance clamp, while genuinely lossy transition emitters must
 retain the missing piece/square identities before their modules can claim closure.
+[[D1577]] re-checks the second half against the newer identity-preserving transition-event layer:
+legacy count readings may remain lossy pack/inspector compatibility projections while modules use
+the event authority, but only if corpus-wide equivalence and rule-event decomposition pass.
+That measurement passes on all 754 committed edges: amend the presentation/module drafts around
+the shipped event authority. [[D1578]] proves en-passant's victim square already survives in the
+admitted capture-class derivation; bind that adapter and refuse endpoint inference from raw capture
+rather than inventing another producer.
 [[D1569]] keeps the guided-hint producer family literal: its module binding imports the measured
 per-family horizon registry only after the selector/redaction gate, never a generic or wildcard
 projection that launders different derivations into one id.

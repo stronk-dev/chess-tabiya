@@ -7948,3 +7948,25 @@ invents a node id or creates a second score authority.
 **Next:** independent cross-review of both amended RFCs; record the Node-24 same-work latency,
 heap/RSS and cache receipt; then accept and implement the packet before any hint, bot or Review
 consumer builds its own denominator.
+
+## 2026-08-26 — Transition identity audit replaced a six-emitter rewrite with a measured hand-off
+
+Walked all 754 committed corpus edges and compared the legacy count-only transition readings with
+the newer `transitionSemanticFacts` layer. The legacy surface remains lossy—3,373 observations and
+zero square vectors—but all 5,314 semantic facts retain their family minimum subject/move
+identities. The five geometry families reconstruct the old count keys edge by edge; the independent
+rule events reconstruct the four legacy irreversibility leaves when the compatibility priority is
+applied explicitly. The executable receipt lives in
+`tools/d1577-transition-event-handoff/transition-event-handoff.test.ts` and
+`planning/evidence-foundation-ux/d1577-transition-event-handoff.json`; the dossier is
+`design/research/transition-event-handoff.md`.
+
+**Changed:** [[D1577]] records that no six-producer rewrite is required. The presentation and
+module-registration drafts now route all five geometry event families through literal relation
+adapters into post-commit nudge and Review while leaving legacy pack predicates intact. [[D1578]]
+records the en-passant endpoint correction: raw `capture@1` cannot locate the captured pawn, but
+the already-admitted `derived.exchange.capture_class@1` carries both victim and landing squares,
+so a new capture producer would duplicate authority.
+
+**Next:** independently cross-review the two amended drafts, then implement the event-form,
+relation-adapter and module-admission hand-off rather than modifying the old transition readings.

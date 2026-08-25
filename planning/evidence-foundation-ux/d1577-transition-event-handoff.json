@@ -1,0 +1,52 @@
+{
+  "experiment": "D1577 transition-event hand-off",
+  "measuredAt": "2026-08-26",
+  "head": "b9cb4dac",
+  "machine": {
+    "platform": "macOS 26.5 arm64",
+    "node": "v26.7.0"
+  },
+  "population": {
+    "packs": 50,
+    "edges": 754
+  },
+  "legacy": {
+    "observations": 3373,
+    "observationsWithSquares": 0,
+    "irreversibilityLeaves": {
+      "castled": 22,
+      "clock_zeroed": 253,
+      "last_of_role": 21,
+      "pawn_break": 60
+    }
+  },
+  "identityEvents": {
+    "facts": 5314,
+    "factsWithRequiredSubjectOrMoveIdentity": 5314,
+    "families": {
+      "capture": 101,
+      "castled": 22,
+      "checkmate": 6,
+      "clock_reset": 253,
+      "defended_duty": 135,
+      "developed": 124,
+      "last_of_role": 21,
+      "occupied_attack": 460,
+      "occupied_defence": 324,
+      "pawn_contact": 26,
+      "piece_escape": 2719,
+      "promotion": 1,
+      "slider_ray": 1122
+    }
+  },
+  "equivalence": {
+    "geometry": "edge-by-edge exact counts for all five legacy geometry families",
+    "irreversibility": "all four legacy leaves reconstructed from independent events plus the legacy castled > last_of_role > pawn_break priority",
+    "result": "pass"
+  },
+  "limitations": [
+    "The instrument proves factual hand-off and minimum endpoint identity, not learner usefulness or selection priority.",
+    "Raw rules.transition.event.capture@1 lacks the en-passant victim square; the existing derived.exchange.capture_class@1 retains it and is the required relation source.",
+    "Structural JSON or event counts are not UI budgets."
+  ]
+}
