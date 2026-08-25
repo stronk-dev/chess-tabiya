@@ -7846,3 +7846,15 @@ change, and unsupported bytes remain an honest third state. A mounted Studio tes
 CC-BY-SA posture, adds a credit, and reads the resulting unsaved textarea bytes. Seventeen focused
 tests pass and the web typecheck is clean. AUT-a13, AUT-a16, and [[D1559]] close; [[D1394]] remains
 open under the theory-knowledge pipeline.
+
+## 2026-08-25 — Null shape signatures become an explicit authoring choice
+
+**What landed:** Shape Studio distinguishes structural success, a missing signature, and a
+deliberate refusal to grade one position. The refusal path requires a reason before it can replace
+an expression or fill an unfinished plan, then keeps that note editable beside the JSON.
+
+**Verification:** pure fixtures prove all three states, required-note refusal, preservation of
+unrelated bytes, and that a refusal-note edit cannot overwrite a structural plan. A mounted Studio
+test fills the reason, chooses the null signature, and verifies the exact unsaved shape bytes and
+honesty copy. Seventeen focused tests pass and the web typecheck is clean. AUT-a24 and [[D1560]]
+close; AUT-a25 still owns structural expression authoring.

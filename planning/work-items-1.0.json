@@ -2577,16 +2577,20 @@
     {
       "id": "AUT-a24",
       "sourceState": "queued",
-      "state": "queued",
+      "state": "completed",
       "capability": "theory_content",
       "owner": "content-and-theory",
-      "assignment": "capability:theory_content",
+      "assignment": "closed",
       "sourceDocument": "ux-authoring-and-library.md",
       "sourceSection": "§9 G3",
       "sourceHeading": "Authoring and library — `ux-authoring-and-library.md`",
       "summary": "`success.signature: null` becomes a first-class authoring choice with its required note",
       "legacyRoute": "none",
-      "sourceDigest": "sha256:b119ef2f6acf810bb2e42d419292fab27e0444e8c14e8c3d5aaf4a89e13ebff9"
+      "sourceDigest": "sha256:b119ef2f6acf810bb2e42d419292fab27e0444e8c14e8c3d5aaf4a89e13ebff9",
+      "completion": {
+        "completedOn": "2026-08-25",
+        "evidence": "Shape Studio projects structural/missing/uncheckable plan success states and requires an explicit non-empty reason before writing signature:null into the unsaved buffer."
+      }
     },
     {
       "id": "AUT-a25",

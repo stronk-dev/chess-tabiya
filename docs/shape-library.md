@@ -83,6 +83,13 @@ updates, lint plus optional probe-FEN matching, immutable community registration
 and account-deletion tombstoning. Migration 10 owns `shape_drafts` and
 `registered_shapes`; run schema stays v0.8 because firings are derived.
 
+The editor projects every plan's success-signature state beside the JSON. A structural expression
+is named as checkable; an absent signature is named as unfinished; and `null` is rendered as an
+honest refusal with its required note. Turning an unfinished or structurally checkable plan into a
+null signature requires the author to enter a non-empty reason and press an explicit replacement
+button. Studio never invents an expression when reversing that choice—the structured expression
+builder remains separate work—so missing work and deliberate non-gradability cannot look alike.
+
 `make expression-census` measures every trigger and non-null success signature over the authored
 position corpus. Coverage labels are diagnostic only. A closed sound-refutation arm rejects a
 proven-unsatisfiable shape expression while preserving the lint route's optional probe result.

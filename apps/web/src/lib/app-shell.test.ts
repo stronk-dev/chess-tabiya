@@ -610,6 +610,42 @@ describe("application shell", () => {
     await unmount(component);
   });
 
+  it("makes a null plan signature an explicit noted choice in Shape Studio", async () => {
+    history.replaceState(null, "", "/create");
+    const shapeDraft: ShapeDraft = {
+      id: "shape-signature-draft",
+      shapeId: "duration-shape",
+      document: {
+        id: "duration-shape",
+        plans: [{ id: "hold-over-time", label: "Hold over time", success: {} }],
+        provenance: { licence: "CC-BY-SA-4.0", sources: ["original"], attribution: [] },
+      },
+      digest,
+      state: "draft",
+      validation: { valid: false, issues: [] },
+    };
+    const shapeApi: DrillClientApi = { ...api(), async packDrafts() { return []; }, async shapeDrafts() { return [shapeDraft]; } };
+    const component = mount(App, { target: target(), props: { api: shapeApi, router: new HistoryRouter(window), storage: new MemoryStorage() } });
+
+    await vi.waitFor(() => expect(document.body.textContent).toContain("duration-shape · draft"));
+    document.querySelector<HTMLButtonElement>("aside[aria-label='Your shape drafts'] button")!.click();
+    await vi.waitFor(() => expect(document.body.textContent).toContain("No success signature has been chosen."));
+    const reason = document.querySelector<HTMLTextAreaElement>(".signature-editor article textarea")!;
+    reason.value = "Duration cannot be certified by one position.";
+    reason.dispatchEvent(new Event("input", { bubbles: true }));
+    await tick();
+    const choose = [...document.querySelectorAll<HTMLButtonElement>("button")].find((button) => button.textContent === "Mark deliberately uncheckable")!;
+    expect(choose.disabled).toBe(false);
+    choose.click();
+    await tick();
+
+    const bytes = JSON.parse(document.querySelector<HTMLTextAreaElement>("#shape-studio-json")!.value);
+    expect(bytes.plans[0].success).toEqual({ signature: null, note: "Duration cannot be certified by one position." });
+    expect(document.body.textContent).toContain("Honest refusal:");
+    expect(document.body.textContent).toContain("not missing work");
+    await unmount(component);
+  });
+
   it("shows live vocabulary usage and unavailable policies to pack authors", async () => {
     history.replaceState(null, "", "/create");
     const studioApi: DrillClientApi = {

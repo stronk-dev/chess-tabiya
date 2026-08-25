@@ -18,6 +18,7 @@
   import AppearanceSettings from "./lib/AppearanceSettings.svelte";
   import DistillDraftForm from "./lib/DistillDraftForm.svelte";
   import PackProvenanceEditor from "./lib/PackProvenanceEditor.svelte";
+  import ShapePlanSignatureEditor from "./lib/ShapePlanSignatureEditor.svelte";
   import { ThemeController } from "./lib/theme/controller.js";
   import { provideTheme } from "./lib/theme/context.js";
   import {
@@ -1257,6 +1258,7 @@
         </aside>
         <section>
           <label for="shape-studio-json">Shape JSON</label><textarea id="shape-studio-json" bind:value={shapeStudioJson} spellcheck="false"></textarea>
+          <ShapePlanSignatureEditor documentJson={shapeStudioJson} onDocumentJson={(documentJson) => shapeStudioJson = documentJson} />
           <label>Probe FEN <input bind:value={shapeProbeFen} placeholder="Optional position to test the trigger" /></label>
           <div class="row-actions">
             <button type="button" onclick={() => void createShapeDraft()}>Create shape draft</button>
