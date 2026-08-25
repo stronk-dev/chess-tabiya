@@ -5,6 +5,12 @@ public Lichess study. The importer walks every game, chapter, and variation, rec
 only learner-side moves, and keys answers by normalized position. Transpositions share
 coverage without a move-order-specific card tree.
 
+Before a fetched study is parsed or stored, its game comments, starting comments,
+numeric annotation glyphs, and comment-encoded board drawings are removed. Headers and
+the complete move/variation tree remain. This keeps someone else's study prose from
+entering the private repertoire record as authored-looking material while preserving
+the learner's opening choices.
+
 The Learn surface scans opponent replies against a Lichess Explorer population. Path
 frequencies multiply from raw counts, same-ply transpositions merge before expansion,
 and replies below the learner's `1 in N games` bound are pruned. Corpus abstention stops

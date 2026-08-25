@@ -3,7 +3,7 @@ import type { OpponentSelection } from "@chess-tabiya/runtime";
 
 import { RunService } from "./service.js";
 import { SQLiteRunStorage } from "./storage.js";
-import { normalizeLichessGameUrl, normalizeLichessStudyUrl, resolveImportSource, resolveStudySource } from "./import-source.js";
+import { normalizeLichessGameUrl, normalizeLichessStudyUrl, resolveImportSource, resolveStudySource, stripPgnAnnotations } from "./import-source.js";
 import { createRestHandler } from "./rest.js";
 import { EvidenceJobQueue, type EvidenceExecutor } from "./evidence-queue.js";
 
@@ -110,6 +110,20 @@ describe("own-game import", () => {
     const calls:string[]=[];const fetchImpl:typeof fetch=async(input,init)=>{calls.push(String(input));expect(new Headers(init?.headers).has("authorization")).toBe(false);return new Response(PGN,{status:200});};
     await expect(resolveStudySource("https://lichess.org/study/Ab12cd34",fetchImpl)).resolves.toMatchObject({sourceKind:"lichess_study",sourceUrl:"https://lichess.org/study/Ab12cd34"});expect(calls).toEqual(["https://lichess.org/api/study/Ab12cd34.pgn"]);
     await expect(resolveStudySource("https://chess.com/study/Ab12cd34",fetchImpl)).rejects.toMatchObject({code:"IMPORT_SOURCE_UNSUPPORTED"});
+  });
+
+  it("strips study prose, glyphs, and graphical annotations while preserving its move tree", async () => {
+    const annotated = `[Event "Imported study"]\n[Result "*"]\n\n{chapter introduction} 1. e4! {main prose [%cal Ge2e4]} e5 (1... c5?! {variation prose}) 2. Nf3 $1 *`;
+    const stripped = stripPgnAnnotations(annotated);
+    expect(stripped).toContain('[Event "Imported study"]');
+    expect(stripped).toContain("1. e4 e5");
+    expect(stripped).toContain("1... c5");
+    expect(stripped).not.toMatch(/chapter introduction|main prose|variation prose|%cal|\$1|e4!|c5\?/);
+
+    const fetchImpl: typeof fetch = async () => new Response(annotated, { status: 200 });
+    const resolved = await resolveStudySource("https://lichess.org/study/Ab12cd34", fetchImpl);
+    expect(resolved.pgn).toBe(stripped);
+    expect(resolved.licenceNote).toContain("annotations stripped");
   });
 
   it("binds the closed import and provenance read contracts with typed errors", async () => {

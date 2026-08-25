@@ -7808,3 +7808,13 @@ not pre-empt the owner's pending decision about `/library`.
 fields in sorted order, and the browser API's complete-surface fixture proves the `/principles`
 request. The focused application, registry, and browser API suites pass 18 tests; server and web
 typechecks are clean. AUT-a3, AUT-a18, and [[D1556]] close.
+
+## 2026-08-25 — Lichess Study imports retain moves, not somebody else's prose
+
+**What landed:** fetched Study PGN is parsed and re-emitted before repertoire parsing or storage.
+The sanitizer removes game and move comments, NAGs, and comment-encoded board drawings while
+preserving headers and every mainline/variation move. The stored source note states the operation.
+
+**Verification:** a fixture containing chapter prose, mainline and variation comments, symbolic and
+numeric glyphs, and a `%cal` drawing retains both branches and none of the annotations. The focused
+nine-test import suite and server typecheck pass. AUT-a15 and [[D1557]] close.

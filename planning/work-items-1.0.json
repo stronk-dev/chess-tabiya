@@ -2399,17 +2399,21 @@
     {
       "id": "AUT-a15",
       "sourceState": "queued",
-      "state": "queued",
+      "state": "completed",
       "capability": "theory_content",
       "owner": "content-and-theory",
-      "assignment": "capability:theory_content",
+      "assignment": "closed",
       "sourceDocument": "ux-authoring-and-library.md",
       "sourceSection": "§7 E-import-strip",
       "sourceHeading": "Authoring and library — `ux-authoring-and-library.md`",
       "summary": "Imported Lichess study annotations are third-party copyright; the import path must strip them",
       "legacyRoute": "ledger",
       "note": "[[D410]]",
-      "sourceDigest": "sha256:dc9501bc2d793d1b68efa4af0df37c3bea4eca7995b53de473a7fd6be2307719"
+      "sourceDigest": "sha256:dc9501bc2d793d1b68efa4af0df37c3bea4eca7995b53de473a7fd6be2307719",
+      "completion": {
+        "completedOn": "2026-08-25",
+        "evidence": "Lichess Study PGN sanitizer removes comments, NAGs, and comment-encoded drawings before parsing and storage while preserving the move tree"
+      }
     },
     {
       "id": "AUT-a16",

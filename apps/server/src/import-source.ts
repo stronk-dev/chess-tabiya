@@ -1,3 +1,5 @@
+import { makePgn, parsePgn, type PgnNodeData, type ChildNode } from "chessops/pgn";
+
 import { ServerError } from "./errors.js";
 
 export type ImportSource =
@@ -20,6 +22,19 @@ export interface ResolvedStudySource {
 
 let serial = Promise.resolve();
 
+function stripNodeAnnotations(node: ChildNode<PgnNodeData>): void {
+  node.data = { san: node.data.san };
+  for (const child of node.children) stripNodeAnnotations(child);
+}
+
+export function stripPgnAnnotations(pgn: string): string {
+  return parsePgn(pgn).map((game) => {
+    delete game.comments;
+    for (const child of game.moves.children) stripNodeAnnotations(child);
+    return makePgn(game);
+  }).join("\n\n");
+}
+
 export function normalizeLichessStudyUrl(value:string):{studyId:string;url:string}{
   let url:URL;try{url=new URL(value);}catch{throw new ServerError("IMPORT_SOURCE_UNSUPPORTED","Source must be a public lichess study URL");}
   if(url.protocol!=="https:"||(url.hostname!=="lichess.org"&&url.hostname!=="www.lichess.org")){
@@ -37,7 +52,7 @@ export async function resolveStudySource(url:string,fetchImpl:typeof fetch=fetch
     if(response.status===404)throw new ServerError("IMPORT_SOURCE_NOT_FOUND","Lichess study was not found");
     if(response.status===429||response.status>=500)throw new ServerError("IMPORT_SOURCE_UNAVAILABLE","Lichess study export is temporarily unavailable",{details:{retryAfter:response.headers.get("retry-after")??undefined}});
     if(!response.ok)throw new ServerError("IMPORT_SOURCE_UNAVAILABLE",`Lichess study export failed with HTTP ${response.status}`);
-    return Object.freeze({pgn:await response.text(),sourceKind:"lichess_study" as const,sourceUrl:normalized.url,licenceNote:`no-rights-asserted: public lichess study export ${normalized.url}; retrieved ${new Date().toISOString()}`});
+    return Object.freeze({pgn:stripPgnAnnotations(await response.text()),sourceKind:"lichess_study" as const,sourceUrl:normalized.url,licenceNote:`no-rights-asserted: public lichess study export ${normalized.url}; annotations stripped; retrieved ${new Date().toISOString()}`});
   }catch(error){if(error instanceof ServerError)throw error;throw new ServerError("IMPORT_SOURCE_UNAVAILABLE","Lichess study export is unavailable",{cause:error});}finally{clearTimeout(timeout);}});
   serial=task.then(()=>undefined,()=>undefined);return task;
 }
