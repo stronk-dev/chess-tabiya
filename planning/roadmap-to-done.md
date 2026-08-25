@@ -175,6 +175,9 @@ Primary RFCs: `learner-modules`, `module-registration`, `hint-distance`,
 Owner ruling [[D1564]] makes producer coverage part of this exit: the evidence layer owes the
 typed operands required by every promised module. Presentation work may abstain honestly while a
 source is unavailable, but 1.0 may not defer required emitters behind that availability state.
+[[D1568]] separates two coupled obligations: existing directed evidence needs a typed one-fact
+relation overlay and applied assistance clamp, while genuinely lossy transition emitters must
+retain the missing piece/square identities before their modules can claim closure.
 
 ### 5. Whole-game Review, story, share, and return
 

@@ -1,6 +1,6 @@
 # RFC: Module registration — the eleven declarations, the compile site, and the seats
 
-- **Status:** draft — 2026-08-24. The [[D1430]] document: the learner-module layer exists as a
+- **Status:** draft, amended 2026-08-25 on [[D1564]]/[[D1568]]. The [[D1430]] document: the learner-module layer exists as a
   contract, a compiler, a reducer pipeline and a preset algebra, and **has never been
   instantiated**. This RFC writes the instances, calls the compiler in production, and gives each
   module a seat a person can look at.
@@ -23,6 +23,9 @@
   region, the seat mechanics of its §4, the leak-destination table of its §5);
   implementing `rfc/move-quality-grades.md` (its projection landed — §0.3);
   accepted `rfc/tactical-collectors.md` and `rfc/breadth-collectors.md` (the projection ids).
+  The arrow form additionally consumes `rfc/evidence-presentation.md`'s amended sealed
+  `relation_overlay`; the six lossy transition emitters and the bounded guided-hint target are
+  mandatory producer dependencies, not optional availability arms.
 - **Parent / amends:** amends `rfc/learner-modules.md` §1.6 (the answer-ceiling image, which as
   shipped is an exact-match map and not a ceiling), §1.7 (`ceilings.sessions`/`ceilings.roles`,
   undeclared for all eleven — [[D1206]]), §4.2 (`outpost`/`pawn_safe_square` return on the owner's
@@ -117,8 +120,8 @@ map** — every module bound to one of `design/05`'s five regions through
 fudged; (§4) the **precursor disposition**, module by module, naming every shipped behaviour that
 is kept, moved or retired, with nothing dropped silently; (§5) **budgets and honest-empty** as
 shipped invariants with an enforcement path, including the module-level ceiling check that today
-exists only per-entry; (§6) **arrows**, stated exactly as measured, with the owner's decision left
-open and a repair that pre-empts neither answer.
+exists only per-entry; (§6) **arrows**, activated by the owner's [[D1564]] ruling through a typed
+relation renderer, real effective clamp, and mandatory operand-retention closure.
 
 It deliberately ships **no new collector, no new preset, no layout geometry and no bot policy**
 (§Motivation).
@@ -148,9 +151,10 @@ amendment they asked for, plus the registration and the seats they were blocking
 
 **Scope boundary — declarations, the compile site, the read path, the seats, and nothing else:**
 
-- **No new collectors.** Every accepted projection id below is verified present in the compiled
-  catalogue at HEAD, with exactly one exception, which is declared-awaiting rather than
-  registered: `pack.authored.classifier@1` (§0.3).
+- **No duplicate collectors.** Existing exact relation payloads are reused. Every accepted
+  projection id below is verified present in the compiled catalogue at HEAD, with two exceptions
+  declared-awaiting rather than fabricated: `pack.authored.classifier@1` (§0.3) and
+  `derived.guidance.hint_target@1` (§1.3/§6), whose bounded producer is owned by `hint-distance`.
 - **No new preset names, no new workflow contexts.** `presets.ts` ships both closed lists with
   `validation: "candidate"`; this RFC reads them and adds a registry invariant tying them to the
   declarations. Confirming or renaming a candidate is the owner's, per `intent-presets.md` §7.
@@ -254,7 +258,7 @@ Table caption — unit: **module id**; total: **11**, set-equal to `MODULE_IDS`
 |---:|---|---|---|---|---|---:|---|
 | 1 | `rules_floor` | pre_commit (ambient) | board_input | none | 0 / 0 / — / 0 | 0 | silent |
 | 2 | `sight_on_request` | pre_commit (on_request) **· post_commit (on_request)** | rail | **pattern** | 1 / 30 / 6 / 1 | 0 | stated_absence |
-| 3 | `blunder_prevention` | at_commit (proactive) | board_adjacent | threat | 1 / 20 / 1 / 0 | 0 | silent |
+| 3 | `blunder_prevention` | at_commit (proactive) | board_adjacent | threat | 1 / 20 / 1 / 1 | 0 | silent |
 | 4 | `threat_radar` | pre_commit (on_request) · post_commit (on_request) | rail | threat | 3 / 60 / 4 / 2 | 0 | stated_absence |
 | 5 | `postcommit_nudge` | post_commit (proactive) | rail | **evaluation** | 2 / 50 / 2 / 1 | 3 | silent |
 | 6 | `structure_nudge` | post_commit (**proactive**) | rail | **theory** | 1 / 80 / 4 / 0 | 3 | stated_absence |
@@ -356,13 +360,14 @@ the declarations.
 | `module.postcommit_nudge` | 8 `rules.structural.event.*` (the 11 `STRUCTURAL_EVENT_FAMILIES` at `evidence-catalog.ts:115-118` minus the refused `piece_count`, `direct_attack_count`, `line_blockers`); 7 `rules.transition.event.*` (`TRANSITION_RULE_EVENT_FAMILIES` minus `clock_reset`); `rules.castling.event.rights_lost`, `rules.tactic.event.{double_attack, check, loose_piece}`, `derived.exchange.{capture_class, trade_completed}`, `rules.structural.event.pawn_islands`; 10 `derived.semantic_avoidance.*`; `rules.pawn.event.dynamics`, `derived.pawn.event.transitions`, `rules.king.event.zone_state`, `derived.king.captured_zone_defender`, `derived.activity.event.open_file_occupancy`; `derived.grade.move_quality` | 38 |
 | `module.structure_nudge` | `theory.shapes.firing`; `rules.structural.reading.{named_structure, space, pawn_connectivity}`; `rules.phase.reading`; `rules.endgame.reading` | 6 |
 | `module.theory_breadcrumb` | `pack.authored.claim`; `theory.shapes.firing`; `human.explorer.population` **(operand-scoped, §2.3)**; `theory.opening_identity.record` | 4 |
-| `module.guided_hint` | `live.stockfish.{eval, pv}` (pv stage-3 only); `live.syzygy.{result, category, distance}`; `rules.endgame.reading`; `pack.authored.claim` | 7 |
+| `module.guided_hint` | `live.syzygy.{result, category, distance}`; `rules.endgame.reading`; `pack.authored.claim`; ◇ `derived.guidance.hint_target` (bounded stage 1 pattern / stage 2 fact / stage 3 move; never raw PV) | 6 |
 | `module.compare_coach` | `derived.compare.{structure_delta, eval_delta, engine_trajectory, piece_route}`; `run.record.{fork, consequence, objective_transition, checkpoint_hit}` | 8 |
 | `module.review_map` | the 37 compiled nudge event/avoidance ids re-declared; `rules.pivotal.marker`, `rules.phase.reading`, `rules.endgame.reading`; `recorded.engine.eval`, `recorded.tablebase.result`; `live.stockfish.{eval, wdl}`; `run.record.{objective_transition, consequence, imported_result}`; `derived.grade.move_quality` | 48 |
 | `module.full_inspector` | `rules.tactic.reading.{loose_piece, ray_classification, rook_on_seventh, trapped_piece, back_rank, discovered_latency}`, `rules.tactic.consequence.{threat, mate_in_one, reply_breadth}`, `rules.structural.reading.{space, pawn_connectivity}`, `rules.phase.development`, `rules.castling.reading.{rights, legality}`, `derived.tactic.{discovered_executed, promotion_pressure}` (16); `rules.square.reading.control`, `rules.mobility.reading.piece_destinations`, `rules.pawn.reading.{contacts, candidate_majority}`, `derived.material.reading.role_signature`, `rules.king.reading.zone_state` (6); `live.stockfish.{eval, wdl, pv}`, `human.maia.{policy, candidate_wdl}`, `human.explorer.population`, `live.syzygy.{result, category, distance}`, `recorded.engine.eval`, `recorded.tablebase.result`, `theory.shapes.firing` (12); `rules.phase.reading`, `rules.pivotal.marker`, `derived.compare.{structure_delta, eval_delta}`, `derived.story.rank` (5); ◇ `pack.authored.classifier` (1) | 40 |
 
-Tripwires: declared **183**; compiled **182**; declared-awaiting **1** (`pack.authored.classifier@1`
-in `full_inspector`). The two grade rows compile (§0.3). Every non-◇ id above was verified present
+Tripwires: declared **182**; compiled **180**; declared-awaiting **2**
+(`pack.authored.classifier@1` in `full_inspector`, `derived.guidance.hint_target@1` in
+`guided_hint`). The two grade rows compile (§0.3). Every non-◇ id above was verified present
 in the compiled catalogue at `f0d5460`. `[V]`
 
 `selection.familyPrecedence` is, for each module, its `accepts` order verbatim — the compiler
@@ -390,12 +395,14 @@ The compiler requires both non-empty (`module-contract.ts:143`); §1.3 of `learn
 
 `forms` per module, each a subset of the closed inventory and each mapped by `MODULE_FORM_IMAGE`
 (`module-contract.ts:119-127`): `rules_floor` `["square"]`; `sight_on_request`
-`["sentence","square"]`; `blunder_prevention` `["sentence"]`; `threat_radar` `["sentence","square"]`;
-`postcommit_nudge` `["sentence","card","square"]`; `structure_nudge` `["card","timeline_mark"]`;
-`theory_breadcrumb` `["sentence","card"]`; `guided_hint` `["sentence","square"]`; `compare_coach`
-`["sentence","card"]`; `review_map` `["timeline_mark","card","sentence"]`; `full_inspector`
-`["panel","card","sentence","square"]`. **No module declares `arrow`** — §6 says why, and the
-invariant that keeps it honest.
+`["sentence","square","arrow"]`; `blunder_prevention` `["sentence","square","arrow"]`; `threat_radar` `["sentence","square","arrow"]`;
+`postcommit_nudge` `["sentence","card","square","arrow"]`; `structure_nudge` `["card","timeline_mark"]`;
+`theory_breadcrumb` `["sentence","card"]`; `guided_hint` `["sentence","square","arrow"]`; `compare_coach`
+`["sentence","card","arrow"]`; `review_map` `["timeline_mark","card","sentence","square","arrow"]`; `full_inspector`
+`["panel","card","sentence","square","arrow"]`. `guided_hint`'s arrow budget is reserved for
+its bounded stage-3 hint-target projection and cannot be spent by raw Stockfish PV; the registry
+cannot land while that declared-awaiting producer remains absent (§6, [[D1455]]). Every active arrow form is backed by
+the set-equal relation-renderer closure in `evidence-presentation.md` §3.6a.
 
 #### 1.5 `noveltyWindow`, and the [[D1164]] closure it needs
 
@@ -470,7 +477,7 @@ from the barrel today.
 #### 2.2 Step 2 — the manifest join
 
 In `evidence-catalog.ts`: ten `module.*` ids appended to `EVIDENCE_CONSUMER_IDS` (25 → 35);
-`PRODUCTION_ELIGIBILITY_DECLARATIONS`, the 182 compiled rows of §1.3, joined into
+`PRODUCTION_ELIGIBILITY_DECLARATIONS`, the 180 compiled rows of §1.3, joined into
 `EVIDENCE_MANIFEST.eligibility` beside the 67 research rows, which stay byte-identical;
 `production.module_local@1` appended to `EVIDENCE_SELECTION_POLICIES` beside the untouched
 `research.r2_candidate@1`. The manifest digest moves; the docs tuples in `docs/semantic-evidence.md`
@@ -820,64 +827,46 @@ This is `design/05` invariant 5 (*"absence is stated, never simulated"*) applied
 layer, and it is the direct answer to [[D1432]]'s complaint shape: a positive affordance that
 silently does nothing is worse than a stated absence.
 
-### §6 — Arrows: what a `maxArrows > 0` module renders today, and what activation needs
+### §6 — Arrows: activated as typed relation renderings, never a second chess engine
 
-**Today it renders nothing, and the reason is three independent gaps, not one.** Seven modules
-carry a nonzero `maxArrows` (sight 1, radar 2, nudge 1, hint 1, compare 2, review 2, inspector 8).
-Verified at HEAD:
+[[D1564]] resolves [[D1429]] as **activate**. The earlier diagnosis was materially over-broad:
+the product has no system-drawn arrow *renderer*, but the catalogue already has exact directed
+evidence. `ThreatResult` retains threatening piece, UCI and target; square-control events retain
+controller and target; defender duties retain defender and target; ray classifications retain
+slider, blocker and target; mobility retains piece and destinations; move/event payloads retain
+UCIs and anchors; observed tactic payloads retain their named participants. These projections
+already declare `arrows`. Recomputing any of them in Svelte would be a duplicate producer.
 
-1. **No system-drawn arrow producer exists.** `design/05` §3-forms splits board marks into three
-   things and says of form (c), system-drawn: *"(c) has no producer yet — the structural reader
-   emits square sets, not vectors."* Confirmed in code: the only autoShapes producer is
-   `DrillScreen.svelte:382`, which emits `{ orig, brush }` — squares, never a `dest`. The **only**
-   code in the repo that can emit a `dest` is `live-marks.ts:6-12 relayedMarkShapes`, consumed at
-   `App.svelte:1075` — that is form (b), a host's or teacher's relayed mark, person-attributed and
-   outside the assistance ladder entirely.
-2. **No form-dispatching renderer exists for any form.** `EvidenceForm` includes `"arrows"`
-   (`evidence-contract.ts:6`) and seventeen projections declare it, and nothing anywhere switches
-   on a form value to render. `MODULE_FORM_IMAGE.arrow` (`module-contract.ts:123`) is the only
-   mapping and it lives inside the never-invoked compiler.
-3. **The `assistance.arrows` control is inert, and its inertness is load-bearing.** Typed
-   (`assistance.ts:13`), defaulted off (`:18`), migrated from three prior versions each of which
-   hard-writes `"off"` (`assistance-preference.ts:43-51`), persisted to
-   `tabiya.assistance.v1.${context}`, rendered as eight `<select>`s
-   (`AssistanceSettings.svelte:64`), and read by **no renderer**. The ledger's clamp claim needs one
-   refinement that strengthens it: `permittedAssistance` *computes* an `arrows` ceiling
-   (`assistance.ts:34`) that **no site applies** — contrast `DrillScreen.svelte:380`, which derives
-   `effectiveLighting` from the sibling axis. There is no `effectiveArrows`. And the runtime
-   documents its own dead field: `evidence-catalog.ts:892` (HEAD `:883`) declares
-   `assistance.arrows` with `disposition: { kind: "experimental", reason: "D546: migrated
-   preference has no producer and no renderer; F5 or an owner ruling decides activation or
-   retirement." }` — pinned by four independent checks, including a build-time guard at
-   `apps/server/src/evidence-manifest-check.ts:66-67`.
+Activation is one coupled landing:
 
-**What activation would require, mechanically and completely.** (i) An admitted fact whose retained
-operands include an **ordered** pair of squares — [[D900]]'s rule, so a fact retaining only square
-*sets* draws marks and never arrows. (ii) A registered arrow renderer, which means a
-form-dispatching layer that does not exist for any form. (iii) An `effectiveArrows` narrowing at
-the consumption site, so the computed ceiling is applied. (iv) **Deletion of `assistance.arrows`'s
-disposition in the same change** — `evidence-contract.ts:607` makes a bound consumer and a
-disposition mutually exclusive exactly as `:603` does for projections, so activation and
-disposition-removal are one edit, and `evidence-manifest-check.ts:66-67` fails loudly if they are
-separated.
+1. `evidence-presentation.md` §3.6a's registered `relation_overlay` constructs nodes and directed
+   edges only from one admitted payload. Its equivalent sentence and overlay are sealed together
+   in the same `RenderedEvidenceItem`; a call site cannot attach an arbitrary arrow.
+2. The relation-renderer census is set-equal to every module-eligible projection declaring the
+   `arrows` form. A projection retaining only unordered square sets is refused from the relation
+   component and may construct only `square_set`.
+3. `effectiveArrows` is computed at the module seat from
+   `configured arrows ∩ permittedAssistance arrows ∩ module forms ∩ module maxArrows`. Every term
+   narrows. The board receives only this bounded result, never a producer census.
+4. `assistance.arrows`'s experimental disposition is deleted in the same commit that binds the
+   consumer; `evidence-contract.ts`'s bound-or-disposed invariant remains the guard.
+5. The raw three-option axis remains configurable under **Advanced**, per the owner's requirement
+   that primitives remain reachable, but ordinary workflows operate through named modules and
+   presets. It is no longer an inert top-level control and no disabled “future producer” copy
+   remains.
 
-**What this RFC does, and what it deliberately does not.** The owner has **not** ruled activate vs
-retire ([[D1429]]; the decision text at `planning/platform-alignment/decision-queue.md:188-197` was
-drafted and never asked), so neither is assumed. Three things follow:
+Two producer debts are deliberately not hidden by that reuse. The six legacy transition families
+measured by evidence-presentation D4 must retain exact piece/square identities before their nudge
+and Review overlays can compile. `guided_hint` cannot turn raw `live.stockfish.pv` into an arrow
+([[D1455]]); `hint-distance` must declare a bounded stage-3 hint-target projection with its source,
+answer distance and abstention. Both are 1.0 closure failures until implemented, not reasons to
+leave every other arrow dark or to simulate availability.
 
-- **No module declares the `arrow` form** (§1.4). Declaring a form the system cannot draw is a
-  positive affordance that silently does nothing — the [[D1432]] class the owner has just
-  complained about.
-- **The accepted `maxArrows` values stand unchanged**, because a backstop that is never spent is
-  the rule working (*"unused budget stays empty"*), not a defect. What changes is that it becomes
-  inert **by construction** rather than by accident: a registry invariant makes `maxArrows > 0`
-  admissible only while the module declares no `arrow` form, and the day one does, all four
-  activation steps must land together or the build fails (A13).
-- **The `<select>` stops lying without pre-empting the ruling.** It renders through
-  `HonestControl.svelte` — the shipped idiom with nine existing call sites — disabled, with the
-  visible reason *"No system-drawn arrow producer exists yet."* wired through `aria-describedby`.
-  That is invariant 5 applied to a control, it is available under either ruling, and it forecloses
-  neither. Open question 2 puts the ruling itself to the owner with both options priced.
+Arrow-bearing modules are `sight_on_request`, `blunder_prevention`, `threat_radar`,
+`postcommit_nudge`, `compare_coach`, `review_map` and `full_inspector`; `guided_hint` joins when its
+bounded target producer lands. `structure_nudge` and `theory_breadcrumb` remain square/card
+components because their evidence is a shape/citation, not a directed relation. The module budget
+is a maximum, never a request to fill the board.
 
 ## Deviations from design
 
@@ -900,7 +889,11 @@ drafted and never asked), so neither is assumed. Three things follow:
 
 ## Acceptance criteria
 
-> **[[D1455]] — narrowing edit owed before acceptance.** §4's consumer table admits `live.stockfish.pv` into `module.guided_hint` at stage 3, and the stage-3 ceiling is `principal_variation` — while `evidence-catalog.ts:772` declares that projection's own limitation as *"Explicit Analyze consumer only; never a guidance binding."* Pressing hint a third time would hand an engine line to a guidance module, which is [[D317]]'s shape. This is [[D1343]] reached by a second document. The edit only ever **narrows** what a guidance module may print, so it does not wait for `rfc/hint-distance.md`'s redraft.
+> **[[D1455]] — discharged in the 2026-08-25 draft amendment.** Raw `live.stockfish.eval` and
+> `live.stockfish.pv` are removed from `module.guided_hint`. The module instead carries one
+> declared-awaiting `derived.guidance.hint_target@1`, bounded by `hint-distance` and staged as
+> pattern → fact → move. Acceptance remains red until that producer exists; a missing target does
+> not license the forbidden PV binding.
 
 > **Rows landed 2026-08-24.** [[D1444]] — the layer was returned with a paper trail, but its ids are already production currency and a campaign can reward a module that resolves to nothing. [[D1445]] — `MODULE_ANSWER_IMAGE` is exact-match, no ceiling maps to `evaluation`, and the just-ruled grade has nowhere to live. [[D1446]] — binding needs fifteen dispositions deleted atomically, and `pack.authored.classifier@1` has never existed. [[D1447]] — the `arrows` clamp is unenforced and square sight is keyboard-unreachable.
 
@@ -917,11 +910,12 @@ defect class here ([[D444]]/[[D984]]/[[D1274]]), so each carries its falsifier.
 2. **A2 — The eligibility set, asserted by derivation, not by count** ([[D1240]]).
    `make module-registry-census` emits the declared rows from `MODULE_DECLARATIONS` and the
    compiled ids from `EVIDENCE_MANIFEST`; the test asserts **set-equality** between the compiled
-   eligibility rows and the census output, with 182/183/1 baked only as a drift tripwire. The 67
+   eligibility rows and the census output, with 180/182/2 baked only as a drift tripwire. The 67
    research rows are byte-identical. **RED at HEAD:** eligibility is 67 rows against one research
    consumer. **Negative:** a test asserts `pack.authored.classifier@1` is **absent** from the
-   compiled manifest and **present** in `full_inspector`'s `awaiting`, so the criterion cannot pass
-   vacuously while an unbuilt projection silently compiles.
+   compiled manifest and **present** in `full_inspector`'s `awaiting`; a sibling negative pins
+   `derived.guidance.hint_target@1` in `guided_hint.awaiting`. The criterion cannot pass vacuously
+   while either unbuilt projection silently compiles.
 3. **A3 — Sessions and roles are derived, not typed in** ([[D1206]]). A fixture mutates one
    `WORKFLOW_CONTEXT_POLICIES` row's `moduleCeiling` and asserts the registry **fails to compile**
    because a module's `ceilings.sessions` no longer matches. A second fixture flips one forbidden
@@ -977,11 +971,15 @@ defect class here ([[D444]]/[[D984]]/[[D1274]]), so each carries its falsifier.
     comparison cap and its overflow sentence, the guard's two framing sentences, the `G` chip, the
     top-eight moment cap, and the three inspector refusal sentences all still reach a screen.
     **RED against any implementation that rebuilds a surface instead of re-seating it.**
-13. **A13 — Arrows stay inert by construction.** No module declares the `arrow` form; a fixture
-    adding `arrow` to any module's `forms` while no arrow producer is registered **fails**; the
-    `assistance.arrows` `<select>` renders disabled through `HonestControl` with its stated reason;
-    `evidence-manifest-check.ts:66-67`'s producerless-disposition guard still passes. **RED at
-    HEAD:** the control renders three selectable options and applies none of them.
+13. **A13 — Arrow activation is sealed, bounded and complete.** The arrow-bearing module set is
+    set-equal to §1.4; each rendered edge comes from one admitted fact through the registered
+    `relation_overlay`; and `effectiveArrows` is the pointwise narrowing of configured permission,
+    role/context permission, module form and `maxArrows`. A fixture lowers each term independently
+    and proves the board result only shrinks. `assistance.arrows` loses its disposition in the same
+    commit that binds the consumer, and the Advanced control visibly changes the effective output.
+    **RED at HEAD:** the control renders three selectable options and applies none of them; no
+    sealed relation renderer exists. **Negative:** an arbitrary `{orig,dest}` attached by a Svelte
+    caller and a relation reconstructed from FEN both fail the renderer/coverage guards.
 14. **A14 — The compare renderer, narrowed to retained operands** ([[D1213]]).
     `derived.compare.structure_delta@1` renders kind, colour, role, squares/file and count as an
     `appeared` fact on both screen and voice paths; a fixture demanding a before/after pair is
@@ -997,10 +995,13 @@ defect class here ([[D444]]/[[D984]]/[[D1274]]), so each carries its falsifier.
     `review`, `feedbackDeliveryOpen` for `post_commit`. A module delivering at a timing whose
     boundary event is absent fails, which **voids this RFC's `none` claim rather than hiding it**
     (`intent-presets.md` §6's reopen condition, made executable).
-17. **A17 — Stage gate.** Against a position with an admitted `live.stockfish.pv@1` fact: stage 1
-    carries pattern content only, stage 2 names at most the subject square and carries no move or
-    PV bytes, stage 3 under an open disclosure boundary may carry them. A stage request outside an
-    open boundary renders the declared empty state, never a deferred reveal.
+17. **A17 — Stage gate.** Against a position with an admitted
+    `derived.guidance.hint_target@1` fact: stage 1 carries pattern content only, stage 2 names at
+    most the subject square and carries no move bytes, and stage 3 under an open disclosure
+    boundary may carry its one bounded move/arrow. The target retains and cites its engine,
+    tablebase, theory or authored inputs; raw `live.stockfish.pv` is never a module binding. A
+    stage request outside an open boundary renders the declared empty state, never a deferred
+    reveal.
 18. **A18 — Novelty across two real ancestor nodes** ([[D1164]]). The boundary fixture uses **two
     distinct node ids and distinct move anchors**: a stable fact repeated at ancestor distance
     `noveltyWindow` drops, the same fact at `noveltyWindow + 1` survives, and
@@ -1023,6 +1024,7 @@ defect class here ([[D444]]/[[D984]]/[[D1274]]), so each carries its falsifier.
 | D4 | Before/after operands for `derived.compare.structure_delta@1` — A14 is narrowed to what the projection retains (§4.9); widening the derivation to carry a before observation is real work with a real cost and is not smuggled in here | review-evidence-compiler | the commit that widens the projection or records the refusal | |
 | D5 | Durable per-learner module-delivery records — this RFC's `none` claim rests on packets being recomputable from run state (§tabiya-claims); which stage of a hint a learner requested is not, and durable capture is `longitudinal-store`'s declared grain | longitudinal-store | the longitudinal-store commit adding a module-delivery projection | |
 | D6 | Per-timing role narrowing — `ModuleTimingDeclaration` carries timing and initiative only, so `compare_coach` takes the narrower role set across both its arms (§1.2). A spectator loses nothing reachable today, but the contract cannot express what it should | learner-modules | the learner-modules amendment commit | |
+| D7 | `derived.guidance.hint_target@1` — the bounded, staged output that may power the final guided-hint arrow without binding raw Stockfish PV. Its evidence inputs, answer distance, abstention and counterfactual scope are owned by the `hint-distance` redraft; module registration remains RED while it is only declared-awaiting | hint-distance | the accepted producer amendment and implementation commit | |
 
 ## Open questions
 
@@ -1031,16 +1033,10 @@ defect class here ([[D444]]/[[D984]]/[[D1274]]), so each carries its falsifier.
    `pawn_safe_square` was excluded on the identical ground, which [[D566]]'s closure discharges.
    §1.3 declares both on that reasoning. If the owner meant the ruling narrowly, one row is removed
    and sight is 21 rather than 22; nothing structural moves. Proposed ledger row.
-2. **`assistance.arrows`: activate or retire** ([[D1429]], never asked). Both options priced in §6.
-   **Activate** costs an ordered-operand producer, a form-dispatching renderer, an `effectiveArrows`
-   narrowing and the disposition deletion — four coupled changes, none of which exists.
-   **Retire** costs one field removal, a fifth migration arm and the deletion of eight `<select>`s.
-   This RFC assumes neither and ships the disabled honest control, which is correct under both.
-   Owner's.
-3. **Is `structure_nudge` proactive?** §1.1 resolves the accepted text's undeclarable disjunction to
-   `proactive` on the passive-marker ruling. If the owner reads §3a's silence default as barring
-   even a passive marker, it becomes `on_request` and one field changes. Routed to the owner as a
-   one-token decision rather than presupposed.
+2. **Answered 2026-08-25 — activate `assistance.arrows`.** [[D1564]] rejects retirement and
+   requires the producer→typed relation→module→board path. §6 and A13 carry the coupled work.
+3. **Answered 2026-08-25 — `structure_nudge` is proactive as a passive marker, with content on
+   request.** [[D1564]] confirms §1.1's declarable reading; no modal or unsolicited prose follows.
 4. **Which preset names survive owner use?** All five carry `validation: "candidate"`
    (`presets.ts:32-36`) and `intent-presets.md` §7 makes confirmation an owner ruling after real
    sessions. This RFC reads the table and freezes nothing about the names.
@@ -1095,6 +1091,12 @@ Proposed — ids assigned at landing; head was **D1444** at drafting (**D1434** 
 
 ## Changelog
 
+- 2026-08-25: amended on [[D1564]]/[[D1568]]. Arrow activation and proactive structure markers
+  are no longer open owner questions. Re-derived the “no producer” claim into existing exact
+  directed payloads versus genuinely lossy emitters; added the sealed relation-overlay and
+  `effectiveArrows` contract; made transition retention and a bounded guided-hint target hard
+  producer dependencies; removed raw Stockfish eval/PV from `guided_hint`; and changed A13/A17
+  from inertness checks into able-to-fail activation and stage-boundary checks.
 - 2026-08-24: created. Drafted at HEAD `f0d5460` (manifest tuple 35/188/25/210 core, 67/67/15/1
   semantic; `CURRENT_CONSUMER_OPERATION_IDS` 23; ledger head D1444). Every projection id in §1.3
   verified against the compiled catalogue read from `git show f0d5460:` rather than the working

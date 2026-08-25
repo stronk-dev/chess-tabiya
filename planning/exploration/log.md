@@ -7886,3 +7886,21 @@ arrows/highlights behind presentation ([[D1564]]); campaign separates run-scoped
 persistent rewards ([[D1565]]); and the recommended bot, Review, accessibility and appearance
 directions are approved ([[D1566]]). Public matchmaking is returned for a no-chat-specific cost
 derivation instead of inheriting a generic moderation objection ([[D1567]]).
+
+## 2026-08-25 — Arrow activation split into evidence retention and typed rendering
+
+Re-derived `module-registration.md` §6 and `evidence-presentation.md` D4/D5 against the compiled
+catalogue after owner ruling [[D1564]]. The documents' shared statement that no vector producer
+exists is materially over-broad: threat moves, controller edges, defender duties, slider rays,
+piece destinations, move anchors and observed tactic relations already retain ordered identities
+and declare the `arrows` form. They lack a typed one-fact relation-overlay renderer and an applied
+`effectiveArrows` clamp. The six legacy transition families remain a different defect: their
+payloads lose the square identities a square or relation component needs.
+
+**Changed:** [[D1568]] records the class and routes both halves to the two active RFCs. Arrow
+activation is no longer an owner question or an optional future source. Existing exact relations
+must render through the sealed evidence item; missing transition and staged-hint operands remain
+producer obligations with able-to-fail coverage, not honest-empty excuses.
+
+**Next:** finish the two RFC amendments, take them through independent buildability review, then
+implement the producer→relation→module→board path in dependency order.

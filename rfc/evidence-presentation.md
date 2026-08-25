@@ -1,6 +1,9 @@
 # RFC: evidence-presentation — the component vocabulary between a typed fact and a pixel
 
-- **Status:** draft — 2026-08-24
+- **Status:** draft, amended 2026-08-25 on [[D1564]]/[[D1568]] — arrow activation is a 1.0
+  obligation, split between existing exact relation operands, a typed relation renderer, and the
+  genuinely missing transition/staged-hint operand retention. It is no longer an owner-held
+  optional future producer.
 - **Author:** claude (evidence-presentation fork), from `design/research/evidence-presentation.md`
   (R3, 2026-08-20) and the HEAD census recorded as [[D1431]]/[[D1434]]
 - **Created:** 2026-08-24
@@ -29,6 +32,10 @@
   active is a preset question, not a component question); `rfc/hint-distance.md` (the rung
   ladder — a component never widens a rung); `rfc/review-evidence-compiler.md` and
   `rfc/review-map.md` (their outputs are operands here, and this RFC adds no selection)
+- **Owner ruling consumed:** [[D1564]] — every promised support option must have the typed
+  producer operands it needs; arrows/highlights are activated, not retired or left dark behind
+  availability. [[D1568]] records the re-derived split between existing relation evidence and
+  genuinely lossy emitters.
 - **Parent / amends:** amends nothing. **Repairs in place** the rendering half of
   `rfc/archive/adaptive-guidance.md`, `rfc/archive/n-way-comparison.md` and
   `rfc/archive/runtime-corpus-evidence.md` — each shipped a correct producer and a joined
@@ -58,15 +65,16 @@ encodes exactly nothing visually. A repo-wide sweep for `<svg`, `<canvas`, `<met
 `<progress` across `apps/` and `packages/` returns **one file** — `GameStoryScreen.svelte:30`,
 the share-card generator, which draws a picture for people who are not using the app.
 
-**This RFC specifies the missing layer as a closed vocabulary of twelve components** (§3), each
+**This RFC specifies the missing layer as a closed vocabulary of thirteen components** (§3), each
 derived from what the evidence *is* rather than from what looks good: a distribution over moves,
-an outcome split, a magnitude, a trail of magnitudes, a square set, a move path, a count against
+an outcome split, a magnitude, a trail of magnitudes, a square set, a move path, an exact directed
+board relation, a count against
 a denominator, a citation, a categorical state, an authored claim, an abstention, and — for
 author and operator surfaces only — a structured document. Each declares its **typed operand**,
 its **convention obligation**, its **honest-empty state**, its image in `design/05`'s form
 inventory, and the theme tokens it consumes.
 
-Three rules bind all twelve. **Honest empty is a shipped state, not a blank** (§4): every
+Three rules bind all thirteen. **Honest empty is a shipped state, not a blank** (§4): every
 component renders absence as itself, and abstention is visually and structurally distinct from
 zero — a distribution with no candidates and a distribution where every candidate scored 0% are
 different pictures. **The number and its convention travel together** (§5): a component that
@@ -224,19 +232,28 @@ Deviation 1, and the design-tier amendment is owed to the owner (Discharge D1).
 **The declaration lands in the runtime, the implementation lands in the client.**
 `COMPONENT_DECLARATIONS` and the operand types land as
 `packages/runtime/src/presentation-contract.ts` — shared, frozen, testable without a DOM, and
-importable by the server-side renderers that already build sentences. The twelve Svelte
+importable by the server-side renderers that already build sentences. The thirteen Svelte
 implementations land under `apps/web/src/lib/evidence/`. **Nothing in this RFC edits
 `packages/runtime/src/evidence-catalog.ts`**, which `rfc/module-registration.md` owns; the join
 is one-way and by type only (a component declares which `EvidenceForm` members it may serve;
 `evidence-catalog.ts` does not import this file), so landing order is free in either direction.
 The pin is recorded in `rfc/README.md`.
 
+**The sealed rendered item carries both representations.** The implementation amends
+`RenderedEvidenceItem` from `{ evidence, sentences }` to
+`{ evidence, sentences, components }`, where `components` is a readonly union of the thirteen
+typed operands below. A registered renderer constructs the sentence and component operands from
+the same admitted `DeclaredEvidence`; neither a module nor a Svelte call site may attach a board
+overlay later. `renderEvidenceItems` seals both arrays in the same `RenderedEvidenceView`, and
+`voiceCheck` continues to derive its allow-list from that view's sentences. This is the
+producer→presentation join [[D1568]] requires and prevents a second, ungrounded overlay authority.
+
 ### §3 — The closed component vocabulary
 
-**Twelve components. This is the closed list; adding or dropping one is a spec change with a
+**Thirteen components. This is the closed list; adding or dropping one is a spec change with a
 changelog line.** Every component declares eight fields:
 
-1. **`id`** — one of the twelve.
+1. **`id`** — one of the thirteen.
 2. **`renders`** — one sentence naming the object it draws.
 3. **`operand`** — the typed input. **Total by type**: a component whose operand type does not
    compile cannot be constructed, which is `rfc/theming.md` §2's totality trick applied to
@@ -429,6 +446,65 @@ budget, and draws it. A component that queries anything is the defect the dossie
 - **Empty:** `stated_absence` — *"No line was recorded for this position."*
 - **Forms:** `card` (→ `panel`), `arrow` (→ `arrows`), `sentence`.
 - **Replaces:** `CompareView.svelte:137`'s `{route.squares.join(" → ")}`.
+
+#### 3.6a `relation_overlay` — one admitted directed relation on the board
+
+- **Renders:** the pieces and squares participating in one admitted fact, plus only the directed
+  edges that fact retains. It is the component for controller→square, attacker→target,
+  defender→duty, slider→target, screen→ray and played origin→destination relations. It is not a
+  principal variation and never invents a candidate move.
+- **Operand:**
+  ```ts
+  type BoardRelationKind =
+    | "controls" | "attacks" | "defends" | "screens"
+    | "pins" | "skewers" | "threatens" | "moves_to"
+    | "opens_ray" | "closes_ray";
+  interface RelationOverlayOperand {
+    readonly nodes: readonly {
+      readonly square: Square;
+      readonly role?: Role;
+      readonly color?: Color;
+      readonly emphasis: "source" | "target" | "screen" | "context";
+    }[];
+    readonly edges: readonly {
+      readonly from: Square;
+      readonly to: Square;
+      readonly relation: BoardRelationKind;
+      readonly sign: "state" | "gained" | "lost";
+    }[];
+    readonly owner: { readonly factRef: string; readonly caption: string };
+    readonly answerDistance: AnswerDistance;
+    readonly convention?: Convention;
+  }
+  ```
+- **Construction rule:** every node and edge is a literal projection operand or a mechanical UCI
+  split retained by that same projection. The renderer may label and deduplicate; it may not run
+  chess rules, query the position, choose a relation, connect two members of an unordered set, or
+  infer importance. A projection retaining only square sets constructs `square_set`, never this
+  component. A relation whose declared grounding is `declared_convention` carries that convention
+  inside the operand.
+- **Existing producer coverage:** `ThreatResult.threats[].threateningPiece/threatenedMove/target`,
+  `SquareControlReading` and `SquareControlEvent`, `DefenderDutyReading` and its removal/relocation
+  events, `RayClassificationReading`, `DiscoveredLatencyReading`/`DiscoveredExecutedEvent`,
+  `PieceDestinationsReading/Event`, exact move anchors, and the observed semantic-tactic payloads
+  already retain ordered identities and already declare the `arrows` form. They need registered
+  relation renderers, not replacement chess collectors.
+- **Mandatory producer repairs:** the six legacy transition families in Discharge D4 must retain
+  their exact subject/source/target squares before they can construct this component or
+  `square_set`. The final direct stage of `guided_hint` must consume a separately declared,
+  bounded hint-target projection from `hint-distance`; raw `live.stockfish.pv` is not converted
+  into a guidance arrow ([[D1455]]). Neither absence may be used to declare 1.0 presentation
+  complete.
+- **Renders as:** lit nodes and at most the owning module's arrow budget, with focus/touch parity.
+  Focusing the caption exposes the relation; focusing either endpoint exposes the same caption.
+  Gained/lost styling uses theme tokens and line pattern, never good/bad move colour.
+- **Empty:** `stated_absence` for an explicit request and no overlay for a silent module. A
+  missing required producer is a coverage-gate failure, not a fake empty fact.
+- **Forms:** `arrow` (→ `arrows`), `square` (→ `lit_squares` / `piece_halo`), `sentence`.
+- **Equivalent sentence:** mechanically names the same endpoints and registered relation label;
+  for example, *"The bishop on b4 pins the knight on c3 to the queen on d2"* is permitted only
+  from a `ray_classification` payload whose kind is `absolute_pin`/`relative_pin` and whose three
+  identities are retained. The renderer cannot manufacture the word from geometry.
 
 #### 3.7 `count_with_denominator` — a count that is only meaningful against its base
 
@@ -799,7 +875,7 @@ asserted; the count is printed for drift.
 
 **§8.3 the runtime guard** — `PRESENTATION_RAW_ID` at the component text boundary, plus the
 `enum_state` vocabulary lookup, plus `data-abstention` presence/absence per §4c. Exercised by
-component tests over zero/one/many/withheld/unavailable operands for **all twelve** components.
+component tests over zero/one/many/withheld/unavailable operands for **all thirteen** components.
 
 **§8.4 `make component-theme-sweep`** — over `apps/web/src/lib/evidence/**` and every file that
 constructs a component: the shipped `theme.test.ts:221` pattern **plus** named CSS colours
@@ -858,7 +934,7 @@ All four join `make verify`.
 Each names the tree state that makes it RED. A criterion that cannot be made to fail is a defect
 class in this repo ([[D444]]/[[D984]]/[[D1274]]).
 
-1. **`COMPONENT_DECLARATIONS` has exactly the twelve §3 ids, is frozen, and every member declares
+1. **`COMPONENT_DECLARATIONS` has exactly the thirteen §3 ids, is frozen, and every member declares
    all eight §3 fields.** *RED:* delete `emptyBehavior` from any member, or add a thirteenth id
    without a changelog line. *Wrong impl:* an optional field, which lets a component ship with no
    empty state — the defect this RFC exists to prevent.
@@ -927,6 +1003,14 @@ class in this repo ([[D444]]/[[D984]]/[[D1274]]).
     operand's `answerDistance`.** *RED:* hand a `principal_variation` path to a `fact`-ceiling
     module and observe the refusal. *Wrong impl:* filtering the plies to a shorter path, which
     reveals a best move one ply at a time.
+13a. **`relation_overlay` is sealed to one admitted fact and the arrow coverage join is
+    set-equal.** A derived census lists every module-eligible projection that declares `arrows`,
+    whether its retained payload constructs `relation_overlay`, and the exact registered
+    renderer. Existing directed projections in §3.6a must all resolve; the six D4 transition
+    families and the guided-hint target remain named RED rows until their producer contracts land.
+    *RED:* join two members of an unordered square set, attach an edge not present in the payload,
+    or remove one directed projection's renderer. *Wrong impl:* a Svelte component recomputing
+    attacks from FEN, which creates a second chess authority after admission.
 14. **`structured_document` is unconstructible from a learner route.** Asserted by a route→
     component reachability check over the router's learner routes. *RED:* construct it in
     `DrillScreen.svelte`. *Wrong impl:* a runtime role check, which passes in a test harness
@@ -942,7 +1026,7 @@ class in this repo ([[D444]]/[[D984]]/[[D1274]]).
     form, and a provider-off deployment gets byte-identical sentences.** *RED:* let
     `distribution`'s visual arm include a row its sentence omits. *Wrong impl:* generating the
     sentence from the rendered DOM, which makes the assertion circular.
-17. **Every one of the twelve components has a test at zero, one, many, withheld and
+17. **Every one of the thirteen components has a test at zero, one, many, withheld and
     provider-unavailable operands.** Set-equality between `COMPONENT_DECLARATIONS` ids and the
     ids covered by the state matrix. *RED:* add a component without its five states. *Wrong
     impl:* a shared parameterised test that skips inapplicable states silently — the matrix
@@ -972,8 +1056,8 @@ class in this repo ([[D444]]/[[D984]]/[[D1274]]).
 | D1 | The `design/05` §3-forms amendment naming the component layer beneath the form inventory, and the `design/03:323` B1-residual correction (Deviations 1–2) — law 5 work, not this RFC's | OWNER | `planning/intent-amendment-handoff.md` | |
 | D2 | Seat ids, seat budgets and the module→seat binding these components render into | claude (the concurrent `rfc/module-registration.md` fork; the pin is in `rfc/README.md`) | that RFC's landing commit | |
 | D3 | `docs/evidence-presentation.md` — the canonical description of the shipped vocabulary, plus the `docs/theming.md` note for §8.4's widened sweep | codex | this RFC's implementing commit | |
-| D4 | **`square_set` has no operand for the transition families**: A3 measured 0/3,371 transition observations retaining squares, and all six transition families lossy (`design/03:331`). The component is specified and unusable for those families until the retention repair lands | `semantic-collectors.md` | that RFC's implementing commit | |
-| D5 | **`move_path` arrows have no vector producer** for facts retaining only square sets ([[D546]], `design/05` §3-forms form (c)). The component's arrow arm is dark until one exists — and [[D1429]] separately holds that the `arrows` preference is read by no renderer at all, a ruling that has sat drafted and unasked in `planning/platform-alignment/decision-queue.md:188-197` | OWNER ([[D1429]]), then the arrow producer's own lane | the arrow producer's landing | |
+| D4 | **The six legacy transition families lose the square identities required by `square_set` and `relation_overlay`**: A3 measured 0/3,371 transition observations retaining squares. [[D1564]] makes the retention repair a 1.0 producer obligation; honest-empty cannot discharge it | `semantic-collectors.md` | the emitter-retention landing with the 0/3,371 negative turned into set-equal typed coverage | |
+| D5 | **Arrow activation has two halves.** Existing exact directed payloads in §3.6a need the sealed `relation_overlay`, while the `arrows` preference needs a real `effectiveArrows` consumption clamp. [[D1564]] resolves the former owner fork as **activate**; [[D1568]] records why this is not a request for a duplicate chess collector | `module-registration.md` + this RFC | the coupled relation-renderer/clamp landing | owner half discharged 2026-08-25 by [[D1564]]; implementation open |
 | D6 | The `distribution` operand for Maia policy carries an **optional** `mass` (`DrillScreen.svelte:417` renders *"frequency unavailable"* when absent). Whether a candidate with no mass may appear in a distribution at all is a selection question | `learner-modules.md` | that RFC's next amendment | |
 | D7 | The `rfc/theming.md` criterion-2 repair itself — this RFC's §8.4 guards the **component tree**; the shipped sweep at `theme.test.ts:221` still cannot see the 16 sites in §7b outside it | `theming.md` | that RFC's next revision ([[D1433]]) | |
 | D8 | Move-quality grade valence: which grades, if any, carry a registered `valence` token (§3.9 forbids valence on move vocabularies; the grade vocabulary is the one case where the owner may want an exception) | `move-quality-grades.md` | that RFC's next revision | |
@@ -1049,6 +1133,13 @@ Proposed — ids assigned at landing; head was **D1434** at drafting.
 
 ## Changelog
 
+- 2026-08-25 — amended on [[D1564]]/[[D1568]]. The former “no vector producer” statement was
+  split after re-deriving the catalogue: many exact payloads already retain directed relations,
+  while six legacy transition families genuinely lose squares. Added the thirteenth component,
+  `relation_overlay`, sealed it to the same admitted evidence item as its equivalent sentence,
+  made existing directed projections renderer obligations, and converted transition/hint-target
+  gaps from dark optional arms into explicit producer-coverage failures. Arrow activation is no
+  longer an owner question.
 - 2026-08-24 — drafted on the owner's *"where are all the nice ux components?"* commission, from
   R3's landed dossier and the [[D1431]]/[[D1434]] census. Twelve components derived from the
   shipped operand types rather than from a visual inventory (§3); honest-empty given a rendering
@@ -1057,7 +1148,7 @@ Proposed — ids assigned at landing; head was **D1434** at drafting.
   after finding that the single-word enums defeat every regex (§6, criterion 5); the [[D1433]]
   hole re-derived at 16 sites and its criterion given a self-check so it cannot be emptied (§7,
   criterion 11); nine discharges recorded, of which **two are genuine blockers with named
-  owners** — D4's missing square operands for all six transition families and D5's absent vector
-  producer, which between them dark the arrow arm of `move_path` and the transition arm of
-  `square_set`. Cross-draft ownership pin with `rfc/module-registration.md` recorded in
+  owners** — D4's missing square operands for all six transition families and the then-unruled
+  D5 arrow activation. The 2026-08-25 amendment supersedes D5's producer diagnosis without
+  erasing its history. Cross-draft ownership pin with `rfc/module-registration.md` recorded in
   `rfc/README.md` per [[D1381]].
