@@ -2305,17 +2305,21 @@
     {
       "id": "AUT-a1",
       "sourceState": "queued",
-      "state": "queued",
+      "state": "completed",
       "capability": "theory_content",
       "owner": "content-and-theory",
-      "assignment": "capability:theory_content",
+      "assignment": "closed",
       "sourceDocument": "ux-authoring-and-library.md",
       "sourceSection": "§5 C1",
       "sourceHeading": "Authoring and library — `ux-authoring-and-library.md`",
       "summary": "**Call `POST /packs/drafts/:id/lint` on the buffer, debounced, without saving.** The endpoint accepts arbitrary unsaved bytes and has never had a client caller",
       "legacyRoute": "wave3 #10",
       "note": "[[D1488]]; `api.ts` already has `lintShapeDraft`",
-      "sourceDigest": "sha256:49d68eb4dbe173cdf4a7a939ab86a7a5228c09d3c2e23031430d0d8c6d340b28"
+      "sourceDigest": "sha256:49d68eb4dbe173cdf4a7a939ab86a7a5228c09d3c2e23031430d0d8c6d340b28",
+      "completion": {
+        "completedOn": "2026-08-25",
+        "evidence": "Debounced unsaved-pack lint proven by API and mounted App fixtures"
+      }
     },
     {
       "id": "AUT-a10",

@@ -7722,3 +7722,18 @@ off-phase principles, unknown sibling packs, or unproven `variantOf` relations.
 `VARIANT_RELATION_UNPROVEN` — and the server typecheck passes. The remaining [[D1488]] work is the
 unsaved-buffer client wiring; `GET /principles` remains new surface and still needs the RFC boundary
 identified by the complete UX index rather than being smuggled in as a trivial route.
+
+## 2026-08-25 — Unsaved Pack Studio bytes reach the validator
+
+**What landed:** AUT-a1 narrows [[D1488]] to its RFC-bound principle surface. The client now debounces
+the selected mutable pack's editor bytes for 300 ms and calls the existing lint route without a
+save. A generation fence discards superseded replies. Invalid JSON is identified locally and makes
+no request; network failure is presented separately from a valid negative lint result; Save remains
+available for incomplete drafts while Save & playtest requires the current buffer to be clean.
+
+**Verification:** the API fixture pins the encoded route, POST method, and exact unsaved document
+body. The mounted application fixture proves initial lint, changed-buffer lint, disabled playtest,
+zero save calls while typing, and zero server calls for malformed JSON. The focused 17-test API and
+shell suite passes, and Svelte typecheck reports zero errors and zero warnings. AUT-a4 still owns
+human grouping of incomplete-versus-wrong diagnostics; this change does not call raw validator rows
+a finished authoring UX.

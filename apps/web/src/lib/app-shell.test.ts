@@ -4,7 +4,7 @@ import type { Api } from "@lichess-org/chessground/api";
 import type { Config } from "@lichess-org/chessground/config";
 import type { DrillPackDefinition } from "@chess-tabiya/schema/drill-pack";
 import { createRun } from "@chess-tabiya/runtime";
-import { mount, unmount } from "svelte";
+import { mount, tick, unmount } from "svelte";
 import { afterEach, describe, expect, it, vi } from "vitest";
 
 import fixtureJson from "../../../../schemas/drill_pack.example.json?raw";
@@ -18,6 +18,7 @@ import App from "../App.svelte";
 import type {
   Capabilities,
   DrillClientApi,
+  PackDraft,
   PackSummary,
   RunSummary,
 } from "./api.js";
@@ -402,18 +403,66 @@ describe("application shell", () => {
     history.replaceState(null, "", "/create");
     const draft = { id: "draft-one", packId: pack.id, document: pack, digest, state: "draft" as const, validation: { valid: true, issues: [] } };
     const updatePackDraft = vi.fn(async () => draft);
+    const lintPackDraft = vi.fn(async () => draft.validation);
     const playtestPackDraft = vi.fn(async (_draftId: string, _writerId: string) => ({ run, url: `/play/run/${run.id}` }));
-    const studioApi: DrillClientApi = { ...api(), async packDrafts() { return [draft]; }, updatePackDraft, playtestPackDraft };
+    const studioApi: DrillClientApi = { ...api(), async packDrafts() { return [draft]; }, updatePackDraft, lintPackDraft, playtestPackDraft };
     const component = mount(App, { target: target(), props: { api: studioApi, router: new HistoryRouter(window), storage: new MemoryStorage() } });
 
     await vi.waitFor(() => expect(document.body.textContent).toContain(`${pack.id} · draft`));
     document.querySelector<HTMLButtonElement>("aside[aria-label='Your drafts'] button")!.click();
     await vi.waitFor(() => expect(document.querySelector<HTMLButtonElement>("button.primary")?.disabled).toBe(false));
+    expect(lintPackDraft).toHaveBeenCalledWith(draft.id, expect.objectContaining({ id: pack.id }));
     document.querySelector<HTMLButtonElement>("button.primary")!.click();
     await vi.waitFor(() => expect(playtestPackDraft).toHaveBeenCalled());
     expect(updatePackDraft).toHaveBeenCalledWith(draft.id, draft.digest, expect.objectContaining({ id: pack.id }));
     expect(playtestPackDraft).toHaveBeenCalledWith(draft.id, expect.stringMatching(/^writer-/));
     await vi.waitFor(() => expect(location.pathname).toBe(`/play/run/${run.id}`));
+    await unmount(component);
+  });
+
+  it("debounces unsaved Studio lint, reports invalid JSON locally, and never saves while typing", async () => {
+    history.replaceState(null, "", "/create");
+    const draft = { id: "draft-one", packId: pack.id, document: pack, digest, state: "draft" as const, validation: { valid: true, issues: [] } };
+    const updatePackDraft = vi.fn(async () => draft);
+    let resolveSlow: ((validation: PackDraft["validation"]) => void) | undefined;
+    const lintPackDraft = vi.fn(async (_draftId: string, document: unknown) => {
+      const title = (document as { title?: string }).title;
+      if (title === "Slow stale title") return new Promise<PackDraft["validation"]>((resolve) => { resolveSlow = resolve; });
+      return title === "Unsaved invalid title"
+        ? { valid: false, issues: [{ code: "TITLE_FIXTURE", path: "/title", message: "The unsaved title is rejected." }] }
+        : title === "Newer invalid title"
+          ? { valid: false, issues: [{ code: "NEWER_FIXTURE", path: "/title", message: "The newer result wins." }] }
+        : draft.validation;
+    });
+    const studioApi: DrillClientApi = { ...api(), async packDrafts() { return [draft]; }, updatePackDraft, lintPackDraft };
+    const component = mount(App, { target: target(), props: { api: studioApi, router: new HistoryRouter(window), storage: new MemoryStorage() } });
+
+    await vi.waitFor(() => expect(document.body.textContent).toContain(`${pack.id} · draft`));
+    document.querySelector<HTMLButtonElement>("aside[aria-label='Your drafts'] button")!.click();
+    await vi.waitFor(() => expect(lintPackDraft).toHaveBeenCalledTimes(1));
+    const textarea = document.querySelector<HTMLTextAreaElement>("#studio-json")!;
+    textarea.value = JSON.stringify({ ...pack, title: "Unsaved invalid title" }, null, 2);
+    textarea.dispatchEvent(new Event("input", { bubbles: true }));
+    await vi.waitFor(() => expect(document.body.textContent).toContain("The unsaved title is rejected."));
+    expect(document.querySelector<HTMLButtonElement>("button.primary")?.disabled).toBe(true);
+    expect(updatePackDraft).not.toHaveBeenCalled();
+
+    textarea.value = JSON.stringify({ ...pack, title: "Slow stale title" }, null, 2);
+    textarea.dispatchEvent(new Event("input", { bubbles: true }));
+    await vi.waitFor(() => expect(lintPackDraft).toHaveBeenCalledTimes(3));
+    textarea.value = JSON.stringify({ ...pack, title: "Newer invalid title" }, null, 2);
+    textarea.dispatchEvent(new Event("input", { bubbles: true }));
+    await vi.waitFor(() => expect(document.body.textContent).toContain("The newer result wins."));
+    resolveSlow?.({ valid: false, issues: [{ code: "STALE_FIXTURE", path: "/title", message: "The stale result replaced the new one." }] });
+    await tick();
+    expect(document.body.textContent).not.toContain("The stale result replaced the new one.");
+
+    const callsBeforeMalformed = lintPackDraft.mock.calls.length;
+    textarea.value = "{ not json";
+    textarea.dispatchEvent(new Event("input", { bubbles: true }));
+    await vi.waitFor(() => expect(document.body.textContent).toContain("JSON is not valid:"));
+    expect(lintPackDraft).toHaveBeenCalledTimes(callsBeforeMalformed);
+    expect(updatePackDraft).not.toHaveBeenCalled();
     await unmount(component);
   });
 

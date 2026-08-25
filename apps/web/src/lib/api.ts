@@ -617,6 +617,8 @@ export interface PackDraft {
   readonly validation: { readonly valid: boolean; readonly issues: readonly { readonly code: string; readonly path: string; readonly message: string }[] };
 }
 
+export type PackValidation = PackDraft["validation"];
+
 export interface ShapeDraft {
   readonly id: string;
   readonly shapeId: string;
@@ -828,6 +830,7 @@ export interface DrillClientApi extends RunApi {
   packDrafts?(): Promise<readonly PackDraft[]>;
   createPackDraft?(document: unknown): Promise<PackDraft>;
   updatePackDraft?(draftId: string, digest: string, document: unknown): Promise<PackDraft>;
+  lintPackDraft?(draftId: string, document: unknown): Promise<PackValidation>;
   playtestPackDraft?(draftId: string, writerId: string): Promise<{ readonly run: DrillRun; readonly url: string }>;
   registerPackDraft?(draftId: string): Promise<PackSummary>;
   withdrawPackDraft?(draftId: string): Promise<void>;
@@ -1100,6 +1103,13 @@ export class DrillApi implements DrillClientApi {
       body: { document },
     });
     return (await response.json() as { readonly draft: PackDraft }).draft;
+  }
+
+  lintPackDraft(draftId: string, document: unknown): Promise<PackValidation> {
+    return this.#json(`/packs/drafts/${encoded(draftId)}/lint`, {
+      method: "POST",
+      body: { document },
+    });
   }
 
   playtestPackDraft(draftId: string, writerId: string): Promise<{ readonly run: DrillRun; readonly url: string }> {

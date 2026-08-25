@@ -62,6 +62,14 @@ issues instead of offering an inert action. Withdrawal makes mutable bytes read-
 private playtests keep resolving their exact digest. Studio remains an intentionally low-level
 authoring instrument rather than a visual chess-content editor.
 
+While a mutable pack is selected, the client debounces the editor buffer for 300 ms and sends those
+unsaved bytes to `POST /packs/drafts/:id/lint`. Superseded responses cannot replace newer results,
+malformed JSON is reported locally without a request, and transport failure is distinct from a
+validation result. Save remains available for incomplete work; playtest stays disabled until the
+current unsaved buffer is validation-clean. The result list still exposes validator paths and codes;
+grouping incomplete fields separately from contradictory content is a later presentation contract,
+not implied by the live wiring.
+
 `POST /runs/:id/distill` lets a run host turn played branches into an ordinary
 learner-owned draft with `seedKind: run`. It copies only recorded move facts,
 remaps portable fired checkpoints, substitutes a mechanical checkpoint when

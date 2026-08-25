@@ -31,6 +31,22 @@ function json(value: unknown, init: ResponseInit = {}): Response {
 }
 
 describe("DrillApi", () => {
+  it("posts unsaved pack bytes to the draft lint route without saving them", async () => {
+    const calls: { readonly url: string; readonly init?: RequestInit }[] = [];
+    const validation = { valid: false, issues: [{ code: "FIXTURE", path: "/title", message: "Fixture issue" }] };
+    const api = new DrillApi("http://tabiya.test", async (input, init) => {
+      calls.push({ url: String(input), ...(init === undefined ? {} : { init }) });
+      return json(validation);
+    });
+    const document = { id: "unsaved", title: "Still editing" };
+
+    expect(await api.lintPackDraft("draft / one", document)).toEqual(validation);
+    expect(calls).toEqual([{
+      url: "http://tabiya.test/packs/drafts/draft%20%2F%20one/lint",
+      init: expect.objectContaining({ method: "POST", body: JSON.stringify({ document }) }),
+    }]);
+  });
+
   it("keeps account export opaque and binds both two-phase deletion flows", async () => {
     const calls: { readonly url: string; readonly init?: RequestInit }[] = [];
     const digest = `sha256:${"f".repeat(64)}`;

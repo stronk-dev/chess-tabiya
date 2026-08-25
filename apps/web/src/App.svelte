@@ -30,6 +30,7 @@
     type ProgressSchedule,
     type RelatedProgressAttempt,
     type PackDraft,
+    type PackValidation,
     type ShapeDraft,
     type LiveSessionSummary,
     type LiveSessionDetail,
@@ -117,6 +118,10 @@
   let studioJson = $state("");
   let selectedDraftId: string | undefined = $state();
   let studioActionError: string | undefined = $state();
+  let packBufferValidation: PackValidation | undefined = $state();
+  let packLintState: "idle" | "waiting" | "checking" | "ready" | "invalid_json" | "error" | "unavailable" = $state("idle");
+  let packLintError: string | undefined = $state();
+  let packLintGeneration = 0;
   let withdrawConfirmId: string | undefined = $state();
   let shapeDrafts: readonly ShapeDraft[] = $state([]);
   let shapeStudioJson = $state("");
@@ -214,6 +219,7 @@
   );
   let openAssignments = $derived(assignedPacks.filter((assignment) => assignment.withdrawnAt === null));
   let selectedPackDraft = $derived(drafts.find((candidate) => candidate.id === selectedDraftId));
+  let displayedPackValidation = $derived(packBufferValidation ?? selectedPackDraft?.validation);
   let selectedPackRegistrationBlock = $derived(registrationBlockReason(selectedPackDraft));
   let runContext = $derived(
     route.name === "run" && session.runState
@@ -224,6 +230,53 @@
         }
       : undefined,
   );
+
+  $effect(() => {
+    const draft = selectedPackDraft;
+    const documentText = studioJson;
+    if (route.name !== "create" || draft?.state !== "draft") {
+      packBufferValidation = undefined;
+      packLintError = undefined;
+      packLintState = "idle";
+      return;
+    }
+    if (api.lintPackDraft === undefined) {
+      packBufferValidation = undefined;
+      packLintError = "Live validation is unavailable in this deployment.";
+      packLintState = "unavailable";
+      return;
+    }
+    const generation = ++packLintGeneration;
+    packBufferValidation = undefined;
+    packLintError = undefined;
+    packLintState = "waiting";
+    const timer = setTimeout(() => void (async () => {
+      let document: unknown;
+      try {
+        document = JSON.parse(documentText);
+      } catch (error) {
+        if (generation !== packLintGeneration) return;
+        packLintState = "invalid_json";
+        packLintError = `JSON is not valid: ${error instanceof Error ? error.message : String(error)}`;
+        return;
+      }
+      packLintState = "checking";
+      try {
+        const validation = await api.lintPackDraft!(draft.id, document);
+        if (generation !== packLintGeneration) return;
+        packBufferValidation = validation;
+        packLintState = "ready";
+      } catch (error) {
+        if (generation !== packLintGeneration) return;
+        packLintState = "error";
+        packLintError = `Validation check failed: ${error instanceof Error ? error.message : String(error)}`;
+      }
+    })(), 300);
+    return () => {
+      clearTimeout(timer);
+      if (generation === packLintGeneration) packLintGeneration += 1;
+    };
+  });
 
   function navigate(path: string): void {
     if (shellHelpOpen) closeShellHelp();
@@ -1069,17 +1122,18 @@
           <div class="row-actions">
             <button type="button" onclick={() => void createDraft()}>Create draft</button>
             <button type="button" disabled={selectedPackDraft?.state !== "draft"} aria-describedby={selectedPackDraft?.state !== "draft" ? "draft-action-disabled" : undefined} onclick={() => void saveDraft()}>Save</button>
-            <button class="primary" type="button" disabled={selectedPackDraft?.state !== "draft" || !selectedPackDraft?.validation.valid} aria-describedby={selectedPackDraft?.state !== "draft" ? "draft-action-disabled" : !selectedPackDraft.validation.valid ? "playtest-disabled" : undefined} onclick={() => void playtestDraft()}>Save &amp; playtest</button>
+            <button class="primary" type="button" disabled={selectedPackDraft?.state !== "draft" || packLintState !== "ready" || !packBufferValidation?.valid} aria-describedby={selectedPackDraft?.state !== "draft" ? "draft-action-disabled" : packLintState !== "ready" || !packBufferValidation?.valid ? "playtest-disabled" : undefined} onclick={() => void playtestDraft()}>Save &amp; playtest</button>
             <button type="button" disabled={selectedPackRegistrationBlock !== undefined} aria-describedby={selectedPackRegistrationBlock !== undefined ? "register-disabled" : "pack-publication-retention"} onclick={() => void registerDraft()}>Register community pack</button>
             <button type="button" disabled={selectedPackDraft?.state !== "draft"} aria-describedby={selectedPackDraft?.state !== "draft" ? "draft-action-disabled" : undefined} onclick={() => { if (selectedPackDraft) withdrawConfirmId = selectedPackDraft.id; }}>Withdraw…</button>
           </div>
           {#if selectedPackDraft?.state !== "draft"}<p id="draft-action-disabled" class="honest">{selectedPackDraft ? `This draft is ${selectedPackDraft.state}; its saved bytes remain read-only.` : "Select or create a draft first."}</p>{/if}
-          {#if selectedPackDraft?.state === "draft" && !selectedPackDraft.validation.valid}<p id="playtest-disabled" class="honest">Fix the listed validation errors before the real run can start.</p>{/if}
+          {#if selectedPackDraft?.state === "draft" && (packLintState !== "ready" || !packBufferValidation?.valid)}<p id="playtest-disabled" class="honest">{packLintState === "waiting" ? "Waiting for you to pause typing…" : packLintState === "checking" ? "Checking these unsaved bytes…" : packLintState === "unavailable" ? "Live validation is unavailable; saving remains possible." : "Fix the listed validation errors before the real run can start."}</p>{/if}
           {#if selectedPackRegistrationBlock !== undefined}<p id="register-disabled" class="honest">{selectedPackRegistrationBlock}</p>{/if}
           {#if selectedPackDraft}<p id="pack-publication-retention" class="honest">Playtesting stays private and preserves the tested bytes. Registration publishes immutable document bytes, authored prose, licence, and attribution; those remain available with “deleted account” attribution if you later delete your account.</p>{/if}
           {#if selectedPackDraft && withdrawConfirmId === selectedPackDraft.id}<aside class="deletion-card"><h3>Withdraw this draft?</h3><p>It becomes read-only and cannot be registered. Existing private playtest runs keep their exact tested bytes.</p><div class="row-actions"><button type="button" onclick={() => void withdrawDraft(selectedPackDraft.id)}>Confirm withdrawal</button><button type="button" onclick={() => withdrawConfirmId = undefined}>Cancel</button></div></aside>{/if}
           {#if studioActionError}<p role="alert">{studioActionError}</p>{/if}
-          {#if selectedPackDraft}<ul>{#each selectedPackDraft.validation.issues as issue}<li><code>{issue.path}</code> {issue.code}: {issue.message}</li>{:else}<li>Validation clean.</li>{/each}</ul>{/if}
+          {#if packLintError}<p role="alert">{packLintError}</p>{/if}
+          {#if selectedPackDraft && displayedPackValidation}<ul aria-label="Pack validation results">{#each displayedPackValidation.issues as issue}<li><code>{issue.path}</code> {issue.code}: {issue.message}</li>{:else}<li>{packLintState === "ready" ? "Unsaved bytes are validation clean." : "Saved bytes are validation clean."}</li>{/each}</ul>{/if}
         </section>
       </div>
       <p class="honest">Community registration does not make a pack official. Official packs enter through git and the deployment image.</p>
