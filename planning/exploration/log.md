@@ -7818,3 +7818,16 @@ preserving headers and every mainline/variation move. The stored source note sta
 **Verification:** a fixture containing chapter prose, mainline and variation comments, symbolic and
 numeric glyphs, and a `%cal` drawing retains both branches and none of the annotations. The focused
 nine-test import suite and server typecheck pass. AUT-a15 and [[D1557]] close.
+
+## 2026-08-25 — Studio exposes dead vocabulary and unsupported policy declarations
+
+**What landed:** the public shape and principle summaries now count the served packs that reference
+each entry. The count normalises both accepted shape-reference forms and de-duplicates repeated
+references inside one pack. The Create route groups zero-use principles, zero-use shapes, and policy
+modes the runtime declares unavailable, retaining each declared reason and making clear that unused
+does not mean invalid.
+
+**Verification:** a pure vocabulary fixture proves per-pack de-duplication; production application
+tests prove both catalogues carry derived counts; and a mounted `/create` test proves an author sees
+only zero-use entries plus the unsupported-mode reason. Sixty-one focused tests pass, with server and
+web typechecks clean. AUT-a12 and [[D1558]] close.

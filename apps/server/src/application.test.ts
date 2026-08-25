@@ -73,8 +73,8 @@ describe("development application mock opponent", () => {
     await new Promise<void>((resolve, reject) => { application!.server.once("error", reject); application!.server.listen(0, "127.0.0.1", resolve); });
     const address = application.server.address() as AddressInfo;
     const origin = `http://127.0.0.1:${address.port}`;
-    const summaries = (await (await fetch(`${origin}/shapes`)).json()) as { shapes: { id: string; channel: string }[] };
-    expect(summaries.shapes).toEqual(expect.arrayContaining([expect.objectContaining({ id: "carlsbad", channel: "official" })]));
+    const summaries = (await (await fetch(`${origin}/shapes`)).json()) as { shapes: { id: string; channel: string; usedByPacks: number }[] };
+    expect(summaries.shapes).toEqual(expect.arrayContaining([expect.objectContaining({ id: "carlsbad", channel: "official", usedByPacks: expect.any(Number) })]));
     const detail = await fetch(`${origin}/shapes/carlsbad`);
     expect(detail.status).toBe(200); expect(detail.headers.get("x-shape-digest")).toMatch(/^sha256:/);
     expect(await detail.json()).toMatchObject({ id: "carlsbad", channel: "official" });
@@ -92,7 +92,7 @@ describe("development application mock opponent", () => {
     const response = await fetch(`http://127.0.0.1:${address.port}/principles`);
     expect(response.status).toBe(200);
     expect(response.headers.get("content-type")).toContain("application/json");
-    const body = await response.json() as { principles: { id: string; name: string; phases: string[]; licence: string }[] };
+    const body = await response.json() as { principles: { id: string; name: string; phases: string[]; licence: string; usedByPacks: number }[] };
     expect(body.principles.length).toBeGreaterThan(0);
     expect(body.principles.map((principle) => principle.id)).toEqual(
       [...body.principles.map((principle) => principle.id)].sort(),
@@ -102,6 +102,7 @@ describe("development application mock opponent", () => {
       name: expect.any(String),
       phases: expect.any(Array),
       licence: expect.any(String),
+      usedByPacks: expect.any(Number),
     }));
   });
 

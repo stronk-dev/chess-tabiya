@@ -80,6 +80,7 @@ export type SurfaceCapabilities = Readonly<
 export interface Capabilities {
   readonly engines: readonly EngineIdentity[];
   readonly policyModes: readonly OpponentPolicyMode[];
+  readonly unsupportedPolicyModes: readonly { readonly mode: string; readonly reason: string }[];
   readonly feedbackPolicies: readonly FeedbackPolicy[];
   readonly tempoVerdicts: readonly string[];
   readonly tempoGradeable: readonly string[];
@@ -348,6 +349,7 @@ export class EngineCapabilities implements CapabilitiesProvider {
           : mode === "practical_resistance"
             ? providerState.tablebase !== "none" && providerState.opponent !== "none"
             : true)),
+      unsupportedPolicyModes: DECLARED_UNIMPLEMENTED_POLICY_MODES,
       feedbackPolicies: FEEDBACK_POLICIES,
       tempoVerdicts: TEMPO_VERDICTS,
       tempoGradeable: TEMPO_GRADEABLE_VERDICTS,

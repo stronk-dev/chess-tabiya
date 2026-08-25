@@ -61,6 +61,7 @@ import { reasoningMatchCheck, type ReasoningProposal } from "./reasoning.js";
 import { distillRun } from "./distill.js";
 import type { ClassroomService } from "./classroom.js";
 import type { PrincipleRegistry } from "./principle-registry.js";
+import { vocabularyUsage } from "./authoring-vocabulary.js";
 
 export type RestHandler = (request: Request) => Promise<Response>;
 
@@ -1014,11 +1015,13 @@ export function createRestHandler(
       if(request.method==="GET"&&shapeExport!==null){if(shapeStudio===undefined)throw new ServerError("STORAGE_FAILURE","Shape Studio is not configured");return json(200,shapeStudio.export(decodeURIComponent(shapeExport[1]!),authenticate()));}
       if (request.method === "GET" && url.pathname === "/shapes") {
         if (shapes === undefined) throw new ServerError("STORAGE_FAILURE", "Shape registry is not configured");
-        return json(200, { shapes: shapes.list() });
+        const usage = vocabularyUsage(service.packs().map((pack) => service.pack(pack.id).document));
+        return json(200, { shapes: shapes.list().map((shape) => ({ ...shape, usedByPacks: usage.shapes.get(shape.id) ?? 0 })) });
       }
       if (request.method === "GET" && url.pathname === "/principles") {
         if (principles === undefined) throw new ServerError("STORAGE_FAILURE", "Principle registry is not configured");
-        return json(200, { principles: principles.list() });
+        const usage = vocabularyUsage(service.packs().map((pack) => service.pack(pack.id).document));
+        return json(200, { principles: principles.list().map((principle) => ({ ...principle, usedByPacks: usage.principles.get(principle.id) ?? 0 })) });
       }
       if (request.method === "GET" && /^\/shapes\/[^/]+$/.test(url.pathname)) {
         if (shapes === undefined) throw new ServerError("STORAGE_FAILURE", "Shape registry is not configured");

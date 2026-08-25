@@ -70,6 +70,7 @@ const capabilities: Capabilities = {
     },
   ],
   policyModes: ["human_common", "strong_engine", "theory_strict"],
+  unsupportedPolicyModes: [],
   feedbackPolicies: ["delayed_checkpoint", "segment_end", "immediate_guard"],
   guardBasis: ["rules", "engine"],
   recordedReadingKinds: [],

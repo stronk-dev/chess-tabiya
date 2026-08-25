@@ -72,6 +72,7 @@ const capabilities: Capabilities = {
   evidenceManifest: { digest: "fixture", counts: { producers: 25, projections: 146, consumers: 25, bindings: 182, semanticEvents: 40, eligibility: 40, reasons: 15, selectionPolicies: 1 }, availability: [], bindings: [] },
   engines: [],
   policyModes: ["human_common"],
+  unsupportedPolicyModes: [],
   feedbackPolicies: ["delayed_checkpoint", "segment_end", "immediate_guard"],
   guardBasis: ["rules", "engine"],
   recordedReadingKinds: [],
@@ -606,6 +607,38 @@ describe("application shell", () => {
       [...document.querySelectorAll<HTMLButtonElement>("button")].find((button) => button.textContent === label)!.click();
       await vi.waitFor(() => expect(document.querySelector<HTMLElement>("p[role='alert']")?.textContent).toBe(message));
     }
+    await unmount(component);
+  });
+
+  it("shows live vocabulary usage and unavailable policies to pack authors", async () => {
+    history.replaceState(null, "", "/create");
+    const studioApi: DrillClientApi = {
+      ...api(),
+      async packDrafts() { return []; },
+      async shapeDrafts() { return []; },
+      async shapes() {
+        return [
+          { id: "used-shape", version: "1", digest, name: "Used shape", phases: ["middlegame"], licence: "CC-BY-SA-4.0", channel: "official", usedByPacks: 2 },
+          { id: "orphan-shape", version: "1", digest, name: "Unclaimed outpost", phases: ["middlegame"], licence: "CC-BY-SA-4.0", channel: "official", usedByPacks: 0 },
+        ];
+      },
+      async principles() {
+        return [{ id: "orphan-principle", version: "1", digest, name: "Loose principle", phases: ["middlegame"], licence: "CC-BY-SA-4.0", usedByPacks: 0 }];
+      },
+      async capabilities() {
+        return { ...capabilities, unsupportedPolicyModes: [{ mode: "plan_defense", reason: "No move selector implements this declared mode." }] };
+      },
+    };
+    const component = mount(App, { target: target(), props: { api: studioApi, router: new HistoryRouter(window), storage: new MemoryStorage() } });
+
+    await vi.waitFor(() => expect(document.querySelector("#vocabulary-status-title")?.textContent).toBe("Vocabulary status"));
+    const status = document.querySelector<HTMLElement>(".vocabulary-status")!;
+    expect(status.textContent).toContain("Loose principle");
+    expect(status.textContent).toContain("orphan-principle");
+    expect(status.textContent).toContain("Unclaimed outpost");
+    expect(status.textContent).not.toContain("Used shape");
+    expect(status.textContent).toContain("plan_defense");
+    expect(status.textContent).toContain("No move selector implements this declared mode.");
     await unmount(component);
   });
 

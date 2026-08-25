@@ -34,6 +34,8 @@
     type PackDraft,
     type PackValidation,
     type ShapeDraft,
+    type ShapeSummary,
+    type PrincipleSummary,
     type LiveSessionSummary,
     type LiveSessionDetail,
     type SessionJournalEntry,
@@ -127,6 +129,8 @@
   let packLintGeneration = 0;
   let withdrawConfirmId: string | undefined = $state();
   let shapeDrafts: readonly ShapeDraft[] = $state([]);
+  let authoringShapes: readonly ShapeSummary[] = $state([]);
+  let authoringPrinciples: readonly PrincipleSummary[] = $state([]);
   let shapeStudioJson = $state("");
   let selectedShapeDraftId: string | undefined = $state();
   let shapeProbeFen = $state("");
@@ -412,7 +416,13 @@
         ]);
         const pages=await Promise.all(repertoires.map(async(item)=>[item.id,await api.repertoireGaps?.(item.id)] as const));repertoirePages=Object.fromEntries(pages.filter((entry)=>entry[1]!==undefined)) as Record<string,RepertoireGapPage>;
       } else if (next.name === "create") {
-        [drafts, shapeDrafts] = await Promise.all([api.packDrafts?.() ?? Promise.resolve([]), api.shapeDrafts?.() ?? Promise.resolve([])]);
+        [drafts, shapeDrafts, authoringShapes, authoringPrinciples, capabilities] = await Promise.all([
+          api.packDrafts?.() ?? Promise.resolve([]),
+          api.shapeDrafts?.() ?? Promise.resolve([]),
+          api.shapes(),
+          api.principles?.() ?? Promise.resolve([]),
+          api.capabilities(),
+        ]);
       } else if (next.name === "live") {
         [liveSessions,runs,classrooms,packs]=await Promise.all([api.liveSessions?.()??Promise.resolve([]),api.runs(50,0),api.classrooms?.()??Promise.resolve([]),api.packs()]);
       } else if (next.name === "live-session") {
@@ -1218,6 +1228,25 @@
         </aside>
       </div>
       <p class="honest">Community registration does not make a pack official. Official packs enter through git and the deployment image.</p>
+      <section class="vocabulary-status" aria-labelledby="vocabulary-status-title">
+        <p class="eyebrow">Authoring capabilities</p>
+        <h2 id="vocabulary-status-title">Vocabulary status</h2>
+        <p>These counts come from the packs served right now. An unused entry is available but has no pack consumer; an unavailable policy is declared by the runtime but cannot be selected.</p>
+        <div class="vocabulary-status-grid">
+          <section aria-labelledby="unused-principles-title">
+            <h3 id="unused-principles-title">Unused principles</h3>
+            <ul>{#each authoringPrinciples.filter((principle) => principle.usedByPacks === 0) as principle}<li><strong>{principle.name}</strong> <code>{principle.id}</code></li>{:else}<li>Every registered principle is used by a served pack.</li>{/each}</ul>
+          </section>
+          <section aria-labelledby="unused-shapes-title">
+            <h3 id="unused-shapes-title">Unused shapes</h3>
+            <ul>{#each authoringShapes.filter((shape) => shape.usedByPacks === 0) as shape}<li><strong>{shape.name}</strong> <code>{shape.id}</code></li>{:else}<li>Every registered shape is used by a served pack.</li>{/each}</ul>
+          </section>
+          <section aria-labelledby="unavailable-policies-title">
+            <h3 id="unavailable-policies-title">Unavailable run policies</h3>
+            <ul>{#each capabilities?.unsupportedPolicyModes ?? [] as policy}<li><code>{policy.mode}</code> — {policy.reason}</li>{:else}<li>No declared policy modes are unavailable.</li>{/each}</ul>
+          </section>
+        </div>
+      </section>
       <h2>Shape library editor</h2>
       <div class="studio-grid">
         <aside aria-label="Your shape drafts">
@@ -1416,6 +1445,11 @@
   .validation-sections ul { margin: 0; padding-inline-start: 1.2rem; }
   .graduation-column { max-height: min(72dvh, 52rem); padding: 0.8rem; border: 1px solid var(--line); border-radius: 0.8rem; background: var(--panel); }
   .graduation-column h2 { margin: 0; font: 600 1.2rem var(--display-font); }
+  .vocabulary-status { margin-block: 1rem; padding: 1rem; border: 1px solid var(--line); border-radius: 0.8rem; background: var(--panel); }
+  .vocabulary-status > h2, .vocabulary-status h3 { margin: 0; }
+  .vocabulary-status-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1rem; }
+  .vocabulary-status-grid section { min-width: 0; }
+  .vocabulary-status-grid ul { margin-bottom: 0; padding-left: 1.2rem; overflow-wrap: anywhere; }
   .graduation-list { display: grid; gap: 0.6rem; margin: 0; padding: 0; list-style: none; }
   .graduation-list li { display: grid; gap: 0.25rem; padding: 0.65rem; border: 1px solid var(--line); border-radius: 0.55rem; }
   .graduation-list li.blocking { border-color: var(--danger); }
@@ -1436,7 +1470,7 @@
     .live-wall article { grid-template-columns: 5rem minmax(0, 1fr); }
     .live-wall article > button { grid-column: 1 / -1; }
     .mini-board { inline-size: 5rem; block-size: 5rem; }
-    .studio-grid, .live-overlay { grid-template-columns: 1fr; }
+    .studio-grid, .vocabulary-status-grid, .live-overlay { grid-template-columns: 1fr; }
     .row-actions { flex-wrap: wrap; }
   }
 </style>

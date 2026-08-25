@@ -2354,17 +2354,21 @@
     {
       "id": "AUT-a12",
       "sourceState": "queued",
-      "state": "queued",
+      "state": "completed",
       "capability": "theory_content",
       "owner": "content-and-theory",
-      "assignment": "capability:theory_content",
+      "assignment": "closed",
       "sourceDocument": "ux-authoring-and-library.md",
       "sourceSection": "§6 D4",
       "sourceHeading": "Authoring and library — `ux-authoring-and-library.md`",
       "summary": "The studio states its dead entries: 1 orphan principle, 4 orphan shapes, unimplemented enum values",
       "legacyRoute": "none",
       "note": "`capabilities.ts` already declares it",
-      "sourceDigest": "sha256:31409d1686e245ee88e2e5cb136f8a6b29626c409ba520b5bf6a5534c0a4791f"
+      "sourceDigest": "sha256:31409d1686e245ee88e2e5cb136f8a6b29626c409ba520b5bf6a5534c0a4791f",
+      "completion": {
+        "completedOn": "2026-08-25",
+        "evidence": "Studio derives per-pack usage for served principles/shapes and renders declared unsupported run modes; production routes, mounted UI, focused suites, server/web typechecks."
+      }
     },
     {
       "id": "AUT-a13",

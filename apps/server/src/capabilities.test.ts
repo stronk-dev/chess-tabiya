@@ -126,6 +126,10 @@ describe("engine capabilities", () => {
       expect(await response.json()).toEqual({
         engines: [identities["stockfish-analysis"], identities["maia-5m"]],
         policyModes: ["human_common", "strong_engine", "theory_strict", "perfect_tablebase", "practical_resistance"],
+        unsupportedPolicyModes: [
+          { mode: "plan_defense", reason: expect.any(String) },
+          { mode: "human_external", reason: expect.any(String) },
+        ],
         feedbackPolicies: ["delayed_checkpoint", "segment_end", "immediate_guard"],
         tempoVerdicts: ["unopened", "open", "in_time", "over_budget", "too_slow", "outpaced", "premature"],
         tempoGradeable: ["in_time", "over_budget", "too_slow", "premature", "outpaced"],

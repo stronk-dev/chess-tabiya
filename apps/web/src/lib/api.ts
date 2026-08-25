@@ -55,6 +55,7 @@ export interface ShapeSummary {
   readonly licence: string;
   readonly channel: "official" | "community";
   readonly publisherHandle?: string;
+  readonly usedByPacks: number;
 }
 
 export interface PrincipleSummary {
@@ -64,6 +65,7 @@ export interface PrincipleSummary {
   readonly name: string;
   readonly phases: readonly ("opening" | "middlegame" | "endgame")[];
   readonly licence: string;
+  readonly usedByPacks: number;
 }
 
 export type ShapeEntryView = ShapeEntryDefinition & {
@@ -426,6 +428,10 @@ export interface Capabilities {
     | "perfect_tablebase"
     | "practical_resistance"
   )[];
+  readonly unsupportedPolicyModes: readonly {
+    readonly mode: string;
+    readonly reason: string;
+  }[];
   readonly feedbackPolicies: readonly (
     | "delayed_checkpoint"
     | "segment_end"

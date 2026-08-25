@@ -10,6 +10,13 @@ shape, principle, and sibling-pack lookups. Unknown or off-phase principles and 
 unproven `variantOf` relations therefore fail in Studio instead of appearing clean until a later
 CLI check.
 
+Studio also projects the vocabulary's current reach instead of making an author discover dead
+entries by reading registries. `GET /shapes` and `GET /principles` derive `usedByPacks` from the
+documents served by the run service, counting each reference at most once per pack. The Create
+route lists zero-use shapes and principles without treating them as invalid. It separately renders
+the runtime's declared unsupported policy modes and their reasons; these are unavailable
+capabilities, not merely unused content.
+
 ## Sources and publication channels
 
 Packs loaded from git, the image, or an operator's development draft path are `official`.
