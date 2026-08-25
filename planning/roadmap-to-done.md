@@ -212,6 +212,8 @@ counter-cases and honest empties. Runtime ships an allow-listed immutable conten
 
 Primary RFCs: `graduation-clearance`, `pack-population-provenance`,
 `theory-knowledge-pipeline`, `theory-drill-current-joins`, `famous-games`. UX owner: AUT items.
+Owner-blocked fork: [[D1562]] / AUT-a9 waits on whether the Create position door funds a board;
+the four-door chooser must not ship as a boardless placeholder while that decision is open.
 
 ### 7. Human-like bots, personalities, roster, and bot events
 

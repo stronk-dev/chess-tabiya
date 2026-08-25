@@ -2754,7 +2754,7 @@
     {
       "id": "AUT-a9",
       "sourceState": "queued",
-      "state": "queued",
+      "state": "blocked_owner",
       "capability": "theory_content",
       "owner": "content-and-theory",
       "assignment": "capability:theory_content",

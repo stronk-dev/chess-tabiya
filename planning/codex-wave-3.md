@@ -375,7 +375,7 @@ the index says *trivial*, *one string*, *one line* or *two lines* is an afternoo
 - **AUT-a6** (§3 A3) — Derive the version string from the schema `$id`. The studio's only instructional string names format **0.8**; the shipped schema is **0.27**
 - **AUT-a7** (§3 A4) 🏆 — Ask the author for a title instead of hardcoding *"Distilled rehearsal"* on every distilled draft
 - **AUT-a8** (§8 F1) — The graduation blocker list becomes the studio's primary right-hand column
-- **AUT-a9** (§3 A1/A2) — `/create` opens on a four-door chooser (position · game · run · existing pack); the fourth door produces a ten-required-field scaffold with placeholders rather than an empty string
+- **AUT-a9** (§3 A1/A2) `[blocked-owner: D1562 / dossier decision 4]` — `/create` opens on a four-door chooser (position · game · run · existing pack); the fourth door produces a ten-required-field scaffold with placeholders rather than an empty string
 - **AUT-a10** (§9 G1) — The one-FEN probe becomes a corpus preview — *fires on N of M authored positions*, each opening a board
 - **AUT-a11** (§6 D2) — Every registry-backed field becomes a picker showing name and statement, never a text input
 - **AUT-a12** (§6 D4) — The studio states its dead entries: 1 orphan principle, 4 orphan shapes, unimplemented enum values

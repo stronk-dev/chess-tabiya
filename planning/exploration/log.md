@@ -7871,3 +7871,9 @@ require the principle statement. A mounted Studio test chooses a shape, changes 
 selects a principle after reading its statement, and verifies exact JSON bytes. Nineteen focused
 web tests and thirteen registry/application tests pass; server and web typechecks are clean.
 AUT-a11 and [[D1561]] close.
+
+## 2026-08-25 — The Create chooser stops pretending its board decision is settled
+
+**What changed:** AUT-a9 moved from queued to owner-blocked. Its own source requires owner decision
+4—whether authoring funds a board—before the position door can be specified. No partial chooser was
+built. [[D1562]] records the state mismatch; the expression builder AUT-a25 remains executable.
