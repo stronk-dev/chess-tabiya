@@ -147,6 +147,11 @@ if (missingBrowserTiers.length > 0) {
   failures.push(`browser CI workflow: missing named tiers: ${missingBrowserTiers.join(", ")}`);
 }
 
+const lefthook = await readText("lefthook.yml");
+if (!lefthook.includes("run: node tools/staged-process-contracts.mjs")) {
+  failures.push("lefthook: process contracts must run from the staged Git-index snapshot");
+}
+
 const ciLocal = await readText("tools/ci-local.mjs");
 if (!ciLocal.includes('run("make", ["verify"]') || !ciLocal.includes('run("make", ["test-browser-ci"]')) {
   failures.push("local CI parity: expected make verify followed by make test-browser-ci");

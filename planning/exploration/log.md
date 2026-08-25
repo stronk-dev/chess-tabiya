@@ -7680,3 +7680,16 @@ that output. The executable tuple is 37 producers / 193 projections / 25 consume
 plus 67 semantic events / 67 eligibility rows / 15 refusal reasons / one policy; the prior
 35/189 figures were not retained merely because the unaffected consumer/binding counts still
 matched.
+
+## 2026-08-25 — Pre-commit process checks use the staged snapshot
+
+**What landed:** [[D1509]] closes. Lefthook's process-contract job no longer runs five governance
+tools against the shared working tree. One runner materializes the complete Git index into an
+isolated temporary directory and runs register, status, work, roadmap and intent parity there.
+Ordinary `make` targets keep their working-tree semantics, so developers can still inspect work in
+progress without making another worker's unstaged migration or RFC bytes part of a commit gate.
+
+**Verification:** the permanent Git fixture stages one tracked value, then writes a conflicting
+unstaged value and an untracked file; the snapshot contains only the staged value. The runner's
+target set is exact, Lefthook validation passes, and scaffold verification now fails if the hook is
+changed back to a working-tree command.

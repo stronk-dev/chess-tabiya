@@ -6,7 +6,7 @@ is not proof that the production application routes an endpoint.
 
 | Tier | Command | Owns | Must not substitute for |
 |---|---|---|---|
-| Fast commit checks | Lefthook `pre-commit` | Staged diff hygiene and affected package/process checks | Full CI or a push gate |
+| Fast commit checks | Lefthook `pre-commit` | Staged diff hygiene, affected package checks, and process contracts over an isolated Git-index snapshot | Full CI or a push gate |
 | Software contracts | `make verify-software` | Types, framework-free reducers/selectors, server contracts, schemas and compiled runtime manifests | Real-corpus acceptance, process ledgers, browser behavior or deployed routing |
 | Repository governance | `make verify-governance` | RFC/register/work/roadmap/intent consistency, a source-sealed 1.0 status receipt, and test-tier ownership | Product behavior, content quality or release proof |
 | Real-content contracts | `make verify-content` | Schema and application compatibility against committed draft/pack/candidate bytes | Graduation readiness, authored chess judgement or software contracts already expressible with synthetic fixtures |
@@ -21,6 +21,13 @@ is not proof that the production application routes an endpoint.
 runs the named browser tiers separately so the failing step says whether the regression is a core
 journey, real-content integration, or the interaction matrix. Traces, screenshots and the HTML
 report are uploaded when a browser tier fails.
+
+Pre-commit process checks intentionally do not read the shared working tree. The hook materializes
+the Git index and runs register, status, work, roadmap and intent checks inside that temporary
+snapshot. This makes the commit's staged bytes the unit under review and prevents an unrelated
+unstaged schema, migration or planning edit from another worker from blocking it. Direct
+`make register-check`, `make status-parity`, and related commands continue to inspect the working
+tree during development.
 
 Content is shipped product data and therefore still receives schema, provenance, compatibility and
 integration validation. Its exact prose is not pinned unless the wording itself is a declared public

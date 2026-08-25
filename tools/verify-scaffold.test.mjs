@@ -40,3 +40,12 @@ test("workflow command guard reports every missing tier", () => {
     ["make test-browser-content", "make test-browser-matrix"],
   );
 });
+
+test("hook command guard distinguishes the staged process-contract runner", () => {
+  assert.deepEqual(
+    missingRequiredText("run: make register-check\n", [
+      "run: node tools/staged-process-contracts.mjs",
+    ]),
+    ["run: node tools/staged-process-contracts.mjs"],
+  );
+});
