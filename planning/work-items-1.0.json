@@ -5519,10 +5519,10 @@
       "assignment": "capability:support",
       "sourceDocument": "ux-in-run.md",
       "sourceSection": "in-run §2.1",
-      "sourceHeading": "`rfc/hint-distance.md` — **draft, returned to research 2026-08-23**",
+      "sourceHeading": "`rfc/hint-distance.md` — **draft rebuilt 2026-08-26; awaiting independent buildability review**",
       "summary": "**The rung is the request, not a setting** — it advances on each request within a decision and resets at the next commitment, with the config field acting as a *ceiling* rather than a starting point",
       "legacyRoute": "ledger",
-      "sourceDigest": "sha256:9fbf87e835f1c7888356fb39e5b3d917503bb75347c2aa249e80aa1cd77ff202"
+      "sourceDigest": "sha256:a1c653d05e54db4d6bae31534c305c71ed80f1f61ac0e062621cf352dfbd6aaa"
     },
     {
       "id": "INR-c13",
@@ -5533,10 +5533,10 @@
       "assignment": "capability:support",
       "sourceDocument": "ux-in-run.md",
       "sourceSection": "in-run §2.2",
-      "sourceHeading": "`rfc/hint-distance.md` — **draft, returned to research 2026-08-23**",
+      "sourceHeading": "`rfc/hint-distance.md` — **draft rebuilt 2026-08-26; awaiting independent buildability review**",
       "summary": "Each rung states what the next one would add, before you ask for it (*\"Name the piece\"*, then *\"Say how far away\"*)",
       "legacyRoute": "none",
-      "sourceDigest": "sha256:646acbf18e34272eca587e6eb36b463d85915b76e439c7d68bdae4c477f415aa"
+      "sourceDigest": "sha256:fc946e5ee64f05eeb74a4fd7a9f275652cbf178f6f22b25a65226c4e9fc35907"
     },
     {
       "id": "INR-c14",
@@ -5547,10 +5547,10 @@
       "assignment": "capability:support",
       "sourceDocument": "ux-in-run.md",
       "sourceSection": "in-run §2.4",
-      "sourceHeading": "`rfc/hint-distance.md` — **draft, returned to research 2026-08-23**",
+      "sourceHeading": "`rfc/hint-distance.md` — **draft rebuilt 2026-08-26; awaiting independent buildability review**",
       "summary": "Rung 0 (`pattern`) is the default first press and should be generous",
       "legacyRoute": "none",
-      "sourceDigest": "sha256:38d714478cca8a592824a5ed2fda6f72bdadd8dd0416edd4de9642a201a2b03c"
+      "sourceDigest": "sha256:ad14b97438bcf4e39c6269b178ecf4603d280bd6ce7268b14c0956188752b15f"
     },
     {
       "id": "INR-c15",

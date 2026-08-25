@@ -188,6 +188,12 @@ rather than inventing another producer.
 [[D1569]] keeps the guided-hint producer family literal: its module binding imports the measured
 per-family horizon registry only after the selector/redaction gate, never a generic or wildcard
 projection that launders different derivations into one id.
+The 2026-08-26 rebuild now makes that gate concrete: one operator horizon per measured family,
+one learner disclosure per family×rung, physical omission of higher-rung bytes, and one
+per-decision Hint/A-little-more interaction. [[D1582]] keeps the F1 trust boundary honest across
+REST: admitted views remain server-local and terminate in a closed digest-checked delivery receipt.
+The rebuild still awaits independent review, the shared packet, and [[D1581]]'s AssistanceConfig
+register before implementation; no UX work may substitute raw engine/PV strings while it waits.
 [[D1570]]–[[D1576]] return the shared candidate packet to buildability research before it becomes
 the denominator for bots, hints and Review: bind or demote the packet in F1, retain literal engine
 evidence in scored joins, name the execution/cache owner, make cache identities coherent and

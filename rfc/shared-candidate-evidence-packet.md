@@ -10,7 +10,7 @@
 - **Design refs:** `design/05-in-run-experience.md` §5 (*"detection is cheap, significance is not"* — the split this RFC executes in code: one factual population, separate opinionated derivations) and §3b-i (*"The LLM is the voice, never the source"*); `design/03-product-breadth.md` §Play (opponent selection) and §Intelligence and explanation
 - **Exploration gate:** [[D1071]] 📊 and [[D1072]] 🐞 — research complete 2026-08-23, dossier `design/research/shared-candidate-evidence-packet.md`, executable falsifier `tools/d1071-candidate-packet-harness/` under `rfc/0000-rfc-process.md` §Exploration gate. [[D1330]]'s per-dossier classification of all 118 research artifacts ranked this **live debt rank 6**: the population finding was partially adopted by `evidence-move-selector.md`, *"but the packet itself is that RFC's Discharge D2, unbuilt"*
 - **Depends on:** **accepted** `rfc/exact-legal-mobility.md` — it ships the single actual-turn move authority (`exactLegalMoves`/`exactLegalMoveMap`), `MOVE_IDENTITY_CONVENTION`, `MOVE_DESTINATION_CONVENTION` and the `rules.mobility.reading.legal_moves@1` projection, which is this packet's legal-convention field rather than a new one (§4.2). Implemented F1 evidence contract (`rfc/archive/evidence-contract-manifest.md`, `rfc/archive/semantic-evidence-selection.md`) and the compiled catalogue at HEAD
-- **Parent / amends:** amends the `SemanticSelectionInput` contract in `packages/runtime/src/semantic-evidence.ts` (§3 — the caller-supplied alternative population becomes a compiled packet), the `derived.opponent.candidate_feature_vector@1` declaration in `packages/runtime/src/evidence-catalog.ts:712-723` (§8.2 — its engine dependency becomes consumed rather than declared), and `rfc/review-evidence-compiler.md`'s engine-point source (§8.3 — a node-free position evaluation becomes the shared source and Review derives its node-scoped point). **Discharges `rfc/hint-distance.md` D5 on landing**; that row is its author's to flip
+- **Parent / amends:** amends the `SemanticSelectionInput` contract in `packages/runtime/src/semantic-evidence.ts` (§3 — the caller-supplied alternative population becomes a compiled packet), the `derived.opponent.candidate_feature_vector@1` declaration in `packages/runtime/src/evidence-catalog.ts:712-723` (§8.2 — its engine dependency becomes consumed rather than declared), and `rfc/review-evidence-compiler.md`'s engine-point source (§8.3 — a node-free position evaluation becomes the shared source and Review derives its node-scoped point). **Discharges rebuilt `rfc/hint-distance.md` D2 on landing**; that row is its author's to flip
 - **Supersedes / superseded by:** —
 - **Planning:** `planning/evidence-foundation-ux/` (once implementing)
 
@@ -176,10 +176,10 @@ specifies.
    per promoting move (`legal-moves.ts:42-46`). `[V]` On the initial position the two agree at 20, so
    the 2/20 finding stands exactly. On any position with a promotion available the harness would
    **understate** the legal population and therefore **understate** the completeness gap it measures.
-6. **`hint-distance.md:593` cites this dossier as [[D1330]] rank 5.** It is **rank 6**
+6. **The returned `hint-distance.md:593` cited this dossier as [[D1330]] rank 5.** It is **rank 6**
    (`planning/platform-alignment/dossier-remainder.md:232`); rank 5 is `theory-drill-current-joins`.
-   `[V]` Off by one, in a row that otherwise points at exactly the right document. Not repaired here
-   — that file belongs to a concurrent draft — and recorded for its author.
+   `[V]` Off by one, in a row that otherwise pointed at exactly the right document. The 2026-08-26
+   rebuild removed that stale rank claim and consumes this RFC by name; D4 is discharged.
 7. **The ledger head at drafting was D1384, not D1354 and not D1373.** The drafting brief stated
    D1354; an earlier version of this correction stated D1373, which was itself wrong. Re-derived
    from the drafting commit: `git show 3a291abb:design/BACKLOG.md` has a maximum row id of
@@ -674,11 +674,13 @@ a scored search output and is not the exact legal population**, and criterion 15
 rather than conventional: a MultiPV result presented as the population fails.
 
 **§7.2 — The semantic-horizon hint.** Inputs: the packet at each searched PV node, plus one sealed
-versioned PV. Output: the chosen eligible event with its target, actor, occurrence ply and move,
-subject to `hint-distance.md`'s rung grammar. Abstains when the PV is absent or illegal, when the
-packet is missing, when the selector finds no eligible event, or when the budget expires. **Any reach
-claim made over this join is a range, not a number** ([[D1352]]): 56/64 and 46/64 are upper bounds
-under the R2-derived candidate policy.
+versioned PV. Output: one operator-only, relation-safe occurrence retaining exact search, packet,
+edge, source-occurrence, actor and target identities. `hint-distance.md` then compiles a separate
+family/rung disclosure whose lower bytes cannot contain the move. Abstains when the PV is absent or
+illegal, when a packet is missing, when the measured family/sign/relation selector finds no eligible
+occurrence, or when the budget expires. The immutable D1397 receipt—not the superseded D1066 range—
+is the drift authority: strict-direct 10/64 in both arms; qualified root-followup 16/64 depth-12 and
+10/64 at 100 ms; 35/150 admitted occurrences and zero opponent admissions.
 
 **§7.3 — Review opportunity and avoidance.** Inputs: the packet at the played root, plus the sealed
 played edge. Output: the played event and the **literal** alternative denominator — `|candidates| −
@@ -1084,7 +1086,7 @@ contradicted.
 | D1 | Repair the shipped `OpponentSelector` cache: key it on the packet identity plus the policy derivation rather than on a full-history hash, and bound it (§6.2) | codex | `planning/evidence-foundation-ux/` | |
 | D2 | Measure end-to-end cold and warm latency on one computation and record it beside the D1071 baseline as a distinct measurement; measure both cache scopes and preserve the equal-item falsifier (§0.4, criterion 12) | codex | `planning/evidence-foundation-ux/d1579-candidate-packet-node24-envelope.json` | discharged 2026-08-26 for the pre-implementation envelope; implementation re-runs the same receipt on production symbols |
 | D3 | Register a production hint selection policy; only `research.r2_candidate@1` exists and it is `disposition: "experimental"` (§10 hold 3) | claude | `rfc/hint-distance.md` | |
-| D4 | Correct `hint-distance.md:593`'s [[D1330]] rank citation from 5 to 6 (§0.6) | claude | `rfc/hint-distance.md` | |
+| D4 | Correct the returned `hint-distance.md:593` [[D1330]] rank citation (§0.6) | codex | rebuilt `rfc/hint-distance.md` | discharged 2026-08-26 |
 | D5 | Fold the packet's population into `review-evidence-compiler.md`'s opportunity/avoidance denominator when that RFC implements (§2.5) | claude | `planning/evidence-foundation-ux/` | |
 | D6 | Tier-2 variant support: the collectors are standard-chess-shaped and two are defined against the standard back rank; this is `evidence-move-selector.md` D3's repair, and the packet inherits it (§2.2, §10 hold 1) | codex | `planning/platform-alignment/bot-policy/` | |
 | D7 | A serialised, cross-process packet form with a receipt and a re-seal on admission, **if** ever wanted — refused here, exit named (§6.5, §11.5) | OWNER | `rfc/README.md` | |

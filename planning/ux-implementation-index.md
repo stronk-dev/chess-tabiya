@@ -677,7 +677,7 @@ RFC status read from `rfc/README.md` at HEAD.
 | CLP-c4 | core-loop §12 rec 6 | `enum_state` over a total label registry for the compare and rail vocabularies; stop re-deriving `outcome` by rescanning `run.events` | ledger | |
 | CLP-c5 | core-loop §5 B4 | Retire the rail's bookkeeping header; show the attempts and which one you are in | none | |
 
-### `rfc/hint-distance.md` — **draft, returned to research 2026-08-23**
+### `rfc/hint-distance.md` — **draft rebuilt 2026-08-26; awaiting independent buildability review**
 
 | id | § | what it is | queued? | 🏆 |
 |---|---|---|---|---|

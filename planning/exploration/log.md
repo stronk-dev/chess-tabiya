@@ -7997,3 +7997,26 @@ neither this research nor the RFC manufactures a release-pass threshold.
 **Next:** independent cross-review of the completed buildability/cache amendment. On acceptance,
 implement the one packet/service and re-run this exact Node-24 receipt over production symbols;
 F12 separately owes the numeric appliance-tier gate.
+
+## 2026-08-26 — Hint-distance rebuilt from the measured selector and sealed at the wire boundary
+
+Rebuilt `rfc/hint-distance.md` after the D1363/D1397 relation-safe selector work. The document now
+uses the measured seven-family/status table and exact search, packet and source-occurrence
+identities; separates one operator-only horizon per family from one learner disclosure per
+family×rung; and specifies physical omission of higher-rung bytes. The learner interaction is one
+per-decision **Hint / A little more** action while `AssistanceConfig.hintDistance` is an Advanced
+or preset ceiling. Engine-semantic Hint, theory breadcrumb, structure nudge and tablebase/endgame
+presentation remain separate modules, so one unavailable source cannot silence the others.
+
+**Corrected during self-review:** the first rebuild put `RenderedEvidenceView` in a REST response.
+That cannot work: F1's symbol/private-`WeakSet` seal is process-local and disappears in JSON.
+[[D1582]] records the defect. The server now retains admission, rendering, provider input and voice
+checking in-process, then emits a closed digest-checked delivery receipt containing only the
+selected rung's learner bytes; the browser validates the wire contract and never claims an F1
+seal. [[D1581]] separately records that the two RFCs changing versioned `AssistanceConfig` have no
+shared-resource register.
+
+**Next:** run the independent buildability review in
+`planning/evidence-foundation-ux/hint-distance-rebuild-review-handoff.md`. Implementation remains
+blocked on that decision, the accepted/implemented shared candidate packet, the AssistanceConfig
+register, and the integrated Node-24 production-path latency receipt.
