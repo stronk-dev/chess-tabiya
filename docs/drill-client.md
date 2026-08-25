@@ -22,8 +22,12 @@ that fails on its first opponent turn.
 
 Each accepted document receives a server-computed SHA-256 digest over its RFC
 8785 canonical form. `GET /packs` returns immutable summaries containing ID,
-version, digest, title, mode, nullable phase, difficulty, and review status.
-The library renders a missing phase as `unclassified`. `GET /packs/:id`
+version, digest, title, mode, nullable phase, difficulty, authored objective summary, concepts,
+channel, publisher identity when present, and review status. These are catalogue fields only;
+they do not release authored feedback. The library searches title, objective and concepts,
+filters by phase and the declared online-rapid window, and translates the four storage modes into
+learner-facing rehearsal verbs. Provenance remains visible in each card's footer instead of
+occupying its leading metadata row. `GET /packs/:id`
 returns a browser-safe projection and the complete stored document's digest in
 `x-pack-digest`; missing packs are typed `PACK_NOT_FOUND` errors. The projection
 contains identity and catalogue fields, provenance, start, objective type,

@@ -2,7 +2,7 @@
 
 ## Toolchain
 
-- Node.js 24 or newer.
+- Node.js 24, matching `.node-version` and CI exactly.
 - pnpm 11.18.0, pinned by the root package manifest.
 - TypeScript core packages shared by browser and Node consumers.
 - Svelte 5 + Vite for the web client.
@@ -60,6 +60,11 @@ make up
 make up-engines
 make down
 ```
+
+The Makefile selects Homebrew's `node@24` and Stockfish 18 installations when
+present. On other systems it uses PATH and the optional `SF_CMD` override. Normal
+development and parity checks therefore use the commands above directly; callers
+do not prepend toolchain-specific environment assignments.
 
 `make verify` is the aggregate local gate. GitHub presents its three owners separately:
 `make verify-software` runs types, synthetic/runtime contracts and compiled manifests;
@@ -135,8 +140,8 @@ Explicit extra draft paths remain development-only.
 `make up` starts the production bundle with the deterministic mock opponent.
 `make up-engines` adds the healthchecked Maia sidecar and uses Stockfish from
 the server image; `make down` stops either profile. The devcontainer references
-the same root Compose file and includes Stockfish, so its post-create gate can
-run `ENGINES_REQUIRED=1 make verify`.
+the same root Compose file and includes Stockfish, so its post-create gate runs
+the same `make verify` command as the host and CI.
 
 Tag releases build amd64/arm64 server and Maia images, publish both version and
 commit-SHA tags to GHCR, and attach a Compose file with digest-pinned images.

@@ -16,8 +16,8 @@ an explicit not-found view rather than crashing the application.
 
 | Route | Current surface |
 |---|---|
-| `/` | Home, including the most recent run's lease-aware resume card |
-| `/play` | Just Play position entry and registered pack list |
+| `/` | Home with the loop promise, lease-aware Continue card, due/open counts, direct first start, and one opening/middlegame/endgame thread |
+| `/play` | Named human-choice resistance ladder, strong-engine alternative, optional FEN, and the searchable phase/band pack catalogue |
 | `/play/run/:runId` | Live drill, branch, compare, and export context |
 | `/review` | Stored run history; opening a row returns to its live run context |
 | `/rating` | Server-shaped band-equivalent publication, permanent rated-win marks, disclosures, and whole-game result history |
@@ -45,6 +45,20 @@ application routes. A live `/play/run/:runId` is a focused full-viewport composi
 that global chrome with its own fixed run topbar; its Tabiya control exits back to Play, where the
 global navigation resumes. Standalone comparison is not a route: Review opens a run at
 `/play/run/:runId`, where the existing controller can project and compare it.
+
+Home is useful with or without history. With history it leads with Continue and preserves the
+lease-aware resume behavior. Without history it starts the first available rehearsal directly;
+it never renders an empty resume card or requires a second “Go to Play” click. Due schedules and
+open coach assignments render as counts with verbs, and phase starters reuse the same registered
+pack summaries as the catalogue. The product's commit → consequence → rewind → branch loop is
+stated above the first choice instead of being discoverable only after a run starts.
+
+The Play entry keeps workflow choices bounded. Human-like play uses the four named, calibrated
+Maia rungs already used by rated play and sends the selected `targetElo` into the run's opponent
+policy. Strong-engine play is a separate, explicitly non-human-like option and carries no Elo.
+The label states permanently that these rung numbers are not FIDE, Lichess, or Chess.com ratings.
+The pack catalogue filters client-side by phase, recorded online-rapid window and free text over
+title, concepts and authored objective; it can sort by curated order, title or difficulty.
 
 The measured record is deliberately separate from `/learn`: return scheduling remains an attempt
 history rather than a score. `/rating` renders only the publication already shaped by the server,

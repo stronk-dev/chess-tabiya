@@ -17,7 +17,7 @@ async function learner(browser: Browser, prefix: string): Promise<{
   await page.getByLabel("Handle").fill(handle);
   await page.getByLabel("Password").fill(PASSWORD);
   await page.getByRole("button", { name: "Register" }).click();
-  await expect(page.getByText("Choose a position worth returning to.")).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Choose the game you want to understand." })).toBeVisible();
   return { context, page, handle };
 }
 
@@ -52,7 +52,7 @@ async function play(page: Page, from: string, to: string, orientation: "white" |
 
 async function startPosition(page: Page): Promise<string> {
   await page.goto("/play");
-  await page.getByRole("button", { name: "Start game" }).click();
+  await page.getByRole("button", { name: "Start and keep the game" }).click();
   await expect(page.getByLabel("Chessboard")).toBeVisible();
   return decodeURIComponent(new URL(page.url()).pathname.split("/").at(-1)!);
 }

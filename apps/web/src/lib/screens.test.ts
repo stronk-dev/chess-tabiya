@@ -40,6 +40,7 @@ vi.mock("@lichess-org/chessground", () => ({
 import CompareView from "./CompareView.svelte";
 import CheckpointSheet from "./CheckpointSheet.svelte";
 import DrillScreen from "./DrillScreen.svelte";
+import JustPlayStarter from "./JustPlayStarter.svelte";
 import PackList from "./PackList.svelte";
 import type { PackSummary, ShapeEntryView } from "./api.js";
 import type {
@@ -500,6 +501,8 @@ describe("Layer 3 screens", () => {
       mode: pack.mode as string,
       phase: "opening",
       difficulty: pack.difficulty,
+      objectiveSummary: pack.objective.summary ?? pack.objective.type.replaceAll("_", " "),
+      concepts: pack.concepts ?? [],
       reviewStatus: "draft",
       channel: "community",
     };
@@ -509,10 +512,56 @@ describe("Layer 3 screens", () => {
     });
 
     expect(document.body.textContent).toContain("advanced club");
-    expect(document.body.textContent).toContain("unreviewed draft");
+    expect(document.body.textContent).toContain("draft");
+    expect(document.body.textContent).toContain(summary.objectiveSummary);
     expect(document.body.textContent).toContain("opening");
     document.querySelector<HTMLButtonElement>(".pack-card button")!.click();
     expect(onSelect).toHaveBeenCalledWith(pack.id);
+    await unmount(component);
+  });
+
+  it("filters the catalogue over authored objectives and keeps the empty state recoverable", async () => {
+    const opening: PackSummary = {
+      id: "najdorf", version: "0.27", digest: `sha256:${"b".repeat(64)}`,
+      title: "Najdorf English Attack", mode: "line", phase: "opening",
+      difficulty: { minOnlineRapid: 1800, maxOnlineRapid: 2200 },
+      objectiveSummary: "Continue beyond the opening fork.", concepts: ["sicilian-defense"],
+      reviewStatus: "draft", channel: "community",
+    };
+    const ending: PackSummary = {
+      id: "lucena", version: "0.27", digest: `sha256:${"c".repeat(64)}`,
+      title: "Lucena bridge", mode: "outcome", phase: "endgame",
+      difficulty: { minOnlineRapid: 1000, maxOnlineRapid: 1600 },
+      objectiveSummary: "Build the bridge and promote.", concepts: ["rook-ending"],
+      reviewStatus: "draft", channel: "community",
+    };
+    const component = mount(PackList, { target: target(), props: { packs: [opening, ending], onSelect: vi.fn() } });
+    const search = document.querySelector<HTMLInputElement>('input[type="search"]')!;
+    search.value = "rook-ending";
+    search.dispatchEvent(new Event("input", { bubbles: true }));
+    await tick();
+    expect(document.querySelectorAll(".pack-card")).toHaveLength(1);
+    expect(document.body.textContent).toContain("Lucena bridge");
+    document.querySelectorAll<HTMLButtonElement>(".phase-tabs button")[1]!.click();
+    await tick();
+    expect(document.body.textContent).toContain("No positions match those filters");
+    document.querySelector<HTMLButtonElement>(".empty button")!.click();
+    await tick();
+    expect(document.querySelectorAll(".pack-card")).toHaveLength(2);
+    await unmount(component);
+  });
+
+  it("starts Just Play with a named Maia rung and keeps strong-engine play distinct", async () => {
+    const onStart = vi.fn();
+    const component = mount(JustPlayStarter, { target: target(), props: { onStart } });
+    const radios = document.querySelectorAll<HTMLInputElement>('input[name="opponent"]');
+    radios[2]!.click();
+    document.querySelector<HTMLFormElement>(".just-play form")!.dispatchEvent(new SubmitEvent("submit", { bubbles: true, cancelable: true }));
+    expect(onStart).toHaveBeenLastCalledWith(expect.objectContaining({ mode: "human_common", targetElo: 1800 }));
+    radios[4]!.click();
+    document.querySelector<HTMLFormElement>(".just-play form")!.dispatchEvent(new SubmitEvent("submit", { bubbles: true, cancelable: true }));
+    expect(onStart).toHaveBeenLastCalledWith(expect.objectContaining({ mode: "strong_engine" }));
+    expect(onStart.mock.calls.at(-1)?.[0]).not.toHaveProperty("targetElo");
     await unmount(component);
   });
 

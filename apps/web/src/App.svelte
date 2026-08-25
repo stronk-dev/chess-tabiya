@@ -186,6 +186,13 @@
   });
 
   let recentRun = $derived(runs[0]);
+  let phaseStarters = $derived(
+    (["opening", "middlegame", "endgame"] as const).flatMap((phase) => {
+      const pack = packs.find((candidate) => candidate.phase === phase);
+      return pack === undefined ? [] : [pack];
+    }),
+  );
+  let openAssignments = $derived(assignedPacks.filter((assignment) => assignment.withdrawnAt === null));
   let selectedPackDraft = $derived(drafts.find((candidate) => candidate.id === selectedDraftId));
   let selectedPackRegistrationBlock = $derived(registrationBlockReason(selectedPackDraft));
   let runContext = $derived(
@@ -276,7 +283,14 @@
       controller.stopSession();
     }
     try {
-      if (next.name === "home" || next.name === "review") {
+      if (next.name === "home") {
+        [runs, packs, dueSchedules, assignedPacks] = await Promise.all([
+          api.runs(50, 0),
+          api.packs(),
+          api.dueProgress?.() ?? Promise.resolve([]),
+          api.assignments?.() ?? Promise.resolve([]),
+        ]);
+      } else if (next.name === "review") {
         runs = await api.runs(50, 0);
       } else if (next.name === "story") {
         const loaded = await Promise.all([refreshStory(next.runId, true), api.capabilities()]);
@@ -723,11 +737,12 @@
     <main class="shell-view"><h1>Something interrupted the route.</h1><p role="alert">{routeError}</p></main>
   {:else if route.name === "home"}
     <main class="shell-view home" aria-labelledby="home-title">
-      <p class="eyebrow">Tabiya / rehearsal workspace</p>
-      <h1 id="home-title">Return to the decision, not the answer.</h1>
+      <p class="eyebrow">Tabiya / play the consequence</p>
+      <h1 id="home-title">Do not just learn the move. Rehearse the game it creates.</h1>
+      <p class="home-lede">Play a position out. Rewind to the decision. Try it another way. Keep both attempts.</p>
       {#if recentRun}
         <section class="resume-card" aria-labelledby="resume-title">
-          <p class="eyebrow">Resume</p>
+          <p class="eyebrow">Continue</p>
           <h2 id="resume-title">{recentRun.title}</h2>
           <p>{recentRun.branchCount} {recentRun.branchCount === 1 ? "branch" : "branches"} · {recentRun.objectiveState} · {readableDate(recentRun.updatedAt)}</p>
           <p class="access">
@@ -737,9 +752,36 @@
           <button type="button" onclick={() => navigate(routePath({ name: "run", runId: recentRun.id }))}>Resume run</button>
         </section>
       {:else}
-        <p>No previous run yet. Start with a rehearsal pack.</p>
+        <section class="start-card" aria-labelledby="start-title">
+          <p class="eyebrow">Start here</p>
+          <h2 id="start-title">Choose one real position. Your attempt begins immediately.</h2>
+          {#if phaseStarters[0]}
+            <p>{phaseStarters[0].objectiveSummary}</p>
+            <button class="primary" type="button" onclick={() => controller.startPack(phaseStarters[0]!.id)}>Start the first rehearsal</button>
+          {:else}
+            <p>No rehearsal pack is available from this deployment.</p>
+          {/if}
+        </section>
       {/if}
-      <button class="primary" type="button" onclick={() => navigate("/play")}>Go to Play</button>
+      <section class="home-status" aria-labelledby="home-status-title">
+        <div><p class="eyebrow">Due and open</p><h2 id="home-status-title">What is waiting for you</h2></div>
+        <p><strong>{dueSchedules.length}</strong> {dueSchedules.length === 1 ? "rehearsal is" : "rehearsals are"} due</p>
+        <p><strong>{openAssignments.length}</strong> {openAssignments.length === 1 ? "coach assignment is" : "coach assignments are"} open</p>
+      </section>
+      {#if phaseStarters.length > 0}
+        <section class="phase-starters" aria-labelledby="phase-starters-title">
+          <div><p class="eyebrow">Pick up a thread</p><h2 id="phase-starters-title">Start from the phase you are working on.</h2></div>
+          {#each phaseStarters as pack}
+            <article>
+              <span>{pack.phase?.replaceAll("_", " ")}</span>
+              <h3>{pack.title}</h3>
+              <p>{pack.objectiveSummary}</p>
+              <button type="button" onclick={() => controller.startPack(pack.id)}>Start {pack.phase}</button>
+            </article>
+          {/each}
+        </section>
+      {/if}
+      <button type="button" onclick={() => navigate("/play")}>Browse every position and opponent</button>
     </main>
   {:else if route.name === "play"}
     <div class="play-surface">
@@ -1144,9 +1186,23 @@
   .shell-view > h1 { max-width: 18ch; margin: 0.4rem 0 1rem; font: 500 clamp(2.3rem, 6vw, 5rem)/0.96 var(--display-font); letter-spacing: -0.045em; }
   .eyebrow { color: var(--accent); font: 700 0.72rem/1.2 ui-monospace, monospace; letter-spacing: 0.12em; text-transform: uppercase; }
   .home > h1 { max-width: 15ch; }
-  .resume-card { max-width: 42rem; margin: 2.5rem 0 1rem; padding: 1.4rem; border: 1px solid var(--line); border-radius: 1rem; background: var(--panel); box-shadow: var(--shadow); }
+  .home-lede { max-width: 42rem; color: var(--muted); font-size: 1.1rem; }
+  .resume-card, .start-card { max-width: 42rem; margin: 2.5rem 0 1rem; padding: 1.4rem; border: 1px solid var(--line); border-radius: 1rem; background: var(--panel); box-shadow: var(--shadow); }
+  .start-card h2 { margin: .3rem 0 .6rem; font: 500 clamp(1.4rem, 3vw, 2rem) var(--display-font); }
   .resume-card h2, .item-list h2 { margin: 0.2rem 0; font: 500 1.5rem var(--display-font); }
   .resume-card p, .item-list p { color: var(--muted); }
+  .home-status { display: grid; grid-template-columns: minmax(14rem, 1fr) auto auto; gap: 1rem; align-items: end; margin-top: 2rem; padding: 1rem 0; border-block: 1px solid var(--line); }
+  .home-status h2, .phase-starters h2 { margin: .2rem 0; font: 500 1.5rem var(--display-font); }
+  .home-status p { margin: 0; }
+  .home-status strong { font: 500 2rem var(--display-font); }
+  .phase-starters { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: .75rem; margin: 2rem 0 1rem; }
+  .phase-starters > div { grid-column: 1 / -1; }
+  .phase-starters article { display: flex; flex-direction: column; min-height: 15rem; padding: 1rem; border: 1px solid var(--line); border-radius: .9rem; background: var(--panel); }
+  .phase-starters article > span { color: var(--accent); font: 700 .7rem ui-monospace, monospace; text-transform: uppercase; }
+  .phase-starters h3 { margin: .75rem 0 .4rem; font: 500 1.25rem var(--display-font); }
+  .phase-starters article p { color: var(--muted); font-size: .85rem; }
+  .phase-starters article button { margin-top: auto; }
+  @media (max-width: 45rem) { .home-status, .phase-starters { grid-template-columns: 1fr; } .phase-starters > div { grid-column: 1; } }
   .repertoire-form{display:grid;gap:.65rem;max-width:44rem;padding:1rem;border:1px solid var(--line);border-radius:.8rem;background:var(--panel)}
   .repertoire-form label{display:grid;gap:.25rem}.repertoire-form input,.repertoire-form select,.repertoire-form textarea{padding:.6rem;border:1px solid var(--line);border-radius:.4rem;background:white}
   .repertoire-card{display:grid;gap:.6rem}.gap-results{grid-column:1/-1;border-top:1px solid var(--line);padding-top:.6rem}.gap-row{display:flex;align-items:center;justify-content:space-between;gap:1rem;padding:.4rem 0}

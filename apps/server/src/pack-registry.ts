@@ -38,6 +38,8 @@ export interface PackSummary {
   readonly mode: string;
   readonly phase: PackPhase | null;
   readonly difficulty: unknown;
+  readonly objectiveSummary: string;
+  readonly concepts: readonly string[];
   readonly reviewStatus: string;
   readonly channel: "official" | "community";
   readonly publisherHandle?: string;
@@ -60,6 +62,10 @@ export interface PackRecord {
     readonly authorSpans: readonly string[];
     readonly principles: readonly { readonly id: string; readonly name: string; readonly statement: string; readonly standsOn: string; readonly counterCase: string }[];
   }>;
+}
+
+function objectiveSummary(document: DrillPackDefinition): string {
+  return document.objective.summary?.trim() || document.objective.type.replaceAll("_", " ");
 }
 
 function projectSpineNode(node: SpineNode): unknown {
@@ -295,6 +301,8 @@ export class PackRegistry {
         mode: raw.mode as string,
         phase: typeof raw.phase === "string" ? (raw.phase as PackPhase) : null,
         difficulty: raw.difficulty ?? null,
+        objectiveSummary: objectiveSummary(document),
+        concepts: Object.freeze([...(document.concepts ?? [])]),
         reviewStatus: provenance.reviewStatus as string,
         channel,
       });
@@ -404,6 +412,8 @@ export class PackRegistry {
         mode: String(raw.mode),
         phase: typeof raw.phase === "string" ? raw.phase as PackPhase : null,
         difficulty: raw.difficulty ?? null,
+        objectiveSummary: objectiveSummary(document),
+        concepts: Object.freeze([...(document.concepts ?? [])]),
         reviewStatus: String(provenance.reviewStatus),
         channel: "community",
         publisherHandle,
@@ -431,7 +441,10 @@ export class PackRegistry {
         id: document.id, version: document.version, digest,
         title: String(raw.title), mode: String(raw.mode),
         phase: typeof raw.phase === "string" ? raw.phase as PackPhase : null,
-        difficulty: raw.difficulty ?? null, reviewStatus: String(provenance.reviewStatus),
+        difficulty: raw.difficulty ?? null,
+        objectiveSummary: objectiveSummary(document),
+        concepts: Object.freeze([...(document.concepts ?? [])]),
+        reviewStatus: String(provenance.reviewStatus),
         channel: "community",
       }),
       feedbackPolicy: raw.feedbackPolicy as FeedbackPolicy,

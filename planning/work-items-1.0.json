@@ -1,10 +1,11 @@
 {
-  "schemaVersion": 1,
+  "schemaVersion": 2,
   "authority": "planning/ux-implementation-index.md",
   "assignmentModel": "Every live item belongs to exactly one capability queue whose owner is declared in planning/roadmap-1.0.json.",
   "items": [
     {
       "id": "A11-a1",
+      "sourceState": "queued",
       "state": "queued",
       "capability": "accessibility",
       "owner": "client-platform",
@@ -19,6 +20,7 @@
     },
     {
       "id": "A11-a10",
+      "sourceState": "queued",
       "state": "queued",
       "capability": "accessibility",
       "owner": "client-platform",
@@ -32,6 +34,7 @@
     },
     {
       "id": "A11-a11",
+      "sourceState": "queued",
       "state": "queued",
       "capability": "accessibility",
       "owner": "client-platform",
@@ -46,6 +49,7 @@
     },
     {
       "id": "A11-a12",
+      "sourceState": "queued",
       "state": "queued",
       "capability": "accessibility",
       "owner": "client-platform",
@@ -60,6 +64,7 @@
     },
     {
       "id": "A11-a13",
+      "sourceState": "queued",
       "state": "queued",
       "capability": "accessibility",
       "owner": "client-platform",
@@ -73,6 +78,7 @@
     },
     {
       "id": "A11-a14",
+      "sourceState": "queued",
       "state": "queued",
       "capability": "accessibility",
       "owner": "client-platform",
@@ -86,6 +92,7 @@
     },
     {
       "id": "A11-a15",
+      "sourceState": "queued",
       "state": "queued",
       "capability": "accessibility",
       "owner": "client-platform",
@@ -99,6 +106,7 @@
     },
     {
       "id": "A11-a16",
+      "sourceState": "queued",
       "state": "queued",
       "capability": "accessibility",
       "owner": "client-platform",
@@ -113,6 +121,7 @@
     },
     {
       "id": "A11-a17",
+      "sourceState": "queued",
       "state": "queued",
       "capability": "accessibility",
       "owner": "client-platform",
@@ -126,6 +135,7 @@
     },
     {
       "id": "A11-a18",
+      "sourceState": "queued",
       "state": "queued",
       "capability": "accessibility",
       "owner": "client-platform",
@@ -139,6 +149,7 @@
     },
     {
       "id": "A11-a19",
+      "sourceState": "queued",
       "state": "queued",
       "capability": "accessibility",
       "owner": "client-platform",
@@ -152,6 +163,7 @@
     },
     {
       "id": "A11-a2",
+      "sourceState": "queued",
       "state": "queued",
       "capability": "accessibility",
       "owner": "client-platform",
@@ -165,6 +177,7 @@
     },
     {
       "id": "A11-a20",
+      "sourceState": "queued",
       "state": "queued",
       "capability": "accessibility",
       "owner": "client-platform",
@@ -179,6 +192,7 @@
     },
     {
       "id": "A11-a21",
+      "sourceState": "queued",
       "state": "queued",
       "capability": "accessibility",
       "owner": "client-platform",
@@ -193,6 +207,7 @@
     },
     {
       "id": "A11-a22",
+      "sourceState": "queued",
       "state": "queued",
       "capability": "accessibility",
       "owner": "client-platform",
@@ -206,6 +221,7 @@
     },
     {
       "id": "A11-a23",
+      "sourceState": "queued",
       "state": "queued",
       "capability": "accessibility",
       "owner": "client-platform",
@@ -219,6 +235,7 @@
     },
     {
       "id": "A11-a24",
+      "sourceState": "queued",
       "state": "queued",
       "capability": "accessibility",
       "owner": "client-platform",
@@ -232,6 +249,7 @@
     },
     {
       "id": "A11-a25",
+      "sourceState": "queued",
       "state": "queued",
       "capability": "accessibility",
       "owner": "client-platform",
@@ -245,6 +263,7 @@
     },
     {
       "id": "A11-a26",
+      "sourceState": "queued",
       "state": "queued",
       "capability": "accessibility",
       "owner": "client-platform",
@@ -260,6 +279,7 @@
     },
     {
       "id": "A11-a27",
+      "sourceState": "queued",
       "state": "queued",
       "capability": "accessibility",
       "owner": "client-platform",
@@ -273,6 +293,7 @@
     },
     {
       "id": "A11-a28",
+      "sourceState": "queued",
       "state": "queued",
       "capability": "accessibility",
       "owner": "client-platform",
@@ -286,6 +307,7 @@
     },
     {
       "id": "A11-a29",
+      "sourceState": "queued",
       "state": "queued",
       "capability": "accessibility",
       "owner": "client-platform",
@@ -301,6 +323,7 @@
     },
     {
       "id": "A11-a3",
+      "sourceState": "queued",
       "state": "queued",
       "capability": "accessibility",
       "owner": "client-platform",
@@ -315,6 +338,7 @@
     },
     {
       "id": "A11-a30",
+      "sourceState": "queued",
       "state": "queued",
       "capability": "accessibility",
       "owner": "client-platform",
@@ -328,6 +352,7 @@
     },
     {
       "id": "A11-a31",
+      "sourceState": "queued",
       "state": "queued",
       "capability": "accessibility",
       "owner": "client-platform",
@@ -342,6 +367,7 @@
     },
     {
       "id": "A11-a32",
+      "sourceState": "queued",
       "state": "queued",
       "capability": "accessibility",
       "owner": "client-platform",
@@ -355,6 +381,7 @@
     },
     {
       "id": "A11-a33",
+      "sourceState": "queued",
       "state": "queued",
       "capability": "accessibility",
       "owner": "client-platform",
@@ -369,6 +396,7 @@
     },
     {
       "id": "A11-a34",
+      "sourceState": "queued",
       "state": "queued",
       "capability": "accessibility",
       "owner": "client-platform",
@@ -383,6 +411,7 @@
     },
     {
       "id": "A11-a4",
+      "sourceState": "queued",
       "state": "queued",
       "capability": "accessibility",
       "owner": "client-platform",
@@ -397,6 +426,7 @@
     },
     {
       "id": "A11-a5",
+      "sourceState": "queued",
       "state": "queued",
       "capability": "accessibility",
       "owner": "client-platform",
@@ -410,6 +440,7 @@
     },
     {
       "id": "A11-a6",
+      "sourceState": "queued",
       "state": "queued",
       "capability": "accessibility",
       "owner": "client-platform",
@@ -424,6 +455,7 @@
     },
     {
       "id": "A11-a7",
+      "sourceState": "queued",
       "state": "queued",
       "capability": "accessibility",
       "owner": "client-platform",
@@ -437,6 +469,7 @@
     },
     {
       "id": "A11-a8",
+      "sourceState": "queued",
       "state": "queued",
       "capability": "accessibility",
       "owner": "client-platform",
@@ -451,6 +484,7 @@
     },
     {
       "id": "A11-a9",
+      "sourceState": "queued",
       "state": "queued",
       "capability": "accessibility",
       "owner": "client-platform",
@@ -465,6 +499,7 @@
     },
     {
       "id": "A11-b1",
+      "sourceState": "blocked_owner",
       "state": "blocked_owner",
       "capability": "accessibility",
       "owner": "client-platform",
@@ -478,6 +513,7 @@
     },
     {
       "id": "A11-b2",
+      "sourceState": "blocked_owner",
       "state": "blocked_owner",
       "capability": "accessibility",
       "owner": "client-platform",
@@ -492,6 +528,7 @@
     },
     {
       "id": "A11-b3",
+      "sourceState": "blocked_owner",
       "state": "blocked_owner",
       "capability": "accessibility",
       "owner": "client-platform",
@@ -506,6 +543,7 @@
     },
     {
       "id": "A11-b4",
+      "sourceState": "blocked_owner",
       "state": "blocked_owner",
       "capability": "accessibility",
       "owner": "client-platform",
@@ -519,6 +557,7 @@
     },
     {
       "id": "A11-b5",
+      "sourceState": "blocked_owner",
       "state": "blocked_owner",
       "capability": "accessibility",
       "owner": "client-platform",
@@ -532,6 +571,7 @@
     },
     {
       "id": "A11-b6",
+      "sourceState": "blocked_owner",
       "state": "blocked_owner",
       "capability": "accessibility",
       "owner": "client-platform",
@@ -545,6 +585,7 @@
     },
     {
       "id": "A11-b7",
+      "sourceState": "blocked_owner",
       "state": "blocked_owner",
       "capability": "accessibility",
       "owner": "client-platform",
@@ -559,6 +600,7 @@
     },
     {
       "id": "A11-c1",
+      "sourceState": "blocked_rfc",
       "state": "blocked_rfc",
       "capability": "accessibility",
       "owner": "client-platform",
@@ -572,6 +614,7 @@
     },
     {
       "id": "A11-d1",
+      "sourceState": "completed",
       "state": "completed",
       "capability": "accessibility",
       "owner": "client-platform",
@@ -585,6 +628,7 @@
     },
     {
       "id": "A11-d2",
+      "sourceState": "completed",
       "state": "completed",
       "capability": "accessibility",
       "owner": "client-platform",
@@ -598,6 +642,7 @@
     },
     {
       "id": "A11-d3",
+      "sourceState": "completed",
       "state": "completed",
       "capability": "accessibility",
       "owner": "client-platform",
@@ -610,6 +655,7 @@
     },
     {
       "id": "A11-d4",
+      "sourceState": "completed",
       "state": "completed",
       "capability": "accessibility",
       "owner": "client-platform",
@@ -622,6 +668,7 @@
     },
     {
       "id": "A11-e1",
+      "sourceState": "retired",
       "state": "retired",
       "capability": "accessibility",
       "owner": "client-platform",
@@ -635,6 +682,7 @@
     },
     {
       "id": "A11-e2",
+      "sourceState": "retired",
       "state": "retired",
       "capability": "accessibility",
       "owner": "client-platform",
@@ -648,6 +696,7 @@
     },
     {
       "id": "A11-e3",
+      "sourceState": "retired",
       "state": "retired",
       "capability": "accessibility",
       "owner": "client-platform",
@@ -661,6 +710,7 @@
     },
     {
       "id": "A11-e4",
+      "sourceState": "retired",
       "state": "retired",
       "capability": "accessibility",
       "owner": "client-platform",
@@ -674,6 +724,7 @@
     },
     {
       "id": "ARR-a1",
+      "sourceState": "queued",
       "state": "queued",
       "capability": "rehearsal",
       "owner": "core-loop",
@@ -688,48 +739,64 @@
     },
     {
       "id": "ARR-a10",
-      "state": "queued",
+      "sourceState": "queued",
+      "state": "completed",
       "capability": "rehearsal",
       "owner": "core-loop",
-      "assignment": "capability:rehearsal",
+      "assignment": "closed",
       "sourceDocument": "ux-arrival-and-start.md",
       "sourceSection": "§5.3 C1",
       "sourceHeading": "Arrival and getting into a session — `ux-arrival-and-start.md`",
       "summary": "Phase-first filtered, searchable catalogue — three phase entries, band filter, free-text search over title + `concepts` + `objective.summary`, a sort",
       "legacyRoute": "ledger",
       "note": "[[D1474]]; needs `PackSummary` widened (it exposes `difficulty: unknown` and no concepts/summary/window)",
-      "sourceDigest": "sha256:0f8164e6df2eb16684e997ed586a93ee4770dfd2f640e6a0719d042b5786a074"
+      "sourceDigest": "sha256:0f8164e6df2eb16684e997ed586a93ee4770dfd2f640e6a0719d042b5786a074",
+      "completion": {
+        "completedOn": "2026-08-25",
+        "evidence": "D1545"
+      }
     },
     {
       "id": "ARR-a11",
-      "state": "queued",
+      "sourceState": "queued",
+      "state": "completed",
       "capability": "rehearsal",
       "owner": "core-loop",
-      "assignment": "capability:rehearsal",
+      "assignment": "closed",
       "sourceDocument": "ux-arrival-and-start.md",
       "sourceSection": "§5.3 C2",
       "sourceHeading": "Arrival and getting into a session — `ux-arrival-and-start.md`",
       "summary": "The pack card leads with the authored objective sentence. `screen-model.ts:85` holds `objectiveSummary` and **has zero callers**",
       "legacyRoute": "ledger",
       "note": "[[D1474]]",
-      "sourceDigest": "sha256:0d8924b97276c04df5917306d513aab1b5ccf178f521e7ea0155540e6c246794"
+      "sourceDigest": "sha256:0d8924b97276c04df5917306d513aab1b5ccf178f521e7ea0155540e6c246794",
+      "completion": {
+        "completedOn": "2026-08-25",
+        "evidence": "D1545"
+      }
     },
     {
       "id": "ARR-a12",
-      "state": "queued",
+      "sourceState": "queued",
+      "state": "completed",
       "capability": "rehearsal",
       "owner": "core-loop",
-      "assignment": "capability:rehearsal",
+      "assignment": "closed",
       "sourceDocument": "ux-arrival-and-start.md",
       "sourceSection": "§5.3 C3",
       "sourceHeading": "Arrival and getting into a session — `ux-arrival-and-start.md`",
       "summary": "Translate the mode enum into its verb — the card's first word is literally `line`, `plan`, `outcome`, `trajectory`",
       "legacyRoute": "none",
       "note": "4 strings; meanings already in `design/01`",
-      "sourceDigest": "sha256:82e30cefde7a266a6e6b7102bdbf230b5556431b08812544f6cbd5aa876de9bc"
+      "sourceDigest": "sha256:82e30cefde7a266a6e6b7102bdbf230b5556431b08812544f6cbd5aa876de9bc",
+      "completion": {
+        "completedOn": "2026-08-25",
+        "evidence": "D1545"
+      }
     },
     {
       "id": "ARR-a13",
+      "sourceState": "queued",
       "state": "queued",
       "capability": "rehearsal",
       "owner": "core-loop",
@@ -744,62 +811,83 @@
     },
     {
       "id": "ARR-a14",
-      "state": "queued",
+      "sourceState": "queued",
+      "state": "completed",
       "capability": "rehearsal",
       "owner": "core-loop",
-      "assignment": "capability:rehearsal",
+      "assignment": "closed",
       "sourceDocument": "ux-arrival-and-start.md",
       "sourceSection": "§5.3 C5",
       "sourceHeading": "Arrival and getting into a session — `ux-arrival-and-start.md`",
       "summary": "Move the provenance stamp off the card's leading metadata row — *\"unreviewed draft · community\"* fires on 100% of 56 cards",
       "legacyRoute": "none",
       "note": "the catalogue-level wording needs O-C5; the placement does not",
-      "sourceDigest": "sha256:5093a2d260da229e89766af48f4f9b7d4b0f5ec623bb69a8dbab3c1185c97cf4"
+      "sourceDigest": "sha256:5093a2d260da229e89766af48f4f9b7d4b0f5ec623bb69a8dbab3c1185c97cf4",
+      "completion": {
+        "completedOn": "2026-08-25",
+        "evidence": "D1545"
+      }
     },
     {
       "id": "ARR-a15",
-      "state": "queued",
+      "sourceState": "queued",
+      "state": "completed",
       "capability": "rehearsal",
       "owner": "core-loop",
-      "assignment": "capability:rehearsal",
+      "assignment": "closed",
       "sourceDocument": "ux-arrival-and-start.md",
       "sourceSection": "§6.3 D1",
       "sourceHeading": "Arrival and getting into a session — `ux-arrival-and-start.md`",
       "summary": "**Promote `/rating`'s four-rung named picker into `/play` and delete the two-word `<select>`.** The control, the honest footer and the `targetElo` plumbing all exist",
       "legacyRoute": "ledger",
       "note": "[[D1473]]",
-      "sourceDigest": "sha256:165f636d280b991c0904d1bf5c5a875dda8da3872d4fb38480888cc0b22a955b"
+      "sourceDigest": "sha256:165f636d280b991c0904d1bf5c5a875dda8da3872d4fb38480888cc0b22a955b",
+      "completion": {
+        "completedOn": "2026-08-25",
+        "evidence": "D1545"
+      }
     },
     {
       "id": "ARR-a16",
-      "state": "queued",
+      "sourceState": "queued",
+      "state": "completed",
       "capability": "rehearsal",
       "owner": "core-loop",
-      "assignment": "capability:rehearsal",
+      "assignment": "closed",
       "sourceDocument": "ux-arrival-and-start.md",
       "sourceSection": "§6.3 D1",
       "sourceHeading": "Arrival and getting into a session — `ux-arrival-and-start.md`",
       "summary": "Rename the **\"Record\"** nav item — the product's only competent opponent picker is filed under a word meaning *history*",
       "legacyRoute": "ledger",
       "note": "[[D1473]]; overlaps two IA lanes",
-      "sourceDigest": "sha256:631f1b8443bf0b1fdc11c27f691af0b9302fa8aef1f02b3658f691e14fa113e9"
+      "sourceDigest": "sha256:631f1b8443bf0b1fdc11c27f691af0b9302fa8aef1f02b3658f691e14fa113e9",
+      "completion": {
+        "completedOn": "2026-08-25",
+        "evidence": "D1545"
+      }
     },
     {
       "id": "ARR-a17",
-      "state": "queued",
+      "sourceState": "queued",
+      "state": "completed",
       "capability": "rehearsal",
       "owner": "core-loop",
-      "assignment": "capability:rehearsal",
+      "assignment": "closed",
       "sourceDocument": "ux-arrival-and-start.md",
       "sourceSection": "§6.3 D3",
       "sourceHeading": "Arrival and getting into a session — `ux-arrival-and-start.md`",
       "summary": "Carry the no-Elo labelling verbatim: rung words + *\"not FIDE, Lichess, or Chess.com\"*",
       "legacyRoute": "none",
       "note": "copy decision already made; permanent, not temporary",
-      "sourceDigest": "sha256:0bfebaeb114f45b2b6d27c9dbcc938f068e3782f8b8efcee464aefaa10225201"
+      "sourceDigest": "sha256:0bfebaeb114f45b2b6d27c9dbcc938f068e3782f8b8efcee464aefaa10225201",
+      "completion": {
+        "completedOn": "2026-08-25",
+        "evidence": "D1545"
+      }
     },
     {
       "id": "ARR-a18",
+      "sourceState": "queued",
       "state": "queued",
       "capability": "rehearsal",
       "owner": "core-loop",
@@ -814,6 +902,7 @@
     },
     {
       "id": "ARR-a19",
+      "sourceState": "queued",
       "state": "queued",
       "capability": "rehearsal",
       "owner": "core-loop",
@@ -828,20 +917,26 @@
     },
     {
       "id": "ARR-a2",
-      "state": "queued",
+      "sourceState": "queued",
+      "state": "completed",
       "capability": "rehearsal",
       "owner": "core-loop",
-      "assignment": "capability:rehearsal",
+      "assignment": "closed",
       "sourceDocument": "ux-arrival-and-start.md",
       "sourceSection": "§2.3 A2",
       "sourceHeading": "Arrival and getting into a session — `ux-arrival-and-start.md`",
       "summary": "Say what this is above the fold: *\"Do not just learn the move. Rehearse the game it creates.\"* + the loop in plain English",
       "legacyRoute": "none",
       "note": "2 strings on Home",
-      "sourceDigest": "sha256:ce12620c11ff1ed3fc5afae842440d04e7fc0835f146955a14fad31e1ac97a19"
+      "sourceDigest": "sha256:ce12620c11ff1ed3fc5afae842440d04e7fc0835f146955a14fad31e1ac97a19",
+      "completion": {
+        "completedOn": "2026-08-25",
+        "evidence": "D1545"
+      }
     },
     {
       "id": "ARR-a20",
+      "sourceState": "queued",
       "state": "queued",
       "capability": "rehearsal",
       "owner": "core-loop",
@@ -856,6 +951,7 @@
     },
     {
       "id": "ARR-a21",
+      "sourceState": "queued",
       "state": "queued",
       "capability": "rehearsal",
       "owner": "core-loop",
@@ -870,6 +966,7 @@
     },
     {
       "id": "ARR-a22",
+      "sourceState": "queued",
       "state": "queued",
       "capability": "rehearsal",
       "owner": "core-loop",
@@ -884,6 +981,7 @@
     },
     {
       "id": "ARR-a23",
+      "sourceState": "queued",
       "state": "queued",
       "capability": "rehearsal",
       "owner": "core-loop",
@@ -898,6 +996,7 @@
     },
     {
       "id": "ARR-a24",
+      "sourceState": "queued",
       "state": "queued",
       "capability": "rehearsal",
       "owner": "core-loop",
@@ -912,6 +1011,7 @@
     },
     {
       "id": "ARR-a25",
+      "sourceState": "queued",
       "state": "queued",
       "capability": "rehearsal",
       "owner": "core-loop",
@@ -926,6 +1026,7 @@
     },
     {
       "id": "ARR-a3",
+      "sourceState": "queued",
       "state": "queued",
       "capability": "rehearsal",
       "owner": "core-loop",
@@ -940,6 +1041,7 @@
     },
     {
       "id": "ARR-a4",
+      "sourceState": "queued",
       "state": "queued",
       "capability": "rehearsal",
       "owner": "core-loop",
@@ -954,46 +1056,62 @@
     },
     {
       "id": "ARR-a5",
-      "state": "queued",
+      "sourceState": "queued",
+      "state": "completed",
       "capability": "rehearsal",
       "owner": "core-loop",
-      "assignment": "capability:rehearsal",
+      "assignment": "closed",
       "sourceDocument": "ux-arrival-and-start.md",
       "sourceSection": "§3.3 B1",
       "sourceHeading": "Arrival and getting into a session — `ux-arrival-and-start.md`",
       "summary": "Home **Due and open** region: counts with verbs; `dueProgress`/`assignedPacks` are already fetched on the home route",
       "legacyRoute": "none",
-      "sourceDigest": "sha256:b3dd758fc35dcb7a08473bbd8f76953e7ee12009c114e2ddca1e5bb2e7832441"
+      "sourceDigest": "sha256:b3dd758fc35dcb7a08473bbd8f76953e7ee12009c114e2ddca1e5bb2e7832441",
+      "completion": {
+        "completedOn": "2026-08-25",
+        "evidence": "D1545"
+      }
     },
     {
       "id": "ARR-a6",
-      "state": "queued",
+      "sourceState": "queued",
+      "state": "completed",
       "capability": "rehearsal",
       "owner": "core-loop",
-      "assignment": "capability:rehearsal",
+      "assignment": "closed",
       "sourceDocument": "ux-arrival-and-start.md",
       "sourceSection": "§3.3 B1",
       "sourceHeading": "Arrival and getting into a session — `ux-arrival-and-start.md`",
       "summary": "Home **Pick up a thread**: three specific suggestions returning, three phase entries on day one",
       "legacyRoute": "none",
       "note": "lands on ARR-a10",
-      "sourceDigest": "sha256:8fdfc817c3a5bc18feaa823d7f40eacd482078c88b834431e689f91b4e65f76c"
+      "sourceDigest": "sha256:8fdfc817c3a5bc18feaa823d7f40eacd482078c88b834431e689f91b4e65f76c",
+      "completion": {
+        "completedOn": "2026-08-25",
+        "evidence": "D1545"
+      }
     },
     {
       "id": "ARR-a7",
-      "state": "queued",
+      "sourceState": "queued",
+      "state": "completed",
       "capability": "rehearsal",
       "owner": "core-loop",
-      "assignment": "capability:rehearsal",
+      "assignment": "closed",
       "sourceDocument": "ux-arrival-and-start.md",
       "sourceSection": "§3.3 B2",
       "sourceHeading": "Arrival and getting into a session — `ux-arrival-and-start.md`",
       "summary": "Delete the resume card's *\"No previous run yet… Go to Play\"* two-click abstraction",
       "legacyRoute": "none",
-      "sourceDigest": "sha256:6d95b58bff27b47b388a851d627f0ebb1819e20746dd4c7d5caff6e0bbc49d7d"
+      "sourceDigest": "sha256:6d95b58bff27b47b388a851d627f0ebb1819e20746dd4c7d5caff6e0bbc49d7d",
+      "completion": {
+        "completedOn": "2026-08-25",
+        "evidence": "D1545"
+      }
     },
     {
       "id": "ARR-a8",
+      "sourceState": "queued",
       "state": "queued",
       "capability": "rehearsal",
       "owner": "core-loop",
@@ -1008,6 +1126,7 @@
     },
     {
       "id": "ARR-a9",
+      "sourceState": "queued",
       "state": "queued",
       "capability": "rehearsal",
       "owner": "core-loop",
@@ -1022,6 +1141,7 @@
     },
     {
       "id": "ARR-b1",
+      "sourceState": "blocked_owner",
       "state": "blocked_owner",
       "capability": "rehearsal",
       "owner": "core-loop",
@@ -1035,6 +1155,7 @@
     },
     {
       "id": "ARR-b2",
+      "sourceState": "blocked_owner",
       "state": "blocked_owner",
       "capability": "rehearsal",
       "owner": "core-loop",
@@ -1048,6 +1169,7 @@
     },
     {
       "id": "ARR-b3",
+      "sourceState": "blocked_owner",
       "state": "blocked_owner",
       "capability": "rehearsal",
       "owner": "core-loop",
@@ -1061,6 +1183,7 @@
     },
     {
       "id": "ARR-b4",
+      "sourceState": "blocked_owner",
       "state": "blocked_owner",
       "capability": "rehearsal",
       "owner": "core-loop",
@@ -1074,6 +1197,7 @@
     },
     {
       "id": "ARR-b5",
+      "sourceState": "blocked_owner",
       "state": "blocked_owner",
       "capability": "rehearsal",
       "owner": "core-loop",
@@ -1087,6 +1211,7 @@
     },
     {
       "id": "ARR-b6",
+      "sourceState": "blocked_owner",
       "state": "blocked_owner",
       "capability": "rehearsal",
       "owner": "core-loop",
@@ -1100,6 +1225,7 @@
     },
     {
       "id": "ARR-b7",
+      "sourceState": "blocked_owner",
       "state": "blocked_owner",
       "capability": "rehearsal",
       "owner": "core-loop",
@@ -1113,6 +1239,7 @@
     },
     {
       "id": "ARR-c1",
+      "sourceState": "blocked_rfc",
       "state": "blocked_rfc",
       "capability": "rehearsal",
       "owner": "core-loop",
@@ -1126,6 +1253,7 @@
     },
     {
       "id": "ARR-d1",
+      "sourceState": "completed",
       "state": "completed",
       "capability": "rehearsal",
       "owner": "core-loop",
@@ -1139,6 +1267,7 @@
     },
     {
       "id": "ARR-d2",
+      "sourceState": "completed",
       "state": "completed",
       "capability": "rehearsal",
       "owner": "core-loop",
@@ -1152,6 +1281,7 @@
     },
     {
       "id": "ARR-d3",
+      "sourceState": "completed",
       "state": "completed",
       "capability": "rehearsal",
       "owner": "core-loop",
@@ -1164,6 +1294,7 @@
     },
     {
       "id": "ARR-e1",
+      "sourceState": "retired",
       "state": "retired",
       "capability": "rehearsal",
       "owner": "core-loop",
@@ -1177,6 +1308,7 @@
     },
     {
       "id": "ARR-e2",
+      "sourceState": "retired",
       "state": "retired",
       "capability": "rehearsal",
       "owner": "core-loop",
@@ -1190,6 +1322,7 @@
     },
     {
       "id": "ATR-a1",
+      "sourceState": "completed",
       "state": "completed",
       "capability": "review",
       "owner": "review-and-return",
@@ -1203,6 +1336,7 @@
     },
     {
       "id": "ATR-a10",
+      "sourceState": "queued",
       "state": "queued",
       "capability": "review",
       "owner": "review-and-return",
@@ -1217,6 +1351,7 @@
     },
     {
       "id": "ATR-a11",
+      "sourceState": "queued",
       "state": "queued",
       "capability": "review",
       "owner": "review-and-return",
@@ -1231,6 +1366,7 @@
     },
     {
       "id": "ATR-a12",
+      "sourceState": "queued",
       "state": "queued",
       "capability": "review",
       "owner": "review-and-return",
@@ -1244,6 +1380,7 @@
     },
     {
       "id": "ATR-a13",
+      "sourceState": "queued",
       "state": "queued",
       "capability": "review",
       "owner": "review-and-return",
@@ -1257,6 +1394,7 @@
     },
     {
       "id": "ATR-a14",
+      "sourceState": "queued",
       "state": "queued",
       "capability": "review",
       "owner": "review-and-return",
@@ -1270,6 +1408,7 @@
     },
     {
       "id": "ATR-a15",
+      "sourceState": "queued",
       "state": "queued",
       "capability": "review",
       "owner": "review-and-return",
@@ -1284,6 +1423,7 @@
     },
     {
       "id": "ATR-a16",
+      "sourceState": "queued",
       "state": "queued",
       "capability": "review",
       "owner": "review-and-return",
@@ -1297,6 +1437,7 @@
     },
     {
       "id": "ATR-a17",
+      "sourceState": "queued",
       "state": "queued",
       "capability": "review",
       "owner": "review-and-return",
@@ -1310,6 +1451,7 @@
     },
     {
       "id": "ATR-a18",
+      "sourceState": "queued",
       "state": "queued",
       "capability": "review",
       "owner": "review-and-return",
@@ -1324,6 +1466,7 @@
     },
     {
       "id": "ATR-a19",
+      "sourceState": "queued",
       "state": "queued",
       "capability": "review",
       "owner": "review-and-return",
@@ -1338,6 +1481,7 @@
     },
     {
       "id": "ATR-a2",
+      "sourceState": "completed",
       "state": "completed",
       "capability": "review",
       "owner": "review-and-return",
@@ -1351,6 +1495,7 @@
     },
     {
       "id": "ATR-a20",
+      "sourceState": "queued",
       "state": "queued",
       "capability": "review",
       "owner": "review-and-return",
@@ -1365,6 +1510,7 @@
     },
     {
       "id": "ATR-a21",
+      "sourceState": "queued",
       "state": "queued",
       "capability": "review",
       "owner": "review-and-return",
@@ -1378,6 +1524,7 @@
     },
     {
       "id": "ATR-a22",
+      "sourceState": "queued",
       "state": "queued",
       "capability": "review",
       "owner": "review-and-return",
@@ -1392,6 +1539,7 @@
     },
     {
       "id": "ATR-a23",
+      "sourceState": "queued",
       "state": "queued",
       "capability": "review",
       "owner": "review-and-return",
@@ -1406,6 +1554,7 @@
     },
     {
       "id": "ATR-a24",
+      "sourceState": "queued",
       "state": "queued",
       "capability": "review",
       "owner": "review-and-return",
@@ -1419,6 +1568,7 @@
     },
     {
       "id": "ATR-a25",
+      "sourceState": "queued",
       "state": "queued",
       "capability": "review",
       "owner": "review-and-return",
@@ -1433,6 +1583,7 @@
     },
     {
       "id": "ATR-a26",
+      "sourceState": "queued",
       "state": "queued",
       "capability": "review",
       "owner": "review-and-return",
@@ -1446,6 +1597,7 @@
     },
     {
       "id": "ATR-a27",
+      "sourceState": "queued",
       "state": "queued",
       "capability": "review",
       "owner": "review-and-return",
@@ -1459,6 +1611,7 @@
     },
     {
       "id": "ATR-a28",
+      "sourceState": "queued",
       "state": "queued",
       "capability": "review",
       "owner": "review-and-return",
@@ -1472,6 +1625,7 @@
     },
     {
       "id": "ATR-a3",
+      "sourceState": "queued",
       "state": "queued",
       "capability": "review",
       "owner": "review-and-return",
@@ -1485,6 +1639,7 @@
     },
     {
       "id": "ATR-a4",
+      "sourceState": "completed",
       "state": "completed",
       "capability": "review",
       "owner": "review-and-return",
@@ -1498,6 +1653,7 @@
     },
     {
       "id": "ATR-a5",
+      "sourceState": "queued",
       "state": "queued",
       "capability": "review",
       "owner": "review-and-return",
@@ -1512,6 +1668,7 @@
     },
     {
       "id": "ATR-a6",
+      "sourceState": "queued",
       "state": "queued",
       "capability": "review",
       "owner": "review-and-return",
@@ -1526,6 +1683,7 @@
     },
     {
       "id": "ATR-a7",
+      "sourceState": "completed",
       "state": "completed",
       "capability": "review",
       "owner": "review-and-return",
@@ -1539,6 +1697,7 @@
     },
     {
       "id": "ATR-a8",
+      "sourceState": "completed",
       "state": "completed",
       "capability": "review",
       "owner": "review-and-return",
@@ -1552,6 +1711,7 @@
     },
     {
       "id": "ATR-a9",
+      "sourceState": "completed",
       "state": "completed",
       "capability": "review",
       "owner": "review-and-return",
@@ -1565,6 +1725,7 @@
     },
     {
       "id": "ATR-b1",
+      "sourceState": "blocked_owner",
       "state": "blocked_owner",
       "capability": "review",
       "owner": "review-and-return",
@@ -1578,6 +1739,7 @@
     },
     {
       "id": "ATR-b2",
+      "sourceState": "blocked_owner",
       "state": "blocked_owner",
       "capability": "review",
       "owner": "review-and-return",
@@ -1591,6 +1753,7 @@
     },
     {
       "id": "ATR-b3",
+      "sourceState": "blocked_owner",
       "state": "blocked_owner",
       "capability": "review",
       "owner": "review-and-return",
@@ -1604,6 +1767,7 @@
     },
     {
       "id": "ATR-b4",
+      "sourceState": "blocked_owner",
       "state": "blocked_owner",
       "capability": "review",
       "owner": "review-and-return",
@@ -1617,6 +1781,7 @@
     },
     {
       "id": "ATR-b5",
+      "sourceState": "blocked_owner",
       "state": "blocked_owner",
       "capability": "review",
       "owner": "review-and-return",
@@ -1630,6 +1795,7 @@
     },
     {
       "id": "ATR-b6",
+      "sourceState": "blocked_owner",
       "state": "blocked_owner",
       "capability": "review",
       "owner": "review-and-return",
@@ -1644,6 +1810,7 @@
     },
     {
       "id": "ATR-b7",
+      "sourceState": "blocked_owner",
       "state": "blocked_owner",
       "capability": "review",
       "owner": "review-and-return",
@@ -1657,6 +1824,7 @@
     },
     {
       "id": "ATR-b8",
+      "sourceState": "blocked_owner",
       "state": "blocked_owner",
       "capability": "review",
       "owner": "review-and-return",
@@ -1670,6 +1838,7 @@
     },
     {
       "id": "ATR-c1",
+      "sourceState": "blocked_rfc",
       "state": "blocked_rfc",
       "capability": "review",
       "owner": "review-and-return",
@@ -1683,6 +1852,7 @@
     },
     {
       "id": "ATR-c10",
+      "sourceState": "blocked_rfc",
       "state": "blocked_rfc",
       "capability": "review",
       "owner": "review-and-return",
@@ -1696,6 +1866,7 @@
     },
     {
       "id": "ATR-c11",
+      "sourceState": "blocked_rfc",
       "state": "blocked_rfc",
       "capability": "review",
       "owner": "review-and-return",
@@ -1709,6 +1880,7 @@
     },
     {
       "id": "ATR-c12",
+      "sourceState": "blocked_rfc",
       "state": "blocked_rfc",
       "capability": "review",
       "owner": "review-and-return",
@@ -1723,6 +1895,7 @@
     },
     {
       "id": "ATR-c13",
+      "sourceState": "blocked_rfc",
       "state": "blocked_rfc",
       "capability": "review",
       "owner": "review-and-return",
@@ -1736,6 +1909,7 @@
     },
     {
       "id": "ATR-c14",
+      "sourceState": "blocked_rfc",
       "state": "blocked_rfc",
       "capability": "review",
       "owner": "review-and-return",
@@ -1749,6 +1923,7 @@
     },
     {
       "id": "ATR-c15",
+      "sourceState": "blocked_rfc",
       "state": "blocked_rfc",
       "capability": "review",
       "owner": "review-and-return",
@@ -1763,6 +1938,7 @@
     },
     {
       "id": "ATR-c16",
+      "sourceState": "blocked_rfc",
       "state": "blocked_rfc",
       "capability": "review",
       "owner": "review-and-return",
@@ -1776,6 +1952,7 @@
     },
     {
       "id": "ATR-c17",
+      "sourceState": "blocked_rfc",
       "state": "blocked_rfc",
       "capability": "review",
       "owner": "review-and-return",
@@ -1789,6 +1966,7 @@
     },
     {
       "id": "ATR-c18",
+      "sourceState": "blocked_rfc",
       "state": "blocked_rfc",
       "capability": "review",
       "owner": "review-and-return",
@@ -1802,6 +1980,7 @@
     },
     {
       "id": "ATR-c19",
+      "sourceState": "blocked_rfc",
       "state": "blocked_rfc",
       "capability": "review",
       "owner": "review-and-return",
@@ -1815,6 +1994,7 @@
     },
     {
       "id": "ATR-c2",
+      "sourceState": "blocked_rfc",
       "state": "blocked_rfc",
       "capability": "review",
       "owner": "review-and-return",
@@ -1828,6 +2008,7 @@
     },
     {
       "id": "ATR-c20",
+      "sourceState": "blocked_rfc",
       "state": "blocked_rfc",
       "capability": "review",
       "owner": "review-and-return",
@@ -1841,6 +2022,7 @@
     },
     {
       "id": "ATR-c21",
+      "sourceState": "blocked_rfc",
       "state": "blocked_rfc",
       "capability": "review",
       "owner": "review-and-return",
@@ -1854,6 +2036,7 @@
     },
     {
       "id": "ATR-c22",
+      "sourceState": "blocked_rfc",
       "state": "blocked_rfc",
       "capability": "review",
       "owner": "review-and-return",
@@ -1867,6 +2050,7 @@
     },
     {
       "id": "ATR-c3",
+      "sourceState": "blocked_rfc",
       "state": "blocked_rfc",
       "capability": "review",
       "owner": "review-and-return",
@@ -1880,6 +2064,7 @@
     },
     {
       "id": "ATR-c4",
+      "sourceState": "blocked_rfc",
       "state": "blocked_rfc",
       "capability": "review",
       "owner": "review-and-return",
@@ -1893,6 +2078,7 @@
     },
     {
       "id": "ATR-c5",
+      "sourceState": "blocked_rfc",
       "state": "blocked_rfc",
       "capability": "review",
       "owner": "review-and-return",
@@ -1906,6 +2092,7 @@
     },
     {
       "id": "ATR-c6",
+      "sourceState": "blocked_rfc",
       "state": "blocked_rfc",
       "capability": "review",
       "owner": "review-and-return",
@@ -1919,6 +2106,7 @@
     },
     {
       "id": "ATR-c7",
+      "sourceState": "blocked_rfc",
       "state": "blocked_rfc",
       "capability": "review",
       "owner": "review-and-return",
@@ -1932,6 +2120,7 @@
     },
     {
       "id": "ATR-c8",
+      "sourceState": "blocked_rfc",
       "state": "blocked_rfc",
       "capability": "review",
       "owner": "review-and-return",
@@ -1945,6 +2134,7 @@
     },
     {
       "id": "ATR-c9",
+      "sourceState": "blocked_rfc",
       "state": "blocked_rfc",
       "capability": "review",
       "owner": "review-and-return",
@@ -1958,6 +2148,7 @@
     },
     {
       "id": "ATR-d1",
+      "sourceState": "completed",
       "state": "completed",
       "capability": "review",
       "owner": "review-and-return",
@@ -1970,6 +2161,7 @@
     },
     {
       "id": "ATR-d2",
+      "sourceState": "completed",
       "state": "completed",
       "capability": "review",
       "owner": "review-and-return",
@@ -1983,6 +2175,7 @@
     },
     {
       "id": "ATR-d3",
+      "sourceState": "completed",
       "state": "completed",
       "capability": "review",
       "owner": "review-and-return",
@@ -1996,6 +2189,7 @@
     },
     {
       "id": "ATR-d4",
+      "sourceState": "completed",
       "state": "completed",
       "capability": "review",
       "owner": "review-and-return",
@@ -2008,6 +2202,7 @@
     },
     {
       "id": "ATR-d5",
+      "sourceState": "completed",
       "state": "completed",
       "capability": "review",
       "owner": "review-and-return",
@@ -2021,6 +2216,7 @@
     },
     {
       "id": "ATR-e1",
+      "sourceState": "retired",
       "state": "retired",
       "capability": "review",
       "owner": "review-and-return",
@@ -2034,6 +2230,7 @@
     },
     {
       "id": "ATR-e2",
+      "sourceState": "retired",
       "state": "retired",
       "capability": "review",
       "owner": "review-and-return",
@@ -2047,6 +2244,7 @@
     },
     {
       "id": "ATR-e3",
+      "sourceState": "retired",
       "state": "retired",
       "capability": "review",
       "owner": "review-and-return",
@@ -2060,6 +2258,7 @@
     },
     {
       "id": "ATR-e4",
+      "sourceState": "retired",
       "state": "retired",
       "capability": "review",
       "owner": "review-and-return",
@@ -2073,6 +2272,7 @@
     },
     {
       "id": "AUT-a1",
+      "sourceState": "queued",
       "state": "queued",
       "capability": "theory_content",
       "owner": "content-and-theory",
@@ -2087,6 +2287,7 @@
     },
     {
       "id": "AUT-a10",
+      "sourceState": "queued",
       "state": "queued",
       "capability": "theory_content",
       "owner": "content-and-theory",
@@ -2101,6 +2302,7 @@
     },
     {
       "id": "AUT-a11",
+      "sourceState": "queued",
       "state": "queued",
       "capability": "theory_content",
       "owner": "content-and-theory",
@@ -2115,6 +2317,7 @@
     },
     {
       "id": "AUT-a12",
+      "sourceState": "queued",
       "state": "queued",
       "capability": "theory_content",
       "owner": "content-and-theory",
@@ -2129,6 +2332,7 @@
     },
     {
       "id": "AUT-a13",
+      "sourceState": "queued",
       "state": "queued",
       "capability": "theory_content",
       "owner": "content-and-theory",
@@ -2143,6 +2347,7 @@
     },
     {
       "id": "AUT-a14",
+      "sourceState": "queued",
       "state": "queued",
       "capability": "theory_content",
       "owner": "content-and-theory",
@@ -2157,6 +2362,7 @@
     },
     {
       "id": "AUT-a15",
+      "sourceState": "queued",
       "state": "queued",
       "capability": "theory_content",
       "owner": "content-and-theory",
@@ -2171,6 +2377,7 @@
     },
     {
       "id": "AUT-a16",
+      "sourceState": "queued",
       "state": "queued",
       "capability": "theory_content",
       "owner": "content-and-theory",
@@ -2185,6 +2392,7 @@
     },
     {
       "id": "AUT-a17",
+      "sourceState": "queued",
       "state": "queued",
       "capability": "theory_content",
       "owner": "content-and-theory",
@@ -2199,6 +2407,7 @@
     },
     {
       "id": "AUT-a18",
+      "sourceState": "queued",
       "state": "queued",
       "capability": "theory_content",
       "owner": "content-and-theory",
@@ -2213,6 +2422,7 @@
     },
     {
       "id": "AUT-a19",
+      "sourceState": "queued",
       "state": "queued",
       "capability": "theory_content",
       "owner": "content-and-theory",
@@ -2227,6 +2437,7 @@
     },
     {
       "id": "AUT-a2",
+      "sourceState": "queued",
       "state": "queued",
       "capability": "theory_content",
       "owner": "content-and-theory",
@@ -2241,6 +2452,7 @@
     },
     {
       "id": "AUT-a20",
+      "sourceState": "queued",
       "state": "queued",
       "capability": "theory_content",
       "owner": "content-and-theory",
@@ -2255,6 +2467,7 @@
     },
     {
       "id": "AUT-a21",
+      "sourceState": "queued",
       "state": "queued",
       "capability": "theory_content",
       "owner": "content-and-theory",
@@ -2269,6 +2482,7 @@
     },
     {
       "id": "AUT-a22",
+      "sourceState": "queued",
       "state": "queued",
       "capability": "theory_content",
       "owner": "content-and-theory",
@@ -2283,6 +2497,7 @@
     },
     {
       "id": "AUT-a23",
+      "sourceState": "queued",
       "state": "queued",
       "capability": "theory_content",
       "owner": "content-and-theory",
@@ -2297,6 +2512,7 @@
     },
     {
       "id": "AUT-a24",
+      "sourceState": "queued",
       "state": "queued",
       "capability": "theory_content",
       "owner": "content-and-theory",
@@ -2310,6 +2526,7 @@
     },
     {
       "id": "AUT-a25",
+      "sourceState": "queued",
       "state": "queued",
       "capability": "theory_content",
       "owner": "content-and-theory",
@@ -2324,6 +2541,7 @@
     },
     {
       "id": "AUT-a26",
+      "sourceState": "queued",
       "state": "queued",
       "capability": "theory_content",
       "owner": "content-and-theory",
@@ -2338,6 +2556,7 @@
     },
     {
       "id": "AUT-a27",
+      "sourceState": "queued",
       "state": "queued",
       "capability": "theory_content",
       "owner": "content-and-theory",
@@ -2351,6 +2570,7 @@
     },
     {
       "id": "AUT-a3",
+      "sourceState": "queued",
       "state": "queued",
       "capability": "theory_content",
       "owner": "content-and-theory",
@@ -2365,6 +2585,7 @@
     },
     {
       "id": "AUT-a4",
+      "sourceState": "queued",
       "state": "queued",
       "capability": "theory_content",
       "owner": "content-and-theory",
@@ -2379,6 +2600,7 @@
     },
     {
       "id": "AUT-a5",
+      "sourceState": "queued",
       "state": "queued",
       "capability": "theory_content",
       "owner": "content-and-theory",
@@ -2392,6 +2614,7 @@
     },
     {
       "id": "AUT-a6",
+      "sourceState": "queued",
       "state": "queued",
       "capability": "theory_content",
       "owner": "content-and-theory",
@@ -2405,6 +2628,7 @@
     },
     {
       "id": "AUT-a7",
+      "sourceState": "queued",
       "state": "queued",
       "capability": "theory_content",
       "owner": "content-and-theory",
@@ -2419,6 +2643,7 @@
     },
     {
       "id": "AUT-a8",
+      "sourceState": "queued",
       "state": "queued",
       "capability": "theory_content",
       "owner": "content-and-theory",
@@ -2432,6 +2657,7 @@
     },
     {
       "id": "AUT-a9",
+      "sourceState": "queued",
       "state": "queued",
       "capability": "theory_content",
       "owner": "content-and-theory",
@@ -2446,6 +2672,7 @@
     },
     {
       "id": "AUT-b1",
+      "sourceState": "blocked_owner",
       "state": "blocked_owner",
       "capability": "theory_content",
       "owner": "content-and-theory",
@@ -2459,6 +2686,7 @@
     },
     {
       "id": "AUT-b2",
+      "sourceState": "blocked_owner",
       "state": "blocked_owner",
       "capability": "theory_content",
       "owner": "content-and-theory",
@@ -2473,6 +2701,7 @@
     },
     {
       "id": "AUT-b3",
+      "sourceState": "blocked_owner",
       "state": "blocked_owner",
       "capability": "theory_content",
       "owner": "content-and-theory",
@@ -2486,6 +2715,7 @@
     },
     {
       "id": "AUT-b4",
+      "sourceState": "blocked_owner",
       "state": "blocked_owner",
       "capability": "theory_content",
       "owner": "content-and-theory",
@@ -2500,6 +2730,7 @@
     },
     {
       "id": "AUT-b5",
+      "sourceState": "blocked_owner",
       "state": "blocked_owner",
       "capability": "theory_content",
       "owner": "content-and-theory",
@@ -2513,6 +2744,7 @@
     },
     {
       "id": "AUT-b6",
+      "sourceState": "blocked_owner",
       "state": "blocked_owner",
       "capability": "theory_content",
       "owner": "content-and-theory",
@@ -2526,6 +2758,7 @@
     },
     {
       "id": "AUT-b7",
+      "sourceState": "blocked_owner",
       "state": "blocked_owner",
       "capability": "theory_content",
       "owner": "content-and-theory",
@@ -2539,6 +2772,7 @@
     },
     {
       "id": "AUT-c1",
+      "sourceState": "blocked_rfc",
       "state": "blocked_rfc",
       "capability": "theory_content",
       "owner": "content-and-theory",
@@ -2553,6 +2787,7 @@
     },
     {
       "id": "AUT-c2",
+      "sourceState": "blocked_rfc",
       "state": "blocked_rfc",
       "capability": "theory_content",
       "owner": "content-and-theory",
@@ -2566,6 +2801,7 @@
     },
     {
       "id": "AUT-c3",
+      "sourceState": "blocked_rfc",
       "state": "blocked_rfc",
       "capability": "theory_content",
       "owner": "content-and-theory",
@@ -2580,6 +2816,7 @@
     },
     {
       "id": "AUT-c4",
+      "sourceState": "blocked_rfc",
       "state": "blocked_rfc",
       "capability": "theory_content",
       "owner": "content-and-theory",
@@ -2593,6 +2830,7 @@
     },
     {
       "id": "AUT-c5",
+      "sourceState": "blocked_rfc",
       "state": "blocked_rfc",
       "capability": "theory_content",
       "owner": "content-and-theory",
@@ -2606,6 +2844,7 @@
     },
     {
       "id": "AUT-c6",
+      "sourceState": "blocked_rfc",
       "state": "blocked_rfc",
       "capability": "theory_content",
       "owner": "content-and-theory",
@@ -2619,6 +2858,7 @@
     },
     {
       "id": "AUT-d1",
+      "sourceState": "completed",
       "state": "completed",
       "capability": "theory_content",
       "owner": "content-and-theory",
@@ -2631,6 +2871,7 @@
     },
     {
       "id": "AUT-d2",
+      "sourceState": "completed",
       "state": "completed",
       "capability": "theory_content",
       "owner": "content-and-theory",
@@ -2644,6 +2885,7 @@
     },
     {
       "id": "AUT-d3",
+      "sourceState": "completed",
       "state": "completed",
       "capability": "theory_content",
       "owner": "content-and-theory",
@@ -2656,6 +2898,7 @@
     },
     {
       "id": "AUT-e2",
+      "sourceState": "retired",
       "state": "retired",
       "capability": "theory_content",
       "owner": "content-and-theory",
@@ -2669,6 +2912,7 @@
     },
     {
       "id": "CLP-a1",
+      "sourceState": "queued",
       "state": "queued",
       "capability": "rehearsal",
       "owner": "core-loop",
@@ -2683,6 +2927,7 @@
     },
     {
       "id": "CLP-a10",
+      "sourceState": "queued",
       "state": "queued",
       "capability": "rehearsal",
       "owner": "core-loop",
@@ -2697,6 +2942,7 @@
     },
     {
       "id": "CLP-a11",
+      "sourceState": "queued",
       "state": "queued",
       "capability": "rehearsal",
       "owner": "core-loop",
@@ -2711,6 +2957,7 @@
     },
     {
       "id": "CLP-a12",
+      "sourceState": "queued",
       "state": "queued",
       "capability": "rehearsal",
       "owner": "core-loop",
@@ -2724,6 +2971,7 @@
     },
     {
       "id": "CLP-a13",
+      "sourceState": "queued",
       "state": "queued",
       "capability": "rehearsal",
       "owner": "core-loop",
@@ -2737,6 +2985,7 @@
     },
     {
       "id": "CLP-a14",
+      "sourceState": "queued",
       "state": "queued",
       "capability": "rehearsal",
       "owner": "core-loop",
@@ -2751,6 +3000,7 @@
     },
     {
       "id": "CLP-a15",
+      "sourceState": "queued",
       "state": "queued",
       "capability": "rehearsal",
       "owner": "core-loop",
@@ -2765,6 +3015,7 @@
     },
     {
       "id": "CLP-a16",
+      "sourceState": "queued",
       "state": "queued",
       "capability": "rehearsal",
       "owner": "core-loop",
@@ -2779,6 +3030,7 @@
     },
     {
       "id": "CLP-a17",
+      "sourceState": "queued",
       "state": "queued",
       "capability": "rehearsal",
       "owner": "core-loop",
@@ -2792,6 +3044,7 @@
     },
     {
       "id": "CLP-a18",
+      "sourceState": "queued",
       "state": "queued",
       "capability": "rehearsal",
       "owner": "core-loop",
@@ -2806,6 +3059,7 @@
     },
     {
       "id": "CLP-a19",
+      "sourceState": "queued",
       "state": "queued",
       "capability": "rehearsal",
       "owner": "core-loop",
@@ -2820,6 +3074,7 @@
     },
     {
       "id": "CLP-a2",
+      "sourceState": "queued",
       "state": "queued",
       "capability": "rehearsal",
       "owner": "core-loop",
@@ -2834,6 +3089,7 @@
     },
     {
       "id": "CLP-a20",
+      "sourceState": "queued",
       "state": "queued",
       "capability": "rehearsal",
       "owner": "core-loop",
@@ -2847,6 +3103,7 @@
     },
     {
       "id": "CLP-a21",
+      "sourceState": "queued",
       "state": "queued",
       "capability": "rehearsal",
       "owner": "core-loop",
@@ -2861,6 +3118,7 @@
     },
     {
       "id": "CLP-a22",
+      "sourceState": "queued",
       "state": "queued",
       "capability": "rehearsal",
       "owner": "core-loop",
@@ -2875,6 +3133,7 @@
     },
     {
       "id": "CLP-a23",
+      "sourceState": "queued",
       "state": "queued",
       "capability": "rehearsal",
       "owner": "core-loop",
@@ -2889,6 +3148,7 @@
     },
     {
       "id": "CLP-a24",
+      "sourceState": "queued",
       "state": "queued",
       "capability": "rehearsal",
       "owner": "core-loop",
@@ -2903,6 +3163,7 @@
     },
     {
       "id": "CLP-a3",
+      "sourceState": "queued",
       "state": "queued",
       "capability": "rehearsal",
       "owner": "core-loop",
@@ -2917,6 +3178,7 @@
     },
     {
       "id": "CLP-a4",
+      "sourceState": "completed",
       "state": "completed",
       "capability": "rehearsal",
       "owner": "core-loop",
@@ -2930,6 +3192,7 @@
     },
     {
       "id": "CLP-a5",
+      "sourceState": "queued",
       "state": "queued",
       "capability": "rehearsal",
       "owner": "core-loop",
@@ -2943,6 +3206,7 @@
     },
     {
       "id": "CLP-a6",
+      "sourceState": "queued",
       "state": "queued",
       "capability": "rehearsal",
       "owner": "core-loop",
@@ -2957,6 +3221,7 @@
     },
     {
       "id": "CLP-a7",
+      "sourceState": "queued",
       "state": "queued",
       "capability": "rehearsal",
       "owner": "core-loop",
@@ -2970,6 +3235,7 @@
     },
     {
       "id": "CLP-a8",
+      "sourceState": "queued",
       "state": "queued",
       "capability": "rehearsal",
       "owner": "core-loop",
@@ -2983,6 +3249,7 @@
     },
     {
       "id": "CLP-a9",
+      "sourceState": "queued",
       "state": "queued",
       "capability": "rehearsal",
       "owner": "core-loop",
@@ -2997,6 +3264,7 @@
     },
     {
       "id": "CLP-b1",
+      "sourceState": "blocked_owner",
       "state": "blocked_owner",
       "capability": "rehearsal",
       "owner": "core-loop",
@@ -3010,6 +3278,7 @@
     },
     {
       "id": "CLP-b2",
+      "sourceState": "blocked_owner",
       "state": "blocked_owner",
       "capability": "rehearsal",
       "owner": "core-loop",
@@ -3023,6 +3292,7 @@
     },
     {
       "id": "CLP-b3",
+      "sourceState": "blocked_owner",
       "state": "blocked_owner",
       "capability": "rehearsal",
       "owner": "core-loop",
@@ -3036,6 +3306,7 @@
     },
     {
       "id": "CLP-b4",
+      "sourceState": "blocked_owner",
       "state": "blocked_owner",
       "capability": "rehearsal",
       "owner": "core-loop",
@@ -3049,6 +3320,7 @@
     },
     {
       "id": "CLP-b5",
+      "sourceState": "blocked_owner",
       "state": "blocked_owner",
       "capability": "rehearsal",
       "owner": "core-loop",
@@ -3062,6 +3334,7 @@
     },
     {
       "id": "CLP-b6",
+      "sourceState": "blocked_owner",
       "state": "blocked_owner",
       "capability": "rehearsal",
       "owner": "core-loop",
@@ -3076,6 +3349,7 @@
     },
     {
       "id": "CLP-b7",
+      "sourceState": "blocked_owner",
       "state": "blocked_owner",
       "capability": "rehearsal",
       "owner": "core-loop",
@@ -3089,6 +3363,7 @@
     },
     {
       "id": "CLP-b8",
+      "sourceState": "blocked_owner",
       "state": "blocked_owner",
       "capability": "rehearsal",
       "owner": "core-loop",
@@ -3103,6 +3378,7 @@
     },
     {
       "id": "CLP-c1",
+      "sourceState": "blocked_rfc",
       "state": "blocked_rfc",
       "capability": "rehearsal",
       "owner": "core-loop",
@@ -3116,6 +3392,7 @@
     },
     {
       "id": "CLP-c10",
+      "sourceState": "blocked_rfc",
       "state": "blocked_rfc",
       "capability": "rehearsal",
       "owner": "core-loop",
@@ -3129,6 +3406,7 @@
     },
     {
       "id": "CLP-c2",
+      "sourceState": "blocked_rfc",
       "state": "blocked_rfc",
       "capability": "rehearsal",
       "owner": "core-loop",
@@ -3142,6 +3420,7 @@
     },
     {
       "id": "CLP-c3",
+      "sourceState": "blocked_rfc",
       "state": "blocked_rfc",
       "capability": "rehearsal",
       "owner": "core-loop",
@@ -3155,6 +3434,7 @@
     },
     {
       "id": "CLP-c4",
+      "sourceState": "blocked_rfc",
       "state": "blocked_rfc",
       "capability": "rehearsal",
       "owner": "core-loop",
@@ -3168,6 +3448,7 @@
     },
     {
       "id": "CLP-c5",
+      "sourceState": "blocked_rfc",
       "state": "blocked_rfc",
       "capability": "rehearsal",
       "owner": "core-loop",
@@ -3181,6 +3462,7 @@
     },
     {
       "id": "CLP-c6",
+      "sourceState": "blocked_rfc",
       "state": "blocked_rfc",
       "capability": "rehearsal",
       "owner": "core-loop",
@@ -3194,6 +3476,7 @@
     },
     {
       "id": "CLP-c7",
+      "sourceState": "blocked_rfc",
       "state": "blocked_rfc",
       "capability": "rehearsal",
       "owner": "core-loop",
@@ -3207,6 +3490,7 @@
     },
     {
       "id": "CLP-c8",
+      "sourceState": "blocked_rfc",
       "state": "blocked_rfc",
       "capability": "rehearsal",
       "owner": "core-loop",
@@ -3220,6 +3504,7 @@
     },
     {
       "id": "CLP-c9",
+      "sourceState": "blocked_rfc",
       "state": "blocked_rfc",
       "capability": "rehearsal",
       "owner": "core-loop",
@@ -3233,6 +3518,7 @@
     },
     {
       "id": "CLP-d1",
+      "sourceState": "completed",
       "state": "completed",
       "capability": "rehearsal",
       "owner": "core-loop",
@@ -3245,6 +3531,7 @@
     },
     {
       "id": "CLP-d2",
+      "sourceState": "completed",
       "state": "completed",
       "capability": "rehearsal",
       "owner": "core-loop",
@@ -3257,6 +3544,7 @@
     },
     {
       "id": "CLP-e1",
+      "sourceState": "retired",
       "state": "retired",
       "capability": "rehearsal",
       "owner": "core-loop",
@@ -3270,6 +3558,7 @@
     },
     {
       "id": "CLP-e2",
+      "sourceState": "retired",
       "state": "retired",
       "capability": "rehearsal",
       "owner": "core-loop",
@@ -3283,6 +3572,7 @@
     },
     {
       "id": "CMP-a1",
+      "sourceState": "queued",
       "state": "queued",
       "capability": "campaign",
       "owner": "campaign",
@@ -3297,6 +3587,7 @@
     },
     {
       "id": "CMP-a10",
+      "sourceState": "queued",
       "state": "queued",
       "capability": "campaign",
       "owner": "campaign",
@@ -3311,6 +3602,7 @@
     },
     {
       "id": "CMP-a11",
+      "sourceState": "queued",
       "state": "queued",
       "capability": "campaign",
       "owner": "campaign",
@@ -3325,6 +3617,7 @@
     },
     {
       "id": "CMP-a12",
+      "sourceState": "queued",
       "state": "queued",
       "capability": "campaign",
       "owner": "campaign",
@@ -3339,6 +3632,7 @@
     },
     {
       "id": "CMP-a13",
+      "sourceState": "queued",
       "state": "queued",
       "capability": "campaign",
       "owner": "campaign",
@@ -3353,6 +3647,7 @@
     },
     {
       "id": "CMP-a14",
+      "sourceState": "queued",
       "state": "queued",
       "capability": "campaign",
       "owner": "campaign",
@@ -3367,6 +3662,7 @@
     },
     {
       "id": "CMP-a15",
+      "sourceState": "queued",
       "state": "queued",
       "capability": "campaign",
       "owner": "campaign",
@@ -3382,6 +3678,7 @@
     },
     {
       "id": "CMP-a16",
+      "sourceState": "queued",
       "state": "queued",
       "capability": "campaign",
       "owner": "campaign",
@@ -3397,6 +3694,7 @@
     },
     {
       "id": "CMP-a17",
+      "sourceState": "queued",
       "state": "queued",
       "capability": "campaign",
       "owner": "campaign",
@@ -3411,6 +3709,7 @@
     },
     {
       "id": "CMP-a18",
+      "sourceState": "queued",
       "state": "queued",
       "capability": "campaign",
       "owner": "campaign",
@@ -3425,6 +3724,7 @@
     },
     {
       "id": "CMP-a19",
+      "sourceState": "queued",
       "state": "queued",
       "capability": "campaign",
       "owner": "campaign",
@@ -3438,6 +3738,7 @@
     },
     {
       "id": "CMP-a2",
+      "sourceState": "queued",
       "state": "queued",
       "capability": "campaign",
       "owner": "campaign",
@@ -3452,6 +3753,7 @@
     },
     {
       "id": "CMP-a20",
+      "sourceState": "queued",
       "state": "queued",
       "capability": "campaign",
       "owner": "campaign",
@@ -3465,6 +3767,7 @@
     },
     {
       "id": "CMP-a21",
+      "sourceState": "queued",
       "state": "queued",
       "capability": "campaign",
       "owner": "campaign",
@@ -3479,6 +3782,7 @@
     },
     {
       "id": "CMP-a22",
+      "sourceState": "queued",
       "state": "queued",
       "capability": "campaign",
       "owner": "campaign",
@@ -3492,6 +3796,7 @@
     },
     {
       "id": "CMP-a23",
+      "sourceState": "queued",
       "state": "queued",
       "capability": "campaign",
       "owner": "campaign",
@@ -3506,6 +3811,7 @@
     },
     {
       "id": "CMP-a24",
+      "sourceState": "queued",
       "state": "queued",
       "capability": "campaign",
       "owner": "campaign",
@@ -3519,6 +3825,7 @@
     },
     {
       "id": "CMP-a25",
+      "sourceState": "queued",
       "state": "queued",
       "capability": "campaign",
       "owner": "campaign",
@@ -3534,6 +3841,7 @@
     },
     {
       "id": "CMP-a26",
+      "sourceState": "queued",
       "state": "queued",
       "capability": "campaign",
       "owner": "campaign",
@@ -3548,6 +3856,7 @@
     },
     {
       "id": "CMP-a27",
+      "sourceState": "queued",
       "state": "queued",
       "capability": "campaign",
       "owner": "campaign",
@@ -3562,6 +3871,7 @@
     },
     {
       "id": "CMP-a28",
+      "sourceState": "queued",
       "state": "queued",
       "capability": "campaign",
       "owner": "campaign",
@@ -3575,6 +3885,7 @@
     },
     {
       "id": "CMP-a29",
+      "sourceState": "queued",
       "state": "queued",
       "capability": "campaign",
       "owner": "campaign",
@@ -3588,6 +3899,7 @@
     },
     {
       "id": "CMP-a3",
+      "sourceState": "queued",
       "state": "queued",
       "capability": "campaign",
       "owner": "campaign",
@@ -3601,6 +3913,7 @@
     },
     {
       "id": "CMP-a4",
+      "sourceState": "queued",
       "state": "queued",
       "capability": "campaign",
       "owner": "campaign",
@@ -3614,6 +3927,7 @@
     },
     {
       "id": "CMP-a5",
+      "sourceState": "queued",
       "state": "queued",
       "capability": "campaign",
       "owner": "campaign",
@@ -3628,6 +3942,7 @@
     },
     {
       "id": "CMP-a6",
+      "sourceState": "queued",
       "state": "queued",
       "capability": "campaign",
       "owner": "campaign",
@@ -3641,6 +3956,7 @@
     },
     {
       "id": "CMP-a7",
+      "sourceState": "queued",
       "state": "queued",
       "capability": "campaign",
       "owner": "campaign",
@@ -3654,6 +3970,7 @@
     },
     {
       "id": "CMP-a8",
+      "sourceState": "queued",
       "state": "queued",
       "capability": "campaign",
       "owner": "campaign",
@@ -3669,6 +3986,7 @@
     },
     {
       "id": "CMP-a9",
+      "sourceState": "queued",
       "state": "queued",
       "capability": "campaign",
       "owner": "campaign",
@@ -3682,6 +4000,7 @@
     },
     {
       "id": "CMP-b1",
+      "sourceState": "blocked_owner",
       "state": "blocked_owner",
       "capability": "campaign",
       "owner": "campaign",
@@ -3696,6 +4015,7 @@
     },
     {
       "id": "CMP-b10",
+      "sourceState": "blocked_owner",
       "state": "blocked_owner",
       "capability": "campaign",
       "owner": "campaign",
@@ -3709,6 +4029,7 @@
     },
     {
       "id": "CMP-b11",
+      "sourceState": "blocked_owner",
       "state": "blocked_owner",
       "capability": "campaign",
       "owner": "campaign",
@@ -3722,6 +4043,7 @@
     },
     {
       "id": "CMP-b2",
+      "sourceState": "blocked_owner",
       "state": "blocked_owner",
       "capability": "campaign",
       "owner": "campaign",
@@ -3735,6 +4057,7 @@
     },
     {
       "id": "CMP-b3",
+      "sourceState": "blocked_owner",
       "state": "blocked_owner",
       "capability": "campaign",
       "owner": "campaign",
@@ -3748,6 +4071,7 @@
     },
     {
       "id": "CMP-b4",
+      "sourceState": "blocked_owner",
       "state": "blocked_owner",
       "capability": "campaign",
       "owner": "campaign",
@@ -3762,6 +4086,7 @@
     },
     {
       "id": "CMP-b5",
+      "sourceState": "blocked_owner",
       "state": "blocked_owner",
       "capability": "campaign",
       "owner": "campaign",
@@ -3776,6 +4101,7 @@
     },
     {
       "id": "CMP-b6",
+      "sourceState": "blocked_owner",
       "state": "blocked_owner",
       "capability": "campaign",
       "owner": "campaign",
@@ -3790,6 +4116,7 @@
     },
     {
       "id": "CMP-b7",
+      "sourceState": "blocked_owner",
       "state": "blocked_owner",
       "capability": "campaign",
       "owner": "campaign",
@@ -3803,6 +4130,7 @@
     },
     {
       "id": "CMP-b8",
+      "sourceState": "blocked_owner",
       "state": "blocked_owner",
       "capability": "campaign",
       "owner": "campaign",
@@ -3816,6 +4144,7 @@
     },
     {
       "id": "CMP-b9",
+      "sourceState": "blocked_owner",
       "state": "blocked_owner",
       "capability": "campaign",
       "owner": "campaign",
@@ -3830,6 +4159,7 @@
     },
     {
       "id": "CMP-c1",
+      "sourceState": "blocked_rfc",
       "state": "blocked_rfc",
       "capability": "campaign",
       "owner": "campaign",
@@ -3844,6 +4174,7 @@
     },
     {
       "id": "CMP-c10",
+      "sourceState": "blocked_rfc",
       "state": "blocked_rfc",
       "capability": "campaign",
       "owner": "campaign",
@@ -3857,6 +4188,7 @@
     },
     {
       "id": "CMP-c11",
+      "sourceState": "blocked_rfc",
       "state": "blocked_rfc",
       "capability": "campaign",
       "owner": "campaign",
@@ -3870,6 +4202,7 @@
     },
     {
       "id": "CMP-c12",
+      "sourceState": "blocked_rfc",
       "state": "blocked_rfc",
       "capability": "campaign",
       "owner": "campaign",
@@ -3883,6 +4216,7 @@
     },
     {
       "id": "CMP-c13",
+      "sourceState": "blocked_rfc",
       "state": "blocked_rfc",
       "capability": "campaign",
       "owner": "campaign",
@@ -3896,6 +4230,7 @@
     },
     {
       "id": "CMP-c14",
+      "sourceState": "blocked_rfc",
       "state": "blocked_rfc",
       "capability": "campaign",
       "owner": "campaign",
@@ -3909,6 +4244,7 @@
     },
     {
       "id": "CMP-c15",
+      "sourceState": "blocked_rfc",
       "state": "blocked_rfc",
       "capability": "campaign",
       "owner": "campaign",
@@ -3922,6 +4258,7 @@
     },
     {
       "id": "CMP-c2",
+      "sourceState": "blocked_rfc",
       "state": "blocked_rfc",
       "capability": "campaign",
       "owner": "campaign",
@@ -3935,6 +4272,7 @@
     },
     {
       "id": "CMP-c3",
+      "sourceState": "blocked_rfc",
       "state": "blocked_rfc",
       "capability": "campaign",
       "owner": "campaign",
@@ -3948,6 +4286,7 @@
     },
     {
       "id": "CMP-c4",
+      "sourceState": "blocked_rfc",
       "state": "blocked_rfc",
       "capability": "campaign",
       "owner": "campaign",
@@ -3961,6 +4300,7 @@
     },
     {
       "id": "CMP-c5",
+      "sourceState": "blocked_rfc",
       "state": "blocked_rfc",
       "capability": "campaign",
       "owner": "campaign",
@@ -3974,6 +4314,7 @@
     },
     {
       "id": "CMP-c6",
+      "sourceState": "blocked_rfc",
       "state": "blocked_rfc",
       "capability": "campaign",
       "owner": "campaign",
@@ -3988,6 +4329,7 @@
     },
     {
       "id": "CMP-c7",
+      "sourceState": "blocked_rfc",
       "state": "blocked_rfc",
       "capability": "campaign",
       "owner": "campaign",
@@ -4001,6 +4343,7 @@
     },
     {
       "id": "CMP-c8",
+      "sourceState": "blocked_rfc",
       "state": "blocked_rfc",
       "capability": "campaign",
       "owner": "campaign",
@@ -4015,6 +4358,7 @@
     },
     {
       "id": "CMP-c9",
+      "sourceState": "blocked_rfc",
       "state": "blocked_rfc",
       "capability": "campaign",
       "owner": "campaign",
@@ -4029,6 +4373,7 @@
     },
     {
       "id": "CMP-d1",
+      "sourceState": "completed",
       "state": "completed",
       "capability": "campaign",
       "owner": "campaign",
@@ -4041,6 +4386,7 @@
     },
     {
       "id": "CMP-d2",
+      "sourceState": "completed",
       "state": "completed",
       "capability": "campaign",
       "owner": "campaign",
@@ -4053,6 +4399,7 @@
     },
     {
       "id": "CMP-d3",
+      "sourceState": "completed",
       "state": "completed",
       "capability": "campaign",
       "owner": "campaign",
@@ -4066,6 +4413,7 @@
     },
     {
       "id": "CMP-d4",
+      "sourceState": "completed",
       "state": "completed",
       "capability": "campaign",
       "owner": "campaign",
@@ -4079,6 +4427,7 @@
     },
     {
       "id": "CMP-e1",
+      "sourceState": "retired",
       "state": "retired",
       "capability": "campaign",
       "owner": "campaign",
@@ -4092,6 +4441,7 @@
     },
     {
       "id": "CMP-e2",
+      "sourceState": "retired",
       "state": "retired",
       "capability": "campaign",
       "owner": "campaign",
@@ -4105,6 +4455,7 @@
     },
     {
       "id": "CMP-e3",
+      "sourceState": "retired",
       "state": "retired",
       "capability": "campaign",
       "owner": "campaign",
@@ -4118,6 +4469,7 @@
     },
     {
       "id": "CMP-e4",
+      "sourceState": "retired",
       "state": "retired",
       "capability": "campaign",
       "owner": "campaign",
@@ -4131,6 +4483,7 @@
     },
     {
       "id": "IMP-a1",
+      "sourceState": "queued",
       "state": "queued",
       "capability": "account_data",
       "owner": "account-and-data",
@@ -4145,6 +4498,7 @@
     },
     {
       "id": "IMP-a10",
+      "sourceState": "queued",
       "state": "queued",
       "capability": "account_data",
       "owner": "account-and-data",
@@ -4159,6 +4513,7 @@
     },
     {
       "id": "IMP-a11",
+      "sourceState": "queued",
       "state": "queued",
       "capability": "account_data",
       "owner": "account-and-data",
@@ -4173,6 +4528,7 @@
     },
     {
       "id": "IMP-a12",
+      "sourceState": "queued",
       "state": "queued",
       "capability": "account_data",
       "owner": "account-and-data",
@@ -4187,6 +4543,7 @@
     },
     {
       "id": "IMP-a13",
+      "sourceState": "queued",
       "state": "queued",
       "capability": "account_data",
       "owner": "account-and-data",
@@ -4201,6 +4558,7 @@
     },
     {
       "id": "IMP-a14",
+      "sourceState": "queued",
       "state": "queued",
       "capability": "account_data",
       "owner": "account-and-data",
@@ -4215,6 +4573,7 @@
     },
     {
       "id": "IMP-a15",
+      "sourceState": "queued",
       "state": "queued",
       "capability": "account_data",
       "owner": "account-and-data",
@@ -4229,6 +4588,7 @@
     },
     {
       "id": "IMP-a16",
+      "sourceState": "queued",
       "state": "queued",
       "capability": "account_data",
       "owner": "account-and-data",
@@ -4243,6 +4603,7 @@
     },
     {
       "id": "IMP-a17",
+      "sourceState": "queued",
       "state": "queued",
       "capability": "account_data",
       "owner": "account-and-data",
@@ -4256,6 +4617,7 @@
     },
     {
       "id": "IMP-a18",
+      "sourceState": "queued",
       "state": "queued",
       "capability": "account_data",
       "owner": "account-and-data",
@@ -4269,6 +4631,7 @@
     },
     {
       "id": "IMP-a19",
+      "sourceState": "queued",
       "state": "queued",
       "capability": "account_data",
       "owner": "account-and-data",
@@ -4282,6 +4645,7 @@
     },
     {
       "id": "IMP-a2",
+      "sourceState": "queued",
       "state": "queued",
       "capability": "account_data",
       "owner": "account-and-data",
@@ -4296,6 +4660,7 @@
     },
     {
       "id": "IMP-a20",
+      "sourceState": "queued",
       "state": "queued",
       "capability": "account_data",
       "owner": "account-and-data",
@@ -4310,6 +4675,7 @@
     },
     {
       "id": "IMP-a21",
+      "sourceState": "queued",
       "state": "queued",
       "capability": "account_data",
       "owner": "account-and-data",
@@ -4323,6 +4689,7 @@
     },
     {
       "id": "IMP-a22",
+      "sourceState": "queued",
       "state": "queued",
       "capability": "account_data",
       "owner": "account-and-data",
@@ -4336,6 +4703,7 @@
     },
     {
       "id": "IMP-a23",
+      "sourceState": "queued",
       "state": "queued",
       "capability": "account_data",
       "owner": "account-and-data",
@@ -4349,6 +4717,7 @@
     },
     {
       "id": "IMP-a24",
+      "sourceState": "queued",
       "state": "queued",
       "capability": "account_data",
       "owner": "account-and-data",
@@ -4363,6 +4732,7 @@
     },
     {
       "id": "IMP-a25",
+      "sourceState": "queued",
       "state": "queued",
       "capability": "account_data",
       "owner": "account-and-data",
@@ -4377,6 +4747,7 @@
     },
     {
       "id": "IMP-a26",
+      "sourceState": "queued",
       "state": "queued",
       "capability": "account_data",
       "owner": "account-and-data",
@@ -4392,6 +4763,7 @@
     },
     {
       "id": "IMP-a27",
+      "sourceState": "queued",
       "state": "queued",
       "capability": "account_data",
       "owner": "account-and-data",
@@ -4405,6 +4777,7 @@
     },
     {
       "id": "IMP-a28",
+      "sourceState": "queued",
       "state": "queued",
       "capability": "account_data",
       "owner": "account-and-data",
@@ -4419,6 +4792,7 @@
     },
     {
       "id": "IMP-a29",
+      "sourceState": "queued",
       "state": "queued",
       "capability": "account_data",
       "owner": "account-and-data",
@@ -4433,6 +4807,7 @@
     },
     {
       "id": "IMP-a3",
+      "sourceState": "queued",
       "state": "queued",
       "capability": "account_data",
       "owner": "account-and-data",
@@ -4447,6 +4822,7 @@
     },
     {
       "id": "IMP-a30",
+      "sourceState": "queued",
       "state": "queued",
       "capability": "account_data",
       "owner": "account-and-data",
@@ -4460,6 +4836,7 @@
     },
     {
       "id": "IMP-a4",
+      "sourceState": "queued",
       "state": "queued",
       "capability": "account_data",
       "owner": "account-and-data",
@@ -4474,6 +4851,7 @@
     },
     {
       "id": "IMP-a5",
+      "sourceState": "queued",
       "state": "queued",
       "capability": "account_data",
       "owner": "account-and-data",
@@ -4487,6 +4865,7 @@
     },
     {
       "id": "IMP-a6",
+      "sourceState": "queued",
       "state": "queued",
       "capability": "account_data",
       "owner": "account-and-data",
@@ -4502,6 +4881,7 @@
     },
     {
       "id": "IMP-a7",
+      "sourceState": "queued",
       "state": "queued",
       "capability": "account_data",
       "owner": "account-and-data",
@@ -4515,6 +4895,7 @@
     },
     {
       "id": "IMP-a8",
+      "sourceState": "queued",
       "state": "queued",
       "capability": "account_data",
       "owner": "account-and-data",
@@ -4529,6 +4910,7 @@
     },
     {
       "id": "IMP-a9",
+      "sourceState": "queued",
       "state": "queued",
       "capability": "account_data",
       "owner": "account-and-data",
@@ -4542,6 +4924,7 @@
     },
     {
       "id": "IMP-b1",
+      "sourceState": "blocked_owner",
       "state": "blocked_owner",
       "capability": "account_data",
       "owner": "account-and-data",
@@ -4555,6 +4938,7 @@
     },
     {
       "id": "IMP-b10",
+      "sourceState": "blocked_owner",
       "state": "blocked_owner",
       "capability": "account_data",
       "owner": "account-and-data",
@@ -4568,6 +4952,7 @@
     },
     {
       "id": "IMP-b2",
+      "sourceState": "blocked_owner",
       "state": "blocked_owner",
       "capability": "account_data",
       "owner": "account-and-data",
@@ -4582,6 +4967,7 @@
     },
     {
       "id": "IMP-b3",
+      "sourceState": "blocked_owner",
       "state": "blocked_owner",
       "capability": "account_data",
       "owner": "account-and-data",
@@ -4595,6 +4981,7 @@
     },
     {
       "id": "IMP-b4",
+      "sourceState": "blocked_owner",
       "state": "blocked_owner",
       "capability": "account_data",
       "owner": "account-and-data",
@@ -4609,6 +4996,7 @@
     },
     {
       "id": "IMP-b5",
+      "sourceState": "blocked_owner",
       "state": "blocked_owner",
       "capability": "account_data",
       "owner": "account-and-data",
@@ -4622,6 +5010,7 @@
     },
     {
       "id": "IMP-b6",
+      "sourceState": "blocked_owner",
       "state": "blocked_owner",
       "capability": "account_data",
       "owner": "account-and-data",
@@ -4635,6 +5024,7 @@
     },
     {
       "id": "IMP-b7",
+      "sourceState": "blocked_owner",
       "state": "blocked_owner",
       "capability": "account_data",
       "owner": "account-and-data",
@@ -4648,6 +5038,7 @@
     },
     {
       "id": "IMP-b8",
+      "sourceState": "blocked_owner",
       "state": "blocked_owner",
       "capability": "account_data",
       "owner": "account-and-data",
@@ -4662,6 +5053,7 @@
     },
     {
       "id": "IMP-b9",
+      "sourceState": "blocked_owner",
       "state": "blocked_owner",
       "capability": "account_data",
       "owner": "account-and-data",
@@ -4675,6 +5067,7 @@
     },
     {
       "id": "IMP-c1",
+      "sourceState": "blocked_rfc",
       "state": "blocked_rfc",
       "capability": "account_data",
       "owner": "account-and-data",
@@ -4688,6 +5081,7 @@
     },
     {
       "id": "IMP-d1",
+      "sourceState": "completed",
       "state": "completed",
       "capability": "account_data",
       "owner": "account-and-data",
@@ -4701,6 +5095,7 @@
     },
     {
       "id": "IMP-d2",
+      "sourceState": "completed",
       "state": "completed",
       "capability": "account_data",
       "owner": "account-and-data",
@@ -4713,6 +5108,7 @@
     },
     {
       "id": "IMP-d3",
+      "sourceState": "completed",
       "state": "completed",
       "capability": "account_data",
       "owner": "account-and-data",
@@ -4725,6 +5121,7 @@
     },
     {
       "id": "INR-a1",
+      "sourceState": "queued",
       "state": "queued",
       "capability": "support",
       "owner": "assistance-and-presentation",
@@ -4739,6 +5136,7 @@
     },
     {
       "id": "INR-a10",
+      "sourceState": "queued",
       "state": "queued",
       "capability": "support",
       "owner": "assistance-and-presentation",
@@ -4753,6 +5151,7 @@
     },
     {
       "id": "INR-a11",
+      "sourceState": "queued",
       "state": "queued",
       "capability": "support",
       "owner": "assistance-and-presentation",
@@ -4767,6 +5166,7 @@
     },
     {
       "id": "INR-a2",
+      "sourceState": "queued",
       "state": "queued",
       "capability": "support",
       "owner": "assistance-and-presentation",
@@ -4781,6 +5181,7 @@
     },
     {
       "id": "INR-a3",
+      "sourceState": "queued",
       "state": "queued",
       "capability": "support",
       "owner": "assistance-and-presentation",
@@ -4795,6 +5196,7 @@
     },
     {
       "id": "INR-a4",
+      "sourceState": "queued",
       "state": "queued",
       "capability": "support",
       "owner": "assistance-and-presentation",
@@ -4809,6 +5211,7 @@
     },
     {
       "id": "INR-a5",
+      "sourceState": "queued",
       "state": "queued",
       "capability": "support",
       "owner": "assistance-and-presentation",
@@ -4823,6 +5226,7 @@
     },
     {
       "id": "INR-a6",
+      "sourceState": "queued",
       "state": "queued",
       "capability": "support",
       "owner": "assistance-and-presentation",
@@ -4837,6 +5241,7 @@
     },
     {
       "id": "INR-a7",
+      "sourceState": "queued",
       "state": "queued",
       "capability": "support",
       "owner": "assistance-and-presentation",
@@ -4851,6 +5256,7 @@
     },
     {
       "id": "INR-a8",
+      "sourceState": "queued",
       "state": "queued",
       "capability": "support",
       "owner": "assistance-and-presentation",
@@ -4865,6 +5271,7 @@
     },
     {
       "id": "INR-a9",
+      "sourceState": "queued",
       "state": "queued",
       "capability": "support",
       "owner": "assistance-and-presentation",
@@ -4879,6 +5286,7 @@
     },
     {
       "id": "INR-b1",
+      "sourceState": "blocked_owner",
       "state": "blocked_owner",
       "capability": "support",
       "owner": "assistance-and-presentation",
@@ -4892,6 +5300,7 @@
     },
     {
       "id": "INR-b2",
+      "sourceState": "blocked_owner",
       "state": "blocked_owner",
       "capability": "support",
       "owner": "assistance-and-presentation",
@@ -4905,6 +5314,7 @@
     },
     {
       "id": "INR-b3",
+      "sourceState": "blocked_owner",
       "state": "blocked_owner",
       "capability": "support",
       "owner": "assistance-and-presentation",
@@ -4918,6 +5328,7 @@
     },
     {
       "id": "INR-b4",
+      "sourceState": "blocked_owner",
       "state": "blocked_owner",
       "capability": "support",
       "owner": "assistance-and-presentation",
@@ -4931,6 +5342,7 @@
     },
     {
       "id": "INR-c1",
+      "sourceState": "blocked_rfc",
       "state": "blocked_rfc",
       "capability": "support",
       "owner": "assistance-and-presentation",
@@ -4944,6 +5356,7 @@
     },
     {
       "id": "INR-c10",
+      "sourceState": "blocked_rfc",
       "state": "blocked_rfc",
       "capability": "support",
       "owner": "assistance-and-presentation",
@@ -4957,6 +5370,7 @@
     },
     {
       "id": "INR-c11",
+      "sourceState": "blocked_rfc",
       "state": "blocked_rfc",
       "capability": "support",
       "owner": "assistance-and-presentation",
@@ -4970,6 +5384,7 @@
     },
     {
       "id": "INR-c12",
+      "sourceState": "blocked_rfc",
       "state": "blocked_rfc",
       "capability": "support",
       "owner": "assistance-and-presentation",
@@ -4983,6 +5398,7 @@
     },
     {
       "id": "INR-c13",
+      "sourceState": "blocked_rfc",
       "state": "blocked_rfc",
       "capability": "support",
       "owner": "assistance-and-presentation",
@@ -4996,6 +5412,7 @@
     },
     {
       "id": "INR-c14",
+      "sourceState": "blocked_rfc",
       "state": "blocked_rfc",
       "capability": "support",
       "owner": "assistance-and-presentation",
@@ -5009,6 +5426,7 @@
     },
     {
       "id": "INR-c15",
+      "sourceState": "blocked_rfc",
       "state": "blocked_rfc",
       "capability": "support",
       "owner": "assistance-and-presentation",
@@ -5022,6 +5440,7 @@
     },
     {
       "id": "INR-c16",
+      "sourceState": "blocked_rfc",
       "state": "blocked_rfc",
       "capability": "support",
       "owner": "assistance-and-presentation",
@@ -5035,6 +5454,7 @@
     },
     {
       "id": "INR-c2",
+      "sourceState": "blocked_rfc",
       "state": "blocked_rfc",
       "capability": "support",
       "owner": "assistance-and-presentation",
@@ -5048,6 +5468,7 @@
     },
     {
       "id": "INR-c3",
+      "sourceState": "blocked_rfc",
       "state": "blocked_rfc",
       "capability": "support",
       "owner": "assistance-and-presentation",
@@ -5061,6 +5482,7 @@
     },
     {
       "id": "INR-c4",
+      "sourceState": "blocked_rfc",
       "state": "blocked_rfc",
       "capability": "support",
       "owner": "assistance-and-presentation",
@@ -5074,6 +5496,7 @@
     },
     {
       "id": "INR-c5",
+      "sourceState": "blocked_rfc",
       "state": "blocked_rfc",
       "capability": "support",
       "owner": "assistance-and-presentation",
@@ -5087,6 +5510,7 @@
     },
     {
       "id": "INR-c6",
+      "sourceState": "blocked_rfc",
       "state": "blocked_rfc",
       "capability": "support",
       "owner": "assistance-and-presentation",
@@ -5100,6 +5524,7 @@
     },
     {
       "id": "INR-c7",
+      "sourceState": "blocked_rfc",
       "state": "blocked_rfc",
       "capability": "support",
       "owner": "assistance-and-presentation",
@@ -5113,6 +5538,7 @@
     },
     {
       "id": "INR-c8",
+      "sourceState": "blocked_rfc",
       "state": "blocked_rfc",
       "capability": "support",
       "owner": "assistance-and-presentation",
@@ -5126,6 +5552,7 @@
     },
     {
       "id": "INR-c9",
+      "sourceState": "blocked_rfc",
       "state": "blocked_rfc",
       "capability": "support",
       "owner": "assistance-and-presentation",
@@ -5139,6 +5566,7 @@
     },
     {
       "id": "INR-d1",
+      "sourceState": "completed",
       "state": "completed",
       "capability": "support",
       "owner": "assistance-and-presentation",
@@ -5152,6 +5580,7 @@
     },
     {
       "id": "INR-d2",
+      "sourceState": "completed",
       "state": "completed",
       "capability": "support",
       "owner": "assistance-and-presentation",
@@ -5164,6 +5593,7 @@
     },
     {
       "id": "INR-d3",
+      "sourceState": "completed",
       "state": "completed",
       "capability": "support",
       "owner": "assistance-and-presentation",
@@ -5177,6 +5607,7 @@
     },
     {
       "id": "LIV-a1",
+      "sourceState": "queued",
       "state": "queued",
       "capability": "social_play",
       "owner": "live-and-social",
@@ -5192,6 +5623,7 @@
     },
     {
       "id": "LIV-a10",
+      "sourceState": "queued",
       "state": "queued",
       "capability": "social_play",
       "owner": "live-and-social",
@@ -5206,6 +5638,7 @@
     },
     {
       "id": "LIV-a11",
+      "sourceState": "queued",
       "state": "queued",
       "capability": "social_play",
       "owner": "live-and-social",
@@ -5220,6 +5653,7 @@
     },
     {
       "id": "LIV-a12",
+      "sourceState": "queued",
       "state": "queued",
       "capability": "social_play",
       "owner": "live-and-social",
@@ -5235,6 +5669,7 @@
     },
     {
       "id": "LIV-a13",
+      "sourceState": "queued",
       "state": "queued",
       "capability": "social_play",
       "owner": "live-and-social",
@@ -5250,6 +5685,7 @@
     },
     {
       "id": "LIV-a14",
+      "sourceState": "queued",
       "state": "queued",
       "capability": "social_play",
       "owner": "live-and-social",
@@ -5264,6 +5700,7 @@
     },
     {
       "id": "LIV-a15",
+      "sourceState": "queued",
       "state": "queued",
       "capability": "social_play",
       "owner": "live-and-social",
@@ -5277,6 +5714,7 @@
     },
     {
       "id": "LIV-a16",
+      "sourceState": "queued",
       "state": "queued",
       "capability": "social_play",
       "owner": "live-and-social",
@@ -5291,6 +5729,7 @@
     },
     {
       "id": "LIV-a17",
+      "sourceState": "queued",
       "state": "queued",
       "capability": "social_play",
       "owner": "live-and-social",
@@ -5304,6 +5743,7 @@
     },
     {
       "id": "LIV-a18",
+      "sourceState": "queued",
       "state": "queued",
       "capability": "social_play",
       "owner": "live-and-social",
@@ -5319,6 +5759,7 @@
     },
     {
       "id": "LIV-a19",
+      "sourceState": "queued",
       "state": "queued",
       "capability": "social_play",
       "owner": "live-and-social",
@@ -5332,6 +5773,7 @@
     },
     {
       "id": "LIV-a2",
+      "sourceState": "queued",
       "state": "queued",
       "capability": "social_play",
       "owner": "live-and-social",
@@ -5345,6 +5787,7 @@
     },
     {
       "id": "LIV-a20",
+      "sourceState": "queued",
       "state": "queued",
       "capability": "social_play",
       "owner": "live-and-social",
@@ -5359,6 +5802,7 @@
     },
     {
       "id": "LIV-a21",
+      "sourceState": "queued",
       "state": "queued",
       "capability": "social_play",
       "owner": "live-and-social",
@@ -5372,6 +5816,7 @@
     },
     {
       "id": "LIV-a22",
+      "sourceState": "queued",
       "state": "queued",
       "capability": "social_play",
       "owner": "live-and-social",
@@ -5386,6 +5831,7 @@
     },
     {
       "id": "LIV-a23",
+      "sourceState": "queued",
       "state": "queued",
       "capability": "social_play",
       "owner": "live-and-social",
@@ -5401,6 +5847,7 @@
     },
     {
       "id": "LIV-a24",
+      "sourceState": "queued",
       "state": "queued",
       "capability": "social_play",
       "owner": "live-and-social",
@@ -5415,6 +5862,7 @@
     },
     {
       "id": "LIV-a25",
+      "sourceState": "queued",
       "state": "queued",
       "capability": "social_play",
       "owner": "live-and-social",
@@ -5428,6 +5876,7 @@
     },
     {
       "id": "LIV-a3",
+      "sourceState": "queued",
       "state": "queued",
       "capability": "social_play",
       "owner": "live-and-social",
@@ -5442,6 +5891,7 @@
     },
     {
       "id": "LIV-a4",
+      "sourceState": "queued",
       "state": "queued",
       "capability": "social_play",
       "owner": "live-and-social",
@@ -5457,6 +5907,7 @@
     },
     {
       "id": "LIV-a5",
+      "sourceState": "queued",
       "state": "queued",
       "capability": "social_play",
       "owner": "live-and-social",
@@ -5470,6 +5921,7 @@
     },
     {
       "id": "LIV-a6",
+      "sourceState": "queued",
       "state": "queued",
       "capability": "social_play",
       "owner": "live-and-social",
@@ -5483,6 +5935,7 @@
     },
     {
       "id": "LIV-a7",
+      "sourceState": "queued",
       "state": "queued",
       "capability": "social_play",
       "owner": "live-and-social",
@@ -5497,6 +5950,7 @@
     },
     {
       "id": "LIV-a8",
+      "sourceState": "queued",
       "state": "queued",
       "capability": "social_play",
       "owner": "live-and-social",
@@ -5511,6 +5965,7 @@
     },
     {
       "id": "LIV-a9",
+      "sourceState": "queued",
       "state": "queued",
       "capability": "social_play",
       "owner": "live-and-social",
@@ -5524,6 +5979,7 @@
     },
     {
       "id": "LIV-b1",
+      "sourceState": "blocked_owner",
       "state": "blocked_owner",
       "capability": "social_play",
       "owner": "live-and-social",
@@ -5537,6 +5993,7 @@
     },
     {
       "id": "LIV-b10",
+      "sourceState": "blocked_owner",
       "state": "blocked_owner",
       "capability": "social_play",
       "owner": "live-and-social",
@@ -5551,6 +6008,7 @@
     },
     {
       "id": "LIV-b11",
+      "sourceState": "blocked_owner",
       "state": "blocked_owner",
       "capability": "social_play",
       "owner": "live-and-social",
@@ -5565,6 +6023,7 @@
     },
     {
       "id": "LIV-b2",
+      "sourceState": "blocked_owner",
       "state": "blocked_owner",
       "capability": "social_play",
       "owner": "live-and-social",
@@ -5579,6 +6038,7 @@
     },
     {
       "id": "LIV-b3",
+      "sourceState": "blocked_owner",
       "state": "blocked_owner",
       "capability": "social_play",
       "owner": "live-and-social",
@@ -5593,6 +6053,7 @@
     },
     {
       "id": "LIV-b4",
+      "sourceState": "blocked_owner",
       "state": "blocked_owner",
       "capability": "social_play",
       "owner": "live-and-social",
@@ -5607,6 +6068,7 @@
     },
     {
       "id": "LIV-b5",
+      "sourceState": "blocked_owner",
       "state": "blocked_owner",
       "capability": "social_play",
       "owner": "live-and-social",
@@ -5621,6 +6083,7 @@
     },
     {
       "id": "LIV-b6",
+      "sourceState": "blocked_owner",
       "state": "blocked_owner",
       "capability": "social_play",
       "owner": "live-and-social",
@@ -5635,6 +6098,7 @@
     },
     {
       "id": "LIV-b7",
+      "sourceState": "blocked_owner",
       "state": "blocked_owner",
       "capability": "social_play",
       "owner": "live-and-social",
@@ -5649,6 +6113,7 @@
     },
     {
       "id": "LIV-b8",
+      "sourceState": "blocked_owner",
       "state": "blocked_owner",
       "capability": "social_play",
       "owner": "live-and-social",
@@ -5662,6 +6127,7 @@
     },
     {
       "id": "LIV-b9",
+      "sourceState": "blocked_owner",
       "state": "blocked_owner",
       "capability": "social_play",
       "owner": "live-and-social",
@@ -5676,6 +6142,7 @@
     },
     {
       "id": "LIV-c1",
+      "sourceState": "blocked_rfc",
       "state": "blocked_rfc",
       "capability": "social_play",
       "owner": "live-and-social",
@@ -5690,6 +6157,7 @@
     },
     {
       "id": "LIV-c2",
+      "sourceState": "blocked_rfc",
       "state": "blocked_rfc",
       "capability": "social_play",
       "owner": "live-and-social",
@@ -5704,6 +6172,7 @@
     },
     {
       "id": "LIV-c3",
+      "sourceState": "blocked_rfc",
       "state": "blocked_rfc",
       "capability": "social_play",
       "owner": "live-and-social",
@@ -5717,6 +6186,7 @@
     },
     {
       "id": "LIV-c4",
+      "sourceState": "blocked_rfc",
       "state": "blocked_rfc",
       "capability": "social_play",
       "owner": "live-and-social",
@@ -5731,6 +6201,7 @@
     },
     {
       "id": "LIV-c5",
+      "sourceState": "blocked_rfc",
       "state": "blocked_rfc",
       "capability": "social_play",
       "owner": "live-and-social",
@@ -5745,6 +6216,7 @@
     },
     {
       "id": "LIV-c6",
+      "sourceState": "blocked_rfc",
       "state": "blocked_rfc",
       "capability": "social_play",
       "owner": "live-and-social",
@@ -5759,6 +6231,7 @@
     },
     {
       "id": "LIV-c7",
+      "sourceState": "blocked_rfc",
       "state": "blocked_rfc",
       "capability": "social_play",
       "owner": "live-and-social",
@@ -5773,6 +6246,7 @@
     },
     {
       "id": "LIV-d1",
+      "sourceState": "completed",
       "state": "completed",
       "capability": "social_play",
       "owner": "live-and-social",
@@ -5786,6 +6260,7 @@
     },
     {
       "id": "LIV-d2",
+      "sourceState": "completed",
       "state": "completed",
       "capability": "social_play",
       "owner": "live-and-social",
@@ -5799,6 +6274,7 @@
     },
     {
       "id": "LIV-d3",
+      "sourceState": "completed",
       "state": "completed",
       "capability": "social_play",
       "owner": "live-and-social",
@@ -5812,6 +6288,7 @@
     },
     {
       "id": "LIV-e1",
+      "sourceState": "retired",
       "state": "retired",
       "capability": "social_play",
       "owner": "live-and-social",
@@ -5825,6 +6302,7 @@
     },
     {
       "id": "LIV-e2",
+      "sourceState": "retired",
       "state": "retired",
       "capability": "social_play",
       "owner": "live-and-social",
@@ -5838,6 +6316,7 @@
     },
     {
       "id": "LIV-e3",
+      "sourceState": "retired",
       "state": "retired",
       "capability": "social_play",
       "owner": "live-and-social",
@@ -5851,6 +6330,7 @@
     },
     {
       "id": "OPP-a1",
+      "sourceState": "queued",
       "state": "queued",
       "capability": "bots",
       "owner": "bot-play",
@@ -5865,6 +6345,7 @@
     },
     {
       "id": "OPP-a10",
+      "sourceState": "queued",
       "state": "queued",
       "capability": "bots",
       "owner": "bot-play",
@@ -5880,6 +6361,7 @@
     },
     {
       "id": "OPP-a11",
+      "sourceState": "queued",
       "state": "queued",
       "capability": "bots",
       "owner": "bot-play",
@@ -5894,6 +6376,7 @@
     },
     {
       "id": "OPP-a12",
+      "sourceState": "queued",
       "state": "queued",
       "capability": "bots",
       "owner": "bot-play",
@@ -5909,6 +6392,7 @@
     },
     {
       "id": "OPP-a13",
+      "sourceState": "queued",
       "state": "queued",
       "capability": "bots",
       "owner": "bot-play",
@@ -5923,6 +6407,7 @@
     },
     {
       "id": "OPP-a14",
+      "sourceState": "queued",
       "state": "queued",
       "capability": "bots",
       "owner": "bot-play",
@@ -5937,6 +6422,7 @@
     },
     {
       "id": "OPP-a15",
+      "sourceState": "queued",
       "state": "queued",
       "capability": "bots",
       "owner": "bot-play",
@@ -5951,6 +6437,7 @@
     },
     {
       "id": "OPP-a16",
+      "sourceState": "queued",
       "state": "queued",
       "capability": "bots",
       "owner": "bot-play",
@@ -5964,6 +6451,7 @@
     },
     {
       "id": "OPP-a17",
+      "sourceState": "queued",
       "state": "queued",
       "capability": "bots",
       "owner": "bot-play",
@@ -5978,6 +6466,7 @@
     },
     {
       "id": "OPP-a18",
+      "sourceState": "queued",
       "state": "queued",
       "capability": "bots",
       "owner": "bot-play",
@@ -5992,6 +6481,7 @@
     },
     {
       "id": "OPP-a19",
+      "sourceState": "queued",
       "state": "queued",
       "capability": "bots",
       "owner": "bot-play",
@@ -6006,6 +6496,7 @@
     },
     {
       "id": "OPP-a2",
+      "sourceState": "completed",
       "state": "completed",
       "capability": "bots",
       "owner": "bot-play",
@@ -6019,6 +6510,7 @@
     },
     {
       "id": "OPP-a3",
+      "sourceState": "queued",
       "state": "queued",
       "capability": "bots",
       "owner": "bot-play",
@@ -6033,6 +6525,7 @@
     },
     {
       "id": "OPP-a4",
+      "sourceState": "queued",
       "state": "queued",
       "capability": "bots",
       "owner": "bot-play",
@@ -6047,6 +6540,7 @@
     },
     {
       "id": "OPP-a5",
+      "sourceState": "queued",
       "state": "queued",
       "capability": "bots",
       "owner": "bot-play",
@@ -6060,6 +6554,7 @@
     },
     {
       "id": "OPP-a6",
+      "sourceState": "queued",
       "state": "queued",
       "capability": "bots",
       "owner": "bot-play",
@@ -6073,6 +6568,7 @@
     },
     {
       "id": "OPP-a7",
+      "sourceState": "queued",
       "state": "queued",
       "capability": "bots",
       "owner": "bot-play",
@@ -6087,6 +6583,7 @@
     },
     {
       "id": "OPP-a8",
+      "sourceState": "queued",
       "state": "queued",
       "capability": "bots",
       "owner": "bot-play",
@@ -6101,6 +6598,7 @@
     },
     {
       "id": "OPP-a9",
+      "sourceState": "queued",
       "state": "queued",
       "capability": "bots",
       "owner": "bot-play",
@@ -6114,6 +6612,7 @@
     },
     {
       "id": "OPP-b1",
+      "sourceState": "blocked_owner",
       "state": "blocked_owner",
       "capability": "bots",
       "owner": "bot-play",
@@ -6128,6 +6627,7 @@
     },
     {
       "id": "OPP-b10",
+      "sourceState": "blocked_owner",
       "state": "blocked_owner",
       "capability": "bots",
       "owner": "bot-play",
@@ -6141,6 +6641,7 @@
     },
     {
       "id": "OPP-b2",
+      "sourceState": "blocked_owner",
       "state": "blocked_owner",
       "capability": "bots",
       "owner": "bot-play",
@@ -6154,6 +6655,7 @@
     },
     {
       "id": "OPP-b3",
+      "sourceState": "blocked_owner",
       "state": "blocked_owner",
       "capability": "bots",
       "owner": "bot-play",
@@ -6167,6 +6669,7 @@
     },
     {
       "id": "OPP-b4",
+      "sourceState": "blocked_owner",
       "state": "blocked_owner",
       "capability": "bots",
       "owner": "bot-play",
@@ -6180,6 +6683,7 @@
     },
     {
       "id": "OPP-b5",
+      "sourceState": "blocked_owner",
       "state": "blocked_owner",
       "capability": "bots",
       "owner": "bot-play",
@@ -6193,6 +6697,7 @@
     },
     {
       "id": "OPP-b6",
+      "sourceState": "blocked_owner",
       "state": "blocked_owner",
       "capability": "bots",
       "owner": "bot-play",
@@ -6207,6 +6712,7 @@
     },
     {
       "id": "OPP-b7",
+      "sourceState": "blocked_owner",
       "state": "blocked_owner",
       "capability": "bots",
       "owner": "bot-play",
@@ -6220,6 +6726,7 @@
     },
     {
       "id": "OPP-b8",
+      "sourceState": "blocked_owner",
       "state": "blocked_owner",
       "capability": "bots",
       "owner": "bot-play",
@@ -6234,6 +6741,7 @@
     },
     {
       "id": "OPP-b9",
+      "sourceState": "blocked_owner",
       "state": "blocked_owner",
       "capability": "bots",
       "owner": "bot-play",
@@ -6248,6 +6756,7 @@
     },
     {
       "id": "OPP-c1",
+      "sourceState": "blocked_rfc",
       "state": "blocked_rfc",
       "capability": "bots",
       "owner": "bot-play",
@@ -6262,6 +6771,7 @@
     },
     {
       "id": "OPP-c10",
+      "sourceState": "blocked_rfc",
       "state": "blocked_rfc",
       "capability": "bots",
       "owner": "bot-play",
@@ -6275,6 +6785,7 @@
     },
     {
       "id": "OPP-c11",
+      "sourceState": "blocked_rfc",
       "state": "blocked_rfc",
       "capability": "bots",
       "owner": "bot-play",
@@ -6288,6 +6799,7 @@
     },
     {
       "id": "OPP-c12",
+      "sourceState": "blocked_rfc",
       "state": "blocked_rfc",
       "capability": "bots",
       "owner": "bot-play",
@@ -6301,6 +6813,7 @@
     },
     {
       "id": "OPP-c13",
+      "sourceState": "blocked_rfc",
       "state": "blocked_rfc",
       "capability": "bots",
       "owner": "bot-play",
@@ -6315,6 +6828,7 @@
     },
     {
       "id": "OPP-c14",
+      "sourceState": "blocked_rfc",
       "state": "blocked_rfc",
       "capability": "bots",
       "owner": "bot-play",
@@ -6328,6 +6842,7 @@
     },
     {
       "id": "OPP-c2",
+      "sourceState": "blocked_rfc",
       "state": "blocked_rfc",
       "capability": "bots",
       "owner": "bot-play",
@@ -6341,6 +6856,7 @@
     },
     {
       "id": "OPP-c3",
+      "sourceState": "blocked_rfc",
       "state": "blocked_rfc",
       "capability": "bots",
       "owner": "bot-play",
@@ -6354,6 +6870,7 @@
     },
     {
       "id": "OPP-c4",
+      "sourceState": "blocked_rfc",
       "state": "blocked_rfc",
       "capability": "bots",
       "owner": "bot-play",
@@ -6367,6 +6884,7 @@
     },
     {
       "id": "OPP-c5",
+      "sourceState": "blocked_rfc",
       "state": "blocked_rfc",
       "capability": "bots",
       "owner": "bot-play",
@@ -6380,6 +6898,7 @@
     },
     {
       "id": "OPP-c6",
+      "sourceState": "blocked_rfc",
       "state": "blocked_rfc",
       "capability": "bots",
       "owner": "bot-play",
@@ -6394,6 +6913,7 @@
     },
     {
       "id": "OPP-c7",
+      "sourceState": "blocked_rfc",
       "state": "blocked_rfc",
       "capability": "bots",
       "owner": "bot-play",
@@ -6407,6 +6927,7 @@
     },
     {
       "id": "OPP-c8",
+      "sourceState": "blocked_rfc",
       "state": "blocked_rfc",
       "capability": "bots",
       "owner": "bot-play",
@@ -6420,6 +6941,7 @@
     },
     {
       "id": "OPP-c9",
+      "sourceState": "blocked_rfc",
       "state": "blocked_rfc",
       "capability": "bots",
       "owner": "bot-play",
@@ -6434,6 +6956,7 @@
     },
     {
       "id": "OPP-d1",
+      "sourceState": "completed",
       "state": "completed",
       "capability": "bots",
       "owner": "bot-play",
@@ -6446,6 +6969,7 @@
     },
     {
       "id": "OPP-d2",
+      "sourceState": "completed",
       "state": "completed",
       "capability": "bots",
       "owner": "bot-play",
@@ -6459,6 +6983,7 @@
     },
     {
       "id": "OPP-d3",
+      "sourceState": "completed",
       "state": "completed",
       "capability": "bots",
       "owner": "bot-play",
@@ -6471,6 +6996,7 @@
     },
     {
       "id": "OPP-e1",
+      "sourceState": "retired",
       "state": "retired",
       "capability": "bots",
       "owner": "bot-play",
@@ -6484,6 +7010,7 @@
     },
     {
       "id": "OPP-e2",
+      "sourceState": "retired",
       "state": "retired",
       "capability": "bots",
       "owner": "bot-play",
@@ -6497,6 +7024,7 @@
     },
     {
       "id": "OPP-e3",
+      "sourceState": "retired",
       "state": "retired",
       "capability": "bots",
       "owner": "bot-play",
@@ -6510,6 +7038,7 @@
     },
     {
       "id": "SET-a1",
+      "sourceState": "queued",
       "state": "queued",
       "capability": "support",
       "owner": "assistance-and-presentation",
@@ -6524,6 +7053,7 @@
     },
     {
       "id": "SET-a10",
+      "sourceState": "queued",
       "state": "queued",
       "capability": "support",
       "owner": "assistance-and-presentation",
@@ -6538,6 +7068,7 @@
     },
     {
       "id": "SET-a11",
+      "sourceState": "queued",
       "state": "queued",
       "capability": "support",
       "owner": "assistance-and-presentation",
@@ -6551,6 +7082,7 @@
     },
     {
       "id": "SET-a12",
+      "sourceState": "queued",
       "state": "queued",
       "capability": "support",
       "owner": "assistance-and-presentation",
@@ -6564,6 +7096,7 @@
     },
     {
       "id": "SET-a13",
+      "sourceState": "queued",
       "state": "queued",
       "capability": "support",
       "owner": "assistance-and-presentation",
@@ -6577,6 +7110,7 @@
     },
     {
       "id": "SET-a14",
+      "sourceState": "queued",
       "state": "queued",
       "capability": "support",
       "owner": "assistance-and-presentation",
@@ -6590,6 +7124,7 @@
     },
     {
       "id": "SET-a15",
+      "sourceState": "queued",
       "state": "queued",
       "capability": "support",
       "owner": "assistance-and-presentation",
@@ -6604,6 +7139,7 @@
     },
     {
       "id": "SET-a16",
+      "sourceState": "queued",
       "state": "queued",
       "capability": "support",
       "owner": "assistance-and-presentation",
@@ -6618,6 +7154,7 @@
     },
     {
       "id": "SET-a17",
+      "sourceState": "queued",
       "state": "queued",
       "capability": "support",
       "owner": "assistance-and-presentation",
@@ -6632,6 +7169,7 @@
     },
     {
       "id": "SET-a18",
+      "sourceState": "queued",
       "state": "queued",
       "capability": "support",
       "owner": "assistance-and-presentation",
@@ -6645,6 +7183,7 @@
     },
     {
       "id": "SET-a19",
+      "sourceState": "queued",
       "state": "queued",
       "capability": "support",
       "owner": "assistance-and-presentation",
@@ -6658,6 +7197,7 @@
     },
     {
       "id": "SET-a2",
+      "sourceState": "queued",
       "state": "queued",
       "capability": "support",
       "owner": "assistance-and-presentation",
@@ -6672,6 +7212,7 @@
     },
     {
       "id": "SET-a20",
+      "sourceState": "queued",
       "state": "queued",
       "capability": "support",
       "owner": "assistance-and-presentation",
@@ -6685,6 +7226,7 @@
     },
     {
       "id": "SET-a21",
+      "sourceState": "queued",
       "state": "queued",
       "capability": "support",
       "owner": "assistance-and-presentation",
@@ -6698,6 +7240,7 @@
     },
     {
       "id": "SET-a22",
+      "sourceState": "queued",
       "state": "queued",
       "capability": "support",
       "owner": "assistance-and-presentation",
@@ -6712,6 +7255,7 @@
     },
     {
       "id": "SET-a23",
+      "sourceState": "queued",
       "state": "queued",
       "capability": "support",
       "owner": "assistance-and-presentation",
@@ -6725,6 +7269,7 @@
     },
     {
       "id": "SET-a24",
+      "sourceState": "queued",
       "state": "queued",
       "capability": "support",
       "owner": "assistance-and-presentation",
@@ -6738,6 +7283,7 @@
     },
     {
       "id": "SET-a25",
+      "sourceState": "queued",
       "state": "queued",
       "capability": "support",
       "owner": "assistance-and-presentation",
@@ -6752,6 +7298,7 @@
     },
     {
       "id": "SET-a26",
+      "sourceState": "queued",
       "state": "queued",
       "capability": "support",
       "owner": "assistance-and-presentation",
@@ -6766,6 +7313,7 @@
     },
     {
       "id": "SET-a27",
+      "sourceState": "queued",
       "state": "queued",
       "capability": "support",
       "owner": "assistance-and-presentation",
@@ -6780,6 +7328,7 @@
     },
     {
       "id": "SET-a3",
+      "sourceState": "queued",
       "state": "queued",
       "capability": "support",
       "owner": "assistance-and-presentation",
@@ -6794,6 +7343,7 @@
     },
     {
       "id": "SET-a4",
+      "sourceState": "queued",
       "state": "queued",
       "capability": "support",
       "owner": "assistance-and-presentation",
@@ -6808,6 +7358,7 @@
     },
     {
       "id": "SET-a5",
+      "sourceState": "queued",
       "state": "queued",
       "capability": "support",
       "owner": "assistance-and-presentation",
@@ -6822,6 +7373,7 @@
     },
     {
       "id": "SET-a6",
+      "sourceState": "queued",
       "state": "queued",
       "capability": "support",
       "owner": "assistance-and-presentation",
@@ -6836,6 +7388,7 @@
     },
     {
       "id": "SET-a7",
+      "sourceState": "queued",
       "state": "queued",
       "capability": "support",
       "owner": "assistance-and-presentation",
@@ -6850,6 +7403,7 @@
     },
     {
       "id": "SET-a8",
+      "sourceState": "queued",
       "state": "queued",
       "capability": "support",
       "owner": "assistance-and-presentation",
@@ -6863,6 +7417,7 @@
     },
     {
       "id": "SET-a9",
+      "sourceState": "queued",
       "state": "queued",
       "capability": "support",
       "owner": "assistance-and-presentation",
@@ -6876,6 +7431,7 @@
     },
     {
       "id": "SET-b1",
+      "sourceState": "blocked_owner",
       "state": "blocked_owner",
       "capability": "support",
       "owner": "assistance-and-presentation",
@@ -6889,6 +7445,7 @@
     },
     {
       "id": "SET-b2",
+      "sourceState": "blocked_owner",
       "state": "blocked_owner",
       "capability": "support",
       "owner": "assistance-and-presentation",
@@ -6902,6 +7459,7 @@
     },
     {
       "id": "SET-b3",
+      "sourceState": "blocked_owner",
       "state": "blocked_owner",
       "capability": "support",
       "owner": "assistance-and-presentation",
@@ -6916,6 +7474,7 @@
     },
     {
       "id": "SET-b4",
+      "sourceState": "blocked_owner",
       "state": "blocked_owner",
       "capability": "support",
       "owner": "assistance-and-presentation",
@@ -6929,6 +7488,7 @@
     },
     {
       "id": "SET-b5",
+      "sourceState": "blocked_owner",
       "state": "blocked_owner",
       "capability": "support",
       "owner": "assistance-and-presentation",
@@ -6942,6 +7502,7 @@
     },
     {
       "id": "SET-c1",
+      "sourceState": "blocked_rfc",
       "state": "blocked_rfc",
       "capability": "support",
       "owner": "assistance-and-presentation",
@@ -6955,6 +7516,7 @@
     },
     {
       "id": "SET-c2",
+      "sourceState": "blocked_rfc",
       "state": "blocked_rfc",
       "capability": "support",
       "owner": "assistance-and-presentation",
@@ -6968,6 +7530,7 @@
     },
     {
       "id": "SET-c3",
+      "sourceState": "blocked_rfc",
       "state": "blocked_rfc",
       "capability": "support",
       "owner": "assistance-and-presentation",
@@ -6981,6 +7544,7 @@
     },
     {
       "id": "SET-d1",
+      "sourceState": "completed",
       "state": "completed",
       "capability": "support",
       "owner": "assistance-and-presentation",
@@ -6993,6 +7557,7 @@
     },
     {
       "id": "SET-d2",
+      "sourceState": "completed",
       "state": "completed",
       "capability": "support",
       "owner": "assistance-and-presentation",
@@ -7006,6 +7571,7 @@
     },
     {
       "id": "TCH-a1",
+      "sourceState": "queued",
       "state": "queued",
       "capability": "professional",
       "owner": "professional-workflows",
@@ -7021,6 +7587,7 @@
     },
     {
       "id": "TCH-a10",
+      "sourceState": "queued",
       "state": "queued",
       "capability": "professional",
       "owner": "professional-workflows",
@@ -7036,6 +7603,7 @@
     },
     {
       "id": "TCH-a11",
+      "sourceState": "queued",
       "state": "queued",
       "capability": "professional",
       "owner": "professional-workflows",
@@ -7049,6 +7617,7 @@
     },
     {
       "id": "TCH-a12",
+      "sourceState": "queued",
       "state": "queued",
       "capability": "professional",
       "owner": "professional-workflows",
@@ -7062,6 +7631,7 @@
     },
     {
       "id": "TCH-a13",
+      "sourceState": "queued",
       "state": "queued",
       "capability": "professional",
       "owner": "professional-workflows",
@@ -7076,6 +7646,7 @@
     },
     {
       "id": "TCH-a14",
+      "sourceState": "queued",
       "state": "queued",
       "capability": "professional",
       "owner": "professional-workflows",
@@ -7089,6 +7660,7 @@
     },
     {
       "id": "TCH-a15",
+      "sourceState": "queued",
       "state": "queued",
       "capability": "professional",
       "owner": "professional-workflows",
@@ -7102,6 +7674,7 @@
     },
     {
       "id": "TCH-a16",
+      "sourceState": "queued",
       "state": "queued",
       "capability": "professional",
       "owner": "professional-workflows",
@@ -7115,6 +7688,7 @@
     },
     {
       "id": "TCH-a17",
+      "sourceState": "queued",
       "state": "queued",
       "capability": "professional",
       "owner": "professional-workflows",
@@ -7129,6 +7703,7 @@
     },
     {
       "id": "TCH-a18",
+      "sourceState": "queued",
       "state": "queued",
       "capability": "professional",
       "owner": "professional-workflows",
@@ -7142,6 +7717,7 @@
     },
     {
       "id": "TCH-a19",
+      "sourceState": "queued",
       "state": "queued",
       "capability": "professional",
       "owner": "professional-workflows",
@@ -7156,6 +7732,7 @@
     },
     {
       "id": "TCH-a2",
+      "sourceState": "queued",
       "state": "queued",
       "capability": "professional",
       "owner": "professional-workflows",
@@ -7171,6 +7748,7 @@
     },
     {
       "id": "TCH-a20",
+      "sourceState": "queued",
       "state": "queued",
       "capability": "professional",
       "owner": "professional-workflows",
@@ -7185,6 +7763,7 @@
     },
     {
       "id": "TCH-a21",
+      "sourceState": "queued",
       "state": "queued",
       "capability": "professional",
       "owner": "professional-workflows",
@@ -7199,6 +7778,7 @@
     },
     {
       "id": "TCH-a22",
+      "sourceState": "queued",
       "state": "queued",
       "capability": "professional",
       "owner": "professional-workflows",
@@ -7212,6 +7792,7 @@
     },
     {
       "id": "TCH-a23",
+      "sourceState": "queued",
       "state": "queued",
       "capability": "professional",
       "owner": "professional-workflows",
@@ -7227,6 +7808,7 @@
     },
     {
       "id": "TCH-a24",
+      "sourceState": "queued",
       "state": "queued",
       "capability": "professional",
       "owner": "professional-workflows",
@@ -7241,6 +7823,7 @@
     },
     {
       "id": "TCH-a25",
+      "sourceState": "queued",
       "state": "queued",
       "capability": "professional",
       "owner": "professional-workflows",
@@ -7255,6 +7838,7 @@
     },
     {
       "id": "TCH-a26",
+      "sourceState": "queued",
       "state": "queued",
       "capability": "professional",
       "owner": "professional-workflows",
@@ -7269,6 +7853,7 @@
     },
     {
       "id": "TCH-a27",
+      "sourceState": "queued",
       "state": "queued",
       "capability": "professional",
       "owner": "professional-workflows",
@@ -7284,6 +7869,7 @@
     },
     {
       "id": "TCH-a28",
+      "sourceState": "queued",
       "state": "queued",
       "capability": "professional",
       "owner": "professional-workflows",
@@ -7297,6 +7883,7 @@
     },
     {
       "id": "TCH-a29",
+      "sourceState": "queued",
       "state": "queued",
       "capability": "professional",
       "owner": "professional-workflows",
@@ -7310,6 +7897,7 @@
     },
     {
       "id": "TCH-a3",
+      "sourceState": "queued",
       "state": "queued",
       "capability": "professional",
       "owner": "professional-workflows",
@@ -7323,6 +7911,7 @@
     },
     {
       "id": "TCH-a30",
+      "sourceState": "queued",
       "state": "queued",
       "capability": "professional",
       "owner": "professional-workflows",
@@ -7336,6 +7925,7 @@
     },
     {
       "id": "TCH-a31",
+      "sourceState": "queued",
       "state": "queued",
       "capability": "professional",
       "owner": "professional-workflows",
@@ -7349,6 +7939,7 @@
     },
     {
       "id": "TCH-a32",
+      "sourceState": "queued",
       "state": "queued",
       "capability": "professional",
       "owner": "professional-workflows",
@@ -7363,6 +7954,7 @@
     },
     {
       "id": "TCH-a33",
+      "sourceState": "queued",
       "state": "queued",
       "capability": "professional",
       "owner": "professional-workflows",
@@ -7377,6 +7969,7 @@
     },
     {
       "id": "TCH-a4",
+      "sourceState": "queued",
       "state": "queued",
       "capability": "professional",
       "owner": "professional-workflows",
@@ -7392,6 +7985,7 @@
     },
     {
       "id": "TCH-a5",
+      "sourceState": "queued",
       "state": "queued",
       "capability": "professional",
       "owner": "professional-workflows",
@@ -7406,6 +8000,7 @@
     },
     {
       "id": "TCH-a6",
+      "sourceState": "queued",
       "state": "queued",
       "capability": "professional",
       "owner": "professional-workflows",
@@ -7421,6 +8016,7 @@
     },
     {
       "id": "TCH-a7",
+      "sourceState": "queued",
       "state": "queued",
       "capability": "professional",
       "owner": "professional-workflows",
@@ -7435,6 +8031,7 @@
     },
     {
       "id": "TCH-a8",
+      "sourceState": "queued",
       "state": "queued",
       "capability": "professional",
       "owner": "professional-workflows",
@@ -7448,6 +8045,7 @@
     },
     {
       "id": "TCH-a9",
+      "sourceState": "queued",
       "state": "queued",
       "capability": "professional",
       "owner": "professional-workflows",
@@ -7462,6 +8060,7 @@
     },
     {
       "id": "TCH-b1",
+      "sourceState": "blocked_owner",
       "state": "blocked_owner",
       "capability": "professional",
       "owner": "professional-workflows",
@@ -7476,6 +8075,7 @@
     },
     {
       "id": "TCH-b10",
+      "sourceState": "blocked_owner",
       "state": "blocked_owner",
       "capability": "professional",
       "owner": "professional-workflows",
@@ -7489,6 +8089,7 @@
     },
     {
       "id": "TCH-b2",
+      "sourceState": "blocked_owner",
       "state": "blocked_owner",
       "capability": "professional",
       "owner": "professional-workflows",
@@ -7503,6 +8104,7 @@
     },
     {
       "id": "TCH-b3",
+      "sourceState": "blocked_owner",
       "state": "blocked_owner",
       "capability": "professional",
       "owner": "professional-workflows",
@@ -7517,6 +8119,7 @@
     },
     {
       "id": "TCH-b4",
+      "sourceState": "blocked_owner",
       "state": "blocked_owner",
       "capability": "professional",
       "owner": "professional-workflows",
@@ -7531,6 +8134,7 @@
     },
     {
       "id": "TCH-b5",
+      "sourceState": "blocked_owner",
       "state": "blocked_owner",
       "capability": "professional",
       "owner": "professional-workflows",
@@ -7545,6 +8149,7 @@
     },
     {
       "id": "TCH-b6",
+      "sourceState": "blocked_owner",
       "state": "blocked_owner",
       "capability": "professional",
       "owner": "professional-workflows",
@@ -7559,6 +8164,7 @@
     },
     {
       "id": "TCH-b7",
+      "sourceState": "blocked_owner",
       "state": "blocked_owner",
       "capability": "professional",
       "owner": "professional-workflows",
@@ -7573,6 +8179,7 @@
     },
     {
       "id": "TCH-b8",
+      "sourceState": "blocked_owner",
       "state": "blocked_owner",
       "capability": "professional",
       "owner": "professional-workflows",
@@ -7586,6 +8193,7 @@
     },
     {
       "id": "TCH-b9",
+      "sourceState": "blocked_owner",
       "state": "blocked_owner",
       "capability": "professional",
       "owner": "professional-workflows",
@@ -7600,6 +8208,7 @@
     },
     {
       "id": "TCH-c1",
+      "sourceState": "blocked_rfc",
       "state": "blocked_rfc",
       "capability": "professional",
       "owner": "professional-workflows",
@@ -7613,6 +8222,7 @@
     },
     {
       "id": "TCH-d1",
+      "sourceState": "completed",
       "state": "completed",
       "capability": "professional",
       "owner": "professional-workflows",
@@ -7625,6 +8235,7 @@
     },
     {
       "id": "TCH-d2",
+      "sourceState": "completed",
       "state": "completed",
       "capability": "professional",
       "owner": "professional-workflows",
@@ -7637,6 +8248,7 @@
     },
     {
       "id": "TCH-d3",
+      "sourceState": "completed",
       "state": "completed",
       "capability": "professional",
       "owner": "professional-workflows",
@@ -7649,6 +8261,7 @@
     },
     {
       "id": "TCH-e1",
+      "sourceState": "retired",
       "state": "retired",
       "capability": "professional",
       "owner": "professional-workflows",

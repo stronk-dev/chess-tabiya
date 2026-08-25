@@ -275,6 +275,7 @@ export class DrillSessionController {
     readonly fen: string;
     readonly side: "white" | "black";
     readonly mode: "human_common" | "strong_engine";
+    readonly targetElo?: 1000 | 1400 | 1800 | 2200;
   }): Promise<void> {
     this.#projectionOnly = false;
     this.#matchMode = undefined;
@@ -286,7 +287,17 @@ export class DrillSessionController {
       const session = WriterSession.claimFor(runId, this.#storage);
       const run = await this.#api.createRun({
         id: runId,
-        session: { kind: "position", start: { fen: input.fen, side: input.side }, feedbackPolicy: "attempt_end", opponentPolicy: { mode: input.mode } },
+        session: {
+          kind: "position",
+          start: { fen: input.fen, side: input.side },
+          feedbackPolicy: "attempt_end",
+          opponentPolicy: {
+            mode: input.mode,
+            ...(input.mode === "human_common" && input.targetElo !== undefined
+              ? { targetElo: input.targetElo }
+              : {}),
+          },
+        },
         policyConfig: positionPolicyConfig(capabilities),
         seed,
       }, session.writerId);

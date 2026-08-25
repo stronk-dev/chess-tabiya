@@ -165,6 +165,8 @@ class FakeApi implements DrillClientApi {
         mode: this.document.mode as string,
         phase: "opening",
         difficulty: this.document.difficulty,
+        objectiveSummary: this.document.objective.summary ?? this.document.objective.type.replaceAll("_", " "),
+        concepts: this.document.concepts ?? [],
         reviewStatus: "schema_example",
         channel: "official",
       },
@@ -759,9 +761,10 @@ describe("DrillSessionController", () => {
       fen: "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1",
       side: "black",
       mode: "human_common",
+      targetElo: 1800,
     });
 
-    expect(api.created?.session).toMatchObject({ kind: "position", feedbackPolicy: "attempt_end" });
+    expect(api.created?.session).toMatchObject({ kind: "position", feedbackPolicy: "attempt_end", opponentPolicy: { mode: "human_common", targetElo: 1800 } });
     expect(api.selected).toMatchObject({ startFen: expect.stringContaining("rnbqkbnr"), historyUci: [], policy: { mode: "human_common", policyConfigDigest: digest } });
     expect(environment.controller.state.pack).toBeUndefined();
     expect(environment.controller.state.runState?.run.nodes.at(-1)).toMatchObject({ moveUci: "e2e4", actor: "opponent" });

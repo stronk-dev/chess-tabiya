@@ -79,10 +79,15 @@ TABIYA_PORT=8080 make up
 
 Requirements:
 
-- Node.js 24 or newer
+- Node.js 24
 - pnpm 11.18.0
 - Docker for packaged or Maia-backed operation
 - Stockfish 18 for the real-engine verification path
+
+On Homebrew systems the Makefile selects `node@24` and Stockfish 18 directly when
+they are installed. Other platforms use the same `node` and `stockfish`/`SF_CMD`
+resolution supplied by PATH or CI; the commands below do not require environment
+prefixes.
 
 Install dependencies and run the standard checks:
 

@@ -34,6 +34,8 @@ export interface PackSummary {
   readonly mode: string;
   readonly phase: PackPhase | null;
   readonly difficulty: unknown;
+  readonly objectiveSummary: string;
+  readonly concepts: readonly string[];
   readonly reviewStatus: string;
   readonly channel: "official" | "community";
   readonly publisherHandle?: string;

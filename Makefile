@@ -1,3 +1,12 @@
+# Prefer the repository's pinned local toolchain when Homebrew supplies it. CI and
+# other platforms continue to use PATH/SF_CMD, so callers never need shell prefixes.
+ifneq ($(wildcard /opt/homebrew/opt/node@24/bin/node),)
+export PATH := /opt/homebrew/opt/node@24/bin:$(PATH)
+endif
+
+SF_CMD ?= $(if $(wildcard /opt/homebrew/bin/stockfish),/opt/homebrew/bin/stockfish,$(shell command -v stockfish 2>/dev/null))
+export SF_CMD
+
 .PHONY: setup check typecheck test test-software test-content test-tier-check test-browser test-browser-smoke test-browser-content test-browser-matrix test-browser-ci ci-local schema-check register-check status-parity work-index work-item-check roadmap-receipt roadmap-check intent-parity evidence-manifest-check semantic-evidence-check opening-catalogue opening-catalogue-check account-data-lifecycle-check learner-rating-bracket learner-rating-bracket-check learner-rating-isolation-check graduation-plan graduation-plan-check tactical-collector-measurement breadth-collector-measurement build verify-software verify-governance verify-content verify pack-check shape-check expression-census graduation-report graduation-report-update graduation-clear pack-preview source-fetch candidate-emit candidate-attach sourcing-check verify-draft tablebase-walk engine-walk up up-engines down
 
 setup:
@@ -120,6 +129,7 @@ verify-governance: register-check status-parity work-index work-item-check roadm
 verify-content: test-content
 
 verify: verify-software verify-governance verify-content
+verify: export ENGINES_REQUIRED := 1
 
 pack-check:
 	@test -n "$(FILE)" || (echo "Usage: make pack-check FILE=<path-to-pack.json>" >&2; exit 2)

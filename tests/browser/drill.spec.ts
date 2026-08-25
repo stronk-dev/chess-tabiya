@@ -14,7 +14,7 @@ async function register(page: Page): Promise<string> {
     await page.getByLabel("Password").fill("browser-test-password");
     await page.getByRole("button", { name: "Register" }).click();
   }
-  await expect(page.getByText("Choose a position worth returning to.")).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Choose the game you want to understand." })).toBeVisible();
   return handle;
 }
 
@@ -126,7 +126,7 @@ test("imports one game, opens a grounded story, re-enters play, and exports orig
 });
 
 test("account lifecycle downloads data, deletes one run, and clears this browser on account deletion", async ({ page }) => {
-  await page.getByRole("button", { name: "Start game" }).click();
+  await page.getByRole("button", { name: "Start and keep the game" }).click();
   await expect(page.getByLabel("Chessboard")).toBeVisible();
   const runId = page.url().split("/").at(-1)!;
   await page.evaluate((id) => {
@@ -169,8 +169,9 @@ test("account lifecycle downloads data, deletes one run, and clears this browser
 test("Just Play reaches a Carlsbad and opens a guided shape marker without mutating the run", async ({ page }) => {
   await page.evaluate(() => localStorage.setItem("tabiya.assistance.v1.position", JSON.stringify({ version: 4, markers: "off", guided: "live", humanSplit: "off", corpus: "off", voice: "authored", spoken: "off", boardLighting: "legal", arrows: "off", ambient: "off" })));
   await page.getByLabel("Your side").selectOption("black");
-  await page.getByLabel("Optional FEN").fill("r1bqr1k1/pppnbppp/5n2/3p2B1/3P4/2NBP3/PPQ1NPPP/R4RK1 b - - 7 10");
-  await page.getByRole("button", { name: "Start game" }).click();
+  await page.getByRole("button", { name: "Start from a FEN" }).click();
+  await page.getByLabel("Position FEN").fill("r1bqr1k1/pppnbppp/5n2/3p2B1/3P4/2NBP3/PPQ1NPPP/R4RK1 b - - 7 10");
+  await page.getByRole("button", { name: "Start and keep the game" }).click();
   await expect(page.getByLabel("Chessboard")).toBeVisible();
   await expect(page.getByRole("button", { name: /Carlsbad structure/ })).toHaveCount(0);
   await expect(page.getByText("No pack is loaded. Nothing is claimed about this position.")).toBeVisible();
@@ -203,7 +204,7 @@ test("Just Play reaches a Carlsbad and opens a guided shape marker without mutat
 });
 
 test("Just Play explicitly reveals evidence and the next move closes the window", async ({ page }) => {
-  await page.getByRole("button", { name: "Start game" }).click();
+  await page.getByRole("button", { name: "Start and keep the game" }).click();
   await expect(page.getByLabel("Chessboard")).toBeVisible();
   const reveal = page.getByRole("button", { name: "Open evidence for this position" });
   await expect(reveal).toBeEnabled();
@@ -256,8 +257,9 @@ test("adaptive guidance keeps a queen-exchange phase change passive and removabl
     Object.defineProperty(window, "speechSynthesis", { configurable: true, value: { getVoices: () => [{}], cancel() {}, speak(value: { text: string }) { (window as unknown as { __spoken: string[] }).__spoken.push(value.text); } } });
   });
   await page.reload();
-  await page.getByLabel("Optional FEN").fill("3qk2r/5p2/2b2n2/8/8/8/8/3QK3 w - - 0 1");
-  await page.getByRole("button", { name: "Start game" }).click();
+  await page.getByRole("button", { name: "Start from a FEN" }).click();
+  await page.getByLabel("Position FEN").fill("3qk2r/5p2/2b2n2/8/8/8/8/3QK3 w - - 0 1");
+  await page.getByRole("button", { name: "Start and keep the game" }).click();
   await expect(page.getByLabel("Chessboard")).toBeVisible();
   await expect(page.getByRole("region", { name: "Phase reading" })).toContainText("middlegame");
   await expect(page.getByText("Detected by Tabiya's phase bands: middlegame.")).toHaveCount(0);
@@ -293,7 +295,7 @@ test("adaptive guidance keeps a queen-exchange phase change passive and removabl
 });
 
 test("runtime corpus counts stay silent until reveal and render population facts on request", async ({ page }) => {
-  await page.getByRole("button", { name: "Start game" }).click();
+  await page.getByRole("button", { name: "Start and keep the game" }).click();
   await page.getByText("Assistance", { exact: true }).click();
   await page.getByLabel("Passive pivotal markers").check();
   await move(page, "e2", "e4");
@@ -310,7 +312,7 @@ test("runtime corpus counts stay silent until reveal and render population facts
   await page.getByRole("button", { name: "Open corpus evidence inspector" }).click();
   await page.getByRole("button", { name: "Inspector", exact: true }).click();
   const corpus = page.getByRole("region", { name: "Corpus evidence" });
-  await expect(corpus).toContainText("Lichess explorer — rating buckets 1000,1200,1400,1600,1800,2000,2200,2500");
+  await expect(corpus).toContainText("Lichess explorer — rating buckets 1400; speeds blitz,rapid,classical");
   await expect(corpus).toContainText("These counts say what this population played, not what is good.");
   await expect(corpus).toContainText("e4 — 60 of 120 games (50.0%). Outcome split withheld below the 100-game per-move floor.");
   await expect(corpus).toContainText("Last recorded game in this population: 2019-04.");
@@ -326,7 +328,7 @@ test("@content Pack B references the Carlsbad entry while its pack prose stays s
   expect(projected).not.toHaveProperty("planClasses");
   expect(projected).not.toHaveProperty("successConditions");
 
-  await page.getByRole("article").filter({ hasText: pack.title }).getByRole("button", { name: /Open position/ }).click();
+  await page.getByRole("article").filter({ hasText: pack.title }).getByRole("button", { name: /Rehearse this position/ }).click();
   await page.getByRole("button", { name: "Inspector" }).click();
   const structuralReading = page.getByRole("button", { name: "Position structure" });
   await expect(structuralReading).toHaveAttribute("aria-expanded", "false");
@@ -352,7 +354,7 @@ test("@content Pack B references the Carlsbad entry while its pack prose stays s
 
 test("immediate guard waits for the consequence, preserves play-on, and rewinds the decision", async ({ page }) => {
   const card = page.getByRole("article").filter({ hasText: "Post-commit guard browser fixture" });
-  await card.getByRole("button", { name: /Open position/ }).click();
+  await card.getByRole("button", { name: /Rehearse this position/ }).click();
   await expect(page.getByLabel("Chessboard")).toBeVisible();
 
   await move(page, "h2", "h3");
@@ -374,7 +376,7 @@ test("immediate guard waits for the consequence, preserves play-on, and rewinds 
 
 test("stated reasoning reveals attributed key points only after recording and keeps the prior attempt", async ({ page }) => {
   const card = page.getByRole("article").filter({ hasText: "Stated reasoning browser fixture" });
-  await card.getByRole("button", { name: /Open position/ }).click();
+  await card.getByRole("button", { name: /Rehearse this position/ }).click();
   await move(page, "h2", "h3");
 
   const reasoning = page.getByRole("region", { name: "State your reasoning" });
@@ -412,7 +414,7 @@ test("stated reasoning reveals attributed key points only after recording and ke
 
 test("Live turns a run into a session and exposes a chrome-free overlay", async ({ page }) => {
   const card = page.getByRole("article").filter({ hasText: "schema example" }).first();
-  await card.getByRole("button", { name: /Open position/ }).click();
+  await card.getByRole("button", { name: /Rehearse this position/ }).click();
   await expect(page.getByLabel("Chessboard")).toBeVisible();
   await page.goto("/live");
   await expect(page.getByRole("heading", { name: "Rehearse with other people." })).toBeVisible();
@@ -476,7 +478,7 @@ test("library exposes phase honestly and survives a malformed pack response", as
     await route.fulfill({ response, json: body });
   });
   await page.reload();
-  await expect(page.getByRole("article").filter({ hasText: "Unclassified browser fixture" })).toContainText("unclassified");
+  await expect(page.getByRole("article").filter({ hasText: "Unclassified browser fixture" })).toContainText("phase not recorded");
 
   const pageErrors: Error[] = [];
   page.on("pageerror", (error) => pageErrors.push(error));
@@ -489,9 +491,9 @@ test("library exposes phase honestly and survives a malformed pack response", as
   const card = page.getByRole("article").filter({
     has: page.getByText("Najdorf: choose a setup and cross the theory boundary", { exact: true }),
   });
-  await card.getByRole("button", { name: /Open position/ }).click();
+  await card.getByRole("button", { name: /Rehearse this position/ }).click();
   await expect(page.getByRole("alert")).toContainText("did not declare start.side");
-  await expect(page.getByText("Choose a position worth returning to.")).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Choose the game you want to understand." })).toBeVisible();
   expect(pageErrors).toEqual([]);
 });
 
@@ -500,7 +502,7 @@ test("terminal outcome reveals authored commentary, a native story, and a revoca
     .getByRole("article")
     .filter({ hasText: "Terminal outcome browser fixture" });
   await expect(card).toBeVisible();
-  await card.getByRole("button", { name: /Open position/ }).click();
+  await card.getByRole("button", { name: /Rehearse this position/ }).click();
 
   await move(page, "f2", "f3");
   await expect(page.getByRole("heading", { name: "Before terminal continuation" })).toBeVisible();
@@ -537,7 +539,7 @@ test("terminal outcome reveals authored commentary, a native story, and a revoca
 
 test("terminal flip preserves the source and milestones link back into played runs", async ({ page }) => {
   const card = page.getByRole("article").filter({ hasText: "Terminal outcome browser fixture" });
-  await card.getByRole("button", { name: /Open position/ }).click();
+  await card.getByRole("button", { name: /Rehearse this position/ }).click();
   await move(page, "f2", "f3");
   await page.getByRole("button", { name: "Continue" }).click();
   await move(page, "g2", "g4");
@@ -553,7 +555,7 @@ test("terminal flip preserves the source and milestones link back into played ru
 
 test("Outcome Drill resolves a non-terminal hold and remains playable", async ({ page }) => {
   const card = page.getByRole("article").filter({ hasText: "Outcome hold browser fixture" });
-  await card.getByRole("button", { name: /Open position/ }).click();
+  await card.getByRole("button", { name: /Rehearse this position/ }).click();
   await expect(page.getByText("No opponent move has been played yet.")).toBeVisible();
   await expect(page.getByText("Root assessment (authored, unproved):", { exact: false })).toBeVisible();
 
@@ -574,7 +576,7 @@ test("Outcome Drill resolves a non-terminal hold and remains playable", async ({
 
 test("Outcome Drill can grade a terminal loss as successful resistance", async ({ page }) => {
   const card = page.getByRole("article").filter({ hasText: "Outcome resist browser fixture" });
-  await card.getByRole("button", { name: /Open position/ }).click();
+  await card.getByRole("button", { name: /Rehearse this position/ }).click();
   await move(page, "f2", "f3");
   await expect(page.getByRole("heading", { name: "Resistance horizon" })).toBeVisible();
   await page.getByRole("button", { name: "Continue" }).click();
@@ -588,7 +590,7 @@ test("Outcome Drill can grade a terminal loss as successful resistance", async (
 
 test("@content Pack C names authored assessment and the opponent that actually moved", async ({ page }) => {
   const card = page.getByRole("article").filter({ hasText: "Rook endings: holding 3 against 4" });
-  await card.getByRole("button", { name: /Open position/ }).click();
+  await card.getByRole("button", { name: /Rehearse this position/ }).click();
   await expect(page.getByText("Eleven pieces are on the board", { exact: false })).toBeVisible();
   await expect(page.getByText("Requested resistance: Human-model replies, target Elo 1900", { exact: false })).toBeVisible();
   await expect(page.getByText("Deterministic mock opponent", { exact: false })).toBeVisible();
@@ -808,7 +810,7 @@ test("@content served Najdorf pack plays, rewinds, branches, compares, and expor
   await page
     .getByRole("article")
     .filter({ hasText: "schema example" })
-    .getByRole("button", { name: /Open position/ })
+    .getByRole("button", { name: /Rehearse this position/ })
     .click();
   await expect(page.getByLabel("Chessboard")).toBeVisible();
   await page.getByRole("button", { name: "Inspector" }).click();
@@ -985,7 +987,7 @@ test("branch group captures three candidates, rotates, recovers evidence, compar
   await page
     .getByRole("article")
     .filter({ hasText: "schema example" })
-    .getByRole("button", { name: /Open position/ })
+    .getByRole("button", { name: /Rehearse this position/ })
     .click();
   await move(page, "c1", "e3");
   await page.getByRole("button", { name: "Continue" }).click();
@@ -1054,7 +1056,7 @@ test("@content Pack A withholds its line, grades the boundary, and renders autho
   const projected = await page.request.get("/packs/anti-caro-advance-c5-race");
   expect(projected.ok(), await projected.text()).toBe(true);
   expect((await projected.json()).spine).toEqual([]);
-  await card.getByRole("button", { name: /Open position/ }).click();
+  await card.getByRole("button", { name: /Rehearse this position/ }).click();
 
   await expect(page.getByLabel("Chessboard")).toBeVisible();
   await expect(page.getByText("Active line 1 plies")).toBeVisible();
@@ -1096,7 +1098,7 @@ test("@content Pack A withholds its line, grades the boundary, and renders autho
 
 test("Line Drill crosses a cap on-line, continues, and renders unknown honestly", async ({ page }) => {
   const card = page.getByRole("article").filter({ hasText: "Line Drill boundary browser fixture" });
-  await card.getByRole("button", { name: /Open position/ }).click();
+  await card.getByRole("button", { name: /Rehearse this position/ }).click();
   await expect(page.getByText("Requested resistance: Authored theory replies", { exact: false })).toBeVisible();
   await expect(page.getByText("No opponent move has been played yet.")).toBeVisible();
 
@@ -1124,7 +1126,7 @@ test("a granted spectator follows a run without receiving a write control", asyn
   const card = page
     .getByRole("article")
     .filter({ hasText: "Caro-Kann Advance: winning the c5 race" });
-  await card.getByRole("button", { name: /Open position/ }).click();
+  await card.getByRole("button", { name: /Rehearse this position/ }).click();
   await expect(page.getByLabel("Chessboard")).toBeVisible();
   const runId = decodeURIComponent(new URL(page.url()).pathname.split("/").at(-1)!);
   const writerId = await page.evaluate((id) =>
@@ -1172,7 +1174,7 @@ test("@matrix every shell route owns the viewport at supported desktop and table
     await page
       .getByRole("article")
       .filter({ hasText: "schema example" })
-      .getByRole("button", { name: /Open position/ })
+    .getByRole("button", { name: /Rehearse this position/ })
       .click();
     await expect(page.getByLabel("Chessboard")).toBeVisible();
     const runPath = new URL(page.url()).pathname;
@@ -1220,7 +1222,7 @@ test("@matrix play composition keeps one exact board rectangle through overlays 
   await page
     .getByRole("article")
     .filter({ hasText: "schema example" })
-    .getByRole("button", { name: /Open position/ })
+    .getByRole("button", { name: /Rehearse this position/ })
     .click();
 
   const projections = [
@@ -1267,7 +1269,7 @@ test("@matrix play composition keeps one exact board rectangle through overlays 
 
 test("a committed move updates the stable board instance instead of remounting it", async ({ page }) => {
   await page.goto("/play");
-  await page.getByRole("button", { name: "Start game" }).click();
+  await page.getByRole("button", { name: "Start and keep the game" }).click();
   const board = page.getByLabel("Chessboard");
   await expect(board).toBeVisible();
   await board.evaluate((element) => {
@@ -1302,7 +1304,7 @@ test("@matrix served endgame packs keep the board above the timeline at supporte
       await page.goto("/play");
       const card = page.getByRole("article").filter({ hasText: title });
       await expect(card, `${title} should be served`).toHaveCount(1);
-      await card.getByRole("button", { name: /Open position/ }).click();
+  await card.getByRole("button", { name: /Rehearse this position/ }).click();
       await expect(page.getByLabel("Chessboard")).toBeVisible();
       await assertRunViewport(page, viewport);
     }
@@ -1336,7 +1338,7 @@ test("@matrix served endgame packs submit the exact drawn move through every per
         await inputPage
           .getByRole("article")
           .filter({ hasText: pack.title })
-          .getByRole("button", { name: /Open position/ })
+    .getByRole("button", { name: /Rehearse this position/ })
           .click();
         await liveInputMove(inputPage, pack.uci, pack.orientation, mode);
       }
@@ -1350,7 +1352,7 @@ test("@matrix the semantic board remains a complete interactive grid after a key
   await page
     .getByRole("article")
     .filter({ hasText: "schema example" })
-    .getByRole("button", { name: /Open position/ })
+    .getByRole("button", { name: /Rehearse this position/ })
     .click();
   const grid = page.getByRole("grid", { name: /Board input/u });
   await expect(grid).toBeVisible();
@@ -1369,7 +1371,7 @@ test("@matrix normal Tab traversal reaches every drill region in both directions
   await page
     .getByRole("article")
     .filter({ hasText: "schema example" })
-    .getByRole("button", { name: /Open position/ })
+    .getByRole("button", { name: /Rehearse this position/ })
     .click();
   await page.getByText("Enter a move", { exact: true }).click();
 
@@ -1423,7 +1425,7 @@ test("@matrix mobile shell, settings, and install manifest preserve the run regi
   await page.reload();
   await expect(position.getByLabel("Board lighting")).toHaveValue("sight");
   await page.goto("/play");
-  await page.getByRole("button", { name: "Start game" }).click();
+  await page.getByRole("button", { name: "Start and keep the game" }).click();
   await expect(page.getByLabel("Chessboard")).toBeVisible();
   await expect(page.getByRole("navigation", { name: "Run regions" })).toBeVisible();
   for (const viewport of [{ width: 390, height: 844 }, { width: 360, height: 680 }] as const) {
@@ -1451,7 +1453,7 @@ test("@matrix mobile shell, settings, and install manifest preserve the run regi
   await page
     .getByRole("article")
     .filter({ hasText: "Outcome hold browser fixture" })
-    .getByRole("button", { name: /Open position/ })
+    .getByRole("button", { name: /Rehearse this position/ })
     .click();
   await page.getByRole("button", { name: "Support" }).click();
   await expect(page.getByText("No opponent move has been played yet.")).toBeVisible();

@@ -217,10 +217,14 @@ describe("runtime invariant properties", () => {
           const result = commitMove(rewound, legal[moveChoice % legal.length]!, { at });
 
           expect(JSON.stringify(oldNodes)).toBe(oldSnapshot);
-          expect(result.emitted.map((event) => event.type)).toEqual([
+          const emittedTypes = result.emitted.map((event) => event.type);
+          expect(emittedTypes.slice(0, 2)).toEqual([
             "branch.forked",
             "move.committed",
           ]);
+          expect(emittedTypes.slice(2)).toEqual(
+            emittedTypes.includes("outcome.reached") ? ["outcome.reached"] : [],
+          );
           expect(result.run.nodes.slice(0, oldNodes.length)).toEqual(oldNodes);
           expect(result.run.nodes.at(-1)!.parentId).toBe(target.id);
           const comparison = compareBranches(result.run, [

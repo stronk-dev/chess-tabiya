@@ -7496,3 +7496,48 @@ the individual stale sentences remain owned by their own amendment rows.
 
 **Verification:** receipt unit tests, roadmap R1-R10 and the 1,348-row work index are green; full
 repository governance follows before commit.
+
+## 2026-08-25 — arrival, catalogue and opponent entry become one usable workflow
+
+**What landed:** the first executable 1.0 UX wave closes the arrival/catalogue defects rather than
+adding another settings surface. Home now states the rehearsal loop, provides direct first-run and
+phase-thread doors, and reports due/open work. The pack summary carries authored objectives and
+concepts; Play provides phase, band, search and sort controls; cards lead with the objective and
+translate storage modes into actions. The primary full-game entry now sends one of four named Maia
+rungs into `opponentPolicy.targetElo`, keeps strong-engine play distinct, and names the rating limit.
+
+**Tracking correction:** first use exposed [[D1544]] — `work-items-1.0.json` could not advance an
+item without rewriting its source dossier. The stable item now retains `sourceState` separately
+from its execution `state`; completion requires a date and evidence string, and sync preserves
+lawful progress. The 1.0 receipt therefore records this wave as completed work rather than leaving
+its items queued forever.
+
+**Verification:** server/web typechecks and 62 focused projection, catalogue, screen, controller,
+and shell tests pass. The in-app browser had no available browser instance, so no manual visual
+verdict is claimed; the repository browser and full verification gates remain required before the
+checkpoint lands.
+
+## 2026-08-25 — the full gate finds a terminal suffix hidden by random generation
+
+The first full software pass found [[D1546]] after 74 generated cases: a legal post-rewind move
+emitted the required `branch.forked` → `move.committed` sequence and then correctly emitted
+`outcome.reached`. The property had accidentally specified the entire event list rather than its
+ordering invariant. It now asserts the exact two-event prefix and admits only the chess-rules
+terminal suffix. The focused property file and the complete 993-test software tier pass; governance
+is rerun after the same-commit ledger closeout.
+
+## 2026-08-25 — local verification owns its pinned toolchain
+
+[[D1547]] closes the shell-contract gap exposed while verifying the first 1.0 UX wave. The
+Makefile now selects Homebrew's pinned Node 24 and Stockfish 18 installations when present,
+retains PATH and `SF_CMD` fallbacks for other platforms, and enables the required-engine arm from
+`make verify` itself. README and development documentation now state the same exact command rather
+than teaching callers to reconstruct CI with `PATH=...`, `SF_CMD=...`, or
+`ENGINES_REQUIRED=1` prefixes.
+
+Plain `make test-browser` passed 34 required journeys with the optional live Maia latency probe
+skipped and zero retries. Its first run usefully found stale accessible-name assertions left by
+the arrival/catalogue redesign; those tests now bind to the new headings, FEN disclosure, pack
+action, selected-rating corpus scope, and honest unknown-phase copy. Plain `make verify` selected
+Node 24 and Stockfish, passed all 993 software tests, then stopped at the deliberately open D1547
+row; the row was closed and the complete gate rerun.

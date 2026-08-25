@@ -1,25 +1,93 @@
 <script lang="ts">
-  interface Props {
-    busy?: boolean;
-    onStart: (input: { readonly fen: string; readonly side: "white" | "black"; readonly mode: "human_common" | "strong_engine" }) => void | Promise<void>;
+  interface StartInput {
+    readonly fen: string;
+    readonly side: "white" | "black";
+    readonly mode: "human_common" | "strong_engine";
+    readonly targetElo?: 1000 | 1400 | 1800 | 2200;
   }
+  interface Props { busy?: boolean; onStart: (input: StartInput) => void | Promise<void>; }
   let { busy = false, onStart }: Props = $props();
   let side: "white" | "black" = $state("white");
-  let mode: "human_common" | "strong_engine" = $state("human_common");
+  let opponent: "1000" | "1400" | "1800" | "2200" | "engine" = $state("1400");
   let fen = $state("");
+  let positionOpen = $state(false);
   const initial = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
+  const bands = Object.freeze([
+    { value: "1000", name: "First rung", detail: "More familiar human choices" },
+    { value: "1400", name: "Steady", detail: "A balanced rehearsal partner" },
+    { value: "1800", name: "Testing", detail: "Stronger practical resistance" },
+    { value: "2200", name: "Top measured rung", detail: "The hardest calibrated human-choice band" },
+  ] as const);
+
+  function start(): void {
+    if (opponent === "engine") {
+      void onStart({ fen: fen.trim() || initial, side, mode: "strong_engine" });
+      return;
+    }
+    void onStart({ fen: fen.trim() || initial, side, mode: "human_common", targetElo: Number(opponent) as 1000 | 1400 | 1800 | 2200 });
+  }
 </script>
 
 <section class="just-play" aria-labelledby="just-play-title">
-  <p>Just Play</p><h2 id="just-play-title">Start with a board, then branch and learn as you go.</h2>
-  <form onsubmit={(event) => { event.preventDefault(); void onStart({ fen: fen.trim() || initial, side, mode }); }}>
-    <label>Your side <select bind:value={side}><option value="white">White</option><option value="black">Black</option></select></label>
-    <label>Opponent <select bind:value={mode}><option value="human_common">Human-common</option><option value="strong_engine">Strong engine</option></select></label>
-    <label class="fen">Optional FEN <input bind:value={fen} placeholder="Initial position" /></label>
-    <button type="submit" disabled={busy}>Start game</button>
+  <header>
+    <p class="eyebrow">Play a full game</p>
+    <h2 id="just-play-title">Choose the resistance. Keep every decision.</h2>
+    <p>Start from the normal position or bring a FEN. You can rewind and branch without losing the attempt.</p>
+  </header>
+  <form onsubmit={(event) => { event.preventDefault(); start(); }}>
+    <fieldset>
+      <legend>Human-like opponent</legend>
+      <div class="opponent-grid">
+        {#each bands as band}
+          <label class:checked={opponent === band.value}>
+            <input type="radio" name="opponent" value={band.value} bind:group={opponent} />
+            <span><strong>{band.name}</strong><small>{band.detail}</small></span>
+            <b>{band.value}</b>
+          </label>
+        {/each}
+        <label class:checked={opponent === "engine"}>
+          <input type="radio" name="opponent" value="engine" bind:group={opponent} />
+          <span><strong>Engine test</strong><small>Strongest available calculation, not human-like play</small></span>
+          <b>SF</b>
+        </label>
+      </div>
+      <p class="honest">Band numbers describe this calibrated Maia ladder. They are not FIDE, Lichess, or Chess.com ratings.</p>
+    </fieldset>
+    <div class="start-options">
+      <label>Your side
+        <select bind:value={side}><option value="white">White</option><option value="black">Black</option></select>
+      </label>
+      <button class="position-toggle" type="button" aria-expanded={positionOpen} onclick={() => positionOpen = !positionOpen}>{positionOpen ? "Use normal start" : "Start from a FEN"}</button>
+      {#if positionOpen}<label class="fen">Position FEN <input bind:value={fen} placeholder="Paste a legal FEN" /></label>{/if}
+      <button class="start" type="submit" disabled={busy}>{busy ? "Starting…" : "Start and keep the game"}</button>
+    </div>
   </form>
 </section>
 
 <style>
-  .just-play{width:min(70rem,calc(100% - 2rem));margin:0 auto 1rem;padding:1rem;border:1px solid var(--line);border-radius:1rem;background:var(--panel)}p{margin:0;color:var(--accent);font:700 .7rem ui-monospace,monospace;text-transform:uppercase}h2{margin:.25rem 0 1rem;font:500 1.5rem var(--display-font)}form{display:grid;grid-template-columns:auto auto minmax(15rem,1fr) auto;gap:.7rem;align-items:end}label{display:grid;gap:.25rem;font-size:.78rem}.fen input,select{padding:.65rem;border:1px solid var(--line);border-radius:.55rem;background:var(--paper)}button{padding:.7rem}.just-play :global(button:disabled){opacity:.5}@media(max-width:50rem){form{grid-template-columns:1fr}.just-play{max-height:45%;overflow:auto}}
+  .just-play { width: min(76rem, calc(100% - 2rem)); margin: 1rem auto 1.5rem; padding: clamp(1rem, 3vw, 1.5rem); border: 1px solid var(--line); border-radius: 1.25rem; background: var(--panel); box-shadow: var(--shadow); }
+  header { max-width: 48rem; }
+  .eyebrow { margin: 0; color: var(--accent); font: 700 .7rem ui-monospace, monospace; text-transform: uppercase; letter-spacing: .08em; }
+  h2 { margin: .3rem 0 .5rem; font: 500 clamp(1.5rem, 4vw, 2.3rem) var(--display-font); }
+  header > p:last-child { margin-top: 0; color: var(--muted); }
+  form { display: grid; gap: 1rem; }
+  fieldset { min-width: 0; margin: 0; padding: 0; border: 0; }
+  legend { margin-bottom: .5rem; font-weight: 700; }
+  .opponent-grid { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: .5rem; }
+  .opponent-grid label { position: relative; min-height: 7.25rem; display: grid; grid-template-columns: 1fr auto; align-content: space-between; gap: .5rem; padding: .8rem; border: 1px solid var(--line); border-radius: .8rem; background: var(--paper); cursor: pointer; }
+  .opponent-grid label.checked { border-color: var(--accent); box-shadow: inset 0 0 0 1px var(--accent); }
+  .opponent-grid input { position: absolute; opacity: 0; }
+  .opponent-grid span { display: grid; gap: .25rem; }
+  .opponent-grid small { color: var(--muted); line-height: 1.3; }
+  .opponent-grid b { align-self: end; color: var(--accent); font: 700 1rem ui-monospace, monospace; }
+  .honest { margin: .6rem 0 0; color: var(--muted); font-size: .75rem; }
+  .start-options { display: grid; grid-template-columns: minmax(8rem, .35fr) auto minmax(18rem, 1fr) auto; gap: .6rem; align-items: end; }
+  .start-options label { display: grid; gap: .3rem; font-size: .78rem; }
+  select, input, button { min-height: 2.75rem; padding: .65rem .75rem; border: 1px solid var(--line); border-radius: .6rem; background: var(--paper); color: var(--ink); font: inherit; }
+  .position-toggle { align-self: end; }
+  .start { border-color: var(--accent); background: var(--accent); color: var(--on-accent); font-weight: 700; }
+  button { cursor: pointer; }
+  button:disabled { opacity: .5; cursor: wait; }
+  @media (max-width: 65rem) { .opponent-grid { grid-template-columns: repeat(2, 1fr); } .start-options { grid-template-columns: 1fr 1fr; } .fen { grid-column: 1 / -1; } }
+  @media (max-width: 35rem) { .opponent-grid, .start-options { grid-template-columns: 1fr; } .fen { grid-column: auto; } }
 </style>

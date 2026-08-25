@@ -10,12 +10,12 @@ async function register(page: Page): Promise<void> {
     await page.getByLabel("Password").fill("browser-test-password");
     await page.getByRole("button", { name: "Register" }).click();
   }
-  await expect(page.getByText("Choose a position worth returning to.")).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Choose the game you want to understand." })).toBeVisible();
 }
 
 test("appearance axes apply live without replacing the board or its position", async ({ page }) => {
   await register(page);
-  await page.getByRole("button", { name: "Start game" }).click();
+  await page.getByRole("button", { name: "Start and keep the game" }).click();
   const shell = page.locator(".board-shell").first();
   const board = shell.getByLabel("Chessboard");
   await expect(board).toBeVisible();

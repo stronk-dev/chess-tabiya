@@ -47,6 +47,8 @@ const packSummary: PackSummary = {
   mode: pack.mode as string,
   phase: "opening",
   difficulty: pack.difficulty,
+  objectiveSummary: pack.objective.summary ?? pack.objective.type.replaceAll("_", " "),
+  concepts: pack.concepts ?? [],
   reviewStatus: "schema_example",
   channel: "official",
 };
@@ -191,6 +193,21 @@ afterEach(() => {
 });
 
 describe("application shell", () => {
+  it("turns an empty Home into a direct rehearsal start instead of an empty resume card", async () => {
+    const emptyApi: DrillClientApi = { ...api(), async runs() { return []; } };
+    const component = mount(App, {
+      target: target(),
+      props: { api: emptyApi, router: new HistoryRouter(window), storage: new MemoryStorage() },
+    });
+
+    await vi.waitFor(() => expect(document.body.textContent).toContain("Start the first rehearsal"));
+    expect(document.body.textContent).toContain("Do not just learn the move. Rehearse the game it creates.");
+    expect(document.body.textContent).toContain("0 rehearsals are due");
+    expect(document.body.textContent).toContain("Pick up a thread");
+    expect(document.body.textContent).not.toContain("No previous run yet");
+    await unmount(component);
+  });
+
   it("waits for authentication before loading and reloads the current route after registration", async () => {
     history.replaceState(null, "", "/play");
     let authenticated = false;
@@ -234,7 +251,7 @@ describe("application shell", () => {
     );
 
     await vi.waitFor(() =>
-      expect(document.body.textContent).toContain("Choose a position worth returning to."),
+      expect(document.body.textContent).toContain("Choose the game you want to understand."),
     );
     expect(packCalls).toBe(1);
     expect(document.body.textContent).not.toContain("AUTH_REQUIRED");
@@ -321,7 +338,7 @@ describe("application shell", () => {
     );
 
     const routes = [
-      ["/play", "Choose a position worth returning to."],
+      ["/play", "Choose the game you want to understand."],
       ["/learn", "Return to the positions"],
       ["/rating", "Your measured record"],
       ["/live", "Rehearse with other people"],
