@@ -3,8 +3,10 @@
 **Target:** `rfc/semantic-collectors.md` §3.7 and the shared provider-source/F1 RFC created from
 `planning/bounded-policy-targets/author-repair-2026-08-26.md`.
 
-**Authority:** `design/research/promotion-race-contract-closure.md` and
-`tools/d1699-promotion-race-contract-harness/`. No owner ruling is required. Do not implement the
+**Authority:** `design/research/promotion-race-contract-closure.md`,
+`tools/d1699-promotion-race-contract-harness/`, plus the generic execution contract in
+`design/research/evidence-execution-and-confidence-closure.md` and
+`f1-execution-metadata-author-repair-2026-08-26.md`. No owner ruling is required. Do not implement the
 held ids from this handoff. Amend, cross-review and observe dependency order.
 
 ## Semantic-collectors amendment
@@ -53,6 +55,9 @@ held ids from this handoff. Amend, cross-review and observe dependency order.
 - Apply the same correction to `derived.bounded_target` rather than marking all five outputs local
   or provider.
 - Add confidence/availability/latency tests across every `anyOf` member.
+- Do not hand-author a promotion-specific execution row. F1 generates paths from the literal
+  derivation graph, preserves recorded and live alternatives even if their current cost matches,
+  and applies source-absence behavior at the binding path.
 
 ## Acceptance additions
 

@@ -170,6 +170,14 @@ producer-wide metadata cannot describe a producer mixing local geometry with opt
 outcome, so F1 must compile availability/latency per projection and derivation member. Six Node-24
 arms pass; the semantic RFC needs author amendment/review and the provider dependency before it can
 truthfully move 12/14 to 14/14.
+The manifest-wide follow-up makes that F1 amendment exact. The current 46 derived projections carry
+96 direct derivation members expanding to 99 executable paths. Eight outputs falsely advertise
+local/sync over Stockfish, ten bindings bypass provider-off validation through local wrappers, and
+49 immediate members discard reported confidence; the transitive repair touches candidate vector,
+story last-level, rank and title. [[D1701]]/[[D1702]] require generated path metadata, sticky
+reported confidence and binding-level source-absence semantics before the shared provider layer or
+new dependent collectors land. `dependsOn` remains the semantic/migration graph; execution derives
+only from literal derivation choices, preserving alternatives rather than conjoining them.
 The variant foundation now has an executable scope receipt rather than the earlier textual count:
 [[D1683]] measures 159 production calls across 32 files and separates nine rules-aware play
 authorities from 23 standard-only/evidence readers that must be capability-gated. Tier-2 support

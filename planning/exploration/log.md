@@ -8755,3 +8755,30 @@ Six Node-24 arms pass in `tools/d1699-promotion-race-contract-harness/`. Dossier
 `planning/evidence-foundation-ux/promotion-race-author-repair-2026-08-26.md`. No RFC, production,
 schema, content or UI byte changed; 13/14 waits on author amendment/review and 14/14 additionally
 waits on the shared provider/F1 prerequisite.
+
+## 2026-08-26 — Manifest-wide execution and confidence contract measured
+
+Expanded every literal derivation in the shipped F1 catalogue rather than repairing only the held
+promotion and bounded-target rows. The 37-producer / 193-projection graph contains 46 derived
+projections, 96 direct derivation members and 99 fully expanded executable paths. Equal current
+latency/source profiles cannot be collapsed because their exact derivation choices remain the
+admission and confidence authority.
+
+The census confirms three live contract defects. Eight shipped derived projections advertise
+`local/sync` while their paths require Stockfish. Ten bindings across seven projections escape the
+provider fallback check because it tests only the immediate producer; nine say consumer-wide
+available and one unavailable without a binding-path consequence. Forty-nine immediate derivation
+members discard `reported` confidence. Correcting the graph reaches a four-projection fixed point:
+candidate vector, story last-level, story rank and story title ([[D1701]], [[D1702]]).
+
+The repair is generated path metadata over the existing literal derivation graph, sticky reported
+confidence and binding-level unsatisfied-source behavior. Producer metadata remains the own local
+operation. `dependsOn` remains the semantic/migration graph and is not conjoined with mutually
+exclusive derivation alternatives. This supplies the generic F1 amendment needed before the shared
+Stockfish/Maia/Syzygy provider exchange and dependent Review, bot and promotion work.
+
+Three Node-24 arms pass in `tools/d1700-evidence-execution-harness/`, including exact current-count
+assertions and a red-shape confidence fixture. Dossier:
+`design/research/evidence-execution-and-confidence-closure.md`; author handoff:
+`planning/evidence-foundation-ux/f1-execution-metadata-author-repair-2026-08-26.md`. No RFC,
+production, schema, content or UI byte changed.

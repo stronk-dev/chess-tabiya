@@ -3,7 +3,10 @@
 **Target:** `rfc/bounded-policy-targets.md`
 
 **Authority:** `design/research/bounded-policy-target-contract-closure.md`,
-`tools/d1652-bounded-target-repair-harness/`, and the independent return in this directory. No owner
+`tools/d1652-bounded-target-repair-harness/`,
+`design/research/evidence-execution-and-confidence-closure.md`,
+`planning/evidence-foundation-ux/f1-execution-metadata-author-repair-2026-08-26.md`, and the
+independent return in this directory. No owner
 ruling is required. Do not implement from this handoff. Amend/split, cross-review, accept only after
 the provider dependency is buildable, then queue implementation.
 
@@ -63,12 +66,17 @@ partially. Do not descope layers 2/3 from 1.0.
 - Publish every field for the two raw sources, three local derivations and two policy derivations:
   payload, semantics, operands, signs, grounding, exactness, confidence, answers, forms, abstention,
   limitations, dispositions and full literal derivation members.
-- Add weakest-input confidence validation to `compileEvidenceManifest`; run a current-manifest
-  census and correct every exposed row. A `reported` input cannot derive `exact`.
+- Add weakest-input confidence validation to `compileEvidenceManifest`; the completed census has
+  49 immediate violations and a four-projection fixed point. A `reported` input cannot become
+  `exact` or `not_applicable`.
 - Repair [[D1700]] rather than replacing one producer-wide lie with another: compile effective
   availability/latency per projection and per `anyOf` member, retaining the producer scalar only as
   own-operation metadata. The three local target outputs remain sync while the two policy outputs
   retain provider-bearing dependency paths. `derived.grade` cannot advertise effective `sync`.
+- Apply [[D1701]]/[[D1702]] exactly as the shared F1 handoff specifies: preserve all 99 current
+  expanded path identities, validate provider/source absence at the binding path rather than only
+  the immediate producer, and migrate candidate/story confidence transitively before adding new
+  target-policy rows.
 - Include the node-free `live.syzygy.position_result@1` source required by the promotion-race
   closure; the shared layer serves Stockfish, Maia and Syzygy rather than leaving pawn/Review code
   to invent a private tablebase adapter.
