@@ -40,6 +40,50 @@ describe("pack graduation", () => {
     }
   });
 
+  it("reports the clearance kind, record kind, subject, and honest transitional populations", async () => {
+    const temporary = await mkdtemp(join(tmpdir(), "tabiya-graduation-clearance-report-"));
+    try {
+      const document = JSON.parse(await readFile("schemas/drill_pack.example.json", "utf8"));
+      document.id = "clearance-report-fixture";
+      document.provenance.graduationBlockers = [
+        {
+          id: "engine-record",
+          state: "blocking",
+          statement: "An engine record is still absent.",
+          clearance: {
+            kind: "ledger_record",
+            recordKind: "engine_eval",
+            subject: "/start/fen",
+            instrument: "make engine-walk",
+          },
+        },
+        {
+          id: "missing-instrument",
+          state: "blocking",
+          statement: "The required instrument does not exist.",
+          clearance: {
+            kind: "unbuilt",
+            subject: "/start/fen",
+            blockedBy: "design/BACKLOG.md",
+          },
+        },
+        {
+          id: "not-migrated",
+          state: "blocking",
+          statement: "This entry deliberately represents the pre-migration corpus.",
+        },
+      ];
+      await writeFile(join(temporary, "fixture.json"), `${JSON.stringify(document, null, 2)}\n`);
+
+      const report = await graduationReport([temporary]);
+      expect(report.text).toContain("clearable: 1; unclearable: 1; unspecified: 1");
+      expect(report.text).toContain("clears via ledger_record:engine_eval /start/fen");
+      expect(report.text).toContain("clears via unbuilt /start/fen");
+    } finally {
+      await rm(temporary, { recursive: true, force: true });
+    }
+  });
+
   it("resolves one moved pack from either catalogue root and refuses a stale duplicate", async () => {
     const temporary = await mkdtemp(join(tmpdir(), "tabiya-graduation-"));
     const drafts = join(temporary, "drafts");

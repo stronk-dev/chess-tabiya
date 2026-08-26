@@ -22,6 +22,23 @@ blocking condition, writes the grouped accepted-condition audit page at
 read-only; use the deliberately named `make graduation-report-update` only when a reviewed pack
 change is meant to refresh the checked-in accepted-conditions page.
 
+The report understands the accepted clearance vocabulary ahead of its held schema migration. When
+a blocking entry carries a clearance it prints the exact kind, optional evidence-record kind and
+subject, and separates clearable from unclearable entries. Pre-migration entries remain explicitly
+`unspecified`; the report does not infer a predicate from their prose.
+
+## Clearance transition tooling
+
+`make graduation-clear FILE=<pack.json>` evaluates an already-authored clearance against that
+pack's own ledger, manifest and shared expression census. It can write a blocking-to-resolved
+transition, re-stamp the evidence digest and emit the matching `.graduation.json` receipt; `CHECK=1`
+performs the evaluation without writing. Its historical non-vacuity exception is the exact set of
+four measured Syzygy blocker identities, not every blocker in those packs. Any additional
+already-true predicate is refused before the pack, ledger or receipt changes.
+
+The pack-schema 0.28 and corpus migration remain held by Gate F. The existence of the writer does
+not imply that current blocker prose has been classified, supplied with subjects, or cleared.
+
 ## Official publication boundary
 
 Graduating an official pack is one atomic repository change:

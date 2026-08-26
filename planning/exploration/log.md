@@ -9571,3 +9571,24 @@ exploring conflicting seal/void histories. Their populations and assertions rema
 the tests now declare 15-second and 20-second integration budgets. Performance remains governed
 by the isolated performance tier, and neither retries nor reduced property coverage were added.
 D1820 closes.
+
+## 2026-08-26 — Graduation non-vacuity exception narrows to four entries
+
+The already-landed graduation writer exempted four pack ids from its non-vacuity refusal so the
+RFC's four measured stale Syzygy blockers could make their first transition. That was one identity
+component short: a second `assessment_grounded` blocker in any exempt pack inherited the exception.
+The exemption now names the exact four `packId/entryId` pairs. All four real positive arms remain
+executable, while a same-pack second blocker raises `GRADUATION_CLEARANCE_VACUOUS` before the pack,
+ledger, or transition receipt changes. D1821 closes; no schema or corpus byte moved under D560.
+
+## 2026-08-26 — Real-content contracts receive an integration-tier ceiling
+
+The required content tier produced five independent failures at Vitest's exact five-second unit
+default only under the full parallel corpus population. Focused executions retained their semantic
+results. `vitest.content.config.ts` now declares one 30-second deadlock ceiling for this integration
+tier. No test population, assertion, worker count or retry changed, and product latency remains in
+the separately isolated performance tier. D1822 closes pending the exact full-gate rerun.
+
+The exact rerun completed green: 1,044 software contracts, one isolated performance contract and
+171 real-content contracts, plus type, build and every repository-governance check. The content tier
+completed its full 16-file population in 58.93 seconds without retries or reduced coverage.

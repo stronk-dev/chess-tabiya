@@ -11,5 +11,9 @@ export default defineConfig({
       reportsDirectory: ".cache/coverage/content",
     },
     include: [...CONTENT_CONTRACT_TESTS],
+    // These contracts intentionally load and cross-check the committed corpus in
+    // parallel. Product latency belongs to vitest.performance.config.ts; this is
+    // an integration-suite deadlock ceiling, not a performance assertion.
+    testTimeout: 30_000,
   },
 });

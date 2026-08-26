@@ -41,6 +41,11 @@ integration validation. Its exact prose is not pinned unless the wording itself 
 contract. Browser tests assert semantic labels and effects such as an `Alternative move` item being
 present; content instruments identify which pack and content rule failed.
 
+The real-content Vitest tier has a 30-second per-test deadlock ceiling because its contracts load
+and cross-check the complete committed corpus concurrently. That ceiling is not a product-latency
+budget: latency and complexity thresholds live in the isolated performance tier. Do not weaken a
+content population, add retries, or copy the ceiling into software unit tests to make a red run pass.
+
 Application and runtime unit tests assert exported values, mounted DOM, reducer output and events;
 they do not parse `.svelte` source text or pin private variable names, class expressions, or literal
 CSS declarations. Layout, hit-target and region-reach contracts run against rendered boxes and

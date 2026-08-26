@@ -3,7 +3,36 @@ import { basename, dirname, extname, resolve } from "node:path";
 
 import { digestDrillPack } from "@chess-tabiya/schema/drill-pack";
 
-type Entry = string | { readonly id: string; readonly state: "blocking" | "resolved" | "accepted"; readonly statement: string; readonly clearedBy?: string; readonly accepted?: { readonly kind: string; readonly ruling: string; readonly rulingRef: string } };
+interface Clearance {
+  readonly kind: "assessment_grounded" | "ledger_record" | "claim_bound" | "shape_firing" | "pointer_authored" | "unbuilt" | "unreachable" | "referent_removed";
+  readonly subject: string;
+  readonly recordKind?: string;
+}
+
+type Entry = string | {
+  readonly id: string;
+  readonly state: "blocking" | "resolved" | "accepted";
+  readonly statement: string;
+  readonly clearedBy?: string;
+  readonly clearance?: Clearance;
+  readonly resolved?: { readonly clearance?: Clearance };
+  readonly accepted?: { readonly kind: string; readonly ruling: string; readonly rulingRef: string; readonly unreachableBecause?: string };
+};
+
+const CLEARABLE_KINDS = new Set<Clearance["kind"]>([
+  "assessment_grounded",
+  "ledger_record",
+  "claim_bound",
+  "shape_firing",
+  "pointer_authored",
+]);
+const UNCLEARABLE_KINDS = new Set<Clearance["kind"]>(["unbuilt", "unreachable"]);
+
+function clearanceLabel(clearance: Clearance | undefined): string {
+  if (clearance === undefined) return "(unspecified)";
+  const kind = clearance.recordKind === undefined ? clearance.kind : `${clearance.kind}:${clearance.recordKind}`;
+  return `${kind} ${clearance.subject}`;
+}
 
 function files(root: string): readonly string[] {
   if (root === "content/candidates") return readdirSync(root, { withFileTypes: true }).filter((entry) => entry.isDirectory()).map((entry) => resolve(root, entry.name, "pack.json")).filter((file) => { try { readFileSync(file); return true; } catch { return false; } }).sort();
@@ -59,7 +88,7 @@ export async function graduationReport(roots: readonly string[] = ["content/draf
   const sections: string[] = [];
   for (const root of roots) {
     const documents = files(root).map((file) => ({ file, document: JSON.parse(readFileSync(file, "utf8")) as { id: string; provenance?: { graduationBlockers?: Entry[] } } }));
-    const counts = { blocking: 0, resolved: 0, accepted: 0, legacy: 0 };
+    const counts = { blocking: 0, resolved: 0, accepted: 0, legacy: 0, clearable: 0, unclearable: 0, unspecified: 0 };
     const documentLines: string[] = [];
     for (const { file, document } of documents) {
       const entries = document.provenance?.graduationBlockers ?? [];
@@ -78,6 +107,11 @@ export async function graduationReport(roots: readonly string[] = ["content/draf
       for (const entry of entries) {
         if (typeof entry === "string") { counts.legacy += 1; legacy += 1; continue; }
         counts[entry.state] += 1;
+        if (entry.state === "blocking") {
+          if (entry.clearance === undefined) counts.unspecified += 1;
+          else if (CLEARABLE_KINDS.has(entry.clearance.kind)) counts.clearable += 1;
+          else if (UNCLEARABLE_KINDS.has(entry.clearance.kind)) counts.unclearable += 1;
+        }
         if (entry.state === "accepted") accepted.push({ packId: document.id, entry });
       }
       const stateCounts = {
@@ -89,10 +123,10 @@ export async function graduationReport(roots: readonly string[] = ["content/draf
       documentLines.push(`- **${document.id}** — blocking ${stateCounts.blocking}; resolved ${stateCounts.resolved}; accepted ${stateCounts.accepted}; ${digestState}`);
       for (const entry of blocking) {
         if (typeof entry === "string") documentLines.push(`  - **legacy** — ${entry}`);
-        else documentLines.push(`  - **${entry.id}** — ${entry.statement}; clears via ${entry.clearedBy ?? "(unspecified)"}`);
+        else documentLines.push(`  - **${entry.id}** — ${entry.statement}; clears via ${clearanceLabel(entry.clearance)}`);
       }
     }
-    sections.push(`## ${root}\n\ndocuments: ${documents.length}; legacy: ${counts.legacy}; blocking: ${counts.blocking}; resolved: ${counts.resolved}; accepted: ${counts.accepted}\n\n${documentLines.join("\n") || "(none)"}`);
+    sections.push(`## ${root}\n\ndocuments: ${documents.length}; legacy: ${counts.legacy}; blocking: ${counts.blocking}; resolved: ${counts.resolved}; accepted: ${counts.accepted}\nclearable: ${counts.clearable}; unclearable: ${counts.unclearable}; unspecified: ${counts.unspecified}\n\n${documentLines.join("\n") || "(none)"}`);
   }
   const acceptedLines: string[] = [];
   for (const kind of [...new Set(accepted.map(({ entry }) => entry.accepted!.kind))].sort()) {

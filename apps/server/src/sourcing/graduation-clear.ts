@@ -11,10 +11,10 @@ import { assessmentGrounding } from "./ledger-validation.js";
 import type { EvidenceLedger, EvidenceRecord, SourceManifest, SourcingIssue } from "./types.js";
 
 const FIRST_RUN_EXEMPTIONS = new Set([
-  "mate-k-q-technique",
-  "mate-k-r-technique",
-  "mate-two-bishops",
-  "philidor-passive-rook-convert",
+  "mate-k-q-technique/the-syzygy-root-assessment-is-declared-but-not-ledger-ve",
+  "mate-k-r-technique/the-syzygy-root-assessment-is-declared-but-not-ledger-ve",
+  "mate-two-bishops/the-syzygy-root-assessment-is-declared-but-not-ledger-ve",
+  "philidor-passive-rook-convert/the-syzygy-root-assessment-is-declared-but-not-ledger-ve",
 ]);
 
 const MECHANICAL_KINDS = new Set([
@@ -190,7 +190,7 @@ export async function clearGraduationEntries(file: string, options: { readonly n
       held.push({ id: blocking.id, kind: clearance.kind, ...(clearance.recordKind === undefined ? {} : { recordKind: clearance.recordKind }), verdict: "does not hold" });
       return entry;
     }
-    if (!FIRST_RUN_EXEMPTIONS.has(pack.id) || clearance.kind !== "assessment_grounded") {
+    if (!FIRST_RUN_EXEMPTIONS.has(`${pack.id}/${blocking.id}`) || clearance.kind !== "assessment_grounded") {
       throw new GraduationClearanceError("GRADUATION_CLEARANCE_VACUOUS", `${pack.id}/${blocking.id} already satisfies ${clearance.kind}`);
     }
     transitions.push({ id: blocking.id, from: "blocking", to: "resolved", clearance, evidence: result.evidence });
