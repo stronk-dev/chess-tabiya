@@ -8589,3 +8589,23 @@ Dossier: `design/research/bot-production-route-and-selection-budget.md`; handoff
 `planning/bot-roster/production-route-author-repair-2026-08-26.md`; instrument:
 `tools/d1605-bot-route-boundary-harness/` (7/7 green). No production/RFC/schema byte or concurrent
 Claude path changed.
+
+## 2026-08-26 — D1601/D1607 bot axes and grounded card compiler measured
+
+Replaced the roster's false cp-versus-Elo “orthogonality” with three independently declared
+projections: model band, behavior family and display identity. The family projection is byte-equal
+across bands while model and persona differ; baseline, guarded and pawn-forward family projections
+remain distinct. No structural criterion assumes a zero strength effect—exact-digest calibration
+must measure it.
+
+The eight-arm card compiler accepts a profile plus an optional matching calibration receipt and no
+caller sentence. It renders registered Maia/sampler mechanics, guard and abstention scope, the
+guard-dependent +12.28-point pawn measurement, no book, no cross-game memory, endgame/clock scope
+and calibration/absence with source ids. Decorative name/avatar/tagline is a separate display slot
+and reaches no behavior statement. Wrong-digest calibration, malformed family layers, wrong bands
+and caller prose fail.
+
+Dossier: `design/research/bot-policy-axes-and-card-grounding.md`; handoff:
+`planning/bot-roster/card-axis-author-repair-2026-08-26.md`; instrument:
+`tools/d1601-bot-card-contract-harness/` (8/8 green). D1610/D1611 remain owner decisions; no RFC,
+profile, product copy, schema or concurrent Claude byte changed.
