@@ -393,7 +393,7 @@
       "sourceHeading": "Accessibility and small screens — `ux-accessibility-and-mobile.md`",
       "summary": "**Twenty-three per-surface findings**, one row each — shell, home, pack list, Just Play starter, drill, board, timeline, branch rail, phone tabs, compare, checkpoint sheet, terminal sheet, shape panel, inspector, story, rating, live list, live overlay, create, library, appearance, assistance, cohort standing, group panel",
       "legacyRoute": "none",
-      "note": "narrowed 2026-08-26: Pixel 7 production-bundle checks prove Home, Play, Review, Learn, Live list, Create, Library and Settings own their width with unclipped controls; Compare now stacks complete aligned branch cards/strips/results without horizontal panning. Conditional live-session/overlay, Shape, Cohort, Group and remaining per-surface quality findings stay open",
+      "note": "narrowed 2026-08-26: Pixel 7 production-bundle checks prove Home, Play, Review, Learn, Live list, Create, Library and Settings own their width with unclipped controls; Compare stacks complete aligned branch cards/strips/results without horizontal panning; a full academy session and its overlay own their width and stack board before copy; the named-shape dialog keeps every action reachable and restores focus on Escape. Cohort, Group and remaining qualitative per-surface findings stay open",
       "tournamentReady": true,
       "sourceDigest": "sha256:c0cf92f7355077e15581a3f897fc263b40207443a751d19af64a307199b6eeac"
     },

@@ -1524,6 +1524,7 @@
     .live-wall article > button { grid-column: 1 / -1; }
     .mini-board { inline-size: 5rem; block-size: 5rem; }
     .studio-grid, .vocabulary-status-grid, .live-overlay { grid-template-columns: 1fr; }
+    .live-overlay :global(.board-shell) { width: calc(100% - 1rem); justify-self: center; }
     .row-actions { flex-wrap: wrap; }
   }
 </style>

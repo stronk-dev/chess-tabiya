@@ -183,7 +183,11 @@ rail-stacking breakpoint. Below 720px
 the shell and drill transform without changing their information model:
 navigation becomes a compact scrolling menu, the board remains visible, and
 Timeline, Branches, and Evidence are mutually exclusive region tabs. The live
-simul wall becomes a single column and comparison/live panels stack.
+simul wall and session studio become single columns. The chrome-free live
+overlay stacks its board before the session copy; its board shell keeps a
+compact inline inset so Chessground's coordinate paint remains visible without
+creating hidden horizontal content. Comparison stacks complete branch cards,
+evidence strips, and results rather than requiring a sideways hunt.
 
 Opening a compact run region turns the companion into a labelled modal drawer
 only at phone width. It takes focus when opened from outside, makes the board and

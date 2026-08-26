@@ -9432,3 +9432,20 @@ proves Home, Play, Review, Learn, Live list, Create, Library and Settings own th
 do not clip controls outside a deliberately scrollable rail. A11-a29 remains open for conditional
 live-session/overlay, Shape, Cohort, Group and qualitative per-surface work; its broad no-media-query
 premise is now narrowed by rendered evidence rather than repeated from the dossier.
+
+## 2026-08-26 — Phone live overlay contains the board's painted coordinates (D1817)
+
+The next A11-a29 production-bundle journey entered a real academy session rather than inspecting
+the empty Live route. Its studio already collapsed to one column with every control inside the
+Pixel 7 viewport. The overlay also stacked the board before its copy card, but the scroll boundary
+still owned six pixels of hidden horizontal content. An offender receipt identified only
+Chessground's file-coordinate elements, whose glyphs paint outside the board box; a half-rem inset
+reduced rather than removed the defect, while the final one-rem centred inset retains the labels
+and removes the overflow.
+
+The permanent fixture now proves the complete run-to-session-to-overlay path, including the
+session controls, board and copy bounds, vertical reading order, and zero hidden horizontal
+content. A separate real named-shape journey proves the dialog and every action fit at Pixel 7 and
+that Escape closes it and restores the exact board marker. No Shape CSS changed: the earlier
+absence of a dedicated media query was not itself a rendered defect. D1817 closes. A11-a29 remains
+open for Cohort, Group, and qualitative per-surface findings.

@@ -1516,6 +1516,106 @@ test("@matrix @mobile comparison stacks complete branch cards without hidden hor
   expect(overflow.cards[1]!.top).toBeGreaterThan(overflow.cards[0]!.top);
 });
 
+test("@matrix @mobile live session and overlay keep controls and board inside the viewport", async ({ page }) => {
+  await page.goto("/play");
+  await page
+    .getByRole("article")
+    .filter({ hasText: "schema example" })
+    .first()
+    .getByRole("button", { name: /Rehearse this position/ })
+    .click();
+  await expect(page.getByLabel("Chessboard")).toBeVisible();
+  await page.goto("/live");
+  await page.getByRole("button", { name: "Create academy" }).first().click();
+  await expect(page.getByRole("heading", { name: "academy session" })).toBeVisible();
+
+  const sessionGeometry = await page.locator("main.shell-view").evaluate((main) => {
+    const viewportWidth = document.documentElement.clientWidth;
+    const controls = [...main.querySelectorAll<HTMLElement>("button, input, select")]
+      .filter((element) => {
+        const rect = element.getBoundingClientRect();
+        return rect.width > 0 && (rect.left < -1 || rect.right > viewportWidth + 1);
+      })
+      .map((element) => element.getAttribute("aria-label") ?? element.textContent?.trim() ?? element.tagName);
+    const grid = main.querySelector<HTMLElement>(".studio-grid")!;
+    return {
+      overflow: main.scrollWidth - main.clientWidth,
+      controls,
+      columns: getComputedStyle(grid).gridTemplateColumns,
+    };
+  });
+  expect(sessionGeometry.overflow).toBeLessThanOrEqual(1);
+  expect(sessionGeometry.controls).toEqual([]);
+  expect(sessionGeometry.columns.trim().split(/\s+/u)).toHaveLength(1);
+
+  await page.getByRole("button", { name: "Open overlay" }).click();
+  const overlay = page.getByLabel("Live session overlay");
+  await expect(overlay).toBeVisible();
+  const overlayGeometry = await overlay.evaluate((main) => {
+    const board = main.querySelector<HTMLElement>('[aria-label="Chessboard"]')!.getBoundingClientRect();
+    const copy = main.querySelector<HTMLElement>("aside")!.getBoundingClientRect();
+    const bounds = main.getBoundingClientRect();
+    return {
+      overflow: main.scrollWidth - main.clientWidth,
+      offenders: [...main.querySelectorAll<HTMLElement>("*")]
+        .map((element) => {
+          const rect = element.getBoundingClientRect();
+          return { tag: element.tagName, className: element.className, right: rect.right - bounds.right };
+        })
+        .filter((entry) => entry.right > 1)
+        .sort((left, right) => right.right - left.right)
+        .slice(0, 8),
+      board: { left: board.left, right: board.right, top: board.top, bottom: board.bottom },
+      copy: { left: copy.left, right: copy.right, top: copy.top },
+      viewportWidth: document.documentElement.clientWidth,
+    };
+  });
+  expect(overlayGeometry.overflow, JSON.stringify(overlayGeometry.offenders)).toBeLessThanOrEqual(1);
+  expect(overlayGeometry.board.left).toBeGreaterThanOrEqual(-1);
+  expect(overlayGeometry.board.right).toBeLessThanOrEqual(overlayGeometry.viewportWidth + 1);
+  expect(overlayGeometry.copy.left).toBeGreaterThanOrEqual(-1);
+  expect(overlayGeometry.copy.right).toBeLessThanOrEqual(overlayGeometry.viewportWidth + 1);
+  expect(overlayGeometry.copy.top).toBeGreaterThanOrEqual(overlayGeometry.board.bottom - 1);
+});
+
+test("@matrix @mobile named-shape dialog stays bounded with every action reachable", async ({ page }) => {
+  await page.goto("/play");
+  await page.evaluate(() => localStorage.setItem("tabiya.assistance.v1.position", JSON.stringify({ version: 4, markers: "off", guided: "live", humanSplit: "off", corpus: "off", voice: "authored", spoken: "off", boardLighting: "legal", arrows: "off", ambient: "off" })));
+  await page.getByLabel("Your side").selectOption("black");
+  await page.getByRole("button", { name: "Start from a FEN" }).click();
+  await page.getByLabel("Position FEN").fill("r1bqr1k1/pppnbppp/5n2/3p2B1/3P4/2NBP3/PPQ1NPPP/R4RK1 b - - 7 10");
+  await page.getByRole("button", { name: "Start and keep the game" }).click();
+  await move(page, "c7", "c6", "black");
+  const marker = page.getByRole("button", { name: /Carlsbad structure/ });
+  await marker.click();
+  const panel = page.getByRole("dialog", { name: "Carlsbad structure" });
+  await expect(panel).toBeVisible();
+
+  const geometry = await panel.evaluate((dialog) => {
+    const viewport = { width: document.documentElement.clientWidth, height: document.documentElement.clientHeight };
+    const bounds = dialog.getBoundingClientRect();
+    const actions = [...dialog.querySelectorAll<HTMLElement>("button")].map((button) => {
+      const rect = button.getBoundingClientRect();
+      return { left: rect.left, right: rect.right, top: rect.top, bottom: rect.bottom };
+    });
+    return {
+      bounds: { left: bounds.left, right: bounds.right, top: bounds.top, bottom: bounds.bottom },
+      viewport,
+      overflow: dialog.scrollWidth - dialog.clientWidth,
+      actions,
+    };
+  });
+  expect(geometry.bounds.left).toBeGreaterThanOrEqual(-1);
+  expect(geometry.bounds.right).toBeLessThanOrEqual(geometry.viewport.width + 1);
+  expect(geometry.bounds.top).toBeGreaterThanOrEqual(-1);
+  expect(geometry.bounds.bottom).toBeLessThanOrEqual(geometry.viewport.height + 1);
+  expect(geometry.overflow).toBeLessThanOrEqual(1);
+  expect(geometry.actions.every((action) => action.left >= -1 && action.right <= geometry.viewport.width + 1)).toBe(true);
+  await page.keyboard.press("Escape");
+  await expect(panel).toHaveCount(0);
+  await expect(marker).toBeFocused();
+});
+
 test("the drill keyboard map remains contained and scrollable at the supported phone floor", async ({ page }) => {
   await page.setViewportSize({ width: 360, height: 680 });
   await page.goto("/play");
