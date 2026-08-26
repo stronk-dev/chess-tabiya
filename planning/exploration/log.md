@@ -8962,3 +8962,21 @@ legal advance and legal opponent pawn capture become separate projections. Five 
 three documents require explicit v1/v2 migration after D1722 convention provenance and before
 D1711 validation, D1718 avoidance or learner modules. No production, RFC, schema, content, pack or
 learner-UX byte changed.
+
+## 2026-08-26 — Square denial and outpost family separated (D1724)
+
+Triangulated FIDE attack semantics, Chess.com's term boundary and a historical classical Stockfish
+outpost evaluator, then reconstructed the shipped `outpost` predicate over the fixed populations.
+Current pawn control, same-file future challenge and capture-migration reach answer different
+questions; candidate square, occupied outpost and strategic use are also distinct states.
+
+Across 611 authored / 577 imported positions, the shipped maximal convention leaves 0 / 17
+occupied outposts. The same-file convention yields 9 / 43 and retains 162 / 383 candidates that
+only hypothetical capture migration refuses. Across 754 + 579 decisions and every legal
+alternative, pawn control newly hitting an occupied piece discriminates at 3.17× / 3.23×; generic
+reach overlap is 1.14× / 1.36×, while future-file-candidate removal is 9.83× / 16.77× but has only
+4 / 8 played positives. The successor keeps exact pawn/square/piece/basis operands, splits
+candidate/occupied/use, and refuses “prevents,” forced retreat, value or intent without another
+evidence plane. D632's live authoring count is corrected from stale 77 to 23 expressions in three
+shape documents; all still require dry-run plus human basis review. No production, RFC, schema,
+content, pack or learner-UX byte changed.
