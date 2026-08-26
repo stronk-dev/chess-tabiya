@@ -221,6 +221,14 @@ positives and semantic hard negatives, bind exact population result identity and
 per-event validation profiles before D1710 wires events into modules. This is not another collector
 breadth wave: it makes the existing evidence claims able to fail before their blast radius expands.
 
+[[D1713]] makes that repair estimable: 32/67 events have an emitter positive, 5/67 an emitter
+semantic negative and none an emitter-level orientation case. Eleven negatives and four
+orientation cases exist only at source-predicate level; counterfactual authority splits 1 emitter,
+2 composition and 3 source cases; imported output observes 23 current event roots; external
+disagreement covers 8 tactic families; 14 events have no independent authority in any arm. The
+validation RFC must close these as classed work packages and a total required/not-applicable table,
+not claim one blended coverage percentage.
+
 ### 3. Arrival and the rehearsal loop
 
 <!-- roadmap-capability: rehearsal -->

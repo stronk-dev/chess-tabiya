@@ -8866,3 +8866,15 @@ index, and accepts only when the latter begins with the former. A middle inserti
 both fail; a strict tail append passes. The pre-commit glob now includes the guard's own source and
 test, so changing the checker cannot skip the checker. The historical D1711 middle insertion and
 its tail correction remain untouched as incident evidence.
+
+## 2026-08-26 — Semantic-validation migration depth measured (D1713)
+
+Published the set-equal 67-event migration matrix behind [[D1711]]. Existing authorities split
+32 emitter positives / 35 missing, 5 emitter semantic negatives / 11 source-only / 51 missing,
+zero emitter orientation cases / four source-only, and one emitter counterfactual / five
+lower-layer. Imported output observes 23 current event roots; eight tactic families have external
+disagreement evidence; fourteen events have no authority in any measured arm. The matrix pins each
+populated cell to an exact file, test title and authority level, so predicate, composition,
+population and external evidence cannot be laundered into event validation. The D1711 author
+handoff now carries classed migration work packages. No production, RFC, schema, content or UX byte
+changed.

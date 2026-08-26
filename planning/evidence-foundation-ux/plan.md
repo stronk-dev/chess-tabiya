@@ -53,6 +53,13 @@ positive, semantic hard negative, mirror/orientation, counterfactual, imported a
 arms. Phase 3 may not treat the word `validated` as a production property until those witnesses are
 bound to the declaration and fail when the predicate is broken.
 
+[[D1713]] **completed 2026-08-26 with the exact migration-depth matrix**: 32/67 events have an
+emitter positive, 5/67 an emitter semantic negative, 0/67 an emitter orientation case, 1/67 an
+emitter counterfactual case, 23/67 an imported observation and 8/67 an external disagreement
+study. Eleven further negatives, four orientation cases and five counterfactual cases exist only
+at a lower source/composition layer. Fourteen events have no independent authority in any arm.
+The checked matrix retains exact file/test/level authorities and now feeds the D1711 author action.
+
 **Deliverable 7 (owner questions) accumulates here** — nothing is silently chosen.
 **All four open questions RULED 2026-08-22 ([[D745]])**: space = classic zones + pawn control,
 `chess_tradition`; the negative reading faces learners post-commit/review with the denominator;

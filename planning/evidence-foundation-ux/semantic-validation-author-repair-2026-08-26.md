@@ -62,6 +62,32 @@ Re-run D1711 and quote the live counts. At the current checkpoint they are:
 Counts are tripwires, not design constants. The RFC must publish the exact migration matrix, not
 copy these totals into a second hand-maintained register.
 
+## D1713 exact migration work packages
+
+The follow-up executable matrix is `tools/d1713-semantic-validation-matrix/`; its interpretation is
+`design/research/semantic-validation-migration-matrix.md`. It replaces the coarse “reuse existing
+assertions” instruction with these current work packages:
+
+1. **Emitter positives:** migrate 32 existing cases; supply 35 missing cases.
+2. **Emitter semantic negatives:** migrate 5 existing cases; elevate 11 source-predicate negatives
+   through their real emitter; supply 51 cases with no semantic-negative authority.
+3. **Orientation:** elevate 4 source-predicate cases; there are zero existing emitter-level cases.
+   Every other event needs either a case or a reasoned `not_applicable` cell.
+4. **Counterfactual:** preserve 1 emitter, 2 composition and 3 source-predicate authorities without
+   conflating their levels; decide the other 61 cells explicitly.
+5. **Population:** retain the 23 actually observed current event roots with exact result identity;
+   do not inherit the old input token for the other 44.
+6. **External:** retain eight disagreement studies as calibration evidence, never as a truth oracle;
+   decide applicability rather than requiring an external theme for every event.
+7. **Authority-empty first:** line blockers, piece escape, developed, six named avoidance events,
+   pawn transitions, harassment pressure, defender consequence and captured-zone defender are the
+   fourteen events with no independent authority in any arm.
+
+The matrix source is the exact 67-row register and is set-equal to the runtime root inventory. The
+counts above are checkpoint summaries, not a second authority. The RFC must preserve the matrix's
+`event_emitter` / `source_predicate` / `composition` / `population_observation` /
+`external_disagreement` distinction in migration receipts.
+
 ## Ordering
 
 This RFC precedes D1710 application emitter wiring and Phase 3 module activation. It may be authored
