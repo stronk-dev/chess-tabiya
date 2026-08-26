@@ -8113,3 +8113,21 @@ always-visible identity has an implementing home.
 `planning/bot-roster/buildability-return-2026-08-26.md`. [[D1610]]/[[D1611]] retain only the genuine
 owner choices—final names/assets and the new-learner default. No production, protected-design,
 schema or migration bytes changed; the catalogue remains empty rather than falsely complete.
+
+## 2026-08-26 — longitudinal-store independent re-review returns the background foundation
+
+Independently re-reviewed the 2026-08-24 `longitudinal-store` amendment against the current
+semantic catalogue, storage transactions, run-event identity, import record and supported hosted
+topology. The original architecture improvements survive: measured request-path refusal, per-run
+phase/class grain, immutable observation time, typed refs, paired revision digests, honest absence
+for unattributable shared predictions, and authoritative rebuild.
+
+The RFC remains draft. Six contract gaps are recorded as [[D1612]]–[[D1617]] and detailed in
+`planning/longitudinal-store/independent-rereview-2026-08-26.md`: the exact constructor/base joins
+exist only in a disposable timing harness; `running` jobs have no safe claim/reclaim/CAS protocol
+and their promised closed failure code is free text; the worker has no pinned snapshot cut;
+interval processing does not preserve the family-independent decision denominator; seven distinct
+production run-write SQL paths are not a closed scheduling boundary; and imported source-game
+moves are observed games, not evidence that the learner played them. No migration or production
+projection code was started. Next: author amendment, fold the superseded two-table/synchronous
+sections into one contract, refresh the migration register, and independently re-review again.

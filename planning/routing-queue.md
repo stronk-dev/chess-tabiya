@@ -56,6 +56,7 @@ set execution order.
 | D604 | privacy/design ruling | Treat a style vector as identifying behavioral data in storage, export, deletion, and sharing contracts. |
 | D699, D700, D701, D702 | `longitudinal-store` RFC | Add the versioned personal-observation ledger and identity model before any weakness, habit, opening-accuracy, or coaching aggregate. |
 | D1011 | `longitudinal-store` author/register correction | Reconcile the accepted status with the three clauses that explicitly require answers before acceptance/implementation; do not infer the proposed answers in code. |
+| D1612, D1613, D1614, D1615, D1616, D1617 | `longitudinal-store` author amendment | Publish the exact constructor joins; specify a lease/CAS-safe worker and snapshot cut; define interval denominator algebra; close all seven run-write scheduling paths; and keep imported games observed-only until subject attribution is durable. Then fold the superseded specification and send it through independent re-review. |
 
 ## Campaign, drills, and return loops
 

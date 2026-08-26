@@ -1,7 +1,10 @@
 # RFC: Longitudinal store — the personal observation ledger
 
-- **Status:** draft — returned 2026-08-23 on the Codex buildability review and D1405
-  cost gate; amended 2026-08-24, awaiting independent re-review. The 2026-08-22
+- **Status:** draft — returned again by the 2026-08-26 independent buildability re-review
+  (`planning/longitudinal-store/independent-rereview-2026-08-26.md`; [[D1612]]–[[D1617]]).
+  The 2026-08-24 amendment repairs the original D1405 cost gate but still lacks a normative literal
+  constructor registry, a recoverable/CAS-safe durable claim protocol, exact interval aggregation,
+  a closed run-write scheduling boundary, and the imported-game subject boundary. The 2026-08-22
   acceptance is retained below as history, not as implementation authority. The amendment
   replaces synchronous whole-run replay with a durable append/background schedule, closes the
   67-family constructor gap with a typed adapter registry, makes decision references and
@@ -938,3 +941,9 @@ head after that renumbering and **not yet written**:
   time, durable job scheduling/freshness, paired revision digests and replacement criteria;
   recorded [[D1510]] rather than guessing shared-prediction authorship. Awaiting independent
   re-review; no production implementation is authorized yet.
+- 2026-08-26: independently re-reviewed and returned again. The amendment's architecture survives,
+  but its exact constructor joins live only in a disposable harness; the durable job cannot be
+  claimed/recovered safely or publish against an exact snapshot cut; interval processing leaves the
+  family-independent decision denominator undefined; seven production run-write shapes lack a
+  closed scheduling boundary; and imported source-game moves cannot support personal-style claims
+  without a durable subject declaration. See `planning/longitudinal-store/independent-rereview-2026-08-26.md`.
