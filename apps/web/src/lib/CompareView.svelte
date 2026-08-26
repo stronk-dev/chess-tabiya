@@ -186,7 +186,7 @@
 
   <aside class="alignment" aria-label="Aligned position relationship"><p>{recordedPathSentence()}</p><p>{positionSentence()}</p></aside>
 
-  <StatusAnnouncement message={`Comparison aligned ply ${step} of ${maxStep}`} />
+  <StatusAnnouncement message={`Comparison position ${step} of ${maxStep}`} />
   <div
     class="boards"
     data-zoom={zoom}
@@ -195,7 +195,7 @@
     {#each comparison.columns as column}
       {@const node = comparisonNode(run, comparison, step, column.branchId)}
       <article class:absent={!node} data-branch-id={column.branchId}>
-        <h3>{column.label}{column.origin === "simulated" ? " · simulated" : ""}</h3>
+        <h3>{column.label}{column.origin === "simulated" ? " · preview line" : ""}</h3>
         {#if run.branches.find((branch) => branch.id === column.branchId)?.intent}<p class="branch-intent">Intent: {run.branches.find((branch) => branch.id === column.branchId)?.intent}</p>{/if}
         {#if node}
           {@const outcome = outcomeAt(node.id)}
@@ -205,7 +205,7 @@
               <div><dt>Last move</dt><dd>{node.moveSan ?? "No move"}</dd></div>
               <div><dt>Moved by</dt><dd>{actorLabel(node.actor)}</dd></div>
               <div><dt>Material</dt><dd>{materialLabel(node.fen)}</dd></div>
-              <div><dt>Ply</dt><dd>{node.ply}</dd></div>
+              <div><dt>Half-moves played</dt><dd>{node.ply}</dd></div>
               <div><dt>Checkpoints</dt><dd>{node.checkpointRefs.length}</dd></div>
             </dl>
           {/if}
@@ -219,7 +219,7 @@
     <HonestControl disabled={step === 0} reasonId="compare-previous-unavailable" reason="The comparison is already at its first aligned position.">
       {#snippet children(describedBy)}<button type="button" disabled={step === 0} aria-describedby={describedBy} onclick={() => onStep(step - 1)}>← Previous</button>{/snippet}
     </HonestControl>
-    <span>Aligned ply {step} / {maxStep}</span>
+    <span>Position {step} / {maxStep}</span>
     <HonestControl disabled={step === maxStep} reasonId="compare-next-unavailable" reason="The comparison is already at its last aligned position.">
       {#snippet children(describedBy)}<button type="button" disabled={step === maxStep} aria-describedby={describedBy} onclick={() => onStep(step + 1)}>Next →</button>{/snippet}
     </HonestControl>

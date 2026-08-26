@@ -47,6 +47,7 @@
     resistanceSentences,
     resistanceSummary,
   } from "./outcome-presentation.js";
+  import { phaseLabel, phaseSummary } from "./run-copy.js";
   import { assistanceProfile, loadAssistance, saveAssistance, type PreferenceStorage } from "./assistance-preference.js";
   import { runViewportSupport, type RunViewportSupport } from "./viewport-support.js";
   import { playBoardEdge } from "./play-composition.js";
@@ -1004,7 +1005,7 @@
         <button class="objective-line" type="button" onclick={() => (objectiveOpen = true)} title={objectiveSentence}>
           <span>Objective</span>
           <strong>{objectiveSentence}</strong>
-          <small>{detectedPhase.phase}</small>
+          <small>{phaseLabel(detectedPhase.phase)}</small>
         </button>
       </section>
 
@@ -1032,8 +1033,7 @@
             </section>
           {/if}
           <section class="phase-reading" aria-label="Phase reading">
-            {#if pack}<span>{pack.phase}</span>{/if}
-            <span>{detectedPhase.phase}</span>
+            <span>{phaseSummary(pack?.phase, detectedPhase.phase)}</span>
           </section>
         </div>
 
@@ -1066,9 +1066,9 @@
               </section>
             {/if}
             {#if run.feedbackPolicy === "attempt_end" && canWrite && onReveal !== undefined}
-              <section class="evidence-reveal" aria-label="Evidence disclosure">
-                <button type="button" disabled={feedbackDeliveryOpen(run) || busy} onclick={() => void onReveal?.()}>Open evidence for this position</button>
-                {#if feedbackDeliveryOpen(run)}<p>Evidence is open at this position until you commit your next move.</p>{/if}
+              <section class="evidence-reveal" aria-label="Temporary help">
+                <button type="button" disabled={feedbackDeliveryOpen(run) || busy} onclick={() => void onReveal?.()}>Show support for this position</button>
+                {#if feedbackDeliveryOpen(run)}<p>Support is available for this position until you commit your next move.</p>{/if}
                 <p>It closes again after your next move.</p>
               </section>
             {/if}
@@ -1309,6 +1309,12 @@
             <h3>Attempt conditions</h3>
             {#if assessmentDetail}<p>{assessmentDetail}</p>{/if}
             {#each resistanceDetail as sentence}<p>{sentence}</p>{/each}
+          </section>
+        {/if}
+        {#if banner !== undefined}
+          <section aria-label="Objective change evidence" data-evidence-consumer="inspector.objective_change">
+            <h3>Objective change</h3>
+            {#each banner.sentences as sentence}<p><strong>{sentence.sourceLabel}</strong> · {sentence.text}</p>{/each}
           </section>
         {/if}
         {#if terminalEvidence.length > 0}

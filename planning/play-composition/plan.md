@@ -34,6 +34,10 @@ remain in their owning RFCs.
     consequences only. Raw objective tokens, engine values, detector attribution, structure
     census, piece routes and source records moved to a separate focus-restoring evidence
     inspector; desktop content and mobile matrix journeys assert both sides of the boundary.
+11. The second vocabulary-law slice translates objective-change evidence into deterministic
+    family-level Support summaries while retaining exact sentences in Inspector; collapses duplicate
+    phase enums; removes UCI/ply/simulated transport vocabulary from ordinary controls; and names the
+    bounded reveal after learner support rather than the evidence pipeline.
 
 ## Remaining before archive
 

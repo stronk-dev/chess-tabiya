@@ -1,23 +1,22 @@
 <script lang="ts">
   import type { WhyBannerModel } from "./screen-model.js";
   import StatusAnnouncement from "./StatusAnnouncement.svelte";
-  import { objectiveStateLabel } from "./run-copy.js";
+  import { objectiveChangeSummaries, objectiveStateLabel } from "./run-copy.js";
 
   interface Props {
     model?: WhyBannerModel | undefined;
   }
 
   let { model }: Props = $props();
+  let summaries = $derived(model === undefined ? [] : objectiveChangeSummaries(model.sentences));
 </script>
 
 {#if model}
   <aside class="why-banner" aria-label="Why the objective changed">
-    <StatusAnnouncement message={`${objectiveStateLabel(model.state)}. ${model.sentences.map((sentence) => sentence.text).join(" ")}`} />
+    <StatusAnnouncement message={`${objectiveStateLabel(model.state)}. ${summaries.join(" ")}`} />
     <span class="state">{objectiveStateLabel(model.state)}</span>
     <div>
-      {#each model.sentences as sentence}
-        <p><strong>{sentence.sourceLabel}</strong> · {sentence.text}</p>
-      {/each}
+      {#each summaries as sentence}<p>{sentence}</p>{/each}
     </div>
   </aside>
 {/if}

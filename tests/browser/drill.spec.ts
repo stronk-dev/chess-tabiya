@@ -239,7 +239,7 @@ test("Just Play reaches a Carlsbad and opens a guided shape marker without mutat
 test("Just Play explicitly reveals evidence and the next move closes the window", async ({ page }) => {
   await page.getByRole("button", { name: "Start and keep the game" }).click();
   await expect(page.getByLabel("Chessboard")).toBeVisible();
-  const reveal = page.getByRole("button", { name: "Open evidence for this position" });
+  const reveal = page.getByRole("button", { name: "Show support for this position" });
   await expect(reveal).toBeEnabled();
   await page.getByRole("button", { name: "Inspector" }).click();
   await expect(page.getByRole("button", { name: "Load model candidates" })).toHaveCount(0);
@@ -247,7 +247,7 @@ test("Just Play explicitly reveals evidence and the next move closes the window"
 
   await reveal.click();
   await expect(reveal).toBeDisabled();
-  await expect(page.getByText("Evidence is open at this position until you commit your next move.")).toBeVisible();
+  await expect(page.getByText("Support is available for this position until you commit your next move.")).toBeVisible();
   await page.getByRole("button", { name: "Inspector" }).click();
   await expect(page.getByRole("button", { name: "Load model candidates" })).toBeVisible();
   await page.getByRole("button", { name: "Return to play" }).click();
@@ -257,7 +257,7 @@ test("Just Play explicitly reveals evidence and the next move closes the window"
 
   await move(page, "e2", "e4", "white");
   await expect(reveal).toBeEnabled();
-  await expect(page.getByText("Evidence is open at this position until you commit your next move.")).toHaveCount(0);
+  await expect(page.getByText("Support is available for this position until you commit your next move.")).toHaveCount(0);
   await page.getByRole("button", { name: "Inspector" }).click();
   await expect(page.getByRole("button", { name: "Load model candidates" })).toHaveCount(0);
 });
@@ -294,7 +294,7 @@ test("adaptive guidance keeps a queen-exchange phase change passive and removabl
   await page.getByLabel("Position FEN").fill("3qk2r/5p2/2b2n2/8/8/8/8/3QK3 w - - 0 1");
   await page.getByRole("button", { name: "Start and keep the game" }).click();
   await expect(page.getByLabel("Chessboard")).toBeVisible();
-  await expect(page.getByRole("region", { name: "Phase reading" })).toContainText("middlegame");
+  await expect(page.getByRole("region", { name: "Phase reading" })).toContainText("Middlegame");
   await expect(page.getByText("Detected by Tabiya's phase bands: middlegame.")).toHaveCount(0);
 
   await page.getByText("Assistance", { exact: true }).click();
@@ -786,7 +786,7 @@ async function liveInputMove(
   );
   if (mode === "text") {
     await page.getByText("Enter a move", { exact: true }).click();
-    await page.getByLabel("Move in SAN or UCI").fill(uci);
+    await page.getByLabel("Move in chess notation").fill(uci);
     await page.getByRole("button", { name: "Submit move" }).click();
   } else if (mode === "keyboard") {
     const grid = page.getByRole("grid", { name: /Board input/u });
@@ -1310,7 +1310,7 @@ test("@matrix play composition keeps one exact board rectangle through overlays 
     expect(calm).not.toBeNull();
 
     await page.getByText("Enter a move", { exact: true }).click();
-    await expect(page.getByLabel("Move in SAN or UCI")).toBeVisible();
+    await expect(page.getByLabel("Move in chess notation")).toBeVisible();
     expect(await page.getByLabel("Chessboard").boundingBox()).toEqual(calm);
     await page.getByText("Enter a move", { exact: true }).click();
 
@@ -1859,7 +1859,7 @@ test("@matrix mobile shell, settings, and install manifest preserve the run regi
   expect(appearanceBox?.width).toBeGreaterThanOrEqual(24);
   expect(appearanceBox?.height).toBeGreaterThanOrEqual(24);
   await page.getByText("Enter a move", { exact: true }).click();
-  for (const target of [page.getByLabel("Move in SAN or UCI"), page.getByRole("button", { name: "Submit move" })]) {
+  for (const target of [page.getByLabel("Move in chess notation"), page.getByRole("button", { name: "Submit move" })]) {
     const box = await target.boundingBox();
     expect(box?.width).toBeGreaterThanOrEqual(24);
     expect(box?.height).toBeGreaterThanOrEqual(24);

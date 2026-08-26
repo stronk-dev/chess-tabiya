@@ -335,7 +335,7 @@
   <details class="text-move">
     <summary>Enter a move</summary>
     <form onsubmit={submitText}>
-      <label>Move in SAN or UCI <input bind:value={moveText} disabled={inputDisabled} aria-describedby={inputDisabled ? "text-move-disabled" : undefined} autocomplete="off" /></label>
+      <label>Move in chess notation <input bind:value={moveText} disabled={inputDisabled} aria-describedby={inputDisabled ? "text-move-disabled" : undefined} autocomplete="off" /></label>
       <button type="submit" disabled={inputDisabled} aria-describedby={inputDisabled ? "text-move-disabled" : undefined}>Submit move</button>
       {#if inputDisabled}<span id="text-move-disabled">This board is not accepting moves.</span>{/if}
     </form>

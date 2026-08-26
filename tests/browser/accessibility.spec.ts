@@ -85,7 +85,7 @@ test("@matrix @mobile the mobile project uses real touch and coarse-pointer sema
     page.getByRole("link", { name: "Appearance" }),
   ];
   await page.getByText("Enter a move", { exact: true }).click();
-  criticalTargets.push(page.getByLabel("Move in SAN or UCI"), page.getByRole("button", { name: "Submit move" }));
+  criticalTargets.push(page.getByLabel("Move in chess notation"), page.getByRole("button", { name: "Submit move" }));
   for (const target of criticalTargets) {
     const box = await target.boundingBox();
     expect(box, "critical touch target has no rendered box").not.toBeNull();

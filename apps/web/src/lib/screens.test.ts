@@ -42,6 +42,7 @@ import CheckpointSheet from "./CheckpointSheet.svelte";
 import DrillScreen from "./DrillScreen.svelte";
 import JustPlayStarter from "./JustPlayStarter.svelte";
 import PackList from "./PackList.svelte";
+import WhyBanner from "./WhyBanner.svelte";
 import type { Capabilities, PackSummary, ShapeEntryView } from "./api.js";
 import type {
   RegionKeyboardHandler,
@@ -155,6 +156,32 @@ afterEach(() => {
 });
 
 describe("Layer 3 screens", () => {
+  it("keeps objective-change evidence detail out of ordinary Support copy", async () => {
+    const component = mount(WhyBanner, {
+      target: target(),
+      props: {
+        model: {
+          state: "degraded",
+          eventSeq: 7,
+          sentences: [
+            { reference: "rules:structure-outpost", sourceLabel: "Rules", text: "Tabiya's strict outpost detector condition holds." },
+            { reference: "engine:root", sourceLabel: "Engine", text: "Centipawn evidence recorded." },
+          ],
+        },
+      },
+    });
+    await tick();
+
+    const banner = document.querySelector<HTMLElement>(".why-banner")!;
+    expect(banner.textContent).toContain("Objective weakened");
+    expect(banner.textContent).toContain("A rules-based position feature affected the drill objective.");
+    expect(banner.textContent).toContain("A recorded engine assessment affected the drill objective.");
+    expect(banner.textContent).not.toContain("detector");
+    expect(banner.textContent).not.toContain("Centipawn");
+    expect(banner.textContent).not.toContain("Engine ·");
+    await unmount(component);
+  });
+
   it("turns a real first run into a four-step rehearsal and opens its two preserved attempts", async () => {
     const run = branchedRun();
     const onCompare = vi.fn();
@@ -450,7 +477,7 @@ describe("Layer 3 screens", () => {
     const shared = { onMove: vi.fn(), onRewind: vi.fn(), onFork: vi.fn(), onSwitchBranch: vi.fn(), onCompare: vi.fn(), onCloseCompare: vi.fn(), onContinueCheckpoint: vi.fn(), onExport: vi.fn(), onStop: vi.fn(), registerKeyboardRegion };
     let component = mount(DrillScreen, { target: target(), props: { snapshot: { run, access: "writer", pendingEvidence: 0, withheld: false }, onReveal, ...shared } });
     await tick();
-    const reveal = [...document.querySelectorAll<HTMLButtonElement>("button")].find((button) => button.textContent === "Open evidence for this position")!;
+    const reveal = [...document.querySelectorAll<HTMLButtonElement>("button")].find((button) => button.textContent === "Show support for this position")!;
     expect(reveal.disabled).toBe(false);
     reveal.click();
     expect(onReveal).toHaveBeenCalledTimes(1);
@@ -461,7 +488,7 @@ describe("Layer 3 screens", () => {
     document.body.replaceChildren();
     component = mount(DrillScreen, { target: target(), props: { snapshot: { run, access: "read_only", pendingEvidence: 0, withheld: false }, onReveal, ...shared } });
     await tick();
-    expect(document.body.textContent).not.toContain("Open evidence for this position");
+    expect(document.body.textContent).not.toContain("Show support for this position");
     await unmount(component);
   });
 
@@ -706,6 +733,15 @@ describe("Layer 3 screens", () => {
     expect(document.body.textContent).toContain(
       "Checkpoint reached: Critical race resolved.",
     );
+    const whyBanner = document.querySelector<HTMLElement>(".why-banner")!;
+    expect(whyBanner.textContent).not.toContain("Pack ·");
+    const inspector = [...document.querySelectorAll<HTMLButtonElement>("button")].find((button) => button.textContent?.trim() === "Inspector")!;
+    inspector.click();
+    await tick();
+    const objectiveEvidence = document.querySelector<HTMLElement>('[aria-label="Objective change evidence"]')!;
+    expect(objectiveEvidence.textContent).toContain("Pack · Checkpoint reached: Critical race resolved.");
+    [...document.querySelectorAll<HTMLButtonElement>("button")].find((button) => button.textContent?.trim() === "Return to play")!.click();
+    await tick();
     expect(document.body.textContent).toContain("early queenside");
     expect(document.querySelectorAll(".timeline li.checkpoint").length).toBe(2);
     expect(document.querySelector('[role="dialog"] h2')?.textContent).toBe(
@@ -746,9 +782,9 @@ describe("Layer 3 screens", () => {
     });
     await tick();
 
-    expect(document.body.textContent).toContain("Aligned ply 2 / 2");
+    expect(document.body.textContent).toContain("Position 2 / 2");
     const comparisonStatus = document.querySelector<HTMLElement>('[data-status-announcement]')!;
-    expect(comparisonStatus.textContent).toBe("Comparison aligned ply 2 of 2");
+    expect(comparisonStatus.textContent).toBe("Comparison position 2 of 2");
     expect(document.querySelector(".boards")?.getAttribute("aria-live")).toBeNull();
     expect(comparisonStatus.querySelector("button, [tabindex]")).toBeNull();
     expect(document.activeElement?.id).toBe("compare-title");

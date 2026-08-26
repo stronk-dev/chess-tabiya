@@ -39,6 +39,13 @@ candidates came from and which resistance was requested or played, but do not ex
 bytes, engine/model versions or selector bookkeeping. The Inspector's Attempt conditions section
 retains the exact root-assessment, provider and per-ply resistance record for deliberate inspection.
 
+Objective-change banners follow that split as well: Support receives a deterministic family-level
+reason, while Inspector retains the exact references, source labels and sentences. Phase chrome
+collapses matching authored/detected phases to one readable label and explains genuine differences.
+Text entry is labelled as chess notation even though its controller continues to accept both SAN
+and coordinate input. The temporary reveal is named for the support it affords, not its evidence
+transport, and comparison navigation speaks in positions rather than runtime ply terminology.
+
 ## Verification
 
 The browser suite asserts the exact board rectangle at the seven accepted projections:

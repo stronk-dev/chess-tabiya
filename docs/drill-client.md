@@ -302,7 +302,8 @@ the current attempt survives before confirmation.
 The checkpoint sheet takes focus and exposes continue, rewind, compare when
 the authored checkpoint allows it, and stop. Objective transitions are never
 shown bare: `screen-model.ts` rejects an empty evidence-ref set before
-`WhyBanner.svelte` renders the sentence table.
+`WhyBanner.svelte` renders a deterministic learner summary. Exact source labels
+and evidence sentences remain available in Inspector's Objective change section.
 
 The comparison screen consumes the server/runtime `BranchComparison` payload.
 It leads with one fork board carrying every recorded candidate arrow, then lists
@@ -322,6 +323,8 @@ grounding. When `machineFeedback` is withheld, the server removes the machine
 fields and the inspector admits none of the trajectory, sparkline, summary score,
 or machine consumer. Engine arrows, move recommendations, and human-frequency
 overlays remain absent; the fork arrows are only moves the learner already played.
+Ordinary comparison navigation calls each synchronized step a position; internal
+ply offsets and preview/simulation identity remain evidence/runtime detail.
 
 Outcome Drill adds a compact context surface above the board and in checkpoint
 or terminal sheets. It keeps four facts separate: a concise root assessment,

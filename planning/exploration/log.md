@@ -9625,3 +9625,18 @@ assessment, engine identity and per-ply resistance record. A production-browser 
 journey proves both halves at the same checkpoint—provider identity is absent from its ordinary
 dialog, then present after the deliberate Inspector action. D1825–D1827 close; module selection and
 the complete play-composition matrix remain open.
+
+## 2026-08-27 — Objective changes and run chrome stop exposing analysis plumbing
+
+The next accepted play-composition slice closes five related vocabulary leaks. Objective-change
+banners now render deterministic summaries by grounded evidence family instead of source labels,
+detector prose or engine/tablebase transport strings; Inspector receives a dedicated Objective
+change section carrying the exact original records. Matching authored/detected phases collapse to
+one readable label, while a real mismatch names drill focus and current position separately.
+
+Text move entry says chess notation while preserving both accepted input grammars. Compare calls
+preview lines and synchronized positions what they are instead of exposing `simulated` and `ply`.
+The bounded reveal is presented as temporary support and retains the same recorded disclosure and
+next-move re-close behavior. Focused type/component checks pass 27/27; production-browser reveal,
+objective-change, real-content compare, stable-board and mobile-composition journeys pass. D1828–D1832
+close; module seating and the complete 112-image matrix remain open.
