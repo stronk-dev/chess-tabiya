@@ -99,5 +99,19 @@ weaker player must still be able to win on lower floors, so the pool cannot simp
 is to experiment least where the product most wants it); and what a learner sees when it is low,
 given [[D1496]]'s rule that the counter must never appear at the moment of the mistake.
 
+**Research result — 2026-08-26.** `design/research/campaign-failure-resource.md` and the disposable
+Node-24 harness `tools/d1515-failure-resource-harness/` reduce the mechanism search to one family.
+Automatic global HP fails attribution and carries an early miss into the boss; act HP removes the
+carry but not the failure-authorised debit or second counter; reusing earned rewinds makes the
+learner husband experimentation for later survival. The only tested structural candidate clearing
+all four axes is act-reset **availability over the already-earned inventory**: after the submitted
+verdict, the learner chooses which tool affordance rests, while ownership, theory knowledge, Review
+and the standard path remain. [[D1598]]/[[D1599]].
+
+**Still owner-blocked:** what happens when no exhaustible tool remains — forced recovery route
+(recommended), one carried strain resolved at the act boundary, or exhaustion/lost prestige as the
+complete nonterminal consequence. [[D1600]]. The research licences no count, threshold or learner
+copy, and no person has yet tested whether the candidate feels non-punitive.
+
 **Do not draft a campaign failure RFC from this row.** It is a GAP row under law 1 until the research
-lands.
+lands **and [[D1600]] is ruled**.

@@ -50,6 +50,15 @@ blocks the unchecked items above at the persistence boundary.
 - [ ] Incorporate failure-resource semantics only after [[D1515]] research passes its exploration
   gate; one failed node does not end the run and failure never locks the educational path.
 
+R12 research has now landed in `design/research/campaign-failure-resource.md`:
+
+- [x] Execute all 512 nine-node achieved/failed patterns across global HP, act HP, shared-charge
+  resistance and inventory-exhaustion controls ([[D1598]]).
+- [x] Identify the only tested candidate clearing attribution, carry-forward, second-currency and
+  educational-access constraints: act-reset availability over owned tools ([[D1599]]).
+- [ ] Obtain [[D1600]]'s owner ruling on the no-exhaustible-tool second stage. Until then R12 remains
+  non-RFC research and campaign failure storage/events are blocked.
+
 After the author amendment, repeat independent buildability review against the source symbols,
 then resume the migration chain. Do not treat the already-green pure checkpoints as acceptance of
 the missing product contract.

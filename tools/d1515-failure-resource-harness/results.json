@@ -1,0 +1,46 @@
+{
+  "direct_global_hp": {
+    "sequences": 512,
+    "completed": 46,
+    "terminated": 466,
+    "singleFailureTerminations": 0,
+    "act1FailureChangesAct3Capacity": true,
+    "failureDebitAuthority": "failed_verdict",
+    "newNumericCurrency": true,
+    "recoveryDependsOnWinning": false,
+    "unconsequencedFailures": 0
+  },
+  "direct_act_hp": {
+    "sequences": 512,
+    "completed": 64,
+    "terminated": 448,
+    "singleFailureTerminations": 0,
+    "act1FailureChangesAct3Capacity": false,
+    "failureDebitAuthority": "failed_verdict",
+    "newNumericCurrency": true,
+    "recoveryDependsOnWinning": false,
+    "unconsequencedFailures": 0
+  },
+  "shared_charge_resistance": {
+    "sequences": 512,
+    "completed": 512,
+    "terminated": 0,
+    "singleFailureTerminations": 0,
+    "act1FailureChangesAct3Capacity": true,
+    "failureDebitAuthority": "learner_resistance_choice",
+    "newNumericCurrency": false,
+    "recoveryDependsOnWinning": false,
+    "unconsequencedFailures": 0
+  },
+  "inventory_exhaustion": {
+    "sequences": 512,
+    "completed": 512,
+    "terminated": 0,
+    "singleFailureTerminations": 0,
+    "act1FailureChangesAct3Capacity": false,
+    "failureDebitAuthority": "learner_exhaustion_choice",
+    "newNumericCurrency": false,
+    "recoveryDependsOnWinning": false,
+    "unconsequencedFailures": 0
+  }
+}

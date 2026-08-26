@@ -8072,3 +8072,24 @@ collectible vocabulary, path-sensitive later-use proof and prestige denominator.
 than silently answered. The exact return is
 `planning/campaign/two-horizon-return.md`; no protected design, production code, schema, migration
 or content bytes changed.
+
+## 2026-08-26 — R12 failure-resource search narrowed to inventory availability
+
+Ran a primary-source and executable research pass on [[D1515]] rather than drafting the missing
+failure contract. Blades and Fate separate the consequence from the player-elected resource spend;
+Fate also demonstrates why a short buffer needs a second carried state. Hades supplies the opposite
+control—failure increases resilience. Productive-failure and competence-frustration research bound
+the learning claim without being treated as game-UX proof.
+
+The disposable Node-24 harness exhaustively ran all 512 achieved/failed patterns over the accepted
+3×3 campaign. Global HP(3) completes 46 and carries Act-I loss into Act III; act HP(2) completes 64
+and keeps the failed verdict as debit authority; shared rewind charges preserve access but still
+price early experimentation. Act-reset availability over acquired tools is the only tested
+candidate that preserves all educational paths, removes cross-act carry, adds no second number and
+makes the learner's consequence choice the debit authority. [[D1598]]/[[D1599]].
+
+**Gate state:** research-complete, owner-blocked—not RFC-ready. [[D1600]] asks what follows when no
+tool is available to rest: recovery route (recommended), carried act-level strain, or a completely
+nonterminal exhaustion/prestige consequence. No counts, thresholds, copy or felt-quality claim are
+licensed. The dossier is `design/research/campaign-failure-resource.md`; the instrument and receipt
+are `tools/d1515-failure-resource-harness/`.
