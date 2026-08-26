@@ -293,6 +293,13 @@ sight keeps their coarse counts. The 1.0 route therefore preserves pack predicat
 named-structure identity, activates D1710 packet/path operations, and makes named modules select
 the rich facts. Renaming the raw panel or moving it beside the board does not satisfy this gate.
 
+[[D1728]] closes isolated/doubled pawn subject identity. The existing pawn-connectivity source
+reproduces both legacy predicates exactly, but learner/event rows lose exact group membership,
+including 27 fixed-population changes whose file truth stays unchanged. The 1.0 route derives
+unbounded exact groups and `membership_changed`, preserves current author predicates, and keeps
+weakness/value/plan in separate theory/evaluation joins. Ordinary modules, Review, style, bots and
+broad content do not activate the file-only rows as learner evidence.
+
 ### 3. Arrival and the rehearsal loop
 
 <!-- roadmap-capability: rehearsal -->

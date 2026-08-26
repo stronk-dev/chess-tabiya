@@ -9009,3 +9009,16 @@ projection: prose-only in inspector/sight, id+name+prose in guidance. The handof
 predicates stable, seals pattern identity, activates D1710/D1711 operations and replaces ordinary
 presentation with question-bound rich sources. No production, RFC, schema, content, pack or
 learner-UX byte changed.
+
+## 2026-08-26 — Exact isolated/doubled pawn identity measured (D1728/D1729)
+
+Derived exact pawn-file groups from shipped `pawnConnectivityReading` and proved them set-equal to
+both legacy predicates across 18,912 fixed color/file cells. Isolated file rows collapse 163→180
+authored and 369→408 imported pawn subjects; 17/39 are simultaneously doubled. No tripled corpus
+case exists, but a `c3,c4,c5` fixture retains all three.
+
+Across committed edges, exact membership changes while file truth stays true in 18 authored and
+9 imported events; 28/77 authored and 49/109 imported isolated+doubled group changes exclude the
+mover. The v1 event's “identity-preserving” claim is therefore false. The handoff derives an exact
+group reading/event with `membership_changed`, preserves pack predicates, and refuses
+weakness/value/plan. No production, RFC, schema, pack, content or learner UX changed.

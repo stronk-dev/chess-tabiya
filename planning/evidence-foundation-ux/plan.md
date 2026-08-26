@@ -126,6 +126,16 @@ named-structure payload authorities under one projection. The author handoff kee
 pack compatibility, seals identities, binds production packet/path operations through D1710 and
 replaces ordinary presentation before module acceptance.
 
+[[D1728]] **completed the exact isolated/doubled pawn identity boundary on 2026-08-26**. The
+shipped pawn-connectivity reading already derives both legacy file predicates exactly across
+18,912 fixed cells, but their learner/event payloads discard the pawn subjects. Multi-pawn
+isolated groups occur on 17/163 authored and 39/369 imported isolated files; 18/9 committed-edge
+changes preserve file truth while changing exact membership, and 28/77 + 49/109 changed groups
+exclude the mover. [[D1729]] therefore corrects the manifest's false identity-preserving claim.
+The author handoff adds an unbounded exact group reading and before/after event with
+`membership_changed`, preserves pack predicates, and refuses weakness/value/plan until joined to
+separate evidence.
+
 **Deliverable 7 (owner questions) accumulates here** — nothing is silently chosen.
 **All four open questions RULED 2026-08-22 ([[D745]])**: space = classic zones + pawn control,
 `chess_tradition`; the negative reading faces learners post-commit/review with the denominator;

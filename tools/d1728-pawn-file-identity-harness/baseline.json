@@ -1,0 +1,53 @@
+{
+  "schema": "tabiya.research.d1728-pawn-file-identity.v1",
+  "authored": {
+    "static": { "positions": 611, "isolatedFiles": 163, "isolatedPawns": 180, "isolatedMultiPawnFiles": 17, "doubledFiles": 98, "doubledPawns": 196, "tripledOrMoreFiles": 0, "isolatedAndDoubledFiles": 17 },
+    "isolatedTransitions": {
+      "decisions": 754, "changedGroups": 36, "truthChanged": 22, "identityOnlyChanged": 14, "crossSubjectChanged": 13,
+      "examples": [
+        "anti-italian-center-attack-black/p18-nxd5:f6d5:white:d:d4+d5→d4",
+        "carlsbad-minority-attack/bxc6-consequence:b5c6:white:a:→a2",
+        "carlsbad-minority-attack/bxc6-consequence:b5c6:black:d:→d5",
+        "carlsbad-minority-attack/bxc6-recapture:b7c6:black:a:→a6",
+        "carlsbad-minority-attack/bxc6-recapture:b7c6:black:d:d5→",
+        "italian-center-attack-white/p18-nxd5:f6d5:white:d:d4+d5→d4"
+      ]
+    },
+    "doubledTransitions": {
+      "decisions": 754, "changedGroups": 41, "truthChanged": 37, "identityOnlyChanged": 4, "crossSubjectChanged": 15,
+      "examples": [
+        "anti-caro-advance-early-c5/nxd4-central:f3d4:black:d:d4+d5→",
+        "anti-italian-center-attack-black/p11-cxd4:c3d4:black:d:d4+d7→",
+        "anti-italian-center-attack-black/p18-nxd5:f6d5:white:d:d4+d5→",
+        "anti-scandinavian-white/p4-qxd5:d8d5:white:d:d2+d5→",
+        "anti-scandinavian-white/p6-nxd5:f6d5:white:d:d4+d5→",
+        "closed-centre-chain-black-base-strike/cxd4-recapture:c3d4:black:d:d4+d5→"
+      ]
+    }
+  },
+  "imported": {
+    "static": { "positions": 577, "isolatedFiles": 369, "isolatedPawns": 408, "isolatedMultiPawnFiles": 39, "doubledFiles": 180, "doubledPawns": 360, "tripledOrMoreFiles": 0, "isolatedAndDoubledFiles": 39 },
+    "isolatedTransitions": {
+      "decisions": 579, "changedGroups": 65, "truthChanged": 58, "identityOnlyChanged": 7, "crossSubjectChanged": 40,
+      "examples": [
+        "https://lichess.org/82AjXY9N#24:b7c6:black:a:→a7",
+        "https://lichess.org/GeGxAAq6#16:d7c6:black:e:→e6",
+        "https://lichess.org/FLpiXGM1#24:f6g5:white:f:→f2",
+        "https://lichess.org/FLpiXGM1#24:f6g5:white:h:→h3",
+        "https://lichess.org/FLpiXGM1#24:f6g5:black:e:→e7",
+        "https://lichess.org/ZHWGswJq#48:d3f4:white:f:f4→"
+      ]
+    },
+    "doubledTransitions": {
+      "decisions": 579, "changedGroups": 44, "truthChanged": 42, "identityOnlyChanged": 2, "crossSubjectChanged": 9,
+      "examples": [
+        "https://lichess.org/pOwXJnoO#16:e7f5:white:f:f3+f5→",
+        "https://lichess.org/GeGxAAq6#8:d8f6:white:f:f2+f6→",
+        "https://lichess.org/yIw37Fag#24:c5e3:white:e:e2+e3→",
+        "https://lichess.org/CTpsOdRL#8:f6d5:white:d:d2+d5→",
+        "https://lichess.org/Ug73cjl5#16:d6c5:white:c:c3+c5→",
+        "https://lichess.org/bcyI760n#16:b4c3:white:c:c2+c3→"
+      ]
+    }
+  }
+}
