@@ -8507,3 +8507,23 @@ instrument: `tools/d1585-module-semantic-closure/` (8/8 green).
 The RFC stays returned. These results require author amendment and repeat review, and [[D1164]]'s
 exact set-equal stable novelty-identity matrix remains open. No production, protected design,
 schema, content or concurrent Claude review/harness byte changed.
+
+## 2026-08-26 — D1164 module novelty identity closure measured
+
+Derived the proactive accepts rather than preserving the RFC's hand count. The post-commit module
+contains 43 projections, not 38; structure adds six; theory adds three unique rows because shape
+firing overlaps. The possible identity registry is therefore 52 exact ids. Every member now has a
+stable compared-field declaration or one explicit exemption (edge-scoped move grade), and the
+checker forbids node/event ids, all FEN spellings, move/UCI anchors, shape node anchors and source
+retrieval time from novelty identity.
+
+Eight executable arms prove distinct-node equality, changed-subject inequality, positive versus
+avoidance polarity, grade preservation, optional-union canonicality and closure set equality. The
+pass also finds [[D1694]]: `theory_breadcrumb` is declared on request but assigned a three-node
+suppression window in contradiction with the same section's repeat-request guarantee. Active
+closure is 49 under window 0, or 52 only after an initiative amendment; the instrument records
+both and chooses neither.
+
+Dossier: `design/research/module-novelty-identity-closure.md`; instrument:
+`tools/d1164-novelty-identity-harness/` (8/8 green). No production, protected design, schema,
+content, RFC status or concurrent Claude review/harness byte changed.

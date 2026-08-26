@@ -46,6 +46,21 @@ types, crossed negatives and the author amendment checklist are in the dossier. 
 set-equal stable-novelty identity matrix remains open and is the next research job; do not treat
 this section as registry acceptance.
 
+The novelty pass must also close [[D1693]]: §1.5's `38 + 6 + 4` prose contradicts §1.3's literal
+43-row post-commit set before overlap is even removed. Derive the union from exact accepted ids,
+never either hand count.
+[[D1694]] is a separate semantic fork found by the same derivation: `theory_breadcrumb` is
+`on_request` in the declaration but window 3 in the novelty section, contradicting the section's
+own repeat-request rule. The author must choose timing/initiative or window 0 before the final
+closure can be set-equal; the research matrix must show both cardinalities and must not choose.
+
+`design/research/module-novelty-identity-closure.md` and
+`tools/d1164-novelty-identity-harness/` now supply that exact matrix. The possible registry is 52
+ids, with one explicit per-edge grade exemption; every stable row excludes volatile run/FEN/move
+anchors and retains semantic subject/polarity bytes. The active closure derives to 49 under the
+recommended existing-invariant correction (`theory_breadcrumb` remains on request, window 0), or
+52 only if the author changes its initiative. Amendment/re-review—not further discovery—is next.
+
 ## Re-review and implementation order
 
 - Independent re-review resolves every row above to exact types/symbols and able-to-fail fixtures.

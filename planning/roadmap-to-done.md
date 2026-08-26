@@ -218,6 +218,11 @@ population-summary derivation; [[D1587]] reseals reducer survivors through the e
 consumer authority; and [[D1589]] keeps the non-guidance rules floor for both Match seats. The
 registry remains returned until the RFC absorbs these results and [[D1164]] supplies the exact
 stable novelty-identity closure.
+That closure is now measured: 52 possible declarations, with active set 49 under the existing
+on-request repeat-answer invariant or 52 only if theory breadcrumb becomes suppressible.
+[[D1693]] corrects the draft's false `38 + 6 + 4` arithmetic; [[D1694]] keeps the author from
+silently choosing timing through an identity table. Production remains blocked on amendment and
+repeat review, not further novelty discovery.
 The 2026-08-26 independent re-review returns the preset compiler on [[D1659]]–[[D1663]] and
 [[D1437]]/[[D1500]]: unset preferences currently masquerade as explicit Quiet choices; raw config
 and module outputs can contradict; availability is undefined across provider/browser state;
