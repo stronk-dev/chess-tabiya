@@ -8384,3 +8384,21 @@ so this does not rescue `evidence-presentation`'s manifest-string coverage claim
 family still needs an exact constructor and operand-retention negatives, and the real route/seat
 remains D1588 work. Dossier: `design/research/sealed-component-adapter.md`; instrument:
 `tools/d1664-component-adapter-harness/` (5/5 green). No production or protected-design byte changed.
+
+## 2026-08-26 — variants full-family amendment returns at independent re-review
+
+Re-derived `rfc/variants.md` against the current branch runtime, chessops variant/move types, PGN
+normalization, opponent parser, evidence queue, campaign seal and release composition. The prior
+review's six repairs survive. The widened Tier-2 implementation premise does not.
+
+[[D1674]]–[[D1682]] record nine blockers. Runtime commits and terminals are standard-`Chess` and
+Crazyhouse drops are explicitly refused; Chess960 behavior has no durable origin identity;
+`parseVariant` erases the Standard-versus-960 distinction needed by the setup guard;
+Fairy-Stockfish has no packaged operation and its drop moves cannot cross the selector; evidence
+jobs carry no rules identity; declared rungs and admission contexts have no typed authorities;
+evidence-dark campaign nodes cannot use the current pack seal; and one criterion is green only
+because the schema has no semantic field to test.
+
+The RFC/register, routing and 1.0 social/campaign capabilities now say returned. Exact repair and
+falsifiers: `planning/variants/independent-rereview-2026-08-26.md`. No production, protected design,
+schema, content or concurrent Claude review/harness byte changed.

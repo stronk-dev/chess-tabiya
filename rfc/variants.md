@@ -1,7 +1,10 @@
 # RFC: Variants — per-surface admission, declared rungs, and the full family
 
-- **Status:** draft — **six blockers repaired and widened to the full family 2026-08-23, ready for
-  re-review.** The cross-review's six return-class findings are resolved at source, and the document
+- **Status:** draft — **returned 2026-08-26 by independent re-review on [[D1674]]–[[D1682]]**
+  (`planning/variants/independent-rereview-2026-08-26.md`). The prior cross-review's six findings
+  were repaired, but the widening is not buildable over the standard-only branch/evidence/opponent
+  authorities. Prior status: six blockers repaired and widened to the full family 2026-08-23. The
+  cross-review's six return-class findings are resolved at source, and the document
   no longer ships the Chess960-only cut it was returned for. **What changed:** (1) **Open question 1
   is CLOSED, not re-asked** — [[D1153]] ruled *compose a bot that does not depend on Maia*, [[D1160]]
   returned the priced answer the same day, and [[D1271]] then **funded [[D810]]'s evidence-to-move

@@ -100,6 +100,7 @@ set execution order.
 
 | Rows | Primary destination | Next action / gate |
 |---|---|---|
+| D1674, D1675, D1676, D1677, D1678, D1679, D1680, D1681, D1682 | `variants` author amendment | Replace the standard-only Tier-2 premise with a rules-aware run/move/terminal authority; persist exact 960/setup identity; split PGN setup classification; package and consume Fairy-Stockfish; carry rules capability through every evidence operation; define rung/admission vocabularies and map every entry; route campaign variants to a real successor. Repeat independent review before lane 0.20 implementation. |
 | D707 | private human-play RFC lane | Scope native play as a private learning primitive, not a competitive service. |
 | D252 | session/board-control defect | Preserve the distinction between match session kind and matching board control, with the divergent case in tests. |
 

@@ -350,6 +350,8 @@ Primary RFCs: `campaign-core`, `training-mode-variants`. UX owner: CMP items.
 Owner ruling [[D1565]] requires two explicit progression horizons: a run-scoped inventory of
 drip-fed theory, modules and tools that matters in later encounters and bosses, plus durable
 long-term rewards across runs. Exact consequential failure arithmetic remains research-owned.
+Variant campaigns remain a successor structure, not a `DrillRun.rules` rider: [[D1681]] proves the
+current pack-seal campaign cannot advance an evidence-dark Tier-2 node without inventing a verdict.
 
 ### 10. Human play, live sources, clocks, variants, and social return
 
@@ -368,6 +370,12 @@ future event/round/pairing/result aggregate without pretending 1.0 runs a public
 
 Primary RFCs: `live-sources`, `live-following`, `social-play`, `recorded-clocks`,
 `enforced-clocks`, `variants`. UX owner: LIV items shared with professional workflows.
+The 2026-08-26 variants re-review returns the full-family contract on [[D1674]]–[[D1682]]. Tier-2
+play requires a rules-aware branch/move/terminal authority, durable setup identity, normalized PGN
+setup classification, a packaged Fairy-Stockfish operation, rules-bearing evidence requests,
+typed rung/admission closures and real entry-point readers. The current standard-`Chess` runtime
+rejects Crazyhouse drops and validates every variant terminal under standard rules, so lane 0.20
+may not land as an optional field over unchanged mechanics.
 [[D1567]] reopens the public-pool cost model for a no-chat product. The 1.0 decision must price
 automatic pairing, avoid/block, abort/stall controls, rate limits and operator evidence directly,
 without assuming a social-network moderation stack or assuming chess-only play has no abuse case.
