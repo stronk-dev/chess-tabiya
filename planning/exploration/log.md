@@ -8255,3 +8255,17 @@ The RFC/register and Phase-2h plan now say returned. The exact amendment order i
 `planning/evidence-foundation-ux/shared-candidate-packet-independent-review-2026-08-26.md`. No
 production, schema, content, design-intent or concurrent Wave-C harness byte changed; implementation
 waits for author amendment and another independent review.
+
+## 2026-08-26 — F1 admitted/rendered views receive a real process-local seal
+
+The Guided Hint buildability pass re-ran the archived F1 trust claim at the runtime symbol and found
+[[D1637]]: `ConsumerEvidenceView` and `RenderedEvidenceView` asserted only a non-exported symbol.
+That rejects a fresh structural literal, but object spread copies enumerable symbol properties, so
+spreading a legitimate view and replacing `items` recreated the D662 evidence/prose side channel.
+
+Both constructors now register their frozen result in distinct private `WeakSet`s and both exported
+assertions require membership as well as the symbol and shape. Permanent fixtures refuse spread
+copies at the consumer and rendered layers, a spread passed back through `renderEvidenceItems`, JSON
+round-trips and the existing declared-evidence cast forge. `docs/evidence-contract.md` records the
+actual boundary. The ordinary `make test` gate passes 184 files / 1,192 tests; no schema, content,
+manifest declaration, design-intent or concurrent semantic-harness byte changed.

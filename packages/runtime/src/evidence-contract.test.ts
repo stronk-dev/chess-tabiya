@@ -3,6 +3,8 @@ import { describe, expect, it } from "vitest";
 import {
   EVIDENCE_MANIFEST_ERROR_CODES,
   EvidenceManifestError,
+  assertConsumerEvidenceView,
+  assertRenderedEvidenceView,
   compileEvidenceManifest,
   declareEvidence,
   evidenceForConsumer,
@@ -109,6 +111,11 @@ describe("evidence manifest compiler", () => {
     const rendered = renderEvidenceItems(admitted, { "p.output@1": () => ["one"] });
     expect(rendered.items[0]?.sentences).toEqual(["one"]);
     expect(() => renderEvidenceItems({ consumer: { id: "c", version: 1 }, items: [evidence] } as never, { "p.output@1": () => ["forged"] })).toThrowError(expect.objectContaining({ code: "EVIDENCE_GENERIC_BYPASS" }));
+    expect(() => assertConsumerEvidenceView({ ...admitted })).toThrowError(expect.objectContaining({ code: "EVIDENCE_GENERIC_BYPASS" }));
+    expect(() => renderEvidenceItems({ ...admitted, items: [] } as never, { "p.output@1": () => ["forged"] })).toThrowError(expect.objectContaining({ code: "EVIDENCE_GENERIC_BYPASS" }));
+    expect(() => assertRenderedEvidenceView({ ...rendered, items: [] })).toThrowError(expect.objectContaining({ code: "EVIDENCE_GENERIC_BYPASS" }));
+    expect(() => assertConsumerEvidenceView(JSON.parse(JSON.stringify(admitted)))).toThrowError(expect.objectContaining({ code: "EVIDENCE_GENERIC_BYPASS" }));
+    expect(() => assertRenderedEvidenceView(JSON.parse(JSON.stringify(rendered)))).toThrowError(expect.objectContaining({ code: "EVIDENCE_GENERIC_BYPASS" }));
     const forgedEvidence = { ...evidence } as never;
     expect(() => evidenceForConsumer(manifest, { id: "c", version: 1 }, [forgedEvidence])).toThrowError(expect.objectContaining({ code: "EVIDENCE_GENERIC_BYPASS" }));
   });

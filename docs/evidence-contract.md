@@ -58,7 +58,8 @@ Registering evidence does not make it learner-visible and does not create anothe
 The external voice renderer is a consumer, never a chess authority. Server guidance first wraps
 source-specific values as `DeclaredEvidence`, admits the exact scope-specific consumer view, then
 runs registered per-projection renderers. Both admitted and rendered views carry a private runtime
-seal. The provider and `voiceCheck` read the same sealed `{ evidence, sentences }` items; there is
+symbol plus constructor-owned `WeakSet` membership: object spread, JSON round-trips and casts cannot
+copy admission. The provider and `voiceCheck` read the same sealed `{ evidence, sentences }` items; there is
 no parallel packet sentence array that either side can widen. Maia candidates, Explorer rows,
 transition counts, engine principal variations, and recorded engine/tablebase prose do not enter
 merely because the catalogue knows they exist.

@@ -212,6 +212,8 @@ export interface DeclaredEvidence<T> {
 const DECLARED: unique symbol = Symbol("tabiya.evidence.declared");
 const DECLARED_VALUES = new WeakSet<object>();
 const ADMITTED = Symbol("tabiya.evidence.admitted");
+const CONSUMER_VIEWS = new WeakSet<object>();
+const RENDERED_VIEWS = new WeakSet<object>();
 
 export interface ConsumerEvidenceView<T = unknown> {
   readonly [ADMITTED]: true;
@@ -423,17 +425,19 @@ export function evidenceForConsumer<T>(manifest: CompiledEvidenceManifest, consu
     }
     if (permitted.has(`${refKey(value.producer)}:${refKey(value.projection)}`)) admitted.push(value);
   }
-  return immutable({ [ADMITTED]: true as const, consumer: { ...consumer }, items: admitted });
+  const view = immutable({ [ADMITTED]: true as const, consumer: { ...consumer }, items: admitted });
+  CONSUMER_VIEWS.add(view);
+  return view;
 }
 
 export function assertConsumerEvidenceView(value: unknown): asserts value is ConsumerEvidenceView {
-  if (typeof value !== "object" || value === null || (value as { readonly [ADMITTED]?: unknown })[ADMITTED] !== true || !Array.isArray((value as { readonly items?: unknown }).items)) {
+  if (typeof value !== "object" || value === null || (value as { readonly [ADMITTED]?: unknown })[ADMITTED] !== true || !CONSUMER_VIEWS.has(value) || !Array.isArray((value as { readonly items?: unknown }).items)) {
     fail("EVIDENCE_GENERIC_BYPASS", "consumer evidence view was not constructed by evidenceForConsumer", ["consumer-view:unsealed"]);
   }
 }
 
 export function assertRenderedEvidenceView(value: unknown): asserts value is RenderedEvidenceView {
-  if (typeof value !== "object" || value === null || (value as { readonly [ADMITTED]?: unknown })[ADMITTED] !== true || !Array.isArray((value as { readonly items?: unknown }).items)) {
+  if (typeof value !== "object" || value === null || (value as { readonly [ADMITTED]?: unknown })[ADMITTED] !== true || !RENDERED_VIEWS.has(value) || !Array.isArray((value as { readonly items?: unknown }).items)) {
     fail("EVIDENCE_GENERIC_BYPASS", "rendered evidence view was not constructed by renderEvidenceItems", ["rendered-view:unsealed"]);
   }
 }
@@ -447,7 +451,9 @@ export function renderEvidenceItems<T>(view: ConsumerEvidenceView<T>, renderers:
     }
     return immutable({ evidence, sentences: Object.freeze([...renderer(evidence)]) });
   });
-  return immutable({ [ADMITTED]: true as const, consumer: { ...view.consumer }, items });
+  const rendered = immutable({ [ADMITTED]: true as const, consumer: { ...view.consumer }, items });
+  RENDERED_VIEWS.add(rendered);
+  return rendered;
 }
 
 export function compileEvidenceManifest(declarations: EvidenceContractDeclarations): CompiledEvidenceManifest {
