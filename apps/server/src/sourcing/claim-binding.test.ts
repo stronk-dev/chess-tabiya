@@ -59,8 +59,20 @@ describe("claim bindings",()=>{
     const authored=binding(judgement,{textSha256:sha256(judgement),spans:[{span:judgement,authored:true}]});
     expect(codes(pack(judgement,["corpus_observed"]),ledger([authored]))).toEqual(expect.arrayContaining(["CLAIM_AUTHOR_LABEL_REQUIRED","CLAIM_LABEL_UNEARNED"]));
     expect(codes(pack(judgement,["corpus_observed","author_principle"]),ledger([authored]))).toContain("CLAIM_LABEL_UNEARNED");
-    const rate="f5 scores 90.9% for White";
-    expect(codes(pack(rate,["author_principle"]),ledger([binding(rate,{textSha256:sha256(rate),spans:[{span:rate,authored:true}]})]))).toContain("CLAIM_READING_UNATTRIBUTED");
+    for (const rate of [
+      "f5 scores 90.9% for White",
+      "f5 scores 91% for White",
+      "f5 scores 91 percent for White",
+      "f5 scores ninety-one percent for White",
+    ]) {
+      expect(codes(pack(rate,["author_principle"]),ledger([binding(rate,{textSha256:sha256(rate),spans:[{span:rate,authored:true}]})]))).toContain("CLAIM_READING_UNATTRIBUTED");
+    }
+
+    // Counts carry their denominator and remain author-attributable; the rate
+    // refusal must not turn into a blanket ban on authored integers.
+    for (const count of ["The sample contains 91 games", "The move appeared 44,467,486 times"]) {
+      expect(codes(pack(count,["author_principle"]),ledger([binding(count,{textSha256:sha256(count),spans:[{span:count,authored:true}]})]))).not.toContain("CLAIM_READING_UNATTRIBUTED");
+    }
   });
 
   it("admits a complete tablebase census with all four promotion roles", () => {

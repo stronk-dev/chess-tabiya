@@ -1,5 +1,14 @@
 # RFC drafting queue — the unowned NEEDS-RFC rows, collapsed into documents
 
+## 2026-08-26 live amendment queue
+
+- **D1811 — flip `feedback-delivery` criterion 19 after D417.** The criterion deliberately
+  asserted that integer percentages still escaped `CLAIM_READING_UNATTRIBUTED` and explicitly
+  required its fixture to flip when D417 landed. D417 now refuses decimal, integer, numeric-word
+  and spelled-number rate forms while preserving authored counts. The RFC author must replace the
+  historical defect assertion with the positive refusal requirement before stage 2 continues; no
+  production rollback is permitted to satisfy the stale criterion.
+
 **Written 2026-08-16 against `2160d2c`.** Input: `planning/defect-triage.md` §4 (47 NEEDS-RFC rows)
 and every row it names in `design/BACKLOG.md`. This is a **drafting queue, not a spec and not a
 fix**. Nothing in the tree was changed to produce it; no RFC was drafted; no ledger row, register

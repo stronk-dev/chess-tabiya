@@ -9185,3 +9185,18 @@ fails the ordinary software suite rather than relying on review.
 D1809 stays open only on AC-16's all-multi-learner-rendering registry, which is intentionally
 coupled to D1808's missing sealed copy registry rather than implemented as a second hand-written
 site list.
+
+## 2026-08-26 — Authored rate laundering closed without banning counts (D417)
+
+The claim-binding guard now refuses rates written as decimal values, integer percentages, numeric
+`percent` phrases, or spelled-number `percent` phrases inside author-attributed segments. Negative
+fixtures preserve ordinary authored counts such as `91 games` and `44,467,486 times`; the repair
+therefore enforces the ruled rate/count distinction rather than treating every integer as machine
+output.
+
+The focused claim-binding suite passes. `feedback-delivery` criterion 19 intentionally recorded the
+old hole and said it must flip when D417 lands, but no executable criterion fixture exists; D1811
+routes that documentary reconciliation to the RFC author instead of weakening production behavior
+to preserve stale accepted prose. The corpus's `anti-scandinavian-white/just-take-it` claim remains
+for the separately owned claim-binding content wave, where its 74% measurement can receive its real
+explorer assertion rather than being rewritten or laundered as judgement.
