@@ -2,6 +2,7 @@ import { mount } from "svelte";
 
 import App from "./App.svelte";
 import "./accessibility.css";
+import "./lib/theme/controls.css";
 
 const target = document.querySelector<HTMLElement>("#app");
 

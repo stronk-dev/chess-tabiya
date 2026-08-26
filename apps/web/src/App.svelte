@@ -1413,9 +1413,6 @@
     margin: 0;
     background: radial-gradient(circle at 12% 5%, color-mix(in srgb, var(--ink) 5%, transparent), transparent 30rem), linear-gradient(135deg, transparent 0 58%, color-mix(in srgb, var(--accent) 4%, transparent) 58% 100%), var(--paper);
   }
-  :global(button), :global(input), :global(select), :global(textarea) { font: inherit; }
-  :global(:focus-visible) { outline: 3px solid color-mix(in srgb, var(--accent) 65%, var(--on-accent)); outline-offset: 2px; }
-  :global(::selection) { background: color-mix(in srgb, var(--accent) 25%, var(--on-accent)); }
   .shell-view { width: min(70rem, calc(100% - 2rem)); height: 100%; margin: 0 auto; padding: clamp(2rem, 6vw, 5rem) 0; overflow: auto; }
   .play-surface{height:100%;overflow:auto;padding:1rem 0}.surface-skip{position:fixed;z-index:50;top:.35rem;left:.35rem;padding:.6rem .8rem;border-radius:.5rem;background:var(--ink);color:var(--paper);transform:translateY(-150%)}.surface-skip:focus{transform:translateY(0)}
   .auth-gate { width: min(32rem, calc(100% - 2rem)); margin: 10vh auto; }

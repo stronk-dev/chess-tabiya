@@ -9503,3 +9503,18 @@ by D1461/SET-c1; this pass does not bypass its accepted-RFC requirement. Finally
 contrast test derives Brown's dark square from the actual embedded SVG overlay and Olive's from
 its declared gradient, eliminating the hand-entered `#c0ae91` shadow specification. SET-a21,
 SET-a22, SET-a23, and D1433 close; D1461 remains open by name.
+
+## 2026-08-26 — Native controls gain one product-wide visual authority
+
+The shell contained 240 native-control occurrences and reconstructed their usable styling in
+component scopes; its only global control rule was `font: inherit`. `theme/controls.css` now owns
+the baseline once for text inputs, selects, textareas, action buttons, checkboxes and radios:
+product tokens, minimum target height, borders, radii, placeholder color, focus, hover, disabled
+and native accent behavior. Local component CSS remains responsible for layout and intentional
+variants rather than being deleted in a risky mechanical sweep.
+
+The former global font, focus and selection fragments were removed from `App.svelte`. A source
+contract proves the shared layer is imported once at the application boundary and covers every
+native family; a production-browser Settings fixture proves select, password and button share the
+font and minimum-height floor, text controls share a ground, and checkboxes receive size and the
+theme accent. SET-a15 and SET-a24 close.

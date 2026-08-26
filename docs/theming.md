@@ -47,6 +47,12 @@ registered board and piece artwork, forced-colors paint, and the separately
 tracked interaction-paint contract. Ordinary rendering does not inherit
 `Canvas` or `CanvasText` from the operating system.
 
+`theme/controls.css` is the shared native-control baseline. It gives text
+inputs, selects, textareas, action buttons, checkboxes, and radios one
+token-driven font, ground, border, radius, focus, disabled, placeholder, and
+accent treatment. Component styles may refine layout and deliberate variants;
+they do not have to reconstruct a usable control from browser defaults.
+
 Board CSS is split into two layers:
 
 - `board-skins/` paints only light and dark squares;
@@ -76,7 +82,8 @@ The permanent tests cover catalog totality and cross-product selection, device
 and stored-mode resolution, reduced motion, palette contrast, exact inherited
 palette bytes, source-derived board-square colors, evidence-paint color
 separation, asset registration, token and literal sweeps, assistance/theme type
-and import separation, live cross-tab
+and import separation, the one-time shared-control import and its production
+computed styles, live cross-tab
 application, stable board identity and position, real post-gesture movement
 interpolation, mode-aware browser chrome, and real forced-color projection from
 a Chessground destination. Shared CSS also honors device color scheme before

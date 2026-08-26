@@ -7374,17 +7374,18 @@
     {
       "id": "SET-a15",
       "sourceState": "queued",
-      "state": "queued",
+      "state": "completed",
       "capability": "support",
       "owner": "assistance-and-presentation",
-      "assignment": "capability:support",
+      "assignment": "closed",
       "sourceDocument": "ux-settings-and-identity.md",
       "sourceSection": "§8.4-1",
       "sourceHeading": "Settings, appearance and identity — `ux-settings-and-identity.md`",
       "summary": "**One control layer authored once, token-driven** — select, checkbox, radio, input, button. The single highest-leverage identity change in the app, and it costs one file",
       "legacyRoute": "lane",
       "note": "ux-work-lane A2/A3",
-      "sourceDigest": "sha256:129cdda944f80c752872ae1910fc8837342e96ee0c56e93d5245021010306d83"
+      "sourceDigest": "sha256:129cdda944f80c752872ae1910fc8837342e96ee0c56e93d5245021010306d83",
+      "completion": { "completedOn": "2026-08-26", "evidence": "theme/controls.css is the single token-driven native-control baseline for action, text, select, checkbox and radio controls; unit and production-browser tests bind its import and computed result" }
     },
     {
       "id": "SET-a16",
@@ -7527,16 +7528,17 @@
     {
       "id": "SET-a24",
       "sourceState": "queued",
-      "state": "queued",
+      "state": "completed",
       "capability": "support",
       "owner": "assistance-and-presentation",
-      "assignment": "capability:support",
+      "assignment": "closed",
       "sourceDocument": "ux-settings-and-identity.md",
       "sourceSection": "§8.2a",
       "sourceHeading": "Settings, appearance and identity — `ux-settings-and-identity.md`",
       "summary": "There is no global stylesheet: 20+ component-scoped style blocks plus one `:global` section",
       "legacyRoute": "none",
-      "sourceDigest": "sha256:8024a13f1440c4a2eef8b0bc0c163f46ec13d1cb6eebeec6361a92aa2569f927"
+      "sourceDigest": "sha256:8024a13f1440c4a2eef8b0bc0c163f46ec13d1cb6eebeec6361a92aa2569f927",
+      "completion": { "completedOn": "2026-08-26", "evidence": "the application boundary now imports shared theme, control and accessibility CSS authorities; component-scoped CSS remains for local layout and variants" }
     },
     {
       "id": "SET-a25",

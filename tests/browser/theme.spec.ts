@@ -85,6 +85,44 @@ test("Settings exposes independent persisted pickers and inherited contrast disc
   await expect(appearance.getByText("Your device requests reduced motion")).toBeVisible();
 });
 
+test("Settings native controls share the token-driven application baseline", async ({ page }) => {
+  await register(page);
+  await page.goto("/settings");
+  const result = await page.evaluate(() => {
+    const select = document.querySelector<HTMLSelectElement>("select");
+    const checkbox = document.querySelector<HTMLInputElement>('input[type="checkbox"]');
+    const password = document.querySelector<HTMLInputElement>('input[type="password"]');
+    const button = document.querySelector<HTMLButtonElement>("button");
+    if (select === null || checkbox === null || password === null || button === null) throw new Error("Settings control fixture is incomplete");
+    const styles = [select, password, button].map((element) => getComputedStyle(element));
+    const checkboxStyle = getComputedStyle(checkbox);
+    const tokenColor = (name: string): string => {
+      const probe = document.createElement("span");
+      probe.style.backgroundColor = `var(${name})`;
+      document.body.append(probe);
+      const value = getComputedStyle(probe).backgroundColor;
+      probe.remove();
+      return value;
+    };
+    return {
+      fonts: styles.map((style) => style.fontFamily),
+      minimumHeights: styles.map((style) => Number.parseFloat(style.minHeight)),
+      selectBackground: styles[0]!.backgroundColor,
+      passwordBackground: styles[1]!.backgroundColor,
+      panel: tokenColor("--panel"),
+      surface: tokenColor("--surface"),
+      checkboxSize: [Number.parseFloat(checkboxStyle.inlineSize), Number.parseFloat(checkboxStyle.blockSize)],
+      checkboxAccent: checkboxStyle.accentColor,
+    };
+  });
+  expect(new Set(result.fonts).size).toBe(1);
+  expect(result.minimumHeights.every((height) => height >= 40)).toBe(true);
+  expect(result.selectBackground).toBe(result.surface);
+  expect(result.passwordBackground).toBe(result.panel);
+  expect(result.checkboxSize.every((size) => size >= 17)).toBe(true);
+  expect(result.checkboxAccent).not.toBe("auto");
+});
+
 test("system display preferences keep board semantics visible without colour alone", async ({ page }) => {
   await page.emulateMedia({ colorScheme: "dark" });
   await register(page);
