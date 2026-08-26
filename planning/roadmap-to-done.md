@@ -178,6 +178,14 @@ story last-level, rank and title. [[D1701]]/[[D1702]] require generated path met
 reported confidence and binding-level source-absence semantics before the shared provider layer or
 new dependent collectors land. `dependsOn` remains the semantic/migration graph; execution derives
 only from literal derivation choices, preserving alternatives rather than conjoining them.
+The shared provider boundary now has its fourth source contract. [[D1703]]–[[D1709]] prove the
+runtime Explorer page has no position/transport identity, accepts illegal/duplicate/impossible
+moves, excludes queue time from its four-second budget, disagrees with its manifest abstentions,
+discards fetched response fields and erases valid sub-100 populations. The repair is one node-free
+`human.explorer.position_page@1` receipt shared by authoring and interactive policies, followed by
+separate theory summary, recorded-move occurrence and repertoire projections. Seven Node-24 arms
+pass; the shared provider RFC must cover Stockfish, Maia, Syzygy **and Explorer** before Review,
+bots, theory or packs consume new provider evidence.
 The variant foundation now has an executable scope receipt rather than the earlier textual count:
 [[D1683]] measures 159 production calls across 32 files and separates nine rules-aware play
 authorities from 23 standard-only/evidence readers that must be capability-gated. Tier-2 support

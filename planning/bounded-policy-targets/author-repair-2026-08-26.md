@@ -15,7 +15,7 @@ the provider dependency is buildable, then queue implementation.
 The current six-projection wave crosses three reusable layers. Rewrite it in this dependency order:
 
 1. exact local target derivation;
-2. shared Stockfish/Maia/Syzygy provider receipts, scheduler and per-projection execution metadata;
+2. shared Stockfish/Maia/Syzygy/Explorer provider receipts, scheduler and per-projection execution metadata;
 3. target-policy composition.
 
 Preferred shape: narrow the current RFC to layer 1 and draft one shared provider-exchange RFC for
@@ -78,8 +78,9 @@ partially. Do not descope layers 2/3 from 1.0.
   the immediate producer, and migrate candidate/story confidence transitively before adding new
   target-policy rows.
 - Include the node-free `live.syzygy.position_result@1` source required by the promotion-race
-  closure; the shared layer serves Stockfish, Maia and Syzygy rather than leaving pawn/Review code
-  to invent a private tablebase adapter.
+  closure; the shared layer serves Stockfish, Maia, Syzygy and Explorer rather than leaving
+  pawn/Review/repertoire code to invent private provider adapters. Explorer's exact source contract
+  is in `planning/evidence-foundation-ux/explorer-source-author-repair-2026-08-26.md`.
 - Add able-to-fail negatives before claiming the declaration image compiles.
 
 ## 5. Make identity come from the exchange ([[D1647]])

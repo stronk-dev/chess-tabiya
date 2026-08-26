@@ -47,6 +47,12 @@ breadcrumb must refuse this family. Merely adding an `operands` field cannot pro
 narrowing. A negative fixture must place a sentinel SAN/UCI only inside `result.moves[]` and prove
 it reaches neither the module packet nor its rendered bytes.
 
+**2026-08-26 source-contract correction:** the summary's literal input is the node-free
+`human.explorer.position_page@1` specified by
+`design/research/explorer-source-contract-closure.md`, not the relabellable legacy
+`human.explorer.population@1`. Node/move occurrence is a separate exact join. This does not change
+R2's required move-sentinel negative; it makes the input authority truthful.
+
 ## R3 — reduction cannot feed the sealed renderer (D1587)
 
 Section 2.5 step 2 returns `ModuleReductionResult.facts`. Step 3 calls

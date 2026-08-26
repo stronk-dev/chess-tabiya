@@ -8782,3 +8782,27 @@ assertions and a red-shape confidence fixture. Dossier:
 `design/research/evidence-execution-and-confidence-closure.md`; author handoff:
 `planning/evidence-foundation-ux/f1-execution-metadata-author-repair-2026-08-26.md`. No RFC,
 production, schema, content or UI byte changed.
+
+## 2026-08-26 — Explorer source truth closed before consumer expansion
+
+Audited the live and authoring Lichess Explorer paths as the fourth shared evidence provider. The
+existing runtime `CorpusResult` is not a source receipt: it omits normalized-position and transport
+identity, can be relabelled to arbitrary nodes/moves, accepts illegal/duplicate/impossible move
+rows, starts its four-second budget only after queue dispatch, disagrees with manifest abstentions,
+and drops fetched average-rating/opening/history fields. A separate source/selection defect turns
+every valid population below 100 into absence before consumers can choose their own denominator
+([[D1703]]–[[D1709]]).
+
+The buildable contract is one node-free `human.explorer.position_page@1` receipt over exact request,
+raw-response digests, validated bounded rows, listed/unlisted mass and cache provenance. Authoring
+and interactive clients share normalization/validation/receipt truth while retaining different
+scheduler/cache policies. Theory gets a move-free derived summary; played-move Review facts join
+the source separately to recorded position/move; repertoire preserves unlisted mass; bots and
+longitudinal analysis require their own admitted projections. Popularity never grades or
+recommends a move.
+
+Seven Node-24 arms pass in `tools/d1703-explorer-source-contract-harness/`. Dossier:
+`design/research/explorer-source-contract-closure.md`; author handoff:
+`planning/evidence-foundation-ux/explorer-source-author-repair-2026-08-26.md`. The shared provider
+handoffs now name Stockfish, Maia, Syzygy and Explorer. No active RFC, production, schema, content
+or UI byte changed.

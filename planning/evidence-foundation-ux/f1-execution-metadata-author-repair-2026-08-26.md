@@ -48,9 +48,14 @@ The shared provider RFC consumes this generic contract and adds:
 - `live.stockfish.legal_root_table@1`;
 - `human.maia.policy_page@1` plus a separate run occurrence;
 - `live.syzygy.position_result@1`;
+- `human.explorer.position_page@1` plus separate summary/run/repertoire projections;
 - same-exchange identity/generation receipts;
 - bounded shared scheduling, cache identity, timeout and cancellation;
 - real operations and one operator/research traversal per source.
+
+Explorer's literal source/selection boundary is in
+`explorer-source-author-repair-2026-08-26.md`: valid sparse populations remain source successes,
+node/move occurrence is derived separately, and the interactive budget starts at caller arrival.
 
 Then it compiles these dependent paths without private metadata:
 
