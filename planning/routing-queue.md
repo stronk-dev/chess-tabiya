@@ -69,6 +69,7 @@ set execution order.
 | Rows | Primary destination | Next action / gate |
 |---|---|---|
 | D574, D575, D576, D578 | pack-schema lifecycle RFC lane | Restore unique machine-readable schema identity, pack-declared compatibility, and a reusable read-only migration planner. |
+| D1620, D1621, D1622, D1623, D1624, D1625, D1626 | `pack-capability-contract` author amendment | Add the requirement dependency graph and capability-grain digest closure; separate semantic disposition from deployment reachability; make the census and version migration executable; refresh HEAD facts; and give every completion obligation a real owner. Then repeat independent buildability review before acceptance or lane 0.30 implementation. |
 | D580 | knowledge-retrieval provenance lane | Give stored chunks reproducible source-artifact identity before using them as grounded chess material. |
 | D1007, D1008 | `rfc/claim-semantic-anchors.md` | Drafted proposition-first facts, registered grouped clause rendering, one-binding compatibility and whole-clause-only automatic migration. Refresh §7 after F3 fixes its literal declaration syntax, cross-review, then implement before the binding wave resumes. |
 | D693 | shape recommendation contract | Distinguish an encountered/teaching reference from a merely prospective authoring suggestion. |

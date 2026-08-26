@@ -8185,3 +8185,30 @@ versioned cp/mate and routes Review, grades, bots and packs to source-local rule
 The dossier is `design/research/engine-tablebase-corroboration.md`; raw receipts are under
 `planning/d143-engine-tablebase-corroboration/`; the disposable instrument is
 `tools/d143-engine-tablebase-corroboration-harness/`.
+
+## 2026-08-26 — pack-capability contract returns on the dependency and digest foundations
+
+Independently re-reviewed the repaired F3 draft before lane-0.30 implementation. The six prior
+repairs survive, including the consumer-owned claim-binding grammar and the two-cause availability
+ruling, but the draft remains unbuildable without inventing core semantics. [[D1620]]–[[D1626]]
+record the exact gaps.
+
+The mandatory pack `requires` array has no capability dependency/applicability graph, so neither
+under- nor over-stamping can be refused as criterion 3 promises. The actual D566 repair changed the
+`pawnSafetyOnPosition` helper while its structural switch branch remained a call: module + symbol
+source regions therefore either miss the change or invalidate all eighteen arms together. The
+declared semantic-disposition type cannot represent the `unsupported` and
+`temporarily_unavailable` states criteria 8/16 branch on, and no total mapping exists from the two
+shipped registries. The census supplies counts but not reproducible subject identity, and the
+suffix-version ban has no precise legacy/API/test boundary.
+
+The named live instruments also moved: `make evidence-manifest-check` is now
+37/193/25/210 (semantic 67/67/15/1), and `FORMAT_DISPOSITIONS` is 7 reached / 3 refused / 1 retired /
+1 unmeasured—not five refused. Later lifecycle audits remain unresolved: F7 and the evidence-kind
+follow-up do not exist, while several obligations sit outside checked Discharges ownership.
+
+The RFC and active register now say returned; the executable queue forbids implementation; the
+exact amendment order is in
+`planning/pack-capability-contract/independent-rereview-2026-08-26.md`. No schema, corpus,
+production or protected-design bytes changed. No new owner ruling is needed, and [[D560]] remains
+whole.
