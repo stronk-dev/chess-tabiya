@@ -229,6 +229,14 @@ disagreement covers 8 tactic families; 14 events have no independent authority i
 validation RFC must close these as classed work packages and a total required/not-applicable table,
 not claim one blended coverage percentage.
 
+[[D1714]] refreshes the live migration boundary to 39 valid emitter positives, 10 emitter
+negatives, 13 source-only negatives and seven no-valid-authority rows. All fourteen prior empty
+rows can mechanically fire, but that does not make them equivalent: five local families are
+fixture-ready, two sequences wait on a total recorded-path operation, and seven avoidance families
+are defect witnesses because projection/sign aggregation drops their subject. King opposition is
+also blocker-blind and opening-live. D1716/D1717 precede validation or learner admission of those
+families; green mechanical output is not chess-semantic closure.
+
 ### 3. Arrival and the rehearsal loop
 
 <!-- roadmap-capability: rehearsal -->

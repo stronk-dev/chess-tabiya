@@ -4,10 +4,11 @@
 authority for a production positive, semantic hard negative, orientation, counterfactual,
 imported-population observation or external-labelled comparison?
 
-**Status:** answered `[V]` at 2026-08-26 HEAD. Existing work is reusable, but it is sharply
-asymmetric: **32/67** events have an emitter-level positive, **5/67** have an emitter-level
-semantic negative, **0/67** have an emitter-level orientation case, and **14/67** have no
-independent authority in any measured arm.
+**Status:** answered `[V]` at 2026-08-26 HEAD and refreshed by D1714. Existing work is reusable,
+but it is sharply asymmetric: **39/67** events have a valid emitter-level positive, **10/67** have
+an emitter-level semantic negative, **0/67** have an emitter-level orientation case, and **7/67**
+have no valid authority in any measured arm. All seven remaining rows are mechanically reachable
+avoidance events withheld because D1714 proved their subject relation unsound.
 
 **Instrument:** `tools/d1713-semantic-validation-matrix/`. The checked 67-row matrix is set-equal
 to `SEMANTIC_EVENT_PROJECTION_IDS`. Every populated cell records the exact source path, test title
@@ -37,8 +38,8 @@ level to event validation. `[V]` (`tools/d1713-semantic-validation-matrix/valida
 
 | Arm | Event-emitter authority | Other executable authority | No measured authority |
 |---|---:|---:|---:|
-| positive | 32 | 0 | 35 |
-| semantic hard negative | 5 | 11 source-predicate | 51 |
+| positive | 39 | 0 | 28 |
+| semantic hard negative | 10 | 13 source-predicate | 44 |
 | mirror/orientation | 0 | 4 source-predicate | 63 |
 | counterfactual/complete alternatives | 1 | 2 composition + 3 source-predicate | 61 |
 | imported population | n/a | 23 population observations | 44 |
@@ -50,17 +51,15 @@ to some events; the RFC author must make that decision explicitly in a total pro
 
 ### Production positives
 
-The 32 emitter positives cover exact transition events, exchange/trade facts, square control and
+The 39 emitter positives cover exact transition events, exchange/trade facts, square control and
 mobility, selected king/material/activity facts, and the identity-retaining tactic sequences. The
-remaining **35** event ids have no production-emitter positive bound by an exact test case:
+remaining **28** event ids have no valid production-emitter positive bound by an exact test case:
 
-- ten structural readings: backward/doubled/half-open/isolated pawns, opposition, king zone, line
-  blockers, open file, passed pawn and direct-attack count;
-- six transition readings: occupied attack, occupied defence, slider ray, piece escape, defended
-  duty and developed;
+- nine structural readings: backward/doubled/half-open/isolated pawns, opposition, king zone, open
+  file, passed pawn and direct-attack count;
+- four transition readings: occupied attack, occupied defence, slider ray and defended duty;
 - all thirteen semantic-avoidance families;
-- pawn dynamics, pawn transitions, harassment pressure, defender consequence and captured-zone
-  defender; and
+- pawn dynamics; and
 - check zwischenzug.
 
 `[V]` The exact ids are emitted under `noEventPositive` by D1713 matrix case 3. This list does not
@@ -69,14 +68,15 @@ the real semantic emitter.
 
 ### Semantic hard negatives
 
-Only castling, checkmate, promotion, double attack and completed trade have a nearby negative in a
-test that invokes their event emitter. `[V]` Eleven more families have useful lower-level negative
-authorities: defender exposure, open-file occupancy, defender removal/relocation and seven
-identity-retaining tactical sequences including check zwischenzug. Those eleven must be elevated
-through the production emitter; their predicate-only cases cannot be copied unchanged and called
-complete. `[V]` (D1713 `NEGATIVE` authorities)
+Ten events have a nearby negative in a test that invokes their event emitter: the original
+castling, checkmate, promotion, double attack and completed trade cases plus line blockers, piece
+escape, development, pawn transitions and captured-zone defender from D1714. `[V]` Thirteen more
+families have useful lower-level negative authorities: the original eleven plus harassment
+pressure and defender consequence. Those thirteen must be elevated through a total production
+emitter; their predicate-only cases cannot be copied unchanged and called complete. `[V]` (D1713
+`NEGATIVE` authorities)
 
-The other **51** events have no measured semantic-negative authority at any level. Missing an
+The other **44** events have no valid semantic-negative authority at any level. Missing an
 operand is still a contract-shape negative and cannot discharge any of these rows. `[V]`
 
 ### Orientation and counterfactual boundaries
@@ -103,13 +103,10 @@ valuable restraint/calibration arm, not a positive oracle; Lichess themes are in
 `[V]` (`tools/d872-semantic-tactics-harness/agreement.test.ts`;
 `design/research/basic-semantic-tactics-stage-0.md`)
 
-## Fourteen events with no independent authority
+## Seven events with no valid independent authority
 
-The union of all six measured arms is empty for exactly these events:
+After D1714, the union of valid authorities remains empty for exactly these events:
 
-- `rules.structural.event.line_blockers`
-- `rules.transition.event.piece_escape`
-- `rules.transition.event.developed`
 - `derived.semantic_avoidance.half_open_file`
 - `derived.semantic_avoidance.isolated_pawn`
 - `derived.semantic_avoidance.king_opposition`
@@ -117,22 +114,19 @@ The union of all six measured arms is empty for exactly these events:
 - `derived.semantic_avoidance.passed_pawn`
 - `derived.semantic_avoidance.piece_count`
 - `derived.semantic_avoidance.pawn_islands`
-- `derived.pawn.event.transitions`
-- `derived.pawn.sequence.harassment_pressure`
-- `derived.tactic.sequence.defender_consequence`
-- `derived.king.captured_zone_defender`
 
-`[V]` D1713 matrix case 3. This is the first implementation work package, because there is no
-existing authority to migrate. It is not evidence that all fourteen implementations are wrong.
+`[V]` D1713 matrix case 3 after the D1714 refresh. D1714 made all seven mechanically emit and
+refuse, but also proved the projection/sign-only avoidance relation drops subject identity. Those
+green cases remain defect witnesses under D1716, not semantic authorities. `[V]`
 
 ## Authoring consequence
 
 The validation RFC now has a bounded migration plan rather than “reuse existing tests”:
 
-1. register the 32 real emitter positives and five real emitter negatives without weakening them;
-2. elevate the eleven source-only negatives through the actual emitter;
-3. author 35 missing emitter positives and 51 missing semantic negatives, beginning with the
-   fourteen authority-empty events;
+1. register the 39 valid emitter positives and ten real emitter negatives without weakening them;
+2. elevate the thirteen source-only negatives through the actual emitter;
+3. author or repair 28 missing emitter positives and 44 missing semantic negatives, beginning with
+   D1716's seven defect-blocked avoidance events;
 4. lift the four source orientation cases and decide the other 63 cells explicitly;
 5. retain counterfactual, population and external arms at their honest level while the RFC's total
    table rules required versus inapplicable per family; and

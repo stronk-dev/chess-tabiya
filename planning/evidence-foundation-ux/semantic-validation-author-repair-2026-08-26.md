@@ -68,9 +68,10 @@ The follow-up executable matrix is `tools/d1713-semantic-validation-matrix/`; it
 `design/research/semantic-validation-migration-matrix.md`. It replaces the coarse “reuse existing
 assertions” instruction with these current work packages:
 
-1. **Emitter positives:** migrate 32 existing cases; supply 35 missing cases.
-2. **Emitter semantic negatives:** migrate 5 existing cases; elevate 11 source-predicate negatives
-   through their real emitter; supply 51 cases with no semantic-negative authority.
+1. **Emitter positives:** migrate 39 valid cases; close 28 no-valid-authority cells. Seven of those
+   28 have mechanical D1714 witnesses that remain excluded until D1716 repairs their semantics.
+2. **Emitter semantic negatives:** migrate 10 existing cases; elevate 13 source-predicate negatives
+   through their real emitter; close 44 cells with no valid semantic-negative authority.
 3. **Orientation:** elevate 4 source-predicate cases; there are zero existing emitter-level cases.
    Every other event needs either a case or a reasoned `not_applicable` cell.
 4. **Counterfactual:** preserve 1 emitter, 2 composition and 3 source-predicate authorities without
@@ -79,9 +80,11 @@ assertions” instruction with these current work packages:
    do not inherit the old input token for the other 44.
 6. **External:** retain eight disagreement studies as calibration evidence, never as a truth oracle;
    decide applicability rather than requiring an external theme for every event.
-7. **Authority-empty first:** line blockers, piece escape, developed, six named avoidance events,
-   pawn transitions, harassment pressure, defender consequence and captured-zone defender are the
-   fourteen events with no independent authority in any arm.
+7. **D1714 refinement:** line blockers, piece escape, development, pawn transitions and
+   captured-zone defender now have valid positive/negative pairs. Harassment pressure and defender
+   consequence have valid positives plus lower-predicate negatives, but no total operation. The
+   seven avoidance events mechanically emit/refuse and remain the only no-valid-authority rows:
+   D1716 proves their subject relation unsound, and D1717 separately blocks king opposition.
 
 The matrix source is the exact 67-row register and is set-equal to the runtime root inventory. The
 counts above are checkpoint summaries, not a second authority. The RFC must preserve the matrix's

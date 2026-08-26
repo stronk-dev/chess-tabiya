@@ -8878,3 +8878,20 @@ populated cell to an exact file, test title and authority level, so predicate, c
 population and external evidence cannot be laundered into event validation. The D1711 author
 handoff now carries classed migration work packages. No production, RFC, schema, content or UX byte
 changed.
+
+## 2026-08-26 — Authority-empty semantic events executed (D1714–D1717)
+
+Exercised all fourteen D1713 authority-empty ids on exact legal positions, sequences and complete
+alternative populations. Five local families now have emitter-level positive/negative witnesses;
+two sequence families have valid positive constructors but only lower-predicate negatives pending
+the D1710 production operation. All seven avoidance ids mechanically emit and refuse, but the pass
+found the relation is not valid: selector aggregation retains only projection/sign and drops the
+subject. Exact `a4b5` loses isolated-pawn(a), gains isolated-pawn(b), and is still labelled as
+isolated-pawn avoidance because all 41 alternatives preserve the a-file subject ([[D1716]]).
+
+The same search found blocker-blind distant opposition in a nearly full-material opening: king e1
+versus king e7 counts despite intervening pieces, refuting a living phase-lock claim ([[D1717]]).
+Defect witnesses were deliberately excluded from the validation matrix. Its live totals are now
+39 emitter positives, 10 emitter negatives, 13 source-only negatives and seven no-valid-authority
+rows. [[D1715]] corrected the handoff's six-versus-seven avoidance miscount. No RFC, production,
+schema, content, pack or learner-UX byte changed.

@@ -60,6 +60,14 @@ study. Eleven further negatives, four orientation cases and five counterfactual 
 at a lower source/composition layer. Fourteen events have no independent authority in any arm.
 The checked matrix retains exact file/test/level authorities and now feeds the D1711 author action.
 
+[[D1714]] **completed 2026-08-26 with the authority-empty execution split**: all fourteen
+mechanically fire. Five local events have valid emitter positives/negatives; two sequence events
+have valid positives but only lower-predicate negatives pending D1710's total operation; all seven
+avoidance events mechanically emit/refuse but are invalid validation authorities because the
+selector drops subject identity ([[D1716]]). The same pass proves king opposition is blocker-blind
+and opening-live ([[D1717]]). D1713 now reads 39 emitter positives, 10 emitter negatives, 13
+source-only negatives and seven no-valid-authority events.
+
 **Deliverable 7 (owner questions) accumulates here** — nothing is silently chosen.
 **All four open questions RULED 2026-08-22 ([[D745]])**: space = classic zones + pawn control,
 `chess_tradition`; the negative reading faces learners post-commit/review with the denominator;

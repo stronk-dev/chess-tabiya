@@ -25,9 +25,11 @@ const breadth = (test: string, level: Level = "event_emitter") => a("packages/ru
 const anchors = (test: string, level: Level = "event_emitter") => a("packages/runtime/src/semantic-tactics.test.ts", test, level);
 const sequences = (test: string, level: Level = "event_emitter") => a("packages/runtime/src/semantic-tactic-sequences.test.ts", test, level);
 const d872 = (file: string, test: string, level: Level) => a(`tools/d872-semantic-tactics-harness/${file}`, test, level);
+const d1714 = (test: string, level: Level) => a("tools/d1714-authority-empty-harness/authority-empty.test.ts", test, level);
 
 const POSITIVE: Readonly<Record<string, readonly Authority[]>> = Object.freeze({
   "rules.structural.event.piece_count": [runtime("emits identity-preserving structural relations while leaving raw readings independent")],
+  "rules.structural.event.line_blockers": [d1714("pins five legal positives through the local emitter boundary", "event_emitter")],
   "rules.structural.event.pawn_islands": [runtime("emits pawn-island and mover-relative loose-piece events through the compiled path")],
   "rules.transition.event.castled": [runtime("emits castling, promotion and checkmate exact positives")],
   "rules.transition.event.clock_reset": [runtime("emits independent transition properties without priority suppression")],
@@ -36,6 +38,8 @@ const POSITIVE: Readonly<Record<string, readonly Authority[]>> = Object.freeze({
   "rules.transition.event.checkmate": [runtime("emits castling, promotion and checkmate exact positives")],
   "rules.transition.event.promotion": [runtime("emits castling, promotion and checkmate exact positives")],
   "rules.transition.event.capture": [runtime("seals an immediate capture-recapture trade over both capture and recorded-move anchors")],
+  "rules.transition.event.piece_escape": [d1714("pins five legal positives through the local emitter boundary", "event_emitter")],
+  "rules.transition.event.developed": [d1714("pins five legal positives through the local emitter boundary", "event_emitter")],
   "rules.tactic.event.double_attack": [runtime("emits exact reply/check and exchange-filtered double-attack events from their real producers")],
   "rules.tactic.consequence.reply_breadth": [runtime("emits exact reply/check and exchange-filtered double-attack events from their real producers")],
   "rules.tactic.event.check": [runtime("emits exact reply/check and exchange-filtered double-attack events from their real producers")],
@@ -47,10 +51,14 @@ const POSITIVE: Readonly<Record<string, readonly Authority[]>> = Object.freeze({
   "rules.square.event.control": [breadth("routes one-edge breadth facts through the compiled semantic-event authority")],
   "rules.mobility.event.piece_destinations": [breadth("routes one-edge breadth facts through the compiled semantic-event authority")],
   "derived.pawn.sequence.contact_timing": [breadth("seals a retained contact sequence only with the required recorded-move evidence")],
+  "derived.pawn.event.transitions": [d1714("pins five legal positives through the local emitter boundary", "event_emitter")],
+  "derived.pawn.sequence.harassment_pressure": [d1714("reaches the two isolated sequence constructors from real predicate outputs", "event_emitter")],
   "derived.tactic.defender_exposure": [breadth("routes one-edge breadth facts through the compiled semantic-event authority")],
+  "derived.tactic.sequence.defender_consequence": [d1714("reaches the two isolated sequence constructors from real predicate outputs", "event_emitter")],
   "derived.material.event.role_asymmetry": [breadth("retains promotion-only and capture-promotion authorities for material-role events")],
   "rules.king.event.zone_state": [breadth("routes one-edge breadth facts through the compiled semantic-event authority")],
   "derived.activity.event.open_file_occupancy": [breadth("routes one-edge breadth facts through the compiled semantic-event authority")],
+  "derived.king.captured_zone_defender": [d1714("pins five legal positives through the local emitter boundary", "event_emitter")],
   "rules.tactic.event.defender_removed": [anchors("joins defender removal to the exact capture and retained target")],
   "rules.tactic.event.defender_duty_relocated": [anchors("distinguishes a same-piece relocation that loses its duty")],
   "derived.tactic.deflection_observed": [sequences("requires defender displacement and a later positive target capture")],
@@ -67,6 +75,13 @@ const NEGATIVE: Readonly<Record<string, readonly Authority[]>> = Object.freeze({
   "rules.transition.event.promotion": [runtime("emits castling, promotion and checkmate exact positives")],
   "rules.tactic.event.double_attack": [runtime("emits exact reply/check and exchange-filtered double-attack events from their real producers")],
   "derived.exchange.trade_completed": [runtime("seals an immediate capture-recapture trade over both capture and recorded-move anchors")],
+  "rules.structural.event.line_blockers": [d1714("reaches nearby legal local-emitter negatives without corrupting an operand", "event_emitter")],
+  "rules.transition.event.piece_escape": [d1714("reaches nearby legal local-emitter negatives without corrupting an operand", "event_emitter")],
+  "rules.transition.event.developed": [d1714("reaches nearby legal local-emitter negatives without corrupting an operand", "event_emitter")],
+  "derived.pawn.event.transitions": [d1714("checks an explicit pawn-transition positive and a quiet negative through breadth emission", "event_emitter")],
+  "derived.pawn.sequence.harassment_pressure": [d1714("reaches the two isolated sequence constructors from real predicate outputs", "source_predicate")],
+  "derived.tactic.sequence.defender_consequence": [d1714("reaches the two isolated sequence constructors from real predicate outputs", "source_predicate")],
+  "derived.king.captured_zone_defender": [d1714("reaches nearby legal local-emitter negatives without corrupting an operand", "event_emitter")],
   "derived.tactic.defender_exposure": [breadth("requires both an exact lost enemy defence edge and a positive local capture", "source_predicate")],
   "derived.activity.event.open_file_occupancy": [breadth("requires the heavy piece itself to move from a closed source file onto a declared open file", "source_predicate")],
   "rules.tactic.event.defender_removed": [anchors("joins defender removal to the exact capture and retained target", "source_predicate")],
