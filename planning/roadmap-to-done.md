@@ -211,6 +211,13 @@ network commit. The returned registration contract needs one timing-discriminate
 module query and one generation-token staging controller. [[D1691]] also blocks trust: the current
 board announces a committed move before the server accepts it; [[D1692]] pins the post-commit nudge
 to the learner node returned before automatic opponent play advances the cursor.
+The registry's remaining semantic returns now have executable repair shapes: [[D1585]] uses
+literal branched answer-content sets rather than a false total ladder; [[D1591]] derives Sight's
+`fact + pattern` union from its real 22 projections; [[D1586]] requires a move-free Explorer
+population-summary derivation; [[D1587]] reseals reducer survivors through the existing exact
+consumer authority; and [[D1589]] keeps the non-guidance rules floor for both Match seats. The
+registry remains returned until the RFC absorbs these results and [[D1164]] supplies the exact
+stable novelty-identity closure.
 The 2026-08-26 independent re-review returns the preset compiler on [[D1659]]–[[D1663]] and
 [[D1437]]/[[D1500]]: unset preferences currently masquerade as explicit Quiet choices; raw config
 and module outputs can contradict; availability is undefined across provider/browser state;

@@ -34,6 +34,18 @@ and exact-once commit. It also routes the premature success announcement ([[D169
 pre-opponent post-commit subject seam ([[D1692]]). The RFC still needs author amendment and repeat
 review before production implementation.
 
+## Measured author input — semantic closure
+
+`design/research/module-registry-semantic-closure.md` and
+`tools/d1585-module-semantic-closure/` close the discovery half of items 1, 2, 3, 5 and 7 with
+eight executable arms. The answer contract needs literal branched allowed-content sets, not a
+total ceiling; Sight's 22-row union derives to `fact + pattern`; Explorer needs a registered
+move-free population-summary derivation; reduced facts reseal through the existing
+`evidenceForConsumer` authority; and `rules_floor` alone admits the Match participant. Exact
+types, crossed negatives and the author amendment checklist are in the dossier. [[D1164]]'s
+set-equal stable-novelty identity matrix remains open and is the next research job; do not treat
+this section as registry acceptance.
+
 ## Re-review and implementation order
 
 - Independent re-review resolves every row above to exact types/symbols and able-to-fail fixtures.

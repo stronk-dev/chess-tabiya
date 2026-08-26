@@ -8487,3 +8487,23 @@ capture the learner node returned by the move before automatic opponent play adv
 Dossier: `design/research/module-delivery-and-staging-boundary.md`; instrument:
 `tools/d1588-module-delivery-harness/` (9/9 green). No production, schema, content,
 protected-design or concurrent Claude review/harness byte changed.
+
+## 2026-08-26 — D1585/D1586/D1587/D1589/D1591 module semantic closure measured
+
+Turned five independent-review returns into able-to-fail contract prototypes instead of asking an
+implementer to choose semantics. Eight Node-24 arms establish that answer content branches across
+theory, evaluation and move disclosure; Sight's literal 22-row manifest set derives exactly
+`fact + pattern`, with rook-on-seventh as its sole pattern witness; and a population-summary
+payload can retain Explorer context while making SAN, UCI and committed-move identity
+unrepresentable.
+
+The same pass executes the reducer bridge through the real F1 seals: survivors are re-admitted for
+the exact same consumer through `evidenceForConsumer`, a dropped sentinel reaches none of
+deterministic/provider/voice bytes, and a spread-forged subset fails. Match's only permitted module
+now has a measured role repair shape—`rules_floor` admits the seated participant while the context
+ceiling still excludes all guidance. Dossier: `design/research/module-registry-semantic-closure.md`;
+instrument: `tools/d1585-module-semantic-closure/` (8/8 green).
+
+The RFC stays returned. These results require author amendment and repeat review, and [[D1164]]'s
+exact set-equal stable novelty-identity matrix remains open. No production, protected design,
+schema, content or concurrent Claude review/harness byte changed.
