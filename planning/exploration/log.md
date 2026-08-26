@@ -9145,3 +9145,17 @@ type/build/schema/evidence/governance checks, 166 real-content tests, 24 browser
 optional Maia test skipped), four browser content tests and seven responsive/accessibility matrix
 tests. D1448 remains open pending a committed-byte or GitHub-green receipt rather than being
 closed from an uncommitted working-tree run.
+
+## 2026-08-26 — Learner-rating acceptance closure (D1807–D1810)
+
+Re-derived all eighteen accepted learner-rating criteria against production records, routes,
+components and executable tests. Seven are complete, seven have only partial/example authority,
+three are missing and rated Campaign remains dependency-blocked. The sharpest gap is AC-8: no
+Maia value-head diagnostic exists in the rated record or STRICT table, so the promised
+diagnostic-only cross-check needs an owned migration amendment. AC-12's test covers only the seven
+disclosure constants while the actual screen authors a larger copy set including “Beat band.”
+AC-18 is inexpressible without played-control and calibration-coverage identities.
+
+No production, migration, RFC, intent or archived bytes changed. The dossier routes the three
+contract gaps back to learner-rating authoring and keeps AC-13–AC-16's population-level test debt
+explicit rather than crediting current examples as total invariants.

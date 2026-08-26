@@ -1813,3 +1813,21 @@ loop cannot run**.
 `learner_id`, so a friend game would count **for the host alone, forever**, and a guest's plies are
 stamped `system`. **[[D1806]]** — the deferral is a compiled set difference (15 causes admitted, 9
 produced), and criterion 14 proves the tournament claim with a Swiss fixture that adds **no `ALTER`**.
+
+### Learner-rating acceptance closure — [[D1807]]–[[D1810]]
+
+`design/research/learner-rating-acceptance-closure.md` re-runs all eighteen accepted criteria at
+the production symbols: **7 complete, 7 partial, 3 missing, 1 Campaign-blocked**. Do not archive
+`learner-rating` from its current “mostly implemented” status line.
+
+**Author amendment first:** [[D1807]] adds the missing AC-8 diagnostic storage/source authority
+without permitting it into `glicko2Update`; [[D1808]] replaces the false seven-string copy boundary
+with one sealed registry consumed by the real Rating screen; [[D1810]] coordinates AC-18's
+played-control and calibration-coverage identity with the clock/bot lane. These are contract and
+resource changes, not implementation discretion.
+
+**Executable after the amendment (and independently where the population is already literal):**
+[[D1809]] strengthens AC-13–AC-16 with the declared reachability, rating-permutation,
+cross-classroom and all-rendering-site authorities. Example fixtures do not discharge those total
+invariants. AC-17 stays with the returned Campaign product path rather than a synthetic rated-boss
+test over no production route.
