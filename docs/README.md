@@ -1,96 +1,118 @@
-# Canonical implementation docs
+# Implemented-system documentation
 
-This directory describes what currently exists. Design intent remains in `design/`;
-accepted implementation contracts remain in `rfc/`; work history remains in `planning/`.
+This directory documents what exists in the current tree. Product intent lives in `design/`, active
+implementation contracts in `rfc/`, and live status/history in `planning/`. A document appearing
+here means its described mechanism has landed; it does not imply that every larger 1.0 journey that
+uses the mechanism is complete.
 
-Implemented foundation:
+Start with:
 
-- `development.md` — workspace layout, toolchain, and verification commands.
-- `testing.md` — named unit/contract, content-integration, browser-journey,
-  responsive/accessibility, local-parity, and release-proof tiers.
-- `branch-runtime.md` — immutable run tree, rewind/fork/objective/replay semantics,
-  comparison and PGN export, REST/lease/storage behavior, measured envelope, and
-  current limitations.
-- `branch-groups.md` — durable candidate sets over ordinary branches, four seed
-  sources, controlled-resistance reply journals, sequential/lockstep play,
-  semantic zoom, evidence recovery, comparison, and export.
-- `branch-set-scale.md` — decided-shortfall collapse without ranking, reversible
-  local folding, sequential learner-perspective tablebase classification, stated
-  comparison truncation, and one-pass rail projection.
-- `drill-pack-format.md` — living v0.17 schema, semantic authoring lint, canonical
-  digest and URL tooling, executable checkpoint-action validation, pack/run PGN
-  round-trip, and deferred content boundary.
-- `engine-workers.md` — UCI supervision, Dockerized Maia and policy exposure,
-  opponent selection/cache/writer seam, evidence queue, capabilities, ratified
-  strong-engine profile, measured envelope, and current limitations.
-- `drill-client.md` — pack-aware server routes and the REST-driven Svelte
-  client: persisted writer sessions, event-projected state, episode
-  orchestration, board/timeline/branch screens, evidence sentences, comparison,
-  browser-safe pack projection, keyboard behavior, PGN export, browser
-  acceptance, and packaged operation.
-- `app-shell.md` — stable routes and information architecture, run discovery
-  and lease-aware resume, honest deployment capabilities, fitted/responsive
-  viewport regions, install manifest, real settings, global keyboard ownership,
-  and disabled-control explanations.
-- `explanation-grounds.md` — durable comparison evidence, feedback withholding,
-  path-relative authored checkpoint reveal, grounded objective sentences,
-  aligned engine-score trajectories, provenance honesty, and the explicit
-  content-era boundary.
-- `identity-and-authorization.md` — learner accounts, server-side sessions,
-  per-run roles, learner-bound writer leases, grant transfer, deletion
-  reassignment, and hosted-operation limits.
-- `content-sourcing.md` — unpublished candidate artifacts, evidence/source linkage,
-  licence enforcement, deterministic and polite source access, opening skeletons,
-  Syzygy/engine grounding, authenticated explorer priorities, and private-evidence puzzle
-  consequence seeds.
-- `tablebase-grounding.md` — draft verification into ledger-verified Syzygy sidecars,
-  deterministic perfect tablebase resistance, capability publication, and named refusal
+- [System architecture](architecture.md) — boundaries, dependency direction and end-to-end flows.
+- [Feature and capability map](features.md) — what each work area owns and unlocks.
+- [Extending Tabiya](extending.md) — where code/content changes belong and their integration checks.
+- [Development foundation](development.md) — toolchain, workspace and commands.
+- [Testing](testing.md) — verification tiers and what each tier proves.
+
+Current completion state is deliberately not copied here. Use the
+[authoritative 1.0 roadmap](../planning/roadmap-to-done.md) and its
+[source-sealed receipt](../planning/roadmap-1.0.receipt.json).
+
+## Rehearsal runtime and play surface
+
+- [Branch runtime](branch-runtime.md) — immutable run tree, events, rewind/fork, objectives, replay,
+  storage and export.
+- [Branch groups](branch-groups.md) — durable candidate sets, controlled resistance, evidence
+  recovery and group comparison.
+- [Branch-set scale](branch-set-scale.md) — decided-shortfall collapse, reversible folding and
+  bounded rail projection.
+- [Drill-pack format](drill-pack-format.md) — living pack schema, semantic lint, digests, timing
+  windows and authoring validation.
+- [Drill client](drill-client.md) — REST-driven Svelte client, board/timeline/branch interaction,
+  leases, projection and browser acceptance.
+- [Application shell](app-shell.md) — routes, information architecture, viewport regions, resume,
+  capabilities and keyboard ownership.
+- [Play composition](play-composition.md) — one stable board workspace and the composition rules
+  shared by play contexts.
+- [N-way comparison](n-way-comparison.md) — 2–8 branch comparison, simulation, predictions and deep
+  analysis.
+- [Outcome Drill grading](outcome-drill-grading.md) — win/hold/save/resist grading and exact
+  assessment boundaries.
+- [Trajectory Drill](trajectory-drill.md) — continuous legs, per-leg objectives and causal
+  provenance.
+- [Return and progression](return-and-progression.md) — attempt projection, schedules, duplication,
+  related retries and the Learn surface.
+- [Open-answer grading](open-answer-grading.md) — private stated reasoning and deterministic
+  authored-key matching.
+
+## Evidence, explanation and assistance
+
+- [Evidence contract](evidence-contract.md) — producers, projections, consumers, bindings,
+  availability and registration.
+- [Semantic evidence](semantic-evidence.md) — operand-preserving events, research selection and
+  counterfactual population rules.
+- [Recorded evidence](recorded-evidence.md) — durable evidence shapes and their source identity.
+- [Claim backing](claim-backing.md) — authored-claim evidence bindings and validation.
+- [Explanation grounds](explanation-grounds.md) — disclosure, grounded sentences, score
+  trajectories and provenance honesty.
+- [Structural reading](structural-reading.md) — deterministic structure predicates and learner
+  observations.
+- [Transition primitives](transition-primitives.md) — typed phase/structure transition readings.
+- [Adaptive guidance](adaptive-guidance.md) — phase bands, assistance, pivotal markers, endgame
+  naming and voice boundary.
+- [Runtime corpus evidence](runtime-corpus-evidence.md) — disclosure-gated Explorer frequency and
+  recency facts.
+- [Runtime opening identity](runtime-opening-identity.md) — exact opening endpoint/path/history
+  catalogue and production boundary.
+- [Expression census](expression-census.md) — offline structural-expression coverage and
+  satisfiability instrument.
+- [Board annotation](board-annotation.md) — arrows, marks and their evidence/disclosure ownership.
+
+## Engines and opponent infrastructure
+
+- [Engine workers](engine-workers.md) — UCI supervision, Maia, Stockfish evidence, capabilities,
+  caching and failure handling.
+- [Engine grounding](engine-grounding.md) — fixed-depth opening assessments and the read-only engine
+  authoring walk.
+- [Tablebase grounding](tablebase-grounding.md) — Syzygy sidecars, perfect resistance and refusal
   boundaries.
-- `engine-grounding.md` — fixed-depth opening assessments, manifest-linked engine
-  evidence, draft verification, the read-only engine walker, and the “not a proof” boundary.
-- `outcome-drill-grading.md` — win/hold/save/resist grading, monotone outcome
-  transitions, exact-assessment admission, path-scoped resistance identity, and
-  the learner-facing honesty contract.
-- Line Drill theory grading is documented across `drill-pack-format.md`,
-  `branch-runtime.md`, `engine-workers.md`, and `drill-client.md`: authored
-  membership, boundary crossing, recorded applied policy, and withheld
-  three-way verdict delivery are one cross-layer contract.
-- `return-and-progression.md` — durable branch-attempt projection, migration 6,
-  learner-scoped return schedules, run duplication, the `/learn` surface, and pack
-  schema 0.6 retry/concept vocabulary.
-- `trajectory-drill.md` — pack schema 0.7 trajectory legs, continuous-path entry,
-  per-leg objective seal/reset, causal move provenance, derived verdicts, and the
-  deliberately non-aggregated client presentation.
-- `pack-studio.md` — migration 7 durable drafts/registrations, source-derived
-  publication channels, digest-retained playtests and versions, the authoring REST
-  surface, pack schema 0.8, and `/create`.
-- `n-way-comparison.md` — one-axis 2–8 branch comparison, consequence rows,
-  scratch simulation and promotion, prediction capture, deep analysis, run
-  run schema 0.8, pack schema 0.9, and migration 8.
-- `live-sessions.md` — roles and board-control policy, native two-player matches,
-  pause-and-rehearse, friend links, simul summaries, possession authorship, proposals,
-  advisory chat votes, Arena PGN legs, follower withholding, migrations 9/14, and the
-  accepted streamer-disclosure limitation.
-- `structural-reading.md` — fifteen deterministic rung-0 predicates, mirrored/quantified
-  expressions, finite learner observations, current-position deltas, and grounded plan objectives.
-- `shape-library.md` — reusable structural entries and pack references, source-derived
-  channels, derived timeline firings, the attributed plans panel, Shape Studio, and the
-  pack-free Just Play position player.
-- `adaptive-guidance.md` — attributed phase bands, silent-by-default assistance,
-  passive pivotal markers, gated human-model splits, endgame census and technique naming,
-  retrospective evaluation pivots, and the packet-checked optional voice seam.
-- `runtime-corpus-evidence.md` — operator-authenticated, disclosure-gated Lichess
-  frequency and recency facts, bounded interactive caching, honest abstention, and
-  the closed fact-only assistance renderer.
-- `repertoire-gap-finding.md` — private multi-line repertoire import, population-bound
-  coverage scans, explicit partiality, atomic gap-to-run entry, and learner-chosen
-  answers on the Learn surface.
-- `open-answer-grading.md` — durable stated-reasoning transcripts, grounded authored
-  key points, deterministic literal/SAN matching, owner-only previous-attempt comparison,
-  and the explicit never-graded privacy contract.
-- `game-import-and-story.md` — one-game PGN/lichess import, imported-run identity,
-  idempotent evidence completion, grounded story moments, live re-entry, and
-  original-game-plus-branches export.
-- `adoption-wave-1.md` — native terminal stories, deterministic and revocable
-  public cards, external packet-bound voice, explicit-open spoken delivery,
-  event-shaped milestones, and opposite-side replay provenance.
+- [Bot policy](bot-policy.md) — measured policy composition and the current opponent-policy
+  foundation.
+
+## Content, theory and authoring
+
+- [Content sourcing](content-sourcing.md) — candidates, provenance, licences, source access and
+  grounding pipelines.
+- [Pack Studio](pack-studio.md) — durable drafts, publication channels, versions and authoring API.
+- [Pack graduation](pack-graduation.md) — clearance states, reports and official-content boundary.
+- [Shape library](shape-library.md) — reusable structural entries, triggers, plans and Shape Studio.
+- [Repertoire gap finding](repertoire-gap-finding.md) — private repertoire import, coverage scans
+  and gap-to-run entry.
+
+## Review, story and adoption
+
+- [Game import and story](game-import-and-story.md) — PGN/Lichess import, grounded moments,
+  re-entry and export.
+- [Adoption wave 1](adoption-wave-1.md) — terminal stories, public cards, milestones and
+  opposite-side replay.
+
+## Social, professional and progression surfaces
+
+- [Live sessions](live-sessions.md) — roles, native matches, proposals, votes, overlays, Arena legs
+  and follower withholding.
+- [Classrooms](classrooms.md) — rosters, assignments, submissions and consent.
+- [Campaign](campaign.md) — campaign schema/registry/fold and the present product boundary.
+- [Learner rating](learner-rating.md) — isolated rating arithmetic, storage and learner surface.
+
+## Identity and client platform
+
+- [Identity and authorization](identity-and-authorization.md) — accounts, sessions, roles, grants
+  and writer leases.
+- [Account data lifecycle](account-data-lifecycle.md) — export, deletion, tombstones and browser-local
+  clearing.
+- [Theming](theming.md) — app, board and piece appearance axes and persistence.
+
+## Documentation rule
+
+Every Markdown document directly under `docs/` must appear in this index. `make docs-check` enforces
+that set equality and also checks that the repository README links the architecture, features and
+contributor entry points.

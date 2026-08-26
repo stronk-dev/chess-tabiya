@@ -12,13 +12,13 @@ different resistance.
 The name *tabiya* refers to a familiar position where established opening theory
 gives way to play. The project applies that idea to every phase of the game.
 
-## Features
+## Implemented foundation
 
 - Rewindable run trees: every attempt becomes a branch that can be replayed,
   compared, or exported.
 - Line, plan, outcome, and trajectory drills built from validated drill packs.
-- Human-oriented opposition through Maia policies, with Stockfish and Syzygy used
-  for attributed evidence rather than as the default actor.
+- Human-oriented opposition infrastructure through Maia policies, with Stockfish
+  and Syzygy used for attributed evidence rather than as the default actor.
 - Grounded feedback with disclosure timing, authored provenance, structural
   observations, engine records, and human-game corpus facts.
 - PGN and repertoire import, return scheduling, pack authoring tools, and shared
@@ -41,6 +41,18 @@ into this README:
 - [Defect and feature ledger](design/BACKLOG.md)
 - [Active RFC register](rfc/README.md)
 - [Implemented-system documentation](docs/README.md)
+- [Authoritative 1.0 roadmap](planning/roadmap-to-done.md)
+
+## Understand the project
+
+- [Feature and capability map](docs/features.md) — what each work area owns and unlocks, without
+  presenting partial machinery as a finished feature.
+- [System architecture](docs/architecture.md) — dependency direction, container ownership and the
+  main rehearsal, evidence, content and provider flows.
+- [Extending Tabiya](docs/extending.md) — where routes, APIs, schemas, migrations, evidence,
+  assistance, bots and content belong.
+- [Contributing](CONTRIBUTING.md) — the human workflow from idea or defect through verification and
+  closeout.
 
 ## Quick start with Docker
 
@@ -114,6 +126,16 @@ contract.
 
 ## Architecture
 
+```text
+Svelte web client  --HTTP-->  application/server  -->  SQLite
+       |                              |
+       v                              v
+shared runtime + schemas       engines and evidence providers
+                                      |
+                                      v
+                         validated packs and source records
+```
+
 | Path | Responsibility |
 |---|---|
 | `apps/web` | Svelte 5 browser client |
@@ -129,6 +151,7 @@ contract.
 
 Start with these technical documents:
 
+- [System architecture and dependency map](docs/architecture.md)
 - [Branch runtime](docs/branch-runtime.md)
 - [Drill-pack format](docs/drill-pack-format.md)
 - [Drill client](docs/drill-client.md)
@@ -146,14 +169,10 @@ The product thesis is documented in [design/00-thesis.md](design/00-thesis.md).
 
 ## Contributing
 
-The project uses an evidence-first, RFC-driven workflow. Before a substantial
-change, read [AGENTS.md](AGENTS.md), the [RFC process](rfc/0000-rfc-process.md),
-and the relevant living design document. Open an issue before beginning a large
-feature or schema change so it can be placed in the research and RFC sequence.
-
-Bug fixes and documentation improvements should include the smallest relevant
-verification command. Product implementations require an accepted RFC; research
-harnesses and prototypes follow the exploration exception described by RFC-0000.
+Start with [CONTRIBUTING.md](CONTRIBUTING.md). The project uses an evidence-first,
+RFC-driven workflow: new ideas are ledgered, open product questions are researched,
+and product implementations require an accepted RFC. The contributor guide includes
+a change-placement decision tree, verification expectations and closeout rules.
 
 ## License
 

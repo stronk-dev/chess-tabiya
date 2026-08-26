@@ -49,6 +49,7 @@ make verify
 make register-check
 make status-parity
 make intent-parity
+make docs-check
 make graduation-plan
 make build
 make test-browser
@@ -77,6 +78,9 @@ proves the Svelte production bundle. `make status-parity` binds the Active and A
 their files, compares lifecycle tokens, and refuses malformed or ownerless surviving obligations.
 `make intent-parity` binds the owner/Claude amendments in living intent to their mirrored gate
 claims and deliberately preserved open questions; it reads those documents and never rewrites them.
+`make docs-check` requires every direct `docs/*.md` document to appear exactly once in the canonical
+index and keeps the repository README linked to the architecture, feature, extension and contributor
+entry points. It is part of `make verify-governance`.
 `make test-browser` builds and starts the default mock-backed application and
 runs the full Playwright episode in a separate browser CI job.
 
