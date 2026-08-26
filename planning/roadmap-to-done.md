@@ -300,6 +300,13 @@ unbounded exact groups and `membership_changed`, preserves current author predic
 weakness/value/plan in separate theory/evaluation joins. Ordinary modules, Review, style, bots and
 broad content do not activate the file-only rows as learner evidence.
 
+[[D1730]] closes the generic-line-collector question. Nearly a third of raw structural facts are
+target-free board-edge blocker rows, while exact target-ray, discovered and observed-clearance
+evidence already exists but has no ordinary consumer path. 1.0 versions [[D1731]]'s omitted
+equal-count membership changes, keeps the line meanings separate, and lets requested sight,
+postcommit Support and Review select exact relations. Another universal “relevant line” detector
+would duplicate sources and recreate the dump.
+
 ### 3. Arrival and the rehearsal loop
 
 <!-- roadmap-capability: rehearsal -->

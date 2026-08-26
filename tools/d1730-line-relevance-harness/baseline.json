@@ -1,0 +1,49 @@
+{
+  "schema": "tabiya.research.d1730-line-relevance.v1",
+  "authored": {
+    "positions": 643,
+    "decisions": 754,
+    "triples": 622,
+    "structuralFacts": 41115,
+    "lineBlockers": 11556,
+    "lineBlockerShare": 0.2811,
+    "targetRays": 5772,
+    "rayKinds": {
+      "absolute_pin": 36,
+      "relative_pin": 216,
+      "skewer": 91,
+      "xray_attack": 2017,
+      "xray_defense": 3412
+    },
+    "latencyScreens": 174,
+    "sliderRayGained": 751,
+    "sliderRayLost": 371,
+    "countPreservingBlockerChanges": 109,
+    "discoveredExecuted": 5,
+    "lineClearanceObserved": 0,
+    "squareClearanceObserved": 24
+  },
+  "imported": {
+    "positions": 1152,
+    "decisions": 579,
+    "triples": 6775,
+    "structuralFacts": 93323,
+    "lineBlockers": 29075,
+    "lineBlockerShare": 0.3116,
+    "targetRays": 15393,
+    "rayKinds": {
+      "absolute_pin": 217,
+      "relative_pin": 663,
+      "skewer": 308,
+      "xray_attack": 5550,
+      "xray_defense": 8655
+    },
+    "latencyScreens": 754,
+    "sliderRayGained": 746,
+    "sliderRayLost": 422,
+    "countPreservingBlockerChanges": 126,
+    "discoveredExecuted": 9,
+    "lineClearanceObserved": 23,
+    "squareClearanceObserved": 374
+  }
+}

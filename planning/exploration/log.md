@@ -9022,3 +9022,17 @@ Across committed edges, exact membership changes while file truth stays true in 
 mover. The v1 event's “identity-preserving” claim is therefore false. The handoff derives an exact
 group reading/event with `membership_changed`, preserves pack predicates, and refuses
 weakness/value/plan. No production, RFC, schema, pack, content or learner UX changed.
+
+## 2026-08-26 — Line evidence relevance and blocker identity measured (D1730/D1731)
+
+Executed the legacy board-edge blocker reading, exact target-ray and discovered readers, slider-ray
+edge events, discovered execution and both observed clearance sequences over the fixed
+authored/imported populations. Raw blocker rows are 11,556/41,115 (28.11%) authored and
+29,075/93,323 (31.16%) imported structural facts, yet the endpoint is a board edge rather than a
+chess target. Exact target-bearing sources already ship but stop before ordinary consumers.
+
+The transition event compares only blocker-array lengths. Exact reconstruction finds 109 authored
+and 126 imported count-preserving blocker-set changes that v1 drops entirely. The handoff versions
+that inventory event with `membership_changed`, preserves target-bearing ray/discovered/clearance
+authorities, and makes relevance a selected module query rather than a new universal collector.
+No production, RFC, schema, pack, content or learner UX changed.

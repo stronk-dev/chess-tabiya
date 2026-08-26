@@ -136,6 +136,15 @@ The author handoff adds an unbounded exact group reading and before/after event 
 `membership_changed`, preserves pack predicates, and refuses weakness/value/plan until joined to
 separate evidence.
 
+[[D1730]] **completed the line-evidence relevance boundary on 2026-08-26**. Board-edge
+`line_blockers` contributes 28.11%/31.16% of authored/imported structural facts but names no chess
+target. Exact pin/skewer/X-ray, discovered-latency/execution, target-capture clearance and quiet
+square clearance already ship as distinct meanings; they stop at inspector-only or research-only
+bindings. [[D1731]] finds the generic `slider_ray` event also misses 109/126 equal-count
+blocker-membership changes. The author handoff versions that inventory event and makes ordinary
+relevance a selected-piece/square or postcommit/Review reducer over target-bearing evidence, not a
+new all-rays collector.
+
 **Deliverable 7 (owner questions) accumulates here** — nothing is silently chosen.
 **All four open questions RULED 2026-08-22 ([[D745]])**: space = classic zones + pawn control,
 `chess_tradition`; the negative reading faces learners post-commit/review with the denominator;
