@@ -15,6 +15,7 @@ set execution order.
 
 | Rows | Primary destination | Next action / gate |
 |---|---|---|
+| D1711 | new `semantic-validation-authority` RFC | Replace self-generated validation labels with an independent executable fixture registry and per-event required-profile receipts; migrate real existing producer tests, bind population input+result identity, and gate learner/module admission on passing required arms. Author and independently review before D1710 emitter wiring or Phase 3 activation. |
 | D565, D568, D748, D800 | semantic collector research | Finish bounded-reply semantics and the Wave-C contract; retain honest unavailable/zero outcomes. |
 | D1631, D1632, D1633, D1634, D1635, D1636 | `shared-candidate-evidence-packet` author amendment | Separate factual/adjudication and factual/provider/policy cache identities; name real production operations; compile the F1 tuple; preserve the full candidate closure; and define White-score→root-side-loss derivation. Re-review before implementation. |
 | D1652, D1653, D1654, D1655, D1656, D1657, D1658 | `bounded-policy-targets` author amendment | Split generic Stockfish/Maia source receipts from target derivations; publish literal F1 rows; retain sealed threat/exchange inputs; prove legal-root set completeness; name production operations and bound provider scheduling/cache identity. Re-review before implementation. |
@@ -117,6 +118,7 @@ set execution order.
 
 | Rows | Primary destination | Next action / gate |
 |---|---|---|
+| D1712 | process-contract tooling | Add a staged-diff guard proving exploration-log additions occur strictly after the committed EOF; keep the 2026-08-26 middle insertion and tail correction as immutable incident evidence. |
 | D652 | status-parity closeout | Remove hand-copied incident counts from `planning/WORK.md`; the executable parity checker is authoritative. |
 | D809 | ledger namespace closeout | Keep F1 ids, retain the bot renumbering, and let `make work-index` fail any future duplicate. |
 | D515, D517 | RFC lifecycle amendment | Represent cross-document discharge ownership structurally; keep the incident as evidence, not a perpetual task. |

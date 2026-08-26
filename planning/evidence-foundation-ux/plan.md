@@ -44,6 +44,15 @@ caller and none of the 67 semantic projections reaches a live application operat
 `producer-execution-author-repair-2026-08-26.md`. This is now the explicit gate between collector
 implementation and Phase 3 activation.
 
+[[D1711]] **completed 2026-08-26 with a negative validation baseline**: the semantic register's 67
+positive/hard-negative identifiers are generated from the same projection list as its census test,
+while the compiler checks only non-empty strings. Zero of 134 labels has an independent referent;
+54 ids are named by another executable test and 13 are not; the common R2 input predates more than
+half the current register. The dossier and author handoff require a total executable profile over
+positive, semantic hard negative, mirror/orientation, counterfactual, imported and external-labelled
+arms. Phase 3 may not treat the word `validated` as a production property until those witnesses are
+bound to the declaration and fail when the predicate is broken.
+
 **Deliverable 7 (owner questions) accumulates here** — nothing is silently chosen.
 **All four open questions RULED 2026-08-22 ([[D745]])**: space = classic zones + pawn control,
 `chess_tradition`; the negative reading faces learners post-commit/review with the denominator;

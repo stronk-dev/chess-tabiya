@@ -8704,6 +8704,28 @@ Nine Node-24 arms pass in `tools/d1631-candidate-packet-repair-harness/`. Dossie
 returned pending Claude author amendment and fresh independent buildability review; no RFC,
 production, schema, content or UI byte changed.
 
+## 2026-08-26 — Semantic validation labels separated from executable chess evidence
+
+Closed [[D1711]] by running the complete 67-event register through a new disposable validation
+authority census. Every declaration manufactures one `positive` and one `hard-negative` string
+from its own projection id. The compiler checks only non-empty strings; the generic all-event test
+constructs arbitrary complete operands, removes the first operand for its negative, and regenerates
+the same expected labels. None of the 134 labels resolves to an independent fixture or dispatcher.
+
+The audit does not erase real testing: 54 event ids are named outside the generic census (27 by
+runtime/application tests, 49 by research tests, with overlap), while 13 have no independent named
+executable witness. The manifest nevertheless binds none of those tests. Its shared external token
+is also only an input identity: the retained R2 baseline compiled 33 events and observes 29 current
+ids, leaving 38 current ids absent while all 67 claim the same token.
+
+Phase 3 now requires an independently authored/reviewed semantic-validation-authority contract:
+production-emitter positives, genuine semantic hard negatives, total per-event applicability for
+mirror/counterfactual/imported/external arms, and exact input+result receipts. Five Node-24 arms pass
+in `tools/d1711-semantic-validation-closure/`. Dossier:
+`design/research/semantic-validation-closure.md`; handoff:
+`planning/evidence-foundation-ux/semantic-validation-author-repair-2026-08-26.md`. No production,
+schema, content or UI byte changed.
+
 ## 2026-08-26 — Bounded target provider/derivation return closed at the contract layer
 
 Re-derived [[D1390]], [[D1647]] and [[D1652]]–[[D1658]] against the shipped F1 compiler, legal-move
@@ -8828,3 +8850,10 @@ arms pass in `tools/d1710-producer-execution-harness/`. Dossier:
 `design/research/producer-execution-closure.md`; handoff:
 `planning/evidence-foundation-ux/producer-execution-author-repair-2026-08-26.md`. No RFC,
 production, schema, content or UI byte changed.
+
+## 2026-08-26 — D1711 append-position correction (D1712)
+
+The D1711 closeout entry exists earlier in this file because its context patch matched a prior
+same-day closeout sentence rather than the previous EOF. Law 7 forbids moving or deleting that
+history. This tail entry records that D1711 followed D1710 and routes [[D1712]] to a staged-diff
+guard requiring future exploration-log additions to occur strictly after the committed EOF.

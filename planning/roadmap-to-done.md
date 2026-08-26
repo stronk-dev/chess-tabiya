@@ -212,6 +212,15 @@ Phase 3 therefore waits on the complete one-edge packet operation plus the recor
 catalogue membership, an exported constructor or a consumer-operation registry entry cannot
 satisfy a module, Review, bot, drill or longitudinal dependency.
 
+[[D1711]] closes the separate validation axis and makes the word *validated* unavailable at HEAD.
+All 67 semantic declarations manufacture their own positive/hard-negative labels, the compiler
+checks only non-empty strings, and zero of 134 labels resolves to an independent fixture. The one
+external token names an old 33-event R2 input; its output observes 29 current ids and says nothing
+about the other 38. A new executable validation authority must run production emitters on genuine
+positives and semantic hard negatives, bind exact population result identity and publish total
+per-event validation profiles before D1710 wires events into modules. This is not another collector
+breadth wave: it makes the existing evidence claims able to fail before their blast radius expands.
+
 ### 3. Arrival and the rehearsal loop
 
 <!-- roadmap-capability: rehearsal -->
