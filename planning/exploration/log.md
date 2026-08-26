@@ -8565,3 +8565,27 @@ Dossier: `design/research/bot-guard-and-trait-contract.md`; author handoff:
 `planning/bot-roster/guard-trait-author-repair-2026-08-26.md`; instrument:
 `tools/d1602-bot-guard-contract-harness/` (10/10 green). No RFC was amended or accepted, no
 production profile was registered, and no concurrent D872/review byte was touched.
+
+## 2026-08-26 — D1605/D1606 bot production route and budget boundary measured
+
+The seven-arm production census finds only three of twelve required operations at HEAD: the server
+parser validates a profile, the cache key retains it, and human-common acquires a Maia vector. Run
+types/schema, both create contracts, both request builders, the non-test selector, persisted
+selection, capabilities and card cannot carry the profile. `composeBotPolicySelection` still has
+one production occurrence—its definition.
+
+The present browser round trip is also the wrong authority: authenticated `/select-move` accepts
+caller FEN/history/policy/seed and the browser echoes the selection into the run mutation. Extending
+that pass-through would make profile choice client-authoritative and retain D233's evidence leak.
+The author handoff therefore specifies one run-bound atomic select+append operation with active-node
+CAS and request idempotency; raw Maia evidence queries do not inherit persona transforms.
+
+Re-derived the committed D969 combined depth-8 population rather than rerunning a disposable
+chain: 50 roots, 958 exact candidates, sequential p50/p95/max 209.085/286.796/499.1 ms. The author
+input proposes 400 ms worry, 500 ms intervention and a 500-ms optional-guard opportunity window;
+the exact release route under expected concurrency remains the completion receipt.
+
+Dossier: `design/research/bot-production-route-and-selection-budget.md`; handoff:
+`planning/bot-roster/production-route-author-repair-2026-08-26.md`; instrument:
+`tools/d1605-bot-route-boundary-harness/` (7/7 green). No production/RFC/schema byte or concurrent
+Claude path changed.
