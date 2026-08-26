@@ -8527,3 +8527,22 @@ both and chooses neither.
 Dossier: `design/research/module-novelty-identity-closure.md`; instrument:
 `tools/d1164-novelty-identity-harness/` (8/8 green). No production, protected design, schema,
 content, RFC status or concurrent Claude review/harness byte changed.
+
+## 2026-08-26 — D1612–D1617 longitudinal-store contract closure measured
+
+Turned all six independent re-review returns into one ten-arm executable author handoff. The exact
+constructor registry contains 67 literal versioned rows and rejects a count-preserving swap of two
+valid avoidance bases. The durable job protocol adds generation, token, worker and expiry;
+simultaneous claims, expiry/reclaim, stale publication, crash-before/after publish, retry and closed
+failure-code arms all behave distinctly.
+
+The snapshot cut now means the validated contiguous run-event prefix through claimed N, with a
+publication CAS that can publish N and reopen pending M when a newer request arrives. Independent
+phase/class decision denominators make late-first opportunity, later no-opportunity, retry, phase
+change and complete rebuild agree. The storage scheduling set is exactly seven real operations,
+and imported rows remain observed-only unless a durable non-empty learner assertion exists.
+
+Dossier: `design/research/longitudinal-store-contract-closure.md`; handoff:
+`planning/longitudinal-store/author-repair-handoff-2026-08-26.md`; instrument:
+`tools/d1612-longitudinal-contract-harness/` (10/10 green). No migration, production schema,
+protected design, RFC status, player-profile consumer, content or concurrent Claude byte changed.
