@@ -302,6 +302,12 @@ live.
 | B11 | Reusable shapes: a shape entry attaches wherever its trigger fires; a drill is a generated recipe; one play surface | **mechanically shipped 2026-08-14 (`shape-library`). R8 qualification 2026-08-21:** 38/50 draft packs carry 44 shape references across 21/25 shapes and the server reverse-resolves encountered shapes to pack IDs, but the learner action discards that ID, includes prospective references, and ShapePanel/Library/Review expose no exact theory↔drill handoff (D692-D695). Reuse exists in storage/runtime; the end-to-end learning workflow does not. |
 | B8 | Platform: desktop shell, responsive/PWA, self-hosted engines/providers, share links, accessibility | **mechanically shipped, release-qualified by R18.** The light profile completes/persists a rehearsal without cloud secrets and share links ship. Accessible-board-input (`2b68103`) repairs the former pointer-only board with one controller, five input modes, a 150-cell permanent matrix and a semantic post-gesture grid; owner device/browser/AT validation remains D3. The 1.0 platform floor is still unmet independently: no account export/backup contract; deletion retains solo runs; Maia loss leaves green capabilities and hangs an uncached request; distributed notices/SBOM are absent; the 5.11 GB Maia image carries proprietary-labelled CUDA dependencies; PWA remains manifest-only. `design/research/release-platform-audit.md` `[V]`; O13/F12 own the release floor. |
 
+**B4 corroboration note, 2026-08-26:** D143 now crosses the committed ledger partition in a
+research instrument: two Stockfish-18/depth-22 runs over all 288 Syzygy FENs repeat 288/288
+observations and agree with exact W/D/L throughout. The preregistered ±25 cp screen separates this
+fixed population, but B4 does not gain a scalar normalization: cp/mate and W/D/L/DTZ/DTM remain
+typed, source-local operands, and cross-version/independent-population validation is still absent.
+
 **Watch item — the Lucas Chess failure mode:** breadth without unifying depth
 produces a mode menu, not a product (our own competitor research named this
 case). If surfaces accumulate while B4 stays unmet, that is K6/K4 evidence

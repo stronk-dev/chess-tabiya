@@ -17,7 +17,7 @@ set execution order.
 |---|---|---|
 | D565, D568, D748, D800 | semantic collector research | Finish bounded-reply semantics and the Wave-C contract; retain honest unavailable/zero outcomes. |
 | D583, D584, D586, D587, D588, D589 | F2 renderer/conformance RFC lane | Seal board and provider projections, bind sentences to admitted evidence, and define provider-independent conformance before implementation. |
-| D143, D228, D275 | evidence/provenance integrity lane | Establish cross-instrument corroboration, reconcile capability registers, and make attribution chains mechanically truthful through research then an RFC where contracts change. |
+| D228, D275 | evidence/provenance integrity lane | Reconcile capability registers and make attribution chains mechanically truthful through research then an RFC where contracts change. D143's cross-instrument corroboration is measured and closed. |
 
 ## Learner modules, presets, and presentation
 

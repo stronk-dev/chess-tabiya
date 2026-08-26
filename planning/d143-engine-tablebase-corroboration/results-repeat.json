@@ -1,0 +1,7715 @@
+{
+  "schema": "tabiya.research.engine-tablebase-corroboration.v1",
+  "measuredAt": "2026-08-26T01:55:25.245Z",
+  "environment": {
+    "node": "v24.19.0",
+    "platform": "darwin",
+    "arch": "arm64",
+    "stockfishCommand": "/opt/homebrew/bin/stockfish",
+    "engine": {
+      "name": "Stockfish 18",
+      "author": "the Stockfish developers (see AUTHORS file)"
+    },
+    "profile": {
+      "depth": 22,
+      "threads": 1,
+      "hashMb": 16,
+      "multiPv": 1,
+      "timeoutMs": 120000
+    }
+  },
+  "population": {
+    "records": 341,
+    "distinctFens": 288,
+    "categories": {
+      "win": 108,
+      "loss": 107,
+      "draw": 73
+    }
+  },
+  "controls": {
+    "perspectiveAlternation": {
+      "packId": "mate-k-r-technique",
+      "positions": 18,
+      "passed": true
+    }
+  },
+  "summary": {
+    "overall": {
+      "positions": 288,
+      "typed": {
+        "cp": 158,
+        "mate": 130
+      },
+      "directionalAgreement": {
+        "matches": 210,
+        "eligible": 210,
+        "percent": 100
+      },
+      "exactDrawAbsCp": {
+        "count": 73,
+        "median": 0,
+        "p90": 7,
+        "p95": 8,
+        "max": 21
+      }
+    },
+    "thresholds": [
+      {
+        "deadband": 0,
+        "drawCorrect": {
+          "count": 56,
+          "total": 73,
+          "percent": 76.7
+        },
+        "decisiveCorrect": {
+          "count": 215,
+          "total": 215,
+          "percent": 100
+        },
+        "eligible": false
+      },
+      {
+        "deadband": 25,
+        "drawCorrect": {
+          "count": 73,
+          "total": 73,
+          "percent": 100
+        },
+        "decisiveCorrect": {
+          "count": 215,
+          "total": 215,
+          "percent": 100
+        },
+        "eligible": true
+      },
+      {
+        "deadband": 50,
+        "drawCorrect": {
+          "count": 73,
+          "total": 73,
+          "percent": 100
+        },
+        "decisiveCorrect": {
+          "count": 215,
+          "total": 215,
+          "percent": 100
+        },
+        "eligible": true
+      },
+      {
+        "deadband": 100,
+        "drawCorrect": {
+          "count": 73,
+          "total": 73,
+          "percent": 100
+        },
+        "decisiveCorrect": {
+          "count": 215,
+          "total": 215,
+          "percent": 100
+        },
+        "eligible": true
+      },
+      {
+        "deadband": 200,
+        "drawCorrect": {
+          "count": 73,
+          "total": 73,
+          "percent": 100
+        },
+        "decisiveCorrect": {
+          "count": 214,
+          "total": 215,
+          "percent": 99.5
+        },
+        "eligible": true
+      },
+      {
+        "deadband": 500,
+        "drawCorrect": {
+          "count": 73,
+          "total": 73,
+          "percent": 100
+        },
+        "decisiveCorrect": {
+          "count": 205,
+          "total": 215,
+          "percent": 95.3
+        },
+        "eligible": true
+      }
+    ],
+    "decision": {
+      "eligibleDeadbandsForIndependentValidation": [
+        25,
+        50,
+        100,
+        200,
+        500
+      ],
+      "followupValidationEligible": true,
+      "productionNormalizationPermitted": false
+    },
+    "strata": {
+      "pieceCount": {
+        "3": {
+          "positions": 85,
+          "typed": {
+            "cp": 41,
+            "mate": 44
+          },
+          "directionalAgreement": {
+            "matches": 68,
+            "eligible": 68,
+            "percent": 100
+          },
+          "exactDrawAbsCp": {
+            "count": 15,
+            "median": 0,
+            "p90": 0,
+            "p95": 0,
+            "max": 8
+          }
+        },
+        "4": {
+          "positions": 120,
+          "typed": {
+            "cp": 43,
+            "mate": 77
+          },
+          "directionalAgreement": {
+            "matches": 96,
+            "eligible": 96,
+            "percent": 100
+          },
+          "exactDrawAbsCp": {
+            "count": 21,
+            "median": 0,
+            "p90": 2,
+            "p95": 3,
+            "max": 7
+          }
+        },
+        "5": {
+          "positions": 60,
+          "typed": {
+            "cp": 54,
+            "mate": 6
+          },
+          "directionalAgreement": {
+            "matches": 34,
+            "eligible": 34,
+            "percent": 100
+          },
+          "exactDrawAbsCp": {
+            "count": 26,
+            "median": 0,
+            "p90": 7,
+            "p95": 9,
+            "max": 21
+          }
+        },
+        "6": {
+          "positions": 17,
+          "typed": {
+            "cp": 14,
+            "mate": 3
+          },
+          "directionalAgreement": {
+            "matches": 8,
+            "eligible": 8,
+            "percent": 100
+          },
+          "exactDrawAbsCp": {
+            "count": 9,
+            "median": 0,
+            "p90": 8,
+            "p95": 8,
+            "max": 10
+          }
+        },
+        "7": {
+          "positions": 6,
+          "typed": {
+            "cp": 6,
+            "mate": 0
+          },
+          "directionalAgreement": {
+            "matches": 4,
+            "eligible": 4,
+            "percent": 100
+          },
+          "exactDrawAbsCp": {
+            "count": 2,
+            "median": 0,
+            "p90": 0,
+            "p95": 0,
+            "max": 0
+          }
+        }
+      },
+      "sideToMove": {
+        "b": {
+          "positions": 171,
+          "typed": {
+            "cp": 103,
+            "mate": 68
+          },
+          "directionalAgreement": {
+            "matches": 110,
+            "eligible": 110,
+            "percent": 100
+          },
+          "exactDrawAbsCp": {
+            "count": 56,
+            "median": 0,
+            "p90": 6,
+            "p95": 7,
+            "max": 11
+          }
+        },
+        "w": {
+          "positions": 117,
+          "typed": {
+            "cp": 55,
+            "mate": 62
+          },
+          "directionalAgreement": {
+            "matches": 100,
+            "eligible": 100,
+            "percent": 100
+          },
+          "exactDrawAbsCp": {
+            "count": 17,
+            "median": 0,
+            "p90": 9,
+            "p95": 10,
+            "max": 21
+          }
+        }
+      },
+      "halfmoveClock": {
+        "0": {
+          "positions": 36,
+          "typed": {
+            "cp": 28,
+            "mate": 8
+          },
+          "directionalAgreement": {
+            "matches": 25,
+            "eligible": 25,
+            "percent": 100
+          },
+          "exactDrawAbsCp": {
+            "count": 11,
+            "median": 0,
+            "p90": 7,
+            "p95": 7,
+            "max": 8
+          }
+        },
+        "1-49": {
+          "positions": 252,
+          "typed": {
+            "cp": 130,
+            "mate": 122
+          },
+          "directionalAgreement": {
+            "matches": 185,
+            "eligible": 185,
+            "percent": 100
+          },
+          "exactDrawAbsCp": {
+            "count": 62,
+            "median": 0,
+            "p90": 7,
+            "p95": 8,
+            "max": 21
+          }
+        }
+      },
+      "terminal": {
+        "non-terminal": {
+          "positions": 272,
+          "typed": {
+            "cp": 147,
+            "mate": 125
+          },
+          "directionalAgreement": {
+            "matches": 210,
+            "eligible": 210,
+            "percent": 100
+          },
+          "exactDrawAbsCp": {
+            "count": 62,
+            "median": 0,
+            "p90": 7,
+            "p95": 8,
+            "max": 21
+          }
+        },
+        "terminal": {
+          "positions": 16,
+          "typed": {
+            "cp": 11,
+            "mate": 5
+          },
+          "directionalAgreement": {
+            "matches": 0,
+            "eligible": 0,
+            "percent": null
+          },
+          "exactDrawAbsCp": {
+            "count": 11,
+            "median": 0,
+            "p90": 0,
+            "p95": 0,
+            "max": 0
+          }
+        }
+      }
+    },
+    "counterexamples": {
+      "signContradictions": [],
+      "mateDisagreements": [],
+      "decisiveNearestZero": [
+        {
+          "fen": "6k1/4B3/7K/5N2/8/8/8/8 b - - 37 19",
+          "packIds": [
+            "mate-bishop-knight",
+            "trajectory-mate-bishop-knight"
+          ],
+          "category": "loss",
+          "dtz": -58,
+          "dtm": -58,
+          "engine": {
+            "type": "cp",
+            "value": -135,
+            "depth": 22,
+            "bestmove": "g8f7"
+          }
+        },
+        {
+          "fen": "8/8/4k3/4B3/4K3/3N4/8/8 b - - 1 1",
+          "packIds": [
+            "mate-bishop-knight",
+            "trajectory-mate-bishop-knight"
+          ],
+          "category": "loss",
+          "dtz": -38,
+          "dtm": -38,
+          "engine": {
+            "type": "cp",
+            "value": -205,
+            "depth": 22,
+            "bestmove": "e6d7"
+          }
+        },
+        {
+          "fen": "8/8/4k3/8/4K3/2BN4/8/8 w - - 0 1",
+          "packIds": [
+            "mate-bishop-knight",
+            "trajectory-mate-bishop-knight"
+          ],
+          "category": "win",
+          "dtz": 39,
+          "dtm": 39,
+          "engine": {
+            "type": "cp",
+            "value": 331,
+            "depth": 22,
+            "bestmove": "c3e5"
+          }
+        },
+        {
+          "fen": "8/3k4/8/4B3/4K3/3N4/8/8 w - - 2 2",
+          "packIds": [
+            "mate-bishop-knight",
+            "trajectory-mate-bishop-knight"
+          ],
+          "category": "win",
+          "dtz": 37,
+          "dtm": 37,
+          "engine": {
+            "type": "cp",
+            "value": 362,
+            "depth": 22,
+            "bestmove": "e4d5"
+          }
+        },
+        {
+          "fen": "8/3k4/8/3KB3/5N2/8/8/8 w - - 6 4",
+          "packIds": [
+            "mate-bishop-knight",
+            "trajectory-mate-bishop-knight"
+          ],
+          "category": "win",
+          "dtz": 33,
+          "dtm": 33,
+          "engine": {
+            "type": "cp",
+            "value": 405,
+            "depth": 22,
+            "bestmove": "d5c5"
+          }
+        },
+        {
+          "fen": "1K6/1P1k4/8/8/8/8/r7/2R5 w - - 0 1",
+          "packIds": [
+            "lucena-bridge-convert"
+          ],
+          "category": "win",
+          "dtz": 15,
+          "dtm": 41,
+          "engine": {
+            "type": "cp",
+            "value": 422,
+            "depth": 22,
+            "bestmove": "c1c7"
+          }
+        },
+        {
+          "fen": "1K6/1PRk4/8/8/8/8/r7/8 b - - 1 1",
+          "packIds": [
+            "lucena-bridge-convert"
+          ],
+          "category": "loss",
+          "dtz": -16,
+          "dtm": -42,
+          "engine": {
+            "type": "cp",
+            "value": -438,
+            "depth": 22,
+            "bestmove": "d7d6"
+          }
+        },
+        {
+          "fen": "1K6/1P1k4/8/8/8/8/r7/3R4 b - - 1 1",
+          "packIds": [
+            "lucena-bridge-convert"
+          ],
+          "category": "loss",
+          "dtz": -14,
+          "dtm": -40,
+          "engine": {
+            "type": "cp",
+            "value": -444,
+            "depth": 22,
+            "bestmove": "d7e6"
+          }
+        },
+        {
+          "fen": "1R5r/4k3/8/4K3/4P3/8/8/8 b - - 4 3",
+          "packIds": [
+            "philidor-passive-rook-convert"
+          ],
+          "category": "win",
+          "dtz": 1,
+          "dtm": 33,
+          "engine": {
+            "type": "cp",
+            "value": 494,
+            "depth": 22,
+            "bestmove": "h8b8"
+          }
+        },
+        {
+          "fen": "4k3/8/5K2/4P3/8/8/8/8 w - - 1 10",
+          "packIds": [
+            "pawn-opposition-convert"
+          ],
+          "category": "win",
+          "dtz": 5,
+          "dtm": 25,
+          "engine": {
+            "type": "cp",
+            "value": 496,
+            "depth": 22,
+            "bestmove": "f6e6"
+          }
+        },
+        {
+          "fen": "8/8/3k4/8/4K3/4P3/8/8 w - - 1 2",
+          "packIds": [
+            "pawn-opposition-convert"
+          ],
+          "category": "win",
+          "dtz": 7,
+          "dtm": 35,
+          "engine": {
+            "type": "cp",
+            "value": 502,
+            "depth": 22,
+            "bestmove": "e4f5"
+          }
+        },
+        {
+          "fen": "3k4/8/4K3/8/8/4P3/8/8 w - - 9 6",
+          "packIds": [
+            "pawn-opposition-convert"
+          ],
+          "category": "win",
+          "dtz": 1,
+          "dtm": 27,
+          "engine": {
+            "type": "cp",
+            "value": 504,
+            "depth": 22,
+            "bestmove": "e6f7"
+          }
+        }
+      ],
+      "exactDrawLargestAbsCp": [
+        {
+          "fen": "4k3/R7/8/4K2r/4P3/8/8/8 w - - 1 2",
+          "packIds": [
+            "philidor-third-rank-hold"
+          ],
+          "category": "draw",
+          "dtz": 0,
+          "dtm": 0,
+          "engine": {
+            "type": "cp",
+            "value": 21,
+            "depth": 22,
+            "bestmove": "e5e6"
+          }
+        },
+        {
+          "fen": "4k2r/1R6/8/4K3/4P3/8/8/8 b - - 2 2",
+          "packIds": [
+            "philidor-passive-rook-convert"
+          ],
+          "category": "draw",
+          "dtz": 0,
+          "dtm": 0,
+          "engine": {
+            "type": "cp",
+            "value": -11,
+            "depth": 22,
+            "bestmove": "h8h6"
+          }
+        },
+        {
+          "fen": "3b4/2k5/8/2PKP3/8/8/4B3/8 w - - 1 2",
+          "packIds": [
+            "opposite-bishops-fortress-hold"
+          ],
+          "category": "draw",
+          "dtz": 0,
+          "dtm": 0,
+          "engine": {
+            "type": "cp",
+            "value": 10,
+            "depth": 22,
+            "bestmove": "e2a6"
+          }
+        },
+        {
+          "fen": "4k3/R7/8/4K3/4P3/8/8/7r w - - 1 2",
+          "packIds": [
+            "philidor-third-rank-hold"
+          ],
+          "category": "draw",
+          "dtz": 0,
+          "dtm": 0,
+          "engine": {
+            "type": "cp",
+            "value": 9,
+            "depth": 22,
+            "bestmove": "a7a8"
+          }
+        },
+        {
+          "fen": "3b4/4k3/2P5/3KP3/8/8/4B3/8 b - - 0 2",
+          "packIds": [
+            "opposite-bishops-fortress-hold"
+          ],
+          "category": "draw",
+          "dtz": 0,
+          "dtm": 0,
+          "engine": {
+            "type": "cp",
+            "value": -8,
+            "depth": 22,
+            "bestmove": "d8c7"
+          }
+        },
+        {
+          "fen": "8/4k3/2P1P3/b2K4/8/8/4B3/8 w - - 1 4",
+          "packIds": [
+            "opposite-bishops-fortress-hold"
+          ],
+          "category": "draw",
+          "dtz": 0,
+          "dtm": 0,
+          "engine": {
+            "type": "cp",
+            "value": 8,
+            "depth": 22,
+            "bestmove": "e2c4"
+          }
+        },
+        {
+          "fen": "8/8/3k4/8/8/3KP3/8/8 b - - 2 2",
+          "packIds": [
+            "pawn-opposition-convert"
+          ],
+          "category": "draw",
+          "dtz": 0,
+          "dtm": 0,
+          "engine": {
+            "type": "cp",
+            "value": -8,
+            "depth": 22,
+            "bestmove": "d6d5"
+          }
+        },
+        {
+          "fen": "4k2r/R7/3K4/8/4P3/8/8/8 b - - 2 2",
+          "packIds": [
+            "philidor-passive-rook-convert"
+          ],
+          "category": "draw",
+          "dtz": 0,
+          "dtm": 0,
+          "engine": {
+            "type": "cp",
+            "value": -7,
+            "depth": 22,
+            "bestmove": "h8h6"
+          }
+        },
+        {
+          "fen": "4k3/R7/6r1/3K4/4P3/8/8/8 w - - 3 3",
+          "packIds": [
+            "philidor-third-rank-hold"
+          ],
+          "category": "draw",
+          "dtz": 0,
+          "dtm": 0,
+          "engine": {
+            "type": "cp",
+            "value": 7,
+            "depth": 22,
+            "bestmove": "e4e5"
+          }
+        },
+        {
+          "fen": "8/8/1Pp1k3/8/8/8/6K1/8 b - - 0 3",
+          "packIds": [
+            "pawn-breakthrough-convert"
+          ],
+          "category": "draw",
+          "dtz": 0,
+          "dtm": 0,
+          "engine": {
+            "type": "cp",
+            "value": 7,
+            "depth": 22,
+            "bestmove": "e6d7"
+          }
+        },
+        {
+          "fen": "4k2r/R7/4K3/8/4P3/8/8/8 b - - 2 2",
+          "packIds": [
+            "philidor-passive-rook-convert"
+          ],
+          "category": "draw",
+          "dtz": 0,
+          "dtm": 0,
+          "engine": {
+            "type": "cp",
+            "value": -6,
+            "depth": 22,
+            "bestmove": "h8h6"
+          }
+        },
+        {
+          "fen": "4k3/R7/6r1/3KP3/8/8/8/8 b - - 0 3",
+          "packIds": [
+            "philidor-third-rank-hold"
+          ],
+          "category": "draw",
+          "dtz": 0,
+          "dtm": 0,
+          "engine": {
+            "type": "cp",
+            "value": -6,
+            "depth": 22,
+            "bestmove": "g6h6"
+          }
+        }
+      ]
+    }
+  },
+  "observations": [
+    {
+      "fen": "1K1R4/1P2k3/8/8/8/8/r7/8 b - - 3 2",
+      "tablebase": {
+        "category": "draw",
+        "dtz": 0,
+        "dtm": 0,
+        "checkmate": false,
+        "stalemate": false,
+        "insufficientMaterial": false,
+        "pieceCount": 5
+      },
+      "packIds": [
+        "lucena-bridge-convert"
+      ],
+      "supports": [
+        "/deviations/4/moveUci"
+      ],
+      "engine": {
+        "type": "cp",
+        "value": 0,
+        "depth": 22,
+        "bestmove": "e7d8"
+      }
+    },
+    {
+      "fen": "1K6/1P1k4/8/8/8/8/r1R5/8 b - - 1 1",
+      "tablebase": {
+        "category": "win",
+        "dtz": 1,
+        "dtm": 35,
+        "checkmate": false,
+        "stalemate": false,
+        "insufficientMaterial": false,
+        "pieceCount": 5
+      },
+      "packIds": [
+        "lucena-bridge-convert"
+      ],
+      "supports": [
+        "/deviations/0/moveUci"
+      ],
+      "engine": {
+        "type": "cp",
+        "value": 661,
+        "depth": 22,
+        "bestmove": "a2c2"
+      }
+    },
+    {
+      "fen": "1K6/1P1k4/8/8/8/8/r7/2R5 w - - 0 1",
+      "tablebase": {
+        "category": "win",
+        "dtz": 15,
+        "dtm": 41,
+        "checkmate": false,
+        "stalemate": false,
+        "insufficientMaterial": false,
+        "pieceCount": 5
+      },
+      "packIds": [
+        "lucena-bridge-convert"
+      ],
+      "supports": [
+        "/start/fen"
+      ],
+      "engine": {
+        "type": "cp",
+        "value": 422,
+        "depth": 22,
+        "bestmove": "c1c7"
+      }
+    },
+    {
+      "fen": "1K6/1P1k4/8/8/8/8/r7/3R4 b - - 1 1",
+      "tablebase": {
+        "category": "loss",
+        "dtz": -14,
+        "dtm": -40,
+        "checkmate": false,
+        "stalemate": false,
+        "insufficientMaterial": false,
+        "pieceCount": 5
+      },
+      "packIds": [
+        "lucena-bridge-convert"
+      ],
+      "supports": [
+        "/spine/0/moveUci"
+      ],
+      "engine": {
+        "type": "cp",
+        "value": -444,
+        "depth": 22,
+        "bestmove": "d7e6"
+      }
+    },
+    {
+      "fen": "1K6/1P1k4/8/8/8/8/r7/R7 b - - 1 1",
+      "tablebase": {
+        "category": "draw",
+        "dtz": 0,
+        "dtm": 0,
+        "checkmate": false,
+        "stalemate": false,
+        "insufficientMaterial": false,
+        "pieceCount": 5
+      },
+      "packIds": [
+        "lucena-bridge-convert"
+      ],
+      "supports": [
+        "/deviations/1/moveUci"
+      ],
+      "engine": {
+        "type": "cp",
+        "value": 0,
+        "depth": 22,
+        "bestmove": "a2a1"
+      }
+    },
+    {
+      "fen": "1K6/1P1Rk3/8/8/8/8/r7/8 b - - 3 2",
+      "tablebase": {
+        "category": "draw",
+        "dtz": 0,
+        "dtm": 0,
+        "checkmate": false,
+        "stalemate": false,
+        "insufficientMaterial": false,
+        "pieceCount": 5
+      },
+      "packIds": [
+        "lucena-bridge-convert"
+      ],
+      "supports": [
+        "/deviations/3/moveUci"
+      ],
+      "engine": {
+        "type": "cp",
+        "value": 0,
+        "depth": 22,
+        "bestmove": "e7d7"
+      }
+    },
+    {
+      "fen": "1K6/1P2k3/8/8/3R4/8/8/r7 w - - 4 3",
+      "tablebase": {
+        "category": "win",
+        "dtz": 11,
+        "dtm": 35,
+        "checkmate": false,
+        "stalemate": false,
+        "insufficientMaterial": false,
+        "pieceCount": 5
+      },
+      "packIds": [
+        "lucena-bridge-convert"
+      ],
+      "supports": [
+        "/spine/0/children/0/children/0/children/0/moveUci"
+      ],
+      "engine": {
+        "type": "cp",
+        "value": 524,
+        "depth": 22,
+        "bestmove": "b8c7"
+      }
+    },
+    {
+      "fen": "1K6/1P2k3/8/8/3R4/8/r7/8 b - - 3 2",
+      "tablebase": {
+        "category": "loss",
+        "dtz": -12,
+        "dtm": -38,
+        "checkmate": false,
+        "stalemate": false,
+        "insufficientMaterial": false,
+        "pieceCount": 5
+      },
+      "packIds": [
+        "lucena-bridge-convert"
+      ],
+      "supports": [
+        "/spine/0/children/0/children/0/moveUci"
+      ],
+      "engine": {
+        "type": "cp",
+        "value": -558,
+        "depth": 22,
+        "bestmove": "e7e6"
+      }
+    },
+    {
+      "fen": "1K6/1P2k3/8/8/8/8/r7/3R4 w - - 2 2",
+      "tablebase": {
+        "category": "win",
+        "dtz": 13,
+        "dtm": 39,
+        "checkmate": false,
+        "stalemate": false,
+        "insufficientMaterial": false,
+        "pieceCount": 5
+      },
+      "packIds": [
+        "lucena-bridge-convert"
+      ],
+      "supports": [
+        "/spine/0/children/0/moveUci"
+      ],
+      "engine": {
+        "type": "cp",
+        "value": 507,
+        "depth": 22,
+        "bestmove": "d1d4"
+      }
+    },
+    {
+      "fen": "1K6/1PRk4/8/8/8/8/r7/8 b - - 1 1",
+      "tablebase": {
+        "category": "loss",
+        "dtz": -16,
+        "dtm": -42,
+        "checkmate": false,
+        "stalemate": false,
+        "insufficientMaterial": false,
+        "pieceCount": 5
+      },
+      "packIds": [
+        "lucena-bridge-convert"
+      ],
+      "supports": [
+        "/deviations/2/moveUci"
+      ],
+      "engine": {
+        "type": "cp",
+        "value": -438,
+        "depth": 22,
+        "bestmove": "d7d6"
+      }
+    },
+    {
+      "fen": "1r2k3/R7/4P3/3K4/8/8/8/8 w - - 1 5",
+      "tablebase": {
+        "category": "draw",
+        "dtz": 0,
+        "dtm": 0,
+        "checkmate": false,
+        "stalemate": false,
+        "insufficientMaterial": false,
+        "pieceCount": 5
+      },
+      "packIds": [
+        "philidor-third-rank-hold"
+      ],
+      "supports": [
+        "/deviations/6/moveUci"
+      ],
+      "engine": {
+        "type": "cp",
+        "value": 0,
+        "depth": 22,
+        "bestmove": "a7g7"
+      }
+    },
+    {
+      "fen": "1R5r/4k3/8/4K3/4P3/8/8/8 b - - 4 3",
+      "tablebase": {
+        "category": "win",
+        "dtz": 1,
+        "dtm": 33,
+        "checkmate": false,
+        "stalemate": false,
+        "insufficientMaterial": false,
+        "pieceCount": 5
+      },
+      "packIds": [
+        "philidor-passive-rook-convert"
+      ],
+      "supports": [
+        "/deviations/4/moveUci"
+      ],
+      "engine": {
+        "type": "cp",
+        "value": 494,
+        "depth": 22,
+        "bestmove": "h8b8"
+      }
+    },
+    {
+      "fen": "2k5/2B5/2K3N1/8/8/8/8/8 b - - 13 7",
+      "tablebase": {
+        "category": "draw",
+        "dtz": 0,
+        "dtm": 0,
+        "checkmate": false,
+        "stalemate": true,
+        "insufficientMaterial": false,
+        "pieceCount": 4
+      },
+      "packIds": [
+        "mate-bishop-knight",
+        "trajectory-mate-bishop-knight"
+      ],
+      "supports": [
+        "/deviations/1/moveUci"
+      ],
+      "engine": {
+        "type": "cp",
+        "value": 0,
+        "depth": 0,
+        "bestmove": null
+      }
+    },
+    {
+      "fen": "2k5/4N3/2K5/8/8/6B1/8/8 b - - 13 7",
+      "tablebase": {
+        "category": "loss",
+        "dtz": -26,
+        "dtm": -26,
+        "checkmate": false,
+        "stalemate": false,
+        "insufficientMaterial": false,
+        "pieceCount": 4
+      },
+      "packIds": [
+        "mate-bishop-knight",
+        "trajectory-mate-bishop-knight"
+      ],
+      "supports": [
+        "/spine/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/moveUci"
+      ],
+      "engine": {
+        "type": "mate",
+        "value": -14,
+        "depth": 22,
+        "bestmove": "c8d8"
+      }
+    },
+    {
+      "fen": "2k5/8/2K3N1/4B3/8/8/8/8 b - - 9 5",
+      "tablebase": {
+        "category": "loss",
+        "dtz": -30,
+        "dtm": -30,
+        "checkmate": false,
+        "stalemate": false,
+        "insufficientMaterial": false,
+        "pieceCount": 4
+      },
+      "packIds": [
+        "mate-bishop-knight",
+        "trajectory-mate-bishop-knight"
+      ],
+      "supports": [
+        "/spine/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/moveUci"
+      ],
+      "engine": {
+        "type": "mate",
+        "value": -17,
+        "depth": 22,
+        "bestmove": "c8d8"
+      }
+    },
+    {
+      "fen": "2k5/8/2K3N1/8/8/6B1/8/8 w - - 12 7",
+      "tablebase": {
+        "category": "win",
+        "dtz": 27,
+        "dtm": 27,
+        "checkmate": false,
+        "stalemate": false,
+        "insufficientMaterial": false,
+        "pieceCount": 4
+      },
+      "packIds": [
+        "mate-bishop-knight",
+        "trajectory-mate-bishop-knight"
+      ],
+      "supports": [
+        "/spine/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/moveUci"
+      ],
+      "engine": {
+        "type": "mate",
+        "value": 16,
+        "depth": 22,
+        "bestmove": "g6e7"
+      }
+    },
+    {
+      "fen": "2k5/8/6N1/3KB3/8/8/8/8 w - - 8 5",
+      "tablebase": {
+        "category": "win",
+        "dtz": 31,
+        "dtm": 31,
+        "checkmate": false,
+        "stalemate": false,
+        "insufficientMaterial": false,
+        "pieceCount": 4
+      },
+      "packIds": [
+        "mate-bishop-knight",
+        "trajectory-mate-bishop-knight"
+      ],
+      "supports": [
+        "/spine/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/moveUci"
+      ],
+      "engine": {
+        "type": "mate",
+        "value": 17,
+        "depth": 22,
+        "bestmove": "d5c6"
+      }
+    },
+    {
+      "fen": "2Nk4/8/2K5/8/8/6B1/8/8 b - - 15 8",
+      "tablebase": {
+        "category": "draw",
+        "dtz": 0,
+        "dtm": 0,
+        "checkmate": false,
+        "stalemate": false,
+        "insufficientMaterial": false,
+        "pieceCount": 4
+      },
+      "packIds": [
+        "mate-bishop-knight",
+        "trajectory-mate-bishop-knight"
+      ],
+      "supports": [
+        "/deviations/4/moveUci"
+      ],
+      "engine": {
+        "type": "cp",
+        "value": 0,
+        "depth": 22,
+        "bestmove": "d8c8"
+      }
+    },
+    {
+      "fen": "3B1k2/8/3N2K1/8/8/8/8/8 b - - 31 16",
+      "tablebase": {
+        "category": "loss",
+        "dtz": -8,
+        "dtm": -8,
+        "checkmate": false,
+        "stalemate": false,
+        "insufficientMaterial": false,
+        "pieceCount": 4
+      },
+      "packIds": [
+        "mate-bishop-knight",
+        "trajectory-mate-bishop-knight"
+      ],
+      "supports": [
+        "/spine/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/moveUci"
+      ],
+      "engine": {
+        "type": "mate",
+        "value": -4,
+        "depth": 22,
+        "bestmove": "f8g8"
+      }
+    },
+    {
+      "fen": "3B2k1/8/3N2K1/8/8/8/8/8 w - - 32 17",
+      "tablebase": {
+        "category": "win",
+        "dtz": 7,
+        "dtm": 7,
+        "checkmate": false,
+        "stalemate": false,
+        "insufficientMaterial": false,
+        "pieceCount": 4
+      },
+      "packIds": [
+        "mate-bishop-knight",
+        "trajectory-mate-bishop-knight"
+      ],
+      "supports": [
+        "/spine/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/moveUci"
+      ],
+      "engine": {
+        "type": "mate",
+        "value": 4,
+        "depth": 22,
+        "bestmove": "d8e7"
+      }
+    },
+    {
+      "fen": "3B3k/8/6KN/8/8/8/8/8 b - - 39 20",
+      "tablebase": {
+        "category": "draw",
+        "dtz": 0,
+        "dtm": 0,
+        "checkmate": false,
+        "stalemate": true,
+        "insufficientMaterial": false,
+        "pieceCount": 4
+      },
+      "packIds": [
+        "mate-bishop-knight",
+        "trajectory-mate-bishop-knight"
+      ],
+      "supports": [
+        "/deviations/10/moveUci"
+      ],
+      "engine": {
+        "type": "cp",
+        "value": 0,
+        "depth": 0,
+        "bestmove": null
+      }
+    },
+    {
+      "fen": "3b4/2k5/8/2PKP3/8/8/4B3/8 w - - 1 2",
+      "tablebase": {
+        "category": "draw",
+        "dtz": 0,
+        "dtm": 0,
+        "checkmate": false,
+        "stalemate": false,
+        "insufficientMaterial": false,
+        "pieceCount": 6
+      },
+      "packIds": [
+        "opposite-bishops-fortress-hold"
+      ],
+      "supports": [
+        "/deviations/2/moveUci"
+      ],
+      "engine": {
+        "type": "cp",
+        "value": 10,
+        "depth": 22,
+        "bestmove": "e2a6"
+      }
+    },
+    {
+      "fen": "3b4/3k4/8/2PKP3/8/8/4B3/8 b - - 0 1",
+      "tablebase": {
+        "category": "draw",
+        "dtz": 0,
+        "dtm": 0,
+        "checkmate": false,
+        "stalemate": false,
+        "insufficientMaterial": false,
+        "pieceCount": 6
+      },
+      "packIds": [
+        "opposite-bishops-fortress-hold"
+      ],
+      "supports": [
+        "/start/fen"
+      ],
+      "engine": {
+        "type": "cp",
+        "value": 0,
+        "depth": 22,
+        "bestmove": "d8h4"
+      }
+    },
+    {
+      "fen": "3b4/4k3/2P5/3KP3/8/8/4B3/8 b - - 0 2",
+      "tablebase": {
+        "category": "draw",
+        "dtz": 0,
+        "dtm": 0,
+        "checkmate": false,
+        "stalemate": false,
+        "insufficientMaterial": false,
+        "pieceCount": 6
+      },
+      "packIds": [
+        "opposite-bishops-fortress-hold"
+      ],
+      "supports": [
+        "/spine/0/children/0/moveUci"
+      ],
+      "engine": {
+        "type": "cp",
+        "value": -8,
+        "depth": 22,
+        "bestmove": "d8c7"
+      }
+    },
+    {
+      "fen": "3b4/4k3/8/2PKP3/8/8/4B3/8 w - - 1 2",
+      "tablebase": {
+        "category": "draw",
+        "dtz": 0,
+        "dtm": 0,
+        "checkmate": false,
+        "stalemate": false,
+        "insufficientMaterial": false,
+        "pieceCount": 6
+      },
+      "packIds": [
+        "opposite-bishops-fortress-hold"
+      ],
+      "supports": [
+        "/spine/0/moveUci"
+      ],
+      "engine": {
+        "type": "cp",
+        "value": 0,
+        "depth": 22,
+        "bestmove": "e2g4"
+      }
+    },
+    {
+      "fen": "3bk3/8/2P5/3KP3/8/8/4B3/8 w - - 1 3",
+      "tablebase": {
+        "category": "win",
+        "dtz": 9,
+        "dtm": 27,
+        "checkmate": false,
+        "stalemate": false,
+        "insufficientMaterial": false,
+        "pieceCount": 6
+      },
+      "packIds": [
+        "opposite-bishops-fortress-hold"
+      ],
+      "supports": [
+        "/deviations/3/moveUci"
+      ],
+      "engine": {
+        "type": "cp",
+        "value": 1196,
+        "depth": 22,
+        "bestmove": "d5d6"
+      }
+    },
+    {
+      "fen": "3k3R/8/3KP3/8/8/8/8/8 b - - 6 9",
+      "tablebase": {
+        "category": "loss",
+        "dtz": -1,
+        "dtm": null,
+        "checkmate": true,
+        "stalemate": false,
+        "insufficientMaterial": false,
+        "pieceCount": 4
+      },
+      "packIds": [
+        "philidor-passive-rook-convert"
+      ],
+      "supports": [
+        "/spine/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/moveUci"
+      ],
+      "engine": {
+        "type": "mate",
+        "value": 0,
+        "depth": 0,
+        "bestmove": null
+      }
+    },
+    {
+      "fen": "3k4/2B1N3/2K5/8/8/8/8/8 b - - 15 8",
+      "tablebase": {
+        "category": "draw",
+        "dtz": 0,
+        "dtm": 0,
+        "checkmate": false,
+        "stalemate": false,
+        "insufficientMaterial": false,
+        "pieceCount": 4
+      },
+      "packIds": [
+        "mate-bishop-knight",
+        "trajectory-mate-bishop-knight"
+      ],
+      "supports": [
+        "/deviations/3/moveUci"
+      ],
+      "engine": {
+        "type": "cp",
+        "value": 0,
+        "depth": 22,
+        "bestmove": "d8e7"
+      }
+    },
+    {
+      "fen": "3k4/4N3/2K5/8/8/6B1/8/8 w - - 14 8",
+      "tablebase": {
+        "category": "win",
+        "dtz": 25,
+        "dtm": 25,
+        "checkmate": false,
+        "stalemate": false,
+        "insufficientMaterial": false,
+        "pieceCount": 4
+      },
+      "packIds": [
+        "mate-bishop-knight",
+        "trajectory-mate-bishop-knight"
+      ],
+      "supports": [
+        "/spine/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/moveUci"
+      ],
+      "engine": {
+        "type": "mate",
+        "value": 17,
+        "depth": 22,
+        "bestmove": "c6d6"
+      }
+    },
+    {
+      "fen": "3k4/4N3/3K4/8/8/6B1/8/8 b - - 15 8",
+      "tablebase": {
+        "category": "loss",
+        "dtz": -24,
+        "dtm": -24,
+        "checkmate": false,
+        "stalemate": false,
+        "insufficientMaterial": false,
+        "pieceCount": 4
+      },
+      "packIds": [
+        "mate-bishop-knight",
+        "trajectory-mate-bishop-knight"
+      ],
+      "supports": [
+        "/spine/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/moveUci"
+      ],
+      "engine": {
+        "type": "mate",
+        "value": -15,
+        "depth": 22,
+        "bestmove": "d8e8"
+      }
+    },
+    {
+      "fen": "3k4/4N3/4K3/8/8/6B1/8/8 w - - 18 10",
+      "tablebase": {
+        "category": "win",
+        "dtz": 21,
+        "dtm": 21,
+        "checkmate": false,
+        "stalemate": false,
+        "insufficientMaterial": false,
+        "pieceCount": 4
+      },
+      "packIds": [
+        "mate-bishop-knight",
+        "trajectory-mate-bishop-knight"
+      ],
+      "supports": [
+        "/spine/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/moveUci"
+      ],
+      "engine": {
+        "type": "mate",
+        "value": 13,
+        "depth": 22,
+        "bestmove": "g3d6"
+      }
+    },
+    {
+      "fen": "3k4/4N3/4K3/8/8/8/7B/8 b - - 19 10",
+      "tablebase": {
+        "category": "loss",
+        "dtz": -20,
+        "dtm": -20,
+        "checkmate": false,
+        "stalemate": false,
+        "insufficientMaterial": false,
+        "pieceCount": 4
+      },
+      "packIds": [
+        "mate-bishop-knight",
+        "trajectory-mate-bishop-knight"
+      ],
+      "supports": [
+        "/spine/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/moveUci"
+      ],
+      "engine": {
+        "type": "mate",
+        "value": -12,
+        "depth": 22,
+        "bestmove": "d8e8"
+      }
+    },
+    {
+      "fen": "3k4/4N3/8/3K4/8/6B1/8/8 b - - 15 8",
+      "tablebase": {
+        "category": "draw",
+        "dtz": 0,
+        "dtm": 0,
+        "checkmate": false,
+        "stalemate": false,
+        "insufficientMaterial": false,
+        "pieceCount": 4
+      },
+      "packIds": [
+        "mate-bishop-knight",
+        "trajectory-mate-bishop-knight"
+      ],
+      "supports": [
+        "/deviations/2/moveUci"
+      ],
+      "engine": {
+        "type": "cp",
+        "value": -2,
+        "depth": 22,
+        "bestmove": "d8e7"
+      }
+    },
+    {
+      "fen": "3k4/5K2/8/4P3/8/8/8/8 b - - 4 11",
+      "tablebase": {
+        "category": "loss",
+        "dtz": -2,
+        "dtm": -22,
+        "checkmate": false,
+        "stalemate": false,
+        "insufficientMaterial": false,
+        "pieceCount": 3
+      },
+      "packIds": [
+        "pawn-opposition-convert"
+      ],
+      "supports": [
+        "/spine/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/moveUci"
+      ],
+      "engine": {
+        "type": "mate",
+        "value": -12,
+        "depth": 22,
+        "bestmove": "d8d7"
+      }
+    },
+    {
+      "fen": "3k4/5K2/8/8/8/4P3/8/8 b - - 10 6",
+      "tablebase": {
+        "category": "loss",
+        "dtz": -2,
+        "dtm": -32,
+        "checkmate": false,
+        "stalemate": false,
+        "insufficientMaterial": false,
+        "pieceCount": 3
+      },
+      "packIds": [
+        "pawn-opposition-convert"
+      ],
+      "supports": [
+        "/spine/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/moveUci"
+      ],
+      "engine": {
+        "type": "cp",
+        "value": -8115,
+        "depth": 22,
+        "bestmove": "d8d7"
+      }
+    },
+    {
+      "fen": "3k4/7R/3KP3/8/8/8/8/8 w - - 5 9",
+      "tablebase": {
+        "category": "win",
+        "dtz": 1,
+        "dtm": 1,
+        "checkmate": false,
+        "stalemate": false,
+        "insufficientMaterial": false,
+        "pieceCount": 4
+      },
+      "packIds": [
+        "philidor-passive-rook-convert"
+      ],
+      "supports": [
+        "/spine/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/moveUci"
+      ],
+      "engine": {
+        "type": "mate",
+        "value": 1,
+        "depth": 22,
+        "bestmove": "h7h8"
+      }
+    },
+    {
+      "fen": "3k4/8/1bP1P3/3K4/8/8/4B3/8 w - - 1 4",
+      "tablebase": {
+        "category": "draw",
+        "dtz": 0,
+        "dtm": 0,
+        "checkmate": false,
+        "stalemate": false,
+        "insufficientMaterial": false,
+        "pieceCount": 6
+      },
+      "packIds": [
+        "opposite-bishops-fortress-hold"
+      ],
+      "supports": [
+        "/deviations/7/moveUci"
+      ],
+      "engine": {
+        "type": "cp",
+        "value": 0,
+        "depth": 22,
+        "bestmove": "d5d6"
+      }
+    },
+    {
+      "fen": "3k4/8/2K3N1/4B3/8/8/8/8 w - - 10 6",
+      "tablebase": {
+        "category": "win",
+        "dtz": 29,
+        "dtm": 29,
+        "checkmate": false,
+        "stalemate": false,
+        "insufficientMaterial": false,
+        "pieceCount": 4
+      },
+      "packIds": [
+        "mate-bishop-knight",
+        "trajectory-mate-bishop-knight"
+      ],
+      "supports": [
+        "/spine/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/moveUci"
+      ],
+      "engine": {
+        "type": "cp",
+        "value": 8115,
+        "depth": 22,
+        "bestmove": "c6d6"
+      }
+    },
+    {
+      "fen": "3k4/8/2K3N1/8/8/6B1/8/8 b - - 11 6",
+      "tablebase": {
+        "category": "loss",
+        "dtz": -28,
+        "dtm": -28,
+        "checkmate": false,
+        "stalemate": false,
+        "insufficientMaterial": false,
+        "pieceCount": 4
+      },
+      "packIds": [
+        "mate-bishop-knight",
+        "trajectory-mate-bishop-knight"
+      ],
+      "supports": [
+        "/spine/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/moveUci"
+      ],
+      "engine": {
+        "type": "mate",
+        "value": -17,
+        "depth": 22,
+        "bestmove": "d8c8"
+      }
+    },
+    {
+      "fen": "3k4/8/3K4/8/3BB3/8/8/8 b - - 1 1",
+      "tablebase": {
+        "category": "loss",
+        "dtz": -16,
+        "dtm": -16,
+        "checkmate": false,
+        "stalemate": false,
+        "insufficientMaterial": false,
+        "pieceCount": 4
+      },
+      "packIds": [
+        "mate-two-bishops"
+      ],
+      "supports": [
+        "/spine/0/moveUci"
+      ],
+      "engine": {
+        "type": "mate",
+        "value": -13,
+        "depth": 22,
+        "bestmove": "d8e8"
+      }
+    },
+    {
+      "fen": "3k4/8/4K3/4P3/8/8/8/8 w - - 3 11",
+      "tablebase": {
+        "category": "win",
+        "dtz": 3,
+        "dtm": 23,
+        "checkmate": false,
+        "stalemate": false,
+        "insufficientMaterial": false,
+        "pieceCount": 3
+      },
+      "packIds": [
+        "pawn-opposition-convert"
+      ],
+      "supports": [
+        "/spine/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/moveUci"
+      ],
+      "engine": {
+        "type": "cp",
+        "value": 690,
+        "depth": 22,
+        "bestmove": "e6f7"
+      }
+    },
+    {
+      "fen": "3k4/8/4K3/8/4P3/8/8/8 b - - 0 6",
+      "tablebase": {
+        "category": "loss",
+        "dtz": -2,
+        "dtm": -26,
+        "checkmate": false,
+        "stalemate": false,
+        "insufficientMaterial": false,
+        "pieceCount": 3
+      },
+      "packIds": [
+        "pawn-opposition-convert"
+      ],
+      "supports": [
+        "/deviations/7/moveUci"
+      ],
+      "engine": {
+        "type": "cp",
+        "value": -875,
+        "depth": 22,
+        "bestmove": "d8e8"
+      }
+    },
+    {
+      "fen": "3k4/8/4K3/8/8/4P3/8/8 w - - 9 6",
+      "tablebase": {
+        "category": "win",
+        "dtz": 1,
+        "dtm": 27,
+        "checkmate": false,
+        "stalemate": false,
+        "insufficientMaterial": false,
+        "pieceCount": 3
+      },
+      "packIds": [
+        "pawn-opposition-convert"
+      ],
+      "supports": [
+        "/spine/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/moveUci"
+      ],
+      "engine": {
+        "type": "cp",
+        "value": 504,
+        "depth": 22,
+        "bestmove": "e6f7"
+      }
+    },
+    {
+      "fen": "3k4/8/8/3K4/3BB3/8/8/8 w - - 0 1",
+      "tablebase": {
+        "category": "win",
+        "dtz": 17,
+        "dtm": 17,
+        "checkmate": false,
+        "stalemate": false,
+        "insufficientMaterial": false,
+        "pieceCount": 4
+      },
+      "packIds": [
+        "mate-two-bishops"
+      ],
+      "supports": [
+        "/start/fen"
+      ],
+      "engine": {
+        "type": "mate",
+        "value": 13,
+        "depth": 22,
+        "bestmove": "d5d6"
+      }
+    },
+    {
+      "fen": "3k4/R7/3K4/8/8/8/8/8 b - - 11 6",
+      "tablebase": {
+        "category": "loss",
+        "dtz": -10,
+        "dtm": -10,
+        "checkmate": false,
+        "stalemate": false,
+        "insufficientMaterial": false,
+        "pieceCount": 3
+      },
+      "packIds": [
+        "mate-k-r-technique"
+      ],
+      "supports": [
+        "/spine/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/moveUci"
+      ],
+      "engine": {
+        "type": "mate",
+        "value": -8,
+        "depth": 22,
+        "bestmove": "d8e8"
+      }
+    },
+    {
+      "fen": "3k4/R7/8/3K4/8/8/8/8 w - - 10 6",
+      "tablebase": {
+        "category": "win",
+        "dtz": 11,
+        "dtm": 11,
+        "checkmate": false,
+        "stalemate": false,
+        "insufficientMaterial": false,
+        "pieceCount": 3
+      },
+      "packIds": [
+        "mate-k-r-technique"
+      ],
+      "supports": [
+        "/spine/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/moveUci"
+      ],
+      "engine": {
+        "type": "mate",
+        "value": 6,
+        "depth": 22,
+        "bestmove": "d5c6"
+      }
+    },
+    {
+      "fen": "3Q2k1/8/8/8/8/8/6K1/8 b - - 9 5",
+      "tablebase": {
+        "category": "loss",
+        "dtz": -12,
+        "dtm": -12,
+        "checkmate": false,
+        "stalemate": false,
+        "insufficientMaterial": false,
+        "pieceCount": 3
+      },
+      "packIds": [
+        "mate-k-q-technique"
+      ],
+      "supports": [
+        "/deviations/3/moveUci"
+      ],
+      "engine": {
+        "type": "mate",
+        "value": -9,
+        "depth": 22,
+        "bestmove": "g8g7"
+      }
+    },
+    {
+      "fen": "4k2r/1R6/8/4K3/4P3/8/8/8 b - - 2 2",
+      "tablebase": {
+        "category": "draw",
+        "dtz": 0,
+        "dtm": 0,
+        "checkmate": false,
+        "stalemate": false,
+        "insufficientMaterial": false,
+        "pieceCount": 5
+      },
+      "packIds": [
+        "philidor-passive-rook-convert"
+      ],
+      "supports": [
+        "/deviations/2/moveUci"
+      ],
+      "engine": {
+        "type": "cp",
+        "value": -11,
+        "depth": 22,
+        "bestmove": "h8h6"
+      }
+    },
+    {
+      "fen": "4k2r/R7/3K4/8/4P3/8/8/8 b - - 2 2",
+      "tablebase": {
+        "category": "draw",
+        "dtz": 0,
+        "dtm": 0,
+        "checkmate": false,
+        "stalemate": false,
+        "insufficientMaterial": false,
+        "pieceCount": 5
+      },
+      "packIds": [
+        "philidor-passive-rook-convert"
+      ],
+      "supports": [
+        "/deviations/0/moveUci"
+      ],
+      "engine": {
+        "type": "cp",
+        "value": -7,
+        "depth": 22,
+        "bestmove": "h8h6"
+      }
+    },
+    {
+      "fen": "4k2r/R7/4K3/8/4P3/8/8/8 b - - 2 2",
+      "tablebase": {
+        "category": "draw",
+        "dtz": 0,
+        "dtm": 0,
+        "checkmate": false,
+        "stalemate": false,
+        "insufficientMaterial": false,
+        "pieceCount": 5
+      },
+      "packIds": [
+        "philidor-passive-rook-convert"
+      ],
+      "supports": [
+        "/deviations/1/moveUci"
+      ],
+      "engine": {
+        "type": "cp",
+        "value": -6,
+        "depth": 22,
+        "bestmove": "h8h6"
+      }
+    },
+    {
+      "fen": "4k2r/R7/8/4K3/4P3/8/8/8 w - - 1 2",
+      "tablebase": {
+        "category": "win",
+        "dtz": 3,
+        "dtm": 21,
+        "checkmate": false,
+        "stalemate": false,
+        "insufficientMaterial": false,
+        "pieceCount": 5
+      },
+      "packIds": [
+        "philidor-passive-rook-convert",
+        "philidor-third-rank-hold"
+      ],
+      "supports": [
+        "/deviations/0/moveUci",
+        "/start/fen"
+      ],
+      "engine": {
+        "type": "cp",
+        "value": 1236,
+        "depth": 22,
+        "bestmove": "a7a8"
+      }
+    },
+    {
+      "fen": "4k3/2B1N3/4K3/8/8/8/8/8 b - - 21 11",
+      "tablebase": {
+        "category": "loss",
+        "dtz": -18,
+        "dtm": -18,
+        "checkmate": false,
+        "stalemate": false,
+        "insufficientMaterial": false,
+        "pieceCount": 4
+      },
+      "packIds": [
+        "mate-bishop-knight",
+        "trajectory-mate-bishop-knight"
+      ],
+      "supports": [
+        "/spine/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/moveUci"
+      ],
+      "engine": {
+        "type": "mate",
+        "value": -11,
+        "depth": 22,
+        "bestmove": "e8f8"
+      }
+    },
+    {
+      "fen": "4k3/2B5/3NK3/8/8/8/8/8 b - - 25 13",
+      "tablebase": {
+        "category": "loss",
+        "dtz": -14,
+        "dtm": -14,
+        "checkmate": false,
+        "stalemate": false,
+        "insufficientMaterial": false,
+        "pieceCount": 4
+      },
+      "packIds": [
+        "mate-bishop-knight",
+        "trajectory-mate-bishop-knight"
+      ],
+      "supports": [
+        "/spine/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/moveUci"
+      ],
+      "engine": {
+        "type": "mate",
+        "value": -10,
+        "depth": 22,
+        "bestmove": "e8f8"
+      }
+    },
+    {
+      "fen": "4k3/2B5/4K3/5N2/8/8/8/8 w - - 24 13",
+      "tablebase": {
+        "category": "win",
+        "dtz": 15,
+        "dtm": 15,
+        "checkmate": false,
+        "stalemate": false,
+        "insufficientMaterial": false,
+        "pieceCount": 4
+      },
+      "packIds": [
+        "mate-bishop-knight",
+        "trajectory-mate-bishop-knight"
+      ],
+      "supports": [
+        "/spine/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/moveUci"
+      ],
+      "engine": {
+        "type": "mate",
+        "value": 9,
+        "depth": 22,
+        "bestmove": "c7b6"
+      }
+    },
+    {
+      "fen": "4k3/2Q5/8/8/8/8/6K1/8 b - - 5 3",
+      "tablebase": {
+        "category": "loss",
+        "dtz": -10,
+        "dtm": -10,
+        "checkmate": false,
+        "stalemate": false,
+        "insufficientMaterial": false,
+        "pieceCount": 3
+      },
+      "packIds": [
+        "mate-k-q-technique"
+      ],
+      "supports": [
+        "/spine/0/children/0/children/0/children/0/children/0/moveUci"
+      ],
+      "engine": {
+        "type": "mate",
+        "value": -6,
+        "depth": 22,
+        "bestmove": "e8f8"
+      }
+    },
+    {
+      "fen": "4k3/4N3/3K4/8/8/6B1/8/8 w - - 16 9",
+      "tablebase": {
+        "category": "win",
+        "dtz": 23,
+        "dtm": 23,
+        "checkmate": false,
+        "stalemate": false,
+        "insufficientMaterial": false,
+        "pieceCount": 4
+      },
+      "packIds": [
+        "mate-bishop-knight",
+        "trajectory-mate-bishop-knight"
+      ],
+      "supports": [
+        "/spine/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/moveUci"
+      ],
+      "engine": {
+        "type": "mate",
+        "value": 12,
+        "depth": 22,
+        "bestmove": "d6e6"
+      }
+    },
+    {
+      "fen": "4k3/4N3/4K3/8/8/6B1/8/8 b - - 17 9",
+      "tablebase": {
+        "category": "loss",
+        "dtz": -22,
+        "dtm": -22,
+        "checkmate": false,
+        "stalemate": false,
+        "insufficientMaterial": false,
+        "pieceCount": 4
+      },
+      "packIds": [
+        "mate-bishop-knight",
+        "trajectory-mate-bishop-knight"
+      ],
+      "supports": [
+        "/spine/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/moveUci"
+      ],
+      "engine": {
+        "type": "mate",
+        "value": -12,
+        "depth": 22,
+        "bestmove": "e8d8"
+      }
+    },
+    {
+      "fen": "4k3/4N3/4K3/8/8/8/7B/8 w - - 20 11",
+      "tablebase": {
+        "category": "win",
+        "dtz": 19,
+        "dtm": 19,
+        "checkmate": false,
+        "stalemate": false,
+        "insufficientMaterial": false,
+        "pieceCount": 4
+      },
+      "packIds": [
+        "mate-bishop-knight",
+        "trajectory-mate-bishop-knight"
+      ],
+      "supports": [
+        "/spine/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/moveUci"
+      ],
+      "engine": {
+        "type": "mate",
+        "value": 10,
+        "depth": 22,
+        "bestmove": "h2c7"
+      }
+    },
+    {
+      "fen": "4k3/4Q3/8/8/8/8/6K1/8 b - - 5 3",
+      "tablebase": {
+        "category": "draw",
+        "dtz": 0,
+        "dtm": 0,
+        "checkmate": false,
+        "stalemate": false,
+        "insufficientMaterial": false,
+        "pieceCount": 3
+      },
+      "packIds": [
+        "mate-k-q-technique"
+      ],
+      "supports": [
+        "/deviations/2/moveUci"
+      ],
+      "engine": {
+        "type": "cp",
+        "value": 0,
+        "depth": 22,
+        "bestmove": "e8e7"
+      }
+    },
+    {
+      "fen": "4k3/7R/3KP3/8/8/8/8/8 b - - 4 8",
+      "tablebase": {
+        "category": "loss",
+        "dtz": -2,
+        "dtm": -8,
+        "checkmate": false,
+        "stalemate": false,
+        "insufficientMaterial": false,
+        "pieceCount": 4
+      },
+      "packIds": [
+        "philidor-passive-rook-convert"
+      ],
+      "supports": [
+        "/spine/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/moveUci"
+      ],
+      "engine": {
+        "type": "mate",
+        "value": -5,
+        "depth": 22,
+        "bestmove": "e8f8"
+      }
+    },
+    {
+      "fen": "4k3/7R/4P3/3K4/8/8/8/8 w - - 3 8",
+      "tablebase": {
+        "category": "win",
+        "dtz": 1,
+        "dtm": 7,
+        "checkmate": false,
+        "stalemate": false,
+        "insufficientMaterial": false,
+        "pieceCount": 4
+      },
+      "packIds": [
+        "philidor-passive-rook-convert"
+      ],
+      "supports": [
+        "/spine/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/moveUci"
+      ],
+      "engine": {
+        "type": "mate",
+        "value": 6,
+        "depth": 22,
+        "bestmove": "d5d6"
+      }
+    },
+    {
+      "fen": "4k3/8/3K2B1/8/3B4/8/8/8 b - - 3 2",
+      "tablebase": {
+        "category": "loss",
+        "dtz": -14,
+        "dtm": -14,
+        "checkmate": false,
+        "stalemate": false,
+        "insufficientMaterial": false,
+        "pieceCount": 4
+      },
+      "packIds": [
+        "mate-two-bishops"
+      ],
+      "supports": [
+        "/spine/0/children/0/children/0/moveUci"
+      ],
+      "engine": {
+        "type": "mate",
+        "value": -10,
+        "depth": 22,
+        "bestmove": "e8d8"
+      }
+    },
+    {
+      "fen": "4k3/8/3K4/8/3BB3/8/8/8 w - - 2 2",
+      "tablebase": {
+        "category": "win",
+        "dtz": 15,
+        "dtm": 15,
+        "checkmate": false,
+        "stalemate": false,
+        "insufficientMaterial": false,
+        "pieceCount": 4
+      },
+      "packIds": [
+        "mate-two-bishops"
+      ],
+      "supports": [
+        "/spine/0/children/0/moveUci"
+      ],
+      "engine": {
+        "type": "mate",
+        "value": 12,
+        "depth": 22,
+        "bestmove": "e4g6"
+      }
+    },
+    {
+      "fen": "4k3/8/4K3/4P3/8/8/8/8 b - - 2 10",
+      "tablebase": {
+        "category": "loss",
+        "dtz": -4,
+        "dtm": -24,
+        "checkmate": false,
+        "stalemate": false,
+        "insufficientMaterial": false,
+        "pieceCount": 3
+      },
+      "packIds": [
+        "pawn-opposition-convert"
+      ],
+      "supports": [
+        "/spine/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/moveUci"
+      ],
+      "engine": {
+        "type": "mate",
+        "value": -15,
+        "depth": 22,
+        "bestmove": "e8d8"
+      }
+    },
+    {
+      "fen": "4k3/8/4K3/8/8/4P3/8/8 b - - 8 5",
+      "tablebase": {
+        "category": "loss",
+        "dtz": -2,
+        "dtm": -28,
+        "checkmate": false,
+        "stalemate": false,
+        "insufficientMaterial": false,
+        "pieceCount": 3
+      },
+      "packIds": [
+        "pawn-opposition-convert"
+      ],
+      "supports": [
+        "/spine/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/moveUci"
+      ],
+      "engine": {
+        "type": "cp",
+        "value": -897,
+        "depth": 22,
+        "bestmove": "e8f8"
+      }
+    },
+    {
+      "fen": "4k3/8/5K2/4P3/8/8/8/8 w - - 1 10",
+      "tablebase": {
+        "category": "win",
+        "dtz": 5,
+        "dtm": 25,
+        "checkmate": false,
+        "stalemate": false,
+        "insufficientMaterial": false,
+        "pieceCount": 3
+      },
+      "packIds": [
+        "pawn-opposition-convert"
+      ],
+      "supports": [
+        "/spine/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/moveUci"
+      ],
+      "engine": {
+        "type": "cp",
+        "value": 496,
+        "depth": 22,
+        "bestmove": "f6e6"
+      }
+    },
+    {
+      "fen": "4k3/8/5K2/8/8/4P3/8/8 w - - 7 5",
+      "tablebase": {
+        "category": "win",
+        "dtz": 1,
+        "dtm": 29,
+        "checkmate": false,
+        "stalemate": false,
+        "insufficientMaterial": false,
+        "pieceCount": 3
+      },
+      "packIds": [
+        "pawn-opposition-convert"
+      ],
+      "supports": [
+        "/spine/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/moveUci"
+      ],
+      "engine": {
+        "type": "cp",
+        "value": 514,
+        "depth": 22,
+        "bestmove": "f6e6"
+      }
+    },
+    {
+      "fen": "4k3/8/8/2Q5/8/8/6K1/8 w - - 4 3",
+      "tablebase": {
+        "category": "win",
+        "dtz": 11,
+        "dtm": 11,
+        "checkmate": false,
+        "stalemate": false,
+        "insufficientMaterial": false,
+        "pieceCount": 3
+      },
+      "packIds": [
+        "mate-k-q-technique"
+      ],
+      "supports": [
+        "/spine/0/children/0/children/0/children/0/moveUci"
+      ],
+      "engine": {
+        "type": "mate",
+        "value": 8,
+        "depth": 22,
+        "bestmove": "c5c7"
+      }
+    },
+    {
+      "fen": "4k3/R7/1r1KP3/8/8/8/8/8 w - - 3 6",
+      "tablebase": {
+        "category": "draw",
+        "dtz": 0,
+        "dtm": 0,
+        "checkmate": false,
+        "stalemate": false,
+        "insufficientMaterial": false,
+        "pieceCount": 5
+      },
+      "packIds": [
+        "philidor-third-rank-hold"
+      ],
+      "supports": [
+        "/deviations/8/moveUci"
+      ],
+      "engine": {
+        "type": "cp",
+        "value": 0,
+        "depth": 22,
+        "bestmove": "d6e5"
+      }
+    },
+    {
+      "fen": "4k3/R7/1r2P3/3K4/8/8/8/8 b - - 0 4",
+      "tablebase": {
+        "category": "draw",
+        "dtz": 0,
+        "dtm": 0,
+        "checkmate": false,
+        "stalemate": false,
+        "insufficientMaterial": false,
+        "pieceCount": 5
+      },
+      "packIds": [
+        "philidor-third-rank-hold"
+      ],
+      "supports": [
+        "/spine/0/children/0/children/0/children/0/children/0/children/0/moveUci"
+      ],
+      "engine": {
+        "type": "cp",
+        "value": 0,
+        "depth": 22,
+        "bestmove": "b6b5"
+      }
+    },
+    {
+      "fen": "4k3/R7/1r6/3K4/4P3/8/8/8 b - - 2 2",
+      "tablebase": {
+        "category": "draw",
+        "dtz": 0,
+        "dtm": 0,
+        "checkmate": false,
+        "stalemate": false,
+        "insufficientMaterial": false,
+        "pieceCount": 5
+      },
+      "packIds": [
+        "philidor-third-rank-hold"
+      ],
+      "supports": [
+        "/spine/0/children/0/moveUci"
+      ],
+      "engine": {
+        "type": "cp",
+        "value": -2,
+        "depth": 22,
+        "bestmove": "b6h6"
+      }
+    },
+    {
+      "fen": "4k3/R7/1r6/3KP3/8/8/8/8 w - - 1 4",
+      "tablebase": {
+        "category": "draw",
+        "dtz": 0,
+        "dtm": 0,
+        "checkmate": false,
+        "stalemate": false,
+        "insufficientMaterial": false,
+        "pieceCount": 5
+      },
+      "packIds": [
+        "philidor-third-rank-hold"
+      ],
+      "supports": [
+        "/spine/0/children/0/children/0/children/0/children/0/moveUci"
+      ],
+      "engine": {
+        "type": "cp",
+        "value": 0,
+        "depth": 22,
+        "bestmove": "a7c7"
+      }
+    },
+    {
+      "fen": "4k3/R7/1r6/4K3/4P3/8/8/8 w - - 1 2",
+      "tablebase": {
+        "category": "draw",
+        "dtz": 0,
+        "dtm": 0,
+        "checkmate": false,
+        "stalemate": false,
+        "insufficientMaterial": false,
+        "pieceCount": 5
+      },
+      "packIds": [
+        "philidor-third-rank-hold"
+      ],
+      "supports": [
+        "/spine/0/moveUci"
+      ],
+      "engine": {
+        "type": "cp",
+        "value": 0,
+        "depth": 22,
+        "bestmove": "e5d5"
+      }
+    },
+    {
+      "fen": "4k3/R7/2r1P3/3K4/8/8/8/8 w - - 1 5",
+      "tablebase": {
+        "category": "win",
+        "dtz": 1,
+        "dtm": 9,
+        "checkmate": false,
+        "stalemate": false,
+        "insufficientMaterial": false,
+        "pieceCount": 5
+      },
+      "packIds": [
+        "philidor-third-rank-hold"
+      ],
+      "supports": [
+        "/deviations/4/moveUci"
+      ],
+      "engine": {
+        "type": "mate",
+        "value": 10,
+        "depth": 22,
+        "bestmove": "d5c6"
+      }
+    },
+    {
+      "fen": "4k3/R7/3K4/8/8/8/8/8 w - - 12 7",
+      "tablebase": {
+        "category": "win",
+        "dtz": 9,
+        "dtm": 9,
+        "checkmate": false,
+        "stalemate": false,
+        "insufficientMaterial": false,
+        "pieceCount": 3
+      },
+      "packIds": [
+        "mate-k-r-technique"
+      ],
+      "supports": [
+        "/spine/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/moveUci"
+      ],
+      "engine": {
+        "type": "mate",
+        "value": 7,
+        "depth": 22,
+        "bestmove": "a7e7"
+      }
+    },
+    {
+      "fen": "4k3/R7/3KP3/8/8/8/8/1r6 b - - 2 5",
+      "tablebase": {
+        "category": "draw",
+        "dtz": 0,
+        "dtm": 0,
+        "checkmate": false,
+        "stalemate": false,
+        "insufficientMaterial": false,
+        "pieceCount": 5
+      },
+      "packIds": [
+        "philidor-third-rank-hold"
+      ],
+      "supports": [
+        "/spine/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/moveUci"
+      ],
+      "engine": {
+        "type": "cp",
+        "value": 0,
+        "depth": 22,
+        "bestmove": "b1d1"
+      }
+    },
+    {
+      "fen": "4k3/R7/3KP3/8/8/8/8/3r4 w - - 3 6",
+      "tablebase": {
+        "category": "draw",
+        "dtz": 0,
+        "dtm": 0,
+        "checkmate": false,
+        "stalemate": false,
+        "insufficientMaterial": false,
+        "pieceCount": 5
+      },
+      "packIds": [
+        "philidor-third-rank-hold"
+      ],
+      "supports": [
+        "/spine/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/moveUci"
+      ],
+      "engine": {
+        "type": "cp",
+        "value": 0,
+        "depth": 22,
+        "bestmove": "d6e5"
+      }
+    },
+    {
+      "fen": "4k3/R7/3KP3/8/8/8/8/7r w - - 3 6",
+      "tablebase": {
+        "category": "win",
+        "dtz": 1,
+        "dtm": 1,
+        "checkmate": false,
+        "stalemate": false,
+        "insufficientMaterial": false,
+        "pieceCount": 5
+      },
+      "packIds": [
+        "philidor-third-rank-hold"
+      ],
+      "supports": [
+        "/deviations/7/moveUci"
+      ],
+      "engine": {
+        "type": "mate",
+        "value": 1,
+        "depth": 22,
+        "bestmove": "a7a8"
+      }
+    },
+    {
+      "fen": "4k3/R7/4K3/8/8/8/8/8 b - - 13 7",
+      "tablebase": {
+        "category": "loss",
+        "dtz": -10,
+        "dtm": -10,
+        "checkmate": false,
+        "stalemate": false,
+        "insufficientMaterial": false,
+        "pieceCount": 3
+      },
+      "packIds": [
+        "mate-k-r-technique"
+      ],
+      "supports": [
+        "/spine/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/moveUci"
+      ],
+      "engine": {
+        "type": "mate",
+        "value": -9,
+        "depth": 22,
+        "bestmove": "e8d8"
+      }
+    },
+    {
+      "fen": "4k3/R7/4P3/3K4/8/8/8/1r6 w - - 1 5",
+      "tablebase": {
+        "category": "draw",
+        "dtz": 0,
+        "dtm": 0,
+        "checkmate": false,
+        "stalemate": false,
+        "insufficientMaterial": false,
+        "pieceCount": 5
+      },
+      "packIds": [
+        "philidor-third-rank-hold"
+      ],
+      "supports": [
+        "/spine/0/children/0/children/0/children/0/children/0/children/0/children/0/moveUci"
+      ],
+      "engine": {
+        "type": "cp",
+        "value": 0,
+        "depth": 22,
+        "bestmove": "d5e4"
+      }
+    },
+    {
+      "fen": "4k3/R7/4P3/4K3/8/8/8/3r4 b - - 4 6",
+      "tablebase": {
+        "category": "draw",
+        "dtz": 0,
+        "dtm": 0,
+        "checkmate": false,
+        "stalemate": false,
+        "insufficientMaterial": false,
+        "pieceCount": 5
+      },
+      "packIds": [
+        "philidor-third-rank-hold"
+      ],
+      "supports": [
+        "/spine/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/moveUci"
+      ],
+      "engine": {
+        "type": "cp",
+        "value": 0,
+        "depth": 22,
+        "bestmove": "d1e1"
+      }
+    },
+    {
+      "fen": "4k3/R7/4P3/4K3/8/8/8/4r3 w - - 5 7",
+      "tablebase": {
+        "category": "draw",
+        "dtz": 0,
+        "dtm": 0,
+        "checkmate": false,
+        "stalemate": false,
+        "insufficientMaterial": false,
+        "pieceCount": 5
+      },
+      "packIds": [
+        "philidor-third-rank-hold"
+      ],
+      "supports": [
+        "/spine/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/moveUci"
+      ],
+      "engine": {
+        "type": "cp",
+        "value": 0,
+        "depth": 22,
+        "bestmove": "e5f6"
+      }
+    },
+    {
+      "fen": "4k3/R7/4PK2/8/8/8/8/4r3 b - - 6 7",
+      "tablebase": {
+        "category": "draw",
+        "dtz": 0,
+        "dtm": 0,
+        "checkmate": false,
+        "stalemate": false,
+        "insufficientMaterial": false,
+        "pieceCount": 5
+      },
+      "packIds": [
+        "philidor-third-rank-hold"
+      ],
+      "supports": [
+        "/spine/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/moveUci"
+      ],
+      "engine": {
+        "type": "cp",
+        "value": 0,
+        "depth": 22,
+        "bestmove": "e1f1"
+      }
+    },
+    {
+      "fen": "4k3/R7/4PK2/8/8/8/8/5r2 w - - 7 8",
+      "tablebase": {
+        "category": "draw",
+        "dtz": 0,
+        "dtm": 0,
+        "checkmate": false,
+        "stalemate": false,
+        "insufficientMaterial": false,
+        "pieceCount": 5
+      },
+      "packIds": [
+        "philidor-third-rank-hold"
+      ],
+      "supports": [
+        "/spine/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/moveUci"
+      ],
+      "engine": {
+        "type": "cp",
+        "value": 0,
+        "depth": 22,
+        "bestmove": "f6g6"
+      }
+    },
+    {
+      "fen": "4k3/R7/4r3/3K4/8/8/8/8 w - - 0 5",
+      "tablebase": {
+        "category": "win",
+        "dtz": 1,
+        "dtm": 11,
+        "checkmate": false,
+        "stalemate": false,
+        "insufficientMaterial": false,
+        "pieceCount": 4
+      },
+      "packIds": [
+        "philidor-third-rank-hold"
+      ],
+      "supports": [
+        "/deviations/5/moveUci"
+      ],
+      "engine": {
+        "type": "mate",
+        "value": 7,
+        "depth": 22,
+        "bestmove": "d5e6"
+      }
+    },
+    {
+      "fen": "4k3/R7/6r1/3K4/4P3/8/8/8 w - - 3 3",
+      "tablebase": {
+        "category": "draw",
+        "dtz": 0,
+        "dtm": 0,
+        "checkmate": false,
+        "stalemate": false,
+        "insufficientMaterial": false,
+        "pieceCount": 5
+      },
+      "packIds": [
+        "philidor-third-rank-hold"
+      ],
+      "supports": [
+        "/spine/0/children/0/children/0/moveUci"
+      ],
+      "engine": {
+        "type": "cp",
+        "value": 7,
+        "depth": 22,
+        "bestmove": "e4e5"
+      }
+    },
+    {
+      "fen": "4k3/R7/6r1/3KP3/8/8/8/8 b - - 0 3",
+      "tablebase": {
+        "category": "draw",
+        "dtz": 0,
+        "dtm": 0,
+        "checkmate": false,
+        "stalemate": false,
+        "insufficientMaterial": false,
+        "pieceCount": 5
+      },
+      "packIds": [
+        "philidor-third-rank-hold"
+      ],
+      "supports": [
+        "/spine/0/children/0/children/0/children/0/moveUci"
+      ],
+      "engine": {
+        "type": "cp",
+        "value": -6,
+        "depth": 22,
+        "bestmove": "g6h6"
+      }
+    },
+    {
+      "fen": "4k3/R7/7r/4K3/4P3/8/8/8 b - - 0 1",
+      "tablebase": {
+        "category": "draw",
+        "dtz": 0,
+        "dtm": 0,
+        "checkmate": false,
+        "stalemate": false,
+        "insufficientMaterial": false,
+        "pieceCount": 5
+      },
+      "packIds": [
+        "philidor-third-rank-hold"
+      ],
+      "supports": [
+        "/start/fen"
+      ],
+      "engine": {
+        "type": "cp",
+        "value": 0,
+        "depth": 22,
+        "bestmove": "h6h2"
+      }
+    },
+    {
+      "fen": "4k3/R7/8/4K2r/4P3/8/8/8 w - - 1 2",
+      "tablebase": {
+        "category": "draw",
+        "dtz": 0,
+        "dtm": 0,
+        "checkmate": false,
+        "stalemate": false,
+        "insufficientMaterial": false,
+        "pieceCount": 5
+      },
+      "packIds": [
+        "philidor-third-rank-hold"
+      ],
+      "supports": [
+        "/deviations/3/moveUci"
+      ],
+      "engine": {
+        "type": "cp",
+        "value": 21,
+        "depth": 22,
+        "bestmove": "e5e6"
+      }
+    },
+    {
+      "fen": "4k3/R7/8/4K3/4P3/8/8/7r w - - 1 2",
+      "tablebase": {
+        "category": "draw",
+        "dtz": 0,
+        "dtm": 0,
+        "checkmate": false,
+        "stalemate": false,
+        "insufficientMaterial": false,
+        "pieceCount": 5
+      },
+      "packIds": [
+        "philidor-third-rank-hold"
+      ],
+      "supports": [
+        "/deviations/2/moveUci"
+      ],
+      "engine": {
+        "type": "cp",
+        "value": 9,
+        "depth": 22,
+        "bestmove": "a7a8"
+      }
+    },
+    {
+      "fen": "4k3/R7/r7/4K3/4P3/8/8/8 w - - 1 2",
+      "tablebase": {
+        "category": "win",
+        "dtz": 1,
+        "dtm": 19,
+        "checkmate": false,
+        "stalemate": false,
+        "insufficientMaterial": false,
+        "pieceCount": 5
+      },
+      "packIds": [
+        "philidor-third-rank-hold"
+      ],
+      "supports": [
+        "/deviations/1/moveUci"
+      ],
+      "engine": {
+        "type": "mate",
+        "value": 13,
+        "depth": 22,
+        "bestmove": "a7a6"
+      }
+    },
+    {
+      "fen": "4Nk2/2B5/6K1/8/8/8/8/8 b - - 31 16",
+      "tablebase": {
+        "category": "draw",
+        "dtz": 0,
+        "dtm": 0,
+        "checkmate": false,
+        "stalemate": false,
+        "insufficientMaterial": false,
+        "pieceCount": 4
+      },
+      "packIds": [
+        "mate-bishop-knight",
+        "trajectory-mate-bishop-knight"
+      ],
+      "supports": [
+        "/deviations/6/moveUci"
+      ],
+      "engine": {
+        "type": "cp",
+        "value": 0,
+        "depth": 22,
+        "bestmove": "f8e8"
+      }
+    },
+    {
+      "fen": "4Q2k/8/6K1/8/8/8/8/8 b - - 19 10",
+      "tablebase": {
+        "category": "loss",
+        "dtz": -1,
+        "dtm": null,
+        "checkmate": true,
+        "stalemate": false,
+        "insufficientMaterial": false,
+        "pieceCount": 3
+      },
+      "packIds": [
+        "mate-k-q-technique"
+      ],
+      "supports": [
+        "/spine/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/moveUci"
+      ],
+      "engine": {
+        "type": "mate",
+        "value": 0,
+        "depth": 0,
+        "bestmove": null
+      }
+    },
+    {
+      "fen": "4R3/4k3/4P3/3K4/8/8/8/8 b - - 2 7",
+      "tablebase": {
+        "category": "draw",
+        "dtz": 0,
+        "dtm": 0,
+        "checkmate": false,
+        "stalemate": false,
+        "insufficientMaterial": false,
+        "pieceCount": 4
+      },
+      "packIds": [
+        "philidor-passive-rook-convert"
+      ],
+      "supports": [
+        "/deviations/8/moveUci"
+      ],
+      "engine": {
+        "type": "cp",
+        "value": 0,
+        "depth": 22,
+        "bestmove": "e7e8"
+      }
+    },
+    {
+      "fen": "5Bk1/8/6K1/5N2/8/8/8/8 b - - 37 19",
+      "tablebase": {
+        "category": "draw",
+        "dtz": 0,
+        "dtm": 0,
+        "checkmate": false,
+        "stalemate": false,
+        "insufficientMaterial": false,
+        "pieceCount": 4
+      },
+      "packIds": [
+        "mate-bishop-knight",
+        "trajectory-mate-bishop-knight"
+      ],
+      "supports": [
+        "/deviations/7/moveUci"
+      ],
+      "engine": {
+        "type": "cp",
+        "value": 0,
+        "depth": 22,
+        "bestmove": "g8f8"
+      }
+    },
+    {
+      "fen": "5k2/2B1N3/4K3/8/8/8/8/8 w - - 22 12",
+      "tablebase": {
+        "category": "win",
+        "dtz": 17,
+        "dtm": 17,
+        "checkmate": false,
+        "stalemate": false,
+        "insufficientMaterial": false,
+        "pieceCount": 4
+      },
+      "packIds": [
+        "mate-bishop-knight",
+        "trajectory-mate-bishop-knight"
+      ],
+      "supports": [
+        "/spine/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/moveUci"
+      ],
+      "engine": {
+        "type": "mate",
+        "value": 10,
+        "depth": 22,
+        "bestmove": "e7f5"
+      }
+    },
+    {
+      "fen": "5k2/2B5/3N1K2/8/8/8/8/8 b - - 27 14",
+      "tablebase": {
+        "category": "loss",
+        "dtz": -12,
+        "dtm": -12,
+        "checkmate": false,
+        "stalemate": false,
+        "insufficientMaterial": false,
+        "pieceCount": 4
+      },
+      "packIds": [
+        "mate-bishop-knight",
+        "trajectory-mate-bishop-knight"
+      ],
+      "supports": [
+        "/spine/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/moveUci"
+      ],
+      "engine": {
+        "type": "mate",
+        "value": -8,
+        "depth": 22,
+        "bestmove": "f8g8"
+      }
+    },
+    {
+      "fen": "5k2/2B5/3N2K1/8/8/8/8/8 w - - 30 16",
+      "tablebase": {
+        "category": "win",
+        "dtz": 9,
+        "dtm": 9,
+        "checkmate": false,
+        "stalemate": false,
+        "insufficientMaterial": false,
+        "pieceCount": 4
+      },
+      "packIds": [
+        "mate-bishop-knight",
+        "trajectory-mate-bishop-knight"
+      ],
+      "supports": [
+        "/spine/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/moveUci"
+      ],
+      "engine": {
+        "type": "mate",
+        "value": 5,
+        "depth": 22,
+        "bestmove": "c7d8"
+      }
+    },
+    {
+      "fen": "5k2/2B5/3NK3/8/8/8/8/8 w - - 26 14",
+      "tablebase": {
+        "category": "win",
+        "dtz": 13,
+        "dtm": 13,
+        "checkmate": false,
+        "stalemate": false,
+        "insufficientMaterial": false,
+        "pieceCount": 4
+      },
+      "packIds": [
+        "mate-bishop-knight",
+        "trajectory-mate-bishop-knight"
+      ],
+      "supports": [
+        "/spine/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/moveUci"
+      ],
+      "engine": {
+        "type": "mate",
+        "value": 7,
+        "depth": 22,
+        "bestmove": "e6f6"
+      }
+    },
+    {
+      "fen": "5k2/2B5/4K3/5N2/8/8/8/8 b - - 23 12",
+      "tablebase": {
+        "category": "loss",
+        "dtz": -16,
+        "dtm": -16,
+        "checkmate": false,
+        "stalemate": false,
+        "insufficientMaterial": false,
+        "pieceCount": 4
+      },
+      "packIds": [
+        "mate-bishop-knight",
+        "trajectory-mate-bishop-knight"
+      ],
+      "supports": [
+        "/spine/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/moveUci"
+      ],
+      "engine": {
+        "type": "mate",
+        "value": -10,
+        "depth": 22,
+        "bestmove": "f8e8"
+      }
+    },
+    {
+      "fen": "5k2/2Q5/8/8/8/8/6K1/8 w - - 6 4",
+      "tablebase": {
+        "category": "win",
+        "dtz": 9,
+        "dtm": 9,
+        "checkmate": false,
+        "stalemate": false,
+        "insufficientMaterial": false,
+        "pieceCount": 3
+      },
+      "packIds": [
+        "mate-k-q-technique"
+      ],
+      "supports": [
+        "/spine/0/children/0/children/0/children/0/children/0/children/0/moveUci"
+      ],
+      "engine": {
+        "type": "mate",
+        "value": 5,
+        "depth": 22,
+        "bestmove": "g2h3"
+      }
+    },
+    {
+      "fen": "5k2/3Q4/8/8/8/8/6K1/8 b - - 7 4",
+      "tablebase": {
+        "category": "loss",
+        "dtz": -10,
+        "dtm": -10,
+        "checkmate": false,
+        "stalemate": false,
+        "insufficientMaterial": false,
+        "pieceCount": 3
+      },
+      "packIds": [
+        "mate-k-q-technique"
+      ],
+      "supports": [
+        "/spine/0/children/0/children/0/children/0/children/0/children/0/children/0/moveUci"
+      ],
+      "engine": {
+        "type": "mate",
+        "value": -5,
+        "depth": 22,
+        "bestmove": "f8g8"
+      }
+    },
+    {
+      "fen": "5k2/5B2/5K2/8/3B4/8/8/8 b - - 9 5",
+      "tablebase": {
+        "category": "draw",
+        "dtz": 0,
+        "dtm": 0,
+        "checkmate": false,
+        "stalemate": true,
+        "insufficientMaterial": false,
+        "pieceCount": 4
+      },
+      "packIds": [
+        "mate-two-bishops"
+      ],
+      "supports": [
+        "/deviations/2/moveUci"
+      ],
+      "engine": {
+        "type": "cp",
+        "value": 0,
+        "depth": 0,
+        "bestmove": null
+      }
+    },
+    {
+      "fen": "5k2/6B1/3K2B1/8/8/8/8/8 b - - 5 3",
+      "tablebase": {
+        "category": "draw",
+        "dtz": 0,
+        "dtm": 0,
+        "checkmate": false,
+        "stalemate": false,
+        "insufficientMaterial": false,
+        "pieceCount": 4
+      },
+      "packIds": [
+        "mate-two-bishops"
+      ],
+      "supports": [
+        "/deviations/0/moveUci"
+      ],
+      "engine": {
+        "type": "cp",
+        "value": 0,
+        "depth": 22,
+        "bestmove": "f8g7"
+      }
+    },
+    {
+      "fen": "5k2/8/3K2B1/8/3B4/8/8/8 w - - 4 3",
+      "tablebase": {
+        "category": "win",
+        "dtz": 13,
+        "dtm": 13,
+        "checkmate": false,
+        "stalemate": false,
+        "insufficientMaterial": false,
+        "pieceCount": 4
+      },
+      "packIds": [
+        "mate-two-bishops"
+      ],
+      "supports": [
+        "/spine/0/children/0/children/0/children/0/moveUci"
+      ],
+      "engine": {
+        "type": "mate",
+        "value": 9,
+        "depth": 22,
+        "bestmove": "d6e6"
+      }
+    },
+    {
+      "fen": "5k2/8/4K1B1/8/3B4/8/8/8 b - - 5 3",
+      "tablebase": {
+        "category": "loss",
+        "dtz": -12,
+        "dtm": -12,
+        "checkmate": false,
+        "stalemate": false,
+        "insufficientMaterial": false,
+        "pieceCount": 4
+      },
+      "packIds": [
+        "mate-two-bishops"
+      ],
+      "supports": [
+        "/spine/0/children/0/children/0/children/0/children/0/moveUci"
+      ],
+      "engine": {
+        "type": "mate",
+        "value": -9,
+        "depth": 22,
+        "bestmove": "f8g8"
+      }
+    },
+    {
+      "fen": "5k2/8/5KB1/2B5/8/8/8/8 b - - 9 5",
+      "tablebase": {
+        "category": "loss",
+        "dtz": -8,
+        "dtm": -8,
+        "checkmate": false,
+        "stalemate": false,
+        "insufficientMaterial": false,
+        "pieceCount": 4
+      },
+      "packIds": [
+        "mate-two-bishops"
+      ],
+      "supports": [
+        "/spine/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/moveUci"
+      ],
+      "engine": {
+        "type": "mate",
+        "value": -6,
+        "depth": 22,
+        "bestmove": "f8g8"
+      }
+    },
+    {
+      "fen": "5k2/8/5KB1/8/3B4/8/8/8 w - - 8 5",
+      "tablebase": {
+        "category": "win",
+        "dtz": 9,
+        "dtm": 9,
+        "checkmate": false,
+        "stalemate": false,
+        "insufficientMaterial": false,
+        "pieceCount": 4
+      },
+      "packIds": [
+        "mate-two-bishops"
+      ],
+      "supports": [
+        "/spine/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/moveUci"
+      ],
+      "engine": {
+        "type": "mate",
+        "value": 5,
+        "depth": 22,
+        "bestmove": "d4c5"
+      }
+    },
+    {
+      "fen": "5k2/R7/4K3/8/8/8/8/8 w - - 14 8",
+      "tablebase": {
+        "category": "win",
+        "dtz": 7,
+        "dtm": 7,
+        "checkmate": false,
+        "stalemate": false,
+        "insufficientMaterial": false,
+        "pieceCount": 3
+      },
+      "packIds": [
+        "mate-k-r-technique"
+      ],
+      "supports": [
+        "/spine/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/moveUci"
+      ],
+      "engine": {
+        "type": "mate",
+        "value": 5,
+        "depth": 22,
+        "bestmove": "a7b7"
+      }
+    },
+    {
+      "fen": "5k2/R7/5K2/8/8/8/8/8 b - - 15 8",
+      "tablebase": {
+        "category": "loss",
+        "dtz": -12,
+        "dtm": -12,
+        "checkmate": false,
+        "stalemate": false,
+        "insufficientMaterial": false,
+        "pieceCount": 3
+      },
+      "packIds": [
+        "mate-k-r-technique"
+      ],
+      "supports": [
+        "/spine/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/moveUci"
+      ],
+      "engine": {
+        "type": "mate",
+        "value": -9,
+        "depth": 22,
+        "bestmove": "f8e8"
+      }
+    },
+    {
+      "fen": "6Bk/8/6K1/2B5/8/8/8/8 b - - 17 9",
+      "tablebase": {
+        "category": "draw",
+        "dtz": 0,
+        "dtm": 0,
+        "checkmate": false,
+        "stalemate": false,
+        "insufficientMaterial": false,
+        "pieceCount": 4
+      },
+      "packIds": [
+        "mate-two-bishops"
+      ],
+      "supports": [
+        "/deviations/6/moveUci"
+      ],
+      "engine": {
+        "type": "cp",
+        "value": 0,
+        "depth": 22,
+        "bestmove": "h8g8"
+      }
+    },
+    {
+      "fen": "6k1/2B1K3/3N4/8/8/8/8/8 b - - 29 15",
+      "tablebase": {
+        "category": "loss",
+        "dtz": -24,
+        "dtm": -24,
+        "checkmate": false,
+        "stalemate": false,
+        "insufficientMaterial": false,
+        "pieceCount": 4
+      },
+      "packIds": [
+        "mate-bishop-knight",
+        "trajectory-mate-bishop-knight"
+      ],
+      "supports": [
+        "/deviations/5/moveUci"
+      ],
+      "engine": {
+        "type": "mate",
+        "value": -12,
+        "depth": 22,
+        "bestmove": "g8g7"
+      }
+    },
+    {
+      "fen": "6k1/2B5/3N1K2/8/8/8/8/8 w - - 28 15",
+      "tablebase": {
+        "category": "win",
+        "dtz": 11,
+        "dtm": 11,
+        "checkmate": false,
+        "stalemate": false,
+        "insufficientMaterial": false,
+        "pieceCount": 4
+      },
+      "packIds": [
+        "mate-bishop-knight",
+        "trajectory-mate-bishop-knight"
+      ],
+      "supports": [
+        "/spine/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/moveUci"
+      ],
+      "engine": {
+        "type": "mate",
+        "value": 8,
+        "depth": 22,
+        "bestmove": "c7b6"
+      }
+    },
+    {
+      "fen": "6k1/2B5/3N2K1/8/8/8/8/8 b - - 29 15",
+      "tablebase": {
+        "category": "loss",
+        "dtz": -10,
+        "dtm": -10,
+        "checkmate": false,
+        "stalemate": false,
+        "insufficientMaterial": false,
+        "pieceCount": 4
+      },
+      "packIds": [
+        "mate-bishop-knight",
+        "trajectory-mate-bishop-knight"
+      ],
+      "supports": [
+        "/spine/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/moveUci"
+      ],
+      "engine": {
+        "type": "mate",
+        "value": -5,
+        "depth": 22,
+        "bestmove": "g8f8"
+      }
+    },
+    {
+      "fen": "6k1/3Q4/8/8/8/8/6K1/8 w - - 8 5",
+      "tablebase": {
+        "category": "win",
+        "dtz": 9,
+        "dtm": 9,
+        "checkmate": false,
+        "stalemate": false,
+        "insufficientMaterial": false,
+        "pieceCount": 3
+      },
+      "packIds": [
+        "mate-k-q-technique"
+      ],
+      "supports": [
+        "/spine/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/moveUci"
+      ],
+      "engine": {
+        "type": "mate",
+        "value": 5,
+        "depth": 22,
+        "bestmove": "g2h3"
+      }
+    },
+    {
+      "fen": "6k1/4B3/3N2K1/8/8/8/8/8 b - - 33 17",
+      "tablebase": {
+        "category": "loss",
+        "dtz": -6,
+        "dtm": -6,
+        "checkmate": false,
+        "stalemate": false,
+        "insufficientMaterial": false,
+        "pieceCount": 4
+      },
+      "packIds": [
+        "mate-bishop-knight",
+        "trajectory-mate-bishop-knight"
+      ],
+      "supports": [
+        "/spine/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/moveUci"
+      ],
+      "engine": {
+        "type": "mate",
+        "value": -3,
+        "depth": 22,
+        "bestmove": "g8h8"
+      }
+    },
+    {
+      "fen": "6k1/4B3/6K1/5N2/8/8/8/8 w - - 36 19",
+      "tablebase": {
+        "category": "win",
+        "dtz": 3,
+        "dtm": 3,
+        "checkmate": false,
+        "stalemate": false,
+        "insufficientMaterial": false,
+        "pieceCount": 4
+      },
+      "packIds": [
+        "mate-bishop-knight",
+        "trajectory-mate-bishop-knight"
+      ],
+      "supports": [
+        "/spine/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/moveUci"
+      ],
+      "engine": {
+        "type": "mate",
+        "value": 2,
+        "depth": 22,
+        "bestmove": "f5h6"
+      }
+    },
+    {
+      "fen": "6k1/4B3/6KN/8/8/8/8/8 b - - 37 19",
+      "tablebase": {
+        "category": "loss",
+        "dtz": -2,
+        "dtm": -2,
+        "checkmate": false,
+        "stalemate": false,
+        "insufficientMaterial": false,
+        "pieceCount": 4
+      },
+      "packIds": [
+        "mate-bishop-knight",
+        "trajectory-mate-bishop-knight"
+      ],
+      "supports": [
+        "/spine/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/moveUci"
+      ],
+      "engine": {
+        "type": "mate",
+        "value": -1,
+        "depth": 22,
+        "bestmove": "g8h8"
+      }
+    },
+    {
+      "fen": "6k1/4B3/7K/5N2/8/8/8/8 b - - 37 19",
+      "tablebase": {
+        "category": "loss",
+        "dtz": -58,
+        "dtm": -58,
+        "checkmate": false,
+        "stalemate": false,
+        "insufficientMaterial": false,
+        "pieceCount": 4
+      },
+      "packIds": [
+        "mate-bishop-knight",
+        "trajectory-mate-bishop-knight"
+      ],
+      "supports": [
+        "/deviations/8/moveUci"
+      ],
+      "engine": {
+        "type": "cp",
+        "value": -135,
+        "depth": 22,
+        "bestmove": "g8f7"
+      }
+    },
+    {
+      "fen": "6k1/4K3/6B1/8/3B4/8/8/8 b - - 7 4",
+      "tablebase": {
+        "category": "draw",
+        "dtz": 0,
+        "dtm": 0,
+        "checkmate": false,
+        "stalemate": true,
+        "insufficientMaterial": false,
+        "pieceCount": 4
+      },
+      "packIds": [
+        "mate-two-bishops"
+      ],
+      "supports": [
+        "/deviations/1/moveUci"
+      ],
+      "engine": {
+        "type": "cp",
+        "value": 0,
+        "depth": 0,
+        "bestmove": null
+      }
+    },
+    {
+      "fen": "6k1/4Q3/6K1/8/8/8/8/8 b - - 17 9",
+      "tablebase": {
+        "category": "loss",
+        "dtz": -2,
+        "dtm": -2,
+        "checkmate": false,
+        "stalemate": false,
+        "insufficientMaterial": false,
+        "pieceCount": 3
+      },
+      "packIds": [
+        "mate-k-q-technique"
+      ],
+      "supports": [
+        "/spine/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/moveUci"
+      ],
+      "engine": {
+        "type": "mate",
+        "value": -1,
+        "depth": 22,
+        "bestmove": "g8h8"
+      }
+    },
+    {
+      "fen": "6k1/4Q3/8/6K1/8/8/8/8 w - - 16 9",
+      "tablebase": {
+        "category": "win",
+        "dtz": 3,
+        "dtm": 3,
+        "checkmate": false,
+        "stalemate": false,
+        "insufficientMaterial": false,
+        "pieceCount": 3
+      },
+      "packIds": [
+        "mate-k-q-technique"
+      ],
+      "supports": [
+        "/spine/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/moveUci"
+      ],
+      "engine": {
+        "type": "mate",
+        "value": 2,
+        "depth": 22,
+        "bestmove": "g5g6"
+      }
+    },
+    {
+      "fen": "6k1/4Q3/8/8/6K1/8/8/8 b - - 13 7",
+      "tablebase": {
+        "category": "loss",
+        "dtz": -6,
+        "dtm": -6,
+        "checkmate": false,
+        "stalemate": false,
+        "insufficientMaterial": false,
+        "pieceCount": 3
+      },
+      "packIds": [
+        "mate-k-q-technique"
+      ],
+      "supports": [
+        "/spine/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/moveUci"
+      ],
+      "engine": {
+        "type": "mate",
+        "value": -3,
+        "depth": 22,
+        "bestmove": "g8h8"
+      }
+    },
+    {
+      "fen": "6k1/4Q3/8/8/8/6K1/8/8 w - - 12 7",
+      "tablebase": {
+        "category": "win",
+        "dtz": 7,
+        "dtm": 7,
+        "checkmate": false,
+        "stalemate": false,
+        "insufficientMaterial": false,
+        "pieceCount": 3
+      },
+      "packIds": [
+        "mate-k-q-technique"
+      ],
+      "supports": [
+        "/spine/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/moveUci"
+      ],
+      "engine": {
+        "type": "mate",
+        "value": 4,
+        "depth": 22,
+        "bestmove": "g3h4"
+      }
+    },
+    {
+      "fen": "6k1/4Q3/8/8/8/8/6K1/8 b - - 9 5",
+      "tablebase": {
+        "category": "loss",
+        "dtz": -10,
+        "dtm": -10,
+        "checkmate": false,
+        "stalemate": false,
+        "insufficientMaterial": false,
+        "pieceCount": 3
+      },
+      "packIds": [
+        "mate-k-q-technique"
+      ],
+      "supports": [
+        "/spine/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/moveUci"
+      ],
+      "engine": {
+        "type": "mate",
+        "value": -5,
+        "depth": 22,
+        "bestmove": "g8h8"
+      }
+    },
+    {
+      "fen": "6k1/7B/5K2/2B5/8/8/8/8 b - - 11 6",
+      "tablebase": {
+        "category": "draw",
+        "dtz": 0,
+        "dtm": 0,
+        "checkmate": false,
+        "stalemate": false,
+        "insufficientMaterial": false,
+        "pieceCount": 4
+      },
+      "packIds": [
+        "mate-two-bishops"
+      ],
+      "supports": [
+        "/deviations/3/moveUci"
+      ],
+      "engine": {
+        "type": "cp",
+        "value": 0,
+        "depth": 22,
+        "bestmove": "g8h7"
+      }
+    },
+    {
+      "fen": "6k1/8/4K1B1/8/3B4/8/8/8 w - - 6 4",
+      "tablebase": {
+        "category": "win",
+        "dtz": 11,
+        "dtm": 11,
+        "checkmate": false,
+        "stalemate": false,
+        "insufficientMaterial": false,
+        "pieceCount": 4
+      },
+      "packIds": [
+        "mate-two-bishops"
+      ],
+      "supports": [
+        "/spine/0/children/0/children/0/children/0/children/0/children/0/moveUci"
+      ],
+      "engine": {
+        "type": "mate",
+        "value": 8,
+        "depth": 22,
+        "bestmove": "e6f6"
+      }
+    },
+    {
+      "fen": "6k1/8/5K2/2B5/8/8/8/1B6 b - - 11 6",
+      "tablebase": {
+        "category": "loss",
+        "dtz": -6,
+        "dtm": -6,
+        "checkmate": false,
+        "stalemate": false,
+        "insufficientMaterial": false,
+        "pieceCount": 4
+      },
+      "packIds": [
+        "mate-two-bishops"
+      ],
+      "supports": [
+        "/spine/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/moveUci"
+      ],
+      "engine": {
+        "type": "mate",
+        "value": -5,
+        "depth": 22,
+        "bestmove": "g8h8"
+      }
+    },
+    {
+      "fen": "6k1/8/5KB1/2B5/8/8/8/8 w - - 10 6",
+      "tablebase": {
+        "category": "win",
+        "dtz": 7,
+        "dtm": 7,
+        "checkmate": false,
+        "stalemate": false,
+        "insufficientMaterial": false,
+        "pieceCount": 4
+      },
+      "packIds": [
+        "mate-two-bishops"
+      ],
+      "supports": [
+        "/spine/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/moveUci"
+      ],
+      "engine": {
+        "type": "mate",
+        "value": 6,
+        "depth": 22,
+        "bestmove": "g6f5"
+      }
+    },
+    {
+      "fen": "6k1/8/5KB1/8/3B4/8/8/8 b - - 7 4",
+      "tablebase": {
+        "category": "loss",
+        "dtz": -10,
+        "dtm": -10,
+        "checkmate": false,
+        "stalemate": false,
+        "insufficientMaterial": false,
+        "pieceCount": 4
+      },
+      "packIds": [
+        "mate-two-bishops"
+      ],
+      "supports": [
+        "/spine/0/children/0/children/0/children/0/children/0/children/0/children/0/moveUci"
+      ],
+      "engine": {
+        "type": "mate",
+        "value": -7,
+        "depth": 22,
+        "bestmove": "g8f8"
+      }
+    },
+    {
+      "fen": "6k1/8/6K1/2B5/8/8/8/1B6 w - - 14 8",
+      "tablebase": {
+        "category": "win",
+        "dtz": 3,
+        "dtm": 3,
+        "checkmate": false,
+        "stalemate": false,
+        "insufficientMaterial": false,
+        "pieceCount": 4
+      },
+      "packIds": [
+        "mate-two-bishops"
+      ],
+      "supports": [
+        "/spine/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/moveUci"
+      ],
+      "engine": {
+        "type": "mate",
+        "value": 2,
+        "depth": 22,
+        "bestmove": "b1a2"
+      }
+    },
+    {
+      "fen": "6k1/8/6K1/2B5/8/8/B7/8 b - - 15 8",
+      "tablebase": {
+        "category": "loss",
+        "dtz": -2,
+        "dtm": -2,
+        "checkmate": false,
+        "stalemate": false,
+        "insufficientMaterial": false,
+        "pieceCount": 4
+      },
+      "packIds": [
+        "mate-two-bishops"
+      ],
+      "supports": [
+        "/spine/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/moveUci"
+      ],
+      "engine": {
+        "type": "mate",
+        "value": -1,
+        "depth": 22,
+        "bestmove": "g8h8"
+      }
+    },
+    {
+      "fen": "6k1/R7/5K2/8/8/8/8/8 w - - 16 9",
+      "tablebase": {
+        "category": "win",
+        "dtz": 5,
+        "dtm": 5,
+        "checkmate": false,
+        "stalemate": false,
+        "insufficientMaterial": false,
+        "pieceCount": 3
+      },
+      "packIds": [
+        "mate-k-r-technique"
+      ],
+      "supports": [
+        "/spine/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/moveUci"
+      ],
+      "engine": {
+        "type": "mate",
+        "value": 3,
+        "depth": 22,
+        "bestmove": "a7a8"
+      }
+    },
+    {
+      "fen": "6k1/R7/6K1/8/8/8/8/8 b - - 17 9",
+      "tablebase": {
+        "category": "loss",
+        "dtz": -14,
+        "dtm": -14,
+        "checkmate": false,
+        "stalemate": false,
+        "insufficientMaterial": false,
+        "pieceCount": 3
+      },
+      "packIds": [
+        "mate-k-r-technique"
+      ],
+      "supports": [
+        "/spine/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/moveUci"
+      ],
+      "engine": {
+        "type": "mate",
+        "value": -8,
+        "depth": 22,
+        "bestmove": "g8f8"
+      }
+    },
+    {
+      "fen": "6Nk/4B3/6K1/8/8/8/8/8 b - - 39 20",
+      "tablebase": {
+        "category": "draw",
+        "dtz": 0,
+        "dtm": 0,
+        "checkmate": false,
+        "stalemate": false,
+        "insufficientMaterial": false,
+        "pieceCount": 4
+      },
+      "packIds": [
+        "mate-bishop-knight",
+        "trajectory-mate-bishop-knight"
+      ],
+      "supports": [
+        "/deviations/11/moveUci"
+      ],
+      "engine": {
+        "type": "cp",
+        "value": 0,
+        "depth": 22,
+        "bestmove": "h8g8"
+      }
+    },
+    {
+      "fen": "7k/4B3/3N2K1/8/8/8/8/8 w - - 34 18",
+      "tablebase": {
+        "category": "win",
+        "dtz": 5,
+        "dtm": 5,
+        "checkmate": false,
+        "stalemate": false,
+        "insufficientMaterial": false,
+        "pieceCount": 4
+      },
+      "packIds": [
+        "mate-bishop-knight",
+        "trajectory-mate-bishop-knight"
+      ],
+      "supports": [
+        "/spine/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/moveUci"
+      ],
+      "engine": {
+        "type": "mate",
+        "value": 3,
+        "depth": 22,
+        "bestmove": "d6f7"
+      }
+    },
+    {
+      "fen": "7k/4B3/6K1/5N2/8/8/8/8 b - - 35 18",
+      "tablebase": {
+        "category": "loss",
+        "dtz": -4,
+        "dtm": -4,
+        "checkmate": false,
+        "stalemate": false,
+        "insufficientMaterial": false,
+        "pieceCount": 4
+      },
+      "packIds": [
+        "mate-bishop-knight",
+        "trajectory-mate-bishop-knight"
+      ],
+      "supports": [
+        "/spine/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/moveUci"
+      ],
+      "engine": {
+        "type": "mate",
+        "value": -2,
+        "depth": 22,
+        "bestmove": "h8g8"
+      }
+    },
+    {
+      "fen": "7k/4B3/6KN/8/8/8/8/8 w - - 38 20",
+      "tablebase": {
+        "category": "win",
+        "dtz": 1,
+        "dtm": 1,
+        "checkmate": false,
+        "stalemate": false,
+        "insufficientMaterial": false,
+        "pieceCount": 4
+      },
+      "packIds": [
+        "mate-bishop-knight",
+        "trajectory-mate-bishop-knight"
+      ],
+      "supports": [
+        "/spine/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/moveUci"
+      ],
+      "engine": {
+        "type": "mate",
+        "value": 1,
+        "depth": 22,
+        "bestmove": "e7f6"
+      }
+    },
+    {
+      "fen": "7k/4Q3/6K1/8/8/8/8/8 w - - 18 10",
+      "tablebase": {
+        "category": "win",
+        "dtz": 1,
+        "dtm": 1,
+        "checkmate": false,
+        "stalemate": false,
+        "insufficientMaterial": false,
+        "pieceCount": 3
+      },
+      "packIds": [
+        "mate-k-q-technique"
+      ],
+      "supports": [
+        "/spine/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/moveUci"
+      ],
+      "engine": {
+        "type": "mate",
+        "value": 1,
+        "depth": 22,
+        "bestmove": "e7g7"
+      }
+    },
+    {
+      "fen": "7k/4Q3/8/6K1/8/8/8/8 b - - 15 8",
+      "tablebase": {
+        "category": "loss",
+        "dtz": -4,
+        "dtm": -4,
+        "checkmate": false,
+        "stalemate": false,
+        "insufficientMaterial": false,
+        "pieceCount": 3
+      },
+      "packIds": [
+        "mate-k-q-technique"
+      ],
+      "supports": [
+        "/spine/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/moveUci"
+      ],
+      "engine": {
+        "type": "mate",
+        "value": -2,
+        "depth": 22,
+        "bestmove": "h8g8"
+      }
+    },
+    {
+      "fen": "7k/4Q3/8/8/6K1/8/8/8 w - - 14 8",
+      "tablebase": {
+        "category": "win",
+        "dtz": 5,
+        "dtm": 5,
+        "checkmate": false,
+        "stalemate": false,
+        "insufficientMaterial": false,
+        "pieceCount": 3
+      },
+      "packIds": [
+        "mate-k-q-technique"
+      ],
+      "supports": [
+        "/spine/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/moveUci"
+      ],
+      "engine": {
+        "type": "mate",
+        "value": 3,
+        "depth": 22,
+        "bestmove": "g4h5"
+      }
+    },
+    {
+      "fen": "7k/4Q3/8/8/8/6K1/8/8 b - - 11 6",
+      "tablebase": {
+        "category": "loss",
+        "dtz": -8,
+        "dtm": -8,
+        "checkmate": false,
+        "stalemate": false,
+        "insufficientMaterial": false,
+        "pieceCount": 3
+      },
+      "packIds": [
+        "mate-k-q-technique"
+      ],
+      "supports": [
+        "/spine/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/moveUci"
+      ],
+      "engine": {
+        "type": "mate",
+        "value": -5,
+        "depth": 22,
+        "bestmove": "h8g8"
+      }
+    },
+    {
+      "fen": "7k/4Q3/8/8/8/8/6K1/8 w - - 10 6",
+      "tablebase": {
+        "category": "win",
+        "dtz": 9,
+        "dtm": 9,
+        "checkmate": false,
+        "stalemate": false,
+        "insufficientMaterial": false,
+        "pieceCount": 3
+      },
+      "packIds": [
+        "mate-k-q-technique"
+      ],
+      "supports": [
+        "/spine/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/moveUci"
+      ],
+      "engine": {
+        "type": "mate",
+        "value": 5,
+        "depth": 22,
+        "bestmove": "g2h3"
+      }
+    },
+    {
+      "fen": "7k/5K2/8/2B5/8/8/8/1B6 b - - 13 7",
+      "tablebase": {
+        "category": "draw",
+        "dtz": 0,
+        "dtm": 0,
+        "checkmate": false,
+        "stalemate": true,
+        "insufficientMaterial": false,
+        "pieceCount": 4
+      },
+      "packIds": [
+        "mate-two-bishops"
+      ],
+      "supports": [
+        "/deviations/4/moveUci"
+      ],
+      "engine": {
+        "type": "cp",
+        "value": 0,
+        "depth": 0,
+        "bestmove": null
+      }
+    },
+    {
+      "fen": "7k/5Q2/6K1/8/8/8/8/8 b - - 19 10",
+      "tablebase": {
+        "category": "draw",
+        "dtz": 0,
+        "dtm": 0,
+        "checkmate": false,
+        "stalemate": true,
+        "insufficientMaterial": false,
+        "pieceCount": 3
+      },
+      "packIds": [
+        "mate-k-q-technique"
+      ],
+      "supports": [
+        "/deviations/6/moveUci"
+      ],
+      "engine": {
+        "type": "cp",
+        "value": 0,
+        "depth": 0,
+        "bestmove": null
+      }
+    },
+    {
+      "fen": "7k/5Q2/8/8/8/8/6K1/8 b - - 11 6",
+      "tablebase": {
+        "category": "draw",
+        "dtz": 0,
+        "dtm": 0,
+        "checkmate": false,
+        "stalemate": true,
+        "insufficientMaterial": false,
+        "pieceCount": 3
+      },
+      "packIds": [
+        "mate-k-q-technique"
+      ],
+      "supports": [
+        "/deviations/4/moveUci"
+      ],
+      "engine": {
+        "type": "cp",
+        "value": 0,
+        "depth": 0,
+        "bestmove": null
+      }
+    },
+    {
+      "fen": "7k/6Q1/8/8/8/8/6K1/8 b - - 11 6",
+      "tablebase": {
+        "category": "draw",
+        "dtz": 0,
+        "dtm": 0,
+        "checkmate": false,
+        "stalemate": false,
+        "insufficientMaterial": false,
+        "pieceCount": 3
+      },
+      "packIds": [
+        "mate-k-q-technique"
+      ],
+      "supports": [
+        "/deviations/5/moveUci"
+      ],
+      "engine": {
+        "type": "cp",
+        "value": 0,
+        "depth": 22,
+        "bestmove": "h8g7"
+      }
+    },
+    {
+      "fen": "7k/6R1/6K1/8/8/8/8/8 b - - 19 10",
+      "tablebase": {
+        "category": "draw",
+        "dtz": 0,
+        "dtm": 0,
+        "checkmate": false,
+        "stalemate": true,
+        "insufficientMaterial": false,
+        "pieceCount": 3
+      },
+      "packIds": [
+        "mate-k-r-technique"
+      ],
+      "supports": [
+        "/deviations/4/moveUci"
+      ],
+      "engine": {
+        "type": "cp",
+        "value": 0,
+        "depth": 0,
+        "bestmove": null
+      }
+    },
+    {
+      "fen": "7k/8/1B4K1/8/8/8/B7/8 b - - 17 9",
+      "tablebase": {
+        "category": "draw",
+        "dtz": 0,
+        "dtm": 0,
+        "checkmate": false,
+        "stalemate": true,
+        "insufficientMaterial": false,
+        "pieceCount": 4
+      },
+      "packIds": [
+        "mate-two-bishops"
+      ],
+      "supports": [
+        "/deviations/5/moveUci"
+      ],
+      "engine": {
+        "type": "cp",
+        "value": 0,
+        "depth": 0,
+        "bestmove": null
+      }
+    },
+    {
+      "fen": "7k/8/5BKN/8/8/8/8/8 b - - 39 20",
+      "tablebase": {
+        "category": "loss",
+        "dtz": -1,
+        "dtm": null,
+        "checkmate": true,
+        "stalemate": false,
+        "insufficientMaterial": false,
+        "pieceCount": 4
+      },
+      "packIds": [
+        "mate-bishop-knight",
+        "trajectory-mate-bishop-knight"
+      ],
+      "supports": [
+        "/spine/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/moveUci"
+      ],
+      "engine": {
+        "type": "mate",
+        "value": 0,
+        "depth": 0,
+        "bestmove": null
+      }
+    },
+    {
+      "fen": "7k/8/5K2/2B5/8/8/8/1B6 w - - 12 7",
+      "tablebase": {
+        "category": "win",
+        "dtz": 5,
+        "dtm": 5,
+        "checkmate": false,
+        "stalemate": false,
+        "insufficientMaterial": false,
+        "pieceCount": 4
+      },
+      "packIds": [
+        "mate-two-bishops"
+      ],
+      "supports": [
+        "/spine/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/moveUci"
+      ],
+      "engine": {
+        "type": "mate",
+        "value": 3,
+        "depth": 22,
+        "bestmove": "f6g6"
+      }
+    },
+    {
+      "fen": "7k/8/6K1/2B5/8/8/8/1B6 b - - 13 7",
+      "tablebase": {
+        "category": "loss",
+        "dtz": -4,
+        "dtm": -4,
+        "checkmate": false,
+        "stalemate": false,
+        "insufficientMaterial": false,
+        "pieceCount": 4
+      },
+      "packIds": [
+        "mate-two-bishops"
+      ],
+      "supports": [
+        "/spine/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/moveUci"
+      ],
+      "engine": {
+        "type": "mate",
+        "value": -2,
+        "depth": 22,
+        "bestmove": "h8g8"
+      }
+    },
+    {
+      "fen": "7k/8/6K1/2B5/8/8/B7/8 w - - 16 9",
+      "tablebase": {
+        "category": "win",
+        "dtz": 1,
+        "dtm": 1,
+        "checkmate": false,
+        "stalemate": false,
+        "insufficientMaterial": false,
+        "pieceCount": 4
+      },
+      "packIds": [
+        "mate-two-bishops"
+      ],
+      "supports": [
+        "/spine/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/moveUci"
+      ],
+      "engine": {
+        "type": "mate",
+        "value": 1,
+        "depth": 22,
+        "bestmove": "c5d4"
+      }
+    },
+    {
+      "fen": "7k/8/6K1/8/3B4/8/B7/8 b - - 17 9",
+      "tablebase": {
+        "category": "loss",
+        "dtz": -1,
+        "dtm": null,
+        "checkmate": true,
+        "stalemate": false,
+        "insufficientMaterial": false,
+        "pieceCount": 4
+      },
+      "packIds": [
+        "mate-two-bishops"
+      ],
+      "supports": [
+        "/spine/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/moveUci"
+      ],
+      "engine": {
+        "type": "mate",
+        "value": 0,
+        "depth": 0,
+        "bestmove": null
+      }
+    },
+    {
+      "fen": "7k/8/6KN/6B1/8/8/8/8 b - - 39 20",
+      "tablebase": {
+        "category": "draw",
+        "dtz": 0,
+        "dtm": 0,
+        "checkmate": false,
+        "stalemate": true,
+        "insufficientMaterial": false,
+        "pieceCount": 4
+      },
+      "packIds": [
+        "mate-bishop-knight",
+        "trajectory-mate-bishop-knight"
+      ],
+      "supports": [
+        "/deviations/9/moveUci"
+      ],
+      "engine": {
+        "type": "cp",
+        "value": 0,
+        "depth": 0,
+        "bestmove": null
+      }
+    },
+    {
+      "fen": "7k/R7/6K1/8/8/8/8/8 w - - 18 10",
+      "tablebase": {
+        "category": "win",
+        "dtz": 1,
+        "dtm": 1,
+        "checkmate": false,
+        "stalemate": false,
+        "insufficientMaterial": false,
+        "pieceCount": 3
+      },
+      "packIds": [
+        "mate-k-r-technique"
+      ],
+      "supports": [
+        "/spine/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/moveUci"
+      ],
+      "engine": {
+        "type": "mate",
+        "value": 1,
+        "depth": 22,
+        "bestmove": "a7a8"
+      }
+    },
+    {
+      "fen": "7R/3k4/8/3K4/4P3/8/8/8 b - - 2 4",
+      "tablebase": {
+        "category": "loss",
+        "dtz": -2,
+        "dtm": -16,
+        "checkmate": false,
+        "stalemate": false,
+        "insufficientMaterial": false,
+        "pieceCount": 4
+      },
+      "packIds": [
+        "philidor-passive-rook-convert"
+      ],
+      "supports": [
+        "/spine/0/children/0/children/0/children/0/children/0/moveUci"
+      ],
+      "engine": {
+        "type": "mate",
+        "value": -11,
+        "depth": 22,
+        "bestmove": "d7e7"
+      }
+    },
+    {
+      "fen": "7R/3k4/8/4K3/4P3/8/8/8 w - - 1 4",
+      "tablebase": {
+        "category": "win",
+        "dtz": 3,
+        "dtm": 17,
+        "checkmate": false,
+        "stalemate": false,
+        "insufficientMaterial": false,
+        "pieceCount": 4
+      },
+      "packIds": [
+        "philidor-passive-rook-convert"
+      ],
+      "supports": [
+        "/spine/0/children/0/children/0/children/0/moveUci"
+      ],
+      "engine": {
+        "type": "mate",
+        "value": 11,
+        "depth": 22,
+        "bestmove": "e5f6"
+      }
+    },
+    {
+      "fen": "7R/4k3/4P3/3K4/8/8/8/8 w - - 1 7",
+      "tablebase": {
+        "category": "win",
+        "dtz": 2,
+        "dtm": 11,
+        "checkmate": false,
+        "stalemate": false,
+        "insufficientMaterial": false,
+        "pieceCount": 4
+      },
+      "packIds": [
+        "philidor-passive-rook-convert"
+      ],
+      "supports": [
+        "/spine/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/moveUci"
+      ],
+      "engine": {
+        "type": "mate",
+        "value": 8,
+        "depth": 22,
+        "bestmove": "h8h1"
+      }
+    },
+    {
+      "fen": "7R/4k3/4P3/4K3/8/8/8/8 b - - 2 7",
+      "tablebase": {
+        "category": "draw",
+        "dtz": 0,
+        "dtm": 0,
+        "checkmate": false,
+        "stalemate": true,
+        "insufficientMaterial": false,
+        "pieceCount": 4
+      },
+      "packIds": [
+        "philidor-passive-rook-convert"
+      ],
+      "supports": [
+        "/deviations/7/moveUci"
+      ],
+      "engine": {
+        "type": "cp",
+        "value": 0,
+        "depth": 0,
+        "bestmove": null
+      }
+    },
+    {
+      "fen": "7R/4k3/8/3K4/4P3/8/8/8 w - - 3 5",
+      "tablebase": {
+        "category": "win",
+        "dtz": 1,
+        "dtm": 15,
+        "checkmate": false,
+        "stalemate": false,
+        "insufficientMaterial": false,
+        "pieceCount": 4
+      },
+      "packIds": [
+        "philidor-passive-rook-convert"
+      ],
+      "supports": [
+        "/spine/0/children/0/children/0/children/0/children/0/children/0/moveUci"
+      ],
+      "engine": {
+        "type": "mate",
+        "value": 9,
+        "depth": 22,
+        "bestmove": "h8h1"
+      }
+    },
+    {
+      "fen": "7R/4k3/8/3KP3/8/8/8/8 b - - 0 5",
+      "tablebase": {
+        "category": "loss",
+        "dtz": -2,
+        "dtm": -14,
+        "checkmate": false,
+        "stalemate": false,
+        "insufficientMaterial": false,
+        "pieceCount": 4
+      },
+      "packIds": [
+        "philidor-passive-rook-convert"
+      ],
+      "supports": [
+        "/spine/0/children/0/children/0/children/0/children/0/children/0/children/0/moveUci"
+      ],
+      "engine": {
+        "type": "mate",
+        "value": -11,
+        "depth": 22,
+        "bestmove": "e7d7"
+      }
+    },
+    {
+      "fen": "7R/4k3/8/4K3/4P3/8/8/8 b - - 0 3",
+      "tablebase": {
+        "category": "loss",
+        "dtz": -4,
+        "dtm": -18,
+        "checkmate": false,
+        "stalemate": false,
+        "insufficientMaterial": false,
+        "pieceCount": 4
+      },
+      "packIds": [
+        "philidor-passive-rook-convert"
+      ],
+      "supports": [
+        "/spine/0/children/0/children/0/moveUci"
+      ],
+      "engine": {
+        "type": "mate",
+        "value": -15,
+        "depth": 22,
+        "bestmove": "e7f7"
+      }
+    },
+    {
+      "fen": "7R/5k2/4P3/3K4/8/8/8/8 b - - 0 6",
+      "tablebase": {
+        "category": "loss",
+        "dtz": -3,
+        "dtm": -12,
+        "checkmate": false,
+        "stalemate": false,
+        "insufficientMaterial": false,
+        "pieceCount": 4
+      },
+      "packIds": [
+        "philidor-passive-rook-convert"
+      ],
+      "supports": [
+        "/spine/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/moveUci"
+      ],
+      "engine": {
+        "type": "mate",
+        "value": -9,
+        "depth": 22,
+        "bestmove": "f7e7"
+      }
+    },
+    {
+      "fen": "7R/5k2/8/3KP3/8/8/8/8 w - - 1 6",
+      "tablebase": {
+        "category": "win",
+        "dtz": 1,
+        "dtm": 13,
+        "checkmate": false,
+        "stalemate": false,
+        "insufficientMaterial": false,
+        "pieceCount": 4
+      },
+      "packIds": [
+        "philidor-passive-rook-convert"
+      ],
+      "supports": [
+        "/spine/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/moveUci"
+      ],
+      "engine": {
+        "type": "mate",
+        "value": 10,
+        "depth": 22,
+        "bestmove": "d5d6"
+      }
+    },
+    {
+      "fen": "7r/R3k3/8/4K3/4P3/8/8/8 b - - 4 3",
+      "tablebase": {
+        "category": "loss",
+        "dtz": -4,
+        "dtm": -28,
+        "checkmate": false,
+        "stalemate": false,
+        "insufficientMaterial": false,
+        "pieceCount": 5
+      },
+      "packIds": [
+        "philidor-passive-rook-convert"
+      ],
+      "supports": [
+        "/deviations/3/moveUci"
+      ],
+      "engine": {
+        "type": "cp",
+        "value": -888,
+        "depth": 22,
+        "bestmove": "e7f8"
+      }
+    },
+    {
+      "fen": "8/1P2k3/1K6/8/3R4/8/8/1r6 w - - 8 5",
+      "tablebase": {
+        "category": "win",
+        "dtz": 7,
+        "dtm": 29,
+        "checkmate": false,
+        "stalemate": false,
+        "insufficientMaterial": false,
+        "pieceCount": 5
+      },
+      "packIds": [
+        "lucena-bridge-convert"
+      ],
+      "supports": [
+        "/spine/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/moveUci"
+      ],
+      "engine": {
+        "type": "cp",
+        "value": 530,
+        "depth": 22,
+        "bestmove": "b6c6"
+      }
+    },
+    {
+      "fen": "8/1P2k3/1K6/8/3R4/8/8/2r5 b - - 7 4",
+      "tablebase": {
+        "category": "loss",
+        "dtz": -8,
+        "dtm": -32,
+        "checkmate": false,
+        "stalemate": false,
+        "insufficientMaterial": false,
+        "pieceCount": 5
+      },
+      "packIds": [
+        "lucena-bridge-convert"
+      ],
+      "supports": [
+        "/spine/0/children/0/children/0/children/0/children/0/children/0/children/0/moveUci"
+      ],
+      "engine": {
+        "type": "cp",
+        "value": -517,
+        "depth": 22,
+        "bestmove": "c1b1"
+      }
+    },
+    {
+      "fen": "8/1P2k3/2K5/8/3R4/8/8/1r6 b - - 13 7",
+      "tablebase": {
+        "category": "loss",
+        "dtz": -8,
+        "dtm": -28,
+        "checkmate": false,
+        "stalemate": false,
+        "insufficientMaterial": false,
+        "pieceCount": 5
+      },
+      "packIds": [
+        "lucena-bridge-convert"
+      ],
+      "supports": [
+        "/deviations/7/moveUci"
+      ],
+      "engine": {
+        "type": "cp",
+        "value": -611,
+        "depth": 22,
+        "bestmove": "e7e6"
+      }
+    },
+    {
+      "fen": "8/1P2k3/2K5/8/3R4/8/8/1r6 b - - 9 5",
+      "tablebase": {
+        "category": "loss",
+        "dtz": -8,
+        "dtm": -28,
+        "checkmate": false,
+        "stalemate": false,
+        "insufficientMaterial": false,
+        "pieceCount": 5
+      },
+      "packIds": [
+        "lucena-bridge-convert"
+      ],
+      "supports": [
+        "/spine/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/moveUci"
+      ],
+      "engine": {
+        "type": "cp",
+        "value": -800,
+        "depth": 22,
+        "bestmove": "e7e6"
+      }
+    },
+    {
+      "fen": "8/1P2k3/2K5/8/3R4/8/8/2r5 w - - 10 6",
+      "tablebase": {
+        "category": "win",
+        "dtz": 5,
+        "dtm": 23,
+        "checkmate": false,
+        "stalemate": false,
+        "insufficientMaterial": false,
+        "pieceCount": 5
+      },
+      "packIds": [
+        "lucena-bridge-convert"
+      ],
+      "supports": [
+        "/spine/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/moveUci"
+      ],
+      "engine": {
+        "type": "cp",
+        "value": 1301,
+        "depth": 22,
+        "bestmove": "c6b5"
+      }
+    },
+    {
+      "fen": "8/1P2k3/8/1K6/1R6/8/8/1r6 b - - 13 7",
+      "tablebase": {
+        "category": "loss",
+        "dtz": -2,
+        "dtm": -20,
+        "checkmate": false,
+        "stalemate": false,
+        "insufficientMaterial": false,
+        "pieceCount": 5
+      },
+      "packIds": [
+        "lucena-bridge-convert"
+      ],
+      "supports": [
+        "/spine/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/moveUci"
+      ],
+      "engine": {
+        "type": "cp",
+        "value": -1297,
+        "depth": 22,
+        "bestmove": "b1h1"
+      }
+    },
+    {
+      "fen": "8/1P2k3/8/1K6/3R4/8/8/1r6 w - - 12 7",
+      "tablebase": {
+        "category": "win",
+        "dtz": 3,
+        "dtm": 21,
+        "checkmate": false,
+        "stalemate": false,
+        "insufficientMaterial": false,
+        "pieceCount": 5
+      },
+      "packIds": [
+        "lucena-bridge-convert"
+      ],
+      "supports": [
+        "/spine/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/moveUci"
+      ],
+      "engine": {
+        "type": "cp",
+        "value": 1228,
+        "depth": 22,
+        "bestmove": "d4b4"
+      }
+    },
+    {
+      "fen": "8/1P2k3/8/1K6/3R4/8/8/2r5 b - - 11 6",
+      "tablebase": {
+        "category": "loss",
+        "dtz": -4,
+        "dtm": -22,
+        "checkmate": false,
+        "stalemate": false,
+        "insufficientMaterial": false,
+        "pieceCount": 5
+      },
+      "packIds": [
+        "lucena-bridge-convert"
+      ],
+      "supports": [
+        "/spine/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/moveUci"
+      ],
+      "engine": {
+        "type": "cp",
+        "value": -1213,
+        "depth": 22,
+        "bestmove": "c1b1"
+      }
+    },
+    {
+      "fen": "8/1P2k3/8/2K5/3R4/8/8/1r6 b - - 13 7",
+      "tablebase": {
+        "category": "draw",
+        "dtz": 0,
+        "dtm": 0,
+        "checkmate": false,
+        "stalemate": false,
+        "insufficientMaterial": false,
+        "pieceCount": 5
+      },
+      "packIds": [
+        "lucena-bridge-convert"
+      ],
+      "supports": [
+        "/deviations/6/moveUci"
+      ],
+      "engine": {
+        "type": "cp",
+        "value": 0,
+        "depth": 22,
+        "bestmove": "b1b7"
+      }
+    },
+    {
+      "fen": "8/1PK1k3/8/8/3R4/8/8/2r5 w - - 6 4",
+      "tablebase": {
+        "category": "win",
+        "dtz": 9,
+        "dtm": 33,
+        "checkmate": false,
+        "stalemate": false,
+        "insufficientMaterial": false,
+        "pieceCount": 5
+      },
+      "packIds": [
+        "lucena-bridge-convert"
+      ],
+      "supports": [
+        "/spine/0/children/0/children/0/children/0/children/0/children/0/moveUci"
+      ],
+      "engine": {
+        "type": "cp",
+        "value": 506,
+        "depth": 22,
+        "bestmove": "c7b6"
+      }
+    },
+    {
+      "fen": "8/1PK1k3/8/8/3R4/8/8/r7 b - - 5 3",
+      "tablebase": {
+        "category": "loss",
+        "dtz": -10,
+        "dtm": -34,
+        "checkmate": false,
+        "stalemate": false,
+        "insufficientMaterial": false,
+        "pieceCount": 5
+      },
+      "packIds": [
+        "lucena-bridge-convert"
+      ],
+      "supports": [
+        "/spine/0/children/0/children/0/children/0/children/0/moveUci"
+      ],
+      "engine": {
+        "type": "cp",
+        "value": -971,
+        "depth": 22,
+        "bestmove": "a1c1"
+      }
+    },
+    {
+      "fen": "8/1PK1k3/8/8/8/8/r7/3R4 b - - 3 2",
+      "tablebase": {
+        "category": "loss",
+        "dtz": -16,
+        "dtm": -42,
+        "checkmate": false,
+        "stalemate": false,
+        "insufficientMaterial": false,
+        "pieceCount": 5
+      },
+      "packIds": [
+        "lucena-bridge-convert"
+      ],
+      "supports": [
+        "/deviations/5/moveUci"
+      ],
+      "engine": {
+        "type": "cp",
+        "value": -514,
+        "depth": 22,
+        "bestmove": "a2c2"
+      }
+    },
+    {
+      "fen": "8/2b1k3/2P5/3KP3/8/8/4B3/8 w - - 1 3",
+      "tablebase": {
+        "category": "draw",
+        "dtz": 0,
+        "dtm": 0,
+        "checkmate": false,
+        "stalemate": false,
+        "insufficientMaterial": false,
+        "pieceCount": 6
+      },
+      "packIds": [
+        "opposite-bishops-fortress-hold"
+      ],
+      "supports": [
+        "/deviations/4/moveUci"
+      ],
+      "engine": {
+        "type": "cp",
+        "value": 0,
+        "depth": 22,
+        "bestmove": "e2g4"
+      }
+    },
+    {
+      "fen": "8/2k2K2/4P3/8/8/8/8/8 b - - 0 12",
+      "tablebase": {
+        "category": "loss",
+        "dtz": -2,
+        "dtm": -20,
+        "checkmate": false,
+        "stalemate": false,
+        "insufficientMaterial": false,
+        "pieceCount": 3
+      },
+      "packIds": [
+        "pawn-opposition-convert"
+      ],
+      "supports": [
+        "/spine/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/moveUci"
+      ],
+      "engine": {
+        "type": "cp",
+        "value": -513,
+        "depth": 22,
+        "bestmove": "c7c6"
+      }
+    },
+    {
+      "fen": "8/2k2K2/8/4P3/8/8/8/8 w - - 5 12",
+      "tablebase": {
+        "category": "win",
+        "dtz": 1,
+        "dtm": 21,
+        "checkmate": false,
+        "stalemate": false,
+        "insufficientMaterial": false,
+        "pieceCount": 3
+      },
+      "packIds": [
+        "pawn-opposition-convert"
+      ],
+      "supports": [
+        "/spine/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/moveUci"
+      ],
+      "engine": {
+        "type": "cp",
+        "value": 511,
+        "depth": 22,
+        "bestmove": "e5e6"
+      }
+    },
+    {
+      "fen": "8/2Qk4/8/8/8/8/6K1/8 b - - 3 2",
+      "tablebase": {
+        "category": "draw",
+        "dtz": 0,
+        "dtm": 0,
+        "checkmate": false,
+        "stalemate": false,
+        "insufficientMaterial": false,
+        "pieceCount": 3
+      },
+      "packIds": [
+        "mate-k-q-technique"
+      ],
+      "supports": [
+        "/deviations/1/moveUci"
+      ],
+      "engine": {
+        "type": "cp",
+        "value": 0,
+        "depth": 22,
+        "bestmove": "d7c7"
+      }
+    },
+    {
+      "fen": "8/3k1K2/8/8/4P3/8/8/8 b - - 0 7",
+      "tablebase": {
+        "category": "loss",
+        "dtz": -4,
+        "dtm": -30,
+        "checkmate": false,
+        "stalemate": false,
+        "insufficientMaterial": false,
+        "pieceCount": 3
+      },
+      "packIds": [
+        "pawn-opposition-convert"
+      ],
+      "supports": [
+        "/spine/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/moveUci"
+      ],
+      "engine": {
+        "type": "cp",
+        "value": -937,
+        "depth": 22,
+        "bestmove": "d7d6"
+      }
+    },
+    {
+      "fen": "8/3k1K2/8/8/8/4P3/8/8 w - - 11 7",
+      "tablebase": {
+        "category": "win",
+        "dtz": 1,
+        "dtm": 31,
+        "checkmate": false,
+        "stalemate": false,
+        "insufficientMaterial": false,
+        "pieceCount": 3
+      },
+      "packIds": [
+        "pawn-opposition-convert"
+      ],
+      "supports": [
+        "/spine/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/moveUci"
+      ],
+      "engine": {
+        "type": "cp",
+        "value": 511,
+        "depth": 22,
+        "bestmove": "e3e4"
+      }
+    },
+    {
+      "fen": "8/3k3R/8/4K3/4P3/8/8/8 b - - 2 4",
+      "tablebase": {
+        "category": "loss",
+        "dtz": -4,
+        "dtm": -18,
+        "checkmate": false,
+        "stalemate": false,
+        "insufficientMaterial": false,
+        "pieceCount": 4
+      },
+      "packIds": [
+        "philidor-passive-rook-convert"
+      ],
+      "supports": [
+        "/deviations/6/moveUci"
+      ],
+      "engine": {
+        "type": "mate",
+        "value": -10,
+        "depth": 22,
+        "bestmove": "d7c6"
+      }
+    },
+    {
+      "fen": "8/3k3R/8/8/8/3K4/8/8 b - - 1 1",
+      "tablebase": {
+        "category": "loss",
+        "dtz": -24,
+        "dtm": -24,
+        "checkmate": false,
+        "stalemate": false,
+        "insufficientMaterial": false,
+        "pieceCount": 3
+      },
+      "packIds": [
+        "mate-k-r-technique"
+      ],
+      "supports": [
+        "/deviations/0/moveUci"
+      ],
+      "engine": {
+        "type": "cp",
+        "value": -8115,
+        "depth": 22,
+        "bestmove": "d7e6"
+      }
+    },
+    {
+      "fen": "8/3k4/1b6/2PKP3/8/8/4B3/8 w - - 1 2",
+      "tablebase": {
+        "category": "win",
+        "dtz": 1,
+        "dtm": 15,
+        "checkmate": false,
+        "stalemate": false,
+        "insufficientMaterial": false,
+        "pieceCount": 6
+      },
+      "packIds": [
+        "opposite-bishops-fortress-hold"
+      ],
+      "supports": [
+        "/deviations/0/moveUci"
+      ],
+      "engine": {
+        "type": "mate",
+        "value": 11,
+        "depth": 22,
+        "bestmove": "c5b6"
+      }
+    },
+    {
+      "fen": "8/3k4/5b2/2PKP3/8/8/4B3/8 w - - 1 2",
+      "tablebase": {
+        "category": "win",
+        "dtz": 1,
+        "dtm": 13,
+        "checkmate": false,
+        "stalemate": false,
+        "insufficientMaterial": false,
+        "pieceCount": 6
+      },
+      "packIds": [
+        "opposite-bishops-fortress-hold"
+      ],
+      "supports": [
+        "/deviations/1/moveUci"
+      ],
+      "engine": {
+        "type": "mate",
+        "value": 8,
+        "depth": 22,
+        "bestmove": "e5f6"
+      }
+    },
+    {
+      "fen": "8/3k4/5K2/4P3/8/8/8/8 b - - 0 9",
+      "tablebase": {
+        "category": "loss",
+        "dtz": -6,
+        "dtm": -26,
+        "checkmate": false,
+        "stalemate": false,
+        "insufficientMaterial": false,
+        "pieceCount": 3
+      },
+      "packIds": [
+        "pawn-opposition-convert"
+      ],
+      "supports": [
+        "/spine/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/moveUci"
+      ],
+      "engine": {
+        "type": "cp",
+        "value": -510,
+        "depth": 22,
+        "bestmove": "d7c6"
+      }
+    },
+    {
+      "fen": "8/3k4/5K2/8/4P3/8/8/8 w - - 3 9",
+      "tablebase": {
+        "category": "win",
+        "dtz": 1,
+        "dtm": 27,
+        "checkmate": false,
+        "stalemate": false,
+        "insufficientMaterial": false,
+        "pieceCount": 3
+      },
+      "packIds": [
+        "pawn-opposition-convert"
+      ],
+      "supports": [
+        "/spine/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/moveUci"
+      ],
+      "engine": {
+        "type": "cp",
+        "value": 8115,
+        "depth": 22,
+        "bestmove": "f6f7"
+      }
+    },
+    {
+      "fen": "8/3k4/5K2/8/8/4P3/8/8 b - - 6 4",
+      "tablebase": {
+        "category": "loss",
+        "dtz": -2,
+        "dtm": -30,
+        "checkmate": false,
+        "stalemate": false,
+        "insufficientMaterial": false,
+        "pieceCount": 3
+      },
+      "packIds": [
+        "pawn-opposition-convert"
+      ],
+      "supports": [
+        "/spine/0/children/0/children/0/children/0/children/0/children/0/children/0/moveUci"
+      ],
+      "engine": {
+        "type": "cp",
+        "value": -926,
+        "depth": 22,
+        "bestmove": "d7d6"
+      }
+    },
+    {
+      "fen": "8/3k4/6N1/3KB3/8/8/8/8 b - - 7 4",
+      "tablebase": {
+        "category": "loss",
+        "dtz": -32,
+        "dtm": -32,
+        "checkmate": false,
+        "stalemate": false,
+        "insufficientMaterial": false,
+        "pieceCount": 4
+      },
+      "packIds": [
+        "mate-bishop-knight",
+        "trajectory-mate-bishop-knight"
+      ],
+      "supports": [
+        "/spine/0/children/0/children/0/children/0/children/0/children/0/children/0/moveUci"
+      ],
+      "engine": {
+        "type": "cp",
+        "value": -591,
+        "depth": 22,
+        "bestmove": "d7c8"
+      }
+    },
+    {
+      "fen": "8/3k4/7R/3K4/8/8/8/8 b - - 5 3",
+      "tablebase": {
+        "category": "loss",
+        "dtz": -18,
+        "dtm": -18,
+        "checkmate": false,
+        "stalemate": false,
+        "insufficientMaterial": false,
+        "pieceCount": 3
+      },
+      "packIds": [
+        "mate-k-r-technique"
+      ],
+      "supports": [
+        "/spine/0/children/0/children/0/children/0/children/0/moveUci"
+      ],
+      "engine": {
+        "type": "mate",
+        "value": -12,
+        "depth": 22,
+        "bestmove": "d7c7"
+      }
+    },
+    {
+      "fen": "8/3k4/7R/8/4K3/8/8/8 w - - 4 3",
+      "tablebase": {
+        "category": "win",
+        "dtz": 17,
+        "dtm": 17,
+        "checkmate": false,
+        "stalemate": false,
+        "insufficientMaterial": false,
+        "pieceCount": 3
+      },
+      "packIds": [
+        "mate-k-r-technique"
+      ],
+      "supports": [
+        "/spine/0/children/0/children/0/children/0/moveUci"
+      ],
+      "engine": {
+        "type": "mate",
+        "value": 12,
+        "depth": 22,
+        "bestmove": "e4d5"
+      }
+    },
+    {
+      "fen": "8/3k4/7R/8/8/3K4/8/8 b - - 1 1",
+      "tablebase": {
+        "category": "loss",
+        "dtz": -20,
+        "dtm": -20,
+        "checkmate": false,
+        "stalemate": false,
+        "insufficientMaterial": false,
+        "pieceCount": 3
+      },
+      "packIds": [
+        "mate-k-r-technique"
+      ],
+      "supports": [
+        "/spine/0/moveUci"
+      ],
+      "engine": {
+        "type": "cp",
+        "value": -8115,
+        "depth": 22,
+        "bestmove": "d7e7"
+      }
+    },
+    {
+      "fen": "8/3k4/8/2Q5/8/8/6K1/8 b - - 3 2",
+      "tablebase": {
+        "category": "loss",
+        "dtz": -14,
+        "dtm": -14,
+        "checkmate": false,
+        "stalemate": false,
+        "insufficientMaterial": false,
+        "pieceCount": 3
+      },
+      "packIds": [
+        "mate-k-q-technique"
+      ],
+      "supports": [
+        "/spine/0/children/0/children/0/moveUci"
+      ],
+      "engine": {
+        "type": "mate",
+        "value": -9,
+        "depth": 22,
+        "bestmove": "d7e6"
+      }
+    },
+    {
+      "fen": "8/3k4/8/3KB3/5N2/8/8/8 w - - 6 4",
+      "tablebase": {
+        "category": "win",
+        "dtz": 33,
+        "dtm": 33,
+        "checkmate": false,
+        "stalemate": false,
+        "insufficientMaterial": false,
+        "pieceCount": 4
+      },
+      "packIds": [
+        "mate-bishop-knight",
+        "trajectory-mate-bishop-knight"
+      ],
+      "supports": [
+        "/spine/0/children/0/children/0/children/0/children/0/children/0/moveUci"
+      ],
+      "engine": {
+        "type": "cp",
+        "value": 405,
+        "depth": 22,
+        "bestmove": "d5c5"
+      }
+    },
+    {
+      "fen": "8/3k4/8/3KB3/8/3N4/8/8 b - - 3 2",
+      "tablebase": {
+        "category": "loss",
+        "dtz": -36,
+        "dtm": -36,
+        "checkmate": false,
+        "stalemate": false,
+        "insufficientMaterial": false,
+        "pieceCount": 4
+      },
+      "packIds": [
+        "mate-bishop-knight",
+        "trajectory-mate-bishop-knight"
+      ],
+      "supports": [
+        "/spine/0/children/0/children/0/moveUci"
+      ],
+      "engine": {
+        "type": "mate",
+        "value": -23,
+        "depth": 22,
+        "bestmove": "d7e7"
+      }
+    },
+    {
+      "fen": "8/3k4/8/4B3/4K3/3N4/8/8 w - - 2 2",
+      "tablebase": {
+        "category": "win",
+        "dtz": 37,
+        "dtm": 37,
+        "checkmate": false,
+        "stalemate": false,
+        "insufficientMaterial": false,
+        "pieceCount": 4
+      },
+      "packIds": [
+        "mate-bishop-knight",
+        "trajectory-mate-bishop-knight"
+      ],
+      "supports": [
+        "/spine/0/children/0/moveUci"
+      ],
+      "engine": {
+        "type": "cp",
+        "value": 362,
+        "depth": 22,
+        "bestmove": "e4d5"
+      }
+    },
+    {
+      "fen": "8/3k4/8/4K3/8/4P3/8/8 w - - 5 4",
+      "tablebase": {
+        "category": "win",
+        "dtz": 3,
+        "dtm": 31,
+        "checkmate": false,
+        "stalemate": false,
+        "insufficientMaterial": false,
+        "pieceCount": 3
+      },
+      "packIds": [
+        "pawn-opposition-convert"
+      ],
+      "supports": [
+        "/spine/0/children/0/children/0/children/0/children/0/children/0/moveUci"
+      ],
+      "engine": {
+        "type": "cp",
+        "value": 8115,
+        "depth": 22,
+        "bestmove": "e5f6"
+      }
+    },
+    {
+      "fen": "8/3k4/8/8/2Q5/8/6K1/8 w - - 2 2",
+      "tablebase": {
+        "category": "win",
+        "dtz": 13,
+        "dtm": 13,
+        "checkmate": false,
+        "stalemate": false,
+        "insufficientMaterial": false,
+        "pieceCount": 3
+      },
+      "packIds": [
+        "mate-k-q-technique"
+      ],
+      "supports": [
+        "/spine/0/children/0/moveUci"
+      ],
+      "engine": {
+        "type": "mate",
+        "value": 10,
+        "depth": 22,
+        "bestmove": "g2g3"
+      }
+    },
+    {
+      "fen": "8/3k4/8/8/8/3K4/7R/8 w - - 0 1",
+      "tablebase": {
+        "category": "win",
+        "dtz": 21,
+        "dtm": 21,
+        "checkmate": false,
+        "stalemate": false,
+        "insufficientMaterial": false,
+        "pieceCount": 3
+      },
+      "packIds": [
+        "mate-k-r-technique"
+      ],
+      "supports": [
+        "/start/fen"
+      ],
+      "engine": {
+        "type": "mate",
+        "value": 20,
+        "depth": 22,
+        "bestmove": "h2h6"
+      }
+    },
+    {
+      "fen": "8/3k4/R7/3K4/8/8/8/8 w - - 8 5",
+      "tablebase": {
+        "category": "win",
+        "dtz": 13,
+        "dtm": 13,
+        "checkmate": false,
+        "stalemate": false,
+        "insufficientMaterial": false,
+        "pieceCount": 3
+      },
+      "packIds": [
+        "mate-k-r-technique"
+      ],
+      "supports": [
+        "/spine/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/moveUci"
+      ],
+      "engine": {
+        "type": "mate",
+        "value": 10,
+        "depth": 22,
+        "bestmove": "a6a7"
+      }
+    },
+    {
+      "fen": "8/4k2R/4P3/3K4/8/8/8/8 b - - 2 7",
+      "tablebase": {
+        "category": "loss",
+        "dtz": -2,
+        "dtm": -12,
+        "checkmate": false,
+        "stalemate": false,
+        "insufficientMaterial": false,
+        "pieceCount": 4
+      },
+      "packIds": [
+        "philidor-passive-rook-convert"
+      ],
+      "supports": [
+        "/spine/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/moveUci"
+      ],
+      "engine": {
+        "type": "mate",
+        "value": -7,
+        "depth": 22,
+        "bestmove": "e7e8"
+      }
+    },
+    {
+      "fen": "8/4k3/1bP1P3/3K4/8/8/4B3/8 b - - 0 3",
+      "tablebase": {
+        "category": "draw",
+        "dtz": 0,
+        "dtm": 0,
+        "checkmate": false,
+        "stalemate": false,
+        "insufficientMaterial": false,
+        "pieceCount": 6
+      },
+      "packIds": [
+        "opposite-bishops-fortress-hold"
+      ],
+      "supports": [
+        "/spine/0/children/0/children/0/children/0/moveUci"
+      ],
+      "engine": {
+        "type": "cp",
+        "value": 0,
+        "depth": 22,
+        "bestmove": "b6c7"
+      }
+    },
+    {
+      "fen": "8/4k3/1bP5/3KP3/8/8/4B3/8 w - - 1 3",
+      "tablebase": {
+        "category": "draw",
+        "dtz": 0,
+        "dtm": 0,
+        "checkmate": false,
+        "stalemate": false,
+        "insufficientMaterial": false,
+        "pieceCount": 6
+      },
+      "packIds": [
+        "opposite-bishops-fortress-hold"
+      ],
+      "supports": [
+        "/spine/0/children/0/children/0/moveUci"
+      ],
+      "engine": {
+        "type": "cp",
+        "value": 4,
+        "depth": 22,
+        "bestmove": "e2c4"
+      }
+    },
+    {
+      "fen": "8/4k3/2P1P3/3K4/3b4/8/4B3/8 w - - 1 4",
+      "tablebase": {
+        "category": "win",
+        "dtz": 1,
+        "dtm": 13,
+        "checkmate": false,
+        "stalemate": false,
+        "insufficientMaterial": false,
+        "pieceCount": 6
+      },
+      "packIds": [
+        "opposite-bishops-fortress-hold"
+      ],
+      "supports": [
+        "/deviations/5/moveUci"
+      ],
+      "engine": {
+        "type": "mate",
+        "value": 9,
+        "depth": 22,
+        "bestmove": "c6c7"
+      }
+    },
+    {
+      "fen": "8/4k3/2P1P3/b2K4/8/8/4B3/8 w - - 1 4",
+      "tablebase": {
+        "category": "draw",
+        "dtz": 0,
+        "dtm": 0,
+        "checkmate": false,
+        "stalemate": false,
+        "insufficientMaterial": false,
+        "pieceCount": 6
+      },
+      "packIds": [
+        "opposite-bishops-fortress-hold"
+      ],
+      "supports": [
+        "/spine/0/children/0/children/0/children/0/children/0/moveUci"
+      ],
+      "engine": {
+        "type": "cp",
+        "value": 8,
+        "depth": 22,
+        "bestmove": "e2c4"
+      }
+    },
+    {
+      "fen": "8/4k3/5R2/3K4/8/8/8/8 b - - 7 4",
+      "tablebase": {
+        "category": "draw",
+        "dtz": 0,
+        "dtm": 0,
+        "checkmate": false,
+        "stalemate": false,
+        "insufficientMaterial": false,
+        "pieceCount": 3
+      },
+      "packIds": [
+        "mate-k-r-technique"
+      ],
+      "supports": [
+        "/deviations/2/moveUci"
+      ],
+      "engine": {
+        "type": "cp",
+        "value": 0,
+        "depth": 22,
+        "bestmove": "e7f6"
+      }
+    },
+    {
+      "fen": "8/4k3/5R2/8/8/3K4/8/8 b - - 3 2",
+      "tablebase": {
+        "category": "draw",
+        "dtz": 0,
+        "dtm": 0,
+        "checkmate": false,
+        "stalemate": false,
+        "insufficientMaterial": false,
+        "pieceCount": 3
+      },
+      "packIds": [
+        "mate-k-r-technique"
+      ],
+      "supports": [
+        "/deviations/1/moveUci"
+      ],
+      "engine": {
+        "type": "cp",
+        "value": 0,
+        "depth": 22,
+        "bestmove": "e7f6"
+      }
+    },
+    {
+      "fen": "8/4k3/7R/3K4/8/8/8/8 w - - 6 4",
+      "tablebase": {
+        "category": "win",
+        "dtz": 17,
+        "dtm": 17,
+        "checkmate": false,
+        "stalemate": false,
+        "insufficientMaterial": false,
+        "pieceCount": 3
+      },
+      "packIds": [
+        "mate-k-r-technique"
+      ],
+      "supports": [
+        "/spine/0/children/0/children/0/children/0/children/0/children/0/moveUci"
+      ],
+      "engine": {
+        "type": "mate",
+        "value": 11,
+        "depth": 22,
+        "bestmove": "d5c6"
+      }
+    },
+    {
+      "fen": "8/4k3/7R/8/4K3/8/8/8 b - - 3 2",
+      "tablebase": {
+        "category": "loss",
+        "dtz": -18,
+        "dtm": -18,
+        "checkmate": false,
+        "stalemate": false,
+        "insufficientMaterial": false,
+        "pieceCount": 3
+      },
+      "packIds": [
+        "mate-k-r-technique"
+      ],
+      "supports": [
+        "/spine/0/children/0/children/0/moveUci"
+      ],
+      "engine": {
+        "type": "mate",
+        "value": -14,
+        "depth": 22,
+        "bestmove": "e7d8"
+      }
+    },
+    {
+      "fen": "8/4k3/7R/8/8/3K4/8/8 w - - 2 2",
+      "tablebase": {
+        "category": "win",
+        "dtz": 19,
+        "dtm": 19,
+        "checkmate": false,
+        "stalemate": false,
+        "insufficientMaterial": false,
+        "pieceCount": 3
+      },
+      "packIds": [
+        "mate-k-r-technique"
+      ],
+      "supports": [
+        "/spine/0/children/0/moveUci"
+      ],
+      "engine": {
+        "type": "mate",
+        "value": 14,
+        "depth": 22,
+        "bestmove": "d3c4"
+      }
+    },
+    {
+      "fen": "8/4k3/8/3KB3/5N2/8/8/8 b - - 5 3",
+      "tablebase": {
+        "category": "loss",
+        "dtz": -34,
+        "dtm": -34,
+        "checkmate": false,
+        "stalemate": false,
+        "insufficientMaterial": false,
+        "pieceCount": 4
+      },
+      "packIds": [
+        "mate-bishop-knight",
+        "trajectory-mate-bishop-knight"
+      ],
+      "supports": [
+        "/spine/0/children/0/children/0/children/0/children/0/moveUci"
+      ],
+      "engine": {
+        "type": "cp",
+        "value": -550,
+        "depth": 22,
+        "bestmove": "e7d7"
+      }
+    },
+    {
+      "fen": "8/4k3/8/3KB3/8/3N4/8/8 w - - 4 3",
+      "tablebase": {
+        "category": "win",
+        "dtz": 35,
+        "dtm": 35,
+        "checkmate": false,
+        "stalemate": false,
+        "insufficientMaterial": false,
+        "pieceCount": 4
+      },
+      "packIds": [
+        "mate-bishop-knight",
+        "trajectory-mate-bishop-knight"
+      ],
+      "supports": [
+        "/spine/0/children/0/children/0/children/0/moveUci"
+      ],
+      "engine": {
+        "type": "cp",
+        "value": 510,
+        "depth": 22,
+        "bestmove": "d3c5"
+      }
+    },
+    {
+      "fen": "8/4k3/8/4K3/8/4P3/8/8 b - - 4 3",
+      "tablebase": {
+        "category": "loss",
+        "dtz": -4,
+        "dtm": -32,
+        "checkmate": false,
+        "stalemate": false,
+        "insufficientMaterial": false,
+        "pieceCount": 3
+      },
+      "packIds": [
+        "pawn-opposition-convert"
+      ],
+      "supports": [
+        "/spine/0/children/0/children/0/children/0/children/0/moveUci"
+      ],
+      "engine": {
+        "type": "mate",
+        "value": -17,
+        "depth": 22,
+        "bestmove": "e7d7"
+      }
+    },
+    {
+      "fen": "8/4k3/8/5K2/8/4P3/8/8 w - - 3 3",
+      "tablebase": {
+        "category": "win",
+        "dtz": 5,
+        "dtm": 33,
+        "checkmate": false,
+        "stalemate": false,
+        "insufficientMaterial": false,
+        "pieceCount": 3
+      },
+      "packIds": [
+        "pawn-opposition-convert"
+      ],
+      "supports": [
+        "/spine/0/children/0/children/0/children/0/moveUci"
+      ],
+      "engine": {
+        "type": "cp",
+        "value": 8115,
+        "depth": 22,
+        "bestmove": "f5e5"
+      }
+    },
+    {
+      "fen": "8/4k3/R7/3K4/8/8/8/8 b - - 7 4",
+      "tablebase": {
+        "category": "loss",
+        "dtz": -16,
+        "dtm": -16,
+        "checkmate": false,
+        "stalemate": false,
+        "insufficientMaterial": false,
+        "pieceCount": 3
+      },
+      "packIds": [
+        "mate-k-r-technique"
+      ],
+      "supports": [
+        "/spine/0/children/0/children/0/children/0/children/0/children/0/children/0/moveUci"
+      ],
+      "engine": {
+        "type": "mate",
+        "value": -11,
+        "depth": 22,
+        "bestmove": "e7f7"
+      }
+    },
+    {
+      "fen": "8/5K2/3k4/4P3/8/8/8/8 b - - 0 8",
+      "tablebase": {
+        "category": "draw",
+        "dtz": 0,
+        "dtm": 0,
+        "checkmate": false,
+        "stalemate": false,
+        "insufficientMaterial": false,
+        "pieceCount": 3
+      },
+      "packIds": [
+        "pawn-opposition-convert"
+      ],
+      "supports": [
+        "/deviations/5/moveUci"
+      ],
+      "engine": {
+        "type": "cp",
+        "value": 0,
+        "depth": 22,
+        "bestmove": "d6e5"
+      }
+    },
+    {
+      "fen": "8/5K2/3k4/8/4P3/8/8/8 w - - 1 8",
+      "tablebase": {
+        "category": "win",
+        "dtz": 3,
+        "dtm": 29,
+        "checkmate": false,
+        "stalemate": false,
+        "insufficientMaterial": false,
+        "pieceCount": 3
+      },
+      "packIds": [
+        "pawn-opposition-convert"
+      ],
+      "supports": [
+        "/spine/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/moveUci"
+      ],
+      "engine": {
+        "type": "cp",
+        "value": 511,
+        "depth": 22,
+        "bestmove": "f7f6"
+      }
+    },
+    {
+      "fen": "8/6K1/8/8/8/2Q5/1p6/1k6 b - - 7 4",
+      "tablebase": {
+        "category": "loss",
+        "dtz": -26,
+        "dtm": -32,
+        "checkmate": false,
+        "stalemate": false,
+        "insufficientMaterial": false,
+        "pieceCount": 4
+      },
+      "packIds": [
+        "queen-vs-pawn-seventh-convert"
+      ],
+      "supports": [
+        "/deviations/6/moveUci"
+      ],
+      "engine": {
+        "type": "cp",
+        "value": -745,
+        "depth": 22,
+        "bestmove": "b1a2"
+      }
+    },
+    {
+      "fen": "8/7K/2Q5/8/8/8/1p6/2k5 b - - 1 1",
+      "tablebase": {
+        "category": "loss",
+        "dtz": -32,
+        "dtm": -34,
+        "checkmate": false,
+        "stalemate": false,
+        "insufficientMaterial": false,
+        "pieceCount": 4
+      },
+      "packIds": [
+        "queen-vs-pawn-seventh-convert"
+      ],
+      "supports": [
+        "/deviations/3/moveUci"
+      ],
+      "engine": {
+        "type": "cp",
+        "value": -8115,
+        "depth": 22,
+        "bestmove": "c1d2"
+      }
+    },
+    {
+      "fen": "8/7K/8/8/2Q5/8/1p6/2k5 b - - 1 1",
+      "tablebase": {
+        "category": "loss",
+        "dtz": -28,
+        "dtm": -30,
+        "checkmate": false,
+        "stalemate": false,
+        "insufficientMaterial": false,
+        "pieceCount": 4
+      },
+      "packIds": [
+        "queen-vs-pawn-seventh-convert"
+      ],
+      "supports": [
+        "/spine/0/moveUci"
+      ],
+      "engine": {
+        "type": "cp",
+        "value": -762,
+        "depth": 22,
+        "bestmove": "c1d2"
+      }
+    },
+    {
+      "fen": "8/7K/8/8/2Q5/8/1p6/3k4 w - - 2 2",
+      "tablebase": {
+        "category": "win",
+        "dtz": 27,
+        "dtm": 29,
+        "checkmate": false,
+        "stalemate": false,
+        "insufficientMaterial": false,
+        "pieceCount": 4
+      },
+      "packIds": [
+        "queen-vs-pawn-seventh-convert"
+      ],
+      "supports": [
+        "/spine/0/children/0/moveUci"
+      ],
+      "engine": {
+        "type": "cp",
+        "value": 708,
+        "depth": 22,
+        "bestmove": "c4b3"
+      }
+    },
+    {
+      "fen": "8/7K/8/8/3Q4/8/1p6/2k5 b - - 1 1",
+      "tablebase": {
+        "category": "draw",
+        "dtz": 0,
+        "dtm": 0,
+        "checkmate": false,
+        "stalemate": false,
+        "insufficientMaterial": false,
+        "pieceCount": 4
+      },
+      "packIds": [
+        "queen-vs-pawn-seventh-convert"
+      ],
+      "supports": [
+        "/deviations/2/moveUci"
+      ],
+      "engine": {
+        "type": "cp",
+        "value": 0,
+        "depth": 22,
+        "bestmove": "b2b1q"
+      }
+    },
+    {
+      "fen": "8/7K/8/8/4Q3/8/1p6/2k5 w - - 0 1",
+      "tablebase": {
+        "category": "win",
+        "dtz": 29,
+        "dtm": 31,
+        "checkmate": false,
+        "stalemate": false,
+        "insufficientMaterial": false,
+        "pieceCount": 4
+      },
+      "packIds": [
+        "queen-vs-pawn-seventh-convert"
+      ],
+      "supports": [
+        "/start/fen"
+      ],
+      "engine": {
+        "type": "cp",
+        "value": 597,
+        "depth": 22,
+        "bestmove": "e4c4"
+      }
+    },
+    {
+      "fen": "8/7K/8/8/8/1Q6/1p6/2k5 w - - 4 3",
+      "tablebase": {
+        "category": "win",
+        "dtz": 25,
+        "dtm": 27,
+        "checkmate": false,
+        "stalemate": false,
+        "insufficientMaterial": false,
+        "pieceCount": 4
+      },
+      "packIds": [
+        "queen-vs-pawn-seventh-convert"
+      ],
+      "supports": [
+        "/spine/0/children/0/children/0/children/0/moveUci"
+      ],
+      "engine": {
+        "type": "cp",
+        "value": 676,
+        "depth": 22,
+        "bestmove": "b3c3"
+      }
+    },
+    {
+      "fen": "8/7K/8/8/8/1Q6/1p6/3k4 b - - 3 2",
+      "tablebase": {
+        "category": "loss",
+        "dtz": -26,
+        "dtm": -28,
+        "checkmate": false,
+        "stalemate": false,
+        "insufficientMaterial": false,
+        "pieceCount": 4
+      },
+      "packIds": [
+        "queen-vs-pawn-seventh-convert"
+      ],
+      "supports": [
+        "/spine/0/children/0/children/0/moveUci"
+      ],
+      "engine": {
+        "type": "mate",
+        "value": -20,
+        "depth": 22,
+        "bestmove": "d1c1"
+      }
+    },
+    {
+      "fen": "8/7K/8/8/8/2Q5/1p6/1k6 w - - 6 4",
+      "tablebase": {
+        "category": "win",
+        "dtz": 23,
+        "dtm": 25,
+        "checkmate": false,
+        "stalemate": false,
+        "insufficientMaterial": false,
+        "pieceCount": 4
+      },
+      "packIds": [
+        "queen-vs-pawn-seventh-convert"
+      ],
+      "supports": [
+        "/spine/0/children/0/children/0/children/0/children/0/children/0/moveUci"
+      ],
+      "engine": {
+        "type": "cp",
+        "value": 732,
+        "depth": 22,
+        "bestmove": "h7g6"
+      }
+    },
+    {
+      "fen": "8/7K/8/8/8/2Q5/1p6/2k5 b - - 5 3",
+      "tablebase": {
+        "category": "loss",
+        "dtz": -24,
+        "dtm": -26,
+        "checkmate": false,
+        "stalemate": false,
+        "insufficientMaterial": false,
+        "pieceCount": 4
+      },
+      "packIds": [
+        "queen-vs-pawn-seventh-convert"
+      ],
+      "supports": [
+        "/spine/0/children/0/children/0/children/0/children/0/moveUci"
+      ],
+      "engine": {
+        "type": "cp",
+        "value": -716,
+        "depth": 22,
+        "bestmove": "c1b1"
+      }
+    },
+    {
+      "fen": "8/7K/8/8/8/8/1p6/1kQ5 b - - 7 4",
+      "tablebase": {
+        "category": "win",
+        "dtz": 1,
+        "dtm": 19,
+        "checkmate": false,
+        "stalemate": false,
+        "insufficientMaterial": false,
+        "pieceCount": 4
+      },
+      "packIds": [
+        "queen-vs-pawn-seventh-convert"
+      ],
+      "supports": [
+        "/deviations/5/moveUci"
+      ],
+      "engine": {
+        "type": "cp",
+        "value": 514,
+        "depth": 22,
+        "bestmove": "b1c1"
+      }
+    },
+    {
+      "fen": "8/7K/8/8/8/8/1p6/1Qk5 b - - 1 1",
+      "tablebase": {
+        "category": "win",
+        "dtz": 1,
+        "dtm": 21,
+        "checkmate": false,
+        "stalemate": false,
+        "insufficientMaterial": false,
+        "pieceCount": 4
+      },
+      "packIds": [
+        "queen-vs-pawn-seventh-convert"
+      ],
+      "supports": [
+        "/deviations/0/moveUci"
+      ],
+      "engine": {
+        "type": "cp",
+        "value": 505,
+        "depth": 22,
+        "bestmove": "c1b1"
+      }
+    },
+    {
+      "fen": "8/7K/8/8/8/8/1pQ5/2k5 b - - 1 1",
+      "tablebase": {
+        "category": "win",
+        "dtz": 1,
+        "dtm": 19,
+        "checkmate": false,
+        "stalemate": false,
+        "insufficientMaterial": false,
+        "pieceCount": 4
+      },
+      "packIds": [
+        "queen-vs-pawn-seventh-convert"
+      ],
+      "supports": [
+        "/deviations/1/moveUci"
+      ],
+      "engine": {
+        "type": "mate",
+        "value": 13,
+        "depth": 22,
+        "bestmove": "c1c2"
+      }
+    },
+    {
+      "fen": "8/7K/8/8/8/8/1Q6/1k6 b - - 0 4",
+      "tablebase": {
+        "category": "draw",
+        "dtz": 0,
+        "dtm": 0,
+        "checkmate": false,
+        "stalemate": false,
+        "insufficientMaterial": false,
+        "pieceCount": 3
+      },
+      "packIds": [
+        "queen-vs-pawn-seventh-convert"
+      ],
+      "supports": [
+        "/deviations/4/moveUci"
+      ],
+      "engine": {
+        "type": "cp",
+        "value": 0,
+        "depth": 22,
+        "bestmove": "b1b2"
+      }
+    },
+    {
+      "fen": "8/8/1bP1Pk2/3K4/8/8/4B3/8 w - - 1 4",
+      "tablebase": {
+        "category": "win",
+        "dtz": 3,
+        "dtm": 23,
+        "checkmate": false,
+        "stalemate": false,
+        "insufficientMaterial": false,
+        "pieceCount": 6
+      },
+      "packIds": [
+        "opposite-bishops-fortress-hold"
+      ],
+      "supports": [
+        "/deviations/6/moveUci"
+      ],
+      "engine": {
+        "type": "cp",
+        "value": 1378,
+        "depth": 22,
+        "bestmove": "d5d6"
+      }
+    },
+    {
+      "fen": "8/8/1Pp1k3/8/8/8/6K1/8 b - - 0 3",
+      "tablebase": {
+        "category": "draw",
+        "dtz": 0,
+        "dtm": 0,
+        "checkmate": false,
+        "stalemate": false,
+        "insufficientMaterial": false,
+        "pieceCount": 4
+      },
+      "packIds": [
+        "pawn-breakthrough-convert"
+      ],
+      "supports": [
+        "/deviations/6/moveUci"
+      ],
+      "engine": {
+        "type": "cp",
+        "value": 7,
+        "depth": 22,
+        "bestmove": "e6d7"
+      }
+    },
+    {
+      "fen": "8/8/1pp1k3/P7/8/8/5K2/8 b - - 1 3",
+      "tablebase": {
+        "category": "win",
+        "dtz": 1,
+        "dtm": 31,
+        "checkmate": false,
+        "stalemate": false,
+        "insufficientMaterial": false,
+        "pieceCount": 5
+      },
+      "packIds": [
+        "pawn-breakthrough-convert"
+      ],
+      "supports": [
+        "/deviations/7/moveUci"
+      ],
+      "engine": {
+        "type": "cp",
+        "value": 8115,
+        "depth": 22,
+        "bestmove": "b6a5"
+      }
+    },
+    {
+      "fen": "8/8/1pp1k3/P7/8/8/6K1/8 w - - 0 3",
+      "tablebase": {
+        "category": "win",
+        "dtz": 1,
+        "dtm": 29,
+        "checkmate": false,
+        "stalemate": false,
+        "insufficientMaterial": false,
+        "pieceCount": 5
+      },
+      "packIds": [
+        "pawn-breakthrough-convert"
+      ],
+      "supports": [
+        "/spine/0/children/0/children/0/children/0/moveUci"
+      ],
+      "engine": {
+        "type": "cp",
+        "value": 553,
+        "depth": 22,
+        "bestmove": "a5a6"
+      }
+    },
+    {
+      "fen": "8/8/3k1K2/8/4P3/8/8/8 b - - 2 8",
+      "tablebase": {
+        "category": "loss",
+        "dtz": -2,
+        "dtm": -28,
+        "checkmate": false,
+        "stalemate": false,
+        "insufficientMaterial": false,
+        "pieceCount": 3
+      },
+      "packIds": [
+        "pawn-opposition-convert"
+      ],
+      "supports": [
+        "/spine/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/moveUci"
+      ],
+      "engine": {
+        "type": "cp",
+        "value": -837,
+        "depth": 22,
+        "bestmove": "d6d7"
+      }
+    },
+    {
+      "fen": "8/8/3k2K1/8/4P3/8/8/8 b - - 2 8",
+      "tablebase": {
+        "category": "draw",
+        "dtz": 0,
+        "dtm": 0,
+        "checkmate": false,
+        "stalemate": false,
+        "insufficientMaterial": false,
+        "pieceCount": 3
+      },
+      "packIds": [
+        "pawn-opposition-convert"
+      ],
+      "supports": [
+        "/deviations/6/moveUci"
+      ],
+      "engine": {
+        "type": "cp",
+        "value": 0,
+        "depth": 22,
+        "bestmove": "d6e5"
+      }
+    },
+    {
+      "fen": "8/8/3k4/2Q5/8/8/6K1/8 b - - 1 1",
+      "tablebase": {
+        "category": "draw",
+        "dtz": 0,
+        "dtm": 0,
+        "checkmate": false,
+        "stalemate": false,
+        "insufficientMaterial": false,
+        "pieceCount": 3
+      },
+      "packIds": [
+        "mate-k-q-technique"
+      ],
+      "supports": [
+        "/deviations/0/moveUci"
+      ],
+      "engine": {
+        "type": "cp",
+        "value": 0,
+        "depth": 22,
+        "bestmove": "d6c5"
+      }
+    },
+    {
+      "fen": "8/8/3k4/5K2/8/4P3/8/8 b - - 2 2",
+      "tablebase": {
+        "category": "loss",
+        "dtz": -6,
+        "dtm": -34,
+        "checkmate": false,
+        "stalemate": false,
+        "insufficientMaterial": false,
+        "pieceCount": 3
+      },
+      "packIds": [
+        "pawn-opposition-convert"
+      ],
+      "supports": [
+        "/spine/0/children/0/children/0/moveUci"
+      ],
+      "engine": {
+        "type": "cp",
+        "value": -969,
+        "depth": 22,
+        "bestmove": "d6e7"
+      }
+    },
+    {
+      "fen": "8/8/3k4/8/2Q5/8/6K1/8 b - - 1 1",
+      "tablebase": {
+        "category": "loss",
+        "dtz": -14,
+        "dtm": -14,
+        "checkmate": false,
+        "stalemate": false,
+        "insufficientMaterial": false,
+        "pieceCount": 3
+      },
+      "packIds": [
+        "mate-k-q-technique"
+      ],
+      "supports": [
+        "/spine/0/moveUci"
+      ],
+      "engine": {
+        "type": "mate",
+        "value": -9,
+        "depth": 22,
+        "bestmove": "d6e5"
+      }
+    },
+    {
+      "fen": "8/8/3k4/8/3K4/4P3/8/8 b - - 2 2",
+      "tablebase": {
+        "category": "loss",
+        "dtz": -10,
+        "dtm": -38,
+        "checkmate": false,
+        "stalemate": false,
+        "insufficientMaterial": false,
+        "pieceCount": 3
+      },
+      "packIds": [
+        "pawn-opposition-convert"
+      ],
+      "supports": [
+        "/deviations/4/moveUci"
+      ],
+      "engine": {
+        "type": "cp",
+        "value": -7959,
+        "depth": 22,
+        "bestmove": "d6e6"
+      }
+    },
+    {
+      "fen": "8/8/3k4/8/4K3/4P3/8/8 w - - 1 2",
+      "tablebase": {
+        "category": "win",
+        "dtz": 7,
+        "dtm": 35,
+        "checkmate": false,
+        "stalemate": false,
+        "insufficientMaterial": false,
+        "pieceCount": 3
+      },
+      "packIds": [
+        "pawn-opposition-convert"
+      ],
+      "supports": [
+        "/spine/0/children/0/moveUci"
+      ],
+      "engine": {
+        "type": "cp",
+        "value": 502,
+        "depth": 22,
+        "bestmove": "e4f5"
+      }
+    },
+    {
+      "fen": "8/8/3k4/8/8/2Q5/6K1/8 w - - 0 1",
+      "tablebase": {
+        "category": "win",
+        "dtz": 15,
+        "dtm": 15,
+        "checkmate": false,
+        "stalemate": false,
+        "insufficientMaterial": false,
+        "pieceCount": 3
+      },
+      "packIds": [
+        "mate-k-q-technique"
+      ],
+      "supports": [
+        "/start/fen"
+      ],
+      "engine": {
+        "type": "mate",
+        "value": 9,
+        "depth": 22,
+        "bestmove": "g2g3"
+      }
+    },
+    {
+      "fen": "8/8/3k4/8/8/3KP3/8/8 b - - 2 2",
+      "tablebase": {
+        "category": "draw",
+        "dtz": 0,
+        "dtm": 0,
+        "checkmate": false,
+        "stalemate": false,
+        "insufficientMaterial": false,
+        "pieceCount": 3
+      },
+      "packIds": [
+        "pawn-opposition-convert"
+      ],
+      "supports": [
+        "/deviations/3/moveUci"
+      ],
+      "engine": {
+        "type": "cp",
+        "value": -8,
+        "depth": 22,
+        "bestmove": "d6d5"
+      }
+    },
+    {
+      "fen": "8/8/4k3/4B3/4K3/3N4/8/8 b - - 1 1",
+      "tablebase": {
+        "category": "loss",
+        "dtz": -38,
+        "dtm": -38,
+        "checkmate": false,
+        "stalemate": false,
+        "insufficientMaterial": false,
+        "pieceCount": 4
+      },
+      "packIds": [
+        "mate-bishop-knight",
+        "trajectory-mate-bishop-knight"
+      ],
+      "supports": [
+        "/spine/0/moveUci"
+      ],
+      "engine": {
+        "type": "cp",
+        "value": -205,
+        "depth": 22,
+        "bestmove": "e6d7"
+      }
+    },
+    {
+      "fen": "8/8/4k3/8/3K4/8/4P3/8 b - - 1 1",
+      "tablebase": {
+        "category": "loss",
+        "dtz": -4,
+        "dtm": -40,
+        "checkmate": false,
+        "stalemate": false,
+        "insufficientMaterial": false,
+        "pieceCount": 3
+      },
+      "packIds": [
+        "pawn-opposition-convert"
+      ],
+      "supports": [
+        "/deviations/2/moveUci"
+      ],
+      "engine": {
+        "type": "cp",
+        "value": -939,
+        "depth": 22,
+        "bestmove": "e6d6"
+      }
+    },
+    {
+      "fen": "8/8/4k3/8/4K3/2BN4/8/8 w - - 0 1",
+      "tablebase": {
+        "category": "win",
+        "dtz": 39,
+        "dtm": 39,
+        "checkmate": false,
+        "stalemate": false,
+        "insufficientMaterial": false,
+        "pieceCount": 4
+      },
+      "packIds": [
+        "mate-bishop-knight",
+        "trajectory-mate-bishop-knight"
+      ],
+      "supports": [
+        "/start/fen"
+      ],
+      "engine": {
+        "type": "cp",
+        "value": 331,
+        "depth": 22,
+        "bestmove": "c3e5"
+      }
+    },
+    {
+      "fen": "8/8/4k3/8/4K3/4P3/8/8 b - - 0 1",
+      "tablebase": {
+        "category": "loss",
+        "dtz": -8,
+        "dtm": -36,
+        "checkmate": false,
+        "stalemate": false,
+        "insufficientMaterial": false,
+        "pieceCount": 3
+      },
+      "packIds": [
+        "pawn-opposition-convert"
+      ],
+      "supports": [
+        "/spine/0/moveUci"
+      ],
+      "engine": {
+        "type": "cp",
+        "value": -514,
+        "depth": 22,
+        "bestmove": "e6d6"
+      }
+    },
+    {
+      "fen": "8/8/4k3/8/4K3/8/4P3/8 w - - 0 1",
+      "tablebase": {
+        "category": "win",
+        "dtz": 1,
+        "dtm": 37,
+        "checkmate": false,
+        "stalemate": false,
+        "insufficientMaterial": false,
+        "pieceCount": 3
+      },
+      "packIds": [
+        "pawn-opposition-convert"
+      ],
+      "supports": [
+        "/start/fen"
+      ],
+      "engine": {
+        "type": "cp",
+        "value": 515,
+        "depth": 22,
+        "bestmove": "e2e3"
+      }
+    },
+    {
+      "fen": "8/8/4k3/8/8/4K3/4P3/8 b - - 1 1",
+      "tablebase": {
+        "category": "draw",
+        "dtz": 0,
+        "dtm": 0,
+        "checkmate": false,
+        "stalemate": false,
+        "insufficientMaterial": false,
+        "pieceCount": 3
+      },
+      "packIds": [
+        "pawn-opposition-convert"
+      ],
+      "supports": [
+        "/deviations/0/moveUci"
+      ],
+      "engine": {
+        "type": "cp",
+        "value": 0,
+        "depth": 22,
+        "bestmove": "e6e5"
+      }
+    },
+    {
+      "fen": "8/8/4k3/8/8/5K2/4P3/8 b - - 1 1",
+      "tablebase": {
+        "category": "draw",
+        "dtz": 0,
+        "dtm": 0,
+        "checkmate": false,
+        "stalemate": false,
+        "insufficientMaterial": false,
+        "pieceCount": 3
+      },
+      "packIds": [
+        "pawn-opposition-convert"
+      ],
+      "supports": [
+        "/deviations/1/moveUci"
+      ],
+      "engine": {
+        "type": "cp",
+        "value": 0,
+        "depth": 22,
+        "bestmove": "e6f5"
+      }
+    },
+    {
+      "fen": "8/8/4kB2/8/4K3/3N4/8/8 b - - 1 1",
+      "tablebase": {
+        "category": "draw",
+        "dtz": 0,
+        "dtm": 0,
+        "checkmate": false,
+        "stalemate": false,
+        "insufficientMaterial": false,
+        "pieceCount": 4
+      },
+      "packIds": [
+        "mate-bishop-knight",
+        "trajectory-mate-bishop-knight"
+      ],
+      "supports": [
+        "/deviations/0/moveUci"
+      ],
+      "engine": {
+        "type": "cp",
+        "value": -3,
+        "depth": 22,
+        "bestmove": "e6f6"
+      }
+    },
+    {
+      "fen": "8/8/6K1/8/8/2Q5/1p6/1k6 b - - 7 4",
+      "tablebase": {
+        "category": "loss",
+        "dtz": -22,
+        "dtm": -24,
+        "checkmate": false,
+        "stalemate": false,
+        "insufficientMaterial": false,
+        "pieceCount": 4
+      },
+      "packIds": [
+        "queen-vs-pawn-seventh-convert"
+      ],
+      "supports": [
+        "/spine/0/children/0/children/0/children/0/children/0/children/0/children/0/moveUci"
+      ],
+      "engine": {
+        "type": "mate",
+        "value": -14,
+        "depth": 22,
+        "bestmove": "b1a2"
+      }
+    },
+    {
+      "fen": "8/8/6K1/8/8/2Q5/kp6/8 w - - 8 5",
+      "tablebase": {
+        "category": "win",
+        "dtz": 21,
+        "dtm": 23,
+        "checkmate": false,
+        "stalemate": false,
+        "insufficientMaterial": false,
+        "pieceCount": 4
+      },
+      "packIds": [
+        "queen-vs-pawn-seventh-convert"
+      ],
+      "supports": [
+        "/spine/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/moveUci"
+      ],
+      "engine": {
+        "type": "mate",
+        "value": 18,
+        "depth": 22,
+        "bestmove": "c3c2"
+      }
+    },
+    {
+      "fen": "8/8/6K1/8/8/8/1pQ5/k7 w - - 10 6",
+      "tablebase": {
+        "category": "win",
+        "dtz": 19,
+        "dtm": 21,
+        "checkmate": false,
+        "stalemate": false,
+        "insufficientMaterial": false,
+        "pieceCount": 4
+      },
+      "packIds": [
+        "queen-vs-pawn-seventh-convert"
+      ],
+      "supports": [
+        "/spine/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/moveUci"
+      ],
+      "engine": {
+        "type": "cp",
+        "value": 658,
+        "depth": 22,
+        "bestmove": "c2a4"
+      }
+    },
+    {
+      "fen": "8/8/6K1/8/8/8/kpQ5/8 b - - 9 5",
+      "tablebase": {
+        "category": "loss",
+        "dtz": -20,
+        "dtm": -22,
+        "checkmate": false,
+        "stalemate": false,
+        "insufficientMaterial": false,
+        "pieceCount": 4
+      },
+      "packIds": [
+        "queen-vs-pawn-seventh-convert"
+      ],
+      "supports": [
+        "/spine/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/moveUci"
+      ],
+      "engine": {
+        "type": "mate",
+        "value": -18,
+        "depth": 22,
+        "bestmove": "a2a1"
+      }
+    },
+    {
+      "fen": "8/8/6K1/8/Q7/8/1p6/1k6 w - - 12 7",
+      "tablebase": {
+        "category": "win",
+        "dtz": 17,
+        "dtm": 19,
+        "checkmate": false,
+        "stalemate": false,
+        "insufficientMaterial": false,
+        "pieceCount": 4
+      },
+      "packIds": [
+        "queen-vs-pawn-seventh-convert"
+      ],
+      "supports": [
+        "/spine/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/moveUci"
+      ],
+      "engine": {
+        "type": "cp",
+        "value": 636,
+        "depth": 22,
+        "bestmove": "g6f5"
+      }
+    },
+    {
+      "fen": "8/8/6K1/8/Q7/8/1p6/k7 b - - 11 6",
+      "tablebase": {
+        "category": "loss",
+        "dtz": -18,
+        "dtm": -20,
+        "checkmate": false,
+        "stalemate": false,
+        "insufficientMaterial": false,
+        "pieceCount": 4
+      },
+      "packIds": [
+        "queen-vs-pawn-seventh-convert"
+      ],
+      "supports": [
+        "/spine/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/moveUci"
+      ],
+      "engine": {
+        "type": "cp",
+        "value": -802,
+        "depth": 22,
+        "bestmove": "a1b1"
+      }
+    },
+    {
+      "fen": "8/8/8/5K2/2Q5/8/1p6/2k5 b - - 15 8",
+      "tablebase": {
+        "category": "loss",
+        "dtz": -14,
+        "dtm": -16,
+        "checkmate": false,
+        "stalemate": false,
+        "insufficientMaterial": false,
+        "pieceCount": 4
+      },
+      "packIds": [
+        "queen-vs-pawn-seventh-convert"
+      ],
+      "supports": [
+        "/spine/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/moveUci"
+      ],
+      "engine": {
+        "type": "mate",
+        "value": -13,
+        "depth": 22,
+        "bestmove": "c1d2"
+      }
+    },
+    {
+      "fen": "8/8/8/5K2/2Q5/8/1p6/3k4 w - - 16 9",
+      "tablebase": {
+        "category": "win",
+        "dtz": 13,
+        "dtm": 15,
+        "checkmate": false,
+        "stalemate": false,
+        "insufficientMaterial": false,
+        "pieceCount": 4
+      },
+      "packIds": [
+        "queen-vs-pawn-seventh-convert"
+      ],
+      "supports": [
+        "/spine/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/moveUci"
+      ],
+      "engine": {
+        "type": "mate",
+        "value": 10,
+        "depth": 22,
+        "bestmove": "c4d3"
+      }
+    },
+    {
+      "fen": "8/8/8/5K2/8/1Q6/1p6/2k5 w - - 18 10",
+      "tablebase": {
+        "category": "win",
+        "dtz": 11,
+        "dtm": 13,
+        "checkmate": false,
+        "stalemate": false,
+        "insufficientMaterial": false,
+        "pieceCount": 4
+      },
+      "packIds": [
+        "queen-vs-pawn-seventh-convert"
+      ],
+      "supports": [
+        "/spine/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/moveUci"
+      ],
+      "engine": {
+        "type": "mate",
+        "value": 8,
+        "depth": 22,
+        "bestmove": "b3c3"
+      }
+    },
+    {
+      "fen": "8/8/8/5K2/8/1Q6/1p6/3k4 b - - 17 9",
+      "tablebase": {
+        "category": "loss",
+        "dtz": -12,
+        "dtm": -14,
+        "checkmate": false,
+        "stalemate": false,
+        "insufficientMaterial": false,
+        "pieceCount": 4
+      },
+      "packIds": [
+        "queen-vs-pawn-seventh-convert"
+      ],
+      "supports": [
+        "/spine/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/moveUci"
+      ],
+      "engine": {
+        "type": "mate",
+        "value": -11,
+        "depth": 22,
+        "bestmove": "d1c1"
+      }
+    },
+    {
+      "fen": "8/8/8/5K2/Q7/8/1p6/1k6 b - - 13 7",
+      "tablebase": {
+        "category": "loss",
+        "dtz": -16,
+        "dtm": -18,
+        "checkmate": false,
+        "stalemate": false,
+        "insufficientMaterial": false,
+        "pieceCount": 4
+      },
+      "packIds": [
+        "queen-vs-pawn-seventh-convert"
+      ],
+      "supports": [
+        "/spine/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/moveUci"
+      ],
+      "engine": {
+        "type": "mate",
+        "value": -14,
+        "depth": 22,
+        "bestmove": "b1c1"
+      }
+    },
+    {
+      "fen": "8/8/8/5K2/Q7/8/1p6/2k5 w - - 14 8",
+      "tablebase": {
+        "category": "win",
+        "dtz": 15,
+        "dtm": 17,
+        "checkmate": false,
+        "stalemate": false,
+        "insufficientMaterial": false,
+        "pieceCount": 4
+      },
+      "packIds": [
+        "queen-vs-pawn-seventh-convert"
+      ],
+      "supports": [
+        "/spine/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/moveUci"
+      ],
+      "engine": {
+        "type": "mate",
+        "value": 13,
+        "depth": 22,
+        "bestmove": "a4c4"
+      }
+    },
+    {
+      "fen": "8/8/Ppp1k3/8/8/8/6K1/8 b - - 0 3",
+      "tablebase": {
+        "category": "loss",
+        "dtz": -2,
+        "dtm": -28,
+        "checkmate": false,
+        "stalemate": false,
+        "insufficientMaterial": false,
+        "pieceCount": 5
+      },
+      "packIds": [
+        "pawn-breakthrough-convert"
+      ],
+      "supports": [
+        "/spine/0/children/0/children/0/children/0/children/0/moveUci"
+      ],
+      "engine": {
+        "type": "cp",
+        "value": -565,
+        "depth": 22,
+        "bestmove": "c6c5"
+      }
+    },
+    {
+      "fen": "8/8/Pppk4/8/8/8/6K1/8 w - - 1 4",
+      "tablebase": {
+        "category": "win",
+        "dtz": 1,
+        "dtm": 27,
+        "checkmate": false,
+        "stalemate": false,
+        "insufficientMaterial": false,
+        "pieceCount": 5
+      },
+      "packIds": [
+        "pawn-breakthrough-convert"
+      ],
+      "supports": [
+        "/spine/0/children/0/children/0/children/0/children/0/children/0/moveUci"
+      ],
+      "engine": {
+        "type": "cp",
+        "value": 5922,
+        "depth": 22,
+        "bestmove": "a6a7"
+      }
+    },
+    {
+      "fen": "8/P1k5/1pp5/8/8/8/6K1/8 w - - 1 5",
+      "tablebase": {
+        "category": "win",
+        "dtz": 1,
+        "dtm": 23,
+        "checkmate": false,
+        "stalemate": false,
+        "insufficientMaterial": false,
+        "pieceCount": 5
+      },
+      "packIds": [
+        "pawn-breakthrough-convert"
+      ],
+      "supports": [
+        "/spine/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/moveUci"
+      ],
+      "engine": {
+        "type": "cp",
+        "value": 1050,
+        "depth": 22,
+        "bestmove": "a7a8q"
+      }
+    },
+    {
+      "fen": "8/p7/1Pp1k3/P7/8/8/6K1/8 b - - 0 2",
+      "tablebase": {
+        "category": "loss",
+        "dtz": -2,
+        "dtm": -30,
+        "checkmate": false,
+        "stalemate": false,
+        "insufficientMaterial": false,
+        "pieceCount": 6
+      },
+      "packIds": [
+        "pawn-breakthrough-convert"
+      ],
+      "supports": [
+        "/spine/0/children/0/children/0/moveUci"
+      ],
+      "engine": {
+        "type": "cp",
+        "value": -8115,
+        "depth": 22,
+        "bestmove": "a7a6"
+      }
+    },
+    {
+      "fen": "8/P7/1ppk4/8/8/8/6K1/8 b - - 0 4",
+      "tablebase": {
+        "category": "loss",
+        "dtz": -2,
+        "dtm": -26,
+        "checkmate": false,
+        "stalemate": false,
+        "insufficientMaterial": false,
+        "pieceCount": 5
+      },
+      "packIds": [
+        "pawn-breakthrough-convert"
+      ],
+      "supports": [
+        "/spine/0/children/0/children/0/children/0/children/0/children/0/children/0/moveUci"
+      ],
+      "engine": {
+        "type": "cp",
+        "value": -696,
+        "depth": 22,
+        "bestmove": "d6d5"
+      }
+    },
+    {
+      "fen": "8/p7/2P1k3/P7/8/8/6K1/8 b - - 0 2",
+      "tablebase": {
+        "category": "draw",
+        "dtz": 0,
+        "dtm": 0,
+        "checkmate": false,
+        "stalemate": false,
+        "insufficientMaterial": false,
+        "pieceCount": 5
+      },
+      "packIds": [
+        "pawn-breakthrough-convert"
+      ],
+      "supports": [
+        "/deviations/4/moveUci"
+      ],
+      "engine": {
+        "type": "cp",
+        "value": 5,
+        "depth": 22,
+        "bestmove": "e6d6"
+      }
+    },
+    {
+      "fen": "8/p7/2p1k3/PP6/8/5K2/8/8 b - - 1 2",
+      "tablebase": {
+        "category": "win",
+        "dtz": 1,
+        "dtm": 43,
+        "checkmate": false,
+        "stalemate": false,
+        "insufficientMaterial": false,
+        "pieceCount": 6
+      },
+      "packIds": [
+        "pawn-breakthrough-convert"
+      ],
+      "supports": [
+        "/deviations/5/moveUci"
+      ],
+      "engine": {
+        "type": "cp",
+        "value": 886,
+        "depth": 22,
+        "bestmove": "c6b5"
+      }
+    },
+    {
+      "fen": "8/p7/2p1k3/PP6/8/8/6K1/8 w - - 0 2",
+      "tablebase": {
+        "category": "win",
+        "dtz": 1,
+        "dtm": 31,
+        "checkmate": false,
+        "stalemate": false,
+        "insufficientMaterial": false,
+        "pieceCount": 6
+      },
+      "packIds": [
+        "pawn-breakthrough-convert"
+      ],
+      "supports": [
+        "/spine/0/children/0/moveUci"
+      ],
+      "engine": {
+        "type": "cp",
+        "value": 750,
+        "depth": 22,
+        "bestmove": "b5b6"
+      }
+    },
+    {
+      "fen": "8/pp6/1P2k3/P1P5/8/8/6K1/8 b - - 0 1",
+      "tablebase": {
+        "category": "loss",
+        "dtz": -2,
+        "dtm": null,
+        "checkmate": false,
+        "stalemate": false,
+        "insufficientMaterial": false,
+        "pieceCount": 7
+      },
+      "packIds": [
+        "pawn-breakthrough-convert"
+      ],
+      "supports": [
+        "/deviations/1/moveUci"
+      ],
+      "engine": {
+        "type": "cp",
+        "value": -692,
+        "depth": 22,
+        "bestmove": "a7b6"
+      }
+    },
+    {
+      "fen": "8/pp6/2P1k3/PP6/8/8/6K1/8 b - - 0 1",
+      "tablebase": {
+        "category": "loss",
+        "dtz": -2,
+        "dtm": null,
+        "checkmate": false,
+        "stalemate": false,
+        "insufficientMaterial": false,
+        "pieceCount": 7
+      },
+      "packIds": [
+        "pawn-breakthrough-convert"
+      ],
+      "supports": [
+        "/spine/0/moveUci"
+      ],
+      "engine": {
+        "type": "cp",
+        "value": -522,
+        "depth": 22,
+        "bestmove": "b7b6"
+      }
+    },
+    {
+      "fen": "8/pp6/4k3/PPP5/8/8/5K2/8 b - - 1 1",
+      "tablebase": {
+        "category": "loss",
+        "dtz": -4,
+        "dtm": null,
+        "checkmate": false,
+        "stalemate": false,
+        "insufficientMaterial": false,
+        "pieceCount": 7
+      },
+      "packIds": [
+        "pawn-breakthrough-convert"
+      ],
+      "supports": [
+        "/deviations/3/moveUci"
+      ],
+      "engine": {
+        "type": "cp",
+        "value": -646,
+        "depth": 22,
+        "bestmove": "e6d7"
+      }
+    },
+    {
+      "fen": "8/pp6/4k3/PPP5/8/8/6K1/8 w - - 0 1",
+      "tablebase": {
+        "category": "win",
+        "dtz": 1,
+        "dtm": null,
+        "checkmate": false,
+        "stalemate": false,
+        "insufficientMaterial": false,
+        "pieceCount": 7
+      },
+      "packIds": [
+        "pawn-breakthrough-convert"
+      ],
+      "supports": [
+        "/start/fen"
+      ],
+      "engine": {
+        "type": "cp",
+        "value": 535,
+        "depth": 22,
+        "bestmove": "c5c6"
+      }
+    },
+    {
+      "fen": "8/pp6/4k3/PPP5/8/8/8/7K b - - 1 1",
+      "tablebase": {
+        "category": "draw",
+        "dtz": 0,
+        "dtm": null,
+        "checkmate": false,
+        "stalemate": false,
+        "insufficientMaterial": false,
+        "pieceCount": 7
+      },
+      "packIds": [
+        "pawn-breakthrough-convert"
+      ],
+      "supports": [
+        "/deviations/2/moveUci"
+      ],
+      "engine": {
+        "type": "cp",
+        "value": 0,
+        "depth": 22,
+        "bestmove": "e6d7"
+      }
+    },
+    {
+      "fen": "8/pp6/P3k3/1PP5/8/8/6K1/8 b - - 0 1",
+      "tablebase": {
+        "category": "draw",
+        "dtz": 0,
+        "dtm": null,
+        "checkmate": false,
+        "stalemate": false,
+        "insufficientMaterial": false,
+        "pieceCount": 7
+      },
+      "packIds": [
+        "pawn-breakthrough-convert"
+      ],
+      "supports": [
+        "/deviations/0/moveUci"
+      ],
+      "engine": {
+        "type": "cp",
+        "value": 0,
+        "depth": 22,
+        "bestmove": "b7a6"
+      }
+    },
+    {
+      "fen": "8/R2k4/8/3K4/8/8/8/8 b - - 9 5",
+      "tablebase": {
+        "category": "loss",
+        "dtz": -12,
+        "dtm": -12,
+        "checkmate": false,
+        "stalemate": false,
+        "insufficientMaterial": false,
+        "pieceCount": 3
+      },
+      "packIds": [
+        "mate-k-r-technique"
+      ],
+      "supports": [
+        "/spine/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/moveUci"
+      ],
+      "engine": {
+        "type": "mate",
+        "value": -8,
+        "depth": 22,
+        "bestmove": "d7d8"
+      }
+    },
+    {
+      "fen": "Q7/2k5/1pp5/8/8/8/6K1/8 b - - 0 5",
+      "tablebase": {
+        "category": "loss",
+        "dtz": -6,
+        "dtm": -22,
+        "checkmate": false,
+        "stalemate": false,
+        "insufficientMaterial": false,
+        "pieceCount": 5
+      },
+      "packIds": [
+        "pawn-breakthrough-convert"
+      ],
+      "supports": [
+        "/spine/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/moveUci"
+      ],
+      "engine": {
+        "type": "mate",
+        "value": -17,
+        "depth": 22,
+        "bestmove": "c7d6"
+      }
+    },
+    {
+      "fen": "R3k2r/8/8/4K3/4P3/8/8/8 b - - 2 2",
+      "tablebase": {
+        "category": "loss",
+        "dtz": -2,
+        "dtm": -20,
+        "checkmate": false,
+        "stalemate": false,
+        "insufficientMaterial": false,
+        "pieceCount": 5
+      },
+      "packIds": [
+        "philidor-passive-rook-convert"
+      ],
+      "supports": [
+        "/spine/0/moveUci"
+      ],
+      "engine": {
+        "type": "mate",
+        "value": -18,
+        "depth": 22,
+        "bestmove": "e8f7"
+      }
+    },
+    {
+      "fen": "R5k1/8/5K2/8/8/8/8/8 b - - 17 9",
+      "tablebase": {
+        "category": "loss",
+        "dtz": -4,
+        "dtm": -4,
+        "checkmate": false,
+        "stalemate": false,
+        "insufficientMaterial": false,
+        "pieceCount": 3
+      },
+      "packIds": [
+        "mate-k-r-technique"
+      ],
+      "supports": [
+        "/deviations/3/moveUci"
+      ],
+      "engine": {
+        "type": "mate",
+        "value": -2,
+        "depth": 22,
+        "bestmove": "g8h7"
+      }
+    },
+    {
+      "fen": "R6k/8/6K1/8/8/8/8/8 b - - 19 10",
+      "tablebase": {
+        "category": "loss",
+        "dtz": -1,
+        "dtm": null,
+        "checkmate": true,
+        "stalemate": false,
+        "insufficientMaterial": false,
+        "pieceCount": 3
+      },
+      "packIds": [
+        "mate-k-r-technique"
+      ],
+      "supports": [
+        "/spine/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/children/0/moveUci"
+      ],
+      "engine": {
+        "type": "mate",
+        "value": 0,
+        "depth": 0,
+        "bestmove": null
+      }
+    },
+    {
+      "fen": "R6r/4k3/8/3K4/4P3/8/8/8 b - - 4 3",
+      "tablebase": {
+        "category": "win",
+        "dtz": 1,
+        "dtm": 31,
+        "checkmate": false,
+        "stalemate": false,
+        "insufficientMaterial": false,
+        "pieceCount": 5
+      },
+      "packIds": [
+        "philidor-passive-rook-convert"
+      ],
+      "supports": [
+        "/deviations/5/moveUci"
+      ],
+      "engine": {
+        "type": "cp",
+        "value": 504,
+        "depth": 22,
+        "bestmove": "h8a8"
+      }
+    },
+    {
+      "fen": "R6r/4k3/8/4K3/4P3/8/8/8 w - - 3 3",
+      "tablebase": {
+        "category": "win",
+        "dtz": 1,
+        "dtm": 19,
+        "checkmate": false,
+        "stalemate": false,
+        "insufficientMaterial": false,
+        "pieceCount": 5
+      },
+      "packIds": [
+        "philidor-passive-rook-convert"
+      ],
+      "supports": [
+        "/spine/0/children/0/moveUci"
+      ],
+      "engine": {
+        "type": "mate",
+        "value": 13,
+        "depth": 22,
+        "bestmove": "a8h8"
+      }
+    }
+  ]
+}

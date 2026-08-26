@@ -8166,3 +8166,22 @@ retains the digest-gated, multi-valued ledger index, preserves duplicate clock-s
 suppresses stale and unstamped ledgers, yields to live evidence and stays off the wire. Stale routing
 rows for D142, D663/D665/D666, D671–D678 and D722 are removed under [[D1618]]; all were already
 closed by their archived implementation contracts.
+
+## 2026-08-26 — D143 crosses the engine/tablebase partition without collapsing it
+
+Preregistered and ran the whole committed Syzygy population through the exact Stockfish authoring
+profile. The input is 341 records deduplicated to 288 FENs (108 win / 107 loss / 73 draw); both fresh
+Stockfish 18 runs completed and all 288 score-type/value/depth/best-move observations repeated
+byte-for-byte. The alternating mating-line perspective control passes.
+
+For the 272 non-terminal positions, every one of 210 decisive readings has the correct
+side-to-move sign. The sixteen terminals remain typed—five `mate 0` losses and eleven `cp 0`
+draws. Exact draws top out at 21 cp and the nearest decisive cp is 135, so the preregistered ±25 cp
+screen separates this fixed population 288/288. That passes the follow-up criterion and does not
+license production normalization: the dossier keeps Syzygy W/D/L/DTZ/DTM separate from bounded,
+versioned cp/mate and routes Review, grades, bots and packs to source-local rules.
+
+[[D143]] is closed as a research gap; no corpus ledger or production evidence contract was widened.
+The dossier is `design/research/engine-tablebase-corroboration.md`; raw receipts are under
+`planning/d143-engine-tablebase-corroboration/`; the disposable instrument is
+`tools/d143-engine-tablebase-corroboration-harness/`.
