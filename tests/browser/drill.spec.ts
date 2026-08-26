@@ -96,6 +96,10 @@ const ENDGAME_INTERACTION_PACKS = [
 test.beforeEach(async ({ page }) => register(page));
 
 test("a first learner enters the real rehearsal loop with a persistent event-derived guide", async ({ page }) => {
+  const catalogueSkip = page.getByRole("link", { name: "Skip to position catalogue" });
+  await catalogueSkip.focus();
+  await page.keyboard.press("Enter");
+  await expect(page.locator("#position-catalogue")).toBeFocused();
   await page.getByRole("link", { name: "Home" }).click();
   await expect(page.getByRole("heading", { name: "Do not just learn the move. Rehearse the game it creates." })).toBeFocused();
   await expect(page.getByRole("heading", { name: "How Tabiya works" })).toBeVisible();
@@ -785,7 +789,22 @@ async function liveInputMove(
     await page.keyboard.press("Enter");
     await navigateGrid(page, uci.slice(0, 2), uci.slice(2, 4), orientation);
     await page.keyboard.press("Enter");
-    await expect(grid).toBeFocused();
+    const gridElement = await grid.elementHandle();
+    if (gridElement === null) throw new TypeError("Semantic board disappeared after move submission");
+    await page.waitForFunction((element) => {
+      const modal = document.querySelector<HTMLElement>('[role="dialog"][aria-modal="true"]');
+      return document.activeElement === element || (modal !== null && modal.contains(document.activeElement));
+    }, gridElement);
+    const focusState = await grid.evaluate((element) => {
+      const active = document.activeElement;
+      const modal = active instanceof HTMLElement
+        ? active.closest<HTMLElement>('[role="dialog"][aria-modal="true"]')
+        : null;
+      return modal === null
+        ? { owner: "grid", valid: active === element }
+        : { owner: "modal", valid: modal.contains(active) && element.closest("[inert]") !== null };
+    });
+    expect(focusState.valid, `${focusState.owner} must own focus after keyboard submission`).toBe(true);
     await expect(grid).toHaveAttribute("aria-activedescendant", `board-square-${uci.slice(2, 4)}`);
   } else {
     const board = page.getByLabel("Chessboard");
@@ -1418,7 +1437,7 @@ test("@matrix served endgame packs submit the exact drawn move through every per
   }
 });
 
-test("@matrix the semantic board remains a complete interactive grid after a keyboard move", async ({ page }) => {
+test("@matrix the semantic board remains complete and yields focus to a checkpoint after a keyboard move", async ({ page }) => {
   await page.goto("/play");
   await page
     .getByRole("article")
@@ -1432,7 +1451,10 @@ test("@matrix the semantic board remains a complete interactive grid after a key
   await expect(grid.locator('[aria-selected="true"]')).toHaveCount(1);
   await expect(page.getByText("Enter a move", { exact: true })).toBeVisible();
   await liveInputMove(page, "c1e3", "white", "keyboard");
-  await expect(grid).toBeFocused();
+  const checkpoint = page.getByRole("dialog", { name: "Choose the setup" });
+  await expect(checkpoint).toBeVisible();
+  expect(await checkpoint.evaluate((element) => element.contains(document.activeElement))).toBe(true);
+  expect(await grid.evaluate((element) => element.closest("[inert]") !== null)).toBe(true);
   await expect(grid).toHaveAttribute("aria-activedescendant", "board-square-e3");
   await expect(page.locator(".input-status")).toContainText("Move committed:");
 });
@@ -1450,6 +1472,11 @@ test("the drill keyboard map remains contained and scrollable at the supported p
   expect(box.y).toBeGreaterThanOrEqual(0);
   expect(box.y + box.height).toBeLessThanOrEqual(680);
   expect(await dialog.evaluate((element) => getComputedStyle(element).overflowY)).toBe("auto");
+  expect(await page.getByRole("button", { name: "Keyboard shortcuts" }).evaluate((element) => element.closest("[inert]") !== null)).toBe(true);
+  const close = dialog.getByRole("button", { name: "Close" });
+  await close.focus();
+  await page.keyboard.press("Tab");
+  await expect(close).toBeFocused();
 });
 
 test("drill shortcuts keep native controls and never leak a shell chord from the board", async ({ page }) => {

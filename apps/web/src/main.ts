@@ -1,6 +1,7 @@
 import { mount } from "svelte";
 
 import App from "./App.svelte";
+import "./accessibility.css";
 
 const target = document.querySelector<HTMLElement>("#app");
 

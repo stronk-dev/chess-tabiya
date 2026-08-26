@@ -33,7 +33,7 @@
   ]);
 </script>
 
-<main class="library" aria-labelledby="pack-list-title">
+<main id="position-catalogue" class="library" aria-labelledby="pack-list-title" tabindex="-1">
   <header>
     <p class="eyebrow">Rehearsal library</p>
     <h1 id="pack-list-title">Choose the game you want to understand.</h1>

@@ -11,6 +11,7 @@
   import CompareView from "./CompareView.svelte";
   import HonestControl from "./HonestControl.svelte";
   import KeyboardHelp from "./KeyboardHelp.svelte";
+  import { modalBoundary } from "./modal-boundary.js";
   import Timeline from "./Timeline.svelte";
   import TerminalSheet from "./TerminalSheet.svelte";
   import WhyBanner from "./WhyBanner.svelte";
@@ -877,7 +878,7 @@
   <main class="drill" tabindex="-1" bind:this={mainElement} aria-labelledby="drill-title" style={`--board-edge: ${boardEdge}px`}>
     <header class="topbar">
       <button class="wordmark" type="button" onclick={onStop}>Tabiya</button>
-      <div class="status" aria-live="polite">
+      <div class="status visually-hidden-on-phone" aria-live="polite">
         <span class="run-name">{pack?.title ?? "Just Play"}</span>
         <span class:readonly={snapshot.access === "read_only"}>
           {snapshot.access === "read_only" ? "Read-only follower" : busy ? "Writer · thinking…" : "Writer · your move"}
@@ -1185,7 +1186,7 @@
 
 {#if viewportSupport.supported && objectiveOpen}
   <div class="modal-backdrop">
-    <div class="modal objective-dialog" role="dialog" aria-modal="true" aria-labelledby="objective-dialog-title">
+    <div class="modal objective-dialog" role="dialog" aria-modal="true" aria-labelledby="objective-dialog-title" use:modalBoundary>
       <p>Objective</p>
       <h2 id="objective-dialog-title">{objectiveSentence}</h2>
       <button type="button" onclick={() => (objectiveOpen = false)}>Return to the board</button>
@@ -1195,7 +1196,7 @@
 
 {#if viewportSupport.supported && inspectorOpen}
   <div class="modal-backdrop inspector-backdrop">
-    <div class="inspector-surface" role="dialog" aria-modal="true" aria-labelledby="inspector-title">
+    <div class="inspector-surface" role="dialog" aria-modal="true" aria-labelledby="inspector-title" use:modalBoundary>
       <header><div><p>Analysis surface</p><h2 id="inspector-title">Evidence inspector</h2></div><button type="button" onclick={() => (inspectorOpen = false)}>Return to play</button></header>
       <div class="inspector-grid">
         <section class="structural-reading" aria-label="Evidence inspector: position structure" data-evidence-consumer="inspector.position_structure">
@@ -1260,7 +1261,7 @@
 
 {#if viewportSupport.supported && forkOpen}
   <div class="modal-backdrop">
-    <div role="dialog" aria-modal="true" aria-labelledby="fork-title">
+    <div role="dialog" aria-modal="true" aria-labelledby="fork-title" use:modalBoundary>
       <form class="modal" onsubmit={(event) => { event.preventDefault(); void submitFork(); }}>
         <p>Branch from here</p>
         <h2 id="fork-title">Name the experiment.</h2>
@@ -1274,7 +1275,7 @@
 
 {#if viewportSupport.supported && checkpointPickerOpen}
   <div class="modal-backdrop">
-    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="picker-title">
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="picker-title" use:modalBoundary>
       <p>Rewind</p><h2 id="picker-title" tabindex="-1" bind:this={pickerHeading}>Choose a checkpoint.</h2>
       <div class="checkpoint-options">
         {#each [...run.events].reverse().filter((event) => event.type === "checkpoint.reached") as event}
@@ -1293,7 +1294,7 @@
 {#if viewportSupport.supported && openShape}<ShapePanel entry={openShape} onClose={closeShape} onInspect={() => { openShapeId = undefined; shapeInvoker = undefined; inspectorOpen = true; }} />{/if}
 {#if viewportSupport.supported && openPivotalNodeId !== undefined && pivotalDialogOpen}
   <div class="modal-backdrop">
-    <div class="modal guidance-panel" role="dialog" aria-modal="true" aria-labelledby="pivotal-title" data-evidence-consumer="board.pivotal_marker">
+    <div class="modal guidance-panel" role="dialog" aria-modal="true" aria-labelledby="pivotal-title" data-evidence-consumer="board.pivotal_marker" use:modalBoundary>
       <p>Pivotal marker</p><h2 id="pivotal-title">Review {openPivotalNode?.moveSan ?? "this moment"}</h2>
       <p class="guidance-sentence">A concrete change was recorded at ply {openPivotalNode?.ply ?? 0}. Open its evidence when you want the full diagnostic reading.</p>
       <div><button type="button" onclick={() => { pivotalDialogOpen = false; inspectorOpen = true; }}>Open in Inspector</button><button type="button" onclick={() => (pivotalDialogOpen = false)}>Close</button></div>
@@ -1714,14 +1715,6 @@
     .topbar {
       grid-template-columns: 1fr auto auto;
       padding: 0 .5rem;
-    }
-
-    .status {
-      position: absolute;
-      width: 1px;
-      height: 1px;
-      overflow: hidden;
-      clip-path: inset(50%);
     }
 
     .workspace {

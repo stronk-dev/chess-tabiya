@@ -361,7 +361,7 @@
         </div>
       {/each}
     </div>
-    <div class="input-status" aria-live="polite" role="status">{inputState.lastAnnouncement}</div>
+    <div class="input-status visually-hidden" aria-live="polite" role="status">{inputState.lastAnnouncement}</div>
     {#if inputState.pendingPromotion}
       <div
         class="promotion-picker"
@@ -433,16 +433,6 @@
   .semantic-cell { min-width: 0; min-height: 0; display: grid; place-items: center; color: transparent; }
   .semantic-cell.active { color: CanvasText; outline: 3px solid CanvasText; outline-offset: -3px; background: color-mix(in srgb, var(--ink) 16%, transparent); }
   .semantic-cell span { font: 600 0.55rem/1 ui-monospace, monospace; }
-
-  .input-status {
-    position: absolute;
-    left: 0;
-    width: 1px;
-    height: 1px;
-    overflow: hidden;
-    clip-path: inset(50%);
-    white-space: nowrap;
-  }
 
   .text-move {
     position: absolute;

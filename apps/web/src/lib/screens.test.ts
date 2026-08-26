@@ -416,6 +416,7 @@ describe("Layer 3 screens", () => {
     expect(document.querySelector(".shape-panel")?.getAttribute("role")).toBe("dialog");
     expect(document.querySelector(".shape-panel")?.getAttribute("aria-modal")).toBe("true");
     expect(document.activeElement?.id).toBe("shape-panel-title");
+    expect(marker.closest("[inert]")).not.toBeNull();
     expect(document.querySelector(".shape-panel")?.textContent).toContain("Named plans for this structure — general to the kind of position, not advice for this one.");
     expect(document.querySelector(".shape-panel")?.textContent).not.toContain("shape trigger");
     expect(document.querySelector(".shape-panel")?.textContent).toContain("Minority attack");
@@ -1060,7 +1061,17 @@ describe("Layer 3 screens", () => {
     await tick();
     expect(document.querySelector('[aria-labelledby="shortcut-title"]')).not.toBeNull();
     expect(document.activeElement?.id).toBe("shortcut-title");
+    expect(document.querySelector('[aria-labelledby="shortcut-title"]')?.textContent).toContain("Workspace");
+    expect(document.querySelector('[aria-labelledby="shortcut-title"]')?.textContent).toContain("G then H");
+    expect(document.querySelector('[aria-labelledby="shortcut-title"]')?.textContent).toContain("Rehearsal");
     expect(document.body.textContent).toContain("Shift + R");
+    expect(main.closest("[inert]")).not.toBeNull();
+    const modalClose = document.querySelector<HTMLButtonElement>('[aria-labelledby="shortcut-title"] button')!;
+    modalClose.focus();
+    const wrappedTab = new KeyboardEvent("keydown", { key: "Tab", bubbles: true, cancelable: true });
+    modalClose.dispatchEvent(wrappedTab);
+    expect(wrappedTab.defaultPrevented).toBe(true);
+    expect(document.activeElement).toBe(modalClose);
     key("Escape");
     await tick();
     expect(document.activeElement).toBe(main);

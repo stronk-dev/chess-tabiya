@@ -965,6 +965,7 @@
     </main>
   {:else if route.name === "play"}
     <div class="play-surface">
+      <a class="surface-skip" href="#position-catalogue" onclick={(event) => { event.preventDefault(); document.getElementById("position-catalogue")?.focus(); }}>Skip to position catalogue</a>
       <JustPlayStarter busy={session.busy} onStart={(input) => controller.startPosition(input)} />
       <PackList
         {packs}
@@ -1414,7 +1415,7 @@
   :global(:focus-visible) { outline: 3px solid color-mix(in srgb, var(--accent) 65%, white); outline-offset: 2px; }
   :global(::selection) { background: color-mix(in srgb, var(--accent) 25%, white); }
   .shell-view { width: min(70rem, calc(100% - 2rem)); height: 100%; margin: 0 auto; padding: clamp(2rem, 6vw, 5rem) 0; overflow: auto; }
-  .play-surface{height:100%;overflow:auto;padding:1rem 0}
+  .play-surface{height:100%;overflow:auto;padding:1rem 0}.surface-skip{position:fixed;z-index:50;top:.35rem;left:.35rem;padding:.6rem .8rem;border-radius:.5rem;background:var(--ink);color:var(--paper);transform:translateY(-150%)}.surface-skip:focus{transform:translateY(0)}
   .auth-gate { width: min(32rem, calc(100% - 2rem)); margin: 10vh auto; }
   .auth-gate h1 { font: 500 clamp(2rem, 6vw, 4rem)/1 var(--display-font); }
   .auth-gate form { display: grid; gap: 1rem; margin: 2rem 0 1rem; }

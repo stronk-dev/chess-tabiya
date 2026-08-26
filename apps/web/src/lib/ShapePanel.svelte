@@ -2,6 +2,7 @@
   import { onMount } from "svelte";
 
   import type { ShapeEntryView } from "./api.js";
+  import { modalBoundary } from "./modal-boundary.js";
   interface Props {
     entry: ShapeEntryView;
     onClose: () => void;
@@ -23,7 +24,7 @@
 
 <svelte:window onkeydown={keydown} />
 
-<div class="shape-panel" role="dialog" aria-modal="true" aria-labelledby="shape-panel-title" data-evidence-consumer="theory.shape_firing">
+<div class="shape-panel" role="dialog" aria-modal="true" aria-labelledby="shape-panel-title" data-evidence-consumer="theory.shape_firing" use:modalBoundary>
   <header>
     <div>
       <p class="eyebrow">Named structure · {entry.channel}{entry.publisherHandle ? ` · ${entry.publisherHandle}` : ""}</p>

@@ -99,44 +99,56 @@
     {
       "id": "A11-a14",
       "sourceState": "queued",
-      "state": "queued",
+      "state": "completed",
       "capability": "accessibility",
       "owner": "client-platform",
-      "assignment": "capability:accessibility",
+      "assignment": "closed",
       "sourceDocument": "ux-accessibility-and-mobile.md",
       "sourceSection": "§3.2 s0-tabstops",
       "sourceHeading": "Accessibility and small screens — `ux-accessibility-and-mobile.md`",
       "summary": "Reaching the pack list costs ~12 tab stops",
       "legacyRoute": "none",
-      "sourceDigest": "sha256:f2490e02024c7ccd10bdb3e8f8b06f44785e4af8f364b6e0279f0060b737df49"
+      "sourceDigest": "sha256:f2490e02024c7ccd10bdb3e8f8b06f44785e4af8f364b6e0279f0060b737df49",
+      "completion": {
+        "completedOn": "2026-08-26",
+        "evidence": "Play exposes a focus-visible bypass that explicitly moves focus to the position catalogue; real Chromium fixture"
+      }
     },
     {
       "id": "A11-a15",
       "sourceState": "queued",
-      "state": "queued",
+      "state": "completed",
       "capability": "accessibility",
       "owner": "client-platform",
-      "assignment": "capability:accessibility",
+      "assignment": "closed",
       "sourceDocument": "ux-accessibility-and-mobile.md",
       "sourceSection": "§3.2 s2-two-maps",
       "sourceHeading": "Accessibility and small screens — `ux-accessibility-and-mobile.md`",
       "summary": "The two help dialogs disagree and no single place lists the whole keyboard",
       "legacyRoute": "none",
-      "sourceDigest": "sha256:289e115acb2b256a4dbae42908f366cd44c3e6b65fdd17b920a32316b81decba"
+      "sourceDigest": "sha256:289e115acb2b256a4dbae42908f366cd44c3e6b65fdd17b920a32316b81decba",
+      "completion": {
+        "completedOn": "2026-08-26",
+        "evidence": "shell and drill help wrap one KeyboardGuide over one workspace/rehearsal shortcut registry; both component entry points assert the complete map"
+      }
     },
     {
       "id": "A11-a16",
       "sourceState": "queued",
-      "state": "queued",
+      "state": "completed",
       "capability": "accessibility",
       "owner": "client-platform",
-      "assignment": "capability:accessibility",
+      "assignment": "closed",
       "sourceDocument": "ux-accessibility-and-mobile.md",
       "sourceSection": "§3.1",
       "sourceHeading": "Accessibility and small screens — `ux-accessibility-and-mobile.md`",
       "summary": "**Zero focus traps client-wide against ten dialogs; zero `inert` uses.** Should land as one change, not nine",
       "legacyRoute": "none",
       "note": "interacts with region registration and the phone sheet",
+      "completion": {
+        "completedOn": "2026-08-26",
+        "evidence": "one modalBoundary action covers every aria-modal dialog, makes all background branches inert, traps Tab in both directions and reference-counts restoration; DOM and Chromium fixtures prove the boundary"
+      },
       "sourceDigest": "sha256:f9e2c2c304840ccbd673c6d4e8a3a81ac665a9af9fa51e8fe07a4bea5c1b9c74"
     },
     {
@@ -156,16 +168,20 @@
     {
       "id": "A11-a18",
       "sourceState": "queued",
-      "state": "queued",
+      "state": "completed",
       "capability": "accessibility",
       "owner": "client-platform",
-      "assignment": "capability:accessibility",
+      "assignment": "closed",
       "sourceDocument": "ux-accessibility-and-mobile.md",
       "sourceSection": "§3.1",
       "sourceHeading": "Accessibility and small screens — `ux-accessibility-and-mobile.md`",
       "summary": "Three separate `visually-hidden` implementations, one using deprecated `clip: rect()`",
       "legacyRoute": "none",
-      "sourceDigest": "sha256:d3ba4388717e72f619129273e04c3822ebfac8e0e805fe8615b8c7223ea21c2b"
+      "sourceDigest": "sha256:d3ba4388717e72f619129273e04c3822ebfac8e0e805fe8615b8c7223ea21c2b",
+      "completion": {
+        "completedOn": "2026-08-26",
+        "evidence": "one imported accessibility stylesheet owns always-hidden and responsive-hidden geometry; whole-client source census refuses deprecated clip and duplicate inset geometry"
+      }
     },
     {
       "id": "A11-a19",

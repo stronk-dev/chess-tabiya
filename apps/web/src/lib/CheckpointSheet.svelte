@@ -11,6 +11,7 @@
   import type { StartSide } from "./board-model.js";
   import { theoryVerdictSentence, UNKNOWN_THEORY_NOTE } from "./theory-presentation.js";
   import { claimProvenance } from "./claim-presentation.js";
+  import { modalBoundary } from "./modal-boundary.js";
 
   interface Props {
     checkpoint: CheckpointNotice;
@@ -91,7 +92,7 @@
 </script>
 
 <div class="backdrop">
-  <div class="sheet" role="dialog" aria-modal="true" aria-labelledby="checkpoint-title" aria-describedby="checkpoint-boundary-note">
+  <div class="sheet" role="dialog" aria-modal="true" aria-labelledby="checkpoint-title" aria-describedby="checkpoint-boundary-note" use:modalBoundary>
     <p class="eyebrow">Checkpoint</p>
     <h2 id="checkpoint-title" tabindex="-1" bind:this={heading}>{checkpoint.label}</h2>
     <p id="checkpoint-boundary-note">You reached a semantic boundary. Choose an action below to leave this checkpoint; Escape does not dismiss it.</p>

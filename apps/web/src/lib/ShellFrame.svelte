@@ -67,7 +67,7 @@
         >
       {/each}
     </nav>
-    <div class="run-context" aria-live="polite">
+    <div class="run-context visually-hidden-below-rail" aria-live="polite">
       {#if runContext}
         <span>{runContext.title}</span>
         <strong class:readonly={runContext.access === "read_only"}>
@@ -193,14 +193,6 @@
       grid-template-columns: auto minmax(0, 1fr);
     }
 
-    .run-context {
-      position: absolute;
-      width: 1px;
-      height: 1px;
-      overflow: hidden;
-      clip-path: inset(50%);
-      white-space: nowrap;
-    }
   }
 
   @media (max-width: 719px) {

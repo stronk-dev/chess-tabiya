@@ -9316,3 +9316,29 @@ work while a ply is focused, move focus with the preview, and expose one roving 
 one stop per move. Checkpoints no longer swallow Escape and state why the modal is deliberately not
 dismissible. A new keyboard-owner unit fixture plus component and browser interaction tests cover
 the boundaries. A11-a12 is complete; the separate shared focus-trap/inert obligation remains open.
+
+## 2026-08-26 — Catalogue bypass, one keyboard map and shared hidden geometry close
+
+Play now offers a focus-visible bypass that moves focus directly to the position catalogue. A real
+Chromium check caught that fragment scrolling alone did not focus a `tabindex=-1` target, so the
+link performs the promised focus transfer explicitly rather than relying on browser variance.
+
+Shell and drill help now wrap one KeyboardGuide over one workspace/rehearsal shortcut registry;
+either entry point exposes the complete map and the two copies cannot drift. Always-hidden and
+responsive-hidden geometry moved into one imported accessibility stylesheet. A whole-client source
+census rejects deprecated `clip: rect()` and any duplicate `clip-path: inset(50%)` implementation
+outside that utility. A11-a14, A11-a15 and A11-a18 are complete.
+
+## 2026-08-26 — One modal boundary closes the client-wide focus leak (D1492 / A11-a16)
+
+Every `aria-modal=true` dialog now uses one action that makes all background branches inert and
+owns circular Tab and Shift+Tab traversal. Claims are reference-counted, so an overlapping or
+chained dialog cannot re-enable background content when the first boundary closes; pre-existing
+inert state is restored exactly. Escape remains the owning workflow's decision rather than being
+hidden inside the generic boundary.
+
+A pure DOM contract proves both directions, restoration and overlapping claims. Mounted drill
+fixtures prove ordinary controls sit below an inert ancestor while Shape and keyboard dialogs are
+open. A real Chromium fixture at the supported phone floor proves the background is inert and the
+single-focusable keyboard dialog wraps focus rather than leaking into the page. A11-a16 and D1492
+are complete.

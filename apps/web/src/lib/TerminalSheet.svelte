@@ -1,5 +1,6 @@
 <script lang="ts">
   import { onMount } from "svelte";
+  import { modalBoundary } from "./modal-boundary.js";
 
   import type { RunOutcome } from "@chess-tabiya/runtime";
   import type { AuthoredFeedbackItem, ShapeEntryView } from "./api.js";
@@ -31,7 +32,7 @@
 </script>
 
 <div class="backdrop">
-  <div class="sheet" role="dialog" aria-modal="true" aria-labelledby="outcome-title">
+  <div class="sheet" role="dialog" aria-modal="true" aria-labelledby="outcome-title" use:modalBoundary>
     <p class="eyebrow">Attempt complete</p>
     <h2 id="outcome-title" tabindex="-1" bind:this={heading}>
       {outcome === "win" ? "You won." : outcome === "loss" ? "You lost." : "Draw."}

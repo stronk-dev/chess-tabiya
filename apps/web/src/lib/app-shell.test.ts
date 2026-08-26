@@ -413,6 +413,12 @@ describe("application shell", () => {
       expect(document.body.textContent).toContain("You hold the board"),
     );
     expect(document.title).toBe("Home · Tabiya");
+    key("?");
+    await vi.waitFor(() => expect(document.activeElement?.id).toBe("shell-shortcuts-title"));
+    expect(document.querySelector('[aria-labelledby="shell-shortcuts-title"]')?.textContent).toContain("Workspace");
+    expect(document.querySelector('[aria-labelledby="shell-shortcuts-title"]')?.textContent).toContain("Rehearsal");
+    expect(document.querySelector('[aria-labelledby="shell-shortcuts-title"]')?.textContent).toContain("Shift + R");
+    key("Escape");
     const skip = document.querySelector<HTMLAnchorElement>(".skip-link")!;
     expect(skip.textContent).toBe("Skip to content");
     expect(skip.getAttribute("href")).toBe("#main-content");

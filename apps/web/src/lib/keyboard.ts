@@ -21,6 +21,26 @@ export const KEYBOARD_OWNERSHIP = Object.freeze({
   browser: Object.freeze(["Tab outside the drill region"]),
 });
 
+export const WORKSPACE_SHORTCUTS = Object.freeze([
+  ["G then H", "Home"], ["G then P", "Play"], ["G then L", "Learn"],
+  ["G then R", "Review"], ["G then V", "Live"], ["G then C", "Create"],
+  ["G then B", "Library"], ["G then S", "Settings"],
+  ["G then M", "Focus primary navigation"],
+] as const);
+
+export const DRILL_SHORTCUTS = Object.freeze([
+  ["R", "Rewind to last checkpoint"], ["Shift + R", "Choose a checkpoint"],
+  ["B", "Fork at the current position"], ["1…9", "Switch branch"],
+  ["Alt + C", "Toggle comparison outside text entry and the board"],
+  ["Board arrows / Home / End / Page keys", "Move the active board square"],
+  ["Board Enter / Space", "Select a piece or commit its destination"],
+  ["Board Escape", "Cancel selection; press again to return to drill shortcuts"],
+  ["Escape", "Return from a drill control to the drill shortcut region"],
+  ["← / →", "Step the timeline or comparison outside text entry and the board"],
+  ["Space", "Play or pause branch replay when the drill region is focused"],
+  ["E", "Export PGN"],
+] as const);
+
 interface KeyboardActions {
   readonly navigate: (path: string) => void;
   readonly focusPrimaryNavigation: () => void;
