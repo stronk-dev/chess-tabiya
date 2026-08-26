@@ -254,6 +254,16 @@ unobstructed linear geometry, while modules decide endgame relevance. Because ei
 predicate leaves currently carry no convention version, the author repair also owes an explicit
 drill-pack/shape grammar and deliberate content migration before validation or learner admission.
 
+[[D1722]] closes the semantic-provenance question across the whole manifest rather than treating
+opposition as an isolated definition bug. Of 42 projections labelled `declared_convention`, only
+10 carry a machine-readable convention operand; 16 name a convention only in prose and 16 do
+neither. Eighteen additional convention-dependent projections use another scalar grounding. The
+compiler accepts same-version meaning rewrites and refuses an added composition convention on a
+single-grounding derivation, so validation and modules cannot infer a trustworthy source closure
+from today's fields. A compiled convention registry, direct plus per-path transitive refs,
+version-enforced migration and sealed bounded disclosure now precede D1711, avoidance v2 and all
+learner/provider activation. Ordinary UX still receives module wording; raw ids remain Advanced.
+
 ### 3. Arrival and the rehearsal loop
 
 <!-- roadmap-capability: rehearsal -->

@@ -85,6 +85,16 @@ predicate convention and deliberate migration of eight leaves in two content doc
 remains module relevance. The dossier and exact author handoff precede D1711 validation and D1718
 avoidance activation.
 
+[[D1722]] **completed the convention-provenance closure audit on 2026-08-26**: the 42 projections
+labelled `declared_convention` split 10 machine-readable convention operands / 16 versioned prose
+only / 16 neither; 27 already have consumers and two reach the external story voice. A dependency
+pass finds 18 more convention-dependent rows with another scalar grounding—twelve source/sibling
+and six derived. Two executable controls expose the contract failure: an in-place convention
+meaning rewrite compiles, while adding truthful convention grounding to a single-grounding
+derivation is refused. The shared author repair adds a registered convention vocabulary,
+direct/transitive per-path closure, version rules and sealed module/provider disclosure before
+D1711 validation, D1718 avoidance or Phase-3 activation.
+
 **Deliverable 7 (owner questions) accumulates here** — nothing is silently chosen.
 **All four open questions RULED 2026-08-22 ([[D745]])**: space = classic zones + pawn control,
 `chess_tradition`; the negative reading faces learners post-commit/review with the denominator;

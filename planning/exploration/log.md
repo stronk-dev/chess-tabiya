@@ -8927,3 +8927,21 @@ The successor handoff requires unobstructed reading/event/avoidance `@2` identit
 authored-predicate convention, deliberate migration of eight leaves across two content documents,
 and D1711 executable validation before learner admission. The prior campaign research
 generalization was corrected. No production, RFC, schema, content, pack or learner-UX byte changed.
+
+## 2026-08-26 — Convention provenance closure audited (D1722)
+
+Derived all 42 projections labelled `declared_convention` from the compiled manifest: ten carry a
+machine-readable convention operand, sixteen name a version-like convention only in prose and
+sixteen do neither. Twenty-seven already have consumers and two reach the external story voice. A
+second dependency pass found eighteen convention-dependent projections under another scalar
+grounding—twelve source/sibling rows and six derived compositions—including backward-pawn and
+king-opposition predicates/readings labelled exact position rules while their events are labelled
+conventional.
+
+Two executable controls make the contract defect able to fail. The compiler accepts rewriting the
+meaning of `backward_pawn@1` without a version change, and it rejects truthful convention grounding
+on `square_clearance_observed@1` because a single-grounding derivation must repeat its input
+grounding even when the composition adds `observed-window@1`. The author handoff requires one
+compiled convention registry, direct and per-path transitive refs, semantic version enforcement and
+sealed module/provider disclosure. It explicitly keeps raw ids in Advanced rather than recreating
+the rejected evidence dump. No production, RFC, schema, content, pack or learner-UX byte changed.

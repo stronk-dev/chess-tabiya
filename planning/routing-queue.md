@@ -15,6 +15,7 @@ set execution order.
 
 | Rows | Primary destination | Next action / gate |
 |---|---|---|
+| D1722 | shared convention-provenance author amendment → F1/D1711/F2/F5/F8 | Consume `declared-convention-identity-author-repair-2026-08-26.md`: register exact convention definitions; declare direct and per-path transitive refs independently of primary grounding; seal bounded disclosure into rendered/provider items; enforce versioned semantic migration; classify the measured 42 labelled + 18 other-grounding rows before validation or learner activation. |
 | D1719 | D1716 semantic-selection subject-identity amendment | Replace family/sign then move-level deduplication with declared root-subject/outcome grouping and distinct supporting-move counts; the current `alternativeEvents` array cannot be filtered into a complete subject denominator. |
 | D1718 | D1716 semantic-selection subject-identity successor author input | Consume the measured 790/491/455 census and total thirteen-family grammar from `avoidance-subject-author-repair-2026-08-26.md`; author new `@2` evidence rather than patching isolated pawns or widening `@1`. |
 | D1717 | king-opposition v2 semantic/schema author amendment | Consume `king-opposition-author-repair-2026-08-26.md`: publish unobstructed reading/event/avoidance `@2`, explicit authored-predicate convention and eight-leaf migration; keep phase in consumer selection; independently review before D1711 validation or D1718 learner admission. |
