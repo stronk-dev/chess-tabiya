@@ -17,6 +17,7 @@ import {
 import {
   DOWNSTREAM_SOURCE_READERS,
   FOUNDATION_CAPABILITY_RECEIPTS,
+  NONLANDED_EXECUTION_OWNERS,
   SOURCE_PROGRAM_HANDOFFS,
 } from "./registry.js";
 
@@ -95,6 +96,19 @@ describe("D1737 declared 1.0 foundation basis", () => {
     expect(FOUNDATION_CAPABILITY_RECEIPTS.filter((item) => item.production === "landed_source")).toHaveLength(14);
     expect(FOUNDATION_CAPABILITY_RECEIPTS.filter((item) => item.production === "versioned_repair_required")).toHaveLength(7);
     expect(FOUNDATION_CAPABILITY_RECEIPTS.filter((item) => item.production === "specified_source_not_landed")).toHaveLength(9);
+  });
+
+  it("assigns exactly one living execution owner to all sixteen non-landed source families", () => {
+    const nonLanded = FOUNDATION_CAPABILITY_RECEIPTS
+      .filter((item) => item.production !== "landed_source")
+      .map((item) => item.id)
+      .sort();
+    expect(Object.keys(NONLANDED_EXECUTION_OWNERS).sort()).toEqual(nonLanded);
+    expect(nonLanded).toHaveLength(16);
+    for (const owner of Object.values(NONLANDED_EXECUTION_OWNERS)) {
+      expect(existsSync(resolve(ROOT, owner)), owner).toBe(true);
+    }
+    expect(Object.values(NONLANDED_EXECUTION_OWNERS).filter((owner) => owner === WAVE)).toHaveLength(12);
   });
 
   it("keeps the source-repair wave set-equal to all sixteen program handoffs and its two downstream readers", () => {

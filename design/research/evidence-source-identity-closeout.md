@@ -26,7 +26,7 @@ set-equal instruments instead of repeating their measurements. It binds:
 - all **67** semantic-event projections;
 - thirty required source-capability families reconstructed from the owner's examples, D717/Waves
   A–C, R21's player-style atoms and the roadmap's variant evidence obligation;
-- all sixteen source-program author handoffs and the bounded-target/Review readers. `[V]`
+- all seventeen source-program author handoffs and the bounded-target/Review readers. `[V]`
 
 The receipt is deliberately not a universal chess ontology. New theory and concepts remain
 extensible. Its claim is narrower: every evidence family already required for the recorded 1.0
@@ -112,20 +112,37 @@ This prevents the two recurring category errors: commissioning a duplicate detec
 operation or consumer is absent, and claiming a capability complete because a projection appears
 in the catalogue. `[V]`
 
+## Execution ownership for the sixteen non-landed families
+
+The source-research receipt initially named all sixteen production gaps but implied the D1736 wave
+owned the entire set. The executable owner join now assigns exactly one living destination: `[V]`
+
+- **twelve** version/source/provider families route through D1736's shared amendment wave;
+- the **seven literal style contracts** are one author handoff consumed by that wave, with no style
+  prose or thresholds;
+- bounded named-target policy routes through its returned author repair;
+- cited theory applicability routes through `theory-knowledge-pipeline`;
+- variant rules identity routes through the returned `variants` contract.
+
+This is ownership, not landing permission. Draft/returned owners still require amendment,
+independent review and acceptance before implementation.
+
 ## D1738: the consolidation itself was not closed
 
-The D1736 wave said every handoff must be referenced once but named only six of its sixteen
-program handoffs by filename; ten appeared as topic shorthand. Its bounded-policy reader lived in
-another directory and was mentioned without a path. The closeout replaced shorthand with a literal
-sixteen-row inventory plus two downstream readers, and the harness now fails on an omitted,
+The D1736 wave said every handoff must be referenced once but named only six of its original
+sixteen program handoffs by filename; ten appeared as topic shorthand. Its bounded-policy reader
+lived in another directory and was mentioned without a path. The closeout replaced shorthand with
+a literal inventory plus two downstream readers; D1739 then added the missing style-atom handoff,
+bringing the checked program inventory to seventeen. The harness now fails on an omitted,
 additional or multiply referenced handoff. `[V]`
 
 ## Decision and implementation order
 
-1. Author and accept the single source-identity/shared-provider amendment sequence in D1736; do
-   not split it by chess noun when several rows edit the same compiler and manifest.
-2. Land the seven version repairs and nine new source boundaries with stable old pack predicates
-   or explicit migrations.
+1. Author and accept D1736's shared source-identity/provider sequence, consuming all seventeen
+   literal handoffs; do not split shared compiler/manifest work by chess noun.
+2. In parallel, amend/review the three sibling owners: bounded targets, theory and variants. Land
+   the seven version repairs and nine new source boundaries with stable old pack predicates or
+   explicit migrations.
 3. Bind real packet/path/provider operations and independent validation before learner eligibility.
 4. Implement subject-safe avoidance, then migrate ordinary modules away from legacy inventories.
 5. Only then finish presets/composition and connect Review, bots, theory, drills and longitudinal

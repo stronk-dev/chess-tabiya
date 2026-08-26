@@ -50,6 +50,25 @@ export const FOUNDATION_CAPABILITY_RECEIPTS: readonly FoundationCapabilityReceip
   { id: "named_structure_identity", production: "versioned_repair_required", authority: "design/research/legacy-reading-successor-closure.md", boundary: "One sealed pattern id/name payload authority replaces prose-only identity." },
 ]);
 
+export const NONLANDED_EXECUTION_OWNERS = Object.freeze({
+  isolated_doubled_pawn_identity: "planning/evidence-foundation-ux/foundation-source-repair-wave-2026-08-26.md",
+  backward_pawn: "planning/evidence-foundation-ux/foundation-source-repair-wave-2026-08-26.md",
+  pawn_islands_chains: "planning/evidence-foundation-ux/foundation-source-repair-wave-2026-08-26.md",
+  open_half_open_file_access: "planning/evidence-foundation-ux/foundation-source-repair-wave-2026-08-26.md",
+  space_denial_outpost: "planning/evidence-foundation-ux/foundation-source-repair-wave-2026-08-26.md",
+  king_zone_shelter_opposition: "planning/evidence-foundation-ux/foundation-source-repair-wave-2026-08-26.md",
+  promotion_pressure_race_tablebase: "planning/evidence-foundation-ux/foundation-source-repair-wave-2026-08-26.md",
+  cited_theory_applicability: "rfc/theory-knowledge-pipeline.md",
+  engine_search_tablebase_receipts: "planning/evidence-foundation-ux/foundation-source-repair-wave-2026-08-26.md",
+  maia_policy_receipt: "planning/evidence-foundation-ux/foundation-source-repair-wave-2026-08-26.md",
+  explorer_population_receipt: "planning/evidence-foundation-ux/foundation-source-repair-wave-2026-08-26.md",
+  bounded_named_target_policy: "planning/bounded-policy-targets/author-repair-2026-08-26.md",
+  subject_safe_avoidance: "planning/evidence-foundation-ux/foundation-source-repair-wave-2026-08-26.md",
+  style_literal_atoms: "planning/evidence-foundation-ux/style-foundation-atoms-author-repair-2026-08-26.md",
+  variant_rules_identity: "rfc/variants.md",
+  named_structure_identity: "planning/evidence-foundation-ux/foundation-source-repair-wave-2026-08-26.md",
+} as const);
+
 export const SOURCE_PROGRAM_HANDOFFS = Object.freeze([
   "planning/evidence-foundation-ux/declared-convention-identity-author-repair-2026-08-26.md",
   "planning/evidence-foundation-ux/f1-execution-metadata-author-repair-2026-08-26.md",
@@ -60,6 +79,7 @@ export const SOURCE_PROGRAM_HANDOFFS = Object.freeze([
   "planning/evidence-foundation-ux/line-evidence-author-repair-2026-08-26.md",
   "planning/evidence-foundation-ux/file-activity-author-repair-2026-08-26.md",
   "planning/evidence-foundation-ux/pawn-island-identity-author-repair-2026-08-26.md",
+  "planning/evidence-foundation-ux/style-foundation-atoms-author-repair-2026-08-26.md",
   "planning/evidence-foundation-ux/producer-execution-author-repair-2026-08-26.md",
   "planning/evidence-foundation-ux/explorer-source-author-repair-2026-08-26.md",
   "planning/evidence-foundation-ux/shared-candidate-packet-author-repair-2026-08-26.md",

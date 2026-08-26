@@ -6,7 +6,7 @@ handoffs. The rule is simple: source truth and identity land before selection or
 
 ## Why one wave
 
-Sixteen `*author-repair*` / `*author-handoff*` files now exist in the evidence-foundation program.
+Seventeen `*author-repair*` / `*author-handoff*` files now exist in the evidence-foundation program.
 One bounded-policy repair lives in its own program and Review has a downstream compiler
 checkpoint. Several touch the same compiled manifest, semantic-event registry, structure/pawn
 readers and module accepts. A file-by-file queue would repeat the defect D1726 measured: coarse
@@ -29,6 +29,7 @@ readers appear once and do not own source semantics.
 | 1 | `planning/evidence-foundation-ux/line-evidence-author-repair-2026-08-26.md` |
 | 1 | `planning/evidence-foundation-ux/file-activity-author-repair-2026-08-26.md` |
 | 1 | `planning/evidence-foundation-ux/pawn-island-identity-author-repair-2026-08-26.md` |
+| 1 | `planning/evidence-foundation-ux/style-foundation-atoms-author-repair-2026-08-26.md` |
 | 2 | `planning/evidence-foundation-ux/producer-execution-author-repair-2026-08-26.md` |
 | 2 | `planning/evidence-foundation-ux/explorer-source-author-repair-2026-08-26.md` |
 | 2 | `planning/evidence-foundation-ux/shared-candidate-packet-author-repair-2026-08-26.md` |
@@ -44,7 +45,7 @@ readers appear once and do not own source semantics.
 | stage | authority | required result | must not happen yet |
 |---:|---|---|---|
 | 0 | shared convention provenance and F1 execution metadata | registered convention identity, transitive grounding, projection-effective latency/availability/confidence | no new derived projection or provider/module admission |
-| 1 | king opposition; backward pawn; square denial/outpost; pawn-file identity; line evidence; file activity; pawn-island identity | versioned exact source readings/events, one pawn ontology, stable old author predicates, explicit migration list | no learner rendering; no in-place semantic rewrite |
+| 1 | king opposition; backward pawn; square denial/outpost; pawn-file identity; line evidence; file activity; pawn-island identity; literal style atoms | versioned exact source readings/events, one pawn ontology, stable old author predicates, exact per-candidate/path atoms, explicit migration list | no learner rendering, habit thresholds or style prose; no in-place semantic rewrite |
 | 2 | producer execution, Explorer and shared-candidate/provider contracts | every admitted projection has a real packet/path/application operation and truthful absence/cost | catalogue membership is not completion |
 | 3 | semantic validation plus each source handoff's able-to-fail fixtures | independent positive/hard-negative/abstention/population authority for every activated event | no self-generated fixture labels; no vacuous green rows |
 | 4 | counterfactual subject identity | subject-first distinct-move denominators over exact v2 identities; same-move subjects retained | no v1 projection/sign grouping in learner claims |

@@ -9087,3 +9087,18 @@ presets and UX remain separate gates. Its executable anti-drop check also caught
 consolidated repair wave named only six of sixteen program handoffs literally. The wave now carries
 all sixteen exact paths plus its two downstream readers once each. No production, RFC, schema,
 pack, content or learner UX changed.
+
+## 2026-08-26 — Non-landed evidence sources received exact execution owners (D1739)
+
+Rechecked the D1737 result as an execution graph rather than only a research inventory. Its first
+order implied the shared D1736 wave owned all sixteen non-landed/repair families; it directly owns
+twelve. Bounded targets, cited theory and variant rules identity retain their separate living
+owners. The seven literal player-style contracts had research definitions but no exact author
+handoff, so the queue could still have dropped them.
+
+Added the style-foundation handoff: two exact fianchetto configurations, three per-candidate
+move/ply facts, game-level castling eligibility and typed clock-spend inputs, with no thresholds,
+style prose, storage or personality claim. D1736 now consumes seventeen literal program handoffs.
+The executable receipt assigns exactly one living owner to all sixteen non-landed families and
+keeps the three sibling RFC lanes explicit. No production, RFC, schema, pack, content or learner
+UX changed.

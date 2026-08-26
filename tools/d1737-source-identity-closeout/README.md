@@ -7,7 +7,8 @@ It verifies three separate things:
 
 1. all 37 compiled producer roots and the current 193-projection tuple remain accounted;
 2. the declared 1.0 evidence basis has one research authority and an honest production state;
-3. the consolidated source-repair wave names all sixteen program handoffs and its two downstream
+3. all sixteen non-landed source families have one execution owner, and the consolidated
+   source-repair wave names all seventeen program handoffs and its two downstream
    readers exactly once.
 
 Run with repository Node 24:
