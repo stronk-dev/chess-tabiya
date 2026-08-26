@@ -9070,3 +9070,20 @@ semantic validation; subject-first avoidance denominators; then ordinary-module 
 packet recommends one living source-identity amendment over seven competing edits to the same
 manifest/runtime files, while preserving each dossier as semantic authority. No RFC was accepted,
 no production or content byte changed, and module/UX activation remains downstream.
+
+## 2026-08-26 — Declared 1.0 evidence source identity closed as a research inventory (D1737/D1738)
+
+Composed the existing set-equal receipts for 37 producer roots / 193 projections, 18 structural
+families, 14 transition leaves, 30 tactical ids, 18 breadth ids and 67 semantic events into one
+thirty-family 1.0 source basis. Fourteen families have a landed source boundary, seven require a
+versioned repair and nine have a researched/specifiable source contract that is not landed. No row
+remains an unowned source-semantics question. This supersedes the 2026-08-24 closure's claim that
+bounded 2–3-ply prevention was still a research gap and adds the previously omitted style atoms and
+variant rules identity.
+
+The pass does not claim product closure: sixteen source families still need production work, and
+real operations, independent semantic validation, subject-safe avoidance, module selection,
+presets and UX remain separate gates. Its executable anti-drop check also caught D1738: the
+consolidated repair wave named only six of sixteen program handoffs literally. The wave now carries
+all sixteen exact paths plus its two downstream readers once each. No production, RFC, schema,
+pack, content or learner UX changed.

@@ -6,21 +6,49 @@ handoffs. The rule is simple: source truth and identity land before selection or
 
 ## Why one wave
 
-Sixteen `*author-repair*` / `*author-handoff*` files now exist in this program. Several touch the
-same compiled manifest, semantic-event registry, structure/pawn readers and module accepts. A
-file-by-file queue would repeat the defect D1726 measured: coarse legacy facts remain live while
-richer successors are “implemented” beside them. D1736 therefore orders the shared seams once.
+Sixteen `*author-repair*` / `*author-handoff*` files now exist in the evidence-foundation program.
+One bounded-policy repair lives in its own program and Review has a downstream compiler
+checkpoint. Several touch the same compiled manifest, semantic-event registry, structure/pawn
+readers and module accepts. A file-by-file queue would repeat the defect D1726 measured: coarse
+legacy facts remain live while richer successors are “implemented” beside them. D1736 therefore
+orders the shared seams once.
+
+## Literal handoff inventory
+
+This is the set-equal anti-drop list. Each source-program handoff appears once; the two downstream
+readers appear once and do not own source semantics.
+
+| stage | handoff |
+|---:|---|
+| 0 | `planning/evidence-foundation-ux/declared-convention-identity-author-repair-2026-08-26.md` |
+| 0 | `planning/evidence-foundation-ux/f1-execution-metadata-author-repair-2026-08-26.md` |
+| 1 | `planning/evidence-foundation-ux/king-opposition-author-repair-2026-08-26.md` |
+| 1 | `planning/evidence-foundation-ux/backward-pawn-author-repair-2026-08-26.md` |
+| 1 | `planning/evidence-foundation-ux/square-denial-outpost-author-repair-2026-08-26.md` |
+| 1 | `planning/evidence-foundation-ux/pawn-file-identity-author-repair-2026-08-26.md` |
+| 1 | `planning/evidence-foundation-ux/line-evidence-author-repair-2026-08-26.md` |
+| 1 | `planning/evidence-foundation-ux/file-activity-author-repair-2026-08-26.md` |
+| 1 | `planning/evidence-foundation-ux/pawn-island-identity-author-repair-2026-08-26.md` |
+| 2 | `planning/evidence-foundation-ux/producer-execution-author-repair-2026-08-26.md` |
+| 2 | `planning/evidence-foundation-ux/explorer-source-author-repair-2026-08-26.md` |
+| 2 | `planning/evidence-foundation-ux/shared-candidate-packet-author-repair-2026-08-26.md` |
+| 3 | `planning/evidence-foundation-ux/semantic-validation-author-repair-2026-08-26.md` |
+| 4 | `planning/evidence-foundation-ux/avoidance-subject-author-repair-2026-08-26.md` |
+| 5 | `planning/evidence-foundation-ux/legacy-reading-successor-author-repair-2026-08-26.md` |
+| 6 | `planning/evidence-foundation-ux/promotion-race-author-repair-2026-08-26.md` |
+| reader | `planning/bounded-policy-targets/author-repair-2026-08-26.md` |
+| reader | `planning/evidence-foundation-ux/review-evidence-compiler-author-checkpoint-2026-08-26.md` |
 
 ## Dependency order
 
-| stage | authority/handoffs | required result | must not happen yet |
+| stage | authority | required result | must not happen yet |
 |---:|---|---|---|
-| 0 | `declared-convention-identity-author-repair-2026-08-26.md`; `f1-execution-metadata-author-repair-2026-08-26.md` | registered convention identity, transitive grounding, projection-effective latency/availability/confidence | no new derived projection or provider/module admission |
+| 0 | shared convention provenance and F1 execution metadata | registered convention identity, transitive grounding, projection-effective latency/availability/confidence | no new derived projection or provider/module admission |
 | 1 | king opposition; backward pawn; square denial/outpost; pawn-file identity; line evidence; file activity; pawn-island identity | versioned exact source readings/events, one pawn ontology, stable old author predicates, explicit migration list | no learner rendering; no in-place semantic rewrite |
-| 2 | `producer-execution-author-repair-2026-08-26.md`; Explorer/shared-candidate/provider handoffs | every admitted projection has a real packet/path/application operation and truthful absence/cost | catalogue membership is not completion |
-| 3 | `semantic-validation-author-repair-2026-08-26.md` plus each source handoff's able-to-fail fixtures | independent positive/hard-negative/abstention/population authority for every activated event | no self-generated fixture labels; no vacuous green rows |
-| 4 | `avoidance-subject-author-repair-2026-08-26.md` | subject-first distinct-move denominators over exact v2 identities; same-move subjects retained | no v1 projection/sign grouping in learner claims |
-| 5 | `legacy-reading-successor-author-repair-2026-08-26.md` + returned `module-registration` | ordinary modules select exact question-bound facts; raw inventories move to Advanced/compatibility; one named-structure payload authority | no raw panel rename as a substitute for migration |
+| 2 | producer execution, Explorer and shared-candidate/provider contracts | every admitted projection has a real packet/path/application operation and truthful absence/cost | catalogue membership is not completion |
+| 3 | semantic validation plus each source handoff's able-to-fail fixtures | independent positive/hard-negative/abstention/population authority for every activated event | no self-generated fixture labels; no vacuous green rows |
+| 4 | counterfactual subject identity | subject-first distinct-move denominators over exact v2 identities; same-move subjects retained | no v1 projection/sign grouping in learner claims |
+| 5 | legacy-successor migration plus returned `module-registration` | ordinary modules select exact question-bound facts; raw inventories move to Advanced/compatibility; one named-structure payload authority | no raw panel rename as a substitute for migration |
 | 6 | promotion/bounded-target and Review/compiler handoffs | provider-backed consequence facts join only after same-position source receipts and source-local value normalization | no cross-source scalar laundering or provider-off simulation |
 
 ## Source repair set for stage 1
@@ -72,5 +100,6 @@ Likely parents/readers:
 ## Exit
 
 D1736 closes only when an accepted RFC/amendment set names the stages, shared claims and landing
-order, and every source handoff is referenced exactly once. Implementation closes source rows and
-defects in its own commits; module/UX completion remains downstream.
+order, and every source-program handoff in the literal inventory is claimed exactly once.
+Implementation closes source rows and defects in its own commits; module/UX completion remains
+downstream.

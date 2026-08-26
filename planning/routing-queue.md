@@ -15,6 +15,7 @@ set execution order.
 
 | Rows | Primary destination | Next action / gate |
 |---|---|---|
+| D1737, D1738 | source-identity closeout → D1736 shared authoring wave | Consume `evidence-source-identity-closeout.md` and its executable 30-family receipt. Keep the 14 landed / 7 version-repair / 9 specified-unlanded distinction; preserve the literal sixteen-handoff plus two-reader inventory; do not call source research complete product completion. |
 | D1728, D1729 | exact pawn-file successor → structural collector / D1711/D1718/D1710 | Consume `pawn-file-identity-author-repair-2026-08-26.md`: derive exact isolated/doubled group reading/event from `pawnConnectivityReading`, support unbounded group size and membership-only/cross-subject changes, replace the false v1 identity claim, and preserve author predicates. |
 | D1730, D1731 | exact line-family boundary → transition/semantic collector + D1710/D1711/module-registration | Consume `line-evidence-author-repair-2026-08-26.md`: version target-free blocker membership with `membership_changed`, preserve target-bearing ray/discovered/clearance authorities, bind real operations and keep raw board-edge inventory Advanced/compatibility-only. |
 | D1732, D1733 | exact file state/access → pawn/activity collector + D1710/D1711/module-registration | Consume `file-activity-author-repair-2026-08-26.md`: derive exact file state from D1728/pawn connectivity, add stationary heavy-piece access revealed, preserve the distinct moved-entry event and keep value/control/theory outside both. |
