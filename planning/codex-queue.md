@@ -1767,3 +1767,26 @@ that is structurally the named death shape; "narrowness" as praise in different 
 my own [[D1476]]; and a decided-position threshold declared as cited values after conceding it is
 unpinnable. **[[D1531]]** corrects wave-3 item 7: `<main>` is not missing, 17 landmarks ship, and the
 "fix" would have nested landmarks.
+
+### The work-state instrument — [[D1741]]–[[D1744]]
+
+`rfc/work-state.md` (`74ba93b2`) is the fix for [[D1523]]: state on the item, not in a document about
+the item.
+
+**[[D1741]]: six states, not the five I proposed.** The addition is **`untriaged`**, because the five
+*"cannot express recorded, never classified, which is what most of this ledger actually is — and
+calling that `todo` asserts an intention nobody formed."* Measured: **817 of 968 open rows (84.4%)
+are untriaged and unowned**, and `doing` is **zero**. Unowned and untriaged are locked by a
+biconditional, so the headline cannot be improved without actually triaging something.
+
+**[[D1742]]: `done` is mostly unevidenced** — 402 of 573 closed rows name neither a commit nor a path,
+and only 33 name a sha. Every rollup in this repo counts closed rows. All three `⛔` rows are
+**unruled refusals**, and one row is simultaneously refused and open.
+
+**[[D1743]]** — the ledger cannot carry the state itself: 12 conflated glyph values, a documented
+vocabulary with two symbols appearing zero times, 53 malformed rows, one row with no glyph, and
+concurrent writers adding rows mid-pass. State goes in a byte-digest-joined sidecar with staleness
+red rather than invisible.
+
+**[[D1744]]** — three of nineteen criteria are **red at HEAD today**, which is the falsifiability
+proof. The blocker grammar has **no `other`**: an unnamed blocker is an untriaged item wearing a label.
