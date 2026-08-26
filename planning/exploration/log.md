@@ -8448,3 +8448,22 @@ client-supplied start/history and persists mass/rank on the active node without 
 Dossier: `design/research/variant-evidence-operation-boundary.md`; instrument:
 `tools/d1678-evidence-operation-harness/` (3/3 green). No production, schema, content,
 protected-design or concurrent Claude review/harness byte changed.
+
+## 2026-08-26 — D1679 rules-aware producer capability measured
+
+Compiled a literal three-subject matrix over the current evidence catalogue rather than copying
+F1's landing headline. The manifest now contains 37 producers / 193 projections / 25 consumers /
+210 bindings. Every producer is classified for Standard, Chess960 and Tier-2 evidence-dark
+subjects, and additions fail set equality until classified.
+
+[[D1688]] records the architectural result: computation, learner admission and absence semantics
+are independent. A rules-capable Fairy opponent must not authorize learner evidence; a missing
+Standard provider is honest-empty while a wrong-domain Maia or detector request is suppressed;
+and all twelve derived producers inherit their exact inputs rather than laundering capability.
+Producer rows remain defaults beneath projection dispositions and consumer bindings, which is
+necessary for mixed producers such as `run.record`. [[D1687]] corrects mutable planning prose that
+still treated the historical 19-producer landing population as current.
+
+Dossier: `design/research/variant-producer-capability.md`; instrument:
+`tools/d1679-rules-capability-harness/` (6/6 green). No production, schema, content,
+protected-design or concurrent Claude review/harness byte changed.

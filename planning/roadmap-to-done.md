@@ -154,6 +154,12 @@ producer calls, split 8 service / 7 direct REST. A queue guard cannot cover huma
 voice packets or prediction; the operation population and the rules/setup receipt must be compiled
 together. [[D1685]] also blocks prediction independently because its stored Maia mass/rank is not
 bound to the active node's position/history.
+[[D1688]] now measures the catalogue side across all 37 current producers and three subject
+families. Capability must compile three independent axes—source computability, learner admission
+and honest-empty versus suppression—before the 193 projection dispositions and 210 bindings are
+applied. This is shared foundation, not variant polish: it lets bots consume a legal opponent
+provider without widening Support/Review, and prevents derived evidence from laundering an invalid
+source into a learner claim.
 
 ### 3. Arrival and the rehearsal loop
 

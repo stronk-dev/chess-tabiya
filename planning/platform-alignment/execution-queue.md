@@ -108,10 +108,12 @@ Every RFC needs buildability review, negative fixtures, non-vacuity checks, expl
 claims, a planning directory, and accepted status before implementation.
 
 **Wave 6A update, 2026-08-21:** complete. The process/register predecessors and F1 are implemented
-and archived. F1 closes with 19 producers, 93 projections, 23 sealed consumer operations and 142
-exact bindings. F2 subsequently implemented 33 events, research-only eligibility and complete
-local selection in `7944ecb`; F3 remains behind O6 rather than inheriting authority merely because
-it shared the old Wave-6B row (D680).
+and archived. F1 closed at landing with 19 producers, 93 projections, 23 sealed consumer operations
+and 142 exact bindings. Collector and derivation waves have since grown the executable tuple to 37
+producers / 193 projections / 25 consumers / 210 bindings; landing counts are not the current
+capability population. F2 subsequently implemented 33 events, research-only eligibility and
+complete local selection in `7944ecb`; F3 remains behind O6 rather than inheriting authority merely
+because it shared the old Wave-6B row (D680).
 
 **F12 update, 2026-08-21:** R18/O13 are split into bounded child contracts in
 `release-platform/f12-work-order.md`. `rfc/accessible-board-input.md` is the first independent
