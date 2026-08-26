@@ -1,6 +1,6 @@
 # RFC: Bounded policy targets — one named target, three plies, and the two policy arms that bound it
 
-- **Status:** draft — 2026-08-23
+- **Status:** draft — returned by independent buildability review 2026-08-26 on [[D1652]]–[[D1658]]; implementation forbidden pending author amendment and repeat review
 - **Author:** claude (drafted from `design/research/bounded-policy-targets.md` and re-verified line by line against `tools/d1023-bounded-policy-harness/`)
 - **Created:** 2026-08-23
 - **Design refs:** `design/00-thesis.md` (the instrument doctrine — *"Stockfish validates, Maia predicts, the corpus witnesses — none of them can teach why"* — is the whole shape of this RFC: three arms, three authorities, no fourth voice); `design/05-in-run-experience.md` §assistance ladder (these projections are requested operands, never a default stream). No design-tier section owns the named-target family; its intent authority is [[D558]]'s split and the [[D1023]] research closure, and a `design/` section remains owner work under law 5.

@@ -138,6 +138,13 @@ Primary RFCs: `pack-capability-contract`, `claim-semantic-anchors`, `tactical-co
 `semantic-collectors`, `runtime-opening-identity`, `exact-legal-mobility`, `breadth-collectors`,
 `evidence-move-selector`, `shared-candidate-evidence-packet`, `bounded-policy-targets`.
 
+The 2026-08-26 independent review keeps [[D1023]]'s measured exact-target collector but returns
+`bounded-policy-targets` on [[D1652]]–[[D1658]]. The provider layer must expose reusable node-free
+Stockfish and Maia source receipts, literal F1 derivations over sealed target inputs, independent
+legal-root completeness, real server operations and bounded scheduling/cache identity. A provider
+file or inspector disposition alone does not complete this foundation; Support, Review, bots and
+packs may not consume target-policy facts until the amended contract passes repeat review.
+
 ### 3. Arrival and the rehearsal loop
 
 <!-- roadmap-capability: rehearsal -->

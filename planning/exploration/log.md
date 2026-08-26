@@ -8309,3 +8309,24 @@ active register, Phase-2e plan, routing queue and 1.0 Review capability now say 
 repair order and able-to-fail fixtures are in
 `planning/evidence-foundation-ux/review-evidence-compiler-author-checkpoint-2026-08-26.md`. No
 production, schema, content, protected design or concurrent semantic-harness byte changed.
+
+## 2026-08-26 — bounded policy targets returns at independent buildability review
+
+Re-derived `rfc/bounded-policy-targets.md` against the committed D1023 artifacts, the F1 compiler,
+exact legal-move authority, production Maia request/history identity, evidence manifest and server
+composition. The research verdict survives: exact named-target removal/return and its separate
+quantifiers are useful primitives; the destination-denial arm remains a measured negative; no
+intent, plan, prophylaxis, significance or move-quality claim is earned.
+
+[[D1652]]–[[D1658]] return the implementation contract. The Stockfish source already contains an
+interpreted target category; the run-node Maia page cannot identify hypothetical/history-conditioned
+queries; the six catalogue declarations are not literal; the provider file has no executable
+operation/composition path; root completeness compares two counts from the same response; registered
+threat/exchange inputs would be recomputed outside their sealed authority; and up to two Stockfish
+depths plus nine Maia calls per target have no bounded scheduling/cache protocol. Existing [[D1390]]
+and [[D1647]] remain prerequisites for truthful latency and same-exchange provider identity.
+
+The RFC and active register now say returned; routing and the 1.0 evidence capability name the exact
+repair. The independent dossier is
+`planning/bounded-policy-targets/independent-buildability-review-2026-08-26.md`. No production,
+schema, content, protected design or concurrent Wave-C/review byte changed.
