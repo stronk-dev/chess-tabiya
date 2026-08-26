@@ -419,17 +419,21 @@
     {
       "id": "A11-a30",
       "sourceState": "queued",
-      "state": "queued",
+      "state": "completed",
       "capability": "accessibility",
       "owner": "client-platform",
-      "assignment": "capability:accessibility",
+      "assignment": "closed",
       "sourceDocument": "ux-accessibility-and-mobile.md",
       "sourceSection": "§3.9",
       "sourceHeading": "Accessibility and small screens — `ux-accessibility-and-mobile.md`",
       "summary": "Test-harness defects: no `projects` array (one implicit Chromium at 1440×1000); `devices[]` never imported, so 8 of 9 phone-width assertions run with desktop input semantics; 4.7% of 467 selector uses assert a11y semantics; 1 of 11 live regions asserted; **Escape is never pressed in the suite**; `forcedColors`/`colorScheme` emulation is zero; `keyboard.ts` owns the shortcut system and has no unit test",
       "legacyRoute": "none",
-      "note": "narrowed 2026-08-26: named desktop/mobile projects, an imported Pixel 7 device, axe scanning, Escape/modal checks and keyboard unit coverage now ship; forced-colors/color-scheme and broader live-region state coverage remain",
-      "sourceDigest": "sha256:ba2ae1f51fa782f12ec3649b2af8bf4d43a43ad86fbc625f68e0f1b234d56c7f"
+      "note": "named desktop/mobile projects, real Pixel 7 semantics, axe scanning, Escape/modal checks, keyboard unit coverage, forced-colors/color-scheme emulation, and atomic text-only live-region state coverage all ship",
+      "sourceDigest": "sha256:ba2ae1f51fa782f12ec3649b2af8bf4d43a43ad86fbc625f68e0f1b234d56c7f",
+      "completion": {
+        "completedOn": "2026-08-26",
+        "evidence": "StatusAnnouncement boundary plus safe live-region browser scan across catalogue, Settings, rehearsal and Pixel 7; comparison and conditional panel unit contracts"
+      }
     },
     {
       "id": "A11-a31",

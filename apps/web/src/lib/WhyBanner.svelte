@@ -1,5 +1,6 @@
 <script lang="ts">
   import type { WhyBannerModel } from "./screen-model.js";
+  import StatusAnnouncement from "./StatusAnnouncement.svelte";
 
   interface Props {
     model?: WhyBannerModel | undefined;
@@ -9,7 +10,8 @@
 </script>
 
 {#if model}
-  <aside class="why-banner" aria-live="polite" aria-label="Why the objective changed">
+  <aside class="why-banner" aria-label="Why the objective changed">
+    <StatusAnnouncement message={`${model.state}. ${model.sentences.map((sentence) => sentence.text).join(" ")}`} />
     <span class="state">{model.state}</span>
     <div>
       {#each model.sentences as sentence}

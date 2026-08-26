@@ -68,9 +68,9 @@
 
   {#if error}<p class="error" role="alert">{error}</p>{/if}
   {#if loading}
-    <p class="loading" aria-live="polite">Loading rehearsal packs…</p>
+    <p class="loading" role="status" aria-live="polite" aria-atomic="true">Loading rehearsal packs…</p>
   {:else}
-    <p class="result-count" aria-live="polite">{visible.length} {visible.length === 1 ? "position" : "positions"}</p>
+    <p class="result-count" role="status" aria-live="polite" aria-atomic="true">{visible.length} {visible.length === 1 ? "position" : "positions"}</p>
     <section class="pack-grid" aria-label="Available packs">
       {#each visible as pack}
         <article class="pack-card">

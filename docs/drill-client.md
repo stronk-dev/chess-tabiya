@@ -439,6 +439,11 @@ compact companion check opens a real phone drawer, proves the board is inert and
 focus is inside, closes with Escape, and requires focus to return to the exact
 region tab. The same responsive modal boundary is inactive at wider layouts.
 
+Run state, first-rehearsal progress, post-commit guard facts, selected-square
+sight, comparison position, and board-input feedback use atomic status
+announcements. The visible guide, guard actions, and comparison boards are not
+live regions; only their changed textual receipt is announced.
+
 ## Packaged operation
 
 The root Compose file has an unprofiled server using the deterministic mock

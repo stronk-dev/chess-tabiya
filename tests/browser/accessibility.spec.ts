@@ -21,18 +21,43 @@ async function expectNoWcagViolations(page: Page, state: string): Promise<void> 
   expect(results.violations, `${state}: ${JSON.stringify(results.violations, null, 2)}`).toEqual([]);
 }
 
+async function expectSafeLiveRegions(page: Page, state: string): Promise<void> {
+  const regions = page.locator('[aria-live]');
+  expect(await regions.count(), `${state}: no live regions rendered`).toBeGreaterThan(0);
+  for (let index = 0; index < await regions.count(); index += 1) {
+    const region = regions.nth(index);
+    await expect(region, `${state}: live region ${index} has no status role`).toHaveAttribute("role", "status");
+    await expect(region, `${state}: live region ${index} is not atomic`).toHaveAttribute("aria-atomic", "true");
+    expect(
+      await region.locator('button, a, input, select, textarea, [tabindex]:not([tabindex="-1"])').count(),
+      `${state}: live region ${index} contains an interactive descendant`,
+    ).toBe(0);
+  }
+}
+
 test("@matrix automated WCAG scan covers catalogue, settings, and a live rehearsal", async ({ page }) => {
   await register(page);
   await expectNoWcagViolations(page, "position catalogue");
+  await expectSafeLiveRegions(page, "position catalogue");
+  const resultStatus = page.locator(".result-count");
+  const before = await resultStatus.textContent();
+  await page.getByPlaceholder("Najdorf, Carlsbad, passed pawn…").fill("no-position-has-this-name");
+  await expect(resultStatus).toHaveText("0 positions");
+  expect(await resultStatus.textContent()).not.toBe(before);
 
   await page.goto("/settings");
   await expect(page.getByRole("heading", { name: "This deployment" })).toBeVisible();
+  await page.getByRole("button", { name: "Review deletion effects" }).click();
+  await expect(page.locator(".deletion-preview")).toBeVisible();
+  await expect(page.locator(".deletion-preview [data-status-announcement]")).toContainText("Deletion effects loaded");
   await expectNoWcagViolations(page, "settings");
+  await expectSafeLiveRegions(page, "settings");
 
   await page.goto("/play");
   await page.getByRole("button", { name: "Start and keep the game" }).click();
   await expect(page.getByLabel("Chessboard")).toBeVisible();
   await expectNoWcagViolations(page, "live rehearsal");
+  await expectSafeLiveRegions(page, "live rehearsal");
 });
 
 test("@matrix @mobile the mobile project uses real touch and coarse-pointer semantics", async ({ page }) => {

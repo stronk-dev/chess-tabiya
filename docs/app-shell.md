@@ -253,6 +253,12 @@ The browser test covers the drill-to-compare binding, unmodified Tab traversal,
 the navigation escape chord, and focus restoration; it also caught a
 lost-focus defect after checkpoint continuation.
 
+Changing shell and workflow state is announced through atomic, text-only status
+regions. Visible cards, dialogs, comparison boards, and their controls remain
+outside those regions, so a state change does not replay an entire interactive
+surface. The browser matrix checks this boundary across the catalogue, account
+deletion preview, a live rehearsal, and the mobile composition.
+
 ## Honest disabled controls
 
 Every disabled control, including an element using `aria-disabled="true"`,

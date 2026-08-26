@@ -361,7 +361,7 @@
         </div>
       {/each}
     </div>
-    <div class="input-status visually-hidden" aria-live="polite" role="status">{inputState.lastAnnouncement}</div>
+    <div class="input-status visually-hidden" aria-live="polite" aria-atomic="true" role="status">{inputState.lastAnnouncement}</div>
     {#if inputState.pendingPromotion}
       <div
         class="promotion-picker"

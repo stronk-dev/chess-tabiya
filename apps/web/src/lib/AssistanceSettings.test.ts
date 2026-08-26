@@ -52,6 +52,11 @@ describe("account lifecycle panel", () => {
     [...document.querySelectorAll<HTMLButtonElement>("button")].find((button) => button.textContent?.includes("Review deletion effects"))!.click();
     await vi.waitFor(() => expect(loadDeletionPreview).toHaveBeenCalledOnce());
     await vi.waitFor(() => expect(document.body.textContent).toContain("Deletion effects"));
+    const deletionStatus = document.querySelector<HTMLElement>('.deletion-preview [data-status-announcement]')!;
+    expect(deletionStatus.textContent).toContain("2 permanently deleted");
+    expect(deletionStatus.textContent).toContain("3 access records revoked");
+    expect(deletionStatus.querySelector("button, a, input, [tabindex]")).toBeNull();
+    expect(document.querySelector(".deletion-preview")?.getAttribute("aria-live")).toBeNull();
     const text = document.body.textContent ?? "";
     for (const heading of ["Permanently deleted", "Kept read-only for collaborators", "Access revoked", "Published work retained"]) expect(text).toContain(heading);
     expect(text).toContain(preview.backupNotice);

@@ -5,6 +5,7 @@
   import { onMount } from "svelte";
   import Chessboard from "./Chessboard.svelte";
   import HonestControl from "./HonestControl.svelte";
+  import StatusAnnouncement from "./StatusAnnouncement.svelte";
   import { displayedLastMove, type StartSide } from "./board-model.js";
   import {
     COMPARISON_CELL_FLOOR_REM,
@@ -159,11 +160,11 @@
 
   <aside class="alignment" aria-label="Aligned position relationship"><p>{recordedPathSentence()}</p><p>{positionSentence()}</p></aside>
 
+  <StatusAnnouncement message={`Comparison aligned ply ${step} of ${maxStep}`} />
   <div
     class="boards"
     data-zoom={zoom}
     style={`--branches:${comparison.columns.length};--cell-floor:${COMPARISON_CELL_FLOOR_REM[zoom]}rem`}
-    aria-live="polite"
   >
     {#each comparison.columns as column}
       {@const node = comparisonNode(run, comparison, step, column.branchId)}

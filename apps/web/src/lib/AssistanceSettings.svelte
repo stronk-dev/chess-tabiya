@@ -4,6 +4,7 @@
 
   import type { Capabilities, DeletionEffect, DeletionPreview, Learner } from "./api.js";
   import { ASSISTANCE_PROFILES, loadAssistance, saveAssistance, type AssistanceProfile } from "./assistance-preference.js";
+  import StatusAnnouncement from "./StatusAnnouncement.svelte";
 
   interface Props {
     capabilities?: Capabilities | undefined;
@@ -98,7 +99,8 @@
       <p>First review exactly what will be deleted, what collaborators can still read, and what published work remains.</p>
       <button type="button" onclick={() => void previewDeletion()}>Review deletion effects</button>
     {:else}
-      <div class="deletion-preview" aria-live="polite">
+      <div class="deletion-preview">
+        <StatusAnnouncement message={`Deletion effects loaded. ${effectCount(deletionPreview.hardDelete)} permanently deleted. ${effectCount(deletionPreview.tombstone)} kept read-only. ${effectCount(deletionPreview.revoke)} access records revoked. ${effectCount(deletionPreview.retainedPublished)} published records retained.`} />
         <h4>Deletion effects</h4>
         {#if effectCount(deletionPreview.hardDelete) > 0}<h5>Permanently deleted</h5><ul>{#each deletionPreview.hardDelete as effect}<li>{effect.label} ({effect.count})</li>{/each}</ul>{/if}
         {#if effectCount(deletionPreview.tombstone) > 0}<h5>Kept read-only for collaborators</h5><ul>{#each deletionPreview.tombstone as effect}<li>{effect.label}</li>{/each}</ul>{/if}

@@ -172,6 +172,11 @@ describe("Layer 3 screens", () => {
     const guide = document.querySelector<HTMLElement>(".rehearsal-guide")!;
     expect(guide.textContent).toContain("First rehearsal · 4 of 4");
     expect(guide.textContent).toContain("Both consequences survived");
+    const guideStatus = guide.querySelector<HTMLElement>('[role="status"]')!;
+    expect(guideStatus.textContent).toContain("First rehearsal, step 4 of 4");
+    expect(guideStatus.getAttribute("aria-atomic")).toBe("true");
+    expect(guideStatus.querySelector("button, [tabindex]")).toBeNull();
+    expect(guide.getAttribute("aria-live")).toBeNull();
     const compare = [...guide.querySelectorAll<HTMLButtonElement>("button")]
       .find((button) => button.textContent?.includes("Compare both attempts"))!;
     compare.click();
@@ -592,11 +597,15 @@ describe("Layer 3 screens", () => {
       reviewStatus: "draft", channel: "community",
     };
     const component = mount(PackList, { target: target(), props: { packs: [opening, ending], onSelect: vi.fn() } });
+    const countStatus = document.querySelector<HTMLElement>('[role="status"]')!;
+    expect(countStatus.textContent).toBe("2 positions");
+    expect(countStatus.getAttribute("aria-atomic")).toBe("true");
     const search = document.querySelector<HTMLInputElement>('input[type="search"]')!;
     search.value = "rook-ending";
     search.dispatchEvent(new Event("input", { bubbles: true }));
     await tick();
     expect(document.querySelectorAll(".pack-card")).toHaveLength(1);
+    expect(countStatus.textContent).toBe("1 position");
     expect(document.body.textContent).toContain("Lucena bridge");
     document.querySelectorAll<HTMLButtonElement>(".phase-tabs button")[1]!.click();
     await tick();
@@ -731,6 +740,10 @@ describe("Layer 3 screens", () => {
     await tick();
 
     expect(document.body.textContent).toContain("Aligned ply 2 / 2");
+    const comparisonStatus = document.querySelector<HTMLElement>('[data-status-announcement]')!;
+    expect(comparisonStatus.textContent).toBe("Comparison aligned ply 2 of 2");
+    expect(document.querySelector(".boards")?.getAttribute("aria-live")).toBeNull();
+    expect(comparisonStatus.querySelector("button, [tabindex]")).toBeNull();
     expect(document.activeElement?.id).toBe("compare-title");
     expect(document.body.textContent).toContain("Line ended");
     expect(document.querySelector(".boards article.absent")).not.toBeNull();

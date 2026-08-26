@@ -108,8 +108,8 @@ test("a first learner enters the real rehearsal loop with a persistent event-der
   await expect(page).toHaveURL(/\/play\/run\/run-/u);
   await expect(page.getByLabel("Chessboard")).toBeVisible();
   await expect(page.getByRole("heading", { name: "Make one decision." })).toBeVisible();
-  await expect(page.getByText("Tabiya does not comment while you are deciding.", { exact: false })).toBeVisible();
-  await expect(page.getByText("This attempt will stay recorded.", { exact: false })).toBeVisible();
+  await expect(page.locator(".guide-body").filter({ hasText: "Tabiya does not comment while you are deciding." })).toBeVisible();
+  await expect(page.locator(".guide-body").filter({ hasText: "This attempt will stay recorded." })).toBeVisible();
   const viewport = page.viewportSize();
   if (viewport === null) throw new Error("Playwright did not report a viewport");
   await assertRunViewport(page, viewport);
@@ -181,7 +181,7 @@ test("account lifecycle downloads data, deletes one run, and clears this browser
   await page.getByRole("button", { name: "Download my data", exact: true }).click();
   const download = await downloadPromise;
   expect(download.suggestedFilename()).toMatch(/^tabiya-account-[a-z0-9_]+\.json$/u);
-  await expect(page.getByRole("status")).toContainText("download has started");
+  await expect(page.getByRole("status").filter({ hasText: "download has started" })).toBeVisible();
   await expect(page.getByLabel("Current password")).toHaveValue("");
 
   await page.getByRole("button", { name: "Review deletion effects" }).click();
@@ -1112,7 +1112,7 @@ test("@content Pack A withholds its line, grades the boundary, and renders autho
 
   await expect(page.getByLabel("Chessboard")).toBeVisible();
   await expect(page.getByText("Active line 1 plies")).toBeVisible();
-  await expect(page.getByText("Authored commentary withheld until checkpoints")).toBeVisible();
+  await expect(page.getByText("Authored commentary withheld until checkpoints", { exact: true })).toBeVisible();
   await move(page, "g1", "f3");
   await expect(page.getByText("Active line 3 plies")).toBeVisible();
   await move(page, "f1", "e2");
@@ -1576,7 +1576,7 @@ test("@matrix mobile shell, settings, and install manifest preserve the run regi
   await expect(page).toHaveTitle("Rehearsal · Tabiya");
   await expect(page.getByLabel("Chessboard")).toBeVisible();
   await expect(page.getByRole("navigation", { name: "Run regions" })).toBeVisible();
-  const runContext = page.locator("main.drill .status");
+  const runContext = page.locator("main.drill [data-status-announcement]").first();
   await expect(runContext).toHaveAttribute("aria-live", "polite");
   expect(await runContext.evaluate((element) => getComputedStyle(element).display)).not.toBe("none");
   const contextBox = await runContext.boundingBox();

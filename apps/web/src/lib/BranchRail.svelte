@@ -69,7 +69,7 @@
   </ol>
   {#if onCompareAllHere}
     <button type="button" onclick={() => onCompareAllHere(branches.find((branch) => branch.id === activeBranchId)?.forkNodeId ?? "")}>Compare all forked here</button>
-    {#if compareLimitNotice}<span class="reason" aria-live="polite">{compareLimitNotice}</span>{/if}
+    {#if compareLimitNotice}<span class="reason" role="status" aria-live="polite" aria-atomic="true">{compareLimitNotice}</span>{/if}
   {/if}
   {#if onClassify && unclassified > 0}<button type="button" onclick={() => onClassify?.()}>Classify remaining</button>{/if}
   {#if settled.length > 0}

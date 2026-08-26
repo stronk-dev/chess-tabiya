@@ -3,6 +3,7 @@
 
   import type { AppRoute } from "./router.js";
   import type { Learner } from "./api.js";
+  import StatusAnnouncement from "./StatusAnnouncement.svelte";
 
   interface RunContext {
     readonly title: string;
@@ -38,6 +39,12 @@
     return route.name === name || (name === "play" && route.name === "run") || (name === "review" && route.name === "story") || (name === "live" && (route.name === "live-session" || route.name === "live-overlay"));
   }
 
+  let runStatus = $derived(
+    runContext === undefined
+      ? "No active run"
+      : `${runContext.title}. ${runContext.access === "read_only" ? "Read-only" : runContext.busy ? "Thinking" : "Writer"}`,
+  );
+
   function follow(event: MouseEvent, path: string): void {
     if (
       event.button !== 0 ||
@@ -67,7 +74,8 @@
         >
       {/each}
     </nav>
-    <div class="run-context visually-hidden-below-rail" aria-live="polite">
+    <StatusAnnouncement message={runStatus} />
+    <div class="run-context visually-hidden-below-rail" aria-hidden="true">
       {#if runContext}
         <span>{runContext.title}</span>
         <strong class:readonly={runContext.access === "read_only"}>

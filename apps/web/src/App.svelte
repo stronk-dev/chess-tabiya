@@ -15,6 +15,7 @@
   import ShellFrame from "./lib/ShellFrame.svelte";
   import ShellKeyboardHelp from "./lib/ShellKeyboardHelp.svelte";
   import AssistanceSettings from "./lib/AssistanceSettings.svelte";
+  import StatusAnnouncement from "./lib/StatusAnnouncement.svelte";
   import AppearanceSettings from "./lib/AppearanceSettings.svelte";
   import DistillDraftForm from "./lib/DistillDraftForm.svelte";
   import PackProvenanceEditor from "./lib/PackProvenanceEditor.svelte";
@@ -1365,7 +1366,8 @@
       <section><h2>Rehearsal packs</h2><ul>{#each packs as pack}<li>{pack.title} <small>{pack.reviewStatus.replaceAll("_", " ")}</small></li>{:else}<li>No packs available.</li>{/each}</ul></section>
       <section><h2>Runs with exportable PGN</h2><ul>{#each runs as run}<li><button class="link-button" type="button" onclick={() => navigate(routePath({ name: "run", runId: run.id }))}>{run.title}</button> <small>{run.branchCount} branches</small> {#if run.viewerRole === "host"}<button type="button" onclick={() => void reviewRunDeletion(run)}>Delete this run</button>{/if}</li>{:else}<li>No run artifacts yet.</li>{/each}</ul>
         {#if runDeletion}
-          <aside class="deletion-card" aria-live="polite">
+          <aside class="deletion-card">
+            <StatusAnnouncement message={`Deletion effects loaded for ${runDeletion.run.title}. Review the listed permanent, retained, and revoked records before confirming.`} />
             <h3>Delete {runDeletion.run.title}?</h3>
             {#each runDeletion.preview.hardDelete as effect}<p>{effect.label}</p>{/each}
             {#each runDeletion.preview.tombstone as effect}<p>{effect.label}</p>{/each}

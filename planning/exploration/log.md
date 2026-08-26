@@ -9399,3 +9399,19 @@ catalogue maps. Its 2× ratio measured which positions were queried and timer no
 catalogue size. That false arm is removed. The unchanged contract still loads the complete artifact
 under 250 ms and measures 55,928 lookup pairs across its 3,810 endpoints and 7,854 membership keys
 under the unchanged 50 µs p95 ceiling in the isolated single-worker performance tier.
+
+## 2026-08-26 — Live regions announce changed facts, not whole panels (D1815 / A11-a30)
+
+The remaining accessibility-harness arm found a product defect while adding coverage: comparison
+marked the complete multi-board grid as live, while rehearsal guides, guard cards and deletion
+previews placed interactive or unchanged content inside live regions. A change could therefore
+replay boards, buttons and whole panels instead of announcing the changed fact.
+
+One atomic text-only `StatusAnnouncement` now owns compound announcements. Visible shell status,
+guides, guard actions, deletion cards, Why context and comparison boards remain outside it; the
+five simple inline regions are atomic `role=status` text containers. Component fixtures cover the
+conditional guide, deletion and comparison shapes. The real browser matrix mutates the catalogue
+count, loads an account-deletion preview, enters a rehearsal, scans every rendered live region for
+atomic text-only semantics, and repeats the mobile path under the Pixel 7 device project. All nine
+matrix cases pass. A11-a30 and D1815 close; owner screen-reader use remains the distinct A11-c1
+release discharge rather than being inferred from DOM automation.

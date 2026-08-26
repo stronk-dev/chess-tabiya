@@ -17,6 +17,7 @@
   import WhyBanner from "./WhyBanner.svelte";
   import OutcomeContext from "./OutcomeContext.svelte";
   import ShapePanel from "./ShapePanel.svelte";
+  import StatusAnnouncement from "./StatusAnnouncement.svelte";
   import GroupPanel from "./GroupPanel.svelte";
   import { renderEvidenceRef } from "./evidence-sentences.js";
   import { renderStructuralExpressionSpec, renderStructuralObservation } from "./structural-sentences.js";
@@ -902,13 +903,14 @@
   <main class="drill" tabindex="-1" bind:this={mainElement} aria-labelledby="drill-title" style={`--board-edge: ${boardEdge}px`}>
     <header class="topbar">
       <button class="wordmark" type="button" onclick={onStop}>Tabiya</button>
-      <div class="status visually-hidden-on-phone" aria-live="polite">
+      <StatusAnnouncement message={`${pack?.title ?? "Just Play"}. ${snapshot.access === "read_only" ? "Read-only follower" : busy ? "Writer, thinking" : "Writer, your move"}${authoredFeedback?.hasWithheldAuthoredContent ? ". Authored commentary withheld until checkpoints" : ""}`} />
+      <div class="status visually-hidden-on-phone" aria-hidden="true">
         <span class="run-name">{pack?.title ?? "Just Play"}</span>
         <span class:readonly={snapshot.access === "read_only"}>
           {snapshot.access === "read_only" ? "Read-only follower" : busy ? "Writer · thinking…" : "Writer · your move"}
         </span>
         {#if authoredFeedback?.hasWithheldAuthoredContent}
-          <span role="status">Authored commentary withheld until checkpoints</span>
+          <span>Authored commentary withheld until checkpoints</span>
         {/if}
       </div>
       <div class="topbar-actions">
@@ -1036,7 +1038,8 @@
         <div class="companion-scroll">
           <section id="run-support-region" class="companion-section evidence-seat" class:compact-active={compactTab === "evidence"} aria-label="Support">
             {#if guide}
-              <section class="rehearsal-guide" aria-labelledby="rehearsal-guide-title" aria-live="polite">
+              <section class="rehearsal-guide" aria-labelledby="rehearsal-guide-title">
+                <StatusAnnouncement message={`First rehearsal, step ${guide.ordinal} of 4. ${guide.title}. ${guide.body.join(" ")}`} />
                 <div class="guide-progress" aria-label={`First rehearsal, step ${guide.ordinal} of 4`}>
                   {#each [1, 2, 3, 4] as step}
                     <span class:reached={step <= guide.ordinal}></span>
@@ -1060,7 +1063,8 @@
               </section>
             {/if}
             {#if guardEvent?.type === "feedback.generated"}
-              <section class="guard-prompt" aria-label="Post-commit guard" aria-live="polite">
+              <section class="guard-prompt" aria-label="Post-commit guard">
+                <StatusAnnouncement message={`The consequence exposed something concrete. ${guardGrounds.map((sentence) => sentence.text).join(" ")} Your played line stays preserved.`} />
                 <div>
                   <strong>The consequence exposed something concrete.</strong>
                   {#each guardGrounds as sentence}<p>{sentence.text}</p>{/each}
@@ -1072,7 +1076,7 @@
                 </div>
               </section>
             {/if}
-            {#if overlayCaption.length > 0}<div class="overlay-caption" aria-live="polite" data-evidence-consumer="board.selected_square_sight">{#each overlayCaption as sentence}<p>{sentence}</p>{/each}</div>{/if}
+            {#if overlayCaption.length > 0}<div class="overlay-caption" role="status" aria-live="polite" aria-atomic="true" data-evidence-consumer="board.selected_square_sight">{#each overlayCaption as sentence}<p>{sentence}</p>{/each}</div>{/if}
             {#if assistance.boardLighting === "evidence" && !feedbackDeliveryOpen(run)}<p class="overlay-caption honest">No disclosed evidence exists here; structural sight remains available.</p>{/if}
             {#if pack !== undefined && (assessment !== undefined || resistance.length > 0)}<OutcomeContext {assessment} {resistance} grade={objectiveGradeSentence(pack.objective.type, currentNode.objectiveState)} />{/if}
             {#if banner !== undefined}<WhyBanner model={banner} />{/if}
