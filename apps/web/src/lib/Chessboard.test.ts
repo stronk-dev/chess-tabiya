@@ -130,4 +130,28 @@ describe("Chessboard", () => {
     expect(chessground.redrawAll.mock.calls.length).toBeGreaterThan(redrawsBeforeSelection);
     await unmount(component);
   });
+
+  it("requests square sight only when the keyboard activates an origin", async () => {
+    const onSelect = vi.fn();
+    const target = document.createElement("div");
+    document.body.append(target);
+    const component = mount(Chessboard, {
+      target,
+      props: {
+        fen: "8/8/8/8/8/8/4P3/4K2k w - - 0 1",
+        startSide: "white",
+        onSelect,
+        onMove: vi.fn(),
+      },
+    });
+    await tick();
+
+    const grid = target.querySelector<HTMLElement>("[data-board-input-grid]")!;
+    grid.dispatchEvent(new KeyboardEvent("keydown", { key: "ArrowUp", bubbles: true }));
+    expect(onSelect).not.toHaveBeenCalled();
+    grid.dispatchEvent(new KeyboardEvent("keydown", { key: "Enter", bubbles: true }));
+    expect(onSelect).toHaveBeenCalledOnce();
+    expect(onSelect).toHaveBeenCalledWith("e2");
+    await unmount(component);
+  });
 });

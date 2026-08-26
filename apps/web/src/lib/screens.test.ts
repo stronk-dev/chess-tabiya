@@ -299,12 +299,20 @@ describe("Layer 3 screens", () => {
     await tick();
 
     const ambient = document.querySelector<HTMLButtonElement>('button[aria-label="Open assistance"]')!;
+    const tabs = [...document.querySelectorAll<HTMLButtonElement>(".compact-tabs button:not(.sheet-close)")];
+    expect(tabs.map((tab) => [tab.textContent, tab.getAttribute("aria-pressed")])).toEqual([
+      ["Support", "false"],
+      ["Branches", "false"],
+      ["Actions", "true"],
+    ]);
     expect(ambient.getAttribute("aria-controls")).toBe("run-support-region");
     expect(document.querySelector(".rail-stack")?.classList.contains("sheet-open")).toBe(false);
     ambient.click();
     await tick();
     expect(document.querySelector(".rail-stack")?.classList.contains("sheet-open")).toBe(true);
     expect(document.getElementById("run-support-region")?.classList.contains("compact-active")).toBe(true);
+    expect(tabs[0]?.getAttribute("aria-pressed")).toBe("true");
+    expect(tabs[2]?.getAttribute("aria-pressed")).toBe("false");
     await unmount(component);
   });
 
@@ -549,7 +557,9 @@ describe("Layer 3 screens", () => {
     expect(document.body.textContent).toContain("draft");
     expect(document.body.textContent).toContain(summary.objectiveSummary);
     expect(document.body.textContent).toContain("opening");
-    document.querySelector<HTMLButtonElement>(".pack-card button")!.click();
+    const open = document.querySelector<HTMLButtonElement>(".pack-card button")!;
+    expect(open.getAttribute("aria-label")).toBe(`Rehearse this position: ${summary.title}`);
+    open.click();
     expect(onSelect).toHaveBeenCalledWith(pack.id);
     await unmount(component);
   });

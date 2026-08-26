@@ -6,31 +6,39 @@
     {
       "id": "A11-a1",
       "sourceState": "queued",
-      "state": "queued",
+      "state": "completed",
       "capability": "accessibility",
       "owner": "client-platform",
-      "assignment": "capability:accessibility",
+      "assignment": "closed",
       "sourceDocument": "ux-accessibility-and-mobile.md",
       "sourceSection": "§4 d1",
       "sourceHeading": "Accessibility and small screens — `ux-accessibility-and-mobile.md`",
       "summary": "Keyboard cannot reach square sight — call `onSelect` from the `activate` transition (**not** from `onActiveSquareChange`; sight is on-request, not on-cursor)",
       "legacyRoute": "wave3 #5",
       "note": "[[D1447]]; two lines",
-      "sourceDigest": "sha256:316e36200a662aa9389f8104801fc4f33ec8fe0b0c305bf25a4a559164946f4e"
+      "sourceDigest": "sha256:316e36200a662aa9389f8104801fc4f33ec8fe0b0c305bf25a4a559164946f4e",
+      "completion": {
+        "completedOn": "2026-08-26",
+        "evidence": "keyboard activate transition invokes onSelect only after entering origin_selected; focused Chessboard contract test"
+      }
     },
     {
       "id": "A11-a10",
       "sourceState": "queued",
-      "state": "queued",
+      "state": "completed",
       "capability": "accessibility",
       "owner": "client-platform",
-      "assignment": "capability:accessibility",
+      "assignment": "closed",
       "sourceDocument": "ux-accessibility-and-mobile.md",
       "sourceSection": "§4 d11",
       "sourceHeading": "Accessibility and small screens — `ux-accessibility-and-mobile.md`",
       "summary": "Phone region tabs carry no selected state in the accessibility tree — three attributes",
       "legacyRoute": "wave3 #7",
-      "sourceDigest": "sha256:20f7e58506470ff30be5568ad4eef85ae906777bb601c4b217f22ffbf600947c"
+      "sourceDigest": "sha256:20f7e58506470ff30be5568ad4eef85ae906777bb601c4b217f22ffbf600947c",
+      "completion": {
+        "completedOn": "2026-08-26",
+        "evidence": "Support, Branches and Actions expose mutually exclusive aria-pressed state; component transition fixture"
+      }
     },
     {
       "id": "A11-a11",
@@ -65,16 +73,20 @@
     {
       "id": "A11-a13",
       "sourceState": "queued",
-      "state": "queued",
+      "state": "completed",
       "capability": "accessibility",
       "owner": "client-platform",
-      "assignment": "capability:accessibility",
+      "assignment": "closed",
       "sourceDocument": "ux-accessibility-and-mobile.md",
       "sourceSection": "§3.2 s0-packnames",
       "sourceHeading": "Accessibility and small screens — `ux-accessibility-and-mobile.md`",
       "summary": "**Every pack card button's accessible name is *\"Open position\"*** — N indistinguishable entries",
       "legacyRoute": "none",
-      "sourceDigest": "sha256:bd3d128e8b70d88954d1b67c13cef7596c1b284fc7a1c8febbd0fbdc1f9eed11"
+      "sourceDigest": "sha256:bd3d128e8b70d88954d1b67c13cef7596c1b284fc7a1c8febbd0fbdc1f9eed11",
+      "completion": {
+        "completedOn": "2026-08-26",
+        "evidence": "each pack action names its authored title through a tested aria-label"
+      }
     },
     {
       "id": "A11-a14",
@@ -164,16 +176,20 @@
     {
       "id": "A11-a2",
       "sourceState": "queued",
-      "state": "queued",
+      "state": "completed",
       "capability": "accessibility",
       "owner": "client-platform",
-      "assignment": "capability:accessibility",
+      "assignment": "closed",
       "sourceDocument": "ux-accessibility-and-mobile.md",
       "sourceSection": "§4 d2",
       "sourceHeading": "Accessibility and small screens — `ux-accessibility-and-mobile.md`",
       "summary": "`KeyboardHelp` clips at the viewport floor — copy `ShellKeyboardHelp`'s `max-height` rule, one line",
       "legacyRoute": "wave3 #7",
-      "sourceDigest": "sha256:35b26a9b47caf3e8efc2480a67517648e57498fc6e21d3fbba8db65285765f70"
+      "sourceDigest": "sha256:35b26a9b47caf3e8efc2480a67517648e57498fc6e21d3fbba8db65285765f70",
+      "completion": {
+        "completedOn": "2026-08-26",
+        "evidence": "drill keyboard map is height-bounded and scrollable; browser fixture keeps it inside 360x680"
+      }
     },
     {
       "id": "A11-a20",
@@ -5340,17 +5356,21 @@
     {
       "id": "INR-a5",
       "sourceState": "queued",
-      "state": "queued",
+      "state": "completed",
       "capability": "support",
       "owner": "assistance-and-presentation",
-      "assignment": "capability:support",
+      "assignment": "closed",
       "sourceDocument": "ux-in-run.md",
       "sourceSection": "§3.2",
       "sourceHeading": "The in-run experience — `ux-in-run.md`",
       "summary": "Keyboard square-sight parity — call `onSelect` from the `activate` transition, not from `onActiveSquareChange`",
       "legacyRoute": "wave3 #5",
       "note": "[[D1447]]",
-      "sourceDigest": "sha256:0899323ea58a0528e4b5bd7fdc0d1f64e5ec129ecad63ee98d64d5018b6ee6c3"
+      "sourceDigest": "sha256:0899323ea58a0528e4b5bd7fdc0d1f64e5ec129ecad63ee98d64d5018b6ee6c3",
+      "completion": {
+        "completedOn": "2026-08-26",
+        "evidence": "keyboard square activation now reaches the same requested-sight callback as pointer selection without cursor-driven disclosure"
+      }
     },
     {
       "id": "INR-a6",
@@ -5385,17 +5405,21 @@
     {
       "id": "INR-a8",
       "sourceState": "queued",
-      "state": "queued",
+      "state": "completed",
       "capability": "support",
       "owner": "assistance-and-presentation",
-      "assignment": "capability:support",
+      "assignment": "closed",
       "sourceDocument": "ux-in-run.md",
       "sourceSection": "§6.6",
       "sourceHeading": "The in-run experience — `ux-in-run.md`",
       "summary": "Animation preference with a **None** option and a Normal default",
       "legacyRoute": "ledger",
       "note": "[[D840]]; without it a commit and a rewind are visually indistinguishable",
-      "sourceDigest": "sha256:07002367f4b9f35066a2c113bc76f773104c6875fe806acd4a69b8f0d7d42596"
+      "sourceDigest": "sha256:07002367f4b9f35066a2c113bc76f773104c6875fe806acd4a69b8f0d7d42596",
+      "completion": {
+        "completedOn": "2026-08-26",
+        "evidence": "None/Fast/Normal preference ships with Normal default and browser-proven opponent interpolation; D840"
+      }
     },
     {
       "id": "INR-a9",

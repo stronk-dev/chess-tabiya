@@ -958,9 +958,9 @@
 
         <nav class="compact-tabs" aria-label="Run regions">
           <span class="sheet-handle" aria-hidden="true"></span>
-          <button class:active={compactTab === "evidence"} onclick={() => { compactTab = "evidence"; sheetOpen = true; }}>Support</button>
-          <button class:active={compactTab === "branches"} onclick={() => { compactTab = "branches"; sheetOpen = true; }}>Branches</button>
-          <button class:active={compactTab === "timeline"} onclick={() => { compactTab = "timeline"; sheetOpen = true; }}>Actions</button>
+          <button class:active={compactTab === "evidence"} aria-pressed={compactTab === "evidence"} onclick={() => { compactTab = "evidence"; sheetOpen = true; }}>Support</button>
+          <button class:active={compactTab === "branches"} aria-pressed={compactTab === "branches"} onclick={() => { compactTab = "branches"; sheetOpen = true; }}>Branches</button>
+          <button class:active={compactTab === "timeline"} aria-pressed={compactTab === "timeline"} onclick={() => { compactTab = "timeline"; sheetOpen = true; }}>Actions</button>
           <button class="sheet-close" type="button" aria-label="Collapse companion" onclick={() => (sheetOpen = false)}>Close</button>
         </nav>
 

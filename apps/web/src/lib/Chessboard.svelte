@@ -173,7 +173,11 @@
 
   function dispatch(action: BoardInputAction): BoardInputResult {
     if (action.type !== "cancel") escapeArmed = false;
-    return apply(controller.dispatch(action));
+    const result = apply(controller.dispatch(action));
+    if (action.type === "activate" && result.state.phase === "origin_selected" && result.state.origin !== null) {
+      onSelect?.(result.state.origin);
+    }
+    return result;
   }
 
   function moved(from: Key, to: Key): void {

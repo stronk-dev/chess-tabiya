@@ -81,7 +81,7 @@
           <h2>{pack.title}</h2>
           <p class="objective">{pack.objectiveSummary}</p>
           <p class="difficulty">{packDifficultyCopy(pack, learnerBand)}</p>
-          <button class="open-pack" type="button" onclick={() => onSelect(pack.id)}>Rehearse this position <span aria-hidden="true">→</span></button>
+          <button class="open-pack" type="button" aria-label={`Rehearse this position: ${pack.title}`} onclick={() => onSelect(pack.id)}>Rehearse this position <span aria-hidden="true">→</span></button>
           <p class="provenance">{pack.channel === "official" ? "Official" : "Community"}{pack.publisherHandle ? ` · @${pack.publisherHandle}` : ""} · {pack.reviewStatus.replaceAll("_", " ")}</p>
         </article>
       {:else}

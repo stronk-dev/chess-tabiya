@@ -1430,6 +1430,21 @@ test("@matrix the semantic board remains a complete interactive grid after a key
   await expect(page.locator(".input-status")).toContainText("Move committed:");
 });
 
+test("the drill keyboard map remains contained and scrollable at the supported phone floor", async ({ page }) => {
+  await page.setViewportSize({ width: 360, height: 680 });
+  await page.goto("/play");
+  await page.getByRole("button", { name: "Start and keep the game" }).click();
+  await page.getByRole("button", { name: "Keyboard shortcuts" }).click();
+
+  const dialog = page.getByRole("dialog", { name: "Keep your hands on the position." });
+  await expect(dialog).toBeVisible();
+  const box = await dialog.boundingBox();
+  if (box === null) throw new TypeError("Keyboard map has no rendered bounds");
+  expect(box.y).toBeGreaterThanOrEqual(0);
+  expect(box.y + box.height).toBeLessThanOrEqual(680);
+  expect(await dialog.evaluate((element) => getComputedStyle(element).overflowY)).toBe("auto");
+});
+
 test("@matrix normal Tab traversal reaches every drill region in both directions and exits", async ({ page }) => {
   await page.goto("/play");
   await page

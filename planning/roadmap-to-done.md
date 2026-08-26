@@ -42,8 +42,8 @@ A capability is not complete because one link exists. That makes the current sta
 - API breadth was **overstated by REST branch counts**: [[D1532]] found five implemented rating
   families omitted from `application.ts:isApiPath`. They are production-routed now and guarded at
   the real HTTP application boundary; the roadmap retains the distinction for every future family.
-- UX is **an architectural rebuild, not polish**: 569 distinct items; 304 buildable now, 98 waiting
-  on a ruling, 97 on an RFC, 46 done, and 24 stale/wrong. Panels still stack above/between content,
+- UX is **an architectural rebuild, not polish**: 569 distinct items; 273 buildable now, 61 waiting
+  on a ruling, 116 on an RFC, 95 done, and 24 stale/wrong. Panels still stack above/between content,
   the board changes size, and evidence leaks as implementation detail.
 
 Run these for current counts; prose counts are dated evidence, not authority:
@@ -94,7 +94,7 @@ route fails `make roadmap-check` until it has an owner.
 
 **State: partial.** The ledger, RFC register, work index, status parity, shared-resource register,
 intent parity, and persistent UX-item registry are real. The 569-item register now distinguishes
-304 queued, 98 owner-blocked, 97 RFC-blocked, 46 complete and 24 retired items, with zero live
+273 queued, 61 owner-blocked, 116 RFC-blocked, 95 complete and 24 retired items, with zero live
 items unassigned; a source-row edit or a new id fails until its durable state is reconciled. Generic
 non-UX ledger rows still answer “mentioned?” more reliably than “actively delivered?”, so the
 capability remains partial rather than overstated as proven.

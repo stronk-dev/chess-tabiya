@@ -9246,3 +9246,17 @@ of Chessground's inner surface during `redrawAll()`; watching the old inner elem
 negative even while the visual interpolation ran. The focused stable-instance plus animation pair
 passes, and the full browser gate passes 36 tests with only the optional Maia latency test skipped.
 D840 is closed on executable interaction evidence rather than configuration inspection.
+
+## 2026-08-26 — Four no-ruling accessibility defects close (D1447 partial)
+
+Keyboard activation now reaches requested square sight only when the board controller enters
+`origin_selected`; moving the semantic cursor remains silent, preserving the assistance ceiling.
+The phone companion's Support, Branches and Actions controls expose mutually exclusive
+`aria-pressed` state, every pack action includes its authored title in its accessible name, and the
+drill keyboard map uses the already-shipped height-bounded scrolling dialog pattern.
+
+Focused component coverage proves the requested-sight transition, tab state and unique pack name.
+A browser fixture at the supported 360×680 floor proves the keyboard map remains inside the
+viewport with scrolling enabled. Work items A11-a1, A11-a2, A11-a10, A11-a13 and the duplicate
+INR-a5 obligation are complete. D1447 remains open only for the separate owner choice to activate
+or retire the currently inert `arrows` assistance ceiling.

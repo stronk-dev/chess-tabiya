@@ -56,6 +56,8 @@
 
   .dialog {
     width: min(36rem, 100%);
+    max-height: calc(100dvh - 2rem);
+    overflow: auto;
     padding: 1.25rem;
     border-radius: 1.2rem;
     background: var(--panel);
