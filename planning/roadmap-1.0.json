@@ -150,7 +150,7 @@
       "name": "Human-like opponents, personalities, roster, and bot events",
       "release": "core",
       "owner": "bot-play",
-      "rfcs": ["bot-policy.md", "bot-roster.md", "bot-route-source.md"],
+      "rfcs": ["bot-policy.md", "bot-roster.md", "bot-route-source.md", "opponent-experience.md"],
       "completion": {
         "evidence": ["partial", "Maia bands, candidate probabilities, guards, routes, repertoire, traits, memory, clock behavior, and endgame behavior are measured separately."],
         "state": ["blocked", "Named profile digests persist every model, bound, proposal, guard, trait, and fallback used for a move."],

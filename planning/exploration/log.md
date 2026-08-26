@@ -8609,3 +8609,19 @@ Dossier: `design/research/bot-policy-axes-and-card-grounding.md`; handoff:
 `planning/bot-roster/card-axis-author-repair-2026-08-26.md`; instrument:
 `tools/d1601-bot-card-contract-harness/` (8/8 green). D1610/D1611 remain owner decisions; no RFC,
 profile, product copy, schema or concurrent Claude byte changed.
+
+## 2026-08-26 — D1608 opponent-experience RFC drafted
+
+Drafted the bounded learner-facing owner for the bot roster after the research, route and grounded
+card gates were all available. The RFC makes the exact 4×3 Play picker, grounded card and fixed
+in-run identity bar one indivisible acceptance outcome; exact-digest resume/rematch,
+provider/degraded states, 320×568/keyboard behavior and a full release journey are included.
+
+The route deliberately consumes the server-owned atomic opponent operation from the D1605 research
+rather than widening public `/select-move` with a client-selected profile. Strong engine remains a
+separate sparring wall. Raw model/profile ids stay out of ordinary Play, and opponent identity is
+chrome independent of assistance ceilings.
+
+`rfc/opponent-experience.md` remains draft. D1610 (final twelve identities/art), D1611 (first-run
+default; RFC recommends baseline 1400) and independent cross-review block acceptance. The RFC
+claims no shared resource and no product/schema byte was changed.
