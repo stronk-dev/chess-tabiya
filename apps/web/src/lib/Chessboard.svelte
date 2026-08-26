@@ -44,7 +44,7 @@
     marks?: readonly DrawShape[];
     drawingEnabled?: boolean;
     onMarksChange?: (shapes: readonly DrawShape[]) => void;
-    onSelect?: (square: Key) => void;
+    onSelect?: (square: Key | undefined) => void;
     onExitGrid?: () => void;
     activeSquare?: Square | undefined;
     onActiveSquareChange?: (square: Square) => void;
@@ -182,6 +182,7 @@
   function dispatch(action: BoardInputAction): BoardInputResult {
     if (action.type !== "cancel") escapeArmed = false;
     const result = apply(controller.dispatch(action));
+    if (action.type === "cancel") onSelect?.(undefined);
     if (action.type === "activate" && result.state.phase === "origin_selected" && result.state.origin !== null) {
       onSelect?.(result.state.origin);
     }
@@ -220,6 +221,10 @@
         if (typeof board?.redrawAll === "function") board.redrawAll();
       });
     });
+  }
+
+  function settlePointerSelection(): void {
+    requestAnimationFrame(() => onSelect?.(board?.state.selected));
   }
 
   function promote(role: PromotionRole): void {
@@ -341,7 +346,8 @@
     </form>
   </details>
   <div class="board-surface">
-    <div class="board" bind:this={boardElement} aria-label="Chessboard"></div>
+    <!-- svelte-ignore a11y_no_static_element_interactions (Chessground owns the interactive board subtree) -->
+    <div class="board" bind:this={boardElement} aria-label="Chessboard" onpointerup={settlePointerSelection}></div>
     <div
       class="semantic-grid"
       bind:this={gridElement}

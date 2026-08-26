@@ -1370,6 +1370,202 @@ test("@matrix play composition keeps one exact board rectangle through reachable
   }
 });
 
+test("selected-square support clears with the visible selection and displayed position", async ({ page }) => {
+  await page.goto("/play");
+  await page
+    .getByRole("article")
+    .filter({ hasText: "schema example" })
+    .getByRole("button", { name: /Rehearse this position/ })
+    .click();
+
+  const board = page.getByLabel("Chessboard");
+  const box = await board.boundingBox();
+  if (box === null) throw new Error("Chessground board has no bounding box");
+  const d4 = squarePoint(box, "d4");
+  const selectedSight = page.locator('[data-evidence-consumer="board.selected_square_sight"]');
+
+  await page.mouse.click(d4.x, d4.y);
+  await expect(selectedSight).toBeVisible();
+  await page.mouse.click(d4.x, d4.y);
+  await expect(selectedSight).toHaveCount(0);
+
+  await move(page, "d4", "b5");
+  await expect(page.getByText("Active line 2 plies")).toBeVisible();
+  await expect(selectedSight).toHaveCount(0);
+
+  const movedBox = await board.boundingBox();
+  if (movedBox === null) throw new Error("Chessground board has no moved bounding box");
+  const b5 = squarePoint(movedBox, "b5");
+  await page.mouse.click(b5.x, b5.y);
+  await expect(selectedSight).toBeVisible();
+  await page.getByRole("button", { name: /^Ply 1:/u }).click();
+  await expect(page.getByText("Preview", { exact: true })).toBeVisible();
+  await expect(selectedSight).toHaveCount(0);
+});
+
+test("@matrix post-commit guard preserves the board rectangle at every composition viewport", async ({ page }, testInfo) => {
+  const projections = [
+    { width: 1440, height: 900 },
+    { width: 1366, height: 768 },
+    { width: 1280, height: 720 },
+    { width: 768, height: 1024 },
+    { width: 430, height: 932 },
+    { width: 390, height: 844 },
+    { width: 360, height: 680 },
+  ] as const;
+
+  for (const viewport of projections) {
+    await page.setViewportSize(viewport);
+    await page.goto("/play");
+    await page
+      .getByRole("article")
+      .filter({ hasText: "Post-commit guard browser fixture" })
+      .getByRole("button", { name: /Rehearse this position/ })
+      .click();
+    await assertRunViewport(page, viewport);
+    const calm = await page.getByLabel("Chessboard").boundingBox();
+    expect(calm).not.toBeNull();
+
+    await move(page, "h2", "h3");
+    const prompt = page.getByRole("region", { name: "Consequence to review" });
+    if (!await prompt.isVisible()) {
+      await page.getByRole("button", { name: "Support", exact: true }).click();
+    }
+    await expect(prompt).toBeVisible();
+    expect(await page.getByLabel("Chessboard").boundingBox()).toEqual(calm);
+    await attachCompositionCell(page, testInfo, viewport, "04-post-commit-guard");
+  }
+});
+
+test("@matrix terminal outcome preserves the board rectangle at every composition viewport", async ({ page }, testInfo) => {
+  test.setTimeout(60_000);
+  const projections = [
+    { width: 1440, height: 900 },
+    { width: 1366, height: 768 },
+    { width: 1280, height: 720 },
+    { width: 768, height: 1024 },
+    { width: 430, height: 932 },
+    { width: 390, height: 844 },
+    { width: 360, height: 680 },
+  ] as const;
+
+  for (const viewport of projections) {
+    await page.setViewportSize(viewport);
+    await page.goto("/play");
+    await page
+      .getByRole("article")
+      .filter({ hasText: "Terminal outcome browser fixture" })
+      .getByRole("button", { name: /Rehearse this position/ })
+      .click();
+    await assertRunViewport(page, viewport);
+    const calm = await page.getByLabel("Chessboard").boundingBox();
+    expect(calm).not.toBeNull();
+
+    await move(page, "f2", "f3");
+    await page.getByRole("button", { name: "Continue" }).click();
+    await move(page, "g2", "g4");
+    await expect(page.getByRole("dialog", { name: "You lost." })).toBeVisible();
+    expect(await page.getByLabel("Chessboard").boundingBox()).toEqual(calm);
+    await attachCompositionCell(page, testInfo, viewport, "14-terminal-outcome");
+  }
+});
+
+test("@matrix promotion picker overlays the unchanged board at every composition viewport", async ({ page }, testInfo) => {
+  const projections = [
+    { width: 1440, height: 900 },
+    { width: 1366, height: 768 },
+    { width: 1280, height: 720 },
+    { width: 768, height: 1024 },
+    { width: 430, height: 932 },
+    { width: 390, height: 844 },
+    { width: 360, height: 680 },
+  ] as const;
+
+  for (const viewport of projections) {
+    await page.setViewportSize(viewport);
+    await page.goto("/play");
+    await page.getByRole("button", { name: "Start from a FEN" }).click();
+    await page.getByLabel("Position FEN").fill("7k/P7/8/8/8/8/8/7K w - - 0 1");
+    await page.getByRole("button", { name: "Start and keep the game" }).click();
+    await assertRunViewport(page, viewport);
+    const calm = await page.getByLabel("Chessboard").boundingBox();
+    expect(calm).not.toBeNull();
+
+    await move(page, "a7", "a8");
+    await expect(page.getByRole("dialog", { name: "Choose promotion piece" })).toBeVisible();
+    expect(await page.getByLabel("Chessboard").boundingBox()).toEqual(calm);
+    await attachCompositionCell(page, testInfo, viewport, "15-promotion-pending");
+  }
+});
+
+test("@matrix rewind, fork re-entry, and comparison remain composed at every viewport", async ({ page }, testInfo) => {
+  test.setTimeout(120_000);
+  const projections = [
+    { width: 1440, height: 900 },
+    { width: 1366, height: 768 },
+    { width: 1280, height: 720 },
+    { width: 768, height: 1024 },
+    { width: 430, height: 932 },
+    { width: 390, height: 844 },
+    { width: 360, height: 680 },
+  ] as const;
+
+  for (const viewport of projections) {
+    await page.setViewportSize(viewport);
+    await page.goto("/play");
+    await page
+      .getByRole("article")
+      .filter({ hasText: "schema example" })
+      .getByRole("button", { name: /Rehearse this position/ })
+      .click();
+    await assertRunViewport(page, viewport);
+    const calm = await page.getByLabel("Chessboard").boundingBox();
+    expect(calm).not.toBeNull();
+
+    await move(page, "c1", "e3");
+    await page.getByRole("button", { name: "Continue" }).click();
+    await page.getByRole("button", { name: "Continue" }).click();
+    await expect(page.getByText("Active line 2 plies")).toBeVisible();
+    await move(page, "f2", "f3");
+    await page.getByRole("button", { name: "Continue" }).click();
+
+    await page.locator("main.drill").focus();
+    await page.keyboard.press("r");
+    await expect(page.getByText("Active line 2 plies")).toBeVisible();
+    await page.keyboard.press("b");
+    await page.getByLabel("Label").fill("quiet setup");
+    await page.getByLabel("Intent").fill("Compare a lower-commitment setup");
+    await page.getByRole("button", { name: "Create branch" }).click();
+    await clickMove(page, "d1", "d2");
+    if (await page.getByRole("button", { name: "Continue" }).isVisible().catch(() => false)) {
+      await page.getByRole("button", { name: "Continue" }).click();
+    }
+
+    const mainBranch = page.getByRole("button", { name: /Switch to branch 1: main/ });
+    if (!await mainBranch.isVisible()) {
+      await page.getByRole("button", { name: "Branches", exact: true }).click();
+    }
+    await mainBranch.click();
+    await page.getByRole("button", { name: /Switch to branch 2: quiet setup/ }).click();
+    await expect(page.locator(".rail li.active strong")).toHaveText("quiet setup");
+    expect(await page.getByLabel("Chessboard").boundingBox()).toEqual(calm);
+    await attachCompositionCell(page, testInfo, viewport, "11-timeline-rewind-fork-reentry");
+
+    if (viewport.width <= 719 && await page.locator(".rail-stack").evaluate((element) => element.classList.contains("sheet-open"))) {
+      await page.getByRole("button", { name: "Collapse companion" }).click();
+    }
+    await page.locator("main.drill").focus();
+    await page.keyboard.press("Alt+C");
+    await expect(page.getByRole("heading", { name: "Same decision, two consequences." })).toBeVisible();
+    const horizontal = await page.evaluate(() => ({
+      clientWidth: document.documentElement.clientWidth,
+      scrollWidth: document.documentElement.scrollWidth,
+    }));
+    expect(horizontal.scrollWidth).toBeLessThanOrEqual(horizontal.clientWidth + 1);
+    await attachCompositionCell(page, testInfo, viewport, "12-compare-open");
+  }
+});
+
 test("a committed move updates the stable board instance instead of remounting it", async ({ page }) => {
   await page.goto("/play");
   await page.getByRole("button", { name: "Start and keep the game" }).click();

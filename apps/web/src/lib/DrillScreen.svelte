@@ -487,6 +487,7 @@
   }
 
   async function boardMove(uci: string): Promise<void> {
+    selectedSquare = undefined;
     if (groupOpen && groupSource === "hand_picked") {
       captureGroupMove(uci);
       return;
@@ -498,7 +499,7 @@
     if (before === undefined || groupPreference(before.groupId) !== "lockstep" || checkpoint !== undefined) return;
     const next = before.members[(beforeIndex + 1) % before.members.length];
     if (next === undefined || next.branchId === run.activeCursor.branchId) return;
-    await onSwitchBranch(branchPath(run, next.branchId).at(-1)!.id, next.branchId);
+    await switchRunBranch(branchPath(run, next.branchId).at(-1)!.id, next.branchId);
   }
 
   async function createGroup(): Promise<void> {
@@ -515,7 +516,7 @@
   async function nextGroupMember(group: BranchGroup): Promise<void> {
     const current = group.members.findIndex((member) => member.branchId === run.activeCursor.branchId);
     const next = group.members[(current + 1) % group.members.length];
-    if (next !== undefined) await onSwitchBranch(branchPath(run, next.branchId).at(-1)!.id, next.branchId);
+    if (next !== undefined) await switchRunBranch(branchPath(run, next.branchId).at(-1)!.id, next.branchId);
   }
   function editingTarget(event: KeyboardEvent): boolean {
     return event.composedPath().some((target) =>
@@ -628,22 +629,34 @@
   }
   async function switchVisibleBranch(nodeId: string, branchId: string): Promise<void> {
     pinnedExpanded = [...new Set([...pinnedExpanded, branchId])];
+    selectedSquare = undefined;
     await onSwitchBranch(nodeId, branchId);
   }
 
   function preview(nodeId: string): void {
+    selectedSquare = undefined;
     previewNodeId = previewNodeId === nodeId ? undefined : nodeId;
+  }
+
+  async function rewindRun(target: RewindTarget): Promise<void> {
+    selectedSquare = undefined;
+    await onRewind(target);
+  }
+
+  async function switchRunBranch(nodeId: string, branchId: string): Promise<void> {
+    selectedSquare = undefined;
+    await onSwitchBranch(nodeId, branchId);
   }
 
   async function confirmPreview(nodeId = previewNodeId): Promise<void> {
     if (!canWrite || nodeId === undefined) return;
     previewNodeId = undefined;
-    await onRewind({ nodeId });
+    await rewindRun({ nodeId });
   }
 
   async function rewindFirstRehearsal(): Promise<void> {
     if (!canWrite || guide?.rewindNodeId === undefined) return;
-    await onRewind({ nodeId: guide.rewindNodeId });
+    await rewindRun({ nodeId: guide.rewindNodeId });
   }
 
   async function compareFirstRehearsal(): Promise<void> {
@@ -774,7 +787,7 @@
       }
       else {
         const checkpointId = latestCheckpointId();
-        if (checkpointId !== undefined) void onRewind({ checkpointId });
+        if (checkpointId !== undefined) void rewindRun({ checkpointId });
       }
       return true;
     } else if (event.key.toLowerCase() === "b") {
@@ -788,7 +801,7 @@
       const branch = cards[Number(event.key) - 1];
       if (branch !== undefined) {
         event.preventDefault();
-        void onSwitchBranch(branch.leafNodeId, branch.id);
+        void switchRunBranch(branch.leafNodeId, branch.id);
         return true;
       }
     } else if (
@@ -1082,7 +1095,7 @@
                 </div>
                 <div class="guard-actions">
                   <button type="button" onclick={() => (dismissedGuardSeq = guardEvent?.seq)}>Play on</button>
-                  <button class="primary" type="button" disabled={snapshot.access === "read_only" || guardRewindNodeId === undefined} onclick={() => guardRewindNodeId === undefined ? undefined : onRewind({ nodeId: guardRewindNodeId })}>Rewind</button>
+                  <button class="primary" type="button" disabled={snapshot.access === "read_only" || guardRewindNodeId === undefined} onclick={() => guardRewindNodeId === undefined ? undefined : rewindRun({ nodeId: guardRewindNodeId })}>Rewind</button>
                 </div>
               </section>
             {/if}
@@ -1100,7 +1113,7 @@
             {startSide}
             advanceMode={groupPreference(activeGroup.groupId)}
             onAdvanceMode={(mode) => setGroupPreference(activeGroup!.groupId, mode)}
-            onEnter={onSwitchBranch}
+            onEnter={switchRunBranch}
             onCompare={() => onCompare(activeGroup!.members.map((member) => member.branchId))}
             onAnalyze={(nodeIds) => onAnalyzeMissing?.(nodeIds)}
           />
@@ -1207,7 +1220,7 @@
     resolution={checkpointResolution}
     canCompare={cards.length >= 2}
     onContinue={continueFromCheckpoint}
-    onRewind={() => onRewind({ nodeId: checkpoint.nodeId })}
+    onRewind={() => rewindRun({ nodeId: checkpoint.nodeId })}
     onCompare={openCompare}
     {onStop}
   />
@@ -1224,7 +1237,7 @@
     {resistance}
     grade={pack === undefined ? undefined : objectiveGradeSentence(pack.objective.type, currentNode.objectiveState)}
     canRewind={snapshot.access === "writer" && currentNode.parentId !== null}
-    onRewind={() => currentNode.parentId === null ? undefined : onRewind({ nodeId: currentNode.parentId })}
+    onRewind={() => currentNode.parentId === null ? undefined : rewindRun({ nodeId: currentNode.parentId })}
     {onStory}
     onFlip={onFlip === undefined ? undefined : () => onFlip(run.nodes[0]!.id)}
     onInspectEvidence={() => (inspectorOpen = true)}
@@ -1351,7 +1364,7 @@
       <div class="checkpoint-options">
         {#each [...run.events].reverse().filter((event) => event.type === "checkpoint.reached") as event}
           {#if event.type === "checkpoint.reached"}
-            <button type="button" onclick={() => { checkpointPickerOpen = false; void onRewind({ checkpointId: event.data.checkpointId }); }}>
+            <button type="button" onclick={() => { checkpointPickerOpen = false; void rewindRun({ checkpointId: event.data.checkpointId }); }}>
               {pack?.checkpoints.find((item) => item.id === event.data.checkpointId)?.label ?? event.data.checkpointId}
             </button>
           {/if}

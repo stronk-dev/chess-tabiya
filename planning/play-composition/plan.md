@@ -40,6 +40,12 @@ remain in their owning RFCs.
     family-level Support summaries while retaining exact sentences in Inspector; collapses duplicate
     phase enums; removes UCI/ply/simulated transport vocabulary from ordinary controls; and names the
     bounded reveal after learner support rather than the evidence pipeline.
+12. The executable composition matrix retains 77 named screenshots: eleven reachable states at
+    all seven viewports, including real guard, terminal, promotion, rewind/fork/re-entry and Compare
+    journeys. The other five state columns depend exactly on learner-module emission.
+13. Selected-square captions follow Chessboard's authoritative settled selection across pointer,
+    keyboard, commit and history changes. The tablet branch band separates identity, horizontally
+    scrollable cards and actions, so its real branch buttons are not covered by footer controls.
 
 ## Remaining before archive
 
@@ -49,16 +55,13 @@ remain in their owning RFCs.
 2. Remove the remaining ordinary-surface vocabulary leaks named by §5. The related-pack relation
    currently suppresses its raw UCI until an authoritative SAN projection exists; phase, compare,
    tablebase and voice families still need their compiled module renderers.
-3. Complete the remaining ten acceptance states in the 7×16 matrix ([[D1834]]). States 1, 2, 7, 8, 10 and 16
-   now retain 42/112 successful screenshots; post-commit, timeline, compare, terminal and promotion
-   remain executable work, while module-cue, guided, honest-empty and max-load cells wait on their
-   accepted producer/module dependencies. Do not count blocked cells as screenshots.
+3. Complete the five module-dependent acceptance states in the 7×16 matrix ([[D1834]]). States 1,
+   2, 4, 7, 8, 10, 11, 12, 14, 15 and 16 now retain 77/112 successful screenshots. States 3, 5,
+   6, 9 and 13 wait on accepted producer/module emission; do not count blocked cells as screenshots.
 4. Bind the full Inspector's amended accepts list when `learner-modules` implements, including the
    D924 phase/pivotal/classifier/compare families.
 5. Reconcile `docs/drill-client.md`, close the remaining ledger rows, append final lifecycle logs,
    and archive only after A1–A15 pass as a set.
-6. Clear selected-square Support when the visible board selection clears or the displayed node
-   changes ([[D1835]]); state 2 may not retain a caption for a selection Chessground no longer paints.
 
 ## Explicit non-goals of this checkpoint
 

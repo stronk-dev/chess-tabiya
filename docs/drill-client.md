@@ -445,6 +445,13 @@ outgoing UCI for every served endgame at desktop, tablet and phone projections;
 resting containment or merely observing some legal move is not accepted as
 interaction correctness.
 
+Selection state is one authoritative Chessboard output: pointer selection and deselection report
+the settled Chessground square, keyboard cancellation reports absence, and commit, preview, rewind
+and branch changes clear the companion caption. The seven-viewport composition report retains all
+eleven currently reachable states (77 named cells), including real guard, terminal, promotion,
+rewind/fork/re-entry and Compare journeys. Its remaining five columns require emitted learner
+modules and stay explicitly incomplete.
+
 The real Pixel 7 browser project also measures the permanent 24px touch floor
 for Sign out, the on-board Appearance link, and both text-move controls. Its
 compact companion check opens a real phone drawer, proves the board is inert and

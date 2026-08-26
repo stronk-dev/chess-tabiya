@@ -68,25 +68,27 @@
       </li>
     {/each}
   </ol>
-  {#if onCompareAllHere}
-    <button type="button" onclick={() => onCompareAllHere(branches.find((branch) => branch.id === activeBranchId)?.forkNodeId ?? "")}>Compare all forked here</button>
-    {#if compareLimitNotice}<span class="reason" role="status" aria-live="polite" aria-atomic="true">{compareLimitNotice}</span>{/if}
-  {/if}
-  {#if onClassify && unclassified > 0}<button type="button" onclick={() => onClassify?.()}>Classify remaining</button>{/if}
-  {#if settled.length > 0}
-    <details><summary>Settled outcomes ({settled.length})</summary><ul>{#each settled as branch}{@const fact = decidedness[branch.id]}<li><button type="button" onclick={() => onRestore?.(branch.id)}>{branch.label}</button>{#if fact?.state === "decided"}<span>{renderCollapseExplanation(branch.id, fact, branch.leafPly).text}</span>{/if}</li>{/each}</ul></details>
-  {/if}
-  {#if hidden.length > 0}
-    <details><summary>Hidden by you ({hidden.length})</summary><button type="button" onclick={() => onRestoreAll?.()}>Restore all</button><ul>{#each hidden as branch}<li><button type="button" onclick={() => onRestore?.(branch.id)}>{branch.label}</button></li>{/each}</ul></details>
-  {/if}
+  <div class="rail-actions">
+    {#if onCompareAllHere}
+      <button type="button" onclick={() => onCompareAllHere(branches.find((branch) => branch.id === activeBranchId)?.forkNodeId ?? "")}>Compare all forked here</button>
+      {#if compareLimitNotice}<span class="reason" role="status" aria-live="polite" aria-atomic="true">{compareLimitNotice}</span>{/if}
+    {/if}
+    {#if onClassify && unclassified > 0}<button type="button" onclick={() => onClassify?.()}>Classify remaining</button>{/if}
+    {#if settled.length > 0}
+      <details><summary>Settled outcomes ({settled.length})</summary><ul>{#each settled as branch}{@const fact = decidedness[branch.id]}<li><button type="button" onclick={() => onRestore?.(branch.id)}>{branch.label}</button>{#if fact?.state === "decided"}<span>{renderCollapseExplanation(branch.id, fact, branch.leafPly).text}</span>{/if}</li>{/each}</ul></details>
+    {/if}
+    {#if hidden.length > 0}
+      <details><summary>Hidden by you ({hidden.length})</summary><button type="button" onclick={() => onRestoreAll?.()}>Restore all</button><ul>{#each hidden as branch}<li><button type="button" onclick={() => onRestore?.(branch.id)}>{branch.label}</button></li>{/each}</ul></details>
+    {/if}
+  </div>
 </aside>
 
 <style>
   .rail {
     min-width: 0;
     min-height: 0;
-    display: grid;
-    grid-template-rows: auto minmax(0, 1fr);
+    display: flex;
+    flex-direction: column;
     overflow: hidden;
   }
 
@@ -108,6 +110,8 @@
   }
 
   ol {
+    flex: 1 1 auto;
+    min-height: 0;
     display: grid;
     gap: 0.55rem;
     margin: 0;
@@ -187,9 +191,43 @@
   }
 
   .fold{margin:.15rem .4rem;border:0;background:transparent;color:var(--muted);font-size:.7rem;text-decoration:underline;cursor:pointer}
+  .rail-actions{display:grid;gap:.35rem;flex:none}
   .reason,details span{display:block;color:var(--muted);font-size:.7rem;margin:.35rem 0}
   details{margin-top:.5rem;font-size:.75rem}
   details ul{list-style:none;padding:0;display:grid;gap:.35rem}
 
   .group-marker{grid-column:2;color:var(--accent);font:600 .62rem ui-monospace,monospace;text-transform:uppercase}
+
+  @media (min-width: 720px) and (max-width: 1023px) {
+    .rail {
+      display: grid;
+      grid-template-columns: minmax(9rem, 11rem) minmax(0, 1fr) minmax(9rem, 11rem);
+      grid-template-rows: minmax(0, 1fr);
+      gap: .55rem;
+    }
+
+    .heading {
+      display: grid;
+      align-content: center;
+      margin: 0;
+    }
+
+    ol {
+      min-width: 0;
+      display: flex;
+      overflow-x: auto;
+      overflow-y: hidden;
+    }
+
+    ol > li {
+      flex: 0 0 min(15rem, 48vw);
+      overflow: hidden;
+    }
+
+    .rail-actions {
+      min-width: 0;
+      align-content: start;
+      overflow-y: auto;
+    }
+  }
 </style>

@@ -9654,3 +9654,18 @@ Dynamic and module-dependent states remain open and are not represented by subst
 The pass also exposed D1835: Chessground can visually clear a selected square while the Support
 caption retains the prior selection, so selection clearing is the next state-2 repair. D1833 closes;
 D1834 remains implementing.
+
+## 2026-08-27 — Every currently reachable composition state has retained evidence
+
+The matrix now executes real post-commit guard, terminal, promotion, rewind → fork → re-entry and
+Compare paths at all seven viewports, taking successful coverage from 42 to 77 of 112 cells. These
+are the eleven states the current application can honestly reach. The remaining five—move-staged
+cue, expanded module, final guided hint, honest-empty module and max module load—depend exactly on
+the returned learner-module/emission layer and remain uncounted.
+
+The new state-11 path found two product-state failures. Selected-square Support outlived visible
+Chessground deselection; Chessboard now reports the settled square or absence and commit/history
+operations clear it. At 768×1024, the branch summary and Compare control intercepted visible branch
+cards. The tablet band now separates identity, horizontally scrollable cards and actions into three
+columns, and the test performs both pointer branch switches without force. D1835 and D1836 close;
+D1834 remains implementing only on the five named module-dependent columns.
