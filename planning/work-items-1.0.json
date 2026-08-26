@@ -7623,17 +7623,18 @@
     {
       "id": "SET-a5",
       "sourceState": "queued",
-      "state": "queued",
+      "state": "completed",
       "capability": "support",
       "owner": "assistance-and-presentation",
-      "assignment": "capability:support",
+      "assignment": "closed",
       "sourceDocument": "ux-settings-and-identity.md",
       "sourceSection": "§2.3a2",
       "sourceHeading": "Settings, appearance and identity — `ux-settings-and-identity.md`",
       "summary": "Move the inherited-palette sub-AA notice onto the entry card, where `rfc/theming.md` already specifies it",
       "legacyRoute": "none",
       "note": "mechanism right, seating wrong",
-      "sourceDigest": "sha256:2deba5a7a23b904c34b06d39d08cfc6dd7c28e7cfd5d1ef14eba1c8457ce5443"
+      "sourceDigest": "sha256:2deba5a7a23b904c34b06d39d08cfc6dd7c28e7cfd5d1ef14eba1c8457ce5443",
+      "completion": { "completedOn": "2026-08-26", "evidence": "the selected app-theme control carries its measured inherited-palette warning inline, including each pair and ratio; the detached page-level disclosure is removed" }
     },
     {
       "id": "SET-a6",
@@ -7669,16 +7670,17 @@
     {
       "id": "SET-a8",
       "sourceState": "queued",
-      "state": "queued",
+      "state": "completed",
       "capability": "support",
       "owner": "assistance-and-presentation",
-      "assignment": "capability:support",
+      "assignment": "closed",
       "sourceDocument": "ux-settings-and-identity.md",
       "sourceSection": "§5.2e",
       "sourceHeading": "Settings, appearance and identity — `ux-settings-and-identity.md`",
       "summary": "First paint renders `SILENT_ASSISTANCE` then replaces it `onMount` — a visible flash",
       "legacyRoute": "none",
-      "sourceDigest": "sha256:0d9b1cfabd83b18579da3efbd6e8895bbfe1dd7c6466479f81e6a0f685497bf9"
+      "sourceDigest": "sha256:0d9b1cfabd83b18579da3efbd6e8895bbfe1dd7c6466479f81e6a0f685497bf9",
+      "completion": { "completedOn": "2026-08-26", "evidence": "AssistanceSettings initializes every context from validated storage before first render; a no-tick component fixture proves stored evidence lighting and markers are present immediately" }
     },
     {
       "id": "SET-a9",

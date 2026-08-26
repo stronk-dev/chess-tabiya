@@ -6,7 +6,7 @@ import { SILENT_ASSISTANCE } from "@chess-tabiya/runtime";
 import { ASSISTANCE_PROFILES, PROFILE_DEFAULTS, assistanceKey, assistanceProfile, loadAssistance, loadWorkflowPreset, saveAssistance, saveWorkflowPreset, workflowKey } from "./assistance-preference.js";
 import AssistanceSettings from "./AssistanceSettings.svelte";
 
-afterEach(() => document.body.replaceChildren());
+afterEach(() => { document.body.replaceChildren(); vi.unstubAllGlobals(); });
 
 function target(): HTMLElement {
   const element = document.createElement("div");
@@ -98,6 +98,16 @@ describe("assistance preference", () => {
       expect(reason.getAttribute("aria-hidden")).toBeNull();
     }
     expect(document.querySelectorAll("#external-voice-unavailable")).toHaveLength(1);
+    await unmount(component);
+  });
+
+  it("renders stored assistance on the first component paint", async () => {
+    const values = new Map([[assistanceKey("position"), JSON.stringify({ ...SILENT_ASSISTANCE, boardLighting: "evidence", markers: "live" })]]);
+    vi.stubGlobal("localStorage", { getItem: (key: string) => values.get(key) ?? null, setItem: (key: string, value: string) => values.set(key, value) });
+    const component = mount(AssistanceSettings, { target: target(), props: { onSignOut: vi.fn(), onExport: vi.fn(), onDelete: vi.fn() } });
+    const fieldset = [...document.querySelectorAll("fieldset")].find((item) => item.querySelector("legend")?.textContent === "Just Play")!;
+    expect(fieldset.querySelector<HTMLSelectElement>("select")?.value).toBe("evidence");
+    expect([...fieldset.querySelectorAll<HTMLInputElement>('input[type="checkbox"]')].find((input) => input.parentElement?.textContent?.includes("Passive markers"))?.checked).toBe(true);
     await unmount(component);
   });
 

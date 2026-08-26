@@ -19,7 +19,8 @@ speed while silently applying another.
 Settings exposes every choice independently and applies it immediately. A small
 Appearance link in the board region opens that section without adding another
 in-run settings system. Inherited palettes disclose measured color pairs below
-Tabiya's own accessibility floor rather than silently editing upstream colors.
+Tabiya's own accessibility floor on the selected theme control rather than
+silently editing upstream colors or separating the warning from its choice.
 The Settings preview composes scoped real chrome with the actual Chessground
 board and piece assets. Its representative position exposes every piece role in
 both colors, check, history, legal destinations, and the registered mark brushes;

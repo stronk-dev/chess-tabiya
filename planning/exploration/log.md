@@ -9533,3 +9533,15 @@ role/side combinations, check, history, destination and shape layers. The first 
 removed the board's redundant text-move disclosure from the miniature and tightened ambiguous
 label queries instead of accepting a test that happened to find the first "Board". SET-a1 through
 SET-a4, SET-a26 and D1463 close; the separate named-Looks decision remains open.
+
+## 2026-08-26 — Settings first paint and palette disclosure become truthful
+
+Two smaller audit findings close after the preview wave. The inherited-palette warning now sits
+on the selected app-theme control and lists each measured pair and ratio; the detached page-level
+details block is gone, so the warning cannot be mistaken for a general property of every theme.
+
+Assistance Settings no longer initializes all eight workflows to silence and replaces them after
+mount. Each profile loads its validated device-local preference into component state before the
+first render. A no-tick component fixture seeds Just Play with evidence lighting and live markers
+and proves both values exist on initial paint. SET-a5 and SET-a8 close; the raw workflow matrix and
+permission-aware controls remain separately owned by SET-a14/SET-a7 and their active RFC work.

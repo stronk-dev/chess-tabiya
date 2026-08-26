@@ -54,6 +54,9 @@
       <select value={resolved.preference.appTheme} onchange={(event) => setAppTheme(event.currentTarget.value)}>
         {#each APP_THEME_IDS as id}<option value={id}>{APP_THEMES[id].label}</option>{/each}
       </select>
+      {#if notices.length > 0}
+        <span class="theme-contrast" role="status">This theme has {notices.length} measured low-contrast {notices.length === 1 ? "pair" : "pairs"}: {notices.map((notice) => `${notice.pair} ${notice.ratio.toFixed(2)}:1`).join("; ")}.</span>
+      {/if}
     </label>
     <label>
       Light or dark
@@ -108,12 +111,6 @@
   </section>
   <p class="current">Using {APP_THEMES[resolved.appTheme].label} in {resolved.mode} mode.</p>
   {#if APP_THEMES[resolved.preference.appTheme].after}<p class="credit">{APP_THEMES[resolved.preference.appTheme].after}</p>{/if}
-  {#if notices.length > 0}
-    <details class="contrast-notice">
-      <summary>This inherited palette has {notices.length} measured low-contrast {notices.length === 1 ? "pair" : "pairs"}</summary>
-      <ul>{#each notices as notice}<li>{notice.pair}: {notice.ratio.toFixed(2)}:1 (AA floor {notice.minimum}:1)</li>{/each}</ul>
-    </details>
-  {/if}
 </section>
 
 <style>
@@ -128,8 +125,8 @@
   .preview-eyebrow{text-transform:uppercase;letter-spacing:.08em;font-size:.68rem}.board-preview{min-width:0}.board-preview :global(.appearance-link),.board-preview :global(.text-move){display:none}.board-preview p{margin:.5rem 0 0;color:var(--muted);font-size:.72rem;line-height:1.4}
   label{display:grid;gap:.3rem;font-size:.82rem;color:var(--muted)}
   select{color:var(--ink);background:var(--surface)}
-  .honest,.credit,.current,.contrast-notice{font-size:.8rem;color:var(--muted)}
+  .honest,.credit,.current,.theme-contrast{font-size:.8rem;color:var(--muted)}
   .current{color:var(--ink)}
-  .contrast-notice{border-left:3px solid var(--warning);padding-left:.7rem}
+  .theme-contrast{padding-left:.6rem;border-left:3px solid var(--warning);line-height:1.4}
   @media(max-width:719px){.appearance-preview{grid-template-columns:1fr}.board-preview{width:min(100%,21rem);justify-self:center}}
 </style>

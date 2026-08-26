@@ -1,6 +1,5 @@
 <script lang="ts">
-  import { SILENT_ASSISTANCE, type AssistanceConfig } from "@chess-tabiya/runtime";
-  import { onMount } from "svelte";
+  import type { AssistanceConfig } from "@chess-tabiya/runtime";
 
   import type { Capabilities, DeletionEffect, DeletionPreview, Learner } from "./api.js";
   import { ASSISTANCE_PROFILES, loadAssistance, saveAssistance, type AssistanceProfile } from "./assistance-preference.js";
@@ -18,7 +17,7 @@
 
   let { capabilities, learner, onSignOut, onExport, onDelete, loadDeletionPreview, plannedSurfaceIds = [] }: Props = $props();
   const labels: Record<AssistanceProfile, string> = { pack: "Curated drill", position: "Just Play", imported: "Imported game", match: "Match / Arena", stream: "Streamed session", academy: "Academy", onramp: "On-ramp", campaign: "Campaign" };
-  let configs: Record<AssistanceProfile, AssistanceConfig> = $state(Object.fromEntries(ASSISTANCE_PROFILES.map((profile) => [profile, SILENT_ASSISTANCE])) as Record<AssistanceProfile, AssistanceConfig>);
+  let configs: Record<AssistanceProfile, AssistanceConfig> = $state(Object.fromEntries(ASSISTANCE_PROFILES.map((profile) => [profile, loadAssistance(profile, storage())])) as Record<AssistanceProfile, AssistanceConfig>);
   let password = $state("");
   let exportPassword = $state("");
   let exportStatus = $state<string | undefined>();
@@ -52,7 +51,6 @@
     catch (error) { exportStatus = error instanceof Error ? error.message : String(error); }
     finally { exportPassword = ""; }
   }
-  onMount(() => { configs = Object.fromEntries(ASSISTANCE_PROFILES.map((profile) => [profile, loadAssistance(profile, storage())])) as Record<AssistanceProfile, AssistanceConfig>; });
 </script>
 
 <section id="playing-settings" aria-labelledby="assistance-settings-title">
