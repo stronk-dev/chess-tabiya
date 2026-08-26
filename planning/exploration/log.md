@@ -8269,3 +8269,21 @@ copies at the consumer and rendered layers, a spread passed back through `render
 round-trips and the existing declared-evidence cast forge. `docs/evidence-contract.md` records the
 actual boundary. The ordinary `make test` gate passes 184 files / 1,192 tests; no schema, content,
 manifest declaration, design-intent or concurrent semantic-harness byte changed.
+
+## 2026-08-26 — Guided Hint returns at the author checkpoint
+
+Re-derived the rebuilt Guided Hint document against the shipped F1 compiler, module vocabulary,
+AssistanceConfig/preset algebra, evidence queue and run/client types. The measured selector and
+five byte-redacted learner rungs survive, but [[D1638]]–[[D1643]] prevent a trustworthy production
+path. Voice fallback and search-source absence share one ambiguous state; the five-rung ceiling has
+no owner-approved preset/context table or representable permission type; the operator horizon is
+structurally forgeable; its literal F1 graph widens measured/mixed-grounding inputs and invents
+`pattern` answer content for source families that do not carry it; `move` is not a module-answer
+ceiling token; and pending/reset behavior invents identities without a poll/cancel/stale protocol.
+
+This is an author checkpoint, not the independent D1 review. The RFC/register and Phase-2h plan say
+returned, and `planning/evidence-foundation-ux/hint-distance-author-checkpoint-2026-08-26.md` gives
+the exact repair order. [[D1639]] is the one owner choice: total preset/context maximum rungs.
+Everything else is technical author work after the returned shared packet supplies its amended
+authority types. No implementation, schema, content, design-intent or concurrent Wave-C harness byte
+changed in this checkpoint.

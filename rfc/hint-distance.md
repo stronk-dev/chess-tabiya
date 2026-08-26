@@ -1,7 +1,7 @@
 # RFC: Guided-hint disclosure distance
 
-- **Status:** draft — rebuilt 2026-08-26 after the D1363/D1397 measured selector passes and the
-  D1579 shared-packet envelope; ready for independent buildability review, not implementation
+- **Status:** draft — returned by the 2026-08-26 author buildability checkpoint on
+  [[D1638]]–[[D1643]]; this does not discharge independent D1 and implementation remains forbidden
 - **Author:** codex, amending claude's 2026-08-23 draft on the owner's [[D1061]] ruling and
   [[D1456]] product correction
 - **Created:** 2026-08-23; rebuilt 2026-08-26
