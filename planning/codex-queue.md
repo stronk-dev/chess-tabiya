@@ -1790,3 +1790,26 @@ red rather than invisible.
 
 **[[D1744]]** — three of nineteen criteria are **red at HEAD today**, which is the falsifiability
 proof. The blocker grammar has **no `other`**: an unnamed blocker is an untriaged item wearing a label.
+
+### Native ratings — [[D1802]]–[[D1806]]
+
+`rfc/native-ratings.md` (`1cdedae7`), one migration position, no run lane, both argued.
+
+**[[D1802]] is the finding.** [[D1516]] read three problems; there is **one**. `rated_games.result` is
+`win|loss|draw` — a value defined **relative to a learner** — and a value relative to one participant
+cannot be shared by two, so the primary key was never the mistake. **Re-orienting the result to
+colour** makes the row a fact about the *game* with each side's score a projection, which is exactly
+what a crosstable reads. One re-orientation buys the native match and the tournament together.
+
+**[[D1803]] corrects me**: three [[D1529]] claims did not reproduce, including a token-scope `CHECK` I
+read from **migration 13** when **migration 14 rebuilt the table** — stale by eleven migrations.
+Verify against the live schema, not the migration that created it.
+
+**[[D1804]] is the owner's**: `learner-rating` R11 voids a rewound rated game and `MATCH_LIVE` refuses
+rewind while a match is live, so **the one place two humans play a real game is the one place the core
+loop cannot run**.
+
+**[[D1805]]** — the [[D1415]] repair is necessary and not sufficient: the attempt upsert omits
+`learner_id`, so a friend game would count **for the host alone, forever**, and a guest's plies are
+stamped `system`. **[[D1806]]** — the deferral is a compiled set difference (15 causes admitted, 9
+produced), and criterion 14 proves the tournament claim with a Swiss fixture that adds **no `ALTER`**.
