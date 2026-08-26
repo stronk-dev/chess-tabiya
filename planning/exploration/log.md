@@ -9592,3 +9592,22 @@ the separately isolated performance tier. D1822 closes pending the exact full-ga
 The exact rerun completed green: 1,044 software contracts, one isolated performance contract and
 171 real-content contracts, plus type, build and every repository-governance check. The content tier
 completed its full 16-file population in 58.93 seconds without retries or reduced coverage.
+
+## 2026-08-26 — Terminal evidence leaves the ordinary outcome dialog
+
+The attempt-complete sheet rendered every engine/tablebase sentence directly beneath the learner's
+outcome and authored commentary. That was `play-composition` L14's raw-evidence dump on one of the
+highest-attention moments in the run. The sheet now keeps the outcome and next actions concise and
+offers a deliberate “Inspect recorded evidence” action only when records exist. The exact records
+render in the full Evidence Inspector; leaving it returns to the still-open terminal sheet. Focused
+web contracts pass 39/39 and the production-browser terminal/review/share journey passes. D1823
+closes; module selection and the complete composition matrix remain open.
+
+## 2026-08-26 — Branch-runtime latency leaves the parallel software pool
+
+The full gate found the server-bound latency contract still among generic software tests. Its
+unchanged four event populations perform 552 loopback HTTP/SQLite operations and assert 100/200 ms
+p95 envelopes; under 173-file contention one rewind p95 reached 106.4 ms while its median was
+8.0 ms. The file now carries the repository's `-performance.test.ts` identity and is declared in
+the single-worker performance tier. The population and thresholds are unchanged, the tier guard
+reports two isolated performance files, and both contracts pass. D1824 closes.

@@ -1223,6 +1223,7 @@
     onRewind={() => currentNode.parentId === null ? undefined : onRewind({ nodeId: currentNode.parentId })}
     {onStory}
     onFlip={onFlip === undefined ? undefined : () => onFlip(run.nodes[0]!.id)}
+    onInspectEvidence={() => (inspectorOpen = true)}
     {onStop}
   />
 {/if}
@@ -1299,6 +1300,14 @@
             </div>
           {:else}<p class="honest">This run has no trajectory legs.</p>{/if}
         </section>
+        {#if terminalEvidence.length > 0}
+          <section aria-label="Terminal evidence" data-evidence-consumer="inspector.terminal_evidence">
+            <h3>Terminal evidence</h3>
+            {#each terminalEvidence as sentence}
+              <p><strong>{sentence.sourceLabel}</strong> · {sentence.text}</p>
+            {/each}
+          </section>
+        {/if}
       </div>
     </div>
   </div>

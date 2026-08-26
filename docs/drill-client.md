@@ -165,7 +165,9 @@ authored layer.
 After a terminal move, the controller does not request another opponent move.
 It refreshes run-scoped authored feedback and presents a non-dismissible
 attempt-complete sheet with the exact outcome occurrence's authored commentary
-and recorded evidence. Read-only followers perform the same refresh when their
+and the next replay/review actions. Recorded engine and tablebase sentences do not dump into that
+ordinary decision surface; when present, a deliberate Inspector action opens the exact records and
+returns to the still-open attempt sheet. Read-only followers perform the same refresh when their
 event poll first observes the outcome. Rewind remains available to the active
 writer and starts the next branch experiment.
 

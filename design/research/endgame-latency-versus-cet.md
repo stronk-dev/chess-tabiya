@@ -136,7 +136,7 @@ here produced by a real instrument.
 `tools/k9-endgame-latency-harness/api-arm.mjs`, over the shipped HTTP routes on loopback,
 against the six endgame packs and 164 distinct ≤7-piece FENs walked from their spines with the
 shipped `apps/server/src/fen-walk.ts`. Percentile convention copied from the shipped
-`apps/server/src/latency.test.ts:114-120` (median = `sorted[floor(n/2)]`,
+`apps/server/src/latency-performance.test.ts:114-120` (median = `sorted[floor(n/2)]`,
 p95 = `sorted[ceil(n·0.95)−1]`) so these are comparable to it. All values in ms. `[V]`
 
 | Operation | n | min | **median** | **p95** | max | Budget |
@@ -417,7 +417,7 @@ named residuals, in order: fix the layout, then run one owner session.
 - **Why the shipped harness was not used.** Two reasons, both above: it could not start, and its
   latency envelope is one sample per operation on an opening pack. Where the shipped instrument
   *could* be reused it was — `apps/server/src/fen-walk.ts` produced the FEN set, and the
-  percentile convention is copied from `apps/server/src/latency.test.ts`.
+  percentile convention is copied from `apps/server/src/latency-performance.test.ts`.
 - **The corpus was reached by a route production does not use.** The six endgame packs were
   served by placing them in the extracted tree's `content/drafts/` and booting with
   `NODE_ENV=development`. Production does not do this and, per [[D481]], must not: it would serve

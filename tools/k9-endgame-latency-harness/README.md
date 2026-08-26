@@ -32,7 +32,7 @@ be used as-is, for two reasons, both recorded in the dossier:
 |---|---|
 | `make-headtree.sh` | Extracts HEAD outside the repo, re-points `@chess-tabiya/*` at that tree so no dirty workspace source is bundled, empties `content/drafts`, and copies in the named endgame packs |
 | `serve.ts` | Boots the shipped `createApplication` with a stated configuration; `K9_REAL_TABLEBASE=1` injects the shipped `LichessTablebaseSource` so `perfect_tablebase` reaches real Syzygy instead of the empty `FixtureTablebaseSource` that `ENGINE_MODE=mock` installs |
-| `api-arm.mjs` | Per-instrument-call distributions over the shipped HTTP routes (median/p95 convention copied from `apps/server/src/latency.test.ts`) |
+| `api-arm.mjs` | Per-instrument-call distributions over the shipped HTTP routes (median/p95 convention copied from `apps/server/src/latency-performance.test.ts`) |
 | `browser-arm.spec.ts` + `playwright.k9.config.ts` | Perceived, in-page distributions: board ready, run reload, opponent reply, rewind |
 | `playability-probe.mjs` | Can the authored first move be made at all, per pack, per viewport |
 | `occlusion-probe.mjs` | Hit-tests all 64 squares per pack per viewport and reports which are covered and by what |

@@ -29,7 +29,9 @@ compiled, not a substitute for those modules.
 
 Raw position structure, transition census, human-model candidates and corpus counts are available
 only in the explicit full-screen Evidence Inspector. Ordinary play does not render those diagnostic
-readings as a hint stream.
+readings as a hint stream. The attempt-complete dialog follows the same boundary: it keeps the
+outcome, authored commentary and return actions in view, while an explicit “Inspect recorded
+evidence” door opens the exact terminal engine/tablebase records in the Inspector.
 
 ## Verification
 

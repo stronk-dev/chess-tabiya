@@ -24,9 +24,10 @@
     shapes?: readonly ShapeEntryView[];
     onStory?: (() => void) | undefined;
     onFlip?: (() => void | Promise<void>) | undefined;
+    onInspectEvidence?: (() => void) | undefined;
   }
 
-  let { outcome, authoredItems, evidence, canRewind, onRewind, onStop, assessment, resistance = [], grade, run, shapes = [], onStory, onFlip }: Props = $props();
+  let { outcome, authoredItems, evidence, canRewind, onRewind, onStop, assessment, resistance = [], grade, run, shapes = [], onStory, onFlip, onInspectEvidence }: Props = $props();
   let heading: HTMLHeadingElement;
   onMount(() => heading?.focus());
 </script>
@@ -63,20 +64,10 @@
       </section>
     {/if}
 
-    {#if evidence.length > 0}
-      <section aria-labelledby="terminal-evidence">
-        <h3 id="terminal-evidence">Recorded evidence</h3>
-        <ul>
-          {#each evidence as sentence}
-            <li><strong>{sentence.sourceLabel}</strong> · {sentence.text}</li>
-          {/each}
-        </ul>
-      </section>
-    {/if}
-
     <div class="actions">
       {#if onStory}<button type="button" onclick={onStory}>Story of this run</button>{/if}
       {#if onFlip}<button type="button" onclick={onFlip}>Replay this as {run.start.side === "white" ? "Black" : "White"}</button>{/if}
+      {#if evidence.length > 0 && onInspectEvidence}<button type="button" onclick={onInspectEvidence}>Inspect recorded evidence <span aria-hidden="true">({evidence.length})</span></button>{/if}
       <button type="button" disabled={!canRewind} onclick={onRewind}>Rewind and branch</button>
       <button type="button" onclick={onStop}>Stop session</button>
     </div>

@@ -3,7 +3,7 @@
 // Per-instrument-call latency on the ENDGAME surface, measured against a
 // running harness server (tools/k9-endgame-latency-harness/serve.ts) over the
 // shipped HTTP routes. Percentile convention is copied from the shipped
-// apps/server/src/latency.test.ts so the numbers are comparable to it:
+// apps/server/src/latency-performance.test.ts so the numbers are comparable to it:
 //   median = sorted[floor(n/2)]   p95 = sorted[ceil(n*0.95)-1]
 //
 // Usage: node api-arm.mjs <base-url> <fen-file> <pack-dir> [samples]

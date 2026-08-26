@@ -18,5 +18,6 @@ export const CONTENT_CONTRACT_TESTS = Object.freeze([
 ]);
 
 export const PERFORMANCE_CONTRACT_TESTS = Object.freeze([
+  "apps/server/src/latency-performance.test.ts",
   "apps/server/src/opening-catalogue-performance.test.ts",
 ]);
