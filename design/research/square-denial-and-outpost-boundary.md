@@ -7,8 +7,10 @@ turning geometry into strategic judgement?
 **Verdict:** keep three pawn relations separate. Current pawn control is rules-exact. A pawn on an
 adjacent file that can advance to attack a square is a useful declared future-file convention.
 Tabiya's existing capture-migration closure is a stronger, separately useful conservative
-convention; it is not the ordinary outpost boundary. Candidate square, occupied outpost and
-move-created challenge are derived records with different operands. None establishes value,
+convention; it is not the ordinary outpost boundary. Candidate square and occupied outpost are
+different records. Move-created evidence already exists for occupied minors and their next-edge
+relocation, while empty-square local safety was measured by D771; the missing work is a shared
+current-control identity plus consumer binding, not duplicate detectors. None establishes value,
 intent, permanence, best play or that a non-king piece is legally barred from moving.
 
 **Instrument:** `tools/d1724-square-denial-harness/` is a disposable exploration harness. It
@@ -99,6 +101,20 @@ it establishes only square, support, occupant and pawn-challenge geometry. `[V]`
 
 ## 4. Move-created square denial
 
+**Correction D1725.** This section originally described move-created square denial as absent. At
+HEAD, `rules.pawn.event.dynamics` already emits `minor_harassed` with exact moved-pawn and occupied
+bishop/knight identities, while `derived.pawn.sequence.harassment_pressure` retains the exact
+bishop relocation and pressure line over the consecutive reply. D771 separately proved that an
+empty bishop/knight destination remains legal and measured the change to locally exchange-unsafe
+at 1.00× authored / 1.02× imported. `[V]` (`packages/runtime/src/pawn-dynamics.ts:211-225,350-382`;
+`design/research/legal-square-denial.md`)
+
+D1724's transition census is deliberately broader: it counts every non-pawn role and a cheaper
+current-attack overlap, not D771's exact legal/local-exchange predicate. That explains why its
+3.17×/3.23× occupied-non-pawn result differs from the earlier minor-only harassment result
+(3.63×/3.18×), and why the reach-overlap rates must not replace D771. The same direction across
+scopes is useful corroboration; the values are not interchangeable. `[V]`
+
 For every decision, D1724 compares the played move with every legal alternative. “Pawn move” is a
 poor selector by itself. The useful facts retain the pawn, gained squares and named enemy pieces.
 `reachable target` below means a gained pawn-control square is in a named enemy non-pawn's current
@@ -116,8 +132,10 @@ doing so. `[V]`
 This gives the requested h-pawn/bishop shape an exact form: after `h2h3`, the pawn newly controls
 `g4`; if a Black bishop occupies `g4`, the record says `pawn h3 → controls g4 → bishop g4`. It may
 render “the pawn now attacks the bishop on g4.” It may not render “you forced the bishop back”
-unless reply evidence shows that consequence. Likewise `a2a3` intersecting a knight's current
-reach to `b4` may render the overlap, not “the knight can no longer use b4.” `[V]` (D1724 fixtures)
+unless the existing reply-sequence record fires—and even then it says observed relocation, not
+force. Likewise `a2a3` intersecting a knight's current reach to `b4` may render the overlap, while
+D771 supplies the stronger legal/local-safety fact; neither says “the knight can no longer use
+b4.” `[V]` (D1724 fixtures; D771)
 
 The rare future-file-candidate removal is the best discriminator, but has only 4 authored and 8
 imported played positives. It is appropriate as exact evidence with a local denominator, not a
@@ -135,9 +153,11 @@ boolean:
 | `rules.pawn.capture_migration_reach` | declared convention | beneficiary, square, enemy pawn, minimum captures, limitations | hypothetical capture migration reaches an attacking file |
 | `derived.square.outpost_candidate` | declared composition | square, beneficiary, rank, support pawns, chosen challenge basis | advanced supported square passes that named pawn convention |
 | `derived.square.outpost_occupied` | declared composition | candidate receipt, exact piece/role/square | named piece occupies candidate |
-| `rules.transition.pawn_control_gained` | exact transition | move, pawn before/after, gained/lost squares | the move changed pawn control |
-| `derived.transition.pawn_challenges_piece` | exact composition | control-gain receipt, enemy piece/role/square | new pawn control hits an occupied piece |
-| `derived.transition.pawn_reach_overlap` | exact composition | control-gain receipt, enemy piece/source, overlap square, attack basis | new pawn control overlaps that piece's current attack set |
+| `rules.transition.pawn_control_gained` | exact transition | move, pawn before/after, gained/lost squares | shared source identity for the move's changed pawn control |
+| existing `rules.pawn.event.dynamics/minor_harassed` | exact operands inside a mixed convention projection | moved pawn, occupied bishop/knight | new pawn control hits the occupied minor; rebind or split, do not duplicate |
+| existing `derived.pawn.sequence.harassment_pressure` | recorded path + declared line convention | pawn, bishop before/after, anchors, retained pressure | exact bishop relocated next and the declared line persisted; no force claim |
+| existing D771 local-safety successor | exact legal moves + `legal-exchange@1` convention | pawn, minor, square, before/after legal and exchange states | destination stayed legal and became locally exchange-unsafe |
+| optional broad `derived.transition.pawn_reach_overlap` | exact composition | control-gain receipt, enemy piece/source, overlap square, attack basis | new pawn control overlaps that piece's current attack set; supporting detail only |
 
 The existing maximal composite can remain available by explicitly composing future-file and
 capture-migration reach. It must not remain the unnamed dependency of the only `outpost` identity.
@@ -146,8 +166,9 @@ capture-migration reach. It must not remain the unnamed dependency of the only `
 
 - **Requested sight / hover:** current control, future-file challenge and exact named-piece overlap
   can light squares/arrows directly.
-- **Post-commit nudge:** the 3.2× occupied-piece event is eligible after local denominator and
-  valence checks; the 1.14–1.36× generic reach overlap is supporting detail, not a headline.
+- **Post-commit nudge:** reuse `minor_harassed` for bishops/knights and the recorded sequence when
+  present; the broader 3.2× event only justifies adding other roles if a consumer needs them. The
+  1.14–1.36× generic reach overlap is supporting detail, not a headline.
 - **Review:** can compare candidate creation/removal and later occupation, with engine/human/theory
   evidence separately deciding importance.
 - **Drills/theory:** authors select the candidate convention explicitly and may require occupation

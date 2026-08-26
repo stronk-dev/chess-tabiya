@@ -13,13 +13,18 @@ or implementation authority.
    the exact challenge basis. Occupation adds exact piece identity and role.
 3. Preserve `maximal_pawn_reach@1` as the explicit union of same-file and capture-migration reach;
    do not silently rewrite it or continue using it as the unnamed sole outpost meaning.
-4. Add exact transition records for pawn-control gained/lost, occupied-piece challenge and
-   current-reach overlap. The latter says overlap, never “prevents,” “forces” or “cannot use.”
+4. Add one shared exact pawn-control gained/lost identity. Reuse or split the shipped
+   `minor_harassed` arm for occupied bishops/knights, reuse `harassment_pressure` for the observed
+   reply, and join D771's legal/local-safety successor for empty destinations. Add broader roles or
+   current-reach overlap only where a named consumer needs them; never duplicate these three
+   collectors. “Overlap” never means “prevents,” “forces” or “cannot use.”
 5. Carry root pawn, before/after square, affected square and named enemy piece through D1711
    validation and D1718 subject-safe selection. No file/color aggregate may replace them.
-6. Module eligibility follows the measured boundary: occupied-piece challenge is a candidate
-   headline (3.17× / 3.23×); generic reach overlap is supporting/on-request; rare future-file
-   candidate removal keeps a local denominator and no global priority from twelve positives.
+6. Module eligibility follows the measured boundary: existing minor harassment is the occupied
+   headline candidate (3.63× / 3.18× in its own scope); D1724's broader occupied-non-pawn census is
+   3.17× / 3.23× but does not replace it. Generic reach overlap and D771 empty-square safety remain
+   supporting/on-request; rare future-file candidate removal keeps a local denominator and no
+   global priority from twelve positives.
 7. Re-run all 23 authored `outpost` expressions in the three shape documents under each successor.
    Human author review chooses which explicit convention each claim intended. This closes the
    corrected D632 debt; no automatic truth-set migration.

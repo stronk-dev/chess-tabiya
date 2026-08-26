@@ -8980,3 +8980,14 @@ candidate/occupied/use, and refuses “prevents,” forced retreat, value or int
 evidence plane. D632's live authoring count is corrected from stale 77 to 23 expressions in three
 shape documents; all still require dry-run plus human basis review. No production, RFC, schema,
 content, pack or learner-UX byte changed.
+
+## 2026-08-26 — D1724 transition provenance corrected (D1725)
+
+A live-symbol reread found D1724's outpost split is new but its initial statement that
+move-created denial was missing was false. `rules.pawn.event.dynamics` already emits
+`minor_harassed` with exact pawn/minor identity; `derived.pawn.sequence.harassment_pressure`
+retains the bishop reply and pressure line; D771 already measured empty-square legal/local-safety.
+D1724's broader all-non-pawn event has different scope, explaining its 3.17× / 3.23× result versus
+the prior minor-only 3.63× / 3.18×. The handoff now reuses existing collectors and routes delivery
+through D1710; only shared current-control identity or genuinely new roles remain candidate source
+work. No production, RFC, schema, content, pack or learner-UX byte changed.

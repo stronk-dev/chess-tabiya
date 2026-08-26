@@ -273,14 +273,16 @@ separate derived facts. This one primitive can then power a theory-only highligh
 card, a direct reply nudge, subject-safe avoidance and bot/style features without any surface
 inventing chess meaning. Five authored leaves migrate only after the source contract stabilizes.
 
-[[D1724]] closes the next square-control boundary. One `safe` boolean cannot serve current board
-highlighting, future pawn challenge, a hypothetical capture-migration closure, a candidate square,
-an occupied outpost and the value of using it. The shipped maximal convention leaves zero occupied
-authored examples; a separately named same-file convention yields 9 authored / 43 imported while
-preserving maximal reach for consumers that truly need it. Exact pawn-control gains that hit an
-occupied piece are a stable 3.2× signal across both populations. These records retain pawn, square,
-piece and convention identity so Support can highlight, Review can explain, drills can author and
-bots/style can consume the same facts without any surface inventing “prevents,” intent or value.
+[[D1724]] closes the next square-control boundary, with [[D1725]] correcting its initial omission
+of shipped work. One `safe` boolean cannot serve current board highlighting, future pawn challenge,
+a hypothetical capture-migration closure, a candidate square, an occupied outpost and the value of
+using it. The shipped maximal convention leaves zero occupied authored examples; a separately
+named same-file convention yields 9 authored / 43 imported while preserving maximal reach for
+consumers that truly need it. The broad occupied-control census is a stable 3.17× / 3.23× signal;
+the existing minor-only `minor_harassed` event, `harassment_pressure` sequence and D771 local-safety
+fact already own important subsets. The successor reuses and binds them through D1710, adding only
+missing roles/shared identity, so Support, Review, drills and bots/style consume one family rather
+than duplicate it or invent “prevents,” intent or value.
 
 ### 3. Arrival and the rehearsal loop
 

@@ -104,13 +104,16 @@ occupancy, capture options and half-open state; legal advance/reply becomes a se
 projection. Five authored leaves in three documents migrate explicitly after D1722 and before
 D1711/D1718/module activation.
 
-[[D1724]] **completed the square-denial/outpost primitive boundary on 2026-08-26**. Current FIDE
-pawn control, same-file future challenge and capture-migration reach are separate facts. The
-shipped maximal dependency leaves zero occupied authored outposts; same-file challenge yields 9
-authored / 43 imported, while retaining maximal reach independently. Pawn moves newly controlling
-an occupied piece are 3.17× / 3.23× signals; generic reach overlap is only 1.14× / 1.36×. The author
-handoff splits candidate from occupied/use, retains pawn/square/piece identity and corrects D632 to
-23 current expressions in three shape docs before human migration.
+[[D1724]] **completed the square-denial/outpost primitive boundary on 2026-08-26; [[D1725]]
+corrected its initial prior-work omission before authoring**. Current FIDE pawn control, same-file
+future challenge and capture-migration reach are separate facts. The shipped maximal dependency
+leaves zero occupied authored outposts; same-file challenge yields 9 authored / 43 imported while
+retaining maximal reach independently. The broader all-non-pawn occupied-control census reads
+3.17× / 3.23×; the already-shipped minor-only `minor_harassed` event reads 3.63× / 3.18×,
+`harassment_pressure` retains the bishop reply/pressure line and D771 already establishes
+empty-square local safety. The author handoff therefore reuses those collectors, routes delivery
+through D1710, splits candidate from occupied/use, retains exact operands and corrects D632 to 23
+current expressions in three shape docs before human migration.
 
 **Deliverable 7 (owner questions) accumulates here** — nothing is silently chosen.
 **All four open questions RULED 2026-08-22 ([[D745]])**: space = classic zones + pawn control,
