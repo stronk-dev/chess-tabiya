@@ -2,9 +2,9 @@
   "schemaVersion": 1,
   "authority": "planning/roadmap-to-done.md",
   "sourceDigests": {
-    "roadmap": "sha256:2cbf2ca01d651d2064ab3508166f975b8baecbe7502d35f76fc9f3a12d855734",
+    "roadmap": "sha256:3b5d67872077a35e26c3b5183915fe4ddad8ce502c1a35695fd31b1fde15ea04",
     "workItems": "sha256:1a4ab1d12de764ce1d675c442560646a55a0842725bd0df7521ee031c0767c7c",
-    "rfcRegister": "sha256:db04c85c59f7ad1cc85cec17277f6110414727a91909d2cf063335f4f4f49acc",
+    "rfcRegister": "sha256:9de093243d4ce3937ce2babfb5fbd5de6f0e4aae3d77b8b52f5554757d37c07e",
     "uxIndex": "sha256:265db3cdaee3bb7bccb0a3f07aaabdc9e27f15e719c8efcf949d713516f131f8",
     "router": "sha256:db0f9165c98f25ab4e0b5cbbc211a83a690eb61a5b9a00ece4a75688a7a58b62",
     "application": "sha256:b5182b128945143bb187a5483361dfcd36cc530ae5a2e7c2cfb1941797482efb",
@@ -17,7 +17,7 @@
       "breadth": 2,
       "post_1_0": 0
     },
-    "assignedRfcs": 48,
+    "assignedRfcs": 49,
     "workItems": {
       "queued": 279,
       "blocked_owner": 61,
@@ -230,7 +230,7 @@
       "name": "Work truth, measurement, and release accounting",
       "release": "core",
       "owner": "coordinator",
-      "rfcCount": 1,
+      "rfcCount": 2,
       "workItems": {
         "queued": 0,
         "blocked_owner": 0,

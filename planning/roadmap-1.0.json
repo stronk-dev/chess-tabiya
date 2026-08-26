@@ -18,7 +18,7 @@
       "name": "Work truth, measurement, and release accounting",
       "release": "core",
       "owner": "coordinator",
-      "rfcs": ["measurement-records.md"],
+      "rfcs": ["measurement-records.md", "work-state.md"],
       "completion": {
         "evidence": ["partial", "Measurements retain inputs, revisions, and negative results."],
         "state": ["partial", "Every live item has one durable state, one owner, and one capability."],
