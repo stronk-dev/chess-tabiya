@@ -25,6 +25,7 @@ set execution order.
 
 | Rows | Primary destination | Next action / gate |
 |---|---|---|
+| D1664, D1665, D1666, D1667, D1668, D1669, D1670, D1671, D1672 | `evidence-presentation` author amendment | Replace manifest-string coverage with a sealed projection→component adapter authority; derive convention provenance; repair citation/enum/abstention/schema operands; scope coverage to real consumers; pin chart scale; resolve owner/design and returned module/hint dependencies. Repeat independent review before implementation. |
 | D965, D966, D967, D968 | `learner-modules` amendment | Return the accepted document for the literal enumeration, reducer grammar, per-module ceilings, and cumulative answer-distance sets; re-review before module implementation. |
 | D1629 | `hint-distance` / `intent-presets` v5 amendment | Put AssistanceConfig parsing/migration behind one runtime codec consumed by web and bind it to the TypeChecker-derived field/domain conformance matrix before v5 can land. |
 | D1659, D1661, D1662, D1663 | `intent-presets` author amendment | Distinguish unset/explicit/migrated preferences; bind legacy config to module effects; define complete provider/browser availability; and split config/pill delivery from the later real module/logging edge. Repeat independent review. |

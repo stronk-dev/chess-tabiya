@@ -1,6 +1,8 @@
 # RFC: evidence-presentation — the component vocabulary between a typed fact and a pixel
 
-- **Status:** draft, amended 2026-08-26 on [[D1564]]/[[D1568]]/[[D1569]]/[[D1577]]/[[D1578]] —
+- **Status:** draft — returned 2026-08-26 by independent buildability review on
+  [[D1664]]–[[D1672]] (`planning/platform-alignment/evidence-presentation/independent-buildability-review-2026-08-26.md`);
+  prior amendment 2026-08-26 on [[D1564]]/[[D1568]]/[[D1569]]/[[D1577]]/[[D1578]] —
   arrow activation is a 1.0 obligation. The transition-event hand-off is measured: five geometry
   event families already retain their relations; the live work is forms, adapters, module admission,
   routing capture overlays through the existing capture-class endpoint, and the per-family

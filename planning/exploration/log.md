@@ -8351,3 +8351,21 @@ Campaign's guided default unreachable.
 The RFC/register, routing and 1.0 Support capability now say returned. Exact repair and falsifiers:
 `planning/intent-presets/independent-amendment-rereview-2026-08-26.md`. No production, protected
 design, schema, content or concurrent UX/review byte changed.
+
+## 2026-08-26 — evidence presentation returns at independent buildability review
+
+Traced `rfc/evidence-presentation.md` through the shipped F1 seals, generic renderer registry,
+manifest projection declarations, learner/operator dispositions and the actual claim/citation
+payloads. The thirteen-component vocabulary remains the right missing layer beneath forms and
+module seats, and the one-fact/no-local-chess rules survive. The proposed trust boundary does not.
+
+[[D1664]]–[[D1672]] record nine blockers. Production renderers consume unknown payloads through
+casts, so manifest strings cannot prove a visual operand came from admitted evidence. Convention
+metadata is caller-writable; citation has no passage; enum values remain plain strings; abstention
+has no closed state vocabulary; structured documents are neither schema-bound nor byte-preserving;
+coverage incorrectly includes machine/retired/operator projections; chart range is caller-owned;
+and the full landing still depends on owner-tier intent plus returned module/hint contracts.
+
+The RFC and active register now say returned, with exact repair and falsifiers in
+`planning/platform-alignment/evidence-presentation/independent-buildability-review-2026-08-26.md`.
+No production, protected design, schema, content or concurrent Claude review/harness byte changed.

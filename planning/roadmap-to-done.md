@@ -179,6 +179,13 @@ renderers over sealed items, never graders, selectors, chess authorities, or ava
 
 Primary RFCs: `learner-modules`, `module-registration`, `hint-distance`, `assistance-config-register`,
 `evidence-presentation`, `intent-presets`. UX owners: INR and SET items.
+The 2026-08-26 independent presentation review returns the thirteen-component landing on
+[[D1664]]–[[D1672]]. The component vocabulary is still the required layer, but manifest strings
+cannot seal typed visual operands; conventions are caller-writable; citation/enum/abstention and
+structured-document operands are incomplete; coverage includes non-learner projections; chart
+scale is a second visual authority; and real seats/hints plus the owner-tier component amendment
+remain unresolved. Presentation implementation starts only after one real projection proves the
+admission → sealed adapter → wire/parser → seat → equivalent-sentence path and forged operands fail.
 The 2026-08-26 independent re-review returns the preset compiler on [[D1659]]–[[D1663]] and
 [[D1437]]/[[D1500]]: unset preferences currently masquerade as explicit Quiet choices; raw config
 and module outputs can contradict; availability is undefined across provider/browser state;
@@ -541,7 +548,8 @@ stable enough that a new primitive does not require blind edits to every pack.
 ### Wave 3 — rebuild the client around journeys and presets
 
 1. Establish stable board + scrollable regions + responsive drawers/tabs before adding panels.
-2. Land module registration, preset composition, disclosure, Advanced controls and typed components.
+2. Land the sealed projection→component authority, then module registration, preset composition,
+   disclosure, Advanced controls and typed components.
 3. Deliver ARR → run → consequence → compare → terminal as one first-run flow.
 4. Deliver full Review, Theory/Library, Campaign, bot cards, profile, native/social, Coach and Stream
    as complete vertical journeys.
