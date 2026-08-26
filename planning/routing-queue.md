@@ -118,7 +118,6 @@ set execution order.
 
 | Rows | Primary destination | Next action / gate |
 |---|---|---|
-| D1712 | process-contract tooling | Add a staged-diff guard proving exploration-log additions occur strictly after the committed EOF; keep the 2026-08-26 middle insertion and tail correction as immutable incident evidence. |
 | D652 | status-parity closeout | Remove hand-copied incident counts from `planning/WORK.md`; the executable parity checker is authoritative. |
 | D809 | ledger namespace closeout | Keep F1 ids, retain the bot renumbering, and let `make work-index` fail any future duplicate. |
 | D515, D517 | RFC lifecycle amendment | Represent cross-document discharge ownership structurally; keep the incident as evidence, not a perpetual task. |

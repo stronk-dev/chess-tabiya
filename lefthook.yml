@@ -30,6 +30,7 @@ pre-commit:
         - "planning/roadmap-1.0.json"
         - "tools/{register-check,status-parity,work-index,roadmap-check,intent-parity-harness}/**/*"
         - "tools/roadmap-check*.mjs"
+        - "tools/staged-process-contracts*.mjs"
       run: node tools/staged-process-contracts.mjs
 
     - name: scaffold

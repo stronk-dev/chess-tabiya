@@ -14,6 +14,36 @@ export const PROCESS_CONTRACT_TARGETS = Object.freeze([
   "intent-parity",
 ]);
 
+function git(root, args) {
+  return execFileSync("git", args, { cwd: root, encoding: "utf8", stdio: ["ignore", "pipe", "pipe"] });
+}
+
+function gitObject(root, object) {
+  try {
+    return git(root, ["show", object]);
+  } catch {
+    return undefined;
+  }
+}
+
+export function assertStagedLogsAppendOnly(root) {
+  const changed = git(root, ["diff", "--cached", "--name-only", "--diff-filter=ACMRD", "--", "planning"])
+    .split("\n")
+    .filter((path) => path === "planning/log.md" || path.startsWith("planning/") && path.endsWith("/log.md"));
+  const errors = [];
+  for (const path of changed) {
+    const committed = gitObject(root, `HEAD:${path}`) ?? "";
+    const staged = gitObject(root, `:${path}`);
+    if (staged === undefined) {
+      errors.push(`${path} was deleted; append-only logs cannot be removed`);
+    } else if (!staged.startsWith(committed)) {
+      errors.push(`${path} changed before the previous committed EOF; append new entries at the tail only`);
+    }
+  }
+  if (errors.length > 0) throw new Error(`append-only log check failed:\n- ${errors.join("\n- ")}`);
+  return Object.freeze(changed);
+}
+
 export function materializeGitIndex(root, destination) {
   const prefix = `${path.resolve(destination)}${path.sep}`;
   mkdirSync(prefix, { recursive: true });
@@ -28,6 +58,7 @@ export function runStagedProcessContracts(root, options = {}) {
   const temporary = mkdtempSync(path.join(tmpdir(), "tabiya-process-index-"));
   const snapshot = path.join(temporary, "snapshot");
   try {
+    assertStagedLogsAppendOnly(root);
     materializeGitIndex(root, snapshot);
     execFileSync(options.make ?? "make", PROCESS_CONTRACT_TARGETS, {
       cwd: snapshot,

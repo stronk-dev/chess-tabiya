@@ -8857,3 +8857,12 @@ The D1711 closeout entry exists earlier in this file because its context patch m
 same-day closeout sentence rather than the previous EOF. Law 7 forbids moving or deleting that
 history. This tail entry records that D1711 followed D1710 and routes [[D1712]] to a staged-diff
 guard requiring future exploration-log additions to occur strictly after the committed EOF.
+
+## 2026-08-26 — Append-only log position is now enforced (D1712)
+
+Closed [[D1712]] at the process boundary. `staged-process-contracts` enumerates staged
+`planning/**/log.md` paths, reads the previous bytes from `HEAD` and the proposed bytes from the
+index, and accepts only when the latter begins with the former. A middle insertion and deletion
+both fail; a strict tail append passes. The pre-commit glob now includes the guard's own source and
+test, so changing the checker cannot skip the checker. The historical D1711 middle insertion and
+its tail correction remain untouched as incident evidence.
