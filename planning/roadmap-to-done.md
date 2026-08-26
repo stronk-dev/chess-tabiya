@@ -138,6 +138,15 @@ Primary RFCs: `pack-capability-contract`, `claim-semantic-anchors`, `tactical-co
 `semantic-collectors`, `runtime-opening-identity`, `exact-legal-mobility`, `breadth-collectors`,
 `evidence-move-selector`, `shared-candidate-evidence-packet`, `bounded-policy-targets`.
 
+The 2026-08-26 [[D1631]]–[[D1636]] closure makes the shared candidate denominator buildable
+without pretending it is already integrated. The factual packet is a sealed internal receipt over
+the complete legal set and original declared evidence; adjudication, history-conditioned provider
+results, policy selection and learner modules remain separate joins. Its code-derived closure is 47
+one-edge event ids plus 22 reading ids, and its reusable engine source stays White-perspective while
+bot comparison derives a typed root frame with no mate-to-cp conversion. Nine Node-24 arms pass;
+the RFC still requires author amendment and independent review before implementation, and live
+application injection belongs to the first consumer RFC rather than an unused foundation hook.
+
 The 2026-08-26 independent review keeps [[D1023]]'s measured exact-target collector but returns
 `bounded-policy-targets` on [[D1652]]–[[D1658]]. The provider layer must expose reusable node-free
 Stockfish and Maia source receipts, literal F1 derivations over sealed target inputs, independent

@@ -8677,3 +8677,29 @@ Nine Node-24 arms pass in `tools/d1592-two-horizon-harness/`. Dossier:
 `design/research/campaign-two-horizon-contract.md`; author handoff:
 `planning/campaign/two-horizon-author-repair-2026-08-26.md`. [[D1600]] remains owner-blocked; no
 RFC, schema, migration, production route, content or UI byte was changed.
+
+## 2026-08-26 — Shared candidate packet return closed at the contract layer
+
+Re-derived [[D1631]]–[[D1636]] against the current legal-move authority, F1 compiler, semantic
+collectors, candidate adapter, application root and opponent selector. The lower primitive
+survives, but one correction changes its type: a variable heterogeneous packet cannot truthfully be
+one F1 derived evidence projection. The literal RFC tuple fails `EVIDENCE_DERIVATION_WIDENS`; the
+repair is an operator-only sealed compilation receipt retaining original declared values, while F1
+continues to bind each constituent to its actual consumer.
+
+The contract now separates complete legal rows from game adjudication and separates factual,
+provider and policy cache identities, preserving Maia's exact history-shaped request. The first
+landing is narrowed to the compiler/cache/service, the real research semantic-selection operation,
+the legacy candidate adapter and a bounded existing final selector cache. No live bot, hint,
+Review, REST or application injection is claimed before its consumer RFC lands.
+
+The code-derived closure is 47 one-edge event identities plus 22 reading identities, including the
+two features the returned migration dropped: conditional legal exchange and fork survival. Typed
+Stockfish scores remain White-perspective at source; a separate root projection handles both colors,
+cp loss and mate relations, abstaining on mixed domains or measurement mismatch.
+
+Nine Node-24 arms pass in `tools/d1631-candidate-packet-repair-harness/`. Dossier:
+`design/research/shared-candidate-packet-contract-closure.md`; author handoff:
+`planning/evidence-foundation-ux/shared-candidate-packet-author-repair-2026-08-26.md`. The RFC remains
+returned pending Claude author amendment and fresh independent buildability review; no RFC,
+production, schema, content or UI byte changed.
