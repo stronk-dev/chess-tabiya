@@ -5,7 +5,7 @@ import { afterEach, describe, expect, it } from "vitest";
 
 import { createApplication, type ChessTabiyaApplication } from "./application.js";
 
-describe("development application mock opponent", () => {
+describe("development application mock opponent", { timeout: 15_000 }, () => {
   let application: ChessTabiyaApplication | undefined;
 
   afterEach(async () => {

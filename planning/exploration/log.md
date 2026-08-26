@@ -9102,3 +9102,25 @@ style prose, storage or personality claim. D1736 now consumes seventeen literal 
 The executable receipt assigns exactly one living owner to all sixteen non-landed families and
 keeps the three sibling RFC lanes explicit. No production, RFC, schema, pack, content or learner
 UX changed.
+
+## 2026-08-26 — Required software CI timing instruments stabilized (D1740)
+
+Two consecutive GitHub software-contract runs failed the same single-call opening-catalogue
+microbenchmark at 55.12/55.66 microseconds against a 50-microsecond ceiling, while one then two
+full-application boundary tests crossed Vitest's generic five-second unit timeout under runner
+contention. The lookup check now keeps the 50-microsecond p95 and population-scaling negatives but
+amortizes scheduler/timer noise over bounded 100-call samples. The production-boundary suite now
+declares a fifteen-second integration budget; its assertions and real server boundary are
+unchanged.
+
+The affected two-file suite passed five consecutive runs (40/40 assertions). The exact GitHub
+software command, `make verify-software`, then passed 1,026 tests across 168 files plus workspace
+typechecks, schema/scaffold/packaging checks, compiled evidence manifests, production builds,
+opening-catalogue verification, account lifecycle and rating isolation. Full local-CI closeout
+remains D1448 and is not claimed by this repair.
+
+The surrounding required tiers also passed before commit: repository governance (1,545 ledger
+rows / 968 open / zero unrouted; 569 registered work items), real-content compatibility (166/166),
+browser smoke (24 passed / one optional skipped), real-content browser integration (4/4), and the
+responsive/accessibility interaction matrix (7/7). These are verification receipts for the
+checkpoint, not a claim that D1448's clean committed-byte `make ci-local` discharge is complete.
