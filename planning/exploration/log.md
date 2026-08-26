@@ -9061,3 +9061,12 @@ count. Changed islands affect the non-moving side 24/54 times.
 The handoff versions exact before/after islands with `topology_changed`, stops emitting unchanged
 semantic events, reuses the D1728 pawn authority, preserves authored count conditions and refuses
 weakness/value/plan. No production, RFC, schema, pack, content or learner UX changed.
+
+## 2026-08-26 — Evidence source-repair handoffs dependency-ordered (D1736)
+
+Consolidated sixteen evidence author handoffs into one six-stage authoring wave: shared convention
+and execution provenance; exact source identities/events; real production operations; independent
+semantic validation; subject-first avoidance denominators; then ordinary-module migration. The
+packet recommends one living source-identity amendment over seven competing edits to the same
+manifest/runtime files, while preserving each dossier as semantic authority. No RFC was accepted,
+no production or content byte changed, and module/UX activation remains downstream.
