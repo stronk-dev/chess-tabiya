@@ -16,7 +16,7 @@ an explicit not-found view rather than crashing the application.
 
 | Route | Current surface |
 |---|---|
-| `/` | Home with the loop promise, lease-aware Continue card, due/open counts, direct first start, and one opening/middlegame/endgame thread |
+| `/` | Home with the four-step loop explanation, evidence boundary, lease-aware Continue card, due/open counts, direct first start, and one opening/middlegame/endgame thread |
 | `/play` | Named human-choice resistance ladder, strong-engine alternative, optional FEN, and the searchable phase/band pack catalogue |
 | `/play/run/:runId` | Live drill, branch, compare, and export context |
 | `/review` | Stored run history; opening a row returns to its live run context |
@@ -51,8 +51,12 @@ lease-aware resume behavior. Without history it starts the designated short cons
 it never renders an empty resume card or requires a second “Go to Play” click. Due schedules and
 open coach assignments render as counts with verbs, and phase starters reuse the same registered
 pack summaries as the catalogue. The product's commit → consequence → rewind → branch loop is
-stated above the first choice instead of being discoverable only after a run starts. That first
-run is the ordinary persisted `startPack` run with a client-only, event-derived four-step guide:
+stated above the first choice instead of being discoverable only after a run starts. A second,
+always-visible Home section explains the complete loop as Commit → Play the consequence → Rewind
+and branch → Compare and replay, and states the evidence boundary: authored explanations and
+measured records retain their sources, while generated wording may present but not invent or grade.
+It adds no route, provider call, evidence projection or chess claim. The first run is the ordinary
+persisted `startPack` run with a client-only, event-derived four-step guide:
 decide in deliberate silence, play to a recorded consequence boundary, rewind to the original
 decision, finish the alternative, then compare the two preserved branches. The guide survives a
 reload by retaining only its run id; it creates no tutorial run type or chess claims.

@@ -205,6 +205,10 @@ describe("application shell", () => {
 
     await vi.waitFor(() => expect(document.body.textContent).toContain("Start the first rehearsal"));
     expect(document.body.textContent).toContain("Do not just learn the move. Rehearse the game it creates.");
+    expect(document.body.textContent).toContain("How Tabiya works");
+    expect(document.body.textContent).toContain("Play the consequence");
+    expect(document.body.textContent).toContain("Your first attempt stays intact");
+    expect(document.body.textContent).toContain("Grounded feedback, not invented chess truth");
     expect(document.body.textContent).toContain("0 rehearsals are due");
     expect(document.body.textContent).toContain("Pick up a thread");
     expect(document.body.textContent).not.toContain("No previous run yet");

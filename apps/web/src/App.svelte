@@ -917,6 +917,23 @@
         <p><strong>{dueSchedules.length}</strong> {dueSchedules.length === 1 ? "rehearsal is" : "rehearsals are"} due</p>
         <p><strong>{openAssignments.length}</strong> {openAssignments.length === 1 ? "coach assignment is" : "coach assignments are"} open</p>
       </section>
+      <section class="how-it-works" aria-labelledby="how-it-works-title">
+        <div class="how-it-works-heading">
+          <p class="eyebrow">The rehearsal loop</p>
+          <h2 id="how-it-works-title">How Tabiya works</h2>
+          <p>Openings, middlegames, and endgames use the same loop: make a decision, live with it, then return with another idea.</p>
+        </div>
+        <ol class="rehearsal-loop">
+          <li><span>01</span><h3>Commit</h3><p>Choose a real position and play the decision you want to understand.</p></li>
+          <li><span>02</span><h3>Play the consequence</h3><p>Continue against resistance long enough for the decision to shape the game.</p></li>
+          <li><span>03</span><h3>Rewind and branch</h3><p>Return to the decision and try another plan. Your first attempt stays intact.</p></li>
+          <li><span>04</span><h3>Compare and replay</h3><p>Compare what followed, replay under different resistance, and return later.</p></li>
+        </ol>
+        <aside class="evidence-promise" aria-labelledby="evidence-promise-title">
+          <div><p class="eyebrow">Evidence boundary</p><h3 id="evidence-promise-title">Grounded feedback, not invented chess truth.</h3></div>
+          <p>Authored explanations and measured evidence keep their source. Generated wording may present those records; it does not invent strategy or grade your move.</p>
+        </aside>
+      </section>
       {#if phaseStarters.length > 0}
         <section class="phase-starters" aria-labelledby="phase-starters-title">
           <div><p class="eyebrow">Pick up a thread</p><h2 id="phase-starters-title">Start from the phase you are working on.</h2></div>
@@ -1403,6 +1420,18 @@
   .home-status h2, .phase-starters h2 { margin: .2rem 0; font: 500 1.5rem var(--display-font); }
   .home-status p { margin: 0; }
   .home-status strong { font: 500 2rem var(--display-font); }
+  .how-it-works { margin: 3rem 0; padding: clamp(1.1rem, 3vw, 1.8rem); border: 1px solid var(--line); border-radius: 1rem; background: color-mix(in srgb, var(--panel) 88%, transparent); }
+  .how-it-works-heading { max-width: 43rem; }
+  .how-it-works-heading h2 { margin: .25rem 0 .6rem; font: 500 clamp(1.7rem, 4vw, 2.6rem) var(--display-font); }
+  .how-it-works-heading > p:last-child, .rehearsal-loop p, .evidence-promise > p { color: var(--muted); }
+  .rehearsal-loop { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: .75rem; margin: 1.6rem 0; padding: 0; list-style: none; }
+  .rehearsal-loop li { padding: .85rem 0 0; border-top: 2px solid var(--accent); }
+  .rehearsal-loop span { color: var(--accent); font: 700 .7rem ui-monospace, monospace; letter-spacing: .1em; }
+  .rehearsal-loop h3 { margin: .65rem 0 .35rem; font: 500 1.1rem var(--display-font); }
+  .rehearsal-loop p { margin: 0; font-size: .85rem; line-height: 1.5; }
+  .evidence-promise { display: grid; grid-template-columns: minmax(15rem, .8fr) minmax(18rem, 1.2fr); gap: 1rem; align-items: end; padding-top: 1rem; border-top: 1px solid var(--line); }
+  .evidence-promise h3 { margin: .2rem 0 0; font: 500 1.25rem var(--display-font); }
+  .evidence-promise > p { margin: 0; line-height: 1.55; }
   .phase-starters { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: .75rem; margin: 2rem 0 1rem; }
   .phase-starters > div { grid-column: 1 / -1; }
   .phase-starters article { display: flex; flex-direction: column; min-height: 15rem; padding: 1rem; border: 1px solid var(--line); border-radius: .9rem; background: var(--panel); }
@@ -1410,7 +1439,8 @@
   .phase-starters h3 { margin: .75rem 0 .4rem; font: 500 1.25rem var(--display-font); }
   .phase-starters article p { color: var(--muted); font-size: .85rem; }
   .phase-starters article button { margin-top: auto; }
-  @media (max-width: 45rem) { .home-status, .phase-starters { grid-template-columns: 1fr; } .phase-starters > div { grid-column: 1; } }
+  @media (max-width: 60rem) { .rehearsal-loop { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+  @media (max-width: 45rem) { .home-status, .phase-starters, .rehearsal-loop, .evidence-promise { grid-template-columns: 1fr; } .phase-starters > div { grid-column: 1; } }
   .repertoire-form{display:grid;gap:.65rem;max-width:44rem;padding:1rem;border:1px solid var(--line);border-radius:.8rem;background:var(--panel)}
   .repertoire-form label{display:grid;gap:.25rem}.repertoire-form input,.repertoire-form select,.repertoire-form textarea{padding:.6rem;border:1px solid var(--line);border-radius:.4rem;background:white}
   .repertoire-card{display:grid;gap:.6rem}.gap-results{grid-column:1/-1;border-top:1px solid var(--line);padding-top:.6rem}.gap-row{display:flex;align-items:center;justify-content:space-between;gap:1rem;padding:.4rem 0}

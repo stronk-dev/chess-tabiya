@@ -97,6 +97,8 @@ test.beforeEach(async ({ page }) => register(page));
 
 test("a first learner enters the real rehearsal loop with a persistent event-derived guide", async ({ page }) => {
   await page.getByRole("link", { name: "Home" }).click();
+  await expect(page.getByRole("heading", { name: "How Tabiya works" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Grounded feedback, not invented chess truth." })).toBeVisible();
   await page.getByRole("button", { name: "Start the first rehearsal" }).click();
   await expect(page).toHaveURL(/\/play\/run\/run-/u);
   await expect(page.getByLabel("Chessboard")).toBeVisible();
