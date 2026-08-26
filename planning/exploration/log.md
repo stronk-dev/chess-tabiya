@@ -8546,3 +8546,22 @@ Dossier: `design/research/longitudinal-store-contract-closure.md`; handoff:
 `planning/longitudinal-store/author-repair-handoff-2026-08-26.md`; instrument:
 `tools/d1612-longitudinal-contract-harness/` (10/10 green). No migration, production schema,
 protected design, RFC status, player-profile consumer, content or concurrent Claude byte changed.
+
+## 2026-08-26 — D1602–D1604 bot guard and dependent trait contract measured
+
+Converted the bot-roster buildability return's guard and trait requirements into a ten-arm
+Node-24 instrument. One sealed receipt now binds the root, history, exact legal candidate set,
+Stockfish 18 identity, Threads 1, Hash 16, cleared state, MultiPV/searchmoves, fixed depth 8,
+root-side score domain and elapsed time. Candidate loss is derived inside the receipt; provider-off,
+deadline, missing/duplicate, bounded, mixed-domain, wrong-root/history and forged inputs abstain.
+
+The only measured trait is registered as `pawn_move@1` and derived from the shipped exact-legal
+board boundary. Ordinary moves, captures and promotions are positive; castling/non-pawns are hard
+negatives. A guard abstention now necessarily abstains the dependent pawn trait and preserves the
+base human-policy mass. D1606 is only half answered: the dedicated request operands are pinned,
+but the exact Maia-plus-guard production chain still needs a combined-budget measurement.
+
+Dossier: `design/research/bot-guard-and-trait-contract.md`; author handoff:
+`planning/bot-roster/guard-trait-author-repair-2026-08-26.md`; instrument:
+`tools/d1602-bot-guard-contract-harness/` (10/10 green). No RFC was amended or accepted, no
+production profile was registered, and no concurrent D872/review byte was touched.
