@@ -59,6 +59,24 @@ R12 research has now landed in `design/research/campaign-failure-resource.md`:
 - [ ] Obtain [[D1600]]'s owner ruling on the no-exhaustible-tool second stage. Until then R12 remains
   non-RFC research and campaign failure storage/events are blocked.
 
+Two-horizon contract research has now landed in
+`design/research/campaign-two-horizon-contract.md` with nine executable arms:
+
+- [x] Census the actual reward authorities: module ids are shared; theory ids are draft-only;
+  appearance ids are browser-only ([[D1695]], [[D1696]]).
+- [x] Separate owned/equipped/ready/resting/suppressed/available/effective state and prove preset
+  transitions cannot mutate ownership or equipment.
+- [x] Specify the closed run-reward families and refuse a generic `tool_unlock` string.
+- [x] Execute acquisition-to-later-use and boss-use negatives, completion-denominator prestige,
+  terminal event authority and idempotent completed-run awards.
+- [x] Hand the author the campaign-schema lane-2 claim and collision with `training-mode-variants`
+  ([[D1697]]).
+- [ ] Decide whether 1.0 durable rewards stop at completion/prestige marks plus shared-catalog
+  cosmetics, or fund a typed meta-reward registry for skip starts/modifiers/variant runs
+  ([[D1698]]).
+- [ ] Run the author repair from
+  `planning/campaign/two-horizon-author-repair-2026-08-26.md`, then independent review.
+
 After the author amendment, repeat independent buildability review against the source symbols,
 then resume the migration chain. Do not treat the already-green pure checkpoints as acceptance of
 the missing product contract.

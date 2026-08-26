@@ -384,6 +384,13 @@ Primary RFCs: `campaign-core`, `training-mode-variants`. UX owner: CMP items.
 Owner ruling [[D1565]] requires two explicit progression horizons: a run-scoped inventory of
 drip-fed theory, modules and tools that matters in later encounters and bosses, plus durable
 long-term rewards across runs. Exact consequential failure arithmetic remains research-owned.
+The two-horizon foundation is now measured, not implemented: [[D1695]] blocks theory rewards on a
+missing runtime passage authority, [[D1696]] blocks server-owned cosmetic awards on browser-local
+catalogs, [[D1697]] requires campaign-schema lane 2, and [[D1698]] refuses generic durable
+skip-start/modifier/variant ids without a registry and consumer. The author handoff specifies
+separate ownership/equipment/availability state, universal later+boss opportunity, exact prestige
+denominator and idempotent award history; `campaign-core` remains returned until it absorbs and
+survives review.
 Variant campaigns remain a successor structure, not a `DrillRun.rules` rider: [[D1681]] proves the
 current pack-seal campaign cannot advance an evidence-dark Tier-2 node without inventing a verdict.
 

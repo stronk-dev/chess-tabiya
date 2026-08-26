@@ -8650,3 +8650,30 @@ twelve profiles remain the 1.0 outcome; partial catalogue registration, permanen
 Both RFCs remain draft pending independent cross-review. D1610/D1611 remain owner decisions and
 the exact release-concurrency/calibration/observability receipts remain implementation discharges.
 No catalogue profile, schema, migration or production byte changed in this author round.
+
+## 2026-08-26 — Campaign two-horizon progression contract measured
+
+Closed the mechanical author inputs behind [[D1592]]–[[D1597]] without resuming the returned
+campaign implementation. The authority census finds one campaign reward kind and eleven module
+ids at HEAD, but no runtime theory-passage authority and no server-readable appearance catalog.
+Recorded those dependency faults as [[D1695]]/[[D1696]], the owed campaign-schema lane-2 claim as
+[[D1697]], and the absence of any durable title/modifier/skip-start/variant reward registry as
+[[D1698]].
+
+The research contract separates owned, equipped, ready/resting, encounter-suppressed, source-
+available and effective state; a preset transition cannot mutate ownership or equipment, and every
+ineffective owned item carries one exact reason. The proposed run reward union is module unlock,
+bundle-pinned theory unlock and the existing typed campaign-resource grant—not a generic tool id.
+A path diagnostic follows every acquisition through every reachable continuation and requires a
+later consumer plus a later boss consumer, while claiming structural opportunity only.
+
+The durable horizon uses an idempotent completed-run award keyed by learner, pinned campaign, run
+and reward, with owned inventory projected from award history. The minimum grounded 1.0 classes are
+completion/prestige marks and shared-catalog cosmetics; broader meta rewards remain an explicit
+product choice. Prestige now has the exact completed nine-layer denominator, abandonment is an
+event authority, and terminal cursors are discriminated rather than overloaded `null`.
+
+Nine Node-24 arms pass in `tools/d1592-two-horizon-harness/`. Dossier:
+`design/research/campaign-two-horizon-contract.md`; author handoff:
+`planning/campaign/two-horizon-author-repair-2026-08-26.md`. [[D1600]] remains owner-blocked; no
+RFC, schema, migration, production route, content or UI byte was changed.
