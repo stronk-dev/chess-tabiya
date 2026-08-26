@@ -153,6 +153,15 @@ Stockfish and Maia source receipts, literal F1 derivations over sealed target in
 legal-root completeness, real server operations and bounded scheduling/cache identity. A provider
 file or inspector disposition alone does not complete this foundation; Support, Review, bots and
 packs may not consume target-policy facts until the amended contract passes repeat review.
+
+The 2026-08-26 contract closure makes the repair executable and changes its unit of work. Exact
+target derivation, shared provider exchange receipts and target-policy composition are three
+dependency layers; all remain required for 1.0, but they must not be accepted as one partially real
+RFC. Nine Node-24 falsifiers prove canonical legal-set equality (including rook-square castling
+identity), exact Maia history/request keys, sealed threat/exchange joins, weakest-input confidence,
+inherited provider latency, same-exchange engine generation and bounded cancellation. The shared
+provider layer is a prerequisite for Review, candidate scoring and evidence-aware bots rather than
+private infrastructure owned by this one target family.
 The variant foundation now has an executable scope receipt rather than the earlier textual count:
 [[D1683]] measures 159 production calls across 32 files and separates nine rules-aware play
 authorities from 23 standard-only/evidence readers that must be capability-gated. Tier-2 support

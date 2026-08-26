@@ -8703,3 +8703,29 @@ Nine Node-24 arms pass in `tools/d1631-candidate-packet-repair-harness/`. Dossie
 `planning/evidence-foundation-ux/shared-candidate-packet-author-repair-2026-08-26.md`. The RFC remains
 returned pending Claude author amendment and fresh independent buildability review; no RFC,
 production, schema, content or UI byte changed.
+
+## 2026-08-26 — Bounded target provider/derivation return closed at the contract layer
+
+Re-derived [[D1390]], [[D1647]] and [[D1652]]–[[D1658]] against the shipped F1 compiler, legal-move
+authority, threat/exchange evidence, engine supervisor, evidence queue, Maia selector and actual
+server composition. D1023's chess findings survive; the proposed implementation unit does not. The
+buildable dependency is three layers: exact local target derivation, shared generic provider
+exchange receipts/scheduler, then target-policy composition. All three remain required for 1.0.
+
+The Stockfish source becomes a node-free complete legal-root table with same-exchange actual
+identity; target categories are derived separately. The Maia source carries a discriminated
+history-conditioned versus exact-FEN request and never invents counterfactual node ids. Legal-root
+completeness is set equality against the shipped authority, whose castling identity is `e1a1/e1h1`,
+not hand-written destination UCI. Named targets retain and join the registered threat and exchange
+items rather than recomputing them.
+
+The pass reproduced two shared manifest defects: an `exact` confidence over a `reported` provider
+input compiles today, and `derived.grade` advertises `sync` despite live Stockfish input. It also
+confirmed there is no bounded-target production operation and current engine execution returns
+anonymous lines rather than a same-exchange identity receipt.
+
+Nine Node-24 arms pass in `tools/d1652-bounded-target-repair-harness/`. Dossier:
+`design/research/bounded-policy-target-contract-closure.md`; author handoff:
+`planning/bounded-policy-targets/author-repair-2026-08-26.md`. The RFC remains returned pending
+Claude author split/amendment and fresh review; no RFC, production, schema, content or UI byte
+changed.
