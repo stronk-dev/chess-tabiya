@@ -153,6 +153,13 @@ stationary heavy-piece access after a pawn leaves the file occurs 27/35 played t
 keeps moved-entry and stationary-reveal as separate causes, and refuses activity/control/value
 until a module joins separate evidence.
 
+[[D1734]] **completed pawn-island transition identity on 2026-08-26**. V1 emits two count rows per
+move and labels 1,472/1,092 authored/imported relations preserved; [[D1735]] shows those buckets
+mix 1,445/1,057 true no-ops with 27/35 equal-count occupied-file partition changes. Another 36/66
+change count, and 24/54 changed relations belong to the non-moving side. The handoff versions exact
+before/after partitions with `topology_changed`, removes unchanged semantic rows, preserves current
+author conditions, and keeps weakness/value/plan outside the source.
+
 **Deliverable 7 (owner questions) accumulates here** — nothing is silently chosen.
 **All four open questions RULED 2026-08-22 ([[D745]])**: space = classic zones + pawn control,
 `chess_tradition`; the negative reading faces learners post-commit/review with the denominator;

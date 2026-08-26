@@ -1,0 +1,23 @@
+{
+  "schema": "tabiya.research.d1734-pawn-island-identity.v1",
+  "authored": {
+    "decisions": 754,
+    "currentEvents": 1508,
+    "currentPreserved": 1472,
+    "unchanged": 1445,
+    "countChanged": 36,
+    "topologyChangedSameCount": 27,
+    "movingSideChanges": 39,
+    "opponentSideChanges": 24
+  },
+  "imported": {
+    "decisions": 579,
+    "currentEvents": 1158,
+    "currentPreserved": 1092,
+    "unchanged": 1057,
+    "countChanged": 66,
+    "topologyChangedSameCount": 35,
+    "movingSideChanges": 47,
+    "opponentSideChanges": 54
+  }
+}

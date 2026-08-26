@@ -313,6 +313,12 @@ collector cannot represent. 1.0 derives exact file state from the shared pawn au
 authored predicates, and exposes moved-entry versus stationary-reveal as separate module/bot/Review
 facts. Neither is permitted to manufacture “active,” “controls,” “good” or a plan.
 
+[[D1734]] closes pawn-island event identity. The exact state already ships, but v1's two rows per
+move are overwhelmingly no-ops and hide 62 equal-count topology changes as `preserved`; 78 changed
+relations affect the non-moving side. 1.0 versions exact partitions, removes unchanged semantic
+events, preserves authored count conditions, and supplies module/bot/Review/longitudinal consumers
+with the actual affected islands rather than a directionless integer.
+
 ### 3. Arrival and the rehearsal loop
 
 <!-- roadmap-capability: rehearsal -->

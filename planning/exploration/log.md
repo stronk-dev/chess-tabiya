@@ -9049,3 +9049,15 @@ stationary case—pawn movement/capture newly revealing the file to a retained r
 27/35 times at 2.43×/3.83×. The handoff derives exact file-state change from the D1728 pawn source,
 adds a separate stationary-access event and refuses activity/control/value language without
 another join. No production, RFC, schema, pack, content or learner UX changed.
+
+## 2026-08-26 — Pawn-island transition identity measured (D1734/D1735)
+
+Compared exact occupied-file partitions from the shipped pawn-connectivity source across all 754
+authored and 579 imported committed edges. V1 emits exactly two count rows per move. Its
+1,472/1,092 `preserved` rows split into 1,445/1,057 genuinely unchanged relations and 27/35
+equal-count topology changes that the payload cannot express; 36/66 further relations change
+count. Changed islands affect the non-moving side 24/54 times.
+
+The handoff versions exact before/after islands with `topology_changed`, stops emitting unchanged
+semantic events, reuses the D1728 pawn authority, preserves authored count conditions and refuses
+weakness/value/plan. No production, RFC, schema, pack, content or learner UX changed.
