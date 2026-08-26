@@ -9288,3 +9288,31 @@ five-file compiler closure. It retains every semantic assertion: enumeration-ord
 digest sensitivity to changed source meaning, malformed-row refusal, duplicate-endpoint refusal,
 missing-source refusal and undeclared-compiler refusal. Its focused runtime is 11 ms; the
 full-corpus build/check and isolated performance gates are unchanged.
+
+## 2026-08-26 — Navigation and named-structure keyboard continuity closes
+
+Three more no-ruling accessibility defects close. After the initial page load, asynchronous route
+navigation focuses the new view's heading only after its data settles, so title and focus now move
+together. The named-structure overlay is a labelled modal dialog: it focuses its heading, closes on
+Escape and restores the exact timeline marker that opened it. Opening its evidence inspector remains
+a forward transition and deliberately does not bounce focus back to the marker.
+
+Visible shortcut badges remain available to sighted keyboard users, while Fork, Compare,
+Replay/Pause, Export and Rewind now expose action-only accessible names. Focused component tests and
+real browser journeys prove route-heading focus plus ShapePanel focus, Escape and restoration.
+Work items A11-a5, A11-a7 and A11-a9 are complete; the shared trap/inert and shortcut-reachability
+items remain separate and open.
+
+## 2026-08-26 — Drill keyboard ownership becomes continuous (D1492 / A11-a12)
+
+The shortcut break was one over-broad predicate: buttons, links, text entry and the board were all
+treated as the same kind of target. The handler now preserves text editing and board-grid ownership,
+and preserves native Space activation on buttons, links and summaries, while the non-conflicting
+drill commands work from ordinary controls. Alt+C no longer has a second hidden focus guard. Escape
+returns focus to the drill shortcut region, and the keyboard map states the boundary.
+
+The shell no longer arms its `g` navigation chord inside the semantic board. Timeline arrows now
+work while a ply is focused, move focus with the preview, and expose one roving ply stop rather than
+one stop per move. Checkpoints no longer swallow Escape and state why the modal is deliberately not
+dismissible. A new keyboard-owner unit fixture plus component and browser interaction tests cover
+the boundaries. A11-a12 is complete; the separate shared focus-trap/inert obligation remains open.

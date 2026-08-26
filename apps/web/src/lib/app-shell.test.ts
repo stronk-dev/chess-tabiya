@@ -441,6 +441,7 @@ describe("application shell", () => {
     for (const [path, copy] of routes) {
       router.navigate(path);
       await vi.waitFor(() => expect(document.body.textContent).toContain(copy));
+      await vi.waitFor(() => expect(document.activeElement).toBe(document.querySelector("#main-content main h1")));
       expect(document.title.endsWith(" · Tabiya")).toBe(true);
       expect(document.title).not.toBe("Tabiya");
       expectDisabledControlsExplained();

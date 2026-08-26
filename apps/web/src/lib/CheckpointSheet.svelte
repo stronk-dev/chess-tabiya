@@ -91,10 +91,10 @@
 </script>
 
 <div class="backdrop">
-  <div class="sheet" role="dialog" aria-modal="true" aria-labelledby="checkpoint-title">
+  <div class="sheet" role="dialog" aria-modal="true" aria-labelledby="checkpoint-title" aria-describedby="checkpoint-boundary-note">
     <p class="eyebrow">Checkpoint</p>
     <h2 id="checkpoint-title" tabindex="-1" bind:this={heading}>{checkpoint.label}</h2>
-    <p>You reached a semantic boundary. Continue, replay it, or compare attempts.</p>
+    <p id="checkpoint-boundary-note">You reached a semantic boundary. Choose an action below to leave this checkpoint; Escape does not dismiss it.</p>
     {#if checkpoint.interaction?.type === "prediction" && node}
       <section class="prediction" aria-labelledby="prediction-title">
         <h3 id="prediction-title">Predict the opponent's reply</h3>

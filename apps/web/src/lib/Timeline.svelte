@@ -36,8 +36,8 @@
   let rootPivotal = $derived(pivotalMarkers.some((marker) => marker.nodeId === rootNodeId));
 </script>
 
-<!-- svelte-ignore a11y_no_noninteractive_tabindex (an empty timeline is still a required drill focus region) -->
-<section class="timeline" aria-labelledby="timeline-title" tabindex="0">
+<!-- svelte-ignore a11y_no_noninteractive_tabindex (only an empty timeline needs a focusable region) -->
+<section class="timeline" aria-labelledby="timeline-title" tabindex={entries.length === 0 ? 0 : undefined}>
   <div class="timeline-heading">
     <h2 id="timeline-title">Active line</h2>
     <span>{entries.length} plies</span>
@@ -45,7 +45,7 @@
   <ol>
     {#if rootMarkers.length > 0 && rootNodeId !== undefined}
       <li>
-        <button type="button" aria-label="Start position" class:preview={previewNodeId === rootNodeId} onclick={() => onPreview(rootNodeId)}>
+        <button type="button" aria-label="Start position" tabindex={previewNodeId === rootNodeId || (previewNodeId === undefined && activeNodeId === rootNodeId) ? 0 : -1} data-timeline-node={rootNodeId} class:preview={previewNodeId === rootNodeId} onclick={() => onPreview(rootNodeId)}>
           <span class="ply">0</span><span>Start</span>
         </button>
         {#each rootMarkers as marker}<button class="shape-marker" type="button" onclick={() => onOpenShape(marker.entryId)}>{marker.label}{marker.channel === "community" ? " · community" : ""}</button>{/each}
@@ -56,6 +56,8 @@
       <li class:checkpoint={entry.checkpointIds.length > 0}>
         <button
           type="button"
+          tabindex={(previewNodeId ?? activeNodeId) === entry.nodeId ? 0 : -1}
+          data-timeline-node={entry.nodeId}
           class:preview={previewNodeId === entry.nodeId}
           aria-current={activeNodeId === entry.nodeId ? "step" : undefined}
           aria-label={`Ply ${entry.ply}: ${entry.moveSan}${
@@ -93,6 +95,7 @@
             class="confirm"
             type="button"
             disabled={!canConfirm}
+            aria-label="Rewind to preview"
             aria-describedby={describedBy}
             onclick={() => onConfirm(previewNodeId)}
           >Rewind to preview <kbd>Enter</kbd></button>

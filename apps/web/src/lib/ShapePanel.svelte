@@ -1,4 +1,6 @@
 <script lang="ts">
+  import { onMount } from "svelte";
+
   import type { ShapeEntryView } from "./api.js";
   interface Props {
     entry: ShapeEntryView;
@@ -7,13 +9,25 @@
   }
 
   let { entry, onClose, onInspect }: Props = $props();
+  let heading: HTMLHeadingElement;
+
+  onMount(() => heading.focus());
+
+  function keydown(event: KeyboardEvent): void {
+    if (event.key !== "Escape") return;
+    event.preventDefault();
+    event.stopPropagation();
+    onClose();
+  }
 </script>
 
-<aside class="shape-panel" aria-labelledby="shape-panel-title" data-evidence-consumer="theory.shape_firing">
+<svelte:window onkeydown={keydown} />
+
+<div class="shape-panel" role="dialog" aria-modal="true" aria-labelledby="shape-panel-title" data-evidence-consumer="theory.shape_firing">
   <header>
     <div>
       <p class="eyebrow">Named structure · {entry.channel}{entry.publisherHandle ? ` · ${entry.publisherHandle}` : ""}</p>
-      <h2 id="shape-panel-title">{entry.name}</h2>
+      <h2 id="shape-panel-title" tabindex="-1" bind:this={heading}>{entry.name}</h2>
     </div>
     <button type="button" onclick={onClose}>Close</button>
   </header>
@@ -39,7 +53,7 @@
   </section>
 
   <footer><button type="button" onclick={onInspect}>Inspect trigger and sources</button></footer>
-</aside>
+</div>
 
 <style>
   .shape-panel{position:absolute;inset:1rem 1rem 1rem auto;z-index:20;width:min(32rem,calc(100% - 2rem));overflow:auto;padding:1rem;border:1px solid var(--line);border-radius:1rem;background:var(--panel);box-shadow:var(--shadow)}

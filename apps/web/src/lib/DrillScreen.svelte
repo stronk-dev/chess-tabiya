@@ -162,6 +162,7 @@
   let forkInvoker: HTMLElement | undefined;
   let checkpointPickerInvoker: HTMLElement | undefined;
   let compareInvoker: HTMLElement | undefined;
+  let shapeInvoker: HTMLElement | undefined;
   let forkOpen = $state(false);
   let checkpointPickerOpen = $state(false);
   let replaying = $state(false);
@@ -487,18 +488,24 @@
     const next = group.members[(current + 1) % group.members.length];
     if (next !== undefined) await onSwitchBranch(branchPath(run, next.branchId).at(-1)!.id, next.branchId);
   }
-  function interactiveTarget(event: KeyboardEvent): boolean {
+  function editingTarget(event: KeyboardEvent): boolean {
     return event.composedPath().some((target) =>
       target instanceof HTMLInputElement ||
       target instanceof HTMLTextAreaElement ||
       target instanceof HTMLSelectElement ||
+      (target instanceof HTMLElement && target.isContentEditable),
+    );
+  }
+
+  function boardInputTarget(event: KeyboardEvent): boolean {
+    return event.composedPath().some((target) => target instanceof HTMLElement && target.dataset.boardInputGrid !== undefined);
+  }
+
+  function nativeSpaceTarget(event: KeyboardEvent): boolean {
+    return event.composedPath().some((target) =>
       target instanceof HTMLButtonElement ||
       target instanceof HTMLAnchorElement ||
-      (target instanceof HTMLElement && (
-        target.tagName === "SUMMARY" ||
-        target.isContentEditable ||
-        target.dataset.boardInputGrid !== undefined
-      )),
+      (target instanceof HTMLElement && target.tagName === "SUMMARY"),
     );
   }
 
@@ -519,6 +526,18 @@
 
   function restoreFocus(target: HTMLElement | undefined): void {
     void tick().then(() => (target?.isConnected ? target : mainElement)?.focus());
+  }
+
+  function showShape(entryId: string): void {
+    shapeInvoker = document.activeElement instanceof HTMLElement ? document.activeElement : mainElement;
+    inspectedShapeId = entryId;
+    openShapeId = entryId;
+  }
+
+  function closeShape(): void {
+    openShapeId = undefined;
+    restoreFocus(shapeInvoker);
+    shapeInvoker = undefined;
   }
 
   function openCompare(): void {
@@ -622,6 +641,16 @@
     previewNodeId = entries[nextIndex]!.nodeId;
   }
 
+  function focusTimelinePreview(): void {
+    const nodeId = previewNodeId;
+    if (nodeId === undefined) return;
+    void tick().then(() => {
+      const target = [...document.querySelectorAll<HTMLElement>("[data-timeline-node]")]
+        .find((element) => element.dataset.timelineNode === nodeId);
+      target?.focus();
+    });
+  }
+
   function toggleReplay(): void {
     replaying = !replaying;
     if (!replaying) {
@@ -690,12 +719,14 @@
       else if (forkOpen) closeFork();
       else if (checkpointPickerOpen) closeCheckpointPicker();
       else if (comparison !== undefined) closeCompare();
-      else if (checkpoint === undefined) return false;
+      else if (checkpoint !== undefined) return false;
+      else restoreFocus(mainElement);
       event.preventDefault();
       return true;
     }
     if (
-      interactiveTarget(event) ||
+      editingTarget(event) ||
+      boardInputTarget(event) ||
       helpOpen ||
       forkOpen ||
       checkpointPickerOpen ||
@@ -732,8 +763,7 @@
       }
     } else if (
       event.altKey &&
-      event.code === "KeyC" &&
-      (event.target === mainElement || event.target === regionElement)
+      event.code === "KeyC"
     ) {
       event.preventDefault();
       if (comparison === undefined) {
@@ -743,10 +773,13 @@
       else closeCompare();
       return true;
     } else if (event.key === "ArrowLeft" || event.key === "ArrowRight") {
+      const fromTimeline = event.composedPath().some((target) => target instanceof HTMLElement && target.closest(".timeline") !== null);
       event.preventDefault();
       stepTimeline(event.key === "ArrowLeft" ? -1 : 1);
+      if (fromTimeline) focusTimelinePreview();
       return true;
     } else if (event.key === " ") {
+      if (nativeSpaceTarget(event)) return false;
       event.preventDefault();
       toggleReplay();
       return true;
@@ -926,7 +959,7 @@
             {authoredSpineNodeIds}
             rootNodeId={run.nodes[0]?.id}
             {shapeMarkers}
-            onOpenShape={(entryId) => { inspectedShapeId = entryId; openShapeId = entryId; }}
+            onOpenShape={showShape}
             pivotalMarkers={pivotalRows}
             onOpenPivotal={openPivotalMarker}
           />
@@ -1051,7 +1084,7 @@
         </div>
         <div class="quick-actions" aria-label="Run actions">
           <HonestControl disabled={!canWrite} reasonId="drill-fork-readonly" reason="This read-only view cannot create a branch.">
-            {#snippet children(describedBy)}<button type="button" disabled={!canWrite} aria-describedby={describedBy} onclick={(event) => { forkInvoker = invoker(event); forkOpen = true; }}>Fork <kbd>B</kbd></button>{/snippet}
+            {#snippet children(describedBy)}<button type="button" disabled={!canWrite} aria-label="Fork branch" aria-describedby={describedBy} onclick={(event) => { forkInvoker = invoker(event); forkOpen = true; }}>Fork <kbd>B</kbd></button>{/snippet}
           </HonestControl>
           <HonestControl disabled={!canWrite} reasonId="drill-group-readonly" reason="This read-only view cannot create a branch group.">
             {#snippet children(describedBy)}<button type="button" disabled={!canWrite} aria-describedby={describedBy} onclick={() => (groupOpen = !groupOpen)}>Branch group</button>{/snippet}
@@ -1065,15 +1098,16 @@
               <button
                 type="button"
                 disabled={cards.length < 2}
+                aria-label="Compare branches"
                 aria-describedby={describedBy}
                 onclick={(event) => { compareInvoker = invoker(event); openCompare(); }}
               >Compare <kbd>Alt+C</kbd></button>
             {/snippet}
           </HonestControl>
-          <button type="button" aria-pressed={replaying} onclick={toggleReplay}>
+          <button type="button" aria-label={replaying ? "Pause replay" : "Replay"} aria-pressed={replaying} onclick={toggleReplay}>
             {replaying ? "Pause" : "Replay"} <kbd>Space</kbd>
           </button>
-          <button type="button" onclick={() => onExport(compareIds.length > 0 ? compareIds : undefined)}>Export <kbd>E</kbd></button>
+          <button type="button" aria-label="Export" onclick={() => onExport(compareIds.length > 0 ? compareIds : undefined)}>Export <kbd>E</kbd></button>
         </div>
           </section>
         </div>
@@ -1256,7 +1290,7 @@
   </div>
 {/if}
 
-{#if viewportSupport.supported && openShape}<ShapePanel entry={openShape} onClose={() => (openShapeId = undefined)} onInspect={() => { openShapeId = undefined; inspectorOpen = true; }} />{/if}
+{#if viewportSupport.supported && openShape}<ShapePanel entry={openShape} onClose={closeShape} onInspect={() => { openShapeId = undefined; shapeInvoker = undefined; inspectorOpen = true; }} />{/if}
 {#if viewportSupport.supported && openPivotalNodeId !== undefined && pivotalDialogOpen}
   <div class="modal-backdrop">
     <div class="modal guidance-panel" role="dialog" aria-modal="true" aria-labelledby="pivotal-title" data-evidence-consumer="board.pivotal_marker">

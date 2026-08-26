@@ -181,6 +181,7 @@
   let story: GameStory | undefined = $state();
   let capabilities: Capabilities | undefined = $state();
   let routeLoading = $state(true);
+  let routeHasLoaded = false;
   let routeError: string | undefined = $state();
   let shellHelpOpen = $state(false);
   let learner: Learner | undefined = $state();
@@ -447,7 +448,19 @@
         routeError = error instanceof Error ? error.message : String(error);
       }
     } finally {
-      if (generation === loadGeneration) routeLoading = false;
+      if (generation === loadGeneration) {
+        const moveFocus = routeHasLoaded;
+        routeHasLoaded = true;
+        routeLoading = false;
+        if (moveFocus) {
+          await tick();
+          if (generation === loadGeneration) {
+            const heading = document.querySelector<HTMLElement>("#main-content main h1");
+            heading?.setAttribute("tabindex", "-1");
+            heading?.focus();
+          }
+        }
+      }
     }
   }
 

@@ -97,6 +97,7 @@ test.beforeEach(async ({ page }) => register(page));
 
 test("a first learner enters the real rehearsal loop with a persistent event-derived guide", async ({ page }) => {
   await page.getByRole("link", { name: "Home" }).click();
+  await expect(page.getByRole("heading", { name: "Do not just learn the move. Rehearse the game it creates." })).toBeFocused();
   await expect(page.getByRole("heading", { name: "How Tabiya works" })).toBeVisible();
   await expect(page.getByRole("heading", { name: "Grounded feedback, not invented chess truth." })).toBeVisible();
   await page.getByRole("button", { name: "Start the first rehearsal" }).click();
@@ -212,11 +213,17 @@ test("Just Play reaches a Carlsbad and opens a guided shape marker without mutat
   await transitionButton.click();
   await expect(transitionButton).toHaveAttribute("aria-expanded", "false");
   await page.getByRole("button", { name: "Return to play" }).click();
+  await marker.focus();
   await marker.click();
-  const panel = page.getByRole("complementary", { name: "Carlsbad structure" });
+  const panel = page.getByRole("dialog", { name: "Carlsbad structure" });
   await expect(panel).toContainText("Named plans for this structure — general to the kind of position, not advice for this one.");
   await expect(panel).not.toContainText("shape trigger");
   for (const label of ["Minority attack", "Achieve e3-e4", "Land h4-h5 against a hook", "Reach a queenless position with the c-pawn sound", "Get the pawn to a5 with b4 still empty", "Central counter-break"]) await expect(panel.getByText(label, { exact: true })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Carlsbad structure" })).toBeFocused();
+  await page.keyboard.press("Escape");
+  await expect(panel).toHaveCount(0);
+  await expect(marker).toBeFocused();
+  await marker.click();
   await panel.getByRole("button", { name: "Inspect trigger and sources" }).click();
   await expect(page.getByRole("region", { name: "Named structure evidence" })).toContainText("CC-BY-SA-4.0");
   await page.getByRole("button", { name: "Return to play" }).click();
@@ -1443,6 +1450,35 @@ test("the drill keyboard map remains contained and scrollable at the supported p
   expect(box.y).toBeGreaterThanOrEqual(0);
   expect(box.y + box.height).toBeLessThanOrEqual(680);
   expect(await dialog.evaluate((element) => getComputedStyle(element).overflowY)).toBe("auto");
+});
+
+test("drill shortcuts keep native controls and never leak a shell chord from the board", async ({ page }) => {
+  await page.goto("/play");
+  await page
+    .getByRole("article")
+    .filter({ hasText: "schema example" })
+    .getByRole("button", { name: /Rehearse this position/ })
+    .click();
+
+  const help = page.getByRole("button", { name: "Keyboard shortcuts" });
+  await help.focus();
+  await page.keyboard.press("b");
+  await expect(page.getByRole("dialog", { name: "Name the experiment." })).toBeVisible();
+  await page.keyboard.press("Escape");
+  await expect(help).toBeFocused();
+  await page.keyboard.press("Escape");
+  await expect(page.locator("main.drill")).toBeFocused();
+
+  await expect(page.getByRole("button", { name: "Fork branch", exact: true })).toBeVisible();
+  await expect(page.getByRole("button", { name: "Replay", exact: true })).toBeVisible();
+  await expect(page.getByRole("button", { name: "Export", exact: true })).toBeVisible();
+
+  const grid = page.getByRole("grid", { name: /Board input/u });
+  await grid.focus();
+  const runUrl = page.url();
+  await page.keyboard.press("g");
+  await page.keyboard.press("h");
+  await expect(page).toHaveURL(runUrl);
 });
 
 test("@matrix normal Tab traversal reaches every drill region in both directions and exits", async ({ page }) => {

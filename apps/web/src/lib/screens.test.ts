@@ -410,13 +410,24 @@ describe("Layer 3 screens", () => {
     } });
     await tick();
     expect(document.body.textContent).toContain("Nothing is authored about this position — Tabiya reads it as you play");
-    expect(document.querySelector<HTMLButtonElement>(".shape-marker")?.textContent).toContain("Carlsbad structure");
-    document.querySelector<HTMLButtonElement>(".shape-marker")!.click(); await tick();
+    const marker = document.querySelector<HTMLButtonElement>(".shape-marker")!;
+    expect(marker.textContent).toContain("Carlsbad structure");
+    marker.focus(); marker.click(); await tick();
+    expect(document.querySelector(".shape-panel")?.getAttribute("role")).toBe("dialog");
+    expect(document.querySelector(".shape-panel")?.getAttribute("aria-modal")).toBe("true");
+    expect(document.activeElement?.id).toBe("shape-panel-title");
     expect(document.querySelector(".shape-panel")?.textContent).toContain("Named plans for this structure — general to the kind of position, not advice for this one.");
     expect(document.querySelector(".shape-panel")?.textContent).not.toContain("shape trigger");
     expect(document.querySelector(".shape-panel")?.textContent).toContain("Minority attack");
+    window.dispatchEvent(new KeyboardEvent("keydown", { key: "Escape", bubbles: true })); await tick();
+    expect(document.querySelector(".shape-panel")).toBeNull();
+    expect(document.activeElement).toBe(marker);
+    marker.click(); await tick();
     document.querySelector<HTMLButtonElement>(".shape-panel footer button")!.click(); await tick();
     expect(document.querySelector('[aria-label="Named structure evidence"]')?.textContent).toContain("CC-BY-SA-4.0");
+    expect(document.querySelector<HTMLButtonElement>(".quick-actions button")?.getAttribute("aria-label")).toBe("Fork branch");
+    expect([...document.querySelectorAll<HTMLButtonElement>(".quick-actions button")].find((button) => button.textContent?.includes("Replay"))?.getAttribute("aria-label")).toBe("Replay");
+    expect([...document.querySelectorAll<HTMLButtonElement>(".quick-actions button")].find((button) => button.textContent?.includes("Export"))?.getAttribute("aria-label")).toBe("Export");
     await unmount(component);
   });
 
@@ -875,6 +886,7 @@ describe("Layer 3 screens", () => {
     expect(document.body.textContent).toContain(
       "Reach this checkpoint on at least two branches before comparing.",
     );
+    expect(document.body.textContent).toContain("Escape does not dismiss it.");
     await unmount(component);
   });
 
@@ -1001,7 +1013,6 @@ describe("Layer 3 screens", () => {
     contenteditable.contentEditable = "true";
     main.append(contenteditable);
     for (const target of [
-      document.querySelector(".assistance-control summary")!,
       document.querySelector(".text-move input")!,
       document.querySelector("[data-board-input-grid]")!,
       contenteditable,
@@ -1012,16 +1023,38 @@ describe("Layer 3 screens", () => {
       expect(regionKeyboard?.(blocked)).toBe(false);
     }
     expect(onCompare).toHaveBeenCalledTimes(compareCalls);
-    key("ArrowLeft");
+    const ordinaryButton = document.querySelector<HTMLButtonElement>('button[aria-label="Keyboard shortcuts"]')!;
+    const compareFromButton = new KeyboardEvent("keydown", { key: "c", code: "KeyC", altKey: true, bubbles: true, cancelable: true });
+    Object.defineProperty(compareFromButton, "target", { value: ordinaryButton });
+    Object.defineProperty(compareFromButton, "composedPath", { value: () => [ordinaryButton, main] });
+    expect(regionKeyboard?.(compareFromButton)).toBe(true);
+    expect(onCompare).toHaveBeenCalledTimes(compareCalls + 1);
+
+    const timelineButton = document.querySelector<HTMLButtonElement>(".timeline [data-timeline-node][tabindex='0']")!;
+    timelineButton.focus();
+    const timelineArrow = new KeyboardEvent("keydown", { key: "ArrowLeft", bubbles: true, cancelable: true });
+    Object.defineProperty(timelineArrow, "target", { value: timelineButton });
+    Object.defineProperty(timelineArrow, "composedPath", { value: () => [timelineButton, timelineButton.closest(".timeline")!, main] });
+    expect(regionKeyboard?.(timelineArrow)).toBe(true);
     await tick();
     expect(document.body.textContent).toContain("Preview");
-    key(" ");
+    expect(document.activeElement).toBe(document.querySelector(".timeline [data-timeline-node][tabindex='0']"));
+    expect(document.querySelectorAll(".timeline [data-timeline-node][tabindex='0']")).toHaveLength(1);
+
+    const nativeSpace = new KeyboardEvent("keydown", { key: " ", bubbles: true, cancelable: true });
+    Object.defineProperty(nativeSpace, "target", { value: ordinaryButton });
+    Object.defineProperty(nativeSpace, "composedPath", { value: () => [ordinaryButton, main] });
+    expect(regionKeyboard?.(nativeSpace)).toBe(false);
+    main.focus(); key(" ");
     await tick();
     expect(
       document.querySelector<HTMLButtonElement>('[aria-pressed="true"]'),
     ).not.toBeNull();
     key("e");
     expect(onExport).toHaveBeenCalledOnce();
+
+    ordinaryButton.focus(); key("Escape"); await tick();
+    expect(document.activeElement).toBe(main);
 
     key("?");
     await tick();

@@ -62,17 +62,21 @@
     {
       "id": "A11-a12",
       "sourceState": "queued",
-      "state": "queued",
+      "state": "completed",
       "capability": "accessibility",
       "owner": "client-platform",
-      "assignment": "capability:accessibility",
+      "assignment": "closed",
       "sourceDocument": "ux-accessibility-and-mobile.md",
       "sourceSection": "§3.2 s3-c1…c9",
       "sourceHeading": "Accessibility and small screens — `ux-accessibility-and-mobile.md`",
       "summary": "The nine shortcut defects individually: all nine suppressed from the board grid with only an undocumented double-Escape out; no key returns focus to a region; arrow stepping dead **inside** the timeline; Space toggles replay except on any button; Alt+C has a second undocumented guard; the `g` chord is live inside the grid and swallows the next keystroke for 1.2s; the checkpoint sheet swallows Escape silently; the timeline puts a non-interactive section in tab order (40-ply run = 40+ consecutive stops)",
       "legacyRoute": "wave3 #6",
       "note": "[[D1492]] names the class; the nine are individually unqueued",
-      "sourceDigest": "sha256:0e80d3421b69b5b094acc78ae5941fc139ff735e8d9fb020e78fcc4c166b78aa"
+      "sourceDigest": "sha256:0e80d3421b69b5b094acc78ae5941fc139ff735e8d9fb020e78fcc4c166b78aa",
+      "completion": {
+        "completedOn": "2026-08-26",
+        "evidence": "scoped shortcut ownership preserves editing/board/native-Space behavior, Escape returns to the drill region, timeline arrows work on a single roving ply stop, board g cannot arm shell navigation, and checkpoint Escape is explicitly non-dismissible"
+      }
     },
     {
       "id": "A11-a13",
@@ -455,16 +459,20 @@
     {
       "id": "A11-a5",
       "sourceState": "queued",
-      "state": "queued",
+      "state": "completed",
       "capability": "accessibility",
       "owner": "client-platform",
-      "assignment": "capability:accessibility",
+      "assignment": "closed",
       "sourceDocument": "ux-accessibility-and-mobile.md",
       "sourceSection": "§4 d5",
       "sourceHeading": "Accessibility and small screens — `ux-accessibility-and-mobile.md`",
       "summary": "Route changes move no focus and announce nothing",
       "legacyRoute": "wave3 #7",
-      "sourceDigest": "sha256:c45611854cb07e77678f869922af7c16d4a716e48a45c0961506b6445c10a142"
+      "sourceDigest": "sha256:c45611854cb07e77678f869922af7c16d4a716e48a45c0961506b6445c10a142",
+      "completion": {
+        "completedOn": "2026-08-26",
+        "evidence": "every post-initial route load focuses its rendered h1 after asynchronous route data settles; unit and real-browser navigation fixtures"
+      }
     },
     {
       "id": "A11-a6",
@@ -488,16 +496,20 @@
     {
       "id": "A11-a7",
       "sourceState": "queued",
-      "state": "queued",
+      "state": "completed",
       "capability": "accessibility",
       "owner": "client-platform",
-      "assignment": "capability:accessibility",
+      "assignment": "closed",
       "sourceDocument": "ux-accessibility-and-mobile.md",
       "sourceSection": "§4 d7",
       "sourceHeading": "Accessibility and small screens — `ux-accessibility-and-mobile.md`",
       "summary": "`ShapePanel` is an overlay with no dialog role, no focus move, no restore and no Escape",
       "legacyRoute": "wave3 #7",
-      "sourceDigest": "sha256:908e675fdde5d2380b1b8cc685c06c67685688c589ffae04c06194ef650a53e6"
+      "sourceDigest": "sha256:908e675fdde5d2380b1b8cc685c06c67685688c589ffae04c06194ef650a53e6",
+      "completion": {
+        "completedOn": "2026-08-26",
+        "evidence": "ShapePanel is a labelled modal dialog, focuses its heading, closes on Escape and restores the exact timeline marker; component and browser fixtures"
+      }
     },
     {
       "id": "A11-a8",
@@ -521,17 +533,21 @@
     {
       "id": "A11-a9",
       "sourceState": "queued",
-      "state": "queued",
+      "state": "completed",
       "capability": "accessibility",
       "owner": "client-platform",
-      "assignment": "capability:accessibility",
+      "assignment": "closed",
       "sourceDocument": "ux-accessibility-and-mobile.md",
       "sourceSection": "§4 d10",
       "sourceHeading": "Accessibility and small screens — `ux-accessibility-and-mobile.md`",
       "summary": "Keyboard hints live inside accessible names — *\"Fork B\"*, *\"Replay Space\"*, *\"Export E\"*",
       "legacyRoute": "wave3 #7 / lane A7",
       "note": "proposed as **D494** in the lane and never ledgered",
-      "sourceDigest": "sha256:52cb64a71cea8ea2aca6c2fca182f2709c57cd02e69cb6dcc104eb98c45dfc9c"
+      "sourceDigest": "sha256:52cb64a71cea8ea2aca6c2fca182f2709c57cd02e69cb6dcc104eb98c45dfc9c",
+      "completion": {
+        "completedOn": "2026-08-26",
+        "evidence": "Fork, Compare, Replay/Pause, Export and Rewind retain visible shortcut badges while exposing action-only accessible names"
+      }
     },
     {
       "id": "A11-b1",

@@ -54,7 +54,10 @@ function interactive(target: Node | null): boolean {
     target instanceof HTMLInputElement ||
     target instanceof HTMLTextAreaElement ||
     target instanceof HTMLSelectElement ||
-    (target instanceof HTMLElement && target.isContentEditable)
+    (target instanceof HTMLElement && (
+      target.isContentEditable ||
+      target.closest("[data-board-input-grid]") !== null
+    ))
   );
 }
 
