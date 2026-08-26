@@ -4,10 +4,12 @@ ifneq ($(wildcard /opt/homebrew/opt/node@24/bin/node),)
 export PATH := /opt/homebrew/opt/node@24/bin:$(PATH)
 endif
 
+CI_NODE := $(if $(wildcard /opt/homebrew/opt/node@24/bin/node),/opt/homebrew/opt/node@24/bin/node,node)
+
 SF_CMD ?= $(if $(wildcard /opt/homebrew/bin/stockfish),/opt/homebrew/bin/stockfish,$(shell command -v stockfish 2>/dev/null))
 export SF_CMD
 
-.PHONY: setup check typecheck test test-software test-content test-tier-check docs-check staged-process-contracts-test test-browser test-browser-smoke test-browser-content test-browser-matrix test-browser-ci ci-local schema-check register-check status-parity work-index work-item-check roadmap-receipt roadmap-check intent-parity evidence-manifest-check semantic-evidence-check opening-catalogue opening-catalogue-check account-data-lifecycle-check learner-rating-bracket learner-rating-bracket-check learner-rating-isolation-check graduation-plan graduation-plan-check tactical-collector-measurement breadth-collector-measurement build verify-software verify-governance verify-content verify pack-check shape-check expression-census graduation-report graduation-report-update graduation-clear pack-preview source-fetch candidate-emit candidate-attach sourcing-check verify-draft tablebase-walk engine-walk up up-engines down
+.PHONY: setup check typecheck test test-software test-performance test-content test-tier-check docs-check staged-process-contracts-test test-browser test-browser-smoke test-browser-content test-browser-matrix test-browser-ci ci-local schema-check register-check status-parity work-index work-item-check roadmap-receipt roadmap-check intent-parity evidence-manifest-check semantic-evidence-check opening-catalogue opening-catalogue-check account-data-lifecycle-check learner-rating-bracket learner-rating-bracket-check learner-rating-isolation-check graduation-plan graduation-plan-check tactical-collector-measurement breadth-collector-measurement build verify-software verify-governance verify-content verify pack-check shape-check expression-census graduation-report graduation-report-update graduation-clear pack-preview source-fetch candidate-emit candidate-attach sourcing-check verify-draft tablebase-walk engine-walk up up-engines down
 
 setup:
 	pnpm install --frozen-lockfile
@@ -22,6 +24,9 @@ test:
 
 test-software:
 	pnpm test:software
+
+test-performance:
+	pnpm test:performance
 
 test-content:
 	pnpm test:content
@@ -52,7 +57,7 @@ test-browser-matrix:
 test-browser-ci: test-browser-smoke test-browser-content test-browser-matrix
 
 ci-local:
-	node tools/ci-local.mjs
+	$(CI_NODE) tools/ci-local.mjs
 
 schema-check:
 	pnpm schema:check
@@ -129,7 +134,7 @@ breadth-collector-measurement:
 build:
 	pnpm build
 
-verify-software: typecheck test-software schema-check evidence-manifest-check semantic-evidence-check opening-catalogue-check account-data-lifecycle-check learner-rating-bracket-check learner-rating-isolation-check
+verify-software: typecheck test-software test-performance schema-check evidence-manifest-check semantic-evidence-check opening-catalogue-check account-data-lifecycle-check learner-rating-bracket-check learner-rating-isolation-check
 
 verify-governance: register-check status-parity work-index work-item-check roadmap-check intent-parity test-tier-check docs-check staged-process-contracts-test
 

@@ -4,6 +4,7 @@ import test from "node:test";
 import {
   REQUIRED_NODE_MAJOR,
   REQUIRED_PNPM_VERSION,
+  ciEnvironment,
   preflightFailures,
 } from "./ci-local.mjs";
 
@@ -33,5 +34,12 @@ test("toolchain and required service drift are all refused", () => {
       "SF_CMD must name an executable Stockfish binary, as it does in CI",
       "Docker Compose must be available because schema verification renders every deployment profile",
     ],
+  );
+});
+
+test("child commands inherit the Node executable that launched CI parity", () => {
+  assert.deepEqual(
+    ciEnvironment({ PATH: "/usr/bin:/bin", SENTINEL: "kept" }, "/opt/node24/bin/node"),
+    { PATH: "/opt/node24/bin:/usr/bin:/bin", SENTINEL: "kept" },
   );
 });

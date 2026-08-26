@@ -127,6 +127,17 @@ if (!verifyDependencies.ruleFound || verifyDependencies.missing.length > 0) {
   );
 }
 
+const softwareDependencies = missingMakeDependencies(makefile, "verify-software", ["test-performance"]);
+if (!softwareDependencies.ruleFound || softwareDependencies.missing.length > 0) {
+  failures.push("Makefile: verify-software must include the isolated performance tier");
+}
+
+const softwareConfig = await readText("vitest.software.config.ts");
+const performanceConfig = await readText("vitest.performance.config.ts");
+if (!softwareConfig.includes("...PERFORMANCE_CONTRACT_TESTS") || !performanceConfig.includes("include: [...PERFORMANCE_CONTRACT_TESTS]")) {
+  failures.push("test tiers: performance contracts must be excluded from generic software and included by the isolated config");
+}
+
 const workflow = await readText(".github/workflows/verify.yml");
 const missingVerifyTiers = missingRequiredText(workflow, [
   "make verify-software",
@@ -155,6 +166,9 @@ if (!lefthook.includes("run: node tools/staged-process-contracts.mjs")) {
 const ciLocal = await readText("tools/ci-local.mjs");
 if (!ciLocal.includes('run("make", ["verify"]') || !ciLocal.includes('run("make", ["test-browser-ci"]')) {
   failures.push("local CI parity: expected make verify followed by make test-browser-ci");
+}
+if (!makefile.includes("$(CI_NODE) tools/ci-local.mjs") || !ciLocal.includes("const environment = ciEnvironment()")) {
+  failures.push("local CI parity: pinned Node must launch the wrapper and all of its child commands");
 }
 
 const workspace = await readText("pnpm-workspace.yaml");

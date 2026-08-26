@@ -16,3 +16,7 @@ export const CONTENT_CONTRACT_TESTS = Object.freeze([
   "apps/server/src/validator-integrity.test.ts",
   "packages/schema/src/drill-pack.test.ts",
 ]);
+
+export const PERFORMANCE_CONTRACT_TESTS = Object.freeze([
+  "apps/server/src/opening-catalogue-performance.test.ts",
+]);

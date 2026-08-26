@@ -16,3 +16,14 @@ test("a test that reads the real corpus cannot silently enter the software tier"
     "real-content test is not assigned to the content tier: apps/example/leak.test.ts",
   ]);
 });
+
+test("a named performance test cannot silently enter the generic software pool", (t) => {
+  const root = mkdtempSync(join(tmpdir(), "tabiya-test-tier-"));
+  t.after(() => rmSync(root, { recursive: true }));
+  mkdirSync(join(root, "apps/example"), { recursive: true });
+  mkdirSync(join(root, "packages/example"), { recursive: true });
+  writeFileSync(join(root, "apps/example/lookup-performance.test.ts"), "performance.now()\n");
+  assert.deepEqual(validateTestTiers(root).filter((error) => error.includes("lookup-performance")), [
+    "performance test is not assigned to the performance tier: apps/example/lookup-performance.test.ts",
+  ]);
+});

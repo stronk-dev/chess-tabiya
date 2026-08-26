@@ -9124,3 +9124,24 @@ rows / 968 open / zero unrouted; 569 registered work items), real-content compat
 browser smoke (24 passed / one optional skipped), real-content browser integration (4/4), and the
 responsive/accessibility interaction matrix (7/7). These are verification receipts for the
 checkpoint, not a claim that D1448's clean committed-byte `make ci-local` discharge is complete.
+
+## 2026-08-26 — Local CI entrypoint and performance tier repaired (D1800/D1801)
+
+The first full `make ci-local` attempt after D1740 refused under ambient Node 26 even though the
+repository's Node 24 executable was installed. The Make entrypoint now invokes the pinned
+executable directly, and the wrapper prepends that executable's directory to every pnpm and Make
+child environment. A unit fixture and scaffold contract refuse either half disappearing. The
+ordinary command now needs no shell prefix and still installs no pre-push hook.
+
+That repair exposed a second false signal: the unchanged opening-catalogue 50-microsecond p95
+contract passed under pinned Node 24 alone but measured 102.72 microseconds while sharing Vitest's
+pool with 167 unrelated files. It now runs as one required, single-worker performance tier after
+the 1,025 generic software tests. Test-tier and scaffold checks refuse undeclared performance
+files, re-entry into the generic pool, or removal from `verify-software`.
+
+The final ordinary `make ci-local` reached `local CI parity PASS`: Node 24, pnpm 11.18.0, 1,025
+generic software tests, one isolated performance contract at the unchanged ceiling, all
+type/build/schema/evidence/governance checks, 166 real-content tests, 24 browser smoke tests (one
+optional Maia test skipped), four browser content tests and seven responsive/accessibility matrix
+tests. D1448 remains open pending a committed-byte or GitHub-green receipt rather than being
+closed from an uncommitted working-tree run.
