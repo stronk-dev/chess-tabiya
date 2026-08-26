@@ -162,6 +162,14 @@ identity), exact Maia history/request keys, sealed threat/exchange joins, weakes
 inherited provider latency, same-exchange engine generation and bounded cancellation. The shared
 provider layer is a prerequisite for Review, candidate scoring and evidence-aware bots rather than
 private infrastructure owned by this one target family.
+
+The same layer now owns node-free live Syzygy position receipts. [[D1699]] closes Wave C's final
+promotion pair: geometry derives from complete declared pawn contacts; outcome joins exact legal
+moves to same-FEN recorded-or-live tablebase evidence. [[D1700]] corrects the latency repair itself:
+producer-wide metadata cannot describe a producer mixing local geometry with optional-provider
+outcome, so F1 must compile availability/latency per projection and derivation member. Six Node-24
+arms pass; the semantic RFC needs author amendment/review and the provider dependency before it can
+truthfully move 12/14 to 14/14.
 The variant foundation now has an executable scope receipt rather than the earlier textual count:
 [[D1683]] measures 159 production calls across 32 files and separates nine rules-aware play
 authorities from 23 standard-only/evidence readers that must be capability-gated. Tier-2 support

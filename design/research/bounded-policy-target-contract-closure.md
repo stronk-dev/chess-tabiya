@@ -43,8 +43,9 @@ The build order is therefore: `[M]`
 
 1. **Exact target derivation:** registered threat + registered legal exchange + complete exact legal
    move map produce named target, immediate result and bounded-return result. Local and provider-free.
-2. **Provider exchange receipts:** generic Stockfish legal-root and Maia policy-page operations,
-   same-exchange actual identity, complete request keys, bounded scheduling and truthful latency.
+2. **Provider exchange receipts:** generic Stockfish legal-root, Maia policy-page and Syzygy
+   position-result operations, same-exchange/request identity, complete request keys, bounded
+   scheduling and truthful per-projection execution metadata.
 3. **Target-policy composition:** joins those raw records to the sealed exact target and publishes
    the two target-specific policy readings, still inspector-only until a module selects them.
 
@@ -213,10 +214,14 @@ census and correct every current false confidence. Weakening the check to keep t
 green is forbidden. `[M]`
 
 Latency has the parallel defect. `producer()` maps availability to latency, and
-`derived.grade@1` is currently `local/sync` despite a live Stockfish derivation input. Derived
-latency must be explicit and no faster than the slowest admitted input member: `sync < interactive
-< background < offline`. The harness reproduces `derived.grade: sync` and the required inherited
-`interactive` result. `[V]`
+`derived.grade@1` is currently `local/sync` despite a live Stockfish derivation input. The later
+promotion-race closure ([[D1700]]) proves a producer-wide replacement is also wrong: one derived
+producer may contain local outputs and an `anyOf` projection with recorded/sync and
+provider/interactive members. F1 must compile effective latency and source requirements per
+projection/member, retaining the producer scalar only as its own-operation default. If that compiler
+work is declined, provider-backed outputs require separate producer ids. The harness reproduces
+`derived.grade: sync`; `promotion-race-contract-closure.md` supplies the mixed-producer falsifier.
+`[V]`
 
 ## 7. Provider work needs one shared bounded scheduler ([[D1655]], [[D1658]])
 
@@ -268,7 +273,8 @@ human.maia.policy_page@1 (one or more exact request receipts)
   -> derived.bounded_target.policy_bounds@1
 ```
 
-The two policy projections are `derived`, `reported`, provider-latency and inspector-only. Their
+The two policy projections are `derived`, `reported`, have provider-bearing effective dependency
+members, and are inspector-only. Their
 payloads retain the raw receipt(s), all exact target inputs, candidate/counterfactual pair identity,
 typed abstention and the D1023 denominator fields. No input is reconstructed from prose, node id or
 provider-owned count. `[M]`

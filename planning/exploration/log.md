@@ -8729,3 +8729,29 @@ Nine Node-24 arms pass in `tools/d1652-bounded-target-repair-harness/`. Dossier:
 `planning/bounded-policy-targets/author-repair-2026-08-26.md`. The RFC remains returned pending
 Claude author split/amendment and fresh review; no RFC, production, schema, content or UI byte
 changed.
+
+## 2026-08-26 — Wave-C promotion-race pair closed at the contract layer
+
+Re-derived the two held `semantic-collectors` ids ([[D963]]) against the shipped pawn evidence,
+promotion helpers, exact legal moves, recorded/live tablebase shapes and F1 compiler. The existing
+functions were not merely unregistered: raw-FEN geometry calls mutually contesting a2/b7 pawns an
+unopposed race although both are `passed:false`, and the tablebase helper accepts a result from a
+different same-piece-count position because its source carries no FEN ([[D1699]]).
+
+The compileable graph is now literal. Geometry derives from the sealed complete pawn-contact
+reading and retains opposing passed pawns with clear forward paths. Outcome also retains the exact
+legal-move map and uses `anyOf` over same-FEN recorded tablebase or a new node-free live Syzygy
+position receipt. Provider/outside/input absence stays unavailable and geometry never acquires
+outcome words.
+
+The pass corrected the preceding bounded-provider handoff too: `derived.pawn` mixes local geometry
+with `[sync, interactive]` outcome alternatives, so one producer-wide scalar cannot be made truthful
+by setting it to the slowest input ([[D1700]]). F1 needs projection/member-effective availability
+and latency, or separate provider-backed producer ids. The shared provider layer now covers
+Stockfish, Maia and Syzygy.
+
+Six Node-24 arms pass in `tools/d1699-promotion-race-contract-harness/`. Dossier:
+`design/research/promotion-race-contract-closure.md`; author handoff:
+`planning/evidence-foundation-ux/promotion-race-author-repair-2026-08-26.md`. No RFC, production,
+schema, content or UI byte changed; 13/14 waits on author amendment/review and 14/14 additionally
+waits on the shared provider/F1 prerequisite.

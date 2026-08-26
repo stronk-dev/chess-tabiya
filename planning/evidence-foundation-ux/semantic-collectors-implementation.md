@@ -63,13 +63,25 @@ guessing. Five-plus attacker moves remain a separately versioned authority.
 
 ### S4 — promotion-race description and exact outcome join
 
-- Reuse Tactical's per-pawn promotion geometry; do not register a duplicate.
-- Derive descriptive alternating-turn arrival order only under the pinned race convention.
-- Join Syzygy/tablebase result by the same participant/position identity where available.
+- Keep Tactical's one-sided per-pawn promotion-pressure projection; do not re-register it as a
+  complete two-runner population. Derive the race from the sealed complete pawn-contact reading,
+  retaining only exact opposing passed pawns with clear forward paths.
+- Derive descriptive alternating-turn arrival order only under the pinned race convention. The
+  permanent a2/b7 adjacent-file false positive must refuse; a2/h7 retains arrival plies 9/10.
+- Join Syzygy/tablebase result by byte-equal canonical full FEN. Both literal alternatives also
+  retain the exact legal-move map because immediate-promotion/check operands are not in geometry.
+- The live arm waits on shared `live.syzygy.position_result@1`; the recorded arm uses
+  `recorded.tablebase.result@1`. Do not create a pawn-specific source adapter.
+- Compile effective availability/latency per derivation member; `derived.pawn` contains both local
+  and optional-provider outputs and cannot truthfully have one effective scalar for every output.
 - Keep geometry and outcome as separate items; only the tablebase input may supply outcome words.
 
 Permanent boundaries: blocked/capturable path abstention, geometric-order inversion against
 Syzygy, outside-domain tablebase, and typed promotion-input abstention.
+
+Contract closure: `design/research/promotion-race-contract-closure.md` and
+`promotion-race-author-repair-2026-08-26.md` ([[D963]], [[D1699]], [[D1700]]). Author amendment and
+repeat review precede the held implementation.
 
 ### S5 — catalogue, fixtures, measurements, and closeout
 

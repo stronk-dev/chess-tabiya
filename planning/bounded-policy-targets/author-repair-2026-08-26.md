@@ -12,7 +12,7 @@ the provider dependency is buildable, then queue implementation.
 The current six-projection wave crosses three reusable layers. Rewrite it in this dependency order:
 
 1. exact local target derivation;
-2. shared provider exchange receipts/scheduler;
+2. shared Stockfish/Maia/Syzygy provider receipts, scheduler and per-projection execution metadata;
 3. target-policy composition.
 
 Preferred shape: narrow the current RFC to layer 1 and draft one shared provider-exchange RFC for
@@ -65,8 +65,13 @@ partially. Do not descope layers 2/3 from 1.0.
   limitations, dispositions and full literal derivation members.
 - Add weakest-input confidence validation to `compileEvidenceManifest`; run a current-manifest
   census and correct every exposed row. A `reported` input cannot derive `exact`.
-- Make producer latency explicit or derived from the slowest derivation input. Provider-backed
-  target policy and `derived.grade` cannot advertise `sync`.
+- Repair [[D1700]] rather than replacing one producer-wide lie with another: compile effective
+  availability/latency per projection and per `anyOf` member, retaining the producer scalar only as
+  own-operation metadata. The three local target outputs remain sync while the two policy outputs
+  retain provider-bearing dependency paths. `derived.grade` cannot advertise effective `sync`.
+- Include the node-free `live.syzygy.position_result@1` source required by the promotion-race
+  closure; the shared layer serves Stockfish, Maia and Syzygy rather than leaving pawn/Review code
+  to invent a private tablebase adapter.
 - Add able-to-fail negatives before claiming the declaration image compiles.
 
 ## 5. Make identity come from the exchange ([[D1647]])
@@ -101,7 +106,7 @@ load-tests deployment defaults; no hover or pointer event may enqueue work.
 - `derived.bounded_target.policy_bounds@1` derives from raw Maia page receipt(s) plus the same exact
   target facts. Retain request convention, band denominator, mass completeness and expansion
   parameters.
-- Both are `reported`, provider-latency and inspector-only.
+- Both are `reported`, carry provider-bearing effective dependency metadata and are inspector-only.
 - Preserve all three Maia absence arms, mass-less refusal, no summing of the two quantities, one
   band per request and the negative destination result.
 - Raw provider rows remain reusable by Review, candidate scoring and bots; target interpretations
