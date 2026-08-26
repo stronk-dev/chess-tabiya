@@ -323,8 +323,13 @@ builds:
 
 1. **A lens can be in your deck and never speak.** Q8 measured `outpost` — the feature the
    whole rung-0 argument rests on — firing on **2 of 515 positions**. Many of the 18 are
-   phase-locked (`king_opposition` never fires in an opening). The effective deck at any
-   given node is smaller than 34.
+   phase-concentrated in current authored content. **Correction 2026-08-26 ([[D1717]]):**
+   `king_opposition` is not phase-locked by its predicate. It appears only in endgames across the
+   fixed authored population (73/73 current observations), but fires 16 times outside endgame in
+   the imported population; all 17 imported observations have occupied intervening squares and are
+   rejected by the unobstructed successor boundary
+   (`design/research/king-opposition-semantic-boundary.md`). The effective deck at any given node
+   is smaller than 34, but phase relevance belongs to the consumer rather than the source fact.
 2. **Thirteen observations are unconditional** (12 piece counts + king distance, D78) —
    they fire in every position and carry no information. As deck items they are blanks, and
    a loadout design must exclude them or it is selling filler.

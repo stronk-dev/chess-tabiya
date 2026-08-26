@@ -246,6 +246,14 @@ The successor therefore needs thirteen declared root-subject/value grammars, sub
 distinct-move denominators and new `@2` identities upstream of validation and every learner
 consumer; filtering the `@1` retained events cannot repair the lost evidence.
 
+[[D1717]] closes the held opposition family's source boundary. The blocker-blind v1 convention
+emits 90 observations over the same fixed populations; only 61 have empty intervening squares and
+29 are blocked, including every imported occurrence. The authored corpus's all-endgame
+concentration is not a source phase rule. New reading/event/avoidance `@2` identities must encode
+unobstructed linear geometry, while modules decide endgame relevance. Because eight authored
+predicate leaves currently carry no convention version, the author repair also owes an explicit
+drill-pack/shape grammar and deliberate content migration before validation or learner admission.
+
 ### 3. Arrival and the rehearsal loop
 
 <!-- roadmap-capability: rehearsal -->

@@ -8912,3 +8912,18 @@ state evaluation, subject-first distinct-move counting, literal played/alternati
 perspective without valence. `king_opposition` remains held on [[D1717]], and all avoidance remains
 research-only pending [[D1711]] validation plus [[D1710]] production emission. No production, RFC,
 schema, content, pack or learner-UX byte changed.
+
+## 2026-08-26 — King-opposition source boundary measured (D1717)
+
+Triangulated the mechanical definition against three instructional sources and executed the
+shipped predicate over 754 authored plus 579 imported decisions. The current blocker-blind
+convention emits 90 observations; 61 have an empty line between the kings and 29 have an occupied
+intervening square. Authored positions split 73 current / 61 unobstructed / 12 blocked; imported
+positions split 17 / 0 / 17. The authored corpus happens to concentrate opposition in endgames,
+but the false imported observations span opening, middlegame, endgame and unclear phases, so phase
+is consumer relevance rather than source truth.
+
+The successor handoff requires unobstructed reading/event/avoidance `@2` identities, an explicit
+authored-predicate convention, deliberate migration of eight leaves across two content documents,
+and D1711 executable validation before learner admission. The prior campaign research
+generalization was corrected. No production, RFC, schema, content, pack or learner-UX byte changed.

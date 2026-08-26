@@ -76,6 +76,15 @@ thirteen-row root-subject/outcome grammar and successor contract are in
 `avoidance-subject-author-repair-2026-08-26.md`. [[D1719]] proves the current receipt also discards
 same-move subjects before sealing, so `@1` cannot be repaired by filtering its retained events.
 
+[[D1717]] **completed the king-opposition semantic boundary on 2026-08-26**: the fixed populations
+contain 90 shipped observations, but only 61 have an empty line between the kings and 29 are
+blocked; imported positions are 17 current / 0 unobstructed / 17 blocked. Three instructional
+sources support unobstructed direct/distant linear geometry and no universal phase cutoff. The
+successor therefore needs new reading/event/avoidance `@2` identities plus an explicit authored
+predicate convention and deliberate migration of eight leaves in two content documents. Phase
+remains module relevance. The dossier and exact author handoff precede D1711 validation and D1718
+avoidance activation.
+
 **Deliverable 7 (owner questions) accumulates here** — nothing is silently chosen.
 **All four open questions RULED 2026-08-22 ([[D745]])**: space = classic zones + pawn control,
 `chess_tradition`; the negative reading faces learners post-commit/review with the denominator;

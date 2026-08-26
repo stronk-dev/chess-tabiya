@@ -1,0 +1,31 @@
+{
+  "schema": "tabiya.research.d1717-king-opposition.v1",
+  "populations": {
+    "authored": {
+      "decisions": 754,
+      "uniquePositions": 611,
+      "current": 73,
+      "unobstructed": 61,
+      "blocked": 12,
+      "phases": {
+        "opening": { "current": 0, "unobstructed": 0, "blocked": 0 },
+        "middlegame": { "current": 0, "unobstructed": 0, "blocked": 0 },
+        "endgame": { "current": 73, "unobstructed": 61, "blocked": 12 },
+        "unclear": { "current": 0, "unobstructed": 0, "blocked": 0 }
+      }
+    },
+    "imported": {
+      "decisions": 579,
+      "uniquePositions": 577,
+      "current": 17,
+      "unobstructed": 0,
+      "blocked": 17,
+      "phases": {
+        "opening": { "current": 1, "unobstructed": 0, "blocked": 1 },
+        "middlegame": { "current": 13, "unobstructed": 0, "blocked": 13 },
+        "endgame": { "current": 1, "unobstructed": 0, "blocked": 1 },
+        "unclear": { "current": 2, "unobstructed": 0, "blocked": 2 }
+      }
+    }
+  }
+}
