@@ -1,6 +1,13 @@
 # RFC: Bot policy
 
-- **Status:** implementing — 2026-08-23 composed-selection checkpoint. The pure server-side stack now reconstructs, guards/abstains, applies declared priors/traits, draws from the seed+history authority and emits the exact explainable record; provider permutations are byte-identical and executable fields are compiler-bound to their declared/digested parameters. The record is not yet attached to `OpponentSelection` or persisted: that remains the claimed 0.18/migration seam behind longitudinal-store. No production profile is registered: D969 still blocks the guard probe and D970 the literal band roster. **Accepted 2026-08-22 by claude as register owner on the buildability test.** *(Prior checkpoints: Stage-B candidate evidence; foundation/request seam; accepted; draft.)*
+- **Status:** draft — returned for the 2026-08-26 production-safety amendment. The accepted
+  compiler/sampler foundation remains installed, but the live input authority and route do not
+  satisfy the evidence they claim: guard losses and traits are caller fields, dependent traits can
+  run after guard abstention, and the browser still selects through `/select-move` then echoes raw
+  selection bytes into the run. No production profile may register until the sealed guard/trait
+  contract, server-owned atomic opponent operation, grounded card compiler and exact-route budget
+  below survive cross-review. Claims 0.18/migration remain held; no production/schema byte changes
+  in this author round. *(Prior checkpoints: implementing; accepted 2026-08-22; draft.)*
 - **Author:** claude (drafted on the D717 program routing, `planning/evidence-foundation-ux/plan.md`
   Phase 6; executes the completed dependency map
   `planning/platform-alignment/bot-policy/f8-dependency-map.md`)
@@ -65,12 +72,12 @@ version bump, two payloads; the register row's parenthetical gains that clause i
 register-touching commit (acceptance), stated here rather than edited now so the C3
 byte-join between this block and `rfc/README.md` stays intact. So: one run-schema lane,
 one stamp-only migration position, frozen literals per the migration-4/9 freeze lesson.
-The downstream seam of both widenings is verified empty at HEAD: no F1 manifest row
-declares the `opponent.move_selected` event payload shape, and no active draft consumes
-`OpponentSelection` by name — `longitudinal-store` ingests learner-actor evidence families
-only (its own grain rule: the opponent's move is never the owner's observation) and
-`learner-modules` names neither symbol — so the optional fields have no consumer to
-notify beyond the stamp itself. **Everything else is
+The downstream seam is now explicit rather than empty: `bot-roster.md` declares the instances and
+`opponent-experience.md` consumes the capability/card/identity projections, while neither claims a
+second copy of the persisted policy record. `longitudinal-store` still ingests learner-actor
+evidence only. The atomic operation's request/root/receipt fields are part of the same
+`OpponentSelection.policy` record and 0.18 lane; no additional shared-resource claim is introduced
+by the amendment. **Everything else is
 deliberately claim-free**: the policy/layer/profile definitions are **catalog-local
 versioned declarations, not a storage table** (§1 argues this — the [[D473]] decision the
 drafting order asked for); the three new evidence projections are additive `@1` identities
@@ -98,6 +105,14 @@ every candidate with the literal tactical/breadth collector ids once those RFCs 
 one registry, two consumers architecture ([[D551]]/[[D810]]/[[D893]]): bot policy and
 learner guidance consume the same registered projections, and neither owns or receives the
 other's prose. A bot policy is never a learner module.
+
+**2026-08-26 production-safety amendment.** The installed catalog and pure composer are not a
+production bot path. The amendment replaces three false authorities before any roster is allowed
+to register: a bare per-candidate loss becomes one sealed whole-candidate guard receipt; caller
+trait strings become a registered legal-board trait view; and the two-request browser round trip
+becomes one server-owned, run-bound select-and-append operation. It also replaces free behavior
+copy with a source-bearing card compiler and makes release-concurrency latency/calibration receipts
+completion obligations. The detailed clauses below are normative over the earlier checkpoints.
 
 ## Motivation
 
@@ -258,9 +273,10 @@ The argument, since the drafting order asked for one:
 Each **layer declaration** carries: stable `id@version`; kind (one of §2's seven); exact
 inputs (provider projections and/or registered evidence ids — literal ids, no forecasts);
 transform/mask parameters; abstention conditions and fallback behavior; whether it changes
-strength; its measured output metric with dossier citation; and a `disclosure` string (the
-profile-card sentence — mandatory for any layer that consults an engine, per the explicit
-information-advantage rule). Each **profile declaration** is a named composition: base
+strength; and its measured output metric with dossier source ids. It carries no caller-authored
+behavior sentence. A closed card renderer maps registered layer/measurement/absence identities to
+source-bearing statements; decorative identity is a separate closed owner-authored registry (§2.8,
+§7). Each **profile declaration** is a named composition: base
 model reference (engine id, modelId, band), sampler (`id@version`, temperature, top-p,
 completeness threshold), ordered layer references, presentation reference, and a compiled
 **profile digest**: RFC-8785 SHA-256 over the canonical composition, same `sha256:` grammar
@@ -306,38 +322,42 @@ repertoire; a root-conditioned book through ply 24 is an opening layer with expl
 fallthrough, not a general continuation policy."* Opening-book work remains sacrificial
 research under D560/Gate F (O8.3).
 
-**§2.4 `ErrorGuard`** — `guard.severe_error@1`: mask (zero and renormalize) every
-candidate whose fixed-bound Stockfish loss versus the best candidate in the same probe is
-≥ the declared threshold (default 250 cp, R11's measured value: removes all measured
-severe mass, −1.27 cp expected-loss shift, 100.2% explorer-match retention). Declared
-engine identity and search bound ride the record. **The guard is an explicit information
-advantage**: the layer declaration's `disclosure` string states the engine, bound and
-threshold, and the profile card renders it. The guarantee is stated at its actual
-strength: engine identity, search bound and threshold are **typed declaration fields**,
-and the compiler (§3) **fails a guard layer whose `disclosure` string does not embed each
-of those declared literals verbatim** — so an absent, empty, or vacuous disclosure
-("plays carefully") cannot carry a guard through compilation. What remains authored is
-only the prose around the literals, and A6's conformance fixture gates that; "a hidden
-guard cannot compile" is the honest form of the claim, and it is a compile error, not a
-review note. Abstention:
-engine unavailable → the guard records `abstained: "provider_unavailable"` and the base
-distribution passes through unmasked — recorded, never silent. If the guard masks the
-entire distribution (all candidates ≥ threshold — possible in lost positions), it
-abstains with `abstained: "empty_after_mask"` rather than selecting from nothing.
+**§2.4 `ErrorGuard`** — `guard.severe_error@1` consumes exactly one sealed
+`stockfish-guard@1` candidate-set receipt. The request binds root FEN, full-history digest, side to
+move, canonical exact candidate set, Stockfish 18, Threads 1, Hash 16, cleared game state,
+`MultiPV = candidateCount`, exact `searchmoves`, depth 8, root-side score perspective, final-only
+typed rows and elapsed time. Candidate loss is derived inside the receipt only; no production input
+admits `guardLossCp` or an equivalent caller number.
 
-**§2.5 `ControlledTrait[]`** — `trait.<name>@version`: a declared candidate classifier
-(pure move/board arithmetic in Stage A; registered evidence ids in Stage B) and a
-multiplier over the post-guard distribution. **Registration requires R11's predeclared
-trait gate, per trait**: ≥10-point declared-trait change, ≤35 cp expected-loss shift,
-≤1-point rise in ≥250 cp mass, ≥90% relative explorer-match retention — measured, cited.
-v1 registers exactly one: `trait.pawn_preference@1` (pawn ×4 after guard; §0's numbers).
-Forcing ×3 and quiet ×3 are the **permanent negative fixtures**: the catalog test
-attempts to register each and must be refused (criterion A7). An **error model shaped by
-salience is folklore until [[D815]]'s measurement lands** — the salience hierarchy
-(threat-just-created, attacker-just-moved) has no empirical paper behind it, current
-`structuralDelta` cannot establish the threat relation, and D825 removed recorded salience
-from the Wave-A payload; no salience-shaped layer may register until that experiment
-passes. This RFC says so rather than approximating (Discharges D2).
+The receipt compiler and consumer abstain the **whole guard** on provider unavailability, the
+500-ms guard opportunity deadline, candidate-set mismatch, illegal/extra/duplicate/missing rows,
+bounded rows, mixed cp/mate domains, an all-mate/non-cp domain, a forged seal, or root/history
+mismatch. `empty_after_mask` is also a whole-guard abstention. Every abstention passes the unchanged
+normalized Maia distribution onward and is recorded. On one exact cp domain, the guard masks every
+candidate whose `bestCp - candidateCp` is at least 250 cp. The depth-8 population measured 100%
+severe-mass removal, 1.36 cp expected-loss strengthening and 100.21% explorer-match retention.
+
+The guard is an explicit information advantage, but disclosure is compiled rather than authored:
+the card renderer maps the registered guard/request/measurement ids to engine, depth, threshold,
+abstention and scope statements (§7). A free `disclosure` sentence is not an authority and cannot
+enter the card.
+
+**§2.5 `ControlledTrait[]`** — `trait.<name>@version` references a closed versioned classifier id
+and a measured multiplier. Stage A's registry contains exactly `pawn_move@1 → pawn_move`; the
+classifier accepts only `(root position, exact legal move set)`, canonicalizes through the runtime
+legal-board boundary and returns a sealed trait view. Ordinary pawn moves, captures and promotions
+are positives; castling and non-pawn moves are hard negatives. Caller-provided `traits: string[]`
+and free classifier strings are not production inputs. The compiler asserts set-equality between
+registered classifier outputs and catalogued trait values and refuses an unregistered classifier.
+
+Registration still requires R11's predeclared trait gate per trait: ≥10-point declared-trait
+change, ≤35 cp expected-loss shift, ≤1-point rise in ≥250 cp mass, and ≥90% relative explorer-match
+retention. v1 registers exactly `trait.pawn_preference@1` (pawn ×4, +12.28 percentage points at
+depth 8) and declares `dependsOn: "error_guard"`. It runs only when that guard applied. Any guard
+abstention records a dependent-trait abstention and preserves the unchanged Maia distribution;
+there is no unguarded pawn-forward fallback. Forcing ×3 and quiet ×3 remain permanent negative
+fixtures. Salience-shaped traits remain blocked on [[D815]] rather than approximated (Discharges
+D2).
 
 **§2.6 `MemoryPolicy`** — interface reserved, **off**; the type exists so the composition
 grammar is closed, and no instance can register (a registration attempt is a negative
@@ -354,11 +374,11 @@ resistance measurement already published (`HUMAN_COMMON_RESISTANCE_PROFILE`,
 the layer's effect is unmeasured — the R11 population stops at ply 20, so even the 250 cp
 guard's endgame effect is a stated unknown on the card, not a claim.
 
-**§2.8 `PresentationPersona`** — name/art/voice/bio. Reads the policy declaration; **can
-never alter moves** (O8.1). Voice prose is presentation-tier under law 8 and the R5
-renderer rules (deterministic fallback, conformance gating); it may assert only traits
-from the profile's controlled list, must label observed traits as observed, and may not
-use the refused vocabulary (O8.2's list) at all in v1.
+**§2.8 `PresentationPersona`** — a closed owner-authored identity asset: name, avatar and
+chess-neutral decorative tagline. It can never alter moves and is excluded from family-policy
+equality. It supplies no “how this opponent plays” prose; every chess-bearing card statement comes
+from §7's compiler. Observed-trait narration is a later, separately grounded projection and cannot
+be smuggled into this display registry.
 
 ### §3 — The compiler
 
@@ -366,10 +386,12 @@ One compilation path, from the dependency map §3 verbatim:
 
 ```text
 admitted provider candidate set
+  → sealed stockfish-guard@1 whole-set receipt                                         [guarded families]
+  → sealed registered legal-board trait view                                           [trait families]
   → candidate evidence adapter (same registered collectors, evaluated on each child)   [Stage B]
   → optional declared repertoire prior                                                 [interface only]
   → optional declared error guard
-  → zero-or-more measured trait transforms
+  → zero-or-more measured trait transforms whose declared dependencies applied
   → seeded sampler over the resulting complete distribution
   → typed selection derivation + persisted opponent.move_selected
 ```
@@ -377,8 +399,9 @@ admitted provider candidate set
 Compile-time failures (each a fixture): two layers claiming the same authority (two
 guards; two samplers; a trait and a guard both declaring the mask effect on the same
 basis); a transform requiring a complete vector composed with a provider window that can
-cap (the profile must then declare the degraded path); a guard without disclosure (§2.4);
-a trait without a cited passing measurement (§2.5); any layer with a delay effect (§2.7);
+cap (the profile must then declare the degraded path); a guard without the registered
+`stockfish-guard@1` request identity; a trait without a registered classifier, a cited passing
+measurement or its required guard dependency (§2.5); any layer with a delay effect (§2.7);
 a `MemoryPolicy` instance (§2.6); **any layer declaring a learner-derived input** (§8's
 wall — the input vocabulary is closed to provider projections and registered
 position-evidence ids, and learner history, style vectors, ratings, and run records of
@@ -390,7 +413,9 @@ and passed in as a bare constant is inadmissible the moment its citation is chec
 per-learner number has no population dossier to cite. A9's census inspects parameter
 citations, not only input ids.
 A layer may abstain without erasing the base distribution (O8.1); every abstention is
-recorded in §6's record with its reason.
+recorded in §6's record with its reason. The production composer accepts the Maia vector plus sealed
+receipt/view types only. A structurally similar plain object, bare loss number or trait string fails
+at the runtime seal boundary, not merely in TypeScript.
 
 **Identity discipline** (dependency map §3): the request's existing `policyConfigDigest`
 is the run session digest and **is not relabeled** as the stack identity. The run carries
@@ -399,44 +424,45 @@ decision.
 
 ### §4 — The selector at runtime
 
-**§4.1 Request seam ([[D821]]).** `SelectorPolicy` gains one optional field:
+**§4.1 Run identity and the only production operation ([[D821]]/[[D1605]]).**
+`RunOpponentPolicy` gains one optional exact profile reference:
 
 ```ts
 readonly profile?: { readonly id: string; readonly version: number; readonly digest: string };
 ```
 
-`parseSelectMoveRequest` widens its closed field list (`opponent-selector.ts:159-163`) by
-exactly `profile` and keeps rejecting unknown fields. Rules: `profile` is valid only with
-`mode: "human_common"` in v1 (other modes with a profile → `INVALID_REQUEST`); `profile`
-is **mutually exclusive** with `targetElo`, `temperature`, and `topP` — the profile is
-the single authority for band and sampler, so a request supplying both is refused rather
-than merged (two authorities is the D662/D679 shape this repo keeps paying for). The
-digest must match the catalog's compiled digest for `id@version`
-(mismatch → `INVALID_REQUEST`; this is how a stale client is caught at the boundary).
-`selectionCacheKey` (`:219`) extends with the profile triple.
+It is valid only with `human_common`, mutually exclusive with `targetElo`, `temperature` and
+`topP`, digest-validated against the compiled catalog at run creation, persisted in `run.started`,
+read exactly on resume and never upgraded to “latest.” Historical runs carry none and infer none.
+The existing `SelectorPolicy.profile` parser and profile-aware cache key remain useful internal
+validation seams, but public `/select-move` is **not** the production authority for profile play.
 
-**The run seam — the production caller, named.** Production selection requests are not
-composed ad hoc: the web client assembles every `SelectMoveRequest` from the run's
-persisted policy (`#selectionRequest`, `apps/web/src/lib/session-controller.ts`, reading
-`run.opponentPolicy`), so a profile that exists only in the selector request grammar is
-unreachable by any shipped caller — and a resumed run would not know which bot it was
-playing. `RunOpponentPolicy` (`packages/runtime/src/types.ts:69`) therefore gains the
-**same optional `profile` triple**, under exactly §4.1's rules (v1 `human_common` only;
-mutually exclusive with `targetElo`/`temperature`/`topP`; digest checked against the
-catalog **at run creation** through the existing `validateOpponentPolicy` path,
-`apps/server/src/service.ts:345` → `OpponentSelector.validatePolicy`, so a stale profile
-is refused before a run starts, not at its first opponent move). The client passes the
-triple through unchanged; the persisted `run.started` `opponentPolicy` payload widens by
-the same optional object under the same 0.18 stamp — absent on every historical run and
-**never inferred**, the same discipline as §6's record. This is §3's identity discipline
-made real rather than asserted: the run carries the session digest *and* the profile
-triple; the selection record carries what was actually applied per move. The roster
-*picker* UI (which surface offers which profile) is Just Play / `play-composition`
-surface work and is not this RFC's; the seam specified here ends at `run.opponentPolicy`.
+Production uses one server-owned atomic operation:
 
-**§4.2 The seeded draw ([[D823]], mechanism 1).** For a profile request the selector:
+```text
+POST /runs/:runId/opponent-ply
+{ expectedNodeId, requestId } + authenticated writer/lease identity
+```
+
+The browser supplies no FEN, history, seed, policy/profile, candidate evidence or selected move.
+Under one writer lease and cursor check, the server derives the current root/history/seed/exact
+profile digest; acquires the Maia vector; compiles the sealed guard receipt and registered trait
+view; composes and samples; appends the selected move plus policy record; and saves the run. A stale
+`expectedNodeId` refuses before selection is committed. `requestId` is idempotent: a retry of a
+successful operation returns the same committed event, while reuse against a different node or
+writer fails.
+
+This operation replaces the shipped two-step
+`POST /select-move → browser selection bytes → POST /runs/:id/moves` path for opponent play; that
+path remains only for explicitly separate evidence/diagnostic consumers until D233 removes or
+narrows it. Prediction, human-split and analysis consumers continue to read raw Maia and never
+inherit a persona transform. Grouped branches call the same server-owned core through their
+group-specific wrapper.
+
+**§4.2 The seeded draw ([[D823]], mechanism 1).** Inside the atomic operation the selector
 requests the full-width raw vector exactly as `#humanCommon` does today; verifies the
-completeness statistic against the profile threshold; runs §3's compiled pipeline over the
+completeness statistic against the profile threshold; acquires the guard sequentially over that
+exact admitted candidate set; runs §3's compiled pipeline over the
 reconstructed distribution; and draws with the **branch seed** via the existing
 deterministic primitives (`unitInterval`/`sampleWeighted`, `opponent-selector.ts:347-365`,
 keyed on the request's history hash). The recorded engine identity keeps Maia's identity
@@ -455,13 +481,19 @@ bit-stable scalar basis; both ship unchanged (§8). This RFC **inherits, rather 
 silently fixing,** the unseeded sample everywhere a profile does not own the draw — replay
 and the event log remain the repeatability instrument there, exactly as today.
 
-**§4.3 The degraded path is recorded, never silent.** If the raw vector fails the
-completeness threshold, or the model omits mass, the stack does not apply: the selector
-falls back to Maia's returned `bestmove` exactly as today, and the §6 record states
-`applied: false` with the reason and `seedHonored: false`. *"Falling back to Maia
-`bestmove` is legal only as a recorded degraded path that says the stack did not apply"*
-(dependency map §4). A degraded selection renders on the profile card as the base model,
-not the profile.
+**§4.3 Degradation and availability are recorded, never silent.** If the raw vector fails the
+completeness threshold, the base model fails, or the model omits mass, the composed stack does not
+apply: the selector falls back only through the already-declared Maia/base-mode behavior and §6
+records `applied: false`, the exact reason and `seedHonored: false`. If the optional guard is
+unavailable, incomplete, late or otherwise abstains, baseline human-policy play remains available;
+guarded and pawn-forward execute the unchanged Maia distribution with both guard and dependent
+trait abstentions recorded. Runtime fallback never silently advertises an applied guard.
+
+Release availability is stricter than one-move fallback: if the exact release-concurrency benchmark
+crosses §4.5's intervention boundary or cannot produce complete guard receipts, guarded and
+pawn-forward profiles are unavailable in the roster capability until a matching provider receipt
+clears. Baseline Play remains available. A card and in-run identity surface render the live
+availability/degraded state from the same record rather than rewriting it as persona behavior.
 
 **§4.4 Candidate generation.** The [[D810]] candidate set is the union the owner named —
 Maia policy mass ∪ book/explorer frequency ∪ engine multipv — realized in v1 as: the
@@ -471,6 +503,16 @@ registers) reweights within it; explorer frequency enters only through layers th
 declare it (none in v1 — the statistical book measured itself out, §2.3). The set is
 **complete or explicitly truncated** — completeness is a recorded statistic, and any
 transform requiring completeness abstains on a capped window (dependency map §2).
+
+**§4.5 Combined selection budget.** Acquisition is sequential because the measured guard set is
+the Maia-admitted vector. The predeclared release operating contract is: combined p95 ≤400 ms is
+healthy; p95 >500 ms, or any incomplete/late receipt in the fixed release benchmark, is an
+intervention; and the optional guard has a 500-ms opportunity deadline measured from selection
+start. The committed D969 population (p50 209.085, p95 286.796, max 499.1 ms on one host) justifies
+the depth-8 choice and these author thresholds, but is not a portable performance guarantee. The
+exact atomic production route must benchmark total/Maia/guard/composition durations under expected
+release concurrency before guarded profiles register. Deadline records `deadline_exceeded`; it
+never turns into an unguarded trait or hides baseline Play.
 
 ### §5 — Candidate featuring: Stage A without [[D813]], Stage B with it
 
@@ -531,6 +573,22 @@ readonly policy?: {
   readonly degradedReason?: string;
   readonly completeness: number;           // raw returned mass sum
   readonly seed: number;
+  readonly requestId: string;               // atomic-operation idempotency identity
+  readonly rootIdentity: string;            // binds active node/root/history receipt
+  readonly guardReceipt?: {
+    readonly requestProfileId: "stockfish-guard@1";
+    readonly engineId: string;
+    readonly candidateSetDigest: string;
+    readonly historyDigest: string;
+    readonly elapsedMs: number;
+    readonly outcome: "applied" | "abstained";
+    readonly reason?: string;
+  };
+  readonly traitView?: {
+    readonly registryVersion: 1;
+    readonly classifierIds: readonly string[];
+    readonly candidateSetDigest: string;
+  };
   readonly layers: readonly {
     readonly id: string;                   // "guard.severe_error@1", "trait.pawn_preference@1", …
     readonly action: "applied" | "abstained" | "fallthrough";
@@ -542,7 +600,7 @@ readonly policy?: {
     readonly rawMass?: number;
     readonly sampledMass?: number;         // after sampler reconstruction
     readonly finalMass?: number;           // after guard + traits, renormalized
-    readonly guardLossCp?: number;         // the guard's priced loss, when the guard ran
+    readonly guardLossCp?: number;         // derived from the sealed receipt, never caller input
     readonly features?: readonly {         // Stage B; each names its literal id
       readonly id: string;                 // e.g. "rules.tactic.event.fork_allowed@1"
       readonly value: string | number | boolean;
@@ -551,6 +609,10 @@ readonly policy?: {
   readonly chosenFinalMass?: number;
 };
 ```
+
+The persisted record is a projection of the sealed inputs, not the seals themselves. Its root,
+history and candidate-set digests must match the operation that appended it. The storage/parser
+surface accepts no independent `guardLossCp`, classifier or profile claim from the browser.
 
 **What this buys, and the law-8 line.** *"It missed your fork because the knight had just
 moved"* — or in v1's honest vocabulary, *"the fork candidate carried 0.03 of the policy's
@@ -572,15 +634,22 @@ This is also [[D708]]'s prerequisite paid forward: a future tournament envelope 
 
 ### §7 — Calibration is the acceptance gate for every strength label ([[D819]])
 
-**The label rule, normative: a bot's stated Elo is a measured claim with its measurement
-cited, or it is not stated.** Concretely: the profile card always shows the human-policy
-band, model identity, and active layers (O8.4); it shows a strength number **only** when a
-calibration record exists for that exact profile digest, and then always with its
-citation (harness, date, games, CI, time control). The calibrated value is stored
-separately from `targetElo` and **only the calibrated value may ever feed a rating
-update** ([[D344]], extended to profiles). A profile whose composition changes loses its
-calibration (the digest changed) until re-measured — *"a trait transform cannot inherit
-the base model's label by assumption"* (O8.4).
+**The label rule, normative: a bot's stated Elo is a measured claim with its measurement cited, or
+it is not stated.** A closed card compiler accepts only a compiled profile, the live provider/
+availability projection and an optional calibration receipt for that exact digest. It accepts no
+caller sentence or presentation `bio`. Registered renderers emit source-bearing statements for the
+Maia band/model, sampler, guard engine/depth/threshold and every abstention family, the pawn trait's
+guard dependency/multiplier/+12.28-point measurement, no book, no cross-game memory, endgame scope,
+clock/time-control scope, availability and calibration/absence. It never translates 250 cp into a
+motif such as “hanging piece,” never calls a Maia sample the plurality move, and never claims the
+guard always runs.
+
+The card shows a strength number **only** when a calibration record exists for that exact profile
+digest, and then always with its citation (harness, date, games, CI, time control). The calibrated
+value is stored separately from `targetElo` and **only the calibrated value may ever feed a rating
+update** ([[D344]], extended to profiles). A profile whose composition or identity changes loses
+its calibration until re-measured. Decorative name/avatar/tagline render in a separate slot and
+reach none of the behavior statements.
 
 **The ladder.** Reuse `tools/d333-band-outcome-harness/` (committed; reproduction per
 `design/research/maia-band-outcome-transfer.md` §Reproduction): paired openings, colour
@@ -620,8 +689,10 @@ norm is the product surface, not a footnote.
 `theory_strict`, `perfect_tablebase`, `practical_resistance`) keep their exact semantics;
 a profile is an optional refinement of `human_common` (§4.1). `availableModes` and mode
 validation are untouched; `/capabilities` gains `policyProfiles.human_common.profiles`:
-the registered profiles with id/version/digest, disclosure card, controlled-trait list,
-and calibration state (`calibrated` with citation | `uncalibrated`). The unimplemented
+the registered profiles with id/version/digest, grounded compiled card, controlled-trait list,
+live provider availability and calibration state (`calibrated` with citation | `uncalibrated`).
+The catalogue projection is server-authored and ordered; the client declares no parallel family
+enum. The unimplemented
 modes (`plan_defense`, `human_external`) stay declared-unimplemented.
 
 **Capability dispositions extend per the [[D370]] precedent — mode-scope, never
@@ -677,29 +748,32 @@ runtime selector, and does not reopen [[D817]].
 
 ### §10 — Implementation surface
 
-Unit: **production source file**; total: **11** (Stage A; Stage B adds one). Criterion A12
-counts the same unit.
+The production-boundary census is operational rather than a hand-counted file total. All twelve
+operations below must have one named non-test symbol and one positive/negative fixture; a parser or
+declaration does not count as consumption:
 
-| # | file | change |
+| # | operation | required production home |
 |---|---|---|
-| 1 | `apps/server/src/opponent-selector.ts` | request seam (§4.1), compiled-stack execution + seeded draw (§4.2), degraded path (§4.3), cache-key extension |
-| 2 | `apps/server/src/bot-policy-catalog.ts` (new) | layer/profile declarations, compiler, digests (§1–§3) |
-| 3 | `apps/server/src/capabilities.ts` | five disposition rows, `profiles` publication (§8) |
-| 4 | `packages/runtime/src/types.ts` | `OpponentSelection.policy` (§6) |
-| 5 | `packages/schema/src/index.ts` | `DRILL_RUN_SCHEMA_VERSION` `"0.17"` → `"0.18"` |
-| 6 | `apps/server/src/storage.ts` | the stamp-only migration at its claimed position (frozen literals; its number is assigned at landing as `STORAGE_VERSION + 1`, never printed in a draft — the register's position rule) |
-| 7 | `packages/runtime/src/evidence-catalog.ts` | the §5 projection ids; `opponent.selection` consumer row gains the new projections |
-| 8 | `apps/server/src/evidence-manifest.ts` | bindings for the new projections |
-| 9 | `apps/server/src/service.ts` | run-creation acceptance and digest validation of `opponentPolicy.profile` (§4.1 run seam; the `validateOpponentPolicy` pass-through) |
-| 10 | `apps/web/src/lib/api.ts` | client `SelectMoveRequest`/run-creation types gain the `profile` triple (§4.1) |
-| 11 | `apps/web/src/lib/session-controller.ts` | `#selectionRequest` passes `run.opponentPolicy.profile` through (§4.1; shared file with `assistance-control-wiring`, disjoint members — coordination named in the header) |
+| 1 | run create stores exact profile reference | run/session validation + run schema 0.18 |
+| 2 | resume resolves the same digest, never latest | run service/storage projection |
+| 3 | client invokes only run id/writer/expected node/request id | web API + session controller |
+| 4 | server derives FEN/history/seed/profile | `RunService` atomic opponent operation |
+| 5 | Maia returns the admitted human-policy vector | `OpponentSelector` internal acquisition |
+| 6 | `stockfish-guard@1` compiles a sealed receipt | supervised engine request + guard receipt module |
+| 7 | registered legal-board classifier compiles a sealed trait view | bot-trait registry/adapter |
+| 8 | non-test composer consumes both seals | selector/service composition path |
+| 9 | move and decision append atomically/idempotently | service/storage event append |
+| 10 | `OpponentSelection.policy` survives persistence/replay | runtime types/schema/migration |
+| 11 | roster capability reads compiled profile + provider state | server capability projection |
+| 12 | card projection reads the same profile/receipts | registered bot-card compiler |
 
-Named validation/docs sites that necessarily move (the [[D828]] lesson — named, not
-implicit, and not extra implementation homes): `apps/server/src/evidence-manifest-check.ts`
-(`:25` anchors `opponent.selection`), the capability/manifest test fixtures, the run-schema
-scaffold fixture (`packages/runtime/src/scaffold.test.ts:11` pins `"0.17"`), and
-`docs/bot-policy.md` (new) + `docs/engine-workers.md`. Stage B adds
-`apps/server/src/candidate-evidence.ts` (new; the D813 adapter).
+`apps/server/src/rest.ts` owns the run-bound route and must stop accepting selection bytes for this
+path. Public `/select-move` remains a separately dispositioned diagnostic/evidence route; it is not
+counted above. `packages/runtime/src/evidence-catalog.ts` and
+`apps/server/src/evidence-manifest.ts` carry §5's registered read-back projections. Named validation
+and docs sites include the capability/manifest fixtures, run-schema scaffold, provider-off/deadline
+fixtures, `docs/bot-policy.md`, `docs/engine-workers.md` and the full release journey. Stage B adds
+the D813 candidate-evidence adapter without widening the atomic authority.
 
 ## Deviations from design
 
@@ -713,76 +787,53 @@ this RFC proposes no design-doc text (law 5).
 Each criterion names its failure mode; none can pass while measuring nothing ([[D444]]/
 [[D451]] — the able-to-fail fixtures are part of the criterion).
 
-- **A1 — request seam.** `parseSelectMoveRequest` accepts a valid `profile` triple with
-  `human_common` and rejects: unknown fields (existing negative retained), `profile` with
-  any other mode, `profile` alongside `targetElo`/`temperature`/`topP`, and a digest that
-  does not match the catalog. The run seam round-trips: a position-session run created
-  with `opponentPolicy.profile` is refused at creation on a bad digest, persists the
-  triple in `run.started` when valid, and the client's next selection request carries it;
-  historical runs carry none and no code path infers one. *Fails if* the parser merges
-  instead of refusing (two authorities), or if a profile is acceptable in a selector
-  request but unreachable from the run that must send it.
-- **A2 — compiler refusals.** Fixtures for every §3 failure: duplicate authority, complete-
-  vector transform without a degraded declaration, undisclosed guard, unmeasured trait,
-  delay layer, memory instance, learner-derived input. Each fixture must fail compilation;
-  a green run with any fixture passing compilation fails the criterion. *Fails if* refusals
-  are review-notes rather than compile errors.
-- **A3 — by-record determinism.** Same (startFen, historyUci, seed, profile triple, model
-  identity) → byte-identical `OpponentSelection` including the `policy` record, across
-  process restarts; `seedHonored: true` on the composed path. *Fails if* any
-  basis-equal tie is broken by insertion order (the `neutralTiebreak` rule) or if two runs
-  diverge.
-- **A4 — sampler positive control.** The reconstruction layer, run over the committed R11
-  aggregates (`planning/platform-alignment/bot-policy/results.json` —
-  `summary.current_sample` is the captured production sample, `summary.production_sampler`
-  the reconstruction; the fixture reads the committed file, never numbers restated in a
-  test), reproduces expected loss within 0.5 cp and severe mass within 0.1 pp of the
-  captured production sample (the measured agreement is 0.27 cp / 0.03 pp; the bound
-  leaves working room without admitting the raw vector's 39 cp error). The able-to-fail
-  arm: perturbing T to 1.0 must break the bound. *Fails if* the control is asserted
-  against the reconstruction's own output rather than the captured sample.
-- **A5 — record round-trip and migration.** A composed selection's `policy` record
-  survives event-log persistence and replay byte-identically; the migration is stamp-only
-  with frozen literals; historical selections carry no `policy` and no code path infers
-  one (negative fixture: a pre-0.18 selection rendered through the new path shows the base
-  model, not a reconstructed profile). *Fails if* any historical row acquires a policy
-  record.
-- **A6 — disclosure is structural.** Every registered profile with a guard renders the
-  guard's engine/bound/threshold on its card from the layer's `disclosure` string; the
-  card's controlled-trait list is exactly the profile's registered traits. Negative
-  fixtures: a card asserting a trait absent from the composition must fail the conformance
-  test, and a guard whose `disclosure` omits any of its declared engine/bound/threshold
-  literals must fail compilation (§2.4). *Fails if* card text is hand-written prose beside
-  the declaration, or if the disclosure check accepts any non-empty string.
-- **A7 — trait gate enforcement.** `trait.pawn_preference@1` registers with its cited
-  measurements; registration attempts for forcing ×3 and quiet ×3 (the measured failures)
-  are refused by the catalog test. *Fails if* the gate checks presence of numbers rather
-  than the predeclared thresholds.
-- **A8 — degraded path.** With a provider capped below the completeness threshold, the
-  selection returns Maia `bestmove`, `policy.applied: false` with reason,
-  `seedHonored: false`, and the client surface shows base-model attribution. *Fails if*
-  the degraded selection is presented as the profile.
-- **A9 — the wall and the grading boundary.** A census/type fixture proves no selector or
-  catalog input names a learner-derived source; `capabilities.ts:124`'s refusal row is
-  byte-unchanged; grep-level census finds no multi-band Maia request path. *Fails
-  vacuously if* written as "no regression" — the fixture must construct a learner-input
-  layer and watch it refused (A2's seventh fixture is shared here).
-- **A10 — dispositions.** The five §8 rows land; `assertAdvertisedCapabilityDispositions`
-  and `assertRecordedReadingCapabilityDispositions` pass; every advertised engine option
-  still has a disposition. *Fails if* a new advertised option ships uncovered.
-- **A11 — calibration gate on labels.** An uncalibrated profile's card and `/capabilities`
-  entry carry no strength number (negative fixture); a calibrated one carries the figure
-  with citation and time control; changing any layer version flips the profile back to
-  `uncalibrated` (digest test). The calibration *run itself* is Discharges D3, not this
-  criterion — this criterion gates the **label plumbing** and is satisfiable at landing.
-  *Fails if* the criterion is read as requiring the ladder before merge (it must not be:
-  that reading makes it unsatisfiable pre-landing, the [[D473]] class).
-- **A12 — surface census.** Exactly the 11 Stage-A production files of §10 change for
-  Stage A (validation/docs sites excluded by name, per §10); the count is asserted in the
-  landing review against `git diff --stat`. *Fails if* a twelfth production home appears
-  unnamed.
-- **A13 — docs.** `docs/bot-policy.md` documents the stack, the record, the label rule,
-  and the degraded path in the landing commit. *Fails if* deferred.
+- **A1 — exact run identity.** Create rejects a bad digest or a profile combined with request
+  overrides; valid create/resume preserves the exact triple; historical runs infer none. *Fails if*
+  resume resolves latest or the browser can replace the profile per move.
+- **A2 — one atomic production route.** A non-test fixture executes create → server-derived Maia →
+  guard/trait → compose → append under one lease/cursor check. The browser request contains only
+  run/writer identity, expected node and request id. Stale-node, wrong-writer and reused-request/
+  different-node arms refuse; retry of a success returns the same event. *Fails if* `/select-move`
+  selection bytes cross the browser on the profile path or if the parser/catalog is the only caller.
+- **A3 — sealed guard authority.** Positive, provider-off, deadline, missing, duplicate,
+  mixed-domain, all-mate, bounded, wrong-history, wrong-root, candidate-set mismatch and forged-
+  receipt fixtures prove whole-guard behavior. No production type admits a bare loss. *Fails if* a
+  structurally matching plain object or one candidate annotation can apply the guard.
+- **A4 — registered trait authority and dependency.** `pawn_move@1` proves ordinary/capture/
+  promotion positives and castling/non-pawn negatives at the legal-board boundary. Caller strings,
+  illegal/duplicate candidates and unregistered classifiers fail. Guard success applies pawn ×4;
+  every guard abstention records trait abstention and returns mass byte-equal to base Maia. *Fails
+  if* an unguarded pawn-forward distribution can execute.
+- **A5 — compiler refusals.** Duplicate authority, incomplete vector without a degraded path,
+  unknown guard profile, unmeasured/unregistered/unguarded trait, delay, memory and learner-derived
+  inputs all fail compilation. Forcing ×3 and quiet ×3 remain measured negative registrations.
+- **A6 — by-record determinism.** Same run root/history/seed/profile/provider receipts produces a
+  byte-identical selection/decision across restarts; equal-mass ties use `neutralTiebreak` and the
+  composed path records `seedHonored: true`.
+- **A7 — sampler positive control.** The committed R11 captured production sample remains within
+  0.5 cp and 0.1 pp of reconstruction; T=1.0 breaks the bound. The fixture reads the artifact, not
+  restated expected numbers.
+- **A8 — atomic persistence and migration.** Move, policy decision, root/history/candidate digests,
+  layer actions and abstentions survive event-log replay byte-identically under run 0.18. A failed
+  append saves neither move nor decision; historical rows gain nothing.
+- **A9 — compiled grounded card.** Baseline/guard/pawn cards compile from registered layers,
+  measurements, abstentions, absence/scope and optional exact-digest calibration only. Wrong-digest
+  calibration, absent sources, malformed family composition and caller sentences fail. Decorative
+  identity reaches only the display slot. *Fails if* a word filter is the grounding mechanism.
+- **A10 — availability and degradation.** Provider-off/deadline/incomplete receipts keep baseline
+  Play available, make guarded/pawn profiles unavailable when the release receipt is red, and never
+  present an abstained guard as applied. Prediction/human-split paths remain raw Maia consumers.
+- **A11 — exact production budget.** The release operation benchmarks expected concurrency and
+  records total/Maia/guard/composition durations. Combined p95 ≤400 ms is healthy; p95 >500 ms or
+  any incomplete/late receipt is intervention. A 500-ms guard opportunity deadline abstains the
+  guard without failing baseline Play. *Fails if* D969's one-host maximum is relabeled a guarantee.
+- **A12 — operation census.** Every one of §10's twelve operations has a non-test symbol and the
+  positive route traverses all twelve; the nine currently absent operations must invert. A parser,
+  type or anchor without runtime consumption does not pass.
+- **A13 — wall/dispositions/docs.** Learner-derived inputs and multi-band persona queries remain
+  compile-refused; every advertised provider/profile state has a disposition; docs describe the
+  atomic route, seals, record, card, budget and degradation; the release journey exercises
+  choose → play → resume → rematch through normal Make/CI targets.
 
 ## Discharges
 
@@ -790,20 +841,19 @@ Each criterion names its failure mode; none can pass while measuring nothing ([[
 |---|---|---|---|---|
 | D1 | Stage B: the [[D813]] candidate-evidence adapter over the literal landed tactical/breadth ids — feature-weighted personas beyond the O8.2 roster are blocked until it lands | `planning/evidence-foundation-ux/plan.md` | the Stage-B landing commit | |
 | D2 | The [[D815]] salience measurement (human severe-error mass conditioned on exact threat-just-created / attacker-just-moved classes, behind tactical landing) — no salience-shaped layer may register before it passes; a failed measurement kills the family | claude | dossier in `design/research/` + ledger flip | |
-| D3 | The [[D819]] calibration run for the shipped roster: D333-harness ladder under [[D341]] seeding, ~500–800 games/arm, predeclared distribution bounds; profiles remain `uncalibrated` (A11) until it lands | claude | calibration dossier + the register/ledger flips | |
+| D3 | The replacement-preregistered exact-digest roster calibration: band-relative outcome/distribution, clock/time-control scope, severe-tail, trait observability, reproducibility and provider-off receipts; `uncalibrated` is legal registration but not 1.0 completion | claude | calibration dossier + exact profile digests + register/ledger flips | |
 | D4 | The human-scale anchor ruling (anchor accounts vs learner-derived Glicko vs stay band-relative) — a cost/policy decision; until ruled, no absolute human Elo is stated anywhere | OWNER | `planning/exploration/log.md` ruling entry | |
 | D5 | Owner-use roster validation via the retained 42-branch blind packet (O8.5) — validates or rejects profiles by use; cannot clear H5/C5 population claims | OWNER | `planning/platform-alignment/bot-policy/` + ledger | |
+| D6 | Exact atomic production route benchmark at release concurrency clears the 400/500-ms operating contract or returns the guarded families for revision | `bot-policy` | release receipt with image/profile digests and total/Maia/guard/composition distributions | |
 
 ## Open questions
 
 1. **The human-scale anchor** — carried as Discharges D4 (owner). Explicitly deferred; it
    does not block acceptance because §7's label rule makes the pre-anchor state honest
    rather than wrong.
-2. **Which bands the Human baseline exposes.** The measured ladder has ~five
-   learner-distinguishable rungs across a ~290-Elo real span. Proposal: expose the rung
-   set the D333 measurement distinguishes (not the raw 100-point grid, which is below
-   learner resolution per [[D336]]). To be settled at acceptance; either answer is
-   implementable.
+2. **Resolved by [[D1566]].** The roster exposes exactly the measured
+   `[1000, 1400, 1800, 2200]` bands crossed with three behavior families. These are model-band
+   identities, not human Elo labels.
 3. **Pack-side profile references** — explicitly deferred to a future RFC (it would claim
    a pack lane; packs keep `opponentPolicy` untouched here).
 4. **The endgame floor layer** (`guard.endgame_floor`) — named, unregistered, unmeasured;
@@ -838,3 +888,10 @@ as a named future measured layer (Open question 4).
   names the committed conformance artifact by path; the claims paragraph states the
   verified-empty downstream seam of the payload widenings and defers the register-row
   parenthetical to the next register-touching commit to preserve the C3 byte-join.
+- 2026-08-26: returned to draft for the production-safety amendment after D1601–D1609 were
+  re-derived at the live symbols. Replaced browser-authoritative profile selection with one atomic
+  run-bound opponent operation; replaced bare guard loss/trait strings with sealed whole-set and
+  legal-board authorities; made pawn weighting depend on guard success; pinned
+  `stockfish-guard@1`, the 400/500-ms operating contract and release benchmark; replaced free
+  behavior prose with a source-bearing card compiler; expanded calibration/observability
+  discharges. No profile, schema, migration or production byte changed in the author round.

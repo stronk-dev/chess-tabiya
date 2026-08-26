@@ -8625,3 +8625,28 @@ chrome independent of assistance ceilings.
 `rfc/opponent-experience.md` remains draft. D1610 (final twelve identities/art), D1611 (first-run
 default; RFC recommends baseline 1400) and independent cross-review block acceptance. The RFC
 claims no shared resource and no product/schema byte was changed.
+
+## 2026-08-26 — Bot policy and roster production-safety author amendment
+
+Folded the three measured D1601–D1609 repair handoffs into `bot-policy.md` and `bot-roster.md`.
+`bot-policy` returned from implementing to draft because the installed compiler is not a safe
+production path: the live composer still trusts bare loss/trait fields and the browser performs a
+run-unbound `/select-move` followed by an echoed selection append.
+
+The amended authority is one server-owned atomic opponent operation. It derives exact run root,
+history, seed and profile; consumes a sealed `stockfish-guard@1` whole-candidate receipt and a
+registered `pawn_move@1` legal-board view; makes pawn weighting depend on guard success; persists
+move and decision together under cursor/idempotency guards; and feeds capability/card projections
+from the same compiled profile. The release operating contract is p95 at or below 400 ms healthy,
+above 500 ms intervention, with a 500-ms optional-guard opportunity deadline and baseline Play
+preserved.
+
+The roster no longer compares centipawns with Elo or calls family strength-orthogonal. Band,
+family and display are separately declared; exact-digest calibration reports the actual family
+effect. Hand-written behavior copy is replaced by a closed source-bearing card compiler. All
+twelve profiles remain the 1.0 outcome; partial catalogue registration, permanent
+`uncalibrated`, placeholder identities and a hidden Maia-1500 default cannot count as completion.
+
+Both RFCs remain draft pending independent cross-review. D1610/D1611 remain owner decisions and
+the exact release-concurrency/calibration/observability receipts remain implementation discharges.
+No catalogue profile, schema, migration or production byte changed in this author round.
