@@ -8433,3 +8433,18 @@ Workflow origin remains a separate axis for [[D1680]] rather than being overload
 identity. Dossier: `design/research/variant-setup-identity.md`; instrument:
 `tools/d1675-setup-identity-harness/` (5/5 green). No production, schema, content,
 protected-design or concurrent Claude review/harness byte changed.
+
+## 2026-08-26 — D1678 run-evidence operation boundary measured
+
+AST-censused the run-derived evidence request surface instead of assuming the asynchronous queue
+was the boundary. There are 15 production calls: eight in `DrillRunService` and seven direct in
+REST, spanning queue jobs, selector/enumeration, tablebase, corpus and local evidence packets.
+`EvidenceJobInput`, `SelectMoveRequest` and `RunStart` all omit the measured rules/setup identity.
+
+[[D1686]] records the contract consequence: operation-set-equal capability compilation must cover
+all 15 calls, while provider internals and offline sourcing remain separately declared. [[D1685]]
+records the independent standard-chess defect found in the same pass: prediction selects from
+client-supplied start/history and persists mass/rank on the active node without a subject join.
+Dossier: `design/research/variant-evidence-operation-boundary.md`; instrument:
+`tools/d1678-evidence-operation-harness/` (3/3 green). No production, schema, content,
+protected-design or concurrent Claude review/harness byte changed.

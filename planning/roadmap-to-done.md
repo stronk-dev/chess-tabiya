@@ -149,6 +149,11 @@ The variant foundation now has an executable scope receipt rather than the earli
 authorities from 23 standard-only/evidence readers that must be capability-gated. Tier-2 support
 must land both halves together; making the branch legal while standard detectors still run is an
 evidence-contamination failure, not partial variant support.
+[[D1686]] measures the request side of that contamination boundary: run-derived evidence has 15
+producer calls, split 8 service / 7 direct REST. A queue guard cannot cover human split, corpus,
+voice packets or prediction; the operation population and the rules/setup receipt must be compiled
+together. [[D1685]] also blocks prediction independently because its stored Maia mass/rank is not
+bound to the active node's position/history.
 
 ### 3. Arrival and the rehearsal loop
 
