@@ -15,6 +15,8 @@ set execution order.
 
 | Rows | Primary destination | Next action / gate |
 |---|---|---|
+| D1719 | D1716 semantic-selection subject-identity amendment | Replace family/sign then move-level deduplication with declared root-subject/outcome grouping and distinct supporting-move counts; the current `alternativeEvents` array cannot be filtered into a complete subject denominator. |
+| D1718 | D1716 semantic-selection subject-identity successor author input | Consume the measured 790/491/455 census and total thirteen-family grammar from `avoidance-subject-author-repair-2026-08-26.md`; author new `@2` evidence rather than patching isolated pawns or widening `@1`. |
 | D1717 | king-opposition semantic research → collector amendment | Establish the blocker/applicability boundary with canonical direct/distant, occupied-line, opening and color/turn mirrors; version the predicate if semantics change; correct the false phase-lock research claim before D1711 validates the family. |
 | D1716 | new semantic-selection subject-identity amendment | Replace projection/sign-only avoidance with an exact declared subject/outcome relation across played and complete alternatives; retain family/sign counts as research-only; fixture the a-file→b-file isolated-pawn false avoidance before any avoidance event enters D1711 validation or a learner module. |
 | D1714 | D1711 + D1710 + D1716/D1717 handoff | Migrate five valid local positive/negative pairs and two sequence positives; give sequences a total operation before negative validation; withhold all seven avoidance defect witnesses until subject identity and opposition semantics are repaired. |

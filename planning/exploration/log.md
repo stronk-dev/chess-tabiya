@@ -8895,3 +8895,20 @@ Defect witnesses were deliberately excluded from the validation matrix. Its live
 39 emitter positives, 10 emitter negatives, 13 source-only negatives and seven no-valid-authority
 rows. [[D1715]] corrected the handoff's six-versus-seven avoidance miscount. No RFC, production,
 schema, content, pack or learner-UX byte changed.
+
+## 2026-08-26 — Avoidance subject/outcome grammar closed (D1718–D1719)
+
+Replayed 754 authored and 579 imported decisions through the production complete-alternative
+selector and projected every retained avoidance event onto a total thirteen-family root-subject
+grammar. The current top-two policy emits 790 avoidance facts. Played children retain the broad
+family in 491, the exact projected condition key in 455, and the family only on another subject in
+36; the latter is the measured class behind the isolated-a → isolated-b false generic wording.
+
+The pass found a second data-loss boundary: the selector deduplicates by family/sign/move before it
+seals `alternativeEvents`. One exact legal edge emits twelve distinct preserved direct-attack
+subjects and retains at most one for that move, so no downstream filter can recover complete
+subject denominators ([[D1719]]). The author handoff requires new `@2` identities, root-domain
+state evaluation, subject-first distinct-move counting, literal played/alternative values and
+perspective without valence. `king_opposition` remains held on [[D1717]], and all avoidance remains
+research-only pending [[D1711]] validation plus [[D1710]] production emission. No production, RFC,
+schema, content, pack or learner-UX byte changed.

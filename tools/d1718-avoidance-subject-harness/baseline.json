@@ -1,0 +1,58 @@
+{
+  "schema": "tabiya.research.d1718-avoidance-subject.v1",
+  "subjectGrammar": {
+    "derived.semantic_avoidance.backward_pawn": "file_state",
+    "derived.semantic_avoidance.doubled_pawn": "file_state",
+    "derived.semantic_avoidance.half_open_file": "file_state",
+    "derived.semantic_avoidance.isolated_pawn": "file_state",
+    "derived.semantic_avoidance.open_file": "file_state",
+    "derived.semantic_avoidance.king_opposition": "king_pair_relation",
+    "derived.semantic_avoidance.king_zone": "king_state",
+    "derived.semantic_avoidance.line_blockers": "root_slider_ray",
+    "derived.semantic_avoidance.passed_pawn": "root_pawn_state",
+    "derived.semantic_avoidance.piece_count": "color_role_measure",
+    "derived.semantic_avoidance.direct_attack_count": "fixed_square_measure",
+    "derived.semantic_avoidance.loose_piece": "root_piece_state",
+    "derived.semantic_avoidance.pawn_islands": "color_measure"
+  },
+  "populations": {
+    "authored": {
+      "decisions": 754,
+      "avoided": 462,
+      "families": {
+        "derived.semantic_avoidance.backward_pawn": { "selected": 2, "playedChildFamilySurvives": 0, "playedChildAlternativeSubjectSurvives": 0, "signs": { "preserved": 2 } },
+        "derived.semantic_avoidance.doubled_pawn": { "selected": 2, "playedChildFamilySurvives": 0, "playedChildAlternativeSubjectSurvives": 0, "signs": { "preserved": 2 } },
+        "derived.semantic_avoidance.half_open_file": { "selected": 0, "playedChildFamilySurvives": 0, "playedChildAlternativeSubjectSurvives": 0, "signs": {} },
+        "derived.semantic_avoidance.isolated_pawn": { "selected": 1, "playedChildFamilySurvives": 1, "playedChildAlternativeSubjectSurvives": 0, "signs": { "preserved": 1 } },
+        "derived.semantic_avoidance.open_file": { "selected": 0, "playedChildFamilySurvives": 0, "playedChildAlternativeSubjectSurvives": 0, "signs": {} },
+        "derived.semantic_avoidance.king_opposition": { "selected": 0, "playedChildFamilySurvives": 0, "playedChildAlternativeSubjectSurvives": 0, "signs": {} },
+        "derived.semantic_avoidance.king_zone": { "selected": 3, "playedChildFamilySurvives": 0, "playedChildAlternativeSubjectSurvives": 0, "signs": { "preserved": 3 } },
+        "derived.semantic_avoidance.line_blockers": { "selected": 173, "playedChildFamilySurvives": 173, "playedChildAlternativeSubjectSurvives": 171, "signs": { "gained": 102, "lost": 59, "preserved": 12 } },
+        "derived.semantic_avoidance.passed_pawn": { "selected": 0, "playedChildFamilySurvives": 0, "playedChildAlternativeSubjectSurvives": 0, "signs": {} },
+        "derived.semantic_avoidance.piece_count": { "selected": 0, "playedChildFamilySurvives": 0, "playedChildAlternativeSubjectSurvives": 0, "signs": {} },
+        "derived.semantic_avoidance.direct_attack_count": { "selected": 142, "playedChildFamilySurvives": 125, "playedChildAlternativeSubjectSurvives": 108, "signs": { "gained": 66, "lost": 62, "preserved": 14 } },
+        "derived.semantic_avoidance.loose_piece": { "selected": 133, "playedChildFamilySurvives": 5, "playedChildAlternativeSubjectSurvives": 3, "signs": { "gained": 93, "preserved": 37, "lost": 3 } },
+        "derived.semantic_avoidance.pawn_islands": { "selected": 6, "playedChildFamilySurvives": 6, "playedChildAlternativeSubjectSurvives": 6, "signs": { "preserved": 6 } }
+      }
+    },
+    "imported": {
+      "decisions": 579,
+      "avoided": 328,
+      "families": {
+        "derived.semantic_avoidance.backward_pawn": { "selected": 0, "playedChildFamilySurvives": 0, "playedChildAlternativeSubjectSurvives": 0, "signs": {} },
+        "derived.semantic_avoidance.doubled_pawn": { "selected": 6, "playedChildFamilySurvives": 0, "playedChildAlternativeSubjectSurvives": 0, "signs": { "preserved": 6 } },
+        "derived.semantic_avoidance.half_open_file": { "selected": 0, "playedChildFamilySurvives": 0, "playedChildAlternativeSubjectSurvives": 0, "signs": {} },
+        "derived.semantic_avoidance.isolated_pawn": { "selected": 0, "playedChildFamilySurvives": 0, "playedChildAlternativeSubjectSurvives": 0, "signs": {} },
+        "derived.semantic_avoidance.open_file": { "selected": 1, "playedChildFamilySurvives": 0, "playedChildAlternativeSubjectSurvives": 0, "signs": { "preserved": 1 } },
+        "derived.semantic_avoidance.king_opposition": { "selected": 0, "playedChildFamilySurvives": 0, "playedChildAlternativeSubjectSurvives": 0, "signs": {} },
+        "derived.semantic_avoidance.king_zone": { "selected": 0, "playedChildFamilySurvives": 0, "playedChildAlternativeSubjectSurvives": 0, "signs": {} },
+        "derived.semantic_avoidance.line_blockers": { "selected": 91, "playedChildFamilySurvives": 91, "playedChildAlternativeSubjectSurvives": 91, "signs": { "lost": 39, "gained": 52 } },
+        "derived.semantic_avoidance.passed_pawn": { "selected": 0, "playedChildFamilySurvives": 0, "playedChildAlternativeSubjectSurvives": 0, "signs": {} },
+        "derived.semantic_avoidance.piece_count": { "selected": 0, "playedChildFamilySurvives": 0, "playedChildAlternativeSubjectSurvives": 0, "signs": {} },
+        "derived.semantic_avoidance.direct_attack_count": { "selected": 69, "playedChildFamilySurvives": 69, "playedChildAlternativeSubjectSurvives": 67, "signs": { "lost": 33, "gained": 36 } },
+        "derived.semantic_avoidance.loose_piece": { "selected": 156, "playedChildFamilySurvives": 16, "playedChildAlternativeSubjectSurvives": 4, "signs": { "gained": 98, "preserved": 54, "lost": 4 } },
+        "derived.semantic_avoidance.pawn_islands": { "selected": 5, "playedChildFamilySurvives": 5, "playedChildAlternativeSubjectSurvives": 5, "signs": { "preserved": 5 } }
+      }
+    }
+  }
+}

@@ -68,6 +68,14 @@ selector drops subject identity ([[D1716]]). The same pass proves king oppositio
 and opening-live ([[D1717]]). D1713 now reads 39 emitter positives, 10 emitter negatives, 13
 source-only negatives and seven no-valid-authority events.
 
+[[D1718]] **completed D1716's all-family subject audit on 2026-08-26**: the real top-two selector
+emits 790 avoidance facts across 754 authored + 579 imported decisions. Played children retain the
+broad family in 491, the exact projected condition key in 455, and only another subject in 36. The
+thirteen-row root-subject/outcome grammar and successor contract are in
+`design/research/avoidance-subject-identity.md` and
+`avoidance-subject-author-repair-2026-08-26.md`. [[D1719]] proves the current receipt also discards
+same-move subjects before sealing, so `@1` cannot be repaired by filtering its retained events.
+
 **Deliverable 7 (owner questions) accumulates here** — nothing is silently chosen.
 **All four open questions RULED 2026-08-22 ([[D745]])**: space = classic zones + pawn control,
 `chess_tradition`; the negative reading faces learners post-commit/review with the denominator;

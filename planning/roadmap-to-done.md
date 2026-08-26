@@ -237,6 +237,15 @@ are defect witnesses because projection/sign aggregation drops their subject. Ki
 also blocker-blind and opening-live. D1716/D1717 precede validation or learner admission of those
 families; green mechanical output is not chess-semantic closure.
 
+[[D1718]] makes the avoidance repair total instead of patching the isolated-pawn witness. Across
+the fixed 754 authored + 579 imported decisions, the current top-two selector emits 790 avoidance
+facts; 491 played children retain the broad family, 455 retain the exact projected condition key,
+and 36 retain the family only on another subject. [[D1719]] separately proves one legal edge can
+emit twelve same-family/sign subjects that collapse to one move entry before the receipt is sealed.
+The successor therefore needs thirteen declared root-subject/value grammars, subject-first
+distinct-move denominators and new `@2` identities upstream of validation and every learner
+consumer; filtering the `@1` retained events cannot repair the lost evidence.
+
 ### 3. Arrival and the rehearsal loop
 
 <!-- roadmap-capability: rehearsal -->
