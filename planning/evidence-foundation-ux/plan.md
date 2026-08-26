@@ -145,6 +145,14 @@ blocker-membership changes. The author handoff versions that inventory event and
 relevance a selected-piece/square or postcommit/Review reducer over target-bearing evidence, not a
 new all-rays collector.
 
+[[D1732]] **completed the open/half-open file source and access boundary on 2026-08-26**. Both
+legacy predicates derive set-equal from exact pawn connectivity and remain valid authored state.
+The shipped moved-rook/queen event measures 1.40×/1.24×, while [[D1733]]'s currently excluded
+stationary heavy-piece access after a pawn leaves the file occurs 27/35 played times at
+2.43×/3.83×. The author handoff derives one exact file-state transition from D1728's source,
+keeps moved-entry and stationary-reveal as separate causes, and refuses activity/control/value
+until a module joins separate evidence.
+
 **Deliverable 7 (owner questions) accumulates here** — nothing is silently chosen.
 **All four open questions RULED 2026-08-22 ([[D745]])**: space = classic zones + pawn control,
 `chess_tradition`; the negative reading faces learners post-commit/review with the denominator;

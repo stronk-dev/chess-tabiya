@@ -9036,3 +9036,16 @@ and 126 imported count-preserving blocker-set changes that v1 drops entirely. Th
 that inventory event with `membership_changed`, preserves target-bearing ray/discovered/clearance
 authorities, and makes relevance a selected module query rather than a new universal collector.
 No production, RFC, schema, pack, content or learner UX changed.
+
+## 2026-08-26 — Exact file state and stationary heavy-piece access measured (D1732/D1733)
+
+Derived open and color-relative half-open files from exact pawn connectivity and proved both
+legacy predicate truth sets over every fixed authored/imported before/after position. Across
+643/1,152 unique positions the source sees 1,758/577 open states, 604/1,877 half-open states and
+552/1,222 rook/queen occupancies on eligible files.
+
+The shipped moved-heavy event fires 19/26 played times at 1.40×/1.24×. Its explicitly excluded
+stationary case—pawn movement/capture newly revealing the file to a retained rook/queen—fires
+27/35 times at 2.43×/3.83×. The handoff derives exact file-state change from the D1728 pawn source,
+adds a separate stationary-access event and refuses activity/control/value language without
+another join. No production, RFC, schema, pack, content or learner UX changed.

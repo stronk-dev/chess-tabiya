@@ -307,6 +307,12 @@ equal-count membership changes, keeps the line meanings separate, and lets reque
 postcommit Support and Review select exact relations. Another universal “relevant line” detector
 would duplicate sources and recreate the dump.
 
+[[D1732]] closes open/half-open file source truth and isolates [[D1733]]: a pawn change can reveal
+an eligible file to a stationary rook/queen, a stable 2.43×/3.83× event the moved-piece-only
+collector cannot represent. 1.0 derives exact file state from the shared pawn authority, preserves
+authored predicates, and exposes moved-entry versus stationary-reveal as separate module/bot/Review
+facts. Neither is permitted to manufacture “active,” “controls,” “good” or a plan.
+
 ### 3. Arrival and the rehearsal loop
 
 <!-- roadmap-capability: rehearsal -->

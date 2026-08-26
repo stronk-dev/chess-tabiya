@@ -1,0 +1,53 @@
+{
+  "schema": "tabiya.research.d1732-file-activity.v1",
+  "authored": {
+    "positions": 643,
+    "decisions": 754,
+    "openFiles": 1758,
+    "halfOpenFiles": 604,
+    "heavyOccupancies": 552,
+    "movedPlayed": 19,
+    "movedPlayedKinds": {
+      "queen:half_open_file": 3,
+      "queen:open_file": 2,
+      "rook:half_open_file": 4,
+      "rook:open_file": 10
+    },
+    "movedAlternative": 353,
+    "movedLift": 1.4,
+    "stationaryPlayed": 27,
+    "stationaryPlayedKinds": {
+      "queen:half_open_file": 18,
+      "rook:half_open_file": 9
+    },
+    "stationaryAlternative": 289,
+    "stationaryLift": 2.43,
+    "alternatives": 19639
+  },
+  "imported": {
+    "positions": 1152,
+    "decisions": 579,
+    "openFiles": 577,
+    "halfOpenFiles": 1877,
+    "heavyOccupancies": 1222,
+    "movedPlayed": 26,
+    "movedPlayedKinds": {
+      "queen:half_open_file": 6,
+      "queen:open_file": 5,
+      "rook:half_open_file": 9,
+      "rook:open_file": 6
+    },
+    "movedAlternative": 682,
+    "movedLift": 1.24,
+    "stationaryPlayed": 35,
+    "stationaryPlayedKinds": {
+      "queen:half_open_file": 19,
+      "queen:open_file": 4,
+      "rook:half_open_file": 11,
+      "rook:open_file": 1
+    },
+    "stationaryAlternative": 297,
+    "stationaryLift": 3.83,
+    "alternatives": 18842
+  }
+}
