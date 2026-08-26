@@ -8233,3 +8233,25 @@ The research dossier, coverage matrix, active register, routing and planning rec
 the process RFC has sixteen mutation classes and fourteen acceptance criteria, claims no product
 resource itself, and is ready for independent D1 review. Normal governance is green after
 refreshing the roadmap receipt; implementation remains forbidden until that review accepts it.
+
+## 2026-08-26 — shared candidate packet returns before bots, hints and Review build on it
+
+Independently reviewed the [[D1570]]–[[D1580]] buildability/cache amendment against the shipped
+manifest compiler, legal-move authority, candidate collector, application composition and opponent
+provider path. The lower architecture survives: one provider-free complete legal-candidate
+population with separate bot/hint/Review joins remains the right foundation, and the Node-24
+equal-item falsifier/typed-weight receipt remains valid evidence. The document is not buildable yet.
+
+[[D1631]]–[[D1636]] record six independent blockers. Insufficient-material positions can be
+game-terminal while retaining legal moves, contradicting the packet's zero-terminal and complete-set
+criteria. The proposed final bot-cache key drops move history even though Maia receives
+`position fen … moves …`. The RFC promises application injection into bot and semantic operations
+that do not exist and are absent from its implementation table. Its literal derived projection
+fails the shipped single-input grounding rule. Moving only the twenty child readings loses the
+separately-derived legal-exchange and fork-survival inputs. Finally, the shared engine source is
+White-perspective while the bot vector labels it root-side without defining a conversion or loss.
+
+The RFC/register and Phase-2h plan now say returned. The exact amendment order is in
+`planning/evidence-foundation-ux/shared-candidate-packet-independent-review-2026-08-26.md`. No
+production, schema, content, design-intent or concurrent Wave-C harness byte changed; implementation
+waits for author amendment and another independent review.

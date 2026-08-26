@@ -1,10 +1,13 @@
 # RFC: Shared candidate evidence packet — the compiled legal population three consumers are measured against
 
-- **Status:** draft, buildability/cache amendment 2026-08-26 on [[D1570]]–[[D1580]] — the lower
-  primitive remains supported. The exact manifest tuple, joined engine payload and process owner
-  are specified; the Node-24 receipt returned equal-item cache weight and the corrected typed
-  weight below now awaits cross-review. [[D1580]] holds numeric appliance-tier clearance, not the
-  bounded mechanism, because F12 declares no memory ceiling yet
+- **Status:** draft — **returned by independent buildability review 2026-08-26 on
+  [[D1631]]–[[D1636]].** The lower primitive and Node-24 cache finding remain supported, but the
+  current text cannot be implemented: terminal/legal-set invariants conflict; the final bot cache
+  drops Maia history; production operations are unnamed; the literal F1 tuple fails the shipped
+  derivation compiler; two candidate features disappear; and the engine join labels White scores
+  as root-side without a derivation. Exact return and repair order:
+  `planning/evidence-foundation-ux/shared-candidate-packet-independent-review-2026-08-26.md`.
+  [[D1580]] still holds numeric appliance-tier clearance separately
 - **Author:** claude (drafted from `design/research/shared-candidate-evidence-packet.md` and `tools/d1071-candidate-packet-harness/`; every carried claim re-verified at HEAD, with seven corrections recorded)
 - **Created:** 2026-08-23
 - **Design refs:** `design/05-in-run-experience.md` §5 (*"detection is cheap, significance is not"* — the split this RFC executes in code: one factual population, separate opinionated derivations) and §3b-i (*"The LLM is the voice, never the source"*); `design/03-product-breadth.md` §Play (opponent selection) and §Intelligence and explanation

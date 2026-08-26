@@ -16,6 +16,7 @@ set execution order.
 | Rows | Primary destination | Next action / gate |
 |---|---|---|
 | D565, D568, D748, D800 | semantic collector research | Finish bounded-reply semantics and the Wave-C contract; retain honest unavailable/zero outcomes. |
+| D1631, D1632, D1633, D1634, D1635, D1636 | `shared-candidate-evidence-packet` author amendment | Separate factual/adjudication and factual/provider/policy cache identities; name real production operations; compile the F1 tuple; preserve the full candidate closure; and define White-score→root-side-loss derivation. Re-review before implementation. |
 | D583, D584, D586, D587, D588, D589 | F2 renderer/conformance RFC lane | Seal board and provider projections, bind sentences to admitted evidence, and define provider-independent conformance before implementation. |
 | D228, D275 | evidence/provenance integrity lane | Reconcile capability registers and make attribution chains mechanically truthful through research then an RFC where contracts change. D143's cross-instrument corroboration is measured and closed. |
 
