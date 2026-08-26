@@ -9231,3 +9231,18 @@ future broadcast-round adapter that does not yet exist. That adapter must reuse 
 boundary. During the preceding D428 pass, the archived RFC was found to have explicitly declined
 the required production-code choice; its missing successor is now concretely queued rather than
 implemented without an accepted contract.
+
+## 2026-08-26 — Real move interpolation is browser-proven (D840)
+
+The theme-system implementation already supplied explicit normal, fast and reduced-motion
+animation configuration, while the play-composition board path retained one outer board instance
+and delayed its layout redraw until the configured interpolation completed. The missing piece was
+an interaction-level witness: configuration and stable-instance tests could both pass while the
+pieces still teleported.
+
+A browser test now commits `e2e4`, waits for the real opponent reply and observes Chessground's
+live `piece.anim` state at the stable board boundary. The observer intentionally follows replacement
+of Chessground's inner surface during `redrawAll()`; watching the old inner element produced a false
+negative even while the visual interpolation ran. The focused stable-instance plus animation pair
+passes, and the full browser gate passes 36 tests with only the optional Maia latency test skipped.
+D840 is closed on executable interaction evidence rather than configuration inspection.

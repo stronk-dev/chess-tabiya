@@ -21,7 +21,7 @@ remain in their owning RFCs.
    is gone; a reset token re-asserts capture state through the existing `board.set()` path.
 7. Permanent browser checks cover exact geometry at all seven viewports, text entry, objective and
    Inspector overlays, phone sheet gestures, stable board DOM identity, keyboard traversal, the
-   150 input projections and the multi-user match flows. Current browser result: 30 passed, one
+   150 input projections, visible move interpolation and the multi-user match flows. Current browser result: 36 passed, one
    optional Maia latency test skipped.
 8. The first vocabulary-law slice is live: branch-group candidates use legality-checked SAN;
    checkpoint alternatives never fall back to raw UCI; pivotal producer prose and shape trigger

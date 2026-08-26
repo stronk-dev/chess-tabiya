@@ -1310,6 +1310,43 @@ test("a committed move updates the stable board instance instead of remounting i
   )).toBe(true);
 });
 
+test("an opponent reply visibly animates on the stable board instance", async ({ page }) => {
+  await page.emulateMedia({ reducedMotion: "no-preference" });
+  await page.goto("/play");
+  await page.getByRole("button", { name: "Start and keep the game" }).click();
+  const board = page.getByLabel("Chessboard");
+  await expect(board).toBeVisible();
+  await expect(page.locator(".board-shell")).toHaveAttribute("data-animation", /^(normal|fast)$/u);
+
+  await board.evaluate((element) => {
+    if (element.querySelector("cg-board") === null) throw new TypeError("Chessground board surface is missing");
+    const state = window as unknown as {
+      __tabiyaSawOpponentAnimation?: boolean;
+      __tabiyaAnimationObserver?: MutationObserver;
+    };
+    state.__tabiyaSawOpponentAnimation = false;
+    state.__tabiyaAnimationObserver?.disconnect();
+    state.__tabiyaAnimationObserver = new MutationObserver(() => {
+      if (element.querySelector("cg-board piece.black.anim") !== null) state.__tabiyaSawOpponentAnimation = true;
+    });
+    state.__tabiyaAnimationObserver.observe(element, {
+      attributes: true,
+      attributeFilter: ["class"],
+      childList: true,
+      subtree: true,
+    });
+  });
+
+  await move(page, "e2", "e4", "white");
+  await expect(page.locator(".timeline")).toContainText("Active line 2 plies");
+  await expect.poll(() => page.evaluate(() =>
+    (window as unknown as { __tabiyaSawOpponentAnimation?: boolean }).__tabiyaSawOpponentAnimation,
+  )).toBe(true);
+  await page.evaluate(() => {
+    (window as unknown as { __tabiyaAnimationObserver?: MutationObserver }).__tabiyaAnimationObserver?.disconnect();
+  });
+});
+
 test("@matrix served endgame packs keep the board above the timeline at supported desktop projections", async ({
   page,
 }) => {
