@@ -1412,8 +1412,8 @@
     background: radial-gradient(circle at 12% 5%, color-mix(in srgb, var(--ink) 5%, transparent), transparent 30rem), linear-gradient(135deg, transparent 0 58%, color-mix(in srgb, var(--accent) 4%, transparent) 58% 100%), var(--paper);
   }
   :global(button), :global(input), :global(textarea) { font: inherit; }
-  :global(:focus-visible) { outline: 3px solid color-mix(in srgb, var(--accent) 65%, white); outline-offset: 2px; }
-  :global(::selection) { background: color-mix(in srgb, var(--accent) 25%, white); }
+  :global(:focus-visible) { outline: 3px solid color-mix(in srgb, var(--accent) 65%, var(--on-accent)); outline-offset: 2px; }
+  :global(::selection) { background: color-mix(in srgb, var(--accent) 25%, var(--on-accent)); }
   .shell-view { width: min(70rem, calc(100% - 2rem)); height: 100%; margin: 0 auto; padding: clamp(2rem, 6vw, 5rem) 0; overflow: auto; }
   .play-surface{height:100%;overflow:auto;padding:1rem 0}.surface-skip{position:fixed;z-index:50;top:.35rem;left:.35rem;padding:.6rem .8rem;border-radius:.5rem;background:var(--ink);color:var(--paper);transform:translateY(-150%)}.surface-skip:focus{transform:translateY(0)}
   .auth-gate { width: min(32rem, calc(100% - 2rem)); margin: 10vh auto; }
@@ -1457,7 +1457,7 @@
   @media (max-width: 60rem) { .rehearsal-loop { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
   @media (max-width: 45rem) { .home-status, .phase-starters, .rehearsal-loop, .evidence-promise { grid-template-columns: 1fr; } .phase-starters > div { grid-column: 1; } }
   .repertoire-form{display:grid;gap:.65rem;max-width:44rem;padding:1rem;border:1px solid var(--line);border-radius:.8rem;background:var(--panel)}
-  .repertoire-form label{display:grid;gap:.25rem}.repertoire-form input,.repertoire-form select,.repertoire-form textarea{padding:.6rem;border:1px solid var(--line);border-radius:.4rem;background:white}
+  .repertoire-form label{display:grid;gap:.25rem}.repertoire-form input,.repertoire-form select,.repertoire-form textarea{padding:.6rem;border:1px solid var(--line);border-radius:.4rem;background:var(--paper);color:var(--ink)}
   .repertoire-card{display:grid;gap:.6rem}.gap-results{grid-column:1/-1;border-top:1px solid var(--line);padding-top:.6rem}.gap-row{display:flex;align-items:center;justify-content:space-between;gap:1rem;padding:.4rem 0}
   .access, .honest { font-size: 0.88rem; }
   button { padding: 0.72rem 0.9rem; border: 1px solid var(--line); border-radius: 0.65rem; background: var(--panel); color: var(--ink); cursor: pointer; }

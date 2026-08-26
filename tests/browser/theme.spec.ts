@@ -13,6 +13,18 @@ async function register(page: Page): Promise<void> {
   await expect(page.getByRole("heading", { name: "Choose the game you want to understand." })).toBeVisible();
 }
 
+function squarePoint(
+  box: { readonly x: number; readonly y: number; readonly width: number; readonly height: number },
+  square: string,
+): { readonly x: number; readonly y: number } {
+  const file = square.charCodeAt(0) - 97;
+  const rank = Number(square[1]) - 1;
+  return {
+    x: box.x + ((file + 0.5) * box.width) / 8,
+    y: box.y + ((7 - rank + 0.5) * box.height) / 8,
+  };
+}
+
 test("appearance axes apply live without replacing the board or its position", async ({ page }) => {
   await register(page);
   await page.getByRole("button", { name: "Start and keep the game" }).click();
@@ -68,4 +80,39 @@ test("Settings exposes independent persisted pickers and inherited contrast disc
   const stored = await page.evaluate(() => JSON.parse(localStorage.getItem("tabiya.theme") ?? "{}"));
   expect(stored).toEqual({ appTheme: "tokyo-night", boardTheme: "olive", pieceSet: "mono", modeOverride: "light", animation: "fast" });
   expect(stored).not.toHaveProperty("version");
+});
+
+test("system display preferences keep board semantics visible without colour alone", async ({ page }) => {
+  await page.emulateMedia({ colorScheme: "dark" });
+  await register(page);
+  await expect(page.locator("html")).toHaveAttribute("data-mode", "dark");
+  await expect(page.locator("html")).toHaveAttribute("data-app-theme", "warm-dark");
+
+  await page.getByRole("button", { name: "Start and keep the game" }).click();
+  const board = page.getByLabel("Chessboard");
+  const box = await board.boundingBox();
+  if (box === null) throw new Error("Chessground board has no bounding box");
+  const e2 = squarePoint(box, "e2");
+  await page.mouse.click(e2.x, e2.y);
+  const destination = page.locator("cg-board square.move-dest").first();
+  await expect(destination).toBeAttached();
+
+  await page.emulateMedia({ colorScheme: "dark", forcedColors: "active" });
+  await expect.poll(() => destination.evaluate((element) => getComputedStyle(element).outlineStyle)).toBe("dotted");
+  expect(await destination.evaluate((element) => getComputedStyle(element).backgroundImage)).not.toContain("gradient");
+
+  await destination.evaluate((element) => element.classList.add("oc"));
+  expect(await destination.evaluate((element) => getComputedStyle(element).outlineStyle)).toBe("double");
+  expect(await destination.evaluate((element) => {
+    element.setAttribute("class", "check");
+    return {
+      style: getComputedStyle(element).outlineStyle,
+      width: getComputedStyle(element).outlineWidth,
+    };
+  })).toEqual({ style: "double", width: "6px" });
+
+  await page.emulateMedia({ colorScheme: "dark", forcedColors: "none", reducedMotion: "reduce" });
+  const visibleButton = page.locator("button:visible").first();
+  await visibleButton.focus();
+  expect(await visibleButton.evaluate((element) => getComputedStyle(element).transitionDuration)).toBe("1e-06s");
 });

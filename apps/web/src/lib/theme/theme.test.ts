@@ -180,7 +180,12 @@ describe("theme foundation", () => {
       }
     }
     const boards = [["#f0d9b5", "#c0ae91"], ["#f0d9a8", "#96a25e"]] as const;
-    const paints = [[155, 199, 0, 0.41], [20, 85, 30, 0.5], [20, 30, 85, 0.5]] as const;
+    const paints = [
+      [155, 199, 0, 0.41],
+      [20, 85, 30, 0.5],
+      [20, 30, 85, 0.5],
+      [20, 85, 0, 0.55], // occupied destination: the capture ring criterion used to omit
+    ] as const;
     for (const board of boards) for (const square of board) for (const paint of paints) {
       expect(deltaE(composite(paint, rgb(square)), rgb(square))).toBeGreaterThanOrEqual(20);
     }
@@ -218,7 +223,9 @@ describe("theme foundation", () => {
 
     for (const file of files.filter((path) => path.endsWith(".svelte") && !path.includes("/theme/"))) {
       if (file.endsWith("GameStoryScreen.svelte")) continue;
-      expect(readFileSync(file, "utf8"), relative(sourceDirectory, file)).not.toMatch(/#[0-9a-f]{3,8}\b|rgba?\(|hsla?\(/iu);
+      const contents = readFileSync(file, "utf8");
+      expect(contents, relative(sourceDirectory, file)).not.toMatch(/#[0-9a-f]{3,8}\b|rgba?\(|hsla?\(/iu);
+      expect(contents, relative(sourceDirectory, file)).not.toMatch(/\b(?:color|background(?:-color)?|outline)\s*:[^;}\n]*\bwhite\b/iu);
     }
     for (const file of filesBelow(join(themeDirectory, "board-skins"))) {
       expect(readFileSync(file, "utf8")).not.toMatch(/last-move|selected|move-dest|check|premove/u);
@@ -226,5 +233,16 @@ describe("theme foundation", () => {
     expect(Object.keys(MARK_BRUSHES)).toEqual(["green", "red", "blue", "yellow"]);
     const manifest = JSON.parse(readFileSync(join(sourceDirectory, "..", "public", "manifest.webmanifest"), "utf8")) as Record<string, unknown>;
     expect(manifest.theme_colors).toEqual({ light: "#eeeade", dark: "#16140f" });
+  });
+
+  it("keeps critical board states distinguishable without hue alone", () => {
+    const paint = readFileSync(join(themeDirectory, "interaction-paint.css"), "utf8");
+    expect(paint).toMatch(/square\.last-move\s*\{[^}]*box-shadow:/su);
+    expect(paint).toMatch(/square\.check\s*\{[^}]*box-shadow:/su);
+    const accessibility = readFileSync(join(sourceDirectory, "accessibility.css"), "utf8");
+    expect(accessibility).toMatch(/@media \(forced-colors: active\)/u);
+    for (const selector of ["move-dest", "oc.move-dest", "last-move", "selected", "check", "current-premove"]) {
+      expect(accessibility).toContain(`square.${selector}`);
+    }
   });
 });

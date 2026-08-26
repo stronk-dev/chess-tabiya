@@ -35,7 +35,7 @@
     padding: 0.25rem 0.5rem;
     border-radius: 999px;
     background: var(--accent);
-    color: white;
+    color: var(--on-accent);
     font: 700 0.68rem/1 ui-monospace, monospace;
     letter-spacing: 0.08em;
     text-transform: uppercase;

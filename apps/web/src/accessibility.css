@@ -7,6 +7,67 @@
   white-space: nowrap;
 }
 
+/* Give native controls the right palette before the theme controller mounts. */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-mode]) {
+    color-scheme: dark;
+  }
+}
+
+/* Motion preferences apply to the whole shell, not only Chessground pieces. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+
+  [role="dialog"] {
+    backdrop-filter: none !important;
+  }
+}
+
+@media (prefers-contrast: more) {
+  :focus-visible {
+    outline-width: 4px !important;
+    outline-style: double !important;
+  }
+
+  button,
+  input,
+  select,
+  textarea,
+  [role="button"] {
+    border-width: 2px !important;
+  }
+}
+
+/* Windows High Contrast removes the gradients used by Chessground. Preserve each
+   state with a distinct shape so capture, check, history and selection do not
+   collapse into one colour-only signal. */
+@media (forced-colors: active) {
+  .board-shell cg-board square.move-dest,
+  .board-shell cg-board square.premove-dest,
+  .board-shell cg-board square.last-move,
+  .board-shell cg-board square.selected,
+  .board-shell cg-board square.check,
+  .board-shell cg-board square.current-premove {
+    background: none !important;
+    box-shadow: none !important;
+  }
+
+  .board-shell cg-board square.move-dest { outline: 3px dotted Highlight; outline-offset: -5px; }
+  .board-shell cg-board square.oc.move-dest { outline: 5px double Highlight; outline-offset: -7px; }
+  .board-shell cg-board square.premove-dest,
+  .board-shell cg-board square.current-premove { outline: 3px dashed LinkText; outline-offset: -5px; }
+  .board-shell cg-board square.last-move { outline: 3px dashed CanvasText; outline-offset: -4px; }
+  .board-shell cg-board square.selected { outline: 4px solid Highlight; outline-offset: -5px; }
+  .board-shell cg-board square.check { outline: 6px double Mark; outline-offset: -8px; }
+}
+
 @media (max-width: 719px) {
   .visually-hidden-on-phone {
     position: absolute;

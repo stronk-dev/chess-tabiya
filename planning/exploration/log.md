@@ -9356,3 +9356,19 @@ overflow while route focus made it programmatically-only. Scrolling moved to a l
 region and the heading remains the route-focus target. A11-a19 and D1813 close. A11-a30 narrows to
 forced-colors/color-scheme emulation and broader live-region state coverage; the device, project,
 Escape/modal, scanner and keyboard-unit arms now ship.
+
+## 2026-08-26 — Board semantics survive system display preferences (D1494)
+
+The theming acceptance contract now includes the signal it previously omitted: an occupied move
+destination is the capture indicator, and its repaired 55% ring clears the same ΔE floor on every
+shipped board square. The gate no longer treats hue separation as sufficient. Last move and check
+carry inset geometry in ordinary rendering, while forced-colors mode projects destinations,
+captures, premoves, history, selection and check onto distinct system-color outline geometries.
+
+The global accessibility stylesheet now has meaningful color-scheme, reduced-motion,
+increased-contrast and forced-colors branches. Themed hard-coded white declarations were replaced
+with palette tokens and the source sweep learned to reject that missed named-color class. A real
+Chromium journey starts from the device dark preference, selects an actual Chessground move,
+activates forced colors and proves the destination/capture/check projections, then proves the CSS
+motion floor. A11-a17 and A11-a20 through A11-a24 complete. D1460's policy question about an OS
+motion override and D1461's broader token-driven interaction-paint defect remain open by name.

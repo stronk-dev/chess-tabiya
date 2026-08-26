@@ -125,7 +125,7 @@
     min-height: 3.5rem;
     padding: 0.55rem clamp(0.75rem, 2vw, 1.5rem);
     border-bottom: 1px solid var(--line);
-    background: color-mix(in srgb, var(--paper) 94%, white);
+    background: color-mix(in srgb, var(--paper) 94%, var(--on-accent));
   }
 
   .wordmark {

@@ -218,7 +218,7 @@
     border: 0;
     border-radius: 0.6rem;
     background: var(--accent);
-    color: white;
+    color: var(--on-accent);
     cursor: pointer;
   }
 

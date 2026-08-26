@@ -547,23 +547,35 @@ owner's felt pass (D5) and may trail the code landing.
      not 10** (§6: the "lighting overlay" is the blue brush; [[D984]]). Chessground's untouched
      defaults already pass: green/red 91.3, green/blue 118.3, green/yellow 80.9, red/blue 82.2,
      red/yellow 61.1, blue/yellow 132.2.
-   - **7b — evidence paint against its own square, ≥ 20.** Measured 2026-08-22 (brown squares
+   - **7b — evidence paint against its own square, ≥ 20.** The population includes occupied
+     move destinations (`square.oc.move-dest`) as a separate capture signal; omitting a
+     selector from the table is a criterion failure. Measured 2026-08-22 and amended
+     2026-08-26 (brown squares
      `#f0d9b5` / `#c0ae91`, the dark decoded from the theme's own base64 SVG; olive `#f0d9a8` /
-     `#8a9656`):
+     `#96a25e`):
 
      | paint | brown light | brown dark | olive light | olive dark |
      |---|---|---|---|---|
      | last-move `rgba(155,199,0,.41)` | 35.1 | 36.2 | 32.1 | 26.3 |
-     | selected + dests `rgba(20,85,30,.5)` | 33.4 | 27.8 | 33.0 | **18.3** ✗ |
+     | selected + dests `rgba(20,85,30,.5)` | 33.4 | 27.8 | 33.0 | 20.0 |
      | premove `rgba(20,30,85,.5)` | 43.1 | 36.9 | 44.8 | 39.6 |
+     | occupied destination `rgba(20,85,0,.55)` | ≥20 | ≥20 | ≥20 | ≥20 |
 
-     **`olive` fails its own floor** at 18.3. Two one-value repairs, either sufficient, both
-     `candidate` under D1: lighten the olive dark square to **`#96a25e`** (ΔE 20.0, only 4.8
-     from the artboard value) or raise the dests alpha to **0.55** (ΔE 20.0). `brown` passes
-     everywhere; worst case 27.8.
+     The implemented D1 choice lightened the olive dark square to **`#96a25e`**, bringing the
+     ordinary destination to the 20.0 floor. The 2026-08-26 capture-ring amendment independently
+     raises that signal's alpha to 0.55; the test enumerates all four board-square combinations.
    - **7c — `warning` vs `danger`, ≥ 20**: paper 51.3, tokyo-night dark 53.6, tokyo-night light
      69.7 — all pass; `warm-dark` is uncomputable until its `danger` is pinned, which criterion
      3 forces anyway.
+   - **7d — semantics do not depend on hue alone.** Last move and check each carry persistent
+     inset-ring geometry in ordinary rendering. Under `forced-colors: active`, gradients and
+     fills are removed and destination, occupied destination/capture, premove, last move,
+     selection and check each receive a system-colour outline with distinct
+     solid/dotted/dashed/double geometry. A browser assertion begins from a real Chessground
+     destination and proves the forced-colour projection; a source assertion keeps the complete
+     state population closed. This is the 2026-08-26 amendment that closes [[D1494]]: the old
+     ΔE-only gate rated a last-move highlight with 1.02:1 luminance as healthy, omitted the
+     capture ring, and let check disappear under a tritan simulation.
 8. **No remount on any axis switch** — extend A9's browser guard: capture the board element
    identity, switch app theme / board theme / piece set / mode mid-run, assert the same element
    instance, zero chessground re-instantiations, and the position unchanged.
@@ -738,3 +750,11 @@ in the ledger: they are gaps left by the id-block renumbering whose convention
   `--warning` repair variant, the olive-square repair) and D5's felt-quality pass, which rides the
   owner's own session. Neither is unfinished implementation — D4 is discharged and criteria 1–13
   are green.
+- 2026-08-26 (**criterion 7 amended after measured accessibility evidence**): 7b's closed
+  population now includes the occupied-destination capture ring and its repaired 55% paint; new
+  7d requires non-hue geometry for last move and check plus distinct system-colour geometry for
+  every board state under forced colors. The implementation adds all four system-preference CSS
+  blocks, replaces themed hard-coded white with palette tokens, and proves dark-device startup,
+  real Chessground destination projection, forced colors and reduced motion in Chromium. This
+  closes the concrete [[D1494]] failures without claiming [[D1461]]'s broader token-driven-paint
+  defect or [[D1460]]'s separate owner choice about OS motion override.

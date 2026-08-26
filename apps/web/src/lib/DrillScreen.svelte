@@ -1494,7 +1494,7 @@
   .rehearsal-guide > p:first-of-type { color:var(--accent); font:700 .62rem ui-monospace,monospace; letter-spacing:.08em; text-transform:uppercase; }
   .rehearsal-guide h2 { font:600 1.05rem/1.2 var(--display-font); }
   .rehearsal-guide .guide-body { color:var(--muted); font-size:.8rem; line-height:1.4; }
-  .rehearsal-guide button { justify-self:start; padding:.55rem .7rem; border:1px solid var(--accent); border-radius:.6rem; background:var(--accent); color:white; }
+  .rehearsal-guide button { justify-self:start; padding:.55rem .7rem; border:1px solid var(--accent); border-radius:.6rem; background:var(--accent); color:var(--on-accent); }
   .guide-progress { display:grid; grid-template-columns:repeat(4,1fr); gap:.25rem; }
   .guide-progress span { height:.2rem; border-radius:999px; background:var(--line); }
   .guide-progress span.reached { background:var(--accent); }
@@ -1663,7 +1663,7 @@
   .modal button.primary {
     border-color: var(--accent);
     background: var(--accent);
-    color: white;
+    color: var(--on-accent);
   }
 
   .checkpoint-options {

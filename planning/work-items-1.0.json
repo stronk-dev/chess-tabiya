@@ -154,15 +154,19 @@
     {
       "id": "A11-a17",
       "sourceState": "queued",
-      "state": "queued",
+      "state": "completed",
       "capability": "accessibility",
       "owner": "client-platform",
-      "assignment": "capability:accessibility",
+      "assignment": "closed",
       "sourceDocument": "ux-accessibility-and-mobile.md",
       "sourceSection": "§3.1",
       "sourceHeading": "Accessibility and small screens — `ux-accessibility-and-mobile.md`",
       "summary": "Zero `prefers-reduced-motion`, `prefers-contrast`, `forced-colors` and `prefers-color-scheme` CSS blocks anywhere",
       "legacyRoute": "none",
+      "completion": {
+        "completedOn": "2026-08-26",
+        "evidence": "one global accessibility layer supplies meaningful fallbacks for all four system preferences; unit and Chromium checks cover their concrete effects"
+      },
       "sourceDigest": "sha256:782097afe0d88154e9379495d6b8f5e83c59cd8a40c15ba54585cade5be59617"
     },
     {
@@ -222,73 +226,93 @@
     {
       "id": "A11-a20",
       "sourceState": "queued",
-      "state": "queued",
+      "state": "completed",
       "capability": "accessibility",
       "owner": "client-platform",
-      "assignment": "capability:accessibility",
+      "assignment": "closed",
       "sourceDocument": "ux-accessibility-and-mobile.md",
       "sourceSection": "§3.4 B",
       "sourceHeading": "Accessibility and small screens — `ux-accessibility-and-mobile.md`",
       "summary": "Criterion 7's population omits `square.oc.move-dest`; the capture ring fails at 12.5 and 18.6 against a floor of 20",
       "legacyRoute": "ledger",
       "note": "[[D1461]]; the criterion amendment is an RFC edit — see (c)",
+      "completion": {
+        "completedOn": "2026-08-26",
+        "evidence": "the theming RFC and permanent contrast test now enumerate occupied destinations; the 55% capture ring clears the 20-point floor on every shipped square"
+      },
       "sourceDigest": "sha256:f1a21a1e9e4a4d08ae1676e63ce9f1d374787464365fb20567ea7ec117b2212d"
     },
     {
       "id": "A11-a21",
       "sourceState": "queued",
-      "state": "queued",
+      "state": "completed",
       "capability": "accessibility",
       "owner": "client-platform",
-      "assignment": "capability:accessibility",
+      "assignment": "closed",
       "sourceDocument": "ux-accessibility-and-mobile.md",
       "sourceSection": "§3.4 E",
       "sourceHeading": "Accessibility and small screens — `ux-accessibility-and-mobile.md`",
       "summary": "**Colour vision has never been considered anywhere** — the check indicator vanishes for tritanopes on brown dark squares",
       "legacyRoute": "ledger",
       "note": "[[D1494]]",
+      "completion": {
+        "completedOn": "2026-08-26",
+        "evidence": "check and last-move states now carry non-hue inset geometry; forced-colors projects check to a distinct double system-color outline"
+      },
       "sourceDigest": "sha256:ebe535cde14585a3d6cbe021c005d0ede6e2aac3db09645d386180f10130f06c"
     },
     {
       "id": "A11-a22",
       "sourceState": "queued",
-      "state": "queued",
+      "state": "completed",
       "capability": "accessibility",
       "owner": "client-platform",
-      "assignment": "capability:accessibility",
+      "assignment": "closed",
       "sourceDocument": "ux-accessibility-and-mobile.md",
       "sourceSection": "§3.4 F",
       "sourceHeading": "Accessibility and small screens — `ux-accessibility-and-mobile.md`",
       "summary": "Five hard-coded whites in themed colour, one of them the global `:focus-visible` outline",
       "legacyRoute": "none",
+      "completion": {
+        "completedOn": "2026-08-26",
+        "evidence": "focus, selection, forms and accent-backed actions use palette tokens; the source sweep now rejects named white in themed declarations"
+      },
       "sourceDigest": "sha256:aa9833be0073a562014f461f1b3e0701593ab19f52316f83b0702c386428de88"
     },
     {
       "id": "A11-a23",
       "sourceState": "queued",
-      "state": "queued",
+      "state": "completed",
       "capability": "accessibility",
       "owner": "client-platform",
-      "assignment": "capability:accessibility",
+      "assignment": "closed",
       "sourceDocument": "ux-accessibility-and-mobile.md",
       "sourceSection": "§3.4 G",
       "sourceHeading": "Accessibility and small screens — `ux-accessibility-and-mobile.md`",
       "summary": "`forced-colors` is unhandled and every dest and check indicator is a `radial-gradient` background image — which forced-colors mode removes",
       "legacyRoute": "none",
+      "completion": {
+        "completedOn": "2026-08-26",
+        "evidence": "forced-colors replaces removed gradients with distinct system-color geometry for destination, capture, premove, history, selection and check; a real Chessground browser fixture proves it"
+      },
       "sourceDigest": "sha256:823d6d88ed167d2d112c8a2fa799208917fc2cee8dabf5a2372e2b0847a28ba9"
     },
     {
       "id": "A11-a24",
       "sourceState": "queued",
-      "state": "queued",
+      "state": "completed",
       "capability": "accessibility",
       "owner": "client-platform",
-      "assignment": "capability:accessibility",
+      "assignment": "closed",
       "sourceDocument": "ux-accessibility-and-mobile.md",
       "sourceSection": "§3.5",
       "sourceHeading": "Accessibility and small screens — `ux-accessibility-and-mobile.md`",
       "summary": "`prefers-reduced-motion` reaches only Chessground interpolation; no CSS block exists",
       "legacyRoute": "none",
+      "completion": {
+        "completedOn": "2026-08-26",
+        "evidence": "the global reduced-motion rule suppresses CSS animation, transition and smooth scrolling, with computed browser behavior asserted; D1460's separate override-policy choice remains open"
+      },
       "sourceDigest": "sha256:4405078b838e8a551e3efb39bc6bc04b851a2ddc536b65a86c8eeb2fdaf365b0"
     },
     {

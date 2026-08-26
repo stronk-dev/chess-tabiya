@@ -24,4 +24,12 @@ describe("accessibility style primitives", () => {
     const css = readFileSync(utility, "utf8");
     for (const name of [".visually-hidden", ".visually-hidden-on-phone", ".visually-hidden-below-rail"]) expect(css).toContain(name);
   });
+
+  it("defines meaningful fallbacks for every system display preference", () => {
+    const css = readFileSync(resolve(SOURCE, "accessibility.css"), "utf8");
+    expect(css).toMatch(/@media \(prefers-color-scheme: dark\)[\s\S]*color-scheme:\s*dark/u);
+    expect(css).toMatch(/@media \(prefers-reduced-motion: reduce\)[\s\S]*transition-duration:\s*0\.001ms/u);
+    expect(css).toMatch(/@media \(prefers-contrast: more\)[\s\S]*outline-style:\s*double/u);
+    expect(css).toMatch(/@media \(forced-colors: active\)[\s\S]*outline:\s*6px double Mark/u);
+  });
 });

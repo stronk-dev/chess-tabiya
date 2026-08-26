@@ -45,6 +45,13 @@ Board CSS is split into two layers:
 - `interaction-paint.css` paints destinations, selection, last move, premove,
   check, and other interaction state exactly once for every board skin.
 
+Critical states do not depend on hue alone. Last move and check retain inset-ring
+geometry in ordinary palettes. In forced-colors mode the browser-facing layer
+replaces gradients with distinct solid, dotted, dashed, and double system-color
+outlines for destinations, captures, premoves, history, selection, and check.
+The occupied-destination capture ring is part of the same measured contrast
+population as ordinary destinations.
+
 Piece skins are similarly independent. `theme/assets.ts` is the exhaustive
 artwork and redistribution manifest. Adding a board or piece file without a
 matching manifest row fails the test suite.
@@ -62,7 +69,10 @@ and stored-mode resolution, reduced motion, palette contrast, exact inherited
 palette bytes, evidence-paint color separation, asset registration, token and
 literal sweeps, assistance/theme type and import separation, live cross-tab
 application, stable board identity and position, real post-gesture movement
-interpolation, and mode-aware browser chrome.
+interpolation, mode-aware browser chrome, and real forced-color projection from
+a Chessground destination. Shared CSS also honors device color scheme before
+controller startup, suppresses CSS motion under reduced motion, and strengthens
+controls and focus under increased contrast.
 
 The remaining acceptance item is deliberately subjective: the owner must report
 in normal use that movement reads as a game rather than a diagram. That discharge
