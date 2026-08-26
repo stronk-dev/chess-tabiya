@@ -186,6 +186,9 @@ structured-document operands are incomplete; coverage includes non-learner proje
 scale is a second visual authority; and real seats/hints plus the owner-tier component amendment
 remain unresolved. Presentation implementation starts only after one real projection proves the
 admission → sealed adapter → wire/parser → seat → equivalent-sentence path and forged operands fail.
+[[D1673]] now proves the adapter/wire/parser portion on one real admitted claim projection with
+five positive/negative arms; the remaining work is to generalise through exact per-projection
+constructors and the real module route/seat, not to invent a third generic evidence wrapper.
 The 2026-08-26 independent re-review returns the preset compiler on [[D1659]]–[[D1663]] and
 [[D1437]]/[[D1500]]: unset preferences currently masquerade as explicit Quiet choices; raw config
 and module outputs can contradict; availability is undefined across provider/browser state;

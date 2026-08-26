@@ -8369,3 +8369,18 @@ and the full landing still depends on owner-tier intent plus returned module/hin
 The RFC and active register now say returned, with exact repair and falsifiers in
 `planning/platform-alignment/evidence-presentation/independent-buildability-review-2026-08-26.md`.
 No production, protected design, schema, content or concurrent Claude review/harness byte changed.
+
+## 2026-08-26 — D1664 sealed component-adapter feasibility pass
+
+Ran a disposable five-arm harness over the real F1 admission path for
+`pack.authored.claim_delivery@1`. A registered projection-specific adapter can produce a
+process-local component seal bound by evidence object identity, terminate in a closed
+digest-bearing JSON receipt, and acquire a new client-local seal only through an exact parser.
+Literal, spread and JSON copies; cross-evidence pairing; text tampering; extra fields; direct
+unparsed JSON; and an unregistered projection all refuse as intended.
+
+[[D1673]] records the positive result and its limit: the registered adapter remains trusted code,
+so this does not rescue `evidence-presentation`'s manifest-string coverage claim. Each projection
+family still needs an exact constructor and operand-retention negatives, and the real route/seat
+remains D1588 work. Dossier: `design/research/sealed-component-adapter.md`; instrument:
+`tools/d1664-component-adapter-harness/` (5/5 green). No production or protected-design byte changed.
