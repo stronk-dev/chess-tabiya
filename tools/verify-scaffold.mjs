@@ -157,6 +157,22 @@ const missingBrowserTiers = missingRequiredText(browserWorkflow, [
 if (missingBrowserTiers.length > 0) {
   failures.push(`browser CI workflow: missing named tiers: ${missingBrowserTiers.join(", ")}`);
 }
+const missingBrowserEvidence = missingRequiredText(browserWorkflow, [
+  "if: always()",
+  "playwright-report/",
+  "test-results/",
+]);
+if (missingBrowserEvidence.length > 0) {
+  failures.push(`browser CI workflow: successful matrix evidence is not retained: ${missingBrowserEvidence.join(", ")}`);
+}
+
+const playwrightConfig = await readText("playwright.config.ts");
+const missingPlaywrightEvidence = missingRequiredText(playwrightConfig, [
+  '["html", { outputFolder: "playwright-report", open: "never" }]',
+]);
+if (missingPlaywrightEvidence.length > 0) {
+  failures.push("Playwright config: the successful browser report must retain explicit matrix attachments");
+}
 
 const lefthook = await readText("lefthook.yml");
 if (!lefthook.includes("run: node tools/staged-process-contracts.mjs")) {

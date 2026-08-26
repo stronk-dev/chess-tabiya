@@ -9640,3 +9640,17 @@ The bounded reveal is presented as temporary support and retains the same record
 next-move re-close behavior. Focused type/component checks pass 27/27; production-browser reveal,
 objective-change, real-content compare, stable-board and mobile-composition journeys pass. D1828–D1832
 close; module seating and the complete 112-image matrix remain open.
+
+## 2026-08-27 — Successful play-composition evidence becomes a CI artifact
+
+The accepted A8 contract could not be met by the shipped tooling: Playwright used only its list
+reporter and browser CI uploaded report paths only on failure. The job now emits an HTML report and
+uploads it plus raw test results on every outcome; scaffold verification pins both requirements.
+
+The composition matrix now attaches six named post-gesture states at all seven required viewports:
+calm rest, selected-square sight, assistance menu, long objective, Inspector and text/keyboard
+entry. Every gesture preserves the exact calm board rectangle, producing 42/112 report cells.
+Dynamic and module-dependent states remain open and are not represented by substitute fixtures.
+The pass also exposed D1835: Chessground can visually clear a selected square while the Support
+caption retains the prior selection, so selection clearing is the next state-2 repair. D1833 closes;
+D1834 remains implementing.

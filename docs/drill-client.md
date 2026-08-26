@@ -414,7 +414,11 @@ honest `schema_example` status and selectable `human_common` policy. It then
 plays against the deterministic mock opponent, crosses checkpoints, rewinds,
 creates and switches an alternative branch, compares both lines, and downloads
 a legal variation PGN. This lives in a separate browser CI job rather than
-making the engine-free unit gate depend on a browser installation.
+making the engine-free unit gate depend on a browser installation. The browser job writes both
+the list output and an HTML Playwright report. Matrix tests attach successful state/viewport
+screenshots explicitly; GitHub uploads the report and raw test results with `if: always()` so
+passing visual evidence is reviewable instead of retaining artifacts only after a failure.
+Scaffold verification pins the reporter and workflow upload contract.
 
 The acceptance run also records browser-observed board-ready, rewind, branch
 switch, and mock selector timings. The optional Maia measurement is selected

@@ -1,7 +1,7 @@
 import { mkdir, writeFile } from "node:fs/promises";
 import { randomUUID } from "node:crypto";
 
-import { expect, test, type Locator, type Page } from "@playwright/test";
+import { expect, test, type Locator, type Page, type TestInfo } from "@playwright/test";
 import { playBoardEdge } from "../../apps/web/src/lib/play-composition.js";
 
 async function register(page: Page): Promise<string> {
@@ -73,6 +73,21 @@ async function assertRunViewport(
     expect(timeline).not.toBeNull();
     expect(board!.y + board!.height).toBeLessThanOrEqual(timeline!.y + 1);
   }
+}
+
+async function attachCompositionCell(
+  page: Page,
+  testInfo: TestInfo,
+  viewport: { readonly width: number; readonly height: number },
+  state: string,
+): Promise<void> {
+  await testInfo.attach(
+    `play-composition-${viewport.width}x${viewport.height}-${state}`,
+    {
+      body: await page.screenshot({ animations: "disabled" }),
+      contentType: "image/png",
+    },
+  );
 }
 
 const ENDGAME_VIEWPORT_PACKS = [
@@ -1285,14 +1300,7 @@ test("@matrix every shell route owns the viewport at supported desktop and table
   }
 });
 
-test("@matrix play composition keeps one exact board rectangle through overlays and companion gestures", async ({ page }) => {
-  await page.goto("/play");
-  await page
-    .getByRole("article")
-    .filter({ hasText: "schema example" })
-    .getByRole("button", { name: /Rehearse this position/ })
-    .click();
-
+test("@matrix play composition keeps one exact board rectangle through reachable states and records successful cells", async ({ page }, testInfo) => {
   const projections = [
     { width: 1440, height: 900 },
     { width: 1366, height: 768 },
@@ -1305,18 +1313,35 @@ test("@matrix play composition keeps one exact board rectangle through overlays 
 
   for (const viewport of projections) {
     await page.setViewportSize(viewport);
+    await page.goto("/play");
+    await page
+      .getByRole("article")
+      .filter({ hasText: "schema example" })
+      .getByRole("button", { name: /Rehearse this position/ })
+      .click();
     await assertRunViewport(page, viewport);
     const calm = await page.getByLabel("Chessboard").boundingBox();
     expect(calm).not.toBeNull();
+    await attachCompositionCell(page, testInfo, viewport, "01-calm-rest");
+
+    await page.getByText("Assistance", { exact: true }).click();
+    await expect(page.locator("details.assistance-control")).toHaveAttribute("open", "");
+    expect(await page.getByLabel("Chessboard").boundingBox()).toEqual(calm);
+    await attachCompositionCell(page, testInfo, viewport, "07-menu-popover-open");
+    await page.getByText("Assistance", { exact: true }).click();
+
+    await attachCompositionCell(page, testInfo, viewport, "08-long-objective");
 
     await page.getByText("Enter a move", { exact: true }).click();
     await expect(page.getByLabel("Move in chess notation")).toBeVisible();
     expect(await page.getByLabel("Chessboard").boundingBox()).toEqual(calm);
+    await attachCompositionCell(page, testInfo, viewport, "16-keyboard-text-entry-active");
     await page.getByText("Enter a move", { exact: true }).click();
 
     await page.getByRole("button", { name: "Inspector" }).click();
     await expect(page.getByRole("dialog", { name: "Evidence inspector" })).toBeVisible();
     expect(await page.getByLabel("Chessboard").boundingBox()).toEqual(calm);
+    await attachCompositionCell(page, testInfo, viewport, "10-inspector-open");
     await page.getByRole("button", { name: "Return to play" }).click();
 
     if (viewport.width <= 1023) {
@@ -1332,6 +1357,16 @@ test("@matrix play composition keeps one exact board rectangle through overlays 
       expect(await page.getByLabel("Chessboard").boundingBox()).toEqual(calm);
       await page.getByRole("button", { name: "Collapse companion" }).click();
     }
+
+    const selectedPoint = squarePoint(calm!, "d4");
+    await page.mouse.click(selectedPoint.x, selectedPoint.y);
+    const selectedSight = page.locator('[data-evidence-consumer="board.selected_square_sight"]');
+    if (!await selectedSight.isVisible()) {
+      await page.getByRole("button", { name: "Support", exact: true }).click();
+    }
+    await expect(selectedSight).toBeVisible();
+    expect(await page.getByLabel("Chessboard").boundingBox()).toEqual(calm);
+    await attachCompositionCell(page, testInfo, viewport, "02-square-selected");
   }
 });
 
