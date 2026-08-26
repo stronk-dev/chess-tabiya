@@ -55,13 +55,16 @@ describe("GroupPanel", () => {
 
     (Array.from(host.querySelectorAll("button")).find((button) => button.textContent === "Overview") as HTMLButtonElement).click(); await tick();
     expect(host.querySelector("[aria-label='Chessboard']")).toBeNull();
-    expect(host.textContent).not.toContain("No recorded engine evidence");
+    expect(host.textContent).not.toContain("Comparison details are not ready");
 
     (Array.from(host.querySelectorAll("button")).find((button) => button.textContent === "Boards") as HTMLButtonElement).click(); await tick();
     expect(host.querySelector(".canvas")?.getAttribute("data-zoom"), host.innerHTML).toBe("near");
     expect(host.querySelectorAll("[aria-label='Chessboard']"), host.innerHTML).toHaveLength(2);
-    expect(host.textContent).toContain("No recorded engine evidence for this branch leaf.");
+    expect(host.textContent).toContain("Comparison details are not ready for this branch.");
+    expect(host.textContent).toContain("Prepare missing comparisons");
     expect(host.textContent).toContain("same position always receives the same reply");
+    expect(host.textContent).toContain("In progress");
+    expect(host.textContent).not.toMatch(/\b(active|preserved|degraded|failed|achieved|transitioned)\b/u);
     expect(host.textContent?.toLowerCase()).not.toMatch(/\b(rank|score|better|worse|best|worst)\b/);
   });
 });

@@ -1,6 +1,7 @@
 <script lang="ts">
   import type { WhyBannerModel } from "./screen-model.js";
   import StatusAnnouncement from "./StatusAnnouncement.svelte";
+  import { objectiveStateLabel } from "./run-copy.js";
 
   interface Props {
     model?: WhyBannerModel | undefined;
@@ -11,8 +12,8 @@
 
 {#if model}
   <aside class="why-banner" aria-label="Why the objective changed">
-    <StatusAnnouncement message={`${model.state}. ${model.sentences.map((sentence) => sentence.text).join(" ")}`} />
-    <span class="state">{model.state}</span>
+    <StatusAnnouncement message={`${objectiveStateLabel(model.state)}. ${model.sentences.map((sentence) => sentence.text).join(" ")}`} />
+    <span class="state">{objectiveStateLabel(model.state)}</span>
     <div>
       {#each model.sentences as sentence}
         <p><strong>{sentence.sourceLabel}</strong> · {sentence.text}</p>

@@ -3,6 +3,7 @@
 
   import Chessboard from "./Chessboard.svelte";
   import type { StartSide } from "./board-model.js";
+  import { objectiveStateLabel, runOutcomeLabel } from "./run-copy.js";
 
   type ZoomBand = "far" | "mid" | "near";
   type AdvanceMode = "sequential" | "lockstep";
@@ -41,16 +42,12 @@
 
   function sourceSentence(): string {
     if (group.source === "human_replies") {
-      const engine = group.distribution?.engine;
-      return engine === undefined
-        ? "Seeded from a recorded human-reply distribution."
-        : `Seeded from recorded human replies (${engine.name}${engine.modelId === undefined ? "" : ` · ${engine.modelId}`}).`;
+      return "Candidates from recorded human games.";
     }
     if (group.source === "engine_top_n") {
-      const engine = group.distribution?.engine;
-      return engine === undefined ? "Seeded from recorded engine lines." : `Seeded from recorded engine lines (${engine.name} ${engine.version}).`;
+      return "Candidates from engine analysis.";
     }
-    return group.source === "authored" ? "Seeded from authored variations." : "Moves chosen for this experiment.";
+    return group.source === "authored" ? "Candidates from this drill." : "Moves chosen for this experiment.";
   }
 
   function resistanceSentence(): string {
@@ -89,7 +86,7 @@
       <article data-group-member={cell.member.branchId} class:active={cell.member.branchId === run.activeCursor.branchId}>
         <button class="cell-heading" type="button" onclick={() => onEnter(cell.leaf.id, cell.member.branchId)}>
           <strong>{cell.branch.label}</strong>
-          <span>{cell.leaf.objectiveState}{cell.outcome === undefined ? "" : ` · ${cell.outcome}`}</span>
+          <span>{objectiveStateLabel(cell.leaf.objectiveState)}{cell.outcome === undefined ? "" : ` · ${runOutcomeLabel(cell.outcome)}`}</span>
         </button>
         {#if zoom === "mid" || zoom === "near"}
           <dl>
@@ -98,7 +95,7 @@
             <div><dt>Material</dt><dd>{materialBalanceAt(cell.leaf.fen, startSide) >= 0 ? "+" : ""}{materialBalanceAt(cell.leaf.fen, startSide)}</dd></div>
             <div><dt>Checkpoints</dt><dd>{cell.checkpointCount}</dd></div>
           </dl>
-          {#if !cell.hasEvidence}<p class="absence">No recorded engine evidence for this branch leaf.</p>{/if}
+          {#if !cell.hasEvidence}<p class="absence">Comparison details are not ready for this branch.</p>{/if}
         {/if}
         {#if zoom === "near"}
           <Chessboard fen={cell.leaf.fen} {startSide} lastMove={cell.leaf.moveUci} disabled onMove={() => {}} />
@@ -108,7 +105,7 @@
   </div>
 
   {#if missingNodeIds.length > 0}
-    <button class="analysis" type="button" onclick={() => onAnalyze(missingNodeIds)}>Analyze missing evidence</button>
+    <button class="analysis" type="button" onclick={() => onAnalyze(missingNodeIds)}>Prepare missing comparisons</button>
   {/if}
 </section>
 

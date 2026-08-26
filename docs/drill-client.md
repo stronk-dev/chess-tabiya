@@ -288,7 +288,7 @@ The drill screen composes three regions:
 - a bottom active-line timeline whose checkpoint markers support a
   click-preview followed by explicit rewind confirmation; and
 - a right branch rail with branch label, first divergent move, optional intent,
-  live objective-state chip, branch switching, and compare selection. A switch carries
+  live learner-facing objective-progress chip, branch switching, and compare selection. A switch carries
   both the leaf node and branch id, so an empty fork or another shared-node state remains
   observable and selects the intended branch rather than whichever branch the node implies.
 
@@ -324,14 +324,16 @@ or machine consumer. Engine arrows, move recommendations, and human-frequency
 overlays remain absent; the fork arrows are only moves the learner already played.
 
 Outcome Drill adds a compact context surface above the board and in checkpoint
-or terminal sheets. It keeps four facts separate: the root assessment, the
-resistance requested by the pack, the engine identities actually recorded on
-this path, and the objective state/result. A Syzygy assessment says `Exact`
-only when the server projects `ledger_verified`; otherwise it is explicitly an
-authored, unproved claim. The client never infers which policy ran from an
-engine identity and always says that recorded resistance is not proof of
-perfect play. Non-terminal checkpoint resolution says that the attempt ended,
-not that the position was proved.
+or terminal sheets. It keeps four facts separate: a concise root assessment,
+the resistance requested by the pack, the resistance modes recorded on this
+path, and readable objective progress/result. Provider identities, versions,
+retrieval metadata and per-ply policy bookkeeping remain in Inspector's Attempt
+conditions section. A Syzygy assessment says `Exact` only when the server
+projects `ledger_verified`; otherwise the ordinary surface says the supporting
+record is unavailable. The client never infers which policy ran from an engine
+identity and always says that recorded resistance is not proof of perfect play.
+Non-terminal checkpoint resolution says that the attempt ended, not that the
+position was proved.
 
 Shape-library matches are derived over the active played path. Their passive timeline
 markers (including a ply-0 root row) open an attributed detection-and-plans panel without
@@ -344,7 +346,7 @@ At a decision point the drill can capture two through eight legal candidate
 moves without committing them, then create a durable group of ordinary
 branches. The server, not the browser, resolves authored or machine candidates
 and controls subsequent group replies. The branch rail marks membership while
-the group panel presents source and resistance attribution plus Overview,
+the group panel presents learner-facing candidate-source and resistance summaries plus Overview,
 Summary, and Boards semantic-zoom bands. It never ranks candidates.
 
 On a phone, opening the hand-picked creator from the modal Actions drawer closes

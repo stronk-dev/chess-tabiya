@@ -9611,3 +9611,17 @@ p95 envelopes; under 173-file contention one rewind p95 reached 106.4 ms while i
 8.0 ms. The file now carries the repository's `-performance.test.ts` identity and is declared in
 the single-worker performance tier. The population and thresholds are unchanged, the tier guard
 reports two isolated performance files, and both contracts pass. D1824 closes.
+
+## 2026-08-26 — Ordinary play translates evidence into learner vocabulary
+
+The accepted play-composition vocabulary law now reaches Branches, branch groups, Support,
+checkpoints and objective-change announcements. Raw objective/result enums, provider versions,
+selector bookkeeping and phrases such as “policy distribution,” “diagnostic reading” and
+“post-commit guard” no longer occupy the ordinary workflow. One shared vocabulary describes
+objective progress, candidate source, requested/played resistance and the learner action.
+
+The evidence was not discarded: Inspector's Attempt conditions section retains the detailed root
+assessment, engine identity and per-ply resistance record. A production-browser Outcome Drill
+journey proves both halves at the same checkpoint—provider identity is absent from its ordinary
+dialog, then present after the deliberate Inspector action. D1825–D1827 close; module selection and
+the complete play-composition matrix remain open.

@@ -1,6 +1,7 @@
 <script lang="ts">
   import type { BranchCard } from "./screen-model.js";
   import { renderCollapseExplanation, type Decidedness } from "@chess-tabiya/runtime";
+  import { objectiveStateLabel } from "./run-copy.js";
 
   interface Props {
     branches: readonly BranchCard[];
@@ -32,7 +33,7 @@
 <aside class="rail" aria-labelledby="branch-title" data-active-branch-id={activeBranchId}>
   <div class="heading">
     <h2 id="branch-title">Branches</h2>
-    <span>{branches.length} branches · {settled.length} settled · {hidden.length} hidden by you · {unclassified} not classified</span>
+    <span>{branches.length} branches · {settled.length} settled · {hidden.length} hidden by you · {unclassified} still open</span>
   </div>
   <ol>
     {#each visible as branch, index}
@@ -50,9 +51,9 @@
             <small>{branch.firstMove}{branch.intent ? ` · ${branch.intent}` : ""}</small>
           </span>
           <span class:terminal={branch.terminal} class="objective">
-            {branch.objectiveState}
+            {objectiveStateLabel(branch.objectiveState)}
           </span>
-          {#if branch.origin === "simulated"}<span>simulated</span>{/if}
+          {#if branch.origin === "simulated"}<span>preview line</span>{/if}
           {#if groupOrdinals[branch.id] !== undefined}<span class="group-marker">group {groupOrdinals[branch.id]}</span>{/if}
         </button>
         <label>

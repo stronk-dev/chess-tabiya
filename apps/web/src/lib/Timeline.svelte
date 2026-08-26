@@ -74,7 +74,7 @@
             <span class="authored-marker" aria-label="Authored commentary available">A</span>
           {/if}
           {#if entry.guardGenerated}
-            <span class="guard-marker" aria-label="Post-commit guard recorded">G</span>
+            <span class="guard-marker" aria-label="Review marker">G</span>
           {/if}
         </button>
         {#each shapeMarkers.filter((marker) => marker.nodeId === entry.nodeId) as marker}<button class="shape-marker" type="button" onclick={() => onOpenShape(marker.entryId)}>{marker.label}{marker.channel === "community" ? " · community" : ""}</button>{/each}

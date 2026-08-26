@@ -99,7 +99,7 @@
     {#if checkpoint.interaction?.type === "prediction" && node}
       <section class="prediction" aria-labelledby="prediction-title">
         <h3 id="prediction-title">Predict the opponent's reply</h3>
-        <p>Play one candidate on the board. Tabiya records the policy distribution as numbers, never a verdict.</p>
+        <p>Play the reply you expect. Your prediction stays with this attempt so you can compare it with what happened.</p>
         <Chessboard
           fen={node.fen}
           startSide={checkpoint.interaction.flipBoard ? (startSide === "white" ? "black" : "white") : startSide}

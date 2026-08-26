@@ -10,9 +10,11 @@ import {
 
 import {
   assessmentSentence,
+  assessmentSummary,
   checkpointResolutionSentence,
   objectiveGradeSentence,
   resistanceSentences,
+  resistanceSummary,
   resistanceModeLabel,
   type ProjectedGrading,
 } from "./outcome-presentation.js";
@@ -78,6 +80,10 @@ describe("outcome presentation honesty", () => {
     };
     expect(assessmentSentence(measured)).toBe("Root assessment: +0.54 for White — stockfish-authoring 18 at depth 22, retrieved 2026-08-12T12:00:00.000Z. An engine evaluation at a fixed depth, not a proof.");
     expect(assessmentSentence({ ...measured, grounding: "unverified" })).toBe("Root assessment (declared, unproved): an engine evaluation is declared but no matching evidence record backs it, so it is shown as a claim.");
+    expect(assessmentSummary(authored)).toBe("Starting assessment from the drill author: Author's stated root.");
+    expect(assessmentSummary(exact)).toBe("The starting position is an exact tablebase draw.");
+    expect(assessmentSummary(measured)).toBe("A recorded engine assessment is available for the starting position.");
+    expect(assessmentSummary({ ...measured, grounding: "unverified" })).toBe("A starting assessment is declared, but its supporting record is unavailable.");
   });
 
   it("states the request before play and the recorded engine after play without claiming policy", () => {
@@ -106,6 +112,11 @@ describe("outcome presentation honesty", () => {
     expect(text).not.toContain("not which policy it applied");
     expect(text).not.toContain("actually played");
     expect(text).not.toContain("Maia");
+    expect(resistanceSummary(after, after.activeCursor.nodeId)).toEqual([
+      "Resistance requested: Authored theory replies.",
+      "Resistance played: Authored theory replies.",
+      "Not perfect play.",
+    ]);
   });
 
   it("keeps the archived policy disclaimer only for migrated unknown plies", () => {
@@ -201,6 +212,6 @@ describe("outcome presentation honesty", () => {
       const sentence = checkpointResolutionSentence("Authored horizon", state);
       expect(sentence.toLowerCase()).not.toMatch(/draw|held|you drew|you won/);
     }
-    expect(objectiveGradeSentence("hold", "active")).toContain("unresolved");
+    expect(objectiveGradeSentence("hold", "active")).toBe("Objective · In progress");
   });
 });

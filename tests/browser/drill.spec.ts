@@ -309,7 +309,7 @@ test("adaptive guidance keeps a queen-exchange phase change passive and removabl
 
   await marker.click();
   const guidance = page.getByRole("dialog", { name: /Review/ });
-  await expect(guidance).toContainText("A concrete change was recorded");
+  await expect(guidance).toContainText("This move changed something concrete");
   await expect(guidance).not.toContainText("phase bands");
   await expect(guidance).not.toContainText("material-census convention");
   await expect.poll(() => page.evaluate(() => (window as unknown as { __spoken: string[] }).__spoken)).toEqual([]);
@@ -391,10 +391,10 @@ test("immediate guard waits for the consequence, preserves play-on, and rewinds 
   await expect(page.getByLabel("Chessboard")).toBeVisible();
 
   await move(page, "h2", "h3");
-  const prompt = page.getByRole("region", { name: "Post-commit guard" });
+  const prompt = page.getByRole("region", { name: "Consequence to review" });
   await expect(prompt).toBeVisible();
   await expect(prompt).toContainText("The material balance changed on this path.");
-  await expect(page.getByLabel("Post-commit guard recorded")).toBeVisible();
+  await expect(page.getByLabel("Review marker")).toBeVisible();
 
   await prompt.getByRole("button", { name: "Play on" }).click();
   await expect(prompt).toHaveCount(0);
@@ -593,7 +593,7 @@ test("Outcome Drill resolves a non-terminal hold and remains playable", async ({
   const card = page.getByRole("article").filter({ hasText: "Outcome hold browser fixture" });
   await card.getByRole("button", { name: /Rehearse this position/ }).click();
   await expect(page.getByText("No opponent move has been played yet.")).toBeVisible();
-  await expect(page.getByText("Root assessment (authored, unproved):", { exact: false })).toBeVisible();
+  await expect(page.getByText("Starting assessment from the drill author:", { exact: false })).toBeVisible();
 
   await move(page, "e2", "e4");
   await expect(page.getByText("Active line 2 plies")).toBeVisible();
@@ -602,10 +602,13 @@ test("Outcome Drill resolves a non-terminal hold and remains playable", async ({
   await expect(page.getByText("without conceding the result", { exact: false })).toBeVisible();
   await expect(page.getByText("not a proof of the position", { exact: false })).toBeVisible();
   const checkpointSheet = page.getByRole("dialog");
-  await expect(checkpointSheet.getByText("Deterministic mock opponent", { exact: false })).toBeVisible();
-  await expect(checkpointSheet.getByText("Applied resistance: Authored theory replies", { exact: false })).toBeVisible();
+  await expect(checkpointSheet.getByText("Deterministic mock opponent", { exact: false })).toHaveCount(0);
+  await expect(checkpointSheet.getByText("Resistance played: Authored theory replies → Human-model replies", { exact: false })).toBeVisible();
   await page.getByRole("button", { name: "Continue" }).click();
   await expect(page.getByRole("dialog")).toHaveCount(0);
+  await page.getByRole("button", { name: "Inspector" }).click();
+  await expect(page.getByRole("region", { name: "Attempt conditions" })).toContainText("Deterministic mock opponent");
+  await page.getByRole("button", { name: "Return to play" }).click();
   await clickMove(page, "f1", "b5");
   await expect(page.getByText("Active line 6 plies")).toBeVisible();
 });
@@ -620,17 +623,20 @@ test("Outcome Drill can grade a terminal loss as successful resistance", async (
   await clickMove(page, "g2", "g4");
   await expect(page.getByRole("heading", { name: "You lost." })).toBeVisible();
   await expect(
-    page.getByRole("dialog").getByText("Objective: resist — achieved"),
+    page.getByRole("dialog").getByText("Objective · Objective reached"),
   ).toBeVisible();
 });
 
-test("@content Pack C names authored assessment and the opponent that actually moved", async ({ page }) => {
+test("@content Pack C summarizes the attempt and preserves the recorded opponent in Inspector", async ({ page }) => {
   const card = page.getByRole("article").filter({ hasText: "Rook endings: holding 3 against 4" });
   await card.getByRole("button", { name: /Rehearse this position/ }).click();
   await expect(page.getByText("Eleven pieces are on the board", { exact: false })).toBeVisible();
-  await expect(page.getByText("Requested resistance: Human-model replies, target Elo 1900", { exact: false })).toBeVisible();
-  await expect(page.getByText("Deterministic mock opponent", { exact: false })).toBeVisible();
+  await expect(page.getByText("Resistance requested: Human-model replies", { exact: false })).toBeVisible();
+  await expect(page.getByText("Resistance played: Human-model replies", { exact: false })).toBeVisible();
+  await expect(page.getByText("Deterministic mock opponent", { exact: false })).toHaveCount(0);
   await expect(page.getByText("Maia", { exact: false })).toHaveCount(0);
+  await page.getByRole("button", { name: "Inspector" }).click();
+  await expect(page.getByRole("region", { name: "Attempt conditions" })).toContainText("Deterministic mock opponent");
 });
 
 interface LatencyEnvelope {
@@ -1088,9 +1094,9 @@ test("branch group captures three candidates, rotates, recovers evidence, compar
 
   await page.getByRole("button", { name: "Boards" }).click();
   await expect(page.locator("[data-group-member] [aria-label='Chessboard']")).toHaveCount(3);
-  const missing = page.getByText("No recorded engine evidence for this branch leaf.");
+  const missing = page.getByText("Comparison details are not ready for this branch.");
   await expect(missing.first()).toBeVisible();
-  await page.getByRole("button", { name: "Analyze missing evidence" }).click();
+  await page.getByRole("button", { name: "Prepare missing comparisons" }).click();
   await expect(missing).toHaveCount(0, { timeout: 5_000 });
 
   await page.getByRole("button", { name: "Compare group" }).click();
@@ -1153,14 +1159,14 @@ test("@content Pack A withholds its line, grades the boundary, and renders autho
     .filter({ hasText: "Alternative move" });
   await expect(authoredAlternative).toBeVisible();
   await expect(authoredAlternative.locator("p")).not.toHaveText("");
-  await expect(page.getByText("Objective: follow_theory — degraded", { exact: false })).toBeVisible();
-  await expect(boundarySheet.getByText("Applied resistance: Authored theory replies", { exact: false })).toBeVisible();
+  await expect(page.getByText("Objective · Objective weakened", { exact: false })).toBeVisible();
+  await expect(boundarySheet.getByText("Resistance played: Authored theory replies", { exact: false })).toBeVisible();
 });
 
 test("Line Drill crosses a cap on-line, continues, and renders unknown honestly", async ({ page }) => {
   const card = page.getByRole("article").filter({ hasText: "Line Drill boundary browser fixture" });
   await card.getByRole("button", { name: /Rehearse this position/ }).click();
-  await expect(page.getByText("Requested resistance: Authored theory replies", { exact: false })).toBeVisible();
+  await expect(page.getByText("Resistance requested: Authored theory replies", { exact: false })).toBeVisible();
   await expect(page.getByText("No opponent move has been played yet.")).toBeVisible();
 
   await move(page, "c1", "e3");
@@ -1176,7 +1182,7 @@ test("Line Drill crosses a cap on-line, continues, and renders unknown honestly"
   await expect(page.getByRole("heading", { name: "The pack is silent here" })).toBeVisible();
   await expect(page.getByText("Ply 5, a3: this pack has no statement about this move.")).toBeVisible();
   await expect(page.getByText("Unknown is not a judgement", { exact: false })).toBeVisible();
-  await expect(page.getByRole("dialog").getByText("Applied resistance: Authored theory replies", { exact: false })).toBeVisible();
+  await expect(page.getByRole("dialog").getByText("Resistance played: Authored theory replies", { exact: false })).toBeVisible();
   await expect(page.getByText("predate policy recording", { exact: false })).toHaveCount(0);
 });
 
@@ -1895,7 +1901,7 @@ test("@matrix mobile shell, settings, and install manifest preserve the run regi
     .click();
   await page.getByRole("button", { name: "Support" }).click();
   await expect(page.getByText("No opponent move has been played yet.")).toBeVisible();
-  await expect(page.getByText("Root assessment (authored, unproved):", { exact: false })).toBeVisible();
+  await expect(page.getByText("Starting assessment from the drill author:", { exact: false })).toBeVisible();
   await assertRunViewport(page, { width: 430, height: 932 });
   await page.getByRole("button", { name: "Collapse companion" }).click();
   expect((await page.locator('[aria-label="Chessboard"]').boundingBox())!.width).toBeGreaterThan(192);

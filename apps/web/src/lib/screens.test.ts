@@ -268,7 +268,7 @@ describe("Layer 3 screens", () => {
     expect(document.querySelector(".pivotal-marker")).not.toBeNull();
     expect(document.querySelector('.guidance-panel[role="dialog"]')).toBeNull();
     document.querySelector<HTMLButtonElement>(".pivotal-marker")!.click(); await tick();
-    expect(document.querySelector(".guidance-panel")?.textContent).toContain("A concrete change was recorded");
+    expect(document.querySelector(".guidance-panel")?.textContent).toContain("This move changed something concrete");
     expect(document.querySelector(".guidance-panel")?.textContent).not.toContain("phase bands");
     document.querySelector<HTMLButtonElement>(".guidance-panel button")!.click(); await tick();
     expect(document.querySelector('[aria-label="Recorded moment evidence"]')?.textContent).toContain("material-census convention");
@@ -454,7 +454,8 @@ describe("Layer 3 screens", () => {
     expect(reveal.disabled).toBe(false);
     reveal.click();
     expect(onReveal).toHaveBeenCalledTimes(1);
-    expect(document.body.textContent).toContain("Recorded on the run as a disclosure");
+    expect(document.body.textContent).toContain("It closes again after your next move.");
+    expect(document.body.textContent).not.toContain("Recorded on the run as a disclosure");
     await unmount(component);
 
     document.body.replaceChildren();
@@ -1010,7 +1011,10 @@ describe("Layer 3 screens", () => {
     const main = document.querySelector<HTMLElement>("main.drill")!;
     expect(document.activeElement).toBe(main);
     expect(document.querySelector<HTMLElement>(".rail")?.dataset.activeBranchId).toBe(run.activeCursor.branchId);
-    expect(document.querySelector<HTMLButtonElement>('.branch-card[aria-current="true"]')?.textContent).toContain(run.branches.find((branch) => branch.id === run.activeCursor.branchId)?.label);
+    const activeBranch = document.querySelector<HTMLButtonElement>('.branch-card[aria-current="true"]');
+    expect(activeBranch?.textContent).toContain(run.branches.find((branch) => branch.id === run.activeCursor.branchId)?.label);
+    expect(activeBranch?.textContent).toContain("Objective reached");
+    expect(activeBranch?.textContent).not.toMatch(/\b(active|preserved|degraded|failed|achieved|transitioned)\b/u);
 
     key("r");
     expect(onRewind).toHaveBeenCalledWith({ checkpointId: "plan-commitment" });

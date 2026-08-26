@@ -39,11 +39,13 @@
   import type { RegisterKeyboardRegion } from "./keyboard.js";
   import {
     assessmentSentence,
+    assessmentSummary,
     checkpointResolutionSentence,
     humanModelBandSentence,
     objectiveGradeSentence,
     projectedGrading,
     resistanceSentences,
+    resistanceSummary,
   } from "./outcome-presentation.js";
   import { assistanceProfile, loadAssistance, saveAssistance, type PreferenceStorage } from "./assistance-preference.js";
   import { runViewportSupport, type RunViewportSupport } from "./viewport-support.js";
@@ -355,13 +357,15 @@
   let banner = $derived(pack === undefined ? undefined : whyBanner(pack, run));
   let grading = $derived(pack === undefined ? undefined : projectedGrading(pack));
   let assessment = $derived(
-    grading === undefined ? undefined : assessmentSentence(grading),
+    grading === undefined ? undefined : assessmentSummary(grading),
   );
+  let assessmentDetail = $derived(grading === undefined ? undefined : assessmentSentence(grading));
   let resistance = $derived(
     pack === undefined || (grading === undefined && pack.objective.type !== "follow_theory")
       ? []
-      : resistanceSentences(run, currentNode.id, pack),
+      : resistanceSummary(run, currentNode.id, pack),
   );
+  let resistanceDetail = $derived(pack === undefined ? [] : resistanceSentences(run, currentNode.id, pack));
   let checkpointResolution = $derived.by(() => {
     if (
       grading?.resolveAt.kind !== "checkpoint" ||
@@ -1065,11 +1069,11 @@
               <section class="evidence-reveal" aria-label="Evidence disclosure">
                 <button type="button" disabled={feedbackDeliveryOpen(run) || busy} onclick={() => void onReveal?.()}>Open evidence for this position</button>
                 {#if feedbackDeliveryOpen(run)}<p>Evidence is open at this position until you commit your next move.</p>{/if}
-                <p>Recorded on the run as a disclosure, and it closes again on your next committed move.</p>
+                <p>It closes again after your next move.</p>
               </section>
             {/if}
             {#if guardEvent?.type === "feedback.generated"}
-              <section class="guard-prompt" aria-label="Post-commit guard">
+              <section class="guard-prompt" aria-label="Consequence to review">
                 <StatusAnnouncement message={`The consequence exposed something concrete. ${guardGrounds.map((sentence) => sentence.text).join(" ")} Your played line stays preserved.`} />
                 <div>
                   <strong>The consequence exposed something concrete.</strong>
@@ -1300,6 +1304,13 @@
             </div>
           {:else}<p class="honest">This run has no trajectory legs.</p>{/if}
         </section>
+        {#if assessmentDetail !== undefined || resistanceDetail.length > 0}
+          <section aria-label="Attempt conditions" data-evidence-consumer="inspector.attempt_conditions">
+            <h3>Attempt conditions</h3>
+            {#if assessmentDetail}<p>{assessmentDetail}</p>{/if}
+            {#each resistanceDetail as sentence}<p>{sentence}</p>{/each}
+          </section>
+        {/if}
         {#if terminalEvidence.length > 0}
           <section aria-label="Terminal evidence" data-evidence-consumer="inspector.terminal_evidence">
             <h3>Terminal evidence</h3>
@@ -1350,7 +1361,7 @@
   <div class="modal-backdrop">
     <div class="modal guidance-panel" role="dialog" aria-modal="true" aria-labelledby="pivotal-title" data-evidence-consumer="board.pivotal_marker" use:modalBoundary>
       <p>Pivotal marker</p><h2 id="pivotal-title">Review {openPivotalNode?.moveSan ?? "this moment"}</h2>
-      <p class="guidance-sentence">A concrete change was recorded at ply {openPivotalNode?.ply ?? 0}. Open its evidence when you want the full diagnostic reading.</p>
+      <p class="guidance-sentence">This move changed something concrete. Open the details when you want to inspect the underlying facts.</p>
       <div><button type="button" onclick={() => { pivotalDialogOpen = false; inspectorOpen = true; }}>Open in Inspector</button><button type="button" onclick={() => (pivotalDialogOpen = false)}>Close</button></div>
     </div>
   </div>

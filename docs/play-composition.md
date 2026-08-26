@@ -33,6 +33,12 @@ readings as a hint stream. The attempt-complete dialog follows the same boundary
 outcome, authored commentary and return actions in view, while an explicit “Inspect recorded
 evidence” door opens the exact terminal engine/tablebase records in the Inspector.
 
+The same boundary applies before the attempt ends. Branches, branch groups, Support and checkpoint
+sheets share learner-facing labels for objective progress and game outcomes. They describe where
+candidates came from and which resistance was requested or played, but do not expose runtime enum
+bytes, engine/model versions or selector bookkeeping. The Inspector's Attempt conditions section
+retains the exact root-assessment, provider and per-ply resistance record for deliberate inspection.
+
 ## Verification
 
 The browser suite asserts the exact board rectangle at the seven accepted projections:

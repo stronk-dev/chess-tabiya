@@ -5,6 +5,7 @@ import {
   type ObjectiveState,
   type SelectionEngineIdentity,
 } from "@chess-tabiya/runtime";
+import { objectiveStateLabel } from "./run-copy.js";
 
 type ProjectedAssessment =
   | { readonly kind: "authored"; readonly note: string }
@@ -69,6 +70,16 @@ export function assessmentSentence(grading: ProjectedGrading): string {
     return `Root assessment: ${score} for White — ${grading.assessedBy.engineId} ${grading.assessedBy.engineVersion} at depth ${grading.assessedBy.depth}, retrieved ${grading.assessedBy.retrievedAt}. An engine evaluation at a fixed depth, not a proof.`;
   }
   return "Root assessment (authored, unproved): A tablebase result is declared but no matching evidence record backs it, so it is shown as a claim.";
+}
+
+export function assessmentSummary(grading: ProjectedGrading): string {
+  if (grading.assessedBy.kind === "authored") return `Starting assessment from the drill author: ${grading.assessedBy.note}`;
+  if (grading.grounding !== "ledger_verified") return "A starting assessment is declared, but its supporting record is unavailable.";
+  if (grading.assessedBy.kind === "syzygy") {
+    const result = grading.assessedBy.category === "win" ? "win" : grading.assessedBy.category === "loss" ? "loss" : "draw";
+    return `The starting position is an exact tablebase ${result}.`;
+  }
+  return "A recorded engine assessment is available for the starting position.";
 }
 
 function engineName(identity: SelectionEngineIdentity): string {
@@ -182,13 +193,27 @@ export function resistanceSentences(run: DrillRun, nodeId: string, pack?: DrillP
   return lines;
 }
 
+export function resistanceSummary(run: DrillRun, nodeId: string, pack?: DrillPackDefinition): readonly string[] {
+  const resistance = resistanceOnPath(run, nodeId, pack);
+  const lines = [`Resistance requested: ${resistanceModeLabel(resistance.requested.mode)}.`];
+  if (resistance.engines.length === 0) {
+    lines.push("No opponent move has been played yet.");
+  } else if (resistance.applied.length === 0) {
+    lines.push("The opponent reply predates resistance tracking.");
+  } else if (resistance.applied.length === 1) {
+    lines.push(`Resistance played: ${resistanceModeLabel(resistance.applied[0]!.mode)}.`);
+  } else {
+    lines.push(`Resistance played: ${resistance.applied.map((entry) => resistanceModeLabel(entry.mode)).join(" → ")}.`);
+  }
+  lines.push("Not perfect play.");
+  return lines;
+}
+
 export function objectiveGradeSentence(
-  objectiveType: string,
+  _objectiveType: string,
   state: ObjectiveState,
 ): string {
-  return state === "active"
-    ? `Objective: ${objectiveType} — unresolved`
-    : `Objective: ${objectiveType} — ${state}`;
+  return `Objective · ${objectiveStateLabel(state)}`;
 }
 
 export function checkpointResolutionSentence(
