@@ -9342,3 +9342,17 @@ fixtures prove ordinary controls sit below an inert ancestor while Shape and key
 open. A real Chromium fixture at the supported phone floor proves the background is inert and the
 single-focusable keyboard dialog wraps focus rather than leaking into the page. A11-a16 and D1492
 are complete.
+
+## 2026-08-26 — Accessibility automation gains a real device tier and finds D1813
+
+The browser configuration now has explicit desktop Chromium and Pixel 7 projects. Project-level
+grep keeps the full journey suite single-run while the mobile-labelled matrix uses the imported
+device profile, including its mobile user agent, touch points and coarse pointer instead of a
+desktop browser resized to phone width.
+
+An axe-core WCAG A/AA gate scans the authenticated position catalogue, Settings and a live
+rehearsal. Its first run found a serious keyboard defect: the long Objective `<h1>` owned its own
+overflow while route focus made it programmatically-only. Scrolling moved to a labelled focusable
+region and the heading remains the route-focus target. A11-a19 and D1813 close. A11-a30 narrows to
+forced-colors/color-scheme emulation and broader live-region state coverage; the device, project,
+Escape/modal, scanner and keyboard-unit arms now ship.

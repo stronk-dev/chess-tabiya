@@ -13,7 +13,7 @@ is not proof that the production application routes an endpoint.
 | Real-content contracts | `make verify-content` | Schema and application compatibility against committed draft/pack/candidate bytes, including the published-pack evidence-digest invariant | Authored chess judgement or software contracts already expressible with synthetic fixtures |
 | Browser journeys | `make test-browser-smoke` | Stable user journeys asserted through roles, state and outcomes | Mutable authored prose or exhaustive viewport coverage |
 | Real-content integration | `make test-browser-content` | Representative draft/pack integration with the application | Chess-truth validation or product behavior already expressible with a synthetic fixture |
-| Responsive/accessibility matrices | `make test-browser-matrix` | Post-gesture geometry, input projections, semantic board and navigation | A resting screenshot |
+| Responsive/accessibility matrices | `make test-browser-matrix` | Post-gesture geometry, input projections, semantic board/navigation, WCAG A/AA scanning, and real mobile input semantics | A resting screenshot |
 | Complete browser gate | `make test-browser-ci` | The same three named browser tiers used by GitHub | Release-image, migration or backup proof |
 | Full non-browser gate | `make verify` | Software + governance + real-content targets, matching the three required GitHub jobs | Browser or release-image proof |
 | Exact local CI | `make ci-local` | Pinned Node/pnpm, Stockfish and Compose preflight, then all required non-browser and browser tiers | Ordinary development checks |
@@ -22,6 +22,12 @@ is not proof that the production application routes an endpoint.
 runs the named browser tiers separately so the failing step says whether the regression is a core
 journey, real-content integration, or the interaction matrix. Traces, screenshots and the HTML
 report are uploaded when a browser tier fails.
+
+Playwright has explicit desktop Chromium and Pixel 7 projects. Project-level test filters keep
+ordinary journeys on one desktop browser while `@mobile` matrix cases inherit the device's mobile
+user agent, touch points and coarse pointer. The accessibility matrix runs axe-core against the
+authenticated catalogue, Settings and an active rehearsal; it gates WCAG A/AA violations and
+complements interaction assertions for focus ownership, announcements and responsive state.
 
 Pre-commit process checks intentionally do not read the shared working tree. The hook materializes
 the Git index and runs register, status, work, roadmap and intent checks inside that temporary

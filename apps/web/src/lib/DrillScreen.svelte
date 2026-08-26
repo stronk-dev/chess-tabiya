@@ -974,7 +974,8 @@
 
       <aside class="rail-stack" class:sheet-open={sheetOpen} aria-label="Run companion">
         <div class="companion-identity">
-          <div class="objective-copy">
+          <!-- svelte-ignore a11y_no_noninteractive_tabindex (WCAG keyboard access for an overflow region) -->
+          <div class="objective-copy" role="region" aria-labelledby="drill-title" tabindex="0">
             <p>Objective</p>
             <h1 id="drill-title">{objectiveSentence}</h1>
           </div>
@@ -1453,6 +1454,11 @@
 
   .companion-identity { display: grid; gap: .55rem; padding: .75rem; border-bottom: 1px solid var(--line); }
 
+  .objective-copy {
+    max-height: 6rem;
+    overflow: auto;
+  }
+
   .objective-copy p {
     margin: 0;
     color: var(--accent);
@@ -1463,9 +1469,7 @@
 
   .objective-copy h1 {
     max-width: 32ch;
-    max-height: 6rem;
     margin: 0.25rem 0 0;
-    overflow: auto;
     font: 500 1.15rem/1.2 var(--display-font);
   }
 

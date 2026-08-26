@@ -420,7 +420,7 @@ A second Playwright projection checks every route at 1280x720, 1440x900, and
 the drill board remains wholly within the viewport and above the timeline. A
 corpus projection additionally exercises all six served endgame packs across
 the measured failing desktop sizes and requires a board of at least 192px;
-long objective prose scrolls inside its own bounded region instead of consuming
+long objective prose scrolls inside a labelled, keyboard-focusable bounded region instead of consuming
 the board's interaction area. Compact runs bound that prose more tightly so the
 same 192px board floor remains inside the position region rather than underneath
 Timeline.
