@@ -131,6 +131,20 @@ This register does **not** validate UX quality, preset defaults, permission sema
 every old stored value migrates correctly. Those remain product/runtime acceptance criteria. It
 only prevents invisible authority/version collisions.
 
+### 6. Pre-review correction — derive semantic domains through aliases
+
+The first process draft proposed a syntax-level walk of direct string-literal union nodes. That is
+insufficient for its already-named successor: `rfc/hint-distance.md:307-310` specifies
+`hintDistance: "off" | HintRung`, and `HintRung` is derived from
+`(typeof HINT_RUNGS)[number]` at `:198-200`. `[V]` A direct AST union walker sees a type reference
+and indexed-access type, not the five literal members.
+
+The extractor must therefore use the pinned workspace TypeScript `Program`/`TypeChecker` and
+normalize the **resolved** string-literal union. Equivalent inline, local-alias and imported
+readonly-tuple forms produce the same domain/digest; a changed tuple value moves it; any remaining
+broad `string`, `any`, `unknown`, `never` or non-string member fails closed. `[M]` [[D1627]] records
+the correction and the process RFC fixtures it before independent review.
+
 ## Exploration-gate decision
 
 **PASS for a narrow process RFC.** `[V]` The question is no longer a GAP: the rule-7 predicate,

@@ -315,6 +315,17 @@ settings may configure it because every primitive remains reachable somewhere. O
 not show a six-option select. Presets and workflow contracts project a named default and a ceiling;
 the run screen shows one learner question and one progressive action.
 
+**The type, parser and migrations are one product boundary ([[D1629]]).** Today
+`apps/web/src/lib/assistance-preference.ts` independently hand-codes `validV4` and every legacy
+migration beside runtime's authoritative `AssistanceConfig` interface. V5 deletes that split:
+`packages/runtime/src/assistance-codec.ts` exports one pure `parseAssistanceConfig`/migration
+operation for v1-v5, and the web preference store calls it rather than retaining a second validator.
+The assistance-register TypeChecker projection drives a conformance fixture: for every current
+field and every allowed literal, a base valid value with that one member round-trips; missing,
+extra, unknown and broad values refuse; v1-v4 fixtures migrate to v5 with `hintDistance: "off"`;
+and a valid v5 non-off rung survives save/load byte-for-byte. This is a test-time join to the
+register authority, not runtime reflection or another stored schema.
+
 The effective ceiling is the minimum of preset, workflow context, role/contest policy and stored
 Advanced preference. **Runtime source availability is not a ceiling term** ([[D1371]]). A request
 above policy yields `policy_refused`; an allowed request whose source abstains yields `honest_empty`.
@@ -512,6 +523,11 @@ as default-on on inherited D1066 timings; the integrated receipt is an implement
 18. **Owner-use discharge.** On the owner's normal devices, the ladder feels increasingly useful,
     never like a raw evidence dump, and the qualified later-line wording is understandable. A
     negative verdict returns selection/presentation; it is not rationalized away.
+19. **Assistance codec parity ([[D1629]]).** Web imports the one runtime v1-v5 parser/migrator and
+    contains no parallel `validV5`/migration switch. The TypeChecker-derived field/domain matrix
+    exercises every allowed literal plus missing/extra/unknown values; v1-v4 each migrate with
+    `hintDistance: "off"`, and a non-off v5 round-trips through the real preference store. Adding a
+    field/domain member to the registered type without codec support fails.
 
 ## Discharges
 
@@ -528,6 +544,7 @@ as default-on on inherited D1066 timings; the integrated receipt is an implement
 | D9 | Owner device/use verdict | OWNER | dated validation record | |
 | D10 | AssistanceConfig shared-resource register gap [[D1581]] | codex | accepted process RFC/check | |
 | D11 | Process-local F1 view must terminate in a closed wire receipt [[D1582]] | codex | amended contract + able-to-fail server/client fixtures | |
+| D12 | AssistanceConfig runtime codec and TypeChecker-derived persistence conformance [[D1629]] | codex | v5 implementing SHA + focused runtime/web receipt | |
 
 ## Open questions
 
@@ -548,3 +565,7 @@ Preset names/composition remain `intent-presets`' owner-use validation, not choi
 - 2026-08-26: self-review caught [[D1582]] before cross-review: the process-local F1 seal cannot
   survive JSON. The server now terminates the admitted view in a closed, digest-checked delivery
   receipt; the browser validates wire bytes and never claims to reconstruct evidence admission.
+- 2026-08-26: pre-review [[D1629]] correction. V5 now owns one pure runtime assistance
+  parser/migrator consumed by web and a TypeChecker-derived domain conformance matrix; prose saying
+  migrations default the new field is no longer the only guard against a registered field being
+  silently discarded by browser persistence.

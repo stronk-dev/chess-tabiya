@@ -1,6 +1,7 @@
 # RFC: AssistanceConfig shared-resource register
 
-- **Status:** draft — research-complete 2026-08-26; ready for independent process/buildability review
+- **Status:** draft — research-complete 2026-08-26; pre-review alias correction [[D1627]] applied;
+  ready for independent process/buildability review
 - **Author:** codex
 - **Created:** 2026-08-26
 - **Design refs:** none. This is repository process over an already-ruled assistance contract; it
@@ -10,8 +11,8 @@
   current claimant and exact checker delta are all verified at HEAD.
 - **Depends on:** implemented `rfc/archive/shared-resource-registers.md`; RFC-0000 rule 7
 - **Parent / amends:** follows up immutable `rfc/archive/shared-resource-registers.md`; amends
-  `rfc/0000-rfc-process.md` only to name the eighth registered resource, `rfc/README.md` with its
-  register, and `tools/register-check.mjs` with the derived reader/check
+  `rfc/README.md` with its register and `tools/register-check.mjs` with the derived reader/check.
+  RFC-0000 rule 7 is already generic and is not edited ([[D1628]])
 - **Supersedes / superseded by:** —
 - **Planning:** `planning/assistance-config-register/`
 
@@ -55,8 +56,9 @@ defaults, permission algebra, v5 migration bytes, UI and hint semantics stay in 
 ### 1. Canonical resource and claim grammar
 
 `tools/register-check.mjs` adds the literal canonical resource `assistance-config` to
-`RESOURCE_NAMES`. RFC-0000 rule 7's resource list/example is amended to name it. The claim grammar
-adds exactly:
+`RESOURCE_NAMES`. RFC-0000 rule 7 already defines the predicate and gains no hand-maintained
+resource example; the executable resource↔README bijection remains the inventory ([[D1628]]). The
+claim grammar adds exactly:
 
 ```text
 assistance-config | lane <positive integer> | <non-empty changed symbols>
@@ -86,8 +88,9 @@ still adds the exhaustive preset/clamp columns in the v5 landing; dependency is 
 
 ### 2. Tree derivation is semantic and formatting-insensitive
 
-The register reader parses `packages/runtime/src/assistance.ts` with the workspace's pinned
-TypeScript compiler API. It locates exactly one exported `AssistanceConfig` interface and derives:
+The register reader builds a workspace TypeScript `Program` with the pinned compiler and resolves
+`packages/runtime/src/assistance.ts` through its `TypeChecker`. It locates exactly one exported
+`AssistanceConfig` interface and derives:
 
 ```ts
 interface AssistanceConfigTree {
@@ -101,10 +104,20 @@ The parser requires:
 
 1. one required readonly property named `version` whose type is one positive integer literal;
 2. every other property required and readonly;
-3. every other type a non-empty union of unique string literals;
+3. every other property's **resolved semantic type** a non-empty union containing only unique
+   string-literal members;
 4. no index signature, method, call/construct signature, inheritance or duplicate property.
 
 Anything else fails with the unsupported node/property named. It is not silently omitted.
+
+Resolution is semantic rather than syntax-only because the already-specified v5 field is
+`"off" | HintRung`, where `HintRung = (typeof HINT_RUNGS)[number]`. The checker must resolve local
+and imported aliases, `as const` readonly-tuple indexed access and nested unions to the literal
+domain. It then refuses `string`, `unknown`, `any`, `never`, numeric/object members, generics whose
+instantiation is not a closed literal set, or a union retaining any non-string-literal residue.
+The normalized digest contains the resolved values, not alias names or source spelling: replacing
+an inline union with an equivalent alias is formatting-equivalent; changing the tuple behind that
+alias is semantic drift.
 
 For the digest, field names and each member domain are sorted, encoded as canonical JSON together
 with `head`, hashed with SHA-256 and truncated to the existing register convention's 12 lowercase
@@ -166,10 +179,21 @@ C3 remains the authority for declaration/register bijection. C4/C6 are generaliz
 include the new numeric-head register; their schema/evidence/migration semantics do not change.
 The command's terminal success line becomes `C1-C9 green`.
 
+`derivedOutput` gains an explicit branch rather than falling through its current assumption that
+every non-schema/non-migration resource is `evidence-kinds` ([[D1630]]). At the registered
+checkpoint it prints:
+
+```text
+assistance-config: head 4; next hint-distance.md (lane 5)
+```
+
+With no live claimant it prints `next lane 5`; it never reads `.members` from the assistance tree
+or parses a lane claim as an evidence member.
+
 ### 5. Able-to-fail fixtures
 
 `tools/register-check.test.mjs` supplies source strings/temporary trees for every branch. The
-fixture table's unit is **mutation class**; total twelve:
+fixture table's unit is **mutation class**; total sixteen:
 
 | # | mutation | required result |
 |---|---|---|
@@ -185,6 +209,10 @@ fixture table's unit is **mutation class**; total twelve:
 | 10 | claim lane 6 at head 4 | C9 failure |
 | 11 | two claimant RFCs, whether same or different lanes | C9 failure |
 | 12 | one lane-5 claim and matching README row | pass while tree remains head 4 |
+| 13 | replace a direct union with an equivalent local alias | same derived domain and digest |
+| 14 | resolve an imported `as const` tuple through `(typeof VALUES)[number]` | exact literal domain; changing one tuple value changes digest |
+| 15 | widen one alias/tuple-derived arm to `string` (or leave another non-literal residue) | named extractor refusal |
+| 16 | render derived output with/without the lane-5 claimant | exact assistance line; no evidence-kinds fallthrough |
 
 The implementation also runs the real repository and asserts derived head 4, nine axes, 22 values,
 the current digest and exactly one lane-5 claimant. The explicit counts are drift tripwires; a
@@ -195,7 +223,7 @@ future intentional version changes them together with its claim.
 Implementation changes exactly these authority classes:
 
 - `tools/register-check.mjs` and `tools/register-check.test.mjs`;
-- `rfc/README.md` and `rfc/0000-rfc-process.md`;
+- `rfc/README.md`;
 - claim/status/dependency prose in `rfc/hint-distance.md` and `rfc/intent-presets.md`;
 - current-tense fixed register counts in active RFC/register prose ([[D1584]]), rewritten to
   “the registered resources” while explicitly dated historical counts remain untouched;
@@ -215,9 +243,10 @@ None. No design intent changes.
 1. **Rule-7 coverage.** `RESOURCE_NAMES` and the README register set each gain exactly
    `assistance-config`; deleting either fails C6/C9.
 2. **Semantic derivation.** The real tree derives head 4, nine axes and 22 string members; the
-   normalized digest is stable under mutation-class 1 and changes under classes 2-5.
-3. **Fail closed.** Mutation classes 6-7 throw a named extractor error; no property disappears
-   from the normalized shape.
+   normalized digest is stable under mutation-classes 1 and 13, resolves class 14, and changes
+   under classes 2-5 and the changed-tuple arm of 14.
+3. **Fail closed.** Mutation classes 6-7 and 15 throw a named extractor error; no property or
+   non-literal union residue disappears from the normalized shape.
 4. **Register binding.** C9.2/C9.3/C9.5 fail on wrong head, wrong/missing digest and missing landed
    head respectively.
 5. **Single writer.** Same-lane and different-lane two-claim fixtures both fail. Lane 4 and lane 6
@@ -237,6 +266,13 @@ None. No design intent changes.
 12. **No hand-count recurrence.** Current-tense active prose contains no assertion that the live
     register set has six, seven or eight members; [[D1584]] closes while dated historical facts
     remain byte-identifiable as history.
+13. **Generic process law stays generic.** `rfc/0000-rfc-process.md` is byte-identical; deleting
+    `assistance-config` from `RESOURCE_NAMES` or its README section still fails criteria 1/4, so no
+    prose inventory is needed.
+14. **Derived output has a typed assistance arm ([[D1630]]).** With the Guided Hint claim it prints
+    `assistance-config: head 4; next hint-distance.md (lane 5)`; without one it prints
+    `assistance-config: head 4; next lane 5`. Neither path accesses `.members` or uses the
+    evidence-kind claim parser.
 
 ## Discharges
 
@@ -253,4 +289,15 @@ contract.
 
 ## Changelog
 
+- 2026-08-26: pre-review [[D1630]] correction. Added the exact `derivedOutput` branch and fixture;
+  the shipped fallback treats every non-schema/non-migration resource as `evidence-kinds` and
+  would otherwise crash or misparse the new lane claim.
+- 2026-08-26: pre-review [[D1628]] scope correction. Removed the unnecessary RFC-0000 amendment:
+  rule 7 is already generic, while `RESOURCE_NAMES` plus the README bijection are the executable
+  inventory. Added criterion 13 and removed the process-law file from §6.
+- 2026-08-26: pre-review [[D1627]] correction. The syntax-only direct-union extractor would have
+  rejected the already-specified v5 `"off" | HintRung` field. Derivation now uses a workspace
+  TypeScript `Program`/`TypeChecker`, resolves local/imported and readonly-tuple aliases to their
+  semantic literal domains, and fails on any broad/non-literal residue. Added mutation classes
+  13-15 and rebound criteria 2-3; no product byte or assistance value changed.
 - 2026-08-26: drafted from `design/research/assistance-config-shared-resource.md` and [[D1581]].

@@ -8212,3 +8212,24 @@ exact amendment order is in
 `planning/pack-capability-contract/independent-rereview-2026-08-26.md`. No schema, corpus,
 production or protected-design bytes changed. No new owner ruling is needed, and [[D560]] remains
 whole.
+
+## 2026-08-26 — AssistanceConfig register is buildable before independent review
+
+The pre-review of `rfc/assistance-config-register.md` found and corrected three process defects
+without implementing the register. [[D1627]] replaces a syntax-only union walker—which would have
+rejected Guided Hint's already-specified `"off" | HintRung` alias—with a TypeChecker-normalized
+semantic-domain contract and able-to-fail local/imported/readonly-tuple fixtures. [[D1628]] keeps
+RFC-0000's rule 7 generic instead of adding a prose inventory beside the executable resource set.
+[[D1630]] gives `derivedOutput` an explicit assistance branch rather than falling through the
+evidence-kind shape and reading members that do not exist.
+
+The adjacent product seam remains open and owned. [[D1629]] records that the runtime interface and
+the browser's hand-written parser/migrations can still drift while C9 is green. `hint-distance`
+now requires one pure runtime v1-v5 codec consumed by web plus a TypeChecker-derived persistence
+matrix over every field/domain member, missing/extra/unknown values, all legacy migrations and a
+non-off v5 round trip. That correction changes no product byte and does not widen this process RFC.
+
+The research dossier, coverage matrix, active register, routing and planning records now agree:
+the process RFC has sixteen mutation classes and fourteen acceptance criteria, claims no product
+resource itself, and is ready for independent D1 review. Normal governance is green after
+refreshing the roadmap receipt; implementation remains forbidden until that review accepts it.
