@@ -203,6 +203,15 @@ applied. This is shared foundation, not variant polish: it lets bots consume a l
 provider without widening Support/Review, and prevents derived evidence from laundering an invalid
 source into a learner claim.
 
+[[D1710]] closes the missing execution axis and makes the foundation state materially more
+negative: 193 compiled projections divide into 93 current-consumer, 67 research-only and 33
+unbound, yet the current-admitted candidate vector has zero production callers and **none of the
+67 semantic projections reaches a live application operation**. Their exact deepest roots are 45
+operator-selector-only, 11 behind the unused candidate helper and 11 isolated sequence helpers.
+Phase 3 therefore waits on the complete one-edge packet operation plus the recorded-path compiler;
+catalogue membership, an exported constructor or a consumer-operation registry entry cannot
+satisfy a module, Review, bot, drill or longitudinal dependency.
+
 ### 3. Arrival and the rehearsal loop
 
 <!-- roadmap-capability: rehearsal -->

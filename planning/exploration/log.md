@@ -8806,3 +8806,25 @@ Seven Node-24 arms pass in `tools/d1703-explorer-source-contract-harness/`. Doss
 `planning/evidence-foundation-ux/explorer-source-author-repair-2026-08-26.md`. The shared provider
 handoffs now name Stockfish, Maia, Syzygy and Explorer. No active RFC, production, schema, content
 or UI byte changed.
+
+## 2026-08-26 — Compiled evidence reclassified by deepest executable root
+
+Closed [[D1710]] by joining the 193-projection F1 catalogue to constructors, non-test callers,
+operation roots and sealed outputs. The manifest splits 93 current-consumer / 67 research-only /
+33 unbound. That binding result overstates execution in two exact ways: the current-admitted
+`derived.opponent.candidate_feature_vector@1` has zero production callers, and none of the 67
+semantic projections reaches a live application operation.
+
+The semantic set is now partitioned without residue: 45 can reach only the operator selector, 11
+more can reach only `localSemanticEvents` behind the unused candidate helper, and 11 multi-edge
+families stop at isolated constructors. This reproduces [[D1067]], [[D1072]], [[D1386]] and
+[[D1633]] as one manifest-wide class rather than creating duplicate defects. It also finds the two
+unbound bounded predicates—mate-through-four and overloaded-defender conflict—remain helper-only.
+
+Phase 3 is re-gated on real operations: the complete one-edge packet, a recorded-run path compiler,
+and emitted-item activation checks. The author handoff requires a generated execution-disposition
+receipt so future catalogue growth cannot repeat the compiler-equals-product error. Five Node-24
+arms pass in `tools/d1710-producer-execution-harness/`. Dossier:
+`design/research/producer-execution-closure.md`; handoff:
+`planning/evidence-foundation-ux/producer-execution-author-repair-2026-08-26.md`. No RFC,
+production, schema, content or UI byte changed.
