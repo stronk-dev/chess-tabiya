@@ -731,6 +731,8 @@ export {
   type MaterialRoleVector,
 } from "./material-state.js";
 
+export { CORPUS_GUARD } from "./population-guard.js";
+
 export const runtimeBuildInfo = Object.freeze({
   packageName: "@chess-tabiya/runtime",
   runSchemaVersion: DRILL_RUN_SCHEMA_VERSION,

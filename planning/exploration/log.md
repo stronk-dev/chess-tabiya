@@ -8153,3 +8153,16 @@ reconciliation: `PackProvenanceEditor.svelte` referenced the nonexistent `--pane
 used a fallback that silently flattened the intended raised surface to paper. [[D1619]] replaces it
 with the declared `--surface` token. The existing theme test enumerates every CSS variable reference
 against the palette and derived-token registries, so another fallback cannot hide the same class.
+
+## 2026-08-26 — one population guard and the discarded-ledger row closed
+
+Implemented [[D264]] under the archived `evidence-at-runtime` criterion that already required the
+population disclosure to have one authority. Runtime now exports the sole `CORPUS_GUARD`; both the
+web Explorer renderer and server repertoire scan/recommendation paths consume it, and their tests
+compare output to the shared value. This removes the punctuation fork without adding a judgement.
+
+The same symbol audit re-derived [[D142]] as shipped rather than open: `PackRecord.positionEvidence`
+retains the digest-gated, multi-valued ledger index, preserves duplicate clock-sensitive records,
+suppresses stale and unstamped ledgers, yields to live evidence and stays off the wire. Stale routing
+rows for D142, D663/D665/D666, D671–D678 and D722 are removed under [[D1618]]; all were already
+closed by their archived implementation contracts.

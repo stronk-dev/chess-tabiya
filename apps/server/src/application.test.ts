@@ -1,5 +1,6 @@
 import type { AddressInfo } from "node:net";
 
+import { CORPUS_GUARD } from "@chess-tabiya/runtime";
 import { afterEach, describe, expect, it } from "vitest";
 
 import { createApplication, type ChessTabiyaApplication } from "./application.js";
@@ -195,7 +196,7 @@ describe("development application mock opponent", () => {
     const created=await fetch(`${origin}/repertoires`,{method:"POST",headers:{"content-type":"application/json",cookie},body:JSON.stringify({name:"Black repertoire",side:"black",targetElo:1600,coverageDenominator:10,source:{kind:"pgn",pgn:"1. d4 d5 *"}})});expect(created.status,await created.clone().text()).toBe(201);const repertoire=(await created.json() as any).repertoire;
     expect((await fetch(`${origin}/repertoires/${repertoire.id}/scan`,{method:"POST",headers:{"content-type":"application/json",cookie},body:"{}"})).status).toBe(202);
     let page:any;for(let index=0;index<20;index++){page=await (await fetch(`${origin}/repertoires/${repertoire.id}/gaps`,{headers:{cookie}})).json();if(page.status==="ready")break;await new Promise((resolve)=>setTimeout(resolve,5));}
-    expect(page.scan.guard).toBe("These counts say what this population played, not what is good");expect(page.scan.gaps[0]).toMatchObject({replySan:"e4",state:"open"});
+    expect(page.scan.guard).toBe(CORPUS_GUARD);expect(page.scan.gaps[0]).toMatchObject({replySan:"e4",state:"open"});
     const entered=await fetch(`${origin}/repertoires/${repertoire.id}/gaps/enter`,{method:"POST",headers:{"content-type":"application/json",cookie},body:JSON.stringify({gapKey:page.scan.gaps[0].key})});expect(entered.status,await entered.clone().text()).toBe(201);const result=await entered.json() as any;expect(result).toMatchObject({alreadyEntered:false,runId:expect.stringMatching(/^gap-/),writerId:expect.stringMatching(/^writer-/)});
     const repeated=await fetch(`${origin}/repertoires/${repertoire.id}/gaps/enter`,{method:"POST",headers:{"content-type":"application/json",cookie},body:JSON.stringify({gapKey:page.scan.gaps[0].key})});expect(await repeated.json()).toMatchObject({alreadyEntered:true,runId:result.runId});
     const outsider=await fetch(`${origin}/auth/register`,{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify({handle:"repertoire_outsider",password:"repertoire-outsider-password"})}),otherCookie=outsider.headers.get("set-cookie")!.split(";",1)[0]!;expect((await fetch(`${origin}/repertoires/${repertoire.id}`,{headers:{cookie:otherCookie}})).status).toBe(404);

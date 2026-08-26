@@ -1,6 +1,8 @@
+import { CORPUS_GUARD } from "@chess-tabiya/runtime";
+
 import type { CorpusPage } from "./api.js";
 
-export const CORPUS_GUARD = "These counts say what this population played, not what is good.";
+export { CORPUS_GUARD };
 export const CORPUS_MOVE_OUTCOME_FLOOR = 100;
 const pct = (value: number, total: number): string => (Math.round(value / total * 1000) / 10).toFixed(1);
 
