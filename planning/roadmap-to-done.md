@@ -284,6 +284,15 @@ fact already own important subsets. The successor reuses and binds them through 
 missing roles/shared identity, so Support, Review, drills and bots/style consume one family rather
 than duplicate it or invent “prevents,” intent or value.
 
+[[D1726]] closes the source-to-ordinary-consumer migration boundary. The web still renders a
+median 80–84 legacy structural facts per position and four-to-six transition strings per move;
+five inventory families are 85–88% of the structural volume. Eight richer structural sources have
+zero consumers and every identity-rich transition successor is research-only. The returned module
+draft would even reserve exact mobility, king and material records for Advanced while ordinary
+sight keeps their coarse counts. The 1.0 route therefore preserves pack predicates, seals D1727's
+named-structure identity, activates D1710 packet/path operations, and makes named modules select
+the rich facts. Renaming the raw panel or moving it beside the board does not satisfy this gate.
+
 ### 3. Arrival and the rehearsal loop
 
 <!-- roadmap-capability: rehearsal -->

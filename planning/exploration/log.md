@@ -8991,3 +8991,21 @@ D1724's broader all-non-pawn event has different scope, explaining its 3.17× / 
 the prior minor-only 3.63× / 3.18×. The handoff now reuses existing collectors and routes delivery
 through D1710; only shared current-control identity or genuinely new roles remain candidate source
 work. No production, RFC, schema, content, pack or learner-UX byte changed.
+
+## 2026-08-26 — Legacy reading to identity-rich successor closure measured (D1726/D1727)
+
+Joined all 18 structural feature kinds and all 14 transition reading leaves to the compiled
+producer/consumer graph, live web operation and returned module-registration table. All 17 emitted
+structural readings are live in inspector/sight; eight richer structural successors have zero
+consumers. All 14 legacy transition leaves have an identity-rich event successor, but every
+successor is research-only. The current web renders the legacy rows directly.
+
+Across 611 authored / 577 imported positions, raw structural width is 63.89 mean / 80 median / 102
+max and 80.80 / 84 / 106. Five inventory families contribute 33,225/39,035 (85.12%) and
+40,980/46,621 (87.90%) facts. The returned module draft would preserve the inversion: ordinary
+sight receives every legacy row while exact mobility, king state and material-role identity remain
+full-inspector-only. The pass also reproduced two named-structure payload shapes under one
+projection: prose-only in inspector/sight, id+name+prose in guidance. The handoff keeps authored
+predicates stable, seals pattern identity, activates D1710/D1711 operations and replaces ordinary
+presentation with question-bound rich sources. No production, RFC, schema, content, pack or
+learner-UX byte changed.

@@ -115,6 +115,17 @@ empty-square local safety. The author handoff therefore reuses those collectors,
 through D1710, splits candidate from occupied/use, retains exact operands and corrects D632 to 23
 current expressions in three shape docs before human migration.
 
+[[D1726]] **completed the legacy-reading/identity-rich-successor closure on 2026-08-26**. The live
+learner path still renders all 17 emitted structural readings and 14 transition count/string
+leaves. Eight richer structural projections have zero compiled consumers; every identity-rich
+transition successor is research-only. The fixed corpus measures median 80 authored / 84 imported
+structural facts, with five inventory families contributing 85.12% / 87.90%. Returned
+`module-registration` would preserve the inversion by giving ordinary sight the legacy rows while
+exact mobility, king and material state stay full-inspector-only. [[D1727]] additionally finds two
+named-structure payload authorities under one projection. The author handoff keeps predicates for
+pack compatibility, seals identities, binds production packet/path operations through D1710 and
+replaces ordinary presentation before module acceptance.
+
 **Deliverable 7 (owner questions) accumulates here** — nothing is silently chosen.
 **All four open questions RULED 2026-08-22 ([[D745]])**: space = classic zones + pawn control,
 `chess_tradition`; the negative reading faces learners post-commit/review with the denominator;
