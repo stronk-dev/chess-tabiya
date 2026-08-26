@@ -72,6 +72,6 @@
   textarea { min-height: 5rem; resize: vertical; }
   .credit-heading { display: flex; justify-content: space-between; align-items: center; gap: 1rem; }
   .credit-row label { grid-template-columns: 9rem minmax(0, 1fr); align-items: center; }
-  .cc0-limit { margin-top: 1rem; padding: .8rem; border-inline-start: .25rem solid var(--accent); background: var(--panel-raised, var(--paper)); }
+  .cc0-limit { margin-top: 1rem; padding: .8rem; border-inline-start: .25rem solid var(--accent); background: var(--surface); }
   @media (max-width: 45rem) { .credit-row label { grid-template-columns: 1fr; } }
 </style>

@@ -8131,3 +8131,25 @@ production run-write SQL paths are not a closed scheduling boundary; and importe
 moves are observed games, not evidence that the learner played them. No migration or production
 projection code was started. Next: author amendment, fold the superseded two-table/synchronous
 sections into one contract, refresh the migration register, and independently re-review again.
+
+## 2026-08-26 — stale evidence routes reconciled against shipped symbols
+
+Re-derived ten routed evidence defects before assigning implementation. D520 already shares the
+promotion-complete exact legal-move authority and its validator fixture covers queen, rook, bishop
+and knight promotion. D851–D859 were repaired in the accepted breadth contract and landed in
+`5d8c7b6f`: exact legal/pseudo control, controller-edge defender loss, pre-state contact execution,
+kind-specific retained horizons, pressure identity, literal pawn predicates, candidate-majority
+boundaries, en-passant captured-square retention and mover-relative open-file occupancy all have
+production symbols and discriminating fixtures.
+
+The ledger still described those nine rows as open and the routing queue still instructed a worker
+to implement seven of them plus D520. [[D1618]] records the class. All ten ledger states are now
+truthful and the completed routing instructions are removed; no product behavior changed.
+
+## 2026-08-26 — provenance editor rejoins the theme contract
+
+The normal unit gate caught one committed non-network failure while verifying the evidence-route
+reconciliation: `PackProvenanceEditor.svelte` referenced the nonexistent `--panel-raised` token and
+used a fallback that silently flattened the intended raised surface to paper. [[D1619]] replaces it
+with the declared `--surface` token. The existing theme test enumerates every CSS variable reference
+against the palette and derived-token registries, so another fallback cannot hide the same class.

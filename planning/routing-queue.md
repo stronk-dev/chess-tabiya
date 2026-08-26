@@ -16,13 +16,11 @@ set execution order.
 | Rows | Primary destination | Next action / gate |
 |---|---|---|
 | D565, D568, D748, D800 | semantic collector research | Finish bounded-reply semantics and the Wave-C contract; retain honest unavailable/zero outcomes. |
-| D852, D853, D854, D855, D856, D857, D858 | `breadth-collectors` correction/closeout | Apply the reviewed payload-boundary corrections before the affected projections can graduate. |
 | D671, D672, D673, D674, D675, D676, D677, D678 | evidence-manifest successor work | Correct declared producer payloads and consumer projections; require compiled-view consumption rather than anchor-only census. |
 | D663, D665, D666 | evidence-manifest direct defects | Fix reasoning-review provider input, phase payload typing, and consumer-closure measurement under the accepted evidence contract. |
 | D583, D584, D586, D587, D588, D589 | F2 renderer/conformance RFC lane | Seal board and provider projections, bind sentences to admitted evidence, and define provider-independent conformance before implementation. |
 | D722 | evidence vocabulary implementation | Either add a production emitter with an accepted consumer or remove the dead `packAbsentEvidenceRef` vocabulary through the owning RFC. |
 | D142, D143, D228, D264, D275 | evidence/provenance integrity lane | Reconcile the discarded ledger, corroboration coverage, capability registers, guard forks, and attribution truthfulness through research then an RFC where contracts change. |
-| D520 | tablebase evidence defect | Repair promotion-complete successor generation and add underpromotion fixtures before claiming `tablebase.moveCensus@v1` coverage. |
 
 ## Learner modules, presets, and presentation
 
