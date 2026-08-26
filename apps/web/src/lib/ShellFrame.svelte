@@ -55,7 +55,7 @@
 
 <div class="shell">
   {#if chrome}
-  <a class="skip-link" href="#primary-navigation">Skip to primary navigation</a>
+  <a class="skip-link" href="#main-content">Skip to content</a>
   <header class="shell-topbar">
     <a class="wordmark" href="/" onclick={(event) => follow(event, "/")}>Tabiya</a>
     <nav id="primary-navigation" aria-label="Primary navigation">
@@ -89,7 +89,7 @@
     {/if}
   </header>
   {/if}
-  <div class="shell-content">{@render children()}</div>
+  <div id="main-content" class="shell-content" tabindex="-1">{@render children()}</div>
 </div>
 
 <style>
@@ -194,7 +194,12 @@
     }
 
     .run-context {
-      display: none;
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      overflow: hidden;
+      clip-path: inset(50%);
+      white-space: nowrap;
     }
   }
 

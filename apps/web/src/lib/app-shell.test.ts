@@ -412,6 +412,11 @@ describe("application shell", () => {
     await vi.waitFor(() =>
       expect(document.body.textContent).toContain("You hold the board"),
     );
+    expect(document.title).toBe("Home · Tabiya");
+    const skip = document.querySelector<HTMLAnchorElement>(".skip-link")!;
+    expect(skip.textContent).toBe("Skip to content");
+    expect(skip.getAttribute("href")).toBe("#main-content");
+    expect(document.getElementById("main-content")?.getAttribute("tabindex")).toBe("-1");
     document
       .querySelector<HTMLButtonElement>(".resume-card button")!
       .click();
@@ -436,6 +441,8 @@ describe("application shell", () => {
     for (const [path, copy] of routes) {
       router.navigate(path);
       await vi.waitFor(() => expect(document.body.textContent).toContain(copy));
+      expect(document.title.endsWith(" · Tabiya")).toBe(true);
+      expect(document.title).not.toBe("Tabiya");
       expectDisabledControlsExplained();
     }
 

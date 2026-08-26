@@ -2,7 +2,7 @@
 
 import { describe, expect, it } from "vitest";
 
-import { HistoryRouter, parseRoute, routePath } from "./router.js";
+import { HistoryRouter, parseRoute, routePath, routeTitle } from "./router.js";
 
 describe("application router", () => {
   it("parses every shell route and encoded run deep link", () => {
@@ -52,5 +52,13 @@ describe("application router", () => {
     expect(location.pathname).toBe("/settings");
     expect(names).toEqual(["home", "play", "review", "settings"]);
     router.destroy();
+  });
+
+  it("gives every route family a page title", () => {
+    expect(routeTitle({ name: "home" })).toBe("Home · Tabiya");
+    expect(routeTitle({ name: "run", runId: "one" })).toBe("Rehearsal · Tabiya");
+    expect(routeTitle({ name: "story", runId: "one" })).toBe("Game review · Tabiya");
+    expect(routeTitle({ name: "live-session", sessionId: "one" })).toBe("Live session · Tabiya");
+    expect(routeTitle({ name: "not-found", pathname: "/missing" })).toBe("Not found · Tabiya");
   });
 });

@@ -9260,3 +9260,31 @@ A browser fixture at the supported 360×680 floor proves the keyboard map remain
 viewport with scrolling enabled. Work items A11-a1, A11-a2, A11-a10, A11-a13 and the duplicate
 INR-a5 obligation are complete. D1447 remains open only for the separate owner choice to activate
 or retire the currently inert `arrows` assistance ceiling.
+
+## 2026-08-26 — Shell and mobile accessibility floors close
+
+Five no-ruling client defects now have executable closure. The skip link targets a focusable
+content boundary without nesting the route-owned `<main>` landmarks. A closed title map names all
+fourteen route families and the live router updates `document.title`. Mobile status uses a clipped
+live region rather than `display:none`; this re-derivation also corrects the dossier's stale site,
+because play composition moved the active-run status from ShellFrame into DrillScreen. ShellFrame
+now uses the same safe pattern for the non-run shell context.
+
+Board appearance and text-move controls enforce the 24 CSS-pixel target floor. Assistance
+checkboxes render in aligned rows rather than above their captions; D484 remains open only for the
+larger presets/defaults/Advanced workflow. Component tests cover titles and skip targeting, while
+the 390×844 browser matrix measures route-title transitions, visible-live-region semantics, touch
+target boxes and checkbox layout. Work items A11-a3, A11-a4, A11-a6, A11-a8 and A11-a11 are
+complete.
+
+## 2026-08-26 — Opening compiler unit contract is decoupled from corpus scale (D1812)
+
+The exact software gate exposed a compiler contract crossing Vitest's generic five-second budget
+under parallel load. The test rebuilt all 3,810 pinned openings three times even though the
+production artifact's population, bytes, loader and lookup performance are independently checked.
+
+The compiler unit contract now uses five valid, distinct one-row TSV sources and a complete
+five-file compiler closure. It retains every semantic assertion: enumeration-order invariance,
+digest sensitivity to changed source meaning, malformed-row refusal, duplicate-endpoint refusal,
+missing-source refusal and undeclared-compiler refusal. Its focused runtime is 11 ms; the
+full-corpus build/check and isolated performance gates are unchanged.

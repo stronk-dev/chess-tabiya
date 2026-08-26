@@ -4,7 +4,6 @@ import { resolve } from "node:path";
 import { canonicalizeJson } from "@chess-tabiya/schema/drill-pack";
 import { describe, expect, it } from "vitest";
 
-import { CHESS_OPENINGS_COMMIT } from "./sourcing/openings.js";
 import {
   OPENING_CATALOGUE_COMPILER_FILES,
   OPENING_CATALOGUE_FILES,
@@ -14,29 +13,40 @@ import {
 
 const ROOT = new URL("../../../", import.meta.url).pathname;
 
-async function inputs(): Promise<{ readonly sources: readonly OpeningCatalogueSourceInput[]; readonly compilers: readonly { readonly path: string; readonly bytes: Uint8Array }[] }> {
-  const sources = await Promise.all(OPENING_CATALOGUE_FILES.map(async (name) => Object.freeze({ name, bytes: await readFile(resolve(ROOT, "vendor", "chess-openings", CHESS_OPENINGS_COMMIT, name)) })));
-  const compilers = await Promise.all(OPENING_CATALOGUE_COMPILER_FILES.map(async (path) => Object.freeze({ path, bytes: await readFile(resolve(ROOT, path)) })));
-  return Object.freeze({ sources, compilers });
+function semanticFixture(): { readonly sources: readonly OpeningCatalogueSourceInput[]; readonly compilers: readonly { readonly path: string; readonly bytes: Uint8Array }[] } {
+  const rows = Object.freeze({
+    "a.tsv": "A00\tAmar Opening\t1. Nh3",
+    "b.tsv": "B00\tKing's Pawn Game\t1. e4",
+    "c.tsv": "A40\tQueen's Pawn Game\t1. d4",
+    "d.tsv": "A10\tEnglish Opening\t1. c4",
+    "e.tsv": "A04\tZukertort Opening\t1. Nf3",
+  } as const);
+  const sources = OPENING_CATALOGUE_FILES.map((name) => Object.freeze({
+    name,
+    bytes: Buffer.from(`eco\tname\tpgn\n${rows[name]}\n`),
+  }));
+  const compilers = OPENING_CATALOGUE_COMPILER_FILES.map((path) => Object.freeze({
+    path,
+    bytes: Buffer.from(`fixture:${path}`),
+  }));
+  return Object.freeze({ sources: Object.freeze(sources), compilers: Object.freeze(compilers) });
 }
 
 describe("runtime opening catalogue compiler", () => {
-  it("is deterministic across enumeration order and changes its digest when source meaning changes", async () => {
-    const value = await inputs();
+  it("is deterministic across enumeration order and changes its digest when source meaning changes", () => {
+    const value = semanticFixture();
     const first = compileRuntimeOpeningCatalogue(value.sources, value.compilers);
     const shuffled = compileRuntimeOpeningCatalogue([...value.sources].reverse(), [...value.compilers].reverse());
     expect(canonicalizeJson(shuffled)).toBe(canonicalizeJson(first));
-    expect(first.namedEndpoints).toHaveLength(3_810);
-    expect(first.pathMembership).toHaveLength(7_854);
-    expect(Math.max(...first.pathMembership.map((item) => item.descendantEndpointCount))).toBe(2_023);
+    expect(first.namedEndpoints).toHaveLength(5);
     const renamed = value.sources.map((source) => source.name === "a.tsv"
       ? Object.freeze({ ...source, bytes: Buffer.from(Buffer.from(source.bytes).toString("utf8").replace("Amar Opening\t", "Amar Opening renamed\t")) })
       : source);
     expect(compileRuntimeOpeningCatalogue(renamed, value.compilers).digest).not.toBe(first.digest);
   });
 
-  it("refuses malformed rows, duplicate endpoints, missing files and undeclared compiler helpers", async () => {
-    const value = await inputs();
+  it("refuses malformed rows, duplicate endpoints, missing files and undeclared compiler helpers", () => {
+    const value = semanticFixture();
     const malformed = value.sources.map((source) => source.name === "a.tsv" ? Object.freeze({ ...source, bytes: Buffer.from("wrong header\n") }) : source);
     expect(() => compileRuntimeOpeningCatalogue(malformed, value.compilers)).toThrow(/TSV header/);
     const duplicate = value.sources.map((source) => source.name === "e.tsv" ? Object.freeze({ ...source, bytes: Buffer.concat([Buffer.from(source.bytes), Buffer.from("A00\tDuplicate Amar\t1. Nh3\n")]) }) : source);

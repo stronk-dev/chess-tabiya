@@ -393,6 +393,10 @@
     top: .45rem;
     left: .45rem;
     padding: .25rem .4rem;
+    min-height: 1.5rem;
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
     border: 1px solid var(--line);
     border-radius: .4rem;
     background: var(--panel);
@@ -457,7 +461,7 @@
   .text-move form { grid-template-columns: minmax(0, 1fr) auto; gap: 0.3rem; margin-top: 0.35rem; }
   .text-move[open] form { display: grid; }
   .text-move label { display: grid; gap: 0.15rem; }
-  .text-move input, .text-move button { min-width: 0; padding: 0.25rem; color: inherit; background: Canvas; border: 1px solid CanvasText; }
+  .text-move input, .text-move button { min-width: 0; min-height: 1.5rem; box-sizing: border-box; padding: 0.25rem; color: inherit; background: Canvas; border: 1px solid CanvasText; }
 
   .promotion-picker {
     position: absolute;

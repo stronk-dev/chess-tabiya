@@ -116,5 +116,5 @@
 {/if}
 
 <style>
-  section{margin:2rem 0}.context-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:.8rem}fieldset{display:grid;gap:.65rem;padding:1rem;border:1px solid var(--line);border-radius:.8rem;background:var(--panel)}label{display:grid;gap:.25rem}dl{display:flex;flex-wrap:wrap;gap:.5rem 1rem}dl div{display:grid}.honest{color:var(--muted);font-size:.8rem}form{display:grid;gap:.6rem;max-width:28rem;margin-top:1rem}@media(max-width:719px){.context-grid{grid-template-columns:1fr}}
+  section{margin:2rem 0}.context-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:.8rem}fieldset{display:grid;gap:.65rem;padding:1rem;border:1px solid var(--line);border-radius:.8rem;background:var(--panel)}label{display:grid;gap:.25rem}label:has(> input[type="checkbox"]){display:flex;align-items:center}dl{display:flex;flex-wrap:wrap;gap:.5rem 1rem}dl div{display:grid}.honest{color:var(--muted);font-size:.8rem}form{display:grid;gap:.6rem;max-width:28rem;margin-top:1rem}@media(max-width:719px){.context-grid{grid-template-columns:1fr}}
 </style>

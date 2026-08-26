@@ -43,17 +43,21 @@
     {
       "id": "A11-a11",
       "sourceState": "queued",
-      "state": "queued",
+      "state": "completed",
       "capability": "accessibility",
       "owner": "client-platform",
-      "assignment": "capability:accessibility",
+      "assignment": "closed",
       "sourceDocument": "ux-accessibility-and-mobile.md",
       "sourceSection": "§4 d12",
       "sourceHeading": "Accessibility and small screens — `ux-accessibility-and-mobile.md`",
       "summary": "48 checkboxes render above their captions; one `:has()` rule",
       "legacyRoute": "wave3 #13",
       "note": "[[D484]], open since 2026-08-16",
-      "sourceDigest": "sha256:488202ef8f970b0f3edb122ab81bcbb316943f1f82e87e0bff9ff6ff9a3e85a6"
+      "sourceDigest": "sha256:488202ef8f970b0f3edb122ab81bcbb316943f1f82e87e0bff9ff6ff9a3e85a6",
+      "completion": {
+        "completedOn": "2026-08-26",
+        "evidence": "checkbox-bearing assistance labels use a flex row; phone browser fixture verifies horizontal alignment"
+      }
     },
     {
       "id": "A11-a12",
@@ -340,17 +344,21 @@
     {
       "id": "A11-a3",
       "sourceState": "queued",
-      "state": "queued",
+      "state": "completed",
       "capability": "accessibility",
       "owner": "client-platform",
-      "assignment": "capability:accessibility",
+      "assignment": "closed",
       "sourceDocument": "ux-accessibility-and-mobile.md",
       "sourceSection": "§4 d3",
       "sourceHeading": "Accessibility and small screens — `ux-accessibility-and-mobile.md`",
       "summary": "**The skip link skips *to* the navigation.** Point it at the content instead",
       "legacyRoute": "wave3 #7",
       "note": "see the correction at the end — the *\"no `<main>`\"* half of this row is false at HEAD",
-      "sourceDigest": "sha256:7f5e5dfeb385895ac6e6d355912a1e6d8a7dfc65c787d4b84c6b5f1946bf09bb"
+      "sourceDigest": "sha256:7f5e5dfeb385895ac6e6d355912a1e6d8a7dfc65c787d4b84c6b5f1946bf09bb",
+      "completion": {
+        "completedOn": "2026-08-26",
+        "evidence": "skip link targets the focusable shell content boundary without nesting the route-owned main landmark"
+      }
     },
     {
       "id": "A11-a30",
@@ -428,17 +436,21 @@
     {
       "id": "A11-a4",
       "sourceState": "queued",
-      "state": "queued",
+      "state": "completed",
       "capability": "accessibility",
       "owner": "client-platform",
-      "assignment": "capability:accessibility",
+      "assignment": "closed",
       "sourceDocument": "ux-accessibility-and-mobile.md",
       "sourceSection": "§4 d4",
       "sourceHeading": "Accessibility and small screens — `ux-accessibility-and-mobile.md`",
       "summary": "`<title>Tabiya</title>` is static across twelve routes; write `document.title` in the router subscription (WCAG 2.4.2)",
       "legacyRoute": "wave3 #7",
       "note": "verified at HEAD",
-      "sourceDigest": "sha256:d071a5d4ef784025b77797402a2be5ff5df9473bc887cce5df58392c60f31efc"
+      "sourceDigest": "sha256:d071a5d4ef784025b77797402a2be5ff5df9473bc887cce5df58392c60f31efc",
+      "completion": {
+        "completedOn": "2026-08-26",
+        "evidence": "closed route-title map covers every AppRoute family and the live router subscription updates document.title"
+      }
     },
     {
       "id": "A11-a5",
@@ -457,17 +469,21 @@
     {
       "id": "A11-a6",
       "sourceState": "queued",
-      "state": "queued",
+      "state": "completed",
       "capability": "accessibility",
       "owner": "client-platform",
-      "assignment": "capability:accessibility",
+      "assignment": "closed",
       "sourceDocument": "ux-accessibility-and-mobile.md",
       "sourceSection": "§4 d6",
       "sourceHeading": "Accessibility and small screens — `ux-accessibility-and-mobile.md`",
       "summary": "The busy live region is `display:none` below 60rem, so *\"Thinking…\"* is never announced on a phone",
       "legacyRoute": "wave3 #7",
       "note": "`.status`'s `clip-path` below 719px is the correct pattern to copy",
-      "sourceDigest": "sha256:c9d3d978adc14824ebdde72ca25b0a9aa6aa1278eea7f6d290a89ce14b5cedc7"
+      "sourceDigest": "sha256:c9d3d978adc14824ebdde72ca25b0a9aa6aa1278eea7f6d290a89ce14b5cedc7",
+      "completion": {
+        "completedOn": "2026-08-26",
+        "evidence": "play-composition moved run status into DrillScreen's clip-hidden live region; shell run context now uses the same mobile pattern and browser coverage refuses display:none"
+      }
     },
     {
       "id": "A11-a7",
@@ -486,17 +502,21 @@
     {
       "id": "A11-a8",
       "sourceState": "queued",
-      "state": "queued",
+      "state": "completed",
       "capability": "accessibility",
       "owner": "client-platform",
-      "assignment": "capability:accessibility",
+      "assignment": "closed",
       "sourceDocument": "ux-accessibility-and-mobile.md",
       "sourceSection": "§4 d8",
       "sourceHeading": "Accessibility and small screens — `ux-accessibility-and-mobile.md`",
       "summary": "Two sub-24px touch targets **on the board** — `.appearance-link` (~21px) and `.text-move` input/Submit (~21px), the second being the accessibility fallback control",
       "legacyRoute": "wave3 #7",
       "note": "WCAG 2.5.8",
-      "sourceDigest": "sha256:35a68309ccfda8f58c6689110b937c3f31a8678f5b2e9a559d8d09e5cc271c8c"
+      "sourceDigest": "sha256:35a68309ccfda8f58c6689110b937c3f31a8678f5b2e9a559d8d09e5cc271c8c",
+      "completion": {
+        "completedOn": "2026-08-26",
+        "evidence": "appearance, text-move input and submit controls enforce a 24px floor; phone browser fixture measures rendered boxes"
+      }
     },
     {
       "id": "A11-a9",

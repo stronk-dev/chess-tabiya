@@ -1500,13 +1500,35 @@ test("@matrix mobile shell, settings, and install manifest preserve the run regi
   await page.setViewportSize({ width: 390, height: 844 });
   await page.goto("/settings");
   const position = page.getByRole("group", { name: "Just Play" });
+  const ambientLabel = position.locator("label").filter({ hasText: "Ambient presence" });
+  expect(await ambientLabel.evaluate((element) => getComputedStyle(element).display)).toBe("flex");
+  expect(await ambientLabel.evaluate((element) => getComputedStyle(element).alignItems)).toBe("center");
+  await expect(page).toHaveTitle("Settings · Tabiya");
   await position.getByLabel("Board lighting").selectOption("sight");
   await page.reload();
   await expect(position.getByLabel("Board lighting")).toHaveValue("sight");
   await page.goto("/play");
+  await expect(page).toHaveTitle("Play · Tabiya");
   await page.getByRole("button", { name: "Start and keep the game" }).click();
+  await expect(page).toHaveTitle("Rehearsal · Tabiya");
   await expect(page.getByLabel("Chessboard")).toBeVisible();
   await expect(page.getByRole("navigation", { name: "Run regions" })).toBeVisible();
+  const runContext = page.locator("main.drill .status");
+  await expect(runContext).toHaveAttribute("aria-live", "polite");
+  expect(await runContext.evaluate((element) => getComputedStyle(element).display)).not.toBe("none");
+  const contextBox = await runContext.boundingBox();
+  expect(contextBox?.width).toBeLessThanOrEqual(1);
+  expect(contextBox?.height).toBeLessThanOrEqual(1);
+  const appearanceBox = await page.getByRole("link", { name: "Appearance" }).boundingBox();
+  expect(appearanceBox?.width).toBeGreaterThanOrEqual(24);
+  expect(appearanceBox?.height).toBeGreaterThanOrEqual(24);
+  await page.getByText("Enter a move", { exact: true }).click();
+  for (const target of [page.getByLabel("Move in SAN or UCI"), page.getByRole("button", { name: "Submit move" })]) {
+    const box = await target.boundingBox();
+    expect(box?.width).toBeGreaterThanOrEqual(24);
+    expect(box?.height).toBeGreaterThanOrEqual(24);
+  }
+  await page.getByText("Enter a move", { exact: true }).click();
   for (const viewport of [{ width: 390, height: 844 }, { width: 360, height: 680 }] as const) {
     await page.setViewportSize(viewport);
     await assertRunViewport(page, viewport);

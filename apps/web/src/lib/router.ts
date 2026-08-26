@@ -31,6 +31,27 @@ const STATIC_ROUTES: Readonly<Record<string, StaticRouteName>> = Object.freeze({
   "/settings": "settings",
 });
 
+const ROUTE_TITLES: Readonly<Record<AppRoute["name"], string>> = Object.freeze({
+  home: "Home",
+  play: "Play",
+  run: "Rehearsal",
+  review: "Review",
+  story: "Game review",
+  rating: "Rating",
+  learn: "Learn",
+  live: "Live",
+  "live-session": "Live session",
+  "live-overlay": "Live overlay",
+  create: "Create",
+  library: "Library",
+  settings: "Settings",
+  "not-found": "Not found",
+});
+
+export function routeTitle(route: AppRoute): string {
+  return `${ROUTE_TITLES[route.name]} · Tabiya`;
+}
+
 function normalizedPath(pathname: string): string {
   return pathname.length > 1 ? pathname.replace(/\/+$/, "") : pathname;
 }

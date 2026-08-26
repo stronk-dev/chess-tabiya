@@ -56,7 +56,7 @@
     type DeletionPreview,
     ApiError,
   } from "./lib/api.js";
-  import { HistoryRouter, routePath, type AppRoute } from "./lib/router.js";
+  import { HistoryRouter, routePath, routeTitle, type AppRoute } from "./lib/router.js";
   import { ShellKeyboardDispatcher } from "./lib/keyboard.js";
   import {
     DrillSessionController,
@@ -813,6 +813,7 @@
     unsubscribeController = controller.subscribe((next) => (session = next));
     unsubscribeRouter = router.subscribe((next) => {
       route = next;
+      document.title = routeTitle(next);
       if (learner === undefined) return;
       void loadRoute(next);
       syncLivePolling(next);
