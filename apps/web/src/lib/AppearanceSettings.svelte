@@ -15,6 +15,7 @@
   } from "./theme/axes.js";
   import { APP_THEMES, INHERITED_CONTRAST_NOTICES } from "./theme/catalog.js";
   import type { ResolvedTheme } from "./theme/controller.js";
+  import HonestControl from "./HonestControl.svelte";
 
   const theme = useTheme();
   let resolved: ResolvedTheme = $state(theme.current);
@@ -63,9 +64,13 @@
     </label>
     <label>
       Piece movement
-      <select value={resolved.preference.animation} onchange={(event) => setAnimation(event.currentTarget.value)}>
-        {#each ANIMATION_PREFERENCES as value}<option {value}>{value === "none" ? "No animation" : value === "fast" ? "Fast" : "Normal"}</option>{/each}
-      </select>
+      <HonestControl disabled={resolved.reducedMotion} reasonId="device-reduced-motion" reason="Your device requests reduced motion, so piece movement is off. Change the device setting to choose another speed.">
+        {#snippet children(describedBy)}
+          <select disabled={resolved.reducedMotion} aria-describedby={describedBy} value={resolved.preference.animation} onchange={(event) => setAnimation(event.currentTarget.value)}>
+            {#each ANIMATION_PREFERENCES as value}<option {value}>{value === "none" ? "No animation" : value === "fast" ? "Fast" : "Normal"}</option>{/each}
+          </select>
+        {/snippet}
+      </HonestControl>
     </label>
   </div>
   <p class="current">Using {APP_THEMES[resolved.appTheme].label} in {resolved.mode} mode.</p>

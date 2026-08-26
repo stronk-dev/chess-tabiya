@@ -11,7 +11,10 @@ The application-color catalog contains Paper (light), Tokyo Night (light and
 dark), and Warm Dark. Device light/dark mode is the default; a browser may pin an
 explicit mode. The board catalog contains Brown and Olive. The piece catalog
 contains Cburnett and Lichess Mono. Movement is Normal (250 ms), Fast (120 ms),
-or None. Reduced-motion device preferences always force None.
+or None. Reduced-motion device preferences always force None. Settings exposes
+that resolved device fact, disables the preference that is not currently in
+effect, and states how to regain the choice; it never displays a selectable
+speed while silently applying another.
 
 Settings exposes every choice independently and applies it immediately. A small
 Appearance link in the board region opens that section without adding another

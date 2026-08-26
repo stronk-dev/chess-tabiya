@@ -46,7 +46,7 @@ test("@matrix automated WCAG scan covers catalogue, settings, and a live rehears
   expect(await resultStatus.textContent()).not.toBe(before);
 
   await page.goto("/settings");
-  await expect(page.getByRole("heading", { name: "This deployment" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Settings", exact: true })).toBeVisible();
   await page.getByRole("button", { name: "Review deletion effects" }).click();
   await expect(page.locator(".deletion-preview")).toBeVisible();
   await expect(page.locator(".deletion-preview [data-status-announcement]")).toContainText("Deletion effects loaded");

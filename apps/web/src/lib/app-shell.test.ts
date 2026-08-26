@@ -441,7 +441,7 @@ describe("application shell", () => {
       ["/live", "Rehearse with other people"],
       ["/create", "Author against the real validator"],
       ["/library", "Packs and run artifacts"],
-      ["/settings", "This deployment"],
+      ["/settings", "Settings"],
       ["/missing", "This route is not part of Tabiya"],
     ] as const;
     for (const [path, copy] of routes) {
@@ -451,6 +451,11 @@ describe("application shell", () => {
       expect(document.title.endsWith(" · Tabiya")).toBe(true);
       expect(document.title).not.toBe("Tabiya");
       expectDisabledControlsExplained();
+      if (path === "/settings") {
+        expect([...document.querySelectorAll(".settings-toc a")].map((link) => link.textContent)).toEqual(["Appearance", "Playing", "Account", "About"]);
+        expect(document.querySelector("#about-deployment-title")?.textContent).toBe("About this deployment");
+        expect(document.querySelectorAll("#external-voice-unavailable")).toHaveLength(1);
+      }
     }
 
     expect(document.body.textContent).toContain("/missing");

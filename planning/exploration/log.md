@@ -9465,3 +9465,19 @@ closes the phone drawer. The fixture captures three legal candidates, crosses th
 checkpoint, opens Branches and proves complete candidate cards and controls stack vertically with
 no panel or canvas overflow. D1818, D1819 and TCH-a21 close. A11-a29 remains open only for the
 qualitative per-surface findings that geometry and reachability measurements cannot discharge.
+
+## 2026-08-26 — Settings separates player choices from deployment diagnostics
+
+The next support slice removes deployment internals from the Settings identity without hiding
+them. The route is now titled Settings and has a sticky labelled index over Appearance, Playing,
+Account and About. Provider identities, run-schema/policy facts and surface availability live in
+About this deployment; the eight disabled external-voice controls all reference one visible
+provider-off explanation there instead of repeating it inside every workflow fieldset.
+
+The resolved theme now retains the device reduced-motion fact rather than only its derived `none`
+animation value. Piece movement uses the ordinary honest-control boundary: when the OS override is
+active, the ineffective select is disabled and the reason is visible. The production-bundle test
+changes the media preference after selecting Fast and proves the live disclosure. The global
+native-control reset also includes `select`, closing the long-standing font mismatch. SET-a6,
+SET-a10 through SET-a13, and SET-a16 complete; presets and the primitive-heavy Playing surface
+remain owned by their returned contracts rather than being improvised in this slice.

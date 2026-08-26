@@ -204,9 +204,12 @@ the unsupported minimum and its reason; it does not silently clip or shrink the
 board past the target floor. This floor applies to run play, not the surrounding
 catalogue and settings routes.
 
-`/settings` edits the same per-browser assistance records used by the in-run
-popover for pack, position, and imported sessions. It reports deployment
-providers without pretending environment configuration is an account control.
+`/settings` is the learner-facing Settings surface, with a sticky section index
+for Appearance, Playing, Account, and About. It edits the same per-browser
+assistance records used by the in-run popover for pack, position, and imported
+sessions. Provider and surface status live together under About this deployment
+without pretending environment configuration is an account control; unavailable
+external voice is stated once there and referenced by every affected control.
 Account deletion uses in-page password re-entry; shared runs are reassigned.
 
 Appearance is a separate global browser preference, documented in

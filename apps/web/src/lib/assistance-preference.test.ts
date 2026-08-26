@@ -93,10 +93,11 @@ describe("assistance preference", () => {
       expect(control.disabled).toBe(true);
       const reasonId = control.getAttribute("aria-describedby")!;
       const reason = document.getElementById(reasonId)!;
-      expect(reason.textContent).toContain("No external voice provider is configured");
+      expect(reason.textContent).toContain("External voice is unavailable");
       expect(reason.hidden).toBe(false);
       expect(reason.getAttribute("aria-hidden")).toBeNull();
     }
+    expect(document.querySelectorAll("#external-voice-unavailable")).toHaveLength(1);
     await unmount(component);
   });
 

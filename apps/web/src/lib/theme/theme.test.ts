@@ -94,10 +94,10 @@ describe("theme foundation", () => {
   });
 
   it("resolves device mode, fallback, reduced motion, and three animation levels", () => {
-    expect(resolveTheme(DEFAULT_THEME_PREFERENCE, false, false).appTheme).toBe("paper");
-    expect(resolveTheme(DEFAULT_THEME_PREFERENCE, true, false).appTheme).toBe("warm-dark");
+    expect(resolveTheme(DEFAULT_THEME_PREFERENCE, false, false)).toMatchObject({ appTheme: "paper", reducedMotion: false });
+    expect(resolveTheme(DEFAULT_THEME_PREFERENCE, true, false)).toMatchObject({ appTheme: "warm-dark", reducedMotion: false });
     expect(resolveTheme({ ...DEFAULT_THEME_PREFERENCE, appTheme: "tokyo-night" }, true, false).appTheme).toBe("tokyo-night");
-    expect(resolveTheme(DEFAULT_THEME_PREFERENCE, false, true).animation).toBe("none");
+    expect(resolveTheme(DEFAULT_THEME_PREFERENCE, false, true)).toMatchObject({ animation: "none", reducedMotion: true });
     expect(animationConfig("none")).toEqual({ enabled: false, duration: 0 });
     expect(animationConfig("fast")).toEqual({ enabled: true, duration: 120 });
     expect(animationConfig("normal")).toEqual({ enabled: true, duration: 250 });

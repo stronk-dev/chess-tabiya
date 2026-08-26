@@ -80,6 +80,9 @@ test("Settings exposes independent persisted pickers and inherited contrast disc
   const stored = await page.evaluate(() => JSON.parse(localStorage.getItem("tabiya.theme") ?? "{}"));
   expect(stored).toEqual({ appTheme: "tokyo-night", boardTheme: "olive", pieceSet: "mono", modeOverride: "light", animation: "fast" });
   expect(stored).not.toHaveProperty("version");
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  await expect(appearance.getByLabel("Piece movement")).toBeDisabled();
+  await expect(appearance.getByText("Your device requests reduced motion")).toBeVisible();
 });
 
 test("system display preferences keep board semantics visible without colour alone", async ({ page }) => {

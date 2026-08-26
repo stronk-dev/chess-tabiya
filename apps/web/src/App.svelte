@@ -1381,10 +1381,10 @@
     </main>
   {:else if route.name === "settings"}
     <main class="shell-view" aria-labelledby="settings-title">
-      <p class="eyebrow">Settings</p><h1 id="settings-title">This deployment</h1>
+      <p class="eyebrow">Preferences and account</p><h1 id="settings-title">Settings</h1>
+      <nav class="settings-toc" aria-label="Settings sections"><a href="#appearance-settings">Appearance</a><a href="#playing-settings">Playing</a>{#if learner}<a href="#account-settings">Account</a>{/if}<a href="#about-deployment">About</a></nav>
       <AppearanceSettings />
-      <AssistanceSettings {capabilities} {learner} onSignOut={signOut} onExport={exportAccountWithPassword} loadDeletionPreview={() => api.accountDeletionPreview?.() ?? Promise.reject(new Error("Deletion preview is unavailable."))} onDelete={deleteAccountWithPassword} />
-      {#if capabilities}<h2>Surface availability</h2><ul>{#each Object.entries(capabilities.surfaces) as [id, availability]}<li>{id}: {PLANNED_SURFACES.includes(id as SurfaceId) ? "planned" : availability}</li>{/each}</ul>{/if}
+      <AssistanceSettings {capabilities} {learner} plannedSurfaceIds={PLANNED_SURFACES as readonly SurfaceId[]} onSignOut={signOut} onExport={exportAccountWithPassword} loadDeletionPreview={() => api.accountDeletionPreview?.() ?? Promise.reject(new Error("Deletion preview is unavailable."))} onDelete={deleteAccountWithPassword} />
     </main>
   {:else if route.name === "not-found"}
     <main class="shell-view empty-state" aria-labelledby="not-found-title">
@@ -1413,7 +1413,7 @@
     margin: 0;
     background: radial-gradient(circle at 12% 5%, color-mix(in srgb, var(--ink) 5%, transparent), transparent 30rem), linear-gradient(135deg, transparent 0 58%, color-mix(in srgb, var(--accent) 4%, transparent) 58% 100%), var(--paper);
   }
-  :global(button), :global(input), :global(textarea) { font: inherit; }
+  :global(button), :global(input), :global(select), :global(textarea) { font: inherit; }
   :global(:focus-visible) { outline: 3px solid color-mix(in srgb, var(--accent) 65%, var(--on-accent)); outline-offset: 2px; }
   :global(::selection) { background: color-mix(in srgb, var(--accent) 25%, var(--on-accent)); }
   .shell-view { width: min(70rem, calc(100% - 2rem)); height: 100%; margin: 0 auto; padding: clamp(2rem, 6vw, 5rem) 0; overflow: auto; }
@@ -1427,6 +1427,9 @@
   .session-banner { position: fixed; z-index: 21; right: 1rem; bottom: 1rem; display: grid; gap: 0.25rem; padding: 0.7rem; max-width: 18rem; border: 1px solid var(--line); border-radius: 0.7rem; background: var(--panel); box-shadow: var(--shadow); font-size: 0.8rem; }
   .shell-view > h1 { max-width: 18ch; margin: 0.4rem 0 1rem; font: 500 clamp(2.3rem, 6vw, 5rem)/0.96 var(--display-font); letter-spacing: -0.045em; }
   .eyebrow { color: var(--accent); font: 700 0.72rem/1.2 ui-monospace, monospace; letter-spacing: 0.12em; text-transform: uppercase; }
+  .settings-toc { position: sticky; z-index: 2; top: 0; display: flex; flex-wrap: wrap; gap: .45rem; padding: .65rem; border: 1px solid var(--line); border-radius: .75rem; background: color-mix(in srgb, var(--panel) 92%, transparent); backdrop-filter: blur(.5rem); }
+  .settings-toc a { padding: .45rem .65rem; border-radius: .5rem; color: var(--ink); text-decoration: none; }
+  .settings-toc a:hover, .settings-toc a:focus-visible { background: var(--accent-soft); }
   .home > h1 { max-width: 15ch; }
   .home-lede { max-width: 42rem; color: var(--muted); font-size: 1.1rem; }
   .resume-card, .start-card { max-width: 42rem; margin: 2.5rem 0 1rem; padding: 1.4rem; border: 1px solid var(--line); border-radius: 1rem; background: var(--panel); box-shadow: var(--shadow); }

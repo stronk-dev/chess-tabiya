@@ -13,9 +13,10 @@
     onExport: (password: string) => void | Promise<void>;
     onDelete: (password: string, previewDigest: string) => void | Promise<void>;
     loadDeletionPreview?: () => Promise<DeletionPreview>;
+    plannedSurfaceIds?: readonly string[];
   }
 
-  let { capabilities, learner, onSignOut, onExport, onDelete, loadDeletionPreview }: Props = $props();
+  let { capabilities, learner, onSignOut, onExport, onDelete, loadDeletionPreview, plannedSurfaceIds = [] }: Props = $props();
   const labels: Record<AssistanceProfile, string> = { pack: "Curated drill", position: "Just Play", imported: "Imported game", match: "Match / Arena", stream: "Streamed session", academy: "Academy", onramp: "On-ramp", campaign: "Campaign" };
   let configs: Record<AssistanceProfile, AssistanceConfig> = $state(Object.fromEntries(ASSISTANCE_PROFILES.map((profile) => [profile, SILENT_ASSISTANCE])) as Record<AssistanceProfile, AssistanceConfig>);
   let password = $state("");
@@ -54,8 +55,8 @@
   onMount(() => { configs = Object.fromEntries(ASSISTANCE_PROFILES.map((profile) => [profile, loadAssistance(profile, storage())])) as Record<AssistanceProfile, AssistanceConfig>; });
 </script>
 
-<section aria-labelledby="assistance-settings-title">
-  <h2 id="assistance-settings-title">Assistance by context</h2>
+<section id="playing-settings" aria-labelledby="assistance-settings-title">
+  <h2 id="assistance-settings-title">Playing</h2>
   <p class="honest">Saved in this browser only. Deployment providers are controlled by the server environment.</p>
   <div class="context-grid">
     {#each ASSISTANCE_PROFILES as kind}
@@ -69,21 +70,14 @@
         <label><input type="checkbox" checked={configs[kind].guided === "live"} onchange={(event) => set(kind, "guided", event.currentTarget.checked ? "live" : "off")} /> Named-pattern guidance</label>
         <label><input type="checkbox" checked={configs[kind].humanSplit === "on_request"} onchange={(event) => set(kind, "humanSplit", event.currentTarget.checked ? "on_request" : "off")} /> Human move split on request</label>
         <label><input type="checkbox" checked={configs[kind].corpus === "on_request"} onchange={(event) => set(kind, "corpus", event.currentTarget.checked ? "on_request" : "off")} /> Corpus counts on request</label>
-        <label><input type="checkbox" checked={configs[kind].voice === "persona"} disabled={capabilities?.providers.llm !== "external"} aria-describedby={capabilities?.providers.llm !== "external" ? `${kind}-voice-unavailable` : undefined} onchange={(event) => set(kind, "voice", event.currentTarget.checked ? "persona" : "authored")} /> External voice</label>
-        {#if capabilities?.providers.llm !== "external"}<span class="honest" id={`${kind}-voice-unavailable`}>No external voice provider is configured for this deployment.</span>{/if}
+        <label><input type="checkbox" checked={configs[kind].voice === "persona"} disabled={capabilities?.providers.llm !== "external"} aria-describedby={capabilities?.providers.llm !== "external" ? "external-voice-unavailable" : undefined} onchange={(event) => set(kind, "voice", event.currentTarget.checked ? "persona" : "authored")} /> External voice</label>
       </fieldset>
     {/each}
   </div>
 </section>
 
-<section aria-labelledby="provider-settings-title">
-  <h2 id="provider-settings-title">Deployment capabilities</h2>
-  {#if capabilities}<dl>{#each Object.entries(capabilities.providers) as [name, value]}<div><dt>{name}</dt><dd>{value}</dd></div>{/each}</dl><p>Run schema {capabilities.runSchemaVersion}; policies {capabilities.policyModes.join(", ")}.</p>{:else}<p>Capability status is unavailable.</p>{/if}
-  <p class="honest">These are status facts, not account controls. Change them in the deployment environment.</p>
-</section>
-
 {#if learner}
-<section aria-labelledby="account-settings-title">
+<section id="account-settings" aria-labelledby="account-settings-title">
   <h2 id="account-settings-title">Account</h2><p>Signed in as <strong>@{learner.handle}</strong>.</p>
   <button type="button" onclick={onSignOut}>Sign out</button>
   <form onsubmit={(event) => { event.preventDefault(); void downloadAccount(); }}>
@@ -116,6 +110,17 @@
   </form>
 </section>
 {/if}
+
+<section id="about-deployment" aria-labelledby="about-deployment-title">
+  <h2 id="about-deployment-title">About this deployment</h2>
+  {#if capabilities}
+    <h3>Services</h3><dl>{#each Object.entries(capabilities.providers) as [name, value]}<div><dt>{name}</dt><dd>{value}</dd></div>{/each}</dl>
+    <p>Run schema {capabilities.runSchemaVersion}; policies {capabilities.policyModes.join(", ")}.</p>
+    <h3>Surface availability</h3><ul>{#each Object.entries(capabilities.surfaces) as [id, availability]}<li>{id}: {plannedSurfaceIds.includes(id) ? "planned" : availability}</li>{/each}</ul>
+  {:else}<p>Deployment status is unavailable.</p>{/if}
+  {#if capabilities?.providers.llm !== "external"}<p class="honest" id="external-voice-unavailable">External voice is unavailable because this deployment has no configured provider.</p>{/if}
+  <p class="honest">These are status facts, not account controls. Change them in the deployment environment.</p>
+</section>
 
 <style>
   section{margin:2rem 0}.context-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:.8rem}fieldset{display:grid;gap:.65rem;padding:1rem;border:1px solid var(--line);border-radius:.8rem;background:var(--panel)}label{display:grid;gap:.25rem}label:has(> input[type="checkbox"]){display:flex;align-items:center}dl{display:flex;flex-wrap:wrap;gap:.5rem 1rem}dl div{display:grid}.honest{color:var(--muted);font-size:.8rem}form{display:grid;gap:.6rem;max-width:28rem;margin-top:1rem}@media(max-width:719px){.context-grid{grid-template-columns:1fr}}

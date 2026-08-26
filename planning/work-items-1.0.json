@@ -7299,59 +7299,63 @@
     {
       "id": "SET-a10",
       "sourceState": "queued",
-      "state": "queued",
+      "state": "completed",
       "capability": "support",
       "owner": "assistance-and-presentation",
-      "assignment": "capability:support",
+      "assignment": "closed",
       "sourceDocument": "ux-settings-and-identity.md",
       "sourceSection": "§5.4-4",
       "sourceHeading": "Settings, appearance and identity — `ux-settings-and-identity.md`",
       "summary": "Rename the `/settings` h1 (*\"This deployment\"*) and move capability and surface-availability lists to an *About this deployment* section",
       "legacyRoute": "lane",
       "note": "ux-work-lane E3",
-      "sourceDigest": "sha256:437b2eec87398e99a9a8263b5a9b99cfb34584f0d19323e99c39c5b096f9c1d8"
+      "sourceDigest": "sha256:437b2eec87398e99a9a8263b5a9b99cfb34584f0d19323e99c39c5b096f9c1d8",
+      "completion": { "completedOn": "2026-08-26", "evidence": "Settings owns the learner-facing title; deployment services and surface status live in About this deployment" }
     },
     {
       "id": "SET-a11",
       "sourceState": "queued",
-      "state": "queued",
+      "state": "completed",
       "capability": "support",
       "owner": "assistance-and-presentation",
-      "assignment": "capability:support",
+      "assignment": "closed",
       "sourceDocument": "ux-settings-and-identity.md",
       "sourceSection": "§5.4-5",
       "sourceHeading": "Settings, appearance and identity — `ux-settings-and-identity.md`",
       "summary": "Give settings a table of contents (Appearance · Playing · Account · About) and a landmark structure",
       "legacyRoute": "none",
-      "sourceDigest": "sha256:08ca516a49e577f2de849dd7fc9f2723b6e7910114f899827979d5c7390d0213"
+      "sourceDigest": "sha256:08ca516a49e577f2de849dd7fc9f2723b6e7910114f899827979d5c7390d0213",
+      "completion": { "completedOn": "2026-08-26", "evidence": "sticky labelled Settings navigation links Appearance, Playing, Account when signed in, and About landmarks" }
     },
     {
       "id": "SET-a12",
       "sourceState": "queued",
-      "state": "queued",
+      "state": "completed",
       "capability": "support",
       "owner": "assistance-and-presentation",
-      "assignment": "capability:support",
+      "assignment": "closed",
       "sourceDocument": "ux-settings-and-identity.md",
       "sourceSection": "§6C-4",
       "sourceHeading": "Settings, appearance and identity — `ux-settings-and-identity.md`",
       "summary": "Replace eight identical *no provider* strings with one statement in About",
       "legacyRoute": "none",
-      "sourceDigest": "sha256:833da90ea2143d32de3479d25905829308e06de21a7be2b28871d39514f873d5"
+      "sourceDigest": "sha256:833da90ea2143d32de3479d25905829308e06de21a7be2b28871d39514f873d5",
+      "completion": { "completedOn": "2026-08-26", "evidence": "all eight unavailable external-voice controls reference one visible statement in About" }
     },
     {
       "id": "SET-a13",
       "sourceState": "queued",
-      "state": "queued",
+      "state": "completed",
       "capability": "support",
       "owner": "assistance-and-presentation",
-      "assignment": "capability:support",
+      "assignment": "closed",
       "sourceDocument": "ux-settings-and-identity.md",
       "sourceSection": "§6C-2",
       "sourceHeading": "Settings, appearance and identity — `ux-settings-and-identity.md`",
       "summary": "Reduced motion is already inferred and must be **disclosed**, not silent",
       "legacyRoute": "none",
-      "sourceDigest": "sha256:bfc002749bf0bf0e411a9e9af6846facd5a7c279d9e33d0ca2b9d4ba6757f865"
+      "sourceDigest": "sha256:bfc002749bf0bf0e411a9e9af6846facd5a7c279d9e33d0ca2b9d4ba6757f865",
+      "completion": { "completedOn": "2026-08-26", "evidence": "resolved theme exposes the device reduced-motion fact and Settings visibly explains the enforced no-animation state" }
     },
     {
       "id": "SET-a14",
@@ -7385,17 +7389,18 @@
     {
       "id": "SET-a16",
       "sourceState": "queued",
-      "state": "queued",
+      "state": "completed",
       "capability": "support",
       "owner": "assistance-and-presentation",
-      "assignment": "capability:support",
+      "assignment": "closed",
       "sourceDocument": "ux-settings-and-identity.md",
       "sourceSection": "§8.4-2",
       "sourceHeading": "Settings, appearance and identity — `ux-settings-and-identity.md`",
       "summary": "Add `select` to the global `font: inherit` reset — one word",
       "legacyRoute": "wave3 #13 / lane A2",
       "note": "[[D484]], open since 2026-08-16",
-      "sourceDigest": "sha256:76b6dbab1ce56253bb27940b714b42b18fbb569628ebcba45ca680757a3a0c11"
+      "sourceDigest": "sha256:76b6dbab1ce56253bb27940b714b42b18fbb569628ebcba45ca680757a3a0c11",
+      "completion": { "completedOn": "2026-08-26", "evidence": "the global native-control reset now applies the product font to selects as well as buttons, inputs and textareas" }
     },
     {
       "id": "SET-a17",
@@ -7619,17 +7624,18 @@
     {
       "id": "SET-a6",
       "sourceState": "queued",
-      "state": "queued",
+      "state": "completed",
       "capability": "support",
       "owner": "assistance-and-presentation",
-      "assignment": "capability:support",
+      "assignment": "closed",
       "sourceDocument": "ux-settings-and-identity.md",
       "sourceSection": "§4.2/§4.4c",
       "sourceHeading": "Settings, appearance and identity — `ux-settings-and-identity.md`",
       "summary": "Render **Piece movement** through `HonestControl` when reduce-motion is on — today the select displays a value that is not in effect",
       "legacyRoute": "ledger",
       "note": "[[D1460]]",
-      "sourceDigest": "sha256:05fd449c1556881cf33f32aeadce2932c79476074a06b4059b138150afdc076a"
+      "sourceDigest": "sha256:05fd449c1556881cf33f32aeadce2932c79476074a06b4059b138150afdc076a",
+      "completion": { "completedOn": "2026-08-26", "evidence": "Piece movement uses HonestControl under device reduced motion, disables the ineffective choice and states why" }
     },
     {
       "id": "SET-a7",

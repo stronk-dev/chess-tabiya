@@ -14,6 +14,7 @@ export interface ResolvedTheme {
   mode: ThemeMode;
   appTheme: keyof typeof APP_THEMES;
   animation: AnimationPreference;
+  reducedMotion: boolean;
 }
 
 export interface MediaQueryLike {
@@ -35,6 +36,7 @@ export function resolveTheme(
     mode,
     appTheme,
     animation: reducedMotion ? "none" : preference.animation,
+    reducedMotion,
   });
 }
 
