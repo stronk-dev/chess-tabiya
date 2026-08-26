@@ -8402,3 +8402,19 @@ because the schema has no semantic field to test.
 The RFC/register, routing and 1.0 social/campaign capabilities now say returned. Exact repair and
 falsifiers: `planning/variants/independent-rereview-2026-08-26.md`. No production, protected design,
 schema, content or concurrent Claude review/harness byte changed.
+
+## 2026-08-26 — D1674 rules-aware runtime scope becomes executable
+
+Ran a five-arm disposable harness against the pinned chessops and shipped runtime. Chessops accepts
+and serializes a legal Crazyhouse `P@e4` drop; the current run refuses the pocket start and rejects
+the drop as malformed. A King-of-the-Hill White win over the same board is a standard-chess draw,
+so normal-move support cannot stand in for rules-correct terminal projection.
+
+The AST census replaces [[D1674]]'s 181 textual occurrences with 159 production call sites across
+32 files: 146 position, 11 legal-move, and 2 terminal calls. [[D1683]] records the important split:
+nine play/input/export/opponent authorities must become rules-aware, while 23 standard-pack and
+evidence readers need an exhaustive standard-only/suppressed disposition. A blind parser rewrite
+would legalize play and manufacture variant chess evidence. Dossier:
+`design/research/variant-runtime-boundary.md`; instrument:
+`tools/d1674-variant-runtime-harness/` (5/5 green). No production, schema, content, protected-design
+or concurrent Claude review/harness byte changed.

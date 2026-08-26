@@ -144,6 +144,11 @@ Stockfish and Maia source receipts, literal F1 derivations over sealed target in
 legal-root completeness, real server operations and bounded scheduling/cache identity. A provider
 file or inspector disposition alone does not complete this foundation; Support, Review, bots and
 packs may not consume target-policy facts until the amended contract passes repeat review.
+The variant foundation now has an executable scope receipt rather than the earlier textual count:
+[[D1683]] measures 159 production calls across 32 files and separates nine rules-aware play
+authorities from 23 standard-only/evidence readers that must be capability-gated. Tier-2 support
+must land both halves together; making the branch legal while standard detectors still run is an
+evidence-contamination failure, not partial variant support.
 
 ### 3. Arrival and the rehearsal loop
 
