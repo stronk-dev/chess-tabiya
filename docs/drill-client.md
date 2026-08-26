@@ -350,6 +350,12 @@ and controls subsequent group replies. The branch rail marks membership while
 the group panel presents source and resistance attribution plus Overview,
 Summary, and Boards semantic-zoom bands. It never ranks candidates.
 
+On a phone, opening the hand-picked creator from the modal Actions drawer closes
+that drawer before asking for board gestures, so the board cannot remain inert
+while candidate capture is active. The completed candidate cards, header and
+controls stack vertically at the compact breakpoint; no group comparison unit
+is placed behind a horizontal pan.
+
 Sequential advance is the default; lockstep is an optional local preference.
 Switching a group member follows the ordinary rewind contract and requests an
 opponent reply when the new cursor is on the opponent's turn. Evidence removed

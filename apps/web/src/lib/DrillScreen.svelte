@@ -233,6 +233,12 @@
     companionInvoker = undefined;
   }
 
+  function toggleGroupCreator(): void {
+    const opening = !groupOpen;
+    groupOpen = opening;
+    if (opening && phoneSheetModal) closeCompanion();
+  }
+
   function openAssistance(event: Event): void {
     openCompanion("evidence", event);
   }
@@ -1127,7 +1133,7 @@
             {#snippet children(describedBy)}<button type="button" disabled={!canWrite} aria-label="Fork branch" aria-describedby={describedBy} onclick={(event) => { forkInvoker = invoker(event); forkOpen = true; }}>Fork <kbd>B</kbd></button>{/snippet}
           </HonestControl>
           <HonestControl disabled={!canWrite} reasonId="drill-group-readonly" reason="This read-only view cannot create a branch group.">
-            {#snippet children(describedBy)}<button type="button" disabled={!canWrite} aria-describedby={describedBy} onclick={() => (groupOpen = !groupOpen)}>Branch group</button>{/snippet}
+            {#snippet children(describedBy)}<button type="button" disabled={!canWrite} aria-describedby={describedBy} onclick={toggleGroupCreator}>Branch group</button>{/snippet}
           </HonestControl>
           <HonestControl
             disabled={cards.length < 2}

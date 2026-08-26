@@ -76,7 +76,8 @@ seed and engine configuration are fixed by the workflow and the resulting run op
 play board. A classroom standing lives inside that classroom on `/live`. Joining is a
 two-step learner gesture whose confirmation repeats the permanent unwitnessed-games limitation;
 record and rating visibility remain independently revocable. The table preserves the server's
-result order and prints no client-derived rank.
+result order and prints no client-derived rank. At phone width that same ordered projection is a
+vertical list of complete learner cards rather than a 48-rem table requiring a sideways hunt.
 
 The application boundary also exposes the official principle registry at `GET /principles` as an
 id-sorted summary catalogue. The browser client preserves each entry's id, version, digest, name,

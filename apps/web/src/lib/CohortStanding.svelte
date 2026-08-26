@@ -110,6 +110,21 @@
           <td>{#if entry.rating}{entry.rating.pointEstimate ? publishedBandLabel(entry.rating.pointEstimate) : ""}<small>Interval {publishedBandInterval(entry.rating)}</small>{:else}<span class="muted">Not shown</span>{/if}</td>
         </tr>{:else}<tr><td colspan="5">No learner has published an entry.</td></tr>{/each}</tbody>
       </table></div>
+      <ul class="standing-cards" aria-label="Classroom standing">
+        {#each view.entries as entry}
+          <li class:self={entry.learnerId === learnerId}>
+            <h5>@{entry.handle}</h5>
+            <dl>
+              <div><dt>Marks</dt><dd>{#each entry.marks as mark}<span class={`mark ${mark.mark}`} title={`Beat band ${markBand(mark)} on ${new Date(mark.earnedAt).toLocaleDateString()}`}>{markBand(mark)}</span>{:else}<span class="muted">None recorded</span>{/each}</dd></div>
+              <div><dt>Record</dt><dd>{entry.record ? `${entry.record.wins}–${entry.record.draws}–${entry.record.losses}` : "Hidden"}{#if entry.record}<small>{entry.record.games} games · {entry.record.abandoned} abandoned</small>{/if}</dd></div>
+              <div><dt>By opponent band</dt><dd>{#if entry.record?.byOpponentBand.length}{#each entry.record.byOpponentBand as split}<span class="split">{split.opponentBand}: {split.wins}–{split.draws}–{split.losses}</span>{/each}{:else}<span class="muted">Not shown</span>{/if}</dd></div>
+              <div><dt>Rating</dt><dd>{#if entry.rating}{entry.rating.pointEstimate ? publishedBandLabel(entry.rating.pointEstimate) : ""}<small>Interval {publishedBandInterval(entry.rating)}</small>{:else}<span class="muted">Not shown</span>{/if}</dd></div>
+            </dl>
+          </li>
+        {:else}
+          <li>No learner has published an entry.</li>
+        {/each}
+      </ul>
 
       {#if role === "teacher" && view.standing.closedAt === null}
         <details><summary>Standing window</summary><div class="window-form"><label>From <input type="datetime-local" bind:value={windowFrom} /></label><label>Until <input type="datetime-local" bind:value={windowTo} /></label><button type="button" disabled={actionPending || !windowFrom} onclick={() => void mutate({ op: "window", windowFrom: iso(windowFrom), ...(windowTo ? { windowTo: iso(windowTo) } : {}) })}>Update window</button><button type="button" disabled={actionPending} onclick={() => void mutate({ op: "close" })}>Close standing</button></div></details>
@@ -130,6 +145,7 @@
   .window-form label { display: grid; gap: .25rem; }
   .confirmation { margin-bottom: 1rem; }
   .table-scroll { overflow-x: auto; margin-top: 1rem; }
+  .standing-cards { display: none; }
   table { width: 100%; border-collapse: collapse; min-width: 48rem; }
   th, td { padding: .65rem; border-bottom: 1px solid var(--line); text-align: left; vertical-align: top; }
   thead th { color: var(--muted); font-size: .7rem; text-transform: uppercase; }
@@ -141,4 +157,16 @@
   details { margin-top: 1rem; }
   summary { cursor: pointer; margin-bottom: .75rem; }
   .error { color: var(--ink); }
+  @media (max-width: 719px) {
+    .standing { padding: .75rem; }
+    .table-scroll { display: none; }
+    .standing-cards { display: grid; gap: .65rem; margin: 1rem 0 0; padding: 0; list-style: none; }
+    .standing-cards > li { min-width: 0; padding: .75rem; border: 1px solid var(--line); border-radius: .65rem; background: var(--paper); }
+    .standing-cards > li.self { border-color: var(--accent); }
+    .standing-cards h5 { margin: 0 0 .55rem; font: 600 1rem var(--display-font); overflow-wrap: anywhere; }
+    .standing-cards dl { display: grid; gap: .45rem; margin: 0; }
+    .standing-cards dl div { display: grid; grid-template-columns: minmax(6.5rem, auto) minmax(0, 1fr); gap: .6rem; }
+    .standing-cards dt { color: var(--muted); font-size: .7rem; text-transform: uppercase; }
+    .standing-cards dd { min-width: 0; margin: 0; overflow-wrap: anywhere; }
+  }
 </style>

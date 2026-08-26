@@ -9449,3 +9449,19 @@ content. A separate real named-shape journey proves the dialog and every action 
 that Escape closes it and restores the exact board marker. No Shape CSS changed: the earlier
 absence of a dedicated media query was not itself a rendered defect. D1817 closes. A11-a29 remains
 open for Cohort, Group, and qualitative per-surface findings.
+
+## 2026-08-26 — Phone Cohort and Group stop hiding work sideways (D1818 / D1819 / TCH-a21)
+
+The last two conditional A11-a29 geometry paths ran as complete Pixel 7 journeys. Cohort's
+48-rem table reproduced the already-ledgered TCH-a21 sideways hunt. Phone width now renders the
+same server-ordered entries as complete learner cards while desktop keeps the semantic table;
+record, opponent-band, marks and rating fields stay together rather than being dropped for fit.
+
+The Group journey found a more fundamental failure before it reached geometry. “Branch group”
+opened from the modal Actions drawer, and the creator then instructed the learner to capture moves
+on the board outside that drawer. The drawer correctly left the board inert, so the creator could
+never collect two candidates and its submit stayed disabled. Opening this board-dependent tool now
+closes the phone drawer. The fixture captures three legal candidates, crosses the resulting
+checkpoint, opens Branches and proves complete candidate cards and controls stack vertically with
+no panel or canvas overflow. D1818, D1819 and TCH-a21 close. A11-a29 remains open only for the
+qualitative per-surface findings that geometry and reachability measurements cannot discharge.

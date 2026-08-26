@@ -1616,6 +1616,90 @@ test("@matrix @mobile named-shape dialog stays bounded with every action reachab
   await expect(marker).toBeFocused();
 });
 
+test("@matrix @mobile classroom standing uses learner cards instead of a sideways table", async ({ page }) => {
+  await page.goto("/live");
+  const classrooms = page.getByRole("region").filter({ has: page.getByRole("heading", { name: "Classrooms" }) });
+  await classrooms.getByLabel("New classroom").fill("Phone cohort");
+  await classrooms.getByRole("button", { name: "Create", exact: true }).click();
+  await expect(page.getByRole("heading", { name: "Phone cohort" })).toBeVisible();
+  await classrooms.getByRole("button", { name: "Open" }).click();
+  await expect(page.getByText("No standing is open for this classroom.")).toBeVisible();
+  await page.getByRole("button", { name: "Open standing" }).click();
+  await expect(page.getByText("Join this standing")).toBeVisible();
+  await page.getByRole("button", { name: "Join this standing" }).click();
+  await page.getByRole("button", { name: "Publish my record" }).click();
+
+  const standing = page.locator(".standing");
+  const cards = standing.getByRole("list", { name: "Classroom standing" });
+  await expect(cards).toBeVisible();
+  await expect(standing.locator(".table-scroll")).toBeHidden();
+  await expect(cards.getByRole("listitem")).toHaveCount(1);
+  const geometry = await standing.evaluate((section) => {
+    const bounds = section.getBoundingClientRect();
+    const controls = [...section.querySelectorAll<HTMLElement>("button, input")]
+      .filter((element) => {
+        const rect = element.getBoundingClientRect();
+        return rect.width > 0 && (rect.left < bounds.left - 1 || rect.right > bounds.right + 1);
+      })
+      .map((element) => element.textContent?.trim() ?? element.tagName);
+    return { overflow: section.scrollWidth - section.clientWidth, controls };
+  });
+  expect(geometry.overflow).toBeLessThanOrEqual(1);
+  expect(geometry.controls).toEqual([]);
+});
+
+test("@matrix @mobile branch group stacks complete candidate cards without sideways panning", async ({ page }) => {
+  await page.goto("/play");
+  await page
+    .getByRole("article")
+    .filter({ hasText: "schema example" })
+    .getByRole("button", { name: /Rehearse this position/ })
+    .click();
+  await expect(page.getByLabel("Chessboard")).toBeVisible();
+  await move(page, "c1", "e3");
+  await page.getByRole("button", { name: "Continue" }).click();
+  await page.getByRole("button", { name: "Continue" }).click();
+  await page.getByRole("button", { name: "Actions" }).click();
+  await page.getByRole("button", { name: "Branch group" }).click();
+  await move(page, "f2", "f3");
+  await move(page, "h2", "h3");
+  await move(page, "a2", "a3");
+  await page.getByRole("button", { name: "Create group" }).click();
+  const checkpoint = page.getByRole("dialog").filter({ has: page.getByRole("button", { name: "Continue" }) });
+  await expect(checkpoint).toBeVisible();
+  await checkpoint.getByRole("button", { name: "Continue" }).click();
+  await page.getByRole("button", { name: "Branches" }).click();
+
+  const group = page.locator(".group-panel");
+  await expect(group).toBeVisible();
+  await expect(group.locator("[data-group-member]")).toHaveCount(3);
+  const geometry = await group.evaluate((section) => {
+    const bounds = section.getBoundingClientRect();
+    const cards = [...section.querySelectorAll<HTMLElement>("[data-group-member]")].map((card) => {
+      const rect = card.getBoundingClientRect();
+      return { left: rect.left - bounds.left, right: rect.right - bounds.right, top: rect.top };
+    });
+    const controls = [...section.querySelectorAll<HTMLElement>("button, select")]
+      .filter((element) => {
+        const rect = element.getBoundingClientRect();
+        return rect.width > 0 && (rect.left < bounds.left - 1 || rect.right > bounds.right + 1);
+      })
+      .map((element) => element.textContent?.trim() ?? element.tagName);
+    return {
+      overflow: section.scrollWidth - section.clientWidth,
+      canvasOverflow: section.querySelector<HTMLElement>(".canvas")!.scrollWidth - section.querySelector<HTMLElement>(".canvas")!.clientWidth,
+      cards,
+      controls,
+    };
+  });
+  expect(geometry.overflow).toBeLessThanOrEqual(1);
+  expect(geometry.canvasOverflow).toBeLessThanOrEqual(1);
+  expect(geometry.cards.every((card) => card.left >= -1 && card.right <= 1)).toBe(true);
+  expect(geometry.cards[1]!.top).toBeGreaterThan(geometry.cards[0]!.top);
+  expect(geometry.cards[2]!.top).toBeGreaterThan(geometry.cards[1]!.top);
+  expect(geometry.controls).toEqual([]);
+});
+
 test("the drill keyboard map remains contained and scrollable at the supported phone floor", async ({ page }) => {
   await page.setViewportSize({ width: 360, height: 680 });
   await page.goto("/play");

@@ -393,7 +393,7 @@
       "sourceHeading": "Accessibility and small screens — `ux-accessibility-and-mobile.md`",
       "summary": "**Twenty-three per-surface findings**, one row each — shell, home, pack list, Just Play starter, drill, board, timeline, branch rail, phone tabs, compare, checkpoint sheet, terminal sheet, shape panel, inspector, story, rating, live list, live overlay, create, library, appearance, assistance, cohort standing, group panel",
       "legacyRoute": "none",
-      "note": "narrowed 2026-08-26: Pixel 7 production-bundle checks prove Home, Play, Review, Learn, Live list, Create, Library and Settings own their width with unclipped controls; Compare stacks complete aligned branch cards/strips/results without horizontal panning; a full academy session and its overlay own their width and stack board before copy; the named-shape dialog keeps every action reachable and restores focus on Escape. Cohort, Group and remaining qualitative per-surface findings stay open",
+      "note": "narrowed 2026-08-26: Pixel 7 production-bundle checks prove the eight primary routes, Compare, live session/overlay, named-shape dialog, Cohort standing and three-candidate Group own their width and keep controls reachable; the board-dependent Group creator also dismisses the phone drawer before candidate capture. Remaining qualitative per-surface findings stay open",
       "tournamentReady": true,
       "sourceDigest": "sha256:c0cf92f7355077e15581a3f897fc263b40207443a751d19af64a307199b6eeac"
     },
@@ -8009,17 +8009,21 @@
     {
       "id": "TCH-a21",
       "sourceState": "queued",
-      "state": "queued",
+      "state": "completed",
       "capability": "professional",
       "owner": "professional-workflows",
-      "assignment": "capability:professional",
+      "assignment": "closed",
       "sourceDocument": "ux-teacher-and-classroom.md",
       "sourceSection": "§7.2-2",
       "sourceHeading": "Teacher and classroom — `ux-teacher-and-classroom.md`",
       "summary": "The standing table's 48rem min-width scrolls sideways on a phone and a member must hunt for their own row",
       "legacyRoute": "none",
       "tournamentReady": true,
-      "sourceDigest": "sha256:e4eb38a7c9080b9e425904a28cccdd81060fd27b99cc824047f16e28e14c7ce0"
+      "sourceDigest": "sha256:e4eb38a7c9080b9e425904a28cccdd81060fd27b99cc824047f16e28e14c7ce0",
+      "completion": {
+        "completedOn": "2026-08-26",
+        "evidence": "phone standing replaces the 48rem sideways table with complete learner cards while preserving server order and the desktop table"
+      }
     },
     {
       "id": "TCH-a22",
