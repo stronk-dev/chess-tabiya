@@ -8287,3 +8287,25 @@ the exact repair order. [[D1639]] is the one owner choice: total preset/context 
 Everything else is technical author work after the returned shared packet supplies its amended
 authority types. No implementation, schema, content, design-intent or concurrent Wave-C harness byte
 changed in this checkpoint.
+
+## 2026-08-26 — Review evidence compiler returns at the author checkpoint
+
+Traced `rfc/review-evidence-compiler.md` through the shipped manifest compiler, Story projection,
+`RunService.#ensureStoryEvidence`, queue/executor, engine supervisor and REST response. The typed
+node-free position evaluation, separate cp/mate domains, partial family states and refusal of raw
+provider dumps remain the right foundation. The production contract is not buildable yet.
+
+[[D1644]]–[[D1651]] record eight blockers. White-WDL is a read-time normalization misdeclared as a
+second node-bound live source. The optional mate-proof link has no declared position authority.
+Idempotence repairs `enqueueProducer` while production Story uses `queue.enqueue`. Constructor-held
+engine identity can go stale across a restart. Story's `last_level` loses its learner-perspective
+conversion. The F1-sealed packet has no named server-local consumer or closed JSON termination.
+Eval+WDL for every imported node has no progressive retained-work bound. Finally, exact recorded
+position identity is used to upgrade measured engine confidence, which violates the weakest-input
+derivation rule.
+
+This is the RFC author's buildability checkpoint, not its required independent review. The RFC,
+active register, Phase-2e plan, routing queue and 1.0 Review capability now say returned; the exact
+repair order and able-to-fail fixtures are in
+`planning/evidence-foundation-ux/review-evidence-compiler-author-checkpoint-2026-08-26.md`. No
+production, schema, content, protected design or concurrent semantic-harness byte changed.

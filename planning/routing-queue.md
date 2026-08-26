@@ -32,6 +32,14 @@ set execution order.
 | D1641 | `hint-distance` author amendment + independent D1 review | Publish literal per-family/per-rung F1 tuples that inherit grounding, exactness, abstention and answer content without widening. |
 | D1642 | `hint-distance` + `module-registration` author amendment | Map HintRung onto the closed module answer vocabulary and make the real compiler fixture fail on an impossible outer ceiling. |
 | D1643 | `hint-distance` author amendment + independent D1 review | Define one idempotent enqueue/poll/cancel/stale-result protocol over a derivable decision identity. |
+| D1644 | `review-evidence-compiler` author amendment | Recast White-WDL as a node-free derivation over raw WDL/request position, then join recorded occurrences separately. |
+| D1645 | `review-evidence-compiler` + forced-mate proof projection amendment | Add a versioned declared position/occurrence anchor before permitting an exact Review proof link. |
+| D1646 | `review-evidence-compiler` author amendment | Make the actual `RunService.#ensureStoryEvidence`/Story read path use the one idempotent request identity and fixture it. |
+| D1647 | `review-evidence-compiler` engine receipt amendment | Bind requested and actual engine identity to the same queued exchange and refuse stale/restarted mismatches. |
+| D1648 | `review-evidence-compiler` Story compatibility amendment | Convert White evaluation to learner perspective at the `last_level` consumer and fixture both colors. |
+| D1649 | `review-evidence-compiler` production boundary amendment | Name the server-local sealed-packet consumer and one closed serializable Story/Review receipt plus parser. |
+| D1650 | `review-evidence-compiler` scheduling amendment | Specify bounded progressive whole-game enrichment with cursor, outstanding cap, retry/backpressure and truthful completion states. |
+| D1651 | `review-evidence-compiler` F1 amendment | Publish literal weakest-input confidence tuples and a real compiler widening negative for every Review derivation. |
 | D1016, D1017 | `learner-modules` author/implementation return | Record `2a54d05` as a real contract-compiler checkpoint, then specify the cross-projection reducer relations, bounded novelty history, overflow observation and one non-contradictory pipeline before the 181-row registry/selector resumes. |
 | D878, D903 | learner-module implementation | Preserve the measured seven-axis taxonomy and land the corrected 175/173 eligibility counts with the module compiler. |
 | D624 | module evidence-shape research | Feed the competitor finding into module contracts: learner intent selects evidence-shaped modules, never raw sources. |

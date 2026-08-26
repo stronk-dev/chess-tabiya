@@ -1,8 +1,10 @@
 # RFC: Review evidence compiler
 
-- **Status:** draft, buildability amendment 2026-08-26 on [[D1576]] — executes Semantic Collectors
-  discharge D2 from D916–D928; depends on the shared node-free engine source below and requires
-  independent buildability review before acceptance
+- **Status:** draft — returned by the 2026-08-26 author buildability checkpoint on
+  [[D1644]]–[[D1651]]. The typed node-free eval/mate-domain architecture survives, but source
+  identity, proof anchoring, production idempotence, engine identity freshness, learner perspective,
+  process/wire termination, bounded enrichment and F1 confidence inheritance must be amended before
+  the required independent review or any implementation.
 - **Author:** codex, on the D717 evidence-foundation routing and the completed Wave-C C4 research
 - **Created:** 2026-08-23
 - **Design refs:** `design/03-product-breadth.md` Review/Analyze surfaces;

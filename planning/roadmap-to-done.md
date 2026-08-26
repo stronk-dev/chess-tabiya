@@ -223,6 +223,13 @@ understanding surface nor Tabiya's distinctive return-to-rehearsal loop. [[D1536
 raw cp/enum leaks; story is still capped to opaque cards, the move/phase arc is missing, and engine
 graphics outrank grounded explanation.
 
+The 2026-08-26 compiler checkpoint keeps the typed node-free engine score and separate cp/mate
+domains, but returns the production contract on [[D1644]]–[[D1651]]: reusable White-WDL identity,
+position-anchored mate proof, the actual Story queue path, same-exchange engine provenance,
+learner-side compatibility, the process-local-seal/wire boundary, bounded whole-game scheduling and
+weakest-input confidence. Review implementation cannot begin by merely filling the drafted types;
+those eight joins are part of the 1.0 foundation.
+
 **1.0 exit:** native, bot, imported, social and campaign games compile to one Review Map: opening
 and phase arc; navigable move timeline; bounded grounded moments; separate grade, human rarity,
 theory, semantic change and exact endgame facts; correct learner-side result; decided-position
