@@ -8418,3 +8418,18 @@ would legalize play and manufacture variant chess evidence. Dossier:
 `design/research/variant-runtime-boundary.md`; instrument:
 `tools/d1674-variant-runtime-harness/` (5/5 green). No production, schema, content, protected-design
 or concurrent Claude review/harness byte changed.
+
+## 2026-08-26 — D1675/D1676 setup identity and import semantics measured
+
+Ran five executable arms over the pinned chessops PGN parser and the production importer. The
+library collapses 20 Standard/from-position/Chess960 aliases plus missing Variant to `chess` and
+never reads `SetUp`. Production therefore accepts `From Position` without FEN as the ordinary
+initial game, while rejecting a Chess960 PGN that supplies both `SetUp "1"` and FEN.
+
+[[D1684]] records the minimum non-lossy identity: `rules + setupFamily`, with five families. A
+same-FEN control proves that Standard and Chess960 admission can require different Maia,
+Stockfish-960 and explorer capability, so current/later FEN bytes cannot recreate the fact.
+Workflow origin remains a separate axis for [[D1680]] rather than being overloaded into the chess
+identity. Dossier: `design/research/variant-setup-identity.md`; instrument:
+`tools/d1675-setup-identity-harness/` (5/5 green). No production, schema, content,
+protected-design or concurrent Claude review/harness byte changed.

@@ -381,6 +381,10 @@ setup classification, a packaged Fairy-Stockfish operation, rules-bearing eviden
 typed rung/admission closures and real entry-point readers. The current standard-`Chess` runtime
 rejects Crazyhouse drops and validates every variant terminal under standard rules, so lane 0.20
 may not land as an optional field over unchanged mechanics.
+[[D1684]] now pins the adjacent identity boundary: `rules + setupFamily` is the minimum durable
+chess subject, while workflow origin remains separate admission policy. The current importer
+silently turns From Position without FEN into the normal start and rejects a supplied Chess960
+setup; both must fail the production import matrix before variant support can claim persistence.
 [[D1567]] reopens the public-pool cost model for a no-chat product. The 1.0 decision must price
 automatic pairing, avoid/block, abort/stall controls, rate limits and operator evidence directly,
 without assuming a social-network moderation stack or assuming chess-only play has no abuse case.
