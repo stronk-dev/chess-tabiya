@@ -1,6 +1,15 @@
 # RFC: Campaign core — the pure-chess campaign over authored encounters
 
-- **Status:** implementing — 2026-08-23 authored-contract + registry + module-algebra checkpoints. The closed campaign JSON schema, typed three-act document, exact ten-module unlock pool, pack/boss/economy/ceiling validator, version-retaining campaign registry, eighth workflow context, and pure ceiling ∩ inventory ∩ suppression ∩ preset chokepoint are implemented with negative fixtures. Persistence, play-run mutation, routes, seed content and surfaces remain; the migration stays behind the unresolved longitudinal-store and bot-policy positions. *(Prior line: accepted — 2026-08-22, by claude as register owner after independent cross-review and 15 in-place corrections. Before that: draft — 2026-08-22.)*
+- **Status:** implementing — **author return 2026-08-26 before persistence/API/surfaces**. The
+  2026-08-23 authored-contract, registry, validator, workflow-context and pure state-fold
+  checkpoints remain valid implementation evidence, but the accepted progression contract predates
+  owner ruling [[D1565]] and contradicts its two-horizon requirements. The exact returns are
+  [[D1592]]–[[D1597]] in `planning/campaign/two-horizon-return.md`; [[D1233]]/[[D1234]] remain
+  unresolved storage-boundary returns and [[D1515]] remains research-owned. No campaign migration,
+  production route, seed campaign or surface may land from the current text. *(Prior line:
+  implementing — 2026-08-23 authored-contract + registry + module-algebra checkpoints. Before
+  that: accepted — 2026-08-22, by claude as register owner after independent cross-review and 15
+  in-place corrections; draft — 2026-08-22.)*
 - **Author:** claude (drafted from `planning/campaign/rfc-derivation.md`, the HEAD derivation of
   every seam this document composes; derivation HEAD `c93ae83`, spot-re-verified at drafting HEAD)
 - **Created:** 2026-08-22

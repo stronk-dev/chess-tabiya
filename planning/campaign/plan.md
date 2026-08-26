@@ -27,6 +27,33 @@ Current external dependency: `longitudinal-store.md` has a contradictory accepta
 ([[D1011]]); `bot-policy.md` still holds D969/D970. Neither blocks the completed authored-contract
 checkpoint, and neither is inferred here.
 
+## Two-horizon author return — 2026-08-26
+
+Owner ruling [[D1565]] postdates the accepted contract. The code-grounded return is
+`planning/campaign/two-horizon-return.md`; it preserves the completed schema/registry/fold work but
+blocks the unchecked items above at the persistence boundary.
+
+- [ ] Amend the run inventory so a preset may request presentation without silently removing an
+  earned capability; define owned, equipped/requested, suppressed and effective states separately
+  ([[D1593]]).
+- [ ] Expand the closed reward vocabulary beyond `module_unlock` so theory and other collectible
+  tools named by [[D1565]] have typed identity, provenance and a later-use contract ([[D1594]]).
+- [ ] Add an authoring invariant proving each promised reward can matter after acquisition,
+  including at least one later boss path; disclosure alone is not consumption ([[D1595]]).
+- [ ] Specify durable cross-run reward classes, award/idempotency authority, projection/storage,
+  export/deletion and migration ownership instead of calling prestige a persistence-free read
+  ([[D1592]], [[D1596]]).
+- [ ] Require campaign completion in `prestigeEligible`; a single achieved seal currently returns
+  true ([[D1597]]).
+- [ ] Resolve the pre-existing abandonment authority and terminal cursor returns ([[D1233]],
+  [[D1234]]) before an HTTP/storage contract exposes them.
+- [ ] Incorporate failure-resource semantics only after [[D1515]] research passes its exploration
+  gate; one failed node does not end the run and failure never locks the educational path.
+
+After the author amendment, repeat independent buildability review against the source symbols,
+then resume the migration chain. Do not treat the already-green pure checkpoints as acceptance of
+the missing product contract.
+
 ## Roguelike reconciliation — landed amendments and their residue (2026-08-23)
 
 Ten claude-owned amendments landed ([[D1314]]); the four owner-tier ones are drafted in

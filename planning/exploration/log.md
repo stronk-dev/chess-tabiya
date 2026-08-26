@@ -8054,3 +8054,21 @@ guard lacks a five-input controller protocol, and one sight-ceiling premise name
 in its own table. The review lives at
 `planning/learner-modules/module-registration-cross-review.md`. No production, protected design,
 schema, migration or content bytes moved.
+
+## 2026-08-26 — Campaign persistence stopped on the two-horizon ruling
+
+Re-read `campaign-core` and its landed runtime checkpoint against the later owner ruling [[D1565]].
+The checkpoint preserves useful run-local machinery, but the accepted contract cannot deliver the
+ruled product: its preset intersection can remove an earned module from actual play, its reward
+union can express modules only, and its prestige section explicitly says it adds no persistence.
+The validator also proves registration but not that a reward can matter after acquisition or at a
+later boss. Finally, `prestigeEligible` is true after one achieved node because it never requires
+completion.
+
+**Verdict:** return the RFC at the persistence boundary, retaining the schema/registry/fold work.
+[[D1592]]–[[D1597]] route the missing cross-run authority, owned-versus-equipped algebra, broader
+collectible vocabulary, path-sensitive later-use proof and prestige denominator. The prior
+[[D1233]]/[[D1234]] state-fold returns still stand, and [[D1515]] remains research-owned rather
+than silently answered. The exact return is
+`planning/campaign/two-horizon-return.md`; no protected design, production code, schema, migration
+or content bytes changed.
