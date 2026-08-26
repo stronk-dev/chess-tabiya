@@ -205,6 +205,12 @@ admission → sealed adapter → wire/parser → seat → equivalent-sentence pa
 [[D1673]] now proves the adapter/wire/parser portion on one real admitted claim projection with
 five positive/negative arms; the remaining work is to generalise through exact per-projection
 constructors and the real module route/seat, not to invent a third generic evidence wrapper.
+The real module route is now scoped rather than hand-waved: [[D1689]] proves the 36-action run API
+has no generic module response, and [[D1690]] proves all five board input modes converge before the
+network commit. The returned registration contract needs one timing-discriminated, server-subject
+module query and one generation-token staging controller. [[D1691]] also blocks trust: the current
+board announces a committed move before the server accepts it; [[D1692]] pins the post-commit nudge
+to the learner node returned before automatic opponent play advances the cursor.
 The 2026-08-26 independent re-review returns the preset compiler on [[D1659]]–[[D1663]] and
 [[D1437]]/[[D1500]]: unset preferences currently masquerade as explicit Quiet choices; raw config
 and module outputs can contradict; availability is undefined across provider/browser state;

@@ -8467,3 +8467,23 @@ still treated the historical 19-producer landing population as current.
 Dossier: `design/research/variant-producer-capability.md`; instrument:
 `tools/d1679-rules-capability-harness/` (6/6 green). No production, schema, content,
 protected-design or concurrent Claude review/harness byte changed.
+
+## 2026-08-26 — D1588/D1590 module delivery and staging boundary measured
+
+The returned module-registration draft referred to an existing run/evidence response that does
+not exist. An executable census finds 36 closed run actions and no module operation; the async
+evidence page carries only producer-job results. [[D1689]] supplies the author boundary: one
+timing-discriminated module query whose server derives the subject and whose closed wire is parsed
+through the sealed component adapter before an occupied seat.
+
+The input side is smaller than the draft implied. Click, drag, touch, keyboard-grid and SAN/UCI
+text all emit one exact controller candidate after promotion. A generation-token coordinator
+passes risk, empty, unavailable, revise/restore, stale-response and exact-once-confirm arms across
+all five modes ([[D1690]]). The pass also finds two trust/subject seams: the board announces
+“Move committed” before the server mutation resolves ([[D1691]]), and post-commit packets must
+capture the learner node returned by the move before automatic opponent play advances the cursor
+([[D1692]]).
+
+Dossier: `design/research/module-delivery-and-staging-boundary.md`; instrument:
+`tools/d1588-module-delivery-harness/` (9/9 green). No production, schema, content,
+protected-design or concurrent Claude review/harness byte changed.

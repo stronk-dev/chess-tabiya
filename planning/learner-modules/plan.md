@@ -23,6 +23,17 @@
 7. [[D1591]] — re-derive sight's accepted answer-content union and correct the false
    space/pawn-connectivity premise.
 
+## Measured author input — delivery and staging
+
+`design/research/module-delivery-and-staging-boundary.md` and
+`tools/d1588-module-delivery-harness/` close the discovery half of items 4 and 6. The run router
+has 36 actions and no module response; the exact new operation/request/wire/invalidation boundary
+is written as an amendment handoff. All five input modes converge on one candidate after promotion,
+and a 9-arm generation-token prototype covers risk/empty/unavailable, revise/restore, stale reply
+and exact-once commit. It also routes the premature success announcement ([[D1691]]) and the
+pre-opponent post-commit subject seam ([[D1692]]). The RFC still needs author amendment and repeat
+review before production implementation.
+
 ## Re-review and implementation order
 
 - Independent re-review resolves every row above to exact types/symbols and able-to-fail fixtures.
