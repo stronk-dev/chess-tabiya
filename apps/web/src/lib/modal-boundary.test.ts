@@ -67,4 +67,21 @@ describe("modal boundary", () => {
     secondBoundary.destroy();
     expect(background.inert).toBe(true);
   });
+
+  it("can become modal only while a responsive surface is open", () => {
+    const { background, dialog, first, last } = fixture();
+    const boundary = modalBoundary(dialog, false);
+    expect(background.inert).toBe(false);
+
+    boundary.update(true);
+    expect(background.inert).toBe(true);
+    last.focus();
+    expect(pressTab(last).defaultPrevented).toBe(true);
+    expect(document.activeElement).toBe(first);
+
+    boundary.update(false);
+    expect(background.inert).toBe(false);
+    expect(pressTab(last).defaultPrevented).toBe(false);
+    boundary.destroy();
+  });
 });

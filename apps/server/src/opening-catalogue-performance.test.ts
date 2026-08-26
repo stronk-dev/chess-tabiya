@@ -17,7 +17,7 @@ function percentile(values: readonly number[], fraction: number): number {
 }
 
 describe("runtime opening catalogue performance", () => {
-  it("loads below 250 ms and performs size-independent synchronous lookups below 50 µs p95", async () => {
+  it("loads below 250 ms and performs full-catalogue synchronous lookups below 50 µs p95", async () => {
     const loadStarted = performance.now();
     const loaded = await loadOpeningCatalogue(ARTIFACT);
     const loadMs = performance.now() - loadStarted;
@@ -57,9 +57,10 @@ describe("runtime opening catalogue performance", () => {
       return percentile(values, 0.95);
     };
     const fullP95Us = measure(positions);
-    const smallP95Us = measure(positions.slice(0, 100));
+    // This runs 55,928 lookup pairs against the complete production maps. The former
+    // "size scaling" ratio compared two query-set lengths against these same maps, so
+    // it measured query mix and timer noise rather than catalogue population size.
+    // The full-population absolute budget is the product contract and remains unchanged.
     expect(fullP95Us).toBeLessThan(50);
-    // Population size must not produce the linear scaling that the latency ceiling exists to catch.
-    expect(fullP95Us).toBeLessThanOrEqual(Math.max(1, smallP95Us) * 2);
   });
 });

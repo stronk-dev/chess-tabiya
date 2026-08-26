@@ -46,8 +46,36 @@ test("@matrix @mobile the mobile project uses real touch and coarse-pointer sema
   expect(device.touchPoints).toBeGreaterThan(0);
   expect(device.userAgent).toMatch(/Android|Mobile/u);
 
+  const signOutBox = await page.getByRole("button", { name: "Sign out" }).boundingBox();
+  expect(signOutBox, "Sign out has no rendered touch target").not.toBeNull();
+  expect(signOutBox!.width).toBeGreaterThanOrEqual(24);
+  expect(signOutBox!.height).toBeGreaterThanOrEqual(24);
+
   await page.getByRole("button", { name: "Start and keep the game" }).click();
   await expect(page.getByLabel("Chessboard")).toBeVisible();
   await expect(page.locator(".compact-tabs button[aria-pressed='true']")).toHaveCount(1);
   await expect(page.locator(".compact-tabs button[aria-pressed='false']")).toHaveCount(2);
+
+  const criticalTargets = [
+    page.getByRole("link", { name: "Appearance" }),
+  ];
+  await page.getByText("Enter a move", { exact: true }).click();
+  criticalTargets.push(page.getByLabel("Move in SAN or UCI"), page.getByRole("button", { name: "Submit move" }));
+  for (const target of criticalTargets) {
+    const box = await target.boundingBox();
+    expect(box, "critical touch target has no rendered box").not.toBeNull();
+    expect(box!.width).toBeGreaterThanOrEqual(24);
+    expect(box!.height).toBeGreaterThanOrEqual(24);
+  }
+  await page.getByText("Enter a move", { exact: true }).click();
+
+  const supportTab = page.getByRole("button", { name: "Support" });
+  await supportTab.click();
+  const companion = page.getByRole("dialog", { name: "Run companion" });
+  await expect(companion).toBeVisible();
+  await expect(page.locator(".position-column")).toHaveAttribute("inert", "");
+  expect(await companion.evaluate((element) => element.contains(document.activeElement))).toBe(true);
+  await page.keyboard.press("Escape");
+  await expect(companion).toHaveCount(0);
+  await expect(supportTab).toBeFocused();
 });

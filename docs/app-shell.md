@@ -185,6 +185,13 @@ navigation becomes a compact scrolling menu, the board remains visible, and
 Timeline, Branches, and Evidence are mutually exclusive region tabs. The live
 simul wall becomes a single column and comparison/live panels stack.
 
+Opening a compact run region turns the companion into a labelled modal drawer
+only at phone width. It takes focus when opened from outside, makes the board and
+shell inert, contains Tab in both directions, closes on Escape, and restores the
+exact region tab that opened it. At tablet and desktop widths the same element
+remains an ordinary companion landmark, so modal semantics never leak into the
+side-by-side composition.
+
 The measured minimum supported run viewport is 360×680 CSS pixels. At that
 floor every compact region retains a fully visible board with at least 24px
 chess-square targets. Below either dimension the run mounts no board and states

@@ -94,7 +94,7 @@ route fails `make roadmap-check` until it has an owner.
 
 **State: partial.** The ledger, RFC register, work index, status parity, shared-resource register,
 intent parity, and persistent UX-item registry are real. The 569-item register now distinguishes
-253 queued, 61 owner-blocked, 116 RFC-blocked, 115 complete and 24 retired items, with zero live
+251 queued, 61 owner-blocked, 116 RFC-blocked, 117 complete and 24 retired items, with zero live
 items unassigned; a source-row edit or a new id fails until its durable state is reconciled. Generic
 non-UX ledger rows still answer “mentioned?” more reliably than “actively delivered?”, so the
 capability remains partial rather than overstated as proven.

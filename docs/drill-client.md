@@ -433,6 +433,12 @@ outgoing UCI for every served endgame at desktop, tablet and phone projections;
 resting containment or merely observing some legal move is not accepted as
 interaction correctness.
 
+The real Pixel 7 browser project also measures the permanent 24px touch floor
+for Sign out, the on-board Appearance link, and both text-move controls. Its
+compact companion check opens a real phone drawer, proves the board is inert and
+focus is inside, closes with Escape, and requires focus to return to the exact
+region tab. The same responsive modal boundary is inactive at wider layouts.
+
 ## Packaged operation
 
 The root Compose file has an unprofiled server using the deterministic mock

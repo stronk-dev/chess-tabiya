@@ -9372,3 +9372,30 @@ Chromium journey starts from the device dark preference, selects an actual Chess
 activates forced colors and proves the destination/capture/check projections, then proves the CSS
 motion floor. A11-a17 and A11-a20 through A11-a24 complete. D1460's policy question about an OS
 motion override and D1461's broader token-driven interaction-paint defect remain open by name.
+
+## 2026-08-26 — The real phone owns its target floor and companion boundary
+
+The touch-target finding was stale in the favorable direction: Appearance and both text-move
+controls already carried explicit 24px minimums, while the old guard still only regexed two
+timeline rules. The Pixel 7 project now measures those three controls plus Sign out in rendered
+CSS under real touch/coarse-pointer semantics. A11-a25 closes on behavior rather than another
+source estimate.
+
+The compact companion now becomes modal only while it is open at phone width. The shared boundary
+is updateable, so the same DOM remains an ordinary landmark on tablet and desktop but owns dialog
+semantics, focus, background inertness and circular Tab on a phone. Escape closes the drawer and
+restores the exact region tab that opened it. Unit tests prove inactive→active→inactive ownership;
+the Pixel 7 journey proves the composed behavior. A11-a28 closes. A11-a27 remains open because a
+landscape iPad's smaller vertical dimension—not the rail subtraction alone—physically caps an
+unoccluded square board; changing that composition requires a deliberate layout contract, not a
+one-line breakpoint fiction.
+
+## 2026-08-26 — Opening performance gate stops comparing query mixes (D1814)
+
+Exact `make verify` caught the isolated opening lookup test failing its relative arm while the
+product budget passed comfortably: 26.1 µs p95 against 50 µs. Inspection showed the supposed
+population-scaling comparison ran a 100-query slice and the 6,991-query set against the same full
+catalogue maps. Its 2× ratio measured which positions were queried and timer noise; it never varied
+catalogue size. That false arm is removed. The unchanged contract still loads the complete artifact
+under 250 ms and measures 55,928 lookup pairs across its 3,810 endpoints and 7,854 membership keys
+under the unchanged 50 µs p95 ceiling in the isolated single-worker performance tier.

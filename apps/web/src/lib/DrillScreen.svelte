@@ -202,6 +202,8 @@
   let boardMoveAnnouncement: string | undefined = $state();
   let boardFocusRequested = $state(false);
   let compactTab: "timeline" | "branches" | "evidence" = $state("timeline");
+  let companionInvoker = $state<HTMLElement>();
+  let companionElement = $state<HTMLElement>();
   let decidedness: Readonly<Record<string, Decidedness>> = $state({});
   let foldedBranchIds: string[] = $state([]);
   let pinnedExpanded: string[] = $state([]);
@@ -216,13 +218,27 @@
     viewportSupport = runViewportSupport(globalThis.innerWidth, globalThis.innerHeight);
   }
 
-  function openAssistance(): void {
-    compactTab = "evidence";
+  function openCompanion(tab: typeof compactTab, event?: Event): void {
+    companionInvoker = event === undefined
+      ? document.activeElement instanceof HTMLElement ? document.activeElement : mainElement
+      : invoker(event);
+    compactTab = tab;
     sheetOpen = true;
+  }
+
+  function closeCompanion(): void {
+    sheetOpen = false;
+    restoreFocus(companionInvoker);
+    companionInvoker = undefined;
+  }
+
+  function openAssistance(event: Event): void {
+    openCompanion("evidence", event);
   }
 
   let run = $derived(snapshot.run);
   let boardEdge = $derived(playBoardEdge(viewportSupport.width, viewportSupport.height));
+  let phoneSheetModal = $derived(viewportSupport.width > 0 && viewportSupport.width <= 719 && sheetOpen);
   let canWrite = $derived(snapshot.access === "writer");
   let currentNode = $derived(activeNode(run));
   let guide = $derived(firstRehearsal ? rehearsalGuideStep(run) : undefined);
@@ -720,6 +736,7 @@
       else if (forkOpen) closeFork();
       else if (checkpointPickerOpen) closeCheckpointPicker();
       else if (comparison !== undefined) closeCompare();
+      else if (phoneSheetModal) closeCompanion();
       else if (checkpoint !== undefined) return false;
       else restoreFocus(mainElement);
       event.preventDefault();
@@ -838,6 +855,13 @@
       compactTab = "evidence";
       sheetOpen = true;
     }
+  });
+
+  $effect(() => {
+    if (!phoneSheetModal) return;
+    void tick().then(() => {
+      if (companionElement !== undefined && !companionElement.contains(document.activeElement)) companionElement.focus();
+    });
   });
 
   $effect(() => {
@@ -972,7 +996,17 @@
         </button>
       </section>
 
-      <aside class="rail-stack" class:sheet-open={sheetOpen} aria-label="Run companion">
+      <!-- svelte-ignore a11y_no_noninteractive_tabindex (phone-only dialog needs a programmatic focus target; tabindex is absent outside that state) -->
+      <aside
+        class="rail-stack"
+        class:sheet-open={sheetOpen}
+        bind:this={companionElement}
+        role={phoneSheetModal ? "dialog" : undefined}
+        aria-modal={phoneSheetModal ? "true" : undefined}
+        aria-label="Run companion"
+        tabindex={phoneSheetModal ? -1 : undefined}
+        use:modalBoundary={phoneSheetModal}
+      >
         <div class="companion-identity">
           <!-- svelte-ignore a11y_no_noninteractive_tabindex (WCAG keyboard access for an overflow region) -->
           <div class="objective-copy" role="region" aria-labelledby="drill-title" tabindex="0">
@@ -993,10 +1027,10 @@
 
         <nav class="compact-tabs" aria-label="Run regions">
           <span class="sheet-handle" aria-hidden="true"></span>
-          <button class:active={compactTab === "evidence"} aria-pressed={compactTab === "evidence"} onclick={() => { compactTab = "evidence"; sheetOpen = true; }}>Support</button>
-          <button class:active={compactTab === "branches"} aria-pressed={compactTab === "branches"} onclick={() => { compactTab = "branches"; sheetOpen = true; }}>Branches</button>
-          <button class:active={compactTab === "timeline"} aria-pressed={compactTab === "timeline"} onclick={() => { compactTab = "timeline"; sheetOpen = true; }}>Actions</button>
-          <button class="sheet-close" type="button" aria-label="Collapse companion" onclick={() => (sheetOpen = false)}>Close</button>
+          <button class:active={compactTab === "evidence"} aria-pressed={compactTab === "evidence"} onclick={(event) => openCompanion("evidence", event)}>Support</button>
+          <button class:active={compactTab === "branches"} aria-pressed={compactTab === "branches"} onclick={(event) => openCompanion("branches", event)}>Branches</button>
+          <button class:active={compactTab === "timeline"} aria-pressed={compactTab === "timeline"} onclick={(event) => openCompanion("timeline", event)}>Actions</button>
+          <button class="sheet-close" type="button" aria-label="Collapse companion" onclick={closeCompanion}>Close</button>
         </nav>
 
         <div class="companion-scroll">

@@ -318,15 +318,19 @@
     {
       "id": "A11-a25",
       "sourceState": "queued",
-      "state": "queued",
+      "state": "completed",
       "capability": "accessibility",
       "owner": "client-platform",
-      "assignment": "capability:accessibility",
+      "assignment": "closed",
       "sourceDocument": "ux-accessibility-and-mobile.md",
       "sourceSection": "§3.6",
       "sourceHeading": "Accessibility and small screens — `ux-accessibility-and-mobile.md`",
       "summary": "`.identity-control` Sign out is ~24px, borderline; **the 24px guard regexes two CSS rules in one file and cannot see the two that fail**",
       "legacyRoute": "none",
+      "completion": {
+        "completedOn": "2026-08-26",
+        "evidence": "the real Pixel 7 project measures Sign out, Appearance, text-move input and Submit at the 24px floor; the previously estimated on-board failures already carry explicit minimums"
+      },
       "sourceDigest": "sha256:c76433817d3a33de878acd2033ade3ca1e37ea31064079ad3cbd50f76082b86b"
     },
     {
@@ -362,15 +366,19 @@
     {
       "id": "A11-a28",
       "sourceState": "queued",
-      "state": "queued",
+      "state": "completed",
       "capability": "accessibility",
       "owner": "client-platform",
-      "assignment": "capability:accessibility",
+      "assignment": "closed",
       "sourceDocument": "ux-accessibility-and-mobile.md",
       "sourceSection": "§3.7 phone-sheet",
       "sourceHeading": "Accessibility and small screens — `ux-accessibility-and-mobile.md`",
       "summary": "The phone sheet has no dialog role, no `aria-modal`, no focus move, trap or Escape",
       "legacyRoute": "none",
+      "completion": {
+        "completedOn": "2026-08-26",
+        "evidence": "phone-only companion modal owns role, aria-modal, focus, inert background, circular Tab, Escape close and invoker restoration; wider layouts retain ordinary landmark semantics"
+      },
       "sourceDigest": "sha256:e78393a8a0fa6aaa0d42bb370918ada0fcb3926ca54f6cb296980cdaf575fbfd"
     },
     {

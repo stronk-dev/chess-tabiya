@@ -40,9 +40,9 @@ function tabbable(node: HTMLElement): HTMLElement[] {
 }
 
 /** One modal boundary: background inertness and circular Tab ownership. Escape stays with the owning workflow. */
-export function modalBoundary(node: HTMLElement): { destroy(): void } {
+export function modalBoundary(node: HTMLElement, initiallyActive = true): { update(active: boolean): void; destroy(): void } {
   const background = backgroundSiblings(node);
-  for (const element of background) claim(element);
+  let active = false;
 
   const keydown = (event: KeyboardEvent): void => {
     if (event.key !== "Tab") return;
@@ -63,12 +63,23 @@ export function modalBoundary(node: HTMLElement): { destroy(): void } {
       first.focus();
     }
   };
-  node.addEventListener("keydown", keydown);
-
-  return {
-    destroy(): void {
+  const update = (next: boolean): void => {
+    if (next === active) return;
+    active = next;
+    if (active) {
+      for (const element of background) claim(element);
+      node.addEventListener("keydown", keydown);
+    } else {
       node.removeEventListener("keydown", keydown);
       for (const element of background) release(element);
+    }
+  };
+  update(initiallyActive);
+
+  return {
+    update,
+    destroy(): void {
+      update(false);
     },
   };
 }
