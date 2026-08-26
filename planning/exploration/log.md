@@ -9159,3 +9159,17 @@ AC-18 is inexpressible without played-control and calibration-coverage identitie
 No production, migration, RFC, intent or archived bytes changed. The dossier routes the three
 contract gaps back to learner-rating authoring and keeps AC-13–AC-16's population-level test debt
 explicit rather than crediting current examples as total invariants.
+
+## 2026-08-26 — Learner-rating cohort population invariants (D1809 partial)
+
+Strengthened the already-authorized AC-14/15 behavior at the production service/storage boundary.
+A paired 120-game population gives two learners identical results while their calibrated opponent
+rungs drive materially different ratings; the standing remains ordered only by results and
+handle. Equivalent rated games remain byte-equal across classroom membership/publication, two
+open classrooms cannot aggregate one another, and the response negative now names forbidden
+rank/percentile/mean/z-score plus run/evidence identities.
+
+The focused eight-test cohort suite passes under repository Node 24. D1809 remains open rather
+than being over-closed: no source-reachability guard yet proves every standing member is
+self-created, and no total registry yet enumerates every multi-learner rendering site that owes the
+unwitnessed-games limitation.

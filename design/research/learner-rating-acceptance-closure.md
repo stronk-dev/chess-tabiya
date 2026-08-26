@@ -87,3 +87,12 @@ classification for this audit, not a release metric. `[V]`
 - It does not call example-level tests worthless. It distinguishes them from the total/population
   invariants the accepted criteria explicitly require.
 - It does not use the dirty D872 harness or the concurrent `planning/review/` work.
+
+## Post-audit implementation checkpoint
+
+The immediate D1809 slice adds three population-level AC-14/15 arms without changing product
+semantics: 120 games per learner prove result ordering survives materially reversed ratings;
+equivalent member/non-member rating and game projections remain byte-equal before and after
+publication; and two open classrooms remain disjoint. The response-negative also names forbidden
+rank/percentile/mean/z-score and run/evidence fields. `[V]` Standing-creation reachability and an
+all-multi-learner-rendering registry remain open, so the matrix's partial verdict does not move.

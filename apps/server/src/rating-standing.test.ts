@@ -1,6 +1,7 @@
 import { createHash } from "node:crypto";
 
 import { createRun } from "@chess-tabiya/runtime";
+import { ratedOpponentRung, type RatedOpponentBand } from "@chess-tabiya/runtime/rating";
 import { afterEach, describe, expect, it } from "vitest";
 
 import { IdentityService } from "./identity.js";
@@ -26,10 +27,11 @@ function run(id: string) {
   });
 }
 
-function game(runId: string, learnerId: string): OpenRatedGameRecord {
+function game(runId: string, learnerId: string, opponentBand: RatedOpponentBand = 1400): OpenRatedGameRecord {
+  const rung = ratedOpponentRung(opponentBand)!;
   return Object.freeze({
     runId, learnerId, calibrationId: "maia3-5m-band-ladder-2026-08-16",
-    opponentBand: 1400, opponentRating: 1500, opponentRd: 24.1,
+    opponentBand, opponentRating: rung.rating, opponentRd: rung.rd,
     learnerSide: "white", startPieceCount: 32,
     engineIdentityDigest: "1e13597c42d4858b7cfd7cfdae01e297263364b2",
     state: "open", startedAt: AT,
@@ -44,9 +46,15 @@ function addMember(storage: SQLiteRunStorage, learnerId: string) {
   storage.setClassroomMemberState("club", learnerId, "active", AT);
 }
 
-function addResult(storage: SQLiteRunStorage, learnerId: string, id: string, result: "win" | "loss" | "draw") {
+function addResult(
+  storage: SQLiteRunStorage,
+  learnerId: string,
+  id: string,
+  result: "win" | "loss" | "draw",
+  opponentBand: RatedOpponentBand = 1400,
+) {
   const value = run(id);
-  storage.createRatedRun(value, { writerId: `writer-${learnerId}`, learnerId }, "Rated game", game(id, learnerId));
+  storage.createRatedRun(value, { writerId: `writer-${learnerId}`, learnerId }, "Rated game", game(id, learnerId, opponentBand));
   storage.sealRatedGame({ runId: id, result, terminalReason: "checkmate", plyCount: 30, sealedAt: "2026-08-22T11:00:00.000Z" });
 }
 
@@ -94,8 +102,65 @@ describe("cohort standing", () => {
       },
     });
     expect(view.entries[0]).not.toHaveProperty("rating");
-    expect(JSON.stringify(view)).not.toMatch(/a-win|runId|branch|fen|evidence/iu);
+    expect(JSON.stringify(view)).not.toMatch(/a-win|runId|branch|fen|evidence|percentile|zScore|cohortMean|"rank"/iu);
     expect(view.limitation).toMatch(/nobody witnessed/iu);
+  });
+
+  it("orders only by results even when published rating points in the opposite direction", () => {
+    const { storage, service } = setup();
+    service.openCohortStanding(teacher, "club", { windowFrom: "2026-08-01T00:00:00.000Z", at: AT });
+    for (let index = 0; index < 120; index += 1) {
+      const result = index % 2 === 0 ? "win" : "loss";
+      addResult(storage, learnerA.learnerId, `alpha-low-${index}`, result, 1000);
+      addResult(storage, learnerB.learnerId, `beta-high-${index}`, result, 2200);
+    }
+    const alphaRating = storage.learnerRating(learnerA.learnerId)!;
+    const betaRating = storage.learnerRating(learnerB.learnerId)!;
+    expect(betaRating.rating).toBeGreaterThan(alphaRating.rating);
+
+    for (const learner of [learnerA, learnerB]) {
+      service.publishCohortStanding(learner, "club", AT);
+      service.setCohortStandingVisibility(learner, "club", "rating", true);
+    }
+    const entries = service.cohortStanding(teacher, "club").entries;
+    expect(entries.map((entry) => entry.handle)).toEqual(["alpha", "beta"]);
+    expect(entries.every((entry) => entry.record?.points === 60 && entry.record.games === 120)).toBe(true);
+    expect(entries.every((entry) => entry.rating !== undefined)).toBe(true);
+  });
+
+  it("keeps rating projection byte-equal across classroom publication and non-membership", () => {
+    const { storage, service } = setup();
+    service.openCohortStanding(teacher, "club", { windowFrom: "2026-08-01T00:00:00.000Z", at: AT });
+    addResult(storage, learnerA.learnerId, "member-result", "draw", 1800);
+    addResult(storage, outsider.learnerId, "outsider-result", "draw", 1800);
+
+    const normalizeRating = (learnerId: string) => {
+      const { learnerId: _ignored, ...state } = storage.learnerRating(learnerId)!;
+      return state;
+    };
+    const normalizeGame = (learnerId: string) => storage.ratedGames(learnerId).map(({ runId: _run, learnerId: _learner, ...record }) => record);
+    expect(normalizeRating(learnerA.learnerId)).toEqual(normalizeRating(outsider.learnerId));
+    expect(normalizeGame(learnerA.learnerId)).toEqual(normalizeGame(outsider.learnerId));
+
+    service.publishCohortStanding(learnerA, "club", AT);
+    service.setCohortStandingVisibility(learnerA, "club", "rating", true);
+    service.cohortStanding(teacher, "club");
+    expect(normalizeRating(learnerA.learnerId)).toEqual(normalizeRating(outsider.learnerId));
+    expect(normalizeGame(learnerA.learnerId)).toEqual(normalizeGame(outsider.learnerId));
+  });
+
+  it("never aggregates entries across classroom boundaries", () => {
+    const { storage, service } = setup();
+    storage.createClassroom({ id: "other-club", ownerLearnerId: teacher.learnerId, name: "Other club", createdAt: AT, archivedAt: null });
+    storage.inviteClassroomMember({ classroomId: "other-club", learnerId: outsider.learnerId, memberRole: "learner", state: "invited", invitedBy: teacher.learnerId, invitedAt: AT });
+    storage.setClassroomMemberState("other-club", outsider.learnerId, "active", AT);
+    service.openCohortStanding(teacher, "club", { windowFrom: "2026-08-01T00:00:00.000Z", at: AT });
+    service.openCohortStanding(teacher, "other-club", { windowFrom: "2026-08-01T00:00:00.000Z", at: AT });
+    service.publishCohortStanding(learnerA, "club", AT);
+    service.publishCohortStanding(outsider, "other-club", AT);
+
+    expect(service.cohortStanding(teacher, "club").entries.map((entry) => entry.learnerId)).toEqual([learnerA.learnerId]);
+    expect(service.cohortStanding(teacher, "other-club").entries.map((entry) => entry.learnerId)).toEqual([outsider.learnerId]);
   });
 
   it("withdraws immediately and leaving the classroom removes the entry", () => {
