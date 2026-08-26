@@ -1,0 +1,49 @@
+{
+  "schema": "tabiya.research.d1723-backward-pawn.v1",
+  "populations": {
+    "authored": {
+      "decisions": 754,
+      "uniquePositions": 611,
+      "fileObservations": 142,
+      "subjects": 142,
+      "emptyStop": 86,
+      "occupiedStop": 56,
+      "occupiedOwn": 1,
+      "occupiedEnemy": 55,
+      "ambiguousFiles": 0,
+      "isolated": 14,
+      "adjacentAhead": 128,
+      "capturableEnemyPawn": 0,
+      "halfOpenFile": 50,
+      "readingsWithNoSquares": 142,
+      "phases": {
+        "opening": { "files": 4, "subjects": 4, "emptyStop": 4 },
+        "middlegame": { "files": 81, "subjects": 81, "emptyStop": 46 },
+        "endgame": { "files": 30, "subjects": 30, "emptyStop": 14 },
+        "unclear": { "files": 27, "subjects": 27, "emptyStop": 22 }
+      }
+    },
+    "imported": {
+      "decisions": 579,
+      "uniquePositions": 577,
+      "fileObservations": 261,
+      "subjects": 262,
+      "emptyStop": 165,
+      "occupiedStop": 97,
+      "occupiedOwn": 7,
+      "occupiedEnemy": 90,
+      "ambiguousFiles": 1,
+      "isolated": 85,
+      "adjacentAhead": 177,
+      "capturableEnemyPawn": 7,
+      "halfOpenFile": 95,
+      "readingsWithNoSquares": 261,
+      "phases": {
+        "opening": { "files": 4, "subjects": 4, "emptyStop": 4 },
+        "middlegame": { "files": 211, "subjects": 212, "emptyStop": 138 },
+        "endgame": { "files": 7, "subjects": 7, "emptyStop": 2 },
+        "unclear": { "files": 39, "subjects": 39, "emptyStop": 21 }
+      }
+    }
+  }
+}

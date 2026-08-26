@@ -15,6 +15,7 @@ set execution order.
 
 | Rows | Primary destination | Next action / gate |
 |---|---|---|
+| D1723 | backward-pawn v2 author amendment → D1722/D1711/D1718/F2/F5 | Consume `backward-pawn-author-repair-2026-08-26.md`: register the convention; emit exact pawn/stop/support/controller/occupancy identity; preserve a derived legacy file predicate; separate legal advance/reply; migrate five authored leaves; validate before avoidance or learner rendering. |
 | D1722 | shared convention-provenance author amendment → F1/D1711/F2/F5/F8 | Consume `declared-convention-identity-author-repair-2026-08-26.md`: register exact convention definitions; declare direct and per-path transitive refs independently of primary grounding; seal bounded disclosure into rendered/provider items; enforce versioned semantic migration; classify the measured 42 labelled + 18 other-grounding rows before validation or learner activation. |
 | D1719 | D1716 semantic-selection subject-identity amendment | Replace family/sign then move-level deduplication with declared root-subject/outcome grouping and distinct supporting-move counts; the current `alternativeEvents` array cannot be filtered into a complete subject denominator. |
 | D1718 | D1716 semantic-selection subject-identity successor author input | Consume the measured 790/491/455 census and total thirteen-family grammar from `avoidance-subject-author-repair-2026-08-26.md`; author new `@2` evidence rather than patching isolated pawns or widening `@1`. |

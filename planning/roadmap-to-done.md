@@ -264,6 +264,15 @@ from today's fields. A compiled convention registry, direct plus per-path transi
 version-enforced migration and sealed bounded disclosure now precede D1711, avoidance v2 and all
 learner/provider activation. Ordinary UX still receives module wording; raw ids remain Advanced.
 
+[[D1723]] supplies the first complete convention-to-form case. The broad backward-pawn relation is
+worth keeping, but the current 403 file observations erase 404 exact pawn subjects and every
+reading has an empty square list. With 153/404 stop squares occupied, the structure fact cannot
+honestly become an immediate “advance and be captured” hint. The v2 source therefore retains exact
+pawn/stop/support/controller/occupancy identity, while legal advance and legal opponent capture are
+separate derived facts. This one primitive can then power a theory-only highlight, a changed-state
+card, a direct reply nudge, subject-safe avoidance and bot/style features without any surface
+inventing chess meaning. Five authored leaves migrate only after the source contract stabilizes.
+
 ### 3. Arrival and the rehearsal loop
 
 <!-- roadmap-capability: rehearsal -->

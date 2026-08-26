@@ -8945,3 +8945,20 @@ grounding even when the composition adds `observed-window@1`. The author handoff
 compiled convention registry, direct and per-path transitive refs, semantic version enforcement and
 sealed module/provider disclosure. It explicitly keeps raw ids in Advanced rather than recreating
 the rejected evidence dump. No production, RFC, schema, content, pack or learner-UX byte changed.
+
+## 2026-08-26 — Backward-pawn source and payload boundary measured (D1723)
+
+Triangulated the shipped relation against Chess.com's term reference, Chess Programming Wiki's
+computational definition and historical Stockfish source. The concept is stable but executable
+definitions differ, so Tabiya's narrow support-plus-pawn-controller rule is retained as a declared
+convention rather than presented as universal rules truth.
+
+The fixed 754 authored + 579 imported decisions contain 403 file observations representing 404
+exact pawn subjects. Every current reading has an empty square list. Only 251 subjects have an
+empty stop; 153 are occupied (8 own / 145 enemy), while 99 are isolated, 305 have an adjacent pawn
+ahead, 145 are on a half-open file and seven can capture an enemy pawn immediately. The successor
+keeps the broad static fact but retains exact pawn/stop/support/controller/occupancy operands;
+legal advance and legal opponent pawn capture become separate projections. Five authored leaves in
+three documents require explicit v1/v2 migration after D1722 convention provenance and before
+D1711 validation, D1718 avoidance or learner modules. No production, RFC, schema, content, pack or
+learner-UX byte changed.

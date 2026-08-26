@@ -95,6 +95,15 @@ derivation is refused. The shared author repair adds a registered convention voc
 direct/transitive per-path closure, version rules and sealed module/provider disclosure before
 D1711 validation, D1718 avoidance or Phase-3 activation.
 
+[[D1723]] **completed the backward-pawn semantic/payload boundary on 2026-08-26**: the current
+narrow convention is defensible as declared product semantics, but 403 file observations collapse
+404 exact pawn subjects and every reading carries zero squares. Only 251/404 subjects have an empty
+stop; 153 are occupied, so a legal advance/capture consequence cannot be inferred from the broad
+structure relation. The v2 handoff retains pawn, stop, support/ahead pawns, pseudo controllers,
+occupancy, capture options and half-open state; legal advance/reply becomes a separate exact
+projection. Five authored leaves in three documents migrate explicitly after D1722 and before
+D1711/D1718/module activation.
+
 **Deliverable 7 (owner questions) accumulates here** — nothing is silently chosen.
 **All four open questions RULED 2026-08-22 ([[D745]])**: space = classic zones + pawn control,
 `chess_tradition`; the negative reading faces learners post-commit/review with the denominator;
