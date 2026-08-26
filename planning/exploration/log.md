@@ -8093,3 +8093,23 @@ tool is available to rest: recovery route (recommended), carried act-level strai
 nonterminal exhaustion/prestige consequence. No counts, thresholds, copy or felt-quality claim are
 licensed. The dossier is `design/research/campaign-failure-resource.md`; the instrument and receipt
 are `tools/d1515-failure-resource-harness/`.
+
+## 2026-08-26 — Bot roster returned before an empty catalogue became a checkbox
+
+Independently reviewed `rfc/bot-roster.md` against D969, the shipped catalogue/composer and the
+later owner ruling [[D1566]]. The measured four-band × three-family product survives, and the
+persona-grain fork is closed at one persistent persona per profile. The draft is not buildable yet.
+
+The guard accepts a bare caller-owned centipawn loss, so it cannot express or verify D969's mixed
+cp/mate abstention, exact rows, shared candidate set, depth, perspective or provider identity. On
+guard abstention the composer continues into pawn reweighting even though that family was measured
+only after a successful guard. Trait ids remain free strings, and the composer still has no
+production caller. The draft also compares cp with Elo to claim strength orthogonality, then asks
+same-family non-model layers to be byte-identical while assigning every profile a different persona
+layer. Finally, neither the combined Maia+guard budget nor [[D1566]]'s Play picker, card and
+always-visible identity has an implementing home.
+
+**Verdict:** returned on [[D1601]]–[[D1609]]; exact repairs and resume order are in
+`planning/bot-roster/buildability-return-2026-08-26.md`. [[D1610]]/[[D1611]] retain only the genuine
+owner choices—final names/assets and the new-learner default. No production, protected-design,
+schema or migration bytes changed; the catalogue remains empty rather than falsely complete.

@@ -263,7 +263,13 @@ a boardless placeholder; it is now implementation work rather than an owner fork
 **State: measured machinery, no production roster.** Maia bands and policy composition exist;
 route-source research passed; the catalogue still has no composed production profiles, depth
 persistence and trait population block it, and most personality claims are not observable in play.
-Avatars or adjectives do not solve that.
+Avatars or adjectives do not solve that. The 2026-08-26 buildability return adds the deeper
+contract blockers: typed shared-probe guard evidence, dependent-trait fallback, compiled trait
+identities, a production composer route, combined selection budget and the owner-ruled picker/card/
+identity surface ([[D1601]], [[D1602]], [[D1603]], [[D1604]], [[D1605]], [[D1606]], [[D1607]],
+[[D1608]], [[D1609]]). [[D1610]] and [[D1611]] retain the final persona assets and explicit default
+as owner choices. An honest non-empty catalogue is downstream of those repairs, not a substitute
+for them.
 
 **1.0 exit:** four measured bands × three behavior families carry immutable policy digests;
 grounded route proposals and guard fallback never throw; repertoire, traits, plausible errors,

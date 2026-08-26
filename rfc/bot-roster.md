@@ -1,6 +1,6 @@
 # RFC: Bot roster
 
-- **Status:** draft — 2026-08-23. Registers the twelve profiles the accepted `bot-policy` grammar has never carried: `BOT_POLICY_PROFILES = compileBotPolicyCatalog([])` is a literal empty array at `apps/server/src/bot-policy-catalog.ts:299`, so the seven-layer compiler ships with **zero instances** and a learner picks between two words. Consumes the eight bot dossiers `bot-policy` never cited ([[D1091]]).
+- **Status:** draft — returned on buildability 2026-08-26. The measured four-band × three-family product and [[D1566]]'s one-persona-per-profile ruling stand, but the present contract cannot implement D969's typed mixed-domain guard, lets a pawn trait run after its required guard abstains, accepts caller-forged trait strings, has no production composition route, omits the combined selection budget, and does not own the ruled Play picker/card/identity outcome. Its orthogonality criterion is also both empirically overstated and mechanically incompatible with per-profile presentation layers. Exact return: `planning/bot-roster/buildability-return-2026-08-26.md`. `BOT_POLICY_PROFILES` remains intentionally empty.
 - **Author:** claude (drafted from `planning/bot-roster/roster.md`, which assembled the dossier numbers for the first time)
 - **Created:** 2026-08-23
 - **Design refs:** `design/00-thesis.md` (*"a human-like opponent while truly applying an opening/middlegame/endgame"*); `design/03-product-breadth.md` §Just Play (*"choose a side/position/opponent"*). The bot lane has no design-tier section; its intent authority is the owner ideation [[D810]]–[[D812]] and the O8 ruling, quoted in `bot-policy` §0. A `design/` bot section remains owner work under law 5.
@@ -492,12 +492,14 @@ here.
 
 1. **Persona naming.** The twelve placeholder names are claude's. Changing one voids that profile's
    calibration by digest, so the owner or design tier should pick before the ladder runs, not after.
-2. **One persona per profile, or one per family?** Both compile. Per-profile makes a rung a
-   character; per-family makes the band a setting shown separately by the card. A one-line fork.
-3. **Which Stockfish spec owns the guard call.** `stockfish-play` carries the ratified 50,000-node
-   play profile; `stockfish-analysis` is the analysis spec. The guard needs `Threads=1`, `Hash=16`,
-   `ucinewgame` + `Clear Hash` per call, `MultiPV=candidateCount`, `searchmoves` — a third
-   configuration. Not a measurement; an RFC decision.
+2. **Default profile.** [[D1566]] fixes the picker, roster, visible identity and persona grain but
+   does not choose the profile a new learner meets. The accidental hidden Maia-1500 default is not
+   one of the measured rungs and may not survive as an implicit answer.
+
+**Resolved after drafting:** [[D1566]] chooses **one persistent persona per profile**, not one per
+family. The guard's engine configuration is no longer an owner question: the return requires a
+dedicated supervised `stockfish-guard` request identity because neither the play nor analysis spec
+declares D969's exact request and fallback contract.
 
 ## Ledger rows
 
@@ -518,3 +520,6 @@ Proposed — id assigned at landing; head was **D1293** at drafting.
   cited. Registers twelve profiles; claims run-schema lane 0.22 for the `searchBound` widening;
   amends `bot-policy` §2.4's depth-12 numbers to production depth-8; withdraws the trait-gate
   unit-check obligation and corrects [[D1250]]'s timeout claim, both re-derived at HEAD.
+- 2026-08-26 — independently returned before acceptance on [[D1601]]–[[D1609]]. [[D1566]] resolves
+  persona grain at one persistent persona per profile; names and the default remain owner choices.
+  No production, schema, migration or protected-design bytes changed.
