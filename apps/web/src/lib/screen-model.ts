@@ -16,6 +16,7 @@ import {
 } from "@chess-tabiya/runtime";
 
 import { renderEvidenceRef, type EvidenceSentence } from "./evidence-sentences.js";
+import { branchDisplayLabel } from "./run-copy.js";
 
 export interface TimelineEntry {
   readonly nodeId: string;
@@ -147,7 +148,7 @@ export function branchCards(run: DrillRun): readonly BranchCard[] {
     );
     return Object.freeze({
       id: branch.id,
-      label: branch.label,
+      label: branchDisplayLabel(branch.label, first?.moveSan ?? "At fork", branch.intent),
       ...(branch.intent === undefined ? {} : { intent: branch.intent }),
       firstMove: first?.moveSan ?? "At fork",
       leafNodeId: leaf.id,
@@ -158,6 +159,25 @@ export function branchCards(run: DrillRun): readonly BranchCard[] {
       origin: branch.origin,
     });
   });
+}
+
+export function timelineBranchCards(run: DrillRun): readonly BranchCard[] {
+  const cards = branchCards(run);
+  const byId = new Map(cards.map((card) => [card.id, card]));
+  const links: BranchCard[] = [];
+
+  for (const forkNodeId of new Set(cards.map((card) => card.forkNodeId))) {
+    const forkNode = run.nodes.find((node) => node.id === forkNodeId);
+    const group = new Map<string, BranchCard>();
+    const parent = forkNode === undefined ? undefined : byId.get(forkNode.branchId);
+    if (parent !== undefined) group.set(parent.id, { ...parent, forkNodeId });
+    for (const card of cards) {
+      if (card.forkNodeId === forkNodeId) group.set(card.id, card);
+    }
+    if (group.size >= 2) links.push(...group.values());
+  }
+
+  return Object.freeze(links);
 }
 
 export function latestCheckpoint(

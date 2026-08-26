@@ -9669,3 +9669,21 @@ operations clear it. At 768×1024, the branch summary and Compare control interc
 cards. The tablet band now separates identity, horizontally scrollable cards and actions into three
 columns, and the test performs both pointer branch switches without force. D1835 and D1836 close;
 D1834 remains implementing only on the five named module-dependent columns.
+
+## 2026-08-27 — Compare now exits back into the complete rehearsal loop
+
+Six queued core-loop items close together because their production boundary is one journey. The
+fork dialog now asks what the learner is trying before an optional short name; absent names project
+as the first played SAN move plus that intent. The Timeline derives both the parent continuation
+and alternatives at the actual fork rather than trusting each branch's creation root. Catalogue
+cards state a declared or derived consequence horizon before start and the run keeps it visible.
+Compare can start the same fork position as a distinct run at a learner-selected human-like rung,
+while preserving the compared attempts and keeping the applied rung visible.
+
+The first browser execution caught a non-root identity error: the rail showed the alternative, but
+Timeline grouped only branches whose own `forkNodeId` matched and therefore omitted the parent
+continuation. A pure projection now constructs the complete fork group; its non-root unit fixture
+and the full catalogue → run → rewind → intent fork → Timeline → Compare → new run browser journey
+pass. CLP-a12/a13/a14/a15/a16/a18 and D1838 close. D1837 separately corrects IMP-a1/a2/a4 from
+queued to RFC-blocked: a picker without durable selected-game and omission identity would lose its
+truth on reload/export.

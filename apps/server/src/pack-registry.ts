@@ -39,6 +39,7 @@ export interface PackSummary {
   readonly phase: PackPhase | null;
   readonly difficulty: unknown;
   readonly objectiveSummary: string;
+  readonly consequenceHorizon: { readonly kind: "declared" | "authored"; readonly plies: number } | null;
   readonly concepts: readonly string[];
   readonly reviewStatus: string;
   readonly channel: "official" | "community";
@@ -66,6 +67,16 @@ export interface PackRecord {
 
 function objectiveSummary(document: DrillPackDefinition): string {
   return document.objective.summary?.trim() || document.objective.type.replaceAll("_", " ");
+}
+
+function consequenceHorizon(document: DrillPackDefinition): PackSummary["consequenceHorizon"] {
+  const declared = document.authoredBoundary?.plyHorizon;
+  if (Number.isSafeInteger(declared) && declared! > 0) return freeze({ kind: "declared" as const, plies: declared! });
+  const depth = (node: SpineNode): number => 1 + Math.max(0, ...node.children.map(depth));
+  const spine = Math.max(0, ...(document.spine ?? []).map(depth));
+  const leg = Math.max(0, ...(document.legs ?? []).map((item) => item.branchLengthTarget ?? 0));
+  const plies = Math.max(spine, leg);
+  return plies > 0 ? freeze({ kind: "authored" as const, plies }) : null;
 }
 
 function projectSpineNode(node: SpineNode): unknown {
@@ -302,6 +313,7 @@ export class PackRegistry {
         phase: typeof raw.phase === "string" ? (raw.phase as PackPhase) : null,
         difficulty: raw.difficulty ?? null,
         objectiveSummary: objectiveSummary(document),
+        consequenceHorizon: consequenceHorizon(document),
         concepts: Object.freeze([...(document.concepts ?? [])]),
         reviewStatus: provenance.reviewStatus as string,
         channel,
@@ -413,6 +425,7 @@ export class PackRegistry {
         phase: typeof raw.phase === "string" ? raw.phase as PackPhase : null,
         difficulty: raw.difficulty ?? null,
         objectiveSummary: objectiveSummary(document),
+        consequenceHorizon: consequenceHorizon(document),
         concepts: Object.freeze([...(document.concepts ?? [])]),
         reviewStatus: String(provenance.reviewStatus),
         channel: "community",
@@ -443,6 +456,7 @@ export class PackRegistry {
         phase: typeof raw.phase === "string" ? raw.phase as PackPhase : null,
         difficulty: raw.difficulty ?? null,
         objectiveSummary: objectiveSummary(document),
+        consequenceHorizon: consequenceHorizon(document),
         concepts: Object.freeze([...(document.concepts ?? [])]),
         reviewStatus: String(provenance.reviewStatus),
         channel: "community",

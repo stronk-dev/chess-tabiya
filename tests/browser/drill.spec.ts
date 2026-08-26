@@ -917,8 +917,8 @@ test("@content served Najdorf pack plays, rewinds, branches, compares, and expor
     (await page.evaluate(() => performance.now())) - rewindStart;
 
   await page.keyboard.press("b");
-  await page.getByLabel("Label").fill("quiet setup");
-  await page.getByLabel("Intent").fill("Compare a lower-commitment setup");
+  await page.getByLabel("Short name").fill("quiet setup");
+  await page.getByLabel("What are you trying?").fill("Compare a lower-commitment setup");
   await page.getByRole("button", { name: "Create branch" }).click();
   await clickMove(page, "d1", "d2");
   await expect(page.getByText("Active line 4 plies")).toBeVisible();
@@ -1533,8 +1533,8 @@ test("@matrix rewind, fork re-entry, and comparison remain composed at every vie
     await page.keyboard.press("r");
     await expect(page.getByText("Active line 2 plies")).toBeVisible();
     await page.keyboard.press("b");
-    await page.getByLabel("Label").fill("quiet setup");
-    await page.getByLabel("Intent").fill("Compare a lower-commitment setup");
+    await page.getByLabel("Short name").fill("quiet setup");
+    await page.getByLabel("What are you trying?").fill("Compare a lower-commitment setup");
     await page.getByRole("button", { name: "Create branch" }).click();
     await clickMove(page, "d1", "d2");
     if (await page.getByRole("button", { name: "Continue" }).isVisible().catch(() => false)) {
@@ -1564,6 +1564,41 @@ test("@matrix rewind, fork re-entry, and comparison remain composed at every vie
     expect(horizontal.scrollWidth).toBeLessThanOrEqual(horizontal.clientWidth + 1);
     await attachCompositionCell(page, testInfo, viewport, "12-compare-open");
   }
+});
+
+test("branch intent names the saved line and Compare replays the same decision at a chosen rung", async ({ page }) => {
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await page.goto("/play");
+  const card = page.getByRole("article").filter({ hasText: "schema example" });
+  await expect(card).toContainText("Consequence · up to 4 plies");
+  await card.getByRole("button", { name: /Rehearse this position/ }).click();
+
+  await move(page, "c1", "e3");
+  await page.getByRole("button", { name: "Continue" }).click();
+  await page.getByRole("button", { name: "Continue" }).click();
+  await move(page, "f2", "f3");
+  await page.getByRole("button", { name: "Continue" }).click();
+  await page.locator("main.drill").focus();
+  await page.keyboard.press("r");
+  await page.keyboard.press("b");
+  await expect(page.getByLabel("What are you trying?")).toBeFocused();
+  await page.getByLabel("What are you trying?").fill("Keep the queen flexible");
+  await page.getByRole("button", { name: "Create branch" }).click();
+  await clickMove(page, "d1", "d2");
+  if (await page.getByRole("button", { name: "Continue" }).isVisible().catch(() => false)) await page.getByRole("button", { name: "Continue" }).click();
+
+  const generatedName = "Qd2 — Keep the queen flexible";
+  await expect(page.locator(".rail li.active strong")).toHaveText(generatedName);
+  await expect(page.locator(".timeline").getByRole("button", { name: generatedName, exact: true })).toBeVisible();
+
+  await page.locator("main.drill").focus();
+  await page.keyboard.press("Alt+C");
+  await expect(page.getByRole("heading", { name: "Same decision, two consequences." })).toBeVisible();
+  await page.getByLabel("Human-like rung").selectOption("1800");
+  await page.getByRole("button", { name: "Start a new replay" }).click();
+  await expect(page).toHaveURL(/\/play\/run\//u);
+  await expect(page.locator("[data-status-announcement]")).toContainText("Human-like rung 1800");
+  await expect(page.locator("[data-status-announcement]")).toContainText("Full game · until a rules-terminal result");
 });
 
 test("a committed move updates the stable board instance instead of remounting it", async ({ page }) => {
@@ -1724,8 +1759,8 @@ test("@matrix @mobile comparison stacks complete branch cards without hidden hor
   await page.keyboard.press("r");
   await expect(page.getByText("Active line 2 plies")).toBeVisible();
   await page.keyboard.press("b");
-  await page.getByLabel("Label").fill("quiet setup");
-  await page.getByLabel("Intent").fill("Compare a lower-commitment setup");
+  await page.getByLabel("Short name").fill("quiet setup");
+  await page.getByLabel("What are you trying?").fill("Compare a lower-commitment setup");
   await page.getByRole("button", { name: "Create branch" }).click();
   await clickMove(page, "d1", "d2");
   await expect(page.getByText("Active line 4 plies")).toBeVisible();

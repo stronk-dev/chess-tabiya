@@ -778,6 +778,7 @@ describe("Layer 3 screens", () => {
         step: 2,
         onStep: vi.fn(),
         onClose: vi.fn(),
+        onReplayResistance: vi.fn(),
       },
     });
     await tick();
@@ -799,6 +800,7 @@ describe("Layer 3 screens", () => {
     );
     expect(document.body.textContent).toContain("Where the attempts split");
     expect(document.body.textContent).toContain("Intent: Test Black's expansion");
+    expect(document.body.textContent).toContain("Change the practical resistance, not the recorded attempts.");
     expect(document.body.textContent).not.toContain("Recorded differences by branch");
     expect(document.body.textContent).not.toContain("Opponent and authored-line context");
     expect(document.body.textContent).not.toContain("Tabiya structural detector");
@@ -1065,7 +1067,7 @@ describe("Layer 3 screens", () => {
     key("b");
     await tick();
     expect(document.activeElement).toBe(
-      document.querySelector('input[placeholder="alt-2"]'),
+      document.querySelector('textarea[placeholder*="keep the knight"]'),
     );
     key("Escape");
     await tick();

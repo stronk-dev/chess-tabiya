@@ -80,6 +80,7 @@
           </div>
           <h2>{pack.title}</h2>
           <p class="objective">{pack.objectiveSummary}</p>
+          <p class="horizon">{pack.consequenceHorizon === null || pack.consequenceHorizon === undefined ? "Consequence length not recorded" : `Consequence · up to ${pack.consequenceHorizon.plies} ${pack.consequenceHorizon.plies === 1 ? "ply" : "plies"}`}</p>
           <p class="difficulty">{packDifficultyCopy(pack, learnerBand)}</p>
           <button class="open-pack" type="button" aria-label={`Rehearse this position: ${pack.title}`} onclick={() => onSelect(pack.id)}>Rehearse this position <span aria-hidden="true">→</span></button>
           <p class="provenance">{pack.channel === "official" ? "Official" : "Community"}{pack.publisherHandle ? ` · @${pack.publisherHandle}` : ""} · {pack.reviewStatus.replaceAll("_", " ")}</p>
@@ -98,7 +99,7 @@
 <style>
   .library { width: min(76rem, calc(100% - 2rem)); height: 100%; margin: 0 auto; padding: clamp(2rem, 6vw, 5rem) 0; overflow: auto; }
   header { max-width: 52rem; margin-bottom: 2rem; }
-  .eyebrow, .card-meta, .difficulty, .provenance, .result-count { font: 700 0.72rem/1.35 ui-monospace, SFMono-Regular, Menlo, monospace; letter-spacing: 0.08em; text-transform: uppercase; }
+  .eyebrow, .card-meta, .difficulty, .horizon, .provenance, .result-count { font: 700 0.72rem/1.35 ui-monospace, SFMono-Regular, Menlo, monospace; letter-spacing: 0.08em; text-transform: uppercase; }
   .eyebrow { color: var(--accent); }
   h1 { max-width: 16ch; margin: 0.5rem 0 1rem; font: 500 clamp(2.4rem, 6vw, 5.4rem) / 0.96 var(--display-font); letter-spacing: -0.05em; }
   .lede { max-width: 40rem; color: var(--ink); font-size: 1.08rem; }
@@ -116,6 +117,7 @@
   h2 { max-width: 24ch; margin: 1.5rem 0 .65rem; font: 500 1.65rem/1.08 var(--display-font); }
   .objective { margin: 0; color: var(--ink); line-height: 1.45; }
   .difficulty { margin-top: auto; padding-top: 1rem; color: var(--muted); }
+  .horizon { margin:.75rem 0 0;color:var(--muted); }
   button { font: inherit; cursor: pointer; }
   .open-pack { width: 100%; margin-top: .75rem; display: flex; justify-content: space-between; padding: .9rem 1rem; border: 0; border-radius: .75rem; background: var(--ink); color: var(--paper); }
   .open-pack:hover, .open-pack:focus-visible { background: var(--accent); color: var(--on-accent); }

@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import { objectiveChangeSummaries, objectiveStateLabel, phaseSummary, runOutcomeLabel } from "./run-copy.js";
+import { branchDisplayLabel, consequenceHorizon, objectiveChangeSummaries, objectiveStateLabel, phaseSummary, runOutcomeLabel } from "./run-copy.js";
 
 describe("run copy", () => {
   it("translates runtime state into one learner vocabulary", () => {
@@ -14,6 +14,14 @@ describe("run copy", () => {
     expect(phaseSummary("opening", "opening")).toBe("Opening");
     expect(phaseSummary("opening", "middlegame")).toBe("Drill focus: Opening · Current position: Middlegame");
     expect(phaseSummary(undefined, "unclear")).toBe("Phase unclear");
+  });
+
+  it("turns machine branch labels and authored horizons into learner copy", () => {
+    expect(branchDisplayLabel("alt-3", "Nf5", "keep pressure on e7")).toBe("Nf5 — keep pressure on e7");
+    expect(branchDisplayLabel("Kingside try", "Nf5", "keep pressure on e7")).toBe("Kingside try");
+    expect(consequenceHorizon()).toBe("Full game · until a rules-terminal result");
+    expect(consequenceHorizon({ authoredBoundary: { plyHorizon: 6 } })).toBe("Consequence · up to 6 plies");
+    expect(consequenceHorizon({ spine: [{ children: [{ children: [] }] }] })).toBe("Consequence · up to 2 plies");
   });
 
   it("keeps objective-change plumbing out of the learner summary", () => {

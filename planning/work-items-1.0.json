@@ -3171,74 +3171,94 @@
     {
       "id": "CLP-a12",
       "sourceState": "queued",
-      "state": "queued",
+      "state": "completed",
       "capability": "rehearsal",
       "owner": "core-loop",
-      "assignment": "capability:rehearsal",
+      "assignment": "closed",
       "sourceDocument": "ux-core-loop.md",
       "sourceSection": "§5 B1",
       "sourceHeading": "The core loop — `ux-core-loop.md`",
       "summary": "Fork modal: intent first, machine label optional. `fork()` already makes both optional",
       "legacyRoute": "none",
+      "completion": {
+        "completedOn": "2026-08-27",
+        "evidence": "intent-first fork dialog with optional short name; production browser journey focuses intent, creates an unnamed branch and retains the learner's stated experiment"
+      },
       "sourceDigest": "sha256:f280d14f72c5abe48629a12afbd68118d5c3bc492d278a109a472e4f1f090f16"
     },
     {
       "id": "CLP-a13",
       "sourceState": "queued",
-      "state": "queued",
+      "state": "completed",
       "capability": "rehearsal",
       "owner": "core-loop",
-      "assignment": "capability:rehearsal",
+      "assignment": "closed",
       "sourceDocument": "ux-core-loop.md",
       "sourceSection": "§5 B2",
       "sourceHeading": "The core loop — `ux-core-loop.md`",
       "summary": "Name a branch from the move plus the intent, not `alt-3`",
       "legacyRoute": "none",
+      "completion": {
+        "completedOn": "2026-08-27",
+        "evidence": "machine alt labels project as first played SAN plus learner intent while explicit learner labels remain unchanged; unit and production browser contracts"
+      },
       "sourceDigest": "sha256:90aee615eef2b5d76975175511ff2324d8b1f54ad29aff644a588b9b9c08d1c6"
     },
     {
       "id": "CLP-a14",
       "sourceState": "queued",
-      "state": "queued",
+      "state": "completed",
       "capability": "rehearsal",
       "owner": "core-loop",
-      "assignment": "capability:rehearsal",
+      "assignment": "closed",
       "sourceDocument": "ux-core-loop.md",
       "sourceSection": "§5 B3",
       "sourceHeading": "The core loop — `ux-core-loop.md`",
       "summary": "Branches appear in the move list as well as the rail",
       "legacyRoute": "none",
       "note": "coupled to the timeline clipping fix",
+      "completion": {
+        "completedOn": "2026-08-27",
+        "evidence": "timeline derives the parent continuation plus every alternative at each actual fork and exposes branch-switch controls; non-root fork unit contract and production browser journey"
+      },
       "sourceDigest": "sha256:c321c7da0fa7a48caba058c81cc812cc85b026ddb310abab3b06ab9e5dc83253"
     },
     {
       "id": "CLP-a15",
       "sourceState": "queued",
-      "state": "queued",
+      "state": "completed",
       "capability": "rehearsal",
       "owner": "core-loop",
-      "assignment": "capability:rehearsal",
+      "assignment": "closed",
       "sourceDocument": "ux-core-loop.md",
       "sourceSection": "§6 D1",
       "sourceHeading": "The core loop — `ux-core-loop.md`",
       "summary": "**Replay at a different band as a first-class exit action from compare** — the thesis's own last clause, with no gesture in the product",
       "legacyRoute": "none",
       "note": "wires to an existing run-creation path",
+      "completion": {
+        "completedOn": "2026-08-27",
+        "evidence": "Compare offers a first-class replay from the preserved fork FEN through the production run-creation path; the prior attempts remain saved and the browser arrives in a distinct run"
+      },
       "sourceDigest": "sha256:7b7fcc94654a1c3123ca69f99ae003cc9f123939d61cd8393195b4df23dbe149"
     },
     {
       "id": "CLP-a16",
       "sourceState": "queued",
-      "state": "queued",
+      "state": "completed",
       "capability": "rehearsal",
       "owner": "core-loop",
-      "assignment": "capability:rehearsal",
+      "assignment": "closed",
       "sourceDocument": "ux-core-loop.md",
       "sourceSection": "§6 D5",
       "sourceHeading": "The core loop — `ux-core-loop.md`",
       "summary": "The learner moves the ladder; any band suggestion is accepted, never applied silently; applied band always visible",
       "legacyRoute": "none",
       "note": "Dr. Wolf's churn complaint is the field evidence",
+      "completion": {
+        "completedOn": "2026-08-27",
+        "evidence": "learner-owned four-rung selector in Compare, no automatic rung change, explicit calibration disclaimer and applied rung retained in the run's visible status announcement"
+      },
       "sourceDigest": "sha256:f41e5de117bde422e0529f29b5f49e5987f4d73d4b5e7e2428428020a87b2f33"
     },
     {
@@ -3262,16 +3282,20 @@
     {
       "id": "CLP-a18",
       "sourceState": "queued",
-      "state": "queued",
+      "state": "completed",
       "capability": "rehearsal",
       "owner": "core-loop",
-      "assignment": "capability:rehearsal",
+      "assignment": "closed",
       "sourceDocument": "ux-core-loop.md",
       "sourceSection": "§3 P1",
       "sourceHeading": "The core loop — `ux-core-loop.md`",
       "summary": "The run states the consequence's horizon before it starts and holds it visible",
       "legacyRoute": "none",
       "note": "pack boundary ships; `PivotalMarker` kinds present",
+      "completion": {
+        "completedOn": "2026-08-27",
+        "evidence": "catalogue derives and states each pack's declared/authored ply horizon before start; run objective and atomic status retain it, with honest full-game/absent fallbacks"
+      },
       "sourceDigest": "sha256:71600db7193bed4d7bd1c3ebed1f69525ef518f468abbc3e1abac0181a2c761d"
     },
     {
@@ -4721,7 +4745,7 @@
     {
       "id": "IMP-a1",
       "sourceState": "queued",
-      "state": "queued",
+      "state": "blocked_rfc",
       "capability": "account_data",
       "owner": "account-and-data",
       "assignment": "capability:account_data",
@@ -4730,7 +4754,7 @@
       "sourceHeading": "Import, account and data — `ux-import-and-account.md`",
       "summary": "Multi-game PGN: parse all, render a picker, import the chosen game. **The data is already in hand at `pgn-import.ts:26` when the refusal throws**",
       "legacyRoute": "ledger",
-      "note": "[[D1486]]",
+      "note": "[[D1486]]; [[D1837]] requires durable selected-game and omission identity before the picker can survive reload/export",
       "sourceDigest": "sha256:e4232d6d3a06d6e94f970e1d65bd45e74c923180b2a92da5f813f57765b69fc1"
     },
     {
@@ -4883,7 +4907,7 @@
     {
       "id": "IMP-a2",
       "sourceState": "queued",
-      "state": "queued",
+      "state": "blocked_rfc",
       "capability": "account_data",
       "owner": "account-and-data",
       "assignment": "capability:account_data",
@@ -4892,7 +4916,7 @@
       "sourceHeading": "Import, account and data — `ux-import-and-account.md`",
       "summary": "Variation-bearing PGN: import the mainline and state the omission on the run. `original_pgn` retains the bytes verbatim",
       "legacyRoute": "ledger",
-      "note": "[[D1486]]",
+      "note": "[[D1486]]; [[D1837]] requires a persisted omitted-variation fact before the run can state the omission after reload",
       "sourceDigest": "sha256:fb239c8fd1d2d06771dc6bd86104162205f19a3cc64e75e5726050fff5cb4533"
     },
     {
@@ -5074,7 +5098,7 @@
     {
       "id": "IMP-a4",
       "sourceState": "queued",
-      "state": "queued",
+      "state": "blocked_rfc",
       "capability": "account_data",
       "owner": "account-and-data",
       "assignment": "capability:account_data",
@@ -5083,7 +5107,7 @@
       "sourceHeading": "Import, account and data — `ux-import-and-account.md`",
       "summary": "A confirmation step before the run exists: players, date, result, plies, side, and what will be dropped",
       "legacyRoute": "none",
-      "note": "one server dry-run route or a client-side parse; `chessops/pgn` is already a dependency",
+      "note": "[[D1837]]: preview can be client- or server-side, but confirmation depends on durable selected-game and omission metadata",
       "sourceDigest": "sha256:fbebdb42628af3279b3d1744ffb4b89ef57be62cf73c6bc433f7098da680cc44"
     },
     {

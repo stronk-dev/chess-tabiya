@@ -20,6 +20,7 @@ import {
   latestCheckpoint,
   packObjective,
   packStartSide,
+  timelineBranchCards,
   timelineEntries,
   whyBanner,
 } from "./screen-model.js";
@@ -89,9 +90,17 @@ describe("screen view models", () => {
         firstMove: "b5",
       }),
     ]);
+    expect(timelineBranchCards(alternative.run)).toEqual([
+      expect.objectContaining({ id: cards[0]!.id, forkNodeId: first.run.activeCursor.nodeId }),
+      expect.objectContaining({ id: cards[1]!.id, forkNodeId: first.run.activeCursor.nodeId }),
+    ]);
     expect(comparisonNode(alternative.run, comparison, 0, alternative.run.branches[0]!.id)?.moveSan).toBe(
       "Be3",
     );
+
+    const automatic = fork(rewound.run, rewound.run.activeCursor.nodeId, { intent: "Test the queenside break", at });
+    const automaticMove = commitMove(automatic.run, "b7b5", { at });
+    expect(branchCards(automaticMove.run)[1]).toMatchObject({ label: "b5 — Test the queenside break", firstMove: "b5" });
     expect(comparisonNode(alternative.run, comparison, 1, alternative.run.branches[0]!.id)?.moveSan).toBe(
       "e6",
     );

@@ -15,6 +15,8 @@
     onOpenShape?: (entryId: string) => void;
     pivotalMarkers?: readonly { readonly nodeId: string; readonly label: string }[];
     onOpenPivotal?: (nodeId: string) => void;
+    branches?: readonly { readonly id: string; readonly label: string; readonly forkNodeId: string; readonly leafNodeId: string }[];
+    onOpenBranch?: (leafNodeId: string, branchId: string) => void | Promise<void>;
   }
 
   let {
@@ -30,10 +32,17 @@
     onOpenShape = () => {},
     pivotalMarkers = [],
     onOpenPivotal = () => {},
+    branches = [],
+    onOpenBranch = () => {},
   }: Props = $props();
 
   let rootMarkers = $derived(shapeMarkers.filter((marker) => marker.nodeId === rootNodeId));
   let rootPivotal = $derived(pivotalMarkers.some((marker) => marker.nodeId === rootNodeId));
+  function branchesAt(nodeId: string | undefined) {
+    if (nodeId === undefined) return [];
+    const rows = branches.filter((branch) => branch.forkNodeId === nodeId);
+    return rows.length < 2 ? [] : rows;
+  }
 </script>
 
 <!-- svelte-ignore a11y_no_noninteractive_tabindex (only an empty timeline needs a focusable region) -->
@@ -43,13 +52,14 @@
     <span>{entries.length} plies</span>
   </div>
   <ol>
-    {#if rootMarkers.length > 0 && rootNodeId !== undefined}
+    {#if rootNodeId !== undefined && (rootMarkers.length > 0 || rootPivotal || branchesAt(rootNodeId).length > 0)}
       <li>
         <button type="button" aria-label="Start position" tabindex={previewNodeId === rootNodeId || (previewNodeId === undefined && activeNodeId === rootNodeId) ? 0 : -1} data-timeline-node={rootNodeId} class:preview={previewNodeId === rootNodeId} onclick={() => onPreview(rootNodeId)}>
           <span class="ply">0</span><span>Start</span>
         </button>
         {#each rootMarkers as marker}<button class="shape-marker" type="button" onclick={() => onOpenShape(marker.entryId)}>{marker.label}{marker.channel === "community" ? " · community" : ""}</button>{/each}
         {#if rootPivotal}<button class="pivotal-marker" type="button" aria-label="Open pivotal marker at ply 0" onclick={() => onOpenPivotal(rootNodeId)}><span aria-hidden="true"></span></button>{/if}
+        {#if branchesAt(rootNodeId).length > 0}<div class="branch-links" aria-label="Branches from the start">{#each branchesAt(rootNodeId) as branch}<button type="button" onclick={() => onOpenBranch(branch.leafNodeId, branch.id)}>{branch.label}</button>{/each}</div>{/if}
       </li>
     {/if}
     {#each entries as entry}
@@ -79,6 +89,7 @@
         </button>
         {#each shapeMarkers.filter((marker) => marker.nodeId === entry.nodeId) as marker}<button class="shape-marker" type="button" onclick={() => onOpenShape(marker.entryId)}>{marker.label}{marker.channel === "community" ? " · community" : ""}</button>{/each}
         {#if pivotalMarkers.some((marker) => marker.nodeId === entry.nodeId)}<button class="pivotal-marker" type="button" aria-label={`Open pivotal marker at ply ${entry.ply}`} onclick={() => onOpenPivotal(entry.nodeId)}><span aria-hidden="true"></span></button>{/if}
+        {#if branchesAt(entry.nodeId).length > 0}<div class="branch-links" aria-label={`Branches from ply ${entry.ply}`}>{#each branchesAt(entry.nodeId) as branch}<button type="button" onclick={() => onOpenBranch(branch.leafNodeId, branch.id)}>{branch.label}</button>{/each}</div>{/if}
       </li>
     {/each}
   </ol>
@@ -211,6 +222,7 @@
 
   .shape-marker{display:block;margin-top:.25rem;width:100%;padding:.3rem .45rem;border:1px solid var(--accent);border-radius:.45rem;background:transparent;color:var(--accent);font:.65rem/1.2 var(--display-font)}
   .pivotal-marker{display:block!important;min-width:1.5rem;min-height:1.5rem;margin:.25rem auto 0;padding:0!important;border:0!important;background:transparent!important}.pivotal-marker span{display:block;width:.55rem;height:.55rem;margin:auto;border-radius:50%;background:var(--warning)}
+  .branch-links{display:grid;gap:.2rem;margin-top:.25rem}.branch-links button{max-width:10rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;padding:.25rem .4rem;border:1px solid var(--accent);border-radius:.4rem;background:transparent;color:var(--accent);font:.62rem/1.2 var(--display-font)}
 
   .confirm {
     margin-top: 0.5rem;

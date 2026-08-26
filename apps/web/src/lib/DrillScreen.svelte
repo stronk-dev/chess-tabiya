@@ -31,6 +31,7 @@
     branchCards,
     packObjective,
     packStartSide,
+    timelineBranchCards,
     timelineEntries,
     whyBanner,
   } from "./screen-model.js";
@@ -47,7 +48,7 @@
     resistanceSentences,
     resistanceSummary,
   } from "./outcome-presentation.js";
-  import { phaseLabel, phaseSummary } from "./run-copy.js";
+  import { consequenceHorizon, phaseLabel, phaseSummary } from "./run-copy.js";
   import { assistanceProfile, loadAssistance, saveAssistance, type PreferenceStorage } from "./assistance-preference.js";
   import { runViewportSupport, type RunViewportSupport } from "./viewport-support.js";
   import { playBoardEdge } from "./play-composition.js";
@@ -86,6 +87,7 @@
     onCompare: (branchIds: readonly string[]) => void | Promise<void>;
     onClassifyBranches?: (branchIds: readonly string[]) => Promise<Readonly<Record<string, Decidedness>>>;
     onCloseCompare: () => void;
+    onReplayResistance?: ((input: { readonly fen: string; readonly side: "white" | "black"; readonly targetElo: 1000 | 1400 | 1800 | 2200 }) => void | Promise<void>) | undefined;
     onContinueCheckpoint: () => void | Promise<void>;
     onPrediction?: (uci: string) => void | Promise<void>;
     onReasoning?: (input: { readonly transcript?: import("@chess-tabiya/runtime").ReasoningTranscript; readonly skipped?: true }) => void | Promise<void>;
@@ -136,6 +138,7 @@
     onCompare,
     onClassifyBranches,
     onCloseCompare,
+    onReplayResistance,
     onContinueCheckpoint,
     onPrediction = () => {},
     onReasoning = () => {},
@@ -194,7 +197,7 @@
   let groupModes: Record<string, "sequential" | "lockstep"> = $state({});
   let replayTimer: ReturnType<typeof setInterval> | undefined;
   let mainElement = $state<HTMLElement>();
-  let forkInput = $state<HTMLInputElement>();
+  let forkIntentInput = $state<HTMLTextAreaElement>();
   let pickerHeading = $state<HTMLHeadingElement>();
   let regionElement = $state<HTMLElement>();
   let unregisterKeyboard: (() => void) | undefined;
@@ -251,6 +254,7 @@
   let phoneSheetModal = $derived(viewportSupport.width > 0 && viewportSupport.width <= 719 && sheetOpen);
   let canWrite = $derived(snapshot.access === "writer");
   let currentNode = $derived(activeNode(run));
+  let comparisonForkNode = $derived(comparison === undefined ? undefined : run.nodes.find((node) => node.id === comparison.forkNodeId));
   let guide = $derived(firstRehearsal ? rehearsalGuideStep(run) : undefined);
   let objectiveSentence = $derived(
     pack === undefined
@@ -351,6 +355,7 @@
     currentNode.evidenceRefs.map((reference) => renderEvidenceRef(reference, pack)),
   );
   let cards = $derived(branchCards(run));
+  let timelineCards = $derived(timelineBranchCards(run));
   let collapsedIds = $derived(collapsedBranchIds(run, decidedness, new Set(compareIds), new Set(pinnedExpanded)));
   let groups = $derived(groupsFromEvents(run));
   let activeGroup = $derived(groups.find((group) => group.members.some((member) => member.branchId === run.activeCursor.branchId)));
@@ -795,7 +800,7 @@
       if (!canWrite) return true;
       forkInvoker = keyboardInvoker(event);
       forkOpen = true;
-      void tick().then(() => forkInput?.focus());
+      void tick().then(() => forkIntentInput?.focus());
       return true;
     } else if (/^[1-9]$/.test(event.key)) {
       const branch = cards[Number(event.key) - 1];
@@ -921,15 +926,18 @@
     step={compareStep}
     onStep={(step) => (compareStep = step)}
     onClose={closeCompare}
+    onReplayResistance={onReplayResistance === undefined || comparisonForkNode === undefined ? undefined : (targetElo) => onReplayResistance({ fen: comparisonForkNode!.fen, side: startSide, targetElo })}
     onVoice={onCompareVoice === undefined ? undefined : async () => (await onCompareVoice()).text}
   />
 {:else}
   <main class="drill" tabindex="-1" bind:this={mainElement} aria-labelledby="drill-title" style={`--board-edge: ${boardEdge}px`}>
     <header class="topbar">
       <button class="wordmark" type="button" onclick={onStop}>Tabiya</button>
-      <StatusAnnouncement message={`${pack?.title ?? "Just Play"}. ${snapshot.access === "read_only" ? "Read-only follower" : busy ? "Writer, thinking" : "Writer, your move"}${authoredFeedback?.hasWithheldAuthoredContent ? ". Authored commentary withheld until checkpoints" : ""}`} />
+      <StatusAnnouncement message={`${pack?.title ?? "Just Play"}. ${run.opponentPolicy.mode === "human_common" ? `Human-like rung ${run.opponentPolicy.targetElo ?? "not recorded"}` : "Engine test"}. ${consequenceHorizon(pack)}. ${snapshot.access === "read_only" ? "Read-only follower" : busy ? "Writer, thinking" : "Writer, your move"}${authoredFeedback?.hasWithheldAuthoredContent ? ". Authored commentary withheld until checkpoints" : ""}`} />
       <div class="status visually-hidden-on-phone" aria-hidden="true">
         <span class="run-name">{pack?.title ?? "Just Play"}</span>
+        <span>{run.opponentPolicy.mode === "human_common" ? `Human-like ${run.opponentPolicy.targetElo ?? "unbanded"}` : "Engine test"}</span>
+        <span>{consequenceHorizon(pack)}</span>
         <span class:readonly={snapshot.access === "read_only"}>
           {snapshot.access === "read_only" ? "Read-only follower" : busy ? "Writer · thinking…" : "Writer · your move"}
         </span>
@@ -1013,12 +1021,14 @@
             onOpenShape={showShape}
             pivotalMarkers={pivotalRows}
             onOpenPivotal={openPivotalMarker}
+            branches={timelineCards}
+            onOpenBranch={switchVisibleBranch}
           />
         </div>
         <button class="objective-line" type="button" onclick={() => (objectiveOpen = true)} title={objectiveSentence}>
           <span>Objective</span>
           <strong>{objectiveSentence}</strong>
-          <small>{phaseLabel(detectedPhase.phase)}</small>
+          <small>{phaseLabel(detectedPhase.phase)} · {consequenceHorizon(pack)}</small>
         </button>
       </section>
 
@@ -1349,8 +1359,8 @@
       <form class="modal" onsubmit={(event) => { event.preventDefault(); void submitFork(); }}>
         <p>Branch from here</p>
         <h2 id="fork-title">Name the experiment.</h2>
-        <label>Label <input bind:this={forkInput} bind:value={forkLabel} placeholder="alt-{cards.length}" /></label>
-        <label>Intent <textarea bind:value={forkIntent} placeholder="What are you testing?"></textarea></label>
+        <label>What are you trying? <textarea bind:this={forkIntentInput} bind:value={forkIntent} placeholder="For example: keep the knight and challenge the centre"></textarea></label>
+        <label>Short name <input bind:value={forkLabel} placeholder="Optional — the move and intent name it automatically" /></label>
         <div><button type="button" onclick={closeFork}>Cancel</button><button class="primary" type="submit">Create branch</button></div>
       </form>
     </div>

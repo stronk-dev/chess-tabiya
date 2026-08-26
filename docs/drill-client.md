@@ -463,6 +463,25 @@ sight, comparison position, and board-input feedback use atomic status
 announcements. The visible guide, guard actions, and comparison boards are not
 live regions; only their changed textual receipt is announced.
 
+## Branch intent, horizon, and replay resistance
+
+Forking leads with the learner's intended experiment. A short name remains optional; when it is
+absent, ordinary surfaces replace the runtime's `alt-N` label with the first played SAN move plus
+that intent. Explicit learner names remain unchanged. The branch rail and Timeline use the same
+projection. Timeline derives each real fork group from runtime branch identity, including the
+parent continuation, so a non-root fork does not disappear merely because the original branch was
+created at the run root.
+
+The catalogue states the consequence horizon before a pack starts. An explicit authored boundary
+wins; otherwise the server derives the greatest authored leg/spine depth, and a missing boundary is
+stated honestly. The compact objective and atomic run status retain the same horizon while playing.
+
+Compare ends with a first-class replay action. It uses the preserved fork position, leaves every
+recorded attempt intact, and creates a distinct position run through the ordinary production path.
+The learner chooses one of the calibrated Maia rungs; no suggestion changes it silently, the copy
+does not equate it with FIDE or platform ratings, and the applied rung remains in the new run's
+visible and announced status.
+
 At the compact breakpoint, comparison preserves the aligned-ply model and stacks
 each complete learner-facing branch card and result vertically. The opt-in
 evidence inspector owns its own bounded scrolling surface. It does not shrink

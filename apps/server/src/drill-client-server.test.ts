@@ -121,6 +121,7 @@ describe("drill-client pack registry", () => {
         phase: fixture.phase,
         difficulty: fixture.difficulty,
         objectiveSummary: fixture.objective.summary ?? fixture.objective.type.replaceAll("_", " "),
+        consequenceHorizon: { kind: "declared", plies: 4 },
         concepts: fixture.concepts ?? [],
         reviewStatus: "schema_example",
         channel: "official",

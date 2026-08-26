@@ -1008,6 +1008,7 @@
         onFork={(label, intent) => controller.fork(label, intent)}
         onSwitchBranch={(nodeId, branchId) => controller.switchBranch(nodeId, branchId)}
         onCompare={(branchIds) => controller.compare(branchIds)}
+        onReplayResistance={(input) => controller.startPosition({ ...input, mode: "human_common" })}
         onClassifyBranches={(branchIds) => api.branchDecidedness(session.runState!.run.id, branchIds)}
         onCloseCompare={() => controller.closeCompare()}
         onContinueCheckpoint={() => controller.continueCheckpoint()}
