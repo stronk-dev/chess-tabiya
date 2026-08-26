@@ -9518,3 +9518,18 @@ contract proves the shared layer is imported once at the application boundary an
 native family; a production-browser Settings fixture proves select, password and button share the
 font and minimum-height floor, text controls share a ground, and checkboxes receive size and the
 theme accent. SET-a15 and SET-a24 close.
+
+## 2026-08-26 — Appearance previews the real composed chess surface (D1463)
+
+Appearance previously changed five selectors without showing their combined result. It now pairs
+scoped product chrome with the real Chessground component: the chosen palette visibly supplies
+paper, panel, ink, muted, line, accent and on-accent, while the board uses typed local board/piece
+overrides that do not mutate the document theme.
+
+The preview position carries all six piece roles in both colors, a checked king, last-move paint,
+preselected legal destinations and four shapes using the complete registered brush set. The
+production-browser contract verifies the palette bytes, local board/piece attributes, all twelve
+role/side combinations, check, history, destination and shape layers. The first rendered pass also
+removed the board's redundant text-move disclosure from the miniature and tightened ambiguous
+label queries instead of accepting a test that happened to find the first "Board". SET-a1 through
+SET-a4, SET-a26 and D1463 close; the separate named-Looks decision remains open.

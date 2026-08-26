@@ -29,6 +29,7 @@
     type Square,
   } from "./board-input.js";
   import { useTheme } from "./theme/context.js";
+  import type { BoardThemeId, PieceSetId } from "./theme/axes.js";
   import { MARK_BRUSHES } from "./theme/catalog.js";
   import { animationConfig, type ResolvedTheme } from "./theme/controller.js";
 
@@ -50,6 +51,9 @@
     lastMoveAnnouncement?: string | undefined;
     onMoveCommitted?: (announcement: string) => void;
     focusAfterMove?: boolean;
+    boardTheme?: BoardThemeId;
+    pieceSet?: PieceSetId;
+    selectedSquare?: Key;
     /** Re-assert the current position without replacing the board instance. */
     resetToken?: string | number;
     onMoveSettled?: () => void;
@@ -75,6 +79,9 @@
     lastMoveAnnouncement,
     onMoveCommitted,
     focusAfterMove = false,
+    boardTheme,
+    pieceSet,
+    selectedSquare,
     resetToken = 0,
     onMoveSettled,
     onFocusRestored,
@@ -129,6 +136,7 @@
       orientation: model.orientation,
       turnColor: model.turnColor,
       check: model.check,
+      ...(selectedSquare === undefined ? {} : { selected: selectedSquare }),
       ...(model.lastMove === undefined ? {} : { lastMove: [...model.lastMove] }),
       highlight: { lastMove: highlightMoves, check: true },
       drawable: {
@@ -297,6 +305,7 @@
     overlays;
     marks;
     drawingEnabled;
+    selectedSquare;
     resetToken;
     onMarksChange;
     inputState = controller.replacePosition(inputPosition);
@@ -321,7 +330,7 @@
   });
 </script>
 
-<div class="board-shell" data-board-theme={resolvedTheme.preference.boardTheme} data-piece-set={resolvedTheme.preference.pieceSet} data-animation={resolvedTheme.animation}>
+<div class="board-shell" data-board-theme={boardTheme ?? resolvedTheme.preference.boardTheme} data-piece-set={pieceSet ?? resolvedTheme.preference.pieceSet} data-animation={resolvedTheme.animation}>
   {#if !disabled}<a class="appearance-link" href="/settings#appearance-settings">Appearance</a>{/if}
   <details class="text-move">
     <summary>Enter a move</summary>

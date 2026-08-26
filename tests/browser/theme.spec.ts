@@ -70,13 +70,27 @@ test("Settings exposes independent persisted pickers and inherited contrast disc
   await page.goto("/settings#appearance-settings");
   const appearance = page.getByRole("region", { name: "Appearance" });
   await expect(appearance).toBeVisible();
-  await appearance.getByLabel("App theme").selectOption("tokyo-night");
-  await appearance.getByLabel("Light or dark").selectOption("light");
-  await appearance.getByLabel("Board").selectOption("olive");
-  await appearance.getByLabel("Pieces").selectOption("mono");
-  await appearance.getByLabel("Piece movement").selectOption("fast");
+  await appearance.getByRole("combobox", { name: "App theme", exact: true }).selectOption("tokyo-night");
+  await appearance.getByRole("combobox", { name: "Light or dark", exact: true }).selectOption("light");
+  await appearance.getByRole("combobox", { name: "Board", exact: true }).selectOption("olive");
+  await appearance.getByRole("combobox", { name: "Pieces", exact: true }).selectOption("mono");
+  await appearance.getByRole("combobox", { name: "Piece movement", exact: true }).selectOption("fast");
   await expect(appearance.getByText("Using Tokyo Night in light mode.")).toBeVisible();
   await expect(appearance.getByText("3 measured low-contrast pairs")).toBeVisible();
+  const preview = appearance.getByLabel("Board and piece preview");
+  const previewShell = preview.locator(".board-shell");
+  await expect(previewShell).toHaveAttribute("data-board-theme", "olive");
+  await expect(previewShell).toHaveAttribute("data-piece-set", "mono");
+  await expect(preview.locator("square.check")).toHaveCount(1);
+  await expect(preview.locator("square.last-move")).toHaveCount(2);
+  expect(await preview.locator("square.move-dest").count()).toBeGreaterThan(0);
+  await expect(preview.locator("svg.cg-shapes")).toBeAttached();
+  for (const side of ["white", "black"]) for (const role of ["king", "queen", "rook", "bishop", "knight", "pawn"]) {
+    await expect(preview.locator(`piece.${side}.${role}`).first()).toBeAttached();
+  }
+  const chrome = appearance.locator(".chrome-preview");
+  expect(await chrome.evaluate((element) => getComputedStyle(element).backgroundColor)).toBe("rgb(225, 226, 231)");
+  expect(await chrome.getByRole("button", { name: "Accent action" }).evaluate((element) => getComputedStyle(element).backgroundColor)).toBe("rgb(46, 125, 233)");
   const stored = await page.evaluate(() => JSON.parse(localStorage.getItem("tabiya.theme") ?? "{}"));
   expect(stored).toEqual({ appTheme: "tokyo-night", boardTheme: "olive", pieceSet: "mono", modeOverride: "light", animation: "fast" });
   expect(stored).not.toHaveProperty("version");

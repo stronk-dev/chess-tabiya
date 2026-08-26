@@ -7284,17 +7284,18 @@
     {
       "id": "SET-a1",
       "sourceState": "queued",
-      "state": "queued",
+      "state": "completed",
       "capability": "support",
       "owner": "assistance-and-presentation",
-      "assignment": "capability:support",
+      "assignment": "closed",
       "sourceDocument": "ux-settings-and-identity.md",
       "sourceSection": "§2.3a",
       "sourceHeading": "Settings, appearance and identity — `ux-settings-and-identity.md`",
       "summary": "App-theme preview card: a miniature of the real chrome showing six tokens as they appear",
       "legacyRoute": "ledger",
       "note": "[[D1463]]; needs `applyPalette(el, palette)` — the controller writes 12 tokens only to `documentElement`",
-      "sourceDigest": "sha256:fb09cf8baa9b2fd5bba06b5cd02b63fc80ddba6957b2dbe5bc9dfc85a366ec75"
+      "sourceDigest": "sha256:fb09cf8baa9b2fd5bba06b5cd02b63fc80ddba6957b2dbe5bc9dfc85a366ec75",
+      "completion": { "completedOn": "2026-08-26", "evidence": "the Appearance preview scopes the selected catalog palette onto real miniature chrome showing paper, panel, ink, muted, line, accent and on-accent in use" }
     },
     {
       "id": "SET-a10",
@@ -7452,17 +7453,18 @@
     {
       "id": "SET-a2",
       "sourceState": "queued",
-      "state": "queued",
+      "state": "completed",
       "capability": "support",
       "owner": "assistance-and-presentation",
-      "assignment": "capability:support",
+      "assignment": "closed",
       "sourceDocument": "ux-settings-and-identity.md",
       "sourceSection": "§2.3b",
       "sourceHeading": "Settings, appearance and identity — `ux-settings-and-identity.md`",
       "summary": "Board preview: a mid-game FEN with last-move, dest dot, check radial and all four `MARK_BRUSHES`",
       "legacyRoute": "ledger",
       "note": "[[D1463]]",
-      "sourceDigest": "sha256:0c37ee90c0b7e175978aa05529544b2270c6c500beded4c8aeaa653abf8fcf5b"
+      "sourceDigest": "sha256:0c37ee90c0b7e175978aa05529544b2270c6c500beded4c8aeaa653abf8fcf5b",
+      "completion": { "completedOn": "2026-08-26", "evidence": "the real preview board renders a checked king, last move, preselected legal destinations and all four registered mark brushes on a representative position" }
     },
     {
       "id": "SET-a20",
@@ -7558,17 +7560,18 @@
     {
       "id": "SET-a26",
       "sourceState": "queued",
-      "state": "queued",
+      "state": "completed",
       "capability": "support",
       "owner": "assistance-and-presentation",
-      "assignment": "capability:support",
+      "assignment": "closed",
       "sourceDocument": "ux-settings-and-identity.md",
       "sourceSection": "§7.3",
       "sourceHeading": "Settings, appearance and identity — `ux-settings-and-identity.md`",
       "summary": "The product ships a preview for deleting your account and none for changing its colours",
       "legacyRoute": "ledger",
       "note": "[[D1463]]",
-      "sourceDigest": "sha256:328e64e441e2de3977dac71bde9583d242415983389b259af872015563fe8a83"
+      "sourceDigest": "sha256:328e64e441e2de3977dac71bde9583d242415983389b259af872015563fe8a83",
+      "completion": { "completedOn": "2026-08-26", "evidence": "Appearance now previews the applied chrome, board, pieces, legal-destination and evidence-paint composition before the learner leaves Settings" }
     },
     {
       "id": "SET-a27",
@@ -7588,32 +7591,34 @@
     {
       "id": "SET-a3",
       "sourceState": "queued",
-      "state": "queued",
+      "state": "completed",
       "capability": "support",
       "owner": "assistance-and-presentation",
-      "assignment": "capability:support",
+      "assignment": "closed",
       "sourceDocument": "ux-settings-and-identity.md",
       "sourceSection": "§2.3c",
       "sourceHeading": "Settings, appearance and identity — `ux-settings-and-identity.md`",
       "summary": "Piece preview: six roles in both colours over one light and one dark selected square",
       "legacyRoute": "none",
       "note": "mono is a mask recolour that can fail to separate",
-      "sourceDigest": "sha256:d80067cab442c4dc795f3f54b27f84d08aeaab49b826699fbf85670d37b2b321"
+      "sourceDigest": "sha256:d80067cab442c4dc795f3f54b27f84d08aeaab49b826699fbf85670d37b2b321",
+      "completion": { "completedOn": "2026-08-26", "evidence": "the production preview contains king, queen, rook, bishop, knight and pawn for both colors over both selected board colors; the browser contract enumerates all twelve role/side combinations" }
     },
     {
       "id": "SET-a4",
       "sourceState": "queued",
-      "state": "queued",
+      "state": "completed",
       "capability": "support",
       "owner": "assistance-and-presentation",
-      "assignment": "capability:support",
+      "assignment": "closed",
       "sourceDocument": "ux-settings-and-identity.md",
       "sourceSection": "§2.4-2",
       "sourceHeading": "Settings, appearance and identity — `ux-settings-and-identity.md`",
       "summary": "`Chessboard` reads board/piece attributes from the global controller — it needs two optional props to preview anything",
       "legacyRoute": "none",
       "note": "small and named",
-      "sourceDigest": "sha256:26f1582a5bd8416154bf41ab9ed11a8152fed6a57f66e0200d5cfa964bf6b839"
+      "sourceDigest": "sha256:26f1582a5bd8416154bf41ab9ed11a8152fed6a57f66e0200d5cfa964bf6b839",
+      "completion": { "completedOn": "2026-08-26", "evidence": "Chessboard accepts typed boardTheme and pieceSet overrides (plus an optional selected square) on its local shell without mutating the document theme" }
     },
     {
       "id": "SET-a5",

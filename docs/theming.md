@@ -20,6 +20,10 @@ Settings exposes every choice independently and applies it immediately. A small
 Appearance link in the board region opens that section without adding another
 in-run settings system. Inherited palettes disclose measured color pairs below
 Tabiya's own accessibility floor rather than silently editing upstream colors.
+The Settings preview composes scoped real chrome with the actual Chessground
+board and piece assets. Its representative position exposes every piece role in
+both colors, check, history, legal destinations, and the registered mark brushes;
+previewing one axis never mutates another or changes the document-level choice.
 
 ## Preference and resolution
 
@@ -86,7 +90,9 @@ and import separation, the one-time shared-control import and its production
 computed styles, live cross-tab
 application, stable board identity and position, real post-gesture movement
 interpolation, mode-aware browser chrome, and real forced-color projection from
-a Chessground destination. Shared CSS also honors device color scheme before
+a Chessground destination. The browser contract also binds the preview palette,
+board/piece overrides, all twelve role/color combinations, and its board-state
+paint. Shared CSS also honors device color scheme before
 controller startup, suppresses CSS motion under reduced motion, and strengthens
 controls and focus under increased contrast.
 

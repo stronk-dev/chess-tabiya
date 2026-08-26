@@ -104,6 +104,17 @@ describe("Chessboard", () => {
     await unmount(component);
   });
 
+  it("lets a contained preview override board and piece artwork without changing the global theme", async () => {
+    const target = document.createElement("div"); document.body.append(target);
+    const component = mount(Chessboard, { target, props: { fen: "8/8/8/8/8/8/8/K6k w - - 0 1", startSide: "white", boardTheme: "olive", pieceSet: "mono", selectedSquare: "a1", disabled: true, onMove: vi.fn() } });
+    await tick();
+    expect(target.querySelector(".board-shell")?.getAttribute("data-board-theme")).toBe("olive");
+    expect(target.querySelector(".board-shell")?.getAttribute("data-piece-set")).toBe("mono");
+    expect(chessground.configs[0]?.selected).toBe("a1");
+    expect(document.documentElement.dataset.boardTheme).not.toBe("olive");
+    await unmount(component);
+  });
+
   it("refreshes cached board bounds after selection-driven parent layout", async () => {
     vi.stubGlobal("requestAnimationFrame", (callback: FrameRequestCallback) => {
       callback(0);
