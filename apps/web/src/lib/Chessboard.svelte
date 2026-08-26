@@ -428,10 +428,10 @@
     outline: none;
   }
 
-  .semantic-grid:focus-visible { box-shadow: inset 0 0 0 3px CanvasText; }
+  .semantic-grid:focus-visible { box-shadow: inset 0 0 0 3px var(--ink); }
   .semantic-row { display: grid; grid-template-columns: repeat(8, 1fr); }
   .semantic-cell { min-width: 0; min-height: 0; display: grid; place-items: center; color: transparent; }
-  .semantic-cell.active { color: CanvasText; outline: 3px solid CanvasText; outline-offset: -3px; background: color-mix(in srgb, var(--ink) 16%, transparent); }
+  .semantic-cell.active { color: var(--ink); outline: 3px solid var(--ink); outline-offset: -3px; background: color-mix(in srgb, var(--ink) 16%, transparent); }
   .semantic-cell span { font: 600 0.55rem/1 ui-monospace, monospace; }
 
   .text-move {
@@ -441,9 +441,9 @@
     right: 0.45rem;
     width: min(18rem, calc(100% - 0.9rem));
     padding: 0.3rem 0.45rem;
-    border: 1px solid var(--line, CanvasText);
+    border: 1px solid var(--line);
     border-radius: 0.4rem;
-    background: var(--panel, Canvas);
+    background: var(--panel);
     font-size: 0.72rem;
   }
 
@@ -451,7 +451,7 @@
   .text-move form { grid-template-columns: minmax(0, 1fr) auto; gap: 0.3rem; margin-top: 0.35rem; }
   .text-move[open] form { display: grid; }
   .text-move label { display: grid; gap: 0.15rem; }
-  .text-move input, .text-move button { min-width: 0; min-height: 1.5rem; box-sizing: border-box; padding: 0.25rem; color: inherit; background: Canvas; border: 1px solid CanvasText; }
+  .text-move input, .text-move button { min-width: 0; min-height: 1.5rem; box-sizing: border-box; padding: 0.25rem; color: inherit; background: var(--panel); border: 1px solid var(--line); }
 
   .promotion-picker {
     position: absolute;
@@ -460,7 +460,7 @@
     display: flex;
     gap: 0.25rem;
     padding: 0.5rem;
-    background: Canvas;
-    border: 1px solid CanvasText;
+    background: var(--panel);
+    border: 1px solid var(--line);
   }
 </style>

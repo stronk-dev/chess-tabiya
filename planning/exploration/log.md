@@ -9481,3 +9481,25 @@ changes the media preference after selecting Fast and proves the live disclosure
 native-control reset also includes `select`, closing the long-standing font mismatch. SET-a6,
 SET-a10 through SET-a13, and SET-a16 complete; presets and the primitive-heavy Playing surface
 remain owned by their returned contracts rather than being improvised in this slice.
+
+## 2026-08-26 — Theme-source closure removes the sweep's blind spots (D1433)
+
+The settings audit's color findings were re-derived before editing. Four queued instances had
+already moved in the favorable direction: checkbox labels are aligned rows, accent-backed text
+uses `--on-accent`, focus and selection no longer mix toward hard white, and repertoire controls
+no longer force white backgrounds. SET-a17 through SET-a20 close on current source evidence rather
+than being misreported as work performed in this commit.
+
+The remaining normal-mode leaks were live. Game Story and the board's semantic/text-input layers
+used `Canvas` and `CanvasText`, so their colors followed the operating system instead of the
+selected Tabiya palette. They now consume `--ink`, `--muted`, `--line`, and `--panel`; OS system
+colors remain only in the forced-colors accessibility projection where they are the correct
+authority.
+
+The permanent sweep now scans CSS as well as Svelte, detects named and CSS system colors, and has
+no component-by-name exemption. Legitimate literal authorities are enumerated instead of hiding
+the whole theme directory. `interaction-paint.css` remains one explicit temporary authority owned
+by D1461/SET-c1; this pass does not bypass its accepted-RFC requirement. Finally, the board-paint
+contrast test derives Brown's dark square from the actual embedded SVG overlay and Olive's from
+its declared gradient, eliminating the hand-entered `#c0ae91` shadow specification. SET-a21,
+SET-a22, SET-a23, and D1433 close; D1461 remains open by name.

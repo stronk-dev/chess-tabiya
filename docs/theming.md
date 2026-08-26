@@ -39,8 +39,13 @@ position.
 ## CSS and asset boundaries
 
 The palette contract is the twelve-token vocabulary in `theme/tokens.ts`.
-Application components consume those tokens; a permanent sweep rejects phantom
-tokens, retired surface aliases, and new unregistered color literals.
+Application components consume those tokens; a permanent sweep covers both
+Svelte and CSS sources and rejects phantom tokens, retired surface aliases,
+hex/rgb/hsl literals, named colors, and CSS system colors. Its literal
+authorities are enumerated rather than directory-wide: palette defaults,
+registered board and piece artwork, forced-colors paint, and the separately
+tracked interaction-paint contract. Ordinary rendering does not inherit
+`Canvas` or `CanvasText` from the operating system.
 
 Board CSS is split into two layers:
 
@@ -69,8 +74,9 @@ uses the visible board position.
 
 The permanent tests cover catalog totality and cross-product selection, device
 and stored-mode resolution, reduced motion, palette contrast, exact inherited
-palette bytes, evidence-paint color separation, asset registration, token and
-literal sweeps, assistance/theme type and import separation, live cross-tab
+palette bytes, source-derived board-square colors, evidence-paint color
+separation, asset registration, token and literal sweeps, assistance/theme type
+and import separation, live cross-tab
 application, stable board identity and position, real post-gesture movement
 interpolation, mode-aware browser chrome, and real forced-color projection from
 a Chessground destination. Shared CSS also honors device color scheme before

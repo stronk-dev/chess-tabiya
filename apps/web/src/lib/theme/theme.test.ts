@@ -71,6 +71,24 @@ function deltaE(first: Rgb, second: Rgb): number {
   return Math.sqrt(left.reduce((sum, value, index) => sum + (value - right[index]!) ** 2, 0));
 }
 
+const COLOR_LITERAL = /#[0-9a-f]{3,8}\b|rgba?\(|hsla?\(/iu;
+const NAMED_COLOR_DECLARATION = /\b(?:color|background(?:-color)?|border(?:-color)?|outline(?:-color)?|fill|stroke)\s*:[^;}\n]*\b(?:white|black|Canvas|CanvasText)\b/iu;
+
+function boardSquares(id: "brown" | "olive"): readonly [string, string] {
+  const source = readFileSync(join(themeDirectory, "board-skins", `${id}.css`), "utf8");
+  const light = source.match(/background-color:\s*(#[0-9a-f]{6})/iu)?.[1];
+  if (light === undefined) throw new Error(`${id} has no declared light square`);
+  const explicitDark = source.match(/repeating-conic-gradient\(\s*(#[0-9a-f]{6})/iu)?.[1];
+  if (explicitDark !== undefined) return [light, explicitDark];
+  const encoded = source.match(/base64,([^')]+)/u)?.[1];
+  if (encoded === undefined) throw new Error(`${id} has no derivable dark square`);
+  const svg = Buffer.from(encoded, "base64").toString("utf8");
+  const opacity = Number(svg.match(/<rect[^>]*\bid="f"[^>]*\bopacity="([0-9.]+)"/u)?.[1]);
+  if (!Number.isFinite(opacity)) throw new Error(`${id} dark-square overlay has no opacity`);
+  const dark = composite([0, 0, 0, opacity], rgb(light));
+  return [light, `#${dark.map((channel) => Math.round(channel).toString(16).padStart(2, "0")).join("")}`];
+}
+
 describe("theme foundation", () => {
   it("loads each preference field independently and claims no version", () => {
     const storage = {
@@ -179,7 +197,7 @@ describe("theme foundation", () => {
         expect(deltaE(brushes[left]!, brushes[right]!)).toBeGreaterThanOrEqual(20);
       }
     }
-    const boards = [["#f0d9b5", "#c0ae91"], ["#f0d9a8", "#96a25e"]] as const;
+    const boards = [boardSquares("brown"), boardSquares("olive")];
     const paints = [
       [155, 199, 0, 0.41],
       [20, 85, 30, 0.5],
@@ -221,11 +239,23 @@ describe("theme foundation", () => {
     for (const match of source.matchAll(/var\(--([a-z][a-z0-9-]+)/gu)) expect(declared.has(match[1]!)).toBe(true);
     expect(source).not.toMatch(/--(?:paper|panel)-soft\b/u);
 
-    for (const file of files.filter((path) => path.endsWith(".svelte") && !path.includes("/theme/"))) {
-      if (file.endsWith("GameStoryScreen.svelte")) continue;
+    const literalAuthorities = new Set([
+      join(themeDirectory, "base.css"),
+      join(themeDirectory, "interaction-paint.css"), // D1461/SET-c1: explicitly held by the paint RFC.
+      ...filesBelow(join(themeDirectory, "board-skins")),
+      ...filesBelow(join(themeDirectory, "piece-skins")),
+    ]);
+    const systemColorAuthorities = new Set([
+      join(sourceDirectory, "accessibility.css"), // Forced-colors mode must use the OS high-contrast palette.
+    ]);
+    expect(COLOR_LITERAL.test("color: #fff")).toBe(true);
+    expect(NAMED_COLOR_DECLARATION.test("background: white")).toBe(true);
+    expect(NAMED_COLOR_DECLARATION.test("color: CanvasText")).toBe(true);
+    expect(files.some((path) => path.endsWith(".css") && !literalAuthorities.has(path))).toBe(true);
+    for (const file of files) {
       const contents = readFileSync(file, "utf8");
-      expect(contents, relative(sourceDirectory, file)).not.toMatch(/#[0-9a-f]{3,8}\b|rgba?\(|hsla?\(/iu);
-      expect(contents, relative(sourceDirectory, file)).not.toMatch(/\b(?:color|background(?:-color)?|outline)\s*:[^;}\n]*\bwhite\b/iu);
+      if (!literalAuthorities.has(file)) expect(contents, relative(sourceDirectory, file)).not.toMatch(COLOR_LITERAL);
+      if (!systemColorAuthorities.has(file)) expect(contents, relative(sourceDirectory, file)).not.toMatch(NAMED_COLOR_DECLARATION);
     }
     for (const file of filesBelow(join(themeDirectory, "board-skins"))) {
       expect(readFileSync(file, "utf8")).not.toMatch(/last-move|selected|move-dest|check|premove/u);
