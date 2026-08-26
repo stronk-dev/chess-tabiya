@@ -9173,3 +9173,15 @@ The focused eight-test cohort suite passes under repository Node 24. D1809 remai
 than being over-closed: no source-reachability guard yet proves every standing member is
 self-created, and no total registry yet enumerates every multi-learner rendering site that owes the
 unwitnessed-games limitation.
+
+## 2026-08-26 — Standing self-publication becomes a reachability invariant (D1809 partial)
+
+Added a production-source closure test for AC-13. Across every non-test server TypeScript source,
+exactly one call may reach `publishStandingMember`, it lives in the authenticated service method
+and its payload takes `learnerId` from `principal.learnerId`. Exactly one SQL insertion authority
+may write `standing_members`. A future teacher/import/classroom derivation or raw-SQL bypass now
+fails the ordinary software suite rather than relying on review.
+
+D1809 stays open only on AC-16's all-multi-learner-rendering registry, which is intentionally
+coupled to D1808's missing sealed copy registry rather than implemented as a second hand-written
+site list.

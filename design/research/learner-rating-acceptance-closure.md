@@ -96,3 +96,9 @@ equivalent member/non-member rating and game projections remain byte-equal befor
 publication; and two open classrooms remain disjoint. The response-negative also names forbidden
 rank/percentile/mean/z-score and run/evidence fields. `[V]` Standing-creation reachability and an
 all-multi-learner-rendering registry remain open, so the matrix's partial verdict does not move.
+
+The follow-up AC-13 arm scans every production server source, permits exactly one call to the
+standing-member writer, binds that call to `principal.learnerId`, and permits exactly one SQL
+insertion authority. A future classroom-import, teacher-write or raw-SQL bypass therefore fails
+the ordinary software suite. `[V]` AC-16's total rendering-site registry remains coupled to
+D1808's copy-authority amendment.
