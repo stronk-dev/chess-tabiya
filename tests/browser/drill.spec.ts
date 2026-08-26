@@ -1459,6 +1459,63 @@ test("@matrix the semantic board remains complete and yields focus to a checkpoi
   await expect(page.locator(".input-status")).toContainText("Move committed:");
 });
 
+test("@matrix @mobile comparison stacks complete branch cards without hidden horizontal content", async ({ page }) => {
+  await page.goto("/play");
+  await page
+    .getByRole("article")
+    .filter({ hasText: "schema example" })
+    .getByRole("button", { name: /Rehearse this position/ })
+    .click();
+
+  await move(page, "c1", "e3");
+  await page.getByRole("button", { name: "Continue" }).click();
+  await page.getByRole("button", { name: "Continue" }).click();
+  await expect(page.getByText("Active line 2 plies")).toBeVisible();
+  await move(page, "f2", "f3");
+  await page.getByRole("button", { name: "Continue" }).click();
+
+  await page.locator("main.drill").focus();
+  await page.keyboard.press("r");
+  await expect(page.getByText("Active line 2 plies")).toBeVisible();
+  await page.keyboard.press("b");
+  await page.getByLabel("Label").fill("quiet setup");
+  await page.getByLabel("Intent").fill("Compare a lower-commitment setup");
+  await page.getByRole("button", { name: "Create branch" }).click();
+  await clickMove(page, "d1", "d2");
+  await expect(page.getByText("Active line 4 plies")).toBeVisible();
+
+  await page.locator("main.drill").focus();
+  await page.keyboard.press("Alt+C");
+  await expect(page.getByRole("heading", { name: "Same decision, two consequences." })).toBeVisible();
+  await expect(page.locator(".boards article")).toHaveCount(2);
+
+  const overflow = await page.locator(".compare").evaluate((compare) => {
+    const horizontalRegions = [...compare.querySelectorAll<HTMLElement>(".boards, .results, .strip-band")];
+    const cards = [...compare.querySelectorAll<HTMLElement>(".boards > article")];
+    const bounds = compare.getBoundingClientRect();
+    return {
+      compare: compare.scrollWidth - compare.clientWidth,
+      regions: horizontalRegions.map((region) => region.scrollWidth - region.clientWidth),
+      offenders: [...compare.querySelectorAll<HTMLElement>("*")]
+        .map((element) => {
+          const rect = element.getBoundingClientRect();
+          return { tag: element.tagName, className: element.className, right: rect.right - bounds.right };
+        })
+        .filter((entry) => entry.right > 1)
+        .sort((left, right) => right.right - left.right)
+        .slice(0, 8),
+      cards: cards.map((card) => {
+        const rect = card.getBoundingClientRect();
+        return { left: rect.left - bounds.left, right: rect.right - bounds.right, top: rect.top };
+      }),
+    };
+  });
+  expect(overflow.compare, JSON.stringify(overflow.offenders)).toBeLessThanOrEqual(1);
+  expect(overflow.regions.every((amount) => amount <= 1)).toBe(true);
+  expect(overflow.cards.every((card) => card.left >= -1 && card.right <= 1)).toBe(true);
+  expect(overflow.cards[1]!.top).toBeGreaterThan(overflow.cards[0]!.top);
+});
+
 test("the drill keyboard map remains contained and scrollable at the supported phone floor", async ({ page }) => {
   await page.setViewportSize({ width: 360, height: 680 });
   await page.goto("/play");

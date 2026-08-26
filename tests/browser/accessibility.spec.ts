@@ -104,3 +104,40 @@ test("@matrix @mobile the mobile project uses real touch and coarse-pointer sema
   await expect(companion).toHaveCount(0);
   await expect(supportTab).toBeFocused();
 });
+
+test("@matrix @mobile primary non-run journeys own their width without clipped controls", async ({ page }) => {
+  await register(page);
+  for (const route of ["/", "/play", "/review", "/learn", "/live", "/create", "/library", "/settings"]) {
+    await page.goto(route);
+    await expect(page.getByText("Loading Tabiya…")).toHaveCount(0);
+    const geometry = await page.locator("main, #position-catalogue").first().evaluate((main) => {
+      const viewportWidth = document.documentElement.clientWidth;
+      const bounds = main.getBoundingClientRect();
+      const clippedControls = [...main.querySelectorAll<HTMLElement>("button, input, select, textarea, a[href]")]
+        .filter((element) => {
+          const style = getComputedStyle(element);
+          if (style.display === "none" || style.visibility === "hidden") return false;
+          const rect = element.getBoundingClientRect();
+          if (rect.width <= 0 || (rect.left >= -1 && rect.right <= viewportWidth + 1)) return false;
+          let ancestor = element.parentElement;
+          while (ancestor !== null && ancestor !== main) {
+            const ancestorStyle = getComputedStyle(ancestor);
+            if (["auto", "scroll"].includes(ancestorStyle.overflowX) && ancestor.scrollWidth > ancestor.clientWidth + 1) return false;
+            ancestor = ancestor.parentElement;
+          }
+          return true;
+        })
+        .map((element) => element.getAttribute("aria-label") ?? element.textContent?.trim() ?? element.tagName);
+      return {
+        left: bounds.left,
+        right: bounds.right - viewportWidth,
+        overflow: main.scrollWidth - main.clientWidth,
+        clippedControls,
+      };
+    });
+    expect(geometry.left, `${route}: main begins outside the viewport`).toBeGreaterThanOrEqual(-1);
+    expect(geometry.right, `${route}: main ends outside the viewport`).toBeLessThanOrEqual(1);
+    expect(geometry.overflow, `${route}: main owns hidden horizontal content`).toBeLessThanOrEqual(1);
+    expect(geometry.clippedControls, `${route}: controls are clipped`).toEqual([]);
+  }
+});

@@ -9415,3 +9415,20 @@ count, loads an account-deletion preview, enters a rehearsal, scans every render
 atomic text-only semantics, and repeats the mobile path under the Pixel 7 device project. All nine
 matrix cases pass. A11-a30 and D1815 close; owner screen-reader use remains the distinct A11-c1
 release discharge rather than being inferred from DOM automation.
+
+## 2026-08-26 — Phone comparison keeps both consequences without a horizontal hunt (D1816)
+
+A real Pixel 7 run reproduced A11-a29's Compare failure at the product boundary: the two aligned
+branch cards retained their 15-rem column floors, so the second consequence lived to the right of
+the first. Compact Compare now stacks complete cards, evidence strips and results while preserving
+the same aligned-ply selector and vertical reading order. The first geometry run still found nine
+pixels of root overflow; its offender receipt isolated Chessground file-coordinate paint inside
+the near-detail cards, so those cards own their paint and the Compare scroller is vertical-only.
+
+The permanent mobile fixture creates, rewinds and branches an actual schema-example run, opens
+Compare, and proves both cards stay inside the surface, the second follows the first vertically,
+and Compare plus each aligned region has no hidden horizontal content. A second Pixel 7 route pass
+proves Home, Play, Review, Learn, Live list, Create, Library and Settings own their main width and
+do not clip controls outside a deliberately scrollable rail. A11-a29 remains open for conditional
+live-session/overlay, Shape, Cohort, Group and qualitative per-surface work; its broad no-media-query
+premise is now narrowed by rendered evidence rather than repeated from the dossier.

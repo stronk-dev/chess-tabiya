@@ -444,6 +444,12 @@ sight, comparison position, and board-input feedback use atomic status
 announcements. The visible guide, guard actions, and comparison boards are not
 live regions; only their changed textual receipt is announced.
 
+At the compact breakpoint, comparison preserves the aligned-ply model and
+stacks each complete branch card, evidence strip, and result vertically. It does
+not shrink boards into unreadable columns or require a horizontal pan to reach
+the second consequence. A real Pixel 7 fixture creates both branches through
+the public UI and checks the rendered bounds and scroll ownership.
+
 ## Packaged operation
 
 The root Compose file has an unprofiled server using the deterministic mock

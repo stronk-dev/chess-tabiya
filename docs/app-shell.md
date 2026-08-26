@@ -259,6 +259,11 @@ outside those regions, so a state change does not replay an entire interactive
 surface. The browser matrix checks this boundary across the catalogue, account
 deletion preview, a live rehearsal, and the mobile composition.
 
+The Pixel 7 matrix also traverses Home, Play, Review, Learn, Live, Create,
+Library, and Settings through the production bundle. Each main surface must own
+its width and every control must remain inside the viewport unless a named
+horizontal rail owns that control explicitly.
+
 ## Honest disabled controls
 
 Every disabled control, including an element using `aria-disabled="true"`,
