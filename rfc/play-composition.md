@@ -1,6 +1,6 @@
 # RFC: Play composition
 
-- **Status:** implementing — 2026-08-22 shell checkpoint landed: exact seven-viewport geometry, closed stage, responsive companion, separate Inspector, stable board instance and post-gesture browser gates. Module seats, vocabulary cleanup and the full 7×16 screenshot matrix remain. *(Accepted earlier 2026-08-22 by claude as register owner after cross-review.)*
+- **Status:** implementing — shell checkpoint landed 2026-08-22; the 2026-08-26 comparison checkpoint removes raw objective/engine/detector/route records from the ordinary comparison and gives them one explicit, focus-restoring Evidence inspector. Exact seven-viewport geometry, closed stage, responsive companion, stable board instance and post-gesture browser gates remain live. Module seats, remaining vocabulary cleanup and the full 7×16 screenshot matrix remain. *(Accepted earlier 2026-08-22 by claude as register owner after cross-review.)*
 - **Author:** claude (drafted on the D717 program routing, Phase 4)
 - **Created:** 2026-08-22
 - **Design refs:** `design/05-in-run-experience.md` §1 (invariants), §2 (the five regions),

@@ -197,6 +197,9 @@ describe("drill-client pack registry", () => {
     );
   });
 
+  // This is a real-corpus integration contract. Its assertions, not Vitest's
+  // generic unit-test timeout, define success; catalogue latency is measured
+  // independently in the isolated performance tier.
   it("serves committed drafts and never serves the schema fixture", async () => {
     const registry = await PackRegistry.loadDefault();
     expect(registry.list()).not.toContainEqual(expect.objectContaining({ reviewStatus: "schema_example" }));
@@ -211,7 +214,7 @@ describe("drill-client pack registry", () => {
         "trajectory-legs-browser",
       ]),
     );
-  });
+  }, 15_000);
 
   it("refuses semantic lint failures and unsupported v1 policies", async () => {
     const illegal = pack();

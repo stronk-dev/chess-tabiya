@@ -9545,3 +9545,29 @@ mount. Each profile loads its validated device-local preference into component s
 first render. A no-tick component fixture seeds Just Play with evidence lighting and live markers
 and proves both values exist on initial paint. SET-a5 and SET-a8 close; the raw workflow matrix and
 permission-aware controls remain separately owned by SET-a14/SET-a7 and their active RFC work.
+
+## 2026-08-26 — Compare separates learner meaning from evidence inspection
+
+The play-composition implementation advanced without pretending the returned module registry was
+ready. Compare now opens on the learner's recorded decisions: SAN, actor, intent, material,
+position/path convergence and concise objective consequences. Raw objective-state tokens, engine
+scores, detector-attributed structural rows, piece routes, source sentences and resistance records
+move behind one explicit Evidence inspector. The underlying objective timelines still validate
+their evidence references eagerly, so hiding raw records from the summary does not weaken the
+grounding contract.
+
+The inspector is modal, viewport-bounded and returns focus to its exact invoker. The component
+suite pins the clean/inspector split and provider-withheld arm; the real content journey opens the
+Najdorf comparison and inspects its records; the mobile matrix proves the inspector stays inside
+the viewport. D910 remains implementing because module seats and the full 112-cell screenshot
+matrix are still open.
+
+## 2026-08-26 — Integration-strength tests receive explicit budgets
+
+The full software gate exposed two semantic contracts that were incorrectly borrowing Vitest's
+generic five-second unit timeout: the committed-draft boundary loads the complete real pack
+registry, and the rated-result property creates and migrates 250 fresh SQLite stores while
+exploring conflicting seal/void histories. Their populations and assertions remain unchanged;
+the tests now declare 15-second and 20-second integration budgets. Performance remains governed
+by the isolated performance tier, and neither retries nor reduced property coverage were added.
+D1820 closes.

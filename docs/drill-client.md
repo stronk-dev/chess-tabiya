@@ -308,23 +308,18 @@ the move, actor and the learner's recorded intent for each attempt. Its synchron
 stepper positions the deeper per-branch boards on the aligned pair; an absent
 side is dimmed and labeled `Line ended`. The surface states shared recorded-node
 groups separately from same-position re-convergence by `transposeKey`, and every
-cell uses the shared learner-relative material calculation. Objective timelines
-and checkpoint hits render as separate strips. Each objective change is rendered as
-`from → to` and every recorded ground is resolved through the existing evidence
-sentence table; an empty ground set fails instead of manufacturing explanatory
-copy. Recorded resistance and authored-line membership are present per consequence.
-The deterministic grounded narrative is expanded before engine graphics; raw
-producer terminology remains in machine attributes, not learner labels. When
-`machineFeedback` is available, a per-side recorded engine trajectory plots the
-comparison's White-perspective centipawn or mate scores at their aligned ply
-offsets and marks the common fork. When it is withheld, the server removes the
-machine fields and the client admits none of the trajectory, sparkline, summary
-score, or machine consumer; an empty collection is never treated as the policy
-signal. The engine deployment supplies Stockfish; the mock deployment remains
-honestly labeled as recorded engine evidence rather than claiming a provider
-identity absent from the payload. Engine arrows, move recommendations, and
-human-frequency overlays remain absent; the fork arrows are only moves the
-learner already played.
+cell uses the shared learner-relative material calculation. The ordinary surface
+keeps the recorded decision, SAN, actor, intent, material, convergence and concise
+objective consequences in view. Raw objective-state tokens, source sentences,
+structural census, piece routes and engine numbers live behind the explicit
+comparison Evidence inspector. Opening it does not alter the comparison layout;
+closing it restores focus to the invoking control. Objective timelines are
+validated eagerly even while hidden: every change must retain a non-empty
+evidence-ref set, so moving the records out of the summary does not weaken
+grounding. When `machineFeedback` is withheld, the server removes the machine
+fields and the inspector admits none of the trajectory, sparkline, summary score,
+or machine consumer. Engine arrows, move recommendations, and human-frequency
+overlays remain absent; the fork arrows are only moves the learner already played.
 
 Outcome Drill adds a compact context surface above the board and in checkpoint
 or terminal sheets. It keeps four facts separate: the root assessment, the
@@ -450,11 +445,12 @@ sight, comparison position, and board-input feedback use atomic status
 announcements. The visible guide, guard actions, and comparison boards are not
 live regions; only their changed textual receipt is announced.
 
-At the compact breakpoint, comparison preserves the aligned-ply model and
-stacks each complete branch card, evidence strip, and result vertically. It does
-not shrink boards into unreadable columns or require a horizontal pan to reach
-the second consequence. A real Pixel 7 fixture creates both branches through
-the public UI and checks the rendered bounds and scroll ownership.
+At the compact breakpoint, comparison preserves the aligned-ply model and stacks
+each complete learner-facing branch card and result vertically. The opt-in
+evidence inspector owns its own bounded scrolling surface. It does not shrink
+boards into unreadable columns or require a horizontal pan to reach the second
+consequence. A real Pixel 7 fixture creates both branches through the public UI,
+opens and closes the inspector, and checks its bounds and focus restoration.
 
 ## Packaged operation
 

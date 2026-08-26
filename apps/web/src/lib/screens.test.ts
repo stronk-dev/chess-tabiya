@@ -748,21 +748,25 @@ describe("Layer 3 screens", () => {
     expect(document.body.textContent).toContain("Line ended");
     expect(document.querySelector(".boards article.absent")).not.toBeNull();
     expect(document.body.textContent).toContain("main");
-    expect(document.body.textContent).toContain("active → achieved");
-    expect(document.body.textContent).toContain("objective achieved");
-    expect(document.body.textContent).toContain("M-2");
+    expect(document.body.textContent).toContain("This attempt reached the objective.");
+    expect(document.body.textContent).not.toContain("active → achieved");
+    expect(document.body.textContent).not.toContain("M-2");
     expect(document.querySelector('[data-evidence-ref="pack-absent:timing-window"]')?.textContent).toBe(
       "Checkpoint not reached on this branch: Critical race resolved.",
     );
     expect(document.body.textContent).toContain("Where the attempts split");
     expect(document.body.textContent).toContain("Intent: Test Black's expansion");
+    expect(document.body.textContent).not.toContain("Recorded differences by branch");
+    expect(document.body.textContent).not.toContain("Opponent and authored-line context");
+    expect(document.body.textContent).not.toContain("Tabiya structural detector");
+    expect(document.querySelector('[role="dialog"][aria-labelledby="comparison-inspector-title"]')).toBeNull();
+    document.querySelector<HTMLButtonElement>(".header-actions button")!.click();
+    await tick();
+    expect(document.querySelector('[role="dialog"][aria-labelledby="comparison-inspector-title"]')).not.toBeNull();
+    expect(document.body.textContent).toContain("active → achieved");
+    expect(document.body.textContent).toContain("M-2");
     expect(document.body.textContent).toContain("Recorded differences by branch");
     expect(document.body.textContent).toContain("Opponent and authored-line context");
-    expect(document.body.textContent).not.toContain("Evidence inspector");
-    const compareSections = [...document.querySelectorAll(".compare > section")];
-    expect(compareSections.indexOf(document.querySelector(".narrative")!)).toBeLessThan(
-      compareSections.indexOf(document.querySelector(".trajectory")!),
-    );
     expect(document.querySelector(".boards")?.getAttribute("data-zoom")).toBe("near");
     expect(document.querySelectorAll("[aria-label='Chessboard']")).toHaveLength(2);
     expect(chessground.configs[0]!.drawable!.autoShapes).toHaveLength(2);
@@ -773,7 +777,10 @@ describe("Layer 3 screens", () => {
     expect(document.body.textContent).toContain("active");
     expect(document.querySelectorAll(".sparkline span")).toHaveLength(comparison.columns.reduce((total,column)=>total+comparison.evidence[column.branchId]!.length,0));
     expect(document.body.textContent).toContain("recorded branches share");
-    expect(document.querySelector<HTMLButtonElement>(".narrative-heading button")?.getAttribute("aria-expanded")).toBe("true");
+    document.querySelector<HTMLButtonElement>(".comparison-inspector header button")!.click();
+    await tick();
+    expect(document.querySelector(".comparison-inspector")).toBeNull();
+    expect(document.activeElement).toBe(document.querySelector(".header-actions button"));
     expectDisabledControlsExplained();
     await unmount(component);
   });
@@ -800,6 +807,10 @@ describe("Layer 3 screens", () => {
     expect(document.querySelector('[aria-label="Recorded engine evaluation"]')).toBeNull();
     expect(document.querySelector('[data-evidence-consumer="compare.engine_trajectory"]')).toBeNull();
     expect(document.body.textContent).not.toContain("M-2");
+    document.querySelector<HTMLButtonElement>(".header-actions button")!.click();
+    await tick();
+    expect(document.querySelector('[aria-label="Recorded engine evaluation"]')).toBeNull();
+    expect(document.querySelector('[data-evidence-consumer="compare.engine_trajectory"]')).toBeNull();
     await unmount(component);
   });
 
@@ -841,6 +852,9 @@ describe("Layer 3 screens", () => {
     } });
     await tick();
 
+    expect(document.body.textContent).not.toContain("eval evidence recorded.");
+    document.querySelector<HTMLButtonElement>(".header-actions button")!.click();
+    await tick();
     expect(document.body.textContent).toContain("eval evidence recorded.");
     expect(document.body.textContent).not.toContain("details are pending");
     await unmount(component);

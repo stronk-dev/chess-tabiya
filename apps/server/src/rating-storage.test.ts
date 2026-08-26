@@ -156,6 +156,9 @@ describe("rated-game storage", () => {
     storage.close();
   });
 
+  // Keep all 250 generated histories. Each history intentionally creates and
+  // migrates a fresh SQLite store, so this property belongs to an explicit
+  // integration budget rather than Vitest's generic five-second unit budget.
   it("permits at most one rated result for every generated seal/void action sequence", () => {
     fc.assert(fc.property(
       fc.array(fc.constantFrom("seal_win", "seal_loss", "seal_draw", "void_fork", "void_rewind", "void_abandon"), { minLength: 1, maxLength: 30 }),
@@ -185,7 +188,7 @@ describe("rated-game storage", () => {
         storage.close();
       },
     ), { numRuns: 250 });
-  });
+  }, 20_000);
 
   it("expires open games after thirty days and counts abandonment separately", () => {
     const storage = new SQLiteRunStorage(":memory:", { onMigration: () => {} });

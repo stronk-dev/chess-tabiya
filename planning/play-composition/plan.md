@@ -30,6 +30,10 @@ remain in their owning RFCs.
 9. The aggregate “evidence waiting” plumbing counter is absent from run chrome; raw trajectory-leg
    state lives in Inspector; theory checkpoints no longer expose deviation-class or mistake enums
    as learner copy.
+10. Compare now opens with decisions, SAN, actor, intent, material, convergence and concise
+    consequences only. Raw objective tokens, engine values, detector attribution, structure
+    census, piece routes and source records moved to a separate focus-restoring evidence
+    inspector; desktop content and mobile matrix journeys assert both sides of the boundary.
 
 ## Remaining before archive
 

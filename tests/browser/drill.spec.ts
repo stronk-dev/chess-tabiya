@@ -922,8 +922,15 @@ test("@content served Najdorf pack plays, rewinds, branches, compares, and expor
   await expect(page.getByRole("heading", { name: "Where the attempts split" })).toBeVisible();
   await expect(page.locator(".divergence [aria-label='Chessboard']")).toBeVisible();
   await expect(page.locator(".divergence").getByText("Compare a lower-commitment setup", { exact: true })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Recorded differences by branch" })).toHaveCount(0);
+  await expect(page.getByText("active → achieved")).toHaveCount(0);
+  await expect(page.getByRole("region", { name: "Grounded comparison" })).toBeVisible();
+  await expect(page.getByRole("region", { name: "Grounded comparison" }).getByText("All attempts share this fork position.", { exact: true })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "quiet setup" })).toHaveCount(2);
+  const comparisonInspectorButton = page.getByRole("button", { name: "Evidence inspector" });
+  await comparisonInspectorButton.click();
+  await expect(page.getByRole("dialog", { name: "Recorded facts behind this comparison" })).toBeVisible();
   await expect(page.getByRole("heading", { name: "Recorded differences by branch" })).toBeVisible();
-  await expect(page.getByText("Evidence inspector")).toHaveCount(0);
   await expect(page.locator(".sparkline")).toHaveCount(2);
   await expect.poll(() =>
     page.locator(".sparkline").evaluateAll((sparklines) =>
@@ -940,9 +947,6 @@ test("@content served Najdorf pack plays, rewinds, branches, compares, and expor
       }),
     ),
   ).toBe(true);
-  await expect(page.getByRole("region", { name: "Grounded comparison" })).toBeVisible();
-  await expect(page.getByText(/recorded branches share/)).toBeVisible();
-  await expect(page.getByRole("heading", { name: "quiet setup" })).toHaveCount(2);
   await expect(page.getByText("active → achieved")).toBeVisible();
   await expect(
     page.getByText("Checkpoint reached: Critical race resolved."),
@@ -951,6 +955,8 @@ test("@content served Najdorf pack plays, rewinds, branches, compares, and expor
   await expect(
     page.locator('.evidence-cell[data-ply-offset="0"] .evidence-entry'),
   ).toHaveCount(2);
+  await page.getByRole("button", { name: "Return to comparison" }).click();
+  await expect(comparisonInspectorButton).toBeFocused();
 
   await page
     .getByRole("heading", { name: "Same decision, two consequences." })
@@ -1488,6 +1494,23 @@ test("@matrix @mobile comparison stacks complete branch cards without hidden hor
   await page.keyboard.press("Alt+C");
   await expect(page.getByRole("heading", { name: "Same decision, two consequences." })).toBeVisible();
   await expect(page.locator(".boards article")).toHaveCount(2);
+  await expect(page.locator(".compare")).not.toContainText("Tabiya structural detector");
+  await expect(page.locator(".compare")).not.toContainText("Recorded engine evaluation");
+
+  const inspectorButton = page.getByRole("button", { name: "Evidence inspector" });
+  await inspectorButton.click();
+  const inspector = page.getByRole("dialog", { name: "Recorded facts behind this comparison" });
+  await expect(inspector).toBeVisible();
+  await expect(inspector.getByText("Recorded differences by branch")).toBeVisible();
+  const inspectorBounds = await inspector.boundingBox();
+  const comparisonViewport = page.viewportSize();
+  expect(inspectorBounds).not.toBeNull();
+  expect(comparisonViewport).not.toBeNull();
+  expect(inspectorBounds!.x).toBeGreaterThanOrEqual(-1);
+  expect(inspectorBounds!.x + inspectorBounds!.width).toBeLessThanOrEqual(comparisonViewport!.width + 1);
+  await page.getByRole("button", { name: "Return to comparison" }).click();
+  await expect(inspector).toHaveCount(0);
+  await expect(inspectorButton).toBeFocused();
 
   const overflow = await page.locator(".compare").evaluate((compare) => {
     const horizontalRegions = [...compare.querySelectorAll<HTMLElement>(".boards, .results, .strip-band")];
