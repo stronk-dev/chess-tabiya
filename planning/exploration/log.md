@@ -8330,3 +8330,24 @@ The RFC and active register now say returned; routing and the 1.0 evidence capab
 repair. The independent dossier is
 `planning/bounded-policy-targets/independent-buildability-review-2026-08-26.md`. No production,
 schema, content, protected design or concurrent Wave-C/review byte changed.
+
+## 2026-08-26 — intent-presets D971 amendment returns at independent re-review
+
+Traced the amended preset/config/clamp tables through runtime persistence, module contracts,
+DrillScreen, server permissions, `/capabilities`, browser speech state and Campaign reach. The
+closed preset/context vocabularies and shipped workflow key survive; the compiler and surface
+contract do not yet.
+
+[[D1659]] finds the first-use no-op: `loadAssistance` returns complete `SILENT_ASSISTANCE` when no
+key exists, and rule 4 interprets all nine fallback fields as explicit choices, so Guided, Support
+and Analysis compile back to Quiet. [[D1660]] records the one owner choice: named presets cannot
+truthfully coexist with a global higher raw override; choose literal named presets plus
+Custom/Advanced, or visible per-preset modifications. [[D1661]] records the module/config bypass in
+both directions. [[D1662]] records the undefined availability input across provider, browser and
+pending state. [[D1663]] records the lifecycle contradiction between a deferred module consumer,
+criterion-9 delivery logging and claimed counterparty discharge. Existing [[D1437]]/[[D1500]] keeps
+Campaign's guided default unreachable.
+
+The RFC/register, routing and 1.0 Support capability now say returned. Exact repair and falsifiers:
+`planning/intent-presets/independent-amendment-rereview-2026-08-26.md`. No production, protected
+design, schema, content or concurrent UX/review byte changed.

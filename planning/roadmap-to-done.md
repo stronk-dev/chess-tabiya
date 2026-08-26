@@ -179,6 +179,13 @@ renderers over sealed items, never graders, selectors, chess authorities, or ava
 
 Primary RFCs: `learner-modules`, `module-registration`, `hint-distance`, `assistance-config-register`,
 `evidence-presentation`, `intent-presets`. UX owners: INR and SET items.
+The 2026-08-26 independent re-review returns the preset compiler on [[D1659]]–[[D1663]] and
+[[D1437]]/[[D1500]]: unset preferences currently masquerade as explicit Quiet choices; raw config
+and module outputs can contradict; availability is undefined across provider/browser state;
+Campaign is unreachable; and a deferred module consumer cannot discharge activation/logging.
+[[D1660]] is the remaining owner rule for named presets versus Custom/Advanced overrides. The
+shipped context/preset ids remain foundation, but a pill may not claim a preset until compiled
+behavior and its logged module deliveries agree.
 Owner ruling [[D1564]] makes producer coverage part of this exit: the evidence layer owes the
 typed operands required by every promised module. Presentation work may abstain honestly while a
 source is unavailable, but 1.0 may not defer required emitters behind that availability state.

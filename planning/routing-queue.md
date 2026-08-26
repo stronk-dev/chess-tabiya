@@ -27,6 +27,8 @@ set execution order.
 |---|---|---|
 | D965, D966, D967, D968 | `learner-modules` amendment | Return the accepted document for the literal enumeration, reducer grammar, per-module ceilings, and cumulative answer-distance sets; re-review before module implementation. |
 | D1629 | `hint-distance` / `intent-presets` v5 amendment | Put AssistanceConfig parsing/migration behind one runtime codec consumed by web and bind it to the TypeChecker-derived field/domain conformance matrix before v5 can land. |
+| D1659, D1661, D1662, D1663 | `intent-presets` author amendment | Distinguish unset/explicit/migrated preferences; bind legacy config to module effects; define complete provider/browser availability; and split config/pill delivery from the later real module/logging edge. Repeat independent review. |
+| D1660 | OWNER → `intent-presets` amendment | Rule named-preset versus Advanced/Custom overrides; recommended named presets literal + lower-only narrowing + a sixth Custom/Advanced state for higher raw configuration. |
 | D1638 | `hint-distance` author amendment + independent D1 review | Split search-source availability from optional voice fallback and fixture both outcomes independently. |
 | D1639 | OWNER → `hint-distance` + `intent-presets` amendment | Rule total preset/context maximum rungs; authors then encode field-specific defaults, clamps and access algebra. |
 | D1640 | `hint-distance` author amendment + independent D1 review | Seal the operator horizon over admitted PV, candidate-packet, semantic-occurrence and root identities before disclosure. |
