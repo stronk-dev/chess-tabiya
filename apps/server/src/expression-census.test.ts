@@ -46,16 +46,31 @@ describe("expression census", () => {
     const root = mkdtempSync(resolve(tmpdir(), "tabiya-evidence-census-"));
     const file = resolve(root, "sample.json");
     const pack = JSON.parse(readFileSync(resolvePackPath("anti-caro-advance-early-c5"), "utf8"));
-    const claimText = "The corpus contains 9,346,096 games in this window.";
-    pack.feedbackClaims = [{ id: "observed", text: claimText, evidenceTypes: ["corpus_observed"] }];
+    const claimText = "The corpus contains 9,346,096 games and the engine reads +0.50.";
+    pack.feedbackClaims = [{ id: "observed", text: claimText, evidenceTypes: ["corpus_observed", "engine_validated"] }];
     writeFileSync(file, JSON.stringify(pack));
-    writeFileSync(file.replace(/\.json$/u, ".evidence.json"), JSON.stringify({
+    const sidecar = {
       schema: "tabiya.sourcing.evidence.v1", sourcedAt: "2026-08-16T00:00:00.000Z", abstentions: [],
-      records: [{ kind: "explorer_frequency", anchor: { fen: pack.start.fen }, sourceId: "lichess-explorer", retrievedAt: "2026-08-16T00:00:00.000Z", grounds: "citable_source", supports: ["/start/fen"], values: { ratings: [1400, 1600, 1800], speeds: ["blitz", "rapid"], since: "2024-01", until: "2026-07", total: 9346096 } }],
-      claimBindings: [{ claimId: "observed", pointer: "/feedbackClaims/0/text", textSha256: `sha256:${createHash("sha256").update(claimText).digest("hex")}`, spans: [{ span: "9,346,096", assertion: { kind: "explorer.total@v1", args: { fen: pack.start.fen } } }] }],
-    }));
+      records: [
+        { kind: "explorer_position_census", anchor: { fen: pack.start.fen }, sourceId: "lichess-explorer", retrievedAt: "2026-08-16T00:00:00.000Z", grounds: "citable_source", supports: ["/start/fen"], values: { fen: pack.start.fen, ratings: [1400, 1600, 1800], speeds: ["blitz", "rapid"], since: "2024-01", until: "2026-07", total: 9346096, whitePct: 50, drawPct: 20, blackPct: 30, topMoves: [] } },
+        { kind: "engine_eval", anchor: { fen: pack.start.fen }, sourceId: "stockfish-fixture", retrievedAt: "2026-08-16T00:00:00.000Z", grounds: "machine_validation", supports: ["/start/fen"], values: { fen: pack.start.fen, centipawns: 50, depth: 22, requestedDepth: 22, engineId: "stockfish-fixture", engineName: "Stockfish", engineVersion: "18", threads: 1, hashMb: 16, multiPv: 1, perspective: "white", timeoutMs: 120000 } },
+      ],
+      claimBindings: [{ claimId: "observed", pointer: "/feedbackClaims/0/text", textSha256: `sha256:${createHash("sha256").update(claimText).digest("hex")}`, spans: [
+        { span: "9,346,096", assertion: { kind: "explorer.total@v1", args: { fen: pack.start.fen } } },
+        { span: "+0.50", assertion: { kind: "engine.centipawns@v1", args: { fen: pack.start.fen } } },
+      ] }],
+    };
+    writeFileSync(file.replace(/\.json$/u, ".evidence.json"), JSON.stringify(sidecar));
     const report = evidenceCensus(new Map([[file, pack]]));
-    expect(report.packs[0]?.citations[0]).toMatchObject({ evidenceType: "corpus_observed", rung: 4, backing: { kind: "ledger", backedClaims: 1, records: 1 }, populations: [{ ratings: [1400, 1600, 1800], speeds: ["blitz", "rapid"], since: "2024-01", until: "2026-07", total: 9346096 }] });
+    expect(report.packs[0]?.citations.find((citation) => citation.evidenceType === "corpus_observed")).toMatchObject({ evidenceType: "corpus_observed", rung: 4, backing: { kind: "ledger", backedClaims: 1, records: 1 }, populations: [{ ratings: [1400, 1600, 1800], speeds: ["blitz", "rapid"], since: "2024-01", until: "2026-07", total: 9346096 }] });
+    expect(report.packs[0]?.citations.find((citation) => citation.evidenceType === "engine_validated")).toMatchObject({ backing: { kind: "ledger", backedClaims: 1, records: 1 } });
+    expect(report.totals.backedClaims).toBe(1);
+
+    // A declaration with a drifted digest is not backing, even if every record
+    // and typed assertion is otherwise present.
+    sidecar.claimBindings[0]!.textSha256 = `sha256:${"0".repeat(64)}`;
+    writeFileSync(file.replace(/\.json$/u, ".evidence.json"), JSON.stringify(sidecar));
+    expect(evidenceCensus(new Map([[file, pack]])).totals.backedClaims).toBe(0);
   });
 
   // Selects subjects BY OBSERVATION, never by name. The earlier form pinned

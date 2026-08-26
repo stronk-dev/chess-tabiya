@@ -18,8 +18,9 @@ import {
   expressionSatisfiability,
   type ExpressionWitness,
 } from "./expression-satisfiability.js";
-import type { EvidenceLedger, EvidenceRecord } from "./sourcing/types.js";
-import { MACHINE_LABEL_EVIDENCE_KINDS } from "./sourcing/claim-binding.js";
+import type { EvidenceLedger, EvidenceRecord, SourcingIssue } from "./sourcing/types.js";
+import { MACHINE_LABEL_EVIDENCE_KINDS, validateClaimBindings } from "./sourcing/claim-binding.js";
+import { validateLedger } from "./sourcing/ledger-validation.js";
 import { runDeclarationCensus } from "./declaration-census.js";
 
 export type CensusSubjectKind = "shape_trigger" | "shape_plan_signature" | "pack_success_condition" | "pack_fen_predicate" | "pack_window_closing" | "pack_key_point_ground" | "bare_expression";
@@ -86,17 +87,28 @@ function populationOf(record: EvidenceRecord): Record<string, unknown> | undefin
 }
 
 export function evidenceCensus(packDocuments: ReadonlyMap<string, DrillPackDefinition>) {
+  const validatedClaimKeys = new Set<string>();
   const packs = [...packDocuments].flatMap(([absolute, pack]) => {
     const claims = pack.feedbackClaims ?? [];
     if (claims.length === 0) return [];
     const ledger = evidenceLedger(absolute);
+    const validationIssues: SourcingIssue[] = [];
+    const validatedLedger = ledger === undefined ? undefined : validateLedger(ledger, validationIssues);
+    const validBindings = validatedLedger === undefined ? [] : validateClaimBindings(pack, validatedLedger, validationIssues);
+    for (const binding of validBindings) {
+      const claim = claims.find((candidate) => candidate.id === binding.claimId);
+      if (claim?.evidenceTypes.some((label) => (MACHINE_LABEL_EVIDENCE_KINDS[label] ?? []).some((kind) => binding.instrumentKinds.includes(kind)))) {
+        validatedClaimKeys.add(`${pack.id}/${binding.claimId}`);
+      }
+    }
     const citations = [...new Set(claims.flatMap((claim) => claim.evidenceTypes))].sort().map((evidenceType) => {
       const claimIndexes = claims.flatMap((claim, index) => claim.evidenceTypes.includes(evidenceType) ? [index] : []);
       const ledgerKinds = MACHINE_LABEL_EVIDENCE_KINDS[evidenceType];
-      const bindings = claimIndexes.flatMap((index) => ledger?.claimBindings?.filter((binding) => binding.pointer === `/feedbackClaims/${index}/text`) ?? []);
+      const validPointers = new Set(validBindings.map((binding) => `${binding.claimId}\u0000${binding.pointer}`));
+      const bindings = claimIndexes.flatMap((index) => ledger?.claimBindings?.filter((binding) => binding.pointer === `/feedbackClaims/${index}/text` && validPointers.has(`${binding.claimId}\u0000${binding.pointer}`)) ?? []);
       const assertionFamilies = new Set(bindings.flatMap((binding) => binding.spans.flatMap((span) => "assertion" in span ? [span.assertion.kind.split(".")[0]] : [])));
-      const matching = ledgerKinds === undefined ? [] : ledger?.records.filter((record) => ledgerKinds.includes(record.kind) && assertionFamilies.has(record.kind === "tablebase_result" ? "tablebase" : record.kind === "engine_eval" ? "engine" : "explorer")) ?? [];
-      const backedClaims = ledgerKinds === undefined ? 0 : claimIndexes.filter((index) => (ledger?.claimBindings ?? []).some((binding) => binding.pointer === `/feedbackClaims/${index}/text` && binding.spans.some((span) => "assertion" in span && ledgerKinds.includes(span.assertion.kind.startsWith("tablebase.") ? "tablebase_result" : span.assertion.kind.startsWith("engine.") ? "engine_eval" : "explorer_position_census")))).length;
+      const matching = ledgerKinds === undefined ? [] : validatedLedger?.records.filter((record) => ledgerKinds.includes(record.kind) && assertionFamilies.has(record.kind === "tablebase_result" ? "tablebase" : record.kind === "engine_eval" ? "engine" : "explorer")) ?? [];
+      const backedClaims = ledgerKinds === undefined ? 0 : claimIndexes.filter((index) => validBindings.some((binding) => binding.pointer === `/feedbackClaims/${index}/text` && binding.instrumentKinds.some((kind) => ledgerKinds.includes(kind)))).length;
       const populations = matching.flatMap((record) => {
         const population = populationOf(record);
         return population === undefined ? [] : [canonicalizeJson(population)];
@@ -124,7 +136,7 @@ export function evidenceCensus(packDocuments: ReadonlyMap<string, DrillPackDefin
     totals: {
       packs: packs.length,
       claims: packs.reduce((sum, pack) => sum + pack.claims, 0),
-      backedClaims: citations.reduce((sum, citation) => sum + citation.backing.backedClaims, 0),
+      backedClaims: validatedClaimKeys.size,
       populations: citations.reduce((sum, citation) => sum + citation.populations.length, 0),
       byRung: rungs,
     },

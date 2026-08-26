@@ -16,7 +16,7 @@ import { validatePackDocument, type PackPrincipleLookup, type PackShapeLookup } 
 import { buildPositionEvidenceIndex } from "./position-evidence.js";
 import { assessmentGrounding } from "./sourcing/ledger-validation.js";
 import { validateLedger } from "./sourcing/ledger-validation.js";
-import { validateClaimBindings } from "./sourcing/claim-binding.js";
+import { MACHINE_LABEL_EVIDENCE_KINDS, validateClaimBindings } from "./sourcing/claim-binding.js";
 import type { SourcingIssue } from "./sourcing/types.js";
 
 export const SIDECAR_BASENAMES = Object.freeze([
@@ -291,7 +291,7 @@ export class PackRegistry {
       for (const claim of document.feedbackClaims ?? []) {
         const binding = validBindings.find((candidate) => candidate.claimId === claim.id);
         if (binding !== undefined) claimBackings.set(claim.id, Object.freeze({ binding: binding.disposition, instrumentKinds: binding.instrumentKinds, rendered: binding.rendered, authorSpans: binding.authorSpans, principles: principleRows(claim.principles) }));
-        else if (claim.evidenceTypes.includes("author_principle") && !claim.evidenceTypes.some((label) => ["corpus_observed", "engine_validated", "tablebase_exact"].includes(label))) claimBackings.set(claim.id, Object.freeze({ binding: "self_declared", instrumentKinds: Object.freeze([]), rendered: Object.freeze([]), authorSpans: Object.freeze([claim.text]), principles: principleRows(claim.principles) }));
+        else if (!claim.evidenceTypes.some((label) => MACHINE_LABEL_EVIDENCE_KINDS[label] !== undefined)) claimBackings.set(claim.id, Object.freeze({ binding: "self_declared", instrumentKinds: Object.freeze([]), rendered: Object.freeze([]), authorSpans: Object.freeze(claim.evidenceTypes.includes("author_principle") ? [claim.text] : []), principles: principleRows(claim.principles) }));
       }
       const summary: PackSummary = freeze({
         id: document.id,

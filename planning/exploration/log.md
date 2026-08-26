@@ -9200,3 +9200,20 @@ routes that documentary reconciliation to the RFC author instead of weakening pr
 to preserve stale accepted prose. The corpus's `anti-scandinavian-white/just-take-it` claim remains
 for the separately owned claim-binding content wave, where its 74% measurement can receive its real
 explorer assertion rather than being rewritten or laundered as judgement.
+
+## 2026-08-26 — Claim-backing writer and census agree on explicit validated state (D431/D444/D445)
+
+`PackRegistry.fromDocuments` now records explicit `self_declared` backing rows for admitted
+non-machine claims instead of making delivery infer them from a missing map entry. Machine-labelled
+claims remain absent unless a validating binding exists, and the unverified community/playtest
+constructors remain empty. A derived-feature-only production fixture binds the writer and reader.
+
+The expression census now validates each ledger and its claim bindings before reporting backing.
+Per-evidence-label counts retain attribution, while the headline total is a set of unique
+`(pack, claim)` identities. One dual-labelled explorer+engine fixture counts once overall and once
+under each relevant label; corrupting only its text digest reduces backing to zero.
+
+D445 was refuted rather than patched. Repeated instrument text is rejected by the earlier
+unique-occurrence rule as `CLAIM_SPAN_AMBIGUOUS`, before `authorSegments` can consume a range. The
+ambiguity fixture now also proves the validated result is empty. The suspicious `indexOf`
+therefore has no observable misattribution under the shipped invariant.

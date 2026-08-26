@@ -525,6 +525,13 @@ describe("authored feedback projection", () => {
       checkpoints: [{ id: "finish", trigger: { atSpineNode: "e5" } }],
       feedbackClaims: [{ id: "derived-only", text: "An authored derived-feature claim.", evidenceTypes: ["derived_feature"] }],
     }));
+    expect(pack.claimBackings.get("derived-only")).toEqual({
+      binding: "self_declared",
+      instrumentKinds: [],
+      rendered: [],
+      authorSpans: [],
+      principles: [],
+    });
     let run = play(newRun(pack, "claim-derived-default"), ["e2e4", "e7e5"]);
     run = reachCheckpoint(run, "finish", at).run;
     expect(projectAuthoredFeedback(pack, run).items).toContainEqual(expect.objectContaining({

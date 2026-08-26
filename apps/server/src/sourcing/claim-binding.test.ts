@@ -44,7 +44,13 @@ describe("claim bindings",()=>{
     expect(codes(pack(),ledger([binding(text),binding(text)]))).toContain("CLAIM_BINDING_DUPLICATE");
     expect(codes(pack(),ledger([binding(text,{spans:[{span:"missing",authored:true}]})]))).toContain("CLAIM_SPAN_ABSENT");
     const repeated="31.4% then 31.4%";
-    expect(codes(pack(repeated),ledger([binding(repeated)]))).toContain("CLAIM_SPAN_AMBIGUOUS");
+    const repeatedDocument = pack(repeated);
+    const repeatedEvidence = ledger([binding(repeated)]);
+    const repeatedIssues: SourcingIssue[] = [];
+    expect(validateClaimBindings(repeatedDocument, repeatedEvidence, repeatedIssues)).toEqual([]);
+    // D445's feared repeated-prose range cannot reach authorSegments: the
+    // earlier unique-occurrence guard rejects the binding first.
+    expect(repeatedIssues.map((issue) => issue.code)).toContain("CLAIM_SPAN_AMBIGUOUS");
     expect(codes(pack(),ledger([binding(text,{spans:[{span:"31.4%",assertion:{kind:"explorer.moveSharePct@v1",args:{fen:START,san:"d4"}}}]})]))).toContain("CLAIM_ASSERTION_UNRECORDED");
     const contradictory=structuredClone(ledger([binding(text)])) as any; contradictory.records[0].values.topMoves[0].sharePct=30;
     expect(codes(pack(),contradictory)).toContain("CLAIM_SPAN_CONTRADICTED");
