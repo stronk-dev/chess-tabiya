@@ -92,15 +92,21 @@ describe("own-game import", () => {
 
   it("normalizes public lichess ids, fetches once without credentials, and rejects chess.com URLs", async () => {
     expect(normalizeLichessGameUrl("https://www.lichess.org/abcd1234WXYZ/black?foo=1#bar")).toEqual({ gameId: "abcd1234", url: "https://lichess.org/abcd1234" });
+    const annotated = PGN.replace("1. e4 e5", "{Engine review} 1. e4! {Blunder. d4 was best. [%eval -1.2]} e5 $2");
     const calls: { input: string; init?: RequestInit }[] = [];
     const fetchImpl: typeof fetch = async (input, init) => {
       calls.push({ input: String(input), ...(init === undefined ? {} : { init }) });
-      return new Response(PGN, { status: 200 });
+      return new Response(annotated, { status: 200 });
     };
     const resolved = await resolveImportSource({ kind: "lichess", url: "https://lichess.org/abcd1234" }, fetchImpl);
     expect(resolved.sourceKind).toBe("lichess_url");
     expect(calls).toHaveLength(1);
     expect(calls[0]!.input).toContain("evals=false");
+    expect(calls[0]!.input).toContain("literate=false");
+    expect(calls[0]!.input).toContain("comments=false");
+    expect(resolved.pgn).toContain("1. e4 e5");
+    expect(resolved.pgn).not.toMatch(/Engine review|Blunder|was best|%eval|\$2|e4!/u);
+    expect(resolved.licenceNote).toContain("annotations stripped");
     expect(new Headers(calls[0]!.init?.headers).has("authorization")).toBe(false);
     await expect(resolveImportSource({ kind: "lichess", url: "https://chess.com/game/live/1" }, fetchImpl)).rejects.toMatchObject({ code: "IMPORT_SOURCE_UNSUPPORTED" });
   });

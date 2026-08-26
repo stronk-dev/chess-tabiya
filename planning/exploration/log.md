@@ -9217,3 +9217,17 @@ D445 was refuted rather than patched. Repeated instrument text is rejected by th
 unique-occurrence rule as `CLAIM_SPAN_AMBIGUOUS`, before `authorSegments` can consume a range. The
 ambiguity fixture now also proves the validated result is empty. The suspicious `indexOf`
 therefore has no observable misattribution under the shipped invariant.
+
+## 2026-08-26 — Lichess import strips third-party grading defensively (D410)
+
+The Lichess game export now requests `comments=false` as well as `evals=false` and
+`literate=false`, then independently parses and re-serializes the returned PGN through the same
+annotation stripper used for studies. A hostile-response fixture injects prose grading, `%eval`,
+NAGs and annotated SAN while ignoring the request flags; none reaches the resolved import bytes.
+The licence note states that annotations were stripped.
+
+This closes the shipped Lichess URL boundary, not the manual-paste boundary in D959 and not a
+future broadcast-round adapter that does not yet exist. That adapter must reuse the same stripping
+boundary. During the preceding D428 pass, the archived RFC was found to have explicitly declined
+the required production-code choice; its missing successor is now concretely queued rather than
+implemented without an accepted contract.

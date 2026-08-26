@@ -85,7 +85,7 @@ export async function resolveImportSource(
     const timeout = setTimeout(() => controller.abort(), 10_000);
     try {
       const endpoint = new URL(`https://lichess.org/game/export/${normalized.gameId}`);
-      endpoint.search = "moves=true&tags=true&clocks=false&evals=false&opening=false&literate=false";
+      endpoint.search = "moves=true&tags=true&clocks=false&evals=false&opening=false&literate=false&comments=false";
       const response = await fetchImpl(endpoint, {
         headers: { Accept: "application/x-chess-pgn", "User-Agent": "chess-tabiya/own-game-import" },
         signal: controller.signal,
@@ -98,10 +98,10 @@ export async function resolveImportSource(
       }
       if (!response.ok) throw new ServerError("IMPORT_SOURCE_UNAVAILABLE", `Lichess export failed with HTTP ${response.status}`);
       return Object.freeze({
-        pgn: await response.text(),
+        pgn: stripPgnAnnotations(await response.text()),
         sourceKind: "lichess_url" as const,
         sourceUrl: normalized.url,
-        licenceNote: `no-rights-asserted: public lichess export ${normalized.url}; retrieved ${new Date().toISOString()}`,
+        licenceNote: `no-rights-asserted: public lichess export ${normalized.url}; annotations stripped; retrieved ${new Date().toISOString()}`,
       });
     } catch (error) {
       if (error instanceof ServerError) throw error;

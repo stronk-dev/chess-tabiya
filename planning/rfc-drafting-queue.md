@@ -2,6 +2,14 @@
 
 ## 2026-08-26 live amendment queue
 
+- **D428 — authoring issue-code successor.** The archived `dead-vocabulary` RFC explicitly
+  preferred a closed `PackIssueCode` but refused to choose it because production validation was
+  outside that RFC's scope. Its former “whichever RFC next owns it” route has no accepted
+  successor. Draft the narrow successor before changing `runtimeIssue`/`runtimeWarning`; it must
+  enumerate dynamic `PackCompileError` and assessment-admission codes as well as the literal call
+  sites, and extend the declaration census set-equal rather than adding a type-only union no reader
+  can walk.
+
 - **D1811 — flip `feedback-delivery` criterion 19 after D417.** The criterion deliberately
   asserted that integer percentages still escaped `CLAIM_READING_UNATTRIBUTED` and explicitly
   required its fixture to flip when D417 landed. D417 now refuses decimal, integer, numeric-word
