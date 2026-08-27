@@ -1,6 +1,7 @@
 # RFC: Semantic-convention shared-resource register
 
-- **Status:** draft — 2026-08-27; ready for independent process/buildability review
+- **Status:** draft — returned by independent process/buildability review 2026-08-27 on
+  [[D1917]]–[[D1919]]; [[D1920]] is the factual correction
 - **Author:** codex
 - **Created:** 2026-08-27
 - **Design refs:** none. This is repository process and changes no evidence meaning or learner UX.
@@ -185,8 +186,20 @@ None. This is process machinery over already-researched future product state.
 
 None. This document chooses no convention meaning or learner behavior.
 
+## Independent-review routing
+
+| finding | blocker | repair owner |
+|---|---|---|
+| [[D1917]] | full-ref claims do not serialize one base-id version lineage | author amendment |
+| [[D1918]] | member projection cannot enforce claimed semantic-byte immutability | author amendment |
+| [[D1919]] | initial seed is private/disposable rather than a durable checker authority | author amendment |
+| [[D1920]] | live resource count is seven before this RFC, not six | author correction |
+
 ## Changelog
 
+- 2026-08-27: independent review returned the draft on [[D1917]]–[[D1919]] and recorded the
+  [[D1920]] factual correction. Exact return:
+  `planning/semantic-convention-register/independent-buildability-review-2026-08-27.md`.
 - 2026-08-27: drafted from the executable 39-member D1722 census. Depends on the earlier
   assistance register for C9 and adds C10; specifies the empty-before-first-landing state so process
   machinery does not force illegal product implementation.

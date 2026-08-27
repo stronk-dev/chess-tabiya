@@ -10364,3 +10364,23 @@ continue another foundation dependency without implementing around it.
 - Exact return: `planning/assistance-config-register/independent-buildability-review-2026-08-27.md`.
 - Next: remove the claim-based drift exception, add crossed atomic-landing fixtures, repeat the
   focused review, then implement the register before v5/presets.
+
+## 2026-08-27 — Semantic-convention register returned on lineage and authority
+
+- Independently reviewed the process-only semantic-convention register and added a disposable
+  three-arm falsifier.
+- The exact-ref collision rule accepts simultaneous `space@2` and `space@3` claims, so one semantic
+  lineage has no sequential writer or per-id head ([[D1917]]).
+- The proposed tree reader erases definition, limitations, authority and disclosure, so it cannot
+  detect the same-version meaning rewrite its C10 prose claims ([[D1918]]). The identity register
+  must state that boundary honestly; the product RFC's durable previous-release authority owns the
+  semantic bytes.
+- The only machine-readable 39-member seed is a private constant inside a disposable research test,
+  while C10 specifies no durable import/parser and its file boundary names no seed artifact
+  ([[D1919]]).
+- Corrected by row, not in owner/product prose: seven resources are registered at HEAD, so semantic
+  conventions would be the eighth ([[D1920]]).
+- Exact return:
+  `planning/semantic-convention-register/independent-buildability-review-2026-08-27.md`.
+- Next: author amendment, repeat focused review, then implementation after the assistance register
+  predecessor lands.
