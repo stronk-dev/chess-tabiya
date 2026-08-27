@@ -1,7 +1,10 @@
 # RFC: Guided-hint disclosure distance
 
-- **Status:** draft — returned by the 2026-08-26 author buildability checkpoint on
-  [[D1638]]–[[D1643]]; this does not discharge independent D1 and implementation remains forbidden
+- **Status:** draft amended 2026-08-27 — technical returns [[D1638]], [[D1640]]–[[D1643]] are
+  repaired against the shared provider/execution draft, the candidate-packet authority and the
+  amended module/presentation contracts. [[D1639]] remains an explicit owner table awaiting
+  ruling; independent D1 and implementation remain forbidden until it is answered and the
+  dependency drafts pass their own reviews
 - **Author:** codex, amending claude's 2026-08-23 draft on the owner's [[D1061]] ruling and
   [[D1456]] product correction
 - **Created:** 2026-08-23; rebuilt 2026-08-26
@@ -14,8 +17,9 @@
   `design/research/hint-relation-safe-selection.md`, with the frozen receipt at
   `planning/evidence-foundation-ux/d1397-hint-relation-results.json`. The shared population is
   specified and Node-24-measured by `rfc/shared-candidate-evidence-packet.md` and [[D1579]].
-- **Depends on:** `rfc/shared-candidate-evidence-packet.md` (must be accepted and implemented
-  before this module may become default-on); the implemented F1 evidence contract; accepted
+- **Depends on:** amended `rfc/shared-candidate-evidence-packet.md` (must be accepted and implemented
+  before this module may become default-on); draft `rfc/provider-exchange-and-execution.md` for
+  same-exchange Stockfish execution, confidence and bounded scheduling; the implemented F1 evidence contract; accepted
   `rfc/learner-modules.md`; draft `rfc/module-registration.md`; implementing
   `rfc/intent-presets.md`
 - **Parent / amends:** amends `rfc/learner-modules.md` §4.8/A17,
@@ -106,28 +110,19 @@ export type HintFamily =
 
 export type HintRelation = "root_direct" | "root_followup_in_line";
 
-export interface ExactEvidenceOccurrenceRef {
-  readonly declaration: VersionedEvidenceId;
-  readonly occurrenceId: string;
-  readonly contentDigest: string;
-}
-
-export interface ExactSearchRef {
-  readonly declaration: VersionedEvidenceId; // live.stockfish.pv@1
-  readonly jobId: string;
-  readonly contentDigest: string;
-  readonly engine: { readonly name: string; readonly version: string };
-  readonly bound:
-    | { readonly kind: "movetime"; readonly requestedMs: number; readonly reachedDepth: number | null }
-    | { readonly kind: "depth"; readonly requestedDepth: number; readonly reachedDepth: number | null };
+export interface DeclaredEvidenceRef {
+  readonly producer: VersionedEvidenceId;
+  readonly projection: VersionedEvidenceId;
+  readonly evidenceDigest: string;
 }
 
 export interface HintHorizonOccurrence {
   readonly family: HintFamily;
   readonly sourceRole: "reading" | "predicate" | "event";
-  readonly search: ExactSearchRef;
-  readonly packetId: string;
-  readonly source: ExactEvidenceOccurrenceRef;
+  readonly search: ProviderExchangeReceipt;
+  readonly rootTableDigest: string;
+  readonly packetDigests: readonly string[];
+  readonly source: DeclaredEvidenceRef;
   readonly rootSide: "white" | "black";
   readonly edgeSide: "white" | "black";
   readonly relation: HintRelation;
@@ -139,10 +134,22 @@ export interface HintHorizonOccurrence {
 }
 ```
 
-`VersionedEvidenceId` names a declaration; `jobId`/`occurrenceId` and content digests name the
-bytes ([[D1365]]). The compiler rechecks the engine payload digest, search provenance, candidate
-packet id, semantic occurrence digest and edge anchor. Swapping two same-version PVs, two
-same-family occurrences or two packet ids is a typed refusal, not a cache miss treated as truth.
+The interface is descriptive output, not a public constructor input. `compileHintHorizon` accepts
+one `HintHorizonAuthority` containing the **actual sealed values**: an admitted
+`live.stockfish.legal_root_table@1` source with its same-exchange execution receipt; the selected
+literal root row/PV; one original sealed candidate-population view for every scanned PV node; and
+the original declared semantic occurrence retained by the owning packet. It also receives the
+root `{runId, branchId, nodeId, fen, eventHeadSeq}` from the server-owned run.
+
+The constructor asserts: root FEN/request equality; exact legal-root set equality; selected row
+reference membership; legal consecutive PV edges; packet FEN/path equality; original evidence
+reference ownership by the named packet; family/status/sign mapping; and root/edge side. Only then
+does it create a private `WeakSet`-sealed horizon and a `WeakMap` owner tuple over those exact
+authorities. `compileHintDisclosure` accepts only that sealed horizon. Literal/spread/JSON/double-
+asserted horizons, a correctly sealed occurrence rebuilt outside its packet, cross-generation root
+tables, same-version PV swaps, packet swaps and occurrence swaps all fail before disclosure
+([[D1640]]). Digests are receipts emitted *after* identity checks, never substitutes for the
+authorities being checked.
 
 The four non-event sources now have an exact referent. A **reading or predicate is evaluated at a
 specific legal PV edge** and `occurrencePly` names that evaluation edge; the RFC never relabels the
@@ -160,6 +167,38 @@ source projection as an event.
 
 The table's unit is **hint family**; total seven, asserted set-equal to D1397's frozen
 `contract.families`, never hand-counted as proof.
+
+#### §1.1 — The literal F1 derivation graph
+
+The implementation exports `HINT_DECLARATION_MATRIX`; it is the authority for every horizon and
+disclosure declaration, not documentation copied beside them. All horizons derive from the
+family source above **and** `live.stockfish.legal_root_table@1`. The mixed chain therefore declares
+the weakest input tuple exactly: `grounding: "declared_convention"`, `exactness: "measured"`,
+`confidence: "reported"`. It never relabels bounded search as proof. Every horizon declares the
+closed abstention union `input_abstained | no_admitted_occurrence | provider_unavailable |
+deadline_exceeded | queue_full | cancelled | invalid_response | identity_mismatch`; the operator
+receipt retains the more specific source abstention underneath `input_abstained`.
+
+| family | exact source answer image | horizon answer image | `pattern`/`square`/`piece`/`distance` image | `move` image |
+|---|---|---|---|---|
+| `mate_in_one` | `threat` | `threat`, `move` | `threat` | `threat`, `move` |
+| `forced_mate` | `candidate_moves` | `candidate_moves`, `move` | `candidate_moves` | `candidate_moves`, `move` |
+| `double_attack` | `threat` | `threat`, `move` | `threat` | `threat`, `move` |
+| `fork_survives_reply` | `threat` | `threat`, `move` | `threat` | `threat`, `move` |
+| `discovered_executed` | `fact`, `pattern`, `threat` | `fact`, `pattern`, `threat`, `move` | `fact`, `pattern`, `threat` | `fact`, `pattern`, `threat`, `move` |
+| `loose_piece` | `fact`, `threat` | `fact`, `threat`, `move` | `fact`, `threat` | `fact`, `threat`, `move` |
+| `promotion_pressure` | `fact` | `fact`, `move` | `fact` | `fact`, `move` |
+
+The table is executable data: each row supplies source projection, role/status, derivation inputs,
+grounding, exactness, confidence, abstention and each rung's answer image/forms. The implementation
+compiles it through the real F1 manifest compiler. Adding `pattern` to a mate row, `evaluation` to
+any row, `principal_variation` to any learner row, deleting a source input or claiming exact
+confidence is a must-fail widening fixture ([[D1641]]).
+
+The learner rung named **pattern** is disclosure-distance copy meaning “name the family before its
+geometry.” It is not `EvidenceAnswerContent.pattern`. Only `discovered_executed` has that answer
+token because only its admitted source declares it. Every other family label is rendered under its
+literal source answer image; a shared label must not manufacture a pattern claim.
 
 ### §2 — Relation and selection are literal
 
@@ -275,22 +314,33 @@ type HintDeliveryReceipt = {
   readonly version: 1;
   readonly requestId: string;
   readonly runId: string;
-  readonly branchId: string;
-  readonly nodeId: string;
-  readonly decisionId: string;
+  readonly decision: HintDecisionStamp;
   readonly rung: HintRung;
   readonly family: HintFamily;
   readonly projectionId: HintDisclosureProjectionId;
   readonly disclosureDigest: string;
   readonly manifestDigest: string;
   readonly rendered: {
-    readonly source: "deterministic" | "provider";
+    readonly source: "deterministic";
     readonly sentence: string;
+    readonly voice:
+      | { readonly state: "not_requested" }
+      | { readonly state: "rendered"; readonly sentence: string }
+      | {
+          readonly state: "fallback";
+          readonly reason: "provider_unavailable" | "deadline_exceeded" | "refused" | "invalid_output";
+        };
   };
   readonly marks: HintDeliveryMarks;
   readonly receiptDigest: string;
 };
 ```
+
+The deterministic rendered item remains the only evidence authority. A successful optional voice
+paraphrase is an additional checked presentation; the browser displays it only in the `rendered`
+arm. Every other voice state displays `rendered.sentence` byte-for-byte. Voice absence or failure
+therefore cannot turn an available chess hint into a source failure, and cannot suppress the hint
+([[D1638]]).
 
 `HintDeliveryMarks` is itself a rung-discriminated closed union derived from the same redacted
 packet: pattern has no board coordinates; square may name only the disclosed square set; piece may
@@ -330,12 +380,58 @@ The effective ceiling is the minimum of preset, workflow context, role/contest p
 Advanced preference. **Runtime source availability is not a ceiling term** ([[D1371]]). A request
 above policy yields `policy_refused`; an allowed request whose source abstains yields `honest_empty`.
 
-`HintRequestState` is client/session-ephemeral and keyed by
-`runId + branchId + nodeId + committedMoveCount`. It begins before `pattern`, advances exactly one
-rung per learner request, and resets on commit, rewind, branch/fork selection, node selection or run
-replacement. Refresh may reset to the first rung; no run-schema event is invented. The later
-longitudinal-store discharge may record requests for learning analytics, but it cannot change the
-live compiler.
+**D1639 owner table — proposed, not ruled.** The five preset defaults, eight context clamps and
+role/contest cells below are the smallest concrete table that makes the algebra implementable. The
+RFC remains draft until the owner confirms or changes it; neither `intent-presets` nor code may
+transcribe these candidates as decisions.
+
+| preset | proposed default/ceiling | reason |
+|---|---|---|
+| `quiet` | `off` | silence means silence |
+| `guided` | `distance` | useful consequence without revealing the move |
+| `theory_only` | `off` | theory remains a separate source/module |
+| `support` | `distance` | stronger help on request without default move disclosure |
+| `analysis` | `off` | the explicit Inspector/Review modules own raw analysis |
+
+| context | proposed maximum | reason |
+|---|---|---|
+| `position` | `move` | learner-owned free play may request the full ladder |
+| `pack` | `distance` | rehearsal protects the authored answer |
+| `imported` | `move` | historical review may reveal the played alternative |
+| `match` | `off` | no live contest assistance |
+| `stream` | `distance` | self-analysis is allowed but live move delivery is withheld |
+| `academy` | `distance` | relay remains a nudge, not an answer feed |
+| `onramp` | `move` | explicitly guided learning may reveal the final move on request |
+| `campaign` | `distance` | encounters protect the collected theory/module challenge |
+
+Proposed access cells: the acting `solo|host|participant` learner receives the preset/context
+minimum; a live `spectator` receives `off` from this learner-action module; a post-outcome reviewing
+grant may use the `imported`/Review contract; any seated rated or timed contest is `off`. Advanced
+or Custom may store any of `off|pattern|square|piece|distance|move`, but can never widen a context
+or access ceiling. This table answers “where can every primitive be configured?” without making
+ordinary learners operate the primitive panel.
+
+There is no `committedMoveCount` or run `revision` in `DrillRun` ([[D1643]], [[D1858]]). The server
+derives one exact decision stamp from bytes that do exist:
+
+```ts
+type HintDecisionStamp = {
+  readonly eventHeadSeq: number;
+  readonly cursor: { readonly branchId: string; readonly nodeId: string };
+  readonly disclosureBoundarySeq: number | null;
+  readonly digest: string;
+};
+```
+
+`eventHeadSeq` is the last contiguous run event, `cursor` is `activeCursor`, and
+`disclosureBoundarySeq` names the exact currently open checkpoint/disclosure occurrence or `null`.
+The digest covers `runId` plus those fields in canonical JSON. Returning to the same node after a
+commit, rewind or fork is therefore a different decision. `HintRequestState` is client/session-
+ephemeral and keyed by that digest. It begins before `pattern`, advances exactly one rung per
+learner request, and resets whenever the recomputed digest changes or the run is replaced. Refresh
+may reset to the first rung; no run-schema event or parallel revision counter is invented. The
+later longitudinal-store discharge may record requests for learning analytics, but it cannot
+change the live compiler.
 
 The client sends the explicit computed rung so the server can validate it; the public control says
 **Hint** and then **A little more**, never “stage 2,” “PV,” “semantic event” or a producer name.
@@ -366,7 +462,7 @@ The implementing change owns this exact path:
 ```text
 GuidedHintSeat.svelte
   → RunState.requestHint(nodeId, rung)
-  → ApiClient.hint(runId, {nodeId, rung}, writerId)
+  → ApiClient.hint(runId, {nodeId, rung, decisionDigest}, writerId)
   → POST /runs/:runId/hints
   → DrillRunService.hint(...)
   → injected CandidatePopulationService
@@ -386,19 +482,44 @@ type HintResponse =
   | { readonly state: "pending"; readonly requestId: string; readonly rung: HintRung }
   | { readonly state: "available"; readonly delivery: HintDeliveryReceipt }
   | { readonly state: "honest_empty"; readonly rung: HintRung; readonly reason: HintEmptyReason }
+  | { readonly state: "source_unavailable"; readonly rung: HintRung; readonly reason: ProviderSourceReason }
   | { readonly state: "policy_refused"; readonly rung: HintRung; readonly reason: HintPolicyReason }
-  | { readonly state: "provider_off"; readonly rung: HintRung };
+  | { readonly state: "failed"; readonly rung: HintRung; readonly reason: HintFailureReason }
+  | { readonly state: "stale" | "cancelled"; readonly requestId: string; readonly rung: HintRung };
 ```
 
-`pending` polls the existing evidence page/job mechanism and recompiles when the exact job resolves;
-it never returns a placeholder move. `honest_empty` offers the product loop: play and inspect the
-consequence, rewind, or try another branch. It is not an invitation for the LLM to invent help.
+The protocol is closed and idempotent:
+
+1. `POST /runs/:runId/hints` receives `{ nodeId, rung, decisionDigest }`. The server recomputes the
+   decision stamp, active writer, disclosure boundary, effective ceiling and module availability;
+   caller-supplied policy bytes are forbidden.
+2. The request id is a deterministic digest of run decision, rung, manifest/compiler digests and
+   provider-source generation. Repeating the same POST joins the same queued/resolved operation;
+   it cannot enqueue a duplicate.
+3. `GET /runs/:runId/hints/:requestId` polls that exact operation. Before every response and before
+   publication, the server recomputes the decision stamp. A mismatch returns `stale`; the client
+   also compares the receipt stamp and never renders a late result.
+4. `DELETE /runs/:runId/hints/:requestId` removes this waiter and cancels queued work; the shared
+   provider scheduler aborts active work when its final subscriber leaves. A run/cursor/boundary
+   change triggers this cancellation from the client, but server-side stale refusal is still the
+   authority.
+5. The queue is deliberately process-local. After restart an unknown request id makes the client
+   re-POST the same decision/rung; deterministic identity either recreates the operation or finds a
+   retained exact provider exchange. No persisted request schema is invented.
+
+`pending` never returns a placeholder move. `honest_empty` means the available exact inputs yielded
+no admitted occurrence and offers the product loop: play and inspect the consequence, rewind, or
+try another branch. `source_unavailable` means Stockfish/search execution could not supply the
+required input while theory/structure modules remain independently available. `failed` is reserved
+for a typed contract/internal failure and is never presented as “safe” or “no hint.” None is an
+invitation for the LLM to invent help.
 
 The route validates active writer, node/branch identity, open disclosure boundary, effective
 ceiling and module availability. Its response parser rejects extra fields, identity/rung mismatch,
 unknown disclosure projection, or a receipt-digest mismatch; it never asserts an F1 seal across
 JSON. The API, run state and seat each have a focused contract test; one browser test traverses
-button → pending → available for every rung and pending → honest-empty.
+button → pending → available for every rung plus honest-empty, source-unavailable, cancellation,
+restart/re-POST and a late stale result after commit/rewind/fork.
 
 ### §8 — Rated play is guarded at the capability boundary
 
@@ -431,11 +552,18 @@ readonly disclosure?: {
 Only `guided_hint` may declare it; `guided_hint` must declare it; every accepted projection must be
 one exact member of `HINT_DISCLOSURE_PROJECTION_IDS`; every row must declare its exact
 `answerContent`; and `compileModuleRegistry` checks projection → family/rung registry → disclosure
-image → requested rung → effective ceiling. Omission is a compile error. Other modules keep their
-existing answer ceilings unchanged.
+image → requested rung → effective ceiling. Omission is a compile error.
 
-`guided_hint`'s module answer ceiling becomes `move`, its raw PV/tablebase/authored/endgame accepts
-rows are removed, and its literal precedence is the ordered disclosure registry. The module may
+This RFC consumes `module-registration`'s branched `ModuleAnswerCapability`, not the nonexistent
+singular `ModuleAnswerCeiling="move"` from the returned draft ([[D1642]]). Guided Hint declares the
+exact capability union `observation | pattern | threat | candidates | move`; compilation requires
+that union's answer image to equal the union of §1.1's disclosure rows. The `move` capability maps
+only to `fact + move` ([[D1859]]), so it cannot grant `ranked_moves`; no Hint row declares
+evaluation, theory, principle, plan, ranking or principal variation. Other modules declare their
+own independent branches.
+
+Its raw PV/tablebase/authored/endgame acceptance rows are removed, and its literal precedence is
+the ordered disclosure registry. The module may
 render at checkpoint/post-commit disclosure boundaries only. A `move` rung at `pre_commit` or
 `at_commit` fails compilation; lower pre-commit availability, if a future context proposes it,
 requires a separate owner ruling and RFC amendment rather than falling through this grammar.
@@ -451,7 +579,9 @@ After both RFCs are implemented, a Node-24 production-boundary harness measures:
 
 - cold request → pending/available;
 - warm packet + warm PV → rendered deterministic item;
-- provider off → `provider_off` while theory/structure modules still render;
+- Stockfish/source off → `source_unavailable` while theory/structure modules still render;
+- optional voice off/timeout/refusal → the same available hint with byte-identical deterministic
+  sentence and typed fallback provenance;
 - honest-empty selector;
 - all five rung payload sizes and browser paint.
 
@@ -477,8 +607,10 @@ as default-on on inherited D1066 timings; the integrated receipt is an implement
 1. **Measured registry equality.** The seven internal horizon ids are set-equal to D1397's frozen
    family list; every source role/status row matches §1. A changed family, sign or relation requires
    a new preregistered receipt. Negative: the old D1066 list fails equality.
-2. **Exact occurrence identity.** Same-version PV/occurrence swaps, altered packet id, engine bound
-   or content digest all fail before selection.
+2. **Exact occurrence identity.** The horizon compiler accepts the actual sealed root table, row/PV,
+   packet views and retained occurrence. Literal/spread/JSON/double-asserted horizons, same-version
+   PV/occurrence swaps, rebuilt occurrences, packet swaps and cross-generation search values all
+   fail before selection; changing only matching digest strings cannot make any fixture pass.
 3. **Perspective safety.** All 150 frozen occurrences classify exactly; 78 opponent occurrences
    produce zero guided-hint admissions. Higher-precedence opponent synthetic fixtures cannot change
    selection.
@@ -491,32 +623,39 @@ as default-on on inherited D1066 timings; the integrated receipt is an implement
 7. **Five sealed byte images.** Serialised packets are exactly cumulative as §3 states. Every
    higher-field sentinel is absent from every lower packet; object literals, spreads, JSON
    round-trips and double assertions fail the runtime seal.
-8. **Exact disclosure registry.** Per-family/per-rung projections and registered renderers are
-   set-equal. Removing one or adding a generic/wildcard projection fails manifest/module closure.
+8. **Exact declaration and disclosure registry.** `HINT_DECLARATION_MATRIX` compiles through the
+   real F1 compiler with §1.1's source, grounding, exactness, confidence, abstention, answer and form
+   tuples. Per-family/per-rung projections and renderers are set-equal. Removing one, widening one,
+   or adding a generic/wildcard projection fails manifest/module closure.
 9. **One rendered authority.** Deterministic text, external provider input and `voiceCheck` derive
    from the same one-item redacted view. A provider cannot name an absent square/move, a different
-   move, a judgement or a recommendation; provider-off bytes equal deterministic bytes.
+   move, a judgement or a recommendation. Voice-off/timeout/refusal keeps the response `available`,
+   records typed fallback provenance and displays deterministic bytes exactly.
 10. **Ceiling versus availability.** Above-ceiling requests return `policy_refused`; an allowed
-    request with no source returns `honest_empty` or `provider_off`. Neither silently downgrades or
-    disables theory/structure modules.
-11. **Per-decision progression.** Hint/A-little-more advances one rung and every named decision
-    boundary resets. The ordinary run UI contains no rung/source select; Advanced exposes the
-    ceiling.
+    request with available sources but no selected occurrence returns `honest_empty`; absent search
+    returns `source_unavailable`. Neither silently downgrades or disables theory/structure modules.
+11. **Per-decision progression.** Hint/A-little-more advances one rung for an exact decision-stamp
+    digest. Commit, rewind, fork, cursor/boundary change and a return to the same node after another
+    event reset it. The ordinary run UI contains no rung/source select; Advanced exposes the ceiling.
 12. **Production closure and trust boundary.** Browser → run state → client → REST → service →
     injected population service → selector → disclosure compiler → admitted module → server-local
     renderer/voice check → delivery-receipt compiler → same seat passes for all five rungs,
-    pending, provider-off, honest-empty and policy-refused. Deleting any link fails a
-    consumer-operation test. Serializing a `RenderedEvidenceView`, accepting a malformed receipt,
-    adding a higher-rung byte to a lower-rung receipt, or claiming a browser-side F1 seal fails.
+    pending, source-unavailable, voice fallback, honest-empty and policy-refused. Idempotent POST,
+    GET poll, DELETE cancellation, restart/re-POST and a late result after commit/rewind/fork are
+    exercised. Deleting any link fails a consumer-operation test. Serializing a
+    `RenderedEvidenceView`, accepting a malformed receipt, adding a higher-rung byte to a lower-rung
+    receipt, or claiming a browser-side F1 seal fails.
 13. **Rated boundary.** Open-rated direct enqueue, analysis, hint request and cached-horizon paths
     all fail before bytes/job creation; post-outcome Review succeeds.
 14. **No optional answer bypass.** Every guided-hint acceptance row declares exact answer content;
-    deleting it or presenting an internal horizon as a module item fails `compileModuleRegistry`.
+    the module's branched capability image equals their union and grants no rank/eval/theory/PV
+    answer. Deleting an answer, making `move` imply ranking, or presenting an internal horizon as a
+    module item fails `compileModuleRegistry`.
 15. **Shared service only.** A hint and another injected consumer hit one process-local packet
     service; a request-local cache constructor is refused.
 16. **Integrated latency.** The Node-24 receipt records the §10 arms and clears both budgets before
-    any preset makes the module default-on. Provider-off does not delay or suppress independent
-    theory/structure rendering.
+    any preset makes the module default-on. Search-source absence and optional voice absence are
+    measured independently; neither delays or suppresses independent theory/structure rendering.
 17. **CI parity.** Node-24 `make verify`, focused server/web tests, browser content/composed journey,
     `status-parity`, `register-check`, `work-index`, roadmap receipt and `git diff --check` pass on
     committed bytes. No content-coverage census is misclassified as a unit-test failure.
@@ -528,6 +667,11 @@ as default-on on inherited D1066 timings; the integrated receipt is an implement
     exercises every allowed literal plus missing/extra/unknown values; v1-v4 each migrate with
     `hintDistance: "off"`, and a non-off v5 round-trips through the real preference store. Adding a
     field/domain member to the registered type without codec support fails.
+20. **Owner ceiling table ([[D1639]]).** The owner-ratified five-preset, eight-context and
+    role/contest cells are mirrored byte-identically into this RFC and `intent-presets`. Every one
+    of the 40 preset×context combinations compiles by minimum; rated/timed live assistance is off;
+    Advanced can select all six stored values but cannot widen policy. This criterion is RED while
+    §5 remains labelled proposed.
 
 ## Discharges
 
@@ -537,9 +681,9 @@ as default-on on inherited D1066 timings; the integrated receipt is an implement
 | D2 | Shared candidate packet accepted and implemented with injected service | `shared-candidate-evidence-packet` | implementing SHA | |
 | D3 | Horizon/disclosure registries, selector, seals, renderers and module compiler amendment | codex | implementing SHA + docs | |
 | D4 | REST/service/client/store/seat production path and rated common-boundary guard | codex | implementing SHA + E2E receipt | |
-| D5 | `intent-presets` v5 projection and explicit per-context ceiling cells | `intent-presets` | its amendment/implementation SHA | |
+| D5 | Owner-ratified D1639 table mirrored into `intent-presets` v5 projection and explicit per-context/role ceiling cells | OWNER + `intent-presets` | dated ruling + amendment/implementation SHA | |
 | D6 | Module-registration accepts/precedence/count amendment from horizon ids to disclosure ids | `module-registration` | its amendment/implementation SHA | |
-| D7 | Node-24 integrated latency/provider-off/browser receipt | codex | immutable result artifact | |
+| D7 | Node-24 integrated latency, source-unavailable, independent voice-fallback and browser receipt | codex | immutable result artifact | |
 | D8 | Durable hint-request analytics, if retained | `longitudinal-store` | its module-delivery projection; not required for live function | |
 | D9 | Owner device/use verdict | OWNER | dated validation record | |
 | D10 | AssistanceConfig shared-resource register gap [[D1581]] | codex | accepted process RFC/check | |
@@ -548,9 +692,11 @@ as default-on on inherited D1066 timings; the integrated receipt is an implement
 
 ## Open questions
 
-None block independent review. The engine-semantic selector, per-decision request behavior,
-Advanced ceiling, source separation and theory-only composition are already ruled or measured.
-Preset names/composition remain `intent-presets`' owner-use validation, not choices for this RFC.
+**D1639 blocks independent review:** confirm or change §5's proposed five preset ceilings, eight
+context maxima and role/contest cells. The technical compiler, source separation, decision protocol
+and theory-only composition are specified; those values are product intent and are not inferred
+from the implementation. Preset labels and promise copy remain `intent-presets`' separate owner-use
+validation.
 
 ## Changelog
 

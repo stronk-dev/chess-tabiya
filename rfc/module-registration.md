@@ -2,7 +2,8 @@
 
 - **Status:** draft amended 2026-08-27 — the 2026-08-26 independent return on
   [[D1585]]–[[D1591]] and follow-up [[D1689]]–[[D1694]] executable closures are applied;
-  the author repair additionally closes the invalid F1 eligibility/policy joins [[D1854]]/[[D1855]];
+  the author repair additionally closes the invalid F1 eligibility/policy joins [[D1854]]/[[D1855]]
+  and the invented revision/ranking widenings [[D1858]]/[[D1859]];
   ready for repeat buildability review. Acceptance remains blocked on the shared Explorer source
   and move-free summary projection, the sealed component wire, and the final measured Guided Hint
   disclosure registry rather than on an invented compatibility path. Prior
@@ -547,15 +548,16 @@ const MODULE_ANSWER_CAPABILITY_IMAGE = {
   evaluation: ["fact", "evaluation"],
   candidates: ["fact", "candidate_moves"],
   ranked_candidates: ["fact", "candidate_moves", "ranked_moves"],
-  move: ["fact", "candidate_moves", "ranked_moves", "move"],
+  move: ["fact", "move"],
   principal_variation: ["fact", "candidate_moves", "ranked_moves", "move", "principal_variation"],
 } as const;
 ```
 
 `ModuleAnswerContract` declares a non-empty literal union of capabilities (or `none` for
 `rules_floor`); compilation unions their images. Theory refuses evaluation, evaluation refuses
-theory/principle/plan, and move-bearing capabilities imply no theory or evaluation unless the
-module declares those branches separately. Each module declares exactly the branches its accepted
+theory/principle/plan, and the `move` branch implies neither candidate ranking nor theory or
+evaluation ([[D1859]]). A module that ranks and names a move declares both `ranked_candidates` and
+`move`; Guided Hint may declare a literal move without silently gaining `ranked_moves`. Each module declares exactly the branches its accepted
 projection union needs; the compiler asserts set equality rather than relying on a hand-written
 singular label in §1.1. Sight's 22 rows derive exactly `fact + pattern`, with
 `rook_on_seventh` as the sole pattern witness.
@@ -656,10 +658,18 @@ type ModuleQueryRequest =
   | { timing: "review"; nodeId?: string };
 ```
 
-The server resolves the run/branch/revision and effective module set; caller-supplied role,
-session, preset, permissions, evidence, source status and seat are forbidden. It returns a closed
-`ModuleQueryPage` carrying `{ runId, branchId, revision, subjectNodeId, timing, generation?,
-effectiveConfigDigest, packets }`. Each packet carries module id, timing, budget receipt,
+The server resolves the run, branch, exact **decision stamp** and effective module set;
+caller-supplied role, session, preset, permissions, evidence, source status and seat are forbidden.
+There is no invented run revision ([[D1858]]). The stamp is derived from existing authoritative
+bytes as `{ eventHeadSeq, cursor: { branchId, nodeId }, disclosureBoundarySeq }`, where
+`eventHeadSeq` is the last event's contiguous `seq` and `disclosureBoundarySeq` is the exact open
+boundary occurrence or `null`. Its canonical digest is recomputed by the server for every request.
+A rewind, fork, branch/node change, disclosure close or a return to the same node after another
+event therefore produces a different stamp.
+
+The route returns a closed `ModuleQueryPage` carrying `{ runId, decision, subjectNodeId, timing,
+generation?, effectiveConfigDigest, packets }`; `decision` contains the stamp fields and digest.
+Each packet carries module id, timing, budget receipt,
 `noveltyAbstained`, typed empty state and the sealed-component wire items owned by
 `evidence-presentation`. F1 brands are process-local and do not cross JSON; the server serializes
 only after brand assertions and the client accepts only the strict component parser. Extra fields,
@@ -670,8 +680,10 @@ Post-commit ordering is load-bearing: `DrillSessionController.move` receives the
 `MutationResult.run`, queries with the learner `subjectNodeId` from that result, and only then calls
 `#playOpponentIfNeeded`. Querying the active cursor afterwards would describe the automatic reply.
 Pre-commit and checkpoint calls occur only on the explicit selection/hint gesture; Review queries
-on surface load and replay selection. The cache key is the complete request plus run revision and
-effective-config digest. A mutation, rewind/fork, selection generation, disclosure close or source
+on surface load and replay selection. The cache key is the complete request plus decision-stamp
+digest and effective-config digest. Before publishing an asynchronous result, the server and
+client both compare the current stamp with the request stamp; a late result is a typed stale result
+and never renders. A mutation, rewind/fork, selection generation, disclosure close or source
 availability change invalidates the relevant entry.
 
 #### 2.6 Steps 5–6 — seat, client side
@@ -1000,8 +1012,9 @@ is a maximum, never a request to fill the board.
    reading of F1's bound-or-disposed law for a module that consumes interaction affordances rather
    than evidence. The compiler already requires this shape for `rules_floor` alone
    (`module-contract.ts:159,179`); this RFC declares it explicitly rather than by omission.
-2. **`ModuleAnswerCeiling` gains three members, `ModuleAcceptanceDeclaration` gains one field,
-   and `ModuleAnswerContract` gains the closed Guided Hint disclosure member** (§2.3). These are
+2. **The singular `ModuleAnswerCeiling` is replaced by branched `ModuleAnswerCapability`,
+   `ModuleAcceptanceDeclaration` gains one field, and `ModuleAnswerContract` gains the closed
+   Guided Hint disclosure member** (§2.3). These are
    catalog-local union/interface extensions, register-silent, and follow the
    precedent `learner-modules` §2 set when it added `at_commit` to the shipped `EvidenceTiming`
    union in the same change that landed its consumers. Neither is a design-tier change:
@@ -1157,8 +1170,8 @@ defect class here ([[D444]]/[[D984]]/[[D1274]]), so each carries its falsifier.
 19. **A19 — The module operation is closed end to end.** One production-boundary matrix traverses
     authenticated route → `RunService.queryModules` → strict request parser → module compiler and
     reducer → strict sealed-component response parser → occupied seat for every timing arm. It
-    proves provider-off and honest-empty states, a post-commit packet bound to the learner's new
-    node before the automatic reply, revision/config/generation invalidation, and rejection of
+    proves source-unavailable and honest-empty states, a post-commit packet bound to the learner's new
+    node before the automatic reply, decision-stamp/config/generation invalidation, and rejection of
     extra fields, caller-supplied authority, unknown components and foreign subject nodes.
     **RED at HEAD:** the route, service operation and client parser/store do not exist, so no
     module id can reach a seat.

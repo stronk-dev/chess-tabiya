@@ -10074,3 +10074,22 @@ closed in the pass. The RFC remains unaccepted and splits landing into a real cu
 checkpoint followed by module/hint/arrow composition; neither empty coverage nor plain-JSON
 compatibility can satisfy it. Re-derived the live manifest at 37/193/25/210 and `make schema-check`
 green. Next: repeat independent buildability review while work continues on other lawful 1.0 nodes.
+
+## 2026-08-27 — Guided Hint technical return repaired; owner ceiling table isolated
+
+Amended `rfc/hint-distance.md` on D1638/D1640–D1643. The operator horizon now accepts and retains
+the actual sealed Stockfish root table, selected PV row, candidate-packet views and source
+occurrence instead of trusting digest strings. One literal seven-family declaration matrix owns
+the mixed F1 derivations and refuses pattern/ranking/evaluation/PV widening. Optional voice
+failure preserves the deterministic available hint while search absence is a separate typed
+state. Existing run bytes now derive one event-head/cursor/disclosure-boundary stamp for
+idempotent POST/poll/cancel/restart and stale-result refusal; no fictional run revision or
+committed-move counter is introduced.
+
+The cross-document pass found [[D1858]] (module query invented that same run revision) and
+[[D1859]] (the nominally branched `move` capability also granted ranked moves); both RFC contracts
+are corrected before implementation. [[D1639]] is deliberately not guessed: the document now
+contains a concrete proposed five-preset/eight-context/role table and an able-to-fail criterion,
+but remains draft until the owner confirms or changes those product values. Next: governance and
+roadmap receipts, then continue repairing the shared candidate-packet prerequisite while the owner
+ceiling ruling remains isolated.
