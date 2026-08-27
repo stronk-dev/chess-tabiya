@@ -10037,3 +10037,13 @@ join contract locally exactly as CI would: expected 200, received 404. The fixtu
 therefore crossed expiry on 2026-08-27. [[D1853]] binds both components to one injected clock. The
 repair changes no production expiry rule and keeps the public page, wrong-redeemer, one-use and
 exhaustion assertions intact.
+
+## 2026-08-27 — shared provider/execution RFC drafted
+
+Converted the measured D1652–D1658 and D1699–D1709 author-repair handoffs into
+`rfc/provider-exchange-and-execution.md`. The draft keeps F1 execution paths, reported-confidence
+inheritance, Stockfish/Maia/Syzygy/Explorer receipts and one bounded scheduler in a shared
+foundation while refusing private collector adapters or learner-facing semantics. It is not
+accepted and no product implementation is authorised until an independent buildability review
+rechecks the literal operations and able-to-fail fixtures against HEAD. Next: run governance, then
+route the draft for independent review while continuing only already-accepted foundation work.
