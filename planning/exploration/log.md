@@ -10093,3 +10093,23 @@ contains a concrete proposed five-preset/eight-context/role table and an able-to
 but remains draft until the owner confirms or changes those product values. Next: governance and
 roadmap receipts, then continue repairing the shared candidate-packet prerequisite while the owner
 ceiling ruling remains isolated.
+
+## 2026-08-27 — shared candidate-packet return repaired across bots, hints and Review
+
+Amended `rfc/shared-candidate-evidence-packet.md` on D1631–D1636. The factual population remains
+complete in insufficient-material, fifty-move and repetition states; only checkmate/stalemate own
+zero rows. Packet, provider and final-policy caches now carry separate complete identities, keeping
+Maia history/model/generation above the provider-free packet. The implementation surface names the
+actual semantic-selection and candidate-feature operations, `OpponentSelector` consumption,
+application injection, cancellation and the bounded final cache rather than stopping at manifest
+anchors.
+
+The F1 tuple now compiles three scope-discriminated `anyOf` members over one legal-move authority,
+the complete event closure and the complete 20+2 reading closure; legal exchange and fork survival
+cannot disappear during migration. The engine seam retains reusable White-perspective evidence and
+derives explicit root-side cp/mate comparison and loss, including Black roots and mixed-domain
+abstention. The pass found [[D1860]]: that node-free Stockfish source was outside the newer shared
+provider catalogue, so `provider-exchange-and-execution` now owns it as its fifth typed operation
+on the same scheduler/receipt. Both RFCs remain draft pending repeat independent review. Next:
+verify governance/roadmap receipts, checkpoint these amendments, then continue the next lawful 1.0
+dependency without waiting on the separate Guided Hint owner table.

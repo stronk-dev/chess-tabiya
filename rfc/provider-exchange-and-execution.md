@@ -1,7 +1,8 @@
 # RFC: Provider exchange and projection execution
 
-- **Status:** draft 2026-08-27 — shared F1/provider foundation assembled from the four-provider
-  contract-closure dossiers; ready for independent buildability review before acceptance.
+- **Status:** draft amended 2026-08-27 — shared F1/provider foundation assembled from the
+  four-provider contract-closure dossiers; [[D1860]] adds the reusable fifth typed operation,
+  Stockfish fixed-bound position evaluation, before independent buildability review.
 - **Author:** codex, from the D1652–D1658 and D1699–D1709 author-repair handoffs
 - **Created:** 2026-08-27
 - **Design refs:** `design/03-product-breadth.md` evidence architecture and provider-backed
@@ -268,6 +269,40 @@ The engine execution boundary returns the actual engine identity, generation, re
 output digest and UCI bytes from the same serialized task. Existing health remains health; it is
 not exchange provenance.
 
+#### 5.1 Fixed-bound position evaluation
+
+`StockfishPositionEvaluationOperation.execute(request, signal)` is the second Stockfish operation,
+not a private candidate-packet adapter ([[D1860]]). It uses the same scheduler, engine execution
+boundary, generation and receipt constructor as the legal-root table:
+
+```ts
+type FixedBoundPositionScore =
+  | { readonly kind: "centipawns"; readonly value: number }
+  | { readonly kind: "mate"; readonly side: "white" | "black"; readonly distance: number; readonly unit: "moves" };
+
+interface FixedBoundPositionEvaluation {
+  readonly fen: string;
+  readonly positionKey: string;
+  readonly perspective: "white";
+  readonly score: FixedBoundPositionScore;
+  readonly engine: { readonly id: string; readonly name: string; readonly version: string };
+  readonly bound:
+    | { readonly kind: "movetime"; readonly requestedMs: number; readonly reachedDepth: number | null }
+    | { readonly kind: "depth"; readonly requestedDepth: number; readonly reachedDepth: number | null }
+    | { readonly kind: "nodes"; readonly requestedNodes: number; readonly reachedDepth: number | null };
+  readonly receipt: ProviderExchangeReceipt;
+}
+```
+
+The normalized request key is exact canonical six-field FEN plus engine/version/generation, bound,
+command digest and timeout. The operation parses exactly one completed score, rejects bound/NaN/
+missing/zero-distance mate output, and converts the engine's declared side-to-move score to the
+named White frame using the FEN turn. Both White- and Black-to-move cp/mate fixtures assert the
+conversion. `live.stockfish.position_eval@1` is
+`search/source_record`, `bounded_search/measured/reported`, answers evaluation, and carries no node,
+best move, PV, rank, loss, grade or recommendation. Bot and Review derive their own frames from this
+one source; neither opens a second engine request path.
+
 ### 6. Maia policy-page source and run occurrence
 
 ```ts
@@ -360,15 +395,15 @@ rendering, provider input, voice allow-list or wire.
 
 ### 9. Composition and operations
 
-`apps/server/src/application.ts` constructs one scheduler and the four operations. The application
+`apps/server/src/application.ts` constructs one scheduler and the five operations. The application
 does not re-declare evidence semantics. Each operation has one real operator/research traversal
 before any learner binding is added:
 
 | operation unit | total | required traversal |
 |---|---:|---|
-| typed provider operations | 4 | Stockfish legal roots, Maia policy page, Syzygy position, Explorer page |
+| typed provider operations | 5 | Stockfish legal roots, Stockfish fixed-bound position evaluation, Maia policy page, Syzygy position, Explorer page |
 | shared scheduler composition | 1 | application root with explicit bounds and source health inputs |
-| raw source adapters | 4 | exact projection declaration through `declareEvidence` adapter |
+| raw source adapters | 5 | exact projection declaration through `declareEvidence` adapter |
 | migration operations | 3 | Maia run occurrence, Explorer summary, Explorer played occurrence |
 
 The operation census resolves exported callables from the application composition through to each
@@ -384,7 +419,7 @@ Implementation is one reviewable RFC but lands in guarded commits in this order:
 2. compile path-preserving execution metadata and migrate the four confidence declarations plus
    ten current transitive-provider bindings;
 3. expose path satisfiability through `/capabilities` and its web type;
-4. add the bounded scheduler, same-exchange receipts and four typed source operations;
+4. add the bounded scheduler, same-exchange receipts and five typed source operations;
 5. migrate the current Maia/Explorer/Syzygy/Stockfish callers without changing learner semantics;
 6. prove operator traversals and retire duplicated authorities only at zero consumers;
 7. close only the rows actually discharged and archive with BACKLOG plus exploration-log closeout.
@@ -414,10 +449,12 @@ learner-facing explanation.
 5. Runtime capabilities suppress only unsatisfied paths. Recorded and live alternatives remain
    distinct; source absent, cached/recorded, outside-domain, honest-empty and refuted are not
    interchangeable.
-6. All four provider payload declarations match §§5–8 literally and compile through F1 with no
+6. All five provider payload declarations match §§5–8 literally and compile through F1 with no
    second hand-written execution image.
 7. Stockfish positives cover ordinary play, both castling identities and four promotions. Missing,
-   duplicate, extra, equal-count replacement and short-depth tables fail.
+   duplicate, extra, equal-count replacement and short-depth tables fail. Fixed-bound evaluation
+   separately covers White/Black cp and mate orientation, zero/non-integral mate distance,
+   generation/bound mismatch and same-exchange receipt identity.
 8. Maia positives cover history-conditioned and exact-FEN requests. Same FEN/different history,
    model, band, temperature, top-p or width cannot alias; identity/generation mismatch fails.
 9. Syzygy direct and queue-backed probes use the same constructor; same body/different FEN and
@@ -434,7 +471,7 @@ learner-facing explanation.
 13. The Explorer move sentinel cannot reach theory, deterministic text, voice allow-list, provider
     input or wire; raw provider rows are refused by grade, recommendation, theory and personality
     consumers.
-14. An application/source census names four real callable operations, one shared scheduler
+14. An application/source census names five real callable operations, one shared scheduler
     composition and the three migration operations in §9. Removing any callable fails the census.
 15. `make evidence-manifest-check`, `make semantic-evidence-check`, server/runtime/web typechecks,
     focused provider tests, `make verify-software` and `make verify-governance` pass on committed
@@ -468,5 +505,8 @@ returns to author instead of accepting a placeholder.
 
 ## Changelog
 
+- 2026-08-27: [[D1860]] registered `live.stockfish.position_eval@1` and its fixed-bound operation
+  beside the legal-root table so candidate bots and Review consume the same scheduler, engine
+  generation and same-exchange receipt instead of creating a private Stockfish authority.
 - 2026-08-27: created from the independently measured F1, bounded-target, promotion-race and
   Explorer contract closures.
