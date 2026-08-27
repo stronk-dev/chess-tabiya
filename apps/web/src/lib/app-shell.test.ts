@@ -511,6 +511,7 @@ describe("application shell", () => {
       rotationCursor: 0,
       createdBy: "learner-a",
       createdAt: "2026-08-27T09:00:00.000Z",
+      classroom: { id: "classroom-wall", name: "Thursday endgames" },
       board: {
         activeFen: run.nodes[0]!.fen,
         objectiveState: "active",
@@ -542,6 +543,8 @@ describe("application shell", () => {
       return candidate!;
     });
     expect(card.textContent).toContain("@student-black to move");
+    expect(card.textContent).toContain("Classroom: Thursday endgames");
+    expect(card.textContent).toContain("Match session · Two players share the match board");
     expect(card.textContent).toContain("paused since");
     expect(card.textContent).toContain("Objective state: active");
     expect(card.textContent).toContain("Last move");
@@ -576,6 +579,7 @@ describe("application shell", () => {
         createdBy: "learner-host",
         createdAt: "2026-08-27T11:00:00.000Z",
       },
+      classroom: { id: "classroom-one", name: "Endgame club" },
       role: "host",
       activeNodeId: "node-one",
       leaseHeldBy: { learnerId: "learner-host", handle: "coach" },
@@ -605,6 +609,9 @@ describe("application shell", () => {
     });
 
     await vi.waitFor(() => expect(document.body.textContent).toContain("proposed by @student"));
+    expect(document.body.textContent).toContain("Classroom: Endgame club");
+    expect(document.body.textContent).toContain("Academy lesson");
+    expect(document.body.textContent).toContain("rewind, branch, compare, and return without discarding the original line");
     expect(document.querySelector("[aria-label='Move proposals']")?.textContent).toContain("e2e4");
     const play = [...document.querySelectorAll<HTMLButtonElement>("button")].find((button) => button.textContent === "Play proposal")!;
     play.click();

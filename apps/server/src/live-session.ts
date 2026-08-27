@@ -49,6 +49,14 @@ export class LiveSessionService {
     this.#now = options.now ?? (() => new Date().toISOString());
   }
 
+  #classroomIdentity(session: LiveSession, principal: Principal): { readonly id: string; readonly name: string } | undefined {
+    if (session.classroomId === undefined) return undefined;
+    const membership = this.#storage.classroomMember(session.classroomId, principal.learnerId);
+    if (membership?.state !== "active") return undefined;
+    const classroom = this.#storage.classroom(session.classroomId);
+    return classroom === undefined ? undefined : Object.freeze({ id: classroom.id, name: classroom.name });
+  }
+
   create(principal: Principal, input: {
     readonly runId: string; readonly kind: SessionKind; readonly title: string;
     readonly boardControl?: BoardControl; readonly scheduledFor?: string;
@@ -100,7 +108,8 @@ export class LiveSessionService {
     const main=stored.run.branches[0]!,plies=stored.run.nodes.filter((candidate)=>candidate.branchId===main.id&&candidate.parentId!==null);
     const match=this.#storage.matchState(session.id);
     const player=(learnerId:string|null)=>{if(learnerId===null)return null;const learner=this.#storage.learnerById(learnerId);if(learner===undefined)throw new ServerError("STORAGE_FAILURE","Match player is missing");return Object.freeze({learnerId:learner.id,handle:learner.handle});};
-    return Object.freeze({...session,board:Object.freeze({activeFen:node.fen,objectiveState:node.objectiveState,sideToMove:node.fen.split(" ")[1]==="w"?"white" as const:"black" as const,plyCount:plies.length,pausedAt:match?.pausedAt??null,leaseHeldBy:Object.freeze({learnerId:holder.id,handle:holder.handle}),lastMoveAt:plies.at(-1)?.createdAt??null,...(match===undefined?{}:{players:Object.freeze({white:player(match.whiteLearnerId),black:player(match.blackLearnerId)})})}),...(match===undefined?{}:{match})});
+    const classroom=this.#classroomIdentity(session,principal);
+    return Object.freeze({...session,...(classroom===undefined?{}:{classroom}),board:Object.freeze({activeFen:node.fen,objectiveState:node.objectiveState,sideToMove:node.fen.split(" ")[1]==="w"?"white" as const:"black" as const,plyCount:plies.length,pausedAt:match?.pausedAt??null,leaseHeldBy:Object.freeze({learnerId:holder.id,handle:holder.handle}),lastMoveAt:plies.at(-1)?.createdAt??null,...(match===undefined?{}:{players:Object.freeze({white:player(match.whiteLearnerId),black:player(match.blackLearnerId)})})}),...(match===undefined?{}:{match})});
   })); }
 
   detail(sessionId:string,principal:Principal):LiveSessionDetail {
@@ -115,7 +124,8 @@ export class LiveSessionService {
     const activeNode=stored.run.nodes.find((node)=>node.id===stored.run.activeCursor.nodeId);if(activeNode===undefined)throw new ServerError("STORAGE_FAILURE","Session cursor is missing");
     const storedMarks=this.#storage.relayedRunMarks(session.runId,activeNode.transposeKey,`${stored.run.activeCursor.branchId}:${activeNode.id}`);
     const marks=Object.freeze(storedMarks.slice(0,128).map((mark)=>{const author=this.#storage.learnerById(mark.authorLearnerId);return Object.freeze({scope:mark.scope,brush:mark.brush,orig:mark.orig,...(mark.dest===undefined?{}:{dest:mark.dest}),...(author===undefined?{}:{drawnBy:Object.freeze({learnerId:author.id,handle:author.handle})}),at:mark.at});}));
-    return Object.freeze({session,role:this.#storage.runRole(session.runId,principal.learnerId)!,activeNodeId:stored.run.activeCursor.nodeId,leaseHeldBy:{learnerId:holder.id,handle:holder.handle},...(voteAdapter===undefined?{}:{voteAdapter:{learnerId:voteAdapter.id,handle:voteAdapter.handle}}),grants:this.#storage.grants(session.runId),moveAuthorship,proposals,
+    const classroom=this.#classroomIdentity(session,principal);
+    return Object.freeze({session,...(classroom===undefined?{}:{classroom}),role:this.#storage.runRole(session.runId,principal.learnerId)!,activeNodeId:stored.run.activeCursor.nodeId,leaseHeldBy:{learnerId:holder.id,handle:holder.handle},...(voteAdapter===undefined?{}:{voteAdapter:{learnerId:voteAdapter.id,handle:voteAdapter.handle}}),grants:this.#storage.grants(session.runId),moveAuthorship,proposals,
       ...(latest===undefined?{}:{vote:this.#tallyWithDerivedState(session,latest.id)}),invitations:this.#storage.invitations(sessionId),legs:this.#storage.arenaLegs(sessionId),...(match===undefined?{}:{match}),marks,...(storedMarks.length>128?{marksTruncated:true as const}:{})});
   }
 

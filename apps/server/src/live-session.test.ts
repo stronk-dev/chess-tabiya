@@ -98,6 +98,33 @@ describe("live session platform",()=>{
     const response=await request(handler,"POST",`/sessions/${sid}/votes`,{cookie:bob.cookie,body:{op:"cast",windowId:wid,choiceUci:"e2e4",voterKey:"forged"}});expect(response.status).toBe(400);expect((await response.json() as any).error.code).toBe("INVALID_REQUEST");
   });
 
+  it("names a session's classroom only to active classroom members",async()=>{
+    const {storage,handler}=setup();
+    const teacher=await register(handler,"class-teacher");
+    const learner=await register(handler,"class-learner");
+    const outsider=await register(handler,"run-outsider");
+    await request(handler,"POST","/runs",{cookie:teacher.cookie,writerId:"writer-class",body:{id:"class-run",session:{kind:"position",start:{fen:FEN,side:"white"},feedbackPolicy:"attempt_end",opponentPolicy:{mode:"human_common"}},policyConfig:{seedMode:"fixed",locus:{executedAt:"server",engineIds:[],modelIds:[]}},seed:8}});
+    for(const handle of ["class-learner","run-outsider"]){
+      await request(handler,"POST","/runs/class-run/grants",{cookie:teacher.cookie,writerId:"writer-class",body:{op:"grant",handle,role:"spectator"}});
+    }
+    storage.createClassroom({id:"classroom-session",ownerLearnerId:teacher.learner.id,name:"Thursday endgames",createdAt:"2026-08-13T12:00:00.000Z",archivedAt:null});
+    storage.inviteClassroomMember({classroomId:"classroom-session",learnerId:learner.learner.id,memberRole:"learner",state:"invited",invitedBy:teacher.learner.id,invitedAt:"2026-08-13T12:00:00.000Z"});
+    storage.setClassroomMemberState("classroom-session",learner.learner.id,"active","2026-08-13T12:00:00.000Z");
+    const created=await request(handler,"POST","/sessions",{cookie:teacher.cookie,body:{runId:"class-run",kind:"academy",title:"Rook endings",classroomId:"classroom-session"}});
+    const sessionId=((await created.json()) as any).session.id as string;
+
+    for(const member of [teacher,learner]){
+      const list=(await (await request(handler,"GET","/sessions",{cookie:member.cookie})).json() as any).sessions;
+      expect(list[0].classroom).toEqual({id:"classroom-session",name:"Thursday endgames"});
+      const detail=await (await request(handler,"GET",`/sessions/${sessionId}`,{cookie:member.cookie})).json() as any;
+      expect(detail.classroom).toEqual({id:"classroom-session",name:"Thursday endgames"});
+    }
+    const outsiderList=(await (await request(handler,"GET","/sessions",{cookie:outsider.cookie})).json() as any).sessions;
+    expect(outsiderList[0]).not.toHaveProperty("classroom");
+    const outsiderDetail=await (await request(handler,"GET",`/sessions/${sessionId}`,{cookie:outsider.cookie})).json() as any;
+    expect(outsiderDetail).not.toHaveProperty("classroom");
+  });
+
   it("uses the current-holder witness so only one competing free claim wins",async()=>{
     const {handler}=setup();const alice=await register(handler,"alice");const bob=await register(handler,"bob");const carol=await register(handler,"carol");
     await request(handler,"POST","/runs",{cookie:alice.cookie,writerId:"writer-a",body:{id:"race",session:{kind:"position",start:{fen:FEN,side:"white"},feedbackPolicy:"attempt_end",opponentPolicy:{mode:"human_common"}},policyConfig:{seedMode:"fixed",locus:{executedAt:"server",engineIds:[],modelIds:[]}},seed:9}});

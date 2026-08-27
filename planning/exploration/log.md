@@ -9799,3 +9799,22 @@ match with named seats; and the production academy journey returns through `/liv
 empty-move, side-to-move and objective states before reopening its overlay. TCH-a4/a7/a8/a9 close.
 D1479 remains open only for the owner choice to adopt elapsed-time ordering and the broader doctrine;
 this pass does not make that product decision through a sort function.
+
+## 2026-08-27 — A classroom session keeps its classroom identity
+
+The live-session read model now joins its persisted `classroomId` to the classroom's current name
+for both the session wall and the opened studio. The projection is membership-scoped: an active
+teacher or learner sees the classroom identity, while an outside spectator who can read the run
+receives no classroom name. The client renders the joined name rather than asking it to infer or
+cache classroom identity from a separately loaded list.
+
+The server fixture exercises teacher, learner and outside-spectator reads through both `/sessions`
+and `/sessions/:id`; component fixtures bind the name on the wall and in the studio. TCH-a10 is
+complete.
+
+The adjacent studio identity gap closes in the same surface without inventing a teacher-only tool:
+raw kind/control tokens become player-facing names, and each live kind explains its actual workflow.
+Academy in particular names board handoff, attributed proposals and marks, and the preserved
+rewind/branch/compare/return loop already available through the shared board. Component and
+production-browser assertions keep that explanation attached to the academy route. TCH-a11 is
+complete.

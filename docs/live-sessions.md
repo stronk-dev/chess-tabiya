@@ -98,7 +98,10 @@ journal entry commit atomically.
 `/sessions` lists and creates sessions. Each summary includes the active FEN, recorded
 objective state, side to move, mainline ply count, pause state, lease holder,
 last-move time, and match players, allowing the `/live` simul wall to poll all granted
-boards in one request. The wall resolves the side to the seated handle when one exists,
+boards in one request. When a session belongs to a classroom, the summary and detail also
+project that classroom's id and name to active classroom members. A run spectator who is
+not an active classroom member receives no classroom identity, even when the session is
+readable through the run grant. The wall resolves the side to the seated handle when one exists,
 states pause and last-move times, and presents the objective state. These are factual
 triage signals; the wall neither computes an evaluation nor sorts or labels a learner by
 one. Nested routes
@@ -109,7 +112,11 @@ not-found response as an unknown run.
 
 The browser provides `/live`, `/live/session/:sessionId`, and the chrome-free
 `/live/overlay/:runId`. The ordinary drill adds a small session rail when its run belongs
-to a live session. Session and overlay tallies poll every two seconds. The overlay uses
+to a live session. Wall and studio copy name Stream, Academy lesson, and Match as distinct
+workflows rather than exposing their stored enum and board-control tokens. Academy explicitly
+points to the shipped handoff, proposal, mark, rewind, branch, comparison, and main-line return
+loop; those remain operations on the shared run, not a separate teacher-only review surface.
+Session and overlay tallies poll every two seconds. The overlay uses
 the same run projection and feedback barrier as the player; it is not a second evidence
 surface. It always resumes through a projection-only controller: a writer lease saved in the
 same browser is ignored, no opponent selection is requested, and the overlay cannot commit a
@@ -155,4 +162,5 @@ SQLite migration 9 adds the original live-session tables. Migration 14 rebuilds 
 closed session/journal/token vocabularies and adds `match_states`; it disables foreign
 keys before its transaction and verifies `foreign_key_check` before commit. The run
 schema remains v0.17 and pack schema remains v0.27. Migration 24 adds the nullable
-`classroom_id` association used by scheduled classroom sessions; see `docs/classrooms.md`.
+`classroom_id` association used by scheduled classroom sessions; the service joins its name at
+read time rather than copying it into session storage. See `docs/classrooms.md`.

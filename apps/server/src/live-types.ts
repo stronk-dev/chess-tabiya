@@ -100,6 +100,7 @@ export interface ArenaLeg {
 
 export interface LiveSessionDetail {
   readonly session: LiveSession;
+  readonly classroom?: { readonly id: string; readonly name: string };
   readonly role: RunRole;
   readonly activeNodeId: string;
   readonly leaseHeldBy: { readonly learnerId: string; readonly handle: string };
@@ -147,6 +148,7 @@ export interface LiveBoardSummary {
 }
 
 export interface LiveSessionSummary extends LiveSession {
+  readonly classroom?: { readonly id: string; readonly name: string };
   readonly board: LiveBoardSummary;
   readonly match?: MatchState;
 }
