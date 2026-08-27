@@ -10047,3 +10047,15 @@ foundation while refusing private collector adapters or learner-facing semantics
 accepted and no product implementation is authorised until an independent buildability review
 rechecks the literal operations and able-to-fail fixtures against HEAD. Next: run governance, then
 route the draft for independent review while continuing only already-accepted foundation work.
+
+## 2026-08-27 — learner-module registry return repaired for repeat review
+
+Applied the D1585–D1591 and D1689–D1694 executable closures to
+`rfc/module-registration.md`: branched answer capabilities, move-free Explorer theory input,
+authority-preserving reducer resealing, a closed module query operation, one five-mode staged-move
+handshake, exact sight/novelty closures and post-commit node ordering. The repair also found and
+recorded D1854/D1855 before implementation: F1 eligibility is semantic-event-only, and one F1
+selection policy cannot own ten consumers. The amended contract leaves research eligibility and
+selection byte-identical; module declarations, consumers and adapters own admission, while the
+existing reducer algorithm becomes a typed module-local policy. Next: governance verification and
+repeat independent buildability review; no module implementation is authorised before acceptance.

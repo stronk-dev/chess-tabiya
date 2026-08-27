@@ -1,7 +1,11 @@
 # RFC: Module registration — the eleven declarations, the compile site, and the seats
 
-- **Status:** draft — returned 2026-08-26 by independent buildability review on
-  [[D1585]]–[[D1591]] (`planning/learner-modules/module-registration-cross-review.md`); prior
+- **Status:** draft amended 2026-08-27 — the 2026-08-26 independent return on
+  [[D1585]]–[[D1591]] and follow-up [[D1689]]–[[D1694]] executable closures are applied;
+  the author repair additionally closes the invalid F1 eligibility/policy joins [[D1854]]/[[D1855]];
+  ready for repeat buildability review. Acceptance remains blocked on the shared Explorer source
+  and move-free summary projection, the sealed component wire, and the final measured Guided Hint
+  disclosure registry rather than on an invented compatibility path. Prior
   amendment 2026-08-26 on [[D1564]]/[[D1568]]/[[D1569]]/[[D1577]]/[[D1578]] and the rebuilt
   `hint-distance` contract. The [[D1430]] document: the learner-module layer exists as a
   contract, a compiler, a reducer pipeline and a preset algebra, and **has never been
@@ -29,7 +33,10 @@
   The arrow form additionally consumes `rfc/evidence-presentation.md`'s amended sealed
   `relation_overlay`; the existing identity-preserving transition-event layer, its literal
   relation adapters, and the measured per-family guided-hint horizon **and disclosure** registries are mandatory
-  dependencies, not optional availability arms. The legacy count readings remain compatibility
+  dependencies, not optional availability arms. The move-free theory input is
+  `derived.explorer.population_summary@1` from `provider-exchange-and-execution`; wire items use
+  the sealed component union from `evidence-presentation`. Neither may be replaced by a legacy raw
+  page or a plain JSON evidence object. The legacy count readings remain compatibility
   inputs for pack predicates and do not become a second learner-facing event authority.
 - **Parent / amends:** amends `rfc/learner-modules.md` §1.6 (the answer-ceiling image, which as
   shipped is an exact-match map and not a ceiling), §1.7 (`ceilings.sessions`/`ceilings.roles`,
@@ -52,9 +59,8 @@ none
 been otherwise, checked rather than waved past.** Every artifact this RFC adds is catalog-local or
 client-side: the eleven `ModuleDeclaration` instances and their closure
 (`packages/runtime/src/module-registry.ts`, new), ten `module.*` consumer ids appended to
-`EVIDENCE_CONSUMER_IDS` (`evidence-catalog.ts:98`), the production eligibility rows joined into
-`EVIDENCE_MANIFEST.eligibility`, one selection policy beside the untouched
-`research.r2_candidate@1` (`evidence-catalog.ts:985`), the `module-lift@1` table, per-projection
+`EVIDENCE_CONSUMER_IDS` (`evidence-catalog.ts:98`), their exact F1 adapters/bindings, the
+module-local `production.module_local@1` ordering declaration, the `module-lift@1` table, per-projection
 renderers, and the seat components under `apps/web/src`. **None of the six registers moves**:
 `DRILL_PACK_SCHEMA_VERSION` 0.27 (lanes 0.28–0.32 live-claimed), run schema 0.17 (lanes 0.18–0.22
 live-claimed), shape-entry 0.3, principle-entry 0.1, campaign 1, the migration register (head 25),
@@ -208,8 +214,9 @@ of `threat` excludes `fact` — so `blunder_prevention` (ceiling `threat`) canno
 `full_inspector` (ceiling `principal_variation`) can carry none of its forty rows. Worse, **no
 ceiling token maps to `evaluation` at all**, so `derived.grade.move_quality@1`
 (`answerContent: ["evaluation"]`, `evidence-catalog.ts:819`) is admissible to no module in the
-registry — including the two the projection's own disposition names. §2.3 replaces the map with a
-monotone chain over the shipped `AnswerDistance` union (`evidence-contract.ts:7`).
+registry — including the two the projection's own disposition names. §2.3 replaces the map with
+explicit branched capability images. Theory and evaluation are incomparable; neither derives
+authority from the spelling order of a TypeScript union.
 
 **C2 — the ceiling is enforced nowhere.** `assertDeclaration:166` compares only a *per-entry*
 `answerContent` declaration against the image; `admitModuleFacts` (`module-reducers.ts:~172`)
@@ -237,8 +244,10 @@ return (sight 20 → 22). [[D632]]'s measurement — post-repair `outpost` fires
 PV"*. Verified: none of its 48 rows declares `candidate_moves`, `move`, `ranked_moves` or
 `principal_variation`. A permission nothing can exercise cannot fail a test, so it is corrected to
 `evaluation` (§1.1). `sight_on_request`'s `fact` ceiling is corrected upward to `pattern`, because
-three of its own accepted rows declare `pattern` (`rook_on_seventh`, `space`, `pawn_connectivity`)
-— the ceiling was below its contents, not above.
+the literal 22-row set derives an exact `fact + pattern` answer union. `rook_on_seventh` is the
+sole pattern witness; `space` and `pawn_connectivity` are separate Structure rows and never part of
+Sight. The compiler derives this union from the accepted projection declarations rather than
+preserving either prose claim by memory.
 
 #### 0.3 Two facts that moved since `learner-modules` was accepted
 
@@ -271,7 +280,7 @@ Table caption — unit: **module id**; total: **11**, set-equal to `MODULE_IDS`
 | 4 | `threat_radar` | pre_commit (on_request) · post_commit (on_request) | rail | threat | 3 / 60 / 4 / 2 | 0 | stated_absence |
 | 5 | `postcommit_nudge` | post_commit (proactive) | rail | **evaluation** | 2 / 50 / 2 / 1 | 3 | silent |
 | 6 | `structure_nudge` | post_commit (**proactive**) | rail | **theory** | 1 / 80 / 4 / 0 | 3 | stated_absence |
-| 7 | `theory_breadcrumb` | post_commit (on_request) | rail | **theory** | 1 / 60 / 0 / 0 | 3 | stated_absence |
+| 7 | `theory_breadcrumb` | post_commit (on_request) | rail | **theory** | 1 / 60 / 0 / 0 | **0** | stated_absence |
 | 8 | `guided_hint` | checkpoint (on_request, progressive disclosure) | rail | **move, through `guided_hint@1` disclosure** | 1 / 40 / 2 / 1 per rung | 0 | unavailable_source |
 | 9 | `compare_coach` | checkpoint (on_request) · review (on_request) | rail | **evaluation** | 2 / 60 / 2 / 2 | 0 | stated_absence |
 | 10 | `review_map` | review (proactive) | timeline | **evaluation** | 3 / 80 / 3 / 2 per moment | 0 | stated_absence |
@@ -327,11 +336,14 @@ shipped code rather than chosen:
    `authoring.claim_binding` and `runtime.repertoire_scan` (`evidence-catalog.ts:888-889`); a
    module carrying them would widen a learner surface into an authoring one. Registry invariant,
    failable.
-2. **Play-timed modules declare `["learner","host"]`** — the person holding the board and the host
+2. **Play-timed guidance modules declare `["learner","host"]`** — the person holding the board and the host
    who may take it. Grounded in the shipped clamp: `permittedAssistance`
    (`assistance.ts:30-34`) grants the disclosive axes only when
    `role === "solo" || role === "host" || reviewing`, and `client-surface-floor.test.ts:37-65`
-   pins that refusal for participants and spectators. Applies to modules 1–9.
+   pins that refusal for participants and spectators. Applies to modules 2–9.
+   `rules_floor` is the non-guidance exception and declares
+   `["learner","host","participant"]`: both seated Match roles retain legal destinations and
+   the semantic board grid while every guidance module remains outside Match's context ceiling.
 3. **Review-only modules may declare all four viewer roles**, because *"a finished run has nothing
    left to contaminate"* (`design/05` §3a-i) and the shipped review consumer already declares them:
    `review.story` carries `roles: ["learner","host","participant","spectator"]`
@@ -368,7 +380,7 @@ the declarations.
 | `module.threat_radar` | the blunder three; `rules.tactic.reading.{back_rank, trapped_piece, ray_classification}`; `derived.tactic.defender_exposure` | 7 |
 | `module.postcommit_nudge` | 8 `rules.structural.event.*` (the 11 `STRUCTURAL_EVENT_FAMILIES` at `evidence-catalog.ts:115-118` minus the refused `piece_count`, `direct_attack_count`, `line_blockers`); all 5 `TRANSITION_GEOMETRY_EVENT_FAMILIES`; 7 `rules.transition.event.*` (`TRANSITION_RULE_EVENT_FAMILIES` minus `clock_reset`); `rules.castling.event.rights_lost`, `rules.tactic.event.{double_attack, check, loose_piece}`, `derived.exchange.{capture_class, trade_completed}`, `rules.structural.event.pawn_islands`; 10 `derived.semantic_avoidance.*`; `rules.pawn.event.dynamics`, `derived.pawn.event.transitions`, `rules.king.event.zone_state`, `derived.king.captured_zone_defender`, `derived.activity.event.open_file_occupancy`; `derived.grade.move_quality` | 43 |
 | `module.structure_nudge` | `theory.shapes.firing`; `rules.structural.reading.{named_structure, space, pawn_connectivity}`; `rules.phase.reading`; `rules.endgame.reading` | 6 |
-| `module.theory_breadcrumb` | `pack.authored.claim`; `theory.shapes.firing`; `human.explorer.population` **(operand-scoped, §2.3)**; `theory.opening_identity.record` | 4 |
+| `module.theory_breadcrumb` | `pack.authored.claim`; `theory.shapes.firing`; `derived.explorer.population_summary`; `theory.opening_identity.record` | 4 |
 | `module.guided_hint` | the literal ordered expansion `...HINT_DISCLOSURE_PROJECTION_IDS` (one sealed `derived.hint.disclosure.<family>.<rung>@1` per measured family/rung pair; never raw PV or the internal horizon) | `R` |
 | `module.compare_coach` | `derived.compare.{structure_delta, eval_delta, engine_trajectory, piece_route}`; `run.record.{fork, consequence, objective_transition, checkpoint_hit}` | 8 |
 | `module.review_map` | the 42 compiled nudge event/avoidance ids re-declared; `rules.pivotal.marker`, `rules.phase.reading`, `rules.endgame.reading`; `recorded.engine.eval`, `recorded.tablebase.result`; `live.stockfish.{eval, wdl}`; `run.record.{objective_transition, consequence, imported_result}`; `derived.grade.move_quality` | 53 |
@@ -384,7 +396,10 @@ was verified present in the compiled catalogue at `f0d5460`. `[V]`
 
 `selection.familyPrecedence` is, for each module, its `accepts` order verbatim — the compiler
 requires order-equality (`module-contract.ts:163`), so the table above is simultaneously the
-precedence declaration. `selection.policy` is `production.module_local@1` for all eleven.
+precedence declaration. `selection.policy` is `production.module_local@1` for all eleven. That
+identifier resolves in the module registry to the ordering implemented by `module-reducers.ts`;
+it is deliberately **not** an `EvidenceSelectionPolicyDeclaration`, whose shape owns exactly one
+consumer and whose event-population semantics are the separate research selector ([[D1855]]).
 
 #### 1.4 `intent` and `learnerAction` — one sentence and one verb each
 
@@ -417,43 +432,44 @@ registry cannot land until the literal horizon registry and sealed rung compiler
 [[D1455]], [[D1569]]). Every active arrow form is backed by
 the set-equal relation-renderer closure in `evidence-presentation.md` §3.6a.
 
-#### 1.5 `noveltyWindow`, and the [[D1164]] closure it needs
+#### 1.5 `noveltyWindow`, and the [[D1164]] closure
 
-Six modules take `noveltyWindow: 0` and three of those need their reason stated, because zero is
-not a default here:
+Nine modules take `noveltyWindow: 0`. `rules_floor` and `blunder_prevention` concern only the
+current staged moment. Every `on_request` or `explicit_mode` delivery also takes zero:
+`sight_on_request`, `threat_radar`, `theory_breadcrumb`, `guided_hint`, `compare_coach`,
+`review_map` and `full_inspector`. A repeated explicit request is entitled to the same answer;
+novelty suppression there would simulate absence. This resolves [[D1694]] conservatively without
+changing `theory_breadcrumb`'s declared initiative.
 
-- `rules_floor`, `blunder_prevention` — the accepted defaults; the module's whole job is the
-  current staged moment.
-- `sight_on_request`, `threat_radar`, `guided_hint`, `compare_coach`, `full_inspector`,
-  `review_map` — **`on_request` and `explicit_mode` deliveries take `0`**, because novelty
-  suppression on a requested delivery is a silent refusal of an explicit gesture. A learner who
-  asks the same question twice is entitled to the same answer, and *"absence is stated, never
-  simulated"* forbids answering a second request with nothing.
+Exactly two proactive modules take `3`: `postcommit_nudge` and `structure_nudge`. Their active
+novelty closure is derived from the literal accepts union and contains 49 unique projections
+(43 + 6 with no overlap removed by hand). `NOVELTY_IDENTITY_DECLARATIONS` is set-equal to that
+active union. The research matrix also classifies the three theory-only members so changing the
+initiative later cannot create an unreviewed identity, but inactive declarations do not count as
+the current closure.
 
-The three proactive modules take `3`: `postcommit_nudge`, `structure_nudge`, `theory_breadcrumb`.
+The closed declaration union is:
 
-**[[D1164]] is a live blocker on those three, and it is discharged here rather than deferred.** The
-return is correct: for a projection absent from `FACT_EQUIVALENCE_CLASSES`
-(`module-reducers.ts:36`), `factIdentity@1` keys on the full retained-operand serialization, and
-event operands include `nodeId` and move anchors, so the same chess fact at two ancestor nodes has
-different identity bytes by construction and the boundary fixture can only pass by faking one node
-identity. The amendment the return asked for:
+```ts
+type NoveltyIdentityDeclaration =
+  | { readonly projection: VersionedEvidenceId; readonly kind: "stable"; readonly comparedFields: readonly string[] }
+  | { readonly projection: VersionedEvidenceId; readonly kind: "exempt"; readonly reason: string };
+```
 
-> *"For every projection eligible for novelty reduction, declare one of: (1) a stable equivalence
-> class and exact compared fields that deliberately exclude volatile run-location operands while
-> retaining mover/subject/polarity; or (2) `novelty: exempt`."*
+Every stable field is a literal operand of its projection. The exact grouped matrix is the one
+measured in `design/research/module-novelty-identity-closure.md`: structural events use
+`family,before,after`; geometry uses `subject,targets_before,targets_after`; non-capture rule events
+use `mover,detail`; capture uses `mover,captured,enPassant`; and each remaining family uses the
+explicit fields in that dossier. The checker refuses node/event ids, FENs, UCI/move anchors,
+shape-node anchors and retrieval timestamps. `derived.grade.move_quality@1` is the one explicit
+exemption because it is scoped to the just-committed edge; a later grade with the same class is a
+new fact.
 
-**The closure is exactly the union of the three proactive modules' `accepts` lists** — 38 + 6 + 4
-with duplicates removed — and it is set-equal-checked at compile against
-`{ module | noveltyWindow > 0 }`, which is the return's own closure condition. Every row declares
-compared fields that exclude `nodeId`, `eventId`, ply and move anchors and retain
-`{ moverColor, subject squares/file, family, sign }`. **Positive and avoidance families stay in
-different classes permanently** — `rules.structural.event.isolated_pawn` and
-`derived.semantic_avoidance.isolated_pawn` are generated from the same family list
-(`evidence-catalog.ts:124`), and collapsing them would invert a fact's polarity in front of a
-learner. A projection in the closure with no declared row is a **compile failure**, not a silent
-abstention; a projection outside the closure keeps the shipped conservative behaviour
-(`noveltyAbstained: true`, never "everything is new").
+`factIdentity` uses the stable declaration and omits absent optional fields rather than serializing
+`undefined`. An exempt fact always survives novelty. A projection in the active closure with no
+declaration is a compile failure, not an abstention. Distinct-node fixtures prove the same stable
+fact matches across different move/FEN anchors, a changed subject does not, and positive versus
+avoidance polarity never collapses.
 
 ### §2 — Where the registry is compiled, and who reads it
 
@@ -487,60 +503,88 @@ invariants the module compiler cannot see because they cross files:
 `packages/runtime/src/index.ts` re-exports this file **and `module-reducers.js`**, which is absent
 from the barrel today.
 
-#### 2.2 Step 2 — the manifest join
+#### 2.2 Step 2 — the manifest join, without misusing semantic eligibility
 
-In `evidence-catalog.ts`: ten `module.*` ids appended to `EVIDENCE_CONSUMER_IDS` (25 → 35);
-`PRODUCTION_ELIGIBILITY_DECLARATIONS`, the `185 + R` compiled rows of §1.3, joined into
-`EVIDENCE_MANIFEST.eligibility` beside the 67 research rows, which stay byte-identical;
-`production.module_local@1` appended to `EVIDENCE_SELECTION_POLICIES` beside the untouched
-`research.r2_candidate@1`. The manifest digest moves; the docs tuples in `docs/semantic-evidence.md`
-and `docs/evidence-contract.md` move in the same commit.
+In `evidence-catalog.ts`, append ten `module.*` ids to `EVIDENCE_CONSUMER_IDS` (25 → 35), one
+closed consumer declaration per evidence-bearing module, and the exact adapters that bind each
+compiled §1.3 acceptance pair. The module acceptance/binding closure is declared **`186 + R`**,
+compiled **`185 + R`**, awaiting **1**; these are derived drift tripwires over
+`MODULE_DECLARATIONS`, consumer `accepts`, and compiled bindings, never hand-maintained manifest
+counts.
 
-#### 2.3 The three contract repairs this join requires
+`EVIDENCE_MANIFEST.eligibility` and `EVIDENCE_SELECTION_POLICIES` stay byte-identical. This is a
+required correction to `learner-modules` §6, not an omitted integration. An
+`EvidenceEligibilityDeclaration` names a `SemanticEventDeclaration`; readings, source records and
+ordinary derived projections in §1.3 are not semantic events, and the compiler rejects them as
+`EVIDENCE_ELIGIBILITY_ORPHANED`. Likewise, an `EvidenceSelectionPolicyDeclaration` owns exactly
+one consumer, while `production.module_local@1` is one shared reducer algorithm used by ten
+module consumers. Module admission is therefore the closed declaration → consumer → adapter
+binding path, and module ordering is the separately typed module-local policy in
+`module-registry.ts`. No projection is copied into a second eligibility authority ([[D1854]],
+[[D1855]]).
 
-**(a) `MODULE_ANSWER_IMAGE` becomes a monotone chain.** `ModuleAnswerCeiling` gains two members,
-`theory` and `evaluation`, and each token's image is every answer distance at or below it. The
-order is not invented: it is the shipped `AnswerDistance` union's own declaration order
-(`evidence-contract.ts:7`), with the four move-bearing members confined to the top two rungs, which
-is §5's refusal made mechanical.
+The manifest digest still moves because consumers and adapters move; the docs tuples in
+`docs/semantic-evidence.md` and `docs/evidence-contract.md` move in the same commit. A compiler
+negative attempts to insert `rules.phase.reading@1` into F1 eligibility and must fail with
+`EVIDENCE_ELIGIBILITY_ORPHANED`; a sibling deletes one module adapter while leaving the projection
+in that module's acceptance list and must fail module acceptance/binding set equality.
 
-| ceiling | image |
-|---|---|
-| `none` | — |
-| `fact` | fact |
-| `pattern` | + pattern |
-| `threat` | + threat |
-| `theory` | + theory, principle, plan |
-| `evaluation` | + evaluation |
-| `candidate_move` | + candidate_moves |
-| `move` | + ranked_moves, move |
-| `principal_variation` | + principal_variation |
+#### 2.3 The four contract repairs this join requires
 
-`guided_hint` no longer uses the shipped three-stage special case. `hint-distance` proves that a
-five-rung byte disclosure cannot be represented by three answer ceilings, and that the optional
-per-row `answerContent` field is a bypass. `ModuleAnswerCeiling` therefore also gains `move`, and
-`ModuleAnswerContract` gains the closed `guided_hint@1` disclosure declaration specified there.
-Only `guided_hint` may declare it; every one of its acceptance rows must declare exact answer
-content and be a literal member of `HINT_DISCLOSURE_PROJECTION_IDS`. The old
-`1:pattern | 2:fact | 3:principal_variation` branch and its raw-PV mental model are deleted.
+**(a) Answer distance is a branched capability set, not a total ladder.** Replace the misleading
+singleton `MODULE_ANSWER_IMAGE` with an explicit image:
 
-**(b) admission enforces the module ceiling.** `admitModuleFacts` gains one refusal: a fact whose
-projection `answerContent` is not a subset of the module's image is refused, counted, and never
-delivered. Without this the ceiling is decorative (C2).
+```ts
+type ModuleAnswerCapability =
+  | "observation" | "pattern" | "threat" | "theory" | "evaluation"
+  | "candidates" | "ranked_candidates" | "move" | "principal_variation";
 
-**(c) `ModuleAcceptanceDeclaration` gains an optional `operands: readonly string[]`.** This is the
-**operand-scoped admission mechanism** `learner-modules.md` §4.2 itself named as needed and
-declined to invent (*"a proposed ledger row, not an invention here"*). It narrows an accepted
-projection to a named subset of its own declared operands, checked at compile against
-`ProjectionDeclaration.operands`, and the ceiling check in (b) runs against the narrowed content.
-It has one measured use at this landing and it is load-bearing: `human.explorer.population@1`
-declares `answerContent: ["fact","candidate_moves"]` (`evidence-catalog.ts:787`), so
-`theory_breadcrumb` at a `theory` ceiling would otherwise refuse every corpus fact — while
-`learner-modules` §4.7 requires exactly the narrowed form, *"book-presence context — rendered as a
-theory pointer, never a popularity-as-quality verdict."* The entry declares
-`operands: ["nodeId","result"]`, the per-move list is never admitted, and the shipped
-`CORPUS_GUARD` sentence (*"These counts say what this population played, not what is good."*,
-`corpus-sentences.ts:3`) is carried into the module's renderer.
+const MODULE_ANSWER_CAPABILITY_IMAGE = {
+  observation: ["fact"],
+  pattern: ["fact", "pattern"],
+  threat: ["fact", "threat"],
+  theory: ["fact", "pattern", "theory", "principle", "plan"],
+  evaluation: ["fact", "evaluation"],
+  candidates: ["fact", "candidate_moves"],
+  ranked_candidates: ["fact", "candidate_moves", "ranked_moves"],
+  move: ["fact", "candidate_moves", "ranked_moves", "move"],
+  principal_variation: ["fact", "candidate_moves", "ranked_moves", "move", "principal_variation"],
+} as const;
+```
+
+`ModuleAnswerContract` declares a non-empty literal union of capabilities (or `none` for
+`rules_floor`); compilation unions their images. Theory refuses evaluation, evaluation refuses
+theory/principle/plan, and move-bearing capabilities imply no theory or evaluation unless the
+module declares those branches separately. Each module declares exactly the branches its accepted
+projection union needs; the compiler asserts set equality rather than relying on a hand-written
+singular label in §1.1. Sight's 22 rows derive exactly `fact + pattern`, with
+`rook_on_seventh` as the sole pattern witness.
+
+`guided_hint` uses the closed `guided_hint@1` disclosure declaration specified by
+`hint-distance`. Only that module may declare it; every acceptance row is an exact member of
+`HINT_DISCLOSURE_PROJECTION_IDS` with exact answer content. The old three-stage branch and its raw
+PV mental model are deleted.
+
+**(b) Admission enforces the compiled capability union.** `admitModuleFacts` refuses and counts a
+projection whose `answerContent` is not a subset of the module's declared union. No optional
+per-entry field may widen the module. Crossed theory/evaluation and pre-move/PV negatives make the
+rule able to fail.
+
+**(c) Theory consumes a move-free derived Explorer summary, not operand surgery.** The proposed
+`ModuleAcceptanceDeclaration.operands` field is withdrawn. Narrowing `nodeId + result` on the
+legacy `CorpusPage` retains `result.moves[]` and its `candidate_moves` authority. The only theory
+row is `derived.explorer.population_summary@1`, derived from the node-free
+`human.explorer.position_page@1` specified by `provider-exchange-and-execution`. Its payload
+structurally omits moves while retaining normalized position/window, population totals/WDL,
+recency/source and `CORPUS_GUARD`. A SAN/UCI sentinel present only in the raw page's `moves[]`
+reaches neither the module packet, deterministic renderer, component wire, provider input nor
+voice allow-list.
+
+**(d) Reducer survivors are re-admitted through the existing authority.** After
+`reduceModulePacket`, the server calls `evidenceForConsumer` again with the same consumer id and
+`result.facts.map(fact => fact.evidence)`, then passes that branded narrowed view to
+`renderEvidenceItems`. A dropped sentinel cannot reach deterministic output, provider input or
+`voiceCheck`; a structurally forged subset remains refused. No second sealing primitive is added.
 
 #### 2.4 The fifteen dispositions that must be deleted in the binding commit
 
@@ -584,7 +628,9 @@ module set, per module:
    (`module-reducers.ts:311`) → admission, lift ordering, dedup, subsumption, novelty, backstop,
    and the `reduction_quality@1` observation on overflow. **This is the first production call of
    the reducer pipeline.**
-3. `renderEvidenceItems(view', MODULE_RENDERERS)` (`evidence-contract.ts:405`) → the branded
+3. Re-run `evidenceForConsumer` for the same module consumer over
+   `result.facts.map(fact => fact.evidence)`, then call
+   `renderEvidenceItems(narrowedView, MODULE_RENDERERS)` (`evidence-contract.ts:405`) → the branded
    `RenderedEvidenceView`. Note the hard constraint this creates: `renderEvidenceItems` fails with
    `EVIDENCE_BINDING_UNDECLARED` for **any admitted projection with no registered renderer**
    (`:409`), so the renderer registry must cover every distinct accepted id. That coverage is
@@ -597,10 +643,36 @@ campaign?)` as their single entry point so three call sites stop re-deriving it.
 narrowing then apply from `ceilings` and `permittedAssistance`. **Every term only narrows**
 (`design/05` §3-forms as amended).
 
-The result is delivered on the existing run/evidence response as
-`modules: { [moduleId]: RenderedModulePacket }`, where a packet is
-`{ moduleId, timing, items, empty, budgets, noveltyAbstained }` and `empty` is the module's
-declared `emptyBehavior` rendered, never an absent key.
+There is no existing generic run/evidence response; the D1689 census found 36 run actions and none
+is modules. Add one authenticated `POST /runs/:runId/modules/query` operation backed by
+`RunService.queryModules`. Its closed request is timing-discriminated:
+
+```ts
+type ModuleQueryRequest =
+  | { timing: "pre_commit"; nodeId: string; selectedSquare?: string }
+  | { timing: "at_commit"; nodeId: string; candidateUci: string; generation: number }
+  | { timing: "post_commit"; subjectNodeId: string }
+  | { timing: "checkpoint"; nodeId: string; checkpointId: string; hintRung?: string }
+  | { timing: "review"; nodeId?: string };
+```
+
+The server resolves the run/branch/revision and effective module set; caller-supplied role,
+session, preset, permissions, evidence, source status and seat are forbidden. It returns a closed
+`ModuleQueryPage` carrying `{ runId, branchId, revision, subjectNodeId, timing, generation?,
+effectiveConfigDigest, packets }`. Each packet carries module id, timing, budget receipt,
+`noveltyAbstained`, typed empty state and the sealed-component wire items owned by
+`evidence-presentation`. F1 brands are process-local and do not cross JSON; the server serializes
+only after brand assertions and the client accepts only the strict component parser. Extra fields,
+unknown projections/components, digest mismatch and a subject not belonging to the run are typed
+refusals.
+
+Post-commit ordering is load-bearing: `DrillSessionController.move` receives the authoritative
+`MutationResult.run`, queries with the learner `subjectNodeId` from that result, and only then calls
+`#playOpponentIfNeeded`. Querying the active cursor afterwards would describe the automatic reply.
+Pre-commit and checkpoint calls occur only on the explicit selection/hint gesture; Review queries
+on surface load and replay selection. The cache key is the complete request plus run revision and
+effective-config digest. A mutation, rewind/fork, selection generation, disclosure close or source
+availability change invalidates the relevant entry.
 
 #### 2.6 Steps 5–6 — seat, client side
 
@@ -612,6 +684,31 @@ never stage layout). `DrillScreen.svelte`'s existing `#run-support-region` — t
 `.evidence-seat` holding a reveal button, the guard prompt and the sight caption — becomes that
 region's host. Seat expansion state is component state, persisted nowhere, which is why this RFC
 stores no preference.
+
+#### 2.7 One staged-move protocol for all five input modes
+
+`blunder_prevention` is inserted after the shared `BoardInputController` produces one exact UCI
+and after promotion choice, but before `onMove`. Click, drag and touch already converge at
+Chessground's `after`; keyboard-grid and text converge on the same `BoardInputResult.moveUci`.
+There is one controller-level state machine, never five interceptors:
+
+```ts
+type StagedMoveState =
+  | { kind: "idle"; generation: number }
+  | { kind: "checking"; generation: number; mode: MoveInputMode; uci: string; restore: InputRestoreReceipt }
+  | { kind: "warning"; generation: number; mode: MoveInputMode; uci: string; restore: InputRestoreReceipt }
+  | { kind: "unavailable"; generation: number; mode: MoveInputMode; uci: string; restore: InputRestoreReceipt }
+  | { kind: "committing"; generation: number; mode: MoveInputMode; uci: string; restore: InputRestoreReceipt };
+```
+
+If the module is ineffective, the candidate bypasses the query and commits normally. An honest
+empty response commits once and emits no all-clear. A concrete risk holds the exact candidate for
+`revise` or exact-once `confirm`. Source/server failure is shown as unavailable and also requires
+explicit confirmation; it is never called safe. `revise` restores active square, origin, input
+focus and text value. A new gesture or revise increments generation, so late responses are ignored.
+The board announces a committed move only after the mutation succeeds, not when a candidate is
+staged. A 5-mode × risk/empty/unavailable × confirm/revise matrix, promotion-before-stage and stale
+generation fixtures are one acceptance unit.
 
 ### §3 — The five regions and the seat classes
 
@@ -746,8 +843,9 @@ Kept as registered renderers: the three theory verdicts and `UNKNOWN_THEORY_NOTE
 (`theory-presentation.ts:5-20`) — *"Unknown is not a judgement. The author wrote nothing about this
 move…"*; the three-tier authored-claim provenance renderer (`claim-presentation.ts:12-38`); the
 corpus renderer with `CORPUS_GUARD`, the 100-game abstention floor and the
-`CORPUS_MOVE_OUTCOME_FLOOR` of 100 (`corpus-sentences.ts:3-26`) — under the §2.3(c) operand
-scoping, so the guard survives and the per-move list does not reach this module.
+`CORPUS_MOVE_OUTCOME_FLOOR` of 100 (`corpus-sentences.ts:3-26`) — over the
+§2.3(c) move-free `derived.explorer.population_summary@1`. The guard survives and the raw
+per-move list is structurally absent rather than hidden by renderer convention.
 Honest-empty at landing: `theory.opening_identity.record@1` — runtime admission is still refused
 (`position-evidence.ts:25`), so the breadcrumb renders the absence sentence rather than pretending.
 Not absorbed: the raw `packId` button label at `DrillScreen.svelte:935-940` is chrome, and it
@@ -912,7 +1010,12 @@ is a maximum, never a request to fill the board.
    single declarable one. No capability is lost.
 4. **The `sight_on_request` post-commit arm is added** relative to `learner-modules` §4.2 (§1.1) in
    order not to retire shipped behaviour. It narrows nothing.
-5. Otherwise none. Silence as the default posture, the disclosure model, §3b's naming law, the
+5. **F1 eligibility and selection-policy rows are not module registries.** This amends
+   `learner-modules` §6.3–§6.4: semantic-event eligibility remains byte-identical; the complete
+   module acceptance closure is enforced by declarations, consumers and adapters; and
+   `production.module_local@1` is a module-local ordering declaration rather than one impossible
+   F1 policy shared across ten consumers ([[D1854]], [[D1855]]).
+6. Otherwise none. Silence as the default posture, the disclosure model, §3b's naming law, the
    O1–O4 amendments, the [[D659]] parity rule and the [[D745]] denominator rule are implemented
    here, not deviated from.
 
@@ -938,31 +1041,32 @@ defect class here ([[D444]]/[[D984]]/[[D1274]]), so each carries its falsifier.
    **Negative:** deleting any one of the four §2.1 cross-file invariants makes an existing fixture
    pass that should fail — each is committed with a fixture that flips one value (a session set,
    an `operator` role, a preset naming a module with no declaration, a novelty-closure gap).
-2. **A2 — The eligibility set, asserted by derivation, not by count** ([[D1240]]).
-   `make module-registry-census` emits the declared rows from `MODULE_DECLARATIONS` and the
-   compiled ids from `EVIDENCE_MANIFEST`; the test asserts **set-equality** between the compiled
-   eligibility rows and the census output, with **declared `186 + R` / compiled `185 + R` /
-   awaiting `1`** baked only as derived drift tripwires. The 67
-   research rows are byte-identical. **RED at HEAD:** eligibility is 67 rows against one research
-   consumer. **Negative:** a test asserts `pack.authored.classifier@1` is **absent** from the
-   compiled manifest and **present** in `full_inspector`'s `awaiting`; a sibling negative deletes
-   one id from `HINT_DISCLOSURE_PROJECTION_IDS` while leaving it in the family×rung registry and
-   compilation fails set-equality. The criterion cannot pass vacuously through an awaiting
-   wildcard or incomplete horizon family.
+2. **A2 — The acceptance/binding set, asserted by derivation, not by count** ([[D1240]],
+   [[D1854]], [[D1855]]). `make module-registry-census` emits acceptance pairs from
+   `MODULE_DECLARATIONS`, consumer pairs from `EVIDENCE_CONSUMERS`, and bound pairs from
+   `EVIDENCE_MANIFEST.bindings`; the test asserts exact set-equality across all three, with
+   **declared `186 + R` / compiled `185 + R` / awaiting `1`** baked only as derived drift
+   tripwires. The 67 research eligibility rows and sole research selection policy are
+   byte-identical. **RED at HEAD:** no module consumer or binding exists. **Negatives:**
+   `pack.authored.classifier@1` is absent from the compiled manifest and present in
+   `full_inspector.awaiting`; deleting one disclosure id from the family×rung product fails;
+   deleting one adapter while retaining its acceptance fails; inserting the non-event
+   `rules.phase.reading@1` into F1 eligibility fails exactly with
+   `EVIDENCE_ELIGIBILITY_ORPHANED`. The criterion cannot pass through an awaiting wildcard,
+   incomplete horizon family, or a second eligibility authority.
 3. **A3 — Sessions and roles are derived, not typed in** ([[D1206]]). A fixture mutates one
    `WORKFLOW_CONTEXT_POLICIES` row's `moduleCeiling` and asserts the registry **fails to compile**
    because a module's `ceilings.sessions` no longer matches. A second fixture flips one forbidden
    role (`operator` on `sight_on_request`) and one forbidden session (`match` on `guided_hint`) and
    asserts both fail. **RED at HEAD:** no module declares either field, and the compiler accepts any
    non-empty array — the exact hole the return named.
-4. **A4 — The answer ceiling is enforced, and the chain is monotone.** For every module, every
-   accepted projection's `answerContent` is a subset of the module's image; a fixture admitting
-   `derived.grade.move_quality@1` (`["evaluation"]`) into a module whose ceiling is `threat` is
-   refused at admission with a counted refusal. **RED at HEAD twice over:** the images are
-   singletons, so `full_inspector` at `principal_variation` admits none of its forty rows; and no
-   ceiling maps to `evaluation`, so the grade projection is admissible nowhere.
-   **Negative:** a fixture asserting monotone containment along the eight-token chain fails against
-   any non-monotone image table.
+4. **A4 — Answer capabilities are explicit branches.** For every module, every accepted
+   projection's `answerContent` is a subset of the literal union of its declared capability
+   images. A grade admitted to a threat-only module is refused. Crossed negatives prove Theory
+   refuses evaluation, Evaluation refuses theory/principle/plan, and Principal Variation admits
+   move bytes without implying either branch. Sight's literal 22 rows derive exactly
+   `fact + pattern`, and only `rook_on_seventh` witnesses pattern. **RED at HEAD:** the singleton
+   images cannot represent even `fact + threat`, and no image contains evaluation.
 5. **A5 — Renderer coverage, by set-equality.** Every distinct accepted projection id has exactly
    one registered renderer, asserted set-equal to `make module-registry-census`'s renderer column.
    **RED at HEAD:** `renderEvidenceItems` fails with `EVIDENCE_BINDING_UNDECLARED` for any admitted
@@ -976,9 +1080,13 @@ defect class here ([[D444]]/[[D984]]/[[D1274]]), so each carries its falsifier.
    direction of drift. **RED at HEAD:** all twenty-one carry dispositions and none is bound.
    **Negative:** a fixture binding `rules.tactic.consequence.threat@1` while leaving its
    disposition in place must fail with that exact code.
-7. **A7 — At-commit distinctness.** A fixture stages a move without committing: only
-   `blunder_prevention` may produce output. Running the same fixture with the move committed flips
-   which modules may fire. **RED at HEAD:** no module produces output at any timing.
+7. **A7 — At-commit distinctness and five-mode staging.** Click, drag, touch, keyboard-grid and
+   text all produce the same exact staged UCI after promotion resolution. At the staged position
+   only `blunder_prevention` may produce output. Honest empty commits exactly once; risk and
+   unavailable require revise or exact-once confirm; revise restores each mode's focus/input state;
+   a newer generation invalidates a late reply. Running the committed fixture flips which modules
+   may fire, and the move announcement occurs only after server acceptance. **RED at HEAD:** every
+   input path commits immediately and no module produces at-commit output.
 8. **A8 — Honest empty, per module, with the two hard negatives.** Each evidence-bearing module's
    zero-eligible fixture renders exactly its declared `emptyBehavior`. **Negative pins:**
    `blunder_prevention` emits **zero bytes** on empty and no string resembling an all-clear exists
@@ -1046,7 +1154,15 @@ defect class here ([[D444]]/[[D984]]/[[D1274]]), so each carries its falsifier.
     `derived.semantic_avoidance.isolated_pawn`. **RED against the shipped identity**, which keys
     unregistered projections on full retained operands including `nodeId`, so no cross-node match is
     possible — the exact defect the return refused to fake.
-19. **A19 — Closeout.** The landing commit flips this RFC's ledger rows, appends the
+19. **A19 — The module operation is closed end to end.** One production-boundary matrix traverses
+    authenticated route → `RunService.queryModules` → strict request parser → module compiler and
+    reducer → strict sealed-component response parser → occupied seat for every timing arm. It
+    proves provider-off and honest-empty states, a post-commit packet bound to the learner's new
+    node before the automatic reply, revision/config/generation invalidation, and rejection of
+    extra fields, caller-supplied authority, unknown components and foreign subject nodes.
+    **RED at HEAD:** the route, service operation and client parser/store do not exist, so no
+    module id can reach a seat.
+20. **A20 — Closeout.** The landing commit flips this RFC's ledger rows, appends the
     `planning/exploration/log.md` entry in the same commit, and writes its SHA into
     `move-quality-grades.md`'s D1 (which its Status line says blocks archival),
     `learner-modules.md`'s D1, and `play-composition.md`'s D2 where those are discharged.
