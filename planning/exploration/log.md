@@ -10113,3 +10113,19 @@ provider catalogue, so `provider-exchange-and-execution` now owns it as its fift
 on the same scheduler/receipt. Both RFCs remain draft pending repeat independent review. Next:
 verify governance/roadmap receipts, checkpoint these amendments, then continue the next lawful 1.0
 dependency without waiting on the separate Guided Hint owner table.
+
+## 2026-08-27 — bounded-target return split into three buildable 1.0 layers
+
+Applied `planning/bounded-policy-targets/author-repair-2026-08-26.md` without partially accepting the
+returned monolith. `rfc/bounded-policy-targets.md` now owns only one synchronous derivation operation
+and three literal local projections over retained threat, legal-exchange and exact-legal-move items.
+It cannot recompute the source predicates, accept a caller child-FEN, collapse the two bounded
+quantifiers or turn a partial traversal into a false negative.
+
+The shared provider draft retains generic node-free Stockfish/Maia receipts, same-exchange identity
+and the bounded scheduler. New `rfc/bounded-target-policy-composition.md` owns only the two reported
+joins: a depth-stable Stockfish category and one-band Maia bounds with mass/denominator refusal.
+[[D1861]] records the split as a landing boundary rather than a scope cut: all three layers remain
+required for 1.0, and no Support, Review, pack, bot or longitudinal binding lands from these drafts.
+Next: run governance/receipt checks, checkpoint the author work, then route all three documents for
+independent review while continuing accepted implementation work.

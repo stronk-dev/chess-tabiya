@@ -137,7 +137,7 @@ significance; raw-sentence side channels are gone; modules, bots and Review shar
 Primary RFCs: `pack-capability-contract`, `claim-semantic-anchors`, `tactical-collectors`,
 `semantic-collectors`, `semantic-convention-register`, `semantic-convention-provenance`,
 `runtime-opening-identity`, `exact-legal-mobility`, `breadth-collectors`, `evidence-move-selector`,
-`shared-candidate-evidence-packet`, `bounded-policy-targets`.
+`shared-candidate-evidence-packet`, `bounded-policy-targets`, `bounded-target-policy-composition`.
 
 The convention foundation now has an explicit two-step landing boundary. The process-only
 `semantic-convention-register` first records an empty landed set plus D1722's exact 39-member live
@@ -145,14 +145,16 @@ claim; only the independently accepted product RFC may then create the runtime d
 convert those claims to landed rows. This preserves the no-implementation-before-acceptance law
 without leaving a new shared semantic authority outside drift/collision checks.
 
-The 2026-08-26 [[D1631]]–[[D1636]] closure makes the shared candidate denominator buildable
-without pretending it is already integrated. The factual packet is a sealed internal receipt over
-the complete legal set and original declared evidence; adjudication, history-conditioned provider
-results, policy selection and learner modules remain separate joins. Its code-derived closure is 47
-one-edge event ids plus 22 reading ids, and its reusable engine source stays White-perspective while
-bot comparison derives a typed root frame with no mate-to-cp conversion. Nine Node-24 arms pass;
-the RFC still requires author amendment and independent review before implementation, and live
-application injection belongs to the first consumer RFC rather than an unused foundation hook.
+The 2026-08-27 amendment applies the [[D1631]]–[[D1636]] closure without pretending the shared
+candidate denominator is already implemented. The factual packet remains a sealed internal receipt
+over the complete legal set and original declared evidence; adjudication, history-conditioned
+provider results, policy selection and learner modules remain separate joins. Its code-derived
+closure is 47 one-edge event ids plus 22 reading ids (the moved twenty plus legal exchange and fork
+survival), and its reusable engine source stays White-perspective while bot comparison derives a
+typed root frame with no mate-to-cp conversion. Concrete semantic/bot operations, application
+injection, cancellation and the bounded history-preserving final cache are now in the RFC's
+implementation surface. Nine Node-24 arms pass; repeat independent review and the shared-provider
+acceptance still precede implementation.
 
 The 2026-08-26 independent review keeps [[D1023]]'s measured exact-target collector but returns
 `bounded-policy-targets` on [[D1652]]–[[D1658]]. The provider layer must expose reusable node-free
@@ -169,6 +171,14 @@ identity), exact Maia history/request keys, sealed threat/exchange joins, weakes
 inherited provider latency, same-exchange engine generation and bounded cancellation. The shared
 provider layer is a prerequisite for Review, candidate scoring and evidence-aware bots rather than
 private infrastructure owned by this one target family.
+
+The 2026-08-27 author pass now makes that boundary literal. `bounded-policy-targets` is the local
+three-projection operation only: it retains sealed threat/exchange/legal-move evidence and owns no
+provider bytes. `provider-exchange-and-execution` owns the generic Stockfish/Maia receipts and shared
+scheduler. New `bounded-target-policy-composition` owns the two reported provider joins and one
+reachable application operation. This is a landing split, not a scope cut: all three are 1.0
+requirements, every learner binding remains downstream, and each draft requires independent review
+before dependency-ordered acceptance or implementation.
 
 The same layer now owns node-free live Syzygy position receipts. [[D1699]] closes Wave C's final
 promotion pair: geometry derives from complete declared pawn contacts; outcome joins exact legal
