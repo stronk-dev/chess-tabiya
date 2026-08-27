@@ -1,8 +1,9 @@
 # RFC: Provider exchange and projection execution
 
-- **Status:** draft amended 2026-08-27 — shared F1/provider foundation assembled from the
-  four-provider contract-closure dossiers; [[D1860]] adds the reusable fifth typed operation,
-  Stockfish fixed-bound position evaluation, before independent buildability review.
+- **Status:** draft — returned by independent buildability review 2026-08-27 on
+  [[D1871]]–[[D1878]]. The shared-provider direction survives; implementation is not authorised
+  until the capability, receipt, occurrence, payload, scheduler and generation contracts are
+  repaired and independently re-reviewed.
 - **Author:** codex, from the D1652–D1658 and D1699–D1709 author-repair handoffs
 - **Created:** 2026-08-27
 - **Design refs:** `design/03-product-breadth.md` evidence architecture and provider-backed

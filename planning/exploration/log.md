@@ -10201,3 +10201,21 @@ continue another foundation dependency without implementing around it.
   fixture. D1870 continues to own learner admission/presentation.
 - Next: independent buildability review before acceptance; no implementation is authorized from
   the first draft.
+
+## 2026-08-27 — provider exchange RFC returned on eight buildability blockers
+
+- Independently reviewed the full provider-exchange RFC, its four exploration dossiers and the
+  production F1, capability, engine, Maia, Explorer and Syzygy boundaries.
+- Preserved the shared-provider direction: compiled execution paths, one bounded scheduler,
+  same-exchange receipts, node-free Stockfish evaluation and source-truth-first Explorer parsing
+  remain the correct foundation for Support, Review, bots and drills.
+- Returned implementation on [[D1871]]–[[D1878]]: the global capability route cannot express
+  request-bound cached satisfaction; cache provenance contradicts receipt retention; Maia
+  occurrence drops history; legal-root MultiPV conflicts with a live refusal and omits bounded
+  score negatives; Explorer lacks a literal payload; source-absence aggregation is undefined; the
+  scheduler's request/result types do not exist; and actual engine generation is required before
+  the exchange that discovers it.
+- Exact return:
+  `planning/provider-exchange-and-execution/independent-buildability-review-2026-08-27.md`.
+- Next: author amendment in the review's dependency order, then repeat independent review. No
+  provider foundation implementation is authorised from the current draft.
