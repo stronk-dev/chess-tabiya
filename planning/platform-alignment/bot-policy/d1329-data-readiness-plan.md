@@ -108,6 +108,8 @@ guard and stopping rule are frozen.
 - `tools/d1329-data-readiness-harness/`
 - `planning/platform-alignment/bot-policy/d1329-data-readiness-results.json`
 - `planning/platform-alignment/bot-policy/d1329-data-readiness-results.md`
+- `planning/platform-alignment/bot-policy/d1329-projection-cost-results.json`
+- `planning/platform-alignment/bot-policy/d1329-projection-cost-results.md`
 - `design/research/non-maia-selector-data-readiness.md`
 
 The harness is disposable research code. It does not enter production packages.
@@ -133,3 +135,9 @@ criterion into an able-to-fail one; it does not alter a model, feature or outcom
 **V2 result:** pass. The fixed range yields 827,067 complete games / 48,470,810 eligible decisions;
 all 36 cells clear 10,000, with a minimum of 13,809. Source clauses 1–5 are complete. Clauses 6–7
 remain the outcome-blind projection census and owner cost ceiling.
+
+**Projection result:** clause 6 fails. The candidate-weighted result is 5,347/5,664 legal
+candidates (94.403%) against the frozen 99% floor. Every omission belongs to one of 11 roots with a
+mate score, which the shipped cp-only adapter cannot represent. Clause 7 is therefore not reached:
+costs are reported as planning evidence, but no owner ceiling can admit a programme whose mandatory
+projection is not total enough. No model was fitted and the reserved population remains unread.

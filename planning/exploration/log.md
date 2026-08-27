@@ -10274,3 +10274,25 @@ continue another foundation dependency without implementing around it.
   cardinality budgets. No model is fitted and the reserved third population remains unread.
 - Next: implement and run the disposable projection instrument, report its cost without inventing
   an owner budget, then present the priced set-dependent-programme disposition.
+
+## 2026-08-27 — D1329 projection gate failed before model work
+
+- Ran the frozen 36-cell projection/cost arm over the pinned June-2026 CC0 prefix: five
+  minimum-hash positions per rating × speed × ply-window cell, 180 positions and 5,664 exact legal
+  candidates. Selection did not read the played move; committed results retain aggregates only.
+- Corrected the instrument before accepting its verdict: the first receipt divided successful
+  positions by sampled positions, while the preregistered gate names sampled legal candidates.
+  V2 counts every legal candidate in an all-or-nothing failed root and writes the failed receipt
+  before checking verdict consistency. The threshold and fixed sample did not change.
+- The candidate-weighted result is **5,347/5,664 = 94.403%**, failing the frozen ≥99% projection
+  gate. All 317 failed candidates belong to 11 roots containing a Stockfish mate score; the shipped
+  candidate adapter accepts finite centipawns only. This is D195/D1636 measured at population
+  scale, not a semantic-collector failure, and no mate-to-cp conversion was invented.
+- Generic evidence flattening over the 169 completed positions produced 2,370 names / 3,376,630
+  non-zero scalars / 249,314,807 encoded bytes and took 101.474 seconds versus 1.463 seconds for
+  the fixed depth-2 engine roots. Linear planning cost at 1m decisions is 166.788 projection hours
+  and 1,373.920 GiB; a cardinality-only 16-field cap remains 1,027.276 GiB.
+- No model was fitted, no owner budget was invented or requested, and the reserved D1297
+  confirmation population remains unread. Next: land typed cp/mate candidate scores and a
+  registered projection-balanced compact model view, then rerun this exact census before any
+  learning curve.

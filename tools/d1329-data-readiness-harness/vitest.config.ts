@@ -10,6 +10,6 @@ export default defineConfig({
   },
   test: {
     include: ["tools/d1329-data-readiness-harness/**/*.test.ts"],
-    testTimeout: 120_000,
+    testTimeout: 3_600_000,
   },
 });

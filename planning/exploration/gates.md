@@ -159,6 +159,13 @@ rewind adds value**.
   D1329). The precommitted 256 MiB range yields 827,067 complete games / 48.47m eligible decisions;
   all 36 roster-derived cells clear 10k (minimum 13,809), with zero illegal replays. Source clauses
   1–5 are complete. Projection completeness/cost and owner budget remain open; H5/C5 remain unchanged.
+- **Projection gate fails 2026-08-27** (`design/research/non-maia-selector-data-readiness.md`,
+  D1329). The outcome-blind 36-cell sample reaches 5,347/5,664 legal candidates (**94.403%**), below
+  the frozen 99% floor. All 317 omitted candidates belong to 11 roots containing typed mate scores;
+  the shipped adapter accepts cp only (D195). Generic flattening also projects 166.8 single-process
+  hours / 1,373.9 GiB at 1m decisions, so D1299's compact registered view remains prerequisite. No
+  learning curve or owner budget fork is opened; the exact typed-score repair and census rerun come
+  first. The reserved confirmation population remains unread and H5/C5 remain unchanged.
 
 ## Kill criteria
 

@@ -1,0 +1,790 @@
+{
+  "schema": "tabiya.research.d1329-projection-cost.v2",
+  "measuredAt": "2026-08-27T15:49:12.263Z",
+  "source": {
+    "decompressedPrefixSha256": "sha256:89d444ea00e073ee17d6a02747a7c9da12fe49c949d5b407c9e0d0a60b7d81ea",
+    "selection": "five-min-sha256-per-36-cells",
+    "samplePerCell": 5
+  },
+  "engine": {
+    "name": "Stockfish",
+    "version": "18",
+    "depth": 2,
+    "threads": 1,
+    "hashMb": 16
+  },
+  "population": {
+    "sampledPositions": 180,
+    "successfulPositions": 169,
+    "failedPositions": 11,
+    "successRate": 0.944032,
+    "sampledLegalCandidates": 5664,
+    "successfulLegalCandidates": 5347,
+    "failedLegalCandidates": 317,
+    "byCell": {
+      "1000-1399/blitz/late-41-plus/standard": {
+        "sampledPositions": 5,
+        "successfulPositions": 4,
+        "sampledLegalCandidates": 96,
+        "successfulLegalCandidates": 66
+      },
+      "1000-1399/blitz/middlegame-17-40/standard": {
+        "sampledPositions": 5,
+        "successfulPositions": 5,
+        "sampledLegalCandidates": 178,
+        "successfulLegalCandidates": 178
+      },
+      "1000-1399/blitz/opening-8-16/standard": {
+        "sampledPositions": 5,
+        "successfulPositions": 5,
+        "sampledLegalCandidates": 191,
+        "successfulLegalCandidates": 191
+      },
+      "1000-1399/bullet/late-41-plus/standard": {
+        "sampledPositions": 5,
+        "successfulPositions": 5,
+        "sampledLegalCandidates": 156,
+        "successfulLegalCandidates": 156
+      },
+      "1000-1399/bullet/middlegame-17-40/standard": {
+        "sampledPositions": 5,
+        "successfulPositions": 4,
+        "sampledLegalCandidates": 156,
+        "successfulLegalCandidates": 137
+      },
+      "1000-1399/bullet/opening-8-16/standard": {
+        "sampledPositions": 5,
+        "successfulPositions": 5,
+        "sampledLegalCandidates": 181,
+        "successfulLegalCandidates": 181
+      },
+      "1000-1399/rapid/late-41-plus/standard": {
+        "sampledPositions": 5,
+        "successfulPositions": 3,
+        "sampledLegalCandidates": 134,
+        "successfulLegalCandidates": 84
+      },
+      "1000-1399/rapid/middlegame-17-40/standard": {
+        "sampledPositions": 5,
+        "successfulPositions": 5,
+        "sampledLegalCandidates": 186,
+        "successfulLegalCandidates": 186
+      },
+      "1000-1399/rapid/opening-8-16/standard": {
+        "sampledPositions": 5,
+        "successfulPositions": 4,
+        "sampledLegalCandidates": 175,
+        "successfulLegalCandidates": 136
+      },
+      "1400-1799/blitz/late-41-plus/standard": {
+        "sampledPositions": 5,
+        "successfulPositions": 5,
+        "sampledLegalCandidates": 169,
+        "successfulLegalCandidates": 169
+      },
+      "1400-1799/blitz/middlegame-17-40/standard": {
+        "sampledPositions": 5,
+        "successfulPositions": 5,
+        "sampledLegalCandidates": 159,
+        "successfulLegalCandidates": 159
+      },
+      "1400-1799/blitz/opening-8-16/standard": {
+        "sampledPositions": 5,
+        "successfulPositions": 5,
+        "sampledLegalCandidates": 174,
+        "successfulLegalCandidates": 174
+      },
+      "1400-1799/bullet/late-41-plus/standard": {
+        "sampledPositions": 5,
+        "successfulPositions": 5,
+        "sampledLegalCandidates": 102,
+        "successfulLegalCandidates": 102
+      },
+      "1400-1799/bullet/middlegame-17-40/standard": {
+        "sampledPositions": 5,
+        "successfulPositions": 4,
+        "sampledLegalCandidates": 140,
+        "successfulLegalCandidates": 117
+      },
+      "1400-1799/bullet/opening-8-16/standard": {
+        "sampledPositions": 5,
+        "successfulPositions": 5,
+        "sampledLegalCandidates": 156,
+        "successfulLegalCandidates": 156
+      },
+      "1400-1799/rapid/late-41-plus/standard": {
+        "sampledPositions": 5,
+        "successfulPositions": 5,
+        "sampledLegalCandidates": 144,
+        "successfulLegalCandidates": 144
+      },
+      "1400-1799/rapid/middlegame-17-40/standard": {
+        "sampledPositions": 5,
+        "successfulPositions": 5,
+        "sampledLegalCandidates": 198,
+        "successfulLegalCandidates": 198
+      },
+      "1400-1799/rapid/opening-8-16/standard": {
+        "sampledPositions": 5,
+        "successfulPositions": 5,
+        "sampledLegalCandidates": 176,
+        "successfulLegalCandidates": 176
+      },
+      "1800-2199/blitz/late-41-plus/standard": {
+        "sampledPositions": 5,
+        "successfulPositions": 5,
+        "sampledLegalCandidates": 115,
+        "successfulLegalCandidates": 115
+      },
+      "1800-2199/blitz/middlegame-17-40/standard": {
+        "sampledPositions": 5,
+        "successfulPositions": 5,
+        "sampledLegalCandidates": 182,
+        "successfulLegalCandidates": 182
+      },
+      "1800-2199/blitz/opening-8-16/standard": {
+        "sampledPositions": 5,
+        "successfulPositions": 4,
+        "sampledLegalCandidates": 166,
+        "successfulLegalCandidates": 140
+      },
+      "1800-2199/bullet/late-41-plus/standard": {
+        "sampledPositions": 5,
+        "successfulPositions": 4,
+        "sampledLegalCandidates": 157,
+        "successfulLegalCandidates": 129
+      },
+      "1800-2199/bullet/middlegame-17-40/standard": {
+        "sampledPositions": 5,
+        "successfulPositions": 5,
+        "sampledLegalCandidates": 181,
+        "successfulLegalCandidates": 181
+      },
+      "1800-2199/bullet/opening-8-16/standard": {
+        "sampledPositions": 5,
+        "successfulPositions": 5,
+        "sampledLegalCandidates": 154,
+        "successfulLegalCandidates": 154
+      },
+      "1800-2199/rapid/late-41-plus/standard": {
+        "sampledPositions": 5,
+        "successfulPositions": 5,
+        "sampledLegalCandidates": 133,
+        "successfulLegalCandidates": 133
+      },
+      "1800-2199/rapid/middlegame-17-40/standard": {
+        "sampledPositions": 5,
+        "successfulPositions": 5,
+        "sampledLegalCandidates": 175,
+        "successfulLegalCandidates": 175
+      },
+      "1800-2199/rapid/opening-8-16/standard": {
+        "sampledPositions": 5,
+        "successfulPositions": 5,
+        "sampledLegalCandidates": 184,
+        "successfulLegalCandidates": 184
+      },
+      "2200-2599/blitz/late-41-plus/standard": {
+        "sampledPositions": 5,
+        "successfulPositions": 5,
+        "sampledLegalCandidates": 105,
+        "successfulLegalCandidates": 105
+      },
+      "2200-2599/blitz/middlegame-17-40/standard": {
+        "sampledPositions": 5,
+        "successfulPositions": 4,
+        "sampledLegalCandidates": 178,
+        "successfulLegalCandidates": 149
+      },
+      "2200-2599/blitz/opening-8-16/standard": {
+        "sampledPositions": 5,
+        "successfulPositions": 5,
+        "sampledLegalCandidates": 161,
+        "successfulLegalCandidates": 161
+      },
+      "2200-2599/bullet/late-41-plus/standard": {
+        "sampledPositions": 5,
+        "successfulPositions": 4,
+        "sampledLegalCandidates": 159,
+        "successfulLegalCandidates": 123
+      },
+      "2200-2599/bullet/middlegame-17-40/standard": {
+        "sampledPositions": 5,
+        "successfulPositions": 4,
+        "sampledLegalCandidates": 121,
+        "successfulLegalCandidates": 84
+      },
+      "2200-2599/bullet/opening-8-16/standard": {
+        "sampledPositions": 5,
+        "successfulPositions": 5,
+        "sampledLegalCandidates": 166,
+        "successfulLegalCandidates": 166
+      },
+      "2200-2599/rapid/late-41-plus/standard": {
+        "sampledPositions": 5,
+        "successfulPositions": 5,
+        "sampledLegalCandidates": 120,
+        "successfulLegalCandidates": 120
+      },
+      "2200-2599/rapid/middlegame-17-40/standard": {
+        "sampledPositions": 5,
+        "successfulPositions": 5,
+        "sampledLegalCandidates": 176,
+        "successfulLegalCandidates": 176
+      },
+      "2200-2599/rapid/opening-8-16/standard": {
+        "sampledPositions": 5,
+        "successfulPositions": 5,
+        "sampledLegalCandidates": 160,
+        "successfulLegalCandidates": 160
+      }
+    }
+  },
+  "timing": {
+    "engineMs": 1462.717699,
+    "projectionMs": 101473.947713
+  },
+  "generic": {
+    "distinctNames": 2370,
+    "scalars": 3376630,
+    "bytes": 249314807
+  },
+  "compactBudgets": {
+    "cappedScalars": {
+      "8": 1905823,
+      "16": 2524697,
+      "32": 3053702
+    },
+    "averageScalarBytes": 73.835394
+  },
+  "projections": {
+    "derived.activity.event.open_file_occupancy@1": {
+      "emissions": 176,
+      "payloadBytes": 77410,
+      "distinctNames": 25,
+      "flattenedScalars": 1866,
+      "flattenedBytes": 156726,
+      "cappedScalars": {
+        "8": 1408,
+        "16": 1866,
+        "32": 1866
+      }
+    },
+    "derived.exchange.capture_class@1": {
+      "emissions": 322,
+      "payloadBytes": 608665,
+      "distinctNames": 133,
+      "flattenedScalars": 13103,
+      "flattenedBytes": 1029956,
+      "cappedScalars": {
+        "8": 2576,
+        "16": 5152,
+        "32": 10052
+      }
+    },
+    "derived.king.captured_zone_defender@1": {
+      "emissions": 49,
+      "payloadBytes": 33122,
+      "distinctNames": 29,
+      "flattenedScalars": 637,
+      "flattenedBytes": 46908,
+      "cappedScalars": {
+        "8": 392,
+        "16": 637,
+        "32": 637
+      }
+    },
+    "derived.material.event.role_asymmetry@1": {
+      "emissions": 326,
+      "payloadBytes": 201893,
+      "distinctNames": 44,
+      "flattenedScalars": 7815,
+      "flattenedBytes": 565321,
+      "cappedScalars": {
+        "8": 2608,
+        "16": 5216,
+        "32": 7815
+      }
+    },
+    "derived.material.reading.role_signature@1": {
+      "emissions": 5347,
+      "payloadBytes": 6177483,
+      "distinctNames": 25,
+      "flattenedScalars": 133675,
+      "flattenedBytes": 9988196,
+      "cappedScalars": {
+        "8": 42776,
+        "16": 85552,
+        "32": 133675
+      }
+    },
+    "derived.pawn.event.transitions@1": {
+      "emissions": 68,
+      "payloadBytes": 31915,
+      "distinctNames": 30,
+      "flattenedScalars": 780,
+      "flattenedBytes": 56212,
+      "cappedScalars": {
+        "8": 499,
+        "16": 680,
+        "32": 780
+      }
+    },
+    "derived.tactic.defender_exposure@1": {
+      "emissions": 47,
+      "payloadBytes": 94438,
+      "distinctNames": 126,
+      "flattenedScalars": 1962,
+      "flattenedBytes": 159464,
+      "cappedScalars": {
+        "8": 376,
+        "16": 752,
+        "32": 1485
+      }
+    },
+    "derived.tactic.discovered_executed@1": {
+      "emissions": 58,
+      "payloadBytes": 83487,
+      "distinctNames": 74,
+      "flattenedScalars": 1994,
+      "flattenedBytes": 153071,
+      "cappedScalars": {
+        "8": 464,
+        "16": 928,
+        "32": 1856
+      }
+    },
+    "derived.tactic.fork_survives_reply@1": {
+      "emissions": 104,
+      "payloadBytes": 225653,
+      "distinctNames": 127,
+      "flattenedScalars": 4179,
+      "flattenedBytes": 397395,
+      "cappedScalars": {
+        "8": 832,
+        "16": 1664,
+        "32": 3316
+      }
+    },
+    "derived.tactic.promotion_pressure@1": {
+      "emissions": 5347,
+      "payloadBytes": 1064797,
+      "distinctNames": 37,
+      "flattenedScalars": 18667,
+      "flattenedBytes": 1374643,
+      "cappedScalars": {
+        "8": 9638,
+        "16": 14542,
+        "32": 18667
+      }
+    },
+    "rules.castling.event.rights_lost@1": {
+      "emissions": 433,
+      "payloadBytes": 99988,
+      "distinctNames": 8,
+      "flattenedScalars": 1299,
+      "flattenedBytes": 78869,
+      "cappedScalars": {
+        "8": 1299,
+        "16": 1299,
+        "32": 1299
+      }
+    },
+    "rules.castling.reading.legality@1": {
+      "emissions": 8463,
+      "payloadBytes": 1271086,
+      "distinctNames": 8,
+      "flattenedScalars": 50778,
+      "flattenedBytes": 3024580,
+      "cappedScalars": {
+        "8": 50778,
+        "16": 50778,
+        "32": 50778
+      }
+    },
+    "rules.castling.reading.rights@1": {
+      "emissions": 5347,
+      "payloadBytes": 854102,
+      "distinctNames": 4,
+      "flattenedScalars": 21388,
+      "flattenedBytes": 1290858,
+      "cappedScalars": {
+        "8": 21388,
+        "16": 21388,
+        "32": 21388
+      }
+    },
+    "rules.exchange.predicate.legal_exchange@1": {
+      "emissions": 322,
+      "payloadBytes": 427462,
+      "distinctNames": 111,
+      "flattenedScalars": 10206,
+      "flattenedBytes": 834140,
+      "cappedScalars": {
+        "8": 2576,
+        "16": 5152,
+        "32": 9169
+      }
+    },
+    "rules.king.event.zone_state@1": {
+      "emissions": 10694,
+      "payloadBytes": 6288424,
+      "distinctNames": 63,
+      "flattenedScalars": 187002,
+      "flattenedBytes": 12109511,
+      "cappedScalars": {
+        "8": 85552,
+        "16": 159664,
+        "32": 186306
+      }
+    },
+    "rules.king.reading.zone_state@1": {
+      "emissions": 5347,
+      "payloadBytes": 9147530,
+      "distinctNames": 37,
+      "flattenedScalars": 145350,
+      "flattenedBytes": 10699421,
+      "cappedScalars": {
+        "8": 42776,
+        "16": 85552,
+        "32": 145308
+      }
+    },
+    "rules.mobility.event.piece_destinations@1": {
+      "emissions": 16412,
+      "payloadBytes": 9048213,
+      "distinctNames": 20,
+      "flattenedScalars": 213356,
+      "flattenedBytes": 14551732,
+      "cappedScalars": {
+        "8": 131296,
+        "16": 213356,
+        "32": 213356
+      }
+    },
+    "rules.mobility.reading.piece_destinations@1": {
+      "emissions": 5347,
+      "payloadBytes": 9935374,
+      "distinctNames": 16,
+      "flattenedScalars": 72969,
+      "flattenedBytes": 6461172,
+      "cappedScalars": {
+        "8": 42707,
+        "16": 72969,
+        "32": 72969
+      }
+    },
+    "rules.pawn.event.dynamics@1": {
+      "emissions": 319,
+      "payloadBytes": 141781,
+      "distinctNames": 79,
+      "flattenedScalars": 3158,
+      "flattenedBytes": 225821,
+      "cappedScalars": {
+        "8": 2319,
+        "16": 2817,
+        "32": 3158
+      }
+    },
+    "rules.pawn.reading.candidate_majority@1": {
+      "emissions": 5347,
+      "payloadBytes": 1320977,
+      "distinctNames": 17,
+      "flattenedScalars": 24800,
+      "flattenedBytes": 2026800,
+      "cappedScalars": {
+        "8": 15371,
+        "16": 24521,
+        "32": 24800
+      }
+    },
+    "rules.pawn.reading.contacts@1": {
+      "emissions": 5347,
+      "payloadBytes": 23611363,
+      "distinctNames": 41,
+      "flattenedScalars": 119508,
+      "flattenedBytes": 8480376,
+      "cappedScalars": {
+        "8": 42612,
+        "16": 84531,
+        "32": 119147
+      }
+    },
+    "rules.phase.development@1": {
+      "emissions": 5347,
+      "payloadBytes": 1066015,
+      "distinctNames": 6,
+      "flattenedScalars": 18854,
+      "flattenedBytes": 1199333,
+      "cappedScalars": {
+        "8": 18854,
+        "16": 18854,
+        "32": 18854
+      }
+    },
+    "rules.square.event.control@1": {
+      "emissions": 164306,
+      "payloadBytes": 51744695,
+      "distinctNames": 15,
+      "flattenedScalars": 985836,
+      "flattenedBytes": 59227782,
+      "cappedScalars": {
+        "8": 985836,
+        "16": 985836,
+        "32": 985836
+      }
+    },
+    "rules.square.reading.control@1": {
+      "emissions": 5347,
+      "payloadBytes": 112934261,
+      "distinctNames": 28,
+      "flattenedScalars": 135134,
+      "flattenedBytes": 11639210,
+      "cappedScalars": {
+        "8": 42776,
+        "16": 85552,
+        "32": 135134
+      }
+    },
+    "rules.structural.event.pawn_islands@1": {
+      "emissions": 10694,
+      "payloadBytes": 2498036,
+      "distinctNames": 5,
+      "flattenedScalars": 42776,
+      "flattenedBytes": 2523784,
+      "cappedScalars": {
+        "8": 42776,
+        "16": 42776,
+        "32": 42776
+      }
+    },
+    "rules.structural.reading.pawn_connectivity@1": {
+      "emissions": 5347,
+      "payloadBytes": 4315630,
+      "distinctNames": 21,
+      "flattenedScalars": 106446,
+      "flattenedBytes": 8758545,
+      "cappedScalars": {
+        "8": 42776,
+        "16": 84898,
+        "32": 106446
+      }
+    },
+    "rules.structural.reading.space@1": {
+      "emissions": 5347,
+      "payloadBytes": 3449061,
+      "distinctNames": 17,
+      "flattenedScalars": 90899,
+      "flattenedBytes": 6123388,
+      "cappedScalars": {
+        "8": 42776,
+        "16": 85552,
+        "32": 90899
+      }
+    },
+    "rules.tactic.consequence.mate_in_one@1": {
+      "emissions": 5347,
+      "payloadBytes": 440731,
+      "distinctNames": 7,
+      "flattenedScalars": 5365,
+      "flattenedBytes": 327664,
+      "cappedScalars": {
+        "8": 5365,
+        "16": 5365,
+        "32": 5365
+      }
+    },
+    "rules.tactic.consequence.reply_breadth@1": {
+      "emissions": 5347,
+      "payloadBytes": 2183494,
+      "distinctNames": 5,
+      "flattenedScalars": 26735,
+      "flattenedBytes": 1672969,
+      "cappedScalars": {
+        "8": 26735,
+        "16": 26735,
+        "32": 26735
+      }
+    },
+    "rules.tactic.consequence.threat@1": {
+      "emissions": 5347,
+      "payloadBytes": 3234547,
+      "distinctNames": 149,
+      "flattenedScalars": 66668,
+      "flattenedBytes": 5638917,
+      "cappedScalars": {
+        "8": 21372,
+        "16": 35412,
+        "32": 56239
+      }
+    },
+    "rules.tactic.event.check@1": {
+      "emissions": 144,
+      "payloadBytes": 38402,
+      "distinctNames": 16,
+      "flattenedScalars": 1364,
+      "flattenedBytes": 87281,
+      "cappedScalars": {
+        "8": 1152,
+        "16": 1364,
+        "32": 1364
+      }
+    },
+    "rules.tactic.event.double_attack@1": {
+      "emissions": 104,
+      "payloadBytes": 180333,
+      "distinctNames": 120,
+      "flattenedScalars": 3451,
+      "flattenedBytes": 295511,
+      "cappedScalars": {
+        "8": 832,
+        "16": 1664,
+        "32": 2927
+      }
+    },
+    "rules.tactic.event.loose_piece@1": {
+      "emissions": 3581,
+      "payloadBytes": 14058559,
+      "distinctNames": 383,
+      "flattenedScalars": 246227,
+      "flattenedBytes": 22344998,
+      "cappedScalars": {
+        "8": 28648,
+        "16": 57296,
+        "32": 114592
+      }
+    },
+    "rules.tactic.reading.back_rank@1": {
+      "emissions": 5347,
+      "payloadBytes": 1218340,
+      "distinctNames": 30,
+      "flattenedScalars": 16751,
+      "flattenedBytes": 1373381,
+      "cappedScalars": {
+        "8": 10807,
+        "16": 16085,
+        "32": 16751
+      }
+    },
+    "rules.tactic.reading.discovered_latency@1": {
+      "emissions": 5347,
+      "payloadBytes": 3840948,
+      "distinctNames": 133,
+      "flattenedScalars": 90366,
+      "flattenedBytes": 8335282,
+      "cappedScalars": {
+        "8": 22651,
+        "16": 42279,
+        "32": 76159
+      }
+    },
+    "rules.tactic.reading.loose_piece@1": {
+      "emissions": 5347,
+      "payloadBytes": 37992988,
+      "distinctNames": 200,
+      "flattenedScalars": 305963,
+      "flattenedBytes": 29802522,
+      "cappedScalars": {
+        "8": 42764,
+        "16": 85167,
+        "32": 161986
+      }
+    },
+    "rules.tactic.reading.ray_classification@1": {
+      "emissions": 5347,
+      "payloadBytes": 25289323,
+      "distinctNames": 43,
+      "flattenedScalars": 169040,
+      "flattenedBytes": 14251957,
+      "cappedScalars": {
+        "8": 41131,
+        "16": 81867,
+        "32": 154335
+      }
+    },
+    "rules.tactic.reading.rook_on_seventh@1": {
+      "emissions": 5347,
+      "payloadBytes": 504936,
+      "distinctNames": 14,
+      "flattenedScalars": 7184,
+      "flattenedBytes": 489545,
+      "cappedScalars": {
+        "8": 6798,
+        "16": 7184,
+        "32": 7184
+      }
+    },
+    "rules.tactic.reading.trapped_piece@1": {
+      "emissions": 5347,
+      "payloadBytes": 929006,
+      "distinctNames": 97,
+      "flattenedScalars": 17754,
+      "flattenedBytes": 1179161,
+      "cappedScalars": {
+        "8": 16206,
+        "16": 16470,
+        "32": 16968
+      }
+    },
+    "rules.transition.event.capture@1": {
+      "emissions": 322,
+      "payloadBytes": 112209,
+      "distinctNames": 19,
+      "flattenedScalars": 2575,
+      "flattenedBytes": 156687,
+      "cappedScalars": {
+        "8": 2575,
+        "16": 2575,
+        "32": 2575
+      }
+    },
+    "rules.transition.event.developed@1": {
+      "emissions": 550,
+      "payloadBytes": 189528,
+      "distinctNames": 8,
+      "flattenedScalars": 2750,
+      "flattenedBytes": 175718,
+      "cappedScalars": {
+        "8": 2750,
+        "16": 2750,
+        "32": 2750
+      }
+    }
+  },
+  "errors": {
+    "mate_score_unrepresentable": {
+      "positions": 11,
+      "legalCandidates": 317
+    }
+  },
+  "estimates": [
+    {
+      "decisions": 10000,
+      "engineHours": 0.022573,
+      "projectionHours": 1.667882,
+      "genericGiB": 13.739202,
+      "cap8GiB": 7.754621,
+      "cap16GiB": 10.272763,
+      "cap32GiB": 12.425237
+    },
+    {
+      "decisions": 100000,
+      "engineHours": 0.225728,
+      "projectionHours": 16.678821,
+      "genericGiB": 137.392017,
+      "cap8GiB": 77.546212,
+      "cap16GiB": 102.727634,
+      "cap32GiB": 124.252369
+    },
+    {
+      "decisions": 1000000,
+      "engineHours": 2.25728,
+      "projectionHours": 166.788211,
+      "genericGiB": 1373.920165,
+      "cap8GiB": 775.462118,
+      "cap16GiB": 1027.276343,
+      "cap32GiB": 1242.523687
+    }
+  ],
+  "verdict": "projection_gate_fail"
+}
