@@ -9,9 +9,11 @@ Its local models are prospective contract falsifiers for node-free provider iden
 same-exchange receipts, source/derivation separation, legal-root completeness, weakest-input
 confidence, inherited latency and bounded scheduling.
 
-Run with the repository's Node 24 toolchain:
+The repeat-review additions transcribe the amended three-row local F1 image and prove its current
+grounding/exactness widening, then exercise the source-FEN versus passed-FEN chronology loss.
+
+Run from the repository root:
 
 ```sh
-/opt/homebrew/opt/node@24/bin/node node_modules/vitest/vitest.mjs run \
-  --config tools/d1652-bounded-target-repair-harness/vitest.config.ts
+pnpm exec vitest run --config tools/d1652-bounded-target-repair-harness/vitest.config.ts
 ```

@@ -1,6 +1,6 @@
 # RFC: Exact bounded material targets
 
-- **Status:** draft — author-amended 2026-08-27 after the D1652–D1658 independent return; repeat independent buildability review required
+- **Status:** draft — returned on repeat independent buildability review 2026-08-27 on [[D1904]]–[[D1909]]
 - **Author:** codex, preserving the D1023 research contract and applying `planning/bounded-policy-targets/author-repair-2026-08-26.md`
 - **Created:** 2026-08-23; narrowed 2026-08-27
 - **Exploration gate:** [[D1023]] ✅; executable contract closure in `design/research/bounded-policy-target-contract-closure.md`
@@ -369,8 +369,21 @@ learner preset exposes them are consumer decisions and do not change the exact p
 - [[D1372]] remains a bot-route provenance correction. This RFC neither defines nor consumes
   `rawMass`/`proposedBy`; the policy-composition sibling keys Maia admission on source-page mass.
 
+## Repeat-review routing
+
+| finding | blocker | repair owner |
+|---|---|---|
+| [[D1904]] | literal F1 grounding/exactness image widens over convention inputs | amend §3 and compile the exact image |
+| [[D1905]] | original source FEN is absent after the threat pass convention | amend source authority and §§1.2–1.3 |
+| [[D1906]] | capped traversal has no closed evidence/abstention return | amend §§2.3 and 4 |
+| [[D1907]] | captured-attacker result conflicts with identity-loss prose | amend §§2.1–2.2 and criterion 6 |
+| [[D1908]] | normative evidence item type does not exist | publish literal generic request/result types in §4 |
+| [[D1909]] | local/sync bounded traversal has no measured cost gate | add production latency/multiplication criterion |
+
 ## Changelog
 
+- 2026-08-27 — repeat independent review returned the narrowed local contract on [[D1904]]–[[D1909]].
+  Exact return: `planning/bounded-policy-targets/repeat-independent-buildability-review-2026-08-27.md`.
 - 2026-08-27 — applied the D1652–D1658 author handoff by narrowing this RFC to exact local target
   derivation. Removed the false target-specific Stockfish source, node-shaped Maia reuse, provider
   operation placeholders and mixed-latency producer. Published three literal F1 rows over retained

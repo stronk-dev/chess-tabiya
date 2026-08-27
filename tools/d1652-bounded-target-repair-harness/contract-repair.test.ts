@@ -157,6 +157,77 @@ function confidenceGapDeclarations(): EvidenceContractDeclarations {
   });
 }
 
+function amendedLocalTargetDeclarations(): EvidenceContractDeclarations {
+  const derivedRef = Object.freeze({ id: "derived.bounded_target", version: 1 as const });
+  const input = (id: string) => Object.freeze({ id, version: 1 as const });
+  const disposed = Object.freeze({ kind: "inspector_only" as const, reason: "No learner consumer is admitted by the local collector RFC." });
+  const common = {
+    producer: derivedRef,
+    plane: "derived" as const,
+    confidence: "exact" as const,
+    disposition: disposed,
+  };
+  const outputs: readonly ProjectionDeclaration[] = Object.freeze([
+    Object.freeze({
+      ...common,
+      id: "derived.bounded_target.named_material_target", version: 1,
+      role: "reading", payloadType: "NamedMaterialTarget",
+      semantics: "Exact positive material-capture identity retained from the declared threat and exchange.",
+      operands: Object.freeze(["convention", "passedFen", "attacker", "victim", "captureUci", "threat", "exchange"]),
+      signs: Object.freeze(["state", "threatened"]),
+      grounding: "position_rules", exactness: "exact",
+      abstention: Object.freeze({ possible: true, reasons: Object.freeze(["input_abstained", "position_mismatch", "target_mismatch", "exchange_mismatch"]) }),
+      answerContent: Object.freeze(["fact", "threat"]),
+      forms: Object.freeze(["sentence", "list", "lit_squares", "arrows", "piece_halo", "machine_condition"]),
+      dependsOn: Object.freeze([]),
+      derivation: Object.freeze({ inputs: Object.freeze([input("rules.tactic.consequence.threat"), input("rules.exchange.predicate.legal_exchange")]) }),
+      limitations: Object.freeze(["One exact material capture; no intent, quality, plan, force or significance."]),
+    }),
+    Object.freeze({
+      ...common,
+      id: "derived.bounded_target.immediate", version: 1,
+      role: "event", payloadType: "BoundedTargetImmediate",
+      semantics: "Exact immediate preservation or removal of one named material target after one legal candidate.",
+      operands: Object.freeze(["target", "legalMoves", "candidateUci", "afterFen", "result", "cause"]),
+      signs: Object.freeze(["preserved", "removed"]),
+      grounding: "position_rules", exactness: "exact",
+      abstention: Object.freeze({ possible: true, reasons: Object.freeze(["input_abstained", "position_mismatch", "candidate_not_legal", "target_mismatch"]) }),
+      answerContent: Object.freeze(["fact", "threat"]),
+      forms: Object.freeze(["sentence", "timeline_marker", "lit_squares", "arrows", "piece_halo", "machine_condition"]),
+      dependsOn: Object.freeze([]),
+      derivation: Object.freeze({ inputs: Object.freeze([input("derived.bounded_target.named_material_target"), input("rules.mobility.reading.legal_moves")]) }),
+      limitations: Object.freeze(["One candidate and target; no ranking, evaluation, recommendation, intent or significance."]),
+    }),
+    Object.freeze({
+      ...common,
+      id: "derived.bounded_target.bounded_return", version: 1,
+      role: "reading", payloadType: "BoundedTargetReturn",
+      semantics: "Separate exists-exists return and exists-for-all-defences survival within the declared three-ply horizon.",
+      operands: Object.freeze(["target", "immediate", "horizonPlies", "visitedPositions", "reintroducedWithin3Ply", "reintroductionWitness", "preparationSurvivesEveryDefence", "everyDefenceWitness", "firstRefutation"]),
+      signs: Object.freeze(["preserved", "removed", "enabled"]),
+      grounding: "declared_convention", exactness: "convention",
+      abstention: Object.freeze({ possible: true, reasons: Object.freeze(["input_abstained", "position_mismatch", "target_mismatch", "budget_exhausted"]) }),
+      answerContent: Object.freeze(["fact", "threat"]),
+      forms: Object.freeze(["sentence", "list", "timeline_marker", "lit_squares", "arrows", "machine_condition"]),
+      dependsOn: Object.freeze([]),
+      derivation: Object.freeze({ inputs: Object.freeze([input("derived.bounded_target.named_material_target"), input("derived.bounded_target.immediate"), input("rules.mobility.reading.legal_moves")]) }),
+      limitations: Object.freeze(["Horizon is three plies; no strategy or inevitability beyond it."]),
+    }),
+  ]);
+  return Object.freeze({
+    ...EVIDENCE_CONTRACT_DECLARATIONS,
+    producers: Object.freeze([...EVIDENCE_CONTRACT_DECLARATIONS.producers, Object.freeze({
+      id: derivedRef.id,
+      version: derivedRef.version,
+      plane: "derived" as const,
+      implementation: "packages/runtime/src/bounded-target.ts",
+      availability: "local" as const,
+      latency: "sync" as const,
+      outputs,
+    })]),
+  });
+}
+
 function assertConfidenceDoesNotWiden(output: ProjectionDeclaration, inputs: readonly ProjectionDeclaration[]): void {
   if (inputs.some((input) => input.confidence === "reported") && output.confidence !== "reported") {
     throw new TypeError("derived confidence exceeds reported input");
@@ -269,6 +340,27 @@ describe("D1654 literal F1 confidence and latency", () => {
     const grade = PRIMARY_EVIDENCE_MANIFEST.producers.find((row) => row.id === "derived.grade")!;
     expect(grade.latency).toBe("sync");
     expect(inheritedLatency(["interactive", "sync"])).toBe("interactive");
+  });
+});
+
+describe("amended local declaration image", () => {
+  it("rejects the RFC's exact/position-rules widening over convention-grounded inputs", () => {
+    expect(() => compileEvidenceManifest(amendedLocalTargetDeclarations())).toThrow(/derived projection exceeds/u);
+  });
+
+  it("shows that the sealed threat retains the passed FEN but not the candidate source FEN", () => {
+    const sourceFen = "r3k3/8/8/8/8/8/8/Q3K3 w - - 0 1";
+    const reading = threats(sourceFen);
+    expect(reading.kind).toBe("threats");
+    const exchange = reading.kind === "threats" ? reading.threats.find((row) => row.threatenedMove === "a8a1")?.exchange : undefined;
+    expect(exchange).toBeDefined();
+    const target = namedTarget(declareThreatEvidence(reading), declareLegalExchangeEvidence(exchange!));
+    expect(target.sourceFen).not.toBe(sourceFen);
+    expect(target.sourceFen.split(" ")[1]).toBe("b");
+    expect(sourceFen.split(" ")[1]).toBe("w");
+    expect(reading).not.toHaveProperty("fen");
+    expect(exactLegalMoves(sourceFen).some((move) => move.uci === "a1a8")).toBe(true);
+    expect(exactLegalMoves(target.sourceFen).some((move) => move.uci === "a1a8")).toBe(false);
   });
 });
 

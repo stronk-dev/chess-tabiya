@@ -10316,3 +10316,20 @@ continue another foundation dependency without implementing around it.
   `planning/evidence-foundation-ux/shared-candidate-packet-repeat-review-2026-08-27.md`.
 - Next: repair the packet admission boundary and narrow first landing, reconcile the engine source,
   then repeat review after the provider contract is independently accepted.
+## 2026-08-27 — bounded target local layer returned on repeat buildability review
+
+- Repeated the independent review after the provider/policy split. The original D1023 exact
+  removal/return result, separate quantifiers, destination negative and inspector-only posture
+  survive.
+- Extended the D1652 repair harness to 11/11 with the amended three-row F1 image and a literal
+  source/pass-position control. The image correctly fails `EVIDENCE_DERIVATION_WIDENS`: two rows
+  claim `position_rules/exact` over convention-grounded/convention-exact inputs ([[D1904]]).
+- Returned the RFC because the threat/pass source retains only the opponent-turn exchange FEN and
+  loses the original candidate-source FEN ([[D1905]]); capped traversal has no closed typed
+  abstention result ([[D1906]]); captured-attacker and identity-loss rules conflict ([[D1907]]);
+  the normative operation names a nonexistent evidence-item type ([[D1908]]); and its `local/sync`
+  execution class has no production latency or whole-set multiplication gate ([[D1909]]).
+- Exact return:
+  `planning/bounded-policy-targets/repeat-independent-buildability-review-2026-08-27.md`.
+- Next: amend the evidence strengths and chronology authority first, then close the result type and
+  measure production cost before another independent review.
