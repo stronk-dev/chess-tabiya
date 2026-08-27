@@ -241,6 +241,16 @@
     packs.find((pack) => pack.id === "conversion-up-a-piece") ?? phaseStarters[0],
   );
   let openAssignments = $derived(assignedPacks.filter((assignment) => assignment.withdrawnAt === null));
+  let completedAssignmentOffers = $derived.by(() => {
+    if (route.name !== "run" || session.viewer?.role !== "host" || session.runState === undefined) return [] as readonly AssignedPack[];
+    const completed = session.runState.run.events.some((event) => event.type === "outcome.reached");
+    if (!completed) return [] as readonly AssignedPack[];
+    return assignedPacks.filter((assignment) =>
+      assignment.withdrawnAt === null &&
+      assignment.packId === session.runState!.run.packId &&
+      !assignment.submissions.some((submission) => submission.runId === session.runState!.run.id && submission.withdrawnAt === null),
+    );
+  });
   let selectedPackDraft = $derived(drafts.find((candidate) => candidate.id === selectedDraftId));
   let displayedPackValidation = $derived(packBufferValidation ?? selectedPackDraft?.validation);
   let packRequiredFields = $derived(requiredFieldStates(studioJson));
@@ -485,7 +495,12 @@
         const matchMode=activeLiveDetail?.match===undefined?undefined:activeLiveDetail.match.pausedAt===null?"live":"paused";
         await controller.resume(next.runId,{projectionOnly:true,...(matchMode===undefined?{}:{matchMode})});
       } else if (next.name === "run") {
-        const related=(await (api.liveSessions?.()??Promise.resolve([]))).find((item)=>item.runId===next.runId);
+        const [relatedSessions,nextAssignments]=await Promise.all([
+          api.liveSessions?.()??Promise.resolve([]),
+          api.assignments?.()??Promise.resolve([]),
+        ]);
+        assignedPacks=nextAssignments;
+        const related=relatedSessions.find((item)=>item.runId===next.runId);
         activeLiveDetail=related===undefined?undefined:await api.liveSession?.(related.id);
         const matchMode=activeLiveDetail?.match===undefined?undefined:activeLiveDetail.match.pausedAt===null?"live":"paused";
         await controller.resume(next.runId,{...(matchMode===undefined?{}:{matchMode})});
@@ -1117,6 +1132,8 @@
         onFlip={(nodeId) => flipRun(session.runState!.run.id, nodeId)}
         onSelectPack={(packId) => controller.startPack(packId)}
         onFirstRehearsalComplete={completeFirstRehearsal}
+        assignmentOffers={completedAssignmentOffers}
+        onSubmitAssignment={(assignmentId)=>submitAssignedRun(assignmentId,session.runState!.run.id)}
         registerKeyboardRegion={keyboardDispatcher.registerRegion}
       />
       {#if session.viewer?.role === "spectator"}

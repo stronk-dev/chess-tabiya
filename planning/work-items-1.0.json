@@ -8041,16 +8041,18 @@
     {
       "id": "TCH-a19",
       "sourceState": "queued",
-      "state": "queued",
+      "state": "completed",
       "capability": "professional",
       "owner": "professional-workflows",
-      "assignment": "capability:professional",
+      "assignment": "closed",
       "sourceDocument": "ux-teacher-and-classroom.md",
       "sourceSection": "§4.3c",
       "sourceHeading": "Teacher and classroom — `ux-teacher-and-classroom.md`",
       "summary": "Offer submission at run end (`outcome.reached`), not only from the inbox",
       "legacyRoute": "none",
-      "note": "one conditional on an already-loaded list",
+      "note": "implemented 2026-08-27; matching assignments enter the terminal sheet and reuse the full submission-consent route instead of hiding a CTA behind the outcome modal",
+      "completion": { "completedOn": "2026-08-27", "evidence": "The two-account browser journey assigns the terminal fixture, reaches outcome, confirms the classroom/teacher/evidence disclosure inside TerminalSheet and observes the submitted attempt in the teacher roster" },
+      "tournamentReady": true,
       "sourceDigest": "sha256:7e3c8f4b24ab449892a4e0c915f827a6f438a9368bdec1bccd030056d5ea61e3"
     },
     {

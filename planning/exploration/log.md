@@ -9855,3 +9855,17 @@ card now names every teacher whose current run grant resolves. The remaining obl
 not another surface. The production classroom journey now shrinks the learner to 390 pixels after
 sharing, verifies the named watcher remains visible inside the viewport, and retains the existing
 revocation path. No fourth compact run tab was introduced. TCH-a31 is complete.
+
+## 2026-08-27 — Assignment hand-in joins the outcome ritual
+
+A completed run now loads the learner's assignment context directly and offers each matching open
+assignment inside the terminal sheet. The offer names the classroom, assigning teacher and literal
+teacher note. Review sharing opens in the same modal rather than behind it and repeats the current
+teacher recipients, 90-day window, recorded moves plus opened evidence/reveals, one-run boundary,
+and non-retroactive revocation. Confirmation invokes the existing submission operation; no second
+consent model or run grant path was added.
+
+A focused terminal-sheet fixture proves review and cancellation are inert before confirmation. The
+production two-account journey creates the classroom and assignment, completes the assigned terminal
+pack, shares from the outcome sheet and observes the named submission in the teacher roster. TCH-a19
+is complete.

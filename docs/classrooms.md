@@ -27,6 +27,14 @@ An optional note is stored and displayed as the teacher's literal, attributed sp
 outside the run. It never enters a run snapshot, evidence packet, explanation, or
 voice-provider request.
 
+When a run of an assigned pack reaches its recorded outcome, the terminal sheet offers every
+matching open assignment that does not already hold an active submission of that run. The offer
+names the classroom, assigning teacher and literal teacher note. Sharing remains a two-step consent
+act inside the outcome sheet: it names the current teacher recipients, 90-day access window, the
+recorded moves and opened evidence/reveals, the one-run boundary, and the fact that later revocation
+cannot undo a read. Directly opening a completed run loads the same assignment context, so the
+funnel does not depend on first visiting `/learn`.
+
 The teacher view is roster-by-assignment rather than a detached submission inbox. Every
 active learner appears under every assignment with a factual state: not submitted,
 submitted with access available, access revoked or expired, or withdrawn. A submission

@@ -665,6 +665,54 @@ test("a classroom assignment shows who submitted and makes sharing explicit", as
   await waitingContext.close();
 });
 
+test("a completed assigned attempt offers hand-in inside the outcome sheet", async ({ page, browser }) => {
+  test.setTimeout(60_000);
+  await page.goto("/live");
+  const classrooms = page.getByRole("region").filter({ has: page.getByRole("heading", { name: "Classrooms" }) });
+  await classrooms.getByLabel("New classroom").fill("Endgame submissions");
+  await classrooms.getByRole("button", { name: "Create", exact: true }).click();
+
+  const learnerContext = await browser.newContext();
+  const learnerPage = await learnerContext.newPage();
+  const learnerHandle = await register(learnerPage);
+  await classrooms.getByRole("button", { name: "Open", exact: true }).click();
+  await classrooms.getByLabel("Invite handle").fill(learnerHandle);
+  await classrooms.getByRole("button", { name: "Invite", exact: true }).click();
+  await learnerPage.goto("/live");
+  await learnerPage.getByRole("button", { name: "Accept", exact: true }).click();
+
+  await classrooms.getByRole("button", { name: "Open", exact: true }).click();
+  await classrooms.getByLabel("Pack").selectOption({ label: "Terminal outcome browser fixture" });
+  await classrooms.getByLabel("Teacher note").fill("Bring me the finished attempt");
+  await classrooms.getByRole("button", { name: "Assign", exact: true }).click();
+
+  await learnerPage.goto("/learn");
+  const assignment = learnerPage.getByRole("article").filter({ hasText: "Terminal outcome browser fixture" });
+  await expect(assignment).toContainText("Bring me the finished attempt");
+  await assignment.getByRole("button", { name: "Start pack" }).click();
+  await move(learnerPage, "f2", "f3");
+  await learnerPage.getByRole("button", { name: "Continue" }).click();
+  await move(learnerPage, "g2", "g4");
+
+  const terminal = learnerPage.getByRole("dialog", { name: "You lost." });
+  const handIn = terminal.getByRole("region", { name: "Hand in this attempt" });
+  await expect(handIn).toContainText("Endgame submissions · assigned by @");
+  await expect(handIn).toContainText("Teacher note: Bring me the finished attempt");
+  await handIn.getByRole("button", { name: "Review sharing" }).click();
+  const consent = terminal.getByRole("complementary", { name: "Share this completed attempt?" });
+  await expect(consent).toContainText("will be able to read this run for up to 90 days");
+  await expect(consent).toContainText("evidence or reveals you opened during it");
+  await expect(consent).toContainText("cannot undo what a teacher already saw");
+  await consent.getByRole("button", { name: "Confirm sharing" }).click();
+  await expect(handIn).toHaveCount(0);
+
+  await classrooms.getByRole("button", { name: "Open", exact: true }).click();
+  const status = classrooms.getByLabel("Submission status for Terminal outcome browser fixture");
+  await expect(status).toContainText(`@${learnerHandle}`);
+  await expect(status).toContainText("Submitted");
+  await learnerContext.close();
+});
+
 test("library exposes phase honestly and survives a malformed pack response", async ({
   page,
 }) => {

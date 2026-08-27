@@ -13,7 +13,7 @@
   import KeyboardHelp from "./KeyboardHelp.svelte";
   import { modalBoundary } from "./modal-boundary.js";
   import Timeline from "./Timeline.svelte";
-  import TerminalSheet from "./TerminalSheet.svelte";
+  import TerminalSheet, { type AssignmentSubmissionOffer } from "./TerminalSheet.svelte";
   import WhyBanner from "./WhyBanner.svelte";
   import OutcomeContext from "./OutcomeContext.svelte";
   import ShapePanel from "./ShapePanel.svelte";
@@ -109,6 +109,8 @@
     onFlip?: ((nodeId: string) => void | Promise<void>) | undefined;
     onSelectPack?: ((packId: string) => void | Promise<void>) | undefined;
     onFirstRehearsalComplete?: (() => void) | undefined;
+    assignmentOffers?: readonly AssignmentSubmissionOffer[] | undefined;
+    onSubmitAssignment?: ((assignmentId: string) => Promise<void>) | undefined;
     registerKeyboardRegion: RegisterKeyboardRegion;
   }
 
@@ -160,6 +162,8 @@
     onFlip,
     onSelectPack,
     onFirstRehearsalComplete,
+    assignmentOffers = [],
+    onSubmitAssignment,
     registerKeyboardRegion,
   }: Props = $props();
 
@@ -1254,6 +1258,8 @@
     {onStory}
     onFlip={onFlip === undefined ? undefined : () => onFlip(run.nodes[0]!.id)}
     onInspectEvidence={() => (inspectorOpen = true)}
+    {assignmentOffers}
+    {onSubmitAssignment}
     {onStop}
   />
 {/if}
