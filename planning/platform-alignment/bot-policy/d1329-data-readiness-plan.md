@@ -46,6 +46,34 @@ On a deterministic sample selected **without reading the played move** (game dig
 5. extrapolate measured single-process wall time and storage to 10k, 100k and 1m decisions, labelled
    as linear projections rather than benchmarks at those sizes.
 
+### Projection-arm protocol frozen 2026-08-27 before reading results
+
+- Input is the already-pinned decompressed 256 MiB successor artifact:
+  `sha256:89d444ea00e073ee17d6a02747a7c9da12fe49c949d5b407c9e0d0a60b7d81ea`.
+- The sample is exactly five positions from each of the 36 required
+  rating × speed × window cells (180 total). Within a cell, retain the five lexicographically
+  smallest SHA-256 values of `complete-game-bytes + NUL + ply-index`. The played move, engine score,
+  evidence payload and game outcome never enter selection.
+- Exact duplicate FENs are refused rather than replaced after selection. If that leaves a cell below
+  five, the sample fails; the prefix or selection rule is not widened.
+- Generate the complete legal set with chessops. Obtain one genuine Stockfish-18 full-root table per
+  position at `depth 2`, `Threads=1`, `Hash=16`, with `ucinewgame` and `Clear Hash` before each
+  position. Engine time and evidence-projection time are reported separately. A bounded/missing/
+  duplicate/foreign root or any mate/cp mixture is a source failure, never coerced.
+- Invoke the shipped `candidateFeatureVector` once per admitted position over that exact root set.
+  A successful call is a conservative success for every mandatory collector because the adapter
+  executes the complete registered closure and throws on any escaping result. Whole-operation
+  failure counts as failure for every mandatory collector; this may understate individual success
+  and cannot make the 99% gate easier.
+- Record only cell, counts, timing, serialized byte size, projection-id cardinality and error class.
+  No FEN, move, score, payload, game/player identity or fitted model enters committed output.
+- Generic flattening is measured using D1162's fixed identity-leaf exclusions. The compact arm is
+  a **budget census only**: per projection report scalar-name and byte cardinality, then price caps
+  of 8, 16 and 32 scalar fields per projection. No compact feature is chosen and no payload is
+  changed in response to the result.
+- Extrapolation is linear from measured admitted positions and is explicitly labelled as a planning
+  estimate. It does not claim parallel scaling, model-training cost or production latency.
+
 ## Able-to-fail gates
 
 The result recommends **fund a learning-curve generation** only if all clauses pass:

@@ -77,6 +77,7 @@ set execution order.
 
 | Rows | Primary destination | Next action / gate |
 |---|---|---|
+| D1899 | `evidence-move-selector` author/owner disposition + D1329 projection arm | Keep the evidence foundation and legal-coverage rule, but do not implement the refuted diagonal/conditional-logit heads or retune the fixed guard. Finish projection coverage/cost, obtain the compute/storage ceiling, then rule fund set-dependent programme / defer beyond 1.0 / refuse non-Maia 1.0 goal. Repeat research/RFC reconciliation before any implementation. |
 | D969, D970 | `bot-policy` amendment | D970 research recommends exact bands `[1000,1400,1800,2200]`; owner/RFC action is prepared in `planning/platform-alignment/bot-policy/d970-roster-handoff.md`. Also pin D969's bounded Stockfish probe/score-mate behavior before production registration. D1014's catalog-wide layer-identity guard is implemented. |
 | D1012 | bot-policy composed sampler | Make seeded draws invariant to provider emission order by applying the accepted neutral-tiebreak authority at the draw boundary. |
 | D1013 | bot-policy compiler | Bind executable typed layer fields to the generic parameter map so profile digest, disclosure and runtime behavior cannot disagree. |

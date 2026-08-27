@@ -10259,3 +10259,18 @@ continue another foundation dependency without implementing around it.
   `planning/platform-alignment/knowledge-retrieval/independent-buildability-review-2026-08-27.md`.
 - Next: author amendment in the review's dependency order, O5 product-direction ruling and F3
   dependency discharge, then repeat independent buildability review.
+
+## 2026-08-27 — evidence-move selector returned; projection census frozen
+
+- Reconciled the active selector RFC with the complete D1162→D1297→D1312→D1328/D1329 evidence
+  chain. The RFC and register had stopped at the first pass even though both the proper standalone
+  head and its fixed-guard composition were later refused by their preregistered gates.
+- Returned implementation on [[D1899]]. Legal-set coverage, fitted-not-authored provenance and the
+  shared candidate evidence plane survive; the diagonal/conditional-logit implementation body does
+  not. The owner-funded non-Maia goal remains open under [[D1320]], not silently killed by research.
+- Froze D1329's projection/cost arm before reading it: five hash-selected positions in each of 36
+  cells, exact legal closure, genuine Stockfish-18 depth-2 root scores, separate engine/projection
+  timing, conservative whole-operation success, aggregate-only output and 8/16/32-field compact
+  cardinality budgets. No model is fitted and the reserved third population remains unread.
+- Next: implement and run the disposable projection instrument, report its cost without inventing
+  an owner budget, then present the priced set-dependent-programme disposition.

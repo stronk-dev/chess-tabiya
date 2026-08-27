@@ -1,6 +1,9 @@
 # RFC: Evidence-to-move selector — a base distribution built from registered evidence, not a policy net
 
-- **Status:** draft — 2026-08-23
+- **Status:** draft — **returned 2026-08-27 on [[D1899]] after research/RFC reconciliation.**
+  D1297 refused the proper standalone head, D1312 refused the fixed-guard composition, and D1328/
+  D1329 make data readiness plus an owner disposition the next lawful step. No implementation is
+  authorised from this body
 - **Author:** claude
 - **Created:** 2026-08-23
 - **Design refs:** `design/03-product-breadth.md` §Play (opponent selection); `design/01-training-model.md` (the opponent models human choice, never a weakened engine)
@@ -333,6 +336,11 @@ the owner may veto the widening on [[D1271]]'s own authority.
 
 ## Changelog
 
+- 2026-08-27 — **returned on [[D1899]].** The active document/register had stopped at D1162's first
+  pass while later preregistered research refused the diagonal head, its proper-score standalone
+  repair and the fixed-guard composition. The evidence signal and legal-coverage rule survive; the
+  implementation body does not. Exact reconciliation:
+  `planning/platform-alignment/bot-policy/evidence-move-selector-reconciliation-2026-08-27.md`.
 - 2026-08-23 — drafted on owner ruling [[D1271]] (fund [[D810]]'s evidence-to-move selector), from
   `design/research/non-maia-bot-composition.md` and `planning/bot-roster/roster.md`. Consumes
   codex's preregistered [[D1162]] screen rather than duplicating it ([[D1183]]). Four source
