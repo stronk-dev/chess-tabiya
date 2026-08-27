@@ -9888,3 +9888,20 @@ Two owner-scope questions surfaced and are ledgered rather than smuggled into im
 release/audit/safeguarding authority; [[D1845]] asks whether “one FOSS platform” includes academy
 billing/payroll/white-label CRM or ends at the complete rehearsal classroom. R58–R64 preserve the
 source boundary and love/hate searches.
+
+## 2026-08-27 — F12-C becomes a buildable storage-recovery contract
+
+O13's ruled appliance floor and R18's D608 finding now have an active RFC rather than a roadmap
+sentence. `rfc/storage-backup-recovery.md` specifies a closed, verified backup bundle; SQLite online
+backup over a stopped HTTP service; independent integrity and foreign-key checks; read-only refusal
+before touching future/unsupported storage; automatic pre-upgrade snapshots; staged migrations and
+restores; destructive replacement confirmation; explicit compatibility; and production-image,
+Compose, Make and multi-architecture recovery drills.
+
+The draft refuses two tempting checkbox implementations: copying only the live database while WAL
+may hold committed bytes, and calling an old image a rollback plan after a forward-only migration.
+The last-known-good path is the verified pre-upgrade database plus the image declared compatible
+with it. Its two operator defaults are explicit rather than left for implementation: maintenance is
+a separate Compose overlay requiring an absolute backup directory, and the immutable full source
+SHA is the recovery revision identity. No product byte lands before owner acceptance; independent
+buildability review remains.
