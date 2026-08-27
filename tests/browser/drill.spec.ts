@@ -576,6 +576,9 @@ test("a classroom assignment shows who submitted and makes sharing explicit", as
   test.setTimeout(60_000);
   await page.goto("/live");
   const classrooms = page.getByRole("region").filter({ has: page.getByRole("heading", { name: "Classrooms" }) });
+  await expect(classrooms).toContainText("A classroom lets a teacher assign packs to you and schedule sessions");
+  await expect(classrooms).toContainText("It does not let them see your runs");
+  const teacherHandle = (await page.getByRole("banner").locator("strong").textContent())!.replace(/^@/u, "");
   await classrooms.getByLabel("New classroom").fill("Thursday group");
   await classrooms.getByRole("button", { name: "Create", exact: true }).click();
 
@@ -594,7 +597,11 @@ test("a classroom assignment shows who submitted and makes sharing explicit", as
   }
   for (const learnerPage of [submittedPage, waitingPage]) {
     await learnerPage.goto("/live");
-    await learnerPage.getByRole("button", { name: "Accept", exact: true }).click();
+    const invitation = learnerPage.getByRole("article").filter({ hasText: "Thursday group" });
+    await expect(invitation).toContainText(`Invited by @${teacherHandle}`);
+    await expect(invitation).toContainText("Accepting lets teachers assign packs to you and schedule sessions");
+    await expect(invitation).toContainText("It does not let them see your runs");
+    await invitation.getByRole("button", { name: "Accept", exact: true }).click();
     await expect(learnerPage.getByText("learner · active")).toBeVisible();
   }
 

@@ -47,7 +47,22 @@ export class ClassroomService {
   list(principal: Principal) {
     return Object.freeze(this.storage.classroomsFor(principal.learnerId).map((classroom) => {
       const membership = this.storage.classroomMember(classroom.id, principal.learnerId)!;
-      return Object.freeze({ ...classroom, memberRole: membership.memberRole, memberState: membership.state });
+      const inviter = membership.invitedBy === null
+        ? undefined
+        : this.storage.classroomMember(classroom.id, membership.invitedBy);
+      return Object.freeze({
+        ...classroom,
+        memberRole: membership.memberRole,
+        memberState: membership.state,
+        ...(membership.state === "invited" ? {
+          invitation: Object.freeze({
+            invitedAt: membership.invitedAt,
+            invitedBy: inviter === undefined
+              ? null
+              : Object.freeze({ learnerId: inviter.learnerId, handle: inviter.handle }),
+          }),
+        } : {}),
+      });
     }));
   }
 

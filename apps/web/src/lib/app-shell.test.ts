@@ -697,6 +697,45 @@ describe("application shell", () => {
     await unmount(component);
   });
 
+  it("explains classroom consent before creation and names a pending invitation", async () => {
+    history.replaceState(null, "", "/live");
+    const respondClassroomInvite = vi.fn(async () => undefined);
+    const classroomApi: DrillClientApi = {
+      ...api(),
+      async classrooms() {
+        return [{
+          id: "classroom-invite",
+          ownerLearnerId: "teacher-one",
+          name: "Endgame study",
+          createdAt: "2026-08-18T12:00:00.000Z",
+          archivedAt: null,
+          memberRole: "learner" as const,
+          memberState: "invited" as const,
+          invitation: {
+            invitedAt: "2026-08-27T12:00:00.000Z",
+            invitedBy: { learnerId: "teacher-one", handle: "coach" },
+          },
+        }];
+      },
+      respondClassroomInvite,
+    };
+    const component = mount(App, {
+      target: target(),
+      props: { api: classroomApi, router: new HistoryRouter(window), storage: new MemoryStorage() },
+    });
+
+    await vi.waitFor(() => expect(document.body.textContent).toContain("Endgame study"));
+    const classroomSection = document.querySelector("[aria-labelledby='classrooms-title']")!;
+    expect(classroomSection.textContent).toContain("A classroom lets a teacher assign packs to you and schedule sessions");
+    expect(classroomSection.textContent).toContain("It does not let them see your runs");
+    expect(classroomSection.textContent).toContain("Invited by @coach");
+    expect(classroomSection.textContent).toContain("Accepting lets teachers assign packs to you and schedule sessions");
+    expect(classroomSection.textContent).toContain("you share attempts one at a time and can withdraw them");
+    [...classroomSection.querySelectorAll<HTMLButtonElement>("button")].find((button) => button.textContent === "Accept")!.click();
+    await vi.waitFor(() => expect(respondClassroomInvite).toHaveBeenCalledWith("classroom-invite", "accept"));
+    await unmount(component);
+  });
+
   it("renders the teacher's roster by assignment with named submissions and absences", async () => {
     history.replaceState(null, "", "/live");
     const classroom: ClassroomDetail = {

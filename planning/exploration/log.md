@@ -9832,3 +9832,17 @@ The focused component fixture proves the first click and cancellation are inert 
 `reclaim` call. The production two-account journey exercises the full possession protocol: host
 offer, participant navigation, explicit participant device claim, learner-specific confirmation,
 host reclaim, and the existing proposal flow afterwards. TCH-a28 is complete.
+
+## 2026-08-27 — Classroom consent precedes creation and acceptance
+
+The classroom section now explains its consent model before presenting the Create control:
+teachers may assign packs and schedule sessions, but membership alone never grants run access.
+Pending invitation cards resolve the inviting classroom member's handle and invitation time, then
+state what the learner or teacher role authorises and what it does not before Accept or Decline.
+After acceptance, the invitation-only projection disappears rather than becoming permanent roster
+metadata on the list surface.
+
+The authenticated route fixture proves the invited learner receives the named inviter and that an
+active member no longer receives invitation data. A component fixture binds explanation, identity,
+permissions and refusal copy; the production two-learner classroom journey observes those facts
+before either learner accepts. TCH-a29 is complete.

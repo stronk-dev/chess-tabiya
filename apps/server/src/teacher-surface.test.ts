@@ -166,11 +166,23 @@ describe("teacher-surface consent storage", () => {
     expect(created.status).toBe(201);
     const classroomId = ((await created.json()) as { classroom: { id: string } }).classroom.id;
     expect((await call("POST", `/classrooms/${classroomId}/members`, teacher, { op: "invite", handle: "learner-route", role: "learner" })).status).toBe(201);
+    const invitationList = await call("GET", "/classrooms", learner);
+    expect(invitationList.status).toBe(200);
+    expect(await invitationList.json()).toMatchObject({ classrooms: [{
+      id: classroomId,
+      memberRole: "learner",
+      memberState: "invited",
+      invitation: { invitedAt: AT, invitedBy: { learnerId: teacher.learner.id, handle: "teacher-route" } },
+    }] });
     const run = drillRun("route-run");
     storage.create(run, { writerId: "writer", learnerId: learner.learner.id });
     expect((await call("GET", `/runs/${run.id}/graph`, teacher)).status).toBe(404);
 
     expect((await call("POST", `/classrooms/${classroomId}/members`, learner, { op: "accept" })).status).toBe(200);
+    const acceptedList = await call("GET", "/classrooms", learner);
+    const acceptedBody = (await acceptedList.json()) as { classrooms: { id: string; memberState: string; invitation?: unknown }[] };
+    expect(acceptedBody).toMatchObject({ classrooms: [{ id: classroomId, memberState: "active" }] });
+    expect(acceptedBody.classrooms[0]?.invitation).toBeUndefined();
     const assignmentResponse = await call("POST", `/classrooms/${classroomId}/assignments`, teacher, { packId: "pack-a", note: "Compare the structures" });
     expect(assignmentResponse.status).toBe(201);
     const assignmentId = ((await assignmentResponse.json()) as { assignment: { id: string } }).assignment.id;

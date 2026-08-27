@@ -1402,10 +1402,11 @@
       <p class="eyebrow">Live / shared rehearsal</p><h1 id="live-title">Rehearse with other people.</h1>
       <section aria-labelledby="classrooms-title">
         <h2 id="classrooms-title">Classrooms</h2>
+        <p>A classroom lets a teacher assign packs to you and schedule sessions. It does not let them see your runs — you share an attempt one at a time, and you can take it back.</p>
         <form class="row-actions" onsubmit={(event)=>{event.preventDefault();void createClassroom();}}><label>New classroom <input required bind:value={classroomName} /></label><button type="submit">Create</button></form>
         <div class="item-list">
           {#each classrooms as classroom}
-            <article><div><h3>{classroom.name}</h3><p>{classroom.memberRole} · {classroom.memberState}{classroom.archivedAt ? " · archived read-only" : ""}</p></div>
+            <article><div><h3>{classroom.name}</h3><p>{classroom.memberRole} · {classroom.memberState}{classroom.archivedAt ? " · archived read-only" : ""}</p>{#if classroom.memberState==="invited"}<p>{classroom.invitation?.invitedBy ? `Invited by @${classroom.invitation.invitedBy.handle}` : "Invited by a classroom teacher"}{classroom.invitation ? ` · ${readableDate(classroom.invitation.invitedAt)}` : ""}</p>{#if classroom.memberRole==="teacher"}<p class="honest">Accepting makes you a classroom teacher: you can invite members, assign packs, and schedule sessions. It does not grant access to anyone's runs; learners share attempts one at a time and can withdraw them.</p>{:else}<p class="honest">Accepting lets teachers assign packs to you and schedule sessions. It does not let them see your runs; you share attempts one at a time and can withdraw them.</p>{/if}{/if}</div>
               {#if classroom.memberState==="invited"}<div class="row-actions"><button type="button" onclick={()=>void respondClassroom(classroom.id,"accept")}>Accept</button><button type="button" onclick={()=>void respondClassroom(classroom.id,"decline")}>Decline</button></div>{:else}<button type="button" onclick={()=>void openClassroom(classroom.id)}>Open</button>{/if}
             </article>
           {:else}<p>No classrooms yet.</p>{/each}

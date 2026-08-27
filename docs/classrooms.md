@@ -13,6 +13,13 @@ limited to 200 current members and 20 outstanding invitations, and a learner may
 active classrooms. Either role can leave. Teachers can remove members, while only the
 owner can archive the classroom.
 
+The classroom browser states the consent boundary before offering creation: membership
+allows assignments and scheduled sessions but does not expose runs. A pending invitation
+resolves and names the inviting classroom member, records when it was sent, and explains
+the invited role before Accept or Decline. The invitation projection exists only while
+membership is pending; accepting removes it from the classroom list response. Learners
+still share run access one attempt at a time and may withdraw that access.
+
 Teachers assign registered packs. A due date is advisory and does not enter the learner's
 spaced-repetition schedule; both sides label it overdue after it passes, but it blocks
 nothing. Assignment cards resolve the registered pack title instead of exposing its id.

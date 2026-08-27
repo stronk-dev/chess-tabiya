@@ -8223,15 +8223,18 @@
     {
       "id": "TCH-a29",
       "sourceState": "queued",
-      "state": "queued",
+      "state": "completed",
       "capability": "professional",
       "owner": "professional-workflows",
-      "assignment": "capability:professional",
+      "assignment": "closed",
       "sourceDocument": "ux-teacher-and-classroom.md",
       "sourceSection": "§2.3",
       "sourceHeading": "Teacher and classroom — `ux-teacher-and-classroom.md`",
       "summary": "The classroom section must explain itself in one sentence before offering a Create control; the invitation must name the inviter, what it authorises and what it does not (`invitedBy`/`invitedAt` are on the type and unrendered)",
       "legacyRoute": "none",
+      "note": "implemented 2026-08-27; classroom consent precedes creation and pending cards name the inviter, timestamp, role powers and the run-access boundary",
+      "completion": { "completedOn": "2026-08-27", "evidence": "The classroom list resolves inviter identity only for pending membership; component and two-account browser journeys bind the consent explanation before Create and before Accept" },
+      "tournamentReady": true,
       "sourceDigest": "sha256:e5824a47fbfcb537b10f155353187db1268cf8202d01257b3530eef9902778a0"
     },
     {
