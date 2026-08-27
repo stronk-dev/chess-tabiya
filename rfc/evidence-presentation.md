@@ -1,8 +1,10 @@
 # RFC: evidence-presentation — the component vocabulary between a typed fact and a pixel
 
-- **Status:** draft amended 2026-08-27 — the independent buildability return on
-  [[D1664]]–[[D1672]] is repaired from the executable [[D1673]] projection→component→wire→parser
-  harness and the shared provider-exchange contract; ready for repeat review, not accepted.
+- **Status:** draft returned on repeat independent buildability review 2026-08-27 — the seal and
+  typed-operand repairs hold, but [[D1862]] leaves 116 current visual binding mappings unspecified,
+  [[D1668]] still admits impossible pending/terminal abstentions, and [[D1672]]'s owner-only design
+  amendment remains blank. Exact return:
+  `planning/platform-alignment/evidence-presentation/repeat-buildability-review-2026-08-27.md`.
   Landing is explicitly two checkpoints (§2.1): the sealed component foundation plus current
   consumer migrations first, then module/hint seats only after their own accepted contracts.
   Prior amendment 2026-08-26 on [[D1564]]/[[D1568]]/[[D1569]]/[[D1577]]/[[D1578]] —

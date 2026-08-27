@@ -10146,3 +10146,24 @@ design amendment is still blank. Exact return:
 `planning/platform-alignment/evidence-presentation/repeat-buildability-review-2026-08-27.md`.
 Next: run governance, checkpoint the return, and continue another lawful 1.0 dependency while the
 author/owner discharges these three boundaries.
+
+## 2026-08-27 — module-registration repeat review reaches the missing production join
+
+Repeat-reviewed `rfc/module-registration.md` after the D1585–D1591, D1689–D1694 and
+D1854/D1855/D1858/D1859 amendment. All 25 disposable repair arms pass: eight semantic closure,
+nine route/staging feasibility and eight novelty-identity tests. The original returns are
+substantively repaired.
+
+The production trace returns the RFC again on [[D1863]]–[[D1869]]. The server forbids the
+browser-local preset/config it cannot derive; §2.5 still invokes the projection-only string
+renderer that the component contract deletes; `declaredEvidence` has no timing-complete assembly
+operation; pre/at-commit threat and prevention delivery have no logged boundary despite the RFC's
+`none` claim; the legacy `assistance.arrows` consumer has no non-bypassing binding purpose; the
+eleven new capability sets are unstated; and semantic request fields remain raw strings without
+authoritative membership checks. Dependencies on the returned preset/presentation/hint/provider
+contracts remain real, not availability arms.
+
+Exact return: `planning/learner-modules/repeat-buildability-review-2026-08-27.md`. The remaining
+owner choice is narrow: whether the outpost ruling also returns `pawn_safe_square` to requested
+Sight. Next: update the RFC register/roadmap receipt, verify governance, checkpoint the return and
+continue another foundation dependency without implementing around it.

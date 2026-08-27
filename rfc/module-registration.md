@@ -1,12 +1,9 @@
 # RFC: Module registration — the eleven declarations, the compile site, and the seats
 
-- **Status:** draft amended 2026-08-27 — the 2026-08-26 independent return on
-  [[D1585]]–[[D1591]] and follow-up [[D1689]]–[[D1694]] executable closures are applied;
-  the author repair additionally closes the invalid F1 eligibility/policy joins [[D1854]]/[[D1855]]
-  and the invented revision/ranking widenings [[D1858]]/[[D1859]];
-  ready for repeat buildability review. Acceptance remains blocked on the shared Explorer source
-  and move-free summary projection, the sealed component wire, and the final measured Guided Hint
-  disclosure registry rather than on an invented compatibility path. Prior
+- **Status:** draft returned on repeat independent buildability review 2026-08-27 — the original
+  [[D1585]]–[[D1591]]/[[D1689]]–[[D1694]] repairs pass their 25 executable harness arms, but the
+  production join remains blocked on [[D1863]]–[[D1869]] plus the unresolved requested-Sight owner
+  row. Exact return: `planning/learner-modules/repeat-buildability-review-2026-08-27.md`. Prior
   amendment 2026-08-26 on [[D1564]]/[[D1568]]/[[D1569]]/[[D1577]]/[[D1578]] and the rebuilt
   `hint-distance` contract. The [[D1430]] document: the learner-module layer exists as a
   contract, a compiler, a reducer pipeline and a preset algebra, and **has never been
