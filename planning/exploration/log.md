@@ -10219,3 +10219,22 @@ continue another foundation dependency without implementing around it.
   `planning/provider-exchange-and-execution/independent-buildability-review-2026-08-27.md`.
 - Next: author amendment in the review's dependency order, then repeat independent review. No
   provider foundation implementation is authorised from the current draft.
+
+## 2026-08-27 — theory↔drill current joins returned on nine buildability blockers
+
+- Independently reviewed the full theory↔drill RFC against the implemented opening catalogue,
+  pack/principle types, Learn recommendation projection, REST/client routes and durable derivation
+  storage/export boundaries.
+- Preserved the exact applicability direction, `present`-only targeting, all-target reachability,
+  server-atomic launch and the refusal to invent an evidence `link` rendering.
+- Returned implementation on [[D1879]]–[[D1887]]: the opening reference type is undefined; the
+  type-level law-8 seal contradicts required payloads; the principle union cannot express two
+  acceptance fixtures; client input can forge provenance; Library has no durable source; the
+  launch has no wire contract; derivation validity is not structural; Learn drops its firing
+  anchor; and progression effects are unruled.
+- Re-derived a stale dependency in the process: runtime opening identity is implemented now, so
+  its applicability and Review criteria must execute rather than remain deferred/red.
+- Exact return:
+  `planning/platform-alignment/theory-drill/independent-buildability-review-2026-08-27.md`.
+- Next: author amendment in the review's dependency order, one owner/product ruling for [[D1887]]
+  unless living intent already settles it, then repeat independent buildability review.

@@ -69,6 +69,7 @@ set execution order.
 | D559, D623, D114, D115, D356, D358 | grounded Review research/RFC lane | Specify a replayable Review Map with useful pivotal selection and conditional-scope carrying; do not turn it into an engine review screen. |
 | D512 | comparison UI defect | Make branch identity observable when two branches share a node; cover the DOM state directly. |
 | D695 | theory workflow lane | Close reusable theory identity into an actual learner return/rehearsal workflow after its exploration gate. |
+| D1879, D1880, D1881, D1882, D1883, D1884, D1885, D1886, D1887 | `theory-drill-current-joins` author amendment | Publish real shared opening/principle/action unions; reconcile the law-8 seal; make launch provenance server-authoritative; separate Library starts from source-bound launches; define the REST/client protocol; validate durable derivations; retain exact Learn firing anchors; and resolve progression effects. Refresh the now-implemented opening dependency, then repeat independent review. |
 | D441 | record/progression presentation | Keep permanent marks and milestones semantically separate even if a future surface composes them. |
 
 ## Bots and opponent behavior

@@ -1,7 +1,7 @@
 # RFC: Theory↔drill current joins
 
-- **Status:** draft — 2026-08-23. The typed applicability edge that closes the theory↔drill loop.
-  Ready for review
+- **Status:** draft — returned 2026-08-27 by independent buildability review. The typed applicability edge
+  remains the right direction, but [[D1879]]–[[D1887]] must be amended before implementation.
 - **Author:** claude (on the [[D1310]] mandate read; [[D1330]] live-debt rank 5)
 - **Created:** 2026-08-23
 - **Design refs:** `design/05-in-run-experience.md:231` (the narrowing-only `∩` algebra) and `:236`
@@ -682,6 +682,14 @@ Proposed — ids assigned at landing; head was **D1354** at drafting.
 
 ## Changelog
 
+- 2026-08-27: returned by independent buildability review on [[D1879]]–[[D1887]]. The proposed
+  opening type has no definition at the runtime/server boundary; criterion 14 contradicts both the
+  raw route field and the implemented opening payload; the principle union cannot represent its
+  bare-principle or claim→pack fixtures; client-supplied launch provenance is not authoritative;
+  Library has no source for the required derivation; the launch has no wire contract; persisted
+  derivation validity is not structural; Learn discards the firing anchor; and progression effects
+  remain an owner/product decision. Exact return:
+  `planning/platform-alignment/theory-drill/independent-buildability-review-2026-08-27.md`.
 - 2026-08-23: created. Drafted from `design/research/theory-drill-current-joins.md` as [[D1330]]'s
   rank-5 live debt, with every claim re-derived at HEAD. Four findings changed the specification:
   the route vocabulary cannot express a pack target (§2), the shipped derivation table assumes a
