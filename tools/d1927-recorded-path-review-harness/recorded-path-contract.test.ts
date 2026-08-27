@@ -92,12 +92,13 @@ describe("recorded-semantic-path draft against live authorities", () => {
     expect(forged.derivationInputs.map((value) => value.payload)).toEqual(unrelated.map((value) => value.payload));
   });
 
-  it("finds no convention-registry digest in the proposed result identity", () => {
+  it("requires convention-registry and exact source closure in the amended result identity", () => {
     const rfc = readFileSync("rfc/recorded-semantic-path.md", "utf8");
     const digestMaterial = rfc.match(/The result digest[\s\S]*?```ts\n([\s\S]*?)```/u)?.[1] ?? "";
     expect(digestMaterial).toContain("manifestDigest");
-    expect(digestMaterial).not.toMatch(/conventionDigest|registryDigest/u);
-    expect(rfc).toMatch(/current\s+manifest\/convention heads/u);
+    expect(digestMaterial).toContain("semanticConventionRegistryDigest");
+    expect(digestMaterial).toContain("sourceClosureDigest");
+    expect(rfc).not.toMatch(/current\s+manifest\/convention heads/u);
   });
 
   it("derives the eleven-family population from exact run-record derivation membership", () => {

@@ -47,3 +47,20 @@ per start and the final digest are byte-equal to eager fan-out. Total p95 falls 
 all arms. The RFC can retain a synchronous operation by compiling only one transition event set and
 one checked check declaration per edge plus its exact recorded-edge/duty/exchange sources. Full
 local fan-out remains refused. Results: `d1931-source-closure-results.{json,md}`.
+
+## 2026-08-27 — strict path and exact edge authority measured
+
+A disposable four-arm candidate resolves both paths of a shipped-runtime fork independently of
+node array order and refuses missing parents, cycles, duplicate ids and multiple tips. The fork also
+closes [[D1932]]: the shared ancestral edge has one byte identity only when requested-branch and
+relative-offset context stays on the path/window receipt. The exact source is therefore
+`run.record.edge@1`, keyed by run plus actual parent/child record and actual child branch. Because
+the eleven v1 semantic projections declare the narrative `run.record.move@1` source, production
+migration requires v2 successors rather than rewriting those declarations in place. Dossier:
+`design/research/recorded-path-authority.md`.
+
+The migration trace also found [[D1933]]: `SEMANTIC_EVENT_PROJECTION_IDS` erases versions, and two
+server checks manufacture `@1` from those strings. An exact v1/v2 population can therefore satisfy
+the old base-id set equality while one version is absent. The amendment must replace it with a
+literal `VersionedEvidenceId` authority; any logical-family collapse is separately named and cannot
+police manifest or consumer closure.

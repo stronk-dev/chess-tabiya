@@ -230,16 +230,15 @@ Phase 3 therefore waits on the complete one-edge packet operation plus the recor
 catalogue membership, an exported constructor or a consumer-operation registry entry cannot
 satisfy a module, Review, bot, drill or longitudinal dependency.
 
-The recorded half now has a concrete but returned draft owner: `recorded-semantic-path.md` compiles
-the eleven existing multi-edge projections across thirteen exact 2/3/4/5-edge evaluator rows, with
-complete window receipts and a real-consumer completion gate. Independent review preserved that
-population and boundary but returned strict path completeness ([[D1927]]), exact edge/value
-authority ([[D1928]]/[[D1921]]), convention-aware identity ([[D1929]]) and the absolute
-consumer/CI performance contract ([[D1930]]). The fixed 20/40/80-ply comparison refuses eager
-full one-edge fan-out at 40+ plies and resolves [[D1931]] with a byte-identical exact-source shape:
-64.7/129.7/212.7 ms p95, all below the 500 ms synchronous envelope. Strict path, exact edge/value
-and convention identity remain the author blockers. [[D1870]] remains the separate
-consumer/presentation join after the amended compiler lands.
+The recorded half now has an amended draft owner: `recorded-semantic-path.md` compiles eleven v2
+multi-edge projections across thirteen exact 2/3/4/5-edge evaluator rows, with complete window
+receipts and a real-consumer completion gate. D1927/D1928/D1932/D1933 now have an executable contract:
+total graph-derived paths, path-independent `run.record.edge@1`, and v2 successors rather than an
+in-place v1 provenance rewrite, with exact versioned refs replacing the base-id event inventory.
+The fixed 20/40/80-ply comparison refuses eager full one-edge
+fan-out and resolves [[D1931]] with a byte-identical exact-source shape at
+64.7/129.7/212.7 ms p95, all below 500 ms. [[D1921]]/[[D1929]] value/convention identity and repeat
+review still block acceptance. [[D1870]] remains the separate consumer/presentation join.
 
 [[D1711]] closes the separate validation axis and makes the word *validated* unavailable at HEAD.
 All 67 semantic declarations manufacture their own positive/hard-negative labels, the compiler

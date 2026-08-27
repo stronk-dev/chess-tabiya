@@ -10457,3 +10457,22 @@ continue another foundation dependency without implementing around it.
 - Dossier updated: `design/research/recorded-semantic-path-cost.md`; instrument and results:
   `tools/d1931-recorded-path-source-harness/`,
   `planning/recorded-semantic-path/d1931-source-closure-results.{json,md}`.
+
+## 2026-08-27 — recorded path and edge authority become executable
+
+- Extended the disposable D1927 return harness with a total graph-derived resolver, exact-edge and
+  exact-version candidates; all eleven original/candidate arms pass.
+- The resolver is node-array-order independent and refuses missing parent, cycle, duplicate id and
+  multiple same-branch tips before any chess detector runs.
+- A shipped-runtime fork closes [[D1932]]: its shared ancestral edge has one identity across both
+  descendant requests only when requested branch and relative offset remain path/window context.
+- The exact source is a new `run.record.edge@1` machine authority over run plus actual parent/child
+  record. Narrative `run.record.move@1` remains unchanged.
+- Replacing the source under the eleven current `@1` sequence outputs would mutate declared
+  provenance in place. The RFC amendment must add v2 successors and route future
+  Review/module/longitudinal consumers to them explicitly.
+- The migration exposed [[D1933]]: the exported semantic inventory and two server checks erase
+  versions or hard-code `@1`. The exact authority must become `VersionedEvidenceId[]`; a separately
+  named family view may collapse versions only for deliberate analysis.
+- Dossier: `design/research/recorded-path-authority.md`; instrument:
+  `tools/d1927-recorded-path-review-harness/authority-candidate.test.ts`.
