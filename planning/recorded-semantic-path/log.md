@@ -30,3 +30,11 @@ refuses the 40/80-ply arms. Validation remained below 0.6 ms; the thirteen windo
 [[D1931]]: measure canonical one-edge reuse or the exact capture/check/duty/exchange closure instead
 of recomputing every local semantic family. Results:
 `d1930-cost-results.{json,md}`; dossier: `design/research/recorded-semantic-path-cost.md`.
+
+## 2026-08-27 — D1931 exact-source comparison preregistered
+
+Froze an identity-first comparison on D1930's exact population. The candidate replaces full local
+fan-out with one transition compile and one direct check probe per edge. It must produce byte-equal
+event ids, receipt bytes and result digest for every path before timing matters, then pass 500 ms
+p95 at all 20/40/80-ply arms. Control timings are rerun in the same process; old D1930 numbers are
+not reused as a favorable baseline.
