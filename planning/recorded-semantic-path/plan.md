@@ -16,9 +16,10 @@ implementation is authorised.
    to event operands; projection-name set membership is insufficient.
 4. Depend on the semantic-convention closure and include its exact digest/receipt in result
    identity.
-5. **Measured:** eager full-path p95 is 399.7/826.3/1,434.0 ms at 20/40/80 plies against the
-   existing 500 ms envelope. Measure [[D1931]]'s exact-source/canonical-edge alternative; keep
-   deterministic CI work bounds separate from environment-sensitive benchmark reporting.
+5. **Resolved by measurement:** eager full-path fan-out remains refused, while D1931's exact-source
+   shape preserves every result byte and passes at 64.7/129.7/212.7 ms p95 for 20/40/80 plies.
+   Specify exactly one transition compile and check probe per edge; keep deterministic CI work and
+   parity bounds separate from environment-sensitive benchmark reporting.
 6. Amend the RFC around the measured execution shape, rerun the five-arm falsifier, then repeat
    independent buildability review.
 

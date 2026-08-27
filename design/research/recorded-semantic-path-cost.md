@@ -3,15 +3,15 @@
 **Question.** Can the proposed thirteen-row recorded semantic path compiler run synchronously over
 ordinary complete games, and which part of the workload determines the answer?
 
-**Verdict.** **Not in the RFC's current eager-fan-out shape.** `[V]` On the preregistered fixed
-imported population, 20-ply total p95 is 399.7 ms, but 40 plies reaches 826.3 ms and 80 plies
-1,434.0 ms against the existing 500 ms synchronous envelope. The result is more specific than
-“semantic tactics are slow”: path validation stays below 0.6 ms p95 and all thirteen multi-edge
-window rows together reach only 184.9 ms p95 at 80 plies. Recomputing the full
-`localSemanticEvents` fan-out for every historical edge consumes about 88% of total p95 in every
-arm. Source: preregistration and result bytes in
-`planning/recorded-semantic-path/d1930-cost-{preregistration.md,results.json}`; executable candidate
-in `tools/d1930-recorded-path-cost-harness/`.
+**Verdict.** **Yes with exact source closure; no with eager local fan-out.** `[V]` On the
+preregistered fixed imported population, replacing full `localSemanticEvents` fan-out with exactly
+one transition compile and one check probe per recorded edge preserves every sorted event id,
+receipt byte and result digest. Total p95 falls from 397.5/803.6/1,391.2 ms to
+64.7/129.7/212.7 ms at 20/40/80 plies, passing the existing 500 ms synchronous envelope in every
+arm. The sequence foundation is not intrinsically slow: eager unrelated one-edge collection was
+the cost. Sources: both preregistrations and result bytes under `planning/recorded-semantic-path/`;
+executable candidates in `tools/d1930-recorded-path-cost-harness/` and
+`tools/d1931-recorded-path-source-harness/`.
 
 ## 1. Frozen method
 
@@ -51,18 +51,38 @@ the eleven recorded-sequence constructors need a much smaller declared source cl
 edges, captures, checks, defender-duty readings and exact legal exchanges. The bounded-window
 arithmetic itself remains under the 500 ms envelope even at 80 plies.
 
-This creates [[D1931]]: the RFC must not privately recompute every one-edge semantic family merely
-to obtain capture/check authorities. It must either consume one canonical already-compiled
-per-edge operation or execute only the exact declared source closure, while preserving one source
-identity for Review, modules and longitudinal analysis. Which repair meets the budget is a measured
-follow-up, not something this result assumes.
+This created [[D1931]]: the RFC must not privately recompute every one-edge semantic family merely
+to obtain capture/check authorities. The preregistered follow-up resolves that choice in favor of
+the exact declared source closure. It preserves one source identity for Review, modules and
+longitudinal analysis without depending on a separately cached complete local packet.
 
-## 4. Product and CI consequence
+## 4. Exact-source follow-up
 
-- Full-path eager compilation is background/pending work at 40+ plies; it may not block a move or
-  synchronous Review response.
-- If the narrower declared-source candidate passes, the recorded sequence operation may remain
-  synchronous while the broader one-edge evidence packet is cached/compiled separately.
+`[V]` D1931 reran the eager control and exact-source candidate in the same process, alternating
+their order across the identical twelve-path, three-repetition population. Before any timing was
+admitted, every path had to produce byte-equal sorted event ids, all `plies × 13` receipts and the
+same final digest. All identity checks passed.
+
+| mode | plies | total p50 | total p95 | max | 500 ms |
+|---|---:|---:|---:|---:|---|
+| eager | 20 | 378.9 ms | 397.5 ms | 401.4 ms | pass |
+| exact source | 20 | 61.7 ms | 64.7 ms | 64.9 ms | pass |
+| eager | 40 | 755.3 ms | 803.6 ms | 814.9 ms | **refuse** |
+| exact source | 40 | 120.4 ms | 129.7 ms | 131.2 ms | pass |
+| eager | 80 | 1,249.9 ms | 1,391.2 ms | 1,403.9 ms | **refuse** |
+| exact source | 80 | 199.5 ms | 212.7 ms | 215.8 ms | pass |
+
+`[V]` Exact-source preparation is 18.1/36.9/56.8 ms p95. Window cost stays effectively unchanged
+at 47.9/93.3/156.7 ms, confirming that the speedup did not skip the thirteen evaluators. The
+candidate performs exactly one `transitionSemanticEvents` call and one direct checked
+`checkEvent` declaration per edge, plus the same move, duty and exchange authorities as the
+control. Raw result: `planning/recorded-semantic-path/d1931-source-closure-results.json`.
+
+## 5. Product and CI consequence
+
+- Full-path eager compilation remains refused at 40+ plies and must not be the implementation.
+- The exact-source recorded sequence operation may remain synchronous; it does not require a
+  background/pending state or the complete one-edge packet as a prerequisite.
 - Generic software CI should assert the 13-row set, exact receipt count, one call per required
   source edge, ordering and stable identities. It should not assert elapsed milliseconds.
 - A pinned performance tier owns repeated 20/40/80-ply timings and the absolute 500 ms boundary;
@@ -71,10 +91,10 @@ follow-up, not something this result assumes.
 These are execution decisions only. The measurement says nothing about which events are useful,
 which module may show them or whether an observed sequence deserves a named tactic.
 
-## 5. Limits
+## 6. Limits
 
-`[V]` The disposable candidate intentionally preserves the known D1921/D1928 source-binding defect
-so it measures the current constructors rather than inventing the repair. It does not include
+`[V]` Both disposable candidates intentionally preserve the known D1921/D1928 source-binding defect
+so they measure the current constructors rather than inventing the repair. They do not include
 storage, transport, rendering or an external provider. The imported population is fixed and
 stratified but not a worst-case adversarial chess population. Node-24 and release-container
 reproduction remain required. None of those limits can make 826.3/1,434.0 ms a pass under the

@@ -1,0 +1,252 @@
+{
+  "measuredAt": "2026-08-27T17:38:19.697Z",
+  "node": "v26.7.0",
+  "platform": "darwin/arm64",
+  "populationDigest": "sha256:663e2f4d09b2b34089acdcc52016059b0ca8e064921973ba79b39f71a7695d7c",
+  "evaluatorRows": 13,
+  "pathsPerArm": 12,
+  "repetitions": 3,
+  "arms": [
+    {
+      "mode": "eager",
+      "plies": 20,
+      "paths": 12,
+      "repetitions": 3,
+      "timings": {
+        "validation": {
+          "samples": 36,
+          "p50Ms": 0.14479199999914272,
+          "p95Ms": 0.16724999999860302,
+          "maxMs": 0.170708999999988
+        },
+        "preparation": {
+          "samples": 36,
+          "p50Ms": 334.43833300000006,
+          "p95Ms": 352.1945829999986,
+          "maxMs": 354.5409589999981
+        },
+        "windows": {
+          "samples": 36,
+          "p50Ms": 45.00279200000023,
+          "p95Ms": 48.2238750000015,
+          "maxMs": 48.45116699999926
+        },
+        "total": {
+          "samples": 36,
+          "p50Ms": 378.9464169999992,
+          "p95Ms": 397.48270799999955,
+          "maxMs": 401.4021250000005
+        }
+      },
+      "work": {
+        "preparedEdges": 20,
+        "eagerCalls": 20,
+        "transitionCalls": 0,
+        "checkProbes": 0,
+        "receipts": 260
+      },
+      "synchronous500ms": true
+    },
+    {
+      "mode": "exact_source",
+      "plies": 20,
+      "paths": 12,
+      "repetitions": 3,
+      "timings": {
+        "validation": {
+          "samples": 36,
+          "p50Ms": 0.14145900000039546,
+          "p95Ms": 0.1608750000004875,
+          "maxMs": 0.17370800000026065
+        },
+        "preparation": {
+          "samples": 36,
+          "p50Ms": 17.012625000001208,
+          "p95Ms": 18.089082999998936,
+          "maxMs": 18.57533400000011
+        },
+        "windows": {
+          "samples": 36,
+          "p50Ms": 45.05149999999958,
+          "p95Ms": 47.89000000000124,
+          "maxMs": 48.406417000001966
+        },
+        "total": {
+          "samples": 36,
+          "p50Ms": 61.73687500000233,
+          "p95Ms": 64.70520899999974,
+          "maxMs": 64.86162500000046
+        }
+      },
+      "work": {
+        "preparedEdges": 20,
+        "eagerCalls": 0,
+        "transitionCalls": 20,
+        "checkProbes": 20,
+        "receipts": 260
+      },
+      "synchronous500ms": true
+    },
+    {
+      "mode": "eager",
+      "plies": 40,
+      "paths": 12,
+      "repetitions": 3,
+      "timings": {
+        "validation": {
+          "samples": 36,
+          "p50Ms": 0.26737499999580905,
+          "p95Ms": 0.29349999999976717,
+          "maxMs": 0.2995420000006561
+        },
+        "preparation": {
+          "samples": 36,
+          "p50Ms": 668.2472089999937,
+          "p95Ms": 717.1159579999949,
+          "maxMs": 727.6265829999975
+        },
+        "windows": {
+          "samples": 36,
+          "p50Ms": 88.27716700000019,
+          "p95Ms": 92.58379199999763,
+          "maxMs": 94.98929199999839
+        },
+        "total": {
+          "samples": 36,
+          "p50Ms": 755.323000000004,
+          "p95Ms": 803.5920420000039,
+          "maxMs": 814.8918330000015
+        }
+      },
+      "work": {
+        "preparedEdges": 40,
+        "eagerCalls": 40,
+        "transitionCalls": 0,
+        "checkProbes": 0,
+        "receipts": 520
+      },
+      "synchronous500ms": false
+    },
+    {
+      "mode": "exact_source",
+      "plies": 40,
+      "paths": 12,
+      "repetitions": 3,
+      "timings": {
+        "validation": {
+          "samples": 36,
+          "p50Ms": 0.25962499999877764,
+          "p95Ms": 0.2809170000036829,
+          "maxMs": 0.30304099999921164
+        },
+        "preparation": {
+          "samples": 36,
+          "p50Ms": 32.54758299999958,
+          "p95Ms": 36.89800000000105,
+          "maxMs": 37.7377919999999
+        },
+        "windows": {
+          "samples": 36,
+          "p50Ms": 87.44833300000028,
+          "p95Ms": 93.2534169999999,
+          "maxMs": 95.90225000000646
+        },
+        "total": {
+          "samples": 36,
+          "p50Ms": 120.37229099999968,
+          "p95Ms": 129.67904199999612,
+          "maxMs": 131.16354200000205
+        }
+      },
+      "work": {
+        "preparedEdges": 40,
+        "eagerCalls": 0,
+        "transitionCalls": 40,
+        "checkProbes": 40,
+        "receipts": 520
+      },
+      "synchronous500ms": true
+    },
+    {
+      "mode": "eager",
+      "plies": 80,
+      "paths": 12,
+      "repetitions": 3,
+      "timings": {
+        "validation": {
+          "samples": 36,
+          "p50Ms": 0.43683299999975134,
+          "p95Ms": 0.7069999999948777,
+          "maxMs": 0.7182089999987511
+        },
+        "preparation": {
+          "samples": 36,
+          "p50Ms": 1103.8516669999954,
+          "p95Ms": 1234.1063330000034,
+          "maxMs": 1245.9117079999996
+        },
+        "windows": {
+          "samples": 36,
+          "p50Ms": 147.19904099999985,
+          "p95Ms": 157.33595799999603,
+          "maxMs": 157.86916600000404
+        },
+        "total": {
+          "samples": 36,
+          "p50Ms": 1249.9340000000084,
+          "p95Ms": 1391.231375000003,
+          "maxMs": 1403.9464579999913
+        }
+      },
+      "work": {
+        "preparedEdges": 80,
+        "eagerCalls": 80,
+        "transitionCalls": 0,
+        "checkProbes": 0,
+        "receipts": 1040
+      },
+      "synchronous500ms": false
+    },
+    {
+      "mode": "exact_source",
+      "plies": 80,
+      "paths": 12,
+      "repetitions": 3,
+      "timings": {
+        "validation": {
+          "samples": 36,
+          "p50Ms": 0.4541670000035083,
+          "p95Ms": 0.49883300000510644,
+          "maxMs": 0.5694160000130069
+        },
+        "preparation": {
+          "samples": 36,
+          "p50Ms": 50.029750000016065,
+          "p95Ms": 56.764165999993565,
+          "maxMs": 57.997375000006286
+        },
+        "windows": {
+          "samples": 36,
+          "p50Ms": 147.9965830000001,
+          "p95Ms": 156.65741600000183,
+          "maxMs": 157.3108329999959
+        },
+        "total": {
+          "samples": 36,
+          "p50Ms": 199.5402919999906,
+          "p95Ms": 212.66220799999428,
+          "maxMs": 215.7648329999938
+        }
+      },
+      "work": {
+        "preparedEdges": 80,
+        "eagerCalls": 0,
+        "transitionCalls": 80,
+        "checkProbes": 80,
+        "receipts": 1040
+      },
+      "synchronous500ms": true
+    }
+  ],
+  "verdict": "exact_source_sync_pass"
+}

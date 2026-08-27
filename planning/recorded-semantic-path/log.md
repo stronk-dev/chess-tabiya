@@ -38,3 +38,12 @@ fan-out with one transition compile and one direct check probe per edge. It must
 event ids, receipt bytes and result digest for every path before timing matters, then pass 500 ms
 p95 at all 20/40/80-ply arms. Control timings are rerun in the same process; old D1930 numbers are
 not reused as a favorable baseline.
+
+## 2026-08-27 — D1931 exact-source comparison passes
+
+The candidate passed the identity gate on every fixed path: sorted event ids, all thirteen receipts
+per start and the final digest are byte-equal to eager fan-out. Total p95 falls from
+397.5/803.6/1,391.2 ms to 64.7/129.7/212.7 ms at 20/40/80 plies, passing the 500 ms envelope in
+all arms. The RFC can retain a synchronous operation by compiling only one transition event set and
+one checked check declaration per edge plus its exact recorded-edge/duty/exchange sources. Full
+local fan-out remains refused. Results: `d1931-source-closure-results.{json,md}`.

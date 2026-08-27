@@ -10442,3 +10442,18 @@ continue another foundation dependency without implementing around it.
 - Dossier: `design/research/recorded-semantic-path-cost.md`; instrument and raw results:
   `tools/d1930-recorded-path-cost-harness/`,
   `planning/recorded-semantic-path/d1930-cost-results.{json,md}`.
+
+## 2026-08-27 — recorded-path exact source closure restores synchronous execution
+
+- Preregistered and ran D1931 against D1930's identical fixed population, rerunning the eager
+  control and alternating execution order rather than comparing against yesterday's clock.
+- Exact source closure passed the semantic gate on every path: sorted event ids, all receipt bytes
+  and final result digest are byte-equal to full local fan-out.
+- Total p95 fell from 397.5/803.6/1,391.2 ms to 64.7/129.7/212.7 ms at 20/40/80 plies. All exact
+  arms pass 500 ms; no pending/background concession is needed for recorded sequence compilation.
+- The author repair is now literal: one transition compile and one direct checked check declaration
+  per edge, plus the same recorded-edge/duty/exchange authorities. Eager full local fan-out stays
+  refused, while Node-24/release timing remains an implementation discharge.
+- Dossier updated: `design/research/recorded-semantic-path-cost.md`; instrument and results:
+  `tools/d1931-recorded-path-source-harness/`,
+  `planning/recorded-semantic-path/d1931-source-closure-results.{json,md}`.

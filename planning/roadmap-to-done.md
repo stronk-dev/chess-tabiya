@@ -235,10 +235,11 @@ the eleven existing multi-edge projections across thirteen exact 2/3/4/5-edge ev
 complete window receipts and a real-consumer completion gate. Independent review preserved that
 population and boundary but returned strict path completeness ([[D1927]]), exact edge/value
 authority ([[D1928]]/[[D1921]]), convention-aware identity ([[D1929]]) and the absolute
-consumer/CI performance contract ([[D1930]]). The fixed 20/40/80-ply measurement then refused
-eager full one-edge fan-out at 40+ plies and routed a narrower exact-source/canonical-edge
-mechanism to [[D1931]]. [[D1870]] remains the separate consumer/presentation join after the
-amended compiler lands.
+consumer/CI performance contract ([[D1930]]). The fixed 20/40/80-ply comparison refuses eager
+full one-edge fan-out at 40+ plies and resolves [[D1931]] with a byte-identical exact-source shape:
+64.7/129.7/212.7 ms p95, all below the 500 ms synchronous envelope. Strict path, exact edge/value
+and convention identity remain the author blockers. [[D1870]] remains the separate
+consumer/presentation join after the amended compiler lands.
 
 [[D1711]] closes the separate validation axis and makes the word *validated* unavailable at HEAD.
 All 67 semantic declarations manufacture their own positive/hard-negative labels, the compiler

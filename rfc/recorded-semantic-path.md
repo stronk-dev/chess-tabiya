@@ -408,10 +408,13 @@ assumed.
 | [[D1921]] | event seals accept unrelated move-evidence values and retain the same id | semantic-convention/value-level derivation predecessor |
 | [[D1929]] | result identity claims convention heads but digests no convention receipt | semantic-convention predecessor + author amendment |
 | [[D1930]] | relative co-editable benchmark has no absolute consumer budget or deterministic CI split | disposable measurement + author amendment |
-| [[D1931]] | eager full `localSemanticEvents` preparation dominates and fails the 40/80-ply synchronous envelope | exact-source/canonical-edge measurement + author amendment |
+| [[D1931]] | eager full `localSemanticEvents` preparation dominates and fails the 40/80-ply synchronous envelope | **measured:** exact source closure is byte-identical and passes all three arms; author must specify that shape |
 
 ## Changelog
 
+- 2026-08-27: D1931 resolves execution shape without weakening semantics. One transition compile
+  and one direct check declaration per edge preserve every event id, receipt and result digest;
+  total p95 is 64.7/129.7/212.7 ms at 20/40/80 plies. Eager full local fan-out remains refused.
 - 2026-08-27: D1930 measured the first-draft execution shape. Total p95 is
   399.7/826.3/1,434.0 ms at 20/40/80 plies against 500 ms; preparation is ~88% of total and
   produces [[D1931]]. Dossier: `design/research/recorded-semantic-path-cost.md`.
