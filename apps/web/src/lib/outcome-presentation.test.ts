@@ -89,7 +89,7 @@ describe("outcome presentation honesty", () => {
   it("states the request before play and the recorded engine after play without claiming policy", () => {
     const before = run();
     expect(resistanceSentences(before, before.activeCursor.nodeId)).toEqual([
-      "Requested resistance: Authored theory replies, target Elo 1900 — the pack's request.",
+      "Requested resistance: Authored theory replies, human-model rung 1900 — the pack's request.",
       "No opponent move has been played yet.",
       "Authored theory replies exist only inside this pack's spine. The authored horizon and the available replies can end at different moves.",
       "Not perfect play.",
@@ -113,7 +113,7 @@ describe("outcome presentation honesty", () => {
     expect(text).not.toContain("actually played");
     expect(text).not.toContain("Maia");
     expect(resistanceSummary(after, after.activeCursor.nodeId)).toEqual([
-      "Resistance requested: Authored theory replies.",
+      "Resistance requested: Authored theory replies · rung 1900.",
       "Resistance played: Authored theory replies.",
       "Not perfect play.",
     ]);
@@ -132,7 +132,7 @@ describe("outcome presentation honesty", () => {
     expect(text).not.toContain("Applied resistance:");
   });
 
-  it("distinguishes a requested Elo band from one the recorded engine applied", () => {
+  it("distinguishes a requested human-model rung from the rung the engine applied", () => {
     let honored = commitMove(run(), "e2e4", { actor: "user", at }).run;
     honored = appendOpponentPly(honored, {
       moveUci: "e7e5",
@@ -147,7 +147,7 @@ describe("outcome presentation honesty", () => {
       },
     }, { at }).run;
     expect(resistanceSentences(honored, honored.activeCursor.nodeId)).toContain(
-      "The engine advertised its rating-band option and recorded target Elo 1900 as applied.",
+      "The engine recorded human-model rung 1900 as applied.",
     );
 
     let unhonored = commitMove(run(), "e2e4", { actor: "user", at }).run;
@@ -163,7 +163,7 @@ describe("outcome presentation honesty", () => {
       },
     }, { at }).run;
     expect(resistanceSentences(unhonored, unhonored.activeCursor.nodeId)).toContain(
-      "Target Elo 1900 was requested but is not recorded as applied.",
+      "Human-model rung 1900 was requested but is not recorded as applied.",
     );
   });
 
@@ -203,7 +203,7 @@ describe("outcome presentation honesty", () => {
       engine: { id: "maia", name: "Maia", version: "1", seedHonored: false, eloHonored: true, eloApplied: 1500 },
     }, { at }).run;
     expect(resistanceSentences(value, value.activeCursor.nodeId)).toContain(
-      "The session did not choose a rating band; the engine recorded Elo 1500 as applied.",
+      "The session did not choose a human-model rung; the engine recorded rung 1500 as applied.",
     );
   });
 

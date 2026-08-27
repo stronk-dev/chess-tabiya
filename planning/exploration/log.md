@@ -9687,3 +9687,31 @@ and the full catalogue → run → rewind → intent fork → Timeline → Compa
 pass. CLP-a12/a13/a14/a15/a16/a18 and D1838 close. D1837 separately corrects IMP-a1/a2/a4 from
 queued to RFC-blocked: a picker without durable selected-game and omission identity would lose its
 truth on reload/export.
+
+## 2026-08-27 — Opponent choice and resistance disclosure stop impersonating ratings
+
+The current opponent surfaces now share one honest vocabulary. Just Play presents four explicit
+human-model rungs and keeps the strong engine outside that ladder; every human-model surface says
+the rung is not a FIDE, Lichess or Chess.com rating. Requested and applied resistance render in
+packless play as well as authored drills, and the visible/announced run status retains the selected
+rung. At the measured ≤10-piece boundary, Support discloses that changing the Maia rung has very
+little effect because endgame choices converge.
+
+Focused projection/component checks and a production browser journey cover explicit rung 1800,
+packless Support, the exact shared disclaimer and the low-material limit. OPP-a1/a3/a6/a7/a8/a10
+and D1839 close. Named personas, adaptive play, opponent cards and tournaments remain untouched
+behind their returned contracts; this wave makes the current selector truthful rather than
+pretending those later systems already exist.
+
+The complete browser rerun also falsified an earlier selected-square fix: its first execution
+passed and its unchanged second execution retained the caption. Recomputing the pointer coordinate
+failed five of five, ruling out the initial test-layout hypothesis. Chessground's select callback
+can precede its mouse-up clearing when pieces are draggable; Chessboard now publishes the settled
+selection after its existing two layout frames and resets the shared input controller when empty.
+The focused journey then passed five consecutive executions. D1840 closes as a product-state race,
+not a retried-away CI flake.
+
+Making resistance visible in packless play also brought an existing OutcomeContext contrast defect
+into the live-rehearsal axe scan: 12.48 px muted text resolved to 4.47:1 against the mixed panel,
+below WCAG AA's 4.5:1 floor. The context now uses the primary ink token without changing its panel
+or hierarchy. D1841 closes on the automated matrix rather than exempting the new sentences.

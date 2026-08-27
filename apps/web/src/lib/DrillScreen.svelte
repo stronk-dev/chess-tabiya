@@ -52,6 +52,7 @@
   import { assistanceProfile, loadAssistance, saveAssistance, type PreferenceStorage } from "./assistance-preference.js";
   import { runViewportSupport, type RunViewportSupport } from "./viewport-support.js";
   import { playBoardEdge } from "./play-composition.js";
+  import { HUMAN_MODEL_RUNG_DISCLAIMER, humanModelMaterialLimit, opponentStatus } from "./opponent-copy.js";
   import { moveSanFromUci } from "./board-input.js";
   import { checkpointAuthoredItems as selectCheckpointAuthoredItems } from "./checkpoint-authored-items.js";
   import { rehearsalGuideStep } from "./rehearsal-guide.js";
@@ -366,12 +367,14 @@
     grading === undefined ? undefined : assessmentSummary(grading),
   );
   let assessmentDetail = $derived(grading === undefined ? undefined : assessmentSentence(grading));
-  let resistance = $derived(
-    pack === undefined || (grading === undefined && pack.objective.type !== "follow_theory")
-      ? []
-      : resistanceSummary(run, currentNode.id, pack),
-  );
-  let resistanceDetail = $derived(pack === undefined ? [] : resistanceSentences(run, currentNode.id, pack));
+  let resistance = $derived([
+    ...resistanceSummary(run, currentNode.id, pack),
+    ...(() => { const limit = humanModelMaterialLimit(currentNode.fen, run.opponentPolicy.mode); return limit === undefined ? [] : [limit]; })(),
+  ]);
+  let resistanceDetail = $derived([
+    ...resistanceSentences(run, currentNode.id, pack),
+    ...(() => { const limit = humanModelMaterialLimit(currentNode.fen, run.opponentPolicy.mode); return limit === undefined ? [] : [limit]; })(),
+  ]);
   let checkpointResolution = $derived.by(() => {
     if (
       grading?.resolveAt.kind !== "checkpoint" ||
@@ -933,10 +936,10 @@
   <main class="drill" tabindex="-1" bind:this={mainElement} aria-labelledby="drill-title" style={`--board-edge: ${boardEdge}px`}>
     <header class="topbar">
       <button class="wordmark" type="button" onclick={onStop}>Tabiya</button>
-      <StatusAnnouncement message={`${pack?.title ?? "Just Play"}. ${run.opponentPolicy.mode === "human_common" ? `Human-like rung ${run.opponentPolicy.targetElo ?? "not recorded"}` : "Engine test"}. ${consequenceHorizon(pack)}. ${snapshot.access === "read_only" ? "Read-only follower" : busy ? "Writer, thinking" : "Writer, your move"}${authoredFeedback?.hasWithheldAuthoredContent ? ". Authored commentary withheld until checkpoints" : ""}`} />
+      <StatusAnnouncement message={`${pack?.title ?? "Just Play"}. ${opponentStatus(run.opponentPolicy.mode, run.opponentPolicy.targetElo)}. ${run.opponentPolicy.mode === "human_common" ? HUMAN_MODEL_RUNG_DISCLAIMER : ""} ${consequenceHorizon(pack)}. ${snapshot.access === "read_only" ? "Read-only follower" : busy ? "Writer, thinking" : "Writer, your move"}${authoredFeedback?.hasWithheldAuthoredContent ? ". Authored commentary withheld until checkpoints" : ""}`} />
       <div class="status visually-hidden-on-phone" aria-hidden="true">
         <span class="run-name">{pack?.title ?? "Just Play"}</span>
-        <span>{run.opponentPolicy.mode === "human_common" ? `Human-like ${run.opponentPolicy.targetElo ?? "unbanded"}` : "Engine test"}</span>
+        <span>{opponentStatus(run.opponentPolicy.mode, run.opponentPolicy.targetElo)}</span>
         <span>{consequenceHorizon(pack)}</span>
         <span class:readonly={snapshot.access === "read_only"}>
           {snapshot.access === "read_only" ? "Read-only follower" : busy ? "Writer · thinking…" : "Writer · your move"}
@@ -1111,7 +1114,7 @@
             {/if}
             {#if overlayCaption.length > 0}<div class="overlay-caption" role="status" aria-live="polite" aria-atomic="true" data-evidence-consumer="board.selected_square_sight">{#each overlayCaption as sentence}<p>{sentence}</p>{/each}</div>{/if}
             {#if assistance.boardLighting === "evidence" && !feedbackDeliveryOpen(run)}<p class="overlay-caption honest">No disclosed evidence exists here; structural sight remains available.</p>{/if}
-            {#if pack !== undefined && (assessment !== undefined || resistance.length > 0)}<OutcomeContext {assessment} {resistance} grade={objectiveGradeSentence(pack.objective.type, currentNode.objectiveState)} />{/if}
+            <OutcomeContext {assessment} {resistance} grade={pack === undefined ? undefined : objectiveGradeSentence(pack.objective.type, currentNode.objectiveState)} />
             {#if banner !== undefined}<WhyBanner model={banner} />{/if}
           </section>
 
@@ -1285,6 +1288,7 @@
           {#if assistancePermission.humanSplit === "free" && onHumanSplit !== undefined}<button type="button" onclick={() => void requestHumanSplit()}>Load model candidates</button>{/if}
           {#if humanSplit}
             <p class="honest">{humanModelBandSentence(humanSplit)}</p>
+            <p class="honest">{HUMAN_MODEL_RUNG_DISCLAIMER}</p>
             <p class="guidance-sentence">{humanCandidateSentences(humanSplit).join(" · ")}</p>
           {:else}<p class="honest">No human-model page loaded.</p>{/if}
         </section>

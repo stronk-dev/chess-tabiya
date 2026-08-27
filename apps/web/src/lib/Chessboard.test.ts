@@ -7,6 +7,7 @@ import { afterEach, describe, expect, it, vi } from "vitest";
 
 const chessground = vi.hoisted(() => ({
   configs: [] as Config[],
+  state: { selected: undefined as string | undefined },
   set: vi.fn<(config: Config) => void>(),
   redrawAll: vi.fn<() => void>(),
   destroy: vi.fn<() => void>(),
@@ -16,6 +17,7 @@ vi.mock("@lichess-org/chessground", () => ({
   Chessground: (_element: HTMLElement, config: Config) => {
     chessground.configs.push(config);
     return {
+      state: chessground.state,
       set: chessground.set,
       redrawAll: chessground.redrawAll,
       destroy: chessground.destroy,
@@ -28,6 +30,7 @@ import Chessboard from "./Chessboard.svelte";
 afterEach(() => {
   document.body.replaceChildren();
   chessground.configs.length = 0;
+  chessground.state.selected = undefined;
   chessground.set.mockClear();
   chessground.redrawAll.mockClear();
   chessground.destroy.mockClear();
@@ -115,7 +118,7 @@ describe("Chessboard", () => {
     await unmount(component);
   });
 
-  it("refreshes cached board bounds after selection-driven parent layout", async () => {
+  it("refreshes cached bounds and publishes Chessground's settled selection", async () => {
     vi.stubGlobal("requestAnimationFrame", (callback: FrameRequestCallback) => {
       callback(0);
       return 1;
@@ -135,10 +138,15 @@ describe("Chessboard", () => {
     await tick();
     const redrawsBeforeSelection = chessground.redrawAll.mock.calls.length;
 
+    chessground.state.selected = "e2";
     chessground.configs[0]!.events!.select!("e2");
 
     expect(onSelect).toHaveBeenCalledWith("e2");
     expect(chessground.redrawAll.mock.calls.length).toBeGreaterThan(redrawsBeforeSelection);
+
+    chessground.state.selected = undefined;
+    chessground.configs[0]!.events!.select!("e2");
+    expect(onSelect).toHaveBeenLastCalledWith(undefined);
     await unmount(component);
   });
 

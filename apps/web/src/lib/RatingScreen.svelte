@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { HUMAN_MODEL_RUNG_DISCLAIMER } from "./opponent-copy.js";
   import { onMount } from "svelte";
 
   import type {
@@ -105,7 +106,7 @@
           </label>
           <button type="submit" disabled={starting}>{starting ? "Starting…" : "Start rated game"}</button>
         </form>
-        <p class="honest">Band labels describe this calibrated Maia ladder. They are not FIDE, Lichess, or Chess.com ratings.</p>
+        <p class="honest">{HUMAN_MODEL_RUNG_DISCLAIMER}</p>
         {#if startError}<p role="alert" class="error">{startError}</p>{/if}
       </section>
     {/if}

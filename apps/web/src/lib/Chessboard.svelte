@@ -219,12 +219,14 @@
       if (typeof board?.redrawAll === "function") board.redrawAll();
       requestAnimationFrame(() => {
         if (typeof board?.redrawAll === "function") board.redrawAll();
+        if (board === undefined) return;
+        const settled = board.state.selected;
+        if (settled === undefined && inputState.phase === "origin_selected") {
+          apply(controller.dispatch({ type: "cancel" }));
+        }
+        onSelect?.(settled);
       });
     });
-  }
-
-  function settlePointerSelection(): void {
-    requestAnimationFrame(() => onSelect?.(board?.state.selected));
   }
 
   function promote(role: PromotionRole): void {
@@ -347,7 +349,7 @@
   </details>
   <div class="board-surface">
     <!-- svelte-ignore a11y_no_static_element_interactions (Chessground owns the interactive board subtree) -->
-    <div class="board" bind:this={boardElement} aria-label="Chessboard" onpointerup={settlePointerSelection}></div>
+    <div class="board" bind:this={boardElement} aria-label="Chessboard"></div>
     <div
       class="semantic-grid"
       bind:this={gridElement}

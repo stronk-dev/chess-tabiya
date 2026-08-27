@@ -482,6 +482,14 @@ The learner chooses one of the calibrated Maia rungs; no suggestion changes it s
 does not equate it with FIDE or platform ratings, and the applied rung remains in the new run's
 visible and announced status.
 
+Just Play uses the same honest opponent vocabulary before and during a run. Its human-like ladder
+has four explicit Tabiya rungs; the strong engine is a separate engine-test family, not a fifth
+rung. Every current human-model opponent surface states verbatim that these numbers are not FIDE,
+Lichess or Chess.com ratings. Support always separates requested from applied resistance, including
+packless games where no author can supply that context. At ten pieces or fewer it also states the
+measured applicability limit: changing the Maia rung has very little effect because endgame choices
+converge. This is a disclosure about the current model family, not a personality claim.
+
 At the compact breakpoint, comparison preserves the aligned-ply model and stacks
 each complete learner-facing branch card and result vertically. The opt-in
 evidence inspector owns its own bounded scrolling surface. It does not shrink

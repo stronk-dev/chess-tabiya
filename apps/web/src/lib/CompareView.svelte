@@ -5,6 +5,7 @@
   import { onMount } from "svelte";
   import Chessboard from "./Chessboard.svelte";
   import HonestControl from "./HonestControl.svelte";
+  import { HUMAN_MODEL_RUNG_DISCLAIMER } from "./opponent-copy.js";
   import StatusAnnouncement from "./StatusAnnouncement.svelte";
   import { displayedLastMove, type StartSide } from "./board-model.js";
   import { modalBoundary } from "./modal-boundary.js";
@@ -238,7 +239,7 @@
       <div><p class="eyebrow">Try the same decision again</p><h3 id="replay-resistance-title">Change the practical resistance, not the recorded attempts.</h3><p>Your comparison stays saved. You choose the next rung; Tabiya never changes it silently.</p></div>
       <label>Human-like rung <select bind:value={replayBand}><option value={1000}>First rung · 1000</option><option value={1400}>Steady · 1400</option><option value={1800}>Testing · 1800</option><option value={2200}>Top measured rung · 2200</option></select></label>
       <button type="button" onclick={() => void onReplayResistance?.(Number(replayBand) as 1000 | 1400 | 1800 | 2200)}>Start a new replay</button>
-      <small>These are calibrated Maia ladder rungs, not FIDE, Lichess, or Chess.com ratings.</small>
+      <small>{HUMAN_MODEL_RUNG_DISCLAIMER}</small>
     </section>
   {/if}
 

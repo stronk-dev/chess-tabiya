@@ -390,7 +390,8 @@ describe("Layer 3 screens", () => {
     document.querySelector<HTMLButtonElement>(".inspector-entry")!.click();
     await vi.waitFor(() => {
       const evidence = document.querySelector("[aria-label='Human-model evidence']")?.textContent;
-      expect(evidence).toContain("Target Elo 1500 was requested but is not recorded as applied");
+      expect(evidence).toContain("human-model rung 1500 was requested but is not recorded as applied");
+      expect(evidence).toContain("not FIDE, Lichess, or Chess.com ratings");
       expect(evidence).toContain("Ke2 40%");
       expect(evidence).not.toContain("e1e2");
     });
@@ -654,6 +655,9 @@ describe("Layer 3 screens", () => {
     const onStart = vi.fn();
     const component = mount(JustPlayStarter, { target: target(), props: { onStart } });
     const radios = document.querySelectorAll<HTMLInputElement>('input[name="opponent"]');
+    expect(document.querySelector(".ladder")?.contains(radios[4]!)).toBe(false);
+    expect(document.querySelector(".engine-choice")?.contains(radios[4]!)).toBe(true);
+    expect(document.querySelector(".ladder")?.textContent).toContain("not FIDE, Lichess, or Chess.com ratings");
     radios[2]!.click();
     document.querySelector<HTMLFormElement>(".just-play form")!.dispatchEvent(new SubmitEvent("submit", { bubbles: true, cancelable: true }));
     expect(onStart).toHaveBeenLastCalledWith(expect.objectContaining({ mode: "human_common", targetElo: 1800 }));

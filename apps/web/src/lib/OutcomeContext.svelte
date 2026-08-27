@@ -25,6 +25,6 @@
     border-radius: 0.75rem;
     background: color-mix(in srgb, var(--panel) 92%, var(--accent));
   }
-  p { margin: 0; font-size: 0.78rem; color: var(--muted); }
+  p { margin: 0; font-size: 0.78rem; color: var(--ink); }
   .resolution, .grade { color: inherit; font-weight: 700; }
 </style>

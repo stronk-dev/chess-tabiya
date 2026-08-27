@@ -251,6 +251,20 @@ test("Just Play reaches a Carlsbad and opens a guided shape marker without mutat
   await expect(page.getByText("Authored commentary withheld", { exact: false })).toHaveCount(0);
 });
 
+test("Just Play states its selected human-model rung and low-material limit", async ({ page }) => {
+  await page.goto("/play");
+  await page.getByLabel("Testing").check();
+  await page.getByRole("button", { name: "Start from a FEN" }).click();
+  await page.getByLabel("Position FEN").fill("8/8/8/8/8/4k3/6P1/4K3 w - - 0 1");
+  await page.getByRole("button", { name: "Start and keep the game" }).click();
+
+  const support = page.getByRole("region", { name: "Support" });
+  await expect(support).toContainText("Resistance requested: Human-model replies · rung 1800.");
+  await expect(support).toContainText("They are not FIDE, Lichess, or Chess.com ratings.");
+  await expect(support).toContainText("With ten pieces or fewer, changing the Maia rung has very little effect");
+  await expect(page.locator("[data-status-announcement]")).toContainText("Human-like opponent · rung 1800");
+});
+
 test("Just Play explicitly reveals evidence and the next move closes the window", async ({ page }) => {
   await page.getByRole("button", { name: "Start and keep the game" }).click();
   await expect(page.getByLabel("Chessboard")).toBeVisible();
@@ -648,8 +662,8 @@ test("@content Pack C summarizes the attempt and preserves the recorded opponent
   await expect(page.getByText("Eleven pieces are on the board", { exact: false })).toBeVisible();
   await expect(page.getByText("Resistance requested: Human-model replies", { exact: false })).toBeVisible();
   await expect(page.getByText("Resistance played: Human-model replies", { exact: false })).toBeVisible();
+  await expect(page.getByRole("region", { name: "Support" })).toContainText("They are not FIDE, Lichess, or Chess.com ratings.");
   await expect(page.getByText("Deterministic mock opponent", { exact: false })).toHaveCount(0);
-  await expect(page.getByText("Maia", { exact: false })).toHaveCount(0);
   await page.getByRole("button", { name: "Inspector" }).click();
   await expect(page.getByRole("region", { name: "Attempt conditions" })).toContainText("Deterministic mock opponent");
 });
@@ -1386,7 +1400,10 @@ test("selected-square support clears with the visible selection and displayed po
 
   await page.mouse.click(d4.x, d4.y);
   await expect(selectedSight).toBeVisible();
-  await page.mouse.click(d4.x, d4.y);
+  const selectedBox = await board.boundingBox();
+  if (selectedBox === null) throw new Error("Chessground board has no selected-state bounding box");
+  const selectedD4 = squarePoint(selectedBox, "d4");
+  await page.mouse.click(selectedD4.x, selectedD4.y);
   await expect(selectedSight).toHaveCount(0);
 
   await move(page, "d4", "b5");
@@ -1597,7 +1614,7 @@ test("branch intent names the saved line and Compare replays the same decision a
   await page.getByLabel("Human-like rung").selectOption("1800");
   await page.getByRole("button", { name: "Start a new replay" }).click();
   await expect(page).toHaveURL(/\/play\/run\//u);
-  await expect(page.locator("[data-status-announcement]")).toContainText("Human-like rung 1800");
+  await expect(page.locator("[data-status-announcement]")).toContainText("Human-like opponent · rung 1800");
   await expect(page.locator("[data-status-announcement]")).toContainText("Full game · until a rules-terminal result");
 });
 

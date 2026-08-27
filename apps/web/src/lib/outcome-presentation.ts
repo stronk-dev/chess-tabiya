@@ -6,6 +6,7 @@ import {
   type SelectionEngineIdentity,
 } from "@chess-tabiya/runtime";
 import { objectiveStateLabel } from "./run-copy.js";
+import { HUMAN_MODEL_RUNG_DISCLAIMER } from "./opponent-copy.js";
 
 type ProjectedAssessment =
   | { readonly kind: "authored"; readonly note: string }
@@ -107,12 +108,12 @@ export function humanModelBandSentence(page: { readonly engine: SelectionEngineI
   const { engine, targetElo } = page;
   if (targetElo !== null) {
     return engine.eloHonored === true && engine.eloApplied === targetElo
-      ? `${engine.name} recorded the requested Elo ${targetElo} band as applied.`
-      : `${engine.name}: Target Elo ${targetElo} was requested but is not recorded as applied.`;
+      ? `${engine.name} recorded human-model rung ${targetElo} as applied.`
+      : `${engine.name}: human-model rung ${targetElo} was requested but is not recorded as applied.`;
   }
   return engine.eloApplied === undefined
-    ? `${engine.name}: no rating band was requested or recorded.`
-    : `${engine.name}: no rating band was requested; the engine recorded Elo ${engine.eloApplied} as applied.`;
+    ? `${engine.name}: no human-model rung was requested or recorded.`
+    : `${engine.name}: no human-model rung was requested; the engine recorded rung ${engine.eloApplied} as applied.`;
 }
 
 const RESISTANCE_MODE_LABELS = Object.freeze({
@@ -131,10 +132,10 @@ export function resistanceModeLabel(mode: keyof typeof RESISTANCE_MODE_LABELS): 
 export function resistanceSentences(run: DrillRun, nodeId: string, pack?: DrillPackDefinition): readonly string[] {
   const resistance = resistanceOnPath(run, nodeId, pack);
   const requested = resistance.requested;
-  const target = requested.targetElo === undefined ? "" : `, target Elo ${requested.targetElo}`;
+  const target = requested.targetElo === undefined ? "" : `, human-model rung ${requested.targetElo}`;
   const lines = [`Requested resistance: ${resistanceModeLabel(requested.mode)}${target} — the pack's request.`];
   for (const leg of resistance.requestedByLeg ?? []) {
-    const legTarget = leg.policy.targetElo === undefined ? "" : `, target Elo ${leg.policy.targetElo}`;
+    const legTarget = leg.policy.targetElo === undefined ? "" : `, human-model rung ${leg.policy.targetElo}`;
     lines.push(`Leg ${leg.legId}: requested ${resistanceModeLabel(leg.policy.mode)}${legTarget}; ${leg.plyCount} opponent plies recorded.`);
   }
   if (resistance.engines.length === 0) {
@@ -144,6 +145,7 @@ export function resistanceSentences(run: DrillRun, nodeId: string, pack?: DrillP
       ...(requested.mode === "theory_strict"
         ? ["Authored theory replies exist only inside this pack's spine. The authored horizon and the available replies can end at different moves."]
         : []),
+      ...(requested.mode === "human_common" ? [HUMAN_MODEL_RUNG_DISCLAIMER] : []),
       "Not perfect play.",
     ];
   }
@@ -173,14 +175,14 @@ export function resistanceSentences(run: DrillRun, nodeId: string, pack?: DrillP
   if (requested.targetElo !== undefined) {
     const applied = resistance.engines.some((entry) => entry.engine.eloApplied === requested.targetElo);
     lines.push(applied
-      ? `The engine advertised its rating-band option and recorded target Elo ${requested.targetElo} as applied.`
-      : `Target Elo ${requested.targetElo} was requested but is not recorded as applied.`);
+      ? `The engine recorded human-model rung ${requested.targetElo} as applied.`
+      : `Human-model rung ${requested.targetElo} was requested but is not recorded as applied.`);
   } else {
     const appliedBands = [...new Set(resistance.engines.flatMap((entry) =>
       entry.engine.eloApplied === undefined ? [] : [entry.engine.eloApplied],
     ))];
     if (appliedBands.length > 0) {
-      lines.push(`The session did not choose a rating band; the engine recorded ${appliedBands.map((band) => `Elo ${band}`).join(", ")} as applied.`);
+      lines.push(`The session did not choose a human-model rung; the engine recorded ${appliedBands.map((band) => `rung ${band}`).join(", ")} as applied.`);
     }
   }
   if (resistance.unknownPlyCount > 0) {
@@ -189,13 +191,15 @@ export function resistanceSentences(run: DrillRun, nodeId: string, pack?: DrillP
   if (requested.mode === "theory_strict") {
     lines.push("Authored theory replies exist only inside this pack's spine. The authored horizon and the available replies can end at different moves.");
   }
+  if (requested.mode === "human_common") lines.push(HUMAN_MODEL_RUNG_DISCLAIMER);
   lines.push("Not perfect play.");
   return lines;
 }
 
 export function resistanceSummary(run: DrillRun, nodeId: string, pack?: DrillPackDefinition): readonly string[] {
   const resistance = resistanceOnPath(run, nodeId, pack);
-  const lines = [`Resistance requested: ${resistanceModeLabel(resistance.requested.mode)}.`];
+  const rung = resistance.requested.targetElo === undefined ? "" : ` · rung ${resistance.requested.targetElo}`;
+  const lines = [`Resistance requested: ${resistanceModeLabel(resistance.requested.mode)}${rung}.`];
   if (resistance.engines.length === 0) {
     lines.push("No opponent move has been played yet.");
   } else if (resistance.applied.length === 0) {
@@ -205,6 +209,7 @@ export function resistanceSummary(run: DrillRun, nodeId: string, pack?: DrillPac
   } else {
     lines.push(`Resistance played: ${resistance.applied.map((entry) => resistanceModeLabel(entry.mode)).join(" → ")}.`);
   }
+  if (resistance.requested.mode === "human_common") lines.push(HUMAN_MODEL_RUNG_DISCLAIMER);
   lines.push("Not perfect play.");
   return lines;
 }

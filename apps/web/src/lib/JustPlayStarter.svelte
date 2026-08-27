@@ -1,4 +1,6 @@
 <script lang="ts">
+  import { HUMAN_MODEL_RUNG_DISCLAIMER } from "./opponent-copy.js";
+
   interface StartInput {
     readonly fen: string;
     readonly side: "white" | "black";
@@ -36,7 +38,9 @@
   </header>
   <form onsubmit={(event) => { event.preventDefault(); start(); }}>
     <fieldset>
-      <legend>Human-like opponent</legend>
+      <legend>Opponent</legend>
+      <section class="ladder" aria-labelledby="human-ladder-title">
+        <div><strong id="human-ladder-title">Human-like ladder</strong><small>Maia models common human choices at four calibrated rungs.</small></div>
       <div class="opponent-grid">
         {#each bands as band}
           <label class:checked={opponent === band.value}>
@@ -45,13 +49,16 @@
             <b>{band.value}</b>
           </label>
         {/each}
+      </div>
+      <p class="honest">{HUMAN_MODEL_RUNG_DISCLAIMER}</p>
+      </section>
+      <section class="engine-choice" aria-labelledby="engine-test-title">
         <label class:checked={opponent === "engine"}>
           <input type="radio" name="opponent" value="engine" bind:group={opponent} />
-          <span><strong>Engine test</strong><small>Strongest available calculation, not human-like play</small></span>
+          <span><strong id="engine-test-title">Engine test</strong><small>Strongest available calculation. This is outside the human-like ladder.</small></span>
           <b>SF</b>
         </label>
-      </div>
-      <p class="honest">Band numbers describe this calibrated Maia ladder. They are not FIDE, Lichess, or Chess.com ratings.</p>
+      </section>
     </fieldset>
     <div class="start-options">
       <label>Your side
@@ -73,13 +80,15 @@
   form { display: grid; gap: 1rem; }
   fieldset { min-width: 0; margin: 0; padding: 0; border: 0; }
   legend { margin-bottom: .5rem; font-weight: 700; }
-  .opponent-grid { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: .5rem; }
-  .opponent-grid label { position: relative; min-height: 7.25rem; display: grid; grid-template-columns: 1fr auto; align-content: space-between; gap: .5rem; padding: .8rem; border: 1px solid var(--line); border-radius: .8rem; background: var(--paper); cursor: pointer; }
-  .opponent-grid label.checked { border-color: var(--accent); box-shadow: inset 0 0 0 1px var(--accent); }
+  .ladder,.engine-choice { padding:.8rem;border:1px solid var(--line);border-radius:.9rem;background:color-mix(in srgb,var(--panel) 92%,var(--paper)); }
+  .ladder>div:first-child { display:grid;gap:.2rem;margin-bottom:.65rem }.ladder>div:first-child small{color:var(--muted)}
+  .engine-choice{margin-top:.65rem}.opponent-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: .5rem; }
+  .opponent-grid label,.engine-choice label { position: relative; min-height: 7.25rem; display: grid; grid-template-columns: 1fr auto; align-content: space-between; gap: .5rem; padding: .8rem; border: 1px solid var(--line); border-radius: .8rem; background: var(--paper); cursor: pointer; }
+  .engine-choice label{min-height:auto}.opponent-grid label.checked,.engine-choice label.checked { border-color: var(--accent); box-shadow: inset 0 0 0 1px var(--accent); }
   .opponent-grid input { position: absolute; opacity: 0; }
-  .opponent-grid span { display: grid; gap: .25rem; }
-  .opponent-grid small { color: var(--muted); line-height: 1.3; }
-  .opponent-grid b { align-self: end; color: var(--accent); font: 700 1rem ui-monospace, monospace; }
+  .opponent-grid span,.engine-choice span { display: grid; gap: .25rem; }
+  .opponent-grid small,.engine-choice small { color: var(--muted); line-height: 1.3; }
+  .opponent-grid b,.engine-choice b { align-self: end; color: var(--accent); font: 700 1rem ui-monospace, monospace; }
   .honest { margin: .6rem 0 0; color: var(--muted); font-size: .75rem; }
   .start-options { display: grid; grid-template-columns: minmax(8rem, .35fr) auto minmax(18rem, 1fr) auto; gap: .6rem; align-items: end; }
   .start-options label { display: grid; gap: .3rem; font-size: .78rem; }
