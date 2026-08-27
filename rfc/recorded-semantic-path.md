@@ -1,6 +1,7 @@
 # RFC: Recorded semantic path compiler
 
-- **Status:** draft 2026-08-27 — first author pass; independent buildability review required
+- **Status:** draft — returned by independent buildability review 2026-08-27 on
+  [[D1927]]–[[D1930]] plus inherited [[D1921]]
 - **Author:** codex
 - **Created:** 2026-08-27
 - **Design refs:** `design/05-in-run-experience.md` §5 (detection is cheap; significance is not),
@@ -11,24 +12,28 @@
   `design/research/producer-execution-closure.md`; module assembly census
   `design/research/module-evidence-assembly.md`. The research is complete and executable
   production reach is the measured gap, not an open feasibility question
-- **Depends on:** implemented branch runtime and `branchPath`; implemented evidence manifest,
-  semantic event seal and eleven existing multi-edge projections; accepted
-  `rfc/semantic-collectors.md` (the projection semantics, already implemented for this subset)
+- **Depends on:** implemented branch runtime and current `branchPath`; implemented evidence
+  manifest, semantic event seal and eleven existing multi-edge projections; accepted
+  `rfc/semantic-collectors.md` (the projection semantics, already implemented for this subset).
+  Acceptance now also waits on the exact value/convention authority returned in
+  `rfc/semantic-convention-provenance.md` ([[D1921]]/[[D1929]])
 - **Parent / amends:** implements the recorded-run adapter left outside
   `rfc/semantic-collectors.md` §1.1 and consumed later by `rfc/module-registration.md`,
   `rfc/review-evidence-compiler.md` and `rfc/longitudinal-store.md`
 - **Supersedes / superseded by:** —
-- **Planning:** `planning/evidence-foundation-ux/` once implementing
+- **Planning:** `planning/recorded-semantic-path/`
 
 ```tabiya-claims
 none
 ```
 
-The compiler adds no schema field, migration, evidence kind, projection id, producer id or
-persisted record. Its family table is private implementation data derived set-equal from existing
-manifest projections; it is not exported as a second closed vocabulary. The public operation
-returns existing `SemanticEvidenceEvent` identities and a non-persisted execution receipt. No
-shared versioned resource moves.
+The current draft claims no schema field, migration, evidence kind, projection id, producer id or
+persisted record. Independent review found that [[D1928]] may require an exact-edge successor and
+therefore migration/version pricing before acceptance; `tabiya-claims: none` is not permission to
+silently widen `run.record.move@1`. The family table remains private implementation data derived
+set-equal from existing manifest projections, not a second exported vocabulary. The public
+operation returns existing `SemanticEvidenceEvent` identities and a non-persisted execution
+receipt.
 
 ## Summary
 
@@ -389,11 +394,25 @@ Review and longitudinal surfaces. It adds no product surface or chess judgement.
 
 ## Open questions
 
-None. Product selection, presentation and hint disclosure decisions remain in their owning RFCs;
-this compiler's input authority and output semantics are fixed by the implemented run and evidence
-contracts.
+No owner product choice is open. Product selection, presentation and hint disclosure decisions
+remain in their owning RFCs. The author must still resolve the buildability questions below; the
+implemented run/evidence contracts do not currently supply the exact authorities the first draft
+assumed.
+
+## Independent-review routing
+
+| finding | blocker | repair owner |
+|---|---|---|
+| [[D1927]] | `branchPath` truncates missing ancestry, trusts node-array order and has no cycle guard | author amendment / strict path authority |
+| [[D1928]] | `run.record.move@1` is a loose narrative payload, not the claimed exact edge receipt | evidence-authority amendment and migration pricing |
+| [[D1921]] | event seals accept unrelated move-evidence values and retain the same id | semantic-convention/value-level derivation predecessor |
+| [[D1929]] | result identity claims convention heads but digests no convention receipt | semantic-convention predecessor + author amendment |
+| [[D1930]] | relative co-editable benchmark has no absolute consumer budget or deterministic CI split | disposable measurement + author amendment |
 
 ## Changelog
 
+- 2026-08-27: independent review returned the draft on [[D1927]]–[[D1930]] plus inherited
+  [[D1921]]. Exact return:
+  `planning/recorded-semantic-path/independent-buildability-review-2026-08-27.md`.
 - 2026-08-27: first draft from the D1067/D1068 source audit, D1710 execution census and D1865
   module-assembly census.

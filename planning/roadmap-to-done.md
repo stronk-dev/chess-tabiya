@@ -230,10 +230,13 @@ Phase 3 therefore waits on the complete one-edge packet operation plus the recor
 catalogue membership, an exported constructor or a consumer-operation registry entry cannot
 satisfy a module, Review, bot, drill or longitudinal dependency.
 
-The recorded half now has a concrete draft owner: `recorded-semantic-path.md` compiles the eleven
-existing multi-edge projections across thirteen exact 2/3/4/5-edge evaluator rows, with complete
-window receipts and a real-consumer completion gate. It still requires independent review and
-acceptance; [[D1870]] remains the separate consumer/presentation join after it lands.
+The recorded half now has a concrete but returned draft owner: `recorded-semantic-path.md` compiles
+the eleven existing multi-edge projections across thirteen exact 2/3/4/5-edge evaluator rows, with
+complete window receipts and a real-consumer completion gate. Independent review preserved that
+population and boundary but returned strict path completeness ([[D1927]]), exact edge/value
+authority ([[D1928]]/[[D1921]]), convention-aware identity ([[D1929]]) and the absolute
+consumer/CI performance contract ([[D1930]]). [[D1870]] remains the separate
+consumer/presentation join after the amended compiler lands.
 
 [[D1711]] closes the separate validation axis and makes the word *validated* unavailable at HEAD.
 All 67 semantic declarations manufacture their own positive/hard-negative labels, the compiler

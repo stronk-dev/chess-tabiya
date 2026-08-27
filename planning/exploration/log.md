@@ -10404,3 +10404,23 @@ continue another foundation dependency without implementing around it.
   `planning/semantic-convention-provenance/independent-buildability-review-2026-08-27.md`.
 - Next: source-backed declaration authoring and value-level closure first, then immutable semantic
   history, durable receipt claims and provider completeness before repeat review.
+
+## 2026-08-27 — recorded semantic path returned on source and identity authority
+
+- Independently reviewed the D1067 recorded-run compiler against the live branch resolver,
+  run-record adapter, semantic seal, convention dependency and CI/performance contract.
+- A five-arm disposable harness proves `branchPath` can silently truncate a missing-parent chain
+  and choose a non-leaf from node-array order ([[D1927]]), while a semantic sequence accepts
+  unrelated move receipts and retains the same event id (the operation-level reproduction of
+  [[D1921]]).
+- Returned the draft because `run.record.move@1` is narrative rather than the exact edge receipt it
+  claims ([[D1928]]); the result digest names convention heads but contains no convention closure
+  ([[D1929]]); and the relative baseline has no absolute consumer budget or deterministic CI split
+  ([[D1930]]).
+- Preserved the central positive result: deriving semantic declarations that include
+  `run.record.move@1` yields exactly the named eleven projections, and their thirteen horizons match
+  the shipped operand functions. The compiler remains the correct shared operation after repair.
+- Exact return:
+  `planning/recorded-semantic-path/independent-buildability-review-2026-08-27.md`.
+- Next: strict path and exact edge authority first; coordinate value/convention provenance with the
+  already-returned semantic-convention RFC, measure consumer envelopes, amend, then repeat review.
