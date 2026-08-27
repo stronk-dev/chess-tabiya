@@ -9730,3 +9730,17 @@ collaborator, publication and backup retention before account preview. The produ
 journey downloads a run PGN and the account archive, hard-deletes an owned run and observes its 404,
 then deletes the account and proves the current browser's durable keys are gone. IMP-a18/a19/a22/a23
 and D1842 close together because they are one honest account-exit path rather than four labels.
+
+## 2026-08-27 — Academy proposals become a complete two-person gesture
+
+The live studio no longer stops after a learner proposes a UCI move. It names the proposing handle,
+and an open proposal gives the host explicit Play proposal and Decline actions. Playing acquires the
+ordinary run lease before invoking the existing resolver, preserving possession rather than creating
+a coach-only mutation bypass; the same action refreshes the session projection so the resolved state
+is visible immediately.
+
+A production browser journey creates separate host and participant accounts, grants the participant
+through a session invitation, records their proposal, verifies the host sees the participant's handle,
+and applies the move through the real route. TCH-a5 and the central-gesture half of D1480 close. D1480
+remains open for the separate classroom identity residual: submission rows still omit learner, pack and
+assignment identity; missing submissions remain invisible; learner assignment cards name no teacher.

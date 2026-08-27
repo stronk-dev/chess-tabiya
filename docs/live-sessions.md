@@ -62,7 +62,9 @@ remain ordinary attempts belonging to the learner who created them.
 Hosts and participants can propose a legal move at a run node. A proposal is session
 state, not a run event. Only a host applies it through the ordinary leased run mutation;
 the proposal then records the resulting run sequence. Leaving the node makes unresolved
-proposals stale.
+proposals stale. The session studio names the proposing handle. An open proposal gives
+the host explicit **Play proposal** and **Decline** actions; playing first acquires the
+ordinary run lease and therefore does not bypass board possession.
 
 A host may open one 15–600 second vote window over two to eight legal moves. Votes are
 advisory: a tally never moves a piece. The host may separately play or apply a move and

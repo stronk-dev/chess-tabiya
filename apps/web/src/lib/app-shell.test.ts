@@ -18,6 +18,7 @@ import App from "../App.svelte";
 import type {
   Capabilities,
   DrillClientApi,
+  LiveSessionDetail,
   PackDraft,
   PackSummary,
   RunSummary,
@@ -459,6 +460,69 @@ describe("application shell", () => {
     }
 
     expect(document.body.textContent).toContain("/missing");
+    await unmount(component);
+  });
+
+  it("lets a live-session host identify and resolve a learner proposal", async () => {
+    history.replaceState(null, "", "/live/session/session-one");
+    const storage = new MemoryStorage();
+    WriterSession.claimFor("live-run", storage, () => "writer-live");
+    const proposal = {
+      id: "proposal-one",
+      sessionId: "session-one",
+      nodeId: "node-one",
+      moveUci: "e2e4",
+      proposedBy: "learner-guest",
+      at: "2026-08-27T12:00:00.000Z",
+      status: "open" as const,
+      resolvedRunSeq: null,
+    };
+    const detail: LiveSessionDetail = {
+      session: {
+        id: "session-one",
+        runId: "live-run",
+        kind: "academy",
+        title: "Endgame workshop",
+        boardControl: "host_directed",
+        handoffLearnerId: "learner-host",
+        rotationCursor: 0,
+        createdBy: "learner-host",
+        createdAt: "2026-08-27T11:00:00.000Z",
+      },
+      role: "host",
+      activeNodeId: "node-one",
+      leaseHeldBy: { learnerId: "learner-host", handle: "coach" },
+      grants: [
+        { learnerId: "learner-host", handle: "coach", role: "host", grantedAt: "2026-08-27T11:00:00.000Z" },
+        { learnerId: "learner-guest", handle: "student", role: "participant", grantedAt: "2026-08-27T11:01:00.000Z" },
+      ],
+      moveAuthorship: [],
+      proposals: [proposal],
+      invitations: [],
+      legs: [],
+      marks: [],
+    };
+    const claimLease = vi.fn(async () => undefined);
+    const resolveProposal = vi.fn(async () => ({ ...proposal, status: "applied" as const, resolvedRunSeq: 4 }));
+    const liveApi: DrillClientApi = {
+      ...api(),
+      async session() { return { id: "learner-host", handle: "coach", createdAt: "2026-08-27T10:00:00.000Z" }; },
+      async liveSession() { return detail; },
+      async sessionJournal() { return { entries: [], nextSeq: 0 }; },
+      claimLease,
+      resolveProposal,
+    };
+    const component = mount(App, {
+      target: target(),
+      props: { api: liveApi, router: new HistoryRouter(window), storage },
+    });
+
+    await vi.waitFor(() => expect(document.body.textContent).toContain("proposed by @student"));
+    expect(document.querySelector("[aria-label='Move proposals']")?.textContent).toContain("e2e4");
+    const play = [...document.querySelectorAll<HTMLButtonElement>("button")].find((button) => button.textContent === "Play proposal")!;
+    play.click();
+    await vi.waitFor(() => expect(resolveProposal).toHaveBeenCalledWith("session-one", "proposal-one", "apply", "writer-live"));
+    expect(claimLease).toHaveBeenCalledWith("live-run", "writer-live");
     await unmount(component);
   });
 

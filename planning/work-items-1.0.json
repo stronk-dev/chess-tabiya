@@ -8296,16 +8296,17 @@
     {
       "id": "TCH-a5",
       "sourceState": "queued",
-      "state": "queued",
+      "state": "completed",
       "capability": "professional",
       "owner": "professional-workflows",
-      "assignment": "capability:professional",
+      "assignment": "closed",
       "sourceDocument": "ux-teacher-and-classroom.md",
       "sourceSection": "§Verdict F4",
       "sourceHeading": "Teacher and classroom — `ux-teacher-and-classroom.md`",
       "summary": "**`resolveProposal` has a route and a client method and no button anywhere.** A learner can propose a move and a coach cannot accept it — the coached session's central gesture",
       "legacyRoute": "ledger",
-      "note": "[[D1480]]; verified at HEAD: zero `.svelte` callers",
+      "note": "implemented 2026-08-27; host actions name, play and decline open participant proposals through the ordinary lease",
+      "completion": { "completedOn": "2026-08-27", "evidence": "App session studio renders proposedBy and host Play proposal/Decline actions; component test binds the writer and a two-account Playwright journey proves participant proposal to applied move" },
       "sourceDigest": "sha256:0e74612859767bfaedd4b0edb6ada6b2b637cea22c46a23386c399f12a3760f4"
     },
     {

@@ -516,6 +516,38 @@ test("Live turns a run into a session and exposes a chrome-free overlay", async 
   await expect(page.locator("#primary-navigation")).toHaveCount(0);
 });
 
+test("an academy host can identify and play a participant's proposed move", async ({ page, browser }) => {
+  const card = page.getByRole("article").filter({ hasText: "schema example" }).first();
+  await card.getByRole("button", { name: /Rehearse this position/ }).click();
+  await expect(page.getByLabel("Chessboard")).toBeVisible();
+  await page.goto("/live");
+  await page.getByRole("button", { name: "Create academy" }).first().click();
+  await expect(page.getByText("your role: host")).toBeVisible();
+  const sessionUrl = page.url();
+
+  const participantContext = await browser.newContext();
+  const participant = await participantContext.newPage();
+  const participantHandle = await register(participant);
+  const invitations = page.getByRole("heading", { name: "Invitations" }).locator("..");
+  await invitations.getByLabel("Tabiya handle").fill(participantHandle);
+  await invitations.getByRole("button", { name: "Create invitation" }).click();
+  await expect(invitations).toContainText(`@${participantHandle}`);
+
+  await participant.goto(sessionUrl);
+  await expect(participant.getByText("your role: participant")).toBeVisible();
+  const proposals = participant.getByRole("heading", { name: "Proposals" }).locator("..");
+  await proposals.getByLabel("Move (UCI)").fill("a1b1");
+  await proposals.getByRole("button", { name: "Propose" }).click();
+  await expect(proposals.getByText("a1b1", { exact: true })).toBeVisible();
+
+  const hostProposals = page.getByRole("heading", { name: "Proposals" }).locator("..");
+  await expect(hostProposals).toContainText(`proposed by @${participantHandle}`, { timeout: 5_000 });
+  await hostProposals.getByRole("button", { name: "Play proposal" }).click();
+  await expect(hostProposals).toContainText("applied");
+  await expect(hostProposals.getByRole("button", { name: "Play proposal" })).toHaveCount(0);
+  await participantContext.close();
+});
+
 test("library exposes phase honestly and survives a malformed pack response", async ({
   page,
 }) => {
