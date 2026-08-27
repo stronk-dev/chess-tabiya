@@ -1,7 +1,7 @@
 # RFC: Recorded semantic path compiler
 
-- **Status:** draft — returned by independent buildability review 2026-08-27 on
-  [[D1927]]–[[D1930]] plus inherited [[D1921]]
+- **Status:** draft — returned by independent buildability review and follow-up measurement
+  2026-08-27 on [[D1927]]–[[D1931]] plus inherited [[D1921]]
 - **Author:** codex
 - **Created:** 2026-08-27
 - **Design refs:** `design/05-in-run-experience.md` §5 (detection is cheap; significance is not),
@@ -408,9 +408,13 @@ assumed.
 | [[D1921]] | event seals accept unrelated move-evidence values and retain the same id | semantic-convention/value-level derivation predecessor |
 | [[D1929]] | result identity claims convention heads but digests no convention receipt | semantic-convention predecessor + author amendment |
 | [[D1930]] | relative co-editable benchmark has no absolute consumer budget or deterministic CI split | disposable measurement + author amendment |
+| [[D1931]] | eager full `localSemanticEvents` preparation dominates and fails the 40/80-ply synchronous envelope | exact-source/canonical-edge measurement + author amendment |
 
 ## Changelog
 
+- 2026-08-27: D1930 measured the first-draft execution shape. Total p95 is
+  399.7/826.3/1,434.0 ms at 20/40/80 plies against 500 ms; preparation is ~88% of total and
+  produces [[D1931]]. Dossier: `design/research/recorded-semantic-path-cost.md`.
 - 2026-08-27: independent review returned the draft on [[D1927]]–[[D1930]] plus inherited
   [[D1921]]. Exact return:
   `planning/recorded-semantic-path/independent-buildability-review-2026-08-27.md`.

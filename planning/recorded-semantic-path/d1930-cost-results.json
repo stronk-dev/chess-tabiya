@@ -1,0 +1,159 @@
+{
+  "measuredAt": "2026-08-27T17:27:00.510Z",
+  "node": "v26.7.0",
+  "platform": "darwin/arm64",
+  "populationDigest": "sha256:663e2f4d09b2b34089acdcc52016059b0ca8e064921973ba79b39f71a7695d7c",
+  "evaluatorRows": 13,
+  "pathsPerArm": 12,
+  "repetitions": 3,
+  "arms": [
+    {
+      "plies": 20,
+      "paths": 12,
+      "repetitions": 3,
+      "timings": {
+        "validation": {
+          "samples": 36,
+          "p50Ms": 0.14950000000135333,
+          "p95Ms": 0.20349999999962165,
+          "maxMs": 0.4742919999989681
+        },
+        "preparation": {
+          "samples": 36,
+          "p50Ms": 338.2329170000012,
+          "p95Ms": 350.9963749999997,
+          "maxMs": 353.68454100000054
+        },
+        "windows": {
+          "samples": 36,
+          "p50Ms": 49.13349999999991,
+          "p95Ms": 52.31775000000016,
+          "maxMs": 53.21650000000045
+        },
+        "total": {
+          "samples": 36,
+          "p50Ms": 387.15679199999977,
+          "p95Ms": 399.7241670000003,
+          "maxMs": 402.9845000000005
+        }
+      },
+      "work": {
+        "preparedEdges": 20,
+        "localSemanticCalls": 20,
+        "receipts": 260,
+        "defenderDutyReads": {
+          "samples": 36,
+          "p50Ms": 0,
+          "p95Ms": 1,
+          "maxMs": 1
+        },
+        "emittedEvents": {
+          "samples": 36,
+          "p50Ms": 3,
+          "p95Ms": 6,
+          "maxMs": 6
+        }
+      },
+      "synchronous500ms": true
+    },
+    {
+      "plies": 40,
+      "paths": 12,
+      "repetitions": 3,
+      "timings": {
+        "validation": {
+          "samples": 36,
+          "p50Ms": 0.271415999995952,
+          "p95Ms": 0.3038329999981215,
+          "maxMs": 0.3102919999946607
+        },
+        "preparation": {
+          "samples": 36,
+          "p50Ms": 676.6929170000003,
+          "p95Ms": 727.9967500000021,
+          "maxMs": 733.7514169999995
+        },
+        "windows": {
+          "samples": 36,
+          "p50Ms": 98.06883300000482,
+          "p95Ms": 101.78508300000249,
+          "maxMs": 102.86529200000223
+        },
+        "total": {
+          "samples": 36,
+          "p50Ms": 773.3134169999976,
+          "p95Ms": 826.3309169999993,
+          "maxMs": 829.1752090000009
+        }
+      },
+      "work": {
+        "preparedEdges": 40,
+        "localSemanticCalls": 40,
+        "receipts": 520,
+        "defenderDutyReads": {
+          "samples": 36,
+          "p50Ms": 0,
+          "p95Ms": 1,
+          "maxMs": 1
+        },
+        "emittedEvents": {
+          "samples": 36,
+          "p50Ms": 8,
+          "p95Ms": 10,
+          "maxMs": 10
+        }
+      },
+      "synchronous500ms": false
+    },
+    {
+      "plies": 80,
+      "paths": 12,
+      "repetitions": 3,
+      "timings": {
+        "validation": {
+          "samples": 36,
+          "p50Ms": 0.4677090000041062,
+          "p95Ms": 0.8760420000035083,
+          "maxMs": 0.896999999997206
+        },
+        "preparation": {
+          "samples": 36,
+          "p50Ms": 1113.9188330000034,
+          "p95Ms": 1262.3447500000038,
+          "maxMs": 1264.769207999998
+        },
+        "windows": {
+          "samples": 36,
+          "p50Ms": 164.7480829999986,
+          "p95Ms": 184.85595899999316,
+          "maxMs": 190.7566669999942
+        },
+        "total": {
+          "samples": 36,
+          "p50Ms": 1274.4586249999993,
+          "p95Ms": 1433.9857920000068,
+          "maxMs": 1442.7504999999946
+        }
+      },
+      "work": {
+        "preparedEdges": 80,
+        "localSemanticCalls": 80,
+        "receipts": 1040,
+        "defenderDutyReads": {
+          "samples": 36,
+          "p50Ms": 0,
+          "p95Ms": 2,
+          "maxMs": 2
+        },
+        "emittedEvents": {
+          "samples": 36,
+          "p50Ms": 17,
+          "p95Ms": 21,
+          "maxMs": 21
+        }
+      },
+      "synchronous500ms": false
+    }
+  ],
+  "verdict": "synchronous_full_path_refused"
+}

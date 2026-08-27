@@ -2,8 +2,9 @@
 
 ## State
 
-Draft product RFC returned by independent buildability review on [[D1927]]–[[D1930]] and the
-already-open value-level provenance blocker [[D1921]]. No implementation is authorised.
+Draft product RFC returned by independent buildability review and follow-up measurement on
+[[D1927]]–[[D1931]] and the already-open value-level provenance blocker [[D1921]]. No
+implementation is authorised.
 
 ## Repair order
 
@@ -15,9 +16,11 @@ already-open value-level provenance blocker [[D1921]]. No implementation is auth
    to event operands; projection-name set membership is insufficient.
 4. Depend on the semantic-convention closure and include its exact digest/receipt in result
    identity.
-5. Measure fixed realistic path-length populations, set an absolute consumer budget, and separate
-   deterministic CI work bounds from environment-sensitive benchmark reporting.
-6. Amend the RFC, rerun the five-arm falsifier, then repeat independent buildability review.
+5. **Measured:** eager full-path p95 is 399.7/826.3/1,434.0 ms at 20/40/80 plies against the
+   existing 500 ms envelope. Measure [[D1931]]'s exact-source/canonical-edge alternative; keep
+   deterministic CI work bounds separate from environment-sensitive benchmark reporting.
+6. Amend the RFC around the measured execution shape, rerun the five-arm falsifier, then repeat
+   independent buildability review.
 
 ## Boundary
 

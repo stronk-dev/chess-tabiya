@@ -10424,3 +10424,21 @@ continue another foundation dependency without implementing around it.
   `planning/recorded-semantic-path/independent-buildability-review-2026-08-27.md`.
 - Next: strict path and exact edge authority first; coordinate value/convention provenance with the
   already-returned semantic-convention RFC, measure consumer envelopes, amend, then repeat review.
+
+## 2026-08-27 — recorded-path eager fan-out refused; window arithmetic survives
+
+- Preregistered and executed D1930 over twelve fixed imported paths at each of 20/40/80 plies,
+  three measured call-cold repetitions after warmup, with legal replay, one local semantic compile
+  per edge and all thirteen window rows at every start.
+- Total p95 is 399.7/826.3/1,434.0 ms against the existing 500 ms synchronous envelope. The
+  40/80-ply arms refuse synchronous full-path compilation.
+- The decomposition changes the repair: validation remains below 0.6 ms and all thirteen bounded
+  windows cost only 52.3/101.8/184.9 ms. Full `localSemanticEvents` preparation consumes about 88%
+  of total p95.
+- Added [[D1931]] rather than calling the sequence foundation slow: measure one canonical per-edge
+  packet or the exact recorded-edge/capture/check/duty/exchange source closure, then amend around
+  the winning execution shape. Generic CI receives exact work counts; timing stays in the pinned
+  performance tier.
+- Dossier: `design/research/recorded-semantic-path-cost.md`; instrument and raw results:
+  `tools/d1930-recorded-path-cost-harness/`,
+  `planning/recorded-semantic-path/d1930-cost-results.{json,md}`.
