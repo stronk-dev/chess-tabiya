@@ -10059,3 +10059,18 @@ selection policy cannot own ten consumers. The amended contract leaves research 
 selection byte-identical; module declarations, consumers and adapters own admission, while the
 existing reducer algorithm becomes a typed module-local policy. Next: governance verification and
 repeat independent buildability review; no module implementation is authorised before acceptance.
+
+## 2026-08-27 — evidence-presentation return repaired from the executable seal harness
+
+Amended `rfc/evidence-presentation.md` on D1664–D1673. The contract now follows the tested
+F1-admission → exact projection/consumer adapter → owner-bound process seal → closed digest wire →
+strict client parser/new seal path, with family-specific retained-operand negatives instead of
+treating manifest strings as types. Convention metadata derives from same-exchange provider or
+registered semantic receipts; citation content is bound; enum state is vocabulary-coupled;
+abstention has a request lifecycle; structured documents are schema-coupled read-only viewers;
+coverage is split across ordinary learner, Inspector and author/operator binding populations; and
+chart scale is registered rather than caller-controlled. D1856/D1857 record two draft defects
+closed in the pass. The RFC remains unaccepted and splits landing into a real current-consumer
+checkpoint followed by module/hint/arrow composition; neither empty coverage nor plain-JSON
+compatibility can satisfy it. Re-derived the live manifest at 37/193/25/210 and `make schema-check`
+green. Next: repeat independent buildability review while work continues on other lawful 1.0 nodes.

@@ -1,8 +1,11 @@
 # RFC: evidence-presentation — the component vocabulary between a typed fact and a pixel
 
-- **Status:** draft — returned 2026-08-26 by independent buildability review on
-  [[D1664]]–[[D1672]] (`planning/platform-alignment/evidence-presentation/independent-buildability-review-2026-08-26.md`);
-  prior amendment 2026-08-26 on [[D1564]]/[[D1568]]/[[D1569]]/[[D1577]]/[[D1578]] —
+- **Status:** draft amended 2026-08-27 — the independent buildability return on
+  [[D1664]]–[[D1672]] is repaired from the executable [[D1673]] projection→component→wire→parser
+  harness and the shared provider-exchange contract; ready for repeat review, not accepted.
+  Landing is explicitly two checkpoints (§2.1): the sealed component foundation plus current
+  consumer migrations first, then module/hint seats only after their own accepted contracts.
+  Prior amendment 2026-08-26 on [[D1564]]/[[D1568]]/[[D1569]]/[[D1577]]/[[D1578]] —
   arrow activation is a 1.0 obligation. The transition-event hand-off is measured: five geometry
   event families already retain their relations; the live work is forms, adapters, module admission,
   routing capture overlays through the existing capture-class endpoint, and the per-family
@@ -27,10 +30,11 @@
   and nobody built.
 - **Depends on:** `rfc/learner-modules.md` (accepted — the eleven modules, their `forms`,
   `budgets`, `emptyBehavior` and the [[D659]] class rule; **consumed, never re-decided**);
-  `rfc/module-registration.md` (draft, concurrent — the eleven module seats and their
-  facts/marks/arrows budgets; this RFC's components are what those seats render into, and the
-  boundary is pinned in `rfc/README.md`); `rfc/theming.md` (awaiting D1 — the three axes and the
-  12-token `THEME_TOKENS` contract every component here consumes)
+  `rfc/module-registration.md` (draft, concurrent — required only for checkpoint B's eleven
+  module seats, not checkpoint A's current-consumer path); `rfc/theming.md` (awaiting D1 — the
+  three axes and the 12-token `THEME_TOKENS` contract every component here consumes);
+  `rfc/provider-exchange-and-execution.md` for provider/same-exchange convention receipts and
+  request lifecycle; `rfc/semantic-convention-provenance.md` for declared convention sources.
 - **Consumes without re-specifying:** `rfc/intent-presets.md` (accepted — which modules are
   active is a preset question, not a component question); `rfc/hint-distance.md` (the rung
   ladder — a component never widens a rung); `rfc/review-evidence-compiler.md` and
@@ -52,8 +56,8 @@ none
 
 ## Summary
 
-The product has an evidence contract with **20 producers, 126 projections, 25 consumers and 175
-bindings** (`design/03-product-breadth.md:326`), and it renders that contract to a learner as
+The product has an evidence contract with **37 producers, 193 projections, 25 consumers and 210
+bindings** (`make evidence-manifest-check`, 2026-08-27), and it renders much of that contract to a learner as
 `JSON.stringify`, comma-joined arrays, de-underscored enum ids and a row of identical bullet
 characters. The owner is not describing a taste disagreement. He is describing a **missing
 layer**: between a typed fact and a pixel there is nothing that knows what shape the fact *is*.
@@ -77,7 +81,10 @@ author and operator surfaces only — a structured document. Each declares its *
 its **convention obligation**, its **honest-empty state**, its image in `design/05`'s form
 inventory, and the theme tokens it consumes.
 
-Three rules bind all thirteen. **Honest empty is a shipped state, not a blank** (§4): every
+Three rules bind all thirteen. Each component is built only by a projection-keyed adapter over a
+validated retained payload, process-sealed to its admitted evidence owner, serialized as a closed
+digest receipt, and parsed into a new client-local seal before Svelte can receive it (§2.1).
+**Honest empty is a shipped state, not a blank** (§4): every
 component renders absence as itself, and abstention is visually and structurally distinct from
 zero — a distribution with no candidates and a distribution where every candidate scored 0% are
 different pictures. **The number and its convention travel together** (§5): a component that
@@ -242,14 +249,92 @@ is one-way and by type only (a component declares which `EvidenceForm` members i
 `evidence-catalog.ts` does not import this file), so landing order is free in either direction.
 The pin is recorded in `rfc/README.md`.
 
-**The sealed rendered item carries both representations.** The implementation amends
-`RenderedEvidenceItem` from `{ evidence, sentences }` to
-`{ evidence, sentences, components }`, where `components` is a readonly union of the thirteen
-typed operands below. A registered renderer constructs the sentence and component operands from
-the same admitted `DeclaredEvidence`; neither a module nor a Svelte call site may attach a board
-overlay later. `renderEvidenceItems` seals both arrays in the same `RenderedEvidenceView`, and
-`voiceCheck` continues to derive its allow-list from that view's sentences. This is the
-producer→presentation join [[D1568]] requires and prevents a second, ungrounded overlay authority.
+#### 2.1 The two checkpoints, and the one real path both must use
+
+This RFC lands in two checkpoints without treating the first as product completion:
+
+1. **A — sealed component foundation and current consumers.** Land the component schemas,
+   projection-keyed adapter registry, process seal, closed wire/parser, coverage classes and the
+   real `pack.authored.claim_delivery@1 → guidance.authored_claim@1 → claim → wire → parser →
+   existing claim seat` path from [[D1673]]. Then migrate the currently bound learner/Inspector
+   renderers named by the derived coverage census; no zero-consumer registry checkpoint qualifies.
+2. **B — module composition.** `module-registration` binds the same receipts into all occupied
+   module seats, including relation overlays and Guided Hint disclosures. Checkpoint B cannot land
+   until that RFC, the sealed hint registry and effective arrow clamp are accepted and implemented.
+
+The RFC remains `implementing` between A and B. Neither checkpoint may invent a compatibility
+path that hands a Svelte component plain JSON or raw F1 process objects.
+
+The executable path is exactly the [[D1673]] harness shape:
+
+```text
+F1 ConsumerEvidenceView
+  → exact projection+consumer adapter over a validated retained payload
+  → process-local PresentedEvidenceItem seal + admitted-owner identity
+  → closed presentation.receipt@1 body + canonical digest
+  → exact client parser + client-local PresentedEvidenceItem seal
+  → component renderer + equivalent sentence from that same sealed component
+```
+
+`RenderedEvidenceItem` is replaced, not widened with another caller-owned array. A presented item
+contains `{ evidenceRef, adapter, component, componentDigest }`; its sentence is produced only by
+the registered renderer for that sealed component. `voiceCheck` derives its allow-list from those
+same rendered sentences. A module or Svelte call site cannot attach a component, sentence, mark or
+arrow later.
+
+#### 2.2 The adapter authority: typed payloads, literal retention, and two seals
+
+`packages/runtime/src/presentation-contract.ts` declares:
+
+```ts
+interface ProjectionPresentationAdapter<P, C extends ComponentId> {
+  readonly id: VersionedEvidenceId;
+  readonly projection: VersionedEvidenceId;
+  readonly consumer: VersionedEvidenceId;
+  readonly component: C;
+  readonly sourceOperands: readonly ProjectionOperandPath<P>[];
+  readonly parsePayload: ExactPayloadParser<P>;
+  readonly construct: (retained: RetainedPayload<P>) => ComponentOperandMap[C];
+  readonly assertions: readonly OperandRetentionAssertion<C>[];
+}
+```
+
+The compiler joins `projection + consumer` to an exact F1 binding, requires every
+`sourceOperands` member to occur in both the typed payload schema and the projection's literal
+`operands`, and hands `construct` only the frozen retained object—not the unknown payload. The
+adapter is trusted product code, so each family also declares executable retention assertions:
+copied fields remain byte-equal; mechanical transforms name their exact inputs; relation endpoints
+are members of retained directed operands; ratios name numerator and denominator; authored text
+is copied byte-for-byte. An adapter with no assertions does not compile.
+
+`presentEvidenceItems` accepts only a real `ConsumerEvidenceView`, runs the exact adapter, validates
+the component-specific runtime schema, and records both the component and its admitted evidence
+owner in private `WeakSet`/`WeakMap` authorities. `serializePresentedEvidence` asserts that owner
+before emitting the closed version-1 receipt and its canonical digest. `parsePresentationReceipt`
+rejects unknown/extra fields, digest mismatch, an unregistered adapter/projection/consumer/component
+tuple and an invalid operand, then creates a **new** client-local seal. Process brands are never
+claimed to survive JSON.
+
+The permanent negatives are the five [[D1673]] arms plus the return's four: literal/spread/JSON
+forge; cross-evidence owner swap; wire mutation/extra field/unparsed JSON; unregistered projection;
+invented relation edge; component swap between two admitted items; post-render component append;
+and a sentinel present only in an undeclared/dropped payload field. All fail before Svelte receives
+an item. This is [[D1664]]'s closure; manifest `payloadType`/`operands` strings alone are never
+treated as type evidence.
+
+#### 2.3 Coverage populations are derived from bindings, not the whole catalogue
+
+`PRESENTATION_CONSUMER_CLASSES` assigns every real visual/audio F1 consumer exactly one class:
+`ordinary_learner`, `inspector`, or `author_operator`. It is set-equal to compiled consumers whose
+bindings expose at least one form other than `machine_condition`; consumers with only machine
+conditions and unbound/disposed projections are outside presentation coverage by construction.
+
+For each class, `make component-coverage` derives the exact `consumer@version × projection@version`
+binding population and requires exactly one or more registered adapters serving every bound form.
+The three populations and their misses print separately. A retired, experimental, unbound or
+machine-only projection creates no fake learner widget; a new learner binding fails immediately
+until its adapter exists. `module.full_inspector@1` joins the Inspector class when checkpoint B
+registers it. This closes [[D1670]] without an ad-hoc exclusion list.
 
 ### §3 — The closed component vocabulary
 
@@ -293,8 +378,8 @@ budget, and draws it. A component that queries anything is the defect the dossie
       readonly count?: number;             // present iff the basis is a corpus
       readonly withheld?: WithheldReason;  // per-row floor, e.g. the 100-game outcome floor
     }[];
-    readonly residual: { readonly share: number; readonly label: string } | null;
-    readonly convention: Convention;       // §5 — mandatory
+    readonly residual: { readonly share: number; readonly label: DistributionResidualLabelId } | null;
+    readonly convention: ConventionReceipt; // §5 — mandatory, compiler-derived
     readonly highlight: { readonly uci: string; readonly why: HighlightReason } | null;
   }
   ```
@@ -327,7 +412,7 @@ budget, and draws it. A component that queries anything is the defect the dossie
     readonly white: number; readonly draws: number; readonly black: number;
     readonly total: number;
     readonly perspective: "white" | "black" | "side_to_move";
-    readonly convention: Convention;
+    readonly convention: ConventionReceipt;
     readonly floor: { readonly threshold: number; readonly met: boolean };
   }
   ```
@@ -361,7 +446,7 @@ budget, and draws it. A component that queries anything is the defect the dossie
   interface MagnitudeOperand {
     readonly value: number;
     readonly unit: MagnitudeUnit;
-    readonly convention: Convention;   // carries perspective + search bound + producer
+    readonly convention: ConventionReceipt; // carries same-source perspective/bound/producer
     readonly saturated: boolean;       // the value is at the instrument's limit, not the truth
   }
   ```
@@ -386,15 +471,17 @@ budget, and draws it. A component that queries anything is the defect the dossie
 - **Renders:** how one measured quantity moved across a branch. **This is the component the
   product does not have.**
 - **Operand:** `readonly { plyOffset: number; magnitude: MagnitudeOperand }[]` plus one shared
-  `convention` asserted equal across every point (a trail mixing two producers or two units is a
-  construction error, not a rendering choice), plus an explicit `domain` and `range` with their
-  units.
+  `ConventionReceipt` asserted equal across every point (a trail mixing two sources, generations,
+  perspectives or units is a construction error), and a registered `MagnitudeScalePolicyRef`.
+  There is no caller-supplied domain, range or coordinate.
 - **Convention:** required, once, for the whole trail.
 - **Renders as:** a real plot — an `<svg>` line or step path with a stated vertical extent and a
   zero reference, plies on the horizontal, points addressable by keyboard, **and** an
-  `equivalentSentence` table available without hover. The vertical extent is **stated, not
-  inferred silently**: an auto-scaled evaluation chart makes a 0.2-pawn drift look like a
-  catastrophe, which is a graded move by geometry.
+  `equivalentSentence` table available without hover. `MAGNITUDE_SCALE_POLICIES` is keyed by
+  exact `consumer × projection × unit`, declares a fixed measurement-domain extent, zero rule,
+  saturation behavior and label, and is joined at adapter compile. The component derives pixels
+  from that policy; the caller cannot influence perceived significance. A binding with no reviewed
+  scale policy is unrenderable rather than auto-scaled. This closes [[D1671]].
 - **Empty:** `stated_absence` — *"No recorded evaluation covers this branch."* A trail of length
   1 renders as a `magnitude` (§3.3), not as a one-point chart.
 - **Forms:** `card` (→ `panel`), `timeline_mark`.
@@ -409,12 +496,13 @@ budget, and draws it. A component that queries anything is the defect the dossie
   interface SquareSetOperand {
     readonly squares: readonly Square[];      // deduplicated at construction
     readonly brush: MarkBrush;                // MARK_BRUSHES, types.ts:51
-    readonly owner: { readonly factRef: string; readonly caption: string };
+    readonly owner: { readonly factRef: string };
     readonly ordered: false;                  // a set, never a vector — see §3.6
   }
   ```
 - **Convention:** not applicable (a square set is exact or it does not exist), but `owner` is
-  mandatory and is the whole point.
+  mandatory and is the whole point. Its caption is rendered from the sealed component by the
+  projection adapter's registered sentence renderer, never supplied independently.
 - **Renders as:** lit squares plus **the one caption that owns them**, bound bidirectionally:
   focusing the caption lights the squares, focusing a square surfaces its caption, and both are
   reachable by keyboard (WCAG 2.2 hover/focus, dossier §6.1). **Deduplication is at
@@ -475,9 +563,9 @@ budget, and draws it. A component that queries anything is the defect the dossie
       readonly relation: BoardRelationKind;
       readonly sign: "state" | "gained" | "lost";
     }[];
-    readonly owner: { readonly factRef: string; readonly caption: string };
+    readonly owner: { readonly factRef: string };
     readonly answerDistance: AnswerDistance;
-    readonly convention?: Convention;
+    readonly convention?: ConventionReceipt;
   }
   ```
 - **Construction rule:** every node and edge is a literal projection operand or a mechanical UCI
@@ -512,7 +600,8 @@ budget, and draws it. A component that queries anything is the defect the dossie
 - **Empty:** `stated_absence` for an explicit request and no overlay for a silent module. A
   missing required producer is a coverage-gate failure, not a fake empty fact.
 - **Forms:** `arrow` (→ `arrows`), `square` (→ `lit_squares` / `piece_halo`), `sentence`.
-- **Equivalent sentence:** mechanically names the same endpoints and registered relation label;
+- **Equivalent sentence:** mechanically names the same endpoints and registered relation label
+  from the sealed component; no independent caption field exists;
   for example, *"The bishop on b4 pins the knight on c3 to the queen on d2"* is permitted only
   from a `ray_classification` payload whose kind is `absolute_pin`/`relative_pin` and whose three
   identities are retained. The renderer cannot manufacture the word from geometry.
@@ -520,7 +609,9 @@ budget, and draws it. A component that queries anything is the defect the dossie
 #### 3.7 `count_with_denominator` — a count that is only meaningful against its base
 
 - **Renders:** a numerator against the base it was drawn from.
-- **Operand:** `{ numerator: number; denominator: number; denominatorMeaning: string; floor?: {…} }`.
+- **Operand:** `{ numerator: number; denominator: number; denominatorMeaning: DenominatorMeaningId;
+  floor?: {…} }`; `DenominatorMeaningId` is a registered label keyed by the exact adapter, not
+  caller prose.
 - **Convention:** required — `denominatorMeaning` **is** the convention (*"legal alternatives
   evaluated"*, *"games in this population"*, *"checkpoints in this pack"*).
 - **Renders as:** *"2 of 25 legal alternatives evaluated"* with a proportional mark. **A bare
@@ -539,24 +630,60 @@ budget, and draws it. A component that queries anything is the defect the dossie
 #### 3.8 `citation` — an attributed reference to a source
 
 - **Renders:** one cited passage or authored source with everything the licence requires.
-- **Operand:** `{ sourceLabel; title; locator; licence: LicenceId; url?: string; revision?: string }`.
+- **Operand:**
+  ```ts
+  interface CitationOperand {
+    readonly content:
+      | { readonly kind: "quoted_passage"; readonly text: string; readonly binding: EvidenceFieldBinding }
+      | { readonly kind: "authored_summary"; readonly text: string; readonly binding: EvidenceFieldBinding };
+    readonly source: {
+      readonly source: VersionedEvidenceId;
+      readonly title: string;
+      readonly locator: string;
+      readonly licence: LicenceId;
+      readonly url?: string;
+      readonly revision?: string;
+    };
+  }
+  ```
+  `EvidenceFieldBinding` names the admitted projection, retained text field and evidence digest.
+  `authored_summary` means a summary already present in cited/authored evidence; a renderer or LLM
+  cannot create it.
 - **Convention:** not applicable; **attribution is mandatory and is part of the component**, not
   of the page that hosts it — which is what makes a citation safe to move between surfaces.
   Licence obligations are read from the sourcing register, never re-decided here.
-- **Renders as:** an attributed block: quoted or summarised passage, source label, locator, and
+- **Renders as:** an attributed block: quoted or authored-summary passage, registered source label, locator, and
   the licence line. The `revision` field renders when present, because an unpinned citation is a
   claim about a moving target (`theory-knowledge-pipeline` §9's P7).
 - **Empty:** `stated_absence` — *"Nothing cited covers this position"* — which is
   `theory-presentation.ts:5`'s existing `UNKNOWN_THEORY_NOTE` discipline: *"Unknown is not a
   judgement."* That constant is lifted into this component's empty state verbatim.
 - **Forms:** `card` (→ `panel`), `sentence`.
+- **Metadata-only refusal:** a source record with no bound `content` does not construct a citation;
+  it produces the registered `citation_content_absent` abstention. Inspector provenance chrome may
+  still show its metadata. Wrong-source swaps and metadata-only prose manufacture are permanent
+  negatives ([[D1666]]).
 
 #### 3.9 `enum_state` — a categorical value from a closed vocabulary
 
 - **Renders:** one member of a closed set, as a human label.
-- **Operand:** `{ vocabulary: LabelVocabularyId; value: string }` where `value` is constrained by
-  the vocabulary's own union type — so an unregistered vocabulary and an unregistered member are
-  **both compile errors** (§6).
+- **Operand:** the mapped discriminated union below; there is no `value: string` escape hatch.
+  ```ts
+  interface LabelVocabularyMembers {
+    readonly objective_state: ObjectiveState;
+    readonly run_outcome: RunOutcome;
+    readonly opponent_mode: RunOpponentMode;
+    // every §6b vocabulary appears literally
+  }
+  type EnumStateOperand = {
+    [K in keyof LabelVocabularyMembers]: Readonly<{
+      vocabulary: K;
+      value: LabelVocabularyMembers[K];
+    }>
+  }[keyof LabelVocabularyMembers];
+  ```
+  `parseEnumStateOperand` performs the same coupled lookup for untrusted JSON. An opponent-mode
+  member paired with `objective_state` fails at typecheck and at runtime ([[D1667]]).
 - **Convention:** not applicable; the vocabulary **is** the convention, and the component renders
   the vocabulary's own one-line gloss on request.
 - **Renders as:** a label, optionally with a valence token (`--accent` / `--warning` /
@@ -572,9 +699,10 @@ budget, and draws it. A component that queries anything is the defect the dossie
 #### 3.10 `claim` — an authored judgement with its ground attached
 
 - **Renders:** a sentence somebody is responsible for, with the responsibility rendered.
-- **Operand:** the shipped `guidance.authored_claim@1` view — `{ text; sourceLabel; binding:
+- **Operand:** the admitted `pack.authored.claim_delivery@1` projection — `{ text; binding:
   "ledger_bound" | "author_attributed" | "author_declared"; principles?; earnedEvidenceTypes }`
-  (`claim-presentation.ts:12-29`).
+  — as received by the `guidance.authored_claim@1` consumer (`claim-presentation.ts:12-29`).
+  Consumer and projection identities are not interchangeable.
 - **Convention:** required in its authored form — the **binding** is the convention. A
   ledger-bound claim and an author-declared one are different epistemic objects and must not
   render identically, which `claim-presentation.ts` already gets right in prose.
@@ -591,12 +719,30 @@ budget, and draws it. A component that queries anything is the defect the dossie
 #### 3.11 `abstention` — the honest-empty state as a first-class component
 
 - **Renders:** the fact that there is nothing to render, and why.
-- **Operand:** `{ reason: AbstentionReason; producer?: VersionedEvidenceId; asked: string }`
-  where `AbstentionReason` is the closed vocabulary already declared per projection
-  (`ProjectionDeclaration.abstention.reasons`, `evidence-contract.ts:34`) plus the three
-  `emptyBehavior` classes from `learner-modules` §1.10.
-- **Convention:** not applicable; `asked` **is** the honesty — an abstention that does not say
-  what question it is refusing is a blank with a border.
+- **Operand:** a sealed source-specific lifecycle receipt, never free learner prose:
+  ```ts
+  type PresentationRequestState =
+    | { readonly kind: "never_requested" }
+    | { readonly kind: "pending"; readonly requestId: string; readonly generation: number }
+    | { readonly kind: "settled"; readonly requestId: string; readonly generation: number };
+  type PresentationAbsenceKind = "withheld" | "unavailable" | "failed" | "empty";
+  interface AbstentionOperand {
+    readonly question: PresentationQuestionId;
+    readonly projection: VersionedEvidenceId;
+    readonly producer: VersionedEvidenceId;
+    readonly request: Exclude<PresentationRequestState, { kind: "never_requested" }>;
+    readonly absence: PresentationAbsenceKind;
+    readonly reason: PresentationAbsenceReasonRef;
+    readonly providerReceipt?: VersionedEvidenceId;
+  }
+  ```
+  `PRESENTATION_QUESTIONS` supplies the learner label and is set-equal to adapters that can
+  abstain. `PRESENTATION_ABSENCE_REASONS` joins each projection's declared reasons, module
+  empty-behavior mapping and provider request result to one closed label; callers cannot add a
+  string. `never_requested` is represented by the unopened on-request module door and constructs
+  no abstention component. Pending, withheld, unavailable, failed and genuine empty are distinct.
+- **Convention:** not applicable; the registered `question` is the honesty — an abstention that
+  does not say what question it is refusing is a blank with a border.
 - **Renders as:** a bordered, `--muted`, deliberately *lighter*-weight block — never an error
   colour (nothing failed), never zero-height. Structurally distinct from every value component:
   a screen reader hears *"no data: …"*, and a `data-abstention` attribute makes the distinction
@@ -604,35 +750,57 @@ budget, and draws it. A component that queries anything is the defect the dossie
 - **Empty:** not applicable — this **is** the empty state, which is the point of making it a
   component instead of a fallback.
 - **Forms:** every form its host component may serve, so an abstaining component never changes
-  channel and never disappears from its seat.
+  channel and never disappears from its seat; the adapter declares that literal form set.
 - **This is the component every other component delegates to.** §4 makes that delegation a
   contract rather than a convention.
+- **Lifecycle:** request ids/generations come from the shared provider/module operation. A newer
+  generation, disclosure close, node revision or source-generation change invalidates a pending
+  receipt; a late response is discarded and can never replace a newer component. No component
+  invents its own spinner protocol ([[D1668]]).
 
 #### 3.12 `structured_document` — the machine object, for author and operator surfaces only
 
-- **Renders:** a schema-typed object as a labelled form, with the raw serialization available.
-- **Operand:** `{ schemaId: string; document: unknown }` — the **only** component admitting
-  `unknown`, and it admits it only because the schema is the type.
+- **Renders:** a validated schema-typed object as a read-only labelled viewer, with canonical raw
+  JSON available.
+- **Operand:** a discriminated union derived from `STRUCTURED_DOCUMENT_SCHEMAS`; each registry
+  entry couples one literal schema id to its runtime parser, TypeScript output type, allowed roles
+  and canonical serializer. There is no `unknown` arm:
+  ```ts
+  type StructuredDocumentOperand = {
+    [K in keyof StructuredDocumentSchemaMap]: Readonly<{
+      schemaId: K;
+      document: StructuredDocumentSchemaMap[K];
+      canonicalBytes: string;
+      digest: string;
+    }>
+  }[keyof StructuredDocumentSchemaMap];
+  ```
+  The constructor parses first, recomputes canonical bytes/digest, and refuses cross-schema data.
 - **Disposition:** `author_only | operator_only` (`EvidenceDisposition`,
   `evidence-contract.ts:4`). **A learner-facing surface may not construct this component**, and
   §8.4's sweep asserts it. `App.svelte:906`'s `JSON.stringify` is a learner surface and is
   therefore not a `structured_document` at all — it is a `distribution` basis line plus four
   `enum_state`s.
-- **Renders as:** fields derived from the JSON Schema (label, type, required, description),
-  validation errors bound to their field, and a **raw JSON view behind an explicit toggle** that
-  round-trips byte-identically. Keeping the raw view is deliberate — `evidence-presentation.md`
-  §8 decision 4: *"do not delete expert analysis in the name of simplicity."*
+- **Renders as:** fields derived from the registered schema (label, type, required, description)
+  and a **canonical raw JSON view behind an explicit toggle**. This is deliberately read-only.
+  The RFC makes no false byte-identical-source claim because current object paths do not retain
+  original source bytes. Pack/Shape editing remains owned by their authoring RFCs and cannot be
+  declared repaired by this viewer ([[D1669]]).
 - **Empty:** an empty document renders the schema's own required-field skeleton, not `{}`.
 - **Forms:** `panel`.
-- **Replaces:** `App.svelte:988` and `:1013`.
+- **Does not replace:** `App.svelte:988` and `:1013`; their schema-driven editing journey remains
+  open under [[D1434]]/the authoring capability. It does replace raw object dumps on existing
+  author/operator inspection surfaces once those surfaces enter the derived coverage set.
 
 ---
 
-**Coverage check.** The vocabulary is closed against the shipped evidence surface by
-construction, not by assertion: §8.2's derivation walks every `ProjectionDeclaration` in
-`PRIMARY_EVIDENCE_MANIFEST`, reads its `payloadType`, `operands`, `answerContent` and `forms`,
-and asserts every projection maps to at least one component. **A projection with no component is
-a build failure**, and that is what makes this list closed rather than merely long. Two mappings
+**Coverage check.** The vocabulary is closed against the three real presentation populations in
+§2.3, not every projection in the catalogue. §8.2 derives ordinary learner, Inspector and
+author/operator `consumer × projection` pairs from compiled bindings/roles/forms and asserts each
+pair maps to its exact projection-keyed adapter and every adapter maps back to one such pair.
+`payloadType` and `operands` strings are diagnostics only; runtime payload schemas and retention
+assertions own buildability. **A newly presentation-bound projection with no adapter is a build
+failure; a retired, unbound or machine-condition projection is correctly absent.** Two mappings
 are stated here because they are the ones an implementer would get wrong:
 
 - **Clock readings** (`recorded-clocks.md`, `enforced-clocks.md`) are `magnitude` with
@@ -679,9 +847,10 @@ whitespace. It never fills the gap with a locally-distinctive-but-useless fact �
 one component to fill the seat, which reads as more evidence than exists.
 
 **Rule 4e — a component never renders a placeholder, skeleton or spinner as though it were
-content.** A pending operand renders `abstention` with reason `pending`, replaced when the
-operand arrives. Simulated content, including a greyed-out fake bar, is the *simulated absence*
-`design/05:41` prohibits.
+content.** A sealed `pending` receipt renders the registered pending abstention, and only a settled
+receipt with the same request id/generation may replace it. A newer generation makes the old
+response unrenderable. Simulated content, including a greyed-out fake bar, is the *simulated
+absence* `design/05:41` prohibits.
 
 ### §5 — The number and its convention travel together
 
@@ -695,21 +864,32 @@ and this RFC's §1e is the proof that we shipped them: `+0.54` measured to what 
 perspective, by which engine version; `31%` of which model's policy, at which rating band,
 counted over what.
 
-**Rule 5a — the `Convention` type, and its mandatory presence.**
+**Rule 5a — `ConventionReceipt` is derived provenance, not caller prose.**
 
 ```ts
-interface Convention {
-  readonly producer: VersionedEvidenceId;      // id@version — the label layer renders it (§6)
-  readonly producerLabel: string;              // from the label registry, never the id
+type ConventionBasis =
+  | { readonly kind: "search"; readonly execution: ProviderExecutionReceiptRef }
+  | { readonly kind: "tablebase_exact"; readonly execution: ProviderExecutionReceiptRef }
+  | { readonly kind: "human_model"; readonly execution: ProviderExecutionReceiptRef;
+      readonly model: VersionedEvidenceId; readonly band: number }
+  | { readonly kind: "human_population"; readonly execution: ProviderExecutionReceiptRef;
+      readonly population: PopulationDescriptor; readonly sampleSize: number }
+  | { readonly kind: "declared"; readonly convention: SemanticConventionRef };
+interface ConventionReceipt {
+  readonly producer: VersionedEvidenceId;
+  readonly sourceProjection: VersionedEvidenceId;
+  readonly sourceEvidenceDigest: string;
   readonly perspective: "white" | "black" | "side_to_move" | "learner" | "not_applicable";
-  readonly basis: string;                      // "Lichess explorer, 1600–1800, blitz, 2024-01..2026-06"
-  readonly bound:
-    | { readonly kind: "search"; readonly depth: number; readonly nodes?: number }
-    | { readonly kind: "exact" }               // rules, tablebase
-    | { readonly kind: "sample"; readonly n: number }
-    | { readonly kind: "model"; readonly band: string };
+  readonly basis: ConventionBasis;
 }
 ```
+
+The adapter compiler derives `producer`, source projection/digest, search/model/sample bounds and
+provider generation from the same admitted evidence or same-exchange receipt. Declared rules use
+the registered semantic-convention authority. There is no free `basis`, `producerLabel`, model
+band or depth field. The rendered label comes from the registered producer/source label layer.
+Cross-evidence producer, bound and basis swaps fail owner/digest or same-exchange validation
+([[D1665]]).
 
 **Rule 5b — a convention-requiring component cannot be constructed without one.** Not validated;
 **unconstructible**. `convention` is a required non-nullable field of `DistributionOperand`,
@@ -723,10 +903,9 @@ breakpoint can drop. The failing shape is `DrillScreen.svelte:1150-1151` verbati
 convention from the operand and observing the component fail to construct, **and** by asserting
 the rendered convention text is a descendant of the component root.
 
-**Rule 5d — `producerLabel`, never the producer id.** `Convention.producer` is `id@version`
-because provenance needs it; `producerLabel` is what renders. This is §6's rule stated at the one
-place a raw id is legitimately *carried* — it may be carried in a `data-` attribute for
-inspection, and it may never be the text.
+**Rule 5d — the registered producer label, never the producer id.** The receipt carries
+`id@version` because provenance needs it; the label registry is the sole rendered name. The id may
+be carried in a `data-` attribute for inspection and may never be learner-visible text.
 
 **Rule 5e — the convention is not a disclaimer.** `CORPUS_GUARD` (*"These counts say what this
 population played, not what is good"*) is a **guard** and stays as authored text alongside the
@@ -877,21 +1056,26 @@ reachable from markup. Output is a list of `file:line: expression`. **Baseline a
 id/enum text sites + 11 de-underscore sites + 1 `JSON.stringify`.** The criterion asserts the
 output is **set-equal to a declared allowlist**, and the allowlist ships **empty** at landing.
 
-**§8.2 `make component-coverage`** — walks `PRIMARY_EVIDENCE_MANIFEST`, and for every
-`ProjectionDeclaration` asserts (a) its `payloadType`/`operands`/`answerContent` map to at least
-one `COMPONENT_DECLARATIONS` member, (b) every `forms` member is served by one of that
-projection's components under `learner-modules` §1.12's pinned mapping, and (c) the label
-registry is **set-equal** to the derived set of learner-reachable closed unions. No total is
-asserted; the count is printed for drift.
+**§8.2 `make component-coverage`** — derives the three §2.3 populations from compiled
+consumer/projection bindings, roles, forms and dispositions. For every pair it asserts (a) one
+exact registered payload parser/adapter, (b) every bound non-machine form is served, (c) source
+operands are literal retained operands, (d) retention assertions and any convention/scale policy
+exist, and (e) every adapter maps back to exactly one real pair. Learner, Inspector and
+author/operator totals/misses print separately; no integer is asserted. The label registry is
+set-equal to the closed unions reachable through those adapters.
 
-**§8.3 the runtime guard** — `PRESENTATION_RAW_ID` at the component text boundary, plus the
-`enum_state` vocabulary lookup, plus `data-abstention` presence/absence per §4c. Exercised by
-component tests over zero/one/many/withheld/unavailable operands for **all thirteen** components.
+**§8.3 the runtime and wire guards** — `PRESENTATION_RAW_ID` at the component text boundary, the
+`enum_state` vocabulary lookup, `data-abstention` presence/absence, the two process-local seals and
+the strict version-1 receipt parser. Exercised by component tests over
+zero/one/many/withheld/unavailable operands for **all thirteen** components plus the nine forge/
+swap/dropped-operand negatives in §2.2.
 
 **§8.4 `make component-theme-sweep`** — over `apps/web/src/lib/evidence/**` and every file that
 constructs a component: the shipped `theme.test.ts:221` pattern **plus** named CSS colours
-**plus** CSS system colours **plus** `color-mix()` with a literal second operand, and a
-`structured_document`-disposition check asserting no learner route constructs §3.12. Baseline at
+**plus** CSS system colours **plus** `color-mix()` with a literal second operand. A separate
+router/application reachability check resolves indirect imports and asserts only authenticated
+author/operator routes can request a `structured_document` receipt; a component-local role check
+does not count. Baseline at
 `f0d5460` over all of `apps/web/src`: **16** (6 named, 10 system), listed in §7b.
 
 All four join `make verify`.
@@ -914,8 +1098,9 @@ All four join `make verify`.
    inventory (law 5); this RFC maps onto it and asks for the amendment in Discharge D1.
 6. **Generated text.** `claim` takes bound authored text; the LLM boundary is
    `learner-modules` §6.3's and is not widened. *Refused by:* law 8, [[D421]].
-7. **Deleting the inspector or the raw view.** `structured_document` keeps raw JSON behind a
-   toggle and `full_inspector` keeps attributed raw evidence. *Refused by:* dossier §8
+7. **Deleting the inspector or the raw view.** `structured_document` keeps canonical raw JSON
+   behind a toggle and `full_inspector` keeps attributed raw evidence. Pack/Shape editing remains
+   AUT-a25's structured-builder journey rather than being falsely closed by a viewer. *Refused by:* dossier §8
    decision 4.
 8. **A component that queries the board or the manifest.** Every operand is passed in.
    *Refused by:* the dossier's central finding — *"a gesture is currently a query against the
@@ -937,23 +1122,33 @@ All four join `make verify`.
 3. **`design/05:41`'s *"Absence is stated, never simulated"* is stated as an invariant with no
    rendering obligation.** §4 supplies one, which is a strengthening rather than a contradiction;
    flagged so the owner can see that a design invariant acquired a shipped meaning here.
+4. **The implementation is two checkpoints, not one empty foundation and not one dependency
+   knot.** Checkpoint A must migrate real current consumers through the sealed wire; checkpoint B
+   composes those same receipts into modules after the returned module/hint contracts land. The
+   RFC remains open between them ([[D1672]]).
 
 ## Acceptance criteria
 
-> **Rows landed 2026-08-24.** [[D1440]] — `make schema-check` is red at HEAD because `verify-scaffold.mjs` pins the verify chain by exact literal and the Makefile already exceeds it. [[D1441]] — `evidenceKindLabel` labels one member of four. [[D1442]] — the enums learners see are single ordinary words, so registry totality is the only arm that can catch them; the theming hole is 16 declarations across 7 files. [[D1443]] — the dossier named this fix on 2026-08-20 and the contract closed at a `forms` field that a plain sentence satisfies.
+> **Rows landed 2026-08-24.** [[D1440]] is already fixed: `make schema-check` now proves required-set
+> containment and is green at HEAD. [[D1441]] — `evidenceKindLabel` labels one member of four.
+> [[D1442]] — the enums learners see are single ordinary words, so registry totality is the only
+> arm that can catch them; the theming hole is 16 declarations across 7 files. [[D1443]] — the
+> dossier named this fix on 2026-08-20 and the contract closed at a `forms` field that a plain
+> sentence satisfies. The 2026-08-27 amendment adds [[D1664]]–[[D1673]]'s typed adapter/wire return.
 
 Each names the tree state that makes it RED. A criterion that cannot be made to fail is a defect
 class in this repo ([[D444]]/[[D984]]/[[D1274]]).
 
 1. **`COMPONENT_DECLARATIONS` has exactly the thirteen §3 ids, is frozen, and every member declares
-   all eight §3 fields.** *RED:* delete `emptyBehavior` from any member, or add a thirteenth id
+   all eight §3 fields.** *RED:* delete `emptyBehavior` from any member, or add a fourteenth id
    without a changelog line. *Wrong impl:* an optional field, which lets a component ship with no
    empty state — the defect this RFC exists to prevent.
-2. **`make component-coverage` passes, and every `ProjectionDeclaration` in
-   `PRIMARY_EVIDENCE_MANIFEST` maps to at least one component.** *RED:* add a projection with a
-   `payloadType` no component accepts and observe the build fail. **Set-equality against the
-   derivation; no integer asserted.** *Wrong impl:* a hand-written list of projections, which
-   passes until the next producer lands.
+2. **`make component-coverage` passes over the three derived presentation populations.** Every
+   ordinary learner, Inspector and author/operator `consumer × projection` binding has an exact
+   payload parser/adapter serving every bound non-machine form, and every adapter maps back to one
+   such pair. *RED:* add one learner binding without an adapter; retire/unbind a projection while
+   leaving its adapter. Both fail set equality. Adding a machine-only projection creates no fake
+   widget. *Wrong impl:* walking every catalogue projection or maintaining exclusions by hand.
 3. **The label registry is set-equal to the derived set of learner-reachable closed unions, and
    every vocabulary is total over its union type.** *RED:* add a member to `ObjectiveState`
    without a label and observe a **type** error, not a test failure; separately, delete a
@@ -979,7 +1174,8 @@ class in this repo ([[D444]]/[[D984]]/[[D1274]]).
 7. **A convention-requiring component cannot be constructed without a convention, and the
    convention renders inside the component root.** Two arms: a type-level arm (a fixture omitting
    `convention` fails `make typecheck`) and a DOM arm (the rendered convention text is a
-   descendant of the component's root element). *RED:* move the convention into a sibling
+   descendant of the component's root element). Cross-evidence producer, search-bound, model-band
+   and population-basis swaps fail the receipt owner/same-exchange checks. *RED:* move the convention into a sibling
    element — the shape at `DrillScreen.svelte:1150-1151` — and observe the DOM arm fail. *Wrong
    impl:* a nullable `convention` with a runtime check, which passes for every caller that
    passes `undefined` deliberately.
@@ -1025,19 +1221,23 @@ class in this repo ([[D444]]/[[D984]]/[[D1274]]).
     *RED:* join two members of an unordered square set, attach an edge not present in the payload,
     or remove one directed projection's renderer. *Wrong impl:* a Svelte component recomputing
     attacks from FEN, which creates a second chess authority after admission.
-14. **`structured_document` is unconstructible from a learner route.** Asserted by a route→
-    component reachability check over the router's learner routes. *RED:* construct it in
-    `DrillScreen.svelte`. *Wrong impl:* a runtime role check, which passes in a test harness
-    that runs as `author`.
+14. **`structured_document` is a schema-coupled read-only viewer and is unconstructible from a
+    learner route.** Cross-schema data and digest/canonical-byte mismatch fail the runtime parser.
+    A router→application→consumer reachability check proves only authenticated author/operator
+    operations can request the receipt. *RED:* construct it indirectly from `DrillScreen.svelte`
+    or pair a pack schema id with shape data. *Wrong impl:* `{schemaId:string, document:unknown}`
+    plus a component-local role check.
 15. **`magnitude_trail` renders an `<svg>` with a stated vertical extent and a keyboard-reachable
     point list, and its values are not carried only in `title`.** *RED:* revert to
     `CompareView.svelte:135`'s `●` row and observe both arms fail — the missing `<svg>` and the
     `title`-only value. *Wrong impl:* an `<svg>` of identical circles, which satisfies a naive
     "has a chart" check; the criterion therefore asserts **distinct geometry for distinct
     values**, by rendering a two-point trail with different magnitudes and asserting the
-    rendered coordinates differ.
-16. **Every component's `equivalentSentence` renders the same admitted content as its visual
-    form, and a provider-off deployment gets byte-identical sentences.** *RED:* let
+    rendered coordinates differ. An attempted caller-provided alternate range is rejected, and
+    identical evidence under two attempted ranges produces byte-identical geometry from its one
+    registered scale policy.
+16. **Every component's `equivalentSentence` renders from the same sealed component operand as its
+    visual form, and a provider-off deployment gets byte-identical sentences.** *RED:* let
     `distribution`'s visual arm include a row its sentence omits. *Wrong impl:* generating the
     sentence from the rendered DOM, which makes the assertion circular.
 17. **Every one of the thirteen components has a test at zero, one, many, withheld and
@@ -1054,14 +1254,19 @@ class in this repo ([[D444]]/[[D984]]/[[D1274]]).
     `none` consistently with `rfc/README.md`'s registers — this RFC claims no schema lane, no
     migration position and no evidence kind.
 20. **All four §8 instruments are in the `verify` target, and `make schema-check` is green with
-    them there.** *RED:* remove any one from the `verify` target. **This criterion is RED at
-    HEAD for a reason that is not this RFC's:** `tools/verify-scaffold.mjs:104` pins `verify`'s
-    dependency list by **exact-line regex**, and the shipped `Makefile:60` already carries two
-    targets that regex does not admit (`work-index`, `account-data-lifecycle-check`), so
-    `make schema-check` fails at `f0d5460` before this RFC touches anything. The implementer
-    repairs the scaffold check to assert **set-containment** of the required targets rather than
-    line equality, and only then adds the four. *Wrong impl:* editing the regex to hardcode a
-    second exact line, which re-arms the same trap for the next instrument.
+    them there.** *RED:* remove any one from the `verify` target. [[D1440]]'s prerequisite is
+    already green at HEAD: the scaffold guard accepts added checks and fails missing required
+    checks. *Wrong impl:* weakening that set-containment guard or placing an instrument only in a
+    local convenience target.
+21. **The projection→component→wire→parser path is sealed and owner-bound.** The real
+    `pack.authored.claim_delivery@1` vertical slice reaches its existing seat; literal/spread/JSON
+    process forges, cross-evidence owner swap, wire mutation/extra field/unparsed JSON,
+    unregistered projection, invented edge, component swap, post-render append and dropped-field
+    sentinel all fail before Svelte. *Wrong impl:* a TypeScript interface around caller-built JSON.
+22. **Checkpoint closeout is honest.** Checkpoint A records exactly which current presentation
+    binding pairs migrated and leaves the RFC `implementing`; checkpoint B alone may close the
+    module/hint/arrow rows and archive after its real module operation and seats pass. Neither
+    checkpoint counts an empty coverage population as success.
 
 ## Discharges
 
@@ -1075,35 +1280,26 @@ class in this repo ([[D444]]/[[D984]]/[[D1274]]).
 | D6 | The `distribution` operand for Maia policy carries an **optional** `mass` (`DrillScreen.svelte:417` renders *"frequency unavailable"* when absent). Whether a candidate with no mass may appear in a distribution at all is a selection question | `learner-modules.md` | that RFC's next amendment | |
 | D7 | The `rfc/theming.md` criterion-2 repair itself — this RFC's §8.4 guards the **component tree**; the shipped sweep at `theme.test.ts:221` still cannot see the 16 sites in §7b outside it | `theming.md` | that RFC's next revision ([[D1433]]) | |
 | D8 | Move-quality grade valence: which grades, if any, carry a registered `valence` token (§3.9 forbids valence on move vocabularies; the grade vocabulary is the one case where the owner may want an exception) | `move-quality-grades.md` | that RFC's next revision | |
-| D9 | Participant comprehension of these components. §3 is derived from the evidence's shape and from the dossier's measured tails; **no arm of this RFC establishes that a learner understands a bar** | `planning/platform-alignment/evidence-presentation/participant-plan.md` | the R3 participant arm | |
+| D9 | Owner-use/public-use comprehension of these components. §3 is derived from evidence shape and measured tails; no mechanical arm proves a learner understands a bar. Recruited participants are out of 1.0 scope under [[D649]], while the owner-use and eventual public-use falsifiers remain | `planning/platform-alignment/evidence-presentation/participant-plan.md` | owner use before checkpoint-B archival; public use after release | external arm descoped, owner-use open |
+| D10 | The raw Pack/Shape JSON textareas are editing journeys, not `structured_document` viewer coverage. They remain owned by AUT-a25's structured-expression builder with JSON alongside | codex (AUT-a25 in `planning/ux-implementation-index.md`) | AUT-a25 implementation closeout | |
 
-## Open questions
+## Questions resolved for this draft
 
-1. **Does the `full_inspector` module use these components, or its own raw view?** §3.12 is
-   disposition-gated to author/operator, and the inspector is a learner-reachable analysis mode.
-   Recommendation: **components, with `magnitude`/`move_path`/`citation` at their widest budgets,
-   plus a per-fact provenance drawer** — an inspector that dumps is the surface the owner is
-   complaining about, at maximum volume. Flagged because the opposite reading of dossier §8
-   decision 4 (*"keep raw evidence… in an explicit inspector"*) is defensible.
-2. **Should `distribution` ever draw on the board?** §3.1 refuses arrows because a per-candidate
-   arrow is a ranked-move recommendation. A *heat* over destination squares is arguably the same
-   information in a form that ranks nothing legible. Recommendation: **no in v1** — it is a
-   ranking rendered as a gradient, and law 8's boundary should not be tested by a colour ramp.
-3. **Does `outcome_split` render from the learner's perspective or from White's?** The operand
-   requires a `perspective` and `corpus-sentences.ts:16` names both colours today.
-   Recommendation: **`side_to_move` by default with the colour names always visible**, because a
-   learner-relative bar silently inverts when the learner plays Black and nothing on screen says
-   so. Flagged because the opposite is friendlier and is what most sites do.
-4. **Is `claim`'s counter-case (*"It can be wrong when: …"*) always rendered, or on request?**
-   `claim-presentation.ts:8` always includes it in prose. Always-rendering is honest and doubles
-   the block's height in a rail seat; on-request risks a claim reading as settled.
-   Recommendation: **always for `author_declared`, on request for `ledger_bound`** — the weaker
-   the binding, the louder the caveat.
-5. **Should the label registry carry a locale seam now or later?** Every entry is a user-facing
-   string, and adding the seam after 25+ vocabularies exist is the expensive order.
-   Recommendation: **structure the registry so a locale layer is additive** (entries keyed by
-   vocabulary and member, no inline concatenation) **and do not build the layer**, since no
-   locale requirement is ruled.
+1. **`full_inspector` uses components plus a per-fact provenance/raw drawer.** The owner ruled the
+   raw producer inventory belongs in Advanced Inspector, not ordinary workflow surfaces; that does
+   not license an unstructured dump as the Inspector's primary rendering. Components provide the
+   readable view and the drawer preserves exact evidence bytes/ids.
+2. **A distribution does not draw a board heatmap in 1.0.** A destination gradient is still a
+   ranked-move recommendation encoded by colour. Exact selected candidate relations may render
+   only when a module/rung admits them through `relation_overlay`.
+3. **Perspective is evidence, not a component default.** The adapter must retain it and the bar
+   always labels White/Draw/Black (or the exact declared frame). The current Explorer adapter stays
+   White-labelled; no component silently learner-inverts or side-to-move-inverts it.
+4. **Claim counter-cases preserve shipped behavior and always render when present.** Collapsing
+   them by binding class would make caveat visibility a new product policy and is refused here.
+5. **The registry is locale-additive but 1.0 ships one locale.** Keys are vocabulary/member ids and
+   strings live only in the locale record; no inline concatenation. A locale switch/runtime is not
+   built without a product requirement.
 
 ## Ledger rows
 
@@ -1134,12 +1330,10 @@ Proposed — ids assigned at landing; head was **D1434** at drafting.
   only instrument that can, which is [[D526]]/[[D1433]]'s lesson generalised: an instrument built
   from the defect's own assumption reproduces it, so the fix is a second instrument of a
   different *kind*, not a better pattern.
-- 🐞 **`make schema-check` is RED at HEAD, and the cause is an instrument that forbids adding
-  instruments.** `tools/verify-scaffold.mjs:104` asserts the `verify` target by exact-line regex;
-  `Makefile:60` already carries `work-index` and `account-data-lifecycle-check`, which that line
-  does not admit, so the check has been failing independently of any draft. Found while running
-  this RFC's own gate. The repair is set-containment, not a longer literal — a scaffold check
-  that fails whenever the scaffold grows will be satisfied by deleting targets. Criterion 20.
+- ✅ **`make schema-check`'s instrument-growth defect is closed.** [[D1440]] replaced the exact
+  verify-line regex with required-set containment and added missing-target, missing-dependency and
+  valid-superset tests. Re-derived 2026-08-27: `make schema-check` is green, so criterion 20 starts
+  from a functioning guard rather than repeating the old HEAD claim.
 - 💡 **`design/05`'s form inventory is a channel list and cannot specify a rendering.** Nine
   forms, no row that distinguishes a distribution from a citation. Every string in §1 satisfied
   "renders as a sentence" honestly. The design-tier amendment is Discharge D1; the row exists so
@@ -1147,6 +1341,17 @@ Proposed — ids assigned at landing; head was **D1434** at drafting.
 
 ## Changelog
 
+- 2026-08-27 — repaired the independent [[D1664]]–[[D1672]] return from [[D1673]]'s executable
+  real-projection harness. Presentation now has exact payload parsers, projection+consumer
+  adapters with retained-operand assertions, owner-bound process seals, a closed digest wire and
+  a client-local parser seal; equivalent sentences derive from the same sealed component. Caller
+  provenance becomes a same-exchange/registered `ConventionReceipt`; citation gains bound content;
+  enum state is a mapped discriminated union; abstention gains a closed request lifecycle;
+  structured documents narrow to schema-coupled read-only viewers; coverage splits into ordinary,
+  Inspector and author/operator binding populations; and chart scale becomes a registered policy.
+  The landing splits into a real current-consumer checkpoint and a later module checkpoint without
+  allowing either an empty registry or a raw-JSON compatibility route. Updated the live manifest
+  baseline to 37/193/25/210 and re-derived `make schema-check` green.
 - 2026-08-26 — corrected on [[D1577]]/[[D1578]]. The statement that all six transition
   producers still lacked identity was stale: the legacy count readings do, but the newer event
   layer reconstructs every geometry count and irreversibility leaf over all 754 committed edges,
