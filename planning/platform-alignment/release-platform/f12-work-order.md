@@ -71,7 +71,7 @@ the appliance or 1.0.
 
 ## 3. Child contracts
 
-### F12-A — safe deployment profiles and reverse proxy — READY TO DRAFT
+### F12-A — safe deployment profiles and reverse proxy — DRAFTED 2026-08-27; INDEPENDENT REVIEW NEXT
 
 Owns D607 and the complete hosted topology.
 
@@ -88,6 +88,11 @@ Required contract:
   message rather than folklore.
 
 Non-goals: federation, Kubernetes, public SaaS billing, an operator account.
+
+Active specification: `rfc/safe-deployment-profiles.md`. The source pass widened the exact transport
+boundary by two routed defects: unbounded pre-route request buffering ([[D1846]]) and response
+streams collapsed back into complete buffers ([[D1847]]). No product implementation is authorized
+before independent buildability review and owner acceptance.
 
 ### F12-B — portable data and deletion lifecycle — IMPLEMENTED 2026-08-23
 

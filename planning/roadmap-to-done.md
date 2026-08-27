@@ -664,8 +664,9 @@ verified bytes, boot digest-pinned Compose on a clean host, serve advertised jou
 engine degradation, migrate a prior DB, back up/restore, update/roll back, and publish licences/
 SBOM/signatures. Health is live, not a startup snapshot.
 
-Primary RFC: `storage-backup-recovery` for F12-C/D608. [[D1448]], the remaining F12 children,
-packaging checks, workflows and deploy artifacts own the other residuals.
+Primary RFCs: `storage-backup-recovery` for F12-C/D608 and `safe-deployment-profiles` for
+F12-A/D607/D1846/D1847. [[D1448]], the remaining F12 children, packaging checks, workflows and
+deploy artifacts own the other residuals.
 
 ## Production surface inventory
 

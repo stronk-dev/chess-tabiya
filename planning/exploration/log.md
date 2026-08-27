@@ -9905,3 +9905,20 @@ with it. Its two operator defaults are explicit rather than left for implementat
 a separate Compose overlay requiring an absolute backup directory, and the immutable full source
 SHA is the recovery revision identity. No product byte lands before owner acceptance; independent
 buildability review remains.
+
+## 2026-08-27 — F12-A defines three safe network postures and closes over the Node adapter
+
+`rfc/safe-deployment-profiles.md` turns the release audit's contradictory Compose defaults into
+three explicit, non-composable workflows: zero-configuration loopback HTTP for one host, an
+internal-CA HTTPS appliance for LAN devices, and publicly trusted/file-certificate HTTPS for a
+hosted installation. The two HTTPS profiles place a pinned FOSS Caddy edge in front of an
+unpublished application socket; exact public origin, Host/forwarded-header trust, secure host-only
+cookies, CSP, secrets, readiness and failure behavior are one contract rather than environment
+folklore.
+
+The source audit widened F12-A by two defects before drafting. The Node adapter buffers every
+request without a byte limit ([[D1846]]) and converts every response stream into one complete
+`ArrayBuffer` ([[D1847]]). The RFC therefore assigns every route an ingress budget and requires
+backpressured/cancellable response streaming through the real rendered proxy. Proxy-only limits and
+header-presence tests cannot close either defect. The draft is registered and roadmap-owned; no
+product byte lands before independent buildability review and owner acceptance.
