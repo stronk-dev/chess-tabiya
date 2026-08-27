@@ -165,3 +165,21 @@ every payload:
   cannot be identified or migrated safely. D1717 separately decides opposition v2.
 - It does not authorize an RFC amendment or production change. F1, D1711, semantic-selection,
   candidate-packet and evidence-presentation authors must reconcile one shared contract first.
+
+## 2026-08-27 follow-up — reviewed initial member census
+
+`[V]` The successor RFC's initial membership is now executable rather than pending prose.
+`tools/d1722-convention-identity-harness/initial-member-census.test.ts` pins 39 unique sorted refs:
+23 literal identities already present in production and 16 identities assigned to meanings already
+implemented under unversioned projection prose. Every existing identity must occur in production;
+every assigned identity must point at its exact live projection witness. The test also excludes
+`mate-proof-traversal-fnv64@1` (proof serialization) and `module-reducers@1` (implementation
+version), demonstrating why a regex over `@1` tokens is not a convention registry.
+
+The follow-up found two specification defects. First, `grade-convention@1/<context>` cannot parse as
+the RFC's own `{id, version}` type; the registry member is `grade-convention@1` and the already
+retained context selects its threshold arm. Second, the live story-title implementation became
+learner-relative under D667 while its compiled manifest prose still says White-relative. That stale
+declaration is recorded as D1851 and must be corrected before `story-title@1` is frozen. `[V]`
+(`packages/runtime/src/grade.ts`; `packages/runtime/src/story.ts`;
+`packages/runtime/src/evidence-catalog.ts`)

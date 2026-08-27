@@ -9993,3 +9993,17 @@ One process dependency is stated rather than bypassed: conventions are a seventh
 but the implemented claim grammar knows six. The RFC therefore claims `none` while draft and may
 not be accepted until the register/checker and its claim block carry the exact reviewed initial
 member set. This prevents the convention registry from becoming another unregistered private list.
+
+## 2026-08-27 — D1722 publishes the exact initial convention membership
+
+The disposable D1722 harness now pins the registry seed at 39 members: 23 identities already in
+production and 16 identities assigned to existing unversioned meanings. It rejects the tempting
+regex shortcut by explicitly excluding proof-serialization and reducer-version tokens, binds each
+assigned identity to live projection witnesses, and keeps grade context as an operand of
+`grade-convention@1` rather than an invalid pseudo-version.
+
+The pass also found [[D1851]]: D667 made Story titles learner-relative, but the compiled projection
+still declares White-relative result verbs. The defect is ledgered and the RFC refuses to freeze
+that stale sentence into `story-title@1`. The exact-member acceptance obligation is discharged;
+the remaining process dependency is extending the shared-resource grammar/checker and replacing
+the draft's `none` claim before independent acceptance.

@@ -20,10 +20,10 @@ none
 ```
 
 The claim block is intentionally `none` while this document is a draft. This RFC creates a seventh
-shared resource, `semantic-conventions`; the current checked claim grammar knows only six. Before
-acceptance, the exact initial member census must be published, the register/checker must gain that
-resource, and this block must become its set-equal membership claim. A private catalogue-local list
-or an unregistered exported constant is not an acceptable shortcut.
+shared resource, `semantic-conventions`; the current checked claim grammar knows only six. The
+reviewed 39-member initial census is published in §1.2. Before acceptance, the register/checker must
+gain that resource and this block must become its set-equal membership claim. A private
+catalogue-local list or an unregistered exported constant is not an acceptable shortcut.
 
 ## Summary
 
@@ -141,6 +141,29 @@ operands, version tokens in projection semantics/limitations and the D1722 other
 set. Acceptance requires a literal reviewed table; a regex result alone cannot decide that prose is
 a real convention.
 
+### 1.2 Reviewed initial membership
+
+The executable census in `tools/d1722-convention-identity-harness/initial-member-census.test.ts`
+pins **39** initial members. Twenty-three identities already occur in production bytes. Sixteen
+assign an identity to an already-shipped, unversioned meaning; they name migration work and do not
+invent chess semantics.
+
+| class | exact members |
+|---|---|
+| already identified (23) | `back_rank_susceptible@1`, `candidate-majority@1`, `chessops-king-takes-rook@1`, `defence-duty@1`, `development@1`, `grade-convention@1`, `king-landing-square@1`, `king-shelter@1`, `king-zone@1`, `legal-exchange@1`, `local-non-losing@1`, `material-role-signature@1`, `mate-proof@1`, `maximal_pawn_reach@1`, `mover-turn-ep-cleared@1`, `observed-window@1`, `overload-conflict@1`, `pressure-line@1`, `race-arrival@1`, `space@1`, `standard-uci-king-destination@1`, `threat@1`, `trapped@1` |
+| identity assigned to shipped meaning (16) | `backward-pawn-legacy@1`, `candidate-feature-vector@1`, `discovered-latency@1`, `double-attack@1`, `evidence-reference-resolution@1`, `fork-survival@1`, `king-opposition-blocker-blind@1`, `loose-piece@1`, `opening-deepest-reached@1`, `pawn-relations@1`, `ray-classification@1`, `square-control@1`, `story-last-level@1`, `story-rank@1`, `story-title@1`, `trade-completed@1` |
+
+`mate-proof-traversal-fnv64@1` is a proof-digest serialization identity and
+`module-reducers@1` is an implementation version; neither defines evidence truth, so both are
+explicitly excluded. Projection/producer/consumer `foo@1` refs are likewise resource identities,
+not conventions. A new member therefore requires a reviewed semantic witness, not merely a suffix.
+
+The census also corrects an invalid draft shape: `grade-convention@1` is the convention ref and
+`context` remains a retained instance operand. `grade-convention@1/<context>` is not a ref and may
+never enter the register. The `story-title@1` declaration is also blocked on [[D1851]]: production
+is learner-relative after D667, while the manifest prose still says White-relative; the migration
+must repair that declaration before the registry snapshot freezes it.
+
 ### 2. Projection declarations and path closure
 
 `ProjectionDeclaration` gains:
@@ -190,7 +213,7 @@ than `declared_convention`. Total: 18, set-equal to the executable D1722 census.
 | `rules.tactic.reading.defender_duty_set@1` | `position_rules` | direct `defence-duty@1` |
 | `rules.tactic.event.{defender_removed,defender_duty_relocated}@1` | `position_rules` | inherit `defence-duty@1` from their declared source and retain exact event operands |
 | `derived.compare.structure_delta@1` | `position_rules` | inherit the exact closures of the before/after facts; no new comparison convention |
-| `derived.grade.move_quality@1` | `bounded_search` | direct `grade-convention@1/<context>` plus engine-source provenance |
+| `derived.grade.move_quality@1` | `bounded_search` | direct `grade-convention@1`; its retained `convention.context` selects the registered threshold arm, plus engine-source provenance |
 | `derived.material.reading.role_signature@1` | `position_rules` | direct `material-role-signature@1` |
 | `derived.material.event.role_asymmetry@1` | `position_rules` | inherit/direct `material-role-signature@1`; no piece-value verdict |
 | `derived.pawn.sequence.harassment_pressure@1` | `recorded_run` | retain its exact payload convention plus observed sequence closure |
@@ -323,8 +346,8 @@ does not add a learner-facing evidence settings surface or strategic judgement.
 
 ## Open questions
 
-None require an owner product choice. The exact initial convention member table and the 18-row
-classification are author/buildability obligations, not preferences. Any row whose definition
+None require an owner product choice. The exact initial convention member table is §1.2 and the
+18-row classification is §3; both are author/buildability obligations, not preferences. Any row whose definition
 cannot be traced is refused from learner admission and returned to its source RFC; it is not filled
 with model knowledge.
 
@@ -334,3 +357,7 @@ with model knowledge.
   separate convention closure, path-specific derivation, sealed disclosure, version/migration law,
   exact 18-row classification and the shared-resource-register prerequisite. Claims no current
   resource while draft; acceptance requires the new membership register and exact claim.
+- 2026-08-27: published the executable 39-member seed census (23 existing identities plus 16
+  identities for shipped meanings), excluded two non-semantic version tokens, and corrected grade
+  context from an invalid pseudo-version to a retained operand. Logged [[D1851]] rather than freezing
+  the stale White-relative story-title declaration into the registry.
