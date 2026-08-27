@@ -548,6 +548,65 @@ test("an academy host can identify and play a participant's proposed move", asyn
   await participantContext.close();
 });
 
+test("a classroom assignment shows who submitted and makes sharing explicit", async ({ page, browser }) => {
+  test.setTimeout(60_000);
+  await page.goto("/live");
+  const classrooms = page.getByRole("region").filter({ has: page.getByRole("heading", { name: "Classrooms" }) });
+  await classrooms.getByLabel("New classroom").fill("Thursday group");
+  await classrooms.getByRole("button", { name: "Create", exact: true }).click();
+
+  const submittedContext = await browser.newContext();
+  const submittedPage = await submittedContext.newPage();
+  const submittedHandle = await register(submittedPage);
+  const waitingContext = await browser.newContext();
+  const waitingPage = await waitingContext.newPage();
+  const waitingHandle = await register(waitingPage);
+
+  await classrooms.getByRole("button", { name: "Open", exact: true }).click();
+  for (const handle of [submittedHandle, waitingHandle]) {
+    await classrooms.getByLabel("Invite handle").fill(handle);
+    await classrooms.getByRole("button", { name: "Invite", exact: true }).click();
+    await expect(classrooms.getByText(`@${handle} — learner, invited`)).toBeVisible();
+  }
+  for (const learnerPage of [submittedPage, waitingPage]) {
+    await learnerPage.goto("/live");
+    await learnerPage.getByRole("button", { name: "Accept", exact: true }).click();
+    await expect(learnerPage.getByText("learner · active")).toBeVisible();
+  }
+
+  await classrooms.getByRole("button", { name: "Open", exact: true }).click();
+  await classrooms.getByLabel("Pack").selectOption({ label: "Najdorf: choose a setup and cross the theory boundary" });
+  await classrooms.getByLabel("Teacher note").fill("Compare both plans");
+  await classrooms.getByRole("button", { name: "Assign", exact: true }).click();
+  await expect(classrooms.getByText("Compare both plans")).toBeVisible();
+
+  await submittedPage.goto("/learn");
+  const assigned = submittedPage.getByRole("region").filter({ has: submittedPage.getByRole("heading", { name: "Assigned" }) });
+  await expect(assigned.getByRole("heading", { name: "Najdorf: choose a setup and cross the theory boundary" })).toBeVisible();
+  await expect(assigned.getByText("Compare both plans")).toBeVisible();
+  await assigned.getByRole("button", { name: "Start pack" }).click();
+  await expect(submittedPage.getByLabel("Chessboard")).toBeVisible();
+  await submittedPage.goto("/learn");
+  await assigned.getByLabel("Completed run").selectOption({ index: 1 });
+  await assigned.getByRole("button", { name: "Share with teachers" }).click();
+  const confirmation = submittedPage.getByRole("complementary", { name: /Share .+\?/ });
+  await expect(confirmation).toContainText("will be able to read this run for up to 90 days");
+  await expect(confirmation).toContainText("They do not gain access to your other runs.");
+  await confirmation.getByRole("button", { name: "Confirm sharing" }).click();
+  await expect(assigned.getByText("Currently shared with", { exact: false })).toBeVisible();
+
+  await classrooms.getByRole("button", { name: "Open", exact: true }).click();
+  const status = classrooms.getByLabel("Submission status for Najdorf: choose a setup and cross the theory boundary");
+  await expect(status).toContainText(`@${submittedHandle}`);
+  await expect(status).toContainText("Submitted");
+  await expect(status).toContainText(`@${waitingHandle}`);
+  await expect(status).toContainText("not submitted");
+  await expect(status.getByRole("button", { name: `Review @${submittedHandle}'s run` })).toBeVisible();
+
+  await submittedContext.close();
+  await waitingContext.close();
+});
+
 test("library exposes phase honestly and survives a malformed pack response", async ({
   page,
 }) => {

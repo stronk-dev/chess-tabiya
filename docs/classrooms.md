@@ -14,9 +14,17 @@ active classrooms. Either role can leave. Teachers can remove members, while onl
 owner can archive the classroom.
 
 Teachers assign registered packs. A due date is advisory and does not enter the learner's
-spaced-repetition schedule. An optional note is stored and displayed as the teacher's
-literal, attributed speech outside the run. It never enters a run snapshot, evidence
-packet, explanation, or voice-provider request.
+spaced-repetition schedule; both sides label it overdue after it passes, but it blocks
+nothing. Assignment cards resolve the registered pack title instead of exposing its id.
+An optional note is stored and displayed as the teacher's literal, attributed speech
+outside the run. It never enters a run snapshot, evidence packet, explanation, or
+voice-provider request.
+
+The teacher view is roster-by-assignment rather than a detached submission inbox. Every
+active learner appears under every assignment with a factual state: not submitted,
+submitted with access available, access revoked or expired, or withdrawn. A submission
+names the learner, pack, assignment, date, and access state; it never adds a mark, score,
+or teacher-facing chess verdict.
 
 ## Consent, expiry, and revocation
 
@@ -24,6 +32,13 @@ A learner may submit only a run they host whose `packId` matches the assignment.
 submission grants current active teachers spectator access for 90 days by default, with
 an allowed range of 1–90 days. Existing independent grants are not changed or recorded
 as submission grants.
+
+On Learn, a learner chooses one matching hosted run from a dated selector and reviews a
+consent card before sharing. The card names the active teachers, the 90-day default, the
+this-run-only boundary, and that recorded moves, evidence attachments, and reveal events
+are readable. After sharing, the card names only teachers whose current run grants still
+resolve. The revoke action is labelled as stopping future access and states that it cannot
+undo what a teacher already saw.
 
 Every submission records exactly the teacher grants it minted. Withdrawing the
 submission, leaving or being removed, a teacher leaving, archiving the classroom, or

@@ -148,6 +148,8 @@
   let classrooms: readonly ClassroomSummary[] = $state([]);
   let classroomDetail: ClassroomDetail | undefined = $state();
   let assignedPacks: readonly AssignedPack[] = $state([]);
+  let assignmentRunSelection: Readonly<Record<string,string>> = $state({});
+  let submissionIntent: {readonly assignmentId:string;readonly runId:string}|undefined = $state();
   let classroomName = $state("");
   let classroomInviteHandle = $state("");
   let classroomInviteRole: "teacher" | "learner" = $state("learner");
@@ -348,6 +350,14 @@
     return Number.isNaN(date.valueOf()) ? value : date.toLocaleString();
   }
 
+  function packTitle(packId:string):string{return packs.find((pack)=>pack.id===packId)?.title??packId;}
+  function isOverdue(dueAt:string|null):boolean{return dueAt!==null&&Date.parse(dueAt)<Date.now();}
+  function classroomMemberHandle(learnerId:string):string{return classroomDetail?.members.find((member)=>member.learnerId===learnerId)?.handle??"former member";}
+  function assignmentSubmissions(assignmentId:string,learnerId:string){return classroomDetail?.submissions.filter((submission)=>submission.assignmentId===assignmentId&&submission.learnerId===learnerId)??[];}
+  function chooseAssignmentRun(assignmentId:string,runId:string):void{assignmentRunSelection={...assignmentRunSelection,[assignmentId]:runId};}
+  function prepareAssignedRun(assignmentId:string):void{const runId=assignmentRunSelection[assignmentId];if(runId)submissionIntent={assignmentId,runId};}
+  async function confirmAssignedRun():Promise<void>{if(!submissionIntent)return;await submitAssignedRun(submissionIntent.assignmentId,submissionIntent.runId);submissionIntent=undefined;}
+
   function relatedAttemptKey(attempt: ProgressAttempt): string {
     return `${attempt.runId}\0${attempt.branchId}`;
   }
@@ -412,7 +422,7 @@
         capabilities = await api.capabilities();
       } else if (next.name === "learn") {
         relatedAttempts = {};
-        [attempts, dueSchedules, milestones, repertoires, recommendations, assignedPacks, runs] = await Promise.all([
+        [attempts, dueSchedules, milestones, repertoires, recommendations, assignedPacks, runs, packs] = await Promise.all([
           api.progress?.() ?? Promise.resolve([]),
           api.dueProgress?.() ?? Promise.resolve([]),
           api.milestones?.() ?? Promise.resolve([]),
@@ -420,6 +430,7 @@
           api.recommendations?.() ?? Promise.resolve([]),
           api.assignments?.() ?? Promise.resolve([]),
           api.runs(50, 0),
+          api.packs(),
         ]);
         const pages=await Promise.all(repertoires.map(async(item)=>[item.id,await api.repertoireGaps?.(item.id)] as const));repertoirePages=Object.fromEntries(pages.filter((entry)=>entry[1]!==undefined)) as Record<string,RepertoireGapPage>;
       } else if (next.name === "create") {
@@ -1116,22 +1127,19 @@
         <h2 id="assigned-title">Assigned</h2>
         <div class="item-list">
           {#each assignedPacks as assignment}
+            {@const eligibleRuns=runs.filter((run)=>run.packId===assignment.packId&&run.viewerRole==="host")}
             <article>
               <div>
-                <h3>{assignment.packId}</h3>
-                <p>{assignment.classroomName} · assigned by @{assignment.assignedByHandle}{assignment.dueAt ? ` · due ${readableDate(assignment.dueAt)}` : ""}</p>
+                <h3>{packTitle(assignment.packId)}</h3>
+                <p>{assignment.classroomName} · assigned by @{assignment.assignedByHandle}{assignment.dueAt ? ` · due ${readableDate(assignment.dueAt)}` : ""}{isOverdue(assignment.dueAt) ? " · overdue" : ""}</p>
                 {#if assignment.note}<blockquote><p>{assignment.note}</p><footer>— @{assignment.assignedByHandle}, your teacher</footer></blockquote>{/if}
-                {#each assignment.submissions as submission}<p>{submission.withdrawnAt ? "Submission withdrawn" : `Submitted ${readableDate(submission.submittedAt)} · access until ${readableDate(submission.accessExpiresAt)}`} {#if !submission.withdrawnAt}<button type="button" onclick={()=>void withdrawAssignedRun(assignment.id,submission.runId)}>Revoke teacher access</button>{/if}</p>{/each}
+                {#each assignment.submissions as submission}<div class="submission-record"><p>{submission.withdrawnAt ? "Submission withdrawn" : `Submitted ${readableDate(submission.submittedAt)} · access until ${readableDate(submission.accessExpiresAt)}`}</p>{#if !submission.withdrawnAt}<p>{submission.grantedTeacherHandles.length>0?`Currently shared with ${submission.grantedTeacherHandles.map((handle)=>`@${handle}`).join(", ")}.`:"No teacher currently holds access."}</p><button type="button" onclick={()=>void withdrawAssignedRun(assignment.id,submission.runId)}>Stop future teacher access</button><p class="honest">Revoking stops future reads. It cannot undo what a teacher already saw.</p>{/if}</div>{/each}
               </div>
-              <div class="row-actions">
-                <button type="button" onclick={()=>void controller.startPack(assignment.packId)}>Start pack</button>
-                {#each runs.filter((run)=>run.packId===assignment.packId&&run.viewerRole==="host") as run}
-                  <button type="button" onclick={()=>void submitAssignedRun(assignment.id,run.id)}>Submit {run.title}</button>
-                {/each}
-              </div>
+              <div class="row-actions"><button type="button" onclick={()=>void controller.startPack(assignment.packId)}>Start pack</button>{#if eligibleRuns.length>0}<label>Completed run <select value={assignmentRunSelection[assignment.id]??""} onchange={(event)=>chooseAssignmentRun(assignment.id,event.currentTarget.value)}><option value="">Choose a run</option>{#each eligibleRuns as run}<option value={run.id}>{run.title} · {readableDate(run.updatedAt)} · {run.branchCount} {run.branchCount===1?"branch":"branches"}</option>{/each}</select></label><button type="button" disabled={!assignmentRunSelection[assignment.id]} aria-describedby={!assignmentRunSelection[assignment.id]?`submission-run-required-${assignment.id}`:undefined} onclick={()=>prepareAssignedRun(assignment.id)}>Share with teachers</button>{#if !assignmentRunSelection[assignment.id]}<p id={`submission-run-required-${assignment.id}`} class="honest">Choose one of your runs of this pack.</p>{/if}{:else}<p class="honest">Play this assignment before sharing an attempt.</p>{/if}</div>
             </article>
           {:else}<p>No open assignments.</p>{/each}
         </div>
+        {#if submissionIntent}{@const assignment=assignedPacks.find((candidate)=>candidate.id===submissionIntent!.assignmentId)}{@const run=runs.find((candidate)=>candidate.id===submissionIntent!.runId)}{#if assignment&&run}<aside class="consent-card" aria-labelledby="submission-confirm-title"><h3 id="submission-confirm-title">Share {run.title}?</h3><p>{assignment.teacherHandles.length>0?`${assignment.teacherHandles.map((handle)=>`@${handle}`).join(", ")} will be able to read this run for up to 90 days.`:"No active teacher is available to receive this run."}</p><p class="honest">They receive this run only, including its moves and the evidence or reveals already recorded in it. They do not gain access to your other runs.</p><div class="row-actions"><button type="button" disabled={assignment.teacherHandles.length===0} aria-describedby={assignment.teacherHandles.length===0?"submission-no-teacher":undefined} onclick={()=>void confirmAssignedRun()}>Confirm sharing</button><button type="button" onclick={()=>submissionIntent=undefined}>Cancel</button></div>{#if assignment.teacherHandles.length===0}<p id="submission-no-teacher" class="honest">An active teacher must be present before this run can be shared.</p>{/if}</aside>{/if}{/if}
       </section>
       {#if recommendations.length>0}
         <section aria-labelledby="recommended-title"><h2 id="recommended-title">Recommended next</h2><div class="item-list">
@@ -1361,9 +1369,8 @@
               <form class="row-actions" onsubmit={(event)=>{event.preventDefault();void inviteClassroom();}}><label>Invite handle <input required bind:value={classroomInviteHandle}/></label><label>Role <select bind:value={classroomInviteRole}><option value="learner">Learner</option><option value="teacher">Teacher</option></select></label><button type="submit">Invite</button></form>
               <form class="row-actions" onsubmit={(event)=>{event.preventDefault();void assignClassroomPack();}}><label>Pack <select required bind:value={assignmentPackId}><option value="">Choose a pack</option>{#each packs as pack}<option value={pack.id}>{pack.title}</option>{/each}</select></label><label>Teacher note <input bind:value={assignmentNote}/></label><label>Due <input type="datetime-local" bind:value={assignmentDueAt}/></label><button type="submit">Assign</button></form>
             {/if}
-            <h4>Assignments</h4><ul>{#each classroomDetail.assignments as assignment}<li>{assignment.packId}{assignment.dueAt?` · ${readableDate(assignment.dueAt)}`:""}{assignment.withdrawnAt?" · withdrawn":""}</li>{:else}<li>No assignments.</li>{/each}</ul>
+            <h4>Assignments and submissions</h4><div class="item-list assignment-grid">{#each classroomDetail.assignments as assignment}<article><div><h5>{packTitle(assignment.packId)}</h5><p>Assigned by @{classroomMemberHandle(assignment.assignedBy)} · {readableDate(assignment.createdAt)}{assignment.dueAt?` · due ${readableDate(assignment.dueAt)}`:""}{isOverdue(assignment.dueAt)&&!assignment.withdrawnAt?" · overdue":""}{assignment.withdrawnAt?" · withdrawn":""}</p>{#if assignment.note}<blockquote><p>{assignment.note}</p><footer>— @{classroomMemberHandle(assignment.assignedBy)}, teacher note</footer></blockquote>{/if}</div>{#if classroomDetail.membership.memberRole==="teacher"}<ul aria-label={`Submission status for ${packTitle(assignment.packId)}`}>{#each classroomDetail.members.filter((member)=>member.memberRole==="learner"&&member.state==="active") as member}{@const submissions=assignmentSubmissions(assignment.id,member.learnerId)}<li><strong>@{member.handle}</strong>{#if submissions.length===0} — not submitted{:else}<ul>{#each submissions as submission}<li>{submission.withdrawnAt?`Withdrawn ${readableDate(submission.withdrawnAt)}`:`Submitted ${readableDate(submission.submittedAt)}`} · {submission.access==="available"?"access available":"access revoked or expired"}{#if submission.access==="available"} <button type="button" onclick={()=>navigate(routePath({name:"run",runId:submission.runId}))}>Review @{member.handle}'s run</button>{/if}</li>{/each}</ul>{/if}</li>{:else}<li>No active learners.</li>{/each}</ul>{/if}</article>{:else}<p>No assignments.</p>{/each}</div>
             {#if learner}<CohortStanding {api} classroomId={classroomDetail.classroom.id} learnerId={learner.id} role={classroomDetail.membership.memberRole} />{/if}
-            {#if classroomDetail.membership.memberRole==="teacher"}<h4>Submitted runs</h4><ul>{#each classroomDetail.submissions as submission}<li>{readableDate(submission.submittedAt)} · {submission.access==="available"?"access available":"access revoked or expired"} {#if submission.access==="available"}<button type="button" onclick={()=>navigate(routePath({name:"run",runId:submission.runId}))}>Review run</button>{/if}</li>{:else}<li>No submitted runs.</li>{/each}</ul>{/if}
             <h4>Upcoming sessions</h4><ul>{#each classroomDetail.upcomingSessions as item}<li>{item.title} · {item.scheduledFor?readableDate(item.scheduledFor):"unscheduled"}</li>{:else}<li>No scheduled sessions.</li>{/each}</ul>
           </article>
         {/if}
@@ -1501,6 +1508,12 @@
   .item-list { display: grid; gap: 0.7rem; max-height: min(55dvh, 36rem); margin-top: 2rem; overflow: auto; }
   .item-list article { display: flex; align-items: center; justify-content: space-between; gap: 1rem; padding: 1rem; border: 1px solid var(--line); border-radius: 0.8rem; background: var(--panel); }
   .item-list article.recorded-attempt { display: grid; align-items: stretch; }
+  .assignment-grid { max-height: none; overflow: visible; }
+  .assignment-grid article { display: grid; grid-template-columns: minmax(0, 1fr) minmax(16rem, 1fr); align-items: start; }
+  .assignment-grid h5 { margin: 0.2rem 0; font: 500 1.15rem var(--display-font); }
+  .assignment-grid ul { margin: 0; padding-inline-start: 1.2rem; }
+  .submission-record { margin-top: 0.75rem; padding-top: 0.75rem; border-top: 1px solid var(--line); }
+  .submission-record p { margin: 0.35rem 0; }
   .recorded-attempt-header, .related-attempts li { display: flex; align-items: center; justify-content: space-between; gap: 1rem; }
   .recorded-attempt-header > div:first-child, .related-attempts span { min-width: 0; }
   .related-attempts { display: grid; gap: 0.5rem; margin: 0; padding: 0.75rem 0 0; border-top: 1px solid var(--line); list-style: none; }
@@ -1513,6 +1526,8 @@
   .import-game input, .import-game textarea { width: 100%; padding: 0.65rem; border: 1px solid var(--line); border-radius: 0.5rem; }
   .row-actions { display: flex; gap: 0.5rem; }
   .deletion-card { margin-top: 1rem; padding: 1rem; max-width: 42rem; border: 1px solid var(--line); border-radius: 0.8rem; background: var(--panel); }
+  .consent-card { margin-top: 1rem; padding: 1rem; max-width: 42rem; border: 2px solid var(--accent); border-radius: 0.8rem; background: var(--panel); box-shadow: var(--shadow); }
+  .consent-card h3 { margin-top: 0; }
   .row-actions label { display: grid; gap: 0.25rem; }
   select { padding: 0.65rem; border: 1px solid var(--line); border-radius: 0.55rem; background: var(--panel); }
   .live-overlay { width: 100%; height: 100%; display: grid; grid-template-columns: minmax(0, min(75vh, 70vw)) minmax(12rem, 1fr); gap: 1.5rem; align-items: center; padding: 1rem; overflow: hidden; background: transparent; }
@@ -1557,6 +1572,7 @@
     .live-wall article > button { grid-column: 1 / -1; }
     .mini-board { inline-size: 5rem; block-size: 5rem; }
     .studio-grid, .vocabulary-status-grid, .live-overlay { grid-template-columns: 1fr; }
+    .assignment-grid article { grid-template-columns: 1fr; }
     .live-overlay :global(.board-shell) { width: calc(100% - 1rem); justify-self: center; }
     .row-actions { flex-wrap: wrap; }
   }

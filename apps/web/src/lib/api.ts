@@ -328,7 +328,8 @@ export interface ClassroomMember { readonly classroomId:string;readonly learnerI
 export interface ClassroomAssignment { readonly id:string;readonly classroomId:string;readonly packId:string;readonly assignedBy:string;readonly note:string|null;readonly dueAt:string|null;readonly createdAt:string;readonly withdrawnAt:string|null }
 export interface AssignmentSubmission { readonly assignmentId:string;readonly learnerId:string;readonly runId:string;readonly grantedLearnerIds:readonly string[];readonly submittedAt:string;readonly accessExpiresAt:string;readonly withdrawnAt:string|null;readonly access?:"available"|"revoked_or_expired" }
 export interface ClassroomDetail { readonly classroom:Omit<ClassroomSummary,"memberRole"|"memberState">;readonly membership:ClassroomMember;readonly members:readonly ClassroomMember[];readonly assignments:readonly ClassroomAssignment[];readonly submissions:readonly AssignmentSubmission[];readonly upcomingSessions:readonly LiveSession[] }
-export interface AssignedPack extends ClassroomAssignment { readonly classroomName:string;readonly assignedByHandle:string;readonly submissions:readonly AssignmentSubmission[] }
+export interface AssignedPackSubmission extends AssignmentSubmission { readonly grantedTeacherHandles:readonly string[] }
+export interface AssignedPack extends ClassroomAssignment { readonly classroomName:string;readonly assignedByHandle:string;readonly teacherHandles:readonly string[];readonly submissions:readonly AssignedPackSubmission[] }
 
 export interface RatingView {
   readonly rating?: RatingPublication | null;

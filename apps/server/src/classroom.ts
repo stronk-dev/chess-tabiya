@@ -152,11 +152,23 @@ export class ClassroomService {
     return Object.freeze(this.storage.assignmentsForLearner(principal.learnerId).map((assignment) => {
       const classroom = this.storage.classroom(assignment.classroomId)!;
       const assigner = this.storage.learnerById(assignment.assignedBy);
+      const teacherHandles = this.storage.classroomMembers(assignment.classroomId)
+        .filter((member) => member.memberRole === "teacher" && member.state === "active")
+        .map((member) => member.handle)
+        .sort((left, right) => left.localeCompare(right));
       return Object.freeze({
         ...assignment,
         classroomName: classroom.name,
         assignedByHandle: assigner?.handle ?? "deleted",
-        submissions: Object.freeze(submissions.filter((submission) => submission.assignmentId === assignment.id)),
+        teacherHandles: Object.freeze(teacherHandles),
+        submissions: Object.freeze(submissions.filter((submission) => submission.assignmentId === assignment.id).map((submission) => Object.freeze({
+          ...submission,
+          grantedTeacherHandles: Object.freeze(submission.grantedLearnerIds.flatMap((teacherId) => {
+            if (this.storage.runRole(submission.runId, teacherId) === undefined) return [];
+            const teacher = this.storage.learnerById(teacherId);
+            return teacher === undefined ? [] : [teacher.handle];
+          }).sort((left, right) => left.localeCompare(right))),
+        }))),
       });
     }));
   }

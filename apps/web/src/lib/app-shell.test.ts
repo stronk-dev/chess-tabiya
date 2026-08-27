@@ -17,6 +17,8 @@ vi.mock("@lichess-org/chessground", () => ({
 import App from "../App.svelte";
 import type {
   Capabilities,
+  AssignedPack,
+  ClassroomDetail,
   DrillClientApi,
   LiveSessionDetail,
   PackDraft,
@@ -523,6 +525,98 @@ describe("application shell", () => {
     play.click();
     await vi.waitFor(() => expect(resolveProposal).toHaveBeenCalledWith("session-one", "proposal-one", "apply", "writer-live"));
     expect(claimLease).toHaveBeenCalledWith("live-run", "writer-live");
+    await unmount(component);
+  });
+
+  it("makes assignment sharing an identified, bounded consent step", async () => {
+    history.replaceState(null, "", "/learn");
+    const assignment: AssignedPack = {
+      id: "assignment-one",
+      classroomId: "classroom-one",
+      packId: pack.id,
+      assignedBy: "teacher-one",
+      note: "Compare both plans",
+      dueAt: "2026-08-20T12:00:00.000Z",
+      createdAt: "2026-08-18T12:00:00.000Z",
+      withdrawnAt: null,
+      classroomName: "Thursday group",
+      assignedByHandle: "coach",
+      teacherHandles: ["coach"],
+      submissions: [],
+    };
+    const submitAssignment = vi.fn(async () => ({
+      assignmentId: assignment.id,
+      learnerId: "learner-test",
+      runId: runSummary.id,
+      grantedLearnerIds: ["teacher-one"],
+      submittedAt: "2026-08-27T12:00:00.000Z",
+      accessExpiresAt: "2026-11-25T12:00:00.000Z",
+      withdrawnAt: null,
+    }));
+    const assignedApi: DrillClientApi = {
+      ...api(),
+      async assignments() { return [assignment]; },
+      submitAssignment,
+    };
+    const component = mount(App, {
+      target: target(),
+      props: { api: assignedApi, router: new HistoryRouter(window), storage: new MemoryStorage() },
+    });
+
+    await vi.waitFor(() => expect([...document.querySelectorAll("h3")].some((heading) => heading.textContent === packSummary.title)).toBe(true));
+    expect([...document.querySelectorAll("h3")].some((heading) => heading.textContent === pack.id)).toBe(false);
+    expect(document.body.textContent).toContain("assigned by @coach");
+    expect(document.body.textContent).toContain("overdue");
+    expect(document.body.textContent).toContain("Compare both plans");
+    const runSelect = document.querySelector<HTMLSelectElement>("select[aria-label='Completed run']")
+      ?? [...document.querySelectorAll<HTMLSelectElement>("select")].find((select) => select.parentElement?.textContent?.includes("Completed run"))!;
+    runSelect.value = runSummary.id;
+    runSelect.dispatchEvent(new Event("change", { bubbles: true }));
+    const share = [...document.querySelectorAll<HTMLButtonElement>("button")].find((button) => button.textContent === "Share with teachers")!;
+    await vi.waitFor(() => expect(share.disabled).toBe(false));
+    share.click();
+    await vi.waitFor(() => expect(document.body.textContent).toContain(`@coach will be able to read this run for up to 90 days.`));
+    expect(document.body.textContent).toContain("They do not gain access to your other runs.");
+    [...document.querySelectorAll<HTMLButtonElement>("button")].find((button) => button.textContent === "Confirm sharing")!.click();
+    await vi.waitFor(() => expect(submitAssignment).toHaveBeenCalledWith(assignment.id, runSummary.id));
+    await unmount(component);
+  });
+
+  it("renders the teacher's roster by assignment with named submissions and absences", async () => {
+    history.replaceState(null, "", "/live");
+    const classroom: ClassroomDetail = {
+      classroom: { id: "classroom-one", ownerLearnerId: "learner-test", name: "Thursday group", createdAt: "2026-08-18T12:00:00.000Z", archivedAt: null },
+      membership: { classroomId: "classroom-one", learnerId: "learner-test", handle: "coach", memberRole: "teacher", state: "active", invitedBy: null, invitedAt: "2026-08-18T12:00:00.000Z", joinedAt: "2026-08-18T12:00:00.000Z", leftAt: null },
+      members: [
+        { classroomId: "classroom-one", learnerId: "learner-test", handle: "coach", memberRole: "teacher", state: "active", invitedBy: null, invitedAt: "2026-08-18T12:00:00.000Z", joinedAt: "2026-08-18T12:00:00.000Z", leftAt: null },
+        { classroomId: "classroom-one", learnerId: "student-one", handle: "submitted", memberRole: "learner", state: "active", invitedBy: "learner-test", invitedAt: "2026-08-18T12:00:00.000Z", joinedAt: "2026-08-18T12:01:00.000Z", leftAt: null },
+        { classroomId: "classroom-one", learnerId: "student-two", handle: "waiting", memberRole: "learner", state: "active", invitedBy: "learner-test", invitedAt: "2026-08-18T12:00:00.000Z", joinedAt: "2026-08-18T12:01:00.000Z", leftAt: null },
+      ],
+      assignments: [{ id: "assignment-one", classroomId: "classroom-one", packId: pack.id, assignedBy: "learner-test", note: "Compare both plans", dueAt: "2026-08-20T12:00:00.000Z", createdAt: "2026-08-18T12:00:00.000Z", withdrawnAt: null }],
+      submissions: [{ assignmentId: "assignment-one", learnerId: "student-one", runId: runSummary.id, grantedLearnerIds: ["learner-test"], submittedAt: "2026-08-19T12:00:00.000Z", accessExpiresAt: "2026-11-17T12:00:00.000Z", withdrawnAt: null, access: "available" }],
+      upcomingSessions: [],
+    };
+    const classroomApi: DrillClientApi = {
+      ...api(),
+      async classrooms() { return [{ ...classroom.classroom, memberRole: "teacher", memberState: "active" }]; },
+      async classroom() { return classroom; },
+      async liveSessions() { return []; },
+    };
+    const component = mount(App, {
+      target: target(),
+      props: { api: classroomApi, router: new HistoryRouter(window), storage: new MemoryStorage() },
+    });
+
+    await vi.waitFor(() => expect(document.body.textContent).toContain("Thursday group"));
+    [...document.querySelectorAll<HTMLButtonElement>("button")].find((button) => button.textContent === "Open")!.click();
+    await vi.waitFor(() => expect(document.body.textContent).toContain("Assignments and submissions"));
+    expect(document.body.textContent).toContain(packSummary.title);
+    expect(document.body.textContent).toContain("Compare both plans");
+    expect(document.body.textContent).toContain("@submitted");
+    expect(document.body.textContent).toContain("@waiting");
+    expect(document.body.textContent).toContain("not submitted");
+    expect(document.body.textContent).toContain("access available");
+    expect([...document.querySelectorAll<HTMLButtonElement>("button")].some((button) => button.textContent === "Review @submitted's run")).toBe(true);
     await unmount(component);
   });
 

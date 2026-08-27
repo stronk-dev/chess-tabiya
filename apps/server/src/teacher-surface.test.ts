@@ -147,8 +147,16 @@ describe("teacher-surface consent storage", () => {
     expect(assignmentResponse.status).toBe(201);
     const assignmentId = ((await assignmentResponse.json()) as { assignment: { id: string } }).assignment.id;
     expect((await call("POST", `/assignments/${assignmentId}/submissions`, learner, { runId: run.id })).status).toBe(201);
+    expect(classrooms.assignments({ learnerId: learner.learner.id, handle: learner.learner.handle })).toMatchObject([{
+      id: assignmentId,
+      assignedByHandle: "teacher-route",
+      teacherHandles: ["teacher-route"],
+      submissions: [{ runId: run.id, grantedTeacherHandles: ["teacher-route"] }],
+    }]);
     expect((await call("GET", `/runs/${run.id}/graph`, teacher)).status).toBe(200);
     expect((await call("POST", `/assignments/${assignmentId}/submissions`, learner, { op: "withdraw", runId: run.id })).status).toBe(200);
+    expect(classrooms.assignments({ learnerId: learner.learner.id, handle: learner.learner.handle })[0]?.submissions[0])
+      .toMatchObject({ runId: run.id, grantedTeacherHandles: [] });
     expect((await call("GET", `/runs/${run.id}/graph`, teacher)).status).toBe(404);
     storage.close();
   });

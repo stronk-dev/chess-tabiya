@@ -9744,3 +9744,25 @@ through a session invitation, records their proposal, verifies the host sees the
 and applies the move through the real route. TCH-a5 and the central-gesture half of D1480 close. D1480
 remains open for the separate classroom identity residual: submission rows still omit learner, pack and
 assignment identity; missing submissions remain invisible; learner assignment cards name no teacher.
+
+## 2026-08-27 — Classroom work becomes a roster, not an anonymous inbox
+
+The second professional-workflow slice closes the classroom half of D1480. Teacher cards now join
+each assignment to every active learner and render factual act states — not submitted, submitted with
+access, revoked or expired, and withdrawn — with the learner, pack title, assignment date, teacher
+note and review link kept together. No evaluation, score or teacher-authored product verdict enters
+the grid. The same cards label advisory due dates overdue without writing to the learner scheduler.
+
+Learn now loads the pack catalogue on direct entry; this corrects the dossier's claim that packs were
+already loaded on both assignment surfaces. Matching hosted runs are offered through one dated,
+branch-counted selector instead of an unbounded row of bare buttons. Before mutation, a consent card
+names the active teachers, the 90-day default, this-run-only scope and the recorded evidence/reveal
+visibility. After submission, the service derives displayed teacher handles from current `runRole`,
+so direct revoke, withdrawal or expiry cannot leave a stale watcher name. Revocation is explicitly a
+future-read boundary, never an undo.
+
+Focused server/component tests bind the joins and revocation case. A production three-account browser
+journey creates a classroom, invites and accepts two learners, assigns a real pack, starts and shares one
+learner's run, and verifies the teacher sees that learner as submitted and the other as not submitted.
+TCH-a1/a2/a3/a12/a13/a14/a15/a16/a17/a18 complete; TCH-a33 remains open only for its multi-account
+standing/read-symmetry arm, while classroom, assignment and academy browser coverage now exists.
