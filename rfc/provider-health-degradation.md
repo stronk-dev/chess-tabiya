@@ -1,6 +1,6 @@
 # RFC: Provider health and honest degradation
 
-- **Status:** draft
+- **Status:** draft — returned by independent buildability review 2026-08-27 on [[D1910]]–[[D1915]]
 - **Author:** Codex on the owner's O13 Choice-C ruling
 - **Created:** 2026-08-27
 - **Design refs:** `design/02-product-shape.md` deployment axis; `design/03-product-breadth.md` B4/B8; `design/05-in-run-experience.md` assistance/source-risk boundary
@@ -540,6 +540,17 @@ Rollback may remove the new API fields only before a release claims F12-H. It ma
 | id | the obligation | owner | recorded when discharged | discharged |
 |---|---|---|---|---|
 | D1 | Run Maia/Stockfish/HTTP-provider failure, exact-cache divergence and recovery on the final digest-pinned CPU release profile rather than a source-only fixture | `planning/platform-alignment/release-platform/` F12-H | final release-proof receipt and exploration-log entry | |
+
+## Independent-review routing
+
+| finding | blocker | repair owner |
+|---|---|---|
+| [[D1910]] | one Stockfish health key cannot represent play and analysis instances | §§1–3 and F1 mapping |
+| [[D1911]] | not-configured/unverified states are not total across snapshot and mode API | §§2, 8–10 |
+| [[D1912]] | F1 has no rendering-provider dependency/pipeline contract for voice/TTS | §§5, 8 and criterion 5 |
+| [[D1913]] | receipt permits contradictory success/failure/fallback combinations | §4 and operation wrapper |
+| [[D1914]] | durable opponent receipt contradicts the `none` run-schema claim | rollout/register plus run compatibility |
+| [[D1915]] | cache-only global state has no cache-inventory transition | §§2, 7 and snapshot derivation |
 
 ## Open questions
 

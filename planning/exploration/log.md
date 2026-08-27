@@ -10333,3 +10333,20 @@ continue another foundation dependency without implementing around it.
   `planning/bounded-policy-targets/repeat-independent-buildability-review-2026-08-27.md`.
 - Next: amend the evidence strengths and chronology authority first, then close the result type and
   measure production cost before another independent review.
+
+## 2026-08-27 — provider health returned on topology, state, F1 and persistence
+
+- Independently reviewed the D609/D1848 provider-health draft against the production engine
+  topology, F1 consumer types, opponent cache and persisted run event. The desired behavior—honest
+  live/cache/domain/failure distinctions and no silent substitution—survives.
+- Added a disposable six-arm buildability harness. It proves that two independent Stockfish
+  instances collapse into one health key ([[D1910]]); absent/unverified states are not total across
+  snapshot and mode APIs ([[D1911]]); and F1 has no field for the voice/TTS dependencies the draft
+  assigns it ([[D1912]]).
+- Returned the draft on three additional closure failures: the receipt is not a discriminated
+  success/failure/fallback result ([[D1913]]); receipts promised to Review/export necessarily alter
+  persisted `opponent.move_selected` despite a `none` claim ([[D1914]]); and cache-only health can
+  survive expiry/eviction of the last valid entry ([[D1915]]).
+- Exact return: `planning/provider-health-degradation/independent-buildability-review-2026-08-27.md`.
+- Next: amend provider instance identity and the total state algebra before the compiler/persistence
+  repairs, then repeat review and rerun R18.
