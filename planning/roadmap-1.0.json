@@ -277,7 +277,7 @@
       "name": "CI parity, packaging, deployment, observability, and release",
       "release": "core",
       "owner": "release-engineering",
-      "rfcs": ["storage-backup-recovery.md", "safe-deployment-profiles.md"],
+      "rfcs": ["storage-backup-recovery.md", "safe-deployment-profiles.md", "provider-health-degradation.md"],
       "completion": {
         "evidence": ["not_applicable", "This slice verifies evidence machinery but creates no chess truth."],
         "state": ["partial", "Schema/register/work/intent checks and three workflows exist; many research harnesses and release states are not enforced."],

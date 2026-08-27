@@ -2,9 +2,9 @@
   "schemaVersion": 1,
   "authority": "planning/roadmap-to-done.md",
   "sourceDigests": {
-    "roadmap": "sha256:b38fd333dd9ad46be781cd4de432159af250853577f04e187a9f24bdb8a20a47",
+    "roadmap": "sha256:791def566dd7d9591e8b34f6fbd34d8a02bed5257fa7abaf04ab85599b1fd0a8",
     "workItems": "sha256:16e5dbb67e4267ee00f64e977d226ffa37eba3b78c0fb4f300d18798777503c4",
-    "rfcRegister": "sha256:5681fec2850ee6126403209b4cd27d0798b18938496eee2f272c3708a40459b5",
+    "rfcRegister": "sha256:22ef142677e02c78bf423ee2f8a9660a4857d677cd72a0f9ed4e9875ca1ccb78",
     "uxIndex": "sha256:f1038776a0e730365f62f937cb1b706f68346d3cbdfc8580667c9ad7c21b91ac",
     "router": "sha256:85169850d104e0f24b2bd1ea53237e677eab0bb4f4a6af91e53728c45b9517b9",
     "application": "sha256:b5182b128945143bb187a5483361dfcd36cc530ae5a2e7c2cfb1941797482efb",
@@ -17,7 +17,7 @@
       "breadth": 2,
       "post_1_0": 0
     },
-    "assignedRfcs": 52,
+    "assignedRfcs": 53,
     "workItems": {
       "queued": 180,
       "blocked_owner": 61,
@@ -997,7 +997,7 @@
       "name": "CI parity, packaging, deployment, observability, and release",
       "release": "core",
       "owner": "release-engineering",
-      "rfcCount": 2,
+      "rfcCount": 3,
       "workItems": {
         "queued": 0,
         "blocked_owner": 0,

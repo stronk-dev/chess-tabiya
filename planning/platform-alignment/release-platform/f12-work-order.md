@@ -130,7 +130,7 @@ account-deletion clause. D657 is closed.
 Account-bundle **import** is not implied by O13's export/delete ruling. Server backup/restore belongs
 to F12-C. A future user-level cross-instance import needs its own collision/identity contract.
 
-### F12-C — backup, restore, upgrade and recovery — READY TO DRAFT
+### F12-C — backup, restore, upgrade and recovery — DRAFTED 2026-08-27; INDEPENDENT REVIEW NEXT
 
 Owns D608.
 
@@ -147,7 +147,10 @@ Required contract:
 - disposable drill proving backup → mutate → restore → verify on both amd64 and arm64 CI runners or
   equivalent emulation.
 
-### F12-D — provider health and honest degradation — BLOCKED ON F1 ACCEPTANCE
+Active specification: `rfc/storage-backup-recovery.md`. No product implementation is authorized
+before independent buildability review and owner acceptance.
+
+### F12-D — provider health and honest degradation — DRAFTED 2026-08-27; INDEPENDENT REVIEW NEXT
 
 Owns D609 and consumes F1 rather than inventing a second capability registry.
 
@@ -162,8 +165,12 @@ Required contract:
 - client modules render honest empty/unavailable and never silently substitute Stockfish for Maia,
   corpus for theory or an LLM for deterministic evidence.
 
-F12-D may draft after F1 is accepted. F1 itself declares availability fields but does not choose
-health probing, timeout or hysteresis policy.
+F1 is implemented and archived at `rfc/archive/evidence-contract-manifest.md`; the former drafting
+hold is discharged. Active specification: `rfc/provider-health-degradation.md`. The source pass
+added [[D1848]]: the opponent cache is unbounded, omits provider/model generation from its key and
+returns cached/live selections indistinguishably. The RFC consumes F1's compiled latency and
+provider-off declarations, and adds no parallel evidence registry. No product implementation is
+authorized before independent buildability review and owner acceptance.
 
 ### F12-E — runtime bundle, FOSS engine matrix and verifiable distribution — PARTLY BLOCKED
 
@@ -195,7 +202,7 @@ Blocked portion:
 2. `cpu`: FOSS Stockfish + CPU Maia, the default full local-opponent appliance;
 3. `accelerated`: optional GPU image, separately labelled/licensed, never required by a core journey.
 
-### F12-F — one accessible board-input model — READY TO DRAFT
+### F12-F — one accessible board-input model — IMPLEMENTED; OWNER-USE DISCHARGE REMAINS
 
 Owns D612/D613 and preserves the now-green pointer/touch contract.
 
@@ -213,6 +220,10 @@ Required contract:
   devices; mechanical checks remain release gates even before that session.
 
 No chess evidence or move recommendation is added by accessible input.
+
+The implementation landed at `2b68103`; D612/D613 and the permanent mechanical matrix are closed.
+The sole remaining hold is the owner's ordinary device/browser/assistive-technology validation by
+use (D3 in `rfc/accessible-board-input.md`), not another code or participant-study wave.
 
 ### F12-G — offline knowledge/tablebase and PWA update semantics — BLOCKED ON F4
 

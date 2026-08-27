@@ -9922,3 +9922,26 @@ request without a byte limit ([[D1846]]) and converts every response stream into
 backpressured/cancellable response streaming through the real rendered proxy. Proxy-only limits and
 header-presence tests cannot close either defect. The draft is registered and roadmap-owned; no
 product byte lands before independent buildability review and owner acceptance.
+
+## 2026-08-27 — F12-D joins live provider truth to the implemented evidence manifest
+
+The F1 drafting hold in the release work order was stale: `evidence-contract-manifest` is
+implemented and archived. `rfc/provider-health-degradation.md` now specifies the missing operational
+half without creating a second evidence registry. One six-provider runtime authority consumes UCI
+handshakes and real HTTP/request outcomes; F1's four provider-backed producers derive availability
+from that snapshot, while external voice and TTS remain renderer dependencies rather than chess
+evidence.
+
+The source pass widened D609 by one concrete cache defect ([[D1848]]). `OpponentSelector` retains an
+unbounded process-lifetime promise map, omits engine/model generation from the key, and returns
+cached and live selections in the same shape. The RFC makes cache-only service exact-request scoped,
+bounds and generation-keys provider caches, and requires acquisition receipts. Cache hits never
+heal provider health.
+
+The deadline and degradation rules close the user-facing failure, not just `/capabilities`: Maia's
+60-second wait is removed; queue, retry and provider work share one compiled F1 consumer budget;
+provider loss pauses before an opponent move and offers retry/change rather than silently switching
+to Stockfish or a random move; no-data/out-of-domain, provider-off and exact-cache states remain
+distinct. Lichess 429 handling follows its published one-at-a-time/full-minute rule. The draft is
+registered and roadmap-owned; independent buildability review and owner acceptance precede product
+implementation.
