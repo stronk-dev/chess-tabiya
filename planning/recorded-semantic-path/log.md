@@ -12,3 +12,11 @@ benchmark has neither an absolute consumer budget nor deterministic CI boundary 
 A five-arm disposable harness reproduces the executable boundaries and confirms the eleven-family
 population itself is derivable exactly. Exact return:
 `independent-buildability-review-2026-08-27.md`.
+
+## 2026-08-27 — D1930 cost measurement preregistered
+
+Frozen a 20/40/80-ply, twelve-path-per-arm imported population; legal replay plus all thirteen
+evaluator rows; one warmup and three cold measured calls; split validation/preparation/window/total
+timings; exact work counts; and the existing 500 ms synchronous envelope. Any failed arm routes
+full-path work to background/incremental execution. Generic software CI receives only deterministic
+work assertions; wall-clock remains in the pinned performance tier.
