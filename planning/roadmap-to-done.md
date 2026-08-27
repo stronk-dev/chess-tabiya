@@ -137,7 +137,8 @@ significance; raw-sentence side channels are gone; modules, bots and Review shar
 Primary RFCs: `pack-capability-contract`, `claim-semantic-anchors`, `tactical-collectors`,
 `semantic-collectors`, `semantic-convention-register`, `semantic-convention-provenance`,
 `runtime-opening-identity`, `exact-legal-mobility`, `breadth-collectors`, `evidence-move-selector`,
-`shared-candidate-evidence-packet`, `bounded-policy-targets`, `bounded-target-policy-composition`.
+`shared-candidate-evidence-packet`, `bounded-policy-targets`, `bounded-target-policy-composition`,
+`recorded-semantic-path`.
 
 The convention foundation now has an explicit two-step landing boundary. The process-only
 `semantic-convention-register` first records an empty landed set plus D1722's exact 39-member live
@@ -228,6 +229,11 @@ operator-selector-only, 11 behind the unused candidate helper and 11 isolated se
 Phase 3 therefore waits on the complete one-edge packet operation plus the recorded-path compiler;
 catalogue membership, an exported constructor or a consumer-operation registry entry cannot
 satisfy a module, Review, bot, drill or longitudinal dependency.
+
+The recorded half now has a concrete draft owner: `recorded-semantic-path.md` compiles the eleven
+existing multi-edge projections across thirteen exact 2/3/4/5-edge evaluator rows, with complete
+window receipts and a real-consumer completion gate. It still requires independent review and
+acceptance; [[D1870]] remains the separate consumer/presentation join after it lands.
 
 [[D1711]] closes the separate validation axis and makes the word *validated* unavailable at HEAD.
 All 67 semantic declarations manufacture their own positive/hard-negative labels, the compiler

@@ -10183,3 +10183,21 @@ continue another foundation dependency without implementing around it.
   acceptance set. This joins [[D1067]]'s missing path compiler to an equally missing consumer.
 - Next: author must repair module registration around [[D1863]]–[[D1870]] and the accepted
   provider/path dependencies; no module UI implementation is honest before this join closes.
+
+## 2026-08-27 — recorded semantic path compiler gets an RFC owner
+
+- Drafted `rfc/recorded-semantic-path.md` from the completed D1067/D1068 source audit, D1710
+  execution census and D1865 module-assembly census.
+- The contract covers the eleven existing multi-edge projection ids through thirteen exact
+  2/3/4/5-edge evaluator rows. It derives anchors only from `branchPath`, constructs exact sealed
+  move/event inputs, evaluates every start/family window and distinguishes emitted, evaluated
+  no-witness, insufficient continuation and whole-path refusal.
+- The draft explicitly handles fork ancestry, deterministic dedup/digest, shared one-edge work and
+  an authenticated server operation. It adds no detector, storage, schema, prose or UI.
+- D1068 remains a hard boundary: a Stockfish PV cannot mint recorded-run identities. Hypothetical
+  hint horizons require separately registered provider-derived evidence.
+- Completion is able to fail: compiler code alone enters `awaiting`; the RFC cannot become
+  implemented until deleting a real Review/module/longitudinal consumer call fails a production
+  fixture. D1870 continues to own learner admission/presentation.
+- Next: independent buildability review before acceptance; no implementation is authorized from
+  the first draft.
