@@ -9715,3 +9715,18 @@ Making resistance visible in packless play also brought an existing OutcomeConte
 into the live-rehearsal axe scan: 12.48 px muted text resolved to 4.47:1 against the mixed panel,
 below WCAG AA's 4.5:1 floor. The context now uses the primary ink token without changing its panel
 or hierarchy. D1841 closes on the automated matrix rather than exempting the new sentences.
+
+## 2026-08-27 — Account exit exposes the interoperable artifact and its limits before action
+
+The accepted portable-account journey now distinguishes its two exports at the point of use. The
+account JSON is explicitly a Tabiya archive for safekeeping and inspection: Tabiya cannot import it
+and other chess products do not read it. Account links to Library, where every visible game offers a
+direct standard-PGN download without first opening the run; opening remains the path for selecting
+particular branches.
+
+Deletion also states its boundary before the learner asks for a destructive preview. Library names
+shared read-only history and operator-backup retention beside per-run deletion; Account names
+collaborator, publication and backup retention before account preview. The production browser
+journey downloads a run PGN and the account archive, hard-deletes an owned run and observes its 404,
+then deletes the account and proves the current browser's durable keys are gone. IMP-a18/a19/a22/a23
+and D1842 close together because they are one honest account-exit path rather than four labels.

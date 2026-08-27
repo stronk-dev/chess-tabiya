@@ -179,6 +179,11 @@ test("account lifecycle downloads data, deletes one run, and clears this browser
   }, runId);
 
   await page.goto("/library");
+  await expect(page.getByText("Shared runs may remain as read-only history", { exact: false })).toBeVisible();
+  const pgnDownloadPromise = page.waitForEvent("download");
+  await page.getByRole("button", { name: "Download PGN" }).click();
+  const pgnDownload = await pgnDownloadPromise;
+  expect(pgnDownload.suggestedFilename()).toMatch(/\.pgn$/u);
   await page.getByRole("button", { name: "Delete this run" }).click();
   await expect(page.getByRole("heading", { name: /Delete .*\?/u })).toBeVisible();
   await expect(page.getByText("permanently deleted", { exact: false })).toBeVisible();
@@ -191,6 +196,8 @@ test("account lifecycle downloads data, deletes one run, and clears this browser
   ], runId)).toEqual([null, null]);
 
   await page.goto("/settings");
+  await expect(page.getByText("Tabiya cannot import it", { exact: false })).toBeVisible();
+  await expect(page.getByRole("link", { name: "download them as PGN" })).toHaveAttribute("href", "/library");
   await page.getByLabel("Current password").fill("browser-test-password");
   const downloadPromise = page.waitForEvent("download");
   await page.getByRole("button", { name: "Download my data", exact: true }).click();

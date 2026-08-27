@@ -41,6 +41,9 @@ describe("account lifecycle panel", () => {
     } });
     await tick();
 
+    expect(document.body.textContent).toContain("Tabiya cannot import it");
+    expect(document.querySelector<HTMLAnchorElement>('a[href="/library"]')?.textContent).toContain("download them as PGN");
+
     const passwordInputs = [...document.querySelectorAll<HTMLInputElement>('input[type="password"]')];
     expect(passwordInputs).toHaveLength(1);
     setInput(passwordInputs[0]!, "export-password");

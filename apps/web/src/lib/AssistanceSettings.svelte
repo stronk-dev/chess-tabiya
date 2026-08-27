@@ -81,6 +81,7 @@
   <form onsubmit={(event) => { event.preventDefault(); void downloadAccount(); }}>
     <h3>Download my data</h3>
     <p class="honest">A portable copy of your runs, progress, authored drafts, publications, and account-scoped activity. Passwords, sessions, provider credentials, and preferences stored only on this device are excluded.</p>
+    <p class="honest">This Tabiya account archive is for safekeeping and inspection. Tabiya cannot import it, and other chess products do not read it. To move games between chess tools, <a href="/library">download them as PGN</a>.</p>
     <label>Current password <input type="password" autocomplete="current-password" bind:value={exportPassword} /></label>
     <button type="submit">Download my data</button>
     {#if exportStatus}<p role="status">{exportStatus}</p>{/if}
@@ -88,7 +89,7 @@
   <form onsubmit={(event) => { event.preventDefault(); void removeAccount(); }}>
     <h3>Delete account</h3>
     {#if deletionPreview === undefined}
-      <p>First review exactly what will be deleted, what collaborators can still read, and what published work remains.</p>
+      <p>First review exactly what will be deleted, what collaborators can still read, what published work remains, and what an existing operator backup may retain.</p>
       <button type="button" onclick={() => void previewDeletion()}>Review deletion effects</button>
     {:else}
       <div class="deletion-preview">

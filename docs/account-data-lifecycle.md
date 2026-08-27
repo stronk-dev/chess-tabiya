@@ -26,6 +26,12 @@ board-view preferences, assistance preferences, and workflow presets are named a
 exclusion because another device's copy is neither account data nor recoverable by the
 server. There is no account-import endpoint.
 
+The account download is a Tabiya archive for safekeeping and inspection, not a
+chess-interchange file: neither Tabiya nor other chess products import it. The
+Account region states that boundary before download and links to Library, where
+each visible game can be downloaded directly as standard PGN without opening the
+run. Branch-selective export remains available inside the run.
+
 Stored run text is not silently dropped. A valid document is emitted as parsed JSON;
 invalid stored JSON uses a lossless raw UTF-8 arm with a typed diagnostic.
 
@@ -50,3 +56,8 @@ preferences, but learner deletion invalidates every server session.
 Live storage is removed immediately. Backups are installation-owned and may retain an
 older copy until the operator's configured retention period expires; deleting an
 account cannot purge an existing backup artifact.
+
+Those limits are stated before a learner starts either destructive flow. Library
+warns that a shared run can remain as read-only collaborator history and that a
+backup may retain an older copy; Account names collaborator, publication and backup
+retention before it loads the exact deletion preview.

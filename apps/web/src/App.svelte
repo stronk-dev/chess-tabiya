@@ -119,6 +119,7 @@
   let runs: readonly RunSummary[] = $state([]);
   let runDeletion = $state<{ readonly run: RunSummary; readonly preview: DeletionPreview } | undefined>();
   let runDeletionError = $state<string | undefined>();
+  let runArtifactError = $state<string | undefined>();
   let attempts: readonly ProgressAttempt[] = $state([]);
   let dueSchedules: readonly ProgressSchedule[] = $state([]);
   let milestones: readonly ProgressMilestone[] = $state([]);
@@ -664,8 +665,7 @@
     } catch (error) { runDeletionError = error instanceof Error ? error.message : String(error); }
   }
 
-  async function exportPgn(branchIds?: readonly string[]): Promise<void> {
-    const download = await controller.exportPgn(branchIds);
+  function savePgn(download: { readonly text: string; readonly filename: string }): void {
     const url = URL.createObjectURL(
       new Blob([download.text], { type: "text/x-chess-pgn;charset=utf-8" }),
     );
@@ -676,6 +676,19 @@
     anchor.click();
     anchor.remove();
     setTimeout(() => URL.revokeObjectURL(url), 0);
+  }
+
+  async function exportPgn(branchIds?: readonly string[]): Promise<void> {
+    savePgn(await controller.exportPgn(branchIds));
+  }
+
+  async function exportRunPgn(runId: string): Promise<void> {
+    runArtifactError = undefined;
+    try {
+      savePgn(await api.pgn(runId));
+    } catch (error) {
+      runArtifactError = error instanceof Error ? error.message : String(error);
+    }
   }
 
   async function createDraft(): Promise<void> {
@@ -1365,7 +1378,11 @@
     <main class="shell-view" aria-labelledby="library-title">
       <p class="eyebrow">Library</p><h1 id="library-title">Packs and run artifacts</h1>
       <section><h2>Rehearsal packs</h2><ul>{#each packs as pack}<li>{pack.title} <small>{pack.reviewStatus.replaceAll("_", " ")}</small></li>{:else}<li>No packs available.</li>{/each}</ul></section>
-      <section><h2>Runs with exportable PGN</h2><ul>{#each runs as run}<li><button class="link-button" type="button" onclick={() => navigate(routePath({ name: "run", runId: run.id }))}>{run.title}</button> <small>{run.branchCount} branches</small> {#if run.viewerRole === "host"}<button type="button" onclick={() => void reviewRunDeletion(run)}>Delete this run</button>{/if}</li>{:else}<li>No run artifacts yet.</li>{/each}</ul>
+      <section><h2>My games</h2>
+        <p>Download a game as standard PGN for chess tools, or open it to choose particular branches.</p>
+        <p class="honest">Deleting a run removes Tabiya's live copy immediately. Shared runs may remain as read-only history for collaborators, and deployment backups may retain an older copy until their configured retention period ends.</p>
+        <ul>{#each runs as run}<li><button class="link-button" type="button" onclick={() => navigate(routePath({ name: "run", runId: run.id }))}>{run.title}</button> <small>{run.branchCount} branches</small> <button type="button" onclick={() => void exportRunPgn(run.id)}>Download PGN</button> {#if run.viewerRole === "host"}<button type="button" onclick={() => void reviewRunDeletion(run)}>Delete this run</button>{/if}</li>{:else}<li>No saved games yet.</li>{/each}</ul>
+        {#if runArtifactError}<p role="alert">{runArtifactError}</p>{/if}
         {#if runDeletion}
           <aside class="deletion-card">
             <StatusAnnouncement message={`Deletion effects loaded for ${runDeletion.run.title}. Review the listed permanent, retained, and revoked records before confirming.`} />
