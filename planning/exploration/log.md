@@ -10296,3 +10296,23 @@ continue another foundation dependency without implementing around it.
   confirmation population remains unread. Next: land typed cp/mate candidate scores and a
   registered projection-balanced compact model view, then rerun this exact census before any
   learning curve.
+
+## 2026-08-27 — shared candidate packet returned on runtime admission and execution
+
+- Repeated the independent buildability review after the [[D1631]]–[[D1636]] amendment. The
+  focused harness passes 10/10: terminal/adjudication separation, three cache identities, the
+  47-event/22-reading closure and White-to-root score algebra survive, and the literal amended
+  scope-wide F1 tuple now compiles. The original D1634 static blocker is closed rather than carried.
+- Returned the RFC on four narrower blockers. The factual cache returns a consumer-specific view
+  without a defined consumer/request ([[D1900]]); general declared evidence cannot witness the
+  scope-specific runtime derivation member criterion 22 claims ([[D1901]]); the “real” bot path is
+  reachable only through a test-created profile while the production catalogue is empty
+  ([[D1902]]); and per-candidate child evaluation replaces D969/D1329's measured one-root operation
+  without a whole-set execution budget ([[D1903]]).
+- The shared provider dependency also remains returned on [[D1871]]–[[D1878]], including undefined
+  scheduler request/result types and impossible requested-versus-actual generation identity. No new
+  row duplicates those findings.
+- Exact return:
+  `planning/evidence-foundation-ux/shared-candidate-packet-repeat-review-2026-08-27.md`.
+- Next: repair the packet admission boundary and narrow first landing, reconcile the engine source,
+  then repeat review after the provider contract is independently accepted.

@@ -1,13 +1,15 @@
 # RFC: Shared candidate evidence packet — the compiled legal population three consumers are measured against
 
-- **Status:** draft amended 2026-08-27 — the independent buildability returns
-  [[D1631]]–[[D1636]] are repaired: legal terminal state is separated from adjudication; packet,
-  provider and policy cache identities remain layered; production operations/composition are
-  named; the literal F1 tuple includes the complete evidence closure; the two extra reading
-  derivations are retained; and White scores convert through a typed root-side loss projection.
-  Repeat independent review is required before implementation. Exact return and repair order:
-  `planning/evidence-foundation-ux/shared-candidate-packet-independent-review-2026-08-26.md`.
-  [[D1580]] still holds numeric appliance-tier clearance separately
+- **Status:** draft — returned by repeat independent buildability review 2026-08-27 on
+  [[D1900]]–[[D1903]], with the returned provider dependency [[D1871]]–[[D1878]] still blocking.
+  The [[D1631]]–[[D1636]] terminal/cache/closure/score repairs survive and the literal amended F1
+  tuple compiles, but consumer-specific admission is conflated with the factual cache, the
+  scope-specific derivation has no runtime value witness, the claimed bot consumer is test-only,
+  and per-child evaluation replaces the measured one-root operation without a whole-set budget.
+  Exact return:
+  `planning/evidence-foundation-ux/shared-candidate-packet-repeat-review-2026-08-27.md`.
+  Do not implement before amendment and another independent review. [[D1580]] remains separate
+  numeric appliance-tier debt
 - **Author:** claude (drafted from `design/research/shared-candidate-evidence-packet.md` and `tools/d1071-candidate-packet-harness/`; every carried claim re-verified at HEAD, with seven corrections recorded)
 - **Created:** 2026-08-23
 - **Design refs:** `design/05-in-run-experience.md` §5 (*"detection is cheap, significance is not"* — the split this RFC executes in code: one factual population, separate opinionated derivations) and §3b-i (*"The LLM is the voice, never the source"*); `design/03-product-breadth.md` §Play (opponent selection) and §Intelligence and explanation
@@ -1040,6 +1042,10 @@ rather than aspirational — criterion 14.
 | [[D1574]] | a fixed-position census was treated as the emitted schema | §5.3 | criteria 9, 16 |
 | [[D1575]] | the six-file target omitted the server-private readings authority and production entries | §12 | criterion 20 |
 | [[D1576]] | Review's run-node-bound engine point could not represent a hypothetical candidate honestly | §8.3; Review RFC amendment | criterion 17; Discharge D8 |
+| [[D1900]] | the shared factual cache returns a consumer-specific view without defining or keying the consumer | §6.0 | repeat review; amend service/request boundary before criterion 23 |
+| [[D1901]] | the compiled scope-wide `anyOf` declaration has no runtime value-level derivation-member witness | §3.1 | repeat review; amend F1 admission/receipt before criterion 22 |
+| [[D1902]] | the claimed live bot consumer is reachable only through a test-created profile while the production roster is empty | §6.0, §10 | repeat review; narrow first landing or wait for an accepted concrete profile |
+| [[D1903]] | per-child position evaluation replaces the measured one-root bot-guard operation without a whole-set execution budget | §7.1, §8.3 | repeat review; reconcile source/topology before criterion 17 |
 
 ## Deviations from design
 

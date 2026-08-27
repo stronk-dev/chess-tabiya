@@ -194,6 +194,71 @@ function badPacketDeclarations(): EvidenceContractDeclarations {
   });
 }
 
+const evidenceRef = (id: string) => Object.freeze({ id, version: 1 });
+
+function amendedPacketDeclarations(): EvidenceContractDeclarations {
+  const packet = evidenceRef("derived.candidate.event_population");
+  const producer = evidenceRef("derived.candidate");
+  const consumers = EVIDENCE_CONTRACT_DECLARATIONS.consumers.map((consumer) => {
+    if (consumer.id !== "research.semantic_selection" && consumer.id !== "opponent.selection") return consumer;
+    return Object.freeze({
+      ...consumer,
+      accepts: Object.freeze([...consumer.accepts, packet]),
+      answerContent: Object.freeze([...new Set([...consumer.answerContent, "candidate_moves" as const])]),
+    });
+  });
+  const adapters = ["research.semantic_selection", "opponent.selection"].map((consumerId, index) => {
+    const consumer = consumers.find((candidate) => candidate.id === consumerId)!;
+    return Object.freeze({
+      id: `adapter.${consumerId}.candidate_packet`, version: 1,
+      implementation: consumer.implementation,
+      producer, projection: packet,
+      consumer: evidenceRef(consumerId),
+      timing: Object.freeze(["analysis" as const]),
+      roles: Object.freeze(["operator" as const]),
+      sessions: consumer.sessions,
+      forms: Object.freeze(["machine_condition" as const]),
+      answerContent: Object.freeze(["fact" as const, "candidate_moves" as const]),
+      latency: consumer.latency,
+      budget: consumer.budget,
+    });
+  });
+  const legal = evidenceRef("rules.mobility.reading.legal_moves");
+  const events = LOCAL_EVENT_IDS.map(evidenceRef);
+  const readings = CANDIDATE_READING_IDS.map(evidenceRef);
+  return Object.freeze({
+    ...EVIDENCE_CONTRACT_DECLARATIONS,
+    consumers: Object.freeze(consumers),
+    adapters: Object.freeze([...EVIDENCE_CONTRACT_DECLARATIONS.adapters, ...adapters]),
+    producers: Object.freeze([
+      ...EVIDENCE_CONTRACT_DECLARATIONS.producers,
+      Object.freeze({
+        id: "derived.candidate", version: 1, plane: "derived" as const,
+        implementation: "candidatePopulation", availability: "local" as const, latency: "sync" as const,
+        outputs: Object.freeze([Object.freeze({
+          id: "derived.candidate.event_population", version: 1, producer,
+          role: "reading" as const, plane: "derived" as const,
+          payloadType: "CandidateEventPopulation",
+          semantics: "Complete exact legal-move rows plus the literal sealed local evidence emitted for each child under the named scope and conventions.",
+          operands: Object.freeze(["id", "beforeFen", "scope", "legalConvention", "moveIdentityConvention", "manifestDigest", "compilerVersion", "legalMoves", "candidates", "terminal"]),
+          signs: Object.freeze(["state" as const]), grounding: "declared_convention" as const,
+          exactness: "convention" as const, confidence: "exact" as const,
+          abstention: Object.freeze({ possible: true, reasons: Object.freeze(["input_abstained"]) }),
+          answerContent: Object.freeze(["fact" as const, "candidate_moves" as const]),
+          forms: Object.freeze(["list" as const, "panel" as const, "machine_condition" as const]),
+          dependsOn: Object.freeze([]),
+          derivation: Object.freeze({ anyOf: Object.freeze([
+            Object.freeze([legal, ...events]),
+            Object.freeze([legal, ...readings]),
+            Object.freeze([legal, ...events, ...readings]),
+          ]) }),
+          limitations: Object.freeze(["Internal population only; no quality, rank, likelihood, recommendation, grade or personality."]),
+        })]),
+      }),
+    ]),
+  });
+}
+
 function repairedDeclaredValues(beforeFen: string, moveUci: string, afterFen: string): readonly DeclaredEvidence<unknown>[] {
   const readings: DeclaredEvidence<unknown>[] = [
     declareCastlingRightsEvidence(castlingRights(afterFen)),
@@ -339,6 +404,10 @@ describe("D1634 F1 aggregate boundary", () => {
     expect(() => compileEvidenceManifest(badPacketDeclarations())).toThrow(/derived projection exceeds/u);
     expect(compileEvidenceManifest(EVIDENCE_CONTRACT_DECLARATIONS).digest).toBe(PRIMARY_EVIDENCE_MANIFEST.digest);
     expect(PRIMARY_EVIDENCE_MANIFEST.projections.some((row) => row.id === "derived.candidate.event_population")).toBe(false);
+  });
+
+  it("executes the amended scope-wide wrapper tuple against the shipped compiler", () => {
+    expect(() => compileEvidenceManifest(amendedPacketDeclarations())).not.toThrow();
   });
 });
 
