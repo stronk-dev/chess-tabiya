@@ -10384,3 +10384,23 @@ continue another foundation dependency without implementing around it.
   `planning/semantic-convention-register/independent-buildability-review-2026-08-27.md`.
 - Next: author amendment, repeat focused review, then implementation after the assistance register
   predecessor lands.
+
+## 2026-08-27 — Semantic convention provenance returned on runtime truth and durability
+
+- Independently reviewed the product-side D1722 successor with a six-arm disposable falsifier.
+- The manifest declares possible derivation paths, but a live evidence value retains no input values
+  or selected member and is frozen before admission; it cannot receive the promised path-specific
+  receipt ([[D1921]]).
+- Exact adapters validate operand key names, not values: a forged `unregistered@999` convention is
+  sealed today, and the proposed instance-key list does not define extractors for current operand
+  shapes ([[D1922]]).
+- The draft publishes 39 identities but zero literal definition/limitation/authority/disclosure
+  declarations, leaving law-8 chess truth for an implementer to invent ([[D1923]]).
+- `voiceCheck` accepts a provider response that drops a required limitation ([[D1924]]); a normal
+  repo-local previous snapshot can be changed beside the definition it polices ([[D1925]]); and the
+  run schema persists neither convention nor projection receipts despite the stated Review/history
+  guarantee ([[D1926]]).
+- Exact return:
+  `planning/semantic-convention-provenance/independent-buildability-review-2026-08-27.md`.
+- Next: source-backed declaration authoring and value-level closure first, then immutable semantic
+  history, durable receipt claims and provider completeness before repeat review.

@@ -1,7 +1,7 @@
 # RFC: Semantic convention provenance — definitions survive collection, derivation and disclosure
 
-- **Status:** draft — 2026-08-27; authored from the completed D1722 research and awaiting
-  independent buildability review
+- **Status:** draft — returned by independent buildability review 2026-08-27 on
+  [[D1921]]–[[D1926]]
 - **Author:** codex (agent), for Marco
 - **Created:** 2026-08-27
 - **Design refs:** `design/04-content-architecture.md` §2d and §7;
@@ -14,7 +14,7 @@
   implement before this RFC can be accepted
 - **Parent / amends:** follow-up to `rfc/archive/evidence-contract-manifest.md`
 - **Supersedes / superseded by:** —
-- **Planning:** `planning/semantic-convention-provenance/` (once implementing)
+- **Planning:** `planning/semantic-convention-provenance/`
 
 ```tabiya-claims
 none
@@ -353,8 +353,21 @@ None require an owner product choice. The exact initial convention member table 
 cannot be traced is refused from learner admission and returned to its source RFC; it is not filled
 with model knowledge.
 
+## Independent-review routing
+
+| finding | blocker | repair owner |
+|---|---|---|
+| [[D1921]] | no sealed value-level derivation member/inputs; receipt cannot attach after freeze | author amendment |
+| [[D1922]] | live adapters accept forged instance convention values | author amendment |
+| [[D1923]] | 39 refs have no literal source-grounded declaration population | source-backed authoring pass |
+| [[D1924]] | provider allow-list cannot enforce limitation completeness | author amendment |
+| [[D1925]] | previous snapshot may be co-edited with same-version meaning | process/product reconciliation |
+| [[D1926]] | Review/history promise has no durable receipt or run claim | author amendment + register claim |
+
 ## Changelog
 
+- 2026-08-27: independent review returned the draft on [[D1921]]–[[D1926]]. Exact return:
+  `planning/semantic-convention-provenance/independent-buildability-review-2026-08-27.md`.
 - 2026-08-27: created from D1722's measured 42 + 18 populations and author handoff. Defines a
   separate convention closure, path-specific derivation, sealed disclosure, version/migration law,
   exact 18-row classification and the shared-resource-register prerequisite. Claims no current
