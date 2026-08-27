@@ -162,9 +162,9 @@ not conventions. A new member therefore requires a reviewed semantic witness, no
 
 The census also corrects an invalid draft shape: `grade-convention@1` is the convention ref and
 `context` remains a retained instance operand. `grade-convention@1/<context>` is not a ref and may
-never enter the register. The `story-title@1` declaration is also blocked on [[D1851]]: production
-is learner-relative after D667, while the manifest prose still says White-relative; the migration
-must repair that declaration before the registry snapshot freezes it.
+never enter the register. [[D1851]] is already closed: `story-title@1` production and manifest
+semantics are both learner-relative, and a focused regression binds the declaration to the paired
+opposite-side outputs before the registry snapshot freezes it.
 
 ### 2. Projection declarations and path closure
 
@@ -363,3 +363,6 @@ with model knowledge.
   identities for shipped meanings), excluded two non-semantic version tokens, and corrected grade
   context from an invalid pseudo-version to a retained operand. Logged [[D1851]] rather than freezing
   the stale White-relative story-title declaration into the registry.
+- 2026-08-27: [[D1851]] closed under the implemented F1/D667 contract: the Story-title manifest
+  now declares the learner-relative behavior production already used, with a regression over both
+  opposite-side output and declaration prose.

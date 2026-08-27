@@ -10020,3 +10020,20 @@ The process RFC depends on `assistance-config-register` for C9 and therefore own
 creating a numbering collision. It changes no runtime, evidence, schema, storage, content, web or
 archive bytes. [[D1852]] records the missing register as a separate process defect; independent
 review is the next action.
+
+## 2026-08-27 — D1851 Story-title authority reconciled
+
+The one production defect found by the convention census is closed under the already-implemented
+F1/D667 contract. `derived.story.title@1` no longer tells renderers/reviewers that imported-result
+verbs are White-relative while `suggestTitle` computes them from the learner's side. The regression
+checks both sides of the same `1-0` result and pins the compiled manifest wording to
+learner-relative. No title behavior changed; the authority now describes the shipped behavior.
+
+## 2026-08-27 — CI time bomb reproduced and closed
+
+The full software tier, run before the Story-authority checkpoint, failed the live-session public
+join contract locally exactly as CI would: expected 200, received 404. The fixture fixed
+`LiveSessionService` at 2026-08-13 but left `SQLiteRunStorage` on wall time; its default 14-day link
+therefore crossed expiry on 2026-08-27. [[D1853]] binds both components to one injected clock. The
+repair changes no production expiry rule and keeps the public page, wrong-redeemer, one-use and
+exhaustion assertions intact.

@@ -11,6 +11,7 @@ import { SQLiteRunStorage, STORAGE_VERSION } from "./storage.js";
 
 const FEN="rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
 const PASSWORD="correct horse battery staple";
+const TEST_NOW="2026-08-13T12:00:00.000Z";
 const executor:EvidenceExecutor={async execute(){return {kind:"eval",source:"engine_validated",values:{centipawns:0}};}};
 const derive=(password:string,salt:Buffer)=>Promise.resolve(createHash("sha256").update(salt).update(password).digest());
 
@@ -22,7 +23,7 @@ const cookie=(response:Response)=>response.headers.get("set-cookie")!.split(";",
 describe("live session platform",()=>{
   const stores:SQLiteRunStorage[]=[];
   afterEach(()=>{for(const store of stores.splice(0))store.close();});
-  function setup(){const storage=new SQLiteRunStorage(":memory:",{onMigration:()=>{}});stores.push(storage);const identity=new IdentityService(storage,{cookieSecure:false,derive});const queue=new EvidenceJobQueue(executor);const service=new RunService(storage,{evidenceQueue:queue,progressStorage:storage});const live=new LiveSessionService(storage,{now:()=>"2026-08-13T12:00:00.000Z",runService:service});return {storage,queue,live,handler:createRestHandler(service,undefined,undefined,identity,undefined,live)};}
+  function setup(){const now=()=>TEST_NOW;const storage=new SQLiteRunStorage(":memory:",{onMigration:()=>{},now});stores.push(storage);const identity=new IdentityService(storage,{cookieSecure:false,derive});const queue=new EvidenceJobQueue(executor);const service=new RunService(storage,{evidenceQueue:queue,progressStorage:storage});const live=new LiveSessionService(storage,{now,runService:service});return {storage,queue,live,handler:createRestHandler(service,undefined,undefined,identity,undefined,live)};}
   async function register(handler:ReturnType<typeof createRestHandler>,handle:string){const response=await request(handler,"POST","/auth/register",{body:{handle,password:PASSWORD}});return {cookie:cookie(response),learner:(await response.json() as any).learner as {id:string;handle:string}};}
 
   it("migrates to the live schema and enforces board control, proposals, and namespaced advisory votes",async()=>{

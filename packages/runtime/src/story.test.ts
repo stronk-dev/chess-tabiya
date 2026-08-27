@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import { attachEvidence, commitMove, createRun, renderReviewStoryEvidence, selectedStoryMoments, storyDeclaredEvidence, storyEvidenceSourceLabels, storyMoments, suggestTitle, type StoryMoment } from "./index.js";
+import { attachEvidence, commitMove, createRun, PRIMARY_EVIDENCE_MANIFEST, renderReviewStoryEvidence, selectedStoryMoments, storyDeclaredEvidence, storyEvidenceSourceLabels, storyMoments, suggestTitle, type StoryMoment } from "./index.js";
 
 if (false) {
   // @ts-expect-error review story rendering consumes only a compiled evidence view.
@@ -49,6 +49,9 @@ describe("grounded game story", () => {
     const base = { moments: [], rank: [], outcome: { kind: "recorded_result" as const, result: "1-0" as const } };
     expect(suggestTitle({ ...base, side: "white" })).toBe("Won at the finish");
     expect(suggestTitle({ ...base, side: "black" })).toBe("The turning point at the finish");
+    const declaration = PRIMARY_EVIDENCE_MANIFEST.projections.find((projection) => projection.id === "derived.story.title" && projection.version === 1);
+    expect(declaration?.semantics).toContain("learner-relative");
+    expect(declaration?.semantics).not.toContain("White-relative");
   });
 
   it("selects by rank before restoring chronology", () => {
