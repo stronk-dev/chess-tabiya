@@ -10129,3 +10129,20 @@ joins: a depth-stable Stockfish category and one-band Maia bounds with mass/deno
 required for 1.0, and no Support, Review, pack, bot or longitudinal binding lands from these drafts.
 Next: run governance/receipt checks, checkpoint the author work, then route all three documents for
 independent review while continuing accepted implementation work.
+
+## 2026-08-27 — evidence-presentation repeat review returns the current-population join
+
+Repeat-reviewed `rfc/evidence-presentation.md` against the live compiled manifest and the D1673
+seal harness. Six original repairs hold, but acceptance remains blocked. The manifest has 210
+bindings and 117 non-machine consumer/projection pairs across 20 consumers; only the authored-claim
+pair has an executable component mapping, so the proposed coverage command would check a product
+mapping the RFC never specifies. [[D1862]] requires a set-equal mapping or bounded set-equal
+consumer-family splits rather than 116 implementer choices.
+
+The [[D1668]] lifecycle repair also still permits `pending` combined with any terminal absence and
+reintroduces a nonexistent node revision instead of the shared event-head/cursor/disclosure stamp.
+[[D1672]] remains open because checkpoint A itself adds the component layer while its owner-only
+design amendment is still blank. Exact return:
+`planning/platform-alignment/evidence-presentation/repeat-buildability-review-2026-08-27.md`.
+Next: run governance, checkpoint the return, and continue another lawful 1.0 dependency while the
+author/owner discharges these three boundaries.
