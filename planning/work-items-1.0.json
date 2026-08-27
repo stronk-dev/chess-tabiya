@@ -8270,15 +8270,18 @@
     {
       "id": "TCH-a31",
       "sourceState": "queued",
-      "state": "queued",
+      "state": "completed",
       "capability": "professional",
       "owner": "professional-workflows",
-      "assignment": "capability:professional",
+      "assignment": "closed",
       "sourceDocument": "ux-teacher-and-classroom.md",
       "sourceSection": "§5.4",
       "sourceHeading": "Teacher and classroom — `ux-teacher-and-classroom.md`",
       "summary": "The desktop grants list satisfies watcher-disclosure; the compact-viewport half does not, and the RFC routes the phone answer to a `/learn` card that names nobody",
       "legacyRoute": "none",
+      "note": "completed 2026-08-27 by the TCH-a3 live-grant projection plus an explicit compact-viewport production assertion; no fourth run tab added",
+      "completion": { "completedOn": "2026-08-27", "evidence": "The /learn submitted-run card names each teacher whose grant currently resolves, remains visible within 390px, and retains the existing revoke control; the archived RFC's compact route is now exercised directly" },
+      "tournamentReady": true,
       "sourceDigest": "sha256:8507f06e7693b4f15f3ae46338761e512f923d40808e0fe486f2df9a6d95e2cd"
     },
     {

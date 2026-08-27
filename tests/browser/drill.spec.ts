@@ -624,7 +624,14 @@ test("a classroom assignment shows who submitted and makes sharing explicit", as
   await expect(confirmation).toContainText("will be able to read this run for up to 90 days");
   await expect(confirmation).toContainText("They do not gain access to your other runs.");
   await confirmation.getByRole("button", { name: "Confirm sharing" }).click();
-  await expect(assigned.getByText("Currently shared with", { exact: false })).toBeVisible();
+  const watcherDisclosure = assigned.getByText("Currently shared with", { exact: false });
+  await expect(watcherDisclosure).toContainText(`@${teacherHandle}`);
+  await submittedPage.setViewportSize({ width: 390, height: 844 });
+  await expect(watcherDisclosure).toBeVisible();
+  const watcherBounds = await watcherDisclosure.boundingBox();
+  expect(watcherBounds).not.toBeNull();
+  expect(watcherBounds!.x + watcherBounds!.width).toBeLessThanOrEqual(390);
+  await submittedPage.setViewportSize({ width: 1440, height: 1000 });
 
   await classrooms.getByRole("button", { name: "Open", exact: true }).click();
   const status = classrooms.getByLabel("Submission status for Najdorf: choose a setup and cross the theory boundary");

@@ -33,6 +33,11 @@ submitted with access available, access revoked or expired, or withdrawn. A subm
 names the learner, pack, assignment, date, and access state; it never adds a mark, score,
 or teacher-facing chess verdict.
 
+The learner's submitted-run card is also the compact-viewport watcher disclosure. It names
+every teacher whose current run grant still resolves and offers revocation; the name is derived
+from live authorization state rather than copied from the original submission. This deliberately
+uses the `/learn` card that survives the compact floor instead of adding a fourth in-run tab.
+
 ## Consent, expiry, and revocation
 
 A learner may submit only a run they host whose `packId` matches the assignment. The

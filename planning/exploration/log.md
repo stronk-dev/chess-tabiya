@@ -9846,3 +9846,12 @@ The authenticated route fixture proves the invited learner receives the named in
 active member no longer receives invitation data. A component fixture binds explanation, identity,
 permissions and refusal copy; the production two-learner classroom journey observes those facts
 before either learner accepts. TCH-a29 is complete.
+
+## 2026-08-27 — The compact watcher disclosure is bound to live grants
+
+TCH-a31's source finding became stale when TCH-a3 added `grantedTeacherHandles`: the archived
+teacher-surface contract routes the compact answer to the `/learn` submitted-run card, and that
+card now names every teacher whose current run grant resolves. The remaining obligation was proof,
+not another surface. The production classroom journey now shrinks the learner to 390 pixels after
+sharing, verifies the named watcher remains visible inside the viewport, and retains the existing
+revocation path. No fourth compact run tab was introduced. TCH-a31 is complete.
