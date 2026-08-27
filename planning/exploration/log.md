@@ -10167,3 +10167,19 @@ Exact return: `planning/learner-modules/repeat-buildability-review-2026-08-27.md
 owner choice is narrow: whether the outpost ruling also returns `pawn_safe_square` to requested
 Sight. Next: update the RFC register/roadmap receipt, verify governance, checkpoint the return and
 continue another foundation dependency without implementing around it.
+
+## 2026-08-27 — module evidence assembly measured; semantic tactics consumer gap found
+
+- Expanded the nine non-empty, non-Guided-Hint learner modules into all 186 declared
+  consumer/projection pairs in `tools/d1865-evidence-assembly-harness/`; 5/5 arms pass on Node 24.
+- Measured 184 pairs resolving at HEAD and two explicit absent dependencies. Guided Hint still has
+  no disclosure projection until its measured family×rung registry exists.
+- Verified the live guidance packet is only a partial assembler: it does not execute edge
+  semantics, candidate/provider operations, compare/story derivations or the future hint compiler.
+- Landed `design/research/module-evidence-assembly.md` with a timing-specific, deduplicated
+  producer-execution shape and able-to-fail closure for the RFC amendment.
+- Found [[D1870]]: the registered observed semantic tactics (deflection, attraction, both clearance
+  forms, interference, zwischenzug and overload exploitation) are absent from every learner-module
+  acceptance set. This joins [[D1067]]'s missing path compiler to an equally missing consumer.
+- Next: author must repair module registration around [[D1863]]–[[D1870]] and the accepted
+  provider/path dependencies; no module UI implementation is honest before this join closes.

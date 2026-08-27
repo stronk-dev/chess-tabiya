@@ -406,12 +406,15 @@ Campaign is unreachable; and a deferred module consumer cannot discharge activat
 shipped context/preset ids remain foundation, but a pill may not claim a preset until compiled
 behavior and its logged module deliveries agree.
 The 2026-08-27 module-registry repeat review verifies the original semantic/staging/novelty repair
-harnesses, then returns the production join on [[D1863]]–[[D1869]]. Browser-local requested help
+harnesses, then returns the production join on [[D1863]]–[[D1870]]. Browser-local requested help
 cannot be derived by a server that forbids it; the module path still calls the projection-only
 string renderer presentation replaces; no operation assembles the 186+R admitted projection
 population; revealing pre/at-commit modules have no claimed disclosure boundary; the legacy
 `assistance.arrows` consumer would duplicate or bypass modules; the eleven branched capability
-sets are unstated; and request chess/rung/checkpoint strings lack authoritative validation.
+sets are unstated; and request chess/rung/checkpoint strings lack authoritative validation. The
+subsequent 186-pair execution census also proves the observed
+deflection/attraction/clearance/interference/zwischenzug/overload family has no learner-module
+consumer even after its separately missing recorded-path compiler lands.
 Registration can proceed only as a real request → server clamp → collector execution → exact F1
 pair → reducer → sealed component → seat path, not as declarations around an empty input list.
 Owner ruling [[D1564]] makes producer coverage part of this exit: the evidence layer owes the

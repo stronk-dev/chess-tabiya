@@ -16,7 +16,7 @@ novelty identity. The exact session/role derivations, post-commit subject orderi
 token and no-fake-run-revision corrections are buildable directions.
 
 The repeat pass then traced the proposed route through the live preset store, producer execution,
-F1 admission and the amended component wire. Seven blockers remain. They are not requests for
+F1 admission and the amended component wire. Eight blockers remain. They are not requests for
 more UI polish: each is an authority or reachability gap that can produce a green registry with
 wrong or permanently empty learner output.
 
@@ -119,6 +119,21 @@ normalization is not server authority.
 with typed production-boundary refusals before a collector/provider runs. Include illegal/stale
 UCI, invalid square, foreign checkpoint and over-ceiling rung negatives.
 
+## R8 — the semantic tactics foundation has no learner consumer (D1870)
+
+The D1865 executable expansion covers all 186 declared non-hint module pairs. None accepts the
+registered observed deflection, attraction, line/square clearance, interference, check
+zwischenzug or overload-exploitation projections. D1067 already establishes that their
+constructors are test-only and `localSemanticEvents` cannot emit multi-edge observations. The
+new finding is the other half: even after a path compiler exists, F1 admission would discard all
+of them from Post-commit Nudge, Review Map and Full Inspector.
+
+**Required repair:** add the recorded-run path compiler as a dependency and publish the exact
+module/timing/form acceptance set for the semantic-wave projections. Join every added pair to the
+pair-keyed presentation mapping and exercise positive, no-witness and broken-boundary cases.
+Engine-PV horizons remain different projections because recorded-run evidence cannot be relabelled
+as hypothetical provider evidence (D1068).
+
 ## Dependency and owner boundary
 
 Acceptance also remains mechanically premature while the RFC's own required inputs are returned:
@@ -140,7 +155,7 @@ Marco must confirm or narrow that one row; an implementation agent may not infer
 
 ## Re-review entry condition
 
-Re-review after R1–R7 are specified against accepted or independently buildable dependencies and
+Re-review after R1–R8 are specified against accepted or independently buildable dependencies and
 the Sight owner choice is recorded. The next pass should start from four real requests—selected
 square, staged move, post-commit node and Review—and prove for each:
 requested intent → server clamp → collector execution → F1 pair admission → reducer → pair-keyed
