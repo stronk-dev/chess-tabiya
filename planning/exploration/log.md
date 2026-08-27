@@ -10007,3 +10007,16 @@ still declares White-relative result verbs. The defect is ledgered and the RFC r
 that stale sentence into `story-title@1`. The exact-member acceptance obligation is discharged;
 the remaining process dependency is extending the shared-resource grammar/checker and replacing
 the draft's `none` claim before independent acceptance.
+
+## 2026-08-27 — The convention register gets its own process boundary
+
+`rfc/semantic-convention-register.md` now owns the last pre-acceptance dependency for D1722. It
+adds a distinct sorted `id@version` claim grammar, collision identity per member, set equality to
+the executable 39-member census and a narrowly bounded pre-landing state: the runtime source may be
+absent only while the landed set is empty and a valid live claim exists. That lets governance land
+before product code without weakening the no-implementation-before-accepted-RFC law.
+
+The process RFC depends on `assistance-config-register` for C9 and therefore owns C10 rather than
+creating a numbering collision. It changes no runtime, evidence, schema, storage, content, web or
+archive bytes. [[D1852]] records the missing register as a separate process defect; independent
+review is the next action.

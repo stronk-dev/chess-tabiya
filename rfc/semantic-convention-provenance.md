@@ -10,7 +10,8 @@
   `design/research/declared-convention-identity-closure.md` and its seven-arm executable harness
 - **Depends on:** implemented `rfc/archive/evidence-contract-manifest.md`; implemented
   `rfc/archive/shared-resource-registers.md`; implemented
-  `rfc/archive/semantic-evidence-selection.md`
+  `rfc/archive/semantic-evidence-selection.md`; draft `rfc/semantic-convention-register.md` must
+  implement before this RFC can be accepted
 - **Parent / amends:** follow-up to `rfc/archive/evidence-contract-manifest.md`
 - **Supersedes / superseded by:** —
 - **Planning:** `planning/semantic-convention-provenance/` (once implementing)
@@ -21,8 +22,9 @@ none
 
 The claim block is intentionally `none` while this document is a draft. This RFC creates a seventh
 shared resource, `semantic-conventions`; the current checked claim grammar knows only six. The
-reviewed 39-member initial census is published in §1.2. Before acceptance, the register/checker must
-gain that resource and this block must become its set-equal membership claim. A private
+reviewed 39-member initial census is published in §1.2 and the exact process repair is
+`semantic-convention-register.md`. Before acceptance, that register/checker must land and this block
+must become its set-equal membership claim. A private
 catalogue-local list or an unregistered exported constant is not an acceptable shortcut.
 
 ## Summary

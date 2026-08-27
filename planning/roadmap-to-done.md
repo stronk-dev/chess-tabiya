@@ -135,8 +135,15 @@ grounding, latency and abstention; selectors compile consumer-specific eligibili
 significance; raw-sentence side channels are gone; modules, bots and Review share the manifest.
 
 Primary RFCs: `pack-capability-contract`, `claim-semantic-anchors`, `tactical-collectors`,
-`semantic-collectors`, `runtime-opening-identity`, `exact-legal-mobility`, `breadth-collectors`,
-`evidence-move-selector`, `shared-candidate-evidence-packet`, `bounded-policy-targets`.
+`semantic-collectors`, `semantic-convention-register`, `semantic-convention-provenance`,
+`runtime-opening-identity`, `exact-legal-mobility`, `breadth-collectors`, `evidence-move-selector`,
+`shared-candidate-evidence-packet`, `bounded-policy-targets`.
+
+The convention foundation now has an explicit two-step landing boundary. The process-only
+`semantic-convention-register` first records an empty landed set plus D1722's exact 39-member live
+claim; only the independently accepted product RFC may then create the runtime declarations and
+convert those claims to landed rows. This preserves the no-implementation-before-acceptance law
+without leaving a new shared semantic authority outside drift/collision checks.
 
 The 2026-08-26 [[D1631]]–[[D1636]] closure makes the shared candidate denominator buildable
 without pretending it is already integrated. The factual packet is a sealed internal receipt over
