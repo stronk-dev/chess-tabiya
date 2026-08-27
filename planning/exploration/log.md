@@ -9974,3 +9974,22 @@ bytes. D1 requires an explicit upstream statement or model replacement/removal b
 CPU tier can ship. E1 uses a loader-traced temporary content allow-list and excludes jobs,
 candidates, sidecars, planning prose and local paths; E2 must later replace it with F3/F4's compiled
 bundle. Independent buildability review and owner acceptance remain before implementation.
+
+## 2026-08-27 — Convention provenance becomes a first-class evidence contract
+
+D1722's completed research is now a draft implementation contract rather than an author handoff.
+`rfc/semantic-convention-provenance.md` separates a fact's primary grounding from the exact
+definition, threshold or observed-window convention that made it true; compiles direct and
+path-specific transitive convention closure; seals that closure through deterministic and external
+voice rendering; and keeps raw ids in Advanced while ordinary modules get optional “How this was
+detected” disclosure.
+
+The draft is total over the measured migration population: 42 projections currently labelled
+`declared_convention` plus the 18 other-grounding dependencies found by the executable D1722
+census. It explicitly refuses same-version meaning rewrites and treats opposition v1/v2 as the
+permanent negative control. No production, content or schema byte moved.
+
+One process dependency is stated rather than bypassed: conventions are a seventh shared resource,
+but the implemented claim grammar knows six. The RFC therefore claims `none` while draft and may
+not be accepted until the register/checker and its claim block carry the exact reviewed initial
+member set. This prevents the convention registry from becoming another unregistered private list.
