@@ -603,6 +603,26 @@ test("a classroom assignment shows who submitted and makes sharing explicit", as
   await expect(status).toContainText("not submitted");
   await expect(status.getByRole("button", { name: `Review @${submittedHandle}'s run` })).toBeVisible();
 
+  const teacherStanding = classrooms.getByRole("region", { name: "Classroom standing" });
+  await teacherStanding.getByRole("button", { name: "Open standing" }).click();
+  await expect(teacherStanding.getByText("Teachers can open and manage the window, but they never publish or appear")).toBeVisible();
+
+  await submittedPage.goto("/live");
+  const submittedClassrooms = submittedPage.getByRole("region").filter({ has: submittedPage.getByRole("heading", { name: "Classrooms" }) });
+  await submittedClassrooms.getByRole("button", { name: "Open", exact: true }).click();
+  const submittedStanding = submittedClassrooms.getByRole("region", { name: "Classroom standing" });
+  await expect(submittedStanding.getByText("Learners choose whether to publish their own result record")).toBeVisible();
+  await submittedStanding.getByRole("button", { name: "Join this standing" }).click();
+  await submittedStanding.getByRole("button", { name: "Publish my record" }).click();
+  await expect(submittedStanding.getByRole("rowheader", { name: `@${submittedHandle}` })).toBeVisible();
+
+  await waitingPage.goto("/live");
+  const waitingClassrooms = waitingPage.getByRole("region").filter({ has: waitingPage.getByRole("heading", { name: "Classrooms" }) });
+  await waitingClassrooms.getByRole("button", { name: "Open", exact: true }).click();
+  const waitingStanding = waitingClassrooms.getByRole("region", { name: "Classroom standing" });
+  await expect(waitingStanding.getByRole("rowheader", { name: `@${submittedHandle}` })).toBeVisible();
+  await expect(waitingStanding.getByRole("button", { name: "Join this standing" })).toBeVisible();
+
   await submittedContext.close();
   await waitingContext.close();
 });
@@ -1339,6 +1359,9 @@ test("a granted spectator follows a run without receiving a write control", asyn
   await spectator.goto(`/play/run/${encodeURIComponent(runId)}`);
   await expect(spectator.getByLabel("Chessboard")).toBeVisible();
   await expect(spectator.getByText("Read-only follower", { exact: true })).toBeVisible();
+  const reviewAccess = spectator.getByRole("complementary", { name: "Review access" });
+  await expect(reviewAccess).toContainText("Review tools open after this attempt reaches its recorded outcome");
+  await expect(reviewAccess).toContainText("Read access remains available now");
   await expect(spectator.getByRole("button", { name: "Take the board on this device" })).toHaveCount(0);
   await expect(spectator.getByRole("button", { name: /^Fork/ })).toBeDisabled();
   await expect(spectator.getByRole("button", { name: "Branch group" })).toBeDisabled();

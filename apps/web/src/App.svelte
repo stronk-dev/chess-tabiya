@@ -357,6 +357,13 @@
   function chooseAssignmentRun(assignmentId:string,runId:string):void{assignmentRunSelection={...assignmentRunSelection,[assignmentId]:runId};}
   function prepareAssignedRun(assignmentId:string):void{const runId=assignmentRunSelection[assignmentId];if(runId)submissionIntent={assignmentId,runId};}
   async function confirmAssignedRun():Promise<void>{if(!submissionIntent)return;await submitAssignedRun(submissionIntent.assignmentId,submissionIntent.runId);submissionIntent=undefined;}
+  function reviewRailCopy(state: NonNullable<typeof session.viewer>["reviewRail"]): string {
+    if (state === "open") return "This submitted attempt is complete. You receive the same disclosed evidence, human-model split, corpus and narration rail as its learner.";
+    if (state === "closed_incomplete") return "Review tools open after this attempt reaches its recorded outcome. Read access remains available now.";
+    if (state === "closed_live_session") return "Review tools are closed while this run has an open live session. Read access remains available; close the session to restore the submitted review rail.";
+    if (state === "closed_shared_not_submitted") return "This run was shared directly, not submitted through an assignment. Read access is available, but the human-model split, corpus and narration review tools are not granted.";
+    return "";
+  }
 
   function relatedAttemptKey(attempt: ProgressAttempt): string {
     return `${attempt.runId}\0${attempt.branchId}`;
@@ -1072,6 +1079,9 @@
         onFirstRehearsalComplete={completeFirstRehearsal}
         registerKeyboardRegion={keyboardDispatcher.registerRegion}
       />
+      {#if session.viewer?.role === "spectator"}
+        <aside class="session-banner" aria-label="Review access"><strong>{session.viewer.reviewRail === "open" ? "Submitted review access" : "Review access limited"}</strong><span>{reviewRailCopy(session.viewer.reviewRail)}</span></aside>
+      {/if}
       {#if activeLiveDetail}
         <aside class="session-banner" aria-label="Live session rail"><strong>{activeLiveDetail.session.title}</strong>{#if activeLiveDetail.match}{@const seated=learner?.id===activeLiveDetail.match.whiteLearnerId||learner?.id===activeLiveDetail.match.blackLearnerId}<span>{activeLiveDetail.match.pausedAt?"Paused — rehearsal is open":activeLiveDetail.match.pauseProposedBy?"Pause proposed":learnerOwnsActiveMatchTurn()?"Your move":"Their move"}</span><div class="row-actions">{#if activeLiveDetail.match.pausedAt}<button type="button" onclick={()=>void operateActiveMatch("resume")}>Resume main line</button>{:else if seated}{#if activeLiveDetail.match.pauseProposedBy===learner?.id}<button type="button" onclick={()=>void operateActiveMatch("withdraw_pause")}>Withdraw pause</button>{:else if activeLiveDetail.match.pauseProposedBy}<button type="button" onclick={()=>void operateActiveMatch("accept_pause")}>Accept pause</button>{:else}<button type="button" onclick={()=>void operateActiveMatch("propose_pause")}>Propose pause</button>{/if}{:else if activeLiveDetail.role==="host"}<button type="button" onclick={()=>void operateActiveMatch("pause")}>Pause for coaching</button>{/if}</div>{:else}<span>{activeLiveDetail.role} · {activeLiveDetail.proposals.filter((item)=>item.status==="open").length} open proposals{activeLiveDetail.vote ? ` · ${activeLiveDetail.vote.total} votes` : ""}</span>{/if}<button type="button" onclick={()=>navigate(routePath({name:"live-session",sessionId:activeLiveDetail!.session.id}))}>Session</button></aside>
       {/if}

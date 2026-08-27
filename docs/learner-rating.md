@@ -35,6 +35,12 @@ opts in and the publication gate admits a point estimate, and never affect the o
 returns no run, branch, move, position, or evidence data and permanently states that its games
 were played alone against a bot and were not witnessed.
 
+Before any publish action, the client states that entry is learner-chosen and that teachers may
+manage the time window but never publish or appear in the standing. Event marks carry the visible
+verb and date (for example, “Beat band 2200 · …”), so touch users do not have to discover the
+meaning through a hover title. A rating object without a publishable point estimate renders as
+not shown and never leaks an interval-only pseudo-cell.
+
 The authenticated shell exposes the learner's measured record at `/rating`. It renders only the
 server-shaped publication: no point estimate appears when the server abstains, every visible
 estimate carries its interval and disclosures, marks name the recorded win event rather than a

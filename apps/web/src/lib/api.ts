@@ -89,6 +89,12 @@ export interface RunGraph {
     readonly leaseHeldBy: LeaseIdentity;
     readonly seatedInContest: boolean;
     readonly reviewing: boolean;
+    readonly reviewRail:
+      | "not_applicable"
+      | "open"
+      | "closed_incomplete"
+      | "closed_live_session"
+      | "closed_shared_not_submitted";
   };
   readonly nodes: readonly Node[];
   readonly branches: DrillRun["branches"];

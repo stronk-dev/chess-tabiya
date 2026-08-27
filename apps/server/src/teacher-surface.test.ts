@@ -93,12 +93,40 @@ describe("teacher-surface consent storage", () => {
     storage.submitAssignment({ assignmentId: "assignment-a", learnerId: learner.id, runId: terminal.id, grantedLearnerIds: [], submittedAt: AT, accessExpiresAt: EXPIRES, withdrawnAt: null }, [teacher.id]);
     const service = new RunService(storage);
     const teacherPrincipal = { learnerId: teacher.id, handle: teacher.handle };
-    expect(service.graph(terminal.id, teacherPrincipal).viewer).toMatchObject({ role: "spectator", reviewing: true, seatedInContest: false });
+    expect(service.graph(terminal.id, teacherPrincipal).viewer).toMatchObject({
+      role: "spectator",
+      reviewing: true,
+      reviewRail: "open",
+      seatedInContest: false,
+    });
 
     storage.createLiveSession({ id: "review-session", runId: terminal.id, kind: "academy", title: "Review", boardControl: "host_directed", createdBy: learner.id, at: AT });
-    expect(service.graph(terminal.id, teacherPrincipal).viewer.reviewing).toBe(false);
+    expect(service.graph(terminal.id, teacherPrincipal).viewer).toMatchObject({
+      reviewing: false,
+      reviewRail: "closed_live_session",
+    });
     storage.closeLiveSession("review-session", learner.id, AT);
-    expect(service.graph(terminal.id, teacherPrincipal).viewer.reviewing).toBe(true);
+    expect(service.graph(terminal.id, teacherPrincipal).viewer).toMatchObject({ reviewing: true, reviewRail: "open" });
+
+    const sharedTerminal = commitMove(createRun({
+      id: "shared-terminal", packId: "pack-a", packDigest: `sha256:${"7".repeat(64)}`,
+      startFen: "7k/8/5KQ1/8/8/8/8/8 w - - 0 1", seed: 3, createdAt: AT,
+      policyConfig: { seedMode: "fixed", locus: { executedAt: "server", engineIds: [], modelIds: [] } },
+    }), "g6g7", { at: AT }).run;
+    storage.create(sharedTerminal, { writerId: "shared-writer", learnerId: learner.id });
+    storage.grantRole(sharedTerminal.id, teacher.id, "spectator", { writerId: "shared-writer", learnerId: learner.id }, AT);
+    expect(service.graph(sharedTerminal.id, teacherPrincipal).viewer).toMatchObject({
+      reviewing: false,
+      reviewRail: "closed_shared_not_submitted",
+    });
+
+    const sharedIncomplete = drillRun("shared-incomplete");
+    storage.create(sharedIncomplete, { writerId: "incomplete-writer", learnerId: learner.id });
+    storage.grantRole(sharedIncomplete.id, teacher.id, "spectator", { writerId: "incomplete-writer", learnerId: learner.id }, AT);
+    expect(service.graph(sharedIncomplete.id, teacherPrincipal).viewer).toMatchObject({
+      reviewing: false,
+      reviewRail: "closed_incomplete",
+    });
 
     const promotionStart = createRun({
       id: "promotion-run", packId: "pack-a", packDigest: `sha256:${"7".repeat(64)}`,

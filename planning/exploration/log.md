@@ -9766,3 +9766,22 @@ journey creates a classroom, invites and accepts two learners, assigns a real pa
 learner's run, and verifies the teacher sees that learner as submitted and the other as not submitted.
 TCH-a1/a2/a3/a12/a13/a14/a15/a16/a17/a18 complete; TCH-a33 remains open only for its multi-account
 standing/read-symmetry arm, while classroom, assignment and academy browser coverage now exists.
+
+## 2026-08-27 — Review absence gets a reason and the standing says what it is
+
+The server now projects a closed `reviewRail` state beside the existing permission boolean. For a
+spectator it distinguishes an incomplete attempt, an open live session, a direct share that was not
+an assignment submission, and the fully open submitted-review case. The run surface renders those
+facts as read-access boundaries; it no longer asks a teacher to infer policy from missing controls or
+discover it through an `ASSISTANCE_WITHHELD` response. Service fixtures make each state reachable,
+and component plus production-spectator journeys bind the client copy to the server state.
+
+The classroom standing now explains self-publication before its first action and says that teachers
+manage the window but never publish or appear. Event marks visibly name the beat-band event and date
+instead of hiding the verb in a hover title, and an interval without a point estimate renders no
+pseudo-rating. The existing three-account production journey now opens a standing, publishes one
+learner, and proves the non-publishing learner can read that entry. This closes the missing browser
+coverage without deciding whether that read symmetry is desirable; TCH-b2 remains the owner decision.
+
+TCH-a20/a22/a24/a25/a26/a27/a33 complete. D1482 remains open for its separate read-symmetry ruling
+and the persisted abandonment-toggle amendment; neither was smuggled into this defect pass.

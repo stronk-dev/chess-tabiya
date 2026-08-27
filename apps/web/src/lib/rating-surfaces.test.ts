@@ -74,7 +74,19 @@ describe("classroom standing surface", () => {
       standing: { classroomId: "class-one", openedByLearnerId: "teacher", windowFrom: "2026-08-01T00:00:00.000Z", windowTo: null, openedAt: "2026-08-01T00:00:00.000Z", closedAt: null },
       limitation,
       entries: [
-        { learnerId: "learner-b", handle: "zebra", marks: [], record: { wins: 2, draws: 0, losses: 1, games: 3, points: 2, abandoned: 0, byOpponentBand: [] } },
+        {
+          learnerId: "learner-b",
+          handle: "zebra",
+          marks: [{ mark: "gold", band: 2200, calibrationId: "calibration-a", earnedAt: "2026-08-12T00:00:00.000Z" }],
+          record: { wins: 2, draws: 0, losses: 1, games: 3, points: 2, abandoned: 0, byOpponentBand: [] },
+          rating: {
+            state: "provisional",
+            interval: [{ kind: "band", value: 1420 }, { kind: "band", value: 1780 }],
+            ratedGames: 3,
+            abandonedGames: 0,
+            group: "not-publishable",
+          },
+        },
         { learnerId: "learner-c", handle: "alpha", marks: [], record: { wins: 1, draws: 1, losses: 1, games: 3, points: 1.5, abandoned: 0, byOpponentBand: [] } },
       ],
     };
@@ -85,6 +97,11 @@ describe("classroom standing surface", () => {
     } });
     await vi.waitFor(() => expect(document.body.textContent).toContain("@zebra"));
     expect(document.body.textContent).toContain(limitation);
+    expect(document.body.textContent).toContain("Learners choose whether to publish their own result record");
+    expect(document.body.textContent).toContain("Teachers can open and manage the window, but they never publish or appear");
+    expect(document.body.textContent).toContain("Beat band 2200");
+    expect(document.querySelector("tbody tr td:last-child")?.textContent).toBe("Not shown");
+    expect(document.querySelector("tbody tr td:last-child")?.textContent).not.toContain("Interval");
     const handles = [...document.querySelectorAll("tbody th")].map((cell) => cell.textContent?.trim());
     expect(handles).toEqual(["@zebra", "@alpha"]);
 

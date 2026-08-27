@@ -61,9 +61,13 @@ all three conditions hold:
 3. no live session on the run is open.
 
 The predicate is projected as `viewer.reviewing` and is used by every server guidance
-route and by the client assistance controller. A manually granted spectator does not
-receive it. An open live session closes the review rail; closing the session allows the
-predicate to be derived again from durable consent and outcome evidence.
+route and by the client assistance controller. The graph also projects one factual
+`viewer.reviewRail` state: `open`, `closed_incomplete`, `closed_live_session`,
+`closed_shared_not_submitted`, or `not_applicable`. The run surface renders that state
+instead of leaving a reviewer to discover a missing control or a refused request. A
+manually granted spectator receives read access but not the review rail. An open live
+session closes the rail; closing the session allows it to be derived again from durable
+consent and outcome evidence.
 
 For a native match, `viewer.seatedInContest` is true only while the live session is open
 and the learner occupies its White or Black seat. A seated host is capped exactly like a

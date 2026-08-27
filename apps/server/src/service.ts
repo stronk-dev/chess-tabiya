@@ -146,6 +146,12 @@ export interface RunViewer {
   readonly leaseHeldBy: { readonly learnerId: string; readonly handle: string };
   readonly seatedInContest: boolean;
   readonly reviewing: boolean;
+  readonly reviewRail:
+    | "not_applicable"
+    | "open"
+    | "closed_incomplete"
+    | "closed_live_session"
+    | "closed_shared_not_submitted";
 }
 
 export interface RunGraph {
@@ -1095,6 +1101,7 @@ export class RunService {
         leaseHeldBy: Object.freeze({ learnerId: holder.id, handle: holder.handle }),
         seatedInContest: assistance.seatedInContest,
         reviewing: assistance.reviewing,
+        reviewRail: assistance.reviewRail,
       }),
       nodes: publicNodes(run),
       branches: run.branches,
@@ -2062,20 +2069,29 @@ export class RunService {
     return Object.freeze({session,state});
   }
 
-  #assistanceContext(runId: string, principal: Principal, run: DrillRun, _role: RunRole) {
+  #assistanceContext(runId: string, principal: Principal, run: DrillRun, role: RunRole) {
     const session = this.#storage.liveSessionByRun?.(runId);
     const liveSessionOpen = session !== undefined && session.closedAt === undefined;
     const match = session === undefined ? undefined : this.#storage.matchState?.(session.id);
     const seatedInContest = liveSessionOpen && match !== undefined &&
       (match.whiteLearnerId === principal.learnerId || match.blackLearnerId === principal.learnerId);
+    const grantMintedBySubmission = this.#storage.grantMintedBySubmission(runId, principal.learnerId);
+    const outcomeReached = run.events.some((event) => event.type === "outcome.reached");
+    const reviewing = reviewingGrant({ run, grantMintedBySubmission, liveSessionOpen });
+    const reviewRail = role !== "spectator"
+      ? "not_applicable"
+      : reviewing
+        ? "open"
+        : !outcomeReached
+          ? "closed_incomplete"
+          : liveSessionOpen
+            ? "closed_live_session"
+            : "closed_shared_not_submitted";
     return Object.freeze({
       seatedInContest,
       workflowContext: deriveWorkflowContext({ sessionKind: run.sessionKind, feedbackPolicy: run.feedbackPolicy, ...(session === undefined ? {} : { liveKind: session.kind }) }),
-      reviewing: reviewingGrant({
-        run,
-        grantMintedBySubmission: this.#storage.grantMintedBySubmission(runId, principal.learnerId),
-        liveSessionOpen,
-      }),
+      reviewing,
+      reviewRail,
     });
   }
 

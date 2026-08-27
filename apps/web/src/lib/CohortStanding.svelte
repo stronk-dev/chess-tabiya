@@ -57,11 +57,14 @@
   }
 
   function iso(value: string): string { return new Date(value).toISOString(); }
-  function markBand(mark: CohortStandingEntry["marks"][number]): number { return mark.band; }
+  function markLabel(mark: CohortStandingEntry["marks"][number]): string {
+    return `Beat band ${mark.band} · ${new Date(mark.earnedAt).toLocaleDateString()}`;
+  }
 </script>
 
 <section class="standing" aria-labelledby="cohort-standing-title">
   <div class="heading-row"><div><p class="eyebrow">Optional shared record</p><h4 id="cohort-standing-title">Classroom standing</h4></div>{#if view?.standing.closedAt}<span class="status">Closed</span>{:else if view}<span class="status">Open</span>{/if}</div>
+  <p class="honest">Learners choose whether to publish their own result record to this classroom. Teachers can open and manage the window, but they never publish or appear in the standing.</p>
 
   {#if loading}
     <p role="status">Loading standing…</p>
@@ -104,10 +107,10 @@
         <thead><tr><th>Learner</th><th>Marks</th><th>Record</th><th>By opponent band</th><th>Rating</th></tr></thead>
         <tbody>{#each view.entries as entry}<tr class:self={entry.learnerId === learnerId}>
           <th scope="row">@{entry.handle}</th>
-          <td>{#each entry.marks as mark}<span class={`mark ${mark.mark}`} title={`Beat band ${markBand(mark)} on ${new Date(mark.earnedAt).toLocaleDateString()}`}>{markBand(mark)}</span>{:else}<span class="muted">None recorded</span>{/each}</td>
+          <td>{#each entry.marks as mark}<span class={`mark ${mark.mark}`}>{markLabel(mark)}</span>{:else}<span class="muted">None recorded</span>{/each}</td>
           <td>{entry.record ? `${entry.record.wins}–${entry.record.draws}–${entry.record.losses}` : "Hidden"}{#if entry.record}<small>{entry.record.games} games · {entry.record.abandoned} abandoned</small>{/if}</td>
           <td>{#if entry.record?.byOpponentBand.length}{#each entry.record.byOpponentBand as split}<span class="split">{split.opponentBand}: {split.wins}–{split.draws}–{split.losses}</span>{/each}{:else}<span class="muted">Not shown</span>{/if}</td>
-          <td>{#if entry.rating}{entry.rating.pointEstimate ? publishedBandLabel(entry.rating.pointEstimate) : ""}<small>Interval {publishedBandInterval(entry.rating)}</small>{:else}<span class="muted">Not shown</span>{/if}</td>
+          <td>{#if entry.rating?.pointEstimate !== undefined}{publishedBandLabel(entry.rating.pointEstimate)}<small>Interval {publishedBandInterval(entry.rating)}</small>{:else}<span class="muted">Not shown</span>{/if}</td>
         </tr>{:else}<tr><td colspan="5">No learner has published an entry.</td></tr>{/each}</tbody>
       </table></div>
       <ul class="standing-cards" aria-label="Classroom standing">
@@ -115,10 +118,10 @@
           <li class:self={entry.learnerId === learnerId}>
             <h5>@{entry.handle}</h5>
             <dl>
-              <div><dt>Marks</dt><dd>{#each entry.marks as mark}<span class={`mark ${mark.mark}`} title={`Beat band ${markBand(mark)} on ${new Date(mark.earnedAt).toLocaleDateString()}`}>{markBand(mark)}</span>{:else}<span class="muted">None recorded</span>{/each}</dd></div>
+              <div><dt>Marks</dt><dd>{#each entry.marks as mark}<span class={`mark ${mark.mark}`}>{markLabel(mark)}</span>{:else}<span class="muted">None recorded</span>{/each}</dd></div>
               <div><dt>Record</dt><dd>{entry.record ? `${entry.record.wins}–${entry.record.draws}–${entry.record.losses}` : "Hidden"}{#if entry.record}<small>{entry.record.games} games · {entry.record.abandoned} abandoned</small>{/if}</dd></div>
               <div><dt>By opponent band</dt><dd>{#if entry.record?.byOpponentBand.length}{#each entry.record.byOpponentBand as split}<span class="split">{split.opponentBand}: {split.wins}–{split.draws}–{split.losses}</span>{/each}{:else}<span class="muted">Not shown</span>{/if}</dd></div>
-              <div><dt>Rating</dt><dd>{#if entry.rating}{entry.rating.pointEstimate ? publishedBandLabel(entry.rating.pointEstimate) : ""}<small>Interval {publishedBandInterval(entry.rating)}</small>{:else}<span class="muted">Not shown</span>{/if}</dd></div>
+              <div><dt>Rating</dt><dd>{#if entry.rating?.pointEstimate !== undefined}{publishedBandLabel(entry.rating.pointEstimate)}<small>Interval {publishedBandInterval(entry.rating)}</small>{:else}<span class="muted">Not shown</span>{/if}</dd></div>
             </dl>
           </li>
         {:else}
@@ -151,7 +154,7 @@
   thead th { color: var(--muted); font-size: .7rem; text-transform: uppercase; }
   tbody tr.self { background: color-mix(in srgb, var(--accent) 8%, transparent); }
   td small { display: block; margin-top: .2rem; }
-  .mark { display: inline-flex; min-width: 2rem; justify-content: center; margin: .1rem; padding: .2rem .35rem; border-radius: 999px; }
+  .mark { display: inline-flex; justify-content: center; margin: .1rem; padding: .2rem .45rem; border-radius: 999px; font-size: .78rem; overflow-wrap: anywhere; }
   .bronze { background: color-mix(in srgb, var(--danger) 12%, var(--paper)); } .silver { background: color-mix(in srgb, var(--muted) 14%, var(--paper)); } .gold { background: color-mix(in srgb, var(--warning) 16%, var(--paper)); }
   .split { display: block; white-space: nowrap; }
   details { margin-top: 1rem; }

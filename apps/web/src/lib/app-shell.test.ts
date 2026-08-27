@@ -302,6 +302,40 @@ describe("application shell", () => {
     await unmount(component);
   });
 
+  it("states why a spectator's submitted review rail is closed", async () => {
+    const base = api();
+    const spectatorApi: DrillClientApi = {
+      ...base,
+      async graph() {
+        return {
+          id: run.id,
+          viewer: {
+            role: "spectator" as const,
+            mayWrite: false,
+            holdsLease: false,
+            leaseHeldBy: { learnerId: "learner-a", handle: "alice" },
+            seatedInContest: false,
+            reviewing: false,
+            reviewRail: "closed_live_session" as const,
+          },
+          nodes: run.nodes,
+          branches: run.branches,
+          activeCursor: run.activeCursor,
+        };
+      },
+    };
+    history.replaceState(null, "", "/play/run/route-run");
+    const component = mount(App, {
+      target: target(),
+      props: { api: spectatorApi, router: new HistoryRouter(window), storage: new MemoryStorage() },
+    });
+
+    await vi.waitFor(() => expect(document.querySelector("aside[aria-label='Review access']")?.textContent)
+      .toContain("Review tools are closed while this run has an open live session"));
+    expect(document.querySelector("aside[aria-label='Review access']")?.textContent).toContain("Read access remains available");
+    await unmount(component);
+  });
+
   it("sends the author's title when distilling a completed run", async () => {
     const terminalRun = commitMove(createRun({
       id: "distill-run",
@@ -347,6 +381,7 @@ describe("application shell", () => {
             leaseHeldBy: { learnerId: "learner-a", handle: "alice" },
             seatedInContest: false,
             reviewing: false,
+            reviewRail: "not_applicable" as const,
           },
           nodes: terminalRun.nodes,
           branches: terminalRun.branches,

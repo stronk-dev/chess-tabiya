@@ -347,6 +347,7 @@ class FakeApi implements DrillClientApi {
         leaseHeldBy: { learnerId: "learner-a", handle: "alice" },
         seatedInContest: false,
         reviewing: false,
+        reviewRail: "not_applicable" as const,
       },
       nodes: run.nodes,
       branches: run.branches,
