@@ -3,7 +3,7 @@
   "authority": "planning/roadmap-to-done.md",
   "sourceDigests": {
     "roadmap": "sha256:510fb4f59719be62021ae1428857e793f2bba203a0bb4dd7ef68b05fefcb16e0",
-    "workItems": "sha256:8892e3671d32612d5d1388cf730489859396b59bf59303b16fee5bd68c904bd3",
+    "workItems": "sha256:6e77afd4ce432828c0f9824be63f6d437ebab4c34f5e86da09bcc167c0228ff2",
     "rfcRegister": "sha256:3a4281990706bfa8957ed0c74fd895c9a0abf56178624eec8334c2f8fe32c3f1",
     "uxIndex": "sha256:265db3cdaee3bb7bccb0a3f07aaabdc9e27f15e719c8efcf949d713516f131f8",
     "router": "sha256:85169850d104e0f24b2bd1ea53237e677eab0bb4f4a6af91e53728c45b9517b9",
@@ -19,10 +19,10 @@
     },
     "assignedRfcs": 50,
     "workItems": {
-      "queued": 190,
+      "queued": 186,
       "blocked_owner": 61,
       "blocked_rfc": 119,
-      "completed": 175,
+      "completed": 179,
       "retired": 24
     },
     "dimensionStates": {
@@ -822,10 +822,10 @@
       "owner": "professional-workflows",
       "rfcCount": 1,
       "workItems": {
-        "queued": 14,
+        "queued": 10,
         "blocked_owner": 10,
         "blocked_rfc": 1,
-        "completed": 22,
+        "completed": 26,
         "retired": 1
       },
       "routes": {

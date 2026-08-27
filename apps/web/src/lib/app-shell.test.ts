@@ -20,6 +20,7 @@ import type {
   AssignedPack,
   ClassroomDetail,
   DrillClientApi,
+  LiveSessionSummary,
   LiveSessionDetail,
   PackDraft,
   PackSummary,
@@ -497,6 +498,55 @@ describe("application shell", () => {
     }
 
     expect(document.body.textContent).toContain("/missing");
+    await unmount(component);
+  });
+
+  it("renders only factual triage signals on the live wall", async () => {
+    const wallSession: LiveSessionSummary = {
+      id: "session-wall",
+      runId: run.id,
+      kind: "match",
+      title: "Student board",
+      boardControl: "match",
+      rotationCursor: 0,
+      createdBy: "learner-a",
+      createdAt: "2026-08-27T09:00:00.000Z",
+      board: {
+        activeFen: run.nodes[0]!.fen,
+        objectiveState: "active",
+        sideToMove: "black",
+        plyCount: 7,
+        pausedAt: "2026-08-27T09:08:00.000Z",
+        leaseHeldBy: { learnerId: "learner-black", handle: "student-black" },
+        lastMoveAt: "2026-08-27T09:07:00.000Z",
+        players: {
+          white: { learnerId: "learner-white", handle: "student-white" },
+          black: { learnerId: "learner-black", handle: "student-black" },
+        },
+      },
+    };
+    const wallApi: DrillClientApi = {
+      ...api(),
+      async liveSessions() { return [wallSession]; },
+      async classrooms() { return []; },
+    };
+    history.replaceState(null, "", "/live");
+    const component = mount(App, {
+      target: target(),
+      props: { api: wallApi, router: new HistoryRouter(window), storage: new MemoryStorage() },
+    });
+
+    const card = await vi.waitFor(() => {
+      const candidate = [...document.querySelectorAll(".live-wall article")].find((article) => article.textContent?.includes("Student board"));
+      expect(candidate).toBeDefined();
+      return candidate!;
+    });
+    expect(card.textContent).toContain("@student-black to move");
+    expect(card.textContent).toContain("paused since");
+    expect(card.textContent).toContain("Objective state: active");
+    expect(card.textContent).toContain("Last move");
+    expect(document.body.textContent).toContain("never ordered or labelled by engine evaluation");
+    expect(card.textContent).not.toContain("struggling");
     await unmount(component);
   });
 

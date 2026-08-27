@@ -9785,3 +9785,17 @@ coverage without deciding whether that read symmetry is desirable; TCH-b2 remain
 
 TCH-a20/a22/a24/a25/a26/a27/a33 complete. D1482 remains open for its separate read-symmetry ruling
 and the persisted abandonment-toggle amendment; neither was smuggled into this defect pass.
+
+## 2026-08-27 — The simul wall gains facts without a coach verdict
+
+The session summary now carries the active node's `objectiveState` beside its existing board facts.
+Wall cards render the seated handle whose turn it is, the pause timestamp, last committed move time
+or an honest none state, the objective state, lease holder and ply count. The source order remains
+unchanged. No evaluation, “struggling” label or inferred urgency is computed, and the surface says
+that boundary explicitly.
+
+The server route fixture binds objective and activity bytes; a component fixture exercises a paused
+match with named seats; and the production academy journey returns through `/live` and observes the
+empty-move, side-to-move and objective states before reopening its overlay. TCH-a4/a7/a8/a9 close.
+D1479 remains open only for the owner choice to adopt elapsed-time ordering and the broader doctrine;
+this pass does not make that product decision through a sort function.

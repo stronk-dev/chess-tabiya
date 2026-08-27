@@ -508,6 +508,13 @@ test("Live turns a run into a session and exposes a chrome-free overlay", async 
   await expect(page.getByText("Which plan? · open")).toBeVisible();
   await expect(page.getByText("Bishop f4: 0")).toBeVisible();
   await expect(page.getByText("No votes yet.")).toBeVisible();
+  await page.goto("/live");
+  const wallCard = page.locator(".live-wall article").filter({ hasText: "academy session" });
+  await expect(wallCard).toContainText("White to move");
+  await expect(wallCard).toContainText("Objective state: active");
+  await expect(wallCard).toContainText("No move committed yet");
+  await expect(page.getByText("never ordered or labelled by engine evaluation")).toBeVisible();
+  await wallCard.getByRole("button", { name: "Open" }).click();
   await page.getByRole("button", { name: "Open overlay" }).click();
   await expect(page.getByLabel("Live session overlay")).toBeVisible();
   await expect(page.getByLabel("Chessboard")).toBeVisible();

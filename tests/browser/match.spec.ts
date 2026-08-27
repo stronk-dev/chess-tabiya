@@ -142,7 +142,7 @@ test("two learners alternate a native match, pause to branch, and return to the 
     await coach.page.goto("/live");
     const wall = coach.page.getByRole("article").filter({ hasText: "match session" });
     await expect(wall).toContainText(`@${white.handle} vs @${black.handle}`);
-    await expect(wall).toContainText("white to move");
+    await expect(wall).toContainText(`@${white.handle} to move`);
     await expect(wall.getByLabel("Chessboard")).toBeVisible();
     await wall.getByRole("button", { name: "Open" }).click();
     await expect(coach.page).toHaveURL(new RegExp(`/live/session/${sessionId}$`));

@@ -95,9 +95,13 @@ journal entry commit atomically.
 
 ## HTTP and browser surfaces
 
-`/sessions` lists and creates sessions. Each summary includes the active FEN, side to
-move, mainline ply count, pause state, lease holder, last-move time, and match players,
-allowing the `/live` simul wall to poll all granted boards in one request. Nested routes
+`/sessions` lists and creates sessions. Each summary includes the active FEN, recorded
+objective state, side to move, mainline ply count, pause state, lease holder,
+last-move time, and match players, allowing the `/live` simul wall to poll all granted
+boards in one request. The wall resolves the side to the seated handle when one exists,
+states pause and last-move times, and presents the objective state. These are factual
+triage signals; the wall neither computes an evaluation nor sorts or labels a learner by
+one. Nested routes
 expose session detail, the journal, board handoff, match pause operations, friend links,
 proposals, vote windows, invitations, and Arena leg imports. All use the
 existing authenticated cookie and per-run grants; an ungranted caller receives the same

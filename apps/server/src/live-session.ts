@@ -100,7 +100,7 @@ export class LiveSessionService {
     const main=stored.run.branches[0]!,plies=stored.run.nodes.filter((candidate)=>candidate.branchId===main.id&&candidate.parentId!==null);
     const match=this.#storage.matchState(session.id);
     const player=(learnerId:string|null)=>{if(learnerId===null)return null;const learner=this.#storage.learnerById(learnerId);if(learner===undefined)throw new ServerError("STORAGE_FAILURE","Match player is missing");return Object.freeze({learnerId:learner.id,handle:learner.handle});};
-    return Object.freeze({...session,board:Object.freeze({activeFen:node.fen,sideToMove:node.fen.split(" ")[1]==="w"?"white" as const:"black" as const,plyCount:plies.length,pausedAt:match?.pausedAt??null,leaseHeldBy:Object.freeze({learnerId:holder.id,handle:holder.handle}),lastMoveAt:plies.at(-1)?.createdAt??null,...(match===undefined?{}:{players:Object.freeze({white:player(match.whiteLearnerId),black:player(match.blackLearnerId)})})}),...(match===undefined?{}:{match})});
+    return Object.freeze({...session,board:Object.freeze({activeFen:node.fen,objectiveState:node.objectiveState,sideToMove:node.fen.split(" ")[1]==="w"?"white" as const:"black" as const,plyCount:plies.length,pausedAt:match?.pausedAt??null,leaseHeldBy:Object.freeze({learnerId:holder.id,handle:holder.handle}),lastMoveAt:plies.at(-1)?.createdAt??null,...(match===undefined?{}:{players:Object.freeze({white:player(match.whiteLearnerId),black:player(match.blackLearnerId)})})}),...(match===undefined?{}:{match})});
   })); }
 
   detail(sessionId:string,principal:Principal):LiveSessionDetail {

@@ -1,4 +1,4 @@
-import { LIVE_SESSION_KINDS, type LiveSessionKind, type MarkBrush } from "@chess-tabiya/runtime";
+import { LIVE_SESSION_KINDS, type LiveSessionKind, type MarkBrush, type ObjectiveState } from "@chess-tabiya/runtime";
 
 import type { LeaseIdentity, RunRole } from "./storage.js";
 
@@ -134,6 +134,7 @@ export interface MatchState {
 
 export interface LiveBoardSummary {
   readonly activeFen: string;
+  readonly objectiveState: ObjectiveState;
   readonly sideToMove: "white" | "black";
   readonly plyCount: number;
   readonly pausedAt: string | null;
