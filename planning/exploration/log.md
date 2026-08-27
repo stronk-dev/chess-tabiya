@@ -10238,3 +10238,24 @@ continue another foundation dependency without implementing around it.
   `planning/platform-alignment/theory-drill/independent-buildability-review-2026-08-27.md`.
 - Next: author amendment in the review's dependency order, one owner/product ruling for [[D1887]]
   unless living intent already settles it, then repeat independent buildability review.
+
+## 2026-08-27 — theory knowledge pipeline returned on eleven buildability blockers
+
+- Independently reviewed the complete offline theory-builder RFC against the live evidence
+  compiler/collectors, sourcing client and licence checker, voice boundary, ignored source store,
+  release topology and the official CC/SPDX/SQLite contracts.
+- Preserved the measured direction: a separate allow-listed offline compiler, exact applicability
+  before lexical selection, one immutable local artifact, honest-empty absence, no vector service
+  and no request-time scraping.
+- Returned implementation on [[D1888]]–[[D1898]]: the passage type loses applicability origin;
+  manifest metadata is mistaken for an executor and FEN cannot ground event/path motifs; multi-key
+  set algebra is undefined; timestamps make bundle identity nondeterministic; clean checkouts lack
+  citation proof bytes; a quotation string cannot seal attribution; licence and source lifecycle
+  rules are incomplete; the fetch contract leaves rebinding/redirect authority open; raw FTS input
+  and order are undefined; and principle citations do not join to complete attribution.
+- Refreshed one stale dependency: runtime opening identity and both catalogue projections now ship,
+  so those ground paths must execute rather than remain `key_ground_missing` by default.
+- Exact return:
+  `planning/platform-alignment/knowledge-retrieval/independent-buildability-review-2026-08-27.md`.
+- Next: author amendment in the review's dependency order, O5 product-direction ruling and F3
+  dependency discharge, then repeat independent buildability review.

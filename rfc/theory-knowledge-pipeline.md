@@ -1,9 +1,8 @@
 # RFC: Theory knowledge pipeline
 
-- **Status:** draft — 2026-08-23. The F4 provenance compiler. Ready for review; **acceptance is
-  blocked by two named things, neither of them scope** (§14): owner decision **O5**, which is
-  drafted and ready and has never been ruled, and **F3** (`pack-capability-contract.md`), which is
-  a draft rather than an accepted RFC
+- **Status:** draft — **returned 2026-08-27 by independent buildability review on
+  [[D1888]]–[[D1898]]**. The exact/offline F4 direction survives; author amendment and repeat
+  review are required before implementation. O5 and F3 remain separate acceptance dependencies
 - **Author:** claude (on the [[D1310]] mandate read; [[D1330]] live-debt **rank 8**)
 - **Created:** 2026-08-23
 - **Design refs:** `design/05-in-run-experience.md` §3 (the assistance ladder — rung 5 *"Authored
@@ -1237,6 +1236,15 @@ Proposed — ids assigned at landing; head was **D1373** at drafting. (The wave 
 
 ## Changelog
 
+- 2026-08-27: **returned by independent buildability review on [[D1888]]–[[D1898]].** The review
+  found the stored passage type merges the derived/authored key origins its later rules require;
+  manifest declarations do not provide executable grounds and a FEN cannot evaluate transition/
+  path motifs; multi-key eligibility has no set algebra; `generatedAt` makes bundle identity
+  nondeterministic; a clean checkout lacks the source bytes P6 needs; one quotation string cannot
+  seal attribution; the proposed licence/source lifecycle is incomplete; the HTTP contract leaves
+  DNS rebinding/redirect authority open; raw FTS input/order is undefined; and principle citations
+  do not join to full attribution. It also refreshes the now-landed opening projections. Exact
+  return: `planning/platform-alignment/knowledge-retrieval/independent-buildability-review-2026-08-27.md`.
 - 2026-08-23: created. Drafted from the landed R4 dossier and its six-arm experiment on the
   [[D557]] owner ask, routed as [[D1330]] live-debt rank 8. Four corrections re-derived at HEAD
   rather than carried: the thirteen principle entries are **13/13 uncited consumers**, not a
