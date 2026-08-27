@@ -10350,3 +10350,17 @@ continue another foundation dependency without implementing around it.
 - Exact return: `planning/provider-health-degradation/independent-buildability-review-2026-08-27.md`.
 - Next: amend provider instance identity and the total state algebra before the compiler/persistence
   repairs, then repeat review and rerun R18.
+
+## 2026-08-27 — AssistanceConfig register returned on one false-green
+
+- Independently reviewed the process-only assistance register. Rule-7 eligibility, semantic alias
+  resolution, one next-head writer, factual v1-v4 history and the product-byte boundary survive.
+- Added a disposable three-arm harness. It proves the proposed C9 accepts a changed v4 digest when
+  the unchanged head 4 has the reserved lane-5 claimant ([[D1916]]). A future claim may reserve
+  ownership; it cannot authorize current-head drift.
+- The same harness reproduced the browser parser's unknown-field acceptance and type/parser split,
+  but those are already exactly owned by [[D1629]] in Guided Hint and were not duplicated or used to
+  widen this process RFC.
+- Exact return: `planning/assistance-config-register/independent-buildability-review-2026-08-27.md`.
+- Next: remove the claim-based drift exception, add crossed atomic-landing fixtures, repeat the
+  focused review, then implement the register before v5/presets.

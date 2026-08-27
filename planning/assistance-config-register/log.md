@@ -23,3 +23,12 @@ the hand-written browser parser/migrations to runtime's type. `hint-distance` no
 runtime codec consumed by web and a TypeChecker-derived persistence conformance matrix. The process
 register remains product-byte-free and ready for independent review; implementation is not
 authorised yet.
+
+## 2026-08-27 — Independent review return
+
+The TypeChecker extraction, single-writer ownership, history and product-byte boundary survived.
+The review returned one false-green, [[D1916]]: C9.3 permits a live lane-5 claim to excuse changed
+v4 bytes while the tree head stays 4. The claim can reserve only the next head; tree and register
+head/digest must always agree on checked bytes. Three executable controls also reproduced the
+already-routed [[D1629]] browser-codec gap without duplicating it here. Exact return:
+`independent-buildability-review-2026-08-27.md`.

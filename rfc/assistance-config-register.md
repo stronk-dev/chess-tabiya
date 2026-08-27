@@ -1,7 +1,6 @@
 # RFC: AssistanceConfig shared-resource register
 
-- **Status:** draft — research-complete 2026-08-26; pre-review alias correction [[D1627]] applied;
-  ready for independent process/buildability review
+- **Status:** draft — returned by independent process/buildability review 2026-08-27 on [[D1916]]
 - **Author:** codex
 - **Created:** 2026-08-26
 - **Design refs:** none. This is repository process over an already-ruled assistance contract; it
@@ -282,6 +281,12 @@ None. No design intent changes.
 | D2 | Implement C9, register/history, claim transfer, docs and able-to-fail fixtures without product bytes | codex | implementing SHA + green governance output | |
 | D3 | Guided Hint v5 product implementation later moves the landed head/digest, removes its live claim and preserves v1-v4 migrations | codex | `hint-distance` implementing SHA/receipt | |
 
+## Independent-review routing
+
+| finding | blocker | repair owner |
+|---|---|---|
+| [[D1916]] | lane-5 claim masks same-head v4 digest drift | amend §4, mutation table and criteria 2/4/5 |
+
 ## Open questions
 
 None. Product choices remain in their product RFCs; this document only registers their shared
@@ -289,6 +294,9 @@ contract.
 
 ## Changelog
 
+- 2026-08-27: independent review returned C9 on [[D1916]]. A live next-head claim may reserve
+  ownership but must never excuse current-tree head/digest drift. Exact return:
+  `planning/assistance-config-register/independent-buildability-review-2026-08-27.md`.
 - 2026-08-26: pre-review [[D1630]] correction. Added the exact `derivedOutput` branch and fixture;
   the shipped fallback treats every non-schema/non-migration resource as `evidence-kinds` and
   would otherwise crash or misparse the new lane claim.
