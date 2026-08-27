@@ -601,6 +601,15 @@ reconnect, multi-account and source-off cases pass.
 Primary RFC: `casting`. Archived teacher/live mechanisms remain dependencies. UX owner: TCH and
 the professional subset of LIV.
 
+Two researched scope decisions now sit in this capability rather than outside the roadmap:
+
+- [[D1844]] — decide whether 1.0 serves institution-managed minors. A yes requires explicit
+  custodian, recovery, release, audit and safeguarding authority before an RFC; classroom
+  membership alone can never imply account control.
+- [[D1845]] — decide whether 1.0 ends at the complete rehearsal classroom or also includes
+  academy CRM operations such as billing, payroll, parent administration and white labelling.
+  Until ruled, those operations are neither silently promised nor silently discarded.
+
 ### 12. Responsive layout, accessible input, theming, and PWA
 
 <!-- roadmap-capability: accessibility -->

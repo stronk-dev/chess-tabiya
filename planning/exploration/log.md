@@ -9869,3 +9869,22 @@ A focused terminal-sheet fixture proves review and cancellation are inert before
 production two-account journey creates the classroom and assignment, completes the assigned terminal
 pack, shares from the outcome sheet and observes the named submission in the teacher roster. TCH-a19
 is complete.
+
+## 2026-08-27 — The classroom competitor record gains a real desk baseline
+
+The empty classroom shelf now has a six-product primary-source teardown. The old single category
+split into four: synchronous teaching rooms (Chess.com/ChessKid), managed learner administration
+(Lichess/ChessKid), curriculum diagnostics (Chessity), and academy operating systems
+(Chess.Run/ChessPlay). Tabiya's consent-bounded submission of one preserved attempt is a fifth job
+none of those sources claims; E1 remains intact at source-absence level.
+
+The pass does **not** discharge the hands-on claim. No competitor was driven, and the advertised
+browser skill was unavailable on disk, so current step count, geometry, friction and reliability
+remain open under [[D1458]]. TCH-a32 stays queued with an exact two-account protocol instead of
+being closed by vendor pages. [[D1483]] is narrowed from empty coverage to that residual.
+
+Two owner-scope questions surfaced and are ledgered rather than smuggled into implementation:
+[[D1844]] asks whether 1.0 serves institution-managed minors and therefore owes custodian/recovery/
+release/audit/safeguarding authority; [[D1845]] asks whether “one FOSS platform” includes academy
+billing/payroll/white-label CRM or ends at the complete rehearsal classroom. R58–R64 preserve the
+source boundary and love/hate searches.

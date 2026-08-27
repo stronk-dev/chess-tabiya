@@ -94,4 +94,62 @@ Every entry: URL, Use, Caveat. Evidence labels per `design/research/README.md`
 - Caveat: `[V]` source contract and a fresh June-2026 prefix; chronological-prefix counts are not a
   representative month-wide population estimate.
 
-*(next: R58)*
+### R58 — Chess.com Classroom official workflow
+- URLs: https://support.chess.com/en/articles/8708915-how-do-i-use-classroom-on-chess-com ·
+  https://www.chess.com/classroom
+- Use: current entry, source loading, room media/management and participant board-control claims.
+- Caveat: `[V]` primary-source capability record; no authenticated room was driven and vendor
+  documentation does not establish reliability.
+
+### R59 — Lichess Classes surface, source and authority warning
+- URLs: https://lichess.org/class · https://github.com/lichess-org/lila/blob/master/conf/routes/ ·
+  https://github.com/lichess-org/lila/security/advisories/GHSA-8738-rh94-9c27
+- Use: managed class identities, progress/messaging scope, distinct class login, and a concrete
+  route-vs-UI authority failure relevant to custodial-account design.
+- Caveat: `[V]` primary/open-source/advisory claims; the product was not driven. The advisory is a
+  report about Lichess, not evidence of a Tabiya defect.
+
+### R60 — ChessKid classroom and institution workflows
+- URLs: https://support.chesskid.com/en/articles/8867959-coach-how-can-i-review-my-students-games ·
+  https://www.chesskid.com/learn/articles/new-chesskid-experience-for-your-teachers-schools-districts ·
+  https://www.chesskid.com/learn/articles/how-to-use-the-chesskid-live-classroom-tool
+- Use: report-card breadth, organization/group/teacher hierarchy, and live room with child-safe
+  media, saved positions and learner board control.
+- Caveat: `[V]` official capability record; effectiveness/testimonials `[P]`; no educator account
+  or child account was used.
+
+### R61 — Chessity teacher workflow
+- URLs: https://www.chessity.com/en/school ·
+  https://www.chessity.com/en/blog/1405/New_teacher_dashboard_now_available_ ·
+  https://www.chessity.com/en/group-prices
+- Use: curriculum, group management, progress/trouble-spot filters, and recommended-path versus
+  free-navigation control.
+- Caveat: `[V]` vendor-documented product shape; adaptive-effectiveness and testimonials `[P]`;
+  no teacher dashboard was driven.
+
+### R62 — Chess.Run lesson-centred LMS/CRM
+- URLs: https://chess.run/en_gb/chess-school · https://chess.run/features/homework-progress ·
+  https://chess.run/en-gb/features/first-online-lesson
+- Use: material→live lesson→homework→review continuity plus the separate academy-operations seam.
+- Caveat: `[V]` vendor-documented workflow; reliability, grading usefulness and learner data
+  boundaries unverified; no trial account used.
+
+### R63 — ChessPlay.io academy operating system
+- URLs: https://chessplay.io/ · https://help.chessplay.io/
+- Use: current academy-in-a-box capability census: classroom, homework, reports, parent access,
+  tournament, fee and branding surfaces.
+- Caveat: `[V]` for current vendor claims only; most detail is marketing, testimonials `[P]`, and
+  the product was not driven.
+
+### R64 — classroom love/hate and unmet-workflow reports
+- URLs: https://www.chess.com/forum/view/general/classroom-problems-any-online-coaches-having-problems-too ·
+  https://www.chess.com/forum/view/chess-lessons/best-format-for-getting-coaching ·
+  https://lichess.org/forum/lichess-feedback/lichess-classes-what-is-it ·
+  https://github.com/lichess-org/lila/issues/18341 ·
+  https://lichess.org/forum/lichess-feedback/feature-request-for-lichess-classes-simultaneous-exhibitions-between-teacher-and-students
+- Use: reported value (joined board/media, coach data, messaging) and friction (sync/reliability,
+  material persistence, child login, teaching-specific simuls).
+- Caveat: `[P]` anecdotal public reports, not prevalence or current-product proof. Chess.com
+  reliability reports are from 2022–2023 and explicitly require current hands-on recheck.
+
+*(next: R65)*

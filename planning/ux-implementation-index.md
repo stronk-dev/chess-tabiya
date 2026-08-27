@@ -298,7 +298,7 @@ Nothing here waits on an owner ruling, an RFC acceptance, or a document anybody 
 | TCH-a29 | §2.3 | The classroom section must explain itself in one sentence before offering a Create control; the invitation must name the inviter, what it authorises and what it does not (`invitedBy`/`invitedAt` are on the type and unrendered) | none | | |
 | TCH-a30 | §8 | The academy's two default layers disagree — `presets` says `guided`, `PROFILE_DEFAULTS.academy` ships SILENT. A guided session that says nothing | ledger | | |
 | TCH-a31 | §5.4 | The desktop grants list satisfies watcher-disclosure; the compact-viewport half does not, and the RFC routes the phone answer to a `/learn` card that names nobody | none | | |
-| TCH-a32 | §2.2/§13 | **The classroom competitor record is empty** — Chess.com Classroom, ChessKid Classroom, Chessity, Chess.Run and ChessPlay.io are name-drops; Lichess Classes returns zero hits across `design/research/`. The strongest candidate for the first hands-on pass in the programme | ledger | [[D1483]] | |
+| TCH-a32 | §2.2/§13 | **The classroom competitor record is empty** — Chess.com Classroom, ChessKid Classroom, Chessity, Chess.Run and ChessPlay.io are name-drops; Lichess Classes returns zero hits across `design/research/`. The strongest candidate for the first hands-on pass in the programme | ledger | desk arm completed in `classroom-competitor-workflows.md`; [[D1483]] remains for the exact authenticated two-account hands-on protocol | |
 | TCH-a33 | §13 | Nothing was exercised in a browser: no two-account classroom, assignment, standing or academy session | none | a hands-on pass would settle the read-symmetry question by observation | |
 
 ### Import, account and data — `ux-import-and-account.md`

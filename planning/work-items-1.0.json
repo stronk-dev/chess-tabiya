@@ -145,11 +145,11 @@
       "summary": "**Zero focus traps client-wide against ten dialogs; zero `inert` uses.** Should land as one change, not nine",
       "legacyRoute": "none",
       "note": "interacts with region registration and the phone sheet",
+      "sourceDigest": "sha256:f9e2c2c304840ccbd673c6d4e8a3a81ac665a9af9fa51e8fe07a4bea5c1b9c74",
       "completion": {
         "completedOn": "2026-08-26",
         "evidence": "one modalBoundary action covers every aria-modal dialog, makes all background branches inert, traps Tab in both directions and reference-counts restoration; DOM and Chromium fixtures prove the boundary"
-      },
-      "sourceDigest": "sha256:f9e2c2c304840ccbd673c6d4e8a3a81ac665a9af9fa51e8fe07a4bea5c1b9c74"
+      }
     },
     {
       "id": "A11-a17",
@@ -163,11 +163,11 @@
       "sourceHeading": "Accessibility and small screens — `ux-accessibility-and-mobile.md`",
       "summary": "Zero `prefers-reduced-motion`, `prefers-contrast`, `forced-colors` and `prefers-color-scheme` CSS blocks anywhere",
       "legacyRoute": "none",
+      "sourceDigest": "sha256:782097afe0d88154e9379495d6b8f5e83c59cd8a40c15ba54585cade5be59617",
       "completion": {
         "completedOn": "2026-08-26",
         "evidence": "one global accessibility layer supplies meaningful fallbacks for all four system preferences; unit and Chromium checks cover their concrete effects"
-      },
-      "sourceDigest": "sha256:782097afe0d88154e9379495d6b8f5e83c59cd8a40c15ba54585cade5be59617"
+      }
     },
     {
       "id": "A11-a18",
@@ -199,11 +199,11 @@
       "sourceHeading": "Accessibility and small screens — `ux-accessibility-and-mobile.md`",
       "summary": "**Zero axe-core, pa11y or Lighthouse in any `package.json` or source file**",
       "legacyRoute": "none",
+      "sourceDigest": "sha256:3e631c6844f469502a25add77fe6d730bf35c72f925f0bfa8f64af9c665a0206",
       "completion": {
         "completedOn": "2026-08-26",
         "evidence": "axe-core WCAG A/AA scans the authenticated catalogue, Settings and a live rehearsal in the browser matrix; its first run found and closed D1813"
-      },
-      "sourceDigest": "sha256:3e631c6844f469502a25add77fe6d730bf35c72f925f0bfa8f64af9c665a0206"
+      }
     },
     {
       "id": "A11-a2",
@@ -236,11 +236,11 @@
       "summary": "Criterion 7's population omits `square.oc.move-dest`; the capture ring fails at 12.5 and 18.6 against a floor of 20",
       "legacyRoute": "ledger",
       "note": "[[D1461]]; the criterion amendment is an RFC edit — see (c)",
+      "sourceDigest": "sha256:f1a21a1e9e4a4d08ae1676e63ce9f1d374787464365fb20567ea7ec117b2212d",
       "completion": {
         "completedOn": "2026-08-26",
         "evidence": "the theming RFC and permanent contrast test now enumerate occupied destinations; the 55% capture ring clears the 20-point floor on every shipped square"
-      },
-      "sourceDigest": "sha256:f1a21a1e9e4a4d08ae1676e63ce9f1d374787464365fb20567ea7ec117b2212d"
+      }
     },
     {
       "id": "A11-a21",
@@ -255,11 +255,11 @@
       "summary": "**Colour vision has never been considered anywhere** — the check indicator vanishes for tritanopes on brown dark squares",
       "legacyRoute": "ledger",
       "note": "[[D1494]]",
+      "sourceDigest": "sha256:ebe535cde14585a3d6cbe021c005d0ede6e2aac3db09645d386180f10130f06c",
       "completion": {
         "completedOn": "2026-08-26",
         "evidence": "check and last-move states now carry non-hue inset geometry; forced-colors projects check to a distinct double system-color outline"
-      },
-      "sourceDigest": "sha256:ebe535cde14585a3d6cbe021c005d0ede6e2aac3db09645d386180f10130f06c"
+      }
     },
     {
       "id": "A11-a22",
@@ -273,11 +273,11 @@
       "sourceHeading": "Accessibility and small screens — `ux-accessibility-and-mobile.md`",
       "summary": "Five hard-coded whites in themed colour, one of them the global `:focus-visible` outline",
       "legacyRoute": "none",
+      "sourceDigest": "sha256:aa9833be0073a562014f461f1b3e0701593ab19f52316f83b0702c386428de88",
       "completion": {
         "completedOn": "2026-08-26",
         "evidence": "focus, selection, forms and accent-backed actions use palette tokens; the source sweep now rejects named white in themed declarations"
-      },
-      "sourceDigest": "sha256:aa9833be0073a562014f461f1b3e0701593ab19f52316f83b0702c386428de88"
+      }
     },
     {
       "id": "A11-a23",
@@ -291,11 +291,11 @@
       "sourceHeading": "Accessibility and small screens — `ux-accessibility-and-mobile.md`",
       "summary": "`forced-colors` is unhandled and every dest and check indicator is a `radial-gradient` background image — which forced-colors mode removes",
       "legacyRoute": "none",
+      "sourceDigest": "sha256:823d6d88ed167d2d112c8a2fa799208917fc2cee8dabf5a2372e2b0847a28ba9",
       "completion": {
         "completedOn": "2026-08-26",
         "evidence": "forced-colors replaces removed gradients with distinct system-color geometry for destination, capture, premove, history, selection and check; a real Chessground browser fixture proves it"
-      },
-      "sourceDigest": "sha256:823d6d88ed167d2d112c8a2fa799208917fc2cee8dabf5a2372e2b0847a28ba9"
+      }
     },
     {
       "id": "A11-a24",
@@ -309,11 +309,11 @@
       "sourceHeading": "Accessibility and small screens — `ux-accessibility-and-mobile.md`",
       "summary": "`prefers-reduced-motion` reaches only Chessground interpolation; no CSS block exists",
       "legacyRoute": "none",
+      "sourceDigest": "sha256:4405078b838e8a551e3efb39bc6bc04b851a2ddc536b65a86c8eeb2fdaf365b0",
       "completion": {
         "completedOn": "2026-08-26",
         "evidence": "the global reduced-motion rule suppresses CSS animation, transition and smooth scrolling, with computed browser behavior asserted; D1460's separate override-policy choice remains open"
-      },
-      "sourceDigest": "sha256:4405078b838e8a551e3efb39bc6bc04b851a2ddc536b65a86c8eeb2fdaf365b0"
+      }
     },
     {
       "id": "A11-a25",
@@ -327,11 +327,11 @@
       "sourceHeading": "Accessibility and small screens — `ux-accessibility-and-mobile.md`",
       "summary": "`.identity-control` Sign out is ~24px, borderline; **the 24px guard regexes two CSS rules in one file and cannot see the two that fail**",
       "legacyRoute": "none",
+      "sourceDigest": "sha256:c76433817d3a33de878acd2033ade3ca1e37ea31064079ad3cbd50f76082b86b",
       "completion": {
         "completedOn": "2026-08-26",
         "evidence": "the real Pixel 7 project measures Sign out, Appearance, text-move input and Submit at the 24px floor; the previously estimated on-board failures already carry explicit minimums"
-      },
-      "sourceDigest": "sha256:c76433817d3a33de878acd2033ade3ca1e37ea31064079ad3cbd50f76082b86b"
+      }
     },
     {
       "id": "A11-a26",
@@ -375,11 +375,11 @@
       "sourceHeading": "Accessibility and small screens — `ux-accessibility-and-mobile.md`",
       "summary": "The phone sheet has no dialog role, no `aria-modal`, no focus move, trap or Escape",
       "legacyRoute": "none",
+      "sourceDigest": "sha256:e78393a8a0fa6aaa0d42bb370918ada0fcb3926ca54f6cb296980cdaf575fbfd",
       "completion": {
         "completedOn": "2026-08-26",
         "evidence": "phone-only companion modal owns role, aria-modal, focus, inert background, circular Tab, Escape close and invoker restoration; wider layouts retain ordinary landmark semantics"
-      },
-      "sourceDigest": "sha256:e78393a8a0fa6aaa0d42bb370918ada0fcb3926ca54f6cb296980cdaf575fbfd"
+      }
     },
     {
       "id": "A11-a29",
@@ -393,7 +393,7 @@
       "sourceHeading": "Accessibility and small screens — `ux-accessibility-and-mobile.md`",
       "summary": "**Twenty-three per-surface findings**, one row each — shell, home, pack list, Just Play starter, drill, board, timeline, branch rail, phone tabs, compare, checkpoint sheet, terminal sheet, shape panel, inspector, story, rating, live list, live overlay, create, library, appearance, assistance, cohort standing, group panel",
       "legacyRoute": "none",
-      "note": "narrowed 2026-08-26: Pixel 7 production-bundle checks prove the eight primary routes, Compare, live session/overlay, named-shape dialog, Cohort standing and three-candidate Group own their width and keep controls reachable; the board-dependent Group creator also dismisses the phone drawer before candidate capture. Remaining qualitative per-surface findings stay open",
+      "note": "the pattern beneath them: **seven surfaces have no width media query and no RFC or dossier specifies their composition**",
       "tournamentReady": true,
       "sourceDigest": "sha256:c0cf92f7355077e15581a3f897fc263b40207443a751d19af64a307199b6eeac"
     },
@@ -428,7 +428,6 @@
       "sourceHeading": "Accessibility and small screens — `ux-accessibility-and-mobile.md`",
       "summary": "Test-harness defects: no `projects` array (one implicit Chromium at 1440×1000); `devices[]` never imported, so 8 of 9 phone-width assertions run with desktop input semantics; 4.7% of 467 selector uses assert a11y semantics; 1 of 11 live regions asserted; **Escape is never pressed in the suite**; `forcedColors`/`colorScheme` emulation is zero; `keyboard.ts` owns the shortcut system and has no unit test",
       "legacyRoute": "none",
-      "note": "named desktop/mobile projects, real Pixel 7 semantics, axe scanning, Escape/modal checks, keyboard unit coverage, forced-colors/color-scheme emulation, and atomic text-only live-region state coverage all ship",
       "sourceDigest": "sha256:ba2ae1f51fa782f12ec3649b2af8bf4d43a43ad86fbc625f68e0f1b234d56c7f",
       "completion": {
         "completedOn": "2026-08-26",
@@ -3180,11 +3179,11 @@
       "sourceHeading": "The core loop — `ux-core-loop.md`",
       "summary": "Fork modal: intent first, machine label optional. `fork()` already makes both optional",
       "legacyRoute": "none",
+      "sourceDigest": "sha256:f280d14f72c5abe48629a12afbd68118d5c3bc492d278a109a472e4f1f090f16",
       "completion": {
         "completedOn": "2026-08-27",
         "evidence": "intent-first fork dialog with optional short name; production browser journey focuses intent, creates an unnamed branch and retains the learner's stated experiment"
-      },
-      "sourceDigest": "sha256:f280d14f72c5abe48629a12afbd68118d5c3bc492d278a109a472e4f1f090f16"
+      }
     },
     {
       "id": "CLP-a13",
@@ -3198,11 +3197,11 @@
       "sourceHeading": "The core loop — `ux-core-loop.md`",
       "summary": "Name a branch from the move plus the intent, not `alt-3`",
       "legacyRoute": "none",
+      "sourceDigest": "sha256:90aee615eef2b5d76975175511ff2324d8b1f54ad29aff644a588b9b9c08d1c6",
       "completion": {
         "completedOn": "2026-08-27",
         "evidence": "machine alt labels project as first played SAN plus learner intent while explicit learner labels remain unchanged; unit and production browser contracts"
-      },
-      "sourceDigest": "sha256:90aee615eef2b5d76975175511ff2324d8b1f54ad29aff644a588b9b9c08d1c6"
+      }
     },
     {
       "id": "CLP-a14",
@@ -3217,11 +3216,11 @@
       "summary": "Branches appear in the move list as well as the rail",
       "legacyRoute": "none",
       "note": "coupled to the timeline clipping fix",
+      "sourceDigest": "sha256:c321c7da0fa7a48caba058c81cc812cc85b026ddb310abab3b06ab9e5dc83253",
       "completion": {
         "completedOn": "2026-08-27",
         "evidence": "timeline derives the parent continuation plus every alternative at each actual fork and exposes branch-switch controls; non-root fork unit contract and production browser journey"
-      },
-      "sourceDigest": "sha256:c321c7da0fa7a48caba058c81cc812cc85b026ddb310abab3b06ab9e5dc83253"
+      }
     },
     {
       "id": "CLP-a15",
@@ -3236,11 +3235,11 @@
       "summary": "**Replay at a different band as a first-class exit action from compare** — the thesis's own last clause, with no gesture in the product",
       "legacyRoute": "none",
       "note": "wires to an existing run-creation path",
+      "sourceDigest": "sha256:7b7fcc94654a1c3123ca69f99ae003cc9f123939d61cd8393195b4df23dbe149",
       "completion": {
         "completedOn": "2026-08-27",
         "evidence": "Compare offers a first-class replay from the preserved fork FEN through the production run-creation path; the prior attempts remain saved and the browser arrives in a distinct run"
-      },
-      "sourceDigest": "sha256:7b7fcc94654a1c3123ca69f99ae003cc9f123939d61cd8393195b4df23dbe149"
+      }
     },
     {
       "id": "CLP-a16",
@@ -3255,11 +3254,11 @@
       "summary": "The learner moves the ladder; any band suggestion is accepted, never applied silently; applied band always visible",
       "legacyRoute": "none",
       "note": "Dr. Wolf's churn complaint is the field evidence",
+      "sourceDigest": "sha256:f41e5de117bde422e0529f29b5f49e5987f4d73d4b5e7e2428428020a87b2f33",
       "completion": {
         "completedOn": "2026-08-27",
         "evidence": "learner-owned four-rung selector in Compare, no automatic rung change, explicit calibration disclaimer and applied rung retained in the run's visible status announcement"
-      },
-      "sourceDigest": "sha256:f41e5de117bde422e0529f29b5f49e5987f4d73d4b5e7e2428428020a87b2f33"
+      }
     },
     {
       "id": "CLP-a17",
@@ -3292,11 +3291,11 @@
       "summary": "The run states the consequence's horizon before it starts and holds it visible",
       "legacyRoute": "none",
       "note": "pack boundary ships; `PivotalMarker` kinds present",
+      "sourceDigest": "sha256:71600db7193bed4d7bd1c3ebed1f69525ef518f468abbc3e1abac0181a2c761d",
       "completion": {
         "completedOn": "2026-08-27",
         "evidence": "catalogue derives and states each pack's declared/authored ply horizon before start; run objective and atomic status retain it, with honest full-game/absent fallbacks"
-      },
-      "sourceDigest": "sha256:71600db7193bed4d7bd1c3ebed1f69525ef518f468abbc3e1abac0181a2c761d"
+      }
     },
     {
       "id": "CLP-a19",
@@ -4754,7 +4753,7 @@
       "sourceHeading": "Import, account and data — `ux-import-and-account.md`",
       "summary": "Multi-game PGN: parse all, render a picker, import the chosen game. **The data is already in hand at `pgn-import.ts:26` when the refusal throws**",
       "legacyRoute": "ledger",
-      "note": "[[D1486]]; [[D1837]] requires durable selected-game and omission identity before the picker can survive reload/export",
+      "note": "[[D1486]]",
       "sourceDigest": "sha256:e4232d6d3a06d6e94f970e1d65bd45e74c923180b2a92da5f813f57765b69fc1"
     },
     {
@@ -4888,9 +4887,11 @@
       "sourceHeading": "Import, account and data — `ux-import-and-account.md`",
       "summary": "Export never says it cannot be re-imported and that no other product reads it — the doc states it plainly and the `.honest` class exists for it",
       "legacyRoute": "none",
-      "note": "implemented 2026-08-27; the account panel states the archive's safekeeping/inspection boundary and links to interoperable PGN",
-      "completion": { "completedOn": "2026-08-27", "evidence": "AssistanceSettings states that Tabiya cannot import the account archive and other chess products do not read it; component and browser journeys assert the Library PGN link" },
-      "sourceDigest": "sha256:08a60236a0fd5da59a5db3e1ee2aa3fa609d908b5fe9eb44f56d7c30afa2150d"
+      "sourceDigest": "sha256:08a60236a0fd5da59a5db3e1ee2aa3fa609d908b5fe9eb44f56d7c30afa2150d",
+      "completion": {
+        "completedOn": "2026-08-27",
+        "evidence": "AssistanceSettings states that Tabiya cannot import the account archive and other chess products do not read it; component and browser journeys assert the Library PGN link"
+      }
     },
     {
       "id": "IMP-a19",
@@ -4904,9 +4905,11 @@
       "sourceHeading": "Import, account and data — `ux-import-and-account.md`",
       "summary": "PGN export ships per run and is never mentioned or offered from the account screen. *\"Download my games as PGN\"* is the actual request",
       "legacyRoute": "none",
-      "note": "implemented 2026-08-27; Library offers a direct PGN download for every visible run",
-      "completion": { "completedOn": "2026-08-27", "evidence": "the Library calls the existing arbitrary-run PGN API without opening a run; the production account lifecycle captures the browser download and verifies its .pgn filename" },
-      "sourceDigest": "sha256:647587e9fda03cbc9d06b45010ce92a3204ad8ab61e3e4725585c28f441ababc"
+      "sourceDigest": "sha256:647587e9fda03cbc9d06b45010ce92a3204ad8ab61e3e4725585c28f441ababc",
+      "completion": {
+        "completedOn": "2026-08-27",
+        "evidence": "the Library calls the existing arbitrary-run PGN API without opening a run; the production account lifecycle captures the browser download and verifies its .pgn filename"
+      }
     },
     {
       "id": "IMP-a2",
@@ -4920,7 +4923,7 @@
       "sourceHeading": "Import, account and data — `ux-import-and-account.md`",
       "summary": "Variation-bearing PGN: import the mainline and state the omission on the run. `original_pgn` retains the bytes verbatim",
       "legacyRoute": "ledger",
-      "note": "[[D1486]]; [[D1837]] requires a persisted omitted-variation fact before the run can state the omission after reload",
+      "note": "[[D1486]]",
       "sourceDigest": "sha256:fb239c8fd1d2d06771dc6bd86104162205f19a3cc64e75e5726050fff5cb4533"
     },
     {
@@ -4964,9 +4967,11 @@
       "sourceHeading": "Import, account and data — `ux-import-and-account.md`",
       "summary": "Per-run deletion ships and its only entry is inside the account-deletion list",
       "legacyRoute": "ledger",
-      "note": "implemented and production-browser verified 2026-08-27; each owned Library run has an independent deletion preview/action",
-      "completion": { "completedOn": "2026-08-27", "evidence": "Library renders Delete this run beside each host-owned game, applies its typed preview digest, removes the list row and local writer keys, and the production journey confirms the run becomes 404" },
-      "sourceDigest": "sha256:34c7b3a8deb74d24e0b07ec465e462e43e71621a227188b1355fc41823a30492"
+      "sourceDigest": "sha256:34c7b3a8deb74d24e0b07ec465e462e43e71621a227188b1355fc41823a30492",
+      "completion": {
+        "completedOn": "2026-08-27",
+        "evidence": "Library renders Delete this run beside each host-owned game, applies its typed preview digest, removes the list row and local writer keys, and the production journey confirms the run becomes 404"
+      }
     },
     {
       "id": "IMP-a23",
@@ -4980,9 +4985,11 @@
       "sourceHeading": "Import, account and data — `ux-import-and-account.md`",
       "summary": "Say what deletion cannot reach **before** it is chosen, not only inside the preview",
       "legacyRoute": "none",
-      "note": "implemented 2026-08-27 on both run and account deletion entry points",
-      "completion": { "completedOn": "2026-08-27", "evidence": "Library states shared-history and backup-retention limits before any run-deletion click; Account names collaborator, publication and backup categories before loading the destructive preview" },
-      "sourceDigest": "sha256:0e57b334741f3f1796c35b6cda0a41b123011c5c3149a125f46f870c24260369"
+      "sourceDigest": "sha256:0e57b334741f3f1796c35b6cda0a41b123011c5c3149a125f46f870c24260369",
+      "completion": {
+        "completedOn": "2026-08-27",
+        "evidence": "Library states shared-history and backup-retention limits before any run-deletion click; Account names collaborator, publication and backup categories before loading the destructive preview"
+      }
     },
     {
       "id": "IMP-a24",
@@ -5115,7 +5122,7 @@
       "sourceHeading": "Import, account and data — `ux-import-and-account.md`",
       "summary": "A confirmation step before the run exists: players, date, result, plies, side, and what will be dropped",
       "legacyRoute": "none",
-      "note": "[[D1837]]: preview can be client- or server-side, but confirmation depends on durable selected-game and omission metadata",
+      "note": "one server dry-run route or a client-side parse; `chessops/pgn` is already a dependency",
       "sourceDigest": "sha256:fbebdb42628af3279b3d1744ffb4b89ef57be62cf73c6bc433f7098da680cc44"
     },
     {
@@ -6617,9 +6624,12 @@
       "sourceHeading": "The opponent — `ux-opponents.md`",
       "summary": "**Always send a band from Just Play.** The starter sends no `targetElo`, `appliedTargetElo` falls to `profile.default`, and the default is Maia's UCI spin value `1500` — a rung nobody chose, nobody measured, and no learner is ever told about",
       "legacyRoute": "ledger",
-      "note": "implemented 2026-08-27; the starter requires an explicit four-rung choice and the run announces the requested rung",
-      "completion": { "completedOn": "2026-08-27", "evidence": "JustPlayStarter sends the selected targetElo on every human-common start; the production browser journey selects rung 1800 and observes it in Support and the live status announcement" },
-      "sourceDigest": "sha256:164bd90b1311dc94572003007806faeb376f653dfa365ac9abcd444e633c2195"
+      "note": "[[D1502]]; `TARGET_ELO_REQUIRED` exists as the refusal and never fires",
+      "sourceDigest": "sha256:164bd90b1311dc94572003007806faeb376f653dfa365ac9abcd444e633c2195",
+      "completion": {
+        "completedOn": "2026-08-27",
+        "evidence": "JustPlayStarter sends the selected targetElo on every human-common start; the production browser journey selects rung 1800 and observes it in Support and the live status announcement"
+      }
     },
     {
       "id": "OPP-a10",
@@ -6633,10 +6643,13 @@
       "sourceHeading": "The opponent — `ux-opponents.md`",
       "summary": "Keep `strong_engine`, place it **outside** the ladder, and stop calling it a rung",
       "legacyRoute": "none",
-      "note": "implemented 2026-08-27; strong engine is a separate opponent family outside the human-like ladder",
-      "completion": { "completedOn": "2026-08-27", "evidence": "JustPlayStarter renders four human-model rung cards inside the ladder and the strong-engine radio in a separate engine-choice section; component tests assert the DOM boundary" },
+      "note": "`policyUsesMaiaBand` already excludes it",
       "tournamentReady": true,
-      "sourceDigest": "sha256:563841e4a9ae43b307c918628e42ab45de5f30cd5da315bec9cffaeb0e04659a"
+      "sourceDigest": "sha256:563841e4a9ae43b307c918628e42ab45de5f30cd5da315bec9cffaeb0e04659a",
+      "completion": {
+        "completedOn": "2026-08-27",
+        "evidence": "JustPlayStarter renders four human-model rung cards inside the ladder and the strong-engine radio in a separate engine-choice section; component tests assert the DOM boundary"
+      }
     },
     {
       "id": "OPP-a11",
@@ -6799,9 +6812,12 @@
       "sourceHeading": "The opponent — `ux-opponents.md`",
       "summary": "Render the resistance sentences in Just Play — they are gated on `pack !== undefined`, which is backwards: the pack-less game is the one with no author to explain it",
       "legacyRoute": "ledger",
-      "note": "implemented 2026-08-27; packless Just Play receives the same requested/applied resistance context as authored drills",
-      "completion": { "completedOn": "2026-08-27", "evidence": "DrillScreen computes and renders OutcomeContext independently of pack presence; the production browser journey proves the packless Support surface names the selected rung" },
-      "sourceDigest": "sha256:ae898c5ec564acc02d2402cbbabd0770dd27bdbf9211785004334582f79eba35"
+      "note": "[[D1502]]",
+      "sourceDigest": "sha256:ae898c5ec564acc02d2402cbbabd0770dd27bdbf9211785004334582f79eba35",
+      "completion": {
+        "completedOn": "2026-08-27",
+        "evidence": "DrillScreen computes and renders OutcomeContext independently of pack presence; the production browser journey proves the packless Support surface names the selected rung"
+      }
     },
     {
       "id": "OPP-a4",
@@ -6844,9 +6860,11 @@
       "sourceHeading": "The opponent — `ux-opponents.md`",
       "summary": "Put the *\"not FIDE, Lichess, or Chess.com\"* disclaimer on **every** opponent surface, verbatim",
       "legacyRoute": "none",
-      "note": "implemented 2026-08-27 from one shared literal across every current human-model opponent surface",
-      "completion": { "completedOn": "2026-08-27", "evidence": "HUMAN_MODEL_RUNG_DISCLAIMER is consumed by Just Play, Support, Compare, Rating and the human-split Inspector; component and browser tests assert the exact sentence" },
-      "sourceDigest": "sha256:d207359e2f5b97fcd3850f3e16a52982a26b8aded0c2ff9773a557c4c7a2131e"
+      "sourceDigest": "sha256:d207359e2f5b97fcd3850f3e16a52982a26b8aded0c2ff9773a557c4c7a2131e",
+      "completion": {
+        "completedOn": "2026-08-27",
+        "evidence": "HUMAN_MODEL_RUNG_DISCLAIMER is consumed by Just Play, Support, Compare, Rating and the human-split Inspector; component and browser tests assert the exact sentence"
+      }
     },
     {
       "id": "OPP-a7",
@@ -6860,9 +6878,12 @@
       "sourceHeading": "The opponent — `ux-opponents.md`",
       "summary": "Never render `targetElo` as a strength; reword the provenance sentence into band vocabulary (O8.4)",
       "legacyRoute": "ledger",
-      "note": "implemented 2026-08-27; learner surfaces call targetElo a Tabiya human-model rung, never a platform strength",
-      "completion": { "completedOn": "2026-08-27", "evidence": "outcome-presentation projects requested and applied values as rung vocabulary and every current opponent surface shares the non-rating disclaimer" },
-      "sourceDigest": "sha256:e91ea459b8f31ae870004c2d43ffd6febd326df41ea9c7df2d033164481c2882"
+      "note": "[[D344]]",
+      "sourceDigest": "sha256:e91ea459b8f31ae870004c2d43ffd6febd326df41ea9c7df2d033164481c2882",
+      "completion": {
+        "completedOn": "2026-08-27",
+        "evidence": "outcome-presentation projects requested and applied values as rung vocabulary and every current opponent surface shares the non-rating disclaimer"
+      }
     },
     {
       "id": "OPP-a8",
@@ -6876,9 +6897,12 @@
       "sourceHeading": "The opponent — `ux-opponents.md`",
       "summary": "Tell the learner once, in the endgame, that the chosen rung has almost stopped applying — below ten pieces the dial buys ~0.07 Elo per band point instead of 0.40",
       "legacyRoute": "none",
-      "note": "implemented 2026-08-27 at the measured ≤10-piece boundary",
-      "completion": { "completedOn": "2026-08-27", "evidence": "humanModelMaterialLimit derives standard-FEN piece count and adds the attenuation disclosure to pack and packless Support; unit and production-browser low-material fixtures pass" },
-      "sourceDigest": "sha256:2e8222d20db1c6313da904f3a7e7f632d473e15758c6f1f192bcd429fe2dd1fa"
+      "note": "material count is already available",
+      "sourceDigest": "sha256:2e8222d20db1c6313da904f3a7e7f632d473e15758c6f1f192bcd429fe2dd1fa",
+      "completion": {
+        "completedOn": "2026-08-27",
+        "evidence": "humanModelMaterialLimit derives standard-FEN piece count and adds the attenuation disclosure to pack and packless Support; unit and production-browser low-material fixtures pass"
+      }
     },
     {
       "id": "OPP-a9",
@@ -7334,7 +7358,10 @@
       "legacyRoute": "ledger",
       "note": "[[D1463]]; needs `applyPalette(el, palette)` — the controller writes 12 tokens only to `documentElement`",
       "sourceDigest": "sha256:fb09cf8baa9b2fd5bba06b5cd02b63fc80ddba6957b2dbe5bc9dfc85a366ec75",
-      "completion": { "completedOn": "2026-08-26", "evidence": "the Appearance preview scopes the selected catalog palette onto real miniature chrome showing paper, panel, ink, muted, line, accent and on-accent in use" }
+      "completion": {
+        "completedOn": "2026-08-26",
+        "evidence": "the Appearance preview scopes the selected catalog palette onto real miniature chrome showing paper, panel, ink, muted, line, accent and on-accent in use"
+      }
     },
     {
       "id": "SET-a10",
@@ -7350,7 +7377,10 @@
       "legacyRoute": "lane",
       "note": "ux-work-lane E3",
       "sourceDigest": "sha256:437b2eec87398e99a9a8263b5a9b99cfb34584f0d19323e99c39c5b096f9c1d8",
-      "completion": { "completedOn": "2026-08-26", "evidence": "Settings owns the learner-facing title; deployment services and surface status live in About this deployment" }
+      "completion": {
+        "completedOn": "2026-08-26",
+        "evidence": "Settings owns the learner-facing title; deployment services and surface status live in About this deployment"
+      }
     },
     {
       "id": "SET-a11",
@@ -7365,7 +7395,10 @@
       "summary": "Give settings a table of contents (Appearance · Playing · Account · About) and a landmark structure",
       "legacyRoute": "none",
       "sourceDigest": "sha256:08ca516a49e577f2de849dd7fc9f2723b6e7910114f899827979d5c7390d0213",
-      "completion": { "completedOn": "2026-08-26", "evidence": "sticky labelled Settings navigation links Appearance, Playing, Account when signed in, and About landmarks" }
+      "completion": {
+        "completedOn": "2026-08-26",
+        "evidence": "sticky labelled Settings navigation links Appearance, Playing, Account when signed in, and About landmarks"
+      }
     },
     {
       "id": "SET-a12",
@@ -7380,7 +7413,10 @@
       "summary": "Replace eight identical *no provider* strings with one statement in About",
       "legacyRoute": "none",
       "sourceDigest": "sha256:833da90ea2143d32de3479d25905829308e06de21a7be2b28871d39514f873d5",
-      "completion": { "completedOn": "2026-08-26", "evidence": "all eight unavailable external-voice controls reference one visible statement in About" }
+      "completion": {
+        "completedOn": "2026-08-26",
+        "evidence": "all eight unavailable external-voice controls reference one visible statement in About"
+      }
     },
     {
       "id": "SET-a13",
@@ -7395,7 +7431,10 @@
       "summary": "Reduced motion is already inferred and must be **disclosed**, not silent",
       "legacyRoute": "none",
       "sourceDigest": "sha256:bfc002749bf0bf0e411a9e9af6846facd5a7c279d9e33d0ca2b9d4ba6757f865",
-      "completion": { "completedOn": "2026-08-26", "evidence": "resolved theme exposes the device reduced-motion fact and Settings visibly explains the enforced no-animation state" }
+      "completion": {
+        "completedOn": "2026-08-26",
+        "evidence": "resolved theme exposes the device reduced-motion fact and Settings visibly explains the enforced no-animation state"
+      }
     },
     {
       "id": "SET-a14",
@@ -7425,7 +7464,10 @@
       "legacyRoute": "lane",
       "note": "ux-work-lane A2/A3",
       "sourceDigest": "sha256:129cdda944f80c752872ae1910fc8837342e96ee0c56e93d5245021010306d83",
-      "completion": { "completedOn": "2026-08-26", "evidence": "theme/controls.css is the single token-driven native-control baseline for action, text, select, checkbox and radio controls; unit and production-browser tests bind its import and computed result" }
+      "completion": {
+        "completedOn": "2026-08-26",
+        "evidence": "theme/controls.css is the single token-driven native-control baseline for action, text, select, checkbox and radio controls; unit and production-browser tests bind its import and computed result"
+      }
     },
     {
       "id": "SET-a16",
@@ -7441,7 +7483,10 @@
       "legacyRoute": "wave3 #13 / lane A2",
       "note": "[[D484]], open since 2026-08-16",
       "sourceDigest": "sha256:76b6dbab1ce56253bb27940b714b42b18fbb569628ebcba45ca680757a3a0c11",
-      "completion": { "completedOn": "2026-08-26", "evidence": "the global native-control reset now applies the product font to selects as well as buttons, inputs and textareas" }
+      "completion": {
+        "completedOn": "2026-08-26",
+        "evidence": "the global native-control reset now applies the product font to selects as well as buttons, inputs and textareas"
+      }
     },
     {
       "id": "SET-a17",
@@ -7457,7 +7502,10 @@
       "legacyRoute": "wave3 #13 / lane A3",
       "note": "[[D484]]; 48 checkboxes",
       "sourceDigest": "sha256:8c809ff98f6fdbb37f0d290b6740bf12601784199eddf19d8389361d3b5988bd",
-      "completion": { "completedOn": "2026-08-26", "evidence": "AssistanceSettings checkbox labels use the same flex-row pattern as the in-run controls, with computed-layout browser coverage retained under D484" }
+      "completion": {
+        "completedOn": "2026-08-26",
+        "evidence": "AssistanceSettings checkbox labels use the same flex-row pattern as the in-run controls, with computed-layout browser coverage retained under D484"
+      }
     },
     {
       "id": "SET-a18",
@@ -7472,7 +7520,10 @@
       "summary": "Four `color: white` on `background: var(--accent)` where `--on-accent` is near-black in dark themes",
       "legacyRoute": "none",
       "sourceDigest": "sha256:411acd9fcb08158d01a9057c82035e69428691d91578cc6602f94b8a6d91fe5d",
-      "completion": { "completedOn": "2026-08-26", "evidence": "source re-derivation finds every accent-backed control using --on-accent and zero color:white declarations" }
+      "completion": {
+        "completedOn": "2026-08-26",
+        "evidence": "source re-derivation finds every accent-backed control using --on-accent and zero color:white declarations"
+      }
     },
     {
       "id": "SET-a19",
@@ -7487,7 +7538,10 @@
       "summary": "Three hard-white mixes, **including the global `:focus-visible` ring and `::selection`**",
       "legacyRoute": "none",
       "sourceDigest": "sha256:1c14d4ba163bd8e719e8b231c461b76bd279e89dde43bbe85d96747984e89662",
-      "completion": { "completedOn": "2026-08-26", "evidence": "source re-derivation finds no white color mixes; focus and selection paint are token-driven" }
+      "completion": {
+        "completedOn": "2026-08-26",
+        "evidence": "source re-derivation finds no white color mixes; focus and selection paint are token-driven"
+      }
     },
     {
       "id": "SET-a2",
@@ -7503,7 +7557,10 @@
       "legacyRoute": "ledger",
       "note": "[[D1463]]",
       "sourceDigest": "sha256:0c37ee90c0b7e175978aa05529544b2270c6c500beded4c8aeaa653abf8fcf5b",
-      "completion": { "completedOn": "2026-08-26", "evidence": "the real preview board renders a checked king, last move, preselected legal destinations and all four registered mark brushes on a representative position" }
+      "completion": {
+        "completedOn": "2026-08-26",
+        "evidence": "the real preview board renders a checked king, last move, preselected legal destinations and all four registered mark brushes on a representative position"
+      }
     },
     {
       "id": "SET-a20",
@@ -7518,7 +7575,10 @@
       "summary": "`background: white` on every repertoire-form input, select and textarea",
       "legacyRoute": "none",
       "sourceDigest": "sha256:61c9a7439279888b3b504e82ebc0166001e19de90e6c5e803f6f54d635d4a6a0",
-      "completion": { "completedOn": "2026-08-26", "evidence": "source re-derivation finds no white repertoire-control backgrounds; controls inherit the theme layer" }
+      "completion": {
+        "completedOn": "2026-08-26",
+        "evidence": "source re-derivation finds no white repertoire-control backgrounds; controls inherit the theme layer"
+      }
     },
     {
       "id": "SET-a21",
@@ -7533,7 +7593,10 @@
       "summary": "Eight `Canvas`/`CanvasText` uses plus four hexes follow the OS, not the theme",
       "legacyRoute": "none",
       "sourceDigest": "sha256:bafebdf1fdae02b5310148e19765f670bf3b07cf4bb642eb3fd50015316d147a",
-      "completion": { "completedOn": "2026-08-26", "evidence": "Game Story and Chessboard normal-mode surfaces use product tokens; OS system colors remain only in the intentional forced-colors stylesheet" }
+      "completion": {
+        "completedOn": "2026-08-26",
+        "evidence": "Game Story and Chessboard normal-mode surfaces use product tokens; OS system colors remain only in the intentional forced-colors stylesheet"
+      }
     },
     {
       "id": "SET-a22",
@@ -7549,7 +7612,10 @@
       "legacyRoute": "ledger",
       "note": "[[D1433]], [[D1461]]",
       "sourceDigest": "sha256:eb27577ac91c2aa60c0239edccc9da250cc777349cc7c8420a1080c21fb27e41",
-      "completion": { "completedOn": "2026-08-26", "evidence": "the permanent sweep scans Svelte and CSS, detects named and system colors, removes the Game Story exemption, and enumerates only token/artwork, forced-colors, and the separately RFC-held interaction-paint authorities" }
+      "completion": {
+        "completedOn": "2026-08-26",
+        "evidence": "the permanent sweep scans Svelte and CSS, detects named and system colors, removes the Game Story exemption, and enumerates only token/artwork, forced-colors, and the separately RFC-held interaction-paint authorities"
+      }
     },
     {
       "id": "SET-a23",
@@ -7564,7 +7630,10 @@
       "summary": "`theme.test.ts:182` pins `#c0ae91`, a hand-computed constant absent from `brown.css` and recomputed by no test",
       "legacyRoute": "none",
       "sourceDigest": "sha256:9a43ba04732151f7351ece7899449b8f3fe2aac5cab03f2bad78cebd8d6d49fc",
-      "completion": { "completedOn": "2026-08-26", "evidence": "board-paint contrast derives square colors from each skin; brown's dark square is recomputed from its embedded SVG overlay instead of pinned by hand" }
+      "completion": {
+        "completedOn": "2026-08-26",
+        "evidence": "board-paint contrast derives square colors from each skin; brown's dark square is recomputed from its embedded SVG overlay instead of pinned by hand"
+      }
     },
     {
       "id": "SET-a24",
@@ -7579,7 +7648,10 @@
       "summary": "There is no global stylesheet: 20+ component-scoped style blocks plus one `:global` section",
       "legacyRoute": "none",
       "sourceDigest": "sha256:8024a13f1440c4a2eef8b0bc0c163f46ec13d1cb6eebeec6361a92aa2569f927",
-      "completion": { "completedOn": "2026-08-26", "evidence": "the application boundary now imports shared theme, control and accessibility CSS authorities; component-scoped CSS remains for local layout and variants" }
+      "completion": {
+        "completedOn": "2026-08-26",
+        "evidence": "the application boundary now imports shared theme, control and accessibility CSS authorities; component-scoped CSS remains for local layout and variants"
+      }
     },
     {
       "id": "SET-a25",
@@ -7610,7 +7682,10 @@
       "legacyRoute": "ledger",
       "note": "[[D1463]]",
       "sourceDigest": "sha256:328e64e441e2de3977dac71bde9583d242415983389b259af872015563fe8a83",
-      "completion": { "completedOn": "2026-08-26", "evidence": "Appearance now previews the applied chrome, board, pieces, legal-destination and evidence-paint composition before the learner leaves Settings" }
+      "completion": {
+        "completedOn": "2026-08-26",
+        "evidence": "Appearance now previews the applied chrome, board, pieces, legal-destination and evidence-paint composition before the learner leaves Settings"
+      }
     },
     {
       "id": "SET-a27",
@@ -7641,7 +7716,10 @@
       "legacyRoute": "none",
       "note": "mono is a mask recolour that can fail to separate",
       "sourceDigest": "sha256:d80067cab442c4dc795f3f54b27f84d08aeaab49b826699fbf85670d37b2b321",
-      "completion": { "completedOn": "2026-08-26", "evidence": "the production preview contains king, queen, rook, bishop, knight and pawn for both colors over both selected board colors; the browser contract enumerates all twelve role/side combinations" }
+      "completion": {
+        "completedOn": "2026-08-26",
+        "evidence": "the production preview contains king, queen, rook, bishop, knight and pawn for both colors over both selected board colors; the browser contract enumerates all twelve role/side combinations"
+      }
     },
     {
       "id": "SET-a4",
@@ -7657,7 +7735,10 @@
       "legacyRoute": "none",
       "note": "small and named",
       "sourceDigest": "sha256:26f1582a5bd8416154bf41ab9ed11a8152fed6a57f66e0200d5cfa964bf6b839",
-      "completion": { "completedOn": "2026-08-26", "evidence": "Chessboard accepts typed boardTheme and pieceSet overrides (plus an optional selected square) on its local shell without mutating the document theme" }
+      "completion": {
+        "completedOn": "2026-08-26",
+        "evidence": "Chessboard accepts typed boardTheme and pieceSet overrides (plus an optional selected square) on its local shell without mutating the document theme"
+      }
     },
     {
       "id": "SET-a5",
@@ -7673,7 +7754,10 @@
       "legacyRoute": "none",
       "note": "mechanism right, seating wrong",
       "sourceDigest": "sha256:2deba5a7a23b904c34b06d39d08cfc6dd7c28e7cfd5d1ef14eba1c8457ce5443",
-      "completion": { "completedOn": "2026-08-26", "evidence": "the selected app-theme control carries its measured inherited-palette warning inline, including each pair and ratio; the detached page-level disclosure is removed" }
+      "completion": {
+        "completedOn": "2026-08-26",
+        "evidence": "the selected app-theme control carries its measured inherited-palette warning inline, including each pair and ratio; the detached page-level disclosure is removed"
+      }
     },
     {
       "id": "SET-a6",
@@ -7689,7 +7773,10 @@
       "legacyRoute": "ledger",
       "note": "[[D1460]]",
       "sourceDigest": "sha256:05fd449c1556881cf33f32aeadce2932c79476074a06b4059b138150afdc076a",
-      "completion": { "completedOn": "2026-08-26", "evidence": "Piece movement uses HonestControl under device reduced motion, disables the ineffective choice and states why" }
+      "completion": {
+        "completedOn": "2026-08-26",
+        "evidence": "Piece movement uses HonestControl under device reduced motion, disables the ineffective choice and states why"
+      }
     },
     {
       "id": "SET-a7",
@@ -7719,7 +7806,10 @@
       "summary": "First paint renders `SILENT_ASSISTANCE` then replaces it `onMount` — a visible flash",
       "legacyRoute": "none",
       "sourceDigest": "sha256:0d9b1cfabd83b18579da3efbd6e8895bbfe1dd7c6466479f81e6a0f685497bf9",
-      "completion": { "completedOn": "2026-08-26", "evidence": "AssistanceSettings initializes every context from validated storage before first render; a no-tick component fixture proves stored evidence lighting and markers are present immediately" }
+      "completion": {
+        "completedOn": "2026-08-26",
+        "evidence": "AssistanceSettings initializes every context from validated storage before first render; a no-tick component fixture proves stored evidence lighting and markers are present immediately"
+      }
     },
     {
       "id": "SET-a9",
@@ -7887,10 +7977,13 @@
       "sourceHeading": "Teacher and classroom — `ux-teacher-and-classroom.md`",
       "summary": "The teacher's submission list renders a date and an access window and **names no learner, no pack and no assignment**",
       "legacyRoute": "ledger",
-      "note": "implemented 2026-08-27; each classroom assignment now joins learner identity, pack title and submission/access state",
-      "completion": { "completedOn": "2026-08-27", "evidence": "Teacher classroom cards are assignment-scoped and identify every submission by learner, pack, assignment, date and access state; component and three-account browser journeys assert the projection" },
+      "note": "[[D1480]]",
       "tournamentReady": true,
-      "sourceDigest": "sha256:db5db5704215deb52bee91c6871df68c58ce1618607f126875f4702a1e2f73ac"
+      "sourceDigest": "sha256:db5db5704215deb52bee91c6871df68c58ce1618607f126875f4702a1e2f73ac",
+      "completion": {
+        "completedOn": "2026-08-27",
+        "evidence": "Teacher classroom cards are assignment-scoped and identify every submission by learner, pack, assignment, date and access state; component and three-account browser journeys assert the projection"
+      }
     },
     {
       "id": "TCH-a10",
@@ -7904,10 +7997,13 @@
       "sourceHeading": "Teacher and classroom — `ux-teacher-and-classroom.md`",
       "summary": "The live studio never names the owning classroom — `live_sessions.classroom_id` ships; one server-side join",
       "legacyRoute": "none",
-      "note": "implemented 2026-08-27; active classroom members see the owning classroom on both the wall and opened studio while outside run spectators do not",
-      "completion": { "completedOn": "2026-08-27", "evidence": "LiveSessionService projects a membership-scoped classroom identity into session summaries and detail; server privacy tests and component tests cover wall and studio rendering" },
+      "note": "pack night loses its identity the moment it opens",
       "tournamentReady": true,
-      "sourceDigest": "sha256:50e8be0bcddcdbb6d55d08b921e36ae7bf267cd0c806ef25c518251c3cb70e5c"
+      "sourceDigest": "sha256:50e8be0bcddcdbb6d55d08b921e36ae7bf267cd0c806ef25c518251c3cb70e5c",
+      "completion": {
+        "completedOn": "2026-08-27",
+        "evidence": "LiveSessionService projects a membership-scoped classroom identity into session summaries and detail; server privacy tests and component tests cover wall and studio rendering"
+      }
     },
     {
       "id": "TCH-a11",
@@ -7921,9 +8017,11 @@
       "sourceHeading": "Teacher and classroom — `ux-teacher-and-classroom.md`",
       "summary": "The studio is generic across stream/academy/match and does not know it is a lesson; it never says we ship host-side rewind/branch/teach that nobody else has",
       "legacyRoute": "none",
-      "note": "implemented 2026-08-27; each live kind now names its workflow and academy explains the preserved teaching loop",
-      "completion": { "completedOn": "2026-08-27", "evidence": "Live wall and studio replace raw kind/control enums with player-facing labels; academy studio describes handoff, proposals, marks and preserved rewind/branch/compare, covered by component and production browser tests" },
-      "sourceDigest": "sha256:07e129f43c959f357e2c298299d929ee6c4482740c3db8bffc6b9ef6bb18b07b"
+      "sourceDigest": "sha256:07e129f43c959f357e2c298299d929ee6c4482740c3db8bffc6b9ef6bb18b07b",
+      "completion": {
+        "completedOn": "2026-08-27",
+        "evidence": "Live wall and studio replace raw kind/control enums with player-facing labels; academy studio describes handoff, proposals, marks and preserved rewind/branch/compare, covered by component and production browser tests"
+      }
     },
     {
       "id": "TCH-a12",
@@ -7937,9 +8035,11 @@
       "sourceHeading": "Teacher and classroom — `ux-teacher-and-classroom.md`",
       "summary": "Assignment lists and learner cards render `packId` instead of `pack.title`, in two places, with the packs already loaded",
       "legacyRoute": "ledger",
-      "note": "implemented 2026-08-27; Learn now loads the pack catalogue on direct entry and both assignment surfaces resolve the title with an honest id fallback",
-      "completion": { "completedOn": "2026-08-27", "evidence": "App packTitle is used on learner and teacher assignment cards; the production three-account journey asserts the served Najdorf title rather than its id" },
-      "sourceDigest": "sha256:8210ffafc8224e4cdf932c8deaddc10c13a03b58fd8e1ec5493429483081f36c"
+      "sourceDigest": "sha256:8210ffafc8224e4cdf932c8deaddc10c13a03b58fd8e1ec5493429483081f36c",
+      "completion": {
+        "completedOn": "2026-08-27",
+        "evidence": "App packTitle is used on learner and teacher assignment cards; the production three-account journey asserts the served Najdorf title rather than its id"
+      }
     },
     {
       "id": "TCH-a13",
@@ -7953,10 +8053,12 @@
       "sourceHeading": "Teacher and classroom — `ux-teacher-and-classroom.md`",
       "summary": "**Overdue does not exist** — zero grep hits across web, runtime and server, against `teacher-surface` §3.3 which specifies it",
       "legacyRoute": "ledger",
-      "note": "implemented 2026-08-27; advisory due dates are labelled overdue on both learner and teacher cards without entering scheduling",
-      "completion": { "completedOn": "2026-08-27", "evidence": "App compares dueAt only for display and focused component tests assert overdue copy; no schedule writer is introduced" },
       "tournamentReady": true,
-      "sourceDigest": "sha256:dd8b85e03e3acabb85e6c55e6d2ac85b886c07eae38c7c3fdd32c5f7b0f6eb87"
+      "sourceDigest": "sha256:dd8b85e03e3acabb85e6c55e6d2ac85b886c07eae38c7c3fdd32c5f7b0f6eb87",
+      "completion": {
+        "completedOn": "2026-08-27",
+        "evidence": "App compares dueAt only for display and focused component tests assert overdue copy; no schedule writer is introduced"
+      }
     },
     {
       "id": "TCH-a14",
@@ -7970,9 +8072,11 @@
       "sourceHeading": "Teacher and classroom — `ux-teacher-and-classroom.md`",
       "summary": "The coach-side assignment list drops the teacher's note entirely",
       "legacyRoute": "none",
-      "note": "implemented 2026-08-27; the literal note is rendered with the assigning teacher's handle on the classroom card",
-      "completion": { "completedOn": "2026-08-27", "evidence": "Teacher assignment component and production browser journey render the stored note outside the run with explicit teacher attribution" },
-      "sourceDigest": "sha256:1016d8a36ea0911009c0a72e74d4bf14cfc7b29c396bc02ca39a2c6357293e81"
+      "sourceDigest": "sha256:1016d8a36ea0911009c0a72e74d4bf14cfc7b29c396bc02ca39a2c6357293e81",
+      "completion": {
+        "completedOn": "2026-08-27",
+        "evidence": "Teacher assignment component and production browser journey render the stored note outside the run with explicit teacher attribution"
+      }
     },
     {
       "id": "TCH-a15",
@@ -7986,9 +8090,11 @@
       "sourceHeading": "Teacher and classroom — `ux-teacher-and-classroom.md`",
       "summary": "Name the teachers who hold access on the `/learn` card; `grantedLearnerIds` is resolved server-side",
       "legacyRoute": "none",
-      "note": "implemented 2026-08-27; assignments project active teacher handles and each submission projects only teachers whose run grant remains live",
-      "completion": { "completedOn": "2026-08-27", "evidence": "ClassroomService resolves teacherHandles and grantedTeacherHandles through live runRole; server tests prove withdrawal removes the displayed holder and learner cards render the handles" },
-      "sourceDigest": "sha256:b856fd5ec3da3857abc4643b9e946f317fbdacdbed81fdea043b43b002d17ed4"
+      "sourceDigest": "sha256:b856fd5ec3da3857abc4643b9e946f317fbdacdbed81fdea043b43b002d17ed4",
+      "completion": {
+        "completedOn": "2026-08-27",
+        "evidence": "ClassroomService resolves teacherHandles and grantedTeacherHandles through live runRole; server tests prove withdrawal removes the displayed holder and learner cards render the handles"
+      }
     },
     {
       "id": "TCH-a16",
@@ -8002,9 +8108,11 @@
       "sourceHeading": "Teacher and classroom — `ux-teacher-and-classroom.md`",
       "summary": "Revoke copy must not imply revocation is an undo — it guarantees future reads stop, never that what was read is forgotten",
       "legacyRoute": "none",
-      "note": "implemented 2026-08-27; the action is named Stop future teacher access and its adjacent boundary says prior reads cannot be undone",
-      "completion": { "completedOn": "2026-08-27", "evidence": "Learner assignment card renders the future-read boundary beside every active submitted run" },
-      "sourceDigest": "sha256:d4d4c76cd616909752dd505e4f74ddb7d18a08f6d216d6336e226541aac40c18"
+      "sourceDigest": "sha256:d4d4c76cd616909752dd505e4f74ddb7d18a08f6d216d6336e226541aac40c18",
+      "completion": {
+        "completedOn": "2026-08-27",
+        "evidence": "Learner assignment card renders the future-read boundary beside every active submitted run"
+      }
     },
     {
       "id": "TCH-a17",
@@ -8018,9 +8126,12 @@
       "sourceHeading": "Teacher and classroom — `ux-teacher-and-classroom.md`",
       "summary": "A submission confirmation stating who reads it and until when, and **that a granted teacher sees which assistance rungs the learner opened**",
       "legacyRoute": "none",
-      "note": "implemented 2026-08-27; sharing pauses on a named consent card before the server mutation",
-      "completion": { "completedOn": "2026-08-27", "evidence": "Consent card names active teacher handles, the 90-day bound, this-run-only scope and recorded evidence/reveal visibility; component and production browser tests assert it" },
-      "sourceDigest": "sha256:dcdc7033ee3b81538140fa11edf92438bb01c8b0ef11a4e5b3b4529ae67b7eb3"
+      "note": "stated in the RFC, rendered nowhere; `CohortStanding` publish confirmation is the shipped model",
+      "sourceDigest": "sha256:dcdc7033ee3b81538140fa11edf92438bb01c8b0ef11a4e5b3b4529ae67b7eb3",
+      "completion": {
+        "completedOn": "2026-08-27",
+        "evidence": "Consent card names active teacher handles, the 90-day bound, this-run-only scope and recorded evidence/reveal visibility; component and production browser tests assert it"
+      }
     },
     {
       "id": "TCH-a18",
@@ -8034,9 +8145,11 @@
       "sourceHeading": "Teacher and classroom — `ux-teacher-and-classroom.md`",
       "summary": "Submissions render as N bare, unbounded, undated, unordered buttons",
       "legacyRoute": "none",
-      "note": "implemented 2026-08-27; one labelled run selector carries title, update date and branch count before the share action",
-      "completion": { "completedOn": "2026-08-27", "evidence": "Learn renders one Completed run selector over the server-ordered hosted matching runs and a separate Share with teachers action" },
-      "sourceDigest": "sha256:c1044a70e787044a0872287a59e6ac9c8025dcd98a54d46af50959a322358452"
+      "sourceDigest": "sha256:c1044a70e787044a0872287a59e6ac9c8025dcd98a54d46af50959a322358452",
+      "completion": {
+        "completedOn": "2026-08-27",
+        "evidence": "Learn renders one Completed run selector over the server-ordered hosted matching runs and a separate Share with teachers action"
+      }
     },
     {
       "id": "TCH-a19",
@@ -8050,10 +8163,12 @@
       "sourceHeading": "Teacher and classroom — `ux-teacher-and-classroom.md`",
       "summary": "Offer submission at run end (`outcome.reached`), not only from the inbox",
       "legacyRoute": "none",
-      "note": "implemented 2026-08-27; matching assignments enter the terminal sheet and reuse the full submission-consent route instead of hiding a CTA behind the outcome modal",
-      "completion": { "completedOn": "2026-08-27", "evidence": "The two-account browser journey assigns the terminal fixture, reaches outcome, confirms the classroom/teacher/evidence disclosure inside TerminalSheet and observes the submitted attempt in the teacher roster" },
-      "tournamentReady": true,
-      "sourceDigest": "sha256:7e3c8f4b24ab449892a4e0c915f827a6f438a9368bdec1bccd030056d5ea61e3"
+      "note": "one conditional on an already-loaded list",
+      "sourceDigest": "sha256:7e3c8f4b24ab449892a4e0c915f827a6f438a9368bdec1bccd030056d5ea61e3",
+      "completion": {
+        "completedOn": "2026-08-27",
+        "evidence": "The two-account browser journey assigns the terminal fixture, reaches outcome, confirms the classroom/teacher/evidence disclosure inside TerminalSheet and observes the submitted attempt in the teacher roster"
+      }
     },
     {
       "id": "TCH-a2",
@@ -8067,10 +8182,13 @@
       "sourceHeading": "Teacher and classroom — `ux-teacher-and-classroom.md`",
       "summary": "Build the roster × assignment grid — four act-cells, no marks, no scores. *\"Who has not submitted\"* has no representation at all",
       "legacyRoute": "ledger",
-      "note": "implemented 2026-08-27; each assignment enumerates every active learner and one of the factual received/not-received access states",
-      "completion": { "completedOn": "2026-08-27", "evidence": "Teacher assignment cards join the active learner roster to submissions and render not submitted, submitted/access available, revoked-or-expired and withdrawn states without scores or marks" },
+      "note": "[[D1480]]; a round is exactly this grid",
       "tournamentReady": true,
-      "sourceDigest": "sha256:f87fe5655750853120568a4b48c9b7c672802808878b45f1260ded59c0a37775"
+      "sourceDigest": "sha256:f87fe5655750853120568a4b48c9b7c672802808878b45f1260ded59c0a37775",
+      "completion": {
+        "completedOn": "2026-08-27",
+        "evidence": "Teacher assignment cards join the active learner roster to submissions and render not submitted, submitted/access available, revoked-or-expired and withdrawn states without scores or marks"
+      }
     },
     {
       "id": "TCH-a20",
@@ -8084,9 +8202,12 @@
       "sourceHeading": "Teacher and classroom — `ux-teacher-and-classroom.md`",
       "summary": "The rating cell prints an interval with no value when `pointEstimate` is absent",
       "legacyRoute": "none",
-      "note": "implemented 2026-08-27; a non-publishable point estimate renders no interval-shaped pseudo-rating",
-      "completion": { "completedOn": "2026-08-27", "evidence": "CohortStanding requires pointEstimate before rendering both label and interval; the focused component fixture supplies an interval without a point and asserts Not shown" },
-      "sourceDigest": "sha256:3eab1449ddef55d2ce8cf668778509a761f66014c087a2075fe1001b30eab99f"
+      "note": "§10a.3 requires the field to be absent",
+      "sourceDigest": "sha256:3eab1449ddef55d2ce8cf668778509a761f66014c087a2075fe1001b30eab99f",
+      "completion": {
+        "completedOn": "2026-08-27",
+        "evidence": "CohortStanding requires pointEstimate before rendering both label and interval; the focused component fixture supplies an interval without a point and asserts Not shown"
+      }
     },
     {
       "id": "TCH-a21",
@@ -8119,9 +8240,11 @@
       "sourceHeading": "Teacher and classroom — `ux-teacher-and-classroom.md`",
       "summary": "*\"Join this standing\"* precedes any statement of what a standing is",
       "legacyRoute": "none",
-      "note": "implemented 2026-08-27; the optional self-publication and teacher boundary are stated before every standing action",
-      "completion": { "completedOn": "2026-08-27", "evidence": "Permanent standing copy precedes Join/Open controls; component and production three-account tests assert it before publication" },
-      "sourceDigest": "sha256:10dc5990b1f093606bdbc1854d4f8a41d9b2aeca122f06c8f135470b37747f20"
+      "sourceDigest": "sha256:10dc5990b1f093606bdbc1854d4f8a41d9b2aeca122f06c8f135470b37747f20",
+      "completion": {
+        "completedOn": "2026-08-27",
+        "evidence": "Permanent standing copy precedes Join/Open controls; component and production three-account tests assert it before publication"
+      }
     },
     {
       "id": "TCH-a23",
@@ -8151,9 +8274,12 @@
       "sourceHeading": "Teacher and classroom — `ux-teacher-and-classroom.md`",
       "summary": "The mark pill shows the band as its glyph with the verb only in a `title` — invisible on touch",
       "legacyRoute": "ledger",
-      "note": "implemented 2026-08-27; every mark visibly names the recorded beat-band event and date",
-      "completion": { "completedOn": "2026-08-27", "evidence": "Desktop table and compact cards render Beat band N plus the earned date as visible text; the component test asserts the verb without hover" },
-      "sourceDigest": "sha256:b1b7e07f265e3fef36176d4f27f5f838748965858ba93707caee5d9b144b77c5"
+      "note": "[[D1482]]; needs no ruling",
+      "sourceDigest": "sha256:b1b7e07f265e3fef36176d4f27f5f838748965858ba93707caee5d9b144b77c5",
+      "completion": {
+        "completedOn": "2026-08-27",
+        "evidence": "Desktop table and compact cards render Beat band N plus the earned date as visible text; the component test asserts the verb without hover"
+      }
     },
     {
       "id": "TCH-a25",
@@ -8167,10 +8293,12 @@
       "sourceHeading": "Teacher and classroom — `ux-teacher-and-classroom.md`",
       "summary": "Say that the coach is not in the table and cannot publish",
       "legacyRoute": "none",
-      "note": "implemented 2026-08-27; permanent standing copy distinguishes teacher window management from learner publication",
-      "completion": { "completedOn": "2026-08-27", "evidence": "Standing copy says teachers can manage the window but never publish or appear; component and three-account browser tests assert it" },
       "tournamentReady": true,
-      "sourceDigest": "sha256:f80e1fb4a7988fa0e2ee2b022adb08dfe0d1e89f956af80f96d220caa1986061"
+      "sourceDigest": "sha256:f80e1fb4a7988fa0e2ee2b022adb08dfe0d1e89f956af80f96d220caa1986061",
+      "completion": {
+        "completedOn": "2026-08-27",
+        "evidence": "Standing copy says teachers can manage the window but never publish or appear; component and three-account browser tests assert it"
+      }
     },
     {
       "id": "TCH-a26",
@@ -8184,9 +8312,12 @@
       "sourceHeading": "Teacher and classroom — `ux-teacher-and-classroom.md`",
       "summary": "The review rail closes irreversibly if the learner opens the run live — unwarned and unexplained",
       "legacyRoute": "none",
-      "note": "implemented 2026-08-27; reviewRail is server-derived and the run surface states the active-live closure while preserving read access",
-      "completion": { "completedOn": "2026-08-27", "evidence": "RunGraph projects closed_live_session; service tests cross open/closed session states and the app-shell test renders the exact closure instead of a refusing control" },
-      "sourceDigest": "sha256:a9c81a4b537a3a7ddc74c7c318d1feab7b8e8ecb3457ae60d2d85188739e3f70"
+      "note": "`design/05:41` and `teacher-surface` §7.2 both require it be stated",
+      "sourceDigest": "sha256:a9c81a4b537a3a7ddc74c7c318d1feab7b8e8ecb3457ae60d2d85188739e3f70",
+      "completion": {
+        "completedOn": "2026-08-27",
+        "evidence": "RunGraph projects closed_live_session; service tests cross open/closed session states and the app-shell test renders the exact closure instead of a refusing control"
+      }
     },
     {
       "id": "TCH-a27",
@@ -8200,10 +8331,13 @@
       "sourceHeading": "Teacher and classroom — `ux-teacher-and-classroom.md`",
       "summary": "A hand-minted spectator grant confers read but not the review rail, and the asymmetry is invisible",
       "legacyRoute": "none",
-      "note": "implemented 2026-08-27; direct share and assignment submission are distinct server-projected review states",
-      "completion": { "completedOn": "2026-08-27", "evidence": "RunGraph projects closed_shared_not_submitted for a terminal hand grant; the spectator rail states that read remains while human-model, corpus and narration tools are not granted" },
+      "note": "must be stated, not rendered as a refusing control",
       "tournamentReady": true,
-      "sourceDigest": "sha256:02e230b7de2fd055c0ee7f36f61fdc2767fbb8503fe97a3f82e5960cb2cb30a6"
+      "sourceDigest": "sha256:02e230b7de2fd055c0ee7f36f61fdc2767fbb8503fe97a3f82e5960cb2cb30a6",
+      "completion": {
+        "completedOn": "2026-08-27",
+        "evidence": "RunGraph projects closed_shared_not_submitted for a terminal hand grant; the spectator rail states that read remains while human-model, corpus and narration tools are not granted"
+      }
     },
     {
       "id": "TCH-a28",
@@ -8217,10 +8351,11 @@
       "sourceHeading": "Teacher and classroom — `ux-teacher-and-classroom.md`",
       "summary": "Write the pedagogical rule: the cheapest coach intervention is the most expensive for the learner. Put reclaim behind a confirmation naming its cost; keep marks and reveal at hand",
       "legacyRoute": "none",
-      "note": "implemented 2026-08-27; reclaim is a named two-step coach interrupt after the factual nudge options, with the learner and preserved branch named before possession moves",
-      "completion": { "completedOn": "2026-08-27", "evidence": "The academy studio does not call boardControl until the host confirms the learner-specific cost; the two-account browser journey proves offered possession, explicit learner claim, confirmed host reclaim and preserved proposal flow" },
-      "tournamentReady": true,
-      "sourceDigest": "sha256:34cc4394acc96f1c81431f85096de4d0f995d8d3c0ba2090b5241f2df22fcaca"
+      "sourceDigest": "sha256:34cc4394acc96f1c81431f85096de4d0f995d8d3c0ba2090b5241f2df22fcaca",
+      "completion": {
+        "completedOn": "2026-08-27",
+        "evidence": "The academy studio does not call boardControl until the host confirms the learner-specific cost; the two-account browser journey proves offered possession, explicit learner claim, confirmed host reclaim and preserved proposal flow"
+      }
     },
     {
       "id": "TCH-a29",
@@ -8234,10 +8369,11 @@
       "sourceHeading": "Teacher and classroom — `ux-teacher-and-classroom.md`",
       "summary": "The classroom section must explain itself in one sentence before offering a Create control; the invitation must name the inviter, what it authorises and what it does not (`invitedBy`/`invitedAt` are on the type and unrendered)",
       "legacyRoute": "none",
-      "note": "implemented 2026-08-27; classroom consent precedes creation and pending cards name the inviter, timestamp, role powers and the run-access boundary",
-      "completion": { "completedOn": "2026-08-27", "evidence": "The classroom list resolves inviter identity only for pending membership; component and two-account browser journeys bind the consent explanation before Create and before Accept" },
-      "tournamentReady": true,
-      "sourceDigest": "sha256:e5824a47fbfcb537b10f155353187db1268cf8202d01257b3530eef9902778a0"
+      "sourceDigest": "sha256:e5824a47fbfcb537b10f155353187db1268cf8202d01257b3530eef9902778a0",
+      "completion": {
+        "completedOn": "2026-08-27",
+        "evidence": "The classroom list resolves inviter identity only for pending membership; component and two-account browser journeys bind the consent explanation before Create and before Accept"
+      }
     },
     {
       "id": "TCH-a3",
@@ -8251,9 +8387,11 @@
       "sourceHeading": "Teacher and classroom — `ux-teacher-and-classroom.md`",
       "summary": "The learner's `/learn` consent card **names no teacher holding access**, which `teacher-surface` §2.4 requires",
       "legacyRoute": "ledger",
-      "note": "implemented 2026-08-27; every submitted run names the teachers whose current run grants still resolve",
-      "completion": { "completedOn": "2026-08-27", "evidence": "ClassroomService derives grantedTeacherHandles from current runRole and the Learn card renders those handles; withdrawal is tested to produce an empty holder list" },
-      "sourceDigest": "sha256:2a0895e22925e1364081efc04aba42206aec9d07ba2880a0c7843c82bb5397cf"
+      "sourceDigest": "sha256:2a0895e22925e1364081efc04aba42206aec9d07ba2880a0c7843c82bb5397cf",
+      "completion": {
+        "completedOn": "2026-08-27",
+        "evidence": "ClassroomService derives grantedTeacherHandles from current runRole and the Learn card renders those handles; withdrawal is tested to produce an empty holder list"
+      }
     },
     {
       "id": "TCH-a30",
@@ -8281,10 +8419,11 @@
       "sourceHeading": "Teacher and classroom — `ux-teacher-and-classroom.md`",
       "summary": "The desktop grants list satisfies watcher-disclosure; the compact-viewport half does not, and the RFC routes the phone answer to a `/learn` card that names nobody",
       "legacyRoute": "none",
-      "note": "completed 2026-08-27 by the TCH-a3 live-grant projection plus an explicit compact-viewport production assertion; no fourth run tab added",
-      "completion": { "completedOn": "2026-08-27", "evidence": "The /learn submitted-run card names each teacher whose grant currently resolves, remains visible within 390px, and retains the existing revoke control; the archived RFC's compact route is now exercised directly" },
-      "tournamentReady": true,
-      "sourceDigest": "sha256:8507f06e7693b4f15f3ae46338761e512f923d40808e0fe486f2df9a6d95e2cd"
+      "sourceDigest": "sha256:8507f06e7693b4f15f3ae46338761e512f923d40808e0fe486f2df9a6d95e2cd",
+      "completion": {
+        "completedOn": "2026-08-27",
+        "evidence": "The /learn submitted-run card names each teacher whose grant currently resolves, remains visible within 390px, and retains the existing revoke control; the archived RFC's compact route is now exercised directly"
+      }
     },
     {
       "id": "TCH-a32",
@@ -8298,8 +8437,8 @@
       "sourceHeading": "Teacher and classroom — `ux-teacher-and-classroom.md`",
       "summary": "**The classroom competitor record is empty** — Chess.com Classroom, ChessKid Classroom, Chessity, Chess.Run and ChessPlay.io are name-drops; Lichess Classes returns zero hits across `design/research/`. The strongest candidate for the first hands-on pass in the programme",
       "legacyRoute": "ledger",
-      "note": "[[D1483]]",
-      "sourceDigest": "sha256:932364d6976be3a25a1f9b2f4026bfd8b38b31b1ce77816ace01ef9101320538"
+      "note": "desk arm completed in `classroom-competitor-workflows.md`; [[D1483]] remains for the exact authenticated two-account hands-on protocol",
+      "sourceDigest": "sha256:1f16b193fb53e1d8bb2c889952b1acb706659f8016a2191227b3084720b26e42"
     },
     {
       "id": "TCH-a33",
@@ -8313,9 +8452,12 @@
       "sourceHeading": "Teacher and classroom — `ux-teacher-and-classroom.md`",
       "summary": "Nothing was exercised in a browser: no two-account classroom, assignment, standing or academy session",
       "legacyRoute": "none",
-      "note": "implemented 2026-08-27; academy, classroom assignment/submission and standing consent/read behavior all cross real account boundaries",
-      "completion": { "completedOn": "2026-08-27", "evidence": "Production browser journeys cover a two-account academy proposal and a three-account classroom where one learner submits and publishes while the non-publisher observes the standing; the policy decision on that read symmetry remains TCH-b2" },
-      "sourceDigest": "sha256:7b74a47ed163227b9b95a204d42d6501b7bd06aae42300d6ec20533c18867dd1"
+      "note": "a hands-on pass would settle the read-symmetry question by observation",
+      "sourceDigest": "sha256:7b74a47ed163227b9b95a204d42d6501b7bd06aae42300d6ec20533c18867dd1",
+      "completion": {
+        "completedOn": "2026-08-27",
+        "evidence": "Production browser journeys cover a two-account academy proposal and a three-account classroom where one learner submits and publishes while the non-publisher observes the standing; the policy decision on that read symmetry remains TCH-b2"
+      }
     },
     {
       "id": "TCH-a4",
@@ -8329,10 +8471,13 @@
       "sourceHeading": "Teacher and classroom — `ux-teacher-and-classroom.md`",
       "summary": "The simul wall drops `lastMoveAt` — it is in the payload and unrendered, and it is the one honest *who is stuck* signal",
       "legacyRoute": "ledger",
-      "note": "implemented 2026-08-27; the card states the last committed move time or that no move exists",
-      "completion": { "completedOn": "2026-08-27", "evidence": "Live session summaries retain lastMoveAt and the wall renders its timestamp; component and production browser tests cover moved and empty states" },
+      "note": "[[D1479]]",
       "tournamentReady": true,
-      "sourceDigest": "sha256:ea36930066b41d34ea1f5a8b5b380c6d924e748afe3b67e845122f5705b32cc8"
+      "sourceDigest": "sha256:ea36930066b41d34ea1f5a8b5b380c6d924e748afe3b67e845122f5705b32cc8",
+      "completion": {
+        "completedOn": "2026-08-27",
+        "evidence": "Live session summaries retain lastMoveAt and the wall renders its timestamp; component and production browser tests cover moved and empty states"
+      }
     },
     {
       "id": "TCH-a5",
@@ -8346,9 +8491,12 @@
       "sourceHeading": "Teacher and classroom — `ux-teacher-and-classroom.md`",
       "summary": "**`resolveProposal` has a route and a client method and no button anywhere.** A learner can propose a move and a coach cannot accept it — the coached session's central gesture",
       "legacyRoute": "ledger",
-      "note": "implemented 2026-08-27; host actions name, play and decline open participant proposals through the ordinary lease",
-      "completion": { "completedOn": "2026-08-27", "evidence": "App session studio renders proposedBy and host Play proposal/Decline actions; component test binds the writer and a two-account Playwright journey proves participant proposal to applied move" },
-      "sourceDigest": "sha256:0e74612859767bfaedd4b0edb6ada6b2b637cea22c46a23386c399f12a3760f4"
+      "note": "[[D1480]]; verified at HEAD: zero `.svelte` callers",
+      "sourceDigest": "sha256:0e74612859767bfaedd4b0edb6ada6b2b637cea22c46a23386c399f12a3760f4",
+      "completion": {
+        "completedOn": "2026-08-27",
+        "evidence": "App session studio renders proposedBy and host Play proposal/Decline actions; component test binds the writer and a two-account Playwright journey proves participant proposal to applied move"
+      }
     },
     {
       "id": "TCH-a6",
@@ -8378,9 +8526,12 @@
       "sourceHeading": "Teacher and classroom — `ux-teacher-and-classroom.md`",
       "summary": "Mark `sideToMove` against `board.players` so a coach can see whose turn it is",
       "legacyRoute": "none",
-      "note": "implemented 2026-08-27; the side-to-move fact resolves to the seated handle when present",
-      "completion": { "completedOn": "2026-08-27", "evidence": "liveTurnLabel joins board.sideToMove to board.players without evaluation; the component fixture asserts @student-black to move" },
-      "sourceDigest": "sha256:4ca67392be306f517efa133f75570cff51c0e9b7496b7613f17569f69432e3c7"
+      "note": "a rules fact, derivable",
+      "sourceDigest": "sha256:4ca67392be306f517efa133f75570cff51c0e9b7496b7613f17569f69432e3c7",
+      "completion": {
+        "completedOn": "2026-08-27",
+        "evidence": "liveTurnLabel joins board.sideToMove to board.players without evaluation; the component fixture asserts @student-black to move"
+      }
     },
     {
       "id": "TCH-a8",
@@ -8394,9 +8545,11 @@
       "sourceHeading": "Teacher and classroom — `ux-teacher-and-classroom.md`",
       "summary": "Surface `board.pausedAt` on the wall",
       "legacyRoute": "none",
-      "note": "implemented 2026-08-27; the existing paused flag now carries its factual timestamp",
-      "completion": { "completedOn": "2026-08-27", "evidence": "Wall cards render paused since <time> from board.pausedAt; the component contract asserts the state" },
-      "sourceDigest": "sha256:ff25371f19b9eb8c8e88965e69782f44ff80ce3cef6f315148f6c82389d46acb"
+      "sourceDigest": "sha256:ff25371f19b9eb8c8e88965e69782f44ff80ce3cef6f315148f6c82389d46acb",
+      "completion": {
+        "completedOn": "2026-08-27",
+        "evidence": "Wall cards render paused since <time> from board.pausedAt; the component contract asserts the state"
+      }
     },
     {
       "id": "TCH-a9",
@@ -8410,9 +8563,12 @@
       "sourceHeading": "Teacher and classroom — `ux-teacher-and-classroom.md`",
       "summary": "Put the run's `objectiveState` on each wall card as an authored, not computed, signal",
       "legacyRoute": "none",
-      "note": "implemented 2026-08-27; LiveSessionSummary now carries the active node's objectiveState and the wall renders it",
-      "completion": { "completedOn": "2026-08-27", "evidence": "Server route test binds objectiveState in /sessions; component and production browser tests assert Objective state: active on the wall" },
-      "sourceDigest": "sha256:1271fe11b2e864c3dacf0383e2e33b82f7d28093be5fbf0553b6d1b9cc3fffad"
+      "note": "already rendered in the overlay",
+      "sourceDigest": "sha256:1271fe11b2e864c3dacf0383e2e33b82f7d28093be5fbf0553b6d1b9cc3fffad",
+      "completion": {
+        "completedOn": "2026-08-27",
+        "evidence": "Server route test binds objectiveState in /sessions; component and production browser tests assert Objective state: active on the wall"
+      }
     },
     {
       "id": "TCH-b1",
