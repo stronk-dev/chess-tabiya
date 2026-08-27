@@ -665,8 +665,10 @@ engine degradation, migrate a prior DB, back up/restore, update/roll back, and p
 SBOM/signatures. Health is live, not a startup snapshot.
 
 Primary RFCs: `storage-backup-recovery` for F12-C/D608, `safe-deployment-profiles` for
-F12-A/D607/D1846/D1847, and `provider-health-degradation` for F12-D/D609/D1848. [[D1448]], the
-remaining F12 children, packaging checks, workflows and deploy artifacts own the other residuals.
+F12-A/D607/D1846/D1847, `provider-health-degradation` for F12-D/D609/D1848, and
+`verifiable-runtime-distribution` for F12-E1/D610/D615/D1580/D1849/D1850. F12-E2 retains D611's
+final F3/F4 runtime-content join. [[D1448]], the remaining F12 children, packaging checks, workflows
+and deploy artifacts own the other residuals.
 
 ## Production surface inventory
 

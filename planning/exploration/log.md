@@ -9945,3 +9945,32 @@ to Stockfish or a random move; no-data/out-of-domain, provider-off and exact-cac
 distinct. Lichess 429 handling follows its published one-at-a-time/full-minute rule. The draft is
 registered and roadmap-owned; independent buildability review and owner acceptance precede product
 implementation.
+
+## 2026-08-27 — F12-E splits distribution truth from the blocked content-bundle join
+
+The release child was “partly blocked” because it combined two unlike dependencies. E1 can be
+specified now: immutable image/workflow inputs, a FOSS CPU Maia image, resource envelopes,
+SBOM/notices/corresponding source, signatures/attestations and native amd64/arm64 proof. E2 still
+depends on F3/F4 to decide the final rights-cleared runtime content bundle. The split prevents one
+future chess-content join from holding every release-supply-chain repair hostage.
+
+`rfc/verifiable-runtime-distribution.md` gives E1 a closed release set and three honest tiers. Core
+must fit a 512 MiB hard / 384 MiB peak envelope; CPU must fit 2 GiB hard / 1,843 MiB peak; all server
+caches compose inside 96 MiB retained JS heap, finally supplying [[D1580]] with a falsifiable release
+predicate. Accelerated packaging is optional and, if published, names its exact hardware/runtime/
+licence/resource matrix; it can never enter the default CPU layers or support an unqualified
+all-FOSS claim.
+
+The source audit added two defects before drafting. Both Dockerfiles resolve mutable bases or
+dependency repositories despite their final output digest ([[D1849]]), and write-capable GitHub
+Actions use movable major tags even though GitHub identifies full commit SHAs as the sole immutable
+reference ([[D1850]]). E1 freezes those materials, generates per-platform SPDX inventories from
+the pushed digests, signs image indexes, attests image/SBOM/release subjects, and verifies the set in
+a clean job before publication.
+
+The present Maia weight basis remains deliberately red. The pinned model card labels its paper and
+then points elsewhere for code/weights; the RFC refuses to infer a licence for the exact weight
+bytes. D1 requires an explicit upstream statement or model replacement/removal before the required
+CPU tier can ship. E1 uses a loader-traced temporary content allow-list and excludes jobs,
+candidates, sidecars, planning prose and local paths; E2 must later replace it with F3/F4's compiled
+bundle. Independent buildability review and owner acceptance remain before implementation.

@@ -172,7 +172,7 @@ returns cached/live selections indistinguishably. The RFC consumes F1's compiled
 provider-off declarations, and adds no parallel evidence registry. No product implementation is
 authorized before independent buildability review and owner acceptance.
 
-### F12-E — runtime bundle, FOSS engine matrix and verifiable distribution — PARTLY BLOCKED
+### F12-E — runtime bundle, FOSS engine matrix and verifiable distribution — E1 DRAFTED; E2 BLOCKED
 
 Owns D610/D611/D615, signed/attested images, multi-architecture tiers and the distribution half of
 Choice C.
@@ -196,11 +196,25 @@ Blocked portion:
   candidates, jobs, local paths and authoring-only sidecars, and carry only rights-cleared runtime
   artifacts.
 
+The child is split at that real dependency boundary. Active E1 specification:
+`rfc/verifiable-runtime-distribution.md`, ready for independent buildability review. It owns image
+inputs, FOSS CPU packaging, resource envelopes, native multi-architecture proof, SBOM/notices/source,
+full-SHA workflow dependencies, signatures and attestations. Its source pass adds [[D1849]] (mutable
+base/OS/Python resolution) and [[D1850]] (write-capable actions referenced by movable tags). E2 owns
+the final F3/F4 runtime-content export; E1 uses a strict temporary loader-derived allow-list and
+cannot discharge the final content join. No product implementation is authorized before E1's
+independent review and owner acceptance.
+
 **OWNER RULED 2026-08-21:** adopt these resource tiers as proposed:
 
 1. `core`: deterministic rehearsal, no model, lowest supported memory;
 2. `cpu`: FOSS Stockfish + CPU Maia, the default full local-opponent appliance;
 3. `accelerated`: optional GPU image, separately labelled/licensed, never required by a core journey.
+
+E1 proposes the falsifiable numeric floor missing under [[D1580]]: `core` has a 512 MiB hard / 384
+MiB peak envelope; `cpu` has a 2 GiB total hard / 1,843 MiB peak envelope; all server caches compose
+inside 96 MiB retained JS heap. Owner acceptance of E1 adopts those numbers; a measured failure
+returns the contract rather than silently inflating the appliance.
 
 ### F12-F — one accessible board-input model — IMPLEMENTED; OWNER-USE DISCHARGE REMAINS
 
