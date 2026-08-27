@@ -8206,15 +8206,18 @@
     {
       "id": "TCH-a28",
       "sourceState": "queued",
-      "state": "queued",
+      "state": "completed",
       "capability": "professional",
       "owner": "professional-workflows",
-      "assignment": "capability:professional",
+      "assignment": "closed",
       "sourceDocument": "ux-teacher-and-classroom.md",
       "sourceSection": "§5.3 ladder",
       "sourceHeading": "Teacher and classroom — `ux-teacher-and-classroom.md`",
       "summary": "Write the pedagogical rule: the cheapest coach intervention is the most expensive for the learner. Put reclaim behind a confirmation naming its cost; keep marks and reveal at hand",
       "legacyRoute": "none",
+      "note": "implemented 2026-08-27; reclaim is a named two-step coach interrupt after the factual nudge options, with the learner and preserved branch named before possession moves",
+      "completion": { "completedOn": "2026-08-27", "evidence": "The academy studio does not call boardControl until the host confirms the learner-specific cost; the two-account browser journey proves offered possession, explicit learner claim, confirmed host reclaim and preserved proposal flow" },
+      "tournamentReady": true,
       "sourceDigest": "sha256:34cc4394acc96f1c81431f85096de4d0f995d8d3c0ba2090b5241f2df22fcaca"
     },
     {

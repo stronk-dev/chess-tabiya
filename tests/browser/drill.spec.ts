@@ -544,6 +544,21 @@ test("an academy host can identify and play a participant's proposed move", asyn
 
   await participant.goto(sessionUrl);
   await expect(participant.getByText("your role: participant")).toBeVisible();
+  const members = page.getByRole("heading", { name: "Members" }).locator("..");
+  await members.getByLabel("Offer board to handle").fill(participantHandle);
+  await members.getByRole("button", { name: "Offer board" }).click();
+  await participant.getByRole("button", { name: "Open shared board" }).click();
+  await expect(participant.getByLabel("Chessboard")).toBeVisible();
+  await participant.getByRole("button", { name: "Take the board on this device" }).click();
+  await page.goto(sessionUrl);
+  await expect(page.getByText(`@${participantHandle} holds the board.`)).toBeVisible();
+  await page.getByRole("button", { name: "Take back board…" }).click();
+  const reclaim = page.getByRole("complementary", { name: `Take the board from @${participantHandle}?` });
+  await expect(reclaim).toContainText("their attempt-in-progress ends as an active learning turn");
+  await expect(reclaim).toContainText("Nothing in the learner's line is deleted");
+  await reclaim.getByRole("button", { name: "Confirm — take the board" }).click();
+  await expect(page.getByText("holds the board.").first()).not.toContainText(`@${participantHandle}`);
+  await participant.goto(sessionUrl);
   const proposals = participant.getByRole("heading", { name: "Proposals" }).locator("..");
   await proposals.getByLabel("Move (UCI)").fill("a1b1");
   await proposals.getByRole("button", { name: "Propose" }).click();

@@ -9818,3 +9818,17 @@ Academy in particular names board handoff, attributed proposals and marks, and t
 rewind/branch/compare/return loop already available through the shared board. Component and
 production-browser assertions keep that explanation attached to the academy route. TCH-a11 is
 complete.
+
+## 2026-08-27 — Board reclaim becomes a deliberate coach interrupt
+
+The live studio now exposes the already-shipped host reclaim operation without turning it into the
+cheapest way to coach. While a learner holds the board, the host first sees the factual cost and a
+two-step confirmation naming that learner: reclaim ends their active learning turn, but their line
+stays in the branch rail and nothing is deleted. A vote or proposal remains the named lower-cost
+nudge. Cancel performs no request; confirm creates the host's device writer, invokes the existing
+atomic reclaim and refreshes both possession and its journal.
+
+The focused component fixture proves the first click and cancellation are inert before the exact
+`reclaim` call. The production two-account journey exercises the full possession protocol: host
+offer, participant navigation, explicit participant device claim, learner-specific confirmation,
+host reclaim, and the existing proposal flow afterwards. TCH-a28 is complete.

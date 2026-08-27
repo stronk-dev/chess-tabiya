@@ -567,7 +567,7 @@ describe("application shell", () => {
       status: "open" as const,
       resolvedRunSeq: null,
     };
-    const detail: LiveSessionDetail = {
+    let detail: LiveSessionDetail = {
       session: {
         id: "session-one",
         runId: "live-run",
@@ -582,7 +582,7 @@ describe("application shell", () => {
       classroom: { id: "classroom-one", name: "Endgame club" },
       role: "host",
       activeNodeId: "node-one",
-      leaseHeldBy: { learnerId: "learner-host", handle: "coach" },
+      leaseHeldBy: { learnerId: "learner-guest", handle: "student" },
       grants: [
         { learnerId: "learner-host", handle: "coach", role: "host", grantedAt: "2026-08-27T11:00:00.000Z" },
         { learnerId: "learner-guest", handle: "student", role: "participant", grantedAt: "2026-08-27T11:01:00.000Z" },
@@ -595,6 +595,10 @@ describe("application shell", () => {
     };
     const claimLease = vi.fn(async () => undefined);
     const resolveProposal = vi.fn(async () => ({ ...proposal, status: "applied" as const, resolvedRunSeq: 4 }));
+    const boardControl = vi.fn(async () => {
+      detail = { ...detail, leaseHeldBy: { learnerId: "learner-host", handle: "coach" } };
+      return detail.session;
+    });
     const liveApi: DrillClientApi = {
       ...api(),
       async session() { return { id: "learner-host", handle: "coach", createdAt: "2026-08-27T10:00:00.000Z" }; },
@@ -602,6 +606,7 @@ describe("application shell", () => {
       async sessionJournal() { return { entries: [], nextSeq: 0 }; },
       claimLease,
       resolveProposal,
+      boardControl,
     };
     const component = mount(App, {
       target: target(),
@@ -613,6 +618,24 @@ describe("application shell", () => {
     expect(document.body.textContent).toContain("Academy lesson");
     expect(document.body.textContent).toContain("rewind, branch, compare, and return without discarding the original line");
     expect(document.querySelector("[aria-label='Move proposals']")?.textContent).toContain("e2e4");
+    const reclaim = [...document.querySelectorAll<HTMLButtonElement>("button")].find((button) => button.textContent === "Take back board…")!;
+    reclaim.click();
+    expect(boardControl).not.toHaveBeenCalled();
+    await vi.waitFor(() => expect(document.body.textContent).toContain("Take the board from @student?"));
+    expect(document.body.textContent).toContain("their attempt-in-progress ends as an active learning turn");
+    expect(document.body.textContent).toContain("Nothing in the learner's line is deleted");
+    const cancel = [...document.querySelectorAll<HTMLButtonElement>("button")].find((button) => button.textContent === "Cancel")!;
+    cancel.click();
+    await vi.waitFor(() => expect(document.body.textContent).not.toContain("Take the board from @student?"));
+    [...document.querySelectorAll<HTMLButtonElement>("button")].find((button) => button.textContent === "Take back board…")!.click();
+    const confirm = await vi.waitFor(() => {
+      const candidate = [...document.querySelectorAll<HTMLButtonElement>("button")].find((button) => button.textContent === "Confirm — take the board");
+      expect(candidate).toBeDefined();
+      return candidate!;
+    });
+    confirm.click();
+    await vi.waitFor(() => expect(boardControl).toHaveBeenCalledWith("session-one", "writer-live", "reclaim"));
+    await vi.waitFor(() => expect(document.body.textContent).toContain("@coach holds the board"));
     const play = [...document.querySelectorAll<HTMLButtonElement>("button")].find((button) => button.textContent === "Play proposal")!;
     play.click();
     await vi.waitFor(() => expect(resolveProposal).toHaveBeenCalledWith("session-one", "proposal-one", "apply", "writer-live"));

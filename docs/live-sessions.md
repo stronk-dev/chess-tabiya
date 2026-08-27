@@ -116,6 +116,11 @@ to a live session. Wall and studio copy name Stream, Academy lesson, and Match a
 workflows rather than exposing their stored enum and board-control tokens. Academy explicitly
 points to the shipped handoff, proposal, mark, rewind, branch, comparison, and main-line return
 loop; those remain operations on the shared run, not a separate teacher-only review surface.
+When a learner holds an academy board, the host's reclaim operation is deliberately not a
+one-click convenience. The studio first recommends the non-possession vote or proposal path,
+then opens a learner-specific confirmation explaining that reclaim ends the active learning turn
+while preserving its line in the branch rail. Only confirmation creates the host's device writer
+and sends the atomic server-side reclaim. Cancelling performs no possession operation.
 Session and overlay tallies poll every two seconds. The overlay uses
 the same run projection and feedback barrier as the player; it is not a second evidence
 surface. It always resumes through a projection-only controller: a writer lease saved in the
