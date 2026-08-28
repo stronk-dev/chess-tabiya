@@ -10862,3 +10862,16 @@ CI actually run.
 - Replaced the four review reproductions with seven able-to-fail author fixtures while preserving
   the seven D1916 checks. No runtime, web, schema, storage, content, archive or protected design byte
   changed. Fresh independent review still gates C9 implementation and claim transfer.
+
+## 2026-08-28 — Semantic-convention register second-return author repair
+
+- Corrected the dependency-relative count to resource nine and reused C9's staged/first-parent
+  claimant-to-landing transition for the exact 39-member handoff. Safe-integer parsing now precedes
+  every lineage/head operation; seed equality has explicit zero-landed and post-landing phases.
+- Reconciled product construction: one checked generator transforms the reviewed declaration JSON
+  into the literal runtime array and compares all semantic fields. Canonical semantic history now
+  has an exact JSONL path, four-field row, checker, stable Make targets and governance/CI boundary.
+- Found and recorded [[D2019]]: a history row cannot atomically embed its own landing commit hash.
+  The row retains ref/semantic/registry/owner; staged/first-parent Git history supplies the
+  introducing commit. Seven author fixtures plus the 19 prior contracts pass. No production,
+  schema, storage, web, content, archive or protected design byte changed; fresh reviews remain.

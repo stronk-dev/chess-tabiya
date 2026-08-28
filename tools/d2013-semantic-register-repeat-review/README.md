@@ -1,9 +1,9 @@
-# D2013 semantic-register repeat review
+# D2013 semantic-register second-return author contract
 
-Disposable process/buildability instrument under RFC-0000. It reproduces the repeat-review
-blockers against the amended semantic-convention register: dependency-relative resource numbering,
-claim-to-landing ownership, declaration-source compatibility, semantic-history buildability,
-safe version arithmetic and the pre/post-landing seed invariant.
+Disposable process/buildability author contract under RFC-0000. It crosses the repaired
+dependency-relative resource number, claimant-to-landing ownership, checked literal declaration
+source, canonical append-only history, safe version arithmetic, phase-scoped seed invariant and
+the no-self-hash history row.
 
 Run from the repository root with:
 

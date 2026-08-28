@@ -1,11 +1,10 @@
 # RFC: Semantic-convention shared-resource register
 
-- **Status:** draft — returned again 2026-08-28 on [[D2013]]–[[D2018]]. The lineage and stable-seed
-  repairs survive, but dependency numbering, claim-to-landing ownership, tree-source compatibility,
-  semantic-history buildability, safe version arithmetic and phase-scoped seed enforcement require
-  author correction. Exact return and queue:
-  `planning/semantic-convention-register/repeat-independent-buildability-review-2026-08-28.md` and
-  `repeat-author-handoff.md`. Implementation remains unauthorised.
+- **Status:** draft — amended 2026-08-28 after the [[D2013]]–[[D2018]] repeat return and [[D2019]]
+  author reconciliation. The resource is ninth after assistance; C10 reuses its transition reader;
+  one checked generator produces the literal tree authority; history has exact JSONL/check targets;
+  versions are safe integers; and seed rules are phase-scoped. Fresh independent review still
+  precedes acceptance and implementation.
 - **Author:** codex
 - **Created:** 2026-08-27
 - **Design refs:** none. This is repository process and changes no evidence meaning or learner UX.
@@ -24,22 +23,23 @@ none
 
 ## Summary
 
-Register `semantic-conventions` as the eighth shared resource before the product registry lands.
+Register `semantic-conventions` as the ninth shared resource before the product registry lands.
 The landed tree set starts empty;
 the exact 39-member future set is claimed once by `semantic-convention-provenance.md`. When that
 product RFC implements, the checker derives the members from `CONVENTION_DECLARATIONS`, the README
 records those same members as landed, and the live claim disappears atomically.
 
 This RFC changes no runtime, evidence, rendering, content or schema bytes. It prevents the proposed
-convention catalogue from becoming an eighth shared authority with no collision or drift reader.
+convention catalogue from becoming a ninth shared authority with no collision or drift reader.
 
 ## Motivation
 
 RFC-0000 rule 7 registers a closed/versioned resource when parallel drafts can move it and it crosses
 a package boundary. Semantic conventions satisfy that predicate as soon as one draft claims the
 registry; the 39-member claim now exists as an executable reviewed set. The current checker accepts
-seven resources (six original shapes plus the campaign schema extension), while the convention RFC must
-not implement product bytes before acceptance. Therefore the process register must support a
+seven resources (six original shapes plus the campaign schema extension), and the required
+assistance predecessor adds resource eight before this RFC may land. The convention RFC must not
+implement product bytes before acceptance. Therefore the process register must support a
 pre-landing state: empty landed tree, non-empty future claim.
 
 The register is identity-membership-based, like `evidence-kinds`, but its members are structured
@@ -59,8 +59,10 @@ claim form is:
 semantic-conventions | members <ref>, <ref>... | <non-empty changed symbols>
 ```
 
-Each ref matches `^[a-z][a-z0-9_-]*@[1-9][0-9]*$`. Members must be ASCII-sorted and unique inside
-one claim. A document may carry at most one claim for this resource. C3 collision identity is the
+Each ref matches `^[a-z][a-z0-9_-]*@[1-9][0-9]*$`, and its decimal version must parse as a positive
+JavaScript safe integer (`<= Number.MAX_SAFE_INTEGER`) whose canonical decimal spelling round-trips
+byte-for-byte. Members must be ASCII-sorted and unique inside one claim. A document may carry at
+most one claim for this resource. C3 collision identity is the
 base convention id, not the complete ref: `space@2` and `space@3` collide while `space@2` and
 `threat@2` do not.
 
@@ -73,7 +75,7 @@ This process RFC claims `none`. On its implementation,
 `semantic-convention-provenance.md` atomically changes its block to the exact §1.2 set:
 
 ```text
-semantic-conventions | members back_rank_susceptible@1, backward-pawn-legacy@1, candidate-feature-vector@1, candidate-majority@1, chessops-king-takes-rook@1, defence-duty@1, development@1, discovered-latency@1, double-attack@1, evidence-reference-resolution@1, fork-survival@1, grade-convention@1, king-landing-square@1, king-opposition-blocker-blind@1, king-shelter@1, king-zone@1, legal-exchange@1, local-non-losing@1, loose-piece@1, mate-proof@1, material-role-signature@1, maximal_pawn_reach@1, mover-turn-ep-cleared@1, observed-window@1, opening-deepest-reached@1, overload-conflict@1, pawn-relations@1, pressure-line@1, race-arrival@1, ray-classification@1, space@1, square-control@1, standard-uci-king-destination@1, story-last-level@1, story-rank@1, story-title@1, threat@1, trade-completed@1, trapped@1 | CONVENTION_DECLARATIONS; projection convention closures; append-only semantic history
+semantic-conventions | members back_rank_susceptible@1, backward-pawn-legacy@1, candidate-feature-vector@1, candidate-majority@1, chessops-king-takes-rook@1, defence-duty@1, development@1, discovered-latency@1, double-attack@1, evidence-reference-resolution@1, fork-survival@1, grade-convention@1, king-landing-square@1, king-opposition-blocker-blind@1, king-shelter@1, king-zone@1, legal-exchange@1, local-non-losing@1, loose-piece@1, mate-proof@1, material-role-signature@1, maximal_pawn_reach@1, mover-turn-ep-cleared@1, observed-window@1, opening-deepest-reached@1, overload-conflict@1, pawn-relations@1, pressure-line@1, race-arrival@1, ray-classification@1, space@1, square-control@1, standard-uci-king-destination@1, story-last-level@1, story-rank@1, story-title@1, threat@1, trade-completed@1, trapped@1 | packages/runtime/src/evidence-convention-history.jsonl#semantic-conventions; packages/runtime/src/evidence-conventions.ts#CONVENTION_DECLARATIONS
 ```
 
 The checker compares that literal claim set with the executable D1722 census during the process
@@ -87,12 +89,28 @@ Program/TypeChecker introduced by the predecessor register RFC. It locates exact
 readonly declaration array and derives only each literal `ref.id` plus positive-integer
 `ref.version`. A computed, broad, duplicate or unparsable ref fails; declaration order is ignored.
 
+The product landing creates that literal with one checked one-time source-recovery generator:
+`tools/generate-initial-convention-declarations.mjs` consumes
+`planning/semantic-convention-provenance/initial-declarations.json` and emits the exact initial
+array. `make semantic-convention-source-check` runs the generator in check mode and compares all 39
+semantic fields, not only refs. The emitted TypeScript array becomes the runtime authority; the
+planning JSON remains immutable initial source evidence, not a second mutable runtime registry.
+Later convention versions append reviewed literal declarations directly and remain governed by
+history. A hand-copied initial array, runtime `.map(...)`, broad cast or generator output differing
+from the reviewed JSON fails the product check and C10 extraction ([[D2015]]).
+
 This projection intentionally observes **identity membership only**. It does not and cannot prove
 that definition, limitation, authority or disclosure bytes stayed fixed. The product RFC owns that
-separate guarantee through its append-only semantic-history artifact and staged/first-parent
-governance. Once a tree declaration exists, C10 requires the product/history check and artifact to
-exist; in the legal pre-landing state it requires their absence. It never claims member set-equality
-can see semantic bytes it erases.
+separate guarantee through `packages/runtime/src/evidence-convention-history.jsonl`. Each newline is
+one canonical-JSON object with exactly `ref`, `semanticDigest`, `registryDigest` and `ownerRfc`, in
+that order, followed by `\n`; digests use lowercase `sha256:<64 hex>`. Rows appear in landing order.
+They do not contain their own impossible landing-commit hash ([[D2019]]): staged/first-parent Git
+history identifies the introducing commit. `tools/semantic-convention-history-check.mjs` validates
+row shape, declaration digests, lineage and append-only bytes; `make semantic-convention-history-check`
+runs it, and `make verify-governance` plus CI invoke it on staged and committed first-parent states.
+Once a tree declaration exists, C10 requires that literal artifact, command and source check to
+exist and pass; in the legal pre-landing state it requires all product targets/artifacts absent. It
+never claims member set-equality can see semantic bytes it erases ([[D2016]]).
 
 Before the first product landing, the file/symbol may be absent only when all three facts hold:
 
@@ -124,9 +142,16 @@ The predecessor's C1-C9 meanings remain unchanged. New C10 checks:
 - tree members are unique, valid refs and set-equal to landed rows;
 - live semantic claims are sorted, unique, valid and collide per member;
 - live claims serialize by base id and name exactly the next landed version (or `@1` for a new id);
-- the pre-landing exception satisfies all three conditions above;
-- the durable seed parses as schema version 1, is sorted/unique, and is set-equal to both the D1722
-  census and the sole initial live claim; deletion/drift fails; and
+- every version is a canonical positive safe integer before head arithmetic;
+- the pre-landing exception satisfies all three conditions above. In this phase the durable seed,
+  D1722 census and sole initial live claim are set-equal;
+- after first landing the seed/census remain immutable and their exact initial set is a subset of
+  tree/Landed, but no initial live claim is required;
+- a product landing passes the same staged/first-parent transition reader as C9: the previous sole
+  claimant's exact members and authority tokens become new tree/Landed members owned by that RFC,
+  and the claim disappears; and
+- the literal source-generator and semantic-history targets/artifacts have the exact phase-specific
+  presence above; deletion/drift fails;
 - after product landing, removal/rename cannot be hidden by editing only the README table or only
   the runtime array. Same-version semantic replacement is outside member equality and must fail in
   the product semantic-history check.
@@ -142,7 +167,7 @@ After product landing it prints `39 landed members; claimed 0`. It never falls t
 
 ### 4. Able-to-fail fixture matrix
 
-Unit: one mutation class. Total: nineteen.
+Unit: one mutation class. Total: twenty-eight.
 
 | # | mutation | result |
 |---:|---|---|
@@ -165,6 +190,15 @@ Unit: one mutation class. Total: nineteen.
 | 17 | `space@2` and `threat@2` at matching landed heads | pass |
 | 18 | new id at `@2`, or existing id skips/backtracks | fail |
 | 19 | durable seed deletion, malformed schema, omission or count-preserving swap | fail |
+| 20 | `@9007199254740991`, max+1 and the first two aliased decimal strings | max passes; unsafe/aliased refs fail before arithmetic |
+| 21 | pre-landing seed = census = sole exact claim | pass |
+| 22 | post-landing 39 tree/Landed, immutable seed/census and zero initial claim | pass |
+| 23 | post-landing tree/Landed omit or swap one initial seed member | fail |
+| 24 | exact prior 39-member claimant → generated tree/history + owner-bound Landed rows + no claim | pass |
+| 25 | product landing with no prior claim, wrong owner, partial members or wrong authority token | fail transition |
+| 26 | generator output differs from `initial-declarations.json`, or runtime array is computed/hand-copied | fail source check/C10 |
+| 27 | tree exists but JSONL, history checker, source checker or stable Make/CI target is absent | fail |
+| 28 | history row has wrong key order/shape/digest, lacks newline, or adds self-referential `landingCommit` | fail |
 
 ### 5. Implementation boundary and order
 
@@ -189,27 +223,36 @@ None. This is process machinery over already-researched future product state.
 ## Acceptance criteria
 
 1. `semantic-conventions` exists exactly once in `RESOURCE_NAMES` and README.
-2. Its distinct sorted `id@version` claim grammar accepts the exact 39 and refuses mutation 4/5.
+2. Its distinct sorted `id@version` claim grammar accepts the exact 39, requires canonical positive
+   safe integers and refuses mutations 4/5/20.
 3. C3 detects per-base-id overlap and permits disjoint lineages.
-4. The pre-landing exception passes only for empty tree/landed plus a valid live claim.
-5. The exact live claim, D1722 census and durable seed are set-equal; seed deletion/schema drift,
-   omission and count-preserving swap fail without any copied checker list.
-6. The future AST extractor refuses duplicate, computed, broad and invalid refs.
+4. The pre-landing exception passes only for empty tree/landed plus one valid live claim whose exact
+   set equals seed/census. Post-landing retains immutable seed/census as a subset of tree/Landed and
+   requires no initial live claim.
+5. Seed deletion/schema drift, omission and count-preserving swap fail in both phases without any
+   copied checker list.
+6. The future AST extractor refuses duplicate, computed, broad and invalid refs; the checked
+   generator emits the exact 39 semantic rows from `initial-declarations.json` and check mode fails
+   any difference.
 7. C3/C10 serialize by base id: new ids start at 1, existing ids claim head+1, same-lineage
    concurrent/skipped/backward versions fail, and different ids may advance together.
-8. C4/C6/C10 establish tree↔landed identity set equality after first landing in both directions;
-   semantic-byte immutability is explicitly tested by the product RFC's append-only history, not
-   falsely attributed to this projection.
+8. C4/C6/C10 establish tree↔landed identity set equality after first landing in both directions.
+   The same staged/first-parent transition reader as C9 binds the previous exact claimant and
+   authority tokens to new owner rows; mutation 25 fails and mutation 24 passes.
 9. Reordering declarations changes no derived membership.
 10. Dedicated output reports 0/39 before landing and 39/0 after; no fallback branch is used.
 11. Existing register C1-C9 fixtures and real derived heads/digests remain unchanged.
-12. No product/runtime/web/schema/storage/content/archive byte changes.
+12. No product/runtime/web/schema/storage/content/archive byte changes. C10 merely names the exact
+    future source/history paths and targets whose absence is legal before product landing.
 13. Node-24 governance, `git diff --check`, staged process contracts and CI governance pass on
     committed bytes and report C1-C10 green.
 14. README status, roadmap receipt, [[D1722]], [[D1852]] and append-only logs close in the same
     implementing commit; archive waits for all discharges.
 15. The semantic product RFC carries the exact live claim and can proceed to independent review
     without any product implementation having landed.
+16. At product landing, `make semantic-convention-source-check` and
+    `make semantic-convention-history-check` exist in stable Make/CI surfaces; canonical JSONL rows
+    carry exactly ref/semantic/registry/owner bytes and never an impossible self commit hash.
 
 ## Discharges
 
@@ -231,15 +274,21 @@ None. This document chooses no convention meaning or learner behavior.
 | [[D1918]] | repaired: identity-only scope, product append-only history owns semantic bytes | reconciled with `semantic-convention-provenance.md`; repeat review |
 | [[D1919]] | repaired: stable planning JSON is the single seed consumed by D1722 and future C10 | executable amendment; repeat review |
 | [[D1920]] | repaired: eighth-resource wording throughout | author correction |
-| [[D2013]] | returned: assistance lands first as resource eight, so semantic conventions are ninth | author correction |
-| [[D2014]] | returned: snapshot C10 cannot prove the prior sole claimant at product landing | transition-aware register repair |
-| [[D2015]] | returned: literal AST tree authority conflicts with the product's JSON-expanded source | process/product construction reconciliation |
-| [[D2016]] | returned: append-only history has no named artifact, format or executable governance target | product/process history contract |
-| [[D2017]] | returned: unbounded digit refs alias under JavaScript `number` arithmetic | safe-integer version contract |
-| [[D2018]] | returned: seed-to-live-claim equality is not scoped to the pre-landing phase | explicit C10 state machine |
+| [[D2013]] | repaired: dependency-relative wording names semantic conventions as resource nine | fresh review |
+| [[D2014]] | repaired: C10 reuses the C9 staged/first-parent claimant→landing transition | transition-capable author fixtures |
+| [[D2015]] | repaired: one checked generator emits the literal initial array from the reviewed JSON | process/product source check |
+| [[D2016]] | repaired: exact JSONL path/row format/checker/Make/CI surfaces are named | product/process history fixtures |
+| [[D2017]] | repaired: canonical positive safe-integer parsing precedes all arithmetic | boundary/alias fixtures |
+| [[D2018]] | repaired: explicit zero-landed and post-landing seed/claim phases | state-machine fixtures |
+| [[D2019]] | repaired during author reconciliation: Git transition supplies landing commit; history row has no self hash | fresh review |
 
 ## Changelog
 
+- 2026-08-28: amended after the repeat return. Corrected resource nine, reused the predecessor's
+  claim-to-landing transition, bound the literal tree to one checked source-recovery generator,
+  named canonical JSONL history and stable checks, bounded versions to safe integers, and separated
+  pre/post-landing seed rules. Author reconciliation found [[D2019]] and removed the impossible
+  requirement for a history row to contain its own Git commit. Fresh independent review remains.
 - 2026-08-28: repeat independent review returned the draft on [[D2013]]–[[D2018]]. Exact return:
   `planning/semantic-convention-register/repeat-independent-buildability-review-2026-08-28.md`.
 - 2026-08-27: independent review returned the draft on [[D1917]]–[[D1919]] and recorded the

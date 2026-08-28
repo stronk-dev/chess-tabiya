@@ -187,6 +187,15 @@ is not separated into pre- and post-landing phases ([[D2018]]). The 39-member ce
 lineage remain valid; repair must reuse the transition-safe assistance primitive rather than create
 another snapshot-only register.
 
+The 2026-08-28 author repair closes those specification gaps without implementing product bytes.
+C10 now consumes the C9 transition model, versions are canonical safe integers, and the initial
+seed has explicit pre/post-landing invariants. One checked generator binds the reviewed 39-row JSON
+to the literal runtime array; canonical JSONL history has a named checker and stable Make/CI
+surfaces. Reconciliation found [[D2019]]: an atomic history row cannot contain its own Git commit
+hash, so the row carries ref/semantic/registry/owner while Git transition history supplies the
+introducing commit. Seven author arms plus 19 prior contracts pass; fresh independent review still
+gates both process and product implementation.
+
 The 2026-08-28 second repeat review keeps the shared candidate denominator explicitly
 unimplemented. Its neutral complete-legal packet, original constituent evidence, removal of the
 false F1 aggregate and one-root bot table all survive. The author repair did not establish a real

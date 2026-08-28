@@ -2,10 +2,10 @@
 
 ## State
 
-Draft process RFC returned again after repeat independent buildability review. The [[D1917]]–[[D1919]]
-lineage/scope/seed repairs survive, but [[D2013]]–[[D2018]] leave the resource order, landing
-transition, product construction, history artifact, numeric version domain and pre/post-landing
-state machine unbuildable. No implementation is authorised.
+Draft process RFC amended after the repeat return. The [[D2013]]–[[D2018]] repairs and author-found
+[[D2019]] now have a seven-arm executable contract: resource nine, transition ownership, checked
+literal source, canonical JSONL history, safe versions, phase-scoped seed rules and no self hash.
+Fresh independent review remains; no implementation is authorised.
 
 ## Order
 
@@ -13,8 +13,9 @@ state machine unbuildable. No implementation is authorised.
    resource count.
 2. ✅ Repeat independent review; return recorded in
    `repeat-independent-buildability-review-2026-08-28.md`.
-3. Repair [[D2013]]–[[D2018]] using `repeat-author-handoff.md`; replace the six review arms with
-   transition-capable author fixtures.
+3. ✅ Repair [[D2013]]–[[D2018]] using `repeat-author-handoff.md`; [[D2019]] was found and repaired
+   during process/product reconciliation. Seven transition-capable author fixtures replace the six
+   review reproductions.
 4. Fresh independent review and acceptance only after the repaired assistance-register dependency
    has a compatible transition/history API.
 5. Implement the distinct ref grammar, pre-landing state, future tree reader and repaired fixtures.

@@ -1,7 +1,8 @@
 # RFC: Semantic convention provenance — definitions survive collection, derivation and disclosure
 
-- **Status:** draft — amended 2026-08-27 with executable D1921–D1926/D1934–D1937 contracts;
-  the process predecessor and repeat independent review still block acceptance
+- **Status:** draft — amended 2026-08-28 to reconcile the [[D2013]]–[[D2019]] process return with
+  an exact generated literal source and canonical append-only history. The process predecessor and
+  repeat independent product review still block acceptance
 - **Author:** codex (agent), for Marco
 - **Created:** 2026-08-27
 - **Design refs:** `design/04-content-architecture.md` §2d and §7;
@@ -21,8 +22,9 @@ run-schema | lane 0.24 | EvidenceAttachedEvent gains optional semanticReceipts c
 ```
 
 The run-schema claim is required now by the durable Review/history guarantee in §6.1. The future
-`semantic-conventions` claim remains absent while its process resource is a draft: this RFC creates
-an eighth shared resource and the current checked claim grammar knows seven. The
+`semantic-conventions` claim remains absent while its process resource is a draft: after the
+assistance predecessor, the process RFC creates the ninth shared resource. The current checked
+claim grammar still knows seven because neither predecessor has implemented. The
 reviewed 39-member initial census is published in §1.2 and the exact process repair is
 `semantic-convention-register.md`. Before acceptance, that register/checker must land and this block
 must gain its set-equal membership claim beside the retained run lane. A private
@@ -141,10 +143,13 @@ refs, blank definition/limitations/disclosure, unsupported authority shapes, and
 ruling reference the repository's existing source grammar cannot resolve. The digest covers every
 semantic field, not file path or declaration order.
 
-The compiler also compares the current registry with an append-only semantic-history artifact. One
-line records each newly landed `id@version`, its semantic digest (definition, limitations,
-authority and disclosure), the full registry digest at that landing, owner RFC and landing commit.
-The artifact is not a co-editable snapshot:
+The compiler also compares the current registry with the append-only
+`packages/runtime/src/evidence-convention-history.jsonl`. One newline-terminated canonical-JSON row
+records each newly landed `id@version` with exactly `ref`, `semanticDigest`, `registryDigest` and
+`ownerRfc`, in that order. Both digests use lowercase `sha256:<64 hex>`. A row deliberately does not
+contain its own landing commit: that value cannot be embedded atomically in the Git commit whose
+hash depends on the row ([[D2019]]); the staged/first-parent transition identifies the introducing
+commit externally. The artifact is not a co-editable snapshot:
 
 - the staged governance check compares the index with `HEAD` and permits only appended lines;
 - repository CI checks the committed file against its first parent and likewise refuses edits,
@@ -152,6 +157,11 @@ The artifact is not a co-editable snapshot:
   depth of at least two); and
 - the registry compiler requires every current/historical declaration digest to equal its one
   immutable history row, while a new version appends one new row.
+
+`tools/semantic-convention-history-check.mjs` owns those three checks and the exact initial
+39-row bootstrap; `make semantic-convention-history-check` is a stable dependency of
+`make verify-governance` and the repository-governance CI job. Missing final newline, extra keys,
+noncanonical JSON/key order, wrong digest encoding, row rewrite or a skipped lineage fails.
 
 Changing `space@1` and its old history row in one change therefore fails before refreshed manifest
 or receipt digests matter. `space@2` is legal only as the next lineage version and appends a new
@@ -198,13 +208,16 @@ never enter the register. [[D1851]] is already closed: `story-title@1` productio
 semantics are both learner-relative, and a focused regression binds the declaration to the paired
 opposite-side outputs before the registry snapshot freezes it.
 
-The literal migration population is
+The reviewed migration population is
 `planning/semantic-convention-provenance/initial-declarations.json`. Its 39 rows are set-equal to
 the stable membership seed; every row contains an exact definition, at least one mandatory
 limitation and one or more live projection/implementation witnesses. The envelope supplies the
 single migration snapshot, `landed_contract` authority kind and
-`definition_and_limitations` disclosure kind. The compiler expands each row without authoring or
-paraphrasing it:
+`definition_and_limitations` disclosure kind.
+
+At product landing, `tools/generate-initial-convention-declarations.mjs` expands each row without
+authoring or paraphrasing it into the one literal exported `CONVENTION_DECLARATIONS` array in
+`packages/runtime/src/evidence-conventions.ts`:
 
 ```ts
 {
@@ -216,6 +229,12 @@ paraphrasing it:
   disclosure: { kind: envelope.disclosureKind },
 }
 ```
+
+`make semantic-convention-source-check` regenerates in memory and requires all 39 semantic fields
+to equal the literal TypeScript prefix. The TypeScript array is the runtime authority after
+landing; the planning JSON stays immutable initial source evidence. A hand copy, computed runtime
+map, broad cast or count-only equality fails. Future convention versions append reviewed literal
+declarations directly and append history rows; they do not rewrite the initial artifact.
 
 The source-recovery harness refuses a missing/extra member, blank definition or limitation,
 unresolvable projection, absent file/symbol fragment or a shipped-identity row whose literal ref
@@ -498,10 +517,10 @@ does not add a learner-facing evidence settings surface or strategic judgement.
    agree, and the RFC's claim block no longer says `none` before acceptance.
 2. Registry compilation rejects duplicate, missing and orphan refs, blank semantic fields and an
    unresolved authority reference.
-3. Mutating a registered definition at the same `id@version` fails against the append-only
+3. Mutating a registered definition at the same `id@version` fails against the canonical JSONL
    semantic history even when the declaration, generated registry/manifest/receipt digests and a
    working-tree copy of the history row are changed together; staged and first-parent CI fixtures
-   both fail.
+   both fail. Rows contain exact ref/semantic/registry/owner fields and no self-referential commit.
 4. Every compiled projection declares convention applicability. All
    `grounding: declared_convention` projections have a non-empty closure.
 5. The exact D1722 42-row population and 18-row other-grounding population are migrated or receive
@@ -534,9 +553,11 @@ does not add a learner-facing evidence settings surface or strategic judgement.
 15. A 0.24 run survives create→save→reload→Review and export with byte-equal exact receipts; v1
     remains readable after v2 lands. Legacy absence stays honest-empty, tampering/missing history
     fails typed, and run/account deletion leaves no retained receipt.
-16. `make evidence-manifest-check`, semantic evidence checks, run-schema/migration checks,
+16. `make semantic-convention-source-check`, `make semantic-convention-history-check`,
+    `make evidence-manifest-check`, semantic evidence checks, run-schema/migration checks,
     typecheck, software tests, governance checks and the external-provider negative suite pass on
-    Node 24.
+    Node 24. The source check proves the literal initial array equals all reviewed JSON semantic
+    fields, not merely its 39 refs.
 17. Canonical evidence/run docs describe direct/path convention closure, durable history and the
     ordinary-versus-Advanced presentation boundary; D1722/D1921–D1926/D1934 close with the
     implementation SHA and a log entry.
@@ -569,9 +590,14 @@ with model knowledge.
 | [[D1926]] | repaired in §6.1 with run lane 0.24, origin attestation and durable re-sealing contract; core executable candidate passes | executable amendment + live register claim |
 | [[D1934]] | `exactObject` accepts extra fields | exact key-set repair included before instance extraction |
 | [[D1937]] | an unkeyed persisted digest can be rewritten self-consistently because the run stores neither the semantic payload graph nor an event hash chain | repaired by Ed25519 origin attestation over the canonical persisted envelope; executable tamper/unknown-origin negatives |
+| [[D2019]] | history row required its own impossible landing-commit hash | repaired by exact JSONL row without self hash; staged/first-parent Git transition supplies introducing commit |
 
 ## Changelog
 
+- 2026-08-28: reconciled the semantic-register repeat return. The initial reviewed JSON now feeds
+  one checked generator whose output is the literal runtime array; semantic history has an exact
+  JSONL path/row schema/check command and stable governance targets. [[D2019]] removes the impossible
+  self-referential landing commit field while retaining the introducing commit in Git history.
 - 2026-08-27: independent review returned the draft on [[D1921]]–[[D1926]]. Exact return:
   `planning/semantic-convention-provenance/independent-buildability-review-2026-08-27.md`.
 - 2026-08-27: created from D1722's measured 42 + 18 populations and author handoff. Defines a

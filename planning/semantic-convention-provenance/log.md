@@ -58,3 +58,13 @@ tampering and unknown origins fail; genuine JSON-loaded v1 survives a v2 head; l
 empty. D1924–D1926 are author-buildable at their core. Full live schema/storage/export/deletion and
 key lifecycle remain implementation acceptance work after the process predecessor and repeat
 review.
+
+## 2026-08-28 — Process-register source/history reconciliation
+
+The product draft now matches the repaired C10 boundary. A one-time checked generator expands the
+reviewed 39-row JSON into the one literal runtime declaration array and compares all semantic
+fields. Append-only history has an exact JSONL path, canonical four-field row, checker, Make target
+and governance/CI integration contract. [[D2019]] removes the impossible self-referential landing
+commit field; staged/first-parent Git history identifies the introducing commit. No production,
+schema, storage, content, web or archive byte changed. Process and product fresh reviews still gate
+acceptance.

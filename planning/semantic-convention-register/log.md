@@ -39,3 +39,14 @@ unbounded decimal versions alias under JavaScript `number` ([[D2017]]); and the 
 rule is not scoped away after the legal 39/0 landing ([[D2018]]). The six-arm reproduction passes
 behind `make semantic-register-repeat-review`; exact return and repair order are in
 `repeat-independent-buildability-review-2026-08-28.md` and `repeat-author-handoff.md`.
+
+## 2026-08-28 — Second-return author repair
+
+The register now derives its future count after assistance (resource nine) and reuses the C9
+staged/first-parent claimant transition. The product's reviewed JSON feeds one checked generator
+whose output is the literal TypeScript authority; semantic history is canonical JSONL at one named
+path with one checker and stable Make/CI targets. Convention versions are canonical positive safe
+integers, and seed equality has explicit zero-landed and post-landing phases. Reconciliation found
+[[D2019]]: a row cannot contain its own Git commit hash, so the row retains ref/semantic/registry/
+owner fields while Git history supplies the introducing commit. Seven author arms plus the 19 prior
+contracts pass. Fresh independent review remains; C10/product implementation is unauthorised.

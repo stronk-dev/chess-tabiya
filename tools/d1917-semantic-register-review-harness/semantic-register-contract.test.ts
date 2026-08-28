@@ -129,6 +129,7 @@ describe("amended semantic-convention register candidate", () => {
   it("states identity-only scope and routes semantic bytes to append-only history", () => {
     const rfc = readFileSync("rfc/semantic-convention-register.md", "utf8");
     expect(rfc).toContain("identity membership only");
-    expect(rfc).toContain("append-only semantic-history artifact");
+    expect(rfc).toContain("packages/runtime/src/evidence-convention-history.jsonl");
+    expect(rfc).toContain("make semantic-convention-history-check");
   });
 });
