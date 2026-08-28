@@ -1,14 +1,15 @@
 # RFC: Shared candidate evidence packet — the compiled legal population three consumers are measured against
 
-- **Status:** draft — amended 2026-08-28 after the repeat [[D1900]]–[[D1903]] return and the
-  follow-up [[D1945]]–[[D1947]] contract re-derivation. The factual receipt is cached without
-  consumer authority, the packet is honestly an internal process-local execution value over
-  individually F1-declared evidence rather than a false aggregate derived projection, the first landing has one real semantic
-  consumer, and the held bot join uses one complete legal-root exchange rather than N child
-  searches through an explicit downstream handoff. Exact original return:
-  `planning/evidence-foundation-ux/shared-candidate-packet-repeat-review-2026-08-27.md`.
-  Repeat independent review remains. The provider-free packet landing no longer waits on the
-  provider RFC; the held D10 bot join does. [[D1580]] remains separate numeric appliance-tier debt
+- **Status:** **draft — RETURNED by second repeat independent review 2026-08-28 on
+  [[D1958]], [[D1959]], [[D1960]] and [[D1961]].** The neutral packet, complete legal denominator, no-F1-aggregate repair and
+  one-root bot table survive. Implementation remains unauthorised because the replacement first
+  consumer is a verify-only CLI; the receipt has no runtime seal/assertion contract; cancellation
+  has no yielding/worker execution model; and exact convention/version/abstention authorities are
+  widened to free scalars. Exact return and repair order:
+  `planning/evidence-foundation-ux/shared-candidate-packet-second-repeat-review-2026-08-28.md`.
+  The provider-free compiler itself does not wait on the provider RFC; the held D10 bot join does.
+  [[D1580]] remains separate numeric appliance-tier debt. Prior author state: amended after the
+  repeat [[D1900]]–[[D1903]] return and [[D1945]]–[[D1947]] contract re-derivation.
 - **Author:** claude (drafted from `design/research/shared-candidate-evidence-packet.md` and `tools/d1071-candidate-packet-harness/`; every carried claim re-verified at HEAD, with seven corrections recorded)
 - **Created:** 2026-08-23
 - **Design refs:** `design/05-in-run-experience.md` §5 (*"detection is cheap, significance is not"* — the split this RFC executes in code: one factual population, separate opinionated derivations) and §3b-i (*"The LLM is the voice, never the source"*); `design/03-product-breadth.md` §Play (opponent selection) and §Intelligence and explanation
@@ -1050,6 +1051,10 @@ rather than aspirational — criterion 14.
 | [[D1945]] | either of two future packet bindings could be deleted while F1 orphan closure stayed green | §3.1 | criterion 22: no future-only aggregate bindings ship; downstream RFCs bind only truthful outputs |
 | [[D1946]] | the scope-wide derivation members treated the complete possible vocabulary as values simultaneously present | §3.1, §5.3 | criterion 22: packet is an internal receipt; code-derived vocabulary is a migration guard, not a derivation member |
 | [[D1947]] | `createApplication` was assigned a semantic service even though it has no semantic-selection caller or route | §6.0, §12 | criterion 23: the existing semantic-check executable owns the first composition; application injection waits for a real route |
+| [[D1958]] | the replacement first consumer is a verify-only hard-coded CLI, not a product operation | returned §6.0, §12 | author repair must bind a real Support/Review/bot operation or explicitly obtain authority for an unused foundation primitive |
+| [[D1959]] | the promised process receipt has only an erased type brand and no runtime constructor/assertion | returned §3.1, §3.4 | author repair must specify the private runtime seal, constructor/projector and exact-reference assertion boundary |
+| [[D1960]] | `AbortSignal` cannot interrupt the synchronous measured compiler without a yielding or worker execution model | returned §6.0 | author repair must define executable cancellation topology and maximum cancellation latency |
+| [[D1961]] | exact convention/version/abstention authorities are widened to unchecked scalars | returned §3.1 | author repair must retain literal types and check projection-specific abstention vocabulary |
 
 ## Deviations from design
 

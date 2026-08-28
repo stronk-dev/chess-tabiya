@@ -146,18 +146,17 @@ claim; only the independently accepted product RFC may then create the runtime d
 convert those claims to landed rows. This preserves the no-implementation-before-acceptance law
 without leaving a new shared semantic authority outside drift/collision checks.
 
-The 2026-08-28 repeat-return amendment keeps the shared candidate denominator explicitly
-unimplemented while correcting its authority boundary. The factual packet is a neutral sealed
-internal receipt over the complete legal set and original individually declared evidence—not an F1
-aggregate projection. Its code-derived possible closure is 47 one-edge event ids plus 22 reading
-ids, but a position retains only what actually fired or abstained; the old scope-wide `anyOf`
-conjunction and future-only packet bindings are removed. The existing semantic-check executable is
-the only first-landing composition root; `createApplication` remains unchanged until a real
-Support, Review or bot route consumes the service. Provider execution is not a prerequisite for
-that provider-free landing. The held bot join separately consumes one complete root-side legal
-table with categorical mate outcomes and full delivery provenance. Eight focused arms pass; repeat
-independent review still precedes implementation, while provider acceptance gates only the held bot
-join.
+The 2026-08-28 second repeat review keeps the shared candidate denominator explicitly
+unimplemented. Its neutral complete-legal packet, original constituent evidence, removal of the
+false F1 aggregate and one-root bot table all survive. The author repair did not establish a real
+first consumer: `semantic-evidence-check.ts` is a verify-only hard-coded command, and the RFC itself
+excludes governance tools from production counts. The remaining buildability work is finite:
+publish the runtime receipt constructor/projector/assertion rather than an erased type brand; choose
+a worker or cooperative-yield execution model before promising cancellation of the measured
+synchronous compilation; close convention/version/abstention types; and bind the landing to an
+actual Support, Review or bot operation (or obtain an explicit ruling for an intentionally unused
+foundation primitive). Provider acceptance still gates only the held bot join. Exact return:
+`planning/evidence-foundation-ux/shared-candidate-packet-second-repeat-review-2026-08-28.md`.
 
 The 2026-08-26 independent review keeps [[D1023]]'s measured exact-target collector but returns
 `bounded-policy-targets` on [[D1652]]–[[D1658]]. The provider layer must expose reusable node-free

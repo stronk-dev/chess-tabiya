@@ -10671,3 +10671,17 @@ CI actually run.
 - `make provider-exchange-contract` remains 8/8 green and the crossed author target is now 7/7.
   This is an author checkpoint, not independent acceptance; production remains blocked on repeat
   review.
+
+## 2026-08-28 — Shared-candidate packet second repeat buildability return
+
+- Re-derived the amended packet against the actual Make entry point, application call graph, F1
+  runtime seals, synchronous semantic collectors and exact mobility types. The neutral packet,
+  complete legal denominator, no-F1-aggregate repair and one-root bot table survive.
+- Recorded [[D1958]]–[[D1961]]: the replacement first consumer is a hard-coded verify-only CLI; the
+  promised process receipt has only an erased `unique symbol` brand; `AbortSignal` cannot interrupt
+  a synchronous 0.6–1.1 second compiler without a yielding/worker execution model; and exact
+  convention/version/abstention authorities are widened to unchecked scalars.
+- Added the disposable four-arm reproduction behind the stable
+  `make candidate-packet-repeat-review` entry point and routed the exact author repair. No
+  production, schema, pack, content or protected intent byte changed. Implementation remains
+  unauthorised pending amendment and another independent review.

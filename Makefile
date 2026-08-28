@@ -9,7 +9,7 @@ CI_NODE := $(if $(wildcard /opt/homebrew/opt/node@24/bin/node),/opt/homebrew/opt
 SF_CMD ?= $(if $(wildcard /opt/homebrew/bin/stockfish),/opt/homebrew/bin/stockfish,$(shell command -v stockfish 2>/dev/null))
 export SF_CMD
 
-.PHONY: setup check typecheck test test-software test-performance test-content test-tier-check docs-check staged-process-contracts-test test-browser test-browser-smoke test-browser-content test-browser-matrix test-browser-ci ci-local schema-check register-check status-parity work-index work-item-check roadmap-receipt roadmap-check intent-parity evidence-manifest-check semantic-evidence-check opening-catalogue opening-catalogue-check account-data-lifecycle-check learner-rating-bracket learner-rating-bracket-check learner-rating-isolation-check graduation-plan graduation-plan-check graduation-clearance-contract tactical-collector-measurement breadth-collector-measurement provider-exchange-contract provider-exchange-repeat-review candidate-packet-contract pack-capability-closure bounded-target-contract bounded-target-census build verify-software verify-governance verify-content verify pack-check shape-check expression-census graduation-report graduation-report-update graduation-clear pack-preview source-fetch candidate-emit candidate-attach sourcing-check verify-draft tablebase-walk engine-walk up up-engines down
+.PHONY: setup check typecheck test test-software test-performance test-content test-tier-check docs-check staged-process-contracts-test test-browser test-browser-smoke test-browser-content test-browser-matrix test-browser-ci ci-local schema-check register-check status-parity work-index work-item-check roadmap-receipt roadmap-check intent-parity evidence-manifest-check semantic-evidence-check opening-catalogue opening-catalogue-check account-data-lifecycle-check learner-rating-bracket learner-rating-bracket-check learner-rating-isolation-check graduation-plan graduation-plan-check graduation-clearance-contract tactical-collector-measurement breadth-collector-measurement provider-exchange-contract provider-exchange-repeat-review candidate-packet-contract candidate-packet-repeat-review pack-capability-closure bounded-target-contract bounded-target-census build verify-software verify-governance verify-content verify pack-check shape-check expression-census graduation-report graduation-report-update graduation-clear pack-preview source-fetch candidate-emit candidate-attach sourcing-check verify-draft tablebase-walk engine-walk up up-engines down
 
 setup:
 	pnpm install --frozen-lockfile
@@ -142,6 +142,9 @@ provider-exchange-repeat-review:
 
 candidate-packet-contract:
 	node --test tools/d1900-candidate-packet-amendment-harness/*.test.mts
+
+candidate-packet-repeat-review:
+	node --test tools/d1958-candidate-packet-repeat-review/*.test.mts
 
 pack-capability-closure:
 	./node_modules/.bin/vitest run --config tools/d1620-pack-capability-closure/vitest.config.ts

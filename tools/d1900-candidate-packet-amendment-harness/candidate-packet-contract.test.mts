@@ -45,7 +45,7 @@ test("D1902 first landing names the real semantic path and does not invent a bot
   assert.match(catalogue, /BOT_POLICY_PROFILES\s*=\s*compileBotPolicyCatalog\(\[\]\)/u);
 
   const rfc = readFileSync(new URL("../../rfc/shared-candidate-evidence-packet.md", import.meta.url), "utf8");
-  assert.match(rfc, /first landing has one real semantic/u);
+  assert.match(rfc, /first landing is the real semantic-check operation/u);
   assert.match(rfc, /does not inject a packet operation into\s+`OpponentSelector`/u);
 });
 
