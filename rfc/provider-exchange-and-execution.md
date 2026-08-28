@@ -1,8 +1,10 @@
 # RFC: Provider exchange and projection execution
 
-- **Status:** draft — second author repair 2026-08-28 after repeat return [[D1950]]–[[D1956]]. The
-  literal delivery, history, operation, availability, cache-identity and Explorer-migration seams
-  are repaired; implementation is not authorised until another independent buildability review.
+- **Status:** draft — dependency amendment 2026-08-28 for [[D1969]] after the second author repair.
+  The one fixed-bound Stockfish exchange now retains its completed raw WDL beside the typed score so
+  Review does not create a second engine authority. The literal delivery, history, operation,
+  availability, cache-identity and Explorer-migration seams remain repaired; implementation is not
+  authorised until another independent buildability review covers the complete amended bytes.
 - **Author:** codex, from the D1652–D1658 and D1699–D1709 author-repair handoffs
 - **Created:** 2026-08-27
 - **Design refs:** `design/03-product-breadth.md` evidence architecture and provider-backed
@@ -542,6 +544,12 @@ interface FixedBoundPositionEvaluation {
   readonly positionKey: string;
   readonly perspective: "white";
   readonly score: FixedBoundPositionScore;
+  readonly rawWdl: {
+    readonly subject: "side_to_move";
+    readonly win: number;
+    readonly draw: number;
+    readonly loss: number;
+  };
   readonly engine: { readonly id: string; readonly name: string; readonly version: string };
   readonly bound:
     | { readonly kind: "movetime"; readonly requestedMs: number; readonly reachedDepth: number | null }
@@ -565,9 +573,14 @@ The pending key is exact canonical six-field FEN plus requested engine/version, 
 digest and timeout; it does not contain actual generation. The acquisition receipt adds actual
 engine identity/generation from the serialized execution, and retained admission compares that
 identity to the current established supervisor identity. The operation parses exactly one completed score, rejects bound/NaN/
-missing/zero-distance mate output, and converts the engine's declared side-to-move score to the
-named White frame using the FEN turn. Both White- and Black-to-move cp/mate fixtures assert the
-conversion. `live.stockfish.position_eval@1` is
+missing/zero-distance mate output, and retains the same completed line's raw UCI WDL tuple. WDL is
+required to contain three safe integers in `[0,1000]` summing to 1000; a missing, malformed or
+different-depth WDL makes the response `invalid_response` rather than silently producing a
+score-only Review source. The operation converts the engine's declared side-to-move score to the
+named White frame using the FEN turn, but deliberately keeps WDL in its declared
+`side_to_move` frame. Review owns the node-free White normalization; candidate scoring consumes the
+score and cannot reinterpret WDL as quality. White- and Black-to-move cp/mate/WDL fixtures assert
+both frames. `live.stockfish.position_eval@1` is
 `search/source_record`, has payload
 `ProviderEvidenceDelivery<FixedBoundPositionEvaluation>`, is
 `bounded_search/measured/reported`, answers evaluation, and carries no node,
@@ -934,7 +947,8 @@ learner-facing explanation.
    duplicate, extra, equal-count replacement, short-depth, `upperbound`, `lowerbound`, score-less-PV
    and PV-less-score tables fail. A capability-register test authorizes only the named all-legal
    measurement and refuses every other non-enumerator MultiPV use. Fixed-bound evaluation separately
-   covers White/Black cp and mate orientation, zero/non-integral mate distance,
+   covers White/Black cp and mate orientation, raw side-to-move WDL retention, zero/non-integral
+   mate distance, missing/malformed/non-summing/different-depth WDL,
    generation/bound mismatch and same-exchange acquisition identity. Legal-root rows retain one
    `root_side_to_move` frame; White/Black cp and winning/losing mate controls reject child/White
    relabelling and mate-to-cp conversion.
@@ -1005,6 +1019,11 @@ returns to author instead of accepting a placeholder.
 
 ## Changelog
 
+- 2026-08-28: [[D1969]] amends the existing fixed-bound position-evaluation result rather than
+  adding a sixth operation: the same completed Stockfish exchange now retains a validated raw
+  side-to-move WDL tuple beside the White-normalized typed score. Review derives its node-free White
+  WDL and recorded occurrences from this delivery; no legacy attached row or second engine queue
+  becomes a competing authority.
 - 2026-08-28: repaired repeat return [[D1950]]–[[D1956]] with sealed Maia delivery inputs; the
   official boolean Explorer-history request; one descriptor execution signature; exact leaf states
   and total path reduction; separate pending/retained identities; a literal Explorer summary and

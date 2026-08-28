@@ -184,6 +184,21 @@ test("D1877/D1878 close the operation census and keep actual generation out of p
   assert.equal(retained.actual.generation === 5, false);
 });
 
+function admitRawWdl(value: Readonly<{ subject: string; win: number; draw: number; loss: number }>) {
+  assert.equal(value.subject, "side_to_move");
+  for (const count of [value.win, value.draw, value.loss]) assert.ok(Number.isSafeInteger(count) && count >= 0 && count <= 1000);
+  assert.equal(value.win + value.draw + value.loss, 1000);
+  return Object.freeze({ ...value, subject: "side_to_move" as const });
+}
+
+test("D1969 keeps raw WDL on the existing fixed-bound exchange", () => {
+  assert.deepEqual(admitRawWdl({ subject: "side_to_move", win: 512, draw: 300, loss: 188 }), { subject: "side_to_move", win: 512, draw: 300, loss: 188 });
+  assert.throws(() => admitRawWdl({ subject: "white", win: 512, draw: 300, loss: 188 }));
+  assert.throws(() => admitRawWdl({ subject: "side_to_move", win: 512, draw: 300, loss: 187 }));
+  assert.throws(() => admitRawWdl({ subject: "side_to_move", win: 512.5, draw: 300, loss: 187.5 }));
+  assert.equal(new Set(OPERATIONS).size, 5);
+});
+
 test("the amended RFC publishes every literal authority exercised by the harness", () => {
   const rfc = readFileSync(new URL("../../rfc/provider-exchange-and-execution.md", import.meta.url), "utf8");
   for (const token of [
@@ -191,6 +206,7 @@ test("the amended RFC publishes every literal authority exercised by the harness
     "ProviderOperationRequestMap", "ProviderOperationResultMap", "BindingSourceAbsence",
     "ProviderEvidenceDelivery", "StockfishLegalRootTable", "root_side_to_move",
     "ExplorerPositionPageRequest", "ExplorerPositionPageDomainResult", "MaiaRunMoveOccurrence",
-    "MaiaExactFenMoveOccurrence", "upperbound", "lowerbound", "pendingKey",
+    "MaiaExactFenMoveOccurrence", "upperbound", "lowerbound", "pendingKey", "rawWdl",
+    "side_to_move",
   ]) assert.match(rfc, new RegExp(`\\b${token}\\b`), `missing ${token}`);
 });

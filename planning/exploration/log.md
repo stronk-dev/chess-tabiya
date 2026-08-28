@@ -10731,3 +10731,17 @@ CI actually run.
   runtime/source and three crossed compile controls; the four-arm prior return instrument is red on
   all four obsolete assumptions. This is an author checkpoint; production waits for fresh
   independent review.
+
+## 2026-08-28 — Review evidence compiler author repair and shared WDL dependency
+
+- Repaired [[D1644]]–[[D1651]] without reducing full 1.0 Review: node-free WDL normalization and
+  exact recorded occurrences; forced-mate v2 joined through `run.record.edge@1`; one production
+  bounded progressive coordinator; a named server-only packet consumer plus closed parsed JSON;
+  learner-side Story compatibility; and measured/reported confidence throughout.
+- The dependency trace found [[D1969]]: the shared fixed-bound Stockfish result carried typed score
+  but no WDL. The provider RFC now retains validated raw side-to-move WDL from the same completed
+  exchange, keeping the five-operation census and refusing a second Review engine authority.
+- `make review-evidence-author-contract` passes 6/6 crossed author arms and
+  `make provider-exchange-contract` passes 9/9 including malformed WDL controls. Both RFCs remain
+  draft and unimplemented pending fresh independent review; final Review Map selection remains
+  separately open rather than being hidden in this compiler.

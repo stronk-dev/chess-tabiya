@@ -511,6 +511,15 @@ learner-side compatibility, the process-local-seal/wire boundary, bounded whole-
 weakest-input confidence. Review implementation cannot begin by merely filling the drafted types;
 those eight joins are part of the 1.0 foundation.
 
+The 2026-08-28 author amendment repairs those eight joins without reducing Review. [[D1969]] keeps
+raw side-to-move WDL on the same fixed-bound Stockfish delivery as the typed score, then Review
+normalizes it node-free and creates exact recorded occurrences. Forced-mate v2 binds exact position
+endpoints to `run.record.edge@1`; one bounded progressive coordinator replaces both legacy queue
+paths; a server-only renderer terminates the sealed packet in a closed parsed receipt; and every
+derived engine item remains measured/reported. The amended compiler and its provider dependency
+still require fresh independent review and implementation, so this is contract progress rather
+than a completed Review claim.
+
 **1.0 exit:** native, bot, imported, social and campaign games compile to one Review Map: opening
 and phase arc; navigable move timeline; bounded grounded moments; separate grade, human rarity,
 theory, semantic change and exact endgame facts; correct learner-side result; decided-position
