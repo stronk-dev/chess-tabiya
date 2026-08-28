@@ -10643,3 +10643,16 @@ CI actually run.
 - Landed `design/research/bounded-target-execution-closure.md` and a fresh repeat-review handoff.
   The RFC remains draft, and the production-symbol census remains an implementation discharge;
   no Support, Review, bot, pack, schema or content byte changed.
+
+## 2026-08-28 — Provider-exchange repeat buildability return
+
+- Re-derived the amended provider contract against the shipped F1 compiler, serialized UCI
+  boundary, Maia caller, both Explorer authorities and the Syzygy source. The shared-provider
+  architecture survives, but implementation remains unauthorised.
+- Recorded [[D1950]]–[[D1955]]: both Maia occurrences strip the delivery receipt; Explorer history
+  has an unreachable `not_requested` arm; operation exports have context-versus-signal signatures;
+  mixed-source path availability has no total state algebra; Maia pending and retained keys are
+  conflated; and the two Explorer migration projections have no literal payload/callable contract.
+- Added the disposable six-arm reproduction instrument behind the stable
+  `make provider-exchange-repeat-review` entry point and linked the exact repeat return from the RFC
+  register. No production, schema, pack, content or protected intent byte changed.
