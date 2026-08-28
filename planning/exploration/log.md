@@ -10745,3 +10745,19 @@ CI actually run.
   `make provider-exchange-contract` passes 9/9 including malformed WDL controls. Both RFCs remain
   draft and unimplemented pending fresh independent review; final Review Map selection remains
   separately open rather than being hidden in this compiler.
+
+## 2026-08-28 — Bot-policy production amendment independent return
+
+- Re-derived the D1601–D1609 author amendment against the newer shared provider and candidate
+  packet contracts, the current Maia selector, runtime event sequence, writer lease and SQLite
+  save boundary. The measured layer stack, guard-dependent pawn trait, server-owned route and
+  grounded-card direction survive.
+- Recorded [[D1970]]–[[D1976]]: private provider/guard paths fork the one provider scheduler;
+  bounded Maia mass is called legal-complete; sealed authorities become open durable strings; a
+  node-only precondition cannot make an awaited operation atomic or idempotent; request/timing
+  bytes contradict the derivation's byte-determinism claim; base-provider failure promises a move
+  without a distribution; and Stage B duplicates the shared packet plus all-legal score join.
+- Added the seven-arm reproduction behind the stable `make bot-policy-independent-review` target
+  and routed a dependency-ordered author handoff. No profile, provider operation, production route,
+  schema, migration, content or protected intent byte changed. Implementation remains
+  unauthorised pending amendment and fresh independent review.

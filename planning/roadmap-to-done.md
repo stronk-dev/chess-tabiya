@@ -564,9 +564,13 @@ Avatars or adjectives do not solve that. The 2026-08-26 buildability return adds
 contract blockers: typed shared-probe guard evidence, dependent-trait fallback, compiled trait
 identities, a production composer route, combined selection budget and the owner-ruled picker/card/
 identity surface ([[D1601]], [[D1602]], [[D1603]], [[D1604]], [[D1605]], [[D1606]], [[D1607]],
-[[D1608]], [[D1609]]). [[D1610]] and [[D1611]] retain the final persona assets and explicit default
-as owner choices. An honest non-empty catalogue is downstream of those repairs, not a substitute
-for them.
+[[D1608]], [[D1609]]). The 2026-08-28 repeat review then found the production amendment had not
+joined the newer shared foundation: bot play still forked Maia/Stockfish acquisition, confused
+mass with legal coverage, duplicated the candidate packet, left the durable record open and could
+not make an awaited move atomic/idempotent ([[D1970]], [[D1971]], [[D1972]], [[D1973]], [[D1974]],
+[[D1975]], [[D1976]]). [[D1610]] and [[D1611]] retain
+the final persona assets and explicit default as owner choices. An honest non-empty catalogue is
+downstream of those repairs, not a substitute for them.
 
 **1.0 exit:** four measured bands × three behavior families carry immutable policy digests;
 grounded route proposals and guard fallback never throw; repertoire, traits, plausible errors,

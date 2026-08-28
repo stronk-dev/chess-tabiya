@@ -1,13 +1,15 @@
 # RFC: Bot policy
 
-- **Status:** draft — returned for the 2026-08-26 production-safety amendment. The accepted
-  compiler/sampler foundation remains installed, but the live input authority and route do not
-  satisfy the evidence they claim: guard losses and traits are caller fields, dependent traits can
-  run after guard abstention, and the browser still selects through `/select-move` then echoes raw
-  selection bytes into the run. No production profile may register until the sealed guard/trait
-  contract, server-owned atomic opponent operation, grounded card compiler and exact-route budget
-  below survive cross-review. Claims 0.18/migration remain held; no production/schema byte changes
-  in this author round. *(Prior checkpoints: implementing; accepted 2026-08-22; draft.)*
+- **Status:** **draft — independently returned 2026-08-28 on [[D1970]], [[D1971]], [[D1972]],
+  [[D1973]], [[D1974]], [[D1975]] and [[D1976]].** The
+  D1601–D1609 author amendment preserves the right layer/card/route direction, but it still forks
+  the shared Maia/Stockfish provider boundary, calls a bounded Maia page legal-complete, reopens
+  sealed authorities as free persisted strings, lacks a post-provider event-head compare-and-swap,
+  conflates deterministic policy bytes with request/timing bytes, promises a fallback after the
+  only base distribution fails, and duplicates the shared candidate-packet pipeline in Stage B.
+  Implementation remains unauthorised pending author repair and fresh review. Claims 0.18/migration
+  remain held; no production/schema byte changed in the review. *(Prior checkpoints: implementing;
+  accepted 2026-08-22; draft; D1601–D1609 author-amended.)*
 - **Author:** claude (drafted on the D717 program routing, `planning/evidence-foundation-ux/plan.md`
   Phase 6; executes the completed dependency map
   `planning/platform-alignment/bot-policy/f8-dependency-map.md`)
@@ -895,3 +897,10 @@ as a named future measured layer (Open question 4).
   `stockfish-guard@1`, the 400/500-ms operating contract and release benchmark; replaced free
   behavior prose with a source-bearing card compiler; expanded calibration/observability
   discharges. No profile, schema, migration or production byte changed in the author round.
+- 2026-08-28: independently returned on [[D1970]], [[D1971]], [[D1972]], [[D1973]], [[D1974]],
+  [[D1975]] and [[D1976]]. The amendment must consume the shared
+  provider deliveries and candidate packet, separate returned mass from legal-set coverage, close
+  the durable decision grammar, add a post-provider event-head CAS/idempotency receipt, separate
+  deterministic policy bytes from request/timing bytes, and refuse rather than invent a move when
+  the base provider supplies no distribution. Reproduction:
+  `make bot-policy-independent-review`. No product/schema byte changed in the review.
