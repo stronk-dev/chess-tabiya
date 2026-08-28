@@ -10775,3 +10775,19 @@ CI actually run.
 - Added the five-arm reproduction behind `make candidate-packet-final-review` and routed a literal
   author repair order. No production, schema, content, pack or protected intent byte changed.
   Implementation remains unauthorised pending amendment and another fresh independent review.
+
+## 2026-08-28 — Pack-capability repeat independent buildability return
+
+- Re-derived the [[D1620]]–[[D1626]] author amendment against the actual shape/principle version
+  schemas, F1 projection declaration, strict AJV pack compilers, shipped disposition registries,
+  resolved shape content and the draft claim-anchor dependency. The prior graph/site/state direction,
+  D566 falsifier, planner split and D560 hold survive.
+- Recorded [[D1982]]–[[D1992]]: the namespace rejects its own ids; integer versions cannot carry
+  resolved semver; the complete applicability authority and F1 bridge are absent; 20 refusals lack
+  lawful `ruledBy` mappings; required schema annotations are unknown under strict AJV; criterion 15
+  forms a dependency cycle; several roots are not representable sites; declaration disposition
+  vocabularies conflict; resolved shapes omit embedded evaluator dependencies; and `requires` has no
+  canonical byte form.
+- Added the eleven-arm reproduction behind `make pack-capability-repeat-review`. No production,
+  schema, content, pack or protected intent byte changed. Lane 0.30 remains unauthorised pending
+  author repair and another fresh independent review.
