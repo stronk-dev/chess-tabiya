@@ -178,6 +178,15 @@ claim; only the independently accepted product RFC may then create the runtime d
 convert those claims to landed rows. This preserves the no-implementation-before-acceptance law
 without leaving a new shared semantic authority outside drift/collision checks.
 
+The 2026-08-28 repeat review keeps that process boundary unimplemented on six exact seams. Because
+assistance lands first, semantic conventions are resource nine ([[D2013]]); snapshot C10 cannot
+prove the prior 39-member claimant ([[D2014]]); the literal AST reader conflicts with the product's
+JSON-expanded declaration source ([[D2015]]); append-only history has no named artifact/check
+([[D2016]]); decimal versions exceed safe-number identity ([[D2017]]); and the seed/live-claim rule
+is not separated into pre- and post-landing phases ([[D2018]]). The 39-member census and base-id
+lineage remain valid; repair must reuse the transition-safe assistance primitive rather than create
+another snapshot-only register.
+
 The 2026-08-28 second repeat review keeps the shared candidate denominator explicitly
 unimplemented. Its neutral complete-legal packet, original constituent evidence, removal of the
 false F1 aggregate and one-root bot table all survive. The author repair did not establish a real

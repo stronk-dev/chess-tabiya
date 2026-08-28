@@ -1,7 +1,11 @@
 # RFC: Semantic-convention shared-resource register
 
-- **Status:** draft — amended 2026-08-27 after the [[D1917]]–[[D1920]] return; repeat independent
-  process/buildability review still precedes acceptance
+- **Status:** draft — returned again 2026-08-28 on [[D2013]]–[[D2018]]. The lineage and stable-seed
+  repairs survive, but dependency numbering, claim-to-landing ownership, tree-source compatibility,
+  semantic-history buildability, safe version arithmetic and phase-scoped seed enforcement require
+  author correction. Exact return and queue:
+  `planning/semantic-convention-register/repeat-independent-buildability-review-2026-08-28.md` and
+  `repeat-author-handoff.md`. Implementation remains unauthorised.
 - **Author:** codex
 - **Created:** 2026-08-27
 - **Design refs:** none. This is repository process and changes no evidence meaning or learner UX.
@@ -227,9 +231,17 @@ None. This document chooses no convention meaning or learner behavior.
 | [[D1918]] | repaired: identity-only scope, product append-only history owns semantic bytes | reconciled with `semantic-convention-provenance.md`; repeat review |
 | [[D1919]] | repaired: stable planning JSON is the single seed consumed by D1722 and future C10 | executable amendment; repeat review |
 | [[D1920]] | repaired: eighth-resource wording throughout | author correction |
+| [[D2013]] | returned: assistance lands first as resource eight, so semantic conventions are ninth | author correction |
+| [[D2014]] | returned: snapshot C10 cannot prove the prior sole claimant at product landing | transition-aware register repair |
+| [[D2015]] | returned: literal AST tree authority conflicts with the product's JSON-expanded source | process/product construction reconciliation |
+| [[D2016]] | returned: append-only history has no named artifact, format or executable governance target | product/process history contract |
+| [[D2017]] | returned: unbounded digit refs alias under JavaScript `number` arithmetic | safe-integer version contract |
+| [[D2018]] | returned: seed-to-live-claim equality is not scoped to the pre-landing phase | explicit C10 state machine |
 
 ## Changelog
 
+- 2026-08-28: repeat independent review returned the draft on [[D2013]]–[[D2018]]. Exact return:
+  `planning/semantic-convention-register/repeat-independent-buildability-review-2026-08-28.md`.
 - 2026-08-27: independent review returned the draft on [[D1917]]–[[D1919]] and recorded the
   [[D1920]] factual correction. Exact return:
   `planning/semantic-convention-register/independent-buildability-review-2026-08-27.md`.

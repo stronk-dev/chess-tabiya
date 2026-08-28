@@ -10836,3 +10836,17 @@ CI actually run.
 - Added stable Make targets for the seven-arm D1916 author contract and four-arm repeat review, and
   routed the exact author repair. No runtime, web, schema, storage, content, archive or protected
   design byte changed. C9, assistance v5 and the dependent semantic register remain blocked.
+
+## 2026-08-28 — Semantic-convention register repeat independent return
+
+- Re-derived the [[D1917]]–[[D1920]] amendment against the live seven-resource checker, its required
+  assistance predecessor, the stable seed/declaration artifacts, product compiler/history contract
+  and the empty-to-39 landing transition. Base-id serialization, identity-only scope and the exact
+  39-member source population survive.
+- Recorded [[D2013]]–[[D2018]]: dependency order makes this resource ninth; snapshot C10 cannot
+  prove the previous claimant; the literal AST reader conflicts with JSON expansion; history has no
+  named artifact or production check; unbounded decimal refs alias under JavaScript `number`; and
+  the seed/live-claim invariant has no pre/post-landing phase guard.
+- Added stable `make semantic-register-contract` and `make semantic-register-repeat-review` targets,
+  the six-arm reproduction and an exact author handoff. No runtime, web, schema, storage, content,
+  archive or protected design byte changed. C10 and the semantic product RFC remain unauthorised.

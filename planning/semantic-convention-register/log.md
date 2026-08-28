@@ -28,3 +28,14 @@ disposable seed moved to stable
 `planning/semantic-convention-register/initial-members.json`, and the D1722 census now consumes it
 directly; future C10 consumes the same file. All resource wording now says eighth. Repeat review is
 next; process implementation remains unauthorized.
+
+## 2026-08-28 — Repeat independent review return
+
+The lineage, identity-only scope and stable 39-member seed survive, but six buildability failures
+keep C10 in draft. Assistance lands first, making semantic conventions ninth ([[D2013]]); the final
+snapshot cannot prove the previous claimant ([[D2014]]); the literal tree extractor and JSON-expanded
+product source conflict ([[D2015]]); semantic history has no named repository authority ([[D2016]]);
+unbounded decimal versions alias under JavaScript `number` ([[D2017]]); and the seed-to-live-claim
+rule is not scoped away after the legal 39/0 landing ([[D2018]]). The six-arm reproduction passes
+behind `make semantic-register-repeat-review`; exact return and repair order are in
+`repeat-independent-buildability-review-2026-08-28.md` and `repeat-author-handoff.md`.
