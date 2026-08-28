@@ -1,6 +1,13 @@
 # RFC: Convention-grounded bounded material targets
 
-- **Status:** draft — amended 2026-08-28 after the repeat [[D1904]]–[[D1909]] return; repeat independent buildability review required. Weakest-input F1 rows, sealed source chronology, closed abstention/output types, observed-capture precedence and typed projection aliases pass `make bounded-target-contract`; measured tails refuse request-thread `sync` and route the full operation to `background`.
+- **Status:** **draft — RETURNED by second repeat independent review 2026-08-28 on [[D1962]],
+  [[D1963]], [[D1964]], [[D1965]], [[D1966]], [[D1967]] and [[D1968]].** The three-layer split,
+  convention grounding, exact source authority, provider separation and inspector-only posture
+  survive. Implementation remains unauthorised: the pass transform is duplicated; initial
+  promotion provenance is unavailable; one immediate outcome is impossible; background,
+  cancellation and the 512-pair batch have no execution owner; and request/result/witness truth is
+  uncorrelated. Exact return:
+  `planning/bounded-policy-targets/second-repeat-independent-buildability-review-2026-08-28.md`.
 - **Author:** codex, preserving the D1023 research contract and applying `planning/bounded-policy-targets/author-repair-2026-08-26.md`
 - **Created:** 2026-08-23; narrowed 2026-08-27
 - **Exploration gate:** [[D1023]] ✅; executable contract closure in `design/research/bounded-policy-target-contract-closure.md`
@@ -495,6 +502,13 @@ learner preset exposes them are consumer decisions and do not change the exact p
 | [[D1907]] | captured-attacker result conflicts with identity-loss prose | repaired: observed attacker/victim capture precedes unexplained identity loss in a closed union |
 | [[D1908]] | normative evidence item type does not exist | repaired: literal `DeclaredEvidence<T>` projection aliases and request/result types |
 | [[D1909]] | local/sync bounded traversal has no measured cost gate | repaired: `background`, 512-pair cap and permanent cold/warm tail gates |
+| [[D1962]] | the claimed registered threat-pass transform is privately duplicated | returned: export one source/passed anchor authority used by threat and target admission |
+| [[D1963]] | initial promotion provenance is absent from exchange/threat/FEN inputs | returned: remove it or add a genuine history authority; observed promotion remains exact |
+| [[D1964]] | `target_captured` is unreachable for a candidate by the victim's own side | returned: remove the member and fixture only reachable immediate causes |
+| [[D1965]] | background/cancellation is metadata around synchronous work | returned: specify bounded queue, cooperative yield/worker and maximum cancellation latency |
+| [[D1966]] | the 512-pair ceiling has no request owning both complete sets | returned: add a set-owning batch admission or move the ceiling to its real owner |
+| [[D1967]] | request and result unions admit every cross-pair | returned: publish a distributive map or exact descriptors |
+| [[D1968]] | independent booleans and nullable arrays admit contradictory facts | returned: publish a discriminated result algebra or mandatory validating constructor |
 
 ## Changelog
 

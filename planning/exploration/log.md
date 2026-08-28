@@ -10685,3 +10685,19 @@ CI actually run.
   `make candidate-packet-repeat-review` entry point and routed the exact author repair. No
   production, schema, pack, content or protected intent byte changed. Implementation remains
   unauthorised pending amendment and another independent review.
+
+## 2026-08-28 — Bounded-target second repeat buildability return
+
+- Re-derived the amended local target contract against the private `threats()` pass mutation,
+  exchange identity, standard-FEN provenance, actual D1023 algorithm, JavaScript event loop and
+  published per-item operation type. The local/provider/policy split, convention grounding,
+  source-position authority and inspector-only posture survive.
+- Recorded [[D1962]]–[[D1968]]: duplicated pass transform; unavailable initial promotion
+  provenance; impossible `target_captured`; no actual background/cancellation topology; no
+  set-owning operation for the 512-pair limit; uncorrelated request/result union; and a payload that
+  admits contradictory witness truth.
+- `make bounded-target-contract` passed 14/14, `make bounded-target-repeat-review` passed five
+  runtime/source arms plus its crossed typecheck, and `make bounded-target-census` passed 11/11 over
+  the full populations in 169.65 seconds. Counts and pair maxima remained stable; timing again
+  confirmed background classification. No production, schema, pack, content or protected intent
+  byte changed. Implementation remains unauthorised pending amendment and another review.

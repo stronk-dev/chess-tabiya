@@ -140,6 +140,14 @@ Primary RFCs: `pack-capability-contract`, `claim-semantic-anchors`, `tactical-co
 `shared-candidate-evidence-packet`, `bounded-policy-targets`, `bounded-target-policy-composition`,
 `recorded-semantic-path`.
 
+The 2026-08-28 second repeat review keeps `bounded-policy-targets` unimplemented while preserving
+its useful exact-target census and the local/provider/policy split. Seven finite repairs remain:
+one exported threat-pass anchor; no invented initial promotion provenance; removal of the
+unreachable `target_captured` branch; a discriminated witness algebra; request→result correlation;
+a source-position batch that can actually enforce 512 target×candidate pairs; and a bounded
+cooperative background queue with cancellation during work. Exact return:
+`planning/bounded-policy-targets/second-repeat-independent-buildability-review-2026-08-28.md`.
+
 The convention foundation now has an explicit two-step landing boundary. The process-only
 `semantic-convention-register` first records an empty landed set plus D1722's exact 39-member live
 claim; only the independently accepted product RFC may then create the runtime declarations and
