@@ -10564,3 +10564,19 @@ repository-configured Node 24/Stockfish/Docker toolchain: 1,058 software tests, 
 171 real-content tests, all workspace typechecks, packaging/build, evidence contracts and every
 governance/status/roadmap/docs/staged-process gate. D1938 is closed on the command contributors and
 CI actually run.
+
+## 2026-08-28 — Provider-exchange independent return repaired
+
+- Repaired [[D1871]]–[[D1878]] in `rfc/provider-exchange-and-execution.md` without touching
+  production: stable occurrence-addressed path ids; separate global reach and exact subject
+  satisfaction; immutable acquisition plus discriminated live/retained delivery; complete
+  required/optional source-absence aggregation; a closed five-operation scheduler protocol;
+  requested-versus-actual engine identity; literal Explorer domain results; history-preserving Maia
+  occurrences; and exact-only Stockfish legal-root scores.
+- Added `make provider-exchange-contract` as the repository-owned entry point for the disposable
+  eight-arm falsifier. It passes 8/8 without invocation-time environment overrides.
+- The author pass found and repaired four additional type-level holes before handoff: repeated
+  derivation occurrence aliasing ([[D1939]]), operation/request cross-pairing ([[D1940]]),
+  contradictory zero-population W/D/L ([[D1941]]) and implied Maia top-k completeness ([[D1942]]).
+- Landed the evidence dossier and repeat-review handoff. The RFC remains draft; production is still
+  forbidden until repeat independent buildability review.
