@@ -140,6 +140,14 @@ Primary RFCs: `pack-capability-contract`, `claim-semantic-anchors`, `tactical-co
 `shared-candidate-evidence-packet`, `bounded-policy-targets`, `bounded-target-policy-composition`,
 `recorded-semantic-path`.
 
+The 2026-08-28 shared-candidate packet author repair records the owner's foundation-first sequence
+without laundering verification into product reach: the provider-free complete population may
+land with zero product consumers, while Support/Review/bot discharges remain open. The draft now
+specifies a runtime `WeakMap` receipt authority, exact projection reminting, cooperative
+collector-group cancellation and literal convention/version/reason types. Fresh independent review
+still gates implementation; implementing the packet alone cannot satisfy any 1.0 end feature.
+Receipt: `planning/evidence-foundation-ux/shared-candidate-packet-second-repeat-author-repair-2026-08-28.md`.
+
 The 2026-08-28 second repeat review keeps `bounded-policy-targets` unimplemented while preserving
 its useful exact-target census and the local/provider/policy split. Seven finite repairs remain:
 one exported threat-pass anchor; no invented initial promotion provenance; removal of the

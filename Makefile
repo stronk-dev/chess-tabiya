@@ -142,6 +142,7 @@ provider-exchange-repeat-review:
 
 candidate-packet-contract:
 	node --test tools/d1900-candidate-packet-amendment-harness/*.test.mts
+	./node_modules/.bin/tsc -p tools/d1900-candidate-packet-amendment-harness/tsconfig.contract.json --noEmit
 
 candidate-packet-repeat-review:
 	node --test tools/d1958-candidate-packet-repeat-review/*.test.mts

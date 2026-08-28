@@ -40,13 +40,14 @@ test("D1901 runtime scope truth is a compiler receipt, not a declaration-graph c
   assert.throws(() => assertReceipt(value, [legal]));
 });
 
-test("D1902 first landing names the real semantic path and does not invent a bot", () => {
+test("D1902/D1958 foundation landing claims zero product consumers and does not invent a bot", () => {
   const catalogue = readFileSync(new URL("../../apps/server/src/bot-policy-catalog.ts", import.meta.url), "utf8");
   assert.match(catalogue, /BOT_POLICY_PROFILES\s*=\s*compileBotPolicyCatalog\(\[\]\)/u);
 
   const rfc = readFileSync(new URL("../../rfc/shared-candidate-evidence-packet.md", import.meta.url), "utf8");
-  assert.match(rfc, /first landing is the real semantic-check operation/u);
-  assert.match(rfc, /does not inject a packet operation into\s+`OpponentSelector`/u);
+  assert.match(rfc, /foundation landing has \*\*zero product consumers\*\*/u);
+  assert.match(rfc, /verification CLI may exercise the compiler through a contract-only harness/u);
+  assert.match(rfc, /does not inject a packet operation into `OpponentSelector`/u);
 });
 
 type RootScore =
@@ -104,15 +105,15 @@ test("D1946 refuses a possible-vocabulary list as one value's derivation conjunc
 
   const rfc = readFileSync(new URL("../../rfc/shared-candidate-evidence-packet.md", import.meta.url), "utf8");
   assert.match(rfc, /packet is \*\*not an\s+F1 projection\*\*/u);
-  assert.match(rfc, /code-derived registry and migration guard, never a claim/u);
+  assert.match(rfc, /code-derived registry and migration\s+guard, never a claim/u);
 });
 
-test("D1947 composes the first landing at the actual semantic executable, not the application", () => {
+test("D1947 leaves both the application and verification CLI outside product composition", () => {
   const application = readFileSync(new URL("../../apps/server/src/application.ts", import.meta.url), "utf8");
   const semanticCheck = readFileSync(new URL("../../apps/server/src/semantic-evidence-check.ts", import.meta.url), "utf8");
   const rfc = readFileSync(new URL("../../rfc/shared-candidate-evidence-packet.md", import.meta.url), "utf8");
   assert.doesNotMatch(application, /selectLocalSemanticEvidence|SemanticSelectionOperation/u);
   assert.match(semanticCheck, /selectLocalSemanticEvidence/u);
-  assert.match(rfc, /`createApplication` remains unchanged/u);
-  assert.match(rfc, /`semantic-evidence-check\.ts` constructs one packet service/u);
+  assert.match(rfc, /`createApplication`\s+remains unchanged/u);
+  assert.match(rfc, /`semantic-evidence-check\.ts` remains a verification command/u);
 });

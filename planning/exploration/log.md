@@ -10716,3 +10716,18 @@ CI actually run.
   controls. `make bounded-target-census` passed 11/11 again in 171.44 seconds with semantic counts
   and 111/333 pair maxima unchanged. This remains an author checkpoint; production waits for fresh
   independent review.
+
+## 2026-08-28 — Shared-candidate packet second repeat author repair
+
+- Applied the [[D1958]]–[[D1961]] return under the owner's foundation-first sequencing. The packet
+  may land as a deliberately unused lower primitive, but the verify CLI is no longer called a
+  product consumer and D9/D10/1.0 feature receipts remain open.
+- Replaced the erased-brand-only claim with a private `WeakMap` constructor/assertion authority and
+  an asserted wide→narrow projector that remints a recognized receipt while retaining exact member
+  references. Replaced synchronous whole-packet cancellation prose with code-derived collector
+  groups, a portable yield after every group and last-waiter cancellation during work.
+- Narrowed move convention/compiler version to exported literal types and abstention to a generated
+  projection→reason union set-equal to declarations. `make candidate-packet-contract` passes 11
+  runtime/source and three crossed compile controls; the four-arm prior return instrument is red on
+  all four obsolete assumptions. This is an author checkpoint; production waits for fresh
+  independent review.

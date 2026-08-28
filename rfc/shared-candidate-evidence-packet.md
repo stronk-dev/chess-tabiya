@@ -1,12 +1,12 @@
 # RFC: Shared candidate evidence packet — the compiled legal population three consumers are measured against
 
-- **Status:** **draft — RETURNED by second repeat independent review 2026-08-28 on
-  [[D1958]], [[D1959]], [[D1960]] and [[D1961]].** The neutral packet, complete legal denominator, no-F1-aggregate repair and
-  one-root bot table survive. Implementation remains unauthorised because the replacement first
-  consumer is a verify-only CLI; the receipt has no runtime seal/assertion contract; cancellation
-  has no yielding/worker execution model; and exact convention/version/abstention authorities are
-  widened to free scalars. Exact return and repair order:
-  `planning/evidence-foundation-ux/shared-candidate-packet-second-repeat-review-2026-08-28.md`.
+- **Status:** **draft — author-amended 2026-08-28 after the second repeat [[D1958]]–[[D1961]]
+  return; fresh independent buildability review required.** The packet now lands honestly as a
+  deliberately unconsumed foundation primitive under the owner's foundation-first sequencing; the
+  verify CLI is only a contract instrument and no 1.0 consumer is claimed. A module-private
+  `WeakMap` receipt authority, exact wide→narrow projector, cooperative collector-group yields and
+  literal convention/version/projection-reason types close the technical return. Implementation
+  remains unauthorised.
   The provider-free compiler itself does not wait on the provider RFC; the held D10 bot join does.
   [[D1580]] remains separate numeric appliance-tier debt. Prior author state: amended after the
   repeat [[D1900]]–[[D1903]] return and [[D1945]]–[[D1947]] contract re-derivation.
@@ -101,8 +101,9 @@ sealed events, ~558 ms** to compile the population once. `[V]`
 the bot's selector cache is keyed on policy and session, while the hint and Review operations do
 not yet exist at one production boundary. Today only the semantic-check executable calls local
 selection; the bot host exists but does not consume this population. The earlier claim that three
-live consumers already recompile it was too strong. §6.0 names the executable composition root and
-defers shared application lifetime until the first real route consumes it. `[V]`
+live consumers already recompile it was too strong. §6.0 now refuses to count that verification
+command as a composition root and defers application lifetime until the first real route consumes
+the deliberately unconsumed foundation. `[V]`
 
 **The correctness argument is stronger than the latency one**, and it is the reason this is a
 foundation rather than a cache. The R2 distinctiveness rule — *this event is worth showing because
@@ -345,10 +346,11 @@ This does not remove evidence authority. `legalMovesInput`, every retained
 F1 identities and seals. The private packet compiler records their original object references in a
 process-only receipt and refuses any packet not minted from those values. Downstream conclusions
 must declare the particular values they actually compose; they may not cite the packet container as
-if it were evidence. The real semantic-selection operation consumes the receipt as execution input
-and continues to select only from the existing `research.semantic_selection@1` event bindings.
-The held bot handoff (§8.3) receives the same neutral receipt, but D10 must define truthful derived
-output identities over the exact values it uses before a production bot consumes them.
+if it were evidence. This foundation landing has **zero product consumers**. The existing semantic
+verification CLI may exercise the compiler through a contract-only harness, but it is not a route,
+learner operation or 1.0 discharge. The first accepted semantic-selection, hint, Review or bot
+operation consumes the receipt and declares only its own derived output authority. D9/D10 remain
+required roadmap work; implementing this RFC alone cannot close those consumer features.
 
 `CANDIDATE_PACKET_COMPILER_VERSION = 1` is an exported literal and every construction-semantic
 change must move it or the cache-identity fixture fails.
@@ -363,10 +365,13 @@ export interface CandidateEventPopulation {
   readonly id: string;                        // digest over the identity fields below
   readonly beforeFen: string;                 // canonical full six-field FEN
   readonly scope: CandidatePacketScope;       // one of the three closed members above
-  readonly legalConvention: VersionedEvidenceId;  // rules.mobility.reading.legal_moves@1
-  readonly moveIdentityConvention: string;    // MOVE_IDENTITY_CONVENTION, retained literally
+  readonly legalConvention: {
+    readonly id: "rules.mobility.reading.legal_moves";
+    readonly version: 1;
+  };
+  readonly moveIdentityConvention: typeof MOVE_IDENTITY_CONVENTION;
   readonly manifestDigest: string;            // CompiledEvidenceManifest.digest
-  readonly compilerVersion: number;           // this packet's own construction semantics
+  readonly compilerVersion: typeof CANDIDATE_PACKET_COMPILER_VERSION;
   readonly legalMoves: readonly ExactLegalMove[];  // the sealed authority's complete set
   readonly candidates: readonly CandidateEventRow[];
   readonly terminal?: { readonly reason: "checkmate" | "stalemate" };
@@ -377,10 +382,7 @@ export interface CandidateEventRow {
   readonly afterFen: string;                  // canonical child, derived not supplied
   readonly events: readonly SemanticEvidenceEvent[];   // ORIGINAL sealed values; [] when scope excludes
   readonly readings: readonly DeclaredEvidence<unknown>[]; // ORIGINAL sealed values; [] when scope excludes
-  readonly abstentions: readonly {
-    readonly projection: VersionedEvidenceId;
-    readonly reason: string;
-  }[]; // typed collector abstentions only; no-match is not an abstention
+  readonly abstentions: readonly CandidatePacketAbstention[];
 }
 
 export interface CandidatePopulationRequest {
@@ -388,10 +390,7 @@ export interface CandidatePopulationRequest {
   readonly scope: CandidatePacketScope;
 }
 
-/** Process-local compiler provenance; not a general F1 derivation receipt. */
-declare const CANDIDATE_POPULATION_RECEIPT: unique symbol;
 export interface CandidatePopulationReceipt {
-  readonly [CANDIDATE_POPULATION_RECEIPT]: true;
   readonly packet: CandidateEventPopulation;
   readonly selectedMember: "events" | "readings" | "events_and_readings";
   readonly legalMovesInput: DeclaredEvidence<ExactLegalMoveMap>;
@@ -401,15 +400,49 @@ export interface CandidatePopulationReceipt {
     readonly readings: readonly DeclaredEvidence<unknown>[];
   }[];
 }
+
+// Generated source: one frozen `as const` property per scoped id@version.
+import { CANDIDATE_PACKET_ABSTENTION_REASONS } from
+  "./candidate-population-abstentions.generated.js";
+
+export type CandidatePacketAbstention = ProjectionReasonUnion<
+  typeof CANDIDATE_PACKET_ABSTENTION_REASONS
+>;
+
+const CANDIDATE_POPULATION_RECEIPTS = new WeakMap<
+  CandidatePopulationReceipt,
+  CandidatePopulationReceiptReferences
+>();
+
+function compileCandidatePopulationReceipt(
+  packet: CandidateEventPopulation,
+  legalMovesInput: DeclaredEvidence<ExactLegalMoveMap>,
+  candidateInputs: CandidatePopulationReceipt["candidateInputs"],
+): CandidatePopulationReceipt;
+
+export function assertCandidatePopulationReceipt(
+  value: unknown,
+): asserts value is CandidatePopulationReceipt;
+
+export function projectCandidatePopulationReceipt(
+  receipt: CandidatePopulationReceipt,
+  scope: CandidatePacketScope,
+): CandidatePopulationReceipt;
 ```
 
-The packet compiler therefore creates and process-seals `CandidatePopulationReceipt` while it still
-holds the exact source object references. `selectedMember` is derived from the closed scope, every
-candidate input is reference-identical to the value retained in the packet, and excluded families
-are frozen empty. The private seal proves only “this compiler created this receipt in this process”;
-it is not called an F1 derivation receipt, is not persisted, and cannot be supplied by a caller.
-All other code receives a `CandidatePopulationReceipt`; passing `receipt.packet` without its receipt
-to an operation or constructing a packet-shaped object fails the application/import census.
+`compileCandidatePopulationReceipt` is module-private and the only constructor. It freezes the
+receipt, stores the exact packet/legal/event/reading references in the module-private `WeakMap`, and
+returns the opaque execution value. `assertCandidatePopulationReceipt` requires a map entry and
+then checks the receipt still points to the exact packet, legal input, candidate rows and retained
+event/reading arrays recorded at construction. A forged object, equal rebuild, copy-spread, removed
+row or substituted equal-valued input fails at runtime even after a double type assertion.
+
+`projectCandidatePopulationReceipt` first asserts the wide receipt, performs no chess work, retains
+the same legal/event/reading member references permitted by the narrower scope, constructs a new
+frozen packet/id and calls the same private constructor to mint a distinct narrow receipt. It never
+copies a `WeakMap` entry or brands an arbitrary object. The runtime authority proves only “this
+compiler created and still recognizes this exact receipt in this process”; it is not an F1
+derivation receipt and is never persisted.
 
 Each retained semantic event/reading remains individually admitted through its existing F1 or
 semantic-event constructor. The aggregate is never declared or admitted as evidence. An events-only receipt does not retain readings and a
@@ -418,8 +451,10 @@ legal-move input remains position-rules/exact and each retained evidence value k
 grounding, exactness, confidence and abstention rather than being laundered into one aggregate
 label. Runtime negatives forge the receipt, mismatch selected member/scope, replace one retained
 input by an equal rebuild, or remove a retained reference; they fail the packet compiler's receipt
-assertion. Scope narrows which retained inputs appear in a value. The possible-input vocabulary is
-a code-derived registry and migration guard, never a claim that all members fired in one position.
+assertion. Every receipt reader accepts `unknown` or re-asserts even a statically typed value at its
+boundary; the TypeScript interface alone is not treated as a seal. Scope narrows which retained
+inputs appear in a value. The possible-input vocabulary is a code-derived registry and migration
+guard, never a claim that all members fired in one position.
 
 **§3.2 — What a caller may supply and what it may not.** A caller supplies exactly the closed
 `CandidatePopulationRequest`: **`beforeFen`** and a **request scope** (§3.4). The service injects
@@ -592,49 +627,53 @@ integers. Criterion 10, which is **red before the change and green after**.
 ### §6 — Cache identity, invalidation, single-flight, and the bound
 
 **§6.0 — Ownership and process boundary** ([[D1572]]). `CandidatePopulationService` owns one
-`CandidatePopulationCache`; neither is a module singleton. In this first landing,
-`apps/server/src/semantic-evidence-check.ts` constructs it once and passes it to the real semantic
-selection operation that replaces that executable's direct helper call. `createApplication` gains
-nothing while no user-facing route consumes the packet ([[D1947]]). The first accepted bot,
-Guided Hint or Review route constructs one application-owned service and injects that same instance
-into every packet operation landing with it. A browser, worker or second server process
-compiles or fetches its own derived result; this RFC refuses packet serialization and therefore
-claims no cross-process packet reuse. Tests construct isolated services with explicit limits.
+`CandidatePopulationCache`; neither is a module singleton. This foundation-first landing exports
+the service and has **zero application composition roots and zero product consumers**. The existing
+`semantic-evidence-check.ts` remains a verification command over current production symbols; it is
+not rewritten and not counted as product reach. Contract/performance harnesses construct isolated
+services with explicit limits. The first accepted bot, Guided Hint, Review or semantic-selection
+operation constructs one application-owned service and injects that same instance into every
+packet consumer landing with it.
 
-The owning executable/process composition root is the cache lifetime: exit/restart clears it,
+A browser or second server process compiles its own derived result. This RFC refuses packet
+serialization and therefore claims no cross-process packet reuse. Implementing this lower layer
+closes only its foundation discharges; roadmap and acceptance receipts must continue to report
+Support/Review/bot consumption as missing until those later operations land.
+
+The eventual owning application/process composition root is the cache lifetime: exit/restart clears it,
 deployment instances do not coordinate it, and account/run deletion has nothing to invalidate
 because no learner/session term enters the key. A future production operation reaching the compiler
 without the one injected application service fails its consumer-operation census; it may not
 instantiate an ad-hoc cache per request.
 
-The production operation is named, callable and separately cancellable ([[D1633]]):
+The foundation operation is named, callable and separately cancellable ([[D1633]]):
 
 ```ts
 interface CandidatePopulationService {
   get(request: CandidatePopulationRequest, signal: AbortSignal): Promise<CandidatePopulationReceipt>;
 }
-
-interface SemanticSelectionOperation {
-  select(input: { beforeFen: string; playedUci: string; policy: VersionedEvidenceId }, signal: AbortSignal):
-    Promise<EvidenceSelectionResult>;
-}
-
 ```
 
-`apps/server/src/semantic-selection-operation.ts` owns the research operation: it requests the
-event scope, verifies the returned receipt, finds
-the played row using the packet reader and passes that row plus the packet's
-literal alternatives to `selectSemanticEvidence`; those retained events already carry the existing
-`research.semantic_selection@1` bindings. The CLI calls this operation rather than a runtime helper
-that recompiles. The cache stores only the neutral receipt and never F1 consumer authority.
+The service cache stores only the neutral receipt and never F1 consumer authority. `createApplication`
+remains unchanged and does not inject a packet operation into `OpponentSelector` while
+`BOT_POLICY_PROFILES` is empty. No public REST route is added by this lower primitive—the hint,
+Review and bot route owners expose and admit their own operations later.
 
-`semantic-evidence-check.ts` constructs one packet service and semantic operation for the duration
-of the command. `createApplication` remains unchanged and does not inject a packet operation into
-`OpponentSelector` while `BOT_POLICY_PROFILES` is empty. Caller abort/deadline flows into packet single-flight. Cancelling one waiter removes that waiter;
-shared packet compilation continues for remaining waiters and aborts when none remain. A completed
-packet may be cached; failures/cancellations are not. No public REST route is added by this lower
-primitive—the hint, Review and bot route owners expose their own operations. The one current
-executable consumer is invoked through its actual command entry point and operation census.
+Compilation is cooperatively asynchronous. The code-derived event and reading registries expose
+bounded collector groups; the compiler executes one group for one candidate, records only its exact
+returned values, then awaits an injected `yieldControl(): Promise<void>`. Production's default is a
+portable macrotask yield. The compiler checks its internal `AbortSignal` before a group, immediately
+before and after every yield, after the final candidate and before receipt construction/cache
+publication. No synchronous `localSemanticEvents` wrapper is permitted inside the compiler.
+
+Caller abort/deadline flows into packet single-flight. Cancelling one waiter removes only that
+waiter; compilation continues for remaining waiters. Removing the last waiter aborts the internal
+controller, and the next group boundary returns `cancelled`; no partial packet or receipt is
+constructed or cached. A completed packet may be cached; failures/cancellations are not. The
+algorithmic cancellation bound is **one collector group**. The Node-24 stress receipt separately
+fails if any group exceeds 100 ms on the fixed roots, and a deterministic control aborts from the
+first in-work yield and proves no second group or receipt is observed. A worker is refused until
+semantic-event and F1 reference authorities have an explicit serialize/revalidate/reseal transport.
 
 **§6.1 — The key is facts only.**
 
@@ -938,9 +977,10 @@ projection; the legal-authority and dialect rules; original sealed-event retenti
 candidate-closure-census`; the closed `CandidatePopulationRequest`; process-sealed factual receipt;
 the injected per-process `CandidatePopulationService`; the
 full-FEN key, single-flight, dual-bound weighted LRU, statistics and invalidation rules; the concrete
-semantic-selection operation plus executable composition/cancellation; the Maia-leak repair; the
-`selectSemanticEvidence` input repair and the `evaluatedAlternatives` fix; the narrow-closure repair;
-and the operator-only and LLM boundaries. That is the whole mechanism.
+cooperative compilation/cancellation topology; the Maia-leak repair; the `selectSemanticEvidence`
+input repair and the `evaluatedAlternatives` fix, exercised as a verification contract only; the
+narrow-closure repair; and the operator-only and LLM boundaries. The shipped foundation has zero
+product consumers and claims no Support, Review or bot feature completion.
 
 **Held, and the holds are not mine.**
 
@@ -961,6 +1001,11 @@ and the operator-only and LLM boundaries. That is the whole mechanism.
    request under an aggregate deadline, and repair the final history/provider/policy cache. A test
    profile is not a substitute. This RFC lands only the neutral receipt and typed root-table handoff;
    it does not manufacture a dormant vector or future-only admission.
+5. **First product consumption (`hint-distance.md`, `review-evidence-compiler.md` or the accepted
+   bot path)** — the owner ruled the evidence foundation first because later packs, analysis,
+   Support and bots all consume it. That authorises the lower primitive to land unused, not to
+   masquerade as a feature. D9/D10 and the roadmap remain open until a real route/operation binds
+   exact retained values and its own output authority.
 
 **None of these narrows the mechanism**, and none of them is a size argument.
 
@@ -1003,12 +1048,13 @@ listed symbol moved exactly once rather than rewarding a hand count.
 
 | # | file | change |
 |---|---|---|
-| 1 | `packages/runtime/src/candidate-population.ts` (new) | compiler, legal-authority read, per-child derivation, the **moved** one-authority `candidateChildReadings`, set equality, terminal/scope rules and process receipt (§3–§5) |
-| 2 | `packages/runtime/src/candidate-population-cache.ts` (new) | service/cache types, exact-scope projection, neutral factual receipt, key, single-flight, dual-bound LRU, stats and invalidation (§3.1/§6) |
-| 3 | `packages/runtime/src/semantic-evidence.ts` | selection takes a sealed packet receipt instead of a callback; both enumerators consume one code-derived closure; counts become measurements (§1.2–§1.5, §5.4) |
+| 1 | `packages/runtime/src/candidate-population.ts` (new) | compiler, legal-authority read, code-derived bounded collector groups, cooperative yield, the **moved** one-authority `candidateChildReadings`, set equality, terminal/scope rules, typed abstentions and private `WeakMap` receipt authority (§3–§5/§6.0) |
+| 1a | `packages/runtime/src/candidate-population-abstentions.generated.ts` (new) | generated frozen `as const` projection→reason map; public union derives from these literal bytes |
+| 2 | `packages/runtime/src/candidate-population-cache.ts` (new) | service/cache types, asserted exact-scope projector/minting path, neutral factual receipt, key, waiter-aware cancellation, single-flight, dual-bound LRU, stats and invalidation (§3.1/§6) |
+| 3 | `packages/runtime/src/semantic-evidence.ts` | selection accepts and runtime-asserts a packet receipt instead of a callback; both enumerators consume one code-derived closure; counts become measurements (§1.2–§1.5, §5.4) |
 | 4 | `packages/runtime/src/index.ts` | public packet/service/scope/readings contracts; no consumer deep-imports source files |
-| 5 | `apps/server/src/semantic-selection-operation.ts` (new) | only current executable consumer operation: requests and verifies an event-scope receipt, owns abort/deadline and replaces CLI-local compilation |
 | — | `tools/candidate-closure-census.mjs` (new; governance tool, **not production**) | code-derived schema arm plus prevalence/cost arm (§5.3) |
+| — | `tools/generate-candidate-packet-abstentions.mjs` (new; generator/checker, **not production**) | derives the literal map from scoped declarations and fails check mode on byte or set drift |
 
 Named validation and docs sites that necessarily move (the [[D828]] discipline — named, not implicit,
 and not additional implementation homes): `apps/server/src/semantic-evidence-check.ts` (§5.4's
@@ -1016,7 +1062,6 @@ assertion), `packages/runtime/src/semantic-evidence.test.ts`,
 `packages/runtime/src/candidate-population.test.ts`,
 `packages/runtime/src/candidate-population-cache.test.ts`,
 `packages/runtime/src/evidence-catalog.test.ts`, `apps/server/src/evidence-manifest.test.ts`,
-`apps/server/src/semantic-selection-operation.test.ts`,
 `apps/server/src/semantic-evidence-check.ts`, `docs/evidence-contract.md`,
 `docs/semantic-evidence.md`, and `Makefile`.
 
@@ -1046,15 +1091,15 @@ rather than aspirational — criterion 14.
 | [[D1576]] | Review's run-node-bound engine point could not represent a hypothetical candidate honestly | §8.3; Review RFC amendment | criterion 17; Discharge D8 |
 | [[D1900]] | the shared factual cache returned a consumer-specific view without defining or keying the consumer | §3.1, §6.0 | criteria 23–24: cache only the neutral receipt; no aggregate consumer authority exists |
 | [[D1901]] | the compiled scope-wide `anyOf` declaration had no runtime value-level derivation-member witness | §3.1 | criterion 22: remove the false aggregate projection; private exact-reference receipt owns runtime scope truth |
-| [[D1902]] | the claimed live bot consumer was reachable only through a test-created profile while the production roster is empty | §6.0, §10 | criterion 23 + Discharge D10: first landing is the real semantic-check operation; bot traversal waits for a concrete accepted profile |
+| [[D1902]] | the claimed live bot consumer was reachable only through a test-created profile while the production roster is empty | §6.0, §10 | criterion 23 + Discharge D10: foundation landing claims zero product consumers; bot traversal waits for a concrete accepted profile |
 | [[D1903]] | per-child position evaluation replaced the measured one-root bot-guard operation without a whole-set execution budget | §7.1, §8.3 | criterion 17 + Discharge D10: one delivered complete root table; bot RFC owns aggregate deadline/measurement |
 | [[D1945]] | either of two future packet bindings could be deleted while F1 orphan closure stayed green | §3.1 | criterion 22: no future-only aggregate bindings ship; downstream RFCs bind only truthful outputs |
 | [[D1946]] | the scope-wide derivation members treated the complete possible vocabulary as values simultaneously present | §3.1, §5.3 | criterion 22: packet is an internal receipt; code-derived vocabulary is a migration guard, not a derivation member |
-| [[D1947]] | `createApplication` was assigned a semantic service even though it has no semantic-selection caller or route | §6.0, §12 | criterion 23: the existing semantic-check executable owns the first composition; application injection waits for a real route |
-| [[D1958]] | the replacement first consumer is a verify-only hard-coded CLI, not a product operation | returned §6.0, §12 | author repair must bind a real Support/Review/bot operation or explicitly obtain authority for an unused foundation primitive |
-| [[D1959]] | the promised process receipt has only an erased type brand and no runtime constructor/assertion | returned §3.1, §3.4 | author repair must specify the private runtime seal, constructor/projector and exact-reference assertion boundary |
-| [[D1960]] | `AbortSignal` cannot interrupt the synchronous measured compiler without a yielding or worker execution model | returned §6.0 | author repair must define executable cancellation topology and maximum cancellation latency |
-| [[D1961]] | exact convention/version/abstention authorities are widened to unchecked scalars | returned §3.1 | author repair must retain literal types and check projection-specific abstention vocabulary |
+| [[D1947]] | `createApplication` was assigned a semantic service even though it has no semantic-selection caller or route | §6.0, §12 | criterion 23: no application composition ships until a real route lands |
+| [[D1958]] | the replacement first consumer is a verify-only hard-coded CLI, not a product operation | §3.1, §6.0, §10 | author-repaired under the owner's foundation-first sequence: zero product consumers claimed; D9/D10/roadmap stay open |
+| [[D1959]] | the promised process receipt has only an erased type brand and no runtime constructor/assertion | §3.1, §3.4 | author-repaired: private `WeakMap` constructor authority, runtime assertion and asserted wide→narrow minting path |
+| [[D1960]] | `AbortSignal` cannot interrupt the synchronous measured compiler without a yielding or worker execution model | §6.0 | author-repaired: code-derived collector groups yield cooperatively; final-waiter abort stops at the next group boundary |
+| [[D1961]] | exact convention/version/abstention authorities are widened to unchecked scalars | §3.1 | author-repaired: literal convention/version types and generated projection→reason union with set-equality guard |
 
 ## Deviations from design
 
@@ -1228,9 +1273,9 @@ contradicted.
 20. **The implementation surface is derived, not targeted.** An AST receipt proves every §12 symbol
     has one production definition, `childReadings` has been deleted and replaced by the exported
     runtime authority, no runtime file imports `apps/server`, no consumer deep-imports the new source
-    modules, each of the five production rows has its named definition/caller, and the
-    governance tool is not counted as production. Any extra production file is
-    named in the receipt rather than hidden to preserve a total.
+    modules, each of the five production rows has its named definition and the product-consumer
+    count is exactly zero. The governance CLI is not counted as product consumption. Any extra
+    production file is named in the receipt rather than hidden to preserve a total.
 21. **Invalidation is by key and never by mutation, and provider state cannot reach it** (§6.4 — the
     section that had no criterion). Four arms. **(a)** A compiled packet is frozen: a fixture asserts
     every mutation attempt on a served packet throws in strict mode, and that the cache never hands
@@ -1249,27 +1294,40 @@ contradicted.
     if `derived.candidate.event_population`, an aggregate packet adapter, a packet consumer binding
     or a `ConsumerEvidenceView<CandidateEventPopulation>` appears. The process receipt selects the
     member from scope, retains the exact legal/event/reading input references and refuses a forged
-    receipt, equal rebuild, member/scope mismatch or removed retained input. A semantic-operation
-    fixture proves the selected event is one of the original values already bound to
-    `research.semantic_selection@1`. A negative manifest fixture demonstrates why the withdrawn
+    receipt, equal rebuild, member/scope mismatch or removed retained input through the private
+    `WeakMap` assertion. A wide→narrow fixture proves the projector first asserts the wide value,
+    retains exact permitted references and mints a distinct recognized receipt through the private
+    constructor. A semantic-selection contract fixture proves any later selected event is one of
+    the original values already bound to `research.semantic_selection@1`. A negative manifest fixture demonstrates why the withdrawn
     scope-wide conjunction is not a value proof: a legal quiet root emits only a strict subset of
     the code-derived possible vocabulary while the same static tuple still compiles.
-23. **One service owns one process-local factual cache and the real semantic executable consumes it.**
-    An entry-point fixture runs `semantic-evidence-check.ts`, which constructs one
-    `CandidatePopulationService`, injects it into `SemanticSelectionOperation`, and traverses that
-    operation instead of calling the runtime helper directly. It asserts `createApplication`
-    remains unchanged, `BOT_POLICY_PROFILES` is empty and no packet operation is injected into
-    `OpponentSelector`. Cancellation removes one waiter, aborts on the final waiter, and never caches a
-    failure. A repository assertion refuses a module singleton and ad-hoc
-    `new CandidatePopulationCache()` inside request handlers. A separately constructed service
-    compiles independently and makes no cross-process reuse claim; hint and Review declare only
-    their actual derived outputs through Discharge D9 when their production operations land.
+23. **One service owns one process-local factual cache, and this landing claims no product consumer.**
+    The source census asserts `createApplication`, routes, `OpponentSelector`, Support, Review and
+    web code have zero packet-service imports; `BOT_POLICY_PROFILES` remains empty. The verification
+    CLI may exercise the symbols but is explicitly classified as a contract instrument. A
+    repository assertion refuses a module singleton and ad-hoc `new CandidatePopulationCache()`
+    inside request handlers. A separately constructed service compiles independently and makes no
+    cross-process reuse claim. D9/D10 remain open and the 1.0 roadmap refuses to count packet
+    implementation as their discharge.
+
+    Cancellation is crossed after compilation begins: the first collector group runs, the injected
+    macrotask yield aborts the final waiter, no second group runs, the service returns `cancelled`,
+    and zero packet/receipt/cache entry exists. With two waiters, aborting one does not stop the
+    shared job. Removing the last waiter does. The fixed Node-24 roots record every group duration
+    and fail above 100 ms, making the one-group algorithmic bound a measured wall-clock bound too.
 24. **The factual cache never stores consumer authority.** The cache entry and service return type
     are exactly `CandidatePopulationReceipt`; neither contains a consumer id, binding, view or
-    rendered item. The semantic operation accepts the receipt and rejects a raw packet. A repository
+    rendered item. Every packet reader runtime-asserts the receipt and rejects a raw packet. A repository
     assertion fails on `ConsumerEvidenceView<CandidateEventPopulation>`, packet admission helpers or
     an `opponent.selection` packet binding. Future operations share the neutral receipt and own
     their truthful output admissions separately.
+25. **Convention, compiler version and abstentions remain closed in the receipt.** Compile-time
+    negatives reject any move convention other than `typeof MOVE_IDENTITY_CONVENTION`, any compiler
+    version other than `typeof CANDIDATE_PACKET_COMPILER_VERSION`, and a projection/reason pair not
+    present in `CANDIDATE_PACKET_ABSTENTION_REASONS`. The stable contract target runs the generator
+    in check mode and asserts the generated literal map is byte-current and set-equal to the scoped
+    declarations; no-match emits no abstention. Adding a declaration reason without regenerating
+    the map or forging a reason string fails.
 
 ## Discharges
 
@@ -1412,6 +1470,13 @@ D1354; corrected here per §0.7.)*
   it names the seven checks that cannot catch the thing being asserted.
 
 ## Changelog
+
+- 2026-08-28 — repaired the second repeat [[D1958]]–[[D1961]] return. The owner's
+  foundation-first sequence is recorded honestly as zero product consumers rather than a verify CLI
+  relabeled as production. The receipt now has a private `WeakMap` constructor/assertion authority
+  and an asserted wide→narrow minting path; the compiler yields between bounded collector groups and
+  cancellation after work begins is failable; convention/version/reason fields retain literal
+  authorities. Fresh independent buildability review remains required.
 
 - 2026-08-28 — repeat-return amendment on [[D1900]]–[[D1903]], followed by [[D1945]]–[[D1947]].
   The factual cache now stores one neutral process receipt; the first landing traverses only the
