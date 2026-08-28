@@ -10656,3 +10656,18 @@ CI actually run.
 - Added the disposable six-arm reproduction instrument behind the stable
   `make provider-exchange-repeat-review` entry point and linked the exact repeat return from the RFC
   register. No production, schema, pack, content or protected intent byte changed.
+
+## 2026-08-28 — Provider-exchange second author repair and Explorer source correction
+
+- Repaired [[D1950]]–[[D1955]] with sealed Maia delivery inputs, one descriptor execution shape,
+  per-leaf subject availability plus a total path reduction, separate pending/retained identities,
+  and a literal Explorer summary/internal-provenance/wire projection.
+- The repair exposed [[D1956]]: an exact played-move occurrence cannot derive from narrative
+  `run.record.move@1`; it is ordered after `recorded-semantic-path`'s exact `run.record.edge@1`
+  rather than manufacturing a provider-private run authority.
+- A primary-source check rejected the first width-shaped history repair ([[D1957]]). The official
+  Lichess operation exposes boolean `history` only, matching the two live URL builders. The amended
+  request now has disabled/requested arms and distinguishes requested-empty from not-requested.
+- `make provider-exchange-contract` remains 8/8 green and the crossed author target is now 7/7.
+  This is an author checkpoint, not independent acceptance; production remains blocked on repeat
+  review.

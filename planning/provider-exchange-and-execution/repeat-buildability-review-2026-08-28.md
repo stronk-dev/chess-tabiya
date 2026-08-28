@@ -59,9 +59,10 @@ non-positive widths. `ExplorerReportedHistory` nevertheless contains `not_reques
 request discriminant that can select it. The implementation must either report `not_requested`
 after requesting history or leave the union arm unreachable.
 
-Use a closed disabled-versus-requested request union. Only the requested arm carries a positive
-bounded width. Distinguish disabled, requested-but-empty and requested-with-rows in crossed
-fixtures.
+Use a closed disabled-versus-requested request union. **Author correction [[D1957]]:** the review's
+suggested bounded width was itself unsupported; the official `/lichess` operation exposes a boolean
+`history` parameter and no width. Distinguish disabled, requested-but-empty and requested-with-rows
+in crossed fixtures without inventing provider options.
 
 ### 3. The operation boundary has two `execute` signatures ([[D1952]])
 

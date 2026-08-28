@@ -1,8 +1,8 @@
 # RFC: Provider exchange and projection execution
 
-- **Status:** draft — amended 2026-08-28 after the independent [[D1871]]–[[D1878]] return. The
-  eight seams now have literal contracts and an eight-arm disposable falsifier; implementation is
-  not authorised until repeat independent buildability review.
+- **Status:** draft — second author repair 2026-08-28 after repeat return [[D1950]]–[[D1956]]. The
+  literal delivery, history, operation, availability, cache-identity and Explorer-migration seams
+  are repaired; implementation is not authorised until another independent buildability review.
 - **Author:** codex, from the D1652–D1658 and D1699–D1709 author-repair handoffs
 - **Created:** 2026-08-27
 - **Design refs:** `design/03-product-breadth.md` evidence architecture and provider-backed
@@ -210,8 +210,16 @@ interface SubjectEvidenceAvailabilityResult {
     readonly projection: VersionedEvidenceId;
     readonly paths: readonly {
       readonly pathId: `path:sha256:${string}`;
-      readonly state: "satisfied_local" | "satisfied_build_time" | "satisfied_recorded" |
-        "satisfied_retained" | "reachable_live" | "unsatisfied";
+      readonly sources: readonly {
+        readonly requirement: {
+          readonly projection: VersionedEvidenceId;
+          readonly availability: "recorded" | "provider" | "build_time";
+        };
+        readonly state: "satisfied_build_time" | "satisfied_recorded" | "satisfied_live" |
+          "satisfied_retained" | "reachable_live" | "unsatisfied";
+      }[];
+      readonly state: "satisfied_local" | "satisfied_sources" | "reachable_live" |
+        "unsatisfied";
     }[];
   }[];
 }
@@ -223,6 +231,13 @@ digests can therefore return different satisfaction without making `/capabilitie
 possibility, live reach, recorded/retained satisfaction, source absence and chess refutation remain
 different states. Provider absence cannot become `false`, `draw`, zero population or an empty
 recommendation.
+
+Path-state reduction is total and derives only from the returned leaf rows: zero source leaves is
+`satisfied_local`; all leaves in a `satisfied_*` state is `satisfied_sources`; otherwise, if every
+leaf is either satisfied or `reachable_live` and at least one is reachable, the path is
+`reachable_live`; any `unsatisfied` leaf makes the path `unsatisfied`. Source rows are sorted by
+projection/version/availability and remain visible, so a mixed recorded/provider path never hides
+which leaf is absent. No aggregate state is accepted from a caller.
 
 ### 3. One typed exchange receipt
 
@@ -282,6 +297,27 @@ response completion. Retained engine results are indexed by the pending key and 
 their captured actual identity/generation equals the supervisor's current established identity; a
 cold or unknown generation cannot serve them. A health snapshot or constructor field may not be
 stamped onto later bytes.
+
+The two identities are named separately and cannot substitute for one another:
+
+```ts
+interface ProviderPendingIdentity {
+  readonly operation: ProviderOperationId;
+  readonly normalizedRequestDigest: string;
+}
+
+interface ProviderRetainedIdentity {
+  readonly pending: ProviderPendingIdentity;
+  readonly actualIdentityDigest: string;
+  readonly generation: number | null;
+}
+```
+
+`pendingKey` is the canonical digest of `ProviderPendingIdentity`. A retained engine entry is
+indexed by that key but carries `ProviderRetainedIdentity`; admission recomputes the actual-identity
+digest from the acquisition receipt and compares generation to current supervisor state. Network
+providers use `generation: null` while still binding retained admission to actual endpoint/source
+identity. Actual identity is never part of request coalescing.
 
 Closed source abstention vocabulary:
 
@@ -391,6 +427,12 @@ of operation id plus requested bytes. `execute` is the only production hook that
 acquisition receipt. Engine descriptors enter the supervisor's serialized task inside this hook and
 capture actual identity/generation there.
 
+Each of the five named `*Operation` exports implements its exact
+`ProviderOperationDescriptor<operation-id>` member. There is no second public `execute(request,
+signal)` overload or wrapper operation: every descriptor receives `ProviderExecutionContext`, and
+the scheduler alone derives that context from caller scope/cancellation. The application census
+resolves those five descriptor objects, not five facades plus hidden descriptors.
+
 Rules:
 
 - `deadlineAt` is created at caller arrival, before cache, dedupe or queue decisions. Dispatch gets
@@ -484,7 +526,9 @@ not exchange provenance.
 
 #### 5.1 Fixed-bound position evaluation
 
-`StockfishPositionEvaluationOperation.execute(request, signal)` is the second Stockfish operation,
+`StockfishPositionEvaluationOperation` is the second Stockfish descriptor and implements
+`ProviderOperationDescriptor<"stockfish.position_evaluation@1">`; its only execution entry is
+`execute(request, context: ProviderExecutionContext)`,
 not a private candidate-packet adapter ([[D1860]]). It uses the same scheduler, engine execution
 boundary, generation and receipt constructor as the legal-root table:
 
@@ -560,9 +604,10 @@ interface MaiaPolicyPage {
 }
 ```
 
-The complete key includes request kind and every request byte, requested/actual model identity,
-band, temperature, top-p and width. Equal final FEN with different history is not equal; identical
-exact-FEN requests may dedupe. Candidate identities are unique legal normalized UCI, probabilities
+The pending key includes request kind and every request byte, requested model identity, band,
+temperature, top-p, width and timeout. Actual model identity and generation exist only in the
+acquisition and `ProviderRetainedIdentity`, never in the pending key. Equal final FEN with different
+history is not equal; identical exact-FEN requests may dedupe. Candidate identities are unique legal normalized UCI, probabilities
 are finite and non-negative, `returnedWidth` equals candidate count, and
 `returnedProbabilityMass` equals their finite sum in `[0,1]`. `coverage: "bounded_top_k"` makes
 explicit that missing mass/moves are unobserved rather than impossible; requested/returned width
@@ -578,7 +623,7 @@ History-conditioned and exact-FEN occurrences are deliberately different project
 
 ```ts
 interface MaiaRunMoveOccurrence {
-  readonly page: MaiaPolicyPage;
+  readonly page: DeclaredEvidence<ProviderEvidenceDelivery<MaiaPolicyPage>>;
   readonly run: {
     readonly runId: string;
     readonly eventHeadDigest: string;
@@ -590,16 +635,17 @@ interface MaiaRunMoveOccurrence {
 }
 
 interface MaiaExactFenMoveOccurrence {
-  readonly page: MaiaPolicyPage;
+  readonly page: DeclaredEvidence<ProviderEvidenceDelivery<MaiaPolicyPage>>;
   readonly position: { readonly fen: string; readonly observedMoveUci: string };
 }
 ```
 
-`derived.maia.run_move_occurrence@1` accepts only a page whose request kind is
+`derived.maia.run_move_occurrence@1` accepts only the sealed
+`human.maia.policy_page@1` item whose delivery payload request kind is
 `history_conditioned`; normalized `startFen` and every ordered `historyUci` byte must equal the
 sealed authoritative run path at the named event head, and replay must produce `reachedFen` before
 the observed move is joined. Same final FEN with a different path fails. The separate
-`derived.maia.exact_fen_move_occurrence@1` accepts only `exact_fen` pages and requires exact
+`derived.maia.exact_fen_move_occurrence@1` accepts only sealed `exact_fen` delivery payloads and requires exact
 canonical FEN plus legal observed-move equality; it never claims run history. The current inspector
 human split migrates to the projection matching its actual request. The node-shaped
 `human.maia.policy@1` is retired only when the generated consumer and operation censuses show zero
@@ -627,8 +673,10 @@ identity. `result` is admitted only inside the supported tablebase domain and af
 identity validation. Outside-domain is a typed domain abstention; provider absence is an execution
 failure; neither is a draw or a refutation.
 
-One `SyzygyPositionOperation.execute(request, signal)` and one receipt constructor serve direct
-probe and queue-backed evidence. The existing `TablebaseSource.probe` path migrates through it;
+`SyzygyPositionOperation` implements
+`ProviderOperationDescriptor<"syzygy.position@1">`; its only execution entry is
+`execute(request, context: ProviderExecutionContext)`. That descriptor and one receipt constructor
+serve direct probe and queue-backed evidence. The existing `TablebaseSource.probe` path migrates through it;
 there is no pawn-specific or Review-specific tablebase adapter. This source is the live arm later
 paired with `recorded.tablebase.result@1`; exact same-FEN joins are owned by the consuming
 derivation.
@@ -639,6 +687,10 @@ The Explorer descriptor accepts and returns this closed, node-free protocol:
 
 ```ts
 type ExplorerSpeed = "ultraBullet" | "bullet" | "blitz" | "rapid" | "classical" | "correspondence";
+
+type ExplorerHistoryRequest =
+  | { readonly kind: "disabled" }
+  | { readonly kind: "requested" };
 
 interface ExplorerPositionPageRequest {
   readonly rules: "chess";
@@ -651,7 +703,7 @@ interface ExplorerPositionPageRequest {
   readonly since: string | null;
   readonly until: string | null;
   readonly moveWidth: number;
-  readonly historyWidth: number;
+  readonly history: ExplorerHistoryRequest;
   readonly topWidth: 0;
   readonly recentWidth: 0;
   readonly timeoutMs: number;
@@ -728,8 +780,12 @@ and the requested history union. Transport/provider abstention is the shared
 not `provider_unavailable` or `honest_empty` invented by the parser.
 
 Normalization rejects unordered/duplicate rating buckets or speeds, invalid date windows,
-non-positive widths, mismatched four-/six-field FEN, non-standard variants and non-zero top/recent
-widths. Ingress uses one normalizer and validator shared by `ExplorerClient` and
+non-positive move widths, mismatched four-/six-field FEN,
+non-standard variants and non-zero top/recent widths. `history: disabled` alone admits
+`not_requested`; `history: requested` always returns `reported`, including an empty row list.
+The normalizer serializes those arms to the provider's literal `history=false|true`; no history
+width exists because the official Lichess `/lichess` operation publishes only the boolean request.
+Ingress uses one normalizer and validator shared by `ExplorerClient` and
 `LichessCorpusSource`. It requires unique legal normalized UCI, canonical SAN, safe W/D/L counts,
 below total is valid. `listed` equals the sum of admitted row `played` counts exactly and
 `unlisted = totals.total - listed`; provider SAN and independently normalized canonical SAN both
@@ -741,14 +797,67 @@ threshold is deleted; each consumer owns its explicit sample suitability policy.
 `human_corpus/measured/reported`, answers facts and candidate moves, and is operator/full-inspector
 only. It carries no completeness, quality, rank, recommendation, intent or causal-outcome meaning.
 
-The provider landing also publishes:
+The provider landing also publishes this literal narrow projection and operation:
 
-1. `derived.explorer.population_summary@1`, retaining position/window/totals/WDL/recency/source and
-   `CORPUS_GUARD` while structurally omitting move rows;
-2. `derived.explorer.played_move_occurrence@1`, joining the page to exact run position and move
-   with normalized-position and legal-move equality;
-3. the existing repertoire frontier binding over the raw page or one narrow frontier projection,
-   retaining unlisted mass and its literal sample policy.
+```ts
+interface ExplorerPopulationSummary {
+  readonly page: DeclaredEvidence<ProviderEvidenceDelivery<ExplorerPositionPage>>;
+  readonly position: {
+    readonly positionFen4: string;
+    readonly requestFen6: string;
+    readonly population: {
+      readonly ratingBuckets: readonly number[];
+      readonly speeds: readonly ExplorerSpeed[];
+      readonly since: string | null;
+      readonly until: string | null;
+    };
+  };
+  readonly totals: ExplorerWdlCounts & { readonly total: number };
+  readonly listed: number;
+  readonly unlisted: number;
+  readonly averageRating: number | null;
+  readonly opening: ExplorerReportedOpening;
+  readonly history: ExplorerReportedHistory;
+  readonly suitability: { readonly guard: "CORPUS_GUARD"; readonly accepted: boolean };
+}
+
+type ExplorerPopulationSummaryWire = Readonly<Omit<ExplorerPopulationSummary, "page">> & {
+  readonly source: {
+    readonly provider: "lichess_explorer";
+    readonly normalizedRequestDigest: string;
+    readonly responseDigest: string;
+    readonly delivery: "live" | "retained_exact";
+  };
+};
+
+function deriveExplorerPopulationSummary(
+  page: DeclaredEvidence<ProviderEvidenceDelivery<ExplorerPositionPage>>,
+): ExplorerPopulationSummary;
+
+function explorerPopulationSummaryWire(
+  summary: DeclaredEvidence<ExplorerPopulationSummary>,
+): ExplorerPopulationSummaryWire;
+```
+
+`derived.explorer.population_summary@1` retains the complete delivery, position/window,
+totals/WDL, listed/unlisted mass, rating/opening/history and the literal `CORPUS_GUARD` result while
+structurally omitting move rows. The operation derives every field from the admitted page; callers
+cannot submit a suitability result. A sentinel present only in `page.payload.result.moves[]` remains
+reachable only through the retained internal source input for provenance/inspector use. The exact
+wire adapter replaces that input with the four-field source receipt above; it never spreads or
+serializes the payload, and the sentinel is absent from every summary field, deterministic renderer,
+provider input and wire byte. Direct JSON serialization of `ExplorerPopulationSummary` is a
+governance failure, not a supported transport.
+
+The existing repertoire frontier binding consumes the raw page or a separately declared narrow
+frontier projection and retains unlisted mass plus its literal sample policy.
+
+`derived.explorer.played_move_occurrence@1` does **not** land here ([[D1956]]). Exact occurrence
+needs before-position/move/after-position identity, while shipped `run.record.move@1` is narrative
+SAN/context and `run.record.position@1` alone has no move edge. The successor join depends on
+`recorded-semantic-path`'s exact `run.record.edge@1`, then derives the occurrence from that sealed
+edge plus the admitted Explorer delivery. This is ordered 1.0 work, not a descope or permission for
+a provider-private run authority.
 
 `inspector.corpus`, `runtime.repertoire_scan` and current direct callers migrate through compiled
 paths. The old `human.explorer.population@1` and `position_stats@1`, duplicated parsers and
@@ -767,7 +876,7 @@ before any learner binding is added:
 | typed provider operations | 5 | Stockfish legal roots, Stockfish fixed-bound position evaluation, Maia policy page, Syzygy position, Explorer page |
 | shared scheduler composition | 1 | application root with explicit bounds and source health inputs |
 | raw source adapters | 5 | exact projection declaration through `declareEvidence` adapter |
-| migration operations | 4 | Maia run occurrence, Maia exact-FEN occurrence, Explorer summary, Explorer played occurrence |
+| migration operations | 3 | Maia run occurrence, Maia exact-FEN occurrence, Explorer summary; Explorer played occurrence follows `run.record.edge@1` under [[D1956]] |
 
 The operation census resolves exported callables from the application composition through to each
 adapter; a filename, manifest row or constructor-only test is not reachability. Provider source
@@ -786,7 +895,9 @@ Implementation is one reviewable RFC but lands in guarded commits in this order:
 4. add the bounded scheduler, same-exchange receipts and five typed source operations;
 5. migrate the current Maia/Explorer/Syzygy/Stockfish callers without changing learner semantics;
 6. prove operator traversals and retire duplicated authorities only at zero consumers;
-7. close only the rows actually discharged and archive with BACKLOG plus exploration-log closeout.
+7. hand the exact Explorer played-occurrence join to the `run.record.edge@1` successor and leave it
+   open until that operation traverses production;
+8. close only the rows actually discharged and archive with BACKLOG plus exploration-log closeout.
 
 The held promotion and bounded-target projections are not implemented in this RFC. Once this RFC
 is implemented, their already-researched amendments may compile against these sources without
@@ -830,13 +941,17 @@ learner-facing explanation.
 8. Maia positives cover history-conditioned and exact-FEN requests. Same FEN/different history,
    model, band, temperature, top-p or width cannot alias; identity/generation mismatch fails. A
    transposed-history run occurrence and cross-kind occurrence both fail while the exact run path
-   and separately typed exact-FEN occurrence pass.
+   and separately typed exact-FEN occurrence pass. Both occurrence payloads retain the exact
+   sealed `DeclaredEvidence<ProviderEvidenceDelivery<MaiaPolicyPage>>`; substituting a bare page,
+   bare delivery or different acquisition fails.
 9. Syzygy direct and queue-backed probes use the same constructor; same body/different FEN and
    same-piece-count/different-FEN joins fail; provider absence and outside-domain stay distinct.
 10. Explorer tests bind a captured response to the literal request/domain-result unions and shared
     normalizer; cover standard/Chess960 identity, illegal/duplicate/noncanonical/count-overflow/
     history negatives; retain provider and canonical SAN; accept listed-mass-short and valid
-    0/37/100 totals; and apply sample thresholds only in named consumers.
+    0/37/100 totals; distinguish disabled, requested-empty and requested-populated history; and
+    apply sample thresholds only in named consumers. The literal summary retains its delivery and
+    contains no move-row field or sentinel.
 11. Scheduler tests prove arrival-based deadline, queue-full, queued and active cancellation,
     coalesced-subscriber cancellation, exact-key dedupe, weighted eviction, stale generation/model
     refusal and no retention of failures. A cold-engine pending key does not require generation; a
@@ -849,8 +964,10 @@ learner-facing explanation.
     input or wire; raw provider rows are refused by grade, recommendation, theory and personality
     consumers.
 14. An application/source census names five real callable operations, one shared scheduler
-    composition and the four migration operations in §9. Removing any callable, bypassing
+    composition and the three migration operations in §9. Removing any callable, bypassing
     `scheduler.get`, constructing a receipt elsewhere or adding a private queue/cache fails.
+    Explorer played occurrence remains a checked dependency on `run.record.edge@1`, not a fourth
+    callable or a provider-local edge.
 15. `make evidence-manifest-check`, `make semantic-evidence-check`, server/runtime/web typechecks,
     focused provider tests, `make verify-software` and `make verify-governance` pass on committed
     bytes before the RFC is marked implemented.
@@ -888,6 +1005,12 @@ returns to author instead of accepting a placeholder.
 
 ## Changelog
 
+- 2026-08-28: repaired repeat return [[D1950]]–[[D1956]] with sealed Maia delivery inputs; the
+  official boolean Explorer-history request; one descriptor execution signature; exact leaf states
+  and total path reduction; separate pending/retained identities; a literal Explorer summary and
+  narrow wire projection; and an ordered dependency on `run.record.edge@1` for exact played-move
+  occurrence. The author contract passes 7/7 at `make provider-exchange-repeat-review`; another
+  independent review remains mandatory.
 - 2026-08-28: downstream candidate-packet reconciliation found and repaired [[D1943]]/[[D1944]]:
   legal-root rows now declare one root-side-to-move cp/mate outcome frame, and every provider source
   projection seals the complete typed delivery envelope instead of ambiguously dropping

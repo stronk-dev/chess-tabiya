@@ -1,8 +1,10 @@
 # D1950-D1955 provider-exchange repeat-review instrument
 
-Disposable RFC-review instrument. It reproduces six literal contradictions or omissions in the
-2026-08-28 amended provider-exchange contract. It is not production implementation and makes no
-chess claim.
+Disposable RFC author/review instrument. Its first checkpoint reproduced six literal
+contradictions or omissions in the 2026-08-28 amended provider-exchange contract. The author repair
+now crosses the repaired delivery, history, operation, availability, cache-identity and Explorer
+migration shapes, plus the exact recorded-edge dependency discovered as D1956. It is not production
+implementation and makes no chess claim.
 
 Run it through the stable repository entry point:
 
@@ -10,6 +12,6 @@ Run it through the stable repository entry point:
 make provider-exchange-repeat-review
 ```
 
-The assertions describe the returned document at the review checkpoint. An author repair should
-replace these reproduction arms with crossed positive/negative contract fixtures; deleting or
-weakening them is not a discharge.
+The assertions are disposable author candidates, not independent acceptance. Another buildability
+review must re-derive them against production symbols; deleting or weakening a negative is not a
+discharge.
