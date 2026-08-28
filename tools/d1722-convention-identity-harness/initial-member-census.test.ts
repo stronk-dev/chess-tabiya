@@ -14,48 +14,15 @@ interface SeedRow {
   readonly witnesses: readonly string[];
 }
 
-/** Reviewed seed population for the proposed semantic-convention registry. */
-const INITIAL_CONVENTION_MEMBERS: readonly SeedRow[] = Object.freeze([
-  { ref: "back_rank_susceptible@1", kind: "shipped_identity", witnesses: ["rules.tactic.reading.back_rank@1"] },
-  { ref: "backward-pawn-legacy@1", kind: "assigned_to_existing_meaning", witnesses: ["rules.structural.predicate.backward_pawn@1", "rules.structural.reading.backward_pawn@1", "rules.structural.event.backward_pawn@1"] },
-  { ref: "candidate-feature-vector@1", kind: "assigned_to_existing_meaning", witnesses: ["derived.opponent.candidate_feature_vector@1"] },
-  { ref: "candidate-majority@1", kind: "shipped_identity", witnesses: ["rules.pawn.reading.candidate_majority@1"] },
-  { ref: "chessops-king-takes-rook@1", kind: "shipped_identity", witnesses: ["packages/runtime/src/legal-moves.ts"] },
-  { ref: "defence-duty@1", kind: "shipped_identity", witnesses: ["rules.tactic.reading.defender_duty_set@1"] },
-  { ref: "development@1", kind: "shipped_identity", witnesses: ["rules.phase.development@1"] },
-  { ref: "discovered-latency@1", kind: "assigned_to_existing_meaning", witnesses: ["rules.tactic.reading.discovered_latency@1"] },
-  { ref: "double-attack@1", kind: "assigned_to_existing_meaning", witnesses: ["rules.tactic.event.double_attack@1"] },
-  { ref: "evidence-reference-resolution@1", kind: "assigned_to_existing_meaning", witnesses: ["run.record.evidence_ref_resolution@1"] },
-  { ref: "fork-survival@1", kind: "assigned_to_existing_meaning", witnesses: ["derived.tactic.fork_survives_reply@1"] },
-  { ref: "grade-convention@1", kind: "shipped_identity", witnesses: ["derived.grade.move_quality@1"] },
-  { ref: "king-landing-square@1", kind: "shipped_identity", witnesses: ["packages/runtime/src/legal-moves.ts"] },
-  { ref: "king-opposition-blocker-blind@1", kind: "assigned_to_existing_meaning", witnesses: ["rules.structural.predicate.king_opposition@1", "rules.structural.reading.king_opposition@1", "rules.structural.event.king_opposition@1"] },
-  { ref: "king-shelter@1", kind: "shipped_identity", witnesses: ["rules.king.reading.zone_state@1"] },
-  { ref: "king-zone@1", kind: "shipped_identity", witnesses: ["rules.king.reading.zone_state@1"] },
-  { ref: "legal-exchange@1", kind: "shipped_identity", witnesses: ["rules.exchange.predicate.legal_exchange@1"] },
-  { ref: "local-non-losing@1", kind: "shipped_identity", witnesses: ["rules.mobility.reading.piece_destinations@1"] },
-  { ref: "loose-piece@1", kind: "assigned_to_existing_meaning", witnesses: ["rules.tactic.reading.loose_piece@1"] },
-  { ref: "mate-proof@1", kind: "shipped_identity", witnesses: ["rules.tactic.consequence.forced_mate_after_move@1"] },
-  { ref: "material-role-signature@1", kind: "shipped_identity", witnesses: ["derived.material.reading.role_signature@1"] },
-  { ref: "maximal_pawn_reach@1", kind: "shipped_identity", witnesses: ["rules.structural.predicate.pawn_safe_square@1", "rules.structural.predicate.outpost@1"] },
-  { ref: "mover-turn-ep-cleared@1", kind: "shipped_identity", witnesses: ["derived.tactic.defender_exposure@1"] },
-  { ref: "observed-window@1", kind: "shipped_identity", witnesses: ["derived.tactic.square_clearance_observed@1"] },
-  { ref: "opening-deepest-reached@1", kind: "assigned_to_existing_meaning", witnesses: ["derived.opening.deepest_reached@1"] },
-  { ref: "overload-conflict@1", kind: "shipped_identity", witnesses: ["derived.tactic.overloaded_defender_response_conflict@1"] },
-  { ref: "pawn-relations@1", kind: "assigned_to_existing_meaning", witnesses: ["rules.pawn.reading.contacts@1"] },
-  { ref: "pressure-line@1", kind: "shipped_identity", witnesses: ["derived.pawn.sequence.harassment_pressure@1"] },
-  { ref: "race-arrival@1", kind: "shipped_identity", witnesses: ["derived.pawn.event.transitions@1"] },
-  { ref: "ray-classification@1", kind: "assigned_to_existing_meaning", witnesses: ["rules.tactic.reading.ray_classification@1"] },
-  { ref: "space@1", kind: "shipped_identity", witnesses: ["rules.structural.reading.space@1"] },
-  { ref: "square-control@1", kind: "assigned_to_existing_meaning", witnesses: ["rules.square.reading.control@1"] },
-  { ref: "standard-uci-king-destination@1", kind: "shipped_identity", witnesses: ["packages/runtime/src/legal-moves.ts"] },
-  { ref: "story-last-level@1", kind: "assigned_to_existing_meaning", witnesses: ["derived.story.last_level@1"] },
-  { ref: "story-rank@1", kind: "assigned_to_existing_meaning", witnesses: ["derived.story.rank@1"] },
-  { ref: "story-title@1", kind: "assigned_to_existing_meaning", witnesses: ["derived.story.title@1"] },
-  { ref: "threat@1", kind: "shipped_identity", witnesses: ["rules.tactic.consequence.threat@1"] },
-  { ref: "trade-completed@1", kind: "assigned_to_existing_meaning", witnesses: ["derived.exchange.trade_completed@1"] },
-  { ref: "trapped@1", kind: "shipped_identity", witnesses: ["rules.tactic.reading.trapped_piece@1"] },
-]);
+/** Stable reviewed seed population consumed by research and the future C10 checker. */
+const seed = JSON.parse(readFileSync(resolve(process.cwd(), "planning/semantic-convention-register/initial-members.json"), "utf8")) as {
+  readonly schemaVersion: number;
+  readonly members: readonly SeedRow[];
+};
+const INITIAL_CONVENTION_MEMBERS: readonly SeedRow[] = Object.freeze(seed.members.map((row) => Object.freeze({
+  ...row,
+  witnesses: Object.freeze([...row.witnesses]),
+})));
 
 const EXCLUDED_VERSION_TOKENS = Object.freeze({
   "mate-proof-traversal-fnv64@1": "proof-digest serialization identity, not a chess/product semantic definition",
@@ -85,6 +52,7 @@ const projectionKeys = new Set(PRIMARY_EVIDENCE_MANIFEST.projections.map((projec
 
 describe("D1722 initial semantic-convention member census", () => {
   it("publishes one exact, sorted 39-member seed set", () => {
+    expect(seed.schemaVersion).toBe(1);
     const refs = INITIAL_CONVENTION_MEMBERS.map((row) => row.ref);
     expect(refs).toHaveLength(39);
     expect(new Set(refs).size).toBe(refs.length);

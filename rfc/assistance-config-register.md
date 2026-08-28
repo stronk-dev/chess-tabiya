@@ -1,6 +1,7 @@
 # RFC: AssistanceConfig shared-resource register
 
-- **Status:** draft — returned by independent process/buildability review 2026-08-27 on [[D1916]]
+- **Status:** draft — amended 2026-08-27 after the independent [[D1916]] return; repeat review
+  required
 - **Author:** codex
 - **Created:** 2026-08-26
 - **Design refs:** none. This is repository process over an already-ruled assistance contract; it
@@ -164,15 +165,15 @@ The existing C1-C8 meanings stay byte-for-byte. New check C9 has five arms:
 |---|---|
 | C9.1 | no/multiple AssistanceConfig interface, or unsupported/ambiguous member shape |
 | C9.2 | README head differs from the AST-derived numeric version |
-| C9.3 | README contract digest is absent or differs while no live claim exists |
-| C9.4 | zero-or-more-than-one live claim when code is mid-change, or the sole claim is not head+1 |
+| C9.3 | README contract digest is absent or differs from the AST-derived digest |
+| C9.4 | more than one live claim, or the sole claim is not registered head+1 |
 | C9.5 | the landed table lacks the current head or a live declaration/register row differs |
 
-“Code is mid-change” means the derived digest differs from the register digest. A live claim may
-temporarily explain that difference just as C8 permits claimed schema drift; it never permits a
-wrong head line, two claimants or a non-sequential claim. Before a product landing finishes, the
-register digest/head and landed table move to the new tree, the live claim row disappears, and the
-still-active RFC's block returns to `none` if owner-use validation keeps it unarchived.
+Tree head and digest must always equal the checked register bytes. A live claim reserves only the
+registered head+1 owner; it never excuses current-tree drift ([[D1916]]). The legitimate v5 landing
+is one atomic commit: runtime head/domain, README head/digest, landed table and claim surfaces all
+move together, and the live claim disappears. There is no valid committed midpoint. If owner-use
+validation keeps the product RFC active afterward, its block returns to `none`.
 
 C3 remains the authority for declaration/register bijection. C4/C6 are generalized only enough to
 include the new numeric-head register; their schema/evidence/migration semantics do not change.
@@ -192,7 +193,7 @@ or parses a lane claim as an evidence member.
 ### 5. Able-to-fail fixtures
 
 `tools/register-check.test.mjs` supplies source strings/temporary trees for every branch. The
-fixture table's unit is **mutation class**; total sixteen:
+fixture table's unit is **mutation class**; total nineteen:
 
 | # | mutation | required result |
 |---|---|---|
@@ -207,11 +208,14 @@ fixture table's unit is **mutation class**; total sixteen:
 | 9 | claim lane 4 | C9 failure |
 | 10 | claim lane 6 at head 4 | C9 failure |
 | 11 | two claimant RFCs, whether same or different lanes | C9 failure |
-| 12 | one lane-5 claim and matching README row | pass while tree remains head 4 |
+| 12 | unchanged head-4 tree/register plus one lane-5 claim and matching README row | pass |
 | 13 | replace a direct union with an equivalent local alias | same derived domain and digest |
 | 14 | resolve an imported `as const` tuple through `(typeof VALUES)[number]` | exact literal domain; changing one tuple value changes digest |
 | 15 | widen one alias/tuple-derived arm to `string` (or leave another non-literal residue) | named extractor refusal |
 | 16 | render derived output with/without the lane-5 claimant | exact assistance line; no evidence-kinds fallthrough |
+| 17 | same-head field/member drift plus lane-5 claim | fail head/digest equality; claim cannot mask drift |
+| 18 | tree head 5 with register head 4 plus lane-5 claim | fail head equality |
+| 19 | atomic head-5 tree/register/landed update with claim removed | pass; stale lane-5 claim fails |
 
 The implementation also runs the real repository and asserts derived head 4, nine axes, 22 values,
 the current digest and exactly one lane-5 claimant. The explicit counts are drift tripwires; a
@@ -248,8 +252,10 @@ None. No design intent changes.
    non-literal union residue disappears from the normalized shape.
 4. **Register binding.** C9.2/C9.3/C9.5 fail on wrong head, wrong/missing digest and missing landed
    head respectively.
-5. **Single writer.** Same-lane and different-lane two-claim fixtures both fail. Lane 4 and lane 6
-   fail at head 4; one lane 5 passes.
+5. **Single writer and no drift exception.** Same-lane and different-lane two-claim fixtures both
+   fail. Lane 4 and lane 6 fail at head 4; one lane 5 passes only with unchanged head-4 tree/register
+   bytes. Same-head or head-only drift still fails, while one atomic head-5 landing with no claim
+   passes.
 6. **Bijection.** Deleting either the Guided Hint declaration or README live row fails C3.
 7. **Historical truth.** The four landed rows cite the four commits recovered by `git log -S`; no
    archived RFC is invented as their owner.
@@ -293,6 +299,10 @@ None. Product choices remain in their product RFCs; this document only registers
 contract.
 
 ## Changelog
+
+- 2026-08-27: amended after the D1916 return. Removed the live-claim digest exception: head and
+  digest always equal tree authority; a claim only reserves registered head+1. Added crossed
+  same-head/head-only drift negatives and atomic next-head/unchanged-reservation positives.
 
 - 2026-08-27: independent review returned C9 on [[D1916]]. A live next-head claim may reserve
   ownership but must never excuse current-tree head/digest drift. Exact return:

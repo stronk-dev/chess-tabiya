@@ -2,12 +2,13 @@
 
 ## State
 
-Draft RFC; independent review required before implementation.
+Draft RFC amended after the D1916 return; repeat independent review required before implementation.
 
 ## Order
 
 1. Re-derive `AssistanceConfig` head, domains, historical commits and both RFC seams.
-2. Review `rfc/assistance-config-register.md`; correct or return it, then record acceptance.
+2. ✅ Review `rfc/assistance-config-register.md`; D1916 is amended with an executable crossed
+   candidate. Repeat review and acceptance remain.
 3. Implement the TypeChecker-normalized semantic reader and sixteen mutation classes, including
    local/imported/tuple aliases and the dedicated derived-output arm.
 4. Add the README register and atomically transfer Guided Hint from `none` to the sole v5 claim.

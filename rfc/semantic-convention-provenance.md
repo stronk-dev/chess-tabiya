@@ -1,7 +1,7 @@
 # RFC: Semantic convention provenance — definitions survive collection, derivation and disclosure
 
-- **Status:** draft — returned by independent buildability review 2026-08-27 on
-  [[D1921]]–[[D1926]]
+- **Status:** draft — amended 2026-08-27 with executable D1921–D1926/D1934–D1937 contracts;
+  the process predecessor and repeat independent review still block acceptance
 - **Author:** codex (agent), for Marco
 - **Created:** 2026-08-27
 - **Design refs:** `design/04-content-architecture.md` §2d and §7;
@@ -17,14 +17,15 @@
 - **Planning:** `planning/semantic-convention-provenance/`
 
 ```tabiya-claims
-none
+run-schema | lane 0.24 | EvidenceAttachedEvent gains optional semanticReceipts carrying exact projection/value/convention receipts; schema 0.17 -> 0.24 through the registered lane chain
 ```
 
-The claim block is intentionally `none` while this document is a draft. This RFC creates a seventh
-shared resource, `semantic-conventions`; the current checked claim grammar knows only six. The
+The run-schema claim is required now by the durable Review/history guarantee in §6.1. The future
+`semantic-conventions` claim remains absent while its process resource is a draft: this RFC creates
+an eighth shared resource and the current checked claim grammar knows seven. The
 reviewed 39-member initial census is published in §1.2 and the exact process repair is
 `semantic-convention-register.md`. Before acceptance, that register/checker must land and this block
-must become its set-equal membership claim. A private
+must gain its set-equal membership claim beside the retained run lane. A private
 catalogue-local list or an unregistered exported constant is not an acceptable shortcut.
 
 ## Summary
@@ -96,6 +97,11 @@ export interface ConventionRef {
 
 export type ConventionAuthority =
   | Readonly<{ kind: "position_rules"; implementation: string }>
+  | Readonly<{
+      kind: "landed_contract";
+      witnesses: readonly string[];
+      snapshotRef: string;
+    }>
   | Readonly<{ kind: "published_source"; citation: string; licence: string }>
   | Readonly<{ kind: "product_rule"; rulingRef: string }>
   | Readonly<{ kind: "measured_record"; recordRef: string }>;
@@ -105,10 +111,9 @@ export interface ConventionDeclaration {
   readonly definition: string;
   readonly limitations: readonly string[];
   readonly authority: readonly ConventionAuthority[];
-  readonly disclosure: Readonly<{
-    summary: string;
-    detail: string;
-  }>;
+  readonly disclosure:
+    | Readonly<{ kind: "definition_and_limitations" }>
+    | Readonly<{ kind: "reviewed_text"; summary: string; detail: string }>;
 }
 
 export interface CompiledConventionRegistry {
@@ -117,16 +122,43 @@ export interface CompiledConventionRegistry {
 }
 ```
 
+`landed_contract` is a migration-only authority for meaning already present in shipped bytes.
+`witnesses` are exact projection refs and/or implementation paths/symbols and `snapshotRef` is the
+immutable committed tree whose bytes were reviewed. The compiler verifies the witnesses against
+that snapshot. It cannot authorize a new convention whose meaning is absent from those witnesses; new chess
+truth still requires position-rule code, a published source, owner product ruling or measured
+record. This prevents bounded-search, recorded-run and deterministic product composition from being
+misfiled as `position_rules` merely to migrate them ([[D1936]]).
+
+`definition_and_limitations` is the initial migration disclosure: summary is the exact registered
+definition and detail is that definition followed by every mandatory limitation. It introduces no
+new prose and is intentionally used only for the initial source-recovery population. A later
+source-reviewed concise disclosure uses `reviewed_text`; changing its meaning follows the normal
+version rule. Ordinary module wording remains separate from both.
+
 `compileConventionRegistry` freezes and orders declarations by `(id, version)`, rejects duplicate
 refs, blank definition/limitations/disclosure, unsupported authority shapes, and any citation or
 ruling reference the repository's existing source grammar cannot resolve. The digest covers every
 semantic field, not file path or declaration order.
 
-The compiler also compares the current registry with a checked previous-release snapshot. The same
-`id@version` with different semantic bytes raises `CONVENTION_MEANING_CHANGED_IN_PLACE`, even if a
-manifest/receipt digest was refreshed. Removal is permitted only through an explicit retained
-`retired` declaration that names its successor or refusal reason; historical evidence must remain
-readable.
+The compiler also compares the current registry with an append-only semantic-history artifact. One
+line records each newly landed `id@version`, its semantic digest (definition, limitations,
+authority and disclosure), the full registry digest at that landing, owner RFC and landing commit.
+The artifact is not a co-editable snapshot:
+
+- the staged governance check compares the index with `HEAD` and permits only appended lines;
+- repository CI checks the committed file against its first parent and likewise refuses edits,
+  reordering or deletion of any prior byte (the governance checkout therefore requires history
+  depth of at least two); and
+- the registry compiler requires every current/historical declaration digest to equal its one
+  immutable history row, while a new version appends one new row.
+
+Changing `space@1` and its old history row in one change therefore fails before refreshed manifest
+or receipt digests matter. `space@2` is legal only as the next lineage version and appends a new
+row. Initial bootstrap appends all reviewed initial rows once; subsequent changes may never rewrite
+them. Removal is permitted only through an explicit retained `retired` declaration that names its
+successor or refusal reason; historical evidence and the registry snapshots named by persisted
+receipts remain readable.
 
 ### 1.1 Shared-resource registration
 
@@ -166,6 +198,31 @@ never enter the register. [[D1851]] is already closed: `story-title@1` productio
 semantics are both learner-relative, and a focused regression binds the declaration to the paired
 opposite-side outputs before the registry snapshot freezes it.
 
+The literal migration population is
+`planning/semantic-convention-provenance/initial-declarations.json`. Its 39 rows are set-equal to
+the stable membership seed; every row contains an exact definition, at least one mandatory
+limitation and one or more live projection/implementation witnesses. The envelope supplies the
+single migration snapshot, `landed_contract` authority kind and
+`definition_and_limitations` disclosure kind. The compiler expands each row without authoring or
+paraphrasing it:
+
+```ts
+{
+  ref: parseConventionRef(row.ref),
+  definition: row.definition,
+  limitations: row.limitations,
+  authority: [{ kind: envelope.authorityKind, witnesses: row.witnesses,
+    snapshotRef: envelope.snapshotRef }],
+  disclosure: { kind: envelope.disclosureKind },
+}
+```
+
+The source-recovery harness refuses a missing/extra member, blank definition or limitation,
+unresolvable projection, absent file/symbol fragment or a shipped-identity row whose literal ref
+has no witness. This artifact is the reviewed declaration authority; the seed remains membership
+authority only. A future declaration is authored directly under the normal authority union and
+does not reuse the migration envelope.
+
 ### 2. Projection declarations and path closure
 
 `ProjectionDeclaration` gains:
@@ -173,14 +230,44 @@ opposite-side outputs before the registry snapshot freezes it.
 ```ts
 readonly conventions: Readonly<{
   direct: readonly ConventionRef[];
-  instanceOperands?: readonly string[];
+  instance?: Readonly<{
+    extractor: ConventionOperandExtractorId;
+    operands: readonly string[];
+  }>;
 }>;
 ```
 
-`direct` names fixed definitions applied by the projection itself. `instanceOperands` is required
-only when different payload instances of one projection may select different registered
-conventions. Every named operand must already be in `projection.operands`, and the retained value
-must parse as an exact registered `id@version` ref.
+`direct` names fixed definitions applied by the projection itself. `instance` is required only
+when different payload instances of one projection may select different registered conventions.
+Every named operand must already be in `projection.operands`. Its extractor is not generic key
+lookup: it validates one of the three live value shapes and returns exact refs plus any retained
+non-identity operand:
+
+```ts
+export interface ConventionOperandExtraction {
+  readonly refs: readonly ConventionRef[];
+  readonly retained: Readonly<Record<string, unknown>>;
+}
+
+export interface ConventionOperandExtractor<TPayload> {
+  readonly projection: VersionedEvidenceId;
+  readonly operands: readonly string[];
+  readonly extract: (payload: TPayload, registry: CompiledConventionRegistry) =>
+    ConventionOperandExtraction;
+}
+```
+
+The compiled extractor catalogue is set-equal to the manifest-derived population of
+instance-varying projections. That population is fourteen at the 2026-08-27 gate: twelve
+single-string refs, king-zone's two refs, and grade's structured `{id, version, context}` value.
+Grade `context` is validated and retained but is not a pseudo-ref. Missing, broad, malformed,
+unregistered and invalid-context values fail before evidence sealing. Removing an extractor or
+adding one for a projection that declares no instance conventions fails compilation.
+
+Before extraction, every exact source adapter enforces payload-key set equality with its declared
+operands. The live `exactObject` only checks for missing keys; [[D1934]] proves that an undeclared
+extra `conventionId` or arbitrary caller field is otherwise sealed. A fixed projection therefore
+cannot smuggle an instance ref simply because no extractor runs.
 
 Primary `grounding`, `exactness`, `confidence`, source provenance and abstention remain unchanged.
 Convention refs cannot promote any of them.
@@ -227,20 +314,54 @@ it cannot silently inherit a neighbor's decision.
 
 ### 4. Sealed evidence and rendering
 
-`DeclaredEvidence` remains producer/projection sealed. After manifest admission, the compiler
-attaches an immutable `ConventionReceipt` containing:
+Convention-bearing evidence is created by compiler-owned source and derived constructors. The
+compiler never attaches ancestry after `DeclaredEvidence` has frozen. A source constructor runs
+the exact adapter, validates its direct/instance closure and seals evidence plus receipt in one
+operation. A derived constructor accepts the exact already-sealed input values actually used,
+resolves them to exactly one declared derivation member, derives the closure and seals output plus
+receipt in one operation.
+
+The receipt is value-level and contains:
 
 ```ts
+export type ConventionDerivationReceipt =
+  | Readonly<{ kind: "source" }>
+  | Readonly<{
+      kind: "derived";
+      member: string;
+      inputs: readonly Readonly<{
+        projection: VersionedEvidenceId;
+        valueDigest: string;
+      }>[];
+    }>;
+
 export interface ConventionReceipt {
-  readonly path: number;
   readonly refs: readonly ConventionRef[];
   readonly registryDigest: string;
+  readonly derivation: ConventionDerivationReceipt;
+  readonly digest: string;
 }
 ```
 
-Only the evidence compiler can construct the receipt. A caller cannot add, drop or replace refs by
-object spread, JSON round-trip or type assertion; the runtime seal check fails before rendering.
-Reducer and module narrowing preserve the exact receipt of every retained fact.
+`member` is the canonical sorted exact-ref identity of the selected declaration member, never its
+array index. `inputs` is a canonical multiset, not a set: it retains every concrete input value,
+including repeated values of one projection. `valueDigest` covers producer, exact projection,
+payload and the input's own convention-receipt digest, so two nested paths with equal output bytes
+cannot collapse. Input order does not affect the receipt; input multiplicity does.
+
+Member selection uses exact projection membership but does not discard value identities afterward.
+Missing, extra or ambiguous members fail. An `anyOf` declaration with two canonically identical
+members is invalid at manifest compilation, rather than allowing runtime ambiguity. Closure is the
+union of the exact input receipts actually present plus direct and validated instance refs. An
+unused alternative contributes nothing.
+
+Only the evidence compiler can construct the receipt. A caller cannot add, drop or replace refs or
+inputs by object spread, JSON round-trip or type assertion; the runtime seal check fails before
+rendering. Reducer and module narrowing preserve the exact receipt of every retained fact. The
+fourteen-arm disposable contract in
+`tools/d1921-semantic-convention-review-harness/semantic-convention-contract.test.ts` proves
+same-output/different-path identity, repeated-input multiplicity, canonical order and the negative
+forgery/member cases before production implementation.
 
 Registered evidence renderers may request convention disclosures from the compiled registry. The
 result is a typed renderer output, not caller prose:
@@ -249,15 +370,21 @@ result is a typed renderer output, not caller prose:
 export interface RenderedConventionDisclosure {
   readonly refs: readonly ConventionRef[];
   readonly summary: string;
+  readonly mandatoryLimitations: readonly string[];
   readonly detail: string;
   readonly registryDigest: string;
 }
 ```
 
 Deterministic screen output and an external voice request derive from the same rendered item and
-receipt. `voiceCheck` includes the registered disclosure in its allow-list. A provider may shorten
-or rephrase it within the normal evidence rules; it may not invent a definition, strip a limitation
-or substitute another convention.
+receipt. The provider may shorten or rephrase only the registered summary within the normal
+evidence rules. Mandatory limitations are never provider-authored and never tested by an omission-
+blind allow-list: the application appends/renders the exact registered limitation clauses after a
+valid provider result. Provider-off output uses the same deterministic clauses. `voiceCheck`
+continues to reject invention/substitution in the optional summary; completeness is established by
+the deterministic assembler, not by asking `voiceCheck` to detect missing words. A negative fixture
+returns only a valid summary from the provider and proves the final user-visible disclosure still
+contains every mandatory clause byte-for-byte.
 
 ### 5. Product presentation boundary
 
@@ -285,15 +412,78 @@ The following rules are mandatory:
 Opposition v1/v2 is the permanent positive control: old blocker-blind evidence remains inspectable
 and cannot satisfy v2 validation, avoidance, pack capability or learner-module bindings.
 
+### 6.1 Durable run/history receipt
+
+The Review/history promise is durable, not transient recomputation. Run-schema lane 0.24 widens
+`EvidenceAttachedEvent.data` with an optional `semanticReceipts` array:
+
+```ts
+export interface PersistedSemanticEvidenceReceipt {
+  readonly evidenceRef: string;
+  readonly producer: VersionedEvidenceId;
+  readonly projection: VersionedEvidenceId;
+  readonly payloadDigest: string;
+  readonly convention: ConventionReceipt;
+  readonly attestation: Readonly<{
+    readonly algorithm: "ed25519";
+    readonly keyId: string;
+    readonly signature: string;
+  }>;
+}
+```
+
+Each `evidenceRef` occurs at most once and must also occur in the event's existing `evidenceRefs`.
+The exact attachment operation receives sealed evidence values, not caller-written receipts. It
+serializes producer, projection, payload digest and the already-sealed convention receipt, then
+signs the canonical envelope with the installation's semantic-receipt key. The signature covers
+`evidenceRef` and every field above except itself. A bare/recomputed digest is not authenticity:
+the current event stores no semantic payload/input graph or event hash chain, so a caller could
+alter an input value digest and recompute every unkeyed digest ([[D1937]]). The attestation proves
+that the trusted origin's compiler accepted those exact bytes at attachment time. For a
+manifest projection whose compiled convention disposition is applicable, omission is an error;
+for `not_applicable`, supplying a convention receipt is an error. Non-semantic legacy references
+may remain in `evidenceRefs` without a semantic receipt.
+
+On save/export, the bytes remain inside the append-only run event stream. On load/import, a
+compiler-owned `reSealPersistedSemanticEvidenceReceipt` first verifies the Ed25519 signature against
+a trusted origin key, then checks the receipt digest, exact ref grammar, historical registry digest,
+every referenced declaration digest and derivation-input multiset before restoring the runtime
+seal. A structurally valid plain object never becomes renderable merely because it parsed. Unknown
+keys produce typed `untrusted_receipt_origin`; an invalid signature produces
+`persisted_semantic_attestation_invalid`; unknown historical registry/declaration bytes produce
+`historical_convention_unavailable`, not recomputation under the current head.
+
+The self-hosted appliance creates and retains this signing key through the existing secrets/storage
+boundary; rotation retains old public keys by `keyId`. Account export includes the origin public key
+and fingerprint beside the signed run bytes. Same-origin import verifies automatically. A different
+installation never treats a self-asserted exported key as trusted silently: the user explicitly
+trusts its displayed fingerprint or convention history stays unavailable. Deleting an account/run
+does not delete a shared installation public key, but no receipt or learner datum remains attached
+to it. This is provenance integrity, not a claim that a signer is universally trusted.
+
+Runs below schema 0.24 and imported games whose original events contain no receipt remain readable
+and honestly empty on convention history; no migration manufactures past provenance. New
+convention-bearing attachments after 0.24 must carry receipts. Account export includes them through
+the existing run event export, and both run/account deletion paths delete them with the containing
+run—there is no second retention table. Fixtures cover create→save→reload→Review, export
+byte-equality, deletion, a legacy absent receipt, a v1 receipt after v2 lands, tampered refs/input
+digests, and a missing historical registry snapshot.
+
 ### 7. Implementation order
 
-1. Extend the shared-resource claim grammar/register with `semantic-conventions` and publish the
-   reviewed initial member table.
-2. Land the convention compiler, previous-release snapshot and projection declaration field.
-3. Migrate every current projection and source adapter; produce a zero-unresolved closure report.
-4. Bind receipts through admitted/reduced/rendered/provider views.
-5. Land opposition/backward-pawn and avoidance successor RFCs on the stable contract.
-6. Bind executable semantic validation and only then activate modules, Review, bots and packs.
+1. Extend the shared-resource claim grammar/register with `semantic-conventions`, its durable seed
+   and base-id lineage serialization.
+2. Publish/review the source-grounded 39 declarations and bootstrap the append-only semantic
+   history; no implementer authors missing meaning.
+3. Land the convention compiler, typed fourteen-projection extractor catalogue, exact adapter-key
+   equality and projection declaration field.
+4. Migrate every current projection/source adapter and produce a zero-unresolved closure report.
+5. Land compiler-owned source/derived value seals, canonical receipts, deterministic limitations
+   and admitted/reduced/rendered/provider propagation.
+6. Land run-schema 0.24 attested persistence/re-sealing, installation-key lifecycle and its
+   save/reload/export/deletion fixtures.
+7. Land opposition/backward-pawn and avoidance successor RFCs on the stable contract.
+8. Bind executable semantic validation and only then activate modules, Review, bots and packs.
 
 No content migration occurs in steps 1–4.
 
@@ -308,8 +498,10 @@ does not add a learner-facing evidence settings surface or strategic judgement.
    agree, and the RFC's claim block no longer says `none` before acceptance.
 2. Registry compilation rejects duplicate, missing and orphan refs, blank semantic fields and an
    unresolved authority reference.
-3. Mutating a registered definition at the same `id@version` fails against the previous-release
-   snapshot even after all generated digests are refreshed.
+3. Mutating a registered definition at the same `id@version` fails against the append-only
+   semantic history even when the declaration, generated registry/manifest/receipt digests and a
+   working-tree copy of the history row are changed together; staged and first-parent CI fixtures
+   both fail.
 4. Every compiled projection declares convention applicability. All
    `grounding: declared_convention` projections have a non-empty closure.
 5. The exact D1722 42-row population and 18-row other-grounding population are migrated or receive
@@ -318,24 +510,36 @@ does not add a learner-facing evidence settings surface or strategic judgement.
    refs, while a v1 evidence item fails a synthetic v2 consumer.
 7. `square_clearance_observed` compiles with recorded-run provenance plus
    `observed-window@1`; deleting either the source closure or composition ref fails.
-8. An alternative derivation fixture executes two paths and proves each receipt contains only the
-   conventions of the path actually used.
-9. An instance-varying source adapter cannot omit or forge its retained convention operand; a
-   fixed projection-level convention needs no payload duplication.
+8. An alternative derivation fixture executes two paths with the same output payload and proves
+   each canonical-member receipt contains only the conventions and exact input-value digests of the
+   path actually used. Reversed input order is byte-equal; repeated-projection multiplicity remains.
+9. The typed extractor catalogue is set-equal to all fourteen manifest-derived instance-varying
+   projections and covers string, two-ref and structured-grade shapes. It refuses absent, broad,
+   malformed, unregistered and invalid-context operands. Exact adapters reject every extra key, so
+   a fixed projection cannot smuggle an undeclared instance ref or arbitrary caller data.
 10. A derived projection cannot omit an input ref, add an undeclared ref or widen grounding,
     exactness, confidence or answer content through a convention declaration.
 11. A forged, spread, JSON-round-tripped or stripped `ConventionReceipt` fails the existing
-    admitted/rendered-item seal before deterministic or provider rendering.
-12. Deterministic output and the external voice body carry byte-equal refs/disclosure; an
-    unregistered disclosure sentence fails `voiceCheck`.
+    admitted/rendered-item seal before deterministic or provider rendering. A persisted receipt is
+    accepted only after origin-signature verification, historical validation and compiler
+    re-sealing. Recomputing every unkeyed digest after changing a ref/input still fails the
+    attestation; an unknown key fails `untrusted_receipt_origin`.
+12. Deterministic output and the external voice body carry byte-equal refs/summary. The provider
+    may omit every limitation and the final assembled output still appends every registered
+    mandatory limitation byte-for-byte; an unregistered summary sentence fails `voiceCheck`.
 13. Ordinary module fixtures contain no raw projection/convention id; the Advanced inspector shows
     the exact refs, definition, limitations and authorities.
 14. The convention disclosure does not widen answer distance, assistance timing, seat permission
     or board-visible forms.
-15. `make evidence-manifest-check`, semantic evidence checks, typecheck, software tests,
-    governance checks and the external-provider negative suite pass on Node 24.
-16. Canonical evidence docs describe direct/path convention closure and the ordinary-versus-
-    Advanced presentation boundary; D1722 is closed with the implementation SHA and a log entry.
+15. A 0.24 run survives create→save→reload→Review and export with byte-equal exact receipts; v1
+    remains readable after v2 lands. Legacy absence stays honest-empty, tampering/missing history
+    fails typed, and run/account deletion leaves no retained receipt.
+16. `make evidence-manifest-check`, semantic evidence checks, run-schema/migration checks,
+    typecheck, software tests, governance checks and the external-provider negative suite pass on
+    Node 24.
+17. Canonical evidence/run docs describe direct/path convention closure, durable history and the
+    ordinary-versus-Advanced presentation boundary; D1722/D1921–D1926/D1934 close with the
+    implementation SHA and a log entry.
 
 ## Discharges
 
@@ -357,12 +561,14 @@ with model knowledge.
 
 | finding | blocker | repair owner |
 |---|---|---|
-| [[D1921]] | no sealed value-level derivation member/inputs; receipt cannot attach after freeze | author amendment |
-| [[D1922]] | live adapters accept forged instance convention values | author amendment |
-| [[D1923]] | 39 refs have no literal source-grounded declaration population | source-backed authoring pass |
-| [[D1924]] | provider allow-list cannot enforce limitation completeness | author amendment |
-| [[D1925]] | previous snapshot may be co-edited with same-version meaning | process/product reconciliation |
-| [[D1926]] | Review/history promise has no durable receipt or run claim | author amendment + register claim |
+| [[D1921]] | repaired in §4 by canonical member + exact input-value multiset and compiler-owned source/derived seals; repeat review required | executable amendment: `design/research/semantic-convention-value-authority.md` |
+| [[D1922]] | repaired in §2 by typed extractors set-equal to all fourteen instance projections | executable amendment: `design/research/semantic-convention-value-authority.md` |
+| [[D1923]] | repaired by the literal, source-resolved, set-equal 39-row migration population in `planning/semantic-convention-provenance/initial-declarations.json`; repeat review required | executable amendment: `tools/d1923-semantic-declarations-harness/` |
+| [[D1924]] | repaired in §4: provider authors only the summary; deterministic assembler owns mandatory limitations | author amendment; repeat provider-boundary review |
+| [[D1925]] | repaired in §1 by append-only staged + first-parent semantic history; process-register amendment still required | process/product reconciliation |
+| [[D1926]] | repaired in §6.1 with run lane 0.24, origin attestation and durable re-sealing contract; core executable candidate passes | executable amendment + live register claim |
+| [[D1934]] | `exactObject` accepts extra fields | exact key-set repair included before instance extraction |
+| [[D1937]] | an unkeyed persisted digest can be rewritten self-consistently because the run stores neither the semantic payload graph nor an event hash chain | repaired by Ed25519 origin attestation over the canonical persisted envelope; executable tamper/unknown-origin negatives |
 
 ## Changelog
 
@@ -379,3 +585,21 @@ with model knowledge.
 - 2026-08-27: [[D1851]] closed under the implemented F1/D667 contract: the Story-title manifest
   now declares the learner-relative behavior production already used, with a regression over both
   opposite-side output and declaration prose.
+- 2026-08-27: amended after the independent return. D1921/D1922 now have a fourteen-arm executable
+  candidate: canonical selected-member identity, exact nested input-value multiset, typed extractors
+  set-equal to all fourteen live instance projections and anti-forgery. The pass found D1934
+  (`exactObject` accepts extras), included its exact-key repair, made mandatory limitations
+  deterministic, replaced the co-mutable snapshot with append-only staged/first-parent history and
+  claimed run-schema 0.24 for durable Review receipts. Process-register reconciliation still
+  blocks repeat acceptance.
+- 2026-08-27: closed the D1923 authoring gap with one literal 39-row migration artifact, set-equal
+  to the stable member seed. Every definition carries mandatory limitations and resolves to live
+  projection and/or implementation witnesses at immutable snapshot `62a5731f`. The pass found and
+  repaired two missing literal-identity witnesses (D1935) and added the migration-only
+  `landed_contract` authority after proving the original union misclassified recorded, bounded
+  search and product-composition contracts (D1936).
+- 2026-08-27: executed the D1924 deterministic limitation, D1925 append-only history and D1926
+  persistence cores. Persistence tracing found D1937: the run stores no semantic payload graph or
+  event hash chain, so unkeyed digests can be forged self-consistently. Added Ed25519 origin
+  attestation, explicit unknown-origin behavior and key rotation/export trust boundaries; the
+  candidate rejects ref/input mutation even after digest recomputation.

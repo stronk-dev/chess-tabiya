@@ -2,18 +2,26 @@
 
 ## State
 
-Draft product RFC returned by independent buildability review on [[D1921]]–[[D1926]]. Its process
-register predecessor is separately returned on [[D1917]]–[[D1919]]. No implementation is
+Draft product RFC amended after independent buildability review returned it on
+[[D1921]]–[[D1926]]. D1921/D1922 have a fourteen-arm executable candidate, D1923 has a literal,
+source-resolved 39-declaration migration population, and D1924–D1926 now have executable core
+falsifiers. The persistence pass additionally found and repaired D1937 with an attested origin
+boundary. The separately returned process predecessor
+([[D1917]]–[[D1919]]) and repeat independent review also block acceptance. No implementation is
 authorised.
 
 ## Repair order
 
-1. Publish the exact source-grounded 39-declaration population; no implementer-authored chess truth.
-2. Specify the value-level derived constructor and typed instance-ref extractors.
-3. Put same-version semantic digests behind a non-co-mutable prior authority.
-4. Decide and claim the durable run/persistence representation required by Review/history.
-5. Make mandatory disclosure limitations deterministic rather than omission-checking provider prose.
-6. Reconcile the repaired contract with the process register, then repeat independent review.
+1. ✅ Prove and specify the value-level source/derived constructor, exact nested input identities,
+   all fourteen typed instance-ref extractors and exact adapter keys ([[D1921]], [[D1922]], [[D1934]]).
+2. ✅ Publish the exact source-grounded 39-declaration population; no implementer-authored chess truth
+   ([[D1923]]).
+3. Reconcile append-only semantic digests, base-id lineage and the durable seed with the process
+   register ([[D1917]]–[[D1919]], [[D1925]]).
+4. ✅ Execute the run-0.24 persistence/re-sealing falsifiers for the claimed Review/history contract
+   ([[D1926]]).
+5. ✅ Execute the deterministic limitation assembler/provider negative ([[D1924]]).
+6. Reconcile claims/registers, then repeat independent review.
 
 ## Boundary
 

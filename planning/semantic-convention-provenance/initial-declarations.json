@@ -1,0 +1,242 @@
+{
+  "schemaVersion": 1,
+  "snapshotRef": "62a5731f",
+  "authorityKind": "landed_contract",
+  "disclosureKind": "definition_and_limitations",
+  "declarations": [
+    {
+      "ref": "back_rank_susceptible@1",
+      "definition": "The king stands on its back rank, every non-back-rank king escape is blocked by an own piece or attacked, and an enemy rook or queen is already on that rank or has a file path to it containing no pawn of either color. Non-pawn path blockers do not suppress the state.",
+      "limitations": ["Susceptibility is not mate, a move grade or inferred intent. Rank or diagonal approaches and whether an entry square is defended are outside this convention; exact mate-in-one is separate."],
+      "witnesses": ["rules.tactic.reading.back_rank@1"]
+    },
+    {
+      "ref": "backward-pawn-legacy@1",
+      "definition": "A pawn on the named file is backward when no same-color pawn on an adjacent file is on its rank or behind it from that color's perspective, its one-step stop square is on the board, and an enemy pawn attacks that stop square. Occupancy and move legality of the stop square are not checked.",
+      "limitations": ["This is the shipped blocker-blind legacy predicate. State and signed before/after relations carry no learner valence, relevance or importance."],
+      "witnesses": ["packages/runtime/src/structure.ts#matchesStructuralFeature", "rules.structural.predicate.backward_pawn@1", "rules.structural.reading.backward_pawn@1", "rules.structural.event.backward_pawn@1"]
+    },
+    {
+      "ref": "candidate-feature-vector@1",
+      "definition": "A typed record of one fixed-bound engine evaluation and the literal registered tactical and breadth collector results for each legal candidate child position. It adds no detector, grade, trait or prose.",
+      "limitations": ["The vector re-anchors registered results to hypothetical legal moves. Presence is not importance; absence is not safety; engine score and collector payloads do not grade the learner or establish a personality trait."],
+      "witnesses": ["derived.opponent.candidate_feature_vector@1"]
+    },
+    {
+      "ref": "candidate-majority@1",
+      "definition": "A pawn is not passed and has no enemy pawn strictly ahead on its file. Supporting pawns are other same-color pawns on an adjacent file whose rank is the subject pawn's rank or any rank behind it from that color's perspective; enemy blockers are opposing pawns on adjacent files strictly ahead of the subject. At least one support is required and support count must be at least blocker count.",
+      "limitations": ["The convention deliberately omits a backward-pawn classifier and emits no plan or conversion verdict."],
+      "witnesses": ["rules.pawn.reading.candidate_majority@1"]
+    },
+    {
+      "ref": "chessops-king-takes-rook@1",
+      "definition": "The internal UCI identity is chessops' Chess960-safe castling form in which a castling king move names the rook square; common king-destination spelling is normalized before legality and identity checks.",
+      "limitations": ["This is move identity, not the square on which the king finishes and not a source-input dialect."],
+      "witnesses": ["packages/runtime/src/legal-moves.ts#MOVE_IDENTITY_CONVENTION", "packages/runtime/src/legal-moves.ts#exactMoveIdentity"]
+    },
+    {
+      "ref": "defence-duty@1",
+      "definition": "A duty is a directed pseudo-defence edge under current occupancy from any defender onto a same-color non-king target. Sole defender means the named defender holds the only such edge onto that target. Duties are not legality-filtered; multiple duties alone never imply exploitable overload.",
+      "limitations": ["Pseudo duty may be legally unexecutable; co-defenders are retained specifically to prevent multi-duty state from being called overload."],
+      "witnesses": ["rules.tactic.reading.defender_duty_set@1"]
+    },
+    {
+      "ref": "development@1",
+      "definition": "Role-matched knights on b- and g-file home squares and bishops on c- and f-file home squares are retained per color. A development event is gained when such a minor leaves its home square and lost when it returns.",
+      "limitations": ["Minor-piece home-square state only; it is not a complete opening-development score or move grade."],
+      "witnesses": ["rules.phase.development@1", "rules.transition.event.developed@1"]
+    },
+    {
+      "ref": "discovered-latency@1",
+      "definition": "A friendly non-king screen is the sole blocker between a friendly slider and an enemy target; removing the screen exposes either exact discovered check or a positive legal-exchange@1 capture. Slider, screen, target, ray and exchange operands are retained.",
+      "limitations": ["Latent one-blocker geometry only; it does not claim the screen should move, that every screen move exposes the ray, or that the relation is important."],
+      "witnesses": ["rules.tactic.reading.discovered_latency@1"]
+    },
+    {
+      "ref": "double-attack@1",
+      "definition": "The moved piece attacks at least two enemy targets after the move; each non-king target has a positive legal-exchange@1 capture by that piece. Geometry alone does not emit the event.",
+      "limitations": ["An exact double attack is not a universal positive prior or a move grade."],
+      "witnesses": ["rules.tactic.event.double_attack@1"]
+    },
+    {
+      "ref": "evidence-reference-resolution@1",
+      "definition": "A recorded evidence reference resolves only through the source implementation's documented literal reference grammar and retains its reference, rendered text and source label as separate operands.",
+      "limitations": ["A family-only reference token does not retain predicate operands or independently establish the referenced semantic fact; attached provider bytes travel as a separate declared source item."],
+      "witnesses": ["run.record.evidence_ref_resolution@1", "packages/runtime/src/evidence-ref.ts"]
+    },
+    {
+      "ref": "fork-survival@1",
+      "definition": "For every exact legal reply, the moved piece survives and retains a positive legal-exchange@1 capture of at least one original non-king target on its original square. False results retain refuting replies.",
+      "limitations": ["One-reply local survival only; no inevitability, quality or whole-position claim."],
+      "witnesses": ["derived.tactic.fork_survives_reply@1"]
+    },
+    {
+      "ref": "grade-convention@1",
+      "definition": "Learner-point-of-view loss class using paired readings from one engine and search limit, the unrounded win-percentage drop, threshold, context and lane; no best move or principal variation is retained.",
+      "limitations": ["Single-line evaluations only.", "The grade can be right about the position and wrong about the reason; it is not a lesson."],
+      "witnesses": ["derived.grade.move_quality@1", "packages/runtime/src/grade.ts"]
+    },
+    {
+      "ref": "king-landing-square@1",
+      "definition": "A move's semantic destination is its ordinary destination except for castling, where it is the square returned by chessops kingCastlesTo for the moving color and castling side.",
+      "limitations": ["This is a display and semantic destination, not the runtime's internal castling move identity."],
+      "witnesses": ["packages/runtime/src/legal-moves.ts#MOVE_DESTINATION_CONVENTION", "packages/runtime/src/legal-moves.ts#semanticDestination", "packages/runtime/src/legal-moves.ts#exactMoveDestination"]
+    },
+    {
+      "ref": "king-opposition-blocker-blind@1",
+      "definition": "The named color has opposition when both kings exist, it is the other color's turn, the kings share a file or rank, and there is exactly one square between them for direct opposition or three or five squares for distant opposition. Occupancy of the intervening squares is not checked.",
+      "limitations": ["This is the shipped blocker-blind legacy predicate. State and signed before/after relations carry no learner valence, relevance or importance."],
+      "witnesses": ["packages/runtime/src/structure.ts#opposition", "rules.structural.predicate.king_opposition@1", "rules.structural.reading.king_opposition@1", "rules.structural.event.king_opposition@1"]
+    },
+    {
+      "ref": "king-shelter@1",
+      "definition": "Same-color pawns one or two forward ranks from the king on its file or either adjacent file form the retained shelter set.",
+      "limitations": ["Shelter state emits no exposed-king, attack, safety or mating-net verdict."],
+      "witnesses": ["rules.king.reading.zone_state@1"]
+    },
+    {
+      "ref": "king-zone@1",
+      "definition": "The king zone contains up to eight adjacent squares, excluding the king square. Attackers and defenders are distinct non-king pieces controlling at least one zone square.",
+      "limitations": ["Escape availability uses the per-color turn clone with en passant cleared; zone state emits no exposed-king, attack, safety or mating-net verdict."],
+      "witnesses": ["rules.king.reading.zone_state@1"]
+    },
+    {
+      "ref": "legal-exchange@1",
+      "definition": "One specified legal capture is evaluated by legal recapture-only minimax on its landing square. Either side may stop. Material uses pawn 1, knight 3, bishop 3, rook 5 and queen 9; promotion adds promoted-piece minus pawn. Illegal off-line pinned recaptures and illegal king captures are absent; legal along-ray recaptures and X-rays remain.",
+      "limitations": ["Units are convention material, never centipawns. Zwischenzugs, replies elsewhere, position value and compensation are outside scope."],
+      "witnesses": ["rules.exchange.predicate.legal_exchange@1"]
+    },
+    {
+      "ref": "local-non-losing@1",
+      "definition": "For a legal capture destination, legal-exchange@1 is at least zero. For a quiet destination, after the piece arrives the opponent has no legal capture of it with legal-exchange@1 greater than zero.",
+      "limitations": ["This is one-exchange local safety, never engine safety, recommendation or goodness. It applies to bishop, knight, rook and queen legal destinations."],
+      "witnesses": ["rules.mobility.reading.piece_destinations@1"]
+    },
+    {
+      "ref": "loose-piece@1",
+      "definition": "For each non-king piece belonging to the non-moving side, retain legal capturers, geometric defenders, legal-exchange@1 results and the implementation's en-prise, loose and under-defended flags.",
+      "limitations": ["Local exchange only; zwischenzugs, compensation and whole-position move quality are outside scope."],
+      "witnesses": ["rules.tactic.reading.loose_piece@1", "packages/runtime/src/tactics.ts#loosePieceReading"]
+    },
+    {
+      "ref": "mate-proof@1",
+      "definition": "The declared candidate is attacker move one; later attacker moves are existential and every defender reply is enumerated through one to four attacker moves. One node is counted per visited position before cap and terminal checks; the cap is 250000. Attacker moves sort check-first then canonical UCI, defender moves canonical UCI. Results are proved, refuted by an escaping reply or terminal non-mate, or budget_exhausted.",
+      "limitations": ["Five-plus attacker moves, engine mate claims, move quality and king-zone inference are outside this convention."],
+      "witnesses": ["rules.tactic.consequence.forced_mate_after_move@1"]
+    },
+    {
+      "ref": "material-role-signature@1",
+      "definition": "Per-color counts of pawns, knights, bishops, rooks and queens. Asymmetry is the unordered role-count difference vector; event-comparison magnitude is the sum of the five absolute per-role count differences.",
+      "limitations": ["Kings are excluded. No piece-value scalar, material advantage, imbalance quality or exchange advice is emitted."],
+      "witnesses": ["derived.material.reading.role_signature@1", "derived.material.event.role_asymmetry@1"]
+    },
+    {
+      "ref": "maximal_pawn_reach@1",
+      "definition": "An enemy pawn is a push attacker when it is on an adjacent file and can geometrically reach the rank from which it attacks the target; it is a capture attacker when the minimum file captures needed to reach a target-adjacent file do not exceed its forward rank advance. The square is safe only when both sets are empty.",
+      "limitations": ["The model admits every geometrically possible forward or capture migration while ignoring blockers, capture availability, turn order and move legality. False may be pessimistic; true establishes only absence of an opposing-pawn reach path."],
+      "witnesses": ["packages/runtime/src/structure.ts#pawnSafetyOnPosition", "rules.structural.predicate.pawn_safe_square@1", "rules.structural.predicate.outpost@1"]
+    },
+    {
+      "ref": "mover-turn-ep-cleared@1",
+      "definition": "The pass clone makes the original mover the side to move in the after-position and clears en passant before legal controller and capture checks.",
+      "limitations": ["The clone is an authority input only. The joined edge and capture do not establish removal, deflection, overload, force, success, safety or move quality."],
+      "witnesses": ["derived.tactic.defender_exposure@1", "packages/runtime/src/semantic-evidence.ts#defenderExposureOperands"]
+    },
+    {
+      "ref": "observed-window@1",
+      "definition": "N consecutive move anchors retain N+1 ordered nodes, byte-equal shared FEN and node boundaries, canonical UCI and exact subject identity.",
+      "limitations": ["Recorded order never establishes intent, force, best play or causality."],
+      "witnesses": ["derived.tactic.square_clearance_observed@1", "packages/runtime/src/semantic-evidence.ts#canonicalRecordedPath"]
+    },
+    {
+      "ref": "opening-deepest-reached@1",
+      "definition": "The deepest opening reached is the greatest recorded matched ply, using the lowest node id as deterministic tie-break and retaining every matched visit.",
+      "limitations": ["Retrospective deepest match never labels the current position and never infers move order from FEN."],
+      "witnesses": ["derived.opening.deepest_reached@1"]
+    },
+    {
+      "ref": "overload-conflict@1",
+      "definition": "One named defender is sole defender of the captured target and another retained target; it has a legal recapture; no legal recapture preserves every retained sole duty; and after every recapture at least one retained target has a positive legal-exchange@1 capture. No legal recapture abstains.",
+      "limitations": ["The broad lost-duty-edge rule is rejected. This is candidate-time arithmetic only and does not grade or recommend the candidate."],
+      "witnesses": ["derived.tactic.overloaded_defender_response_conflict@1"]
+    },
+    {
+      "ref": "pawn-relations@1",
+      "definition": "An opposing-pawn contact is a directed pawn-attack edge; a direct lock is a White pawn immediately below a Black pawn on the same file; a passed pawn's blockers are opposing pawns strictly ahead on its file or either adjacent file; protection is a same-color pawn attack on the subject; and a connected passed pair is any two passed pawns of one color on adjacent files.",
+      "limitations": ["Connected-passer rank distance is deliberately unrestricted; all pawn and blocker identities remain literal."],
+      "witnesses": ["rules.pawn.reading.contacts@1"]
+    },
+    {
+      "ref": "pressure-line@1",
+      "definition": "A bishop, rook or queen slider and an enemy rook or queen target are collinear with exactly one occupied square between them, and with that screen removed the target lies in the slider's own chessops attack set. The screen belongs to the target's color, has lower pawn-1/knight-3/bishop-3/rook-5/queen-9 role value than the target, and is not a king. Retention requires the same slider color and role plus the exact same screen and target square, color and role.",
+      "limitations": ["The observed harassment sequence additionally requires a pawn newly attacking the bishop and that exact bishop relocating on the consecutive reply. It establishes no force, quality or intent."],
+      "witnesses": ["derived.pawn.sequence.harassment_pressure@1"]
+    },
+    {
+      "ref": "race-arrival@1",
+      "definition": "Two or more opposite-color named pawns have unblocked forward paths; side to move and the initial double push are respected; strict turn alternation models no captures, checks, king or piece activity.",
+      "limitations": ["Ordering and per-pawn arrival distance are descriptive and contain no outcome verdict."],
+      "witnesses": ["packages/runtime/src/evidence-catalog.ts#BREADTH_CONVENTION_TEXT.raceArrival", "packages/runtime/src/pawn-dynamics.ts#RACE_ARRIVAL_CONVENTION"]
+    },
+    {
+      "ref": "ray-classification@1",
+      "definition": "One-blocker slider rays are classified with precedence absolute pin, skewer, relative pin, then X-ray; each item retains slider, blocker, target, ray and any declared value comparison. Absolute-pin geometry is exact.",
+      "limitations": ["The combined projection conservatively declares convention grounding. State geometry is not a move grade, tactical inevitability or statement that a ray is important."],
+      "witnesses": ["rules.tactic.reading.ray_classification@1"]
+    },
+    {
+      "ref": "space@1",
+      "definition": "Literal pawn-attacked squares in the enemy half are counted by queenside a-c, central d-e and kingside f-h zones; differentials are White minus Black.",
+      "limitations": ["Pawn control only; piece control, mobility, territory quality, recommendation and move grade are outside this convention."],
+      "witnesses": ["rules.structural.reading.space@1"]
+    },
+    {
+      "ref": "square-control@1",
+      "definition": "Square control uses no hypothetical occupant. A pseudo controller is a piece whose chessops attack set contains the target under current occupancy. A legal controller is that same source piece only when the target also appears in its actual allDests set after a valid clone makes the piece's color the side to move and clears en passant.",
+      "limitations": ["Opposing-king-square pseudo control makes the checking color's complete legal set abstain invalid_turn_clone. No individual target receives an invented occupant."],
+      "witnesses": ["rules.square.reading.control@1"]
+    },
+    {
+      "ref": "standard-uci-king-destination@1",
+      "definition": "Engine bestmove and pack move UCI use common standard UCI castling spelling with the king's landing square as destination before normalization to the internal move identity.",
+      "limitations": ["This is an inbound source dialect, not the application's stored move identity."],
+      "witnesses": ["packages/runtime/src/legal-moves.ts#INBOUND_MOVE_DIALECT", "packages/runtime/src/legal-moves.ts#normalizeInboundMove"]
+    },
+    {
+      "ref": "story-last-level@1",
+      "definition": "The last-level flag uses a within-one-pawn evaluation threshold and is gated by whether the imported result says the learner lost.",
+      "limitations": ["This is a deterministic story presentation rule, not a chess significance or move-quality claim."],
+      "witnesses": ["derived.story.last_level@1", "packages/runtime/src/story.ts"]
+    },
+    {
+      "ref": "story-rank@1",
+      "definition": "Story prominence uses a fixed kind-priority order with absolute recorded-evaluation delta as tie-break.",
+      "limitations": ["The ordering is presentation prominence, not chess significance."],
+      "witnesses": ["derived.story.rank@1", "packages/runtime/src/story.ts"]
+    },
+    {
+      "ref": "story-title@1",
+      "definition": "Story title is a fixed composition over rank, recorded outcome and result, learner side and endgame label; imported result verbs are learner-relative.",
+      "limitations": ["The title is deterministic presentation and does not infer intent or add a chess judgement."],
+      "witnesses": ["derived.story.title@1", "packages/runtime/src/story.ts"]
+    },
+    {
+      "ref": "threat@1",
+      "definition": "Give the move to the opponent and clear en passant, then enumerate positive legal-exchange@1 captures and mate in one. Abstain while the side to move is in check.",
+      "limitations": ["Quiet promotion, deeper mating nets, trapping threats and forking threats are outside this one-ply convention. Threat presence is not a move grade, recommendation, forcing claim or statement of intent."],
+      "witnesses": ["rules.tactic.consequence.threat@1"]
+    },
+    {
+      "ref": "trade-completed@1",
+      "definition": "Two immediately consecutive legal captures have a byte-identical shared position, with the second capture occurring on the first capture's landing square.",
+      "limitations": ["Immediate capture-recapture only; later return captures and strategic exchange judgements are outside scope."],
+      "witnesses": ["derived.exchange.trade_completed@1"]
+    },
+    {
+      "ref": "trapped@1",
+      "definition": "A non-pawn, non-king piece of the side to move is locally trapped only when the opponent-turn clone has a positive legal-exchange@1 capture on its current square and every legal destination is locally losing. Capture destinations use their own exchange result; quiet destinations retain every positive opponent capture after relocation.",
+      "limitations": ["Local exchange and legal destinations only; defending moves, intermezzi, compensation, counterattacks and search-derived claims that the piece is lost are outside scope."],
+      "witnesses": ["rules.tactic.reading.trapped_piece@1"]
+    }
+  ]
+}

@@ -32,3 +32,12 @@ v4 bytes while the tree head stays 4. The claim can reserve only the next head; 
 head/digest must always agree on checked bytes. Three executable controls also reproduced the
 already-routed [[D1629]] browser-codec gap without duplicating it here. Exact return:
 `independent-buildability-review-2026-08-27.md`.
+
+## 2026-08-27 — D1916 author repair executes
+
+Removed the claim-based digest exception. The amended C9 always requires AST-derived tree head and
+digest to equal the checked register; a live claim only reserves registered head+1. The disposable
+review harness now passes 7/7: same-head drift plus lane 5 and head-only drift plus lane 5 both
+fail; unchanged head 4 plus one lane-5 reservation passes; only a complete atomic head-5
+tree/register/landed update with the claim removed passes. The two D1629 browser-codec controls
+remain downstream product work. Repeat independent review is required before implementation.

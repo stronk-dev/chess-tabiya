@@ -2,13 +2,14 @@
 
 ## State
 
-Draft process RFC returned by independent buildability review on [[D1917]]–[[D1919]]. It also
-requires the factual [[D1920]] inventory correction. No implementation is authorised.
+Draft process RFC amended after independent buildability review returned it on
+[[D1917]]–[[D1919]]. The factual [[D1920]] correction and a stable seed authority have landed in
+the author/research tier. Repeat review remains; no implementation is authorised.
 
 ## Order
 
-1. Amend lineage ownership, semantic-byte scope and the stable seed authority; correct the resource
-   count.
+1. ✅ Amend lineage ownership, semantic-byte scope and the stable seed authority; correct the
+   resource count.
 2. Repeat independent review and record corrections/acceptance.
 3. Land or rebase onto accepted/implemented `assistance-config-register.md` so C9 remains
    single-owned.

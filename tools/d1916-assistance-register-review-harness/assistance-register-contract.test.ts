@@ -18,6 +18,19 @@ function proposedC9Allows(input: {
   return input.claimLanes.every((lane) => lane === input.registeredHead + 1); // C9.4/C9.5
 }
 
+function amendedC9Allows(input: {
+  readonly registeredHead: number;
+  readonly treeHead: number;
+  readonly digestMatches: boolean;
+  readonly claimLanes: readonly number[];
+  readonly landedHeads: readonly number[];
+}): boolean {
+  if (input.registeredHead !== input.treeHead || !input.digestMatches) return false;
+  if (!input.landedHeads.includes(input.registeredHead)) return false;
+  if (input.claimLanes.length > 1) return false;
+  return input.claimLanes.length === 0 || input.claimLanes[0] === input.registeredHead + 1;
+}
+
 describe("assistance-config register draft against the persisted boundary", () => {
   it("allows a future lane-5 claim to mask a same-head v4 shape mutation", () => {
     expect(proposedC9Allows({
@@ -45,5 +58,34 @@ describe("assistance-config register draft against the persisted boundary", () =
     expect(treeShape).toContain("head: number");
     expect(treeShape).toContain("fields:");
     expect(treeShape).not.toMatch(/migration|parser|storage/u);
+  });
+});
+
+describe("D1916 amended assistance-register contract", () => {
+  it("refuses same-head semantic drift even with the exact next-head reservation", () => {
+    expect(amendedC9Allows({
+      registeredHead: 4, treeHead: 4, digestMatches: false, claimLanes: [5], landedHeads: [1, 2, 3, 4],
+    })).toBe(false);
+  });
+
+  it("refuses head-only drift even with the exact next-head reservation", () => {
+    expect(amendedC9Allows({
+      registeredHead: 4, treeHead: 5, digestMatches: true, claimLanes: [5], landedHeads: [1, 2, 3, 4],
+    })).toBe(false);
+  });
+
+  it("accepts only a complete atomic next-head landing with the claim removed", () => {
+    expect(amendedC9Allows({
+      registeredHead: 5, treeHead: 5, digestMatches: true, claimLanes: [], landedHeads: [1, 2, 3, 4, 5],
+    })).toBe(true);
+    expect(amendedC9Allows({
+      registeredHead: 5, treeHead: 5, digestMatches: true, claimLanes: [5], landedHeads: [1, 2, 3, 4, 5],
+    })).toBe(false);
+  });
+
+  it("accepts an unchanged current tree/register plus one sequential reservation", () => {
+    expect(amendedC9Allows({
+      registeredHead: 4, treeHead: 4, digestMatches: true, claimLanes: [5], landedHeads: [1, 2, 3, 4],
+    })).toBe(true);
   });
 });

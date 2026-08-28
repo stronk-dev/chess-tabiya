@@ -10476,3 +10476,91 @@ continue another foundation dependency without implementing around it.
   named family view may collapse versions only for deliberate analysis.
 - Dossier: `design/research/recorded-path-authority.md`; instrument:
   `tools/d1927-recorded-path-review-harness/authority-candidate.test.ts`.
+
+## 2026-08-27 — Semantic-convention value authority becomes executable
+
+- Extended the disposable D1921 return harness from six reproduced failures to fourteen total
+  arms. The candidate seals canonical derivation-member identity plus an exact multiset of nested
+  input-value digests; same-output alternative paths differ, input order is canonical, repeated
+  projection values remain distinct, and spread/JSON/plain-object forgeries fail.
+- Derived the complete instance-varying population from the live manifest: fourteen projections,
+  not three. Typed extractors cover twelve string arms, one two-ref arm and structured grade
+  identity/context, and are set-equal to that population.
+- Found and ledgered [[D1934]]: `exactObject` never rejects extra payload keys, so fixed projections
+  can smuggle undeclared convention refs or arbitrary caller data. Exact key-set equality now
+  precedes extraction/sealing in the amended contract.
+- Amended the product RFC: provider limitations are deterministic rather than omission-checked;
+  same-version semantics use append-only staged + first-parent history; Review/history claims
+  run-schema lane 0.24 with durable validation/re-sealing and honest legacy absence.
+- D1923's 39 source-grounded literal declarations and the returned process-register reconciliation
+  remain before repeat independent review. Dossier:
+  `design/research/semantic-convention-value-authority.md`.
+
+## 2026-08-27 — Semantic-convention register return repaired
+
+- Published the one stable 39-member seed at
+  `planning/semantic-convention-register/initial-members.json`; the D1722 census now reads it and
+  future C10 is specified to read the same bytes. The private disposable constant is gone.
+- Repaired lineage ownership: collision identity is base id, new ids start at `@1`, existing ids
+  claim exactly landed head+1, and crossed concurrent/skipped/backward cases are explicit
+  falsifiers.
+- Narrowed the member projection honestly to identity. Same-version semantic immutability is owned
+  by the product RFC's append-only staged/first-parent history rather than a checker that erases the
+  fields it claimed to protect.
+- Corrected every resource count to eight. The process RFC remains draft pending repeat review and
+  its assistance-register predecessor; no checker/product implementation is authorized yet.
+
+## 2026-08-27 — Semantic-convention declaration source recovery closes D1923
+
+- Published one literal 39-row migration artifact, set-equal to the stable convention member seed.
+  Every row carries a definition, mandatory limitations and resolvable projection/implementation
+  witnesses; the disposable D1923 harness passes 4/4.
+- Found and repaired two shipped-identity rows whose original witnesses established meaning but not
+  the literal versioned ref (D1935).
+- Refuted the draft authority union for shipped recorded, bounded-search and product-composition
+  meanings. Added migration-only `landed_contract` authority tied to immutable snapshot `62a5731f`;
+  it cannot establish new chess truth (D1936).
+- D1923 is closed at the authoring tier. D1924–D1926 execution, the process predecessor and repeat
+  independent review still block product-RFC acceptance; no production byte is authorized.
+
+## 2026-08-27 — Convention persistence gets an origin trust boundary
+
+- Extended the product falsifier to 21 passing arms: deterministic limitations, append-only
+  history and the durable-receipt core now execute beside exact value/operand contracts.
+- Found D1937 by tracing the live run event: it stores no semantic payload graph or signed event
+  chain, so unkeyed receipt digests can be rewritten self-consistently.
+- Amended the candidate/RFC to sign the canonical receipt envelope with an Ed25519 installation
+  key. Verification precedes historical resealing; recomputed-digest mutation and unknown origins
+  fail typed, v1 remains readable under v2, and legacy absence stays empty.
+- Cross-install signer trust is explicit by fingerprint rather than silently accepting a
+  self-asserted export key. Process-register reconciliation and repeat review remain before
+  acceptance; production remains untouched.
+
+## 2026-08-27 — Assistance register D1916 return repaired
+
+- Removed the false-green in C9: a future lane reservation can never excuse present-tree head or
+  digest drift.
+- The disposable crossed candidate passes 7/7. Same-head and head-only mutation fail despite a
+  lane-5 claim; unchanged head 4 plus its next-head reservation and a complete atomic head-5
+  landing are the only positive controls.
+- The RFC remains draft pending repeat independent review. No runtime, web, schema, storage or
+  content byte changed; D1629 remains the Guided Hint product codec obligation.
+
+## 2026-08-28 — Software-tier worker cap removes false timeout cascade
+
+- The permissioned Node-24 `make verify` run removed the sandbox listener error but exposed 37
+  unrelated 5–30 second timeouts across schema compilation, corpus traversal, SQLite, semantic
+  selection and Stockfish. The unbounded software config saw 14 available workers; 1,021/1,058
+  tests still passed and the run took 170.79 seconds.
+- Re-ran the complete tier with four workers: 175/175 files and 1,058/1,058 tests passed in 14.56
+  seconds. This is a whole-tier comparison, not a selected-file retry.
+- `vitest.software.config.ts` now owns the four-worker cap; the performance tier remains isolated at
+  one worker. D1938 is closed pending the final standard-command/full-verify rerun.
+
+## 2026-08-28 — Standard verification command closes D1938
+
+Plain `make verify`, with no invocation-time environment or parameter overrides, passed under the
+repository-configured Node 24/Stockfish/Docker toolchain: 1,058 software tests, 2 performance tests,
+171 real-content tests, all workspace typechecks, packaging/build, evidence contracts and every
+governance/status/roadmap/docs/staged-process gate. D1938 is closed on the command contributors and
+CI actually run.
