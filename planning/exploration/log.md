@@ -10791,3 +10791,18 @@ CI actually run.
 - Added the eleven-arm reproduction behind `make pack-capability-repeat-review`. No production,
   schema, content, pack or protected intent byte changed. Lane 0.30 remains unauthorised pending
   author repair and another fresh independent review.
+
+## 2026-08-28 — Bounded-target final independent buildability return
+
+- Re-derived the [[D1962]]–[[D1968]] author repair against the process-sealed evidence type, live F1
+  catalogue constructor, existing consumer-only operation census and D1023 algorithm. The pass
+  anchor, observation-only identity, reachable outcome union, complete-set batch and fixed return
+  algebra survive.
+- Recorded [[D1993]]–[[D1999]]: deduplicated work has no waiter cancellation semantics; request and
+  input digests have no byte authority; the live catalogue forces local producers to `sync`; the
+  named producer-operation census does not exist; `exchange_neutralized` contradicts the evaluator
+  refusal; service failures/defaults and the production yield remain open; and exact node/yield
+  gates have no visited-position convention.
+- Added the seven-arm reproduction behind `make bounded-target-final-review`; the 18-arm author
+  contract remains green. No production, schema, content, pack or protected intent byte changed.
+  Implementation remains unauthorised pending author repair and another fresh review.

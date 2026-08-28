@@ -1,11 +1,12 @@
 # RFC: Convention-grounded bounded material targets
 
-- **Status:** **draft — author-amended 2026-08-28 after the second repeat [[D1962]]–[[D1968]]
-  return; fresh independent buildability review required.** The amendment specifies one exported
-  threat-pass anchor, observation-only promotion tracking, a reachable immediate union, a
-  discriminated return algebra, one set-owning batch operation and a bounded cooperative queue
-  with cancellation during work. Eighteen runtime/source controls and five crossed compile-time
-  controls pass through `make bounded-target-contract`; implementation remains unauthorised.
+- **Status:** **draft — returned by final independent buildability review 2026-08-28 on
+  [[D1993]]–[[D1999]].** The seven prior semantic/type repairs survive, but shared-job cancellation,
+  request identity, local/background manifest integration, producer-operation reach, post-candidate
+  exchange authority, service failure/options and visited-position counting remain unspecified or
+  contradictory. Exact return:
+  `planning/bounded-policy-targets/final-independent-buildability-review-2026-08-28.md`.
+  Implementation remains unauthorised.
 - **Author:** codex, preserving the D1023 research contract and applying `planning/bounded-policy-targets/author-repair-2026-08-26.md`
 - **Created:** 2026-08-23; narrowed 2026-08-27
 - **Exploration gate:** [[D1023]] ✅; executable contract closure in `design/research/bounded-policy-target-contract-closure.md`
