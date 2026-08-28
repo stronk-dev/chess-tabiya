@@ -1,10 +1,12 @@
 # RFC: Provider exchange and projection execution
 
-- **Status:** draft — dependency amendment 2026-08-28 for [[D1969]] after the second author repair.
-  The one fixed-bound Stockfish exchange now retains its completed raw WDL beside the typed score so
-  Review does not create a second engine authority. The literal delivery, history, operation,
-  availability, cache-identity and Explorer-migration seams remain repaired; implementation is not
-  authorised until another independent buildability review covers the complete amended bytes.
+- **Status:** draft — returned a third time; final independent buildability review 2026-08-28 found
+  [[D2000]]–[[D2008]]. The prior delivery, history, availability, migration and raw-WDL repairs
+  survive, but operation/result correlation, receipt typing, crossed deadlines, retention bounds,
+  Syzygy domain abstention, Explorer suitability, Stockfish command/result authority and canonical
+  provider digests remain unclosed. Exact return and repair order:
+  `planning/provider-exchange-and-execution/final-independent-buildability-review-2026-08-28.md`
+  and `final-author-handoff.md`. Implementation is not authorised.
 - **Author:** codex, from the D1652–D1658 and D1699–D1709 author-repair handoffs
 - **Created:** 2026-08-27
 - **Design refs:** `design/03-product-breadth.md` evidence architecture and provider-backed

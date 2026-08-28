@@ -10806,3 +10806,20 @@ CI actually run.
 - Added the seven-arm reproduction behind `make bounded-target-final-review`; the 18-arm author
   contract remains green. No production, schema, content, pack or protected intent byte changed.
   Implementation remains unauthorised pending author repair and another fresh review.
+
+## 2026-08-28 — Provider-exchange final independent buildability return
+
+- Re-derived the [[D1950]]–[[D1956]] and [[D1969]] author repairs against the live engine
+  supervisor/evidence executor, Explorer guard/parsers, Syzygy source, F1 boundary and both shipped
+  canonicalization implementations. The sealed delivery, history split, per-leaf availability,
+  pending/retained identity split, narrow Explorer summary and one score+WDL exchange survive.
+- Recorded [[D2000]]–[[D2008]]: success results lose operation correlation; receipts are open and
+  not operation/provider-mapped; coalesced deadlines and waiter settlement are undefined; the
+  promised retention entry bound is absent; Syzygy outside-domain has no result arm; Explorer
+  mistakes `CORPUS_GUARD` prose for a suitability predicate; Stockfish command/WDL state and
+  iterative output selection lack one authority; and provider digests have no shared canonical,
+  domain-separated byte registry.
+- Added the nine-arm reproduction behind `make provider-exchange-final-review` and routed a
+  dependency-ordered author handoff. Both earlier author targets remain green. No production,
+  schema, pack, content or protected intent byte changed. Provider implementation and its Review,
+  bot, theory and collector consumers remain unauthorised pending repair and fresh review.

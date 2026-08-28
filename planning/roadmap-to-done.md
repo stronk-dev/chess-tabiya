@@ -214,6 +214,14 @@ reachable application operation. This is a landing split, not a scope cut: all t
 requirements, every learner binding remains downstream, and each draft requires independent review
 before dependency-ordered acceptance or implementation.
 
+The 2026-08-28 third independent provider review keeps that dependency order but returns the shared
+boundary on [[D2000]]–[[D2008]]. The remaining work is not consumer polish: operation/result
+correlation, operation-keyed receipt construction, coalesced waiter deadlines, true retention
+bounds, representable Syzygy domain abstention, consumer-owned Explorer suitability, descriptor-
+owned Stockfish commands/final-line reduction and one canonical digest registry. Review, bots,
+theory and provider-backed collectors remain blocked from inventing private substitutes until the
+nine-arm `make provider-exchange-final-review` contract is repaired and independently accepted.
+
 The same layer now owns node-free live Syzygy position receipts. [[D1699]] closes Wave C's final
 promotion pair: geometry derives from complete declared pawn contacts; outcome joins exact legal
 moves to same-FEN recorded-or-live tablebase evidence. [[D1700]] corrects the latency repair itself:
