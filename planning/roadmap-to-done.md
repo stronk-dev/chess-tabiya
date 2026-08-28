@@ -146,16 +146,18 @@ claim; only the independently accepted product RFC may then create the runtime d
 convert those claims to landed rows. This preserves the no-implementation-before-acceptance law
 without leaving a new shared semantic authority outside drift/collision checks.
 
-The 2026-08-27 amendment applies the [[D1631]]–[[D1636]] closure without pretending the shared
-candidate denominator is already implemented. The factual packet remains a sealed internal receipt
-over the complete legal set and original declared evidence; adjudication, history-conditioned
-provider results, policy selection and learner modules remain separate joins. Its code-derived
-closure is 47 one-edge event ids plus 22 reading ids (the moved twenty plus legal exchange and fork
-survival), and its reusable engine source stays White-perspective while bot comparison derives a
-typed root frame with no mate-to-cp conversion. Concrete semantic/bot operations, application
-injection, cancellation and the bounded history-preserving final cache are now in the RFC's
-implementation surface. Nine Node-24 arms pass; repeat independent review and the shared-provider
-acceptance still precede implementation.
+The 2026-08-28 repeat-return amendment keeps the shared candidate denominator explicitly
+unimplemented while correcting its authority boundary. The factual packet is a neutral sealed
+internal receipt over the complete legal set and original individually declared evidence—not an F1
+aggregate projection. Its code-derived possible closure is 47 one-edge event ids plus 22 reading
+ids, but a position retains only what actually fired or abstained; the old scope-wide `anyOf`
+conjunction and future-only packet bindings are removed. The existing semantic-check executable is
+the only first-landing composition root; `createApplication` remains unchanged until a real
+Support, Review or bot route consumes the service. Provider execution is not a prerequisite for
+that provider-free landing. The held bot join separately consumes one complete root-side legal
+table with categorical mate outcomes and full delivery provenance. Eight focused arms pass; repeat
+independent review still precedes implementation, while provider acceptance gates only the held bot
+join.
 
 The 2026-08-26 independent review keeps [[D1023]]'s measured exact-target collector but returns
 `bounded-policy-targets` on [[D1652]]–[[D1658]]. The provider layer must expose reusable node-free

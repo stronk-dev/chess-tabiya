@@ -10608,3 +10608,21 @@ CI actually run.
 - Removed `application.ts` from the first-landing surface. The semantic executable constructs the
   service/operation it actually calls; application ownership waits for the first concrete Support,
   Review or bot route. The focused packet target now passes 8/8.
+
+## 2026-08-28 — Pack-capability dependency/digest foundation falsified successfully
+
+- Added the disposable D1620-D1625 closure instrument behind the repository-owned
+  `make pack-capability-closure` entry point; it passes 7/7 without invocation-time environment or
+  parameter overrides.
+- An AST-token site plus declared transitive dependency edges detects the exact D566 helper-only
+  change: `pawn_safe_square` and dependent `outpost` invalidate, while unrelated `isolated_pawn`
+  does not. Literal and absence selectors derive the exact requirement set and reject both missing
+  inherited requirements and unrelated extra stamps.
+- Current format/instrument dispositions map losslessly onto a semantic-status axis; deployment
+  reachability remains a separate axis, with transient unavailability limited to configured
+  providers. No runtime, schema, pack or content byte changed.
+- Annotated census roots distinguish five failure classes including count-preserving id swaps, and
+  the typed suffix rule refuses current-authority strings without banning compatibility fixtures.
+  The RFC author amendment now carries the exact named-root inventory and existing lifecycle
+  destinations. This is not independent acceptance; lane 0.30 and corpus application remain
+  unauthorised pending repeat review.

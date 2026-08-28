@@ -1,11 +1,11 @@
 # RFC: Pack capability contract — semantic versions, handshake, deprecation and migration
 
-- **Status:** draft — returned on independent buildability re-review 2026-08-26 ([[D1620]]–[[D1626]]). The six 2026-08-23 repairs stand, but the mandatory pack requirement set has no dependency/applicability graph; module+symbol source regions cannot isolate the actual D566 helper change; semantic dispositions and deployment reachability are conflated into a type that cannot express `unsupported` or `temporarily_unavailable`; the census has no reproducible identity procedure; live manifest/disposition baselines are stale; the suffix-version migration criterion has no precise boundary; and completion obligations still name absent or anonymous owners. Exact return: `planning/pack-capability-contract/independent-rereview-2026-08-26.md`. No lane-0.30 implementation is authorised. *(Prior state: draft — six blockers repaired 2026-08-23, ready for re-review; before that: draft — returned to author 2026-08-23 on six blockers.)*
+- **Status:** draft — amended 2026-08-28 after the independent [[D1620]]–[[D1626]] return; repeat independent buildability review required. The amendment adds the literal applicability/dependency graph, AST-token capability sites, separate semantic/deployment axes, checked census annotations and named roots, a scoped legacy-version boundary, current executable baselines and existing lifecycle owners. Exact prior return: `planning/pack-capability-contract/independent-rereview-2026-08-26.md`. No lane-0.30 implementation is authorised.
 - **Author:** claude (drafted from `planning/platform-alignment/f3-derivation.md`, the HEAD derivation of every surface this document versions)
 - **Created:** 2026-08-23
 - **Design refs:** `design/research/pack-primitive-stability.md` §6 (R6's six-part model); `planning/platform-alignment/plan.md` Gate F clauses 1, 5, 6, 7
 - **Exploration gate:** O6.1 approved as [[D995]] and O6.2 ruled as [[D996]]; `planning/platform-alignment/theory-drill/o5-o6-handoff.md:96` reads verbatim `O6.1 + O6.2 approved → F3 may draft` (line corrected from `:100`, a code fence, by cross-review 2026-08-23)
-- **Depends on:** `archive/evidence-contract-manifest.md` (F1 — the 188-projection manifest this versions), `rfc/graduation-clearance.md` (accepted — lane 0.28, the planner precedent in its §6.5)
+- **Depends on:** `archive/evidence-contract-manifest.md` (F1 — the compiled manifest this versions), `rfc/graduation-clearance.md` (accepted — lane 0.28, the planner precedent in its §6.5)
 - **Parent / amends:** — (this is F3 in `planning/platform-alignment/rfc-graph.md:70`)
 - **Supersedes / superseded by:** —
 - **Planning:** `planning/platform-alignment/` (`f3-derivation.md`)
@@ -21,7 +21,7 @@ of the evaluator semantics its conditions depend on. Measured over all 92 pack d
 top-level keys under `"additionalProperties": false`, and a grep for
 `schemaVersion|formatVersion|capabilities|$schema|specVersion|packFormat` matches **0 files**
 (`f3-derivation.md` §2e). Meanwhile the meanings a pack depends on live in **≥163 pack-facing
-vocabulary arms across 32 vocabularies**, 188 manifest projections, **13** conventions whose
+vocabulary arms across 32 vocabularies**, **193** core-manifest projections, **13** conventions whose
 semantics are **frozen prose**, and 13 verdict producers of which **12 carry no identifier at all**.
 
 *(Counts corrected at the six-blocker repair, 2026-08-23: the pack-facing arm floor is **163**
@@ -119,7 +119,26 @@ both parse to `{version: 1}`.
 
 **Why this and not the majority spelling:** G5. `evidence-manifest-check.ts:70` proves a suffix
 spelling puts the version inside assertions, where incrementing it requires editing the checker.
-Criterion 5 asserts that no assertion in the tree contains a literal version suffix.
+Criterion 5 asserts the narrower typed-authority boundary below; exact legacy-wire fixtures remain
+legal.
+
+#### §2.1a Structured authority versus legacy wire values
+
+The implementation migrates **authority**, not historical bytes. New capability declarations,
+requirements, successors, provider bindings and binding contracts use `CapabilityId`. Existing
+persisted/API payload versions remain readable through their owning schema/version parser; an old
+run, evidence packet or sidecar is never rewritten merely because this contract lands. Sidecar
+schema names such as `tabiya.sourcing.evidence.v1` are artifact-schema identifiers, not capability
+identifiers, and are outside this migration.
+
+The compiler check is type-directed, not a grep. A suffix literal matching `@N` or `@vN` is illegal
+when its contextual type is `CapabilityId`/`CapabilityKey`, when it initializes a capability field,
+or when it is passed to the current-id assertion API. Tests may contain the exact old bytes only
+through `legacyCapabilityFixture(value)`, which parses the value and marks it as compatibility
+input. Disposable research output and prose are outside the production scan. New writers emit
+structured data; legacy readers remain for the lifetime of the artifact schema that introduced the
+string. Criterion 5 fixtures all three cases: forbidden current authority, permitted named legacy
+wire input, and an unrelated versioned schema string.
 
 #### §2.2 A capability is keyed on an evaluator, not on a field
 
@@ -132,7 +151,10 @@ A capability names **a unit of meaning that a pack can depend on**. Its subject 
 | `verdict_producer` | `objective.state_machine` | **ordering is semantics** (first-match-wins) and no field expresses it |
 | `convention` | `mate-proof` | its normative statement is prose (§2.4) |
 | `constant_table` | `grade.thresholds` | a threshold edit reclassifies every recorded pair |
-| `projection` | `rules.structural.predicate.outpost` | the manifest's existing 188 |
+| `projection` | `rules.structural.predicate.outpost` | a projection in the compiled F1 manifest |
+| `resolved_reference` | `shape.maroczy-bind` | referenced content bytes and version decide expansion |
+| `assistance_surface` | `assistance.arrows` | a declared surface may remain unmeasured/refused independently of a pack union |
+| `error_contract` | `error.SIMULATE_BUDGET_EXCEEDED` | retirement of a public error is versioned meaning |
 
 Keying on evaluators rather than fields is what makes ordering, prose conventions and duplicated
 constant tables expressible. A JSON field may map to several capabilities; a capability may be
@@ -144,16 +166,51 @@ Every capability declaration carries a **semantics digest** over the artifacts t
 meaning:
 
 ```ts
+export type CapabilitySubjectKind =
+  | "vocabulary_arm"
+  | "expression_node"
+  | "verdict_producer"
+  | "convention"
+  | "constant_table"
+  | "projection"
+  | "resolved_reference"
+  | "assistance_surface"
+  | "error_contract";
+
 export interface CapabilityDeclaration {
   readonly id: string;
   readonly version: number;
   readonly subject: CapabilitySubjectKind;
-  readonly sites: readonly CapabilitySite[];   // module + symbol, >= 1, all interpretation sites
+  readonly sites: readonly CapabilitySite[];   // exact AST sites, >= 1, all interpretation sites
+  readonly dependsOn: readonly string[];       // capability ids, acyclic; digest closes transitively
   readonly conventionText?: string;            // when the normative statement is prose (§2.4)
   readonly semanticsDigest: string;            // `sha256:...` over the sites' source regions + conventionText
   readonly disposition: CapabilityDisposition; // §5
 }
 ```
+
+`CapabilitySite` is closed and AST-backed:
+
+```ts
+export type CapabilitySite =
+  | { readonly kind: "symbol"; readonly module: string; readonly symbol: string }
+  | {
+      readonly kind: "discriminant_arm";
+      readonly module: string;
+      readonly owner: string;
+      readonly property: string;
+      readonly value: string;
+    };
+```
+
+`module` is a repository-relative POSIX path. A symbol site selects exactly one named declaration;
+an arm site selects exactly one equality arm inside the named owner. Zero or multiple matches fail.
+The canonical source image is JCS over the domain tag `tabiya.capability.site.v1`, the site record,
+and the ordered TypeScript token stream `(SyntaxKind name, token text)` with trivia excluded. Sites
+sort by their JCS image; dependencies sort by id. Each dependency contributes its full semantics
+digest, cycles fail, and imports/helpers/constants participate only through an explicit site or
+dependency. The TypeScript package and lockfile are part of the repository toolchain; changing the
+extractor format requires a new site-image domain tag rather than silently moving every digest.
 
 `make capability-check` recomputes every `semanticsDigest` from the tree and **fails when a stored
 digest does not match its recomputed value at the same version**. The remedy is always one of two
@@ -162,8 +219,10 @@ things: revert the meaning change, or increment `version` and record the success
 **This is the D566 test.** `pawn_safe_square`'s semantics were repaired to use a disclosed
 `maximal_pawn_reach@1` basis. The pack schema stayed 0.27, no pack byte moved, no `packDigest`
 moved, and the projection stayed `@1` — while `outpost` went from 10 observations in 1.56% of
-positions to **0 of 643**. Under this contract the edit changes the source region behind
-`structuralFeature.pawn_safe_square`, its digest stops matching, and `make verify` goes red until
+positions to **0 of 643**. Under this contract the edit changes the `pawnSafetyOnPosition` symbol
+site declared by `structuralFeature.pawn_safe_square`; dependency closure also invalidates
+`structuralFeature.outpost` while leaving an unrelated structural arm unchanged. Its digest stops
+matching, and `make verify` goes red until
 someone either reverts or bumps to `@2` — at which point every pack requiring `@1` is refused by
 §4's handshake and appears in §6's plan as judgement debt. Criterion 13 fixtures exactly this.
 
@@ -206,9 +265,51 @@ dependent pack with nothing noticing. `named_structure`'s four inline ids (`carl
 `iqp-black`, `maroczy-bind`, `structure.ts:368-393`) are the same class.
 
 **Rule:** a pack's derived requirement set closes over the shape entries and principle entries it
-resolves through. The requirement records the resolved entry's `id` **and its content digest**, so
-a shape edit invalidates the requirement rather than silently re-deciding the pack. This is G24's
-remedy and it is the only part of the contract that reaches outside pack bytes.
+resolves through. Each resolved entry is a generated capability (`shape.<id>` or `principle.<id>`)
+whose capability version is the entry's structured semver and whose semantics digest contains the
+entry's canonical content digest. Editing bytes without moving the entry version fails
+`capability-check`; moving the version changes the pack's derived requirement. This preserves the
+ruled `{id, version}` pack grammar rather than hiding a third field in one requirement family. This
+is G24's remedy and it is the only part of the contract that reaches outside pack bytes.
+
+#### §2.7 Applicability is a literal graph
+
+`CAPABILITY_APPLICABILITY` is the single checked mapping from authored/default pack state to direct
+capabilities. It is versioned and included in the registry digest; neither the planner nor the pack
+loader may reproduce it.
+
+```ts
+type PackSelector =
+  | { readonly kind: "always" }
+  | { readonly kind: "literal"; readonly pointer: string; readonly equals: string | number | boolean }
+  | { readonly kind: "absent"; readonly pointer: string }
+  | { readonly kind: "resolved"; readonly pointer: string; readonly registry: "shape" | "principle" };
+
+interface CapabilityApplicability {
+  readonly selector: PackSelector;
+  readonly capability: string;
+}
+```
+
+Pointers use RFC 6901 with `*` as the only extension, matching exactly one array/object segment per
+star. A literal selector matches the scalar at every expanded pointer; an absent selector is legal
+only at a star-free pointer and matches when that property is omitted; `always` owns unconditional
+state-machine/default semantics; `resolved` emits the generated content capability described in
+§2.6. Duplicate selectors are legal only when they select different capabilities.
+
+Requirement derivation is one algorithm: evaluate every selector against the parsed pack, add its
+direct capability, expand `dependsOn` transitively, reject a missing dependency or cycle, resolve
+shape/principle references, then sort the unique `{id, version}` set. The authored `requires` array
+must set-equal that result. The minimum executable fixture includes:
+
+- `/objective/successConditions/*/feature/kind == "outpost"` →
+  `structuralFeature.outpost`, whose dependency is `structuralFeature.pawn_safe_square`;
+- absent `/guard` → `guard.defaults`;
+- `always` → `objective.state_machine`;
+- a shape reference → the exact generated `shape.<id>` capability.
+
+Removing the helper dependency under-stamps and fails; adding `isolated_pawn` to the example
+over-stamps and fails. That pair is the non-vacuous criterion-3 control required by [[D1620]].
 
 ### §3. The capability enumeration
 
@@ -216,7 +317,78 @@ remedy and it is the only part of the contract that reaches outside pack bytes.
 **Unit: one declaration per capability subject. Total at landing: the census below, asserted by
 criterion 4.**
 
-#### §3.1 The census is DERIVED by a procedure, never hand-counted
+#### §3.1 The census is derived from checked roots, never inferred from syntax alone
+
+The census has four independently checked authorities. A declaration is not one of them; it must
+set-equal their union.
+
+1. **Pack schema vocabularies.** Every `enum` and every discriminated `oneOf` beneath the pack
+   schema must carry exactly one of `x-tabiya-capability` or
+   `x-tabiya-capability-excluded`. The former records a stable `sourceIdentity` equal to its JSON
+   Pointer plus member/discriminant value; the latter requires a reason and ledger row. An
+   unannotated closed vocabulary fails before declarations are compared.
+2. **Interpreter sites.** The implementation owns a literal `PACK_INTERPRETER_ROOTS` list of the
+   pack-evaluation modules named by §3a-bis of `planning/platform-alignment/f3-derivation.md`.
+   Every exhaustive arm in those roots carries `@tabiya-capability-interpreter <sourceIdentity>`.
+   An annotated identity absent from the schema/named roots is an orphan; a schema identity with no
+   interpreter is either a typed `refused` declaration or a census failure.
+3. **Named evaluators and tables.** These are literal normative rows below, not a count copied from
+   planning. Each row declares its exact AST sites.
+4. **F1 projections.** Core projections are absorbed from the compiled F1 manifest by structured
+   `{id, version}` reference. Pack requirements may select only projections bound to
+   `authoring.predicate`, `runtime.objective_condition`, or `runtime.guard_condition`; the rest
+   remain capabilities but cannot appear in a pack stamp.
+
+Schema `sourceIdentity` is canonical JCS over `{schemaPointer, member}`. Capability ids are a
+separate stable public name mapped one-to-one from that identity. Therefore swapping two public ids
+without swapping their source identities fails with `CAPABILITY_IDENTITY_MISMATCH`, even when the
+cardinality is unchanged. The census separately diagnoses `SCHEMA_CAPABILITY_UNANNOTATED`,
+`CAPABILITY_INTERPRETER_ORPHAN`, `CAPABILITY_NAMED_ROOT_MISSING`,
+`CAPABILITY_DECLARATION_EXTRA`, and `CAPABILITY_IDENTITY_MISMATCH`.
+
+**Literal named evaluator roots (13):**
+
+| capability id | evaluator/site authority |
+|---|---|
+| `grade.move_quality` | `moveQualityGrade`, `classFromThresholds` |
+| `objective.state_machine` | `evaluateObjective`, `transitionObjective` |
+| `objective.transition_legality` | `assertObjectiveTransition` and its transition table |
+| `outcome.terminal` | `terminalOutcome` |
+| `tempo.window` | `evaluateWindow` |
+| `tempo.unauthored_default` | `UNAUTHORED_TEMPO_DEFAULTS` and its consumer |
+| `line.membership` | `lineMembership` |
+| `trajectory.verdict` | `trajectoryVerdict` |
+| `branch.decidedness` | `branchDecidedness` |
+| `guard.immediate` | `applyRulesGuard`, `applyRecordedEngineGuard` |
+| `reasoning.key_point_match` | `matchKeyPoints` |
+| `claim.earning` | `projectAuthoredFeedback` and `MACHINE_LABEL_EVIDENCE_KINDS` |
+| `opponent.selection` | the opponent-selection dispatch and ordering basis |
+
+**Literal constant-table roots (16):**
+
+| capability id | table/site authority |
+|---|---|
+| `grade.thresholds` | `GRADE_CONVENTION.constants` |
+| `material.objective_values` | `MATERIAL_VALUES` |
+| `exchange.piece_values` | `EXCHANGE_PIECE_VALUES` |
+| `pressure_line.role_scale` | the registered pressure-line convention text |
+| `guard.material_trigger` | rules-guard material threshold |
+| `guard.defaults` | `guard-conditions.ts` defaults |
+| `tablebase.category_rank` | `CATEGORY_RANK` |
+| `branch.category_rank` | branch-scale `RANK` |
+| `deviation.cost_tolerance` | deviation equality/range constants |
+| `phase.bands` | phase thresholds |
+| `mate_proof.node_cap` | `MATE_PROOF_NODE_CAP` |
+| `rating.glicko2` | `GLICKO2_CONSTANTS` |
+| `rating.opponent_calibration` | `RATED_OPPONENT_CALIBRATION` |
+| `opponent.neutral_tiebreak` | `neutralTiebreakKey` inputs |
+| `opponent.practical_slice` | practical-resistance candidate limit |
+| `selection.semantic_policy` | the registered R2 selection constants |
+
+The following historical arithmetic is retained only as derivation history and landing-tripwire
+input. It is not the normative enumeration procedure.
+
+#### §3.1a Historical derivation and baseline
 
 **This section was returned by cross-review and is rewritten.** The drafted census was a hand-count
 that both **omitted** and **double-counted**, and asserting its integer made criterion 4 satisfiable
@@ -232,7 +404,7 @@ assertion is not a closure argument.
 | 1 | **Closed vocabularies** | every closed union or enum a pack can author, **including nested value vocabularies**, each a distinct subject | the schema's **52 `$defs`** (`schemas/drill_pack.schema.json`) joined to `packages/schema/src/drill-pack/types.ts` |
 | 2 | **Exhaustive switches** | every `switch` whose default asserts `never` interprets a vocabulary; each is a *site*, and a vocabulary with no declaration is a census failure | the tree's `never` exhaustiveness checks |
 | 3 | **Named evaluators without a vocabulary** | verdict producers, prose conventions, constant tables — meaning that is not a union | §3e (13), the two convention tables (13), §3f (16) |
-| 4 | **Manifest projections** | absorbed **by reference**; they already carry `{id, version}` | `make evidence-manifest-check` (188 at HEAD) |
+| 4 | **Manifest projections** | absorbed **by reference**; they already carry `{id, version}` | `make evidence-manifest-check` (**193** core at the 2026-08-28 amendment) |
 
 **The unit, stated because the drafted census mixed two of them silently:** one declaration per
 **capability subject**, where a nested value vocabulary is its own subject. `successCondition`'s
@@ -265,7 +437,7 @@ hand-summed:
 | Constant tables (§3f) | **16** | was 17 — §3f has 16 rows |
 | `claim.binding` (§4.4) | **+1** | required by §4.4 and absent from the drafted census; see below |
 | **Primary total** | **206** | was "191" |
-| Manifest projections | 188 | by reference, unchanged |
+| Core-manifest projections | **193** | by reference; re-derived 2026-08-28 |
 
 **`claim.binding` is a registered capability** (a `verdict_producer` subject, `sourcing/claim-binding.ts`),
 which is what makes §4.4's declaration legal: §4.3's `unmet = pack.requires \ runtimeSupported`
@@ -274,9 +446,16 @@ would have been refused by the draft's own handshake. Registering it does not "b
 because **no hand-count is asserted any more** — this is the third blocker the procedure dissolves
 rather than patches.
 
-The 188 manifest projections **already carry `{id, version}` records** and are absorbed by reference:
+The core manifest's **193** projections at the 2026-08-28 amendment already carry `{id, version}`
+records and are absorbed by reference:
 §2.1's parse rule adopts them without rewriting them, and criterion 5 removes the literal that pins
 them.
+
+The executable amendment baseline is `37/193/25/210 core` and `67/67/15/1 semantic`, produced by
+`make evidence-manifest-check` on 2026-08-28. These are separate producer/projection/consumer/binding
+and event/projection/consumer/provider counts; none is the subject-census size or pack-requirement
+scope. The implementation records the command output as one tripwire artifact rather than copying
+the totals into another register.
 
 **Scope decision, stated rather than assumed.** Three of the manifest's 25 consumers decide pack
 meaning at runtime — `authoring.predicate` (`evidence-catalog.ts:860`),
@@ -320,29 +499,35 @@ speed; this paragraph exists so no later reader mistakes it for an oversight.
 whole registry** — `{id, version, disposition}` for every declaration whose capability this
 deployment actually carries.
 
-**This was a return-class contradiction and is now resolved.** The drafted criterion 8 required the
-response to *set-equal the registry* while criterion 16 and §5.1's [[D509]] rule require an
-`unsupported` capability to be **absent** from it. Both cannot hold: **every deployment carries at
-least one unsupported capability** — `FORMAT_DISPOSITIONS` ships **5** `refused` rows including
-`plan_defense` and `human_external` (`dispositions.ts:25,31`), and `ENGINE_MODE=mock` drops the
-providers, which is the literal D509 case §5.1 cites as its own precedent.
+**The rule, normative:** `packCapabilities` publishes configured declarations whose semantic
+disposition is `active` or `deprecated`. Each row includes its current deployment reachability:
+`supported` or, for a configured provider only, `temporarily_unavailable`. A capability that is
+not configured is `unsupported` for this deployment and is absent. A semantic `refused`,
+`withdrawn`, `unmeasured` or `impossible` declaration is also absent. The current format register
+maps **7 reached / 3 refused / 1 retired / 1 unmeasured** into that semantic axis; those values are
+not deployment states.
 
-**The rule, normative:** `packCapabilities` = the registry's `reached` ∪ `temporarily_unavailable`
-rows. `unsupported`, `refused`, `withdrawn` and `deprecated`-without-a-reached-successor are
-**absent**. This is not a weakening — it is what makes §4.3's `unmet = pack.requires \
-runtimeSupported` compute the right thing with no extra field, which §5.1 already asserted and
-criterion 8 contradicted. Publishing the whole registry is now the *named wrong implementation*,
-because it makes `unmet` empty for a capability the operator never deployed.
+At registration, `runtimeSupported` means the configured active/deprecated identity set; transient
+provider health does not remove an identity from it. At operation time, the same published row's
+reachability determines whether execution proceeds or returns the typed retryable failure in
+§5.1. Publishing the whole semantic registry remains the named wrong implementation because it
+makes an unconfigured/refused capability appear satisfiable.
 
 `FORMAT_DISPOSITIONS`' own comment (`packages/schema/src/drill-pack/dispositions.ts:21`) says it is
 *"deliberately not part of the deployment capabilities payload"* — which is exactly why no pack can
-be checked against it today. This publication is the fix; `FORMAT_DISPOSITIONS` is absorbed as the
-`vocabulary_arm` subset (criterion 8).
+be checked against it today. This publication is the fix, but the rows do not acquire one false
+subject kind. `/opponentPolicy/mode` values are `vocabulary_arm`; `/retryVariants` is a
+`vocabulary_arm`; `/legs/*/opponentPolicy` and `/legs/*/shapes` are resolved-reference/evaluator
+capabilities; `assistance:arrows` is an assistance-surface capability; and
+`error:SIMULATE_BUDGET_EXCEEDED` is a retired error-contract capability. A literal mapping table in
+the registry covers all 12 rows and criterion 8 rejects the shortcut that labels every row
+`vocabulary_arm`.
 
 #### §4.3 The handshake
 
 Modelled on `assertOpponentModeDispositions` (`dispositions.ts:104-122`) — the one place the repo
-already refuses a declared-but-unexecutable capability correctly, generalised from 7 values to 191.
+already refuses a declared-but-unexecutable capability correctly, generalised to the derived
+pack-requirement projection rather than to a hand-copied registry cardinality.
 Its four invariants become module-load `TypeError`s here too:
 
 | Invariant | Error code |
@@ -448,13 +633,41 @@ records-only edit churn the pack digest.
 ### §5. Deprecation: successor or explicit refusal
 
 ```ts
-export type CapabilityDisposition =
-  | { readonly kind: "reached" }
+export type SemanticDisposition =
+  | { readonly kind: "active" }
   | { readonly kind: "deprecated"; readonly successor: CapabilityId; readonly reason: string }
   | { readonly kind: "withdrawn"; readonly reason: string; readonly removedAt: string }
   | { readonly kind: "refused"; readonly reason: string; readonly ruledBy: string }
-  | { readonly kind: "unmeasured"; readonly experiment: string };
+  | { readonly kind: "unmeasured"; readonly experiment: string }
+  | { readonly kind: "impossible"; readonly reason: string };
+
+export type DeploymentReachability =
+  | { readonly kind: "supported" }
+  | { readonly kind: "unsupported" }
+  | { readonly kind: "temporarily_unavailable"; readonly providerId: string; readonly retryAfterMs?: number };
+
+export interface CapabilityDeploymentBinding {
+  readonly capability: CapabilityId;
+  readonly availability: "local" | "recorded" | "provider" | "build_time";
+  readonly configured: boolean;
+  readonly providerId?: string;
+}
 ```
+
+The projection from shipped vocabulary is total and checked:
+
+| shipped disposition | semantic disposition |
+|---|---|
+| `reached` | `active` |
+| `retired` | `withdrawn` |
+| `refused` | `refused` |
+| `unmeasured` | `unmeasured` |
+| `impossible` | `impossible` |
+
+`unsupported` and `temporarily_unavailable` are never semantic dispositions. The first is derived
+from `configured: false`; the second is computed only for a configured `provider` binding whose
+health probe/request failed. A local, recorded or build-time binding entering the transient state is
+a module-load error.
 
 Three things this fixes.
 
@@ -530,6 +743,15 @@ right thing with no new field.
   wrongly unavailable for the process's lifetime. It is a per-request condition on the 503 arm,
   retryable, and the run survives it.
 
+The operation boundary is shared and typed. Before an operation appends any run event or mutates
+run state, `requireCapabilities(operationId, requiredIds)` reads the current deployment projection.
+A transient miss returns HTTP 503 with
+`{code:"PACK_CAPABILITY_TEMPORARILY_UNAVAILABLE", operationId, capabilities, retryable:true,
+retryAfterMs?}`. It appends no event, advances no cursor/revision and preserves the idempotency key,
+so retry after provider recovery continues the same run. Boot without a configured provider takes
+the static 422/listing-exclusion path instead. Criteria cover boot absence, death after
+registration, recovery in-process, and the impossible local/build-time transient.
+
 **Gate F clause 5 — what it now needs, stated because it was blocked on this question.** Clause 5
 (*"pack capabilities and deprecations have a compatibility policy"*) is **unblocked**: the policy is
 §5's disposition union plus this section's two states. It is tickable when the disposition union,
@@ -600,20 +822,11 @@ exhaustively with **no property filter**:
 neither is resolved through by a pack's meaning, so neither can carry a capability requirement.
 Criterion 12 bakes all six counts into the tripwire.
 
-### §8. Ledger-row lifecycle mapping
+### §8. Lifecycle effects are checked discharges
 
-Rows this RFC's implementation flips or feeds, kept here rather than in Discharges because that
-table's owner column is a closed vocabulary:
-
-| Row | Disposition at implementation |
-|---|---|
-| [[D576]] | closed — the derived-vs-stamped fork is ruled ([[D1058]]) and specified in §4.1 |
-| [[D632]] | closed — §6's plan produces its three predicate-bearing documents as judgement debt (criterion 13) |
-| [[D1003]] | closed — §7 defines the clause-6 population |
-| [[D1004]] | closed — §2.1 gives one spelling with version as data |
-| [[D1045]] | closed — §5's `refused` requires `ruledBy` |
-| [[D1002]] | already closed by codex at `rest.ts:662`; §4.3 cites it |
-| [[D228]] | fed — `CAPABILITY_DISPOSITIONS` and `FORMAT_DISPOSITIONS` reconciled by §4.2 |
+The former prose-only row mapping is withdrawn. D5–D11 in the Discharges register below own every
+implementation effect with a literal ledger row and landing record; `verify-draft` checks that
+register. There is no second lifecycle table.
 
 ## Deviations from design
 
@@ -636,36 +849,33 @@ can fail is the [[D444]] class and one nothing can satisfy is the [[D984]] class
 2. **The registry is closed and total.** `CAPABILITY_DECLARATIONS` compiles; the four §4.3
    invariants throw at module load. Fixture: a registry with a `reached` row lacking `sites` fails
    with `CAPABILITY_SITE_MISSING`.
-3. **Declared equals derived.** For all 92 packs, the `requires` array equals the set derived from
-   the vocabulary the pack actually uses, closed over §2.6's resolved entries. Fixture: a pack
-   declaring one capability it does not use fails; a pack using one it does not declare fails.
-4. **The census is DERIVED, not asserted as an integer (§3.1).** `make capability-census` enumerates
-   subjects from the four roots, and `CAPABILITY_DECLARATIONS` **set-equals its output** — id set,
-   not just cardinality. A separate baked baseline reddens when the derived count drifts, and the
-   baseline is produced by *running* the procedure, never hand-summed. *Wrong implementation that
-   passes a count but fails this:* one hand-maintaining a list that happens to total the baseline.
-   *What the returned draft did:* asserted `89+60+13+12+17=191`, of which **four terms were wrong**
-   (§3a is 90, §3a-ter is 62, conventions are 13, constant tables are 16) and which **omitted
-   `SimpleTrigger` and `TransitionExpression` while double-counting nothing it declared** — so the
-   criterion was satisfiable *only* by an implementation that dropped a convention. Fixture: adding a
-   `$defs` union with no declaration fails; adding a declaration with no enumerable subject fails.
-5. **No version literal survives in an assertion.** A tree-wide check finds zero occurrences of a
-   hardcoded `@1`/`@v1` suffix inside a test or checker assertion, including
-   `evidence-manifest-check.ts:70`. Red at HEAD; green only when the literal is replaced by data.
+3. **Declared equals applicable closure.** For all 92 packs, `requires` set-equals §2.7's selector
+   result plus transitive dependencies and resolved entries. The outpost/default fixture derives
+   exactly `guard.defaults`, `objective.state_machine`, `structuralFeature.outpost` and
+   `structuralFeature.pawn_safe_square`; omitting the helper and adding unrelated
+   `structuralFeature.isolated_pawn` fail with distinct under/over-declaration diagnostics.
+4. **The census has independent roots (§3.1).** `make capability-census` rejects an unannotated
+   schema union, orphan interpreter, missing named evaluator, extra declaration and
+   count-preserving swapped public ids with the five named error codes. It set-equals identities,
+   not cardinality. The 13 evaluator and 16 table rows in §3.1 are executable inputs, not prose
+   counts. A separately generated baseline reddens on movement.
+5. **Version literals have a typed boundary (§2.1a).** A current authority initialized from
+   `"x@1"` fails; `legacyCapabilityFixture("x@1")` parses and passes; an unrelated exact schema
+   string such as `tabiya.sourcing.evidence.v1` passes. The check uses TypeScript contextual types
+   and call identity, not a tree-wide grep. Existing wire artifacts remain readable and new
+   capability writers emit structured data.
 6. **Site completeness.** Every capability whose vocabulary has two interpretation sites declares
    both. Fixture: removing the evidence-ref site from `SuccessCondition`'s declaration fails.
 7. **Requirement scope.** A pack's derived requirement set draws only from the three
    pack-meaning consumers; a projection outside them can never appear in a `requires` array.
    Fixture in both directions.
-8. **`FORMAT_DISPOSITIONS` is absorbed, and `packCapabilities` publishes the SUPPORTED projection
-   (§4.2).** All 12 rows appear as `vocabulary_arm` declarations, and `GET /capabilities` returns
-   `packCapabilities` = the registry's `reached` ∪ `temporarily_unavailable` rows — **not the whole
-   registry**. *Wrong implementations, both named:* publishing an empty array; and publishing every
-   declaration including `unsupported`/`refused`, which makes §4.3's `unmet` set compute empty for a
-   capability the operator never deployed and silently admits a pack this deployment cannot serve.
-   Fixture: with `plan_defense` `refused`, it is absent from `packCapabilities` and a pack requiring
-   it is refused. *(This criterion contradicted criterion 16 in the returned draft — both are now
-   the same rule stated once in §4.2.)*
+8. **Semantic and deployment state do not alias (§4.2/§5).** All 12 `FORMAT_DISPOSITIONS` rows and
+   every `CAPABILITY_DISPOSITIONS` row map through the total table in §5, retaining `retired` and
+   `impossible`. `GET /capabilities` publishes configured `active`/`deprecated` rows with a separate
+   `supported`/`temporarily_unavailable` reachability. An unconfigured capability is absent and a
+   refused capability cannot be made supported by provider health. The format-row fixture also
+   proves assistance, error and resolved-reference rows retain their actual subject kinds instead
+   of being coerced to `vocabulary_arm`.
 9. **Every `deprecated` successor resolves.** Fixture: a successor pointing at a `withdrawn`
    capability fails.
 10. **Every `refused` carries `ruledBy`.** Fixture: a refusal with no `ruledBy` fails; one whose
@@ -710,18 +920,27 @@ can fail is the [[D444]] class and one nothing can satisfy is the [[D984]] class
     *Wrong implementation that passes criteria 1–15 and fails this:* one resolving both states at
     registration, which makes a pack permanently unavailable for the process lifetime because a
     provider was down for two minutes — the precise flexibility the ruling exists to preserve.
-17. **Instruments stay green.** `make verify` passes with `migration-plan-check` and
-    `capability-check` wired in.
+17. **Instruments stay green.** `make verify` passes with `migration-plan-check`,
+    `capability-census` and `capability-check` wired in; CI invokes the same Make targets.
 
 ## Discharges
 
 | id | the obligation | owner | recorded when discharged | discharged |
 |---|---|---|---|---|
 | D1 | Open question 1 — what a capability refusal *does*. **Reframed and ruled by [[D1077]]** 2026-08-23: the question is not what we do to the pack but *why the capability is missing*, and there are exactly two causes (§5.1). Gate F clause 5 is **unblocked** | OWNER | the ruling's landing commit | **discharged 2026-08-23 — [[D1077]], `cc98fcb`** |
-| D2 | The sacrificial pilot must exercise every **required** 1.0 capability (O6.1 clause 6). This RFC specifies what "required" means (§3's scope decision); membership is F7's | claude | the pilot matrix's landing commit | |
-| D3 | Re-stamping all 92 ledger `packDigest` values after the lane-0.30 churn (§4.1) — rides the graduation arm, which [[D949]] holds until Gate F | codex | the implementing commit | |
-| D4 | `EVIDENCE_KINDS` has no version axis (7 members, versioned by membership). Whether capability versions cover evidence kinds or they get their own register | claude | the follow-up RFC's landing commit | |
-| D5 | Implementation | codex | the implementing commit | |
+| D2 | The sacrificial pilot must exercise every **required** 1.0 capability. Membership and proof are owned by the existing F7 node and Phase-8 Gate-F procedure | `planning/platform-alignment/rfc-graph.md` F7 | `planning/platform-alignment/execution-queue.md` Phase 8 proof commit | |
+| D3 | Re-stamp every affected evidence-ledger `packDigest` after lane-0.30 churn; the planner derives the population. [[D949]] holds application until Gate F | codex | the implementing/apply commit | |
+| D4 | `EVIDENCE_KINDS` remains the checked membership register in `rfc/README.md`; it is provenance vocabulary, not evaluator semantics. An evaluator over a kind gets its own capability | `archive/shared-resource-registers.md` | this amendment | **discharged 2026-08-28** |
+| D5 | Implement the registry, census, checks, handshake and planner without applying the corpus plan | codex | the implementing commit | |
+| D6 | Close [[D576]] when declared-vs-derived pack requirements ship | codex | the implementing commit | |
+| D7 | Close [[D632]] when D566 dependants appear as judgement debt | codex | the implementing commit | |
+| D8 | Close [[D1003]] when the no-property-filter migration population ships | codex | the implementing commit | |
+| D9 | Close [[D1004]] when structured capability authority and legacy readers ship | codex | the implementing commit | |
+| D10 | Close [[D1045]] when typed refusals require a resolving `ruledBy` | codex | the implementing commit | |
+| D11 | Reconfirm already-closed [[D1002]] remains on the 422 client-error arm | codex | the implementing commit | |
+| D12 | Feed [[D228]] with the total semantic-disposition mapping and separate reachability projection | codex | the implementing commit | |
+| D13 | Preserve [[D1508]]: draft digest drift remains advisory; any otherwise-graduable stale pair and every published stale pair fail content CI | `graduation-report` / real-content CI | **already implemented under [[D1508]]** | **discharged before this amendment** |
+| D14 | Correct the 0.15 `checkpointInteraction` register from four to three members | codex | this amendment | **discharged 2026-08-28** |
 
 ## Open questions
 
@@ -736,16 +955,13 @@ can fail is the [[D444]] class and one nothing can satisfy is the [[D984]] class
    closing observation is load-bearing and is stated there as the model's completeness argument —
    **there is no third cause.** Discharge D1 is discharged; **Gate F clause 5 is unblocked** (see
    §5.1's closing paragraph for what it now needs).
-2. **Does digest staleness become fatal?** 26 of 68 pack/ledger pairs are stale at HEAD and nothing
-   fails — `EVIDENCE_DIGEST_STALE` is `"warning"` at both emit sites
-   (`apps/server/src/sourcing/check.ts:408,468`) and no path upgrades a warning. This RFC's binding
-   does not depend on it (§4.1 puts the stamp inside the pack digest instead), so the question is
-   deferred rather than answered — but a contract relying on an advisory check should say so, and
-   this one does not rely on it.
-3. **`checkpointInteraction` arity.** The shipped schema has three arms (`intent_capture`,
-   `prediction`, `stated_reasoning`) while `rfc/README.md` 0.15 calls it a *"closed four-kind
-   union"*. §3's census uses the schema. Reconciling the register text is a one-line fix owned by
-   whoever next edits that row.
+2. **RESOLVED by existing [[D1508]] policy.** Draft digest drift remains an authoring warning, while
+   `make graduation-report` withholds stale pairs from graduation and real-content CI fails every
+   published stale pair. This capability contract neither weakens nor duplicates that policy; D13
+   names the existing owner.
+3. **RESOLVED in this amendment.** `rfc/README.md` 0.15 now matches the shipped three-member
+   `checkpointInteraction` union (`intent_capture`, `prediction`, `stated_reasoning`); D14 records
+   the correction.
 
 ## Ledger rows
 
@@ -780,6 +996,18 @@ longer manufacture a route for an unrelated landed row).
 
 ## Changelog
 
+- 2026-08-28 (**seven-blocker independent-return amendment**): [[D1620]]–[[D1622]] now have an
+  executable 7-arm disposable falsifier behind `make pack-capability-closure`: literal/absence
+  selectors and dependency closure derive exact requirements; AST-token symbol/arm sites catch the
+  helper-only D566 change at exact grain; and semantic status cannot alias deployment reachability.
+  [[D1623]] gains annotated schema/interpreter roots, literal 13-evaluator/16-table inventories and
+  five distinct negative census controls. [[D1624]] is re-derived at `37/193/25/210 core`,
+  `67/67/15/1 semantic`, and format `7 reached / 3 refused / 1 retired / 1 unmeasured`.
+  [[D1625]] now bans suffix strings only at typed current-authority sites while preserving named
+  compatibility fixtures and unrelated artifact-schema ids. [[D1626]] now points F7, evidence-kind
+  membership and digest freshness at existing authorities; all seven ledger effects are checked
+  Discharges, and the anonymous checkpoint correction landed in the register. Repeat independent
+  buildability review remains required; no production or corpus implementation is authorised.
 - 2026-08-23 (**six-blocker repair**, post-return): (1) **§3.1 replaces the hand-counted census with
   `make capability-census`, a derivation procedure** over the schema's 52 `$defs`, the tree's
   exhaustive `never` switches, the named evaluators without a vocabulary, and the manifest by
@@ -790,9 +1018,10 @@ longer manufacture a route for an unrelated landed row).
   registered** so §4.3's handshake stops refusing every sidecar that names it. (2) **Counts corrected
   at source**: §3a **90**, §3a-ter **62**, conventions **13** (`BREADTH_CONVENTION_TEXT` is 8
   entries), constant tables **16**; primary total **206**. Summary and §2.4 updated to match. (3)
-  **§4.2 publishes the supported projection** (`reached` ∪ `temporarily_unavailable`), resolving the
-  criterion-8/16 contradiction — verified premise: 5 `refused` rows ship, so every deployment carries
-  an unsupported capability. (4) **§4.4 rewritten onto `claim-semantic-anchors` §7's per-binding
+  **§4.2 publishes the supported projection** (that repair's reached/transient formulation), resolving
+  the criterion-8/16 contradiction. The repair's copied claim of **5** refused format rows was later
+  corrected by the 2026-08-28 amendment to the executable **3**. (4) **§4.4 rewritten onto
+  `claim-semantic-anchors` §7's per-binding
   `contract` grammar**; the root-level `requires` form is withdrawn because §7's Stage A keeps a
   legacy binding inside a file the V2 parser also reads, which a per-document declaration cannot
   express; `SIDECAR_CAPABILITY_UNSUPPORTED` is withdrawn so the seam has one refusal code and it is

@@ -118,7 +118,7 @@ for one decision point. **Admission** (eligibility) is semantic and precedes **s
 
 ### §1 — The module contract schema
 
-Every module in §4 declares all thirteen fields. A module missing a field is a spec bug, not a
+Every module in §4 declares all fourteen fields. A module missing a field is a spec bug, not a
 licence to invent. The schema lands as `ModuleDeclaration` in
 `packages/runtime/src/evidence-catalog.ts`, frozen and digest-contributing (§6).
 
@@ -900,7 +900,7 @@ Every criterion can fail (D444/D451/D522); fixtures name their negative arms. Co
 unit and total and match the tables they verify.
 
 1. **A1 — Registry completeness.** All 11 module ids (unit: module id; total 11, §4 caption)
-   exist in `MODULE_DECLARATIONS` with all thirteen §1 fields; `make evidence-manifest-check
+   exist in `MODULE_DECLARATIONS` with all fourteen §1 fields; `make evidence-manifest-check
    semantic-evidence-check` passes; the docs tuple moves in the same change. Negative: a
    twelfth module id, or a module missing `emptyBehavior`, fails compilation.
 2. **A2 — Eligibility rows.** The compiled manifest contains exactly the **179** Appendix-B
@@ -1090,6 +1090,10 @@ this document's to rewrite).
 
 ## Changelog
 
+- 2026-08-28: corrected the two normative thirteen-field residues after the reducer amendment
+  added `noveltyWindow` as field fourteen ([[D1949]]). This changes no product ruling or
+  implementation surface; it makes §1 and A1 agree with the accepted status line, numbered schema
+  and shipped checkpoint type.
 - 2026-08-23: **reducer amendment, clearing codex's buildability return `c4d3c8c`**
   (`planning/learner-modules/implementation-return.md`). The return was correct and the debt was
   the author's: the D906 ruling's three semantic reducers were named and none was defined, and
