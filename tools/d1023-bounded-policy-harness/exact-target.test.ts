@@ -339,6 +339,16 @@ interface Census {
   readonly playedReintroducedExamples: readonly string[];
   readonly playedUniversalExamples: readonly string[];
   readonly providerPairs: readonly ProviderPair[];
+  readonly timing: {
+    readonly coldMs: number;
+    readonly callP95Ms: number;
+    readonly callMaxMs: number;
+    readonly measuredCalls: number;
+    readonly warmP95Ms: number;
+    readonly warmMaxMs: number;
+    readonly measuredDecisions: number;
+    readonly maxTargetCandidatePairs: number;
+  };
 }
 
 interface ProviderPair {
@@ -448,16 +458,23 @@ function census(rows: readonly ResearchRow[]): Census {
   const providerPairs: ProviderPair[] = [];
   const playedBounded = emptyBoundedCounts();
   const alternativeBounded = emptyBoundedCounts();
+  const decisionDurations: number[] = [];
+  const callDurations: number[] = [];
+  const targetCandidatePairs: number[] = [];
   let decisionsWithTargets = 0, targetCount = 0;
   for (const row of rows) {
     const targets = materialTargets(row.parentFen);
     if (targets.length === 0) continue;
+    const decisionStarted = performance.now();
     decisionsWithTargets += 1;
     targetCount += targets.length;
     const alternativeRows = legalOutcomes(row.parentFen).filter((candidate) => candidate.fen !== row.fen);
+    targetCandidatePairs.push(targets.length * (1 + alternativeRows.length));
     for (const named of targets) {
       const playedResult = immediateAnalysis(row.parentFen, row.uci, named);
+      const playedStarted = performance.now();
       const playedHorizon = examine(row.parentFen, row.uci, named);
+      callDurations.push(performance.now() - playedStarted);
       providerPairs.push(providerPair(row, row.uci, row.fen, true, named, playedHorizon));
       recordBounded(playedBounded, playedHorizon);
       if (playedHorizon.reintroducedWithin3Ply && playedReintroducedExamples.length < 12) {
@@ -472,15 +489,45 @@ function census(rows: readonly ResearchRow[]): Census {
       if (playedResult.status === "identity_lost" && identityLostExamples.length < 12) identityLostExamples.push(`${row.id}:${named.baselineMoveUci}->${row.uci}`);
       for (const candidate of alternativeRows) {
         const result = immediateAnalysis(row.parentFen, candidate.uci, named);
+        const alternativeStarted = performance.now();
         const alternativeHorizon = examine(row.parentFen, candidate.uci, named);
+        callDurations.push(performance.now() - alternativeStarted);
         recordBounded(alternativeBounded, alternativeHorizon);
         providerPairs.push(providerPair(row, candidate.uci, candidate.fen, false, named, alternativeHorizon));
         alternatives[result.status] += 1;
         alternativeCauses[result.cause] += 1;
       }
     }
+    decisionDurations.push(performance.now() - decisionStarted);
   }
-  return Object.freeze({ decisions: rows.length, decisionsWithTargets, targets: targetCount, played: Object.freeze(played), alternatives: Object.freeze(alternatives), playedCauses: Object.freeze(playedCauses), alternativeCauses: Object.freeze(alternativeCauses), playedBounded: freezeBounded(playedBounded), alternativeBounded: freezeBounded(alternativeBounded), examples: Object.freeze(examples), identityLostExamples: Object.freeze(identityLostExamples), playedReintroducedExamples: Object.freeze(playedReintroducedExamples), playedUniversalExamples: Object.freeze(playedUniversalExamples), providerPairs: Object.freeze(providerPairs) });
+  const warm = decisionDurations.slice(1).sort((left, right) => left - right);
+  const calls = callDurations.sort((left, right) => left - right);
+  return Object.freeze({
+    decisions: rows.length,
+    decisionsWithTargets,
+    targets: targetCount,
+    played: Object.freeze(played),
+    alternatives: Object.freeze(alternatives),
+    playedCauses: Object.freeze(playedCauses),
+    alternativeCauses: Object.freeze(alternativeCauses),
+    playedBounded: freezeBounded(playedBounded),
+    alternativeBounded: freezeBounded(alternativeBounded),
+    examples: Object.freeze(examples),
+    identityLostExamples: Object.freeze(identityLostExamples),
+    playedReintroducedExamples: Object.freeze(playedReintroducedExamples),
+    playedUniversalExamples: Object.freeze(playedUniversalExamples),
+    providerPairs: Object.freeze(providerPairs),
+    timing: Object.freeze({
+      coldMs: decisionDurations[0] ?? 0,
+      callP95Ms: percentile(calls, 0.95),
+      callMaxMs: calls.at(-1) ?? 0,
+      measuredCalls: calls.length,
+      warmP95Ms: percentile(warm, 0.95),
+      warmMaxMs: warm.at(-1) ?? 0,
+      measuredDecisions: decisionDurations.length,
+      maxTargetCandidatePairs: Math.max(0, ...targetCandidatePairs),
+    }),
+  });
 }
 
 function percent(part: number, total: number): string {
@@ -727,6 +774,7 @@ describe("D1023 exact target identity core", () => {
         `${name} visited positions played p50/p90/p99/max: ${result.playedBounded.visitedP50} / ${result.playedBounded.visitedP90} / ${result.playedBounded.visitedP99} / ${result.playedBounded.visitedMax}; alternatives: ${result.alternativeBounded.visitedP50} / ${result.alternativeBounded.visitedP90} / ${result.alternativeBounded.visitedP99} / ${result.alternativeBounded.visitedMax}.`,
         `${name} played reintroduction examples: ${result.playedReintroducedExamples.join("; ") || "none"}.`,
         `${name} played survives-every-defence examples: ${result.playedUniversalExamples.join("; ") || "none"}.`,
+        `${name} execution timing (call p95/max/count; cold position; warm position p95/max/count; max target×candidate pairs): ${result.timing.callP95Ms.toFixed(2)} ms / ${result.timing.callMaxMs.toFixed(2)} ms / ${result.timing.measuredCalls}; ${result.timing.coldMs.toFixed(2)} ms; ${result.timing.warmP95Ms.toFixed(2)} ms / ${result.timing.warmMaxMs.toFixed(2)} ms / ${result.timing.measuredDecisions}; ${result.timing.maxTargetCandidatePairs}.`,
         "",
       );
       expect(result.decisionsWithTargets).toBeGreaterThan(20);
@@ -734,7 +782,16 @@ describe("D1023 exact target identity core", () => {
       expect(result.alternatives.removed).toBeGreaterThan(0);
       expect(result.playedBounded.budgetExhausted).toBe(0);
       expect(result.alternativeBounded.budgetExhausted).toBe(0);
+      console.info(`bounded-target timing ${name}: call-p95=${result.timing.callP95Ms.toFixed(2)}ms call-max=${result.timing.callMaxMs.toFixed(2)}ms calls=${result.timing.measuredCalls} cold-position=${result.timing.coldMs.toFixed(2)}ms warm-position-p95=${result.timing.warmP95Ms.toFixed(2)}ms warm-position-max=${result.timing.warmMaxMs.toFixed(2)}ms decisions=${result.timing.measuredDecisions} max-target-candidate-pairs=${result.timing.maxTargetCandidatePairs}`);
     }
+    expect(populations.every(({ result }) => result.timing.coldMs < 1_000)).toBe(true);
+    expect(populations.every(({ result }) => result.timing.callP95Ms < 100)).toBe(true);
+    expect(populations.every(({ result }) => result.timing.warmP95Ms < 500)).toBe(true);
+    expect(populations.every(({ result }) => result.timing.callMaxMs < 2_000)).toBe(true);
+    expect(populations.every(({ result }) => result.timing.warmMaxMs < 5_000)).toBe(true);
+    expect(populations.every(({ result }) => result.timing.maxTargetCandidatePairs <= 512)).toBe(true);
+    const syncSafe = populations.every(({ result }) => result.timing.callMaxMs < 250 && result.timing.warmMaxMs < 1_000);
+    expect(syncSafe).toBe(false);
     lines.push("## Pawn-created minor-destination targets", "", "A destination target is the same named bishop/knight and empty square: legal and locally non-losing before a pawn move, still legal but locally losing specifically to the moved pawn after it. Bounded return asks whether that same minor-to-square move becomes locally non-losing again after one opponent preparation and one defender reply.", "", "| population | played candidates / abstained / targets | alternative candidates / abstained / targets | target return played / alternatives | survives every defence played / alternatives |", "|---|---:|---:|---:|---:|");
     const providerPopulations: Readonly<Record<string, unknown>>[] = [];
     for (const { name, rows, result: material } of populations) {

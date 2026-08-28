@@ -10626,3 +10626,20 @@ CI actually run.
   The RFC author amendment now carries the exact named-root inventory and existing lifecycle
   destinations. This is not independent acceptance; lane 0.30 and corpus application remain
   unauthorised pending repeat review.
+
+## 2026-08-28 — Bounded-target repeat return repaired and reclassified background
+
+- Repaired [[D1904]]–[[D1909]] in `rfc/bounded-policy-targets.md` without touching production. The
+  three F1 rows now inherit `declared_convention/convention`; named targets retain the sealed
+  original `legal_moves@1` authority across the threat pass; immediate outcomes and operation
+  evidence/abstention are closed unions; observed attacker/victim captures precede unexplained
+  identity loss; and every normative input uses a literal `DeclaredEvidence<T>` projection alias.
+- Added stable `make bounded-target-contract` and `make bounded-target-census` entry points. The
+  repair contract passes 14/14; the exhaustive census passes 11/11 and writes its execution receipt.
+- The census measured source-position maxima of 111 authored and 333 imported target×candidate
+  pairs. Whole-position maxima were 1,305.12 ms and 993.43 ms; one valid call reached 753.88 ms.
+  This refuses request-thread `sync`: the RFC now declares `local/background`, cancellation, a
+  512-pair ceiling and permanent cold/warm tail gates.
+- Landed `design/research/bounded-target-execution-closure.md` and a fresh repeat-review handoff.
+  The RFC remains draft, and the production-symbol census remains an implementation discharge;
+  no Support, Review, bot, pack, schema or content byte changed.

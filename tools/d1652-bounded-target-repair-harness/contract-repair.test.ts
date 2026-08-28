@@ -4,13 +4,18 @@ import { readFileSync, readdirSync } from "node:fs";
 import { join, relative } from "node:path";
 
 import { describe, expect, it } from "vitest";
+import { Chess } from "chessops/chess";
+import { makeFen, parseFen } from "chessops/fen";
+import { opposite } from "chessops/util";
 
 import {
   EVIDENCE_CONTRACT_DECLARATIONS,
   PRIMARY_EVIDENCE_MANIFEST,
   compileEvidenceManifest,
+  declareExactLegalMovesEvidence,
   declareLegalExchangeEvidence,
   declareThreatEvidence,
+  exactLegalMoveMap,
   exactLegalMoves,
   threats,
   type DeclaredEvidence,
@@ -56,11 +61,57 @@ interface MaiaPolicyRecord {
 
 interface NamedTarget {
   readonly sourceFen: string;
+  readonly passedFen: string;
   readonly attacker: Readonly<{ readonly color: string; readonly role: string; readonly square: string }>;
   readonly victim: Readonly<{ readonly color: string; readonly role: string; readonly square: string }>;
   readonly captureUci: string;
   readonly threat: DeclaredEvidence<unknown>;
   readonly exchange: DeclaredEvidence<unknown>;
+  readonly sourcePosition: DeclaredEvidence<unknown>;
+}
+
+type ImmediateTargetOutcome =
+  | Readonly<{ readonly result: "preserved"; readonly cause: "preserved" }>
+  | Readonly<{ readonly result: "removed"; readonly cause: "attacker_captured" | "target_captured" | "target_moved" | "capture_illegal" | "exchange_neutralized" }>
+  | Readonly<{ readonly result: "identity_lost"; readonly cause: "identity_lost" }>;
+
+type TargetProjectionId =
+  | "derived.bounded_target.named_material_target"
+  | "derived.bounded_target.immediate"
+  | "derived.bounded_target.bounded_return";
+
+type BoundedOperationResult =
+  | Readonly<{ readonly kind: "evidence"; readonly item: DeclaredEvidence<unknown> }>
+  | Readonly<{
+      readonly kind: "abstained";
+      readonly projection: Readonly<{ readonly id: TargetProjectionId; readonly version: 1 }>;
+      readonly reason: "input_abstained" | "position_mismatch" | "target_mismatch" | "candidate_not_legal" | "budget_exhausted";
+      readonly inputDigests: readonly string[];
+      readonly visitedPositions?: number;
+    }>;
+
+function immediateOutcome(result: ImmediateTargetOutcome["result"], cause: ImmediateTargetOutcome["cause"]): ImmediateTargetOutcome {
+  if (result === "preserved" && cause === "preserved") return Object.freeze({ result, cause });
+  if (result === "identity_lost" && cause === "identity_lost") return Object.freeze({ result, cause });
+  if (result === "removed" && ["attacker_captured", "target_captured", "target_moved", "capture_illegal", "exchange_neutralized"].includes(cause)) {
+    return Object.freeze({ result, cause: cause as Extract<ImmediateTargetOutcome, { result: "removed" }>["cause"] });
+  }
+  throw new TypeError("impossible immediate target outcome");
+}
+
+function cappedOperationResult(projection: TargetProjectionId, inputDigests: readonly string[], visitedPositions: number): BoundedOperationResult {
+  return Object.freeze({
+    kind: "abstained",
+    projection: Object.freeze({ id: projection, version: 1 }),
+    reason: "budget_exhausted",
+    inputDigests: Object.freeze([...inputDigests]),
+    visitedPositions,
+  });
+}
+
+function requireProjection<Id extends string>(evidence: DeclaredEvidence<unknown>, id: Id): DeclaredEvidence<unknown> & { readonly projection: { readonly id: Id; readonly version: 1 } } {
+  if (evidence.projection.id !== id || evidence.projection.version !== 1) throw new TypeError(`expected ${id}@1`);
+  return evidence as DeclaredEvidence<unknown> & { readonly projection: { readonly id: Id; readonly version: 1 } };
 }
 
 function digest(value: unknown): string {
@@ -103,9 +154,16 @@ function deriveTargetCategory(raw: StockfishRootRecord, target: NamedTarget, can
   return Object.freeze({ raw, target, candidateUci, category: "neither" });
 }
 
-function namedTarget(threatEvidence: DeclaredEvidence<unknown>, exchangeEvidence: DeclaredEvidence<unknown>): NamedTarget {
-  if (threatEvidence.projection.id !== "rules.tactic.consequence.threat" || exchangeEvidence.projection.id !== "rules.exchange.predicate.legal_exchange") {
-    throw new TypeError("named target requires the registered threat and exchange authorities");
+function passFen(sourceFen: string): string {
+  const position = Chess.fromSetup(parseFen(sourceFen).unwrap()).unwrap();
+  position.turn = opposite(position.turn);
+  position.epSquare = undefined;
+  return makeFen(position.toSetup());
+}
+
+function namedTarget(threatEvidence: DeclaredEvidence<unknown>, exchangeEvidence: DeclaredEvidence<unknown>, sourcePosition: DeclaredEvidence<unknown>): NamedTarget {
+  if (threatEvidence.projection.id !== "rules.tactic.consequence.threat" || exchangeEvidence.projection.id !== "rules.exchange.predicate.legal_exchange" || sourcePosition.projection.id !== "rules.mobility.reading.legal_moves") {
+    throw new TypeError("named target requires the registered threat, exchange and source-position authorities");
   }
   const reading = threatEvidence.payload as ReturnType<typeof threats>;
   if (reading.kind !== "threats") throw new TypeError("abstained threat has no named material target");
@@ -115,13 +173,17 @@ function namedTarget(threatEvidence: DeclaredEvidence<unknown>, exchangeEvidence
     && item.threatenedMove === exchange.captureUci
     && JSON.stringify(item.exchange) === JSON.stringify(exchange));
   if (found?.target === undefined || found.exchange === undefined) throw new TypeError("threat/exchange target identity does not join");
+  const sourceFen = (sourcePosition.payload as ReturnType<typeof exactLegalMoveMap>).fen;
+  if (passFen(sourceFen) !== exchange.beforeFen) throw new TypeError("source position does not produce the retained threat pass position");
   return Object.freeze({
-    sourceFen: exchange.beforeFen,
+    sourceFen,
+    passedFen: exchange.beforeFen,
     attacker: Object.freeze({ ...exchange.capturer }),
     victim: Object.freeze({ ...exchange.captured }),
     captureUci: exchange.captureUci,
     threat: threatEvidence,
     exchange: exchangeEvidence,
+    sourcePosition,
   });
 }
 
@@ -172,30 +234,30 @@ function amendedLocalTargetDeclarations(): EvidenceContractDeclarations {
       ...common,
       id: "derived.bounded_target.named_material_target", version: 1,
       role: "reading", payloadType: "NamedMaterialTarget",
-      semantics: "Exact positive material-capture identity retained from the declared threat and exchange.",
-      operands: Object.freeze(["convention", "passedFen", "attacker", "victim", "captureUci", "threat", "exchange"]),
+      semantics: "Convention-grounded positive material-capture identity retained from threat, exchange and exact source-position evidence.",
+      operands: Object.freeze(["convention", "sourceFen", "passedFen", "attacker", "victim", "captureUci", "threat", "exchange", "sourcePosition"]),
       signs: Object.freeze(["state", "threatened"]),
-      grounding: "position_rules", exactness: "exact",
+      grounding: "declared_convention", exactness: "convention",
       abstention: Object.freeze({ possible: true, reasons: Object.freeze(["input_abstained", "position_mismatch", "target_mismatch", "exchange_mismatch"]) }),
       answerContent: Object.freeze(["fact", "threat"]),
       forms: Object.freeze(["sentence", "list", "lit_squares", "arrows", "piece_halo", "machine_condition"]),
       dependsOn: Object.freeze([]),
-      derivation: Object.freeze({ inputs: Object.freeze([input("rules.tactic.consequence.threat"), input("rules.exchange.predicate.legal_exchange")]) }),
+      derivation: Object.freeze({ inputs: Object.freeze([input("rules.tactic.consequence.threat"), input("rules.exchange.predicate.legal_exchange"), input("rules.mobility.reading.legal_moves")]) }),
       limitations: Object.freeze(["One exact material capture; no intent, quality, plan, force or significance."]),
     }),
     Object.freeze({
       ...common,
       id: "derived.bounded_target.immediate", version: 1,
       role: "event", payloadType: "BoundedTargetImmediate",
-      semantics: "Exact immediate preservation or removal of one named material target after one legal candidate.",
-      operands: Object.freeze(["target", "legalMoves", "candidateUci", "afterFen", "result", "cause"]),
+      semantics: "Convention-grounded immediate preservation or removal of one named material target after one legal candidate.",
+      operands: Object.freeze(["target", "candidateUci", "afterFen", "outcome"]),
       signs: Object.freeze(["preserved", "removed"]),
-      grounding: "position_rules", exactness: "exact",
+      grounding: "declared_convention", exactness: "convention",
       abstention: Object.freeze({ possible: true, reasons: Object.freeze(["input_abstained", "position_mismatch", "candidate_not_legal", "target_mismatch"]) }),
       answerContent: Object.freeze(["fact", "threat"]),
       forms: Object.freeze(["sentence", "timeline_marker", "lit_squares", "arrows", "piece_halo", "machine_condition"]),
       dependsOn: Object.freeze([]),
-      derivation: Object.freeze({ inputs: Object.freeze([input("derived.bounded_target.named_material_target"), input("rules.mobility.reading.legal_moves")]) }),
+      derivation: Object.freeze({ inputs: Object.freeze([input("derived.bounded_target.named_material_target")]) }),
       limitations: Object.freeze(["One candidate and target; no ranking, evaluation, recommendation, intent or significance."]),
     }),
     Object.freeze({
@@ -203,14 +265,14 @@ function amendedLocalTargetDeclarations(): EvidenceContractDeclarations {
       id: "derived.bounded_target.bounded_return", version: 1,
       role: "reading", payloadType: "BoundedTargetReturn",
       semantics: "Separate exists-exists return and exists-for-all-defences survival within the declared three-ply horizon.",
-      operands: Object.freeze(["target", "immediate", "horizonPlies", "visitedPositions", "reintroducedWithin3Ply", "reintroductionWitness", "preparationSurvivesEveryDefence", "everyDefenceWitness", "firstRefutation"]),
+      operands: Object.freeze(["immediate", "horizonPlies", "visitedPositions", "reintroducedWithin3Ply", "reintroductionWitness", "preparationSurvivesEveryDefence", "everyDefenceWitness", "firstRefutation"]),
       signs: Object.freeze(["preserved", "removed", "enabled"]),
       grounding: "declared_convention", exactness: "convention",
       abstention: Object.freeze({ possible: true, reasons: Object.freeze(["input_abstained", "position_mismatch", "target_mismatch", "budget_exhausted"]) }),
       answerContent: Object.freeze(["fact", "threat"]),
       forms: Object.freeze(["sentence", "list", "timeline_marker", "lit_squares", "arrows", "machine_condition"]),
       dependsOn: Object.freeze([]),
-      derivation: Object.freeze({ inputs: Object.freeze([input("derived.bounded_target.named_material_target"), input("derived.bounded_target.immediate"), input("rules.mobility.reading.legal_moves")]) }),
+      derivation: Object.freeze({ inputs: Object.freeze([input("derived.bounded_target.immediate")]) }),
       limitations: Object.freeze(["Horizon is three plies; no strategy or inevitability beyond it."]),
     }),
   ]);
@@ -222,7 +284,7 @@ function amendedLocalTargetDeclarations(): EvidenceContractDeclarations {
       plane: "derived" as const,
       implementation: "packages/runtime/src/bounded-target.ts",
       availability: "local" as const,
-      latency: "sync" as const,
+      latency: "background" as const,
       outputs,
     })]),
   });
@@ -307,7 +369,7 @@ describe("D1652 source and target derivation separation", () => {
     expect(reading.kind).toBe("threats");
     const exchange = reading.kind === "threats" ? reading.threats.find((row) => row.threatenedMove === "a8a1")?.exchange : undefined;
     expect(exchange).toBeDefined();
-    const target = namedTarget(declareThreatEvidence(reading), declareLegalExchangeEvidence(exchange!));
+    const target = namedTarget(declareThreatEvidence(reading), declareLegalExchangeEvidence(exchange!), declareExactLegalMovesEvidence(exactLegalMoveMap(fen)));
     const raw = rawStockfishRecord(rootRecord(START));
     expect(Object.keys(raw)).not.toContain("nextExecution");
     expect(deriveTargetCategory(raw, target, "e2e4")).toMatchObject({ raw, target, candidateUci: "e2e4" });
@@ -344,23 +406,58 @@ describe("D1654 literal F1 confidence and latency", () => {
 });
 
 describe("amended local declaration image", () => {
-  it("rejects the RFC's exact/position-rules widening over convention-grounded inputs", () => {
-    expect(() => compileEvidenceManifest(amendedLocalTargetDeclarations())).toThrow(/derived projection exceeds/u);
+  it("compiles after every derived row inherits the convention-grounded input floor", () => {
+    expect(() => compileEvidenceManifest(amendedLocalTargetDeclarations())).not.toThrow();
   });
 
-  it("shows that the sealed threat retains the passed FEN but not the candidate source FEN", () => {
+  it("closes observed-capture precedence and rejects impossible result/cause pairs", () => {
+    expect(immediateOutcome("preserved", "preserved")).toEqual({ result: "preserved", cause: "preserved" });
+    expect(immediateOutcome("removed", "attacker_captured")).toEqual({ result: "removed", cause: "attacker_captured" });
+    expect(immediateOutcome("removed", "target_captured")).toEqual({ result: "removed", cause: "target_captured" });
+    expect(immediateOutcome("identity_lost", "identity_lost")).toEqual({ result: "identity_lost", cause: "identity_lost" });
+    expect(() => immediateOutcome("identity_lost", "attacker_captured")).toThrow(/impossible/u);
+    expect(() => immediateOutcome("removed", "identity_lost")).toThrow(/impossible/u);
+  });
+
+  it("makes budget exhaustion a closed abstention with no partial facts", () => {
+    const result = cappedOperationResult("derived.bounded_target.bounded_return", ["threat-digest", "candidate-digest"], 25_001);
+    expect(result).toEqual({
+      kind: "abstained",
+      projection: { id: "derived.bounded_target.bounded_return", version: 1 },
+      reason: "budget_exhausted",
+      inputDigests: ["threat-digest", "candidate-digest"],
+      visitedPositions: 25_001,
+    });
+    expect(result).not.toHaveProperty("reintroducedWithin3Ply");
+    expect(result).not.toHaveProperty("preparationSurvivesEveryDefence");
+    expect(result).not.toHaveProperty("reintroductionWitness");
+    expect(result).not.toHaveProperty("firstRefutation");
+  });
+
+  it("rejects a sealed item carrying the wrong projection identity", () => {
+    const sourceFen = "r3k3/8/8/8/8/8/8/Q3K3 w - - 0 1";
+    const reading = threats(sourceFen);
+    expect(requireProjection(declareThreatEvidence(reading), "rules.tactic.consequence.threat").projection.id).toBe("rules.tactic.consequence.threat");
+    expect(() => requireProjection(declareExactLegalMovesEvidence(exactLegalMoveMap(sourceFen)), "rules.tactic.consequence.threat")).toThrow(/expected rules\.tactic/u);
+  });
+
+  it("retains a sealed exact source position and proves its pass-position join", () => {
     const sourceFen = "r3k3/8/8/8/8/8/8/Q3K3 w - - 0 1";
     const reading = threats(sourceFen);
     expect(reading.kind).toBe("threats");
     const exchange = reading.kind === "threats" ? reading.threats.find((row) => row.threatenedMove === "a8a1")?.exchange : undefined;
     expect(exchange).toBeDefined();
-    const target = namedTarget(declareThreatEvidence(reading), declareLegalExchangeEvidence(exchange!));
-    expect(target.sourceFen).not.toBe(sourceFen);
-    expect(target.sourceFen.split(" ")[1]).toBe("b");
+    const target = namedTarget(declareThreatEvidence(reading), declareLegalExchangeEvidence(exchange!), declareExactLegalMovesEvidence(exactLegalMoveMap(sourceFen)));
+    expect(target.sourceFen).toBe(sourceFen);
+    expect(target.sourcePosition.payload).toEqual(exactLegalMoveMap(sourceFen));
+    expect(target.passedFen).not.toBe(sourceFen);
+    expect(target.passedFen.split(" ")[1]).toBe("b");
     expect(sourceFen.split(" ")[1]).toBe("w");
     expect(reading).not.toHaveProperty("fen");
     expect(exactLegalMoves(sourceFen).some((move) => move.uci === "a1a8")).toBe(true);
-    expect(exactLegalMoves(target.sourceFen).some((move) => move.uci === "a1a8")).toBe(false);
+    expect(exactLegalMoves(target.passedFen).some((move) => move.uci === "a1a8")).toBe(false);
+    const wrongSource = "r3k3/8/8/8/8/8/8/Q3K3 w - - 1 2";
+    expect(() => namedTarget(declareThreatEvidence(reading), declareLegalExchangeEvidence(exchange!), declareExactLegalMovesEvidence(exactLegalMoveMap(wrongSource)))).toThrow(/source position/u);
   });
 });
 
@@ -396,10 +493,11 @@ describe("D1657 sealed target joins", () => {
     const reading = threats(fen);
     expect(reading.kind).toBe("threats");
     const matching = reading.kind === "threats" ? reading.threats.find((row) => row.threatenedMove === "a8a1")!.exchange! : undefined;
-    const target = namedTarget(declareThreatEvidence(reading), declareLegalExchangeEvidence(matching!));
+    const source = declareExactLegalMovesEvidence(exactLegalMoveMap(fen));
+    const target = namedTarget(declareThreatEvidence(reading), declareLegalExchangeEvidence(matching!), source);
     expect(target.captureUci).toBe("a8a1");
     const swapped = Object.freeze({ ...matching!, captureUci: "a8b8" });
-    expect(() => namedTarget(declareThreatEvidence(reading), declareLegalExchangeEvidence(swapped))).toThrow(/does not join/u);
+    expect(() => namedTarget(declareThreatEvidence(reading), declareLegalExchangeEvidence(swapped), source)).toThrow(/does not join/u);
   });
 });
 

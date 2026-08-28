@@ -15,5 +15,5 @@ grounding/exactness widening, then exercise the source-FEN versus passed-FEN chr
 Run from the repository root:
 
 ```sh
-pnpm exec vitest run --config tools/d1652-bounded-target-repair-harness/vitest.config.ts
+make bounded-target-contract
 ```

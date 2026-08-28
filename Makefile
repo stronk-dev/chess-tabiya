@@ -9,7 +9,7 @@ CI_NODE := $(if $(wildcard /opt/homebrew/opt/node@24/bin/node),/opt/homebrew/opt
 SF_CMD ?= $(if $(wildcard /opt/homebrew/bin/stockfish),/opt/homebrew/bin/stockfish,$(shell command -v stockfish 2>/dev/null))
 export SF_CMD
 
-.PHONY: setup check typecheck test test-software test-performance test-content test-tier-check docs-check staged-process-contracts-test test-browser test-browser-smoke test-browser-content test-browser-matrix test-browser-ci ci-local schema-check register-check status-parity work-index work-item-check roadmap-receipt roadmap-check intent-parity evidence-manifest-check semantic-evidence-check opening-catalogue opening-catalogue-check account-data-lifecycle-check learner-rating-bracket learner-rating-bracket-check learner-rating-isolation-check graduation-plan graduation-plan-check tactical-collector-measurement breadth-collector-measurement provider-exchange-contract candidate-packet-contract pack-capability-closure build verify-software verify-governance verify-content verify pack-check shape-check expression-census graduation-report graduation-report-update graduation-clear pack-preview source-fetch candidate-emit candidate-attach sourcing-check verify-draft tablebase-walk engine-walk up up-engines down
+.PHONY: setup check typecheck test test-software test-performance test-content test-tier-check docs-check staged-process-contracts-test test-browser test-browser-smoke test-browser-content test-browser-matrix test-browser-ci ci-local schema-check register-check status-parity work-index work-item-check roadmap-receipt roadmap-check intent-parity evidence-manifest-check semantic-evidence-check opening-catalogue opening-catalogue-check account-data-lifecycle-check learner-rating-bracket learner-rating-bracket-check learner-rating-isolation-check graduation-plan graduation-plan-check tactical-collector-measurement breadth-collector-measurement provider-exchange-contract candidate-packet-contract pack-capability-closure bounded-target-contract bounded-target-census build verify-software verify-governance verify-content verify pack-check shape-check expression-census graduation-report graduation-report-update graduation-clear pack-preview source-fetch candidate-emit candidate-attach sourcing-check verify-draft tablebase-walk engine-walk up up-engines down
 
 setup:
 	pnpm install --frozen-lockfile
@@ -139,6 +139,12 @@ candidate-packet-contract:
 
 pack-capability-closure:
 	./node_modules/.bin/vitest run --config tools/d1620-pack-capability-closure/vitest.config.ts
+
+bounded-target-contract:
+	./node_modules/.bin/vitest run --config tools/d1652-bounded-target-repair-harness/vitest.config.ts
+
+bounded-target-census:
+	./node_modules/.bin/vitest run --config tools/d1023-bounded-policy-harness/vitest.config.ts tools/d1023-bounded-policy-harness/exact-target.test.ts
 
 build:
 	pnpm build

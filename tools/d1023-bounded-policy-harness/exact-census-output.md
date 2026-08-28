@@ -15,6 +15,7 @@ authored pack spines alternative bounded: 4870 / 969 / 865 / 9 / 0.
 authored pack spines visited positions played p50/p90/p99/max: 1 / 1470 / 1826 / 1913; alternatives: 1 / 1244 / 1694 / 2029.
 authored pack spines played reintroduction examples: anti-caro-advance-early-c5/nf3-dev:c6e5->g1f3,a7a5,f3d2,c6e5; anti-caro-advance-early-c5/b4-clamp:f8c5->b2b4,a7a5,b4a5,f8c5; anti-caro-advance-early-c5/be3-shield:f8c5->c1e3,a7a5,e3c1,f8c5; anti-italian-center-attack-black/p12-bb4:d4c5->c5b4,b1c3,b4c5,d4c5; anti-kid-classical-white/p14-nc6:d4e5->b8c6,a1b1,c6a5,d4e5; anti-kid-classical-white/p16-ne7:d5c6->c6e7,a1b1,e7c6,d5c6; anti-london-black/p10-e6:d4c5->e7e6,a1b1,c6e7,d4c5; anti-scandinavian-white/p6-qa5:c3d5->d5a5,a1b1,a5a2,c3a2; anti-scandinavian-white/p12-bh5:h3g4->g4h5,a1b1,h5g4,h3g4; anti-scandinavian-white/p14-bg6:g4h5->h5g6,a1b1,g6f5,g4f5; anti-scandinavian-white/p6-qd8:c3d5->d5d8,a1b1,d8d5,c3d5; anti-sicilian-najdorf-english-attack/p9-nc3:f6e4->b1c3,a7a5,c3a4,f6e4.
 authored pack spines played survives-every-defence examples: iqp-black-tarrasch-defence/be6-develop:c3d5->c8e6,d1b3,a7a5,c3d5; iqp-black-tarrasch-defence/be6-develop:g2d5->c8e6,d1b3,a7a5,g2d5.
+authored pack spines execution timing (call p95/max/count; cold position; warm position p95/max/count; max target×candidate pairs): 12.40 ms / 753.88 ms / 5017; 88.19 ms; 367.10 ms / 1305.12 ms / 116; 111.
 
 | sealed imported fixed-ply sample | 183/579 | 255 | 188 / 67 / 0 | 2309 / 6618 / 0 | 73.73% / 25.87% / 2.85x |
 
@@ -27,6 +28,7 @@ sealed imported fixed-ply sample alternative bounded: 8927 / 2309 / 1958 / 29 / 
 sealed imported fixed-ply sample visited positions played p50/p90/p99/max: 59 / 1577 / 2140 / 2185; alternatives: 1 / 1405 / 1979 / 2527.
 sealed imported fixed-ply sample played reintroduction examples: https://lichess.org/pOwXJnoO#24:g4f5->f5e3,a1b1,e3f5,g4f5; https://lichess.org/fd37KgOs#32:g3d6->e8d7,a1b1,d7d8,g3d6; https://lichess.org/50gVKdhE#32:d5c6->c6e5,a1b1,e5c6,d5c6; https://lichess.org/50gVKdhE#48:e1e7->e7g5,a1b1,g5c1,e1c1; https://lichess.org/ty2aVHes#24:a1d1->d1h5,a1b1,h5d1,b1d1; https://lichess.org/ty2aVHes#24:c3d1->d1h5,a1b1,h5d1,c3d1; https://lichess.org/ty2aVHes#24:e1d1->d1h5,a1b1,h5d1,e1d1; https://lichess.org/FLpiXGM1#16:g4h5->h5g6,a1b1,g6f5,g4f5; https://lichess.org/FLpiXGM1#32:g3f5->f5b5,a1b1,b5f5,g3f5; https://lichess.org/TMsn9me9#32:d5a8->a8b8,a1b1,b8a8,d5a8; https://lichess.org/TMsn9me9#40:e6d7->d7b6,a1b1,b6d7,e6d7; https://lichess.org/CmcgG2om#24:b3b7->d5b6,a1a2,b6a4,b3b7.
 sealed imported fixed-ply sample played survives-every-defence examples: none.
+sealed imported fixed-ply sample execution timing (call p95/max/count; cold position; warm position p95/max/count; max target×candidate pairs): 10.26 ms / 158.68 ms / 9182; 133.36 ms; 343.68 ms / 993.43 ms / 183; 333.
 
 ## Pawn-created minor-destination targets
 

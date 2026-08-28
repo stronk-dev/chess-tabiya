@@ -1,6 +1,6 @@
-# RFC: Exact bounded material targets
+# RFC: Convention-grounded bounded material targets
 
-- **Status:** draft — returned on repeat independent buildability review 2026-08-27 on [[D1904]]–[[D1909]]
+- **Status:** draft — amended 2026-08-28 after the repeat [[D1904]]–[[D1909]] return; repeat independent buildability review required. Weakest-input F1 rows, sealed source chronology, closed abstention/output types, observed-capture precedence and typed projection aliases pass `make bounded-target-contract`; measured tails refuse request-thread `sync` and route the full operation to `background`.
 - **Author:** codex, preserving the D1023 research contract and applying `planning/bounded-policy-targets/author-repair-2026-08-26.md`
 - **Created:** 2026-08-23; narrowed 2026-08-27
 - **Exploration gate:** [[D1023]] ✅; executable contract closure in `design/research/bounded-policy-target-contract-closure.md`
@@ -14,7 +14,7 @@ none
 
 ## Summary
 
-This RFC lands the exact, synchronous layer of the bounded-target foundation. It answers three
+This RFC lands the local, bounded-background layer of the bounded-target foundation. It answers three
 questions about one already-declared positive material capture:
 
 1. what exact attacker, victim and capture constitute the target;
@@ -41,9 +41,8 @@ quality verdict.
 ### 1.1 The three-layer boundary
 
 ```text
-threat@1 + legal_exchange@1
+threat@1 + legal_exchange@1 + legal_moves@1(source)
   -> named_material_target@1
-       + legal_moves@1
        -> immediate@1
        -> bounded_return@1
 
@@ -61,84 +60,110 @@ items from which it was computed.
 A named material target is one positive legal capture available to the opponent after the pass
 convention already declared by `rules.tactic.consequence.threat@1`. It is identified by:
 
+- canonical six-field original source FEN and its exact sealed `legal_moves@1` item;
 - canonical six-field passed-position FEN;
 - attacker colour, role, promoted state and square;
 - victim colour, role, promoted state and square;
 - canonical capture UCI under `chessops-king-takes-rook@1`;
-- the exact retained threat and legal-exchange evidence items.
+- the retained threat and legal-exchange evidence items.
 
-The join requires literal equality of the passed-position FEN, attacker, victim, capture identity
-and embedded exchange payload. A cross-position, cross-target or copied payload-shaped substitute
-refuses. The production target is not reconstructed from prose or from a run node id.
+The join requires literal equality of attacker, victim, capture identity and embedded exchange
+payload. It also applies the registered threat pass transform (flip side to move, clear en-passant,
+preserve the other canonical FEN fields) to the sealed source-position FEN and requires exact
+equality with the exchange's passed-position FEN. A cross-position, cross-target or copied
+payload-shaped substitute refuses. The source FEN is never reconstructed from the passed FEN and
+cannot be supplied as an unsealed scalar.
 
 ### 1.3 Candidate authority
 
-`immediate@1` and `bounded_return@1` additionally consume the exact
-`rules.mobility.reading.legal_moves@1` item for the source position. Candidate UCI must be a unique
-member of that item. The adapter computes the child FEN once by playing that canonical identity;
-callers may not supply an after-FEN alongside the move.
+`immediate@1` and `bounded_return@1` consume the same exact source-position authority retained by
+the named target. Candidate UCI must be a unique member of that item. The adapter computes the
+child FEN once by playing that canonical identity; callers may not supply an after-FEN alongside
+the move.
 
 This makes a counterfactual legal move truthful without inventing `run.record.move` or another run
 node. A wrong-FEN legal map, missing candidate, duplicate candidate or caller-supplied child board
 refuses before any bounded enumeration begins.
 
-## 2. Exact local payloads
+## 2. Closed local payloads
 
 ### 2.1 `NamedMaterialTarget`
 
 ```ts
+type ProjectionEvidence<Id extends string, Payload> =
+  DeclaredEvidence<Payload> & {
+    readonly projection: { readonly id: Id; readonly version: 1 };
+  };
+
+type ThreatEvidence = ProjectionEvidence<
+  "rules.tactic.consequence.threat",
+  ThreatResult
+>;
+type LegalExchangeEvidence = ProjectionEvidence<
+  "rules.exchange.predicate.legal_exchange",
+  LegalExchangeResult
+>;
+type SourceLegalMovesEvidence = ProjectionEvidence<
+  "rules.mobility.reading.legal_moves",
+  ExactLegalMoveMap
+>;
+
 interface NamedMaterialTarget {
   readonly convention: "bounded-target@1";
+  readonly sourceFen: string;
   readonly passedFen: string;
   readonly attacker: TrackedPieceIdentity;
   readonly victim: TrackedPieceIdentity;
   readonly captureUci: string;
-  readonly threat: DeclaredEvidenceItem;       // threat@1
-  readonly exchange: DeclaredEvidenceItem;     // legal_exchange@1
+  readonly threat: ThreatEvidence;
+  readonly exchange: LegalExchangeEvidence;
+  readonly sourcePosition: SourceLegalMovesEvidence;
 }
 ```
 
 `TrackedPieceIdentity` contains colour, role, promoted flag and square. It advances through normal
-moves, captures, promotion and chessops rook-square castling. If either tracked piece ceases to be
-the same piece, the later result says `identity_lost`; it never silently retargets another piece on
-the same square.
+moves, captures, promotion and chessops rook-square castling. An observed legal capture of the
+attacker or victim is a known removal cause and takes precedence over identity loss. `identity_lost`
+is reserved for a replacement or mismatch that the exact candidate update cannot explain; it never
+silently retargets another piece on the same square.
 
 ### 2.2 `BoundedTargetImmediate`
 
 ```ts
-type ImmediateTargetCause =
-  | "preserved"
-  | "attacker_captured"
-  | "target_moved"
-  | "capture_illegal"
-  | "exchange_neutralized"
-  | "identity_lost";
+type ImmediateTargetOutcome =
+  | { readonly result: "preserved"; readonly cause: "preserved" }
+  | {
+      readonly result: "removed";
+      readonly cause:
+        | "attacker_captured"
+        | "target_captured"
+        | "target_moved"
+        | "capture_illegal"
+        | "exchange_neutralized";
+    }
+  | { readonly result: "identity_lost"; readonly cause: "identity_lost" };
 
 interface BoundedTargetImmediate {
   readonly target: NamedMaterialTarget;
-  readonly legalMoves: DeclaredEvidenceItem;   // legal_moves@1
   readonly candidateUci: string;
   readonly afterFen: string;
-  readonly result: "removed" | "preserved" | "identity_lost";
-  readonly cause: ImmediateTargetCause;
+  readonly outcome: ImmediateTargetOutcome;
 }
 ```
 
-The result/cause relation is closed:
+The discriminated union makes the result/cause relation closed. Known legal captures are resolved
+before identity comparison: a candidate that captures the tracked attacker is
+`removed/attacker_captured`; one that captures the tracked victim is `removed/target_captured`.
+Only an unexplained replacement or failed identity update is `identity_lost/identity_lost`.
 
-- `preserved` pairs only with `result: "preserved"`;
-- `identity_lost` pairs only with `result: "identity_lost"`;
-- the other four causes pair only with `result: "removed"`.
-
-The adapter retains the named target and legal-move item, so an exact sentence or overlay can point
-back to both source authorities. It does not say the candidate was good, best, intentional or
-prophylactic.
+The adapter retains the named target, which itself retains the exact legal-move authority. A
+sentence or overlay can therefore point back to every source authority without accepting a second
+legal map. It does not say the candidate was good, best, intentional or prophylactic.
 
 ### 2.3 `BoundedTargetReturn`
 
 ```ts
 interface BoundedTargetReturn {
-  readonly target: NamedMaterialTarget;
   readonly immediate: BoundedTargetImmediate;
   readonly horizonPlies: 3;
   readonly visitedPositions: number;
@@ -155,10 +180,11 @@ candidate, opponent preparation, defender reply and available capture. The stron
 the preparation whose target survives every legal defender reply; when false, `firstRefutation`
 retains the first canonical line showing why the candidate preparation fails.
 
-The horizon is exactly three plies after the candidate. Enumeration stops at **25,000 visited
-positions** and emits `budget_exhausted`; a partial traversal never becomes a false `false` result.
-Terminal positions have zero continuations without inventing a reply. A fourth ply is a different
-search and remains outside v1 under [[D1025]].
+The horizon is exactly three plies after the candidate. Enumeration stops before exceeding
+**25,000 visited positions**. At the cap the operation returns the typed `budget_exhausted`
+abstention in §4; it cannot construct or seal this payload, so a partial traversal never becomes a
+false `false` result. Terminal positions have zero continuations without inventing a reply. A
+fourth ply is a different search and remains outside v1 under [[D1025]].
 
 ### 2.4 Direction and significance
 
@@ -179,7 +205,7 @@ the same fields, not a reduced summary.
 | id/version | `derived.bounded_target@1` |
 | plane | `derived` |
 | implementation | `packages/runtime/src/bounded-target.ts` |
-| own availability/latency | `local` / `sync` |
+| own availability/latency | `local` / `background` |
 
 ### 3.2 `derived.bounded_target.named_material_target@1`
 
@@ -187,14 +213,14 @@ the same fields, not a reduced summary.
 |---|---|
 | role / plane | `reading` / `derived` |
 | payloadType | `NamedMaterialTarget` |
-| semantics | exact positive material-capture identity retained from the declared threat and exchange |
-| operands | `convention`, `passedFen`, `attacker`, `victim`, `captureUci`, `threat`, `exchange` |
+| semantics | convention-grounded positive material-capture identity retained from threat, exchange and the exact source-position authority |
+| operands | `convention`, `sourceFen`, `passedFen`, `attacker`, `victim`, `captureUci`, `threat`, `exchange`, `sourcePosition` |
 | signs | `state`, `threatened` |
-| grounding / exactness / confidence | `position_rules` / `exact` / `exact` |
+| grounding / exactness / confidence | `declared_convention` / `convention` / `exact` |
 | answerContent | `fact`, `threat` |
 | forms | `sentence`, `list`, `lit_squares`, `arrows`, `piece_halo`, `machine_condition` |
 | abstention | possible: `input_abstained`, `position_mismatch`, `target_mismatch`, `exchange_mismatch` |
-| derivation inputs | `rules.tactic.consequence.threat@1`, `rules.exchange.predicate.legal_exchange@1` |
+| derivation inputs | `rules.tactic.consequence.threat@1`, `rules.exchange.predicate.legal_exchange@1`, `rules.mobility.reading.legal_moves@1` |
 | limitations | one exact material capture; no intent, quality, plan, force or significance |
 | disposition | `inspector_only` until a named module/Review/bot RFC binds it |
 
@@ -204,14 +230,14 @@ the same fields, not a reduced summary.
 |---|---|
 | role / plane | `event` / `derived` |
 | payloadType | `BoundedTargetImmediate` |
-| semantics | exact immediate preservation/removal of one named material target after one legal candidate |
-| operands | `target`, `legalMoves`, `candidateUci`, `afterFen`, `result`, `cause` |
+| semantics | convention-grounded immediate preservation/removal of one named material target after one legal candidate |
+| operands | `target`, `candidateUci`, `afterFen`, `outcome` |
 | signs | `preserved`, `removed` |
-| grounding / exactness / confidence | `position_rules` / `exact` / `exact` |
+| grounding / exactness / confidence | `declared_convention` / `convention` / `exact` |
 | answerContent | `fact`, `threat` |
 | forms | `sentence`, `timeline_marker`, `lit_squares`, `arrows`, `piece_halo`, `machine_condition` |
 | abstention | possible: `input_abstained`, `position_mismatch`, `candidate_not_legal`, `target_mismatch` |
-| derivation inputs | `derived.bounded_target.named_material_target@1`, `rules.mobility.reading.legal_moves@1` |
+| derivation inputs | `derived.bounded_target.named_material_target@1` |
 | limitations | one candidate and target; no ranking, evaluation, recommendation, intent or significance |
 | disposition | `inspector_only` until a named consumer binds it |
 
@@ -222,48 +248,131 @@ the same fields, not a reduced summary.
 | role / plane | `reading` / `derived` |
 | payloadType | `BoundedTargetReturn` |
 | semantics | separate exists-exists return and exists-for-all-defences survival within the declared three-ply horizon |
-| operands | `target`, `immediate`, `horizonPlies`, `visitedPositions`, `reintroducedWithin3Ply`, `reintroductionWitness`, `preparationSurvivesEveryDefence`, `everyDefenceWitness`, `firstRefutation` |
+| operands | `immediate`, `horizonPlies`, `visitedPositions`, `reintroducedWithin3Ply`, `reintroductionWitness`, `preparationSurvivesEveryDefence`, `everyDefenceWitness`, `firstRefutation` |
 | signs | `preserved`, `removed`, `enabled` |
 | grounding / exactness / confidence | `declared_convention` / `convention` / `exact` |
 | answerContent | `fact`, `threat` |
 | forms | `sentence`, `list`, `timeline_marker`, `lit_squares`, `arrows`, `machine_condition` |
 | abstention | possible: `input_abstained`, `position_mismatch`, `target_mismatch`, `budget_exhausted` |
-| derivation inputs | `derived.bounded_target.named_material_target@1`, `derived.bounded_target.immediate@1`, `rules.mobility.reading.legal_moves@1` |
+| derivation inputs | `derived.bounded_target.immediate@1` |
 | limitations | horizon is three plies; the all-defences fact cannot select a moment; no strategy or inevitability beyond the enumerated horizon |
 | disposition | `inspector_only` until a named consumer binds it |
 
-No declaration has a provider dependency. Provider-effective execution metadata is therefore
-truthfully local/sync for all three projections. The policy-composition RFC will declare separate
-provider-bearing paths rather than making this producer lie about its local facts.
+No declaration has a provider dependency. `local` says where the calculation executes; it does not
+mean cheap. The measured tails in §4.1 require `background` for all three projections. The
+policy-composition RFC will declare separate provider-bearing paths rather than making this
+producer lie about its local facts.
 
 ## 4. Operation and sealing boundary
 
-`BoundedTargetDerivationOperation.derive(request)` is the one production operation. Its request is
-a closed union:
+The literal sealed aliases are:
 
 ```ts
+type NamedMaterialTargetEvidence = ProjectionEvidence<
+  "derived.bounded_target.named_material_target",
+  NamedMaterialTarget
+>;
+type BoundedTargetImmediateEvidence = ProjectionEvidence<
+  "derived.bounded_target.immediate",
+  BoundedTargetImmediate
+>;
+type BoundedTargetReturnEvidence = ProjectionEvidence<
+  "derived.bounded_target.bounded_return",
+  BoundedTargetReturn
+>;
+
 type BoundedTargetDerivationRequest =
   | {
       readonly kind: "named_material_target";
-      readonly threat: DeclaredEvidenceItem;
-      readonly exchange: DeclaredEvidenceItem;
+      readonly threat: ThreatEvidence;
+      readonly exchange: LegalExchangeEvidence;
+      readonly sourcePosition: SourceLegalMovesEvidence;
     }
   | {
-      readonly kind: "immediate" | "bounded_return";
-      readonly target: DeclaredEvidenceItem;
-      readonly legalMoves: DeclaredEvidenceItem;
+      readonly kind: "immediate";
+      readonly target: NamedMaterialTargetEvidence;
       readonly candidateUci: string;
+    }
+  | {
+      readonly kind: "bounded_return";
+      readonly immediate: BoundedTargetImmediateEvidence;
     };
+
+type BoundedTargetProjectionId =
+  | { readonly id: "derived.bounded_target.named_material_target"; readonly version: 1 }
+  | { readonly id: "derived.bounded_target.immediate"; readonly version: 1 }
+  | { readonly id: "derived.bounded_target.bounded_return"; readonly version: 1 };
+
+type BoundedTargetAbstentionReason =
+  | "input_abstained"
+  | "position_mismatch"
+  | "target_mismatch"
+  | "exchange_mismatch"
+  | "candidate_not_legal"
+  | "multiplication_limit"
+  | "budget_exhausted"
+  | "cancelled";
+
+type BoundedTargetDerivationResult =
+  | {
+      readonly kind: "evidence";
+      readonly item:
+        | NamedMaterialTargetEvidence
+        | BoundedTargetImmediateEvidence
+        | BoundedTargetReturnEvidence;
+    }
+  | {
+      readonly kind: "abstained";
+      readonly projection: BoundedTargetProjectionId;
+      readonly reason: BoundedTargetAbstentionReason;
+      readonly inputDigests: readonly string[];
+      readonly candidateUci?: string;
+      readonly visitedPositions?: number;
+    };
+
+interface BoundedTargetDerivationOperation {
+  derive(
+    request: BoundedTargetDerivationRequest,
+    signal: AbortSignal,
+  ): Promise<BoundedTargetDerivationResult>;
+}
 ```
 
 The implementation accepts only compiler-admitted sealed items with the exact projection ids above.
-It returns sealed derived items through the registered adapters. Direct exports may expose pure
-helpers for tests, but application/server callers use the operation; no second adapter may create a
-payload-shaped object and declare it later.
+It returns a sealed derived item or one typed abstention. A `budget_exhausted` result may retain only
+the requested projection, input digests, candidate identity and visited-position count. It contains
+no preservation boolean, witness or refutation, and the adapter refuses to seal
+`bounded_return@1` on that arm. Direct exports may expose pure helpers for tests, but application or
+server callers use the operation; no second adapter may create a payload-shaped object and declare
+it later.
 
 The operation is exported from `packages/runtime/src/index.ts`. Its implementation and declaration
 are included in the generated evidence-operation census. Removing the callable, swapping an input
 projection or returning an unsealed payload fails before any consumer binding exists.
+
+### 4.1 Execution class and multiplication bound
+
+`make bounded-target-census` measures the D1023 algorithm over the fixed authored and imported
+populations. The 2026-08-28 author run measured per-target/candidate p95 at 12.40 ms and 10.26 ms,
+but one legitimate call reached 753.88 ms. Whole-position p95 was 367.10 ms and 343.68 ms, with
+maxima of 1,305.12 ms and 993.43 ms. `[V]`
+(`tools/d1023-bounded-policy-harness/exact-census-output.md`;
+`design/research/bounded-target-execution-closure.md`). This refuses request-thread `sync` even
+though the computation is provider-free.
+
+The production operation is therefore background-only and cancellation-aware. A Support gesture,
+board hover, move commit or HTTP request may consume a completed item but may not run the traversal
+inline. A source-position job admits at most **512 target × candidate pairs**; it returns
+`multiplication_limit` before enumeration when the exact target and legal-candidate authorities
+exceed that bound. Consumers may narrow that set but may not fan it into independent unbounded jobs.
+The permanent census records fixed-population maxima of 111 authored and 333 imported pairs and
+fails if either exceeds 512.
+
+The same census enforces a conservative background envelope: cold position <1,000 ms, per-call p95
+<100 ms, whole-position p95 <500 ms, per-call max <2,000 ms and whole-position max <5,000 ms. It
+also asserts that the fixed populations do **not** satisfy the predeclared request-thread envelope
+(all calls <250 ms and all positions <1,000 ms). If that last assertion changes, the RFC must be
+explicitly reclassified; a stale execution label may not survive a performance improvement.
 
 ## 5. Consumer posture
 
@@ -302,8 +411,8 @@ temporary binding state, not the 1.0 user experience.
 | `packages/runtime/src/evidence-catalog.ts` | one producer and three literal projection declarations/dispositions |
 | `packages/runtime/src/evidence-source-adapters.ts` | exact sealing adapters over the normative operands |
 | `packages/runtime/src/index.ts` | public operation/types export |
-| `tools/bounded-target-census.mjs` | permanent control/census instrument over production symbols |
-| `Makefile` | `bounded-target-census` target |
+| `tools/d1023-bounded-policy-harness/exact-target.test.ts` | permanent control/census instrument, rewritten at implementation to import production symbols |
+| `Makefile` | stable `bounded-target-contract` and `bounded-target-census` targets |
 | `docs/evidence-contract.md`, `docs/semantic-evidence.md` | exact local semantics and refusal boundary |
 
 Tests belong beside the runtime operation and manifest. No server, worker, route, schema, migration,
@@ -317,31 +426,38 @@ pack or Svelte file changes in this RFC.
 2. The literal declaration image in §3 compiles; the producer delta is exactly
    `{derived.bounded_target@1}` and the projection delta exactly the three ids in §3. Bindings do not
    change.
-3. Named-target positives retain the original sealed threat and exchange items. Cross-position,
-   cross-attacker, cross-victim, cross-capture and copy-spread substitutions all fail.
-4. Candidate identity is set-member checked against `legal_moves@1`; wrong-position legal maps,
-   missing candidates and caller-supplied child positions fail.
+3. Named-target positives retain the original sealed threat, exchange and exact source-position
+   items. The pass transform joins that source to the passed FEN; cross-position, cross-attacker,
+   cross-victim, cross-capture and copy-spread substitutions all fail.
+4. Candidate identity is set-member checked against the retained `legal_moves@1`; wrong-position
+   legal maps, missing candidates and caller-supplied child positions fail.
 5. Identity survives ordinary motion, capture, all four promotions and both rook-square castling
-   forms. An identity replacement on the same square returns `identity_lost` rather than retargeting.
-6. The immediate result/cause relation is exhaustive and closed. Every legal combination passes;
-   every impossible pairing fails.
+   forms. Observed attacker/victim captures return their named removal causes before identity
+   comparison; only an unexplained replacement returns `identity_lost`.
+6. `ImmediateTargetOutcome` is an exhaustive discriminated union. Every legal combination passes;
+   every impossible result/cause pairing fails.
 7. Exists-exists and exists-for-all are separate fields with separate witnesses. Replacing them
    with one boolean, exchanging witnesses or omitting the first refutation fails.
-8. A synthetic traversal above 25,000 positions yields only `budget_exhausted`; no partial boolean
-   escapes. Checkmate/stalemate and non-terminal zero-reply fixtures remain distinct.
+8. A synthetic traversal above 25,000 positions yields only the typed `budget_exhausted`
+   abstention; it cannot be sealed as `bounded_return@1`, and no partial boolean, witness or
+   refutation escapes. Checkmate/stalemate and non-terminal zero-reply fixtures remain distinct.
 9. The permanent destination negative reproduces 0/75 and 0/52 all-defences survival, and no
    destination bounded-return projection is registered.
 10. Banned judgement vocabulary is absent from payloads and deterministic renderers. An LLM may
     render only an admitted consumer view and cannot add strategy or move quality.
-11. `BoundedTargetDerivationOperation` is present in the operation census and returns sealed items;
-    removing it or returning a plain payload fails.
+11. The literal aliases and `BoundedTargetDerivationOperation` signature in §4 compile against
+    `DeclaredEvidence<T>`. It is present in the operation census and returns only the closed result
+    union; removing it, swapping an input projection or returning a plain payload fails.
 12. All three projections are disposed `inspector_only` with a named downstream contract; any
     direct Support, Review, drill, bot or longitudinal binding fails this RFC's fixture.
-13. `make bounded-target-census`, runtime typecheck/tests, evidence manifest checks,
-    `make verify-software` and `make verify-governance` pass on committed bytes before implementation
-    closeout.
+13. `make bounded-target-contract`, `make bounded-target-census`, runtime typecheck/tests, evidence
+    manifest checks, `make verify-software` and `make verify-governance` pass on committed bytes
+    before implementation closeout.
 14. Closeout flips only rows shipped by this local layer and appends the exploration log in the same
     commit. D1652–D1656/D1658 remain owned by the provider/composition layers until those land.
+15. The production-symbol census enforces the §4.1 background envelope and 512-pair ceiling. A
+    request-thread call path, a fixed-population multiplication above 512, an unhandled cancellation,
+    or a fixed population newly satisfying the predeclared sync envelope fails informatively.
 
 ## Discharges
 
@@ -373,15 +489,21 @@ learner preset exposes them are consumer decisions and do not change the exact p
 
 | finding | blocker | repair owner |
 |---|---|---|
-| [[D1904]] | literal F1 grounding/exactness image widens over convention inputs | amend §3 and compile the exact image |
-| [[D1905]] | original source FEN is absent after the threat pass convention | amend source authority and §§1.2–1.3 |
-| [[D1906]] | capped traversal has no closed evidence/abstention return | amend §§2.3 and 4 |
-| [[D1907]] | captured-attacker result conflicts with identity-loss prose | amend §§2.1–2.2 and criterion 6 |
-| [[D1908]] | normative evidence item type does not exist | publish literal generic request/result types in §4 |
-| [[D1909]] | local/sync bounded traversal has no measured cost gate | add production latency/multiplication criterion |
+| [[D1904]] | literal F1 grounding/exactness image widens over convention inputs | repaired: all three rows inherit `declared_convention/convention`; literal image compiles |
+| [[D1905]] | original source FEN is absent after the threat pass convention | repaired: named target retains sealed `legal_moves@1`; exact pass-transform join is failable |
+| [[D1906]] | capped traversal has no closed evidence/abstention return | repaired: evidence/abstention union; capped arm cannot carry partial facts or seal a payload |
+| [[D1907]] | captured-attacker result conflicts with identity-loss prose | repaired: observed attacker/victim capture precedes unexplained identity loss in a closed union |
+| [[D1908]] | normative evidence item type does not exist | repaired: literal `DeclaredEvidence<T>` projection aliases and request/result types |
+| [[D1909]] | local/sync bounded traversal has no measured cost gate | repaired: `background`, 512-pair cap and permanent cold/warm tail gates |
 
 ## Changelog
 
+- 2026-08-28 — amended the repeat return without weakening F1. Added weakest-input declarations,
+  retained source-position authority, closed typed outcomes/abstentions, observed-capture precedence
+  and literal sealed aliases. Measured the exhaustive D1023 algorithm through
+  `make bounded-target-census`: fixed-population maxima 333 target×candidate pairs and 1,305.12 ms
+  per position refuse request-thread `sync`; the producer is now `local/background`. Fourteen
+  executable repair controls pass. Repeat independent review remains required.
 - 2026-08-27 — repeat independent review returned the narrowed local contract on [[D1904]]–[[D1909]].
   Exact return: `planning/bounded-policy-targets/repeat-independent-buildability-review-2026-08-27.md`.
 - 2026-08-27 — applied the D1652–D1658 author handoff by narrowing this RFC to exact local target
