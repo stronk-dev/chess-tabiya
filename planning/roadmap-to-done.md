@@ -493,6 +493,12 @@ The rebuild still awaits independent review and the shared packet. [[D1581]]'s p
 `assistance-config-register` draft now specifies the missing normalized-shape/head register and
 sole v5 claim; it too awaits independent review before implementation. No UX work may substitute
 raw engine/PV strings while those dependencies wait.
+The 2026-08-28 repeat review keeps the normalized TypeChecker image and [[D1916]] repair, but
+returns C9 on [[D2009]]–[[D2012]]: contiguous history and the prior-claim→landing transition are
+not enforced, while the proposed claim/status edits contradict Guided Hint's codec and still-open
+owner ruling. Assistance v5, presets and the downstream semantic-convention register remain
+ordered behind a transition-safe author repair; `make assistance-register-repeat-review` is the
+four-arm reproduction.
 [[D1570]]–[[D1576]] return the shared candidate packet to buildability research before it becomes
 the denominator for bots, hints and Review: bind or demote the packet in F1, retain literal engine
 evidence in scored joins, name the execution/cache owner, make cache identities coherent and

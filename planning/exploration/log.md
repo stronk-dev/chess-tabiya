@@ -10823,3 +10823,16 @@ CI actually run.
   dependency-ordered author handoff. Both earlier author targets remain green. No production,
   schema, pack, content or protected intent byte changed. Provider implementation and its Review,
   bot, theory and collector consumers remain unauthorised pending repair and fresh review.
+
+## 2026-08-28 — AssistanceConfig register repeat independent return
+
+- Re-derived the [[D1916]] amendment against the live register checker, four pinned historical
+  assistance commits and the exact Guided Hint/preset bytes the process RFC would edit. The
+  current-head/digest repair, TypeChecker extraction, 4/9/22 tree census, single-writer direction
+  and product-byte boundary survive.
+- Recorded [[D2009]]–[[D2012]]: C9 admits erased/gapped Landed history; the v5 claim names a
+  `validV5` validator its owner forbids; the required preset status rewrite ignores D1639's open
+  owner ruling; and a snapshot-only atomic head-5 state cannot prove the prior sole claimant.
+- Added stable Make targets for the seven-arm D1916 author contract and four-arm repeat review, and
+  routed the exact author repair. No runtime, web, schema, storage, content, archive or protected
+  design byte changed. C9, assistance v5 and the dependent semantic register remain blocked.

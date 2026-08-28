@@ -9,5 +9,8 @@ seam. It is not production code.
 Run from the repository root:
 
 ```sh
-pnpm exec vitest run --config tools/d1916-assistance-register-review-harness/vitest.config.ts
+make assistance-register-contract
 ```
+
+The stable target uses the Node-24 form of the seven-arm contract; the original Vitest source is
+retained as the historical review instrument.

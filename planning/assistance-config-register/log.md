@@ -41,3 +41,13 @@ review harness now passes 7/7: same-head drift plus lane 5 and head-only drift p
 fail; unchanged head 4 plus one lane-5 reservation passes; only a complete atomic head-5
 tree/register/landed update with the claim removed passes. The two D1629 browser-codec controls
 remain downstream product work. Repeat independent review is required before implementation.
+
+## 2026-08-28 — Repeat independent review return
+
+The [[D1916]] always-equal current-head repair passes its stable 7/7 Node-24 contract. Repeat review
+returned the remaining process boundary on [[D2009]]–[[D2012]]: C9 preserves only the current
+Landed head rather than contiguous history; the sole v5 claim names `validV5` even though Guided
+Hint forbids that parallel validator; the mandated preset status rewrite skips the still-open D1639
+owner ruling; and a final head-5 snapshot cannot prove the previous commit held the sole writer
+claim. `make assistance-register-repeat-review` reproduces all four. C9 implementation and v5 claim
+transfer remain blocked pending author repair and fresh review.

@@ -1,7 +1,10 @@
 # RFC: AssistanceConfig shared-resource register
 
-- **Status:** draft — amended 2026-08-27 after the independent [[D1916]] return; repeat review
-  required
+- **Status:** draft — returned again 2026-08-28 on [[D2009]]–[[D2012]]. [[D1916]] remains repaired,
+  but Landed history, claim-to-landing ownership, the literal v5 claim and cross-RFC status edit
+  require author correction. Exact return and queue:
+  `planning/assistance-config-register/repeat-independent-buildability-review-2026-08-28.md` and
+  `repeat-author-handoff.md`. Implementation remains unauthorised.
 - **Author:** codex
 - **Created:** 2026-08-26
 - **Design refs:** none. This is repository process over an already-ruled assistance contract; it

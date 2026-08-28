@@ -2,18 +2,22 @@
 
 ## State
 
-Draft RFC amended after the D1916 return; repeat independent review required before implementation.
+Returned again after repeat independent review on [[D2009]]–[[D2012]]; author repair and another
+fresh review are required before implementation.
 
 ## Order
 
 1. Re-derive `AssistanceConfig` head, domains, historical commits and both RFC seams.
 2. ✅ Review `rfc/assistance-config-register.md`; D1916 is amended with an executable crossed
-   candidate. Repeat review and acceptance remain.
-3. Implement the TypeChecker-normalized semantic reader and sixteen mutation classes, including
+   candidate.
+3. ✅ Repeat review the amended complete bytes; returned on historical continuity,
+   claim-to-landing transition ownership and two false dependent-RFC edits ([[D2009]]–[[D2012]]).
+4. Author-repair D2009–D2012 and return for another independent review.
+5. Implement the TypeChecker-normalized semantic reader and mutation classes, including
    local/imported/tuple aliases and the dedicated derived-output arm.
-4. Add the README register and atomically transfer Guided Hint from `none` to the sole v5 claim.
-5. Refresh docs, ledger, RFC register, roadmap/work receipts and append-only logs.
-6. Run Node-24 governance and staged process checks on exact committed bytes.
+6. Add the README register and atomically transfer Guided Hint from `none` to the sole v5 claim.
+7. Refresh docs, ledger, RFC register, roadmap/work receipts and append-only logs.
+8. Run Node-24 governance and staged process checks on exact committed bytes.
 
 ## Boundaries
 
