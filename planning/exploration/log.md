@@ -10850,3 +10850,15 @@ CI actually run.
 - Added stable `make semantic-register-contract` and `make semantic-register-repeat-review` targets,
   the six-arm reproduction and an exact author handoff. No runtime, web, schema, storage, content,
   archive or protected design byte changed. C10 and the semantic product RFC remain unauthorised.
+
+## 2026-08-28 — AssistanceConfig register second-return author repair
+
+- Replaced snapshot-only history with exact pinned v1–v4 bootstrap rows plus prefix-preserving
+  staged/first-parent appends. A head advance now consumes one prior exact claimant and binds its
+  RFC identity and set-equal path/symbol changes to one new Landed row.
+- Corrected the future v5 claim to the two runtime `AssistanceConfig` fields and the single
+  `parseAssistanceConfig` codec; the process implementation will describe Guided Hint as awaiting
+  the D1639 owner ruling and then repeat review, never as already review-ready.
+- Replaced the four review reproductions with seven able-to-fail author fixtures while preserving
+  the seven D1916 checks. No runtime, web, schema, storage, content, archive or protected design byte
+  changed. Fresh independent review still gates C9 implementation and claim transfer.

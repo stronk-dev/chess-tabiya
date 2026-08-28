@@ -51,3 +51,14 @@ Hint forbids that parallel validator; the mandated preset status rewrite skips t
 owner ruling; and a final head-5 snapshot cannot prove the previous commit held the sole writer
 claim. `make assistance-register-repeat-review` reproduces all four. C9 implementation and v5 claim
 transfer remain blocked pending author repair and fresh review.
+
+## 2026-08-28 — Second-return author repair
+
+C9 now treats Landed rows as exact history: bootstrap pins heads 1–4 to their recovered commits,
+and later staged/first-parent checks accept only prefix-preserving one-head appends. A head advance
+must consume exactly one prior matching claimant, remove its claim, append one row owned by that
+RFC and make a source-change set exactly equal to the claim's path/symbol tokens. The v5 claim names
+the two `AssistanceConfig` fields plus runtime `parseAssistanceConfig`, never `validV5`; the future
+presets wording says Guided Hint awaits the D1639 owner ruling and then repeat review. The seven-arm
+author contract passes with the original seven D1916 checks. Fresh independent review remains;
+implementation and claim transfer are still unauthorised.

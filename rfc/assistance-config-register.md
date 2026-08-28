@@ -1,10 +1,10 @@
 # RFC: AssistanceConfig shared-resource register
 
-- **Status:** draft — returned again 2026-08-28 on [[D2009]]–[[D2012]]. [[D1916]] remains repaired,
-  but Landed history, claim-to-landing ownership, the literal v5 claim and cross-RFC status edit
-  require author correction. Exact return and queue:
-  `planning/assistance-config-register/repeat-independent-buildability-review-2026-08-28.md` and
-  `repeat-author-handoff.md`. Implementation remains unauthorised.
+- **Status:** draft — amended 2026-08-28 after the [[D2009]]–[[D2012]] second return. C9 now has
+  contiguous append-only history and a staged/first-parent claim-to-landing transition; the v5
+  claim names the product RFC's one runtime codec; and dependent status prose remains blocked on
+  [[D1639]] rather than claiming review is open. Fresh independent review still precedes acceptance
+  and implementation.
 - **Author:** codex
 - **Created:** 2026-08-26
 - **Design refs:** none. This is repository process over an already-ruled assistance contract; it
@@ -78,16 +78,24 @@ The stronger rule is required because one browser migrator parses the complete o
 author cannot correctly implement v5→v6 against an unlanded v5 shape, and two v5 authors cannot
 both own the same discriminator.
 
+For this resource, `changed symbols` is machine-readable rather than descriptive prose: one or
+more ASCII-sorted unique tokens separated by `; `, each matching
+`^[a-z0-9_./-]+\.ts#[A-Za-z_$][A-Za-z0-9_$.]*$`. The transition reader compares the previous and
+current TypeScript programs and emits tokens for changed `AssistanceConfig` properties and changed
+codec declarations. It ignores tests/docs and refuses a changed assistance authority that has no
+token. This is the exact set C9.6 binds; the human-readable README change column remains separate.
+
 This process RFC itself claims `none`: it changes the register system, not `AssistanceConfig`.
 On this RFC's implementation, `hint-distance.md` changes its block atomically to:
 
 ```text
-assistance-config | lane 5 | AssistanceConfig.version; AssistanceConfig.hintDistance; validV5/migrate v1-v4 to v5
+assistance-config | lane 5 | packages/runtime/src/assistance-codec.ts#parseAssistanceConfig; packages/runtime/src/assistance.ts#AssistanceConfig.hintDistance; packages/runtime/src/assistance.ts#AssistanceConfig.version
 ```
 
 `intent-presets.md` retains `none`, names `hint-distance` as the v5 owner/dependency, and updates
-its stale “returned to research” prose to “awaiting independent review.” Its product implementation
-still adds the exhaustive preset/clamp columns in the v5 landing; dependency is not a second claim.
+its stale “returned to research” prose to “awaiting the [[D1639]] owner ceiling ruling, then repeat
+independent review.” Its product implementation still adds the exhaustive preset/clamp columns in
+the v5 landing; dependency is not a second claim.
 
 ### 2. Tree derivation is semantic and formatting-insensitive
 
@@ -154,15 +162,23 @@ Its **Landed** table has unit `payload head`, total four, recovered from git his
 Historical commit descriptions are facts, not retroactive RFC ownership. The table says so rather
 than attributing a version to an archived RFC that did not govern it.
 
+The table is a history, not merely a current-head witness. C9 requires exactly one row for every
+integer head `1..registered head`, in ascending order. The process landing is the only bootstrap:
+it must publish exactly the four rows above with those four pinned commits. After bootstrap, the
+staged checker compares the index with `HEAD` and permits only an exact prefix plus, on a head
+advance, one appended row; committed CI compares the current file with its first parent and applies
+the same rule. Deletion, rewrite, reorder, duplication or a gap fails even when the final row still
+matches the current head.
+
 Its **Live claims** table contains the exact Guided Hint lane-5 declaration and no preset claim.
 No hand-written “next free” row exists; `register-check` prints it.
 
 `parseRegisterSections` accepts `contract-digest` only for this resource and retains
 `schema-digest` for schema resources. A digest of the wrong kind/resource is treated as absent.
 
-### 4. C9 — assistance contract identity
+### 4. C9 — assistance contract identity and transition
 
-The existing C1-C8 meanings stay byte-for-byte. New check C9 has five arms:
+The existing C1-C8 meanings stay byte-for-byte. New check C9 has six arms:
 
 | arm | failure |
 |---|---|
@@ -170,13 +186,33 @@ The existing C1-C8 meanings stay byte-for-byte. New check C9 has five arms:
 | C9.2 | README head differs from the AST-derived numeric version |
 | C9.3 | README contract digest is absent or differs from the AST-derived digest |
 | C9.4 | more than one live claim, or the sole claim is not registered head+1 |
-| C9.5 | the landed table lacks the current head or a live declaration/register row differs |
+| C9.5 | landed heads are not the unique contiguous sequence `1..head`, a pinned bootstrap row differs, or append-only history is violated |
+| C9.6 | a head advance does not consume exactly one matching prior claimant into one owner-bound Landed row |
 
 Tree head and digest must always equal the checked register bytes. A live claim reserves only the
 registered head+1 owner; it never excuses current-tree drift ([[D1916]]). The legitimate v5 landing
 is one atomic commit: runtime head/domain, README head/digest, landed table and claim surfaces all
 move together, and the live claim disappears. There is no valid committed midpoint. If owner-use
 validation keeps the product RFC active afterward, its block returns to `none`.
+
+Snapshot equality is necessary but not sufficient for that landing ([[D2012]]). C9 also evaluates
+the staged/first-parent transition. A head advance is legal only when all of these hold:
+
+1. the previous committed head is exactly `current head - 1` and its tree/register/digest are valid;
+2. the previous state contains exactly one declaration/register claimant for the current lane;
+3. the current state removes that claim, appends exactly one Landed row and names the same RFC as
+   owner; and
+4. the assistance source changes are set-equal to the prior claim's exact path/symbol tokens. The v5
+   reservation names `assistance.ts#AssistanceConfig.version`,
+   `assistance.ts#AssistanceConfig.hintDistance` and
+   `assistance-codec.ts#parseAssistanceConfig`; an unrelated assistance symbol or undeclared path
+   fails the transition.
+
+A no-prior-claim, wrong lane, wrong claimant, partial symbol set, rewritten old row or head skip
+fails. Adding or withdrawing an unimplemented claim at an unchanged valid head remains a normal C3
+declaration/register transition and changes no Landed history. The process RFC's first registration
+is a named bootstrap, not a fake head transition: absent previous resource → exact pinned v1-v4
+history + exact Guided Hint v5 claim.
 
 C3 remains the authority for declaration/register bijection. C4/C6 are generalized only enough to
 include the new numeric-head register; their schema/evidence/migration semantics do not change.
@@ -196,7 +232,7 @@ or parses a lane claim as an evidence member.
 ### 5. Able-to-fail fixtures
 
 `tools/register-check.test.mjs` supplies source strings/temporary trees for every branch. The
-fixture table's unit is **mutation class**; total nineteen:
+fixture table's unit is **mutation class**; total twenty-five:
 
 | # | mutation | required result |
 |---|---|---|
@@ -218,11 +254,18 @@ fixture table's unit is **mutation class**; total nineteen:
 | 16 | render derived output with/without the lane-5 claimant | exact assistance line; no evidence-kinds fallthrough |
 | 17 | same-head field/member drift plus lane-5 claim | fail head/digest equality; claim cannot mask drift |
 | 18 | tree head 5 with register head 4 plus lane-5 claim | fail head equality |
-| 19 | atomic head-5 tree/register/landed update with claim removed | pass; stale lane-5 claim fails |
+| 19 | complete head-5 snapshot with claim removed | snapshot arms pass; transition arm separately requires row 24 |
+| 20 | landed history `[4]`, `[1,3,4]`, duplicate 3 or reordered rows | fail C9.5 |
+| 21 | exact pinned v1-v4 bootstrap plus exact Guided Hint v5 claim | pass; changed commit/row/claim fails |
+| 22 | head-5 landing with no prior claim, wrong lane or wrong claimant | fail C9.6 |
+| 23 | head-5 landing rewrites an older row, skips a head or appends two rows | fail C9.5/C9.6 |
+| 24 | prior exact Guided Hint lane-5 claim → head-5 tree/digest + one owner-bound row + no claim | pass |
+| 25 | prior claim omits a changed assistance symbol or names `validV5` | fail C9.6/claim grammar |
 
 The implementation also runs the real repository and asserts derived head 4, nine axes, 22 values,
-the current digest and exactly one lane-5 claimant. The explicit counts are drift tripwires; a
-future intentional version changes them together with its claim.
+the current digest, exact contiguous pinned history and exactly one lane-5 claimant. The explicit
+counts are drift tripwires; a future intentional version changes them through the checked
+claim-to-landing transition.
 
 ### 6. Files and boundaries
 
@@ -253,15 +296,17 @@ None. No design intent changes.
    under classes 2-5 and the changed-tuple arm of 14.
 3. **Fail closed.** Mutation classes 6-7 and 15 throw a named extractor error; no property or
    non-literal union residue disappears from the normalized shape.
-4. **Register binding.** C9.2/C9.3/C9.5 fail on wrong head, wrong/missing digest and missing landed
-   head respectively.
+4. **Register binding.** C9.2/C9.3 fail on wrong head and wrong/missing digest. C9.5 requires one
+   unique contiguous Landed row for every head and refuses mutation classes 20/23.
 5. **Single writer and no drift exception.** Same-lane and different-lane two-claim fixtures both
    fail. Lane 4 and lane 6 fail at head 4; one lane 5 passes only with unchanged head-4 tree/register
-   bytes. Same-head or head-only drift still fails, while one atomic head-5 landing with no claim
-   passes.
+   bytes. Same-head or head-only drift still fails. A complete head-5 snapshot is accepted only
+   when C9.6 proves the prior exact lane-5 claimant, owner-bound appended row and declared symbol
+   transition; mutation classes 22/25 fail and class 24 passes.
 6. **Bijection.** Deleting either the Guided Hint declaration or README live row fails C3.
 7. **Historical truth.** The four landed rows cite the four commits recovered by `git log -S`; no
-   archived RFC is invented as their owner.
+   archived RFC is invented as their owner. Bootstrap requires those exact four rows, and later
+   staged/first-parent checks permit only prefix-preserving one-head appends.
 8. **No product change.** `git diff` contains no runtime/web/schema/storage/content/archive file
    except the two active RFC prose/claim blocks explicitly listed in §6.
 9. **Existing registers unchanged.** Every pre-existing C1-C8 fixture remains green and the real
@@ -278,9 +323,15 @@ None. No design intent changes.
     `assistance-config` from `RESOURCE_NAMES` or its README section still fails criteria 1/4, so no
     prose inventory is needed.
 14. **Derived output has a typed assistance arm ([[D1630]]).** With the Guided Hint claim it prints
-    `assistance-config: head 4; next hint-distance.md (lane 5)`; without one it prints
-    `assistance-config: head 4; next lane 5`. Neither path accesses `.members` or uses the
-    evidence-kind claim parser.
+   `assistance-config: head 4; next hint-distance.md (lane 5)`; without one it prints
+   `assistance-config: head 4; next lane 5`. Neither path accesses `.members` or uses the
+   evidence-kind claim parser.
+15. **Literal claim truth ([[D2010]]).** The sole row names only the runtime
+    `AssistanceConfig.version`/`.hintDistance` fields and `parseAssistanceConfig`; `validV5` or a
+    parallel web migration authority fails the claim/transition fixture.
+16. **Dependent phase truth ([[D2011]]).** Every implementation-owned stale Hint status says
+    “awaiting the D1639 owner ruling, then repeat independent review”; nothing claims that review is
+    already open or changes the owner table.
 
 ## Discharges
 
@@ -295,6 +346,10 @@ None. No design intent changes.
 | finding | blocker | repair owner |
 |---|---|---|
 | [[D1916]] | lane-5 claim masks same-head v4 digest drift | amend §4, mutation table and criteria 2/4/5 |
+| [[D2009]] | repaired in §§3–4 by exact contiguous bootstrap plus append-only staged/first-parent history | repeat independent review |
+| [[D2010]] | repaired in §1/criterion 15 by the exact runtime fields and `parseAssistanceConfig` claim | cross-RFC symbol review |
+| [[D2011]] | repaired in §1/criterion 16 by the actual D1639-blocked phase | cross-RFC status review |
+| [[D2012]] | repaired in §4 by previous-claimant→owner-bound-landing transition semantics | transition-capable repeat review |
 
 ## Open questions
 
@@ -303,6 +358,11 @@ contract.
 
 ## Changelog
 
+- 2026-08-28: amended after the second return. Landed heads are exact contiguous append-only
+  history; head advancement consumes one prior exact claimant through staged/first-parent checks;
+  the v5 claim names only the runtime `AssistanceConfig` fields and `parseAssistanceConfig`; and
+  dependent status prose stays at “awaiting D1639 owner ruling, then repeat review.” The 25-arm
+  author contract replaces the four review reproductions. Fresh independent review remains.
 - 2026-08-27: amended after the D1916 return. Removed the live-claim digest exception: head and
   digest always equal tree authority; a claim only reserves registered head+1. Added crossed
   same-head/head-only drift negatives and atomic next-head/unchanged-reservation positives.

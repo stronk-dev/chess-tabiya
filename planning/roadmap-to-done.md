@@ -508,6 +508,12 @@ not enforced, while the proposed claim/status edits contradict Guided Hint's cod
 owner ruling. Assistance v5, presets and the downstream semantic-convention register remain
 ordered behind a transition-safe author repair; `make assistance-register-repeat-review` is the
 four-arm reproduction.
+The 2026-08-28 author repair now specifies that transition rather than treating the finding as
+closed by prose: exact pinned v1–v4 history, prefix-only staged/first-parent appends, and one prior
+claimant whose exact path/symbol set and RFC identity bind the next Landed row. The v5 claim now
+names runtime `parseAssistanceConfig`, and dependent preset status remains honestly blocked on the
+D1639 owner ruling. Seven author arms plus the seven original D1916 arms pass; fresh independent
+review still gates C9 implementation and the dependent C10 repair.
 [[D1570]]–[[D1576]] return the shared candidate packet to buildability research before it becomes
 the denominator for bots, hints and Review: bind or demote the packet in F1, retain literal engine
 evidence in scored joins, name the execution/cache owner, make cache identities coherent and

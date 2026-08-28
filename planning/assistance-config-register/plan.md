@@ -2,8 +2,10 @@
 
 ## State
 
-Returned again after repeat independent review on [[D2009]]–[[D2012]]; author repair and another
-fresh review are required before implementation.
+Amended after the repeat independent review return on [[D2009]]–[[D2012]]. Contiguous append-only
+history, claimant-to-landing transition ownership, the literal codec claim and the true D1639-blocked
+dependent phase now have a seven-arm author contract. Fresh independent review is required before
+implementation.
 
 ## Order
 
@@ -12,12 +14,13 @@ fresh review are required before implementation.
    candidate.
 3. ✅ Repeat review the amended complete bytes; returned on historical continuity,
    claim-to-landing transition ownership and two false dependent-RFC edits ([[D2009]]–[[D2012]]).
-4. Author-repair D2009–D2012 and return for another independent review.
-5. Implement the TypeChecker-normalized semantic reader and mutation classes, including
+4. ✅ Author-repair D2009–D2012 with exact transition/history/claim/status fixtures.
+5. Fresh independent review of the complete amended C9 contract.
+6. Implement the TypeChecker-normalized semantic reader and mutation classes, including
    local/imported/tuple aliases and the dedicated derived-output arm.
-6. Add the README register and atomically transfer Guided Hint from `none` to the sole v5 claim.
-7. Refresh docs, ledger, RFC register, roadmap/work receipts and append-only logs.
-8. Run Node-24 governance and staged process checks on exact committed bytes.
+7. Add the README register and atomically transfer Guided Hint from `none` to the sole v5 claim.
+8. Refresh docs, ledger, RFC register, roadmap/work receipts and append-only logs.
+9. Run Node-24 governance and staged process checks on exact committed bytes.
 
 ## Boundaries
 
@@ -26,5 +29,5 @@ this RFC. Product v5 remains owned by `hint-distance` after its own review and d
 
 ## Acceptance
 
-All fourteen RFC criteria pass; D1 and D2 are discharged. D3 remains an explicit downstream product
+All sixteen RFC criteria pass; D1 and D2 are discharged. D3 remains an explicit downstream product
 obligation and does not block implementing this register.
