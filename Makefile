@@ -151,6 +151,7 @@ pack-capability-closure:
 
 bounded-target-contract:
 	./node_modules/.bin/vitest run --config tools/d1652-bounded-target-repair-harness/vitest.config.ts
+	./node_modules/.bin/tsc -p tools/d1652-bounded-target-repair-harness/tsconfig.contract.json --noEmit
 
 bounded-target-census:
 	./node_modules/.bin/vitest run --config tools/d1023-bounded-policy-harness/vitest.config.ts tools/d1023-bounded-policy-harness/exact-target.test.ts

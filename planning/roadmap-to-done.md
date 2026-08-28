@@ -148,6 +148,14 @@ a source-position batch that can actually enforce 512 target×candidate pairs; a
 cooperative background queue with cancellation during work. Exact return:
 `planning/bounded-policy-targets/second-repeat-independent-buildability-review-2026-08-28.md`.
 
+The 2026-08-28 author repair answers that return without claiming acceptance: one pass-anchor
+authority, observation-only promotion tracking, reachable immediate states, a discriminated
+bounded-return outcome, one complete-set batch and a bounded cooperative queue are now literal in
+the RFC. The author target crosses malformed result states, the 512 admission edge and cancellation
+after work begins. A fresh independent buildability review still gates implementation; provider and
+policy composition remain separate required 1.0 layers. Receipt:
+`planning/bounded-policy-targets/second-repeat-author-repair-2026-08-28.md`.
+
 The convention foundation now has an explicit two-step landing boundary. The process-only
 `semantic-convention-register` first records an empty landed set plus D1722's exact 39-member live
 claim; only the independently accepted product RFC may then create the runtime declarations and

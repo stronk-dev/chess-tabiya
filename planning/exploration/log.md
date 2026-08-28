@@ -10701,3 +10701,18 @@ CI actually run.
   the full populations in 169.65 seconds. Counts and pair maxima remained stable; timing again
   confirmed background classification. No production, schema, pack, content or protected intent
   byte changed. Implementation remains unauthorised pending amendment and another review.
+
+## 2026-08-28 — Bounded-target second repeat author repair
+
+- Applied the [[D1962]]–[[D1968]] return without reopening the local/provider/policy boundary. The
+  draft now assigns threat passing to one exported anchor, drops ungrounded initial promotion
+  provenance and unreachable `target_captured`, and turns unexplained identity loss into abstention.
+- Replaced duplicated booleans and arbitrary nullable arrays with a three-arm return algebra and
+  fixed move tuples. Replaced the generic per-item request/result unions with one source-position
+  batch owning the set-equal target authorities and complete legal candidates before enforcing 512.
+- Made `background` executable in the contract: one active/eight queued, exact-key deduplication,
+  portable cooperative yield every 64 nodes, cancellation checks during work and no partial
+  publication. `make bounded-target-contract` passes 18 runtime/source plus five crossed compile
+  controls. `make bounded-target-census` passed 11/11 again in 171.44 seconds with semantic counts
+  and 111/333 pair maxima unchanged. This remains an author checkpoint; production waits for fresh
+  independent review.

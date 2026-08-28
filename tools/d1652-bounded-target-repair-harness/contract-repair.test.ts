@@ -60,8 +60,7 @@ interface MaiaPolicyRecord {
 }
 
 interface NamedTarget {
-  readonly sourceFen: string;
-  readonly passedFen: string;
+  readonly passAnchor: Readonly<{ readonly conventionId: "threat@1"; readonly sourceFen: string; readonly passedFen: string }>;
   readonly attacker: Readonly<{ readonly color: string; readonly role: string; readonly square: string }>;
   readonly victim: Readonly<{ readonly color: string; readonly role: string; readonly square: string }>;
   readonly captureUci: string;
@@ -72,39 +71,39 @@ interface NamedTarget {
 
 type ImmediateTargetOutcome =
   | Readonly<{ readonly result: "preserved"; readonly cause: "preserved" }>
-  | Readonly<{ readonly result: "removed"; readonly cause: "attacker_captured" | "target_captured" | "target_moved" | "capture_illegal" | "exchange_neutralized" }>
-  | Readonly<{ readonly result: "identity_lost"; readonly cause: "identity_lost" }>;
+  | Readonly<{ readonly result: "removed"; readonly cause: "attacker_captured" | "target_moved" | "capture_illegal" | "exchange_neutralized" }>;
 
-type TargetProjectionId =
-  | "derived.bounded_target.named_material_target"
-  | "derived.bounded_target.immediate"
-  | "derived.bounded_target.bounded_return";
-
-type BoundedOperationResult =
-  | Readonly<{ readonly kind: "evidence"; readonly item: DeclaredEvidence<unknown> }>
+type BoundedReturnOperationResult =
+  | Readonly<{
+      readonly kind: "evidence";
+      readonly item: DeclaredEvidence<unknown> & {
+        readonly projection: { readonly id: "derived.bounded_target.bounded_return"; readonly version: 1 };
+      };
+    }>
   | Readonly<{
       readonly kind: "abstained";
-      readonly projection: Readonly<{ readonly id: TargetProjectionId; readonly version: 1 }>;
-      readonly reason: "input_abstained" | "position_mismatch" | "target_mismatch" | "candidate_not_legal" | "budget_exhausted";
+      readonly projection: Readonly<{ readonly id: "derived.bounded_target.bounded_return"; readonly version: 1 }>;
+      readonly reason: "budget_exhausted";
       readonly inputDigests: readonly string[];
-      readonly visitedPositions?: number;
+      readonly candidateUci: string;
+      readonly visitedPositions: number;
     }>;
 
 function immediateOutcome(result: ImmediateTargetOutcome["result"], cause: ImmediateTargetOutcome["cause"]): ImmediateTargetOutcome {
   if (result === "preserved" && cause === "preserved") return Object.freeze({ result, cause });
-  if (result === "identity_lost" && cause === "identity_lost") return Object.freeze({ result, cause });
-  if (result === "removed" && ["attacker_captured", "target_captured", "target_moved", "capture_illegal", "exchange_neutralized"].includes(cause)) {
+  if (result === "removed" && ["attacker_captured", "target_moved", "capture_illegal", "exchange_neutralized"].includes(cause)) {
     return Object.freeze({ result, cause: cause as Extract<ImmediateTargetOutcome, { result: "removed" }>["cause"] });
   }
   throw new TypeError("impossible immediate target outcome");
 }
 
-function cappedOperationResult(projection: TargetProjectionId, inputDigests: readonly string[], visitedPositions: number): BoundedOperationResult {
+function cappedOperationResult(inputDigests: readonly string[], candidateUci: string, visitedPositions: number): BoundedReturnOperationResult {
   return Object.freeze({
     kind: "abstained",
-    projection: Object.freeze({ id: projection, version: 1 }),
+    projection: Object.freeze({ id: "derived.bounded_target.bounded_return", version: 1 }),
     reason: "budget_exhausted",
     inputDigests: Object.freeze([...inputDigests]),
+    candidateUci,
     visitedPositions,
   });
 }
@@ -154,11 +153,20 @@ function deriveTargetCategory(raw: StockfishRootRecord, target: NamedTarget, can
   return Object.freeze({ raw, target, candidateUci, category: "neither" });
 }
 
-function passFen(sourceFen: string): string {
+function prospectiveThreatPassAnchor(sourceFen: string): Readonly<{
+  readonly conventionId: "threat@1";
+  readonly sourceFen: string;
+  readonly passedFen: string;
+}> {
   const position = Chess.fromSetup(parseFen(sourceFen).unwrap()).unwrap();
+  const canonicalSource = makeFen(position.toSetup());
   position.turn = opposite(position.turn);
   position.epSquare = undefined;
-  return makeFen(position.toSetup());
+  return Object.freeze({
+    conventionId: "threat@1",
+    sourceFen: canonicalSource,
+    passedFen: makeFen(position.toSetup()),
+  });
 }
 
 function namedTarget(threatEvidence: DeclaredEvidence<unknown>, exchangeEvidence: DeclaredEvidence<unknown>, sourcePosition: DeclaredEvidence<unknown>): NamedTarget {
@@ -174,10 +182,10 @@ function namedTarget(threatEvidence: DeclaredEvidence<unknown>, exchangeEvidence
     && JSON.stringify(item.exchange) === JSON.stringify(exchange));
   if (found?.target === undefined || found.exchange === undefined) throw new TypeError("threat/exchange target identity does not join");
   const sourceFen = (sourcePosition.payload as ReturnType<typeof exactLegalMoveMap>).fen;
-  if (passFen(sourceFen) !== exchange.beforeFen) throw new TypeError("source position does not produce the retained threat pass position");
+  const passAnchor = prospectiveThreatPassAnchor(sourceFen);
+  if (passAnchor.passedFen !== exchange.beforeFen) throw new TypeError("source position does not produce the retained threat pass position");
   return Object.freeze({
-    sourceFen,
-    passedFen: exchange.beforeFen,
+    passAnchor,
     attacker: Object.freeze({ ...exchange.capturer }),
     victim: Object.freeze({ ...exchange.captured }),
     captureUci: exchange.captureUci,
@@ -235,10 +243,10 @@ function amendedLocalTargetDeclarations(): EvidenceContractDeclarations {
       id: "derived.bounded_target.named_material_target", version: 1,
       role: "reading", payloadType: "NamedMaterialTarget",
       semantics: "Convention-grounded positive material-capture identity retained from threat, exchange and exact source-position evidence.",
-      operands: Object.freeze(["convention", "sourceFen", "passedFen", "attacker", "victim", "captureUci", "threat", "exchange", "sourcePosition"]),
+      operands: Object.freeze(["convention", "passAnchor", "attacker", "victim", "captureUci", "threat", "exchange", "sourcePosition"]),
       signs: Object.freeze(["state", "threatened"]),
       grounding: "declared_convention", exactness: "convention",
-      abstention: Object.freeze({ possible: true, reasons: Object.freeze(["input_abstained", "position_mismatch", "target_mismatch", "exchange_mismatch"]) }),
+      abstention: Object.freeze({ possible: true, reasons: Object.freeze(["input_abstained", "position_mismatch", "target_mismatch", "exchange_set_mismatch", "multiplication_limit", "queue_full", "cancelled"]) }),
       answerContent: Object.freeze(["fact", "threat"]),
       forms: Object.freeze(["sentence", "list", "lit_squares", "arrows", "piece_halo", "machine_condition"]),
       dependsOn: Object.freeze([]),
@@ -253,7 +261,7 @@ function amendedLocalTargetDeclarations(): EvidenceContractDeclarations {
       operands: Object.freeze(["target", "candidateUci", "afterFen", "outcome"]),
       signs: Object.freeze(["preserved", "removed"]),
       grounding: "declared_convention", exactness: "convention",
-      abstention: Object.freeze({ possible: true, reasons: Object.freeze(["input_abstained", "position_mismatch", "candidate_not_legal", "target_mismatch"]) }),
+      abstention: Object.freeze({ possible: true, reasons: Object.freeze(["input_abstained", "position_mismatch", "target_mismatch", "identity_lost", "multiplication_limit", "queue_full", "cancelled"]) }),
       answerContent: Object.freeze(["fact", "threat"]),
       forms: Object.freeze(["sentence", "timeline_marker", "lit_squares", "arrows", "piece_halo", "machine_condition"]),
       dependsOn: Object.freeze([]),
@@ -265,10 +273,10 @@ function amendedLocalTargetDeclarations(): EvidenceContractDeclarations {
       id: "derived.bounded_target.bounded_return", version: 1,
       role: "reading", payloadType: "BoundedTargetReturn",
       semantics: "Separate exists-exists return and exists-for-all-defences survival within the declared three-ply horizon.",
-      operands: Object.freeze(["immediate", "horizonPlies", "visitedPositions", "reintroducedWithin3Ply", "reintroductionWitness", "preparationSurvivesEveryDefence", "everyDefenceWitness", "firstRefutation"]),
+      operands: Object.freeze(["immediate", "horizonPlies", "visitedPositions", "outcome"]),
       signs: Object.freeze(["preserved", "removed", "enabled"]),
       grounding: "declared_convention", exactness: "convention",
-      abstention: Object.freeze({ possible: true, reasons: Object.freeze(["input_abstained", "position_mismatch", "target_mismatch", "budget_exhausted"]) }),
+      abstention: Object.freeze({ possible: true, reasons: Object.freeze(["input_abstained", "position_mismatch", "target_mismatch", "identity_lost", "multiplication_limit", "queue_full", "budget_exhausted", "cancelled"]) }),
       answerContent: Object.freeze(["fact", "threat"]),
       forms: Object.freeze(["sentence", "list", "timeline_marker", "lit_squares", "arrows", "machine_condition"]),
       dependsOn: Object.freeze([]),
@@ -413,19 +421,18 @@ describe("amended local declaration image", () => {
   it("closes observed-capture precedence and rejects impossible result/cause pairs", () => {
     expect(immediateOutcome("preserved", "preserved")).toEqual({ result: "preserved", cause: "preserved" });
     expect(immediateOutcome("removed", "attacker_captured")).toEqual({ result: "removed", cause: "attacker_captured" });
-    expect(immediateOutcome("removed", "target_captured")).toEqual({ result: "removed", cause: "target_captured" });
-    expect(immediateOutcome("identity_lost", "identity_lost")).toEqual({ result: "identity_lost", cause: "identity_lost" });
-    expect(() => immediateOutcome("identity_lost", "attacker_captured")).toThrow(/impossible/u);
-    expect(() => immediateOutcome("removed", "identity_lost")).toThrow(/impossible/u);
+    expect(() => immediateOutcome("preserved", "attacker_captured")).toThrow(/impossible/u);
+    expect(() => immediateOutcome("removed", "preserved")).toThrow(/impossible/u);
   });
 
   it("makes budget exhaustion a closed abstention with no partial facts", () => {
-    const result = cappedOperationResult("derived.bounded_target.bounded_return", ["threat-digest", "candidate-digest"], 25_001);
+    const result = cappedOperationResult(["threat-digest", "candidate-digest"], "e2e4", 25_001);
     expect(result).toEqual({
       kind: "abstained",
       projection: { id: "derived.bounded_target.bounded_return", version: 1 },
       reason: "budget_exhausted",
       inputDigests: ["threat-digest", "candidate-digest"],
+      candidateUci: "e2e4",
       visitedPositions: 25_001,
     });
     expect(result).not.toHaveProperty("reintroducedWithin3Ply");
@@ -448,14 +455,14 @@ describe("amended local declaration image", () => {
     const exchange = reading.kind === "threats" ? reading.threats.find((row) => row.threatenedMove === "a8a1")?.exchange : undefined;
     expect(exchange).toBeDefined();
     const target = namedTarget(declareThreatEvidence(reading), declareLegalExchangeEvidence(exchange!), declareExactLegalMovesEvidence(exactLegalMoveMap(sourceFen)));
-    expect(target.sourceFen).toBe(sourceFen);
+    expect(target.passAnchor.sourceFen).toBe(sourceFen);
     expect(target.sourcePosition.payload).toEqual(exactLegalMoveMap(sourceFen));
-    expect(target.passedFen).not.toBe(sourceFen);
-    expect(target.passedFen.split(" ")[1]).toBe("b");
+    expect(target.passAnchor.passedFen).not.toBe(sourceFen);
+    expect(target.passAnchor.passedFen.split(" ")[1]).toBe("b");
     expect(sourceFen.split(" ")[1]).toBe("w");
     expect(reading).not.toHaveProperty("fen");
     expect(exactLegalMoves(sourceFen).some((move) => move.uci === "a1a8")).toBe(true);
-    expect(exactLegalMoves(target.passedFen).some((move) => move.uci === "a1a8")).toBe(false);
+    expect(exactLegalMoves(target.passAnchor.passedFen).some((move) => move.uci === "a1a8")).toBe(false);
     const wrongSource = "r3k3/8/8/8/8/8/8/Q3K3 w - - 1 2";
     expect(() => namedTarget(declareThreatEvidence(reading), declareLegalExchangeEvidence(exchange!), declareExactLegalMovesEvidence(exactLegalMoveMap(wrongSource)))).toThrow(/source position/u);
   });
