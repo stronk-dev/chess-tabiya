@@ -148,6 +148,14 @@ collector-group cancellation and literal convention/version/reason types. Fresh 
 still gates implementation; implementing the packet alone cannot satisfy any 1.0 end feature.
 Receipt: `planning/evidence-foundation-ux/shared-candidate-packet-second-repeat-author-repair-2026-08-28.md`.
 
+The 2026-08-28 final independent packet review keeps that foundation unimplemented on five exact
+boundaries: no closed service success/cancellation/failure algebra ([[D1977]]); held provider join
+behavior still required by foundation acceptance ([[D1978]]); no named production macrotask-yield
+adapter ([[D1979]]); a projector type that admits impossible crossed narrow scopes ([[D1980]]); and
+the shipped loose-piece wrapper erasing declared unavailability as no event ([[D1981]]). These are
+shared correctness dependencies for Support, Review, drills and bots, not optional UX polish.
+Receipt: `planning/evidence-foundation-ux/shared-candidate-packet-final-independent-review-2026-08-28.md`.
+
 The 2026-08-28 second repeat review keeps `bounded-policy-targets` unimplemented while preserving
 its useful exact-target census and the local/provider/policy split. Seven finite repairs remain:
 one exported threat-pass anchor; no invented initial promotion provenance; removal of the

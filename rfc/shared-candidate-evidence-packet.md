@@ -1,15 +1,14 @@
 # RFC: Shared candidate evidence packet — the compiled legal population three consumers are measured against
 
-- **Status:** **draft — author-amended 2026-08-28 after the second repeat [[D1958]]–[[D1961]]
-  return; fresh independent buildability review required.** The packet now lands honestly as a
-  deliberately unconsumed foundation primitive under the owner's foundation-first sequencing; the
-  verify CLI is only a contract instrument and no 1.0 consumer is claimed. A module-private
-  `WeakMap` receipt authority, exact wide→narrow projector, cooperative collector-group yields and
-  literal convention/version/projection-reason types close the technical return. Implementation
-  remains unauthorised.
-  The provider-free compiler itself does not wait on the provider RFC; the held D10 bot join does.
-  [[D1580]] remains separate numeric appliance-tier debt. Prior author state: amended after the
-  repeat [[D1900]]–[[D1903]] return and [[D1945]]–[[D1947]] contract re-derivation.
+- **Status:** **draft — returned by final independent buildability review 2026-08-28 on
+  [[D1977]]–[[D1981]]; implementation remains unauthorised.** The complete score-free population,
+  private receipt authority, literal conventions and deliberately unconsumed foundation landing
+  survive. Author repair must close the service result/error algebra, name the production yield,
+  make scope projection a partial order, preserve collector unavailability, and move held provider
+  criteria to their actual consumer. Exact return:
+  `planning/evidence-foundation-ux/shared-candidate-packet-final-independent-review-2026-08-28.md`.
+  Prior author state: repaired [[D1958]]–[[D1961]] after the repeat [[D1900]]–[[D1903]] and
+  [[D1945]]–[[D1947]] returns. [[D1580]] remains separate numeric appliance-tier debt.
 - **Author:** claude (drafted from `design/research/shared-candidate-evidence-packet.md` and `tools/d1071-candidate-packet-harness/`; every carried claim re-verified at HEAD, with seven corrections recorded)
 - **Created:** 2026-08-23
 - **Design refs:** `design/05-in-run-experience.md` §5 (*"detection is cheap, significance is not"* — the split this RFC executes in code: one factual population, separate opinionated derivations) and §3b-i (*"The LLM is the voice, never the source"*); `design/03-product-breadth.md` §Play (opponent selection) and §Intelligence and explanation

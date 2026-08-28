@@ -10761,3 +10761,17 @@ CI actually run.
   and routed a dependency-ordered author handoff. No profile, provider operation, production route,
   schema, migration, content or protected intent byte changed. Implementation remains
   unauthorised pending amendment and fresh independent review.
+
+## 2026-08-28 — Shared-candidate packet final independent buildability return
+
+- Re-derived the [[D1958]]–[[D1961]] author repair against its public operation signatures,
+  acceptance/implementation boundary, Node event-loop promise, scope projector and the live
+  loose-piece collector path. The complete score-free population, private receipt authority,
+  literal conventions and foundation-first zero-consumer landing survive.
+- Recorded [[D1977]], [[D1978]], [[D1979]], [[D1980]] and [[D1981]]: no closed service result/error
+  algebra; held provider integration required by foundation acceptance; unnamed production yield;
+  impossible crossed scope projections admitted by the public type; and declared collector
+  unavailability erased into the same empty array as a factual hard negative.
+- Added the five-arm reproduction behind `make candidate-packet-final-review` and routed a literal
+  author repair order. No production, schema, content, pack or protected intent byte changed.
+  Implementation remains unauthorised pending amendment and another fresh independent review.
