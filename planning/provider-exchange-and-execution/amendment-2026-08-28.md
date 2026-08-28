@@ -18,6 +18,8 @@ independent buildability review attacks the amended contract.
 | D1876 | discriminated optional/required `BindingSourceAbsence` plus fixed precedence | local+provider, recorded-or-live, mixed-provider and all-absent cases cross |
 | D1877 | exact five-member request/result maps, descriptor map and scheduler-owned execution hook | operation set is closed and set-equal |
 | D1878 | pending key contains requested bytes only; actual generation is captured in acquisition and checked for retained admission | cold key is constructible; changed generation refuses retained result |
+| D1943 | legal-root rows retain `root_side_to_move` cp or categorical `root_mates\|root_is_mated` distance | White/Black, cp and both mate-outcome controls; zero/non-integral distance fails |
+| D1944 | every provider F1 source payload is the complete `ProviderEvidenceDelivery<T>` envelope | stripping acquisition/delivery to bare payload fails the declared boundary |
 
 ## Review attacks added during the amendment
 

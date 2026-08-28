@@ -30,7 +30,12 @@ projection. Explorer publishes literal request, zero/populated result, W/D/L, ca
 SAN, listed/unlisted mass, opening/history and source fields. Stockfish refuses upper/lower-bound
 and incomplete root rows and owns a narrow capability-register migration. `[V]`
 `rfc/provider-exchange-and-execution.md` §§5–8; the eight focused arms pass via
-`make provider-exchange-contract`.
+`make provider-exchange-contract`. A downstream candidate join found two further lossy seams:
+source adapters could seal the bare result while dropping acquisition/delivery provenance, and the
+legal-root table omitted the score frame and mate outcome. Every source projection now carries the
+complete `ProviderEvidenceDelivery<T>` envelope; legal-root rows use the literal
+`root_side_to_move` centipawn or `root_mates|root_is_mated` distance domain. `[V]`
+`rfc/provider-exchange-and-execution.md` §§3, 5.1; [[D1943]]–[[D1944]].
 
 ## Limits
 

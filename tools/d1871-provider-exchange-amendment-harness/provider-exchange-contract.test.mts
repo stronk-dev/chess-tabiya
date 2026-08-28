@@ -1,4 +1,4 @@
-// DISPOSABLE research harness — D1871-D1878. Not production code.
+// DISPOSABLE research harness — D1871-D1878/D1943-D1944. Not production code.
 import assert from "node:assert/strict";
 import { createHash } from "node:crypto";
 import { readFileSync } from "node:fs";
@@ -189,6 +189,7 @@ test("the amended RFC publishes every literal authority exercised by the harness
   for (const token of [
     "pathId", "SubjectEvidenceAvailabilityRequest", "ProviderAcquisitionReceipt", "ProviderDelivery",
     "ProviderOperationRequestMap", "ProviderOperationResultMap", "BindingSourceAbsence",
+    "ProviderEvidenceDelivery", "StockfishLegalRootTable", "root_side_to_move",
     "ExplorerPositionPageRequest", "ExplorerPositionPageDomainResult", "MaiaRunMoveOccurrence",
     "MaiaExactFenMoveOccurrence", "upperbound", "lowerbound", "pendingKey",
   ]) assert.match(rfc, new RegExp(`\\b${token}\\b`), `missing ${token}`);

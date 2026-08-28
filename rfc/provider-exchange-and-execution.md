@@ -256,6 +256,9 @@ type ProviderDelivery<T> =
       readonly acquisition: ProviderAcquisitionReceipt;
       readonly payload: T;
     };
+
+/** The exact payload sealed by every live provider source projection. */
+type ProviderEvidenceDelivery<T> = ProviderDelivery<T>;
 ```
 
 Provider-specific payloads remain typed; `Record` appears only in the common identity envelope and
@@ -265,6 +268,12 @@ that obtained the bytes. A cache hit wraps that same receipt/payload in a new `r
 delivery with a later `servedAt` and non-null cache identity; it never changes `retrievedAt`,
 digests, actual identity or generation. A live delivery has `cacheIdentity: null` and its
 `servedAt` equals retrieval completion.
+
+Every `live.*`/`human.*` provider source projection below declares the complete
+`ProviderEvidenceDelivery<T>` as its F1 payload, not bare `T`. Its exact adapter seals delivery kind,
+served/cache identity, immutable acquisition and provider payload together. A downstream derived
+projection may read `.payload`, but must retain the admitted delivery input; no adapter may strip
+the receipt and then copy provider identity into a new object.
 
 The pending/deduplication key uses the complete normalized requested identity but never contains an
 actual generation not yet observed. Admission captures actual identity inside the same serialized
@@ -427,16 +436,25 @@ interface StockfishLegalRootTableRequest {
 
 interface StockfishLegalRootTable {
   readonly request: StockfishLegalRootTableRequest;
+  readonly scoreFrame: "root_side_to_move";
   readonly rows: readonly {
     readonly moveUci: string;
     readonly reachedDepth: number;
-    readonly score: { readonly kind: "cp" | "mate"; readonly value: number };
+    readonly score:
+      | { readonly kind: "centipawns"; readonly value: number }
+      | {
+          readonly kind: "mate";
+          readonly outcome: "root_mates" | "root_is_mated";
+          readonly distance: number;
+          readonly unit: "moves";
+        };
     readonly pv: readonly string[];
   }[];
 }
 ```
 
-`live.stockfish.legal_root_table@1` is `search/source_record`,
+`live.stockfish.legal_root_table@1` has payload
+`ProviderEvidenceDelivery<StockfishLegalRootTable>` and is `search/source_record`,
 `bounded_search/measured/reported`, answers evaluation/candidate moves/move/PV, and is
 operator-only until a named derived consumer is compiled. Set equality is between unique normalized
 `rows.moveUci` and `exactLegalMoves(fen).map(uci)`, with every row reaching the requested depth.
@@ -453,6 +471,12 @@ capability disposition from the blanket refusal “MultiPV > 1 outside enumerate
 narrowly named “all-legal MultiPV for fixed-depth legal-root measurement” row while retaining the
 refusal for every other non-enumerator use. A set-equality register test fails if the blanket refusal
 survives or the permission widens beyond this operation.
+
+Stockfish's UCI score is interpreted once at the root: cp sign remains in the named
+`root_side_to_move` frame; positive/negative mate becomes `root_mates`/`root_is_mated` with absolute
+positive safe-integer distance. Candidate consumers never flip rows after applying their moves.
+White- and Black-to-move cp fixtures plus winning/losing mate fixtures fail if a White frame, child
+frame, signed-distance mate or mate-to-cp sentinel is substituted.
 
 The engine execution boundary returns the actual engine identity, generation, request digest,
 output digest and UCI bytes from the same serialized task. Existing health remains health; it is
@@ -500,7 +524,9 @@ identity to the current established supervisor identity. The operation parses ex
 missing/zero-distance mate output, and converts the engine's declared side-to-move score to the
 named White frame using the FEN turn. Both White- and Black-to-move cp/mate fixtures assert the
 conversion. `live.stockfish.position_eval@1` is
-`search/source_record`, `bounded_search/measured/reported`, answers evaluation, and carries no node,
+`search/source_record`, has payload
+`ProviderEvidenceDelivery<FixedBoundPositionEvaluation>`, is
+`bounded_search/measured/reported`, answers evaluation, and carries no node,
 best move, PV, rank, loss, grade or recommendation. Bot and Review derive their own frames from this
 one source; neither opens a second engine request path.
 
@@ -542,7 +568,8 @@ are finite and non-negative, `returnedWidth` equals candidate count, and
 explicit that missing mass/moves are unobserved rather than impossible; requested/returned width
 and mass are retained rather than inferred.
 
-`human.maia.policy_page@1` is `human/source_record`,
+`human.maia.policy_page@1` has payload `ProviderEvidenceDelivery<MaiaPolicyPage>` and is
+`human/source_record`,
 `human_model/measured/reported`, answers candidate moves only, and is operator-only pending named
 consumers. Model mass is likelihood under one declared request, never move quality, intent or a
 player diagnosis.
@@ -592,7 +619,8 @@ interface LiveSyzygyPosition {
 }
 ```
 
-`live.syzygy.position_result@1` is `search/source_record`,
+`live.syzygy.position_result@1` has payload
+`ProviderEvidenceDelivery<LiveSyzygyPosition>` and is `search/source_record`,
 `tablebase_exact/exact/not_applicable`, and answers fact/evaluation/candidate moves/move. The full
 canonical FEN—including side to move, castling/en-passant fields and clocks—is part of request
 identity. `result` is admitted only inside the supported tablebase domain and after legal move
@@ -708,7 +736,8 @@ below total is valid. `listed` equals the sum of admitted row `played` counts ex
 survive. Totals 0, 37 and 100 are successful source pages. The parser-level 100-game
 threshold is deleted; each consumer owns its explicit sample suitability policy.
 
-`human.explorer.position_page@1` is `human/source_record`,
+`human.explorer.position_page@1` has payload
+`ProviderEvidenceDelivery<ExplorerPositionPage>` and is `human/source_record`,
 `human_corpus/measured/reported`, answers facts and candidate moves, and is operator/full-inspector
 only. It carries no completeness, quality, rank, recommendation, intent or causal-outcome meaning.
 
@@ -786,14 +815,18 @@ learner-facing explanation.
    Same projection/different subject and same run/different event-head fixtures differ as expected.
    Source absent, cached/recorded, outside-domain, honest-empty and refuted are not interchangeable.
 6. All five operation request/result map members and provider payload declarations match §§5–8
-   literally and compile through F1 with no second hand-written execution image. The operation maps,
-   registered descriptors and application callers are set-equal.
+   literally and compile through F1 with no second hand-written execution image. Every source
+   adapter seals `ProviderEvidenceDelivery<T>` rather than bare `T`; stripping acquisition/delivery
+   provenance fails. The operation maps, registered descriptors and application callers are
+   set-equal.
 7. Stockfish positives cover ordinary play, both castling identities and four promotions. Missing,
    duplicate, extra, equal-count replacement, short-depth, `upperbound`, `lowerbound`, score-less-PV
    and PV-less-score tables fail. A capability-register test authorizes only the named all-legal
    measurement and refuses every other non-enumerator MultiPV use. Fixed-bound evaluation separately
    covers White/Black cp and mate orientation, zero/non-integral mate distance,
-   generation/bound mismatch and same-exchange acquisition identity.
+   generation/bound mismatch and same-exchange acquisition identity. Legal-root rows retain one
+   `root_side_to_move` frame; White/Black cp and winning/losing mate controls reject child/White
+   relabelling and mate-to-cp conversion.
 8. Maia positives cover history-conditioned and exact-FEN requests. Same FEN/different history,
    model, band, temperature, top-p or width cannot alias; identity/generation mismatch fails. A
    transposed-history run occurrence and cross-kind occurrence both fail while the exact run path
@@ -855,6 +888,10 @@ returns to author instead of accepting a placeholder.
 
 ## Changelog
 
+- 2026-08-28: downstream candidate-packet reconciliation found and repaired [[D1943]]/[[D1944]]:
+  legal-root rows now declare one root-side-to-move cp/mate outcome frame, and every provider source
+  projection seals the complete typed delivery envelope instead of ambiguously dropping
+  acquisition/cache provenance at the F1 adapter.
 - 2026-08-28: repaired the independent return [[D1871]]–[[D1878]] with a closed scheduler
   request/result/descriptor protocol; requested-versus-actual engine identity; immutable
   acquisition plus mutable delivery provenance; deterministic compiled path ids and separate

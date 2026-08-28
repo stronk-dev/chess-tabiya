@@ -10580,3 +10580,31 @@ CI actually run.
   contradictory zero-population W/D/L ([[D1941]]) and implied Maia top-k completeness ([[D1942]]).
 - Landed the evidence dossier and repeat-review handoff. The RFC remains draft; production is still
   forbidden until repeat independent buildability review.
+
+## 2026-08-28 — Candidate-packet repeat return repaired without an aggregate evidence shortcut
+
+- Repaired [[D1900]]–[[D1903]]: the shared cache now owns one neutral process-sealed receipt; only
+  the real semantic-selection composition lands; the empty production bot roster gains no test-only
+  traversal; and the held bot join uses one complete legal-root provider exchange rather than N
+  child searches.
+- Re-derived the implemented F1 quantifier instead of trusting the earlier green manifest fixture.
+  Each derivation member is a conjunction, while one legal position emits only a subset of the
+  possible 47 event and 22 reading identities. Logged and repaired [[D1945]]–[[D1946]] by deleting
+  the aggregate packet projection, adapter and future-only bindings. Exact retained values keep
+  their existing F1 identities; the packet is an internal execution container, not evidence.
+- Repaired the provider join's [[D1943]]–[[D1944]] follow-ups: legal-root scores now retain a
+  root-side cp/mate-outcome frame, and F1 source payloads retain the complete delivery/acquisition
+  envelope.
+- Added `make candidate-packet-contract`; 7/7 packet arms and 8/8 provider arms pass through normal
+  repository-owned targets. Updated the research coverage, RFC register and repeat-review handoff.
+  Both RFCs remain draft; production is forbidden until fresh independent buildability review.
+
+## 2026-08-28 — Candidate-packet composition-root correction
+
+- The preceding packet entry's “real semantic-selection composition” is specifically
+  `apps/server/src/semantic-evidence-check.ts`. A source trace found `createApplication` has no
+  semantic-selection caller or route; injecting the service there would be a dormant anchor
+  ([[D1947]]).
+- Removed `application.ts` from the first-landing surface. The semantic executable constructs the
+  service/operation it actually calls; application ownership waits for the first concrete Support,
+  Review or bot route. The focused packet target now passes 8/8.

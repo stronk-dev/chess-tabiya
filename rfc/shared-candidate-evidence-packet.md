@@ -1,21 +1,20 @@
 # RFC: Shared candidate evidence packet — the compiled legal population three consumers are measured against
 
-- **Status:** draft — returned by repeat independent buildability review 2026-08-27 on
-  [[D1900]]–[[D1903]], with the returned provider dependency [[D1871]]–[[D1878]] still blocking.
-  The [[D1631]]–[[D1636]] terminal/cache/closure/score repairs survive and the literal amended F1
-  tuple compiles, but consumer-specific admission is conflated with the factual cache, the
-  scope-specific derivation has no runtime value witness, the claimed bot consumer is test-only,
-  and per-child evaluation replaces the measured one-root operation without a whole-set budget.
-  Exact return:
+- **Status:** draft — amended 2026-08-28 after the repeat [[D1900]]–[[D1903]] return and the
+  follow-up [[D1945]]–[[D1947]] contract re-derivation. The factual receipt is cached without
+  consumer authority, the packet is honestly an internal process-local execution value over
+  individually F1-declared evidence rather than a false aggregate derived projection, the first landing has one real semantic
+  consumer, and the held bot join uses one complete legal-root exchange rather than N child
+  searches through an explicit downstream handoff. Exact original return:
   `planning/evidence-foundation-ux/shared-candidate-packet-repeat-review-2026-08-27.md`.
-  Do not implement before amendment and another independent review. [[D1580]] remains separate
-  numeric appliance-tier debt
+  Repeat independent review remains. The provider-free packet landing no longer waits on the
+  provider RFC; the held D10 bot join does. [[D1580]] remains separate numeric appliance-tier debt
 - **Author:** claude (drafted from `design/research/shared-candidate-evidence-packet.md` and `tools/d1071-candidate-packet-harness/`; every carried claim re-verified at HEAD, with seven corrections recorded)
 - **Created:** 2026-08-23
 - **Design refs:** `design/05-in-run-experience.md` §5 (*"detection is cheap, significance is not"* — the split this RFC executes in code: one factual population, separate opinionated derivations) and §3b-i (*"The LLM is the voice, never the source"*); `design/03-product-breadth.md` §Play (opponent selection) and §Intelligence and explanation
 - **Exploration gate:** [[D1071]] 📊 and [[D1072]] 🐞 — research complete 2026-08-23, dossier `design/research/shared-candidate-evidence-packet.md`, executable falsifier `tools/d1071-candidate-packet-harness/` under `rfc/0000-rfc-process.md` §Exploration gate. [[D1330]]'s per-dossier classification of all 118 research artifacts ranked this **live debt rank 6**: the population finding was partially adopted by `evidence-move-selector.md`, *"but the packet itself is that RFC's Discharge D2, unbuilt"*
-- **Depends on:** **accepted** `rfc/exact-legal-mobility.md` — it ships the single actual-turn move authority (`exactLegalMoves`/`exactLegalMoveMap`), `MOVE_IDENTITY_CONVENTION`, `MOVE_DESTINATION_CONVENTION` and the `rules.mobility.reading.legal_moves@1` projection, which is this packet's legal-convention field rather than a new one (§4.2). Implemented F1 evidence contract (`rfc/archive/evidence-contract-manifest.md`, `rfc/archive/semantic-evidence-selection.md`) and the compiled catalogue at HEAD; draft `rfc/provider-exchange-and-execution.md` for same-exchange Stockfish/Maia receipts, the shared scheduler and cancellation semantics (must be accepted first)
-- **Parent / amends:** amends the `SemanticSelectionInput` contract in `packages/runtime/src/semantic-evidence.ts` (§3 — the caller-supplied alternative population becomes a compiled packet), the `derived.opponent.candidate_feature_vector@1` declaration in `packages/runtime/src/evidence-catalog.ts:712-723` (§8.2 — its engine dependency becomes consumed rather than declared), and `rfc/review-evidence-compiler.md`'s engine-point source (§8.3 — a node-free position evaluation becomes the shared source and Review derives its node-scoped point). **Discharges rebuilt `rfc/hint-distance.md` D2 on landing**; that row is its author's to flip
+- **Depends on:** **accepted** `rfc/exact-legal-mobility.md` — it ships the single actual-turn move authority (`exactLegalMoves`/`exactLegalMoveMap`), `MOVE_IDENTITY_CONVENTION`, `MOVE_DESTINATION_CONVENTION` and the `rules.mobility.reading.legal_moves@1` projection, which is this packet's legal-convention field rather than a new one (§4.2); implemented F1 evidence contract (`rfc/archive/evidence-contract-manifest.md`, `rfc/archive/semantic-evidence-selection.md`) and the compiled catalogue at HEAD. The provider RFC is a dependency of held Discharge D10, not of this provider-free landing
+- **Parent / amends:** amends the `SemanticSelectionInput` contract in `packages/runtime/src/semantic-evidence.ts` (§3 — the caller-supplied alternative population becomes a compiled packet). It supplies the complete-population input and one-root score-source correction to `evidence-move-selector.md`/bot Discharge D10 without implementing a dormant candidate vector here. Review's separate node-free position evaluation stays owned by `provider-exchange-and-execution` plus `review-evidence-compiler`; this RFC does not turn it into N child searches. **Discharges rebuilt `rfc/hint-distance.md` D2 on landing**; that row is its author's to flip
 - **Supersedes / superseded by:** —
 - **Planning:** `planning/evidence-foundation-ux/` (once implementing)
 
@@ -36,13 +35,12 @@ resource. Checked, not assumed:
   JSON that resembles a semantic event is not the event. `[V]`
 - **No migration**, for the same reason: an LRU keyed by a content digest is not a table.
 - **No shape-entry, principle-entry or campaign lane.**
-- **No evidence-kinds member.** That register governs `EVIDENCE_KINDS` in
-  `apps/server/src/sourcing/types.ts:57-65`, the **content-sourcing** union of seven; this RFC adds
-  an **evidence-catalogue projection**, which is a different object with no register in
-  `rfc/README.md` and no schema on disk (`schemas/` holds five documents, none of them the
-  manifest). `[V]` The manifest carries a **content digest** (`evidence-manifest.ts:82`) that moves
-  whenever the catalogue moves; that is a derived value, not a claimed lane, and criterion 14 makes
-  the absence of any register collision failable rather than asserted.
+- **No evidence-kinds member and no F1 projection.** That register governs `EVIDENCE_KINDS` in
+  `apps/server/src/sourcing/types.ts:57-65`, the **content-sourcing** union of seven. This RFC adds
+  no catalogue projection: the packet is an internal
+  execution receipt whose retained events/readings keep their existing exact F1 identities. A
+  complete packet contains a position-specific subset of the possible collector vocabulary, so
+  declaring the whole vocabulary as one derivation conjunction would be false ([[D1946]]). `[V]`
 
 The precedent is `evidence-move-selector.md` §5's and `bot-route-source.md`'s identical `none` on
 identical ground ([[D936]]: a catalogue is not a table). The register row for this draft is added to
@@ -100,9 +98,10 @@ sealed events, ~558 ms** to compile the population once. `[V]`
 
 **And the same population would be compiled up to three times per node without a shared service**:
 the bot's selector cache is keyed on policy and session, while the hint and Review operations do
-not yet exist at one production boundary. Today only the bot-side host is concrete; the earlier
-claim that three live consumers already recompile it was too strong. §6.0 names the server
-composition root and narrows reuse to operations actually injected with that cache. `[V]`
+not yet exist at one production boundary. Today only the semantic-check executable calls local
+selection; the bot host exists but does not consume this population. The earlier claim that three
+live consumers already recompile it was too strong. §6.0 names the executable composition root and
+defers shared application lifetime until the first real route consumes it. `[V]`
 
 **The correctness argument is stronger than the latency one**, and it is the reason this is a
 foundation rather than a cache. The R2 distinctiveness rule — *this event is worth showing because
@@ -311,15 +310,15 @@ prerequisite for a layer that does not need it. The two documents touch at exact
 state an obligation against the legal set — and that point is where §5.2's runtime refusal (a
 proposal set equal to the complete legal set) becomes checkable against a population the proposer
 did not supply. **No file, type or line is claimed by both.** The route source's edits are in
-`apps/server/src/bot-policy-catalog.ts`; this RFC's are in `packages/runtime/src/semantic-evidence.ts`,
-`packages/runtime/src/evidence-catalog.ts` and one new runtime module. Landing order is free in both
+`apps/server/src/bot-policy-catalog.ts`; this RFC's are in `packages/runtime/src/semantic-evidence.ts`
+and the new runtime packet/cache modules. Landing order is free in both
 directions, and no cross-draft pin is required.
 
 **§2.4 — Against `hint-distance.md`: it is that RFC's named dependency.** Its Discharge D5 is *"The
 shared score-free candidate/event packet ([[D1071]])"* with this filename in its target column, and
 its §7 refuses independent recomputation per consumer. This RFC supplies the population; the rung
 grammar, the redaction and the family table stay there. The one thing this RFC hands it beyond the
-population is §1.5: the emitted closure becomes **derived**, so `hint-distance`'s accepts table can
+population is §1.5: the emitted closure becomes **code-derived from the collector registry**, so `hint-distance`'s accepts table can
 be asserted set-equal to something rather than hand-listed — which is the mechanism [[D1363]] found
 missing.
 
@@ -330,30 +329,25 @@ It owns the Review packet; this RFC owns the population its denominators are com
 
 ### §3 — `CandidateEventPopulation`: the contract
 
-**§3.1 — Identity and the literal F1 tuple** ([[D1570]]). Register one output on a new
-`derived.candidate@1` producer implemented in `packages/runtime/src/candidate-population.ts`.
-The producer is `plane: "derived"`, `availability: "local"`, `latency: "sync"`. Its output is:
+**§3.1 — Identity and the process receipt** ([[D1570]], [[D1901]], [[D1946]]). The packet is **not an
+F1 projection**. It is an internal execution value grouping one complete legal population and the
+exact already-declared evidence values emitted for its child positions. F1's
+`derivation.inputs` is a conjunction; each `anyOf` member is an alternative conjunction and a
+runtime semantic-event seal records the one complete member actually used. A real packet contains
+a position-specific subset of the possible 47 event and 22 reading identities. The earlier
+three-member declaration therefore compiled only because the manifest checked names and
+inheritance: it falsely claimed the entire scope vocabulary occurred in every packet value. No
+aggregate projection, adapter, binding, consumer view or future-only opponent admission ships here.
 
-| field | literal value |
-|---|---|
-| id / role / plane | `derived.candidate.event_population@1` / `reading` / `derived` |
-| payload / semantics | `CandidateEventPopulation` / complete exact legal-move rows plus the literal sealed local evidence emitted for each child under the named scope and conventions |
-| operands | `id`, `beforeFen`, `scope`, `legalConvention`, `moveIdentityConvention`, `manifestDigest`, `compilerVersion`, `legalMoves`, `candidates`, `terminal` |
-| sign / grounding / exactness / confidence | `state` / `declared_convention` / `convention` / `exact` |
-| abstention | possible: `input_abstained`; a terminal root is a valid zero-row packet and construction errors remain typed failures, while a collector-specific abstention is retained on its candidate row rather than laundered into absence |
-| answer / forms | `fact`, `candidate_moves` / `list`, `panel`, `machine_condition` |
-| derivation | literal `anyOf` with exactly three members keyed by scope: `[legal_moves, ...events]`, `[legal_moves, ...readings]`, `[legal_moves, ...events, ...readings]`; `dependsOn: []`, because the derivation members already own the complete dependency union |
-| limitations | legality and emitted evidence are not quality, rank, likelihood, recommendation, grade or personality; the packet is operator/internal and may not be rendered to a learner |
-
-The projection is bound, not disposed. `research.semantic_selection@1` and
-`opponent.selection@1` both accept it through literal `machine_condition` adapters and their
-production operations take a sealed `ConsumerEvidenceView<CandidateEventPopulation>` rather than a
-raw payload. The research consumer's answer image gains `candidate_moves`; both consumers remain
-operator-only. Hint and Review **do not** accept the raw packet: their future internal join
-operations register their own bindings when they land, and learner modules accept only the
-selected derived item. A fixture deletes either of the two landing bindings and the F1 compiler
-fails orphan closure; a fixture adds the packet to a learner-role consumer and the role/operation
-audit fails. No generic bypass or temporary disposition is permitted.
+This does not remove evidence authority. `legalMovesInput`, every retained
+`SemanticEvidenceEvent`, and every retained `DeclaredEvidence` reading preserve their exact existing
+F1 identities and seals. The private packet compiler records their original object references in a
+process-only receipt and refuses any packet not minted from those values. Downstream conclusions
+must declare the particular values they actually compose; they may not cite the packet container as
+if it were evidence. The real semantic-selection operation consumes the receipt as execution input
+and continues to select only from the existing `research.semantic_selection@1` event bindings.
+The held bot handoff (§8.3) receives the same neutral receipt, but D10 must define truthful derived
+output identities over the exact values it uses before a production bot consumes them.
 
 `CANDIDATE_PACKET_COMPILER_VERSION = 1` is an exported literal and every construction-semantic
 change must move it or the cache-identity fixture fails.
@@ -364,7 +358,6 @@ export type CandidatePacketScope =
   | { readonly events: true; readonly readings: true }
   | { readonly events: false; readonly readings: true };
 
-/** derived.candidate.event_population@1 */
 export interface CandidateEventPopulation {
   readonly id: string;                        // digest over the identity fields below
   readonly beforeFen: string;                 // canonical full six-field FEN
@@ -388,25 +381,48 @@ export interface CandidateEventRow {
     readonly reason: string;
   }[]; // typed collector abstentions only; no-match is not an abstention
 }
+
+export interface CandidatePopulationRequest {
+  readonly beforeFen: string;
+  readonly scope: CandidatePacketScope;
+}
+
+/** Process-local compiler provenance; not a general F1 derivation receipt. */
+declare const CANDIDATE_POPULATION_RECEIPT: unique symbol;
+export interface CandidatePopulationReceipt {
+  readonly [CANDIDATE_POPULATION_RECEIPT]: true;
+  readonly packet: CandidateEventPopulation;
+  readonly selectedMember: "events" | "readings" | "events_and_readings";
+  readonly legalMovesInput: DeclaredEvidence<ExactLegalMoveMap>;
+  readonly candidateInputs: readonly {
+    readonly moveUci: string;
+    readonly events: readonly SemanticEvidenceEvent[];
+    readonly readings: readonly DeclaredEvidence<unknown>[];
+  }[];
+}
 ```
 
-This literal tuple is compiled by `compileEvidenceManifest` as an acceptance fixture, not merely
-compared to prose ([[D1634]]). Each scope selects its exact `anyOf` member; an events-only packet
-does not falsely claim readings and a readings-only packet does not falsely claim events. The
-legal-move input is position-rules/exact; each retained closure
-mixes exact and declared-convention inputs, so the packet declares
-`grounding: "declared_convention"`, `exactness: "convention"`, `confidence: "exact"` and
-`abstention: {possible:true,reasons:["input_abstained"]}`. A negative fixture removes the weakest
-input while retaining its payload, claims position-rules grounding, claims exactness, or removes
-`input_abstained`; each must fail the shipped compiler. Scope narrows which retained inputs appear
-in a value, never the declaration's complete possible-input vocabulary.
+The packet compiler therefore creates and process-seals `CandidatePopulationReceipt` while it still
+holds the exact source object references. `selectedMember` is derived from the closed scope, every
+candidate input is reference-identical to the value retained in the packet, and excluded families
+are frozen empty. The private seal proves only “this compiler created this receipt in this process”;
+it is not called an F1 derivation receipt, is not persisted, and cannot be supplied by a caller.
+All other code receives a `CandidatePopulationReceipt`; passing `receipt.packet` without its receipt
+to an operation or constructing a packet-shaped object fails the application/import census.
 
-The projection name is this RFC's, replacing the dossier's provisional
-`derived.candidate.event_population@1` with the same string; the shape is the dossier's with §0's
-first correction applied.
+Each retained semantic event/reading remains individually admitted through its existing F1 or
+semantic-event constructor. The aggregate is never declared or admitted as evidence. An events-only receipt does not retain readings and a
+readings-only receipt does not retain events. The
+legal-move input remains position-rules/exact and each retained evidence value keeps its own
+grounding, exactness, confidence and abstention rather than being laundered into one aggregate
+label. Runtime negatives forge the receipt, mismatch selected member/scope, replace one retained
+input by an equal rebuild, or remove a retained reference; they fail the packet compiler's receipt
+assertion. Scope narrows which retained inputs appear in a value. The possible-input vocabulary is
+a code-derived registry and migration guard, never a claim that all members fired in one position.
 
-**§3.2 — What a caller may supply and what it may not.** A caller supplies **`beforeFen`** and a
-**request scope** (§3.4). It may not supply `afterFen`, `legalMoves`, any event, any event sign, id,
+**§3.2 — What a caller may supply and what it may not.** A caller supplies exactly the closed
+`CandidatePopulationRequest`: **`beforeFen`** and a **request scope** (§3.4). The service injects
+manifest, compiler and convention identities. The caller may not supply `afterFen`, `legalMoves`, any event, any event sign, id,
 anchor, basis or derivation input, or any reading. Every one of those is derived by the compiler
 from the root and the legal-move authority. This is the whole of the repair: the population stops
 being an argument and becomes an output. Criterion 1.
@@ -559,8 +575,9 @@ const LOCAL_CANDIDATE_READING_PROJECTION_IDS = Object.freeze([
 compiler separately evaluates `legal_exchange` on the exact root edge and evaluates
 `fork_survives_reply` only from the retained double-attack event plus exact reply breadth/legal
 exchange inputs. Its explicit abstention is retained in `row.abstentions`; no-match emits neither a
-reading nor an abstention. Both exported arrays are set-equal to the literal §3.1 F1 inputs and the
-candidate-vector declaration. Before/after migration fixtures compare projection **identity
+reading nor an abstention. Both exported arrays are checked against the compiled catalogue and the
+candidate compiler's allowed-value registry; D10 separately owns any truthful downstream
+candidate-vector derivation. Before/after migration fixtures compare projection **identity
 multisets** (not just counts) on ordinary, capture, double-attack and abstaining candidates; deleting
 either extra derivation fails while all twenty child readings remain present.
 
@@ -574,23 +591,26 @@ integers. Criterion 10, which is **red before the change and green after**.
 ### §6 — Cache identity, invalidation, single-flight, and the bound
 
 **§6.0 — Ownership and process boundary** ([[D1572]]). `CandidatePopulationService` owns one
-`CandidatePopulationCache`; neither is a module singleton. `apps/server/src/application.ts`
-constructs the service once and injects it into `OpponentSelector` and the server-side semantic
-selection operation. Future Guided Hint and Review joins share it only if they execute in that same
-server process and receive the same injected service. A browser, worker or second server process
+`CandidatePopulationCache`; neither is a module singleton. In this first landing,
+`apps/server/src/semantic-evidence-check.ts` constructs it once and passes it to the real semantic
+selection operation that replaces that executable's direct helper call. `createApplication` gains
+nothing while no user-facing route consumes the packet ([[D1947]]). The first accepted bot,
+Guided Hint or Review route constructs one application-owned service and injects that same instance
+into every packet operation landing with it. A browser, worker or second server process
 compiles or fetches its own derived result; this RFC refuses packet serialization and therefore
 claims no cross-process packet reuse. Tests construct isolated services with explicit limits.
 
-The application composition root is the cache lifetime: restart clears it, deployment instances do
-not coordinate it, account/run deletion has nothing to invalidate because no learner/session term
-enters the key. A production operation reaching the compiler without an injected service fails the
-consumer-operation census; it may not instantiate an ad-hoc cache per request.
+The owning executable/process composition root is the cache lifetime: exit/restart clears it,
+deployment instances do not coordinate it, and account/run deletion has nothing to invalidate
+because no learner/session term enters the key. A future production operation reaching the compiler
+without the one injected application service fails its consumer-operation census; it may not
+instantiate an ad-hoc cache per request.
 
-The production operations are named, callable and separately cancellable ([[D1633]]):
+The production operation is named, callable and separately cancellable ([[D1633]]):
 
 ```ts
 interface CandidatePopulationService {
-  get(request: CandidatePopulationRequest, signal: AbortSignal): Promise<ConsumerEvidenceView<CandidateEventPopulation>>;
+  get(request: CandidatePopulationRequest, signal: AbortSignal): Promise<CandidatePopulationReceipt>;
 }
 
 interface SemanticSelectionOperation {
@@ -598,30 +618,22 @@ interface SemanticSelectionOperation {
     Promise<EvidenceSelectionResult>;
 }
 
-interface CandidateFeatureOperation {
-  build(input: { packet: ConsumerEvidenceView<CandidateEventPopulation>; evaluations: readonly DeclaredEvidence<FixedBoundPositionEvaluation>[] }, signal: AbortSignal):
-    Promise<ConsumerEvidenceView<CandidateFeatureVector>>;
-}
 ```
 
 `apps/server/src/semantic-selection-operation.ts` owns the research operation: it requests the
-event scope, finds the played row using the packet reader and passes that row plus the packet's
-literal alternatives to `selectSemanticEvidence`; the CLI calls this operation rather than a
-runtime helper that recompiles. `apps/server/src/candidate-feature-operation.ts` owns the bot join:
-it requests the full scope, obtains fixed-bound evaluations through the shared provider scheduler,
-then compiles the root-side vector. `OpponentSelector.select` calls it only for a compiled bot
-profile declaring evidence/guard inputs; profiles without those layers do not pay for it. The
-production test supplies such a compiled profile through the real selector path, so this is
-consumption rather than a dormant anchor.
+event scope, verifies the returned receipt, finds
+the played row using the packet reader and passes that row plus the packet's
+literal alternatives to `selectSemanticEvidence`; those retained events already carry the existing
+`research.semantic_selection@1` bindings. The CLI calls this operation rather than a runtime helper
+that recompiles. The cache stores only the neutral receipt and never F1 consumer authority.
 
-`createApplication` constructs one packet service, the semantic operation, candidate-feature
-operation and bounded final-selection cache, injects them into `OpponentSelector` and the CLI/service
-composition adapter, and closes their scopes on application shutdown. Caller abort/deadline flows
-into packet single-flight and the provider scheduler. Cancelling one waiter removes that waiter;
+`semantic-evidence-check.ts` constructs one packet service and semantic operation for the duration
+of the command. `createApplication` remains unchanged and does not inject a packet operation into
+`OpponentSelector` while `BOT_POLICY_PROFILES` is empty. Caller abort/deadline flows into packet single-flight. Cancelling one waiter removes that waiter;
 shared packet compilation continues for remaining waiters and aborts when none remain. A completed
 packet may be cached; failures/cancellations are not. No public REST route is added by this lower
-primitive—the hint, Review and bot route owners expose their own operations—but every listed
-consumer is invoked through a production composition path and operation census.
+primitive—the hint, Review and bot route owners expose their own operations. The one current
+executable consumer is invoked through its actual command entry point and operation census.
 
 **§6.1 — The key is facts only.**
 
@@ -643,7 +655,9 @@ literal and no layer may drop an input owned by the layer below ([[D1632]]):
 1. **Factual packet:** the `packetId` tuple above.
 2. **Provider exchange:** the provider RFC's complete normalized request identity and receipt. For
    Maia this includes `startFen + historyUci[]`, model/band, temperature, top-p, requested width and
-   provider generation. For Stockfish it includes exact FEN, engine/version/generation and bound.
+   requested model identity; actual model/generation remains acquisition provenance. For Stockfish
+   it includes exact FEN, requested engine/version and bound, while actual generation is captured
+   inside the exchange and checked for retained admission.
 3. **Policy result:** `packetId + provider receipt/response digest + policyConfigDigest + profile
    id/version/digest + targetElo + pack/repertoire identity + seed` and every other literal input
    named by the compiled policy layers.
@@ -673,11 +687,13 @@ positions whose clock fields differ remain different factual packets. The final 
 reports the growth and nothing acts on it. `[V]` Single-flight is present and correct (the promise is
 stored before resolution and deleted on rejection, `:495-503`) and is the pattern §6.3 keeps.
 
-Landing replaces it with a bounded `OpponentSelectionCache`. Provider execution first yields the
-same-exchange receipt from `provider-exchange-and-execution`; only then can the policy-result key be
-constructed. Cache lookup therefore cannot precede provider identity unless a retained exact
-provider result supplies that receipt. The final cache keeps single-flight, entry/weight bounds and
-rejection deletion; a packet hit never implies a provider or selection hit.
+This landing does not replace that cache while no production evidence-bearing bot profile can reach
+it. Discharge D10 requires the first accepted bot landing to replace it with a bounded
+`OpponentSelectionCache`. Provider execution first yields the same-exchange acquisition/delivery
+from `provider-exchange-and-execution`; only then can the policy-result key be constructed. Cache
+lookup therefore cannot precede provider identity unless a retained exact provider result supplies
+that receipt. The future final cache keeps single-flight, entry/weight bounds and rejection
+deletion; a packet hit never implies a provider or selection hit.
 
 **§6.3 — Single-flight and a measured dual bound.** Packet construction is single-flight per key —
 the in-flight promise is stored, and deleted on rejection so a failure is not memoised. The cache is
@@ -740,16 +756,26 @@ sealed against.** §11 item 5 records this as a refusal with its exit named.
 
 ### §7 — Three consumers, three exact joins, three honest abstentions
 
-Each join takes the packet plus **one declared input family** (a complete same-bound evaluation set
-for the bot, one PV table for Hint, one played edge for Review), and each abstains on a stated
+Each join takes the packet plus **one declared input family** (one complete legal-root table for the
+bot, one PV table for Hint, one played edge for Review), and each abstains on a stated
 condition without disturbing the packet.
 
-**§7.1 — The bot's candidate vector.** Inputs: the complete population, plus one sealed fixed-bound
-evaluation **per scored candidate**. Output: scores joined to retained event identities. Abstains
-when the evaluation provider is off, when the score set is incomplete or mixes mate and centipawn
-domains ([[D969]]'s measured case: the typed rerun *"abstains on 11 mixed mate/cp positions (33
-cells) rather than converting mate to fake cp"*), or when the bot's declared cap is not the complete
-population it claims. `[V]`
+**§7.1 — The held bot candidate vector uses one measured root exchange.** Inputs: the complete
+population plus one admitted
+`ProviderEvidenceDelivery<StockfishLegalRootTable>` from
+`live.stockfish.legal_root_table@1`, with the table request FEN exactly equal to packet `beforeFen`.
+Output: root-table scores joined by canonical `moveUci` to retained event identities. Set equality
+between table rows and packet legal moves is required before any score is read. The join abstains
+when the provider is off, the root table is incomplete, its engine/bound/acquisition is unavailable,
+or the table mixes mate and centipawn domains ([[D969]]'s measured case: the typed rerun *"abstains
+on 11 mixed mate/cp positions (33 cells) rather than converting mate to fake cp"*). `[V]`
+
+This RFC specifies and fixtures the D10 handoff but does **not** land the vector refactor,
+`CandidateFeatureOperation`, application injection, profile or live bot traversal. The first
+accepted bot profile/route RFC owns the vector declaration/constructor and production operation, an
+arrival-based aggregate deadline over packet plus one root exchange, cancellation and its full
+cold/warm measurement. It may not replace this source with per-child searches without a separately
+preregistered horizon, batching, latency and cancellation study.
 
 [[D1571]] makes “joined” literal rather than descriptive. The repaired payload is:
 
@@ -759,7 +785,7 @@ interface CandidateScoreJoinRow {
   readonly moveUci: string;
   readonly afterFen: string;
   readonly candidateEventIds: readonly string[];
-  readonly evaluation: DeclaredEvidence<FixedBoundPositionEvaluation>;
+  readonly sourceRowMoveUci: string;
   readonly rootScore:
     | { readonly kind: "centipawns"; readonly value: number }
     | { readonly kind: "mate"; readonly outcome: "root_mates" | "root_is_mated"; readonly distance: number };
@@ -769,24 +795,28 @@ interface CandidateScoreJoinRow {
     | { readonly kind: "mate_outcome_flip" };
 }
 
-interface CandidateFeatureVector {
-  readonly packet: DeclaredEvidence<CandidateEventPopulation>;
-  readonly scoreFrame: "root_side";
-  readonly candidates: readonly CandidateScoreJoinRow[];
+interface CandidateScoreJoinInput {
+  readonly packet: CandidatePopulationReceipt;
+  readonly rootTable: DeclaredEvidence<ProviderEvidenceDelivery<StockfishLegalRootTable>>;
+  readonly scoreFrame: "root_side_to_move";
 }
 ```
 
-`evaluation.projection` is `live.stockfish.position_eval@1` (§8.3). Each row is accepted only when
-`packetId`, `moveUci` and `afterFen` match one packet row and the evaluation's exact FEN matches that
-child. Completeness is set equality between joined rows and the declared evaluated scope; the
-complete arm requires all packet rows. The vector's literal derivation inputs are the packet and
-the generic position evaluation, and the runtime payload retains the exact admitted input values.
-A score number plus a copied engine identity is not an input and is rejected.
+`rootTable.projection` is `live.stockfish.legal_root_table@1` (§8.3). The delivery's table request
+FEN, move identity convention and complete row set match the packet root and legal set. Each row is
+accepted only when `packetId`, canonical `moveUci` and source-row identity match one packet row.
+The join input retains the process-sealed packet receipt and one complete admitted root-table
+delivery. It is an internal operation input, not a derived F1 value: the packet container is not
+evidence. D10 must declare the actual downstream output over the exact retained evidence values it
+uses (or first land a general value-level derivation receipt); it may not name the packet as a
+derivation input or repeat the current false variable-set `anyOf` shape. A score number, copied row
+or copied engine identity is not an input and is rejected.
 
-`rootScore` is a derived value, never a relabel of the White bytes ([[D1636]]). For a White root,
-centipawns are retained; for a Black root they are negated. A mate item maps its named mating side
-to `root_mates|root_is_mated` and requires a positive safe-integer distance. Every row must share
-one engine id/version/generation and one literal bound. The loss algebra is closed by score domain:
+`rootScore` is retained from the provider table's declared `root_side_to_move` frame ([[D1943]]),
+never converted from child or White bytes. A mate item already carries
+`root_mates|root_is_mated` and a positive safe-integer distance. The single table/acquisition owns
+one engine id/version/generation and literal bound for every row. The loss algebra is closed by
+score domain:
 
 - cp-only: `bestRootCp - rowRootCp`, finite and non-negative;
 - mate-only: `root_mates` outranks `root_is_mated`; among root mates, shorter distance is better;
@@ -794,15 +824,16 @@ one engine id/version/generation and one literal bound. The loss algebra is clos
   `mate_distance`; a losing candidate below a winning best becomes `mate_outcome_flip`.
 - mixed cp/mate: the vector abstains `mixed_score_domain`; no mate value is converted to fake cp.
 
-Black-root, cp-only, all-winning-mate, all-losing-mate, outcome-flip, mixed-domain, engine/bound
-mismatch and zero/non-integral mate fixtures make the conversion and comparison able to fail. The
-vector declares `scoreFrame: "root_side"` only because it retains these derived `rootScore`/`loss`
-values beside the original White evaluation.
+White- and Black-root, cp-only, all-winning-mate, all-losing-mate, outcome-flip, mixed-domain,
+root-FEN/legal-set mismatch and zero/non-integral mate fixtures make the retained frame and
+comparison able to fail. The internal join declares `scoreFrame: "root_side_to_move"` and retains
+the original delivered root table; it owns loss only, not a second score-frame conversion.
 
-**A bot may evaluate a declared capped subset** — that is legitimate and cheap — but then the derived
-value is marked `evaluated_subset` and **may not support a complete-alternative claim**. **MultiPV is
-a scored search output and is not the exact legal population**, and criterion 15 makes that failable
-rather than conventional: a MultiPV result presented as the population fails.
+**The packet remains the exact legal population; the table is a measured score source.** The
+provider operation uses `MultiPV=N searchmoves` only after independently enumerating the exact legal
+set and requires set equality on return. A bare caller-chosen MultiPV list can never substitute for
+the packet or legal authority. A downstream bot may project a capped scored subset, but that value
+is marked `evaluated_subset` and may not support a complete-scored-alternative claim.
 
 **§7.2 — The semantic-horizon hint.** Inputs: the packet at each searched PV node, plus one sealed
 versioned PV. Output: one operator-only, relation-safe occurrence retaining exact search, packet,
@@ -843,8 +874,8 @@ the same member from the other side. The packet's closure is the **declared** se
 is the must-fail fixture: a Maia WDL declaration offered to the
 packet compiler is refused.
 
-**§8.3 — One node-free engine point is shared by candidate scoring and Review** ([[D1571]],
-[[D1576]]). The current defect is unchanged:
+**§8.3 — Candidate scoring consumes the measured complete root table; Review keeps its distinct
+node-free point** ([[D1571]], [[D1576]], [[D1903]]). The current defect is unchanged:
 `derived.opponent.candidate_feature_vector@1` declares
 `dependsOn: [ref("live.stockfish.eval"), …]` and `derivation.anyOf` requiring
 `live.stockfish.eval` with each collector (`evidence-catalog.ts:721-722`), while its declaration
@@ -853,48 +884,27 @@ constructor accepts any finite number (`candidate-evidence.ts:198`). `[V]` This 
 undeclared-input class caught for runtime opening identity at [[D1018]], live in an operator
 projection.
 
-This RFC adds `live.stockfish.position_eval@1`, the generic source primitive both products were
-missing:
+The provider RFC owns two deliberately distinct Stockfish sources. Candidate scoring consumes
+`live.stockfish.legal_root_table@1`: one fixed-depth, all-legal request whose normalized row set is
+equal to the exact legal authority, carrying a complete
+`ProviderEvidenceDelivery<StockfishLegalRootTable>` in the `root_side_to_move` frame. This is the
+operation D969 actually measured. `live.stockfish.position_eval@1` remains a node-free White-frame
+single-position source for Review and other point consumers; this RFC no longer fans it out once per
+child.
 
-```ts
-type FixedBoundPositionScore =
-  | { readonly kind: "centipawns"; readonly value: number }
-  | { readonly kind: "mate"; readonly side: "white" | "black"; readonly distance: number; readonly unit: "moves" };
+The vector becomes a derivation of the packet plus one admitted delivered legal-root table. A
+caller-invented score is rejected unless it is a row of the retained table whose request FEN,
+move-identity convention, legal set, engine identity, generation and bound match the packet and
+delivery. Criterion 17 is the must-fail fixture: `scoreCp: 900031` with no admitted table fails; an
+equivalently large **typed centipawn** row in a valid complete table succeeds because the gate checks
+provenance/domain, not plausibility. A mate row never enters a cp field; mixed domains abstain as
+§7.1 states.
 
-interface FixedBoundPositionEvaluation {
-  readonly fen: string;                 // canonical full six-field evaluated FEN
-  readonly positionKey: string;         // transposeKey(fen), retained but never substituted for fen
-  readonly perspective: "white";
-  readonly score: FixedBoundPositionScore;
-  readonly engine: { readonly id: string; readonly name: string; readonly version: string };
-  readonly bound:
-    | { readonly kind: "movetime"; readonly requestedMs: number; readonly reachedDepth: number | null }
-    | { readonly kind: "depth"; readonly requestedDepth: number; readonly reachedDepth: number | null }
-    | { readonly kind: "nodes"; readonly requestedNodes: number; readonly reachedDepth: number | null };
-  readonly receipt: ProviderExchangeReceipt; // same exchange as score/engine/bound
-}
-```
-
-The projection belongs to `live.stockfish`, with `grounding: bounded_search`,
-`exactness: measured`, `confidence: reported`, operands exactly the seven fields above, answer
-`evaluation`, forms `panel | machine_condition`, and abstention
-`provider_unavailable | invalid_source_payload`. It contains no node id, best move, PV, rank or
-grade. The operand list includes `receipt` after composing with
-`provider-exchange-and-execution`; the receipt's actual engine/generation/request/bound/response
-identity must match the filtered fields from the same exchange. The adapter constructs a filtered
-value; it never stamps health or seals a generic provider payload by reference.
-
-`review-evidence-compiler.md`'s node-scoped `derived.review.eval_point@1` derives from this
-projection plus `run.record.position@1`; it does not fake a node id for hypothetical children
-and does not create a second score authority. Candidate scoring consumes `position_eval` directly.
-The vector becomes a derivation of the packet plus admitted position-evaluation items and the
-typed White→root-side comparison in §7.1: a
-caller-invented score is rejected unless the sealed item's exact FEN, engine identity, bound and
-typed score domain match the packet row. Criterion 17 is the must-fail fixture — `scoreCp: 900031`
-with no admitted item fails; an equivalently large **typed centipawn** item with valid provenance
-succeeds because the gate checks provenance/domain, not plausibility. A mate item never enters a cp
-field; mixed domains abstain as §7.1 states. The original White item remains available to Review;
-only `derived.opponent.candidate_feature_vector@1` owns root-side scores and loss.
+`review-evidence-compiler.md`'s node-scoped `derived.review.eval_point@1` still derives from
+`live.stockfish.position_eval@1` plus `run.record.position@1`; it does not fake a node id and does
+not create a second score authority. The two sources share scheduler/acquisition machinery, not
+payload semantics. Replacing the one-root candidate source with N child requests requires new
+research and a new amendment rather than being hidden behind “same bound.”
 
 ### §9 — Surface boundary, law 8, and the LLM
 
@@ -920,18 +930,14 @@ an access rule. Criterion 19 asserts no renderer path reaches the packet.
 
 Priced at the full ask ([[D1230]]).
 
-**Ships in this RFC, complete:** the exact F1 tuple and operator-only bindings for
-`derived.candidate.event_population@1`; the compiler and its set-equality completeness assertion;
+**Ships in this RFC, complete:** the process-sealed neutral packet receipt and its set-equality completeness assertion;
 the checkmate/stalemate terminal distinction and explicit adjudication separation; the request-scope vocabulary and immutable wide-to-narrow
 projection; the legal-authority and dialect rules; original sealed-event retention; the
 **code-derived** event and 20+2 reading closures plus a separate prevalence/cost census and `make
-candidate-closure-census`; the injected per-process `CandidatePopulationService`; the full-FEN key,
-single-flight, dual-bound weighted LRU, statistics and invalidation rules; the three join contracts
-with their abstentions; the `evaluated_subset` marker and the MultiPV refusal; the Maia-leak repair;
-the generic node-free `live.stockfish.position_eval@1` source and engine-provenance repair to
-`candidate_feature_vector`, including White→root-side score and typed loss; the bounded
-history-preserving final selection cache; the concrete semantic-selection and candidate-feature
-operations plus application injection/cancellation; the
+candidate-closure-census`; the closed `CandidatePopulationRequest`; process-sealed factual receipt;
+the injected per-process `CandidatePopulationService`; the
+full-FEN key, single-flight, dual-bound weighted LRU, statistics and invalidation rules; the concrete
+semantic-selection operation plus executable composition/cancellation; the Maia-leak repair; the
 `selectSemanticEvidence` input repair and the `evaluatedAlternatives` fix; the narrow-closure repair;
 and the operator-only and LLM boundaries. That is the whole mechanism.
 
@@ -948,6 +954,12 @@ and the operator-only and LLM boundaries. That is the whole mechanism.
    policy is `research.r2_candidate@1`, `disposition: "experimental"`
    (`evidence-catalog.ts:974-979`). `[V]` A production hint policy is that RFC's to declare; the
    packet serves whichever policy is registered.
+4. **Production bot admission and final-policy caching (`bot-policy.md` / `bot-roster.md` /
+   `evidence-move-selector.md`)** — the catalogue is empty today. Those accepted RFCs must name the
+   concrete profile, bind its normal request to truthful derived outputs, compose one legal-root provider
+   request under an aggregate deadline, and repair the final history/provider/policy cache. A test
+   profile is not a substitute. This RFC lands only the neutral receipt and typed root-table handoff;
+   it does not manufacture a dormant vector or future-only admission.
 
 **None of these narrows the mechanism**, and none of them is a size argument.
 
@@ -955,7 +967,8 @@ and the operator-only and LLM boundaries. That is the whole mechanism.
 
 1. **Widening `CandidateFeatureVector` into the shared layer** — [[D1072]], measured. It is not a
    population, it does not retain sealed evidence, and it couples rules-only facts to an engine and a
-   search budget. It stays what it is: one derivation, repaired for provenance (§8.3).
+   search budget. The existing vector is retired by D10 in favor of truthful per-value outputs;
+   this RFC supplies only the population receipt and join input (§8.3).
 2. **Any caller-supplied population, anywhere.** Not as an optimisation, not behind a flag, not for
    tests. §3.2, criterion 1.
 3. **MultiPV as the legal population** — a scored search output with a caller-chosen `N`. §7.1,
@@ -989,19 +1002,11 @@ listed symbol moved exactly once rather than rewarding a hand count.
 
 | # | file | change |
 |---|---|---|
-| 1 | `packages/runtime/src/candidate-population.ts` (new) | compiler, legal-authority read, per-child derivation, the **moved** one-authority `candidateChildReadings`, set equality, terminal/scope rules and packet declaration (§3–§5) |
-| 2 | `packages/runtime/src/candidate-population-cache.ts` (new) | service/cache types, exact-scope projection, key, single-flight, dual-bound LRU, stats and invalidation (§6) |
-| 3 | `packages/runtime/src/evidence-catalog.ts` | exact §3.1 tuple and two bindings; `LOCAL_CANDIDATE_EVENT_PROJECTION_IDS`; `live.stockfish.position_eval@1`; corrected vector derivation (§5.3/§8.3) |
-| 4 | `packages/runtime/src/evidence-source-adapters.ts` | exact packet and filtered position-evaluation declarations; neither seals a generic payload by reference |
-| 5 | `packages/runtime/src/semantic-evidence.ts` | selection takes a sealed packet view instead of a callback; both enumerators consume one closure; counts become measurements (§1.2–§1.5, §5.4) |
-| 6 | `packages/runtime/src/index.ts` | public packet/service/scope/readings and position-evaluation contracts; no consumer deep-imports source files |
-| 7 | `apps/server/src/candidate-evidence.ts` | deletes private `childReadings`; pure vector compiler retains packet, admitted White evaluation, derived root score/loss; Maia closure leak closes (§7.1/§8.2–§8.3) |
-| 8 | `apps/server/src/position-evaluation.ts` (new) | filtered `live.stockfish.position_eval@1` construction from the shared provider scheduler: typed cp/mate, White perspective, exact FEN, same-exchange receipt, engine and bound |
-| 9 | `apps/server/src/semantic-selection-operation.ts` (new) | injected production research operation over an event-scope packet; owns request abort/deadline and replaces CLI-local compilation |
-| 10 | `apps/server/src/candidate-feature-operation.ts` (new) | injected bot operation over a full-scope packet plus same-bound Stockfish evaluation set; owns vector abstention and cancellation |
-| 11 | `apps/server/src/opponent-selection-cache.ts` (new) | bounded single-flight final-policy cache keyed only after exact provider receipt, retaining Maia history/model identity ([[D1632]]) |
-| 12 | `apps/server/src/opponent-selector.ts` | receives packet/feature operation and final cache; compiled evidence/guard profiles traverse them, ordinary provider-only profiles do not compile unused evidence |
-| 13 | `apps/server/src/application.ts` | constructs one packet service and the three server operations/caches, injects them, propagates shutdown/abort, exposes no packet singleton |
+| 1 | `packages/runtime/src/candidate-population.ts` (new) | compiler, legal-authority read, per-child derivation, the **moved** one-authority `candidateChildReadings`, set equality, terminal/scope rules and process receipt (§3–§5) |
+| 2 | `packages/runtime/src/candidate-population-cache.ts` (new) | service/cache types, exact-scope projection, neutral factual receipt, key, single-flight, dual-bound LRU, stats and invalidation (§3.1/§6) |
+| 3 | `packages/runtime/src/semantic-evidence.ts` | selection takes a sealed packet receipt instead of a callback; both enumerators consume one code-derived closure; counts become measurements (§1.2–§1.5, §5.4) |
+| 4 | `packages/runtime/src/index.ts` | public packet/service/scope/readings contracts; no consumer deep-imports source files |
+| 5 | `apps/server/src/semantic-selection-operation.ts` (new) | only current executable consumer operation: requests and verifies an event-scope receipt, owns abort/deadline and replaces CLI-local compilation |
 | — | `tools/candidate-closure-census.mjs` (new; governance tool, **not production**) | code-derived schema arm plus prevalence/cost arm (§5.3) |
 
 Named validation and docs sites that necessarily move (the [[D828]] discipline — named, not implicit,
@@ -1009,13 +1014,9 @@ and not additional implementation homes): `apps/server/src/semantic-evidence-che
 assertion), `packages/runtime/src/semantic-evidence.test.ts`,
 `packages/runtime/src/candidate-population.test.ts`,
 `packages/runtime/src/candidate-population-cache.test.ts`,
-`packages/runtime/src/evidence-catalog.test.ts`, `apps/server/src/candidate-evidence.test.ts`
-(including its *"features every legal candidate"* sentence, which becomes true),
-`apps/server/src/position-evaluation.test.ts`, `apps/server/src/evidence-manifest.test.ts`,
+`packages/runtime/src/evidence-catalog.test.ts`, `apps/server/src/evidence-manifest.test.ts`,
 `apps/server/src/semantic-selection-operation.test.ts`,
-`apps/server/src/candidate-feature-operation.test.ts`,
-`apps/server/src/opponent-selection-cache.test.ts`, `apps/server/src/application.test.ts`,
-`apps/server/src/opponent-selector.test.ts`, `docs/evidence-contract.md`,
+`apps/server/src/semantic-evidence-check.ts`, `docs/evidence-contract.md`,
 `docs/semantic-evidence.md`, and `Makefile`.
 
 **No `schemas/` or `packages/schema/` file changes**, which is what makes the `none` claim failable
@@ -1035,17 +1036,20 @@ rather than aspirational — criterion 14.
 | proposed 📊 | the packet is the population both sibling coverage obligations are stated against | §2 | criteria 2, 5, 15 |
 | proposed 🐞 | `SEMANTIC_EVENT_VALUES` does not distinguish a rebuild from the original, and asserting an event mints a second sealed twin | §5.2, §6.5 | criterion 8 (a rebuild that *passes* the seal) |
 | proposed 🐞 | a criterion citing `register-check` C1–C7 omits C8, the only check that fires on a `none` claims block | criterion 14 | criterion 14 |
-| [[D1570]] | the packet named a projection without the F1 producer/output tuple, adapter or binding | §3.1 | criteria 18, 22 |
+| [[D1570]] | the packet named a projection without an honest value-level evidence contract | §3.1 | criteria 18, 22: no aggregate evidence projection ships; exact constituents retain authority |
 | [[D1571]] | the vector repair stripped the engine evidence and packet identity it claimed to consume | §7.1, §8.2–§8.3 | criteria 15–17 |
 | [[D1572]] | one cache for three consumers had no execution topology or owner | §6.0 | criterion 23 |
 | [[D1573]] | scope/key/transposition claims conflicted and entry count did not bound memory | §3.4, §6.1–§6.3 | criteria 4, 11–13, 21 |
 | [[D1574]] | a fixed-position census was treated as the emitted schema | §5.3 | criteria 9, 16 |
 | [[D1575]] | the six-file target omitted the server-private readings authority and production entries | §12 | criterion 20 |
 | [[D1576]] | Review's run-node-bound engine point could not represent a hypothetical candidate honestly | §8.3; Review RFC amendment | criterion 17; Discharge D8 |
-| [[D1900]] | the shared factual cache returns a consumer-specific view without defining or keying the consumer | §6.0 | repeat review; amend service/request boundary before criterion 23 |
-| [[D1901]] | the compiled scope-wide `anyOf` declaration has no runtime value-level derivation-member witness | §3.1 | repeat review; amend F1 admission/receipt before criterion 22 |
-| [[D1902]] | the claimed live bot consumer is reachable only through a test-created profile while the production roster is empty | §6.0, §10 | repeat review; narrow first landing or wait for an accepted concrete profile |
-| [[D1903]] | per-child position evaluation replaces the measured one-root bot-guard operation without a whole-set execution budget | §7.1, §8.3 | repeat review; reconcile source/topology before criterion 17 |
+| [[D1900]] | the shared factual cache returned a consumer-specific view without defining or keying the consumer | §3.1, §6.0 | criteria 23–24: cache only the neutral receipt; no aggregate consumer authority exists |
+| [[D1901]] | the compiled scope-wide `anyOf` declaration had no runtime value-level derivation-member witness | §3.1 | criterion 22: remove the false aggregate projection; private exact-reference receipt owns runtime scope truth |
+| [[D1902]] | the claimed live bot consumer was reachable only through a test-created profile while the production roster is empty | §6.0, §10 | criterion 23 + Discharge D10: first landing is the real semantic-check operation; bot traversal waits for a concrete accepted profile |
+| [[D1903]] | per-child position evaluation replaced the measured one-root bot-guard operation without a whole-set execution budget | §7.1, §8.3 | criterion 17 + Discharge D10: one delivered complete root table; bot RFC owns aggregate deadline/measurement |
+| [[D1945]] | either of two future packet bindings could be deleted while F1 orphan closure stayed green | §3.1 | criterion 22: no future-only aggregate bindings ship; downstream RFCs bind only truthful outputs |
+| [[D1946]] | the scope-wide derivation members treated the complete possible vocabulary as values simultaneously present | §3.1, §5.3 | criterion 22: packet is an internal receipt; code-derived vocabulary is a migration guard, not a derivation member |
+| [[D1947]] | `createApplication` was assigned a semantic service even though it has no semantic-selection caller or route | §6.0, §12 | criterion 23: the existing semantic-check executable owns the first composition; application injection waits for a real route |
 
 ## Deviations from design
 
@@ -1193,22 +1197,25 @@ contradicted.
     catches a schema byte-change smuggled in under this RFC. *Concrete RED: edit one byte of any
     `schemas/*.schema.json` during implementation — C1–C7 stay green and C8 fails, which is the whole
     point.* *Forces renegotiation in the register rather than a silent widening.*
-15. **MultiPV is refused as the population, and `evaluated_subset` is honest.** A join built over a
-    MultiPV result presented as the legal population fails; a declared capped subset succeeds and is
-    marked `evaluated_subset`; and a complete-alternative claim over an `evaluated_subset` value
+15. **A scored table is never the legal population, and `evaluated_subset` is honest.** A bare
+    caller-chosen MultiPV list presented as the legal population fails. The registered legal-root
+    operation succeeds only after its request rows are set-equal to the independent packet/legal
+    authority; that table remains a score source, not the denominator. A projection of a capped
+    scored subset is marked `evaluated_subset`, and a complete-scored-alternative claim over it
     fails.
 16. **The Maia leak is closed.** A `human.maia.candidate_wdl` declaration offered to the packet
-    compiler is refused, and the packet's admitted closure is asserted set-equal to
+    compiler is refused, and the packet's permitted closure is asserted set-equal to
     the scoped union of `LOCAL_CANDIDATE_EVENT_PROJECTION_IDS` and
     `LOCAL_CANDIDATE_READING_PROJECTION_IDS`, not to `CANDIDATE_COLLECTOR_IDS` or a position sample.
-17. **A caller-invented score and a fake node are refused.** `scoreCp: 900031` with no admitted
-    `live.stockfish.position_eval@1` item **fails**; a typed centipawn item with the same magnitude,
-    exact child FEN, White perspective, same-exchange receipt, engine identity and one bound
-    succeeds. White/Black cp roots orient oppositely and compute non-negative best-minus-row loss;
-    winning-mate chooses shorter, all-losing mate chooses longer, and an outcome flip remains
-    categorical. Wrong FEN, generation/engine/bound mismatch, zero/non-integral mate distance,
-    cp/mate mixing and a fabricated Review `nodeId` fail. Review's node-scoped point derives
-    separately from position-eval + `run.record.position`.
+17. **A caller-invented score, N child searches and a fake node are refused.** `scoreCp: 900031`
+    with no admitted `live.stockfish.legal_root_table@1` delivery fails; a typed centipawn row with
+    the same magnitude in one valid complete table succeeds. White/Black roots retain the one
+    `root_side_to_move` frame and compute non-negative best-minus-row loss; winning mate chooses
+    shorter, all-losing mate chooses longer, and an outcome flip remains categorical. Wrong root
+    FEN, legal-set/move identity, acquisition generation/engine/bound, zero/non-integral mate
+    distance and cp/mate mixing fail. A source census fails if the vector opens any
+    `position_eval` child request. Review's node-scoped point remains a separate derivation of
+    position-eval + `run.record.position`.
 18. **Operator-only, demonstrated.** A fixture asserts no learner-role surface receives a packet, and
     that the advanced inspector's item names sources without enumerating candidates.
 19. **No renderer path reaches the packet.** A fixture asserts the LLM/renderer boundary receives only
@@ -1216,7 +1223,7 @@ contradicted.
 20. **The implementation surface is derived, not targeted.** An AST receipt proves every §12 symbol
     has one production definition, `childReadings` has been deleted and replaced by the exported
     runtime authority, no runtime file imports `apps/server`, no consumer deep-imports the new source
-    modules, each of the thirteen production rows has its named definition/caller, and the
+    modules, each of the five production rows has its named definition/caller, and the
     governance tool is not counted as production. Any extra production file is
     named in the receipt rather than hidden to preserve a total.
 21. **Invalidation is by key and never by mutation, and provider state cannot reach it** (§6.4 — the
@@ -1233,24 +1240,31 @@ contradicted.
     (c): any provider term leaking into the key, which is criterion 11's defect seen from the
     invalidation side.*
 
-22. **The packet is a complete F1 projection, not an interface wearing an id.** The compiled
-    manifest accepts the literal §3.1 producer/output tuple with the exact three scope-discriminated
-    `anyOf` members over legal moves plus the complete event/reading closures, weakest
-    grounding/exactness and `input_abstained`, and exactly the two landing bindings to
-    `research.semantic_selection@1` and `opponent.selection@1`. Deleting either binding fails orphan
-    closure; widening either operation beyond the declared answer/form fails compilation; adding a
-    learner-role binding or a generic payload adapter fails the role/adapter audit. The operation
-    receives a sealed `ConsumerEvidenceView<CandidateEventPopulation>`, never a raw payload.
-23. **One injected service owns one process-local cache and real operations consume it.** An
-    application-composition fixture constructs one `CandidatePopulationService`, injects it into
-    `SemanticSelectionOperation`, `CandidateFeatureOperation` and `OpponentSelector`, then traverses
-    the real semantic CLI operation and a compiled evidence-bearing bot profile. The two scopes
-    compile/hit exactly as §3.4 allows; provider receipt and final policy cache identities remain
-    distinct. Cancellation removes one waiter, aborts on the final waiter, and never caches a
+22. **The packet does not counterfeit an aggregate evidence identity.** A repository contract fails
+    if `derived.candidate.event_population`, an aggregate packet adapter, a packet consumer binding
+    or a `ConsumerEvidenceView<CandidateEventPopulation>` appears. The process receipt selects the
+    member from scope, retains the exact legal/event/reading input references and refuses a forged
+    receipt, equal rebuild, member/scope mismatch or removed retained input. A semantic-operation
+    fixture proves the selected event is one of the original values already bound to
+    `research.semantic_selection@1`. A negative manifest fixture demonstrates why the withdrawn
+    scope-wide conjunction is not a value proof: a legal quiet root emits only a strict subset of
+    the code-derived possible vocabulary while the same static tuple still compiles.
+23. **One service owns one process-local factual cache and the real semantic executable consumes it.**
+    An entry-point fixture runs `semantic-evidence-check.ts`, which constructs one
+    `CandidatePopulationService`, injects it into `SemanticSelectionOperation`, and traverses that
+    operation instead of calling the runtime helper directly. It asserts `createApplication`
+    remains unchanged, `BOT_POLICY_PROFILES` is empty and no packet operation is injected into
+    `OpponentSelector`. Cancellation removes one waiter, aborts on the final waiter, and never caches a
     failure. A repository assertion refuses a module singleton and ad-hoc
     `new CandidatePopulationCache()` inside request handlers. A separately constructed service
-    compiles independently and makes no cross-process reuse claim; hint and Review acquire bindings
-    only through Discharge D9 when their production operations land.
+    compiles independently and makes no cross-process reuse claim; hint and Review declare only
+    their actual derived outputs through Discharge D9 when their production operations land.
+24. **The factual cache never stores consumer authority.** The cache entry and service return type
+    are exactly `CandidatePopulationReceipt`; neither contains a consumer id, binding, view or
+    rendered item. The semantic operation accepts the receipt and rejects a raw packet. A repository
+    assertion fails on `ConsumerEvidenceView<CandidateEventPopulation>`, packet admission helpers or
+    an `opponent.selection` packet binding. Future operations share the neutral receipt and own
+    their truthful output admissions separately.
 
 ## Discharges
 
@@ -1264,7 +1278,8 @@ contradicted.
 | D6 | Tier-2 variant support: the collectors are standard-chess-shaped and two are defined against the standard back rank; this is `evidence-move-selector.md` D3's repair, and the packet inherits it (§2.2, §10 hold 1) | codex | `planning/platform-alignment/bot-policy/` | |
 | D7 | A serialised, cross-process packet form with a receipt and a re-seal on admission, **if** ever wanted — refused here, exit named (§6.5, §11.5) | OWNER | `rfc/README.md` | |
 | D8 | Reconcile `review-evidence-compiler.md` so its node point is `derived.review.eval_point@1` over `live.stockfish.position_eval@1` + `run.record.position@1`; no fake node and no second engine-score authority (§8.3) | codex | Review RFC amendment commit | |
-| D9 | Bind future production hint and Review join operations to the packet only when those operations land; the raw packet remains operator-only and never becomes a learner-module input (§3.1, §9) | codex | each consumer RFC registration/implementation commit | |
+| D9 | Future production hint and Review joins may consume the neutral receipt internally, but must declare and bind only their actual derived outputs when those operations land; the raw packet never becomes a learner-module input (§3.1, §9) | codex | each consumer RFC registration/implementation commit | |
+| D10 | Bind one concrete accepted bot profile/route to truthful candidate outputs; compose one delivered legal-root request under an aggregate deadline, define value-honest derivations over exact retained inputs, measure the complete operation and repair the final provider/policy cache. Test-created profiles do not discharge this row (§7.1, §10 hold 4) | codex | `bot-policy.md`, `bot-roster.md`, `evidence-move-selector.md` | |
 
 ## Answered buildability questions
 
@@ -1392,6 +1407,17 @@ D1354; corrected here per §0.7.)*
   it names the seven checks that cannot catch the thing being asserted.
 
 ## Changelog
+
+- 2026-08-28 — repeat-return amendment on [[D1900]]–[[D1903]], followed by [[D1945]]–[[D1947]].
+  The factual cache now stores one neutral process receipt; the first landing traverses only the
+  real semantic-selection operation and does not invent a bot; the held bot handoff joins one
+  complete root-side legal table rather than N child searches. Re-deriving F1's conjunction
+  semantics then proved the scope-wide 47-event/22-reading `anyOf` false: a position emits only a
+  subset. The aggregate projection, adapter and future-only bindings are removed. Exact retained
+  values keep their existing F1 authority; downstream modules must declare only the conclusions
+  they actually derive. A final reach trace removed dormant `createApplication` injection: the
+  existing semantic-check executable is the first composition root and application lifetime waits
+  for a real Support, Review or bot route. Repeat independent review remains required.
 
 - 2026-08-27 — independent-return amendment on [[D1631]]–[[D1636]]. The packet now reserves empty
   populations for checkmate/stalemate while adjudication stays separate; packet/provider/policy
