@@ -11201,3 +11201,23 @@ CI actually run.
   sidecar RFC owns fields, dispatch, migration and refusal codes after F3 acceptance. Focused author
   contracts pass at 7/7 and 11/11. Production, schema, packs, content and protected intent remain
   untouched; fresh independent review and the [[D560]] corpus hold still gate lane 0.30.
+
+## 2026-08-30 — Learner-module evidence assembly is reconciled to the current foundation
+
+- Re-ran the complete non-hint module/evidence join through the repository-owned
+  `make module-evidence-assembly` target. The stale 186-pair image is replaced by 206 confirmed
+  pairs: 204 compiled and two honestly absent. The unresolved `pawn_safe_square` ruling is an
+  explicit one-pair fork producing 207 rather than a hidden assumption.
+- Folded in the landed dependency facts from [[D2030]]: requested Sight retains owner-ruled
+  `outpost`; Theory Breadcrumb consumes runtime `theory.opening.current_endpoint@1` and rejects the
+  authoring-only provenance record; both grade uses are compiled.
+- Executed [[D1870]]'s consumer closure as an exact 7×3 matrix. Deflection, attraction, both
+  clearance forms, interference, check zwischenzug and overload exploitation each bind to
+  Post-commit Nudge, Review Map and Full Inspector; the two lower-level operand events remain out.
+- Confirmed the execution gap itself still stands. The manifest stores producer implementation
+  strings and the compiled contract has no producer-operation registry; the live guidance packet
+  remains a partial assembler. The refreshed dossier requires typed source receipts, exact
+  timing subjects, shared collection and distinct no-witness/unavailable/broken-boundary outcomes.
+- Eight able-to-fail arms pass. No production, schema, content, pack, protected intent or returned
+  RFC byte changed. Next: the module author consumes this handoff after the recorded-path/provider
+  dependencies are accepted; implementation remains unauthorized until fresh review.

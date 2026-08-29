@@ -6,6 +6,7 @@ import { STRUCTURAL_FEATURE_KINDS } from "../../packages/schema/src/drill-pack/t
 import {
   AVOIDANCE_EVENT_PROJECTION_IDS,
   PRIMARY_EVIDENCE_MANIFEST,
+  SEMANTIC_WAVE_EVENT_PROJECTION_IDS,
   STRUCTURAL_EVENT_PROJECTION_IDS,
   TACTICAL_AVOIDANCE_EVENT_PROJECTION_IDS,
   TRANSITION_EVENT_PROJECTION_IDS,
@@ -28,6 +29,7 @@ const avoidance = [
   ].includes(id)),
   ...TACTICAL_AVOIDANCE_EVENT_PROJECTION_IDS,
 ];
+const observedSemanticTactics = SEMANTIC_WAVE_EVENT_PROJECTION_IDS.filter((id) => id.startsWith("derived.tactic."));
 
 const POSTCOMMIT = Object.freeze([
   ...structuralEvents,
@@ -47,10 +49,11 @@ const POSTCOMMIT = Object.freeze([
   "derived.king.captured_zone_defender",
   "derived.activity.event.open_file_occupancy",
   "derived.grade.move_quality",
+  ...observedSemanticTactics,
 ]);
 
 const SIGHT = Object.freeze([
-  ...STRUCTURAL_FEATURE_KINDS.filter((kind) => kind !== "pawn_count").map((kind) => `rules.structural.reading.${kind}`),
+  ...STRUCTURAL_FEATURE_KINDS.filter((kind) => !["pawn_count", "pawn_safe_square"].includes(kind)).map((kind) => `rules.structural.reading.${kind}`),
   "rules.castling.reading.rights",
   "rules.castling.reading.legality",
   "rules.tactic.reading.rook_on_seventh",
@@ -81,7 +84,7 @@ const THEORY = Object.freeze([
   "pack.authored.claim",
   "theory.shapes.firing",
   "derived.explorer.population_summary",
-  "theory.opening_identity.record",
+  "theory.opening.current_endpoint",
 ]);
 const COMPARE = Object.freeze([
   "derived.compare.structure_delta",
@@ -147,6 +150,7 @@ const INSPECTOR = Object.freeze([
   "derived.compare.eval_delta",
   "derived.story.rank",
   "pack.authored.classifier",
+  ...observedSemanticTactics,
 ]);
 
 const MODULE_ACCEPTS = Object.freeze({
@@ -183,6 +187,7 @@ const ASSEMBLY_STAGE_BY_PRODUCER = Object.freeze({
   "human.maia": "provider_optional",
   "human.explorer": "provider_optional",
   "theory.opening_identity": "catalogue_local",
+  "theory.opening.runtime": "catalogue_local",
   "run.record": "run_local",
   "derived.compare_narrative": "derived_after_inputs",
   "derived.story": "derived_after_inputs",
@@ -198,21 +203,34 @@ const ASSEMBLY_STAGE_BY_PRODUCER = Object.freeze({
 
 const projectionById = new Map(PRIMARY_EVIDENCE_MANIFEST.projections.map((projection) => [projection.id, projection]));
 const pairs = Object.entries(MODULE_ACCEPTS).flatMap(([module, projections]) => projections.map((projection) => ({ module, projection })));
+const PAWN_SAFE_SQUARE_PAIR = Object.freeze({ module: "sight_on_request", projection: "rules.structural.reading.pawn_safe_square" });
+const pairsIfPawnSafeSquareReturns = Object.freeze([...pairs, PAWN_SAFE_SQUARE_PAIR]);
+const semanticConsumerContract = Object.freeze({
+  postcommit_nudge: Object.freeze({ timing: "postcommit", forms: Object.freeze(["list", "panel", "lit_squares", "arrows"]) }),
+  review_map: Object.freeze({ timing: "review", forms: Object.freeze(["list", "panel", "lit_squares", "arrows"]) }),
+  full_inspector: Object.freeze({ timing: "review", forms: Object.freeze(["list", "panel", "lit_squares", "arrows"]) }),
+});
 
 describe("D1865 complete non-hint module assembly closure", () => {
-  it("expands the RFC declaration to exactly 186 consumer/projection pairs", () => {
+  it("reconciles the confirmed dependency image to exactly 206 consumer/projection pairs", () => {
     expect(Object.fromEntries(Object.entries(MODULE_ACCEPTS).map(([module, projections]) => [module, projections.length]))).toEqual({
-      sight_on_request: 22,
+      sight_on_request: 21,
       blunder_prevention: 3,
       threat_radar: 7,
-      postcommit_nudge: 43,
+      postcommit_nudge: 50,
       structure_nudge: 6,
       theory_breadcrumb: 4,
       compare_coach: 8,
-      review_map: 53,
-      full_inspector: 40,
+      review_map: 60,
+      full_inspector: 47,
     });
-    expect(pairs).toHaveLength(186);
+    expect(pairs).toHaveLength(206);
+  });
+
+  it("keeps the unresolved pawn-safe-square ruling as an exact one-pair fork", () => {
+    expect(pairs).not.toContainEqual(PAWN_SAFE_SQUARE_PAIR);
+    expect(pairsIfPawnSafeSquareReturns).toHaveLength(207);
+    expect(pairsIfPawnSafeSquareReturns.filter((pair) => !pairs.includes(pair))).toEqual([PAWN_SAFE_SQUARE_PAIR]);
   });
 
   it("names every absent projection instead of silently shrinking the declaration", () => {
@@ -235,9 +253,9 @@ describe("D1865 complete non-hint module assembly closure", () => {
       return counts;
     }, {});
     expect(histogram).toEqual({
-      position_local: 46,
+      position_local: 45,
       position_or_edge_local: 42,
-      derived_after_inputs: 43,
+      derived_after_inputs: 64,
       edge_local: 24,
       catalogue_local: 4,
       pack_local: 1,
@@ -246,6 +264,42 @@ describe("D1865 complete non-hint module assembly closure", () => {
       recorded_local: 4,
       provider_optional: 11,
     });
+  });
+
+  it("binds the seven observed semantic tactics to Nudge, Review and Inspector without importing operand events", () => {
+    expect(observedSemanticTactics).toEqual([
+      "derived.tactic.deflection_observed",
+      "derived.tactic.attraction_observed",
+      "derived.tactic.line_blocker_clearance_observed",
+      "derived.tactic.square_clearance_observed",
+      "derived.tactic.interference_observed",
+      "derived.tactic.check_zwischenzug_observed",
+      "derived.tactic.overload_exploitation_observed",
+    ]);
+    const semanticPairs = pairs.filter(({ projection }) => observedSemanticTactics.includes(projection as typeof observedSemanticTactics[number]));
+    expect(semanticPairs).toHaveLength(21);
+    expect(new Set(semanticPairs.map(({ module }) => module))).toEqual(new Set(Object.keys(semanticConsumerContract)));
+    expect(pairs.some(({ projection }) => ["rules.tactic.event.defender_removed", "rules.tactic.event.defender_duty_relocated"].includes(projection))).toBe(false);
+
+    for (const [module, contract] of Object.entries(semanticConsumerContract)) {
+      for (const projectionId of observedSemanticTactics) {
+        expect(semanticPairs).toContainEqual({ module, projection: projectionId });
+        const projection = projectionById.get(projectionId)!;
+        expect(projection.answerContent).toEqual(["fact"]);
+        expect(projection.abstention.possible).toBe(true);
+        expect(projection.abstention.reasons).toContain("input_abstained");
+        expect(contract.forms.every((form) => projection.forms.includes(form))).toBe(true);
+      }
+      expect(contract.timing).toMatch(/^(postcommit|review)$/u);
+    }
+    expect(new Set(semanticPairs.map(({ module, projection }) => `${module}\0${projection}`)).size).toBe(21);
+  });
+
+  it("uses runtime opening identity and refuses the authoring-only record", () => {
+    expect(MODULE_ACCEPTS.theory_breadcrumb).toContain("theory.opening.current_endpoint");
+    expect(MODULE_ACCEPTS.theory_breadcrumb).not.toContain("theory.opening_identity.record");
+    expect(projectionById.get("theory.opening.current_endpoint")?.producer.id).toBe("theory.opening.runtime");
+    expect(projectionById.get("theory.opening_identity.record")?.limitations).toContain("Authoring provenance only at F1; not a runtime guidance sentence.");
   });
 
   it("proves the existing guidance packet is a partial assembler, not the module source", () => {
