@@ -7,7 +7,7 @@ the declared evidence consumed by learner modules?
 
 **Feeds:** D1865, D1870, `rfc/module-registration.md`, `rfc/evidence-presentation.md`
 
-**Instrument:** `tools/d1865-evidence-assembly-harness/` (`make module-evidence-assembly`, 8/8
+**Instrument:** `tools/d1865-evidence-assembly-harness/` (`make module-evidence-assembly`, 12/12
 arms green under Node 24)
 
 ## Verdict
@@ -24,8 +24,9 @@ engine/tablebase readings. It never calls `localSemanticEvents`, the candidate c
 Stockfish/Maia/Syzygy/Explorer operations, comparison derivations or story derivations. `[V]`
 (`apps/server/src/guidance.ts:116-143`; executable source-negative in the D1865 harness)
 
-The reconciled non-empty, non-Guided-Hint target expands to **206 exact module-consumer ×
-projection pairs**. At current HEAD, 204 resolve to a compiled projection and two do not:
+The reconciled non-empty, non-Guided-Hint target expands to **207 exact module-consumer ×
+projection pairs** after the owner's affirmative `pawn_safe_square` ruling. At current HEAD, 205
+resolve to a compiled projection and two do not:
 `derived.explorer.population_summary@1` and `pack.authored.classifier@1`. Guided Hint adds zero
 current projections because its measured family×rung disclosure registry does not yet exist.
 This target restores owner-ruled `outpost`, replaces the authoring-only opening record with
@@ -33,13 +34,30 @@ This target restores owner-ruled `outpost`, replaces the authoring-only opening 
 observed semantic tactics to Nudge, Review and Inspector. `[V]` (`design/BACKLOG.md` D1870 and
 D2030; D1865 harness arms 1, 2, 4 and 5)
 
-`pawn_safe_square` remains a genuine one-row owner fork. The confirmed target excludes it and is
-206 pairs; returning it to requested Sight changes only that one pair and yields 207. The harness
-executes both images so an author cannot hide the choice inside a total. `[V]` (D1865 harness arm
-2; `rfc/module-registration.md` open question 1)
+`pawn_safe_square` is the one-row owner ruling applied on 2026-08-30. It returns only to requested
+Sight, producing the confirmed 207-pair image and no other module binding. The harness fails if the
+row disappears or widens another module. `[V]` (D1865 harness arm 2;
+`rfc/module-registration.md` open question 1)
 
-The current RFC text still excludes the registered observed semantic-tactic family altogether.
-The reconciled target closes that consumer-side hole explicitly: deflection, attraction,
+The same live join finds **117 unique compiled projections** underneath the 205 compiled pairs.
+That is the assembler's execution population: collection is once per exact subject/projection,
+then independently admitted to every consuming module. Treating 205 pairs as 205 collector calls
+would repeat shared chess arithmetic; treating 117 projections as 117 learner bindings would erase
+consumer timing and presentation authority. `[V]` (D1865 harness arm 12)
+
+The disposition-transfer prose was materially stale. Intersecting the accepted projection ids
+with the live manifest derives **23** dispositions, not 16; the old list named
+`rules.phase.reading` even though it has no disposition and omitted eight accepted disposed facts.
+The exact 23-member source-derived set is now a permanent harness arm, so binding/disposition
+exclusivity no longer relies on a second hand count. `[V]` (D1865 harness arm 10; [[D2044]])
+
+The exact accepted answer-content unions are also derived per module. They range from
+`fact + pattern` for Sight and `fact + threat` for Blunder Prevention to the Inspector's nine-kind
+union; these values require literal branched capability sets rather than one misleading total
+ceiling. `[V]` (D1865 harness arm 11; [[D1868]])
+
+The pre-reconciliation RFC text excluded the registered observed semantic-tactic family
+altogether. The author-amended target closes that consumer-side hole explicitly: deflection, attraction,
 line/square clearance, interference, check zwischenzug and overload exploitation each bind to
 Post-commit Nudge at `postcommit` and to Review Map and Full Inspector at `review`. The two operand
 events (`defender_removed`, `defender_duty_relocated`) do not become learner facts. This is the
@@ -54,7 +72,7 @@ intentional and must not cause repeated chess computation. `[V]` (D1865 harness 
 
 | assembly stage | pairs | existing authority |
 |---|---:|---|
-| position-local | 45 | structural/phase/endgame readings over one canonical FEN; +1 only if the owner returns `pawn_safe_square` |
+| position-local | 46 | structural/phase/endgame readings over one canonical FEN, including owner-ruled `pawn_safe_square` |
 | position-or-edge local | 42 | castling, tactics, square, mobility, pawn and king arithmetic |
 | edge-local | 24 | `localSemanticEvents(beforeFen, moveUci, afterFen)` and its exact subcollectors |
 | derived after inputs | 64 | grade, compare/story and typed semantic derivations, including 21 observed-tactic consumer pairs |
@@ -65,8 +83,7 @@ intentional and must not cause repeated chess computation. `[V]` (D1865 harness 
 | pack-local | 1 | authored claim |
 | declared but absent | 2 | Explorer population summary; authored classifier |
 
-The distribution totals 206 confirmed pairs; the owner fork changes it to 207 by adding one
-position-local pair. It refutes two tempting implementations. Running all producers per module repeats
+The distribution totals 207 confirmed pairs. It refutes two tempting implementations. Running all producers per module repeats
 the same position/edge arithmetic many times. Starting from `evidencePacket.declared` silently
 starves at least the edge, provider and most derived stages. `[V]` (same census plus
 `apps/server/src/guidance.ts:116-143`)
@@ -152,8 +169,7 @@ horizon projections. `[V]`/`[M]` (D1067, D1068; same source range)
 
 The author repair should add these falsifiers: `[M]`
 
-1. Set equality from every accepted module pair — 206 confirmed or 207 under the explicit owner
-   fork — to one assembly stage and one pair-keyed
+1. Set equality from all 207 accepted module pairs to one assembly stage and one pair-keyed
    presentation adapter. Removing a stage row must fail.
 2. A positive witness for every accepted projection family at every permitted timing; rare
    families may use exact fixtures, but an empty-only corpus result cannot pass.

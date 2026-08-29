@@ -39,7 +39,8 @@ review before production implementation.
 `design/research/module-registry-semantic-closure.md` and
 `tools/d1585-module-semantic-closure/` close the discovery half of items 1, 2, 3, 5 and 7 with
 eight executable arms. The answer contract needs literal branched allowed-content sets, not a
-total ceiling; Sight's 22-row union derives to `fact + pattern`; Explorer needs a registered
+total ceiling; Sight's owner-confirmed 22-row union derives to `fact + pattern`, including
+`pawn_safe_square`; Explorer needs a registered
 move-free population-summary derivation; reduced facts reseal through the existing
 `evidenceForConsumer` authority; and `rules_floor` alone admits the Match participant. Exact
 types, crossed negatives and the author amendment checklist are in the dossier. [[D1164]]'s
@@ -64,17 +65,27 @@ recommended existing-invariant correction (`theory_breadcrumb` remains on reques
 ## Re-review and implementation order
 
 Before the declaration population is re-reviewed, reconcile [[D2030]] against the dependencies
-that have landed since the accepted parent table was written:
+that have landed since the accepted parent table was written (**completed 2026-08-30**):
 
 - replace authoring-only `theory.opening_identity.record@1` on `theory_breadcrumb` with runtime
   `theory.opening.current_endpoint@1`, retaining the former as a negative runtime fixture;
 - restore the owner-ruled `outpost` row now that [[D566]] is fixed; and
 - activate both rows that awaited the now-shipped `derived.grade.move_quality@1`.
 
-The implementation image is 182 compiled rows: the accepted 181-row population plus `outpost`,
-with the opening row replaced rather than added and both grade rows changing from awaiting to
-active. This does not decide whether requested Sight also includes conservative
-`pawn_safe_square`; that remains an owner question.
+The reconciled non-hint implementation image is 207 declared / 205 compiled / 2 exact-awaiting:
+Explorer population summary and authored classifier. It includes 21 observed-tactic pairs, runtime
+opening identity, owner-ruled `outpost`, owner-ruled `pawn_safe_square` and both grade uses.
+`make module-evidence-assembly` binds the RFC text to this source-derived image.
+
+The repeat-review production-join returns [[D1863]]–[[D1869]] were author-amended on 2026-08-30:
+the query carries a typed untrusted requested-assistance receipt and the server re-clamps it;
+presentation is exact pair/form keyed; a 117-projection execution plan owns assembly and typed
+source receipts; revealing pre-/at-commit output carries a narrowly non-persisted disclosure
+receipt; the redundant `assistance.arrows` evidence consumer is retired while its Advanced clamp
+stays; every module publishes literal answer capabilities; and square/UCI/checkpoint/rung tokens
+are validated against authoritative state before producer work. The disposition transfer is now a
+source-derived 23-member set ([[D2044]]), not the stale 16-row prose list. Fresh independent review
+is the next gate; this author amendment is not acceptance.
 
 - Independent re-review resolves every row above to exact types/symbols and able-to-fail fixtures.
 - Accept only after the rebuilt `hint-distance` producer registries it imports are independently

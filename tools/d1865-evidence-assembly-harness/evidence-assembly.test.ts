@@ -53,7 +53,7 @@ const POSTCOMMIT = Object.freeze([
 ]);
 
 const SIGHT = Object.freeze([
-  ...STRUCTURAL_FEATURE_KINDS.filter((kind) => !["pawn_count", "pawn_safe_square"].includes(kind)).map((kind) => `rules.structural.reading.${kind}`),
+  ...STRUCTURAL_FEATURE_KINDS.filter((kind) => kind !== "pawn_count").map((kind) => `rules.structural.reading.${kind}`),
   "rules.castling.reading.rights",
   "rules.castling.reading.legality",
   "rules.tactic.reading.rook_on_seventh",
@@ -204,7 +204,6 @@ const ASSEMBLY_STAGE_BY_PRODUCER = Object.freeze({
 const projectionById = new Map(PRIMARY_EVIDENCE_MANIFEST.projections.map((projection) => [projection.id, projection]));
 const pairs = Object.entries(MODULE_ACCEPTS).flatMap(([module, projections]) => projections.map((projection) => ({ module, projection })));
 const PAWN_SAFE_SQUARE_PAIR = Object.freeze({ module: "sight_on_request", projection: "rules.structural.reading.pawn_safe_square" });
-const pairsIfPawnSafeSquareReturns = Object.freeze([...pairs, PAWN_SAFE_SQUARE_PAIR]);
 const semanticConsumerContract = Object.freeze({
   postcommit_nudge: Object.freeze({ timing: "postcommit", forms: Object.freeze(["list", "panel", "lit_squares", "arrows"]) }),
   review_map: Object.freeze({ timing: "review", forms: Object.freeze(["list", "panel", "lit_squares", "arrows"]) }),
@@ -212,9 +211,9 @@ const semanticConsumerContract = Object.freeze({
 });
 
 describe("D1865 complete non-hint module assembly closure", () => {
-  it("reconciles the confirmed dependency image to exactly 206 consumer/projection pairs", () => {
+  it("reconciles the owner-ruled dependency image to exactly 207 consumer/projection pairs", () => {
     expect(Object.fromEntries(Object.entries(MODULE_ACCEPTS).map(([module, projections]) => [module, projections.length]))).toEqual({
-      sight_on_request: 21,
+      sight_on_request: 22,
       blunder_prevention: 3,
       threat_radar: 7,
       postcommit_nudge: 50,
@@ -224,13 +223,12 @@ describe("D1865 complete non-hint module assembly closure", () => {
       review_map: 60,
       full_inspector: 47,
     });
-    expect(pairs).toHaveLength(206);
+    expect(pairs).toHaveLength(207);
   });
 
-  it("keeps the unresolved pawn-safe-square ruling as an exact one-pair fork", () => {
-    expect(pairs).not.toContainEqual(PAWN_SAFE_SQUARE_PAIR);
-    expect(pairsIfPawnSafeSquareReturns).toHaveLength(207);
-    expect(pairsIfPawnSafeSquareReturns.filter((pair) => !pairs.includes(pair))).toEqual([PAWN_SAFE_SQUARE_PAIR]);
+  it("includes the owner-ruled pawn-safe-square pair without widening any other module", () => {
+    expect(pairs).toContainEqual(PAWN_SAFE_SQUARE_PAIR);
+    expect(pairs.filter(({ projection }) => projection === PAWN_SAFE_SQUARE_PAIR.projection)).toEqual([PAWN_SAFE_SQUARE_PAIR]);
   });
 
   it("names every absent projection instead of silently shrinking the declaration", () => {
@@ -253,7 +251,7 @@ describe("D1865 complete non-hint module assembly closure", () => {
       return counts;
     }, {});
     expect(histogram).toEqual({
-      position_local: 45,
+      position_local: 46,
       position_or_edge_local: 42,
       derived_after_inputs: 64,
       edge_local: 24,
@@ -315,5 +313,73 @@ describe("D1865 complete non-hint module assembly closure", () => {
   it("keeps Guided Hint out until its measured family-by-rung disclosure registry exists", () => {
     const allProjectionIds = new Set(PRIMARY_EVIDENCE_MANIFEST.projections.map((projection) => projection.id));
     expect([...allProjectionIds].filter((id) => id.startsWith("derived.hint.disclosure."))).toEqual([]);
+  });
+
+  it("binds the author-amended module RFC to the reconciled 207-pair image", () => {
+    const rfc = readFileSync(new URL("../../rfc/module-registration.md", import.meta.url), "utf8");
+    const accepts = rfc.match(/#### 1\.3 `accepts`[\s\S]*?#### 1\.4/u)?.[0] ?? "";
+    expect(accepts).toContain("declared **`207 + R`**, compiled **`205 + R`**, and declared-awaiting **2**");
+    expect(accepts).toContain("`theory.opening.current_endpoint`");
+    expect(accepts).not.toContain("`theory.opening_identity.record` | 4");
+    expect(accepts).toContain("all seven `SEMANTIC_WAVE_EVENT_PROJECTION_IDS`");
+    expect(accepts).toContain("all seven observed semantic-tactic projections");
+    expect(accepts).toContain("owner-ruled `pawn_safe_square`");
+    expect(accepts).toContain("owner-ruled `outpost`");
+  });
+
+  it("derives the exact accepted projections whose landing disposition must be removed", () => {
+    const acceptedProjectionIds = new Set(pairs.map(({ projection }) => projection));
+    const acceptedWithDisposition = PRIMARY_EVIDENCE_MANIFEST.projections
+      .filter((projection) => acceptedProjectionIds.has(projection.id) && projection.disposition !== undefined)
+      .map((projection) => projection.id)
+      .sort();
+    expect(acceptedWithDisposition).toEqual([
+      "derived.grade.move_quality",
+      "derived.material.reading.role_signature",
+      "derived.tactic.promotion_pressure",
+      "human.maia.candidate_wdl",
+      "rules.castling.reading.legality",
+      "rules.castling.reading.rights",
+      "rules.king.reading.zone_state",
+      "rules.mobility.reading.piece_destinations",
+      "rules.pawn.reading.candidate_majority",
+      "rules.pawn.reading.contacts",
+      "rules.phase.development",
+      "rules.square.reading.control",
+      "rules.structural.reading.pawn_connectivity",
+      "rules.structural.reading.space",
+      "rules.tactic.consequence.mate_in_one",
+      "rules.tactic.consequence.threat",
+      "rules.tactic.reading.back_rank",
+      "rules.tactic.reading.discovered_latency",
+      "rules.tactic.reading.loose_piece",
+      "rules.tactic.reading.ray_classification",
+      "rules.tactic.reading.rook_on_seventh",
+      "rules.tactic.reading.trapped_piece",
+      "theory.opening.current_endpoint",
+    ]);
+  });
+
+  it("derives each module's exact compiled answer-content union", () => {
+    const answerUnion = Object.fromEntries(Object.entries(MODULE_ACCEPTS).map(([module, projections]) => [
+      module,
+      [...new Set(projections.flatMap((projection) => projectionById.get(projection)?.answerContent ?? []))].sort(),
+    ]));
+    expect(answerUnion).toEqual({
+      sight_on_request: ["fact", "pattern"],
+      blunder_prevention: ["fact", "threat"],
+      threat_radar: ["fact", "pattern", "threat"],
+      postcommit_nudge: ["evaluation", "fact", "threat"],
+      structure_nudge: ["fact", "pattern", "plan", "theory"],
+      theory_breadcrumb: ["fact", "pattern", "plan", "principle", "theory"],
+      compare_coach: ["evaluation", "fact", "move"],
+      review_map: ["evaluation", "fact", "threat"],
+      full_inspector: ["candidate_moves", "evaluation", "fact", "move", "pattern", "plan", "principal_variation", "theory", "threat"],
+    });
+  });
+
+  it("derives the unique compiled projection population the assembler must execute", () => {
+    const compiled = [...new Set(pairs.map(({ projection }) => projection).filter((projection) => projectionById.has(projection)))].sort();
+    expect(compiled).toHaveLength(117);
   });
 });

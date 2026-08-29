@@ -11268,3 +11268,33 @@ CI actually run.
 - `make semantic-validation-author-contract` passes 6/6 and both source instruments remain green.
   No product, schema, content, collector or protected intent byte changed. Fresh independent review
   remains mandatory before Slice A implementation.
+
+## 2026-08-30 — Learner-module dependency image reaches the measured 206-pair target
+
+- Author-amended [[D1870]]/[[D2030]] in `module-registration`: Theory Breadcrumb now consumes the
+  runtime opening endpoint and permanently refuses the authoring provenance record; requested Sight
+  restores owner-ruled `outpost`; both grade uses compile.
+- Added the seven observed semantic tactics to Post-commit Nudge, Review Map and Full Inspector —
+  21 pair-keyed consumer rows — while keeping defender operand events out of learner meaning.
+- The exact non-hint image is 206 declared / 204 compiled / 2 awaiting. `pawn_safe_square` is one
+  isolated non-blocking owner fork producing 207/205 if later ruled in.
+- `make module-evidence-assembly` passes 9/9 and now checks the RFC against the source-derived
+  population. The broader [[D1863]]–[[D1869]] production-join returns remain open; no product,
+  schema, collector, seat or protected intent byte changed.
+
+## 2026-08-30 — Learner-module production join repaired at the author tier
+
+- Author-amended all seven repeat-review returns [[D1863]]–[[D1869]] without declaring acceptance:
+  typed untrusted requested-help input with server re-clamping; exact pair/form presentation;
+  total producer assembly with typed receipts; real pre-/at-commit disclosure accounting; raw
+  arrow-consumer retirement without losing the Advanced clamp; literal capability sets; and
+  authoritative square/UCI/checkpoint/rung validation before producer work.
+- The owner-confirmed source join derives 117 unique compiled projections beneath 205 compiled
+  consumer pairs, within a 207 declared / 2 exact-awaiting image. `pawn_safe_square` is exactly one
+  requested-Sight pair.
+  Assembly executes by projection/subject once; admission and presentation remain consumer-specific.
+- [[D2044]] records the stale disposition authority: 23 accepted projections carry dispositions,
+  not 16, and the old list named one false member while omitting eight live members. The permanent
+  instrument now derives the exact transfer set from the accepted image and manifest.
+- `make module-evidence-assembly` passes 12/12. No registry, route, collector, schema, content,
+  archive or protected intent byte changed. Fresh independent review is the next gate.
