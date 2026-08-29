@@ -1,9 +1,10 @@
 # RFC: evidence-presentation — the component vocabulary between a typed fact and a pixel
 
-- **Status:** draft returned on repeat independent buildability review 2026-08-27 — the seal and
-  typed-operand repairs hold, but [[D1862]] leaves 116 current visual binding mappings unspecified,
-  [[D1668]] still admits impossible pending/terminal abstentions, and [[D1672]]'s owner-only design
-  amendment remains blank. Exact return:
+- **Status:** draft author-amended 2026-08-30; fresh independent buildability review required. The
+  returned [[D1862]] population now has an executable 117/117 plan (110 adapters, six exact
+  producer-operand repairs, one false visual binding removal), and [[D1668]] now shares the real
+  event-head/cursor/disclosure decision stamp through a valid discriminated lifecycle. [[D1672]]'s
+  owner-only design amendment remains blank, so this draft does **not** claim acceptance. Exact return:
   `planning/platform-alignment/evidence-presentation/repeat-buildability-review-2026-08-27.md`.
   Landing is explicitly two checkpoints (§2.1): the sealed component foundation plus current
   consumer migrations first, then module/hint seats only after their own accepted contracts.
@@ -74,16 +75,17 @@ encodes exactly nothing visually. A repo-wide sweep for `<svg`, `<canvas`, `<met
 `<progress` across `apps/` and `packages/` returns **one file** — `GameStoryScreen.svelte:30`,
 the share-card generator, which draws a picture for people who are not using the app.
 
-**This RFC specifies the missing layer as a closed vocabulary of thirteen components** (§3), each
+**This RFC specifies the missing layer as a closed vocabulary of fourteen components** (§3), each
 derived from what the evidence *is* rather than from what looks good: a distribution over moves,
 an outcome split, a magnitude, a trail of magnitudes, a square set, a move path, an exact directed
 board relation, a count against
-a denominator, a citation, a categorical state, an authored claim, an abstention, and — for
+a denominator, a citation, a categorical state, an authored claim, a sealed deterministic fact
+statement, an abstention, and — for
 author and operator surfaces only — a structured document. Each declares its **typed operand**,
 its **convention obligation**, its **honest-empty state**, its image in `design/05`'s form
 inventory, and the theme tokens it consumes.
 
-Three rules bind all thirteen. Each component is built only by a projection-keyed adapter over a
+Three rules bind all fourteen. Each component is built only by a projection-keyed adapter over a
 validated retained payload, process-sealed to its admitted evidence owner, serialized as a closed
 digest receipt, and parsed into a new client-local seal before Svelte can receive it (§2.1).
 **Honest empty is a shipped state, not a blank** (§4): every
@@ -244,7 +246,7 @@ Deviation 1, and the design-tier amendment is owed to the owner (Discharge D1).
 **The declaration lands in the runtime, the implementation lands in the client.**
 `COMPONENT_DECLARATIONS` and the operand types land as
 `packages/runtime/src/presentation-contract.ts` — shared, frozen, testable without a DOM, and
-importable by the server-side renderers that already build sentences. The thirteen Svelte
+importable by the server-side renderers that already build sentences. The fourteen Svelte
 implementations land under `apps/web/src/lib/evidence/`. **Nothing in this RFC edits
 `packages/runtime/src/evidence-catalog.ts`**, which `rfc/module-registration.md` owns; the join
 is one-way and by type only (a component declares which `EvidenceForm` members it may serve;
@@ -338,12 +340,53 @@ machine-only projection creates no fake learner widget; a new learner binding fa
 until its adapter exists. `module.full_inspector@1` joins the Inspector class when checkpoint B
 registers it. This closes [[D1670]] without an ad-hoc exclusion list.
 
+The authoring authority for the current population is
+`tools/d1862-presentation-adapter-plan/plan.ts`, checked by
+`make evidence-presentation-author-contract`. It expands each family against the compiled
+binding's **literal non-machine forms**; it never copies a form list by hand. The result is
+set-equal to all **117 pairs / 20 consumers** and partitions them into **110 immediately
+adaptable**, **six requiring producer-operand repair**, and **one false visual binding to remove**.
+Adding, removing or changing a live form fails the set-equality contract until this RFC is amended.
+
+The exact bounded families are below. `forms = binding` means every live non-machine form on that
+exact pair, neither fewer nor more. Parser names, retained paths and executable assertions live in
+the plan and are mandatory fields, so this table is an index rather than a second authority.
+
+| family | pairs | component / disposition | forms |
+|---|---:|---|---|
+| authoring evidence records | 4 | `structured_document` | binding |
+| pivotal marker | 7 | `enum_state` | binding |
+| structural square sets | 32 | `square_set + enum_state` | binding |
+| named structure, non-board | 4 | `enum_state` | binding |
+| named structure, board | 1 | **repair exact trigger-square operands** ([[D2047]]) | binding after repair |
+| engine trajectory | 1 | `magnitude_trail` | binding |
+| piece route | 1 | `move_path` | binding |
+| structural delta | 2 | `enum_state + square_set` | binding |
+| recorded checkpoint / objective transition | 4 | `fact_statement` | binding |
+| authored claim delivery / claim | 4 | `claim` | binding |
+| authored pack phase | 3 | **repair exact phase operand** ([[D2046]]) | binding after repair |
+| endgame / phase state | 7 | `enum_state` | binding |
+| recorded engine / tablebase | 2 | `magnitude` / `enum_state` | binding |
+| compare evaluation delta | 1 | `magnitude` | binding |
+| recorded consequence / fork / move | 5 | `fact_statement` | binding |
+| story evaluation / last-level / title / import | 8 | `magnitude` and/or `fact_statement` | binding |
+| shape firing | 3 | `enum_state` | binding |
+| Explorer population | 1 | `distribution + outcome_split` | binding |
+| Maia policy | 1 | `distribution` | binding |
+| transition counts / states | 14 | `magnitude + enum_state` / `enum_state` | binding |
+| opponent candidate vector | 1 | `structured_document` | binding |
+| Maia / Stockfish UCI responses | 2 | **repair exact UCI-line operands** ([[D2046]]) | binding after repair |
+| Syzygy probe | 1 | `structured_document` | binding |
+| runtime evidence / reference resolution | 6 | `structured_document` / `fact_statement + citation` | binding |
+| repertoire population | 1 | `distribution + outcome_split` | binding |
+| story rank | 1 | **remove visual forms; selection-only** ([[D2048]]) | remove |
+
 ### §3 — The closed component vocabulary
 
-**Thirteen components. This is the closed list; adding or dropping one is a spec change with a
+**Fourteen components. This is the closed list; adding or dropping one is a spec change with a
 changelog line.** Every component declares eight fields:
 
-1. **`id`** — one of the thirteen.
+1. **`id`** — one of the fourteen.
 2. **`renders`** — one sentence naming the object it draws.
 3. **`operand`** — the typed input. **Total by type**: a component whose operand type does not
    compile cannot be constructed, which is `rfc/theming.md` §2's totality trick applied to
@@ -718,31 +761,71 @@ budget, and draws it. A component that queries anything is the defect the dossie
   text without a binding**, and the LLM renderer boundary is `learner-modules` §6.3's, not
   widened here.
 
+#### 3.10a `fact_statement` — deterministic product prose over an exact admitted fact
+
+- **Renders:** a registered deterministic sentence whose complete meaning is already present in
+  one exact admitted projection: a recorded checkpoint, fork, move, consequence, imported result,
+  evidence-reference resolution or declared-convention story title.
+- **Operand:** not a string and not a caller-owned sentence. The projection+consumer adapter
+  retains the literal source operands and invokes one registered renderer identified by
+  `FactStatementRendererId`. The resulting sealed operand carries `{ rendererId, binding,
+  sourceDigest, renderedText }`, where `binding` is `recorded_run | declared_convention` and
+  `renderedText` is recomputed and byte-checked when the receipt is parsed. There is no generic
+  renderer and no constructor accepting prose.
+- **Convention:** required. `recorded_run` states that the sentence reports exact run bytes;
+  `declared_convention` names the registered deterministic product convention. Neither is an
+  authored chess judgement.
+- **Renders as:** the registered sentence plus its source/binding label when the host form exposes
+  provenance. Visual and equivalent-sentence paths consume the same sealed operand.
+- **Empty:** delegates to `abstention` when the exact source is unavailable; an empty string is
+  rejected, not rendered.
+- **Forms:** `sentence`, `card` (→ `panel`), `timeline_mark` (→ `timeline_marker`) and
+  `spoken_voice` (→ `audio`) only where the exact compiled binding declares them.
+- **Law 8 boundary:** this closes [[D2049]] without creating a prose escape hatch. It may reorder
+  or label recorded operands under a declared convention; it cannot infer a tactic, strategic
+  purpose, grade or recommendation. Such a statement requires a validated producer or an authored
+  `claim` instead.
+
 #### 3.11 `abstention` — the honest-empty state as a first-class component
 
 - **Renders:** the fact that there is nothing to render, and why.
-- **Operand:** a sealed source-specific lifecycle receipt, never free learner prose:
+- **Operand:** a sealed source-specific lifecycle receipt, never free learner prose. It consumes
+  the same event-head/cursor/disclosure decision authority as the owning module/provider operation:
   ```ts
-  type PresentationRequestState =
-    | { readonly kind: "never_requested" }
-    | { readonly kind: "pending"; readonly requestId: string; readonly generation: number }
-    | { readonly kind: "settled"; readonly requestId: string; readonly generation: number };
-  type PresentationAbsenceKind = "withheld" | "unavailable" | "failed" | "empty";
-  interface AbstentionOperand {
-    readonly question: PresentationQuestionId;
-    readonly projection: VersionedEvidenceId;
-    readonly producer: VersionedEvidenceId;
-    readonly request: Exclude<PresentationRequestState, { kind: "never_requested" }>;
-    readonly absence: PresentationAbsenceKind;
-    readonly reason: PresentationAbsenceReasonRef;
-    readonly providerReceipt?: VersionedEvidenceId;
+  interface PresentationDecisionStamp {
+    readonly eventHeadSeq: number;
+    readonly cursor: { readonly branchId: string; readonly nodeId: string };
+    readonly disclosureBoundarySeq: number | null;
+    readonly digest: string;
   }
+  type AbstentionOperand =
+    | {
+        readonly kind: "pending";
+        readonly question: PresentationQuestionId;
+        readonly projection: VersionedEvidenceId;
+        readonly producer: VersionedEvidenceId;
+        readonly requestId: string;
+        readonly decision: PresentationDecisionStamp;
+      }
+    | {
+        readonly kind: "settled_abstention";
+        readonly question: PresentationQuestionId;
+        readonly projection: VersionedEvidenceId;
+        readonly producer: VersionedEvidenceId;
+        readonly requestId: string;
+        readonly decision: PresentationDecisionStamp;
+        readonly absence: "withheld" | "unavailable" | "failed" | "empty";
+        readonly reason: PresentationAbsenceReasonRef;
+        readonly sourceReceipt: SourceOrProviderReceipt;
+      };
   ```
   `PRESENTATION_QUESTIONS` supplies the learner label and is set-equal to adapters that can
   abstain. `PRESENTATION_ABSENCE_REASONS` joins each projection's declared reasons, module
   empty-behavior mapping and provider request result to one closed label; callers cannot add a
   string. `never_requested` is represented by the unopened on-request module door and constructs
-  no abstention component. Pending, withheld, unavailable, failed and genuine empty are distinct.
+  no abstention component. A `pending` receipt has **no terminal absence or source receipt**; a
+  settled abstention has both. Pending, withheld, unavailable, failed and genuine empty are
+  therefore distinct by type rather than copy.
 - **Convention:** not applicable; the registered `question` is the honesty — an abstention that
   does not say what question it is refusing is a blank with a border.
 - **Renders as:** a bordered, `--muted`, deliberately *lighter*-weight block — never an error
@@ -755,10 +838,13 @@ budget, and draws it. A component that queries anything is the defect the dossie
   channel and never disappears from its seat; the adapter declares that literal form set.
 - **This is the component every other component delegates to.** §4 makes that delegation a
   contract rather than a convention.
-- **Lifecycle:** request ids/generations come from the shared provider/module operation. A newer
-  generation, disclosure close, node revision or source-generation change invalidates a pending
-  receipt; a late response is discarded and can never replace a newer component. No component
-  invents its own spinner protocol ([[D1668]]).
+- **Lifecycle:** request identity comes from the shared provider/module operation. Before any
+  pending or settled receipt is admitted, the server recomputes the exact decision stamp from the
+  last contiguous event sequence, active branch/node cursor and open disclosure occurrence. Any
+  field or digest mismatch makes the response stale; a late response is discarded and can never
+  replace a newer component. There is no node revision, parallel generation authority or
+  component-local spinner protocol ([[D1668]]). The compile-only negatives and six freshness arms
+  live in `make evidence-presentation-author-contract`.
 
 #### 3.12 `structured_document` — the machine object, for author and operator surfaces only
 
@@ -806,7 +892,7 @@ failure; a retired, unbound or machine-condition projection is correctly absent.
 are stated here because they are the ones an implementer would get wrong:
 
 - **Clock readings** (`recorded-clocks.md`, `enforced-clocks.md`) are `magnitude` with
-  `unit.kind === "clock_ms"`, not a thirteenth component. Their per-field abstention
+  `unit.kind === "clock_ms"`, not a separate component. Their per-field abstention
   ([[D1131]]: 1,158 broadcast readings, zero declared controls) is `abstention` inside the
   `magnitude`'s empty slot — which is exactly why abstention is per-component.
 - **Move-quality grades** are `enum_state` over the `rfc/move-quality-grades.md` vocabulary, and
@@ -1069,7 +1155,7 @@ set-equal to the closed unions reachable through those adapters.
 **§8.3 the runtime and wire guards** — `PRESENTATION_RAW_ID` at the component text boundary, the
 `enum_state` vocabulary lookup, `data-abstention` presence/absence, the two process-local seals and
 the strict version-1 receipt parser. Exercised by component tests over
-zero/one/many/withheld/unavailable operands for **all thirteen** components plus the nine forge/
+zero/one/many/withheld/unavailable operands for **all fourteen** components plus the nine forge/
 swap/dropped-operand negatives in §2.2.
 
 **§8.4 `make component-theme-sweep`** — over `apps/web/src/lib/evidence/**` and every file that
@@ -1141,8 +1227,8 @@ All four join `make verify`.
 Each names the tree state that makes it RED. A criterion that cannot be made to fail is a defect
 class in this repo ([[D444]]/[[D984]]/[[D1274]]).
 
-1. **`COMPONENT_DECLARATIONS` has exactly the thirteen §3 ids, is frozen, and every member declares
-   all eight §3 fields.** *RED:* delete `emptyBehavior` from any member, or add a fourteenth id
+1. **`COMPONENT_DECLARATIONS` has exactly the fourteen §3 ids, is frozen, and every member declares
+   all eight §3 fields.** *RED:* delete `emptyBehavior` from any member, or add a fifteenth id
    without a changelog line. *Wrong impl:* an optional field, which lets a component ship with no
    empty state — the defect this RFC exists to prevent.
 2. **`make component-coverage` passes over the three derived presentation populations.** Every
@@ -1150,7 +1236,11 @@ class in this repo ([[D444]]/[[D984]]/[[D1274]]).
    payload parser/adapter serving every bound non-machine form, and every adapter maps back to one
    such pair. *RED:* add one learner binding without an adapter; retire/unbind a projection while
    leaving its adapter. Both fail set equality. Adding a machine-only projection creates no fake
-   widget. *Wrong impl:* walking every catalogue projection or maintaining exclusions by hand.
+   widget. The author checkpoint starts at **117 pairs: 110 adapters, six explicit operand repairs
+   and one visual-binding removal**, all executable under
+   `make evidence-presentation-author-contract`; those populations must sum to the live census.
+   *Wrong impl:* walking every catalogue projection, maintaining exclusions by hand, or treating
+   one of the six impossible adapters as a cast.
 3. **The label registry is set-equal to the derived set of learner-reachable closed unions, and
    every vocabulary is total over its union type.** *RED:* add a member to `ObjectiveState`
    without a label and observe a **type** error, not a test failure; separately, delete a
@@ -1242,7 +1332,7 @@ class in this repo ([[D444]]/[[D984]]/[[D1274]]).
     visual form, and a provider-off deployment gets byte-identical sentences.** *RED:* let
     `distribution`'s visual arm include a row its sentence omits. *Wrong impl:* generating the
     sentence from the rendered DOM, which makes the assertion circular.
-17. **Every one of the thirteen components has a test at zero, one, many, withheld and
+17. **Every one of the fourteen components has a test at zero, one, many, withheld and
     provider-unavailable operands.** Set-equality between `COMPONENT_DECLARATIONS` ids and the
     ids covered by the state matrix. *RED:* add a component without its five states. *Wrong
     impl:* a shared parameterised test that skips inapplicable states silently — the matrix
@@ -1265,6 +1355,16 @@ class in this repo ([[D444]]/[[D984]]/[[D1274]]).
     process forges, cross-evidence owner swap, wire mutation/extra field/unparsed JSON,
     unregistered projection, invented edge, component swap, post-render append and dropped-field
     sentinel all fail before Svelte. *Wrong impl:* a TypeScript interface around caller-built JSON.
+21a. **`fact_statement` cannot become a generic prose path.** Only a registered exact
+    projection+consumer adapter can invoke its registered renderer; literal caller text, a
+    renderer id not declared for the pair, a source-digest swap and a rendered-text mutation all
+    fail before Svelte. A deterministic recorded-run fixture succeeds and remains distinct from
+    `claim`. *Wrong impl:* `{text: string, evidenceRef}` — the raw sentence dump with a type name.
+21b. **Abstention has one shared, non-contradictory freshness lifecycle.** Compile-only negatives
+    refuse `pending + absence`, a settled terminal absence without a source/provider receipt, and
+    `never_requested` as a receipt. Runtime negatives change event head, branch, node, disclosure
+    boundary and digest independently and reject every stale response. *Wrong impl:* a component
+    generation or node-revision counter parallel to the module/provider decision stamp.
 22. **Checkpoint closeout is honest.** Checkpoint A records exactly which current presentation
     binding pairs migrated and leaves the RFC `implementing`; checkpoint B alone may close the
     module/hint/arrow rows and archive after its real module operation and seats pass. Neither
@@ -1342,6 +1442,15 @@ Proposed — ids assigned at landing; head was **D1434** at drafting.
   the gap is ledgered even if the amendment waits.
 
 ## Changelog
+
+- 2026-08-30 — author repair for repeat-review [[D1862]]/[[D1668]]. Added a set-equal executable
+  plan over all 117 live visual pairs: 110 exact adapters, six producer-operand repairs that may
+  not be cast around, and one selection-only binding removal, with exact binding forms and
+  retention assertions. Added `fact_statement` as the fourteenth sealed component for grounded
+  deterministic product prose without mislabelling it authored judgement. Replaced the impossible
+  pending-plus-terminal abstention shape and fictional node revision with a discriminated union
+  over the shared event-head/cursor/disclosure stamp. [[D1672]] remains owner-only and therefore
+  keeps the RFC in draft pending fresh review and protected-design amendment.
 
 - 2026-08-27 — repaired the independent [[D1664]]–[[D1672]] return from [[D1673]]'s executable
   real-projection harness. Presentation now has exact payload parsers, projection+consumer

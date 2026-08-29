@@ -9,7 +9,7 @@ CI_NODE := $(if $(wildcard /opt/homebrew/opt/node@24/bin/node),/opt/homebrew/opt
 SF_CMD ?= $(if $(wildcard /opt/homebrew/bin/stockfish),/opt/homebrew/bin/stockfish,$(shell command -v stockfish 2>/dev/null))
 export SF_CMD
 
-.PHONY: setup check typecheck test test-software test-performance test-content test-tier-check docs-check staged-process-contracts-test test-browser test-browser-smoke test-browser-content test-browser-matrix test-browser-ci ci-local schema-check register-check status-parity work-index work-item-sync work-item-check roadmap-receipt roadmap-check intent-parity evidence-manifest-check semantic-evidence-check semantic-validation-closure semantic-validation-matrix semantic-validation-author-contract module-evidence-assembly intent-presets-author-contract opening-catalogue opening-catalogue-check account-data-lifecycle-check learner-rating-bracket learner-rating-bracket-check learner-rating-isolation-check graduation-plan graduation-plan-check graduation-clearance-contract tactical-collector-measurement breadth-collector-measurement promotion-race-contract assistance-register-contract assistance-register-repeat-review assistance-register-final-review semantic-register-contract semantic-register-repeat-review provider-exchange-contract provider-exchange-repeat-review provider-exchange-final-review provider-exchange-fourth-review candidate-packet-contract candidate-packet-repeat-review candidate-packet-final-review review-evidence-author-contract bot-policy-independent-review pack-capability-closure pack-capability-repeat-review bounded-target-contract bounded-target-census bounded-target-repeat-review bounded-target-final-review build verify-software verify-governance verify-content verify pack-check shape-check expression-census graduation-report graduation-report-update graduation-clear pack-preview source-fetch candidate-emit candidate-attach sourcing-check verify-draft tablebase-walk engine-walk up up-engines down
+.PHONY: setup check typecheck test test-software test-performance test-content test-tier-check docs-check staged-process-contracts-test test-browser test-browser-smoke test-browser-content test-browser-matrix test-browser-ci ci-local schema-check register-check status-parity work-index work-item-sync work-item-check roadmap-receipt roadmap-check intent-parity evidence-manifest-check semantic-evidence-check semantic-validation-closure semantic-validation-matrix semantic-validation-author-contract module-evidence-assembly intent-presets-author-contract presentation-binding-census evidence-presentation-author-contract opening-catalogue opening-catalogue-check account-data-lifecycle-check learner-rating-bracket learner-rating-bracket-check learner-rating-isolation-check graduation-plan graduation-plan-check graduation-clearance-contract tactical-collector-measurement breadth-collector-measurement promotion-race-contract assistance-register-contract assistance-register-repeat-review assistance-register-final-review semantic-register-contract semantic-register-repeat-review provider-exchange-contract provider-exchange-repeat-review provider-exchange-final-review provider-exchange-fourth-review candidate-packet-contract candidate-packet-repeat-review candidate-packet-final-review review-evidence-author-contract bot-policy-independent-review pack-capability-closure pack-capability-repeat-review bounded-target-contract bounded-target-census bounded-target-repeat-review bounded-target-final-review build verify-software verify-governance verify-content verify pack-check shape-check expression-census graduation-report graduation-report-update graduation-clear pack-preview source-fetch candidate-emit candidate-attach sourcing-check verify-draft tablebase-walk engine-walk up up-engines down
 
 setup:
 	pnpm install --frozen-lockfile
@@ -125,6 +125,14 @@ module-evidence-assembly:
 
 intent-presets-author-contract:
 	node --test tools/d1659-intent-presets-author-contract/contract.test.mjs
+
+presentation-binding-census:
+	./node_modules/.bin/esbuild tools/d1862-presentation-adapter-plan/census.ts --bundle --platform=node --format=esm --outfile=/tmp/chess-tabiya-presentation-binding-census.mjs
+	node /tmp/chess-tabiya-presentation-binding-census.mjs
+
+evidence-presentation-author-contract:
+	./node_modules/.bin/vitest run --config tools/d1862-presentation-adapter-plan/vitest.config.ts --reporter=verbose
+	./node_modules/.bin/tsc --noEmit --strict --skipLibCheck --target ES2022 --module NodeNext --moduleResolution NodeNext tools/d1862-presentation-adapter-plan/lifecycle.typecheck.ts
 
 opening-catalogue: build
 	node apps/server/dist/opening-catalogue-build.js

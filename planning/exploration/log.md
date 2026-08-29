@@ -11314,3 +11314,22 @@ activation. D1660 is closed by ruling; the technical rows remain author-amended 
 
 **Blocked/next:** fresh independent buildability review. If accepted, implement Checkpoint A and
 verify it before Checkpoint B binds real registered module delivery and disclosure logging.
+
+## 2026-08-30 — evidence-presentation repeat-return author repair
+
+**What landed:** the author tier now has a mechanically set-equal plan over the 117 live visual
+consumer/projection pairs: 110 exact adapters, six explicit producer-operand repairs and one
+selection-only visual-binding removal. The plan names exact parsers, retained paths, component
+outputs, live forms and retention assertions. `fact_statement` becomes the sealed fourteenth
+component for deterministic recorded/declaration-bound prose without turning it into an authored
+claim or a generic text escape hatch.
+
+**What changed:** pending evidence can no longer simultaneously claim a terminal absence. The
+presentation lifecycle now shares the provider/module event-head, cursor and disclosure-boundary
+decision stamp and rejects each stale dimension independently; it invents no node revision.
+`make presentation-binding-census` and `make evidence-presentation-author-contract` are green.
+
+**Blocked/next:** fresh independent buildability review and owner-only [[D1672]] remain before
+acceptance. The six producer contracts named by [[D2046]]/[[D2047]] must gain exact operands before
+their adapters can land; [[D2048]] removes its false visual forms. No implementation, content,
+archive or protected-design byte changed in this author pass.
