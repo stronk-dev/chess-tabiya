@@ -40,6 +40,7 @@
         "claim-semantic-anchors.md",
         "tactical-collectors.md",
         "semantic-collectors.md",
+        "semantic-validation-authority.md",
         "semantic-convention-register.md",
         "semantic-convention-provenance.md",
         "provider-exchange-and-execution.md",

@@ -3,7 +3,8 @@
 **Question:** Do the 67 semantic-event declarations' `validation` fields bind independent,
 executable evidence that each named chess predicate can both fire and refuse?
 
-**Status:** answered `[V]` at 2026-08-26 HEAD. The answer is **no for 67/67 declarations**.
+**Status:** answered `[V]` at 2026-08-26 HEAD and refreshed at 2026-08-29 HEAD. The answer is
+**no for 67/67 declarations**.
 Some implementations have substantial unit and research coverage, but none of that coverage is
 resolved through the manifest's validation identifiers. The manifest therefore proves declaration
 shape, not semantic validity.
@@ -48,31 +49,20 @@ registry, resolver or test dispatcher keyed by those ids. Exactly two code paths
 Neither resolves or executes a fixture. `[V]` (D1711 harness test 2)
 
 This is stronger and narrower than “the collectors are untested.” Outside the generic census,
-**54/67** projection ids are at least named by an executable runtime or disposable research test;
-**27/67** are named in runtime/application tests and **49/67** in research tests, with overlap.
+**66/67** projection ids are now at least named by an executable runtime or disposable research
+test; **27/67** are named in runtime/application tests and **66/67** in research tests, with
+overlap. The 2026-08-26 census was 54/67 named and 49/67 research-named; later foundation
+instruments increased trace coverage without creating a fixture resolver or changing the semantic
+validation verdict.
 Literal naming is only a lower-bound trace signal, not proof that the test establishes the event's
 semantics. `[V]` (D1711 harness test 3)
 
-The remaining **13/67** are not even named by another executable test:
-
-- `rules.structural.event.king_zone`
-- `rules.transition.event.occupied_attack`
-- `rules.transition.event.slider_ray`
-- `rules.transition.event.piece_escape`
-- `rules.transition.event.defended_duty`
-- `rules.transition.event.pawn_contact`
-- `derived.semantic_avoidance.backward_pawn`
-- `derived.semantic_avoidance.doubled_pawn`
-- `derived.semantic_avoidance.half_open_file`
-- `derived.semantic_avoidance.king_opposition`
-- `derived.semantic_avoidance.king_zone`
-- `derived.semantic_avoidance.open_file`
-- `derived.semantic_avoidance.passed_pawn`
-
-`[V]` The full set-equal 67-row mapping, including every runtime and research test path containing
-each literal id, is emitted by D1711 harness test 3. This list must not be interpreted as thirteen
-known-broken detectors; it is thirteen missing independent named witnesses and 54 still-unbound
-witness candidates.
+The remaining **1/67** not named by another executable test is
+`rules.structural.event.king_zone`. `[V]` The full set-equal 67-row mapping, including every runtime
+and research test path containing each literal id, is emitted by `make semantic-validation-closure`
+(D1711 harness test 3). This must not be interpreted as one known-broken detector: literal naming is
+still only trace evidence, and all 67 events remain without a manifest-resolved independent
+validation case.
 
 ## The external-population field overclaims by construction
 

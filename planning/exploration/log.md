@@ -11120,3 +11120,22 @@ CI actually run.
   the two- and three-attempt shared-fork rendering, so prose alone cannot satisfy the contract.
 - The Evidence inspector deliberately remains branch-columnar: evaluation, source attribution
   and recorded facts belong to each attempt even while the visible chess position is shared.
+
+## 2026-08-29 — Semantic validation becomes an executable authority draft
+
+- Refreshed the D1711 and D1713 research through repository-owned
+  `make semantic-validation-closure semantic-validation-matrix` targets. The substantive defect is
+  unchanged: all 67 declarations still manufacture 134 non-resolving validation labels. Later
+  foundation harnesses moved literal trace coverage from 54/67 to 66/67, so the dossier, coverage
+  matrix and ledger now state the current fact rather than preserving the older count.
+- Drafted `rfc/semantic-validation-authority.md` from the completed exploration gate. It separates
+  a total six-arm profile, data-only cases, closed production operations and generated receipts;
+  binds implementation/input/result identity; and makes research-only visibility distinct from
+  learner eligibility. All 67 events require emitter positives, semantic negatives, mirrored cases
+  and current imported-population execution; only avoidance/reply-breadth require a complete-
+  alternative arm, and external labels remain disagreement evidence.
+- The measured migration remains honest debt: 39 emitter positives and 10 emitter negatives can be
+  migrated after acceptance, 13 predicate-only negatives still need elevation, zero event-level
+  orientation cases exist, and seven avoidance events remain withheld on D1716/D1717. No product,
+  collector, consumer or content byte changed; fresh independent buildability review gates
+  implementation.
