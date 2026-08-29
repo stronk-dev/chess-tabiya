@@ -504,6 +504,11 @@ boards into unreadable columns or require a horizontal pan to reach the second
 consequence. A real Pixel 7 fixture creates both branches through the public UI,
 opens and closes the inspector, and checks its bounds and focus restoration.
 
+Recorded engine evaluations appear once inside that inspector, in an accessible table whose rows
+are ply offsets and whose columns are the compared branches. Missing readings are explicit. The
+former per-branch sparklines and repeated deepest-score summaries were removed so one engine record
+does not acquire three competing visual positions or lose its alignment with the other branch.
+
 ## Packaged operation
 
 The root Compose file has an unprofiled server using the deterministic mock

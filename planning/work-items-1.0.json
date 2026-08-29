@@ -1117,17 +1117,21 @@
     {
       "id": "ARR-a24",
       "sourceState": "queued",
-      "state": "queued",
+      "state": "completed",
       "capability": "rehearsal",
       "owner": "core-loop",
-      "assignment": "capability:rehearsal",
+      "assignment": "closed",
       "sourceDocument": "ux-arrival-and-start.md",
       "sourceSection": "§8.3 F4",
       "sourceHeading": "Arrival and getting into a session — `ux-arrival-and-start.md`",
       "summary": "**Appearance preview.** Five `<select>`s of text labels, zero rendered previews, one option labelled *\"Cburnett\"*. `<Chessboard>` already renders a FEN at arbitrary size in five places",
       "legacyRoute": "ledger",
       "note": "[[D1451]], [[D1463]]; `rfc/theming.md` has 0 occurrences of preview/thumbnail/swatch",
-      "sourceDigest": "sha256:9a26698eb36b4301866f8f0c8f6e88b5901407318c3073a914e3988f4ac3b0ea"
+      "sourceDigest": "sha256:9a26698eb36b4301866f8f0c8f6e88b5901407318c3073a914e3988f4ac3b0ea",
+      "completion": {
+        "completedOn": "2026-08-26",
+        "evidence": "D1463 real composed chrome and Chessboard preview; production browser binds palette, board, pieces and evidence paint"
+      }
     },
     {
       "id": "ARR-a25",
@@ -1166,17 +1170,21 @@
     {
       "id": "ARR-a4",
       "sourceState": "queued",
-      "state": "queued",
+      "state": "completed",
       "capability": "rehearsal",
       "owner": "core-loop",
-      "assignment": "capability:rehearsal",
+      "assignment": "closed",
       "sourceDocument": "ux-arrival-and-start.md",
       "sourceSection": "§3.3 B1",
       "sourceHeading": "Arrival and getting into a session — `ux-arrival-and-start.md`",
       "summary": "Home **Continue** region degrades to *\"Start here\"* with a designated first-run pack, not to a button",
       "legacyRoute": "none",
       "note": "reuses `recentRun`",
-      "sourceDigest": "sha256:ea8d8fb73ea72473b4191c37ce2dc5e88478c1c5c29ef938387e81b040ec7340"
+      "sourceDigest": "sha256:ea8d8fb73ea72473b4191c37ce2dc5e88478c1c5c29ef938387e81b040ec7340",
+      "completion": {
+        "completedOn": "2026-08-25",
+        "evidence": "Home renders a designated first-rehearsal card when no recent run exists and starts that exact pack through the production controller"
+      }
     },
     {
       "id": "ARR-a5",
@@ -3441,16 +3449,20 @@
     {
       "id": "CLP-a5",
       "sourceState": "queued",
-      "state": "queued",
+      "state": "completed",
       "capability": "rehearsal",
       "owner": "core-loop",
-      "assignment": "capability:rehearsal",
+      "assignment": "closed",
       "sourceDocument": "ux-core-loop.md",
       "sourceSection": "§1.2 d7",
       "sourceHeading": "The core loop — `ux-core-loop.md`",
       "summary": "Stop rendering the same eval data three times, unaligned, with no shared ply axis",
       "legacyRoute": "none",
-      "sourceDigest": "sha256:943f73cfaf1b8850fa08e5998790fadea25d1dfbe5020f87115ebf2c203741cd"
+      "sourceDigest": "sha256:943f73cfaf1b8850fa08e5998790fadea25d1dfbe5020f87115ebf2c203741cd",
+      "completion": {
+        "completedOn": "2026-08-29",
+        "evidence": "Compare inspector renders one accessible branch-by-ply evaluation table; duplicate sparklines and per-branch score dumps removed; withheld negative and content browser journey"
+      }
     },
     {
       "id": "CLP-a6",

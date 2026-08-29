@@ -1221,12 +1221,11 @@ test("@content served Najdorf pack plays, rewinds, branches, compares, and expor
   await comparisonInspectorButton.click();
   await expect(page.getByRole("dialog", { name: "Recorded facts behind this comparison" })).toBeVisible();
   await expect(page.getByRole("heading", { name: "Recorded differences by branch" })).toBeVisible();
-  await expect(page.locator(".sparkline")).toHaveCount(2);
-  await expect.poll(() =>
-    page.locator(".sparkline").evaluateAll((sparklines) =>
-      sparklines.every((sparkline) => sparkline.querySelectorAll("span").length > 0),
-    ),
-  ).toBe(true);
+  const evaluationAxis = page.locator('[data-evidence-consumer="compare.engine_trajectory"]');
+  await expect(evaluationAxis).toHaveCount(1);
+  await expect(evaluationAxis.locator("tbody tr")).not.toHaveCount(0);
+  await expect(evaluationAxis.locator(".evidence-entry")).toHaveCount(2);
+  await expect(page.locator(".sparkline")).toHaveCount(0);
   await expect.poll(() =>
     page.locator(".strip-band article").evaluateAll((articles) =>
       articles.every((article) => {

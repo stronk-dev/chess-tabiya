@@ -11094,3 +11094,17 @@ CI actually run.
   dependency-free `cooperative-yield.ts:messageChannelMacrotaskYield` rather than two schedulers.
 - The dedicated final-review falsifier now tests the repaired contract. Fresh independent review
   still gates implementation; the seven ledger findings remain open until that review accepts it.
+
+## 2026-08-29 — Compare gives recorded evaluations one aligned home
+
+- Closed `CLP-a5`: the opt-in Compare inspector now renders recorded engine values once, in an
+  accessible table whose rows are shared ply offsets and whose columns are branches. Missing values
+  are explicit. The duplicate per-branch sparklines, repeated trajectory lists and deepest-score
+  summaries were removed; machine-withheld comparisons still render no evaluation surface.
+- Reconciled two already-shipped arrival items the persistent work register still called queued:
+  `ARR-a4` is the production first-rehearsal fallback on Home, and `ARR-a24` is [[D1463]]'s composed
+  Appearance preview. The roadmap receipt moved with the three item states.
+- Routed [[D2030]] into the learner-module plan before implementation: runtime opening identity,
+  the repaired outpost dependency and the shipped move-grade projection must refresh the compiled
+  table, while the separate `pawn_safe_square` owner choice remains open. No module declaration or
+  protected design intent changed.

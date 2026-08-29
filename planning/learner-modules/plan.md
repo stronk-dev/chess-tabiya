@@ -63,6 +63,19 @@ recommended existing-invariant correction (`theory_breadcrumb` remains on reques
 
 ## Re-review and implementation order
 
+Before the declaration population is re-reviewed, reconcile [[D2030]] against the dependencies
+that have landed since the accepted parent table was written:
+
+- replace authoring-only `theory.opening_identity.record@1` on `theory_breadcrumb` with runtime
+  `theory.opening.current_endpoint@1`, retaining the former as a negative runtime fixture;
+- restore the owner-ruled `outpost` row now that [[D566]] is fixed; and
+- activate both rows that awaited the now-shipped `derived.grade.move_quality@1`.
+
+The implementation image is 182 compiled rows: the accepted 181-row population plus `outpost`,
+with the opening row replaced rather than added and both grade rows changing from awaiting to
+active. This does not decide whether requested Sight also includes conservative
+`pawn_safe_square`; that remains an owner question.
+
 - Independent re-review resolves every row above to exact types/symbols and able-to-fail fixtures.
 - Accept only after the rebuilt `hint-distance` producer registries it imports are independently
   accepted; no generic hint wrapper or raw PV binding substitutes.

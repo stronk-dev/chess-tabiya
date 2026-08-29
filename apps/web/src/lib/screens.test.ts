@@ -824,7 +824,11 @@ describe("Layer 3 screens", () => {
     expect(document.querySelector(".boards")?.getAttribute("data-zoom")).toBe("far");
     expect(document.querySelectorAll("[aria-label='Chessboard']")).toHaveLength(1);
     expect(document.body.textContent).toContain("active");
-    expect(document.querySelectorAll(".sparkline span")).toHaveLength(comparison.columns.reduce((total,column)=>total+comparison.evidence[column.branchId]!.length,0));
+    const evaluationOffsets = new Set(comparison.columns.flatMap((column) => comparison.evidence[column.branchId]!.map((entry) => entry.plyOffset)));
+    expect(document.querySelectorAll(".evaluation-axis")).toHaveLength(1);
+    expect(document.querySelectorAll(".evaluation-axis tbody tr")).toHaveLength(evaluationOffsets.size);
+    expect(document.querySelectorAll(".evaluation-axis .evidence-entry")).toHaveLength(comparison.columns.reduce((total,column)=>total+comparison.evidence[column.branchId]!.length,0));
+    expect(document.querySelector(".sparkline")).toBeNull();
     expect(document.body.textContent).toContain("recorded branches share");
     document.querySelector<HTMLButtonElement>(".comparison-inspector header button")!.click();
     await tick();
