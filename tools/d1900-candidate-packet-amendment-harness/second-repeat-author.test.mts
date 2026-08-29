@@ -83,5 +83,6 @@ test("D1958 and D1961 are literal in the amended RFC", () => {
   assert.match(rfc, /CANDIDATE_POPULATION_RECEIPTS = new WeakMap/u);
   assert.match(rfc, /function assertCandidatePopulationReceipt/u);
   assert.match(rfc, /function projectCandidatePopulationReceipt/u);
-  assert.match(rfc, /awaits an injected `yieldControl\(\): Promise<void>`/u);
+  assert.match(rfc, /readonly yieldControl: \(\) => Promise<void>/u);
+  assert.match(rfc, /messageChannelMacrotaskYield/u);
 });

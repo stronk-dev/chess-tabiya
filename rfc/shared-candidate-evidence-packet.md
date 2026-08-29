@@ -1,15 +1,18 @@
 # RFC: Shared candidate evidence packet — the compiled legal population three consumers are measured against
 
-- **Status:** **draft — returned by final independent buildability review 2026-08-28 on
-  [[D1977]]–[[D1981]]; implementation remains unauthorised.** The complete score-free population,
-  private receipt authority, literal conventions and deliberately unconsumed foundation landing
-  survive. Author repair must close the service result/error algebra, name the production yield,
-  make scope projection a partial order, preserve collector unavailability, and move held provider
-  criteria to their actual consumer. Exact return:
+- **Status:** **draft — author repair complete 2026-08-29 for [[D1977]]–[[D1981]]; fresh
+  independent buildability review remains required and implementation remains unauthorised.** The
+  operation now has one closed ready/cancelled/failed algebra and literal options; the production
+  scheduler is the named `messageChannelMacrotaskYield`; projection is a typed and runtime-checked
+  scope partial order; collector groups distinguish available-empty from unavailable; and the held
+  Stockfish join is only a compile-time handoff here, with all behavior moved to D10. Exact return:
   `planning/evidence-foundation-ux/shared-candidate-packet-final-independent-review-2026-08-28.md`.
   Prior author state: repaired [[D1958]]–[[D1961]] after the repeat [[D1900]]–[[D1903]] and
   [[D1945]]–[[D1947]] returns. [[D1580]] remains separate numeric appliance-tier debt.
-- **Author:** claude (drafted from `design/research/shared-candidate-evidence-packet.md` and `tools/d1071-candidate-packet-harness/`; every carried claim re-verified at HEAD, with seven corrections recorded)
+- **Author:** claude (initial draft); codex (2026-08-29 operation-boundary author repair). Drafted
+  from `design/research/shared-candidate-evidence-packet.md` and
+  `tools/d1071-candidate-packet-harness/`; every carried claim re-verified at HEAD, with seven
+  corrections recorded
 - **Created:** 2026-08-23
 - **Design refs:** `design/05-in-run-experience.md` §5 (*"detection is cheap, significance is not"* — the split this RFC executes in code: one factual population, separate opinionated derivations) and §3b-i (*"The LLM is the voice, never the source"*); `design/03-product-breadth.md` §Play (opponent selection) and §Intelligence and explanation
 - **Exploration gate:** [[D1071]] 📊 and [[D1072]] 🐞 — research complete 2026-08-23, dossier `design/research/shared-candidate-evidence-packet.md`, executable falsifier `tools/d1071-candidate-packet-harness/` under `rfc/0000-rfc-process.md` §Exploration gate. [[D1330]]'s per-dossier classification of all 118 research artifacts ranked this **live debt rank 6**: the population finding was partially adopted by `evidence-move-selector.md`, *"but the packet itself is that RFC's Discharge D2, unbuilt"*
@@ -355,15 +358,18 @@ required roadmap work; implementing this RFC alone cannot close those consumer f
 change must move it or the cache-identity fixture fails.
 
 ```ts
-export type CandidatePacketScope =
-  | { readonly events: true; readonly readings: false }
-  | { readonly events: true; readonly readings: true }
-  | { readonly events: false; readonly readings: true };
+export type CandidateEventsScope = { readonly events: true; readonly readings: false };
+export type CandidateReadingsScope = { readonly events: false; readonly readings: true };
+export type CandidateWideScope = { readonly events: true; readonly readings: true };
+export type CandidatePacketScope = CandidateEventsScope | CandidateReadingsScope | CandidateWideScope;
 
-export interface CandidateEventPopulation {
+export type ProjectableCandidateScope<S extends CandidatePacketScope> =
+  S extends CandidateWideScope ? CandidatePacketScope : S;
+
+export interface CandidateEventPopulation<S extends CandidatePacketScope = CandidatePacketScope> {
   readonly id: string;                        // digest over the identity fields below
   readonly beforeFen: string;                 // canonical full six-field FEN
-  readonly scope: CandidatePacketScope;       // one of the three closed members above
+  readonly scope: S;                          // one of the three closed members above
   readonly legalConvention: {
     readonly id: "rules.mobility.reading.legal_moves";
     readonly version: 1;
@@ -389,8 +395,8 @@ export interface CandidatePopulationRequest {
   readonly scope: CandidatePacketScope;
 }
 
-export interface CandidatePopulationReceipt {
-  readonly packet: CandidateEventPopulation;
+export interface CandidatePopulationReceipt<S extends CandidatePacketScope = CandidatePacketScope> {
+  readonly packet: CandidateEventPopulation<S>;
   readonly selectedMember: "events" | "readings" | "events_and_readings";
   readonly legalMovesInput: DeclaredEvidence<ExactLegalMoveMap>;
   readonly candidateInputs: readonly {
@@ -404,9 +410,33 @@ export interface CandidatePopulationReceipt {
 import { CANDIDATE_PACKET_ABSTENTION_REASONS } from
   "./candidate-population-abstentions.generated.js";
 
-export type CandidatePacketAbstention = ProjectionReasonUnion<
-  typeof CANDIDATE_PACKET_ABSTENTION_REASONS
->;
+export type CandidatePacketAbstention = {
+  [P in keyof typeof CANDIDATE_PACKET_ABSTENTION_REASONS]: {
+    readonly projection: P;
+    readonly reason: (typeof CANDIDATE_PACKET_ABSTENTION_REASONS)[P][number];
+  }
+}[keyof typeof CANDIDATE_PACKET_ABSTENTION_REASONS];
+
+export type CandidateCollectorResult<T> =
+  | { readonly kind: "available"; readonly values: readonly T[] }
+  | { readonly kind: "unavailable"; readonly abstention: CandidatePacketAbstention }
+  | { readonly kind: "failed"; readonly projection: string; readonly reason: "threw" | "invalid_result" };
+
+export type CandidatePopulationFailure =
+  | { readonly code: "invalid_fen"; readonly message: string }
+  | { readonly code: "non_terminal_empty"; readonly beforeFen: string }
+  | { readonly code: "collector_failed"; readonly moveUci: string; readonly projection: string; readonly reason: "threw" | "invalid_result" }
+  | { readonly code: "invariant_failed"; readonly invariant: "legal_set" | "child_fen" | "receipt" }
+  | { readonly code: "invalid_scope_projection"; readonly source: CandidatePacketScope; readonly target: CandidatePacketScope };
+
+export type CandidatePopulationResult<S extends CandidatePacketScope = CandidatePacketScope> =
+  | { readonly kind: "ready"; readonly receipt: CandidatePopulationReceipt<S>; readonly cache: "hit" | "projection_hit" | "miss" | "oversize_not_cached" }
+  | { readonly kind: "cancelled"; readonly reason: "caller_aborted" }
+  | { readonly kind: "failed"; readonly error: CandidatePopulationFailure };
+
+export type CandidatePopulationProjectionResult<S extends CandidatePacketScope> =
+  | { readonly kind: "ready"; readonly receipt: CandidatePopulationReceipt<S> }
+  | { readonly kind: "failed"; readonly error: Extract<CandidatePopulationFailure, { readonly code: "invalid_scope_projection" }> };
 
 const CANDIDATE_POPULATION_RECEIPTS = new WeakMap<
   CandidatePopulationReceipt,
@@ -424,9 +454,14 @@ export function assertCandidatePopulationReceipt(
 ): asserts value is CandidatePopulationReceipt;
 
 export function projectCandidatePopulationReceipt(
-  receipt: CandidatePopulationReceipt,
+  receipt: CandidatePopulationReceipt<CandidateWideScope>,
   scope: CandidatePacketScope,
-): CandidatePopulationReceipt;
+): CandidatePopulationProjectionResult<CandidatePacketScope>;
+
+export function projectCandidatePopulationReceipt<
+  S extends CandidateEventsScope | CandidateReadingsScope,
+  T extends ProjectableCandidateScope<S>,
+>(receipt: CandidatePopulationReceipt<S>, scope: T): CandidatePopulationProjectionResult<T>;
 ```
 
 `compileCandidatePopulationReceipt` is module-private and the only constructor. It freezes the
@@ -436,10 +471,14 @@ then checks the receipt still points to the exact packet, legal input, candidate
 event/reading arrays recorded at construction. A forged object, equal rebuild, copy-spread, removed
 row or substituted equal-valued input fails at runtime even after a double type assertion.
 
-`projectCandidatePopulationReceipt` first asserts the wide receipt, performs no chess work, retains
-the same legal/event/reading member references permitted by the narrower scope, constructs a new
-frozen packet/id and calls the same private constructor to mint a distinct narrow receipt. It never
-copies a `WeakMap` entry or brands an arbitrary object. The runtime authority proves only “this
+`projectCandidatePopulationReceipt` first asserts the source receipt and then checks the literal
+partial order `events_and_readings → {events_and_readings, events, readings}`, `events → events`,
+`readings → readings`. Events-only→readings-only and readings-only→events-only fail
+`invalid_scope_projection` before an id, packet, or receipt is constructed; the generic overloads
+make those crossed calls compile-time errors without treating types as the runtime seal. A valid
+projection performs no chess work, retains the same legal/event/reading member references permitted
+by the target scope, constructs a new frozen packet/id and calls the same private constructor to
+mint a distinct receipt. It never copies a `WeakMap` entry or brands an arbitrary object. The runtime authority proves only “this
 compiler created and still recognizes this exact receipt in this process”; it is not an F1
 derivation receipt and is never persisted.
 
@@ -493,7 +532,10 @@ consumer that needs the wide one. A cached wide packet may satisfy a narrow requ
 deterministic no-chess projection that returns a **new frozen packet with the narrow scope and its
 own narrow `packetId`**, retaining the same legal-move and evidence object references while replacing
 the excluded arrays with frozen empties. This counts as a cache hit and not as a compilation.
-Criterion 4.
+The complete permitted relation is literal: wide may project to wide/events/readings; events may
+project only to events; readings may project only to readings. A narrow receipt has discarded the
+other family and cannot manufacture it by projection. The generic type and runtime relation in
+§3.1 enforce the same table independently. Criterion 4.
 
 ### §4 — The legal-move authority, and the dialect that has already bitten twice
 
@@ -575,12 +617,23 @@ is not. Criterion 8 tests that check, and tests it against a **rebuilt, sealed, 
 is the only fixture that distinguishes the two mechanisms.
 
 **§5.3 — The emitted closure is derived from code, not inferred from a sample** ([[D1574]]).
-`localSemanticEvents` and the packet compiler consume one exported literal
-`LOCAL_CANDIDATE_EVENT_PROJECTION_IDS`; it is assembled from the exact one-edge collector groups
-the function composes and is set-equal to their manifest semantic-event declarations. Sequence
+The packet compiler consumes one exported literal `LOCAL_CANDIDATE_EVENT_PROJECTION_IDS`; it is
+assembled from the exact one-edge collector groups the compiler invokes and is set-equal to their
+manifest semantic-event declarations. Every group returns `CandidateCollectorResult`: an
+`available` result may carry zero values and means the collector ran and found no match;
+`unavailable` carries exactly one generated projection/reason pair into
+`row.abstentions`; `failed` becomes the service's typed `collector_failed` result and never a
+factual absence. Sequence
 events requiring `run.record.move@1` and selection-derived avoidance events are excluded by their
 declared source/shape, not by their absence from a corpus. The compiler rejects any retained event
 whose id is outside that set.
+
+The existing `loose_piece` path is the permanent boundary control. Its
+`invalid_turn_clone` result remains `unavailable` through the semantic collector group and produces
+`{ projection: "rules.tactic.event.loose_piece", reason: "invalid_turn_clone" }`; the available
+hard-negative fixture returns `{ kind: "available", values: [] }` and produces no abstention. The
+packet never calls the flattening `localSemanticEvents` wrapper. Any convenience wrapper that still
+returns a plain event array is downstream of the closed group results and is not a packet authority.
 
 `make candidate-closure-census` has two outputs with different authority. The **schema arm** emits
 the code-derived set and requires one named positive plus one hard-negative fixture per member. The
@@ -606,7 +659,8 @@ const LOCAL_CANDIDATE_READING_PROJECTION_IDS = Object.freeze([
 ] as const);
 ```
 
-`candidateChildReadings` owns the twenty child-position calls after moving to runtime. The packet
+`candidateChildReadings` owns the twenty child-position calls after moving to runtime and exposes
+the same closed available/unavailable/failed group result. The packet
 compiler separately evaluates `legal_exchange` on the exact root edge and evaluates
 `fork_survives_reply` only from the retained double-attack event plus exact reply breadth/legal
 exchange inputs. Its explicit abstention is retained in `row.abstentions`; no-match emits neither a
@@ -645,33 +699,62 @@ because no learner/session term enters the key. A future production operation re
 without the one injected application service fails its consumer-operation census; it may not
 instantiate an ad-hoc cache per request.
 
-The foundation operation is named, callable and separately cancellable ([[D1633]]):
+The foundation operation is named, callable and separately cancellable ([[D1633]]). It returns one
+closed algebra; normal control flow never depends on a thrown string:
 
 ```ts
+export interface CandidatePopulationServiceOptions {
+  readonly maxEntries: number;              // default 8; positive safe integer
+  readonly maxRetainedWeight: number;       // default 56_000; positive safe integer
+  readonly maxCollectorsPerGroup: number;   // default 4; closed range 1..8
+  readonly yieldControl: () => Promise<void>; // default messageChannelMacrotaskYield
+}
+
 interface CandidatePopulationService {
-  get(request: CandidatePopulationRequest, signal: AbortSignal): Promise<CandidatePopulationReceipt>;
+  get(request: CandidatePopulationRequest, signal: AbortSignal): Promise<CandidatePopulationResult>;
 }
 ```
+
+`invalid_fen`, non-terminal truncation, collector exception/invalid return, and internal
+legal-set/child-FEN/receipt invariant failures return `failed` with the exact
+`CandidatePopulationFailure` member from §3.1. Caller cancellation returns `cancelled`; it is not a
+failure. A ready result names whether it was a direct hit, projected hit, compiled miss, or an
+oversize value served without caching. The service may throw only for programmer misuse while
+constructing invalid options; all request-time exits use the discriminated result. Exactly
+`ready` values may publish to the cache. `cancelled` and `failed` values never create or replace an
+entry, and an invariant failure cannot leak a partially constructed receipt.
 
 The service cache stores only the neutral receipt and never F1 consumer authority. `createApplication`
 remains unchanged and does not inject a packet operation into `OpponentSelector` while
 `BOT_POLICY_PROFILES` is empty. No public REST route is added by this lower primitive—the hint,
 Review and bot route owners expose and admit their own operations later.
 
-Compilation is cooperatively asynchronous. The code-derived event and reading registries expose
-bounded collector groups; the compiler executes one group for one candidate, records only its exact
-returned values, then awaits an injected `yieldControl(): Promise<void>`. Production's default is a
-portable macrotask yield. The compiler checks its internal `AbortSignal` before a group, immediately
+Compilation is cooperatively asynchronous. The code-derived event and reading registries are
+stable-ordered by projection id and sliced into groups of at most
+`options.maxCollectorsPerGroup` (default 4, valid range 1..8); one group always applies to one
+candidate and never crosses a candidate boundary. The compiler executes one group, records only
+its exact returned values, then awaits `options.yieldControl()`. The production/default adapter is
+the exported `messageChannelMacrotaskYield`, implemented with one `MessageChannel` post and closed
+ports per scheduled continuation; a resolved-Promise/microtask substitute fails the scheduler
+contract because it cannot admit timer-driven cancellation. The service constructor injects this
+default explicitly; tests may inject a deterministic adapter but no product caller chooses a
+scheduler. The compiler checks its internal `AbortSignal` before a group, immediately
 before and after every yield, after the final candidate and before receipt construction/cache
 publication. No synchronous `localSemanticEvents` wrapper is permitted inside the compiler.
 
-Caller abort/deadline flows into packet single-flight. Cancelling one waiter removes only that
-waiter; compilation continues for remaining waiters. Removing the last waiter aborts the internal
-controller, and the next group boundary returns `cancelled`; no partial packet or receipt is
-constructed or cached. A completed packet may be cached; failures/cancellations are not. The
+Caller abort/deadline flows into packet single-flight. Cancelling any waiter removes only that
+waiter and returns `{ kind: "cancelled", reason: "caller_aborted" }` to that caller. If other
+waiters remain, compilation continues for them. If none remain, the service aborts the private
+shared-job controller; `last_waiter_cancelled` is an internal job/cache-stat cause, not a second
+public result competing with the caller's result. The next group boundary stops; no partial packet
+or receipt is constructed or cached. A completed packet may be cached; failures/cancellations are not. The
 algorithmic cancellation bound is **one collector group**. The Node-24 stress receipt separately
-fails if any group exceeds 100 ms on the fixed roots, and a deterministic control aborts from the
-first in-work yield and proves no second group or receipt is observed. A worker is refused until
+fails if any group exceeds 100 ms on the fixed roots. A production-scheduler fixture starts a real
+zero-delay timer that aborts an `AbortController` independently while compilation is in progress;
+the `MessageChannel` continuation admits it, no later group or receipt is observed, and replacing
+the adapter with a microtask makes the fixture fail. The measurement records total operation time,
+collector work, yield count and accumulated yield overhead so a correct but over-yielding topology
+cannot hide behind the per-group maximum. A worker is refused until
 semantic-event and F1 reference authorities have an explicit serialize/revalidate/reseal transport.
 
 **§6.1 — The key is facts only.**
@@ -793,11 +876,13 @@ refusal when they differ. Until someone writes that RFC, JSON that resembles a s
 the event — **not because the seal rejects it, but because nothing has checked what vocabulary it was
 sealed against.** §11 item 5 records this as a refusal with its exit named.
 
-### §7 — Three consumers, three exact joins, three honest abstentions
+### §7 — Three consumer handoffs, with provider behavior held by their owners
 
-Each join takes the packet plus **one declared input family** (one complete legal-root table for the
-bot, one PV table for Hint, one played edge for Review), and each abstains on a stated
-condition without disturbing the packet.
+Each future join takes the packet plus **one declared input family** (one complete legal-root table
+for the bot, one PV table for Hint, one played edge for Review). This foundation exports only the
+compile-time shapes required to make those handoffs compatible. It implements, executes and accepts
+none of their provider operations, score/loss algebra, selection, deadlines, or abstention
+behavior. Those are D9/D10 and the named consumer RFCs' acceptance work.
 
 **§7.1 — The held bot candidate vector uses one measured root exchange.** Inputs: the complete
 population plus one admitted
@@ -809,7 +894,7 @@ when the provider is off, the root table is incomplete, its engine/bound/acquisi
 or the table mixes mate and centipawn domains ([[D969]]'s measured case: the typed rerun *"abstains
 on 11 mixed mate/cp positions (33 cells) rather than converting mate to fake cp"*). `[V]`
 
-This RFC specifies and fixtures the D10 handoff but does **not** land the vector refactor,
+This RFC specifies and typechecks the D10 handoff but does **not** land the vector refactor,
 `CandidateFeatureOperation`, application injection, profile or live bot traversal. The first
 accepted bot profile/route RFC owns the vector declaration/constructor and production operation, an
 arrival-based aggregate deadline over packet plus one root exchange, cancellation and its full
@@ -864,9 +949,11 @@ score domain:
 - mixed cp/mate: the vector abstains `mixed_score_domain`; no mate value is converted to fake cp.
 
 White- and Black-root, cp-only, all-winning-mate, all-losing-mate, outcome-flip, mixed-domain,
-root-FEN/legal-set mismatch and zero/non-integral mate fixtures make the retained frame and
-comparison able to fail. The internal join declares `scoreFrame: "root_side_to_move"` and retains
-the original delivered root table; it owns loss only, not a second score-frame conversion.
+root-FEN/legal-set mismatch and zero/non-integral mate fixtures are transferred verbatim to D10's
+consumer acceptance. They are not foundation criteria and no test-only join is created here to
+simulate production integration. The future internal join declares
+`scoreFrame: "root_side_to_move"` and retains the original delivered root table; it owns loss only,
+not a second score-frame conversion.
 
 **The packet remains the exact legal population; the table is a measured score source.** The
 provider operation uses `MultiPV=N searchmoves` only after independently enumerating the exact legal
@@ -994,7 +1081,7 @@ product consumers and claims no Support, Review or bot feature completion.
    policy is `research.r2_candidate@1`, `disposition: "experimental"`
    (`evidence-catalog.ts:974-979`). `[V]` A production hint policy is that RFC's to declare; the
    packet serves whichever policy is registered.
-4. **Production bot admission and final-policy caching (`bot-policy.md` / `bot-roster.md` /
+4. **Bot score-join behavior, production admission and final-policy caching (`bot-policy.md` / `bot-roster.md` /
    `evidence-move-selector.md`)** — the catalogue is empty today. Those accepted RFCs must name the
    concrete profile, bind its normal request to truthful derived outputs, compose one legal-root provider
    request under an aggregate deadline, and repair the final history/provider/policy cache. A test
@@ -1047,9 +1134,10 @@ listed symbol moved exactly once rather than rewarding a hand count.
 
 | # | file | change |
 |---|---|---|
-| 1 | `packages/runtime/src/candidate-population.ts` (new) | compiler, legal-authority read, code-derived bounded collector groups, cooperative yield, the **moved** one-authority `candidateChildReadings`, set equality, terminal/scope rules, typed abstentions and private `WeakMap` receipt authority (§3–§5/§6.0) |
+| 1 | `packages/runtime/src/candidate-population.ts` (new) | compiler, legal-authority read, closed collector results, code-derived bounded groups, `messageChannelMacrotaskYield`, the **moved** one-authority `candidateChildReadings`, set equality, terminal/scope rules, typed abstentions and private `WeakMap` receipt authority (§3–§5/§6.0) |
 | 1a | `packages/runtime/src/candidate-population-abstentions.generated.ts` (new) | generated frozen `as const` projection→reason map; public union derives from these literal bytes |
-| 2 | `packages/runtime/src/candidate-population-cache.ts` (new) | service/cache types, asserted exact-scope projector/minting path, neutral factual receipt, key, waiter-aware cancellation, single-flight, dual-bound LRU, stats and invalidation (§3.1/§6) |
+| 2 | `packages/runtime/src/candidate-population-cache.ts` (new) | closed service result/failure/options, typed+runtime scope partial-order projector/minting path, neutral factual receipt, key, waiter-aware cancellation, single-flight, dual-bound LRU, stats and invalidation (§3.1/§6) |
+| 2a | `packages/runtime/src/candidate-score-handoff.ts` (new; types only) | `CandidateScoreJoinInput`/`CandidateScoreJoinRow` compile-time D10 seam; no constructor, score algebra, provider call, operation or consumer ships here (§7.1) |
 | 3 | `packages/runtime/src/semantic-evidence.ts` | selection accepts and runtime-asserts a packet receipt instead of a callback; both enumerators consume one code-derived closure; counts become measurements (§1.2–§1.5, §5.4) |
 | 4 | `packages/runtime/src/index.ts` | public packet/service/scope/readings contracts; no consumer deep-imports source files |
 | — | `tools/candidate-closure-census.mjs` (new; governance tool, **not production**) | code-derived schema arm plus prevalence/cost arm (§5.3) |
@@ -1078,16 +1166,16 @@ rather than aspirational — criterion 14.
 | proposed 🐞 | the shipped selection cache is keyed on policy and session, and is unbounded | §6.2–§6.3 | criteria 11, 13 |
 | proposed 📊 | the event envelope loses **six** fields, not five — `evidence`, and with it the producer | §0.2, §5.1 | criterion 7 |
 | proposed 📊 | the D1071 cold/warm pair is not a controlled A/B of one computation | §0.4, §10 hold 2 | criterion 12 |
-| proposed 📊 | the packet is the population both sibling coverage obligations are stated against | §2 | criteria 2, 5, 15 |
+| proposed 📊 | the packet is the population both sibling coverage obligations are stated against | §2 | criteria 2, 5; D10 acceptance owns the scored-table behavior |
 | proposed 🐞 | `SEMANTIC_EVENT_VALUES` does not distinguish a rebuild from the original, and asserting an event mints a second sealed twin | §5.2, §6.5 | criterion 8 (a rebuild that *passes* the seal) |
 | proposed 🐞 | a criterion citing `register-check` C1–C7 omits C8, the only check that fires on a `none` claims block | criterion 14 | criterion 14 |
 | [[D1570]] | the packet named a projection without an honest value-level evidence contract | §3.1 | criteria 18, 22: no aggregate evidence projection ships; exact constituents retain authority |
-| [[D1571]] | the vector repair stripped the engine evidence and packet identity it claimed to consume | §7.1, §8.2–§8.3 | criteria 15–17 |
+| [[D1571]] | the vector repair stripped the engine evidence and packet identity it claimed to consume | §7.1, §8.2–§8.3 | criteria 15 and 17 fence the compile-time handoff; D10 owns all behavior |
 | [[D1572]] | one cache for three consumers had no execution topology or owner | §6.0 | criterion 23 |
 | [[D1573]] | scope/key/transposition claims conflicted and entry count did not bound memory | §3.4, §6.1–§6.3 | criteria 4, 11–13, 21 |
 | [[D1574]] | a fixed-position census was treated as the emitted schema | §5.3 | criteria 9, 16 |
 | [[D1575]] | the six-file target omitted the server-private readings authority and production entries | §12 | criterion 20 |
-| [[D1576]] | Review's run-node-bound engine point could not represent a hypothetical candidate honestly | §8.3; Review RFC amendment | criterion 17; Discharge D8 |
+| [[D1576]] | Review's run-node-bound engine point could not represent a hypothetical candidate honestly | §8.3; Review RFC amendment | Discharge D8; not a foundation acceptance arm |
 | [[D1900]] | the shared factual cache returned a consumer-specific view without defining or keying the consumer | §3.1, §6.0 | criteria 23–24: cache only the neutral receipt; no aggregate consumer authority exists |
 | [[D1901]] | the compiled scope-wide `anyOf` declaration had no runtime value-level derivation-member witness | §3.1 | criterion 22: remove the false aggregate projection; private exact-reference receipt owns runtime scope truth |
 | [[D1902]] | the claimed live bot consumer was reachable only through a test-created profile while the production roster is empty | §6.0, §10 | criterion 23 + Discharge D10: foundation landing claims zero product consumers; bot traversal waits for a concrete accepted profile |
@@ -1099,6 +1187,11 @@ rather than aspirational — criterion 14.
 | [[D1959]] | the promised process receipt has only an erased type brand and no runtime constructor/assertion | §3.1, §3.4 | author-repaired: private `WeakMap` constructor authority, runtime assertion and asserted wide→narrow minting path |
 | [[D1960]] | `AbortSignal` cannot interrupt the synchronous measured compiler without a yielding or worker execution model | §6.0 | author-repaired: code-derived collector groups yield cooperatively; final-waiter abort stops at the next group boundary |
 | [[D1961]] | exact convention/version/abstention authorities are widened to unchecked scalars | §3.1 | author-repaired: literal convention/version types and generated projection→reason union with set-equality guard |
+| [[D1977]] | success, cancellation and failures had no public result algebra or options contract | §3.1, §6.0 | closed `CandidatePopulationResult`/failure/options; every exit crossed against receipt/cache publication in criterion 23 |
+| [[D1978]] | held provider behavior was required by the provider-free foundation's own criteria | §7.1, §10, §12 | type-only score handoff here; criteria 15/17 fence absence; all behavior enumerated on D10 |
+| [[D1979]] | “portable macrotask yield” named neither a production adapter nor measurable topology | §6.0 | `messageChannelMacrotaskYield`, 1..8/default-4 groups, real timer abort and yield-overhead receipt |
+| [[D1980]] | receipt projection admitted impossible crossed narrow scopes | §3.1, §3.4 | `ProjectableCandidateScope` plus runtime partial order and typed invalid-projection result |
+| [[D1981]] | the loose-piece wrapper erased unavailable into the same array as available no-match | §3.1, §5.3 | closed collector result, generated projection/reason abstention and separate available-empty fixture |
 
 ## Deviations from design
 
@@ -1136,7 +1229,9 @@ contradicted.
    `candidates.map(r => r.moveUci)`, that a narrow packet is not served for a wide request, and that a
    wide packet projects to satisfy a narrow one **without chess recomputation** as a distinct frozen
    packet with the narrow scope/id and reference-identical retained members. The false/false scope
-   fails to type-check.
+   and both crossed events-only→readings-only/readings-only→events-only calls fail to type-check;
+   runtime-forged crossed pairs return `invalid_scope_projection` before constructing an id or
+   receipt. Same-scope narrow projection remains valid and reference-preserving.
 5. **One packet serves both the played row and the alternative denominator — compared on `(moveUci,
    afterFen)` pairs, not on cardinality.** The cardinality arm alone **cannot fail**:
    `alternatives = candidates.filter(row => row.moveUci !== playedUci)` makes
@@ -1226,7 +1321,11 @@ contradicted.
     event/reading counts, structural bytes, heap/RSS delta and cache stats under the initial
     8/56,000 dual bound. It must reproduce the equal-item arm retaining materially more heap while
     still passing that bad bound, and the corrected `events + 5×readings` arm staying within weight.
-    The receipt does **not** call the result release-cleared; [[D1580]] keeps that decision red until
+    The implementation rerun additionally records collector-group count, yield count, accumulated
+    `messageChannelMacrotaskYield` overhead and total operation time, and crosses an independently
+    scheduled timer abort. Replacing the adapter with a resolved Promise must starve that timer
+    until compilation ends; yielding after every individual collector instead of the declared
+    bounded groups must materially change the recorded yield count. The receipt does **not** call the result release-cleared; [[D1580]] keeps that decision red until
     F12 names a numeric resource-tier predicate. This splits a buildable bounded mechanism from an
     unavailable release threshold instead of inventing one.
 13. **Single-flight and both bounds work.** Two concurrent requests for one key compile **once**; a
@@ -1246,25 +1345,24 @@ contradicted.
     catches a schema byte-change smuggled in under this RFC. *Concrete RED: edit one byte of any
     `schemas/*.schema.json` during implementation — C1–C7 stay green and C8 fails, which is the whole
     point.* *Forces renegotiation in the register rather than a silent widening.*
-15. **A scored table is never the legal population, and `evaluated_subset` is honest.** A bare
-    caller-chosen MultiPV list presented as the legal population fails. The registered legal-root
-    operation succeeds only after its request rows are set-equal to the independent packet/legal
-    authority; that table remains a score source, not the denominator. A projection of a capped
-    scored subset is marked `evaluated_subset`, and a complete-scored-alternative claim over it
-    fails.
+15. **The held score join has one compile-time seam and zero behavior here.**
+    `CandidateScoreJoinInput` accepts a recognized packet receipt, one declared
+    `live.stockfish.legal_root_table@1` delivery and the literal `root_side_to_move` frame;
+    `CandidateScoreJoinRow` retains packet id, move/source-row identity, child FEN, exact event ids,
+    the closed cp/mate score and loss unions. Type fixtures reject raw packet, raw score and fake
+    node shapes. An AST/source census asserts this RFC lands no join constructor, provider call,
+    score/loss implementation, vector, profile, operation or consumer. D10 carries the scored-table
+    set-equality, `evaluated_subset`, and complete-alternative behavior tests.
 16. **The Maia leak is closed.** A `human.maia.candidate_wdl` declaration offered to the packet
     compiler is refused, and the packet's permitted closure is asserted set-equal to
     the scoped union of `LOCAL_CANDIDATE_EVENT_PROJECTION_IDS` and
     `LOCAL_CANDIDATE_READING_PROJECTION_IDS`, not to `CANDIDATE_COLLECTOR_IDS` or a position sample.
-17. **A caller-invented score, N child searches and a fake node are refused.** `scoreCp: 900031`
-    with no admitted `live.stockfish.legal_root_table@1` delivery fails; a typed centipawn row with
-    the same magnitude in one valid complete table succeeds. White/Black roots retain the one
-    `root_side_to_move` frame and compute non-negative best-minus-row loss; winning mate chooses
-    shorter, all-losing mate chooses longer, and an outcome flip remains categorical. Wrong root
-    FEN, legal-set/move identity, acquisition generation/engine/bound, zero/non-integral mate
-    distance and cp/mate mixing fail. A source census fails if the vector opens any
-    `position_eval` child request. Review's node-scoped point remains a separate derivation of
-    position-eval + `run.record.position`.
+17. **Future provider behavior cannot become a foundation false-green.** The foundation contract
+    target compiles the D10 handoff types and verifies that all behavior named in §7.1—legal-root
+    set equality, `evaluated_subset`, score/loss algebra, mate ordering, acquisition checks,
+    aggregate deadline and zero child searches—is enumerated in Discharge D10 and absent from this
+    RFC's implementation target. No provider fixture is credited toward foundation acceptance.
+    D10 cannot discharge until its real production profile/route crosses every enumerated arm.
 18. **Operator-only, demonstrated.** A fixture asserts no learner-role surface receives a packet, and
     that the advanced inspector's item names sources without enumerating candidates.
 19. **No renderer path reaches the packet.** A fixture asserts the LLM/renderer boundary receives only
@@ -1272,7 +1370,7 @@ contradicted.
 20. **The implementation surface is derived, not targeted.** An AST receipt proves every §12 symbol
     has one production definition, `childReadings` has been deleted and replaced by the exported
     runtime authority, no runtime file imports `apps/server`, no consumer deep-imports the new source
-    modules, each of the five production rows has its named definition and the product-consumer
+    modules, each named production row has its named definition and the product-consumer
     count is exactly zero. The governance CLI is not counted as product consumption. Any extra
     production file is named in the receipt rather than hidden to preserve a total.
 21. **Invalidation is by key and never by mutation, and provider state cannot reach it** (§6.4 — the
@@ -1309,13 +1407,20 @@ contradicted.
     cross-process reuse claim. D9/D10 remain open and the 1.0 roadmap refuses to count packet
     implementation as their discharge.
 
-    Cancellation is crossed after compilation begins: the first collector group runs, the injected
-    macrotask yield aborts the final waiter, no second group runs, the service returns `cancelled`,
+    Every result arm is crossed against cache publication. Invalid FEN, non-terminal truncation,
+    collector exception/invalid result and internal invariant failure return their exact `failed`
+    members and create no cache entry. Cancellation is crossed after compilation begins: the first
+    collector group runs, a real timer independently aborts the final waiter while
+    `messageChannelMacrotaskYield` yields, no second group runs, the sole service call returns
+    `cancelled:caller_aborted`,
     and zero packet/receipt/cache entry exists. With two waiters, aborting one does not stop the
-    shared job. Removing the last waiter does. The fixed Node-24 roots record every group duration
-    and fail above 100 ms, making the one-group algorithmic bound a measured wall-clock bound too.
+    shared job and that waiter receives `cancelled:caller_aborted`; the other may receive `ready`.
+    Removing the last waiter aborts the private shared job and records the internal
+    `last_waiter_cancelled` cause without producing a second public result. The fixed Node-24 roots record every group duration, yield
+    overhead and total time and fail above 100 ms per group, making the one-group algorithmic bound
+    a measured wall-clock bound too.
 24. **The factual cache never stores consumer authority.** The cache entry and service return type
-    are exactly `CandidatePopulationReceipt`; neither contains a consumer id, binding, view or
+    carry only `CandidatePopulationReceipt` inside the `ready` result; neither contains a consumer id, binding, view or
     rendered item. Every packet reader runtime-asserts the receipt and rejects a raw packet. A repository
     assertion fails on `ConsumerEvidenceView<CandidateEventPopulation>`, packet admission helpers or
     an `opponent.selection` packet binding. Future operations share the neutral receipt and own
@@ -1325,8 +1430,10 @@ contradicted.
     version other than `typeof CANDIDATE_PACKET_COMPILER_VERSION`, and a projection/reason pair not
     present in `CANDIDATE_PACKET_ABSTENTION_REASONS`. The stable contract target runs the generator
     in check mode and asserts the generated literal map is byte-current and set-equal to the scoped
-    declarations; no-match emits no abstention. Adding a declaration reason without regenerating
-    the map or forging a reason string fails.
+    declarations. The `loose_piece` invalid-turn-clone fixture yields its declared abstention, while
+    an available hard negative yields an empty event array and no abstention. Flattening either to
+    the other fails. Adding a declaration reason without regenerating the map or forging a reason
+    string fails.
 
 ## Discharges
 
@@ -1341,7 +1448,7 @@ contradicted.
 | D7 | A serialised, cross-process packet form with a receipt and a re-seal on admission, **if** ever wanted — refused here, exit named (§6.5, §11.5) | OWNER | `rfc/README.md` | |
 | D8 | Reconcile `review-evidence-compiler.md` so its node point is `derived.review.eval_point@1` over `live.stockfish.position_eval@1` + `run.record.position@1`; no fake node and no second engine-score authority (§8.3) | codex | Review RFC amendment commit | |
 | D9 | Future production hint and Review joins may consume the neutral receipt internally, but must declare and bind only their actual derived outputs when those operations land; the raw packet never becomes a learner-module input (§3.1, §9) | codex | each consumer RFC registration/implementation commit | |
-| D10 | Bind one concrete accepted bot profile/route to truthful candidate outputs; compose one delivered legal-root request under an aggregate deadline, define value-honest derivations over exact retained inputs, measure the complete operation and repair the final provider/policy cache. Test-created profiles do not discharge this row (§7.1, §10 hold 4) | codex | `bot-policy.md`, `bot-roster.md`, `evidence-move-selector.md` | |
+| D10 | Bind one concrete accepted bot profile/route to truthful candidate outputs; compose one delivered legal-root request under an aggregate deadline; require source-row/legal-set equality; retain `root_side_to_move`; cross cp loss, all-winning/all-losing mate order, outcome flip and mixed-domain abstention; refuse wrong FEN/move/acquisition/bound, zero/non-integral mate, raw scores, fake nodes and every child `position_eval` request; mark capped score projections `evaluated_subset`; declare value-honest outputs over exact retained inputs; measure cold/warm/cancel/provider-off operation; and repair the final provider/policy cache. Test-created profiles and foundation type fixtures do not discharge this row (§7.1, criteria 15/17, §10 hold 4) | codex | `bot-policy.md`, `bot-roster.md`, `evidence-move-selector.md` | |
 
 ## Answered buildability questions
 
@@ -1469,6 +1576,13 @@ D1354; corrected here per §0.7.)*
   it names the seven checks that cannot catch the thing being asserted.
 
 ## Changelog
+
+- 2026-08-29 — author repair for final independent return [[D1977]]–[[D1981]]. The service now has
+  a closed result/failure/options boundary; `messageChannelMacrotaskYield` and a literal bounded
+  group topology replace the unnamed scheduler; receipt projection is a type/runtime partial
+  order; collector groups retain unavailable separately from available-empty; and the provider
+  join is a type-only D10 handoff with every behavioral criterion transferred to the real consumer.
+  Fresh independent buildability review remains required; no implementation is authorised.
 
 - 2026-08-28 — repaired the second repeat [[D1958]]–[[D1961]] return. The owner's
   foundation-first sequence is recorded honestly as zero product consumers rather than a verify CLI

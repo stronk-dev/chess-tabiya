@@ -8,40 +8,47 @@ const semantic = read("packages/runtime/src/semantic-evidence.ts");
 const tactics = read("packages/runtime/src/tactics.ts");
 const catalogue = read("packages/runtime/src/evidence-catalog.ts");
 
-test("D1977: cancellation and typed failures have no public result algebra", () => {
-  assert.match(packet, /get\(request: CandidatePopulationRequest, signal: AbortSignal\): Promise<CandidatePopulationReceipt>/u);
-  assert.match(packet, /returns `cancelled`/u);
-  assert.match(packet, /fails with a typed error/u);
-  assert.doesNotMatch(packet, /type CandidatePopulationResult\s*=/u);
-  assert.doesNotMatch(packet, /interface CandidatePopulationServiceOptions/u);
+test("D1977: service success, cancellation, failure, and options are one closed contract", () => {
+  assert.match(packet, /type CandidatePopulationResult[\s\S]{0,1400}kind: "ready"[\s\S]{0,500}kind: "cancelled"[\s\S]{0,500}kind: "failed"/u);
+  assert.match(packet, /interface CandidatePopulationServiceOptions/u);
+  assert.match(packet, /Promise<CandidatePopulationResult>/u);
+  for (const code of ["invalid_fen", "non_terminal_empty", "collector_failed", "invariant_failed", "invalid_scope_projection"]) {
+    assert.ok(packet.includes(`"${code}"`), `missing closed failure ${code}`);
+  }
+  assert.match(packet, /Exactly\s+`ready` values may publish to the cache/u);
 });
 
-test("D1978: held provider join is nevertheless required by foundation acceptance", () => {
+test("D1978: provider behavior is held while the compile-time handoff remains exact", () => {
   assert.match(packet, /does \*\*not\*\* land the vector refactor/u);
-  assert.match(packet, /Production bot admission and final-policy caching/u);
-  assert.match(packet, /15\. \*\*A scored table is never the legal population/u);
-  assert.match(packet, /17\. \*\*A caller-invented score, N child searches and a fake node are refused/u);
+  assert.match(packet, /Bot score-join behavior, production admission and final-policy caching/u);
+  assert.match(packet, /15\. \*\*The held score join has one compile-time seam and zero behavior here/u);
+  assert.match(packet, /17\. \*\*Future provider behavior cannot become a foundation false-green/u);
   const implementationSurface = packet.slice(packet.indexOf("### §12 — Implementation surface"), packet.indexOf("## Acceptance criteria"));
-  assert.doesNotMatch(implementationSurface, /CandidateScoreJoin(?:Input|Row)/u);
+  assert.match(implementationSurface, /candidate-score-handoff\.ts[\s\S]{0,300}types only/u);
+  assert.match(packet, /Test-created profiles and foundation type fixtures do not discharge this row/u);
 });
 
-test("D1979: the production macrotask yield is unnamed and the control can self-abort", () => {
-  assert.match(packet, /injected `yieldControl\(\): Promise<void>`/u);
-  assert.match(packet, /Production's default is a\s+portable macrotask yield/u);
-  assert.doesNotMatch(packet, /setImmediate|MessageChannel|scheduler\.yield/u);
-  assert.match(packet, /macrotask yield aborts the final waiter/u);
+test("D1979: production scheduling names an adapter, topology, and independent abort", () => {
+  assert.match(packet, /messageChannelMacrotaskYield/u);
+  assert.match(packet, /implemented with one `MessageChannel` post/u);
+  assert.match(packet, /maxCollectorsPerGroup[\s\S]{0,120}default 4/u);
+  assert.match(packet, /real\s+zero-delay timer that aborts an `AbortController` independently/u);
+  assert.match(packet, /yield count and accumulated yield overhead/u);
 });
 
-test("D1980: the projector type admits impossible crossed narrow scopes", () => {
-  assert.match(packet, /projectCandidatePopulationReceipt\(\s*receipt: CandidatePopulationReceipt,\s*scope: CandidatePacketScope/u);
-  assert.doesNotMatch(packet, /CandidatePacketNarrowing|PermittedCandidateProjection|ProjectableCandidateScope/u);
-  assert.doesNotMatch(packet, /events-only→readings-only|readings-only→events-only/u);
+test("D1980: projection is the same partial order at type and runtime boundaries", () => {
+  assert.match(packet, /type ProjectableCandidateScope/u);
+  assert.match(packet, /T extends ProjectableCandidateScope<S>/u);
+  assert.match(packet, /[Ee]vents-only→readings-only and readings-only→events-only fail/u);
+  assert.match(packet, /invalid_scope_projection/u);
 });
 
-test("D1981: loose-piece unavailability is erased into the same empty event array as no-match", () => {
+test("D1981: the author contract separates loose-piece unavailability from no-match", () => {
   assert.match(tactics, /kind: "unavailable"; readonly reason: "invalid_turn_clone"/u);
   assert.match(catalogue, /rules\.tactic\.event\.loose_piece[\s\S]{0,900}abstention: \{ possible: true, reasons: \["invalid_turn_clone"\] \}/u);
   assert.match(semantic, /if \(result\.kind === "unavailable"\) return undefined/u);
   assert.match(semantic, /\.\.\.\(loosePieceSemanticEvents\(beforeFen, moveUci, afterFen\) \?\? \[\]\)/u);
-  assert.match(packet, /no-match emits no abstention/u);
+  assert.match(packet, /CandidateCollectorResult/u);
+  assert.match(packet, /invalid_turn_clone[\s\S]{0,500}available[\s\S]{0,120}values: \[\]/u);
+  assert.match(packet, /Flattening either to\s+the other fails/u);
 });

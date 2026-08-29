@@ -11062,3 +11062,18 @@ CI actually run.
   variations. The browser journey first proves the production multi-game refusal, then imports a
   valid game. `IMP-a1`, `IMP-a2`, and `IMP-a6` remain RFC-blocked; `IMP-a16` and `IMP-a27` remain
   partial because their other storage-start surfaces have not shipped.
+
+## 2026-08-29 — Shared candidate packet answers its final five-operation return
+
+- Author-repaired `shared-candidate-evidence-packet.md` on [[D1977]]–[[D1981]] without authorising
+  implementation. One discriminated ready/cancelled/failed result and literal service options now
+  cover invalid FEN, non-terminal truncation, collector failure, invariant failure, waiter
+  cancellation and cache publication.
+- The scheduler is no longer “portable” by assertion: `messageChannelMacrotaskYield`, default-four
+  and maximum-eight collector groups, an independently scheduled timer abort, per-group work and
+  total yield overhead are named acceptance bytes. Scope projection is the same partial order in
+  its generic type and runtime check.
+- Collector groups now distinguish available-empty from unavailable, with `loose_piece`'s
+  `invalid_turn_clone` as the permanent control. The held Stockfish score join remains a type-only
+  seam; all score/loss/provider behavior is enumerated on D10 and earns no foundation acceptance.
+  The five ledger rows remain open until a fresh independent review accepts the amended contract.
