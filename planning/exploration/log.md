@@ -11021,3 +11021,17 @@ CI actually run.
 - The remaining D1455 closure is still [[D1569]]'s measured horizon registry and sealed production
   rung compiler. This checkpoint narrows an executable contract; it does not pretend that the
   learner-facing hint module is implemented.
+
+## 2026-08-29 — Public arrival reaches a real rehearsal instead of a password wall
+
+- Closed `IMP-a24` and `IMP-a25`, and narrowed [[D1485]] without deciding the separate guest-run
+  identity question. Anonymous visitors now receive the product thesis, four-step rehearsal loop,
+  evidence boundary, and the real searchable pack catalogue served by the already-public pack and
+  capability endpoints.
+- Choosing a pack creates no guest learner or run. The client retains that pack id in memory,
+  moves focus to an honest registration/sign-in handoff, and starts the exact selected pack only
+  after authentication succeeds. Starting and persistence therefore retain the existing identity
+  and authorization boundary.
+- Public story cards now link to `/play` and name the action as rehearsing positions in Tabiya.
+  Component coverage proves anonymous catalogue access and intent retention; the production
+  browser journey crosses anonymous arrival → selection → registration → real board.

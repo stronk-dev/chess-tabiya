@@ -16,8 +16,8 @@ an explicit not-found view rather than crashing the application.
 
 | Route | Current surface |
 |---|---|
-| `/` | Home with the four-step loop explanation, evidence boundary, lease-aware Continue card, due/open counts, direct first start, and one opening/middlegame/endgame thread |
-| `/play` | Named human-choice resistance ladder, strong-engine alternative, optional FEN, and the searchable phase/band pack catalogue |
+| `/` | Public product explanation and catalogue before sign-in; authenticated Home adds the lease-aware Continue card, due/open counts, direct first start, and one opening/middlegame/endgame thread |
+| `/play` | Public searchable phase/band pack catalogue; authenticated Play adds the named human-choice resistance ladder, strong-engine alternative, and optional FEN |
 | `/play/run/:runId` | Live drill, branch, compare, and export context |
 | `/review` | Stored run history; opening a row returns to its live run context |
 | `/rating` | Server-shaped band-equivalent publication, permanent rated-win marks, disclosures, and whole-game result history |
@@ -30,7 +30,8 @@ an explicit not-found view rather than crashing the application.
 | `/settings` | Appearance, provider, deployment-surface, and shortcut information |
 
 Public `/shared/:token` pages sit outside the authenticated shell. Story tokens render a
-bounded terminal card; session-join tokens render only title, host, and the existing
+bounded terminal card whose product link enters the public `/play` catalogue rather than a
+password wall; session-join tokens render only title, host, and the existing
 account form, then redirect an authenticated redeemer into `/live/session/:sessionId`.
 Server-side scope dispatch prevents the anonymous page from booting a run projection or
 leaking a match position.
@@ -60,6 +61,13 @@ persisted `startPack` run with a client-only, event-derived four-step guide:
 decide in deliberate silence, play to a recorded consequence boundary, rewind to the original
 decision, finish the alternative, then compare the two preserved branches. The guide survives a
 reload by retaining only its run id; it creates no tutorial run type or chess claims.
+
+An anonymous browser gets the same concise loop and evidence-boundary explanation plus the real,
+searchable pack catalogue. `GET /packs` and `GET /capabilities` remain intentionally public; no
+synthetic guest learner or run is created. Choosing a pack records only an in-memory start intent,
+brings the account form into view, and starts that exact pack after successful registration or
+sign-in. Starting, saving, branching, and all learner data remain authenticated. This closes the
+public-story acquisition path without introducing a merge-on-signup identity model.
 
 The Play entry keeps workflow choices bounded. Human-like play uses the four named, calibrated
 Maia rungs already used by rated play and sends the selected `targetElo` into the run's opponent

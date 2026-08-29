@@ -42,6 +42,7 @@ describe("adoption wave server contracts", () => {
     expect(JSON.stringify(stored)).not.toContain(share.token);
     const card = service.publicStory(share.token);
     expect(card).toMatchObject({ title: expect.any(String), outcome: { kind: "board_terminal" } });
+    expect(card.productLink).toBe("/play");
     expect(Object.keys(card).sort()).toEqual(["moments", "outcome", "productLink", "title"]);
     expect(card.moments.map((moment) => moment.nodeId)).toEqual(selectedStoryMoments(story).map((moment) => moment.nodeId));
     const milestones = service.milestones(principal);

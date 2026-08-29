@@ -13,6 +13,7 @@ async function register(page: Page): Promise<void> {
     await page.getByLabel("Password").fill("browser-test-password");
     await page.getByRole("button", { name: "Register" }).click();
   }
+  await expect(page.getByRole("button", { name: "Sign out" })).toBeVisible();
   await expect(page.getByRole("heading", { name: "Choose the game you want to understand." })).toBeVisible();
 }
 

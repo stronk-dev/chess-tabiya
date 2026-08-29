@@ -17,6 +17,7 @@ async function learner(browser: Browser, prefix: string): Promise<{
   await page.getByLabel("Handle").fill(handle);
   await page.getByLabel("Password").fill(PASSWORD);
   await page.getByRole("button", { name: "Register" }).click();
+  await expect(page.getByRole("button", { name: "Sign out" })).toBeVisible();
   await expect(page.getByRole("heading", { name: "Choose the game you want to understand." })).toBeVisible();
   return { context, page, handle };
 }

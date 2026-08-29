@@ -4994,32 +4994,40 @@
     {
       "id": "IMP-a24",
       "sourceState": "queued",
-      "state": "queued",
+      "state": "completed",
       "capability": "account_data",
       "owner": "account-and-data",
-      "assignment": "capability:account_data",
+      "assignment": "closed",
       "sourceDocument": "ux-import-and-account.md",
       "sourceSection": "§4.3-4 / §9-1",
       "sourceHeading": "Import, account and data — `ux-import-and-account.md`",
       "summary": "**The acquisition funnel terminates in a wall**: the public story card's only CTA is `productLink:\"/\"`, hardcoded to the password gate, and neither surface says what Tabiya is",
       "legacyRoute": "ledger",
       "note": "[[D1485]], [[D1473]]",
-      "sourceDigest": "sha256:26140eb6448f5c6ab8711aaf5be1270412f178c958e7e4bc3288542016a5364e"
+      "sourceDigest": "sha256:26140eb6448f5c6ab8711aaf5be1270412f178c958e7e4bc3288542016a5364e",
+      "completion": {
+        "completedOn": "2026-08-29",
+        "evidence": "shared story links to /play; anonymous arrival explains the rehearsal loop, loads the real public catalogue, and carries a chosen pack through account creation into a persisted run"
+      }
     },
     {
       "id": "IMP-a25",
       "sourceState": "queued",
-      "state": "queued",
+      "state": "completed",
       "capability": "account_data",
       "owner": "account-and-data",
-      "assignment": "capability:account_data",
+      "assignment": "closed",
       "sourceDocument": "ux-import-and-account.md",
       "sourceSection": "§4.3-1",
       "sourceHeading": "Import, account and data — `ux-import-and-account.md`",
       "summary": "`GET /packs`, `GET /packs/:id` and `GET /capabilities` are **already unauthenticated**; only a blanket client `{:else if !learner}` hides the catalogue",
       "legacyRoute": "ledger",
       "note": "[[D1485]]",
-      "sourceDigest": "sha256:ee330f731ab4dc6d33d5eb5e448f4c11dfa6611bd419d9c9fa45eee117b4d18b"
+      "sourceDigest": "sha256:ee330f731ab4dc6d33d5eb5e448f4c11dfa6611bd419d9c9fa45eee117b4d18b",
+      "completion": {
+        "completedOn": "2026-08-29",
+        "evidence": "the browser loads public packs and capabilities before authentication and exposes the searchable phase, band, and text catalogue without granting run access"
+      }
     },
     {
       "id": "IMP-a26",

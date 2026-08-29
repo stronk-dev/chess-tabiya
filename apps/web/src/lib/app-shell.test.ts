@@ -220,10 +220,11 @@ describe("application shell", () => {
     await unmount(component);
   });
 
-  it("waits for authentication before loading and reloads the current route after registration", async () => {
+  it("shows the public catalogue and resumes the chosen rehearsal after registration", async () => {
     history.replaceState(null, "", "/play");
     let authenticated = false;
     let packCalls = 0;
+    let createCalls = 0;
     const base = api();
     const authApi: DrillClientApi = {
       ...base,
@@ -241,8 +242,19 @@ describe("application shell", () => {
       },
       async packs() {
         packCalls += 1;
-        if (!authenticated) throw new Error("AUTH_REQUIRED");
         return [packSummary];
+      },
+      async createRun(input) {
+        createCalls += 1;
+        return createRun({
+          id: input.id,
+          packId: pack.id,
+          packDigest: digest,
+          policyConfig: input.policyConfig,
+          startFen: pack.start.fen,
+          seed: input.seed,
+          createdAt: "2026-08-29T17:00:00.000Z",
+        });
       },
     };
     const component = mount(App, {
@@ -250,9 +262,13 @@ describe("application shell", () => {
       props: { api: authApi, router: new HistoryRouter(window), storage: new MemoryStorage() },
     });
 
-    await vi.waitFor(() => expect(document.body.textContent).toContain("Create an account"));
-    expect(packCalls).toBe(0);
-    document.querySelector<HTMLButtonElement>(".auth-gate > button")!.click();
+    await vi.waitFor(() => expect(document.body.textContent).toContain("Choose the game you want to understand."));
+    expect(document.body.textContent).toContain("Do not just learn the move. Rehearse the game it creates.");
+    expect(document.body.textContent).toContain(pack.title);
+    expect(packCalls).toBe(1);
+    document.querySelector<HTMLButtonElement>(".open-pack")!.click();
+    await vi.waitFor(() => expect(document.body.textContent).toContain("Create an account or sign in to keep"));
+    expect(document.body.textContent).toContain("Create your learner account.");
     const inputs = document.querySelectorAll<HTMLInputElement>(".auth-gate input");
     inputs[0]!.value = "new_learner";
     inputs[0]!.dispatchEvent(new Event("input", { bubbles: true }));
@@ -262,10 +278,11 @@ describe("application shell", () => {
       new SubmitEvent("submit", { bubbles: true, cancelable: true }),
     );
 
-    await vi.waitFor(() =>
-      expect(document.body.textContent).toContain("Choose the game you want to understand."),
-    );
-    expect(packCalls).toBe(1);
+    await vi.waitFor(() => expect(createCalls).toBe(1));
+    await tick();
+    expect(location.pathname).toMatch(/^\/play\/run\//u);
+    expect(createCalls).toBe(1);
+    expect(packCalls).toBeGreaterThanOrEqual(2);
     expect(document.body.textContent).not.toContain("AUTH_REQUIRED");
     await unmount(component);
   });

@@ -14,6 +14,7 @@ async function register(page: Page): Promise<string> {
     await page.getByLabel("Password").fill("browser-test-password");
     await page.getByRole("button", { name: "Register" }).click();
   }
+  await expect(page.getByRole("button", { name: "Sign out" })).toBeVisible();
   await expect(page.getByRole("heading", { name: "Choose the game you want to understand." })).toBeVisible();
   return handle;
 }
@@ -109,6 +110,25 @@ const ENDGAME_INTERACTION_PACKS = [
 ] as const;
 
 test.beforeEach(async ({ page }) => register(page));
+
+test("an anonymous visitor understands the product, browses positions, and keeps the chosen rehearsal through registration", async ({ page }) => {
+  await page.context().clearCookies();
+  await page.goto("/play");
+
+  await expect(page.getByRole("heading", { name: "Do not just learn the move. Rehearse the game it creates." })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Choose the game you want to understand." })).toBeVisible();
+  await expect(page.getByText("Grounded feedback, not invented chess truth.")).toBeVisible();
+  await expect(page.locator(".pack-card")).not.toHaveCount(0);
+
+  await page.locator(".open-pack").first().click();
+  await expect(page.getByText(/Create an account or sign in to keep/u)).toBeVisible();
+  await page.getByLabel("Handle").fill(`arrival_${randomUUID().slice(0, 8)}`);
+  await page.getByLabel("Password").fill("browser-test-password");
+  await page.getByRole("button", { name: "Register" }).click();
+
+  await expect(page).toHaveURL(/\/play\/run\/run-/u);
+  await expect(page.getByLabel("Chessboard")).toBeVisible();
+});
 
 test("a first learner enters the real rehearsal loop with a persistent event-derived guide", async ({ page }) => {
   const catalogueSkip = page.getByRole("link", { name: "Skip to position catalogue" });

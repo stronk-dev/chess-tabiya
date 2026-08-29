@@ -217,12 +217,13 @@
   let authHandle = $state("");
   let authPassword = $state("");
   let authRegister = $state(false);
+  let pendingPackId: string | undefined = $state();
+  let authNotice: string | undefined = $state();
   let routerStarted = false;
   const onUnauthenticated = (): void => {
     controller.stopSession();
     learner = undefined;
-    router.stop();
-    routerStarted = false;
+    void loadPublicRoute(route);
   };
   let shellHelpReturnFocus: HTMLElement | undefined;
   let unsubscribeController: (() => void) | undefined;
@@ -565,13 +566,39 @@
     }
   }
 
+  async function loadPublicRoute(_next: AppRoute): Promise<void> {
+    const generation = ++loadGeneration;
+    routeLoading = true;
+    routeError = undefined;
+    controller.stopSession();
+    if (livePoll !== undefined) { clearInterval(livePoll); livePoll = undefined; }
+    if (storyPoll !== undefined) { clearInterval(storyPoll); storyPoll = undefined; }
+    try {
+      [packs, capabilities] = await Promise.all([api.packs(), api.capabilities()]);
+    } catch (error) {
+      if (generation === loadGeneration) routeError = error instanceof Error ? error.message : String(error);
+    } finally {
+      if (generation === loadGeneration) {
+        routeHasLoaded = true;
+        routeLoading = false;
+      }
+    }
+  }
+
+  function loadVisibleRoute(next: AppRoute): void {
+    if (learner === undefined) void loadPublicRoute(next);
+    else void loadRoute(next);
+  }
+
   function startRouter(): void {
     if (routerStarted) return;
     routerStarted = true;
     router.start();
-    void loadRoute(router.route);
-    syncLivePolling(router.route);
-    syncStoryPolling(router.route);
+    loadVisibleRoute(router.route);
+    if (learner !== undefined) {
+      syncLivePolling(router.route);
+      syncStoryPolling(router.route);
+    }
   }
 
   function syncLivePolling(next:AppRoute):void{
@@ -697,7 +724,16 @@
         ? await method.call(api, authHandle, authPassword)
         : await method.call(api, authHandle, authPassword);
       authPassword = "";
-      startRouter();
+      authNotice = undefined;
+      const selectedPackId = pendingPackId;
+      pendingPackId = undefined;
+      if (!routerStarted) startRouter();
+      else {
+        await loadRoute(router.route);
+        syncLivePolling(router.route);
+        syncStoryPolling(router.route);
+      }
+      if (selectedPackId !== undefined) await controller.startPack(selectedPackId);
     } catch (error) {
       authError = error instanceof Error ? error.message : String(error);
     }
@@ -722,14 +758,25 @@
     await api.logout?.();
     controller.stopSession();
     learner = undefined;
-    router.stop?.();
-    routerStarted = false;
+    await loadPublicRoute(route);
   }
 
   async function deleteAccountWithPassword(password: string, previewDigest: string): Promise<void> {
     await api.deleteAccount?.(password, previewDigest);
     try { clearAccountLocalData(globalThis.localStorage); } catch { /* storage can be unavailable */ }
-    controller.stopSession(); learner = undefined; router.stop?.(); routerStarted = false;
+    controller.stopSession(); learner = undefined; await loadPublicRoute(route);
+  }
+
+  function choosePublicPack(packId: string): void {
+    pendingPackId = packId;
+    authRegister = true;
+    authError = undefined;
+    authNotice = `Create an account or sign in to keep ${packTitle(packId)} and begin it immediately.`;
+    void tick().then(() => {
+      const access = document.getElementById("account-access");
+      access?.scrollIntoView({ behavior: "smooth", block: "center" });
+      access?.querySelector<HTMLInputElement>("input")?.focus();
+    });
   }
 
   async function exportAccountWithPassword(password: string): Promise<void> {
@@ -1046,10 +1093,12 @@
     unsubscribeRouter = router.subscribe((next) => {
       route = next;
       document.title = routeTitle(next);
-      if (learner === undefined) return;
-      void loadRoute(next);
-      syncLivePolling(next);
-      syncStoryPolling(next);
+      if (authLoading) return;
+      loadVisibleRoute(next);
+      if (learner !== undefined) {
+        syncLivePolling(next);
+        syncStoryPolling(next);
+      }
     });
     void (async () => {
       try {
@@ -1061,6 +1110,7 @@
         learner = undefined;
       } finally {
         authLoading = false;
+        startRouter();
       }
     })();
     return stopTheme;
@@ -1090,20 +1140,45 @@
 {#if authLoading}
   <main class="auth-gate" aria-busy="true"><p>Loading Tabiya…</p></main>
 {:else if !learner}
-  <main class="auth-gate" aria-labelledby="auth-title">
-    <p class="eyebrow">Tabiya / hosted rehearsal</p>
-    <h1 id="auth-title">{authRegister ? "Create your learner account." : "Return to your rehearsals."}</h1>
-    <form onsubmit={(event) => { event.preventDefault(); void authenticate(); }}>
-      <label>Handle <input autocomplete="username" bind:value={authHandle} required /></label>
-      <label>Password <input type="password" autocomplete={authRegister ? "new-password" : "current-password"} bind:value={authPassword} minlength="10" maxlength="256" required /></label>
-      <button class="primary" type="submit">{authRegister ? "Register" : "Sign in"}</button>
-    </form>
-    {#if authError}<p role="alert">{authError}</p>{/if}
-    <button type="button" onclick={() => { authRegister = !authRegister; authError = undefined; }}>
-      {authRegister ? "Use an existing account" : "Create an account"}
-    </button>
-    <p class="honest">There is no password recovery yet. Keep your password somewhere safe.</p>
-  </main>
+  <div class="public-landing">
+    <header class="public-hero">
+      <div>
+        <p class="eyebrow">Tabiya / play the consequence</p>
+        <h1>Do not just learn the move. Rehearse the game it creates.</h1>
+        <p>Choose a real opening, middlegame, or endgame position. Commit to a decision, play its consequence, rewind, branch, and compare both attempts.</p>
+      </div>
+      <ol aria-label="The rehearsal loop">
+        <li><span>01</span> Commit</li>
+        <li><span>02</span> Play the consequence</li>
+        <li><span>03</span> Rewind and branch</li>
+        <li><span>04</span> Compare and replay</li>
+      </ol>
+      <p class="public-boundary"><strong>Grounded feedback, not invented chess truth.</strong> Authored explanations and measured evidence keep their source.</p>
+      <a class="browse-link" href="#position-catalogue">Browse rehearsal positions</a>
+    </header>
+    <section id="account-access" class="auth-gate" aria-labelledby="auth-title">
+      <p class="eyebrow">Keep your rehearsals</p>
+      <h2 id="auth-title">{authRegister ? "Create your learner account." : "Return to your rehearsals."}</h2>
+      {#if authNotice}<p class="auth-notice" role="status" aria-live="polite" aria-atomic="true">{authNotice}</p>{/if}
+      <form onsubmit={(event) => { event.preventDefault(); void authenticate(); }}>
+        <label>Handle <input autocomplete="username" bind:value={authHandle} required /></label>
+        <label>Password <input type="password" autocomplete={authRegister ? "new-password" : "current-password"} bind:value={authPassword} minlength="10" maxlength="256" required /></label>
+        <button class="primary" type="submit">{authRegister ? "Register" : "Sign in"}</button>
+      </form>
+      {#if authError}<p role="alert">{authError}</p>{/if}
+      <button type="button" onclick={() => { authRegister = !authRegister; authError = undefined; }}>
+        {authRegister ? "Use an existing account" : "Create an account"}
+      </button>
+      <p class="honest">There is no password recovery yet. Keep your password somewhere safe.</p>
+    </section>
+    <PackList
+      {packs}
+      loading={routeLoading}
+      error={routeError}
+      actionLabel="Choose this rehearsal"
+      onSelect={choosePublicPack}
+    />
+  </div>
 {:else}
 <ShellFrame
   {route}
@@ -1708,11 +1783,24 @@
   }
   .shell-view { width: min(70rem, calc(100% - 2rem)); height: 100%; margin: 0 auto; padding: clamp(2rem, 6vw, 5rem) 0; overflow: auto; }
   .play-surface{height:100%;overflow:auto;padding:1rem 0}.surface-skip{position:fixed;z-index:50;top:.35rem;left:.35rem;padding:.6rem .8rem;border-radius:.5rem;background:var(--ink);color:var(--paper);transform:translateY(-150%)}.surface-skip:focus{transform:translateY(0)}
-  .auth-gate { width: min(32rem, calc(100% - 2rem)); margin: 10vh auto; }
-  .auth-gate h1 { font: 500 clamp(2rem, 6vw, 4rem)/1 var(--display-font); }
+  .public-landing { height: 100%; overflow: auto; }
+  .public-hero { display: grid; grid-template-columns: minmax(0, 1.4fr) minmax(15rem, .6fr); gap: 1.5rem 3rem; width: min(76rem, calc(100% - 2rem)); margin: 0 auto; padding: clamp(3rem, 8vw, 7rem) 0 2rem; }
+  .public-hero > div { max-width: 52rem; }
+  .public-hero h1 { max-width: 15ch; margin: .5rem 0 1rem; font: 500 clamp(2.7rem, 7vw, 6.5rem)/.92 var(--display-font); letter-spacing: -.055em; }
+  .public-hero > div > p:last-child { max-width: 42rem; color: var(--muted); font-size: 1.08rem; line-height: 1.55; }
+  .public-hero ol { align-self: end; display: grid; gap: .65rem; margin: 0; padding: 0; list-style: none; }
+  .public-hero li { display: flex; gap: .75rem; padding-top: .65rem; border-top: 1px solid var(--line); }
+  .public-hero li span { color: var(--accent); font: 700 .7rem ui-monospace, monospace; }
+  .public-boundary { grid-column: 1; max-width: 44rem; margin: 0; padding: 1rem; border-left: 3px solid var(--accent); background: var(--panel); color: var(--muted); }
+  .public-boundary strong { display: block; color: var(--ink); }
+  .browse-link { align-self: center; justify-self: start; color: var(--ink); font-weight: 700; }
+  .auth-gate { width: min(76rem, calc(100% - 2rem)); margin: 2rem auto; padding: clamp(1.2rem, 4vw, 2rem); border: 1px solid var(--line); border-radius: 1rem; background: var(--panel); box-shadow: var(--shadow); }
+  .auth-gate h2 { max-width: 18ch; margin: .35rem 0 0; font: 500 clamp(1.7rem, 4vw, 3rem)/1 var(--display-font); }
   .auth-gate form { display: grid; gap: 1rem; margin: 2rem 0 1rem; }
   .auth-gate label { display: grid; gap: 0.35rem; }
   .auth-gate input { padding: 0.7rem; border: 1px solid var(--line); border-radius: 0.5rem; }
+  .auth-notice { max-width: 44rem; color: var(--ink); }
+  .public-landing :global(#position-catalogue) { height: auto; min-height: 100%; overflow: visible; }
   .claim-banner { position: fixed; z-index: 20; top: 4rem; right: 1rem; display: flex; gap: 0.7rem; align-items: center; padding: 0.6rem; background: var(--panel); border: 1px solid var(--line); border-radius: 0.7rem; }
   .session-banner { position: fixed; z-index: 21; right: 1rem; bottom: 1rem; display: grid; gap: 0.25rem; padding: 0.7rem; max-width: 18rem; border: 1px solid var(--line); border-radius: 0.7rem; background: var(--panel); box-shadow: var(--shadow); font-size: 0.8rem; }
   .shell-view > h1 { max-width: 18ch; margin: 0.4rem 0 1rem; font: 500 clamp(2.3rem, 6vw, 5rem)/0.96 var(--display-font); letter-spacing: -0.045em; }
@@ -1751,6 +1839,7 @@
   .phase-starters article button { margin-top: auto; }
   @media (max-width: 60rem) { .rehearsal-loop { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
   @media (max-width: 45rem) { .home-status, .phase-starters, .rehearsal-loop, .evidence-promise { grid-template-columns: 1fr; } .phase-starters > div { grid-column: 1; } }
+  @media (max-width: 50rem) { .public-hero { grid-template-columns: 1fr; } .public-boundary { grid-column: 1; } }
   .repertoire-form{display:grid;gap:.65rem;max-width:44rem;padding:1rem;border:1px solid var(--line);border-radius:.8rem;background:var(--panel)}
   .repertoire-form label{display:grid;gap:.25rem}.repertoire-form input,.repertoire-form select,.repertoire-form textarea{padding:.6rem;border:1px solid var(--line);border-radius:.4rem;background:var(--paper);color:var(--ink)}
   .repertoire-card{display:grid;gap:.6rem}.gap-results{grid-column:1/-1;border-top:1px solid var(--line);padding-top:.6rem}.gap-row{display:flex;align-items:center;justify-content:space-between;gap:1rem;padding:.4rem 0}
