@@ -10982,3 +10982,16 @@ CI actually run.
   exposed four stale generated-title assumptions and one stale read-only tally assertion; after
   making each journey submit the title it expected and target the vote action, all 58 required
   desktop/mobile checks passed (one optional Maia latency probe skipped).
+
+## 2026-08-29 — Live audience output reuses the overlay projection
+
+- Closed `LIV-a7`, `LIV-a8`, `LIV-a9`, `LIV-a10` and `LIV-a15` under [[D2023]].
+- The host now receives a selectable/copyable OBS browser-source URL, the source-cookie and in-OBS
+  sign-in instructions, transparent-background guidance, and an inline **See what your audience
+  sees** iframe of the exact `/live/overlay/:runId` route.
+- The interface states that board moves are never delayed and sends live-game delay to streaming
+  software; poll duration is named as a different control. Stream copy leads with commit →
+  consequence → rewind → fork → compare, the overlay calls branches preserved attempts, and match
+  invitation copy names pause-by-consent plus mainline preservation.
+- Software verification passed at 1,068 tests before closeout. Browser, content, governance and the
+  complete repository gate remain the landing checkpoint.

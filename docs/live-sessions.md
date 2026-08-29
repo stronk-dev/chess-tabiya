@@ -78,6 +78,26 @@ The host can close an open vote with either no applied option or one of its decl
 control states that this records the host's choice and never plays a move; the returned closed
 tally is authoritative and the confirmation repeats whether an option was recorded.
 
+## Audience output
+
+A host session exposes one audience-output region. Its read-only OBS browser-source URL points to
+the same `/live/overlay/:runId` route used by **Open overlay** and by the inline **See what your
+audience sees** preview. The preview is an iframe mount of that route, not a second rendering
+implementation, so it stays on the projection-only controller and cannot silently acquire host
+controls or private evidence panels.
+
+The OBS browser source uses its own cookie jar. The host adds the URL as a Browser Source, opens
+the source interaction window, and signs in there once; no bearer token is embedded in the URL.
+The overlay background is transparent. Tabiya does not delay the board: each committed move is
+visible immediately. A host showing a game that is still being played must configure delay in the
+streaming software. Vote duration controls poll closure only and is not presented as board delay.
+
+The overlay calls run branches **preserved attempts**. Stream-session purpose copy names the
+product loop—commit, play the consequence, rewind, fork and compare—rather than advertising a raw
+branch count or a generic poll. Match invitation copy separately tells invitees that either player
+may propose a coaching pause, the other player must accept it, and the played main line remains
+intact.
+
 Ordinary votes use a server-derived `learner:<id>` key. A configured chat-adapter
 account may relay external keys, which the server stores in a disjoint
 `chat:<adapter-id>:<key>` namespace. Other learners cannot supply a key. Keys are bounded

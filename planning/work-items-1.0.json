@@ -5908,17 +5908,21 @@
     {
       "id": "LIV-a10",
       "sourceState": "queued",
-      "state": "queued",
+      "state": "completed",
       "capability": "social_play",
       "owner": "live-and-social",
-      "assignment": "capability:social_play",
+      "assignment": "closed",
       "sourceDocument": "ux-live-and-social.md",
       "sourceSection": "§3 B4",
       "sourceHeading": "Live, casting and social — `ux-live-and-social.md`",
-      "summary": "Reframe the cast pitch as commit → play → rewind → fork → compare; *\"{n} branches\"* needs a noun",
-      "legacyRoute": "none",
-      "note": "the differentiator is host-side rewind, and the interface never says so",
-      "sourceDigest": "sha256:7d233f67b0153d935cfda6e2a39f1af8c19a5321125bfea3bd000cc177d640a5"
+      "summary": "✅ **Closed 2026-08-29:** Stream copy now leads with commit → consequence → rewind → fork → compare, and the overlay calls branches preserved attempts",
+      "legacyRoute": "closed",
+      "note": "[[D2023]]; component copy plus real overlay assertion",
+      "sourceDigest": "sha256:ab0b709401c3e1a3ab8fb83cf1c307d9357fb70e80476006f39c3fd4082ce67e",
+      "completion": {
+        "completedOn": "2026-08-29",
+        "evidence": "stream purpose names commit, consequence, rewind, fork and compare; the real overlay renders preserved-attempt language"
+      }
     },
     {
       "id": "LIV-a11",
@@ -5993,16 +5997,21 @@
     {
       "id": "LIV-a15",
       "sourceState": "queued",
-      "state": "queued",
+      "state": "completed",
       "capability": "social_play",
       "owner": "live-and-social",
-      "assignment": "capability:social_play",
+      "assignment": "closed",
       "sourceDocument": "ux-live-and-social.md",
       "sourceSection": "§7 F2",
       "sourceHeading": "Live, casting and social — `ux-live-and-social.md`",
-      "summary": "Surface **pause-by-consent** in the invitation copy — the uncontested differentiator, unmentioned",
-      "legacyRoute": "none",
-      "sourceDigest": "sha256:504296e23889f8622be0f97b58ce4a2ede82b40921d7abf7f02c30237946e42a"
+      "summary": "✅ **Closed 2026-08-29:** match invitation copy names either player's pause proposal, the other player's acceptance and the preserved main line",
+      "legacyRoute": "closed",
+      "note": "[[D2023]]; native-match browser journey",
+      "sourceDigest": "sha256:ecbc5ac4f2f0b7151dc04db95da126f9faae2dec2d84f842725c9074187374b5",
+      "completion": {
+        "completedOn": "2026-08-29",
+        "evidence": "native-match browser journey renders the two-player consent boundary and preserved-mainline promise before play"
+      }
     },
     {
       "id": "LIV-a16",
@@ -6250,46 +6259,59 @@
     {
       "id": "LIV-a7",
       "sourceState": "queued",
-      "state": "queued",
+      "state": "completed",
       "capability": "social_play",
       "owner": "live-and-social",
-      "assignment": "capability:social_play",
+      "assignment": "closed",
       "sourceDocument": "ux-live-and-social.md",
       "sourceSection": "§1.3a",
       "sourceHeading": "Live, casting and social — `ux-live-and-social.md`",
-      "summary": "The overlay is the host's own OBS capture surface requiring an in-OBS sign-in and **nothing documents it**; name the seam once — copyable URL, transparent background, the cookie step",
-      "legacyRoute": "none",
-      "note": "zero repo matches for `obs`/browser source",
-      "sourceDigest": "sha256:24a773afb2b638cbf5749acbe2f9b8f62ea8d03fd0aa33a99ace88774225f9b6"
+      "summary": "✅ **Closed 2026-08-29:** the host gets a selectable/copyable OBS browser-source URL plus the transparent-background, source-cookie and in-OBS sign-in instructions",
+      "legacyRoute": "closed",
+      "note": "[[D2023]]; host component contract binds the exact run URL",
+      "sourceDigest": "sha256:856aeaf4adcc9b0aef739072b9ead818cb252190d314106f6c02563ccb814245",
+      "completion": {
+        "completedOn": "2026-08-29",
+        "evidence": "host component contract binds the canonical overlay URL and renders OBS cookie, sign-in and transparency guidance"
+      }
     },
     {
       "id": "LIV-a8",
       "sourceState": "queued",
-      "state": "queued",
+      "state": "completed",
       "capability": "social_play",
       "owner": "live-and-social",
-      "assignment": "capability:social_play",
+      "assignment": "closed",
       "sourceDocument": "ux-live-and-social.md",
       "sourceSection": "§3 B1",
       "sourceHeading": "Live, casting and social — `ux-live-and-social.md`",
-      "summary": "**The audience preview**: one host-side control rendering exactly what a viewer sees",
-      "legacyRoute": "ledger",
-      "note": "[[D1469]]; a second mount of the existing `projectionOnly` controller",
-      "sourceDigest": "sha256:62817c2a8ce7a8baf3a4909dfcccde21ae64b12aeee5b0a0b59f3a1b26e01d21"
+      "summary": "✅ **Closed 2026-08-29:** **See what your audience sees** mounts the exact chrome-free overlay route inline and labels it as the spectator-safe projection",
+      "legacyRoute": "closed",
+      "note": "[[D1469]]/[[D2023]]; real browser crosses the nested projection",
+      "sourceDigest": "sha256:213cbc16eb46df00d0e3de3ffe013e3d8a3649ede4ecf6bdb06534e3ae07fef8",
+      "completion": {
+        "completedOn": "2026-08-29",
+        "evidence": "real browser opens the inline audience preview and reaches the same projection-only overlay route"
+      }
     },
     {
       "id": "LIV-a9",
       "sourceState": "queued",
-      "state": "queued",
+      "state": "completed",
       "capability": "social_play",
       "owner": "live-and-social",
-      "assignment": "capability:social_play",
+      "assignment": "closed",
       "sourceDocument": "ux-live-and-social.md",
       "sourceSection": "§3 B3a",
       "sourceHeading": "Live, casting and social — `ux-live-and-social.md`",
-      "summary": "State that the board is never delayed, and instruct streamers to set delay in their streaming software",
-      "legacyRoute": "none",
-      "sourceDigest": "sha256:ae3832b458121cd32847942b11ab6308c5ee58ba74d7ca7ee49c43c4794052ea"
+      "summary": "✅ **Closed 2026-08-29:** the audience-output region states that the board is never delayed, sends live-game delay to streaming software and distinguishes poll duration",
+      "legacyRoute": "closed",
+      "note": "[[D2023]]",
+      "sourceDigest": "sha256:6c7d5c8efa0763e11fe28e9fb7cfc6c7c44497f9f9481f10a1add950c02c8753",
+      "completion": {
+        "completedOn": "2026-08-29",
+        "evidence": "audience-output copy states immediate board delivery, routes delay to streaming software and separates poll duration"
+      }
     },
     {
       "id": "LIV-b1",

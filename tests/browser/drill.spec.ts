@@ -495,6 +495,13 @@ test("Live turns a run into a session and exposes a chrome-free overlay", async 
   await expect(page.getByText("your role: host")).toBeVisible();
   await expect(page.getByRole("heading", { name: "Invitations" })).toBeVisible();
   await expect(page.getByLabel("Tabiya handle")).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Audience output" })).toBeVisible();
+  await expect(page.getByLabel("OBS browser-source URL")).toHaveValue(/\/live\/overlay\//);
+  await expect(page.getByText(/No board delay:/)).toBeVisible();
+  await page.getByRole("button", { name: "See what your audience sees" }).click();
+  const audiencePreview = page.frameLocator('iframe[title="Audience overlay preview"]');
+  await expect(audiencePreview.getByLabel("Live session overlay")).toBeVisible();
+  await expect(audiencePreview.getByText(/Objective in progress · 1 preserved attempt/)).toBeVisible();
   const voteEditor = page.locator(".vote-editor");
   await voteEditor.getByLabel("Prompt").fill("Which plan?");
   const moves = ["a1b1", "c1d2", "c1e3", "c1f4", "c1g5", "c1h6", "d1d2", "d1e2"];
@@ -522,7 +529,7 @@ test("Live turns a run into a session and exposes a chrome-free overlay", async 
   await expect(page.getByLabel("Live session overlay")).toBeVisible();
   await expect(page.getByLabel("Chessboard")).toBeVisible();
   await expect(page.getByRole("heading", { name: "Select a setup and execute its first plan through the timing window." })).toBeVisible();
-  await expect(page.getByText(/Objective in progress · 1 branch/)).toBeVisible();
+  await expect(page.getByText(/Objective in progress · 1 preserved attempt/)).toBeVisible();
   await expect(page.getByText("Bishop f4: 0")).toBeVisible();
   await expect(page.getByText("No votes yet.")).toBeVisible();
   await expect(page.locator("#primary-navigation")).toHaveCount(0);

@@ -71,6 +71,8 @@ test("two learners alternate a native match, pause to branch, and return to the 
     await coach.page.getByLabel("Black handle").fill(black.handle);
     await coach.page.getByRole("button", { name: "Create match" }).click();
     await expect(coach.page.getByRole("heading", { name: "match session" })).toBeVisible();
+    await expect(coach.page.getByText(/Either player may propose a coaching pause/)).toBeVisible();
+    await expect(coach.page.getByText(/Rehearsal opens only after the other player accepts/)).toBeVisible();
     const sessionId = new URL(coach.page.url()).pathname.split("/").at(-1)!;
 
     await Promise.all([

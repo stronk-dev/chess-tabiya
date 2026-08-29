@@ -1316,3 +1316,22 @@ count pluralization is explicit `[V]` (`apps/web/src/lib/live-overlay.ts`). A un
 states and absence, while the complete browser suite reaches the real Academy overlay on desktop
 and mobile and asserts the authored sentence `[V]` (`apps/web/src/lib/live-overlay.test.ts`;
 `tests/browser/drill.spec.ts`). No evidence producer, selection rule or chess claim was added.
+
+## 17. Living correction — audience-output handoff (2026-08-29)
+
+The OBS and audience-preview absences recorded in §§1.3 and 3 are closed at HEAD. The host session
+now renders the canonical overlay URL in a selectable read-only input, offers a clipboard action,
+and states the browser source's separate cookie jar, in-OBS sign-in step and transparent background
+`[V]` (`apps/web/src/App.svelte`, **Audience output**). **See what your audience sees** mounts the
+same `/live/overlay/:runId` route in an iframe rather than reimplementing its board/copy list; the
+complete browser journey reaches that nested route and observes its objective state `[V]`
+(`tests/browser/drill.spec.ts`).
+
+The same region states that Tabiya never delays the board, routes live-game delay to streaming
+software, and explicitly distinguishes poll duration from board delay `[V]`. Stream purpose copy
+now leads with commit → consequence → rewind → fork → compare, while the overlay renders its count
+as preserved attempts instead of the implementation noun *branches* `[V]`. A native-match browser
+journey also sees the pause-by-consent invitation promise before play `[V]`
+(`tests/browser/match.spec.ts`). This closes `LIV-a7`, `LIV-a8`, `LIV-a9`, `LIV-a10` and `LIV-a15`;
+anonymous viewership, chat-provider integration, editorial vote delay and the three-state streamer
+chrome preference remain separate open obligations.

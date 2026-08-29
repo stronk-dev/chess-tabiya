@@ -788,6 +788,14 @@ describe("application shell", () => {
     await vi.waitFor(() => expect(mintSessionLink).toHaveBeenCalledWith("session-one", { invitedRole: "spectator" }));
     await vi.waitFor(() => expect(document.body.textContent).toContain("Watch link: /shared/watch-token"));
     expect(document.body.textContent).toContain("Single use · expires after 14 days · grants spectator access only");
+    expect(document.body.textContent).toContain("Audience output");
+    expect(document.body.textContent).toContain("never the host's private evidence panels or controls");
+    expect(document.body.textContent).toContain("No board delay:");
+    expect(document.body.textContent).toContain("sign in once inside OBS");
+    const overlayUrl = document.querySelector<HTMLInputElement>('input[readonly]')!;
+    expect(overlayUrl.value).toBe("http://localhost:3000/live/overlay/live-run");
+    const preview = [...document.querySelectorAll<HTMLButtonElement>("button")].find((button) => button.textContent === "See what your audience sees")!;
+    expect(preview.getAttribute("aria-controls")).toBe("audience-preview");
     const makeSpectator = [...document.querySelectorAll<HTMLButtonElement>("button")].find((button) => button.textContent === "Make spectator")!;
     makeSpectator.click();
     await vi.waitFor(() => expect(updateGrants).toHaveBeenCalledWith("live-run", { op: "grant", handle: "student", role: "spectator" }, "writer-live"));
