@@ -1,12 +1,10 @@
 # RFC: Provider exchange and projection execution
 
-- **Status:** draft — returned a third time; final independent buildability review 2026-08-28 found
-  [[D2000]]–[[D2008]]. The prior delivery, history, availability, migration and raw-WDL repairs
-  survive, but operation/result correlation, receipt typing, crossed deadlines, retention bounds,
-  Syzygy domain abstention, Explorer suitability, Stockfish command/result authority and canonical
-  provider digests remain unclosed. Exact return and repair order:
-  `planning/provider-exchange-and-execution/final-independent-buildability-review-2026-08-28.md`
-  and `final-author-handoff.md`. Implementation is not authorised.
+- **Status:** draft — third-return author repair complete 2026-08-29 for [[D2000]]–[[D2008]].
+  Distributive operation results, operation-keyed receipts, crossed-waiter settlement, two-axis
+  retention bounds, Syzygy domain abstention, disclosure-only Explorer population, descriptor-owned
+  Stockfish command/result authority and one provider-digest registry are now literal contracts.
+  The author fixtures pass; fresh independent buildability review still gates implementation.
 - **Author:** codex, from the D1652–D1658 and D1699–D1709 author-repair handoffs
 - **Created:** 2026-08-27
 - **Design refs:** `design/03-product-breadth.md` evidence architecture and provider-backed
@@ -245,56 +243,124 @@ which leaf is absent. No aggregate state is accepted from a caller.
 
 ### 3. One typed exchange receipt
 
-All live source payloads carry a receipt constructed inside the operation that produced the bytes:
+All live source payloads carry a receipt constructed by the scheduler from the capture returned by
+the operation that produced the bytes:
 
 ```ts
-interface ProviderAcquisitionReceipt {
-  readonly provider: "stockfish" | "maia" | "syzygy" | "lichess_explorer";
+type ProviderOperationProviderMap = {
+  readonly "stockfish.legal_root_table@1": "stockfish";
+  readonly "stockfish.position_evaluation@1": "stockfish";
+  readonly "maia.policy_page@1": "maia";
+  readonly "syzygy.position@1": "syzygy";
+  readonly "lichess_explorer.position_page@1": "lichess_explorer";
+};
+
+interface StockfishCommandIdentity {
+  readonly commands: readonly string[];
+  readonly commandsDigest: `sha256:${string}`;
+}
+
+type ProviderRequestedIdentityMap = {
+  readonly "stockfish.legal_root_table@1": Readonly<{
+    request: StockfishLegalRootTableRequest;
+    command: StockfishCommandIdentity;
+  }>;
+  readonly "stockfish.position_evaluation@1": Readonly<{
+    request: StockfishPositionEvaluationRequest;
+    command: StockfishCommandIdentity;
+  }>;
+  readonly "maia.policy_page@1": Readonly<{ request: MaiaPolicyPageRequest }>;
+  readonly "syzygy.position@1": Readonly<{ request: SyzygyPositionRequest }>;
+  readonly "lichess_explorer.position_page@1": Readonly<{
+    request: ExplorerPositionPageRequest;
+  }>;
+};
+
+type StockfishActualIdentity = Readonly<{
+  id: string;
+  name: string;
+  version: string;
+  binaryDigest: `sha256:${string}`;
+  uciOptionsDigest: `sha256:${string}`;
+}>;
+
+type ProviderActualIdentityMap = {
+  readonly "stockfish.legal_root_table@1": StockfishActualIdentity;
+  readonly "stockfish.position_evaluation@1": StockfishActualIdentity;
+  readonly "maia.policy_page@1": Readonly<{
+    id: string; version: string; runtimeDigest: `sha256:${string}`;
+  }>;
+  readonly "syzygy.position@1": Readonly<{
+    source: "lichess_syzygy"; endpoint: string; apiVersion: string;
+  }>;
+  readonly "lichess_explorer.position_page@1": Readonly<{
+    source: "lichess_explorer"; endpoint: string; apiVersion: string;
+  }>;
+};
+
+type ProviderAcquisitionReceipt<K extends ProviderOperationId = ProviderOperationId> =
+  K extends ProviderOperationId ? Readonly<{
+  readonly operation: K;
+  readonly provider: ProviderOperationProviderMap[K];
   readonly endpoint: string;
-  readonly requestedIdentity: Readonly<Record<string, string | number | boolean>>;
-  readonly actualIdentity: Readonly<Record<string, string | number | boolean>>;
+  readonly requestedIdentity: ProviderRequestedIdentityMap[K];
+  readonly actualIdentity: ProviderActualIdentityMap[K];
   readonly generation: number | null;
   readonly requestedAt: string;
   readonly retrievedAt: string;
-  readonly normalizedRequestDigest: string;
-  readonly responseDigest: string;
-}
+  readonly normalizedRequestDigest: `sha256:${string}`;
+  readonly responseDigest: `sha256:${string}`;
+}> : never;
 
-type ProviderDelivery<T> =
+type ProviderDelivery<T, K extends ProviderOperationId> =
   | {
       readonly kind: "live";
       readonly servedAt: string;
       readonly cacheIdentity: null;
-      readonly acquisition: ProviderAcquisitionReceipt;
+      readonly acquisition: ProviderAcquisitionReceipt<K>;
       readonly payload: T;
     }
   | {
       readonly kind: "retained_exact";
       readonly servedAt: string;
       readonly cacheIdentity: string;
-      readonly acquisition: ProviderAcquisitionReceipt;
+      readonly acquisition: ProviderAcquisitionReceipt<K>;
       readonly payload: T;
     };
 
 /** The exact payload sealed by every live provider source projection. */
-type ProviderEvidenceDelivery<T> = ProviderDelivery<T>;
+type ProviderEvidenceDelivery<T, K extends ProviderOperationId> = ProviderDelivery<T, K>;
 ```
 
-Provider-specific payloads remain typed; `Record` appears only in the common identity envelope and
-is filled by provider-specific constructors. Engine `generation` increments after each successful
-spawn handshake. Network providers use `null`. Acquisition is immutable evidence of the operation
+The operation maps are the identity authority: neither requested nor actual identity contains an
+open `Record`. `makeProviderAcquisitionReceipt<K>()` is a module-private constructor owned by
+`provider-exchange.ts`. It receives an admitted descriptor, its normalized request, the identity
+captured by that descriptor's live exchange and the exact response bytes; it verifies that
+`operation`, `provider`, requested identity and actual identity inhabit the same `K` arm before it
+seals the receipt. Descriptors and callers cannot construct, cast or spread a receipt. A runtime
+operation/provider mismatch fails as `identity_mismatch`, even when TypeScript has been bypassed.
+The constructor also requires the captured endpoint to equal a network actual identity's endpoint,
+the captured Stockfish/Maia id and version to equal the requested engine/model, and every normalized
+request byte—including bound, timeout, model parameters and population window—to equal the identity
+used for request hashing and execution. A mismatched endpoint, engine/model, bound or request image
+is `identity_mismatch`; it is never repaired by copying the requested value over the capture.
+
+Stockfish and Maia `generation` are positive safe integers incremented after each successful worker
+spawn handshake. Syzygy and Explorer use `null`. The private constructor rejects another
+operation/generation pairing. Acquisition is immutable evidence of the operation
 that obtained the bytes. A cache hit wraps that same receipt/payload in a new `retained_exact`
 delivery with a later `servedAt` and non-null cache identity; it never changes `retrievedAt`,
 digests, actual identity or generation. A live delivery has `cacheIdentity: null` and its
 `servedAt` equals retrieval completion.
 
 Every `live.*`/`human.*` provider source projection below declares the complete
-`ProviderEvidenceDelivery<T>` as its F1 payload, not bare `T`. Its exact adapter seals delivery kind,
+`ProviderEvidenceDelivery<T, K>` as its F1 payload, not bare `T`. Its exact adapter seals delivery kind,
 served/cache identity, immutable acquisition and provider payload together. A downstream derived
 projection may read `.payload`, but must retain the admitted delivery input; no adapter may strip
 the receipt and then copy provider identity into a new object.
 
-The pending/deduplication key uses the complete normalized requested identity but never contains an
+The pending/deduplication key uses the complete normalized requested identity, including the
+descriptor-owned Stockfish command image where applicable, but never contains an
 actual generation not yet observed. Admission captures actual identity inside the same serialized
 exchange. A result is refused if identity or generation changes between execution capture and
 response completion. Retained engine results are indexed by the pending key and admitted only when
@@ -323,6 +389,60 @@ digest from the acquisition receipt and compares generation to current superviso
 providers use `generation: null` while still binding retained admission to actual endpoint/source
 identity. Actual identity is never part of request coalescing.
 
+### 3.1 One canonical provider-digest registry
+
+`packages/runtime/src/provider-digest.ts` is the single byte authority for every digest and key in
+this RFC. It exports no generic caller-selected tag. Instead it exposes six closed operations:
+
+```ts
+type ProviderDigestDomain =
+  | "provider.commands.v1"
+  | "provider.request.v1"
+  | "provider.pending.v1"
+  | "provider.actual.v1"
+  | "provider.response.v1"
+  | "provider.path.v1";
+
+function digestProviderCommands(commands: readonly string[]): `sha256:${string}`;
+function digestProviderRequest(image: ProviderRequestDigestImage): `sha256:${string}`;
+function digestProviderPending(image: ProviderPendingIdentity): `sha256:${string}`;
+function digestProviderActual<K extends ProviderOperationId>(
+  operation: K,
+  provider: ProviderOperationProviderMap[K],
+  identity: ProviderActualIdentityMap[K],
+): `sha256:${string}`;
+function digestProviderResponse(image: ProviderResponseDigestImage): `sha256:${string}`;
+function digestProviderPath(image: CompiledProviderPathDigestImage): `path:sha256:${string}`;
+```
+
+For each domain the hashed bytes are exactly
+`UTF8("tabiya/" + domain + "\u0000") || UTF8(canonicalProviderJson(image))`.
+`canonicalProviderJson` implements RFC 8785 JSON Canonicalization Scheme: recursive object-property
+sorting by UTF-16 code units, preserved array order, ECMAScript JSON string escaping and the RFC's
+finite IEEE-754 number serialization (`-0` becomes `0`; shortest round-trippable decimal/exponent
+form wins). Application validators still require counts, widths, bounds and indices to be safe
+integers, while Maia `temperature` and `topP` remain admissible finite decimals. The canonicalizer
+rejects `undefined`, array holes, `NaN`, infinities, bigint, symbols, functions and non-plain
+objects. The digest is SHA-256 rendered as `sha256:` plus 64 lower-case hexadecimal characters;
+`path` adds its literal `path:` prefix only after hashing.
+
+The exact images are closed:
+
+- commands: `{ commands }`, preserving line order and rejecting CR/LF/NUL inside a command;
+- request: `{ operation, provider, requestedIdentity }`, where Stockfish requested identity
+  includes the descriptor-produced command array and `digestProviderCommands(commands)`;
+- pending: `{ operation, normalizedRequestDigest }`;
+- actual: `{ operation, provider, actualIdentity }`;
+- response: `{ operation, provider, contentEncoding, bodyBase64 }`, where `bodyBase64` represents
+  the exact acquired bytes—the complete UCI task transcript for Stockfish and the HTTP response
+  body for network providers—without parse/re-serialization;
+- path: the exact compiler image specified in §1.
+
+Key reordering is stable; changing an operation, provider, command, request member, actual identity,
+raw response byte or path member changes the appropriate digest. The two older canonicalizers may
+remain for their schema/manifest domains but cannot produce provider identities. A governance
+census rejects another provider hash constructor, raw SHA call or hand-written domain tag.
+
 Closed source abstention vocabulary:
 
 ```text
@@ -338,13 +458,13 @@ successful typed domain/consumer states, not transport failures.
 ### 4. Shared bounded scheduler
 
 `apps/server/src/provider-exchange.ts` owns `ProviderExchangeScheduler`. Its constructor requires
-positive `maxActive`, `maxQueued`, `maxRetainedWeight`, `retentionTtlMs` and a monotonic clock.
-There are no implicit unbounded defaults.
+positive `maxActive`, `maxQueued`, `maxRetainedEntries`, `maxRetainedWeight`, `retentionTtlMs` and
+a monotonic clock. There are no implicit unbounded defaults.
 
 ```ts
 interface ProviderRequestScope {
   readonly id: string;
-  readonly deadlineAt: number;
+  readonly budgetMs: number;
 }
 
 type ProviderOperationId =
@@ -378,16 +498,24 @@ type TypedProviderRequest<K extends ProviderOperationId = ProviderOperationId> =
 type ProviderSourceFailure<K extends ProviderOperationId> = Readonly<{
   kind: "source_failure";
   operation: K;
-  normalizedRequestDigest: string;
+  normalizedRequestDigest: `sha256:${string}`;
   failedAt: string;
   reason: "provider_unavailable" | "deadline_exceeded" | "queue_full" | "cancelled" |
     "invalid_response" | "identity_mismatch";
   providerDetail?: string;
 }>;
 
-type TypedProviderResult<K extends ProviderOperationId> =
-  | Readonly<{ kind: "success"; delivery: ProviderDelivery<ProviderOperationResultMap[K]> }>
-  | ProviderSourceFailure<K>;
+type ProviderSuccess<K extends ProviderOperationId> = K extends ProviderOperationId
+  ? Readonly<{
+      kind: "success";
+      operation: K;
+      normalizedRequestDigest: `sha256:${string}`;
+      delivery: ProviderDelivery<ProviderOperationResultMap[K], K>;
+    }>
+  : never;
+
+type TypedProviderResult<K extends ProviderOperationId = ProviderOperationId> =
+  K extends ProviderOperationId ? ProviderSuccess<K> | ProviderSourceFailure<K> : never;
 
 interface ProviderExecutionContext {
   readonly signal: AbortSignal;
@@ -395,18 +523,30 @@ interface ProviderExecutionContext {
   readonly requestedAt: string;
 }
 
+interface ProviderExecutionCapture<K extends ProviderOperationId> {
+  readonly endpoint: string;
+  readonly actualIdentity: ProviderActualIdentityMap[K];
+  readonly generation: number | null;
+  readonly retrievedAt: string;
+  readonly contentEncoding: "uci-utf8" | "http-body";
+  readonly responseBytes: Uint8Array;
+}
+
 interface ProviderOperationDescriptor<K extends ProviderOperationId> {
   readonly operation: K;
-  pendingKey(request: ProviderOperationRequestMap[K]): string;
-  execute(
+  readonly provider: ProviderOperationProviderMap[K];
+  normalizeRequest(
     request: ProviderOperationRequestMap[K],
+  ): ProviderRequestedIdentityMap[K];
+  execute(
+    requestedIdentity: ProviderRequestedIdentityMap[K],
     context: ProviderExecutionContext,
   ): Promise<Readonly<{
     payload: ProviderOperationResultMap[K];
-    acquisition: ProviderAcquisitionReceipt;
+    capture: ProviderExecutionCapture<K>;
   }>>;
   retainedWeight(payload: ProviderOperationResultMap[K]): number;
-  admitRetained(acquisition: ProviderAcquisitionReceipt): boolean;
+  admitRetained(acquisition: ProviderAcquisitionReceipt<K>): boolean;
 }
 
 type ProviderOperationDescriptors = {
@@ -424,23 +564,34 @@ interface ProviderExchangeScheduler {
 
 The scheduler constructor accepts one `ProviderOperationDescriptors` exact mapped set—one
 for every `ProviderOperationId`, with no extras. Callers provide only the discriminated request,
-scope and cancellation signal. They cannot provide an execution callback, key, weight or receipt.
+relative waiting budget and cancellation signal. They cannot provide an absolute deadline,
+execution callback, key, weight or receipt.
 The scheduler calls the registered descriptor after queue admission, owns failure normalization and
-delivery wrapping, and is the sole cache/deduplication authority. `pendingKey` is a canonical digest
-of operation id plus requested bytes. `execute` is the only production hook that may construct an
-acquisition receipt. Engine descriptors enter the supervisor's serialized task inside this hook and
-capture actual identity/generation there.
+delivery wrapping, and is the sole cache/deduplication authority. It calls `normalizeRequest` once,
+computes the request and pending digests through §3.1, then passes that sealed identity to
+`execute`. The descriptor returns payload plus same-exchange capture; only the scheduler's private
+`makeProviderAcquisitionReceipt` validates the capture, hashes its raw response and seals the
+receipt. Engine descriptors enter the supervisor's serialized task inside `execute` and capture
+actual identity/generation there.
 
 Each of the five named `*Operation` exports implements its exact
-`ProviderOperationDescriptor<operation-id>` member. There is no second public `execute(request,
+`ProviderOperationDescriptor<operation-id>` member. There is no second public `execute(identity,
 signal)` overload or wrapper operation: every descriptor receives `ProviderExecutionContext`, and
 the scheduler alone derives that context from caller scope/cancellation. The application census
 resolves those five descriptor objects, not five facades plus hidden descriptors.
 
 Rules:
 
-- `deadlineAt` is created at caller arrival, before cache, dedupe or queue decisions. Dispatch gets
-  only remaining time.
+- At caller arrival the scheduler samples its monotonic clock once, validates `budgetMs` as a
+  positive safe integer and mints a private waiter deadline `arrival + budgetMs`, before cache,
+  dedupe or queue decisions. The caller cannot forge absolute time. The operation's provider
+  timeout remains part of the normalized request and therefore shared only by exact-key waiters.
+  For a new job the scheduler also mints `executionDeadline = firstArrival + request.timeoutMs`;
+  queue time consumes it, dispatch receives only its remaining duration and later joiners cannot
+  extend it. Waiter budgets bound each caller's waiting, not the descriptor's common execution.
+- Admission order is exact: check an admissible retained entry; otherwise join an equal pending key;
+  otherwise reject when the new-job queue is full; otherwise enqueue one new job. Joining pending
+  work consumes no additional active or queued slot.
 - Exact canonical request identity coalesces. FEN-only keys never coalesce requests whose history,
   model, bound, population window, variant or provider identity differs.
 - Engine pending keys contain requested engine id/spec, normalized commands, position, bound and
@@ -449,10 +600,17 @@ Rules:
   established identity and refuses cold, unknown or changed generations.
 - Queue-full, rejection, invalid response, cancellation, timeout and identity mismatch are never
   retained.
-- Cancellation removes queued work. Active work aborts when its final subscriber leaves; late
-  results are dropped.
-- Retention is weight-bounded as well as entry-bounded. Provider/model/generation changes make a
-  retained result stale.
+- Every waiter settles independently. A shorter waiter reaching its scheduler-minted deadline
+  receives its own `deadline_exceeded` result and detaches while a longer waiter remains joined.
+  Cancelling one waiter yields `cancelled` only for that waiter. Queued or active shared work is
+  aborted only after its final waiter detaches; late results from an aborted job are dropped.
+- `retainedWeight(payload)` must return a positive safe integer (`>= 1`); zero, negative,
+  fractional, infinite or unsafe weights refuse admission. Retention is bounded simultaneously by
+  `maxRetainedEntries` and `maxRetainedWeight`. Before admission the scheduler removes expired and
+  identity-stale entries, then evicts least-recently-served entries until both caps would hold;
+  equal service times tie by ASCII `pendingKey`. An item heavier than the total weight cap is served
+  live and not retained. Failures are never retained.
+- Provider/model/generation changes make a retained result stale.
 - No hover, pointer-move or board-focus operation may enqueue provider work. An accepted module,
   Review operation, bot policy, authoring operation or explicit inspector request supplies the
   scope and interaction budget.
@@ -476,7 +634,6 @@ interface StockfishLegalRootTableRequest {
   readonly requestedWidth: "all_legal";
   readonly moveIdentity: "chessops-king-takes-rook@1";
   readonly requestedEngine: { readonly id: string; readonly version: string };
-  readonly normalizedCommandsDigest: string;
   readonly timeoutMs: number;
 }
 
@@ -500,7 +657,7 @@ interface StockfishLegalRootTable {
 ```
 
 `live.stockfish.legal_root_table@1` has payload
-`ProviderEvidenceDelivery<StockfishLegalRootTable>` and is `search/source_record`,
+`ProviderEvidenceDelivery<StockfishLegalRootTable, "stockfish.legal_root_table@1">` and is `search/source_record`,
 `bounded_search/measured/reported`, answers evaluation/candidate moves/move/PV, and is
 operator-only until a named derived consumer is compiled. Set equality is between unique normalized
 `rows.moveUci` and `exactLegalMoves(fen).map(uci)`, with every row reaching the requested depth.
@@ -524,15 +681,28 @@ positive safe-integer distance. Candidate consumers never flip rows after applyi
 White- and Black-to-move cp fixtures plus winning/losing mate fixtures fail if a White frame, child
 frame, signed-distance mate or mate-to-cp sentinel is substituted.
 
-The engine execution boundary returns the actual engine identity, generation, request digest,
-output digest and UCI bytes from the same serialized task. Existing health remains health; it is
-not exchange provenance.
+The caller never supplies a command digest. After exact legal-move enumeration, the descriptor
+constructs this literal command image inside the serialized supervisor task:
+
+```text
+setoption name UCI_ShowWDL value false
+setoption name MultiPV value <exact legal move count>
+position fen <canonical six-field FEN>
+go depth <requested positive depth>
+```
+
+The requested identity contains that array and its `digestProviderRequest`-bound command digest.
+Before releasing the serialized task, a `finally` block sends `setoption name MultiPV value 1`,
+`setoption name UCI_ShowWDL value false`, then `isready` and waits for `readyok`; failed reset makes
+the generation unhealthy and forbids reuse. The engine execution boundary returns the actual
+engine identity, generation, request digest, output digest and complete task transcript from the
+same serialized task. Existing health remains health; it is not exchange provenance.
 
 #### 5.1 Fixed-bound position evaluation
 
 `StockfishPositionEvaluationOperation` is the second Stockfish descriptor and implements
 `ProviderOperationDescriptor<"stockfish.position_evaluation@1">`; its only execution entry is
-`execute(request, context: ProviderExecutionContext)`,
+`execute(requestedIdentity, context: ProviderExecutionContext)`,
 not a private candidate-packet adapter ([[D1860]]). It uses the same scheduler, engine execution
 boundary, generation and receipt constructor as the legal-root table:
 
@@ -566,25 +736,49 @@ interface StockfishPositionEvaluationRequest {
     | { readonly kind: "movetime"; readonly requestedMs: number }
     | { readonly kind: "depth"; readonly requestedDepth: number }
     | { readonly kind: "nodes"; readonly requestedNodes: number };
-  readonly normalizedCommandsDigest: string;
   readonly timeoutMs: number;
 }
 ```
 
-The pending key is exact canonical six-field FEN plus requested engine/version, bound, command
-digest and timeout; it does not contain actual generation. The acquisition receipt adds actual
+The caller never supplies `normalizedCommandsDigest`. The descriptor normalizes the request, then
+constructs the exact command image below and records the array plus its digest in
+`ProviderRequestedIdentityMap["stockfish.position_evaluation@1"]`:
+
+```text
+setoption name MultiPV value 1
+setoption name UCI_ShowWDL value true
+position fen <canonical six-field FEN>
+go movetime <requestedMs> | go depth <requestedDepth> | go nodes <requestedNodes>
+```
+
+The same `finally` reset (`MultiPV 1`, `UCI_ShowWDL false`, `isready`/`readyok`) runs on success,
+failure, timeout and cancellation before the generation can serve another task. The pending key is
+exact canonical six-field FEN plus requested engine/version, bound, descriptor-owned command image
+and timeout; it does not contain actual generation. The acquisition receipt adds actual
 engine identity/generation from the serialized execution, and retained admission compares that
-identity to the current established supervisor identity. The operation parses exactly one completed score, rejects bound/NaN/
-missing/zero-distance mate output, and retains the same completed line's raw UCI WDL tuple. WDL is
+identity to the current established supervisor identity.
+
+The result reducer starts empty at the descriptor's `position` command and stops at that task's
+first `bestmove`; prior supervisor lines and later-task lines are ineligible. It admits only `info`
+lines with one unbounded `multipv 1` (or omitted MultiPV), a finite cp or non-zero mate score and a
+three-safe-integer WDL tuple on that same line. For a depth request, the selected line is the last
+admissible line at exactly the requested depth. For nodes or movetime, it is the admissible line
+with greatest reported depth, breaking equal-depth ties by latest arrival. No line may be assembled
+from the score of one iteration and WDL of another. Missing/short depth, `upperbound`, `lowerbound`,
+MultiPV other than 1, output after `bestmove`, malformed score or malformed WDL makes the response
+`invalid_response`; a previous task's final line cannot satisfy a new task.
+
+The operation therefore produces exactly one completed score and retains that selected line's raw
+UCI WDL tuple. WDL is
 required to contain three safe integers in `[0,1000]` summing to 1000; a missing, malformed or
-different-depth WDL makes the response `invalid_response` rather than silently producing a
+different-line WDL makes the response `invalid_response` rather than silently producing a
 score-only Review source. The operation converts the engine's declared side-to-move score to the
 named White frame using the FEN turn, but deliberately keeps WDL in its declared
 `side_to_move` frame. Review owns the node-free White normalization; candidate scoring consumes the
 score and cannot reinterpret WDL as quality. White- and Black-to-move cp/mate/WDL fixtures assert
 both frames. `live.stockfish.position_eval@1` is
 `search/source_record`, has payload
-`ProviderEvidenceDelivery<FixedBoundPositionEvaluation>`, is
+`ProviderEvidenceDelivery<FixedBoundPositionEvaluation, "stockfish.position_evaluation@1">`, is
 `bounded_search/measured/reported`, answers evaluation, and carries no node,
 best move, PV, rank, loss, grade or recommendation. Bot and Review derive their own frames from this
 one source; neither opens a second engine request path.
@@ -628,7 +822,8 @@ are finite and non-negative, `returnedWidth` equals candidate count, and
 explicit that missing mass/moves are unobserved rather than impossible; requested/returned width
 and mass are retained rather than inferred.
 
-`human.maia.policy_page@1` has payload `ProviderEvidenceDelivery<MaiaPolicyPage>` and is
+`human.maia.policy_page@1` has payload
+`ProviderEvidenceDelivery<MaiaPolicyPage, "maia.policy_page@1">` and is
 `human/source_record`,
 `human_model/measured/reported`, answers candidate moves only, and is operator-only pending named
 consumers. Model mass is likelihood under one declared request, never move quality, intent or a
@@ -638,7 +833,9 @@ History-conditioned and exact-FEN occurrences are deliberately different project
 
 ```ts
 interface MaiaRunMoveOccurrence {
-  readonly page: DeclaredEvidence<ProviderEvidenceDelivery<MaiaPolicyPage>>;
+  readonly page: DeclaredEvidence<
+    ProviderEvidenceDelivery<MaiaPolicyPage, "maia.policy_page@1">
+  >;
   readonly run: {
     readonly runId: string;
     readonly eventHeadDigest: string;
@@ -650,7 +847,9 @@ interface MaiaRunMoveOccurrence {
 }
 
 interface MaiaExactFenMoveOccurrence {
-  readonly page: DeclaredEvidence<ProviderEvidenceDelivery<MaiaPolicyPage>>;
+  readonly page: DeclaredEvidence<
+    ProviderEvidenceDelivery<MaiaPolicyPage, "maia.policy_page@1">
+  >;
   readonly position: { readonly fen: string; readonly observedMoveUci: string };
 }
 ```
@@ -670,27 +869,43 @@ remaining callers; it may not serve hypothetical positions.
 
 ```ts
 interface SyzygyPositionRequest {
+  readonly rules: "chess";
+  readonly variant: "standard";
   readonly fen: string;
   readonly timeoutMs: number;
 }
 
+type SyzygyPositionDomainResult =
+  | { readonly kind: "in_domain"; readonly position: TablebasePosition }
+  | {
+      readonly kind: "outside_domain";
+      readonly reason: "piece_count";
+      readonly pieceCount: number;
+      readonly maximumPieceCount: 7;
+    };
+
 interface LiveSyzygyPosition {
   readonly fen: string;
-  readonly result: TablebasePosition;
+  readonly result: SyzygyPositionDomainResult;
 }
 ```
 
 `live.syzygy.position_result@1` has payload
-`ProviderEvidenceDelivery<LiveSyzygyPosition>` and is `search/source_record`,
+`ProviderEvidenceDelivery<LiveSyzygyPosition, "syzygy.position@1">` and is `search/source_record`,
 `tablebase_exact/exact/not_applicable`, and answers fact/evaluation/candidate moves/move. The full
 canonical FEN—including side to move, castling/en-passant fields and clocks—is part of request
-identity. `result` is admitted only inside the supported tablebase domain and after legal move
-identity validation. Outside-domain is a typed domain abstention; provider absence is an execution
-failure; neither is a draw or a refutation.
+identity. `in_domain.position` is admitted only after legal move identity validation. Piece count is
+computed locally from the normalized position before network admission; more than seven pieces
+returns the successful `outside_domain` arm without calling Syzygy. Provider absence or an invalid
+in-domain response is a `ProviderSourceFailure`; exact win/draw/loss inside `TablebasePosition` is
+an outcome. These three states have no common fallback and cannot be relabelled as one another.
+The descriptor accepts only the literal standard-chess request arm used by the `/standard`
+endpoint; another ruleset or variant is an invalid request before provider scheduling, not
+`outside_domain`, transport failure or a fabricated tablebase result.
 
 `SyzygyPositionOperation` implements
 `ProviderOperationDescriptor<"syzygy.position@1">`; its only execution entry is
-`execute(request, context: ProviderExecutionContext)`. That descriptor and one receipt constructor
+`execute(requestedIdentity, context: ProviderExecutionContext)`. That descriptor and the one scheduler-private receipt constructor
 serve direct probe and queue-backed evidence. The existing `TablebaseSource.probe` path migrates through it;
 there is no pawn-specific or Review-specific tablebase adapter. This source is the live arm later
 paired with `recorded.tablebase.result@1`; exact same-FEN joins are owned by the consuming
@@ -808,7 +1023,7 @@ survive. Totals 0, 37 and 100 are successful source pages. The parser-level 100-
 threshold is deleted; each consumer owns its explicit sample suitability policy.
 
 `human.explorer.position_page@1` has payload
-`ProviderEvidenceDelivery<ExplorerPositionPage>` and is `human/source_record`,
+`ProviderEvidenceDelivery<ExplorerPositionPage, "lichess_explorer.position_page@1">` and is `human/source_record`,
 `human_corpus/measured/reported`, answers facts and candidate moves, and is operator/full-inspector
 only. It carries no completeness, quality, rank, recommendation, intent or causal-outcome meaning.
 
@@ -816,7 +1031,9 @@ The provider landing also publishes this literal narrow projection and operation
 
 ```ts
 interface ExplorerPopulationSummary {
-  readonly page: DeclaredEvidence<ProviderEvidenceDelivery<ExplorerPositionPage>>;
+  readonly page: DeclaredEvidence<
+    ProviderEvidenceDelivery<ExplorerPositionPage, "lichess_explorer.position_page@1">
+  >;
   readonly position: {
     readonly positionFen4: string;
     readonly requestFen6: string;
@@ -833,7 +1050,10 @@ interface ExplorerPopulationSummary {
   readonly averageRating: number | null;
   readonly opening: ExplorerReportedOpening;
   readonly history: ExplorerReportedHistory;
-  readonly suitability: { readonly guard: "CORPUS_GUARD"; readonly accepted: boolean };
+  readonly disclosure: {
+    readonly guard: "CORPUS_GUARD";
+    readonly statement: typeof CORPUS_GUARD;
+  };
 }
 
 type ExplorerPopulationSummaryWire = Readonly<Omit<ExplorerPopulationSummary, "page">> & {
@@ -846,7 +1066,9 @@ type ExplorerPopulationSummaryWire = Readonly<Omit<ExplorerPopulationSummary, "p
 };
 
 function deriveExplorerPopulationSummary(
-  page: DeclaredEvidence<ProviderEvidenceDelivery<ExplorerPositionPage>>,
+  page: DeclaredEvidence<
+    ProviderEvidenceDelivery<ExplorerPositionPage, "lichess_explorer.position_page@1">
+  >,
 ): ExplorerPopulationSummary;
 
 function explorerPopulationSummaryWire(
@@ -855,9 +1077,12 @@ function explorerPopulationSummaryWire(
 ```
 
 `derived.explorer.population_summary@1` retains the complete delivery, position/window,
-totals/WDL, listed/unlisted mass, rating/opening/history and the literal `CORPUS_GUARD` result while
-structurally omitting move rows. The operation derives every field from the admitted page; callers
-cannot submit a suitability result. A sentinel present only in `page.payload.result.moves[]` remains
+totals/WDL, listed/unlisted mass, rating/opening/history and the exact `CORPUS_GUARD` disclosure
+text while structurally omitting move rows. `CORPUS_GUARD` says only that population counts describe
+play rather than quality; it is not a predicate and this projection contains no `accepted`,
+`suitable` or threshold field. The operation derives every field from the admitted page; callers
+cannot submit a disclosure or suitability decision. A sentinel present only in
+`page.payload.result.moves[]` remains
 reachable only through the retained internal source input for provenance/inspector use. The exact
 wire adapter replaces that input with the four-field source receipt above; it never spreads or
 serializes the payload, and the sentinel is absent from every summary field, deterministic renderer,
@@ -865,7 +1090,9 @@ provider input and wire byte. Direct JSON serialization of `ExplorerPopulationSu
 governance failure, not a supported transport.
 
 The existing repertoire frontier binding consumes the raw page or a separately declared narrow
-frontier projection and retains unlisted mass plus its literal sample policy.
+frontier projection and retains unlisted mass plus its own literal, consumer-owned sample policy.
+Review, repertoire, theory and bot consumers must each name and test any population threshold they
+apply; absence of a consumer policy cannot be filled by this source projection.
 
 `derived.explorer.played_move_occurrence@1` does **not** land here ([[D1956]]). Exact occurrence
 needs before-position/move/after-position identity, while shipped `run.record.move@1` is narrative
@@ -942,7 +1169,7 @@ learner-facing explanation.
    Source absent, cached/recorded, outside-domain, honest-empty and refuted are not interchangeable.
 6. All five operation request/result map members and provider payload declarations match §§5–8
    literally and compile through F1 with no second hand-written execution image. Every source
-   adapter seals `ProviderEvidenceDelivery<T>` rather than bare `T`; stripping acquisition/delivery
+   adapter seals `ProviderEvidenceDelivery<T, K>` rather than bare `T`; stripping acquisition/delivery
    provenance fails. The operation maps, registered descriptors and application callers are
    set-equal.
 7. Stockfish positives cover ordinary play, both castling identities and four promotions. Missing,
@@ -958,7 +1185,8 @@ learner-facing explanation.
    model, band, temperature, top-p or width cannot alias; identity/generation mismatch fails. A
    transposed-history run occurrence and cross-kind occurrence both fail while the exact run path
    and separately typed exact-FEN occurrence pass. Both occurrence payloads retain the exact
-   sealed `DeclaredEvidence<ProviderEvidenceDelivery<MaiaPolicyPage>>`; substituting a bare page,
+   sealed `DeclaredEvidence<ProviderEvidenceDelivery<MaiaPolicyPage, "maia.policy_page@1">>`;
+   substituting a bare page,
    bare delivery or different acquisition fails.
 9. Syzygy direct and queue-backed probes use the same constructor; same body/different FEN and
    same-piece-count/different-FEN joins fail; provider absence and outside-domain stay distinct.
@@ -995,6 +1223,36 @@ learner-facing explanation.
     domain union, all four source-absence cross cases, the exact five-operation protocol and
     requested-versus-actual generation. Repeat independent buildability review returns the RFC if
     any fixture is green only because it reads its own expected value.
+18. The default `TypedProviderResult` is a distributive five-arm union. Every success and failure
+    carries the same literal operation and request digest as its typed request; a generic result
+    cannot pair a Stockfish operation with a Maia, Syzygy or Explorer delivery.
+19. Requested identity, actual identity, provider and receipt are operation-keyed exact maps. Only
+    the scheduler-private constructor seals receipts from a descriptor's captured bytes; open
+    records, descriptor-built receipts, wrong provider/generation arms and runtime double-cast
+    forgeries fail.
+20. A crossed-waiter scheduler fixture gives one exact pending job a short and a long relative
+    budget: the short waiter alone reaches `deadline_exceeded`, the long waiter receives the live
+    success, one cancellation leaves its sibling attached, and only the final departure aborts the
+    queued/active job. Retained lookup, pending join and new-job queue admission execute in the
+    specified order and queue time consumes the first-arrival execution timeout.
+21. Retention fixtures independently exceed entry count and total weight, reject non-positive or
+    non-safe weights, refuse an individually overweight item and prove deterministic expiry/stale
+    purge plus least-recently-served/ASCII-key eviction. No failure enters either bound.
+22. Syzygy fixtures distinguish locally detected `outside_domain`, successful in-domain
+    win/draw/loss and provider failure. No network call occurs outside domain and none of the three
+    states can inhabit another arm.
+23. Explorer summary fixtures carry the exact `CORPUS_GUARD` disclosure and no suitability boolean
+    or source threshold. Two named consumers may make different explicit sample decisions over the
+    same sealed page without changing source evidence.
+24. Stockfish callers cannot submit command bytes or digests. Legal-root and fixed-evaluation
+    descriptors construct the exact option/position/go images in §5, reset MultiPV/ShowWDL and
+    synchronize in `finally`. Iterative-output fixtures reject cross-task, post-bestmove,
+    cross-iteration score/WDL, bounds and wrong-MultiPV lines while selecting the specified last
+    depth or greatest-depth/latest completed line.
+25. The provider-digest registry has the six exact domain tags, canonical JSON and output prefixes
+    in §3.1. Key reorder preserves digests; operation/provider/command/request/identity/raw-response/
+    path mutations change them. Decimal Maia parameters, `-0`, exponent spelling and Unicode keys
+    follow RFC 8785 across runtimes. A census finds no second provider digest authority.
 
 ## Discharges
 
@@ -1021,6 +1279,16 @@ returns to author instead of accepting a placeholder.
 
 ## Changelog
 
+- 2026-08-29: repaired final return [[D2000]]–[[D2008]] with distributive operation-correlated
+  results; exact operation/provider/requested/actual receipt maps and one scheduler-private
+  constructor; scheduler-minted crossed-waiter deadlines plus two-axis deterministic retention;
+  an explicit Syzygy outside-domain arm; disclosure-only Explorer population; descriptor-owned UCI
+  command/reset and iterative-line reduction; and one six-domain provider-digest byte registry.
+  The nine able-to-fail author fixtures replace the review reproductions. Fresh independent review
+  still gates implementation.
+- 2026-08-29: author self-review found [[D2020]] before commit: safe-integer-only canonical JSON
+  could not hash Maia's decimal temperature/top-p request. Provider images now use RFC 8785 finite
+  number serialization and the author digest fixture crosses decimal, negative-zero and key order.
 - 2026-08-28: [[D1969]] amends the existing fixed-bound position-evaluation result rather than
   adding a sixth operation: the same completed Stockfish exchange now retains a validated raw
   side-to-move WDL tuple beside the White-normalized typed score. Review derives its node-free White

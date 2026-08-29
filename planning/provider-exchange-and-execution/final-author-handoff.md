@@ -1,6 +1,7 @@
 # Provider-exchange third return — author handoff
 
-**State:** queued for RFC author repair; production implementation remains blocked.
+**State:** author repair completed 2026-08-29; queued for fresh independent buildability review.
+Production implementation remains blocked until that review accepts the complete bytes.
 
 **Source review:** `final-independent-buildability-review-2026-08-28.md`
 

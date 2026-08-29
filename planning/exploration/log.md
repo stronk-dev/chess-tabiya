@@ -10875,3 +10875,25 @@ CI actually run.
   The row retains ref/semantic/registry/owner; staged/first-parent Git history supplies the
   introducing commit. Seven author fixtures plus the 19 prior contracts pass. No production,
   schema, storage, web, content, archive or protected design byte changed; fresh reviews remain.
+
+## 2026-08-29 — Provider-exchange third-return author repair
+
+- Repaired [[D2000]]–[[D2008]] without implementing the provider layer: operation-distributive
+  results; exact provider/requested/actual receipt maps sealed by one scheduler-private constructor;
+  scheduler-minted per-waiter deadlines, last-waiter abort and deterministic entry/weight retention;
+  an explicit standard-chess Syzygy outside-domain arm; and disclosure-only Explorer population.
+- Removed caller-authored Stockfish command digests. Both engine operations now publish exact
+  descriptor-owned option/position/go/reset images, generation isolation and one task-bounded
+  same-line score/WDL reducer for iterative UCI output.
+- Published one six-domain provider digest registry with exact canonical JSON, UTF-8/domain-prefix
+  bytes and closed request/pending/actual/response/path images. Replaced all nine review
+  reproductions with able-to-fail author fixtures while preserving both earlier provider contracts.
+  No production, schema, pack, content or protected intent byte changed; fresh independent review
+  still gates implementation and its Review, bot, theory and collector consumers.
+
+## 2026-08-29 — Provider-digest decimal self-review
+
+- Found [[D2020]] after the first full gate but before commit: a safe-integer-only canonicalizer
+  could not represent Maia's own decimal temperature/top-p request identity. Corrected the contract
+  to RFC 8785 finite-number serialization and extended the author fixture across decimal mutation,
+  negative zero and reordered keys. This remains RFC authoring only; fresh review still gates code.

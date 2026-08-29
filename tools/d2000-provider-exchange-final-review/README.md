@@ -1,8 +1,9 @@
-# Provider-exchange final independent review instrument
+# Provider-exchange third-return author instrument
 
-Disposable review code for [[D2000]]–[[D2008]]. It checks the amended provider RFC against the
-actual engine, Explorer, tablebase, canonical-digest and operation interfaces. It is not a provider
-implementation and does not authorize one.
+Disposable author code for [[D2000]]–[[D2008]]. Its nine able-to-fail fixtures exercise the repaired
+result/receipt correlation, waiter and retention algebra, Syzygy domain state, Explorer disclosure,
+Stockfish command/reducer authority and provider digest bytes. It is not a provider implementation
+and does not authorize one; fresh independent review remains required.
 
 Run through the stable repository target:
 

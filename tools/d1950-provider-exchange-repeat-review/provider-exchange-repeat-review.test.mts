@@ -18,7 +18,7 @@ test("D1950: Maia occurrences retain the sealed delivery, not a bare page", () =
   const occurrence = Object.freeze({ page: admitted<typeof delivery>(page, "human.maia.policy_page@1"), runId: "run" });
   assert.equal(occurrence.page, page); assert.equal(occurrence.page.payload.acquisition.generation, 7);
   assert.throws(() => admitted(delivery, "human.maia.policy_page@1"), /unsealed/u);
-  assert.match(rfc, /DeclaredEvidence<ProviderEvidenceDelivery<MaiaPolicyPage>>/u); assert.doesNotMatch(rfc, /readonly page: MaiaPolicyPage;/u);
+  assert.match(rfc, /DeclaredEvidence<\s*ProviderEvidenceDelivery<MaiaPolicyPage, "maia\.policy_page@1">\s*>/u); assert.doesNotMatch(rfc, /readonly page: MaiaPolicyPage;/u);
 });
 
 type HistoryRequest = Readonly<{ kind: "disabled" }> | Readonly<{ kind: "requested" }>;
@@ -34,7 +34,7 @@ test("D1951: Explorer history is an explicit disabled/requested union", () => {
 
 test("D1952: all five operations have one context-bearing descriptor entry", () => {
   assert.match(rfc, /Each of the five named `\*Operation` exports implements its exact/u);
-  assert.match(rfc, /There is no second public `execute\(request,[\s\S]*signal\)` overload/u);
+  assert.match(rfc, /There is no second public `execute\(identity,[\s\S]*signal\)` overload/u);
   assert.doesNotMatch(rfc, /Operation\.execute\(request, signal\)/u);
 });
 
