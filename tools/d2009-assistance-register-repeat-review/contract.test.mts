@@ -14,6 +14,7 @@ const pinned = Object.freeze([
   { head: 4, landing: "765efb56" },
 ]);
 const v5Changes = Object.freeze([
+  "apps/web/src/lib/assistance-preference.ts#loadAssistance",
   "packages/runtime/src/assistance-codec.ts#parseAssistanceConfig",
   "packages/runtime/src/assistance.ts#AssistanceConfig.hintDistance",
   "packages/runtime/src/assistance.ts#AssistanceConfig.version",
@@ -85,7 +86,7 @@ test("D2009: the bootstrap pins all four historical landing identities", () => {
   }, []), false);
 });
 
-test("D2010: the sole v5 claim names the one runtime codec and never validV5", () => {
+test("D2010/D2038: the sole v5 claim names codec and persistence roots, never validV5", () => {
   assert.match(rfc, /packages\/runtime\/src\/assistance-codec\.ts#parseAssistanceConfig/u);
   assert.doesNotMatch(rfc, /validV5\/migrate v1-v4 to v5/u);
   assert.match(hint, /contains no parallel `validV5`\/migration switch/u);
@@ -120,7 +121,7 @@ test("D2012: the exact prior claimant advances one head and owns the appended ro
   };
   assert.equal(validTransition(head4, landed, v5Changes), true);
   assert.equal(validTransition(head4, landed, v5Changes.slice(0, 2)), false);
-  assert.equal(validTransition(head4, landed, [...v5Changes, "apps/web/src/lib/validV5"]), false);
+  assert.equal(validTransition(head4, landed, [...v5Changes, "apps/web/src/lib/validV5.ts#validV5"]), false);
 });
 
 test("D1916 remains closed: a claim cannot excuse current tree or digest drift", () => {

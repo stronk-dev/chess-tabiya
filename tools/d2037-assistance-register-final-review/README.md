@@ -1,9 +1,9 @@
-# Assistance-register fresh-review reproduction
+# Assistance-register third-return author contract
 
-Disposable buildability review for D2037/D2038. It proves that the amended first-parent contract
-cannot run in the current shallow governance checkout and that the author transition consumes an
-already-projected token list with no closed authority census, allowing a parallel browser codec to
-fall outside the comparison. It changes no product or process implementation.
+Disposable six-arm contract for the D2037/D2038 author repair. It binds the committed transition
+to an exact two-commit, fail-closed governance checkout and binds assistance transition tokens to a
+closed runtime-codec/browser-persistence authority census. It changes no product or process
+implementation.
 
 ```sh
 make assistance-register-final-review

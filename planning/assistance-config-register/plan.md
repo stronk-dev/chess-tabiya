@@ -2,11 +2,10 @@
 
 ## State
 
-Returned again after the 2026-08-30 fresh review. The D1916/D2009–D2012 snapshot, history,
-claimant, literal-codec and D1639 phase repairs survive. [[D2037]] blocks committed first-parent
-enforcement in the shallow governance checkout; [[D2038]] blocks the promised refusal of parallel
-assistance codecs because no closed authority census derives the transition tokens. Implementation
-and claim transfer remain unauthorised.
+Author-repaired after the 2026-08-30 fresh-review return. The D1916/D2009–D2012 repairs survive;
+[[D2037]] now has an exact two-commit governance checkout plus fail-closed `HEAD^1` acquisition,
+and [[D2038]] now derives transition tokens from the closed runtime-codec/browser-persistence
+authority census. Fresh independent review still gates implementation and claim transfer.
 
 ## Order
 
@@ -18,9 +17,10 @@ and claim transfer remain unauthorised.
 4. ✅ Author-repair D2009–D2012 with exact transition/history/claim/status fixtures.
 5. ✅ Fresh independent review returned [[D2037]]/[[D2038]]; reproduction:
    `make assistance-register-final-review`.
-6. Author a generated, set-equal assistance codec/persistence authority census; add fail-closed
-   first-parent acquisition and the governance workflow/history repair to the RFC boundary.
-7. Repeat fresh review of the complete amended C9 contract.
+6. ✅ Author a generated, set-equal assistance codec/persistence authority census; add fail-closed
+   first-parent acquisition and the governance workflow/history repair to the RFC boundary. Six
+   author arms pass.
+7. NEXT: repeat fresh review of the complete amended C9 contract.
 8. Implement the TypeChecker-normalized semantic reader and mutation classes, including
    local/imported/tuple aliases and the dedicated derived-output arm.
 9. Add the README register and atomically transfer Guided Hint from `none` to the sole v5 claim.

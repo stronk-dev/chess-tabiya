@@ -78,3 +78,17 @@ model, contradicting criterion 15. Four review reproductions pass behind
 `make assistance-register-final-review`. Exact return:
 `fresh-independent-buildability-review-2026-08-30.md`. No process/product implementation is
 authorised until both boundaries are repaired and freshly reviewed.
+
+## 2026-08-30 — Third-return author repair
+
+Repaired [[D2037]] by placing the governance workflow in the exact implementation boundary,
+requiring `fetch-depth: 2`, resolving `HEAD^1` explicitly and making missing required history
+fatal. Repaired [[D2038]] by replacing caller-supplied transition tokens with a generated closure
+over runtime `AssistanceConfig` fields, the sole runtime codec and the sole browser persistence
+reader. The v5 claim now names all four roots; parallel validators, migrations and namespace
+readers cannot hide outside the comparison.
+
+The disposable author contract is now six arms behind `make assistance-register-final-review`.
+Implementation and claim transfer remain unauthorised until a fresh independent review accepts the
+complete amended C9 contract. Exact repair receipt:
+`third-return-author-repair-2026-08-30.md`.

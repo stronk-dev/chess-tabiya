@@ -1,10 +1,10 @@
 # RFC: Semantic-convention shared-resource register
 
-- **Status:** draft — dependency-blocked 2026-08-30 on the returned assistance register
-  ([[D2037]], [[D2038]]). The D2013–D2019 author repairs remain queued, but C10 explicitly reuses
-  C9's first-parent transition reader and cannot enter fresh review until that reader has
-  fail-closed CI history and a closed authority census. No semantic-register implementation is
-  authorised.
+- **Status:** draft — dependency-blocked 2026-08-30 pending fresh review of the author-repaired
+  assistance register ([[D2037]], [[D2038]]). The D2013–D2019 author repairs remain queued, but
+  C10 explicitly reuses C9's first-parent transition reader and cannot enter fresh review until the
+  repaired fail-closed CI history/source-census contract is independently accepted. No
+  semantic-register implementation is authorised.
 - **Author:** codex
 - **Created:** 2026-08-27
 - **Design refs:** none. This is repository process and changes no evidence meaning or learner UX.

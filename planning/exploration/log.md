@@ -11238,3 +11238,17 @@ CI actually run.
 - Next: author derives the complete authority population from production import/source roots and
   adds fail-closed first-parent acquisition to CI scope; fresh review then gates C9 implementation,
   the semantic-convention register, durable convention receipts and recorded semantic paths.
+
+## 2026-08-30 — AssistanceConfig third-return repair closes both specified seams
+
+- [[D2037]] is repaired at the author-contract tier: C9's exact implementation boundary includes
+  the governance checkout at `fetch-depth: 2`, production explicitly resolves `HEAD^1`, and absent
+  required history is fatal rather than silently dropping the committed arm.
+- [[D2038]] is repaired at the author-contract tier: the claim transition derives its complete
+  source delta from the `AssistanceConfig` fields, runtime codec and browser persistence-reader
+  closure. The v5 reservation is four tokens, and an omitted parallel validator, migration or
+  namespace reader fails even when a caller reports only the expected tokens.
+- Six author arms replace the four return reproductions behind
+  `make assistance-register-final-review`. No product, schema, storage, content, archive or
+  protected intent byte changed. Fresh independent review remains the next gate; C9 implementation
+  and the semantic-convention successor remain unauthorised until acceptance.

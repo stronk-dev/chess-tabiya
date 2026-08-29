@@ -58,3 +58,10 @@ arm cannot run in the shallow governance checkout and its changed-symbol transit
 source-authority census. C10 explicitly reuses that transition reader. The seven D2013–D2019 author
 arms remain valid in isolation, but semantic-register fresh review and implementation now wait for
 the predecessor repair rather than pretending the shared transition is executable.
+
+## 2026-08-30 — Predecessor author repair recorded
+
+The assistance-register author has repaired both inherited seams: exact two-commit/fail-closed
+first-parent acquisition and a generated runtime-codec/browser-persistence authority census. C10
+remains dependency-blocked until that complete repair survives fresh independent review; this row
+does not declare the shared transition accepted or authorise semantic-register implementation.

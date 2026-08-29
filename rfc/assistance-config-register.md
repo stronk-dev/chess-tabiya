@@ -1,11 +1,9 @@
 # RFC: AssistanceConfig shared-resource register
 
-- **Status:** draft — returned on fresh independent review 2026-08-30 ([[D2037]], [[D2038]]).
-  The D2009–D2012 snapshot/history repair survives, but committed first-parent enforcement cannot
-  run in the shallow governance checkout and the transition has no closed authority census with
-  which to refuse a parallel browser codec. Exact return:
-  `planning/assistance-config-register/fresh-independent-buildability-review-2026-08-30.md`.
-  Implementation remains unauthorised.
+- **Status:** draft — author-repaired 2026-08-30 after the fresh [[D2037]]/[[D2038]] return.
+  Governance now has an exact two-commit checkout/fail-closed parent contract; one closed
+  persistence/import census derives the assistance authority delta and the v5 claim includes the
+  web persistence root. Six author arms pass; fresh independent review still gates implementation.
 - **Author:** codex
 - **Created:** 2026-08-26
 - **Design refs:** none. This is repository process over an already-ruled assistance contract; it
@@ -81,16 +79,36 @@ both own the same discriminator.
 
 For this resource, `changed symbols` is machine-readable rather than descriptive prose: one or
 more ASCII-sorted unique tokens separated by `; `, each matching
-`^[a-z0-9_./-]+\.ts#[A-Za-z_$][A-Za-z0-9_$.]*$`. The transition reader compares the previous and
-current TypeScript programs and emits tokens for changed `AssistanceConfig` properties and changed
-codec declarations. It ignores tests/docs and refuses a changed assistance authority that has no
-token. This is the exact set C9.6 binds; the human-readable README change column remains separate.
+`^[a-z0-9_./-]+\.ts#[A-Za-z_$][A-Za-z0-9_$.]*$`. The transition reader derives these tokens from
+the previous and current source trees; no caller supplies a supposedly complete list.
+
+The closed authority census has three roots:
+
+1. every changed `AssistanceConfig` property in
+   `packages/runtime/src/assistance.ts#AssistanceConfig.<property>`;
+2. the transitive TypeScript declaration closure of the sole runtime codec export
+   `packages/runtime/src/assistance-codec.ts#parseAssistanceConfig`; and
+3. the transitive import/declaration closure of
+   `apps/web/src/lib/assistance-preference.ts#loadAssistance`, the sole production reader of the
+   `tabiya.assistance.` namespace.
+
+The census scans every non-test production `.ts`/`.svelte` module under `apps/web/src` and
+`packages/runtime/src`. The assistance namespace literal, `assistanceKey` call and raw
+`PreferenceStorage.getItem` result may reach AssistanceConfig parsing only inside the named web
+root. That root must delegate parsed `unknown` to the one runtime codec export and may contain no
+local `value is AssistanceConfig`, version switch or field-domain validation. A second reader,
+validator, migrator or codec; an indirect alias around one; or an AssistanceConfig parser outside
+the three roots fails source closure before the token comparison. An unimported dead file is not a
+production authority and is outside the census. Tests/docs are ignored. Within a root, the token
+represents its complete reachable declaration/import closure, so a helper change cannot disappear
+behind the unchanged export name. This exact derived set is what C9.6 compares with the prior
+claim; the human-readable README change column remains separate.
 
 This process RFC itself claims `none`: it changes the register system, not `AssistanceConfig`.
 On this RFC's implementation, `hint-distance.md` changes its block atomically to:
 
 ```text
-assistance-config | lane 5 | packages/runtime/src/assistance-codec.ts#parseAssistanceConfig; packages/runtime/src/assistance.ts#AssistanceConfig.hintDistance; packages/runtime/src/assistance.ts#AssistanceConfig.version
+assistance-config | lane 5 | apps/web/src/lib/assistance-preference.ts#loadAssistance; packages/runtime/src/assistance-codec.ts#parseAssistanceConfig; packages/runtime/src/assistance.ts#AssistanceConfig.hintDistance; packages/runtime/src/assistance.ts#AssistanceConfig.version
 ```
 
 `intent-presets.md` retains `none`, names `hint-distance` as the v5 owner/dependency, and updates
@@ -171,6 +189,13 @@ advance, one appended row; committed CI compares the current file with its first
 the same rule. Deletion, rewrite, reorder, duplication or a gap fails even when the final row still
 matches the current head.
 
+The repository-governance job's checkout is part of this RFC and sets `fetch-depth: 2`. The
+committed checker resolves exactly `HEAD^1` with `git rev-parse --verify`; absence is a named hard
+failure whenever `HEAD` is not the repository's root commit. Fixture repositories pass explicit
+previous/current snapshots to the pure checker and do not share the production Git fallback. The
+staged arm reads `HEAD` plus the index. Neither arm catches a missing Git object as “not a Git
+fixture”; `tools/status-parity.mjs`'s current silent catch is a negative example, not a precedent.
+
 Its **Live claims** table contains the exact Guided Hint lane-5 declaration and no preset claim.
 No hand-written “next free” row exists; `register-check` prints it.
 
@@ -203,8 +228,9 @@ the staged/first-parent transition. A head advance is legal only when all of the
 2. the previous state contains exactly one declaration/register claimant for the current lane;
 3. the current state removes that claim, appends exactly one Landed row and names the same RFC as
    owner; and
-4. the assistance source changes are set-equal to the prior claim's exact path/symbol tokens. The v5
-   reservation names `assistance.ts#AssistanceConfig.version`,
+4. the complete census-derived assistance source changes are set-equal to the prior claim's exact
+   path/symbol tokens. The v5 reservation names
+   `assistance-preference.ts#loadAssistance`, `assistance.ts#AssistanceConfig.version`,
    `assistance.ts#AssistanceConfig.hintDistance` and
    `assistance-codec.ts#parseAssistanceConfig`; an unrelated assistance symbol or undeclared path
    fails the transition.
@@ -233,7 +259,7 @@ or parses a lane claim as an evidence member.
 ### 5. Able-to-fail fixtures
 
 `tools/register-check.test.mjs` supplies source strings/temporary trees for every branch. The
-fixture table's unit is **mutation class**; total twenty-five:
+fixture table's unit is **mutation class**; total twenty-nine:
 
 | # | mutation | required result |
 |---|---|---|
@@ -262,6 +288,10 @@ fixture table's unit is **mutation class**; total twenty-five:
 | 23 | head-5 landing rewrites an older row, skips a head or appends two rows | fail C9.5/C9.6 |
 | 24 | prior exact Guided Hint lane-5 claim → head-5 tree/digest + one owner-bound row + no claim | pass |
 | 25 | prior claim omits a changed assistance symbol or names `validV5` | fail C9.6/claim grammar |
+| 26 | governance checkout lacks `HEAD^1`, or production parent resolution throws | fail closed; never skip the committed arm |
+| 27 | exact two-commit governance checkout plus valid prior claim→landing | pass committed C9.5/C9.6 |
+| 28 | `loadAssistance` calls a local/direct/indirect `validV5`, or a second production module reads the assistance namespace | fail authority census even when the reported four tokens match |
+| 29 | unrelated production `.ts` change or unimported dead helper | unchanged assistance authority set; no false claim requirement |
 
 The implementation also runs the real repository and asserts derived head 4, nine axes, 22 values,
 the current digest, exact contiguous pinned history and exactly one lane-5 claimant. The explicit
@@ -273,6 +303,7 @@ claim-to-landing transition.
 Implementation changes exactly these authority classes:
 
 - `tools/register-check.mjs` and `tools/register-check.test.mjs`;
+- `.github/workflows/verify.yml` (repository-governance checkout only: `fetch-depth: 2`);
 - `rfc/README.md`;
 - claim/status/dependency prose in `rfc/hint-distance.md` and `rfc/intent-presets.md`;
 - current-tense fixed register counts in active RFC/register prose ([[D1584]]), rewritten to
@@ -303,17 +334,22 @@ None. No design intent changes.
    fail. Lane 4 and lane 6 fail at head 4; one lane 5 passes only with unchanged head-4 tree/register
    bytes. Same-head or head-only drift still fails. A complete head-5 snapshot is accepted only
    when C9.6 proves the prior exact lane-5 claimant, owner-bound appended row and declared symbol
-   transition; mutation classes 22/25 fail and class 24 passes.
+   transition; the symbol set is derived from the closed authority census rather than supplied by
+   the caller. Mutation classes 22/25/28 fail and classes 24/29 pass.
 6. **Bijection.** Deleting either the Guided Hint declaration or README live row fails C3.
 7. **Historical truth.** The four landed rows cite the four commits recovered by `git log -S`; no
    archived RFC is invented as their owner. Bootstrap requires those exact four rows, and later
    staged/first-parent checks permit only prefix-preserving one-head appends.
 8. **No product change.** `git diff` contains no runtime/web/schema/storage/content/archive file
-   except the two active RFC prose/claim blocks explicitly listed in §6.
+   except the two active RFC prose/claim blocks explicitly listed in §6. The governance workflow's
+   exact `fetch-depth: 2` change is the sole non-document/checker addition.
 9. **Existing registers unchanged.** Every pre-existing C1-C8 fixture remains green and the real
    derived heads/digests for seven existing resources are byte-identical.
 10. **Governance/CI.** Node-24 `make verify-governance`, `git diff --check`, the staged
     process-contract hook and CI's governance job pass on committed bytes; success reports C1-C9.
+    Mutation 26 proves required parent absence is fatal and mutation 27 crosses the real
+    two-commit shape. The workflow file is parsed by scaffold verification so removing or lowering
+    its governance `fetch-depth` fails locally before push.
 11. **Docs/closeout.** Development docs, README status, [[D1581]], exploration log and this RFC's
     plan/log are updated in the implementing commit. Archive remains untouched until all
     discharges close.
@@ -327,9 +363,12 @@ None. No design intent changes.
    `assistance-config: head 4; next hint-distance.md (lane 5)`; without one it prints
    `assistance-config: head 4; next lane 5`. Neither path accesses `.members` or uses the
    evidence-kind claim parser.
-15. **Literal claim truth ([[D2010]]).** The sole row names only the runtime
-    `AssistanceConfig.version`/`.hintDistance` fields and `parseAssistanceConfig`; `validV5` or a
-    parallel web migration authority fails the claim/transition fixture.
+15. **Literal claim and source-closure truth ([[D2010]], [[D2038]]).** The sole row names only the
+    web `loadAssistance` root, runtime `AssistanceConfig.version`/`.hintDistance` fields and
+    `parseAssistanceConfig`. The generated production census is set-equal to those roots and proves
+    that `loadAssistance` delegates unknown bytes to the sole runtime codec. A local/direct/indirect
+    `validV5`, another assistance-namespace reader or a parallel migration authority fails even
+    when a caller reports only the four expected tokens.
 16. **Dependent phase truth ([[D2011]]).** Every implementation-owned stale Hint status says
     “awaiting the D1639 owner ruling, then repeat independent review”; nothing claims that review is
     already open or changes the owner table.
@@ -351,8 +390,8 @@ None. No design intent changes.
 | [[D2010]] | repaired in §1/criterion 15 by the exact runtime fields and `parseAssistanceConfig` claim | cross-RFC symbol review |
 | [[D2011]] | repaired in §1/criterion 16 by the actual D1639-blocked phase | cross-RFC status review |
 | [[D2012]] | repaired in §4 by previous-claimant→owner-bound-landing transition semantics | transition-capable repeat review |
-| [[D2037]] | fresh return: committed first-parent enforcement is unavailable in shallow CI and the workflow is outside §6 | author repair + fresh review |
-| [[D2038]] | fresh return: `changedSymbols` has no closed assistance codec/persistence authority census | author repair + fresh review |
+| [[D2037]] | repaired in §§3–6/criteria 8/10: governance checks out exactly two commits and required-parent resolution fails closed | fresh independent review |
+| [[D2038]] | repaired in §§1/4/criteria 5/15: transition tokens derive from the closed runtime-codec/browser-persistence census | fresh independent review |
 
 ## Open questions
 
@@ -361,6 +400,11 @@ contract.
 
 ## Changelog
 
+- 2026-08-30: third-return author repair. The governance job now owns an exact two-commit checkout,
+  production resolves `HEAD^1` explicitly and missing required history is fatal. Transition tokens
+  derive from the closed `AssistanceConfig` fields/runtime-codec/web-persistence source closure;
+  callers cannot omit a parallel validator, migration authority or namespace reader. The six-arm
+  author contract replaces the four return reproductions. Fresh independent review remains.
 - 2026-08-30: fresh independent review returned the repaired draft on [[D2037]]/[[D2038]]. The
   first-parent contract has no CI history and its workflow repair is outside the file boundary;
   the claimed three-token transition can also omit a parallel browser codec because no closed
