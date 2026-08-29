@@ -3356,17 +3356,22 @@
     {
       "id": "CLP-a21",
       "sourceState": "queued",
-      "state": "queued",
+      "state": "completed",
       "capability": "rehearsal",
       "owner": "core-loop",
-      "assignment": "capability:rehearsal",
+      "assignment": "closed",
       "sourceDocument": "ux-core-loop.md",
       "sourceSection": "§7.5",
       "sourceHeading": "The core loop — `ux-core-loop.md`",
-      "summary": "Adopt ChessMotive's row-indexed alignment with a per-row same/different marker keyed on aligned ply",
-      "legacyRoute": "none",
-      "note": "the marker is `groups`",
-      "sourceDigest": "sha256:37729b5aa77d04156fdf2e609b4507b072a5bc57ceee5be1df98c1bfb79536c7"
+      "summary": "✅ **Closed 2026-08-29:** aligned positions render once per exact `ComparisonRow.groups` partition with a visible shared-attempt marker; ended branches remain explicit absence cells",
+      "legacyRoute": "closed",
+      "note": "[[D2031]]; three-branch `[[X,Y],[Z]]` component contract plus production browser fork cells",
+      "tournamentReady": true,
+      "sourceDigest": "sha256:e258f769c0c083c3c786f82debe36b1152f9cccd0f0fa4605d8a26a34a15e566",
+      "completion": {
+        "completedOn": "2026-08-29",
+        "evidence": "Compare renders one position cell per exact shared-node group, retains ended branches as absence cells, and crosses the three-branch [[X,Y],[Z]] partition plus production browser forks"
+      }
     },
     {
       "id": "CLP-a22",

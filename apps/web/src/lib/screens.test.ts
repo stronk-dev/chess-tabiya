@@ -129,6 +129,33 @@ function branchedRun(): DrillRun {
   return run;
 }
 
+function nestedForkRun(): DrillRun {
+  let run = createRun({
+    id: "nested-fork-run",
+    packId: pack.id,
+    packDigest: `sha256:${"b".repeat(64)}`,
+    policyConfig: {
+      seedMode: "fixed",
+      locus: { executedAt: "server", engineIds: [], modelIds: [] },
+    },
+    startFen: "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1",
+    seed: 7,
+    createdAt: at,
+  });
+  run = commitMove(run, "e2e4", { at }).run;
+  const shallowFork = run.activeCursor.nodeId;
+  run = commitMove(run, "e7e5", { at }).run;
+  const deepFork = run.activeCursor.nodeId;
+  run = commitMove(run, "g1f3", { at }).run;
+  run = rewind(run, deepFork, at).run;
+  run = fork(run, deepFork, { label: "Bishop development", at }).run;
+  run = commitMove(run, "f1c4", { at }).run;
+  run = rewind(run, shallowFork, at).run;
+  run = fork(run, shallowFork, { label: "Sicilian reply", at }).run;
+  run = commitMove(run, "c7c5", { at }).run;
+  return run;
+}
+
 function target(): HTMLElement {
   const element = document.createElement("div");
   document.body.append(element);
@@ -882,6 +909,28 @@ describe("Layer 3 screens", () => {
 
     expect(document.body.textContent).toContain("re-converged to the same chess position");
     expect(document.body.textContent).toContain("The recorded paths are separate at this ply");
+    await unmount(component);
+  });
+
+  it("renders one position cell for each exact shared-node group", async () => {
+    const run = nestedForkRun();
+    const comparison = compareBranches(run, run.branches.map((branch) => branch.id));
+    expect(comparison.rows[0]!.groups.map((group) => group.length).sort()).toEqual([1, 2]);
+    const component = mount(CompareView, { target: target(), props: {
+      run, pack, comparison, startSide: "white", step: 1,
+      onStep: vi.fn(), onClose: vi.fn(),
+    } });
+    await tick();
+
+    const cells = [...document.querySelectorAll<HTMLElement>(".boards > article")];
+    expect(cells).toHaveLength(2);
+    const shared = cells.find((cell) => cell.dataset.branchIds?.split(" ").length === 2);
+    expect(shared).toBeDefined();
+    expect(shared?.textContent).toContain("Shared recorded position · 2 attempts");
+    [...document.querySelectorAll<HTMLButtonElement>(".zoom-control button")].at(-1)!.click();
+    await tick();
+    expect(shared?.querySelectorAll('[aria-label="Chessboard"]')).toHaveLength(1);
+    expect(cells.filter((cell) => cell.classList.contains("absent"))).toHaveLength(0);
     await unmount(component);
   });
 

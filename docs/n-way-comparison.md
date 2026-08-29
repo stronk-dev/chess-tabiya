@@ -24,9 +24,12 @@ happens to be empty.
 
 The branch rail provides manual checkboxes and “compare all forked here.” The
 same selection drives branch-selective PGN export. The comparison screen renders
-an N-column board grid and per-branch strips; shared-prefix groups are one
-position, not duplicated differences. Eight is a readability cap, not a data
-integrity limit.
+the current aligned row from `ComparisonRow.groups`: one position cell names all
+attempts occupying that exact recorded node, while an ended branch remains an
+explicit absence cell. It never duplicates a shared-prefix position once per
+branch. The evidence inspector remains branch-columnar because its records and
+source attribution belong to each attempt. Eight is a readability cap, not a
+data integrity limit.
 
 The strip band is derived from the same run snapshot and comparison payload. It
 shows recorded cp/mate points, attributed structural and timing changes, and

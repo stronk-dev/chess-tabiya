@@ -93,6 +93,36 @@
     const node = comparisonNode(run, comparison, step, column.branchId);
     return node === undefined ? [] : [{ column, node }];
   }));
+  let positionGroups = $derived.by(() => {
+    const groupedBranchIds = step === 0
+      ? [comparison.columns.map((column) => column.branchId)]
+      : (currentRow?.groups ?? []);
+    const presentBranchIds = new Set(groupedBranchIds.flat());
+    const groups = groupedBranchIds.map((branchIds) => {
+      const columns = branchIds.flatMap((branchId) => {
+        const column = comparison.columns.find((candidate) => candidate.branchId === branchId);
+        return column === undefined ? [] : [column];
+      });
+      const representative = columns[0];
+      return {
+        key: `position:${branchIds.join(":")}`,
+        branchIds,
+        columns,
+        node: representative === undefined
+          ? undefined
+          : comparisonNode(run, comparison, step, representative.branchId),
+      };
+    });
+    const ended = comparison.columns
+      .filter((column) => !presentBranchIds.has(column.branchId))
+      .map((column) => ({
+        key: `ended:${column.branchId}`,
+        branchIds: [column.branchId],
+        columns: [column],
+        node: undefined,
+      }));
+    return [...groups, ...ended];
+  });
 
   function timeline(entries: readonly ObjectiveTimelineEntry[]) {
     return entries.map((entry) => {
@@ -212,26 +242,26 @@
   <div
     class="boards"
     data-zoom={zoom}
-    style={`--branches:${comparison.columns.length};--cell-floor:${COMPARISON_CELL_FLOOR_REM[zoom]}rem`}
+    style={`--branches:${positionGroups.length};--cell-floor:${COMPARISON_CELL_FLOOR_REM[zoom]}rem`}
   >
-    {#each comparison.columns as column}
-      {@const node = comparisonNode(run, comparison, step, column.branchId)}
-      <article class:absent={!node} data-branch-id={column.branchId}>
-        <h3>{column.label}{column.origin === "simulated" ? " · preview line" : ""}</h3>
-        {#if run.branches.find((branch) => branch.id === column.branchId)?.intent}<p class="branch-intent">Intent: {run.branches.find((branch) => branch.id === column.branchId)?.intent}</p>{/if}
-        {#if node}
-          {@const outcome = outcomeAt(node.id)}
-          <p class="cell-state">{objectiveStateLabel(node.objectiveState)}{outcome === undefined ? "" : ` ${outcome === "checkmate" ? "The game ended in checkmate." : `The recorded outcome is ${outcome.replaceAll("_", " ")}.`}`}</p>
+    {#each positionGroups as group (group.key)}
+      <article class:absent={!group.node} class:shared={group.columns.length > 1} data-branch-ids={group.branchIds.join(" ")}>
+        <h3>{group.columns.map((column) => `${column.label}${column.origin === "simulated" ? " · preview line" : ""}`).join(" + ")}</h3>
+        {#if group.columns.length > 1}<p class="group-marker">Shared recorded position · {group.columns.length} attempts</p>{/if}
+        {#if group.columns.length === 1 && run.branches.find((branch) => branch.id === group.branchIds[0])?.intent}<p class="branch-intent">Intent: {run.branches.find((branch) => branch.id === group.branchIds[0])?.intent}</p>{/if}
+        {#if group.node}
+          {@const outcome = outcomeAt(group.node.id)}
+          <p class="cell-state">{objectiveStateLabel(group.node.objectiveState)}{outcome === undefined ? "" : ` ${outcome === "checkmate" ? "The game ended in checkmate." : `The recorded outcome is ${outcome.replaceAll("_", " ")}.`}`}</p>
           {#if zoom === "mid" || zoom === "near"}
             <dl>
-              <div><dt>Last move</dt><dd>{node.moveSan ?? "No move"}</dd></div>
-              <div><dt>Moved by</dt><dd>{actorLabel(node.actor)}</dd></div>
-              <div><dt>Material</dt><dd>{materialLabel(node.fen)}</dd></div>
-              <div><dt>Half-moves played</dt><dd>{node.ply}</dd></div>
-              <div><dt>Checkpoints</dt><dd>{node.checkpointRefs.length}</dd></div>
+              <div><dt>Last move</dt><dd>{group.node.moveSan ?? "No move"}</dd></div>
+              <div><dt>Moved by</dt><dd>{actorLabel(group.node.actor)}</dd></div>
+              <div><dt>Material</dt><dd>{materialLabel(group.node.fen)}</dd></div>
+              <div><dt>Half-moves played</dt><dd>{group.node.ply}</dd></div>
+              <div><dt>Checkpoints</dt><dd>{group.node.checkpointRefs.length}</dd></div>
             </dl>
           {/if}
-          {#if zoom === "near"}<Chessboard fen={node.fen} {startSide} lastMove={node.moveUci} disabled onMove={() => {}} />{/if}
+          {#if zoom === "near"}<Chessboard fen={group.node.fen} {startSide} lastMove={group.node.moveUci} disabled onMove={() => {}} />{/if}
         {:else}<div class="line-ended">Line ended</div>{/if}
       </article>
     {/each}
@@ -335,7 +365,7 @@
 </section>
 
 <style>
-  .compare{width:min(96rem,calc(100% - 2rem));height:100%;margin:auto;padding:1rem 0;overflow:auto}.compare>header,.stepper,.comparison-inspector>header{display:flex;justify-content:space-between;align-items:center;gap:1rem}.header-actions{display:flex;gap:.5rem;flex-wrap:wrap}.compare header p{margin:0;color:var(--accent);font:700 .68rem ui-monospace,monospace;text-transform:uppercase;letter-spacing:.12em}h2{margin:.2rem 0 0;font:500 clamp(1.6rem,3vw,2.8rem)/1 var(--display-font)}button,select{padding:.65rem .8rem;border:1px solid var(--line);border-radius:.65rem;background:var(--panel);color:inherit}.zoom-control{display:flex;justify-content:flex-end;gap:.25rem;margin-top:1rem}.zoom-control button[aria-pressed="true"]{border-color:var(--accent)}.divergence{display:grid;grid-template-columns:minmax(15rem,24rem) 1fr;gap:1.25rem;align-items:center;margin:1rem 0;padding:1rem;border:1px solid var(--line);border-radius:.9rem;background:var(--panel)}.fork-board{width:min(100%,24rem);justify-self:center}.divergence h3,.narrative h3{margin:.15rem 0 .6rem}.divergence ol{display:grid;gap:.55rem;padding:0;list-style:none}.divergence li{display:grid;grid-template-columns:2rem 1fr;gap:.55rem;align-items:start}.divergence li small{display:block;color:var(--muted)}.divergence li p{margin:.15rem 0}.candidate-number{display:grid;place-items:center;width:1.75rem;aspect-ratio:1;border-radius:50%;background:var(--accent);color:var(--on-accent);font-weight:700}.eyebrow{margin:0;color:var(--accent);font:700 .68rem ui-monospace,monospace;text-transform:uppercase;letter-spacing:.12em}.narrative{padding:1rem;border:1px solid var(--accent);border-radius:.8rem;background:color-mix(in srgb,var(--accent) 6%,var(--panel))}.narrative-heading{display:flex;justify-content:space-between;align-items:start;gap:1rem}.alignment{display:flex;gap:.75rem;flex-wrap:wrap;margin:.75rem 0}.alignment p{margin:0;padding:.45rem .65rem;border-radius:999px;background:var(--surface);color:var(--muted);font-size:.78rem}.boards,.results,.strip-band,.inspector-results{display:grid;grid-template-columns:repeat(var(--branches,2),minmax(var(--cell-floor,15rem),1fr));gap:.8rem;margin:1rem 0;overflow-x:auto;overscroll-behavior:contain}.strip-band>h4{grid-column:1/-1}.strip-band article,.boards article,.results>article,.inspector-results>article{min-width:var(--cell-floor,15rem);padding:.7rem;border:1px solid var(--line);border-radius:.8rem;background:var(--panel)}.boards h3,.boards p{overflow-wrap:anywhere}.branch-intent{padding:.35rem .5rem;border-left:3px solid var(--accent);color:var(--muted);font-size:.78rem}.cell-state{color:var(--muted);font-size:.72rem}.boards dl{display:grid;gap:.2rem;margin:.45rem 0;font-size:.7rem}.boards dl div{display:flex;justify-content:space-between;gap:.35rem}.boards dt{color:var(--muted)}.boards dd{margin:0}.boards article.absent{opacity:.45}.line-ended{min-height:3rem;display:grid;place-items:center;background:var(--surface)}.boards[data-zoom="near"] .line-ended{aspect-ratio:1}.stepper{justify-content:center}.replay-resistance{display:grid;grid-template-columns:minmax(16rem,1fr) auto auto;gap:.75rem;align-items:end;margin:1rem 0;padding:1rem;border:1px solid var(--accent);border-radius:.9rem;background:color-mix(in srgb,var(--accent) 6%,var(--panel))}.replay-resistance h3,.replay-resistance p{margin:.2rem 0}.replay-resistance label{display:grid;gap:.25rem;font-size:.75rem}.replay-resistance small{grid-column:1/-1;color:var(--muted)}.evaluation-axis{margin:1rem 0}.evaluation-table-wrap{overflow-x:auto;overscroll-behavior:contain}.evaluation-axis table{width:100%;min-width:28rem;border-collapse:collapse;background:var(--panel)}.evaluation-axis th,.evaluation-axis td{padding:.55rem .7rem;border:1px solid var(--line);text-align:left;white-space:nowrap}.evaluation-axis thead th{color:var(--muted);font-size:.72rem}.evaluation-axis tbody th{width:6rem}.fork-marker{display:inline-block;color:var(--accent);font:700 .75rem ui-monospace,monospace}.evidence-entry{font:.76rem ui-monospace,monospace}.no-record{color:var(--muted);font-size:.72rem}.results{grid-template-columns:repeat(auto-fit,minmax(16rem,1fr));--cell-floor:16rem}.results p,.inspector-results p{margin:.35rem 0;color:var(--muted)}.validated-timeline{display:none}.inspector-backdrop{position:fixed;inset:0;z-index:40;display:grid;padding:1rem;background:var(--scrim)}.comparison-inspector{width:min(76rem,100%);height:min(92dvh,64rem);margin:auto;overflow:auto;padding:1rem;border:1px solid var(--line);border-radius:1rem;background:var(--surface);box-shadow:var(--shadow)}.comparison-inspector h3{margin:.15rem 0}.inspector-intro{max-width:70ch;color:var(--muted)}@media(max-width:760px){.divergence{grid-template-columns:1fr}.fork-board{width:min(82vw,22rem)}}
+  .compare{width:min(96rem,calc(100% - 2rem));height:100%;margin:auto;padding:1rem 0;overflow:auto}.compare>header,.stepper,.comparison-inspector>header{display:flex;justify-content:space-between;align-items:center;gap:1rem}.header-actions{display:flex;gap:.5rem;flex-wrap:wrap}.compare header p{margin:0;color:var(--accent);font:700 .68rem ui-monospace,monospace;text-transform:uppercase;letter-spacing:.12em}h2{margin:.2rem 0 0;font:500 clamp(1.6rem,3vw,2.8rem)/1 var(--display-font)}button,select{padding:.65rem .8rem;border:1px solid var(--line);border-radius:.65rem;background:var(--panel);color:inherit}.zoom-control{display:flex;justify-content:flex-end;gap:.25rem;margin-top:1rem}.zoom-control button[aria-pressed="true"]{border-color:var(--accent)}.divergence{display:grid;grid-template-columns:minmax(15rem,24rem) 1fr;gap:1.25rem;align-items:center;margin:1rem 0;padding:1rem;border:1px solid var(--line);border-radius:.9rem;background:var(--panel)}.fork-board{width:min(100%,24rem);justify-self:center}.divergence h3,.narrative h3{margin:.15rem 0 .6rem}.divergence ol{display:grid;gap:.55rem;padding:0;list-style:none}.divergence li{display:grid;grid-template-columns:2rem 1fr;gap:.55rem;align-items:start}.divergence li small{display:block;color:var(--muted)}.divergence li p{margin:.15rem 0}.candidate-number{display:grid;place-items:center;width:1.75rem;aspect-ratio:1;border-radius:50%;background:var(--accent);color:var(--on-accent);font-weight:700}.eyebrow{margin:0;color:var(--accent);font:700 .68rem ui-monospace,monospace;text-transform:uppercase;letter-spacing:.12em}.narrative{padding:1rem;border:1px solid var(--accent);border-radius:.8rem;background:color-mix(in srgb,var(--accent) 6%,var(--panel))}.narrative-heading{display:flex;justify-content:space-between;align-items:start;gap:1rem}.alignment{display:flex;gap:.75rem;flex-wrap:wrap;margin:.75rem 0}.alignment p{margin:0;padding:.45rem .65rem;border-radius:999px;background:var(--surface);color:var(--muted);font-size:.78rem}.boards,.results,.strip-band,.inspector-results{display:grid;grid-template-columns:repeat(var(--branches,2),minmax(var(--cell-floor,15rem),1fr));gap:.8rem;margin:1rem 0;overflow-x:auto;overscroll-behavior:contain}.strip-band>h4{grid-column:1/-1}.strip-band article,.boards article,.results>article,.inspector-results>article{min-width:var(--cell-floor,15rem);padding:.7rem;border:1px solid var(--line);border-radius:.8rem;background:var(--panel)}.boards h3,.boards p{overflow-wrap:anywhere}.branch-intent{padding:.35rem .5rem;border-left:3px solid var(--accent);color:var(--muted);font-size:.78rem}.group-marker{display:inline-block;margin:.1rem 0 .4rem;padding:.28rem .45rem;border-radius:999px;background:color-mix(in srgb,var(--accent) 12%,var(--surface));color:var(--accent);font:700 .68rem ui-monospace,monospace}.cell-state{color:var(--muted);font-size:.72rem}.boards dl{display:grid;gap:.2rem;margin:.45rem 0;font-size:.7rem}.boards dl div{display:flex;justify-content:space-between;gap:.35rem}.boards dt{color:var(--muted)}.boards dd{margin:0}.boards article.shared{border-color:var(--accent)}.boards article.absent{opacity:.45}.line-ended{min-height:3rem;display:grid;place-items:center;background:var(--surface)}.boards[data-zoom="near"] .line-ended{aspect-ratio:1}.stepper{justify-content:center}.replay-resistance{display:grid;grid-template-columns:minmax(16rem,1fr) auto auto;gap:.75rem;align-items:end;margin:1rem 0;padding:1rem;border:1px solid var(--accent);border-radius:.9rem;background:color-mix(in srgb,var(--accent) 6%,var(--panel))}.replay-resistance h3,.replay-resistance p{margin:.2rem 0}.replay-resistance label{display:grid;gap:.25rem;font-size:.75rem}.replay-resistance small{grid-column:1/-1;color:var(--muted)}.evaluation-axis{margin:1rem 0}.evaluation-table-wrap{overflow-x:auto;overscroll-behavior:contain}.evaluation-axis table{width:100%;min-width:28rem;border-collapse:collapse;background:var(--panel)}.evaluation-axis th,.evaluation-axis td{padding:.55rem .7rem;border:1px solid var(--line);text-align:left;white-space:nowrap}.evaluation-axis thead th{color:var(--muted);font-size:.72rem}.evaluation-axis tbody th{width:6rem}.fork-marker{display:inline-block;color:var(--accent);font:700 .75rem ui-monospace,monospace}.evidence-entry{font:.76rem ui-monospace,monospace}.no-record{color:var(--muted);font-size:.72rem}.results{grid-template-columns:repeat(auto-fit,minmax(16rem,1fr));--cell-floor:16rem}.results p,.inspector-results p{margin:.35rem 0;color:var(--muted)}.validated-timeline{display:none}.inspector-backdrop{position:fixed;inset:0;z-index:40;display:grid;padding:1rem;background:var(--scrim)}.comparison-inspector{width:min(76rem,100%);height:min(92dvh,64rem);margin:auto;overflow:auto;padding:1rem;border:1px solid var(--line);border-radius:1rem;background:var(--surface);box-shadow:var(--shadow)}.comparison-inspector h3{margin:.15rem 0}.inspector-intro{max-width:70ch;color:var(--muted)}@media(max-width:760px){.divergence{grid-template-columns:1fr}.fork-board{width:min(82vw,22rem)}}
   @media(max-width:760px){
     .compare{width:calc(100% - 1rem);padding:.5rem 0;overflow-x:hidden;overflow-y:auto}
     .compare>header,.stepper,.narrative-heading{flex-wrap:wrap}

@@ -1208,7 +1208,8 @@ test("@content served Najdorf pack plays, rewinds, branches, compares, and expor
   await expect(
     page.getByText("The comparison is already at its first aligned position."),
   ).toBeVisible();
-  await expect(page.locator(".boards article")).toHaveCount(2);
+  await expect(page.locator(".boards article")).toHaveCount(1);
+  await expect(page.locator(".boards article.shared")).toContainText("Shared recorded position · 2 attempts");
   await expect(page.getByRole("heading", { name: "Where the attempts split" })).toBeVisible();
   await expect(page.locator(".divergence [aria-label='Chessboard']")).toBeVisible();
   await expect(page.locator(".divergence").getByText("Compare a lower-commitment setup", { exact: true })).toBeVisible();
@@ -1381,7 +1382,8 @@ test("branch group captures three candidates, rotates, recovers evidence, compar
 
   await page.getByRole("button", { name: "Compare group" }).click();
   await expect(page.getByRole("heading", { name: "Same decision, 3 consequences." })).toBeVisible();
-  await expect(page.locator(".boards article")).toHaveCount(3);
+  await expect(page.locator(".boards article")).toHaveCount(1);
+  await expect(page.locator(".boards article.shared")).toContainText("Shared recorded position · 3 attempts");
 
   const downloadPromise = page.waitForEvent("download");
   await page.getByRole("heading", { name: "Same decision, 3 consequences." }).focus();
@@ -2039,7 +2041,8 @@ test("@matrix @mobile comparison stacks complete branch cards without hidden hor
   await page.locator("main.drill").focus();
   await page.keyboard.press("Alt+C");
   await expect(page.getByRole("heading", { name: "Same decision, two consequences." })).toBeVisible();
-  await expect(page.locator(".boards article")).toHaveCount(2);
+  await expect(page.locator(".boards article")).toHaveCount(1);
+  await expect(page.locator(".boards article.shared")).toContainText("Shared recorded position · 2 attempts");
   await expect(page.locator(".compare")).not.toContainText("Tabiya structural detector");
   await expect(page.locator(".compare")).not.toContainText("Recorded engine evaluation");
 
@@ -2057,6 +2060,8 @@ test("@matrix @mobile comparison stacks complete branch cards without hidden hor
   await page.getByRole("button", { name: "Return to comparison" }).click();
   await expect(inspector).toHaveCount(0);
   await expect(inspectorButton).toBeFocused();
+  await page.getByRole("button", { name: "Next →" }).click();
+  await expect(page.locator(".boards article")).toHaveCount(2);
 
   const overflow = await page.locator(".compare").evaluate((compare) => {
     const horizontalRegions = [...compare.querySelectorAll<HTMLElement>(".boards, .results, .strip-band")];

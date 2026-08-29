@@ -11108,3 +11108,15 @@ CI actually run.
   the repaired outpost dependency and the shipped move-grade projection must refresh the compiled
   table, while the separate `pawn_safe_square` owner choice remains open. No module declaration or
   protected design intent changed.
+
+## 2026-08-29 — Compare stops drawing one shared position as several boards
+
+- Closed `CLP-a21` and [[D2031]] against the archived N-way comparison contract. The visible
+  aligned row now consumes the runtime's exact `ComparisonRow.groups` partition: one cell names
+  every attempt still occupying that recorded node, while ended branches remain visible as
+  explicit absence cells.
+- Added a three-branch nested-fork fixture whose first aligned row is `[[X,Y],[Z]]`; it requires
+  two position cells, one shared marker and no absent branch. Production browser comparisons pin
+  the two- and three-attempt shared-fork rendering, so prose alone cannot satisfy the contract.
+- The Evidence inspector deliberately remains branch-columnar: evaluation, source attribution
+  and recorded facts belong to each attempt even while the visible chess position is shared.
