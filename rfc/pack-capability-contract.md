@@ -1,11 +1,16 @@
 # RFC: Pack capability contract — semantic versions, handshake, deprecation and migration
 
-- **Status:** draft — returned to author 2026-08-28 after repeat independent buildability review ([[D1982]]–[[D1992]]). The prior seven repairs survive, but the amended contract still has incompatible id/version/disposition types, no complete applicability authority or F1 bridge, unregistered strict-schema keywords, unresolved refusal authority, an RFC dependency cycle, unrepresentable AST sites, incomplete resolved-reference closure and no canonical `requires` encoding. Exact return: `planning/pack-capability-contract/repeat-independent-buildability-review-2026-08-28.md`. No lane-0.30 implementation is authorised.
+- **Status:** draft — second-return author repair complete 2026-08-30 for [[D1982]]–[[D1992]].
+  The id/version algebra, generated applicability authority, F1 bridge, refusal-state migration,
+  strict-AJV annotation vocabulary, claim-anchor dependency direction, named semantic roots,
+  resolved-content dependency closure and canonical `requires` bytes are now specified. The eleven
+  author fixtures pass; fresh independent buildability review still gates acceptance and lane-0.30
+  implementation. The D560 corpus hold remains whole.
 - **Author:** claude (drafted from `planning/platform-alignment/f3-derivation.md`, the HEAD derivation of every surface this document versions)
 - **Created:** 2026-08-23
 - **Design refs:** `design/research/pack-primitive-stability.md` §6 (R6's six-part model); `planning/platform-alignment/plan.md` Gate F clauses 1, 5, 6, 7
 - **Exploration gate:** O6.1 approved as [[D995]] and O6.2 ruled as [[D996]]; `planning/platform-alignment/theory-drill/o5-o6-handoff.md:96` reads verbatim `O6.1 + O6.2 approved → F3 may draft` (line corrected from `:100`, a code fence, by cross-review 2026-08-23)
-- **Depends on:** `archive/evidence-contract-manifest.md` (F1 — the compiled manifest this versions), `rfc/graduation-clearance.md` (accepted — lane 0.28, the planner precedent in its §6.5)
+- **Depends on:** `archive/evidence-contract-manifest.md` (F1 — the compiled manifest this versions), `rfc/graduation-clearance.md` (accepted — lane 0.28, the planner precedent in its §6.5). **Followed by, never imports:** draft `rfc/claim-semantic-anchors.md`, which may adopt F3's generic identity only after F3 is accepted.
 - **Parent / amends:** — (this is F3 in `planning/platform-alignment/rfc-graph.md:70`)
 - **Supersedes / superseded by:** —
 - **Planning:** `planning/platform-alignment/` (`f3-derivation.md`)
@@ -106,16 +111,37 @@ packs comprise it.
 ```ts
 // packages/schema/src/capability/types.ts (new)
 export interface CapabilityId {
-  readonly id: string;       // dotted, lowercase, no version suffix
-  readonly version: number;  // integer >= 1
+  readonly id: string;
+  readonly version: CapabilityVersion;
 }
+
+export type CapabilityVersion =
+  | { readonly kind: "integer"; readonly value: number }
+  | { readonly kind: "semver"; readonly value: string };
 ```
 
-**The version is a field, never a suffix inside a string literal.** `formatCapability({id, version})`
-renders `` `${id}@${version}` `` for display, logs and error messages; `parseCapability` accepts
-both shipped spellings (`name@1` and `name@v1`) and returns the structured form. The 56 existing
-identifiers migrate by parse, not by rewrite: `tablebase.probe@v1` and `rules.structural.predicate.outpost@1`
-both parse to `{version: 1}`.
+`CAPABILITY_ID_PATTERN` is
+`^[A-Za-z][A-Za-z0-9_-]*(?:[.:][A-Za-z0-9][A-Za-z0-9_-]*)+$`. It deliberately preserves the
+mixed-case and colon-separated legacy families already shipped (`structuralFeature.outpost`,
+`error.SIMULATE_BUDGET_EXCEEDED`, `assistance:arrows`) while excluding whitespace, slash and every
+`@` suffix. Case is significant; migration never lowercases an existing identity. New ids use
+lowercase dotted form by convention, enforced by the declaration authoring helper, while the public
+parser accepts the complete compatibility grammar above.
+
+**The version is structured data, never a suffix inside `id`.** Integer versions are safe integers
+`>= 1`. Semver is the exact pack-format semver grammar already exported by the schema package,
+normalized to three numeric components with no leading zero and no prerelease/build arm. Generated
+`shape.<id>` / `principle.<id>` capabilities use `{kind:"semver", value: entry.version}`; ordinary
+evaluator/projection capabilities use `{kind:"integer", value:N}`. No numeric coercion exists
+between arms. `capabilityKey` renders the collision-free internal key
+`<id>@i:<integer>` or `<id>@s:<semver>`; display may use the shorter legacy spelling only for an
+integer compatibility value.
+
+`parseLegacyCapability` accepts exactly the shipped `name@1` / `name@v1` forms and returns an
+integer arm. `parseCapabilityRequirement` accepts only the structured object. Thus
+`tablebase.probe@v1` and `rules.structural.predicate.outpost@1` migrate without rewriting historical
+bytes, while shape version `0.1.3` round-trips without an invented integer encoding. A string with a
+semver suffix is not a legacy capability and is refused rather than guessed.
 
 **Why this and not the majority spelling:** G5. `evidence-manifest-check.ts:70` proves a suffix
 spelling puts the version inside assertions, where incrementing it requires editing the checker.
@@ -134,7 +160,7 @@ identifiers, and are outside this migration.
 The compiler check is type-directed, not a grep. A suffix literal matching `@N` or `@vN` is illegal
 when its contextual type is `CapabilityId`/`CapabilityKey`, when it initializes a capability field,
 or when it is passed to the current-id assertion API. Tests may contain the exact old bytes only
-through `legacyCapabilityFixture(value)`, which parses the value and marks it as compatibility
+through `legacyCapabilityFixture(value)`, which calls `parseLegacyCapability` and marks it as compatibility
 input. Disposable research output and prose are outside the production scan. New writers emit
 structured data; legacy readers remain for the lifetime of the artifact schema that introduced the
 string. Criterion 5 fixtures all three cases: forbidden current authority, permitted named legacy
@@ -174,33 +200,36 @@ export type CapabilitySubjectKind =
   | "constant_table"
   | "projection"
   | "resolved_reference"
+  | "contract_identity"
   | "assistance_surface"
   | "error_contract";
 
 export interface CapabilityDeclaration {
   readonly id: string;
-  readonly version: number;
+  readonly version: CapabilityVersion;
   readonly subject: CapabilitySubjectKind;
-  readonly sites: readonly CapabilitySite[];   // exact AST sites, >= 1, all interpretation sites
-  readonly dependsOn: readonly string[];       // capability ids, acyclic; digest closes transitively
+  readonly sources: readonly CapabilityMeaningSource[]; // >= 1; subject-appropriate authority
+  readonly dependsOn: readonly CapabilityId[];           // acyclic; digest closes transitively
   readonly conventionText?: string;            // when the normative statement is prose (§2.4)
-  readonly semanticsDigest: string;            // `sha256:...` over the sites' source regions + conventionText
-  readonly disposition: CapabilityDisposition; // §5
+  readonly semanticsDigest: string;            // `sha256:...` over source images + dependencies + conventionText
+  readonly disposition: SemanticDisposition;  // §5; one vocabulary throughout
 }
 ```
 
-`CapabilitySite` is closed and AST-backed:
+`CapabilityMeaningSource` is closed. AST-backed subjects use `CapabilitySite`; F1 projections and
+resolved content use their own existing canonical authorities instead of pretending to be named
+TypeScript declarations:
 
 ```ts
+export type CapabilityMeaningSource =
+  | { readonly kind: "ast"; readonly site: CapabilitySite }
+  | { readonly kind: "f1_projection"; readonly projection: CapabilityId }
+  | { readonly kind: "resolved_content"; readonly registry: "shape" | "principle"; readonly entryId: string };
+
 export type CapabilitySite =
   | { readonly kind: "symbol"; readonly module: string; readonly symbol: string }
-  | {
-      readonly kind: "discriminant_arm";
-      readonly module: string;
-      readonly owner: string;
-      readonly property: string;
-      readonly value: string;
-    };
+  | { readonly kind: "discriminant_arm"; readonly module: string; readonly owner: string;
+      readonly property: string; readonly value: string };
 ```
 
 `module` is a repository-relative POSIX path. A symbol site selects exactly one named declaration;
@@ -209,8 +238,24 @@ The canonical source image is JCS over the domain tag `tabiya.capability.site.v1
 and the ordered TypeScript token stream `(SyntaxKind name, token text)` with trivia excluded. Sites
 sort by their JCS image; dependencies sort by id. Each dependency contributes its full semantics
 digest, cycles fail, and imports/helpers/constants participate only through an explicit site or
-dependency. The TypeScript package and lockfile are part of the repository toolchain; changing the
+dependency. Before the registry is generated, every §3.1 named root is exported as the literal
+symbol listed there; inline/property/prose descriptions are not legal sites. The TypeScript package
+and lockfile are part of the repository toolchain; changing the
 extractor format requires a new site-image domain tag rather than silently moving every digest.
+
+An `f1_projection` source resolves one exact `ProjectionDeclaration` from
+`PRIMARY_EVIDENCE_MANIFEST`. Its source image is JCS over the domain
+`tabiya.capability.f1-projection.v1` and that declaration's id/version, role, plane, payload type,
+semantics, operands, signs, grounding, exactness, confidence, abstention, answer content, forms,
+limitations, disposition, `dependsOn`, literal derivation and compiled execution paths. Its
+capability dependencies are generated from the declaration's `dependsOn` and every derivation
+member. This is the complete F1→F3 bridge; no `CapabilitySite` or copied manifest digest is
+invented.
+
+A `resolved_content` source resolves the exact registry entry, includes its canonical content
+digest and structured semver arm, and adds the semantic dependencies described in §2.6. A source
+kind inconsistent with `subject` fails `CAPABILITY_SOURCE_KIND_INVALID`; zero sources fails
+`CAPABILITY_SOURCE_MISSING`.
 
 `make capability-check` recomputes every `semanticsDigest` from the tree and **fails when a stored
 digest does not match its recomputed value at the same version**. The remedy is always one of two
@@ -238,8 +283,9 @@ at all. Each convention is therefore a capability whose `conventionText` is insi
 
 #### §2.5 Both interpretation sites, or the capability is not covered
 
-`sites` is a **list**, minimum length 1, and the declaration must name **every** site that
-interprets the subject. Two vocabularies are interpreted twice today:
+For AST-backed subjects, `sources` is a **list**, minimum length 1, and the declaration must name
+**every** site that interprets the subject. Subject-specific F1 and resolved-content sources follow
+§2.3 instead of inventing AST sites. Two vocabularies are interpreted twice today:
 
 | Vocabulary | Predicate switch | Second switch over the same vocabulary |
 |---|---|---|
@@ -266,11 +312,25 @@ dependent pack with nothing noticing. `named_structure`'s four inline ids (`carl
 
 **Rule:** a pack's derived requirement set closes over the shape entries and principle entries it
 resolves through. Each resolved entry is a generated capability (`shape.<id>` or `principle.<id>`)
-whose capability version is the entry's structured semver and whose semantics digest contains the
-entry's canonical content digest. Editing bytes without moving the entry version fails
-`capability-check`; moving the version changes the pack's derived requirement. This preserves the
-ruled `{id, version}` pack grammar rather than hiding a third field in one requirement family. This
-is G24's remedy and it is the only part of the contract that reaches outside pack bytes.
+whose capability version is the entry's `{kind:"semver", value:entry.version}` arm and whose
+semantics digest contains the entry's canonical content digest.
+
+Content bytes are not the closure. `resolvedCapabilityDependencies(entry)` walks every typed
+semantic expression in the validated entry—the shape trigger, plan trigger/success signature,
+principle applicability/counter-case expressions and nested shape/principle references—and maps
+each discriminant/value through the same generated `CAPABILITY_APPLICABILITY` authority as a pack.
+It then closes transitively through referenced entries and evaluator dependencies. Unknown semantic
+nodes, a reference cycle or an expression with no applicability row fail generation. The generated
+resolved declaration stores that exact dependency list, so `shape.maroczy-bind` depends on
+`structuralFeature.outpost`, which depends on `structuralFeature.pawn_safe_square`; a helper-only
+D566 change therefore invalidates the resolved shape even when the pack reaches outpost only through
+that reference.
+
+Editing bytes without moving the entry version fails `capability-check`; moving the version changes
+the pack's derived requirement. Editing a depended-on evaluator changes the closed digest and
+requires the evaluator version transition first. This preserves the ruled `{id, version}` pack
+grammar rather than hiding a third field in one requirement family. This is G24's remedy and it is
+the only part of the contract that reaches outside pack bytes.
 
 #### §2.7 Applicability is a literal graph
 
@@ -287,9 +347,27 @@ type PackSelector =
 
 interface CapabilityApplicability {
   readonly selector: PackSelector;
-  readonly capability: string;
+  readonly capability: CapabilityId;
 }
 ```
+
+The complete authority is the checked generated file
+`packages/schema/src/capability/applicability.generated.ts`, never a four-row hand table. Its source
+is exactly three independently enumerable sets:
+
+1. every `x-tabiya-capability` annotation in the drill-pack schema emits the literal selector and
+   structured capability carried by that annotation;
+2. `PACK_ALWAYS_CAPABILITIES` is a literal table of the unconditional evaluators/defaults from the
+   13 named evaluator roots plus `guard.defaults`; every member names its AST source; and
+3. every annotated shape/principle reference site emits one `resolved` selector.
+
+`make capability-applicability` regenerates bytes; `make capability-applicability-check` compares
+without writing. The generator also emits `CAPABILITY_APPLICABILITY_EXCLUSIONS`, set-equal to every
+`x-tabiya-capability-excluded` annotation. Every closed schema member, default-bearing absent field
+and resolved reference is therefore mapped or explicitly excluded. An annotation, always-root or
+reference added without changing the generated artifact fails; a generated row with no independent
+source fails `CAPABILITY_APPLICABILITY_ORPHAN`. The ordered generated image participates in the
+registry digest, so selector drift cannot hide behind stable declarations.
 
 Pointers use RFC 6901 with `*` as the only extension, matching exactly one array/object segment per
 star. A literal selector matches the scalar at every expanded pointer; an absent selector is legal
@@ -299,8 +377,9 @@ state-machine/default semantics; `resolved` emits the generated content capabili
 
 Requirement derivation is one algorithm: evaluate every selector against the parsed pack, add its
 direct capability, expand `dependsOn` transitively, reject a missing dependency or cycle, resolve
-shape/principle references, then sort the unique `{id, version}` set. The authored `requires` array
-must set-equal that result. The minimum executable fixture includes:
+shape/principle references (including §2.6's embedded semantic dependencies), then canonicalize the
+unique `{id, version}` set under §4.1. The authored `requires` array must byte-equal that canonical
+result after parsing; set equality alone is insufficient. The minimum executable fixture includes:
 
 - `/objective/successConditions/*/feature/kind == "outpost"` →
   `structuralFeature.outpost`, whose dependency is `structuralFeature.pawn_safe_square`;
@@ -324,8 +403,11 @@ set-equal their union.
 
 1. **Pack schema vocabularies.** Every `enum` and every discriminated `oneOf` beneath the pack
    schema must carry exactly one of `x-tabiya-capability` or
-   `x-tabiya-capability-excluded`. The former records a stable `sourceIdentity` equal to its JSON
-   Pointer plus member/discriminant value; the latter requires a reason and ledger row. An
+   `x-tabiya-capability-excluded`. The former is the closed object
+   `{sourceIdentity, selector, capability}` where `selector` is §2.7's JSON value and `capability`
+   is a structured `CapabilityId`; the latter is
+   `{sourceIdentity, reason, authority}` where authority is an existing ledger or protected-intent
+   reference. An
    unannotated closed vocabulary fails before declarations are compared.
 2. **Interpreter sites.** The implementation owns a literal `PACK_INTERPRETER_ROOTS` list of the
    pack-evaluation modules named by §3a-bis of `planning/platform-alignment/f3-derivation.md`.
@@ -334,8 +416,10 @@ set-equal their union.
    interpreter is either a typed `refused` declaration or a census failure.
 3. **Named evaluators and tables.** These are literal normative rows below, not a count copied from
    planning. Each row declares its exact AST sites.
-4. **F1 projections.** Core projections are absorbed from the compiled F1 manifest by structured
-   `{id, version}` reference. Pack requirements may select only projections bound to
+4. **F1 projections.** Core projections are generated through §2.3's literal `f1_projection`
+   bridge. The capability id/version is the projection id/version; the source image is derived from
+   the complete manifest declaration and compiled execution paths, and semantic/derivation inputs
+   become typed capability dependencies. Pack requirements may select only projections bound to
    `authoring.predicate`, `runtime.objective_condition`, or `runtime.guard_condition`; the rest
    remain capabilities but cannot appear in a pack stamp.
 
@@ -345,6 +429,15 @@ without swapping their source identities fails with `CAPABILITY_IDENTITY_MISMATC
 cardinality is unchanged. The census separately diagnoses `SCHEMA_CAPABILITY_UNANNOTATED`,
 `CAPABILITY_INTERPRETER_ORPHAN`, `CAPABILITY_NAMED_ROOT_MISSING`,
 `CAPABILITY_DECLARATION_EXTRA`, and `CAPABILITY_IDENTITY_MISMATCH`.
+
+Both annotations are registered strict-schema keywords through one compiler authority:
+`packages/schema/src/ajv.ts` exports `createStrictAjv2020(options?)`. It constructs AJV 2020 with
+`strict:true`, registers `x-tabiya-capability` and `x-tabiya-capability-excluded` with closed
+meta-schemas for the exact objects above, and then returns the instance. The schema package tests,
+server `pack-validation.ts`, CLI/build tools and migration planner must import this factory; direct
+`new Ajv2020` for pack schemas is a set-equal census failure. A valid annotation compiles, an invalid
+annotation fails its keyword meta-schema, and a misspelled keyword remains an `unknown keyword`
+error—strictness is not disabled and annotations are never silently ignored.
 
 **Literal named evaluator roots (13):**
 
@@ -366,24 +459,30 @@ cardinality is unchanged. The census separately diagnoses `SCHEMA_CAPABILITY_UNA
 
 **Literal constant-table roots (16):**
 
+Every cell below is an exact exported symbol by the implementation's first step. Existing inline or
+property expressions are extracted byte-for-byte into the named constant and every former reader
+imports it; `make capability-site-check` requires one declaration and at least one production
+reader, so creating an unused alias does not satisfy the site. No property path, numeric prose or
+inline `.slice(...)` expression is a normative site.
+
 | capability id | table/site authority |
 |---|---|
-| `grade.thresholds` | `GRADE_CONVENTION.constants` |
+| `grade.thresholds` | `GRADE_CONVENTION_CONSTANTS` |
 | `material.objective_values` | `MATERIAL_VALUES` |
 | `exchange.piece_values` | `EXCHANGE_PIECE_VALUES` |
-| `pressure_line.role_scale` | the registered pressure-line convention text |
-| `guard.material_trigger` | rules-guard material threshold |
-| `guard.defaults` | `guard-conditions.ts` defaults |
+| `pressure_line.role_scale` | `PRESSURE_LINE_ROLE_SCALE` plus the registered pressure-line convention source |
+| `guard.material_trigger` | `RULES_GUARD_MATERIAL_THRESHOLD` |
+| `guard.defaults` | `GUARD_DEFAULTS` |
 | `tablebase.category_rank` | `CATEGORY_RANK` |
-| `branch.category_rank` | branch-scale `RANK` |
-| `deviation.cost_tolerance` | deviation equality/range constants |
-| `phase.bands` | phase thresholds |
+| `branch.category_rank` | `BRANCH_CATEGORY_RANK` |
+| `deviation.cost_tolerance` | `DEVIATION_COST_TOLERANCE` |
+| `phase.bands` | `PHASE_BANDS` |
 | `mate_proof.node_cap` | `MATE_PROOF_NODE_CAP` |
 | `rating.glicko2` | `GLICKO2_CONSTANTS` |
 | `rating.opponent_calibration` | `RATED_OPPONENT_CALIBRATION` |
-| `opponent.neutral_tiebreak` | `neutralTiebreakKey` inputs |
-| `opponent.practical_slice` | practical-resistance candidate limit |
-| `selection.semantic_policy` | the registered R2 selection constants |
+| `opponent.neutral_tiebreak` | `NEUTRAL_TIEBREAK_INPUTS` |
+| `opponent.practical_slice` | `PRACTICAL_RESISTANCE_CANDIDATE_LIMIT` |
+| `selection.semantic_policy` | `SEMANTIC_SELECTION_POLICY_CONSTANTS` |
 
 The following historical arithmetic is retained only as derivation history and landing-tripwire
 input. It is not the normative enumeration procedure.
@@ -439,10 +538,9 @@ hand-summed:
 | **Primary total** | **206** | was "191" |
 | Core-manifest projections | **193** | by reference; re-derived 2026-08-28 |
 
-**`claim.binding` is a registered capability** (a `verdict_producer` subject, `sourcing/claim-binding.ts`),
-which is what makes §4.4's declaration legal: §4.3's `unmet = pack.requires \ runtimeSupported`
-refuses every artifact declaring an unregistered capability, so a sidecar requiring `claim.binding`
-would have been refused by the draft's own handshake. Registering it does not "break the count"
+**`claim.binding` is a registered `contract_identity` capability** whose exact AST source is the
+new exported `CLAIM_BINDING_CAPABILITY_ID` constant in the generic capability registry. It imports
+no sidecar parser or consumer behaviour. Registering it does not "break the count"
 because **no hand-count is asserted any more** — this is the third blocker the procedure dissolves
 rather than patches.
 
@@ -471,16 +569,27 @@ separation both ways.
 ```jsonc
 // pack root, new required key
 "requires": [
-  { "id": "structuralFeature.outpost", "version": 1 },
-  { "id": "objective.state_machine",   "version": 1 }
+  { "id": "objective.state_machine",   "version": { "kind": "integer", "value": 1 } },
+  { "id": "structuralFeature.outpost", "version": { "kind": "integer", "value": 1 } },
+  { "id": "shape.maroczy-bind",         "version": { "kind": "semver",  "value": "0.1.3" } }
 ]
 ```
 
-`$defs/capabilityRequirement` is a closed object of exactly `id` and `version`. The key is
+`$defs/capabilityRequirement` is a closed object of exactly `id` and `version`; `version` is a
+closed discriminated union matching §2.1. The key is
 **required** — a pack with no `requires` is invalid, not permissive. That is the whole reason
 [[D1058]] chose the pack over a sidecar: absence must be a refusal, and every sidecar mechanism in
 the tree is permissive on absence (`apps/server/src/expression-census.ts:77` returns `undefined` on
 a schema mismatch, so a `.v2` ledger reads as *absent* rather than *refused*).
+
+The array is canonical artifact data, not merely a mathematical set. Duplicate `capabilityKey`
+tuples fail `PACK_CAPABILITY_DUPLICATE`. Order is bytewise ascending NFC `id`; equal ids order
+integer versions before semver, integers numerically, and semver by its three numeric components.
+`canonicalCapabilityRequirements` rejects non-canonical input order at parse/validation boundaries;
+all writers call the same function before `digestDrillPack`. The JSON schema sets
+`uniqueItems:true` as a cheap structural guard, while the semantic validator owns tuple identity
+and ordering. A reordered or duplicate equivalent set is invalid rather than allowed to change a
+pack digest. Planner output and authored `requires` compare canonical arrays byte-for-byte.
 
 **The stamp is inside `digestDrillPack`.** `packages/schema/src/drill-pack/digest.ts:69` digests
 every byte with no field filter, so a requirement cannot drift from the content it describes. The
@@ -533,8 +642,8 @@ Its four invariants become module-load `TypeError`s here too:
 | Invariant | Error code |
 |---|---|
 | every declared capability has **exactly one** registry row | `CAPABILITY_DECLARATION_MISSING` |
-| `disposition: "reached"` **iff** the capability is executable | `CAPABILITY_DISPOSITION_INVALID` |
-| a `reached` row names at least one implementation `site` | `CAPABILITY_SITE_MISSING` |
+| semantic disposition `active` **iff** the capability is executable | `CAPABILITY_DISPOSITION_INVALID` |
+| an `active` row names at least one subject-appropriate meaning `source` | `CAPABILITY_SOURCE_MISSING` |
 | no registry row describes an undeclared capability | `CAPABILITY_UNDECLARED` |
 
 At registration, `PackRegistry` computes `unmet = pack.requires \ runtimeSupported` and, when
@@ -554,10 +663,21 @@ at registration, because it may reappear). `planning/archive/drill-client/log.md
 is unblocked.** (Source corrected from `docs/drill-client.md:16` by cross-review 2026-08-23 — that
 file contains no such string; the derivation's `f3-derivation.md:578` carries the same miscite.)
 
-#### §4.4 What an evidence sidecar declares — and why the top-level schema string does not move
+#### §4.4 Compile-time handoff to the later evidence-sidecar consumer
 
-**This section exists because a customer asked for it and would otherwise be blocked on the day
-this RFC is accepted.** `rfc/claim-semantic-anchors.md` §7 defers its entire compatibility story
+**Normative dependency boundary.** F3 exports only the generic structured `CapabilityId` algebra,
+registers the identity `claim.binding`, and proves that the identity round-trips through the generic
+registry. It makes **zero** changes to the evidence-sidecar schema, parser, binding-object grammar,
+stage dispatch, migration or refusal codes. In particular, F3 does not add a `contract` key and does
+not import production code, fixtures or behaviour from the draft `claim-semantic-anchors` RFC.
+That consumer RFC follows accepted F3 and owns all such behaviour. This direction breaks the
+returned dependency cycle: F3 supplies a compile-time primitive; the later consumer adopts it.
+
+The remainder of this section records the returned design shape only as **non-normative derivation
+history**. It is retained to stop the rejected root-level declaration and duplicate error-code
+forms from being proposed again; none of it is an F3 implementation criterion.
+
+**Historical reason this seam was examined.** `rfc/claim-semantic-anchors.md` §7 defers its compatibility story
 here: *"F3 must supply the accepted compatibility declaration that distinguishes the old and new
 binding semantics while the top-level evidence sidecar remains `tabiya.sourcing.evidence.v1`, or
 require a top-level move. This RFC does not choose a competing syntax."* The declaration it needs
@@ -595,14 +715,10 @@ collapses into one. Three further divergences the draft's table hid:
 | explicit `claim.binding@1` | **refused in both stages** — *"any `contract` whose id or version is not exactly `claim.binding`/`2`"* | criterion 15 required it **recorded** |
 | absence | legacy path in Stage A; refused after Stage B | *"reads as `claim.binding@1`"* |
 
-**What F3 supplies, and what it does not.** F3 owns the **grammar and the vocabulary**: a `contract`
-value is a `CapabilityId` (§2.1's structured `{id, version}`, never a suffix string), and
-**`claim.binding` is a registered capability** (§3.1) so §4.3's handshake admits it instead of
-refusing every sidecar that names it. F3 does **not** own the dispatch, the stage timing, or the
-refusal code — those are §7's, and this RFC now **cites** them rather than restating them. There is
-**one** refusal code for this seam, `CLAIM_BINDING_VERSION_UNSUPPORTED`, and it is the consumer's;
-`SIDECAR_CAPABILITY_UNSUPPORTED` is **withdrawn from this RFC**, because minting a second code for
-one seam is the second-spelling defect §2.1 exists to kill.
+**What F3 supplies, and what it does not.** F3 owns only the **generic grammar and vocabulary**:
+`claim.binding` is a registered `CapabilityId` (§3.1). It does **not** own a sidecar field, dispatch,
+stage timing or refusal code. The names below belong solely to the later consumer proposal and are
+not imported into F3 production code.
 
 **Absence is the consumer's rule, unmodified.** F3 states no default. §7's dispatch-by-presence
 governs: no `contract` key → the legacy path during Stage A, `CLAIM_BINDING_VERSION_UNSUPPORTED`
@@ -630,16 +746,24 @@ a requirement cannot drift from the records it describes. It is *not* inside `di
 pack and its sidecar are separate artifacts with separate digests, and conflating them would make a
 records-only edit churn the pack digest.
 
-### §5. Deprecation: successor or explicit refusal
+### §5. Lifecycle: successor, evidence, decision or lawful refusal
 
 ```ts
 export type SemanticDisposition =
   | { readonly kind: "active" }
   | { readonly kind: "deprecated"; readonly successor: CapabilityId; readonly reason: string }
   | { readonly kind: "withdrawn"; readonly reason: string; readonly removedAt: string }
-  | { readonly kind: "refused"; readonly reason: string; readonly ruledBy: string }
+  | { readonly kind: "refused"; readonly reason: string; readonly authority: RefusalAuthority }
+  | { readonly kind: "refuted"; readonly reason: string; readonly evidenceRef: string }
   | { readonly kind: "unmeasured"; readonly experiment: string }
+  | { readonly kind: "pending_decision"; readonly decisionRef: string }
+  | { readonly kind: "unimplemented"; readonly implementationRef: string }
   | { readonly kind: "impossible"; readonly reason: string };
+
+export type RefusalAuthority =
+  | { readonly kind: "owner_ruling"; readonly ledgerRow: string }
+  | { readonly kind: "protected_intent"; readonly document: string; readonly anchor: string }
+  | { readonly kind: "accepted_rfc"; readonly document: string; readonly criterion: string };
 
 export type DeploymentReachability =
   | { readonly kind: "supported" }
@@ -654,15 +778,19 @@ export interface CapabilityDeploymentBinding {
 }
 ```
 
-The projection from shipped vocabulary is total and checked:
+The projection from non-refused shipped vocabulary is total and checked:
 
 | shipped disposition | semantic disposition |
 |---|---|
 | `reached` | `active` |
 | `retired` | `withdrawn` |
-| `refused` | `refused` |
 | `unmeasured` | `unmeasured` |
 | `impossible` | `impossible` |
+
+Legacy `refused` is deliberately **not** a semantic mapping rule. It is a provisional source label
+whose meaning is recovered by exact row identity through `LEGACY_REFUSED_MIGRATION`; an unknown
+legacy refusal fails `CAPABILITY_REFUSAL_MIGRATION_MISSING`. This prevents an absent implementation,
+unanswered decision or negative measurement from being laundered into product intent.
 
 `unsupported` and `temporarily_unavailable` are never semantic dispositions. The first is derived
 from `configured: false`; the second is computed only for a configured `provider` binding whose
@@ -673,21 +801,57 @@ Three things this fixes.
 
 **`successor` becomes typed.** `FormatDisposition.successor` is `string | null` today
 (`dispositions.ts:14`) with nothing saying what it points at. Here it is a `CapabilityId` and
-criterion 9 asserts every `deprecated` successor resolves to a `reached` declaration.
+criterion 9 asserts every `deprecated` successor resolves to an `active` declaration.
 
 **A refusal costs at least as much as an unmeasured row.** The shipped
 `assertAdvertisedCapabilityDispositions` demands an `experiment` for every `unmeasured` disposition
 and **nothing at all** for a `refused` one — so filing an open question as a refusal is the cheapest
 way to make it stop costing anything, which is literally what happened to the famous-game licence
-question ([[D1045]]). Here `refused` requires `ruledBy` naming a ⚖ ledger row, and criterion 10
-fails on any refusal without one. This RFC does not repeat the asymmetry it inherited.
+question ([[D1045]]). Here `refused` requires either a resolving owner-ruling row or an exact anchor
+in protected intent. Research findings use `refuted`; work that has not shipped uses
+`unimplemented`; unanswered product choices use `pending_decision`. Criterion 10 checks the
+authority and the total migration below. This RFC does not repeat the asymmetry it inherited.
 
 **The three prose-only deprecations get typed successors**: `pawn_count`,
 `piece_reach_count scope:"every"` (removal deferred because `registered_shapes` rows are
 immutable), and `plan_consequence` → `structural_feature` with `plan_signature`. `retryVariants`
-(5 kinds, authorable in the schema, **no evaluator**, `refused` at `dispositions.ts:77-82`, carried
-by 7 packs) becomes a `refused` disposition with a `ruledBy` — the format admitting a vocabulary
-the runtime refuses is precisely the state clause 5 exists to make impossible.
+(5 kinds, carried by 7 packs) is not flattened: its catalogue arm is `deprecated` in favour of
+`variantOf`, while its scheduler arm is `active` under [[D1327]].
+
+#### §5a Total migration of the 20 legacy refused rows
+
+This table is normative input to `LEGACY_REFUSED_MIGRATION`. It reviews every refused row present in
+`CAPABILITY_DISPOSITIONS` (17) and `FORMAT_DISPOSITIONS` (3) at drafting HEAD. A source row may split
+when one old label covered two meanings; no implementer chooses a state while translating it.
+
+| legacy identity | semantic destination | existing authority |
+|---|---|---|
+| Stockfish `bestmove / MultiPV rank / bestline` | `unimplemented` | [[D1061]] approved the hint-distance move/PV axis; [[D318]] records the stale blanket refusal |
+| Stockfish `MultiPV > 1 outside enumerate` | `pending_decision` | [[D1037]] refusal audit; no owner ruling exists |
+| Stockfish `SyzygyPath / SyzygyProbeLimit / SyzygyProbeDepth / Syzygy50MoveRule` | `pending_decision` | [[D1037]]; hosted-vs-local deployment is not product intent |
+| Stockfish `UCI_LimitStrength / UCI_Elo / Skill Level` | `refused` | protected intent `AGENTS.md` §Rejected, “Weakened Stockfish as the default opponent” |
+| Stockfish `nodestime / Ponder / go mate` | `pending_decision` | [[D1037]]; absence of a current question is not refusal authority |
+| Stockfish `Debug Log File / NumaPolicy` | `pending_decision` | [[D1037]]; operator diagnostics are a deployment choice |
+| Stockfish `Move Overhead` | `unmeasured` | [[D1049]] separates depicted/measured time from unsupported prediction |
+| Stockfish `EvalFile / EvalFileSmall` | `pending_decision` | [[D1037]]; no owner ruling exists |
+| Maia `band-conditioned resistance` | `refuted` | `design/research/maia-endgame-fidelity.md` §6 and `maia-band-outcome-transfer.md` §7 |
+| Maia `Temperature 0` | `pending_decision` | [[D1037]]; the earlier “different product” statement has no owner authority |
+| Glicko-2 `rating from authored, engine- or tablebase-adjudicated outcomes` | `refused` | accepted `rfc/learner-rating.md` R2/R12 |
+| Glicko-2 `rating as an input to what is said about a move` | `refused` | accepted `rfc/learner-rating.md` R15/AC-11 |
+| Glicko-2 `cross-learner comparison outside a joined cohort` | `active` | [[D437]] reversed the refusal and approved cohort standing |
+| Syzygy `dtm` | `unmeasured` | [[D87]] tablebase-condition experiment family; partial publication is not refusal |
+| Explorer `monthly history` | `refuted` | `design/research/explorer-source-contract-closure.md` §107 |
+| Supervisor `stockfish-play identity` | `pending_decision` | [[D1037]]; client exposure has no owner ruling |
+| Supervisor `EngineRequest.afterCommands` | `withdrawn` | request-scoped state is the shipped successor; source reason already records replacement |
+| format `plan_defense` | `unimplemented` | `DECLARED_UNIMPLEMENTED_POLICY_MODES`; no selector exists |
+| format `human_external` | `unimplemented` | `DECLARED_UNIMPLEMENTED_POLICY_MODES`; no selector exists |
+| format `retryVariants` | split: catalogue `deprecated` → `variantOf`; scheduler `active` | [[D1327]] narrowly lifts the scheduler read and retains the catalogue successor |
+
+The implementation resolves protected-intent anchors against an allow-listed immutable/living
+intent inventory, ledger rows by exact id, evidence references by repository path plus anchor, and
+implementation references by named symbol or ledger row. A dangling reference fails. Crucially,
+the migration does not edit either legacy source table in place; it compiles their identities into
+the new registry and leaves source cleanup to the separately checked migration plan.
 
 #### §5.1 Unavailability has exactly two causes — RULED [[D1077]]
 
@@ -847,8 +1011,9 @@ can fail is the [[D444]] class and one nothing can satisfy is the [[D984]] class
    *Wrong implementation that passes:* one storing `"x@1"` and splitting on demand — refused by
    criterion 5.
 2. **The registry is closed and total.** `CAPABILITY_DECLARATIONS` compiles; the four §4.3
-   invariants throw at module load. Fixture: a registry with a `reached` row lacking `sites` fails
-   with `CAPABILITY_SITE_MISSING`.
+   invariants throw at module load. Fixture: an `active` AST-backed declaration lacking a source
+   fails with `CAPABILITY_SOURCE_MISSING`; an F1-backed declaration with its subject-appropriate
+   projection source passes without inventing an AST site.
 3. **Declared equals applicable closure.** For all 92 packs, `requires` set-equals §2.7's selector
    result plus transitive dependencies and resolved entries. The outpost/default fixture derives
    exactly `guard.defaults`, `objective.state_machine`, `structuralFeature.outpost` and
@@ -876,10 +1041,16 @@ can fail is the [[D444]] class and one nothing can satisfy is the [[D984]] class
    refused capability cannot be made supported by provider health. The format-row fixture also
    proves assistance, error and resolved-reference rows retain their actual subject kinds instead
    of being coerced to `vocabulary_arm`.
-9. **Every `deprecated` successor resolves.** Fixture: a successor pointing at a `withdrawn`
-   capability fails.
-10. **Every `refused` carries `ruledBy`.** Fixture: a refusal with no `ruledBy` fails; one whose
-    `ruledBy` does not resolve to a ⚖ ledger row fails.
+9. **Every `deprecated` successor resolves.** Fixture: a successor pointing at anything other than
+   an `active` capability fails.
+10. **Every legacy refusal migrates, and every semantic refusal has authority.** The exact 20-row
+    source population in §5a set-equals `LEGACY_REFUSED_MIGRATION`; deleting, adding or renaming a
+    legacy row without a migration entry fails. Fixtures separately prove: missing mapping fails;
+    an owner-ruling authority whose row is not ⚖ fails; a protected-intent authority whose document
+    or anchor is not in the allow-listed intent inventory fails; an accepted-RFC authority whose
+    document is not accepted or whose criterion does not resolve fails; and `pending_decision`,
+    `unimplemented`, `unmeasured` and `refuted` cannot be encoded as `refused`. The reversed
+    cross-learner row must compile `active`, while `retryVariants` must compile its two destinations.
 11. **The stop rule is a mechanism.** A plan containing one `judgement[]` entry exits non-zero and
     `make migration-apply` writes zero bytes. Fixture asserts both.
 12. **The population is baked.** `make migration-plan` refuses when any of §7's six counts moves.
@@ -892,23 +1063,15 @@ can fail is the [[D444]] class and one nothing can satisfy is the [[D984]] class
     fails this:* any contract keyed on JSON fields.
 14. **Convention prose is inside the digest.** Editing one character of `BREADTH_CONVENTION_TEXT`
     without a version bump reddens `make capability-check`.
-15. **A sidecar declares its evaluator semantics in the CONSUMER's grammar (§4.4).** A binding
-    object carrying `contract: {id: "claim.binding", version: 2}` parses as V2 with the sidecar's
-    schema string still reading `tabiya.sourcing.evidence.v1`; a binding object with **no** `contract`
-    key follows `claim-semantic-anchors` §7's dispatch-by-presence — legacy path in Stage A, refused
-    after Stage B — and **this RFC asserts no default of its own**; any `contract` whose id or version
-    is not exactly `claim.binding`/`2` is refused with **`CLAIM_BINDING_VERSION_UNSUPPORTED`**, the
-    consumer's code, in **both** stages. Fixture: all **68** committed sidecars (every document
-    carrying `schema: "tabiya.sourcing.evidence.v1"` — 32 in `content/drafts/` as `*.evidence.json`
-    and 36 in `content/candidates/*/evidence.json`; **0** of which carry a `contract` key at HEAD)
-    parse through the Stage-A legacy path, and one hand-built `claim.binding@3` binding is refused.
-    Additionally: `claim.binding` **resolves in the registry** (§3.1), so §4.3's handshake admits a
-    sidecar declaring it. *Wrong implementations, both from the returned draft:* one declaring
-    `requires` at the **sidecar root**, which cannot express §7's Stage A — a single file holding one
-    legacy binding while the V2 parser reads the rest; and one minting a second refusal code for this
-    seam. *(Corrected from "32" by cross-review 2026-08-23: `git ls-files 'content/**/*.evidence.json'`
-    is a filename-convention filter over one of two content roots and drops all 36 candidate
-    sidecars — the exact defect class §7 exists to kill, recurring inside a criterion.)*
+15. **The claim-binding handoff is compile-time only (§4.4).** `claim.binding` resolves through the
+    generic registry as a structured `CapabilityId`, and a generic round-trip fixture preserves both
+    integer and semver arms. The F3 implementation diff contains zero additions to the evidence
+    sidecar schema/parser, zero `contract`-field dispatch and zero occurrence of
+    `CLAIM_BINDING_VERSION_UNSUPPORTED`; importing any production module or fixture from draft
+    `claim-semantic-anchors` fails the dependency-boundary check. The later consumer RFC owns its
+    field, stage migration and refusal code after F3 acceptance. *Wrong implementation from the
+    returned draft:* one that implements a draft consumer while pretending to supply only a generic
+    primitive, creating a circular acceptance dependency.
 16. **Unavailability resolves to exactly one of two states, by cause ([[D1077]], §5.1).** An
     `unsupported` capability is **absent** from `/capabilities`' `packCapabilities` set (the
     [[D509]] rule), so a pack requiring it is refused at registration with
@@ -936,7 +1099,7 @@ can fail is the [[D444]] class and one nothing can satisfy is the [[D984]] class
 | D7 | Close [[D632]] when D566 dependants appear as judgement debt | codex | the implementing commit | |
 | D8 | Close [[D1003]] when the no-property-filter migration population ships | codex | the implementing commit | |
 | D9 | Close [[D1004]] when structured capability authority and legacy readers ship | codex | the implementing commit | |
-| D10 | Close [[D1045]] when typed refusals require a resolving `ruledBy` | codex | the implementing commit | |
+| D10 | Close [[D1045]] when the total migration and typed refusal-authority checks ship | codex | the implementing commit | |
 | D11 | Reconfirm already-closed [[D1002]] remains on the 422 client-error arm | codex | the implementing commit | |
 | D12 | Feed [[D228]] with the total semantic-disposition mapping and separate reachability projection | codex | the implementing commit | |
 | D13 | Preserve [[D1508]]: draft digest drift remains advisory; any otherwise-graduable stale pair and every published stale pair fail content CI | `graduation-report` / real-content CI | **already implemented under [[D1508]]** | **discharged before this amendment** |
@@ -996,6 +1159,16 @@ longer manufacture a route for an unrelated landed row).
 
 ## Changelog
 
+- 2026-08-30 (**second-return author repair**): repaired [[D1982]]–[[D1992]] without implementing
+  lane 0.30. Published the exact compatibility id regex and integer/semver version algebra; replaced
+  the partial applicability examples with one generated schema/always/reference authority and
+  exclusions artifact; gave F1 and resolved content subject-specific source/digest rules; named all
+  constant roots; routed both annotations through one strict AJV factory; and canonicalized
+  `requires` tuples and bytes. The 20 legacy refusals now have a total identity-keyed migration that
+  distinguishes refusal, refutation, unmeasured, pending-decision, unimplemented, withdrawn,
+  active and deprecated states. F3's claim-binding seam is compile-time only, leaving all sidecar
+  behavior to the downstream RFC after acceptance. `make pack-capability-repeat-review` is now an
+  eleven-arm positive author contract. Fresh independent review and the [[D560]] hold remain.
 - 2026-08-28 (**seven-blocker independent-return amendment**): [[D1620]]–[[D1622]] now have an
   executable 7-arm disposable falsifier behind `make pack-capability-closure`: literal/absence
   selectors and dependency closure derive exact requirements; AST-token symbol/arm sites catch the

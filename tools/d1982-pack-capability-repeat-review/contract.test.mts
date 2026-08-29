@@ -1,120 +1,101 @@
-// DISPOSABLE review harness — D1982-D1992. Not production code.
+// DISPOSABLE author-repair harness — D1982-D1992. Not production code.
 import assert from "node:assert/strict";
-import { createRequire } from "node:module";
 import { readFileSync } from "node:fs";
 import { test } from "node:test";
 
-const requireFromSchema = createRequire(new URL("../../packages/schema/package.json", import.meta.url));
-const Ajv2020 = requireFromSchema("ajv/dist/2020.js").default as typeof import("../../packages/schema/node_modules/ajv/dist/2020.js").default;
-
 const read = (path: string): string => readFileSync(path, "utf8");
 const rfc = read("rfc/pack-capability-contract.md");
-const evidenceContract = read("packages/runtime/src/evidence-contract.ts");
-const capabilities = read("apps/server/src/capabilities.ts");
-const dispositions = read("packages/schema/src/drill-pack/dispositions.ts");
 
-test("D1982: the stated lowercase namespace rejects normative ids", () => {
-  assert.match(rfc, /id: string;\s+\/\/ dotted, lowercase/);
-  assert.match(rfc, /`structuralFeature\.outpost`/);
-  assert.match(rfc, /`error\.SIMULATE_BUDGET_EXCEEDED`/);
-  assert.equal("structuralFeature.outpost" === "structuralFeature.outpost".toLowerCase(), false);
-  assert.equal("error.SIMULATE_BUDGET_EXCEEDED" === "error.SIMULATE_BUDGET_EXCEEDED".toLowerCase(), false);
-  assert.doesNotMatch(rfc, /CAPABILITY_ID_PATTERN|capability id regex/i);
+test("D1982: one exact compatibility id grammar accepts the inventory and rejects suffixes", () => {
+  const patternText = rfc.match(/`CAPABILITY_ID_PATTERN` is\s+`([^`]+)`/u)?.[1];
+  assert.ok(patternText);
+  const pattern = new RegExp(patternText, "u");
+  for (const id of ["structuralFeature.outpost", "error.SIMULATE_BUDGET_EXCEEDED", "assistance:arrows", "shape.maroczy-bind"]) {
+    assert.match(id, pattern);
+  }
+  for (const invalid of ["x@1", "x@v1", "two words", "path/value"]) assert.doesNotMatch(invalid, pattern);
+  assert.match(rfc, /New ids use\s+lowercase dotted form by convention/u);
 });
 
-test("D1983: integer CapabilityId cannot round-trip resolved semver", () => {
-  assert.match(rfc, /readonly version: number;\s+\/\/ integer >= 1/);
-  assert.match(rfc, /capability version is the entry's structured semver/);
-  const shape = JSON.parse(read("content/shapes/maroczy-bind.json")) as { version: unknown };
-  assert.equal(shape.version, "0.1.3");
-  assert.equal(Number.isInteger(shape.version), false);
-  assert.match(read("schemas/shape_entry.schema.json"), /"version": \{ "\$ref": "#\/\$defs\/semver" \}/);
-  assert.match(read("schemas/principle_entry.schema.json"), /"version": \{ "\$ref": "#\/\$defs\/semver" \}/);
+test("D1983: the shared version algebra preserves integer and semver without coercion", () => {
+  assert.match(rfc, /kind: "integer"; readonly value: number/u);
+  assert.match(rfc, /kind: "semver"; readonly value: string/u);
+  assert.match(rfc, /No numeric coercion exists\s+between arms/u);
+  assert.match(rfc, /<id>@i:<integer>` or `<id>@s:<semver>/u);
+  assert.match(rfc, /"value": "0\.1\.3"/u);
 });
 
-test("D1984: the full applicability authority is absent", () => {
-  assert.match(rfc, /`CAPABILITY_APPLICABILITY` is the single checked mapping/);
-  assert.match(rfc, /The minimum executable fixture includes:/);
-  assert.doesNotMatch(rfc, /export const CAPABILITY_APPLICABILITY/);
-  const checkpoint = read("tools/d1620-pack-capability-closure/capability-closure.test.ts");
-  assert.match(checkpoint, /const REQUIREMENT_RULES/);
-  assert.equal((checkpoint.match(/capability: "/g) ?? []).length, 4);
-  assert.doesNotMatch(checkpoint, /RFC 6901|~0|~1/);
+test("D1984: applicability has a complete generated authority and checked exclusions", () => {
+  assert.match(rfc, /packages\/schema\/src\/capability\/applicability\.generated\.ts/u);
+  assert.match(rfc, /exactly three independently enumerable sets/u);
+  assert.match(rfc, /CAPABILITY_APPLICABILITY_EXCLUSIONS/u);
+  assert.match(rfc, /make capability-applicability-check/u);
+  assert.match(rfc, /Unknown semantic\s+nodes, a reference cycle or an expression with no applicability row fail generation/u);
 });
 
-test("D1985: F1 projections lack F3's mandatory sites and semantics digest", () => {
-  const projection = evidenceContract.slice(
-    evidenceContract.indexOf("export interface ProjectionDeclaration"),
-    evidenceContract.indexOf("export interface ProducerDeclaration"),
-  );
-  assert.doesNotMatch(projection, /CapabilitySite|sites:/);
-  assert.doesNotMatch(projection, /semanticsDigest/);
-  assert.match(rfc, /readonly sites: readonly CapabilitySite\[\];\s+\/\/ exact AST sites, >= 1/);
-  assert.match(rfc, /F1 projections\.\*\* Core projections are absorbed .* by structured/s);
+test("D1985: the F1 bridge uses its own declaration authority instead of fake AST sites", () => {
+  assert.match(rfc, /kind: "f1_projection"/u);
+  assert.match(rfc, /tabiya\.capability\.f1-projection\.v1/u);
+  assert.match(rfc, /complete F1→F3 bridge; no `CapabilitySite` or copied manifest digest is\s+invented/u);
+  assert.match(rfc, /semantic\/derivation inputs\s+become typed capability dependencies/u);
 });
 
-test("D1986: shipped refused rows have no ruledBy authority", () => {
-  assert.equal((capabilities.match(/disposition: "refused"/g) ?? []).length, 17);
-  assert.equal((dispositions.match(/disposition: "refused"/g) ?? []).length, 3);
-  assert.doesNotMatch(capabilities, /ruledBy/);
-  assert.doesNotMatch(dispositions, /ruledBy/);
-  assert.match(rfc, /Every `refused` carries `ruledBy`/);
-  assert.doesNotMatch(rfc, /CAPABILITY_REFUSAL_RULINGS|FORMAT_REFUSAL_RULINGS/);
+test("D1986: all twenty legacy refusals have typed destinations and lawful authorities", () => {
+  const section = rfc.slice(rfc.indexOf("#### §5a"), rfc.indexOf("#### §5.1"));
+  const tableRows = section.split("\n").filter((line) => /^\| (Stockfish|Maia|Glicko-2|Syzygy|Explorer|Supervisor|format) /u.test(line));
+  assert.equal(tableRows.length, 20);
+  for (const state of ["refused", "refuted", "unmeasured", "pending_decision", "unimplemented", "withdrawn", "active", "deprecated"]) {
+    assert.ok(section.includes("`" + state + "`"));
+  }
+  assert.match(rfc, /CAPABILITY_REFUSAL_MIGRATION_MISSING/u);
+  assert.match(rfc, /accepted_rfc/u);
 });
 
-test("D1987: required annotations fail the current strict AJV contract", () => {
-  assert.match(rfc, /`x-tabiya-capability` or\s+`x-tabiya-capability-excluded`/);
-  assert.match(read("packages/schema/src/drill-pack.test.ts"), /new Ajv2020\(\{ allErrors: true, strict: true \}\)/);
-  assert.match(read("apps/server/src/pack-validation.ts"), /new Ajv2020\(\{ allErrors: true, strict: true \}\)/);
-  const ajv = new Ajv2020({ strict: true });
-  assert.throws(
-    () => ajv.compile({ type: "string", "x-tabiya-capability": { sourceIdentity: "/x:a" } }),
-    /unknown keyword: "x-tabiya-capability"/,
-  );
+test("D1987: strict annotations have one typed AJV compiler authority", () => {
+  assert.match(rfc, /packages\/schema\/src\/ajv\.ts` exports `createStrictAjv2020/u);
+  assert.match(rfc, /closed\s+meta-schemas for the exact objects above/u);
+  assert.match(rfc, /direct\s+`new Ajv2020` for pack schemas is a set-equal census failure/u);
+  assert.match(rfc, /misspelled keyword remains an `unknown keyword`\s+error/u);
 });
 
-test("D1988: F3 imports behavior from the draft that waits on F3", () => {
-  const anchors = read("rfc/claim-semantic-anchors.md");
-  assert.match(anchors, /Status:\*\* draft/);
-  assert.match(anchors, /must land or provide its final declaration syntax\s+before this RFC can be accepted/);
-  const dependencies = rfc.slice(rfc.indexOf("- **Depends on:**"), rfc.indexOf("## Summary"));
-  assert.doesNotMatch(dependencies, /claim-semantic-anchors/);
-  assert.match(rfc, /criterion 15/);
-  assert.match(rfc, /CLAIM_BINDING_VERSION_UNSUPPORTED/);
+test("D1988: F3 has a one-way compile-time handoff and imports no draft consumer behavior", () => {
+  assert.match(rfc, /Followed by, never imports/u);
+  assert.match(rfc, /F3 exports only the generic structured `CapabilityId` algebra/u);
+  assert.match(rfc, /makes \*\*zero\*\* changes to the evidence-sidecar schema/u);
+  assert.match(rfc, /The claim-binding handoff is compile-time only/u);
+  assert.match(rfc, /zero occurrence of\s+`CLAIM_BINDING_VERSION_UNSUPPORTED`/u);
 });
 
-test("D1989: declared site grammar cannot name inline and property roots", () => {
-  const siteType = rfc.slice(rfc.indexOf("export type CapabilitySite"), rfc.indexOf("`module` is a repository-relative"));
-  assert.match(siteType, /kind: "symbol"/);
-  assert.match(siteType, /kind: "discriminant_arm"/);
-  assert.doesNotMatch(siteType, /property_access|call_argument|numeric_literal|expression/);
-  assert.match(rfc, /`GRADE_CONVENTION\.constants`/);
-  assert.match(rfc, /rules-guard material threshold/);
-  assert.match(rfc, /practical-resistance candidate limit/);
-  assert.match(read("apps/server/src/opponent-selector.ts"), /\.slice\(0, 4\)/);
+test("D1989: every normative constant root is an exact exported symbol with a live-reader check", () => {
+  for (const symbol of [
+    "GRADE_CONVENTION_CONSTANTS", "PRESSURE_LINE_ROLE_SCALE", "RULES_GUARD_MATERIAL_THRESHOLD",
+    "GUARD_DEFAULTS", "BRANCH_CATEGORY_RANK", "DEVIATION_COST_TOLERANCE", "PHASE_BANDS",
+    "NEUTRAL_TIEBREAK_INPUTS", "PRACTICAL_RESISTANCE_CANDIDATE_LIMIT", "SEMANTIC_SELECTION_POLICY_CONSTANTS",
+  ]) assert.ok(rfc.includes("`" + symbol + "`"));
+  assert.match(rfc, /requires one declaration and at least one production\s+reader/u);
+  assert.match(rfc, /No property path, numeric prose or\s+inline `\.slice\(\.\.\.\)` expression is a normative site/u);
 });
 
-test("D1990: declaration and criteria disagree on semantic disposition", () => {
-  assert.match(rfc, /readonly disposition: CapabilityDisposition;/);
-  assert.match(rfc, /export type SemanticDisposition =/);
-  assert.doesNotMatch(rfc, /export type CapabilityDisposition\s*=/);
-  assert.match(rfc, /disposition: "reached"/);
-  assert.match(rfc, /successor resolves to a `reached` declaration/);
-  const semanticType = rfc.slice(rfc.indexOf("export type SemanticDisposition"), rfc.indexOf("export type DeploymentReachability"));
-  assert.doesNotMatch(semanticType, /"reached"/);
+test("D1990: declaration and all semantic invariants use one disposition union", () => {
+  assert.match(rfc, /readonly disposition: SemanticDisposition/u);
+  assert.doesNotMatch(rfc, /readonly disposition: CapabilityDisposition/u);
+  assert.match(rfc, /semantic disposition `active` \*\*iff\*\* the capability is executable/u);
+  assert.match(rfc, /successor pointing at anything other than\s+an `active` capability fails/u);
+  assert.match(rfc, /Legacy `refused` is deliberately \*\*not\*\* a semantic mapping rule/u);
 });
 
-test("D1991: generated resolved capabilities omit embedded semantic dependencies", () => {
-  const shape = read("content/shapes/maroczy-bind.json");
-  assert.match(shape, /"kind": "outpost"/);
-  const resolvedSection = rfc.slice(rfc.indexOf("#### §2.6"), rfc.indexOf("#### §2.7"));
-  assert.match(resolvedSection, /canonical content digest/);
-  assert.doesNotMatch(resolvedSection, /dependsOn|dependency|dependencies/);
+test("D1991: resolved content closes over every embedded semantic dependency", () => {
+  const section = rfc.slice(rfc.indexOf("#### §2.6"), rfc.indexOf("#### §2.7"));
+  assert.match(section, /walks every typed\s+semantic expression/u);
+  assert.match(section, /closes transitively through referenced entries and evaluator dependencies/u);
+  assert.match(section, /`shape\.maroczy-bind` depends on\s+`structuralFeature\.outpost`/u);
 });
 
-test("D1992: required arrays have no duplicate or ordering contract", () => {
-  const requirementSection = rfc.slice(rfc.indexOf("#### §4.1"), rfc.indexOf("#### §4.2"));
-  assert.match(requirementSection, /closed object of exactly `id` and `version`/);
-  assert.doesNotMatch(requirementSection, /uniqueItems|duplicate|lexicographic|canonical order/);
-  assert.match(rfc, /authored `requires` array\s+must set-equal/);
+test("D1992: requirements reject duplicate tuples and non-canonical artifact bytes", () => {
+  const section = rfc.slice(rfc.indexOf("#### §4.1"), rfc.indexOf("#### §4.2"));
+  assert.match(section, /PACK_CAPABILITY_DUPLICATE/u);
+  assert.match(section, /bytewise ascending NFC `id`/u);
+  assert.match(section, /integer versions before semver/u);
+  assert.match(section, /uniqueItems:true/u);
+  assert.match(section, /compare canonical arrays byte-for-byte/u);
 });

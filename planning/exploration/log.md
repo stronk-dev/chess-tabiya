@@ -11186,3 +11186,18 @@ CI actually run.
   strengthened the RFC with an explicit six-arm promotion criterion. The original twelve compiled
   projections are unchanged. Fresh independent review gates geometry; the repaired but still-draft
   provider contract additionally gates the outcome projection and 14/14 closeout.
+
+## 2026-08-30 — Gate-F capability contract second return is author-repaired
+
+- Repaired all eleven repeat-review blockers [[D1982]]–[[D1992]] at specification tier. Capability
+  ids and versions now have one exact algebra; applicability and F1/resolved-content sources have
+  complete generated authorities; constant roots are representable; strict schema annotations use
+  one compiler authority; and `requires` is canonical artifact data rather than set-only prose.
+- Re-derived all 20 shipped `refused` rows instead of copying their label. The typed migration now
+  distinguishes lawful product refusal, negative evidence, unmeasured work, unanswered decisions,
+  missing implementation, withdrawal, an owner-reversed active row and a split deprecation/active
+  row. No implementer is asked to manufacture the missing authority.
+- Broke the F3/claim-anchor cycle: F3 registers only a generic structured identity; the later
+  sidecar RFC owns fields, dispatch, migration and refusal codes after F3 acceptance. Focused author
+  contracts pass at 7/7 and 11/11. Production, schema, packs, content and protected intent remain
+  untouched; fresh independent review and the [[D560]] corpus hold still gate lane 0.30.
