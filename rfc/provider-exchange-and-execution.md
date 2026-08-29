@@ -1,11 +1,9 @@
 # RFC: Provider exchange and projection execution
 
-- **Status:** draft — returned by the fourth independent buildability review 2026-08-29 on
-  [[D2032]]–[[D2034]].
-  The [[D2000]]–[[D2008]] author repairs survive, but Syzygy's no-exchange domain result cannot carry
-  the mandatory acquisition receipt, subject availability has no authorization/cross-operation
-  contract, and projection-only source deduplication collapses distinct provider occurrences.
-  Implementation remains unauthorised.
+- **Status:** draft — fourth-return author repair complete 2026-08-29 for [[D2032]]–[[D2036]].
+  Source leaves are occurrence/request-addressed; subject availability composes the shipped run
+  authority and has no public cache-digest probe; Syzygy local domain preflight is a typed
+  no-acquisition arm. The author fixtures pass; fresh independent review still gates implementation.
 - **Author:** codex, from the D1652–D1658 and D1699–D1709 author-repair handoffs
 - **Created:** 2026-08-27
 - **Design refs:** `design/03-product-breadth.md` evidence architecture and provider-backed
@@ -78,6 +76,7 @@ interface CompiledProjectionExecution {
   readonly own: {
     readonly availability: AvailabilityMode;
     readonly latency: LatencyMode;
+    readonly providerOperation: ProviderOperationId | null;
   };
   readonly paths: readonly {
     readonly pathId: `path:sha256:${string}`;
@@ -88,8 +87,10 @@ interface CompiledProjectionExecution {
       readonly inputs: readonly VersionedEvidenceId[];
     }[];
     readonly sourceRequirements: readonly {
+      readonly occurrence: readonly number[];
       readonly projection: VersionedEvidenceId;
       readonly availability: "recorded" | "provider" | "build_time";
+      readonly providerOperation: ProviderOperationId | null;
     }[];
     readonly effectiveLatency: LatencyMode;
   }[];
@@ -104,13 +105,22 @@ is no hand-written execution field on a projection.
 Compilation rules:
 
 1. A non-derived projection has one path. Its producer is the `own` operation; a non-local
-   producer is also its one source requirement.
+   producer is also its one source requirement. Every provider source declaration names exactly
+   one `providerOperation`; local, recorded and build-time declarations require `null`. The
+   compiler checks that operation against the projection adapter's
+   `ProviderEvidenceDelivery<T, K>` payload and the closed request/result map, so projection metadata
+   cannot become a second execution image.
 2. A derivation member recursively takes the Cartesian product of each literal input's paths.
    `inputs` is one member; each `anyOf` entry is a distinct member.
 3. `derivationChoices` retains the selected member at this projection and every nested derived
    projection. Equal latency/source profiles never collapse different choices.
-4. Source requirements are an exact unique set of non-local leaves. Recorded, provider and
-   build-time sources remain distinct even when their current latency is equal.
+4. Source requirements are the exact ordered list of non-local **leaf occurrences**, not a set of
+   projection ids. `occurrence` is the complete zero-based input-index traversal address from the
+   output to that leaf; a non-derived source root uses `[]`. Two occurrences of one projection
+   remain two obligations even when their availability and eventual normalized requests are equal.
+   Recorded, provider and build-time sources remain distinct even when their current latency is
+   equal. A provider leaf also carries the one mapped `ProviderOperationId`; the other two arms
+   carry `null`.
 5. Effective latency is the slowest selected operation under
    `sync < interactive < background < offline`; `worstCaseLatency` is a derived convenience over
    all paths and never replaces them.
@@ -122,16 +132,18 @@ Compilation rules:
 
 `pathId` is the SHA-256 digest of one canonical image containing the output projection/version,
 every selected derivation projection/version, its zero-based input-index traversal address and
-zero-based member number, each member's literal input order, and the sorted source-requirement
-triples. The root occurrence is `[]`; nested addresses append their literal input index, so the same
+zero-based member number, each member's literal input order, and every source requirement's
+occurrence/projection/availability/provider-operation tuple sorted by occurrence then projection.
+The root occurrence is `[]`; nested addresses append their literal input index, so the same
 projection used twice cannot alias itself. It excludes live health, cache contents and
 the requesting subject. Equal images produce equal ids; changing an `anyOf` member, input order or
 source leaf changes the id. The compiler is the only constructor and rejects duplicate ids with
 unequal images.
 
-The existing producer availability and latency fields now mean only the producer's own operation.
-A producer may therefore own a synchronous local output and a provider-bearing derived sibling
-without either declaration lying.
+The existing producer availability and latency fields now mean only the producer's own operation;
+`providerOperation` makes that operation literal only for provider sources. A producer may therefore
+own a synchronous local output and a provider-bearing derived sibling without either declaration
+lying.
 
 ### 2. Confidence inheritance and binding consequences
 
@@ -147,6 +159,14 @@ without either declaration lying.
 The implementing migration corrects the complete fixed point: candidate feature vector, story
 last-level, story rank and story title. It first adds red fixtures against the uncorrected
 catalogue, then changes declarations; weakening the guard to preserve green bytes is forbidden.
+
+The same migration corrects `derived.story.eval_shift@1` from one source declaration to the literal
+two-occurrence member
+`[live.stockfish.position_eval@1, live.stockfish.position_eval@1]`, at input addresses `[0]` and
+`[1]`. The adapter binds `[0]` to the sealed before-position request/delivery and `[1]` to the sealed
+after-position request/delivery before deriving `before`, `after` and `delta`. Equal FEN/request
+digests may share scheduler work, but the two admitted items and occurrence joins remain explicit.
+A one-item array, crossed FEN, reversed occurrence or one delivery spread into both slots fails.
 
 `AdapterDeclaration` gains a required, closed source-absence declaration whenever any compiled
 path contains a provider requirement:
@@ -185,27 +205,37 @@ The global parameterless `GET /capabilities` remains global. It reports the mani
 compiled `pathId`s, static path possibility and current provider reach/health only. It never claims
 that a retained page or recorded item exists for an unnamed subject.
 
-Request-specific satisfaction is a separate authenticated operation:
+Request-specific satisfaction is a separate authenticated and ownership-checked operation:
 
 ```ts
-type EvidenceAvailabilitySubject =
-  | { readonly kind: "run_event"; readonly runId: string; readonly eventHeadDigest: string }
+interface EvidenceAvailabilitySubject {
+  readonly kind: "run_event";
+  readonly runId: string;
+  readonly eventHeadDigest: string;
+}
+
+interface SubjectEvidenceAvailabilityRequest {
+  readonly subject: EvidenceAvailabilitySubject;
+  /** One to 64 unique ids. The server canonicalizes their order. */
+  readonly projectionIds: readonly VersionedEvidenceId[];
+}
+
+type ResolvedSourceSubject =
   | {
-      readonly kind: "module";
+      readonly kind: "recorded";
       readonly runId: string;
       readonly eventHeadDigest: string;
-      readonly module: VersionedEvidenceId;
+      readonly evidenceItemDigest: `sha256:${string}`;
     }
   | {
       readonly kind: "provider_request";
       readonly operation: ProviderOperationId;
-      readonly normalizedRequestDigest: string;
+      readonly normalizedRequestDigest: `sha256:${string}`;
+    }
+  | {
+      readonly kind: "build_time";
+      readonly artifactDigest: `sha256:${string}`;
     };
-
-interface SubjectEvidenceAvailabilityRequest {
-  readonly subject: EvidenceAvailabilitySubject;
-  readonly projectionIds: readonly VersionedEvidenceId[];
-}
 
 interface SubjectEvidenceAvailabilityResult {
   readonly subjectDigest: `sha256:${string}`;
@@ -215,32 +245,62 @@ interface SubjectEvidenceAvailabilityResult {
       readonly pathId: `path:sha256:${string}`;
       readonly sources: readonly {
         readonly requirement: {
+          readonly occurrence: readonly number[];
           readonly projection: VersionedEvidenceId;
           readonly availability: "recorded" | "provider" | "build_time";
+          readonly providerOperation: ProviderOperationId | null;
         };
+        readonly subject: ResolvedSourceSubject | null;
         readonly state: "satisfied_build_time" | "satisfied_recorded" | "satisfied_live" |
-          "satisfied_retained" | "reachable_live" | "unsatisfied";
+          "satisfied_retained" | "reachable_live" | "not_applicable_local_domain" |
+          "unsatisfied";
       }[];
       readonly state: "satisfied_local" | "satisfied_sources" | "reachable_live" |
-        "unsatisfied";
+        "not_applicable" | "unsatisfied";
     }[];
   }[];
 }
 ```
 
-The server resolves run evidence and retained entries from the named subject; callers cannot submit
-their own cache/recorded assertions. Equal projections queried for different run heads or request
-digests can therefore return different satisfaction without making `/capabilities` lie. Static
-possibility, live reach, recorded/retained satisfaction, source absence and chess refutation remain
-different states. Provider absence cannot become `false`, `draw`, zero population or an empty
-recommendation.
+`POST /evidence/availability` is the only public subject operation. It receives the authenticated
+`Principal`. It calls the shipped `requireRead(storage, runId, principal)` authority before looking
+up an event, retained entry or provider health. The event-head digest must name a head in that
+authorized run; absent access, run or head returns the existing generic `RUN_NOT_FOUND` boundary
+without revealing source state. One to 64 unique projection ids are accepted; zero, overflow,
+duplicates, unknown ids and malformed digests are `INVALID_REQUEST`, and the result is sorted
+canonically.
+
+There is deliberately no module/preset subject in this foundation. A later accepted module
+operation intersects its own declaration, workflow/role ceiling and requested projections, then
+uses this run-event authority server-side. This keeps provider exchange below learner modules and
+presets rather than introducing a reverse dependency on their not-yet-landed registries.
+
+There is deliberately no public arbitrary `provider_request` subject. Exact provider subjects are
+constructed server-side by a closed source-subject resolver registry keyed by
+`{consumer projection, pathId, source occurrence}`. A provider resolver returns the mapped literal
+operation plus normalized request digest; recorded and build-time resolvers return their exact
+sealed item/artifact digests. The registry is set-equal to every bound non-local occurrence and
+cannot accept caller-authored cache assertions. An operation that differs from the compiled
+requirement, an occurrence belonging to another path, a crossed run head or a response digest from
+another request is `identity_mismatch`, never an unsatisfied leaf. Operator/research traversals call
+the typed scheduler operation directly; they do not gain a cache-probing HTTP endpoint.
+
+Equal projections queried for different authorized run heads or server-resolved request digests can
+therefore return different satisfaction without making `/capabilities` lie. Static possibility,
+live reach, recorded/retained satisfaction, local domain non-applicability, source absence and chess
+refutation remain different states. Provider absence cannot become `false`, `draw`, zero population
+or an empty recommendation.
 
 Path-state reduction is total and derives only from the returned leaf rows: zero source leaves is
 `satisfied_local`; all leaves in a `satisfied_*` state is `satisfied_sources`; otherwise, if every
 leaf is either satisfied or `reachable_live` and at least one is reachable, the path is
-`reachable_live`; any `unsatisfied` leaf makes the path `unsatisfied`. Source rows are sorted by
-projection/version/availability and remain visible, so a mixed recorded/provider path never hides
-which leaf is absent. No aggregate state is accepted from a caller.
+`reachable_live`; any `unsatisfied` leaf makes the path `unsatisfied`; otherwise any
+`not_applicable_local_domain` leaf makes that path `not_applicable`. A satisfied sibling derivation path still satisfies the
+binding; only when every admitted alternative is locally not applicable does the binding apply its
+declared honest-empty behavior rather than provider-unavailable behavior. Source rows are sorted by
+occurrence/projection/version/availability and remain visible, so a repeated provider or mixed
+recorded/provider path never hides which leaf is absent. No aggregate state or source subject is
+accepted from a caller.
 
 ### 3. One typed exchange receipt
 
@@ -336,7 +396,8 @@ type ProviderEvidenceDelivery<T, K extends ProviderOperationId> = ProviderDelive
 The operation maps are the identity authority: neither requested nor actual identity contains an
 open `Record`. `makeProviderAcquisitionReceipt<K>()` is a module-private constructor owned by
 `provider-exchange.ts`. It receives an admitted descriptor, its normalized request, the identity
-captured by that descriptor's live exchange and the exact response bytes; it verifies that
+captured by that descriptor's live exchange, the exact response bytes, and the scheduler's wall
+sample taken immediately after response completion; it verifies that
 `operation`, `provider`, requested identity and actual identity inhabit the same `K` arm before it
 seals the receipt. Descriptors and callers cannot construct, cast or spread a receipt. A runtime
 operation/provider mismatch fails as `identity_mismatch`, even when TypeScript has been bypassed.
@@ -352,7 +413,7 @@ operation/generation pairing. Acquisition is immutable evidence of the operation
 that obtained the bytes. A cache hit wraps that same receipt/payload in a new `retained_exact`
 delivery with a later `servedAt` and non-null cache identity; it never changes `retrievedAt`,
 digests, actual identity or generation. A live delivery has `cacheIdentity: null` and its
-`servedAt` equals retrieval completion.
+`servedAt` equals the scheduler-sampled `retrievedAt` at retrieval completion.
 
 Every `live.*`/`human.*` provider source projection below declares the complete
 `ProviderEvidenceDelivery<T, K>` as its F1 payload, not bare `T`. Its exact adapter seals delivery kind,
@@ -452,15 +513,18 @@ invalid_response | identity_mismatch
 ```
 
 Provider-specific transport detail may distinguish authorization, 429, 5xx, network failure,
-model failure, incomplete root table and outside-domain. Those details do not widen the semantic
-source-reason vocabulary. Outside Syzygy domain and a valid sparse Explorer population remain
-successful typed domain/consumer states, not transport failures.
+model failure and incomplete root table. Those details do not widen the semantic source-reason
+vocabulary. Outside Syzygy domain is a typed local preflight result; a valid sparse Explorer
+population is successful provider source truth. Neither is a transport failure.
 
 ### 4. Shared bounded scheduler
 
 `apps/server/src/provider-exchange.ts` owns `ProviderExchangeScheduler`. Its constructor requires
-positive `maxActive`, `maxQueued`, `maxRetainedEntries`, `maxRetainedWeight`, `retentionTtlMs` and
-a monotonic clock. There are no implicit unbounded defaults.
+positive `maxActive`, `maxQueued`, `maxRetainedEntries`, `maxRetainedWeight`, `retentionTtlMs`, a
+`monotonicNowMs(): number` authority and a separate `wallNow(): string` UTC-ISO authority. There are
+no implicit unbounded defaults or hidden `Date.now()` calls. Monotonic values alone drive waiter/
+execution deadlines, TTL and eviction age; wall values alone populate `requestedAt`, `retrievedAt`,
+`servedAt`, `failedAt` and local `observedAt`. Both outputs are validated on every sample.
 
 ```ts
 interface ProviderRequestScope {
@@ -491,6 +555,14 @@ interface ProviderOperationResultMap {
   readonly "lichess_explorer.position_page@1": ExplorerPositionPage;
 }
 
+interface ProviderOperationLocalResultMap {
+  readonly "stockfish.legal_root_table@1": never;
+  readonly "stockfish.position_evaluation@1": never;
+  readonly "maia.policy_page@1": never;
+  readonly "syzygy.position@1": SyzygyOutsideDomain;
+  readonly "lichess_explorer.position_page@1": never;
+}
+
 type TypedProviderRequest<K extends ProviderOperationId = ProviderOperationId> =
   K extends ProviderOperationId
     ? Readonly<{ operation: K; request: ProviderOperationRequestMap[K] }>
@@ -515,8 +587,23 @@ type ProviderSuccess<K extends ProviderOperationId> = K extends ProviderOperatio
     }>
   : never;
 
+type ProviderLocalDomainResult<K extends ProviderOperationId> =
+  K extends ProviderOperationId
+    ? [ProviderOperationLocalResultMap[K]] extends [never]
+      ? never
+      : Readonly<{
+          kind: "local_domain_result";
+          operation: K;
+          normalizedRequestDigest: `sha256:${string}`;
+          observedAt: string;
+          payload: ProviderOperationLocalResultMap[K];
+        }>
+    : never;
+
 type TypedProviderResult<K extends ProviderOperationId = ProviderOperationId> =
-  K extends ProviderOperationId ? ProviderSuccess<K> | ProviderSourceFailure<K> : never;
+  K extends ProviderOperationId
+    ? ProviderSuccess<K> | ProviderLocalDomainResult<K> | ProviderSourceFailure<K>
+    : never;
 
 interface ProviderExecutionContext {
   readonly signal: AbortSignal;
@@ -528,7 +615,6 @@ interface ProviderExecutionCapture<K extends ProviderOperationId> {
   readonly endpoint: string;
   readonly actualIdentity: ProviderActualIdentityMap[K];
   readonly generation: number | null;
-  readonly retrievedAt: string;
   readonly contentEncoding: "uci-utf8" | "http-body";
   readonly responseBytes: Uint8Array;
 }
@@ -539,6 +625,9 @@ interface ProviderOperationDescriptor<K extends ProviderOperationId> {
   normalizeRequest(
     request: ProviderOperationRequestMap[K],
   ): ProviderRequestedIdentityMap[K];
+  preflight(
+    requestedIdentity: ProviderRequestedIdentityMap[K],
+  ): ProviderOperationLocalResultMap[K] | null;
   execute(
     requestedIdentity: ProviderRequestedIdentityMap[K],
     context: ProviderExecutionContext,
@@ -567,13 +656,21 @@ The scheduler constructor accepts one `ProviderOperationDescriptors` exact mappe
 for every `ProviderOperationId`, with no extras. Callers provide only the discriminated request,
 relative waiting budget and cancellation signal. They cannot provide an absolute deadline,
 execution callback, key, weight or receipt.
-The scheduler calls the registered descriptor after queue admission, owns failure normalization and
-delivery wrapping, and is the sole cache/deduplication authority. It calls `normalizeRequest` once,
-computes the request and pending digests through §3.1, then passes that sealed identity to
-`execute`. The descriptor returns payload plus same-exchange capture; only the scheduler's private
-`makeProviderAcquisitionReceipt` validates the capture, hashes its raw response and seals the
-receipt. Engine descriptors enter the supervisor's serialized task inside `execute` and capture
+The scheduler owns failure normalization and delivery wrapping and is the sole cache/deduplication
+authority. It calls `normalizeRequest` once, computes the request and pending digests through §3.1,
+runs the closed preflight, and only after queue admission passes that sealed identity to `execute`.
+The descriptor returns payload plus same-exchange capture; only the scheduler's private
+`makeProviderAcquisitionReceipt` validates the capture, samples `wallNow()` for `retrievedAt`,
+hashes the raw response and seals the receipt. Engine descriptors enter the supervisor's serialized task inside `execute` and capture
 actual identity/generation there.
+
+`preflight` is the one no-exchange hook. It is called after normalization/request hashing and before
+retained lookup, pending dedupe or queue admission. Four descriptors can return only `null`; the
+Syzygy descriptor can additionally return the closed `SyzygyOutsideDomain` payload. The scheduler
+wraps that value as `local_domain_result` with the normalized request digest and its own clock. It
+does not call `execute`, construct an acquisition receipt, assign an endpoint/retrieval time/cache
+identity or retain the result. A preflight value from another operation, a Syzygy in-domain value in
+preflight or any provider-derived byte in the local payload is an `identity_mismatch`.
 
 Each of the five named `*Operation` exports implements its exact
 `ProviderOperationDescriptor<operation-id>` member. There is no second public `execute(identity,
@@ -590,9 +687,14 @@ Rules:
   For a new job the scheduler also mints `executionDeadline = firstArrival + request.timeoutMs`;
   queue time consumes it, dispatch receives only its remaining duration and later joiners cannot
   extend it. Waiter budgets bound each caller's waiting, not the descriptor's common execution.
-- Admission order is exact: check an admissible retained entry; otherwise join an equal pending key;
-  otherwise reject when the new-job queue is full; otherwise enqueue one new job. Joining pending
-  work consumes no additional active or queued slot.
+- The same arrival samples `wallNow()` for `requestedAt` after validating canonical UTC ISO form.
+  Later receipt/delivery/failure timestamps take their own wall samples. Wall-clock reversal or leap
+  cannot expire, extend, reorder or retain work; advancing monotonic time cannot fabricate a civil
+  timestamp. Tests inject both clocks and forbid direct wall-clock reads in scheduler/operations.
+- Admission order is exact: normalize/hash and run the closed local preflight; otherwise check an
+  admissible retained entry; otherwise join an equal pending key; otherwise reject when the new-job
+  queue is full; otherwise enqueue one new job. Joining pending work consumes no additional active
+  or queued slot. Local domain results consume neither pending nor retained capacity.
 - Exact canonical request identity coalesces. FEN-only keys never coalesce requests whose history,
   model, bound, population window, variant or provider identity differs.
 - Engine pending keys contain requested engine id/spec, normalized commands, position, bound and
@@ -876,37 +978,42 @@ interface SyzygyPositionRequest {
   readonly timeoutMs: number;
 }
 
-type SyzygyPositionDomainResult =
-  | { readonly kind: "in_domain"; readonly position: TablebasePosition }
-  | {
-      readonly kind: "outside_domain";
-      readonly reason: "piece_count";
-      readonly pieceCount: number;
-      readonly maximumPieceCount: 7;
-    };
+interface SyzygyOutsideDomain {
+  readonly kind: "outside_domain";
+  readonly reason: "piece_count";
+  readonly pieceCount: number;
+  readonly maximumPieceCount: 7;
+}
 
 interface LiveSyzygyPosition {
   readonly fen: string;
-  readonly result: SyzygyPositionDomainResult;
+  readonly position: TablebasePosition;
 }
 ```
 
 `live.syzygy.position_result@1` has payload
 `ProviderEvidenceDelivery<LiveSyzygyPosition, "syzygy.position@1">` and is `search/source_record`,
-`tablebase_exact/exact/not_applicable`, and answers fact/evaluation/candidate moves/move. The full
+`tablebase_exact/exact/exact`, and answers fact/evaluation/candidate moves/move. The full
 canonical FEN—including side to move, castling/en-passant fields and clocks—is part of request
-identity. `in_domain.position` is admitted only after legal move identity validation. Piece count is
-computed locally from the normalized position before network admission; more than seven pieces
-returns the successful `outside_domain` arm without calling Syzygy. Provider absence or an invalid
-in-domain response is a `ProviderSourceFailure`; exact win/draw/loss inside `TablebasePosition` is
-an outcome. These three states have no common fallback and cannot be relabelled as one another.
+identity. `position` is admitted only after legal move identity validation.
+
+`rules.endgame.tablebase_domain@1` is the separate local/sync exact fact emitted only by the
+Syzygy preflight. Its payload is `SyzygyOutsideDomain`, its grounding/exactness/confidence is
+`rules/exact/exact`, and it answers only fact. It carries the normalized request digest and local
+observation time through `ProviderLocalDomainResult<"syzygy.position@1">`, but no provider,
+endpoint, response digest, acquisition, retrieval, delivery or cache field. Piece count is computed
+from the normalized position before retained lookup or network admission; more than seven pieces
+returns this arm without calling Syzygy. Provider absence or an invalid in-domain response is a
+`ProviderSourceFailure`; exact win/draw/loss inside `TablebasePosition` is a receipt-bearing live
+outcome. These three states have no common fallback and cannot be relabelled as one another.
 The descriptor accepts only the literal standard-chess request arm used by the `/standard`
 endpoint; another ruleset or variant is an invalid request before provider scheduling, not
 `outside_domain`, transport failure or a fabricated tablebase result.
 
 `SyzygyPositionOperation` implements
-`ProviderOperationDescriptor<"syzygy.position@1">`; its only execution entry is
-`execute(requestedIdentity, context: ProviderExecutionContext)`. That descriptor and the one scheduler-private receipt constructor
+`ProviderOperationDescriptor<"syzygy.position@1">`; its provider-exchange entry is
+`execute(requestedIdentity, context: ProviderExecutionContext)` and its only non-exchange hook is
+the closed `preflight(requestedIdentity)`. That descriptor and the one scheduler-private receipt constructor
 serve direct probe and queue-backed evidence. The existing `TablebaseSource.probe` path migrates through it;
 there is no pawn-specific or Review-specific tablebase adapter. This source is the live arm later
 paired with `recorded.tablebase.result@1`; exact same-FEN joins are owned by the consuming
@@ -1156,6 +1263,8 @@ learner-facing explanation.
 
 1. The D1700 harness's 96 direct members remain distinguishable and expand to 99 paths at the
    pre-source checkpoint; a deletion or alternative collapse changes the manifest digest and fails.
+   Every non-local leaf occurrence survives separately in its path image, including two uses of one
+   projection.
 2. `reported → exact` and `reported → not_applicable` fixtures fail for both direct and transitive
    chains; every `anyOf` member is checked independently; the corrected current catalogue has zero
    immediate and zero transitive violations.
@@ -1167,12 +1276,14 @@ learner-facing explanation.
 5. Every compiled path has a deterministic content-derived `pathId`. Global capabilities report
    only static/live reach; exact subject availability resolves recorded/retained state server-side.
    Same projection/different subject and same run/different event-head fixtures differ as expected.
-   Source absent, cached/recorded, outside-domain, honest-empty and refuted are not interchangeable.
+   Source absent, cached/recorded, local outside-domain, honest-empty and refuted are not
+   interchangeable.
 6. All five operation request/result map members and provider payload declarations match §§5–8
    literally and compile through F1 with no second hand-written execution image. Every source
    adapter seals `ProviderEvidenceDelivery<T, K>` rather than bare `T`; stripping acquisition/delivery
-   provenance fails. The operation maps, registered descriptors and application callers are
-   set-equal.
+   provenance fails. Each provider projection's compiled `own.providerOperation` equals that `K`;
+   local/recorded/build-time projections reject one. The operation maps, registered descriptors,
+   source declarations and application callers are set-equal.
 7. Stockfish positives cover ordinary play, both castling identities and four promotions. Missing,
    duplicate, extra, equal-count replacement, short-depth, `upperbound`, `lowerbound`, score-less-PV
    and PV-less-score tables fail. A capability-register test authorizes only the named all-legal
@@ -1189,8 +1300,10 @@ learner-facing explanation.
    sealed `DeclaredEvidence<ProviderEvidenceDelivery<MaiaPolicyPage, "maia.policy_page@1">>`;
    substituting a bare page,
    bare delivery or different acquisition fails.
-9. Syzygy direct and queue-backed probes use the same constructor; same body/different FEN and
-   same-piece-count/different-FEN joins fail; provider absence and outside-domain stay distinct.
+9. Syzygy direct and queue-backed in-domain probes use the same constructor; same body/different FEN
+   and same-piece-count/different-FEN joins fail. More-than-seven-piece preflight returns the typed
+   local-domain result before queue admission and has no acquisition/cache fields; provider absence
+   stays distinct.
 10. Explorer tests bind a captured response to the literal request/domain-result unions and shared
     normalizer; cover standard/Chess960 identity, illegal/duplicate/noncanonical/count-overflow/
     history negatives; retain provider and canonical SAN; accept listed-mass-short and valid
@@ -1220,13 +1333,14 @@ learner-facing explanation.
     `planning/exploration/log.md`, and leaves D963/D1699 plus bounded-target consumer rows open until
     their own projections execute.
 17. The D1871–D1878 amendment harness proves path/subject separation, acquisition/delivery
-    separation, history-preserving Maia occurrences, bounded-score refusal, the closed Explorer
-    domain union, all four source-absence cross cases, the exact five-operation protocol and
-    requested-versus-actual generation. Repeat independent buildability review returns the RFC if
-    any fixture is green only because it reads its own expected value.
-18. The default `TypedProviderResult` is a distributive five-arm union. Every success and failure
-    carries the same literal operation and request digest as its typed request; a generic result
-    cannot pair a Stockfish operation with a Maia, Syzygy or Explorer delivery.
+   separation, history-preserving Maia occurrences, bounded-score refusal, the closed Explorer
+   domain union, all four source-absence cross cases, the exact five-operation protocol and
+   requested-versus-actual generation. Repeat independent buildability review returns the RFC if
+   any fixture is green only because it reads its own expected value.
+18. The default `TypedProviderResult` distributes over all five operations. Every success, local
+    domain result and failure carries the same literal operation and request digest as its typed
+    request; a generic result cannot pair a Stockfish operation with a Maia, Syzygy or Explorer
+    delivery, and only Syzygy can inhabit the local-domain arm.
 19. Requested identity, actual identity, provider and receipt are operation-keyed exact maps. Only
     the scheduler-private constructor seals receipts from a descriptor's captured bytes; open
     records, descriptor-built receipts, wrong provider/generation arms and runtime double-cast
@@ -1239,9 +1353,10 @@ learner-facing explanation.
 21. Retention fixtures independently exceed entry count and total weight, reject non-positive or
     non-safe weights, refuse an individually overweight item and prove deterministic expiry/stale
     purge plus least-recently-served/ASCII-key eviction. No failure enters either bound.
-22. Syzygy fixtures distinguish locally detected `outside_domain`, successful in-domain
-    win/draw/loss and provider failure. No network call occurs outside domain and none of the three
-    states can inhabit another arm.
+22. Syzygy fixtures distinguish locally detected `outside_domain`, receipt-bearing in-domain
+    win/draw/loss and provider failure through `TypedProviderResult<"syzygy.position@1">`. No
+    network/receipt/cache field occurs outside domain and none of the three states can inhabit
+    another arm.
 23. Explorer summary fixtures carry the exact `CORPUS_GUARD` disclosure and no suitability boolean
     or source threshold. Two named consumers may make different explicit sample decisions over the
     same sealed page without changing source evidence.
@@ -1254,6 +1369,27 @@ learner-facing explanation.
     in §3.1. Key reorder preserves digests; operation/provider/command/request/identity/raw-response/
     path mutations change them. Decimal Maia parameters, `-0`, exponent spelling and Unicode keys
     follow RFC 8785 across runtimes. A census finds no second provider digest authority.
+26. A two-occurrence fixture compiles one Stockfish evaluation projection at before/after addresses
+    with two different normalized requests. Both requirements and resolved source subjects survive;
+    removing or crossing either fails. Equal requests may coalesce in the scheduler but remain two
+    semantic obligations in the compiled path. The production `derived.story.eval_shift`
+    declaration is amended to the same two-input shape.
+27. `POST /evidence/availability` accepts only one authorized run-event subject and one to 64 unique
+    projections. Owner and current grantee pass `requireRead`; stranger, expired grant, unknown
+    head, duplicate/overflow projections and crossed resolver operation fail without revealing
+    source/cache state. No public provider-digest or module/preset probe exists.
+28. The closed source-subject resolver registry is set-equal to bound non-local occurrences and
+    returns exact recorded item, build artifact or operation/request identities. A projection-only,
+    path-only, caller-authored or wrong-occurrence subject cannot satisfy a leaf.
+29. Scheduler clock fixtures inject independent monotonic and wall authorities. A backward/forward
+    wall jump changes only later ISO receipt fields and never waiter/execution/TTL outcomes; a
+    monotonic advance changes those outcomes without inventing civil time. Missing/malformed wall
+    values, non-finite/decreasing monotonic samples and any direct `Date.now()`/`new Date()` in the
+    scheduler or five operations fail.
+30. The provider runtime and availability route have no import/reference to `ModuleId`, module
+    registry, preset or workflow-ceiling code. A later module operation can call the authorized
+    run-event service after applying its own ceiling, but moving that policy into this RFC fails the
+    dependency-direction census.
 
 ## Discharges
 
@@ -1280,6 +1416,14 @@ returns to author instead of accepting a placeholder.
 
 ## Changelog
 
+- 2026-08-29: repaired [[D2032]]–[[D2036]] at authoring tier. Source requirements now preserve every
+  occurrence and server-resolved subject, the public availability operation is bounded and
+  ownership/role checked, and Syzygy outside-domain is a local preflight result structurally unable
+  to carry provider acquisition or cache provenance. The Story before/after declaration is part of
+  the migration rather than a hypothetical-only fixture. Author self-review [[D2035]] also separates
+  deadline/TTL monotonic time from civil receipt time. Author self-review [[D2036]] removes the
+  downstream module-registry dependency from the public availability subject. Fresh independent
+  review remains.
 - 2026-08-29: fourth independent buildability review returned the RFC on [[D2032]]–[[D2034]].
   `make provider-exchange-fourth-review` proves the standalone Syzygy domain fixture does not compose
   with receipt-bearing scheduler success, the authenticated subject operation has no access matrix,

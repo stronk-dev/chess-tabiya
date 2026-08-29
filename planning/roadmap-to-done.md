@@ -250,6 +250,14 @@ occurrences and request subjects first-class before provider-backed Review, bots
 collectors can claim complete availability. `make provider-exchange-fourth-review` is the current
 three-arm reproduction; implementation remains blocked pending author repair and fresh review.
 
+The same-day author repair now closes those three reproductions plus two self-review failures at the
+contract tier. Provider leaves retain occurrence and server-resolved exact subjects; the public
+availability route is bounded, run-authorized and deliberately below modules/presets; Syzygy local
+domain preflight cannot carry provider provenance; and separate monotonic/wall authorities own
+deadlines versus receipts. The fourth target is now a five-arm author contract and the earlier
+9 + 7 + 9 targets remain green. This is still not implementation authorization: one fresh
+independent review must attack the complete amended bytes first.
+
 The same layer now owns node-free live Syzygy position receipts. [[D1699]] closes Wave C's final
 promotion pair: geometry derives from complete declared pawn contacts; outcome joins exact legal
 moves to same-FEN recorded-or-live tablebase evidence. [[D1700]] corrects the latency repair itself:

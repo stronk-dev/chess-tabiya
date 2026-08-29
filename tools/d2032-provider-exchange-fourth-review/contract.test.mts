@@ -20,7 +20,7 @@ function section(start: string, end: string): string {
   return rfc.slice(from, to);
 }
 
-test("D2032: a no-exchange Syzygy result cannot satisfy the receipt-bearing success protocol", () => {
+test("D2032: Syzygy local domain preflight is structurally outside receipt-bearing success", () => {
   const resultProtocol = section(
     "type ProviderSourceFailure",
     "interface ProviderExecutionContext",
@@ -29,37 +29,48 @@ test("D2032: a no-exchange Syzygy result cannot satisfy the receipt-bearing succ
   const syzygy = section("### 7. Syzygy position source", "### 8. Explorer position source");
 
   assert.match(resultProtocol, /kind: "success";[\s\S]*delivery: ProviderDelivery/u);
-  assert.match(exchange, /execute\([\s\S]*payload:[\s\S]*capture: ProviderExecutionCapture/u);
-  assert.match(exchange, /responseBytes: Uint8Array/u);
-  assert.match(syzygy, /kind: "outside_domain"/u);
-  assert.match(syzygy, /without calling Syzygy/u);
+  assert.match(resultProtocol, /type ProviderLocalDomainResult/u);
+  assert.match(resultProtocol, /kind: "local_domain_result"/u);
+  assert.match(resultProtocol, /ProviderSuccess<K> \| ProviderLocalDomainResult<K> \| ProviderSourceFailure<K>/u);
+  assert.match(exchange, /preflight\([\s\S]*ProviderOperationLocalResultMap\[K\] \| null/u);
+  assert.match(exchange, /preflight[\s\S]*before[\s\S]*retained lookup[\s\S]*queue admission/u);
+  assert.match(syzygy, /interface SyzygyOutsideDomain/u);
+  assert.match(syzygy, /rules\.endgame\.tablebase_domain@1/u);
+  assert.match(syzygy, /no provider,[\s\S]*response digest,[\s\S]*acquisition,[\s\S]*cache field/u);
 
-  type ExchangeSuccess = Readonly<{
-    kind: "success";
-    acquisition: Readonly<{ responseBytes: Uint8Array }>;
+  type LocalDomain = Readonly<{
+    kind: "local_domain_result";
+    operation: "syzygy.position@1";
+    payload: Readonly<{ kind: "outside_domain"; pieceCount: number }>;
   }>;
-  const locallyComputed = Object.freeze({
-    kind: "outside_domain" as const,
-    pieceCount: 8,
-    maximumPieceCount: 7 as const,
+  const locallyComputed: LocalDomain = Object.freeze({
+    kind: "local_domain_result",
+    operation: "syzygy.position@1",
+    payload: Object.freeze({ kind: "outside_domain", pieceCount: 8 }),
   });
   assert.equal("acquisition" in locallyComputed, false);
+  assert.equal("delivery" in locallyComputed, false);
   assert.equal("responseBytes" in locallyComputed, false);
-  assert.equal(
-    (locallyComputed as unknown as Partial<ExchangeSuccess>).acquisition,
-    undefined,
-  );
 });
 
-test("D2033: subject availability names authentication but no authorization or crossed-subject rule", () => {
+test("D2033: public subject availability is bounded and composes canonical run authorization", () => {
+  const publicSubject = section(
+    "interface EvidenceAvailabilitySubject",
+    "interface SubjectEvidenceAvailabilityRequest",
+  );
   const availability = section(
-    "Request-specific satisfaction is a separate authenticated operation:",
+    "Request-specific satisfaction is a separate authenticated and ownership-checked operation:",
     "### 3. One typed exchange receipt",
   );
-  assert.match(availability, /kind: "run_event"/u);
-  assert.match(availability, /kind: "module"/u);
-  assert.match(availability, /kind: "provider_request"/u);
-  assert.doesNotMatch(availability, /requireRead|Principal|FORBIDDEN|operator-only|maximum projection|wrong-operation/u);
+  assert.match(publicSubject, /kind: "run_event"/u);
+  assert.doesNotMatch(publicSubject, /kind: "module"|ModuleId/u);
+  assert.doesNotMatch(publicSubject, /provider_request/u);
+  assert.match(availability, /POST \/evidence\/availability/u);
+  assert.match(availability, /requireRead\(storage, runId, principal\)/u);
+  assert.match(availability, /RUN_NOT_FOUND/u);
+  assert.match(availability, /One to 64\s+unique projection ids/u);
+  assert.match(availability, /no public arbitrary `provider_request` subject/u);
+  assert.match(availability, /operation that differs from the compiled\s+requirement/u);
 
   // The live server already has an ownership/grant-aware read authority. A new
   // run-addressed endpoint needs to compose it rather than merely require a login.
@@ -73,17 +84,19 @@ type SourceOccurrence = Readonly<{
   normalizedRequestDigest: string;
 }>;
 
-function currentUniqueRequirements(
+function occurrenceRequirements(
   occurrences: readonly SourceOccurrence[],
 ): readonly string[] {
-  return [...new Set(occurrences.map((value) => `${value.projection}:provider`))];
+  return occurrences.map(
+    (value) => `${value.occurrence.join(".")}:${value.projection}:${value.normalizedRequestDigest}`,
+  );
 }
 
-test("D2034: projection-only source dedupe collapses two required Stockfish exchanges", () => {
+test("D2034: occurrence-addressed source requirements preserve two Stockfish exchanges", () => {
   const execution = section("interface CompiledProjectionExecution", "### 2. Confidence inheritance");
-  assert.match(execution, /sourceRequirements:[\s\S]*projection: VersionedEvidenceId;[\s\S]*availability:/u);
-  assert.doesNotMatch(execution, /sourceRequirements:[\s\S]*occurrence:/u);
-  assert.match(execution, /Source requirements are an exact unique set of non-local leaves/u);
+  assert.match(execution, /sourceRequirements:[\s\S]*occurrence: readonly number\[\];[\s\S]*projection: VersionedEvidenceId;[\s\S]*providerOperation:/u);
+  assert.match(execution, /exact ordered list of non-local \*\*leaf occurrences\*\*/u);
+  assert.match(execution, /Two occurrences of one projection[\s\S]*remain two obligations/u);
 
   const beforeAndAfter: readonly SourceOccurrence[] = [
     {
@@ -99,16 +112,45 @@ test("D2034: projection-only source dedupe collapses two required Stockfish exch
   ];
   assert.equal(beforeAndAfter.length, 2);
   assert.equal(new Set(beforeAndAfter.map((value) => value.normalizedRequestDigest)).size, 2);
-  assert.deepEqual(currentUniqueRequirements(beforeAndAfter), [
-    "live.stockfish.position_eval@1:provider",
+  assert.deepEqual(occurrenceRequirements(beforeAndAfter), [
+    "0:live.stockfish.position_eval@1:sha256:before",
+    "1:live.stockfish.position_eval@1:sha256:after",
   ]);
-
-  const catalogue = readFileSync(
-    new URL("../../packages/runtime/src/evidence-catalog.ts", import.meta.url),
-    "utf8",
-  );
   assert.match(
-    catalogue,
-    /derived\.story\.eval_shift[\s\S]*operands: \["before", "after", "delta"\][\s\S]*derivation: \{ inputs: \[ref\("live\.stockfish\.eval"\)\] \}/u,
+    rfc,
+    /derived\.story\.eval_shift@1[\s\S]*\[live\.stockfish\.position_eval@1, live\.stockfish\.position_eval@1\]/u,
   );
+});
+
+test("D2035: monotonic deadlines and civil receipt time have separate authorities", () => {
+  const scheduler = section("### 4. Shared bounded scheduler", "### 5. Stockfish legal-root source");
+  assert.match(scheduler, /monotonicNowMs\(\): number/u);
+  assert.match(scheduler, /wallNow\(\): string/u);
+  assert.match(scheduler, /no implicit unbounded defaults or hidden `Date\.now\(\)` calls/u);
+  assert.match(scheduler, /Monotonic values alone drive[\s\S]*deadlines, TTL/u);
+  assert.match(scheduler, /wall values alone populate[\s\S]*requestedAt[\s\S]*observedAt/u);
+  const capture = section("interface ProviderExecutionCapture", "interface ProviderOperationDescriptor");
+  assert.doesNotMatch(capture, /retrievedAt/u);
+  assert.match(scheduler, /samples `wallNow\(\)` for `retrievedAt`/u);
+
+  let monotonic = 100;
+  let wall = "2026-08-29T12:00:00.000Z";
+  const deadline = monotonic + 50;
+  const requestedAt = wall;
+  wall = "2020-01-01T00:00:00.000Z";
+  assert.equal(monotonic < deadline, true, "wall reversal cannot expire the waiter");
+  assert.equal(requestedAt, "2026-08-29T12:00:00.000Z");
+  monotonic = 151;
+  assert.equal(monotonic >= deadline, true, "monotonic time alone expires the waiter");
+  assert.equal(wall, "2020-01-01T00:00:00.000Z");
+});
+
+test("D2036: provider availability does not reverse-depend on modules or presets", () => {
+  const publicSubject = section(
+    "interface EvidenceAvailabilitySubject",
+    "type ResolvedSourceSubject",
+  );
+  assert.doesNotMatch(publicSubject, /ModuleId|moduleId|presetId/u);
+  assert.match(rfc, /There is deliberately no module\/preset subject in this foundation/u);
+  assert.match(rfc, /keeps provider exchange below learner modules and\s+presets/u);
 });

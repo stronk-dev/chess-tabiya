@@ -11154,3 +11154,20 @@ CI actually run.
   protected intent bytes. Review, bots, theory and provider-backed collectors remain blocked from
   creating private substitutes; the repair order is occurrence identity, access/binding, then
   local-versus-provider Syzygy outcomes.
+
+## 2026-08-29 — Provider exchange fourth return is author-repaired
+
+- Replaced the three fourth-review reproductions with able-to-fail author contracts. Non-local
+  leaves now retain occurrence and mapped operation, while a closed server resolver binds each leaf
+  to an exact recorded/build/provider subject. The current Story before/after evaluation is an
+  explicit two-Stockfish-occurrence migration rather than a hypothetical test only.
+- Closed the API/provenance split: public availability is a bounded `requireRead`-authorized
+  run-event operation with no arbitrary provider-digest probe; Syzygy outside-domain is a local
+  preflight result before cache/queue admission and structurally carries no acquisition or cache
+  fields. Live in-domain results keep the original same-exchange receipt rule.
+- Author self-review found and repaired [[D2035]]/[[D2036]] before handoff. Separate monotonic and
+  wall authorities govern deadlines versus receipts, and descriptors cannot stamp retrieval time.
+  Removing the module subject avoids reversing the foundation dependency into not-yet-landed
+  modules/presets; those consumers apply their own ceilings downstream.
+- All four focused targets pass at 9 + 7 + 9 + 5. Production, schema, pack, content and protected
+  intent remain unchanged; fresh independent review still gates implementation.

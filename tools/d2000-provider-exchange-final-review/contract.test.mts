@@ -18,7 +18,8 @@ test("D2000: result union distributes and retains its operation discriminator", 
   const protocol = section("type TypedProviderRequest", "interface ProviderExecutionContext");
   assert.match(protocol, /type ProviderSuccess<K extends ProviderOperationId> = K extends ProviderOperationId/u);
   assert.match(protocol, /kind: "success";\s*operation: K;/u);
-  assert.match(protocol, /type TypedProviderResult<K extends ProviderOperationId = ProviderOperationId> =\s*K extends ProviderOperationId \? ProviderSuccess<K> \| ProviderSourceFailure<K> : never;/u);
+  assert.match(protocol, /type TypedProviderResult<K extends ProviderOperationId = ProviderOperationId> =\s*K extends ProviderOperationId\s*\? ProviderSuccess<K> \| ProviderLocalDomainResult<K> \| ProviderSourceFailure<K>\s*: never;/u);
+  assert.match(protocol, /type ProviderLocalDomainResult<K extends ProviderOperationId>[\s\S]*kind: "local_domain_result"/u);
   const payloadFor = new Map([
     ["stockfish.legal_root_table@1", "StockfishLegalRootTable"],
     ["stockfish.position_evaluation@1", "FixedBoundPositionEvaluation"],
@@ -100,7 +101,7 @@ test("D2002: crossed waiter deadlines and cancellation settle locally", () => {
   assert.deepEqual(reversed.settleExpired(225), ["short-after-dispatch"]);
   assert.equal(reversed.aborted, false); assert.deepEqual([...reversed.deadlines.keys()], ["long-first"]);
   const scheduler = section("### 4. Shared bounded scheduler", "### 5. Stockfish legal-root source");
-  assert.match(scheduler, /retained entry; otherwise join an equal pending key;\s*otherwise reject when the new-job queue is full/u);
+  assert.match(scheduler, /run the closed local preflight; otherwise check an\s*admissible retained entry; otherwise join an equal pending key; otherwise reject when the new-job\s*queue is full/u);
   assert.match(scheduler, /firstArrival \+ request\.timeoutMs/u);
   assert.match(scheduler, /shorter waiter[\s\S]*longer waiter remains joined/u);
 });
@@ -141,7 +142,9 @@ test("D2004: Syzygy domain abstention is a result arm, not failure or outcome", 
   assert.deepEqual(draw, { kind: "in_domain", position: "draw" });
   assert.notEqual(outside.kind, draw.kind); assert.notEqual(outside.kind, failure.kind); assert.notEqual(draw.kind, failure.kind);
   const syzygySection = section("### 7. Syzygy position source", "### 8. Explorer position source");
-  assert.match(syzygySection, /type SyzygyPositionDomainResult[\s\S]*kind: "outside_domain"/u);
+  assert.match(syzygySection, /interface SyzygyOutsideDomain[\s\S]*kind: "outside_domain"/u);
+  assert.match(rfc, /ProviderOperationLocalResultMap[\s\S]*"syzygy\.position@1": SyzygyOutsideDomain/u);
+  assert.match(rfc, /ProviderLocalDomainResult<"syzygy\.position@1">/u);
   assert.match(syzygySection, /without calling Syzygy/u);
 });
 
