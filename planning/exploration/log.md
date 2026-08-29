@@ -11298,3 +11298,19 @@ CI actually run.
   instrument now derives the exact transfer set from the accepted image and manifest.
 - `make module-evidence-assembly` passes 12/12. No registry, route, collector, schema, content,
   archive or protected intent byte changed. Fresh independent review is the next gate.
+## 2026-08-30 — intent-presets author repair closes the returned authority gaps
+
+**What landed:** `rfc/intent-presets.md` was author-amended on D1659–D1663 and D1437/D1500.
+The owner ruled D1660: named workflows remain literal and opinionated; explicit lower/off choices
+may narrow them; any higher raw choice remains configurable but is visibly Custom/Advanced. The
+repair adds a typed preference/migration receipt, a single field→module/form effect authority, a
+closed server/browser availability receipt, authoritative Campaign entry/resume and two honest
+implementation checkpoints. `make intent-presets-author-contract` passes 7/7.
+
+**What changed:** first-use Guided/Support/Analyze can no longer be specified as a silent legacy
+fallback; raw switches cannot recreate absent modules or hide wider help under a named pill;
+Campaign's actual default/key becomes reachable; zero rendered deliveries cannot discharge module
+activation. D1660 is closed by ruling; the technical rows remain author-amended pending review.
+
+**Blocked/next:** fresh independent buildability review. If accepted, implement Checkpoint A and
+verify it before Checkpoint B binds real registered module delivery and disclosure logging.
