@@ -1,6 +1,8 @@
 # RFC: Executable semantic-validation authority
 
-- **Status:** draft — 2026-08-29; requires independent buildability review before implementation
+- **Status:** draft — author-repaired 2026-08-30 on [[D2039]], [[D2040]], [[D2041]], [[D2042]]
+  and [[D2043]]; requires fresh
+  independent buildability review before implementation
 - **Author:** codex, executing [[D1711]] / [[D1713]] / [[D1714]] after refreshing both research
   instruments at HEAD
 - **Created:** 2026-08-29
@@ -14,9 +16,14 @@
   already-valid cases may land independently; full validation of the avoidance and opposition
   families depends on the accepted successors owned by [[D1716]] and [[D1717]]. Multi-edge cases
   depend on the accepted recorded-path operation before they may count as emitter-level negatives.
+  An unavailable-aware application reach for loose-piece evidence depends on the accepted
+  `shared-candidate-evidence-packet` result algebra ([[D1981]]). The held
+  `derived.pawn.promotion_race_tablebase@1` event from `semantic-collectors` must add its profile,
+  cases and explicit required verdict atomically with that projection; no literal cardinality may
+  prevent or silently bypass that transition.
 - **Parent / amends:** living successor to the immutable implemented evidence contract; changes
   `SemanticEventDeclaration.validation` from self-generated labels to a compiled profile reference
-- **Planning:** `planning/semantic-validation-authority/` once accepted
+- **Planning:** `planning/semantic-validation-authority/`
 
 ```tabiya-claims
 none
@@ -73,6 +80,12 @@ At 2026-08-29 HEAD they report:
 - eight external-labelled disagreement studies; and
 - seven avoidance events with no valid authority in any arm because their current subject relation
   is known unsound.
+
+These integers are a dated author checkpoint, not a landing cardinality. The live projection-derived
+root set is always the authority. In particular, the held promotion-race tablebase event makes the
+future cardinality 68 if it lands first; its producing commit must atomically add a profile and an
+explicit not-yet-passing verdict, and the semantic-validation implementation must accept that larger
+set without an author changing a magic number.
 
 The 2026-08-26 dossier's 54/13 literal-name split is superseded by the refreshed 66/1 split. The
 substantive verdict does not move: no declaration resolves a validation id and no consumer reads an
@@ -153,17 +166,17 @@ closed reason and is never inferred from absence.
 
 ### 3.2 Requirement law
 
-The literal 67-row profile is compiled from these author decisions and checked as a generated
-exhibit; the rules do not replace the rows:
+The literal profile is set-equal to the live event-root inventory, compiled from these author
+decisions and checked as a generated exhibit; the rules do not replace the rows:
 
 | arm | 1.0 requirement |
 |---|---|
-| positive | required for all 67; at least one legal input must make the production operation emit the exact event/version |
-| semantic negative | required for all 67; at least one nearby legal input must reach the same operation and omit the exact event for a chess-semantic reason |
-| orientation | required for all 67; chess coordinates, colors, directions, roles and identities are orientation-sensitive even when the final value is a count |
+| positive | required for every live event root; at least one legal input must make the production operation emit the exact event/version |
+| semantic negative | required for every live event root; at least one nearby legal input must reach the same operation and omit the exact event for a chess-semantic reason |
+| orientation | required for every live event root; chess coordinates, colors, directions, roles and identities are orientation-sensitive even when the final value is a count |
 | counterfactual | required for all thirteen `derived.semantic_avoidance.*` events and `rules.tactic.consequence.reply_breadth`; not applicable to literal state changes and recorded-path-only observations because those projections make no all-alternative claim |
-| imported population | required for all 67 as an execution/census arm; a zero positive count is valid when denominator and result identity are retained, but it cannot satisfy the positive arm |
-| external label | present for the eight D872 disagreement families; `not_applicable(no_independent_external_taxonomy)` for the other 59. Even the eight cases are calibration evidence and never substitute for a positive or negative |
+| imported population | required for every live event root as an execution/census arm; a zero positive count is valid when denominator and result identity are retained, but it cannot satisfy the positive arm |
+| external label | present for the eight D872 disagreement families; `not_applicable(no_independent_external_taxonomy)` for every other live root. Even the eight cases are calibration evidence and never substitute for a positive or negative |
 
 An implementation may discover that another event makes a real counterfactual claim. That is an
 author return, not permission to mark the cell not applicable. Conversely a fixture author cannot
@@ -205,14 +218,32 @@ interface SemanticValidationCase {
 
 type SemanticValidationExpectation =
   | { readonly kind: "emits"; readonly minimum: 1; readonly operandMatch?: Readonly<Record<string, unknown>> }
-  | { readonly kind: "abstains"; readonly reason: string }
+  | { readonly kind: "abstains"; readonly reason: SemanticValidationUnavailableReason }
   | { readonly kind: "omits" }
   | {
       readonly kind: "mirrors";
       readonly partnerCase: SemanticValidationCaseRef;
-      readonly transform: "vertical" | "horizontal" | "color_and_vertical";
-      readonly operandMap: Readonly<Record<string, string>>;
+      readonly geometry: "vertical" | "horizontal" | "color_and_vertical";
+      readonly operandRules: readonly SemanticMirrorOperandRule[];
     };
+
+type SemanticValidationUnavailableReason =
+  | "source_predicate_unavailable"
+  | "recorded_path_incomplete"
+  | "complete_alternative_population_unavailable";
+
+type SemanticOperandPathSegment = string | "*";
+interface SemanticMirrorOperandRule {
+  readonly sourcePath: readonly SemanticOperandPathSegment[];
+  readonly partnerPath: readonly SemanticOperandPathSegment[];
+  readonly value:
+    | "identity"
+    | "square"
+    | "color"
+    | "signed_file_delta"
+    | "signed_rank_delta";
+  readonly collection: "scalar" | "ordered" | "canonical_set";
+}
 ```
 
 Case ids are independent author-chosen ids such as `castled.standard-white.positive@1`, never
@@ -226,7 +257,52 @@ before invoking an operation. Recorded-path inputs retain a complete ordered edg
 invalid until the shared recorded-path compiler accepts them. A malformed operand is therefore an
 invalid fixture, never a semantic negative.
 
-### 4.2 Closed production operations
+Mirror partners are also input-bound. The partner's before FEN, UCI and after FEN must equal the
+canonical transformation of the source input under `geometry` before either operation runs.
+`horizontal` maps files `a↔h`; `vertical` maps ranks `1↔8`; `color_and_vertical` maps ranks and
+swaps piece/turn/castling colors. En-passant and castling fields are transformed with the same board
+mapping; an illegal transformed edge is an invalid fixture, never a passing mirror.
+
+`operandRules` is not a string dictionary. Paths address object keys, and `*` addresses every member
+of one array level. `square` applies the case geometry; `color` swaps only for
+`color_and_vertical`; signed file/rank deltas negate exactly when their corresponding axis is
+mirrored; `identity` compares canonical JSON bytes. `ordered` preserves index, while
+`canonical_set` transforms each member then sorts by canonical JSON. Source and partner paths must
+resolve with equal arity. Every scalar operand leaf on both target events is covered exactly once;
+overlap, an unmatched leaf, an unresolved wildcard or an arbitrary transform name fails
+`SEMANTIC_VALIDATION_ORIENTATION_SCHEMA`. This closed walk is the one comparator used by cases and
+receipts; event-specific comparison callbacks are forbidden.
+
+### 4.2 Closed operation results
+
+Every registry invocation returns one result algebra:
+
+```ts
+type SemanticValidationOperationResult =
+  | {
+      readonly kind: "completed";
+      readonly events: readonly SemanticEvidenceEvent<unknown>[];
+    }
+  | {
+      readonly kind: "unavailable";
+      readonly reason: SemanticValidationUnavailableReason;
+    };
+```
+
+An array-returning production export can produce only `completed`, including an honestly empty
+array. A registry adapter may produce `unavailable` only by mapping the production export's native
+typed unavailable/`undefined` arm, never by inspecting an empty event array or catching an error.
+The adapter and mapping are part of the operation implementation digest. `abstains` passes only when
+the operation returns `unavailable` with the exact closed reason; `omits` passes only on `completed`
+with zero target events. Exceptions and malformed inputs are failed executions.
+
+This deliberately exposes the current loose-piece seam: `loosePieceSemanticEvents` can map its
+native `undefined` to `source_predicate_unavailable`, while `localSemanticEvents` erases it through
+`?? []`. Until [[D1981]] supplies an unavailable-aware application operation and the reach check
+below passes, loose-piece cases may be retained as migration evidence but cannot confer a passing
+learner-eligibility verdict.
+
+### 4.3 Closed production operations
 
 `packages/runtime/src/semantic-validation-operations.ts` owns the only function registry. It maps
 versioned operation ids to production exports already used by the application, including:
@@ -241,17 +317,48 @@ versioned operation ids to production exports already used by the application, i
   constructor over a sealed recorded-path receipt.
 
 The case registry selects an operation id and supplies its serializable input; it cannot replace
-the function. Each operation declaration retains the production symbol and a complete sorted list
-of implementation files whose bytes determine `implementationDigest`. A source file named by an
-operation but missing from the digest set fails. Adding a new imported local source to an operation
-without updating its file closure fails a static import-graph check. External package bytes are
-represented by the lockfile digest plus exact package version.
+the function. Each operation declaration retains the production symbol, result adapter and a
+complete sorted list of implementation files whose bytes determine `implementationDigest`. It also
+declares one application reach:
+
+```ts
+type SemanticValidationApplicationReach =
+  | { readonly kind: "direct" }
+  | {
+      readonly kind: "exact_projection_multiset";
+      readonly through: SemanticValidationOperationRef;
+      readonly projections: readonly VersionedEvidenceId[];
+    }
+  | {
+      readonly kind: "required";
+      readonly owner: string;
+      readonly discharge: string;
+    };
+```
+
+`direct` is legal only for an operation called by a non-test application module. A narrower
+structural/transition/breadth/duty operation uses `exact_projection_multiset` through
+`runtime.semantic.local_edge@1`: on every case, the runner invokes both and proves the canonical
+multiset of the declared projections is byte-equal after composition. Sequence operations do the
+same through the accepted recorded-path application operation. A `required` reach is honest debt
+and can execute for migration purposes but cannot pass an event profile. This is how the current
+loose-piece erasure remains visible rather than being certified through its child export.
+
+The compiler derives non-test application callers and operation-to-operation composition from the
+TypeScript import/call graph and checks the reach declaration in both directions. A direct child
+call that is spread into a parent still needs the multiset execution; a symbol merely exported from
+`packages/runtime` is not an application caller. Replacing, filtering or erasing one child event is
+an able-to-fail reach fixture.
+
+A source file named by an operation but missing from the digest set fails. Adding a new imported
+local source to an operation without updating its file closure fails a static import-graph check.
+External package bytes are represented by the lockfile digest plus exact package version.
 
 `compileSemanticEvidenceEvent` and `declareEvidence` are explicitly forbidden operation targets.
 They validate sealed payload structure after a predicate has already decided what to emit and
 therefore cannot establish chess semantics.
 
-### 4.3 Reach and non-vacuity
+### 4.4 Reach and non-vacuity
 
 Every execution records:
 
@@ -272,24 +379,56 @@ the operation fails independently of its expected count.
 
 ### 5.1 Population receipt
 
-The imported-population operation runs the current production emitter over one frozen decision
-population. Its receipt is per event/version and retains:
+The sole 1.0 population input is the committed
+`tools/r2-selection-harness/imported-sample.pgn`, authenticated by
+`tools/r2-selection-harness/fixture.json`: CC0-1.0 Lichess July-2026 standard rated games, exact
+source URL/range, fixture SHA-256, 108 games, nine 12-game speed/rating strata and 579 sampled
+decisions. The build-only reader `tools/semantic-validation-population.ts` parses that exact PGN,
+fails unless every manifest count and digest reproduces, and emits three sealed projections from
+the same games:
+
+1. `sampled_edges`: canonical mainline edges at plies 8/16/24/32/40/48 when present (579);
+2. `recorded_paths`: every complete legal mainline, preserving stable site+ply identities; and
+3. `complete_alternatives`: every legal UCI successor, including all four promotion roles, for each
+   sampled edge's before FEN, sorted by canonical UCI.
+
+Each operation declaration names exactly one compatible population projection. Edge operations run
+over all `sampled_edges`; recorded-path operations run every applicable ordered window from
+`recorded_paths`; counterfactual operations run the played edge plus its entire
+`complete_alternatives` set. No case, profile or implementer supplies a population path or subset.
+Changing the target plies, stratum filter, window enumeration or legal-alternative enumeration is
+an input-version change and produces a new population id, not an in-place receipt refresh.
+
+The imported-population runner invokes the current production operation and its application-reach
+check over that frozen population. Its receipt is per event/version and retains:
 
 ```ts
 interface SemanticPopulationReceipt {
   readonly event: VersionedEvidenceId;
   readonly operation: SemanticValidationOperationRef;
   readonly predicateImplementationDigest: string;
-  readonly input: { readonly id: string; readonly sha256: string; readonly decisions: number };
+  readonly input: {
+    readonly id: string;
+    readonly projection: "sampled_edges" | "recorded_paths" | "complete_alternatives";
+    readonly sha256: string;
+    readonly invocations: number;
+  };
   readonly result: { readonly sha256: string; readonly positiveCount: number; readonly abstainedCount: number };
 }
 ```
 
-The result digest is over canonical sorted observations, not only counts. A zero-count result passes
+The input digest covers the PGN, fixture manifest, reader version and exact projected identity list;
+the denominator is the number of compatible invocations, not always 579. The result digest is over
+canonical sorted observations and typed unavailable rows, not only counts. A zero-count result passes
 this arm when the operation ran over the full non-zero denominator; it does not pass the positive
 arm. The old R2 input token remains historical provenance and cannot be referenced as a current
 population case. A projection added after that run receives a new explicit zero/non-zero receipt
 from the current operation.
+
+Deleting one sampled edge, one recorded window or one legal alternative while retaining the PGN
+digest must change the projected input digest and denominator and fail
+`SEMANTIC_VALIDATION_POPULATION_INCOMPLETE`. The historical `f2-baseline.json` is comparison evidence
+only and cannot serve as input authority because it contains already-reduced result counts.
 
 Changing only the predicate implementation invalidates the receipt. Changing only result bytes
 invalidates it. Reusing the input digest for another projection/version does not confer validation.
@@ -362,9 +501,9 @@ a softer threshold.
 ### Slice A — authority and honest migration
 
 1. Add the root/profile/case/operation/receipt types and compiler checks.
-2. Publish the literal 67-row total profile.
+2. Publish the literal total profile set-equal to the live event-root inventory.
 3. Migrate the 39 emitter positives and ten emitter negatives without weakening their source tests.
-4. Re-run the current imported population for all 67 event versions and migrate the eight external
+4. Re-run the current imported population for every live event version and migrate the eight external
    disagreement receipts.
 5. Mark every other required cell as debt, so no event is accidentally learner-valid merely because
    the authority exists.
@@ -400,13 +539,14 @@ no UI or content is added by this RFC.
 
 ## 9. Acceptance criteria
 
-1. The active-event root inventory is derived from production projections and is set-equal to 67
-   declarations, 67 profiles and 67 generated verdicts at landing; a mutually omitted declaration
-   and profile still fails.
+1. The active-event root inventory is derived from production projections and is set-equal to the
+   declarations, profiles and generated verdicts at landing; a mutually omitted declaration and
+   profile still fails. The dated author checkpoint prints 67, but no landing criterion hard-codes
+   that cardinality. Adding the held promotion-race event without its profile/verdict fails.
 2. `SemanticEventDeclaration.validation` contains a profile reference only. Grep and a type fixture
    prove no `positives`, `hardNegatives`, `externalPopulation` or generated
    `semantic-event:<id>` label remains.
-3. All 67 profiles carry all six arms; no empty array or unrecognized reason compiles.
+3. Every live-root profile carries all six arms; no empty array or unrecognized reason compiles.
 4. A plausible generated label with no case fails `SEMANTIC_VALIDATION_CASE_MISSING`.
 5. A case object cannot express a callback, `DeclaredEvidence`, `SemanticEvidenceEvent` or direct
    compiler call; runtime protection additionally rejects a forged extra key.
@@ -416,15 +556,19 @@ no UI or content is added by this RFC.
    `SEMANTIC_VALIDATION_FIXTURE_INVALID`, not passes as a semantic negative.
 8. A valid semantic negative records one operation invocation and zero target events; unrelated
    events may remain in its output.
-9. An orientation-required event with one case or a partner whose transformed operands do not
-   agree fails `SEMANTIC_VALIDATION_ORIENTATION_INCOMPLETE`.
+9. An orientation-required event with one case, incomplete/overlapping operand paths, an illegal
+   transformed edge or a partner whose canonically transformed operands do not agree fails
+   `SEMANTIC_VALIDATION_ORIENTATION_INCOMPLETE` or
+   `SEMANTIC_VALIDATION_ORIENTATION_SCHEMA` before a receipt is emitted.
 10. A later event pointing at the old R2 token fails `SEMANTIC_VALIDATION_POPULATION_STALE`.
 11. Keeping the population input digest while changing predicate or result digest invalidates the
     receipt independently in both fixtures.
 12. Every present case resolves to exactly one registry row and every registry row is referenced;
     dead, duplicate, stale-version and cross-event cases fail.
-13. Each operation invokes a production symbol and carries a complete local import-file closure;
-    `compileSemanticEvidenceEvent` and `declareEvidence` are refused targets.
+13. Each operation invokes a production symbol, carries a complete local import-file closure and
+    proves either a real non-test application caller or exact target-projection multiset retention
+    through its declared application operation; `compileSemanticEvidenceEvent` and
+    `declareEvidence` are refused targets.
 14. The generated receipt is byte-stable across two runs. `make semantic-validation-check` fails
     after changing a fixture expectation, operation source byte, profile cell or population result
     without regeneration.
@@ -436,8 +580,10 @@ no UI or content is added by this RFC.
     passing receipt.
 18. The 39/10 migration baseline is re-derived through `make semantic-validation-matrix`; any
     divergence is named in the implementation log rather than silently adjusting a count.
-19. The first generated population receipt contains 67 event rows, a non-zero denominator, exact
-    input/result/implementation digests and honest zeroes.
+19. The first generated population receipt contains one row per live event root, compatible
+    non-zero denominators, exact input/result/implementation digests and honest zeroes. The fixture
+    reproduces 108 games and 579 sampled edges, while path/alternative denominators are derived and
+    retained separately.
 20. Production web/server bundles contain no validation fixture registry, frozen fixture FENs or
     executable research harness.
 21. `make verify` includes `semantic-validation-check`; focused authority tests, manifest tests,
@@ -465,7 +611,12 @@ The independent review must run, not merely read, these fixtures:
 13. extra dead case;
 14. learner consumer using `research_only`;
 15. incomplete event visible to operator but refused to learner; and
-16. generated receipt stale after one operation source byte changes.
+16. generated receipt stale after one operation source byte changes;
+17. unavailable child erased to an empty completed parent;
+18. internal child event filtered out by its declared application operation;
+19. mirror with one unmatched nested scalar and one overlapping wildcard;
+20. one sampled edge and one legal alternative omitted while the PGN digest is retained; and
+21. the held promotion-race event added without an atomic profile and verdict.
 
 Each negative records the diagnostic it would fail to catch if the implementation were weakened.
 A green fixture whose selected population is zero is itself a failure.

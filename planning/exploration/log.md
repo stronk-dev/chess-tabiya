@@ -11252,3 +11252,19 @@ CI actually run.
   `make assistance-register-final-review`. No product, schema, storage, content, archive or
   protected intent byte changed. Fresh independent review remains the next gate; C9 implementation
   and the semantic-convention successor remain unauthorised until acceptance.
+
+## 2026-08-30 — Semantic-validation authority becomes buildable at the author tier
+
+- Re-ran D1711/D1713: 67 current declarations still manufacture 134 labels with zero executable
+  referents; only 39 have emitter positives, ten emitter negatives and none emitter-level mirrors.
+- The fresh buildability self-audit recorded [[D2039]]–[[D2043]]: no named population traversal,
+  unrepresentable abstention, an ambiguous mirror map, child-operation validation without
+  application-retention proof, and a frozen landing count conflicting with the held promotion-race
+  event.
+- The amended RFC now binds the authenticated 108-game/579-decision CC0 fixture to edge, path and
+  complete-alternative traversals; uses a closed completed/unavailable result; defines a total
+  mirror leaf walk; requires direct application reach or exact projection-multiset retention; and
+  derives root count from the live catalogue.
+- `make semantic-validation-author-contract` passes 6/6 and both source instruments remain green.
+  No product, schema, content, collector or protected intent byte changed. Fresh independent review
+  remains mandatory before Slice A implementation.
