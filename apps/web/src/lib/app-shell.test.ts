@@ -685,6 +685,17 @@ describe("application shell", () => {
       status: "open" as const,
       resolvedRunSeq: null,
     };
+    const voteWindow = {
+      id: "host-vote",
+      sessionId: "session-one",
+      nodeId: "node-one",
+      prompt: "Which plan?",
+      options: [{ moveUci: "e2e4", label: "Claim the centre" }, { moveUci: "g1f3", label: "Develop" }],
+      opensAt: "2026-08-27T12:00:00.000Z",
+      closesAt: "2026-08-27T12:01:00.000Z",
+      state: "open" as const,
+      appliedOptionUci: null,
+    };
     let detail: LiveSessionDetail = {
       session: {
         id: "session-one",
@@ -707,6 +718,7 @@ describe("application shell", () => {
       ],
       moveAuthorship: [],
       proposals: [proposal],
+      vote: { window: voteWindow, tally: voteWindow.options.map((option) => ({ ...option, count: 0 })), total: 0, relayed: 0 },
       invitations: [],
       legs: [],
       marks: [],
@@ -718,6 +730,15 @@ describe("application shell", () => {
       return detail.session;
     });
     const mintSessionLink = vi.fn(async () => ({ id: "watch-one", token: "secret", url: "/shared/watch-token" }));
+    const updateGrants = vi.fn(async (_runId: string, operation: { readonly op: string; readonly handle: string; readonly role?: string }) => {
+      if (operation.op === "grant") detail = { ...detail, grants: detail.grants.map((grant) => grant.handle === operation.handle ? { ...grant, role: operation.role as "participant" | "spectator" } : grant) };
+      return detail.grants;
+    });
+    const closeVote = vi.fn(async (_sessionId: string, _windowId: string, appliedOptionUci?: string) => {
+      const vote = { ...detail.vote!, window: { ...detail.vote!.window, state: "closed" as const, appliedOptionUci: appliedOptionUci ?? null } };
+      detail = { ...detail, vote };
+      return vote;
+    });
     const liveApi: DrillClientApi = {
       ...api(),
       async session() { return { id: "learner-host", handle: "coach", createdAt: "2026-08-27T10:00:00.000Z" }; },
@@ -727,6 +748,8 @@ describe("application shell", () => {
       resolveProposal,
       boardControl,
       mintSessionLink,
+      updateGrants,
+      closeVote,
     };
     const component = mount(App, {
       target: target(),
@@ -765,6 +788,16 @@ describe("application shell", () => {
     await vi.waitFor(() => expect(mintSessionLink).toHaveBeenCalledWith("session-one", { invitedRole: "spectator" }));
     await vi.waitFor(() => expect(document.body.textContent).toContain("Watch link: /shared/watch-token"));
     expect(document.body.textContent).toContain("Single use · expires after 14 days · grants spectator access only");
+    const makeSpectator = [...document.querySelectorAll<HTMLButtonElement>("button")].find((button) => button.textContent === "Make spectator")!;
+    makeSpectator.click();
+    await vi.waitFor(() => expect(updateGrants).toHaveBeenCalledWith("live-run", { op: "grant", handle: "student", role: "spectator" }, "writer-live"));
+    await vi.waitFor(() => expect(document.querySelector("[aria-label='Session access list']")?.textContent).toContain("@student — spectator"));
+    const applied = [...document.querySelectorAll("label")].find((label) => label.textContent?.includes("Applied option"))!.querySelector("select")!;
+    applied.value = "e2e4";
+    applied.dispatchEvent(new Event("change", { bubbles: true }));
+    [...document.querySelectorAll<HTMLButtonElement>("button")].find((button) => button.textContent === "Close vote")!.click();
+    await vi.waitFor(() => expect(closeVote).toHaveBeenCalledWith("session-one", "host-vote", "e2e4"));
+    await vi.waitFor(() => expect(document.body.textContent).toContain("Vote closed. Recorded Claim the centre as applied; no move was played."));
     await unmount(component);
   });
 

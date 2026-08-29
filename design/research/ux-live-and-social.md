@@ -1303,6 +1303,9 @@ renders server rejection; session detail renders the stored order/current cursor
 an advance action `[V]` (`apps/web/src/App.svelte`; `apps/web/src/lib/app-shell.test.ts`). The same
 pass replaced the generated `${kind} session` title with a required host-authored title and a visible
 pending/error path `[V]`. Adding participant access from this screen remains absent because
-`updateGrants` still has no client caller; rotation is complete only for learners already granted to
-the run. Product-choice composition, eligibility, vote closing and academy-specific behaviour stay
-open under [[D315]] and [[D1470]].
+`updateGrants` now has a host-only **Session access** region that grants or updates participant and
+spectator roles, revokes non-host roles, requires the ordinary writer and refreshes the returned
+grant list `[V]`. The host can also close an open vote and optionally record one declared option as
+applied; the control and confirmation both state that closing never plays a move `[V]`
+(`apps/web/src/App.svelte`; `apps/web/src/lib/app-shell.test.ts`). Product-choice composition,
+eligibility and academy-specific behaviour stay open under [[D315]] and [[D1470]].

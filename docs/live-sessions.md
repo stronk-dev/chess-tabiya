@@ -74,6 +74,10 @@ cast or change a vote while the window is open; the browser sends no caller-auth
 and replaces the displayed tally with the server response. This keeps run replay independent of
 social state.
 
+The host can close an open vote with either no applied option or one of its declared options. The
+control states that this records the host's choice and never plays a move; the returned closed
+tally is authoritative and the confirmation repeats whether an option was recorded.
+
 Ordinary votes use a server-derived `learner:<id>` key. A configured chat-adapter
 account may relay external keys, which the server stores in a disjoint
 `chat:<adapter-id>:<key>` namespace. Other learners cannot supply a key. Keys are bounded
@@ -139,6 +143,12 @@ or participant access; a rejection is rendered beside the creation workflow inst
 from a fire-and-forget call. The session renders the stored order and current cursor, and a host can
 advance it through the ordinary board-control operation. Match setup similarly requires at least
 one named player and explains that the other seat may remain open for a friend link.
+
+The host's **Session access** region is the browser entry point to the existing run-grant contract.
+It grants or updates a handle as participant or spectator, revokes non-host access, refreshes the
+authoritative grant list, and requires this device's ordinary run writer. The copy distinguishes
+the capabilities before a role is assigned: participants can propose and hold the board;
+spectators can watch and vote but cannot move.
 
 When public event delivery stops at an undisclosed engine-evidence barrier, the event
 page returns `withheld: true`. Followers render that fact instead of appearing frozen.

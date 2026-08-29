@@ -10960,3 +10960,15 @@ CI actually run.
 - Participant grant management remains open: a new member cannot be added to a run from this
   screen before entering the rotation. Product-choice composition, eligibility and anonymous
   viewer scope remain open under [[D1470]].
+
+## 2026-08-29 — Live access and poll lifecycle close their client gaps
+
+- Closed [[D315]]'s remaining generic-live mechanics. The host can grant/update participant or
+  spectator access and revoke non-host access from one **Session access** region; every operation
+  uses the ordinary run writer and refreshes the authoritative session detail. This also removes
+  the missing-grant prerequisite from rotation setup.
+- Added the missing vote-close client operation and host workflow. A host may record no applied
+  option or one declared option; copy and confirmation state that this is advisory metadata and
+  never plays a move. The host component contract crosses role update and close-with-option.
+- [[D315]] stays open only for an academy-specific workflow/default/module composition; it no
+  longer advertises generic server-complete/client-absent mechanics.
