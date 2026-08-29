@@ -5556,17 +5556,21 @@
     {
       "id": "INR-a9",
       "sourceState": "queued",
-      "state": "queued",
+      "state": "completed",
       "capability": "support",
       "owner": "assistance-and-presentation",
-      "assignment": "capability:support",
+      "assignment": "closed",
       "sourceDocument": "ux-in-run.md",
       "sourceSection": "§8.1",
       "sourceHeading": "The in-run experience — `ux-in-run.md`",
       "summary": "**Narrow `guided_hint`'s stage-3 admission now**: remove `live.stockfish.pv@1` from its accepts list and drop the ceiling to a single `move`. Today three documents jointly permit a guidance module to print an engine PV against that producer's own declared refusal",
       "legacyRoute": "ledger",
       "note": "[[D1455]]; the edit only ever *narrows*, so it does not wait for `hint-distance`'s redraft",
-      "sourceDigest": "sha256:c85bb7754af92ea1cbe7792420068f66afa548212d015a9294078994e8e310ed"
+      "sourceDigest": "sha256:c85bb7754af92ea1cbe7792420068f66afa548212d015a9294078994e8e310ed",
+      "completion": {
+        "completedOn": "2026-08-29",
+        "evidence": "runtime module compiler now types Guided Hint as pattern → fact → one move; a negative fixture rejects principal-variation content while Analyze retains its PV producer"
+      }
     },
     {
       "id": "INR-b1",

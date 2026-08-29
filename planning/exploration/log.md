@@ -11008,3 +11008,16 @@ CI actually run.
   submission; the server's existing authority remains the race-safe final check.
 - Focused verification passed at 1,071 software tests. Browser and the complete repository gate
   remain the landing checkpoint.
+
+## 2026-08-29 — Guided Hint cannot become an engine-PV feed
+
+- Closed `INR-a9` and narrowed [[D1455]] without claiming that the returned module route now ships.
+  The runtime module compiler's progressive answer contract is `pattern → fact → move`; stage 3
+  may expose one admitted move and cannot admit a principal variation.
+- `live.stockfish.pv@1` remains available to the explicit Analyze/runtime-evidence consumer. A
+  negative compiler fixture pairs admitted evidence with `principal_variation` answer content and
+  must fail `MODULE_ANSWER_WIDENS`, so moving the leak from the stage table into an accepts row does
+  not bypass the boundary.
+- The remaining D1455 closure is still [[D1569]]'s measured horizon registry and sealed production
+  rung compiler. This checkpoint narrows an executable contract; it does not pretend that the
+  learner-facing hint module is implemented.

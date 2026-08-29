@@ -35,7 +35,7 @@ function declaration(id: ModuleId): ModuleDeclaration {
     answerCeiling: id === "rules_floor"
       ? Object.freeze({ ceiling: "none" as const })
       : id === "guided_hint"
-        ? Object.freeze({ ceiling: "principal_variation" as const, stages: Object.freeze([{ stage: 1 as const, ceiling: "pattern" as const }, { stage: 2 as const, ceiling: "fact" as const }, { stage: 3 as const, ceiling: "principal_variation" as const }]) })
+        ? Object.freeze({ ceiling: "move" as const, stages: Object.freeze([{ stage: 1 as const, ceiling: "pattern" as const }, { stage: 2 as const, ceiling: "fact" as const }, { stage: 3 as const, ceiling: "move" as const }]) })
         : Object.freeze({ ceiling: "fact" as const }),
     ceilings: Object.freeze({ disclosure: MODULE_TIMING_IMAGE[moduleTiming], sessions: Object.freeze(["pack"]), roles: Object.freeze(["learner" as const]), visibleBoardParity: true as const }),
     budgets: Object.freeze({ maxFacts: id === "rules_floor" ? 0 : 1, maxWords: id === "rules_floor" ? 0 : 20, maxMarks: id === "rules_floor" ? null : 1, maxArrows: 0 }),
@@ -94,5 +94,13 @@ describe("learner module contract compiler", () => {
   it("rejects a progressive stage that widens beyond the module ceiling", () => {
     const changed = valid().map((module) => module.id === "guided_hint" ? { ...module, answerCeiling: { ceiling: "fact" as const, stages: [{ stage: 1 as const, ceiling: "pattern" as const }, { stage: 2 as const, ceiling: "fact" as const }, { stage: 3 as const, ceiling: "principal_variation" as const }] } } : module);
     expect(() => compileModuleRegistry(changed)).toThrowError(expect.objectContaining<Partial<ModuleContractError>>({ code: "MODULE_STAGE_INVALID" }));
+  });
+
+  it("keeps principal variations out of the progressive guidance path", () => {
+    const changed = valid().map((module) => module.id === "guided_hint" && module.accepts.kind === "manifest" ? {
+      ...module,
+      accepts: { ...module.accepts, projections: [{ projection: evidenceRef, answerContent: ["principal_variation" as const] }] },
+    } : module);
+    expect(() => compileModuleRegistry(changed)).toThrowError(expect.objectContaining<Partial<ModuleContractError>>({ code: "MODULE_ANSWER_WIDENS" }));
   });
 });

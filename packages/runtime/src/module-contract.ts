@@ -9,7 +9,7 @@ export const MODULE_IDS = Object.freeze([
 export type ModuleId = (typeof MODULE_IDS)[number];
 export type ModuleTiming = "pre_commit" | "at_commit" | "post_commit" | "checkpoint" | "review";
 export type ModuleInitiative = "ambient" | "proactive" | "on_request" | "explicit_mode";
-export type ModuleAnswerCeiling = "none" | "fact" | "pattern" | "threat" | "candidate_move" | "principal_variation";
+export type ModuleAnswerCeiling = "none" | "fact" | "pattern" | "threat" | "candidate_move" | "move" | "principal_variation";
 export type ModuleSeatClass = "board_input" | "board_adjacent" | "rail" | "timeline" | "explicit_surface";
 export type ModuleForm = "sentence" | "card" | "square" | "arrow" | "timeline_mark" | "panel" | "spoken_voice";
 
@@ -132,6 +132,7 @@ export const MODULE_ANSWER_IMAGE: Readonly<Record<ModuleAnswerCeiling, readonly 
   pattern: ["pattern"],
   threat: ["threat"],
   candidate_move: ["candidate_moves"],
+  move: ["move"],
   principal_variation: ["principal_variation"],
 } satisfies Record<ModuleAnswerCeiling, readonly AnswerDistance[]>);
 
@@ -152,7 +153,7 @@ function assertDeclaration(module: ModuleDeclaration): void {
   if (answerImage === undefined) fail("MODULE_ANSWER_WIDENS", `${module.id} has no answer-distance image`);
   const stages = module.answerCeiling.stages;
   if (stages !== undefined) {
-    if (module.answerCeiling.ceiling !== "principal_variation" || stages.length !== 3 || stages.map((value) => `${value.stage}:${value.ceiling}`).join("|") !== "1:pattern|2:fact|3:principal_variation") fail("MODULE_STAGE_INVALID", `${module.id} has an invalid progressive stage ceiling`);
+    if (module.answerCeiling.ceiling !== "move" || stages.length !== 3 || stages.map((value) => `${value.stage}:${value.ceiling}`).join("|") !== "1:pattern|2:fact|3:move") fail("MODULE_STAGE_INVALID", `${module.id} has an invalid progressive stage ceiling`);
   } else if (module.id === "guided_hint") fail("MODULE_STAGE_INVALID", "guided_hint requires all three typed stage ceilings");
   if (module.id !== "guided_hint" && stages !== undefined) fail("MODULE_STAGE_INVALID", `${module.id} cannot declare guided-hint stages`);
   if (module.accepts.kind === "none") {
