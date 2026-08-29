@@ -10908,3 +10908,55 @@ CI actually run.
   receipt. Click, drag and touch already share the pointer commit path, so the repair does not create
   per-mode policy. Updated `docs/drill-client.md`; no pack, content, schema, archive or protected
   intent byte changed.
+
+## 2026-08-29 — Own-game clock-retention queue correction
+
+- Reproduced [[D2021]] before taking `IMP-a6`: changing the Lichess request to `clocks=true` cannot
+  retain clocks because the same path immediately replaces every annotated move node with `{ san }`.
+  The queued one-word task would have passed its URL assertion while still losing every reading.
+- Corrected the research and exhaustive UX inventory, and routed request + extract-before-strip +
+  typed persistence + account export/delete joins as one `recorded-clocks` unit. No production,
+  storage, schema, content, archive or protected intent byte changed.
+
+## 2026-08-29 — Live-viewer evidence-ceiling repair
+
+- Closed [[D448]] / `LIV-a18`: the raw evidence page now preserves honest empty before disclosure
+  and, once evidence exists, applies the same role/workflow/live/review ceiling as the other
+  guidance routes. Participant and non-reviewing spectator grants cannot read queued engine values.
+- Added a production HTTP fixture over one real staged engine result: the host receives it while
+  both narrower roles receive `ASSISTANCE_WITHHELD`. Updated `docs/live-sessions.md`; no schema,
+  storage, content, archive or protected intent byte changed.
+
+## 2026-08-29 — Signed-in live vote participation
+
+- Closed the browser-participation arm of [[D315]] / `LIV-a11`. Every signed-in session viewer
+  can now cast or change an open advisory vote; the client sends only session, window and choice,
+  never the adapter-only external voter key, and adopts the server-returned tally.
+- Added a spectator component contract covering the callable option group, exact three-argument
+  request, confirmation and updated count. Corrected the living research, gate watch note,
+  implementation index and live-session docs; rotation, spectator links, close/grant controls and
+  academy-specific behaviour remain explicitly open.
+
+## 2026-08-29 — Spectator watch links reach every live kind
+
+- Closed the spectator-link arm of [[D315]] / `LIV-a12`. A host can mint a distinct watch link
+  from Stream, Academy or Match without overloading a player-seat invitation; the request fixes
+  the role to spectator and supplies no match seat.
+- The result states that the viewer signs in as themselves and that the token is single-use,
+  expires after 14 days and grants read-only spectator access. A host component contract binds
+  the request and rendered limits; rotation, vote close/grant controls and academy-specific
+  behaviour remain open.
+
+## 2026-08-29 — Live creation and rotation become an executable workflow
+
+- Closed `LIV-a3` and `LIV-a4`: the host supplies the session title, creation exposes pending and
+  failure states, and title/rotation/match prerequisites disable submission with attached reasons.
+  The rejection fixture uses a named learner who lacks write access so the error path can fail for
+  the same reason as production.
+- Closed [[D315]]'s rotation-mechanics arm for already-granted members. Creation de-duplicates and
+  sends the ordered `rotationHandles`; detail renders the authoritative order/current cursor and
+  the host can advance it. The test first caught the board-policy select failing to transition the
+  mounted form, so the control now uses an explicit typed change transition.
+- Participant grant management remains open: a new member cannot be added to a run from this
+  screen before entering the rotation. Product-choice composition, eligibility and anonymous
+  viewer scope remain open under [[D1470]].

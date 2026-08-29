@@ -339,7 +339,7 @@ the index says *trivial*, *one string*, *one line* or *two lines* is an afternoo
 - **IMP-a3** (§2.3-5) — **The product routes chess.com users into its own narrowest refusal** — self-inflicted by the copy at `App.svelte:844`
 - **IMP-a4** (§2.4c) — A confirmation step before the run exists: players, date, result, plies, side, and what will be dropped
 - **IMP-a5** (§2.4c2) — Side is a select set *before* parsing, though the PGN headers usually answer it
-- **IMP-a6** (§2.4e / §11-12) 🏆 — **Flip `import-source.ts:73`'s `clocks=false`.** One word, and the only time-sensitive item in the dossier: the data is irreversibly lost for every game imported before it changes
+- **IMP-a6** (§2.4e / §11-12) 🏆 — **RFC-blocked by `recorded-clocks`; [[D2021]].** Request clocks, extract `[%clk]` before `stripPgnAnnotations`, persist typed per-ply readings, and join account export/delete inventory as one unit. A `clocks=true` query-only edit still erases every reading and is explicitly not completion
 - **IMP-a7** (§2.3-4 / §9-4) — Six independent hard refusals render as **one raw parser string in one `alert`**
 - **IMP-a8** (§2.3-1) — Four import forms on four screens with no shared vocabulary and no shared component
 - **IMP-a9** (§2.3-2) — Forms 1 and 2 disagree about whether a variation-bearing multi-game PGN is acceptable (`repertoire.ts:81` vs `pgn-import.ts:26-31`)

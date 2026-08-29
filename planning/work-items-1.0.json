@@ -5142,18 +5142,18 @@
     {
       "id": "IMP-a6",
       "sourceState": "queued",
-      "state": "queued",
+      "state": "blocked_rfc",
       "capability": "account_data",
       "owner": "account-and-data",
       "assignment": "capability:account_data",
       "sourceDocument": "ux-import-and-account.md",
       "sourceSection": "§2.4e / §11-12",
       "sourceHeading": "Import, account and data — `ux-import-and-account.md`",
-      "summary": "**Flip `import-source.ts:73`'s `clocks=false`.** One word, and the only time-sensitive item in the dossier: the data is irreversibly lost for every game imported before it changes",
+      "summary": "**Retain own-game clocks end to end.** Request them, extract `[%clk]` before annotation stripping, persist the typed per-ply readings, and include them in account export/delete inventory. `clocks=true` alone still loses every reading in `stripPgnAnnotations`",
       "legacyRoute": "ledger",
-      "note": "[[D1048]]; extract-before-strip already landed for the broadcast path",
+      "note": "[[D1048]], [[D2021]]; implementation is one `recorded-clocks` unit, not a query-string edit",
       "tournamentReady": true,
-      "sourceDigest": "sha256:25b6c5eab7b24d69fb9fcf340b5cd23645d3b7910249f350424b1b2dfc803318"
+      "sourceDigest": "sha256:ed1485574f1234052f9ec9750676022badb4bb998ead7cbcefd90cb5d6851505"
     },
     {
       "id": "IMP-a7",
@@ -5923,33 +5923,41 @@
     {
       "id": "LIV-a11",
       "sourceState": "queued",
-      "state": "queued",
+      "state": "completed",
       "capability": "social_play",
       "owner": "live-and-social",
-      "assignment": "capability:social_play",
+      "assignment": "closed",
       "sourceDocument": "ux-live-and-social.md",
       "sourceSection": "§1.5a / §11-5",
       "sourceHeading": "Live, casting and social — `ux-live-and-social.md`",
-      "summary": "**`castVote` has zero client callers — the audience cannot cast a vote.** The server side is complete",
-      "legacyRoute": "ledger",
-      "note": "[[D315]]",
-      "sourceDigest": "sha256:a791c69ae10800b6cd7a869d4edb2b81517201eca87c041efdfd474ee12cd585"
+      "summary": "✅ **Closed 2026-08-29:** every signed-in session viewer can cast or change an open advisory vote; the client sends no external voter key and renders the authoritative returned tally",
+      "legacyRoute": "closed",
+      "note": "[[D315]]; component contract crosses a spectator through the real client shape",
+      "sourceDigest": "sha256:b1807cbfb280739739be801a989bc8470a8e30c726473dbc9ae67f8aa4961fd2",
+      "completion": {
+        "completedOn": "2026-08-29",
+        "evidence": "open vote renders signed-in viewer actions; spectator component contract proves the three-argument API call omits adapter identity and adopts the returned tally"
+      }
     },
     {
       "id": "LIV-a12",
       "sourceState": "queued",
-      "state": "queued",
+      "state": "completed",
       "capability": "social_play",
       "owner": "live-and-social",
-      "assignment": "capability:social_play",
+      "assignment": "closed",
       "sourceDocument": "ux-live-and-social.md",
       "sourceSection": "§4 C5",
       "sourceHeading": "Live, casting and social — `ux-live-and-social.md`",
-      "summary": "`mintJoinLink` hardcodes `participant`; there is no *watch this* link mintable from the interface",
-      "legacyRoute": "ledger",
-      "note": "[[D315]]",
+      "summary": "✅ **Closed 2026-08-29:** every live kind exposes a distinct single-use **Create watch link** action; it requests spectator access without a match seat and states the sign-in, expiry and read-only limits",
+      "legacyRoute": "closed",
+      "note": "[[D315]]; host component contract binds the request and rendered result",
       "tournamentReady": true,
-      "sourceDigest": "sha256:0702dc46deb7167ff8c075d5b758fee1a97811a66881e1296fec058474b24afd"
+      "sourceDigest": "sha256:2e6d288ac427c9e118ed7d9cb41716e03755188b4b4df072bdfed310e03182e9",
+      "completion": {
+        "completedOn": "2026-08-29",
+        "evidence": "all live kinds expose a spectator-only watch-link action; host component contract proves role and no-seat request plus rendered one-use and expiry limits"
+      }
     },
     {
       "id": "LIV-a13",
@@ -6028,10 +6036,10 @@
     {
       "id": "LIV-a18",
       "sourceState": "queued",
-      "state": "queued",
+      "state": "completed",
       "capability": "social_play",
       "owner": "live-and-social",
-      "assignment": "capability:social_play",
+      "assignment": "closed",
       "sourceDocument": "ux-live-and-social.md",
       "sourceSection": "§10-q",
       "sourceHeading": "Live, casting and social — `ux-live-and-social.md`",
@@ -6039,7 +6047,11 @@
       "legacyRoute": "ledger",
       "note": "[[D448]]; should close before any viewer list is printed",
       "tournamentReady": true,
-      "sourceDigest": "sha256:a3ef9ea4221ec265433d3d00d2b6251eadbfa943d685d4b709c3bf234bc2c1f9"
+      "sourceDigest": "sha256:a3ef9ea4221ec265433d3d00d2b6251eadbfa943d685d4b709c3bf234bc2c1f9",
+      "completion": {
+        "completedOn": "2026-08-29",
+        "evidence": "RunService evidence applies the compiled viewer assistance ceiling after disclosure; production HTTP fixture crosses host, participant and spectator grants over one staged engine result"
+      }
     },
     {
       "id": "LIV-a19",
@@ -6161,33 +6173,41 @@
     {
       "id": "LIV-a3",
       "sourceState": "queued",
-      "state": "queued",
+      "state": "completed",
       "capability": "social_play",
       "owner": "live-and-social",
-      "assignment": "capability:social_play",
+      "assignment": "closed",
       "sourceDocument": "ux-live-and-social.md",
       "sourceSection": "§1.1c",
       "sourceHeading": "Live, casting and social — `ux-live-and-social.md`",
-      "summary": "`createLive` is invoked as `void` with no catch — **the error path renders nothing**",
-      "legacyRoute": "ledger",
-      "note": "[[D1470]]",
-      "sourceDigest": "sha256:c902728cddd178a3ec2f88ed98640bb429e6b6ff12df80d0882a433d21a09a1b"
+      "summary": "✅ **Closed 2026-08-29:** creation has pending and visible failure states; incomplete rotation, match and title inputs are disabled with reasons",
+      "legacyRoute": "closed",
+      "note": "[[D1470]]; component contract exercises a rejected rotation learner",
+      "sourceDigest": "sha256:c1bd40b8ec21bdd09d1ca1c9988210de9c654250feabf0c1559fdd2b316ea657",
+      "completion": {
+        "completedOn": "2026-08-29",
+        "evidence": "creation pending and error states render; title, rotation and match prerequisites disable submission with reasons; component contract exercises server rejection"
+      }
     },
     {
       "id": "LIV-a4",
       "sourceState": "queued",
-      "state": "queued",
+      "state": "completed",
       "capability": "social_play",
       "owner": "live-and-social",
-      "assignment": "capability:social_play",
+      "assignment": "closed",
       "sourceDocument": "ux-live-and-social.md",
       "sourceSection": "§1.1d",
       "sourceHeading": "Live, casting and social — `ux-live-and-social.md`",
-      "summary": "Every live session is titled `` `${liveKind} session` `` — the user is never asked",
-      "legacyRoute": "none",
-      "note": "an event name has nowhere to live",
+      "summary": "✅ **Closed 2026-08-29:** the host names the session before choosing a source run; the submitted title is trimmed and becomes the session heading",
+      "legacyRoute": "closed",
+      "note": "component contract proves the title reaches creation",
       "tournamentReady": true,
-      "sourceDigest": "sha256:d136ef4be9df94ed9ace6e2a4c930bc9d145b217a95b08eecad27aa5d6fe78bf"
+      "sourceDigest": "sha256:c1a0df73e1c3be52a71a41964b76e42650524d38af90d7178fd033f0df510817",
+      "completion": {
+        "completedOn": "2026-08-29",
+        "evidence": "host-authored trimmed session title reaches the creation request and becomes the returned session heading"
+      }
     },
     {
       "id": "LIV-a5",

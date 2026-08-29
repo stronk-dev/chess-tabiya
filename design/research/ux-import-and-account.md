@@ -292,15 +292,17 @@ public-archive *listing* is the same posture one level up — no account link, n
 background fetch, learner picks one game. That is materially different from *"mine games → detect
 weaknesses"*, which stays rejected.
 
-**(e) Ask for one thing the fetch currently throws away, using a mechanism that already landed.**
+**(e) Retain one thing the fetch currently throws away, through the whole record boundary.**
 `import-source.ts:73` requests `clocks=false&evals=false&opening=false&literate=false` `[V]`.
 Refusing `evals` is right and is the [[D410]] posture. **Clocks are different in kind, and the
 corpus has already ruled on exactly why**: [[D1048]] — *"a clock reading is a **measured fact about
 the game**, not another product's judgement of a move"* — and its fix, an **extract-before-strip**
 amendment lifting `[%clk]` into a typed `{ply, remaining}[]` before the annotation strip, **landed
-2026-08-23 for the broadcast path** `[V]`. So the hard part is built and the correct posture is
-settled; the game-import path simply does not ask for the data. `time-as-a-difficulty-lever.md` and
-`rfc/recorded-clocks.md` both want it.
+2026-08-23 for the broadcast path** `[V]`. The own-game path neither asks for nor extracts it:
+`resolveImportSource` calls `stripPgnAnnotations`, which recursively replaces every move node with
+`{ san }`, so merely changing the query to `clocks=true` would still erase the readings before
+storage `[V]` ([[D2021]]). The correct unit is request + extract-before-strip + the typed persistence
+and account-data joins owned by `rfc/recorded-clocks.md`.
 
 Why this is the only time-sensitive item in the dossier: **data not requested at import cannot be
 requested later.** Every other recommendation here can be applied retroactively to games already
@@ -895,13 +897,12 @@ per the block-registration convention at `design/BACKLOG.md:118-133`.
   currently re-confirm a password (`docs/identity-and-authorization.md:73`). One predicate over the
   existing inventory; `__legacy` (`storage.ts:633`, `identity.ts:147`) is the shipped precedent for
   the row shape.
-- **💡 `import-source.ts:73` requests `clocks=false`, and the mechanism to handle clocks correctly
-  already landed.** [[D1048]]'s extract-before-strip amendment ships for the broadcast path
-  (2026-08-23) on the exact reasoning that applies here — *"a clock reading is a measured fact about
-  the game, not another product's judgement of a move"*. The game-import path does not ask for the
-  data. One word, wanted by `time-as-a-difficulty-lever.md` and `rfc/recorded-clocks.md`, and
-  **irreversible for every game imported before it changes** — the only time-sensitive item in this
-  dossier.
+- **💡 Own-game clock retention is a complete record-boundary unit, not one word.** [[D1048]]'s
+  extract-before-strip amendment ships for broadcasts (2026-08-23), but the game-import path both
+  requests `clocks=false` and destroys any returned clock annotations in `stripPgnAnnotations`.
+  [[D2021]] routes request, typed extraction, persistence and account-data joins together through
+  `rfc/recorded-clocks.md`. The loss remains **irreversible for every game imported before it
+  changes** — the only time-sensitive item in this dossier.
 - **🐞 Import stores identifiers for people who are not our learner.** `pgn-import.ts:63` keeps every
   PGN tag verbatim with no allowlist, and `account-data.ts:182` exports them — so both players'
   platform handles enter durable storage and the account bundle from one paste. Sibling of the

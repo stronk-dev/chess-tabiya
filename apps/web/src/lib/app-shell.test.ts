@@ -553,6 +553,124 @@ describe("application shell", () => {
     await unmount(component);
   });
 
+  it("collects a named rotation, explains incomplete setup, and renders creation failures", async () => {
+    history.replaceState(null, "", "/live");
+    const createdSession = {
+      id: "rotation-session",
+      runId: run.id,
+      kind: "academy" as const,
+      title: "Tuesday relay",
+      boardControl: "rotation" as const,
+      rotation: ["learner-host", "learner-student"],
+      rotationCursor: 0,
+      createdBy: "learner-host",
+      createdAt: "2026-08-27T11:00:00.000Z",
+    };
+    const createLiveSession = vi.fn()
+      .mockRejectedValueOnce(new Error("Rotation learner student needs write access"))
+      .mockResolvedValueOnce(createdSession);
+    const liveApi: DrillClientApi = {
+      ...api(),
+      async session() { return { id: "learner-host", handle: "coach", createdAt: "2026-08-27T10:00:00.000Z" }; },
+      async liveSessions() { return []; },
+      async classrooms() { return []; },
+      createLiveSession,
+    };
+    const component = mount(App, {
+      target: target(),
+      props: { api: liveApi, router: new HistoryRouter(window), storage: new MemoryStorage() },
+    });
+
+    await vi.waitFor(() => expect(document.body.textContent).toContain("Start from a run"));
+    const labelled = (text: string): HTMLInputElement | HTMLSelectElement => {
+      const label = [...document.querySelectorAll("label")].find((candidate) => candidate.textContent?.trim().startsWith(text));
+      expect(label).toBeDefined();
+      return label!.querySelector("input, select")!;
+    };
+    const board = labelled("Board") as HTMLSelectElement;
+    board.selectedIndex = [...board.options].findIndex((option) => option.value === "rotation");
+    board.dispatchEvent(new Event("change", { bubbles: true }));
+    await vi.waitFor(() => expect(document.body.textContent).toContain("Rotation handles"));
+    const createButton = () => [...document.querySelectorAll<HTMLButtonElement>("button")].find((button) => button.textContent === "Create academy");
+    await vi.waitFor(() => {
+      const candidate = createButton();
+      expect(candidate).toBeDefined();
+    });
+    await vi.waitFor(() => expect(createButton()?.disabled).toBe(true));
+    expect(createButton()?.getAttribute("aria-describedby")).toBe("live-rotation-required");
+    const title = labelled("Session title") as HTMLInputElement;
+    title.value = "Tuesday relay";
+    title.dispatchEvent(new Event("input", { bubbles: true }));
+    const handles = labelled("Rotation handles") as HTMLInputElement;
+    handles.value = "coach, student, coach";
+    handles.dispatchEvent(new Event("input", { bubbles: true }));
+    await vi.waitFor(() => expect(createButton()?.disabled).toBe(false));
+    createButton()!.click();
+    await vi.waitFor(() => expect(document.body.textContent).toContain("Rotation learner student needs write access"));
+    expect(createLiveSession).toHaveBeenNthCalledWith(1, expect.objectContaining({
+      runId: run.id,
+      title: "Tuesday relay",
+      boardControl: "rotation",
+      rotationHandles: ["coach", "student"],
+    }));
+    createButton()!.click();
+    await vi.waitFor(() => expect(createLiveSession).toHaveBeenCalledTimes(2));
+    await unmount(component);
+  });
+
+  it("shows the authoritative rotation order and lets its host advance it", async () => {
+    history.replaceState(null, "", "/live/session/rotation-session");
+    const storage = new MemoryStorage();
+    WriterSession.claimFor("rotation-run", storage, () => "writer-rotation");
+    let detail: LiveSessionDetail = {
+      session: {
+        id: "rotation-session",
+        runId: "rotation-run",
+        kind: "academy",
+        title: "Tuesday relay",
+        boardControl: "rotation",
+        rotation: ["learner-host", "learner-student"],
+        rotationCursor: 0,
+        createdBy: "learner-host",
+        createdAt: "2026-08-27T11:00:00.000Z",
+      },
+      role: "host",
+      activeNodeId: "node-one",
+      leaseHeldBy: { learnerId: "learner-host", handle: "coach" },
+      grants: [
+        { learnerId: "learner-host", handle: "coach", role: "host", grantedAt: "2026-08-27T11:00:00.000Z" },
+        { learnerId: "learner-student", handle: "student", role: "participant", grantedAt: "2026-08-27T11:01:00.000Z" },
+      ],
+      moveAuthorship: [],
+      proposals: [],
+      invitations: [],
+      legs: [],
+      marks: [],
+    };
+    const boardControl = vi.fn(async () => {
+      detail = { ...detail, session: { ...detail.session, rotationCursor: 1 } };
+      return detail.session;
+    });
+    const liveApi: DrillClientApi = {
+      ...api(),
+      async session() { return { id: "learner-host", handle: "coach", createdAt: "2026-08-27T10:00:00.000Z" }; },
+      async liveSession() { return detail; },
+      async sessionJournal() { return { entries: [], nextSeq: 0 }; },
+      boardControl,
+    };
+    const component = mount(App, {
+      target: target(),
+      props: { api: liveApi, router: new HistoryRouter(window), storage },
+    });
+
+    await vi.waitFor(() => expect(document.body.textContent).toContain("Current: @coach"));
+    const advance = [...document.querySelectorAll<HTMLButtonElement>("button")].find((button) => button.textContent === "Advance rotation")!;
+    advance.click();
+    await vi.waitFor(() => expect(boardControl).toHaveBeenCalledWith("rotation-session", "writer-rotation", "advance"));
+    await vi.waitFor(() => expect(document.body.textContent).toContain("Current: @student"));
+    await unmount(component);
+  });
+
   it("lets a live-session host identify and resolve a learner proposal", async () => {
     history.replaceState(null, "", "/live/session/session-one");
     const storage = new MemoryStorage();
@@ -599,6 +717,7 @@ describe("application shell", () => {
       detail = { ...detail, leaseHeldBy: { learnerId: "learner-host", handle: "coach" } };
       return detail.session;
     });
+    const mintSessionLink = vi.fn(async () => ({ id: "watch-one", token: "secret", url: "/shared/watch-token" }));
     const liveApi: DrillClientApi = {
       ...api(),
       async session() { return { id: "learner-host", handle: "coach", createdAt: "2026-08-27T10:00:00.000Z" }; },
@@ -607,6 +726,7 @@ describe("application shell", () => {
       claimLease,
       resolveProposal,
       boardControl,
+      mintSessionLink,
     };
     const component = mount(App, {
       target: target(),
@@ -640,6 +760,91 @@ describe("application shell", () => {
     play.click();
     await vi.waitFor(() => expect(resolveProposal).toHaveBeenCalledWith("session-one", "proposal-one", "apply", "writer-live"));
     expect(claimLease).toHaveBeenCalledWith("live-run", "writer-live");
+    const watch = [...document.querySelectorAll<HTMLButtonElement>("button")].find((button) => button.textContent === "Create watch link")!;
+    watch.click();
+    await vi.waitFor(() => expect(mintSessionLink).toHaveBeenCalledWith("session-one", { invitedRole: "spectator" }));
+    await vi.waitFor(() => expect(document.body.textContent).toContain("Watch link: /shared/watch-token"));
+    expect(document.body.textContent).toContain("Single use · expires after 14 days · grants spectator access only");
+    await unmount(component);
+  });
+
+  it("lets a signed-in live viewer cast and change an advisory vote without supplying an external identity", async () => {
+    history.replaceState(null, "", "/live/session/session-vote");
+    const voteWindow = {
+      id: "vote-one",
+      sessionId: "session-vote",
+      nodeId: "node-one",
+      prompt: "Which continuation?",
+      options: [
+        { moveUci: "e2e4", label: "Claim the centre" },
+        { moveUci: "g1f3", label: "Develop first" },
+      ],
+      opensAt: "2026-08-27T12:00:00.000Z",
+      closesAt: "2026-08-27T12:01:00.000Z",
+      state: "open" as const,
+      appliedOptionUci: null,
+    };
+    const detail: LiveSessionDetail = {
+      session: {
+        id: "session-vote",
+        runId: "live-run",
+        kind: "stream",
+        title: "Club stream",
+        boardControl: "host_directed",
+        rotationCursor: 0,
+        createdBy: "learner-host",
+        createdAt: "2026-08-27T11:00:00.000Z",
+      },
+      role: "spectator",
+      activeNodeId: "node-one",
+      leaseHeldBy: { learnerId: "learner-host", handle: "host" },
+      grants: [
+        { learnerId: "learner-host", handle: "host", role: "host", grantedAt: "2026-08-27T11:00:00.000Z" },
+        { learnerId: "learner-viewer", handle: "viewer", role: "spectator", grantedAt: "2026-08-27T11:01:00.000Z" },
+      ],
+      moveAuthorship: [],
+      proposals: [],
+      vote: {
+        window: voteWindow,
+        tally: voteWindow.options.map((option) => ({ ...option, count: 0 })),
+        total: 0,
+        relayed: 0,
+      },
+      invitations: [],
+      legs: [],
+      marks: [],
+    };
+    const castVote = vi.fn(async (_sessionId: string, _windowId: string, choiceUci: string) => ({
+      window: voteWindow,
+      tally: voteWindow.options.map((option) => ({ ...option, count: option.moveUci === choiceUci ? 1 : 0 })),
+      total: 1,
+      relayed: 0,
+    }));
+    const liveApi: DrillClientApi = {
+      ...api(),
+      async session() { return { id: "learner-viewer", handle: "viewer", createdAt: "2026-08-27T10:00:00.000Z" }; },
+      async liveSession() { return detail; },
+      async sessionJournal() { return { entries: [], nextSeq: 0 }; },
+      castVote,
+    };
+    const component = mount(App, {
+      target: target(),
+      props: { api: liveApi, router: new HistoryRouter(window), storage: new MemoryStorage() },
+    });
+
+    const centreVote = await vi.waitFor(() => {
+      const candidate = [...document.querySelectorAll<HTMLButtonElement>("button")]
+        .find((button) => button.textContent?.includes("Vote for Claim the centre"));
+      expect(candidate).toBeDefined();
+      return candidate!;
+    });
+    expect(document.querySelector("[aria-label='Which continuation?']")).not.toBeNull();
+    centreVote.click();
+    await vi.waitFor(() => expect(castVote).toHaveBeenCalledWith("session-vote", "vote-one", "e2e4"));
+    expect(castVote.mock.calls[0]).toHaveLength(3);
+    await vi.waitFor(() => expect(document.body.textContent).toContain("Vote recorded for Claim the centre"));
+    expect(document.body.textContent).toContain("Claim the centre · 1");
+    expect(document.body.textContent).toContain("1 vote, all from signed-in members");
     await unmount(component);
   });
 

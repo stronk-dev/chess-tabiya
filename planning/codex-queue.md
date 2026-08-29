@@ -1,5 +1,13 @@
 # Codex queue — rewritten in full 2026-08-16
 
+## 0-RECORDED-CLOCKS-HOLD. D2021 blocks the query-only import task
+
+Do not take `IMP-a6` as a one-word `clocks=true` edit. `resolveImportSource` immediately passes
+the returned PGN through `stripPgnAnnotations`, which replaces every move node with `{ san }` and
+erases every requested `[%clk]` before storage. [[D2021]] routes the executable unit through
+`recorded-clocks`: request, extract-before-strip, typed per-ply persistence, account export/delete
+inventory, and one real clock-bearing fixture. The work-item registry marks it RFC-blocked.
+
 ## 0-MODULE-REGISTRY-RETURN. D1205/D1206 block declarations, not reducers
 
 Do not invent the 179-row manifest closure. Appendix B literally enumerates 173 compiled rows

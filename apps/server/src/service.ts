@@ -1766,9 +1766,22 @@ export class RunService {
   evidence(runId: string, principalOrSeq?: Principal | number, maybeSeq = 0): EvidencePage {
     const principal = typeof principalOrSeq === "object" ? principalOrSeq : this.#principal("legacy-reader");
     const sinceSeq = typeof principalOrSeq === "number" ? principalOrSeq : maybeSeq;
-    const run = requireRead(this.#storage, runId, principal).stored.run;
+    const { stored, role } = requireRead(this.#storage, runId, principal);
+    const run = stored.run;
     if (!feedbackDeliveryOpen(run)) {
       return Object.freeze({ results: Object.freeze([]), nextSeq: sinceSeq });
+    }
+    const permission = permittedAssistance({
+      sessionKind: run.sessionKind,
+      deliveryOpen: true,
+      role,
+      ...this.#assistanceContext(runId, principal, run, role),
+    });
+    if (permission.boardLighting !== "evidence") {
+      throw new ServerError(
+        "ASSISTANCE_WITHHELD",
+        "Raw engine evidence is withheld from this viewer in this context",
+      );
     }
     return this.#requiredEvidenceQueue().page(runId, sinceSeq);
   }

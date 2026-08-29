@@ -9,7 +9,7 @@ CI_NODE := $(if $(wildcard /opt/homebrew/opt/node@24/bin/node),/opt/homebrew/opt
 SF_CMD ?= $(if $(wildcard /opt/homebrew/bin/stockfish),/opt/homebrew/bin/stockfish,$(shell command -v stockfish 2>/dev/null))
 export SF_CMD
 
-.PHONY: setup check typecheck test test-software test-performance test-content test-tier-check docs-check staged-process-contracts-test test-browser test-browser-smoke test-browser-content test-browser-matrix test-browser-ci ci-local schema-check register-check status-parity work-index work-item-check roadmap-receipt roadmap-check intent-parity evidence-manifest-check semantic-evidence-check opening-catalogue opening-catalogue-check account-data-lifecycle-check learner-rating-bracket learner-rating-bracket-check learner-rating-isolation-check graduation-plan graduation-plan-check graduation-clearance-contract tactical-collector-measurement breadth-collector-measurement assistance-register-contract assistance-register-repeat-review semantic-register-contract semantic-register-repeat-review provider-exchange-contract provider-exchange-repeat-review provider-exchange-final-review candidate-packet-contract candidate-packet-repeat-review candidate-packet-final-review review-evidence-author-contract bot-policy-independent-review pack-capability-closure pack-capability-repeat-review bounded-target-contract bounded-target-census bounded-target-repeat-review bounded-target-final-review build verify-software verify-governance verify-content verify pack-check shape-check expression-census graduation-report graduation-report-update graduation-clear pack-preview source-fetch candidate-emit candidate-attach sourcing-check verify-draft tablebase-walk engine-walk up up-engines down
+.PHONY: setup check typecheck test test-software test-performance test-content test-tier-check docs-check staged-process-contracts-test test-browser test-browser-smoke test-browser-content test-browser-matrix test-browser-ci ci-local schema-check register-check status-parity work-index work-item-sync work-item-check roadmap-receipt roadmap-check intent-parity evidence-manifest-check semantic-evidence-check opening-catalogue opening-catalogue-check account-data-lifecycle-check learner-rating-bracket learner-rating-bracket-check learner-rating-isolation-check graduation-plan graduation-plan-check graduation-clearance-contract tactical-collector-measurement breadth-collector-measurement assistance-register-contract assistance-register-repeat-review semantic-register-contract semantic-register-repeat-review provider-exchange-contract provider-exchange-repeat-review provider-exchange-final-review candidate-packet-contract candidate-packet-repeat-review candidate-packet-final-review review-evidence-author-contract bot-policy-independent-review pack-capability-closure pack-capability-repeat-review bounded-target-contract bounded-target-census bounded-target-repeat-review bounded-target-final-review build verify-software verify-governance verify-content verify pack-check shape-check expression-census graduation-report graduation-report-update graduation-clear pack-preview source-fetch candidate-emit candidate-attach sourcing-check verify-draft tablebase-walk engine-walk up up-engines down
 
 setup:
 	pnpm install --frozen-lockfile
@@ -73,6 +73,9 @@ status-parity:
 work-index:
 	node --test tools/work-index.test.mjs
 	node tools/work-index.mjs
+
+work-item-sync:
+	node tools/work-item-registry.mjs --sync
 
 work-item-check:
 	node --test tools/work-item-registry.test.mjs

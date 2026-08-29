@@ -69,8 +69,10 @@ ordinary run lease and therefore does not bypass board possession.
 A host may open one 15–600 second vote window over two to eight legal moves. Votes are
 advisory: a tally never moves a piece. The host may separately play or apply a move and
 record what was applied. The browser exposes the complete two-to-eight range, separate
-host-authored labels and prompt, and the full duration range. This keeps run replay independent
-of social state.
+host-authored labels and prompt, and the full duration range. Every signed-in session viewer can
+cast or change a vote while the window is open; the browser sends no caller-authored voter key
+and replaces the displayed tally with the server response. This keeps run replay independent of
+social state.
 
 Ordinary votes use a server-derived `learner:<id>` key. A configured chat-adapter
 account may relay external keys, which the server stores in a disjoint
@@ -130,6 +132,14 @@ possession journal; the session screen labels each committed move with the respo
 member handle, or `former member` when that identity no longer resolves through the
 current grants.
 
+Creation collects a viewer-facing session title before a source run is chosen. Rotation setup
+collects an ordered, de-duplicated handle list, refuses an empty list in the browser, and sends the
+same `rotationHandles` contract enforced by the server. Each named learner must already have host
+or participant access; a rejection is rendered beside the creation workflow instead of disappearing
+from a fire-and-forget call. The session renders the stored order and current cursor, and a host can
+advance it through the ordinary board-control operation. Match setup similarly requires at least
+one named player and explains that the other seat may remain open for a friend link.
+
 When public event delivery stops at an undisclosed engine-evidence barrier, the event
 page returns `withheld: true`. Followers render that fact instead of appearing frozen.
 
@@ -148,6 +158,10 @@ default to one use and 14 days, cap at 90 days and 50 active links per session, 
 handle-bound, and are individually revocable. Unknown, wrong-scope, expired, exhausted,
 revoked, and wrong-handle tokens all return the same not-found response.
 
+Every session kind gives its host a distinct **Create watch link** control. It mints a spectator
+token with no match seat and states the one-use, 14-day and spectator-only limits beside the
+result. Native matches retain their separate open-seat participant link.
+
 ## Accepted limitation
 
 A streamer cannot be forced to play blind while their audience sees more evidence: the
@@ -158,6 +172,12 @@ disclosure ceiling, and never exceeds what the run itself has disclosed. A
 submission-granted teacher may receive the host ceiling only after an outcome and after
 the live session closes. It protects every reader from premature evidence; it does not
 pretend to prevent a host from cheating on themselves.
+
+The raw evidence page applies that viewer ceiling after the run's disclosure barrier opens.
+Participants and non-reviewing spectators receive `ASSISTANCE_WITHHELD` rather than queued
+engine or human-model payloads; an undisclosed page remains the same honest empty response for
+every reader. The production HTTP test crosses host, participant and spectator grants against one
+real staged engine result, so the run projection cannot become an assistance bypass.
 
 The live platform uses authenticated polling rather than WebSockets or SSE. External
 challenge URLs remain opaque HTTPS links supplied by the host; native clocks,

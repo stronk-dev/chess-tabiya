@@ -335,6 +335,11 @@ That last one is B4-adjacent and is the row to watch: the evidence *layers* are 
 in the product's widest mode they cannot be opened while playing. Thirteen such gaps are
 ranked in the dossier; **no gate definition is changed by this note.**
 
+**Watch-item correction, 2026-08-29:** the live-audience vote arm above is closed. Every
+signed-in session viewer can cast or change an open advisory vote, and a component contract
+proves the browser omits the adapter-only voter key and adopts the server's returned tally.
+Simulate, duplicate/schedule and the Just Play reveal gaps remain; no gate definition changes.
+
 **Two gate-row corrections owed to `design/03` (owner tier — escalated, not edited here,
 and deliberately not applied to this mirror so the surface stays single):** B1/B8's residual
 *"`/settings` remains display-only"* is **stale** — it renders 54 live assistance controls

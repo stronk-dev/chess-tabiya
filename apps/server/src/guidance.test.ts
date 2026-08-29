@@ -269,6 +269,33 @@ describe("adaptive guidance server seams", () => {
     expect((await handler(request("/runs/role-guide/speech", "POST", { nodeId: run.activeCursor.nodeId, scope: "reading" }, host.cookie))).status).toBe(200);
   });
 
+  it("never serves raw engine evidence to participants or spectators", async () => {
+    const storage = new SQLiteRunStorage(":memory:", { onMigration: () => {} }); stores.push(storage);
+    const identity = new IdentityService(storage, { cookieSecure: false, derive: async (password, salt) => Buffer.alloc(32, password.length + salt.length) });
+    const host = await identity.register({ handle: "evidence-host", password: "correct horse battery staple" });
+    const participant = await identity.register({ handle: "evidence-participant", password: "correct horse battery staple" });
+    const spectator = await identity.register({ handle: "evidence-spectator", password: "correct horse battery staple" });
+    const queue = new EvidenceJobQueue(executor);
+    const service = new RunService(storage, { evidenceQueue: queue });
+    const run = await service.create({ id: "evidence-role-guide", session: { kind: "position", start: { fen: FEN, side: "white" }, feedbackPolicy: "attempt_end", opponentPolicy: { mode: "human_common", targetElo: 1500 } }, policyConfig: { seedMode: "fixed", locus: { executedAt: "server", engineIds: [], modelIds: [] } }, seed: 4, createdAt: at }, { writerId: "host-writer", learnerId: host.learner.id });
+    const hostPrincipal = { learnerId: host.learner.id, handle: host.learner.handle };
+    service.updateGrant(run.id, hostPrincipal, "host-writer", { op: "grant", handle: participant.learner.handle, role: "participant" }, at);
+    service.updateGrant(run.id, hostPrincipal, "host-writer", { op: "grant", handle: spectator.learner.handle, role: "spectator" }, at);
+    service.enqueueEvidence(run.id, hostPrincipal, { nodeId: run.activeCursor.nodeId, kind: "eval", depth: 12 });
+    await queue.whenIdle();
+    service.reveal(run.id, hostPrincipal, "host-writer", at);
+    const handler = createRestHandler(service, undefined, undefined, identity);
+
+    for (const session of [participant, spectator]) {
+      const response = await handler(request(`/runs/${run.id}/evidence?sinceSeq=0`, "GET", undefined, session.cookie));
+      expect(response.status).toBe(409);
+      expect(await response.json()).toMatchObject({ error: { code: "ASSISTANCE_WITHHELD" } });
+    }
+    const hostResponse = await handler(request(`/runs/${run.id}/evidence?sinceSeq=0`, "GET", undefined, host.cookie));
+    expect(hostResponse.status).toBe(200);
+    expect(await hostResponse.json()).toMatchObject({ results: [{ payload: { kind: "eval", source: "engine_validated" } }] });
+  });
+
   it("withholds reasoning-review evidence packets from participants and spectators", async () => {
     const storage = new SQLiteRunStorage(":memory:", { onMigration: () => {} }); stores.push(storage);
     const identity = new IdentityService(storage, { cookieSecure: false, derive: async (password, salt) => Buffer.alloc(32, password.length + salt.length) });

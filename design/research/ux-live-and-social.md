@@ -1278,3 +1278,31 @@ Report-only; `design/BACKLOG.md` is not edited by this pass. Ids are assigned at
 - **The five answers are a contract shape, not final copy.** The sentences in §9 and §10 are
   worked examples showing that each answer is writable from measured facts; the exact wording is
   the implementing RFC's, under whichever intent home Q1 selects.
+
+---
+
+## 16. Living correction — browser vote participation (2026-08-29)
+
+The present-tense `castVote` absence recorded in §§1.5, 10, 11 and 12 is closed at HEAD. An open
+vote now renders one action per server-returned option for every signed-in session viewer;
+`castLiveVote` calls the ordinary client operation with session id, window id and choice only,
+then replaces the displayed vote with the returned authoritative tally `[V]`
+(`apps/web/src/App.svelte`, `castLiveVote` and the open-vote region). A spectator component
+contract proves the three-argument call, identity-key omission, confirmation copy and updated
+count `[V]` (`apps/web/src/lib/app-shell.test.ts`). Adapter relay and its externally supplied key
+remain a separate trusted-account path. The spectator-link absence recorded in §4 C5 and §12 is
+also closed: every session kind now exposes a separate **Create watch link** action which requests
+`invitedRole: "spectator"` without a match seat and renders its one-use, 14-day and spectator-only
+limits `[V]` (`apps/web/src/App.svelte`, `mintWatchLink`; `apps/web/src/lib/app-shell.test.ts`).
+Rotation setup, vote closing, grant management and academy-specific behaviour remain open under
+[[D315]].
+
+The rotation request and creation-error portions are also closed at HEAD. Creation collects an
+ordered, de-duplicated handle list, refuses an empty rotation locally, sends `rotationHandles`, and
+renders server rejection; session detail renders the stored order/current cursor and gives the host
+an advance action `[V]` (`apps/web/src/App.svelte`; `apps/web/src/lib/app-shell.test.ts`). The same
+pass replaced the generated `${kind} session` title with a required host-authored title and a visible
+pending/error path `[V]`. Adding participant access from this screen remains absent because
+`updateGrants` still has no client caller; rotation is complete only for learners already granted to
+the run. Product-choice composition, eligibility, vote closing and academy-specific behaviour stay
+open under [[D315]] and [[D1470]].

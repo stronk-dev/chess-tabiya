@@ -866,7 +866,7 @@ export interface DrillClientApi extends RunApi {
   registerShapeDraft?(draftId: string): Promise<ShapeSummary>;
   liveSessions?(): Promise<readonly LiveSessionSummary[]>;
   liveSession?(sessionId:string):Promise<LiveSessionDetail>;
-  createLiveSession?(input:{readonly runId:string;readonly kind:SessionKind;readonly title:string;readonly boardControl?:BoardControl;readonly matchPlayers?:{readonly white?:string;readonly black?:string};readonly classroomId?:string;readonly scheduledFor?:string}):Promise<LiveSession>;
+  createLiveSession?(input:{readonly runId:string;readonly kind:SessionKind;readonly title:string;readonly boardControl?:BoardControl;readonly rotationHandles?:readonly string[];readonly matchPlayers?:{readonly white?:string;readonly black?:string};readonly classroomId?:string;readonly scheduledFor?:string}):Promise<LiveSession>;
   classrooms?():Promise<readonly ClassroomSummary[]>;
   classroom?(id:string):Promise<ClassroomDetail>;
   createClassroom?(name:string):Promise<ClassroomSummary>;
@@ -1185,7 +1185,7 @@ export class DrillApi implements DrillClientApi {
 
   async liveSessions():Promise<readonly LiveSessionSummary[]>{const body=await this.#json<{sessions:readonly LiveSessionSummary[]}>("/sessions");return body.sessions;}
   liveSession(sessionId:string):Promise<LiveSessionDetail>{return this.#json(`/sessions/${encoded(sessionId)}`);}
-  async createLiveSession(input:{readonly runId:string;readonly kind:SessionKind;readonly title:string;readonly boardControl?:BoardControl;readonly matchPlayers?:{readonly white?:string;readonly black?:string};readonly classroomId?:string;readonly scheduledFor?:string}):Promise<LiveSession>{const body=await this.#json<{session:LiveSession}>("/sessions",{method:"POST",body:input});return body.session;}
+  async createLiveSession(input:{readonly runId:string;readonly kind:SessionKind;readonly title:string;readonly boardControl?:BoardControl;readonly rotationHandles?:readonly string[];readonly matchPlayers?:{readonly white?:string;readonly black?:string};readonly classroomId?:string;readonly scheduledFor?:string}):Promise<LiveSession>{const body=await this.#json<{session:LiveSession}>("/sessions",{method:"POST",body:input});return body.session;}
   async classrooms():Promise<readonly ClassroomSummary[]>{const body=await this.#json<{classrooms:readonly ClassroomSummary[]}>("/classrooms");return body.classrooms;}
   classroom(id:string):Promise<ClassroomDetail>{return this.#json(`/classrooms/${encoded(id)}`);}
   async createClassroom(name:string):Promise<ClassroomSummary>{const body=await this.#json<{classroom:ClassroomSummary}>("/classrooms",{method:"POST",body:{name}});return body.classroom;}

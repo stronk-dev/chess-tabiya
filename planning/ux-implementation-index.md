@@ -207,16 +207,16 @@ Nothing here waits on an owner ruling, an RFC acceptance, or a document anybody 
 |---|---|---|---|---|---|
 | LIV-a1 | §1.1a | `kind: "match"` plus the default `host_directed` board silently produces a two-leg PGN-paste Arena. **Two selects jointly decide which product you get and neither names it** | ledger | [[D1470]] | 🏆 |
 | LIV-a2 | §1.1b | The eligible-run rule (untouched position run, named handle) is invisible until the server throws | none | | |
-| LIV-a3 | §1.1c | `createLive` is invoked as `void` with no catch — **the error path renders nothing** | ledger | [[D1470]] | |
-| LIV-a4 | §1.1d | Every live session is titled `` `${liveKind} session` `` — the user is never asked | none | an event name has nowhere to live | 🏆 |
+| LIV-a3 | §1.1c | ✅ **Closed 2026-08-29:** creation has pending and visible failure states; incomplete rotation, match and title inputs are disabled with reasons | closed | [[D1470]]; component contract exercises a rejected rotation learner | |
+| LIV-a4 | §1.1d | ✅ **Closed 2026-08-29:** the host names the session before choosing a source run; the submitted title is trimmed and becomes the session heading | closed | component contract proves the title reaches creation | 🏆 |
 | LIV-a5 | §1.4a | The broadcast overlay headline is a raw runtime enum (`node.objectiveState`) rendered untranslated | none | | |
 | LIV-a6 | §4 C3 | Replace that enum with the run's human objective sentence, and say so when it is absent | none | | |
 | LIV-a7 | §1.3a | The overlay is the host's own OBS capture surface requiring an in-OBS sign-in and **nothing documents it**; name the seam once — copyable URL, transparent background, the cookie step | none | zero repo matches for `obs`/browser source | |
 | LIV-a8 | §3 B1 | **The audience preview**: one host-side control rendering exactly what a viewer sees | ledger | [[D1469]]; a second mount of the existing `projectionOnly` controller | |
 | LIV-a9 | §3 B3a | State that the board is never delayed, and instruct streamers to set delay in their streaming software | none | | |
 | LIV-a10 | §3 B4 | Reframe the cast pitch as commit → play → rewind → fork → compare; *"{n} branches"* needs a noun | none | the differentiator is host-side rewind, and the interface never says so | |
-| LIV-a11 | §1.5a / §11-5 | **`castVote` has zero client callers — the audience cannot cast a vote.** The server side is complete | ledger | [[D315]] | |
-| LIV-a12 | §4 C5 | `mintJoinLink` hardcodes `participant`; there is no *watch this* link mintable from the interface | ledger | [[D315]] | 🏆 |
+| LIV-a11 | §1.5a / §11-5 | ✅ **Closed 2026-08-29:** every signed-in session viewer can cast or change an open advisory vote; the client sends no external voter key and renders the authoritative returned tally | closed | [[D315]]; component contract crosses a spectator through the real client shape | |
+| LIV-a12 | §4 C5 | ✅ **Closed 2026-08-29:** every live kind exposes a distinct single-use **Create watch link** action; it requests spectator access without a match seat and states the sign-in, expiry and read-only limits | closed | [[D315]]; host component contract binds the request and rendered result | 🏆 |
 | LIV-a13 | §1.5c / §11-6 | `session_invitations.state` has one producer and no `UPDATE` — the state can never move | ledger | [[D1344]] | 🏆 |
 | LIV-a14 | §6 E1–E4 | **Streamer mode**: a three-state chrome preference on the existing keybinding registry that hides handles, ratings, the assistance rail, evidence panels, authored markers and shell chrome, states what it does *not* do, and stops the word *"Stream"* meaning two things | none | depends on nothing; the dossier's own #1 sequenced item | |
 | LIV-a15 | §7 F2 | Surface **pause-by-consent** in the invitation copy — the uncontested differentiator, unmentioned | none | | |
@@ -310,7 +310,7 @@ Nothing here waits on an owner ruling, an RFC acceptance, or a document anybody 
 | IMP-a3 | §2.3-5 | **The product routes chess.com users into its own narrowest refusal** — self-inflicted by the copy at `App.svelte:844` | ledger | [[D1486]] | |
 | IMP-a4 | §2.4c | A confirmation step before the run exists: players, date, result, plies, side, and what will be dropped | none | one server dry-run route or a client-side parse; `chessops/pgn` is already a dependency | |
 | IMP-a5 | §2.4c2 | Side is a select set *before* parsing, though the PGN headers usually answer it | none | | |
-| IMP-a6 | §2.4e / §11-12 | **Flip `import-source.ts:73`'s `clocks=false`.** One word, and the only time-sensitive item in the dossier: the data is irreversibly lost for every game imported before it changes | ledger | [[D1048]]; extract-before-strip already landed for the broadcast path | 🏆 |
+| IMP-a6 | §2.4e / §11-12 | **Retain own-game clocks end to end.** Request them, extract `[%clk]` before annotation stripping, persist the typed per-ply readings, and include them in account export/delete inventory. `clocks=true` alone still loses every reading in `stripPgnAnnotations` | ledger | [[D1048]], [[D2021]]; implementation is one `recorded-clocks` unit, not a query-string edit | 🏆 |
 | IMP-a7 | §2.3-4 / §9-4 | Six independent hard refusals render as **one raw parser string in one `alert`** | none | | |
 | IMP-a8 | §2.3-1 | Four import forms on four screens with no shared vocabulary and no shared component | ledger | [[D1486]] | |
 | IMP-a9 | §2.3-2 | Forms 1 and 2 disagree about whether a variation-bearing multi-game PGN is acceptable (`repertoire.ts:81` vs `pgn-import.ts:26-31`) | none | | |
