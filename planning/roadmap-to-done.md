@@ -241,6 +241,15 @@ owned Stockfish commands/final-line reduction and one canonical digest registry.
 theory and provider-backed collectors remain blocked from inventing private substitutes until the
 nine-arm `make provider-exchange-final-review` contract is repaired and independently accepted.
 
+The 2026-08-29 fourth independent review confirms those nine author repairs but returns the
+composed boundary on [[D2032]]–[[D2034]]. A local Syzygy domain result cannot carry a provider
+acquisition receipt without fabricating an exchange; subject availability has no ownership/role or
+operation/projection access matrix; and projection-only unique source leaves erase multiplicity
+when one consumer needs the same provider at two exact positions. The repair must make source
+occurrences and request subjects first-class before provider-backed Review, bots, theory or
+collectors can claim complete availability. `make provider-exchange-fourth-review` is the current
+three-arm reproduction; implementation remains blocked pending author repair and fresh review.
+
 The same layer now owns node-free live Syzygy position receipts. [[D1699]] closes Wave C's final
 promotion pair: geometry derives from complete declared pawn contacts; outcome joins exact legal
 moves to same-FEN recorded-or-live tablebase evidence. [[D1700]] corrects the latency repair itself:

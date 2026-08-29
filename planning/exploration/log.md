@@ -11139,3 +11139,18 @@ CI actually run.
   orientation cases exist, and seven avoidance events remain withheld on D1716/D1717. No product,
   collector, consumer or content byte changed; fresh independent buildability review gates
   implementation.
+
+## 2026-08-29 — Provider exchange returns on composed rather than isolated contracts
+
+- Ran all three stable provider author targets green, then added the independent
+  `make provider-exchange-fourth-review` composition check. It reproduces three blockers that the
+  earlier fixtures could not see because they tested each layer alone.
+- [[D2032]] shows that the locally computed Syzygy `outside_domain` value cannot inhabit a success
+  arm that always requires captured provider response bytes and an acquisition receipt. [[D2033]]
+  records the missing run/provider authorization and crossed-operation contract on subject
+  availability. [[D2034]] shows that projection-only unique source requirements collapse two exact
+  uses of the same provider, already visible in Story's before/after evaluation shape.
+- Returned `provider-exchange-and-execution` without changing production, schema, pack, content or
+  protected intent bytes. Review, bots, theory and provider-backed collectors remain blocked from
+  creating private substitutes; the repair order is occurrence identity, access/binding, then
+  local-versus-provider Syzygy outcomes.

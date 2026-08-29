@@ -1,10 +1,11 @@
 # RFC: Provider exchange and projection execution
 
-- **Status:** draft — third-return author repair complete 2026-08-29 for [[D2000]]–[[D2008]].
-  Distributive operation results, operation-keyed receipts, crossed-waiter settlement, two-axis
-  retention bounds, Syzygy domain abstention, disclosure-only Explorer population, descriptor-owned
-  Stockfish command/result authority and one provider-digest registry are now literal contracts.
-  The author fixtures pass; fresh independent buildability review still gates implementation.
+- **Status:** draft — returned by the fourth independent buildability review 2026-08-29 on
+  [[D2032]]–[[D2034]].
+  The [[D2000]]–[[D2008]] author repairs survive, but Syzygy's no-exchange domain result cannot carry
+  the mandatory acquisition receipt, subject availability has no authorization/cross-operation
+  contract, and projection-only source deduplication collapses distinct provider occurrences.
+  Implementation remains unauthorised.
 - **Author:** codex, from the D1652–D1658 and D1699–D1709 author-repair handoffs
 - **Created:** 2026-08-27
 - **Design refs:** `design/03-product-breadth.md` evidence architecture and provider-backed
@@ -1279,6 +1280,10 @@ returns to author instead of accepting a placeholder.
 
 ## Changelog
 
+- 2026-08-29: fourth independent buildability review returned the RFC on [[D2032]]–[[D2034]].
+  `make provider-exchange-fourth-review` proves the standalone Syzygy domain fixture does not compose
+  with receipt-bearing scheduler success, the authenticated subject operation has no access matrix,
+  and one projection-only source requirement cannot represent two exact provider requests.
 - 2026-08-29: repaired final return [[D2000]]–[[D2008]] with distributive operation-correlated
   results; exact operation/provider/requested/actual receipt maps and one scheduler-private
   constructor; scheduler-minted crossed-waiter deadlines plus two-axis deterministic retention;
