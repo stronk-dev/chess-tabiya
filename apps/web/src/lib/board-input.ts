@@ -50,6 +50,8 @@ export type BoardInputAction =
 export interface BoardInputResult {
   readonly state: BoardInputState;
   readonly moveUci?: string;
+  /** Announced only after the authoritative move mutation succeeds. */
+  readonly successAnnouncement?: string;
 }
 
 const ROLE_NAME: Readonly<Record<PromotionRole, string>> = Object.freeze({
@@ -249,14 +251,17 @@ export class BoardInputController {
   replacePosition(input: BoardInputPosition): BoardInputState {
     const activeSquare = initialSquare(input, this.#state.activeSquare);
     this.#input = input;
-    // A successful move causes the parent run projection to replace FEN. Keep
-    // its one success announcement through that replacement; replacing it with
-    // a generic position message would make the live region lose the commit at
-    // precisely the moment assistive users need it.
+    // A successful authoritative mutation updates the announcement separately.
+    // Preserve that result while the parent run projection replaces the FEN.
     const announcement = this.#state.lastAnnouncement.startsWith("Move committed:")
       ? this.#state.lastAnnouncement
       : "Position changed.";
     this.#state = this.#idle(activeSquare, announcement);
+    return this.#state;
+  }
+
+  announce(message: string): BoardInputState {
+    this.#state = this.#stateWith({ lastAnnouncement: message });
     return this.#state;
   }
 
@@ -292,9 +297,13 @@ export class BoardInputController {
     return this.#destination(action.square);
   }
 
-  #result(state: BoardInputState, moveUci?: string): BoardInputResult {
+  #result(state: BoardInputState, moveUci?: string, successAnnouncement?: string): BoardInputResult {
     this.#state = state;
-    return Object.freeze({ state, ...(moveUci === undefined ? {} : { moveUci }) });
+    return Object.freeze({
+      state,
+      ...(moveUci === undefined ? {} : { moveUci }),
+      ...(successAnnouncement === undefined ? {} : { successAnnouncement }),
+    });
   }
 
   #idle(activeSquare: Square, lastAnnouncement: string): BoardInputState {
@@ -407,7 +416,11 @@ export class BoardInputController {
     const move = parseUci(moveUci);
     const notation = move === undefined ? moveUci : makeSan(chess, move);
     const destination = semanticDestinationOf(this.#input.fen, moveUci);
-    return this.#result(this.#idle(destination, `Move committed: ${notation}.`), moveUci);
+    return this.#result(
+      this.#idle(destination, `Move staged: ${notation}. Waiting for the game to accept it.`),
+      moveUci,
+      `Move committed: ${notation}.`,
+    );
   }
 }
 

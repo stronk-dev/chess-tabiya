@@ -58,7 +58,8 @@
     resetToken?: string | number;
     onMoveSettled?: () => void;
     onFocusRestored?: () => void;
-    onMove: (uci: string) => void | Promise<void>;
+    /** `false` means the candidate was handled without an authoritative commit. */
+    onMove: (uci: string) => boolean | void | Promise<boolean | void>;
   }
 
   let {
@@ -92,6 +93,7 @@
   let promotionPicker = $state<HTMLDivElement>();
   let board: Api | undefined;
   let redrawTimer: ReturnType<typeof setTimeout> | undefined;
+  let moveGeneration = 0;
   const theme = useTheme();
   let resolvedTheme: ResolvedTheme = $state(theme.current);
   let moveText = $state("");
@@ -171,9 +173,23 @@
       void tick().then(() => promotionPicker?.querySelector<HTMLButtonElement>("button")?.focus());
     }
     if (result.moveUci !== undefined) {
-      onMoveCommitted?.(result.state.lastAnnouncement);
-      void Promise.resolve(onMove(result.moveUci)).finally(() => {
-        onMoveSettled?.();
+      const generation = ++moveGeneration;
+      void Promise.resolve(onMove(result.moveUci)).then((committed) => {
+        if (generation !== moveGeneration) return;
+        if (committed === false) {
+          inputState = controller.announce("Move was not committed. The board position is unchanged.");
+          board?.set(config());
+          return;
+        }
+        const announcement = result.successAnnouncement ?? "Move committed.";
+        inputState = controller.announce(announcement);
+        onMoveCommitted?.(announcement);
+      }, () => {
+        if (generation !== moveGeneration) return;
+        inputState = controller.announce("Move was not committed. The board position is unchanged.");
+        board?.set(config());
+      }).finally(() => {
+        if (generation === moveGeneration) onMoveSettled?.();
       });
     }
     return result;

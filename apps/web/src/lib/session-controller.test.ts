@@ -145,6 +145,7 @@ class FakeApi implements DrillClientApi {
   groupReplyCalls = 0;
   capabilitiesValue: Capabilities = capabilities;
   runSessionDigest = digest;
+  moveError: Error | undefined;
 
   constructor(
     readonly document: DrillPackDefinition = pack,
@@ -285,6 +286,7 @@ class FakeApi implements DrillClientApi {
     input: PlayerMoveRequest,
     writerId: string,
   ): Promise<MutationResult> {
+    if (this.moveError !== undefined) throw this.moveError;
     this.writerIds.push(writerId);
     const before = this.requiredRun().events.length;
     const moved = commitMove(this.requiredRun(), input.uci, { at });
@@ -450,7 +452,7 @@ describe("DrillSessionController", () => {
 
     await environment.controller.startPack(terminalPack.id);
     const callsBeforeMove = api.authoredFeedbackCalls;
-    await environment.controller.move("g6g7");
+    expect(await environment.controller.move("g6g7")).toBe(true);
 
     expect(api.selected).toBeUndefined();
     expect(api.requiredRun().events.at(-1)?.type).toBe("outcome.reached");
@@ -458,6 +460,19 @@ describe("DrillSessionController", () => {
     expect(environment.controller.state.authoredFeedback?.items[0]).toMatchObject({
       text: "Terminal commentary",
       revealedBy: { kind: "outcome" },
+    });
+  });
+
+  it("reports a rejected authoritative move to the shared board controller", async () => {
+    const api = new FakeApi();
+    const environment = controller(api);
+    await environment.controller.startPack(pack.id);
+    api.moveError = new Error("network refused the move");
+
+    expect(await environment.controller.move("c1e3")).toBe(false);
+    expect(environment.controller.state).toMatchObject({
+      busy: false,
+      error: "network refused the move",
     });
   });
 

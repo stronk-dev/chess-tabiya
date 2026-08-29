@@ -43,6 +43,11 @@ describe("BoardInputController", () => {
     expect(pointerMove.moveUci).toBe("e2e4");
     expect(keyboardMove.moveUci).toBe(pointerMove.moveUci);
     expect(text.moveUci).toBe(pointerMove.moveUci);
+    for (const result of [pointerMove, keyboardMove, text]) {
+      expect(result.state.lastAnnouncement).toContain("Move staged:");
+      expect(result.state.lastAnnouncement).not.toContain("Move committed:");
+      expect(result.successAnnouncement).toBe("Move committed: e4.");
+    }
   });
 
   it("uses visual coordinates under both orientations and never wraps", () => {

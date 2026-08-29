@@ -98,6 +98,78 @@ describe("Chessboard", () => {
     await unmount(component);
   });
 
+  it.each(["pointer", "keyboard", "text"] as const)(
+    "announces no authoritative commit when %s input is refused",
+    async (mode) => {
+      let settle: ((committed: boolean) => void) | undefined;
+      const onMove = vi.fn(() => new Promise<boolean>((resolve) => { settle = resolve; }));
+      const onMoveCommitted = vi.fn();
+      const target = document.createElement("div");
+      document.body.append(target);
+      const component = mount(Chessboard, {
+        target,
+        props: {
+          fen: "8/8/8/8/8/8/4P3/4K2k w - - 0 1",
+          startSide: "white",
+          onMove,
+          onMoveCommitted,
+        },
+      });
+      await tick();
+
+      if (mode === "pointer") {
+        chessground.configs.at(-1)!.movable!.events!.after!("e2", "e4", { premove: false, holdTime: 0 });
+      } else if (mode === "keyboard") {
+        const grid = target.querySelector<HTMLElement>("[data-board-input-grid]")!;
+        for (const key of ["ArrowUp", "Enter", "ArrowUp", "ArrowUp", "Enter"]) {
+          grid.dispatchEvent(new KeyboardEvent("keydown", { key, bubbles: true }));
+        }
+      } else {
+        const details = target.querySelector<HTMLDetailsElement>("details.text-move")!;
+        details.open = true;
+        const input = target.querySelector<HTMLInputElement>(".text-move input")!;
+        input.value = "e4";
+        input.dispatchEvent(new Event("input", { bubbles: true }));
+        target.querySelector<HTMLFormElement>(".text-move form")!.dispatchEvent(new SubmitEvent("submit", { bubbles: true, cancelable: true }));
+      }
+      await tick();
+      expect(onMove).toHaveBeenCalledWith("e2e4");
+      expect(target.querySelector("[role=status]")?.textContent).toContain("Move staged:");
+      expect(onMoveCommitted).not.toHaveBeenCalled();
+
+      settle?.(false);
+      await tick();
+      await Promise.resolve();
+      expect(onMoveCommitted).not.toHaveBeenCalled();
+      expect(target.querySelector("[role=status]")?.textContent).toContain("not committed");
+      expect(chessground.set).toHaveBeenCalled();
+      await unmount(component);
+    },
+  );
+
+  it("announces a commit only after the authoritative mutation succeeds", async () => {
+    let settle: ((committed: boolean) => void) | undefined;
+    const onMove = vi.fn(() => new Promise<boolean>((resolve) => { settle = resolve; }));
+    const onMoveCommitted = vi.fn();
+    const target = document.createElement("div");
+    document.body.append(target);
+    const component = mount(Chessboard, {
+      target,
+      props: { fen: "8/8/8/8/8/8/4P3/4K2k w - - 0 1", startSide: "white", onMove, onMoveCommitted },
+    });
+    await tick();
+    chessground.configs[0]!.movable!.events!.after!("e2", "e4", { premove: false, holdTime: 0 });
+    await tick();
+    expect(onMoveCommitted).not.toHaveBeenCalled();
+    settle?.(true);
+    await tick();
+    await Promise.resolve();
+    expect(onMoveCommitted).toHaveBeenCalledOnce();
+    expect(onMoveCommitted).toHaveBeenCalledWith("Move committed: e4.");
+    expect(target.querySelector("[role=status]")?.textContent).toBe("Move committed: e4.");
+    await unmount(component);
+  });
+
   it("keeps learner shapes separate from system overlays without snapping or erasing", async () => {
     const onMarksChange = vi.fn();
     const target = document.createElement("div");document.body.append(target);

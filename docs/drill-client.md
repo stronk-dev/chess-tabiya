@@ -463,6 +463,13 @@ sight, comparison position, and board-input feedback use atomic status
 announcements. The visible guide, guard actions, and comparison boards are not
 live regions; only their changed textual receipt is announced.
 
+All five board input modes stage the same move candidate before the network
+mutation. The board says that the move is waiting for acceptance and announces
+commitment only after the authoritative run mutation succeeds. A refusal or
+network failure instead announces that nothing committed and restores the
+authoritative position. Pointer, keyboard-grid, and text-move rejection tests
+bind this ordering; click, drag, and touch already converge on the pointer path.
+
 ## Branch intent, horizon, and replay resistance
 
 Forking leads with the learner's intended experiment. A short name remains optional; when it is

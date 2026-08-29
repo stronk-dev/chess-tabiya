@@ -308,7 +308,7 @@ export class DrillSessionController {
     } catch (error) { this.#fail(error); }
   }
 
-  async move(uci: string): Promise<void> {
+  async move(uci: string): Promise<boolean> {
     const store = this.#requiredStore();
     this.#patch({ busy: true, error: undefined });
     try {
@@ -317,20 +317,22 @@ export class DrillSessionController {
         await this.#refreshAuthoredFeedback();
         await this.#refreshReasoning();
         this.#patch({ busy: false });
-        return;
+        return true;
       }
       if (this.#hasOutcome(result.emitted)) {
         await this.#refreshAuthoredFeedback();
         this.#patch({ busy: false });
-        return;
+        return true;
       }
       if (this.#matchMode === "live") {
         store.follow();
       }
       await this.#playOpponentIfNeeded();
       this.#patch({ busy: false });
+      return true;
     } catch (error) {
       this.#fail(error);
+      return false;
     }
   }
 

@@ -10897,3 +10897,14 @@ CI actually run.
   could not represent Maia's own decimal temperature/top-p request identity. Corrected the contract
   to RFC 8785 finite-number serialization and extended the author fixture across decimal mutation,
   negative zero and reordered keys. This remains RFC authoring only; fresh review still gates code.
+
+## 2026-08-29 — Authoritative board-move announcement repair
+
+- Closed [[D1691]] across the shared five-mode input path. Move candidates now announce as staged;
+  only a successful authoritative run mutation produces the committed receipt. Rejection, network
+  failure and stale settlement cannot emit success, and the rendered board is restored from the
+  authoritative position on failure.
+- Added pointer, keyboard-grid and text-input rejection fixtures plus a session-controller failure
+  receipt. Click, drag and touch already share the pointer commit path, so the repair does not create
+  per-mode policy. Updated `docs/drill-client.md`; no pack, content, schema, archive or protected
+  intent byte changed.

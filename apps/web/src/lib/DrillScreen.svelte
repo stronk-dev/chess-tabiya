@@ -80,7 +80,7 @@
     seatedInContest?: boolean | undefined;
     reviewing?: boolean | undefined;
     firstRehearsal?: boolean | undefined;
-    onMove: (uci: string) => void | Promise<void>;
+    onMove: (uci: string) => boolean | void | Promise<boolean | void>;
     onReveal?: (() => void | Promise<void>) | undefined;
     onRewind: (target: RewindTarget) => void | Promise<void>;
     onFork: (label?: string, intent?: string) => void | Promise<void>;
@@ -498,20 +498,22 @@
     if (groupCandidates.length < 8) groupCandidates = [...groupCandidates, uci];
   }
 
-  async function boardMove(uci: string): Promise<void> {
+  async function boardMove(uci: string): Promise<boolean> {
     selectedSquare = undefined;
     if (groupOpen && groupSource === "hand_picked") {
       captureGroupMove(uci);
-      return;
+      return false;
     }
     const before = activeGroup;
     const beforeIndex = before?.members.findIndex((member) => member.branchId === run.activeCursor.branchId) ?? -1;
-    await onMove(uci);
+    const committed = await onMove(uci);
+    if (committed === false) return false;
     await tick();
-    if (before === undefined || groupPreference(before.groupId) !== "lockstep" || checkpoint !== undefined) return;
+    if (before === undefined || groupPreference(before.groupId) !== "lockstep" || checkpoint !== undefined) return true;
     const next = before.members[(beforeIndex + 1) % before.members.length];
-    if (next === undefined || next.branchId === run.activeCursor.branchId) return;
+    if (next === undefined || next.branchId === run.activeCursor.branchId) return true;
     await switchRunBranch(branchPath(run, next.branchId).at(-1)!.id, next.branchId);
+    return true;
   }
 
   async function createGroup(): Promise<void> {
