@@ -71,6 +71,7 @@
   import { markAttribution, relayedMarkShapes } from "./lib/live-marks.js";
   import { clearAccountLocalData, clearRunLocalData } from "./lib/account-local-data.js";
   import { graduationEntries, requiredFieldStates, splitValidationIssues } from "./lib/pack-validation-presentation.js";
+  import { importFailureCopy } from "./lib/import-presentation.js";
 
   interface Props {
     api?: DrillClientApi;
@@ -659,7 +660,7 @@
       }, writer.writerId);
       await api.reveal(runId, writer.writerId);
       navigate(routePath({ name: "story", runId }));
-    } catch (error) { importError = error instanceof Error ? error.message : String(error); }
+    } catch (error) { importError = importFailureCopy(error); }
   }
 
   async function startRatedGame(band: 1000 | 1400 | 1800 | 2200, side: "white" | "black"): Promise<void> {
@@ -1372,9 +1373,10 @@
         <span>or paste PGN</span>
         <label>PGN <textarea rows="6" placeholder="[Event …]" bind:value={importPgn}></textarea></label>
         <label>Your side <select bind:value={importSide}><option value="white">White</option><option value="black">Black</option></select></label>
-        <button class="primary" type="submit" disabled={importUrl.trim() === "" && importPgn.trim() === ""}>Build game story</button>
+        <p id="import-storage-disclosure" class="honest">Import keeps the original PGN verbatim—including player names, tags, comments, and move annotations—alongside its parsed main line and the rehearsal branches you add. It is included in your account export and removed with this run or your account, subject to the stated backup limits.</p>
+        <button class="primary" type="submit" aria-describedby="import-storage-disclosure import-source-guidance" disabled={importUrl.trim() === "" && importPgn.trim() === ""}>Build game story</button>
         {#if importError}<p role="alert">{importError}</p>{/if}
-        <p class="honest">Chess.com: download or copy the PGN from the game page and paste it here. Tabiya never links or mines your account.</p>
+        <p id="import-source-guidance" class="honest">Chess.com: export one completed game's PGN and paste it here. Export the game, not an analysis tree with variations. Tabiya never links or mines your account.</p>
       </form>
       <div class="item-list">
         {#each runs as run}

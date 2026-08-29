@@ -33,6 +33,21 @@ The sources are deliberately narrow:
 - chess.com URLs are refused with guidance to paste the PGN because no supported
   per-game public fetch contract exists.
 
+Before submission, the client states the durable-storage boundary: the original
+PGN is kept verbatim, including player names, tags, comments, and move
+annotations, beside the parsed main line and any rehearsal branches added later.
+It also states that these bytes are included in account export and removed with
+the imported run or account, subject to the documented backup limits. Chess.com
+guidance asks for one completed-game export, not an analysis tree containing
+variations.
+
+The server remains the authority for parsing and source lookup. The client maps
+the server's typed refusals to distinct, actionable messages for one-game,
+mainline-only, variant, size, length, empty-game, starting-position,
+illegal-move, parse, lookup, timeout, and unsupported-source failures. An
+unrecognised typed failure retains the server message rather than being replaced
+with a generic alert.
+
 `POST /runs/import` creates the run and its provenance record atomically. Unknown
 request fields fail explicitly. `GET /runs/:id/import` returns the authorized
 record: source kind/URL, movetext digest, PGN headers, result, original PGN,

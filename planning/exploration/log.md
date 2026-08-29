@@ -11047,3 +11047,18 @@ CI actually run.
 - Clipboard write is best effort after token creation. Permission denial leaves the public URL
   visible and reports manual-copy guidance instead of rejecting the click handler. The complete
   browser suite crosses UI mint → anonymous read → UI revoke → generic 404 and passes 60 journeys.
+
+## 2026-08-29 — Import states what it keeps and why it refuses a game
+
+- Closed `IMP-a3`, `IMP-a7`, and `IMP-a10`, and narrowed [[D1486]] without claiming the remaining
+  multi-game, variation-preservation, or clock-retention work. Before submission, Review now says
+  that the original PGN—including names, tags, comments, and annotations—enters durable storage,
+  account export, and the existing deletion/backup boundary.
+- The server remains the parsing authority. A client projection turns its typed source and parser
+  failures into distinct one-game, mainline-only, variant, size, length, empty-game,
+  starting-position, illegal-move, parse, lookup, timeout, and unsupported-source guidance while
+  preserving an unknown server message.
+- Chess.com guidance now asks for one completed-game PGN rather than an analysis tree with
+  variations. The browser journey first proves the production multi-game refusal, then imports a
+  valid game. `IMP-a1`, `IMP-a2`, and `IMP-a6` remain RFC-blocked; `IMP-a16` and `IMP-a27` remain
+  partial because their other storage-start surfaces have not shipped.

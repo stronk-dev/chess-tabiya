@@ -4759,17 +4759,21 @@
     {
       "id": "IMP-a10",
       "sourceState": "queued",
-      "state": "queued",
+      "state": "completed",
       "capability": "account_data",
       "owner": "account-and-data",
-      "assignment": "capability:account_data",
+      "assignment": "closed",
       "sourceDocument": "ux-import-and-account.md",
       "sourceSection": "§2.3-6/-7 / §11-13",
       "sourceHeading": "Import, account and data — `ux-import-and-account.md`",
       "summary": "Import stores another product's move verdicts and **both players' handles verbatim, and exports them**, undisclosed. Disclosure, not stripping — provenance needs the tags",
       "legacyRoute": "ledger",
       "note": "[[D410]]/[[D959]]/[[D1486]]",
-      "sourceDigest": "sha256:b138f6b8a3dd84b41eb68b4f621c9ac64e2ebcc178defb30de40ddd430e1924a"
+      "sourceDigest": "sha256:b138f6b8a3dd84b41eb68b4f621c9ac64e2ebcc178defb30de40ddd430e1924a",
+      "completion": {
+        "completedOn": "2026-08-29",
+        "evidence": "Review discloses before submission that the verbatim PGN, including player names, tags, comments and annotations, is retained, exported, and deleted with the run/account subject to backup limits"
+      }
     },
     {
       "id": "IMP-a11",
@@ -5096,17 +5100,21 @@
     {
       "id": "IMP-a3",
       "sourceState": "queued",
-      "state": "queued",
+      "state": "completed",
       "capability": "account_data",
       "owner": "account-and-data",
-      "assignment": "capability:account_data",
+      "assignment": "closed",
       "sourceDocument": "ux-import-and-account.md",
       "sourceSection": "§2.3-5",
       "sourceHeading": "Import, account and data — `ux-import-and-account.md`",
       "summary": "**The product routes chess.com users into its own narrowest refusal** — self-inflicted by the copy at `App.svelte:844`",
       "legacyRoute": "ledger",
       "note": "[[D1486]]",
-      "sourceDigest": "sha256:d4425f2ce1d9c491863b723fdb2748344455182825fd6d65535d3254b2af6b5a"
+      "sourceDigest": "sha256:d4425f2ce1d9c491863b723fdb2748344455182825fd6d65535d3254b2af6b5a",
+      "completion": {
+        "completedOn": "2026-08-29",
+        "evidence": "Chess.com handoff asks for one completed-game PGN export and explicitly distinguishes it from an analysis tree with variations"
+      }
     },
     {
       "id": "IMP-a30",
@@ -5170,16 +5178,20 @@
     {
       "id": "IMP-a7",
       "sourceState": "queued",
-      "state": "queued",
+      "state": "completed",
       "capability": "account_data",
       "owner": "account-and-data",
-      "assignment": "capability:account_data",
+      "assignment": "closed",
       "sourceDocument": "ux-import-and-account.md",
       "sourceSection": "§2.3-4 / §9-4",
       "sourceHeading": "Import, account and data — `ux-import-and-account.md`",
       "summary": "Six independent hard refusals render as **one raw parser string in one `alert`**",
       "legacyRoute": "none",
-      "sourceDigest": "sha256:c10f44e6f4789230f1439000c276118e9861b17637b02da46ba1aeb4e2580b00"
+      "sourceDigest": "sha256:c10f44e6f4789230f1439000c276118e9861b17637b02da46ba1aeb4e2580b00",
+      "completion": {
+        "completedOn": "2026-08-29",
+        "evidence": "typed import source and parser failures map to actionable learner copy; 11-case unit table and production browser multi-game refusal journey"
+      }
     },
     {
       "id": "IMP-a8",

@@ -158,6 +158,19 @@ test("a first learner enters the real rehearsal loop with a persistent event-der
 
 test("imports one game, opens a grounded story, re-enters play, and exports original plus branch", async ({ page }) => {
   await page.getByRole("link", { name: "Review" }).click();
+  await expect(page.getByText("Import keeps the original PGN verbatim", { exact: false })).toBeVisible();
+  await expect(page.getByText("Export the game, not an analysis tree with variations.", { exact: false })).toBeVisible();
+  await page.getByLabel("PGN").fill(`[Event "First"]
+[Result "*"]
+
+1. e4 *
+
+[Event "Second"]
+[Result "*"]
+
+1. d4 *`);
+  await page.getByRole("button", { name: "Build game story" }).click();
+  await expect(page.getByRole("alert")).toContainText("one game at a time");
   await page.getByLabel("PGN").fill(`[Event "Browser import"]
 [Site "https://lichess.org/abcd1234"]
 [White "Alice"]
