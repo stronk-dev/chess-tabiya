@@ -11077,3 +11077,20 @@ CI actually run.
   `invalid_turn_clone` as the permanent control. The held Stockfish score join remains a type-only
   seam; all score/loss/provider behavior is enumerated on D10 and earns no foundation acceptance.
   The five ledger rows remain open until a fresh independent review accepts the amended contract.
+
+## 2026-08-29 — Bounded targets close the background-operation contract
+
+- Author-repaired `bounded-policy-targets.md` on [[D1993]]–[[D1999]] without authorising
+  implementation. Exact request/result digests now use domain-separated shipped canonical bytes;
+  duplicate calls share one job while cancellation remains waiter-local and only the final waiter
+  stops underlying work.
+- Made `local/background` representable through an explicit checked producer-latency matrix and
+  specified the missing producer-operation registry/call-site census. The exact post-candidate
+  `legal-exchange-for-move@1` result is retained instead of being simultaneously required and
+  forbidden.
+- Closed service defaults, failed/cancelled exits, no-publication cleanup and
+  `bounded-target-visited-positions@1`, including root, terminal, identity-loss, repeated-position,
+  cap and yield boundaries. Under [[D2029]], this RFC and the candidate-packet RFC now require one
+  dependency-free `cooperative-yield.ts:messageChannelMacrotaskYield` rather than two schedulers.
+- The dedicated final-review falsifier now tests the repaired contract. Fresh independent review
+  still gates implementation; the seven ledger findings remain open until that review accepts it.

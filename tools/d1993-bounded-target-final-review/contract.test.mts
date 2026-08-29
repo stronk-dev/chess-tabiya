@@ -1,63 +1,84 @@
-// DISPOSABLE review harness — D1993-D2001. Not production code.
+// DISPOSABLE author/review falsifier — D1993-D1999. Not production code.
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import { test } from "node:test";
 
 const read = (path: string): string => readFileSync(path, "utf8");
 const rfc = read("rfc/bounded-policy-targets.md");
-const authorHarness = read("tools/d1652-bounded-target-repair-harness/second-repeat-repair.test.ts");
-const evidenceContract = read("packages/runtime/src/evidence-contract.ts");
-const evidenceCatalogue = read("packages/runtime/src/evidence-catalog.ts");
-const research = read("tools/d1023-bounded-policy-harness/exact-target.test.ts");
+const packetRfc = read("rfc/shared-candidate-evidence-packet.md");
+const backlog = read("design/BACKLOG.md");
 
-test("D1993: duplicate-job cancellation has no waiter algebra", () => {
-  assert.match(rfc, /Exact duplicate request digests share one job/);
-  assert.match(rfc, /submit\(\s*request: BoundedTargetBatchRequest,\s*signal: AbortSignal/s);
-  assert.doesNotMatch(rfc, /waiter|last subscriber|last caller|per-caller|all waiters|remaining caller/i);
-  assert.equal(rfc.includes("Deduplication occurs before queue-capacity admission"), false);
+test("D1993: shared work has waiter-local cancellation and dedup-before-capacity", () => {
+  assert.match(rfc, /Deduplication then occurs \*\*before\s+queue-capacity admission\*\*/s);
+  assert.match(rfc, /caller abort settles only that waiter/i);
+  assert.match(rfc, /last waiter[\s\S]*queued job is removed immediately[\s\S]*running job receives its private abort/i);
+  assert.match(rfc, /duplicate may attach[\s\S]*eight other unique jobs fill capacity/i);
+  assert.match(rfc, /settlement atomically removes the job-map entry/i);
+  assert.match(rfc, /later identical request starts a new\s+job/i);
+  assert.match(rfc, /Two waiters share one execution/);
 });
 
-test("D1994: request and input digests have no source authority", () => {
-  const declared = evidenceContract.slice(evidenceContract.indexOf("export interface DeclaredEvidence"), evidenceContract.indexOf("const DECLARED:"));
-  assert.doesNotMatch(declared, /digest/);
-  assert.match(rfc, /Exact duplicate request digests/);
-  assert.match(rfc, /readonly inputDigests: readonly string\[\]/);
-  assert.doesNotMatch(rfc, /domain tag|domain-separated|JCS|canonicalPayload|sha256:/i);
+test("D1994: request and result identities have one canonical byte authority", () => {
+  assert.match(rfc, /tabiya:bounded-target-input@1/);
+  assert.match(rfc, /tabiya:bounded-target-request@1/);
+  assert.match(rfc, /tabiya:bounded-target-result@1/);
+  assert.match(rfc, /shipped browser-safe `evidenceDigest\(\)`/);
+  assert.match(rfc, /sorts\s+the exchange item digests lexicographically/s);
+  assert.match(rfc, /maps each declared evidence item to its\s+exact `\{ producer, projection, payload \}` image/s);
+  assert.doesNotMatch(rfc, /readonly inputDigests: readonly string\[\]/);
 });
 
-test("D1995: the live producer helper forces every local producer to sync", () => {
-  assert.match(rfc, /own availability\/latency \| `local` \/ `background`/);
-  assert.match(evidenceCatalogue, /latency: availability === "provider" \? "interactive" : availability === "build_time" \? "offline" : "sync"/);
-  assert.doesNotMatch(authorHarness, /EVIDENCE_PRODUCERS|producer\("derived\.bounded_target"|latency: "background"/);
+test("D1995: the real catalogue change can represent local/background without mutating old rows", () => {
+  assert.match(rfc, /producer\(id, plane, implementation, availability, latency, outputs\)/);
+  assert.match(rfc, /`local → sync \| background`, `recorded → sync`, `provider → interactive`, and\s+`build_time → offline`/s);
+  assert.match(rfc, /existing declaration[\s\S]*compiled bytes and manifest digest do not change/i);
+  assert.match(rfc, /new row is exactly\s+`local\/background`, never an implicit `sync` fallback/s);
 });
 
-test("D1996: the named producer-operation census is absent", () => {
-  assert.match(rfc, /generated evidence-operation census/);
-  assert.match(evidenceContract, /export interface EvidenceConsumerOperation/);
-  assert.doesNotMatch(evidenceContract, /EvidenceProducerOperation|EvidenceServiceOperation|assertEvidenceProducerOperations/);
-  assert.doesNotMatch(evidenceCatalogue, /BoundedTargetBackgroundService|derived\.bounded_target/);
+test("D1996: producer operation authority binds the exact background service and reach", () => {
+  assert.match(rfc, /interface EvidenceProducerOperation/);
+  assert.match(rfc, /assertEvidenceProducerOperations\(producers, operations\)/);
+  assert.match(rfc, /BoundedTargetBackgroundService\.submit/);
+  assert.match(rfc, /RUNTIME_EVIDENCE_PRODUCER_OPERATIONS/);
+  assert.match(rfc, /expected set from \*\*every\s+manifest producer whose latency is `background`\*\*/s);
+  assert.match(rfc, /initial production call-site census is deliberately empty/i);
 });
 
-test("D1997: exchange-neutralized needs the evaluator the RFC forbids", () => {
-  assert.match(rfc, /"exchange_neutralized"/);
-  assert.match(rfc, /No recomputation of threat or legal exchange beside the retained sealed inputs/);
-  assert.match(research, /function positiveTargetCapture[\s\S]*legalExchangeForMove/);
-  assert.match(research, /cause: "exchange_neutralized"/);
-  assert.doesNotMatch(rfc, /post-candidate exchange|internal semantic dependency|legalExchangeForMove.*derived/i);
+test("D1997: post-candidate exchange is a retained versioned semantic dependency", () => {
+  assert.match(rfc, /interface PostCandidateExchangeEvaluation/);
+  assert.match(rfc, /convention: "legal-exchange-for-move@1"/);
+  assert.match(rfc, /readonly resultUnits: number/);
+  assert.match(rfc, /Positive units correlate only with `preserved`; zero or\s+negative units correlate only with `exchange_neutralized`/s);
+  assert.match(rfc, /does not mint a second source evidence item/i);
+  assert.match(rfc, /No recomputation of the source threat or source-position legal exchange/);
 });
 
-test("D1998: service failure and construction options are open", () => {
-  const operation = rfc.slice(rfc.indexOf("type BoundedTargetBatchResult"), rfc.indexOf("### 4.1"));
-  assert.doesNotMatch(operation, /kind: "failed"|throw|internal_error|yield_failed/);
-  assert.doesNotMatch(rfc, /BoundedTargetServiceOptions|BoundedTargetBackgroundServiceOptions/);
-  assert.match(rfc, /injected `yieldControl\(\): Promise<void>`/);
-  assert.doesNotMatch(rfc, /setImmediate|MessageChannel|setTimeout/);
+test("D1998: service options, failures, no-throw submission and cleanup are closed", () => {
+  assert.match(rfc, /interface BoundedTargetServiceOptions/);
+  for (const value of ["maxActive: 1", "maxQueued: 8", "maxPairs: 512", "maxVisitedPositions: 25000", "yieldEveryVisited: 64"]) {
+    assert.match(rfc, new RegExp(value));
+  }
+  for (const reason of ["yield_failed", "traversal_failed", "seal_failed", "invariant_failed"]) {
+    assert.match(rfc, new RegExp(`"${reason}"`));
+  }
+  assert.match(rfc, /Once constructed, `submit\(\)` never throws/);
+  assert.match(rfc, /leaves the active\/queue\/dedup maps in the same state as if it had never\s+been admitted/s);
+  assert.match(rfc, /setTimeout\(\(\) => abort\(\), 0\)/);
 });
 
-test("D1999: visited-position counting is not specified", () => {
-  assert.match(rfc, /25,000 visited positions/);
-  assert.match(rfc, /exactly 64 visited positions/);
-  assert.doesNotMatch(rfc, /root counts as|increment(?:s|ed)? (?:before|after)|transposition.*count|terminal.*increment|visited-position convention/i);
-  assert.match(research, /let visited = 1/);
-  assert.match(research, /visited \+= 1/);
+test("D1999: every visited-position edge and boundary has one convention", () => {
+  assert.match(rfc, /bounded-target-visited-positions@1/);
+  assert.match(rfc, /traversal root and counts as \*\*1\*\*/);
+  assert.match(rfc, /counter increments once[\s\S]*Terminal detection, tracked-identity validation and target evaluation/s);
+  assert.match(rfc, /child still counts if it is terminal or the identity update fails/);
+  assert.match(rfc, /same FEN through two legal paths counts two/);
+  assert.match(rfc, /replay at the sealing boundary[\s\S]*never alters the recorded count/s);
+  assert.match(rfc, /never cap\+1/);
+  assert.match(rfc, /Counts 63\/64\/65 yield zero\/one\/one/);
+});
+
+test("D2029: both background RFCs share one dependency-free macrotask adapter", () => {
+  assert.match(rfc, /cooperative-yield\.ts:messageChannelMacrotaskYield/);
+  assert.match(packetRfc, /cooperative-yield\.ts[\s\S]*messageChannelMacrotaskYield/s);
+  assert.match(backlog, /D2029[^\n]*SAME EVENT-LOOP YIELD/);
 });

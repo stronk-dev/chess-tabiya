@@ -3,7 +3,8 @@
 - **Status:** **draft — author repair complete 2026-08-29 for [[D1977]]–[[D1981]]; fresh
   independent buildability review remains required and implementation remains unauthorised.** The
   operation now has one closed ready/cancelled/failed algebra and literal options; the production
-  scheduler is the named `messageChannelMacrotaskYield`; projection is a typed and runtime-checked
+  scheduler is the shared `messageChannelMacrotaskYield` from dependency-free
+  `cooperative-yield.ts`; projection is a typed and runtime-checked
   scope partial order; collector groups distinguish available-empty from unavailable; and the held
   Stockfish join is only a compile-time handoff here, with all behavior moved to D10. Exact return:
   `planning/evidence-foundation-ux/shared-candidate-packet-final-independent-review-2026-08-28.md`.
@@ -707,7 +708,7 @@ export interface CandidatePopulationServiceOptions {
   readonly maxEntries: number;              // default 8; positive safe integer
   readonly maxRetainedWeight: number;       // default 56_000; positive safe integer
   readonly maxCollectorsPerGroup: number;   // default 4; closed range 1..8
-  readonly yieldControl: () => Promise<void>; // default messageChannelMacrotaskYield
+  readonly yieldControl: () => Promise<void>; // default shared messageChannelMacrotaskYield
 }
 
 interface CandidatePopulationService {
@@ -734,7 +735,8 @@ stable-ordered by projection id and sliced into groups of at most
 `options.maxCollectorsPerGroup` (default 4, valid range 1..8); one group always applies to one
 candidate and never crosses a candidate boundary. The compiler executes one group, records only
 its exact returned values, then awaits `options.yieldControl()`. The production/default adapter is
-the exported `messageChannelMacrotaskYield`, implemented with one `MessageChannel` post and closed
+the exported `messageChannelMacrotaskYield` from `packages/runtime/src/cooperative-yield.ts`,
+implemented with one `MessageChannel` post and closed
 ports per scheduled continuation; a resolved-Promise/microtask substitute fails the scheduler
 contract because it cannot admit timer-driven cancellation. The service constructor injects this
 default explicitly; tests may inject a deterministic adapter but no product caller chooses a
@@ -1134,7 +1136,7 @@ listed symbol moved exactly once rather than rewarding a hand count.
 
 | # | file | change |
 |---|---|---|
-| 1 | `packages/runtime/src/candidate-population.ts` (new) | compiler, legal-authority read, closed collector results, code-derived bounded groups, `messageChannelMacrotaskYield`, the **moved** one-authority `candidateChildReadings`, set equality, terminal/scope rules, typed abstentions and private `WeakMap` receipt authority (§3–§5/§6.0) |
+| 1 | `packages/runtime/src/cooperative-yield.ts` (new), `packages/runtime/src/candidate-population.ts` (new) | one dependency-free `messageChannelMacrotaskYield`; compiler, legal-authority read, closed collector results, code-derived bounded groups, the **moved** one-authority `candidateChildReadings`, set equality, terminal/scope rules, typed abstentions and private `WeakMap` receipt authority (§3–§5/§6.0) |
 | 1a | `packages/runtime/src/candidate-population-abstentions.generated.ts` (new) | generated frozen `as const` projection→reason map; public union derives from these literal bytes |
 | 2 | `packages/runtime/src/candidate-population-cache.ts` (new) | closed service result/failure/options, typed+runtime scope partial-order projector/minting path, neutral factual receipt, key, waiter-aware cancellation, single-flight, dual-bound LRU, stats and invalidation (§3.1/§6) |
 | 2a | `packages/runtime/src/candidate-score-handoff.ts` (new; types only) | `CandidateScoreJoinInput`/`CandidateScoreJoinRow` compile-time D10 seam; no constructor, score algebra, provider call, operation or consumer ships here (§7.1) |
@@ -1189,7 +1191,7 @@ rather than aspirational — criterion 14.
 | [[D1961]] | exact convention/version/abstention authorities are widened to unchecked scalars | §3.1 | author-repaired: literal convention/version types and generated projection→reason union with set-equality guard |
 | [[D1977]] | success, cancellation and failures had no public result algebra or options contract | §3.1, §6.0 | closed `CandidatePopulationResult`/failure/options; every exit crossed against receipt/cache publication in criterion 23 |
 | [[D1978]] | held provider behavior was required by the provider-free foundation's own criteria | §7.1, §10, §12 | type-only score handoff here; criteria 15/17 fence absence; all behavior enumerated on D10 |
-| [[D1979]] | “portable macrotask yield” named neither a production adapter nor measurable topology | §6.0 | `messageChannelMacrotaskYield`, 1..8/default-4 groups, real timer abort and yield-overhead receipt |
+| [[D1979]] | “portable macrotask yield” named neither a production adapter nor measurable topology | §6.0 | shared `cooperative-yield.ts:messageChannelMacrotaskYield`, 1..8/default-4 groups, real timer abort and yield-overhead receipt; [[D2029]] prevents a second authority |
 | [[D1980]] | receipt projection admitted impossible crossed narrow scopes | §3.1, §3.4 | `ProjectableCandidateScope` plus runtime partial order and typed invalid-projection result |
 | [[D1981]] | the loose-piece wrapper erased unavailable into the same array as available no-match | §3.1, §5.3 | closed collector result, generated projection/reason abstention and separate available-empty fixture |
 
