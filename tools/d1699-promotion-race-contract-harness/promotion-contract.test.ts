@@ -24,6 +24,10 @@ import {
 type Latency = ProducerDeclaration["latency"];
 type SourceKind = "recorded.tablebase.result" | "live.syzygy.position_result";
 
+type RepairedPromotionRaceGeometryResult =
+  | { readonly kind: "available"; readonly value: PromotionRaceGeometry }
+  | { readonly kind: "unavailable"; readonly reason: "no_opposing_passed_clear_paths" | "input_abstained" };
+
 interface PositionTablebaseReceipt {
   readonly projection: SourceKind;
   readonly fen: string;
@@ -35,15 +39,17 @@ interface PositionTablebaseReceipt {
   readonly pieceCount: number;
 }
 
-function repairedGeometry(input: DeclaredEvidence<PawnContactsReading> | undefined): PromotionRaceGeometryResult {
+function repairedGeometry(input: DeclaredEvidence<PawnContactsReading> | undefined): RepairedPromotionRaceGeometryResult {
   if (input === undefined) return Object.freeze({ kind: "unavailable", reason: "input_abstained" });
   if (input.projection.id !== "rules.pawn.reading.contacts") throw new TypeError("promotion race requires declared pawn contacts");
   const baseline = promotionRaceGeometry(input.payload.fen);
-  if (baseline.kind === "unavailable") return baseline;
+  if (baseline.kind === "unavailable") {
+    return Object.freeze({ kind: "unavailable", reason: baseline.reason === "input_abstained" ? "input_abstained" : "no_opposing_passed_clear_paths" });
+  }
   const passed = new Set(input.payload.passed.filter((row) => row.passed).map((row) => `${row.pawn.piece.color}:${row.pawn.square}`));
   const pawns = baseline.value.pawns.filter((row) => passed.has(`${row.pawn.piece.color}:${row.pawn.square}`));
   if (!pawns.some((row) => row.pawn.piece.color === "white") || !pawns.some((row) => row.pawn.piece.color === "black")) {
-    return Object.freeze({ kind: "unavailable", reason: "blocked_or_capturable_path_outside_convention" });
+    return Object.freeze({ kind: "unavailable", reason: "no_opposing_passed_clear_paths" });
   }
   const byPly = new Map<number, typeof pawns>();
   for (const pawn of pawns) byPly.set(pawn.arrivalPly, Object.freeze([...(byPly.get(pawn.arrivalPly) ?? []), pawn]));
@@ -60,7 +66,7 @@ function repairedGeometry(input: DeclaredEvidence<PawnContactsReading> | undefin
 }
 
 function repairedTablebaseJoin(
-  geometry: PromotionRaceGeometryResult,
+  geometry: RepairedPromotionRaceGeometryResult,
   legalMoves: DeclaredEvidence<ExactLegalMoveMap>,
   source: PositionTablebaseReceipt | undefined,
 ) {
@@ -107,7 +113,7 @@ function geometryProjection(): ProjectionDeclaration {
     semantics: "race-arrival@1 orders opposing passed pawns with clear forward paths by alternating-turn arrival ply; it contains no outcome.",
     operands: Object.freeze(["fen", "pawns", "arrivalConvention", "ordering", "sideToMove"]), signs: Object.freeze(["state"]),
     grounding: "position_rules", exactness: "convention", confidence: "not_applicable",
-    abstention: Object.freeze({ possible: true, reasons: Object.freeze(["blocked_or_capturable_path_outside_convention", "input_abstained"]) }),
+    abstention: Object.freeze({ possible: true, reasons: Object.freeze(["no_opposing_passed_clear_paths", "input_abstained"]) }),
     answerContent: Object.freeze(["fact"]), forms: Object.freeze(["list", "panel", "lit_squares", "machine_condition"]),
     dependsOn: Object.freeze([Object.freeze({ id: "rules.pawn.reading.contacts", version: 1 })]),
     derivation: Object.freeze({ inputs: Object.freeze([Object.freeze({ id: "rules.pawn.reading.contacts", version: 1 })]) }),
@@ -167,7 +173,7 @@ describe("D1699 exact geometry authority", () => {
     expect(promotionRaceGeometry(mutuallyCapturable).kind).toBe("available");
     const contacts = pawnContactsReading(mutuallyCapturable);
     expect(contacts.passed.map((row) => row.passed)).toEqual([false, false]);
-    expect(repairedGeometry(declarePawnContactsEvidence(contacts))).toEqual({ kind: "unavailable", reason: "blocked_or_capturable_path_outside_convention" });
+    expect(repairedGeometry(declarePawnContactsEvidence(contacts))).toEqual({ kind: "unavailable", reason: "no_opposing_passed_clear_paths" });
   });
 
   it("retains the established opposing-passed-pawn race and typed input abstention", () => {

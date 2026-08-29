@@ -11171,3 +11171,18 @@ CI actually run.
   modules/presets; those consumers apply their own ceilings downstream.
 - All four focused targets pass at 9 + 7 + 9 + 5. Production, schema, pack, content and protected
   intent remain unchanged; fresh independent review still gates implementation.
+
+## 2026-08-29 — Promotion-race collectors stop accepting undeclared and crossed evidence
+
+- Reconciled the held `semantic-collectors` promotion pair with the executable D1699/D1700
+  research. The previously accepted text still allowed raw-FEN participant recomputation and a
+  piece-count-only Syzygy join, even though the harness proves an a2/b7 false race and a category
+  borrowed from another four-piece position.
+- Geometry now derives only from a sealed complete pawn-contact reading and retains exact declared
+  passed-pawn identities. Outcome now derives from exact legal moves plus one same-FEN recorded or
+  live Syzygy delivery. The local outside-domain fact, provider absence and missing input remain
+  separate; no pawn-specific provider authority is permitted.
+- Updated the disposable harness to the honest `no_opposing_passed_clear_paths` vocabulary and
+  strengthened the RFC with an explicit six-arm promotion criterion. The original twelve compiled
+  projections are unchanged. Fresh independent review gates geometry; the repaired but still-draft
+  provider contract additionally gates the outcome projection and 14/14 closeout.

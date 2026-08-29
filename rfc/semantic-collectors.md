@@ -1,6 +1,17 @@
 # RFC: Semantic collectors — Wave-C basic tactics after Waves A/B
 
-- **Status:** implementing 2026-08-22 — 12 of 14 registered projections now compile: the first slice plus deflection, attraction and bounded mate; the two promotion-race projections remain held on the independently reviewed D931 seam and D963's exact source contracts. Accepted 2026-08-22 by claude as register owner on the buildability test, after cross-review with corrections applied in place (seven blockers; all eight observed ids verified **checkable, not intention-inference**, after the causal-binding clauses were pinned from the measured bytes). *(Prior line for history: draft 2026-08-22 — executes the Wave-C foundation-closure handoff)*
+- **Status:** implementing 2026-08-22 — 12 of 14 registered projections compile. **The held
+  promotion pair was author-repaired 2026-08-29 from the executable D1699/D1700 research; that
+  amendment is not accepted and must receive fresh independent buildability review.** Geometry now
+  consumes the declared complete pawn-contact reading instead of recomputing a population from raw
+  FEN. Outcome consumes exact legal moves and one same-FEN recorded-or-live Syzygy delivery; the
+  live arm depends on the draft `provider-exchange-and-execution` contract and cannot implement
+  before that predecessor is independently accepted and landed. The original 12 projections remain
+  accepted/implemented; the amendment does not reopen or relabel their bytes. Accepted 2026-08-22
+  by claude as register owner on the buildability test, after cross-review with corrections applied
+  in place (seven blockers; all eight observed ids verified **checkable, not
+  intention-inference**, after the causal-binding clauses were pinned from the measured bytes).
+  *(Prior line for history: draft 2026-08-22 — executes the Wave-C foundation-closure handoff)*
   (`planning/evidence-foundation-ux/wave-c-foundation-closure.md`); ready for independent
   cross-review before acceptance
 - **Author:** claude, on codex's Wave-C order (item 2) and the D872 program
@@ -224,7 +235,7 @@ edits no consumer timing.
 | `defence-duty@1` | A **duty** is a directed pseudo defence edge: piece D's chessops attack set, under current occupancy, contains the square of a same-color piece T. Any piece including the king may hold a duty; **T is never a king** (the harness `duties()` byte — a king is not a defended target under this convention). **Sole defender** = D holds the only such edge onto T. Duties are occupancy-current pseudo edges and deliberately not legality-filtered — an absolutely pinned defender still holds its duty; whether a recapture is *legal* is decided only where a predicate enumerates legal moves. Declared limitation: a pseudo duty may be legally unexecutable; multiple duties are a state, never by themselves exploitable overload. |
 | `overload-conflict@1` | The `9f7112c` four-clause candidate-time relation, verbatim from the measured repair: (1) one named defender is the **sole** defender (`defence-duty@1`) of the captured target **and** of at least one other surviving named target; (2) the candidate captures the first target and the same defender has at least one **legal** recapture on that square; (3) no such recapture preserves every retained sole duty; (4) after **every** such recapture, at least one retained named target is positively capturable under `legal-exchange@1` (the recapturing turn is real — no clone). Abstention `no_legal_recapture`. The broad lost-duty-edge rule (52/754 authored, 515/6,991 imported) is **rejected and pinned as the permanent hard negative**. |
 | `mate-proof@1` | The D908 bounded solver: the declared candidate move is fixed; later attacker moves are existential; **every** defender reply is enumerated; promotions fully enumerated; horizon = **1–4 attacker moves, the candidate counting as attacker move one** (the harness's `2·N−2` remaining-edge accounting: horizon H proves mate delivered on or before the attacker's Hth move, and **H = 1 means the candidate itself mates** — layered beside 2c's `rules.tactic.consequence.mate_in_one@1`, which stays the position-level enumeration authority; this predicate proves one declared candidate and never re-enumerates all mating moves). Node cap **250,000**, with the accounting pinned because the cap verdict is order-dependent (the boundary probe's 250,001 witnesses): **one node per visited position including transposition revisits, incremented before the cap test and every terminal test**, so a capped run reports cap+1; a transposition memo keyed by (four-field FEN, remaining edges, attacker) is consulted after the terminal tests. **Enumeration order is part of the convention**: attacker moves sorted check-giving first, then ascending canonical UCI; defender replies in ascending canonical UCI (the harness's attacker ordering made normative for both sides — its incidental defender order is chessops-internal and not reproducible; the measured node statistics are therefore reference figures under the harness order, and C6 binds the proved/refuted/abstained counts while node statistics are reported with any ordering-driven divergence named). Result is exactly one of `proved` (retained horizon and proof-tree digest/node count), `refuted` (at least one legal escaping root reply retained, or the terminal non-mate state when the candidate ends the game without mate), or `budget_exhausted` (abstention — never false, never an engine-derived guess). **The proof-tree digest is re-derivable from the retained tree; its serialization and hash are pinned in the declaration's semantics at implementation with a changelog line (pin-the-encoding: no digest algorithm is invented here), and the cross-authority join key is candidate + position + horizon — never the digest** (D2's `mate_transition` joins on exactly that key). Five-plus attacker moves is outside this convention: a separately declared offline budget or a typed engine mate authority may serve it later, and the external `mateIn5` tag is a five-**or-more** bucket, never exact evidence. "Mating net" is presentation vocabulary over a proved tree; king-zone counts, reduced escapes and check sequences remain operands that **cannot emit the name**. |
-| `race-arrival@1` | The D909 descriptive ordering: two or more named pawns of opposite colors, each with an **unblocked forward path** under current occupancy, side to move and the initial double push respected, arrival order computed by strict turn alternation with no captures, checks or piece activity modeled. Output is ordering and per-pawn arrival distance, **explicitly descriptive**: the words winning/losing/drawing are structurally absent (measured: 7/10 agreement with Syzygy including two loss→win inversions). Paths blocked or capturable outside the convention abstain `blocked_or_capturable_path_outside_convention`. |
+| `race-arrival@1` | The D909/D1699 descriptive ordering: two or more exact `passed: true` pawn rows of opposite colors from one sealed `rules.pawn.reading.contacts@1` item, each with a clear forward path under current occupancy. Side to move and the initial double push are respected; arrival order is strict turn alternation with no arbitrary-piece captures, checks or activity modeled. Output is ordering and per-pawn arrival distance, **explicitly descriptive**: winning/losing/drawing are structurally absent (measured 7/10 agreement with Syzygy, including two loss→win inversions). Fewer than two opposing declared participants with clear paths abstains `no_opposing_passed_clear_paths`; missing declared input abstains `input_abstained`. |
 | `observed-window@1` | Recorded-path windows adopt `breadth-collectors.md` §3.4's continuity rule by reference: N consecutive move anchors, N+1 ordered board nodes, byte-equal shared node/FEN at every join, canonical UCI per anchor, and the named subject identities surviving every applicable edge or transforming only through an explicitly recorded capture/relocation edge. Horizons are per-projection (§3) and part of the identity. Observed order never establishes intent, force, best play or causality. |
 
 The observed split contracts (§3.2–§3.4) are conventions too; their exact clauses are pinned in
@@ -430,7 +441,7 @@ exist).
   between two authorities, not permission to merge them** — the exact proof and any
   engine reading remain separately cited forever.
 
-#### 3.7 Promotion races (D909) — geometry described, outcome joined, verdict refused
+#### 3.7 Promotion races (D909/D963/D1699/D1700) — declared participants, exact source join, verdict refused
 
 Both rows ride 2d's `derived.pawn` producer at `pawn-dynamics.ts`.
 
@@ -448,32 +459,49 @@ Both rows ride 2d's `derived.pawn` producer at `pawn-dynamics.ts`.
   promotionUnstoppable`; the matrix row's `sideToMove` rides the reading's position
   anchor rather than a named operand — the amended §3.14 list carries no `sideToMove`
   member, verified against the amendment text) is recorded in the declaration's semantics
-  so the matrix row is traceable to its serving id. **Binding hold (D931):** the amended
-  projection's repaired absence semantics are awaiting independent review: the sibling RFC,
-  matrix and research helper now share the total-row/typed-field shape, and the binding stays held
-  until that review confirms unavailable can never count as refuted (§Ledger).
+  so the matrix row is traceable to its serving id. **D931 is discharged:** the tactical sibling
+  landed its total-row/typed-field contract and permanent fixtures; unavailable never counts as
+  refuted. The remaining promotion hold is the D1699/D1700 amendment and shared provider dependency
+  stated below, not the repaired `promotion_pressure@1` seam.
 - `derived.pawn.promotion_race_geometry@1` — *derived reading* under `race-arrival@1`
-  (§2): two-plus named pawns, per-pawn exact arrival convention and ordering. Grounding
-  `declared_convention`/`convention` (mixed exact inputs: the passed-pawn/blocker
-  authorities and move identity); abstention
-  `["blocked_or_capturable_path_outside_convention", "input_abstained"]`. Operands:
-  `pawns`, `arrivalConvention`, `ordering`, `sideToMove`. **Hard negative, measured:** a
-  recorded FEN where the geometric ordering predicts loss and Syzygy says win (two such
-  in the corpus of ten races) — the fixture that keeps outcome words structurally out.
-- `derived.pawn.promotion_race_tablebase@1` — *derived event* joining the same named
-  participants to the shipped tablebase authorities (`live.syzygy.probe_result@1` /
-  `recorded.tablebase.result@1` by id): `category`, `dtz`, `preciseDtz`, `provider`
-  retained (the server adapter already parses `precise_dtz` —
-  `apps/server/src/tablebase.ts:15-22`). Grounding per §1.3: `declared_convention`
-  (mixed inputs), with the declaration's semantics naming the tablebase input as the
-  sole outcome authority; exactness `convention`; abstention
-  `["outside_tablebase_domain", "provider_unavailable", "input_abstained"]` — outside
-  ≤7 men or with the provider off, **outcome abstains while geometry survives**.
-  Measured census: 288 unique recorded FENs, 157 pawn-bearing; the 23 side-to-move
-  seventh-rank positions split **11 win / 1 draw / 11 loss** — the number that closes
-  the geometric-verdict question permanently. Immediate promotion, promotion-first and
-  promotion-with-check remain exact additional operands; none inherits a result without
-  the join.
+  (§2), with the one literal derivation input
+  `rules.pawn.reading.contacts@1`. The constructor accepts a declared/sealed contacts item,
+  never a caller-supplied FEN. It parses that item's canonical full FEN only to calculate the
+  convention, and every emitted participant must join an exact `passed: true` row by
+  color/square/pawn role. The population is opposing passed pawns with clear forward paths; it
+  retains `fen`, `pawns`, `arrivalConvention`, `ordering` and `sideToMove`. Grounding/exactness/
+  confidence are `position_rules` / `convention` / `not_applicable`; answer content is `fact`;
+  abstention is `["no_opposing_passed_clear_paths", "input_abstained"]`. The old
+  `blocked_or_capturable_path_outside_convention` reason is withdrawn: this convention knows enemy
+  pawn passage, not arbitrary-piece capturability. **Hard negatives, measured:** a2 versus b7 in
+  `4k3/1p6/8/8/8/8/P7/4K3 w - - 0 1` is not a race because both contact rows are `passed: false`;
+  and a recorded geometric-ordering inversion against Syzygy keeps all outcome words structurally
+  absent. The established a2/h7 positive retains arrival plies 9/10.
+- `derived.pawn.promotion_race_tablebase@1` — *derived event* with exactly two literal
+  `derivation.anyOf` members, in this order:
+
+  1. geometry + `rules.mobility.reading.legal_moves@1` +
+     `recorded.tablebase.result@1`;
+  2. geometry + `rules.mobility.reading.legal_moves@1` +
+     `live.syzygy.position_result@1`.
+
+  Geometry, the legal map and the tablebase delivery must carry byte-equal canonical full FEN;
+  another position with the same piece count is an invalid join, not absence. Exact legal moves
+  are a required input because `immediatePromotion` and `promotionWithCheck` cannot be sourced from
+  geometry or tablebase category. The live projection is the receipt-bearing in-domain result from
+  `provider-exchange-and-execution` §7; its separate local
+  `rules.endgame.tablebase_domain@1` outside-domain fact is not an outcome substitute. The event
+  retains `geometry`, `category`, `dtz`, `preciseDtz`, `source`, `immediatePromotion`,
+  `promotionFirst` and `promotionWithCheck`. Grounding/exactness/confidence are
+  `declared_convention` / `convention` / `not_applicable`; answer content is `fact + evaluation`;
+  abstention is `["outside_tablebase_domain", "provider_unavailable", "input_abstained"]`.
+  Only the tablebase input supplies outcome. Source absence never becomes refuted, empty or draw;
+  geometry remains independently usable. The recorded population remains 288 unique FENs / 157
+  pawn-bearing, with 23 side-to-move seventh-rank positions split 11 win / 1 draw / 11 loss.
+
+The geometry declaration may land after this amendment passes fresh review. The outcome declaration
+also requires the provider RFC's occurrence-preserving compiled execution paths and shared Syzygy
+operation to land; no pawn-specific provider adapter or hand-authored execution row is permitted.
 
 ### §4 — Adjudication of the 20 matrix identities
 
@@ -564,7 +592,11 @@ shipped around — no criterion here carries a pre-authorized fallback.
 2. **C2 — Operand fidelity.** Declared `operands` match §3 verbatim; event families enforce
    them through `requiredOperands`; sequence payloads carry their §2 `observed-window@1`
    anchor/node counts and byte-equal boundaries, and swapping any anchor, FEN, defender,
-   slider, target or square makes the positive fixture fail (breadth B8 extended).
+   slider, target or square makes the positive fixture fail (breadth B8 extended). For the
+   promotion pair specifically, geometry has exactly one declared contacts input; outcome has the
+   two ordered three-input alternatives in §3.7. A missing legal map, unsealed contacts item,
+   cross-FEN source, crossed recorded/live source kind or piece-count-only match fails before an
+   event is emitted.
 3. **C3 — Convention pinning.** The §2 convention texts (values included: the four
    overload clauses, 250,000 nodes, 1–4 attacker moves, the heavy-piece set K/Q/R, the
    race-arrival clauses) appear verbatim in the declarations' semantics/limitations.
@@ -576,7 +608,8 @@ shipped around — no criterion here carries a pre-authorized fallback.
    declarations: no pre-commit-timed candidate row grounded outside position rules; no
    `move`/`principal_variation`/`evaluation` answer content on any §3.1–§3.5 projection;
    §3.6's answer content stops at `candidate_moves` under its stage ceiling; §3.7's
-   outcome words exist only in the tablebase join.
+   geometry payload and renderer contain zero outcome words, and outcome words exist only in the
+   same-FEN tablebase join.
 6. **C6 — Measured reproduction.** The permanent implementation reproduces, on the
    identical fixed populations, within 10% of eligible denominators or with a named
    deliberate domain correction: sequence witnesses 5/23/3 (overload exploitation,
@@ -606,14 +639,19 @@ shipped around — no criterion here carries a pre-authorized fallback.
 8. **C8 — No duplicate authorities.** Capture, check, reply-breadth, legal-exchange,
    passed-pawn/blocker, tablebase and recorded-move facts are consumed by id, never
    recomputed under a second meaning; §3.1's events name their derivation/dependsOn
-   inputs; breadth's `defender_exposure@1` remains untouched and unreimplemented.
+   inputs; breadth's `defender_exposure@1` remains untouched and unreimplemented. Promotion
+   geometry receives a sealed `rules.pawn.reading.contacts@1` item and does not call
+   `pawnContactsReading`; the outcome receives sealed exact-legal and tablebase items and does not
+   call a private Syzygy client or recompute legal moves.
 9. **C9 — F1 mechanics clean.** Every derived projection declares literal
    `derivation.inputs`; rules-plane events (§3.1, §3.6) use `dependsOn`, never
    `derivation` (the D827 rule); no declaration widens exactness, grounding, answer
    content or abstention past its inputs (the `EVIDENCE_DERIVATION_WIDENS` check passes
    with `input_abstained` present wherever an input abstains — and the same check *forbids*
    `declared_convention` on a single-grounding derived row, which is why
-   `square_clearance_observed@1` declares `recorded_run`); no registered clause clones a
+   `square_clearance_observed@1` declares `recorded_run`); the promotion outcome's compiled source
+   graph is set-equal to §3.7's two alternatives and preserves recorded/live source identity,
+   effective latency and occurrence; no registered clause clones a
    turn (§1.4), so no `invalid_turn_clone` reason is declared anywhere in this wave and a
    declaration carrying one is a C9 failure.
 10. **C10 — Non-vacuity, honestly split.** Canonical fixture censuses strict-interior for
@@ -629,14 +667,24 @@ shipped around — no criterion here carries a pre-authorized fallback.
 13. **C13 — Mirror coverage.** Every family carries color/file mirror fixtures plus
     capture/promotion identity checks and survives them.
 14. **C14 — Landing-order seam.** The landing commit demonstrates 2c and 2d landed first
-    (their acceptance suites green at the merge base); the `derived.pawn` producer and
-    sequence compilation are consumed, not created here.
+   (their acceptance suites green at the merge base); the `derived.pawn` producer and
+   sequence compilation are consumed, not created here. Geometry additionally requires this
+   amendment's fresh independent acceptance. Outcome additionally requires the accepted and
+   implemented `provider-exchange-and-execution` contract; a private interim Syzygy projection or
+   producer-wide latency override fails C14.
 15. **C15 — Closeout protocol.** The landing commit flips this RFC's recorded ledger rows
     (D925 — the Wave-C implementation-wave 💡 row, disambiguated per §Ledger's collision
-    note — and the rows §Ledger names as shipped), leaves the assigned rows open with
-    their owners, and appends the `planning/exploration/log.md` entry — in the same commit
-    (the CLAUDE.md ledger-and-log clause). C15 cannot close while the D925 collision
-    stands unrepaired.
+   note — and the rows §Ledger names as shipped), leaves the assigned rows open with
+   their owners, and appends the `planning/exploration/log.md` entry — in the same commit
+   (the CLAUDE.md ledger-and-log clause). C15 cannot close while the D925 collision
+   stands unrepaired.
+16. **C16 — Promotion contract falsifiers.** The six D1699/D1700 disposable arms graduate to
+    permanent tests: contacts-based a2/b7 refusal; a2/h7 9/10 positive plus typed input abstention;
+    current piece-count-only false-positive reproduction followed by repaired cross-FEN refusal;
+    recorded and live same-position positives; provider absence distinct from outside-domain and
+    geometry absence; and compiled execution paths `[sync, interactive]` without changing the
+    `derived.pawn` producer's own `sync` operation. The production suite adds a declared-item forge,
+    missing legal-map and crossed-source negative, and reproduces D909's geometric inversion.
 
 ## Discharges
 
@@ -646,6 +694,7 @@ shipped around — no criterion here carries a pre-authorized fallback.
 | D2 | The engine-Review lane: matrix rows `derived.review.eval_delta@1` / `derived.review.mate_transition@1` (typed C4 contract, stage-0 §12.2), the Story mate-type repair (D917, `story.ts:33/:104`) and the multi-source post-game compiler (D918) — codex's order items 3–4, cited here and absorbed by nothing in this RFC; `mate_transition` joins §3.6's proof by node/candidate identity when it lands | `planning/evidence-foundation-ux/plan.md` | the Review-successor RFC's drafting/landing commits | |
 | D3 | The runtime opening-identity trio: matrix rows `theory.opening.current_endpoint@1`, `theory.opening.catalogue_membership@1`, `derived.opening.deepest_reached@1` (D894/D902 evidence; the C3/F4/F7 handoff) — assigned to the runtime opening RFC exactly as `tactical-collectors.md` §3.15 split the same lane | `planning/evidence-foundation-ux/plan.md` | `44637013` — runtime opening compiler, artifact, projections, API and image boundary | ✅ 2026-08-24 |
 | D4 | Authored-corpus semantic-tactic witnesses: the authored spine holds zero observed-sequence witnesses for every §3.2–§3.5 family and zero overload conflicts — the learner copy of these families cannot be validated until a content wave authors or imports cited canonical lines (a content wave carrying the content-era closeout) | `planning/evidence-foundation-ux/plan.md` | the content wave's shipping commit | |
+| D5 | Promotion outcome provider execution: `live.syzygy.position_result@1`, exact occurrence/source identity, same-exchange receipt and projection-effective latency come from one shared provider operation; this RFC must not create a pawn-local source or flatten recorded/live alternatives | `provider-exchange-and-execution` | accepted provider implementation commit + provider F1 census | |
 
 ## Open questions
 
@@ -668,8 +717,8 @@ Recorded rows this RFC encodes (none flipped by drafting): **D872** (the program
 (typed engine operands — D2's evidence), **D919** (overload three-way), **D920** (the
 matrix), **D921** (module-amendment order — D1), **D922** (the sibling amendment §3.7
 binds to). Open defect rows cited, owned elsewhere: **D917**, **D918** (D2); **D904**,
-**D905** (seams, untouched); **D931** (the §3.7 promotion-pressure absence-semantics seam,
-amended in place and awaiting independent review — see the collision note below).
+**D905** (seams, untouched). **D931** is closed by the tactical implementation; §3.7 now waits on
+the separate D1699/D1700 amendment and provider dependency.
 
 Registered rows — **written by the drafting commit `530bb4a`** (the draft's "head D922"
 was already stale when it landed: D923/D924 had been taken by the play-composition review
@@ -688,11 +737,11 @@ precedent — and found the concurrent C4/Review session's in-flight working tre
 carries exactly that repair (the WDL row as D927 plus **D928**, the Review whole-game selector);
 that collision repair landed at `097581e`. **D931**, below, is the later promotion-binding return.
 Every D925 reference in this document means the Wave-C implementation-wave 💡
-row. **D931 🐞 (amended, independent review pending; `tactical-collectors /
-semantic-collectors` seam) binds §3.7 directly:** the sibling RFC, executable matrix and helper
-now share one total geometry row whose reply-dependent fields carry typed availability;
-`invalid_turn_clone` is unavailable, never false. The §3.7 binding cannot be implemented until
-the independent review accepts that repaired shape.
+row. **D931 ✅ (`tactical-collectors / semantic-collectors` seam):** the sibling RFC, executable
+matrix and permanent helper now share one total geometry row whose reply-dependent fields carry
+typed availability; `invalid_turn_clone` is unavailable, never false. This binding is implemented.
+It is not the authority for the two-runner race population, which is why the D1699/D1700 amendment
+derives that population from complete `rules.pawn.reading.contacts@1` instead.
 
 ## Appendix A — registered projection ids
 
@@ -717,6 +766,16 @@ is a spec change with a changelog line.
 | 14 | `derived.pawn.promotion_race_tablebase@1` | 3.7 | `derived.pawn` (2d) | event |
 
 ## Changelog
+
+- 2026-08-29: author-repaired the held promotion pair from
+  `design/research/promotion-race-contract-closure.md` and its six executable D1699/D1700 arms.
+  Geometry now consumes one sealed complete pawn-contact reading and refuses the measured a2/b7
+  false race; its old arbitrary-capturability abstention name is withdrawn. Outcome now consumes
+  exact legal moves and one same-FEN recorded/live Syzygy delivery through two literal derivation
+  alternatives; piece-count-only and cross-FEN joins fail, and provider absence remains distinct
+  from local outside-domain and input absence. C2/C5/C8/C9/C14/C16 make the repaired contract
+  failable. The original twelve implemented projections remain untouched. Fresh independent review
+  gates geometry; provider-exchange acceptance and implementation additionally gate outcome.
 
 - 2026-08-22: adversarial buildability cross-review (independent). Chess/mechanics repairs,
   each verified at the harness symbol that produced the quoted measurement: **(1)** the §1.4
