@@ -66,6 +66,7 @@ test("two learners alternate a native match, pause to branch, and return to the 
     await coach.page.goto("/live");
     await coach.page.getByLabel("Kind").selectOption("match");
     await coach.page.getByLabel("Board").selectOption("match");
+    await coach.page.getByLabel("Session title").fill("match session");
     await coach.page.getByLabel("White handle").fill(white.handle);
     await coach.page.getByLabel("Black handle").fill(black.handle);
     await coach.page.getByRole("button", { name: "Create match" }).click();
@@ -160,6 +161,7 @@ test("a single-use friend link registers a learner without exposing the board", 
     await coach.page.goto("/live");
     await coach.page.getByLabel("Kind").selectOption("match");
     await coach.page.getByLabel("Board").selectOption("match");
+    await coach.page.getByLabel("Session title").fill("match session");
     await coach.page.getByLabel("White handle").fill(coach.handle);
     await coach.page.getByRole("button", { name: "Create match" }).click();
     await coach.page.getByRole("button", { name: "Create friend link" }).click();

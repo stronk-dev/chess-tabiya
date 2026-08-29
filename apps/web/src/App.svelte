@@ -65,6 +65,7 @@
   } from "./lib/session-controller.js";
   import { WriterSession, type KeyValueStorage } from "./lib/writer-session.js";
   import { voteAttribution } from "./lib/live-vote.js";
+  import { liveOverlayObjectiveCopy } from "./lib/live-overlay.js";
   import { markAttribution, relayedMarkShapes } from "./lib/live-marks.js";
   import { clearAccountLocalData, clearRunLocalData } from "./lib/account-local-data.js";
   import { graduationEntries, requiredFieldStates, splitValidationIssues } from "./lib/pack-validation-presentation.js";
@@ -1584,7 +1585,21 @@
     </main>
   {:else if route.name === "live-overlay"}
     <main class="live-overlay" aria-label="Live session overlay">
-      {#if session.runState}{@const node=session.runState.run.nodes.find((candidate)=>candidate.id===session.runState!.run.activeCursor.nodeId)}{#if node}<Chessboard fen={node.fen} startSide={session.runState.run.start.side} overlays={relayedMarkShapes(activeLiveDetail)} disabled={true} onMove={()=>{}}/><aside><p class="eyebrow">Tabiya live</p><h1>{node.objectiveState}</h1><p>{session.runState.run.branches.length} branches</p>{#if activeLiveDetail && markAttribution(activeLiveDetail)}<p>{markAttribution(activeLiveDetail)}</p>{/if}{#if activeLiveDetail?.vote}<p>{activeLiveDetail.vote.window.prompt}</p><ul>{#each activeLiveDetail.vote.tally as item}<li>{item.label}: {item.count}</li>{/each}</ul><p>{voteAttribution(activeLiveDetail)}</p>{/if}{#if session.runState.withheld}<p>Host is ahead; evidence is withheld until this run discloses.</p>{/if}</aside>{/if}{:else}<p role="alert">Overlay run unavailable.</p>{/if}
+      {#if session.runState}
+        {@const node=session.runState.run.nodes.find((candidate)=>candidate.id===session.runState!.run.activeCursor.nodeId)}
+        {#if node}
+          {@const objective=liveOverlayObjectiveCopy(session.pack,node.objectiveState)}
+          <Chessboard fen={node.fen} startSide={session.runState.run.start.side} overlays={relayedMarkShapes(activeLiveDetail)} disabled={true} onMove={()=>{}}/>
+          <aside>
+            <p class="eyebrow">Tabiya live</p>
+            <h1>{objective.headline}</h1>
+            <p>{objective.status} · {session.runState.run.branches.length} {session.runState.run.branches.length===1?"branch":"branches"}</p>
+            {#if activeLiveDetail && markAttribution(activeLiveDetail)}<p>{markAttribution(activeLiveDetail)}</p>{/if}
+            {#if activeLiveDetail?.vote}<p>{activeLiveDetail.vote.window.prompt}</p><ul>{#each activeLiveDetail.vote.tally as item}<li>{item.label}: {item.count}</li>{/each}</ul><p>{voteAttribution(activeLiveDetail)}</p>{/if}
+            {#if session.runState.withheld}<p>Host is ahead; evidence is withheld until this run discloses.</p>{/if}
+          </aside>
+        {/if}
+      {:else}<p role="alert">Overlay run unavailable.</p>{/if}
     </main>
   {:else if route.name === "rating"}
     <RatingScreen {api} onStart={startRatedGame} />

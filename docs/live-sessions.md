@@ -131,7 +131,10 @@ Session and overlay tallies poll every two seconds. The overlay uses
 the same run projection and feedback barrier as the player; it is not a second evidence
 surface. It always resumes through a projection-only controller: a writer lease saved in the
 same browser is ignored, no opponent selection is requested, and the overlay cannot commit a
-ply. Grant-scoped session detail also projects move authorship from the run and
+ply. Its headline is the pack's authored objective summary; a run without one states that no
+rehearsal objective is attached. Objective state is secondary fixed product copy rather than a
+rendered runtime enum, and the branch count uses the correct singular or plural. Grant-scoped
+session detail also projects move authorship from the run and
 possession journal; the session screen labels each committed move with the responsible
 member handle, or `former member` when that identity no longer resolves through the
 current grants.

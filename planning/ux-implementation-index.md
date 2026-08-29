@@ -209,8 +209,8 @@ Nothing here waits on an owner ruling, an RFC acceptance, or a document anybody 
 | LIV-a2 | §1.1b | The eligible-run rule (untouched position run, named handle) is invisible until the server throws | none | | |
 | LIV-a3 | §1.1c | ✅ **Closed 2026-08-29:** creation has pending and visible failure states; incomplete rotation, match and title inputs are disabled with reasons | closed | [[D1470]]; component contract exercises a rejected rotation learner | |
 | LIV-a4 | §1.1d | ✅ **Closed 2026-08-29:** the host names the session before choosing a source run; the submitted title is trimmed and becomes the session heading | closed | component contract proves the title reaches creation | 🏆 |
-| LIV-a5 | §1.4a | The broadcast overlay headline is a raw runtime enum (`node.objectiveState`) rendered untranslated | none | | |
-| LIV-a6 | §4 C3 | Replace that enum with the run's human objective sentence, and say so when it is absent | none | | |
+| LIV-a5 | §1.4a | ✅ **Closed 2026-08-29:** the overlay translates all six objective states into fixed product language; no runtime enum is rendered | closed | [[D2022]]; unit table and desktop/mobile browser matrix | |
+| LIV-a6 | §4 C3 | ✅ **Closed 2026-08-29:** the headline uses the authored pack objective, or explicitly says no rehearsal objective is attached; singular/plural branch copy is fixed in the same projection | closed | [[D2022]]; real overlay browser assertion | |
 | LIV-a7 | §1.3a | The overlay is the host's own OBS capture surface requiring an in-OBS sign-in and **nothing documents it**; name the seam once — copyable URL, transparent background, the cookie step | none | zero repo matches for `obs`/browser source | |
 | LIV-a8 | §3 B1 | **The audience preview**: one host-side control rendering exactly what a viewer sees | ledger | [[D1469]]; a second mount of the existing `projectionOnly` controller | |
 | LIV-a9 | §3 B3a | State that the board is never delayed, and instruct streamers to set delay in their streaming software | none | | |

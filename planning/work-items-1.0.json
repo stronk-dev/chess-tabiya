@@ -6212,30 +6212,40 @@
     {
       "id": "LIV-a5",
       "sourceState": "queued",
-      "state": "queued",
+      "state": "completed",
       "capability": "social_play",
       "owner": "live-and-social",
-      "assignment": "capability:social_play",
+      "assignment": "closed",
       "sourceDocument": "ux-live-and-social.md",
       "sourceSection": "§1.4a",
       "sourceHeading": "Live, casting and social — `ux-live-and-social.md`",
-      "summary": "The broadcast overlay headline is a raw runtime enum (`node.objectiveState`) rendered untranslated",
-      "legacyRoute": "none",
-      "sourceDigest": "sha256:753b46535cb7dad7a818a4e9727a171835166e7ae67ef78d71437dd935d16e1c"
+      "summary": "✅ **Closed 2026-08-29:** the overlay translates all six objective states into fixed product language; no runtime enum is rendered",
+      "legacyRoute": "closed",
+      "note": "[[D2022]]; unit table and desktop/mobile browser matrix",
+      "sourceDigest": "sha256:14e57de37c506b12bf28671c1a9f6df73fed8a1a95cd55e91e17e683465d248f",
+      "completion": {
+        "completedOn": "2026-08-29",
+        "evidence": "live overlay maps every objective runtime state to fixed product copy; pure unit table plus complete desktop/mobile browser matrix"
+      }
     },
     {
       "id": "LIV-a6",
       "sourceState": "queued",
-      "state": "queued",
+      "state": "completed",
       "capability": "social_play",
       "owner": "live-and-social",
-      "assignment": "capability:social_play",
+      "assignment": "closed",
       "sourceDocument": "ux-live-and-social.md",
       "sourceSection": "§4 C3",
       "sourceHeading": "Live, casting and social — `ux-live-and-social.md`",
-      "summary": "Replace that enum with the run's human objective sentence, and say so when it is absent",
-      "legacyRoute": "none",
-      "sourceDigest": "sha256:fc1081f324f754e452e0cb006a93ecce27d6f0f3979cbd946d0b854c5161724f"
+      "summary": "✅ **Closed 2026-08-29:** the headline uses the authored pack objective, or explicitly says no rehearsal objective is attached; singular/plural branch copy is fixed in the same projection",
+      "legacyRoute": "closed",
+      "note": "[[D2022]]; real overlay browser assertion",
+      "sourceDigest": "sha256:479e95c465df86102c73c6c5492de320514301b80ff8a10300b599b3e47f7d90",
+      "completion": {
+        "completedOn": "2026-08-29",
+        "evidence": "real Academy overlay renders the authored objective sentence or explicit absence and correct branch pluralization"
+      }
     },
     {
       "id": "LIV-a7",

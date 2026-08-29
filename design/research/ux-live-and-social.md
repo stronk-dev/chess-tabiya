@@ -1302,10 +1302,17 @@ ordered, de-duplicated handle list, refuses an empty rotation locally, sends `ro
 renders server rejection; session detail renders the stored order/current cursor and gives the host
 an advance action `[V]` (`apps/web/src/App.svelte`; `apps/web/src/lib/app-shell.test.ts`). The same
 pass replaced the generated `${kind} session` title with a required host-authored title and a visible
-pending/error path `[V]`. Adding participant access from this screen remains absent because
-`updateGrants` now has a host-only **Session access** region that grants or updates participant and
+pending/error path `[V]`. `updateGrants` now has a host-only **Session access** region that grants or updates participant and
 spectator roles, revokes non-host roles, requires the ordinary writer and refreshes the returned
 grant list `[V]`. The host can also close an open vote and optionally record one declared option as
 applied; the control and confirmation both state that closing never plays a move `[V]`
 (`apps/web/src/App.svelte`; `apps/web/src/lib/app-shell.test.ts`). Product-choice composition,
 eligibility and academy-specific behaviour stay open under [[D315]] and [[D1470]].
+
+The overlay-headline defect recorded in §1.4 and routed as `LIV-a5` / `LIV-a6` is closed. The
+largest text is now the pack's authored objective summary; a run with no authored objective states
+that absence. All six `ObjectiveState` values map to fixed product-language status text and branch
+count pluralization is explicit `[V]` (`apps/web/src/lib/live-overlay.ts`). A unit table covers all
+states and absence, while the complete browser suite reaches the real Academy overlay on desktop
+and mobile and asserts the authored sentence `[V]` (`apps/web/src/lib/live-overlay.test.ts`;
+`tests/browser/drill.spec.ts`). No evidence producer, selection rule or chess claim was added.

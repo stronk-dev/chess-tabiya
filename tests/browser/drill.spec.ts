@@ -487,6 +487,7 @@ test("Live turns a run into a session and exposes a chrome-free overlay", async 
   await expect(page.getByLabel("Chessboard")).toBeVisible();
   await page.goto("/live");
   await expect(page.getByRole("heading", { name: "Rehearse with other people." })).toBeVisible();
+  await page.getByLabel("Session title").fill("academy session");
   await page.getByRole("button", { name: "Create academy" }).first().click();
   await expect(page.getByRole("heading", { name: "academy session" })).toBeVisible();
   await expect(page.getByText("Live / Academy lesson", { exact: true })).toBeVisible();
@@ -508,7 +509,7 @@ test("Live turns a run into a session and exposes a chrome-free overlay", async 
   await voteEditor.getByLabel("Duration (seconds)").fill("90");
   await voteEditor.getByRole("button", { name: "Open vote" }).click();
   await expect(page.getByText("Which plan? · open")).toBeVisible();
-  await expect(page.getByText("Bishop f4: 0")).toBeVisible();
+  await expect(page.getByRole("button", { name: /Vote for Bishop f4/ })).toBeVisible();
   await expect(page.getByText("No votes yet.")).toBeVisible();
   await page.goto("/live");
   const wallCard = page.locator(".live-wall article").filter({ hasText: "academy session" });
@@ -520,6 +521,8 @@ test("Live turns a run into a session and exposes a chrome-free overlay", async 
   await page.getByRole("button", { name: "Open overlay" }).click();
   await expect(page.getByLabel("Live session overlay")).toBeVisible();
   await expect(page.getByLabel("Chessboard")).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Select a setup and execute its first plan through the timing window." })).toBeVisible();
+  await expect(page.getByText(/Objective in progress · 1 branch/)).toBeVisible();
   await expect(page.getByText("Bishop f4: 0")).toBeVisible();
   await expect(page.getByText("No votes yet.")).toBeVisible();
   await expect(page.locator("#primary-navigation")).toHaveCount(0);
@@ -530,6 +533,7 @@ test("an academy host can identify and play a participant's proposed move", asyn
   await card.getByRole("button", { name: /Rehearse this position/ }).click();
   await expect(page.getByLabel("Chessboard")).toBeVisible();
   await page.goto("/live");
+  await page.getByLabel("Session title").fill("academy session");
   await page.getByRole("button", { name: "Create academy" }).first().click();
   await expect(page.getByText("your role: host")).toBeVisible();
   const sessionUrl = page.url();
@@ -2048,6 +2052,7 @@ test("@matrix @mobile live session and overlay keep controls and board inside th
     .click();
   await expect(page.getByLabel("Chessboard")).toBeVisible();
   await page.goto("/live");
+  await page.getByLabel("Session title").fill("academy session");
   await page.getByRole("button", { name: "Create academy" }).first().click();
   await expect(page.getByRole("heading", { name: "academy session" })).toBeVisible();
 

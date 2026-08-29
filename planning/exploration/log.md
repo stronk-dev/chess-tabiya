@@ -10972,3 +10972,13 @@ CI actually run.
   never plays a move. The host component contract crosses role update and close-with-option.
 - [[D315]] stays open only for an academy-specific workflow/default/module composition; it no
   longer advertises generic server-complete/client-absent mechanics.
+
+## 2026-08-29 — Broadcast overlay uses authored objective language
+
+- Closed [[D2022]] / `LIV-a5` / `LIV-a6`: replaced the overlay's raw objective-state headline with
+  the authored pack objective, or an explicit no-objective sentence. All six runtime states have
+  fixed secondary status copy and one branch no longer renders as “1 branches.”
+- Added a pure projection table covering all states and absence. The complete browser suite then
+  exposed four stale generated-title assumptions and one stale read-only tally assertion; after
+  making each journey submit the title it expected and target the vote action, all 58 required
+  desktop/mobile checks passed (one optional Maia latency probe skipped).
