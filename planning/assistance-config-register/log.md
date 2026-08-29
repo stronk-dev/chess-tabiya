@@ -62,3 +62,19 @@ the two `AssistanceConfig` fields plus runtime `parseAssistanceConfig`, never `v
 presets wording says Guided Hint awaits the D1639 owner ruling and then repeat review. The seven-arm
 author contract passes with the original seven D1916 checks. Fresh independent review remains;
 implementation and claim transfer are still unauthorised.
+
+## 2026-08-30 — Fresh independent review return
+
+The D1916/D2009–D2012 repairs survive, but the completed enforcement path does not. [[D2037]]:
+repository-governance uses a shallow default checkout, so the committed `HEAD^1` transition C9.5/6
+requires is unavailable; the RFC also excludes the workflow repair from its exact file boundary.
+The existing status checker demonstrates the dangerous fallback by silently omitting its committed
+arm when `HEAD^` cannot be read.
+
+[[D2038]]: the author transition accepts an already-projected `changedSymbols` list and no closed
+source/import census defines every AssistanceConfig codec/persistence authority. Adding a parallel
+browser `validV5` while reporting only the three claimed runtime tokens therefore passes the author
+model, contradicting criterion 15. Four review reproductions pass behind
+`make assistance-register-final-review`. Exact return:
+`fresh-independent-buildability-review-2026-08-30.md`. No process/product implementation is
+authorised until both boundaries are repaired and freshly reviewed.

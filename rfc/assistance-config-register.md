@@ -1,10 +1,11 @@
 # RFC: AssistanceConfig shared-resource register
 
-- **Status:** draft — amended 2026-08-28 after the [[D2009]]–[[D2012]] second return. C9 now has
-  contiguous append-only history and a staged/first-parent claim-to-landing transition; the v5
-  claim names the product RFC's one runtime codec; and dependent status prose remains blocked on
-  [[D1639]] rather than claiming review is open. Fresh independent review still precedes acceptance
-  and implementation.
+- **Status:** draft — returned on fresh independent review 2026-08-30 ([[D2037]], [[D2038]]).
+  The D2009–D2012 snapshot/history repair survives, but committed first-parent enforcement cannot
+  run in the shallow governance checkout and the transition has no closed authority census with
+  which to refuse a parallel browser codec. Exact return:
+  `planning/assistance-config-register/fresh-independent-buildability-review-2026-08-30.md`.
+  Implementation remains unauthorised.
 - **Author:** codex
 - **Created:** 2026-08-26
 - **Design refs:** none. This is repository process over an already-ruled assistance contract; it
@@ -350,6 +351,8 @@ None. No design intent changes.
 | [[D2010]] | repaired in §1/criterion 15 by the exact runtime fields and `parseAssistanceConfig` claim | cross-RFC symbol review |
 | [[D2011]] | repaired in §1/criterion 16 by the actual D1639-blocked phase | cross-RFC status review |
 | [[D2012]] | repaired in §4 by previous-claimant→owner-bound-landing transition semantics | transition-capable repeat review |
+| [[D2037]] | fresh return: committed first-parent enforcement is unavailable in shallow CI and the workflow is outside §6 | author repair + fresh review |
+| [[D2038]] | fresh return: `changedSymbols` has no closed assistance codec/persistence authority census | author repair + fresh review |
 
 ## Open questions
 
@@ -358,6 +361,10 @@ contract.
 
 ## Changelog
 
+- 2026-08-30: fresh independent review returned the repaired draft on [[D2037]]/[[D2038]]. The
+  first-parent contract has no CI history and its workflow repair is outside the file boundary;
+  the claimed three-token transition can also omit a parallel browser codec because no closed
+  assistance-authority census derives the token population. Prior repairs survive.
 - 2026-08-28: amended after the second return. Landed heads are exact contiguous append-only
   history; head advancement consumes one prior exact claimant through staged/first-parent checks;
   the v5 claim names only the runtime `AssistanceConfig` fields and `parseAssistanceConfig`; and

@@ -50,3 +50,11 @@ integers, and seed equality has explicit zero-landed and post-landing phases. Re
 [[D2019]]: a row cannot contain its own Git commit hash, so the row retains ref/semantic/registry/
 owner fields while Git history supplies the introducing commit. Seven author arms plus the 19 prior
 contracts pass. Fresh independent review remains; C10/product implementation is unauthorised.
+
+## 2026-08-30 — Fresh review waits on the returned transition predecessor
+
+The AssistanceConfig predecessor was returned on [[D2037]]/[[D2038]]: its committed first-parent
+arm cannot run in the shallow governance checkout and its changed-symbol transition lacks a closed
+source-authority census. C10 explicitly reuses that transition reader. The seven D2013–D2019 author
+arms remain valid in isolation, but semantic-register fresh review and implementation now wait for
+the predecessor repair rather than pretending the shared transition is executable.

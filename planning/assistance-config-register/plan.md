@@ -2,10 +2,11 @@
 
 ## State
 
-Amended after the repeat independent review return on [[D2009]]–[[D2012]]. Contiguous append-only
-history, claimant-to-landing transition ownership, the literal codec claim and the true D1639-blocked
-dependent phase now have a seven-arm author contract. Fresh independent review is required before
-implementation.
+Returned again after the 2026-08-30 fresh review. The D1916/D2009–D2012 snapshot, history,
+claimant, literal-codec and D1639 phase repairs survive. [[D2037]] blocks committed first-parent
+enforcement in the shallow governance checkout; [[D2038]] blocks the promised refusal of parallel
+assistance codecs because no closed authority census derives the transition tokens. Implementation
+and claim transfer remain unauthorised.
 
 ## Order
 
@@ -15,12 +16,16 @@ implementation.
 3. ✅ Repeat review the amended complete bytes; returned on historical continuity,
    claim-to-landing transition ownership and two false dependent-RFC edits ([[D2009]]–[[D2012]]).
 4. ✅ Author-repair D2009–D2012 with exact transition/history/claim/status fixtures.
-5. Fresh independent review of the complete amended C9 contract.
-6. Implement the TypeChecker-normalized semantic reader and mutation classes, including
+5. ✅ Fresh independent review returned [[D2037]]/[[D2038]]; reproduction:
+   `make assistance-register-final-review`.
+6. Author a generated, set-equal assistance codec/persistence authority census; add fail-closed
+   first-parent acquisition and the governance workflow/history repair to the RFC boundary.
+7. Repeat fresh review of the complete amended C9 contract.
+8. Implement the TypeChecker-normalized semantic reader and mutation classes, including
    local/imported/tuple aliases and the dedicated derived-output arm.
-7. Add the README register and atomically transfer Guided Hint from `none` to the sole v5 claim.
-8. Refresh docs, ledger, RFC register, roadmap/work receipts and append-only logs.
-9. Run Node-24 governance and staged process checks on exact committed bytes.
+9. Add the README register and atomically transfer Guided Hint from `none` to the sole v5 claim.
+10. Refresh docs, ledger, RFC register, roadmap/work receipts and append-only logs.
+11. Run Node-24 governance and staged/committed process checks on exact committed bytes.
 
 ## Boundaries
 

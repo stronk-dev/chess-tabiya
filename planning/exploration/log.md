@@ -11221,3 +11221,20 @@ CI actually run.
 - Eight able-to-fail arms pass. No production, schema, content, pack, protected intent or returned
   RFC byte changed. Next: the module author consumes this handoff after the recorded-path/provider
   dependencies are accepted; implementation remains unauthorized until fresh review.
+
+## 2026-08-30 — AssistanceConfig process register returns on CI and source closure
+
+- Fresh-review reproduction keeps every prior D1916/D2009–D2012 repair intact, then crosses the
+  promised committed transition through the actual governance job. [[D2037]] fires: the checkout is
+  shallow, `HEAD^1` is not guaranteed, and the RFC's exact file boundary excludes the workflow
+  change required to make its first-parent contract executable.
+- [[D2038]] fires at the other end of the transition. The author model accepts a caller-projected
+  changed-symbol list and has no closed assistance codec/persistence authority census. A parallel
+  browser `validV5` can therefore be added outside the three reported tokens while criterion 15
+  claims it is refused.
+- Returned `assistance-config-register` rather than implementing a false-green C9. Four executable
+  reproductions pass through `make assistance-register-final-review`; prior author targets remain
+  separate. No runtime, web, schema, storage, content, archive or protected intent byte changed.
+- Next: author derives the complete authority population from production import/source roots and
+  adds fail-closed first-parent acquisition to CI scope; fresh review then gates C9 implementation,
+  the semantic-convention register, durable convention receipts and recorded semantic paths.
