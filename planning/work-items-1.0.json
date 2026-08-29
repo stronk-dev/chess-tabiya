@@ -5032,10 +5032,10 @@
     {
       "id": "IMP-a26",
       "sourceState": "queued",
-      "state": "queued",
+      "state": "completed",
       "capability": "account_data",
       "owner": "account-and-data",
-      "assignment": "capability:account_data",
+      "assignment": "closed",
       "sourceDocument": "ux-import-and-account.md",
       "sourceSection": "§11-17",
       "sourceHeading": "Import, account and data — `ux-import-and-account.md`",
@@ -5043,7 +5043,11 @@
       "legacyRoute": "none",
       "note": "a permanent public window",
       "tournamentReady": true,
-      "sourceDigest": "sha256:db0e1717984fbfdfaa2b50a375ea68d77ec9119cea87bdab0ea802a9d93c7f72"
+      "sourceDigest": "sha256:db0e1717984fbfdfaa2b50a375ea68d77ec9119cea87bdab0ea802a9d93c7f72",
+      "completion": {
+        "completedOn": "2026-08-29",
+        "evidence": "story sharing states its no-expiry lifetime before minting, lists active/revoked links, exposes revoke with the future-read boundary, and retains a visible URL when clipboard permission is denied"
+      }
     },
     {
       "id": "IMP-a27",

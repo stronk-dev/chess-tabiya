@@ -819,7 +819,10 @@ test("terminal outcome reveals authored commentary, a native story, and a revoca
   await page.getByRole("button", { name: "Story of this run" }).click();
   await expect(page).toHaveURL(/\/review\/game\//);
   await expect(page.getByRole("heading", { name: "Story of this run" })).toBeVisible();
+  await expect(page.getByText("A public story link does not expire.", { exact: false })).toBeVisible();
+  await expect(page.getByText("No public story links yet.")).toBeVisible();
   await page.getByRole("button", { name: "Share story" }).click();
+  await expect(page.getByRole("status").filter({ hasText: "Public story link created" })).toBeVisible();
   const publicLink = page.getByRole("link", { name: /\/shared\// });
   const href = await publicLink.getAttribute("href");
   expect(href).not.toBeNull();
@@ -829,9 +832,10 @@ test("terminal outcome reveals authored commentary, a native story, and a revoca
   await publicPage.goto(absolute);
   await expect(publicPage.getByRole("heading")).toContainText(/The turning point|Held|Won|A game story/);
   await expect(publicPage.getByLabel("Chessboard")).toBeVisible();
-  const runId = page.url().split("/").at(-1)!;
-  const shares = await (await page.request.get(`/runs/${runId}/share`)).json() as { shares: { id: string }[] };
-  await page.request.delete(`/runs/${runId}/share/${shares.shares[0]!.id}`);
+  await expect(page.getByRole("list", { name: "Story share links" })).toContainText("public");
+  await page.getByRole("button", { name: "Revoke this link" }).click();
+  await expect(page.getByRole("status").filter({ hasText: "Future reads through that public link are blocked" })).toBeVisible();
+  await expect(page.getByRole("list", { name: "Story share links" })).toContainText("revoked");
   await publicPage.reload();
   await expect(publicPage.getByText("Route not found")).toBeVisible();
   await anonymous.close();

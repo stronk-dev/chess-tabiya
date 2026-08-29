@@ -45,6 +45,13 @@ operation. Unknown, revoked, and deleted tokens all receive the same generic
 404 response. The browser can copy the public URL and render the selected
 recorded position and sentence set to a downloadable PNG.
 
+The story screen states the capability's lifetime before minting: the public URL does not expire
+and remains readable by anyone holding it until revocation or creator-account deletion. It lists
+active and revoked links with creation time and exposes the authenticated revoke operation. Revoke
+copy promises only that future reads stop; it does not imply that copies already saved elsewhere
+can be recalled. Clipboard permission is optional: creation still succeeds and leaves a selectable
+URL plus manual-copy guidance when the browser denies clipboard access.
+
 This table is the one anonymous-capability-token trust surface. Later scopes
 must widen its closed checks through a numbered migration rather than creating
 a parallel token mechanism.

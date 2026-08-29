@@ -11035,3 +11035,15 @@ CI actually run.
 - Public story cards now link to `/play` and name the action as rehearsing positions in Tabiya.
   Component coverage proves anonymous catalogue access and intent retention; the production
   browser journey crosses anonymous arrival → selection → registration → real board.
+
+## 2026-08-29 — Permanent story links gain an honest lifetime and a visible off-switch
+
+- Closed `IMP-a26`, [[D2025]], and [[D2026]] without inventing an expiry policy. The implemented
+  storage contract remains explicit: a `story_read` URL does not expire and remains readable by
+  anyone holding it until the host revokes it or deletes their account.
+- Story now loads the shipped share-management projection, lists active and revoked records with
+  creation time, and exposes revoke beside every active link. The copy says revocation blocks
+  future reads but cannot recall copies already saved elsewhere.
+- Clipboard write is best effort after token creation. Permission denial leaves the public URL
+  visible and reports manual-copy guidance instead of rejecting the click handler. The complete
+  browser suite crosses UI mint → anonymous read → UI revoke → generic 404 and passes 60 journeys.

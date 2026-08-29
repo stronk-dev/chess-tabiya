@@ -46,6 +46,7 @@
     type SessionKind,
     type BoardControl,
     type GameStory,
+    type StoryShare,
     type ProgressMilestone,
     type RunDerivationPage,
     type RepertoireSummary,
@@ -206,6 +207,7 @@
   let importSide: "white" | "black" = $state("white");
   let importError: string | undefined = $state();
   let story: GameStory | undefined = $state();
+  let storyShares: readonly StoryShare[] = $state([]);
   let capabilities: Capabilities | undefined = $state();
   let routeLoading = $state(true);
   let routeHasLoaded = false;
@@ -493,8 +495,13 @@
       } else if (next.name === "review") {
         runs = await api.runs(50, 0);
       } else if (next.name === "story") {
-        const loaded = await Promise.all([refreshStory(next.runId, true), api.capabilities()]);
+        const loaded = await Promise.all([
+          refreshStory(next.runId, true),
+          api.capabilities(),
+          api.storyShares?.(next.runId) ?? Promise.resolve([]),
+        ]);
         capabilities = loaded[1];
+        storyShares = loaded[2];
       } else if (next.name === "play") {
         packs = await api.packs();
       } else if (next.name === "library") {
@@ -1353,7 +1360,7 @@
     {/if}
   {:else if route.name === "story"}
     {@const storyRunId = (route as { readonly name: "story"; readonly runId: string }).runId}
-    {#if story}<GameStoryScreen {story} onEnter={(nodeId) => enterStoryMoment(storyRunId, nodeId)} onExport={() => exportStory(storyRunId)} onShare={api.shareStory === undefined ? undefined : async () => (await api.shareStory!(storyRunId, story!.branchId)).url} onVoice={capabilities?.providers.llm === "external" ? async (nodeId) => (await api.voice(storyRunId, nodeId, "story")).text : undefined} />
+    {#if story}<GameStoryScreen {story} shares={storyShares} onEnter={(nodeId) => enterStoryMoment(storyRunId, nodeId)} onExport={() => exportStory(storyRunId)} onShare={api.shareStory === undefined ? undefined : async () => { const created = await api.shareStory!(storyRunId, story!.branchId); storyShares = await (api.storyShares?.(storyRunId) ?? Promise.resolve(storyShares)); return created; }} onRevoke={api.revokeStoryShare === undefined ? undefined : async (tokenId) => { await api.revokeStoryShare!(storyRunId, tokenId); storyShares = await (api.storyShares?.(storyRunId) ?? Promise.resolve(storyShares)); }} onVoice={capabilities?.providers.llm === "external" ? async (nodeId) => (await api.voice(storyRunId, nodeId, "story")).text : undefined} />
     {:else}<main class="shell-view"><h1>Story unavailable.</h1><p role="alert">{routeError ?? "The imported game has no story payload."}</p></main>{/if}
   {:else if route.name === "review"}
     <main class="shell-view" aria-labelledby="review-title">
